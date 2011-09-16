@@ -108,12 +108,20 @@ function(ev) {
 
 }
 
+// type 0: local
+// type 1: alias
 ZaTreeItemData = function(params) {
     if (arguments.length == 0) { return; }
 
     params = Dwt.getParams(arguments, ZaTreeItemData.PARAMS);
     this.parent = params.parent;
     this.parentObject = params.parentObject || "";
+    this.relatedObject = params.relatedObject || [];
+    this.recentObject= params.recentObject || [];
+    this.type = params.type || 0;
+    if (this.type == 1) {
+        this.path = params.path;
+    }
     this.id = params.id;
     this.text = params.text;
     this.image = params.image;
@@ -125,7 +133,7 @@ ZaTreeItemData = function(params) {
     this.childrenData = new AjxVector();
 }
 
-ZaTreeItemData.PARAMS = ["parent", "id", "text", "image", "index", "count", "mappingId", "callback"];
+ZaTreeItemData.PARAMS = ["parent", "id", "text", "image", "index", "count", "mappingId", "callback", "relatedObject", "recentObject", "type", "path"];
 
 ZaTreeItemData.prototype.addChild =
 function(child, index) {
@@ -156,4 +164,22 @@ function() {
 ZaTreeItemData.prototype.getChildrenNum =
 function() {
    return this.childrenData.size();
+}
+
+ZaTreeItemData.prototype.isAlias =
+function(child, index) {
+	if (this.type == 1)
+        return true;
+    else
+        return false;
+};
+
+ZaTreeItemData.prototype.getRealPath =
+function(child, index) {
+	return this.path;
+};
+
+ZaTreeItemData.prototype.addRelatedObject =
+function(relatedObject) {
+    this.relatedObject = relatedObject;
 }

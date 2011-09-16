@@ -1269,6 +1269,13 @@ ZaOverviewPanelController.prototype.addObjectItem = function (parentPath, name, 
                             id:DwtId._makeId(parentId, index + 1),
                             text: name});
         tree.addTreeItemData(nameDataItem);
+        var relatedObject = new ZaTreeItemData({
+                            text: "user1@mingzhang-desktop",
+                            type: 1,
+                            path: parentPath + ZaTree.SEPERATOR + "user1@mingzhang-desktop"
+                            }
+                        );
+        nameDataItem.addRelatedObject([relatedObject]);
     }
 
     if (!nameDataItem.getData("viewId")) {

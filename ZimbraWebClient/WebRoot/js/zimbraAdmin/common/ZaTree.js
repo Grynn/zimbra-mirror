@@ -72,8 +72,9 @@ function(startNode, pathItems, startIndex) {
     if (pathItems.length == nextStartIndex)
         return startNode;
 
-    if (startNode.childrenData.size() == 0)
+    if (startNode.childrenData.size() == 0) {
         return "";
+    }
 
     var ret = "";
     var i;
@@ -150,6 +151,9 @@ ZaTree.prototype.setSelectionByPath =
 function (path, isAddHistory, skipNotify, kbNavEvent, noFocus) {
 
     var dataItem = this.getTreeItemDataByPath(path);
+    if (dataItem.isAlias()) {
+        path = dataItem.getRealPath();
+    }
     var rootDataItem;
     if (dataItem.isLeaf() && dataItem.parentObject) {
         rootDataItem = dataItem.parentObject;
@@ -201,20 +205,52 @@ ZaTree.prototype.buildTree =
 function (showRootNode) {
 
     this.clearItems();
-    var ti, nextTi, key;
-    this.currentRoot =  new ZaTreeItem({parent:this,className:"overviewHeader",id:showRootNode.id, forceNotifySelection:true});
-	this.currentRoot.enableSelection(false);
-	this.currentRoot.setText(showRootNode.text);
-	this.currentRoot.setData(ZaOverviewPanelController._TID, showRootNode.mappingId);
-    this.currentRoot.setData("dataItem", showRootNode);
+    this.curentRoot = null;
+    this.currentRelated = null;
+    this.currentRoot = this._buildNodeItem(showRootNode);
+    this.currentRoot.setExpanded(true);
+    if (showRootNode.relatedObject.length != 0) {
+        this.currentRelated = this._buildNodeItem(this._getDefaultRelated(showRootNode));
+        this.currentRelated.setExpanded(true);
+    }
+
+    if (showRootNode.recentObject.length != 0) {
+
+    }
+    return this.currentRoot;
+}
+
+ZaTree.prototype._getDefaultRelated =
+function (treeDataItem) {
+    var related = new ZaTreeItemData({
+            parent: treeDataItem.parent,
+            id: treeDataItem.id + "related",
+            text:"related object"
+    });
+    for (var i = 0; i < treeDataItem.relatedObject.length; i++) {
+        var currentObject =treeDataItem.relatedObject[i];
+        currentObject.parent = treeDataItem.parent + ZaTree.SEPERATOR + "related";
+        related.addChild(currentObject);
+    }
+    return related;
+}
+
+ZaTree.prototype._buildNodeItem =
+function(showRootNode) {
+    var ti, nextTi, key, currentRoot;
+    currentRoot =  new ZaTreeItem({parent:this,className:"overviewHeader",id:showRootNode.id, forceNotifySelection:true});
+	currentRoot.enableSelection(false);
+	currentRoot.setText(showRootNode.text);
+	currentRoot.setData(ZaOverviewPanelController._TID, showRootNode.mappingId);
+    currentRoot.setData("dataItem", showRootNode);
     for (key in showRootNode._data) {
-        this.currentRoot.setData(key, showRootNode._data[key]);
+        currentRoot.setData(key, showRootNode._data[key]);
     }
 
     var i, j;
     for (i = 0; i < showRootNode.childrenData.size(); i++) {
         var currentAddNode =  showRootNode.childrenData.get(i);
-        ti = new ZaTreeItem({parent:this.currentRoot,className:"AdminTreeItem",id:currentAddNode.id});
+        ti = new ZaTreeItem({parent: currentRoot,className:"AdminTreeItem",id:currentAddNode.id});
         ti.setCount(currentAddNode.count);
         ti.setText(currentAddNode.text);
         ti.setImage(currentAddNode.image);
@@ -235,9 +271,7 @@ function (showRootNode) {
             }
         }
     }
-
-    this.currentRoot.setExpanded(true);
-    return this.currentRoot;
+    return currentRoot;
 }
 
 ZaTree.prototype._itemClicked =
@@ -246,6 +280,9 @@ function(item, ev) {
 	var a = this._selectedItems.getArray();
 	var numSelectedItems = this._selectedItems.size();
     var currentDataItem =  item.getData("dataItem");
+    if (currentDataItem.isAlias()) {
+        currentDataItem = this.getTreeItemDataByPath(currentDataItem.getRealPath());
+    }
 	if (currentDataItem.isLeaf()) {
 		if (numSelectedItems > 0) {
 			for (i = 0; i < numSelectedItems; i++) {
