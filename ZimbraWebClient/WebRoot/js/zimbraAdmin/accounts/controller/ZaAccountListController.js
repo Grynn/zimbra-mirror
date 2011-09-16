@@ -79,6 +79,7 @@ ZaAccountListController.prototype._show =
 function (list, openInNewTab, openInSearchTab) {
 	this._updateUI(list, openInNewTab, openInSearchTab);
 //	ZaApp.getInstance().pushView(ZaZimbraAdmin._ACCOUNTS_LIST_VIEW);
+    this.updatePopupMenu();
 	ZaApp.getInstance().pushView(this.getContentViewId (), openInNewTab, openInSearchTab);
 	this.updateToolbar();
     if(appNewUI) return;
@@ -149,6 +150,34 @@ function () {
 	}
 }
 
+ZaAccountListController.prototype.updatePopupMenu =
+function () {
+
+	var type = this._defaultType ;
+    if (type == ZaItem.ACCOUNT ) {
+        this._popupOperations[ZaOperation.NEW_MENU] = new ZaOperation(ZaOperation.NEW_MENU, ZaMsg.TBB_New, ZaMsg.ACTBB_New_tt, "Account", "AccountDis",new AjxListener(this, ZaAccountListController.prototype._newAccountListener));
+    } else if (type == ZaItem.ALIAS) {
+        this._popupOperations[ZaOperation.NEW_MENU] = new ZaOperation(ZaOperation.NEW_MENU, ZaMsg.TBB_New, ZaMsg.ALTBB_New_tt, "AccountAlias", "AccountDis",new AjxListener(this, ZaAccountListController.prototype._newAliasListener));
+    } else if (type == ZaItem.DL) {
+        this._popupOperations[ZaOperation.NEW_MENU] = new ZaOperation(ZaOperation.NEW_MENU, ZaMsg.TBB_New, ZaMsg.ALTBB_New_tt, "DistributionList", "DistributionListDis",new AjxListener(this, ZaAccountListController.prototype._newDistributionListListener));
+    } else if (type == ZaItem.RESOURCE ){
+        this._popupOperations[ZaOperation.NEW_MENU] = new ZaOperation(ZaOperation.NEW_MENU, ZaMsg.TBB_New, ZaMsg.ALTBB_New_tt, "Resource", "ResourceDis",new AjxListener(this, ZaAccountListController.prototype._newResourceListener));
+    }
+}
+
+ZaAccountListController.prototype.handleRemoval =
+function(ev) {
+    if(appNewUI)
+        ZaZimbraAdmin.getInstance().getOverviewPanelController().refreshAccountTree();
+    ZaListViewController.prototype.handleRemoval.call(this,ev);
+}
+
+ZaAccountListController.prototype.handleCreation =
+function(ev) {
+    if(appNewUI)
+        ZaZimbraAdmin.getInstance().getOverviewPanelController().refreshAccountTree();
+    ZaListViewController.prototype.handleCreation.call(this,ev);
+}
 
 ZaAccountListController.prototype.set = 
 function(accountList) {

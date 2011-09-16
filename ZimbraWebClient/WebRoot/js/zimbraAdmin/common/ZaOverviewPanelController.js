@@ -1126,7 +1126,7 @@ ZaOverviewPanelController.postqByServerTreeListener = function (ev) {
 }
 
 ZaOverviewPanelController.manageAccountTreeListener = function (ev) {
-    var accountStat =  ZaApp.getInstance().getAccountStats();
+    var accountStat =  ZaApp.getInstance().getAccountStats(true);
     var tree = this._overviewPanel.getFolderTree();
     var childitems = ev.item.getChildren();
 //    var absPath = tree.getABPath(ev.item.getData("dataItem")) ;//+ "/" +;
@@ -1138,6 +1138,15 @@ ZaOverviewPanelController.manageAccountTreeListener = function (ev) {
         var attr = child.getData("TreeItemType");
         child.setCount(accountStat[attr]);
     }
+}
+
+ZaOverviewPanelController.prototype.refreshAccountTree = function() {
+    var targetPath = ZaMsg.OVP_home + ZaTree.SEPERATOR + ZaMsg.OVP_manageAccounts;
+    var tree = this.getOverviewPanel().getFolderTree();
+    var rootItem = tree.getCurrentRootItem();
+    var rootPath = tree.getABPath(rootItem.getData("dataItem"));
+    if(targetPath == rootPath)
+        tree.setSelectionByPath(targetPath);
 }
 
 ZaOverviewPanelController.prototype._modifySearchMenuButton = 

@@ -299,6 +299,9 @@ function (arr) {
     return arr.join(ZaTree.SEPERATOR);
 }
 
+ZaTree.prototype.getCurrentRootItem = function() {
+    return this.currentRoot;
+}
 ZaTree.getPathByArray = ZaTree.prototype.getPathByArray;
 
 
