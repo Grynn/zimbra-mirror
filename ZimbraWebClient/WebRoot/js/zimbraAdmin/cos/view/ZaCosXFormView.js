@@ -139,7 +139,8 @@ function(entry) {
 		this._containedObject[ZaModel.currentTab] = entry[ZaModel.currentTab];
 
 	this._localXForm.setInstance(this._containedObject);
-	this.updateTab();
+    if (!appNewUI)
+	    this.updateTab();
 }
 
 ZaCosXFormView.gotSkins = function () {
@@ -1338,11 +1339,16 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
 				],
 				cssStyle:"padding-top:5px; padding-bottom:5px"
 			},
-			{type:_TAB_BAR_,  ref:ZaModel.currentTab,choices:this.tabChoices,cssClass:"ZaTabBar", id:"xform_tabbar"},
+			{type:_TAB_BAR_,  ref:ZaModel.currentTab,choices:this.tabChoices,cssClass:"ZaTabBar", id:"xform_tabbar", cssStyle: (appNewUI? "display:none;":"")},
 			{type:_SWITCH_, align:_LEFT_, valign:_TOP_, items:cases}
 	];		
 };
 ZaTabView.XFormModifiers["ZaCosXFormView"].push(ZaCosXFormView.myXFormModifier);
+
+ZaCosXFormView.prototype.getTabChoices =
+function() {
+    return this.tabChoices;
+}
 
 ZaCosXFormView.isAllAuthfromInternal =
 function() {

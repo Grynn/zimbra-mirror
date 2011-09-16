@@ -78,6 +78,8 @@ ZaCosListController.prototype._show =
 function (list, openInNewTab, openInSearchTab) {
 	this._updateUI(list, openInNewTab, openInSearchTab);
 	ZaApp.getInstance().pushView(this.getContentViewId (), openInNewTab, openInSearchTab);
+    if (appNewUI)
+        return;
 	if (openInSearchTab) {
 		ZaApp.getInstance().updateSearchTab();
 	} else if(openInNewTab) {
@@ -146,15 +148,19 @@ function (openInNewTab, openInSearchTab) {
 		
 	var elements = new Object();
 	elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
-	elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;		
-	//ZaApp.getInstance().createView(ZaZimbraAdmin._DOMAINS_LIST_VIEW, elements);
-	var tabParams = {
-			openInNewTab: openInNewTab ? openInNewTab : false,
-			tabId: this.getContentViewId(),
-			tab: openInNewTab ? null : (openInSearchTab ? this.getSearchTab() : this.getMainTab()) 
-		}
-	ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams) ;
-	
+    if (!appNewUI) {
+        elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;
+        //ZaApp.getInstance().createView(ZaZimbraAdmin._DOMAINS_LIST_VIEW, elements);
+        var tabParams = {
+                openInNewTab: openInNewTab ? openInNewTab : false,
+                tabId: this.getContentViewId(),
+                tab: openInNewTab ? null : (openInSearchTab ? this.getSearchTab() : this.getMainTab())
+            }
+        ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams) ;
+    }
+    else
+        ZaApp.getInstance().getAppViewMgr().createView(this.getContentViewId(), elements);
+
 	this._initPopupMenu();
 	this._actionMenu =  new ZaPopupMenu(this._contentView, "ActionMenu", null, this._popupOperations, ZaId.VIEW_COSLIST, ZaId.MENU_POP);
 	
@@ -246,6 +252,10 @@ function(ev) {
 	if (ev.detail == DwtListView.ITEM_DBL_CLICKED) {
 		if(ev.item) {
 			ZaApp.getInstance().getCosController().show(ev.item);
+            if (appNewUI) {
+                var parentPath = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_configure, ZaMsg.OVP_cos]);
+                ZaZimbraAdmin.getInstance().getOverviewPanelController().addObjectItem(parentPath, ev.item.name);
+            }
 		}
 	} else {
 		this.changeActionsState();	
@@ -269,6 +279,10 @@ function(ev) {
 	if(this._contentView.getSelectionCount() == 1) {
 		var item = this._contentView.getSelection()[0];
 		ZaApp.getInstance().getCosController().show(item);
+        if (appNewUI) {
+            var parentPath = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_configure, ZaMsg.OVP_cos]);
+            ZaZimbraAdmin.getInstance().getOverviewPanelController().addObjectItem(parentPath, item.name);
+        }
 	}
 }
 

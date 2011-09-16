@@ -52,6 +52,8 @@ function() {
 **/
 ZaOverviewPanelController.prototype.handleCosCreation = 
 function (ev) {
+    if (appNewUI)
+        return;
 	if(ev) {
 		//add the new ZaDomain to the controlled list
 		if(ev.getDetails()) {
@@ -73,6 +75,8 @@ function (ev) {
 **/
 ZaOverviewPanelController.prototype.handleCosChange =
 function (ev) {
+    if (appNewUI)
+        return;
 	if(ev) {
 		var detls = ev.getDetails();	
 		if(detls && (detls instanceof Array)) {		
@@ -93,6 +97,8 @@ function (ev) {
 **/
 ZaOverviewPanelController.prototype.handleCosRemoval = 
 function (ev) {
+    if (appNewUI)
+        return;
 	if(ev) {
 		//add the new ZaDomain to the controlled list
 		var detls = ev.getDetails();		
@@ -103,6 +109,8 @@ function (ev) {
 
 ZaOverviewPanelController.prototype.removeCosTreeItems = 
 function(detls) {
+    if (appNewUI)
+        return;
 	if(detls) {
 		if(detls && (detls instanceof Array)) {
 			for (var key in detls) {
@@ -702,21 +710,21 @@ function() {
                                    text:ZaMsg.OVP_home});
     ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._HOME_VIEW] = ZaOverviewPanelController.homeTreeListener;
     tree.setRootData(home);
-
+    // Section Monitor Start
     var  ti = new ZaTreeItemData({
                                     parent:ZaMsg.OVP_home,
                                     id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_HOME,null, "monHV"),
                                     text: ZaMsg.OVP_monitor,
                                     mappingId: ZaZimbraAdmin._MONITOR_HOME_VIEW});
     tree.addTreeItemData(ti);
-
+    // Add Monitor/Server
     var  ti = new ZaTreeItemData({
                                     parent:ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_monitor]),
                                     id:ZaId.getTreeItemId(ZaId.PANEL_APP,"monHV",null, "serverstatusHV"),
                                     text: ZaMsg.OVP_status,
                                     mappingId: ZaZimbraAdmin._SERVER_STATUS_VIEW});
     tree.addTreeItemData(ti);
-    // Add Mail Queue
+    // Add Monitor/Mail Queue
     if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.MAILQ_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
         try {
             if(mtaList && mtaList.length) {
@@ -757,7 +765,7 @@ function() {
 
 
     }
-
+    // Section Manager Account Start
     var accountMgr = new ZaTreeItemData({
                                     parent:ZaMsg.OVP_home,
                                     id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_HOME,null, "manActHV"),
@@ -765,6 +773,7 @@ function() {
                                     mappingId: ZaZimbraAdmin._MANAGE_ACCOUNT_HOME_VIEW});
     tree.addTreeItemData(accountMgr);
 
+    // Section Configuration Start
     ti = this._configure = new ZaTreeItemData({
                                     parent:ZaMsg.OVP_home,
                                     id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_HOME,null, "adminHV"),
@@ -774,7 +783,16 @@ function() {
 
     if (this._configure) {
         parentPath = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_configure]);
-        
+        // Add Configuration /Cos
+        ti = new ZaTreeItemData({
+                                    parent:parentPath,
+                                    id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_CONFIGURATION,null, ZaId.TREEITEM_COS),
+                                    text: ZaMsg.OVP_cos,
+                                    mappingId: ZaZimbraAdmin._COS_LIST_VIEW});
+        tree.addTreeItemData(ti);
+        ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._COS_LIST_VIEW] = ZaOverviewPanelController.cosListTreeListener;
+
+        // Add Configuration / Global Settings
         ti = new ZaTreeItemData({
                                     parent:parentPath,
                                     id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_CONFIGURATION,null, ZaId.TREEITEM_GSET),
@@ -783,6 +801,7 @@ function() {
         tree.addTreeItemData(ti);
         ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._GLOBAL_SETTINGS] = ZaOverviewPanelController.globalSettingsTreeListener;
 
+        // Add Configuration /Zimlets
         if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ZIMLET_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
             ti = new ZaTreeItemData({
                                     parent:parentPath,
@@ -793,6 +812,7 @@ function() {
 			ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._ZIMLET_LIST_VIEW] = ZaOverviewPanelController.zimletListTreeListener;					
 		}
 
+        // Add Configuration /Admin Ext
 		if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ADMIN_ZIMLET_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
             ti = new ZaTreeItemData({
                                     parent:parentPath,
@@ -803,6 +823,8 @@ function() {
 			ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._ADMIN_ZIMLET_LIST_VIEW] = ZaOverviewPanelController.adminExtListTreeListener;					
 		}
     }
+
+    // Section Tool and Migration Start
     ti = new ZaTreeItemData({
                                     parent:ZaMsg.OVP_home,
                                     id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_HOME,null, "magHV"),
@@ -810,6 +832,7 @@ function() {
                                     mappingId: ZaZimbraAdmin._MIGRATION_HOME_VIEW});
     tree.addTreeItemData(ti);
 
+    // Section Search Start
     ti = new ZaTreeItemData({
                                     parent:ZaMsg.OVP_home,
                                     id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_HOME,null, "searchHV"),
@@ -1198,7 +1221,7 @@ function(item, currentView) {
 
     var parentPath = ZaOverviewPanelController.accountBasePath + relativePath;
     var name = item.name;
-    this.addObjectItem(parentPath, name, currentView)
+    this.addObjectItem(parentPath, name, currentView);
 }
 
 ZaOverviewPanelController.prototype.addObjectItem = function (parentPath, name, currentView, skipHistory, skipNotify) {
