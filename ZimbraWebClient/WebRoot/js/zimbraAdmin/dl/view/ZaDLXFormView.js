@@ -1439,6 +1439,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
 			cssStyle:"padding-top:5px; padding-bottom:5px"
 		},
 		{type:_TAB_BAR_, choices:this.tabChoices,
+            cssStyle:(appNewUI?"display:none;":""),
 			ref: ZaModel.currentTab, colSpan:"*",cssClass:"ZaTabBar", id:"xform_tabbar"
 		},
 		{type:_SWITCH_,items:cases}
@@ -1446,3 +1447,8 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
 };
 
 ZaTabView.XFormModifiers["ZaDLXFormView"].push(ZaDLXFormView.myXFormModifier);
+
+ZaDLXFormView.prototype.getTabChoices =
+function() {
+    return this.tabChoices;
+}
