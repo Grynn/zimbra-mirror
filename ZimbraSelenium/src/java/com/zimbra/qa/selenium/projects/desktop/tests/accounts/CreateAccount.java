@@ -896,6 +896,43 @@ public class CreateAccount extends AjaxCommonTest {
             "Added account message is displayed");
    }
 
+   @Test(description="Wrong receiving server when creating Gmail IMAP Account", groups = { "functional" })
+   public void wrongReceivingServerGmailImapAccount() throws HarnessException {
+      String wrongReceivingServer = ZimbraSeleniumProperties.getUniqueString();
+      DesktopAccountItem desktopAccountItem = DesktopAccountItem.generateDesktopImapAccountItem(
+            gmailUserName,
+            gmailUserName,
+            gmailPassword,
+            wrongReceivingServer,
+            SECURITY_TYPE.SSL,
+            "993",
+            gmailImapSmtpServer,
+            true,
+            "465",
+            gmailUserName,
+            gmailPassword);
+
+      FormAddImapAccount accountForm = (FormAddImapAccount)app.zPageAddNewAccount.zDropDownListSelect(DROP_DOWN_OPTION.IMAP);
+      accountForm.zFill(desktopAccountItem);
+      accountForm.zPressButton(Button.B_VALIDATE_AND_SAVE);
+
+      String message = app.zPageLogin.zGetMessage();
+      ZAssert.assertStringContains(message,
+            "\"" + wrongReceivingServer + ":993" + "\" host not found. Please check hostname and network connectivity.",
+            "Verify error message of wrong incoming server address");
+
+      app.zPageLogin.zNavigateTo();
+
+      String welcomeMessage = app.zPageLogin.zGetWelcomeMessage();
+      ZAssert.assertStringContains(welcomeMessage,
+            "Zimbra Desktop allows you to access email while you are disconnected from the internet.",
+            "Verify welcome message is displayed");
+
+      ZAssert.assertEquals(false,
+            app.zPageLogin.sIsElementPresent(PageLogin.Locators.zDisplayedMessage),
+            "Added account message is displayed");
+   }
+
    @Test(description="Wrong Receiving username when creating Gmail IMAP Account", groups = { "functional" })
    public void wrongReceivingUsernameGmailIMAPAccount() throws HarnessException {
 
@@ -1461,6 +1498,191 @@ public class CreateAccount extends AjaxCommonTest {
             "Delete account link exists");
       ZAssert.assertTrue(app.zPageLogin.sIsElementPresent(PageLogin.Locators.zBtnLoginDesktop),
             "Launch Zimbra Dekstop Button exists");
+   }
+
+   @Test(description="Wrong receiving server name when creating Hotmail POP Account", groups = { "functional" } )
+   public void wrongReceivingServerHotmailPopAccount() throws HarnessException {
+      String wrongReceivingServer = ZimbraSeleniumProperties.getUniqueString();
+      DesktopAccountItem desktopAccountItem = DesktopAccountItem.generateDesktopImapAccountItem(
+            hotmailUserName,
+            hotmailUserName,
+            hotmailPassword,
+            wrongReceivingServer,
+            SECURITY_TYPE.SSL,
+            "995",
+            hotmailPopSmtpServer,
+            false,
+            "25",
+            hotmailUserName,
+            hotmailPassword);
+
+      FormAddPopAccount accountForm = (FormAddPopAccount)app.zPageAddNewAccount.zDropDownListSelect(DROP_DOWN_OPTION.POP);
+      accountForm.zFill(desktopAccountItem);
+      accountForm.zPressButton(Button.B_VALIDATE_AND_SAVE);
+
+      String message = app.zPageLogin.zGetMessage();
+      ZAssert.assertStringContains(message,
+            "\"" + wrongReceivingServer + ":995" + "\" host not found. Please check hostname and network connectivity.",
+            "Verify error message of wrong incoming server address");
+
+      app.zPageLogin.zNavigateTo();
+
+      String welcomeMessage = app.zPageLogin.zGetWelcomeMessage();
+      ZAssert.assertStringContains(welcomeMessage,
+            "Zimbra Desktop allows you to access email while you are disconnected from the internet.",
+            "Verify welcome message is displayed");
+
+      ZAssert.assertEquals(false,
+            app.zPageLogin.sIsElementPresent(PageLogin.Locators.zDisplayedMessage),
+            "Added account message is displayed");
+   }
+
+   @Test(description="Wrong None security receiving port when creating Hotmail POP Account", groups = { "functional" })
+   public void wrongNonePortHotmailPopAccount() throws HarnessException {
+      String wrongSslPort = "111";
+      DesktopAccountItem desktopAccountItem = DesktopAccountItem.generateDesktopImapAccountItem(
+            hotmailUserName,
+            hotmailUserName,
+            hotmailPassword,
+            hotmailPopReceivingServer,
+            SECURITY_TYPE.NONE,
+            wrongSslPort,
+            hotmailPopSmtpServer,
+            false,
+            "25",
+            hotmailUserName,
+            hotmailPassword);
+
+      FormAddPopAccount accountForm = (FormAddPopAccount)app.zPageAddNewAccount.zDropDownListSelect(DROP_DOWN_OPTION.POP);
+      accountForm.zFill(desktopAccountItem);
+      accountForm.zPressButton(Button.B_VALIDATE_AND_SAVE);
+
+      String message = app.zPageLogin.zGetMessage();
+      ZAssert.assertStringContains(message,
+            "Cannot connect to \"" + hotmailPopReceivingServer + ":" + wrongSslPort + "\". Please check host/port and network connectivity.",
+            "Verify error message of wrong incoming server address");
+
+      app.zPageLogin.zNavigateTo();
+
+      String welcomeMessage = app.zPageLogin.zGetWelcomeMessage();
+      ZAssert.assertStringContains(welcomeMessage,
+            "Zimbra Desktop allows you to access email while you are disconnected from the internet.",
+            "Verify welcome message is displayed");
+
+      ZAssert.assertEquals(false,
+            app.zPageLogin.sIsElementPresent(PageLogin.Locators.zDisplayedMessage),
+            "Added account message is displayed");
+   }
+
+   @Test(description="Wrong Ssl security receiving port when creating Hotmail POP Account", groups = { "functional" })
+   public void wrongSslPortHotmailPopAccount() throws HarnessException {
+      String wrongSslPort = "111";
+      DesktopAccountItem desktopAccountItem = DesktopAccountItem.generateDesktopImapAccountItem(
+            hotmailUserName,
+            hotmailUserName,
+            hotmailPassword,
+            hotmailPopReceivingServer,
+            SECURITY_TYPE.SSL,
+            wrongSslPort,
+            hotmailPopSmtpServer,
+            false,
+            "25",
+            hotmailUserName,
+            hotmailPassword);
+
+      FormAddPopAccount accountForm = (FormAddPopAccount)app.zPageAddNewAccount.zDropDownListSelect(DROP_DOWN_OPTION.POP);
+      accountForm.zFill(desktopAccountItem);
+      accountForm.zPressButton(Button.B_VALIDATE_AND_SAVE);
+
+      String message = app.zPageLogin.zGetMessage();
+      ZAssert.assertStringContains(message,
+            "Cannot connect to \"" + hotmailPopReceivingServer + ":" + wrongSslPort + "\". Please check host/port and network connectivity.",
+            "Verify error message of wrong incoming server address");
+
+      app.zPageLogin.zNavigateTo();
+
+      String welcomeMessage = app.zPageLogin.zGetWelcomeMessage();
+      ZAssert.assertStringContains(welcomeMessage,
+            "Zimbra Desktop allows you to access email while you are disconnected from the internet.",
+            "Verify welcome message is displayed");
+
+      ZAssert.assertEquals(false,
+            app.zPageLogin.sIsElementPresent(PageLogin.Locators.zDisplayedMessage),
+            "Added account message is displayed");
+   }
+
+   @Test(description="Wrong TLS security receiving port when creating Hotmail POP Account", groups = { "functional" })
+   public void wrongTlsPortHotmailPopAccount() throws HarnessException {
+      String wrongSslPort = "111";
+      DesktopAccountItem desktopAccountItem = DesktopAccountItem.generateDesktopImapAccountItem(
+            hotmailUserName,
+            hotmailUserName,
+            hotmailPassword,
+            hotmailPopReceivingServer,
+            SECURITY_TYPE.TLS,
+            wrongSslPort,
+            hotmailPopSmtpServer,
+            false,
+            "25",
+            hotmailUserName,
+            hotmailPassword);
+
+      FormAddPopAccount accountForm = (FormAddPopAccount)app.zPageAddNewAccount.zDropDownListSelect(DROP_DOWN_OPTION.POP);
+      accountForm.zFill(desktopAccountItem);
+      accountForm.zPressButton(Button.B_VALIDATE_AND_SAVE);
+
+      String message = app.zPageLogin.zGetMessage();
+      ZAssert.assertStringContains(message,
+            "Cannot connect to \"" + hotmailPopReceivingServer + ":" + wrongSslPort + "\". Please check host/port and network connectivity.",
+            "Verify error message of wrong incoming server address");
+
+      app.zPageLogin.zNavigateTo();
+
+      String welcomeMessage = app.zPageLogin.zGetWelcomeMessage();
+      ZAssert.assertStringContains(welcomeMessage,
+            "Zimbra Desktop allows you to access email while you are disconnected from the internet.",
+            "Verify welcome message is displayed");
+
+      ZAssert.assertEquals(false,
+            app.zPageLogin.sIsElementPresent(PageLogin.Locators.zDisplayedMessage),
+            "Added account message is displayed");
+   }
+
+   @Test(description="Wrong TLS If Available security receiving port when creating Hotmail POP Account", groups = { "functional" })
+   public void wrongTlsIfAvailPortHotmailPopAccount() throws HarnessException {
+      String wrongSslPort = "111";
+      DesktopAccountItem desktopAccountItem = DesktopAccountItem.generateDesktopImapAccountItem(
+            hotmailUserName,
+            hotmailUserName,
+            hotmailPassword,
+            hotmailPopReceivingServer,
+            SECURITY_TYPE.TLS_IF_AVAILABLE,
+            wrongSslPort,
+            hotmailPopSmtpServer,
+            false,
+            "25",
+            hotmailUserName,
+            hotmailPassword);
+
+      FormAddPopAccount accountForm = (FormAddPopAccount)app.zPageAddNewAccount.zDropDownListSelect(DROP_DOWN_OPTION.POP);
+      accountForm.zFill(desktopAccountItem);
+      accountForm.zPressButton(Button.B_VALIDATE_AND_SAVE);
+
+      String message = app.zPageLogin.zGetMessage();
+      ZAssert.assertStringContains(message,
+            "Cannot connect to \"" + hotmailPopReceivingServer + ":" + wrongSslPort + "\". Please check host/port and network connectivity.",
+            "Verify error message of wrong incoming server address");
+
+      app.zPageLogin.zNavigateTo();
+
+      String welcomeMessage = app.zPageLogin.zGetWelcomeMessage();
+      ZAssert.assertStringContains(welcomeMessage,
+            "Zimbra Desktop allows you to access email while you are disconnected from the internet.",
+            "Verify welcome message is displayed");
+
+      ZAssert.assertEquals(false,
+            app.zPageLogin.sIsElementPresent(PageLogin.Locators.zDisplayedMessage),
+            "Added account message is displayed");
    }
 
    @AfterMethod(alwaysRun=true)
