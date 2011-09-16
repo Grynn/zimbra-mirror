@@ -3237,8 +3237,10 @@ CollapsedGroup_XFormItem.prototype.initializeItems = function () {
         if(oldItems) {
             for(var i = 0; i < oldItems.length; i++) {
                 oldItems[i].displayGrid = false;
+                if(oldItems[i].type == "radio")
+                    continue;  // don't deal with _RADIO_
                 if(oldItems[i].label || oldItems[i].txtBoxLabel)
-                    oldItems[i].labelCssStyle = "text-align:left;";
+                    oldItems[i].labelCssStyle = "text-align:left; background-color:#BBB;";
             }
             this.items[1].items =  oldItems;
         }

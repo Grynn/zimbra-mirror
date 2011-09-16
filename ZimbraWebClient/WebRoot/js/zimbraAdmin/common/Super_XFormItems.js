@@ -513,7 +513,7 @@ Super_Checkbox_XFormItem.prototype.initializeItems = function() {
 	var anchorCssStyle = this.getInheritedProperty("anchorCssStyle");
 	
 	var chkBox = {	
-		type:_CHECKBOX_, ref:".",
+		type:_CHECKBOX_, ref:".",  labelCssStyle:(appNewUI?"text-align:left; background-color:#BBB;":_UNDEFINED_),
 		onChange:Composite_XFormItem.onFieldChange,
 		updateElement:function(value) {
 			Super_XFormItem.updateCss.call(this,5);
@@ -1515,7 +1515,7 @@ ZAPlainGrouper_XFormItem.prototype.initializeItems = function () {
         for(var i = 0; i < subitems.length; i++) {
             subitems[i].displayGrid = false;
             if(subitems[i].label || subitems[i].txtBoxLabel)
-                subitems[i].labelCssStyle = "text-align:left;";
+                subitems[i].labelCssStyle = "text-align:left;background-color:#BBB;";
         }
     }
     Group_XFormItem.prototype.initializeItems.call(this);
