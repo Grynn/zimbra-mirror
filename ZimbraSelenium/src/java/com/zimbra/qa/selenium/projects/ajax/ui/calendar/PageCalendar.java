@@ -29,15 +29,15 @@ public class PageCalendar extends AbsTab {
 		public static final String ViewButton = "id=zb__CLD__VIEW_MENU_dropdown";
 
 		// Menus
-		public static final String ViewDayMenu = "css=div[id='zm__Calendar'] tr[id=POPUP_DAY_VIEW]";
-		public static final String ViewWorkWeekMenu = "css=div[id='zm__Calendar'] tr[id=POPUP_WORK_WEEK_VIEW]";
-		public static final String ViewWeekMenu = "css=div[id='zm__Calendar'] tr[id=POPUP_WEEK_VIEW]";
-		public static final String ViewMonthMenu = "css=div[id='zm__Calendar'] tr[id=POPUP_MONTH_VIEW]";
-		public static final String ViewListMenu = "css=div[id='zm__Calendar'] tr[id=POPUP_CAL_LIST_VIEW]";
-		public static final String ViewScheduleMenu = "css=div[id='zm__Calendar'] tr[id=POPUP_SCHEDULE_VIEW]";
+		public static final String ViewDayMenu = "css=div[id='zm__Calendar'] tr[id='POPUP_DAY_VIEW']";
+		public static final String ViewWorkWeekMenu = "css=div[id='zm__Calendar'] tr[id='POPUP_WORK_WEEK_VIEW']";
+		public static final String ViewWeekMenu = "css=div[id='zm__Calendar'] tr[id='POPUP_WEEK_VIEW']";
+		public static final String ViewMonthMenu = "css=div[id='zm__Calendar'] tr[id='POPUP_MONTH_VIEW']";
+		public static final String ViewListMenu = "css=div[id='zm__Calendar'] tr[id='POPUP_CAL_LIST_VIEW']";
+		public static final String ViewScheduleMenu = "css=div[id='zm__Calendar'] tr[id='POPUP_SCHEDULE_VIEW']";
 		
 		public static final String OpenMenu = "id=VIEW_APPOINTMENT_title";
-		public static final String PrintMenu = "css=div[id='zm__Calendar'] tr[id=POPUP_PRINT]";
+		public static final String PrintMenu = "css=div[id='zm__Calendar'] tr[id='POPUP_PRINT']";
 		public static final String AcceptMenu = "id=REPLY_ACCEPT_title";
 		public static final String TentativeMenu = "id=REPLY_TENTATIVE_title";
 		public static final String DeclineMenu = "id=REPLY_DECLINE_title";
@@ -47,17 +47,17 @@ public class PageCalendar extends AbsTab {
 		public static final String EditReplyDeclineSubMenu = "id=EDIT_REPLY_DECLINE_title";
 		public static final String ProposeNewTimeMenu = "id=PROPOSE_NEW_TIME_title";
 		public static final String CreateACopyMenu = "id=DUPLICATE_APPT_title";
-		public static final String ReplyMenu = "css=div[id='zm__Calendar'] tr[id=POPUP_REPLY]";
-		public static final String ReplyToAllMenu = "css=div[id='zm__Calendar'] tr[id=POPUP_REPLY_ALL]";
-		public static final String ForwardMenu = "css=div[id='zm__Calendar'] tr[id=POPUP_FORWARD_APPT]";
+		public static final String ReplyMenu = "css=div[id='zm__Calendar'] tr[id='POPUP_REPLY']";
+		public static final String ReplyToAllMenu = "css=div[id='zm__Calendar'] tr[id='POPUP_REPLY_ALL']";
+		public static final String ForwardMenu = "css=div[id='zm__Calendar'] tr[id='POPUP_FORWARD_APPT']";
 		public static final String DeleteMenu = "css=div[id='zm__Calendar'] tr[id='POPUP_DELETE']";
-		public static final String CancelMenu = "css=div[id='zm__Calendar'] tr[id=POPUP_DELETE']";
-		public static final String MoveMenu = "css=div[id='zm__Calendar'] tr[id=POPUP_MOVE]";
-		public static final String TagAppointmentMenu = "css=div[id='zm__Calendar'] tr[id=POPUP_TAG_MENU]";
+		public static final String CancelMenu = "css=div[id='zm__Calendar'] tr[id='POPUP_DELETE']";
+		public static final String MoveMenu = "css=div[id='zm__Calendar'] tr[id='POPUP_MOVE']";
+		public static final String TagAppointmentMenu = "css=div[id='zm__Calendar'] tr[id='POPUP_TAG_MENU']";
 		public static final String TagAppointmentNewTagSubMenu = "id=TAG_MENU|MENU|NEWTAG_title";
 		public static final String TagAppointmentRemoveTagSubMenu = "id=TAG_MENU|MENU|REMOVETAG_title";
-		public static final String ShowOriginalMenu = "css=div[id='zm__Calendar'] tr[id=POPUP_SHOW_ORIG]";
-		public static final String QuickCommandsMenu = "css=div[id='zm__Calendar'] tr[id=POPUP_QUICK_COMMANDS]";
+		public static final String ShowOriginalMenu = "css=div[id='zm__Calendar'] tr[id='POPUP_SHOW_ORIG']";
+		public static final String QuickCommandsMenu = "css=div[id='zm__Calendar'] tr[id='POPUP_QUICK_COMMANDS']";
 		
 		public static final String InstanceMenu = "id=VIEW_APPT_INSTANCE_title";
 		public static final String SeriesMenu = "id=VIEW_APPT_SERIES_title";
@@ -234,6 +234,7 @@ public class PageCalendar extends AbsTab {
 	}
 
 	private AbsPage zListItemListView(Action action, Button option, String subject) throws HarnessException {
+		
 		logger.info(myPageName() + " zListItemListView("+ action +", "+ option +", "+ subject +")");
 
 		// The default locator points at the subject
@@ -250,82 +251,141 @@ public class PageCalendar extends AbsTab {
 			// Now the ContextMenu is opened
 			// Click on the specified option
 
-
 			if (option == Button.O_OPEN_MENU) {
-
-				optionLocator = "css=div[id='zm__Calendar'] div[id='zmi__Calendar__VIEW_APPOINTMENT'] td[id$='_title']";
+				
+				optionLocator = Locators.OpenMenu;
 				throw new HarnessException("implement action:"+ action +" option:"+ option);
 
 			} else if (option == Button.O_PRINT_MENU) {
 
-				optionLocator = "css=div[id='zm__Calendar'] div[id='zmi__Calendar__PRINT'] td[id$='_title']";
+				optionLocator = Locators.PrintMenu;
 				throw new HarnessException("implement action:"+ action +" option:"+ option);
 
 			} else if ( option == Button.O_ACCEPT_MENU ) {
 
-				optionLocator = "css=div[id='zm__Calendar'] div[id='zmi__Calendar__REPLY_ACCEPT'] td[id$='_title']";
+				optionLocator = Locators.AcceptMenu;
 				throw new HarnessException("implement action:"+ action +" option:"+ option);
 
 			} else if ( option == Button.O_TENTATIVE_MENU ) {
 
-				optionLocator = "css=div[id='zm__Calendar'] div[id='zmi__Calendar__REPLY_TENTATIVE'] td[id$='_title']";
+				optionLocator = Locators.TentativeMenu;
 				throw new HarnessException("implement action:"+ action +" option:"+ option);
 
 			} else if ( option == Button.O_DECLINE_MENU ) {
 
-				optionLocator = "css=div[id='zm__Calendar'] div[id='zmi__Calendar__REPLY_DECLINE'] td[id$='_title']";
+				optionLocator = Locators.DeclineMenu;
 				throw new HarnessException("implement action:"+ action +" option:"+ option);
 
 			} else if ( option == Button.O_PROPOSE_NEW_TIME_MENU ) {
 
-				optionLocator = "css=div[id='zm__Calendar'] div[id='zmi__Calendar__PROPOSE_NEW_TIME'] td[id$='_title']";
+				optionLocator = Locators.ProposeNewTimeMenu;
 				throw new HarnessException("implement action:"+ action +" option:"+ option);
 
 			} else if ( option == Button.O_CREATE_A_COPY_MENU ) {
 
-				optionLocator = "css=div[id='zm__Calendar'] div[id='zmi__Calendar__DUPLICATE_APPT'] td[id$='_title']";
+				optionLocator = Locators.CreateACopyMenu;
 				throw new HarnessException("implement action:"+ action +" option:"+ option);
 
 			} else if ( option == Button.O_REPLY ) {
 
-				optionLocator = "css=div[id='zm__Calendar'] div[id='zmi__Calendar__REPLY'] td[id$='_title']";
+				optionLocator = Locators.ReplyMenu;
 				throw new HarnessException("implement action:"+ action +" option:"+ option);
 
 			} else if ( option == Button.O_REPLY_TO_ALL ) {
 
-				optionLocator = "css=div[id='zm__Calendar'] div[id='zmi__Calendar__REPLY_ALL'] td[id$='_title']";
+				optionLocator = Locators.ReplyToAllMenu;
 				throw new HarnessException("implement action:"+ action +" option:"+ option);
 
 			} else if ( option == Button.O_FORWARD ) {
 
-				optionLocator = "css=div[id='zm__Calendar'] div[id='zmi__Calendar__FORWARD_APPT'] td[id$='_title']";
+				optionLocator = Locators.ForwardMenu;
 				throw new HarnessException("implement action:"+ action +" option:"+ option);
 
 			} else if ( option == Button.O_DELETE ) {
 
-				optionLocator = "css=div[id='zm__Calendar'] div[id='zmi__Calendar__DELETE'] td[id$='_title']";
+				optionLocator = Locators.DeleteMenu;
 				page = new DialogConfirm(DialogConfirm.Confirmation.DELETE, MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
 
 			} else if ( option == Button.O_MOVE ) {
 
-				optionLocator = "css=div[id='zm__Calendar'] div[id='zmi__Calendar__MOVE'] td[id$='_title']";
+				optionLocator = Locators.MoveMenu;
 				throw new HarnessException("implement action:"+ action +" option:"+ option);
 
 			} else if ( option == Button.O_TAG_APPOINTMENT_MENU ) {
 
-				optionLocator = "css=div[id='zm__Calendar'] div[id='zmi__Calendar__TAG_MENU'] td[id$='_title']";
+				optionLocator = Locators.TagAppointmentMenu;
+				throw new HarnessException("implement action:"+ action +" option:"+ option);
+				
+			} else if (option == Button.O_TAG_APPOINTMENT_NEW_TAG_SUB_MENU) {
+				
+				optionLocator = Locators.TagAppointmentNewTagSubMenu;
+				throw new HarnessException("implement action:"+ action +" option:"+ option);
+
+			} else if (option == Button.O_TAG_APPOINTMENT_REMOVE_TAG_SUB_MENU) {
+				
+				optionLocator = Locators.TagAppointmentRemoveTagSubMenu;
 				throw new HarnessException("implement action:"+ action +" option:"+ option);
 
 			} else if ( option == Button.O_SHOW_ORIGINAL_MENU ) {
-
-				optionLocator = "css=div[id='zm__Calendar'] div[id='zmi__Calendar__SHOW_ORIG'] td[id$='_title']";
+				
+				optionLocator = Locators.ShowOriginalMenu;
 				throw new HarnessException("implement action:"+ action +" option:"+ option);
 
 			} else if ( option == Button.O_QUICK_COMMANDS_MENU ) {
-
-				optionLocator = "css=div[id='zm__Calendar'] div[id='zmi__Calendar__QUICK_COMMANDS'] td[id$='_title']";
+				
+				optionLocator = Locators.QuickCommandsMenu;
+				throw new HarnessException("implement action:"+ action +" option:"+ option);
+				
+			} else if (option == Button.O_INSTANCE_MENU) {
+				
+				optionLocator = Locators.InstanceMenu;
 				throw new HarnessException("implement action:"+ action +" option:"+ option);
 
+			} else if (option == Button.O_SERIES_MENU) {
+				
+				optionLocator = Locators.SeriesMenu;
+				throw new HarnessException("implement action:"+ action +" option:"+ option);
+
+			} else if (option == Button.O_OPEN_INSTANCE_MENU) {
+				
+				optionLocator = Locators.OpenInstanceMenu;
+				throw new HarnessException("implement action:"+ action +" option:"+ option);
+
+			} else if (option == Button.O_FORWARD_INSTANCE_MENU) {
+				
+				optionLocator = Locators.ForwardInstanceMenu;
+				throw new HarnessException("implement action:"+ action +" option:"+ option);
+
+			} else if (option == Button.O_DELETE_INSTANCE_MENU) {
+				
+				optionLocator = Locators.DeleteInstanceMenu;
+				throw new HarnessException("implement action:"+ action +" option:"+ option);
+
+			} else if (option == Button.O_OPEN_SERIES_MENU) {
+				
+				optionLocator = Locators.OpenSeriesMenu;
+				throw new HarnessException("implement action:"+ action +" option:"+ option);
+
+			} else if (option == Button.O_FORWARD_SERIES_MENU) {
+				
+				optionLocator = Locators.ForwardSeriesMenu;
+				throw new HarnessException("implement action:"+ action +" option:"+ option);
+
+			} else if (option == Button.O_NEW_APPOINTMENT_MENU) {
+				
+				optionLocator = Locators.NewAppointmentMenu;
+				throw new HarnessException("implement action:"+ action +" option:"+ option);
+
+			} else if (option == Button.O_NEW_ALL_DAY_APPOINTMENT_MENU) {
+				
+				optionLocator = Locators.NewAllDayAppointmentMenu;
+				throw new HarnessException("implement action:"+ action +" option:"+ option);
+
+			} else if (option == Button.O_GO_TO_TODAY_MENU) {
+				
+				optionLocator = Locators.GoToTodayMenu;
+				throw new HarnessException("implement action:"+ action +" option:"+ option);
+				
 			}
 			else {
 				throw new HarnessException("implement action:"+ action +" option:"+ option);

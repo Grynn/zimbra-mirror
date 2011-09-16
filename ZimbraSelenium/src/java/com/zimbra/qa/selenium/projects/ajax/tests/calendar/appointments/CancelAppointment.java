@@ -302,7 +302,7 @@ public class CancelAppointment extends AjaxCommonTest {
 	}
 	
 	@Test(description = "Modify appointment cancellation message while cancelling appointment",
-			groups = { "functional" })
+			groups = { "functional1" })
 	public void CancelAppointment_06() throws HarnessException {
 		
 		// Creating object for appointment data
