@@ -45,12 +45,13 @@ public class CreateMountpoint extends OctopusCommonTest {
 				+ ownerBriefcaseRootFolder.getId() + "'/>"
 				+ "</CreateFolderRequest>");
 
+		// Verify the share folder exists on the server
 		FolderItem ownerFolder = FolderItem.importFromSOAP(ownerAccount,
 				ownerFoldername);
 
 		ZAssert
 				.assertNotNull(ownerFolder,
-						"Verify the new owner folder exists");
+						"Verify the owner share folder exists");
 
 		ZimbraAccount currentAccount = app.zGetActiveAccount();
 
@@ -84,7 +85,6 @@ public class CreateMountpoint extends OctopusCommonTest {
 
 		ZAssert.assertEquals(folderMountpointItem.getName(), folderMountpointName,
 				"Verify the server and client mountpoint names match");
-		
 		
 		// refresh Octopus page
 		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_MY_FILES);

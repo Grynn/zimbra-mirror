@@ -50,12 +50,13 @@ public class DeleteMountpoint extends OctopusCommonTest {
 				+ ownerBriefcaseRootFolder.getId() + "'/>"
 				+ "</CreateFolderRequest>");
 
+		// Verify the share folder exists on the server
 		FolderItem ownerFolder = FolderItem.importFromSOAP(ownerAccount,
 				ownerFoldername);
 
 		ZAssert
 				.assertNotNull(ownerFolder,
-						"Verify the new owner folder exists");
+						"Verify the owner share folder exists");
 
 		ZimbraAccount currentAccount = app.zGetActiveAccount();
 
@@ -83,21 +84,13 @@ public class DeleteMountpoint extends OctopusCommonTest {
 		// Verify the mountpoint exists on the server
 		FolderMountpointItem folderMountpointItem = FolderMountpointItem
 				.importFromSOAP(currentAccount, folderMountpointName);
-
 		ZAssert.assertNotNull(folderMountpointItem,
 				"Verify the mountpoint is available");
 
-		ZAssert.assertEquals(folderMountpointItem.getName(), folderMountpointName,
-				"Verify the server and client mountpoint names match");
-		
-		// Verify the mountpoint exists in the list view
-		List<String> items = app.zPageOctopus.zGetListViewItems();
-		
-		ZAssert.assertNotNull(items, 
-		"Verify list view is not empty");
-		
-		ZAssert.assertContains(items, folderMountpointName,
-		"Verify list view contains mountpoint folder");
+		// refresh Octopus page
+		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_MY_FILES);
+
+		SleepUtil.sleepVerySmall();
 		
 		// Delete the mountpoint folder using drop down list option
 		app.zPageOctopus.zToolbarPressPulldown(Button.B_MY_FILES_LIST_ITEM, Button.O_DELETE, folderMountpointItem);

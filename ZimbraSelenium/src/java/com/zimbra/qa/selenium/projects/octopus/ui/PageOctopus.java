@@ -295,20 +295,24 @@ public class PageOctopus extends AbsTab {
 		} else if (pulldown == Button.B_MY_FILES_LIST_ITEM) {
 			
 			pulldownLocator = Locators.zMyFilesListViewItems.locator
-					+ ":contains(" + itemName  + ") span[class=my-files-list-item-action-button sc-hidden]";
+					+ ":contains(" + itemName  + ") span[class^=my-files-list-item-action-button]";
 
-			if (!this.sIsElementPresent(pulldownLocator))
+			if (!this.zWaitForElementPresent(pulldownLocator,"2000"))
 				throw new HarnessException("Button is not present locator="
 						+ pulldownLocator);
 			
 			zClick(pulldownLocator);
-
+			
 			// If the app is busy, wait for it to become active
 			zWaitForBusyOverlay();
 
 			if (option == Button.O_DELETE) {
 				optionLocator = Locators.zDeleteFolderOption.locator;
-
+				
+				if (!this.zWaitForElementPresent(optionLocator,"2000"))
+					throw new HarnessException("Button is not present locator="
+							+ optionLocator);
+				
 				this.sClickAt(optionLocator,"0,0");
 				
 				// If the app is busy, wait for it to become active

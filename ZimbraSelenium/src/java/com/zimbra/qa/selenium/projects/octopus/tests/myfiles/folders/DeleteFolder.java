@@ -42,10 +42,16 @@ public class DeleteFolder extends OctopusCommonTest {
 				+ briefcaseRootFolder.getId() + "' view='document'/>"
 				+ "</CreateFolderRequest>");
 
+		// Verify the sub-folder exists on the server
 		FolderItem briefcaseSubFolder = FolderItem.importFromSOAP(account,
 				briefcaseSubFolderName);
 		ZAssert.assertNotNull(briefcaseSubFolder,
 				"Verify the subfolder is available");
+		
+		// refresh Octopus page
+		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_MY_FILES);
+
+		SleepUtil.sleepVerySmall();
 		
 		// Delete the folder using drop down list option
 		app.zPageOctopus.zToolbarPressPulldown(Button.B_MY_FILES_LIST_ITEM, Button.O_DELETE, briefcaseSubFolder);
