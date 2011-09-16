@@ -753,7 +753,7 @@ Dwt.__MSIE_OPACITY_RE = /alpha\(opacity=(\d+)\)/;
 Dwt.getOpacity =
 function(htmlElement) {
 	if (AjxEnv.isIE) {
-		var filter = htmlElement.style.filter;
+		var filter = Dwt.getIEFilter(htmlElement, "alpha");
 		var m = Dwt.__MSIE_OPACITY_RE.exec(filter) || [ filter, "100" ];
 		return Number(m[1]);
 	}
@@ -763,7 +763,7 @@ function(htmlElement) {
 Dwt.setOpacity =
 function(htmlElement, opacity) {
 	if (AjxEnv.isIE) {
-		htmlElement.style.filter = "alpha(opacity="+opacity+")";
+        Dwt.alterIEFilter(htmlElement, "alpha", "alpha(opacity="+opacity+")");
 	} else {
 		htmlElement.style.opacity = opacity/100;
 	}
@@ -1549,3 +1549,128 @@ function(id, date) {
 	}
 	div.innerHTML = date.getTime();
 };
+
+
+// Css for Templates
+Dwt.createLinearGradientCss =
+function(startColor, endColor, direction) {
+    var gradientCss = null;
+    var gradient = this.createLinearGradientInfo(startColor, endColor, direction);
+    if (gradient.field) {
+        gradientCss = gradient.field + ":" + gradient.css + ";";
+    }
+    return gradientCss;
+}
+
+/**
+ * -- FF 3.6+
+ *    background: -moz-linear-gradient(black, white);
+ * -- Safari 4+, Chrome 2+
+ *    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #000000), color-stop(100%, #ffffff));
+ * -- Safari 5.1+, Chrome 10+
+ *    background: -webkit-linear-gradient(top, black, white);
+ * -- Opera 11.10
+ *    background: -o-linear-gradient(black, white);
+ * -- IE6 & IE7
+ *    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#000000', endColorstr='#ffffff');
+ * -- IE8 & IE9
+ *    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#000000', endColorstr='#ffffff')";
+ * -- IE10
+ *    background: -ms-linear-gradient(black, white);
+ * -- the standard
+ *    background: linear-gradient(black, white);
+ */
+Dwt.createLinearGradientInfo =
+function(startColor, endColor, direction) {
+
+    var cssDirection;
+    var gradient = {};
+    if (AjxEnv.isIE) {
+        cssDirection = (direction == 'v') ? 0 : 1;
+        gradient.field = "filter";
+        gradient.name  = "DXImageTransform.Microsoft.Gradient";
+        gradient.css   = "progid:" + gradient.name + "(" +
+                         "GradientType=" + cssDirection + ",startColorstr='" + startColor +
+                         "',endColorstr='" + endColor + "')";
+    } else if (AjxEnv.isFirefox3_6up) {
+        cssDirection = (direction == 'v') ? 'top' : 'left';
+        gradient.field = "background";
+        gradient.css   = "-moz-linear-gradient(" + cssDirection + "," + startColor + ", "  + endColor + ")";
+    } else if ((AjxEnv.isSafari && AjxEnv.isSafari5_1up) || AjxEnv.isChrome10up) {
+        cssDirection = (direction == 'v') ? 'top' : 'left';
+        gradient.field = "background";
+        gradient.css   = "-webkit-linear-gradient(" + cssDirection + ","+
+                          startColor + ", " + endColor + ")";
+    } else if ((AjxEnv.isSafari && AjxEnv.isSafari4up) || AjxEnv.isChrome2up) {
+        var startPt = 'left top';
+        var endPt   = (direction == 'v') ? "left bottom" : "right top";
+        gradient.field = "background";
+        gradient.css   = "-webkit-gradient(linear, " + startPt + ", " + endPt +
+                         ", color-stop(0%, " + startColor + "), color-stop(100%, " + endColor + "))";
+    }
+    return gradient;
+}
+
+Dwt.setLinearGradient =
+function(htmlElement, startColor, endColor, direction) {
+    var gradient = Dwt.createLinearGradientInfo(startColor, endColor, direction);
+    if (AjxEnv.isIE) {
+        Dwt.alterIEFilter(htmlElement, gradient.name, gradient.css);
+    } else {
+        htmlElement.style[gradient.field] = gradient.css;
+    }
+}
+
+Dwt.alterIEFilter =
+function(htmlElement, filterName, newFilter) {
+    if (htmlElement.style.filter) {
+        var found = false;
+        var filters = htmlElement.style.filter.split(" ");
+        for (var i = 0; i < filters.length; i++) {
+            if (filters[i].indexOf(filterName) != -1) {
+                filters[i] = newFilter;
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            filters[filters.length] = newFilter;
+        }
+        htmlElement.style.filter = filters.join(" ");
+    } else {
+       htmlElement.style.filter = newFilter;
+    }
+}
+
+Dwt.getIEFilter =
+function(htmlElement, filterName) {
+    var filter = "";
+    if (htmlElement.style.filter) {
+        var filters = htmlElement.style.filter.split(" ");
+        for (var i = 0; i < filters.length; i++) {
+            if (filters[i].indexOf(filterName) != -1) {
+                filter = filters[i];
+                break;
+            }
+        }
+    }
+    return filter
+}
+
+// Used for an unattached DOM subtree.
+Dwt.getDescendant =
+function(htmlElement, id) {
+    var descendant = null;
+    for (var i = 0; i < htmlElement.childNodes.length; i++) {
+        var child = htmlElement.childNodes[i];
+        if (child.id == id) {
+            descendant = child;
+        } else {
+            descendant = Dwt.getDescendant(child, id);
+        }
+        if (descendant != null) {
+            break;
+        }
+    }
+    return descendant
+}
