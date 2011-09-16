@@ -11,7 +11,7 @@ import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.DialogEditFolder;
-import com.zimbra.qa.selenium.projects.ajax.ui.mail.TreeMail.Locators;
+
 
 
 
@@ -32,6 +32,7 @@ public class TreeTasks extends AbsTree {
 		public static final String zDeleteTreeMenuItem = "css=div[id^='POPUP'] tr[id='POPUP_DELETE']";
 		public static final String zRenameTreeMenuItem ="css=tr#POPUP_RENAME_FOLDER";
 		public static final String zEditTreeMenuItem ="css=tr#POPUP_EDIT_PROPS";
+		public static final String zRenameTagTreeMenuItem ="css=div[id='RENAME_TAG'] tr[id='POPUP_RENAME_TAG']";
 	}
 	
 		
@@ -241,7 +242,7 @@ public class TreeTasks extends AbsTree {
 
 		} else if (option == Button.B_RENAME) {
 
-			optionLocator = Locators.zRenameTreeMenuItem;
+			optionLocator = Locators.zRenameTagTreeMenuItem;
 
 			page = new DialogRenameTag(MyApplication,((AppAjaxClient) MyApplication).zPageTasks);
 
