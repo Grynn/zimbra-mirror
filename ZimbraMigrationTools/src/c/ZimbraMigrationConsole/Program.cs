@@ -77,7 +77,7 @@ namespace ZimbraMigrationConsole
                                     System.Console.WriteLine();
 
                                     //userAcct.StartMigration(user.UserName, myXmlConfig.ConfigObj.importOptions.Mail.ToString());
-                                    Test.test();
+                                    Test.test(acctName);
                                     Thread.Sleep(15000);
                                 }
                                 else
@@ -105,7 +105,7 @@ namespace ZimbraMigrationConsole
                                         System.Console.WriteLine();
                                         System.Console.WriteLine();
                                        // userAcct.StartMigration(user.UserName, myXmlConfig.ConfigObj.importOptions.Mail.ToString());
-                                        Test.test();
+                                        Test.test(acctName);
                                         System.Console.WriteLine("......... \n");
                                         Thread.Sleep(9000);
                                     }

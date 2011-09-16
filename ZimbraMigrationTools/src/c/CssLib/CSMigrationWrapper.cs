@@ -124,7 +124,7 @@ namespace CssLib
         }
 
 
-        public void GetListofMapiFolders()
+        public void GetListofMapiFolders(string account)
         {
 
           /*  UDTFolder[] folders;
@@ -162,7 +162,7 @@ namespace CssLib
                 {
 
 
-                    ZimbraValues.GetZimbraValues().AccountName = "KNuthi@knuthi-win-1";
+                    ZimbraValues.GetZimbraValues().AccountName = account;
                     int stat = api.CreateFolder(F1.Name, "1");
                     //stat=  api.CreateFolder("testfolder","2");
 
@@ -171,7 +171,7 @@ namespace CssLib
                 {
                     if ((F1.Name == "Contacts") && (F1.Id == 7))
                     {
-                        ZimbraValues.GetZimbraValues().AccountName = "KNuthi@knuthi-win-1";
+                        ZimbraValues.GetZimbraValues().AccountName = account;
                         // int stat = api.CreateContact(
                     }
 
@@ -205,7 +205,7 @@ namespace CssLib
                                 }
                             }
                         }
-                        ZimbraValues.GetZimbraValues().AccountName = "KNuthi@knuthi-win-1";
+                        ZimbraValues.GetZimbraValues().AccountName = account;
                         if (dict.Count > 0)
                         { int stat = api.CreateContact(dict); }
 
@@ -302,7 +302,7 @@ namespace CssLib
         public void  StartMigration(MigrationAccount Acct)
         {
             
-           // GetListofMapiFolders();
+            GetListofMapiFolders(Acct.Accountname);
            // GetListofItems();
             //Acct.Accountname = "testing";
             Acct.TotalNoContacts = 100;
