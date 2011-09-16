@@ -41,6 +41,24 @@ public abstract class AbsTab extends AbsPage {
 	}
 
 	/**
+	 * Refresh the browser and navigate to this page
+	 */
+	public void zRefresh() throws HarnessException {
+		
+		// Refresh the page
+		sRefresh();
+		
+		// Wait for the page to load
+		sWaitForPageToLoad();
+		
+		SleepUtil.sleep(5000);
+		
+		// Navigate to the page
+		zNavigateTo();
+		
+	}
+	
+	/**
 	 * Navigate to this page
 	 * 
 	 * @throws HarnessException

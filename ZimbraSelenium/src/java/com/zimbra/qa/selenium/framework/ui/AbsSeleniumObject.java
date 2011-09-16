@@ -748,7 +748,7 @@ public abstract class AbsSeleniumObject {
 	 */
 	public void sRefresh() {
 		ClientSessionFactory.session().selenium().refresh();
-		logger.info("refresh the browser");
+		logger.info("refresh()");
 	}
 
 	/**

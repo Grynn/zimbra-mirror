@@ -217,7 +217,7 @@ public class AjaxQuickCommandTest extends AjaxCommonTest {
 
 		
 		// Re-login to pick up the new preferences
-		app.zPageMain.zLogout();
+		super.startingPage.zRefresh();
 
 		// The AjaxCommonTest.commonTestBeforeMethod() method will log into the client
 		
