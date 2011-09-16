@@ -302,7 +302,7 @@ namespace CssLib
         public void  StartMigration(MigrationAccount Acct)
         {
             
-            GetListofMapiFolders(Acct.Accountname);
+            //GetListofMapiFolders(Acct.Accountname);
            // GetListofItems();
             //Acct.Accountname = "testing";
             Acct.TotalNoContacts = 100;
