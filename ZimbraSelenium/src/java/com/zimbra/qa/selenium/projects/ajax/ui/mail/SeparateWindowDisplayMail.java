@@ -283,7 +283,7 @@ public class SeparateWindowDisplayMail extends AbsSeparateWindow {
 
 			if ( option == Button.B_PRINT ) {
 				
-				optionLocator = containerActionMenu + " div[id$='__PRINT'] td[id$='_title']";
+				optionLocator = containerActionMenu + " div[id='PRINT'] td[id$='_title']";
 				page = null;
 				throw new HarnessException("implement me"); // Need to implement the print dialog
 
@@ -291,49 +291,49 @@ public class SeparateWindowDisplayMail extends AbsSeparateWindow {
 				
 			} else if (option == Button.B_RESPORTSPAM) {
 				
-				optionLocator = containerActionMenu + " div[id$='__SPAM'] td[id$='_title']";
+				optionLocator = containerActionMenu + " div[id='SPAM'] td[id$='_title']";
 				page = null;
 				
 				// FALL THROUGH
 				
 			} else if (option == Button.B_RESPORTNOTSPAM) {
 				
-				optionLocator = containerActionMenu + " div[id$='__SPAM'] td[id$='_title']";
+				optionLocator = containerActionMenu + " div[id='SPAM'] td[id$='_title']";
 				page = null;
 				
 				// FALL THROUGH
 				
 			} else if (option == Button.O_MARK_AS_READ) {
 				
-				optionLocator = containerActionMenu + " div[id$='__MARK_READ'] td[id$='_title']";
+				optionLocator = containerActionMenu + " div[id='MARK_READ'] td[id$='_title']";
 				page = null;
 				
 				// FALL THROUGH
 				
 			} else if (option == Button.O_MARK_AS_UNREAD) {
 				
-				optionLocator = containerActionMenu + " div[id$='__MARK_UNREAD'] td[id$='_title']";
+				optionLocator = containerActionMenu + " div[id='MARK_UNREAD'] td[id$='_title']";
 				page = null;
 				
 				// FALL THROUGH
 				
 			} else if (option == Button.O_SHOW_ORIGINAL) {
 				
-				optionLocator = containerActionMenu + " div[id$='__SHOW_ORIG'] td[id$='_title']";
+				optionLocator = containerActionMenu + " div[id='SHOW_ORIG'] td[id$='_title']";
 				page = null;
 				
 				// FALL THROUGH
 
 			} else if (option == Button.B_REDIRECT) {
 				
-				optionLocator = containerActionMenu + " div[id$='__REDIRECT'] td[id$='_title']";
+				optionLocator = containerActionMenu + " div[id='REDIRECT'] td[id$='_title']";
 				page = null;
 				
 				// FALL THROUGH
 
 			} else if (option == Button.O_EDIT_AS_NEW) {
 				
-				optionLocator = containerActionMenu + " div[id$='__EDIT_AS_NEW'] td[id$='_title']";
+				optionLocator = containerActionMenu + " div[id='EDIT_AS_NEW'] td[id$='_title']";
 				page = null;
 				
 				// FALL THROUGH
