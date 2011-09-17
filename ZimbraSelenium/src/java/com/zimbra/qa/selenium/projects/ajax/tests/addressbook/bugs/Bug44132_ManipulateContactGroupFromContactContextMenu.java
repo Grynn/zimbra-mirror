@@ -164,11 +164,7 @@ public class Bug44132_ManipulateContactGroupFromContactContextMenu extends AjaxC
 	public void Add1ContactToGroup() throws HarnessException {			
 		// Create a contact group via Soap
 		ContactGroupItem group = ContactGroupItem.createUsingSOAP(app);			             
-					
-		//refresh the browser
-		app.zPageAddressbook.zRefresh();
-				
-		
+											
 		 // Create a contact via Soap then select
 		ContactItem contactItem = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_LEFTCLICK);
 	
@@ -192,10 +188,7 @@ public class Bug44132_ManipulateContactGroupFromContactContextMenu extends AjaxC
 	public void Add3ContactsToGroup() throws HarnessException {			
 		// Create a contact group via Soap
 		ContactGroupItem group = ContactGroupItem.createUsingSOAP(app);			             
-		
-		//refresh the browser
-		app.zPageAddressbook.zRefresh();
-
+				
 		// Create a contact via Soap
 		ContactItem contactItem1 = ContactItem.createUsingSOAP(app);			             
 		  		  
@@ -309,10 +302,7 @@ public class Bug44132_ManipulateContactGroupFromContactContextMenu extends AjaxC
 	
 		// Create a contact group 
 		ContactGroupItem group1 = CreateGroupOfGAL_ExistingContact_NewEmail();
-	
-		//refresh the browser
-		app.zPageAddressbook.zRefresh();
-
+		
 		// Create a contact via Soap
 		ContactItem contactItem1 = ContactItem.createUsingSOAP(app);			             
 		  		  

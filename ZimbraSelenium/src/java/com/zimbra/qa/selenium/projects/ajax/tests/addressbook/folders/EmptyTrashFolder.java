@@ -39,11 +39,13 @@ public class EmptyTrashFolder extends AjaxCommonTest {
   	     //delete contact + group by click Delete button on toolbar
           app.zPageAddressbook.zToolbarPressButton(Button.B_DELETE);
 
+    
           //verify toasted message 2 contacts moved to Trash
-          String expectedMsg = "2 contacts moved to Trash";
+          String  expectedMsg = "2 contacts moved to Trash";
           ZAssert.assertStringContains(app.zPageMain.zGetToaster().zGetToastMessage(),
 	        expectedMsg , "Verify toast message '" + expectedMsg + "'");
 
+  
 	      //verify deleted contact + group not displayed
           List<ContactItem> contacts = app.zPageAddressbook.zListGetContacts(); 
 	           

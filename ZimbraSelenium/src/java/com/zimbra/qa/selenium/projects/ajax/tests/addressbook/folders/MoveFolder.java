@@ -16,7 +16,7 @@ public class MoveFolder extends AjaxCommonTest {
 		logger.info("New "+ MoveFolder.class.getCanonicalName());
 		
 		// All tests start at the login page
-		super.startingPage = app.zPageMail;
+		super.startingPage = app.zPageAddressbook;
 		super.startingAccountPreferences = null;
 		
 	}
@@ -33,16 +33,17 @@ public class MoveFolder extends AjaxCommonTest {
 		FolderItem contact= FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Contacts);
 		ZAssert.assertNotNull(contact, "Verify can get the contact ");
 
+	
 		FolderItem folderItemDest = CreateFolder.createNewFolderViaSoap(contact,app);
-
+        
 	
 		// Expand parent node to show up sub folder
 		app.zTreeContacts.zExpand(contact);
 	
 		
 		app.zPageAddressbook.zDragAndDrop(
-				"css=td#zti__main_Contacts__" + folderItemSrc.getId() + "_textCell:contains("+ folderItemSrc.getName() + ")",
-				"css=td#zti__main_Contacts__" + folderItemDest.getId() + "_textCell:contains("+ folderItemDest.getName() + ")");
+				"css=div#zov__main_Contacts td#zti__main_Contacts__" + folderItemSrc.getId() + "_textCell:contains("+ folderItemSrc.getName() + ")",
+				"css=div#zov__main_Contacts td#zti__main_Contacts__" + folderItemDest.getId() + "_textCell:contains("+ folderItemDest.getName() + ")");
 			
 
 		// Verify the folder is now in the other subfolder

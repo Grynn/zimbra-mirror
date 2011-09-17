@@ -6,7 +6,10 @@ package com.zimbra.qa.selenium.framework.items;
 import org.apache.log4j.*;
 
 import com.zimbra.common.soap.Element;
+import com.zimbra.qa.selenium.framework.ui.AbsApplication;
+import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
+import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
 
 
 
@@ -84,25 +87,37 @@ public class TagItem implements IItem {
 
 	//Create a new tag via soap
 	//return TagItem object
-	public static TagItem CreateTagViaSoap(ZimbraAccount account) throws HarnessException{
+	public static TagItem CreateUsingSoap(AbsApplication app) throws HarnessException{
 		String tagName = "tag"+ ZimbraSeleniumProperties.getUniqueString();	
 		// Create the object
 		TagItem tagItem = new TagItem();
-		
-		//TODO color attribute shouldn't be fixed
+
+	
+		//TODO color attribute 
 	   // Create a tag via soap
-		account.soapSend(
+		app.zGetActiveAccount().soapSend(
 				"<CreateTagRequest xmlns='urn:zimbraMail'>" +
                	"<tag name='"+ tagName +"' color='1' />" +
                "</CreateTagRequest>");
-		String tagId = account.soapSelectValue("//mail:CreateTagResponse/mail:tag", "id");
+		String tagId = app.zGetActiveAccount().soapSelectValue("//mail:CreateTagResponse/mail:tag", "id");
 
 		// Set the ID
 		tagItem.setId(tagId);
 		//Set tag name
 		tagItem.setName(tagName);			
 
+		// Refresh addressbook
+		((AppAjaxClient)app).zPageMain.zToolbarPressButton(Button.B_REFRESH);
+
 		return tagItem;
+	}
+
+	
+	//Create a new tag via soap
+	//return TagItem object
+	@Deprecated()
+	public static TagItem CreateTagViaSoap(ZimbraAccount account) throws HarnessException{
+		throw new HarnessException("deprecated - using CreateUsingSoap instead");		  
 	}
 	
 	/* (non-Javadoc)

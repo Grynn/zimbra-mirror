@@ -84,12 +84,12 @@ public class TagContactGroup extends AjaxCommonTest  {
 		ContactGroupItem group = app.zPageAddressbook.createUsingSOAPSelectContactGroup(app, Action.A_LEFTCLICK);
 	           
 		// Create a new tag via soap
-	    TagItem tagItem = TagItem.CreateTagViaSoap(app.zGetActiveAccount());
+	    TagItem tagItem = TagItem.CreateUsingSoap(app);
 		
 	    // Dnd on the new tag
 		app.zPageAddressbook.zDragAndDrop(
 				"css=td#zlif__CNS__" + group.getId() + "__fileas:contains("+ group.fileAs + ")",
-				"css=td#zti__main_Contacts__" + tagItem.getId() + "_textCell:contains("+ tagItem.getName() + ")");
+				"css=div#zov__main_Contacts td#zti__main_Contacts__" + tagItem.getId() + "_textCell:contains("+ tagItem.getName() + ")");
 			
 		// Make sure the tag was applied to the contact
 		app.zGetActiveAccount().soapSend(

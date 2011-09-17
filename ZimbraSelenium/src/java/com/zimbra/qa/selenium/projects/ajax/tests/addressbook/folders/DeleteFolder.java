@@ -142,7 +142,7 @@ public class DeleteFolder extends AjaxCommonTest {
 	}
 
 	@Test(	description = "Delete an addressbook folder- Use shortcut Del",
-			groups = { "functional" })
+			groups = { "deprecated" })
 	public void UseShortcutDel() throws HarnessException {
 		
 		FolderItem userRoot= FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.UserRoot);

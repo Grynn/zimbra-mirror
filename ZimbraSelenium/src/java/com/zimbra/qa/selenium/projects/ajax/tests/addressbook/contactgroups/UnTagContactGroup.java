@@ -10,9 +10,8 @@ import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
-import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
+
 
 
 
@@ -50,7 +49,7 @@ public class UnTagContactGroup extends AjaxCommonTest  {
 			groups = { "smoke" })
 	public void ClickRemoveTagToolbarButton() throws HarnessException {
 			
-		TagItem tagItem = TagItem.CreateTagViaSoap(app.zGetActiveAccount());
+		TagItem tagItem = TagItem.CreateUsingSoap(app);
 		
 		// Refresh to display the new tag
 		app.zPageMain.zToolbarPressButton(Button.B_REFRESH);
@@ -71,7 +70,7 @@ public class UnTagContactGroup extends AjaxCommonTest  {
 			groups = { "functional" })
 	public void ClickContextMenuTagGroup() throws HarnessException {
 		
-		TagItem tagItem = TagItem.CreateTagViaSoap(app.zGetActiveAccount());
+		TagItem tagItem = TagItem.CreateUsingSoap(app);
 		
 		// Refresh to display the new tag
 		app.zPageMain.zToolbarPressButton(Button.B_REFRESH);

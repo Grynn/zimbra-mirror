@@ -85,7 +85,7 @@ public class TagContact extends AjaxCommonTest  {
 		ContactItem contactItem = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_LEFTCLICK);
 	          
 		// Create a new tag via soap
-	    TagItem tagItem = TagItem.CreateTagViaSoap(app.zGetActiveAccount());
+	    TagItem tagItem = TagItem.CreateUsingSoap(app);
 		
 		// Refresh to display the new tag
 		app.zPageMain.zToolbarPressButton(Button.B_REFRESH);

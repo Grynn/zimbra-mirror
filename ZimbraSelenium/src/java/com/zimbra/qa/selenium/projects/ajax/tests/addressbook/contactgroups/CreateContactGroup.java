@@ -209,9 +209,8 @@ public class CreateContactGroup extends AjaxCommonTest  {
 		//open contact group form
 		FormContactGroupNew formGroup = (FormContactGroupNew)app.zPageAddressbook.zToolbarPressPulldown(Button.B_NEW, Button.O_NEW_CONTACTGROUP);
         
-		//verify Save, Delete All, and Add (email) buttons disabled		
+		//verify Save and Add (email) buttons disabled		
 		ZAssert.assertFalse(formGroup.sIsVisible(Toolbar.SAVE), "Verify contact button Save disabled ");
-		ZAssert.assertFalse(formGroup.sIsVisible(FormContactGroupNew.Locators.zDeleteAllButton), "Verify contact button Delete All disabled ");
 		ZAssert.assertFalse(formGroup.sIsVisible(FormContactGroupNew.Locators.zAddNewButton), "Verify contact button Add disabled ");
 		
 		
