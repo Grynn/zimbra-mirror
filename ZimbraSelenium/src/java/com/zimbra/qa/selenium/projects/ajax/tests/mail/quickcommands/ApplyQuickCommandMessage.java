@@ -20,10 +20,10 @@ public class ApplyQuickCommandMessage extends AjaxQuickCommandTest {
 	public ApplyQuickCommandMessage() {
 		logger.info("New "+ ApplyQuickCommandMessage.class.getCanonicalName());
 
-		// All tests start at the login page
-		super.startingPage = app.zPageMail;
+		
+		
 
-		// Make sure we are using an account with message view
+		
 		super.startingAccountPreferences = new HashMap<String, String>() {{
 			put("zimbraPrefGroupMailBy", "message");
 		}};

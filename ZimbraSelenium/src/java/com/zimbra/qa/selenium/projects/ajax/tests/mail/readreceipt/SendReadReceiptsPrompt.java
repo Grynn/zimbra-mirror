@@ -1,37 +1,22 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.mail.readreceipt;
 
-import java.util.HashMap;
-
 import org.testng.annotations.Test;
 
 import com.zimbra.common.soap.Element;
-import com.zimbra.qa.selenium.framework.ui.Action;
-import com.zimbra.qa.selenium.framework.ui.Button;
-import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.ZAssert;
-import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
-import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
+import com.zimbra.qa.selenium.framework.ui.*;
+import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.staf.Stafpostqueue;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.core.PrefGroupMailByMessageTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning.DialogWarningID;
 
 
-public class SendReadReceiptsPrompt extends AjaxCommonTest {
+public class SendReadReceiptsPrompt extends PrefGroupMailByMessageTest {
 	
-	@SuppressWarnings("serial")
 	public SendReadReceiptsPrompt() {
 		logger.info("New "+ SendReadReceiptsPrompt.class.getCanonicalName());
 		
-		// All tests start at the login page
-		super.startingPage = app.zPageMail;
-
-		// Make sure we are using an account with message view
-		super.startingAccountPreferences = 
-			new HashMap<String, String>() {{
-				    put("zimbraPrefMailSendReadReceipts", "prompt");
-				    put("zimbraPrefGroupMailBy", "message");
-				}};
+		super.startingAccountPreferences.put("zimbraPrefMailSendReadReceipts", "prompt");
 
 
 	}

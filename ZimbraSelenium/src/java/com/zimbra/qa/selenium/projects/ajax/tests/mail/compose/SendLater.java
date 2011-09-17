@@ -1,7 +1,6 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.mail.compose;
 
 import java.util.GregorianCalendar;
-import java.util.HashMap;
 
 import org.testng.annotations.Test;
 
@@ -11,7 +10,7 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.core.PrefGroupMailByMessageTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning.DialogWarningID;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.DialogSendLater;
@@ -19,18 +18,15 @@ import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew.Field;
 
 
-public class SendLater extends AjaxCommonTest {
+public class SendLater extends PrefGroupMailByMessageTest {
 
-	@SuppressWarnings("serial")
 	public SendLater() {
 		logger.info("New "+ SendLater.class.getCanonicalName());
 		
-		// All tests start at the login page
-		super.startingPage = app.zPageMail;
-		super.startingAccountPreferences = new HashMap<String , String>() {{
-				    put("zimbraPrefComposeFormat", "text");
-		    		put("zimbraFeatureMailSendLaterEnabled", "TRUE");
-				}};
+		
+		
+		super.startingAccountPreferences.put("zimbraPrefComposeFormat", "text");
+		super.startingAccountPreferences.put("zimbraFeatureMailSendLaterEnabled", "TRUE");
 		
 	}
 	

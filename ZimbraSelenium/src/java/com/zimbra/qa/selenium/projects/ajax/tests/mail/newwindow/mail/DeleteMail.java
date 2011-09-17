@@ -1,38 +1,21 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.mail.newwindow.mail;
 
-import java.util.HashMap;
-
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.apache.log4j.*;
 import org.testng.annotations.Test;
 
-import com.zimbra.qa.selenium.framework.items.FolderItem;
-import com.zimbra.qa.selenium.framework.items.MailItem;
-import com.zimbra.qa.selenium.framework.ui.Action;
-import com.zimbra.qa.selenium.framework.ui.Button;
-import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.SleepUtil;
-import com.zimbra.qa.selenium.framework.util.ZAssert;
-import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
-import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.framework.items.*;
+import com.zimbra.qa.selenium.framework.ui.*;
+import com.zimbra.qa.selenium.framework.util.*;
+import com.zimbra.qa.selenium.projects.ajax.core.PrefGroupMailByMessageTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.SeparateWindowDisplayMail;
 
 
-public class DeleteMail extends AjaxCommonTest {
+public class DeleteMail extends PrefGroupMailByMessageTest {
 	protected static Logger logger = LogManager.getLogger(DeleteMail.class);
 
-	@SuppressWarnings("serial")
 	public DeleteMail() throws HarnessException {
 		logger.info("New "+ DeleteMail.class.getCanonicalName());
 		
-		// All tests start at the login page
-		super.startingPage = app.zPageMail;
-
-		// Make sure we are using an account with message view
-		super.startingAccountPreferences = new HashMap<String, String>() {{
-		    		put("zimbraPrefGroupMailBy", "message");
-				}};
 
 
 	}

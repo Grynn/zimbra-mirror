@@ -7,22 +7,17 @@ import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.items.MailItem;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.core.PrefGroupMailByMessageTest;
 
 
-public class FlagMail extends AjaxCommonTest {
+public class FlagMail extends PrefGroupMailByMessageTest {
 
-	@SuppressWarnings("serial")
 	public FlagMail() {
 		logger.info("New "+ FlagMail.class.getCanonicalName());
 		
-		// All tests start at the login page
-		super.startingPage = app.zPageMail;
+		
+		
 
-		// Make sure we are using an account with message view
-		super.startingAccountPreferences = new HashMap<String, String>() {{
-				    put("zimbraPrefGroupMailBy", "message");
-				}};
 		
 	}
 	

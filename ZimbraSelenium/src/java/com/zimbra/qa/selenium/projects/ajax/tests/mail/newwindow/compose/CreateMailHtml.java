@@ -1,31 +1,20 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.mail.newwindow.compose;
 
-import java.util.HashMap;
-
 import org.testng.annotations.Test;
 
-import com.zimbra.qa.selenium.framework.items.MailItem;
-import com.zimbra.qa.selenium.framework.items.RecipientItem;
+import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.Button;
-import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.ZAssert;
-import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
-import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.framework.util.*;
+import com.zimbra.qa.selenium.projects.ajax.core.PrefGroupMailByMessageTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.SeparateWindowFormMailNew;
 
-public class CreateMailHtml extends AjaxCommonTest {
+public class CreateMailHtml extends PrefGroupMailByMessageTest {
 
-	@SuppressWarnings("serial")
 	public CreateMailHtml() {
 		logger.info("New "+ CreateMailHtml.class.getCanonicalName());
 
-		// All tests start at the login page
-		super.startingPage = app.zPageMail;
-		super.startingAccountPreferences = new HashMap<String , String>() {{
-			put("zimbraPrefComposeFormat", "html");
-			put("zimbraPrefComposeInNewWindow", "TRUE");
-		}};
+		super.startingAccountPreferences.put("zimbraPrefComposeFormat", "html");
+		super.startingAccountPreferences.put("zimbraPrefComposeInNewWindow", "TRUE");
 
 	}
 

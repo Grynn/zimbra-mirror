@@ -1,6 +1,5 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.mail.compose.addresspicker;
 
-import java.util.HashMap;
 
 import org.testng.annotations.Test;
 
@@ -11,22 +10,19 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.core.PrefGroupMailByMessageTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormAddressPicker;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 
 
-public class AddCc extends AjaxCommonTest {
+public class AddCc extends PrefGroupMailByMessageTest {
 
-	@SuppressWarnings("serial")
 	public AddCc() {
 		logger.info("New "+ AddCc.class.getCanonicalName());
 		
-		// All tests start at the login page
-		super.startingPage = app.zPageMail;
-		super.startingAccountPreferences = new HashMap<String , String>() {{
-				    put("zimbraPrefComposeFormat", "text");
-				}};
+		
+		
+		super.startingAccountPreferences.put("zimbraPrefComposeFormat", "text");
 		
 	}
 	

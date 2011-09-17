@@ -14,10 +14,10 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.core.PrefGroupMailByMessageTest;
 
 
-public class DeleteMountpoint extends AjaxCommonTest {
+public class DeleteMountpoint extends PrefGroupMailByMessageTest {
 
 	private ZimbraAccount Owner = null;
 	
@@ -25,9 +25,6 @@ public class DeleteMountpoint extends AjaxCommonTest {
 	public DeleteMountpoint() {
 		logger.info("New "+ DeleteMountpoint.class.getCanonicalName());
 		
-		// All tests start at the login page
-		super.startingPage = app.zPageMail;
-		super.startingAccountPreferences = null;
 		
 		Owner = new ZimbraAccount();
 		Owner.provision();

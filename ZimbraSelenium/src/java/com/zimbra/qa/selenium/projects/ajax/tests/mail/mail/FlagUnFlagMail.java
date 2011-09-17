@@ -8,23 +8,18 @@ import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.core.PrefGroupMailByMessageTest;
 
 
 
-public class FlagUnFlagMail extends AjaxCommonTest {
+public class FlagUnFlagMail extends PrefGroupMailByMessageTest {
 
-	@SuppressWarnings("serial")
 	public FlagUnFlagMail() {
 		logger.info("New "+ FlagUnFlagMail.class.getCanonicalName());
 		
-		// All tests start at the login page
-		super.startingPage = app.zPageMail;
+		
+		
 
-		// Make sure we are using an account with message view
-		super.startingAccountPreferences = new HashMap<String, String>() {{
-				    put("zimbraPrefGroupMailBy", "message");
-				}};
 
 	}
 	

@@ -1,6 +1,5 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.mail.compose.spellcheck;
 
-import java.util.HashMap;
 
 import org.testng.annotations.Test;
 
@@ -9,21 +8,18 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.core.PrefGroupMailByMessageTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew.Field;
 
-public class SpellCheckText extends AjaxCommonTest {
+public class SpellCheckText extends PrefGroupMailByMessageTest {
 
-	@SuppressWarnings("serial")
 	public SpellCheckText() {
 		logger.info("New "+ SpellCheckText.class.getCanonicalName());
 		
-		// All tests start at the login page
-		super.startingPage = app.zPageMail;
-		super.startingAccountPreferences = new HashMap<String , String>() {{
-				    put("zimbraPrefComposeFormat", "text");
-				}};
+		
+		
+		super.startingAccountPreferences.put("zimbraPrefComposeFormat", "text");
 		
 	}
 	

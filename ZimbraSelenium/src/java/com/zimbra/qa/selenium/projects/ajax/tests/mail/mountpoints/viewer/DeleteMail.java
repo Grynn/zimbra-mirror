@@ -1,30 +1,24 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.mail.mountpoints.viewer;
 
 import java.awt.event.KeyEvent;
-import java.util.*;
 
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.core.PrefGroupMailByMessageTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogError;
 
 
-public class DeleteMail extends AjaxCommonTest {
+public class DeleteMail extends PrefGroupMailByMessageTest {
 
-	@SuppressWarnings("serial")
 	public DeleteMail() {
 		logger.info("New "+ DeleteMail.class.getCanonicalName());
 		
-		// All tests start at the login page
-		super.startingPage = app.zPageMail;
+		
+		
 
-		// Make sure we are using an account with message view
-		super.startingAccountPreferences = new HashMap<String, String>() {{
-				    put("zimbraPrefGroupMailBy", "message");
-				}};
 		
 	}
 	

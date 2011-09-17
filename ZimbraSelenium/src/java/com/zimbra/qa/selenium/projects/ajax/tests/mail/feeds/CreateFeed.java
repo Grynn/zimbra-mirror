@@ -7,17 +7,16 @@ import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.core.PrefGroupMailByMessageTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.DialogCreateFolder;
 
-public class CreateFeed extends AjaxCommonTest {
+public class CreateFeed extends PrefGroupMailByMessageTest {
 
 	public CreateFeed() {
 		logger.info("New "+ CreateFeed.class.getCanonicalName());
 
-		// All tests start at the login page
-		super.startingPage = app.zPageMail;
-		super.startingAccountPreferences = null;
+		
+		
 	}
 
 

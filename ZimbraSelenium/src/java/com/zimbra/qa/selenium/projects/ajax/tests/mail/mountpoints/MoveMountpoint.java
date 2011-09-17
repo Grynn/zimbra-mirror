@@ -12,11 +12,11 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.core.PrefGroupMailByMessageTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogMove;
 
 
-public class MoveMountpoint extends AjaxCommonTest {
+public class MoveMountpoint extends PrefGroupMailByMessageTest {
 
 	private ZimbraAccount Owner = null;
 	
@@ -24,9 +24,6 @@ public class MoveMountpoint extends AjaxCommonTest {
 	public MoveMountpoint() {
 		logger.info("New "+ MoveMountpoint.class.getCanonicalName());
 		
-		// All tests start at the login page
-		super.startingPage = app.zPageMail;
-		super.startingAccountPreferences = null;
 		
 		Owner = new ZimbraAccount();
 		Owner.provision();

@@ -1,7 +1,6 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.mail.newwindow.mail;
 
 import java.io.File;
-import java.util.HashMap;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -17,29 +16,20 @@ import com.zimbra.qa.selenium.framework.util.XmlStringUtil;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.core.PrefGroupMailByMessageTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.SeparateWindowDisplayMail;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.DisplayMail.Field;
 
 
-public class GetMail extends AjaxCommonTest {
+public class GetMail extends PrefGroupMailByMessageTest {
 	protected static Logger logger = LogManager.getLogger(GetMail.class);
 
 	boolean injected = false;
 	final String mimeFolder = ZimbraSeleniumProperties.getBaseDirectory() + "/data/public/mime/email00";
 
-	@SuppressWarnings("serial")
 	public GetMail() throws HarnessException {
 		logger.info("New "+ GetMail.class.getCanonicalName());
 		
-		// All tests start at the login page
-		super.startingPage = app.zPageMail;
-
-		// Make sure we are using an account with message view
-		super.startingAccountPreferences = new HashMap<String, String>() {{
-		    		put("zimbraPrefGroupMailBy", "message");
-		    		put("zimbraPrefMessageViewHtmlPreferred", "TRUE");
-				}};
 
 
 	}

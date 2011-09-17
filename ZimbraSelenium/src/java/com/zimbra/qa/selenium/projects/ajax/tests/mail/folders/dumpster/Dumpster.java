@@ -1,33 +1,24 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.mail.folders.dumpster;
 
-import java.util.HashMap;
-
 import org.testng.annotations.Test;
 
-import com.zimbra.qa.selenium.framework.items.FolderItem;
-import com.zimbra.qa.selenium.framework.items.MailItem;
-import com.zimbra.qa.selenium.framework.ui.Action;
-import com.zimbra.qa.selenium.framework.ui.Button;
-import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.ZAssert;
-import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.DialogMove;
-import com.zimbra.qa.selenium.projects.ajax.ui.FormRecoverDeletedItems;
+import com.zimbra.qa.selenium.framework.items.*;
+import com.zimbra.qa.selenium.framework.ui.*;
+import com.zimbra.qa.selenium.framework.util.*;
+import com.zimbra.qa.selenium.projects.ajax.core.PrefGroupMailByMessageTest;
+import com.zimbra.qa.selenium.projects.ajax.ui.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.FormRecoverDeletedItems.Field;
 
 
-public class Dumpster extends AjaxCommonTest {
+public class Dumpster extends PrefGroupMailByMessageTest {
 
-	@SuppressWarnings("serial")
 	public Dumpster() {
 		logger.info("New "+ Dumpster.class.getCanonicalName());
 
-		// All tests start at the login page
-		super.startingPage = app.zPageMail;
-		super.startingAccountPreferences = new HashMap<String, String>() {{
-			put("zimbraDumpsterEnabled", "TRUE");
-		}};
+		
+		
+		super.startingAccountPreferences.put("zimbraDumpsterEnabled", "TRUE");
+
 
 	}
 

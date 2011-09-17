@@ -10,20 +10,18 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.core.PrefGroupMailByMessageTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogShareRevoke;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.DialogEditFolder;
 
-public class DeleteShare extends AjaxCommonTest{
+public class DeleteShare extends PrefGroupMailByMessageTest{
 	
 	
 	
 	public DeleteShare() {
 		logger.info("New "+ DeleteShare.class.getCanonicalName());
 
-		// All tests start at the login page
-		super.startingPage = app.zPageMail;
-		super.startingAccountPreferences = null;
+		
 
 	}
 

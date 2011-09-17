@@ -2,7 +2,6 @@ package com.zimbra.qa.selenium.projects.ajax.tests.mail.compose.drafts;
 
 
 
-import java.util.HashMap;
 
 import org.testng.annotations.Test;
 
@@ -14,30 +13,27 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.core.PrefGroupMailByMessageTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew.Field;
 
 
-public class AutoSaveDraftMail extends AjaxCommonTest {
+public class AutoSaveDraftMail extends PrefGroupMailByMessageTest {
 
 	public static final int PrefAutoSaveDraftInterval = 10; // seconds
 
-	@SuppressWarnings("serial")
 	public AutoSaveDraftMail() {
 		logger.info("New "+ AutoSaveDraftMail.class.getCanonicalName());
 
-		// All tests start at the login page
-		super.startingPage = app.zPageMail;
-		super.startingAccountPreferences = new HashMap<String, String>() {{
-			put("zimbraPrefAutoSaveDraftInterval", ""+ PrefAutoSaveDraftInterval +"s");
-		}};
+		
+		
+		super.startingAccountPreferences.put("zimbraPrefAutoSaveDraftInterval", ""+ PrefAutoSaveDraftInterval +"s");
 
 	}
 
 	@Test(	description = "Auto save a basic draft (subject only)",
 			groups = { "smoke" })
-			public void SaveDraftMail_01() throws HarnessException {
+	public void AutoSaveDraftMail_01() throws HarnessException {
 
 
 		// Create the message data to be sent

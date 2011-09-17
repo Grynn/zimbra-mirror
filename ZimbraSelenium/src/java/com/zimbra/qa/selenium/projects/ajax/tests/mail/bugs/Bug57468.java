@@ -14,10 +14,10 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.core.PrefGroupMailByMessageTest;
 import com.zimbra.qa.selenium.projects.ajax.tests.mail.mail.GetMail;
 
-public class Bug57468 extends AjaxCommonTest {
+public class Bug57468 extends PrefGroupMailByMessageTest {
 
 	/**
 	 * @throws HarnessException
@@ -36,11 +36,8 @@ public class Bug57468 extends AjaxCommonTest {
 	public Bug57468() {
 		logger.info("New "+ GetMail.class.getCanonicalName());
 		
-		// All tests start at the login page
-		super.startingPage = app.zPageMail;
-
-		// Make sure we are using an account with message view
-		super.startingAccountPreferences = null;
+		
+		
 
 	}
 

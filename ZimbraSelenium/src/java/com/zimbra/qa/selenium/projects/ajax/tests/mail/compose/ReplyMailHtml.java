@@ -1,27 +1,22 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.mail.compose;
 
-import java.util.HashMap;
-
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.MailItem;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.core.PrefGroupMailByMessageTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 
 
-public class ReplyMailHtml extends AjaxCommonTest {
+public class ReplyMailHtml extends PrefGroupMailByMessageTest {
 
-	@SuppressWarnings("serial")
 	public ReplyMailHtml() {
 		logger.info("New "+ ReplyMailHtml.class.getCanonicalName());
 		
-		// All tests start at the login page
-		super.startingPage = app.zPageMail;
-		super.startingAccountPreferences = new HashMap<String, String>() {{
-				    put("zimbraPrefComposeFormat", "html");
-				}};
+		
+		
+		super.startingAccountPreferences.put("zimbraPrefComposeFormat", "html");
 		
 	}
 	

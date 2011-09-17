@@ -6,18 +6,15 @@ import com.zimbra.common.soap.Element;
 import com.zimbra.qa.selenium.framework.items.TagItem;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.core.PrefGroupMailByMessageTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
 
 
-public class RenameTag extends AjaxCommonTest {
+public class RenameTag extends PrefGroupMailByMessageTest {
 
 	public RenameTag() {
 		logger.info("New "+ RenameTag.class.getCanonicalName());
 		
-		// All tests start at the login page
-		super.startingPage = app.zPageMail;
-		super.startingAccountPreferences = null;
 		
 	}
 	

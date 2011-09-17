@@ -9,18 +9,16 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.core.PrefGroupMailByMessageTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogShare;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogShare.ShareRole;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.DialogEditFolder;
 
-public class EditShare extends AjaxCommonTest{
+public class EditShare extends PrefGroupMailByMessageTest {
+	
 	public EditShare() {
 		logger.info("New "+ EditShare.class.getCanonicalName());
 
-		// All tests start at the login page
-		super.startingPage = app.zPageMail;
-		super.startingAccountPreferences = null;
 
 	}
 

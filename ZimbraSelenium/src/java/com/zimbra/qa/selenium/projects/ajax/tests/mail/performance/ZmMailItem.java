@@ -11,7 +11,7 @@ import com.zimbra.qa.selenium.framework.util.performance.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.LmtpInject;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.core.*;
 
 
 public class ZmMailItem extends AjaxCommonTest {
@@ -21,10 +21,9 @@ public class ZmMailItem extends AjaxCommonTest {
 	public ZmMailItem() throws HarnessException {
 		logger.info("New "+ ZmMailItem.class.getCanonicalName());
 		
-		// All tests start at the login page
 		super.startingPage = app.zPageMail;
 
-		// Make sure we are using an account with message view
+		
 		super.startingAccountPreferences = new HashMap<String, String>() {{
 				    put("zimbraPrefGroupMailBy", "message");
 				    put("zimbraPrefMessageViewHtmlPreferred", "TRUE");

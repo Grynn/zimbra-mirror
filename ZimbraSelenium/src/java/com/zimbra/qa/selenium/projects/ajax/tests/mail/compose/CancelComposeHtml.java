@@ -1,6 +1,5 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.mail.compose;
 
-import java.util.HashMap;
 import java.util.List;
 
 import org.testng.annotations.Test;
@@ -12,23 +11,20 @@ import com.zimbra.qa.selenium.framework.ui.Shortcut;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.core.PrefGroupMailByMessageTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew.Field;
 
 
-public class CancelComposeHtml extends AjaxCommonTest {
+public class CancelComposeHtml extends PrefGroupMailByMessageTest {
 
-	@SuppressWarnings("serial")
 	public CancelComposeHtml() {
 		logger.info("New "+ CancelComposeHtml.class.getCanonicalName());
 		
-		// All tests start at the login page
-		super.startingPage = app.zPageMail;
-		super.startingAccountPreferences = new HashMap<String , String>() {{
-				    put("zimbraPrefComposeFormat", "html");
-				}};
+		
+		
+		super.startingAccountPreferences.put("zimbraPrefComposeFormat", "html");
 
 		
 	}

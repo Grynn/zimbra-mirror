@@ -9,20 +9,15 @@ import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.core.PrefGroupMailByMessageTest;
 
-public class GetFeed extends AjaxCommonTest {
+public class GetFeed extends PrefGroupMailByMessageTest {
 
 	public GetFeed() {
 		logger.info("New "+ GetFeed.class.getCanonicalName());
 
-		// All tests start at the login page
-		super.startingPage = app.zPageMail;
-		super.startingAccountPreferences = new HashMap<String, String>() {
-			private static final long serialVersionUID = 6578132883123088454L;
-		{
-		    put("zimbraPrefGroupMailBy", "message");
-		}};
+		
+		
 	}
 
 

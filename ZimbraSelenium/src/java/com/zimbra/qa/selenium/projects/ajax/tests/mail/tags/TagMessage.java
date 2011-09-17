@@ -1,30 +1,19 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.mail.tags;
 
-import java.util.HashMap;
-
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.core.PrefGroupMailByMessageTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogTag;
 
-public class TagMessage extends AjaxCommonTest {
+public class TagMessage extends PrefGroupMailByMessageTest {
 
-	@SuppressWarnings("serial")
 	public TagMessage() {
 		logger.info("New " + TagMessage.class.getCanonicalName());
 
-		// All tests start at the login page
-		super.startingPage = app.zPageMail;
-
-		super.startingAccountPreferences = new HashMap<String, String>() {
-			{
-				put("zimbraPrefGroupMailBy", "message");
-			}
-		};
 
 	}
 

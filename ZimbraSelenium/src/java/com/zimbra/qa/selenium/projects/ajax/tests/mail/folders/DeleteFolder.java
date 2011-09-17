@@ -6,17 +6,17 @@ import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.core.PrefGroupMailByMessageTest;
 
 
-public class DeleteFolder extends AjaxCommonTest {
+public class DeleteFolder extends PrefGroupMailByMessageTest {
 
 	public DeleteFolder() {
 		logger.info("New "+ DeleteFolder.class.getCanonicalName());
 		
-		// All tests start at the login page
-		super.startingPage = app.zPageMail;
-		super.startingAccountPreferences = null;
+		
+		
+		
 		
 	}
 	

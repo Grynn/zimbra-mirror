@@ -5,7 +5,7 @@ import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.util.performance.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.core.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.PageLogin.Locators;
 
 
@@ -15,7 +15,7 @@ public class ZmMailApp extends AjaxCommonTest {
 	public ZmMailApp() {
 		logger.info("New "+ ZmMailApp.class.getCanonicalName());
 		
-		// All tests start at the login page
+		
 		super.startingPage = app.zPageLogin;
 		super.startingAccountPreferences = null;
 		

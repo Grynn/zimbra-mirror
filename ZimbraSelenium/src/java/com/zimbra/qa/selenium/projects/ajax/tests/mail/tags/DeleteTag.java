@@ -5,18 +5,16 @@ import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.items.TagItem;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.core.PrefGroupMailByMessageTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
 
 
-public class DeleteTag extends AjaxCommonTest {
+public class DeleteTag extends PrefGroupMailByMessageTest {
 
 	public DeleteTag() {
 		logger.info("New "+ DeleteTag.class.getCanonicalName());
 		
-		// All tests start at the login page
-		super.startingPage = app.zPageMail;
-		super.startingAccountPreferences = null;
+		
 		
 	}
 	

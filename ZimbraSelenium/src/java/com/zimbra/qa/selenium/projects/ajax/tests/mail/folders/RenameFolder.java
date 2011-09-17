@@ -7,20 +7,20 @@ import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.core.PrefGroupMailByMessageTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogError;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogRenameFolder;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogError.DialogErrorID;
 
 
-public class RenameFolder extends AjaxCommonTest {
+public class RenameFolder extends PrefGroupMailByMessageTest {
 
 	public RenameFolder() {
 		logger.info("New "+ RenameFolder.class.getCanonicalName());
 		
-		// All tests start at the login page
-		super.startingPage = app.zPageMail;
-		super.startingAccountPreferences = null;
+		
+		
+		
 		
 	}
 	

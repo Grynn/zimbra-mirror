@@ -8,16 +8,16 @@ import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.core.PrefGroupMailByMessageTest;
 
-public class DragAndDropFolder extends AjaxCommonTest{
+public class DragAndDropFolder extends PrefGroupMailByMessageTest{
 
 	public DragAndDropFolder(){
 		logger.info("New "+ DragAndDropFolder.class.getCanonicalName());
 
-		// All tests start at the login page
-		super.startingPage = app.zPageMail;
-		super.startingAccountPreferences = null;
+		
+		
+		
 
 	}
 

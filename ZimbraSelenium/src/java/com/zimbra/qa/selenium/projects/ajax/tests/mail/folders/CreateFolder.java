@@ -7,10 +7,10 @@ import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount.SOAP_DESTINATION_HOST_TYPE;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.core.PrefGroupMailByMessageTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.DialogCreateFolder;
 
-public class CreateFolder extends AjaxCommonTest {
+public class CreateFolder extends PrefGroupMailByMessageTest {
 
 	private boolean _folderIsCreated = false;
 	private String _folderName = null;
@@ -19,9 +19,9 @@ public class CreateFolder extends AjaxCommonTest {
 	public CreateFolder() {
 		logger.info("New " + CreateFolder.class.getCanonicalName());
 
-		// All tests start at the login page
-		super.startingPage = app.zPageMail;
-		super.startingAccountPreferences = null;
+		
+		
+		
 	}
 
 	@BeforeMethod(alwaysRun = true)

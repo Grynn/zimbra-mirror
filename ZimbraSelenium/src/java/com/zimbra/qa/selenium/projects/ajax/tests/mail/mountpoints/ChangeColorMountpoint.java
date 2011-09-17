@@ -11,12 +11,12 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.core.PrefGroupMailByMessageTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.DialogEditFolder;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.DialogEditFolder.FolderColor;
 
 
-public class ChangeColorMountpoint extends AjaxCommonTest {
+public class ChangeColorMountpoint extends PrefGroupMailByMessageTest {
 
 	private ZimbraAccount Owner = null;
 	
@@ -24,9 +24,6 @@ public class ChangeColorMountpoint extends AjaxCommonTest {
 	public ChangeColorMountpoint() {
 		logger.info("New "+ ChangeColorMountpoint.class.getCanonicalName());
 		
-		// All tests start at the login page
-		super.startingPage = app.zPageMail;
-		super.startingAccountPreferences = null;
 		
 		Owner = new ZimbraAccount();
 		Owner.provision();

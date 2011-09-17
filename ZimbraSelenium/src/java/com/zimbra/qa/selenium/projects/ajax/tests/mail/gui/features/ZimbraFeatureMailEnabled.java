@@ -1,46 +1,29 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.mail.gui.features;
 
-import java.util.HashMap;
 import java.util.List;
 
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.MailItem;
 import com.zimbra.qa.selenium.framework.ui.Button;
-import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.ZAssert;
-import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
-import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.framework.util.*;
+import com.zimbra.qa.selenium.projects.ajax.core.PrefGroupMailByMessageTest;
 
 
-public class ZimbraFeatureMailEnabled extends AjaxCommonTest {
+public class ZimbraFeatureMailEnabled extends PrefGroupMailByMessageTest {
 
 	
-	@SuppressWarnings("serial")
 	public ZimbraFeatureMailEnabled() {
 		logger.info("New "+ ZimbraFeatureMailEnabled.class.getCanonicalName());
 		
-		// All tests start at the login page
-		super.startingPage = app.zPageMail;
+		
+		
 
-		// Make sure we are using an account with message view
-		super.startingAccountPreferences = new HashMap<String, String>() {{
-				    			
-					put("zimbraPrefGroupMailBy", "message");
-
-					// Only mail is enabled
-				    put("zimbraFeatureMailEnabled", "TRUE");
-				    put("zimbraFeatureContactsEnabled", "FALSE");
-				    put("zimbraFeatureCalendarEnabled", "FALSE");
-				    put("zimbraFeatureTasksEnabled", "FALSE");
-				    put("zimbraFeatureBriefcasesEnabled", "FALSE");
-
-				    // https://bugzilla.zimbra.com/show_bug.cgi?id=62161#c3
-				    // put("zimbraFeatureOptionsEnabled", "FALSE");
-				    
-
-				}};
+		super.startingAccountPreferences.put("zimbraFeatureMailEnabled", "TRUE");
+		super.startingAccountPreferences.put("zimbraFeatureContactsEnabled", "FALSE");
+		super.startingAccountPreferences.put("zimbraFeatureCalendarEnabled", "FALSE");
+		super.startingAccountPreferences.put("zimbraFeatureTasksEnabled", "FALSE");
+		super.startingAccountPreferences.put("zimbraFeatureBriefcasesEnabled", "FALSE");
 
 
 	}

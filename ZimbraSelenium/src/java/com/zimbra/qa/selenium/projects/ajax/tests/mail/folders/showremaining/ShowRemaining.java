@@ -1,31 +1,22 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.mail.folders.showremaining;
 
-import java.util.HashMap;
 import java.util.List;
 
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.ui.Button;
-import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.SleepUtil;
-import com.zimbra.qa.selenium.framework.util.ZAssert;
-import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
-import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.framework.util.*;
+import com.zimbra.qa.selenium.projects.ajax.core.PrefGroupMailByMessageTest;
 
 
-public class ShowRemaining extends AjaxCommonTest {
+public class ShowRemaining extends PrefGroupMailByMessageTest {
 
-	@SuppressWarnings("serial")
 	public ShowRemaining() {
 		logger.info("New "+ ShowRemaining.class.getCanonicalName());
 		
-		// All tests start at the login page
-		super.startingPage = app.zPageMail;
-		super.startingAccountPreferences = new HashMap<String, String>() {{
-		    put("zimbraPrefGroupMailBy", "message"); // Make this account "dirty" so that the folder tree doesn't slow down other accounts
-		}};
+		
+		
 		
 	}
 	
