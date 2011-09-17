@@ -1,4 +1,4 @@
-package com.zimbra.qa.selenium.projects.ajax.tests.mail.bugs;
+package com.zimbra.qa.selenium.projects.ajax.tests.conversation.bugs;
 
 import java.io.File;
 import java.util.HashMap;
