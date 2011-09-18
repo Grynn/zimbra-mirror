@@ -2,8 +2,11 @@ package com.zimbra.qa.selenium.projects.ajax.tests.addressbook.contactgroups;
 
 
 
+import java.util.List;
+
 import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.items.ContactGroupItem;
+import com.zimbra.qa.selenium.framework.items.ContactItem;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
@@ -26,23 +29,47 @@ public class SearchContactGroup extends AjaxCommonTest {
 	@Test(	description = "select contact option, search an existed contact group ",
 			groups = { "smoke" })
 	public void searchGroupName() throws HarnessException {
-		// Create a contact group via Soap then select
-		ContactGroupItem group = app.zPageAddressbook.createUsingSOAPSelectContactGroup(app,Action.A_LEFTCLICK);
+		// Create a contact group via Soap 
+		ContactGroupItem group = ContactGroupItem.createUsingSOAP(app);
 	  
 		// search for group name
 		app.zPageSearch.zToolbarPressPulldown(Button.B_SEARCHTYPE, Button.O_SEARCHTYPE_CONTACTS);	 		
 		app.zPageSearch.zAddSearchQuery(group.groupName);
 		app.zPageSearch.zToolbarPressButton(Button.B_SEARCH);
-		ZAssert.assertTrue(app.zPageAddressbook.zIsContactDisplayed(group), "Verify contact " + group.fileAs + " displayed");
 				
+	    List<ContactItem> contacts = app.zPageAddressbook.zListGetContacts(); 
+        	
+        ZAssert.assertTrue(contacts.size()==1, "Verify only 1 contact group displayed");		
+        ZAssert.assertEquals(contacts.get(0).fileAs, group.groupName, "Verify contact group (" + group.groupName + ") is displayed");
+	
 	}
+
+	@Test(	description = "select contact option, search  contact groups with same prefix ",
+			groups = { "functional" })
+	public void searchGroupsWithSameNamePrefix() throws HarnessException {
+		// Create a contact group via Soap
+		ContactGroupItem group1 = ContactGroupItem.createUsingSOAP(app);
+		// Create a contact group via Soap
+		ContactGroupItem group2 = ContactGroupItem.createUsingSOAP(app);
+	
+		// search for group names
+		app.zPageSearch.zToolbarPressPulldown(Button.B_SEARCHTYPE, Button.O_SEARCHTYPE_CONTACTS);	 		
+		app.zPageSearch.zAddSearchQuery("group");
+		app.zPageSearch.zToolbarPressButton(Button.B_SEARCH);
+		
+		// verify all 2 groups are displayed
+		ZAssert.assertTrue(app.zPageAddressbook.zIsContactDisplayed(group1), "Verify contact " + group1.fileAs + " displayed");
+		ZAssert.assertTrue(app.zPageAddressbook.zIsContactDisplayed(group2), "Verify contact " + group2.fileAs + " displayed");
+					
+	}
+
 
 	@Test(	description = "select contact option, search a non-existed contact group ",
 			groups = { "functional" })
 	public void searchNonExistedGroupName() throws HarnessException {
-		// Create a contact group via Soap then select
-		ContactGroupItem group = app.zPageAddressbook.createUsingSOAPSelectContactGroup(app,Action.A_LEFTCLICK);
-	  
+		// Create a contact group via Soap 
+		ContactGroupItem group = ContactGroupItem.createUsingSOAP(app);
+		  
 		// search for group name
 		app.zPageSearch.zToolbarPressPulldown(Button.B_SEARCHTYPE, Button.O_SEARCHTYPE_CONTACTS);	 		
 		app.zPageSearch.zAddSearchQuery(group.groupName + ZimbraSeleniumProperties.getUniqueString());
@@ -55,8 +82,8 @@ public class SearchContactGroup extends AjaxCommonTest {
 	@Test(	description = "select contact option, search for a contact group with group member as keyword search ",
 			groups = { "smoke" })
 	public void searchGroupMember() throws HarnessException {
-		// Create a contact group via Soap then select
-		ContactGroupItem group = app.zPageAddressbook.createUsingSOAPSelectContactGroup(app,Action.A_LEFTCLICK);
+		// Create a contact group via Soap 
+		ContactGroupItem group = ContactGroupItem.createUsingSOAP(app);
 	  		
 		app.zPageSearch.zToolbarPressPulldown(Button.B_SEARCHTYPE, Button.O_SEARCHTYPE_CONTACTS);	 		
 
