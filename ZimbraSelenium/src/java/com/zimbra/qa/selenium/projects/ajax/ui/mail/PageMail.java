@@ -1234,9 +1234,9 @@ public class PageMail extends AbsTab {
 				// <div id="zmi__CLV__Par__DELETE" ... By Conversation
 
 				if (zGetPropMailView() == PageMailView.BY_MESSAGE) {
-					optionLocator = "css=div#zmi__TV__DELETE";
+					optionLocator = "css=div[id^='zm__TV__'] div[id='DELETE'] td[id$='_title']";
 				} else {
-					optionLocator = "css=div#zmi__CLV2__DELETE";
+					optionLocator = "css=div[id^='zm__CLV2__'] div[id='DELETE'] td[id$='_title']";
 				}
 
 				page = null;
