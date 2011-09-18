@@ -9,6 +9,7 @@ import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.PrefGroupMailByMessageTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.DisplayMail;
+import com.zimbra.qa.selenium.projects.ajax.ui.mail.DisplayMail.Field;
 
 
 public class Bug39246 extends PrefGroupMailByMessageTest {
@@ -43,21 +44,40 @@ public class Bug39246 extends PrefGroupMailByMessageTest {
 		// In the preview pane, click "View Entire Message"
 		display.zPressButton(Button.B_VIEW_ENTIRE_MESSAGE);
 
-		String windowTitle = "Zimbra: "+ subject;
+		// 7.X behavior opened a new window
+		// 8.X behavior seems to open the entire message in the preview pane
+		
+//		String windowTitle = "Zimbra: "+ subject;
+//
+//		try {
+//			
+//			// Focus on the separate window
+//			app.zPageMail.zSeparateWindowFocus(windowTitle);
+//			
+//			// TODO: add all other verification from bug 39246 test case
+//			
+//		} finally {
+//			
+//			app.zPageMail.zSeparateWindowClose(windowTitle);
+//						
+//		}			
+			
+		// Wait 30 seconds for the end of the message to display
+		String body = "";
+		for (int i = 0; i < 30; i++) {
+			
+			// Get the body
+			body = display.zGetMailProperty(Field.Body);
+			
+			// If the body contains the last few words from the MIME message, assume the full body loaded
+			logger.info("Waiting for 'CLICK ON THE TEST SCRIPT NAMES' to appear ...");
+			if ( body.contains("CLICK ON THE TEST SCRIPT NAMES") )
+				break;
+			
+			SleepUtil.sleep(1000);
+		}
 
-		try {
-			
-			// Focus on the separate window
-			app.zPageMail.zSeparateWindowFocus(windowTitle);
-			
-			// TODO: add all other verification from bug 39246 test case
-			
-		} finally {
-			
-			app.zPageMail.zSeparateWindowClose(windowTitle);
-						
-		}			
-			
+		ZAssert.assertStringContains(body, "CLICK ON THE TEST SCRIPT NAMES", "Verify the last words from the mime are displayed in the body");
 		
 	}
 
