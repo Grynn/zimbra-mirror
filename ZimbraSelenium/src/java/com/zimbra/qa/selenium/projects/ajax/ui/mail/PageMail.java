@@ -1226,56 +1226,51 @@ public class PageMail extends AbsTab {
 			// Now the ContextMenu is opened
 			// Click on the specified option
 
-			String optionLocator = null;
+			String optionLocator = "css=div[id^='zm__CLV2__']";
+			if (zGetPropMailView() == PageMailView.BY_MESSAGE) {
+				optionLocator = "css=div[id^='zm__TV__']";
+			}
 
-			if (option == Button.B_DELETE) {
 
-				// <div id="zmi__TV_DELETE" ... By Message
-				// <div id="zmi__CLV__Par__DELETE" ... By Conversation
+			if ( option == Button.O_MARK_AS_READ ) {
 
-				if (zGetPropMailView() == PageMailView.BY_MESSAGE) {
-					optionLocator = "css=div[id^='zm__TV__'] div[id='DELETE'] td[id$='_title']";
-				} else {
-					optionLocator = "css=div[id^='zm__CLV2__'] div[id='DELETE'] td[id$='_title']";
-				}
-
-				page = null;
-
-			} else if (option == Button.B_TREE_NEWFOLDER) {
-
-				String treeItemLocator = TreeMail.Locators.ztih_main_Mail__FOLDER_ITEM_ID.replace(TreeMail.stringToReplace, "FOLDER");
-
-				GeneralUtility.waitForElementPresent(this, treeItemLocator);
-				ContextMenu contextMenu = (ContextMenu)((AppAjaxClient)MyApplication).zTreeMail.zTreeItem(Action.A_RIGHTCLICK, treeItemLocator);
-				page = contextMenu.zSelect(CONTEXT_MENU_ITEM_NAME.NEW_FOLDER);
-
-			} else if ( option == Button.O_MARK_AS_READ ) {
-
-				if (zGetPropMailView() == PageMailView.BY_MESSAGE) {
-					//optionLocator = "zmi__TV__MARK_READ_title";
-
-					optionLocator="css=td[id^='zmi__TV__MARK_READ__']";
-				} else {
-					//optionLocator = "zmi__CLV__MARK_READ_title";
-					optionLocator="css=td[id^='zmi__CLV2__MARK_READ__']";
-				}
-
+				optionLocator += " div[id^='MARK_READ'] td[id$='_title']";
 				page = null;
 
 				// FALLTHROUGH
 
 			} else if ( option == Button.O_MARK_AS_UNREAD ) {
 
-				if (zGetPropMailView() == PageMailView.BY_MESSAGE) {
-					//optionLocator = "zmi__TV__MARK_UNREAD_title";
-					optionLocator="css=td[id^='zmi__TV__MARK_UNREAD__']";
-				} else {
-					//optionLocator = "zmi__CLV__MARK_UNREAD_title";
-					optionLocator="css=td[id^='zmi__CLV2__MARK_UNREAD__']";
-				}
-
+				optionLocator += " div[id^='MARK_UNREAD'] td[id$='_title']";
 				page = null;
 
+				// FALLTHROUGH
+
+			} else if (option == Button.B_DELETE) {
+
+				optionLocator += " div[id^='DELETE'] td[id$='_title']";
+				page = null;
+
+				// FALLTHROUGH
+
+			} else if (option == Button.B_REPLY) {
+
+				optionLocator += " div[id^='REPLY'] td[id$='_title']";
+				page = null;
+
+				// FALLTHROUGH
+
+			} else if (option == Button.B_REPLYALL) {
+
+				optionLocator += " div[id^='REPLY'] td[id$='_title']";
+				page = null;
+
+				// FALLTHROUGH
+
+			} else if (option == Button.B_FORWARD) {
+
+				optionLocator += " div[id^='REPLY'] td[id$='_title']";
+				page = null;
 
 				// FALLTHROUGH
 
@@ -1291,21 +1286,21 @@ public class PageMail extends AbsTab {
 
 				// FALLTHROUGH
 
-			}
-			else if ( option == Button.O_CREATE_TASK ) {
+			} else if ( option == Button.O_EDIT_AS_NEW ) {
 
-				if (zGetPropMailView() == PageMailView.BY_MESSAGE) {
-					optionLocator="css=div[id^='zm__TV__DWT'] tr[id='POPUP_CREATE_TASK']";
-				} else {
-					optionLocator="css=div[id^='zm__CLV2__DWT'] tr[id='POPUP_CREATE_TASK']";
-				}
-
+				optionLocator += " div[id^='EDIT_AS_NEW'] td[id$='_title']";
 				page = null;
 
 				// FALLTHROUGH
 
-			}
-			else {
+			} else if ( option == Button.O_CREATE_TASK ) {
+
+				optionLocator += " div[id^='CREATE_TASK'] td[id$='_title']";
+				page = null;
+
+				// FALLTHROUGH
+
+			} else {
 				throw new HarnessException("implement action:"+ action +" option:"+ option);
 			}
 
