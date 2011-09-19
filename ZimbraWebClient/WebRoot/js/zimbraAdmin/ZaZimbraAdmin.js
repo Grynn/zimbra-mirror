@@ -1041,6 +1041,8 @@ function() {
 		elements[ZaAppViewMgr.C_BANNER] = this._createBanner();
 	}
 
+    elements[ZaAppViewMgr.C_SEARCH] = ZaApp.getInstance().getSearchListController().getSearchPanel();
+
     this._header = elements[ZaAppViewMgr.C_TREE_TOP] = new ZaCrtAppTreeHeader(this._shell);
 	if(ZaSettings.TREE_ENABLED) {
 		elements[ZaAppViewMgr.C_TREE] = this.getOverviewPanelController().getOverviewPanel();

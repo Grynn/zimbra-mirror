@@ -48,15 +48,24 @@ body						{	@ChromeBg@	}
     background-position:0px;
 }
 
+#skin_td_toaster {
+    width: 100%;
+}
+
+#skin_container_toaster {
+    width:  100%;
+    height: 100%;
+}
 
 #skin_td_search	{	
 	vertical-align:top;
-	width:100%;
 	padding:0px 15px 0px 0px;
 }
+
 #skin_container_search	{	
 	@SkinBorderSearch@
 	height: @TopHeight@;
+    width:400px;
 	padding:3px 4px 3px 4px;
 }
 
