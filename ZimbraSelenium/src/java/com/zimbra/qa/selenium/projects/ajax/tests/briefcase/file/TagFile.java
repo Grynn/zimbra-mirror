@@ -128,7 +128,7 @@ public class TagFile extends AjaxCommonTest {
 
 		// Create file item
 		String filePath = ZimbraSeleniumProperties.getBaseDirectory()
-				+ "/data/public/other/testpptfile.ppt";
+				+ "/data/public/other/testexcelfile.xls";
 
 		FileItem fileItem = new FileItem(filePath);
 
@@ -198,7 +198,7 @@ public class TagFile extends AjaxCommonTest {
 
 		// Create file item
 		String filePath = ZimbraSeleniumProperties.getBaseDirectory()
-				+ "/data/public/other/testpptfile.ppt";
+				+ "/data/public/other/testwordfile.doc";
 
 		FileItem fileItem = new FileItem(filePath);
 

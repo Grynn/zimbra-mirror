@@ -17,7 +17,7 @@ public class CreateMountpoint extends OctopusCommonTest {
 	private ZimbraAccount ownerAccount = null;
 
 	public CreateMountpoint() {
-		logger.info("New " + DeleteMountpoint.class.getCanonicalName());
+		logger.info("New " + CreateMountpoint.class.getCanonicalName());
 
 		// Test starts at the Octopus page
 		super.startingPage = app.zPageOctopus;

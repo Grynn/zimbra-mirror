@@ -1,6 +1,5 @@
 package com.zimbra.qa.selenium.projects.octopus.tests.sharing;
 
-import java.util.List;
 import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderMountpointItem;
