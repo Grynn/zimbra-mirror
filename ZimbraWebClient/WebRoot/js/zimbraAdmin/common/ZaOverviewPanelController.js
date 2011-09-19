@@ -1026,7 +1026,7 @@ ZaOverviewPanelController.globalSettingsTreeListener = function (ev) {
     if (appNewUI) {
         var parentPath = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_configure]);
         var name = ev.item.getText();
-        this.addObjectItem(parentPath, name, undefined, true, true, item);
+        this.addObjectItem(parentPath, name, undefined, true, true, ev.item);
     }
 }
 
