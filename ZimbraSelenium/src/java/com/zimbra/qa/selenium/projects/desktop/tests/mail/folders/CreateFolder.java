@@ -178,7 +178,11 @@ public class CreateFolder extends AjaxCommonTest {
 	        app.zGetActiveAccount().EmailAddress);
 	      
 	        ZAssert.assertNotNull(desktopFolder, "Verify the new RSS folder got created");
-	      
+	        
+	        //Make sure the folder was created on the Desktop Server from UI perspective
+	        System.out.println(app.zPageMail.zGetFolderLocator(_folderName));
+	        ZAssert.assertEquals(app.zPageMail.sIsElementPresent(app.zPageMail.zGetFolderLocator(_folderName)), true, "Verify meeting is deleted from organizer's calendar");
+	        
 	      // Make sure the folder was created on the ZCS server
 			FolderItem folder = FolderItem.importFromSOAP(app.zGetActiveAccount(), _folderName);
 			ZAssert.assertNotNull(folder, "Verify the new RSS folder was created");
