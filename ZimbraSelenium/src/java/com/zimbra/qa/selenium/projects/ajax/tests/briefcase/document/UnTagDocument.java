@@ -6,7 +6,6 @@ import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.DialogTag;
 
 public class UnTagDocument extends AjaxCommonTest {
 
@@ -69,15 +68,6 @@ public class UnTagDocument extends AjaxCommonTest {
 		 * account.soapSelectValue("//mail:doc", "ver");
 		 */
 
-		// refresh briefcase page
-		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
-
-		SleepUtil.sleepVerySmall();
-
-		// Click on created document
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docItem);
-
 		// Create a tag
 		String tagName = "tag" + ZimbraSeleniumProperties.getUniqueString();
 
@@ -96,21 +86,52 @@ public class UnTagDocument extends AjaxCommonTest {
 		 * //ClientSessionFactory.session().selenium().refresh();
 		 */
 
-		// Click on New Tag
-		DialogTag dialogTag = (DialogTag) app.zPageBriefcase
-				.zToolbarPressPulldown(Button.B_TAG, Button.O_TAG_NEWTAG, null);
+		/*
+		 * // this flow is using tag pull down menu // refresh briefcase page
+		 * app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder,
+		 * true);
+		 * 
+		 * SleepUtil.sleepVerySmall();
+		 * 
+		 * // Click on created document
+		 * GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		 * app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docItem);
+		 * 
+		 * // Click on New Tag DialogTag dialogTag = (DialogTag)
+		 * app.zPageBriefcase .zToolbarPressPulldown(Button.B_TAG,
+		 * Button.O_TAG_NEWTAG, null);
+		 * 
+		 * dialogTag.zSetTagName(tagName); dialogTag.zClickButton(Button.B_OK);
+		 */
 
-		dialogTag.zSetTagName(tagName);
-		dialogTag.zClickButton(Button.B_OK);
+		account.soapSend("<CreateTagRequest xmlns='urn:zimbraMail'>"
+				+ "<tag name='" + tagName + "' color='1' />"
+				+ "</CreateTagRequest>");
 
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		// Make sure the tag was created on the server
+		// account.soapSend("<GetTagRequest xmlns='urn:zimbraMail'/>");
+		// String tagId = account.soapSelectValue(
+		//		"//mail:GetTagResponse//mail:tag[@name='" + tagName + "']",
+		//		"id");
 
-		// Make sure the tag was created on the server (get the tag ID)
-		account.soapSend("<GetTagRequest xmlns='urn:zimbraMail'/>");
+		TagItem tagItem = TagItem.importFromSOAP(app.zGetActiveAccount(),
+				tagName);
+		
+		ZAssert.assertNotNull(tagItem, "Verify the new tag was created");
 
-		String tagId = account.soapSelectValue(
-				"//mail:GetTagResponse//mail:tag[@name='" + tagName + "']",
-				"id");
+		String tagId = tagItem.getId();
+
+		// refresh briefcase page
+		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
+
+		SleepUtil.sleepVerySmall();
+
+		// Click on created document
+		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docItem);
+
+		// Tag document using Right Click context menu
+		app.zPageBriefcase.zListItem(Action.A_RIGHTCLICK, Button.O_TAG_FILE,
+				tagItem.getName(), docItem);
 
 		// Make sure the tag was applied to the document
 		account

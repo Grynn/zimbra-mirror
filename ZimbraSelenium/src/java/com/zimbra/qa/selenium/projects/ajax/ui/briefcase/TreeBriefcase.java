@@ -23,9 +23,8 @@ public class TreeBriefcase extends AbsTree {
 		public static final String zNewTagTreeMenuItem = "css=tr[id=POPUP_NEW_TAG]:contains('New Tag')";
 		public static final String zNewFolderTreeMenuItem = "css=tr[id=POPUP_NEW_BRIEFCASE]:contains('New Folder')";
 		public static final String zRenameTagTreeMenuItem = "css=td[id$=_left_icon]>[class=ImgRename]";
-		public static final String zDeleteTreeMenuItem = "css=div[id^='POPUP_'] tr[id='POPUP_DELETE']:contains(Delete)";
-	}
-
+		public static final String zDeleteTreeMenuItem = "css=div[id='DELETE_WITHOUT_SHORTCUT'] tr[id^='POPUP_DELETE']:contains(Delete)";
+	}                                                    
 	public TreeBriefcase(AbsApplication application) {
 		super(application);
 		logger.info("new " + TreeBriefcase.class.getCanonicalName());

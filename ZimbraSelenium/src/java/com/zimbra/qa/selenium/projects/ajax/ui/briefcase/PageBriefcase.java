@@ -592,8 +592,15 @@ public class PageBriefcase extends AbsTab {
 			// wait for the page to go active
 			if (page != null) {
 				if (option == Button.O_SEND_AS_ATTACHMENT) {
-					zWaitForElementPresent("css=div[id$=_attachments_div] a[class='AttLink']", "3000");
-					return page;
+					String locator = "css=div[id$=_attachments_div] a[class='AttLink']";
+					if (!this.zWaitForElementPresent(locator, "3000")) {
+						throw new HarnessException(locator + " not present");
+					}
+				} else if (option == Button.O_TAG_NEWTAG) {
+					String locator = "id=CreateTagDialog";
+					if (!this.zWaitForElementPresent(locator, "3000")) {
+						throw new HarnessException(locator + " not present");
+					}
 				} else
 					page.zWaitForActive();
 			}
@@ -956,7 +963,7 @@ public class PageBriefcase extends AbsTab {
 
 			// Right-Click on the item
 			this.zRightClickAt(itemlocator, "0,0");
-		
+
 			// Now the ContextMenu is opened
 			// Click on the specified option
 
@@ -965,7 +972,7 @@ public class PageBriefcase extends AbsTab {
 			if (option == Button.B_RENAME) {
 
 				optionLocator = "css=div[id^=RENAME_FILE__] tr[id=POPUP_RENAME_FILE]>td[id^=RENAME_FILE]:contains(Rename)";
-				
+
 				page = null;
 
 			} else if (option == Button.O_EDIT) {
@@ -997,14 +1004,14 @@ public class PageBriefcase extends AbsTab {
 
 			} else if (option == Button.O_DELETE) {
 
-				optionLocator = "css=td[id^=DELETE__][id$=_title]:contains(Delete)";
+				optionLocator = "css=div[id=zm__Briefcase] tr[id=POPUP_DELETE]";
 
 				page = new DialogConfirm(DialogConfirm.Confirmation.DELETE,
 						MyApplication, this);
 
 			} else if (option == Button.O_MOVE) {
 
-				optionLocator = "css=td[id^=MOVE__][id$=_title]:contains(Move)";
+				optionLocator = "css=div[id=zm__Briefcase] tr[id=POPUP_MOVE]";
 
 				page = new DialogMove(MyApplication, this);
 			} else if (option == Button.O_TAG_FILE) {
@@ -1015,7 +1022,7 @@ public class PageBriefcase extends AbsTab {
 			} else if (option == Button.O_CHECK_IN_FILE) {
 
 				optionLocator = "css=tr[id=POPUP_CHECKIN]>td[id^=CHECKIN__]:contains('Check In File')";
-				
+
 				page = new DialogCheckInFile(MyApplication, this);
 			} else if (option == Button.O_DISCARD_CHECK_OUT) {
 
@@ -1031,10 +1038,10 @@ public class PageBriefcase extends AbsTab {
 			if (!this.sIsElementPresent(optionLocator)) {
 				throw new HarnessException(optionLocator + " not present!");
 			}
-			
+
 			// click on the option
 			this.zClickAt(optionLocator, "0,0");
-			
+
 			this.zWaitForBusyOverlay();
 
 			// FALL THROUGH
@@ -1093,7 +1100,7 @@ public class PageBriefcase extends AbsTab {
 
 			// Right-Click on the item
 			this.zRightClickAt(itemlocator, "0,0");
-				
+
 			// Now the ContextMenu is opened
 			// Click on the specified option
 
@@ -1101,8 +1108,8 @@ public class PageBriefcase extends AbsTab {
 
 			if (option == Button.O_TAG_FILE) {
 
-				optionLocator = "css=tr[id=POPUP_TAG_MENU]>td[id^=TAG_MENU__]>div[class=ImgCascade]";
-			
+				optionLocator = "css=div[id=zm__Briefcase] tr[id=POPUP_TAG_MENU]>td[id^=TAG_MENU__]>div[class=ImgCascade]";
+
 			} else {
 				throw new HarnessException("implement action: " + action
 						+ " option:" + option);
@@ -1113,7 +1120,6 @@ public class PageBriefcase extends AbsTab {
 
 			// Now the ContextMenu option is opened
 			// Click on the specified sub option
-
 			String subOptionLocator = "css=div[id^=TAG_MENU_][id$=|MENU] [class=ZWidgetTitle]:contains("
 					+ subOption + ")";
 
