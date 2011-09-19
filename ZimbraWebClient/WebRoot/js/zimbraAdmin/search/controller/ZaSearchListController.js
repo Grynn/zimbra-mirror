@@ -424,16 +424,18 @@ function () {
 		
 	var elements = new Object();
 	elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
-	elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;		
-	//ZaApp.getInstance().createView(ZaZimbraAdmin._SEARCH_LIST_VIEW, elements);
-	//always open the search list view in the search tab
-	var tabParams = {
-		openInNewTab: false,
-		tabId: this.getContentViewId(),
-		tab: ZaApp.getInstance().getTabGroup().getSearchTab ()
-	}
-	ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams) ;
-	
+    if (!appNewUI) {
+        elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;
+        //ZaApp.getInstance().createView(ZaZimbraAdmin._SEARCH_LIST_VIEW, elements);
+        //always open the search list view in the search tab
+        var tabParams = {
+            openInNewTab: false,
+            tabId: this.getContentViewId(),
+            tab: ZaApp.getInstance().getTabGroup().getSearchTab ()
+        }
+        ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams) ;
+    } else
+        ZaApp.getInstance().getAppViewMgr().createView(this.getContentViewId(), elements);
 	this._initPopupMenu();
 	this._actionMenu =  new ZaPopupMenu(this._contentView, "ActionMenu", null, this._popupOperations, ZaId.VIEW_SCHLIST, ZaId.MENU_POP);
 	
@@ -572,6 +574,10 @@ ZaSearchListController.prototype._editItem = function (item) {
 	}else if (type==ZaItem.COS) {
                 ZaApp.getInstance().getCosController().show(item);
         }
+    if (appNewUI) {
+        ZaZimbraAdmin.getInstance().getOverviewPanelController().addAccountItem(item);
+
+    }
 };
 
 

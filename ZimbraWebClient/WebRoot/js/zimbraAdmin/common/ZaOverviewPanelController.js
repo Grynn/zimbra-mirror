@@ -847,6 +847,7 @@ function() {
                                     id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_HOME,null, "searchHV"),
                                     text: ZaMsg.OVP_search,
                                     mappingId: ZaZimbraAdmin._SEARCH_HOME_VIEW});
+    ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._SEARCH_HOME_VIEW] = ZaOverviewPanelController.searchListTreeListener;
     tree.addTreeItemData(ti);
 
     if(accountMgr) {
@@ -1099,7 +1100,10 @@ ZaOverviewPanelController.searchListTreeListener = function (ev) {
 	var query = ev.item.getData("query");
 	if (ev.detail == DwtTree.ITEM_SELECTED) {
 		//if(window.console && window.console.log) console.debug("Run the saved search ...") ;
-		searchField.selectSavedSearch(name, query);
+        if (query)
+		    searchField.selectSavedSearch(name, query);
+        else
+            searchField.invokeCallback(); // Use the value in the current search fields;
 	}else if (ev.detail == DwtTree.ITEM_ACTIONED){
 		searchField._currentSavedSearch = {name: name, query: query};
 		searchField.getSavedSearchActionMenu().popup(0, ev.docX, ev.docY);
