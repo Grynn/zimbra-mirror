@@ -47,7 +47,6 @@
   </classpathentry>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/commons-dbcp-1.4.jar" sourcepath="/ThirdParty/commons-dbcp-1.1/src"/>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/commons-codec-1.4.jar"/>
-  <classpathentry kind="lib" path="/ZimbraCommon/jars/catalina-ant.jar"/>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/bcprov-jdk15-146.jar"/>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/ant-contrib-1.0b1.jar"/>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/slf4j-log4j12-1.6.1.jar"/>
