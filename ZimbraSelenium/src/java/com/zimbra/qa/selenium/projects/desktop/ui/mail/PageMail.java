@@ -157,6 +157,9 @@ public class PageMail extends AbsTab {
 		public static final String zShowOriginalDraftMenuIconBtn = "id=zmi__CLV__Dra__SHOW_ORIG_left_icon";
 
 		public static final String zPreferencesTabIconBtn = "id=zb__App__Options_left_icon";
+		
+		public static final String zRssFolderName = "id=zb__App__Options_left_icon";
+		
 		//	public static final String zPreferencesMailIconBtn = "id=ztab__PREF__"
 		//			+ localize(locator.mail) + "_title";
 
@@ -181,7 +184,9 @@ public class PageMail extends AbsTab {
 	}
 
 
-
+	public String zGetFolderLocator(String folderName) throws HarnessException {
+		return "css=div[id$='main_Mail-parent-FOLDER'] div[class='DwtTreeItemLevel1ChildDiv'] div td:contains('" + folderName + "')";
+	}
 
 
 	public PageMail(AbsApplication application) {
