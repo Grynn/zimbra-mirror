@@ -296,10 +296,11 @@ function(item, ev) {
 	var a = this._selectedItems.getArray();
 	var numSelectedItems = this._selectedItems.size();
     var currentDataItem =  item.getData("dataItem");
-    if (currentDataItem.isAlias()) {
+    var isAlias = currentDataItem.isAlias();
+    if (isAlias) {
         currentDataItem = this.getTreeItemDataByPath(currentDataItem.getRealPath());
     }
-	if (currentDataItem.isLeaf()) {
+	if (currentDataItem.isLeaf() && !isAlias) {
 		if (numSelectedItems > 0) {
 			for (i = 0; i < numSelectedItems; i++) {
 				a[i]._setSelected(false);
@@ -314,13 +315,28 @@ function(item, ev) {
 			this._notifyListeners(DwtEvent.SELECTION, [item], DwtTree.ITEM_SELECTED, ev, this._selEv);
 		}
 	} else {
-        this.buildTree(currentDataItem);
+        var buildDataItem;
+        if (!currentDataItem.isLeaf())
+            buildDataItem = currentDataItem;
+        else
+            buildDataItem = currentDataItem.parentObject;
+        this.buildTree(buildDataItem);
         this._selectedItems.removeAll();
-        this._selectedItems.add(this.currentRoot);
-        item = this.currentRoot;
-		if (item._setSelected(true)) {
-            this._updateHistory(item, true);
-			this._notifyListeners(DwtEvent.SELECTION, [item], DwtTree.ITEM_SELECTED, ev, this._selEv);
+
+
+        var selectedItem;
+        if (currentDataItem.isLeaf())
+            selectedItem = this.getTreeItemByPath(this.getABPath(currentDataItem));
+        else
+            selectedItem = this.getCurrentRootItem();
+
+        this._selectedItems.add(selectedItem);
+		if (selectedItem._setSelected(true)) {
+            if (!isAlias)
+                this._updateHistory(selectedItem, true);
+            else
+                this._updateHistory(item, true);
+			this._notifyListeners(DwtEvent.SELECTION, [selectedItem], DwtTree.ITEM_SELECTED, ev, this._selEv);
 		}
     }
 };
