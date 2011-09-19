@@ -2998,7 +2998,7 @@ nowrap:false, labelWrap:true,
 		cases.push({type:_ZATABCASE_, id:"account_form_zimlets_tab", numCols:1,
             caseKey:_tab10, 
 			items:[
-				{type:_ZAGROUP_, numCols:1,colSizes:["auto"], 
+				{type:_ZAGROUP_, numCols:1,colSizes:["auto"], displayGrid:false,
 					items: [
 						{type:_SUPER_ZIMLET_SELECT_,
 							selectRef:ZaAccount.A_zimbraZimletAvailableZimlets, 

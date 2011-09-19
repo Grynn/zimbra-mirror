@@ -215,7 +215,8 @@ function (showRootNode) {
     }
 
     if (showRootNode.recentObject.length != 0) {
-
+        this.currentRelated = this._buildNodeItem(this._getDefaultRecentObjects(showRootNode));
+        this.currentRelated.setExpanded(true);
     }
     return this.currentRoot;
 }
@@ -224,15 +225,30 @@ ZaTree.prototype._getDefaultRelated =
 function (treeDataItem) {
     var related = new ZaTreeItemData({
             parent: treeDataItem.parent,
-            id: treeDataItem.id + "related",
-            text:"related object"
+            id: treeDataItem.id + "_related",
+            text:ZaMsg.OVP_related
     });
     for (var i = 0; i < treeDataItem.relatedObject.length; i++) {
         var currentObject =treeDataItem.relatedObject[i];
-        currentObject.parent = treeDataItem.parent + ZaTree.SEPERATOR + "related";
+        currentObject.parent = treeDataItem.parent + ZaTree.SEPERATOR + ZaMsg.OVP_related;
         related.addChild(currentObject);
     }
     return related;
+}
+
+ZaTree.prototype._getDefaultRecentObjects =
+function (treeDataItem) {
+    var recent = new ZaTreeItemData({
+            parent: treeDataItem.parent,
+            id: treeDataItem.id + "_recent",
+            text:ZaMsg.OVP_recent
+    });
+    for (var i = 0; i < treeDataItem.recentObject.length; i++) {
+        var currentObject =treeDataItem.recentObject[i];
+        currentObject.parent = treeDataItem.parent + ZaTree.SEPERATOR + ZaMsg.OVP_recent;
+        recent.addChild(currentObject);
+    }
+    return recent;
 }
 
 ZaTree.prototype._buildNodeItem =

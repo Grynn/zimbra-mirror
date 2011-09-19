@@ -183,3 +183,8 @@ ZaTreeItemData.prototype.addRelatedObject =
 function(relatedObject) {
     this.relatedObject = relatedObject;
 }
+
+ZaTreeItemData.prototype.addRecentObject =
+function(recentObject) {
+    this.recentObject = recentObject;
+}

@@ -1026,7 +1026,7 @@ ZaOverviewPanelController.globalSettingsTreeListener = function (ev) {
     if (appNewUI) {
         var parentPath = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_configure]);
         var name = ev.item.getText();
-        this.addObjectItem(parentPath, name, undefined, true, true);
+        this.addObjectItem(parentPath, name, undefined, true, true, item);
     }
 }
 
@@ -1230,10 +1230,10 @@ function(item, currentView) {
 
     var parentPath = ZaOverviewPanelController.accountBasePath + relativePath;
     var name = item.name;
-    this.addObjectItem(parentPath, name, currentView);
+    this.addObjectItem(parentPath, name, currentView, false, false, item);
 }
 
-ZaOverviewPanelController.prototype.addObjectItem = function (parentPath, name, currentView, skipHistory, skipNotify) {
+ZaOverviewPanelController.prototype.addObjectItem = function (parentPath, name, currentView, skipHistory, skipNotify, item) {
     if (!currentView) {
         currentView = ZaApp.getInstance().getAppViewMgr().getCurrentViewContent();
         if (!currentView)
@@ -1269,13 +1269,14 @@ ZaOverviewPanelController.prototype.addObjectItem = function (parentPath, name, 
                             id:DwtId._makeId(parentId, index + 1),
                             text: name});
         tree.addTreeItemData(nameDataItem);
-        var relatedObject = new ZaTreeItemData({
-                            text: "user1@mingzhang-desktop",
+        nameDataItem.addRelatedObject(this.getRelatedList(parentPath,item));
+        var recentObject = new ZaTreeItemData({
+                            text: "To Be Developed",
                             type: 1,
-                            path: parentPath + ZaTree.SEPERATOR + "user1@mingzhang-desktop"
+                            path: parentPath + ZaTree.SEPERATOR + "user1@anqin-mac"
                             }
                         );
-        nameDataItem.addRelatedObject([relatedObject]);
+        nameDataItem.addRecentObject([recentObject]);
     }
 
     if (!nameDataItem.getData("viewId")) {
@@ -1324,4 +1325,68 @@ ZaOverviewPanelController.xformTreeListener = function(ev) {
     var currentView = ZaApp.getInstance().getAppViewMgr().getViewContentById(viewId);
     currentView._localXForm.setInstanceValue(stepValue, ZaModel.currentTab);
     currentView._localXForm.refresh() ;
+}
+
+ZaOverviewPanelController.prototype.getRelatedList =
+function(parentPath, item) {
+    if(!item) return;
+    if(item.type == ZaItem.ACCOUNT) {
+        return this.getRelatedList4Account(parentPath, item);
+    } else if (item.type == ZaItem.DL) {
+
+    } else if (item.type == ZaItem.RESOURCE ){
+
+    } else if (item.type == ZaItem.ALIAS) {
+
+    }
+    return [];
+}
+
+ZaOverviewPanelController.prototype.getRelatedList4Account =
+function(parentPath, item) {
+    var alias = item.attrs[ZaAccount.A_zimbraMailAlias];
+    var cos = ZaCos.getCosById(item.attrs[ZaAccount.A_COSId])
+            || ZaCos.getDefaultCos4Account(item[ZaAccount.A_name]);
+    var domainName = ZaAccount.getDomain(item[ZaAccount.A_name]);
+    var domainObj =  ZaDomain.getDomainByName (domainName) ;
+    var zimletList = item.attrs[ZaAccount.A_zimbraZimletAvailableZimlets]
+            || item._defaultValues.attrs[ZaAccount.A_zimbraZimletAvailableZimlets];
+
+    var aliasTi = new ZaTreeItemData({
+                text: ZaMsg.TABT_Aliases,
+                type: 1,
+                count:alias.length,
+                path: parentPath + ZaTree.SEPERATOR + item.name + ZaTree.SEPERATOR + ZaMsg.TABT_Aliases
+                }
+            );
+    var cosTi = new ZaTreeItemData({
+                text: cos.name,
+                mappingId: ZaZimbraAdmin._COS_VIEW,
+                path: parentPath + ZaTree.SEPERATOR + cos.name
+                }
+            );
+    cosTi.setData(ZaOverviewPanelController._OBJ_ID, cos.id);
+    ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._COS_VIEW] = ZaOverviewPanelController.cosTreeListener;
+
+    var domainTi = new ZaTreeItemData({
+                text: domainName,
+                mappingId: ZaZimbraAdmin._DOMAIN_VIEW,
+                path: parentPath + ZaTree.SEPERATOR + domainName
+                }
+            );
+    domainTi.setData(ZaOverviewPanelController._OBJ_ID, domainObj.id);
+    ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._DOMAIN_VIEW] = ZaOverviewPanelController.domainTreeListener;
+    var zimletTi = new ZaTreeItemData({
+                text: ZaMsg.TABT_Zimlets,
+                type: 1,
+                count:zimletList.length,
+                path: parentPath + ZaTree.SEPERATOR + item.name + ZaTree.SEPERATOR + ZaMsg.TABT_Zimlets
+                }
+            );
+    return [aliasTi, cosTi, domainTi, zimletTi];
+}
+
+ZaOverviewPanelController.prototype.getRecentList =
+function(parentPath, item) {
+
 }

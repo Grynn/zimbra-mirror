@@ -254,7 +254,7 @@ function(ev) {
 			ZaApp.getInstance().getCosController().show(ev.item);
             if (appNewUI) {
                 var parentPath = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_configure, ZaMsg.OVP_cos]);
-                ZaZimbraAdmin.getInstance().getOverviewPanelController().addObjectItem(parentPath, ev.item.name);
+                ZaZimbraAdmin.getInstance().getOverviewPanelController().addObjectItem(parentPath, ev.item.name, null, false, false, item);
             }
 		}
 	} else {
@@ -281,7 +281,7 @@ function(ev) {
 		ZaApp.getInstance().getCosController().show(item);
         if (appNewUI) {
             var parentPath = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_configure, ZaMsg.OVP_cos]);
-            ZaZimbraAdmin.getInstance().getOverviewPanelController().addObjectItem(parentPath, item.name);
+            ZaZimbraAdmin.getInstance().getOverviewPanelController().addObjectItem(parentPath, item.name, null, false, false, item);
         }
 	}
 }

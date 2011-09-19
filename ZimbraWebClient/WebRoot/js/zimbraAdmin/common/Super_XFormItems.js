@@ -1506,17 +1506,18 @@ ZAPlainGrouper_XFormItem.prototype.width = "100%";
 ZAPlainGrouper_XFormItem.prototype.displayGrid = true;
 ZAPlainGrouper_XFormItem.prototype.initializeItems = function () {
     var oldItems = this.getItems();
+    var subitems;
     if(oldItems.length == 1 && oldItems[0].type == "group")  {
         oldItems[0].displayGrid = this.getInheritedProperty("displayGrid");
         if(oldItems[0].colSizes.length > 1)
            oldItems[0].colSizes[oldItems[0].colSizes.length -1] = "100%";
         //oldItems[0].colSizes = ["275px","100%"];
-        var subitems = oldItems[0].items;
-        for(var i = 0; i < subitems.length; i++) {
-            subitems[i].displayGrid = false;
-            if(subitems[i].label || subitems[i].txtBoxLabel)
-                subitems[i].labelCssStyle = "text-align:left;background-color:#BBB;";
-        }
+        subitems = oldItems[0].items;
+    } else  subitems = oldItems;
+    for(var i = 0; i < subitems.length; i++) {
+        subitems[i].displayGrid = false;
+        if(subitems[i].label || subitems[i].txtBoxLabel)
+            subitems[i].labelCssStyle = "text-align:left;background-color:#BBB;";
     }
     Group_XFormItem.prototype.initializeItems.call(this);
 }
@@ -1592,6 +1593,25 @@ ZAGroup_XFormItem.isGroupVisible = function(entry, attrsArray, rightsArray) {
 	}
 	
 	return false; 
+}
+
+ZAGroup_XFormItem.prototype.initializeItems = function () {
+    if(appNewUI) {
+        this.displayGrid = this.getInheritedProperty("displayGrid") || true;
+        this.width = this.width || "100%";
+        var oldItems = this.getItems();
+        if(oldItems) {
+            for(var i = 0; i < oldItems.length; i++) {
+                oldItems[i].displayGrid = oldItems[i].displayGrid || false;
+                if(oldItems[i].type == "radio")
+                    continue;  // don't deal with _RADIO_
+                if(oldItems[i].label || oldItems[i].txtBoxLabel)
+                    oldItems[i].labelCssStyle = "text-align:left; background-color:#BBB;";
+            }
+        }
+    }
+
+    Group_XFormItem.prototype.initializeItems.call(this);
 }
 
 ZAWizGroup_XFormItem = function() {}
