@@ -1314,6 +1314,7 @@ ZaOverviewPanelController.prototype.addObjectItem = function (parentPath, name, 
 ZaOverviewPanelController.xformTabTreeListener = function(ev) {
     var viewId = ev.item.parent.getData("viewId");
     var stepValue = ev.item.getData("tabValue");
+    ZaApp.getInstance().getAppViewMgr().pushView(viewId);
     var currentView = ZaApp.getInstance().getAppViewMgr().getViewContentById(viewId);
     currentView._localXForm.setInstanceValue(stepValue, ZaModel.currentTab);
     currentView._localXForm.refresh() ;
@@ -1322,6 +1323,7 @@ ZaOverviewPanelController.xformTabTreeListener = function(ev) {
 ZaOverviewPanelController.xformTreeListener = function(ev) {
     var viewId = ev.item.getData("viewId");
     var stepValue = ev.item.getData("firstTab");
+    ZaApp.getInstance().getAppViewMgr().pushView(viewId);
     var currentView = ZaApp.getInstance().getAppViewMgr().getViewContentById(viewId);
     currentView._localXForm.setInstanceValue(stepValue, ZaModel.currentTab);
     currentView._localXForm.refresh() ;
