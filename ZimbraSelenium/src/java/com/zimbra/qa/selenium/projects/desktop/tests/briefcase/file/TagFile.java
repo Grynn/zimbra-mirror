@@ -176,4 +176,85 @@ public class TagFile extends AjaxCommonTest {
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
       app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
 	}
+
+	@Test(description = "Tag uploaded File using Right Click context menu", groups = { "functional" })
+	public void TagFile_03() throws HarnessException {
+	   ZimbraAccount account = app.zGetActiveAccount();
+
+	   FolderItem briefcaseFolder = FolderItem.importFromSOAP(account,
+	         SystemFolder.Briefcase);
+
+	   // Create file item
+	   String filePath = ZimbraSeleniumProperties.getBaseDirectory()
+	         + "/data/public/other/testpptfile.ppt";
+
+	   FileItem fileItem = new FileItem(filePath);
+
+	   String fileName = fileItem.getName();
+
+	   // Upload file to server through RestUtil
+	   String attachmentId = account.uploadFile(filePath);
+
+	   // Save uploaded file to briefcase through SOAP
+	   account.soapSend("<SaveDocumentRequest xmlns='urn:zimbraMail'>"
+	         + "<doc l='" + briefcaseFolder.getId() + "'><upload id='"
+	         + attachmentId + "'/></doc></SaveDocumentRequest>");
+
+	   // Create a tag
+	   String tagName = "tag" + ZimbraSeleniumProperties.getUniqueString();
+
+	   account.soapSend("<CreateTagRequest xmlns='urn:zimbraMail'>"
+	         + "<tag name='" + tagName + "' color='1' />"
+	         + "</CreateTagRequest>");
+
+	   // Make sure the tag was created on the server
+	   TagItem tagItem = TagItem.importFromSOAP(app.zGetActiveAccount(),
+	         tagName);
+
+	   ZAssert.assertNotNull(tagItem, "Verify the new tag was created");
+
+	   GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
+
+      // refresh briefcase page
+	   app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
+
+	   SleepUtil.sleepVerySmall();
+
+	   // Click on uploaded file
+	   app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
+
+	   // Click on header check box
+	   // app.zPageBriefcase.zHeader(Action.A_BRIEFCASE_HEADER_CHECKBOX);
+
+	   // Tag File using Right Click context menu
+	   app.zPageBriefcase.zListItem(Action.A_RIGHTCLICK, Button.O_TAG_FILE,
+	         tagItem.getName(), fileItem);
+
+	   GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
+
+      // Make sure the tag was applied to the File
+	   account
+	         .soapSend("<SearchRequest xmlns='urn:zimbraMail' types='document'>"
+	               + "<query>"
+	               + fileName
+	               + "</query>"
+	               + "</SearchRequest>");
+
+	   String id = account.soapSelectValue("//mail:SearchResponse//mail:doc",
+	         "t");
+
+	   ZAssert.assertNotNull(id,
+	         "Verify the search response returns the document tag id");
+
+	   ZAssert.assertStringContains(id, tagItem.getId(),
+	         "Verify the tag was attached to the File");
+
+	   // delete file upon test completion
+	   app.zPageBriefcase.deleteFileByName(fileName);
+	   GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
+	}
+
 }
