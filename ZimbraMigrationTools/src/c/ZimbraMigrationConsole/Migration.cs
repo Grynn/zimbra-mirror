@@ -25,7 +25,7 @@ namespace ZimbraMigrationConsole
             test.StartMigration(MyAcct);*/
 
             CSMigrationwrapper test =(CSMigrationwrapper) Test;
-            test.StartMigration(MyAcct);
+            test.StartMigration(MyAcct,false);
 
 
           
