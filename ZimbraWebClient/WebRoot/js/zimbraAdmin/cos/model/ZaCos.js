@@ -834,3 +834,51 @@ ZaCos.getEffectiveCosList = function(adminId) {
     }
 
 }
+
+ZaCos.prototype.countAllAccounts = function() {
+	var soapDoc = AjxSoapDoc.create("SearchDirectoryRequest", ZaZimbraAdmin.URN, null);
+	soapDoc.getMethod().setAttribute("limit", "1");
+	var query = "(" + ZaAccount.A_COSId + "=" + this.id + ")";
+
+    if(this.name == "default") {
+        query = "(|(!(" + ZaAccount.A_COSId + "=*))" + query + ")";
+    }
+	soapDoc.set("query", query);
+    soapDoc.set("types", ZaSearch.ACCOUNTS);
+	var command = new ZmCsfeCommand();
+	var cmdParams = new Object();
+	cmdParams.soapDoc = soapDoc;
+    try {
+	    var resp = command.invoke(cmdParams).Body.SearchDirectoryResponse;
+        if(resp.searchTotal)
+            return  resp.searchTotal;
+        else return 0;
+    } catch(ex) {
+        throw (ex);
+    }
+    return 0;
+}
+
+ZaCos.prototype.countAllDomains = function() {
+	var soapDoc = AjxSoapDoc.create("SearchDirectoryRequest", ZaZimbraAdmin.URN, null);
+	soapDoc.getMethod().setAttribute("limit", "1");
+	var query = "(" + ZaDomain.A_domainDefaultCOSId + "=" + this.id + ")";
+
+    if(this.name == "default") {
+        query = "(|(!(" + ZaDomain.A_domainDefaultCOSId + "=*))" + query + ")";
+    }
+	soapDoc.set("query", query);
+    soapDoc.set("types", ZaSearch.DOMAINS);
+	var command = new ZmCsfeCommand();
+	var cmdParams = new Object();
+	cmdParams.soapDoc = soapDoc;
+    try {
+	    var resp = command.invoke(cmdParams).Body.SearchDirectoryResponse;
+        if(resp.searchTotal)
+            return  resp.searchTotal;
+        else return 0;
+    } catch(ex) {
+        throw (ex);
+    }
+    return 0;
+}

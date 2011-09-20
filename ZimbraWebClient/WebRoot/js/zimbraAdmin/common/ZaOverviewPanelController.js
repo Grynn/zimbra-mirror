@@ -947,13 +947,18 @@ ZaOverviewPanelController.homeTreeListener = function (ev) {
 }
 
 ZaOverviewPanelController.cosTreeListener = function (ev) {
+    var cos = ZaApp.getInstance().getCosList(true).getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID));
 	if(ZaApp.getInstance().getCurrentController()) {
 		ZaApp.getInstance().getCurrentController().switchToNextView(ZaApp.getInstance().getCosController(),
 		 ZaCosController.prototype.show,
-		 ZaApp.getInstance().getCosList(true).getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID)));
+		 cos);
 	} else {					
-		ZaApp.getInstance().getCosController().show(ZaApp.getInstance().getCosList(true).getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID)));
-	}	
+		ZaApp.getInstance().getCosController().show(cos);
+	}
+    if(appNewUI) {
+        var parentPath = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_configure, ZaMsg.OVP_cos]);
+        ZaZimbraAdmin.getInstance().getOverviewPanelController().addObjectItem(parentPath, cos.name, null, false, false, cos);
+    }
 }
 
 ZaOverviewPanelController.domainTreeListener = function (ev) {
@@ -980,6 +985,11 @@ ZaOverviewPanelController.domainTreeListener = function (ev) {
             ZaApp.getInstance().getDomainAliasWizard(true).editDomainAlias (domain, false) ;
         }
 	}
+
+    if (appNewUI) {
+        var parentPath = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_configure, ZaMsg.OVP_domains]);
+        ZaZimbraAdmin.getInstance().getOverviewPanelController().addObjectItem(parentPath, domain.name, null, false, false, domain);
+    }
 }
 
 ZaOverviewPanelController.serverTreeListener = function (ev) {
@@ -1051,10 +1061,19 @@ ZaOverviewPanelController.serverListTreeListener = function (ev) {
 
 ZaOverviewPanelController.domainListTreeListener = function (ev) {
 	var domainListController = ZaApp.getInstance().getDomainListController ();
-	
+
 	//if we do not have access to domains we will only get our own domain in response anyway, so no need to add a query
 //	domainListController._currentQuery = ZaDomain.LOCAL_DOMAIN_QUERY;
 	domainListController._currentQuery = "";
+    if(appNewUI && ev.item.getData(ZaOverviewPanelController._TID) == ZaZimbraAdmin._COS_DOMAIN_LIST_VIEW) {
+        var cos = ev.item.getData("cosItem");
+        var extquery = "(" + ZaDomain.A_domainDefaultCOSId + "=" + cos.id + ")";
+        if(cos.name == "default") {
+            extquery = "(|(!(" + ZaDomain.A_domainDefaultCOSId + "=*))" + extquery + ")";
+        }
+        domainListController._currentQuery = extquery;
+    }
+
         if(!ZaZimbraAdmin.isGlobalAdmin()) {
             var domainNameList = ZaApp.getInstance()._domainNameList;
             if(domainNameList && domainNameList instanceof Array && domainNameList.length > 0) {
@@ -1075,6 +1094,11 @@ ZaOverviewPanelController.domainListTreeListener = function (ev) {
 }
 
 ZaOverviewPanelController.aliasListTreeListener = function (ev) {
+    if(appNewUI && ev.item.getData(ZaOverviewPanelController._TID) == ZaZimbraAdmin._ACCOUNT_ALIAS_LIST_VIEW) {
+        var targetId = ev.item.getData("aliasTargetId");
+        var extquery = "("+ ZaAlias.A_AliasTargetId + "=" + targetId + ")";
+        this._showAccountsView(ZaItem.ALIAS,ev, extquery);
+    } else
 	this._showAccountsView(ZaItem.ALIAS,ev);
 	this._modifySearchMenuButton(ZaItem.ALIAS) ;	
 }
@@ -1085,6 +1109,14 @@ ZaOverviewPanelController.dlListTreeListener = function (ev) {
 }
 
 ZaOverviewPanelController.accountListTreeListener = function (ev) {
+    if(appNewUI && ev.item.getData(ZaOverviewPanelController._TID) == ZaZimbraAdmin._COS_ACCOUNT_LIST_VIEW) {
+        var cos = ev.item.getData("cosItem");
+        var extquery = "(" + ZaAccount.A_COSId + "=" + cos.id + ")";
+        if(cos.name == "default") {
+            extquery = "(|(!(" + ZaAccount.A_COSId + "=*))" + extquery + ")";
+        }
+        this._showAccountsView(ZaItem.ACCOUNT,ev, extquery);
+    } else
 	this._showAccountsView(ZaItem.ACCOUNT,ev);
 	this._modifySearchMenuButton(ZaItem.ACCOUNT) ;
 }
@@ -1174,6 +1206,11 @@ ZaOverviewPanelController.manageAccountTreeListener = function (ev) {
         var attr = child.getData("TreeItemType");
         child.setCount(accountStat[attr]);
     }
+}
+
+ZaOverviewPanelController.accountListInDomainTreeListener = function(ev) {
+    var domain = ev.item.getData("domainItem");
+    ZaDomain.searchAccountsInDomain(domain.name);
 }
 
 ZaOverviewPanelController.prototype.refreshAccountTree = function() {
@@ -1343,7 +1380,10 @@ function(parentPath, item) {
     } else if (item.type == ZaItem.RESOURCE ){
 
     } else if (item.type == ZaItem.ALIAS) {
-
+    } else if (item.type == ZaItem.DOMAIN) {
+        return this.getRelatedList4Domain(parentPath, item);
+    } else if (item.type == ZaItem.COS) {
+        return this.getRelatedList4Cos(parentPath, item);
     }
     return [];
 }
@@ -1360,11 +1400,15 @@ function(parentPath, item) {
 
     var aliasTi = new ZaTreeItemData({
                 text: ZaMsg.TABT_Aliases,
-                type: 1,
+                //type: 1,
                 count:alias.length,
+                mappingId: ZaZimbraAdmin._ACCOUNT_ALIAS_LIST_VIEW,    //ZaZimbraAdmin._ALIASES_LIST_VIEW,
                 path: parentPath + ZaTree.SEPERATOR + item.name + ZaTree.SEPERATOR + ZaMsg.TABT_Aliases
                 }
             );
+    aliasTi.setData("aliasTargetId", item.id);
+    ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._ACCOUNT_ALIAS_LIST_VIEW] = ZaOverviewPanelController.aliasListTreeListener;
+
     var cosTi = new ZaTreeItemData({
                 text: cos.name,
                 mappingId: ZaZimbraAdmin._COS_VIEW,
@@ -1384,12 +1428,57 @@ function(parentPath, item) {
     ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._DOMAIN_VIEW] = ZaOverviewPanelController.domainTreeListener;
     var zimletTi = new ZaTreeItemData({
                 text: ZaMsg.TABT_Zimlets,
-                type: 1,
+                //type: 1,
                 count:zimletList.length,
+                mappingId:ZaZimbraAdmin._ZIMLET_LIST_VIEW,
                 path: parentPath + ZaTree.SEPERATOR + item.name + ZaTree.SEPERATOR + ZaMsg.TABT_Zimlets
                 }
             );
+    ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._ZIMLET_LIST_VIEW] = ZaOverviewPanelController.zimletListTreeListener;
+
     return [aliasTi, cosTi, domainTi, zimletTi];
+}
+
+ZaOverviewPanelController.prototype.getRelatedList4Cos =
+function(parentPath, item) {
+    var count = item.countAllAccounts();
+    var accountTi = new ZaTreeItemData({
+                text: ZaMsg.OVP_accounts,
+                count:count,
+                mappingId: ZaZimbraAdmin._COS_ACCOUNT_LIST_VIEW,
+                path: parentPath + ZaTree.SEPERATOR + item.name + ZaTree.SEPERATOR + ZaMsg.OVP_accounts
+                }
+            );
+    accountTi.setData("cosItem", item);
+    ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._COS_ACCOUNT_LIST_VIEW] = ZaOverviewPanelController.accountListTreeListener;
+
+    count = item.countAllDomains();
+    var domainTi = new ZaTreeItemData({
+                text: ZaMsg.OVP_domains,
+                count:count,
+                mappingId: ZaZimbraAdmin._COS_DOMAIN_LIST_VIEW,
+                path: parentPath + ZaTree.SEPERATOR + item.name + ZaTree.SEPERATOR + ZaMsg.OVP_domains
+                }
+            );
+    domainTi.setData("cosItem", item);
+    ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._COS_DOMAIN_LIST_VIEW] = ZaOverviewPanelController.domainListTreeListener;
+
+    return [accountTi, domainTi];
+}
+
+ZaOverviewPanelController.prototype.getRelatedList4Domain =
+function(parentPath, item) {
+    var count = item.countAllAccounts();
+    var accountTi = new ZaTreeItemData({
+                text: ZaMsg.OVP_accounts,
+                count:count,
+                mappingId: ZaZimbraAdmin._COS_ACCOUNT_LIST_VIEW,
+                path: parentPath + ZaTree.SEPERATOR + item.name + ZaTree.SEPERATOR + ZaMsg.OVP_accounts
+                }
+            );
+    accountTi.setData("domainItem", item);
+    ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._COS_ACCOUNT_LIST_VIEW] = ZaOverviewPanelController.accountListInDomainTreeListener;
+    return [accountTi];
 }
 
 ZaOverviewPanelController.prototype.getRecentList =

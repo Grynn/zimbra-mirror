@@ -2758,3 +2758,26 @@ ZaDomain.getEffectiveDomainList = function(adminId) {
         ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaDomain.getEffectiveDomainList", null, false);
     }
 }
+
+ZaDomain.prototype.countAllAccounts = function() {
+	var soapDoc = AjxSoapDoc.create("SearchDirectoryRequest", ZaZimbraAdmin.URN, null);
+	soapDoc.getMethod().setAttribute("limit", "1");
+	var query = "";
+    var types = [ZaSearch.ACCOUNTS, ZaSearch.DLS, ZaSearch.ALIASES, ZaSearch.RESOURCES];
+
+	soapDoc.set("query", query);
+    soapDoc.set("types", types.toString());
+    soapDoc.set("domain", this.name);
+	var command = new ZmCsfeCommand();
+	var cmdParams = new Object();
+	cmdParams.soapDoc = soapDoc;
+    try {
+	    var resp = command.invoke(cmdParams).Body.SearchDirectoryResponse;
+        if(resp.searchTotal)
+            return  resp.searchTotal;
+        else return 0;
+    } catch(ex) {
+        throw (ex);
+    }
+    return 0;
+}

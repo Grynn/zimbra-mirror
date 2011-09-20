@@ -950,7 +950,7 @@ function (){
 }
 
 
-ZaController.prototype._showAccountsView = function (defaultType, ev) {
+ZaController.prototype._showAccountsView = function (defaultType, ev, filterQuery) {
 
 	var viewId = null;  
 	if(defaultType == ZaItem.DL) {
@@ -987,10 +987,13 @@ ZaController.prototype._showAccountsView = function (defaultType, ev) {
 		if(cnt>0) {
 			queryChunks.push(")");
 			query=queryChunks.join("");
-		}		
+		}
 	}
     }
 
+    if(appNewUI && filterQuery) {
+        query = query + filterQuery;
+    }
 
 	acctListController.setPageNum(1);	
 	acctListController.setQuery(query);
