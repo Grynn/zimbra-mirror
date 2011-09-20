@@ -21,6 +21,8 @@ public class PageOctopus extends AbsTab {
 				"css=div.octopus-tab-label:contains(My Files)");
 		public static final Locators zTabSharing = new Locators(
 		"css=div.octopus-tab-label:contains(Sharing)");
+		public static final Locators zTabTrash = new Locators(
+		"css=div.octopus-tab-label:contains(Trash)");
 		
 		public final String locator;
 
@@ -189,6 +191,10 @@ public class PageOctopus extends AbsTab {
 			// Check if the button is disabled
 			locator = Locators.zTabSharing.locator;
 			page = new PageSharing(MyApplication);
+		} else if (button == Button.B_TAB_TRASH) {
+			// Check if the button is disabled
+			locator = Locators.zTabTrash.locator;
+			page = new PageTrash(MyApplication);
 		} else {
 			throw new HarnessException("no logic defined for button " + button);
 		}

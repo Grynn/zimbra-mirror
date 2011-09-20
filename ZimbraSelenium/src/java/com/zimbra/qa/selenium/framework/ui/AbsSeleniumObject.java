@@ -1021,6 +1021,7 @@ public abstract class AbsSeleniumObject {
 	 * selenium.isElementPresent() returns true
 	 * 
 	 * @param locator
+	 * @param timeout
 	 * @throws HarnessException
 	 */
 	public boolean zWaitForElementPresent(String locator, String timeout)
@@ -1046,6 +1047,19 @@ public abstract class AbsSeleniumObject {
 		} catch (Exception ex) {
 			throw new HarnessException(locator + " never disappeared : ", ex);
 		}
+	}
+	
+	/**
+	 * zWaitForElementDeleted() Waits for condition during a given timout period until
+	 * selenium.isElementPresent() returns false
+	 * 
+	 * @param locator
+	 * @param timeout
+	 * @throws HarnessException
+	 */
+	public boolean zWaitForElementDeleted(String locator, String timeout) throws HarnessException {
+		logger.info("zWaitForElementDeleted(" + locator + ", " + timeout +")");
+		return sWaitForCondition("!selenium.isElementPresent(\"" + locator + "\")", timeout);		
 	}
 
 	/**

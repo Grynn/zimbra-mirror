@@ -94,7 +94,7 @@ public class PageSharing extends AbsTab {
 		zWaitForElementPresent(locator);
 
 		// Click on Sharing tab
-		zClickAt(Locators.zTabSharing.locator, "0,0");
+		zClickAt(locator, "0,0");
 
 		zWaitForBusyOverlay();
 

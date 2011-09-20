@@ -12,25 +12,21 @@ import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.octopus.ui.DialogError;
 import com.zimbra.qa.selenium.projects.octopus.ui.DialogError.DialogErrorID;
 
-public class PageMyFiles extends AbsTab {
+public class PageTrash extends AbsTab {
 
 	public static class Locators {
-		public static final Locators zTabMyFiles = new Locators(
-		"css=div.octopus-tab-label:contains(My Files)");
-		public static final Locators zTabMyFilesSelected = new Locators(
-				"css=div[class^=octopus-tab sc-collection-item sel]>div.octopus-tab-label:contains(My Files)");
-		public static final Locators zMyFilesView = new Locators(
-		"css=div[id=octopus-myfiles-view]");
+		public static final Locators zTabTrash = new Locators(
+				"css=div.octopus-tab-label:contains(Trash)");
+		public static final Locators zTabTrashSelected = new Locators(
+				"css=div[class^=octopus-tab sc-collection-item sel]>div.octopus-tab-label:contains(Trash)");
 		public static final Locators zMyFilesArrowButton = new Locators(
 				"css=span[class*=my-files-list-item-action-button myfiles-button button]");
 		public static final Locators zNewFolderOption = new Locators(
 				"css=div[class^=octopus-template-context-menu-item action-new-folder]:contains(New Folder)");
-		public static final Locators zMyFilesListView = new Locators(
-				"css=div[class*=my-files-list-view]");
 		public static final Locators zMyFilesListViewItems = new Locators(
-				"css=div[class*=my-files-list-view]>div.my-files-list-item");
+		"css=div[class*=my-files-list-view]>div.my-files-list-item");
 		public static final Locators zDeleteFolderOption = new Locators(
-				"css=div[class^=sc-view sc-menu-item] a[class=menu-item]>span:contains(Delete)");
+		"css=div[class^=sc-view sc-menu-item] a[class=menu-item]>span:contains(Delete)");
 
 		public final String locator;
 
@@ -39,10 +35,10 @@ public class PageMyFiles extends AbsTab {
 		}
 	}
 
-	public PageMyFiles(AbsApplication application) {
+	public PageTrash(AbsApplication application) {
 		super(application);
 
-		logger.info("new " + PageMyFiles.class.getCanonicalName());
+		logger.info("new " + PageSharing.class.getCanonicalName());
 
 	}
 
@@ -56,12 +52,11 @@ public class PageMyFiles extends AbsTab {
 
 	@Override
 	public boolean zIsActive() throws HarnessException {
-		// Look for the My Files tab
-		boolean selected = sIsElementPresent(Locators.zTabMyFilesSelected.locator);
+		// Look for the Sharing tab
+		boolean selected = sIsElementPresent(Locators.zTabTrashSelected.locator);
 
 		if (!selected) {
-			logger.debug("zIsActive(): "
-					+ selected);
+			logger.debug("zIsActive(): " + selected);
 			return (false);
 		}
 
@@ -86,12 +81,12 @@ public class PageMyFiles extends AbsTab {
 		if (!((AppOctopusClient) MyApplication).zPageOctopus.zIsActive()) {
 			((AppOctopusClient) MyApplication).zPageOctopus.zNavigateTo();
 		}
-		
-		String locator = Locators.zTabMyFiles.locator;
+
+		String locator = Locators.zTabTrash.locator;
 
 		zWaitForElementPresent(locator);
 
-		// Click on My Files tab
+		// Click on Sharing tab
 		zClickAt(locator, "0,0");
 
 		zWaitForBusyOverlay();
@@ -243,9 +238,8 @@ public class PageMyFiles extends AbsTab {
 		// Return the specified page, or null if not set
 		return (page);
 	}
-
-
-	public boolean zIsItemInListView(IItem item) throws HarnessException {
+	
+	public boolean zIsItemInTrash(IItem item) throws HarnessException {
 		List<String> folders = zGetListViewItems();
 		String name = item.getName();
 		boolean found = false;
@@ -256,7 +250,7 @@ public class PageMyFiles extends AbsTab {
 			}
 		return found;
 	}
-	
+
 	public List<String> zGetListViewItems() throws HarnessException {
 		List<String> items = new ArrayList<String>();
 		String locator = Locators.zMyFilesListViewItems.locator;

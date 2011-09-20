@@ -11,6 +11,9 @@ import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.octopus.core.OctopusCommonTest;
+import com.zimbra.qa.selenium.projects.octopus.ui.PageMyFiles;
+import com.zimbra.qa.selenium.projects.octopus.ui.PageSharing;
+import com.zimbra.qa.selenium.projects.octopus.ui.PageTrash;
 
 public class DeleteMountpoint extends OctopusCommonTest {
 
@@ -86,7 +89,7 @@ public class DeleteMountpoint extends OctopusCommonTest {
 		ZAssert.assertNotNull(folderMountpointItem,
 				"Verify the mountpoint is available");
 
-		// refresh Octopus page
+		// Open My Files page
 		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_MY_FILES);
 
 		SleepUtil.sleepVerySmall();
@@ -94,14 +97,25 @@ public class DeleteMountpoint extends OctopusCommonTest {
 		// Delete the mountpoint folder using drop down list option
 		app.zPageMyFiles.zToolbarPressPulldown(Button.B_MY_FILES_LIST_ITEM, Button.O_DELETE, folderMountpointItem);
 
+		// Verify the mountpoint folder disappears from My Files tab
+		ZAssert.assertTrue(app.zPageMyFiles.zWaitForElementDeleted(
+				PageMyFiles.Locators.zMyFilesListView.locator + ":contains("
+						+ folderMountpointItem.getName() + ")", "3000"),
+				"Verify mountpoint folder disappears from My Files tab");
+
+
+		//click on Trash tab
+		PageTrash pageTrash = (PageTrash)app.zPageOctopus.zToolbarPressButton(Button.B_TAB_TRASH);
+	
 		// Verify the mountpoint folder is now in the trash
-		for(int i = 0; i<5; i++){
-			folderMountpointItem = FolderMountpointItem.importFromSOAP(currentAccount,
-					folderMountpointName);
-			if(folderMountpointItem != null && trash.getId().contentEquals(folderMountpointItem.getParentId()))
-				break;
-			SleepUtil.sleepVerySmall();
-		}
+		ZAssert
+		.assertTrue(
+				app.zPageTrash.zIsItemInTrash(folderMountpointItem),
+				"Verify the mountpoint folder is in the trash");
+		
+		// Verify on server
+		folderMountpointItem = FolderMountpointItem
+		.importFromSOAP(currentAccount, folderMountpointName);
 		
 		ZAssert.assertNotNull(folderMountpointItem,
 				"Verify the mountpoint is again available");

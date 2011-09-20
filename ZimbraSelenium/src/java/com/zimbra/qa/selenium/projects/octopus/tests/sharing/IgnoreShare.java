@@ -1,7 +1,5 @@
 package com.zimbra.qa.selenium.projects.octopus.tests.sharing;
 
-import java.util.List;
-
 import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
@@ -97,7 +95,7 @@ public class IgnoreShare extends OctopusCommonTest {
 				.assertTrue(pageSharing.zWaitForElementPresent(
 						PageSharing.Locators.zShareNotificationListView.locator
 								+ ":contains(" + ownerFolderItem.getName()
-								+ ")", "3000"),
+								+ ")", "9000"),
 						"Verify the owner share folder is displayed in the Share Invitation view");
 
 		// click on Ignore button
@@ -112,17 +110,8 @@ public class IgnoreShare extends OctopusCommonTest {
 		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_MY_FILES);
 
 		// Make sure the ignored folder doesn't appear in My Files list view
-		List<String> folders = app.zPageMyFiles.zGetListViewItems();
-
-		String name = ownerFolderItem.getName();
-		boolean found = false;
-		for (String str : folders)
-			if (str.contains(name)) {
-				found = true;
-				break;
-			}
 		ZAssert
-				.assertFalse(found,
-						"Verify the accepted shared folder appears in My Files list view");
+				.assertFalse(app.zPageMyFiles.zIsItemInListView(ownerFolderItem),
+						"Verify the ignored share folder doesn't appears in My Files list view");
 	}
 }

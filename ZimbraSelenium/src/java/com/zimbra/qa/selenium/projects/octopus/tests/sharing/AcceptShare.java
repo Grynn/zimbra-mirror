@@ -1,7 +1,5 @@
 package com.zimbra.qa.selenium.projects.octopus.tests.sharing;
 
-import java.util.List;
-
 import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
@@ -90,21 +88,21 @@ public class AcceptShare extends OctopusCommonTest {
 				.soapSend("<GetShareNotificationsRequest xmlns='urn:zimbraMail'/>");
 
 		// Open Sharing tab
-		PageSharing pageSharing = (PageSharing) app.zPageOctopus
+		app.zPageOctopus
 				.zToolbarPressButton(Button.B_TAB_SHARING);
 
 		ZAssert
-				.assertTrue(pageSharing.zWaitForElementPresent(
+				.assertTrue(app.zPageSharing.zWaitForElementPresent(
 						PageSharing.Locators.zShareNotificationListView.locator
 								+ ":contains(" + ownerFolderItem.getName()
-								+ ")", "3000"),
+								+ ")", "9000"),
 						"Verify the owner share folder is displayed in the Share Invitation view");
 
 		// click on Add To My Files button
-		pageSharing.zToolbarPressButton(Button.B_ADD_TO_MY_FILES,
+		app.zPageSharing.zToolbarPressButton(Button.B_ADD_TO_MY_FILES,
 				ownerFolderItem);
 
-		ZAssert.assertTrue(pageSharing.zWaitForElementPresent(
+		ZAssert.assertTrue(app.zPageSharing.zWaitForElementPresent(
 				PageSharing.Locators.zSharedItemsView.locator + ":contains("
 						+ ownerFolderItem.getName() + ")", "3000"),
 				"Verify item appears in the Shared Items View");
@@ -113,17 +111,9 @@ public class AcceptShare extends OctopusCommonTest {
 		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_MY_FILES);
 
 		// Make sure the accepted shared folder appears in My Files list view
-		List<String> folders = app.zPageMyFiles.zGetListViewItems();
-
-		String name = ownerFolderItem.getName();
-		boolean found = false;
-		for (String str : folders)
-			if (str.contains(name)) {
-				found = true;
-				break;
-			}
 		ZAssert
-				.assertTrue(found,
+				.assertTrue(
+						app.zPageMyFiles.zIsItemInListView(ownerFolderItem),
 						"Verify the accepted shared folder appears in My Files list view");
 	}
 }

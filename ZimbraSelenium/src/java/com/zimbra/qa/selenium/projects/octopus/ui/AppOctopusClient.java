@@ -15,6 +15,7 @@ public class AppOctopusClient extends AbsApplication {
 	public PageOctopus zPageOctopus = null;
 	public PageMyFiles zPageMyFiles = null;
 	public PageSharing zPageSharing = null;
+	public PageTrash zPageTrash = null;
 
 	public AppOctopusClient() {
 		super();
@@ -31,11 +32,15 @@ public class AppOctopusClient extends AbsApplication {
 		
 		// My Files page
 		zPageMyFiles = new PageMyFiles(this);
-		pages.put(zPageOctopus.myPageName(), zPageMyFiles);
+		pages.put(zPageMyFiles.myPageName(), zPageMyFiles);
 		
 		// Sharing page
 		zPageSharing = new PageSharing(this);
-		pages.put(zPageOctopus.myPageName(), zPageSharing);
+		pages.put(zPageSharing.myPageName(), zPageSharing);
+		
+		// Trash page
+		zPageTrash = new PageTrash(this);
+		pages.put(zPageTrash.myPageName(), zPageTrash);
 
 		// Configure the localization strings
 		getL10N().zAddBundlename(I18N.Catalog.I18nMsg);
