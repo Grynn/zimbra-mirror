@@ -510,7 +510,7 @@ function() {
     var refreshLabel = new DwtComposite (this._shell, "RefreshContainer", Dwt.RELATIVE_STYLE);
     var refreshEl = refreshLabel.getHtmlElement();
     refreshLabel.setCursor ("pointer");
-    refreshEl.onclick = function () { ZaZimbraAdmin.prototype._refreshListener.call(this);};
+    refreshEl.onclick = function () { ZaZimbraAdmin.prototype._refreshListener.call(ZaZimbraAdmin.getInstance());};
     refreshEl.innerHTML = this._getAppLink(null, "Refresh");
     refreshLabel.reparentHtmlElement (ZaSettings.SKIN_REFRESH_DOM_ID) ;
 }
@@ -525,7 +525,7 @@ function() {
     var previousLabel = new DwtComposite (this._shell, "PreviousContainer", Dwt.RELATIVE_STYLE);
     var previousEl = previousLabel.getHtmlElement();
     previousLabel.setCursor ("pointer");
-    previousEl.onclick = function () { ZaZimbraAdmin.prototype._refreshListener.call(this);};
+    previousEl.onclick = function () { ZaZimbraAdmin.prototype._goPrevListener.call(ZaZimbraAdmin.getInstance());};
     previousEl.innerHTML = this._getAppLink(null, "LeftArrow");
     previousLabel.reparentHtmlElement (ZaSettings.SKIN_PREVIOUS_DOM_ID) ;
 }
@@ -539,24 +539,30 @@ function() {
     var nextLabel = new DwtComposite (this._shell, "NextContainer", Dwt.RELATIVE_STYLE);
     var nextEl = nextLabel.getHtmlElement();
     nextLabel.setCursor ("pointer");
-    nextEl.onclick = function () { ZaZimbraAdmin.prototype._refreshListener.call(this);};
+    nextEl.onclick = function () { ZaZimbraAdmin.prototype._goNextListener.call(ZaZimbraAdmin.getInstance());};
     nextEl.innerHTML = this._getAppLink(null, "RightArrow");
     nextLabel.reparentHtmlElement (ZaSettings.SKIN_NEXT_DOM_ID) ;
 }
 
 ZaZimbraAdmin.prototype._refreshListener =
 function(ev) {
-	window.onbeforeunload = null;
+    var currentObject = this._historyMgr.getLatestHistory();
+    if (currentObject)
+        currentObject.goToView();
+}
 
-	// NOTE: Mozilla sometimes handles UI events while the page is
-	//       unloading which references classes and objects that no
-	//       longer exist. So we put up the busy veil and reload
-	//       after a short delay.
-	var shell = DwtShell.getShell(window);
-	shell.setBusy(true);
+ZaZimbraAdmin.prototype._goPrevListener =
+function(ev) {
+    var currentObject = this._historyMgr.getPrevious();
+    if (currentObject)
+        currentObject.goToView();
+}
 
-    var act = new AjxTimedAction(null, ZaZimbraAdmin.redir, window.location);
-	AjxTimedAction.scheduleAction(act, 100);
+ZaZimbraAdmin.prototype._goNextListener =
+function(ev) {
+    var currentObject = this._historyMgr.getNext();
+    if (currentObject)
+        currentObject.goToView();
 }
 
 ZaZimbraAdmin.prototype._createHelpLink =
