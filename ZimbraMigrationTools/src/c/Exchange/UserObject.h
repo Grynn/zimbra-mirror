@@ -64,7 +64,7 @@ END_COM_MAP()
 	}
 
 public:
-	STDMETHOD (InitializeUser)(BSTR UserID,BSTR MailType);
+	STDMETHOD (InitializeUser)(BSTR host,BSTR admin,BSTR UserID,BSTR MailType);
 	STDMETHOD(GetFolderObjects)(/*[out, retval]*/ VARIANT* vObjects);
 	STDMETHOD(GetItemsForFolderObjects)( IfolderObject* FolderObj ,FolderType type, VARIANT creattiondate,VARIANT* vItems);
 	STDMETHOD(GetDataForItem)(VARIANT ItemId,VARIANT* pVal);

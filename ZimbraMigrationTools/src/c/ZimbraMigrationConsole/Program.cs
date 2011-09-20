@@ -16,6 +16,10 @@ namespace ZimbraMigrationConsole
         {
 
            Migration Test = new Migration();
+           CssLib.CSMigrationwrapper TestObj = new CSMigrationwrapper();
+            
+
+            
 
             //Test.test();
 
@@ -42,6 +46,19 @@ namespace ZimbraMigrationConsole
                         {
                             foreach (MVVM.Model.Users user in myXmlConfig.UserList)
                             {
+
+                               // TestObj.InitializeMailClient(myXmlConfig.ConfigObj.mailServer.SourceHostname,myXmlConfig.ConfigObj.mailServer.SourceAdminID,myXmlConfig.ConfigObj.mailServer.SourceAdminID);
+                                TestObj.Initalize(myXmlConfig.ConfigObj.zimbraServer.ZimbraHostname, myXmlConfig.ConfigObj.zimbraServer.Port, myXmlConfig.ConfigObj.zimbraServer.ZimbraAdminID, user.UserName, myXmlConfig.ConfigObj.mailServer.SourceHostname, myXmlConfig.ConfigObj.mailServer.SourceAdminID);
+
+                                /***************************
+                                 * 
+                                 * 
+                                 * 
+                                 * 
+                                 * 
+                                 * ////////////////////////////////////////*/
+                         
+                                 
                                 Account userAcct = new Account();
 
                                 System.Console.WriteLine();
@@ -63,7 +80,7 @@ namespace ZimbraMigrationConsole
                                     //return;
                                 }
 
-                              //  userAcct.InitializeMigration(myXmlConfig.ConfigObj.zimbraServer.ZimbraHostname, myXmlConfig.ConfigObj.zimbraServer.Port, myXmlConfig.ConfigObj.zimbraServer.ZimbraAdminID);
+                              //  userAcct.InitializeMigration(myXmlConfig.ConfigObj.zimbraServer.ZimbraHostname, myXmlConfig.ConfigObj.zimbraServer.Port, myXmlConfig.ConfigObj.zimbraServer.ZimbraAdminID,user.UserName);
 
 
                                 string acctName = user.UserName + '@' + myXmlConfig.ConfigObj.UserProvision.Domain;
@@ -77,7 +94,17 @@ namespace ZimbraMigrationConsole
                                     System.Console.WriteLine();
 
                                     //userAcct.StartMigration(user.UserName, myXmlConfig.ConfigObj.importOptions.Mail.ToString());
-                                    Test.test(acctName);
+                                    Test.test(acctName,TestObj);
+
+
+                                    ///////////////////
+
+                                    
+
+
+
+
+                                    /////////////////////
                                     Thread.Sleep(15000);
                                 }
                                 else
@@ -105,7 +132,7 @@ namespace ZimbraMigrationConsole
                                         System.Console.WriteLine();
                                         System.Console.WriteLine();
                                        // userAcct.StartMigration(user.UserName, myXmlConfig.ConfigObj.importOptions.Mail.ToString());
-                                        Test.test(acctName);
+                                        Test.test(acctName,TestObj);
                                         System.Console.WriteLine("......... \n");
                                         Thread.Sleep(9000);
                                     }
@@ -157,6 +184,8 @@ namespace ZimbraMigrationConsole
             
 
         }
+
+        
         }
            
          

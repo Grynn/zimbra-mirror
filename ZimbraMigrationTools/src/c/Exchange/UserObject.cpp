@@ -52,7 +52,7 @@ long CUserObject::UnInitialize()
 }
 
 
-STDMETHODIMP  CUserObject::InitializeUser(BSTR UserID,BSTR MailType)
+STDMETHODIMP  CUserObject::InitializeUser(BSTR host,BSTR admin,BSTR UserID,BSTR MailType)
 	{
 		HRESULT hr = S_OK;long retval =0;
 		UserID = UserID;
@@ -67,10 +67,10 @@ STDMETHODIMP  CUserObject::InitializeUser(BSTR UserID,BSTR MailType)
 			m_pLogger->doSomething(DBG,"In Initalize User");
 			//Create Session and Open admin store.
 			//Its a static function and store/session will be used commonly by all mailboxes.
-			MAPIAccessAPI::InitGlobalSessionAndStore(L"10.20.136.140",L"MyAdmin");
+			MAPIAccessAPI::InitGlobalSessionAndStore(host,admin);
 			//TODO for Karuna: Call MAPIAccessAPI::UnInitGlobalSessionAndStore() to realse global session and store.
 			//Specify user.
-			maapi = new Zimbra::MAPI::MAPIAccessAPI(L"TestZimbra1");
+			maapi = new Zimbra::MAPI::MAPIAccessAPI(UserID);
 			//Init session and stores
 			maapi->InitializeUser();
 		}

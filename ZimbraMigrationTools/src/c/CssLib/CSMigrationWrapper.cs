@@ -27,6 +27,11 @@ namespace CssLib
         }*/
         string m_MailClient;
 
+
+        Exchange.UserObject O1;
+
+        
+
         public string MailClient
         {
             get { return m_MailClient; }
@@ -38,6 +43,12 @@ namespace CssLib
         MVVM.Model.Users  users = new MVVM.Model.Users();*/
 
         Exchange.IMapiWrapper MailWrapper;
+
+
+        public CSMigrationwrapper()
+        {
+            O1 = new Exchange.UserObject();
+        }
         
 
         /*private void CreateConfig(string Xmlfilename)
@@ -63,7 +74,8 @@ namespace CssLib
             if (MailClient == "MAPI")
             {
 
-                MailWrapper = new Exchange.MapiWrapper();              
+                MailWrapper = new Exchange.MapiWrapper();
+                
             }
         }
 
@@ -94,10 +106,16 @@ namespace CssLib
         
          
 
-        public void Initalize(string HostName,string Port, string AdminAccount)
+        public void Initalize(string HostName,string Port, string AdminAccount,string UserID,string Mailserver,string AdminID)
         {
             //CreateConfig(ConfigXMLFile);            
-                MailWrapper.ConnectToServer(HostName,Port,AdminAccount);
+                //MailWrapper.ConnectToServer(HostName,Port,AdminAccount);
+
+            //Initilaize user object
+
+           
+            O1.InitializeUser(Mailserver, AdminID, UserID,"MAPI");
+
         }
 
         public void Migrate(string MailOptions)
@@ -143,8 +161,10 @@ namespace CssLib
             object[] objectArray;
             objectArray = M1.GetFolderObjects();*/
 
-            UserObject O1 = new UserObject();
-            O1.InitializeUser("ksomasil", "MAPI");
+           // UserObject O1 = new UserObject();
+           // O1.InitializeUser("ksomasil", "MAPI");
+            
+            
             object[] objectArray;
             objectArray = O1.GetFolderObjects();
 
@@ -181,11 +201,12 @@ namespace CssLib
                     ItemObject[] Items = Array.ConvertAll(objectArray, Item => (ItemObject)Item);
 
 
-                    Dictionary<string, string> dict = new Dictionary<string, string>();
+                    
                     foreach (ItemObject I1 in Items)
                     {
                         if (I1 != null)
                         {
+                            Dictionary<string, string> dict = new Dictionary<string, string>();
                             FolderType type = I1.Type;
                             if (type == FolderType.Contacts)
                             {
@@ -204,11 +225,13 @@ namespace CssLib
                                     // Console.WriteLine("{0}, {1}", so1, so2);
                                 }
                             }
-                        }
-                        ZimbraValues.GetZimbraValues().AccountName = account;
-                        if (dict.Count > 0)
-                        { int stat = api.CreateContact(dict); }
 
+                            ZimbraValues.GetZimbraValues().AccountName = account;
+                            if (dict.Count > 0)
+                            { int stat = api.CreateContact(dict); }
+
+                        }
+                       
                     }
 
                    
@@ -302,7 +325,8 @@ namespace CssLib
         public void  StartMigration(MigrationAccount Acct)
         {
             
-            //GetListofMapiFolders(Acct.Accountname);
+            
+            GetListofMapiFolders(Acct.Accountname);
            // GetListofItems();
             //Acct.Accountname = "testing";
             Acct.TotalNoContacts = 100;

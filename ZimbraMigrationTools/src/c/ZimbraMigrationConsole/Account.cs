@@ -45,13 +45,13 @@ namespace ZimbraMigrationConsole
             get { return migrateOptions; }
             set { migrateOptions = value; }
         }
-        public void InitializeMigration(string Hostname,string Port,String Adminacct)
+        public void InitializeMigration(string Hostname,string Port,String Adminacct,string UserID)
         {
             TestObj = new CssLib.CSMigrationwrapper();
             TestObj.MailClient = "MAPI";
-            TestObj.Initalize(Hostname, Port,Adminacct);
+            //TestObj.Initalize(Hostname, Port,Adminacct,UserID);
             Currentuser = new MVVM.Model.Users();
-
+            
 
         }
         public void StartMigration(string AcctName,string MailOptions)
