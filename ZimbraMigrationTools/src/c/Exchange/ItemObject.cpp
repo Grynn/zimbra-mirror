@@ -7,6 +7,7 @@
 
 // CItemObject
 
+
 STDMETHODIMP CItemObject::InterfaceSupportsErrorInfo(REFIID riid)
 {
 	static const IID* const arr[] = 
@@ -98,6 +99,8 @@ STDMETHODIMP CItemObject::put_Parentfolder(IfolderObject* newVal)
 
 STDMETHODIMP CItemObject::GetDataForItem(VARIANT* data)
 {
+
+	//maapi-
 	std::map<BSTR,BSTR> pIt;
 	std::map<BSTR,BSTR>::iterator it;
 	FolderType Type;
@@ -150,7 +153,81 @@ data->vt =VT_ARRAY | VT_BSTR;
 	}
 	return S_OK;
 }
+STDMETHODIMP CItemObject::GetDataForItemID(VARIANT ItemId,VARIANT* pVal)
+{
 
+
+			ContactItemData cd;
+			SBinary ItemID;
+
+			if(ItemId.vt == (VT_ARRAY|VT_UI1)) // (OLE SAFEARRAY)
+ {
+ //Retrieve size of array
+ ItemID.cb = ItemId.parray->rgsabound[0].cElements;
+ ItemID.lpb = new BYTE[ItemID.cb]; //Allocate a buffer to store the data
+ if(ItemID.lpb != NULL)
+ {
+ void * pArrayData;
+ //Obtain safe pointer to the array
+ SafeArrayAccessData(ItemId.parray,&pArrayData);
+ //Copy the bitmap into our buffer
+ memcpy(ItemID.lpb, pArrayData, ItemID.cb); //Unlock the variant data
+ SafeArrayUnaccessData(ItemId.parray);
+
+	maapi->GetItem(ItemID,cd);
+}
+ }
+			
+
+HRESULT hr= S_OK;
+			std::map<BSTR,BSTR> pIt;
+	std::map<BSTR,BSTR>::iterator it;
+	
+	
+		pIt[L"BirthDay"] = SysAllocString((cd.Birthday).c_str());
+		pIt[L"FirstName"]= SysAllocString((cd.FirstName).c_str());
+		pIt[L"JobTitle"]=SysAllocString((cd.JobTitle).c_str());
+		pIt[L"CallbackPhone"]=SysAllocString((cd.CallbackPhone).c_str());
+		pIt[L"Email1"] = SysAllocString((cd.Email1).c_str());
+
+			
+		VariantInit(pVal);
+
+    // Create SafeArray of VARIANT BSTRs
+    SAFEARRAY *pSA= NULL;
+    SAFEARRAYBOUND aDim[2];    // two dimensional array
+    aDim[0].lLbound= 0;
+    aDim[0].cElements= 5;
+    aDim[1].lLbound= 0;
+    aDim[1].cElements= 5;    // rectangular array
+	pSA= SafeArrayCreate(VT_BSTR,2,aDim);  // again, 2 dimensions
+    long aLong[2];
+  
+    if (pSA != NULL) {
+        BSTR temp;
+		
+        for (long x= aDim[0].lLbound; x< 2 /*(aDim[0].cElements + aDim[0].lLbound)*/; x++) { 
+            aLong[0]= x;    // set x index
+			it= pIt.begin();
+            for (long y= aDim[1].lLbound; y< (long) (aDim[1].cElements + aDim[1].lLbound); y++) {
+                aLong[1]= y;    // set y index
+               	if(aLong[0] > 0)
+				{
+					temp =SysAllocString((*it).second);
+				}
+				else
+				temp =SysAllocString((*it).first);
+				hr= SafeArrayPutElement(pSA, aLong, temp);
+                
+				it++;
+            }
+        }
+    }    
+pVal->vt =VT_ARRAY | VT_BSTR;
+	pVal->parray = pSA;
+
+	return hr;
+}
 
 STDMETHODIMP CItemObject::put_ItemID(VARIANT id)
 {

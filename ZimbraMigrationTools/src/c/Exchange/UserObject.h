@@ -21,6 +21,7 @@ using namespace ATL;
 
 */
 // CUserObject
+extern Zimbra::MAPI::MAPIAccessAPI *maapi;
 
 class ATL_NO_VTABLE CUserObject :
 	public CComObjectRootEx<CComSingleThreadModel>,
@@ -32,7 +33,7 @@ class ATL_NO_VTABLE CUserObject :
 private:
 	/*BSTR UserId;
 	BSTR Mailtype;*/
-	Zimbra::MAPI::MAPIAccessAPI *maapi;
+	
 
 public:
 	CUserObject()

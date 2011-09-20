@@ -374,7 +374,8 @@ namespace CssLib
                                     if (type == FolderType.Contacts)
                                     {
 
-                                        string[,] data = O1.GetDataForItem(I1.ItemID);
+                                        //string[,] data = O1.GetDataForItem(I1.ItemID);
+                                        string[,] data = I1.GetDataForItemID(I1.ItemID);
 
                                         int bound0 = data.GetUpperBound(0);
 

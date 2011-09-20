@@ -8,6 +8,10 @@
 #include "Exchange_i.h"
 #include "folderObject.h"
 #include "BaseItem.h"
+#include "Exchange.h"
+#include "ExchangeAdmin.h"
+#include "..\Exchange\MAPIAccessAPI.h"
+
 
 /*
 
@@ -19,7 +23,7 @@ using namespace ATL;
 */
 
 // CItemObject
-
+Zimbra::MAPI::MAPIAccessAPI *maapi;
 class ATL_NO_VTABLE CItemObject :
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CItemObject, &CLSID_ItemObject>,
@@ -82,6 +86,7 @@ public:
 
 	STDMETHOD(put_ItemID)(VARIANT id);
 	STDMETHOD(get_ItemID)(VARIANT* id);
+	STDMETHOD(GetDataForItemID)(VARIANT ItemId,VARIANT* pVal);
 	
 };
 
