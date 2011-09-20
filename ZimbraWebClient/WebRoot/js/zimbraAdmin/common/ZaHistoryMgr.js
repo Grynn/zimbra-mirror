@@ -34,7 +34,7 @@ function() {
     for (var i = 1; i < currentSize; i++)
 		this._history._array[i] = null;
     this._history._array.length = 1;
-    this._currentLocation = 1;
+    this._currentLocation = 0;
     this._evtMgr.notifyListeners(ZaEvent.L_MODIFY, this._history);
     return true;
 }
