@@ -749,6 +749,12 @@ public class PageBriefcase extends AbsTab {
 
 				page = new DialogConfirm(DialogConfirm.Confirmation.DELETE, MyApplication, this);
 
+			} else if (option == Button.O_MOVE) {
+
+            optionLocator = "css=td#zmi__Briefcase__MOVE_title:contains(Move)";
+
+            page = new DialogMove(MyApplication, this);
+
 			} else {
 				throw new HarnessException("implement action: " + action
 						+ " option:" + option);
