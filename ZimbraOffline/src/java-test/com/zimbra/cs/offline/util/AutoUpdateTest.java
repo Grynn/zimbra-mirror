@@ -43,18 +43,18 @@ public class AutoUpdateTest {
     static final String MEDIA_LINUX = "_linux_i686.tgz";
     
     //these values change with every release
-    static final String EXPECTED_FILE_VERSION = "7_1_1_ga";
-    static final String EXPECTED_A_VERSION = "7.1.1";
+    static final String EXPECTED_FILE_VERSION = "7_1_2_ga";
+    static final String EXPECTED_A_VERSION = "7.1.2";
     static final String EXPECTED_TYPE = "minor";
 
     //these values change with every build
-    static final int EXPECTED_BUILD = 10899;
-    static final String HASH_MAC = "821719e1a82ee05eaf967ab6e1df5fc5";
-    static final int SIZE_MAC = 75154478;
-    static final String HASH_WIN = "0b1cfacd35dc855dcc0804971313dd91";
-    static final int SIZE_WIN = 97120768;
-    static final String HASH_LINUX = "51a718094fb10e996e0ffce0682a1d48";
-    static final int SIZE_LINUX = 113444572;
+    static final int EXPECTED_BUILD = 10978;
+    static final String HASH_MAC = "0204af2635a4a6444b0f7e880ccce7c9";
+    static final int SIZE_MAC = 75922756;
+    static final String HASH_WIN = "d9943a891b194fdeea18ff1c7c908b50";
+    static final int SIZE_WIN = 95958528;
+    static final String HASH_LINUX = "2add86bf0469e9e0b3f1e66d2507e064";
+    static final int SIZE_LINUX = 110755660;
     
     static final String EXPECTED_FILE_PREFIX = "zdesktop_"+EXPECTED_FILE_VERSION+"_b"+EXPECTED_BUILD;
     
@@ -136,64 +136,41 @@ public class AutoUpdateTest {
         }
     }
     
+    String[] platforms = {"macos", "linux", "win32"};
+    
     @Test
-    public void mac201() throws HttpException, IOException, DocumentException, ServiceException {
-        sendAndVerify("release", "2.0.1", 10659, "macos");
+    public void ga201() throws HttpException, IOException, DocumentException, ServiceException {
+        for (String platform: platforms) {
+            sendAndVerify("release", "2.0.1", 10659, platform);
+        }
     }
 
     @Test
-    public void mac701() throws HttpException, IOException, DocumentException, ServiceException {
-        sendAndVerify("release", "7.0.1", 10791, "macos");
+    public void ga701() throws HttpException, IOException, DocumentException, ServiceException {
+        for (String platform: platforms) {
+            sendAndVerify("release", "7.0.1", 10791, platform);
+        }
     }
     
     @Test
-    public void mac711_beta() throws HttpException, IOException, DocumentException, ServiceException {
-        sendAndVerify("beta", "7.1.1", 10867, "macos");
+    public void beta711() throws HttpException, IOException, DocumentException, ServiceException {
+        for (String platform: platforms) {
+            sendAndVerify("beta", "7.1.1", 10867, platform);
+        }
     }
 
     @Test
-    public void macAlreadyUpdated() throws HttpException, IOException, DocumentException, ServiceException {
-        sendAndVerify("release", "7.1.1", EXPECTED_BUILD, "macos");
-    }
-    
-    @Test
-    public void win201() throws HttpException, IOException, DocumentException, ServiceException {
-        sendAndVerify("release", "2.0.1", 10659, "win32");
+    public void ga711() throws HttpException, IOException, DocumentException, ServiceException {
+        for (String platform: platforms) {
+            sendAndVerify("ga", "7.1.1", 10917, platform);
+        }
     }
 
     @Test
-    public void win701() throws HttpException, IOException, DocumentException, ServiceException {
-        sendAndVerify("release", "7.0.1", 10791, "win32");
-    }
-    
-    @Test
-    public void win711_beta() throws HttpException, IOException, DocumentException, ServiceException {
-        sendAndVerify("beta", "7.1.1", 10867, "win32");
-    }
-
-    @Test
-    public void winAlreadyUpdated() throws HttpException, IOException, DocumentException, ServiceException {
-        sendAndVerify("release", "7.1.1", EXPECTED_BUILD, "win32");
-    }
-
-    @Test
-    public void linux201() throws HttpException, IOException, DocumentException, ServiceException {
-        sendAndVerify("release", "2.0.1", 10659, "linux");
-    }
-
-    @Test
-    public void linux701() throws HttpException, IOException, DocumentException, ServiceException {
-        sendAndVerify("release", "7.0.1", 10791, "linux");
-    }
-    
-    @Test
-    public void linux711_beta() throws HttpException, IOException, DocumentException, ServiceException {
-        sendAndVerify("beta", "7.1.1", 10867, "linux");
-    }
-
-    @Test
-    public void linuxAlreadyUpdated() throws HttpException, IOException, DocumentException, ServiceException {
-        sendAndVerify("release", "7.1.1", EXPECTED_BUILD, "linux");
+    public void alreadyUpdated() throws HttpException, IOException, DocumentException, ServiceException {
+        for (String platform: platforms) {
+            sendAndVerify("release", EXPECTED_A_VERSION, EXPECTED_BUILD, platform);
+        }
     }
 
 }
