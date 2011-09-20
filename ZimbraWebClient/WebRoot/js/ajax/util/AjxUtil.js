@@ -403,14 +403,10 @@ function(array, object, strict) {
 	return -1;
 };
 
-/*
-// Note: Should change AjxVector::contains to use this
-
 AjxUtil.arrayContains =
 function(array, object, strict) {
 	return AjxUtil.indexOf(array, object, strict) != -1;
 };
-*/
 
 AjxUtil.keys = function(object, acceptFunc) {
     var keys = [];
