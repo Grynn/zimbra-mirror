@@ -14,7 +14,7 @@ public class DeleteFolder extends OctopusCommonTest {
 		logger.info("New " + DeleteFolder.class.getCanonicalName());
 
 		// All tests start at the Briefcase page
-		super.startingPage = app.zPageOctopus;
+		super.startingPage = app.zPageMyFiles;
 		super.startingAccountPreferences = null;
 
 	}
@@ -29,7 +29,7 @@ public class DeleteFolder extends OctopusCommonTest {
 		ZAssert.assertNotNull(briefcaseRootFolder,
 				"Verify the Briefcase root folder is available");
 
-		FolderItem trash = FolderItem.importFromSOAP(app.zGetActiveAccount(),
+		FolderItem trash = FolderItem.importFromSOAP(account,
 				SystemFolder.Trash);
 		ZAssert.assertNotNull(trash, "Verify the trash is available");
 
@@ -54,7 +54,7 @@ public class DeleteFolder extends OctopusCommonTest {
 		SleepUtil.sleepVerySmall();
 		
 		// Delete the folder using drop down list option
-		app.zPageOctopus.zToolbarPressPulldown(Button.B_MY_FILES_LIST_ITEM, Button.O_DELETE, briefcaseSubFolder);
+		app.zPageMyFiles.zToolbarPressPulldown(Button.B_MY_FILES_LIST_ITEM, Button.O_DELETE, briefcaseSubFolder);
 
 		// Verify the folder is now in the trash
 		for(int i = 0; i<5; i++){

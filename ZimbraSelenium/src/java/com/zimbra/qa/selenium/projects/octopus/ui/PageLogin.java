@@ -37,7 +37,7 @@ public class PageLogin extends AbsTab {
 		// Look for the login button. 
 		boolean present = sIsElementPresent(locator);
 		if ( !present ) {
-			logger.debug("isActive() present = "+ present);
+			logger.debug("zIsActive(): "+ present);
 			return (false);
 		}
 

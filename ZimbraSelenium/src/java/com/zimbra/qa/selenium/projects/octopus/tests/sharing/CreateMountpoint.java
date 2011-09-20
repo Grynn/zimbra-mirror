@@ -20,7 +20,7 @@ public class CreateMountpoint extends OctopusCommonTest {
 		logger.info("New " + CreateMountpoint.class.getCanonicalName());
 
 		// Test starts at the Octopus page
-		super.startingPage = app.zPageOctopus;
+		super.startingPage = app.zPageMyFiles;
 		super.startingAccountPreferences = null;
 
 		ownerAccount = new ZimbraAccount();
@@ -90,7 +90,7 @@ public class CreateMountpoint extends OctopusCommonTest {
 		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_MY_FILES);
 				
 		// Verify the mountpoint exists in the list view
-		List<String> items = app.zPageOctopus.zGetListViewItems();
+		List<String> items = app.zPageMyFiles.zGetListViewItems();
 		
 		ZAssert.assertNotNull(items, 
 		"Verify list view is not empty");

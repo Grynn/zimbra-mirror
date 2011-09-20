@@ -13,6 +13,8 @@ public class AppOctopusClient extends AbsApplication {
 	// Pages
 	public PageLogin zPageLogin = null;
 	public PageOctopus zPageOctopus = null;
+	public PageMyFiles zPageMyFiles = null;
+	public PageSharing zPageSharing = null;
 
 	public AppOctopusClient() {
 		super();
@@ -23,9 +25,17 @@ public class AppOctopusClient extends AbsApplication {
 		zPageLogin = new PageLogin(this);
 		pages.put(zPageLogin.myPageName(), zPageLogin);
 
-		// Octopus page
+		// Main Octopus page
 		zPageOctopus = new PageOctopus(this);
 		pages.put(zPageOctopus.myPageName(), zPageOctopus);
+		
+		// My Files page
+		zPageMyFiles = new PageMyFiles(this);
+		pages.put(zPageOctopus.myPageName(), zPageMyFiles);
+		
+		// Sharing page
+		zPageSharing = new PageSharing(this);
+		pages.put(zPageOctopus.myPageName(), zPageSharing);
 
 		// Configure the localization strings
 		getL10N().zAddBundlename(I18N.Catalog.I18nMsg);

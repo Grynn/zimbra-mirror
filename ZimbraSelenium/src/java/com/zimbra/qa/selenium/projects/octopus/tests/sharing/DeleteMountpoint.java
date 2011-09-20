@@ -20,7 +20,7 @@ public class DeleteMountpoint extends OctopusCommonTest {
 		logger.info("New " + DeleteMountpoint.class.getCanonicalName());
 
 		// Test starts at the Octopus page
-		super.startingPage = app.zPageOctopus;
+		super.startingPage = app.zPageMyFiles;
 		super.startingAccountPreferences = null;
 
 		ownerAccount = new ZimbraAccount();
@@ -92,7 +92,7 @@ public class DeleteMountpoint extends OctopusCommonTest {
 		SleepUtil.sleepVerySmall();
 		
 		// Delete the mountpoint folder using drop down list option
-		app.zPageOctopus.zToolbarPressPulldown(Button.B_MY_FILES_LIST_ITEM, Button.O_DELETE, folderMountpointItem);
+		app.zPageMyFiles.zToolbarPressPulldown(Button.B_MY_FILES_LIST_ITEM, Button.O_DELETE, folderMountpointItem);
 
 		// Verify the mountpoint folder is now in the trash
 		for(int i = 0; i<5; i++){

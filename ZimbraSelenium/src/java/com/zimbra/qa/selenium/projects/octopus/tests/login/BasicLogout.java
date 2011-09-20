@@ -11,6 +11,8 @@ public class BasicLogout extends OctopusCommonTest {
 
 	public BasicLogout() {
 		logger.info("New " + BasicLogout.class.getCanonicalName());
+		
+		// All tests start at the Octopus page
 		super.startingPage = app.zPageOctopus;
 	}
 
@@ -21,7 +23,7 @@ public class BasicLogout extends OctopusCommonTest {
 				.sIsElementPresent(PageOctopus.Locators.zSignOutButton.locator),
 				"Verify Sign Out Button is present on the page");
 		
-		// Click on logout
+		// Click on Sign out button
 		app.zPageOctopus.zClick(PageOctopus.Locators.zSignOutButton.locator);
 
 		app.zPageLogin.zWaitForActive();
