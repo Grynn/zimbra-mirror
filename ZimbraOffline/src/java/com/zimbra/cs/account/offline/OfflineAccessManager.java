@@ -143,6 +143,12 @@ public class OfflineAccessManager extends AccessManager {
             throws ServiceException {
         return true;
     }
+    
+    @Override
+    public boolean canAccessGroup(Account credentials, Group group)
+            throws ServiceException {
+        return true;
+    }
 
     @Override
     public boolean canCreateGroup(AuthToken at, String groupEmail)
@@ -150,4 +156,9 @@ public class OfflineAccessManager extends AccessManager {
         return true;
     }
 
+    @Override
+    public boolean canCreateGroup(Account credentials, String groupEmail)
+            throws ServiceException {
+        return true;
+    }
 }
