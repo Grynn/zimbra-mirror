@@ -557,7 +557,7 @@ ZaZimbraAdmin.prototype._refreshListener =
 function(ev) {
     var currentObject = this._historyMgr.getLatestHistory();
     if (currentObject)
-        currentObject.goToView();
+        currentObject.goToView(true);
 }
 
 ZaZimbraAdmin.prototype._goPrevListener =

@@ -95,7 +95,7 @@ ZaHistory = function (path, displayName) {
 }
 
 ZaHistory.prototype.goToView =
-function() {
+function(refresh) {
     var tree = ZaZimbraAdmin.getInstance().getOverviewPanelController().getOverviewPanel().getFolderTree();
-    tree.setSelectionByPath(this.path, false);
+    tree.setSelectionByPath(this.path, false, undefined, undefined, undefined, refresh);
 }

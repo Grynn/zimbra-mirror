@@ -1357,6 +1357,14 @@ ZaOverviewPanelController.xformTabTreeListener = function(ev) {
     var stepValue = ev.item.getData("tabValue");
     ZaApp.getInstance().getAppViewMgr().pushView(viewId);
     var currentView = ZaApp.getInstance().getAppViewMgr().getViewContentById(viewId);
+    if (ev.refresh) {
+        var currentControll = ZaApp.getInstance().getControllerById(viewId);
+        var currentObject = currentControll._currentObject;
+        if (currentObject && currentObject.refresh) {
+            currentObject.refresh(false, true);
+            currentView.setObject(currentObject);
+        }
+    }
     currentView._localXForm.setInstanceValue(stepValue, ZaModel.currentTab);
     currentView._localXForm.refresh() ;
 }
@@ -1366,6 +1374,14 @@ ZaOverviewPanelController.xformTreeListener = function(ev) {
     var stepValue = ev.item.getData("firstTab");
     ZaApp.getInstance().getAppViewMgr().pushView(viewId);
     var currentView = ZaApp.getInstance().getAppViewMgr().getViewContentById(viewId);
+    if (ev.refresh) {
+        var currentControll = ZaApp.getInstance().getControllerById(viewId);
+        var currentObject = currentControll._currentObject;
+        if (currentObject && currentObject.refresh) {
+            currentObject.refresh(false, true);
+            currentView.setObject(currentObject);
+        }
+    }
     currentView._localXForm.setInstanceValue(stepValue, ZaModel.currentTab);
     currentView._localXForm.refresh() ;
 }

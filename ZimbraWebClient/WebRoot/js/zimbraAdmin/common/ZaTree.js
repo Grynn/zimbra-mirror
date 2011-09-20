@@ -148,7 +148,7 @@ function(treeItem, skipNotify, kbNavEvent, noFocus) {
 };
 
 ZaTree.prototype.setSelectionByPath =
-function (path, isAddHistory, skipNotify, kbNavEvent, noFocus) {
+function (path, isAddHistory, skipNotify, kbNavEvent, noFocus, refresh) {
 
     var dataItem = this.getTreeItemDataByPath(path);
     if (dataItem.isAlias()) {
@@ -172,7 +172,7 @@ function (path, isAddHistory, skipNotify, kbNavEvent, noFocus) {
     this._selectedItems.add(treeItem);
 
     if (treeItem._setSelected(true, noFocus) && !skipNotify) {
-    	this._notifyListeners(DwtEvent.SELECTION, [treeItem], DwtTree.ITEM_SELECTED, null, this._selEv, kbNavEvent);
+    	this._notifyListeners(DwtEvent.SELECTION, [treeItem], DwtTree.ITEM_SELECTED, null, this._selEv, kbNavEvent, refresh);
 	}
     this._updateHistory(treeItem, isAddHistory);
 }
@@ -339,6 +339,26 @@ function(item, ev) {
 			this._notifyListeners(DwtEvent.SELECTION, [selectedItem], DwtTree.ITEM_SELECTED, ev, this._selEv);
 		}
     }
+};
+
+ZaTree.prototype._notifyListeners =
+function(listener, items, detail, srcEv, destEv, kbNavEvent, refresh) {
+	if (this.isListenerRegistered(listener)) {
+		if (srcEv) {
+			DwtUiEvent.copy(destEv, srcEv);
+		}
+		destEv.items = items;
+		if (items.length == 1) {
+			destEv.item = items[0];
+		}
+		destEv.detail = detail;
+		destEv.kbNavEvent = kbNavEvent;
+        destEv.refresh = refresh;
+		this.notifyListeners(listener, destEv);
+		if (listener == DwtEvent.SELECTION) {
+			this.shell.notifyGlobalSelection(destEv);
+		}
+	}
 };
 
 ZaTree.prototype._updateHistory =
