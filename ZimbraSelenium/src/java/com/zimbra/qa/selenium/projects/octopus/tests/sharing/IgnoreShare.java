@@ -14,11 +14,11 @@ import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.octopus.core.OctopusCommonTest;
 import com.zimbra.qa.selenium.projects.octopus.ui.PageSharing;
 
-public class AcceptShare extends OctopusCommonTest {
+public class IgnoreShare extends OctopusCommonTest {
 
 	private ZimbraAccount ownerAccount = null;
 
-	public AcceptShare() {
+	public IgnoreShare() {
 		logger.info("New " + AcceptShare.class.getCanonicalName());
 
 		// Test starts at the Octopus page
@@ -30,8 +30,8 @@ public class AcceptShare extends OctopusCommonTest {
 		ownerAccount.authenticate();
 	}
 
-	@Test(description = "Accept share invitation clicking on Add To My Files button", groups = { "smoke" })
-	public void AcceptShare_01() throws HarnessException {
+	@Test(description = "Ignore share invitation clicking on Ignore button", groups = { "smoke" })
+	public void IgnoreShare_01() throws HarnessException {
 		FolderItem ownerBriefcaseRootFolder = FolderItem.importFromSOAP(
 				ownerAccount, SystemFolder.Briefcase);
 
@@ -100,19 +100,18 @@ public class AcceptShare extends OctopusCommonTest {
 								+ ")", "3000"),
 						"Verify the owner share folder is displayed in the Share Invitation view");
 
-		// click on Add To My Files button
-		pageSharing.zToolbarPressButton(Button.B_ADD_TO_MY_FILES,
-				ownerFolderItem);
+		// click on Ignore button
+		pageSharing.zToolbarPressButton(Button.B_IGNORE, ownerFolderItem);
 
 		ZAssert.assertTrue(pageSharing.zWaitForElementPresent(
-				PageSharing.Locators.zSharedItemsView.locator + ":contains("
+				PageSharing.Locators.zIgnoredItemsView.locator + ":contains("
 						+ ownerFolderItem.getName() + ")", "3000"),
-				"Verify item appears in the Shared Items View");
-
+				"Verify item appears in the Ignored Items View");
+	
 		// Click on My Files tab
 		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_MY_FILES);
 
-		// Make sure the accepted shared folder appears in My Files list view
+		// Make sure the ignored folder doesn't appear in My Files list view
 		List<String> folders = app.zPageMyFiles.zGetListViewItems();
 
 		String name = ownerFolderItem.getName();
@@ -123,7 +122,7 @@ public class AcceptShare extends OctopusCommonTest {
 				break;
 			}
 		ZAssert
-				.assertTrue(found,
+				.assertFalse(found,
 						"Verify the accepted shared folder appears in My Files list view");
 	}
 }

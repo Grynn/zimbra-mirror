@@ -24,7 +24,16 @@ public class PageSharing extends AbsTab {
 		"css=ul[id=share-notification-pending-page-list-view]");
 		public static final Locators zShareNotificationListItem =  new Locators(
 				"css=div[class=share-notification-list-item]");
-				
+		public static final Locators zSharedItemsView =  new Locators(
+		"css=div[id=shared-items-view]");
+		public static final Locators zSharedItemRow =  new Locators(
+		"css=div[class=shared-item-row]");
+		public static final Locators zIgnoredItemsView =  new Locators(
+		"css=div[id=ignored-items-view]");
+		public static final Locators zIgnoredItemRow =  new Locators(
+		"css=div[class=shared-item-row]");
+		
+		
 		public final String locator;
 
 		private Locators(String locator) {
@@ -112,7 +121,7 @@ public class PageSharing extends AbsTab {
 		if (button == Button.B_ADD_TO_MY_FILES) {
 			// Check if the button is disabled
 			locator = Locators.zShareNotificationListItem.locator + ":contains(" + item.getName() + ") button:contains(Add to My Files)";
-			page = new PageMyFiles(MyApplication);
+			
 		} else if (button == Button.B_IGNORE) {
 			// Check if the button is disabled
 			locator = Locators.zShareNotificationListItem.locator + ":contains(" + item.getName() + ") button:contains(Ignore)";
