@@ -12,7 +12,6 @@ import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.octopus.core.OctopusCommonTest;
-import com.zimbra.qa.selenium.projects.octopus.ui.PageMyFiles;
 import com.zimbra.qa.selenium.projects.octopus.ui.PageSharing;
 
 public class AcceptShare extends OctopusCommonTest {
