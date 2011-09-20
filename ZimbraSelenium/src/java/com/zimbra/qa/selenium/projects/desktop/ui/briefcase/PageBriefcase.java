@@ -944,6 +944,43 @@ public class PageBriefcase extends AbsTab {
 		return true;
 	}
 
+	public boolean isLockIconPresent(IItem item) throws HarnessException {
+	   boolean present = false;
+	   String itemName = item.getName();
+
+	   String listLocator = Locators.briefcaseListView.locator;
+	   String itemLocator = listLocator
+	         + " div[id^='zli__BDLV__'][class^='Row']";
+	   String itemNameLocator = itemLocator + " div:contains(" + itemName
+	         + ")";
+
+	   zWaitForElementPresent(itemNameLocator);
+
+	   String lockIconLocator = "";
+
+	   int count = sGetCssCount(itemLocator);
+
+	   for (int i = 1; i <= count; i++) {
+	      if (sIsElementPresent(itemLocator + ":nth-child(" + i
+	            + "):contains(" + itemName + ")")) {
+	         lockIconLocator = itemLocator + ":nth-child(" + i
+	               + ") div[id^=zlif__BDLV__][id$=__loid][class^=Img]";
+	         break;
+	      }
+	   }
+	   
+	   if (!this.sIsElementPresent(lockIconLocator))
+	      throw new HarnessException("Lock icon locator is not present "
+	            + lockIconLocator);
+
+	   String image = this.sGetAttribute(lockIconLocator + "@class");
+
+	   if (image.equals("ImgPadLock"))
+	      present = true;
+
+	   return present;      
+	}
+
 	public void deleteFileByName(String docName) throws HarnessException {
 		ZimbraAccount account = MyApplication.zGetActiveAccount();
 		account
