@@ -42,6 +42,8 @@ public class DialogWarning extends AbsDialog {
 		// See http://bugzilla.zimbra.com/show_bug.cgi?id=64081
 		public static final DialogWarningID SendReadReceipt = new DialogWarningID("YesNoMsgDialog");;
 
+		public static final DialogWarningID QuickCommandConfirmDelete = new DialogWarningID("ZmQuickCommandConfirmation1");
+
 		protected String Id;
 		protected DialogWarningID(String id) {
 			Id = id;

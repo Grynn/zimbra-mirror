@@ -12,8 +12,8 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
-import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
-import com.zimbra.qa.selenium.projects.ajax.ui.PageMain;
+import com.zimbra.qa.selenium.projects.ajax.ui.*;
+import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning.DialogWarningID;
 
 
 /**
@@ -293,8 +293,8 @@ public class PagePreferences extends AbsTab {
 		} else if ( button == Button.B_DELETE_QUICK_COMMAND ) {
 			
 			locator = "css=div[id='zb__QCV__REMOVE_QUICK_COMMAND'] td[id$='_title']";
-			throw new HarnessException("See https://bugzilla.zimbra.com/show_bug.cgi?id=63931");
-			
+			page = new DialogWarning(DialogWarningID.QuickCommandConfirmDelete, MyApplication,((AppAjaxClient) MyApplication).zPagePreferences);
+
 		} else {
 			throw new HarnessException("no logic defined for button "+ button);
 		}

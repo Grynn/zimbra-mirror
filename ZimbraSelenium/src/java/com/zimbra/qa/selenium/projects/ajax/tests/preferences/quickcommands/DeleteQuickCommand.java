@@ -2,10 +2,10 @@ package com.zimbra.qa.selenium.projects.ajax.tests.preferences.quickcommands;
 
 import org.testng.annotations.Test;
 
-import com.zimbra.qa.selenium.framework.ui.Action;
-import com.zimbra.qa.selenium.framework.ui.Button;
-import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.ui.*;
+import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxQuickCommandTest;
+import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
 import com.zimbra.qa.selenium.projects.ajax.ui.preferences.TreePreferences.TreeItem;
 
 
@@ -25,18 +25,24 @@ public class DeleteQuickCommand extends AjaxQuickCommandTest {
 			)
 	public void DeleteQuickCommand_01() throws HarnessException {
 		
+		String name = this.getQuickCommand01().getName();
 		
 		// Navigate to preferences -> notifications
 		app.zTreePreferences.zTreeItem(Action.A_LEFTCLICK, TreeItem.QuickCommands);
 
 		// Select the quick command
-		// TODO: implement me!
-
-		// Click "Delete"
-		app.zPagePreferences.zToolbarPressButton(Button.B_DELETE_QUICK_COMMAND);
-		throw new HarnessException("See https://bugzilla.zimbra.com/show_bug.cgi?id=63931");
+		String locator = "css=div[id='zl__QCV__rows'] div[id^='zli__QCV__'] td[id$='_na']:contains('"+ name +"')";
+		ZAssert.assertTrue(app.zTreePreferences.sIsElementPresent(locator), "Verify quick command "+ name +" is in the list");
+		app.zTreePreferences.zClickAt(locator, "");
+		app.zTreePreferences.zWaitForBusyOverlay();
 		
-		// Get the quick commands from the server.  Verify the quick command is not there.
+		// Click "Delete"
+		DialogWarning dialog = (DialogWarning)app.zPagePreferences.zToolbarPressButton(Button.B_DELETE_QUICK_COMMAND);
+		dialog.zClickButton(Button.B_YES);
+
+		// Verify the item no longer appears in the list
+		ZAssert.assertFalse(app.zTreePreferences.sIsElementPresent(locator), "Verify quick command "+ name +" is not in the list");
+
 		
 		
 	}

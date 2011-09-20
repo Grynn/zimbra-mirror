@@ -26,7 +26,7 @@ public class GetQuickCommand extends AjaxQuickCommandTest {
 	)
 	public void GetQuickCommand_01() throws HarnessException {
 
-				// Navigate to preferences -> notifications
+		// Navigate to preferences -> Quick Commands
 		app.zTreePreferences.zTreeItem(Action.A_LEFTCLICK, TreeItem.QuickCommands);
 
 		// Verify that the quick commands exist in the list

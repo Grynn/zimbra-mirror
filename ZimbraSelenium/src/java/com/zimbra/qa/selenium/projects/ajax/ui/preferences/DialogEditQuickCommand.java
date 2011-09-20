@@ -22,7 +22,7 @@ public class DialogEditQuickCommand extends AbsDialog {
 
 	public static class Locators {
 
-		public static final String MainDivID = "DWT301";
+		public static final String MainDivCss = "css=div[id^='ZmQuickCommandDialog']";
 		
 	}
 	
@@ -50,11 +50,11 @@ public class DialogEditQuickCommand extends AbsDialog {
 		
 		if ( button == Button.B_OK ) {
 			
-			locator = "css=div[id='"+ Locators.MainDivID +"'] div[id$='_buttons'] td[id^='OK_'] td[id$='_title']";
+			locator = Locators.MainDivCss + " div[id$='_buttons'] td[id^='OK_'] td[id$='_title']";
 
 		} else if ( button == Button.B_CANCEL ) {
 				
-			locator = "css=div[id='"+ Locators.MainDivID +"'] div[id$='_buttons'] td[id^='Cancel_'] td[id$='_title']";
+			locator = Locators.MainDivCss + " div[id$='_buttons'] td[id^='Cancel_'] td[id$='_title']";
 
 		} else {
 			throw new HarnessException("Button "+ button +" not implemented");
@@ -98,7 +98,7 @@ public class DialogEditQuickCommand extends AbsDialog {
 	public boolean zIsActive() throws HarnessException {
 		logger.info(myPageName() + " zIsActive()");
 
-		String locator = "css=div[id='"+ Locators.MainDivID +"']";
+		String locator = Locators.MainDivCss;
 
 		boolean present = this.sIsElementPresent(locator);
 		if ( !present ) {
@@ -119,16 +119,20 @@ public class DialogEditQuickCommand extends AbsDialog {
 	
 	public void zSetQuickCommandName(String name) throws HarnessException {
 		logger.info(myPageName() + " zSetQuickCommandName("+ name +")");
-		String locator = "css=div[id='"+ Locators.MainDivID +"'] div[id$='_content'] input[id$='_name']";
+		String locator = Locators.MainDivCss + " div[id$='_content'] input[id$='_name']";
 		this.sType(locator, name);
 		this.zWaitForBusyOverlay();
 	}
 
 	public void zSetQuickCommandDescription(String description) throws HarnessException {
 		logger.info(myPageName() + " zSetQuickCommandName("+ description +")");
-		String locator = "css=div[id='"+ Locators.MainDivID +"'] div[id$='_content'] input[id$='_description']";
+		String locator = Locators.MainDivCss + " div[id$='_content'] input[id$='_description']";
 		this.sType(locator, description);
 		this.zWaitForBusyOverlay();
+	}
+	
+	public void zSetQuickCommandAction() throws HarnessException {
+		throw new HarnessException("Implment me!");
 	}
 
 
