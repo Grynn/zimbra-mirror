@@ -67,7 +67,7 @@ DwtMenuItem = function(params) {
 
 	// add listeners if not menu item separator
 	if (!(style & DwtMenuItem.SEPARATOR_STYLE)) {
-		this.addSelectionListener(new AjxListener(this, this.__handleItemSelect));
+		this.addSelectionListener(this.__handleItemSelect.bind(this));
 	}
 };
 
@@ -76,10 +76,8 @@ DwtMenuItem.PARAMS = ["parent", "style", "radioGroupId", "index", "className", "
 DwtMenuItem.prototype = new DwtButton;
 DwtMenuItem.prototype.constructor = DwtMenuItem;
 
-DwtMenuItem.prototype.toString = 
-function() {
-	return "DwtMenuItem";
-};
+DwtMenuItem.prototype.isDwtMenuItem = true;
+DwtMenuItem.prototype.toString = function() { return "DwtMenuItem"; };
 
 //
 // Constants
@@ -219,14 +217,18 @@ function(selectable) {
 	this._selectableWithSubmenu = selectable;
 };
 
+DwtMenuItem.prototype.isSeparator =
+function() {
+	return Boolean(this._style & DwtMenuItem.SEPARATOR_STYLE);
+};
+
 //
 // Protected methods
 //
 
 DwtMenuItem.prototype._createHtml =
 function(templateId) {
-	var defaultTemplate = (this._style & DwtMenuItem.SEPARATOR_STYLE)
-		? this.SEPARATOR_TEMPLATE : this.TEMPLATE;
+	var defaultTemplate = this.isSeparator() ? this.SEPARATOR_TEMPLATE : this.TEMPLATE;
 	DwtButton.prototype._createHtml.call(this, templateId || defaultTemplate);
 };
 
@@ -262,13 +264,11 @@ DwtMenuItem.prototype._checkedItemsRemoved = function() {};
 
 DwtMenuItem.prototype._submenuItemAdded =
 function() {
-	if (this._style & DwtMenuItem.SEPARATOR_STYLE) { return; }
+	if (this.isSeparator()) { return; }
 
 	if (this._cascCell == null) {
 		this._cascCell = this._row.insertCell(-1);
 		this._cascCell.noWrap = true;
-		this._cascCell.style.width = DwtMenuItem._CASCADE_DIM;
-		this._cascCell.style.height = (this._style != DwtMenuItem.SEPARATOR_STYLE) ?  DwtMenuItem._CASCADE_DIM : DwtMenuItem._SEPAARATOR_DIM;
 	}
 };
 
@@ -369,7 +369,7 @@ function(ev) {
 		mouseEv.dwtObj = menu._hoveredItem;
 		DwtButton._mouseOutListener(mouseEv);
 	}
-	if (menuItem._style & DwtMenuItem.SEPARATOR_STYLE) { return false; }
+	if (menuItem.isSeparator()) { return false; }
 	DwtButton._mouseOverListener(ev, menuItem);
 	menu._hoveredItem = menuItem;
 	menu._popdownSubmenus();
@@ -400,9 +400,9 @@ function() {
 };
 
 DwtMenuItem._listeners = {};
-DwtMenuItem._listeners[DwtEvent.ONMOUSEOVER] = new AjxListener(null, DwtMenuItem._mouseOverListener);
-DwtMenuItem._listeners[DwtEvent.ONMOUSEOUT] = new AjxListener(null, DwtMenuItem._mouseOutListener);
-DwtMenuItem._listeners[DwtEvent.ONMOUSEDOWN] = new AjxListener(null, DwtButton._mouseDownListener);
-DwtMenuItem._listeners[DwtEvent.ONMOUSEUP] = new AjxListener(null, DwtButton._mouseUpListener);
-DwtMenuItem._listeners[DwtEvent.ONMOUSEENTER] = new AjxListener(null, DwtMenuItem._mouseOverListener);
-DwtMenuItem._listeners[DwtEvent.ONMOUSELEAVE] = new AjxListener(null, DwtButton._mouseOutListener);
+DwtMenuItem._listeners[DwtEvent.ONMOUSEOVER]	= DwtMenuItem._mouseOverListener.bind();
+DwtMenuItem._listeners[DwtEvent.ONMOUSEOUT]		= DwtMenuItem._mouseOutListener.bind();
+DwtMenuItem._listeners[DwtEvent.ONMOUSEDOWN]	= DwtButton._mouseDownListener.bind();
+DwtMenuItem._listeners[DwtEvent.ONMOUSEUP]		= DwtButton._mouseUpListener.bind();
+DwtMenuItem._listeners[DwtEvent.ONMOUSEENTER]	= DwtMenuItem._mouseOverListener.bind();
+DwtMenuItem._listeners[DwtEvent.ONMOUSELEAVE]	= DwtButton._mouseOutListener.bind();

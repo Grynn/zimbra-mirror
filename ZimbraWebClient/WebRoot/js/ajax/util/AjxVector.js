@@ -265,11 +265,7 @@ function() {
  */
 AjxVector.prototype.contains =
 function(obj) {
-	for (var i = 0; i < this._array.length; i++) {
-		if (this._array[i] == obj)
-			return true;
-	}
-	return false;
+	return AjxUtil.arrayContains(this._array, obj);
 };
 
 

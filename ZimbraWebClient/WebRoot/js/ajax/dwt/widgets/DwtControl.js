@@ -210,19 +210,14 @@ DwtControl = function(params) {
 	this.TEMPLATE = params.template || this.TEMPLATE;
 };
 
+DwtControl.prototype.isDwtControl = true;
+DwtControl.prototype.toString = function() { return "DwtControl"; };
+
+
 DwtControl.PARAMS = ["parent", "className", "posStyle", "deferred", "id", "index", "template"];
 
 DwtControl.ALL_BY_ID = {};
 
-/**
- * Returns a string representation of the class.
- * 
- * @return {string}		a string representation of the class
- */
-DwtControl.prototype.toString =
-function() {
-	return "DwtControl";
-};
 
 //
 // Constants
@@ -1380,6 +1375,28 @@ function() {
 
     var bounds = this.getBounds();
 	return bounds.y+bounds.height;
+};
+
+/**
+ * Returns the positioning style
+ */
+DwtControl.prototype.getPosition =
+function() {
+	if (!this._checkState()) { return; }
+
+	return Dwt.getPosition(this.getHtmlElement());
+};
+
+/**
+ * Sets the positioning style
+ * 
+ * @param 	{constant}	posStyle	positioning style (Dwt.*_STYLE)
+ */
+DwtControl.prototype.setPosition =
+function(posStyle) {
+	if (!this._checkState()) { return; }
+
+	return Dwt.setPosition(this.getHtmlElement(), posStyle);
 };
 
 /**

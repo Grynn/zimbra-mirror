@@ -55,7 +55,7 @@
 DwtOutsideMouseEventMgr = function() {
 
 	this._reset();
-	this._mouseEventListener = DwtOutsideMouseEventMgr._mouseEventHdlr.bind(null);
+	this._mouseEventListener = DwtOutsideMouseEventMgr._mouseEventHdlr.bind();
 	DwtOutsideMouseEventMgr.INSTANCE = this;
 	this.id = "DwtOutsideMouseEventMgr";
 };

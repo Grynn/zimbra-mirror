@@ -525,7 +525,11 @@ AjxStringUtil.ENCODE_MAP = { '>' : '&gt;', '<' : '&lt;', '&' : '&amp;' };
  */
 AjxStringUtil.htmlEncode =
 function(str, includeSpaces) {
+
 	if (!str) {return "";}
+	if (typeof(str) != "string") {
+		str = str.toString ? str.toString() : "";
+	}
 
 	if (!AjxEnv.isSafari || AjxEnv.isSafariNightly) {
 		if (includeSpaces) {

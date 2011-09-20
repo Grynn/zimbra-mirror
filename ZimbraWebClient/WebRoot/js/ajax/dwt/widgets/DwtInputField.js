@@ -721,6 +721,7 @@ function(ev) {
 			obj._showHint();
 		}
 	}
+	obj.notifyListeners(DwtEvent.ONBLUR, ev)
 };
 
 DwtInputField._focusHdlr =
@@ -732,6 +733,7 @@ function(ev) {
 			obj._hideHint('');
 		}
 	}
+	obj.notifyListeners(DwtEvent.ONFOCUS, ev)
 };
 
 DwtInputField._keyDownHdlr =
