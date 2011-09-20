@@ -68,6 +68,7 @@ AjxPackage.require("zimbraAdmin.common.ZaActionStatusView");
 AjxPackage.require("zimbraAdmin.common.ZaTreeItem");
 AjxPackage.require("zimbraAdmin.common.ZaTree");
 AjxPackage.require("zimbraAdmin.common.ZaCurrentAppBar");
+AjxPackage.require("zimbraAdmin.common.ZaHistoryMgr");
 
 //
 // Admin UI Specific components

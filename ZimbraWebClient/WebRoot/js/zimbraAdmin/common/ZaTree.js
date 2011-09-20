@@ -345,7 +345,8 @@ ZaTree.prototype._updateHistory =
 function (treeItem, isAddHistory) {
     var text = treeItem.getText();
     var dataItem = treeItem.getData("dataItem");
-    var historyObject = {path: this.getABPath(dataItem), displayName: text};
+    var path = this.getABPath(dataItem);
+    var historyObject = new ZaHistory(path, text);
     ZaZimbraAdmin.getInstance().updateHistory(historyObject, isAddHistory);
 }
 

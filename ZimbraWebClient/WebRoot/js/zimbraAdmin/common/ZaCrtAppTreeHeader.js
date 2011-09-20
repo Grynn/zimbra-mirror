@@ -10,7 +10,8 @@ ZaCrtAppTreeHeader = function(parent, className, buttons) {
 
 	DwtButton.call(this, parent, "", className, Dwt.ABSOLUTE_STYLE);
     this.preObj = null;
-	this._history = new AjxVector();
+	this._historyMgr = ZaZimbraAdmin.getInstance().getHisotryMgr();
+    this._historyMgr.addChangeListener(new AjxListener(this, this.updateMenu));
     this.menu = new ZaPopupMenu(this);
     this.menu.setWidth(150);
     this.setMenu(this.menu);
@@ -96,21 +97,10 @@ ZaCrtAppTreeHeader.prototype.setText = function (historyObject) {
        pathItems.pop();
        var displayName = pathItems[pathItems.length - 1];
        var path = tree.getPathByArray(pathItems);
-       this.preObj = {
-          path: path,
-          displayName: displayName
-       };
+       this.preObj = new ZaHistory(path, displayName);
     }
 
 	DwtLabel.prototype.setText.call(this, this.preObj.displayName);
-}
-
-ZaCrtAppTreeHeader.prototype.addHistory = function (history) {
-    if (!history)
-        return false;
-    this._history.add(history);
-    this.updateMenu();
-    return true;
 }
 
 ZaCrtAppTreeHeader.prototype.popup =
@@ -152,8 +142,9 @@ ZaCrtAppTreeHeader.prototype.createMenu = function
     var i = 0;
     var mi;
     var listener = new AjxListener(this, this.goToTreeItemListener);
-    for (i = 0; i < this._history.size();i ++) {
-        var currentHistory = this._history.get(i);
+    var allHistory = this._historyMgr.getAllHistory();
+    for (i = 0; i < allHistory.size();i ++) {
+        var currentHistory = allHistory.get(i);
         mi = new DwtMenuItem({
 		                parent: this.menu,
 		                style:		DwtMenuItem.NO_STYLE,
@@ -182,21 +173,10 @@ function() {
 
 ZaCrtAppTreeHeader.prototype.goToTreeItemListener = function (ev) {
     var historyObject =  ev.item.getData("history");
-    // TODO
-    var tree = ZaZimbraAdmin.getInstance().getOverviewPanelController().getOverviewPanel().getFolderTree();
-    var currentDataItem = tree.setSelectionByPath(historyObject.path, false);
-    //window.console.log("To select " + historyObject.path);
+    historyObject.goToView();
 }
 
 ZaCrtAppTreeHeader.prototype.clearHistory = function (ev) {
-	for (var i = 1; i < this._history._array.length; i++)
-		this._history._array[i] = null;
-	this._history._array.length = 1;
-    this.updateMenu();
-    window.console.log("clear history");
+    this._historyMgr.removeHistory();
 }
 
-ZaTreeHistory = function (path, displayName) {
-    this.path = path;
-    this.displayName = displayName;
-}

@@ -907,7 +907,16 @@ function() {
 		
 }
 
+ZaZimbraAdmin.prototype.getHisotryMgr =
+function() {
+	return this._historyMgr;
+}
 
+ZaZimbraAdmin.prototype._createHistoryMgr =
+function() {
+    if (!this._historyMgr)
+        this._historyMgr = new ZaHistoryMgr();
+}
 /**
 * Launching an app causes it to create a view (if necessary) and display it. The view that is created is up to the app.
 * Since most apps schedule an action as part of their launch, a call to this function should not be
@@ -995,7 +1004,7 @@ function() {
 ZaZimbraAdmin.prototype.updateHistory =
 function(historyObject, isAddHistory) {
     if(isAddHistory)
-        this._header.addHistory(historyObject);
+        this._historyMgr.addHistory(historyObject);
     this._header.setText(historyObject);
     this._currentAppBar.setText(historyObject.path);
 
@@ -1010,6 +1019,8 @@ function() {
     if (!this._app)
 		this._createApp();
 
+    // add history mgr
+    this._createHistoryMgr();
     //recreate the error/msg dialogs
     ZaApp.getInstance().initDialogs();
    // if (ZaZimbraAdmin._LOCALE_MSG_RELOADED) this.initDialogs(true) ;
