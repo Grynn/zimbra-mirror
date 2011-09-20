@@ -522,7 +522,7 @@ function() {
 	if(!previousContainer) {
 		return;
 	}
-    var previousLabel = new DwtComposite (this._shell, "PreviousContainer", Dwt.RELATIVE_STYLE);
+    var previousLabel = this._previousContainer = new DwtComposite (this._shell, "PreviousContainer", Dwt.RELATIVE_STYLE);
     var previousEl = previousLabel.getHtmlElement();
     previousLabel.setCursor ("pointer");
     previousEl.onclick = function () { ZaZimbraAdmin.prototype._goPrevListener.call(ZaZimbraAdmin.getInstance());};
@@ -536,7 +536,7 @@ function() {
 	if(!nextContainer) {
 		return;
 	}
-    var nextLabel = new DwtComposite (this._shell, "NextContainer", Dwt.RELATIVE_STYLE);
+    var nextLabel = this._nextContainer = new DwtComposite (this._shell, "NextContainer", Dwt.RELATIVE_STYLE);
     var nextEl = nextLabel.getHtmlElement();
     nextLabel.setCursor ("pointer");
     nextEl.onclick = function () { ZaZimbraAdmin.prototype._goNextListener.call(ZaZimbraAdmin.getInstance());};
@@ -544,6 +544,15 @@ function() {
     nextLabel.reparentHtmlElement (ZaSettings.SKIN_NEXT_DOM_ID) ;
 }
 
+ZaZimbraAdmin.prototype.updatePreNext =
+function () {
+    var isPrevious = this._historyMgr.isPrevious();
+    var isNext = this._historyMgr.isNext();
+
+    this._previousContainer.setEnabled(isPrevious);
+    this._nextContainer.setEnabled(isNext);
+
+}
 ZaZimbraAdmin.prototype._refreshListener =
 function(ev) {
     var currentObject = this._historyMgr.getLatestHistory();
@@ -554,15 +563,19 @@ function(ev) {
 ZaZimbraAdmin.prototype._goPrevListener =
 function(ev) {
     var currentObject = this._historyMgr.getPrevious();
-    if (currentObject)
+    if (currentObject) {
         currentObject.goToView();
+        this.updatePreNext();
+    }
 }
 
 ZaZimbraAdmin.prototype._goNextListener =
 function(ev) {
     var currentObject = this._historyMgr.getNext();
-    if (currentObject)
+    if (currentObject) {
         currentObject.goToView();
+        this.updatePreNext();
+    }
 }
 
 ZaZimbraAdmin.prototype._createHelpLink =
@@ -1054,6 +1067,7 @@ function() {
     this._createRefreshLink();
     this._createPreviousLink();
     this._createNextLink();
+    this._historyMgr.addChangeListener(new AjxListener(this, this.updatePreNext));
     this._createUserName();
 	this._createHelpLink();
 

@@ -46,18 +46,36 @@ function() {
 
 ZaHistoryMgr.prototype.getPrevious =
 function () {
+    if (!this.isPrevious())
+        return "";
+    return this._history.get(--this._currentLocation);
+}
+
+ZaHistoryMgr.prototype.getNext =
+function () {
+    if (!this.isNext())
+        return "";
+    return this._history.get(++this._currentLocation);
+}
+
+ZaHistoryMgr.prototype.isPrevious =
+function () {
     if (this._currentLocation == 0 )
-        return "";
-    return this._history.get(this._currentLocation --);
+        return false;
+    else
+        return true;
 }
 
-ZaHistoryMgr.prototype.getNext = function () {
+ZaHistoryMgr.prototype.isNext =
+function () {
     if (this._currentLocation == this._history.size() - 1 )
-        return "";
-    return this._history.get(this._currentLocation ++);
+        return false;
+    else
+        return true;
 }
 
-ZaHistoryMgr.prototype.getLatestHistory = function () {
+ZaHistoryMgr.prototype.getLatestHistory =
+function () {
     return  this._history.getLast();
 }
 
@@ -79,5 +97,5 @@ ZaHistory = function (path, displayName) {
 ZaHistory.prototype.goToView =
 function() {
     var tree = ZaZimbraAdmin.getInstance().getOverviewPanelController().getOverviewPanel().getFolderTree();
-    var currentDataItem = tree.setSelectionByPath(this.path, false);
+    tree.setSelectionByPath(this.path, false);
 }
