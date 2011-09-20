@@ -17,7 +17,7 @@ private:
     LPMDB m_Store;
     LPMAPISESSION m_mapiSession;
     SBinaryArray m_specialFolderIds;
-
+	Zimbra::Util::CriticalSection cs_store;
 public:
     MAPIStore();
     ~MAPIStore();

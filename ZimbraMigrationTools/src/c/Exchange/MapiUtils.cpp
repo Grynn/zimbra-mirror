@@ -161,7 +161,7 @@ HRESULT Zimbra::MAPI::Util::GetUserDNAndLegacyName(LPCWSTR lpszServer, LPCWSTR l
     wstring strADServer = L"LDAP://";
     strADServer += lpszServer;
     HRESULT hr = ADsOpenObject(
-            strADServer.c_str(), lpszUser /*NULL*/, lpszPwd /*NULL*/, ADS_SECURE_AUTHENTICATION,
+            strADServer.c_str(), /*lpszUser*/ NULL, lpszPwd /*NULL*/, ADS_SECURE_AUTHENTICATION,
             IID_IDirectorySearch,
             (void **)&pDirSearch);
     if (((FAILED(hr))))

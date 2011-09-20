@@ -88,26 +88,32 @@ typedef struct _ContactItemData: BaseItemData {
 
 class MAPIAccessAPI {
 private:
-    std::wstring m_strAdminProfileName;
+    static std::wstring m_strAdminProfileName;
+    static std::wstring m_strExchangeHostName;
+    static Zimbra::MAPI::MAPISession *m_zmmapisession;
+    static Zimbra::MAPI::MAPIStore *m_defaultStore;
+
     std::wstring m_strUserName;
-    std::wstring m_strExchangeHostName;
-    Zimbra::MAPI::MAPISession *m_zmmapisession;
-    Zimbra::MAPI::MAPIStore *m_defaultStore;
-    Zimbra::MAPI::MAPIStore *m_userStore;
+	Zimbra::MAPI::MAPIStore *m_userStore;
     Zimbra::MAPI::MAPIFolder *m_rootFolder;
     ExchangeSpecialFolderId FolderToSkip[TS_FOLDERS_MAX];
-    void InitFoldersToSkip();
 
+	void InitFoldersToSkip();
     bool SkipFolder(ExchangeSpecialFolderId exfid);
-    LPCWSTR OpenSessionAndStore();
+    LPCWSTR OpenUserStore();
     HRESULT Iterate_folders(Zimbra::MAPI::MAPIFolder &folder, vector<Folder_Data> &fd);
     void travrese_folder(Zimbra::MAPI::MAPIFolder &folder);
     HRESULT GetInternalFolder(SBinary sbFolderEID, MAPIFolder &folder);
 
 public:
-    MAPIAccessAPI(wstring strExchangeHostName, wstring strAdminProfileName, wstring strUserName);
+ 	//static methods to be used by all mailboxes
+	static LPCWSTR InitGlobalSessionAndStore(wstring strExchangeHostName,LPCWSTR lpcwstrAdminProfile);
+	static void	UnInitGlobalSessionAndStore();
+
+	//Per mailbox methods.
+	MAPIAccessAPI(wstring strUserName);
     ~MAPIAccessAPI();
-    LPCWSTR Initialize();
+    LPCWSTR InitializeUser();
     LPCWSTR GetRootFolderHierarchy(vector<Folder_Data> &vfolderlist);
     LPCWSTR GetFolderItemsList(SBinary sbFolderEID, vector<Item_Data> &ItemList);
     LPCWSTR GetItem(SBinary sbItemEID, BaseItemData &itemData);

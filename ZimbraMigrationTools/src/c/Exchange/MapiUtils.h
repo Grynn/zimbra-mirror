@@ -136,6 +136,27 @@ inline LPTSTR FromatExceptionInfo(HRESULT errCode, LPWSTR errDescription, LPSTR 
 namespace Zimbra {
 namespace MAPI {
 namespace Util {
+
+class CriticalSection{
+	public:
+		CriticalSection(){ InitializeCriticalSection(&cs); }
+		~CriticalSection(){ DeleteCriticalSection(&cs); }
+		void Enter(){ EnterCriticalSection(&cs); }
+		void Leave(){ LeaveCriticalSection(&cs); }
+	private:
+		CRITICAL_SECTION cs;
+};
+
+#pragma warning( disable : 4512 )
+class AutoCriticalSection{
+	public:
+		AutoCriticalSection(CriticalSection& scs) : cs(scs){cs.Enter();}
+		~AutoCriticalSection(){cs.Leave();}
+
+	private:
+		CriticalSection& cs;
+};
+
 class MapiUtilsException: public GenericException {
 public:
     MapiUtilsException(HRESULT hrErrCode, LPCWSTR lpszDescription): GenericException(hrErrCode,

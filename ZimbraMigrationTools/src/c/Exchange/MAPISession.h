@@ -24,7 +24,7 @@ class MAPISession {
 private:
     IMAPISession *m_Session;
     HRESULT _mapiLogon(LPWSTR strProfile, DWORD dwFlags, LPMAPISESSION &session);
-
+	Zimbra::Util::CriticalSection cs;
 public:
     MAPISession();
     ~MAPISession();

@@ -2,29 +2,26 @@
 #include "Exchange.h"
 #include "MAPIAccessAPI.h"
 
+Zimbra::MAPI::MAPISession *MAPIAccessAPI::m_zmmapisession = NULL;
+Zimbra::MAPI::MAPIStore *MAPIAccessAPI::m_defaultStore= NULL;
+std::wstring MAPIAccessAPI::m_strAdminProfileName=L"";
+std::wstring MAPIAccessAPI::m_strExchangeHostName=L"";
+
+
 // Initialize with Exchange Sever hostname, Outlook Admin profile name, Exchange mailbox name to be migrated
-MAPIAccessAPI::MAPIAccessAPI(wstring strExchangeHostName, wstring strAdminProfileName,
-    wstring strUserName): m_zmmapisession(NULL), m_userStore(NULL), m_defaultStore(NULL),
+MAPIAccessAPI::MAPIAccessAPI(wstring strUserName): m_userStore(NULL),
     m_rootFolder(NULL) {
-    m_strExchangeHostName = strExchangeHostName;
-    m_strAdminProfileName = strAdminProfileName;
     m_strUserName = strUserName;
-    MAPIInitialize(NULL);
+	MAPIInitialize(NULL);
     Zimbra::Mapi::Memory::SetMemAllocRoutines(NULL, MAPIAllocateBuffer, MAPIAllocateMore,
         MAPIFreeBuffer);
     InitFoldersToSkip();
 }
 
 MAPIAccessAPI::~MAPIAccessAPI() {
-    if (m_defaultStore)
-        delete m_defaultStore;
-    m_defaultStore = NULL;
-    if (m_userStore)
+	if (m_userStore)
         delete m_userStore;
     m_userStore = NULL;
-    if (m_zmmapisession)
-        delete m_zmmapisession;
-    m_zmmapisession = NULL;
     MAPIUninitialize();
 }
 
@@ -46,8 +43,62 @@ bool MAPIAccessAPI::SkipFolder(ExchangeSpecialFolderId exfid) {
     return false;
 }
 
+LPCWSTR MAPIAccessAPI::InitGlobalSessionAndStore(wstring strExchangeHostName,LPCWSTR lpcwstrAdminProfile)
+{
+	m_strAdminProfileName = lpcwstrAdminProfile;
+	m_strExchangeHostName = strExchangeHostName;
+	LPCWSTR lpwstrStatus = NULL;
+	try
+	{
+		// Logon into Admin profile
+		m_zmmapisession = new Zimbra::MAPI::MAPISession();
+		HRESULT hr = m_zmmapisession->Logon((LPWSTR)lpcwstrAdminProfile);
+		if (hr != S_OK)
+			goto CLEAN_UP;       
+		m_defaultStore = new Zimbra::MAPI::MAPIStore();
+        
+		// Open Admin default store
+		hr = m_zmmapisession->OpenDefaultStore(*m_defaultStore);
+		if (hr != S_OK)
+			goto CLEAN_UP;  
+	}catch (MAPISessionException &msse) {
+        lpwstrStatus = FromatExceptionInfo(msse.ErrCode(), (LPWSTR)msse.Description().c_str(),
+                (LPSTR)msse.SrcFile().c_str(), msse.SrcLine());
+    } catch (MAPIStoreException &mste) {
+        lpwstrStatus = FromatExceptionInfo(mste.ErrCode(), (LPWSTR)mste.Description().c_str(),
+                (LPSTR)mste.SrcFile().c_str(), mste.SrcLine());
+    } catch (Util::MapiUtilsException &muex) {
+        lpwstrStatus = FromatExceptionInfo(muex.ErrCode(), (LPWSTR)muex.Description().c_str(),
+                (LPSTR)muex.SrcFile().c_str(), muex.SrcLine());
+    }
+
+CLEAN_UP:
+	if(lpwstrStatus)
+	{
+		if(m_zmmapisession)
+			delete m_zmmapisession;
+		m_zmmapisession= NULL;
+
+		if(m_defaultStore)
+			delete m_defaultStore;
+		m_defaultStore=NULL;
+	}
+	return lpwstrStatus;
+}
+
+void MAPIAccessAPI::UnInitGlobalSessionAndStore()
+{
+	if(m_defaultStore)
+		delete m_defaultStore;
+	m_defaultStore=NULL;
+
+	if(m_zmmapisession)
+		delete m_zmmapisession;
+	m_zmmapisession= NULL;
+}
+
 // Open MAPI sessiona and Open Stores
-LPCWSTR MAPIAccessAPI::OpenSessionAndStore() {
+LPCWSTR MAPIAccessAPI::OpenUserStore() {
     LPCWSTR lpwstrStatus = NULL;
     HRESULT hr = S_OK;
     wstring wstruserdn;
@@ -57,19 +108,9 @@ LPCWSTR MAPIAccessAPI::OpenSessionAndStore() {
     LPWSTR pwstrExchangeServerDN = NULL;
 
     try {
-        // Logon into Admin profile
-        m_zmmapisession = new Zimbra::MAPI::MAPISession();
-        hr = m_zmmapisession->Logon((LPWSTR)m_strAdminProfileName.c_str());
-        if (hr != S_OK)
-            goto CLEAN_UP;
-        m_defaultStore = new Zimbra::MAPI::MAPIStore();
+		//user store
         m_userStore = new Zimbra::MAPI::MAPIStore();
-
-        // Open Admin default store
-        hr = m_zmmapisession->OpenDefaultStore(*m_defaultStore);
-        if (hr != S_OK)
-            goto CLEAN_UP;
-        // Get Exchange Server DN
+		// Get Exchange Server DN
         hr = Zimbra::MAPI::Util::GetUserDnAndServerDnFromProfile(
                 m_zmmapisession->GetMAPISessionObject(),
                 ExchangeServerDN, ExchangeUserDN);
@@ -106,12 +147,12 @@ CLEAN_UP:
 }
 
 // Get root folders
-LPCWSTR MAPIAccessAPI::Initialize() {
+LPCWSTR MAPIAccessAPI::InitializeUser() {
     LPCWSTR lpwstrStatus = NULL;
     HRESULT hr = S_OK;
 
     try {
-        lpwstrStatus = OpenSessionAndStore();
+        lpwstrStatus = OpenUserStore();
         if (lpwstrStatus)
             return lpwstrStatus;
         // Get root folder from user store

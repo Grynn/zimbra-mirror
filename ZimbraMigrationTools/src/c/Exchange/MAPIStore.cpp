@@ -22,6 +22,7 @@ MAPIStore::MAPIStore(): m_Store(NULL), m_mapiSession(NULL)
 {}
 
 MAPIStore::~MAPIStore() {
+	Zimbra::Util::AutoCriticalSection autocriticalsection(cs_store); 
     ULONG flags = LOGOFF_ORDERLY;
 
     Zimbra::MAPI::Util::FreeAllSpecialFolders(&m_specialFolderIds);
@@ -33,6 +34,7 @@ MAPIStore::~MAPIStore() {
 }
 
 void MAPIStore::Initialize(LPMAPISESSION mapisession, LPMDB pMdb) {
+	Zimbra::Util::AutoCriticalSection autocriticalsection(cs_store); 
     m_Store = pMdb;
     m_mapiSession = mapisession;
     g_ulIMAPHeaderInfoPropTag = Zimbra::MAPI::Util::IMAPHeaderInfoPropTag(m_Store);
@@ -41,6 +43,7 @@ void MAPIStore::Initialize(LPMAPISESSION mapisession, LPMDB pMdb) {
 }
 
 HRESULT MAPIStore::CompareEntryIDs(SBinary *pBin1, SBinary *pBin2, ULONG &lpulResult) {
+	Zimbra::Util::AutoCriticalSection autocriticalsection(cs_store); 
     HRESULT hr = S_OK;
 
     hr =
@@ -50,6 +53,7 @@ HRESULT MAPIStore::CompareEntryIDs(SBinary *pBin1, SBinary *pBin2, ULONG &lpulRe
 }
 
 HRESULT MAPIStore::GetRootFolder(MAPIFolder &rootFolder) {
+	Zimbra::Util::AutoCriticalSection autocriticalsection(cs_store); 
     HRESULT hr = S_OK;
     SBinary bin;
     ULONG objtype = 0;
@@ -70,5 +74,6 @@ HRESULT MAPIStore::GetRootFolder(MAPIFolder &rootFolder) {
 HRESULT MAPIStore::OpenEntry(ULONG cbEntryID, LPENTRYID lpEntryID, LPCIID lpInterface,
     ULONG ulFlags, ULONG FAR *lpulObjType,
     LPUNKNOWN FAR *lppUnk) {
+	Zimbra::Util::AutoCriticalSection autocriticalsection(cs_store); 
     return m_Store->OpenEntry(cbEntryID, lpEntryID, lpInterface, ulFlags, lpulObjType, lppUnk);
 }
