@@ -102,7 +102,7 @@ public class AcceptShare extends OctopusCommonTest {
 										+ ")","3000"),
 						"Verify the owner share folder displayed in Share Invitation view");
 
-		PageMyFiles pageMyFiles = (PageMyFiles) pageSharing.zToolbarPressButton(Button.B_ADD_TO_MY_FILES, ownerFolderItem);
+		pageSharing.zToolbarPressButton(Button.B_ADD_TO_MY_FILES, ownerFolderItem);
 		
 		// Click on My Files tab
 		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_MY_FILES);
