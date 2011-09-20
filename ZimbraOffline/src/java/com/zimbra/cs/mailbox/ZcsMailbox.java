@@ -274,7 +274,7 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
                 try {
                     if (id != ID_AUTO_INCREMENT) {
                         getTagById(octxt, id);
-                        if ((getChangeMask(octxt, id, MailItem.Type.TAG) & Change.MODIFIED_CONFLICT) != 0) {
+                        if ((getChangeMask(octxt, id, MailItem.Type.TAG) & Change.CONFLICT) != 0) {
                             mLocalTagDeletes.add(id);
                         }
                     }
@@ -337,7 +337,7 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
                 if (convId > 0) {
                     newConv.addChild(msg);
                 }
-                msg.markItemModified(Change.MODIFIED_PARENT);
+                msg.markItemModified(Change.PARENT);
                 msg.mData.parentId = convId;
                 msg.mData.metadataChanged(this);
             } catch (MailServiceException.NoSuchItemException nsie) {
@@ -490,15 +490,15 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
             MailItem item = getItemById(itemId, type);
             int change_mask = getChangeMask(octxt, itemId, type);
 
-            if ((change_mask & Change.MODIFIED_FOLDER) != 0 || folderId == ID_AUTO_INCREMENT) {
+            if ((change_mask & Change.FOLDER) != 0 || folderId == ID_AUTO_INCREMENT) {
                 folderId = item.getFolderId();
             }
 
-            if ((change_mask & Change.MODIFIED_COLOR) != 0 || color.getValue() == ID_AUTO_INCREMENT) {
+            if ((change_mask & Change.COLOR) != 0 || color.getValue() == ID_AUTO_INCREMENT) {
                 color = item.getRgbColor();
             }
             Tag.NormalizedTags ntags;
-            if ((change_mask & Change.MODIFIED_TAGS) != 0 || tags == MailItem.TAG_UNCHANGED) {
+            if ((change_mask & Change.TAGS) != 0 || tags == MailItem.TAG_UNCHANGED) {
                 ntags = new Tag.NormalizedTags(item.getTags());
             } else {
                 ntags = new Tag.NormalizedTags(this, tags);
@@ -506,10 +506,10 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
             if (flags == MailItem.FLAG_UNCHANGED) {
                 flags = item.getFlagBitmask();
             } else {
-                if ((change_mask & Change.MODIFIED_UNREAD) != 0) {
+                if ((change_mask & Change.UNREAD) != 0) {
                     flags = (item.isUnread() ? Flag.BITMASK_UNREAD : 0) | (flags & ~Flag.BITMASK_UNREAD);
                 }
-                if ((change_mask & Change.MODIFIED_FLAGS) != 0) {
+                if ((change_mask & Change.FLAGS) != 0) {
                     flags = item.getInternalFlagBitmask() | (flags & Flag.BITMASK_UNREAD);
                 }
             }
@@ -771,8 +771,9 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
         setConfig(null, VERSIONS_KEY, config);
     }
 
-    public boolean pushNewFolder(OperationContext octxt, int id, boolean suppressRssFailure, ZimbraSoapContext zsc) throws ServiceException {
-        if ((getChangeMask(octxt, id, MailItem.Type.FOLDER) & Change.MODIFIED_CONFLICT) == 0) {
+    public boolean pushNewFolder(OperationContext octxt, int id, boolean suppressRssFailure, ZimbraSoapContext zsc)
+            throws ServiceException {
+        if ((getChangeMask(octxt, id, MailItem.Type.FOLDER) & Change.CONFLICT) == 0) {
             return false;
         }
         return PushChanges.syncFolder(this, id, suppressRssFailure, zsc);

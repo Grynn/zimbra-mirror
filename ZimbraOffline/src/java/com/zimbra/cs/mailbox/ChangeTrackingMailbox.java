@@ -76,7 +76,7 @@ public abstract class ChangeTrackingMailbox extends SyncMailbox {
             return;
         }
         lastChangeTime = System.currentTimeMillis();
-        DbOfflineMailbox.updateChangeRecord(item, Change.MODIFIED_CONFLICT);
+        DbOfflineMailbox.updateChangeRecord(item, Change.CONFLICT);
     }
 
     @Override

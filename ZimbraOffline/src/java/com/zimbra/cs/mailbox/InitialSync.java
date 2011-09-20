@@ -454,8 +454,7 @@ public class InitialSync {
         try {
             ombx.createSearchFolder(new TracelessContext(redo), parentId, name, query, searchTypes, sort, flags, itemColor);
             if (relocated) {
-                ombx.setChangeMask(sContext, id, MailItem.Type.SEARCHFOLDER,
-                        Change.MODIFIED_FOLDER | Change.MODIFIED_NAME);
+                ombx.setChangeMask(sContext, id, MailItem.Type.SEARCHFOLDER, Change.FOLDER | Change.NAME);
             }
             OfflineLog.offline.debug("initial: created search folder (" + id + "): " + name);
         } catch (ServiceException e) {
@@ -525,7 +524,7 @@ public class InitialSync {
                 ombx.createMountpoint(new TracelessContext(redo), parentId, name, ownerId, remoteId, view, flags, itemColor, reminderEnabled);
             }
             if (relocated) {
-                ombx.setChangeMask(sContext, id, itemType, Change.MODIFIED_FOLDER | Change.MODIFIED_NAME);
+                ombx.setChangeMask(sContext, id, itemType, Change.FOLDER | Change.NAME);
             }
             if (acl != null) {
                 ombx.setPermissions(sContext, id, acl);
@@ -592,7 +591,7 @@ public class InitialSync {
             Tag tag = ombx.createTag(new TracelessContext(redo), name, itemColor);
             id = tag.getId();
             if (renamed) {
-                ombx.setChangeMask(sContext, id, MailItem.Type.TAG, Change.MODIFIED_NAME);
+                ombx.setChangeMask(sContext, id, MailItem.Type.TAG, Change.NAME);
             }
             if (getTagSync().isMappingRequired()) {
                 getTagSync().mapTag(remoteId, id);
@@ -1109,7 +1108,7 @@ public class InitialSync {
     }
 
     private boolean isAttachmentDownloadBlocked() throws ServiceException {
-        return (ombx.getRemoteServerVersion().getMajor() < 7) && 
+        return (ombx.getRemoteServerVersion().getMajor() < 7) &&
                 (Boolean.valueOf(ombx.getOfflineAccount().getAttr(Provisioning.A_zimbraAttachmentsBlocked)));
     }
 
@@ -1221,7 +1220,7 @@ public class InitialSync {
 
         saveMessage(in, sizeHint, id, folderId, type, received, flags, tags, convId, null);
     }
-    
+
     private void saveMessage(InputStream in, long sizeHint, int id, int folderId, MailItem.Type type, int received,
             int flags, String[] tags, int convId, DraftInfo draftInfo)
     throws ServiceException {
@@ -1315,7 +1314,7 @@ public class InitialSync {
                 ombx.lock.lock();
                 try  {
                     int change_mask = ombx.getChangeMask(sContext, id, type);
-                    if ((change_mask & Change.MODIFIED_CONTENT) == 0) {
+                    if ((change_mask & Change.CONTENT) == 0) {
                         if (type == MailItem.Type.CHAT) {
                             ombx.updateChat(new TracelessContext(redo2), pm, id);
                         } else {

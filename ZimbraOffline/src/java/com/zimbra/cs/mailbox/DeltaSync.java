@@ -246,7 +246,7 @@ public class DeltaSync {
 
         // delete any deleted folders, starting from the bottom of the tree
         if (isInitSyncDone && foldersToDelete != null && !foldersToDelete.isEmpty()) {
-            ombx.lock.lock(); 
+            ombx.lock.lock();
             try {
                 List<Folder> folders = ombx.getFolderById(sContext, Mailbox.ID_FOLDER_ROOT).getSubfolderHierarchy();
                 Collections.reverse(folders);
@@ -410,8 +410,9 @@ public class DeltaSync {
                 }
                 Integer mask = ombx.getChangeMask(sContext, id, type);
                 // tag numbering conflict issues: don't delete tags we've created locally
-                if (isTag && (mask & Change.MODIFIED_CONFLICT) != 0)
+                if (isTag && (mask & Change.CONFLICT) != 0) {
                     continue;
+                }
                 (isFolder ? foldersToDelete : leafIds).add(id);
                 if (isTag) {
                     tagIds.add(id);
@@ -450,12 +451,12 @@ public class DeltaSync {
         }
 
         // mark the remote folder for re-creation in order to hold its local contents
-        ombx.setChangeMask(sContext, folder.getId(), folder.getType(), Change.MODIFIED_CONFLICT);
+        ombx.setChangeMask(sContext, folder.getId(), folder.getType(), Change.CONFLICT);
         // mark all the contents as moved so that they appear in the remote folder
         for (int contained : ombx.listItemIds(sContext, MailItem.Type.UNKNOWN, folder.getId())) {
             int change_mask = ombx.getChangeMask(sContext, contained, MailItem.Type.UNKNOWN);
-            if ((change_mask & (Change.MODIFIED_FOLDER | Change.MODIFIED_CONFLICT)) == 0) {
-                ombx.setChangeMask(sContext, contained, MailItem.Type.UNKNOWN, change_mask | Change.MODIFIED_FOLDER);
+            if ((change_mask & (Change.FOLDER | Change.CONFLICT)) == 0) {
+                ombx.setChangeMask(sContext, contained, MailItem.Type.UNKNOWN, change_mask | Change.FOLDER);
             }
         }
         OfflineLog.offline.debug("delta: queued folder for recreate: " + folder.getId());
@@ -507,15 +508,14 @@ public class DeltaSync {
 
             int change_mask = ombx.getChangeMask(sContext, id, MailItem.Type.SEARCHFOLDER);
             ombx.rename(sContext, id, MailItem.Type.SEARCHFOLDER, name, parentId);
-            if ((change_mask & Change.MODIFIED_QUERY) == 0) {
+            if ((change_mask & Change.QUERY) == 0) {
                 ombx.modifySearchFolder(sContext, id, query, searchTypes, sort);
             }
             ombx.syncMetadata(sContext, id, MailItem.Type.SEARCHFOLDER, parentId, flags, null, itemColor);
             ombx.syncDate(sContext, id, MailItem.Type.SEARCHFOLDER, date);
 
             if (elt.getAttributeBool(InitialSync.A_RELOCATED, false)) {
-                ombx.setChangeMask(sContext, id, MailItem.Type.SEARCHFOLDER,
-                        change_mask | Change.MODIFIED_FOLDER | Change.MODIFIED_NAME);
+                ombx.setChangeMask(sContext, id, MailItem.Type.SEARCHFOLDER, change_mask | Change.FOLDER | Change.NAME);
             }
             OfflineLog.offline.debug("delta: updated search folder (" + id + "): " + name);
         } finally {
@@ -560,23 +560,25 @@ public class DeltaSync {
             String name = (id == Mailbox.ID_FOLDER_ROOT) ? "ROOT" : elt.getAttribute(MailConstants.A_NAME);
 
             int change_mask = ombx.getChangeMask(sContext, id, MailItem.Type.FOLDER);
-            if (id != Mailbox.ID_FOLDER_ROOT)
+            if (id != Mailbox.ID_FOLDER_ROOT) {
                 ombx.rename(sContext, id, itemType, name, parentId);
+            }
             // XXX: do we need to sync if the folder has perms but the new ACL is empty?
-            if ((change_mask & Change.MODIFIED_ACL) == 0 && acl != null)
+            if ((change_mask & Change.ACL) == 0 && acl != null) {
                 ombx.setPermissions(sContext, id, acl);
-            if ((change_mask & Change.MODIFIED_URL) == 0)
+            }
+            if ((change_mask & Change.URL) == 0) {
                 ombx.setFolderUrl(sContext, id, url);
-
+            }
             if (itemType == MailItem.Type.FOLDER) {
                 // don't care about current feed syncpoint; sync can't be done offline
                 ombx.syncMetadata(sContext, id, MailItem.Type.FOLDER, parentId, flags, null, itemColor);
                 ombx.syncDate(sContext, id, MailItem.Type.FOLDER, date);
             }
 
-            if (elt.getAttributeBool(InitialSync.A_RELOCATED, false))
-                ombx.setChangeMask(sContext, id, itemType, change_mask | Change.MODIFIED_FOLDER | Change.MODIFIED_NAME);
-
+            if (elt.getAttributeBool(InitialSync.A_RELOCATED, false)) {
+                ombx.setChangeMask(sContext, id, itemType, change_mask | Change.FOLDER | Change.NAME);
+            }
             OfflineLog.offline.debug("delta: updated folder (" + id + "): " + name);
         } finally {
             ombx.lock.release();
@@ -597,13 +599,13 @@ public class DeltaSync {
 
         // if the folder was moved/renamed locally, that trumps any changes made remotely
         int parentId = (id == Mailbox.ID_FOLDER_ROOT) ? id : (int) elt.getAttributeLong(MailConstants.A_FOLDER);
-        if ((change_mask & Change.MODIFIED_FOLDER) != 0) {
+        if ((change_mask & Change.FOLDER) != 0) {
             parentId = local.getFolderId();
             elt.addAttribute(MailConstants.A_FOLDER, parentId);
         }
 
         String name = (id == Mailbox.ID_FOLDER_ROOT) ? "ROOT" : elt.getAttribute(MailConstants.A_NAME);
-        if ((change_mask & Change.MODIFIED_NAME) != 0 && !mSyncRenames.contains(id)) {
+        if ((change_mask & Change.NAME) != 0 && !mSyncRenames.contains(id)) {
             name = local.getName();
             elt.addAttribute(MailConstants.A_NAME, name);
         } else {
@@ -634,21 +636,22 @@ public class DeltaSync {
                 else
                     newName = name + uuid;
 
-                if (local == null && (conflict_mask & Change.MODIFIED_CONFLICT) != 0
-                        && isCompatibleFolder(conflict, elt, type)) {
+                if (local == null && (conflict_mask & Change.CONFLICT) != 0 &&
+                        isCompatibleFolder(conflict, elt, type)) {
                     // if the new and existing folders are identical and being created, try to merge them
                     ombx.renumberItem(sContext, conflict.getId(), type, id);
-                    ombx.setChangeMask(sContext, id, type, conflict_mask & ~Change.MODIFIED_CONFLICT);
+                    ombx.setChangeMask(sContext, id, type, conflict_mask & ~Change.CONFLICT);
                     return false;
-                } else if (!conflict.isMutable() || (conflict_mask & Change.MODIFIED_NAME) != 0) {
+                } else if (!conflict.isMutable() || (conflict_mask & Change.NAME) != 0) {
                     // either the local user also renamed the folder or the folder's immutable, so the local client wins
                     name = newName;
                     elt.addAttribute(MailConstants.A_NAME, name).addAttribute(InitialSync.A_RELOCATED, true);
                 } else {
                     // if there's a folder naming conflict within the target folder, usually push the local folder out of the way
                     ombx.rename(null, conflict.getId(), conflict.getType(), newName);
-                    if ((conflict_mask & Change.MODIFIED_NAME) == 0)
+                    if ((conflict_mask & Change.NAME) == 0) {
                         mSyncRenames.add(conflict.getId());
+                    }
                 }
             } else {
                 String viewStr = elt.getAttribute(MailConstants.A_DEFAULT_VIEW, null);
@@ -723,14 +726,16 @@ public class DeltaSync {
 
             int change_mask = ombx.getChangeMask(sContext, id, MailItem.Type.TAG);
             // FIXME: if FOO was renamed BAR and BAR was renamed FOO, this will break
-            if ((change_mask & Change.MODIFIED_NAME) == 0)
+            if ((change_mask & Change.NAME) == 0) {
                 ombx.rename(sContext, id, MailItem.Type.TAG, name);
-            if ((change_mask & Change.MODIFIED_COLOR) == 0)
+            }
+            if ((change_mask & Change.COLOR) == 0) {
                 ombx.setColor(sContext, new int[] { id }, MailItem.Type.TAG, itemColor);
+            }
             ombx.syncDate(sContext, id, MailItem.Type.TAG, date);
 
             if (elt.getAttributeBool(InitialSync.A_RELOCATED, false)) {
-                ombx.setChangeMask(sContext, id, MailItem.Type.TAG, change_mask | Change.MODIFIED_NAME);
+                ombx.setChangeMask(sContext, id, MailItem.Type.TAG, change_mask | Change.NAME);
             }
             OfflineLog.offline.debug("delta: updated tag (" + id + "): " + name);
         } finally {
@@ -742,7 +747,7 @@ public class DeltaSync {
         int change_mask = (local == null ? 0 : ombx.getChangeMask(sContext, id, MailItem.Type.TAG));
 
         String name = elt.getAttribute(MailConstants.A_NAME);
-        if ((change_mask & Change.MODIFIED_NAME) != 0 && !mSyncRenames.contains(id)) {
+        if ((change_mask & Change.NAME) != 0 && !mSyncRenames.contains(id)) {
             name = local.getName();
             elt.addAttribute(MailConstants.A_NAME, name);
         } else {
@@ -761,8 +766,9 @@ public class DeltaSync {
         int conflict_mask = ombx.getChangeMask(sContext, conflict.getId(), MailItem.Type.TAG);
         if (conflict.getId() == id) {
             // new tag remotely, new tag locally, same name
-            if ((conflict_mask & Change.MODIFIED_CONFLICT) != 0)
-                ombx.setChangeMask(sContext, conflict.getId(), MailItem.Type.TAG, conflict_mask & ~Change.MODIFIED_CONFLICT);
+            if ((conflict_mask & Change.CONFLICT) != 0) {
+                ombx.setChangeMask(sContext, conflict.getId(), MailItem.Type.TAG, conflict_mask & ~Change.CONFLICT);
+            }
             return false;
         }
 
@@ -772,16 +778,16 @@ public class DeltaSync {
         } else {
             newName = name + uuid;
         }
-        if (local == null && (conflict_mask & Change.MODIFIED_CONFLICT) != 0) {
+        if (local == null && (conflict_mask & Change.CONFLICT) != 0) {
             // if the new and existing tags are identical and being created, try to merge them
             if (getTagSync().isMappingRequired()) {
                 getTagSync().mapTag(Integer.valueOf(elt.getAttribute(MailConstants.A_ID)), conflict.getId());
             } else {
                 ombx.renumberItem(sContext, conflict.getId(), MailItem.Type.TAG, id);
             }
-            ombx.setChangeMask(sContext, conflict.getId(), MailItem.Type.TAG, conflict_mask & ~Change.MODIFIED_CONFLICT);
+            ombx.setChangeMask(sContext, conflict.getId(), MailItem.Type.TAG, conflict_mask & ~Change.CONFLICT);
             return false;
-        } else if ((conflict_mask & Change.MODIFIED_NAME) != 0) {
+        } else if ((conflict_mask & Change.NAME) != 0) {
             // the local user also renamed the tag, so the local client wins
             name = newName;
             elt.addAttribute(MailConstants.A_NAME, name).addAttribute(InitialSync.A_RELOCATED, true);
@@ -871,7 +877,7 @@ public class DeltaSync {
         ombx.lock.lock();
         try {
             int change_mask = ombx.getChangeMask(sContext, id, MailItem.Type.CONTACT);
-            if ((change_mask & Change.MODIFIED_CONTENT) == 0 && pc != null) {
+            if ((change_mask & Change.CONTENT) == 0 && pc != null) {
                 ombx.modifyContact(sContext, id, pc);
             }
             ombx.syncMetadata(sContext, id, MailItem.Type.CONTACT, folderId, flags, tags, itemColor);

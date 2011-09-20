@@ -314,7 +314,7 @@ public class DbOfflineMailbox {
             pos = DbMailItem.setMailboxId(stmt, ombx, pos);
             stmt.setShort(pos++, MailItem.Type.MESSAGE.toByte());
             stmt.setShort(pos++, MailItem.Type.CHAT.toByte());
-            stmt.setInt(pos++, Change.MODIFIED_UNREAD);
+            stmt.setInt(pos++, Change.UNREAD);
             stmt.setInt(pos++, isUnread ? 1 : 0);
             rs = stmt.executeQuery();
             while (rs.next()) {
@@ -348,7 +348,7 @@ public class DbOfflineMailbox {
             stmt.setShort(pos++, MailItem.Type.APPOINTMENT.toByte());
             stmt.setShort(pos++, MailItem.Type.TASK.toByte());
             stmt.setShort(pos++, MailItem.Type.DOCUMENT.toByte());
-            stmt.setInt(pos++, Change.MODIFIED_FOLDER);
+            stmt.setInt(pos++, Change.FOLDER);
 
             rs = stmt.executeQuery();
             while (rs.next()) {

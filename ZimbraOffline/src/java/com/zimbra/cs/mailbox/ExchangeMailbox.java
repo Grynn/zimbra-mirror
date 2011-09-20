@@ -99,24 +99,19 @@ public class ExchangeMailbox extends ChangeTrackingMailbox {
     }
 
     /** The bitmask of all message changes that we propagate to the server. */
-    static final int MESSAGE_CHANGES = Change.MODIFIED_UNREAD | Change.MODIFIED_FLAGS | Change.MODIFIED_TAGS | Change.MODIFIED_FOLDER;
-
-    /** The bitmask of all chat changes that we propagate to the server. */
-    //static final int CHAT_CHANGES = Change.MODIFIED_UNREAD | Change.MODIFIED_FLAGS | Change.MODIFIED_TAGS | Change.MODIFIED_FOLDER;
+    static final int MESSAGE_CHANGES = Change.UNREAD | Change.FLAGS | Change.TAGS | Change.FOLDER;
 
     /** The bitmask of all contact changes that we propagate to the server. */
-    static final int CONTACT_CHANGES = Change.MODIFIED_FLAGS | Change.MODIFIED_TAGS | Change.MODIFIED_FOLDER | Change.MODIFIED_CONTENT;
+    static final int CONTACT_CHANGES = Change.FLAGS | Change.TAGS | Change.FOLDER | Change.CONTENT;
 
     /** The bitmask of all folder changes that we propagate to the server. */
-    static final int FOLDER_CHANGES = Change.MODIFIED_FLAGS | Change.MODIFIED_FOLDER | Change.MODIFIED_NAME;
+    static final int FOLDER_CHANGES = Change.FLAGS | Change.FOLDER | Change.NAME;
 
     /** The bitmask of all appointment changes that we propagate to the server. */
-    static final int APPOINTMENT_CHANGES = Change.MODIFIED_FLAGS | Change.MODIFIED_TAGS | Change.MODIFIED_FOLDER |
-                                           Change.MODIFIED_CONTENT | Change.MODIFIED_INVITE;
+    static final int APPOINTMENT_CHANGES = Change.FLAGS | Change.TAGS | Change.FOLDER | Change.CONTENT | Change.INVITE;
 
     /** The bitmask of all document changes that we propagate to the server. */
-    static final int DOCUMENT_CHANGES = Change.MODIFIED_FLAGS | Change.MODIFIED_TAGS | Change.MODIFIED_FOLDER |
-                                        Change.MODIFIED_CONTENT | Change.MODIFIED_NAME;
+    static final int DOCUMENT_CHANGES = Change.FLAGS | Change.TAGS | Change.FOLDER | Change.CONTENT | Change.NAME;
 
     @Override
     int getChangeMaskFilter(MailItem.Type type) {
