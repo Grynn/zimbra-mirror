@@ -1135,22 +1135,21 @@ public class PageMail extends AbsTab {
 		boolean onRootFolder = false;
 
 		if (folderItem.getName().equals("USER_ROOT")) {
-			onRootFolder = true;
-			switch (ZimbraSeleniumProperties.getAppType()) {
-			case AJAX:
-				treeItemLocator = TreeMail.Locators.ztih_main_Mail__FOLDER_ITEM_ID.replace(
-						TreeMail.stringToReplace, "FOLDER");
-				break;
 
-			case DESKTOP:
-				treeItemLocator = TreeMail.Locators.zTreeItems.replace(TreeMail.stringToReplace,
-						AjaxCommonTest.defaultAccountName);
-				break;
-			default:
-				throw new HarnessException("Implement me!");
-			}
+		   onRootFolder = true;
+			treeItemLocator = TreeMail.Locators.zTreeItems.replace(TreeMail.stringToReplace,
+			      AjaxCommonTest.defaultAccountName);
+
+		} else if (folderItem.getName().equals("Inbox")) {
+
+		   treeItemLocator = "css=[id^='zti__" +
+		         ((AppAjaxClient)MyApplication).zGetActiveAccount().EmailAddress +
+		         ":main_Mail__']:contains('Inbox')";
+
 		} else {
-			throw new HarnessException("Implement me!");
+
+		   throw new HarnessException("Implement me!");
+
 		}
 
 		AbsPage page = null;
