@@ -79,6 +79,11 @@ function () {
     return  this._history.getLast();
 }
 
+ZaHistoryMgr.prototype.getCurrentyHistory =
+function () {
+    return  this._history.get(this._currentLocation);
+}
+
 ZaHistoryMgr.prototype.addChangeListener =
 function(listener) {
 	return this._evtMgr.addListener(ZaEvent.L_MODIFY, listener);

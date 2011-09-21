@@ -555,7 +555,7 @@ function () {
 }
 ZaZimbraAdmin.prototype._refreshListener =
 function(ev) {
-    var currentObject = this._historyMgr.getLatestHistory();
+    var currentObject = this._historyMgr.getCurrentyHistory();
     if (currentObject)
         currentObject.goToView(true);
 }
