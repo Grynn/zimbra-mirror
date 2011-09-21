@@ -309,6 +309,7 @@ function(item, ev) {
     var isAlias = currentDataItem.isAlias();
     if (isAlias) {
         currentDataItem = this.getTreeItemDataByPath(currentDataItem.getRealPath());
+        this._updateHistoryObj(currentDataItem);
     }
 	if (currentDataItem.isLeaf() && !isAlias) {
 		if (numSelectedItems > 0) {
@@ -378,6 +379,28 @@ function (treeItem, isAddHistory) {
     var path = this.getABPath(dataItem);
     var historyObject = new ZaHistory(path, text);
     ZaZimbraAdmin.getInstance().updateHistory(historyObject, isAddHistory);
+}
+
+ZaTree.prototype._updateHistoryObj =
+function (dataItem) {
+    var text = dataItem.text;
+    var path = this.getABPath(dataItem);
+    var historyObject = new ZaHistory(path, text);
+    var historyMgr = ZaZimbraAdmin.getInstance().getHisotryMgr();
+    historyMgr.addHistoryObj(historyObject);
+    var objList = historyMgr.getAllHistoryObj().getArray();
+    var ti = null;
+    var Tis = [];
+    for(var i = objList.length - 1; i > -1; i --) {
+        ti = new ZaTreeItemData({
+                text: objList[i].displayName,
+                type:1,
+                path: objList[i].path
+                }
+            );
+        Tis.push(ti);
+    }
+    dataItem.recentObject = Tis;
 }
 
 ZaTree.prototype.getABPath =

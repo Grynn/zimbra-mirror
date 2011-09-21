@@ -1300,6 +1300,9 @@ ZaOverviewPanelController.prototype.addObjectItem = function (parentPath, name, 
         }
     }
 
+    var historyObject = new ZaHistory(namePath, name);
+    ZaZimbraAdmin.getInstance().getHisotryMgr().addHistoryObj(historyObject);
+
     if (isAddNameNode) {
         var parentDataItem = tree.getTreeItemDataByPath (parentPath);
         var index = parentDataItem.getChildrenNum();
@@ -1311,13 +1314,7 @@ ZaOverviewPanelController.prototype.addObjectItem = function (parentPath, name, 
                             text: name});
         tree.addTreeItemData(nameDataItem);
         nameDataItem.addRelatedObject(this.getRelatedList(parentPath,item));
-        var recentObject = new ZaTreeItemData({
-                            text: "To Be Developed",
-                            type: 1,
-                            path: parentPath + ZaTree.SEPERATOR + "user1@anqin-mac"
-                            }
-                        );
-        nameDataItem.addRecentObject([recentObject]);
+        nameDataItem.addRecentObject(this.getRecentList())
     }
 
     if (!nameDataItem.getData("viewId")) {
@@ -1452,7 +1449,7 @@ function(parentPath, item) {
             );
     ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._ZIMLET_LIST_VIEW] = ZaOverviewPanelController.zimletListTreeListener;
 
-    return [aliasTi, cosTi, domainTi, zimletTi];
+    return [aliasTi, cosTi, domainTi];
 }
 
 ZaOverviewPanelController.prototype.getRelatedList4Cos =
@@ -1498,6 +1495,19 @@ function(parentPath, item) {
 }
 
 ZaOverviewPanelController.prototype.getRecentList =
-function(parentPath, item) {
-
+function() {
+    var historyMgr = ZaZimbraAdmin.getInstance().getHisotryMgr();
+    var objList = historyMgr.getAllHistoryObj().getArray();
+    var Tis = [];
+    var ti = null;
+    for(var i = objList.length - 1; i > -1; i --) {
+        ti = new ZaTreeItemData({
+                text: objList[i].displayName,
+                type:1,
+                path: objList[i].path
+                }
+            );
+        Tis.push(ti);
+    }
+    return Tis;
 }

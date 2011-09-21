@@ -7,9 +7,12 @@
  */
 ZaHistoryMgr = function() {
     this._history = new AjxVector();
+    this._historyObj = new AjxVector();
     this._evtMgr = new AjxEventMgr();
     this._currentLocation = 0;
 }
+
+ZaHistoryMgr.MAX_HISTROY_OBJ = 5;
 
 ZaHistoryMgr.prototype.toString =
 function() {
@@ -24,6 +27,30 @@ function (historyObject) {
     // Here we always relocates the currentLocation to the current page.
     this._currentLocation = this._history.size() -1;
     this._evtMgr.notifyListeners(ZaEvent.L_MODIFY, this._history);
+}
+
+ZaHistoryMgr.prototype.addHistoryObj =
+function (historyObject) {
+    var lastObj = this._historyObj.get(this._historyObj.size() - 1);
+    if(lastObj && lastObj.path == historyObject.path)
+        return;
+    var loc =  this.findHistoryObj(historyObject);
+    if(loc > -1) this._historyObj.removeAt(loc);
+
+    if(this._historyObj.size()+1 > ZaHistoryMgr.MAX_HISTROY_OBJ) {
+        this._historyObj.removeAt(0);
+    }
+    this._historyObj.add(historyObject);
+}
+
+ZaHistoryMgr.prototype.findHistoryObj =
+function(historyObject) {
+    if(!historyObject) return -1;
+    for(var i = 0; i < this._historyObj._array.length; i++) {
+        if(this._historyObj._array[i].displayName == historyObject.displayName)
+            return i;
+    }
+    return -1;
 }
 
 ZaHistoryMgr.prototype.removeHistory =
@@ -42,6 +69,11 @@ function() {
 ZaHistoryMgr.prototype.getAllHistory =
 function() {
     return this._history;
+}
+
+ZaHistoryMgr.prototype.getAllHistoryObj =
+function() {
+    return this._historyObj;
 }
 
 ZaHistoryMgr.prototype.getPrevious =
