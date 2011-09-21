@@ -12,8 +12,6 @@ import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.octopus.core.OctopusCommonTest;
 import com.zimbra.qa.selenium.projects.octopus.ui.PageMyFiles;
-import com.zimbra.qa.selenium.projects.octopus.ui.PageSharing;
-import com.zimbra.qa.selenium.projects.octopus.ui.PageTrash;
 
 public class DeleteMountpoint extends OctopusCommonTest {
 
@@ -105,7 +103,7 @@ public class DeleteMountpoint extends OctopusCommonTest {
 
 
 		//click on Trash tab
-		PageTrash pageTrash = (PageTrash)app.zPageOctopus.zToolbarPressButton(Button.B_TAB_TRASH);
+		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_TRASH);
 	
 		// Verify the mountpoint folder is now in the trash
 		ZAssert
