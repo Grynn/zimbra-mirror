@@ -36,6 +36,7 @@ import com.zimbra.cs.db.DbUtil;
 import com.zimbra.cs.db.OfflineDbPool;
 import com.zimbra.cs.db.OfflineVersions;
 import com.zimbra.cs.offline.backup.BackupTimer;
+import com.zimbra.cs.offline.util.HeapDumpTimer;
 import com.zimbra.cs.service.AuthProvider;
 import com.zimbra.cs.service.offline.OfflineZimbraAuthProvider;
 import com.zimbra.cs.store.file.Volume;
@@ -106,6 +107,7 @@ public class OfflineApplication extends ZimbraApplication {
             OfflineLog.offline.warn("Unable to update volume compression", e);
         }
         BackupTimer.initialize();
+        HeapDumpTimer.initialize();
     }
 
     public void initializeZimbraDb(boolean forMailboxd) throws ServiceException {

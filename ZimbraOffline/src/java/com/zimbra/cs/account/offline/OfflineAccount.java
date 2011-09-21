@@ -218,6 +218,10 @@ public class OfflineAccount extends Account {
         return OfflineProvisioning.getOfflineInstance().isExchangeAccount(this);
     }
 
+    public boolean isGalAccount() {
+        return OfflineProvisioning.getOfflineInstance().isGalAccount(this);
+    }
+
     public boolean isLocalAccount() {
         return localAccount == null; //the localAccount field will be null if this account is the local account
     }

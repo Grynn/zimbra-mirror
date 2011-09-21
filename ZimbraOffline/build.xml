@@ -69,6 +69,7 @@
   <property name="zimbra.index.dir" location="${zimbra.offline.data.dir}/index"/>
   <property name="zimbra.store.dir" location="${zimbra.offline.data.dir}/store"/>
   <property name="zimbra.sqlite.dir" location="${zimbra.offline.data.dir}/sqlite"/>
+  <property name="zimbra.heapdump.dir" location="${zimbra.offline.data.dir}/heapdump"/>
 
   <property name="build.zmprov" location="${build.dir}/data/zmprov.txt" />
 
@@ -658,6 +659,7 @@
         <copy tofile="${zimbra.offline.app.dir}/lib/libzimbra-native.so" file="../ZimbraServer/lib/libzimbra-native.so.Linux.i386" overwrite="true"/>
       </then>
     </if>
+    <mkdir dir="${zimbra.heapdump.dir}" />
   </target>
 
   <target name="offline-reset-the-world-part-2">
@@ -803,6 +805,8 @@
     <mkdir dir="${dist.data.dir}/data/tmp/jetty/service"/>
     <mkdir dir="${dist.data.dir}/data/tmp/jetty/zimbra"/>
     <mkdir dir="${dist.data.dir}/jetty/etc"/>
+
+    <mkdir dir="${dist.data.dir}/heapdump" />
 
     <copy file="${config.dir}/jetty.xml" todir="${dist.data.dir}/jetty/etc" overwrite="true"/>
     <copy tofile="${dist.data.dir}/bin/zdesktop" file="src/bin/zdesktop" overwrite="true"/>

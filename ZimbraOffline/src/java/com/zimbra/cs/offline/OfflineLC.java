@@ -125,6 +125,11 @@ public class OfflineLC {
     public static final KnownKey zdesktop_sync_io_exception_limit;
     public static final KnownKey zdesktop_sync_item_io_exception_limit;
     public static final KnownKey zdesktop_sync_io_exception_rate;
+    public static final KnownKey zdesktop_heapdump_ftp;
+    public static final KnownKey zdesktop_heapdump_dir;
+    public static final KnownKey zdesktop_heapdump_enabled;
+    public static final KnownKey zdesktop_heapdump_ftp_user;
+    public static final KnownKey zdesktop_heapdump_ftp_psw;
     
     static void init() {
         // This method is there to guarantee static initializer of this
@@ -413,6 +418,14 @@ public class OfflineLC {
         zdesktop_sync_item_io_exception_limit = new KnownKey("zdesktop_sync_item_io_exception_limit", "3");
         //percentage of io exceptions/total items synced which triggers abort
         zdesktop_sync_io_exception_rate = new KnownKey("zdesktop_sync_io_exception_rate", "50");
+
+        //by default disabled in localconfig
+        zdesktop_heapdump_enabled = new KnownKey("zdesktop_heapdump_enabled", "false");
+        zdesktop_heapdump_dir = new KnownKey("zdesktop_heapdump_dir", "${zimbra_home}/heapdump");
+        //ftp account used for uploading heap dumps
+        zdesktop_heapdump_ftp = new KnownKey("zdesktop_heapdump_ftp", "ftp.zimbra.com");
+        zdesktop_heapdump_ftp_user = new KnownKey("zdesktop_heapdump_ftp_user", "zdthrdump");
+        zdesktop_heapdump_ftp_psw = new KnownKey("zdesktop_heapdump_ftp_psw", "kvlprG");
     }
     
     public static String getFullVersion() {
