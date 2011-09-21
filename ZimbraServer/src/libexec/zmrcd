@@ -257,6 +257,27 @@ sub getHostList {
   return \@h;
 }
 
+sub isRsyncCmd {
+  my $cmd = shift;
+  if (defined($cmd) && $cmd ne '') {
+    my @parts = split(/\s+/, $cmd);
+    my $prog = $parts[0];
+    if ($prog =~ /rsync$/) {
+      if (($prog ne 'rsync') && ($prog ne '/opt/zimbra/rsync/bin/rsync')) {
+        logError("command '$prog' not allowed");
+        exit 1;
+      }
+      my $regex = $REGEX_CHECKED_COMMANDS{'rsync'}->{'regex'};
+      if ($cmd !~ /^$regex$/) {
+        logError("invalid arguments in command [$cmd]");
+        exit 1;
+      }
+      return 1;
+    }
+  }
+  return 0;
+}
+
 sub doHelp {
   foreach my $cm (sort keys %SIMPLE_COMMANDS) {
     print $cm, " -> ", $SIMPLE_COMMANDS{$cm}, "\n";
@@ -279,6 +300,13 @@ $| = 1;
 $SIG{ALRM} = \&handleALRM;
 open(LOG, ">>/opt/zimbra/log/zmrcd.log")
   if ($enable_logging eq "TRUE");
+
+# special case for rsync over ssh from a remote host
+my $originalCmd = $ENV{'SSH_ORIGINAL_COMMAND'};
+if (isRsyncCmd($originalCmd)) {
+  print LOG "exec'ing: $originalCmd\n" if ($enable_logging eq "TRUE");
+  exec($originalCmd);
+}
 
 while (<>) {
   trim($_);
