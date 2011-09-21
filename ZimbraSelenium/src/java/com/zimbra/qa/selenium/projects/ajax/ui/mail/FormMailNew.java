@@ -1,6 +1,6 @@
 package com.zimbra.qa.selenium.projects.ajax.ui.mail;
 
-import java.util.List;
+import java.util.*;
 
 import com.zimbra.qa.selenium.framework.core.SeleniumService;
 import com.zimbra.qa.selenium.framework.items.*;
@@ -9,6 +9,7 @@ import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.staf.Stafpostqueue;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
+import com.zimbra.qa.selenium.projects.ajax.ui.AutocompleteEntry.Icon;
 
 
 
@@ -746,4 +747,175 @@ public class FormMailNew extends AbsForm {
 	            sIsElementPresent(Locators.zAttachmentText + "'" + name + "'" + ")");	    		   
 	}
 
+	/**
+	 * Autocompleting is more complicated than zFillField().  Use this
+	 * method when filling out a field that will autocomplete.
+	 * @param field The form field to use (to, cc, bcc, etc.)
+	 * @param value The partial string to use to autocomplete
+	 * @throws HarnessException 
+	 */
+	public List<AutocompleteEntry> zAutocompleteFillField(Field field, String value) throws HarnessException {
+		logger.info(myPageName() + " zAutocompleteFillField("+ field +", "+ value +")");
+
+		tracer.trace("Set "+ field +" to "+ value);
+
+		String locator = null;
+		
+		if ( field == Field.To ) {
+			
+			locator = Locators.zToField;
+			
+			// FALL THROUGH
+			
+		} else if ( field == Field.Cc ) {
+			
+			locator = Locators.zCcField;
+			
+			// FALL THROUGH
+			
+		} else if ( field == Field.Bcc ) {
+			
+			locator = Locators.zBccField;
+			
+			// Make sure the BCC field is showing
+			if ( !zBccIsActive() ) {
+				this.zToolbarPressButton(Button.B_SHOWBCC);
+			}
+			
+			// FALL THROUGH
+			
+		} else {
+			throw new HarnessException("Unsupported field: "+ field);
+		}
+		
+		if ( locator == null ) {
+			throw new HarnessException("locator was null for field "+ field);
+		}
+		
+		
+		// Make sure the button exists
+		if ( !this.sIsElementPresent(locator) )
+			throw new HarnessException("Field is not present field="+ field +" locator="+ locator);
+		
+		// Seems that the client can't handle filling out the new mail form too quickly
+		// Click in the "To" fields, etc, to make sure the client is ready
+		this.sFocus(locator);
+		this.zClick(locator);
+		this.zWaitForBusyOverlay();
+
+		// Instead of sType() use zKeyboard
+		this.zKeyboard.zTypeCharacters(value);
+		
+		this.zWaitForBusyOverlay();
+
+		return (zAutocompleteListGetEntries());
+		
+	}
+
+	
+	/**
+
+	  <div x-display="block" parentid="z_shell" class="ZmAutocompleteListView" style=
+	  "position: absolute; overflow: auto; display: block; left: 263px; top: 132px; z-index: 750;"
+	  id="ZmAutocompleteListView_2">
+	    <table id="DWT117" border="0" cellpadding="0" cellspacing="0">
+	      <tbody>
+	        <tr id="ZmAutocompleteListView_2_acRow_0" class="acRow-selected">
+	          <td class="Icon">
+	            <div class="ImgGALContact" style=""></div>
+	          </td>
+
+	          <td>"James Smith" &lt;enus13166322588223@testdomain.com&gt;</td>
+
+	          <td class="Link"></td>
+
+	          <td class="Link"></td>
+	        </tr>
+
+	        <tr id="ZmAutocompleteListView_2_acRow_1" class="acRow">
+	          <td class="Icon">
+	            <div class="ImgGALContact" style=""></div>
+	          </td>
+
+	          <td>"James Smith" &lt;enus13166323904003@testdomain.com&gt;</td>
+
+	          <td class="Link"></td>
+
+	          <td class="Link"></td>
+	        </tr>
+
+	        <tr id="ZmAutocompleteListView_2_acRow_2" class="acRow">
+	          <td class="Icon">
+	            <div class="ImgGALContact" style=""></div>
+	          </td>
+
+	          <td>"James13166324873063 Smith13166324873064"
+	          &lt;enus13166324873065@testdomain.com&gt;</td>
+
+	          <td class="Link"></td>
+
+	          <td class="Link"></td>
+	        </tr>
+
+
+
+		 */
+
+	protected AutocompleteEntry parseAutocompleteEntry(String itemLocator) throws HarnessException {
+		logger.info(myPageName() + " parseAutocompleteEntry()");
+
+		String locator = null;
+		
+		// Get the icon
+		locator = itemLocator + " td.Icon div@class";
+		String image = this.sGetAttribute(locator);
+		
+		// Get the address
+		locator = itemLocator + " td + td";
+		String address = this.sGetText(locator);
+		
+		AutocompleteEntry entry = new AutocompleteEntry(
+									Icon.getIconFromImage(image), 
+									address, 
+									false,
+									itemLocator);
+
+		return (entry);
+	}
+	
+	public List<AutocompleteEntry> zAutocompleteListGetEntries() throws HarnessException {
+		logger.info(myPageName() + " zAutocompleteListGetEntries()");
+		
+		List<AutocompleteEntry> items = new ArrayList<AutocompleteEntry>();
+		
+		String containerLocator = "css=div[id='ZmAutocompleteListView_2']";
+
+		if ( !this.sIsElementPresent(containerLocator) )
+			throw new HarnessException("Autocomplete not visible!");
+		
+
+		//		logger.info(this.sGetHtmlSource());		// For debugging
+
+		
+		String rowsLocator = containerLocator + " tr[id^='ZmAutocompleteListView_2_acRow']";
+		int count = this.sGetCssCount(rowsLocator);
+		for (int i = 0; i < count; i++) {
+			
+			items.add(parseAutocompleteEntry("css=tr[id='ZmAutocompleteListView_2_acRow_"+ i +"']"));
+			
+		}
+		
+		return (items);
+	}
+
+	public void zAutocompleteSelectItem(AutocompleteEntry entry) throws HarnessException {
+		logger.info(myPageName() + " zAutocompleteSelectItem("+ entry +")");
+		
+		// Click on the address
+		this.sMouseDown(entry.getLocator() + " td + td");
+		this.zWaitForBusyOverlay();
+		
+	}
+	
+	
 }
