@@ -153,6 +153,7 @@ function (path, isAddHistory, skipNotify, kbNavEvent, noFocus, refresh) {
     var dataItem = this.getTreeItemDataByPath(path);
     if (dataItem.isAlias()) {
         path = dataItem.getRealPath();
+        isAddHistory = false;
     }
     var rootDataItem;
     if (dataItem.isLeaf() && dataItem.parentObject) {
@@ -207,7 +208,7 @@ function (showRootNode) {
     this.clearItems();
     this.curentRoot = null;
     this.currentRelated = null;
-    this.currentRoot = this._buildNodeItem(showRootNode);
+    this.currentRoot = this._buildNodeItem(showRootNode, true);
     this.currentRoot.setExpanded(true);
     if (showRootNode.relatedObject.length != 0) {
         this.currentRelated = this._buildNodeItem(this._getDefaultRelated(showRootNode));
@@ -228,6 +229,7 @@ function (treeDataItem) {
             id: treeDataItem.id + "_related",
             text:ZaMsg.OVP_related
     });
+    treeDataItem.addChild(related);
     for (var i = 0; i < treeDataItem.relatedObject.length; i++) {
         var currentObject =treeDataItem.relatedObject[i];
         currentObject.parent = treeDataItem.parent + ZaTree.SEPERATOR + ZaMsg.OVP_related;
@@ -243,6 +245,7 @@ function (treeDataItem) {
             id: treeDataItem.id + "_recent",
             text:ZaMsg.OVP_recent
     });
+    treeDataItem.addChild(recent);
     for (var i = 0; i < treeDataItem.recentObject.length; i++) {
         var currentObject =treeDataItem.recentObject[i];
         currentObject.parent = treeDataItem.parent + ZaTree.SEPERATOR + ZaMsg.OVP_recent;
@@ -252,7 +255,7 @@ function (treeDataItem) {
 }
 
 ZaTree.prototype._buildNodeItem =
-function(showRootNode) {
+function(showRootNode, doCheck) {
     var ti, nextTi, key, currentRoot;
     currentRoot =  new ZaTreeItem({parent:this,className:"overviewHeader",id:showRootNode.id, forceNotifySelection:true});
 	currentRoot.enableSelection(false);
@@ -266,6 +269,13 @@ function(showRootNode) {
     var i, j;
     for (i = 0; i < showRootNode.childrenData.size(); i++) {
         var currentAddNode =  showRootNode.childrenData.get(i);
+        // TODO improved latter
+        if (doCheck) {
+            if (currentAddNode.text == ZaMsg.OVP_related)
+                continue;
+            if (currentAddNode.text == ZaMsg.OVP_recent)
+                continue;
+        }
         ti = new ZaTreeItem({parent: currentRoot,className:"AdminTreeItem",id:currentAddNode.id});
         ti.setCount(currentAddNode.count);
         ti.setText(currentAddNode.text);
