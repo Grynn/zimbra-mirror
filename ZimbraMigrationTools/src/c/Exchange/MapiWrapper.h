@@ -3,6 +3,9 @@
 #pragma once
 #include "MapiMigration.h"
 #include "folderObject.h"
+#include "..\Exchange\MAPIAccessAPI.h"
+
+
 
 class ATL_NO_VTABLE CMapiWrapper: public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CMapiWrapper,

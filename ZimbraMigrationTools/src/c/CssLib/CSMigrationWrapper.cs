@@ -108,15 +108,18 @@ namespace CssLib
 
         public void Initalize(string HostName, string Port, string AdminAccount, string UserID, string Mailserver, string AdminID)
         {
-            //CreateConfig(ConfigXMLFile);            
-            //MailWrapper.ConnectToServer(HostName,Port,AdminAccount);
+            //CreateConfig(ConfigXMLFile);   
+            MailWrapper = new Exchange.MapiWrapper();
+            MailWrapper.ConnectToServer(Mailserver, Port, AdminID);
 
             //Initilaize user object
 
 
-            O1.InitializeUser(Mailserver, AdminID, UserID, "MAPI");
+           // O1.InitializeUser(Mailserver, AdminID, UserID, "MAPI");
 
         }
+
+        
 
         public void Migrate(string MailOptions)
         {
@@ -330,6 +333,10 @@ namespace CssLib
 
             if (!UIflag)
             {
+
+                O1.InitializeUser("", "", Acct.AccountID, "MAPI");
+
+
                 object[] objectArray;
                 objectArray = O1.GetFolderObjects();
 

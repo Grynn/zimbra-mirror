@@ -44,11 +44,12 @@ namespace ZimbraMigrationConsole
                         myXmlConfig.GetUserList();
                         if (myXmlConfig.UserList.Count > 0)
                         {
+                            TestObj.Initalize(myXmlConfig.ConfigObj.zimbraServer.ZimbraHostname, myXmlConfig.ConfigObj.zimbraServer.Port, myXmlConfig.ConfigObj.zimbraServer.ZimbraAdminID, "", myXmlConfig.ConfigObj.mailServer.SourceHostname, myXmlConfig.ConfigObj.mailServer.SourceAdminID);
                             foreach (MVVM.Model.Users user in myXmlConfig.UserList)
                             {
 
                                // TestObj.InitializeMailClient(myXmlConfig.ConfigObj.mailServer.SourceHostname,myXmlConfig.ConfigObj.mailServer.SourceAdminID,myXmlConfig.ConfigObj.mailServer.SourceAdminID);
-                                TestObj.Initalize(myXmlConfig.ConfigObj.zimbraServer.ZimbraHostname, myXmlConfig.ConfigObj.zimbraServer.Port, myXmlConfig.ConfigObj.zimbraServer.ZimbraAdminID, user.UserName, myXmlConfig.ConfigObj.mailServer.SourceHostname, myXmlConfig.ConfigObj.mailServer.SourceAdminID);
+                                
 
                                 /***************************
                                  * 
@@ -94,7 +95,7 @@ namespace ZimbraMigrationConsole
                                     System.Console.WriteLine();
 
                                     //userAcct.StartMigration(user.UserName, myXmlConfig.ConfigObj.importOptions.Mail.ToString());
-                                    Test.test(acctName,TestObj);
+                                    Test.test(acctName,TestObj,user.UserName);
 
 
                                     ///////////////////
@@ -132,7 +133,7 @@ namespace ZimbraMigrationConsole
                                         System.Console.WriteLine();
                                         System.Console.WriteLine();
                                        // userAcct.StartMigration(user.UserName, myXmlConfig.ConfigObj.importOptions.Mail.ToString());
-                                        Test.test(acctName,TestObj);
+                                        Test.test(acctName, TestObj, user.UserName);
                                         System.Console.WriteLine("......... \n");
                                         Thread.Sleep(9000);
                                     }

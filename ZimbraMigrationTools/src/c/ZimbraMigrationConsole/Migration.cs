@@ -8,11 +8,12 @@ namespace ZimbraMigrationConsole
 {
     class Migration
     {
-        public void test(string accountname,object Test)
+        public void test(string accountname,object Test,string accountid)
         {
 
             MigrationAccount MyAcct = new MigrationAccount();
             MyAcct.Accountname = accountname;
+            MyAcct.AccountID = accountid;
             MyAcct.OnChanged +=
                new MigrationObjectEventHandler(i_OnChanged1);
 

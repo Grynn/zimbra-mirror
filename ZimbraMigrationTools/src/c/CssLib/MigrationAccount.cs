@@ -12,13 +12,14 @@ namespace CssLib
         {
             Accountname = "";
             Accountnum = -1;
+            AccountID = "";
 
             migrationFolders = new List<MigrationFolder>();
         }
 
      	private string AccountName;
         private int AccountNum;
-
+        
         private Int64 TotalMails;
         private Int64 TotalContacts;
         private Int64 TotalRules;
@@ -32,6 +33,8 @@ namespace CssLib
         private ProblemInfo lastProblemInfo;
 
         public List<MigrationFolder> migrationFolders;
+        public string AccountID;
+
 
         /*public MigrationFolder MigrationFolders
         {
