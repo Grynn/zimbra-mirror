@@ -29,6 +29,7 @@ namespace CssLib
 
 
         Exchange.UserObject O1;
+        ZimbraAPI api;
 
 
 
@@ -48,6 +49,7 @@ namespace CssLib
         public CSMigrationwrapper()
         {
             O1 = new Exchange.UserObject();
+            api = new ZimbraAPI();
         }
 
 
@@ -109,8 +111,11 @@ namespace CssLib
         public void Initalize(string HostName, string Port, string AdminAccount, string UserID, string Mailserver, string AdminID)
         {
             //CreateConfig(ConfigXMLFile);   
+            int status =0;
             MailWrapper = new Exchange.MapiWrapper();
             MailWrapper.ConnectToServer(Mailserver, Port, AdminID);
+
+            status = api.Logon(HostName, Port, AdminAccount, "test123", true);
 
             //Initilaize user object
 
@@ -348,7 +353,7 @@ namespace CssLib
                 long id = Folders[0].Id;
 
                 string path = Folders[0].ParentPath;
-                ZimbraAPI api = new ZimbraAPI();
+               // ZimbraAPI api = new ZimbraAPI();
                 foreach (folderObject F1 in Folders)
                 {
                     if (F1.Id == 0)

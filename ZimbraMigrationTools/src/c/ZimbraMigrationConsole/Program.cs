@@ -44,7 +44,13 @@ namespace ZimbraMigrationConsole
                         myXmlConfig.GetUserList();
                         if (myXmlConfig.UserList.Count > 0)
                         {
-                            TestObj.Initalize(myXmlConfig.ConfigObj.zimbraServer.ZimbraHostname, myXmlConfig.ConfigObj.zimbraServer.Port, myXmlConfig.ConfigObj.zimbraServer.ZimbraAdminID, "", myXmlConfig.ConfigObj.mailServer.SourceHostname, myXmlConfig.ConfigObj.mailServer.SourceAdminID);
+                            if (myXmlConfig.ConfigObj.OutlookProfile != "")
+                            {
+                                //profile migration
+                                TestObj.Initalize(myXmlConfig.ConfigObj.zimbraServer.ZimbraHostname, myXmlConfig.ConfigObj.zimbraServer.Port, myXmlConfig.ConfigObj.zimbraServer.ZimbraAdminID, myXmlConfig.ConfigObj.OutlookProfile, "", "");
+                            }
+                            else
+                                TestObj.Initalize(myXmlConfig.ConfigObj.zimbraServer.ZimbraHostname, myXmlConfig.ConfigObj.zimbraServer.Port, myXmlConfig.ConfigObj.zimbraServer.ZimbraAdminID, "", myXmlConfig.ConfigObj.mailServer.SourceHostname, myXmlConfig.ConfigObj.mailServer.SourceAdminID);
                             foreach (MVVM.Model.Users user in myXmlConfig.UserList)
                             {
 
