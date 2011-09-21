@@ -101,9 +101,9 @@ ZaHelpView.myXFormModifier = function(xFormObject) {
 					},
 					{type:_SPACER_, colSpan:"*"},					
 					{type:_OUTPUT_, cssStyle:"font-size:12px;", label:null, value:ZaMsg.HELP_PAGE_3, 
-					 cssStyle:"padding-right:10px;padding-left:10px;"},
+					 cssStyle:"padding-right:10px;padding-left:10px;",containerCssStyle: "width:50%;"},
 					{type:_OUTPUT_, cssStyle:"font-size:12px;", label:null, value:ZaMsg.HELP_PAGE_5,
-					 cssStyle:"padding-right:10px;padding-left:10px;"},
+					 cssStyle:"padding-right:10px;padding-left:10px;",containerCssStyle: "width:50%;"},
 					{type:_SEPARATOR_, colSpan:1, cssClass:"helpSeparator"},
 					{type:_SEPARATOR_, colSpan:1, cssClass:"helpSeparator"},
 
