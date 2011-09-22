@@ -91,7 +91,9 @@ public class PageSharing extends AbsTab {
 
 		String locator = Locators.zTabSharing.locator;
 
-		zWaitForElementPresent(locator);
+		if(!zWaitForElementPresent(locator,"5000")){
+			throw new HarnessException(locator + " Not Present!");
+		}
 
 		// Click on Sharing tab
 		zClickAt(locator, "0,0");

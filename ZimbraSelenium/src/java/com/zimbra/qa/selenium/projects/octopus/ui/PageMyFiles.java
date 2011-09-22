@@ -89,7 +89,9 @@ public class PageMyFiles extends AbsTab {
 		
 		String locator = Locators.zTabMyFiles.locator;
 
-		zWaitForElementPresent(locator);
+		if(!zWaitForElementPresent(locator,"5000")){
+			throw new HarnessException(locator + " Not Present!");
+		}
 
 		// Click on My Files tab
 		zClickAt(locator, "0,0");
