@@ -234,6 +234,50 @@ public class PageAddNewAccount extends AbsTab{
    public DesktopAccountItem zAddZimbraImapAccountThruUI(String zimbraEmailAddress,
          String zimbraPassword, String serverName, boolean sendSsl, String sendPort)
    throws HarnessException {
+      return zAddZimbraImapAccountThruUI(
+            null,
+            zimbraEmailAddress,
+            zimbraPassword,
+            serverName,
+            sendSsl,
+            sendPort);
+   }
+
+   /**
+    * Adding Zimbra POP Account through UI Interaction
+    * @param zimbraEmailAddress Zimbra Email address to be added
+    * @param zimbraPassword Zimbra Password to be added
+    * @param serverName ZCS server that hosts the Zimbra account
+    * @param sendSsl Sending Mail through SSL?
+    * @param sendPort Port for sending mail
+    * @return DestkopAccountItem of added Zimbra POP account
+    * @throws HarnessException
+    */
+   public DesktopAccountItem zAddZimbraPopAccountThruUI(String zimbraEmailAddress,
+         String zimbraPassword, String serverName, boolean sendSsl, String sendPort)
+   throws HarnessException {
+      return zAddZimbraPopAccountThruUI(null,
+            zimbraEmailAddress,
+            zimbraPassword,
+            serverName,
+            sendSsl,
+            sendPort);
+   }
+
+   /**
+    * Adding Zimbra IMAP Account through UI Interaction
+    * @param accountName Account name to be given to ZD Client
+    * @param zimbraEmailAddress Zimbra Email address to be added
+    * @param zimbraPassword Zimbra Password to be added
+    * @param serverName ZCS server that hosts the Zimbra account
+    * @param sendSsl Sending Mail through SSL?
+    * @param sendPort Port for sending mail
+    * @return DestkopAccountItem of added Zimbra IMAP account
+    * @throws HarnessException
+    */
+   public DesktopAccountItem zAddZimbraImapAccountThruUI(String accountName, String zimbraEmailAddress,
+         String zimbraPassword, String serverName, boolean sendSsl, String sendPort)
+   throws HarnessException {
       zNavigateTo();
 
       DesktopAccountItem desktopAccountItem = DesktopAccountItem.generateDesktopImapAccountItem(
@@ -249,6 +293,12 @@ public class PageAddNewAccount extends AbsTab{
             zimbraEmailAddress,
             zimbraPassword);
 
+      if (accountName != null) {
+         if (!accountName.equals("")) {
+            desktopAccountItem.accountName = accountName;
+         }
+      }
+
       FormAddImapAccount accountForm = (FormAddImapAccount)((AppAjaxClient)MyApplication).
             zPageAddNewAccount.zDropDownListSelect(DROP_DOWN_OPTION.IMAP);
       accountForm.zFill(desktopAccountItem);
@@ -260,6 +310,7 @@ public class PageAddNewAccount extends AbsTab{
 
    /**
     * Adding Zimbra POP Account through UI Interaction
+    * @param accountName Account name to be given to ZD Client
     * @param zimbraEmailAddress Zimbra Email address to be added
     * @param zimbraPassword Zimbra Password to be added
     * @param serverName ZCS server that hosts the Zimbra account
@@ -268,7 +319,7 @@ public class PageAddNewAccount extends AbsTab{
     * @return DestkopAccountItem of added Zimbra POP account
     * @throws HarnessException
     */
-   public DesktopAccountItem zAddZimbraPopAccountThruUI(String zimbraEmailAddress,
+   public DesktopAccountItem zAddZimbraPopAccountThruUI(String accountName, String zimbraEmailAddress,
          String zimbraPassword, String serverName, boolean sendSsl, String sendPort)
    throws HarnessException {
       zNavigateTo();
@@ -285,6 +336,12 @@ public class PageAddNewAccount extends AbsTab{
             sendPort,
             zimbraEmailAddress,
             zimbraPassword);
+
+      if (accountName != null) {
+         if (!accountName.equals("")) {
+            desktopAccountItem.accountName = accountName;
+         }
+      }
 
       FormAddPopAccount accountForm = (FormAddPopAccount)((AppAjaxClient)MyApplication).
             zPageAddNewAccount.zDropDownListSelect(DROP_DOWN_OPTION.POP);

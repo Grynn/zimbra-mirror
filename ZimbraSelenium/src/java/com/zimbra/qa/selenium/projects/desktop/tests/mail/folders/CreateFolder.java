@@ -7,7 +7,6 @@ import org.testng.annotations.*;
 
 import com.zimbra.qa.selenium.framework.items.DesktopAccountItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
-import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount.SOAP_DESTINATION_HOST_TYPE;
@@ -218,6 +217,7 @@ public class CreateFolder extends AjaxCommonTest {
 	   ZimbraAccount zcsAccount = ZimbraAccount.AccountZWC();
 
 	   DesktopAccountItem accountItem = app.zPageAddNewAccount.zAddZimbraImapAccountThruUI(
+	         AjaxCommonTest.defaultAccountName,
 	         ZimbraAccount.AccountZWC().EmailAddress,
             ZimbraAccount.AccountZWC().Password,
             ZimbraSeleniumProperties.getStringProperty("server.host", "localhost"),
@@ -276,6 +276,7 @@ public class CreateFolder extends AjaxCommonTest {
 	   ZimbraAccount zcsAccount = ZimbraAccount.AccountZWC();
 
 	   DesktopAccountItem accountItem = app.zPageAddNewAccount.zAddZimbraPopAccountThruUI(
+	         AjaxCommonTest.defaultAccountName,
 	         ZimbraAccount.AccountZWC().EmailAddress,
 	         ZimbraAccount.AccountZWC().Password,
 	         ZimbraSeleniumProperties.getStringProperty("server.host", "localhost"),
@@ -297,6 +298,129 @@ public class CreateFolder extends AjaxCommonTest {
 	                  Action.A_RIGHTCLICK,
 	                  Button.B_TREE_NEWFOLDER,
 	                  folderItem);
+
+	   createFolderDialog.zEnterFolderName(_folderName);
+	   createFolderDialog.zClickButton(Button.B_OK);
+
+	   _folderIsCreated = true;
+
+	   // Force-sync
+	   GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+	   app.zPageMain.zWaitForDesktopLoadingSpinner(5000);
+
+	   // Make sure the folder was created on the Desktop Server
+	   FolderItem desktopFolder = FolderItem.importFromSOAP(app
+	         .zGetActiveAccount(), _folderName,
+	         SOAP_DESTINATION_HOST_TYPE.CLIENT,
+	         app.zGetActiveAccount().EmailAddress);
+
+	   ZAssert.assertNotNull(desktopFolder, "Verify the new form opened");
+	   ZAssert.assertEquals(desktopFolder.getName(), _folderName,
+	         "Verify the server and client folder names match");
+
+	   // Make sure the folder was created on the ZCS server
+	   FolderItem folder = null;
+
+	   try {
+	      folder = FolderItem.importFromSOAP(zcsAccount,
+	            _folderName);
+	   } catch (HarnessException e) {
+	      // This is expected because the verification is to get no folder
+	      // from import SOAP
+	   }
+
+	   ZAssert.assertNull(folder, "Verify the folder in ZCS server is not created");
+	}
+
+	@Test(description = "Create mail folder for IMAP Zimbra Account through ZD", groups = { "functional2" })
+	public void CreateMailFolderImapZimbraAccountThroughZD()
+	throws HarnessException {
+	   app.zPageLogin.zNavigateTo();
+	   app.zPageLogin.zRemoveAccount();
+	   ZimbraAccount zcsAccount = ZimbraAccount.AccountZWC();
+
+	   DesktopAccountItem accountItem = app.zPageAddNewAccount.zAddZimbraImapAccountThruUI(
+	         AjaxCommonTest.defaultAccountName,
+	         ZimbraAccount.AccountZWC().EmailAddress,
+	         ZimbraAccount.AccountZWC().Password,
+	         ZimbraSeleniumProperties.getStringProperty("server.host", "localhost"),
+	         true,
+	         "465");
+
+	   ZimbraAccount account = new ZimbraAccount(accountItem.emailAddress,
+	         accountItem.password);
+	   _nonZimbraAccountSetup(account);
+
+	   _folderName = "folder" + ZimbraSeleniumProperties.getUniqueString();
+
+	   FolderItem folderItem = FolderItem.importFromSOAP(app
+	         .zGetActiveAccount(), FolderItem.SystemFolder.UserRoot,
+	         _soapDestination, app.zGetActiveAccount().EmailAddress);
+
+	   DialogCreateFolder createFolderDialog = (DialogCreateFolder)
+	         app.zPageMail.zListItem(
+	               Action.A_RIGHTCLICK,
+	               Button.B_TREE_NEWFOLDER,
+	               folderItem);
+
+	   createFolderDialog.zEnterFolderName(_folderName);
+	   createFolderDialog.zClickButton(Button.B_OK);
+
+	   _folderIsCreated = true;
+
+	   // Force-sync
+	   GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+	   app.zPageMain.zWaitForDesktopLoadingSpinner(5000);
+
+	   // Make sure the folder was created on the Desktop Server
+	   FolderItem desktopFolder = FolderItem.importFromSOAP(app
+	         .zGetActiveAccount(), _folderName,
+	         SOAP_DESTINATION_HOST_TYPE.CLIENT,
+	         app.zGetActiveAccount().EmailAddress);
+
+	   ZAssert.assertNotNull(desktopFolder, "Verify the new form opened");
+	   ZAssert.assertEquals(desktopFolder.getName(), _folderName,
+	         "Verify the server and client folder names match");
+
+	   // Make sure the folder was created on the ZCS server
+	   FolderItem folder = FolderItem.importFromSOAP(zcsAccount,
+	         _folderName);
+
+	   ZAssert.assertNotNull(folder, "Verify the new form opened");
+	   ZAssert.assertEquals(folder.getName(), _folderName,
+	         "Verify the server and client folder names match");
+	}
+
+	@Test(description = "Create mail folder for POP Zimbra Account through ZD", groups = { "functional2" })
+	public void CreateMailFolderPopZimbraAccountThroughZD()
+	throws HarnessException {
+	   app.zPageLogin.zNavigateTo();
+	   app.zPageLogin.zRemoveAccount();
+	   ZimbraAccount zcsAccount = ZimbraAccount.AccountZWC();
+
+	   DesktopAccountItem accountItem = app.zPageAddNewAccount.zAddZimbraPopAccountThruUI(
+	         AjaxCommonTest.defaultAccountName,
+	         ZimbraAccount.AccountZWC().EmailAddress,
+	         ZimbraAccount.AccountZWC().Password,
+	         ZimbraSeleniumProperties.getStringProperty("server.host", "localhost"),
+	         true,
+	         "465");
+
+	   ZimbraAccount account = new ZimbraAccount(accountItem.emailAddress,
+	         accountItem.password);
+	   _nonZimbraAccountSetup(account);
+
+	   _folderName = "folder" + ZimbraSeleniumProperties.getUniqueString();
+
+	   FolderItem folderItem = FolderItem.importFromSOAP(app
+	         .zGetActiveAccount(), FolderItem.SystemFolder.UserRoot,
+	         _soapDestination, app.zGetActiveAccount().EmailAddress);
+
+	   DialogCreateFolder createFolderDialog = (DialogCreateFolder)
+	         app.zPageMail.zListItem(
+	               Action.A_RIGHTCLICK,
+	               Button.B_TREE_NEWFOLDER,
+	               folderItem);
 
 	   createFolderDialog.zEnterFolderName(_folderName);
 	   createFolderDialog.zClickButton(Button.B_OK);
