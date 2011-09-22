@@ -1,44 +1,44 @@
 <?php
+require_once("zd-versions.php");
+
 // update url  : https://www.zimbra.com/aus/zdesktop2/update.php
 
-$download_url_prefix = "http://files2.zimbra.com/downloads/zdesktop";
-$details_url = "http://www.zimbra.com/support/documentation/zd-documentation.html";
-$license_url = "http://www.zimbra.com/license/zimbra-public-eula-2-3.html";
-$version = "@version@";
-$extension_version = "2.0.1";
-$buildid = @buildid@;
-
-$size_win32 = @size_win32@;
-$size_macos = @size_macos@;
-$size_linux = @size_linux@;
-
-$hash_win32 = "@hash_win32@";
-$hash_macos = "@hash_macos@";
-$hash_linux = "@hash_linux@";
+$buildid = 0;
 
 $oldchn = $_REQUEST['chn'];
 $oldver = $_REQUEST['ver'];
 $oldbid = $_REQUEST['bid'];
-$target = $_REQUEST['bos'];
 
-$file_media;
-$size;
-$hash;
-if ($target == "macos") {
-  $file_media = "@media_macos@";
-  $size = $size_macos;
-  $hash = $hash_macos;
-} else if ($target == "linux") {
-  $file_media = "@media_linux@";
-  $size = $size_linux;
-  $hash = $hash_linux;
-} else {
-  $file_media = "@media_win32@";
-  $size = $size_win32;
-  $hash = $hash_win32;
+$os = "macos"; //remove after testing
+
+if (isset($_REQUEST["bos"])) {
+  $os = $_REQUEST['bos'];
 }
 
-$download_url = $download_url_prefix . "/" . $version . "/b" . $buildid . "/" . $file_media;
+$channels = array("release");
+
+if (strcasecmp($oldchn, "beta") == 0) {
+  $channels = array("beta","release");
+}
+
+$type = "ZD";
+
+$zd = $versions["ZD"];
+foreach($channels as &$chn) {
+  if (!empty($zd[$chn])) {
+    if (!empty($zd[$chn][$os])) {
+      if ($zd[$chn][$os]["buildnum"] > $buildid)
+      {
+        $currentBuild = $zd[$chn][$os];
+        $buildid = $currentBuild["buildnum"];
+      }
+    }
+  }
+} 
+
+
+
+$download_url = $currentBuild["download_url_prefix"] . "/" . $currentBuild["shortversion"] . "/b" . $buildid . "/" . $currentBuild["file_media"];
 
 header('Content-Type: text/xml');
 header('Cache-Control: no-cache');
@@ -47,8 +47,8 @@ echo "<?xml version=\"1.0\"?>\n";
 ?>
 <updates>
 <?php if ($buildid > $oldbid) { ?>
-  <update type="minor" version="<?php echo $version?>" extensionVersion="<?php echo $extension_version?>" detailsURL="<?php echo $details_url?>" licenseURL="<?php echo $license_url?>">
-    <patch type="complete" URL="<?php echo $download_url?>" hashFunction="md5" hashValue="<?php echo $hash?>" size="<?php echo $size?>"/>
+  <update type="minor" version="<?php echo $currentBuild["shortversion"]?>" extensionVersion="<?php echo $currentBuild["extension_version"]?>" detailsURL="<?php echo $currentBuild["details_url"]?>" licenseURL="<?php echo $currentBuild["license_url"]?>">
+    <patch type="complete" URL="<?php echo $download_url?>" hashFunction="md5" hashValue="<?php echo $currentBuild["hash"]?>" size="<?php echo $currentBuild["size"]?>"/>
   </update>
 <?php } ?>
 </updates>

@@ -108,6 +108,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     public static final String A_zimbraPrefOfflineBackupPath = "zimbraPrefOfflineBackupPath";
     public static final String A_zimbraPrefOfflineBackupKeep = "zimbraPrefOfflineBackupKeep";
     public static final String A_offlineBackupLastSuccess = "offlineBackupLastSuccess";
+    public static final String A_zimbraPrefOfflineUpdateChannel = "zimbraPrefOfflineUpdateChannel";
     public static final String A_zimbraPrefOfflineAttrProxyMode = "zimbraPrefOfflineAttrProxyMode";
     public static final String A_zimbraPrefOfflineHttpProxyHost = "zimbraPrefOfflineHttpProxyHost";
     public static final String A_zimbraPrefOfflineHttpProxyPort = "zimbraPrefOfflineHttpProxyPort";
@@ -125,6 +126,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     public static final String A_offlineYContactTokenSessionHandle = "offlineYahooContactTokenSessionHandle";
     public static final String A_offlineYContactGuid = "offlineYahooContactGuid";
     public static final String A_offlineYContactVerifier = "offlineYahooContactVerifier";
+
+    private static final String CHN_BETA = "beta";
 
     public enum EntryType {
         ACCOUNT("acct"), DATASOURCE("dsrc", true), IDENTITY("idnt", true), SIGNATURE("sig", true), COS("cos"), CONFIG("conf"), ZIMLET("zmlt");
@@ -507,7 +510,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             A_zimbraPrefOfflineSocksProxyHost,
             A_zimbraPrefOfflineSocksProxyPort,
             A_zimbraPrefOfflineSocksProxyUsername,
-            A_zimbraPrefOfflineSocksProxyPassword
+            A_zimbraPrefOfflineSocksProxyPassword,
+            A_zimbraPrefOfflineUpdateChannel
     ));
 
     @Override
@@ -982,6 +986,9 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         String webappUri = account.getAttr(A_offlineWebappUri, null);
         if (webappUri == null || !webappUri.equals(uri))
             setAccountAttribute(account, A_offlineWebappUri, uri);
+        if (OfflineLC.zdesktop_relabel.value().equalsIgnoreCase(CHN_BETA) && !CHN_BETA.equalsIgnoreCase(account.getAttr(A_zimbraPrefOfflineUpdateChannel, null))) {
+            setAccountAttribute(account, A_zimbraPrefOfflineUpdateChannel, CHN_BETA);
+        }
         return account;
     }
 

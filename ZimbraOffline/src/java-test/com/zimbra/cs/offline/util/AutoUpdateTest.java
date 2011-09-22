@@ -15,6 +15,8 @@
 package com.zimbra.cs.offline.util;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import junit.framework.Assert;
 
@@ -23,6 +25,7 @@ import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.dom4j.DocumentException;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.zimbra.common.httpclient.HttpClientUtil;
@@ -33,7 +36,7 @@ import com.zimbra.cs.offline.OfflineLog;
 
 public class AutoUpdateTest {
 
-    static final String BASE_UPDATE_URL = "http://localhost/update.php"; //for local testing
+    static final String BASE_UPDATE_URL = "http://localhost/zd-update.php"; //for local testing
 //    static final String BASE_UPDATE_URL = "https://www.zimbra.com/aus/zdesktop2/update.php"; //real update site; only updated once build is RTM
 
     static HttpClient httpClient = ZimbraHttpConnectionManager.getExternalHttpConnMgr().newHttpClient();
@@ -42,21 +45,109 @@ public class AutoUpdateTest {
     static final String MEDIA_WIN = "_win32.msi";
     static final String MEDIA_LINUX = "_linux_i686.tgz";
     
-    //these values change with every release
-    static final String EXPECTED_FILE_VERSION = "7_1_2_ga";
-    static final String EXPECTED_A_VERSION = "7.1.2";
-    static final String EXPECTED_TYPE = "minor";
 
     //these values change with every build
-    static final int EXPECTED_BUILD = 10978;
-    static final String HASH_MAC = "0204af2635a4a6444b0f7e880ccce7c9";
-    static final int SIZE_MAC = 75922756;
-    static final String HASH_WIN = "d9943a891b194fdeea18ff1c7c908b50";
-    static final int SIZE_WIN = 95958528;
-    static final String HASH_LINUX = "2add86bf0469e9e0b3f1e66d2507e064";
-    static final int SIZE_LINUX = 110755660;
     
-    static final String EXPECTED_FILE_PREFIX = "zdesktop_"+EXPECTED_FILE_VERSION+"_b"+EXPECTED_BUILD;
+    static class UpdateInfo {
+        int expectedBuild;
+        String expectedFileVersion;
+        String expectedAttrVersion;
+        String expectedType;
+        String expectedFilePrefix;
+        
+        public int getExpectedBuild() {
+            return expectedBuild;
+        }
+
+        public String getExpectedFileVersion() {
+            return expectedFileVersion;
+        }
+
+        public String getExpectedAttrVersion() {
+            return expectedAttrVersion;
+        }
+
+        public String getExpectedType() {
+            return expectedType;
+        }
+
+        public String getExpectedFilePrefix() {
+            return expectedFilePrefix;
+        }
+
+        Map<String, PlatformInfo> platforms = new HashMap<String, PlatformInfo>();
+        
+        UpdateInfo(int expectedBuild, String expectedFileVersion, String expectedAttrVersion, String expectedType) {
+            this.expectedBuild = expectedBuild;
+            this.expectedFileVersion = expectedFileVersion;
+            this.expectedAttrVersion = expectedAttrVersion;
+            this.expectedType = expectedType;
+            this.expectedFilePrefix = "zdesktop_"+expectedFileVersion+"_b"+expectedBuild;
+        }
+        
+        void addPlatform(PlatformInfo info) {
+            platforms.put(info.getPlatform(), info);
+        }
+        
+        PlatformInfo getPlatform(String platform) {
+            return platforms.get(platform);
+        }
+    }
+
+    static class PlatformInfo {
+        String platform;
+        String hash;
+        int size;
+        
+        public String getPlatform() {
+            return platform;
+        }
+
+        public String getHash() {
+            return hash;
+        }
+
+        public int getSize() {
+            return size;
+        }
+
+        PlatformInfo(String platform, String hash, int size) {
+            this.platform = platform;
+            this.hash = hash;
+            this.size = size;
+        }
+
+        public String getFileSuffix() {
+            if (platform.equals("macos")) {
+                return MEDIA_MAC;
+            } else if (platform.equals("win32")) {
+                return MEDIA_WIN;
+            } else if (platform.equals("linux")) {
+                return MEDIA_LINUX;
+            }  
+            Assert.fail("Unexpected platform type");
+            return null;
+        }
+    }
+    
+    private static Map<String, UpdateInfo> updateInfo = new HashMap<String, UpdateInfo>();
+    private static String CHN_RELEASE = "release";
+    private static String CHN_BETA = "beta";
+   
+    @BeforeClass
+    public static void setUp()
+    {
+        UpdateInfo gaUpdateInfo = new UpdateInfo(10978, "7_1_2_ga", "7.1.2", "minor");
+        gaUpdateInfo.addPlatform(new PlatformInfo("macos", "0204af2635a4a6444b0f7e880ccce7c9", 75922756));
+        gaUpdateInfo.addPlatform(new PlatformInfo("win32", "d9943a891b194fdeea18ff1c7c908b50", 95958528));
+        gaUpdateInfo.addPlatform(new PlatformInfo("linux", "2add86bf0469e9e0b3f1e66d2507e064", 110755660));
+        updateInfo.put(CHN_RELEASE, gaUpdateInfo);
+//        UpdateInfo betaUpdateInfo = new UpdateInfo(12978, "7_1_3_beta", "7.1.3", "minor");
+//        betaUpdateInfo.addPlatform(new PlatformInfo("macos", "0204af2635a4a6444b0f7e880ccce7c91", 759227569));
+//        betaUpdateInfo.addPlatform(new PlatformInfo("win32", "d9943a891b194fdeea18ff1c7c908b501", 959585289));
+//        betaUpdateInfo.addPlatform(new PlatformInfo("linux", "2add86bf0469e9e0b3f1e66d2507e0641", 1107556609));
+//        updateInfo.put(CHN_BETA, betaUpdateInfo);
+    }
     
     static final String PARAM_CHN = "chn";
     static final String PARAM_VER = "ver";
@@ -80,19 +171,23 @@ public class AutoUpdateTest {
         return httpMethod.getResponseBodyAsString();
     }
     
-    void verifyExpectedUpdate(String response, String fileSuffix, String expectedHash, int expectedSize) throws DocumentException, ServiceException {
+    void verifyExpectedUpdate(String response, String os, UpdateInfo updateInfo) throws DocumentException, ServiceException {
+        String fileSuffix = updateInfo.getPlatform(os).getFileSuffix();
+        String hash = updateInfo.getPlatform(os).getHash();
+        int size = updateInfo.getPlatform(os).getSize();
+        
         Element xml = Element.parseXML(response);
         Assert.assertEquals(E_UPDATES,xml.getName());
         Element update = xml.getElement(E_UPDATE);
         Assert.assertNotNull(update);
-        Assert.assertEquals(EXPECTED_TYPE,update.getAttribute(A_TYPE));
-        Assert.assertEquals(EXPECTED_A_VERSION,update.getAttribute(A_VERSION));
+        Assert.assertEquals(updateInfo.getExpectedType(),update.getAttribute(A_TYPE));
+        Assert.assertEquals(updateInfo.getExpectedAttrVersion(),update.getAttribute(A_VERSION));
         Element patch = update.getElement(E_PATCH);
         String url = patch.getAttribute(A_URL);
         String filename = url.substring(url.lastIndexOf("/")+1);
-        Assert.assertEquals(EXPECTED_FILE_PREFIX+fileSuffix, filename);
-        Assert.assertEquals(expectedHash, patch.getAttribute(A_HASH));
-        Assert.assertEquals(expectedSize, Integer.parseInt(patch.getAttribute(A_SIZE)));
+        Assert.assertEquals(updateInfo.expectedFilePrefix+fileSuffix, filename);
+        Assert.assertEquals(hash, patch.getAttribute(A_HASH));
+        Assert.assertEquals(size, Integer.parseInt(patch.getAttribute(A_SIZE)));
     }
     
     void verifyNoUpdate(String response) throws DocumentException, ServiceException {
@@ -109,26 +204,17 @@ public class AutoUpdateTest {
         nvp[3] = new NameValuePair(PARAM_BOS, os);
         String response = send(nvp);
 //        OfflineLog.offline.info("\r\n"+response);
-        if (bid < EXPECTED_BUILD) {
-            String fileSuffix = null;
-            String hash = null;
-            int size = 0;
-            if (os.equals("macos")) {
-                fileSuffix = MEDIA_MAC;
-                hash = HASH_MAC;
-                size = SIZE_MAC;
-            } else if (os.equals("win32")) {
-                fileSuffix = MEDIA_WIN;
-                hash = HASH_WIN;
-                size = SIZE_WIN;
-            } else if (os.equals("linux")) {
-                fileSuffix = MEDIA_LINUX;
-                hash = HASH_LINUX;
-                size = SIZE_LINUX;
-            } else {
-                Assert.fail("Unexpected platform type");
+        UpdateInfo update = updateInfo.get(chn);
+        if (chn.equalsIgnoreCase(CHN_BETA)) {
+            //if GA is newer it should be published
+            if (update == null || updateInfo.get(CHN_RELEASE).getExpectedBuild() > update.getExpectedBuild()) {
+                update = updateInfo.get(CHN_RELEASE);
             }
-            verifyExpectedUpdate(response, fileSuffix, hash, size);
+        }
+            
+        
+        if (bid < update.getExpectedBuild()) {
+            verifyExpectedUpdate(response, os, update);
             OfflineLog.offline.info("Expected update received for %s %s %d", os, ver, bid);
         } else {
             verifyNoUpdate(response);
@@ -141,35 +227,35 @@ public class AutoUpdateTest {
     @Test
     public void ga201() throws HttpException, IOException, DocumentException, ServiceException {
         for (String platform: platforms) {
-            sendAndVerify("release", "2.0.1", 10659, platform);
+            sendAndVerify(CHN_RELEASE, "2.0.1", 10659, platform);
         }
     }
 
     @Test
     public void ga701() throws HttpException, IOException, DocumentException, ServiceException {
         for (String platform: platforms) {
-            sendAndVerify("release", "7.0.1", 10791, platform);
+            sendAndVerify(CHN_RELEASE, "7.0.1", 10791, platform);
         }
     }
     
     @Test
     public void beta711() throws HttpException, IOException, DocumentException, ServiceException {
         for (String platform: platforms) {
-            sendAndVerify("beta", "7.1.1", 10867, platform);
+            sendAndVerify(CHN_BETA, "7.1.1", 10867, platform);
         }
     }
 
     @Test
     public void ga711() throws HttpException, IOException, DocumentException, ServiceException {
         for (String platform: platforms) {
-            sendAndVerify("ga", "7.1.1", 10917, platform);
+            sendAndVerify(CHN_RELEASE, "7.1.1", 10917, platform);
         }
     }
 
     @Test
     public void alreadyUpdated() throws HttpException, IOException, DocumentException, ServiceException {
         for (String platform: platforms) {
-            sendAndVerify("release", EXPECTED_A_VERSION, EXPECTED_BUILD, platform);
+            sendAndVerify(CHN_RELEASE, updateInfo.get(CHN_RELEASE).getExpectedAttrVersion(), updateInfo.get(CHN_RELEASE).getExpectedBuild(), platform);
         }
     }
 

@@ -215,32 +215,49 @@
 	
 	<target name="gen-update-php">
 		<copy file="src/installer/update.php" todir="${build.dir}" overwrite="true"/>
-		<replace file="${build.dir}/update.php" token="@version@" value="${offline.version}"/>
-		<replace file="${build.dir}/update.php" token="@buildid@" value="${offline.buildid}"/>
-		<replace file="${build.dir}/update.php" token="@media_win32@" value="${media_win32}"/>
-		<replace file="${build.dir}/update.php" token="@media_macos@" value="${media_macos}"/>
-		<replace file="${build.dir}/update.php" token="@media_linux@" value="${media_linux}"/>
+        <copy file="src/installer/zd-versions.php" todir="${build.dir}" overwrite="true"/>
+        <copy file="src/installer/zd-versions-beta.template" todir="${build.dir}" overwrite="true"/>
+        <copy file="src/installer/zd-versions-release.template" todir="${build.dir}" overwrite="true"/>
+		<property name="channel.file" value="${build.dir}/zd-versions-${offline.channel}.template"/>
+		
+        <copy file="src/installer/zd-versions-build.template" tofile="${channel.file}" overwrite="true"/>
+		
+		<replace file="${channel.file}" token="@version@" value="${offline.version}"/>
+		<replace file="${channel.file}" token="@buildid@" value="${offline.buildid}"/>
+		<replace file="${channel.file}" token="@media_win32@" value="${media_win32}"/>
+		<replace file="${channel.file}" token="@media_macos@" value="${media_macos}"/>
+		<replace file="${channel.file}" token="@media_linux@" value="${media_linux}"/>
+        <replace file="${channel.file}" token="@channel@" value="${offline.channel}"/>
+        <replace file="${channel.file}" token="@license@" value="${offline.aus.license}"/>
+        <replace file="${channel.file}" token="@details@" value="${offline.aus.details}"/>
+        <replace file="${channel.file}" token="@download_prefix@" value="${offline.aus.download}"/>
+        <replace file="${channel.file}" token="@buildtype@" value="${offline.relabel}"/>
+        <replace file="${channel.file}" token="@extver@" value="${offline.aus.extver}"/>
 	
 		<if><available file="${build.dir}/${media_win32}" type="file"/><then>
 			<checksum file="${build.dir}/${media_win32}" property="hash_win32"/>
 			<length file="${build.dir}/${media_win32}" property="size_win32"/>
-			<replace file="${build.dir}/update.php" token="@hash_win32@" value="${hash_win32}"/>
-			<replace file="${build.dir}/update.php" token="@size_win32@" value="${size_win32}"/>
+			<replace file="${channel.file}" token="@hash_win32@" value="${hash_win32}"/>
+			<replace file="${channel.file}" token="@size_win32@" value="${size_win32}"/>
 		</then></if>
 	
 		<if><available file="${build.dir}/${media_macos}" type="file"/><then>
 			<checksum file="${build.dir}/${media_macos}" property="hash_macos"/>
 			<length file="${build.dir}/${media_macos}" property="size_macos"/>
-			<replace file="${build.dir}/update.php" token="@hash_macos@" value="${hash_macos}"/>
-			<replace file="${build.dir}/update.php" token="@size_macos@" value="${size_macos}"/>
+			<replace file="${channel.file}" token="@hash_macos@" value="${hash_macos}"/>
+			<replace file="${channel.file}" token="@size_macos@" value="${size_macos}"/>
 		</then></if>
 	
 		<if><available file="${build.dir}/${media_linux}" type="file"/><then>
 			<checksum file="${build.dir}/${media_linux}" property="hash_linux"/>
 			<length file="${build.dir}/${media_linux}" property="size_linux"/>
-			<replace file="${build.dir}/update.php" token="@hash_linux@" value="${hash_linux}"/>
-			<replace file="${build.dir}/update.php" token="@size_linux@" value="${size_linux}"/>
+			<replace file="${channel.file}" token="@hash_linux@" value="${hash_linux}"/>
+			<replace file="${channel.file}" token="@size_linux@" value="${size_linux}"/>
 		</then></if>
+		<loadfile srcFile="${build.dir}/zd-versions-beta.template" property="zd-beta-versions"/>
+        <loadfile srcFile="${build.dir}/zd-versions-release.template" property="zd-release-versions"/>
+        <replace file="${build.dir}/zd-versions.php" token="@zd-beta-versions@" value="${zd-beta-versions}"/>
+        <replace file="${build.dir}/zd-versions.php" token="@zd-release-versions@" value="${zd-release-versions}"/>
 	</target>
 
 	<target name="symlink-media">
