@@ -61,6 +61,17 @@ sub get_pid_tree() {
                 }
             }
             close(STATUS);
+
+			if ($cmd =~ /java/) {
+				if (open(CMDLINE, "<$PROCFS/$pid/cmdline")) { # else pid has gone away
+					while (my $line = <CMDLINE>) {
+						my @args = split('\0',$line);
+						$cmd = 'zmconfigd' if ($args[$#args] =~ /\/opt\/zimbra\/libexec\/zmconfigd/);
+						$cmd = 'zmmailboxd' if ($args[$#args] =~ /\/opt\/zimbra\/mailboxd\/etc\/jetty.xml/);
+					}
+				}
+			}
+
             next if (!defined($ppid));
             next if (!defined($cmd));
             $pid_names{$pid} = $cmd;
