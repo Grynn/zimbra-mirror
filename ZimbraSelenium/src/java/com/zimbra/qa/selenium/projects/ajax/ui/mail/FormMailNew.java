@@ -808,6 +808,10 @@ public class FormMailNew extends AbsForm {
 		
 		this.zWaitForBusyOverlay();
 
+		waitForAutocomplete();
+		
+// logger.info(this.sGetHtmlSource());		// For debugging
+
 		return (zAutocompleteListGetEntries());
 		
 	}
@@ -857,10 +861,35 @@ public class FormMailNew extends AbsForm {
 	          <td class="Link"></td>
 	        </tr>
 
-
+	  <div class="acWaiting" style="position: absolute; left: 263px; top: 132px; z-index: 100; display: none;" x-display="block">
+	    <table cellspacing="0" cellpadding="0" border="0">
+	      <tbody>
+	        <tr>
+	          <td>
+	            <div class="ImgSpinner"></div>
+	          </td>
+	
+	          <td>Autocompleting...</td>
+	        </tr>
+	      </tbody>
+	    </table>
+	  </div>
 
 		 */
 
+	/**
+	 * Wait for the autocomplete spinner to go away
+	 */
+	protected void waitForAutocomplete() throws HarnessException {
+		String locator = "css=div[class='acWaiting'][style*='display: none;']";
+		for (int i = 0; i < 30; i++) {
+			if ( this.sIsElementPresent(locator) )
+				return; // Found it!
+			SleepUtil.sleep(1000);
+		}
+		throw new HarnessException("autocomplete never completed");
+	}
+	
 	protected AutocompleteEntry parseAutocompleteEntry(String itemLocator) throws HarnessException {
 		logger.info(myPageName() + " parseAutocompleteEntry()");
 
@@ -894,7 +923,6 @@ public class FormMailNew extends AbsForm {
 			throw new HarnessException("Autocomplete not visible!");
 		
 
-		//		logger.info(this.sGetHtmlSource());		// For debugging
 
 		
 		String rowsLocator = containerLocator + " tr[id^='ZmAutocompleteListView_2_acRow']";

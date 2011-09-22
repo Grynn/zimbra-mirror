@@ -5,7 +5,7 @@ import java.util.List;
 import org.testng.annotations.*;
 
 import com.zimbra.qa.selenium.framework.items.*;
-import com.zimbra.qa.selenium.framework.ui.*;
+import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.PrefGroupMailByMessageTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
@@ -13,38 +13,89 @@ import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew.Field;
 
 
-public class AutoCompleteContacts extends PrefGroupMailByMessageTest {
+public class AutoCompleteSharedContacts extends PrefGroupMailByMessageTest {
 
 
+	private ZimbraAccount Owner = null;
+	private FolderItem OwnerFolder = null;
+	private ZimbraAccount Contact = null;
+	private String ContactFirstName = null;
+	private String ContactLastName = null;
 	
-	
-	public AutoCompleteContacts() {
-		logger.info("New "+ AutoCompleteContacts.class.getCanonicalName());
+	public AutoCompleteSharedContacts() {
+		logger.info("New "+ AutoCompleteSharedContacts.class.getCanonicalName());
 		
 		super.startingAccountPreferences.put("zimbraPrefComposeFormat", "text");
+		super.startingAccountPreferences.put("zimbraPrefSharedAddrBookAutoCompleteEnabled", "TRUE");
 	
 	}
 	
-	@Test(	description = "Autocomplete using a Contact - First Name",
-			groups = { "functional" })
-	public void AutoCompleteContacts_01() throws HarnessException {
+	@BeforeMethod(alwaysRun = true)
+	/**
+	 * Create the shared contacts folder
+	 */
+	public void CreateSharedContacts() throws HarnessException {
 		
-		// Create a contact
-		ZimbraAccount contact = new ZimbraAccount();
-		contact.provision();
-		contact.authenticate();
-
-		String firstname = "Michael" + ZimbraSeleniumProperties.getUniqueString();
-		String lastname = "Williams" + ZimbraSeleniumProperties.getUniqueString();
+		Contact = new ZimbraAccount();
+		Contact.provision();
+		Contact.authenticate();
 		
+		Owner = new ZimbraAccount();
+		Owner.provision();
+		Owner.authenticate();
+		
+		
+		ContactFirstName = "Jayden" + ZimbraSeleniumProperties.getUniqueString();
+		ContactLastName = "Brown" + ZimbraSeleniumProperties.getUniqueString();
+		String ownerFolderName = "folder" + ZimbraSeleniumProperties.getUniqueString();
+		String mountpointName = "mountpoint" + ZimbraSeleniumProperties.getUniqueString();
+		
+		
+		// Create a folder to share
+		Owner.soapSend(
+					"<CreateFolderRequest xmlns='urn:zimbraMail'>"
+				+		"<folder name='" + ownerFolderName + "' view='contact' l='" + FolderItem.importFromSOAP(Owner, FolderItem.SystemFolder.Contacts).getId() + "'/>"
+				+	"</CreateFolderRequest>");
+		
+		OwnerFolder = FolderItem.importFromSOAP(Owner, ownerFolderName);
+		
+		// Share it
+		Owner.soapSend(
+					"<FolderActionRequest xmlns='urn:zimbraMail'>"
+				+		"<action id='"+ OwnerFolder.getId() +"' op='grant'>"
+				+			"<grant d='"+ app.zGetActiveAccount().EmailAddress +"' gt='usr' perm='r'/>"
+				+		"</action>"
+				+	"</FolderActionRequest>");
+		
+		// Add a contact to it
+		Owner.soapSend(
+				"<CreateContactRequest xmlns='urn:zimbraMail'>"
+			+		"<cn l='"+ OwnerFolder.getId() +"'>"
+			+			"<a n='firstName'>"+ ContactFirstName +"</a>"
+			+			"<a n='lastName'>"+ ContactLastName +"</a>"
+			+			"<a n='email'>"+ Contact.EmailAddress +"</a>"
+			+		"</cn>"
+			+	"</CreateContactRequest>");
+	
+		
+		// Mount it
 		app.zGetActiveAccount().soapSend(
-					"<CreateContactRequest xmlns='urn:zimbraMail'>"
-				+		"<cn>"
-				+			"<a n='firstName'>"+ firstname +"</a>"
-				+			"<a n='lastName'>"+ lastname +"</a>"
-				+			"<a n='email'>"+ contact.EmailAddress +"</a>"
-				+		"</cn>"
-				+	"</CreateContactRequest>");
+					"<CreateMountpointRequest xmlns='urn:zimbraMail'>"
+				+		"<link l='1' name='"+ mountpointName +"'  rid='"+ OwnerFolder.getId() +"' zid='"+ Owner.ZimbraId +"'/>"
+				+	"</CreateMountpointRequest>");
+		
+		FolderMountpointItem mountpoint = FolderMountpointItem.importFromSOAP(app.zGetActiveAccount(), mountpointName);
+		ZAssert.assertNotNull(mountpoint, "Verify the mountpoint exists");
+
+		
+		
+	}
+
+	
+	@Test(	description = "Autocomplete using a Shared Contact - First Name",
+			groups = { "functional" })
+	public void AutoCompleteSharedContacts_01() throws HarnessException {
+		
 		
 		app.zPageMain.zToolbarPressButton(Button.B_REFRESH);
 		
@@ -61,10 +112,10 @@ public class AutoCompleteContacts extends PrefGroupMailByMessageTest {
 		mailform.zFillField(Field.Body, body);
 
 		// Auto complete a name
-		List<AutocompleteEntry> entries = mailform.zAutocompleteFillField(Field.To, firstname);
+		List<AutocompleteEntry> entries = mailform.zAutocompleteFillField(Field.To, ContactFirstName);
 		AutocompleteEntry found = null;
 		for (AutocompleteEntry entry : entries) {
-			if ( entry.getAddress().contains(contact.EmailAddress) ) {
+			if ( entry.getAddress().contains(Contact.EmailAddress) ) {
 				found = entry;
 				break;
 			}
@@ -77,34 +128,16 @@ public class AutoCompleteContacts extends PrefGroupMailByMessageTest {
 
 		
 		// Log into the destination account and make sure the message is received
-		MailItem received = MailItem.importFromSOAP(contact, "subject:("+ subject +")");
+		MailItem received = MailItem.importFromSOAP(Contact, "subject:("+ subject +")");
 		ZAssert.assertNotNull(received, "Verify the message is received correctly");
 		
 	}
 
-	@Test(	description = "Autocomplete using the Contacts - Partial First Name",
+	@Test(	description = "Autocomplete using the Shared Contacts - Partial First Name",
 			groups = { "functional" })
-	public void AutoCompleteContacts_02() throws HarnessException {
-		
-		// Create a contact
-		ZimbraAccount contact = new ZimbraAccount();
-		contact.provision();
-		contact.authenticate();
-
-		String firstname = "Michael" + ZimbraSeleniumProperties.getUniqueString();
-		String lastname = "Williams" + ZimbraSeleniumProperties.getUniqueString();
-		
-		app.zGetActiveAccount().soapSend(
-					"<CreateContactRequest xmlns='urn:zimbraMail'>"
-				+		"<cn>"
-				+			"<a n='firstName'>"+ firstname +"</a>"
-				+			"<a n='lastName'>"+ lastname +"</a>"
-				+			"<a n='email'>"+ contact.EmailAddress +"</a>"
-				+		"</cn>"
-				+	"</CreateContactRequest>");
+	public void AutoCompleteSharedContacts_02() throws HarnessException {
 		
 		app.zPageMain.zToolbarPressButton(Button.B_REFRESH);
-
 		
 		// Message properties
 		String subject = "subject" + ZimbraSeleniumProperties.getUniqueString();
@@ -121,10 +154,10 @@ public class AutoCompleteContacts extends PrefGroupMailByMessageTest {
 		mailform.zFillField(Field.Body, body);
 
 		// Auto complete a name
-		List<AutocompleteEntry> entries = mailform.zAutocompleteFillField(Field.To, firstname.substring(0, 5));
+		List<AutocompleteEntry> entries = mailform.zAutocompleteFillField(Field.To, ContactFirstName.substring(0, 5));
 		AutocompleteEntry found = null;
 		for (AutocompleteEntry entry : entries) {
-			if ( entry.getAddress().contains(contact.EmailAddress) ) {
+			if ( entry.getAddress().contains(Contact.EmailAddress) ) {
 				found = entry;
 				break;
 			}
@@ -137,91 +170,14 @@ public class AutoCompleteContacts extends PrefGroupMailByMessageTest {
 
 		
 		// Log into the destination account and make sure the message is received
-		MailItem received = MailItem.importFromSOAP(contact, "subject:("+ subject +")");
+		MailItem received = MailItem.importFromSOAP(Contact, "subject:("+ subject +")");
 		ZAssert.assertNotNull(received, "Verify the message is received correctly");
 		
 	}
 
-	@Test(	description = "Autocomplete using a Contact - Last Name",
+	@Test(	description = "Autocomplete using a Shared Contact - Last Name",
 			groups = { "functional" })
-	public void AutoCompleteContacts_03() throws HarnessException {
-		
-		// Create a contact
-		ZimbraAccount contact = new ZimbraAccount();
-		contact.provision();
-		contact.authenticate();
-
-		String firstname = "Michael" + ZimbraSeleniumProperties.getUniqueString();
-		String lastname = "Williams" + ZimbraSeleniumProperties.getUniqueString();
-		
-		app.zGetActiveAccount().soapSend(
-					"<CreateContactRequest xmlns='urn:zimbraMail'>"
-				+		"<cn>"
-				+			"<a n='firstName'>"+ firstname +"</a>"
-				+			"<a n='lastName'>"+ lastname +"</a>"
-				+			"<a n='email'>"+ contact.EmailAddress +"</a>"
-				+		"</cn>"
-				+	"</CreateContactRequest>");
-		
-		app.zPageMain.zToolbarPressButton(Button.B_REFRESH);
-
-		
-		// Message properties
-		String subject = "subject" + ZimbraSeleniumProperties.getUniqueString();
-		String body = "body" + ZimbraSeleniumProperties.getUniqueString();
-		
-		
-		
-		// Open the new mail form
-		FormMailNew mailform = (FormMailNew) app.zPageMail.zToolbarPressButton(Button.B_NEW);
-		ZAssert.assertNotNull(mailform, "Verify the new form opened");
-		
-		// Fill out the form with the data
-		mailform.zFillField(Field.Subject, subject);
-		mailform.zFillField(Field.Body, body);
-
-		// Auto complete a name
-		List<AutocompleteEntry> entries = mailform.zAutocompleteFillField(Field.To, lastname);
-		AutocompleteEntry found = null;
-		for (AutocompleteEntry entry : entries) {
-			if ( entry.getAddress().contains(contact.EmailAddress) ) {
-				found = entry;
-				break;
-			}
-		}
-		ZAssert.assertNotNull(found, "Verify the autocomplete entry exists in the returned list");
-		mailform.zAutocompleteSelectItem(found);
-		
-		// Send the message
-		mailform.zSubmit();
-
-		
-		// Log into the destination account and make sure the message is received
-		MailItem received = MailItem.importFromSOAP(contact, "subject:("+ subject +")");
-		ZAssert.assertNotNull(received, "Verify the message is received correctly");
-		
-	}
-
-	@Test(	description = "Autocomplete using a Contact - Partial Last Name",
-			groups = { "functional" })
-	public void AutoCompleteContacts_04() throws HarnessException {
-		
-		// Create a contact
-		ZimbraAccount contact = new ZimbraAccount();
-		contact.provision();
-		contact.authenticate();
-
-		String firstname = "Michael" + ZimbraSeleniumProperties.getUniqueString();
-		String lastname = "Williams" + ZimbraSeleniumProperties.getUniqueString();
-		
-		app.zGetActiveAccount().soapSend(
-					"<CreateContactRequest xmlns='urn:zimbraMail'>"
-				+		"<cn>"
-				+			"<a n='firstName'>"+ firstname +"</a>"
-				+			"<a n='lastName'>"+ lastname +"</a>"
-				+			"<a n='email'>"+ contact.EmailAddress +"</a>"
-				+		"</cn>"
-				+	"</CreateContactRequest>");
+	public void AutoCompleteSharedContacts_03() throws HarnessException {
 		
 		app.zPageMain.zToolbarPressButton(Button.B_REFRESH);
 
@@ -241,10 +197,10 @@ public class AutoCompleteContacts extends PrefGroupMailByMessageTest {
 		mailform.zFillField(Field.Body, body);
 
 		// Auto complete a name
-		List<AutocompleteEntry> entries = mailform.zAutocompleteFillField(Field.To, lastname.substring(0, 5));
+		List<AutocompleteEntry> entries = mailform.zAutocompleteFillField(Field.To, ContactLastName);
 		AutocompleteEntry found = null;
 		for (AutocompleteEntry entry : entries) {
-			if ( entry.getAddress().contains(contact.EmailAddress) ) {
+			if ( entry.getAddress().contains(Contact.EmailAddress) ) {
 				found = entry;
 				break;
 			}
@@ -257,31 +213,14 @@ public class AutoCompleteContacts extends PrefGroupMailByMessageTest {
 
 		
 		// Log into the destination account and make sure the message is received
-		MailItem received = MailItem.importFromSOAP(contact, "subject:("+ subject +")");
+		MailItem received = MailItem.importFromSOAP(Contact, "subject:("+ subject +")");
 		ZAssert.assertNotNull(received, "Verify the message is received correctly");
 		
 	}
 
-	@Test(	description = "Autocomplete using a Contact - Full Name",
+	@Test(	description = "Autocomplete using a Shared Contact - Partial Last Name",
 			groups = { "functional" })
-	public void AutoCompleteContacts_05() throws HarnessException {
-		
-		// Create a contact
-		ZimbraAccount contact = new ZimbraAccount();
-		contact.provision();
-		contact.authenticate();
-
-		String firstname = "Michael" + ZimbraSeleniumProperties.getUniqueString();
-		String lastname = "Williams" + ZimbraSeleniumProperties.getUniqueString();
-		
-		app.zGetActiveAccount().soapSend(
-					"<CreateContactRequest xmlns='urn:zimbraMail'>"
-				+		"<cn>"
-				+			"<a n='firstName'>"+ firstname +"</a>"
-				+			"<a n='lastName'>"+ lastname +"</a>"
-				+			"<a n='email'>"+ contact.EmailAddress +"</a>"
-				+		"</cn>"
-				+	"</CreateContactRequest>");
+	public void AutoCompleteSharedContacts_04() throws HarnessException {
 		
 		app.zPageMain.zToolbarPressButton(Button.B_REFRESH);
 
@@ -301,10 +240,10 @@ public class AutoCompleteContacts extends PrefGroupMailByMessageTest {
 		mailform.zFillField(Field.Body, body);
 
 		// Auto complete a name
-		List<AutocompleteEntry> entries = mailform.zAutocompleteFillField(Field.To, firstname + " " + lastname);
+		List<AutocompleteEntry> entries = mailform.zAutocompleteFillField(Field.To, ContactLastName.substring(0, 5));
 		AutocompleteEntry found = null;
 		for (AutocompleteEntry entry : entries) {
-			if ( entry.getAddress().contains(contact.EmailAddress) ) {
+			if ( entry.getAddress().contains(Contact.EmailAddress) ) {
 				found = entry;
 				break;
 			}
@@ -317,31 +256,14 @@ public class AutoCompleteContacts extends PrefGroupMailByMessageTest {
 
 		
 		// Log into the destination account and make sure the message is received
-		MailItem received = MailItem.importFromSOAP(contact, "subject:("+ subject +")");
+		MailItem received = MailItem.importFromSOAP(Contact, "subject:("+ subject +")");
 		ZAssert.assertNotNull(received, "Verify the message is received correctly");
 		
 	}
 
-	@Test(	description = "Autocomplete using a Contact - First Name and Last Initial",
+	@Test(	description = "Autocomplete using a Shared Contact - Full Name",
 			groups = { "functional" })
-	public void AutoCompleteContacts_07() throws HarnessException {
-		
-		// Create a contact
-		ZimbraAccount contact = new ZimbraAccount();
-		contact.provision();
-		contact.authenticate();
-
-		String firstname = "Michael" + ZimbraSeleniumProperties.getUniqueString();
-		String lastname = "Williams" + ZimbraSeleniumProperties.getUniqueString();
-		
-		app.zGetActiveAccount().soapSend(
-					"<CreateContactRequest xmlns='urn:zimbraMail'>"
-				+		"<cn>"
-				+			"<a n='firstName'>"+ firstname +"</a>"
-				+			"<a n='lastName'>"+ lastname +"</a>"
-				+			"<a n='email'>"+ contact.EmailAddress +"</a>"
-				+		"</cn>"
-				+	"</CreateContactRequest>");
+	public void AutoCompleteSharedContacts_05() throws HarnessException {
 		
 		app.zPageMain.zToolbarPressButton(Button.B_REFRESH);
 
@@ -361,10 +283,10 @@ public class AutoCompleteContacts extends PrefGroupMailByMessageTest {
 		mailform.zFillField(Field.Body, body);
 
 		// Auto complete a name
-		List<AutocompleteEntry> entries = mailform.zAutocompleteFillField(Field.To, firstname + " " + lastname.substring(0, 1));
+		List<AutocompleteEntry> entries = mailform.zAutocompleteFillField(Field.To, ContactFirstName + " " + ContactLastName);
 		AutocompleteEntry found = null;
 		for (AutocompleteEntry entry : entries) {
-			if ( entry.getAddress().contains(contact.EmailAddress) ) {
+			if ( entry.getAddress().contains(Contact.EmailAddress) ) {
 				found = entry;
 				break;
 			}
@@ -377,22 +299,61 @@ public class AutoCompleteContacts extends PrefGroupMailByMessageTest {
 
 		
 		// Log into the destination account and make sure the message is received
-		MailItem received = MailItem.importFromSOAP(contact, "subject:("+ subject +")");
+		MailItem received = MailItem.importFromSOAP(Contact, "subject:("+ subject +")");
+		ZAssert.assertNotNull(received, "Verify the message is received correctly");
+		
+	}
+
+	@Test(	description = "Autocomplete using a Shared Contact - First Name and Last Initial",
+			groups = { "functional" })
+	public void AutoCompleteSharedContacts_07() throws HarnessException {
+		
+		app.zPageMain.zToolbarPressButton(Button.B_REFRESH);
+
+		
+		// Message properties
+		String subject = "subject" + ZimbraSeleniumProperties.getUniqueString();
+		String body = "body" + ZimbraSeleniumProperties.getUniqueString();
+		
+		
+		
+		// Open the new mail form
+		FormMailNew mailform = (FormMailNew) app.zPageMail.zToolbarPressButton(Button.B_NEW);
+		ZAssert.assertNotNull(mailform, "Verify the new form opened");
+		
+		// Fill out the form with the data
+		mailform.zFillField(Field.Subject, subject);
+		mailform.zFillField(Field.Body, body);
+
+		// Auto complete a name
+		List<AutocompleteEntry> entries = mailform.zAutocompleteFillField(Field.To, ContactFirstName + " " + ContactLastName.substring(0, 1));
+		AutocompleteEntry found = null;
+		for (AutocompleteEntry entry : entries) {
+			if ( entry.getAddress().contains(Contact.EmailAddress) ) {
+				found = entry;
+				break;
+			}
+		}
+		ZAssert.assertNotNull(found, "Verify the autocomplete entry exists in the returned list");
+		mailform.zAutocompleteSelectItem(found);
+		
+		// Send the message
+		mailform.zSubmit();
+
+		
+		// Log into the destination account and make sure the message is received
+		MailItem received = MailItem.importFromSOAP(Contact, "subject:("+ subject +")");
 		ZAssert.assertNotNull(received, "Verify the message is received correctly");
 		
 	}
 
 
-	@Test(	description = "Autocomplete using a Contact - Multiple Matches",
+	@Test(	description = "Autocomplete using a Shared Contact - Multiple Matches",
 			groups = { "functional" })
-	public void AutoCompleteContacts_08() throws HarnessException {
+	public void AutoCompleteSharedContacts_08() throws HarnessException {
 		int count = 3;
 		
-		// Message properties
-		String subject = "subject" + ZimbraSeleniumProperties.getUniqueString();
-		String body = "body" + ZimbraSeleniumProperties.getUniqueString();
-		
-		String firstname = "Jayden" + ZimbraSeleniumProperties.getUniqueString();
+		String firstname = "William" + ZimbraSeleniumProperties.getUniqueString();
 		for (int i = 0; i < count; i++) {
 			
 			// Create a contact
@@ -402,9 +363,9 @@ public class AutoCompleteContacts extends PrefGroupMailByMessageTest {
 
 			String lastname = "Jones" + ZimbraSeleniumProperties.getUniqueString();
 			
-			app.zGetActiveAccount().soapSend(
+			Owner.soapSend(
 						"<CreateContactRequest xmlns='urn:zimbraMail'>"
-					+		"<cn>"
+					+		"<cn l='"+ OwnerFolder.getId() +"'>"
 					+			"<a n='firstName'>"+ firstname +"</a>"
 					+			"<a n='lastName'>"+ lastname +"</a>"
 					+			"<a n='email'>"+ contact.EmailAddress +"</a>"
@@ -415,7 +376,11 @@ public class AutoCompleteContacts extends PrefGroupMailByMessageTest {
 		
 		app.zPageMain.zToolbarPressButton(Button.B_REFRESH);
 
+		// Message properties
+		String subject = "subject" + ZimbraSeleniumProperties.getUniqueString();
+		String body = "body" + ZimbraSeleniumProperties.getUniqueString();
 		
+
 		// Open the new mail form
 		FormMailNew mailform = (FormMailNew) app.zPageMail.zToolbarPressButton(Button.B_NEW);
 		ZAssert.assertNotNull(mailform, "Verify the new form opened");
@@ -437,26 +402,9 @@ public class AutoCompleteContacts extends PrefGroupMailByMessageTest {
 		
 	}
 
-	@Test(	description = "Autocomplete using a Contact - No Matches",
+	@Test(	description = "Autocomplete using a Shared Contact - No Matches",
 			groups = { "functional" })
-	public void AutoCompleteContacts_09() throws HarnessException {
-		
-		// Create a contact
-		ZimbraAccount contact = new ZimbraAccount();
-		contact.provision();
-		contact.authenticate();
-
-		String firstname = "Michael" + ZimbraSeleniumProperties.getUniqueString();
-		String lastname = "Williams" + ZimbraSeleniumProperties.getUniqueString();
-		
-		app.zGetActiveAccount().soapSend(
-					"<CreateContactRequest xmlns='urn:zimbraMail'>"
-				+		"<cn>"
-				+			"<a n='firstName'>"+ firstname +"</a>"
-				+			"<a n='lastName'>"+ lastname +"</a>"
-				+			"<a n='email'>"+ contact.EmailAddress +"</a>"
-				+		"</cn>"
-				+	"</CreateContactRequest>");
+	public void AutoCompleteSharedContacts_09() throws HarnessException {
 		
 		app.zPageMain.zToolbarPressButton(Button.B_REFRESH);
 
