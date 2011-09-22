@@ -1,0 +1,5 @@
+<zimlet name="com_zimbra_gplaces" version="0.1" label="${msg.label}" description="${msg.description}" target="main compose-window">
+  <include>gplaces.js</include>
+	<includeCSS>gplaces.css</includeCSS>
+  <handlerObject>Com_Zimbra_Gplaces</handlerObject>
+</zimlet>

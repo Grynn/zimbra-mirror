@@ -1,0 +1,8 @@
+<zimletConfig name="com_zimbra_gplaces" version="0.1">
+    <global>
+        <property name="allowedDomains">*.google.com</property>
+        <property name="radius">1000</property>
+        <property name="catagories1">restaurant cafe food amusement_park movie_theater bowling_alley art_gallery night_club aquarium bar zoo stadium casino city_hall establishment</property>
+        <property name="catagories2">food restaurant cafe movie_theater amusement_park bowling_alley art_gallery night_club bar zoo stadium casino city_hall</property>
+    </global>
+</zimletConfig>
