@@ -84,7 +84,7 @@ public class CancelMeeting extends AjaxCommonTest {
 		ZAssert.assertEquals(app.zPageCalendar.sIsElementPresent(app.zPageCalendar.zGetApptLocator(apptSubject)), false, "Verify meeting is deleted from organizer's calendar");
 		
 		// Verify meeting is deleted from attendee's calendar
-		SleepUtil.sleepLong(); //importSOAP gives wrong response without sleep
+		SleepUtil.sleepVeryLong(); //importSOAP gives wrong response without sleep
 		AppointmentItem canceledAppt = AppointmentItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ apptSubject +")", startUTC, endUTC);
 		ZAssert.assertNull(canceledAppt, "Verify meeting is deleted from attendee's calendar");
 	}

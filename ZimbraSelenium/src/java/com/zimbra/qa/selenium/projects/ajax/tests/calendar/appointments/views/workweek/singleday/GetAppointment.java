@@ -34,7 +34,6 @@ public class GetAppointment extends AjaxCommonTest {
 		String location = "location" + ZimbraSeleniumProperties.getUniqueString();
 		String content = "content" + ZimbraSeleniumProperties.getUniqueString();
 		
-		
 		// Absolute dates in UTC zone
 		Calendar now = Calendar.getInstance();
 		ZDate startUTC = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 12, 0, 0);
@@ -63,7 +62,7 @@ public class GetAppointment extends AjaxCommonTest {
 						"</m>" +
 					"</CreateAppointmentRequest>");
 		
-		AppointmentItem appt = AppointmentItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject +")", startUTC.addDays(-7), endUTC.addDays(7));
+		AppointmentItem appt = AppointmentItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject +")", startUTC, endUTC);
 		ZAssert.assertNotNull(appt, "Verify the new appointment is created");
 
 		app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
@@ -87,14 +86,13 @@ public class GetAppointment extends AjaxCommonTest {
 		String location = "location" + ZimbraSeleniumProperties.getUniqueString();
 		String content = "content" + ZimbraSeleniumProperties.getUniqueString();
 		
-		
 		// Absolute dates in UTC zone
-		ZDate startUTC = new ZDate(2014, 1, 1, 12, 0, 0);
-		ZDate endUTC   = new ZDate(2014, 1, 1, 14, 0, 0);
+		ZDate startUTC = new ZDate(2011, 9, 22, 12, 0, 0);
+		ZDate endUTC   = new ZDate(2011, 9, 2, 14, 0, 0);
 		
 		// EST timezone string
 		String tz = ZTimeZone.TimeZoneEST.getID();
-
+		
 		// Create a meeting request from AccountA to the test account
 		ZimbraAccount.AccountA().soapSend(
 					"<CreateAppointmentRequest xmlns='urn:zimbraMail'>" +
@@ -114,7 +112,6 @@ public class GetAppointment extends AjaxCommonTest {
 							"</mp>" +
 						"</m>" +
 					"</CreateAppointmentRequest>");
-		
 
 		AppointmentItem appt = AppointmentItem.importFromSOAP(app.zGetActiveAccount(), subject, startUTC.addDays(-10), endUTC.addDays(+10));
 		ZAssert.assertNotNull(appt, "Verify the appointment is in the mailbox");
@@ -125,9 +122,7 @@ public class GetAppointment extends AjaxCommonTest {
 
 		ZAssert.assertEquals(startUTC.toTimeZone(tz), appt.getStartTime(), "Verify the appointment start times match");
 		ZAssert.assertEquals(endUTC.toTimeZone(tz), appt.getEndTime(), "Verify the appointment end times match");
-		
+
 	}
-
-
 
 }
