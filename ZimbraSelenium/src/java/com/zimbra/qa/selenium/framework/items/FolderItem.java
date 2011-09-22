@@ -309,6 +309,27 @@ public class FolderItem extends com.zimbra.soap.mail.type.Folder implements IIte
 		return (importFromSOAP(response));
 	}
 
+	/**
+	 * Get the parent FolderItem
+	 * @param account 
+	 * @param destType Destination Host Type: CLIENT or SERVER
+	 * @param accountName Account Name to be added in SOAP context while importing
+	 * @return parent FolderItem
+	 * @throws HarnessException
+	 */
+	public FolderItem getParentFolder(ZimbraAccount account,
+	      SOAP_DESTINATION_HOST_TYPE destType, String accountName) throws HarnessException {
+	   // Get just the folder specified
+      account.soapSend(
+            "<GetFolderRequest xmlns='urn:zimbraMail'>" +
+               "<folder l='" + super.getParentId() + "'/>" +
+            "</GetFolderRequest>",
+            destType, accountName);
+      Element response = account.soapSelectNode("//mail:GetFolderResponse", 1);
+
+      return (importFromSOAP(response));
+	}
+
 	@Override
 	public String prettyPrint() {
 		StringBuilder sb = new StringBuilder();
