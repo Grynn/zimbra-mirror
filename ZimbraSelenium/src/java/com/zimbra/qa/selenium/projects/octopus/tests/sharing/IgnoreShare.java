@@ -103,7 +103,7 @@ public class IgnoreShare extends OctopusCommonTest {
 
 		ZAssert.assertTrue(pageSharing.zWaitForElementPresent(
 				PageSharing.Locators.zIgnoredItemsView.locator + ":contains("
-						+ ownerFolderItem.getName() + ")", "3000"),
+						+ ownerFolderItem.getName() + ")", "5000"),
 				"Verify item appears in the Ignored Items View");
 	
 		// Click on My Files tab

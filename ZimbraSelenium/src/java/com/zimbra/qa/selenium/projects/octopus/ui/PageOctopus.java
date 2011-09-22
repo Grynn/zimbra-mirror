@@ -21,8 +21,14 @@ public class PageOctopus extends AbsTab {
 				"css=div.octopus-tab-label:contains(My Files)");
 		public static final Locators zTabSharing = new Locators(
 		"css=div.octopus-tab-label:contains(Sharing)");
+		public static final Locators zTabFavorites = new Locators(
+		"css=div.octopus-tab-label:contains(Favorites)");
+		public static final Locators zTabHistory = new Locators(
+		"css=div.octopus-tab-label:contains(History)");
 		public static final Locators zTabTrash = new Locators(
 		"css=div.octopus-tab-label:contains(Trash)");
+		public static final Locators zTabSearch = new Locators(
+		"css=div.octopus-tab-label:contains(Search)");
 		
 		public final String locator;
 
@@ -52,7 +58,7 @@ public class PageOctopus extends AbsTab {
 		boolean present = sIsElementPresent(Locators.zSignOutButton.locator);
 
 		if (!present) {
-			logger.debug("zIsActive(): PageOctopus sign out button present = " + present);
+			logger.debug("zIsActive(): " + present);
 			return (false);
 		}
 		logger.debug("isActive() = " + true);
