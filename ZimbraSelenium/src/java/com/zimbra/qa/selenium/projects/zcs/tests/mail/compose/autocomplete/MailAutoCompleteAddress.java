@@ -1183,58 +1183,6 @@ public class MailAutoCompleteAddress extends CommonTest {
 		SelNGBase.needReset.set(false);
 	}
 
-	/**
-	 * Autocomplete does not work after period(.) in domain name - bug 47045.
-	 * Steps, 1.Create account 2.Modify account with
-	 * zimbraPrefGalAutoCompleteEnabled to TRUE 3.Refresh UI and compose mail
-	 * 4.Type complete account name for e.g. enus@testdomain.com and verify
-	 * autocomplete at each typed character
-	 */
-	@Test(dataProvider = "composeDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
-	public void autocompleteDoesNotWorkAfterPeriod_Bug47045(String from,
-			String to, String cc, String bcc, String subject, String body,
-			String attachments) throws Exception {
-		if (SelNGBase.isExecutionARetry.get())
-			handleRetry();
-
-		acc1 = ZimbraSeleniumProperties.getStringProperty("locale").replace(
-				"_", "")
-				+ "peri@testdomain.com";
-		Stafzmprov.createAccount(acc1);
-		Stafzmprov.modifyAccount(ClientSessionFactory.session().currentUserName(),
-				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
-
-		ClientSessionFactory.session().selenium().refresh();
-		SleepUtil.sleep(3500);
-		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
-		getKeyboardKeys(acc1);
-		typeKeyboardKeys();
-		page.zMailApp.zVerifyAutocompleteExists(acc1.toLowerCase(), 1, 1);
-		pressKeys("@");
-		page.zMailApp.zVerifyAutocompleteExists(acc1.toLowerCase(), 1, 1);
-		pressKeys("t");
-		pressKeys("e");
-		pressKeys("s");
-		pressKeys("t");
-		pressKeys("d");
-		page.zMailApp.zVerifyAutocompleteExists(acc1.toLowerCase(), 1, 1);
-		pressKeys("o");
-		pressKeys("m");
-		pressKeys("a");
-		pressKeys("i");
-		pressKeys("n");
-		page.zMailApp.zVerifyAutocompleteExists(acc1.toLowerCase(), 1, 1);
-		pressKeys(".");
-		page.zMailApp.zVerifyAutocompleteExists(acc1.toLowerCase(), 1, 1);
-		pressKeys("c");
-		pressKeys("o");
-		page.zMailApp.zVerifyAutocompleteExists(acc1.toLowerCase(), 1, 1);
-		pressKeys("m");
-		page.zMailApp.zVerifyAutocompleteExists(acc1.toLowerCase(), 1, 1);
-		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
-
-		SelNGBase.needReset.set(false);
-	}
 
 	/**
 	 * Autocomplete shows contact from deleted(Trashed) address book folders -

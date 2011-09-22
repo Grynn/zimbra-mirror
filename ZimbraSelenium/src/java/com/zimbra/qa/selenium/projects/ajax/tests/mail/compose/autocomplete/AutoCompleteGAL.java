@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.testng.annotations.*;
 
+import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
@@ -337,6 +338,90 @@ public class AutoCompleteGAL extends PrefGroupMailByMessageTest {
 		if ( dialog.zIsActive() ) {
 			dialog.zClickButton(Button.B_NO);
 		}
+		
+	}
+
+	@Bugs(ids = "47045")
+	@Test(	description = "Autocomplete including a period/dot '.' in the string",
+			groups = { "functional" })
+	public void AutoCompleteGAL_Bug47045A() throws HarnessException {
+		
+
+		
+		// Message properties
+		String subject = "subject" + ZimbraSeleniumProperties.getUniqueString();
+		String body = "body" + ZimbraSeleniumProperties.getUniqueString();
+		
+		// Open the new mail form
+		FormMailNew mailform = (FormMailNew) app.zPageMail.zToolbarPressButton(Button.B_NEW);
+		ZAssert.assertNotNull(mailform, "Verify the new form opened");
+		
+		// Fill out the form with the data
+		mailform.zFillField(Field.Subject, subject);
+		mailform.zFillField(Field.Body, body);
+
+		// Auto complete a name based on email address such as "user@domain."
+		String value = SampleAccount.EmailAddress.substring(0, SampleAccount.EmailAddress.indexOf('.') + 1);
+		List<AutocompleteEntry> entries = mailform.zAutocompleteFillField(Field.To, value);
+		AutocompleteEntry found = null;
+		for (AutocompleteEntry entry : entries) {
+			if ( entry.getAddress().contains(SampleAccount.EmailAddress) ) {
+				found = entry;
+				break;
+			}
+		}
+		ZAssert.assertNotNull(found, "Verify the autocomplete entry exists in the returned list");
+		mailform.zAutocompleteSelectItem(found);
+		
+		// Send the message
+		mailform.zSubmit();
+
+		
+		// Log into the destination account and make sure the message is received
+		MailItem received = MailItem.importFromSOAP(SampleAccount, "subject:("+ subject +")");
+		ZAssert.assertNotNull(received, "Verify the message is received correctly");
+		
+	}
+
+	@Bugs(ids = "47045")
+	@Test(	description = "Autocomplete including a period/dot '.' in the string",
+			groups = { "functional" })
+	public void AutoCompleteGAL_Bug47045B() throws HarnessException {
+		
+
+		
+		// Message properties
+		String subject = "subject" + ZimbraSeleniumProperties.getUniqueString();
+		String body = "body" + ZimbraSeleniumProperties.getUniqueString();
+		
+		// Open the new mail form
+		FormMailNew mailform = (FormMailNew) app.zPageMail.zToolbarPressButton(Button.B_NEW);
+		ZAssert.assertNotNull(mailform, "Verify the new form opened");
+		
+		// Fill out the form with the data
+		mailform.zFillField(Field.Subject, subject);
+		mailform.zFillField(Field.Body, body);
+
+		// Auto complete a name based on email address such as "user@domain.c"
+		String value = SampleAccount.EmailAddress.substring(0, SampleAccount.EmailAddress.indexOf('.') + 2);
+		List<AutocompleteEntry> entries = mailform.zAutocompleteFillField(Field.To, value);
+		AutocompleteEntry found = null;
+		for (AutocompleteEntry entry : entries) {
+			if ( entry.getAddress().contains(SampleAccount.EmailAddress) ) {
+				found = entry;
+				break;
+			}
+		}
+		ZAssert.assertNotNull(found, "Verify the autocomplete entry exists in the returned list");
+		mailform.zAutocompleteSelectItem(found);
+		
+		// Send the message
+		mailform.zSubmit();
+
+		
+		// Log into the destination account and make sure the message is received
+		MailItem received = MailItem.importFromSOAP(SampleAccount, "subject:("+ subject +")");
+		ZAssert.assertNotNull(received, "Verify the message is received correctly");
 		
 	}
 
