@@ -198,7 +198,7 @@ public class CreateFolder extends AjaxCommonTest {
 	   String url = app.zGetActiveAccount().soapSelectValue("//mail:folder[@name='" + folder.getName() + "']", "url");
 
 	   // Only RSS folder has url attribute , so if its equal , it asserts the RSS folder creation
-	   ZAssert.assertEquals(url,rssurl, "Verify the url of the rss folder correct");
+	   ZAssert.assertEquals(url,rssUrl, "Verify the url of the rss folder correct");
 	}
 
 	private void _nonZimbraAccountSetup(ZimbraAccount account) throws HarnessException {
