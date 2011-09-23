@@ -44,13 +44,16 @@ public class PageMail extends AbsTab {
 
 	public static class Locators {
 
+		public static final String IsConViewActiveCSS 			= "css=div[id='zv__CLV2-main']";
+		public static final String IsMsgViewActiveCSS 			= "css=div[id='zv__TV-main']";
+
 		public static final String zPrintIconBtnID 		= "zb__CLV2__PRINT_left_icon";
 		public static final String zTagMenuDropdownBtnID	= "zb__CLV2__TAG_MENU_dropdown";
 		public static final String zDetachIconBtnID		= "zb__TV__DETACH_left_icon";
 		public static final String zViewMenuDropdownBtnID	= "zb__CLV2__VIEW_MENU_dropdown";
 
 		public static final String zCloseIconBtn_messageWindow 	= "css=td[id=zb__MSG__CLOSE_left_icon]";
-		public static final String cssTVRowsLocator	= "css=div#zl__TV__rows";
+		public static final String cssTVRowsLocator	= "css=div#zl__TV-main__rows";
 
 		public static class CONTEXT_MENU {
 			// TODO: Until https://bugzilla.zimbra.com/show_bug.cgi?id=56273 is fixed, ContextMenuItem will be defined using the text content
@@ -106,7 +109,7 @@ public class PageMail extends AbsTab {
 		// If the "NEW" button is visible, then the app is visible
 
 		// Check MLV first
-		locator = "css=div#zb__TV__NEW_MENU";
+		locator = "css=div#zb__TV-main__NEW_MENU";
 
 		loaded = this.sIsElementPresent(locator);
 		visible = this.zIsVisiblePerPosition(locator, 4, 74);
@@ -114,7 +117,7 @@ public class PageMail extends AbsTab {
 			return (true);
 
 		// Check CLV next
-		locator = "css=div#zb__CLV2__NEW_MENU";
+		locator = "css=div#zb__CLV2-main__NEW_MENU";
 		loaded = this.sIsElementPresent(locator);
 		visible = this.zIsVisiblePerPosition(locator, 4, 74);
 		if ( loaded && visible )
@@ -701,9 +704,9 @@ public class PageMail extends AbsTab {
 	 * @throws HarnessException
 	 */
 	public PageMailView zGetPropMailView() throws HarnessException {
-		if ( this.zIsVisiblePerPosition("css=div#zv__CLV2", 0, 0) ) {
+		if ( this.zIsVisiblePerPosition(Locators.IsConViewActiveCSS, 0, 0) ) {
 			return (PageMailView.BY_CONVERSATION);
-		} else if ( this.zIsVisiblePerPosition("css=div#zv__TV", 0, 0) ) {
+		} else if ( this.zIsVisiblePerPosition(Locators.IsMsgViewActiveCSS, 0, 0) ) {
 			return (PageMailView.BY_MESSAGE);
 		}
 
@@ -828,11 +831,11 @@ public class PageMail extends AbsTab {
 		String listLocator = null;
 		String rowLocator = null;
 		if (zGetPropMailView() == PageMailView.BY_MESSAGE) {
-			listLocator = "css=div[id='zl__TV__rows']";
-			rowLocator = "div[id^='zli__TV__']";
+			listLocator = "css=div[id='zl__TV-main__rows']";
+			rowLocator = "div[id^='zli__TV-main__']";
 		} else {
-			listLocator = "css=div[id='zl__CLV2__rows']";
-			rowLocator = "div[id^='zli__CLV2__']";
+			listLocator = "css=div[id='zl__CLV2-main__rows']";
+			rowLocator = "div[id^='zli__CLV2-main__']";
 		}
 
 		// Make sure the button exists
@@ -881,11 +884,11 @@ public class PageMail extends AbsTab {
 		//
 
 		if (zGetPropMailView() == PageMailView.BY_MESSAGE) {
-			listLocator = "css=div[id='zl__TV__rows']";
-			rowLocator = "div[id^='zli__TV__']";
+			listLocator = "css=div[id='zl__TV-main__rows']";
+			rowLocator = "div[id^='zli__TV-main__']";
 		} else {
-			listLocator = "css=div[id='zl__CLV2__rows']";
-			rowLocator = "div[id^='zli__CLV2__']";
+			listLocator = "css=div[id='zl__CLV2-main__rows']";
+			rowLocator = "div[id^='zli__CLV2-main__']";
 		}
 
 		// TODO: how to handle both messages and conversations, maybe check the view first?
@@ -1183,11 +1186,11 @@ public class PageMail extends AbsTab {
 		//
 
 		if (zGetPropMailView() == PageMailView.BY_MESSAGE) {
-			listLocator = "css=div[id='zl__TV__rows']";
-			rowLocator = "div[id^='zli__TV__']";
+			listLocator = "css=div[id='zl__TV-main__rows']";
+			rowLocator = "div[id^='zli__TV-main__']";
 		} else {
-			listLocator = "css=div[id='zl__CLV2__rows']";
-			rowLocator = "div[id^='zli__CLV2__']";
+			listLocator = "css=div[id='zl__CLV2-main__rows']";
+			rowLocator = "div[id^='zli__CLV2-main__']";
 		}
 
 		// TODO: how to handle both messages and conversations, maybe check the view first?

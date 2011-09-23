@@ -165,7 +165,7 @@ public class PageMail extends AbsTab {
 
 
 		public static final String zCLVRows			= "zl__CLV__rows";
-		public static final String zTVRows			= "zl__TV__rows";
+		public static final String zTVRows			= "zl__TV-main__rows";
 
 		public static class CONTEXT_MENU {
 			// TODO: Until https://bugzilla.zimbra.com/show_bug.cgi?id=56273 is fixed, ContextMenuItem will be defined using the text content
@@ -687,8 +687,8 @@ public class PageMail extends AbsTab {
 		String listLocator = null;
 		String rowLocator = null;
 		if (zGetPropMailView() == PageMailView.BY_MESSAGE) {
-         listLocator = "//div[@id='zl__TV__rows']";
-         rowLocator = "//div[contains(@id, 'zli__TV__')]";
+         listLocator = "//div[@id='zl__TV-main__rows']";
+         rowLocator = "//div[contains(@id, 'zli__TV-main__')]";
       } else {
          listLocator = "//div[@id='zl__CLV__rows']";
          rowLocator = "//div[contains(@id, 'zli__CLV__')]";
@@ -910,8 +910,8 @@ public class PageMail extends AbsTab {
 	   //
 	   
 	   if (zGetPropMailView() == PageMailView.BY_MESSAGE) {
-	      listLocator = "//div[@id='zl__TV__rows']";
-	      rowLocator = "//div[contains(@id, 'zli__TV__')]";
+	      listLocator = "//div[@id='zl__TV-main__rows']";
+	      rowLocator = "//div[contains(@id, 'zli__TV-main__')]";
 	   } else {
 	      listLocator = "//div[@id='zl__CLV__rows']";
 	      rowLocator = "//div[contains(@id, 'zli__CLV__')]";
@@ -979,8 +979,8 @@ public class PageMail extends AbsTab {
 		//
 
 		if (zGetPropMailView() == PageMailView.BY_MESSAGE) {
-			listLocator = "//div[@id='zl__TV__rows']";
-			rowLocator = "//div[contains(@id, 'zli__TV__')]";
+			listLocator = "//div[@id='zl__TV-main__rows']";
+			rowLocator = "//div[contains(@id, 'zli__TV-main__')]";
 		} else {
 			listLocator = "//div[@id='zl__CLV__rows']";
 			rowLocator = "//div[contains(@id, 'zli__CLV__')]";
@@ -1242,8 +1242,8 @@ public class PageMail extends AbsTab {
 		//
 
 		if (zGetPropMailView() == PageMailView.BY_MESSAGE) {
-			listLocator = "//div[@id='zl__TV__rows']";
-			rowLocator = "//div[contains(@id, 'zli__TV__')]";
+			listLocator = "//div[@id='zl__TV-main__rows']";
+			rowLocator = "//div[contains(@id, 'zli__TV-main__')]";
 		} else {
 			listLocator = "//div[@id='zl__CLV__rows']";
 			rowLocator = "//div[contains(@id, 'zli__CLV__')]";

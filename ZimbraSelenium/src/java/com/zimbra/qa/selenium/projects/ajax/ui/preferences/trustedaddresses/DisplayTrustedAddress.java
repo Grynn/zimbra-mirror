@@ -8,6 +8,7 @@ import com.zimbra.qa.selenium.framework.ui.AbsDisplay;
 import com.zimbra.qa.selenium.framework.ui.AbsPage;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.projects.ajax.ui.mail.PageMail;
 
 public class DisplayTrustedAddress extends AbsDisplay {
 
@@ -20,8 +21,6 @@ public class DisplayTrustedAddress extends AbsDisplay {
 		public static final String zConViewDomainLink = "css=a#zv__CLV2__MSG_displayImages_domain";
 		public static final String zConViewWarningIcon = "css=div#zv__CLV2__MSG_displayImages.DisplayImages div div.ImgWarning";
 
-		public static final String IsConViewActive = "css=[parentid='zv__CLV2']";
-		public static final String IsMsgViewActive = "css=[parentid='zv__TV']";
 	}
 
 	public DisplayTrustedAddress(AbsApplication application) {
@@ -44,7 +43,7 @@ public class DisplayTrustedAddress extends AbsDisplay {
 	@Override
 	public boolean zIsActive() throws HarnessException {
 		// logger.warn("implement me", new Throwable());
-		return (sIsElementPresent(Locators.IsConViewActive) || sIsElementPresent(Locators.IsMsgViewActive));
+		return (sIsElementPresent(PageMail.Locators.IsConViewActiveCSS) || sIsElementPresent(PageMail.Locators.IsMsgViewActiveCSS));
 
 	}
 

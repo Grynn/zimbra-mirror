@@ -32,8 +32,6 @@ public class DisplayMail extends AbsDisplay {
 	 */
 	public static class Locators {
 				
-		public static final String IsConViewActive 			= "css=div[id='zv__CLV2']";
-		public static final String IsMsgViewActive 			= "css=div[id='zv__TV']";
 		
 		public static final String MessageViewPreviewAtBottomCSS		= "css=div[id='zv__TV__MSG']";
 		public static final String MessageViewPreviewAtRightCSS			= "css=div[id='zv__TV__MSG']";
@@ -425,7 +423,7 @@ public class DisplayMail extends AbsDisplay {
 		
 		if ( this.zIsVisiblePerPosition(Locators.MessageViewOpenMessageCSS, 0, 0) ) {
 			ContainerLocator = Locators.MessageViewOpenMessageCSS;
-		} else if ( this.zIsVisiblePerPosition(Locators.IsMsgViewActive, 0, 0)) {
+		} else if ( this.zIsVisiblePerPosition(PageMail.Locators.IsMsgViewActiveCSS, 0, 0)) {
 			if ( this.zIsVisiblePerPosition(Locators.MessageViewPreviewAtBottomCSS, 0, 0) ) {
 				ContainerLocator = Locators.MessageViewPreviewAtBottomCSS;
 			} else if ( this.zIsVisiblePerPosition(Locators.MessageViewPreviewAtRightCSS, 0, 0) ) {
@@ -433,7 +431,7 @@ public class DisplayMail extends AbsDisplay {
 			} else {
 				throw new HarnessException("Unable to determine the current open view");				
 			}
-		} else if ( this.zIsVisiblePerPosition(Locators.IsConViewActive, 0, 0) ) {
+		} else if ( this.zIsVisiblePerPosition(PageMail.Locators.IsConViewActiveCSS, 0, 0) ) {
 			if ( this.zIsVisiblePerPosition(Locators.ConversationViewPreviewAtBottomCSS, 0, 0) ) {
 				ContainerLocator = Locators.ConversationViewPreviewAtBottomCSS;
 			} else if ( this.zIsVisiblePerPosition(Locators.ConversationViewPreviewAtRightCSS, 0, 0) ){
