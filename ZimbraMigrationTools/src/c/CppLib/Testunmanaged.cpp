@@ -11,14 +11,14 @@ Testunmanaged::~Testunmanaged(void)
 {
 }
 */
-extern "C" LOGGERDLL_API CSingleton* GetInstance()
+extern "C" CPPLIB_DLLAPI CSingleton* GetInstance()
 {
 	CSingleton *pv = CSingleton::getInstance();
 	return pv;
 	
 }
 
-extern "C" LOGGERDLL_API void DisposeTestClass(CSingleton* pObject)
+extern "C" CPPLIB_DLLAPI void DisposeTestClass(CSingleton* pObject)
 {
 	if(pObject != NULL)
 	{
@@ -28,7 +28,7 @@ extern "C" LOGGERDLL_API void DisposeTestClass(CSingleton* pObject)
 }
 
 
-extern "C" LOGGERDLL_API void CallDoSomething(CSingleton* pObject, char* pchValue,LogType type)
+extern "C" CPPLIB_DLLAPI void CallDoSomething(CSingleton* pObject, char* pchValue,LogType type)
 {
 	if(pObject != NULL)
 	{

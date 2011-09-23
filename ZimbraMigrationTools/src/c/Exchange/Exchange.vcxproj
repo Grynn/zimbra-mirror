@@ -72,19 +72,23 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='dbg|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>..\out\$(Configuration)\</OutDir>
+    <OutDir>..\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>..\$(Platform)\$(Configuration)\$(TargetName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='dbg|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>..\out64\$(Configuration)\</OutDir>
+    <OutDir>..\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>..\$(Platform)\$(Configuration)\$(TargetName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='rtl|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>..\out\$(Configuration)\</OutDir>
+    <OutDir>..\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>..\$(Platform)\$(Configuration)\$(TargetName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='rtl|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>..\out64\$(Configuration)\</OutDir>
+    <OutDir>..\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>..\$(Platform)\$(Configuration)\$(TargetName)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='dbg|Win32'">
     <ClCompile>
@@ -104,10 +108,9 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>..\out\$(Configuration)\CppLib.lib;comsupp.lib;ActiveDS.lib;adsiid.lib;mapi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>comsupp.lib;ActiveDS.lib;adsiid.lib;mapi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>Exchange.def</ModuleDefinitionFile>
       <RegisterOutput>true</RegisterOutput>
-      <AdditionalOptions>"..\..\..\..\ZimbraMAPI\out\LSMSUTIL32\dbg\usa\Util.lib" "..\..\..\..\ZimbraMAPI\out\LSLIB32\dbg\usa\LSLIB32.lib" %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -123,6 +126,9 @@
     <ResourceCompile>
       <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
+    <Manifest>
+      <VerboseOutput>false</VerboseOutput>
+    </Manifest>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='dbg|x64'">
     <ClCompile>
@@ -142,7 +148,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>..\out64\$(Configuration)\CppLib.lib;comsupp.lib;ActiveDS.lib;adsiid.lib;mapi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>comsupp.lib;ActiveDS.lib;adsiid.lib;mapi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>Exchange.def</ModuleDefinitionFile>
       <RegisterOutput>true</RegisterOutput>
     </Link>
@@ -161,6 +167,9 @@
     <ResourceCompile>
       <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
+    <Manifest>
+      <VerboseOutput>false</VerboseOutput>
+    </Manifest>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='rtl|Win32'">
     <ClCompile>
@@ -185,7 +194,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>..\out\$(Configuration)\CppLib.lib;comsupp.lib;ActiveDS.lib;adsiid.lib;mapi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>comsupp.lib;ActiveDS.lib;adsiid.lib;mapi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>Exchange.def</ModuleDefinitionFile>
       <RegisterOutput>true</RegisterOutput>
     </Link>
@@ -202,6 +211,9 @@
     <ResourceCompile>
       <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
+    <Manifest>
+      <VerboseOutput>false</VerboseOutput>
+    </Manifest>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='rtl|x64'">
     <ClCompile>
@@ -226,7 +238,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>..\out64\$(Configuration)\CppLib.lib;comsupp.lib;ActiveDS.lib;adsiid.lib;mapi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>comsupp.lib;ActiveDS.lib;adsiid.lib;mapi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>Exchange.def</ModuleDefinitionFile>
       <RegisterOutput>true</RegisterOutput>
     </Link>
@@ -244,6 +256,9 @@
     <ResourceCompile>
       <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
+    <Manifest>
+      <VerboseOutput>false</VerboseOutput>
+    </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ContactObj.cpp" />
@@ -325,6 +340,20 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Exchange.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CppLib\CppLib.vcxproj">
+      <Project>{40AC2429-0A84-4E10-8011-439412E5A566}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ZimbraMAPI\vcproj\Util.vcxproj">
+      <Project>{ad950b89-e346-4095-98be-e91944c716ad}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ZimbraMAPI\vcproj\ZimbraRpc.vcxproj">
+      <Project>{3391699B-1204-4098-8697-2E43800AABE4}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

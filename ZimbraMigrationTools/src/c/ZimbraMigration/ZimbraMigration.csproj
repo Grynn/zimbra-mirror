@@ -40,7 +40,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\out\dbg\</OutputPath>
+    <OutputPath>..\Win32\dbg\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -50,7 +50,7 @@
     <PlatformTarget>x86</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\out\rtl\</OutputPath>
+    <OutputPath>..\Win32\rtl\</OutputPath>
     <DefineConstants>
     </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
@@ -63,7 +63,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'dbg|x64'">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>..\out64\dbg\</OutputPath>
+    <OutputPath>..\x64\dbg\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <DebugType>full</DebugType>
@@ -80,7 +80,7 @@
     <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'rtl|x64'">
-    <OutputPath>..\out64\rtl\</OutputPath>
+    <OutputPath>..\x64\rtl\</OutputPath>
     <Optimize>true</Optimize>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <DebugType>pdbonly</DebugType>

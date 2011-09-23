@@ -69,19 +69,23 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='dbg|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>..\out\$(Configuration)\</OutDir>
+    <OutDir>..\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>..\$(Platform)\$(Configuration)\$(TargetName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='dbg|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>..\out64\$(Configuration)\</OutDir>
+    <OutDir>..\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>..\$(Platform)\$(Configuration)\$(TargetName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='rtl|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>..\out\$(Configuration)\</OutDir>
+    <OutDir>..\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>..\$(Platform)\$(Configuration)\$(TargetName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='rtl|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>..\out64\$(Configuration)\</OutDir>
+    <OutDir>..\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>..\$(Platform)\$(Configuration)\$(TargetName)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='dbg|Win32'">
     <ClCompile>
@@ -112,6 +116,9 @@
     <ProjectReference>
       <LinkLibraryDependencies>true</LinkLibraryDependencies>
     </ProjectReference>
+    <Manifest>
+      <VerboseOutput>false</VerboseOutput>
+    </Manifest>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='dbg|x64'">
     <ClCompile>
@@ -139,6 +146,9 @@
       <Command>
       </Command>
     </PostBuildEvent>
+    <Manifest>
+      <VerboseOutput>false</VerboseOutput>
+    </Manifest>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='rtl|Win32'">
     <ClCompile>
@@ -169,6 +179,9 @@
       <Command>
       </Command>
     </PostBuildEvent>
+    <Manifest>
+      <VerboseOutput>false</VerboseOutput>
+    </Manifest>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='rtl|x64'">
     <ClCompile>
@@ -199,6 +212,9 @@
       <Command>
       </Command>
     </PostBuildEvent>
+    <Manifest>
+      <VerboseOutput>false</VerboseOutput>
+    </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">

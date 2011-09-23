@@ -1,11 +1,13 @@
 #pragma once
+#ifdef CPPLIB_EXPORTS
+#define CPPLIB_DLLAPI __declspec(dllexport)
+#else
+#define CPPLIB_DLLAPI __declspec(dllimport)
+#endif
 
-	#define LOGGERDLL_API __declspec(dllexport)
 
-extern "C"
-{
-typedef enum
-{
+extern "C" {
+typedef enum {
 	DBG,
 	INFO,
 	WARN,
@@ -14,7 +16,7 @@ typedef enum
 
 }LogType;
 
-class  LOGGERDLL_API CSingleton{
+class  CPPLIB_DLLAPI CSingleton{
 
 public:
     static CSingleton* getInstance();
