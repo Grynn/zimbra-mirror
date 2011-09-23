@@ -79,7 +79,8 @@ ZaAccount.A_zimbraPhoneticLastName = "zimbraPhoneticLastName";
 ZaAccount.A_zimbraPhoneticCompany = "zimbraPhoneticCompany";
 
 ZaAccount.A_zimbraIsAdminAccount = "zimbraIsAdminAccount";
-ZaAccount.A_zimbraIsDelegatedAdminAccount = "zimbraIsDelegatedAdminAccount" ;
+ZaAccount.A_zimbraIsDelegatedAdminAccount = "zimbraIsDelegatedAdminAccount";
+ZaAccount.A_zimbraIsExternalVirtualAccount = "zimbraIsExternalVirtualAccount";
 // system account
 ZaAccount.A_zimbraIsSystemAccount = "zimbraIsSystemAccount";
 

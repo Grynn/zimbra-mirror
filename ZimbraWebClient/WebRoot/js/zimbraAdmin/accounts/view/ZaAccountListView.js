@@ -132,6 +132,8 @@ function(account, now, isDragProxy) {
 						html[idx++] = AjxImg.getImageHtml("SpecialAccount");
 					} else if (account.attrs[ZaAccount.A_zimbraIsSystemResource] == "TRUE") {
 						html[idx++] = AjxImg.getImageHtml("SystemResource");
+					} else if (account.attrs[ZaAccount.A_zimbraIsExternalVirtualAccount] == "TRUE") {
+						html[idx++] = AjxImg.getImageHtml("AccountExternalVirtual");
 					} else {
 						if(account.isExternal) {
 							html[idx++] = AjxImg.getImageHtml("AccountIMAP");	

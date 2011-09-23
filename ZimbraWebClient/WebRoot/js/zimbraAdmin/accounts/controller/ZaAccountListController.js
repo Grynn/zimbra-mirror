@@ -63,7 +63,7 @@ ZaAccountListController.prototype.show = function (doPush) {
 			offset:this.RESULTSPERPAGE*(this._currentPageNum-1),
 			sortAscending:this._currentSortOrder,
 			limit:this.RESULTSPERPAGE,
-            attrs: [this.fetchAttrs, ZaAccount.A_zimbraIsDelegatedAdminAccount, ZaAccount.A_zimbraIsAdminAccount, ZaAccount.A_zimbraIsSystemResource, ZaAccount.A_zimbraIsSystemAccount].join(),
+            attrs: [this.fetchAttrs, ZaAccount.A_zimbraIsDelegatedAdminAccount, ZaAccount.A_zimbraIsAdminAccount, ZaAccount.A_zimbraIsSystemResource, ZaAccount.A_zimbraIsSystemAccount, ZaAccount.A_zimbraIsExternalVirtualAccount].join(),
 			callback:callback,
 			controller: this,
 			showBusy:true,
