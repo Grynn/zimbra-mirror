@@ -325,10 +325,52 @@ LPCWSTR MAPIAccessAPI::GetItem(SBinary sbItemEID, BaseItemData &itemData) {
     try {
         MAPIMessage msg;
         msg.Initialize(pMessage);
-        if (msg.ItemType() == ZT_MAIL) {
-            printf("ITEM TYPE: ZT_MAIL \n");
-        } else if (msg.ItemType() == ZT_CONTACTS) {
-            printf("ITEM TYPE: ZT_CONTACTS \n");
+		if(msg.ItemType()==ZT_MAIL)	{		 
+			printf("ITEM TYPE: ZT_MAIL \n");
+			MessageItemData *msgdata = (MessageItemData *)&itemData;
+			//subject
+			msgdata->Subject=L"";
+			LPTSTR lpstrsubject;
+			if(msg.Subject(&lpstrsubject)) {
+				msgdata->Subject= lpstrsubject;
+				SafeDelete(lpstrsubject);
+			}
+
+			msgdata->IsFlagged = msg.IsFlagged();
+
+			msgdata->Urlname =L"";
+			LPTSTR lpstrUrlName;
+			if(msg.GetURLName(&lpstrUrlName)) {
+				msgdata->Urlname = lpstrUrlName;
+				SafeDelete(lpstrUrlName);
+			}
+
+			msgdata->IsDraft = msg.IsDraft();
+			msgdata->IsFromMe = (msg.IsFromMe()==TRUE);
+			msgdata->IsUnread = (msg.IsUnread()==TRUE);
+			msgdata->IsForwared = (msg.Forwarded()==TRUE);
+			msgdata->RepliedTo = msg.RepliedTo()==TRUE;
+			msgdata->HasAttachments = msg.HasAttach();
+			msgdata->IsUnsent = msg.IsUnsent()==TRUE;
+			msgdata->HasHtml = msg.HasHtmlPart();
+			msgdata->HasText = msg.HasTextPart();
+
+			msgdata->Date = msg.Date();
+			LPWSTR wstrDateString;
+			AtoW(msg.DateString(),wstrDateString);
+			msgdata->DateString = wstrDateString;
+			SafeDelete(wstrDateString);
+
+			msgdata->deliveryDate = msg.DeliveryDate();
+			LPWSTR wstrDelivDateString;
+			AtoW(msg.DeliveryDateString(),wstrDelivDateString);
+			msgdata->DeliveryDateString = wstrDelivDateString;
+			SafeDelete(wstrDelivDateString);
+
+
+		}
+		else if(msg.ItemType()==ZT_CONTACTS) {
+			printf("ITEM TYPE: ZT_CONTACTS \n");
             MAPIContact mapicontact(*m_zmmapisession, msg);
             ContactItemData *cd = (ContactItemData *)&itemData;
             cd->Birthday = mapicontact.Birthday();
@@ -382,13 +424,18 @@ LPCWSTR MAPIAccessAPI::GetItem(SBinary sbItemEID, BaseItemData &itemData) {
             cd->WorkState = mapicontact.WorkState();
             cd->WorkStreet = mapicontact.WorkStreet();
             cd->WorkURL = mapicontact.WorkURL();
-        } else if (msg.ItemType() == ZT_APPOINTMENTS) {
-            printf("ITEM TYPE: ZT_APPOINTMENTS \n");
-        } else if (msg.ItemType() == ZT_TASKS) {
+
+		}
+		else if(msg.ItemType()==ZT_APPOINTMENTS) {  
+			printf("ITEM TYPE: ZT_APPOINTMENTS \n");
+		}
+		else if(msg.ItemType()==ZT_TASKS) {
             printf("ITEM TYPE: ZT_TASKS \n");
-        } else if (msg.ItemType() == ZT_MEETREQ_RESP) {
+		}
+		else if(msg.ItemType()==ZT_MEETREQ_RESP) {
             printf("ITEM TYPE: ZT_MEETREQ_RESP \n");
-        }
+		}
+		
     } catch (MAPIMessageException &mex) {
         lpwstrStatus = FromatExceptionInfo(mex.ErrCode(), (LPWSTR)mex.Description().c_str(),
                 (LPSTR)mex.SrcFile().c_str(), mex.SrcLine());
@@ -396,6 +443,7 @@ LPCWSTR MAPIAccessAPI::GetItem(SBinary sbItemEID, BaseItemData &itemData) {
         lpwstrStatus = FromatExceptionInfo(cex.ErrCode(), (LPWSTR)cex.Description().c_str(),
                 (LPSTR)cex.SrcFile().c_str(), cex.SrcLine());
     }
+
 ZM_EXIT:
     return lpwstrStatus;
 }

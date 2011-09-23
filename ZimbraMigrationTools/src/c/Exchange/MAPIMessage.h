@@ -80,11 +80,18 @@ private:
     SBinary m_EntryID;
     CHAR m_pDateTimeStr[32];
     CHAR m_pDeliveryDateTimeStr[32];
+	std::vector<std::string> RTFElement;  
+	enum EnumRTFElement {NOTFOUND=-1, OPENBRACE=0, CLOSEBRACE, HTMLTAG, 
+        MHTMLTAG, PAR, TAB, LI, FI, HEXCHAR, PNTEXT, HTMLRTF, 
+        OPENBRACEESC, CLOSEBRACEESC, END, HTMLRTF0};
 
     static MessagePropTags m_messagePropTags;
     static RecipientPropTags m_recipientPropTags;
     static ReplyToPropTags m_replyToPropTags;
 
+	unsigned int CodePageId();
+	EnumRTFElement MatchRTFElement(const char* psz);
+	const char* Advance( const char* psz, const char* pszCharSet );
 public:
     MAPIMessage();
     ~MAPIMessage();
@@ -94,8 +101,8 @@ public:
     LPMESSAGE InternalMessageObject() { return m_pMessage; }
     bool Subject(LPTSTR *ppSubject);
     ZM_ITEM_TYPE ItemType();
-    BOOL IsFlagged();
-    LPTSTR GetURLName();
+    bool IsFlagged();
+    bool GetURLName(LPTSTR *pstrUrlName);
     bool IsDraft();
     BOOL IsFromMe();
     BOOL IsUnread();
@@ -114,6 +121,12 @@ public:
 
     SBinary EntryID() { return m_EntryID; }
     bool TextBody(LPTSTR *ppBody, unsigned int &nTextChars);
+	//reads the utf8 body and retruns it with accented chararcters
+	bool UTF8EncBody( LPTSTR* ppBody, unsigned int& nTextChars );
+	//return the html body of the message
+	bool HtmlBody( LPVOID* ppBody, unsigned int& nHtmlBodyLen );
+	bool DecodeRTF2HTML( char *buf, unsigned int *len );
+	bool IsRTFHTML( const char *buf );
 };
 
 // Message Iterator class

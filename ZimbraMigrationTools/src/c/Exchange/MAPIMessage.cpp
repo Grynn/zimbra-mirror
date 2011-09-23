@@ -1,7 +1,7 @@
 #include "common.h"
 #include "Exchange.h"
 #include "MAPIMessage.h"
-
+#include <Mshtml.h>
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 // MAPIMessageException
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -54,6 +54,23 @@ MAPIMessage::MAPIMessage(): m_pMessage(NULL), m_pMessagePropVals(NULL),
     m_pRecipientRows(NULL) {
     m_EntryID.cb = 0;
     m_EntryID.lpb = NULL;
+
+	//initialize the RTF tags.
+    RTFElement.push_back( "{" );
+    RTFElement.push_back( "}" );
+    RTFElement.push_back( "\\*\\htmltag" );
+    RTFElement.push_back( "\\*\\mhtmltag" );
+    RTFElement.push_back( "\\par" );
+    RTFElement.push_back( "\\tab" );
+    RTFElement.push_back( "\\li" );
+    RTFElement.push_back( "\\fi-" );
+    RTFElement.push_back( "\\'" );
+    RTFElement.push_back( "\\pntext" );
+    RTFElement.push_back( "\\htmlrtf" );
+    RTFElement.push_back( "\\{" );
+    RTFElement.push_back( "\\}" );
+    RTFElement.push_back( "" );
+    RTFElement.push_back( "\\htmlrtf0" );
 }
 
 MAPIMessage::~MAPIMessage() {
@@ -119,20 +136,28 @@ void MAPIMessage::InternalFree() {
     }
 }
 
-bool MAPIMessage::Subject(LPTSTR *ppSubject) {
-    HRESULT hr = S_OK;
+unsigned int MAPIMessage::CodePageId()
+{
+	if( PROP_TYPE(m_pMessagePropVals[INTERNET_CPID].ulPropTag) != PT_ERROR )
+	{
+		return m_pMessagePropVals[INTERNET_CPID].Value.ul;
+	}
+	else if( PROP_TYPE(m_pMessagePropVals[MESSAGE_CODEPAGE].ulPropTag) != PT_ERROR )
+	{
+		return m_pMessagePropVals[MESSAGE_CODEPAGE].Value.ul;
+	}
+	else
+	{
+		//return the current ansii code page of the system
+		return GetACP();
+	}
+}
 
+bool MAPIMessage::Subject(LPTSTR *ppSubject) {
     if (PROP_TYPE(m_pMessagePropVals[SUBJECT].ulPropTag) != PT_ERROR) {
-        int nLen = (int)_tcslen(m_pMessagePropVals[SUBJECT].Value.LPSZ);
-        LPTSTR pSubject = m_pMessagePropVals[SUBJECT].Value.LPSZ;
-        if (SUCCEEDED(hr =
-                    MAPIAllocateBuffer((nLen + 1) * sizeof (TCHAR), (LPVOID *)ppSubject))) {
-            ZeroMemory(*ppSubject, (nLen + 1) * sizeof (TCHAR));
-            _tcscpy(*ppSubject, pSubject);
-            return true;
-        }
+        CopyString(*ppSubject,m_pMessagePropVals[SUBJECT].Value.LPSZ);
+		return true;
     }
-    *ppSubject = NULL;
     return false;
 }
 
@@ -158,16 +183,19 @@ ZM_ITEM_TYPE MAPIMessage::ItemType() {
     return ZT_NONE;
 }
 
-BOOL MAPIMessage::IsFlagged() {
+bool MAPIMessage::IsFlagged() {
     if (PROP_TYPE(m_pMessagePropVals[FLAG_STATUS].ulPropTag) != PT_ERROR)
         return m_pMessagePropVals[FLAG_STATUS].Value.ul == 2;
     return false;
 }
 
-LPTSTR MAPIMessage::GetURLName() {
+bool MAPIMessage::GetURLName(LPTSTR *pstrUrlName) {
     if (PROP_TYPE(m_pMessagePropVals[URL_NAME].ulPropTag) != PT_ERROR)
-        return m_pMessagePropVals[URL_NAME].Value.LPSZ;
-    return NULL;
+	{
+		CopyString(*pstrUrlName,m_pMessagePropVals[URL_NAME].Value.LPSZ);
+        return true;
+	}
+    return false;
 }
 
 bool MAPIMessage::IsDraft() {
@@ -367,6 +395,478 @@ bool MAPIMessage::TextBody(LPTSTR *ppBody, unsigned int &nTextChars) {
     // i.e., some messages do not have a body
     *ppBody = NULL;
     return false;
+}
+
+void ParseHTML (LPWSTR pBuff, LPWSTR *pOutbuff, size_t* oLen)
+{
+	IHTMLDocument2 *pDoc = NULL;
+	CoInitialize(NULL);
+	CoCreateInstance(CLSID_HTMLDocument,
+					NULL,
+					CLSCTX_INPROC_SERVER,
+					IID_IHTMLDocument2,
+					(LPVOID *) &pDoc);
+
+	if (pDoc) 
+	{
+	IPersistStreamInit *pPersist = NULL;
+
+	pDoc->QueryInterface(IID_IPersistStreamInit,
+						(LPVOID *) &pPersist);
+
+	if (pPersist)
+	{
+		IMarkupServices *pMS = NULL;
+
+		pPersist->InitNew();
+		pPersist->Release();
+
+		pDoc->QueryInterface(IID_IMarkupServices,
+								(LPVOID *) &pMS);
+
+		if (pMS)
+		{
+		IMarkupContainer *pMC = NULL;
+		IMarkupPointer *pMkStart = NULL;
+		IMarkupPointer *pMkFinish = NULL;
+
+		pMS->CreateMarkupPointer(&pMkStart);
+		pMS->CreateMarkupPointer(&pMkFinish);
+
+		pMS->ParseString(pBuff,
+							0,
+							&pMC,
+							pMkStart,
+							pMkFinish);
+
+		if (pMC)
+		{
+			IHTMLDocument2 *pNewDoc = NULL;
+
+			pMC->QueryInterface(IID_IHTMLDocument,
+								(LPVOID *) &pNewDoc);
+
+			if (pNewDoc)
+			{
+			// do anything with pNewDoc, in this case
+			// get the body innerText.
+
+			IHTMLElement *pBody;
+			pNewDoc->get_body(&pBody);
+
+			if (pBody)
+			{
+				BSTR strText;
+				pBody->get_innerText(&strText);
+				if(strText!=NULL)
+				{
+					size_t blen= wcslen(strText);
+					*pOutbuff= new WCHAR[blen+ 1]; 
+					ZeroMemory(*pOutbuff,blen+1);
+					swprintf( *pOutbuff,blen+1 ,L"%s", strText);
+					*oLen= blen;
+				}
+				pBody->Release();
+				SysFreeString(strText);
+			}
+
+			pNewDoc->Release();
+			}
+
+			pMC->Release();
+		}
+
+		if (pMkStart)
+			pMkStart->Release();
+
+		if (pMkFinish)
+			pMkFinish->Release();
+
+		pMS->Release();
+		}
+	}
+
+	pDoc->Release();
+	}
+
+	CoUninitialize();
+}
+
+bool MAPIMessage::UTF8EncBody( LPTSTR* ppBody, unsigned int& nTextChars )
+{
+	*ppBody = NULL;	
+	HRESULT hr = S_OK;
+
+	//must use the stream property
+	IStream *pIStream = NULL;
+	const ULONG PR_HTML_BODY = 0x1013001E;
+	hr = m_pMessage->OpenProperty(PR_HTML_BODY, &IID_IStream, STGM_READ, 0, (LPUNKNOWN FAR *) &pIStream);
+
+	if(FAILED(hr))
+    {
+        return false;
+    }
+	// discover the size of the incoming body
+	STATSTG statstg;
+	hr = pIStream->Stat(&statstg, STATFLAG_NONAME);
+	if( FAILED(hr) )
+	{
+		pIStream->Release();
+		pIStream = NULL;
+		return false;
+	}
+	unsigned bodySize = statstg.cbSize.LowPart;
+
+	// download the text
+	ULONG cb;
+	//hr = pIStream->Read(*ppBody, statstg.cbSize.LowPart, &cb);
+	// allocate buffer for incoming body data
+	char* tBuff= new char[bodySize + 10]; 
+	ZeroMemory( tBuff, bodySize + 10 );
+	hr = pIStream->Read(tBuff, statstg.cbSize.LowPart, &cb);
+	
+	if( FAILED(hr)||( cb != statstg.cbSize.LowPart ))
+	{
+		pIStream->Release();
+		pIStream = NULL;
+		return false;
+	}
+	
+	LPWSTR pTempBuff=NULL;
+	int cbuf= MultiByteToWideChar(CodePageId(), 0, tBuff,cb ,NULL, 0);
+	hr = MAPIAllocateBuffer((sizeof(WCHAR)*cbuf)+10, (LPVOID FAR *) &pTempBuff);
+	ZeroMemory(pTempBuff, (sizeof(WCHAR)*cbuf)+10);
+	int rbuf=MultiByteToWideChar(CodePageId(), 0, tBuff, cb,pTempBuff,cbuf);
+	UNREFERENCED_PARAMETER(rbuf);
+	//Zimbra::Rpc::Connection::LogRawText(tBuff,cb,"HTML");
+	delete[] tBuff;
+
+	size_t nLen=0;
+	ParseHTML(pTempBuff,ppBody,&nLen);
+
+	if((*ppBody==NULL)||!(nLen))
+		return false;
+
+	int ctbuf = WideCharToMultiByte( CodePageId(), 0, (LPCWSTR)*ppBody, nLen, NULL, 0, NULL, NULL );
+	tBuff = new char[(ctbuf+ 5)*sizeof(WCHAR)];
+	ZeroMemory( tBuff, (ctbuf + 5)*sizeof(WCHAR));
+	WideCharToMultiByte( CodePageId(), 0, (LPCWSTR)*ppBody, nLen, tBuff, ctbuf, NULL, NULL );
+	//Zimbra::Rpc::Connection::LogRawText(tBuff,ctbuf,"EXFROMHTML_");
+	delete[] tBuff;
+	MAPIFreeBuffer(pTempBuff);
+
+	// close the stream
+	pIStream->Release();
+	pIStream = NULL;
+	nTextChars = (unsigned int)_tcslen(*ppBody);
+	return true;
+}
+
+bool MAPIMessage::IsRTFHTML( const char *buf )
+{
+    // We look for the "\fromhtml" somewhere in the data.
+    // If the rtf encodes text rather than html, then instead
+    // it will only find "\fromtext".
+    const char* pFromPtr = strstr( buf, "\\from" );
+
+    if( !pFromPtr )
+    {
+        return false;
+    }
+
+    return !strncmp( pFromPtr, "\\fromhtml", 9 );    
+}
+
+Zimbra::MAPI::MAPIMessage::EnumRTFElement MAPIMessage::MatchRTFElement( const char* psz )
+{
+    for( int i=0; i<END; i++ )
+    {
+        if( !strncmp( psz, RTFElement[i].c_str(), RTFElement[i].length() ) ) 
+        {
+            return (EnumRTFElement)i;
+        }
+    }
+    return NOTFOUND;
+}
+
+const char* MAPIMessage::Advance( const char* psz, const char* pszCharSet )
+{
+    bool b = false;
+    const char* pszI = NULL;
+    while(*psz)
+    {
+        for( b = false, pszI = pszCharSet; *pszI; b |= (*psz == *pszI), pszI++ );
+        if( b )
+        {
+            psz++;
+        }
+        else 
+        {
+            return psz;
+        }
+    };
+    return psz;
+}
+
+bool MAPIMessage::DecodeRTF2HTML( char *buf, unsigned int *len )
+ {
+ #define WHITESPACE " \t"
+   if(!IsRTFHTML(buf)) 
+   {
+       return false;
+   }
+
+   // pIn -- pointer to where we're reading from
+   // pOut -- pointer to where we're writing to. Invariant: d<c
+   // pMax -- how far we can read from (i.e. to the end of the original rtf)
+   // nIgnoreRTFElement -- stores 'N': after \mhtmlN, we will ignore the subsequent \htmlN.
+   char *pOut=buf, *pIn=buf, *pMax= buf + *len ;
+   int nRTFElement = 0, nIgnoreRTFElement = -1, i = 0, j = 0;
+
+   // First, we skip forwards to the first \htmltag.
+   pIn = strstr( pIn, RTFElement[HTMLTAG].c_str() ) ;
+   if( !( pIn ))
+   {
+       pIn = pMax;
+   }
+
+   // * Ignore { and }. These are part of RTF markup.
+   // * Ignore \htmlrtf...\htmlrtf0. This is how RTF keeps its equivalent markup separate from the html.
+   // * Ignore \r and \n. The real carriage returns are stored in \par tags.
+   // * Ignore \pntext{..} and \liN and \fi-N. These are RTF junk.
+   // * Convert \par and \tab into \r\n and \t
+   // * Convert \'XX into the ascii character indicated by the hex number XX
+   // * Convert \{ and \} into { and }. This is how RTF escapes its curly braces.
+   // * When we get \*\mhtmltagN, keep the tag, but ignore the subsequent \*\htmltagN
+   // * When we get \*\htmltagN, keep the tag as long as it isn't subsequent to a \*\mhtmltagN
+   // * All other text should be kept as it is.
+
+   while( pIn < pMax )
+   {
+       EnumRTFElement rtfElem = NOTFOUND;
+       switch( rtfElem = MatchRTFElement( pIn ) )
+       {
+       case OPENBRACE:
+       case CLOSEBRACE:
+           {
+               pIn++;
+               break;
+           }
+       case HTMLTAG:
+           {
+               nRTFElement = strtol( pIn += RTFElement[HTMLTAG].length(), &pIn, 10 );
+               pIn =(char*)Advance( pIn, WHITESPACE );
+               if( nRTFElement == nIgnoreRTFElement )
+               {
+                   for(; *pIn!='}' && *pIn; pIn++ );
+               }
+               nIgnoreRTFElement = -1;
+               break;
+           }
+       case MHTMLTAG:
+           {
+               nRTFElement = strtol( pIn += RTFElement[MHTMLTAG].length(), &pIn, 10 );
+               pIn = (char*)Advance( pIn, WHITESPACE );
+               nIgnoreRTFElement = nRTFElement;
+               break;
+           }
+       case PAR:
+           {
+               strcpy( pOut, "\r\n" ); 
+               pOut +=2; 
+               pIn += RTFElement[PAR].length();
+               break;
+           }
+       case TAB:
+           {
+               strcpy( pOut, "  " ); 
+               pOut += 2; 
+               pIn += RTFElement[TAB].length();
+               break;
+           }
+       case LI:
+       case FI:
+           {
+               pIn = (char*) Advance( pIn += RTFElement[rtfElem].length(), "0123456789" );
+               break;
+           }
+       case HEXCHAR:
+           {
+               *((unsigned char*)pOut) = (unsigned char) strtol( pIn += 
+                   RTFElement[HEXCHAR].length(), &pIn, 16 );
+               break;
+           }
+       case PNTEXT:
+           {
+               for( pIn += RTFElement[PNTEXT].length(); *pIn != '}' && *pIn ; pIn++ );
+               break;
+           }
+       case HTMLRTF:
+           {
+			   pIn = strstr( pIn, RTFElement[HTMLRTF0].c_str() );
+               if( !pIn) 
+               {
+                   pIn = pMax;
+               }
+               else 
+               {
+                   pIn += RTFElement[HTMLRTF0].length();
+               }
+               break;
+           }
+       case OPENBRACEESC:
+       case CLOSEBRACEESC:
+           {
+               pIn += RTFElement[rtfElem].length();
+               j = rtfElem - OPENBRACEESC + OPENBRACE;
+               strncpy( pOut, RTFElement[j].c_str(), i = (int)RTFElement[j].length() );
+               pOut += i;
+               break;
+           }
+       default:
+           {
+               *pOut = *pIn; 
+               pIn++;
+               pOut++;
+           }
+       }
+       if( rtfElem != NOTFOUND ) 
+       {
+           pIn = (char*)Advance( pIn, WHITESPACE );
+       }
+   }
+
+   *pOut = 0; 
+   pOut++;
+   *len = (unsigned int)(pOut-buf);
+   return pOut != buf;
+ }
+
+bool MAPIMessage::HtmlBody( LPVOID* ppBody, unsigned int& nHtmlBodyLen )
+{
+	if( m_pMessagePropVals[HTML_BODY].ulPropTag == PR_BODY_HTML )
+	{
+		LPVOID pBody = m_pMessagePropVals[HTML_BODY].Value.bin.lpb;
+		size_t nLen =  m_pMessagePropVals[HTML_BODY].Value.bin.cb;
+		MAPIAllocateBuffer((ULONG)(nLen+10), (LPVOID FAR *) ppBody);
+		ZeroMemory( *ppBody, (nLen+10) );
+		memcpy(*ppBody, pBody, nLen);
+		nHtmlBodyLen = (UINT)nLen;
+		return true;
+	}
+
+	//Try to extract HTML BODY using the stream property.
+	HRESULT hr;
+	IStream *pIStream;
+	hr = m_pMessage->OpenProperty(PR_BODY_HTML, &IID_IStream, STGM_READ, 0, (LPUNKNOWN FAR *) &pIStream);
+	if( SUCCEEDED(hr) )
+	{
+		// discover the size of the incoming body
+		STATSTG statstg;
+		hr = pIStream->Stat(&statstg, STATFLAG_NONAME);
+		if( FAILED(hr) )
+			throw MAPIMessageException(E_FAIL, L"HtmlBody(): pIStream->Stat Failed.", __LINE__,
+                    __FILE__);
+		unsigned bodySize = statstg.cbSize.LowPart;
+		nHtmlBodyLen = bodySize;
+
+		// allocate buffer for incoming body data
+		hr = MAPIAllocateBuffer(bodySize + 10, ppBody);
+		ZeroMemory(*ppBody, bodySize + 10);
+		if( FAILED(hr) )
+			throw MAPIMessageException(E_FAIL, L"HtmlBody(): ZeroMemory Failed.", __LINE__,
+                    __FILE__);
+
+		// download the text
+		ULONG cb;
+		hr = pIStream->Read(*ppBody, statstg.cbSize.LowPart, &cb);
+		if( FAILED(hr) )
+			throw MAPIMessageException(E_FAIL, L"HtmlBody(): pIStream->Read Failed.", __LINE__,
+                    __FILE__);
+
+		if( cb != statstg.cbSize.LowPart )
+			throw MAPIMessageException(E_FAIL, L"HtmlBody(): statstg.cbSize.LowPart Failed.", __LINE__,
+                    __FILE__);
+
+		// close the stream
+		pIStream->Release();
+		return true;
+	}
+    else if( m_pMessagePropVals[STORE_SUPPORT_MASK].ulPropTag == PR_STORE_SUPPORT_MASK 
+            || m_pMessagePropVals[RTF_IN_SYNC].ulPropTag == PR_RTF_IN_SYNC )
+    {
+        //Get the compresed rich text data
+        HRESULT hr = S_OK;
+        IStream *pIStream = NULL;
+        hr = m_pMessage->OpenProperty( PR_RTF_COMPRESSED, &IID_IStream, STGM_READ, 
+            0, (LPUNKNOWN FAR *) &pIStream );
+
+        if( pIStream )
+        {
+            IStream *pUnComIStream = NULL; // for the uncompressed stream
+
+            //Uncompress the rich text
+            WrapCompressedRTFStream( pIStream, 0, &pUnComIStream );
+            pIStream->Release() ;
+            if( pUnComIStream )
+            {
+                int nBufSize = 10240;
+                LPSTR pRTFData = new char[nBufSize];
+                unsigned int nRTFSize = 0; 
+                bool bDone = false;
+
+                //We dont know the size of the stream, so kepp reading unless it returns 
+                //success along with less number of bytes than requested.
+                while( !bDone )
+                { 
+                    ULONG ulRead = 0;
+                    hr = pUnComIStream->Read( pRTFData + nRTFSize, 
+                        nBufSize - nRTFSize, &ulRead );
+
+                    if( hr != S_OK ) 
+                    {
+                        pRTFData[nRTFSize] = 0; 
+                        bDone = true;
+                    }
+                    else
+                    { 
+                        nRTFSize += ulRead; 
+                        bDone = ( ulRead < nBufSize - nRTFSize );
+                        if( !bDone )
+                        { 
+                            unsigned int nNewSize = 2*nRTFSize; 
+                            char *pNewBuf = new char[nNewSize];
+                            memcpy( pNewBuf, pRTFData, nRTFSize ); 
+                            delete[] pRTFData;
+                            pRTFData = pNewBuf; 
+                            nBufSize = nNewSize;
+                        }
+                    }
+                }
+                pRTFData[nRTFSize] = 0;
+                // close the stream
+                pUnComIStream->Release();
+
+                //Conver the RTF data into HTML
+                if( DecodeRTF2HTML( pRTFData, &nRTFSize ) )
+                {
+					MAPIAllocateBuffer( (ULONG)(nRTFSize+10), (LPVOID FAR *) ppBody);
+                    ZeroMemory( *ppBody, (nRTFSize+10) );
+                    memcpy( *ppBody, pRTFData, nRTFSize );
+                    nHtmlBodyLen = (UINT)nRTFSize;
+                    delete[] pRTFData ;
+                    return true;
+                }
+
+                delete[] pRTFData ;                
+            }                
+        }
+    }
+	//some other error occurred?
+	//i.e., some messages do not have a body
+	*ppBody = NULL;
+	nHtmlBodyLen = 0;
+	return false;
 }
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>

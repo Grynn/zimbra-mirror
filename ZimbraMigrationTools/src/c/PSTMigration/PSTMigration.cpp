@@ -236,7 +236,13 @@ DWORD WINAPI AccountMigrationThread( LPVOID lpParameter )
 		for(idItr=vItemDataList.begin();idItr!=vItemDataList.end();idItr++)
 		{
 			ContactItemData cd;
-			if((*idItr).lItemType == ZT_CONTACTS)
+			if((*idItr).lItemType == ZT_MAIL)
+			{
+				MessageItemData msgdata;
+				printf("Got message item:");
+				//maapi->GetItem((*idItr).sbMessageID,msgdata);
+			}
+			else if((*idItr).lItemType == ZT_CONTACTS)
 			{
 				printf("Got contact item:");
 				maapi->GetItem((*idItr).sbMessageID,cd);

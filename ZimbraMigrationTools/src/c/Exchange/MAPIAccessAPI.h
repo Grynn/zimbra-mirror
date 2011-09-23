@@ -86,6 +86,32 @@ typedef struct _ContactItemData: BaseItemData {
     wstring IMAddress1;
 } ContactItemData;
 
+typedef struct{
+	LPTSTR buffer;
+	unsigned long size;
+}data_buffer;
+
+typedef struct _MessageItemData: BaseItemData {
+	wstring Subject;
+	bool IsFlagged;
+	wstring Urlname;
+	bool IsDraft;
+	bool IsFromMe;
+	bool IsUnread;
+	bool IsForwared;
+	bool RepliedTo;
+	bool HasAttachments;
+	bool IsUnsent;
+	bool HasHtml;
+	bool HasText;
+	__int64 deliveryDate;
+	wstring DeliveryDateString;
+	__int64 Date;
+	wstring DateString;
+	data_buffer textbody;
+	data_buffer htmlbody;
+
+}MessageItemData;
 class MAPIAccessAPI {
 private:
     static std::wstring m_strAdminProfileName;
