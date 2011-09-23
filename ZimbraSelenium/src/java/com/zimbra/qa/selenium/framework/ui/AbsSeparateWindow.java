@@ -313,6 +313,16 @@ public abstract class AbsSeparateWindow extends AbsPage {
 
 		try {
 
+			// Make sure the separate window was initialized
+			if ( this.DialogWindowID == null || this.DialogWindowID.equals("null") ) {
+				// Window was never opened/found.  Don't close anything.
+				// This may leave an extra window open, but if we can't
+				// find that window, there is no way to close it.
+				//
+				return;
+			}
+
+			// Select the window
 			try {
 				super.sSelectWindow(this.DialogWindowID);
 			} catch (SeleniumException e) {
@@ -320,6 +330,7 @@ public abstract class AbsSeparateWindow extends AbsPage {
 				return;
 			}
 			
+			// Close the window
 			super.sClose();
 
 		} finally {
