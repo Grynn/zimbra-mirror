@@ -25,39 +25,52 @@ public class ViewContactGroup extends AjaxCommonTest  {
 	}
 	
 	private ContactGroupItem createContactGroup(String firstLetterOfGroupName) throws HarnessException {
- 	   ContactGroupItem group = ContactGroupItem.generateContactItem(GenerateItemType.Basic);
-       group.groupName = firstLetterOfGroupName + group.groupName;
-       group.fileAs    = group.groupName;
-	
-       app.zGetActiveAccount().soapSend(
+	 	ContactGroupItem group = ContactGroupItem.generateContactItem(GenerateItemType.Basic);
+	    group.groupName = firstLetterOfGroupName + group.groupName;
+	    group.fileAs    = group.groupName;
+
+   	   	StringBuilder sb= new StringBuilder("");
+   		for (ContactItem contactItem: group.dlist) {
+   			String e= contactItem.email;
+   			sb.append("<m type='I' value='" + e + "' />");
+   		}
+
+   		app.zGetActiveAccount().soapSend(
             "<CreateContactRequest xmlns='urn:zimbraMail'>" +
             "<cn >" +
             "<a n='type'>group</a>" +
             "<a n='nickname'>" + group.groupName +"</a>" +
-            "<a n='dlist'>" + group.getDList() + "</a>" +
             "<a n='fileAs'>8:" +  group.fileAs +"</a>" +
+            sb.toString() +
             "</cn>" +
             "</CreateContactRequest>");
        
        return group;
 	}
 	
+	
+	private void verifyGroupDisplayed(ContactGroupItem group) throws HarnessException {
+		// Select the contact group
+		DisplayContactGroup groupView = (DisplayContactGroup) app.zPageAddressbook.zListItem(Action.A_LEFTCLICK, group.fileAs);
+	  
+		// verify groupname
+		ZAssert.assertStringContains(groupView.zGetContactProperty(DisplayContactGroup.Field.Company), group.fileAs  , "Verify contact group email (" + group.fileAs + ") displayed");	
+		
+		// verify group members
+		for (int i=0; i<group.dlist.size(); i++) {
+	       ZAssert.assertStringContains(groupView.zGetContactProperty(DisplayContactGroup.Field.Email), group.dlist.get(i).email, "Verify contact group email (" + group.dlist.get(i).email + ") displayed");	
+		}		
+	}
     
 	@Test(	description = "View a contact group created via soap",
 			groups = { "functional" })
-	public void DisplayContactGroupInfo_Emails() throws HarnessException {
+	public void DisplayContactGroupInfo() throws HarnessException {
 		         		
 	    // Create a contact group via Soap then select
 		ContactGroupItem group = app.zPageAddressbook.createUsingSOAPSelectContactGroup(app, Action.A_LEFTCLICK);
-	
-	    // Select the contact group
-		DisplayContactGroup groupView = (DisplayContactGroup) app.zPageAddressbook.zListItem(Action.A_LEFTCLICK, group.fileAs);
-	  
-		ZAssert.assertStringContains(groupView.zGetContactProperty(DisplayContactGroup.Field.Company), group.fileAs  , "Verify contact group email (" + group.fileAs + ") displayed");	
-		
-		for (int i=0; i<group.dlist.size(); i++) {
-	       ZAssert.assertStringContains(groupView.zGetContactProperty(DisplayContactGroup.Field.Email), group.dlist.get(i).email, "Verify contact group email (" + group.dlist.get(i) + ") displayed");	
-		}            
+
+		// Verify group name and members displayed
+		verifyGroupDisplayed(group);
    	}
 
 	@Test(	description = "Click Alphabetbar button All: Verify contact groups started with digit and A-Z listed ",
@@ -77,21 +90,12 @@ public class ViewContactGroup extends AjaxCommonTest  {
         
         //click All       
 		app.zPageAddressbook.zToolbarPressButton(Button.B_AB_ALL);
+					
+		// Verify group name and members displayed
+		verifyGroupDisplayed(group1);
+		verifyGroupDisplayed(group2);
+		verifyGroupDisplayed(group3);
 		
-		
-		//verify all contact groups name are listed
-		List<ContactItem> contacts = app.zPageAddressbook.zListGetContacts();
-		int countGroup=0;
-		for (ContactItem ci : contacts) {
-			if (ci.fileAs.equals(group1.fileAs) ||
-				ci.fileAs.equals(group2.fileAs) ||
-			    ci.fileAs.equals(group3.fileAs) ) 
-			{
-	            countGroup++;
-	    	}			
-		}
-	
-		ZAssert.assertTrue(countGroup==3, "Verify contact groups (" + group1.fileAs + "," + group2.fileAs + " and "+ group3.fileAs + ") displayed ");
 	}
 
 	@Test(	description = "Click Alphabetbar button 123: Verify contact groups started with digit listed and A-Z not-listed ",
@@ -126,17 +130,22 @@ public class ViewContactGroup extends AjaxCommonTest  {
 			}
 				
 		}
-	
+        
+		//
 		ZAssert.assertTrue(countGroup==1, "Verify contact groups " + group1.fileAs + "," + group3.fileAs + " not displayed, and "+ group2.fileAs + " displayed ");
+		
+		// Verify group name and members displayed
+		verifyGroupDisplayed(group2);
+		
 	}
 
-	@Test(	description = "Click Alphabetbar button B: Verify only contact groups started with B|b is listed ",
+	@Test(	description = "Click Alphabetbar button Z: Verify only contact groups started with Z|z is listed ",
 			groups = { "functional" })
-	public void ClickBVerifyDisplayContactStartWithBb() throws HarnessException {
+	public void ClickBVerifyDisplayContactStartWithZz() throws HarnessException {
 	
 		 // Create  contact groups 
-		ContactGroupItem group0 = createContactGroup("b");
-		ContactGroupItem group1 = createContactGroup("B");		
+		ContactGroupItem group0 = createContactGroup("z");
+		ContactGroupItem group1 = createContactGroup("Z");		
     	ContactGroupItem group2 = createContactGroup("5");
     	ContactGroupItem group3 = createContactGroup("V");
     	
@@ -146,8 +155,8 @@ public class ViewContactGroup extends AjaxCommonTest  {
         GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
         app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, contactFolder);
         
-        //click B      
-		app.zPageAddressbook.zToolbarPressButton(Button.B_AB_B);
+        //click Z      
+		app.zPageAddressbook.zToolbarPressButton(Button.B_AB_Z);
 		
 		//verify all group started with B listed, other groups not listed
 		List<ContactItem> contacts = app.zPageAddressbook.zListGetContacts();
@@ -164,6 +173,13 @@ public class ViewContactGroup extends AjaxCommonTest  {
 		}
 	
 		ZAssert.assertTrue(countGroup==2, "Verify contact groups " + group1.fileAs + " " + group0.fileAs + " displayed, and " + group2.fileAs + "," + group3.fileAs + " not displayed ");
+
+		
+		// Verify group name and members displayed
+		verifyGroupDisplayed(group0);
+		verifyGroupDisplayed(group1);
+
+
 	}
 	
 	@Test(	description = "Click all Alphabetbar buttons: Verify only contact group started with the alphabet is listed ",
@@ -178,7 +194,7 @@ public class ViewContactGroup extends AjaxCommonTest  {
 		  Button.B_AB_O,Button.B_AB_P,Button.B_AB_Q,Button.B_AB_R,Button.B_AB_S,Button.B_AB_T,Button.B_AB_U,
 		  Button.B_AB_V,Button.B_AB_W,Button.B_AB_X,Button.B_AB_Y,Button.B_AB_Z};
 		
-		for (int i=0; i<26; i++) {
+		for (int i=0; i< cgiArray.length ; i++) {
 			cgiArray[i] = createContactGroup(Character.toString((char)((int)'a' + i)));
 		}		
         
@@ -187,27 +203,21 @@ public class ViewContactGroup extends AjaxCommonTest  {
         GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
         app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, contactFolder);
         
-        for (int i=0; i<26; i++) {
+        for (int i=0; i< buttonArray.length ; i++) {
           //click button      
 		  app.zPageAddressbook.zToolbarPressButton(buttonArray[i]);
 		
-		  //verify group started with button name listed
+		  // Verify group name and members displayed
+		  verifyGroupDisplayed(cgiArray[i]);
+			
+		  //verify only group started with button name listed
 		  List<ContactItem> contacts = app.zPageAddressbook.zListGetContacts();
-		  int countGroup= 0;
 		  for (ContactItem ci : contacts) {
-			if (ci.fileAs.equals(cgiArray[i].fileAs) || ci.fileAs.equals(cgiArray[i].fileAs)) 
-			{
-	            countGroup++;
-			}
-		//	if (ci.fileAs.equals(group2.fileAs) || ci.fileAs.equals(group3.fileAs) )  {
-			//	countGroup--; 
-		//	}
-				
+			  ZAssert.assertTrue(ci.fileAs.toLowerCase().startsWith(Character.toString((char)((int)'a' + i))),
+					  "Verify contact groups names start with " + Character.toString((char)((int)'a' + i)) + " displayed");								     				
 		}
 	
-		ZAssert.assertTrue(countGroup==1, "Verify contact groups " + cgiArray[i].fileAs + " " + cgiArray[i].fileAs + " displayed");
-       
-        }
-	}   
+	  }
+    }   
 }
 
