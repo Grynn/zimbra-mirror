@@ -63,7 +63,7 @@ public class ViewContactGroup extends AjaxCommonTest  {
 	}
     
 	@Test(	description = "View a contact group created via soap",
-			groups = { "functional" })
+			groups = { "smoke" })
 	public void DisplayContactGroupInfo() throws HarnessException {
 		         		
 	    // Create a contact group via Soap then select
@@ -74,7 +74,7 @@ public class ViewContactGroup extends AjaxCommonTest  {
    	}
 
 	@Test(	description = "Click Alphabetbar button All: Verify contact groups started with digit and A-Z listed ",
-			groups = { "functional" })
+			groups = { "smoke" })
 	public void ClickAllVerifyDisplayAllContactGroups() throws HarnessException {
 	
 		 // Create  contact groups 
