@@ -53,8 +53,7 @@ function() {
 
 ZaSearchField.prototype.invokeCallback =
 function() {
-	var query = this._containedObject[ZaSearch.A_query] = this._localXForm.getItemsById(ZaSearch.A_query)[0].getElement().value;
-
+    var query = this._containedObject[ZaSearch.A_query] = this.getSearchFieldElement().value;
 	if (query.indexOf("$set:") == 0) {
 		ZaApp.getInstance().getAppCtxt().getClientCmdHdlr().execute((query.substr(5)).split(" "));
 		return;
@@ -108,7 +107,7 @@ function() {
 ZaSearchField.prototype.getSearchTypes =
 function () {
 		var sb_controller = ZaApp.getInstance().getSearchBuilderController();
-		var query = this._localXForm.getItemsById(ZaSearch.A_query)[0].getElement().value ;
+		var query = this.getSearchFieldElement().value ;
 		var isAdvancedSearch = sb_controller.isAdvancedSearch (query) ;
 		
 		var objList = new Array();
@@ -248,7 +247,7 @@ function (resp, searchName) {
 		return ;
 	}	
 	
-	this._queryFieldElement = this._localXForm.getItemsById(ZaSearch.A_query)[0].getElement(); 
+	this._queryFieldElement = this.getSearchFieldElement();
 	var b = Dwt.getBounds(this._queryFieldElement);
 	
 	/*
@@ -273,7 +272,14 @@ function (resp, searchName) {
 
 ZaSearchField.prototype.getSearchFieldElement =
 function () {
-	return this._localXForm.getItemsById(ZaSearch.A_query)[0].getElement(); 
+    if (!appNewUI)  {
+	    return this._localXForm.getItemsById(ZaSearch.A_query)[0].getElement();
+    }  else {
+        var queryXFormItem = this._localXForm.getItemsById(ZaSearch.A_query)[0];
+        var displayId = queryXFormItem.getId() + "_display";
+        var inputEl = document.getElementById(displayId);
+        return inputEl;
+    }
 }
 
 ZaSearchField.prototype.selectSavedSearch =
@@ -357,7 +363,7 @@ ZaSearchField.prototype.updateSavedSearchMenu =
 function () {
 	
 	var isPoppedUp = false ;
-	this._queryFieldElement = this._localXForm.getItemsById(ZaSearch.A_query)[0].getElement(); 
+	this._queryFieldElement = this.getSearchFieldElement();
 	var b = Dwt.getBounds(this._queryFieldElement);
 	
 	if (this._savedSearchMenu) {
@@ -571,80 +577,130 @@ ZaSearchField.prototype._getMyXForm = function() {
 		}
 	}
 
+    var xFormObject;
     if (appNewUI) {
         numCols = 3;
         colSizes = ["59", "*", "80"];
-    }
-	var xFormObject = {
-		tableCssStyle:"width:100%;padding:2px;",numCols:numCols,width:"100%",
-		colSizes:colSizes,
-		items: [
-			{type:_MENU_BUTTON_, label:null, choices:ZaSearchField.searchChoices, 
-				name: "searchMenuButton",
-				toolTipContent:ZaMsg.searchToolTip, 
-				icon:"SearchAll", cssClass:"DwtToolbarButton"
-			},
-			
-			{type: _GROUP_,  numCols: 2, width: "100%", cssClass: "oselect",
-				//cssStyle:"margin-left: 5px; height: 22px; border: 1px solid; ",
-				items: [	
-				{type:_TEXTFIELD_, ref:ZaSearch.A_query, containerCssClass:"search_field_container", label:null, 
-					elementChanged: function(elementValue,instanceValue, event) {
-						var charCode = event.charCode;
-						if (charCode == 13 || charCode == 3) {
-						   this.getForm().parent.invokeCallback();
-						} else {
-							this.getForm().itemChanged(this, elementValue, event);
-						}
-					},
-					visibilityChecks:[],
-					enableDisableChecks:[],
-					//cssClass:"search_input", 
-					cssStyle:"overflow: hidden;", width:"100%"
-				},
-				{type:_DWT_BUTTON_, label:"", toolTipContent:ZaMsg.tt_savedSearch, 
-					icon: "SelectPullDownArrow", name: "showSavedSearchButton",
-					onActivate:  ZaSearchField.prototype.showSavedSearchButtonHndlr,
-					cssClass: "ZaShowSavedSearchArrowButton",
-                    enableDisableChecks: [[ZaSearchField.canViewSavedSearch]],
-					visibilityChecks:["(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.SAVE_SEARCH] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])"] 
-				}	
-			]},
-					
-			{type:_DWT_BUTTON_, label: ZaMsg.search, toolTipContent:ZaMsg.searchForAll, icon:"Search", name: "searchButton",
-				onActivate:ZaSearchField.srchButtonHndlr, 
-				cssStyle: AjxEnv.isIE ? "marginLeft: 2px;" : "marginLeft: 5px;",
-				cssClass:"DwtToolbarButton"
-			}
-		]
-	};
+        xFormObject = {
+            tableCssStyle:"width:100%;padding:2px;",numCols:numCols,width:"100%",
+            colSizes:colSizes,
+            items: [
+                {type:_MENU_BUTTON_, label:null, choices:ZaSearchField.searchChoices,
+                    name: "searchMenuButton",
+                    toolTipContent:ZaMsg.searchToolTip,
+                    icon:"SearchAll", cssClass:"DwtToolbarButton"
+                },
 
-	//Help search button
-    if (!appNewUI) {
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.HELP_SEARCH] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
-		xFormObject.items.push(
-			{type:_DWT_BUTTON_, label: ZaMsg.help_search , toolTipContent:ZaMsg.tt_help_search, icon:"Help", name: "helpSearchButton",
-                                cssStyle:"overflow: hidden" ,onActivate:ZaSearchField.helpSrchButtonHndlr, cssClass:"DwtToolbarButton"}
-		);
-	} 
-	//Save button
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.SAVE_SEARCH] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
-		xFormObject.items.push({type:_DWT_BUTTON_, label: null , toolTipContent:ZaMsg.tt_save_search, icon:"Save", name: "saveSearchButton",
-				onActivate:ZaSearchField.saveSrchButtonHndlr, cssClass:"DwtToolbarButton",
-                enableDisableChecks: [[ZaSearchField.canSaveSearch]],
-                visibilityChecks:["(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.SAVE_SEARCH] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])"] 
-			});	
-	}
-	
-	//advanced search button	
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNT_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DL_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ALIAS_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.RESOURCE_LIST_VIEW]) {
-		xFormObject.items.push({type: _OUTPUT_, value: ZaToolBar.getSeparatorHtml()});
-		xFormObject.items.push({type:_DWT_BUTTON_, label:ZaMsg.advanced_search, toolTipContent: ZaMsg.tt_advanced_search_open, name: "searchBuildButton",
-				cssStyle:"overflow: hidden" , 	
-                onActivate:ZaSearchField.advancedButtonHndlr,
-				cssClass: "DwtToolbarButton ZaAdvancedSearchButton" 
-			});
-	}
+                {type: _GROUP_,  numCols: 2, width: "100%", cssClass: "oselect",
+                    //cssStyle:"margin-left: 5px; height: 22px; border: 1px solid; ",
+                    items: [/*
+                    {type:_TEXTFIELD_, ref:ZaSearch.A_query, containerCssClass:"search_field_container", label:null,
+                        elementChanged: function(elementValue,instanceValue, event) {
+                            var charCode = event.charCode;
+                            if (charCode == 13 || charCode == 3) {
+                               this.getForm().parent.invokeCallback();
+                            } else {
+                                this.getForm().itemChanged(this, elementValue, event);
+                            }
+                        },
+                        visibilityChecks:[],
+                        enableDisableChecks:[],
+                        //cssClass:"search_input",
+                        cssStyle:"overflow: hidden;", width:"100%"
+                    },  */
+                    {type:_DYNSELECT_, ref:ZaSearch.A_query, dataFetcherClass:ZaSearch,
+                        dataFetcherMethod:ZaSearch.prototype.dynSelectSearch,
+                        labelLocation:_NONE_,
+                        width:"100%", inputWidth:"100%", editable:true, forceUpdate:true,
+                        choices:new XFormChoices([], XFormChoices.OBJECT_REFERENCE_LIST, "name", "name"),
+                        visibilityChecks:[],enableDisableChecks:[],
+                        onChange: function(value, event, form){
+                            if (value instanceof ZaItem ) {
+                                this.setInstanceValue(value.name);
+                            } else {
+                                this.setInstanceValue(value);
+                            }
+                        }
+                    }
+
+                ]},
+
+                {type:_DWT_BUTTON_, label: ZaMsg.search, toolTipContent:ZaMsg.searchForAll, icon:"Search", name: "searchButton",
+                    onActivate:ZaSearchField.srchButtonHndlr,
+                    cssStyle: AjxEnv.isIE ? "marginLeft: 2px;" : "marginLeft: 5px;",
+                    cssClass:"DwtToolbarButton"
+                }
+            ]
+        };
+    }  else  {
+        xFormObject = {
+            tableCssStyle:"width:100%;padding:2px;",numCols:numCols,width:"100%",
+            colSizes:colSizes,
+            items: [
+                {type:_MENU_BUTTON_, label:null, choices:ZaSearchField.searchChoices,
+                    name: "searchMenuButton",
+                    toolTipContent:ZaMsg.searchToolTip,
+                    icon:"SearchAll", cssClass:"DwtToolbarButton"
+                },
+
+                {type: _GROUP_,  numCols: 2, width: "100%", cssClass: "oselect",
+                    //cssStyle:"margin-left: 5px; height: 22px; border: 1px solid; ",
+                    items: [
+                    {type:_TEXTFIELD_, ref:ZaSearch.A_query, containerCssClass:"search_field_container", label:null,
+                        elementChanged: function(elementValue,instanceValue, event) {
+                            var charCode = event.charCode;
+                            if (charCode == 13 || charCode == 3) {
+                               this.getForm().parent.invokeCallback();
+                            } else {
+                                this.getForm().itemChanged(this, elementValue, event);
+                            }
+                        },
+                        visibilityChecks:[],
+                        enableDisableChecks:[],
+                        //cssClass:"search_input",
+                        cssStyle:"overflow: hidden;", width:"100%"
+                    },
+                    {type:_DWT_BUTTON_, label:"", toolTipContent:ZaMsg.tt_savedSearch,
+                        icon: "SelectPullDownArrow", name: "showSavedSearchButton",
+                        onActivate:  ZaSearchField.prototype.showSavedSearchButtonHndlr,
+                        cssClass: "ZaShowSavedSearchArrowButton",
+                        enableDisableChecks: [[ZaSearchField.canViewSavedSearch]],
+                        visibilityChecks:["(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.SAVE_SEARCH] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])"]
+                    }
+                ]},
+
+                {type:_DWT_BUTTON_, label: ZaMsg.search, toolTipContent:ZaMsg.searchForAll, icon:"Search", name: "searchButton",
+                    onActivate:ZaSearchField.srchButtonHndlr,
+                    cssStyle: AjxEnv.isIE ? "marginLeft: 2px;" : "marginLeft: 5px;",
+                    cssClass:"DwtToolbarButton"
+                }
+            ]
+        };
+        //Help search button
+        if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.HELP_SEARCH] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+            xFormObject.items.push(
+                {type:_DWT_BUTTON_, label: ZaMsg.help_search , toolTipContent:ZaMsg.tt_help_search, icon:"Help", name: "helpSearchButton",
+                                    cssStyle:"overflow: hidden" ,onActivate:ZaSearchField.helpSrchButtonHndlr, cssClass:"DwtToolbarButton"}
+            );
+        }
+        //Save button
+        if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.SAVE_SEARCH] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+            xFormObject.items.push({type:_DWT_BUTTON_, label: null , toolTipContent:ZaMsg.tt_save_search, icon:"Save", name: "saveSearchButton",
+                    onActivate:ZaSearchField.saveSrchButtonHndlr, cssClass:"DwtToolbarButton",
+                    enableDisableChecks: [[ZaSearchField.canSaveSearch]],
+                    visibilityChecks:["(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.SAVE_SEARCH] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])"]
+                });
+        }
+
+        //advanced search button
+        if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNT_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DL_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ALIAS_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.RESOURCE_LIST_VIEW]) {
+            xFormObject.items.push({type: _OUTPUT_, value: ZaToolBar.getSeparatorHtml()});
+            xFormObject.items.push({type:_DWT_BUTTON_, label:ZaMsg.advanced_search, toolTipContent: ZaMsg.tt_advanced_search_open, name: "searchBuildButton",
+                    cssStyle:"overflow: hidden" ,
+                    onActivate:ZaSearchField.advancedButtonHndlr,
+                    cssClass: "DwtToolbarButton ZaAdvancedSearchButton"
+                });
+        }
     }
 	// set the last button's width to 98 percents of its container
 	// to reserve some place between last button and its panel. 
