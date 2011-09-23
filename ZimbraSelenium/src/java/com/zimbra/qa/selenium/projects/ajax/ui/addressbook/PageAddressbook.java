@@ -1108,7 +1108,7 @@ public class PageAddressbook extends AbsTab {
 		if ( action == Action.A_LEFTCLICK ) {
 			//click
 			zClick(contactLocator);
-			//zWaitForBusyOverlay();
+			zWaitForBusyOverlay();
 			
 			ArrayList<String> selectedContactArrayList=getSelectedContactLocator();			
 	        String contactType = getContactType(selectedContactArrayList.get(0));
