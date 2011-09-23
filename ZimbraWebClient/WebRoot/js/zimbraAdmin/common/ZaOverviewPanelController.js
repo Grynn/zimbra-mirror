@@ -1065,12 +1065,21 @@ ZaOverviewPanelController.domainListTreeListener = function (ev) {
 	//if we do not have access to domains we will only get our own domain in response anyway, so no need to add a query
 //	domainListController._currentQuery = ZaDomain.LOCAL_DOMAIN_QUERY;
 	domainListController._currentQuery = "";
-    if(appNewUI && ev.item.getData(ZaOverviewPanelController._TID) == ZaZimbraAdmin._COS_DOMAIN_LIST_VIEW) {
-        var cos = ev.item.getData("cosItem");
-        var extquery = "(" + ZaDomain.A_domainDefaultCOSId + "=" + cos.id + ")";
-        if(cos.name == "default") {
-            extquery = "(|(!(" + ZaDomain.A_domainDefaultCOSId + "=*))" + extquery + ")";
+    if(appNewUI) {
+        var extquery = null;
+        var actionType = ev.item.getData(ZaOverviewPanelController._TID);
+        if(actionType == ZaZimbraAdmin._COS_DOMAIN_LIST_VIEW) {
+            var cos = ev.item.getData("cosItem");
+            extquery = "(" + ZaDomain.A_domainDefaultCOSId + "=" + cos.id + ")";
+            if(cos.name == "default") {
+                extquery = "(|(!(" + ZaDomain.A_domainDefaultCOSId + "=*))" + extquery + ")";
+            }
+        } else if(actionType == ZaZimbraAdmin._DOMAIN_ALIAS_LIST_VIEW) {
+            var domain = ev.item.getData("domainItem");
+            extquery = "(" + ZaDomain.A_zimbraDomainAliasTargetId + "=" + domain.id + ")";
         }
+
+        if(extquery)
         domainListController._currentQuery = extquery;
     }
 
@@ -1485,13 +1494,25 @@ function(parentPath, item) {
     var accountTi = new ZaTreeItemData({
                 text: ZaMsg.OVP_accounts,
                 count:count,
-                mappingId: ZaZimbraAdmin._COS_ACCOUNT_LIST_VIEW,
+                mappingId: ZaZimbraAdmin._DOMAIN_ACCOUNT_LIST_VIEW,
                 path: parentPath + ZaTree.SEPERATOR + item.name + ZaTree.SEPERATOR + ZaMsg.OVP_accounts
                 }
             );
     accountTi.setData("domainItem", item);
-    ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._COS_ACCOUNT_LIST_VIEW] = ZaOverviewPanelController.accountListInDomainTreeListener;
-    return [accountTi];
+    ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._DOMAIN_ACCOUNT_LIST_VIEW] = ZaOverviewPanelController.accountListInDomainTreeListener;
+
+    count = item.countAllAliases();
+    var aliasTi = new ZaTreeItemData({
+                text: ZaMsg.TABT_Aliases,
+                count:count,
+                mappingId: ZaZimbraAdmin._DOMAIN_ALIAS_LIST_VIEW,
+                path: parentPath + ZaTree.SEPERATOR + item.name + ZaTree.SEPERATOR + ZaMsg.OVP_accounts
+                }
+            );
+    aliasTi.setData("domainItem", item);
+    ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._DOMAIN_ALIAS_LIST_VIEW] = ZaOverviewPanelController.domainListTreeListener;
+
+    return [accountTi, aliasTi];
 }
 
 ZaOverviewPanelController.prototype.getRecentList =

@@ -2781,3 +2781,25 @@ ZaDomain.prototype.countAllAccounts = function() {
     }
     return 0;
 }
+
+ZaDomain.prototype.countAllAliases = function() {
+	var soapDoc = AjxSoapDoc.create("SearchDirectoryRequest", ZaZimbraAdmin.URN, null);
+	soapDoc.getMethod().setAttribute("limit", "1");
+	var query = "(" + ZaDomain.A_zimbraDomainAliasTargetId + "=" + this.id + ")";
+    var types = [ZaSearch.DOMAINS];
+
+	soapDoc.set("query", query);
+    soapDoc.set("types", types.toString());
+	var command = new ZmCsfeCommand();
+	var cmdParams = new Object();
+	cmdParams.soapDoc = soapDoc;
+    try {
+	    var resp = command.invoke(cmdParams).Body.SearchDirectoryResponse;
+        if(resp.searchTotal)
+            return  resp.searchTotal;
+        else return 0;
+    } catch(ex) {
+        throw (ex);
+    }
+    return 0;
+}

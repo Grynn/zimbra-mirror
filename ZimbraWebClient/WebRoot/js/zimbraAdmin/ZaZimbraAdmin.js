@@ -98,6 +98,8 @@ ZaZimbraAdmin._XFORM_TAB_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
 ZaZimbraAdmin._ACCOUNT_ALIAS_LIST_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
 ZaZimbraAdmin._COS_ACCOUNT_LIST_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
 ZaZimbraAdmin._COS_DOMAIN_LIST_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
+ZaZimbraAdmin._DOMAIN_ACCOUNT_LIST_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
+ZaZimbraAdmin._DOMAIN_ALIAS_LIST_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
 
 // do not change the name of the cookie! SoapServlet looks for it
 ZaZimbraAdmin._COOKIE_NAME = "ZM_ADMIN_AUTH_TOKEN";
