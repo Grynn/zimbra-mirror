@@ -11,9 +11,11 @@ namespace CssLib
     public class ZimbraAPI
     {
         // Errors
-        internal const int INCONSISTENT_LISTS    = 91;
-        internal const int ACCOUNT_NO_NAME       = 98;
-        internal const int ACCOUNT_CREATE_FAILED = 99;
+        internal const int INCONSISTENT_LISTS       = 91;
+        internal const int FOLDER_CREATE_FAILED_SYN = 96;
+        internal const int FOLDER_CREATE_FAILED_SEM = 97;
+        internal const int ACCOUNT_NO_NAME          = 98;
+        internal const int ACCOUNT_CREATE_FAILED    = 99;
         //
 
         // Upload modes
@@ -22,7 +24,26 @@ namespace CssLib
         //
 
         // Values
-        internal const int INLINE_LIMIT = 4000;     // smaller than this limit, we'll inline; larger, we'll upload  
+        internal const int INLINE_LIMIT = 4000;     // smaller than this limit, we'll inline; larger, we'll upload
+ 
+        // Special folders array
+        string[] specialFolders = { "",
+                                    "/Top of Information Store",
+                                    "/Top of Information Store/Inbox",
+                                    "/Top of Information Store/Trash",
+                                    "/Top of Information Store/Junk",
+                                    "/Top of Information Store/Sent",
+                                    "/Top of Information Store/Drafts",
+                                    "/Top of Information Store/Contacts",
+                                    "/Top of Information Store/Tags",
+                                    "/Top of Information Store/Conversations",
+                                    "/Top of Information Store/Calendar",
+                                    "",
+                                    "/Top of Information Store/Wiki",
+                                    "/Top of Information Store/Emailed Contacts",
+                                    "/Top of Information Store/Chats",
+                                    "/Top of Information Store/Tasks"
+                                  };
 
         private string lastError;
         public string LastError
@@ -34,9 +55,54 @@ namespace CssLib
             }
         }
 
+        private string sAccountName;
+        public string AccountName
+        {
+            get { return sAccountName; }
+            set
+            {
+                sAccountName = value;
+            }
+        }
+
+        private bool bIsAdminAccount;
+        public bool IsAdminAccount
+        {
+            get { return bIsAdminAccount; }
+            set
+            {
+                bIsAdminAccount = value;
+            }
+        }
+
+        private bool bIsDomainAdminAccount;
+        public bool IsDomainAdminAccount
+        {
+            get { return bIsDomainAdminAccount; }
+            set
+            {
+                bIsDomainAdminAccount = value;
+            }
+        }
+
+        private Dictionary<string, string> dFolderMap;
+
         public ZimbraAPI()
         {
             ZimbraValues.GetZimbraValues();
+            dFolderMap = new Dictionary<string, string>();
+        }
+
+        private string GetSpecialFolderNum(string folderPath)
+        {
+            for (int i = 0; i < specialFolders.Length; i++)
+            {
+                if (folderPath == specialFolders[i])
+                {
+                    return i.ToString();
+                }
+            }
+            return "";
         }
 
         // Parse Methods //////////////////
@@ -96,8 +162,6 @@ namespace CssLib
                 }
             }
             ZimbraValues.GetZimbraValues().AuthToken = authToken;
-            ZimbraValues.GetZimbraValues().IsAdminAccount = true;
-            ZimbraValues.GetZimbraValues().IsDomainAdminAccount = (isDomainAdmin == "true");
         }
 
         private void ParseGetInfo(string rsp)
@@ -119,7 +183,6 @@ namespace CssLib
                     }
                 }
             }
-            ZimbraValues.GetZimbraValues().AccountName = accountName;
             ZimbraValues.GetZimbraValues().ServerVersion = serverVersion;
         }
 
@@ -270,6 +333,33 @@ namespace CssLib
                 }
             }
         }
+
+        private void ParseCreateFolder(string rsp, out string folderID)
+        {
+            folderID = "";
+            if (rsp != null)
+            {
+                int idx = rsp.IndexOf("folder id=");
+                if (idx != -1)
+                {
+                    XDocument xmlDoc = XDocument.Parse(rsp);
+                    XNamespace ns = "urn:zimbraMail";
+                    foreach (var objIns in xmlDoc.Descendants(ns + "CreateFolderResponse"))
+                    {
+                        foreach (XElement folderIns in objIns.Elements())
+                        {
+                            foreach (XAttribute mAttr in folderIns.Attributes())
+                            {
+                                if (mAttr.Name == "id")
+                                {
+                                    folderID = mAttr.Value;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
         //////////
 
         // private UploadFile method
@@ -352,7 +442,7 @@ namespace CssLib
             }
             if (bWriteAccountBy)    // would only happen after a logon
             {
-                WriteAccountBy(writer, ZimbraValues.zimbraValues.AccountName);
+                WriteAccountBy(writer, AccountName);
             }
             writer.WriteEndElement();   // context
             writer.WriteEndElement();   // header
@@ -1017,6 +1107,7 @@ namespace CssLib
             writer.WriteStartElement("folder");
             writer.WriteAttributeString("name", folder.name);
             writer.WriteAttributeString("l", folder.parent);
+            writer.WriteAttributeString("fie", "1");    // return the existing ID instead of an error
             if (folder.view.Length > 0)
             {
                 writer.WriteAttributeString("view", folder.view);
@@ -1034,16 +1125,17 @@ namespace CssLib
             writer.WriteEndElement();   // CreateFolderRequest
         }
 
-        private int DoCreateFolder(ZimbraFolder folder)
+        private int DoCreateFolder(ZimbraFolder folder, out string folderID)
         {
+            folderID = "";
             lastError = "";
+            int retval = 0;
+
             WebServiceClient client = new WebServiceClient
             {
                 Url = ZimbraValues.GetZimbraValues().Url,
                 WSServiceType = WebServiceClient.ServiceType.Traditional
             };
-
-            int retval = 0;
 
             StringBuilder sb = new StringBuilder();
             XmlWriterSettings settings = new XmlWriterSettings();
@@ -1067,19 +1159,77 @@ namespace CssLib
             string rsp = "";
             client.InvokeService(sb.ToString(), out rsp);
             retval = client.status;
+            if (client.status == 0)
+            {
+                ParseCreateFolder(rsp, out folderID);  // get the id
+            }
+            else
+            {
+                string soapReason = ParseSoapFault(client.errResponseMessage);
+                if (soapReason.Length > 0)
+                {
+                    lastError = soapReason;
+                }
+                else
+                {
+                    lastError = client.exceptionMessage;
+                }
+            }
             return retval;
         }
 
-        public int CreateFolder(string Name, string Parent, string View, string Color, string Flags)
+        private bool GetParentAndChild(string fullPath, out string parent, out string child)
         {
-            return DoCreateFolder(new ZimbraFolder(Name, Parent, View, Color, Flags));
+            parent = "";
+            child = "";
+
+            // break up the folder name and parent from the path
+            int lastSlash = fullPath.LastIndexOf("/");
+            if (lastSlash == -1)
+            {
+                return false;
+            }
+            int folderNameStart = lastSlash + 1;
+            int len = fullPath.Length;
+            parent = fullPath.Substring(0, lastSlash);
+            child = fullPath.Substring(folderNameStart, (len - folderNameStart));
+            //
+
+            return true;
         }
 
-        public int CreateFolder(string Name, string Parent)
+        public int CreateFolder(string FolderPath, string View = "", string Color = "", string Flags = "")
         {
-            return DoCreateFolder(new ZimbraFolder(Name, Parent, "", "", ""));
-        }
+            string parentPath = "";
+            string folderName = "";
+            if (!GetParentAndChild(FolderPath, out parentPath, out folderName))
+            {
+                return FOLDER_CREATE_FAILED_SYN;
+            }
 
+            // first look in the special folders array
+            // if it's not there, look in the map
+            string strParentNum = GetSpecialFolderNum(parentPath);
+            if (strParentNum.Length == 0)
+            {
+                if (dFolderMap.ContainsKey(parentPath))
+                {
+                    strParentNum = dFolderMap[parentPath];
+                }
+                else
+                {
+                    return FOLDER_CREATE_FAILED_SEM;
+                }
+            }
+
+            string folderID = "";
+            int dcfReturnVal = DoCreateFolder(new ZimbraFolder(folderName, strParentNum, View, Color, Flags), out folderID);
+            if (dcfReturnVal == 0)
+            {
+                dFolderMap.Add(FolderPath, folderID);
+            }
+            return dcfReturnVal;
+        }
         /////////////////////////
 
     }

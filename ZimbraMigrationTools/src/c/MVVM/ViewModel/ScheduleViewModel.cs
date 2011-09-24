@@ -207,7 +207,7 @@ namespace MVVM.ViewModel
                 // Make sure account name is set
                 string usrName = (usersViewModel.UsersList[0].MappedName.Length > 0) ? usersViewModel.UsersList[0].MappedName : usersViewModel.UsersList[0].Username;
                 string acctName = usrName + "@" + domainName;
-                ZimbraValues.GetZimbraValues().AccountName = acctName;
+                zimbraAPI.AccountName = acctName;
                 //
 
                 lb.SelectedIndex = 5;

@@ -149,25 +149,25 @@ namespace CssLib
 
         }
 
-
+/*
         public void GetListofMapiFolders(string account)
         {
 
-            /*  UDTFolder[] folders;
+              UDTFolder[] folders;
               MapiWrapper M1 = new MapiWrapper();
               folders = (UDTFolder[]) M1.UDTFolderSequence(0, 10);
               string name = folders[0].Name;
-              FolderType type = folders[0].Type;*/
-            /*UDTItem item;
+              FolderType type = folders[0].Type;
+            UDTItem item;
             item.EntryId = "000-444-444";
             item.Type = FolderType.Mail;
             item.CreationDate = DateTime.Now;
             M1.set_UDTItem( ref item);
-            UDTItem i1 = M1.get_UDTItem();*/
+            UDTItem i1 = M1.get_UDTItem();
 
-            /* MapiWrapper M1 = new MapiWrapper();
+             MapiWrapper M1 = new MapiWrapper();
              object[] objectArray;
-             objectArray = M1.GetFolderObjects();*/
+             objectArray = M1.GetFolderObjects();
 
             // UserObject O1 = new UserObject();
             // O1.InitializeUser("ksomasil", "MAPI");
@@ -190,7 +190,7 @@ namespace CssLib
                 {
 
 
-                    ZimbraValues.GetZimbraValues().AccountName = account;
+                    api.AccountName = account;
                     int stat = api.CreateFolder(F1.Name, "1");
                     //stat=  api.CreateFolder("testfolder","2");
 
@@ -199,7 +199,7 @@ namespace CssLib
                 {
                     if ((F1.Name == "Contacts") && (F1.Id == 7))
                     {
-                        ZimbraValues.GetZimbraValues().AccountName = account;
+                        api.AccountName = account;
                         // int stat = api.CreateContact(
                     }
 
@@ -234,7 +234,7 @@ namespace CssLib
                                 }
                             }
 
-                            ZimbraValues.GetZimbraValues().AccountName = account;
+                            api.AccountName = account;
                             if (dict.Count > 0)
                             { int stat = api.CreateContact(dict); }
 
@@ -249,17 +249,17 @@ namespace CssLib
 
             }
 
-            /* folderObject[] Folders = Array.ConvertAll(objectArray, folder => (folderObject)folder);
+             folderObject[] Folders = Array.ConvertAll(objectArray, folder => (folderObject)folder);
 
              string name = Folders[0].Name;
              long id = Folders[0].Id;
 
-             string path = Folders[0].ParentPath;*/
+             string path = Folders[0].ParentPath;
 
 
 
         }
-
+*/
 
         public void GetListofItems()
         {
@@ -360,8 +360,8 @@ namespace CssLib
                     {
 
 
-                        ZimbraValues.GetZimbraValues().AccountName = Acct.Accountname;
-                        int stat = api.CreateFolder(F1.Name, "1");
+                        api.AccountName = Acct.Accountname;
+                        int stat = api.CreateFolder(F1.ParentPath);
                         //stat=  api.CreateFolder("testfolder","2");
 
                     }
@@ -402,7 +402,7 @@ namespace CssLib
                                         }
                                     }
 
-                                    ZimbraValues.GetZimbraValues().AccountName = Acct.Accountname;
+                                    api.AccountName = Acct.Accountname;
                                     if (dict.Count > 0)
                                     { int stat = api.CreateContact(dict); }
 

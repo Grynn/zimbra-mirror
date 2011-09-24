@@ -11,9 +11,6 @@ namespace CssLib
             zimbraValues = null;
             sUrl = "";
             sAuthToken = "";
-            bIsAdminAccount = true;
-            bIsDomainAdminAccount = false;
-            sAccountName = "";
             sServerVersion = "";
             lDomains = new List<string>();
             lCOSes = new List<CosInfo>();
@@ -45,36 +42,6 @@ namespace CssLib
             set
             {
                 sAuthToken = value;
-            }
-        }
-
-        private bool bIsAdminAccount;
-        public bool IsAdminAccount
-        {
-            get { return bIsAdminAccount; }
-            set
-            {
-                bIsAdminAccount = value;
-            }
-        }
-
-        private bool bIsDomainAdminAccount;
-        public bool IsDomainAdminAccount
-        {
-            get { return bIsDomainAdminAccount; }
-            set
-            {
-                bIsDomainAdminAccount = value;
-            }
-        }
-
-        private string sAccountName;
-        public string AccountName
-        {
-            get { return sAccountName; }
-            set
-            {
-                sAccountName = value;
             }
         }
 
