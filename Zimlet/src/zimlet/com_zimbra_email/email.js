@@ -751,7 +751,7 @@ function(spanElement, contentObjText, matchContext, ev) {
 	}
 
 	this._actionObject = contentObjText;
-	this._composeListener(ev, contentObjText);
+	this._composeListener(ev, this._getAddress(contentObjText));
 };
 
 EmailTooltipZimlet.prototype.menuItemSelected =
