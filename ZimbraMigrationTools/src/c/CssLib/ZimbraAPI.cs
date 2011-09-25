@@ -11,11 +11,12 @@ namespace CssLib
     public class ZimbraAPI
     {
         // Errors
-        internal const int INCONSISTENT_LISTS       = 91;
-        internal const int FOLDER_CREATE_FAILED_SYN = 96;
-        internal const int FOLDER_CREATE_FAILED_SEM = 97;
-        internal const int ACCOUNT_NO_NAME          = 98;
-        internal const int ACCOUNT_CREATE_FAILED    = 99;
+        internal const int INCONSISTENT_LISTS           = 91;
+        internal const int CONTACT_CREATE_FAILED_FLDR   = 95;
+        internal const int FOLDER_CREATE_FAILED_SYN     = 96;
+        internal const int FOLDER_CREATE_FAILED_SEM     = 97;
+        internal const int ACCOUNT_NO_NAME              = 98;
+        internal const int ACCOUNT_CREATE_FAILED        = 99;
         //
 
         // Upload modes
@@ -824,7 +825,7 @@ namespace CssLib
             return retval;
         }
 
-        public void CreateContactRequest(XmlWriter writer, Dictionary<string, string> contact, int requestId)
+        public void CreateContactRequest(XmlWriter writer, Dictionary<string, string> contact, string folderId, int requestId)
         {
             writer.WriteStartElement("CreateContactRequest", "urn:zimbraMail");
             if (requestId != -1)
@@ -832,7 +833,7 @@ namespace CssLib
                 writer.WriteAttributeString("requestId", requestId.ToString());
             }
             writer.WriteStartElement("cn");
-            writer.WriteAttributeString("l", "7");
+            writer.WriteAttributeString("l", folderId);
             
             foreach (KeyValuePair<string, string> pair in contact)
             {
@@ -860,9 +861,25 @@ namespace CssLib
             writer.WriteEndElement();   // CreateContactRequest
         }
 
-        public int CreateContact(Dictionary<string, string> contact)
+        public int CreateContact(Dictionary<string, string> contact, string folderPath = "")
         {
             lastError = "";
+
+            // Create in Contacts unless another folder was desired
+            string folderId = "7";
+            if (folderPath.Length > 0)
+            {
+                if (dFolderMap.ContainsKey(folderPath))
+                {
+                    folderId = dFolderMap[folderPath];
+                }
+                else
+                {
+                    return CONTACT_CREATE_FAILED_FLDR;
+                }
+            }
+            ////////
+
             WebServiceClient client = new WebServiceClient
             {
                 Url = ZimbraValues.GetZimbraValues().Url,
@@ -883,7 +900,7 @@ namespace CssLib
 
                 writer.WriteStartElement("Body", "http://www.w3.org/2003/05/soap-envelope");
 
-                CreateContactRequest(writer, contact, -1);
+                CreateContactRequest(writer, contact, folderId, -1);
 
                 writer.WriteEndElement();   // soap body
                 writer.WriteEndElement();   // soap envelope
@@ -896,9 +913,25 @@ namespace CssLib
             return retval;
         }
 
-        public int CreateContacts(List<Dictionary<string, string>> lContacts)
+        public int CreateContacts(List<Dictionary<string, string>> lContacts, string folderPath = "")
         {
             lastError = "";
+
+            // Create in Contacts unless another folder was desired
+            string folderId = "7";
+            if (folderPath.Length > 0)
+            {
+                if (dFolderMap.ContainsKey(folderPath))
+                {
+                    folderId = dFolderMap[folderPath];
+                }
+                else
+                {
+                    return CONTACT_CREATE_FAILED_FLDR;
+                }
+            }
+            ////////
+
             WebServiceClient client = new WebServiceClient
             {
                 Url = ZimbraValues.GetZimbraValues().Url,
@@ -923,7 +956,7 @@ namespace CssLib
                 for (int i = 0; i < lContacts.Count; i++)
                 {
                     Dictionary<string, string> contact = lContacts[i];
-                    CreateContactRequest(writer, contact, i);
+                    CreateContactRequest(writer, contact, folderId, i);
                 }
 
                 writer.WriteEndElement();   // BatchRequest
