@@ -485,7 +485,7 @@ public class CreateFolder extends AjaxCommonTest {
 	   ZAssert.assertNull(folder, "Verify the folder in ZCS server is not created");
 	}
 
-	@Test(description = "Create Inbox's subfolder for IMAP Zimbra Account through ZD", groups = { "functional" })
+	@Test(description = "Create Inbox's subfolder for IMAP Zimbra Account through ZCS", groups = { "functional" })
 	public void CreateInboxSubfolderImapZimbraAccountThroughZCS()
 	throws HarnessException {
 	   app.zPageLogin.zNavigateTo();
@@ -550,6 +550,71 @@ public class CreateFolder extends AjaxCommonTest {
 	   ZAssert.assertEquals(desktopFolderParent.getName(),
 	         inboxZD.getName(), "Verify the parent folder on ZD server matches");
 	}
+
+	@Test(description = "Create Inbox's subfolder for POP Zimbra Account through ZCS", groups = { "functional" })
+   public void CreateInboxSubfolderPopZimbraAccountThroughZCS()
+   throws HarnessException {
+      app.zPageLogin.zNavigateTo();
+      app.zPageLogin.zRemoveAccount();
+      ZimbraAccount zcsAccount = ZimbraAccount.AccountZWC();
+
+      DesktopAccountItem accountItem = app.zPageAddNewAccount.zAddZimbraPopAccountThruUI(
+            AjaxCommonTest.defaultAccountName,
+            ZimbraAccount.AccountZWC().EmailAddress,
+            ZimbraAccount.AccountZWC().Password,
+            ZimbraSeleniumProperties.getStringProperty("server.host", "localhost"),
+            true,
+            "465");
+
+      ZimbraAccount account = new ZimbraAccount(accountItem.emailAddress,
+            accountItem.password);
+      _nonZimbraAccountSetup(account);
+
+      _folderName = "folder" + ZimbraSeleniumProperties.getUniqueString();
+
+      FolderItem inbox = FolderItem.importFromSOAP(zcsAccount,
+            SystemFolder.Inbox);
+
+      zcsAccount.soapSend(
+            "<CreateFolderRequest xmlns='urn:zimbraMail'>" +
+            "<folder name='"+ _folderName +"' l='"+ inbox.getId() +"'/>" +
+            "</CreateFolderRequest>");
+
+      // Make sure the folder was created on the ZCS server
+      FolderItem folder = FolderItem.importFromSOAP(zcsAccount,
+            _folderName);
+
+      FolderItem parentFolder = folder.getParentFolder(zcsAccount,
+            SOAP_DESTINATION_HOST_TYPE.SERVER,
+            null);
+
+      ZAssert.assertNotNull(folder, "Verify the folder is created on ZCS server");
+      ZAssert.assertEquals(parentFolder.getName(), inbox.getName(),
+            "Verify parent folder's name on ZCS server.");
+      ZAssert.assertEquals(parentFolder.getId(), inbox.getId(),
+            "Verify parent folder's ID on ZCS server.");
+      _folderIsCreated = true;
+
+      // Force-sync
+      GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageMain.zWaitForDesktopLoadingSpinner(5000);
+
+      // Make sure the folder is not created on the ZD server
+      FolderItem desktopFolder = null;
+
+      try {
+         // Make sure the folder was not created on the Desktop Server
+         desktopFolder = FolderItem.importFromSOAP(app
+               .zGetActiveAccount(), _folderName,
+               SOAP_DESTINATION_HOST_TYPE.CLIENT,
+               app.zGetActiveAccount().EmailAddress);
+      } catch (HarnessException e) {
+         // This is expected because the verification is to get no folder
+         // from import SOAP
+      }
+
+      ZAssert.assertNull(desktopFolder, "Verify the folder in ZD server is not created");
+   }
 
 	@Test(description = "Create mail folder for IMAP Zimbra Account through ZCS", groups = { "functional" })
 	public void CreateMailFolderImapZimbraAccountThroughZCS()
@@ -617,7 +682,71 @@ public class CreateFolder extends AjaxCommonTest {
             userRootZD.getName(), "Verify the parent folder on ZD server matches");
 	}
 
-	  @AfterMethod(groups = { "always" })
+   @Test(description = "Create mail folder for POP Zimbra Account through ZCS", groups = { "functional" })
+   public void CreateMailFolderPopZimbraAccountThroughZCS()
+   throws HarnessException {
+      app.zPageLogin.zNavigateTo();
+      app.zPageLogin.zRemoveAccount();
+      ZimbraAccount zcsAccount = ZimbraAccount.AccountZWC();
+
+      DesktopAccountItem accountItem = app.zPageAddNewAccount.zAddZimbraPopAccountThruUI(
+            AjaxCommonTest.defaultAccountName,
+            ZimbraAccount.AccountZWC().EmailAddress,
+            ZimbraAccount.AccountZWC().Password,
+            ZimbraSeleniumProperties.getStringProperty("server.host", "localhost"),
+            true,
+            "465");
+
+      ZimbraAccount account = new ZimbraAccount(accountItem.emailAddress,
+            accountItem.password);
+      _nonZimbraAccountSetup(account);
+
+      _folderName = "folder" + ZimbraSeleniumProperties.getUniqueString();
+
+      FolderItem userRoot = FolderItem.importFromSOAP(zcsAccount,
+            SystemFolder.UserRoot);
+
+      zcsAccount.soapSend(
+            "<CreateFolderRequest xmlns='urn:zimbraMail'>" +
+            "<folder name='"+ _folderName +"' l='"+ userRoot.getId() +"'/>" +
+            "</CreateFolderRequest>");
+
+      // Make sure the folder was created on the ZCS server
+      FolderItem folder = FolderItem.importFromSOAP(zcsAccount,
+            _folderName);
+
+      FolderItem parentFolder = folder.getParentFolder(zcsAccount,
+            SOAP_DESTINATION_HOST_TYPE.SERVER,
+            null);
+
+      ZAssert.assertNotNull(folder, "Verify the folder is created on ZCS server");
+      ZAssert.assertEquals(parentFolder.getName(), userRoot.getName(),
+            "Verify parent folder's name on ZCS server.");
+      ZAssert.assertEquals(parentFolder.getId(), userRoot.getId(),
+            "Verify parent folder's ID on ZCS server.");
+      _folderIsCreated = true;
+
+      // Force-sync
+      GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageMain.zWaitForDesktopLoadingSpinner(5000);
+
+      // Make sure the folder is not created on the Desktop Server
+      FolderItem desktopFolder = null;
+
+      try {
+         desktopFolder = FolderItem.importFromSOAP(app
+               .zGetActiveAccount(), _folderName,
+               SOAP_DESTINATION_HOST_TYPE.CLIENT,
+               app.zGetActiveAccount().EmailAddress);
+      } catch (HarnessException e) {
+         // This is expected because the verification is to get no folder
+         // from import SOAP
+      }
+
+      ZAssert.assertNull(desktopFolder, "Verify the folder in ZD server is not created");
+   }
+
+   @AfterMethod(groups = { "always" })
 	public void createFolderTestCleanup() {
 		if (_folderIsCreated) {
 			try {
