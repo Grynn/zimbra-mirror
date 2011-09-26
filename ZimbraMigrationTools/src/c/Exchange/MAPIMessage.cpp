@@ -750,12 +750,15 @@ bool MAPIMessage::HtmlBody( LPVOID* ppBody, unsigned int& nHtmlBodyLen )
 	if( m_pMessagePropVals[HTML_BODY].ulPropTag == PR_BODY_HTML )
 	{
 		LPVOID pBody = m_pMessagePropVals[HTML_BODY].Value.bin.lpb;
-		size_t nLen =  m_pMessagePropVals[HTML_BODY].Value.bin.cb;
-		MAPIAllocateBuffer((ULONG)(nLen+10), (LPVOID FAR *) ppBody);
-		ZeroMemory( *ppBody, (nLen+10) );
-		memcpy(*ppBody, pBody, nLen);
-		nHtmlBodyLen = (UINT)nLen;
-		return true;
+		if(pBody)
+		{
+			size_t nLen =  m_pMessagePropVals[HTML_BODY].Value.bin.cb;
+			MAPIAllocateBuffer((ULONG)(nLen+10), (LPVOID FAR *) ppBody);
+			ZeroMemory( *ppBody, (nLen+10) );
+			memcpy(*ppBody, pBody, nLen);
+			nHtmlBodyLen = (UINT)nLen;
+			return true;
+		}
 	}
 
 	//Try to extract HTML BODY using the stream property.
