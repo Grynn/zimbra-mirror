@@ -46,29 +46,17 @@ public class CreateFolder extends AjaxCommonTest {
 	}
    
 	private void CreateFolderAndVerify(DialogCreateFolder createFolderDialog, SystemFolder parent) throws HarnessException{
-		FolderItem parentFolder= FolderItem.importFromSOAP(app.zGetActiveAccount(), parent);
 		
 		String folderName = "folder" + ZimbraSeleniumProperties.getUniqueString();
 
 		createFolderDialog.zEnterFolderName(folderName);
 		createFolderDialog.zClickButton(Button.B_OK);
 	
-		// Make sure the folder was created on the ZCS server
-		//FolderItem folder = FolderItem.importFromSOAP(app.zGetActiveAccount(),folderName);
-		//ZAssert.assertNotNull(folder, "Verify the folder created on the srver");
-		//ZAssert.assertEquals(folder.getName(), folderName,"Verify the server and client folder names match");
-
-		//Verify created folder listed on the left menu
-		boolean isFolderDisplayed=false;
-		List<FolderItem> list= app.zPageAddressbook.zListGetFolders(app.zGetActiveAccount(), parentFolder);
-		for (FolderItem i: list) {
-			if (i.getName().equals(folderName)) {
-				isFolderDisplayed=true;
-				break;
-			}
-		}
+		// Make sure the folder was created on the server
+		FolderItem folder = FolderItem.importFromSOAP(app.zGetActiveAccount(),folderName);
+		ZAssert.assertNotNull(folder, "Verify the folder created on the server");
+		ZAssert.assertEquals(folder.getName(), folderName,"Verify folder name found on server");
 		
-		ZAssert.assertTrue(isFolderDisplayed, "Verify folder (" + folderName + ") displayed ");		
 	}
 
 	
