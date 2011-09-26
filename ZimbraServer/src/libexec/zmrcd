@@ -80,7 +80,7 @@ my %REGEX_CHECKED_COMMANDS = (
      regex => '[a-zA-Z0-9\\/\\.\\-_:@ ]*',
      program=>"/opt/zimbra/bin/zmloggerhostmap",},
    "rsync" => {
-     regex => '[\'"a-zA-Z0-9\\/\\.\\-_:@ ]*',
+     regex => '[\'"a-zA-Z0-9\\/\\.\\-_:@= ]*',
      program => "rsync"},
 );
 
