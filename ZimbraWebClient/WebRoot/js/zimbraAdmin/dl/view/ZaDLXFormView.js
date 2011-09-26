@@ -854,7 +854,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
                                 items:[
                                {type:_GROUP_, numCols:3, width:"98%",
                                            items:[
-                                                        {type:_TEXTFIELD_, cssClass:"admin_xform_name_input", ref:ZaSearch.A_query, label:ZaMsg.DLXV_LabelFind,
+                                                        {type:_TEXTFIELD_, cssClass:"admin_xform_name_input", ref:ZaSearch.A_query, label:ZaMsg.DLXV_LabelFind,labelCssStyle:"white-space: nowrap;",
                                                       visibilityChecks:[],enableDisableChecks:[],
                                                       elementChanged: function(elementValue,instanceValue, event) {
                                                                   var charCode = event.charCode;
@@ -1028,7 +1028,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
 				items:[			      
 			       {type:_GROUP_, numCols:3, width:"98%", 
 					   items:[
-							{type:_TEXTFIELD_, cssClass:"admin_xform_name_input", ref:ZaSearch.A_query, label:ZaMsg.DLXV_LabelFind,
+							{type:_TEXTFIELD_, cssClass:"admin_xform_name_input", ref:ZaSearch.A_query, label:ZaMsg.DLXV_LabelFind,labelCssStyle:"white-space: nowrap;",
 						      visibilityChecks:[],enableDisableChecks:[],
 						      elementChanged: function(elementValue,instanceValue, event) {
 								  var charCode = event.charCode;
