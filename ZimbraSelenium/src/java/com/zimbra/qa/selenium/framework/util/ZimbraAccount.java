@@ -56,7 +56,8 @@ public class ZimbraAccount {
 	public String ZimbraMailHost = null;
 	public String ZimbraMailClientHost = null;
 	public String ZimbraId = null;
-	public String CN = null;
+	public String GivenName = null;
+	public String SN = null;
 	public String DisplayName = null;
 	public String EmailAddress = null;
 	public String Password = null;
@@ -82,12 +83,10 @@ public class ZimbraAccount {
 	public ZimbraAccount(String email, String password) {
 
 		if ( email == null ) {
-			CN = ZimbraSeleniumProperties.getStringProperty("locale").toLowerCase().replace("_", "") + ZimbraSeleniumProperties.getUniqueString();
-			DisplayName = CN;
-			email = CN + "@" + ZimbraSeleniumProperties.getStringProperty("testdomain", "testdomain.com");
+			DisplayName = ZimbraSeleniumProperties.getStringProperty("locale").toLowerCase().replace("_", "") + ZimbraSeleniumProperties.getUniqueString();
+			email = DisplayName + "@" + ZimbraSeleniumProperties.getStringProperty("testdomain", "testdomain.com");
 		} else {
-			CN = email.split("@")[0];
-			DisplayName = CN;
+			DisplayName = email.split("@")[0];
 		}
 		EmailAddress = email;
 
@@ -282,7 +281,15 @@ public class ZimbraAccount {
 			for (Map.Entry<String, String> entry : accountAttrs.entrySet()) {
 				prefs.append(String.format("<a n='%s'>%s</a>", entry.getKey(), entry.getValue()));
 			}
-			prefs.append(String.format("<a n='%s'>%s</a>", "displayName", DisplayName));
+			
+			if ( DisplayName != null )
+				prefs.append(String.format("<a n='%s'>%s</a>", "displayName", DisplayName));
+
+			if ( GivenName != null )
+				prefs.append(String.format("<a n='%s'>%s</a>", "givenName", GivenName));
+
+			if ( SN != null )
+				prefs.append(String.format("<a n='%s'>%s</a>", "sn", SN));
 
 			// Create the account
 			ZimbraAdminAccount.GlobalAdmin().soapSend(
