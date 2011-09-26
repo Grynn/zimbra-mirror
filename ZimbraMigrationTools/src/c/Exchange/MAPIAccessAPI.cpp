@@ -367,6 +367,23 @@ LPCWSTR MAPIAccessAPI::GetItem(SBinary sbItemEID, BaseItemData &itemData) {
 			msgdata->DeliveryDateString = wstrDelivDateString;
 			SafeDelete(wstrDelivDateString);
 
+			if(msgdata->HasText)
+			{
+				LPTSTR textMsgBuffer;
+				unsigned int nTextchars;
+				msg.TextBody(&textMsgBuffer,nTextchars);
+				msgdata->textbody.buffer = textMsgBuffer;
+				msgdata->textbody.size = nTextchars;
+			}
+
+			if(msgdata->HasHtml)
+			{
+				LPVOID pHtmlBodyBuffer = NULL;;
+				unsigned int nHtmlchars;
+				msg.HtmlBody(&pHtmlBodyBuffer,nHtmlchars);
+				msgdata->htmlbody.buffer = (LPTSTR)pHtmlBodyBuffer;
+				msgdata->htmlbody.size = nHtmlchars;
+			}
 
 		}
 		else if(msg.ItemType()==ZT_CONTACTS) {

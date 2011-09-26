@@ -5,7 +5,8 @@
 #include "..\Exchange\MAPIAccessAPI.h"
 
 LPCWSTR lpProfileName=L"testprofile";
-LPCWSTR lpServerAddress=L"10.117.82.161";
+LPCWSTR lpExchangeServer=L"10.112.16.164";
+LPCWSTR lpServerAddress=L"10.117.82.163";
 LPCWSTR lpAdminUser = L"admin@zcs2.zmexch.in.zimbra.com";
 LPCWSTR lpAccountUser = L"av1@zcs2.zmexch.in.zimbra.com";
 LPCWSTR lpAccountUserPwd=L"test123";
@@ -114,7 +115,7 @@ void ZCFileUploadTest()
 
 void CreateExchangeMailBox()
 {
-	Zimbra::MAPI::ExchangeAdmin *exchadmin= new Zimbra::MAPI::ExchangeAdmin(L"10.117.82.161");
+	Zimbra::MAPI::ExchangeAdmin *exchadmin= new Zimbra::MAPI::ExchangeAdmin(lpExchangeServer);
 	try
 	{
 		try
@@ -151,7 +152,7 @@ void CreateExchangeMailBox()
 
 void GetAllProfiles()
 {
-	Zimbra::MAPI::ExchangeAdmin *exchadmin= new Zimbra::MAPI::ExchangeAdmin(L"10.117.82.161");
+	Zimbra::MAPI::ExchangeAdmin *exchadmin= new Zimbra::MAPI::ExchangeAdmin(lpExchangeServer);
 	vector<string> vProfileList;
 	exchadmin->GetAllProfiles(vProfileList);
 	vector<string>::iterator itr= vProfileList.begin();
@@ -162,12 +163,12 @@ void GetUserDN()
 {
 	wstring userDN;
 	wstring lagcyName;
-	Zimbra::MAPI::Util::GetUserDNAndLegacyName(L"10.117.82.161",L"Administrator",NULL,userDN,lagcyName);
+	Zimbra::MAPI::Util::GetUserDNAndLegacyName(lpExchangeServer,L"Administrator",NULL,userDN,lagcyName);
 }
 
 void ExchangeMigrationSetupTest()
 {
-/*	ExchangeMigrationSetup *exchmigsetup = new ExchangeMigrationSetup(L"10.117.82.161",
+/*	ExchangeMigrationSetup *exchmigsetup = new ExchangeMigrationSetup(lpExchangeServer,
 		L"Administrator",L"z1mbr4Migration");
 	exchmigsetup->Setup();
 	
@@ -185,7 +186,7 @@ void ExchangeMigrationSetupTest()
 	*/
 	//If Profile exists, rest are Optional else rest 3 params must be there!!!
 	//ExchangeOps::Init("Profile", ExchangeIP[optional], AdminName[Optional], AdminPwd[Optional]);
-	LPCWSTR lpwstrStatus=ExchangeOps::GlobalInit(L"Outlook");//L"10.117.82.161",L"Administrator",L"z1mbr4Migration");//(L"10.20.141.161", L"fbs",L"Test7777");//
+	LPCWSTR lpwstrStatus=ExchangeOps::GlobalInit(L"Outlook");//lpExchangeServer,L"Administrator",L"z1mbr4Migration");//(L"10.20.141.161", L"fbs",L"Test7777");//
 	if(lpwstrStatus)
 		delete[]lpwstrStatus; 
 
@@ -240,7 +241,24 @@ DWORD WINAPI AccountMigrationThread( LPVOID lpParameter )
 			{
 				MessageItemData msgdata;
 				printf("Got message item:");
-				//maapi->GetItem((*idItr).sbMessageID,msgdata);
+				maapi->GetItem((*idItr).sbMessageID,msgdata);
+				printf("Subject: %S Date: %I64X DateString:%S		\
+					DeliveryDate: %I64X deliveryDateString: %S		\
+					Has Attachments: %d Has HTML:%d Has Text:%d	\
+					Is Draft:%d Is Flagged: %d Is Forwarded: %d	\
+					IsFromMe:%d IsUnread:%d IsUnsent:%d IsRepliedTo:%d	\
+					URLName: %S\n",
+					msgdata.Subject.c_str(), msgdata.Date, msgdata.DateString.c_str(),
+					msgdata.deliveryDate, msgdata.DeliveryDateString.c_str(),msgdata.HasAttachments,
+					msgdata.HasHtml, msgdata.HasText,msgdata.IsDraft,msgdata.IsFlagged,msgdata.IsForwared,
+					msgdata.IsFromMe, msgdata.IsUnread, msgdata.IsUnsent,msgdata.RepliedTo,msgdata.Urlname.c_str()
+					);
+				
+				if(msgdata.HasText)
+				printf("TEXT BODY: %S\n",msgdata.textbody.buffer);
+				if(msgdata.HasHtml)
+				printf("HTML BODY: %S\n",msgdata.htmlbody.buffer);
+
 			}
 			else if((*idItr).lItemType == ZT_CONTACTS)
 			{
@@ -283,13 +301,13 @@ DWORD WINAPI AccountMigrationThread( LPVOID lpParameter )
 void MAPIAccessAPITestV()
 {
 	//Create Session and Open admin store.
-	MAPIAccessAPI::InitGlobalSessionAndStore(L"10.117.82.161",L"Outlook");
+	MAPIAccessAPI::InitGlobalSessionAndStore(lpExchangeServer,L"Outlook");
 	
-	DWORD const MAX_THREADS=9;
+	DWORD const MAX_THREADS=1;
 	HANDLE hThreadArray[MAX_THREADS]={0}; 
 	migrationThreadParams mtparams[MAX_THREADS];
 	mtparams[0].mailboxname = L"seretary";
-	mtparams[1].mailboxname = L"av9 av9";
+/*	mtparams[1].mailboxname = L"av9 av9";
 	mtparams[2].mailboxname = L"av1";
 	mtparams[3].mailboxname = L"av2 av2";
 	mtparams[4].mailboxname = L"av3 av3";
@@ -297,7 +315,7 @@ void MAPIAccessAPITestV()
 	mtparams[6].mailboxname = L"av5";
 	mtparams[7].mailboxname = L"av7 av7";
 	mtparams[8].mailboxname = L"appt1";
-
+*/
 	//One thread per mailbox.
 	for( int i=0; i<MAX_THREADS; i++ )
     {

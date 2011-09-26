@@ -55,6 +55,9 @@ MAPIMessage::MAPIMessage(): m_pMessage(NULL), m_pMessagePropVals(NULL),
     m_EntryID.cb = 0;
     m_EntryID.lpb = NULL;
 
+	m_pDateTimeStr[0] = '\0';
+	m_pDeliveryDateTimeStr[0] = '\0';
+
 	//initialize the RTF tags.
     RTFElement.push_back( "{" );
     RTFElement.push_back( "}" );
