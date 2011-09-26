@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Windows; 
 using System.Windows.Controls; 
 using System.Windows.Input;
@@ -12,6 +13,7 @@ namespace MVVM.ViewModel
         UsersViewModel uvm;
         TreeViewItem tviTop;
         String selectedPath;
+        string[] accts; // array of display names and usernames (they alternate)
 
         public QueryBuilderDlg(UsersViewModel theModel)
         {
@@ -69,6 +71,19 @@ namespace MVVM.ViewModel
             }
         }
 
+        private int GetAcctIdx(string acct)
+        {
+            int i;
+            for (i = 0; i < accts.Length; i += 2)
+            {
+                if (accts[i] == acct)
+                {
+                    return i + 1;
+                }
+            }
+            return -1;
+        }
+
         void queryButton_Click(object sender, RoutedEventArgs e)
         {
             lbQBUsers.Items.Clear();
@@ -87,16 +102,21 @@ namespace MVVM.ViewModel
             SearchResultCollection src = ds.FindAll();
             try
             {
+                int arraySiz = (src.Count) * 2;
+                accts = new string[arraySiz];
+                int k = 0;
                 foreach (SearchResult sr in src)
                 {
                     DirectoryEntry de = sr.GetDirectoryEntry();
+                    lbQBUsers.Items.Add(de.Name.Substring(3));
                     foreach (String property in ds.PropertiesToLoad)
                     {
                         foreach (Object myCollection in sr.Properties[property])
                         {
                             if (property == "sAMAccountName")
                             {
-                                lbQBUsers.Items.Add(myCollection.ToString());
+                                accts[k++] = de.Name.Substring(3);
+                                accts[k++] = myCollection.ToString();
                                 break;
                             }
                         }
@@ -113,18 +133,27 @@ namespace MVVM.ViewModel
 
         void okButton_Click(object sender, RoutedEventArgs e)
         {
+            int idx = 0;
+
+            // There is no selected indices array like there is in Windows Forms.
+            // Probably a better way to do this, but for now, just go through the acct array
             if (lbQBUsers.SelectedItems.Count == 0)
             {
                 foreach (String item in lbQBUsers.Items)
                 {
-                    uvm.UsersList.Add(new UsersViewModel(item, ""));
+                    uvm.UsersList.Add(new UsersViewModel(item, accts[idx]));
+                    idx += 2;
                 }
             }
             else
             {
                 foreach (String item in lbQBUsers.SelectedItems)
                 {
-                    uvm.UsersList.Add(new UsersViewModel(item, ""));
+                    idx = GetAcctIdx(item);
+                    if (idx != -1)  // it should always be something, but just in case ...
+                    {
+                        uvm.UsersList.Add(new UsersViewModel(item, accts[idx]));
+                    }
                 }
             }
 

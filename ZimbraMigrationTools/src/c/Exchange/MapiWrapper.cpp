@@ -458,8 +458,15 @@ STDMETHODIMP CMapiWrapper::SelectExchangeUsers(VARIANT* Users, BSTR* pErrorText)
     for (its = (vUserList.begin()); its != vUserList.end(); its++) {
         ObjectPickerData obj = (*its);
 
-		wstring str = (*its).wstrUsername;
-		CComBSTR temp = SysAllocString(str.c_str());
+		//wstring str = (*its).wstrUsername;
+		//CComBSTR temp = SysAllocString(str.c_str());
+		
+		// Comment out above 2 lines.  Use username, not display name.  Later, we'll
+		// return a struct that will have username and displayname (as destination name)
+		wstring strUsername = (*its).pAttributeList[0].second;
+		CComBSTR temp = SysAllocString(strUsername.c_str());
+		////
+
         tempvectors.push_back(temp);
     }
 	VariantInit(Users);

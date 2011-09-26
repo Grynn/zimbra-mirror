@@ -464,6 +464,7 @@ namespace MVVM.ViewModel
             MigrationAccount MyAcct = new MigrationAccount();
             AccountResultsViewModel accountResultsViewModel = ((AccountResultsViewModel)ViewModelPtrs[(int)ViewType.RESULTS]);
             MyAcct.Accountname = accountResultsViewModel.AccountResultsList[num].AccountName;
+            MyAcct.AccountID = MyAcct.Accountname;
             MyAcct.Accountnum = num;
             MyAcct.OnChanged += new MigrationObjectEventHandler(Acct_OnAcctChanged);
 
