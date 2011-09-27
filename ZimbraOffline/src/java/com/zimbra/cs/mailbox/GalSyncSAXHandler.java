@@ -311,14 +311,14 @@ public class GalSyncSAXHandler implements ElementHandler {
                     }
                 }
             }
-
-            GalSyncUtil.fetchContacts(this.mainMbox, this.galMbox, this.context, syncFolder, this.removeItemIds(),
-                    isFullSync, this.ds, retryContactIds, this.token, this.zcsGalAccountId);
-
-            if (this.itemIds.size() > 0) {
-                try {
-                  Thread.sleep(OfflineLC.zdesktop_gal_sync_group_interval.longValue());
-              } catch (InterruptedException ie) {}
+            if (!this.itemIds.isEmpty()) {
+                GalSyncUtil.fetchContacts(this.mainMbox, this.galMbox, this.context, syncFolder, this.removeItemIds(),
+                        isFullSync, this.ds, retryContactIds, this.token, this.zcsGalAccountId);
+                if (!this.itemIds.isEmpty()) {  //remoteItemIds() removes items
+                    try {
+                        Thread.sleep(OfflineLC.zdesktop_gal_sync_group_interval.longValue());
+                    } catch (InterruptedException ie) {}
+                }
             }
         }
     }
