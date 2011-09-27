@@ -165,5 +165,14 @@ public class DragAndDropMessage extends AjaxCommonTest {
 
       ZAssert.assertEquals(folderId, localFolder.getId(), "Verify the local folder ID that the message was moved into");
 
+      // Verifying that ZCS returns null when querying the same message
+      MailItem zcsMailAfterMove = null;
+
+      try {
+         zcsMailAfterMove = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject +")");
+      } catch (HarnessException he) {
+         // This is expected because zcsMailAfterMove is supposed to be null
+      }
+      ZAssert.assertNull(zcsMailAfterMove, "Verifying Mail Item on ZCS server after being moved to local folders");
 	}
 }
