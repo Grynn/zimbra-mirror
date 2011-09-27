@@ -18,16 +18,7 @@ public:
         baseMigrationObj = new MapiMigration();
         exchadmin = new Zimbra::MAPI::ExchangeAdmin(L"10.117.82.161");
 
-        CComBSTR str = _T("Unnamed");
-        m_pUDT.Items = 0;               // default value zero (0)
-        m_pUDT.Name = ::SysAllocString(str);    // default name "Unnamed"
-        m_pUDT.Type = Mail;
-
-        CComBSTR entry = _T("00-0000-000000");
-        m_pUDTItem.EntryId = ::SysAllocString(entry);
-        m_pUDTItem.Type = Mail;
-        ::VariantInit(&m_pUDTItem.CreationDate);
-    }
+       }
 
     DECLARE_REGISTRY_RESOURCEID(IDR_MAPIWRAPPER)
 
@@ -53,24 +44,6 @@ public:
     STDMETHOD(ImportMailOptions) (BSTR OptionsTag);
     STDMETHOD(GetProfilelist) (VARIANT * Profiles);
 
-    STDMETHOD(get_UDTFolder) (UDTFolder * pUDT);
-    STDMETHOD(put_UDTFolder) (UDTFolder * pUDT);
-
-    STDMETHOD(get_UDTItem) (UDTItem * pUDT);
-    STDMETHOD(put_UDTItem) (UDTItem * pUDT);
-
-    STDMETHOD(UDTFolderSequence) (/*[in]*/ long start,
-
-    /*[in]*/ long length,
-
-    /*[out, retval]*/ SAFEARRAY * *SequenceArr);
-
-    STDMETHOD(UDTItemSequence) (/*[in]*/ long start,
-
-    /*[in]*/ long length,
-
-    /*[out, retval]*/ SAFEARRAY * *SequenceArr);
-
     std::vector<CComBSTR> m_vecColors;
 
     std::wstring str_to_wstr(const std::string &str);
@@ -85,11 +58,9 @@ public:
 	STDMETHOD(SelectExchangeUsers)(VARIANT* Users, BSTR* pErrorText);
 
 protected:
-    UDTFolder m_pUDT;
-    UDTItem m_pUDTItem;
-    HRESULT SequenceByElement(long start, long length, SAFEARRAY *SequenceArr);
+    /*HRESULT SequenceByElement(long start, long length, SAFEARRAY *SequenceArr);
     HRESULT SequenceByData(long start, long length, SAFEARRAY *SequenceArr);
-    HRESULT SequenceByItemElement(long start, long length, SAFEARRAY *SequenceArr);
+    HRESULT SequenceByItemElement(long start, long length, SAFEARRAY *SequenceArr);*/
 
     // HRESULT IsUDTFolderArray( SAFEARRAY *pUDTArr, bool &isDynamic );
 };
