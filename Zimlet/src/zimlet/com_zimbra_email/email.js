@@ -191,7 +191,7 @@ function(ev) {
 	if (ev.detail == DwtEvent.ONDBLCLICK) {
 		this._composeListener(ev, bubble.address);
 	}
-	else if (this._bubbleList) {
+	else if (this._bubbleList && this._bubbleList.selectAddressText) {
 		this._bubbleList.selectAddressText();
 	}
 };
