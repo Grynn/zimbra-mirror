@@ -65,6 +65,12 @@ import zimbra.generated.accountclient.account.testModifyWhiteBlackListRequest;
 import zimbra.generated.accountclient.account.testModifyWhiteBlackListResponse;
 import zimbra.generated.accountclient.account.testModifyZimletPrefsRequest;
 import zimbra.generated.accountclient.account.testModifyZimletPrefsResponse;
+import zimbra.generated.accountclient.account.testSearchCalendarResourcesRequest;
+import zimbra.generated.accountclient.account.testSearchCalendarResourcesResponse;
+import zimbra.generated.accountclient.account.testSearchGalRequest;
+import zimbra.generated.accountclient.account.testSearchGalResponse;
+import zimbra.generated.accountclient.account.testSyncGalRequest;
+import zimbra.generated.accountclient.account.testSyncGalResponse;
 import zimbra.generated.accountclient.account.testUpdateProfileRequest;
 import zimbra.generated.accountclient.account.testUpdateProfileResponse;
 
@@ -78,8 +84,8 @@ import zimbra.generated.accountclient.account.testUpdateProfileResponse;
 @WebService(name = "AccountService", targetNamespace = "http://www.zimbra.com/wsdl/AccountService.wsdl")
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
 @XmlSeeAlso({
-    zimbra.generated.accountclient.zm.ObjectFactory.class,
-    zimbra.generated.accountclient.account.ObjectFactory.class
+    zimbra.generated.accountclient.account.ObjectFactory.class,
+    zimbra.generated.accountclient.zm.ObjectFactory.class
 })
 public interface AccountService {
 
@@ -431,6 +437,42 @@ public interface AccountService {
     public testModifyZimletPrefsResponse modifyZimletPrefsRequest(
         @WebParam(name = "ModifyZimletPrefsRequest", targetNamespace = "urn:zimbraAccount", partName = "parameters")
         testModifyZimletPrefsRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns zimbra.generated.accountclient.account.testSearchCalendarResourcesResponse
+     */
+    @WebMethod(action = "urn:zimbraAccount/SearchCalendarResources")
+    @WebResult(name = "SearchCalendarResourcesResponse", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+    public testSearchCalendarResourcesResponse searchCalendarResourcesRequest(
+        @WebParam(name = "SearchCalendarResourcesRequest", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+        testSearchCalendarResourcesRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns zimbra.generated.accountclient.account.testSearchGalResponse
+     */
+    @WebMethod(action = "urn:zimbraAccount/SearchGal")
+    @WebResult(name = "SearchGalResponse", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+    public testSearchGalResponse searchGalRequest(
+        @WebParam(name = "SearchGalRequest", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+        testSearchGalRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns zimbra.generated.accountclient.account.testSyncGalResponse
+     */
+    @WebMethod(action = "urn:zimbraAccount/SyncGal")
+    @WebResult(name = "SyncGalResponse", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+    public testSyncGalResponse syncGalRequest(
+        @WebParam(name = "SyncGalRequest", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+        testSyncGalRequest parameters);
 
     /**
      * 

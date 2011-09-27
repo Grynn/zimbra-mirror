@@ -34,7 +34,8 @@ import zimbra.generated.accountclient.zm.testKeyValuePair;
     "a"
 })
 @XmlSeeAlso({
-    testAccountCustomMetadata.class
+    testAccountCustomMetadata.class,
+    testCalendarResourceInfo.class
 })
 public class testAccountKeyValuePairs {
 

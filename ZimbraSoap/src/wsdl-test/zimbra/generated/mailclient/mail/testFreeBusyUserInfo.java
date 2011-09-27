@@ -47,8 +47,8 @@ public class testFreeBusyUserInfo {
         @XmlElement(name = "n", type = testFreeBusyNODATAslot.class),
         @XmlElement(name = "t", type = testFreeBusyBUSYTENTATIVEslot.class),
         @XmlElement(name = "u", type = testFreeBusyBUSYUNAVAILABLEslot.class),
-        @XmlElement(name = "b", type = testFreeBusyBUSYslot.class),
-        @XmlElement(name = "f", type = testFreeBusyFREEslot.class)
+        @XmlElement(name = "f", type = testFreeBusyFREEslot.class),
+        @XmlElement(name = "b", type = testFreeBusyBUSYslot.class)
     })
     protected List<testFreeBusySlot> fOrBOrT;
     @XmlAttribute(name = "id", required = true)
@@ -75,8 +75,8 @@ public class testFreeBusyUserInfo {
      * {@link testFreeBusyNODATAslot }
      * {@link testFreeBusyBUSYTENTATIVEslot }
      * {@link testFreeBusyBUSYUNAVAILABLEslot }
-     * {@link testFreeBusyBUSYslot }
      * {@link testFreeBusyFREEslot }
+     * {@link testFreeBusyBUSYslot }
      * 
      * 
      */

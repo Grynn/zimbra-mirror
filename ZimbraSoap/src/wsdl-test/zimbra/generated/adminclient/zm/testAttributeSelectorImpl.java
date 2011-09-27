@@ -13,6 +13,7 @@ import zimbra.generated.adminclient.admin.testGetDomainRequest;
 import zimbra.generated.adminclient.admin.testGetServerRequest;
 import zimbra.generated.adminclient.admin.testGetXMPPComponentRequest;
 import zimbra.generated.adminclient.admin.testGetZimletRequest;
+import zimbra.generated.adminclient.admin.testSearchAutoProvDirectoryRequest;
 import zimbra.generated.adminclient.admin.testSearchCalendarResourcesRequest;
 import zimbra.generated.adminclient.admin.testSearchDirectoryRequest;
 
@@ -45,6 +46,7 @@ import zimbra.generated.adminclient.admin.testSearchDirectoryRequest;
     testGetXMPPComponentRequest.class,
     testGetCalendarResourceRequest.class,
     testGetAccountRequest.class,
+    testSearchAutoProvDirectoryRequest.class,
     testGetDomainRequest.class,
     testGetZimletRequest.class,
     testSearchCalendarResourcesRequest.class

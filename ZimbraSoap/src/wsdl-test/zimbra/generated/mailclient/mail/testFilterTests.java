@@ -52,19 +52,19 @@ import javax.xml.bind.annotation.XmlType;
 public class testFilterTests {
 
     @XmlElements({
-        @XmlElement(name = "sizeTest", type = testFilterTestSize.class),
-        @XmlElement(name = "currentTimeTest", type = testFilterTestCurrentTime.class),
-        @XmlElement(name = "trueTest", type = testFilterTestTrue.class),
-        @XmlElement(name = "mimeHeaderTest", type = testFilterTestMimeHeader.class),
-        @XmlElement(name = "attachmentTest", type = testFilterTestAttachment.class),
-        @XmlElement(name = "currentDayOfWeekTest", type = testFilterTestCurrentDayOfWeek.class),
-        @XmlElement(name = "dateTest", type = testFilterTestDate.class),
-        @XmlElement(name = "importanceTest", type = testFilterTestImportance.class),
         @XmlElement(name = "headerExistsTest", type = testFilterTestHeaderExists.class),
+        @XmlElement(name = "dateTest", type = testFilterTestDate.class),
         @XmlElement(name = "headerTest", type = testFilterTestHeader.class),
-        @XmlElement(name = "bodyTest", type = testFilterTestBody.class),
+        @XmlElement(name = "attachmentTest", type = testFilterTestAttachment.class),
+        @XmlElement(name = "sizeTest", type = testFilterTestSize.class),
         @XmlElement(name = "addressBookTest", type = testFilterTestAddressBook.class),
-        @XmlElement(name = "inviteTest", type = testFilterTestInvite.class)
+        @XmlElement(name = "inviteTest", type = testFilterTestInvite.class),
+        @XmlElement(name = "bodyTest", type = testFilterTestBody.class),
+        @XmlElement(name = "currentDayOfWeekTest", type = testFilterTestCurrentDayOfWeek.class),
+        @XmlElement(name = "importanceTest", type = testFilterTestImportance.class),
+        @XmlElement(name = "mimeHeaderTest", type = testFilterTestMimeHeader.class),
+        @XmlElement(name = "trueTest", type = testFilterTestTrue.class),
+        @XmlElement(name = "currentTimeTest", type = testFilterTestCurrentTime.class)
     })
     protected List<testFilterTestInfo> headerTestOrMimeHeaderTestOrHeaderExistsTest;
     @XmlAttribute(name = "condition", required = true)
@@ -88,19 +88,19 @@ public class testFilterTests {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link testFilterTestSize }
-     * {@link testFilterTestCurrentTime }
-     * {@link testFilterTestTrue }
-     * {@link testFilterTestMimeHeader }
-     * {@link testFilterTestAttachment }
-     * {@link testFilterTestCurrentDayOfWeek }
-     * {@link testFilterTestDate }
-     * {@link testFilterTestImportance }
      * {@link testFilterTestHeaderExists }
+     * {@link testFilterTestDate }
      * {@link testFilterTestHeader }
-     * {@link testFilterTestBody }
+     * {@link testFilterTestAttachment }
+     * {@link testFilterTestSize }
      * {@link testFilterTestAddressBook }
      * {@link testFilterTestInvite }
+     * {@link testFilterTestBody }
+     * {@link testFilterTestCurrentDayOfWeek }
+     * {@link testFilterTestImportance }
+     * {@link testFilterTestMimeHeader }
+     * {@link testFilterTestTrue }
+     * {@link testFilterTestCurrentTime }
      * 
      * 
      */

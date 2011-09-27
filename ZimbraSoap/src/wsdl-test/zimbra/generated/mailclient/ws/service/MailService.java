@@ -164,12 +164,18 @@ import zimbra.generated.mailclient.mail.testGetTaskRequest;
 import zimbra.generated.mailclient.mail.testGetTaskResponse;
 import zimbra.generated.mailclient.mail.testGetTaskSummariesRequest;
 import zimbra.generated.mailclient.mail.testGetTaskSummariesResponse;
+import zimbra.generated.mailclient.mail.testGetWatchersRequest;
+import zimbra.generated.mailclient.mail.testGetWatchersResponse;
+import zimbra.generated.mailclient.mail.testGetWatchingItemsRequest;
+import zimbra.generated.mailclient.mail.testGetWatchingItemsResponse;
 import zimbra.generated.mailclient.mail.testGetWorkingHoursRequest;
 import zimbra.generated.mailclient.mail.testGetWorkingHoursResponse;
 import zimbra.generated.mailclient.mail.testGetYahooAuthTokenRequest;
 import zimbra.generated.mailclient.mail.testGetYahooAuthTokenResponse;
 import zimbra.generated.mailclient.mail.testGetYahooCookieRequest;
 import zimbra.generated.mailclient.mail.testGetYahooCookieResponse;
+import zimbra.generated.mailclient.mail.testGlobalSearchRequest;
+import zimbra.generated.mailclient.mail.testGlobalSearchResponse;
 import zimbra.generated.mailclient.mail.testGrantPermissionRequest;
 import zimbra.generated.mailclient.mail.testGrantPermissionResponse;
 import zimbra.generated.mailclient.mail.testICalReplyRequest;
@@ -1231,6 +1237,30 @@ public interface MailService {
      * 
      * @param parameters
      * @return
+     *     returns zimbra.generated.mailclient.mail.testGetWatchersResponse
+     */
+    @WebMethod(action = "urn:zimbraMail/GetWatchers")
+    @WebResult(name = "GetWatchersResponse", targetNamespace = "urn:zimbraMail", partName = "parameters")
+    public testGetWatchersResponse getWatchersRequest(
+        @WebParam(name = "GetWatchersRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
+        testGetWatchersRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns zimbra.generated.mailclient.mail.testGetWatchingItemsResponse
+     */
+    @WebMethod(action = "urn:zimbraMail/GetWatchingItems")
+    @WebResult(name = "GetWatchingItemsResponse", targetNamespace = "urn:zimbraMail", partName = "parameters")
+    public testGetWatchingItemsResponse getWatchingItemsRequest(
+        @WebParam(name = "GetWatchingItemsRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
+        testGetWatchingItemsRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
      *     returns zimbra.generated.mailclient.mail.testGetWorkingHoursResponse
      */
     @WebMethod(action = "urn:zimbraMail/GetWorkingHours")
@@ -1262,6 +1292,18 @@ public interface MailService {
     public testGetYahooCookieResponse getYahooCookieRequest(
         @WebParam(name = "GetYahooCookieRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
         testGetYahooCookieRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns zimbra.generated.mailclient.mail.testGlobalSearchResponse
+     */
+    @WebMethod(action = "urn:zimbraMail/GlobalSearch")
+    @WebResult(name = "GlobalSearchResponse", targetNamespace = "urn:zimbraMail", partName = "parameters")
+    public testGlobalSearchResponse globalSearchRequest(
+        @WebParam(name = "GlobalSearchRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
+        testGlobalSearchRequest parameters);
 
     /**
      * 

@@ -5,7 +5,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.XmlValue;
+import zimbra.generated.adminclient.zm.testKeyValuePair;
 
 
 /**
@@ -16,8 +16,7 @@ import javax.xml.bind.annotation.XmlValue;
  * <pre>
  * &lt;complexType name="attr">
  *   &lt;simpleContent>
- *     &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema>string">
- *       &lt;attribute name="n" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *     &lt;extension base="&lt;urn:zimbra>keyValuePair">
  *       &lt;attribute name="c" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *     &lt;/extension>
  *   &lt;/simpleContent>
@@ -27,65 +26,13 @@ import javax.xml.bind.annotation.XmlValue;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "attr", propOrder = {
-    "value"
-})
-public class testAttr {
+@XmlType(name = "attr")
+public class testAttr
+    extends testKeyValuePair
+{
 
-    @XmlValue
-    protected String value;
-    @XmlAttribute(name = "n", required = true)
-    protected String n;
     @XmlAttribute(name = "c")
     protected Boolean c;
-
-    /**
-     * Gets the value of the value property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getValue() {
-        return value;
-    }
-
-    /**
-     * Sets the value of the value property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setValue(String value) {
-        this.value = value;
-    }
-
-    /**
-     * Gets the value of the n property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getN() {
-        return n;
-    }
-
-    /**
-     * Sets the value of the n property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setN(String value) {
-        this.n = value;
-    }
 
     /**
      * Gets the value of the c property.

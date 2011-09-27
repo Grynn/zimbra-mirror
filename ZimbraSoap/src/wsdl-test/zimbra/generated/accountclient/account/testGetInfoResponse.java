@@ -945,10 +945,10 @@ public class testGetInfoResponse {
     public static class DataSources {
 
         @XmlElements({
-            @XmlElement(name = "pop3", type = testAccountPop3DataSource.class),
-            @XmlElement(name = "imap", type = testAccountImapDataSource.class),
+            @XmlElement(name = "rss", type = testAccountRssDataSource.class),
             @XmlElement(name = "cal", type = testAccountCalDataSource.class),
-            @XmlElement(name = "rss", type = testAccountRssDataSource.class)
+            @XmlElement(name = "pop3", type = testAccountPop3DataSource.class),
+            @XmlElement(name = "imap", type = testAccountImapDataSource.class)
         })
         protected List<testAccountDataSource> pop3OrImapOrRss;
 
@@ -970,10 +970,10 @@ public class testGetInfoResponse {
          * 
          * <p>
          * Objects of the following type(s) are allowed in the list
+         * {@link testAccountRssDataSource }
+         * {@link testAccountCalDataSource }
          * {@link testAccountPop3DataSource }
          * {@link testAccountImapDataSource }
-         * {@link testAccountCalDataSource }
-         * {@link testAccountRssDataSource }
          * 
          * 
          */

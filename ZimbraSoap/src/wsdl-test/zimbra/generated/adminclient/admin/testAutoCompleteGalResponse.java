@@ -19,7 +19,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="cn" type="{urn:zimbraAdmin}autoCompleteGalContactInfo" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="cn" type="{urn:zimbraAdmin}contactInfo" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *       &lt;attribute name="sortBy" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="offset" type="{http://www.w3.org/2001/XMLSchema}int" />
@@ -40,7 +40,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class testAutoCompleteGalResponse {
 
-    protected List<testAutoCompleteGalContactInfo> cn;
+    protected List<testContactInfo> cn;
     @XmlAttribute(name = "sortBy")
     protected String sortBy;
     @XmlAttribute(name = "offset")
@@ -72,13 +72,13 @@ public class testAutoCompleteGalResponse {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link testAutoCompleteGalContactInfo }
+     * {@link testContactInfo }
      * 
      * 
      */
-    public List<testAutoCompleteGalContactInfo> getCn() {
+    public List<testContactInfo> getCn() {
         if (cn == null) {
-            cn = new ArrayList<testAutoCompleteGalContactInfo>();
+            cn = new ArrayList<testContactInfo>();
         }
         return this.cn;
     }

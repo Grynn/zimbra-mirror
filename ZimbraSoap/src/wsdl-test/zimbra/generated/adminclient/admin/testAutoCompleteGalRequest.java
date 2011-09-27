@@ -28,7 +28,6 @@ import zimbra.generated.adminclient.zm.testGalSearchType;
  *         &lt;element name="cursor" type="{urn:zimbra}cursorInfo" minOccurs="0"/>
  *       &lt;/sequence>
  *       &lt;attribute name="domain" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="limit" type="{http://www.w3.org/2001/XMLSchema}int" />
  *       &lt;attribute name="name" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="type" type="{urn:zimbra}galSearchType" />
  *       &lt;attribute name="galAcctId" type="{http://www.w3.org/2001/XMLSchema}string" />
@@ -40,6 +39,7 @@ import zimbra.generated.adminclient.zm.testGalSearchType;
  *       &lt;attribute name="inDumpster" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *       &lt;attribute name="types" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="groupBy" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="quick" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *       &lt;attribute name="sortBy" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="fetch" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="read" type="{http://www.w3.org/2001/XMLSchema}boolean" />
@@ -50,6 +50,7 @@ import zimbra.generated.adminclient.zm.testGalSearchType;
  *       &lt;attribute name="prefetch" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *       &lt;attribute name="resultMode" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="field" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="limit" type="{http://www.w3.org/2001/XMLSchema}int" />
  *       &lt;attribute name="offset" type="{http://www.w3.org/2001/XMLSchema}int" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -73,8 +74,6 @@ public class testAutoCompleteGalRequest {
     protected testCursorInfo cursor;
     @XmlAttribute(name = "domain", required = true)
     protected String domain;
-    @XmlAttribute(name = "limit")
-    protected Integer limit;
     @XmlAttribute(name = "name", required = true)
     protected String name;
     @XmlAttribute(name = "type")
@@ -97,6 +96,8 @@ public class testAutoCompleteGalRequest {
     protected String types;
     @XmlAttribute(name = "groupBy")
     protected String groupBy;
+    @XmlAttribute(name = "quick")
+    protected Boolean quick;
     @XmlAttribute(name = "sortBy")
     protected String sortBy;
     @XmlAttribute(name = "fetch")
@@ -117,6 +118,8 @@ public class testAutoCompleteGalRequest {
     protected String resultMode;
     @XmlAttribute(name = "field")
     protected String field;
+    @XmlAttribute(name = "limit")
+    protected Integer limit;
     @XmlAttribute(name = "offset")
     protected Integer offset;
 
@@ -243,30 +246,6 @@ public class testAutoCompleteGalRequest {
      */
     public void setDomain(String value) {
         this.domain = value;
-    }
-
-    /**
-     * Gets the value of the limit property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Integer }
-     *     
-     */
-    public Integer getLimit() {
-        return limit;
-    }
-
-    /**
-     * Sets the value of the limit property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Integer }
-     *     
-     */
-    public void setLimit(Integer value) {
-        this.limit = value;
     }
 
     /**
@@ -534,6 +513,30 @@ public class testAutoCompleteGalRequest {
     }
 
     /**
+     * Gets the value of the quick property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isQuick() {
+        return quick;
+    }
+
+    /**
+     * Sets the value of the quick property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setQuick(Boolean value) {
+        this.quick = value;
+    }
+
+    /**
      * Gets the value of the sortBy property.
      * 
      * @return
@@ -771,6 +774,30 @@ public class testAutoCompleteGalRequest {
      */
     public void setField(String value) {
         this.field = value;
+    }
+
+    /**
+     * Gets the value of the limit property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
+     */
+    public Integer getLimit() {
+        return limit;
+    }
+
+    /**
+     * Sets the value of the limit property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
+     */
+    public void setLimit(Integer value) {
+        this.limit = value;
     }
 
     /**

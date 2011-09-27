@@ -25,7 +25,7 @@ import zimbra.generated.adminclient.zm.testContactAttr;
  *       &lt;/sequence>
  *       &lt;attribute name="sf" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="exp" type="{http://www.w3.org/2001/XMLSchema}boolean" />
- *       &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="id" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="l" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="f" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="t" type="{http://www.w3.org/2001/XMLSchema}string" />
@@ -39,6 +39,7 @@ import zimbra.generated.adminclient.zm.testContactAttr;
  *       &lt;attribute name="email3" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="type" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="dlist" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="ref" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -59,7 +60,7 @@ public class testContactInfo {
     protected String sf;
     @XmlAttribute(name = "exp")
     protected Boolean exp;
-    @XmlAttribute(name = "id")
+    @XmlAttribute(name = "id", required = true)
     protected String id;
     @XmlAttribute(name = "l")
     protected String l;
@@ -87,6 +88,8 @@ public class testContactInfo {
     protected String type;
     @XmlAttribute(name = "dlist")
     protected String dlist;
+    @XmlAttribute(name = "ref")
+    protected String ref;
 
     /**
      * Gets the value of the meta property.
@@ -528,6 +531,30 @@ public class testContactInfo {
      */
     public void setDlist(String value) {
         this.dlist = value;
+    }
+
+    /**
+     * Gets the value of the ref property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getRef() {
+        return ref;
+    }
+
+    /**
+     * Sets the value of the ref property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setRef(String value) {
+        this.ref = value;
     }
 
 }

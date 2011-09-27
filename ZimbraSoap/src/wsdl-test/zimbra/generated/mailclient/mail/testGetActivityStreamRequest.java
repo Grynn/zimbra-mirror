@@ -17,6 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
+ *         &lt;element name="filter" type="{urn:zimbraMail}activityFilter" minOccurs="0"/>
  *       &lt;/sequence>
  *       &lt;attribute name="id" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="offset" type="{http://www.w3.org/2001/XMLSchema}int" />
@@ -29,15 +30,42 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "getActivityStreamRequest")
+@XmlType(name = "getActivityStreamRequest", propOrder = {
+    "filter"
+})
 public class testGetActivityStreamRequest {
 
+    protected testActivityFilter filter;
     @XmlAttribute(name = "id", required = true)
     protected String id;
     @XmlAttribute(name = "offset")
     protected Integer offset;
     @XmlAttribute(name = "limit")
     protected Integer limit;
+
+    /**
+     * Gets the value of the filter property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link testActivityFilter }
+     *     
+     */
+    public testActivityFilter getFilter() {
+        return filter;
+    }
+
+    /**
+     * Sets the value of the filter property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link testActivityFilter }
+     *     
+     */
+    public void setFilter(testActivityFilter value) {
+        this.filter = value;
+    }
 
     /**
      * Gets the value of the id property.

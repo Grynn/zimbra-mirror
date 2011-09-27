@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 import zimbra.generated.mailclient.zm.testNamedElement;
 
@@ -23,6 +24,7 @@ import zimbra.generated.mailclient.zm.testNamedElement;
  *         &lt;element name="user" type="{urn:zimbraMail}idEmailName" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="a" type="{urn:zimbraMail}activityInfo" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
+ *       &lt;attribute name="session" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -41,6 +43,8 @@ public class testGetActivityStreamResponse {
     protected List<testNamedElement> op;
     protected List<testIdEmailName> user;
     protected List<testActivityInfo> a;
+    @XmlAttribute(name = "session")
+    protected String session;
 
     /**
      * Gets the value of the op property.
@@ -127,6 +131,30 @@ public class testGetActivityStreamResponse {
             a = new ArrayList<testActivityInfo>();
         }
         return this.a;
+    }
+
+    /**
+     * Gets the value of the session property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getSession() {
+        return session;
+    }
+
+    /**
+     * Sets the value of the session property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setSession(String value) {
+        this.session = value;
     }
 
 }

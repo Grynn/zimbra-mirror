@@ -35,7 +35,8 @@ import zimbra.generated.adminclient.zm.testKeyValuePair;
 })
 @XmlSeeAlso({
     testCreateXMbxSearchRequest.class,
-    testAdminCustomMetadata.class
+    testAdminCustomMetadata.class,
+    testAutoProvDirectoryEntry.class
 })
 public class testAdminKeyValuePairs {
 

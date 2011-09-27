@@ -417,14 +417,22 @@ import zimbra.generated.adminclient.admin.testScheduleBackupsRequest;
 import zimbra.generated.adminclient.admin.testScheduleBackupsResponse;
 import zimbra.generated.adminclient.admin.testSearchAccountsRequest;
 import zimbra.generated.adminclient.admin.testSearchAccountsResponse;
+import zimbra.generated.adminclient.admin.testSearchAutoProvDirectoryRequest;
+import zimbra.generated.adminclient.admin.testSearchAutoProvDirectoryResponse;
 import zimbra.generated.adminclient.admin.testSearchCalendarResourcesRequest;
 import zimbra.generated.adminclient.admin.testSearchCalendarResourcesResponse;
 import zimbra.generated.adminclient.admin.testSearchDirectoryRequest;
 import zimbra.generated.adminclient.admin.testSearchDirectoryResponse;
+import zimbra.generated.adminclient.admin.testSearchGalRequest;
+import zimbra.generated.adminclient.admin.testSearchGalResponse;
+import zimbra.generated.adminclient.admin.testSearchMultiMailboxRequest;
+import zimbra.generated.adminclient.admin.testSearchMultiMailboxResponse;
 import zimbra.generated.adminclient.admin.testSetCurrentVolumeRequest;
 import zimbra.generated.adminclient.admin.testSetCurrentVolumeResponse;
 import zimbra.generated.adminclient.admin.testSetPasswordRequest;
 import zimbra.generated.adminclient.admin.testSetPasswordResponse;
+import zimbra.generated.adminclient.admin.testSyncGalAccountRequest;
+import zimbra.generated.adminclient.admin.testSyncGalAccountResponse;
 import zimbra.generated.adminclient.admin.testUndeployZimletRequest;
 import zimbra.generated.adminclient.admin.testUndeployZimletResponse;
 import zimbra.generated.adminclient.admin.testUnloadMailboxRequest;
@@ -454,9 +462,9 @@ import zimbra.generated.adminclient.admin.testVersionCheckResponse;
 @WebService(name = "AdminService", targetNamespace = "http://www.zimbra.com/wsdl/AdminService.wsdl")
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
 @XmlSeeAlso({
-    zimbra.generated.adminclient.zm.ObjectFactory.class,
     zimbra.generated.adminclient.admin.ObjectFactory.class,
-    zimbra.generated.adminclient.mail.ObjectFactory.class
+    zimbra.generated.adminclient.mail.ObjectFactory.class,
+    zimbra.generated.adminclient.zm.ObjectFactory.class
 })
 public interface AdminService {
 
@@ -2925,6 +2933,18 @@ public interface AdminService {
      * 
      * @param parameters
      * @return
+     *     returns zimbra.generated.adminclient.admin.testSearchAutoProvDirectoryResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/SearchAutoProvDirectory")
+    @WebResult(name = "SearchAutoProvDirectoryResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public testSearchAutoProvDirectoryResponse searchAutoProvDirectoryRequest(
+        @WebParam(name = "SearchAutoProvDirectoryRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        testSearchAutoProvDirectoryRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
      *     returns zimbra.generated.adminclient.admin.testSearchCalendarResourcesResponse
      */
     @WebMethod(action = "urn:zimbraAdmin/SearchCalendarResources")
@@ -2949,6 +2969,30 @@ public interface AdminService {
      * 
      * @param parameters
      * @return
+     *     returns zimbra.generated.adminclient.admin.testSearchGalResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/SearchGal")
+    @WebResult(name = "SearchGalResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public testSearchGalResponse searchGalRequest(
+        @WebParam(name = "SearchGalRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        testSearchGalRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns zimbra.generated.adminclient.admin.testSearchMultiMailboxResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/SearchMultiMailbox")
+    @WebResult(name = "SearchMultiMailboxResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public testSearchMultiMailboxResponse searchMultiMailboxRequest(
+        @WebParam(name = "SearchMultiMailboxRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        testSearchMultiMailboxRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
      *     returns zimbra.generated.adminclient.admin.testSetCurrentVolumeResponse
      */
     @WebMethod(action = "urn:zimbraAdmin/SetCurrentVolume")
@@ -2968,6 +3012,18 @@ public interface AdminService {
     public testSetPasswordResponse setPasswordRequest(
         @WebParam(name = "SetPasswordRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
         testSetPasswordRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns zimbra.generated.adminclient.admin.testSyncGalAccountResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/SyncGalAccount")
+    @WebResult(name = "SyncGalAccountResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public testSyncGalAccountResponse syncGalAccountRequest(
+        @WebParam(name = "SyncGalAccountRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        testSyncGalAccountRequest parameters);
 
     /**
      * 

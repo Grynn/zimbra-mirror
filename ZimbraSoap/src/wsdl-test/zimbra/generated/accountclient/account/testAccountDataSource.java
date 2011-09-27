@@ -60,8 +60,8 @@ import javax.xml.bind.annotation.XmlType;
     testAccountContactsDataSource.class,
     testAccountPop3DataSource.class,
     testAccountCalDataSource.class,
-    testAccountImapDataSource.class,
-    testAccountRssDataSource.class
+    testAccountRssDataSource.class,
+    testAccountImapDataSource.class
 })
 public class testAccountDataSource {
 

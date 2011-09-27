@@ -51,8 +51,8 @@ public class testInvitation {
     protected List<testCalTZInfo> tz;
     protected testInviteComponent comp;
     @XmlElements({
-        @XmlElement(name = "shr", type = testShareNotification.class),
-        @XmlElement(name = "mp", type = testPartInfo.class)
+        @XmlElement(name = "mp", type = testPartInfo.class),
+        @XmlElement(name = "shr", type = testShareNotification.class)
     })
     protected List<Object> mpOrShr;
     @XmlAttribute(name = "type", required = true)
@@ -137,8 +137,8 @@ public class testInvitation {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link testShareNotification }
      * {@link testPartInfo }
+     * {@link testShareNotification }
      * 
      * 
      */
