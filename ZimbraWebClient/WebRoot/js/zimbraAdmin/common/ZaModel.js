@@ -45,10 +45,18 @@ ZaModel.FONT_SIZE_CHOICES = [
 	{value:"36pt", label: "36pt"}];
 	
 ZaModel.FONT_FAMILY_CHOICES = [
-	{label:"Arial", 			value:"Arial, Helvetica, sans-serif" },
-	{label:"Times New Roman",	value:"Times New Roman, Times, serif" },
-	{label:"Courier", 			value:"Courier, Courier New, mono" },
-	{label:"Verdana",			value:"Verdana, Arial, Helvetica, sans-serif" }
+	{label:"Arial", 			value:"Sans Serif" },
+   	{label:"Arial Black",       value:"Wide Block"},
+    {label:"Courier New",       value:"Monospaced" },
+	{label:"Comic Sans MS", 	value:"Comic" },
+    {label:"Garamond",          value:"Garamond" },
+    {label:"Georgia",           value:"Elegant" },
+    {label:"Lucida Console",    value:"Console" },
+    {label:"Tahoma",            value:"Professional"},
+    {label:"Terminal",          value:"Terminal" },
+    {label:"Times New Roman",   value:"Serif" },
+    {label:"Trebuchet MS",      value:"Modern" },
+	{label:"Verdana",			value:"Wide" }
 ];
 
 ZaModel.getComposeFormatChoices =   function () {
