@@ -15,6 +15,7 @@ import com.zimbra.common.soap.Element;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.XmlStringUtil;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
+import com.zimbra.qa.selenium.framework.util.ZimbraAccount.SOAP_DESTINATION_HOST_TYPE;
 
 
 /**
@@ -308,33 +309,44 @@ public class MailItem implements IItem {
 
 	public static MailItem importFromSOAP(ZimbraAccount account, String query) throws HarnessException {
 		
-		try {
-			
-			account.soapSend(
-					"<SearchRequest xmlns='urn:zimbraMail' types='message'>" +
-						"<query>"+ query +"</query>" +
-					"</SearchRequest>");
-			
-			Element[] results = account.soapSelectNodes("//mail:SearchResponse/mail:m");
-			if (results.length != 1)
-				throw new HarnessException("Query should return 1 result, not "+ results.length);
-	
-			String id = account.soapSelectValue("//mail:SearchResponse/mail:m", "id");
-			
-			account.soapSend(
-					"<GetMsgRequest xmlns='urn:zimbraMail'>" +
-	                	"<m id='"+ id +"' />" +
-	                "</GetMsgRequest>");
-			Element getMsgResponse = account.soapSelectNode("//mail:GetMsgResponse", 1);
-			
-			// Using the response, create this item
-			return (importFromSOAP(getMsgResponse));
-			
-		} catch (Exception e) {
-			throw new HarnessException("Unable to import using SOAP query("+ query +") and account("+ account.EmailAddress +")", e);
-		}
+		return importFromSOAP(account, query, SOAP_DESTINATION_HOST_TYPE.SERVER, null);
+
 	}
-	
+
+	public static MailItem importFromSOAP(ZimbraAccount account, String query,
+	      SOAP_DESTINATION_HOST_TYPE destType, String accountName) throws HarnessException {
+
+	   try {
+
+         account.soapSend(
+               "<SearchRequest xmlns='urn:zimbraMail' types='message'>" +
+                  "<query>"+ query +"</query>" +
+               "</SearchRequest>",
+               destType,
+               accountName);
+         
+         Element[] results = account.soapSelectNodes("//mail:SearchResponse/mail:m");
+         if (results.length != 1)
+            throw new HarnessException("Query should return 1 result, not "+ results.length);
+   
+         String id = account.soapSelectValue("//mail:SearchResponse/mail:m", "id");
+         
+         account.soapSend(
+               "<GetMsgRequest xmlns='urn:zimbraMail'>" +
+                     "<m id='"+ id +"' />" +
+                   "</GetMsgRequest>",
+                   destType,
+                   accountName);
+         Element getMsgResponse = account.soapSelectNode("//mail:GetMsgResponse", 1);
+         
+         // Using the response, create this item
+         return (importFromSOAP(getMsgResponse));
+         
+      } catch (Exception e) {
+         throw new HarnessException("Unable to import using SOAP query("+ query +") and account("+ account.EmailAddress +")", e);
+      }
+	}
+
 	@Override
 	public String prettyPrint() {
 		StringBuilder sb = new StringBuilder();
