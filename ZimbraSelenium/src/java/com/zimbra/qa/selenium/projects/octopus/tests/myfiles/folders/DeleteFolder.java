@@ -57,17 +57,9 @@ public class DeleteFolder extends OctopusCommonTest {
 		app.zPageMyFiles.zToolbarPressPulldown(Button.B_MY_FILES_LIST_ITEM, Button.O_DELETE, briefcaseSubFolder);
 
 		// Verify the folder is now in the trash
-		for(int i = 0; i<5; i++){
-			briefcaseSubFolder = FolderItem.importFromSOAP(account,
-					briefcaseSubFolderName);
-			if(briefcaseSubFolder!=null && trash.getId().contentEquals(briefcaseSubFolder.getParentId()))
-				break;
-			SleepUtil.sleepVerySmall();
-		}
-		
-		ZAssert.assertNotNull(briefcaseSubFolder,
-				"Verify the subfolder is again available");
-		ZAssert.assertEquals(trash.getId(), briefcaseSubFolder.getParentId(),
-				"Verify the subfolder's parent is now the trash folder");
+		ZAssert.assertTrue(app.zPageMyFiles.zIsFolderAChild(briefcaseSubFolder, trash.getName()),"Verify the deleted folder moved to the trash");
+			
+		ZAssert.assertTrue(app.zPageMyFiles.zIsFolderAParent(trash, briefcaseSubFolderName),
+				"Verify the subfolder's parent id matches trash folder id");
 	}	
 }

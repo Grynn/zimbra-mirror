@@ -5,6 +5,7 @@ import org.testng.annotations.*;
 import com.zimbra.qa.selenium.framework.items.FileItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
+import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.octopus.core.OctopusCommonTest;
 
@@ -21,7 +22,7 @@ public class UploadFile extends OctopusCommonTest {
 		super.startingAccountPreferences = null;
 	}
 
-	@Test(description = "Upload file through RestUtil - verify through SOAP", groups = { "smoke" })
+	@Test(description = "Upload file through RestUtil - verify through SOAP", groups = { "sanity" })
 	public void UploadFile_01() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 
@@ -69,6 +70,38 @@ public class UploadFile extends OctopusCommonTest {
 		app.zPageMyFiles.deleteFileById(id);
 	}
 
+	@Test(description = "Upload file through RestUtil - verify through GUI", groups = { "smoke" })
+	public void UploadFile_02() throws HarnessException {
+		ZimbraAccount account = app.zGetActiveAccount();
+
+		FolderItem briefcaseRootFolder = FolderItem.importFromSOAP(account,
+				SystemFolder.Briefcase);
+
+		// Create file item
+		String filePath = ZimbraSeleniumProperties.getBaseDirectory()
+		+ "/data/public/other/testwordfile.doc";
+		
+		FileItem fileItem = new FileItem(filePath);
+
+		// Upload file to server through RestUtil
+		String attachmentId = account.uploadFile(filePath);
+
+		// Save uploaded file to briefcase through SOAP
+		account.soapSend("<SaveDocumentRequest xmlns='urn:zimbraMail'>"
+				+ "<doc l='" + briefcaseRootFolder.getId() + "'><upload id='"
+				+ attachmentId + "'/></doc></SaveDocumentRequest>");
+
+		// Click on My Files tab
+		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_MY_FILES);
+
+		// Verify file appears in My Files list view
+		ZAssert.assertTrue(app.zPageMyFiles.zIsItemInMyFilesListView(fileItem),"Verify file appears in the list view");
+		
+		// delete file upon test completion
+		app.zPageMyFiles.deleteFileByName(fileItem.getName());
+	}
+	
+	
 	@AfterMethod(groups = { "always" })
 	public void createFolderTestCleanup() {
 		if (_folderIsCreated) {

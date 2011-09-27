@@ -83,13 +83,13 @@ public class AcceptShare extends OctopusCommonTest {
 
 		SleepUtil.sleepMedium();
 
-		// Currrent user gets share notification
-		currentAccount
-				.soapSend("<GetShareNotificationsRequest xmlns='urn:zimbraMail'/>");
-
 		// Open Sharing tab
 		app.zPageOctopus
 				.zToolbarPressButton(Button.B_TAB_SHARING);
+		
+		// Currrent user gets share notification
+		currentAccount
+				.soapSend("<GetShareNotificationsRequest xmlns='urn:zimbraMail'/>");
 
 		ZAssert
 				.assertTrue(app.zPageSharing.zWaitForElementPresent(
@@ -113,7 +113,7 @@ public class AcceptShare extends OctopusCommonTest {
 		// Make sure the accepted shared folder appears in My Files list view
 		ZAssert
 				.assertTrue(
-						app.zPageMyFiles.zIsItemInListView(ownerFolderItem),
+						app.zPageMyFiles.zIsItemInMyFilesListView(ownerFolderItem),
 						"Verify the accepted shared folder appears in My Files list view");
 	}
 }

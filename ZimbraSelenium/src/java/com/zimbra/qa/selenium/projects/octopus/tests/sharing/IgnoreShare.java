@@ -83,13 +83,13 @@ public class IgnoreShare extends OctopusCommonTest {
 
 		SleepUtil.sleepMedium();
 
-		// Currrent user gets share notification
-		currentAccount
-				.soapSend("<GetShareNotificationsRequest xmlns='urn:zimbraMail'/>");
-
 		// Open Sharing tab
 		PageSharing pageSharing = (PageSharing) app.zPageOctopus
 				.zToolbarPressButton(Button.B_TAB_SHARING);
+
+		// Currrent user gets share notification
+		currentAccount
+				.soapSend("<GetShareNotificationsRequest xmlns='urn:zimbraMail'/>");
 
 		ZAssert
 				.assertTrue(pageSharing.zWaitForElementPresent(
@@ -111,7 +111,7 @@ public class IgnoreShare extends OctopusCommonTest {
 
 		// Make sure the ignored folder doesn't appear in My Files list view
 		ZAssert
-				.assertFalse(app.zPageMyFiles.zIsItemInListView(ownerFolderItem),
+				.assertFalse(app.zPageMyFiles.zIsItemInMyFilesListView(ownerFolderItem),
 						"Verify the ignored share folder doesn't appears in My Files list view");
 	}
 }

@@ -28,7 +28,7 @@ public class CreateFolder extends OctopusCommonTest {
 				SystemFolder.Briefcase);
 
 		// Make sure size of the client and server subfolders match
-		int clientsize = app.zPageMyFiles.zGetListViewItems().size();
+		int clientsize = app.zPageMyFiles.zGetMyFilesListViewItems().size();
 		int serversize = briefcaseRootFolder.getSubfolders().size();
 		ZAssert.assertEquals(clientsize, serversize,
 				"Verify size of the client and server subfolders match");
@@ -43,7 +43,7 @@ public class CreateFolder extends OctopusCommonTest {
 		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_MY_FILES);
 
 		// Make sure the folder was created on client
-		int newsize = app.zPageMyFiles.zGetListViewItems().size();
+		int newsize = app.zPageMyFiles.zGetMyFilesListViewItems().size();
 		ZAssert.assertTrue(newsize > clientsize,
 				"Verify the new folder created");
 
