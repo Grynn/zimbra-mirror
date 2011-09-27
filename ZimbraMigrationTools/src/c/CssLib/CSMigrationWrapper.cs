@@ -353,7 +353,7 @@ namespace CssLib
                 long id = Folders[0].Id;
 
                 string path = Folders[0].ParentPath;
-               // ZimbraAPI api = new ZimbraAPI();
+                ZimbraAPI api = new ZimbraAPI();
                 foreach (folderObject F1 in Folders)
                 {
                     if (F1.Id == 0)
