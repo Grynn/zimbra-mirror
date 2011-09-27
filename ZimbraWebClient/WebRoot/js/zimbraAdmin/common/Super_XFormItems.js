@@ -325,7 +325,7 @@ Super_AnchorHelper_XFormItem.prototype.constructWidget = function () {
 	var widget = this.widget = new DwtButton(this.getForm(), this.getCssClass());
 	var height = this.getHeight();
 	var width = this.getWidth();
-	if(!width) width = "100%";
+	//if(!width) width = "100%";
 	var el = null;
 	if (width != null || height != null){
 		el = widget.getHtmlElement();
