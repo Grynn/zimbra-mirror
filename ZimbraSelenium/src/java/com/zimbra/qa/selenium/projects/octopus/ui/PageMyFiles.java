@@ -275,7 +275,14 @@ public class PageMyFiles extends AbsTab {
 		return items;
 	}
 	
-
+	public void deleteFileById(String docId) throws HarnessException {
+		ZimbraAccount account = MyApplication.zGetActiveAccount();
+		account.soapSend("<ItemActionRequest xmlns='urn:zimbraMail'>"
+				+ "<action id='" + docId + "' op='trash'/>"
+				+ "</ItemActionRequest>");
+	}
+	
+	
 	@Override
 	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
 		throw new HarnessException("Implement me");
