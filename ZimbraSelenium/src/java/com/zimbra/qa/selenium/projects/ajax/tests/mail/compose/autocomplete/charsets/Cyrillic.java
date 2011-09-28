@@ -84,8 +84,9 @@ public class Cyrillic extends PrefGroupMailByMessageTest {
 		
 		// Create a contact
 		ZimbraAccount contact = new ZimbraAccount();
-		contact.GivenName = "\u0422\u0435\u0441\u0442\u043e\u0432\u0430\u044f" + ZimbraSeleniumProperties.getUniqueString();
-		contact.SN = "Wilson" + ZimbraSeleniumProperties.getUniqueString();
+		contact.setPref("givenName", "\u0422\u0435\u0441\u0442\u043e\u0432\u0430\u044f" + ZimbraSeleniumProperties.getUniqueString());
+		contact.setPref("sn", "Wilson" + ZimbraSeleniumProperties.getUniqueString());
+		contact.setPref("displayName", contact.getPref("givenName") + " " + contact.getPref("sn"));
 		contact.provision();
 		contact.authenticate();
 		
@@ -105,7 +106,7 @@ public class Cyrillic extends PrefGroupMailByMessageTest {
 
 		// Set the To field
 		// Don't use the autocomplete code, since the Cyrillic will be rejected
-		mailform.zFillField(Field.To, contact.GivenName);
+		mailform.zFillField(Field.To, contact.getPref("givenName"));
 		mailform.zAutocompleteFillField(Field.To, ";");
 		
 		// Send the message

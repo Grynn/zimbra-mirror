@@ -20,7 +20,7 @@ public class AutoCompleteQuickCompleteKeys extends PrefGroupMailByMessageTest {
 	private ZimbraAccount SampleAccount = null;
 	
 	
-	public AutoCompleteQuickCompleteKeys() {
+	public AutoCompleteQuickCompleteKeys() throws HarnessException {
 		logger.info("New "+ AutoCompleteQuickCompleteKeys.class.getCanonicalName());
 		
 		super.startingAccountPreferences.put("zimbraPrefComposeFormat", "text");
@@ -30,7 +30,7 @@ public class AutoCompleteQuickCompleteKeys extends PrefGroupMailByMessageTest {
 		FirstName = "James" + ZimbraSeleniumProperties.getUniqueString();
 		LastName = "Smith" + ZimbraSeleniumProperties.getUniqueString();
 		SampleAccount = new ZimbraAccount();
-		SampleAccount.DisplayName = FirstName + " " + LastName;
+		SampleAccount.setPref("displayName", FirstName + " " + LastName);
 		SampleAccount.provision();
 		SampleAccount.authenticate();
 

@@ -56,7 +56,7 @@ public class SearchContact extends AjaxCommonTest {
 	public void SelectAllItemTypesSearchGALContact() throws HarnessException {
 	
 		// Search a GAL item
-		String name=ZimbraAccount.AccountA().DisplayName;
+		String name=ZimbraAccount.AccountA().getPref("displayName");
 		app.zPageSearch.zToolbarPressPulldown(Button.B_SEARCHTYPE, Button.O_SEARCHTYPE_ALL);
 		app.zPageSearch.zAddSearchQuery(name);
 		PageAllItemTypes resultPage = (PageAllItemTypes) app.zPageSearch.zToolbarPressButton(Button.B_SEARCH);
@@ -65,13 +65,13 @@ public class SearchContact extends AjaxCommonTest {
 
         boolean isFound=false;
 	      for (AllItemTypesItem item : items) {
-		    if (item.from.equals(ZimbraAccount.AccountA().DisplayName)) {
+		    if (item.from.equals(ZimbraAccount.AccountA().getPref("displayName"))) {
 		    	isFound = true;
 		    	break;
 	  	    }
 	      }
   
-        ZAssert.assertTrue(isFound, "Verify GAL contact " + ZimbraAccount.AccountA().DisplayName + " displayed");
+        ZAssert.assertTrue(isFound, "Verify GAL contact " + ZimbraAccount.AccountA().getPref("displayName") + " displayed");
 
 	}
 
@@ -115,7 +115,7 @@ public class SearchContact extends AjaxCommonTest {
 			groups = { "functional" })
 	public void searchExistGAL() throws HarnessException {
 		// search for display name
-		String name=ZimbraAccount.AccountA().DisplayName;
+		String name=ZimbraAccount.AccountA().getPref("displayName");
 		app.zPageSearch.zToolbarPressPulldown(Button.B_SEARCHTYPE, Button.O_SEARCHTYPE_GAL);			
 		app.zPageSearch.zAddSearchQuery(name);
 		app.zPageSearch.zToolbarPressButton(Button.B_SEARCH);

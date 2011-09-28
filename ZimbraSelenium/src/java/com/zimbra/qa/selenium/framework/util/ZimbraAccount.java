@@ -56,16 +56,13 @@ public class ZimbraAccount {
 	public String ZimbraMailHost = null;
 	public String ZimbraMailClientHost = null;
 	public String ZimbraId = null;
-	public String GivenName = null;
-	public String SN = null;
-	public String DisplayName = null;
 	public String EmailAddress = null;
 	public String Password = null;
 	public boolean accountIsDirty = false;
 	protected String ZimbraPrefLocale = Locale.getDefault().toString();
 	protected String MyAuthToken = null;
 	protected String MyClientAuthToken = null;
-	public Map<String, String> preferences = null;
+	protected Map<String, String> preferences = new HashMap<String, String>();
 	public final static String clientAccountName = "local@host.local";
 
 	/*
@@ -82,12 +79,17 @@ public class ZimbraAccount {
 	 */
 	public ZimbraAccount(String email, String password) {
 
-		if ( email == null ) {
-			DisplayName = ZimbraSeleniumProperties.getStringProperty("locale").toLowerCase().replace("_", "") + ZimbraSeleniumProperties.getUniqueString();
-			email = DisplayName + "@" + ZimbraSeleniumProperties.getStringProperty("testdomain", "testdomain.com");
-		} else {
-			DisplayName = email.split("@")[0];
+		try {
+			if ( email == null ) {
+				setPref("displayName", ZimbraSeleniumProperties.getStringProperty("locale").toLowerCase().replace("_", "") + ZimbraSeleniumProperties.getUniqueString());
+				email = getPref("displayName") + "@" + ZimbraSeleniumProperties.getStringProperty("testdomain", "testdomain.com");
+			} else {
+				setPref("displayName", email.split("@")[0]);
+			}
+		} catch (HarnessException e) {
+			logger.error(e);
 		}
+		
 		EmailAddress = email;
 
 		if ( password == null ) {
@@ -281,15 +283,9 @@ public class ZimbraAccount {
 			for (Map.Entry<String, String> entry : accountAttrs.entrySet()) {
 				prefs.append(String.format("<a n='%s'>%s</a>", entry.getKey(), entry.getValue()));
 			}
-			
-			if ( DisplayName != null )
-				prefs.append(String.format("<a n='%s'>%s</a>", "displayName", DisplayName));
-
-			if ( GivenName != null )
-				prefs.append(String.format("<a n='%s'>%s</a>", "givenName", GivenName));
-
-			if ( SN != null )
-				prefs.append(String.format("<a n='%s'>%s</a>", "sn", SN));
+			for (Map.Entry<String, String> entry : preferences.entrySet()) {
+				prefs.append(String.format("<a n='%s'>%s</a>", entry.getKey(), entry.getValue()));
+			}
 
 			// Create the account
 			ZimbraAdminAccount.GlobalAdmin().soapSend(
@@ -581,6 +577,23 @@ public class ZimbraAccount {
 		return (value);
 	}
 
+	/**
+	 * Set a user preference.  This method only changes the ZimbraAccount object.  The
+	 * harness must still call ModifyPrefsRequest, CreateAccountRequest, ModifyAccountRequest,
+	 * etc.
+	 * 
+	 */
+	public void setPref(String key, String value) throws HarnessException {
+
+		preferences.put(key, value);
+		
+	}
+	
+	public String getPref(String key) throws HarnessException {
+		
+		return (preferences.get(key));
+		
+	}
 
 	/**
 	 * Get this Account's Locale Preference (zimbraPrefLocale)

@@ -27,23 +27,23 @@ public class AutoCompleteSearchTerms extends PrefGroupMailByMessageTest {
 	private ZimbraAccount StopWordsAccount = null;
 
 	
-	public AutoCompleteSearchTerms() {
+	public AutoCompleteSearchTerms() throws HarnessException {
 		logger.info("New "+ AutoCompleteGAL.class.getCanonicalName());
 		
 		super.startingAccountPreferences.put("zimbraPrefComposeFormat", "text");
 		super.startingAccountPreferences.put("zimbraPrefGalAutoCompleteEnabled", "TRUE");
 	
 		QueryWordsAccount = new ZimbraAccount();
-		QueryWordsAccount.GivenName = QueryWordsFirstName;
-		QueryWordsAccount.SN = QueryWordsLastName;
-		QueryWordsAccount.DisplayName = QueryWordsAccount.GivenName + " " + QueryWordsAccount.SN;
+		QueryWordsAccount.setPref("givenName", QueryWordsFirstName);
+		QueryWordsAccount.setPref("sn", QueryWordsLastName);
+		QueryWordsAccount.setPref("displayName", QueryWordsFirstName + " " + QueryWordsLastName);
 		QueryWordsAccount.provision();
 		QueryWordsAccount.authenticate();
 
 		StopWordsAccount = new ZimbraAccount();
-		StopWordsAccount.GivenName = StopWordsFirstName;
-		StopWordsAccount.SN = StopWordsLastName;
-		StopWordsAccount.DisplayName = StopWordsAccount.GivenName + " " + StopWordsAccount.SN;
+		StopWordsAccount.setPref("givenName", StopWordsFirstName);
+		StopWordsAccount.setPref("sn", StopWordsLastName);
+		StopWordsAccount.setPref("displayName", StopWordsFirstName + " " + StopWordsLastName);
 		StopWordsAccount.provision();
 		StopWordsAccount.authenticate();
 

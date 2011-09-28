@@ -21,14 +21,14 @@ public class AutoCompleteGAL extends PrefGroupMailByMessageTest {
 	private ZimbraAccount SampleAccount = null;
 	
 	
-	public AutoCompleteGAL() {
+	public AutoCompleteGAL() throws HarnessException {
 		logger.info("New "+ AutoCompleteGAL.class.getCanonicalName());
 		
 		super.startingAccountPreferences.put("zimbraPrefComposeFormat", "text");
 		super.startingAccountPreferences.put("zimbraPrefGalAutoCompleteEnabled", "TRUE");
 	
 		SampleAccount = new ZimbraAccount();
-		SampleAccount.DisplayName = FirstName + " " + LastName;
+		SampleAccount.setPref("displayName", FirstName + " " + LastName);
 		SampleAccount.provision();
 		SampleAccount.authenticate();
 
@@ -213,7 +213,7 @@ public class AutoCompleteGAL extends PrefGroupMailByMessageTest {
 		mailform.zFillField(Field.Body, body);
 
 		// Auto complete a name
-		List<AutocompleteEntry> entries = mailform.zAutocompleteFillField(Field.To, SampleAccount.DisplayName);
+		List<AutocompleteEntry> entries = mailform.zAutocompleteFillField(Field.To, SampleAccount.getPref("displayName"));
 		AutocompleteEntry found = null;
 		for (AutocompleteEntry entry : entries) {
 			if ( entry.getAddress().contains(SampleAccount.EmailAddress) ) {
@@ -287,7 +287,7 @@ public class AutoCompleteGAL extends PrefGroupMailByMessageTest {
 		String firstname = "Ethan" + ZimbraSeleniumProperties.getUniqueString();
 		for (int i = 0; i < count; i++) {
 			ZimbraAccount account = new ZimbraAccount();
-			account.DisplayName = firstname + " Johnson" + ZimbraSeleniumProperties.getUniqueString();
+			account.setPref("displayName", firstname + " Johnson" + ZimbraSeleniumProperties.getUniqueString());
 			account.provision();
 			account.authenticate();
 		}
@@ -433,23 +433,23 @@ public class AutoCompleteGAL extends PrefGroupMailByMessageTest {
 
 		// Create 3 Mikes
 		ZimbraAccount account1 = new ZimbraAccount();
-		account1.GivenName = "Mike";
-		account1.SN = "Carter" + ZimbraSeleniumProperties.getUniqueString();
-		account1.DisplayName = account1.GivenName + " " + account1.SN;
+		account1.setPref("givenName", "Mike");
+		account1.setPref("sn", "Carter" + ZimbraSeleniumProperties.getUniqueString());
+		account1.setPref("displayName", account1.getPref("givenName") + " " + account1.getPref("sn"));
 		account1.provision();
 		account1.authenticate();
 
 		ZimbraAccount account2 = new ZimbraAccount();
-		account2.GivenName = "Mike";
-		account2.SN = "Mitchell" + ZimbraSeleniumProperties.getUniqueString();
-		account2.DisplayName = account2.GivenName + " " + account2.SN;
+		account2.setPref("givenName", "Mike");
+		account2.setPref("sn", "Mitchell" + ZimbraSeleniumProperties.getUniqueString());
+		account2.setPref("displayName", account2.getPref("givenName") + " " + account2.getPref("sn"));
 		account2.provision();
 		account2.authenticate();
 
 		ZimbraAccount account3 = new ZimbraAccount();
-		account3.GivenName = "Mike";
-		account3.SN = "Murphy" + ZimbraSeleniumProperties.getUniqueString();
-		account3.DisplayName = account3.GivenName + " " + account3.SN;
+		account3.setPref("givenName", "Mike");
+		account3.setPref("sn", "Murphy" + ZimbraSeleniumProperties.getUniqueString());
+		account3.setPref("displayName", account3.getPref("givenName") + " " + account3.getPref("sn"));
 		account3.provision();
 		account3.authenticate();
 
@@ -482,9 +482,9 @@ public class AutoCompleteGAL extends PrefGroupMailByMessageTest {
 			}
 		}
 		
-		ZAssert.assertNull(found1, "Verify 'mike m' does not match "+ account1.DisplayName);
-		ZAssert.assertNotNull(found2, "Verify 'mike m' does match "+ account2.DisplayName);
-		ZAssert.assertNotNull(found3, "Verify 'mike m' does match "+ account3.DisplayName);
+		ZAssert.assertNull(found1, "Verify 'mike m' does not match "+ account1.getPref("displayName"));
+		ZAssert.assertNotNull(found2, "Verify 'mike m' does match "+ account2.getPref("displayName"));
+		ZAssert.assertNotNull(found3, "Verify 'mike m' does match "+ account3.getPref("displayName"));
 		
 		// Cancel the compose
 		DialogWarning dialog = (DialogWarning)mailform.zToolbarPressButton(Button.B_CANCEL);

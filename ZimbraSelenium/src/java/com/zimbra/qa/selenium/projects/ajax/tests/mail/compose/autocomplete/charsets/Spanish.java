@@ -93,9 +93,9 @@ public class Spanish extends PrefGroupMailByMessageTest {
 		
 		// Create a contact
 		ZimbraAccount contact = new ZimbraAccount();
-		contact.GivenName = "Ñáéíóúñ" + ZimbraSeleniumProperties.getUniqueString();
-		contact.SN = "Wilson" + ZimbraSeleniumProperties.getUniqueString();
-		contact.DisplayName = contact.GivenName + " " + contact.SN;
+		contact.setPref("givenName", "Ñáéíóúñ" + ZimbraSeleniumProperties.getUniqueString());
+		contact.setPref("sn", "Wilson" + ZimbraSeleniumProperties.getUniqueString());
+		contact.setPref("displayName", contact.getPref("givenName") + " " + contact.getPref("sn"));
 		contact.provision();
 		contact.authenticate();
 		
@@ -114,7 +114,7 @@ public class Spanish extends PrefGroupMailByMessageTest {
 		mailform.zFillField(Field.Body, body);
 
 		// Set the To field
-		List<AutocompleteEntry> entries = mailform.zAutocompleteFillField(Field.To, contact.GivenName);
+		List<AutocompleteEntry> entries = mailform.zAutocompleteFillField(Field.To, contact.getPref("givenName"));
 		AutocompleteEntry found = null;
 		for (AutocompleteEntry entry : entries) {
 			if ( entry.getAddress().contains(contact.EmailAddress) ) {
