@@ -22,7 +22,7 @@ public class UploadFile extends OctopusCommonTest {
 		super.startingAccountPreferences = null;
 	}
 
-	@Test(description = "Upload file through RestUtil - verify through SOAP", groups = { "sanity" })
+	@Test(description = "Upload file through RestUtil - search uploaded file through SOAP", groups = { "sanity" })
 	public void UploadFile_01() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 
@@ -53,7 +53,7 @@ public class UploadFile extends OctopusCommonTest {
 
 		"</SaveDocumentRequest>");
 
-		account.soapSelectNode("//mail:SaveDocumentResponse", 1);
+		// account.soapSelectNode("//mail:SaveDocumentResponse", 1);
 
 		// search the uploaded file
 		app.zGetActiveAccount().soapSend(
@@ -66,11 +66,10 @@ public class UploadFile extends OctopusCommonTest {
 		ZAssert.assertEquals(name, fileName, "Verify file name through SOAP");
 		
 		//delete file upon test completion
-		String id = account.soapSelectValue("//mail:doc", "id");
-		app.zPageMyFiles.deleteFileById(id);
+		app.zPageMyFiles.deleteFile(fileName);
 	}
 
-	@Test(description = "Upload file through RestUtil - verify through GUI", groups = { "smoke" })
+	@Test(description = "Upload file through RestUtil - verify uploaded file appears in the List view", groups = { "smoke" })
 	public void UploadFile_02() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 
@@ -97,8 +96,8 @@ public class UploadFile extends OctopusCommonTest {
 		// Verify file appears in My Files list view
 		ZAssert.assertTrue(app.zPageMyFiles.zIsItemInMyFilesListView(fileItem),"Verify file appears in the list view");
 		
-		// delete file upon test completion
-		app.zPageMyFiles.deleteFileByName(fileItem.getName());
+		//delete file upon test completion
+		app.zPageMyFiles.deleteFile(fileItem.getName());
 	}
 	
 	

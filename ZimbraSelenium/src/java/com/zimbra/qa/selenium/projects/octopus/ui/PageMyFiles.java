@@ -246,7 +246,7 @@ public class PageMyFiles extends AbsTab {
 		return (page);
 	}
 
-	public boolean zIsFolderAParent(FolderItem folderItem, String childFolderName)
+	public boolean zIsFolderParent(FolderItem folderItem, String childFolderName)
 			throws HarnessException {
 		if (folderItem == null || childFolderName == null)
 			throw new HarnessException("folder or item cannot be null");
@@ -258,14 +258,15 @@ public class PageMyFiles extends AbsTab {
 			childFolderItem = FolderItem.importFromSOAP(MyApplication
 					.zGetActiveAccount(), childFolderName);
 			if (childFolderItem != null
-					&& folderItem.getId().contentEquals(childFolderItem.getParentId()))
+					&& folderItem.getId().contentEquals(
+							childFolderItem.getParentId()))
 				return true;
 			SleepUtil.sleepVerySmall();
 		}
 		return found;
 	}
 
-	public boolean zIsFolderAChild(FolderItem folderItem, String parentFolderName)
+	public boolean zIsFolderChild(FolderItem folderItem, String parentFolderName)
 			throws HarnessException {
 		if (folderItem == null || parentFolderName == null)
 			throw new HarnessException("folder or item cannot be null");
@@ -322,17 +323,52 @@ public class PageMyFiles extends AbsTab {
 		return items;
 	}
 
-	public void deleteFileByName(String docName) throws HarnessException {
+	public boolean searchFile(String fileName) throws HarnessException {
+		ZimbraAccount account = MyApplication.zGetActiveAccount();
+		account
+				.soapSend("<SearchRequest xmlns='urn:zimbraMail' types='document'>"
+						+ "<query>"
+						+ fileName
+						+ "</query>"
+						+ "</SearchRequest>");
+		String name = account.soapSelectValue("//mail:doc", "name");
+		if (name.contentEquals(fileName))
+			return true;
+		else
+			return false;
+	}
+
+	public boolean searchFileIn(String fileName, String folderName)
+			throws HarnessException {
+		ZimbraAccount account = MyApplication.zGetActiveAccount();
+		account
+				.soapSend("<SearchRequest xmlns='urn:zimbraMail' types='document'>"
+						+ "<query>in:"
+						+ folderName
+						+ " "
+						+ fileName
+						+ "</query>" + "</SearchRequest>");
+
+		String name = account.soapSelectValue(
+				"//mail:SearchResponse//mail:doc", "name");
+
+		if (name.contentEquals(fileName))
+			return true;
+		else
+			return false;
+	}
+
+	public void deleteFile(String docName) throws HarnessException {
 		ZimbraAccount account = MyApplication.zGetActiveAccount();
 		account
 				.soapSend("<SearchRequest xmlns='urn:zimbraMail' types='document'>"
 						+ "<query>" + docName + "</query>" + "</SearchRequest>");
 		String id = account.soapSelectValue("//mail:doc", "id");
-		deleteFileById(id);
+		deleteFile(id, account);
 	}
 
-	public void deleteFileById(String docId) throws HarnessException {
-		ZimbraAccount account = MyApplication.zGetActiveAccount();
+	private void deleteFile(String docId, ZimbraAccount account)
+			throws HarnessException {
 		account.soapSend("<ItemActionRequest xmlns='urn:zimbraMail'>"
 				+ "<action id='" + docId + "' op='trash'/>"
 				+ "</ItemActionRequest>");
