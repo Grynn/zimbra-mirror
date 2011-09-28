@@ -261,6 +261,7 @@ public class OfflineSyncManager implements FormatListener {
         void clearErrorCode() {
             mCode = null;
             mError = null;
+            lastAuthFail = 0;
             if (mStatus == SyncStatus.authfail || mStatus == SyncStatus.error || mStatus == SyncStatus.offline)
                 mStatus = SyncStatus.unknown;
         }
@@ -389,7 +390,7 @@ public class OfflineSyncManager implements FormatListener {
         notifyStateChange();
     }
 
-    private void authFailed(NamedEntry entry, String code, String password) {
+    public void authFailed(NamedEntry entry, String code, String password) {
         synchronized (syncStatusTable) {
             pendingStatusChanges = true;
             getStatus(entry).authFailed(code, password);

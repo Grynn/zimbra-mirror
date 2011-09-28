@@ -143,45 +143,35 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
     }
 
     public ZAuthToken getAuthToken() throws ServiceException {
-        return getAuthToken(true);
-    }
-
-    static private Map<String, Long> authErrorTimes = new HashMap<String, Long>();
-
-    public ZAuthToken getAuthToken(boolean quickRetry) throws ServiceException {
         ZAuthToken authToken = OfflineSyncManager.getInstance().lookupAuthToken(getAccount());
 
         if (authToken == null) {
-            String uri = getSoapUri();
-            synchronized(authErrorTimes) {
-                if (!quickRetry) {
-                    Long last = authErrorTimes.get(uri);
-                    if (last != null && System.currentTimeMillis() -
-                        last.longValue() < OfflineLC.zdesktop_authreq_retry_interval.longValue())
-                        return null;
-                }
+            OfflineAccount acct = getOfflineAccount();
+            if (!OfflineSyncManager.getInstance().reauthOK(acct)) {
+                OfflineLog.offline.debug("auth request ignored due to recent failure. Password must be re-validated in account setup or password change dialog");
+                return null;
+            }
 
-                String passwd = getAccount().getAttr(OfflineProvisioning.A_offlineRemotePassword);
-                Element request = new Element.XMLElement(AccountConstants.AUTH_REQUEST);
-                request.addElement(AccountConstants.E_ACCOUNT).addAttribute(AccountConstants.A_BY, "id").setText(getAccountId());
-                request.addElement(AccountConstants.E_PASSWORD).setText(passwd);
+            String passwd = getAccount().getAttr(OfflineProvisioning.A_offlineRemotePassword);
+            Element request = new Element.XMLElement(AccountConstants.AUTH_REQUEST);
+            request.addElement(AccountConstants.E_ACCOUNT).addAttribute(AccountConstants.A_BY, "id").setText(getAccountId());
+            request.addElement(AccountConstants.E_PASSWORD).setText(passwd);
 
-                Element response = null;
-                try {
-                    response = sendRequest(request, false, true, OfflineLC.zdesktop_authreq_timeout.intValue());
-                } catch (ServiceException e) {
-                    if (e.getCode().equals(ServiceException.PROXY_ERROR)) {
-                        authErrorTimes.put(uri, Long.valueOf(System.currentTimeMillis()));
-                    } else {
-                        throw e;
-                    }
+            Element response = null;
+            try {
+                response = sendRequest(request, false, true, OfflineLC.zdesktop_authreq_timeout.intValue());
+            } catch (ServiceException e) {
+                if (e.getCode().equals(ServiceException.PROXY_ERROR)) {
+                    OfflineSyncManager.getInstance().authFailed(acct, e.getCode(), acct.getRemotePassword());
+                } else {
+                    throw e;
                 }
+            }
 
-                if (response != null) {
-                    authToken = new ZAuthToken(response.getElement(AccountConstants.E_AUTH_TOKEN), false);
-                    long expires = System.currentTimeMillis() + response.getAttributeLong(AccountConstants.E_LIFETIME);
-                    OfflineSyncManager.getInstance().authSuccess(getAccount(), authToken, expires);
-                }
+            if (response != null) {
+                authToken = new ZAuthToken(response.getElement(AccountConstants.E_AUTH_TOKEN), false);
+                long expires = System.currentTimeMillis() + response.getAttributeLong(AccountConstants.E_LIFETIME);
+                OfflineSyncManager.getInstance().authSuccess(getAccount(), authToken, expires);
             }
         }
 
@@ -621,7 +611,7 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
                 }
             }
             if (session != null) {
-                ZAuthToken zat = getAuthToken(false);
+                ZAuthToken zat = getAuthToken();
                 if (zat != null) {
                     AuthToken at = AuthProvider.getAuthToken(OfflineProvisioning.getOfflineInstance().getLocalAccount());
                     at.setProxyAuthToken(zat.getValue());
