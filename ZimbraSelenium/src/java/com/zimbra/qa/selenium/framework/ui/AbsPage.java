@@ -454,6 +454,19 @@ public abstract class AbsPage extends AbsSeleniumObject {
 		        case '/': doType(KeyEvent.VK_SLASH); break;
 		        case '?': doType(KeyEvent.VK_SHIFT, KeyEvent.VK_SLASH); break;
 		        case ' ': doType(KeyEvent.VK_SPACE); break;
+
+		        // Swedish
+		        case 'Å': doTypeAltCode("143"); break;
+		        
+		        // Spanish ... http://www.asciitable.com/
+		        case 'á': doTypeAltCode("160"); break;
+		        case 'é': doTypeAltCode("130"); break;
+		        case 'í': doTypeAltCode("161"); break;
+		        case 'ó': doTypeAltCode("162"); break;
+		        case 'ú': doTypeAltCode("163"); break;
+		        case 'Ñ': doTypeAltCode("165"); break;
+		        case 'ñ': doTypeAltCode("164"); break;
+		        
 		        default:
 		                throw new IllegalArgumentException("Cannot type character " + character);
 		        }
@@ -473,6 +486,31 @@ public abstract class AbsPage extends AbsSeleniumObject {
 		        robot.keyRelease(keyCodes[offset]);
 		    }
 
+		    /**
+		     * Type Alt+code, e.g. á = ALT+160
+		     * @param code
+		     */
+		    private void doTypeAltCode(String code) {
+		    	
+		    	robot.keyPress(KeyEvent.VK_ALT);
+		    	
+		    	for (int i = 0; i < code.length(); i ++) {
+			        switch (code.charAt(i)) {
+			        case '1': doType(KeyEvent.VK_NUMPAD1); break;
+			        case '2': doType(KeyEvent.VK_NUMPAD2); break;
+			        case '3': doType(KeyEvent.VK_NUMPAD3); break;
+			        case '4': doType(KeyEvent.VK_NUMPAD4); break;
+			        case '5': doType(KeyEvent.VK_NUMPAD5); break;
+			        case '6': doType(KeyEvent.VK_NUMPAD6); break;
+			        case '7': doType(KeyEvent.VK_NUMPAD7); break;
+			        case '8': doType(KeyEvent.VK_NUMPAD8); break;
+			        case '9': doType(KeyEvent.VK_NUMPAD9); break;
+			        case '0': doType(KeyEvent.VK_NUMPAD0); break;
+			        }
+		    	}
+		    	
+		    	robot.keyRelease(KeyEvent.VK_ALT);
+		    }
 		}
 
 
