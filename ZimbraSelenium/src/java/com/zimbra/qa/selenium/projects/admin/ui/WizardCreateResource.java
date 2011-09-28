@@ -47,8 +47,15 @@ public class WizardCreateResource extends AbsWizard {
 
 		sType(Locators.zdlg_RESOURCE_NAME, CN);
 		sType(Locators.zdlg_RESOURCE_LOCAL_NAME, CN);
-		sType(Locators.zdlg_RESOURCE_DOMAIN_NAME, domain);
 
+		/**
+		 * If you use normal type method domain is taken as default domain name.
+		 * Below line of code is not grid friendly but this is only solution working currently. 
+		 */
+		zType(Locators.zdlg_RESOURCE_DOMAIN_NAME,"");
+		this.zKeyboard.zTypeCharacters(domain);
+
+		
 		if(resourceType!="") {
 			sClick(Locators.zdlg_RESOURCE_TYPE);
 			if(resourceType.equals(Locators.LOCATION)) {

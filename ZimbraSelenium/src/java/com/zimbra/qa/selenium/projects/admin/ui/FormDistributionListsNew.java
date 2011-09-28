@@ -5,6 +5,7 @@ import com.zimbra.qa.selenium.framework.ui.AbsApplication;
 import com.zimbra.qa.selenium.framework.ui.AbsForm;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.projects.admin.items.DistributionListItem;
+import com.zimbra.qa.selenium.projects.admin.ui.WizardCreateAlias.Locators;
 
 public class FormDistributionListsNew extends AbsForm {
 	public static class Locators {
@@ -36,7 +37,13 @@ public class FormDistributionListsNew extends AbsForm {
 		String domain = dl.getDomainName();
 
 		sType(Locators.ztb_ACCT_NAME, CN);
-		sType(Locators.ztb_DOMAIN_NAME, domain);
+
+		/**
+		 * If you use normal type method domain is taken as default domain name.
+		 * Below line of code is not grid friendly but this is only solution working currently. 
+		 */
+		zType(Locators.ztb_DOMAIN_NAME,"");
+		this.zKeyboard.zTypeCharacters(domain);
 
 	}
 

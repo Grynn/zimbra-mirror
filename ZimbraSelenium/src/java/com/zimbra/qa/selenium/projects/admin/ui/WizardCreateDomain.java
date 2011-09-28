@@ -36,7 +36,12 @@ public class WizardCreateDomain extends AbsWizard {
 		String domainName = domain.getName();
 
 
-		zType(Locators.zdlg_DOMAIN_NAME, domainName);
+		/**
+		 * If you use normal type method domain is taken as default domain name.
+		 * Below line of code is not grid friendly but this is only solution working currently. 
+		 */
+		zType(Locators.zdlg_DOMAIN_NAME,"");
+		this.zKeyboard.zTypeCharacters(domainName);
 
 
 		clickFinish(AbsWizard.Locators.DOMAIN_DIALOG);

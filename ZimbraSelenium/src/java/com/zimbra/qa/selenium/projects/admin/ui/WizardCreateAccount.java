@@ -44,9 +44,16 @@ public class WizardCreateAccount extends AbsWizard {
 
 
 		zType(Locators.zdlg_ACCT_NAME, CN);
+		
 
-		zType(Locators.zdlg_DOMAIN_NAME, domain);
-
+		/**
+		 * If you use normal type method domain is taken as default domain name.
+		 * Below line of code is not grid friendly but this is only solution working currently. 
+		 */
+		zType(Locators.zdlg_DOMAIN_NAME,"");
+		this.zKeyboard.zTypeCharacters(domain);
+		
+		
 		for (String key : account.getAccountAttrs().keySet()) {
 
 			// TODO: Handle Previous/Next to find the input field, if necessary

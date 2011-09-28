@@ -40,7 +40,14 @@ public class WizardCreateAlias extends AbsWizard {
 		String targetAccount = alias.getTargetAccountEmail();
 
 		sType(Locators.zdlg_ALIAS_NAME, CN);
-		sType(Locators.zdlg_ALIAS_DOMAIN_NAME, domain);
+		
+		/**
+		 * If you use normal type method domain is taken as default domain name.
+		 * Below line of code is not grid friendly but this is only solution working currently. 
+		 */
+		zType(Locators.zdlg_ALIAS_DOMAIN_NAME,"");
+		this.zKeyboard.zTypeCharacters(domain);
+		
 		sType(Locators.zdlg_TARGET_ACCOUNT_NAME, targetAccount);
 		zClick(Locators.zdlg_OK);
 
