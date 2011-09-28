@@ -948,8 +948,20 @@ public class FormMailNew extends AbsForm {
 	public void zAutocompleteForgetItem(AutocompleteEntry entry) throws HarnessException {
 		logger.info(myPageName() + " zAutocompleteForgetItem("+ entry +")");
 		
+		// Mouse over the entry
+		zAutocompleteMouseOverItem(entry);
+		
 		// Click on the address
 		this.sMouseDown(entry.getLocator() + " div[id*='_acForgetText_']");
+		this.zWaitForBusyOverlay();
+		
+	}
+
+	public void zAutocompleteMouseOverItem(AutocompleteEntry entry) throws HarnessException {
+		logger.info(myPageName() + " zAutocompleteMouseOverItem("+ entry +")");
+		
+		// Click on the address
+		this.sMouseOver(entry.getLocator() + " td + td");
 		this.zWaitForBusyOverlay();
 		
 	}
