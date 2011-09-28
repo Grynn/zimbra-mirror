@@ -742,64 +742,6 @@ public class MailAutoCompleteAddress extends CommonTest {
 	}
 
 	/**
-	 * Verify autocomplete with special characters. Steps, 1.Create accounts
-	 * with special character 2.Verify autocomplete with those chracters
-	 * 3.Verify email address is filled automatically with semi-colon (;)
-	 */
-	@Test(dataProvider = "composeDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
-	public void autocompleteOnSpecialCharacters_Bug41512(String from,
-			String to, String cc, String bcc, String subject, String body,
-			String attachments) throws Exception {
-		if (SelNGBase.isExecutionARetry.get())
-			handleRetry();
-
-		acc1 = ZimbraSeleniumProperties.getStringProperty("locale").replace(
-				"_", "")
-				+ "-" + "chr1@testdomain.com";
-		acc2 = ZimbraSeleniumProperties.getStringProperty("locale").replace(
-				"_", "")
-				+ "." + "chr2@testdomain.com";
-		String[] contacts = { acc1, acc2 };
-		createContacts(contacts, true);
-		Stafzmprov.modifyAccount(ClientSessionFactory.session().currentUserName(),
-				"zimbraPrefAutoAddAddressEnabled", "TRUE");
-		getKeyboardKeys(acc1);
-		typeKeyboardKeys();
-		verifySpecialCharAutoComplete("acc1");
-		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
-
-		getKeyboardKeys(acc2);
-		typeKeyboardKeys();
-		verifySpecialCharAutoComplete("acc2");
-		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
-		if (ZimbraSeleniumProperties.getStringProperty("locale")
-				.equals("en_US")) {
-			getKeyboardKeys(acc1);
-			Robot zRobot = new Robot();
-			zRobot.keyPress(KeyEvent.VK_SHIFT);
-			typeKeyboardKeys();
-			zRobot.keyRelease(KeyEvent.VK_SHIFT);
-			verifySpecialCharAutoComplete("acc1");
-			obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
-		}
-
-		obj.zButton.zClick(MailApp.zNewMenuIconBtn);
-		obj.zTextAreaField.zActivate(page.zComposeView.zToField);
-		obj.zTextAreaField.zActivate(page.zComposeView.zToField);
-		pressKeys("z, i, m, b, r, a, ;");
-		SleepUtil.sleep(1000);
-		Assert.assertTrue("Expected value(" + "zimbra@testdomain.com"
-				+ "), Actual Value("
-				+ obj.zTextAreaField.zGetInnerText(page.zComposeView.zToField)
-				+ ")",
-				obj.zTextAreaField.zGetInnerText(page.zComposeView.zToField)
-						.indexOf("zimbra@testdomain.com") >= 0);
-		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
-
-		SelNGBase.needReset.set(false);
-	}
-
-	/**
 	 * Unable to get rid of emailed contacts - bug 40081. Steps, 1.Create
 	 * account with zimbraPrefAutoAddAddressEnabled TRUE 2.Send mail to that
 	 * account so automatically email address would be added in
