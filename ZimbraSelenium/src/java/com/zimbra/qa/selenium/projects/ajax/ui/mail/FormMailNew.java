@@ -945,5 +945,14 @@ public class FormMailNew extends AbsForm {
 		
 	}
 	
+	public void zAutocompleteForgetItem(AutocompleteEntry entry) throws HarnessException {
+		logger.info(myPageName() + " zAutocompleteForgetItem("+ entry +")");
+		
+		// Click on the address
+		this.sMouseDown(entry.getLocator() + " div[id*='_acForgetText_']");
+		this.zWaitForBusyOverlay();
+		
+	}
+
 	
 }
