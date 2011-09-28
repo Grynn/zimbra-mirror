@@ -327,7 +327,8 @@ public class MailItem implements IItem {
          
          Element[] results = account.soapSelectNodes("//mail:SearchResponse/mail:m");
          if (results.length != 1)
-            throw new HarnessException("Query should return 1 result, not "+ results.length);
+            //throw new HarnessException("Query should return 1 result, not "+ results.length);
+        	return null;
    
          String id = account.soapSelectValue("//mail:SearchResponse/mail:m", "id");
          
