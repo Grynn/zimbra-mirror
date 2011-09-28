@@ -55,7 +55,8 @@ public class PageTasks extends AbsTab {
 		public static final String zNewTaskFolderMenuItem ="css=div#zb__TKL__NEW_MENU_NEW_TASK_FOLDER";
 		public static final String zDeleteTaskMenuItem ="css=div[id='zm__Tasks'] tr[id='POPUP_DELETE']";
 		public static final String zMoveTaskMenuItem ="css=div[id='zm__Tasks'] tr[id='POPUP_MOVE']";
-		
+		public static final String zNewTaskListMenuItem="css=div[id$='NEWFOLDER']";
+		public static final String zMoveTaskDropDown="css=td#zb__TKL__MOVE_MENU_dropdown>div";
 		
 	}
 
@@ -609,6 +610,13 @@ public class PageTasks extends AbsTab {
 				throw new HarnessException(	"no logic defined for pulldown/option " + pulldown+ "/" + option);
 			}
 
+		}else if (pulldown == Button.B_MOVE) {
+		
+			pulldownLocator = Locators.zMoveTaskDropDown;
+			optionLocator = Locators.zNewTaskListMenuItem;
+
+			page = new DialogCreateTaskFolder(this.MyApplication, this);
+
 		}
 		// Default behavior
 		if (pulldownLocator != null) {
@@ -683,7 +691,7 @@ public class PageTasks extends AbsTab {
 						+ ", then dynamic must be FolderItem");
 
 			FolderItem folder = (FolderItem) dynamic;
-			pulldownLocator = "css=td#zb__TKL__MOVE_MENU_dropdown>div";
+			pulldownLocator = Locators.zMoveTaskDropDown;
 			optionLocator = "css=td#zti__DwtFolderChooser_TasksTKL__"+ folder.getId() + "_textCell";
 
 			page = null;
