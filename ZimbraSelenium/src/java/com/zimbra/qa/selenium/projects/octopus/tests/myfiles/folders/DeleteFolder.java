@@ -54,12 +54,12 @@ public class DeleteFolder extends OctopusCommonTest {
 		SleepUtil.sleepVerySmall();
 		
 		// Delete the folder using drop down list option
-		app.zPageMyFiles.zToolbarPressPulldown(Button.B_MY_FILES_LIST_ITEM, Button.O_DELETE, briefcaseSubFolder);
+		app.zPageMyFiles.zToolbarPressPulldown(Button.B_MY_FILES_LIST_ITEM, Button.O_DELETE, briefcaseSubFolderName);
 
 		// Verify the folder is now in the trash
-		ZAssert.assertTrue(app.zPageMyFiles.zIsFolderChild(briefcaseSubFolder, trash.getName()),"Verify the deleted folder moved to the trash");
+		ZAssert.assertTrue(app.zPageOctopus.zIsFolderChild(briefcaseSubFolder, trash.getName()),"Verify the deleted folder moved to the trash");
 			
-		ZAssert.assertTrue(app.zPageMyFiles.zIsFolderParent(trash, briefcaseSubFolderName),
+		ZAssert.assertTrue(app.zPageOctopus.zIsFolderParent(trash, briefcaseSubFolderName),
 				"Verify the subfolder's parent id matches trash folder id");
 	}	
 }

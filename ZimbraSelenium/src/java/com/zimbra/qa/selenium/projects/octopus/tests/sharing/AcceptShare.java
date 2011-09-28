@@ -113,7 +113,7 @@ public class AcceptShare extends OctopusCommonTest {
 		// Make sure the accepted shared folder appears in My Files list view
 		ZAssert
 				.assertTrue(
-						app.zPageMyFiles.zIsItemInMyFilesListView(ownerFolderItem),
+						app.zPageOctopus.zIsItemInCurentListView(ownerFolderItem.getName()),
 						"Verify the accepted shared folder appears in My Files list view");
 	}
 }

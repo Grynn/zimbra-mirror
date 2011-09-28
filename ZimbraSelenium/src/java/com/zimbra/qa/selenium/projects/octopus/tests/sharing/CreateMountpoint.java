@@ -90,7 +90,7 @@ public class CreateMountpoint extends OctopusCommonTest {
 		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_MY_FILES);
 				
 		// Verify the mountpoint exists in the list view
-		List<String> items = app.zPageMyFiles.zGetMyFilesListViewItems();
+		List<String> items = app.zPageOctopus.zGetListViewItems();
 		
 		ZAssert.assertNotNull(items, 
 		"Verify list view is not empty");

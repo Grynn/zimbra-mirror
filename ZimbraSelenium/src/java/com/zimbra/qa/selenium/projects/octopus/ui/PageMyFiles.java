@@ -3,15 +3,10 @@
  */
 package com.zimbra.qa.selenium.projects.octopus.ui;
 
-import java.util.ArrayList;
-import java.util.List;
-import com.zimbra.qa.selenium.framework.items.FolderItem;
-import com.zimbra.qa.selenium.framework.items.IItem;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.octopus.ui.DialogError;
 import com.zimbra.qa.selenium.projects.octopus.ui.DialogError.DialogErrorID;
-import com.zimbra.soap.mail.type.Folder;
 
 public class PageMyFiles extends AbsTab {
 
@@ -102,7 +97,97 @@ public class PageMyFiles extends AbsTab {
 	}
 
 	public AbsPage zToolbarPressPulldown(Button pulldown, Button option,
-			IItem item) throws HarnessException {
+			String itemName) throws HarnessException {
+		logger.info(myPageName() + " zToolbarPressPulldown(" + pulldown + ", "
+				+ option + ")");
+
+		tracer.trace("Click pulldown " + pulldown + " then " + option);
+
+		if (pulldown == null)
+			throw new HarnessException("Pulldown cannot be null!");
+
+		if (option == null)
+			throw new HarnessException("Option cannot be null!");
+
+		if (itemName == null)
+			throw new HarnessException("Item name cannot be null!");
+
+		// Default behavior variables
+		String pulldownLocator = null; // If set, this will be expanded
+		String optionLocator = null; // If set, this will be clicked
+		AbsPage page = null; // If set, this page will be returned
+
+ if (pulldown == Button.B_MY_FILES_LIST_ITEM) {
+
+			pulldownLocator = Locators.zMyFilesListViewItems.locator
+					+ ":contains(" + itemName
+					+ ") span[class^=my-files-list-item-action-button]";
+
+			if (!this.zWaitForElementPresent(pulldownLocator, "2000"))
+				throw new HarnessException("Button is not present locator="
+						+ pulldownLocator);
+
+			zClick(pulldownLocator);
+
+			// If the app is busy, wait for it to become active
+			zWaitForBusyOverlay();
+
+			if (option == Button.O_DELETE) {
+				optionLocator = Locators.zDeleteFolderOption.locator;
+
+				if (!this.zWaitForElementPresent(optionLocator, "2000"))
+					throw new HarnessException("Button is not present locator="
+							+ optionLocator);
+
+				this.sClickAt(optionLocator, "0,0");
+
+				// If the app is busy, wait for it to become active
+				zWaitForBusyOverlay();
+
+				return page;
+			} else {
+				logger.info("no logic defined for " + option);
+			}
+		} else {
+			logger.info("no logic defined for " + pulldown + "/" + option);
+		}
+
+		/*
+		 * // Default behavior if (pulldownLocator != null) {
+		 * 
+		 * // Make sure the locator exists if
+		 * (!this.sIsElementPresent(pulldownLocator)) { throw new
+		 * HarnessException("Button " + pulldown + " option " + option +
+		 * " pulldownLocator " + pulldownLocator + " not present!"); }
+		 * 
+		 * zClick(pulldownLocator);
+		 * 
+		 * // If the app is busy, wait for it to become active
+		 * zWaitForBusyOverlay(); }
+		 * 
+		 * if (optionLocator != null) {
+		 * 
+		 * // Make sure the locator exists if
+		 * (!this.sIsElementPresent(optionLocator)) { throw new
+		 * HarnessException(optionLocator + " not present!"); }
+		 * 
+		 * this.sClick(optionLocator);
+		 * 
+		 * // If the app is busy, wait for it to become active
+		 * zWaitForBusyOverlay(); }
+		 * 
+		 * // If we click on pulldown/option and the page is specified, then //
+		 * wait for the page to go active if (page != null) {
+		 * page.zWaitForActive(); }
+		 * 
+		 * // Return the specified page, or null if not set
+		 */
+		return (page);
+	}
+	
+	@Override
+	public AbsPage zToolbarPressPulldown(Button pulldown, Button option)
+			throws HarnessException {
 		logger.info(myPageName() + " zToolbarPressPulldown(" + pulldown + ", "
 				+ option + ")");
 
@@ -115,18 +200,9 @@ public class PageMyFiles extends AbsTab {
 			throw new HarnessException("Option cannot be null!");
 
 		// Default behavior variables
-		String itemName = null;
 		String pulldownLocator = null; // If set, this will be expanded
 		String optionLocator = null; // If set, this will be clicked
 		AbsPage page = null; // If set, this page will be returned
-
-		if (item != null) {
-			if (!(item instanceof FolderItem)) {
-				throw new HarnessException("Not supported item: "
-						+ item.getClass());
-			} else
-				itemName = item.getName();
-		}
 
 		// Based on the button specified, take the appropriate action(s)
 		if (pulldown == Button.B_MY_FILES) {
@@ -165,226 +241,17 @@ public class PageMyFiles extends AbsTab {
 				return page;
 
 			} else {
-				throw new HarnessException("no logic defined for option "
-						+ pulldown + "/" + option);
+				logger.info("no logic defined for " + option);
 			}
-		} else if (pulldown == Button.B_MY_FILES_LIST_ITEM) {
-
-			pulldownLocator = Locators.zMyFilesListViewItems.locator
-					+ ":contains(" + itemName
-					+ ") span[class^=my-files-list-item-action-button]";
-
-			if (!this.zWaitForElementPresent(pulldownLocator, "2000"))
-				throw new HarnessException("Button is not present locator="
-						+ pulldownLocator);
-
-			zClick(pulldownLocator);
-
-			// If the app is busy, wait for it to become active
-			zWaitForBusyOverlay();
-
-			if (option == Button.O_DELETE) {
-				optionLocator = Locators.zDeleteFolderOption.locator;
-
-				if (!this.zWaitForElementPresent(optionLocator, "2000"))
-					throw new HarnessException("Button is not present locator="
-							+ optionLocator);
-
-				this.sClickAt(optionLocator, "0,0");
-
-				// If the app is busy, wait for it to become active
-				zWaitForBusyOverlay();
-
-				return page;
-			} else {
-				throw new HarnessException("no logic defined for option "
-						+ pulldown + "/" + option);
-			}
-		} else {
-			logger.info("no logic defined for pulldown" + pulldown + "/"
-					+ option);
 		}
-
-		// Default behavior
-		if (pulldownLocator != null) {
-
-			// Make sure the locator exists
-			if (!this.sIsElementPresent(pulldownLocator)) {
-				throw new HarnessException("Button " + pulldown + " option "
-						+ option + " pulldownLocator " + pulldownLocator
-						+ " not present!");
-			}
-
-			zClick(pulldownLocator);
-
-			// If the app is busy, wait for it to become active
-			zWaitForBusyOverlay();
-		}
-
-		if (optionLocator != null) {
-
-			// Make sure the locator exists
-			if (!this.sIsElementPresent(optionLocator)) {
-				throw new HarnessException("Button " + pulldown + " option "
-						+ option + " optionLocator " + optionLocator
-						+ " not present!");
-			}
-
-			this.sClick(optionLocator);
-
-			// If the app is busy, wait for it to become active
-			zWaitForBusyOverlay();
-		}
-
-		// If we click on pulldown/option and the page is specified, then
-		// wait for the page to go active
-		if (page != null) {
-			page.zWaitForActive();
-		}
-
-		// Return the specified page, or null if not set
-		return (page);
-	}
-
-	public boolean zIsFolderParent(FolderItem folderItem, String childFolderName)
-			throws HarnessException {
-		if (folderItem == null || childFolderName == null)
-			throw new HarnessException("folder or item cannot be null");
-
-		boolean found = false;
-		FolderItem childFolderItem;
-
-		for (int i = 0; i < 5; i++) {
-			childFolderItem = FolderItem.importFromSOAP(MyApplication
-					.zGetActiveAccount(), childFolderName);
-			if (childFolderItem != null
-					&& folderItem.getId().contentEquals(
-							childFolderItem.getParentId()))
-				return true;
-			SleepUtil.sleepVerySmall();
-		}
-		return found;
-	}
-
-	public boolean zIsFolderChild(FolderItem folderItem, String parentFolderName)
-			throws HarnessException {
-		if (folderItem == null || parentFolderName == null)
-			throw new HarnessException("folder or item cannot be null");
-
-		boolean found = false;
-		FolderItem parentFolderItem;
-
-		for (int i = 0; i < 5; i++) {
-			parentFolderItem = FolderItem.importFromSOAP(MyApplication
-					.zGetActiveAccount(), parentFolderName);
-			if (parentFolderItem != null) {
-				List<Folder> subfolders = parentFolderItem.getSubfolders();
-				String name = folderItem.getName();
-				for (Folder folder : subfolders)
-					if (folder.getName().contains(name)) {
-						return true;
-					}
-			}
-			SleepUtil.sleepVerySmall();
-		}
-		return found;
-	}
-
-	public boolean zIsItemInMyFilesListView(IItem item) throws HarnessException {
-		if (item == null)
-			throw new HarnessException("item cannot be null");
-
-		boolean found = false;
-		for (int i = 0; i < 5; i++) {
-			List<String> itemNames = zGetMyFilesListViewItems();
-			String name = item.getName();
-			for (String str : itemNames)
-				if (str.contains(name)) {
-					return true;
-				}
-			SleepUtil.sleepVerySmall();
-		}
-		return found;
-	}
-
-	public List<String> zGetMyFilesListViewItems() throws HarnessException {
-		List<String> items = new ArrayList<String>();
-		String locator = Locators.zMyFilesListViewItems.locator;
-
-		int count = sGetCssCount(locator);
-		String str;
-
-		for (int i = 1; i <= count; i++) {
-			str = this.sGetText(locator + ":nth-child(" + i
-					+ ") span.my-files-list-item-name");
-
-			items.add(str);
-		}
-		return items;
-	}
-
-	public boolean searchFile(String fileName) throws HarnessException {
-		ZimbraAccount account = MyApplication.zGetActiveAccount();
-		account
-				.soapSend("<SearchRequest xmlns='urn:zimbraMail' types='document'>"
-						+ "<query>"
-						+ fileName
-						+ "</query>"
-						+ "</SearchRequest>");
-		String name = account.soapSelectValue("//mail:doc", "name");
-		if (name.contentEquals(fileName))
-			return true;
-		else
-			return false;
-	}
-
-	public boolean searchFileIn(String fileName, String folderName)
-			throws HarnessException {
-		ZimbraAccount account = MyApplication.zGetActiveAccount();
-		account
-				.soapSend("<SearchRequest xmlns='urn:zimbraMail' types='document'>"
-						+ "<query>in:"
-						+ folderName
-						+ " "
-						+ fileName
-						+ "</query>" + "</SearchRequest>");
-
-		String name = account.soapSelectValue(
-				"//mail:SearchResponse//mail:doc", "name");
-
-		if (name.contentEquals(fileName))
-			return true;
-		else
-			return false;
-	}
-
-	public void deleteFile(String docName) throws HarnessException {
-		ZimbraAccount account = MyApplication.zGetActiveAccount();
-		account
-				.soapSend("<SearchRequest xmlns='urn:zimbraMail' types='document'>"
-						+ "<query>" + docName + "</query>" + "</SearchRequest>");
-		String id = account.soapSelectValue("//mail:doc", "id");
-		deleteFile(id, account);
-	}
-
-	private void deleteFile(String docId, ZimbraAccount account)
-			throws HarnessException {
-		account.soapSend("<ItemActionRequest xmlns='urn:zimbraMail'>"
-				+ "<action id='" + docId + "' op='trash'/>"
-				+ "</ItemActionRequest>");
+		return page;
 	}
 
 	@Override
 	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
 		throw new HarnessException("Implement me");
 	}
-
-	@Override
-	public AbsPage zToolbarPressPulldown(Button pulldown, Button option)
-			throws HarnessException {
-		throw new HarnessException("Implement me");
-	}
-
+	
 	@Override
 	public AbsPage zListItem(Action action, String item)
 			throws HarnessException {

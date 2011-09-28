@@ -3,14 +3,20 @@
  */
 package com.zimbra.qa.selenium.projects.octopus.ui;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.apache.commons.httpclient.HttpStatus;
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
+import com.zimbra.qa.selenium.framework.items.FolderItem;
+import com.zimbra.qa.selenium.framework.items.IItem;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.octopus.ui.DialogError;
 import com.zimbra.qa.selenium.projects.octopus.ui.DialogError.DialogErrorID;
+import com.zimbra.qa.selenium.projects.octopus.ui.PageMyFiles.Locators;
+import com.zimbra.soap.mail.type.Folder;
 
 public class PageOctopus extends AbsTab {
 
@@ -20,16 +26,18 @@ public class PageOctopus extends AbsTab {
 		public static final Locators zTabMyFiles = new Locators(
 				"css=div.octopus-tab-label:contains(My Files)");
 		public static final Locators zTabSharing = new Locators(
-		"css=div.octopus-tab-label:contains(Sharing)");
+				"css=div.octopus-tab-label:contains(Sharing)");
 		public static final Locators zTabFavorites = new Locators(
-		"css=div.octopus-tab-label:contains(Favorites)");
+				"css=div.octopus-tab-label:contains(Favorites)");
 		public static final Locators zTabHistory = new Locators(
-		"css=div.octopus-tab-label:contains(History)");
+				"css=div.octopus-tab-label:contains(History)");
 		public static final Locators zTabTrash = new Locators(
-		"css=div.octopus-tab-label:contains(Trash)");
+				"css=div.octopus-tab-label:contains(Trash)");
 		public static final Locators zTabSearch = new Locators(
-		"css=div.octopus-tab-label:contains(Search)");
-		
+				"css=div.octopus-tab-label:contains(Search)");
+		public static final Locators zMyFilesListViewItems = new Locators(
+				"css=div[class*=my-files-list-view]>div.my-files-list-item");
+
 		public final String locator;
 
 		private Locators(String locator) {
@@ -226,7 +234,118 @@ public class PageOctopus extends AbsTab {
 		return (page);
 	}
 
-	
+	public boolean zIsFolderParent(FolderItem folderItem, String childFolderName)
+			throws HarnessException {
+		if (folderItem == null || childFolderName == null)
+			throw new HarnessException("folder or item cannot be null");
+
+		boolean found = false;
+		FolderItem childFolderItem;
+
+		for (int i = 0; i < 5; i++) {
+			childFolderItem = FolderItem.importFromSOAP(
+					MyApplication.zGetActiveAccount(), childFolderName);
+			if (childFolderItem != null
+					&& folderItem.getId().contentEquals(
+							childFolderItem.getParentId()))
+				return true;
+			SleepUtil.sleepVerySmall();
+		}
+		return found;
+	}
+
+	public boolean zIsFolderChild(FolderItem folderItem, String parentFolderName)
+			throws HarnessException {
+		if (folderItem == null || parentFolderName == null)
+			throw new HarnessException("folder or item cannot be null");
+
+		boolean found = false;
+		FolderItem parentFolderItem;
+
+		for (int i = 0; i < 5; i++) {
+			parentFolderItem = FolderItem.importFromSOAP(
+					MyApplication.zGetActiveAccount(), parentFolderName);
+			if (parentFolderItem != null) {
+				List<Folder> subfolders = parentFolderItem.getSubfolders();
+				String name = folderItem.getName();
+				for (Folder folder : subfolders)
+					if (folder.getName().contains(name)) {
+						return true;
+					}
+			}
+			SleepUtil.sleepVerySmall();
+		}
+		return found;
+	}
+
+	public boolean zIsItemInCurentListView(String itemName) throws HarnessException {
+		if (itemName == null)
+			throw new HarnessException("item cannot be null");
+
+		boolean found = false;
+		for (int i = 0; i < 5; i++) {
+			List<String> itemNames = zGetListViewItems();
+			
+			for (String str : itemNames)
+				if (str.contains(itemName)) {
+					return true;
+				}
+			SleepUtil.sleepVerySmall();
+		}
+		return found;
+	}
+
+	public List<String> zGetListViewItems() throws HarnessException {
+		List<String> items = new ArrayList<String>();
+		String locator = Locators.zMyFilesListViewItems.locator;
+
+		int count = sGetCssCount(locator);
+		String str;
+
+		for (int i = 1; i <= count; i++) {
+			str = this.sGetText(locator + ":nth-child(" + i
+					+ ") span.my-files-list-item-name");
+
+			items.add(str);
+		}
+		return items;
+	}
+
+	public String searchFile(String fileName) throws HarnessException {
+		ZimbraAccount account = MyApplication.zGetActiveAccount();
+		account.soapSend("<SearchRequest xmlns='urn:zimbraMail' types='document'>"
+				+ "<query>" + fileName + "</query>" + "</SearchRequest>");
+		
+		String id = account.soapSelectValue(
+				"//mail:SearchResponse//mail:doc", "id");
+
+			return id;
+	}
+
+	public String searchFileIn(String fileName, String folderName)
+			throws HarnessException {
+		ZimbraAccount account = MyApplication.zGetActiveAccount();
+		account.soapSend("<SearchRequest xmlns='urn:zimbraMail' types='document'>"
+				+ "<query>in:"
+				+ folderName
+				+ " "
+				+ fileName
+				+ "</query>"
+				+ "</SearchRequest>");
+
+		String id = account.soapSelectValue(
+				"//mail:SearchResponse//mail:doc", "id");
+
+		return id;
+	}
+
+	public void deleteFileUsingSOAP(String docId, ZimbraAccount account)
+			throws HarnessException {
+		account.soapSend("<ItemActionRequest xmlns='urn:zimbraMail'>"
+				+ "<action id='" + docId + "' op='trash'/>"
+				+ "</ItemActionRequest>");
+	}
+
 	@Override
 	public AbsPage zToolbarPressPulldown(Button pulldown, Button option)
 			throws HarnessException {

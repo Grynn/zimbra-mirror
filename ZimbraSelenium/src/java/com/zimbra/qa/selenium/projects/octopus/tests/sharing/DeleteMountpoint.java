@@ -93,7 +93,7 @@ public class DeleteMountpoint extends OctopusCommonTest {
 		SleepUtil.sleepVerySmall();
 		
 		// Delete the mountpoint folder using drop down list option
-		app.zPageMyFiles.zToolbarPressPulldown(Button.B_MY_FILES_LIST_ITEM, Button.O_DELETE, folderMountpointItem);
+		app.zPageMyFiles.zToolbarPressPulldown(Button.B_MY_FILES_LIST_ITEM, Button.O_DELETE, folderMountpointName);
 
 		// Verify the mountpoint folder disappears from My Files tab
 		ZAssert.assertTrue(app.zPageMyFiles.zWaitForElementDeleted(

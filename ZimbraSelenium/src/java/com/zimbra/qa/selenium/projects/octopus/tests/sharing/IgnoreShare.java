@@ -111,7 +111,7 @@ public class IgnoreShare extends OctopusCommonTest {
 
 		// Make sure the ignored folder doesn't appear in My Files list view
 		ZAssert
-				.assertFalse(app.zPageMyFiles.zIsItemInMyFilesListView(ownerFolderItem),
+				.assertFalse(app.zPageOctopus.zIsItemInCurentListView(ownerFolderItem.getName()),
 						"Verify the ignored share folder doesn't appears in My Files list view");
 	}
 }
