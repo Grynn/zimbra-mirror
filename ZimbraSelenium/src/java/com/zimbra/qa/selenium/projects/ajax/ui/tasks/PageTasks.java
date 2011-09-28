@@ -895,6 +895,10 @@ public class PageTasks extends AbsTab {
 			page= new FormTaskNew(this.MyApplication);
 			keyCode= "78,75";
 			
+		}else if ( shortcut == Shortcut.S_TASK_HARDELETE ) {			
+			page= null;
+			keyCode= "16,46";
+			
 		}else{
 			throw new HarnessException("implement shortcut: " + shortcut);
 		}
