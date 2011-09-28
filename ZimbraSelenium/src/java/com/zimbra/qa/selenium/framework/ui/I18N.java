@@ -33,7 +33,16 @@ public class I18N {
 	}
 	
     public static final String CONTEXT_MENU_ITEM_NEW_FOLDER = "New Folder"; // TODO: ZmMsg: key: newFolder
+    public static final String CONTEXT_MENU_ITEM_MARK_ALL_AS_READ = "Mark All as Read";
     public static final String CONTEXT_MENU_ITEM_DELETE = "Delete"; // TODO: ZMsg: key: del (?)
+    public static final String CONTEXT_MENU_ITEM_RENAME_FOLDER = "Rename Folder";
+    public static final String CONTEXT_MENU_ITEM_MOVE = "Move";
+    public static final String CONTEXT_MENU_ITEM_SHARE_FOLDER = "Share Folder";
+    public static final String CONTEXT_MENU_ITEM_EDIT_PROPERTIES = "Edit Properties";
+    public static final String CONTEXT_MENU_ITEM_EXPAND_ALL = "Expand All";
+    public static final String CONTEXT_MENU_ITEM_EMPTY_FOLDER = "Empty Folder";
+    public static final String CONTEXT_MENU_ITEM_TURN_SYNC_OFF = "Turn sync off";
+    public static final String CONTEXT_MENU_ITEM_SEND_RECEIVE = "Send/Receive";
     public static final String FORMAT_AS_PLAIN_TEXT= "Format As Plain Text";
     public static final String FORMAT_AS_HTML_TEXT= "Format As HTML";
     public static final String NEW_SIGNATURE= "New Signature";
