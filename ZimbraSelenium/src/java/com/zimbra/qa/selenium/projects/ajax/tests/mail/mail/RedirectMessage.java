@@ -77,7 +77,7 @@ public class RedirectMessage extends PrefGroupMailByMessageTest {
 	}
 	
 	@Test(	description = "Redirect message, using 'Right Click' -> 'Redirect'",
-			groups = { "smoke", "matt" })
+			groups = { "smoke" })
 	public void RedirectMessage_03() throws HarnessException {
 		
 		String subject = "subject"+ ZimbraSeleniumProperties.getUniqueString();

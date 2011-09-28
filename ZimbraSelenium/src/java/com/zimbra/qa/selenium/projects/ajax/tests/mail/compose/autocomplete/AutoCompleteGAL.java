@@ -343,7 +343,7 @@ public class AutoCompleteGAL extends PrefGroupMailByMessageTest {
 
 	@Bugs(	ids = "45815")
 	@Test(	description = "Autocomplete using the GAL - Apostrophe character",
-			groups = { "functional", "matt" })
+			groups = { "functional" })
 	public void AutoCompleteGAL_10() throws HarnessException {
 		
 		ZimbraAccount account = new ZimbraAccount();

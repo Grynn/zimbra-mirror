@@ -257,7 +257,7 @@ public class MoveMessage extends PrefGroupMailByMessageTest {
 	}
 
 	@Test(	description = "Move a mail by using Move -> New folder",
-			groups = { "functional", "matt" })
+			groups = { "functional" })
 	public void MoveMail_05() throws HarnessException {
 		
 		String subject = "subject"+ ZimbraSeleniumProperties.getUniqueString();
