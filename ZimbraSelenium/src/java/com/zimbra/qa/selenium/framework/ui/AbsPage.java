@@ -456,16 +456,16 @@ public abstract class AbsPage extends AbsSeleniumObject {
 		        case ' ': doType(KeyEvent.VK_SPACE); break;
 
 		        // Swedish
-		        case 'Å': doTypeAltCode("143"); break;
+		        case '\u00c5': doTypeAltCode("143"); break;	// Å
 		        
 		        // Spanish ... http://www.asciitable.com/
-		        case 'á': doTypeAltCode("160"); break;
-		        case 'é': doTypeAltCode("130"); break;
-		        case 'í': doTypeAltCode("161"); break;
-		        case 'ó': doTypeAltCode("162"); break;
-		        case 'ú': doTypeAltCode("163"); break;
-		        case 'Ñ': doTypeAltCode("165"); break;
-		        case 'ñ': doTypeAltCode("164"); break;
+		        case '\u00e1': doTypeAltCode("160"); break;	// á
+		        case '\u00e9': doTypeAltCode("130"); break;	// é
+		        case '\u00ed': doTypeAltCode("161"); break;	// í
+		        case '\u00f3': doTypeAltCode("162"); break;	// ó
+		        case '\u00fa': doTypeAltCode("163"); break;	// ú
+		        case '\u00d1': doTypeAltCode("165"); break;	// Ñ
+		        case '\u00f1': doTypeAltCode("164"); break;	// ñ
 		        
 		        default:
 		                throw new IllegalArgumentException("Cannot type character " + character);
