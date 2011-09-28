@@ -626,50 +626,6 @@ public class MailAutoCompleteAddress extends CommonTest {
 	}
 
 	/**
-	 * Verify lucene stop words autocomplete with 'IT Department' - bug 46718.
-	 * Steps, 1.Create contact group called 'IT Department' 2.Type character one
-	 * by one in email To: field and verify autocomplete works
-	 */
-	@Test(dataProvider = "composeDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
-	public void luceneStopWordsAutoComplete_Bug46718(String from, String to,
-			String cc, String bcc, String subject, String body,
-			String attachments) throws Exception {
-		if (SelNGBase.isExecutionARetry.get())
-			handleRetry();
-
-		String groupName = "IT Department";
-		zGoToApplication("Address Book");
-		obj.zButtonMenu.zClick(page.zABCompose.zNewMenuDropdownIconBtn);
-		obj.zMenuItem.zClick(localize(locator.group));
-		obj.zEditField.zType(
-				getNameWithoutSpace(localize(locator.groupNameLabel)),
-				groupName);
-		obj.zEditField.zType(localize(locator.findLabel),
-				"ccuser@testdomain.com");
-		obj.zButton.zClick(localize(locator.search), "2");
-		SleepUtil.sleep(2500);
-		if (ClientSessionFactory.session().currentBrowserName().contains("Safari")) {
-			obj.zButton.zClick(localize(locator.search), "2");
-			obj.zButton.zClick(localize(locator.search), "2");
-			SleepUtil.sleep(1000);
-		}
-		obj.zListItem.zDblClickItemInSpecificList("ccuser@testdomain.com", "2");
-		obj.zButton.zClick(localize(locator.add));
-		obj.zButton.zClick(localize(locator.save), "2");
-		obj.zContactListItem.zExists(groupName);
-
-		page.zComposeView.zNavigateToMailCompose();
-		obj.zTextAreaField.zActivate(page.zComposeView.zToField);
-		pressKeys("i,t");
-		pressKeys("space");
-		pressKeys("d");
-		page.zMailApp.zVerifyAutocompleteExists(groupName, 1, 1);
-		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
-
-		SelNGBase.needReset.set(false);
-	}
-
-	/**
 	 * Unable to get rid of emailed contacts - bug 40081. Steps, 1.Create
 	 * account with zimbraPrefAutoAddAddressEnabled TRUE 2.Send mail to that
 	 * account so automatically email address would be added in
