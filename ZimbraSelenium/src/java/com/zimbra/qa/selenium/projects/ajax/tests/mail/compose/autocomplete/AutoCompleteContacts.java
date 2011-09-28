@@ -755,7 +755,7 @@ public class AutoCompleteContacts extends PrefGroupMailByMessageTest {
 		// Create an addressbook
 		app.zGetActiveAccount().soapSend(
 					"<CreateFolderRequest xmlns='urn:zimbraMail'>"
-				+		"<folder name='"+ foldername +"' l='"+ FolderItem.importFromSOAP(app.zGetActiveAccount(), FolderItem.SystemFolder.Contacts).getId() +"'/>"
+				+		"<folder name='"+ foldername +"' l='"+ FolderItem.importFromSOAP(app.zGetActiveAccount(), FolderItem.SystemFolder.Contacts).getId() +"' view='contact'/>"
 				+	"</CreateFolderRequest>");
 		String folderID = app.zGetActiveAccount().soapSelectValue("//mail:folder", "id");
 
@@ -801,7 +801,7 @@ public class AutoCompleteContacts extends PrefGroupMailByMessageTest {
 			}
 		}
 		
-		ZAssert.assertNull(found, "Verify contacts in and addresbook in trash are not matched");
+		ZAssert.assertNull(found, "Verify contacts in an addresbook in trash are not matched");
 		
 		// Cancel the compose
 		DialogWarning dialog = (DialogWarning)mailform.zToolbarPressButton(Button.B_CANCEL);
@@ -812,6 +812,102 @@ public class AutoCompleteContacts extends PrefGroupMailByMessageTest {
 
 	}
 
+
+	@Test(	description = "Autocomplete should match contacts in addressbooks and subaddressbooks",
+			groups = { "functional" })
+	public void AutoCompleteContacts_10() throws HarnessException {
+		
+		
+		// Create a contact in a addressbook
+		ZimbraAccount contact1 = new ZimbraAccount();
+		contact1.provision();
+		contact1.authenticate();
+
+		String firstname = "Charles" + ZimbraSeleniumProperties.getUniqueString();
+		String lastname = "Anderson" + ZimbraSeleniumProperties.getUniqueString();
+				
+		// Create an addressbook
+		app.zGetActiveAccount().soapSend(
+					"<CreateFolderRequest xmlns='urn:zimbraMail'>"
+				+		"<folder name='addressbook" + ZimbraSeleniumProperties.getUniqueString() +"' l='"+ FolderItem.importFromSOAP(app.zGetActiveAccount(), FolderItem.SystemFolder.Contacts).getId() +"' view='contact'/>"
+				+	"</CreateFolderRequest>");
+		String folderID = app.zGetActiveAccount().soapSelectValue("//mail:folder", "id");
+
+		// Create a contact
+		app.zGetActiveAccount().soapSend(
+					"<CreateContactRequest xmlns='urn:zimbraMail'>"
+				+		"<cn l='"+ folderID +"'>"
+				+			"<a n='firstName'>"+ firstname +"</a>"
+				+			"<a n='lastName'>"+ lastname +"</a>"
+				+			"<a n='email'>"+ contact1.EmailAddress +"</a>"
+				+		"</cn>"
+				+	"</CreateContactRequest>");
+		
+		// Create a contact in a addressbook
+		ZimbraAccount contact2 = new ZimbraAccount();
+		contact2.provision();
+		contact2.authenticate();
+
+		firstname = "Charles" + ZimbraSeleniumProperties.getUniqueString();
+		lastname = "Thomas" + ZimbraSeleniumProperties.getUniqueString();
+				
+		// Create an addressbook
+		app.zGetActiveAccount().soapSend(
+					"<CreateFolderRequest xmlns='urn:zimbraMail'>"
+				+		"<folder name='subaddressbook" + ZimbraSeleniumProperties.getUniqueString() +"' l='"+ folderID +"' view='contact'/>"
+				+	"</CreateFolderRequest>");
+		String subfolderID = app.zGetActiveAccount().soapSelectValue("//mail:folder", "id");
+
+		// Create a contact
+		app.zGetActiveAccount().soapSend(
+					"<CreateContactRequest xmlns='urn:zimbraMail'>"
+				+		"<cn l='"+ subfolderID +"'>"
+				+			"<a n='firstName'>"+ firstname +"</a>"
+				+			"<a n='lastName'>"+ lastname +"</a>"
+				+			"<a n='email'>"+ contact2.EmailAddress +"</a>"
+				+		"</cn>"
+				+	"</CreateContactRequest>");
+		
+
+		// Refresh changes
+		app.zPageMain.zToolbarPressButton(Button.B_REFRESH);
+
+		
+		// Message properties
+		String subject = "subject" + ZimbraSeleniumProperties.getUniqueString();
+		String body = "body" + ZimbraSeleniumProperties.getUniqueString();
+		
+		// Open the new mail form
+		FormMailNew mailform = (FormMailNew) app.zPageMail.zToolbarPressButton(Button.B_NEW);
+		ZAssert.assertNotNull(mailform, "Verify the new form opened");
+		
+		// Fill out the form with the data
+		mailform.zFillField(Field.Subject, subject);
+		mailform.zFillField(Field.Body, body);
+
+		List<AutocompleteEntry> entries = mailform.zAutocompleteFillField(Field.To, "Charles");
+		AutocompleteEntry found1 = null;
+		AutocompleteEntry found2 = null;
+		for (AutocompleteEntry entry : entries) {
+			if ( entry.getAddress().contains(contact1.EmailAddress) ) {
+				found1 = entry;
+			}
+			if ( entry.getAddress().contains(contact2.EmailAddress) ) {
+				found2 = entry;
+			}
+		}
+		
+		ZAssert.assertNotNull(found1, "Verify contacts in an addresbook are matched");
+		ZAssert.assertNotNull(found2, "Verify contacts in a sub-addresbook are matched");
+		
+		// Cancel the compose
+		DialogWarning dialog = (DialogWarning)mailform.zToolbarPressButton(Button.B_CANCEL);
+		if ( dialog.zIsActive() ) {
+			dialog.zClickButton(Button.B_NO);
+		}
+
+
+	}
 
 
 }
