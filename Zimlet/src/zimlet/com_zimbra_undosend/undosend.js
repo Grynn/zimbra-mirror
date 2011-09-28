@@ -51,7 +51,8 @@ function() {
  */
 UndoSendZimlet.prototype.initializeToolbar =
 function(app, toolbar, controller, viewId) {
-	if (viewId.indexOf("COMPOSE") >= 0) {
+	var viewType = appCtxt.getViewTypeFromId(viewId);
+	if (viewType == ZmId.VIEW_COMPOSE) {
 		var sendBtn = toolbar.getButton("SEND_MENU");
 		if(!sendBtn) {
 			sendBtn = toolbar.getButton("SEND");
@@ -101,7 +102,7 @@ function(controller) {
 	if (!this.appViewMgr) {
 		this.appViewMgr = appCtxt.getAppViewMgr();
 	}	
-	var viewId = this.appViewMgr._currentView;
+	var viewId = this.appViewMgr.getCurrentViewId();
 
 	if(!appCtxt.isChildWindow) {
 		if (this.appViewMgr._isTabView[viewId]) {

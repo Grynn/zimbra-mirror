@@ -149,7 +149,8 @@ com_zimbra_shortcutstrainer.prototype.getShortcutFromShortcutKey =
 function(shortcutKey) {
 
 	var text = "";
-	if (this.viewId.indexOf("COMPOSE") >= 0) {//try at view level
+	var viewType = appCtxt.getViewTypeFromId(this.viewId);
+	if (viewType == ZmId.VIEW_COMPOSE) {//try at view level
 		scKey = [ "compose", shortcutKey, "display"].join(".");
 		text = AjxKeys[scKey] || ZmKeys[scKey];
 	}
@@ -259,7 +260,8 @@ function(viewId, isNewView) {
 	//toolbar buttons
 	try {
 		var tb = "";
-		if (viewId.indexOf("COMPOSE") == -1) {
+		var viewType = appCtxt.getViewTypeFromId(viewId);
+		if (viewType != ZmId.VIEW_COMPOSE) {
 			if(appCtxt.getCurrentController) {
 				if(appCtxt.getCurrentController()._toolbar){
 					tb = appCtxt.getCurrentController()._toolbar;

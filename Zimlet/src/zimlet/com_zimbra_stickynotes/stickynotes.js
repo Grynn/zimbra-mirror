@@ -53,10 +53,11 @@ function() {
 
 StickyNotesZimlet.prototype.onShowView =
 function(viewId, isNewView) {
-	if(viewId == "CNS" || viewId == "CAL") {
+	var viewType = appCtxt.getViewTypeFromId(viewId);
+	if(viewType == ZmId.VIEW_CONTACT_SIMPLE || viewId == ZmId.VIEW_CAL) {
 		var controller = appCtxt.getCurrentController();
 		try{
-			if(viewId == "CAL") {//in calendar, there are multiple views and viewId doesnt match internal views
+			if(viewId == ZmId.VIEW_CAL) {//in calendar, there are multiple views and viewId doesnt match internal views
 				for(var vid in controller._listView) {
 					controller._listView[vid].addSelectionListener(new AjxListener(this, this._onContactOrApptView, [controller]));
 				}
@@ -338,7 +339,9 @@ function(app, toolbar, controller, view) {
 	if (!this.turnONstickynotesZimlet) {
 		return;
 	}
-	if (view == appCtxt.get(ZmSetting.CONV_MODE) || view == ZmId.VIEW_CONV || view == ZmId.VIEW_TRAD || view == "CNS" || view == "CLD") {
+	var viewType = appCtxt.getViewTypeFromId(view);
+	if (viewType == appCtxt.get(ZmSetting.CONV_MODE) || viewType == ZmId.VIEW_CONV || viewType == ZmId.VIEW_TRAD ||
+			viewType == ZmId.VIEW_CONTACT_SIMPLE || viewType == ZmId.VIEW_CAL_DAY) {
 		var buttonIndex = -1;
 		for (var i = 0, count = toolbar.opList.length; i < count; i++) {
 			if (toolbar.opList[i] == ZmOperation.PRINT) {
@@ -371,7 +374,7 @@ function(controller) {
 	if (!this.turnONstickynotesZimlet)
 		return;
 
-	var selectedItms = controller.getCurrentView().getSelection();
+	var selectedItms = controller.getListView().getSelection();
 	if (selectedItms.length > 0) {
 		this.srcMsgObj = selectedItms[0];
 		if (this.srcMsgObj.type == "CONV") {
@@ -403,9 +406,9 @@ function(msgObj) {
  */
 StickyNotesZimlet.prototype._createStickyNotes =
 function(obj) {
-	if (obj.type == "CONV") {
+	if (obj.type == ZmId.ITEM_CONV) {
 		this._itemId = obj.cid;
-	} else if (obj.type == "MSG" || obj.type == "CONTACT" || obj.type == "APPT") {
+	} else if (obj.type == ZmId.ITEM_MSG || obj.type == ZmId.ITEM_CONTACT || obj.type == ZmId.ITEM_APPOINTMENT) {
 		this._itemId = obj.id;
 	} else {
 		return;
@@ -427,9 +430,9 @@ function(msg) {
 	if (this.srcMsgObj.tags.length == 0) {
 		return;
 	}
-	if (msg.type == "CONV") {
+	if (msg.type == ZmId.ITEM_CONV) {
 		this._itemId = msg.cid;
-	} else if (msg.type == "MSG") {
+	} else if (msg.type == ZmId.ITEM_MSG) {
 		this._itemId = msg.id;
 	} else {
 		if (this.stickyNotesDisplayed) {
@@ -445,7 +448,7 @@ function(controller) {
 	if (!this.turnONstickynotesZimlet) {
 		return;
 	}
-	var selectedItms = controller.getCurrentView().getSelection();
+	var selectedItms = controller.getListView().getSelection();
 	if (selectedItms.length > 0) {
 		this.srcMsgObj = selectedItms[0];
 		this._itemId = this.srcMsgObj.id;

@@ -180,7 +180,8 @@ DimDimZimlet.prototype.init = function() {
  *
  */
 DimDimZimlet.prototype.initializeToolbar = function(app, toolbar, controller, viewId) {
-	if (viewId.indexOf("APPT") >= 0) {
+	var viewType = appCtxt.getViewTypeFromId(viewId);
+	if (viewType == ZmId.VIEW_APPOINTMENT) {
 		this._initCalendarDimDimToolbar(toolbar, controller);
 	}
 };

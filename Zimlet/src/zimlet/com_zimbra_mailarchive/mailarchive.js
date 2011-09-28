@@ -125,8 +125,9 @@ ZmArchiveZimlet.prototype._hideMenuBtn = function(controller, menu) {
 ZmArchiveZimlet.prototype.initializeToolbar =
 		function(app, toolbar, controller, viewId) {
 			//conversation-list-view or conversation-view or traditional-view(aka message-view)
-			if (viewId == appCtxt.get(ZmSetting.CONV_MODE) || viewId == ZmId.VIEW_CONV || viewId == ZmId.VIEW_TRAD ||
-					viewId.indexOf("MSG") == 0) {
+			var viewType = appCtxt.getViewTypeFromId(viewId);
+			if (viewType == appCtxt.get(ZmSetting.CONV_MODE) || viewType == ZmId.VIEW_CONV || viewType == ZmId.VIEW_TRAD ||
+					viewType == ZmId.VIEW_MSG) {
 				var deleteBtn = toolbar.getButton(ZmOperation.DELETE) || toolbar.getButton(ZmOperation.DELETE_MENU);
 				if(deleteBtn) {
 					deleteBtn.getHtmlElement().style.display = "none";
@@ -149,14 +150,7 @@ ZmArchiveZimlet.prototype.initializeToolbar =
 					var button = toolbar.createOp(ZmArchiveZimlet.ARCHIVE_BUTTON_ID, buttonArgs);
 					button.addSelectionListener(new AjxListener(controller, controller._archiveViaZimletListener, [this]));
 					//add listener to listview so that we can enable button when multiple items are selected
-					var currentView = appCtxt.getCurrentView();
-					var listView;
-					if(currentView.getMailListView)  {
-						listView =   currentView.getMailListView();
-					}
-					if(!listView || !listView.addSelectionListener) {
-						listView = controller.getCurrentView() || controller.listView || controller._listView;
-					}
+					var listView = controller.getListView();
 					if (listView && listView.addSelectionListener) {
 						listView.addSelectionListener(new AjxListener(this, this._listActionListener, button));
 					}

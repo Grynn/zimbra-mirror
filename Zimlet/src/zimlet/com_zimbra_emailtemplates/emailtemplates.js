@@ -38,7 +38,8 @@ function(app, toolbar, controller, viewId) {
 		this._viewIdAndMenuMap = [];
 	}
 	this.viewId = viewId;
-	if (viewId.indexOf("COMPOSE") >= 0 || viewId == "APPT") {
+	this.viewType = controller.getCurrentViewType();
+	if (this.viewType == ZmId.VIEW_COMPOSE || this.viewType == ZmId.VIEW_APPOINTMENT) {
 		if (toolbar.getOp("EMAIL_TEMPLATES_ZIMLET_TOOLBAR_BUTTON")) {
 			return;
 		}
@@ -91,7 +92,7 @@ function(removeChildren) {
 	var getHtml = appCtxt.get(ZmSetting.VIEW_AS_HTML);
 	var callbck = new AjxCallback(this, this._getRecentEmailsHdlr, removeChildren);
 	var _types = new AjxVector();
-	_types.add("MSG");
+	_types.add(ZmId.VIEW_MSG);
 
 	appCtxt.getSearchController().search({query: ["in:(\"",this._folderPath,"\")"].join(""), userText: true, limit:25,  searchFor: ZmId.SEARCH_MAIL,
 		offset:0, types:_types, noRender:true, getHtml: getHtml, callback:callbck, errorCallback:callbck});
@@ -109,7 +110,7 @@ function(removeChildren, result) {
 			this._addStandardMenuItems(menu);
 			return;
 		}
-		var array = result.getResponse().getResults("MSG").getVector().getArray();
+		var array = result.getResponse().getResults(ZmId.VIEW_MSG).getVector().getArray();
 		for (var i = 0; i < array.length; i++) {
 			var msg = array[i];
 			var id = msg.id;
@@ -290,7 +291,7 @@ Com_Zimbra_EmailTemplates.prototype._doInsert =
 function(controller, composeView, templateSubject, templateBody, currentBodyContent, insertMode) {
 	//insert subject
 	if (insertMode == "bodyAndSubject" || insertMode == "all") {
-		if (this.viewId == "APPT") {
+		if (this.viewType == ZmId.VIEW_APPOINTMENT) {
 			composeView._apptEditView._subjectField.setValue(templateSubject);
 		} else {
 			composeView._subjectField.value = templateSubject;
@@ -316,7 +317,7 @@ function(controller, composeView, templateSubject, templateBody, currentBodyCont
 			}
 		}
 
-		if (this.viewId == "APPT") {
+		if (this.viewType == ZmId.VIEW_APPOINTMENT) {
 			try{
 				composeView._apptEditView._attInputField.PERSON.setValue(toStr.concat(ccStr).join(";"));
 			} catch(e) {
@@ -337,7 +338,7 @@ function(controller, composeView, templateSubject, templateBody, currentBodyCont
 	if ((this._composeMode == DwtHtmlEditor.HTML)) {
 		saperator = "</br>";
 	}
-	if (this.viewId == "APPT") {
+	if (this.viewType == ZmId.VIEW_APPOINTMENT) {
 		//in appt, we append templateBody below currentBodyContent to facilitate things like conf-call templates
 		composeView.getHtmlEditor().setContent([currentBodyContent, saperator, templateBody].join(""));
 	} else {

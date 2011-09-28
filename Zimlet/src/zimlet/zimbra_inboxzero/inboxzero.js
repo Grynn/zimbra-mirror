@@ -528,7 +528,7 @@ InboxZero.prototype._createFoldersDone = function(callback, resp) {
 
 InboxZero.prototype.__selectNext = function() {
     var controller = appCtxt.getCurrentController();
-    controller._listView[controller._currentView]._itemToSelect = controller._getNextItemToSelect();
+    controller.getListView()._itemToSelect = controller._getNextItemToSelect();
 };
 
 /**

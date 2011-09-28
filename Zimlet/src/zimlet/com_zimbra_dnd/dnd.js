@@ -136,8 +136,9 @@ function(viewId, isNewView) {
     if(AjxEnv.isDesktop) {    //bug:
     	isWindowsSafari = false;
     }
+	var viewType = appCtxt.getViewTypeFromId(viewId);
     if(this.isHTML5 && !AjxEnv.isIE && !isWindowsSafari) {
-        if (viewId == ZmId.VIEW_COMPOSE || viewId.indexOf(ZmId.VIEW_COMPOSE) != -1) {
+        if (viewType == ZmId.VIEW_COMPOSE) {
             var curView = appCtxt.getAppViewMgr().getCurrentView();
             var el = curView.getHtmlElement();
             
@@ -147,17 +148,17 @@ function(viewId, isNewView) {
             if(dndTooltip && dndTooltip.style) dndTooltip.style.display = "block";
         }
     } else if ("createEvent" in document && document.getElementById("zdnd_files") && !AjxEnv.isIE && !isWindowsSafari) {
-        if (viewId == ZmId.VIEW_COMPOSE ||
-			viewId == ZmId.VIEW_BRIEFCASE_COLUMN ||
-			viewId == ZmId.VIEW_BRIEFCASE ||
-			viewId == ZmId.VIEW_BRIEFCASE_DETAIL || viewId.indexOf(ZmId.VIEW_COMPOSE) != -1) {
+        if (viewType == ZmId.VIEW_COMPOSE ||
+			viewType == ZmId.VIEW_BRIEFCASE_COLUMN ||
+			viewType == ZmId.VIEW_BRIEFCASE ||
+			viewType == ZmId.VIEW_BRIEFCASE_DETAIL) {
 
 			var ev = document.createEvent("Events");
 			ev.initEvent("ZimbraDnD", true, false);
 
 			var curView = appCtxt.getAppViewMgr().getCurrentView();
 
-			if (viewId == ZmId.VIEW_COMPOSE || viewId.indexOf(ZmId.VIEW_COMPOSE) != -1) {
+			if (viewType == ZmId.VIEW_COMPOSE) {
 				curView._resetBodySize();
 			}
             var el = curView.getHtmlElement();
@@ -168,11 +169,11 @@ function(viewId, isNewView) {
 
 Com_Zimbra_DnD.uploadDnDFiles =
 function() {
-	var viewId = appCtxt.getAppViewMgr().getCurrentViewId();
-	if (viewId == ZmId.VIEW_COMPOSE ||
-		viewId == ZmId.VIEW_BRIEFCASE_COLUMN ||
-		viewId == ZmId.VIEW_BRIEFCASE ||
-		viewId == ZmId.VIEW_BRIEFCASE_DETAIL || viewId.indexOf('COMPOSE') != -1)
+	var viewType = appCtxt.getCurrentViewType();
+	if (viewType == ZmId.VIEW_COMPOSE ||
+		viewType == ZmId.VIEW_BRIEFCASE_COLUMN ||
+		viewType == ZmId.VIEW_BRIEFCASE ||
+		viewType == ZmId.VIEW_BRIEFCASE_DETAIL)
 	{
 		var curView = appCtxt.getAppViewMgr().getCurrentView();
         /*if(window.newWindowCommand == 'compose'){
@@ -331,8 +332,8 @@ Com_Zimbra_DnD.prototype._handleResponse = function(req, controller) {
                 if(this.attachment_ids.length > 0 && this.upLoadC == 0) {
                     var attachment_list = this.attachment_ids.join(",");
                     this.attachment_ids = [];
-                    var viewId = appCtxt.getAppViewMgr().getCurrentViewId();
-                    if (viewId == ZmId.VIEW_COMPOSE || viewId.indexOf(ZmId.VIEW_COMPOSE) != -1) {
+					var viewType = appCtxt.getCurrentViewType();
+                    if (viewType == ZmId.VIEW_COMPOSE) {
                         controller.saveDraft(ZmComposeController.DRAFT_TYPE_MANUAL, attachment_list);
                     }
                     this.dndTooltipEl.innerHTML = ZmMsg.dndTooltip;

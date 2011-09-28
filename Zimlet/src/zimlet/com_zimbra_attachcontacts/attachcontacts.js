@@ -46,17 +46,19 @@ AttachContactsZimlet.prototype.init = function() {
  */
 AttachContactsZimlet.prototype.initializeToolbar =
 function(app, toolbar, controller, viewId) {
-	if (viewId.indexOf("COMPOSE") >= 0 && !this._addedToMainWindow) {
-		var btn = toolbar.getOp("ATTACHMENT");
+	var viewType = appCtxt.getViewTypeFromId(viewId);
+	if (viewType == ZmId.VIEW_COMPOSE && !this._addedToMainWindow) {
+		var btn = toolbar.getOp(ZmId.OP_ATTACHMENT);
 		btn.addSelectionListener(new AjxListener(this, this._addTab));	
-	} else if (viewId == "CNS" || viewId == "CN") {
+	} else if (viewType == ZmId.VIEW_CONTACT_SIMPLE || viewType == ZmId.VIEW_CONTACT) {
 		this._initContactsReminderToolbar(toolbar, controller);
 	}
 };
 
 AttachContactsZimlet.prototype.onShowView =
 function(viewId)  {
-	if (viewId == "CNS") {
+	var viewType = appCtxt.getViewTypeFromId(viewId);
+	if (viewType == ZmId.VIEW_CONTACT_SIMPLE) {
 		this._addContactActionMenuItem();
 	}
 };
@@ -163,7 +165,7 @@ AttachContactsZimlet.prototype._contactListSendListener = function() {
 
 AttachContactsZimlet.prototype._getContactListIds = function() {
 	var controller = appCtxt.getApp(ZmApp.CONTACTS).getContactListController();
-	var items = controller.getCurrentView().getSelection();
+	var items = controller.getListView().getSelection();
 	this.contactIdsToAttach = [];
 	for (var i=0; i<items.length; i++) {
         if (!items[i].isGroup()) {
@@ -222,7 +224,7 @@ AttachContactsZimlet.prototype._getContactFromController =
 function(controller) {
 	if (controller) {
 		if (controller instanceof ZmContactListController) {
-			var view = controller.getCurrentView();
+			var view = controller.getListView();
 			if (view) {
 				var selection = view.getSelection();
 				if (selection && selection.length>1)

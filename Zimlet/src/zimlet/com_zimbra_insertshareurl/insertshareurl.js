@@ -23,7 +23,8 @@ ZmInsertShareURL.prototype.constructor = ZmInsertShareURL;
 
 ZmInsertShareURL.prototype.initializeToolbar =
 function(app, toolbar, controller, viewId) {
-	if (viewId.indexOf("COMPOSE") >= 0) {
+	var viewType = appCtxt.getViewTypeFromId(viewId);
+	if (viewType == ZmId.VIEW_COMPOSE) {
 		if(toolbar.getOp("INSERT_SHARE_URL_ZIMLET")) {
 			return;
 		}

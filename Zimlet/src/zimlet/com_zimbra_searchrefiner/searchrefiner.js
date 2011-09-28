@@ -78,7 +78,7 @@ function(_limit, _offset) {
 	var getHtml = appCtxt.get(ZmSetting.VIEW_AS_HTML);
 	var callbck = new AjxCallback(this, this._handleInternalSrcResponse);
 	var _types = new AjxVector();
-	_types.add("MSG");
+	_types.add(ZmId.ITEM_MSG);
 
 	this._currentRequestNumber = this._currentRequestNumber + 1;
 	appCtxt.getSearchController().search({query: this._searchField.value, userText: true, limit:parseInt(_limit),  offset:parseInt(_offset), types:_types, noRender:true, getHtml: getHtml, callback:callbck});
@@ -89,7 +89,7 @@ function(result) {
 	if (!this.wasTriggeredBySearchBtn) {
 		return;
 	}
-	var array = result.getResponse().getResults("MSG").getVector().getArray();
+	var array = result.getResponse().getResults(ZmId.ITEM_MSG).getVector().getArray();
 	this._totalMsgArray = this._totalMsgArray.concat(array);
 	if (this._totalMsgArray.length == 0) {//no results
 		this.hide();
@@ -439,7 +439,8 @@ function(uniqueArry, origArry) {
 //------------------------------------------------------------------------------------------
 com_zimbra_searchrefiner.prototype.onShowView =
 function(viewId, isNewView) {
-	if(viewId.indexOf(ZmId.VIEW_COMPOSE) == -1) {
+	var viewType = appCtxt.getViewTypeFromId(viewId);
+	if (viewType != ZmId.VIEW_COMPOSE) {
 		this.hide();
 	}
 };

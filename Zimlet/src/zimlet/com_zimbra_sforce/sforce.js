@@ -687,7 +687,8 @@ function(viewId) {
 		return;
 	}
 
-	if (viewId.indexOf("MSG") == 0) {
+	var viewType = appCtxt.getViewTypeFromId(viewId);
+	if (viewType != ZmId.VIEW_MSG) {
 		var infoBar = document.getElementById(["zv__MSG__",viewId,"_infoBar"].join(""));
 	} else {
 		var infoBar = document.getElementById(["zv__",viewId,"__MSG_infoBar"].join(""));
@@ -2440,7 +2441,8 @@ Com_Zimbra_SForce.prototype.initializeToolbar = function(app, toolbar, controlle
 		this.sforce_logindlg_showSendAndAddBtn = this.getUserProperty("sforce_logindlg_showSendAndAddBtn") == "true";
 	}
 
-	if (viewId.indexOf("COMPOSE") >= 0 && this.sforce_logindlg_showSendAndAddBtn) {
+	var viewType = appCtxt.getViewTypeFromId(viewId);
+	if (viewType == ZmId.VIEW_COMPOSE && this.sforce_logindlg_showSendAndAddBtn) {
 		this._initComposeSFToolbar(toolbar, controller);
 	}
 };
@@ -2467,7 +2469,7 @@ Com_Zimbra_SForce.prototype._initContactSFToolbar = function(toolbar, controller
 };
 
 Com_Zimbra_SForce.prototype._sfContactTbButtonHdlr = function(controller) {
-	var contact = controller._listView[controller._currentView].getSelection()[0];
+	var contact = controller.getListView().getSelection()[0];
 	this.contactDropped(contact);//should really show a dialog with two sections to sync
 
 };

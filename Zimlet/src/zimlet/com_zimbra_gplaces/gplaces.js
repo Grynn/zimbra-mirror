@@ -39,7 +39,8 @@ Com_Zimbra_Gplaces.prototype.initializeToolbar = function(app, toolbar, controll
 
     // storing viewId in a new variable
     this.viewId = viewId;
-    if (viewId.indexOf(ZmId.VIEW_APPOINTMENT) >= 0 || viewId == ZmId.VIEW_APPOINTMENT) {
+	var viewType = controller.getCurrentViewType();
+    if (viewType == ZmId.VIEW_APPOINTMENT) {
         if (toolbar.getOp("APPT_LOCATION_TOOLBAR_BUTTON")) {
             return;
         }

@@ -178,9 +178,11 @@ WebExZimlet.prototype.init = function() {
  *
  */
 WebExZimlet.prototype.initializeToolbar = function(app, toolbar, controller, viewId) {
-	if ((viewId.indexOf("APPT") >= 0) && (viewId.indexOf("APPTRO") == -1)) {
+	var viewType = appCtxt.getViewTypeFromId(viewId);
+	if (viewType == ZmId.VIEW_APPOINTMENT) {
 		this._initCalendarWebexToolbar(toolbar, controller);
-	} else 	if (viewId == appCtxt.get(ZmSetting.CONV_MODE) || viewId == ZmId.VIEW_CONV || viewId == ZmId.VIEW_TRAD || viewId == "CNS" || viewId == "CLD") {
+	} else 	if (viewType == appCtxt.get(ZmSetting.CONV_MODE) || viewType == ZmId.VIEW_CONV || viewType == ZmId.VIEW_TRAD
+			|| viewType == ZmId.VIEW_CONTACT_SIMPLE || viewType == ZmId.VIEW_CAL_DAY) {
 
 		var op = toolbar.getOp(ZmId.OP_ACTIONS_MENU);
 		if(op) {
@@ -205,13 +207,13 @@ WebExZimlet.prototype._handleQuickMeetingMenuClick = function(controller) {
 	var type = items[0].type;
 	var obj;
 	var emails = [];
-	if (type == "CONV") {
+	if (type == ZmId.ITEM_CONV) {
 		obj = items[0].getFirstHotMsg();
 		emails = obj.getEmails().getArray();
-	} else if(type == "MSG") {
+	} else if(type == ZmId.ITEM_MSG) {
 		obj = items[0];
 		emails = obj.getEmails().getArray();
-	} else if(type == "CONTACT") {
+	} else if(type == ZmId.ITEM_CONTACT) {
 		emails = this._getEmailsFromContacts(items);
 	}
 	var emails = emails instanceof Array ?  emails.join(";") : "";

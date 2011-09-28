@@ -37,8 +37,9 @@ var AttachMailZimlet = com_zimbra_attachmail_HandlerObject;
  */
 AttachMailZimlet.prototype.initializeToolbar =
 function(app, toolbar, controller, viewId) {
-	if (viewId.indexOf("COMPOSE") >= 0 && !this._addedToMainWindow) {
-		var btn = toolbar.getOp("ATTACHMENT");
+	var viewType = appCtxt.getViewTypeFromId(viewId);
+	if (viewType == ZmId.VIEW_COMPOSE && !this._addedToMainWindow) {
+		var btn = toolbar.getOp(ZmId.OP_ATTACHMENT);
 		btn.addSelectionListener(new AjxListener(this, this._addTab));	
 	} 
 };

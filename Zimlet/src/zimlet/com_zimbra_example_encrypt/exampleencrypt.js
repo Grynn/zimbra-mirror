@@ -21,7 +21,8 @@ ZmExampleEncryptZimlet.prototype.constructor = ZmExampleEncryptZimlet;
  */
 ZmExampleEncryptZimlet.prototype.initializeToolbar =
 		function(app, toolbar, controller, viewId) {
-			if (viewId.indexOf("COMPOSE") >= 0) {
+			var viewType = appCtxt.getViewTypeFromId(viewId);
+			if (viewType == ZmId.VIEW_COMPOSE) {
 				var op = toolbar.getOp(ZmOperation.COMPOSE_OPTIONS);
 				if (op) {
 					var menu = op.getMenu();

@@ -293,7 +293,8 @@ function(subject) {
  */
 EmailReminderZimlet.prototype.initializeToolbar =
 function(app, toolbar, controller, viewId) {
-	if(viewId.indexOf("COMPOSE") >=0 && this.ereminder_showInCompose)
+	var viewType = appCtxt.getViewTypeFromId(viewId);
+	if(viewType == ZmId.VIEW_COMPOSE && this.ereminder_showInCompose)
 		this._addReminderBtnToCompose(toolbar, controller);
 };
 
