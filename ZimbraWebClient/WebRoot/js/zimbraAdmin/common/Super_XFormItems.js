@@ -120,9 +120,11 @@ Cos_List_XModelItem = function (){}
 XModelItemFactory.createItemType("_COS_LIST_", "list_enum", Cos_List_XModelItem, Cos_String_XModelItem);
 Cos_List_XModelItem.prototype.outputType = _LIST_;
 Cos_List_XModelItem.prototype.itemDelimiter = List_XModelItem.prototype.itemDelimiter;
+Cos_List_XModelItem.prototype.inputDelimiter = List_XModelItem.prototype.inputDelimiter;
 Cos_List_XModelItem.prototype.listItem = List_XModelItem.prototype.listItem;
 Cos_List_XModelItem.prototype.getOutputType  = List_XModelItem.prototype.getOutputType;
 Cos_List_XModelItem.prototype.getItemDelimiter = List_XModelItem.prototype.getItemDelimiter;
+Cos_List_XModelItem.prototype.getInputDelimiter = List_XModelItem.prototype.getInputDelimiter;
 Cos_List_XModelItem.prototype.getListItem  = List_XModelItem.prototype.getListItem;
 Cos_List_XModelItem.prototype.initializeItems = List_XModelItem.prototype.initializeItems;
 Cos_List_XModelItem.prototype.validateType = List_XModelItem.prototype.validateType;
@@ -133,17 +135,50 @@ Cos_List_XModelItem.prototype.getSuperValue = function(ins) {
 		return null;
 	var _ref = this.ref.replace("/", ".");
 	var lst = eval("ins._defaultValues." + _ref);
-	var retval = [];
+	
 	if(lst) {
-		if(!(lst instanceof Array))
-			lst = [lst];
-
-		var cnt = lst.length
-		for(var i=0;i<cnt;i++) {
-			retval.push(lst[i]);
+		if(this.getOutputType() == _STRING_) {
+			if(lst instanceof Array) {
+				return lst.join(this.getItemDelimiter());
+			}
+		} else {
+			var retval = [];
+			if(!(lst instanceof Array))
+				lst = [lst];
+	
+			var cnt = lst.length
+			for(var i=0;i<cnt;i++) {
+				retval.push(lst[i]);
+			}
+			return retval;		
 		}
 	}
-	return retval;
+	
+}
+
+Cos_List_XModelItem.prototype.setLocalValue = function(val, ins, current, ref) {
+	if(val && this.getOutputType() == _STRING_ && !(val instanceof Array)) {
+		var value = val.split(this.getInputDelimiter());
+		eval("ins."+ref+" = value");
+		this.setValueAt(ins, value, ref);
+	} else {
+        var value = eval("ins."+ref+" = val");
+        this.setValueAt(ins, value, ref);
+	}
+	
+}
+
+Cos_List_XModelItem.prototype.getLocalValue = function(ins, refPath) {
+	if(!ins)
+		return null;
+	
+	var _ref = this.ref.replace("/", ".");	
+	var value =  eval("ins." + _ref);
+	if(value && this.getOutputType() ==_STRING_ && value instanceof Array) {
+		return value.join(this.getItemDelimiter());
+	} else {
+		return value;
+	}
 }
 //	methods
 

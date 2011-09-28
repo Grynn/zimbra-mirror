@@ -1001,13 +1001,16 @@ function(mods) {
 			if(cnt) {
 				for(var ix=0; ix <cnt; ix++) {
 					var attr = null;
-					if(mods[aname][ix] instanceof String)
+					if(mods[aname][ix] instanceof String) {
+						if(AjxUtil.isEmpty(mods[aname][ix])) {
+							continue;
+						}
 						var attr = soapDoc.set("a", mods[aname][ix].toString());
-					else if(mods[aname][ix] instanceof Object)
+					} else if(mods[aname][ix] instanceof Object) {
 						var attr = soapDoc.set("a", mods[aname][ix].toString());
-					else
+					} else {
 						var attr = soapDoc.set("a", mods[aname][ix]);
-	
+					}
 					if(attr)
 						attr.setAttribute("n", aname);
 				}
