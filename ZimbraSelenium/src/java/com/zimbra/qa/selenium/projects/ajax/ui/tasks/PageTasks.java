@@ -54,6 +54,7 @@ public class PageTasks extends AbsTab {
 		public static final String zNewTaskMenuItem ="css=div#zb__TKL__NEW_MENU_NEW_TASK";
 		public static final String zNewTaskFolderMenuItem ="css=div#zb__TKL__NEW_MENU_NEW_TASK_FOLDER";
 		public static final String zDeleteTaskMenuItem ="css=div[id='zm__Tasks'] tr[id='POPUP_DELETE']";
+		public static final String zMoveTaskMenuItem ="css=div[id='zm__Tasks'] tr[id='POPUP_MOVE']";
 		
 		
 	}
@@ -388,13 +389,17 @@ public class PageTasks extends AbsTab {
 				optionLocator= Locators.zDeleteTaskMenuItem;
 				page = null;
 
-			} else {
+			}else if(option == Button.O_MOVE_MENU){
+				optionLocator= Locators.zMoveTaskMenuItem;
+				page = new DialogMove(MyApplication, this);
+			
+			}else {
 				throw new HarnessException("implement action:" + action
 						+ " option:" + option);
 			}
 
 			// click on the option
-			this.zClick(optionLocator);
+			this.zClickAt(optionLocator,"");
 
 			this.zWaitForBusyOverlay();
 
@@ -899,6 +904,12 @@ public class PageTasks extends AbsTab {
 			page= null;
 			keyCode= "16,46";
 			
+		}else if (shortcut == Shortcut.S_MOVE) {
+
+			// "Move" shortcut opens "Choose Folder" dialog
+			page = new DialogMove(MyApplication, this);
+
+			keyCode = "77";
 		}else{
 			throw new HarnessException("implement shortcut: " + shortcut);
 		}
