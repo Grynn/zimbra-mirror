@@ -425,5 +425,74 @@ public class AutoCompleteGAL extends PrefGroupMailByMessageTest {
 		
 	}
 
+	@Bugs(ids = "40959, 65081")
+	@Test(	description = "Autocomplete on 'mike m' should not return all 'mike' names, only those with last name starting with 'm'",
+			groups = { "functional" })
+	public void AutoCompleteGAL_Bug40959() throws HarnessException {
+		
+
+		// Create 3 Mikes
+		ZimbraAccount account1 = new ZimbraAccount();
+		account1.GivenName = "Mike";
+		account1.SN = "Carter" + ZimbraSeleniumProperties.getUniqueString();
+		account1.DisplayName = account1.GivenName + " " + account1.SN;
+		account1.provision();
+		account1.authenticate();
+
+		ZimbraAccount account2 = new ZimbraAccount();
+		account2.GivenName = "Mike";
+		account2.SN = "Mitchell" + ZimbraSeleniumProperties.getUniqueString();
+		account2.DisplayName = account2.GivenName + " " + account2.SN;
+		account2.provision();
+		account2.authenticate();
+
+		ZimbraAccount account3 = new ZimbraAccount();
+		account3.GivenName = "Mike";
+		account3.SN = "Murphy" + ZimbraSeleniumProperties.getUniqueString();
+		account3.DisplayName = account3.GivenName + " " + account3.SN;
+		account3.provision();
+		account3.authenticate();
+
+		
+		// Message properties
+		String subject = "subject" + ZimbraSeleniumProperties.getUniqueString();
+		String body = "body" + ZimbraSeleniumProperties.getUniqueString();
+		
+		// Open the new mail form
+		FormMailNew mailform = (FormMailNew) app.zPageMail.zToolbarPressButton(Button.B_NEW);
+		ZAssert.assertNotNull(mailform, "Verify the new form opened");
+		
+		// Fill out the form with the data
+		mailform.zFillField(Field.Subject, subject);
+		mailform.zFillField(Field.Body, body);
+
+		List<AutocompleteEntry> entries = mailform.zAutocompleteFillField(Field.To, "Mike M");
+		AutocompleteEntry found1 = null;
+		AutocompleteEntry found2 = null;
+		AutocompleteEntry found3 = null;
+		for (AutocompleteEntry entry : entries) {
+			if ( entry.getAddress().contains(account1.EmailAddress) ) {
+				found1 = entry;
+			}
+			if ( entry.getAddress().contains(account2.EmailAddress) ) {
+				found2 = entry;
+			}
+			if ( entry.getAddress().contains(account3.EmailAddress) ) {
+				found3 = entry;
+			}
+		}
+		
+		ZAssert.assertNull(found1, "Verify 'mike m' does not match "+ account1.DisplayName);
+		ZAssert.assertNotNull(found2, "Verify 'mike m' does match "+ account2.DisplayName);
+		ZAssert.assertNotNull(found3, "Verify 'mike m' does match "+ account3.DisplayName);
+		
+		// Cancel the compose
+		DialogWarning dialog = (DialogWarning)mailform.zToolbarPressButton(Button.B_CANCEL);
+		if ( dialog.zIsActive() ) {
+			dialog.zClickButton(Button.B_NO);
+		}
+
+	}
+
 
 }
