@@ -99,7 +99,7 @@ DwtId.DND_PLUS_ID		= "z__roundPlus";
  * 
  * @private
  */
-DwtId._makeId =
+DwtId.makeId =
 function() {
 	var list = [];
 	for (var i = 0; i < arguments.length; i++) {
@@ -110,6 +110,7 @@ function() {
 	}
 	return list.join(DwtId.SEP);
 };
+DwtId._makeId = DwtId.makeId;	// back-compatibility
 
 /**
  * Gets an ID for a list view.
@@ -120,7 +121,7 @@ function() {
  */
 DwtId.getListViewId =
 function(context, modifier) {
-	return DwtId._makeId(DwtId.WIDGET_LIST_VIEW, context, modifier);
+	return DwtId.makeId(DwtId.WIDGET_LIST_VIEW, context, modifier);
 };
 
 /**
@@ -133,7 +134,7 @@ function(context, modifier) {
  */
 DwtId.getListViewHdrId =
 function(type, context, hdr) {
-	return DwtId._makeId(type, context, hdr);
+	return DwtId.makeId(type, context, hdr);
 };
 
 /**
@@ -147,7 +148,7 @@ function(type, context, hdr) {
  */
 DwtId.getListViewItemId =
 function(type, context, itemId, field) {
-	return DwtId._makeId(type, context, itemId, field);
+	return DwtId.makeId(type, context, itemId, field);
 };
 
 /**
@@ -158,5 +159,5 @@ function(type, context, itemId, field) {
  */
 DwtId.getIframeId =
 function(context) {
-	return DwtId._makeId(context, DwtId.IFRAME);
+	return DwtId.makeId(context, DwtId.IFRAME);
 };

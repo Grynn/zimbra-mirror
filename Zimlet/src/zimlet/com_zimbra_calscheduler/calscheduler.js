@@ -558,16 +558,19 @@ function() {
 			keyUpCallback: keyUpCallback,
 			compCallback: acCallback
 		};
+		params.contextId = [this.name, ZmCalBaseItem.PERSON].join("-");
 		this._acContactsList = new ZmAutocompleteListView(params);
 		this._acList[ZmCalBaseItem.PERSON] = this._acContactsList;
 
 		// autocomplete for locations/equipment
 		if (appCtxt.get(ZmSetting.GAL_ENABLED)) {
 			params.options = {type:ZmAutocomplete.AC_TYPE_LOCATION};
+			params.contextId = [this.name, ZmCalBaseItem.LOCATION].join("-");
 			this._acLocationsList = new ZmAutocompleteListView(params);
 			this._acList[ZmCalBaseItem.LOCATION] = this._acLocationsList;
 
 			params.options = {type:ZmAutocomplete.AC_TYPE_EQUIPMENT};
+			params.contextId = [this.name, ZmCalBaseItem.EQUIPMENT].join("-");
 			this._acEquipmentList = new ZmAutocompleteListView(params);
 			this._acList[ZmCalBaseItem.EQUIPMENT] = this._acEquipmentList;
 		}

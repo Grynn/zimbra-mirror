@@ -139,7 +139,8 @@ function(html, idx, obj, spanId, context, options) {
 				dataClass:		appCtxt.getAutocompleter(),
 				matchValue:		ZmAutocomplete.AC_VALUE_FULL,
 				options:		{addrBubbles:true, massDLComplete:true},
-				compCallback:	new AjxCallback(this, this._dlAddrSelected)
+				compCallback:	this._dlAddrSelected.bind(this),
+				contextId:		this.name
 			};
 			this._aclv = new ZmAutocompleteListView(aclvParams);
 		}

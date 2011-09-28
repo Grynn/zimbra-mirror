@@ -3168,7 +3168,7 @@ function() {
 	if (DwtControl.ALL_BY_ID) {
 		if (DwtControl.ALL_BY_ID[this._htmlElId]) {
 			DBG.println(AjxDebug.DBG1, "Duplicate ID for " + this.toString() + ": " + this._htmlElId);
-			this._htmlElId = htmlElement.id = this.__internalId = DwtId._makeId(this._htmlElId, Dwt.getNextId());
+			this._htmlElId = htmlElement.id = this.__internalId = DwtId.makeId(this._htmlElId, Dwt.getNextId());
 		}
 		DwtControl.ALL_BY_ID[this._htmlElId] = this;
 	}

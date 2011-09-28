@@ -432,9 +432,10 @@ ZmPTOZimlet.prototype._addAutoCompleteHandler =
 function() {
     if (appCtxt.get(ZmSetting.CONTACTS_ENABLED) || appCtxt.get(ZmSetting.GAL_ENABLED)) {
         var params = {
-            dataClass: appCtxt.getAutocompleter(),
-            matchValue: ZmAutocomplete.AC_VALUE_EMAIL,
-            keyUpCallback: (new AjxCallback(this, this._acKeyUpListener))
+            dataClass:		appCtxt.getAutocompleter(),
+            matchValue:		ZmAutocomplete.AC_VALUE_EMAIL,
+            keyUpCallback:	this._acKeyUpListener.bind(this),
+			contextId:		this.name
         };
         this._acAddrSelectList = new ZmAutocompleteListView(params);
         this._acAddrSelectList.handle(document.getElementById("ptoZimlet_ccManagerField"));

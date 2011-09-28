@@ -276,9 +276,11 @@ Dwt.__nextId = {};
  */
 Dwt.getNextId =
 function(prefix) {
-	if (arguments.length == 0) prefix = "DWT";
-	if (!Dwt.__nextId[prefix]) Dwt.__nextId[prefix] = 1;
-	return prefix+Dwt.__nextId[prefix]++;
+	prefix = prefix || "DWT";
+	if (!Dwt.__nextId[prefix]) {
+		Dwt.__nextId[prefix] = 1;
+	}
+	return prefix + Dwt.__nextId[prefix]++;
 };
 
 /**
