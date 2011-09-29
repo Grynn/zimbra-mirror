@@ -62,12 +62,13 @@ namespace MVVM.ViewModel
             string[] users = mw.GetListFromObjectPicker();
             for (int i = 0; i < users.Length; i++)
             {
-                //string displayname = users[i].Substring(0, users[i].IndexOf("@"));
-                //UsersList.Add(new UsersViewModel(displayname, ""));
-
-                // Comment out above 2 lines.  For now, we'll just user username
                 // Later, we'll return a struct that will have username and displayname (as destination name)
-                UsersList.Add(new UsersViewModel(users[i], ""));
+                string displayname = "";
+                if (users[i].IndexOf("@") != -1)
+                {
+                    displayname = users[i].Substring(0, users[i].IndexOf("@"));
+                }
+                UsersList.Add(new UsersViewModel(users[i], displayname));
 
                 ScheduleViewModel scheduleViewModel = ((ScheduleViewModel)ViewModelPtrs[(int)ViewType.SCHED]);
                 scheduleViewModel.SchedList.Add(new SchedUser(Username, false));

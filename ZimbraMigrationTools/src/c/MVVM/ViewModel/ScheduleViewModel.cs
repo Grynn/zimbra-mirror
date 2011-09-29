@@ -266,7 +266,9 @@ namespace MVVM.ViewModel
                 UsersViewModel usersViewModel = ((UsersViewModel)ViewModelPtrs[(int)ViewType.USERS]);
                 foreach (UsersViewModel obj in usersViewModel.UsersList)
                 {
-                    schedlist.Add(new SchedUser(obj.Username, obj.IsProvisioned));
+                    int idx = obj.Username.IndexOf("@");
+                    string NameToAdd = (idx != -1) ? obj.Username.Substring(0, idx) : obj.Username;
+                    schedlist.Add(new SchedUser(NameToAdd, obj.IsProvisioned));
                 }
                 return schedlist;
             }
