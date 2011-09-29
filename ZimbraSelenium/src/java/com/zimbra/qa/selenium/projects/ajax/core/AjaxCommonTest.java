@@ -2,11 +2,9 @@ package com.zimbra.qa.selenium.projects.ajax.core;
 
 import java.io.IOException;
 import java.util.*;
-
 import org.apache.log4j.*;
 import org.testng.annotations.*;
 import org.xml.sax.SAXException;
-
 import com.thoughtworks.selenium.*;
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.ui.*;
@@ -415,5 +413,16 @@ public class AjaxCommonTest {
 
 		logger.info("commonTestAfterMethod: finish");
 	}
-
+	
+	public void ModifyAccountPreferences(String string) throws HarnessException {
+		StringBuilder settings = new StringBuilder();
+		for (Map.Entry<String, String> entry : startingAccountPreferences.entrySet()) {
+			settings.append(String.format("<a n='%s'>%s</a>", entry.getKey(), entry.getValue()));
+		}		
+		ZimbraAdminAccount.GlobalAdmin().soapSend(
+				"<ModifyAccountRequest xmlns='urn:zimbraAdmin'>"
+				+		"<id>"+ string +"</id>"
+				+		settings.toString()
+				+	"</ModifyAccountRequest>");
+	}
 }
