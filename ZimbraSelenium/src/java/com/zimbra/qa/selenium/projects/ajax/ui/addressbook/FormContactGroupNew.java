@@ -109,9 +109,11 @@ public class FormContactGroupNew extends AbsForm {
 	// reset the form
 	public void zReset() throws HarnessException {
 		logger.info("FormMailGroupNew.zReset()");
-		String[] fieldList = {getLocator(Locators.zGroupAddNewTextArea), 
-				              getLocator(Locators.zGroupnameField) };
+//		String[] fieldList = {getLocator(Locators.zGroupAddNewTextArea), 
+//				              getLocator(Locators.zGroupnameField) };
 		                  
+		String[] fieldList = {getLocator(Locators.zGroupAddNewTextArea.replaceFirst("=_","=" +Locators.zActiveEditForm + "_")), 
+	              getLocator(Locators.zGroupnameField.replaceFirst("=_","=" +Locators.zActiveEditForm + "_")) };
 		
 		for (int i=0; i < fieldList.length; i++) {
 		  sType(fieldList[i], "");
@@ -126,6 +128,7 @@ public class FormContactGroupNew extends AbsForm {
 		if (locator.startsWith("css=")) {
 		    locator=locator.substring(locator.indexOf(" "));
 		}
+		
 		return "css=div#" + Locators.zActiveEditForm + locator;
 	}
 	
