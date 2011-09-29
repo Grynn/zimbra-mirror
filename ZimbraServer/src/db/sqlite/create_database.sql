@@ -34,7 +34,8 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.mailbox (
    last_soap_access    INTEGER UNSIGNED NOT NULL DEFAULT 0,
    new_messages        INTEGER UNSIGNED NOT NULL DEFAULT 0,
    idx_deferred_count  INTEGER UNSIGNED NOT NULL DEFAULT 0,
-   highest_indexed     VARCHAR(21)                    -- mod_content of highest item in the index
+   highest_indexed     VARCHAR(21),                   -- mod_content of highest item in the index
+   version             VARCHAR(16)
 );
 
 -- -----------------------------------------------------------------------
