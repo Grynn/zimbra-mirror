@@ -4,6 +4,7 @@ import java.util.*;
 
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
+import com.zimbra.qa.selenium.framework.util.staf.Stafpostqueue;
 import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogShareAccept;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogShareDecline;
@@ -33,8 +34,8 @@ public class DisplayMail extends AbsDisplay {
 	public static class Locators {
 				
 		
-		public static final String MessageViewPreviewAtBottomCSS		= "css=div[id='zv__TV__MSG']";
-		public static final String MessageViewPreviewAtRightCSS			= "css=div[id='zv__TV__MSG']";
+		public static final String MessageViewPreviewAtBottomCSS		= "css=div[id='zv__TV-main__MSG']";
+		public static final String MessageViewPreviewAtRightCSS			= "css=div[id='zv__TV-main__MSG']";
 		public static final String MessageViewOpenMessageCSS			= "css=div[id='zv__MSG1__MSG']";
 		
 		public static final String ConversationViewPreviewAtBottomCSS	= "css=div[id='zv__CLV2__CV']";
@@ -91,6 +92,7 @@ public class DisplayMail extends AbsDisplay {
 
 		AbsPage page = this;
 		String locator = null;
+		boolean doPostfixCheck = false;
 
 		if ( button == Button.B_VIEW_ENTIRE_MESSAGE ) {
 			
@@ -123,31 +125,36 @@ public class DisplayMail extends AbsDisplay {
 			
 			locator = this.ContainerLocator + " td[id$='__Inv__REPLY_ACCEPT_title']";
 			page = null;
+			doPostfixCheck = true;
 			
 		} else if ( button == Button.B_DECLINE ) {
 			
 			locator = this.ContainerLocator + " td[id$='__Inv__REPLY_TENTATIVE_title']";
 			page = null;
+			doPostfixCheck = true;
 		
 		} else if ( button == Button.B_TENTATIVE ) {
 			
 			locator = this.ContainerLocator + " td[id$='__Inv__REPLY_DECLINE_title']";
 			page = null;
-			
+			doPostfixCheck = true;
+
 		} else if ( button == Button.B_PROPOSE_NEW_TIME ) {
 			
 			locator = this.ContainerLocator + " td[id$='__Inv__PROPOSE_NEW_TIME_title']";
 			page = null;
-		
+
 		} else if ( button == Button.B_ACCEPT_SHARE ) {
 
 			locator = this.ContainerLocator + " td[id$='__Shr__SHARE_ACCEPT_title']";
 			page = new DialogShareAccept(MyApplication, ((AppAjaxClient) MyApplication).zPageMail);
+			doPostfixCheck = true;
 
 		} else if ( button == Button.B_DECLINE_SHARE ) {
 
 			locator = this.ContainerLocator + " td[id$='__Shr__SHARE_DECLINE_title']";
 			page = new DialogShareDecline(MyApplication, ((AppAjaxClient) MyApplication).zPageMail);
+			doPostfixCheck = true;
 
 		} else  {
 			
@@ -169,6 +176,12 @@ public class DisplayMail extends AbsDisplay {
 			page.zWaitForActive();
 		}
 		
+		if ( doPostfixCheck ) {
+			// Make sure the response is delivered before proceeding
+			Stafpostqueue sp = new Stafpostqueue();
+			sp.waitForPostqueue();
+		}
+
 		return (page);
 	}
 
