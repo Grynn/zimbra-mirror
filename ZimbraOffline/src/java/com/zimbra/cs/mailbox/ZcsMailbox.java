@@ -553,18 +553,27 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
     @Override
     int getChangeMaskFilter(MailItem.Type type) {
         switch (type) {
-        case MailItem.TYPE_MESSAGE:       return PushChanges.MESSAGE_CHANGES;
-        case MailItem.TYPE_CHAT:          return PushChanges.CHAT_CHANGES;
-        case MailItem.TYPE_CONTACT:       return PushChanges.CONTACT_CHANGES;
-        case MailItem.TYPE_MOUNTPOINT:
-        case MailItem.TYPE_FOLDER:        return PushChanges.FOLDER_CHANGES;
-        case MailItem.TYPE_SEARCHFOLDER:  return PushChanges.SEARCH_CHANGES;
-        case MailItem.TYPE_TAG:           return PushChanges.TAG_CHANGES;
-        case MailItem.TYPE_APPOINTMENT:
-        case MailItem.TYPE_TASK:          return PushChanges.APPOINTMENT_CHANGES;
-        case MailItem.TYPE_WIKI:
-        case MailItem.TYPE_DOCUMENT:      return PushChanges.DOCUMENT_CHANGES;
-        default:                          return 0;
+            case MESSAGE:
+                return PushChanges.MESSAGE_CHANGES;
+            case CHAT:
+                return PushChanges.CHAT_CHANGES;
+            case CONTACT:
+                return PushChanges.CONTACT_CHANGES;
+            case MOUNTPOINT:
+            case FOLDER:
+                return PushChanges.FOLDER_CHANGES;
+            case SEARCHFOLDER:
+                return PushChanges.SEARCH_CHANGES;
+            case TAG:
+                return PushChanges.TAG_CHANGES;
+            case APPOINTMENT:
+            case TASK:
+                return PushChanges.APPOINTMENT_CHANGES;
+            case WIKI:
+            case DOCUMENT:
+                return PushChanges.DOCUMENT_CHANGES;
+            default:
+                return 0;
         }
     }
 

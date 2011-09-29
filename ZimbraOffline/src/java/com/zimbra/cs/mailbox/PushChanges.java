@@ -34,6 +34,7 @@ import javax.mail.internet.MimeMessage;
 
 import org.dom4j.QName;
 
+import com.google.common.collect.ImmutableSet;
 import com.zimbra.common.mailbox.Color;
 import com.zimbra.common.mime.MimeConstants;
 import com.zimbra.common.mime.shim.JavaMailInternetAddress;
@@ -140,19 +141,10 @@ public class PushChanges {
             MailItem.Type.WIKI, MailItem.Type.DOCUMENT);
 
     /** The set of all the MailItem types that we synchronize with the server. */
-    static final Set<Byte> PUSH_TYPES_SET = new HashSet<Byte>(Arrays.asList(
-        MailItem.TYPE_FOLDER, 
-        MailItem.TYPE_SEARCHFOLDER,
-        MailItem.TYPE_TAG, 
-        MailItem.TYPE_CONTACT, 
-        MailItem.TYPE_MESSAGE, 
-        MailItem.TYPE_CHAT, 
-        MailItem.TYPE_APPOINTMENT,
-        MailItem.TYPE_TASK,
-        MailItem.TYPE_WIKI,
-        MailItem.TYPE_DOCUMENT,
-        MailItem.TYPE_MOUNTPOINT
-    ));
+    static final Set<MailItem.Type> PUSH_TYPES = ImmutableSet.of(MailItem.Type.FOLDER, MailItem.Type.SEARCHFOLDER,
+            MailItem.Type.TAG, MailItem.Type.CONTACT, MailItem.Type.MESSAGE, MailItem.Type.CHAT,
+            MailItem.Type.APPOINTMENT, MailItem.Type.TASK, MailItem.Type.WIKI, MailItem.Type.DOCUMENT,
+            MailItem.Type.MOUNTPOINT);
 
     private static final TracelessContext sContext = new TracelessContext();
 
@@ -227,17 +219,24 @@ public class PushChanges {
 
         // do folder ops top-down so that we don't get dinged when folders switch places
         if (!changes.isEmpty()) {
-            if (changes.getIds(MailItem.TYPE_FOLDER) != null || changes.getIds(MailItem.TYPE_SEARCHFOLDER) != null || changes.getIds(MailItem.TYPE_MOUNTPOINT) != null) {
+            if (changes.getIds(MailItem.Type.FOLDER) != null || changes.getIds(MailItem.Type.SEARCHFOLDER) != null ||
+                    changes.getIds(MailItem.Type.MOUNTPOINT) != null) {
                 for (Folder folder : ombx.getFolderById(sContext, Mailbox.ID_FOLDER_ROOT).getSubfolderHierarchy()) {
                     if (changes.remove(folder.getType(), folder.getId())) {
                         switch (folder.getType()) {
-                            case MailItem.TYPE_SEARCHFOLDER:  syncSearchFolder(folder.getId());  break;
-                            case MailItem.TYPE_MOUNTPOINT:
-                            case MailItem.TYPE_FOLDER:        syncFolder(folder.getId(), true, null);        break;
+                            case SEARCHFOLDER:
+                                syncSearchFolder(folder.getId());
+                                break;
+                            case MOUNTPOINT:
+                            case FOLDER:
+                                syncFolder(folder.getId(), true, null);
+                                break;
                         }
                     }
                 }
-                changes.remove(MailItem.TYPE_SEARCHFOLDER);  changes.remove(MailItem.TYPE_MOUNTPOINT);  changes.remove(MailItem.TYPE_FOLDER);
+                changes.remove(MailItem.Type.SEARCHFOLDER);
+                changes.remove(MailItem.Type.MOUNTPOINT);
+                changes.remove(MailItem.Type.FOLDER);
             }
         }
 
@@ -530,16 +529,21 @@ public class PushChanges {
             // rename the conflicting item out of the way
             Element rename = null;
             switch (conflictType) {
-                case MailItem.TYPE_MOUNTPOINT:
-                case MailItem.TYPE_SEARCHFOLDER:
-                case MailItem.TYPE_FOLDER:  rename = new Element.XMLElement(MailConstants.FOLDER_ACTION_REQUEST);  break;
-
-                case MailItem.TYPE_TAG:     rename = new Element.XMLElement(MailConstants.TAG_ACTION_REQUEST);  break;
-
-                case MailItem.TYPE_DOCUMENT:
-                case MailItem.TYPE_WIKI:    rename = new Element.XMLElement(MailConstants.WIKI_ACTION_REQUEST);  break;
-
-                default:                    rename = new Element.XMLElement(MailConstants.ITEM_ACTION_REQUEST);  break;
+                case MOUNTPOINT:
+                case SEARCHFOLDER:
+                case FOLDER:
+                    rename = new Element.XMLElement(MailConstants.FOLDER_ACTION_REQUEST);
+                    break;
+                case TAG:
+                    rename = new Element.XMLElement(MailConstants.TAG_ACTION_REQUEST);
+                    break;
+                case DOCUMENT:
+                case WIKI:
+                    rename = new Element.XMLElement(MailConstants.WIKI_ACTION_REQUEST);
+                    break;
+                default:
+                    rename = new Element.XMLElement(MailConstants.ITEM_ACTION_REQUEST);
+                    break;
             }
             rename.addElement(MailConstants.E_ACTION)
                 .addAttribute(MailConstants.A_OPERATION, ItemAction.OP_RENAME)
@@ -723,14 +727,14 @@ public class PushChanges {
             }
             int mask = 0;
             switch (folder.getType()) {
-            case MailItem.TYPE_MOUNTPOINT:
-                mask = ombx.getChangeMask(sContext, id, MailItem.TYPE_MOUNTPOINT);
-                break;
-            case MailItem.TYPE_FOLDER:
-                mask = ombx.getChangeMask(sContext, id, MailItem.TYPE_FOLDER);
-                break;
+                case MOUNTPOINT:
+                    mask = ombx.getChangeMask(sContext, id, MailItem.Type.MOUNTPOINT);
+                    break;
+                case FOLDER:
+                    mask = ombx.getChangeMask(sContext, id, MailItem.Type.FOLDER);
+                    break;
             }
-            if ((mask & Change.MODIFIED_CONFLICT) != 0) {
+            if ((mask & Change.CONFLICT) != 0) {
                 // this is a new folder; need to push to the server
                 elementName = MailConstants.CREATE_FOLDER_REQUEST;
                 request = zsc != null ? zsc.createElement(elementName) : new Element.XMLElement(elementName);
@@ -765,24 +769,26 @@ public class PushChanges {
         try {
             Pair<Integer,Integer> createData = null;
             switch (folder.getType()) {
-            case MailItem.TYPE_MOUNTPOINT:
-                createData = pushRequest(request, create, id, MailItem.TYPE_MOUNTPOINT, name, parentId);
-                break;
-            case MailItem.TYPE_FOLDER:
-                createData = pushRequest(request, create, id, MailItem.TYPE_FOLDER, name, parentId);
-                break;
+                case MOUNTPOINT:
+                    createData = pushRequest(request, create, id, MailItem.Type.MOUNTPOINT, name, parentId);
+                    break;
+                case FOLDER:
+                    createData = pushRequest(request, create, id, MailItem.Type.FOLDER, name, parentId);
+                    break;
             }
             if (create) {
                 // make sure the old item matches the new item...
                 switch (folder.getType()) {
-                case MailItem.TYPE_MOUNTPOINT:
-                    if (!ombx.renumberItem(sContext, id, MailItem.TYPE_MOUNTPOINT, createData.getFirst()))
-                        return true;
-                    break;
-                case MailItem.TYPE_FOLDER:
-                    if (!ombx.renumberItem(sContext, id, MailItem.TYPE_FOLDER, createData.getFirst()))
-                        return true;
-                    break;
+                    case MOUNTPOINT:
+                        if (!ombx.renumberItem(sContext, id, MailItem.Type.MOUNTPOINT, createData.getFirst())) {
+                            return true;
+                        }
+                        break;
+                    case FOLDER:
+                        if (!ombx.renumberItem(sContext, id, MailItem.Type.FOLDER, createData.getFirst())) {
+                            return true;
+                        }
+                        break;
                 }
                 id = createData.getFirst();
             }
@@ -818,12 +824,12 @@ public class PushChanges {
             }
             // update or clear the change bitmask
             switch (folder.getType()) {
-            case MailItem.TYPE_MOUNTPOINT:
-                ombx.setChangeMask(sContext, id, MailItem.TYPE_MOUNTPOINT, mask);
-                break;
-            case MailItem.TYPE_FOLDER:
-                ombx.setChangeMask(sContext, id, MailItem.TYPE_FOLDER, mask);
-                break;
+                case MOUNTPOINT:
+                    ombx.setChangeMask(sContext, id, MailItem.Type.MOUNTPOINT, mask);
+                    break;
+                case FOLDER:
+                    ombx.setChangeMask(sContext, id, MailItem.Type.FOLDER, mask);
+                    break;
             }
             return (mask == 0);
         } finally {
