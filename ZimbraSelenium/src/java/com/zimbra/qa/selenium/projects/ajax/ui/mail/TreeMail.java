@@ -97,7 +97,7 @@ public class TreeMail extends AbsTree {
 		}
 
 		// Initialize the container
-		optionLocator = "css=div[id='ZmActionMenu_1']";
+		optionLocator = "css=div[id='ZmActionMenu_mail']";
 
 		if ( (option == Button.B_NEW) || (option == Button.O_NEW_FOLDER) ) {
 
