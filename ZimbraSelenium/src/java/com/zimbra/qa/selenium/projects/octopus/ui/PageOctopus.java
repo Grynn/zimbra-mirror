@@ -10,12 +10,10 @@ import java.util.Map;
 import org.apache.commons.httpclient.HttpStatus;
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
-import com.zimbra.qa.selenium.framework.items.IItem;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.octopus.ui.DialogError;
 import com.zimbra.qa.selenium.projects.octopus.ui.DialogError.DialogErrorID;
-import com.zimbra.qa.selenium.projects.octopus.ui.PageMyFiles.Locators;
 import com.zimbra.soap.mail.type.Folder;
 
 public class PageOctopus extends AbsTab {

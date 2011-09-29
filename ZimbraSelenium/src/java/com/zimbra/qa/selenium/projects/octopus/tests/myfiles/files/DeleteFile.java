@@ -45,7 +45,7 @@ public class DeleteFile extends OctopusCommonTest {
 
 		// Create file item
 		String filePath = ZimbraSeleniumProperties.getBaseDirectory()
-				+ "/data/public/other/putty.log";
+				+ "/data/public/other/vssver.scc";
 
 		FileItem file = new FileItem(filePath);
 

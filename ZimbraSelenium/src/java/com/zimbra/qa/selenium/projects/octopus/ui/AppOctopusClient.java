@@ -15,7 +15,10 @@ public class AppOctopusClient extends AbsApplication {
 	public PageOctopus zPageOctopus = null;
 	public PageMyFiles zPageMyFiles = null;
 	public PageSharing zPageSharing = null;
+	public PageFavorites zPageFavorites = null;
+	public PageHistory zPageHistory = null;
 	public PageTrash zPageTrash = null;
+	public PageSearch zPageSearch = null;
 
 	public AppOctopusClient() {
 		super();
@@ -29,18 +32,30 @@ public class AppOctopusClient extends AbsApplication {
 		// Main Octopus page
 		zPageOctopus = new PageOctopus(this);
 		pages.put(zPageOctopus.myPageName(), zPageOctopus);
-		
+
 		// My Files page
 		zPageMyFiles = new PageMyFiles(this);
 		pages.put(zPageMyFiles.myPageName(), zPageMyFiles);
-		
+
 		// Sharing page
 		zPageSharing = new PageSharing(this);
 		pages.put(zPageSharing.myPageName(), zPageSharing);
-		
+
+		// Favorites page
+		zPageFavorites = new PageFavorites(this);
+		pages.put(zPageFavorites.myPageName(), zPageFavorites);
+
+		// History page
+		zPageHistory = new PageHistory(this);
+		pages.put(zPageHistory.myPageName(), zPageHistory);
+
 		// Trash page
 		zPageTrash = new PageTrash(this);
 		pages.put(zPageTrash.myPageName(), zPageTrash);
+
+		// Search page
+		zPageSearch = new PageSearch(this);
+		pages.put(zPageSearch.myPageName(), zPageSearch);
 
 		// Configure the localization strings
 		getL10N().zAddBundlename(I18N.Catalog.I18nMsg);
@@ -68,7 +83,7 @@ public class AppOctopusClient extends AbsApplication {
 			throws HarnessException {
 		return (super.zSetActiveAcount(account));
 	}
-	
+
 	public ZimbraAccount zGetActiveAcount() {
 		return (super.zGetActiveAccount());
 	}
