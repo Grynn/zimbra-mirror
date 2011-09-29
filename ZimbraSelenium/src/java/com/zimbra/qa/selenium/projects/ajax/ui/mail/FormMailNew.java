@@ -819,61 +819,40 @@ public class FormMailNew extends AbsForm {
 	
 	/**
 
-	  <div x-display="block" parentid="z_shell" class="ZmAutocompleteListView" style=
-	  "position: absolute; overflow: auto; display: block; left: 263px; top: 132px; z-index: 750;"
-	  id="ZmAutocompleteListView_2">
-	    <table id="DWT117" border="0" cellpadding="0" cellspacing="0">
-	      <tbody>
-	        <tr id="ZmAutocompleteListView_2_acRow_0" class="acRow-selected">
-	          <td class="Icon">
-	            <div class="ImgGALContact" style=""></div>
-	          </td>
+  <div x-display="block" parentid="z_shell" class="ZmAutocompleteListView" style="position: absolute; overflow: auto; display: block; left: 263px; top: 132px; z-index: 750;" id="zac__COMPOSE-1">
+    <table id="DWT117" border="0" cellpadding="0" cellspacing="0">
+      <tbody>
+        <tr id="zac__COMPOSE-1_acRow_0" class="acRow-selected">
+          <td class="Icon">
+            <div class="ImgContact" style=""></div>
+          </td>
 
-	          <td>"James Smith" &lt;enus13166322588223@testdomain.com&gt;</td>
+          <td>"&Atilde;&lsquo;&Atilde;&copy;&Atilde;&iexcl;l Wilson"
+          &lt;enus13173367893124@testdomain.com&gt;</td>
 
-	          <td class="Link"></td>
+          <td class="Link"></td>
 
-	          <td class="Link"></td>
-	        </tr>
+          <td class="Link"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <span style= "position: absolute; left: -10000px; top: -10000px; font-size: 13.3333px;">&Atilde;&lsquo;&Atilde;&copy;&Atilde;&iexcl;l</span>
 
-	        <tr id="ZmAutocompleteListView_2_acRow_1" class="acRow">
-	          <td class="Icon">
-	            <div class="ImgGALContact" style=""></div>
-	          </td>
 
-	          <td>"James Smith" &lt;enus13166323904003@testdomain.com&gt;</td>
+  <div x-display="block" style="position: absolute; left: 263px; top: 132px; z-index: 100; display: none;" class="acWaiting">
+    <table border="0" cellpadding="0" cellspacing="0">
+      <tbody>
+        <tr>
+          <td>
+            <div class="ImgSpinner"></div>
+          </td>
 
-	          <td class="Link"></td>
-
-	          <td class="Link"></td>
-	        </tr>
-
-	        <tr id="ZmAutocompleteListView_2_acRow_2" class="acRow">
-	          <td class="Icon">
-	            <div class="ImgGALContact" style=""></div>
-	          </td>
-
-	          <td>"James13166324873063 Smith13166324873064"
-	          &lt;enus13166324873065@testdomain.com&gt;</td>
-
-	          <td class="Link"></td>
-
-	          <td class="Link"></td>
-	        </tr>
-
-	  <div class="acWaiting" style="position: absolute; left: 263px; top: 132px; z-index: 100; display: none;" x-display="block">
-	    <table cellspacing="0" cellpadding="0" border="0">
-	      <tbody>
-	        <tr>
-	          <td>
-	            <div class="ImgSpinner"></div>
-	          </td>
-	
-	          <td>Autocompleting...</td>
-	        </tr>
-	      </tbody>
-	    </table>
-	  </div>
+          <td>Autocompleting...</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
 		 */
 
@@ -917,7 +896,7 @@ public class FormMailNew extends AbsForm {
 		
 		List<AutocompleteEntry> items = new ArrayList<AutocompleteEntry>();
 		
-		String containerLocator = "css=div[id='ZmAutocompleteListView_2']";
+		String containerLocator = "css=div[id^='zac__COMPOSE-'][style*='display: block;']";
 
 		if ( !this.sIsElementPresent(containerLocator) )
 			throw new HarnessException("Autocomplete not visible!");
@@ -925,11 +904,11 @@ public class FormMailNew extends AbsForm {
 
 
 		
-		String rowsLocator = containerLocator + " tr[id^='ZmAutocompleteListView_2_acRow']";
+		String rowsLocator = containerLocator + " tr[id*='_acRow_']";
 		int count = this.sGetCssCount(rowsLocator);
 		for (int i = 0; i < count; i++) {
 			
-			items.add(parseAutocompleteEntry("css=tr[id='ZmAutocompleteListView_2_acRow_"+ i +"']"));
+			items.add(parseAutocompleteEntry(containerLocator + " tr[id$='_acRow_"+ i +"']"));
 			
 		}
 		
