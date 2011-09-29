@@ -828,8 +828,10 @@ function(tmpObj) {
 			return false;		
 		}	
 	}
-    if(ZaItem.hasWritePermission(ZaAccount.A_zimbraPasswordLockoutMaxFailures,tmpObj) && !AjxUtil.isInt(tmpObj.attrs[ZaAccount.A_zimbraPasswordLockoutMaxFailures])) {
+
+    if(ZaItem.hasWritePermission(ZaAccount.A_zimbraPasswordLockoutMaxFailures,tmpObj)&& tmpObj.attrs[ZaAccount.A_zimbraPasswordLockoutMaxFailures] && !AjxUtil.isInt(tmpObj.attrs[ZaAccount.A_zimbraPasswordLockoutMaxFailures])) {
 			//show error msg
+
 			ZaApp.getInstance().getCurrentController().popupErrorDialog( AjxMessageFormat.format(ZaMsg.ERROR_VALUE_NOT_INTEGER,ZaAccount.A_zimbraPasswordLockoutMaxFailures));
 			return false;
 	}
