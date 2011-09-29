@@ -144,7 +144,7 @@ public class AcceptMeeting extends AjaxCommonTest {
 		app.zGetActiveAccount().soapSend(
 					"<GetAppointmentRequest  xmlns='urn:zimbraMail' id='"+ attendeeInvId +"'/>");
 		
-		String myStatus = ZimbraAccount.AccountA().soapSelectValue("//mail:at[@a='"+ app.zGetActiveAccount().EmailAddress +"']", "ptst");
+		String myStatus = app.zGetActiveAccount().soapSelectValue("//mail:at[@a='"+ app.zGetActiveAccount().EmailAddress +"']", "ptst");
 
 		// Verify attendee shows as psts=AC
 		ZAssert.assertEquals(myStatus, "AC", "Verify that the attendee shows as 'ACCEPTED'");
@@ -153,7 +153,7 @@ public class AcceptMeeting extends AjaxCommonTest {
 
 	@Test(
 			description = "Accept meeting - Verify organizer gets notification message", 
-			groups = { "smoke", "matt" })
+			groups = { "functional" })
 	public void AcceptMeeting_02() throws HarnessException {
 
 
