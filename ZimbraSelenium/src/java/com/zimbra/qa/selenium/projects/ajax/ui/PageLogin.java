@@ -27,6 +27,9 @@ public class PageLogin extends AbsTab {
 		// Displayed text
 		public static final String zDisplayedusername = "css=form[name='loginForm'] label[for='username']";
 		public static final String zDisplayedcopyright = "css=div[class='copyright']";
+		
+		// Toolbar links
+		public static final String zLogoutLink = "css=[id='skin_container_logoff']>a";
 
 	}
 
@@ -122,7 +125,34 @@ public class PageLogin extends AbsTab {
 		((AppAjaxClient)MyApplication).zSetActiveAcount(account);
 
 	}
+	
+	public void zLogout(ZimbraAccount account) throws HarnessException {
+		logger.debug("Logout (ZimbraAccount account)" + account.EmailAddress);
+		sClickAt(Locators.zLogoutLink, "");
+	}
+	
+	public void zLoginTo(ZimbraAccount account) throws HarnessException {
+		zLogout(account);
+		SleepUtil.sleepMedium();
+		
+		logger.debug("login(ZimbraAccount account)" + account.EmailAddress);
 
+		tracer.trace("Login to the "+ MyApplication.myApplicationName() +" using user/password "+ account.EmailAddress +"/"+ account.Password);
+		
+		zSetLoginName(account.EmailAddress);
+		zSetLoginPassword(account.Password);
+
+		// Click the Login button
+		sClick(Locators.zBtnLogin);
+
+		// Wait for the app to load
+		sWaitForPageToLoad();
+		((AppAjaxClient)MyApplication).zPageMain.zWaitForActive();
+
+		((AppAjaxClient)MyApplication).zSetActiveAcount(account);
+
+	}
+	
 	/**
 	 * Add the specified name to the login name field
 	 * @param name
