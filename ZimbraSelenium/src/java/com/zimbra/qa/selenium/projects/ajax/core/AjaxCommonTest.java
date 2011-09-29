@@ -63,6 +63,8 @@ import com.zimbra.qa.selenium.projects.ajax.ui.DialogError.DialogErrorID;
  *
  */
 public class AjaxCommonTest {
+	public String DoubleQuoteChar = new Character((char) 34).toString();
+	
 	protected static Logger logger = LogManager.getLogger(AjaxCommonTest.class);
 	public final boolean isRunningDesktopTest = ZimbraSeleniumProperties.getStringProperty(
 			ZimbraSeleniumProperties.getLocalHost() + ".desktop.test", "false").toLowerCase().equals("true") ? true : false;
