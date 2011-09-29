@@ -827,7 +827,12 @@ function(tmpObj) {
 			ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_ITEMS_PER_PAGE_OVER_MAX);
 			return false;		
 		}	
-	}			
+	}
+    if(ZaItem.hasWritePermission(ZaAccount.A_zimbraPasswordLockoutMaxFailures,tmpObj) && !AjxUtil.isInt(tmpObj.attrs[ZaAccount.A_zimbraPasswordLockoutMaxFailures])) {
+			//show error msg
+			ZaApp.getInstance().getCurrentController().popupErrorDialog( AjxMessageFormat.format(ZaMsg.ERROR_VALUE_NOT_INTEGER,ZaAccount.A_zimbraPasswordLockoutMaxFailures));
+			return false;
+	}
 	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_SKIN_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
 		//check that current theme is part of selected themes
 		var currentTheme = tmpObj.attrs[ZaAccount.A_zimbraPrefSkin] ? tmpObj.attrs[ZaAccount.A_zimbraPrefSkin] : tmpObj._defaultValues.attrs[ZaCos.A_zimbraPrefSkin];
