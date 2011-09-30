@@ -489,7 +489,7 @@ public class PageMail extends AbsTab {
 
 				pulldownLocator = "css=td[id$='__TAG_MENU_dropdown']>div[class='ImgSelectPullDownArrow']";
 
-				optionLocator = "css=td[id$='__TAG_MENU|MENU|NEWTAG_title']";
+				optionLocator = "css=div[id$='__TAG_MENU|MENU'] td[id='mail_newtag_title']";
 
 				page = new DialogTag(this.MyApplication, this);
 
@@ -498,7 +498,7 @@ public class PageMail extends AbsTab {
 
 				pulldownLocator = "css=td[id$='__TAG_MENU_dropdown']>div[class='ImgSelectPullDownArrow']";
 
-				optionLocator = "css=td[id$='__TAG_MENU|MENU|REMOVETAG_title']";
+				optionLocator = "css=div[id$='__TAG_MENU|MENU'] td[id='mail_removetag_title']";
 
 				page = null;
 
