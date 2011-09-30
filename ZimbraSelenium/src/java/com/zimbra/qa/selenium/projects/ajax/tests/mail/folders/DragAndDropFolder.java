@@ -5,9 +5,7 @@ import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.Button;
-import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.ZAssert;
-import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
+import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.PrefGroupMailByMessageTest;
 
 public class DragAndDropFolder extends PrefGroupMailByMessageTest{
@@ -56,9 +54,14 @@ public class DragAndDropFolder extends PrefGroupMailByMessageTest{
 		// Click on Get Mail to refresh the folder list
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 
+		// Bug 65234
+		// Sometimes the folder tree is rendered slowly.  sleep a bit
+		SleepUtil.sleepVerySmall();
+		
 		app.zPageMail.zDragAndDrop(
-				"//td[contains(@id, 'zti__main_Mail__" + subfolder1.getId() + "_textCell') and contains(text(), '"+ name1 + "')]",
-				"//td[contains(@id, 'zti__main_Mail__" + subfolder2.getId() + "_textCell') and contains(text(),'"+ name2 + "')]");
+				"css=td[id='zti__main_Mail__" + subfolder1.getId() + "_textCell']",
+				"css=td[id='zti__main_Mail__" + subfolder2.getId() + "_textCell']");
+				
 
 
 		// Verify the folder is now in the other subfolder
