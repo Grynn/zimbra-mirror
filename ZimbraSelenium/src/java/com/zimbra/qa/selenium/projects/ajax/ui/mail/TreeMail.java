@@ -609,7 +609,9 @@ public class TreeMail extends AbsTree {
 			throw new HarnessException("Must define an action and addressbook");
 		}
 
+		// Bug 65234
 		// Sometimes the folder refresh takes a while.  Sleep a bit here.
+		// If bug 65234 is fixed, this delay can likely be removed
 		SleepUtil.sleepVerySmall();
 	
 		
