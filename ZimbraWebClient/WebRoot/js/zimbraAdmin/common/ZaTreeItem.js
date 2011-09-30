@@ -127,13 +127,14 @@ ZaTreeItemData = function(params) {
     this.image = params.image;
     this.index = params.index;
     this.count = params.count;
+    this.canShowOnRoot = (params.canShowOnRoot === undefined? true : params.canShowOnRoot) ;
     this.mappingId = params.mappingId;
     this.callback = params.callback;
     this._data = {};
     this.childrenData = new AjxVector();
 }
 
-ZaTreeItemData.PARAMS = ["parent", "id", "text", "image", "index", "count", "mappingId", "callback", "relatedObject", "recentObject", "type", "path"];
+ZaTreeItemData.PARAMS = ["parent", "id", "text", "image", "index", "count", "mappingId", "callback", "relatedObject", "recentObject", "type", "path", "canShowOnRoot"];
 
 ZaTreeItemData.prototype.addChild =
 function(child, index) {
@@ -158,7 +159,9 @@ function(child, index) {
 
 ZaTreeItemData.prototype.isLeaf =
 function() {
-   return this.childrenData.size() == 0;
+    var isRealLeaf = this.childrenData.size() == 0;
+    var isFakeLeaf = !this.canShowOnRoot;
+   return (isRealLeaf || isFakeLeaf);
 }
 
 ZaTreeItemData.prototype.getChildrenNum =

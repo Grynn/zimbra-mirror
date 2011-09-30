@@ -788,6 +788,7 @@ function() {
                                     parent:parentPath,
                                     id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_CONFIGURATION,null, ZaId.TREEITEM_COS),
                                     text: ZaMsg.OVP_cos,
+                                    canShowOnRoot: false,
                                     mappingId: ZaZimbraAdmin._COS_LIST_VIEW});
         tree.addTreeItemData(ti);
         ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._COS_LIST_VIEW] = ZaOverviewPanelController.cosListTreeListener;
@@ -797,6 +798,7 @@ function() {
                                     parent:parentPath,
                                     id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_CONFIGURATION,null, ZaId.TREEITEM_DOMAINS),
                                     text: ZaMsg.OVP_domains,
+                                    canShowOnRoot: false,
                                     mappingId: ZaZimbraAdmin._DOMAINS_LIST_VIEW});
         tree.addTreeItemData(ti);
         ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._DOMAINS_LIST_VIEW] = ZaOverviewPanelController.domainListTreeListener;
@@ -857,6 +859,7 @@ function() {
                                 id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_HOME,null, "actLstHV"),
                                 text: ZaMsg.OVP_accounts,
                                 count: 0,
+                                canShowOnRoot: false,
                                 mappingId: ZaZimbraAdmin._ACCOUNTS_LIST_VIEW});     //ZaZimbraAdmin._ACCOUNT_LIST_VIEW
         acctitem.setData("TreeItemType", ZaItem.ACCOUNT);
         tree.addTreeItemData(acctitem);
@@ -866,6 +869,7 @@ function() {
                                 id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_HOME,null, "aliaLstHV"),
                                 text: ZaMsg.OVP_aliases,
                                 count: 0,
+                                canShowOnRoot: false,
                                 mappingId: ZaZimbraAdmin._ALIASES_LIST_VIEW});
         aliaitem.setData("TreeItemType", ZaItem.ALIAS);
         tree.addTreeItemData(aliaitem);
@@ -875,6 +879,7 @@ function() {
                                 id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_HOME,null, "aliaLstHV"),
                                 text: ZaMsg.OVP_distributionLists,
                                 count: 0,
+                                canShowOnRoot: false,
                                 mappingId: ZaZimbraAdmin._DISTRIBUTION_LISTS_LIST_VIEW});
         dlitem.setData("TreeItemType", ZaItem.DL);
         tree.addTreeItemData(dlitem);
@@ -884,6 +889,7 @@ function() {
                                 id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_HOME,null, "aliaLstHV"),
                                 text: ZaMsg.OVP_resources,
                                 count: 0,
+                                canShowOnRoot: false,
                                 mappingId: ZaZimbraAdmin._RESOURCE_VIEW});
         resourceitem.setData("TreeItemType", ZaItem.RESOURCE);
         tree.addTreeItemData(resourceitem);
