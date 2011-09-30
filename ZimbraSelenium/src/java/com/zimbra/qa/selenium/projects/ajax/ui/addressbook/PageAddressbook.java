@@ -326,9 +326,9 @@ public class PageAddressbook extends AbsTab {
 	
 		} else if ( button == Button.B_DELETE ) {
 
-			String id = "zb__CNS__DELETE_left_icon";
+			String id = "zb__CNS-main__DELETE";
 
-			if (sIsElementPresent("css=td#" + id + " div[class*=ZDisabledImage]")) {
+			if (this.zIsElementDisabled("css=div#" + id)) {
 				throw new HarnessException("Tried clicking on "+ button +" but it was disabled "+ id);
 			}
 
@@ -336,10 +336,10 @@ public class PageAddressbook extends AbsTab {
 
 		} else if ( button == Button.B_EDIT ) {
 
-			String id = "zb__CNS__EDIT_left_icon";
+			String id = "zb__CNS-main__EDIT";
 
 			
-			if (sIsElementPresent("css=td#" + id + " div[class*=ZDisabledImage]")) {
+			if (zIsElementDisabled("css=div#" + id )) {
 				throw new HarnessException("Tried clicking on "+ button +" but it was disabled "+ id);
 			}
 
@@ -357,9 +357,9 @@ public class PageAddressbook extends AbsTab {
 		   locator = "id="+ id;
 		   page = new DialogMove(MyApplication, this);
 	    } else if ( button == Button.B_FORWARD) {
-		    String id = "zb__CNS__SEND_CONTACTS_IN_EMAIL_left_icon";
+		    String id = "zb__CNS-main__SEND_CONTACTS_IN_EMAIL";
 	
-		    if (sIsElementPresent("css=td#" + id + " div[class*=ZDisabledImage]")) {
+		    if (zIsElementDisabled("css=div#" + id)) {
 				throw new HarnessException("Tried clicking on "+ button +" but it was disabled ");
 			}
 		   locator = "id="+ id;
