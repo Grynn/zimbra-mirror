@@ -789,6 +789,7 @@ function() {
                                     id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_CONFIGURATION,null, ZaId.TREEITEM_COS),
                                     text: ZaMsg.OVP_cos,
                                     canShowOnRoot: false,
+                                    forceNode: false,
                                     mappingId: ZaZimbraAdmin._COS_LIST_VIEW});
         tree.addTreeItemData(ti);
         ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._COS_LIST_VIEW] = ZaOverviewPanelController.cosListTreeListener;
@@ -799,6 +800,7 @@ function() {
                                     id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_CONFIGURATION,null, ZaId.TREEITEM_DOMAINS),
                                     text: ZaMsg.OVP_domains,
                                     canShowOnRoot: false,
+                                    forceNode: false,
                                     mappingId: ZaZimbraAdmin._DOMAINS_LIST_VIEW});
         tree.addTreeItemData(ti);
         ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._DOMAINS_LIST_VIEW] = ZaOverviewPanelController.domainListTreeListener;
@@ -870,6 +872,7 @@ function() {
                                 text: ZaMsg.OVP_aliases,
                                 count: 0,
                                 canShowOnRoot: false,
+                                forceNode: false,
                                 mappingId: ZaZimbraAdmin._ALIASES_LIST_VIEW});
         aliaitem.setData("TreeItemType", ZaItem.ALIAS);
         tree.addTreeItemData(aliaitem);
@@ -880,6 +883,7 @@ function() {
                                 text: ZaMsg.OVP_distributionLists,
                                 count: 0,
                                 canShowOnRoot: false,
+                                forceNode: false,
                                 mappingId: ZaZimbraAdmin._DISTRIBUTION_LISTS_LIST_VIEW});
         dlitem.setData("TreeItemType", ZaItem.DL);
         tree.addTreeItemData(dlitem);
@@ -890,6 +894,7 @@ function() {
                                 text: ZaMsg.OVP_resources,
                                 count: 0,
                                 canShowOnRoot: false,
+                                forceNode: false,
                                 mappingId: ZaZimbraAdmin._RESOURCE_VIEW});
         resourceitem.setData("TreeItemType", ZaItem.RESOURCE);
         tree.addTreeItemData(resourceitem);

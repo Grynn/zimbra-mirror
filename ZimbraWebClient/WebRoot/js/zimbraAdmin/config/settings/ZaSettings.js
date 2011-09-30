@@ -568,6 +568,7 @@ ZaSettings.SKIN_TOOL_FOOTER_ID          = ZaSettings.SKIN_IDX++;
 ZaSettings.SKIN_SHELL_DOM_ID            = "skin_outer";
 
 ZaSettings.SKIN_LOGO_DOM_ID             = "skin_container_logo" ;
+ZaSettings.SKIN_TOASTER_DOM_ID          = "skin_container_toaster";
 ZaSettings.SKIN_SEARCH_DOM_ID           = "skin_container_search" ;
 ZaSettings.SKIN_REFRESH_DOM_ID          = "skin_container_refresh" ;
 ZaSettings.SKIN_PREVIOUS_DOM_ID         = "skin_container_previous";

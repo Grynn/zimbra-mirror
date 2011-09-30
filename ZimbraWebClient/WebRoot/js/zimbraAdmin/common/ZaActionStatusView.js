@@ -435,8 +435,11 @@ function() {
 ZaToast.prototype.__position =
 function() {
     var location = this._state.location || "C";
-    var containerId = "skin_container_app_tabs";
-
+    var containerId;
+    if (!appNewUI)
+        containerId= "skin_container_app_tabs";
+    else
+        containerId = "skin_container_toaster";
     var el = this.getHtmlElement();
     var container = Dwt.byId(containerId) || this.shell.getHtmlElement();
 

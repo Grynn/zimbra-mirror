@@ -896,7 +896,7 @@ function() {
  */
 ZaZimbraAdmin.prototype.setActionStatusMsg =
 function(params) {
-    if(!appNewUI) {
+    if(this.actionStatusView) {
 	    params = Dwt.getParams(arguments, ZaActionStatusView.MSG_PARAMS);
 	    this.actionStatusView.setStatusMsg(params);
     }
@@ -1038,6 +1038,7 @@ ZaZimbraAdmin.prototype._lauchNewApp =
 function() {
 	ZaSettings.TREE_ENABLED = (document.getElementById(ZaSettings.SKIN_TREE_DOM_ID)!=null);
 	ZaSettings.BANNER_ENABLED = (document.getElementById(ZaSettings.SKIN_LOGO_DOM_ID)!=null);
+    ZaSettings.TOASTER_ENABLED = (document.getElementById(ZaSettings.SKIN_TOASTER_DOM_ID)!=null);
 
     //console.log("Launching ZimbraAdmin Application ....") ;
     if (!this._app)
@@ -1077,6 +1078,9 @@ function() {
 		elements[ZaAppViewMgr.C_BANNER] = this._createBanner();
 	}
 
+    if (ZaSettings.TOASTER_ENABLED) {
+        this._createActionStatus();
+    }
     elements[ZaAppViewMgr.C_SEARCH] = ZaApp.getInstance().getSearchListController().getSearchPanel();
 
     this._header = elements[ZaAppViewMgr.C_TREE_TOP] = new ZaCrtAppTreeHeader(this._shell);
