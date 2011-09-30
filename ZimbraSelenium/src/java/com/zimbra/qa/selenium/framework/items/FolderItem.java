@@ -294,8 +294,9 @@ public class FolderItem extends com.zimbra.soap.mail.type.Folder implements IIte
 		account.soapSend("<GetFolderRequest xmlns='urn:zimbraMail'/>", destType, accountName);
 		String id = account.soapSelectValue("//mail:folder[@name='"+ name +"']", "id");
 
+		// cannot find folder name on the server
 		if (id == null) {
-         throw new HarnessException("Folder with name: " + name + " is not found...");
+           return null;
 		}
 
 		// Get just the folder specified

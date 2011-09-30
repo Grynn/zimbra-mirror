@@ -33,24 +33,13 @@ public class EditProperties extends AjaxCommonTest {
 		dialog.zSetNewName(name);
 		dialog.zClickButton(Button.B_OK);
 
-		//Verify created folder listed on the left menu
-		boolean isNewFolderDisplayed=false;
-		boolean isOldFolderDisplayed=false;
+		// Verify folder names created on the server
+		FolderItem folder = FolderItem.importFromSOAP(app.zGetActiveAccount(),oldName);
+		ZAssert.assertNull(folder, "Verify the old folder name not found on the server");
 		
-		List<FolderItem> list= app.zPageAddressbook.zListGetFolders(app.zGetActiveAccount(),parent);
-		for (FolderItem i: list) {
-			if (i.getName().equals(name)) {
-				isNewFolderDisplayed=true;			
-			}
-			else if (i.getName().equals(oldName)) {
-				isOldFolderDisplayed=true;			
-			}
-		}
-		
-		ZAssert.assertTrue(isNewFolderDisplayed, "Verify new folder (" + name + ") displayed ");		
-		ZAssert.assertFalse(isOldFolderDisplayed, "Verify old folder (" + oldName + ") not displayed ");		
-				
-
+		folder = FolderItem.importFromSOAP(app.zGetActiveAccount(),name);
+		ZAssert.assertNotNull(folder, "Verify the new folder name found on the server");		
+	
 	}
 
 	private void ChangeColorAndVerify(FolderItem folderItem, DialogEditFolder dialog) 

@@ -551,11 +551,11 @@ public class PageAddressbook extends AbsTab {
 				page = new FormContactGroupNew(this.MyApplication);		   
 		   }
 		   else if ( option == Button.O_NEW_TAG ) {			   
-		        optionLocator = "css=div#zb__CNS__NEW_MENU_NEW_TAG";
+		        optionLocator = "css=td#ztih__main_Contacts__TAG_headerCell";
 		        page = new DialogTag(this.MyApplication, this);
 		   }    
 		   else if ( option == Button.O_NEW_ADDRESSBOOK ) {					   
-			    optionLocator = "css=div#zb__CNS__NEW_MENU_NEW_ADDRBOOK";
+			    optionLocator = "css=td#ztih__main_Contacts__ADDRBOOK_headerCell td[id^=DWT][id$=title]";
 				page = new DialogCreateFolder(MyApplication, ((AppAjaxClient)MyApplication).zPageAddressbook);			    
 							    
 
