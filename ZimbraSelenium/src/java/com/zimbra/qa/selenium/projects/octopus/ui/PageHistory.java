@@ -132,12 +132,11 @@ public class PageHistory extends AbsTab {
 			throw new HarnessException("no logic defined for button " + button);
 		}
 
-		if (locator == null) {
-			throw new HarnessException("locator was null for button " + button);
-		}
-
+		/*
+		 * if (locator == null) { throw new
+		 * HarnessException("locator was null for button " + button); }
+		 */
 		// Default behavior, process the locator by clicking on it
-		//
 
 		// Make sure the button exists
 		if (!this.sIsElementPresent(locator))

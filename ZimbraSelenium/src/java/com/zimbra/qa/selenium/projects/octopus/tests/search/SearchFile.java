@@ -18,11 +18,11 @@ public class SearchFile extends OctopusCommonTest {
 	public SearchFile() {
 		logger.info("New " + SearchFile.class.getCanonicalName());
 
-		// test starts at the My Files tab
+		// test starts at the Search tab
 		super.startingPage = app.zPageSearch;
 		super.startingAccountPreferences = null;
 	}
-	
+
 	@BeforeMethod(groups = { "always" })
 	public void testReset() {
 		_folderName = null;
@@ -31,7 +31,6 @@ public class SearchFile extends OctopusCommonTest {
 		_fileAttached = false;
 	}
 
-	
 	@Test(description = "Upload file through RestUtil - verify by searching file through SOAP", groups = { "smoke" })
 	public void SearchFile_01() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
@@ -72,7 +71,7 @@ public class SearchFile extends OctopusCommonTest {
 
 		FolderItem trash = FolderItem.importFromSOAP(account,
 				SystemFolder.Trash);
-		
+
 		ZAssert.assertNotNull(trash, "Verify the trash is available");
 
 		// Create file item
@@ -80,7 +79,6 @@ public class SearchFile extends OctopusCommonTest {
 				+ "/data/public/other/putty.log";
 
 		FileItem file = new FileItem(filePath);
-
 		String fileName = file.getName();
 
 		// Upload file to server through RestUtil
@@ -89,15 +87,9 @@ public class SearchFile extends OctopusCommonTest {
 		// Save uploaded file to the root folder through SOAP
 		account.soapSend(
 
-		"<SaveDocumentRequest xmlns='urn:zimbraMail'>" +
-
-		"<doc l='" + briefcaseRootFolder.getId() + "'>" +
-
-		"<upload id='" + attachmentId + "'/>" +
-
-		"</doc>" +
-
-		"</SaveDocumentRequest>");
+		"<SaveDocumentRequest xmlns='urn:zimbraMail'>" + "<doc l='"
+				+ briefcaseRootFolder.getId() + "'>" + "<upload id='"
+				+ attachmentId + "'/></doc>" + "</SaveDocumentRequest>");
 
 		_fileAttached = true;
 		_fileId = account.soapSelectValue(
@@ -110,13 +102,13 @@ public class SearchFile extends OctopusCommonTest {
 		app.zPageOctopus.deleteFileUsingSOAP(_fileId, account);
 
 		SleepUtil.sleepSmall();
-		
+
 		// Verify by search file in Trash using SOAP
-		ZAssert.assertEquals(_fileId, app.zPageOctopus.searchFileIn(fileName, trash.getName()),
+		ZAssert.assertEquals(_fileId,
+				app.zPageOctopus.searchFileIn(fileName, trash.getName()),
 				"Verify file is returned by search");
 	}
-	
-	
+
 	@AfterMethod(groups = { "always" })
 	public void testCleanup() {
 		if (_folderIsCreated) {
@@ -135,7 +127,8 @@ public class SearchFile extends OctopusCommonTest {
 		if (_fileAttached && _fileId != null) {
 			try {
 				// Delete it from Server
-				app.zPageOctopus.deleteFileUsingSOAP(_fileId, app.zGetActiveAccount());
+				app.zPageOctopus.deleteFileUsingSOAP(_fileId,
+						app.zGetActiveAccount());
 			} catch (Exception e) {
 				logger.info("Failed while deleting the file");
 				e.printStackTrace();

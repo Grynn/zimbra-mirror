@@ -196,17 +196,23 @@ public class PageOctopus extends AbsTab {
 		//
 
 		if (button == Button.B_TAB_MY_FILES) {
-			// Check if the button is disabled
 			locator = Locators.zTabMyFiles.locator;
 			page = new PageMyFiles(MyApplication);
 		} else if (button == Button.B_TAB_SHARING) {
-			// Check if the button is disabled
 			locator = Locators.zTabSharing.locator;
 			page = new PageSharing(MyApplication);
+		} else if (button == Button.B_TAB_FAVORITES) {
+			locator = Locators.zTabFavorites.locator;
+			page = new PageFavorites(MyApplication);
+		} else if (button == Button.B_TAB_HISTORY) {
+			locator = Locators.zTabHistory.locator;
+			page = new PageHistory(MyApplication);
 		} else if (button == Button.B_TAB_TRASH) {
-			// Check if the button is disabled
 			locator = Locators.zTabTrash.locator;
 			page = new PageTrash(MyApplication);
+		} else if (button == Button.B_TAB_SEARCH) {
+			locator = Locators.zTabSearch.locator;
+			page = new PageSearch(MyApplication);
 		} else {
 			throw new HarnessException("no logic defined for button " + button);
 		}

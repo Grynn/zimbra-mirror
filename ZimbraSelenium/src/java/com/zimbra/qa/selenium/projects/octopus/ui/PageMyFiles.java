@@ -27,6 +27,8 @@ public class PageMyFiles extends AbsTab {
 				"css=div[class*=my-files-list-view]>div.my-files-list-item");
 		public static final Locators zDeleteFolderOption = new Locators(
 				"css=div[class^=sc-view sc-menu-item] a[class=menu-item]>span:contains(Delete)");
+		public static final Locators zMarkAsFavorite = new Locators(
+				"css=div[class^=sc-view sc-menu-item] a[class=menu-item]>span:contains(Favorite)");
 
 		public final String locator;
 
@@ -134,6 +136,19 @@ public class PageMyFiles extends AbsTab {
 
 			if (option == Button.O_DELETE) {
 				optionLocator = Locators.zDeleteFolderOption.locator;
+
+				if (!this.zWaitForElementPresent(optionLocator, "2000"))
+					throw new HarnessException("Button is not present locator="
+							+ optionLocator);
+
+				this.sClickAt(optionLocator, "0,0");
+
+				// If the app is busy, wait for it to become active
+				zWaitForBusyOverlay();
+
+				return page;
+			} else if (option == Button.O_FAVORITE) {
+				optionLocator = Locators.zMarkAsFavorite.locator;
 
 				if (!this.zWaitForElementPresent(optionLocator, "2000"))
 					throw new HarnessException("Button is not present locator="

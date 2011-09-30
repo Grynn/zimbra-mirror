@@ -17,23 +17,22 @@ public class PageSearch extends AbsTab {
 		public static final Locators zTabSearchSelected = new Locators(
 				"css=div[class^=octopus-tab sc-collection-item sel]>div.octopus-tab-label:contains(Search)");
 		public static final Locators zSearchHeader = new Locators(
-		"css=div[id=search-header-view]");
+				"css=div[id=search-header-view]");
 		public static final Locators zSearchView = new Locators(
 				"css=div[id=octopus-search-view]");
 		public static final Locators zSearchNotificationListView = new Locators(
-		"css=ul[id=search-notification-pending-page-list-view]");
-		public static final Locators zSearchNotificationListItem =  new Locators(
+				"css=ul[id=search-notification-pending-page-list-view]");
+		public static final Locators zSearchNotificationListItem = new Locators(
 				"css=div[class=search-notification-list-item]");
-		public static final Locators zSearchItemsView =  new Locators(
-		"css=div[id=search-items-view]");
-		public static final Locators zSearchItemRow =  new Locators(
-		"css=div[class=search-item-row]");
-		public static final Locators zIgnoredItemsView =  new Locators(
-		"css=div[id=ignored-items-view]");
-		public static final Locators zIgnoredItemRow =  new Locators(
-		"css=div[class=search-item-row]");
-		
-		
+		public static final Locators zSearchItemsView = new Locators(
+				"css=div[id=search-items-view]");
+		public static final Locators zSearchItemRow = new Locators(
+				"css=div[class=search-item-row]");
+		public static final Locators zIgnoredItemsView = new Locators(
+				"css=div[id=ignored-items-view]");
+		public static final Locators zIgnoredItemRow = new Locators(
+				"css=div[class=search-item-row]");
+
 		public final String locator;
 
 		private Locators(String locator) {
@@ -62,8 +61,7 @@ public class PageSearch extends AbsTab {
 		boolean selected = sIsElementPresent(Locators.zTabSearchSelected.locator);
 
 		if (!selected) {
-			logger.debug("zIsActive(): "
-					+ selected);
+			logger.debug("zIsActive(): " + selected);
 			return (false);
 		}
 
@@ -91,7 +89,7 @@ public class PageSearch extends AbsTab {
 
 		String locator = Locators.zTabSearch.locator;
 
-		if(!zWaitForElementPresent(locator,"5000")){
+		if (!zWaitForElementPresent(locator, "5000")) {
 			throw new HarnessException(locator + " Not Present!");
 		}
 
@@ -103,8 +101,8 @@ public class PageSearch extends AbsTab {
 		zWaitForActive();
 	}
 
-	
-	public AbsPage zToolbarPressButton(Button button, IItem item) throws HarnessException {
+	public AbsPage zToolbarPressButton(Button button, IItem item)
+			throws HarnessException {
 		logger.info(myPageName() + " zToolbarPressButton(" + button + ")");
 
 		tracer.trace("Press the " + button + " button");
@@ -122,22 +120,25 @@ public class PageSearch extends AbsTab {
 
 		if (button == Button.B_ADD_TO_MY_FILES) {
 			// Check if the button is disabled
-			locator = Locators.zSearchNotificationListItem.locator + ":contains(" + item.getName() + ") button:contains(Add to My Files)";
-			
+			locator = Locators.zSearchNotificationListItem.locator
+					+ ":contains(" + item.getName()
+					+ ") button:contains(Add to My Files)";
+
 		} else if (button == Button.B_IGNORE) {
 			// Check if the button is disabled
-			locator = Locators.zSearchNotificationListItem.locator + ":contains(" + item.getName() + ") button:contains(Ignore)";
+			locator = Locators.zSearchNotificationListItem.locator
+					+ ":contains(" + item.getName()
+					+ ") button:contains(Ignore)";
 
 		} else {
 			throw new HarnessException("no logic defined for button " + button);
 		}
 
-		if (locator == null) {
-			throw new HarnessException("locator was null for button " + button);
-		}
-
+		/*
+		 * if (locator == null) { throw new
+		 * HarnessException("locator was null for button " + button); }
+		 */
 		// Default behavior, process the locator by clicking on it
-		//
 
 		// Make sure the button exists
 		if (!this.sIsElementPresent(locator))
@@ -152,8 +153,7 @@ public class PageSearch extends AbsTab {
 
 		return (page);
 	}
-	
-	
+
 	@Override
 	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
 		throw new HarnessException("Implement me");

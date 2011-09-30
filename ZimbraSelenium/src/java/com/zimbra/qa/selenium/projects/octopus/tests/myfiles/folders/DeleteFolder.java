@@ -48,7 +48,7 @@ public class DeleteFolder extends OctopusCommonTest {
 		ZAssert.assertNotNull(briefcaseSubFolder,
 				"Verify the subfolder is available");
 		
-		// refresh Octopus page
+		// click on My Files tab
 		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_MY_FILES);
 
 		SleepUtil.sleepVerySmall();

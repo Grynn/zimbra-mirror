@@ -176,7 +176,15 @@ public class Button {
 	public static final Button B_IGNORE =  new Button("B_IGNORE");
 	public static final Button B_ADD_TO_MY_FILES = new Button("B_ADD_TO_MY_FILES");
 
+	public static final Button B_TAB_FAVORITES = new Button("B_TAB_FAVORITES");
+	public static final Button O_FAVORITE =  new Button("O_FAVORITE");
+	public static final Button O_NOT_FAVORITE =  new Button("O_NOT_FAVORITE");
+
+	public static final Button B_TAB_HISTORY = new Button("B_TAB_HISTORY");
+
 	public static final Button B_TAB_TRASH = new Button("B_TAB_TRASH");
+	
+	public static final Button B_TAB_SEARCH = new Button("B_TAB_SEARCH");
 
 	//Briefcase buttons
 	public static final Button B_UPLOAD_FILE = new Button("B_UPLOAD_FILE");

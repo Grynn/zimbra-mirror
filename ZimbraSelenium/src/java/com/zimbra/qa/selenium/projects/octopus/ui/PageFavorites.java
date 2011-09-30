@@ -17,23 +17,22 @@ public class PageFavorites extends AbsTab {
 		public static final Locators zTabFavoritesSelected = new Locators(
 				"css=div[class^=octopus-tab sc-collection-item sel]>div.octopus-tab-label:contains(Favorites)");
 		public static final Locators zFavoritesHeader = new Locators(
-		"css=div[id=favorites-header-view]");
+				"css=div[id=favorites-header-view]");
 		public static final Locators zFavoritesView = new Locators(
 				"css=div[id=octopus-favorites-view]");
 		public static final Locators zFavoritesNotificationListView = new Locators(
-		"css=ul[id=favorites-notification-pending-page-list-view]");
-		public static final Locators zFavoritesNotificationListItem =  new Locators(
+				"css=ul[id=favorites-notification-pending-page-list-view]");
+		public static final Locators zFavoritesNotificationListItem = new Locators(
 				"css=div[class=favorites-notification-list-item]");
-		public static final Locators zFavoritesItemsView =  new Locators(
-		"css=div[id=favorites-items-view]");
-		public static final Locators zFavoritesItemRow =  new Locators(
-		"css=div[class=favorites-item-row]");
-		public static final Locators zIgnoredItemsView =  new Locators(
-		"css=div[id=ignored-items-view]");
-		public static final Locators zIgnoredItemRow =  new Locators(
-		"css=div[class=favorites-item-row]");
-		
-		
+		public static final Locators zFavoritesItemsView = new Locators(
+				"css=div[id=favorites-items-view]");
+		public static final Locators zFavoritesItemRow = new Locators(
+				"css=div[class=favorites-item-row]");
+		public static final Locators zIgnoredItemsView = new Locators(
+				"css=div[id=ignored-items-view]");
+		public static final Locators zIgnoredItemRow = new Locators(
+				"css=div[class=favorites-item-row]");
+
 		public final String locator;
 
 		private Locators(String locator) {
@@ -62,8 +61,7 @@ public class PageFavorites extends AbsTab {
 		boolean selected = sIsElementPresent(Locators.zTabFavoritesSelected.locator);
 
 		if (!selected) {
-			logger.debug("zIsActive(): "
-					+ selected);
+			logger.debug("zIsActive(): " + selected);
 			return (false);
 		}
 
@@ -91,7 +89,7 @@ public class PageFavorites extends AbsTab {
 
 		String locator = Locators.zTabFavorites.locator;
 
-		if(!zWaitForElementPresent(locator,"5000")){
+		if (!zWaitForElementPresent(locator, "5000")) {
 			throw new HarnessException(locator + " Not Present!");
 		}
 
@@ -103,8 +101,8 @@ public class PageFavorites extends AbsTab {
 		zWaitForActive();
 	}
 
-	
-	public AbsPage zToolbarPressButton(Button button, IItem item) throws HarnessException {
+	public AbsPage zToolbarPressButton(Button button, IItem item)
+			throws HarnessException {
 		logger.info(myPageName() + " zToolbarPressButton(" + button + ")");
 
 		tracer.trace("Press the " + button + " button");
@@ -122,22 +120,25 @@ public class PageFavorites extends AbsTab {
 
 		if (button == Button.B_ADD_TO_MY_FILES) {
 			// Check if the button is disabled
-			locator = Locators.zFavoritesNotificationListItem.locator + ":contains(" + item.getName() + ") button:contains(Add to My Files)";
-			
+			locator = Locators.zFavoritesNotificationListItem.locator
+					+ ":contains(" + item.getName()
+					+ ") button:contains(Add to My Files)";
+
 		} else if (button == Button.B_IGNORE) {
 			// Check if the button is disabled
-			locator = Locators.zFavoritesNotificationListItem.locator + ":contains(" + item.getName() + ") button:contains(Ignore)";
+			locator = Locators.zFavoritesNotificationListItem.locator
+					+ ":contains(" + item.getName()
+					+ ") button:contains(Ignore)";
 
 		} else {
 			throw new HarnessException("no logic defined for button " + button);
 		}
 
-		if (locator == null) {
-			throw new HarnessException("locator was null for button " + button);
-		}
-
+		/*
+		 * if (locator == null) { throw new
+		 * HarnessException("locator was null for button " + button); }
+		 */
 		// Default behavior, process the locator by clicking on it
-		//
 
 		// Make sure the button exists
 		if (!this.sIsElementPresent(locator))
@@ -152,8 +153,7 @@ public class PageFavorites extends AbsTab {
 
 		return (page);
 	}
-	
-	
+
 	@Override
 	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
 		throw new HarnessException("Implement me");

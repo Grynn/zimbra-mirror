@@ -24,9 +24,9 @@ public class PageTrash extends AbsTab {
 		public static final Locators zNewFolderOption = new Locators(
 				"css=div[class^=octopus-template-context-menu-item action-new-folder]:contains(New Folder)");
 		public static final Locators zMyFilesListViewItems = new Locators(
-		"css=div[class*=my-files-list-view]>div.my-files-list-item");
+				"css=div[class*=my-files-list-view]>div.my-files-list-item");
 		public static final Locators zDeleteFolderOption = new Locators(
-		"css=div[class^=sc-view sc-menu-item] a[class=menu-item]>span:contains(Delete)");
+				"css=div[class^=sc-view sc-menu-item] a[class=menu-item]>span:contains(Delete)");
 
 		public final String locator;
 
@@ -84,7 +84,7 @@ public class PageTrash extends AbsTab {
 
 		String locator = Locators.zTabTrash.locator;
 
-		if(!zWaitForElementPresent(locator,"5000")){
+		if (!zWaitForElementPresent(locator, "5000")) {
 			throw new HarnessException(locator + " Not Present!");
 		}
 
@@ -201,46 +201,40 @@ public class PageTrash extends AbsTab {
 		}
 
 		// Default behavior
-		if (pulldownLocator != null) {
-
-			// Make sure the locator exists
-			if (!this.sIsElementPresent(pulldownLocator)) {
-				throw new HarnessException("Button " + pulldown + " option "
-						+ option + " pulldownLocator " + pulldownLocator
-						+ " not present!");
-			}
-
-			zClick(pulldownLocator);
-
-			// If the app is busy, wait for it to become active
-			zWaitForBusyOverlay();
-		}
-
-		if (optionLocator != null) {
-
-			// Make sure the locator exists
-			if (!this.sIsElementPresent(optionLocator)) {
-				throw new HarnessException("Button " + pulldown + " option "
-						+ option + " optionLocator " + optionLocator
-						+ " not present!");
-			}
-
-			this.sClick(optionLocator);
-
-			// If the app is busy, wait for it to become active
-			zWaitForBusyOverlay();
-		}
-
-		// If we click on pulldown/option and the page is specified, then
-		// wait for the page to go active
-		if (page != null) {
-			page.zWaitForActive();
-		}
-
+		/*
+		 * if (pulldownLocator != null) {
+		 * 
+		 * // Make sure the locator exists if
+		 * (!this.sIsElementPresent(pulldownLocator)) { throw new
+		 * HarnessException("Button " + pulldown + " option " + option +
+		 * " pulldownLocator " + pulldownLocator + " not present!"); }
+		 * 
+		 * zClick(pulldownLocator);
+		 * 
+		 * // If the app is busy, wait for it to become active
+		 * zWaitForBusyOverlay(); }
+		 * 
+		 * if (optionLocator != null) {
+		 * 
+		 * // Make sure the locator exists if
+		 * (!this.sIsElementPresent(optionLocator)) { throw new
+		 * HarnessException("Button " + pulldown + " option " + option +
+		 * " optionLocator " + optionLocator + " not present!"); }
+		 * 
+		 * this.sClick(optionLocator);
+		 * 
+		 * // If the app is busy, wait for it to become active
+		 * zWaitForBusyOverlay(); }
+		 * 
+		 * // If we click on pulldown/option and the page is specified, then //
+		 * wait for the page to go active if (page != null) {
+		 * page.zWaitForActive(); }
+		 */
+		
 		// Return the specified page, or null if not set
 		return (page);
 	}
-	
+
 	public boolean zIsItemInTrash(IItem item) throws HarnessException {
 		List<String> folders = zGetListViewItems();
 		String name = item.getName();
@@ -268,7 +262,6 @@ public class PageTrash extends AbsTab {
 		}
 		return items;
 	}
-	
 
 	@Override
 	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
