@@ -5,8 +5,8 @@ import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.DialogCreateBriefcaseFolder;
+import com.zimbra.qa.selenium.projects.desktop.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.desktop.ui.briefcase.DialogCreateBriefcaseFolder;
 
 public class CreateFolder extends AjaxCommonTest {
 
@@ -138,8 +138,8 @@ public class CreateFolder extends AjaxCommonTest {
 		_folderName = "folder" + ZimbraSeleniumProperties.getUniqueString();
 
 		// Create a new briefcase folder using right click context menu + New Briefcase
-		DialogCreateBriefcaseFolder dialog = (DialogCreateBriefcaseFolder) app.zPageBriefcase
-				.zToolbarPressPulldown(Button.B_NEW, Button.O_NEW_BRIEFCASE, null);
+		DialogCreateBriefcaseFolder dialog = (DialogCreateBriefcaseFolder) app.zTreeBriefcase
+				.zTreeItem(Action.A_RIGHTCLICK, Button.B_TREE_NEWFOLDER,briefcaseRootFolder);
 
 		ZAssert.assertNotNull(dialog, "Verify the new dialog opened");
 
