@@ -5,6 +5,7 @@ using System.Text;
 //using MVVM;
 //using Exchange;
 using System.IO;
+using System.Reflection;
 
 namespace CssLib
 {
@@ -25,6 +26,10 @@ namespace CssLib
              get { return m_UserMapFile; }
              set { m_UserMapFile = value; }
          }*/
+
+
+        
+
         string m_MailClient;
 
 
@@ -42,6 +47,8 @@ namespace CssLib
             Contacts = 2,
             Calendar = 3
         };
+
+        
 
 
         public string MailClient
@@ -592,6 +599,123 @@ namespace CssLib
 
         }
 
+        //This code is for loading the exchange.dll at runtime instead of adding it as a reference.
+        // We will use this code after the Com itnerfaces get finalised and no more changes are required for the COM and MAPI libraires.
+
+               
+            //Type userobject;
+              //  object userinstance ;
+             
+
+                public void testCSMigrationwrapper()
+                {
+
+                  //   The following commented code tries to build the Assembly out of com dlls @ runtime instead of referencing to it at compile time.
+
+                    /*           private enum RegKind
+                  {
+                      RegKind_Default = 0,
+                      RegKind_Register = 1,
+                      RegKind_None = 2
+                  }
+
+                  [DllImport("oleaut32.dll", CharSet = CharSet.Unicode, PreserveSig = false)]
+                  private static extern void LoadTypeLibEx(String strTypeLibName, RegKind regKind,
+                      [MarshalAs(UnmanagedType.Interface)] out Object typeLib);
+
+                     
+                     Object typeLib;
+                      LoadTypeLibEx(@"C:\Users\knuthi\Documents\Visual Studio 2010\Projects\TestRegFree\Debug\TestRegFree.dll", RegKind.RegKind_None, out typeLib);
+
+                      if (typeLib == null)
+                      {
+                          Console.WriteLine("LoadTypeLibEx failed.");
+                          return;
+                      }
+
+                      TypeLibConverter converter = new TypeLibConverter();
+                      ConversionEventHandler eventHandler = new ConversionEventHandler();
+
+
+                      System.Reflection.Emit.AssemblyBuilder ab = conv.ConvertTypeLibToAssembly(typeLib, "exploretest.dll",
+          0, eventHandler, null, null, false);
+                      // Save out the Assembly into the cache
+                      // Filename should identical
+                      ab.Save("exploretest.dll");
+          */
+                    Type userobject;
+                    object userinstance ;
+                    //Assembly testAssembly = Assembly.LoadFile(@"C:\Users\knuthi\Documents\Visual Studio 2010\Projects\TestRegClint\TestRegClint\bin\Debug\exploretest.dll");
+                    Assembly testAssembly = Assembly.LoadFile(@"C:\Code\zimbra\main\ZimbraMigrationTools\src\c\Win32\dbg\interop.Exchange.dll");
+
+                    Type[] types = testAssembly.GetTypes();
+
+                    Type calcType = testAssembly.GetType("Exchange.MapiWrapperClass");
+
+                    object calcInstance = Activator.CreateInstance(calcType);
+
+
+
+                    //object o = null;
+                    ParameterModifier pm = new ParameterModifier(1);
+                    pm[0] = true;
+                    ParameterModifier[] mods = { pm };
+
+                    object[] MyArgs = new object[3];
+                    MyArgs[0] = "10.20.136.140";
+                    MyArgs[1] = "7071";
+                    MyArgs[2] = "MyAdmin";
+
+
+                    string value = (string)calcType.InvokeMember("ConnectToServer",
+              BindingFlags.InvokeMethod | BindingFlags.Instance | BindingFlags.Public,
+              null, calcInstance, MyArgs, mods, null, null);
+
+
+
+                    Console.WriteLine(MyArgs[0]);
+                    Console.ReadLine();
+
+                    userobject = testAssembly.GetType("Exchange.UserObjectClass");
+                    userinstance = Activator.CreateInstance(userobject);
+           
+
+                    api = new ZimbraAPI();
+                }
+         
+           public void testStartMigration(MigrationAccount Acct, bool UIflag = true)
+                {
+               Type userobject;
+             object userinstance ;
+               Assembly testAssembly = Assembly.LoadFile(@"C:\Code\zimbra\main\ZimbraMigrationTools\src\c\Win32\dbg\interop.Exchange.dll");
+
+                userobject = testAssembly.GetType("Exchange.UserObjectClass");
+                userinstance = Activator.CreateInstance(userobject);
+
+                    //GetListofMapiFolders(Acct.Accountname);
+
+                    if (!UIflag)
+                    {
+
+                        ParameterModifier pm = new ParameterModifier(1);
+                        pm[0] = true;
+                        ParameterModifier[] mods = { pm };
+
+                        object[] MyArgs = new object[4];
+                        MyArgs[0] = "";
+                        MyArgs[1] = "";
+                        MyArgs[2] = Acct.AccountID;
+                        MyArgs[3] = "MAPI";
+
+
+                        string value = (string)userobject.InvokeMember("InitializeUser",
+                  BindingFlags.InvokeMethod | BindingFlags.Instance | BindingFlags.Public,
+                  null, userinstance, MyArgs, mods, null, null);
+                }
+                
+           }
     }
 
-}
+
+    }
+
