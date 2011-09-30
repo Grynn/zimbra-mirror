@@ -589,5 +589,61 @@ public class DeleteTask extends AjaxCommonTest {
 		ZAssert.assertEquals(nodes.length, 0, "Verify the task3 is not in the  tasks/trash");
 
 	}
+	@Test(	description = "Create task through SOAP - delete using Backspace Key & verify through GUI",
+			groups = { "functional" } )
+	public void DeleteTask_09() throws HarnessException {
+		
+		FolderItem taskFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Tasks);
+		
+		// Create a basic task to delete
+		String subject = "task"+ ZimbraSeleniumProperties.getUniqueString();
+				
+		app.zGetActiveAccount().soapSend(
+				"<CreateTaskRequest xmlns='urn:zimbraMail'>" +
+					"<m >" +
+			        	"<inv>" +
+			        		"<comp name='"+ subject +"'>" +
+			        			"<or a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
+			        		"</comp>" +
+			        	"</inv>" +
+			        	"<su>"+ subject +"</su>" +
+			        	"<mp ct='text/plain'>" +
+			        		"<content>content"+ ZimbraSeleniumProperties.getUniqueString() +"</content>" +
+			        	"</mp>" +
+					"</m>" +
+				"</CreateTaskRequest>");
+
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+
+		TaskItem task = TaskItem.importFromSOAP(app.zGetActiveAccount(), subject);
+		ZAssert.assertNotNull(task, "Verify the task is created");
+		
+		// Refresh the tasks view
+		app.zPageTasks.zToolbarPressButton(Button.B_REFRESH);
+		app.zTreeTasks.zTreeItem(Action.A_LEFTCLICK, taskFolder);
+						
+		// Select the item
+		app.zPageTasks.zListItem(Action.A_MAIL_CHECKBOX, subject);
+
+		
+		// Use Backspace Keyboard Shortcut
+		app.zPageTasks.zKeyboardShortcut(Shortcut.S_BACKSPACE);
+		
+		
+		List<TaskItem> tasks = app.zPageTasks.zGetTasks();
+		ZAssert.assertNotNull(tasks, "Verify the task list exists");
+
+		TaskItem found = null;
+		for (TaskItem t : tasks) {
+			logger.info("Subject: looking for "+ subject +" found: "+ t.gSubject);
+			if ( subject.equals(t.gSubject) ) {
+				found = t;
+				break;
+			}
+		}
+		ZAssert.assertNull(found, "Verify the task is no longer present");
+	
+	}
+
 
 }
