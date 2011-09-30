@@ -175,4 +175,100 @@ public class DragAndDropMessage extends AjaxCommonTest {
       }
       ZAssert.assertNull(zcsMailAfterMove, "Verifying Mail Item on ZCS server after being moved to local folders");
 	}
+
+	@Test(  description = "Drag and Drop a message from ZCS Inbox to local mail subfolder",
+	groups = { "functional" })
+	public void DndMessageFromZimbraAccountToLocalMailSubfolder() throws HarnessException {
+
+	   String subject = "subject"+ ZimbraSeleniumProperties.getUniqueString();
+	   String foldername = "folder"+ ZimbraSeleniumProperties.getUniqueString();
+	   String subfoldername = "subfolder"+ ZimbraSeleniumProperties.getUniqueString();
+
+	   // Create a folder under local to move the message into
+	   //
+	   FolderItem rootLocalFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(),
+	         SystemFolder.UserRoot, SOAP_DESTINATION_HOST_TYPE.CLIENT, ZimbraAccount.clientAccountName);
+
+	   app.zGetActiveAccount().soapSend(
+	         "<CreateFolderRequest xmlns='urn:zimbraMail'>" +
+	         "<folder name='" + foldername +"' l='"+ rootLocalFolder.getId() +"'/>" +
+	         "</CreateFolderRequest>",
+	         SOAP_DESTINATION_HOST_TYPE.CLIENT,
+	         ZimbraAccount.clientAccountName);
+
+	   GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageMail.zWaitForDesktopLoadingSpinner(5000);
+
+      FolderItem localFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(),
+	         foldername,
+	         SOAP_DESTINATION_HOST_TYPE.CLIENT,
+	         ZimbraAccount.clientAccountName);
+
+	   // Create local sub folder
+	   app.zGetActiveAccount().soapSend(
+	         "<CreateFolderRequest xmlns='urn:zimbraMail'>" +
+	         "<folder name='" + subfoldername +"' l='"+ localFolder.getId() +"'/>" +
+	         "</CreateFolderRequest>",
+	         SOAP_DESTINATION_HOST_TYPE.CLIENT,
+	         ZimbraAccount.clientAccountName);
+
+      GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageMail.zWaitForDesktopLoadingSpinner(5000);
+
+      FolderItem localSubfolder = FolderItem.importFromSOAP(app.zGetActiveAccount(),
+            subfoldername,
+            SOAP_DESTINATION_HOST_TYPE.CLIENT,
+            ZimbraAccount.clientAccountName);
+
+	   // Send a message to the account
+	   ZimbraAccount.AccountA().soapSend(
+	         "<SendMsgRequest xmlns='urn:zimbraMail'>" +
+	         "<m>" +
+	         "<e t='t' a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
+	         "<su>"+ subject +"</su>" +
+	         "<mp ct='text/plain'>" +
+	         "<content>content"+ ZimbraSeleniumProperties.getUniqueString() +"</content>" +
+	         "</mp>" +
+	         "</m>" +
+	         "</SendMsgRequest>");
+
+	   // Click Get Mail button
+	   app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+
+	   FolderItem inbox = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Inbox);
+	   app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, inbox);
+
+	   // Get the mail item for the new message
+	   MailItem mail = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject +")");
+
+	   // Select the item
+	   app.zPageMail.zDragAndDrop(
+	         "css=td[id$='"+ mail.getId() +"__su']",
+	         "css=div[id^='zti__" + ZimbraAccount.clientAccountName + ":main_Mail__" + localSubfolder.getId() +"']"); 
+
+	   Toaster toast = app.zPageMain.zGetToaster();
+	   String toastMsg = toast.zGetToastMessage();
+	   ZAssert.assertStringContains(toastMsg, "1 message moved to \"" + subfoldername + "\"", "Verify toast message" );
+	   GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+	   app.zPageMail.zWaitForDesktopLoadingSpinner(5000);
+
+	   MailItem.importFromSOAP(app.zGetActiveAccount(),
+	         "subject:("+ subject +")",
+	         SOAP_DESTINATION_HOST_TYPE.CLIENT,
+	         ZimbraAccount.clientAccountName);
+
+	   String folderId = app.zGetActiveAccount().soapSelectValue("//mail:m", "l");
+
+	   ZAssert.assertEquals(folderId, localSubfolder.getId(), "Verify the local folder ID that the message was moved into");
+
+	   // Verifying that ZCS returns null when querying the same message
+	   MailItem zcsMailAfterMove = null;
+
+	   try {
+	      zcsMailAfterMove = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject +")");
+	   } catch (HarnessException he) {
+	      // This is expected because zcsMailAfterMove is supposed to be null
+	   }
+	   ZAssert.assertNull(zcsMailAfterMove, "Verifying Mail Item on ZCS server after being moved to local folders");
+	}
 }
