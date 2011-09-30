@@ -64,6 +64,7 @@ public class FormTaskNew extends AbsForm {
 		public static final Field Location = new Field("Location");
 		public static final Field Body = new Field("Body");
 		public static final Field HtmlBody = new Field("HtmlBody");
+		public static final Field DueDate = new Field("DueDate");
 		
 		private String field;
 		private Field(String name) {
@@ -310,7 +311,14 @@ public class FormTaskNew extends AbsForm {
 			}
 			return;
 
-		} else {
+		}else if (field == Field.DueDate) {
+			locator = "css=input[id$='_endDateField']";
+			this.sFocus(locator);
+			this.zClick(locator);
+			sType(locator, value);
+
+			return;
+		}else {
 
 			throw new HarnessException("not implemented for field " + field);
 		}

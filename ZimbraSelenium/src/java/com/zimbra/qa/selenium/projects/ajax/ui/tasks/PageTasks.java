@@ -918,6 +918,10 @@ public class PageTasks extends AbsTab {
 			page = new DialogMove(MyApplication, this);
 
 			keyCode = "77";
+		}else if ( shortcut == Shortcut.S_BACKSPACE ) {			
+			page= null;
+			keyCode= "8";
+			
 		}else{
 			throw new HarnessException("implement shortcut: " + shortcut);
 		}

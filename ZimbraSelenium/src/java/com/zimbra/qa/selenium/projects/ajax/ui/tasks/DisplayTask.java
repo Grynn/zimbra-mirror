@@ -172,6 +172,45 @@ public class DisplayTask extends AbsDisplay {
 		
 	}
 
+	public String zGetTaskListViewProperty(Field field) throws HarnessException {
+		String locator = "css=div[id='zl__TKL__rows'] div[id^='zli__TKL'] tr[id^='zlif__TKL']";
+
+		if (field == Field.Subject) {
+		
+			locator += " div[id$='__su']";
+
+		} else if (field == Field.Status) {
+
+			locator += " td[id$='__st']";
+
+		} else if (field == Field.Percentage) {
+
+			locator += " td[id$='__pc']";
+
+		} else if (field == Field.DueDate) {
+
+			locator += " td[id$='__dt']";
+
+		} else {
+
+			throw new HarnessException("no logic defined for field " + field);
+
+		}
+
+		// Make sure something was set
+		if (locator == null)
+			throw new HarnessException("locator was null for field = " + field);
+
+
+		// Get the subject value
+		String value = this.sGetText(locator).trim();
+
+		logger.info(myPageName() + ".zGetTaskListViewProperty(" + field
+				+ ") = " + value);
+		return (value);
+
+	}
+
 
 
 
