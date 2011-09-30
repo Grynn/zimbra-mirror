@@ -39,7 +39,7 @@ public class SeparateWindowDisplayMail extends AbsSeparateWindow {
 	public String zGetMailProperty(Field field) throws HarnessException {
 		logger.info(myPageName() + " zGetDisplayedValue(" + field + ")");
 
-		String container = "css=div[id='zv__MSG1__MSG']";
+		String container = "css=div[id='zv__MSG-1__MSG']";
 		String locator = null;
 		
 		if ( field == Field.From ) {
@@ -93,7 +93,7 @@ public class SeparateWindowDisplayMail extends AbsSeparateWindow {
 
 		} else if ( field == Field.Subject ) {
 			
-			locator = container + " tr[id='zv__MSG__MSG1_hdrTableTopRow'] td[class~='SubjectCol']";
+			locator = container + " tr[id='zv__MSG__MSG-1_hdrTableTopRow'] td[class~='SubjectCol']";
 			
 		} else if ( field == Field.ReceivedDate ) {
 			
@@ -163,7 +163,7 @@ public class SeparateWindowDisplayMail extends AbsSeparateWindow {
 		
 		// Sometimes it takes a while for the separate window to load
 		// Look for the subject before returning
-		String locator = "css=div[id='zv__MSG1__MSG'] tr[id='zv__MSG__MSG1_hdrTableTopRow'] td[class*='SubjectCol']";
+		String locator = "css=div[id='zv__MSG-1__MSG'] tr[id='zv__MSG__MSG-1_hdrTableTopRow'] td[class*='SubjectCol']";
 		for(int i = 0; i < 30; i++) {
 
 			boolean present = sIsElementPresent(locator);

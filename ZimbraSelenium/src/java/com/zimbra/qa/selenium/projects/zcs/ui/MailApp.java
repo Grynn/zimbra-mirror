@@ -44,7 +44,7 @@ public class MailApp extends AppPage {
 
 	public static String zFoldersNewFolderDlg = "id=ztih__ZmNewFolderDialog__FOLDER_textCell";
 
-	public static final String zNewIconBtn = "id=zb__TV__NEW_MENU_left_icon";
+	public static final String zNewIconBtn = "id=zb__TV-main__NEW_MENU_left_icon";
 	public static final String zNewMenuIconBtn = "id=zb__CLV__NEW_MENU_left_icon";
 	public static final String zNewMenuBtn = "id=zb__CLV__NEW_MENU";
 	public static final String zNewMenuDropDown = "id=zb__CLV__NEW_MENU_dropdown";
@@ -66,8 +66,8 @@ public class MailApp extends AppPage {
 	public static final String zJunkBtn = "id=zb__CLV__SPAM";
 	public static final String zTagIconBtn = "id=zb__CLV__TAG_MENU_left_icon";
 	public static final String zTagBtn = "id=zb__CLV__TAG_MENU";
-	public static final String zDetachIconBtn = "id=zb__TV__DETACH_left_icon";
-	public static final String zDetachBtn = "id=zb__TV__DETACH";
+	public static final String zDetachIconBtn = "id=zb__TV-main__DETACH_left_icon";
+	public static final String zDetachBtn = "id=zb__TV-main__DETACH";
 	public static final String zDetachIconBtn2 = "id=zb__CLV__DETACH_left_icon";
 	public static final String zDetachBtn2 = "id=zb__CLV__DETACH";
 	public static final String zDetachBtn_ComposedMessage = "id=zb__COMPOSE1__DETACH_COMPOSE";

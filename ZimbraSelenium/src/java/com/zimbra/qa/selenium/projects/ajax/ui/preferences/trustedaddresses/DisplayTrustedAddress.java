@@ -13,13 +13,13 @@ import com.zimbra.qa.selenium.projects.ajax.ui.mail.PageMail;
 public class DisplayTrustedAddress extends AbsDisplay {
 
 	public static class Locators {
-		public static final String zMsgViewDisplayImgLink = "css=a#zv__TV__MSG_displayImages_dispImgs";
-		public static final String zMsgViewDomainLink = "css=a#zv__TV__MSG_displayImages_domain";
-		public static final String zMsgViewWarningIcon = "css=div#zv__TV__MSG_displayImages.DisplayImages div div.ImgWarning";
+		public static final String zMsgViewDisplayImgLink = "css=a#zv__TV-main__MSG_displayImages_dispImgs";
+		public static final String zMsgViewDomainLink = "css=a#zv__TV-main__MSG_displayImages_domain";
+		public static final String zMsgViewWarningIcon = "css=div#zv__TV-main__MSG_displayImages.DisplayImages div div.ImgWarning";
 
-		public static final String zConViewDisplayImgLink = "css=a#zv__CLV2__MSG_displayImages_dispImgs";
-		public static final String zConViewDomainLink = "css=a#zv__CLV2__MSG_displayImages_domain";
-		public static final String zConViewWarningIcon = "css=div#zv__CLV2__MSG_displayImages.DisplayImages div div.ImgWarning";
+		public static final String zConViewDisplayImgLink = "css=a#zv__CLV2-main__MSG_displayImages_dispImgs";
+		public static final String zConViewDomainLink = "css=a#zv__CLV2-main__MSG_displayImages_domain";
+		public static final String zConViewWarningIcon = "css=div#zv__CLV2-main__MSG_displayImages.DisplayImages div div.ImgWarning";
 
 	}
 
@@ -52,10 +52,10 @@ public class DisplayTrustedAddress extends AbsDisplay {
 
 		String DisplayImgLink = null;
 		if (zimbraPrefGroupMailBy == "message") {
-			DisplayImgLink = sGetEval("selenium.browserbot.getCurrentWindow().document.getElementById('zv__TV__MSG_displayImages').style.display");
+			DisplayImgLink = sGetEval("selenium.browserbot.getCurrentWindow().document.getElementById('zv__TV-main__MSG_displayImages').style.display");
 			return DisplayImgLink;
 		} else if (zimbraPrefGroupMailBy == "conversation") {
-			DisplayImgLink = sGetEval("selenium.browserbot.getCurrentWindow().document.getElementById('zv__CLV2__MSG_displayImages').style.display");
+			DisplayImgLink = sGetEval("selenium.browserbot.getCurrentWindow().document.getElementById('zv__CLV2-main__MSG_displayImages').style.display");
 			return DisplayImgLink;
 		} else {
 			throw new HarnessException("no logic defined  ");

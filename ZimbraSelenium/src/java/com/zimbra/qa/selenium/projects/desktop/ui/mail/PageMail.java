@@ -46,12 +46,12 @@ public class PageMail extends AbsTab {
 
 		public static final String zFoldersNewFolderDlg = "id=ztih__ZmNewFolderDialog__FOLDER_textCell";
 
-		public static final String zNewIconBtn 			= "id=zb__TV__NEW_MENU_left_icon";
+		public static final String zNewIconBtn 			= "id=zb__TV-main__NEW_MENU_left_icon";
 		public static final String zNewMenuIconBtn 		= "id=zb__CLV__NEW_MENU_left_icon";
 		public static final String zNewMenuBtn 			= "id=zb__CLV__NEW_MENU";
 		public static final String zNewMenuDropDown 	= "id=zb__CLV__NEW_MENU_dropdown";
 		public static final String zGetMailIconBtnCLVID 	= "zb__CLV__CHECK_MAIL_left_icon";
-		public static final String zGetMailIconBtnTVID 		= "zb__TV__CHECK_MAIL_left_icon";
+		public static final String zGetMailIconBtnTVID 		= "zb__TV-main__CHECK_MAIL_left_icon";
 		public static final String zGetMailIconBtn 		= "id=zb__CLV__CHECK_MAIL_left_icon";
 		public static final String zGetMailBtn 			= "id=zb__CLV__CHECK_MAIL";
 		public static final String zDeleteIconBtnID 	= "zb__CLV__DELETE_left_icon";
@@ -71,8 +71,8 @@ public class PageMail extends AbsTab {
 		public static final String zTagIconBtn 			= "id=zb__CLV__TAG_MENU_left_icon";
 		public static final String zTagBtn 				= "id=zb__CLV__TAG_MENU";
 		public static final String zTagMenuDropdownBtnID	= "zb__CLV__TAG_MENU_dropdown";
-		public static final String zDetachIconBtnID		= "zb__TV__DETACH_left_icon";
-		public static final String zDetachBtn 			= "id=zb__TV__DETACH";
+		public static final String zDetachIconBtnID		= "zb__TV-main__DETACH_left_icon";
+		public static final String zDetachBtn 			= "id=zb__TV-main__DETACH";
 		public static final String zDetachIconBtn2 		= "id=zb__CLV__DETACH_left_icon";
 		public static final String zDetachBtn2 			= "id=zb__CLV__DETACH";
 		public static final String zDetachBtn_ComposedMessage = "id=zb__COMPOSE1__DETACH_COMPOSE";
@@ -81,7 +81,7 @@ public class PageMail extends AbsTab {
 		public static final String zViewMenuDropdownBtnID	= "zb__CLV__VIEW_MENU_dropdown";
 
 		public static final String zViewMenuCLVBtnID	= zViewIconBtnID;
-		public static final String zViewMenuTVBtnID		= "zb__TV__VIEW_MENU_left_icon";
+		public static final String zViewMenuTVBtnID		= "zb__TV-main__VIEW_MENU_left_icon";
 
 
 		public static final String zCloseIconBtn_newWindow 		= "id=zb__MSG1__CLOSE_left_icon";
@@ -293,7 +293,7 @@ public class PageMail extends AbsTab {
 
 			String id;
 			if ( zGetPropMailView() == PageMailView.BY_MESSAGE ) {
-				id = "zb__TV__DELETE_left_icon";
+				id = "zb__TV-main__DELETE_left_icon";
 			} else {
 				id = "zb__CLV__DELETE_left_icon";
 			}

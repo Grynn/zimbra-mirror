@@ -84,10 +84,10 @@ public class MarkSpamMessage extends PrefGroupMailByMessageTest {
 		
 		
 		// Click Actions
-		app.zPageMail.zClick("css=td[id='zb__TV__ACTIONS_MENU_dropdown']>div[class='ImgSelectPullDownArrow']");
+		app.zPageMail.zClick("css=td[id='zb__TV-main__ACTIONS_MENU_dropdown']>div[class='ImgSelectPullDownArrow']");
 		app.zPageMail.zWaitForBusyOverlay();
 		
-		String locator = "css=div[id='zm__TV'] div[id='SPAM']";
+		String locator = "css=div[id='zm__TV-main'] div[id='SPAM']";
 
 		ZAssert.assertTrue(
 				app.zPageMail.sIsElementPresent(locator),

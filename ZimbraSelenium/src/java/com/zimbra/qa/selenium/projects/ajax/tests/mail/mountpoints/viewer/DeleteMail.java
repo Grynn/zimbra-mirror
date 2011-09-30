@@ -84,7 +84,7 @@ public class DeleteMail extends PrefGroupMailByMessageTest {
 		app.zPageMail.zListItem(Action.A_LEFTCLICK, mail.dSubject);
 		
 		// Verify delete is disabled
-		ZAssert.assertTrue(app.zPageMail.sIsElementPresent("css=div[id='zb__TV__DELETE'].ZDisabled"), "Verify Delete button is disabled");
+		ZAssert.assertTrue(app.zPageMail.sIsElementPresent("css=div[id='zb__TV-main__DELETE'].ZDisabled"), "Verify Delete button is disabled");
 		
 		// Delete the item
 		app.zPageMail.zToolbarPressButton(Button.B_DELETE);
