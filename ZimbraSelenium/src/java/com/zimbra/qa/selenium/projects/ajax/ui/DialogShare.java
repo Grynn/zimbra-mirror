@@ -141,11 +141,11 @@ public class DialogShare extends AbsDialog {
 		
 		if ( button == Button.B_OK ) {
 			
-			locator =  "//div[@id='"+ Locators.zDialogShareId +"']//div[@id='"+ Locators.zButtonsId +"']//td[text()='OK']";
+			locator = "css=div[id='"+ Locators.zDialogShareId +"'] td[id^='OK'] td[id$='_title']";
 			
 		} else if ( button == Button.B_CANCEL ) {
 			
-			locator =  "implement me";
+			locator = "css=div[id='"+ Locators.zDialogShareId +"'] td[id^='Cancel'] td[id$='_title']";
 
 		} else {
 			throw new HarnessException("Button "+ button +" not implemented");
