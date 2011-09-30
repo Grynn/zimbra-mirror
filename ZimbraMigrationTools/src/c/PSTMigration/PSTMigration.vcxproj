@@ -453,6 +453,9 @@
     <ProjectReference Include="..\..\..\..\ZimbraMAPI\vcproj\ZimbraRpc.vcxproj">
       <Project>{3391699b-1204-4098-8697-2e43800aabe4}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ZimbraMAPI\vcproj\ZimbraMime.vcxproj">
+      <Project>{a541a6a1-5677-4504-8d2d-1fb7f3f85585}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
