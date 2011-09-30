@@ -266,7 +266,7 @@ function(showRootNode, doCheck) {
         currentRoot.setData(key, showRootNode._data[key]);
     }
 
-    var i, j;
+    var i, j, forceNode;
     for (i = 0; i < showRootNode.childrenData.size(); i++) {
         var currentAddNode =  showRootNode.childrenData.get(i);
         // TODO improved latter
@@ -276,7 +276,11 @@ function(showRootNode, doCheck) {
             if (currentAddNode.text == ZaMsg.OVP_recent)
                 continue;
         }
-        ti = new ZaTreeItem({parent: currentRoot,className:"AdminTreeItem",id:currentAddNode.id});
+        if( currentAddNode.forceNode !== undefined)
+            forceNode = currentAddNode.forceNode;
+        else
+            forceNode = currentAddNode.childrenData.size() > 0 ? true: false;
+        ti = new ZaTreeItem({parent: currentRoot,className:"AdminTreeItem",id:currentAddNode.id, forceNode: forceNode});
         ti.setCount(currentAddNode.count);
         ti.setText(currentAddNode.text);
         ti.setImage(currentAddNode.image);
@@ -284,17 +288,6 @@ function(showRootNode, doCheck) {
         ti.setData("dataItem", currentAddNode);
         for (key in currentAddNode._data) {
             ti.setData(key, currentAddNode._data[key]);
-        }
-        for (j = 0; j < currentAddNode.childrenData.size(); j++) {
-            var currentNextNode =  currentAddNode.childrenData.get(j);
-            nextTi = new ZaTreeItem({parent:ti,className:"AdminTreeItem",id:currentNextNode.id});
-            nextTi.setText(currentNextNode.text);
-            nextTi.setImage(currentNextNode.image);
-            nextTi.setData(ZaOverviewPanelController._TID, currentNextNode.mappingId);
-            nextTi.setData("dataItem", currentNextNode);
-            for (key in currentNextNode._data) {
-                nextTi.setData(key, currentNextNode._data[key]);
-            }
         }
     }
     return currentRoot;

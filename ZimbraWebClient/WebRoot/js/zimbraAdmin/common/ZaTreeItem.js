@@ -14,11 +14,12 @@ ZaTreeItem = function(params) {
     params = Dwt.getParams(arguments, ZaTreeItem.PARAMS);
     this._parentInTree = params.parent;
     this._countParam = params.count;
+    this.forceNode = (params.forceNode === undefined? false : params.forceNode) ;
     DwtTreeItem.call(this, params);
 }
 
 ZaTreeItem.PARAMS = ["parent", "index", "text", "imageInfo", "deferred", "className", "posStyle",
-					  "forceNotifySelection", "forceNotifyAction", "count"];
+					  "forceNotifySelection", "forceNotifyAction", "count", "forceNode"];
 
 ZaTreeItem.prototype = new DwtTreeItem;
 ZaTreeItem.prototype.constructor = ZaTreeItem;
@@ -38,6 +39,7 @@ function() {
 
 ZaTreeItem.prototype._initialize =
 function(index, realizeDeferred, forceNode) {
+    forceNode = forceNode || this.forceNode;
     DwtTreeItem.prototype._initialize.call(this, index, realizeDeferred, forceNode);
 
 	this._countCell = document.getElementById(this._htmlElId + "_countCell");
@@ -125,6 +127,7 @@ ZaTreeItemData = function(params) {
     this.id = params.id;
     this.text = params.text;
     this.image = params.image;
+    this.forceNode = params.forceNode ;
     this.index = params.index;
     this.count = params.count;
     this.canShowOnRoot = (params.canShowOnRoot === undefined? true : params.canShowOnRoot) ;
@@ -134,7 +137,7 @@ ZaTreeItemData = function(params) {
     this.childrenData = new AjxVector();
 }
 
-ZaTreeItemData.PARAMS = ["parent", "id", "text", "image", "index", "count", "mappingId", "callback", "relatedObject", "recentObject", "type", "path", "canShowOnRoot"];
+ZaTreeItemData.PARAMS = ["parent", "id", "text", "image", "index", "count", "mappingId", "callback", "relatedObject", "recentObject", "type", "path", "canShowOnRoot", "forceNode"];
 
 ZaTreeItemData.prototype.addChild =
 function(child, index) {

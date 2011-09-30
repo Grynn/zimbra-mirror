@@ -1445,6 +1445,7 @@ function(parentPath, item) {
     var cosTi = new ZaTreeItemData({
                 text: cos.name,
                 //image:"COS",
+                forceNode: true,
                 mappingId: ZaZimbraAdmin._COS_VIEW,
                 path: parentPath + ZaTree.SEPERATOR + cos.name
                 }
