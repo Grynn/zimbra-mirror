@@ -1614,10 +1614,10 @@ public class PageMail extends AbsTab {
 			// Check if we are CLV or MV
 			if ( this.zIsVisiblePerPosition("css=div#ztb__CLV2-main", 0, 0) ) {
 				pulldownLocator = "css=td#zb__CLV2-main__MOVE_MENU_dropdown>div";
-				optionLocator = "css=td#zti__DwtFolderChooser_MailCLV2__"+ folder.getId() + "_textCell";
+				optionLocator = "css=td#zti__DwtFolderChooser_MailCLV2-main__"+ folder.getId() + "_textCell";
 			} else {
 				pulldownLocator = "css=td#zb__TV-main__MOVE_MENU_dropdown>div";
-				optionLocator = "css=td#zti__DwtFolderChooser_MailTV__"+ folder.getId() + "_textCell";
+				optionLocator = "css=td#zti__DwtFolderChooser_MailTV-main__"+ folder.getId() + "_textCell";
 			}
 
 

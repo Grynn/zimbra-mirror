@@ -16,9 +16,7 @@ import com.zimbra.qa.selenium.framework.ui.AbsPage;
 import com.zimbra.qa.selenium.framework.ui.AbsTree;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
-import com.zimbra.qa.selenium.framework.util.GeneralUtility;
-import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
+import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
 import com.zimbra.qa.selenium.projects.ajax.ui.ContextMenu;
@@ -483,6 +481,7 @@ public class TreeMail extends AbsTree {
 	 */
 	@Override
 	public AbsPage zPressButton(Button button) throws HarnessException {
+		logger.info(myPageName() + " zPressButton("+ button +")");
 
 		tracer.trace("Click "+ button);
 
@@ -601,6 +600,7 @@ public class TreeMail extends AbsTree {
 	 * @see framework.ui.AbsTree#zTreeItem(framework.ui.Action, framework.items.FolderItem)
 	 */
 	public AbsPage zTreeItem(Action action, IItem folder) throws HarnessException {
+		logger.info(myPageName() + " zTreeItem("+ action +", "+ folder.getName() +")");
 
 		tracer.trace("Click "+ action +" on folder "+ folder.getName());
 
@@ -609,6 +609,10 @@ public class TreeMail extends AbsTree {
 			throw new HarnessException("Must define an action and addressbook");
 		}
 
+		// Sometimes the folder refresh takes a while.  Sleep a bit here.
+		SleepUtil.sleepVerySmall();
+	
+		
 		if ( folder instanceof FolderItem ) {
 			return (zTreeItem(action, (FolderItem)folder));
 		} else if ( folder instanceof SavedSearchFolderItem ) {
@@ -622,6 +626,7 @@ public class TreeMail extends AbsTree {
 
 	@Override
 	public AbsPage zTreeItem(Action action, Button option, IItem folder) throws HarnessException {
+		logger.info(myPageName() + " zTreeItem("+ action +", "+ option +", "+ folder.getName() +")");
 
 		tracer.trace("Click "+ action +" then "+ option +" on folder "+ folder.getName());
 
