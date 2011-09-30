@@ -56,25 +56,21 @@ public class PageMail extends AbsTab {
 		public static final String cssTVRowsLocator	= "css=div#zl__TV-main__rows";
 		
 		// Accept, Decline & Tentative button, menus and dropdown locators
-		public static final String AcceptButton = "css=td[id$='__Inv__REPLY_ACCEPT_title']";
 		public static final String AcceptDropdown = "css=td[id$='__Inv__REPLY_ACCEPT_dropdown']";
 		public static final String AcceptNotifyOrganizerMenu = "id=REPLY_ACCEPT_NOTIFY_title";
 		public static final String AcceptEditReplyMenu = "id=INVITE_REPLY_ACCEPT_title";
 		public static final String AcceptDontNotifyOrganizerMenu = "id=REPLY_ACCEPT_IGNORE_title";
 
-		public static final String TentativeButton = "css=td[id$='__Inv__REPLY_TENTATIVE_title']";
 		public static final String TentativeDropdown = "css=td[id$='__Inv__REPLY_TENTATIVE_dropdown']";
 		public static final String TentativeNotifyOrganizerMenu = "id=REPLY_TENTATIVE_NOTIFY_title";
 		public static final String TentativeEditReplyMenu = "id=INVITE_REPLY_TENTATIVE_title";
 		public static final String TentativeDontNotifyOrganizerMenu = "id=REPLY_TENTATIVE_IGNORE_title";
 		
-		public static final String DeclineButton = "css=td[id$='__Inv__REPLY_DECLINE_title']";
 		public static final String DeclineDropdown = "css=td[id$='__Inv__REPLY_DECLINE_dropdown']";
 		public static final String DeclineNotifyOrganizerMenu = "id=REPLY_DECLINE_NOTIFY_title";
 		public static final String DeclineEditReplyMenu = "id=INVITE_REPLY_DECLINE_title";
 		public static final String DeclineDontNotifyOrganizerMenu = "id=REPLY_DECLINE_IGNORE_title";
 		
-		public static final String ProposeNewTimeButton = "id=zb__CV2__Inv__PROPOSE_NEW_TIME_title";
 		public static final String ProposeNewTimeButtonMsgView = "id=zb__TV-main__Inv__PROPOSE_NEW_TIME_title";
 
 		public static class CONTEXT_MENU {
@@ -403,27 +399,6 @@ public class PageMail extends AbsTab {
 		} else if ( button == Button.B_MAIL_LIST_SORTBY_RECEIVED ) {
 
 			locator = "css=td[id='zlh__TV__dt'] td[id='zlhl__TV__dt']";
-			this.zClick(locator);
-			this.zWaitForBusyOverlay();
-			return (null);
-			
-		} else if ( button == Button.B_ACCEPT ) {
-
-			locator = Locators.AcceptButton;
-			this.zClick(locator);
-			this.zWaitForBusyOverlay();
-			return (null);
-			
-		} else if ( button == Button.B_TENTATIVE ) {
-
-			locator = Locators.TentativeButton;
-			this.zClick(locator);
-			this.zWaitForBusyOverlay();
-			return (null);
-			
-		} else if ( button == Button.B_DECLINE ) {
-
-			locator = Locators.DeclineButton;
 			this.zClick(locator);
 			this.zWaitForBusyOverlay();
 			return (null);

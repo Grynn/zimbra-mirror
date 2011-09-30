@@ -44,6 +44,10 @@ public class DisplayMail extends AbsDisplay {
 		//public static final String ConversationViewPreviewAtBottomCSS	= "css=div[id='zv__CLV2__MSG']";
 		//public static final String ConversationViewPreviewAtRightCSS	= "css=div[id='zv__CLV2__MSG']";
 	
+		public static final String AcceptButton = "css=td[id$='__Inv__REPLY_ACCEPT_title']";
+		public static final String TentativeButton = "css=td[id$='__Inv__REPLY_TENTATIVE_title']";
+		public static final String DeclineButton = "css=td[id$='__Inv__REPLY_DECLINE_title']";
+		public static final String ProposeNewTimeButton = "id=zb__CV2__Inv__PROPOSE_NEW_TIME_title";
 	}
 
 	/**
@@ -123,25 +127,25 @@ public class DisplayMail extends AbsDisplay {
 
 		} else if ( button == Button.B_ACCEPT ) {
 			
-			locator = this.ContainerLocator + " td[id$='__Inv__REPLY_ACCEPT_title']";
+			locator = Locators.AcceptButton;
 			page = null;
 			doPostfixCheck = true;
 		
 		} else if ( button == Button.B_TENTATIVE ) {
 			
-			locator = this.ContainerLocator + " td[id$='__Inv__REPLY_TENTATIVE_title']";
+			locator = Locators.TentativeButton;
 			page = null;
 			doPostfixCheck = true;
 
 		} else if ( button == Button.B_DECLINE ) {
 			
-			locator = this.ContainerLocator + " td[id$='__Inv__REPLY_DECLINE_title']";
+			locator = Locators.DeclineButton;
 			page = null;
 			doPostfixCheck = true;
 			
 		} else if ( button == Button.B_PROPOSE_NEW_TIME ) {
 			
-			locator = this.ContainerLocator + " td[id$='__Inv__PROPOSE_NEW_TIME_title']";
+			locator = Locators.ProposeNewTimeButton;
 			page = null;
 
 		} else if ( button == Button.B_ACCEPT_SHARE ) {
