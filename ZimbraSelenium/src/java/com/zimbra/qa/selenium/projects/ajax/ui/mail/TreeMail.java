@@ -790,6 +790,11 @@ public class TreeMail extends AbsTree {
 
 	public List<FolderItem> zListGetFolders() throws HarnessException {
 
+		// Bug 65234
+		// Sleep for a bit to load up the new folders
+		SleepUtil.sleepVerySmall();
+		
+		
 		List<FolderItem> items = new ArrayList<FolderItem>();
 
 		// Recursively fill out the list, starting with all mail folders
