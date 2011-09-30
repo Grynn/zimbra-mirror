@@ -703,6 +703,11 @@ function () {
 	//check if need to rename
 	if(!isNew) {
 		if(tmpObj.name != this._currentObject.name) {
+            if(this._currentObject.name=="default"||this._currentObject.name=="defaultExternal"){
+                this._errorDialog.setMessage( AjxMessageFormat.format(ZaMsg.FAILED_RENAME_COS_DEFAULT,this._currentObject.name), null, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);
+				this._errorDialog.popup();
+                return false;
+            }
 			newName=tmpObj.name;
 			//changeDetails["newName"] = newName;
 			try {
