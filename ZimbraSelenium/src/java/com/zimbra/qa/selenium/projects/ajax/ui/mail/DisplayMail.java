@@ -126,19 +126,19 @@ public class DisplayMail extends AbsDisplay {
 			locator = this.ContainerLocator + " td[id$='__Inv__REPLY_ACCEPT_title']";
 			page = null;
 			doPostfixCheck = true;
-			
-		} else if ( button == Button.B_DECLINE ) {
+		
+		} else if ( button == Button.B_TENTATIVE ) {
 			
 			locator = this.ContainerLocator + " td[id$='__Inv__REPLY_TENTATIVE_title']";
 			page = null;
 			doPostfixCheck = true;
-		
-		} else if ( button == Button.B_TENTATIVE ) {
+
+		} else if ( button == Button.B_DECLINE ) {
 			
 			locator = this.ContainerLocator + " td[id$='__Inv__REPLY_DECLINE_title']";
 			page = null;
 			doPostfixCheck = true;
-
+			
 		} else if ( button == Button.B_PROPOSE_NEW_TIME ) {
 			
 			locator = this.ContainerLocator + " td[id$='__Inv__PROPOSE_NEW_TIME_title']";
