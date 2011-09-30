@@ -57,7 +57,7 @@ public class AcceptMeeting extends AjaxCommonTest {
 	}
 	
 	@Test(
-			description = "Accept meeting", 
+			description = "Accept a meeting using Accept button from invitation message", 
 			groups = { "smoke" })
 	public void AcceptMeeting_01() throws HarnessException {
 
@@ -130,7 +130,7 @@ public class AcceptMeeting extends AjaxCommonTest {
 		ZAssert.assertEquals(attendeeStatus, "AC", "Verify that the attendee shows as 'ACCEPTED'");
 
 
-		// --- Check that the attendee shows the attendee as "ACCEPT" ---
+		// --- Check that the attendee showing status as "ACCEPT" ---
 
 		// Attendee: Search for the appointment (InvId)
 		app.zGetActiveAccount().soapSend(
