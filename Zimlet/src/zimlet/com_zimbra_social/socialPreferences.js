@@ -124,7 +124,8 @@ function(email, pwd, server) {
 com_zimbra_socialPreferences.prototype._addFacebookBtnListener =
 function() {
 	this.reloginToFB = true;
-	this.showAddFBInfoDlg();
+	//this.showAddFBInfoDlg();
+	this.zimlet.facebook.showFBWindow();
 };
 
 com_zimbra_socialPreferences.prototype._deleteAccountBtnListener =
@@ -293,53 +294,11 @@ function() {
 			accIcon = "social_twitterIcon";
 			statIcon = "social_checkIcon";
 		} else if(account.type == "facebook") {
-			accIcon = "social_facebookIcon" ;
-			if (account.read_stream == "YES" && account.publish_stream == "YES" && account.offline_access == "YES") {
-				 statIcon = "social_checkIcon";
-			} else {
-				this._fbNeedPermCount++;
-				statIcon = "social_closeIcon";
-			}
+			accIcon = "social_facebookIcon";
+			statIcon = "social_checkIcon";
 		}
 		var params = {id:id, type: account.type, accIcon: accIcon, statIcon:statIcon, name:account.name};
 		html[i++] = this._getAccountPrefRowHtml(params);
-		/**
-		html[i++] = "<TR>";
-		html[i++] = "<TD width=16px>";
-		html[i++] = "<input type='checkbox' id='social_pref_accnts_checkbox" + id + "' />";
-		html[i++] = "</TD>";
-		html[i++] = "<TD  align='center'>";
-		if (account.__type == "twitter") {
-			html[i++] = AjxImg.getImageHtml("social_twitterIcon");
-		} else if (account.__type == "facebook") {
-			html[i++] = AjxImg.getImageHtml("social_facebookIcon");
-		}
-		html[i++] = "</TD>";
-		html[i++] = "<TD align='center'>";
-		html[i++] = "<label style=\"font-size:12px;color:black;font-weight:bold\">";
-		html[i++] = account.name;
-		html[i++] = "</label>";
-		html[i++] = "</TD>";
-		html[i++] = "<TD  align='center'>";
-		if (account.type == "twitter") {
-			html[i++] = AjxImg.getImageHtml("social_checkIcon");
-		} else if (account.type == "facebook") {
-			if (account.read_stream == "YES" && account.publish_stream == "YES" && account.offline_access == "YES") {
-				html[i++] = AjxImg.getImageHtml("social_checkIcon");
-			} else {
-				html[i++] = AjxImg.getImageHtml("social_closeIcon");
-				this._fbNeedPermCount++;
-				/*
-				var id = "social_pref_authorizeBtn_" + Dwt.getNextId();
-				html[i++] = "<DIV id='" + id + "'></DIV>";
-				this._authorizeDivIdAndAccountMap.push({account:account, permission:"read_stream", divId:id});
-				this._fbNeedPermCount++;
-				this._setNeedPermission("read");
-
-			}
-		}
-		html[i++] = "</TD>";
-		html[i++] = "</TR>"; */
 		noAccountsFound = false;
 	}
 	for(var j=0; j< this.socialcastAccounts.length; j++) {

@@ -1,8 +1,6 @@
-<zimletConfig name="com_zimbra_social" version="3.4">
+<zimletConfig name="com_zimbra_social" version="3.5">
     <global>
-        <property name="allowedDomains">twitter.com,*.twitter.com,*.facebook.com,*.tweetmeme.com,api.tr.im,*.digg.com,api.bit.ly,*.socialcast.com</property>
-        <property name="social_facebook_api_key">7af6d68c9d453e392c1ed68b27f95506</property>
-        <property name="social_facebook_api_key_zd">f7377c6deafb69c43fd4c691208b0c6a</property>
+        <property name="allowedDomains">zimbraoauth2support.cloudfoundry.com,twitter.com,*.twitter.com,*.facebook.com,*.tweetmeme.com,api.tr.im,*.digg.com,api.bit.ly,*.socialcast.com</property>
 
         <!--
         <property name="hasSensitiveData">true</property>
@@ -12,5 +10,6 @@
             - Supported from Zimbra 7.1.3 onwards
         -->
         <property name="hasSensitiveData">true</property>
+        <property name="OAUTH2_SERVER">https://zimbraoauth2support.cloudfoundry.com/facebook/oauth2.jsp</property>
     </global>
 </zimletConfig>
