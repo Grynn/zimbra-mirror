@@ -678,10 +678,6 @@ function(obj, span, context) {
         }
     }
 
-	if (actionMenu.getOp("SEARCHBUILDER") && (isDetachWindow || !appCtxt.get(ZmSetting.BROWSE_ENABLED))) {
-		ZmOperation.removeOperation(actionMenu, "SEARCHBUILDER", actionMenu._menuItems);
-	}
-
 	if (actionMenu.getOp("ADDTOFILTER") && (isDetachWindow || !appCtxt.get(ZmSetting.FILTERS_ENABLED))) {
 		ZmOperation.removeOperation(actionMenu, "ADDTOFILTER", actionMenu._menuItems);
 	}

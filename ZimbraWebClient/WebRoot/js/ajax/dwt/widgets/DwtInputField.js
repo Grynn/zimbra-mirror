@@ -934,3 +934,18 @@ DwtInputField.prototype.enableFocusHdlr =
 function(){
     this._inputField.onfocus = DwtInputField._focusHdlr;
 };
+
+DwtInputField.prototype.moveCursorToEnd =
+function() {
+	if (AjxEnv.isIE) {
+		var tr = this._inputField.createTextRange();
+		tr.moveStart('character', this._inputField.value.length);
+		tr.collapse();
+		tr.select();
+	 }
+	else {
+		this._inputField.focus();
+		var length = this._inputField.value.length;
+		this._inputField.setSelectionRange(length, length);
+	}
+};
