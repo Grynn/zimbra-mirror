@@ -26,8 +26,8 @@ import java.util.UUID;
 
 import com.zimbra.common.mailbox.Color;
 import com.zimbra.common.service.ServiceException;
-import com.zimbra.common.soap.MailConstants;
 import com.zimbra.common.soap.Element;
+import com.zimbra.common.soap.MailConstants;
 import com.zimbra.common.util.StringUtil;
 import com.zimbra.cs.mailbox.ChangeTrackingMailbox.TracelessContext;
 import com.zimbra.cs.mailbox.util.TagUtil;
@@ -48,6 +48,12 @@ public class DeltaSync {
     private final MailboxSync mMailboxSync;
     private final Set<Integer> mSyncRenames = new HashSet<Integer>();
     private InitialSync isync;
+    private static final Set<Integer> LAST_SYNC_FOLDERS = new HashSet<Integer>();
+
+    static {
+        LAST_SYNC_FOLDERS.add(Mailbox.ID_FOLDER_TRASH);
+        LAST_SYNC_FOLDERS.add(Mailbox.ID_FOLDER_SPAM);
+    }
 
     DeltaSync(ZcsMailbox mbox) {
         ombx = mbox;
@@ -146,7 +152,7 @@ public class DeltaSync {
             }
 
             // for bug 32238, sync trash folder last
-            if (folderId == Mailbox.ID_FOLDER_TRASH || folderId == Mailbox.ID_FOLDER_SPAM) {
+            if (LAST_SYNC_FOLDERS.contains(folderId)) {
                 lastToSyncItems.add(change);
                 continue;
             }
@@ -171,8 +177,11 @@ public class DeltaSync {
 
         for (Element change : lastToSyncItems) {
             OfflineSyncManager.getInstance().continueOK();
+            int id = (int) change.getAttributeLong(MailConstants.A_ID);
+            int folderId = (id == Mailbox.ID_FOLDER_ROOT ? Mailbox.ID_FOLDER_ROOT
+                    : (int) change.getAttributeLong(MailConstants.A_FOLDER));
             prepareSync(messages, modmsgs, chats, modchats, deltamsgs, deltachats, contacts, appts, tasks, documents,
-                    change, Mailbox.ID_FOLDER_TRASH);
+                    change, folderId);
         }
 
         syncItems(isInitSyncDone, foldersToDelete, messages, modmsgs, chats, modchats, deltamsgs, deltachats, contacts,
