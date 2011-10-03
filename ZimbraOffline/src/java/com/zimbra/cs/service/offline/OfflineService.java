@@ -17,6 +17,7 @@ package com.zimbra.cs.service.offline;
 import com.zimbra.common.soap.AccountConstants;
 import com.zimbra.common.soap.MailConstants;
 import com.zimbra.cs.offline.common.OfflineConstants;
+import com.zimbra.cs.service.account.ModifyProperties;
 import com.zimbra.soap.DocumentDispatcher;
 import com.zimbra.soap.DocumentService;
 import com.zimbra.soap.SoapContextExtension;
@@ -73,6 +74,7 @@ public class OfflineService implements DocumentService {
         dispatcher.registerHandler(OfflineConstants.ACCOUNT_BACKUP_ENUM_REQUEST, new OfflineBackupEnumService());
         dispatcher.registerHandler(AccountConstants.GET_DISTRIBUTION_LIST_MEMBERS_REQUEST, new OfflineGetDistributionListMembers());
         dispatcher.registerHandler(MailConstants.MODIFY_CONTACT_REQUEST, new OfflineModifyContact());
+        dispatcher.registerHandler(AccountConstants.MODIFY_PROPERTIES_REQUEST, new OfflineModifyProperties());
 
         // not the most suitable place to do this, but it's just too easy.
         SoapContextExtension.register(OfflineContextExtension.ZDSYNC, new OfflineContextExtension());
