@@ -61,8 +61,8 @@ public class PageAddressbook extends AbsTab {
 	
 	public static class CONTEXT_SUB_MENU {
 				
-		public static final ContextMenuItem CONTACT_SUB_NEW_TAG = new ContextMenuItem("div[id^='TAG_MENU__DWT'][id$='|MENU|NEWTAG']","New Tag","div[class='ImgNewTag']",":contains('nt')");
-		public static final ContextMenuItem CONTACT_SUB_REMOVE_TAG = new ContextMenuItem("div[id^='TAG_MENU__DWT'][id$='|MENU|REMOVETAG']","Remove Tag","div[class='ImgDeleteTag']","");
+		public static final ContextMenuItem CONTACT_SUB_NEW_TAG = new ContextMenuItem("div#contacts_newtag","New Tag","div[class='ImgNewTag']",":contains('nt')");
+		public static final ContextMenuItem CONTACT_SUB_REMOVE_TAG = new ContextMenuItem("div#contacts_removetag","Remove Tag","div[class='ImgDeleteTag']","");
 		//public static final ContextMenuItem CONTACT_SUB_REMOVE_TAG = new ContextMenuItem("td#zmi__Contacts__TAG_MENU|MENU|REMOVETAG_title","Remove Tag","div[class='ImgDeleteTag']","");
 
 		
@@ -514,15 +514,16 @@ public class PageAddressbook extends AbsTab {
 		
 	      if ( option == Button.O_TAG_NEWTAG ) {
 
-	         pulldownLocator = "css=td[id$='__TAG_MENU_dropdown'] div[class='ImgSelectPullDownArrow']";
-	         optionLocator = "css=div[id$='__TAG_MENU|MENU|NEWTAG']";
+	         pulldownLocator = "css=td#zb__CNS-main__TAG_MENU_dropdown div.ImgSelectPullDownArrow";
+	         optionLocator = "css=td#contacts_newtag_title";
+	         
 	         page = new DialogTag(this.MyApplication, this);
 
 	      } else if ( option == Button.O_TAG_REMOVETAG ) {
 						
-			pulldownLocator = "css=td[id$='__TAG_MENU_dropdown'] div[class='ImgSelectPullDownArrow']";
-			optionLocator = "css=div[id$='zb__CNS__TAG_MENU|MENU|REMOVETAG']"; 
-			page = null;
+	    	 pulldownLocator = "css=td#zb__CNS-main__TAG_MENU_dropdown div.ImgSelectPullDownArrow";
+		     optionLocator = "css=td#contacts_removetag_title"; 
+			 page = null;
 			
 			zWaitForBusyOverlay();
 	      }
@@ -551,7 +552,7 @@ public class PageAddressbook extends AbsTab {
 				page = new FormContactGroupNew(this.MyApplication);		   
 		   }
 		   else if ( option == Button.O_NEW_TAG ) {			   
-		        optionLocator = "css=td#ztih__main_Contacts__TAG_headerCell";
+		        optionLocator = "css=td#ztih__main_Contacts__TAG_headerCell td[id^=DWT][id$=title]";
 		        page = new DialogTag(this.MyApplication, this);
 		   }    
 		   else if ( option == Button.O_NEW_ADDRESSBOOK ) {					   
@@ -594,11 +595,22 @@ public class PageAddressbook extends AbsTab {
 			zWaitForBusyOverlay();
 			
 			if ( optionLocator != null ) {
-                
-				// Make sure the locator exists and visible
+                SleepUtil.sleepLong();
+             	// Make sure the locator exists and visible
 				zWaitForElementPresent(optionLocator);
-				
-				if (zIsVisiblePerPosition(optionLocator,0,0)) {
+				/*zClick("css=div#zb__CNS-main__TAG_MENU|MENU>table");
+				zClick("css=div#zb__CNS-main__TAG_MENU|MENU>table>tbody");
+				zClick("css=div#zb__CNS-main__TAG_MENU|MENU>table>tbody>tr:nth-of-type(1)");
+				zClick("css=div#zb__CNS-main__TAG_MENU|MENU>table>tbody>tr:nth-of-type(2)");
+				  ExecuteHarnessMain.ResultListener.captureScreen();
+					
+				zClick("css=div#zb__CNS-main__TAG_MENU|MENU>table>tbody>tr:nth-of-type(3)");
+				zClick("css=div#zb__CNS-main__TAG_MENU|MENU>table>tbody>tr:nth-of-type(3)>td");
+				zClick("css=div#zb__CNS-main__TAG_MENU|MENU>table>tbody>tr:nth-of-type(3)>td>div#contacts_newtag");
+					*/
+				sClick(optionLocator);
+					
+				if (!zIsElementDisabled(optionLocator)) {
 				   zClick(optionLocator);
 				   zWaitForBusyOverlay();
 				}
@@ -635,8 +647,8 @@ public class PageAddressbook extends AbsTab {
 		
 	      if ( item instanceof FolderItem) {
              FolderItem folder = (FolderItem) item;
-	         pulldownLocator = "css=td#zb__CNS__MOVE_MENU_dropdown.ZDropDown";
-	         optionLocator   = "css=td#zti__DwtFolderChooser_ContactsCNS__" + folder.getId() + "_textCell.DwtTreeItem-Text";
+	         pulldownLocator = "css=td#zb__CNS-main__MOVE_MENU_dropdown.ZDropDown";
+	         optionLocator   = "css=td#zti__DwtFolderChooser_ContactsCNS-main__" + folder.getId() + "_textCell.DwtTreeItem-Text";
 	         //TODO page=?	         
 	      }
 	   }
@@ -668,9 +680,9 @@ public class PageAddressbook extends AbsTab {
 			
 			// If we click on pulldown/option and the page is specified, then
 			// wait for the page to go active
-			if ( page != null ) {
-				page.zWaitForActive();
-			}
+			//if ( page != null ) {
+			//	page.zWaitForActive();
+			//}
 			
 		}
 	    return page;
