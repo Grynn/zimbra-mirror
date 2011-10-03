@@ -1,13 +1,13 @@
 /*
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Server
- * Copyright (C) 2006, 2007, 2008, 2009, 2010 Zimbra, Inc.
- * 
+ * Copyright (C) 2006, 2007, 2008, 2009, 2010, 2011 Zimbra, Inc.
+ *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
@@ -26,14 +26,10 @@ import java.util.TimerTask;
 import java.util.UUID;
 
 import com.zimbra.common.account.Key;
-import com.zimbra.common.account.Key.IdentityBy;
-import com.zimbra.common.account.Key.SignatureBy;
 import com.zimbra.common.account.SignatureUtil;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.AccountConstants;
 import com.zimbra.common.soap.Element;
-import com.zimbra.common.soap.MailConstants;
-import com.zimbra.common.soap.Element.XMLElement;
 import com.zimbra.common.util.Constants;
 import com.zimbra.common.util.StringUtil;
 import com.zimbra.cs.account.Account;
@@ -43,7 +39,6 @@ import com.zimbra.cs.account.Identity;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.Signature;
 import com.zimbra.cs.filter.RuleManager;
-import com.zimbra.cs.filter.RuleRewriter;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.MailboxManager;
 import com.zimbra.cs.offline.OfflineLC;
@@ -60,6 +55,7 @@ import com.zimbra.client.ZSignature;
 import com.zimbra.cs.zimlet.ZimletUserProperties;
 import com.zimbra.soap.account.message.ModifyPropertiesRequest;
 import com.zimbra.soap.account.type.Prop;
+import com.zimbra.soap.mail.type.FilterRule;
 
 public class DirectorySync {
 
@@ -101,9 +97,9 @@ public class DirectorySync {
     private Map<String, Long> mLastFailTimes = new HashMap<String, Long>();
 
     HashMap<String, Boolean> accountSyncStatus = new HashMap<String, Boolean>();
-    
+
     private synchronized boolean lockAccountToSync(Account acct) {
-        Boolean inProgress = accountSyncStatus.get(acct.getId()) ; 
+        Boolean inProgress = accountSyncStatus.get(acct.getId()) ;
         if (inProgress != null && inProgress) {
             return false;
         } else {
@@ -111,7 +107,7 @@ public class DirectorySync {
             return true;
         }
     }
-    
+
     private synchronized void unlockAccount(Account acct) {
         accountSyncStatus.remove(acct.getId());
     }
@@ -149,7 +145,7 @@ public class DirectorySync {
                 OfflineLog.offline.warn("error listing accounts to sync", e);
         } catch (Exception t) {
             OfflineLog.offline.error("Unexpected exception syncing directory", t);
-        } 
+        }
     }
 
     public void sync(Account acct, boolean isOnRequest) throws ServiceException {
@@ -158,32 +154,29 @@ public class DirectorySync {
                 OfflineSyncManager.getInstance().continueOK();
                 if (!isOnRequest && !OfflineSyncManager.getInstance().reauthOK(acct)) //don't reauth if just failed not too long ago
                     return;
-        
+
                 OfflineProvisioning prov = (OfflineProvisioning) Provisioning.getInstance();
-        
+
                 // figure out where we need to connect to
                 String email = acct.getAttr(Provisioning.A_mail);
                 String password = acct.getAttr(OfflineProvisioning.A_offlineRemotePassword);
                 String baseUri = acct.getAttr(OfflineProvisioning.A_offlineRemoteServerUri);
-        
+
                 if (email == null || password == null || baseUri == null) {
                     OfflineLog.offline.warn("one of email/password/uri not set for account: " + acct.getName());
                     return;
                 }
-        
+
                 try {
                     // fetch the account data from the remote host
                     ZMailbox zmbx = prov.newZMailbox((OfflineAccount)acct, AccountConstants.USER_SERVICE_URI);
                     syncAccount(prov, acct, zmbx);
                     pushAccount(prov, acct, zmbx);
                     if (((OfflineAccount)acct).getRemoteServerVersion().isAtLeast6xx()) {
-                        syncFilterRules(prov, acct, zmbx);
-                        syncWhiteBlackList(prov, acct, zmbx);
+                        syncFilterRules(acct, zmbx);
+                        syncWhiteBlackList(acct, zmbx);
                     }
-                    else {
-                        syncRules5xx(prov, acct, zmbx);
-                    }
-        
+
                     // FIXME: there's a race condition here, as <tt>acct</tt> may have been modified during the push
                     prov.markAccountClean(acct);
                     mLastSyncTimes.put(acct.getId(), System.currentTimeMillis());
@@ -202,7 +195,7 @@ public class DirectorySync {
         }
     }
 
-    private void syncWhiteBlackList(OfflineProvisioning prov, Account acct, ZMailbox zmbx) throws ServiceException {
+    private void syncWhiteBlackList(Account acct, ZMailbox zmbx) throws ServiceException {
         Set<String> modified = acct.getMultiAttrSet(OfflineProvisioning.A_offlineModifiedAttrs);
         if (modified.contains(Provisioning.A_amavisWhitelistSender)
                 || modified.contains(Provisioning.A_amavisBlacklistSender)) {
@@ -255,79 +248,43 @@ public class DirectorySync {
         }
     }
 
-    private void syncFilterRules(OfflineProvisioning prov, Account acct, ZMailbox zmbx) throws ServiceException {
+    private void syncFilterRules(Account acct, ZMailbox zmbx) throws ServiceException {
         Set<String> modified = acct.getMultiAttrSet(OfflineProvisioning.A_offlineModifiedAttrs);
         if (modified.contains(Provisioning.A_zimbraMailSieveScript)) {
-            Element xmlRules = RuleManager.getIncomingRulesAsXML(XMLElement.mFactory, acct, true);
-            ZFilterRules rules = new ZFilterRules(xmlRules);
-            zmbx.saveIncomingFilterRules(rules);
-            OfflineLog.offline.debug("dsync: pushed %d incoming filter rules: %s", rules.getRules().size(), acct.getName());
+            List<FilterRule> rules = RuleManager.getIncomingRulesAsXML(acct);
+            zmbx.saveIncomingFilterRules(new ZFilterRules(rules));
+            OfflineLog.offline.debug("dsync: pushed %d incoming filter rules: %s", rules.size(), acct.getName());
         } else {
             ZFilterRules rules = zmbx.getIncomingFilterRules(true);
-            Element e = new XMLElement(MailConstants.SAVE_RULES_REQUEST); //dummy element
-            rules.toElement(e);
             try {
-                RuleManager.setIncomingXMLRules(acct, e.getElement(MailConstants.E_FILTER_RULES), true);
-                OfflineLog.offline.debug("dsync: pulled %d incoming filter rules: %s", rules.getRules().size(), acct.getName());
-            } catch (ServiceException x) {
+                RuleManager.setIncomingXMLRules(acct, rules.toJAXB());
+                OfflineLog.offline.debug("dsync: pulled %d incoming filter rules: %s",
+                        rules.getRules().size(), acct.getName());
+            } catch (ServiceException e) {
                 //bug 37422
-                OfflineLog.offline.warn("dsync: pulled %d incoming filter rules:\n%s", rules.getRules().size(), e.prettyPrint(), x);
+                OfflineLog.offline.warn("dsync: pulled %d incoming filter rules", rules.getRules().size(), e);
             }
         }
         if (((OfflineAccount)acct).getRemoteServerVersion().isAtLeast7xx()) {
             //outgoing rules added in 7.0
             if (modified.contains(Provisioning.A_zimbraMailOutgoingSieveScript)) {
-                Element xmlRules = RuleManager.getOutgoingRulesAsXML(XMLElement.mFactory, acct);
-                ZFilterRules rules = new ZFilterRules(xmlRules);
-                zmbx.saveOutgoingFilterRules(rules);
-                OfflineLog.offline.debug("dsync: pushed %d outgoing filter rules: %s", rules.getRules().size(), acct.getName());
+                List<FilterRule> rules = RuleManager.getOutgoingRulesAsXML(acct);
+                zmbx.saveOutgoingFilterRules(new ZFilterRules(rules));
+                OfflineLog.offline.debug("dsync: pushed %d outgoing filter rules: %s", rules.size(), acct.getName());
             } else {
                 ZFilterRules rules = zmbx.getOutgoingFilterRules(true);
-                Element e = new XMLElement(MailConstants.SAVE_RULES_REQUEST); //dummy element
-                rules.toElement(e);
                 try {
-                    RuleManager.setOutgoingXMLRules(acct, e.getElement(MailConstants.E_FILTER_RULES));
-                    OfflineLog.offline.debug("dsync: pulled %d outgoing filter rules: %s", rules.getRules().size(), acct.getName());
-                } catch (ServiceException x) {
+                    RuleManager.setOutgoingXMLRules(acct, rules.toJAXB());
+                    OfflineLog.offline.debug("dsync: pulled %d outgoing filter rules: %s",
+                            rules.getRules().size(), acct.getName());
+                } catch (ServiceException e) {
                     //bug 37422
-                    OfflineLog.offline.warn("dsync: pulled %d outgoing filter rules:\n%s", rules.getRules().size(), e.prettyPrint(), x);
+                    OfflineLog.offline.warn("dsync: pulled %d outgoing filter rules", rules.getRules().size(), e);
                 }
             }
         }
     }
-    
-    private void syncRules5xx(OfflineProvisioning prov, Account acct, ZMailbox zmbx) throws ServiceException {
-        Set<String> modified = acct.getMultiAttrSet(OfflineProvisioning.A_offlineModifiedAttrs);
-        if (modified.contains(Provisioning.A_zimbraMailSieveScript)) {
-            Element xmlRules = RuleManager.getIncomingRulesAsXML(XMLElement.mFactory, acct, false);
-            RuleRewriter.sanitizeRules(xmlRules);
-            saveRulesTo5xxServer(zmbx, xmlRules);
-            OfflineLog.offline.debug("dsync: pushed %d filter rules: %s", xmlRules.listElements().size(), acct.getName());
-        } else {
-            Element xmlRules = getRulesFrom5xxServer(zmbx);
-            RuleRewriter.sanitizeRules(xmlRules);
-            try {
-                RuleManager.setIncomingXMLRules(acct, xmlRules, false);
-                OfflineLog.offline.debug("dsync: pulled %d filter rules: %s", xmlRules.listElements().size(), acct.getName());
-            } catch (ServiceException x) {
-                //bug 37422
-                OfflineLog.offline.warn("dsync: pulled %d filter rules:\n%s", xmlRules.listElements().size(), xmlRules.prettyPrint(), x);
-            }
-        }
-    }
-    
-    private void saveRulesTo5xxServer(ZMailbox zmbx, Element xmlRules) throws ServiceException {
-        Element req = zmbx.newRequestElement(MailConstants.SAVE_RULES_REQUEST);
-        req.addElement(xmlRules);
-        zmbx.invoke(req);
-    }
-    
-    private Element getRulesFrom5xxServer(ZMailbox zmbx) throws ServiceException {
-        Element req = zmbx.newRequestElement(MailConstants.GET_RULES_REQUEST);
-        Element resp = zmbx.invoke(req);
-        return resp.getElement(MailConstants.E_RULES);
-    }
-    
+
     private void syncAccount(OfflineProvisioning prov, Account acct, ZMailbox zmbx) throws ServiceException {
         ZGetInfoResult zgi = zmbx.getAccountInfo(false);
         Mailbox mbox = MailboxManager.getInstance().getMailboxByAccount(acct);
@@ -422,7 +379,7 @@ public class DirectorySync {
     private static boolean isLocallyCreated(Entry e) {
         return e.getMultiAttrSet(OfflineProvisioning.A_offlineModifiedAttrs).contains(OfflineProvisioning.A_offlineDn);
     }
-    
+
     private static Map<String, Object> scrubAttributes(Map<String, Object> attrs, Account acct) {
         for (Iterator<java.util.Map.Entry<String, Object>> i = attrs.entrySet().iterator(); i.hasNext();) {
             String name = i.next().getKey();
@@ -445,7 +402,7 @@ public class DirectorySync {
     private static Map<String, Object> diffAttributes(Account acct, Entry e, Map<String, Object> attrs) {
         return diffAttributes(acct, e, attrs, true);
     }
-    
+
     @SuppressWarnings("unchecked")
     private static Map<String, Object> diffAttributes(Account acct, Entry e, Map<String, Object> attrs, boolean delete) {
         // write over all unchanged account attributes
@@ -470,7 +427,7 @@ public class DirectorySync {
             }
             changes.put(zattr.getKey(), value);
         }
-        
+
         if (delete) {
             // make sure to detect any deleted attributes
             Set<String> existing = new HashSet<String>(e.getAttrs().keySet());
@@ -488,7 +445,7 @@ public class DirectorySync {
                     } catch (ServiceException se) {
                         OfflineLog.offline.error("Unable to determine in key %s is in ZCS %s",key,remoteVersion);
                     }
-                } 
+                }
             }
         }
         return changes;
@@ -659,7 +616,7 @@ public class DirectorySync {
             zmbx.deleteSignature(signatureId);
             OfflineLog.offline.debug("dpush: deleted signature: " + acct.getName() + '/' + signatureId);
         }
-        
+
         if (prov.syncZimletProperties(acct.getId())) {
             Account localAcct = prov.getLocalAccount();
             Set<String> zimletModified = localAcct.getMultiAttrSet(OfflineProvisioning.A_offlineModifiedAttrs);
