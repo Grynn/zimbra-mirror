@@ -35,6 +35,7 @@ import com.zimbra.cs.ldap.ILdapContext;
 import com.zimbra.cs.ldap.LdapClient;
 import com.zimbra.cs.ldap.LdapUtilCommon;
 import com.zimbra.cs.ldap.ZLdapFilter;
+import com.zimbra.cs.ldap.ZLdapFilterFactory.FilterId;
 import com.zimbra.cs.nginx.NginxLookupExtension.EntryNotFoundException;
 import com.zimbra.cs.nginx.NginxLookupExtension.NginxLookupException;
 
@@ -102,7 +103,7 @@ public class LegacyNginxLookupLdapHelper extends AbstractNginxLookupLdapHelper {
 
     @Override
     SearchDirResult searchDirectory(ILdapContext ldapContext, String[] returnAttrs,
-            Config config, String queryTemplate, String searchBase,
+            Config config, FilterId filterId, String queryTemplate, String searchBase,
             String templateKey, String templateVal, Map<String, Boolean> attrs,
             Set<String> extraAttrs) 
     throws NginxLookupException {

@@ -22,6 +22,7 @@ import com.zimbra.cs.account.Config;
 import com.zimbra.cs.account.ldap.LdapProv;
 import com.zimbra.cs.ldap.ILdapContext;
 import com.zimbra.cs.ldap.ZLdapFilter;
+import com.zimbra.cs.ldap.ZLdapFilterFactory.FilterId;
 import com.zimbra.cs.nginx.NginxLookupExtension.NginxLookupException;
 
 abstract class AbstractNginxLookupLdapHelper {
@@ -76,8 +77,8 @@ abstract class AbstractNginxLookupLdapHelper {
      * @throws NginxLookupException
      */
     abstract SearchDirResult searchDirectory(ILdapContext ldapContext, String[] returnAttrs, 
-            Config config, String queryTemplate, String searchBase, String templateKey, 
-            String templateVal, Map<String, Boolean> attrs, Set<String> extraAttrs) 
+            Config config, FilterId filterId, String queryTemplate, String searchBase, 
+            String templateKey, String templateVal, Map<String, Boolean> attrs, Set<String> extraAttrs) 
     throws NginxLookupException;
     
 }

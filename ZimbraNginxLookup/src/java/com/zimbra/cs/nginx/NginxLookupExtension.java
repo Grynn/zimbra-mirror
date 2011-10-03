@@ -57,6 +57,7 @@ import com.zimbra.cs.extension.ZimbraExtension;
 import com.zimbra.cs.ldap.ILdapContext;
 import com.zimbra.cs.ldap.ZLdapFilter;
 import com.zimbra.cs.ldap.ZLdapFilterFactory;
+import com.zimbra.cs.ldap.ZLdapFilterFactory.FilterId;
 import com.zimbra.cs.nginx.AbstractNginxLookupLdapHelper.SearchDirResult;
 import com.zimbra.cs.service.AuthProvider;
 import com.zimbra.cs.service.authenticator.ClientCertAuthenticator;
@@ -507,6 +508,7 @@ public class NginxLookupExtension implements ZimbraExtension {
                             zlc, 
                             getDomainSC(config), 
                             config, 
+                            FilterId.NGINX_GET_DOMAIN_BY_SERVER_IP,
                             Provisioning.A_zimbraReverseProxyDomainNameQuery,
                             Provisioning.A_zimbraReverseProxyDomainNameSearchBase,
                             "IPADDR",
@@ -600,6 +602,7 @@ public class NginxLookupExtension implements ZimbraExtension {
                         zlc, 
                         getServerSC(config), 
                         config, 
+                        FilterId.NGINX_GET_PORT_BY_MAILHOST,
                         Provisioning.A_zimbraReverseProxyPortQuery,
                         Provisioning.A_zimbraReverseProxyPortSearchBase,
                         "MAILHOST",
@@ -838,6 +841,7 @@ public class NginxLookupExtension implements ZimbraExtension {
                             zlc, 
                             getUserSC(config), 
                             config, 
+                            FilterId.NGINX_GET_MAILHOST,
                             Provisioning.A_zimbraReverseProxyMailHostQuery,
                             Provisioning.A_zimbraReverseProxyMailHostSearchBase,
                             "USER",

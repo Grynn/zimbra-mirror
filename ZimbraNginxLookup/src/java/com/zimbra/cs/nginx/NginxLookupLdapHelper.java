@@ -37,7 +37,7 @@ import com.zimbra.cs.ldap.ZSearchControls;
 import com.zimbra.cs.ldap.ZSearchResultEntry;
 import com.zimbra.cs.ldap.ZSearchResultEnumeration;
 import com.zimbra.cs.ldap.ZSearchScope;
-import com.zimbra.cs.nginx.AbstractNginxLookupLdapHelper.SearchDirResult;
+import com.zimbra.cs.ldap.ZLdapFilterFactory.FilterId;
 import com.zimbra.cs.nginx.NginxLookupExtension.EntryNotFoundException;
 import com.zimbra.cs.nginx.NginxLookupExtension.NginxLookupException;
 
@@ -99,7 +99,7 @@ public class NginxLookupLdapHelper extends AbstractNginxLookupLdapHelper {
 
     @Override
     SearchDirResult searchDirectory(ILdapContext ldapContext, String[] returnAttrs,
-            Config config, String queryTemplate, String searchBase,
+            Config config, FilterId filterId, String queryTemplate, String searchBase,
             String templateKey, String templateVal, Map<String, Boolean> attrs,
             Set<String> extraAttrs) 
     throws NginxLookupException {
@@ -128,7 +128,9 @@ public class NginxLookupLdapHelper extends AbstractNginxLookupLdapHelper {
         ZSearchResultEnumeration ne = null;
         try {
             try {
-                ne = zlc.searchDir(base, ZLdapFilterFactory.getInstance().fromFilterString(query), searchControls);
+                ne = zlc.searchDir(base, 
+                        ZLdapFilterFactory.getInstance().fromFilterString(filterId, query), 
+                        searchControls);
                 
                 if (!ne.hasMore())
                     throw new EntryNotFoundException("query returned empty result: "+query);
