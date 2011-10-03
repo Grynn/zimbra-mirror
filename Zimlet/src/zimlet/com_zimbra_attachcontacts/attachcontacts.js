@@ -318,7 +318,7 @@ AttachContactsZimlet._getEmailActionMenu = function(attachContactsZimlet) {
 		attachContactsZimlet.addMenuButton(contactCallback, menu, "NEWCONTACT");
 	} else {
 		if (menu.getOp(AttachContactsZimlet.SEND_CONTACTS))
-			menu.removeOp(AttachContactsZimlet.SEND_CONTACTS);
+			menu.enable(AttachContactsZimlet.SEND_CONTACTS, false);
 	}
 	return menu;
 };
