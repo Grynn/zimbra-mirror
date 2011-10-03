@@ -5,33 +5,32 @@
 #define CPPLIB_DLLAPI __declspec(dllimport)
 #endif
 
-
 extern "C" {
-typedef enum {
-	DBG,
-	INFO,
-	WARN,
-	ERR,
+typedef enum
+{
+    DBG,
+    INFO,
+    WARN,
+    ERR,
+} LogType;
 
-
-}LogType;
-
-class  CPPLIB_DLLAPI CSingleton{
-
+class CPPLIB_DLLAPI CSingleton
+{
 public:
-    static CSingleton* getInstance();
+    static CSingleton *getInstance();
     void destroyInstance();
-    void doSomething(LogType type,char* Msg);
-	//void doSomething(char* Msg);
-	void init();
+    void doSomething(LogType type, char *Msg);
+
+    // void doSomething(char* Msg);
+    void init();
 
 private:
-    CSingleton() {_tcscpy(m_filename, _T(""));}
-    ~CSingleton(){}
-    static CSingleton* m_pInstance;
-protected:
-	 TCHAR m_filename[MAX_PATH + 100];
-	 HANDLE m_LogFileHandle;
-};
+    CSingleton() { _tcscpy(m_filename, _T("")); }
+    ~CSingleton() {}
+    static CSingleton *m_pInstance;
 
+protected:
+    TCHAR m_filename[MAX_PATH + 100];
+    HANDLE m_LogFileHandle;
+};
 }

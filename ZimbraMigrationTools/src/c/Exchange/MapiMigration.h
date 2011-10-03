@@ -1,7 +1,8 @@
 #include "CMigration.h"
 #pragma once
 
-class MapiMigration: public CMigration {
+class MapiMigration: public CMigration
+{
 public:
     MapiMigration(void);
     ~MapiMigration(void);

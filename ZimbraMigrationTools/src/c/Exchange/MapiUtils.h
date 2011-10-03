@@ -2,21 +2,24 @@
 
 #define PR_IPM_OTHERSPECIALFOLDERS_ENTRYID PROP_TAG(PT_MV_BINARY, 0x36D8)
 
-typedef struct _ObjectPickerData {
+typedef struct _ObjectPickerData
+{
     wstring wstrUsername;
     wstring wstrExchangeStore;
     vector<wstring> vAliases;
     vector<std::pair<wstring, wstring> > pAttributeList;
 } ObjectPickerData;
 
-typedef struct _RecipInfo {
+typedef struct _RecipInfo
+{
     LPTSTR pAddrType;
     LPTSTR pEmailAddr;
     ULONG cbEid;
     LPENTRYID pEid;
 } RECIP_INFO;
 
-inline void HexStrFromBSTR(_bstr_t bstr, LPTSTR &szHex) {
+inline void HexStrFromBSTR(_bstr_t bstr, LPTSTR &szHex)
+{
     int i = 0;
     int len = bstr.length();
     BSTR bstrChar = bstr.GetBSTR();
@@ -29,7 +32,8 @@ inline void HexStrFromBSTR(_bstr_t bstr, LPTSTR &szHex) {
         szTemp += wsprintf(szTemp, _T("%X"), *bstrChar++);
 }
 
-inline void WtoA(LPWSTR pStrW, LPSTR &pStrA) {
+inline void WtoA(LPWSTR pStrW, LPSTR &pStrA)
+{
     int nWChars = (int)wcslen(pStrW);
     int nAChars = WideCharToMultiByte(CP_ACP, 0, pStrW, nWChars, NULL, 0, NULL, NULL);
 
@@ -38,7 +42,8 @@ inline void WtoA(LPWSTR pStrW, LPSTR &pStrA) {
     WideCharToMultiByte(CP_ACP, 0, pStrW, nWChars, pStrA, nAChars, NULL, NULL);
 }
 
-inline void AtoW(LPSTR pStrA, LPWSTR &pStrW) {
+inline void AtoW(LPSTR pStrA, LPWSTR &pStrW)
+{
     int AChars = (int)strlen(pStrA);
     int WChars = MultiByteToWideChar(CP_ACP, 0, pStrA, AChars, NULL, 0);
 
@@ -47,26 +52,32 @@ inline void AtoW(LPSTR pStrA, LPWSTR &pStrW) {
     MultiByteToWideChar(CP_ACP, 0, pStrA, AChars, pStrW, WChars);
 }
 
-inline void SafeDelete(LPWSTR &pStr) {
-    if (pStr != NULL) {
+inline void SafeDelete(LPWSTR &pStr)
+{
+    if (pStr != NULL)
+    {
         delete[] pStr;
         pStr = NULL;
     }
 }
 
-inline void SafeDelete(LPCWSTR pStr) {
+inline void SafeDelete(LPCWSTR pStr)
+{
     if (pStr != NULL)
         delete[] pStr;
 }
 
-inline void SafeDelete(LPSTR &pStr) {
-    if (pStr != NULL) {
+inline void SafeDelete(LPSTR &pStr)
+{
+    if (pStr != NULL)
+    {
         delete[] pStr;
         pStr = NULL;
     }
 }
 
-inline LPTSTR LongToHexString(LONG l) {
+inline LPTSTR LongToHexString(LONG l)
+{
     LPTSTR pRetVal = new TCHAR[34];
 
     *pRetVal = _T('x');
@@ -74,21 +85,25 @@ inline LPTSTR LongToHexString(LONG l) {
     return pRetVal;
 }
 
-inline LPTSTR Int32ToString(int i) {
+inline LPTSTR Int32ToString(int i)
+{
     LPTSTR pRetVal = new TCHAR[34];
 
     _itot(i, pRetVal, 10);
     return pRetVal;
 }
 
-inline ULONG SetPropType(ULONG propTag, ULONG propType) {
+inline ULONG SetPropType(ULONG propTag, ULONG propType)
+{
     if (PROP_TYPE(propTag) == PT_ERROR)
         return PR_NULL;
     return PROP_TAG(propType, PROP_ID(propTag));
 }
 
-inline int CopyString(LPWSTR &pDest, LPWSTR pSrc) {
-    if (pSrc == NULL) {
+inline int CopyString(LPWSTR &pDest, LPWSTR pSrc)
+{
+    if (pSrc == NULL)
+    {
         pDest = NULL;
         return 0;
     }
@@ -98,13 +113,15 @@ inline int CopyString(LPWSTR &pDest, LPWSTR pSrc) {
     return nLength;
 }
 
-inline void CopyEntryID(SBinary &src, SBinary &dest) {
+inline void CopyEntryID(SBinary &src, SBinary &dest)
+{
     dest.cb = src.cb;
     MAPIAllocateBuffer(src.cb, (LPVOID *)&(dest.lpb));
     memcpy(dest.lpb, src.lpb, src.cb);
 }
 
-inline void FreeEntryID(SBinary &bin) {
+inline void FreeEntryID(SBinary &bin)
+{
     bin.cb = 0;
     MAPIFreeBuffer(bin.lpb);
     bin.lpb = NULL;
@@ -112,7 +129,8 @@ inline void FreeEntryID(SBinary &bin) {
 
 #define UNICODE_EXCEPTION_STRING L"ErrCode:%s Description:%s SrcFile:%s SrcLine:%s"
 inline LPTSTR FromatExceptionInfo(HRESULT errCode, LPWSTR errDescription, LPSTR srcFile,
-    int srcLine) {
+    int srcLine)
+{
     LPWSTR lpBuffer = NULL;
     LPWSTR lpstrSrcFile = NULL;
 
@@ -133,58 +151,65 @@ inline LPTSTR FromatExceptionInfo(HRESULT errCode, LPWSTR errDescription, LPSTR 
     return lpBuffer;
 }
 
-namespace Zimbra {
-namespace MAPI {
-namespace Util {
+namespace Zimbra
+{
+namespace MAPI
+{
+namespace Util
+{
+class CriticalSection
+{
+public:
+    CriticalSection() { InitializeCriticalSection(&cs); }
+    ~CriticalSection() { DeleteCriticalSection(&cs); }
+    void Enter() { EnterCriticalSection(&cs); }
+    void Leave() { LeaveCriticalSection(&cs); }
 
-class CriticalSection{
-	public:
-		CriticalSection(){ InitializeCriticalSection(&cs); }
-		~CriticalSection(){ DeleteCriticalSection(&cs); }
-		void Enter(){ EnterCriticalSection(&cs); }
-		void Leave(){ LeaveCriticalSection(&cs); }
-	private:
-		CRITICAL_SECTION cs;
+private:
+    CRITICAL_SECTION cs;
 };
 
 #pragma warning( disable : 4512 )
-class AutoCriticalSection{
-	public:
-		AutoCriticalSection(CriticalSection& scs) : cs(scs){cs.Enter();}
-		~AutoCriticalSection(){cs.Leave();}
+class AutoCriticalSection
+{
+public:
+    AutoCriticalSection(CriticalSection &scs): cs(scs) { cs.Enter(); }
+    ~AutoCriticalSection() { cs.Leave(); }
 
-	private:
-		CriticalSection& cs;
+private:
+    CriticalSection &cs;
 };
 
-class MapiUtilsException: public GenericException {
+class MapiUtilsException: public GenericException
+{
 public:
     MapiUtilsException(HRESULT hrErrCode, LPCWSTR lpszDescription): GenericException(hrErrCode,
-            lpszDescription) {}
+                    lpszDescription) {}
     MapiUtilsException(HRESULT hrErrCode, LPCWSTR lpszDescription, int nLine,
-    LPCSTR strFile): GenericException(hrErrCode, lpszDescription, nLine, strFile) {}
+                    LPCSTR strFile): GenericException(hrErrCode, lpszDescription, nLine,
+                    strFile) {}
     virtual ~MapiUtilsException() {}
 };
 
 HRESULT HrMAPIFindDefaultMsgStore(LPMAPISESSION lplhSession, SBinary &bin);
 HRESULT MailboxLogon(LPMAPISESSION pSession, LPMDB pMdb, LPWSTR pStoreDn, LPWSTR pMailboxDn,
-    LPMDB *ppMdb);
+                LPMDB *ppMdb);
 HRESULT GetUserDNAndLegacyName(LPCWSTR lpszServer, LPCWSTR lpszUser, LPCWSTR lpszPwd,
-    wstring &wstruserdn,
-    wstring &wstrlegacyname);
+                wstring &wstruserdn,
+                wstring &wstrlegacyname);
 HRESULT GetUserDnAndServerDnFromProfile(LPMAPISESSION pSession, LPSTR &pExchangeServerDn,
-    LPSTR &pExchangeUserDn);
+                LPSTR &pExchangeUserDn);
 HRESULT HrMAPIFindIPMSubtree(LPMDB lpMdb, SBinary &bin);
 HRESULT GetMdbSpecialFolders(IN LPMDB lpMdb, IN OUT SBinaryArray *pEntryIds);
 HRESULT GetInboxSpecialFolders(LPMAPIFOLDER pInbox, SBinaryArray *pEntryIds);
 HRESULT GetAllSpecialFolders(IN LPMDB lpMdb, IN OUT SBinaryArray *pEntryIds);
 HRESULT FreeAllSpecialFolders(IN SBinaryArray *lpSFIds);
 ExchangeSpecialFolderId GetExchangeSpecialFolderId(LPMDB userStore, IN ULONG cbEntryId,
-    IN LPENTRYID pFolderEntryId,
-    SBinaryArray *pEntryIds);
+                IN LPENTRYID pFolderEntryId,
+                SBinaryArray *pEntryIds);
 HRESULT GetExchangeUsersUsingObjectPicker(vector<ObjectPickerData> &vUserList);
 HRESULT HrMAPIGetSMTPAddress(IN MAPISession &session, IN RECIP_INFO &recipInfo,
-    OUT wstring &strSmtpAddress);
+                OUT wstring &strSmtpAddress);
 
 ULONG IMAPHeaderInfoPropTag(LPMAPIPROP lpMapiProp);
 wstring ReverseDelimitedString(wstring wstrString, WCHAR *delimiter);

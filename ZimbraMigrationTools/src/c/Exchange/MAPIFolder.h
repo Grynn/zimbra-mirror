@@ -12,9 +12,12 @@ DEFINE_OLEGUID(PSETID_COMMON, MAKELONG(0x2000 + (8), 0x0006), 0, 0);
 // completely downloaded or in header only form in case of IMAP
 #define DISPID_HEADER_ITEM 0x8578
 
-namespace Zimbra {
-namespace MAPI {
-class MAPIFolderException: public GenericException {
+namespace Zimbra
+{
+namespace MAPI
+{
+class MAPIFolderException: public GenericException
+{
 public:
     MAPIFolderException(HRESULT hrErrCode, LPCWSTR lpszDescription);
     MAPIFolderException(HRESULT hrErrCode, LPCWSTR lpszDescription, int nLine, LPCSTR strFile);
@@ -24,14 +27,17 @@ public:
 class MAPIFolder;
 
 // Folder Iterator class
-class FolderIterator: public MAPITableIterator {
+class FolderIterator: public MAPITableIterator
+{
 private:
-    typedef enum _FolderIterPropTagIdx {
+    typedef enum _FolderIterPropTagIdx
+    {
         FI_DISPLAY_NAME, FI_ENTRYID,
         FI_PR_LONGTERM_ENTRYID_FROM_TABLE, FI_FLAGS,
         NFOLDERPROPS
     } FolerIterPropTagIdx;
-    typedef struct _FolderIterPropTags {
+    typedef struct _FolderIterPropTags
+    {
         ULONG cValues;
         ULONG aulPropTags[NFOLDERPROPS];
     } FolderIterPropTags;
@@ -45,17 +51,18 @@ public:
     virtual LPSPropTagArray GetProps();
 
     virtual LPSSortOrderSet GetSortOrder() { return NULL; }
-    virtual LPSRestriction GetRestriction(ULONG TypeMask, FILETIME startDate) {
+    virtual LPSRestriction GetRestriction(ULONG TypeMask, FILETIME startDate)
+    {
         UNREFERENCED_PARAMETER(TypeMask);
         UNREFERENCED_PARAMETER(startDate);
         return NULL;
     }
-
     BOOL GetNext(MAPIFolder &folder);
 };
 
 // Exchange System folder enumeration
-typedef enum _ExchangeSpecialFolderId {
+typedef enum _ExchangeSpecialFolderId
+{
     INBOX = 0,
     IPM_SUBTREE = 1,
     CALENDAR = 2,
@@ -78,7 +85,8 @@ typedef enum _ExchangeSpecialFolderId {
 } ExchangeSpecialFolderId;
 
 // Zimbra system folder enumeration
-typedef enum _ZimbraSpecialFolderId {
+typedef enum _ZimbraSpecialFolderId
+{
     ZM_SFID_MIN = 0,
     ZM_SFID_NONE = 0,
     ZM_ROOT = 1,
@@ -88,7 +96,8 @@ typedef enum _ZimbraSpecialFolderId {
 } ZimbraSpecialFolderId;
 
 // MapiFolder class
-class MAPIFolder {
+class MAPIFolder
+{
 private:
     LPMAPIFOLDER m_folder;
     wstring m_displayname;
@@ -119,5 +128,5 @@ public:
 
 // global declaration
 static ULONG g_ulIMAPHeaderInfoPropTag = PR_NULL;
-}                                       // namespace MAPI
-}                                       // namespace Zimbra
+}                                               // namespace MAPI
+}                                               // namespace Zimbra

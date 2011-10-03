@@ -2,98 +2,80 @@
 
 namespace CssLib
 {
-    public class ZimbraValues
+public class ZimbraValues
+{
+    public static ZimbraValues zimbraValues;
+
+    public ZimbraValues()
     {
-        public static ZimbraValues zimbraValues;
-
-        public ZimbraValues()
+        zimbraValues = null;
+        sUrl = "";
+        sAuthToken = "";
+        sServerVersion = "";
+        lDomains = new List<string>();
+        lCOSes = new List<CosInfo>();
+    }
+    public static ZimbraValues GetZimbraValues()
+    {
+        if (zimbraValues == null)
+            zimbraValues = new ZimbraValues();
+        return zimbraValues;
+    }
+    private string sUrl;
+    public string Url {
+        get { return sUrl; }
+        set
         {
-            zimbraValues = null;
-            sUrl = "";
-            sAuthToken = "";
-            sServerVersion = "";
-            lDomains = new List<string>();
-            lCOSes = new List<CosInfo>();
+            sUrl = value;
         }
-
-        public static ZimbraValues GetZimbraValues()
+    }
+    private string sAuthToken;
+    public string AuthToken {
+        get { return sAuthToken; }
+        set
         {
-	        if (zimbraValues == null)
-	        {
-		        zimbraValues = new ZimbraValues() ;
-	        }
-	        return zimbraValues;
+            sAuthToken = value;
         }
-
-        private string sUrl;
-        public string Url
+    }
+    private string sServerVersion;
+    public string ServerVersion {
+        get { return sServerVersion; }
+        set
         {
-            get { return sUrl; }
-            set
-            {
-                sUrl = value;
-            }
+            sServerVersion = value;
         }
-
-        private string sAuthToken;
-        public string AuthToken
+    }
+    private string sHostName;
+    public string HostName {
+        get { return sHostName; }
+        set
         {
-            get { return sAuthToken; }
-            set
-            {
-                sAuthToken = value;
-            }
+            sHostName = value;
         }
-
-        private string sServerVersion;
-        public string ServerVersion
+    }
+    private string sPort;
+    public string Port {
+        get { return sPort; }
+        set
         {
-            get { return sServerVersion; }
-            set
-            {
-                sServerVersion = value;
-            }
+            sPort = value;
         }
-
-        private string sHostName;
-        public string HostName
+    }
+    private List<string> lDomains;
+    public List<string> Domains {
+        get { return lDomains; }
+        set
         {
-            get { return sHostName; }
-            set
-            {
-                sHostName = value;
-            }
+            lDomains = value;
         }
-
-        private string sPort;
-        public string Port
+    }
+    private List<CosInfo> lCOSes;
+    public List<CosInfo> COSes {
+        get { return lCOSes; }
+        set
         {
-            get { return sPort; }
-            set
-            {
-                sPort = value;
-            }
-        }
-
-        private List<string> lDomains;
-        public List<string> Domains
-        {
-            get { return lDomains; }
-            set
-            {
-                lDomains = value;
-            }
-        }
-
-        private List<CosInfo> lCOSes;
-        public List<CosInfo> COSes
-        {
-            get { return lCOSes; }
-            set
-            {
-                lCOSes = value;
-            }
+            lCOSes = value;
         }
     }
 }
-
+}

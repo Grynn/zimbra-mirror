@@ -6,12 +6,14 @@
 // Exception class
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 MAPIStoreException::MAPIStoreException(HRESULT hrErrCode,
-    LPCWSTR lpszDescription): GenericException(hrErrCode, lpszDescription) {
+    LPCWSTR lpszDescription): GenericException(hrErrCode, lpszDescription)
+{
     //
 }
 
 MAPIStoreException::MAPIStoreException(HRESULT hrErrCode, LPCWSTR lpszDescription, int nLine,
-    LPCSTR strFile): GenericException(hrErrCode, lpszDescription, nLine, strFile) {
+    LPCSTR strFile): GenericException(hrErrCode, lpszDescription, nLine, strFile)
+{
     //
 }
 
@@ -21,20 +23,24 @@ MAPIStoreException::MAPIStoreException(HRESULT hrErrCode, LPCWSTR lpszDescriptio
 MAPIStore::MAPIStore(): m_Store(NULL), m_mapiSession(NULL)
 {}
 
-MAPIStore::~MAPIStore() {
-	Zimbra::Util::AutoCriticalSection autocriticalsection(cs_store); 
+MAPIStore::~MAPIStore()
+{
+    Zimbra::Util::AutoCriticalSection autocriticalsection(cs_store);
     ULONG flags = LOGOFF_ORDERLY;
 
     Zimbra::MAPI::Util::FreeAllSpecialFolders(&m_specialFolderIds);
-    if (m_Store) {
+    if (m_Store)
+    {
         m_Store->StoreLogoff(&flags);
         m_Store->Release();
     }
     m_Store = NULL;
 }
 
-void MAPIStore::Initialize(LPMAPISESSION mapisession, LPMDB pMdb) {
-	Zimbra::Util::AutoCriticalSection autocriticalsection(cs_store); 
+void MAPIStore::Initialize(LPMAPISESSION mapisession, LPMDB pMdb)
+{
+    Zimbra::Util::AutoCriticalSection autocriticalsection(cs_store);
+
     m_Store = pMdb;
     m_mapiSession = mapisession;
     g_ulIMAPHeaderInfoPropTag = Zimbra::MAPI::Util::IMAPHeaderInfoPropTag(m_Store);
@@ -42,18 +48,20 @@ void MAPIStore::Initialize(LPMAPISESSION mapisession, LPMDB pMdb) {
     Zimbra::MAPI::Util::GetAllSpecialFolders(m_Store, &m_specialFolderIds);
 }
 
-HRESULT MAPIStore::CompareEntryIDs(SBinary *pBin1, SBinary *pBin2, ULONG &lpulResult) {
-	Zimbra::Util::AutoCriticalSection autocriticalsection(cs_store); 
+HRESULT MAPIStore::CompareEntryIDs(SBinary *pBin1, SBinary *pBin2, ULONG &lpulResult)
+{
+    Zimbra::Util::AutoCriticalSection autocriticalsection(cs_store);
     HRESULT hr = S_OK;
 
     hr =
         m_Store->CompareEntryIDs(pBin1->cb, (LPENTRYID)(pBin1->lpb), pBin2->cb,
-            (LPENTRYID)(pBin2->lpb), 0, &lpulResult);
+        (LPENTRYID)(pBin2->lpb), 0, &lpulResult);
     return hr;
 }
 
-HRESULT MAPIStore::GetRootFolder(MAPIFolder &rootFolder) {
-	Zimbra::Util::AutoCriticalSection autocriticalsection(cs_store); 
+HRESULT MAPIStore::GetRootFolder(MAPIFolder &rootFolder)
+{
+    Zimbra::Util::AutoCriticalSection autocriticalsection(cs_store);
     HRESULT hr = S_OK;
     SBinary bin;
     ULONG objtype = 0;
@@ -64,7 +72,7 @@ HRESULT MAPIStore::GetRootFolder(MAPIFolder &rootFolder) {
             __FILE__);
     if (FAILED(hr =
                 m_Store->OpenEntry(bin.cb, (LPENTRYID)bin.lpb, NULL, MAPI_BEST_ACCESS, &objtype,
-                    (LPUNKNOWN *)&pFolder)))
+                (LPUNKNOWN *)&pFolder)))
         throw MAPIStoreException(hr, L"GetRootFolder(): OpenEntry Failed.", __LINE__, __FILE__);
     // Init root folder object
     rootFolder.Initialize(pFolder, _TEXT("/"), &bin);
@@ -73,7 +81,9 @@ HRESULT MAPIStore::GetRootFolder(MAPIFolder &rootFolder) {
 
 HRESULT MAPIStore::OpenEntry(ULONG cbEntryID, LPENTRYID lpEntryID, LPCIID lpInterface,
     ULONG ulFlags, ULONG FAR *lpulObjType,
-    LPUNKNOWN FAR *lppUnk) {
-	Zimbra::Util::AutoCriticalSection autocriticalsection(cs_store); 
+    LPUNKNOWN FAR *lppUnk)
+{
+    Zimbra::Util::AutoCriticalSection autocriticalsection(cs_store);
+
     return m_Store->OpenEntry(cbEntryID, lpEntryID, lpInterface, ulFlags, lpulObjType, lppUnk);
 }

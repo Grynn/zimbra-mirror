@@ -1,7 +1,8 @@
 #pragma once
 
 // MAPIContactException class
-class MAPIContactException: public GenericException {
+class MAPIContactException: public GenericException
+{
 public:
     MAPIContactException(HRESULT hrErrCode, LPCWSTR lpszDescription);
     MAPIContactException(HRESULT hrErrCode, LPCWSTR lpszDescription, int nLine, LPCSTR strFile);
@@ -9,7 +10,8 @@ public:
 };
 
 // MAPIContact class
-class MAPIContact {
+class MAPIContact
+{
 private:
     // prop tags for named properties
     ULONG pr_mail1address,
@@ -39,7 +41,8 @@ private:
         pr_imaddress;
 
     // index of props
-    typedef enum _ContactsPropIdx {
+    typedef enum _ContactsPropIdx
+    {
         N_MAIL1, N_MAIL1EID, N_MAIL1TYPE, N_MAIL1DISPNAME,
         N_MAIL2, N_MAIL2EID, N_MAIL2TYPE, N_MAIL2DISPNAME,
         N_MAIL3, N_MAIL3EID, N_MAIL3TYPE, N_MAIL3DISPNAME,
@@ -51,7 +54,8 @@ private:
     } ContactsPropIdx;
 
     // this enum defines the order of the props
-    enum {
+    enum
+    {
         C_CALLBACK_TELEPHONE_NUMBER,
         C_CAR_TELEPHONE_NUMBER,
         C_COMPANY_NAME,
@@ -88,7 +92,7 @@ private:
         // NOTES IS PR_BODY AND PR_BODY_HTML
         C_OTHER_ADDRESS_CITY,
         C_OTHER_ADDRESS_COUNTRY,
-        C_PRIMARY_FAX_NUMBER,           // OTHER FAX
+        C_PRIMARY_FAX_NUMBER,                   // OTHER FAX
         C_OTHER_TELEPHONE_NUMBER,
         C_OTHER_ADDRESS_POSTAL_CODE,
         C_OTHER_ADDRESS_STATE_OR_PROVINCE,
@@ -112,7 +116,8 @@ private:
         C_NUM_PROPS
     };
 
-    enum OLK_FILE_AS {
+    enum OLK_FILE_AS
+    {
         OFA_COMPANY = 14870,
         OFA_LAST_C_FIRST_COMPANY = 32793,
         OFA_COMPANY_LAST_C_FIRST = 32792,
@@ -195,107 +200,256 @@ public:
     ~MAPIContact();
     bool IsPersonalDL() { return m_bPersonalDL; }
 
-    void CallbackPhone(LPTSTR pStr) { m_pCallbackPhone = pStr;
-                                      m_size += m_pCallbackPhone.length(); }
-    void CarPhone(LPTSTR pStr) { m_pCarPhone = pStr;
-                                 m_size += m_pCarPhone.length(); }
-    void Company(LPTSTR pStr) { m_pCompany = pStr;
-                                m_size += m_pCompany.length(); }
-    void Email(LPTSTR pStr) { m_pEmail = pStr;
-                              m_size += m_pEmail.length(); }
-    void Email2(LPTSTR pStr) { m_pEmail2 = pStr;
-                               m_size += m_pEmail2.length(); }
-    void Email3(LPTSTR pStr) { m_pEmail3 = pStr;
-                               m_size += m_pEmail3.length(); }
-    void FileAs(LPTSTR pStr) { m_pFileAs = pStr;
-                               m_size += m_pFileAs.length(); }
-    void FirstName(LPTSTR pStr) { m_pFirstName = pStr;
-                                  m_size += m_pFirstName.length(); }
-    void HomeCity(LPTSTR pStr) { m_pHomeCity = pStr;
-                                 m_size += m_pHomeCity.length(); }
-    void HomeCountry(LPTSTR pStr) { m_pHomeCountry = pStr;
-                                    m_size += m_pHomeCountry.length(); }
-    void HomeFax(LPTSTR pStr) { m_pHomeFax = pStr;
-                                m_size += m_pHomeFax.length(); }
-    void HomePhone(LPTSTR pStr) { m_pHomePhone = pStr;
-                                  m_size += m_pHomePhone.length(); }
-    void HomePhone2(LPTSTR pStr) { m_pHomePhone2 = pStr;
-                                   m_size += m_pHomePhone2.length(); }
-    void HomePostalCode(LPTSTR pStr) { m_pHomePostalCode = pStr;
-                                       m_size += m_pHomePostalCode.length(); }
-    void HomeState(LPTSTR pStr) { m_pHomeState = pStr;
-                                  m_size += m_pHomeState.length(); }
-    void HomeStreet(LPTSTR pStr) { m_pHomeStreet = pStr;
-                                   m_size += m_pHomeStreet.length(); }
-    void HomeURL(LPTSTR pStr) { m_pHomeURL = pStr;
-                                m_size += m_pHomeURL.length(); }
-    void JobTitle(LPTSTR pStr) { m_pJobTitle = pStr;
-                                 m_size += m_pJobTitle.length(); }
-    void LastName(LPTSTR pStr) { m_pLastName = pStr;
-                                 m_size += m_pLastName.length(); }
-    void MiddleName(LPTSTR pStr) { m_pMiddleName = pStr;
-                                   m_size += m_pMiddleName.length(); }
-    void MobilePhone(LPTSTR pStr) { m_pMobilePhone = pStr;
-                                    m_size += m_pMobilePhone.length(); }
-    void NamePrefix(LPTSTR pStr) { m_pNamePrefix = pStr;
-                                   m_size += m_pNamePrefix.length(); }
-    void NameSuffix(LPTSTR pStr) { m_pNameSuffix = pStr;
-                                   m_size += m_pNameSuffix.length(); }
-    void Notes(LPTSTR pStr) { m_pNotes = pStr;
-                              m_size += m_pNotes.length(); }
-    void OtherCity(LPTSTR pStr) { m_pOtherCity = pStr;
-                                  m_size += m_pOtherCity.length(); }
-    void OtherCountry(LPTSTR pStr) { m_pOtherCountry = pStr;
-                                     m_size += m_pOtherCountry.length(); }
-    void OtherFax(LPTSTR pStr) { m_pOtherFax = pStr;
-                                 m_size += m_pOtherFax.length(); }
-    void OtherPhone(LPTSTR pStr) { m_pOtherPhone = pStr;
-                                   m_size += m_pOtherPhone.length(); }
-    void OtherPostalCode(LPTSTR pStr) { m_pOtherPostalCode = pStr;
-                                        m_size += m_pOtherPostalCode.length(); }
-    void OtherState(LPTSTR pStr) { m_pOtherState = pStr;
-                                   m_size += m_pOtherState.length(); }
-    void OtherStreet(LPTSTR pStr) { m_pOtherStreet = pStr;
-                                    m_size += m_pOtherStreet.length(); }
-    void OtherURL(LPTSTR pStr) { m_pOtherURL = pStr;
-                                 m_size += m_pOtherURL.length(); }
-    void Pager(LPTSTR pStr) { m_pPager = pStr;
-                              m_size += m_pPager.length(); }
-    void WorkCity(LPTSTR pStr) { m_pWorkCity = pStr;
-                                 m_size += m_pWorkCity.length(); }
-    void WorkCountry(LPTSTR pStr) { m_pWorkCountry = pStr;
-                                    m_size += m_pWorkCountry.length(); }
-    void WorkFax(LPTSTR pStr) { m_pWorkFax = pStr;
-                                m_size += m_pWorkFax.length(); }
-    void WorkPhone(LPTSTR pStr) { m_pWorkPhone = pStr;
-                                  m_size += m_pWorkPhone.length(); }
-    void WorkPostalCode(LPTSTR pStr) { m_pWorkPostalCode = pStr;
-                                       m_size += m_pWorkPostalCode.length(); }
-    void WorkState(LPTSTR pStr) { m_pWorkState = pStr;
-                                  m_size += m_pWorkState.length(); }
-    void WorkStreet(LPTSTR pStr) { m_pWorkStreet = pStr;
-                                   m_size += m_pWorkStreet.length(); }
-    void WorkURL(LPTSTR pStr) { m_pWorkURL = pStr;
-                                m_size += m_pWorkURL.length(); }
-    void Birthday(LPTSTR pStr) { m_pBirthday = pStr;
-                                 m_size += m_pBirthday.length(); }
-    void UserField1(LPTSTR pStr) { m_pUserField1 = pStr;
-                                   m_size += m_pUserField1.length(); }
-    void UserField2(LPTSTR pStr) { m_pUserField2 = pStr;
-                                   m_size += m_pUserField2.length(); }
-    void UserField3(LPTSTR pStr) { m_pUserField3 = pStr;
-                                   m_size += m_pUserField3.length(); }
-    void UserField4(LPTSTR pStr) { m_pUserField4 = pStr;
-                                   m_size += m_pUserField4.length(); }
-    void NickName(LPTSTR pStr) { m_pNickName = pStr;
-                                 m_size += m_pNickName.length(); }
-    void DList(LPTSTR pStr) { m_pDList = pStr;
-                              m_size += m_pDList.length(); }
-    void Type(LPTSTR pStr) { m_pType = pStr;
-                             m_size += m_pType.length(); }
-    void IMAddress1(LPTSTR pStr) { m_pIMAddress1 = pStr;
-                                   m_size += m_pIMAddress1.length(); }
-
+    void CallbackPhone(LPTSTR pStr)
+    {
+        m_pCallbackPhone = pStr;
+        m_size += m_pCallbackPhone.length();
+    }
+    void CarPhone(LPTSTR pStr)
+    {
+        m_pCarPhone = pStr;
+        m_size += m_pCarPhone.length();
+    }
+    void Company(LPTSTR pStr)
+    {
+        m_pCompany = pStr;
+        m_size += m_pCompany.length();
+    }
+    void Email(LPTSTR pStr)
+    {
+        m_pEmail = pStr;
+        m_size += m_pEmail.length();
+    }
+    void Email2(LPTSTR pStr)
+    {
+        m_pEmail2 = pStr;
+        m_size += m_pEmail2.length();
+    }
+    void Email3(LPTSTR pStr)
+    {
+        m_pEmail3 = pStr;
+        m_size += m_pEmail3.length();
+    }
+    void FileAs(LPTSTR pStr)
+    {
+        m_pFileAs = pStr;
+        m_size += m_pFileAs.length();
+    }
+    void FirstName(LPTSTR pStr)
+    {
+        m_pFirstName = pStr;
+        m_size += m_pFirstName.length();
+    }
+    void HomeCity(LPTSTR pStr)
+    {
+        m_pHomeCity = pStr;
+        m_size += m_pHomeCity.length();
+    }
+    void HomeCountry(LPTSTR pStr)
+    {
+        m_pHomeCountry = pStr;
+        m_size += m_pHomeCountry.length();
+    }
+    void HomeFax(LPTSTR pStr)
+    {
+        m_pHomeFax = pStr;
+        m_size += m_pHomeFax.length();
+    }
+    void HomePhone(LPTSTR pStr)
+    {
+        m_pHomePhone = pStr;
+        m_size += m_pHomePhone.length();
+    }
+    void HomePhone2(LPTSTR pStr)
+    {
+        m_pHomePhone2 = pStr;
+        m_size += m_pHomePhone2.length();
+    }
+    void HomePostalCode(LPTSTR pStr)
+    {
+        m_pHomePostalCode = pStr;
+        m_size += m_pHomePostalCode.length();
+    }
+    void HomeState(LPTSTR pStr)
+    {
+        m_pHomeState = pStr;
+        m_size += m_pHomeState.length();
+    }
+    void HomeStreet(LPTSTR pStr)
+    {
+        m_pHomeStreet = pStr;
+        m_size += m_pHomeStreet.length();
+    }
+    void HomeURL(LPTSTR pStr)
+    {
+        m_pHomeURL = pStr;
+        m_size += m_pHomeURL.length();
+    }
+    void JobTitle(LPTSTR pStr)
+    {
+        m_pJobTitle = pStr;
+        m_size += m_pJobTitle.length();
+    }
+    void LastName(LPTSTR pStr)
+    {
+        m_pLastName = pStr;
+        m_size += m_pLastName.length();
+    }
+    void MiddleName(LPTSTR pStr)
+    {
+        m_pMiddleName = pStr;
+        m_size += m_pMiddleName.length();
+    }
+    void MobilePhone(LPTSTR pStr)
+    {
+        m_pMobilePhone = pStr;
+        m_size += m_pMobilePhone.length();
+    }
+    void NamePrefix(LPTSTR pStr)
+    {
+        m_pNamePrefix = pStr;
+        m_size += m_pNamePrefix.length();
+    }
+    void NameSuffix(LPTSTR pStr)
+    {
+        m_pNameSuffix = pStr;
+        m_size += m_pNameSuffix.length();
+    }
+    void Notes(LPTSTR pStr)
+    {
+        m_pNotes = pStr;
+        m_size += m_pNotes.length();
+    }
+    void OtherCity(LPTSTR pStr)
+    {
+        m_pOtherCity = pStr;
+        m_size += m_pOtherCity.length();
+    }
+    void OtherCountry(LPTSTR pStr)
+    {
+        m_pOtherCountry = pStr;
+        m_size += m_pOtherCountry.length();
+    }
+    void OtherFax(LPTSTR pStr)
+    {
+        m_pOtherFax = pStr;
+        m_size += m_pOtherFax.length();
+    }
+    void OtherPhone(LPTSTR pStr)
+    {
+        m_pOtherPhone = pStr;
+        m_size += m_pOtherPhone.length();
+    }
+    void OtherPostalCode(LPTSTR pStr)
+    {
+        m_pOtherPostalCode = pStr;
+        m_size += m_pOtherPostalCode.length();
+    }
+    void OtherState(LPTSTR pStr)
+    {
+        m_pOtherState = pStr;
+        m_size += m_pOtherState.length();
+    }
+    void OtherStreet(LPTSTR pStr)
+    {
+        m_pOtherStreet = pStr;
+        m_size += m_pOtherStreet.length();
+    }
+    void OtherURL(LPTSTR pStr)
+    {
+        m_pOtherURL = pStr;
+        m_size += m_pOtherURL.length();
+    }
+    void Pager(LPTSTR pStr)
+    {
+        m_pPager = pStr;
+        m_size += m_pPager.length();
+    }
+    void WorkCity(LPTSTR pStr)
+    {
+        m_pWorkCity = pStr;
+        m_size += m_pWorkCity.length();
+    }
+    void WorkCountry(LPTSTR pStr)
+    {
+        m_pWorkCountry = pStr;
+        m_size += m_pWorkCountry.length();
+    }
+    void WorkFax(LPTSTR pStr)
+    {
+        m_pWorkFax = pStr;
+        m_size += m_pWorkFax.length();
+    }
+    void WorkPhone(LPTSTR pStr)
+    {
+        m_pWorkPhone = pStr;
+        m_size += m_pWorkPhone.length();
+    }
+    void WorkPostalCode(LPTSTR pStr)
+    {
+        m_pWorkPostalCode = pStr;
+        m_size += m_pWorkPostalCode.length();
+    }
+    void WorkState(LPTSTR pStr)
+    {
+        m_pWorkState = pStr;
+        m_size += m_pWorkState.length();
+    }
+    void WorkStreet(LPTSTR pStr)
+    {
+        m_pWorkStreet = pStr;
+        m_size += m_pWorkStreet.length();
+    }
+    void WorkURL(LPTSTR pStr)
+    {
+        m_pWorkURL = pStr;
+        m_size += m_pWorkURL.length();
+    }
+    void Birthday(LPTSTR pStr)
+    {
+        m_pBirthday = pStr;
+        m_size += m_pBirthday.length();
+    }
+    void UserField1(LPTSTR pStr)
+    {
+        m_pUserField1 = pStr;
+        m_size += m_pUserField1.length();
+    }
+    void UserField2(LPTSTR pStr)
+    {
+        m_pUserField2 = pStr;
+        m_size += m_pUserField2.length();
+    }
+    void UserField3(LPTSTR pStr)
+    {
+        m_pUserField3 = pStr;
+        m_size += m_pUserField3.length();
+    }
+    void UserField4(LPTSTR pStr)
+    {
+        m_pUserField4 = pStr;
+        m_size += m_pUserField4.length();
+    }
+    void NickName(LPTSTR pStr)
+    {
+        m_pNickName = pStr;
+        m_size += m_pNickName.length();
+    }
+    void DList(LPTSTR pStr)
+    {
+        m_pDList = pStr;
+        m_size += m_pDList.length();
+    }
+    void Type(LPTSTR pStr)
+    {
+        m_pType = pStr;
+        m_size += m_pType.length();
+    }
+    void IMAddress1(LPTSTR pStr)
+    {
+        m_pIMAddress1 = pStr;
+        m_size += m_pIMAddress1.length();
+    }
     wstring CallbackPhone() { return m_pCallbackPhone; }
     wstring CarPhone() { return m_pCarPhone; }
     wstring Company() { return m_pCompany; }
@@ -349,6 +503,9 @@ public:
     size_t Size() { return m_size; }
 
     wstring Picture() { return m_pPictureID; }
-    void Picture(LPTSTR pStr, UINT ulFileSize) { m_pPictureID = pStr;
-                                                 m_size += ulFileSize; }
+    void Picture(LPTSTR pStr, UINT ulFileSize)
+    {
+        m_pPictureID = pStr;
+        m_size += ulFileSize;
+    }
 };

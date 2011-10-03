@@ -1,16 +1,20 @@
 #pragma once
 
-namespace Zimbra {
-namespace MAPI {
-class ExchangeAdminException: public GenericException {
+namespace Zimbra
+{
+namespace MAPI
+{
+class ExchangeAdminException: public GenericException
+{
 public:
     ExchangeAdminException(HRESULT hrErrCode, LPCWSTR lpszDescription);
     ExchangeAdminException(HRESULT hrErrCode, LPCWSTR lpszDescription, int nLine,
-    LPCSTR strFile);
+                LPCSTR strFile);
     virtual ~ExchangeAdminException() {}
 };
 
-class ExchangeAdmin {
+class ExchangeAdmin
+{
 private:
     LPPROFADMIN m_pProfAdmin;
     wstring m_strServer;
@@ -26,13 +30,14 @@ public:
     HRESULT GetAllProfiles(vector<string> &vProfileList);
     HRESULT SetDefaultProfile(wstring strProfile);
     HRESULT CreateExchangeMailBox(LPCWSTR lpwstrNewUser, LPCWSTR lpwstrNewUserPwd,
-    LPCWSTR lpwstrlogonuser,
-    LPCWSTR lpwstrLogonUsrPwd);
+                LPCWSTR lpwstrlogonuser,
+                LPCWSTR lpwstrLogonUsrPwd);
     HRESULT DeleteExchangeMailBox(LPCWSTR lpwstrMailBox, LPCWSTR lpwstrlogonuser,
-    LPCWSTR lpwstrLogonUsrPwd);
+                LPCWSTR lpwstrLogonUsrPwd);
 };
 
-class ExchangeMigrationSetup {
+class ExchangeMigrationSetup
+{
 private:
     ExchangeAdmin *m_exchAdmin;
     wstring m_strServer;
@@ -41,14 +46,15 @@ private:
 
 public:
     ExchangeMigrationSetup(LPCWSTR strExhangeHost, LPCWSTR ExchangeAdminName,
-    LPCWSTR ExchangeAdminPwd);
+                LPCWSTR ExchangeAdminPwd);
     ~ExchangeMigrationSetup();
     HRESULT Setup();
     HRESULT Clean();
     HRESULT GetAllProfiles(vector<string> &vProfileList);
 };
 
-class ExchangeOps {
+class ExchangeOps
+{
 private:
     static ExchangeMigrationSetup *m_exchmigsetup;
     static bool Initialized;
@@ -56,7 +62,7 @@ private:
 
 public:
     static LPCWSTR GlobalInit(LPCWSTR lpMAPITarget, LPCWSTR lpAdminUsername = NULL,
-    LPCWSTR lpAdminPassword = NULL);
+                LPCWSTR lpAdminPassword = NULL);
     static LPCWSTR GlobalUninit();
     static LPCWSTR SelectExchangeUsers(vector<ObjectPickerData> &vUserList);
 };

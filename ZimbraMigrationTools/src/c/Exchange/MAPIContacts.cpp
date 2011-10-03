@@ -7,13 +7,15 @@
 // MAPIMessageException
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 MAPIContactException::MAPIContactException(HRESULT hrErrCode,
-    LPCWSTR lpszDescription): GenericException(hrErrCode, lpszDescription) {
+    LPCWSTR lpszDescription): GenericException(hrErrCode, lpszDescription)
+{
     //
 }
 
 MAPIContactException::MAPIContactException(HRESULT hrErrCode, LPCWSTR lpszDescription,
     int nLine,
-    LPCSTR strFile): GenericException(hrErrCode, lpszDescription, nLine, strFile) {
+    LPCSTR strFile): GenericException(hrErrCode, lpszDescription, nLine, strFile)
+{
     //
 }
 
@@ -21,7 +23,8 @@ MAPIContactException::MAPIContactException(HRESULT hrErrCode, LPCWSTR lpszDescri
 // MAPIContact
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 MAPIContact::MAPIContact(Zimbra::MAPI::MAPISession &session,
-    Zimbra::MAPI::MAPIMessage &mMessage) {
+    Zimbra::MAPI::MAPIMessage &mMessage)
+{
     m_bPersonalDL = false;
     m_session = &session;
     m_mapiMessage = &mMessage;
@@ -137,13 +140,15 @@ MAPIContact::MAPIContact(Zimbra::MAPI::MAPISession &session,
     Init();
 }
 
-MAPIContact::~MAPIContact() {
+MAPIContact::~MAPIContact()
+{
     if (m_pPropVals)
         MAPIFreeBuffer(m_pPropVals);
     m_pPropVals = NULL;
 }
 
-HRESULT MAPIContact::Init() {
+HRESULT MAPIContact::Init()
+{
     HRESULT hr = S_OK;
 
     Zimbra::Util::ScopedBuffer<SPropValue> pPropValMsgClass;
@@ -155,7 +160,8 @@ HRESULT MAPIContact::Init() {
         m_bPersonalDL = true;
     // initialize the MAPINAMEID structure GetIDsFromNames requires
     LPMAPINAMEID ppNames[N_NUM_NAMES] = { 0 };
-    for (int i = 0; i < N_NUM_NAMES; i++) {
+    for (int i = 0; i < N_NUM_NAMES; i++)
+    {
         MAPIAllocateBuffer(sizeof (MAPINAMEID), (LPVOID *)&(ppNames[i]));
         ppNames[i]->ulKind = MNID_ID;
         ppNames[i]->lpguid = (LPGUID)(&PS_CONTACT_PROPERTIES);
@@ -184,21 +190,21 @@ HRESULT MAPIContact::Init() {
     pr_fileasID = SetPropType(pContactTags->aulPropTag[N_FILEAS_ID], PT_LONG);
     pr_business_address_city = SetPropType(pContactTags->aulPropTag[N_BUS_CITY], PT_TSTRING);
     pr_business_address_country = SetPropType(pContactTags->aulPropTag[N_BUS_COUNTRY],
-            PT_TSTRING);
+        PT_TSTRING);
     pr_business_address_postal_code = SetPropType(pContactTags->aulPropTag[N_BUS_ZIP],
-            PT_TSTRING);
+        PT_TSTRING);
     pr_business_address_state = SetPropType(pContactTags->aulPropTag[N_BUS_STATE], PT_TSTRING);
     pr_business_address_street = SetPropType(pContactTags->aulPropTag[N_BUS_STREET], PT_TSTRING);
     pr_contact_user1_idx = SetPropType(pContactTags->aulPropTag[N_CONTACT_USER1_IDX],
-            PT_TSTRING);
+        PT_TSTRING);
     pr_contact_user2_idx = SetPropType(pContactTags->aulPropTag[N_CONTACT_USER2_IDX],
-            PT_TSTRING);
+        PT_TSTRING);
     pr_contact_user3_idx = SetPropType(pContactTags->aulPropTag[N_CONTACT_USER3_IDX],
-            PT_TSTRING);
+        PT_TSTRING);
     pr_contact_user4_idx = SetPropType(pContactTags->aulPropTag[N_CONTACT_USER4_IDX],
-            PT_TSTRING);
+        PT_TSTRING);
     pr_contact_oneoffmemebrs = SetPropType(
-            pContactTags->aulPropTag[N_CONTACT_ONEOFFMEMEBRS_IDX], PT_MV_BINARY);
+        pContactTags->aulPropTag[N_CONTACT_ONEOFFMEMEBRS_IDX], PT_MV_BINARY);
     pr_imaddress = SetPropType(pContactTags->aulPropTag[N_IMADDRESS], PT_TSTRING);
     // free the memory we allocated on the head
     for (int i = 0; i < N_NUM_NAMES; i++)
@@ -245,7 +251,7 @@ HRESULT MAPIContact::Init() {
             // notes is PR_BODY and PR_BODY_HTML
             PR_OTHER_ADDRESS_CITY,
             PR_OTHER_ADDRESS_COUNTRY,
-            PR_PRIMARY_FAX_NUMBER,      // other fax
+            PR_PRIMARY_FAX_NUMBER,              // other fax
             PR_OTHER_TELEPHONE_NUMBER,
             PR_OTHER_ADDRESS_POSTAL_CODE,
             PR_OTHER_ADDRESS_STATE_OR_PROVINCE,
@@ -272,16 +278,20 @@ HRESULT MAPIContact::Init() {
     ULONG cVals = 0;
     if (FAILED(hr =
                 m_pMessage->GetProps((LPSPropTagArray) & contactProps, fMapiUnicode, &cVals,
-                    &m_pPropVals)))
+                &m_pPropVals)))
         throw MAPIContactException(hr, L"Init(): GetProps Failed.", __LINE__,
             __FILE__);
     // see if there is a file-as id
     LONG zimbraFileAsId = 0;
-    if (m_bPersonalDL) {                // PDL's always have a custom file-as
+    if (m_bPersonalDL)                          // PDL's always have a custom file-as
+    {
         zimbraFileAsId = 8;
         Type(L"group");
-    } else if (m_pPropVals[C_FILEASID].ulPropTag == contactProps.aulPropTag[C_FILEASID]) {
-        switch (m_pPropVals[C_FILEASID].Value.l) {
+    }
+    else if (m_pPropVals[C_FILEASID].ulPropTag == contactProps.aulPropTag[C_FILEASID])
+    {
+        switch (m_pPropVals[C_FILEASID].Value.l)
+        {
         case OFA_LAST_C_FIRST:
             zimbraFileAsId = 1;
             break;
@@ -311,10 +321,13 @@ HRESULT MAPIContact::Init() {
         CarPhone(m_pPropVals[C_CAR_TELEPHONE_NUMBER].Value.lpszW);
     if (m_pPropVals[C_COMPANY_NAME].ulPropTag == contactProps.aulPropTag[C_COMPANY_NAME])
         Company(m_pPropVals[C_COMPANY_NAME].Value.lpszW);
-    if (m_pPropVals[C_FILEAS].ulPropTag == contactProps.aulPropTag[C_FILEAS]) {
-        if (zimbraFileAsId == 8) {
+    if (m_pPropVals[C_FILEAS].ulPropTag == contactProps.aulPropTag[C_FILEAS])
+    {
+        if (zimbraFileAsId == 8)
+        {
             LPWSTR pwszFileAsValue = m_pPropVals[C_FILEAS].Value.lpszW;
-            if ((pwszFileAsValue != NULL) && (wcsicmp(pwszFileAsValue, L"") != 0)) {
+            if ((pwszFileAsValue != NULL) && (wcsicmp(pwszFileAsValue, L"") != 0))
+            {
                 LPWSTR pwszTemp = new WCHAR[wcslen(m_pPropVals[C_FILEAS].Value.lpszW) + 3];
 
                 // there is a legit string for the custom fileas value
@@ -324,7 +337,9 @@ HRESULT MAPIContact::Init() {
                 if (m_bPersonalDL)
                     NickName(m_pPropVals[C_FILEAS].Value.lpszW);
                 delete[] pwszTemp;
-            } else {
+            }
+            else
+            {
                 LPWSTR pwszNONAME = new WCHAR[wcslen(L"NO_NAME") + 1];
                 wsprintf(pwszNONAME, L"%s", L"NO_NAME");
                 LPWSTR pwszTemp = new WCHAR[wcslen(pwszNONAME) + 3];
@@ -338,7 +353,9 @@ HRESULT MAPIContact::Init() {
                 delete[] pwszTemp;
                 delete[] pwszNONAME;
             }
-        } else if (zimbraFileAsId) {
+        }
+        else if (zimbraFileAsId)
+        {
             WCHAR pwszTemp[3];
             _ltow(zimbraFileAsId, pwszTemp, 10);
             FileAs(pwszTemp);
@@ -443,7 +460,8 @@ HRESULT MAPIContact::Init() {
     if (m_pPropVals[C_CONTACT_USER4_IDX].ulPropTag ==
         contactProps.aulPropTag[C_CONTACT_USER4_IDX])
         UserField4(m_pPropVals[C_CONTACT_USER4_IDX].Value.lpszW);
-    if (m_pPropVals[C_BIRTHDAY].ulPropTag == contactProps.aulPropTag[C_BIRTHDAY]) {
+    if (m_pPropVals[C_BIRTHDAY].ulPropTag == contactProps.aulPropTag[C_BIRTHDAY])
+    {
         SYSTEMTIME st = { 0 };
 
         FileTimeToSystemTime(&(m_pPropVals[C_BIRTHDAY].Value.ft), &st);
@@ -461,10 +479,14 @@ HRESULT MAPIContact::Init() {
     // email 1
     RECIP_INFO tempRecip;
     if ((m_pPropVals[C_MAIL1TYPE].ulPropTag == contactProps.aulPropTag[C_MAIL1TYPE]) &&
-        (m_pPropVals[C_MAIL1ADDRESS].ulPropTag == contactProps.aulPropTag[C_MAIL1ADDRESS])) {
-        if (wcscmp(m_pPropVals[C_MAIL1TYPE].Value.lpszW, L"SMTP") == 0) {
+        (m_pPropVals[C_MAIL1ADDRESS].ulPropTag == contactProps.aulPropTag[C_MAIL1ADDRESS]))
+    {
+        if (wcscmp(m_pPropVals[C_MAIL1TYPE].Value.lpszW, L"SMTP") == 0)
+        {
             Email(m_pPropVals[C_MAIL1ADDRESS].Value.lpszW);
-        } else if (wcscmp(m_pPropVals[C_MAIL1TYPE].Value.lpszW, L"EX") == 0) {
+        }
+        else if (wcscmp(m_pPropVals[C_MAIL1TYPE].Value.lpszW, L"EX") == 0)
+        {
             tempRecip.pAddrType = m_pPropVals[C_MAIL1TYPE].Value.lpszW;
             tempRecip.pEmailAddr = m_pPropVals[C_MAIL1ADDRESS].Value.lpszW;
             tempRecip.cbEid = m_pPropVals[C_MAIL1EID].Value.bin.cb;
@@ -472,7 +494,7 @@ HRESULT MAPIContact::Init() {
 
             wstring strSenderEmail(_TEXT(""));
             HRESULT hr = Zimbra::MAPI::Util::HrMAPIGetSMTPAddress(*m_session, tempRecip,
-                    strSenderEmail);
+                strSenderEmail);
             if (hr != S_OK)
                 Email(m_pPropVals[C_MAIL1DISPNAME].Value.lpszW);
 
@@ -482,10 +504,14 @@ HRESULT MAPIContact::Init() {
     }
     // email 2
     if ((m_pPropVals[C_MAIL2TYPE].ulPropTag == contactProps.aulPropTag[C_MAIL2TYPE]) &&
-        (m_pPropVals[C_MAIL2ADDRESS].ulPropTag == contactProps.aulPropTag[C_MAIL2ADDRESS])) {
-        if (wcscmp(m_pPropVals[C_MAIL2TYPE].Value.lpszW, L"SMTP") == 0) {
+        (m_pPropVals[C_MAIL2ADDRESS].ulPropTag == contactProps.aulPropTag[C_MAIL2ADDRESS]))
+    {
+        if (wcscmp(m_pPropVals[C_MAIL2TYPE].Value.lpszW, L"SMTP") == 0)
+        {
             Email2(m_pPropVals[C_MAIL2ADDRESS].Value.lpszW);
-        } else if (wcscmp(m_pPropVals[C_MAIL2TYPE].Value.lpszW, L"EX") == 0) {
+        }
+        else if (wcscmp(m_pPropVals[C_MAIL2TYPE].Value.lpszW, L"EX") == 0)
+        {
             tempRecip.pAddrType = m_pPropVals[C_MAIL2TYPE].Value.lpszW;
             tempRecip.pEmailAddr = m_pPropVals[C_MAIL2ADDRESS].Value.lpszW;
             tempRecip.cbEid = m_pPropVals[C_MAIL2EID].Value.bin.cb;
@@ -493,7 +519,7 @@ HRESULT MAPIContact::Init() {
 
             wstring strSenderEmail(_TEXT(""));
             HRESULT hr = Zimbra::MAPI::Util::HrMAPIGetSMTPAddress(*m_session, tempRecip,
-                    strSenderEmail);
+                strSenderEmail);
             if (hr != S_OK)
                 Email(m_pPropVals[C_MAIL2DISPNAME].Value.lpszW);
 
@@ -503,10 +529,14 @@ HRESULT MAPIContact::Init() {
     }
     // email 3
     if ((m_pPropVals[C_MAIL3TYPE].ulPropTag == contactProps.aulPropTag[C_MAIL3TYPE]) &&
-        (m_pPropVals[C_MAIL3ADDRESS].ulPropTag == contactProps.aulPropTag[C_MAIL3ADDRESS])) {
-        if (wcscmp(m_pPropVals[C_MAIL3TYPE].Value.lpszW, L"SMTP") == 0) {
+        (m_pPropVals[C_MAIL3ADDRESS].ulPropTag == contactProps.aulPropTag[C_MAIL3ADDRESS]))
+    {
+        if (wcscmp(m_pPropVals[C_MAIL3TYPE].Value.lpszW, L"SMTP") == 0)
+        {
             Email3(m_pPropVals[C_MAIL3ADDRESS].Value.lpszW);
-        } else if (wcscmp(m_pPropVals[C_MAIL3TYPE].Value.lpszW, L"EX") == 0) {
+        }
+        else if (wcscmp(m_pPropVals[C_MAIL3TYPE].Value.lpszW, L"EX") == 0)
+        {
             tempRecip.pAddrType = m_pPropVals[C_MAIL3TYPE].Value.lpszW;
             tempRecip.pEmailAddr = m_pPropVals[C_MAIL3ADDRESS].Value.lpszW;
             tempRecip.cbEid = m_pPropVals[C_MAIL3EID].Value.bin.cb;
@@ -514,7 +544,7 @@ HRESULT MAPIContact::Init() {
 
             wstring strSenderEmail(_TEXT(""));
             HRESULT hr = Zimbra::MAPI::Util::HrMAPIGetSMTPAddress(*m_session, tempRecip,
-                    strSenderEmail);
+                strSenderEmail);
             if (hr != S_OK)
                 Email(m_pPropVals[C_MAIL3DISPNAME].Value.lpszW);
 
@@ -525,14 +555,17 @@ HRESULT MAPIContact::Init() {
     if (m_pPropVals[C_IMADDRESS].ulPropTag == contactProps.aulPropTag[C_IMADDRESS])
         IMAddress1(m_pPropVals[C_IMADDRESS].Value.lpszW);
     // add the 'notes' section
-    if (m_mapiMessage->HasTextPart()) {
+    if (m_mapiMessage->HasTextPart())
+    {
         LPTSTR pBody = NULL;
         UINT nText = 0;
         m_mapiMessage->TextBody(&pBody, nText);
         LPTSTR psz = pBody;
-        if (psz) {
+        if (psz)
+        {
             const char SPACE = ' ', TAB = '\t', CR = 0x0d, LF = 0x0a;
-            while (*psz) {
+            while (*psz)
+            {
                 // Replace control characters with space
                 // Exclude carriage return and new line characters while doing the same
                 if ((*psz < SPACE) && (*psz != CR) && (*psz != LF))
@@ -542,11 +575,15 @@ HRESULT MAPIContact::Init() {
             // We'll add the body only if it has data other than white spaces and new lines
             bool bHasValidChars = false;
             psz = pBody;
-            while (*psz) {
-                if ((*psz == SPACE) || (*psz == TAB) || (*psz == CR) || (*psz == LF)) {
+            while (*psz)
+            {
+                if ((*psz == SPACE) || (*psz == TAB) || (*psz == CR) || (*psz == LF))
+                {
                     psz++;
                     continue;
-                } else {
+                }
+                else
+                {
                     bHasValidChars = true;
                     break;
                 }

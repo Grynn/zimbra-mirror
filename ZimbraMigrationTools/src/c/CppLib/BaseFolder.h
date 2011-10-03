@@ -5,20 +5,14 @@
 class BaseFolder
 {
 protected:
-	 BSTR Strname;
-	 LONG LngID;
-	 BSTR parentPath;
-	 SHORT ZimbraID;
+    BSTR Strname;
+    LONG LngID;
+    BSTR parentPath;
+    SHORT ZimbraID;
+
 public:
-
-	BaseFolder(void)
-	{
-	}
-
-	virtual ~BaseFolder(void)
-	{
-	}
-
-	
+    BaseFolder(void)
+    {}
+    virtual ~BaseFolder(void)
+    {}
 };
-
