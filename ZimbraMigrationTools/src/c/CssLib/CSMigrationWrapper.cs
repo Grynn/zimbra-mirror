@@ -336,7 +336,10 @@ public class CSMigrationwrapper
                                     }
                                 }
                                 api.AccountName = Acct.Accountname;
-                                if (dict.Count > 0) int stat = api.CreateContact(dict);
+                                if (dict.Count > 0)
+                                {
+                                    int stat = api.CreateContact(dict);
+                                }
                             }
                             Acct.migrationFolders[0].CurrentCountOFItems++;
                         }
