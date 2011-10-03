@@ -869,6 +869,7 @@ public class NginxLookupExtension implements ZimbraExtension {
                                     zlc, 
                                     getUserSC(config), 
                                     config, 
+                                    FilterId.NGINX_GET_MAILHOST,
                                     Provisioning.A_zimbraReverseProxyMailHostQuery,
                                     Provisioning.A_zimbraReverseProxyMailHostSearchBase,
                                     "USER",
