@@ -1,4 +1,7 @@
 #pragma once
+
+#include <mime/mimepp/mimepp.h>
+
 namespace Zimbra
 {
 namespace MAPI
