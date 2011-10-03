@@ -1,5 +1,29 @@
 #include "common.h"
 #include "Exchange.h"
+#include <strsafe.h>
+
+enum AttachPropIdx
+{
+    ATTACH_METHOD = 0, ATTACH_CONTENT_ID,
+    ATTACH_LONG_FILENAME, WATTACH_LONG_FILENAME,
+    ATTACH_FILENAME, ATTACH_MIME_TAG,
+    ATTACH_DISPLAY_NAME, WATTACH_DISPLAY_NAME,
+    ATTACH_CONTENT_LOCATION, ATTACH_DISPOSITION,
+    ATTACH_EXTENSION, ATTACH_ENCODING,
+    NATTACH_PROPS
+};
+
+SizedSPropTagArray(NATTACH_PROPS, attachProps) = {
+    NATTACH_PROPS,
+    {
+        PR_ATTACH_METHOD, PR_ATTACH_CONTENT_ID_A,
+        PR_ATTACH_LONG_FILENAME_A, PR_ATTACH_LONG_FILENAME_W,
+        PR_ATTACH_FILENAME_A, PR_ATTACH_MIME_TAG_A,
+        PR_DISPLAY_NAME_A, PR_DISPLAY_NAME_W,
+        PR_ATTACH_CONTENT_LOCATION_A, PR_ATTACH_DISPOSITION_A,
+        PR_ATTACH_EXTENSION_A, PR_ATTACH_ENCODING
+    }
+};
 
 /** special folder stuff **/
 inline void SFAddEidBin(UINT propIdx, LPSPropValue lpProps, UINT folderId,
@@ -320,11 +344,11 @@ HRESULT Zimbra::MAPI::Util::GetUserDnAndServerDnFromProfile(LPMAPISESSION pSessi
     }
     size_t len = strlen(pPropValues[0].Value.lpszA);
     pExchangeServerDn = new CHAR[len + 1];
-    strcpy(pExchangeServerDn, pPropValues[0].Value.lpszA);
+    strcpy_s(pExchangeServerDn, len + 1, pPropValues[0].Value.lpszA);
 
     len = strlen(pPropValues[1].Value.lpszA);
     pExchangeUserDn = new CHAR[len + 1];
-    strcpy(pExchangeUserDn, pPropValues[1].Value.lpszA);
+    strcpy_s(pExchangeUserDn, len + 1, pPropValues[1].Value.lpszA);
 
     return S_OK;
 }
@@ -762,8 +786,8 @@ HRESULT Zimbra::MAPI::Util::GetExchangeUsersUsingObjectPicker(
                                 LPWSTR pwszZimbraAlias = new WCHAR[nAlias + nDomain + 1];
                                 wcsncpy(pwszZimbraAlias, pwszStart, nAlias - 1);
                                 pwszZimbraAlias[nAlias - 1] = L'\0';
-                                wcscat(pwszZimbraAlias, L"@");
-                                wcscat(pwszZimbraAlias, pDomain);
+                                wcscat_s(pwszZimbraAlias, wcslen(L"@"), L"@");
+                                wcscat_s(pwszZimbraAlias, nDomain, pDomain);
 
                                 wstring pwszNameTemp = L"zimbraMailAlias";
 
@@ -946,4 +970,1013 @@ HRESULT Zimbra::MAPI::Util::HrMAPIGetSMTPAddress(IN MAPISession &session,
     if (pUser != NULL)
         UlRelease(pUser);
     return hr;
+}
+
+BOOL Zimbra::MAPI::Util::CompareRecipients(MAPISession &session, RECIP_INFO &r1, RECIP_INFO &r2)
+{
+    SBinary eid1, eid2;
+
+    eid1.cb = r1.cbEid;
+    eid2.cb = r2.cbEid;
+    eid1.lpb = (LPBYTE)r1.pEid;
+    eid2.lpb = (LPBYTE)r2.pEid;
+    if ((eid1.lpb == NULL) || (eid2.lpb == NULL))
+        return FALSE;
+    ULONG ulResult = FALSE;
+    session.CompareEntryIDs(&eid1, &eid2, ulResult);
+    return ulResult;
+}
+
+bool Zimbra::MAPI::Util::NeedsEncoding(LPSTR pStr)
+{
+    for (unsigned int i = 0; i < strlen(pStr); i++)
+    {
+        unsigned char cVal = (unsigned char)(pStr[i]);
+        if (((cVal > 0) && (cVal < 32)) ||
+            ((cVal > 127) && (cVal < 256)))
+            return true;
+    }                                           // for( int i = 0; i < strlen(pStr); i++ )
+    return false;
+}
+
+void Zimbra::MAPI::Util::CreateMimeSubject(IN LPTSTR pSubject, IN UINT codepage,
+    IN OUT LPSTR *ppMimeSubject)
+{
+    LPSTR pMBSubject = NULL;
+
+#if UNICODE
+    // convert the wide string to the appropriate multi-byte string
+    // get the length required
+    int nLen = WideCharToMultiByte(codepage, 0, pSubject, (int)wcslen(
+            pSubject), NULL, 0, NULL, NULL);
+
+    // don't forget to free this buffer...
+    pMBSubject = new CHAR[nLen + 1];
+    ZeroMemory(pMBSubject, nLen + 1);
+
+    // do the conversion
+    WideCharToMultiByte(codepage, 0, pSubject, (int)wcslen(
+            pSubject), pMBSubject, nLen + 1, NULL, NULL);
+#else
+    // no conversion required
+    pMBSubject = pSubject;
+#endif
+    // do we need to do RFC2047 encoding on this string?
+    if (NeedsEncoding(pMBSubject))
+    {
+        // get the string version of the codepage
+        LPSTR pCharset = NULL;
+        CharsetUtil::CharsetStringFromCodePageId(codepage, &pCharset);
+
+        // use mimepp to encode the string
+        mimepp::EncodedWord subj;
+        subj.setDecodedText(pMBSubject);
+        subj.setCharset(pCharset);
+        subj.setEncodingType('q');
+        subj.assemble();
+
+        *ppMimeSubject = new CHAR[subj.getString().length() + 1];
+        strcpy_s(*ppMimeSubject, subj.getString().length() + 1, subj.getString().c_str());
+        if (pCharset != NULL)
+            delete[] pCharset;
+    }
+    else
+    {
+        *ppMimeSubject = new CHAR[strlen(pMBSubject) + 1];
+        strcpy_s(*ppMimeSubject, strlen(pMBSubject) + 1, pMBSubject);
+    }
+#if UNICODE
+    delete[] pMBSubject;
+#endif
+}
+
+void ReplaceLFWithCRLF(LPSTR pszMimeMsg, UINT mimeLength, LPSTR *ppszNewMsg, UINT *pNewLength)
+{
+    LPSTR pNewMsg = new CHAR[mimeLength * 2 + 2];
+    UINT nNewLen = 0;
+
+    *ppszNewMsg = pNewMsg;
+    bool bLastCr = false;
+    for (UINT i = 0; i < mimeLength; i++, pszMimeMsg++, pNewMsg++, nNewLen++)
+    {
+        if (!bLastCr && (*pszMimeMsg == '\n'))
+        {
+            *pNewMsg = '\r';
+            pNewMsg++;
+            nNewLen++;
+        }
+        else
+        {
+            bLastCr = (*pszMimeMsg == '\r');
+        }
+        *pNewMsg = *pszMimeMsg;
+    }
+    *pNewLength = nNewLen;
+    // DumpBuffer( *ppszNewMsg, *pNewLength );
+}
+
+void Zimbra::MAPI::Util::AddBodyToPart(mimepp::BodyPart *pPart, LPSTR pStr, size_t length,
+    BOOL bConvertLFToCRLF)
+{
+    if (!pStr)
+    {
+        // TRACE( _T("Zimbra::MAPI::Util::AddBodyToPart: No body pStr found"));
+        return;
+    }
+    void ReplaceLFWithCRLF(LPSTR, UINT, LPSTR *, UINT *);
+    LPSTR pBuf = NULL;
+    if (bConvertLFToCRLF)
+        ReplaceLFWithCRLF(pStr, (UINT)length, &pBuf, &length);
+    else
+        pBuf = pStr;
+    mimepp::String encodedBodyStr;
+    mimepp::String bodyStr(pBuf, length);
+    MIME_ENCODING me = CharsetUtil::FindBestEncoding(pBuf, (int)length);
+    switch (me)
+    {
+    case ME_QUOTED_PRINTABLE:
+    {
+        // TODO: scream at hunny soft.
+        try
+        {
+            mimepp::QuotedPrintableEncoder encoder;
+            encodedBodyStr = encoder.encode(bodyStr);
+            pPart->headers().contentTransferEncoding().setString("Quoted-printable");
+        }
+        catch (...)                             // if it barfs, re-encode it as base64
+        {
+            mimepp::Base64Encoder encoder;
+            encodedBodyStr = encoder.encode(bodyStr);
+            pPart->headers().contentTransferEncoding().setString("Base64");
+        }
+    }
+    break;
+
+    case ME_BASE64:
+    {
+        pPart->headers().contentTransferEncoding().setString("Base64");
+        mimepp::Base64Encoder encoder;
+        encodedBodyStr = encoder.encode(bodyStr);
+    }
+    break;
+
+    case ME_7BIT:
+    {
+        pPart->headers().contentTransferEncoding().setString("7bit");
+        encodedBodyStr = bodyStr;
+    }
+    break;
+    }
+    pPart->body().setString(encodedBodyStr);
+    if (bConvertLFToCRLF)
+        delete[] pBuf;
+}
+
+void GetContentTypeFromExtension(LPSTR pExt, LPSTR &pContentType)
+{
+    pContentType = NULL;
+    if (pExt == NULL)
+        return;
+    HKEY hExtKey;
+    if (RegOpenKeyA(HKEY_CLASSES_ROOT, pExt, &hExtKey) != ERROR_SUCCESS)
+        return;
+    DWORD type;
+    DWORD nBytes;
+    if ((RegQueryValueExA(hExtKey, "Content Type", NULL, &type, NULL,
+                &nBytes) != ERROR_SUCCESS) || (type != REG_SZ))
+    {
+        RegCloseKey(hExtKey);
+        return;
+    }
+    pContentType = new CHAR[nBytes];
+    if (RegQueryValueExA(hExtKey, "Content Type", NULL, &type, (LPBYTE)pContentType,
+            &nBytes) != ERROR_SUCCESS)
+    {
+        RegCloseKey(hExtKey);
+        delete[] pContentType;
+        pContentType = NULL;
+        return;
+    }
+    RegCloseKey(hExtKey);
+}
+
+BYTE OID_MAC_BINARY[] = { 0x2A, 0x86, 0x48, 0x86, 0xf7, 0x14, 0x03, 0x0B, 0x01 };
+mimepp::BodyPart *Zimbra::MAPI::Util::AttachPartFromIAttach(MAPISession &session,
+    LPATTACH pAttach, LPSTR pCharset,
+    LONG codepage)
+{
+    // text/plain attachments may start with a byte order mark
+    enum BOM { BOM_UTF32BE, BOM_UTF32LE, BOM_UTF16BE, BOM_UTF16LE, BOM_UTF8, NBOMS, BOM_NONE };
+
+    int nboms[] = { 4, 4, 2, 2, 3 };
+    BYTE boms[][4] = {
+        { 0x00, 0x00, 0xFE, 0xFF },
+        { 0xFF, 0xFF, 0x00, 0x00 },
+        { 0xFE, 0xFF },
+        { 0xFF, 0xFE },
+        { 0xEF, 0xBB, 0xBF }
+    };
+    LPSTR pBomCharsets[] = { "UTF-32BE", "UTF-32LE", "UTF-16BE", "UTF-16LE", "UTF-8" };
+
+    BOM bom = BOM_NONE;
+
+    BOOL bMacEncoded = FALSE;
+
+    mimepp::BodyPart *pAttachPart = NULL;
+    if (pAttach == NULL)
+        return NULL;
+    LPSTR pAttachFilename = NULL;
+    HRESULT hr;
+    LPSPropValue pProps = NULL;
+    ULONG cProps = 0;
+    hr = pAttach->GetProps((LPSPropTagArray) & attachProps, 0, &cProps, &pProps);
+    mimepp::String strContentType("");
+    if (FAILED(hr))
+    {
+        throw Zimbra::MAPI::Util::MapiUtilsException(
+            hr, L"Util::AttachPartFromIAttach(): GetProps.",
+            __LINE__,
+            __FILE__);
+    }
+    if (pProps[ATTACH_METHOD].ulPropTag != PR_ATTACH_METHOD)
+    {
+        MAPIFreeBuffer(pProps);
+        return NULL;
+    }
+    pAttachPart = new mimepp::BodyPart;
+    if ((pProps[ATTACH_ENCODING].ulPropTag == PR_ATTACH_ENCODING) &&
+        (pProps[ATTACH_ENCODING].Value.bin.cb == sizeof (OID_MAC_BINARY)))
+    {
+        bMacEncoded = (memcmp(OID_MAC_BINARY,
+                pProps[ATTACH_ENCODING].Value.bin.lpb,
+                pProps[ATTACH_ENCODING].Value.bin.cb) ==
+            0);
+    }
+    if (pProps[ATTACH_CONTENT_ID].ulPropTag == PR_ATTACH_CONTENT_ID_A)
+    {
+        mimepp::String contentId("<");
+        contentId += pProps[ATTACH_CONTENT_ID].Value.lpszA;
+        contentId += ">";
+        pAttachPart->headers().contentId().setString(contentId);
+    }
+    if (pProps[ATTACH_CONTENT_LOCATION].ulPropTag == PR_ATTACH_CONTENT_LOCATION_A)
+    {
+        // add a custom header for content location to support rfc2557
+        pAttachPart->headers().fieldBody("Content-Location").setText(pProps[
+                ATTACH_CONTENT_LOCATION].Value.lpszA);
+    }
+    if (pProps[ATTACH_DISPOSITION].ulPropTag == PR_ATTACH_DISPOSITION_A)
+        pAttachPart->headers().contentDisposition().setType(
+            pProps[ATTACH_DISPOSITION].Value.lpszA);
+    else
+        pAttachPart->headers().contentDisposition().setType("attachment");
+    if (PROP_TYPE(pProps[WATTACH_LONG_FILENAME].ulPropTag) != PT_ERROR)
+    {
+        LPSTR pMimeAttName = NULL;
+        int nLen = (int)_tcslen(pProps[WATTACH_LONG_FILENAME].Value.lpszW);
+        UNREFERENCED_PARAMETER(nLen);
+        LPTSTR pAttname = pProps[WATTACH_LONG_FILENAME].Value.lpszW;
+        CreateMimeSubject(pAttname, codepage, &pMimeAttName);
+        mimepp::String AttStr(pMimeAttName);
+
+        pAttachPart->headers().contentDisposition().setFilename(AttStr);
+        pAttachPart->headers().contentDisposition().assemble();
+        if (pMimeAttName != NULL)
+            delete[] pMimeAttName;
+    }
+    else if (pProps[ATTACH_LONG_FILENAME].ulPropTag == PR_ATTACH_LONG_FILENAME_A)
+    {
+        pAttachFilename = pProps[ATTACH_LONG_FILENAME].Value.lpszA;
+        pAttachPart->headers().contentDisposition().setFilename(pAttachFilename);
+        pAttachPart->headers().contentDisposition().assemble();
+    }
+    else if (pProps[ATTACH_FILENAME].ulPropTag == PR_ATTACH_FILENAME_A)
+    {
+        pAttachFilename = pProps[ATTACH_FILENAME].Value.lpszA;
+        pAttachPart->headers().contentDisposition().setFilename(pAttachFilename);
+        pAttachPart->headers().contentDisposition().assemble();
+    }
+    else if (pProps[ATTACH_DISPLAY_NAME].ulPropTag == PR_DISPLAY_NAME_A)
+    {
+        pAttachFilename = pProps[ATTACH_DISPLAY_NAME].Value.lpszA;
+        pAttachPart->headers().contentDisposition().setFilename(pAttachFilename);
+        pAttachPart->headers().contentDisposition().assemble();
+    }
+    // add the attachment data - embedded or regular?
+    switch (pProps[0].Value.l)
+    {
+    case ATTACH_BY_VALUE:
+        // pr_attach_data_bin
+    {
+        LPVOID pAttachData = NULL;
+        LPVOID inBuffer = NULL;                 // temp buffer
+        size_t attachDataLen = 0;
+
+        LPSPropValue pProp = NULL;
+        hr = HrGetOneProp(pAttach, PR_ATTACH_DATA_BIN, &pProp);
+        if (hr == E_OUTOFMEMORY)
+        {
+            // need to IStream it out
+            IStream *pIStream;
+            hr =
+                    pAttach->OpenProperty(PR_ATTACH_DATA_BIN, &IID_IStream, STGM_READ, 0,
+                    (LPUNKNOWN FAR *)&pIStream);
+            if (!SUCCEEDED(hr))
+            {
+                delete pAttachPart;
+                pAttachPart = NULL;
+                return NULL;
+            }
+            // discover the size of the incoming body
+            STATSTG statstg;
+            hr = pIStream->Stat(&statstg, STATFLAG_NONAME);
+            if (!SUCCEEDED(hr))
+            {
+                delete pAttachPart;
+                pAttachPart = NULL;
+                return NULL;
+            }
+            attachDataLen = statstg.cbSize.LowPart;
+
+            // allocate buffer for incoming body data
+            hr = MAPIAllocateBuffer((ULONG)attachDataLen, (LPVOID FAR *)&inBuffer);
+            if (!SUCCEEDED(hr))
+            {
+                delete pAttachPart;
+                pAttachPart = NULL;
+                return NULL;
+            }
+            ZeroMemory(inBuffer, (int)attachDataLen);
+
+            // download the text
+            ULONG cb;
+            hr = pIStream->Read(inBuffer, statstg.cbSize.LowPart, &cb);
+
+            // close the stream
+            pIStream->Release();
+            pAttachData = inBuffer;
+        }
+        else if (FAILED(hr))
+        {
+            MAPIFreeBuffer(pProp);
+            delete pAttachPart;
+            pAttachPart = NULL;
+            // throw HRException(hr, __FILE__, __LINE__);
+            return NULL;
+        }
+        else
+        {
+            pAttachData = pProp->Value.bin.lpb;
+            attachDataLen = pProp->Value.bin.cb;
+        }
+        int i;
+        for (i = 0; i < NBOMS; i++)
+        {
+            if (attachDataLen > (size_t)nboms[i])
+            {
+                if (memcmp(pAttachData, boms[i], nboms[i]) == 0)
+                {
+                    bom = (BOM)i;
+                    break;
+                }
+            }
+        }
+        if (bMacEncoded)
+            AddBodyToPart(pAttachPart, (LPSTR)pAttachData + 128, attachDataLen - 128, FALSE);
+        else if (bom == BOM_NONE)
+            AddBodyToPart(pAttachPart, (LPSTR)pAttachData, attachDataLen, FALSE);
+        else
+            AddBodyToPart(pAttachPart, (LPSTR)(((BYTE *)pAttachData) + nboms[i]),
+                    (attachDataLen - nboms[i]), FALSE);
+        if (inBuffer != NULL)
+            MAPIFreeBuffer(inBuffer);
+        if (pProp != NULL)
+            MAPIFreeBuffer(pProp);
+    }
+    break;
+    case ATTACH_EMBEDDED_MSG:
+    {
+        LPMESSAGE pMessage = NULL;
+        hr = pAttach->OpenProperty(PR_ATTACH_DATA_OBJ, &IID_IMessage, 0, 0,
+                (LPUNKNOWN *)&pMessage);
+        if (FAILED(hr))
+        {
+            // TODO: error handling
+        }
+        // create a Message object
+        mimepp::Message mimeMsg;
+        MAPIMessage m;
+        m.Initialize(pMessage, session);
+        m.ToMimePPMessage(mimeMsg);
+        mimepp::String ct("message/rfc822; charset=utf-7;");
+        pAttachPart->headers().contentType().setString(ct);
+        pAttachPart->headers().contentType().parse();
+        pAttachPart->headers().contentTransferEncoding().setString("7bit");
+        pAttachPart->headers().contentTransferEncoding().assemble();
+        pAttachPart->headers().contentDisposition().setType("attachment");
+        if (pProps[ATTACH_DISPLAY_NAME].ulPropTag == PR_DISPLAY_NAME_A)
+        {
+            LPSTR pFilename = pProps[ATTACH_DISPLAY_NAME].Value.lpszA;
+            pAttachPart->headers().contentDisposition().setFilename(pFilename);
+        }
+        pAttachPart->headers().contentDisposition().assemble();
+        pAttachPart->body().setString(mimeMsg.getString());
+    }
+        MAPIFreeBuffer(pProps);
+        return pAttachPart;
+    }
+    if ((pProps[ATTACH_MIME_TAG].ulPropTag == PR_ATTACH_MIME_TAG_A) &&
+        stricmp(pProps[ATTACH_MIME_TAG].Value.lpszA, "multipart/appledouble"))
+    {
+        // set the content-type
+        strContentType += pProps[ATTACH_MIME_TAG].Value.lpszA;
+        strContentType += "; charset=";
+        if (bom == BOM_NONE)
+            strContentType += pCharset;
+        else
+            strContentType += pBomCharsets[bom];
+        strContentType += ";";
+        pAttachPart->headers().contentType().setString(strContentType);
+        pAttachPart->headers().contentType().parse();
+    }
+    else if (pAttachFilename != NULL)
+    {
+        if (pProps[ATTACH_EXTENSION].ulPropTag == PR_ATTACH_EXTENSION_A)
+        {
+            LPSTR pContentType = NULL;
+            GetContentTypeFromExtension(pProps[ATTACH_EXTENSION].Value.lpszA, pContentType);
+            if (pContentType == NULL)
+            {
+                strContentType += "application/octet-stream";
+            }
+            else
+            {
+                strContentType += pContentType;
+                delete[] pContentType;
+            }
+        }
+        else
+        {
+            strContentType += "application/octet-stream";
+        }
+        strContentType += "; charset=";
+        if (bom == BOM_NONE)
+            strContentType += pCharset;
+        else
+            strContentType += pBomCharsets[bom];
+        strContentType += ";";
+        pAttachPart->headers().contentType().setString(strContentType);
+        pAttachPart->headers().contentType().parse();
+    }
+    MAPIFreeBuffer(pProps);
+    return pAttachPart;
+}
+
+mimepp::BodyPart *Zimbra::MAPI::Util::AttachTooLargeAttachPart(ULONG attachSize,
+    LPATTACH pAttach,
+    LPSTR)
+{
+    mimepp::BodyPart *pAttachPart = NULL;
+
+    if (pAttach == NULL)
+        return NULL;
+    HRESULT hr;
+    LPSPropValue pProps = NULL;
+    ULONG cProps = 0;
+    hr = pAttach->GetProps((LPSPropTagArray) & attachProps, 0, &cProps, &pProps);
+
+    mimepp::String textBody(
+        "Attachment excluded during import of message.  The maximum attachment size has been exceeded.  Attachment information follows.\r\n\r\n\r\n");
+
+    LPSTR pTmp = new CHAR[64];
+    ultoa(attachSize, pTmp, 10);
+
+    textBody += "Attachment Size: ";
+    textBody += pTmp;
+    textBody += "\r\n";
+
+    delete[] pTmp;
+
+    mimepp::String strContentType("");
+    if (FAILED(hr))
+    {
+        throw Zimbra::MAPI::Util::MapiUtilsException(
+            hr, L"Util::AttachTooLargeAttachPart(): GetProps.",
+            __LINE__,
+            __FILE__);
+    }
+    if (pProps[ATTACH_METHOD].ulPropTag != PR_ATTACH_METHOD)
+    {
+        MAPIFreeBuffer(pProps);
+        return NULL;
+    }
+    pAttachPart = new mimepp::BodyPart;
+    if (pProps[ATTACH_CONTENT_ID].ulPropTag == PR_ATTACH_CONTENT_ID_A)
+    {
+        textBody += "Content-Id: ";
+        textBody += pProps[ATTACH_CONTENT_ID].Value.lpszA;
+        textBody += "\r\n";
+    }
+    if (pProps[ATTACH_CONTENT_LOCATION].ulPropTag == PR_ATTACH_CONTENT_LOCATION_A)
+    {
+        // add a custom header for content location to support rfc2557
+        textBody += "Content-Location: ";
+        textBody += pProps[ATTACH_CONTENT_LOCATION].Value.lpszA;
+        textBody += "\r\n";
+    }
+    if (pProps[ATTACH_LONG_FILENAME].ulPropTag == PR_ATTACH_LONG_FILENAME_A)
+    {
+        textBody += "Filename: ";
+        textBody += pProps[ATTACH_LONG_FILENAME].Value.lpszA;
+        textBody += "\r\n";
+    }
+    else if (pProps[ATTACH_FILENAME].ulPropTag == PR_ATTACH_FILENAME_A)
+    {
+        textBody += "Filename: ";
+        textBody += pProps[ATTACH_FILENAME].Value.lpszA;
+        textBody += "\r\n";
+    }
+    if (pProps[ATTACH_DISPLAY_NAME].ulPropTag == PR_DISPLAY_NAME_A)
+    {
+        textBody += "Content-Description: ";
+        textBody += pProps[ATTACH_DISPLAY_NAME].Value.lpszA;
+        textBody += "\r\n";
+    }
+    strContentType += "text/plain; charset=us-ascii;";
+    pAttachPart->headers().contentType().setString(strContentType);
+    pAttachPart->headers().contentType().parse();
+    pAttachPart->headers().contentDisposition().setType("attachment");
+    pAttachPart->headers().contentDisposition().setFilename("ImportAttachError.txt");
+    pAttachPart->headers().contentDisposition().assemble();
+
+    Zimbra::MAPI::Util::AddBodyToPart(pAttachPart, (LPSTR)textBody.c_str(), textBody.length());
+    MAPIFreeBuffer(pProps);
+    return pAttachPart;
+}
+
+void Zimbra::MAPI::Util::CharsetUtil::CharsetStringFromCodePageId(UINT codePageId,
+    LPSTR *ppCharset)
+{
+    LPSTR pCS = NULL;
+
+    switch (codePageId)
+    {
+    case 708: pCS = "ASMO-708"; break;
+    case 720: pCS = "DOS-720"; break;
+    case 28596: pCS = "iso-8859-6"; break;
+    case 10004: pCS = "x-max-arabic"; break;
+    case 775: pCS = "ibm775"; break;
+    case 28594: pCS = "iso-8859-4"; break;
+    case 852: pCS = "ibm852"; break;
+    case 28592: pCS = "iso-8859-2"; break;
+    case 10029: pCS = "x-mac-ce"; break;
+    case 51936: pCS = "EUC-CN"; break;
+    case 936: pCS = "gb2312"; break;
+    case 52936: pCS = "hz-gb-2312"; break;
+    case 10008: pCS = "x-mac-chinesesimp"; break;
+    case 950: pCS = "big5"; break;
+    case 20000: pCS = "x-Chinese-CNS"; break;
+    case 20002: pCS = "x-Chinese-Eten"; break;
+    case 10002: pCS = "x-mac-chinesetrad"; break;
+    case 866: pCS = "cp866"; break;
+    case 28595: pCS = "iso-8859-5"; break;
+    case 20866: pCS = "koi8-r"; break;
+    case 21866: pCS = "koi8-u"; break;
+    case 10007: pCS = "x-mac-cyrillic"; break;
+    case 29001: pCS = "x-Europa"; break;
+    case 20106: pCS = "x-IA5-German"; break;
+    case 737: pCS = "ibm737"; break;
+    case 28597: pCS = "iso-8859-7"; break;
+    case 10006: pCS = "x-mac-greek"; break;
+    case 869: pCS = "ibm869"; break;
+    case 862: pCS = "DOS-862"; break;
+    case 38598: pCS = "iso-8859-8-i"; break;
+    case 28598: pCS = "iso-8859-8"; break;
+    case 10005: pCS = "x-mac-hebrew"; break;
+    case 20420: pCS = "x-EBCDIC-Arabic"; break;
+    case 20880: pCS = "x-EBCDIC-CyrillicRussian"; break;
+    case 21025: pCS = "x-EBCDIC-CyrillicSerbianBulgarian"; break;
+    case 20277: pCS = "x-EBCDIC-DenmarkNorway"; break;
+    case 1142: pCS = "x-ebcdic-denmarknorway-euro"; break;
+    case 20278: pCS = "x-EBCDIC-FinlandSweden"; break;
+    case 1143: pCS = "x-ebcdic-finlandsweden-euro"; break;
+    case 1147: pCS = "x-ebcdic-france-euro"; break;
+    case 20273: pCS = "x-EBCDIC-Germany"; break;
+    case 1141: pCS = "x-ebcdic-germany-euro"; break;
+    case 875: pCS = "x-EBCDIC-GreekModern"; break;
+    case 20423: pCS = "x-EBCDIC-Greek"; break;
+    case 20424: pCS = "x-EBCDIC-Hebrew"; break;
+    case 20871: pCS = "x-EBCDIC-Icelandic"; break;
+    case 1149: pCS = "x-ebcdic-icelandic-euro"; break;
+    case 1148: pCS = "x-ebcdic-international-euro"; break;
+    case 20280: pCS = "x-EBCDIC-Italy"; break;
+    case 1144: pCS = "x-ebcdic-italy-euro"; break;
+    case 50930: pCS = "x-EBCDIC-JapaneseAndKana"; break;
+    case 50939: pCS = "x-EBCDIC-JapaneseAndJapaneseLatin"; break;
+    case 50931: pCS = "x-EBCDIC-JapaneseAndUSCanada"; break;
+    case 20290: pCS = "x-EBCDIC-JapaneseKatakana"; break;
+    case 50933: pCS = "x-EBCDIC-KoreanAndKoreanExtended"; break;
+    case 20833: pCS = "x-EBCDIC-KoreanExtended"; break;
+    case 870: pCS = "CP870"; break;
+    case 50935: pCS = "x-EBCDIC-SimplifiedChinese"; break;
+    case 20284: pCS = "X-EBCDIC-Spain"; break;
+    case 1145: pCS = "x-ebcdic-spain-euro"; break;
+    case 20838: pCS = "x-EBCDIC-Thai"; break;
+    case 50937: pCS = "x-EBCDIC-TraditionalChinese"; break;
+    case 1026: pCS = "CP1026"; break;
+    case 20905: pCS = "x-EBCDIC-Turkish"; break;
+    case 20285: pCS = "x-EBCDIC-UK"; break;
+    case 1146: pCS = "x-ebcdic-uk-euro"; break;
+    case 37: pCS = "ebcdic-cp-us"; break;
+    case 1140: pCS = "x-ebcdic-cp-us-euro"; break;
+    case 861: pCS = "ibm861"; break;
+    case 10079: pCS = "x-mac-icelandic"; break;
+    case 57006: pCS = "x-iscii-as"; break;
+    case 57003: pCS = "x-iscii-be"; break;
+    case 57002: pCS = "x-iscii-de"; break;
+    case 57010: pCS = "x-iscii-gu"; break;
+    case 57008: pCS = "x-iscii-ka"; break;
+    case 57009: pCS = "x-iscii-ma"; break;
+    case 57007: pCS = "x-iscii-or"; break;
+    case 57011: pCS = "x-iscii-pa"; break;
+    case 57004: pCS = "x-iscii-ta"; break;
+    case 57005: pCS = "x-iscii-te"; break;
+    case 51932: pCS = "euc-jp"; break;
+    case 50220: pCS = "iso-2022-jp"; break;
+    case 50222: pCS = "iso-2022-jp"; break;
+    case 50221: pCS = "csISO2022JP"; break;
+    case 10001: pCS = "x-mac-japanese"; break;
+    case 932: pCS = "shift_jis"; break;
+    case 949: pCS = "ks_c_5601-1987"; break;
+    case 51949: pCS = "euc-kr"; break;
+    case 50225: pCS = "iso-2022-kr"; break;
+    case 1361: pCS = "Johab"; break;
+    case 10003: pCS = "x-mac-korean"; break;
+    case 28593: pCS = "iso-8859-3"; break;
+    case 28605: pCS = "iso-8859-15"; break;
+    case 20108: pCS = "x-IA5-Norwegian"; break;
+    case 437: pCS = "IBM437"; break;
+    case 20107: pCS = "x-IA5-Swedish"; break;
+    case 857: pCS = "ibm857"; break;
+    case 28599: pCS = "iso-8859-9"; break;
+    case 10081: pCS = "x-mac-turkish"; break;
+    case 1200: pCS = "unicode"; break;
+    case 1201: pCS = "unicodeFFFE"; break;
+    case 65000: pCS = "utf-7"; break;
+    case 65001: pCS = "utf-8"; break;
+    case 20127: pCS = "us-ascii"; break;
+    case 850: pCS = "ibm850"; break;
+    case 20105: pCS = "x-IA5"; break;
+    case 28591: pCS = "iso-8859-1"; break;
+    case 10000: pCS = "macintosh"; break;
+    default:
+        break;
+    }                                           // switch( codePageId )
+    if (pCS != NULL)
+    {
+        *ppCharset = new char[(int)strlen(pCS) + 1];
+        strcpy_s(*ppCharset, (int)strlen(pCS) + 1, pCS);
+    }
+    else
+    {
+        *ppCharset = new char[25];
+        sprintf_s(*ppCharset, 25, "windows-%d", codePageId);
+    }
+}
+
+Zimbra::MAPI::Util::MIME_ENCODING Zimbra::MAPI::Util::CharsetUtil::FindBestEncoding(
+    LPSTR pBuffer, int nBuffer)
+{
+    MIME_ENCODING result = ME_7BIT;
+    int lineLength = 0;
+    int nNonAscii = 0;
+    int nNonAsciiThreshold = MulDiv(nBuffer, 17, 100);
+
+    for (int i = 0; i < nBuffer; i++)
+    {
+        unsigned char cVal = (unsigned char)pBuffer[i];
+        if ((cVal == 13) || (cVal == 10))
+        {
+            lineLength = 0;
+        }
+        else if (((cVal >= 0) && (cVal < 32)) || (cVal >= 127))
+        {
+            // Set the encoding to be base64 for a PDF file (Bug 9832)
+            // First four characters of a PDF file are %PDF
+            if (!strncmp(pBuffer, "%PDF", 4))
+            {
+                result = ME_BASE64;
+                break;
+            }
+            nNonAscii++;
+            result = ME_QUOTED_PRINTABLE;
+        }
+        lineLength++;
+        if (lineLength > 76)
+            result = ME_QUOTED_PRINTABLE;
+        if (nNonAscii > nNonAsciiThreshold)
+        {
+            result = ME_BASE64;
+            break;
+        }
+    }
+    return result;
+}
+
+Zimbra::MAPI::Util::StoreUtils *Zimbra::MAPI::Util::StoreUtils::stUtilsInst = NULL;
+// HrGetRegMultiSZValueA
+// Get a REG_MULTI_SZ registry value - allocating memory using new to hold it.
+void Zimbra::MAPI::Util::StoreUtils::HrGetRegMultiSZValueA(IN HKEY hKey,        // the key.
+    IN LPCSTR lpszValue,                        // value name in key.
+    OUT LPVOID *lppData)                        // where to put the data.
+{
+    *lppData = NULL;
+    DWORD dwKeyType = NULL;
+    DWORD cb = NULL;
+    LONG lRet = 0;
+
+    // Get its size
+    lRet = RegQueryValueExA(
+        hKey,
+        lpszValue,
+        NULL,
+        &dwKeyType,
+        NULL,
+        &cb);
+    if ((ERROR_SUCCESS == lRet) && cb && (REG_MULTI_SZ == dwKeyType))
+    {
+        *lppData = new BYTE[cb];
+        if (*lppData)
+        {
+            // Get the current value
+            lRet = RegQueryValueExA(
+                hKey,
+                lpszValue,
+                NULL,
+                &dwKeyType,
+                (unsigned char *)*lppData,
+                &cb);
+            if (ERROR_SUCCESS != lRet)
+            {
+                delete[] *lppData;
+                *lppData = NULL;
+            }
+        }
+    }
+}
+
+// /////////////////////////////////////////////////////////////////////////////
+// Function name   : GetMAPIDLLPath
+// Description       : This will get the correct path to the MAPIDIR with MAPI32.DLL file.
+// Return type      : void
+// Argument         : LPSTR szMAPIDir - Buffer to hold the path to the MAPI32DLL file.
+// ULONG cchMAPIDir - size of the buffer
+void Zimbra::MAPI::Util::StoreUtils::GetMAPIDLLPath(LPSTR szMAPIDir, ULONG cchMAPIDir)
+{
+    HRESULT hRes = S_OK;
+    UINT uiRet = 0;
+    LONG lRet = 0;
+    BOOL bRet = true;
+
+    szMAPIDir[0] = '\0';                        // Terminate String at pos 0 (safer if we fail below)
+
+    CHAR szSystemDir[MAX_PATH + 1] = { 0 };
+
+    // Get the system directory path
+    // (mapistub.dll and mapi32.dll reside here)
+    uiRet = GetSystemDirectoryA(szSystemDir, MAX_PATH);
+    if (uiRet > 0)
+    {
+        CHAR szDLLPath[MAX_PATH + 1] = { 0 };
+
+        hRes = StringCchPrintfA(szDLLPath, MAX_PATH + 1, "%s\\%s",
+            szSystemDir, "mapistub.dll");
+        if (SUCCEEDED(hRes))
+        {
+            LPFGETCOMPONENTPATH pfnFGetComponentPath = NULL;
+
+            HINSTANCE hmodStub = 0;
+            HINSTANCE hmodMapi32 = 0;
+
+            // Load mapistub.dll
+            hmodStub = LoadLibraryA(szDLLPath);
+            if (hmodStub)
+            {
+                // Get the address of FGetComponentPath from the mapistub
+                pfnFGetComponentPath = (LPFGETCOMPONENTPATH)GetProcAddress(
+                    hmodStub, "FGetComponentPath");
+            }
+            // If we didn't get the address of FGetComponentPath
+            // try mapi32.dll
+            if (!pfnFGetComponentPath)
+            {
+                hRes = StringCchPrintfA(szDLLPath, MAX_PATH + 1, "%s\\%s",
+                    szSystemDir, "mapi32.dll");
+                if (SUCCEEDED(hRes))
+                {
+                    // Load mapi32.dll
+                    hmodMapi32 = LoadLibraryA(szDLLPath);
+                    if (hmodMapi32)
+                    {
+                        // Get the address of FGetComponentPath from mapi32
+                        pfnFGetComponentPath = (LPFGETCOMPONENTPATH)GetProcAddress(
+                            hmodMapi32, "FGetComponentPath");
+                    }
+                }
+            }
+            if (pfnFGetComponentPath)
+            {
+                LPSTR szAppLCID = NULL;
+                LPSTR szOfficeLCID = NULL;
+                HKEY hMicrosoftOutlook = NULL;
+
+                lRet = RegOpenKeyEx(
+                    HKEY_LOCAL_MACHINE,
+                    _T("Software\\Clients\\Mail\\Microsoft Outlook"),
+                    NULL,
+                    KEY_READ,
+                    &hMicrosoftOutlook);
+                if ((ERROR_SUCCESS == lRet) && hMicrosoftOutlook)
+                {
+                    HrGetRegMultiSZValueA(hMicrosoftOutlook, "MSIApplicationLCID",
+                        (LPVOID *)&szAppLCID);
+                    HrGetRegMultiSZValueA(hMicrosoftOutlook, "MSIOfficeLCID",
+                        (LPVOID *)&szOfficeLCID);
+                }
+                if (szAppLCID)
+                {
+                    bRet = pfnFGetComponentPath(
+                        "{FF1D0740-D227-11D1-A4B0-006008AF820E}", szAppLCID, szMAPIDir,
+                        cchMAPIDir, true);
+                }
+                if ((!bRet || (szMAPIDir[0] == _T('\0'))) && szOfficeLCID)
+                {
+                    bRet = pfnFGetComponentPath(
+                        "{FF1D0740-D227-11D1-A4B0-006008AF820E}", szOfficeLCID, szMAPIDir,
+                        cchMAPIDir, true);
+                }
+                if (!bRet || (szMAPIDir[0] == _T('\0')))
+                {
+                    bRet = pfnFGetComponentPath(
+                        "{FF1D0740-D227-11D1-A4B0-006008AF820E}", NULL, szMAPIDir, cchMAPIDir,
+                        true);
+                }
+                // We got the path to msmapi32.dll - need to strip it
+                if (bRet && (szMAPIDir[0] != _T('\0')))
+                {
+                    LPSTR lpszSlash = NULL;
+                    LPSTR lpszCur = szMAPIDir;
+                    for (lpszSlash = lpszCur; *lpszCur; lpszCur = lpszCur++)
+                        if (*lpszCur == _T('\\'))
+                            lpszSlash = lpszCur;
+                    *lpszSlash = _T('\0');
+                }
+                delete[] szOfficeLCID;
+                delete[] szAppLCID;
+                if (hMicrosoftOutlook)
+                    RegCloseKey(hMicrosoftOutlook);
+            }
+            // If FGetComponentPath returns FALSE or if
+            // it returned nothing, or if we never found an
+            // address of FGetComponentPath, then
+            // just default to the system directory
+            if (!bRet || (szMAPIDir[0] == '\0'))
+            {
+                hRes = StringCchPrintfA(
+                    szMAPIDir, cchMAPIDir, "%s", szSystemDir);
+            }
+            if (szMAPIDir[0] != _T('\0'))
+            {
+                hRes = StringCchPrintfA(
+                    szMAPIDir, cchMAPIDir, "%s\\%s", szMAPIDir, "msmapi32.dll");
+            }
+            if (hmodMapi32)
+                FreeLibrary(hmodMapi32);
+            if (hmodStub)
+                FreeLibrary(hmodStub);
+        }
+    }
+}
+
+bool Zimbra::MAPI::Util::StoreUtils::isUnicodeStore(LPMESSAGE pMsg)
+{
+        #define STORE_UNICODE_OK ((ULONG)0x00040000)
+    bool retval = false;
+    LPSPropValue pPropSuppMask = NULL;
+    HRESULT hr = HrGetOneProp(pMsg, PR_STORE_SUPPORT_MASK, &pPropSuppMask);
+    if (hr == S_OK)
+        retval = (pPropSuppMask->Value.l & STORE_UNICODE_OK) != 0;
+    if (pPropSuppMask)
+        MAPIFreeBuffer(pPropSuppMask);
+    return retval;
+}
+
+bool Zimbra::MAPI::Util::StoreUtils::Init()
+{
+    if (_hinstLib == NULL)
+    {
+        char szMAPIDir[MAX_PATH];
+        ULONG cchMAPIDir = MAX_PATH;
+        GetMAPIDLLPath(szMAPIDir, cchMAPIDir);
+        if (szMAPIDir[0] == _T('\0'))
+        {
+            // TRACE(_T("GetMAPIDLLPath cannot be found."));
+            return false;
+        }
+        LPWSTR pszMAPIDir = NULL;
+        int cbuf = MultiByteToWideChar(NULL, 0, szMAPIDir, cchMAPIDir, NULL, 0);
+        HRESULT hr = MAPIAllocateBuffer((sizeof (WCHAR) * cbuf) + 10, (LPVOID FAR *)&pszMAPIDir);
+        ZeroMemory(pszMAPIDir, (sizeof (WCHAR) * cbuf) + 10);
+        int rbuf = MultiByteToWideChar(NULL, 0, szMAPIDir, cchMAPIDir, pszMAPIDir, cbuf);
+        UNREFERENCED_PARAMETER(rbuf);
+        UNREFERENCED_PARAMETER(hr);
+        _hinstLib = LoadLibrary(pszMAPIDir);
+        MAPIFreeBuffer(pszMAPIDir);
+        if (_hinstLib != NULL)
+        {
+            pWrapCompressedRTFEx = (WRAPCOMPRESSEDRTFSTREAMEX)GetProcAddress(
+                _hinstLib, "WrapCompressedRTFStreamEx");
+            if (pWrapCompressedRTFEx == NULL)
+                return false;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool Zimbra::MAPI::Util::StoreUtils::GetAnsiStoreMsgNativeType(LPMESSAGE pMsg, ULONG *nBody)
+{
+    bool retval = false;
+
+    *nBody = 0;
+    if (isUnicodeStore(pMsg))                   // if unicode store, return from here
+        return false;
+    if (NULL != pWrapCompressedRTFEx)
+    {
+        HRESULT hRes = S_OK;
+        LPSTREAM lpCompressed = NULL;
+        LPSTREAM lpUncompressed = NULL;
+        RTF_WCSINFO wcsinfo = { 0 };
+        RTF_WCSRETINFO retinfo = { 0 };
+        LPSPropValue lpPropCPID = NULL;
+
+        retinfo.size = sizeof (RTF_WCSRETINFO);
+
+        wcsinfo.size = sizeof (RTF_WCSINFO);
+        wcsinfo.ulFlags = MAPI_NATIVE_BODY;
+        wcsinfo.ulOutCodePage = 0;
+        // Retrieve the value of the Internet code page.
+        // Pass this value to the WrapCompressedRTFStreamEx function.
+        // If the property is not found, the default is 0.
+        if (SUCCEEDED(hRes = HrGetOneProp(pMsg, PR_INTERNET_CPID, &lpPropCPID)))
+            wcsinfo.ulInCodePage = lpPropCPID->Value.l;
+        // Open the compressed RTF stream.
+        if (SUCCEEDED(hRes = pMsg->OpenProperty(PR_RTF_COMPRESSED,
+                    &IID_IStream,
+                    STGM_READ | STGM_DIRECT,
+                    0,
+                    (LPUNKNOWN *)&lpCompressed)))
+        {
+            // Notice that the WrapCompressedRTFStreamEx function has been loaded
+            // by using the GetProcAddress function into pfnWrapEx.
+            // Call the WrapCompressedRTFStreamEx function.
+            if (SUCCEEDED(hRes = pWrapCompressedRTFEx(lpCompressed,
+                        &wcsinfo,
+                        &lpUncompressed,
+                        &retinfo)))
+            {
+                *nBody = retinfo.ulStreamFlags;
+                // Check what the native body type is.
+                switch (retinfo.ulStreamFlags)
+                {
+                case MAPI_NATIVE_BODY_TYPE_RTF:
+                    break;
+                case MAPI_NATIVE_BODY_TYPE_HTML:
+                    break;
+                case MAPI_NATIVE_BODY_TYPE_PLAINTEXT:
+                    break;
+                }
+                retval = true;
+            }
+        }
+        MAPIFreeBuffer(lpPropCPID);
+        if (lpUncompressed)
+            lpUncompressed->Release();
+        if (lpCompressed)
+            lpCompressed->Release();
+    }
+    return retval;
+}
+
+void Zimbra::MAPI::Util::StoreUtils::UnInit()
+{
+    if (_hinstLib != NULL)
+    {
+        BOOL fFreeResult = FreeLibrary(_hinstLib);
+        UNREFERENCED_PARAMETER(fFreeResult);
+    }
+    _hinstLib = NULL;
 }

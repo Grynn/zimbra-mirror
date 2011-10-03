@@ -6,7 +6,7 @@
 // MAPITableIterator
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 MAPITableIterator::MAPITableIterator(): m_pTable(NULL), m_pParentFolder(NULL), m_pRows(NULL),
-    m_currRow(0), m_batchSize(5000), m_rowsVisited(0), m_totalRows(0)
+    m_currRow(0), m_batchSize(5000), m_rowsVisited(0), m_totalRows(0), m_session(NULL)
 {}
 
 MAPITableIterator::~MAPITableIterator()
@@ -21,10 +21,12 @@ MAPITableIterator::~MAPITableIterator()
 }
 
 void MAPITableIterator::Initialize(LPMAPITABLE pTable, LPMAPIFOLDER pFolder,
+    MAPISession &session,
     ULONG ulItemTypeMask)
 {
     HRESULT hr = S_OK;
 
+    m_session = &session;
     if (m_pTable != NULL)
     {
         UlRelease(m_pTable);

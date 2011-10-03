@@ -157,6 +157,41 @@ namespace MAPI
 {
 namespace Util
 {
+enum MIME_ENCODING
+{
+    ME_7BIT,
+    ME_QUOTED_PRINTABLE,
+    ME_BASE64
+};
+
+typedef BOOL (STDAPICALLTYPE FGETCOMPONENTPATH)
+    (LPSTR szComponent,
+                LPSTR szQualifier,
+                LPSTR szDllPath,
+                DWORD cchBufferSize,
+                BOOL fInstall);
+typedef FGETCOMPONENTPATH FAR *LPFGETCOMPONENTPATH;
+#define MAPI_NATIVE_BODY                0x00010000
+#define MAPI_NATIVE_BODY_TYPE_RTF       0x00000001
+#define MAPI_NATIVE_BODY_TYPE_HTML      0x00000002
+#define MAPI_NATIVE_BODY_TYPE_PLAINTEXT 0x00000004
+
+typedef struct
+{
+    ULONG size;
+    ULONG ulStreamFlags;
+} RTF_WCSRETINFO;
+typedef struct
+{
+    ULONG size;
+    ULONG ulFlags;
+    ULONG ulInCodePage;
+    ULONG ulOutCodePage;
+} RTF_WCSINFO;
+typedef HRESULT (STDMETHODCALLTYPE * WRAPCOMPRESSEDRTFSTREAMEX)(LPSTREAM lpCompressedRTFStream,
+                CONST RTF_WCSINFO *pWCSInfo, LPSTREAM *lppUncompressedRTFStream,
+                RTF_WCSRETINFO *pRetInfo);
+
 class CriticalSection
 {
 public:
@@ -210,9 +245,56 @@ ExchangeSpecialFolderId GetExchangeSpecialFolderId(LPMDB userStore, IN ULONG cbE
 HRESULT GetExchangeUsersUsingObjectPicker(vector<ObjectPickerData> &vUserList);
 HRESULT HrMAPIGetSMTPAddress(IN MAPISession &session, IN RECIP_INFO &recipInfo,
                 OUT wstring &strSmtpAddress);
-
+BOOL CompareRecipients(MAPISession &session, RECIP_INFO &r1, RECIP_INFO &r2);
+void CreateMimeSubject(IN LPTSTR pSubject, IN UINT codepage, IN OUT LPSTR *ppMimeSubject);
+bool NeedsEncoding(LPSTR pStr);
 ULONG IMAPHeaderInfoPropTag(LPMAPIPROP lpMapiProp);
 wstring ReverseDelimitedString(wstring wstrString, WCHAR *delimiter);
-}
-}
-}
+void AddBodyToPart(mimepp::BodyPart *pPart, LPSTR pStr, size_t length,
+                BOOL bConvertLFToCRLF = TRUE);
+mimepp::BodyPart *AttachTooLargeAttachPart(ULONG attachSize, LPATTACH pAttach, LPSTR pCharset);
+mimepp::BodyPart *AttachPartFromIAttach(MAPISession &session, LPATTACH pAttach, LPSTR pCharset,
+                LONG codepage);
+
+namespace CharsetUtil
+{
+void CharsetStringFromCodePageId(UINT codePageId, LPSTR *pCharset);
+MIME_ENCODING FindBestEncoding(LPSTR pBuffer, int nBuffer);
+}                                               // end CharsetUtil
+
+class StoreUtils
+{
+private:
+    static StoreUtils *stUtilsInst;
+    HINSTANCE _hinstLib;
+    WRAPCOMPRESSEDRTFSTREAMEX pWrapCompressedRTFEx;
+    void HrGetRegMultiSZValueA(IN HKEY hKey, IN LPCSTR lpszValue, OUT LPVOID *lppData);
+    void GetMAPIDLLPath(LPSTR szMAPIDir, ULONG cchMAPIDir);
+    void UnInit();
+
+    StoreUtils() { _hinstLib = NULL; }
+
+public:
+    static StoreUtils *getInstance()
+    {
+        if (!stUtilsInst)
+            stUtilsInst = new StoreUtils;
+        return stUtilsInst;
+    }
+    void DeleteStoreUtils()
+    {
+        if (stUtilsInst)
+            delete stUtilsInst;
+        stUtilsInst = NULL;
+    }
+    ~StoreUtils()
+    {
+        UnInit();
+    }
+    bool Init();
+    bool isUnicodeStore(LPMESSAGE pMsg);
+    bool GetAnsiStoreMsgNativeType(LPMESSAGE pMsg, ULONG *nBody);
+};                                              // end StoreUtils
+}                                               // end Util
+}                                               // end MAPI
+}                                               // end Zimbra

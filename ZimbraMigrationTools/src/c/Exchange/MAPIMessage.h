@@ -1,5 +1,4 @@
 #pragma once
-
 namespace Zimbra
 {
 namespace MAPI
@@ -85,6 +84,7 @@ private:
         ULONG aulPropTags[NREPLYTOPROPS];
     } ReplyToPropTags;
 
+    MAPISession *m_session;
     LPMESSAGE m_pMessage;
     LPSPropValue m_pMessagePropVals;
     LPSRowSet m_pRecipientRows;
@@ -110,7 +110,7 @@ private:
 public:
     MAPIMessage();
     ~MAPIMessage();
-    void Initialize(LPMESSAGE pMessage);
+    void Initialize(LPMESSAGE pMessage, MAPISession &session);
     void InternalFree();
 
     LPMESSAGE InternalMessageObject() { return m_pMessage; }
@@ -144,6 +144,7 @@ public:
     bool HtmlBody(LPVOID *ppBody, unsigned int &nHtmlBodyLen);
     bool DecodeRTF2HTML(char *buf, unsigned int *len);
     bool IsRTFHTML(const char *buf);
+    void ToMimePPMessage(mimepp::Message &msg);
 };
 
 // Message Iterator class
@@ -219,5 +220,7 @@ private:
 
     SPropValue _propValIMAPHeaderOnly;
 };
+
+mimepp::Mailbox *MakeMimePPMailbox(LPTSTR pDisplayName, LPTSTR pSmtpAddress);
 }
 }

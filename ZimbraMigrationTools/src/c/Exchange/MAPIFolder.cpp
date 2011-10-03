@@ -335,7 +335,7 @@ HRESULT MAPIFolder::GetFolderIterator(FolderIterator &folderIter)
  *
  *      hr=pTable->Restrict(&sr[0],0);
  */
-    folderIter.Initialize(pTable, m_folder);
+    folderIter.Initialize(pTable, m_folder, *m_session);
     return S_OK;
 }
 
@@ -356,6 +356,6 @@ HRESULT MAPIFolder::GetMessageIterator(MessageIterator &msgIterator)
             __FILE__);
     }
     // Init message iterator
-    msgIterator.Initialize(pContentsTable, m_folder);
+    msgIterator.Initialize(pContentsTable, m_folder, *m_session);
     return S_OK;
 }

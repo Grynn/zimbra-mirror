@@ -83,8 +83,9 @@ MAPIMessage::~MAPIMessage()
     InternalFree();
 }
 
-void MAPIMessage::Initialize(LPMESSAGE pMessage)
+void MAPIMessage::Initialize(LPMESSAGE pMessage, MAPISession &session)
 {
+    m_session = &session;
     HRESULT hr = S_OK;
     ULONG cVals = 0;
     LPMAPITABLE pRecipTable = NULL;
@@ -544,7 +545,7 @@ bool MAPIMessage::UTF8EncBody(LPTSTR *ppBody, unsigned int &nTextChars)
         (LPUNKNOWN FAR *)&pIStream);
     if (FAILED(hr))
         return false;
-                                                // discover the size of the incoming body
+    // discover the size of the incoming body
     STATSTG statstg;
     hr = pIStream->Stat(&statstg, STATFLAG_NONAME);
     if (FAILED(hr))
@@ -800,9 +801,11 @@ bool MAPIMessage::HtmlBody(LPVOID *ppBody, unsigned int &nHtmlBodyLen)
             throw MAPIMessageException(E_FAIL, L"HtmlBody(): pIStream->Read Failed.", __LINE__,
                 __FILE__);
         if (cb != statstg.cbSize.LowPart)
+        {
             throw MAPIMessageException(E_FAIL, L"HtmlBody(): statstg.cbSize.LowPart Failed.",
                 __LINE__,
                 __FILE__);
+        }
         // close the stream
         pIStream->Release();
         return true;
@@ -879,6 +882,622 @@ bool MAPIMessage::HtmlBody(LPVOID *ppBody, unsigned int &nHtmlBodyLen)
     return false;
 }
 
+mimepp::Mailbox *Zimbra::MAPI::MakeMimePPMailbox(LPTSTR pDisplayName, LPTSTR pSmtpAddress)
+{
+    // scan the display name and replace any non-displayable characters with a space
+    LPTSTR p = pDisplayName;
+    while (p && *p)
+    {
+        if (*p < 20)
+            *p = _T(' ');
+        p++;
+    }
+    int cbBuf = 0;
+    LPSTR pBuf = NULL;
+    mimepp::Mailbox *pMbx = new mimepp::Mailbox();
+    if (pDisplayName != NULL)
+    {
+        int nDNLen = (int)_tcslen(pDisplayName);
+
+#if UNICODE
+        cbBuf = WideCharToMultiByte(CP_UTF8, 0, (LPCWSTR)pDisplayName, nDNLen, NULL, 0, NULL,
+            NULL);
+
+        pBuf = new CHAR[cbBuf + 1];
+        ZeroMemory(pBuf, cbBuf + 1);
+
+        WideCharToMultiByte(CP_UTF8, 0, (LPCWSTR)pDisplayName, nDNLen, pBuf, cbBuf, NULL, NULL);
+        pMbx->setDisplayNameUtf8(pBuf);
+        delete[] pBuf;
+#else
+        pMbx->setDisplayNameUtf8(pDisplayName);
+#endif
+    }
+    else
+    {}
+#if UNICODE
+    int nSALen = (int)_tcslen(pSmtpAddress);
+    cbBuf = WideCharToMultiByte(CP_ACP, 0, (LPCWSTR)pSmtpAddress, nSALen, NULL, 0, NULL, NULL);
+
+    pBuf = new CHAR[cbBuf + 1];
+    ZeroMemory(pBuf, cbBuf + 1);
+
+    WideCharToMultiByte(CP_ACP, 0, (LPCWSTR)pSmtpAddress, nSALen, pBuf, cbBuf, NULL, NULL);
+#else
+    LPSTR pBuf = pSmtpAddress;
+#endif
+    // encode the sender as BASE64
+    CHAR *pDomain = strchr(pBuf, '@');
+    if (pDomain != NULL)
+    {
+        pMbx->setDomain(pDomain + 1);
+        *pDomain = '\0';
+        pMbx->setLocalPart(pBuf);
+    }
+    else
+    {
+        pMbx->setLocalPart(pBuf);
+    }
+#if UNICODE
+    delete[] pBuf;
+#endif
+
+    return pMbx;
+}
+
+int nKnownHeaders = 15;
+LPSTR pKnownHeaders[] = {
+    "MIME-Version", "Date", "Sender", "From",
+    "To", "Cc", "Bcc", "Reply-To",
+    "Subject", "Content-Type", "Content-Transfer-Encoding", "X-Priority",
+    "Message-ID", "X-Unsent", "Received"
+};
+
+BOOL IsKnownHeader(LPSTR pHeader)
+{
+    for (int i = 0; i < nKnownHeaders; i++)
+    {
+        if (stricmp(pHeader, pKnownHeaders[i]) == 0)
+            return true;
+    }
+    return false;
+}
+
+inline LPSTR MapInvalid(LPSTR psz)
+{
+    LPSTR pHead = psz;
+
+    while (psz && *psz)
+    {
+        if (*psz < 0x20)
+            *psz = ' ';
+        psz++;
+    }
+    return pHead;
+}
+
+inline LPWSTR MapInvalid(LPWSTR psz)
+{
+    LPWSTR pHead = psz;
+
+    while (psz && *psz)
+    {
+        if (*psz < 0x20)
+            *psz = L' ';
+        psz++;
+    }
+    return pHead;
+}
+
+void AddExtraHeaders(mimepp::Message &msg, LPSTR pExtraHeaders)
+{
+    mimepp::Headers headers(pExtraHeaders);
+
+    headers.parse();
+    headers.assemble();
+    for (int i = 0; i < headers.numFields(); i++)
+    {
+        mimepp::Field &f = headers.fieldAt(i);
+        const mimepp::String &name = f.fieldName();
+        if (!IsKnownHeader((LPSTR)name.c_str()) && (name.length() > 0))
+            msg.headers().fieldBody(name.c_str()).setText(MapInvalid((LPSTR)f.fieldBody().text()
+                    .c_str()));
+    }
+}
+
+void MAPIMessage::ToMimePPMessage(mimepp::Message &msg)
+{
+    RECIP_INFO tempRecip;
+    RECIP_INFO tempRecip1;
+    HRESULT hr = S_OK;
+
+    msg.headers().fieldBody("MIME-Version").setText("1.0");
+    // TODO: PR_READ_RECEIPT_REQUESTED/PR_READ_RECEIPT_ENTRYID - Disposition-Notificaiton-To:
+    // grab any additional headers from the mime headers
+    if (PROP_TYPE(m_pMessagePropVals[MIME_HEADERS].ulPropTag) != PT_ERROR)
+        AddExtraHeaders(msg, m_pMessagePropVals[MIME_HEADERS].Value.lpszA);
+    // set the date header
+    __int64 date = Date();
+    if (date != -1)
+    {
+        // build a custom date header because mime-pp can't represent dates before 1970
+        msg.headers().fieldBody("Date").setText(DateString());
+    }
+    if (DeliveryDate() != -1)
+        msg.headers().fieldBody("X-Zimbra-Received").setText(DeliveryDateString());
+    tempRecip.pAddrType = NULL;
+    tempRecip.pEmailAddr = NULL;
+    tempRecip.cbEid = 0;
+    tempRecip.pEid = NULL;
+
+    tempRecip1.pAddrType = NULL;
+    tempRecip1.pEmailAddr = NULL;
+    tempRecip1.cbEid = 0;
+    tempRecip1.pEid = NULL;
+
+    LPTSTR pSenderEmailAdd = NULL;
+    LPTSTR pFromEmailAdd = NULL;
+    // sender
+    if (PROP_TYPE(m_pMessagePropVals[SENDER_ADDRTYPE].ulPropTag) != PT_ERROR)
+        tempRecip.pAddrType = MapInvalid(m_pMessagePropVals[SENDER_ADDRTYPE].Value.LPSZ);
+    if (PROP_TYPE(m_pMessagePropVals[SENDER_EMAIL_ADDR].ulPropTag) != PT_ERROR)
+    {
+        tempRecip.pEmailAddr = MapInvalid(m_pMessagePropVals[SENDER_EMAIL_ADDR].Value.LPSZ);
+    }
+    else                                        // PR_sender_entryid
+    {
+        if (PROP_TYPE(m_pMessagePropVals[SENDER_ENTRYID].ulPropTag) != PT_ERROR)
+        {
+            if (m_pMessagePropVals[SENDER_ENTRYID].Value.bin.cb > 28)
+            {
+                AtoW((LPSTR)((m_pMessagePropVals[SENDER_ENTRYID].Value.bin.lpb) + 28),
+                    pSenderEmailAdd);
+                tempRecip.pEmailAddr = pSenderEmailAdd;
+                tempRecip.pAddrType = _T("EX");
+            }
+        }
+    }
+    if (PROP_TYPE(m_pMessagePropVals[SENDER_ENTRYID].ulPropTag) != PT_ERROR)
+    {
+        tempRecip.cbEid = m_pMessagePropVals[SENDER_ENTRYID].Value.bin.cb;
+        tempRecip.pEid = (LPENTRYID)(m_pMessagePropVals[SENDER_ENTRYID].Value.bin.lpb);
+    }
+    // from
+    if (PROP_TYPE(m_pMessagePropVals[SENT_ADDRTYPE].ulPropTag) != PT_ERROR)
+        tempRecip1.pAddrType = MapInvalid(m_pMessagePropVals[SENT_ADDRTYPE].Value.LPSZ);
+    if (PROP_TYPE(m_pMessagePropVals[SENT_EMAIL_ADDR].ulPropTag) != PT_ERROR)
+    {
+        tempRecip1.pEmailAddr = MapInvalid(m_pMessagePropVals[SENT_EMAIL_ADDR].Value.LPSZ);
+    }
+    else                                        // PR_sent_representing_entryid
+    {
+        if (PROP_TYPE(m_pMessagePropVals[SENT_ENTRYID].ulPropTag) != PT_ERROR)
+        {
+            if (m_pMessagePropVals[SENT_ENTRYID].Value.bin.cb > 28)
+            {
+                AtoW((LPSTR)((m_pMessagePropVals[SENT_ENTRYID].Value.bin.lpb) + 28),
+                    pFromEmailAdd);
+                tempRecip1.pEmailAddr = pFromEmailAdd;
+                tempRecip1.pAddrType = _T("EX");
+            }
+        }
+    }
+    if (PROP_TYPE(m_pMessagePropVals[SENT_ENTRYID].ulPropTag) != PT_ERROR)
+    {
+        tempRecip1.cbEid = m_pMessagePropVals[SENT_ENTRYID].Value.bin.cb;
+        tempRecip1.pEid = (LPENTRYID)(m_pMessagePropVals[SENT_ENTRYID].Value.bin.lpb);
+    }
+    BOOL bSameSenderFrom = TRUE;
+    if (((PROP_TYPE(m_pMessagePropVals[SENDER_ADDRTYPE].ulPropTag) != PT_ERROR) &&
+            (PROP_TYPE(m_pMessagePropVals[SENT_ADDRTYPE].ulPropTag) != PT_ERROR)) ||
+        ((PROP_TYPE(m_pMessagePropVals[SENT_ENTRYID].ulPropTag) != PT_ERROR) &&
+            (PROP_TYPE(m_pMessagePropVals[SENDER_ENTRYID].ulPropTag) != PT_ERROR)))
+        bSameSenderFrom = Zimbra::MAPI::Util::CompareRecipients(*m_session, tempRecip,
+            tempRecip1);
+    // only add the sender header if its different from the from header
+    if (((PROP_TYPE(m_pMessagePropVals[SENDER_ADDRTYPE].ulPropTag) != PT_ERROR) ||
+            (PROP_TYPE(m_pMessagePropVals[SENDER_ENTRYID].ulPropTag) != PT_ERROR)) &&
+        !bSameSenderFrom)
+    {
+        wstring strSenderEmail(_TEXT(""));
+        hr = Zimbra::MAPI::Util::HrMAPIGetSMTPAddress(*m_session, tempRecip, strSenderEmail);
+        mimepp::Mailbox *pMbx =
+            MakeMimePPMailbox(MapInvalid(
+                m_pMessagePropVals[SENDER_NAME].Value.LPSZ), (LPTSTR)strSenderEmail.c_str());
+        msg.headers().sender() = *pMbx;
+        delete pMbx;
+    }
+    else if ((PROP_TYPE(m_pMessagePropVals[SENDER_NAME].ulPropTag) != PT_ERROR) &&
+        (tempRecip.pEmailAddr == NULL))         // if no email address, add name only
+    {
+        wstring strSenderEmail(_TEXT(""));
+        mimepp::Mailbox *pMbx =
+            MakeMimePPMailbox(MapInvalid(
+                m_pMessagePropVals[SENDER_NAME].Value.LPSZ), (LPTSTR)strSenderEmail.c_str());
+        msg.headers().sender() = *pMbx;
+        delete pMbx;
+        // TRACE( _T("Sender(%s) email address not found."),m_pMessagePropVals[SENDER_NAME].Value.LPSZ);
+    }
+    // set the "FROM" header
+    if ((PROP_TYPE(m_pMessagePropVals[SENT_ADDRTYPE].ulPropTag) != PT_ERROR) ||
+        (PROP_TYPE(m_pMessagePropVals[SENT_ENTRYID].ulPropTag) != PT_ERROR))
+    {
+        wstring strSenderEmail(_TEXT(""));
+        hr = Zimbra::MAPI::Util::HrMAPIGetSMTPAddress(*m_session, tempRecip1, strSenderEmail);
+        mimepp::Mailbox *pMbx = NULL;
+        if (PROP_TYPE(m_pMessagePropVals[SENT_NAME].ulPropTag) == PT_ERROR)
+        {
+            pMbx = MakeMimePPMailbox(NULL, (LPTSTR)strSenderEmail.c_str());
+        }
+        else
+        {
+            pMbx =
+                MakeMimePPMailbox(MapInvalid(
+                    m_pMessagePropVals[SENT_NAME].Value.LPSZ), (LPTSTR)strSenderEmail.c_str());
+        }
+        msg.headers().from().addMailbox(pMbx);
+    }
+    if (pFromEmailAdd)
+        delete[] pFromEmailAdd;
+    if (pSenderEmailAdd)
+        delete[] pSenderEmailAdd;
+    // add each recipient (you can have no recipients!)
+    if (m_pRecipientRows != NULL)
+    {
+        for (unsigned int i = 0; i < m_pRecipientRows->cRows; i++)
+        {
+            SRow *pRow = &(m_pRecipientRows->aRow[i]);
+            wstring strRecipEmail(_TEXT(""));
+            CString strDispName;
+            if (pRow->lpProps[RDISPLAY_NAME].ulPropTag == PR_DISPLAY_NAME)
+                strDispName = MapInvalid(pRow->lpProps[RDISPLAY_NAME].Value.LPSZ);
+            if ((pRow->lpProps[RADDRTYPE].ulPropTag == PR_ADDRTYPE) &&
+                (pRow->lpProps[REMAIL_ADDRESS].ulPropTag == PR_EMAIL_ADDRESS) &&
+                (pRow->lpProps[RENTRYID].ulPropTag == PR_ENTRYID))
+            {
+                tempRecip.pAddrType = MapInvalid(pRow->lpProps[RADDRTYPE].Value.LPSZ);
+                tempRecip.pEmailAddr = MapInvalid(pRow->lpProps[REMAIL_ADDRESS].Value.LPSZ);
+                tempRecip.cbEid = pRow->lpProps[RENTRYID].Value.bin.cb;
+                tempRecip.pEid = (LPENTRYID)(pRow->lpProps[RENTRYID].Value.bin.lpb);
+
+                hr = Zimbra::MAPI::Util::HrMAPIGetSMTPAddress(*m_session, tempRecip,
+                    strRecipEmail);
+            }
+            else
+            {
+                // If message has no information about E-mail ID
+                // but Display name is non empty
+                if (!strDispName.IsEmpty())
+                {
+                    // Here we try to figure out whether the display name contains e-mail address also
+                    // This is possible in case of drafts.
+                    int nStart = strDispName.Find('<') + 1;
+                    int nRevFind = strDispName.ReverseFind('<') + 1;
+                    // If there is single '<' in the display name
+                    if (nStart && (nStart == nRevFind))
+                    {
+                        int nEnd = strDispName.Find('>');
+                        nRevFind = strDispName.ReverseFind('>');
+                        // If there is single '>' in the display name appearing after '<'
+                        if ((nEnd == nRevFind) && (nStart < nEnd) && (-1 != nEnd))
+                        {
+                            strRecipEmail = wstring(strDispName.Mid(nStart,
+                                    nEnd - nStart).GetString());
+                            strDispName.Truncate(nStart - 1);
+                        }
+                    }
+                }
+                else
+                {
+                    continue;
+                }
+            }
+            ULONG mapiRecipType = pRow->lpProps[RRECIPIENT_TYPE].Value.l;
+            mimepp::Mailbox *pMbx = MakeMimePPMailbox(
+                (LPWSTR)strDispName.GetString(), (LPTSTR)strRecipEmail.c_str());
+            if (mapiRecipType == MAPI_TO)
+                msg.headers().to().addAddress(pMbx);
+            else if (mapiRecipType == MAPI_CC)
+                msg.headers().cc().addAddress(pMbx);
+            else if (mapiRecipType == MAPI_BCC)
+                msg.headers().bcc().addAddress(pMbx);
+            else
+                delete pMbx;
+        }
+    }
+    // add all the reply-to's
+    if ((PROP_TYPE(m_pMessagePropVals[REPLY_NAMES].ulPropTag) != PT_ERROR) &&
+        (PROP_TYPE(m_pMessagePropVals[REPLY_ENTRIES].ulPropTag) != PT_ERROR))
+    {
+        // LPTSTR pNames = _pMessagePropVals[REPLY_NAMES].Value.LPSZ;
+
+        FLATENTRYLIST *pEntryList =
+            (FLATENTRYLIST *)m_pMessagePropVals[REPLY_ENTRIES].Value.bin.lpb;
+        FLATENTRY *pEntry = (FLATENTRY *)pEntryList->abEntries;
+        for (ULONG i = 0; i < pEntryList->cEntries; i++)
+        {
+            IMailUser *pUser = NULL;
+            ULONG ulObjType = 0;
+
+            m_session->OpenEntry(pEntry->cb, (LPENTRYID)pEntry->abEntry, NULL, MAPI_BEST_ACCESS,
+                &ulObjType,
+                (LPUNKNOWN *)&pUser);
+            if (pUser == NULL)
+                continue;
+            LPSPropValue pReplyToPropVals = NULL;
+            ULONG cVals = 0;
+
+            pUser->GetProps((LPSPropTagArray) & m_replyToPropTags, fMapiUnicode, &cVals,
+                &pReplyToPropVals);
+            ULONG ulRefCount = pUser->Release();
+            UNREFERENCED_PARAMETER(ulRefCount);
+            // DTRACE( _T("LEEKDIAG: %x %d"), pUser, ulRefCount );
+            if (cVals != NREPLYTOPROPS)
+            {
+                if (pReplyToPropVals != NULL)
+                    MAPIFreeBuffer(pReplyToPropVals);
+                continue;
+            }
+            //
+            tempRecip.pAddrType = MapInvalid(pReplyToPropVals[REPLYTO_ADDRTYPE].Value.LPSZ);
+            tempRecip.pEmailAddr = MapInvalid(
+                pReplyToPropVals[REPLYTO_EMAIL_ADDRESS].Value.LPSZ);
+            tempRecip.cbEid = pReplyToPropVals[REPLYTO_ENTRYID].Value.bin.cb;
+            tempRecip.pEid = (LPENTRYID)(pReplyToPropVals[REPLYTO_ENTRYID].Value.bin.lpb);
+
+            wstring strRecipEmail(_TEXT(""));
+            hr = Zimbra::MAPI::Util::HrMAPIGetSMTPAddress(*m_session, tempRecip, strRecipEmail);
+            mimepp::Mailbox *pMbx =
+                MakeMimePPMailbox(MapInvalid(pReplyToPropVals[REPLYTO_DISPLAY_NAME].Value.LPSZ),
+                (LPTSTR)strRecipEmail.c_str());
+            msg.headers().replyTo().addAddress(pMbx);
+
+            MAPIFreeBuffer(pReplyToPropVals);
+
+            LPBYTE pTemp = (LPBYTE)pEntry;
+            ULONG offset = (pEntry->cb + sizeof (pEntry->cb));
+            if ((offset & 3) != 0)
+                offset = (offset & ~3) + 4;
+            pTemp += offset;
+            pEntry = (FLATENTRY *)pTemp;
+        }
+    }
+    // add the subject
+    LPTSTR pSubject = NULL;
+    if (Subject(&pSubject))
+    {
+        int nSubjLen = (int)_tcslen(pSubject);
+        if (nSubjLen > 0)
+        {
+            LPSTR pMimeSubject = NULL;
+            Zimbra::MAPI::Util::CreateMimeSubject(pSubject, CodePageId(), &pMimeSubject);
+
+            mimepp::String subjStr(pMimeSubject);
+            msg.headers().subject().setText(subjStr);
+            if (pMimeSubject != NULL)
+                delete[] pMimeSubject;
+        }
+        MAPIFreeBuffer(pSubject);
+    }
+    // add X-Priority
+    if (PROP_TYPE(m_pMessagePropVals[IMPORTANCE].ulPropTag) != PT_ERROR)
+    {
+        switch (m_pMessagePropVals[IMPORTANCE].Value.l)
+        {
+        case IMPORTANCE_HIGH:
+            msg.headers().fieldBody("X-Priority").setText("1");
+            break;
+        case IMPORTANCE_NORMAL:
+            msg.headers().fieldBody("X-Priority").setText("3");
+            break;
+        case IMPORTANCE_LOW:
+            msg.headers().fieldBody("X-Priority").setText("5");
+            break;
+        }
+    }
+    // add Message-Id
+    if (PROP_TYPE(m_pMessagePropVals[INTERNET_MESSAGE_ID].ulPropTag) != PT_ERROR)
+        msg.headers().messageId().setString(MapInvalid(m_pMessagePropVals[INTERNET_MESSAGE_ID].
+                Value.lpszA));
+    // add X-Unsent
+    if (IsUnsent())
+        msg.headers().fieldBody("X-Unsent").setText("1");
+    // add the body - but it may not be available as a prop...
+    LPTSTR pTextBody = NULL;
+    LPVOID pHtmlBody = NULL;
+    unsigned int nHtmlLen = 0;
+    unsigned int nTextChars = 0;
+
+    LPSTR pCharset = NULL;
+    Zimbra::MAPI::Util::CharsetUtil::CharsetStringFromCodePageId(CodePageId(), &pCharset);
+
+    LPMESSAGE pMsg = InternalMessageObject();
+    ULONG nBody = 0;
+    bool nunicodemsg = false;
+    if (pMsg)
+    {
+        Zimbra::MAPI::Util::StoreUtils *storeUtils =
+            Zimbra::MAPI::Util::StoreUtils::getInstance();
+        if (storeUtils->Init())
+        {
+            nunicodemsg = storeUtils->GetAnsiStoreMsgNativeType(pMsg, &nBody);
+        }
+        else
+        {
+            // TRACE(_T("storeUtils::Init Failed"));
+        }
+    }
+    // For nonunicode pst, if charset is utf-8, PR_HTML is read. PR_BODY & PR_RTF_COMPRESSED doesnt read accented characters
+    // in correct way (bug#19913)
+    bool bProcessNUnicode = false;
+    if ((nunicodemsg) &&
+        ((nBody == MAPI_NATIVE_BODY_TYPE_HTML) ||
+            (nBody == MAPI_NATIVE_BODY_TYPE_PLAINTEXT)) &&
+        (strcmp(pCharset, "utf-8") == 0))
+        bProcessNUnicode = UTF8EncBody(&pTextBody, nTextChars);
+    if (!bProcessNUnicode)
+    {
+        TextBody(&pTextBody, nTextChars);
+        HtmlBody(&pHtmlBody, nHtmlLen);
+    }
+    // Differed allocation of memory to avoid memory leaks
+    mimepp::BodyPart *pTextPart = NULL;
+    mimepp::BodyPart *pHtmlPart = NULL;
+    // fill in the BodyPart for the text memo
+    if (pTextBody != NULL)
+    {
+        pTextPart = new mimepp::BodyPart;
+
+        mimepp::String ct("text/plain; charset=");
+        ct += pCharset;
+        ct += ";";
+
+        pTextPart->headers().contentType().setString(ct);
+
+        int nMBBody = WideCharToMultiByte(
+            CodePageId(), 0, pTextBody, nTextChars, NULL, 0, NULL, NULL);
+        LPSTR pMBBody = new CHAR[nMBBody + 1];
+        ZeroMemory(pMBBody, nMBBody + 1);
+        WideCharToMultiByte(
+            CodePageId(), 0, pTextBody, nTextChars, pMBBody, nMBBody, NULL, NULL);
+
+        Zimbra::MAPI::Util::AddBodyToPart(pTextPart, pMBBody, nMBBody);
+        pTextPart->body().assemble();
+        if (pMBBody != NULL)
+            delete[] pMBBody;
+    }
+    // fill in the BodyPart for the html memo
+    if (pHtmlBody != NULL)
+    {
+        pHtmlPart = new mimepp::BodyPart;
+
+        mimepp::String ct("text/html; charset=");
+        ct += pCharset;
+        ct += ";";
+
+        pHtmlPart->headers().contentType().setString(ct);
+        Zimbra::MAPI::Util::AddBodyToPart(pHtmlPart, (LPSTR)pHtmlBody, nHtmlLen);
+
+        pHtmlPart->body().assemble();
+    }
+    // points to the part that contains the memo
+    mimepp::Entity *pMemoPart = NULL;
+    // set the content type of the message if it has an attachment
+    if (HasAttach())
+    {
+        msg.headers().contentType().setString("multipart/mixed");
+        msg.headers().contentType().parse();
+        msg.headers().contentType().createBoundary();
+        mimepp::BodyPart *pTemp = new mimepp::BodyPart;
+        msg.body().addBodyPart(pTemp);
+        pMemoPart = pTemp;
+    }
+    else
+    {
+        pMemoPart = &(msg);
+        //
+    }
+    if ((pTextBody != NULL) && (pHtmlBody != NULL))
+    {
+        pMemoPart->headers().contentType().setString("multipart/alternative");
+        pMemoPart->headers().contentType().parse();
+        pMemoPart->headers().contentType().createBoundary();
+        pMemoPart->body().addBodyPart(pTextPart);
+        pMemoPart->body().addBodyPart(pHtmlPart);
+        pMemoPart->body().assemble();
+    }
+    // only text exists
+    else if (pTextBody != NULL)
+    {
+        pMemoPart->headers().contentType().setString(
+            pTextPart->headers().contentType().getString());
+        pMemoPart->headers().contentTransferEncoding().setString(
+            pTextPart->headers().contentTransferEncoding().getString());
+        pMemoPart->body().setString(pTextPart->body().getString());
+        pMemoPart->body().assemble();
+        delete pTextPart;
+        delete pHtmlPart;
+    }
+    if (HasAttach())
+    {
+        LPSRowSet pAttachRows = NULL;
+        LPMAPITABLE pAttachTable = NULL;
+        SizedSPropTagArray(2, attachProps) = {
+            2, { PR_ATTACH_NUM, PR_ATTACH_SIZE }
+        };
+
+        hr = m_pMessage->GetAttachmentTable(fMapiUnicode, &pAttachTable);
+        if (FAILED(hr))
+        {
+            throw MAPIMessageException(E_FAIL, L"ToMimePPMessage(): GetAttachmentTable Failed.",
+                __LINE__,
+                __FILE__);
+        }
+        hr = HrQueryAllRows(pAttachTable, (LPSPropTagArray) & attachProps, NULL, NULL, 0,
+            &pAttachRows);
+        if (FAILED(hr))
+        {
+            pAttachTable->Release();
+            throw MAPIMessageException(E_FAIL, L"ToMimePPMessage(): HrQueryAllRows Failed.",
+                __LINE__,
+                __FILE__);
+        }
+// Has been changed to MAX_MESSAGE_SIZE and made global
+// const ULONG MAX_ATTACH_SIZE = (1024 * 1024 * 5 );
+        for (unsigned int i = 0; i < pAttachRows->cRows; i++)
+        {
+            mimepp::BodyPart *pAttachPart = NULL;
+            ULONG attachSize = pAttachRows->aRow[i].lpProps[1].Value.l;
+            UNREFERENCED_PARAMETER(attachSize);
+            LPATTACH pAttach = NULL;
+            hr = m_pMessage->OpenAttach(pAttachRows->aRow[i].lpProps[0].Value.l, NULL, 0,
+                &pAttach);
+            if (FAILED(hr))
+                continue;
+// Now checking overall messagesize instead of attachment size
+
+/*			if( PROP_TYPE(pAttachRows->aRow[i].lpProps[1].ulPropTag) != PT_ERROR && attachSize > MAX_ATTACH_SIZE )
+ *                      {
+ *                              pAttachPart = AttachTooLargeAttachPart( attachSize, pAttach, pCharset );
+ *                      }
+ *                      else*/
+            try
+            {
+                pAttachPart =
+                    Zimbra::MAPI::Util::AttachPartFromIAttach(*m_session, pAttach, pCharset,
+                    CodePageId());
+            }
+            catch (...)
+            {
+                // TRACE(_T("**Error** Exception in AttachPartFromIAttach occurred"));
+                pAttachPart = NULL;
+            }
+            if (pAttachPart != NULL)
+                msg.body().addBodyPart(pAttachPart);
+            ULONG ulRefCount = pAttach->Release();
+            UNREFERENCED_PARAMETER(ulRefCount);
+        }
+        FreeProws(pAttachRows);
+        ULONG ulRefCount = pAttachTable->Release();
+        UNREFERENCED_PARAMETER(ulRefCount);
+    }
+    // assemble the message
+    try
+    {
+        msg.assemble();
+    }
+    catch (...)
+    {
+        // TRACE(_T("**Error** Exception in msg.assemble occurred"));
+    }
+    if (pTextBody != NULL)
+        MAPIFreeBuffer(pTextBody);
+    if (pHtmlBody != NULL)
+        MAPIFreeBuffer(pHtmlBody);
+    if (pCharset != NULL)
+        delete[] pCharset;
+}
+
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 // MessageIterator
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -930,7 +1549,7 @@ BOOL MessageIterator::GetNext(MAPIMessage &msg)
                 (LPUNKNOWN *)&pMessage)))
         throw GenericException(hr, L"MessageIterator::GetNext():OpenEntry Failed.", __LINE__,
             __FILE__);
-    msg.Initialize(pMessage);
+    msg.Initialize(pMessage, *m_session);
 
     return TRUE;
 }

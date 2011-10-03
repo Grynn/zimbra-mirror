@@ -14,11 +14,12 @@ protected:
     ULONG m_batchSize;
     ULONG m_rowsVisited;
     ULONG m_totalRows;
+    MAPISession *m_session;
 
 public:
     MAPITableIterator();
     virtual ~MAPITableIterator();
-    virtual void Initialize(LPMAPITABLE pTable, LPMAPIFOLDER pFolder,
+    virtual void Initialize(LPMAPITABLE pTable, LPMAPIFOLDER pFolder, MAPISession &session,
                 ULONG ulItemTypeMask = ZCM_ALL);
     virtual LPSPropTagArray GetProps() = 0;
     virtual LPSSortOrderSet GetSortOrder() = 0;

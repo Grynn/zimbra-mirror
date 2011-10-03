@@ -367,7 +367,7 @@ LPCWSTR MAPIAccessAPI::GetItem(SBinary sbItemEID, BaseItemData &itemData)
     try
     {
         MAPIMessage msg;
-        msg.Initialize(pMessage);
+        msg.Initialize(pMessage, *m_zmmapisession);
         if (msg.ItemType() == ZT_MAIL)
         {
             printf("ITEM TYPE: ZT_MAIL \n");
@@ -426,6 +426,10 @@ LPCWSTR MAPIAccessAPI::GetItem(SBinary sbItemEID, BaseItemData &itemData)
                 msgdata->htmlbody.buffer = (LPTSTR)pHtmlBodyBuffer;
                 msgdata->htmlbody.size = nHtmlchars;
             }
+            mimepp::Message mimeMsg;
+            msg.ToMimePPMessage(mimeMsg);
+            LPCSTR pDes = mimeMsg.getString().c_str();
+            printf("MIMEPP_BODY: %s\n", pDes);
         }
         else if (msg.ItemType() == ZT_CONTACTS)
         {
