@@ -898,10 +898,10 @@ public class FormMailNew extends AbsForm {
 		
 		String containerLocator = "css=div[id^='zac__COMPOSE-'][style*='display: block;']";
 
-		if ( !this.sIsElementPresent(containerLocator) )
-			throw new HarnessException("Autocomplete not visible!");
-		
-
+		if ( !this.sIsElementPresent(containerLocator) ) {
+			// Autocomplete is not visible, return an empty list.
+			return (items);
+		}
 
 		
 		String rowsLocator = containerLocator + " tr[id*='_acRow_']";
