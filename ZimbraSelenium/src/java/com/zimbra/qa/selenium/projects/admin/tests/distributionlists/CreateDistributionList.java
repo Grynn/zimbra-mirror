@@ -9,7 +9,7 @@ import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAdminAccount;
 import com.zimbra.qa.selenium.projects.admin.core.AdminCommonTest;
 import com.zimbra.qa.selenium.projects.admin.items.DistributionListItem;
-import com.zimbra.qa.selenium.projects.admin.ui.FormDistributionListsNew;
+import com.zimbra.qa.selenium.projects.admin.ui.FormNewDistributionList;
 
 public class CreateDistributionList extends AdminCommonTest {
 	public CreateDistributionList() {
@@ -34,7 +34,7 @@ public class CreateDistributionList extends AdminCommonTest {
 		DistributionListItem dl = new DistributionListItem();
 
 		// Click "New"
-		FormDistributionListsNew form =(FormDistributionListsNew) app.zPageManageDistributionList.zToolbarPressButton(Button.B_NEW);
+		FormNewDistributionList form =(FormNewDistributionList) app.zPageManageDistributionList.zToolbarPressButton(Button.B_NEW);
 	
 		// Fill out the necessary input fields and submit
 		form.zComplete(dl);
@@ -62,7 +62,7 @@ public class CreateDistributionList extends AdminCommonTest {
 		DistributionListItem dl = new DistributionListItem();
 
 		// Click "New"
-		FormDistributionListsNew form =(FormDistributionListsNew) app.zPageManageDistributionList.zToolbarPressPulldown(Button.B_NEW, Button.O_DISTRIBUTIUONLISTS_DISTRIBUTIONLIST);
+		FormNewDistributionList form =(FormNewDistributionList) app.zPageManageDistributionList.zToolbarPressPulldown(Button.B_NEW, Button.O_DISTRIBUTIUONLISTS_DISTRIBUTIONLIST);
 	
 		// Fill out the necessary input fields and submit
 		form.zComplete(dl);

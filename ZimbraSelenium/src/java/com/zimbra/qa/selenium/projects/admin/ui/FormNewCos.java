@@ -7,7 +7,7 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.projects.admin.items.CosItem;
 
 
-public class FormCosNew extends AbsForm {
+public class FormNewCos extends AbsForm {
 
 
 	public static class Locators {
@@ -17,7 +17,7 @@ public class FormCosNew extends AbsForm {
 	}
 
 
-	public FormCosNew(AbsApplication application) {
+	public FormNewCos(AbsApplication application) {
 		super(application);
 		// TODO Auto-generated constructor stub
 	}

@@ -129,7 +129,7 @@ public class PageManageCOS extends AbsTab {
 
 			 
 			// Create the page
-			page = new FormCosNew(MyApplication);
+			page = new FormNewCos(MyApplication);
 
 			// FALL THROUGH
 

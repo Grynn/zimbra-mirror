@@ -139,7 +139,7 @@ public class PageManageDistributionLists extends AbsTab {
 
 			 
 			// Create the page
-			form = new FormDistributionListsNew(MyApplication);
+			form = new FormNewDistributionList(MyApplication);
 
 			// FALL THROUGH
 
@@ -190,7 +190,7 @@ public class PageManageDistributionLists extends AbsTab {
 				pulldownLocator = Locators.zdd_NEW_MENU;
 				optionLocator = PageManageDistributionLists.Locators.zmi_DL;
 
-				form = new FormDistributionListsNew(MyApplication);
+				form = new FormNewDistributionList(MyApplication);
 
 				// FALL THROUGH
 

@@ -7,7 +7,7 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.projects.admin.items.DistributionListItem;
 import com.zimbra.qa.selenium.projects.admin.ui.WizardCreateAlias.Locators;
 
-public class FormDistributionListsNew extends AbsForm {
+public class FormNewDistributionList extends AbsForm {
 	public static class Locators {
 		public static final String ztb_ACCT_NAME = "css=input[id^='ztabv__UNDEFINE_']";
 		public static final String ztb_DOMAIN_NAME="css=input[id$='_name_3_display']";
@@ -15,7 +15,7 @@ public class FormDistributionListsNew extends AbsForm {
 		public static final String zb_CLOSE="zb__DLV__CLOSE_title";
 	}
 
-	public FormDistributionListsNew(AbsApplication application) {
+	public FormNewDistributionList(AbsApplication application) {
 		super(application);
 		// TODO Auto-generated constructor stub
 	}
