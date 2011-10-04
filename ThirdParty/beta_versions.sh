@@ -1,4 +1,4 @@
-cyrus_release=2.1.23
+cyrus_release=2.1.25
 cyrus_patchlevel=3z
 cyrus_version=${cyrus_release}.${cyrus_patchlevel}
 cyrus_src=cyrus-sasl-${cyrus_version}
