@@ -108,6 +108,7 @@ AjxDebug.BUFFER_MAX[AjxDebug.CALENDAR]		= 400;
 AjxDebug.BUFFER_MAX[AjxDebug.REPLY]			= 400;
 AjxDebug.BUFFER_MAX[AjxDebug.SCROLL]		= 100;
 AjxDebug.BUFFER_MAX[AjxDebug.BAD_JSON]		= 200;
+AjxDebug.BUFFER_MAX[AjxDebug.PREFS] 		= 200;
 AjxDebug.BUFFER_MAX[AjxDebug.REMINDER]      = 200;
 AjxDebug.BUFFER_MAX[AjxDebug.TAG_ICON]      = 200;
 AjxDebug.BUFFER_MAX[AjxDebug.PROGRESS]      = 200;
