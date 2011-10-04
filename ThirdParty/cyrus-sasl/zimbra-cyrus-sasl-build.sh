@@ -30,7 +30,11 @@ cd ${cyrus_src}
 patch -g0 -p1 < ../../sasl-link-order.patch
 patch -g0 -p1 < ../../sasl-darwin.patch
 patch -g0 -p1 < ../../sasl-auth-zimbra.patch
-patch -g0 -p1 < ../../gcc-fix.patch
+if [ x$BETA = "xbeta" ]; then
+  patch -g0 -p1 < ../../patches/heimdal-build.patch
+else
+  patch -g0 -p1 < ../../gcc-fix.patch
+fi
 rm config/ltconfig config/libtool.m4
 if [ -x /usr/bin/libtoolize ]; then
 	LIBTOOLIZE=/usr/bin/libtoolize
