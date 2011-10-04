@@ -295,6 +295,12 @@ public:
     bool isUnicodeStore(LPMESSAGE pMsg);
     bool GetAnsiStoreMsgNativeType(LPMESSAGE pMsg, ULONG *nBody);
 };                                              // end StoreUtils
+
+BOOL GetAppName(wstring &wstrAppName);
+BOOL CreateAppTemporaryDirectory();
+BOOL GetAppTemporaryDirectory(wstring &wstrTempAppDirPath);
+wstring GetUniqueName();
+
 }                                               // end Util
 }                                               // end MAPI
 }                                               // end Zimbra

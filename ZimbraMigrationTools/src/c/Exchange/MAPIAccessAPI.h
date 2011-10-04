@@ -119,6 +119,7 @@ typedef struct _MessageItemData: BaseItemData
     wstring DateString;
     data_buffer textbody;
     data_buffer htmlbody;
+	wstring MimeFile;
 } MessageItemData;
 class MAPIAccessAPI
 {

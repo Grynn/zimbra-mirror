@@ -81,6 +81,9 @@ LPCWSTR MAPIAccessAPI::InitGlobalSessionAndStore(wstring strExchangeHostName,
         lpwstrStatus = FromatExceptionInfo(muex.ErrCode(), (LPWSTR)muex.Description().c_str(),
             (LPSTR)muex.SrcFile().c_str(), muex.SrcLine());
     }
+	//Create Temporary dir for temp files
+	Zimbra::MAPI::Util::CreateAppTemporaryDirectory();
+	
 CLEAN_UP:
     if (lpwstrStatus)
     {
@@ -410,6 +413,7 @@ LPCWSTR MAPIAccessAPI::GetItem(SBinary sbItemEID, BaseItemData &itemData)
             AtoW(msg.DeliveryDateString(), wstrDelivDateString);
             msgdata->DeliveryDateString = wstrDelivDateString;
             SafeDelete(wstrDelivDateString);
+/*
             if (msgdata->HasText)
             {
                 LPTSTR textMsgBuffer;
@@ -426,10 +430,61 @@ LPCWSTR MAPIAccessAPI::GetItem(SBinary sbItemEID, BaseItemData &itemData)
                 msgdata->htmlbody.buffer = (LPTSTR)pHtmlBodyBuffer;
                 msgdata->htmlbody.size = nHtmlchars;
             }
+*/
+			//Save mime to file in temp dir
+			HRESULT hr = S_OK;
+			ULONG nBytesWritten = 0;
+			ULONG nTotalBytesWritten = 0;
+			wstring wstrTempAppDirPath;
+			char* lpszDirName=NULL; char* lpszUniqueName=NULL;
+			Zimbra::Util::ScopedInterface<IStream> pStream;
             mimepp::Message mimeMsg;
+
             msg.ToMimePPMessage(mimeMsg);
             LPCSTR pDes = mimeMsg.getString().c_str();
-            printf("MIMEPP_BODY: %s\n", pDes);
+            int nBytesToBeWritten = (int)(mimeMsg.getString().size());
+	
+			if(!Zimbra::MAPI::Util::GetAppTemporaryDirectory(wstrTempAppDirPath))
+			{
+				lpwstrStatus = FromatExceptionInfo(hr, L"GetAppTemporaryDirectory Failed",
+							__FILE__, __LINE__);
+				goto ZM_EXIT;
+			}	
+			
+			WtoA((LPWSTR)wstrTempAppDirPath.c_str(),lpszDirName);
+			string strFQFileName = lpszDirName;
+			WtoA((LPWSTR)Zimbra::MAPI::Util::GetUniqueName().c_str(),lpszUniqueName);
+			strFQFileName += "\\";
+			strFQFileName += lpszUniqueName;
+			SafeDelete(lpszDirName);
+			SafeDelete(lpszUniqueName);
+			//Open stream on file
+			if( FAILED(hr = OpenStreamOnFile( MAPIAllocateBuffer, MAPIFreeBuffer, STGM_CREATE | STGM_READWRITE, 
+				(LPTSTR)strFQFileName.c_str(), NULL, pStream.getptr())))
+			{			
+				lpwstrStatus = FromatExceptionInfo(hr, L"Message Error: OpenStreamOnFile Failed.",
+							__FILE__, __LINE__);
+				goto ZM_EXIT;
+			}
+			//write to file
+			while (!FAILED(hr) && nBytesToBeWritten > 0 )
+			{
+				hr = pStream->Write(pDes, nBytesToBeWritten, &nBytesWritten);
+				pDes += nBytesWritten;
+				nBytesToBeWritten -= nBytesWritten;
+				nTotalBytesWritten += nBytesWritten;
+				nBytesWritten = 0;
+			}
+	
+			if( FAILED(hr=pStream->Commit(0)))
+			{
+				return L"Message Error: Stream Commit Failed.";
+			}
+			//mime file path
+			LPWSTR lpwstrFQFileName=NULL;
+			AtoW((LPSTR)strFQFileName.c_str(),lpwstrFQFileName);
+			msgdata->MimeFile = lpwstrFQFileName;
+			SafeDelete(lpwstrFQFileName);
         }
         else if (msg.ItemType() == ZT_CONTACTS)
         {

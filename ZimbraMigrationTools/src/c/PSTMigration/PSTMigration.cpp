@@ -253,20 +253,10 @@ DWORD WINAPI AccountMigrationThread( LPVOID lpParameter )
 					msgdata.HasHtml, msgdata.HasText,msgdata.IsDraft,msgdata.IsFlagged,msgdata.IsForwared,
 					msgdata.IsFromMe, msgdata.IsUnread, msgdata.IsUnsent,msgdata.RepliedTo,msgdata.Urlname.c_str()
 					);
-				
-				if(msgdata.HasText)
-				{
-					printf("TEXT BODY: %S\n",msgdata.textbody.buffer);
-					MAPIFreeBuffer(msgdata.textbody.buffer);
-				}
-				if(msgdata.HasHtml)
-				{
-					printf("HTML BODY: %S\n",msgdata.htmlbody.buffer);
-					MAPIFreeBuffer(msgdata.htmlbody.buffer);
-				}
 
-
-
+				printf("MIME FILE PATH: %S\n\n\n\n", msgdata.MimeFile.c_str());
+				//Delete the mime file
+				//DeleteFile(msgdata.MimeFile.c_str());
 			}
 			else if((*idItr).lItemType == ZT_CONTACTS)
 			{

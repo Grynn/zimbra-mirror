@@ -1980,3 +1980,69 @@ void Zimbra::MAPI::Util::StoreUtils::UnInit()
     }
     _hinstLib = NULL;
 }
+
+
+BOOL Zimbra::MAPI::Util::CreateAppTemporaryDirectory()
+{
+	BOOL bRet = FALSE;
+	wstring wstrTempDirPath;
+	if(!GetAppTemporaryDirectory(wstrTempDirPath))
+		return bRet;
+
+    SECURITY_ATTRIBUTES secAttr;
+    secAttr.bInheritHandle = FALSE;
+    secAttr.lpSecurityDescriptor = NULL;
+    secAttr.nLength = sizeof(SECURITY_ATTRIBUTES);
+
+	bRet=CreateDirectory(wstrTempDirPath.c_str(), &secAttr);
+
+    return bRet;
+}
+
+BOOL Zimbra::MAPI::Util::GetAppTemporaryDirectory(wstring &wstrTempAppDirPath)
+{
+	WCHAR pwszTempDir[MAX_PATH];
+    if(!GetTempPath(MAX_PATH, pwszTempDir))
+		return FALSE;
+
+    wstrTempAppDirPath = pwszTempDir;
+	wstring wstrAppName;
+	if(!GetAppName(wstrAppName))
+		return FALSE;
+    wstrTempAppDirPath += wstrAppName;
+	return TRUE;	
+}
+
+BOOL Zimbra::MAPI::Util::GetAppName(wstring &wstrAppName)
+{
+	WCHAR szAppPath[MAX_PATH] = L"";
+	if(!GetModuleFileName(0, szAppPath, MAX_PATH))
+		return FALSE;
+	// Extract name
+	wstrAppName = szAppPath;
+	wstrAppName = wstrAppName.substr(wstrAppName.rfind(L"\\") + 1);
+	wstrAppName = wstrAppName.substr(0,wstrAppName.find(L"."));
+	return TRUE;
+}
+
+
+wstring Zimbra::MAPI::Util::GetUniqueName()
+{
+	GUID guid;
+	HRESULT hr=CoCreateGuid(&guid);
+	if(hr!=S_OK)
+	{
+		return L"";
+	}
+	BYTE * str;
+	hr=UuidToString((UUID*)&guid, (RPC_WSTR*)&str);
+	if(hr!=RPC_S_OK)
+	{
+		return L"";
+	}
+	wstring unique= (LPTSTR)str;
+	RpcStringFree((RPC_WSTR*)&str);	
+	replace( unique.begin(), unique.end(), '-', '_'); 
+	unique += L"_migwiz";
+	return unique;
+}
