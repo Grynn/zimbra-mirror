@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="mbox" type="{urn:zimbraAdmin}mailboxWithMailboxId" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="mbox" type="{urn:zimbraAdmin}mailboxWithAccountId" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class testPurgeMessagesResponse {
 
-    protected List<testMailboxWithMailboxId> mbox;
+    protected List<testMailboxWithAccountId> mbox;
 
     /**
      * Gets the value of the mbox property.
@@ -53,13 +53,13 @@ public class testPurgeMessagesResponse {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link testMailboxWithMailboxId }
+     * {@link testMailboxWithAccountId }
      * 
      * 
      */
-    public List<testMailboxWithMailboxId> getMbox() {
+    public List<testMailboxWithAccountId> getMbox() {
         if (mbox == null) {
-            mbox = new ArrayList<testMailboxWithMailboxId>();
+            mbox = new ArrayList<testMailboxWithAccountId>();
         }
         return this.mbox;
     }
