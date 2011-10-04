@@ -240,21 +240,28 @@ public class TreeMail extends AbsTree {
 
 		}
 
+		optionLocator = "css=div[id='ZmActionMenu_mail']";
+		
 		if (option == Button.B_DELETE) {
 
 			// See http://bugzilla.zimbra.com/show_bug.cgi?id=64023
-			optionLocator= "css=div[id^='POPUP_'] tr[id='POPUP_DELETE'] td[id$='_title']";
+			optionLocator += " div[id^='DELETE_WITHOUT_SHORTCUT'] td[id$='_title']";
 			page= null;
-
-		}  else if (option == Button.B_MOVE) {
-
-			optionLocator= "id=POPUP_MOVE";
-			page = new DialogMove(MyApplication,((AppAjaxClient) MyApplication).zPageMail);
 
 		} else if (option == Button.B_RENAME) {
 
-			optionLocator= "id=POPUP_RENAME_SEARCH";
+			optionLocator += " div[id^='RENAME_SEARCH'] td[id$='_title']";
 			page = new DialogRenameFolder(MyApplication,((AppAjaxClient) MyApplication).zPageMail);
+
+		}  else if (option == Button.B_EDIT) {
+
+			optionLocator += " div[id^='EDIT_PROPS'] td[id$='_title']";
+			page = new DialogMove(MyApplication,((AppAjaxClient) MyApplication).zPageMail);
+
+		}  else if (option == Button.B_MOVE) {
+
+			optionLocator += " div[id^='MOVE'] td[id$='_title']";
+			page = new DialogMove(MyApplication,((AppAjaxClient) MyApplication).zPageMail);
 
 		}
 
@@ -280,6 +287,8 @@ public class TreeMail extends AbsTree {
 	protected AbsPage zTreeItem(Action action, Button option, ZimletItem zimlet) throws HarnessException {
 		throw new HarnessException("implement me!");
 	}
+	
+	
 	protected AbsPage zTreeItem(Action action, Button option, TagItem folder)
 	throws HarnessException {
 
@@ -313,22 +322,32 @@ public class TreeMail extends AbsTree {
 			throw new HarnessException("Action " + action
 					+ " not yet implemented");
 		}
+		
+		optionLocator = "css=div[id='ZmActionMenu_mail']";
+
 		if (option == Button.B_TREE_NEWTAG) {
 
-			//optionLocator = "//td[contains(@id,'_left_icon')]/div[contains(@class,'ImgNewTag')]";
-			optionLocator="//div[contains(@id,'POPUP_DWT') and contains(@class,'ZHasSubMenu')]//tbody/tr[@id='POPUP_NEW_TAG']";
+			// optionLocator = "//td[contains(@id,'_left_icon')]/div[contains(@class,'ImgNewTag')]";
+			// optionLocator="//div[contains(@id,'POPUP_DWT') and contains(@class,'ZHasSubMenu')]//tbody/tr[@id='POPUP_NEW_TAG']";
+			optionLocator += " div[id='NEW_TAG'] td[id$='_title']";
 
 		} else if (option == Button.B_DELETE) {
 
-			optionLocator = Locators.zDeleteTreeMenuItem;
+			// optionLocator = Locators.zDeleteTreeMenuItem;
+			optionLocator += " div[id='DELETE_WITHOUT_SHORTCUT'] td[id$='_title']";
 
 			page = new DialogWarning(
 					DialogWarning.DialogWarningID.DeleteTagWarningMessage,
 					MyApplication, ((AppAjaxClient) MyApplication).zPageMail);
 
+		} else if (option == Button.O_MARK_AS_READ) {
+
+			optionLocator += " div[id='MARK_ALL_READ'] td[id$='_title']";
+
 		} else if (option == Button.B_RENAME) {
 
-			optionLocator = Locators.zRenameTreeMenuItem;
+			// optionLocator = Locators.zRenameTreeMenuItem;
+			optionLocator += " div[id='RENAME_TAG'] td[id$='_title']";
 
 			page = new DialogRenameTag(MyApplication,
 					((AppAjaxClient) MyApplication).zPageMail);
