@@ -33,13 +33,13 @@
                                             <GridViewColumnHeader FontSize="11" Width="160" Content=" Status" HorizontalContentAlignment="Left"/>
                                         </GridViewColumn>
                                         <GridViewColumn  DisplayMemberBinding="{Binding Path=AcctProgressMsg}">
-                                            <GridViewColumnHeader FontSize="11" Width="70" Content=" Progress" HorizontalContentAlignment="Left"/>
+                                            <GridViewColumnHeader FontSize="11" Width="84" Content=" Progress" HorizontalContentAlignment="Left"/>
                                         </GridViewColumn>
                                         <GridViewColumn  DisplayMemberBinding="{Binding Path=NumErrs}">
-                                            <GridViewColumnHeader FontSize="11" Width="44" Content=" Errs" HorizontalContentAlignment="Left"/>
+                                            <GridViewColumnHeader FontSize="11" Width="45" Content=" Errs" HorizontalContentAlignment="Left"/>
                                         </GridViewColumn>
                                         <GridViewColumn  DisplayMemberBinding="{Binding Path=NumWarns}">
-                                            <GridViewColumnHeader FontSize="11" Width="44" Content=" Warns" HorizontalContentAlignment="Left"/>
+                                            <GridViewColumnHeader FontSize="11" Width="45" Content=" Warns" HorizontalContentAlignment="Left"/>
                                         </GridViewColumn>
                                     </GridView.Columns>
                                 </GridView>
