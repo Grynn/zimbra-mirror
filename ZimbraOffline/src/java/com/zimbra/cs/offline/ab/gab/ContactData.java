@@ -17,6 +17,8 @@ package com.zimbra.cs.offline.ab.gab;
 import com.google.gdata.data.contacts.ContactEntry;
 import com.google.gdata.data.contacts.Nickname;
 import com.google.gdata.data.contacts.Birthday;
+import com.google.gdata.data.contacts.Website;
+import com.google.gdata.data.contacts.Website.Rel;
 import com.google.gdata.data.TextContent;
 import com.google.gdata.data.PlainTextConstruct;
 import com.google.gdata.data.extensions.Email;
@@ -144,12 +146,31 @@ public class ContactData {
         importOrganization(contact);
         set(A_birthday, contact.hasBirthday() ? contact.getBirthday().getValue() : null);
         set(A_nickname, contact.hasNickname() ? contact.getNickname().getValue() : null);
+        importUrl(contact);
         set(A_notes, null);
         if (contact.getContent() != null) {
             TextContent notes = contact.getTextContent();
             if (notes != null) {
                 set(A_notes, notes.getContent().getPlainText());
             }
+        }
+    }
+
+    private void importUrl(ContactEntry contact) {
+        if (contact.hasWebsites()) {
+            for (Website webURL : contact.getWebsites())
+            {
+                if (webURL.getRel().toString().equalsIgnoreCase(Website.Rel.HOME_PAGE.toString()))
+                    set(A_homeURL, webURL.getHref());
+                else if (webURL.getRel().toString().equalsIgnoreCase(Website.Rel.WORK.toString()))
+                    set(A_workURL, webURL.getHref());
+                else
+                    set(A_otherURL, webURL.getHref());
+            }
+        } else {
+            set(A_homeURL, null);
+            set(A_workURL, null);
+            set(A_otherURL, null);
         }
     }
 
@@ -217,6 +238,9 @@ public class ContactData {
         contact.setNickname(new Nickname(get(A_nickname)));
         contact.setBirthday(new Birthday(get(A_birthday)));
         exportOrganization(contact);
+        exportUrl(contact, Website.Rel.HOME_PAGE, A_homeURL);
+        exportUrl(contact, Website.Rel.WORK, A_workURL);
+        exportUrl(contact, Website.Rel.OTHER, A_otherURL);
         String notes = get(A_notes);
         if (notes != null) {
             contact.setContent(new PlainTextConstruct(notes));
@@ -258,6 +282,7 @@ public class ContactData {
         StructuredPostalAddress spa = getStructuredPostalAddress(contact, type);
         if (spa == null) {
             spa = new StructuredPostalAddress();
+            contact.addStructuredPostalAddress(spa);
             spa.setRel(type);
         } else if (spa.hasFormattedAddress()) {
             spa.setFormattedAddress(null);
@@ -295,7 +320,41 @@ public class ContactData {
             contact.getPhoneNumbers().add(phone);
         }
     }
-    
+
+    private void exportUrl(ContactEntry contact, Rel key, String field) {
+        String value = get(field);
+        if (value != null) {
+            for (Website webURL : contact.getWebsites()) {
+                if (!key.equals(Website.Rel.OTHER)) {
+                    if (key.toString().equalsIgnoreCase(webURL.getRel().toString())) {
+                        webURL.setHref(value);
+                        return;
+                    }
+                } else if (!webURL.getRel().equals(Website.Rel.WORK) && !webURL.getRel().equals(Website.Rel.HOME_PAGE)) {
+                    webURL.setHref(value);
+                    return;
+                }
+            }
+            Website webURL = new Website();
+            webURL.setHref(value);
+            webURL.setRel(key);
+            contact.getWebsites().add(webURL);
+        } else {
+            // delete
+            for (Website webURL : contact.getWebsites()) {
+                if (!key.equals(Website.Rel.OTHER)) {
+                    if (key.toString().equalsIgnoreCase(webURL.getRel().toString())) {
+                        contact.getWebsites().remove(webURL);
+                        return;
+                    }
+                } else if (!webURL.getRel().equals(Website.Rel.WORK) && !webURL.getRel().equals(Website.Rel.HOME_PAGE)) {
+                    contact.getWebsites().remove(webURL);
+                    return;
+                }
+            }
+        }
+    }
+
     private void exportOrganization(ContactEntry contact) {
         String company = get(A_company);
         String title = get(A_jobTitle);
