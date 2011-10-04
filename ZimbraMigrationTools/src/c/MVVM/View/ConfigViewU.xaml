@@ -7,15 +7,13 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Margin="30,50,30,0" Name="userSourceText" Text="This is the source for data to be migrated.  Choose Outlook Profile to migrate everything in a given Exchange profile.  Choose PST File to migrate the contents of a given PST." TextWrapping="Wrap" VerticalAlignment="Top" />
-        <StackPanel Grid.Row="1">
+        <TextBlock Grid.Row="0" HorizontalAlignment="Left" Margin="15,20,30,0" Name="userSourceTitle" Text="Source" TextWrapping="Wrap" FontWeight="Bold" VerticalAlignment="Top" />
+        <TextBlock Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" Margin="15,5,30,0" Name="userSourceText" Text="This is the source for data to be migrated.  Choose Outlook Profile to migrate everything in a given Exchange profile.  Choose PST File to migrate the contents of a given PST." TextWrapping="Wrap" VerticalAlignment="Top" />
+        <StackPanel Grid.Row="2">
             <Grid Name="ConfigSourceGrid">
-                <Grid.Background>
-                    <ImageBrush ImageSource="/MVVM;component/View/Images/bg.png"  />
-                </Grid.Background>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"></RowDefinition>
                     <RowDefinition Height="Auto"></RowDefinition>
@@ -25,20 +23,18 @@
                     <ColumnDefinition Width="*"></ColumnDefinition>
                     <ColumnDefinition Width="Auto"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <RadioButton Grid.Row="0" Grid.Column="0" Margin="30,55,5,5" Name="rbProfile" VerticalAlignment="Center" Content="Outlook Profile" GroupName="SourceGroup" HorizontalAlignment="Stretch" IsChecked="{Binding Path=Isprofile, Mode=OneWay}" />
-                <ComboBox Grid.Row="0" Grid.Column="1" Margin="10,45,20,0" Name="cbOlkProfile" VerticalAlignment="Center" SelectedIndex="{Binding Path=CurrentProfileSelection, Mode=TwoWay}" ItemsSource="{Binding Path=ProfileList}" IsEnabled="{Binding ElementName=rbProfile, Path=IsChecked}" />
-                <RadioButton Grid.Row="1"  Grid.Column="0" Margin="30,25,5,5" Content="PST File" Name="rbPST" VerticalAlignment="Center" GroupName="SourceGroup" IsChecked="{Binding Path=IspST, Mode=OneWay}" />
+                <RadioButton Grid.Row="0" Grid.Column="0" Margin="15,55,5,5" Name="rbProfile" VerticalAlignment="Center" Content="Outlook Profile" GroupName="SourceGroup" HorizontalAlignment="Stretch" IsChecked="{Binding Path=Isprofile, Mode=OneWay}" />
+                <ComboBox Grid.Row="0" Grid.Column="1" Margin="10,49,20,0" Name="cbOlkProfile" VerticalAlignment="Center" SelectedIndex="{Binding Path=CurrentProfileSelection, Mode=TwoWay}" ItemsSource="{Binding Path=ProfileList}" IsEnabled="{Binding ElementName=rbProfile, Path=IsChecked}" />
+                <RadioButton Grid.Row="1"  Grid.Column="0" Margin="15,27,5,5" Content="PST File" Name="rbPST" VerticalAlignment="Center" GroupName="SourceGroup" IsChecked="{Binding Path=IspST, Mode=OneWay}" />
                 <TextBox Grid.Row="1"  Grid.Column="1" Margin="10,25,20,0" Name="tbPST" VerticalAlignment="Center" IsEnabled="{Binding ElementName=rbPST, Path=IsChecked}" Text="{Binding Path=PSTFile}" HorizontalAlignment="Stretch" />
                 <Button Grid.Row="1"  Grid.Column="2" Margin="0,25,20,0" MinWidth="20" Content="..." HorizontalAlignment="Center" Name="browsePSTButton" Command="{Binding GetPSTCommand}" IsEnabled="{Binding ElementName=rbPST, Path=IsChecked}" />
             </Grid>
         </StackPanel>
-        <Separator Grid.Row="2" Margin="5,213,5,0" VerticalAlignment="Top"/>
-        <Grid Name="BottomGrid" Grid.Row="3" >
-            <Button MinWidth="75" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,10,0,0" Content="Help" Name="buttonConfigHelp" Command="{Binding GetConfigSourceHelpCommand}"  />
-            <Button MinWidth="75" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="85,10,0,0" Content="Load" Name="buttonConfigLoad" Command="{Binding LoadCommand}"  />
-            <Button MinWidth="75" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="165,10,0,0" Content="Save" Name="buttonConfigSav" Command="{Binding SaveCommand}"  />
-            <Button MinWidth="75" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,10,85,0" Content="&lt; Back" Name="buttonConfigBack" IsEnabled="False"  />
-            <Button MinWidth="75" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,10,5,0" Content="Next &gt;" Name="buttonConfigNext" Command="{Binding NextCommand}"  />
+        <Grid Name="BottomGrid" Grid.Row="3" Margin="10,0,0,10" VerticalAlignment="Bottom">
+            <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,0,0" Content="Load" Name="buttonConfigLoad" Command="{Binding LoadCommand}"  />
+            <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="80,0,0,0" Content="Save" Name="buttonConfigSav" Command="{Binding SaveCommand}"  />
+            <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,85,0" Content="&lt; Back" Name="buttonConfigBack" IsEnabled="False"  />
+            <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0" Content="Next &gt;" Name="buttonConfigNext" Command="{Binding NextCommand}"  />
         </Grid>
     </Grid>
 </UserControl>

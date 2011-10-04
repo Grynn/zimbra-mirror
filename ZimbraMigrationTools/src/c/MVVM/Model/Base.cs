@@ -4,11 +4,10 @@
 
     public class Base 
     {
-        internal Base(string name, string title, string imageName)
+        internal Base(string name, string title)
         {
             this.Name = name;
             this.Title = title;
-            this.ImageName = imageName;
         }
 
         public string Name
@@ -20,11 +19,5 @@
         {
             get; set;
         }
-
-        public string ImageName
-        {
-            get; set;
-        }
-
     }
 }

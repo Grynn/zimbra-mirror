@@ -20,7 +20,6 @@ namespace MVVM.ViewModel
 
         public UsersViewModel(string username, string mappedname)
         {
-            this.GetUsersHelpCommand = new ActionCommand(this.GetUsersHelp, () => true);
             this.ObjectPickerCommand = new ActionCommand(this.ObjectPicker, () => true);
             this.LDAPBrowserCommand = new ActionCommand(this.LDAPBrowser, () => true);
             this.UserMapCommand = new ActionCommand(this.UserMap, () => true);
@@ -38,17 +37,6 @@ namespace MVVM.ViewModel
 
 
         // Commands
-        public ICommand GetUsersHelpCommand
-        {
-            get;
-            private set;
-        }
-
-        private void GetUsersHelp()
-        {
-            DoHelp("users.html");
-        }
-
         public ICommand ObjectPickerCommand
         {
             get;

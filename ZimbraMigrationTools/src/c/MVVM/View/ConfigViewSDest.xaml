@@ -7,15 +7,13 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition MaxHeight="40"></RowDefinition>
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" HorizontalAlignment="Left" Margin="30,50,30,0" Name="serverDestText" Text="This is the destination Zimbra server for data to be migrated.  Enter your Zimbra server credentials." TextWrapping="Wrap" VerticalAlignment="Top" />
-        <StackPanel Grid.Row="1">
+        <TextBlock Grid.Row="0" HorizontalAlignment="Left" Margin="15,20,30,0" Name="serverDestTitle" Text="Destination" TextWrapping="Wrap" FontWeight="Bold" VerticalAlignment="Top" />
+        <TextBlock Grid.Row="1" HorizontalAlignment="Left" Margin="15,5,30,0" Name="serverDestText" Text="This is the destination Zimbra server for data to be migrated.  Enter your Zimbra server credentials." TextWrapping="Wrap" VerticalAlignment="Top" />
+        <StackPanel Grid.Row="2">
             <Grid Name="ConfigDestGrid" Margin="0,40,0,0">
-                <Grid.Background>
-                    <ImageBrush ImageSource="/MVVM;component/View/Images/bg.png"  />
-                </Grid.Background>
                 <Grid.RowDefinitions>
                     <RowDefinition MinHeight="40" Height="Auto"></RowDefinition>
                     <RowDefinition MinHeight="40" Height="Auto"></RowDefinition>
@@ -25,26 +23,23 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <Label Content="Hostname" Margin="26,0,0,0" HorizontalAlignment="Left" Name="label1" VerticalAlignment="Top" Grid.Row="0" Grid.Column="0" />
-                <TextBox HorizontalAlignment="Left" MinWidth="240" Name="tbHost" VerticalAlignment="Top" Grid.Row="0" Grid.Column="1"  Text="{Binding Path=ZimbraServerHostName}"/>
-                <Label Content="Admin Port" Margin="26,0,0,0" HorizontalAlignment="Left" Name="label2" VerticalAlignment="Top" Grid.Row="1" Grid.Column="0" />
-                <TextBox HorizontalAlignment="Left" MinWidth="50" Name="tbPort" VerticalAlignment="Top" Grid.Row="1" Grid.Column="1" Text="{Binding Path=ZimbraPort}"/>
-                <CheckBox Content="Use Secure Connection" Margin="-22,4,0,0" HorizontalAlignment="Center"  Name="cbSecure" VerticalAlignment="Top" Grid.Row="1" Grid.Column="1" IsChecked="{Binding Path=ZimbraSSL}"/>
-                <Label Content="Admin ID" Margin="26,0,0,0" HorizontalAlignment="Left" Name="label3" VerticalAlignment="Top" Grid.Row="2" Grid.Column="0" />
-                <TextBox HorizontalAlignment="Left" MinWidth="240" Name="tbUser" VerticalAlignment="Top" Grid.Row="2" Grid.Column="1" Text="{Binding Path=ZimbraAdmin}"/>
-                <Label Content="Password" Margin="26,0,0,0" HorizontalAlignment="Left" Name="label4" VerticalAlignment="Top" Grid.Row="3" Grid.Column="0"  />
-                <PasswordBox HorizontalAlignment="Left" MinWidth="240" Name="passwordBox1" VerticalAlignment="Top" Grid.Row="3" Grid.Column="1" PasswordChanged="pb_PasswordChanged"/>
+                <Label Content="Hostname" Margin="11,0,0,0" HorizontalAlignment="Left" Name="label1" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0" />
+                <TextBox MinWidth="240" Margin="0,0,50,0" Name="tbHost" VerticalAlignment="Center" Grid.Row="0" Grid.Column="1"  Text="{Binding Path=ZimbraServerHostName}"/>
+                <Label Content="Admin Port" Margin="11,0,0,0" HorizontalAlignment="Left" Name="label2" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0" />
+                <TextBox HorizontalAlignment="Left" MinWidth="50" Name="tbPort" VerticalAlignment="Center" Grid.Row="1" Grid.Column="1" Text="{Binding Path=ZimbraPort}"/>
+                <CheckBox Content="Use Secure Connection" Margin="-80,0,0,0" HorizontalAlignment="Center"  Name="cbSecure" VerticalAlignment="Center" Grid.Row="1" Grid.Column="1" IsChecked="{Binding Path=ZimbraSSL}"/>
+                <Label Content="Admin ID" Margin="11,0,0,0" HorizontalAlignment="Left" Name="label3" VerticalAlignment="Center" Grid.Row="2" Grid.Column="0" />
+                <TextBox MinWidth="240" Margin="0,0,50,0" Name="tbUser" VerticalAlignment="Center" Grid.Row="2" Grid.Column="1" Text="{Binding Path=ZimbraAdmin}"/>
+                <Label Content="Password" Margin="11,0,0,0" HorizontalAlignment="Left" Name="label4" VerticalAlignment="Center" Grid.Row="3" Grid.Column="0"  />
+                <PasswordBox MinWidth="240" Margin="0,0,50,0" Name="passwordBox1" VerticalAlignment="Center" Grid.Row="3" Grid.Column="1" PasswordChanged="pb_PasswordChanged"/>
             </Grid>
         </StackPanel>
-        <Separator Grid.Row="2" Margin="5,147,5,0" VerticalAlignment="Top"/>
-        <Grid Name="BottomGrid" Grid.Row="3" >
-            <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,10,0,0" Content="Help" Name="buttonConfigHelp" Command="{Binding GetConfigDestHelpCommand}"  />
-            <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="85,10,0,0" Content="Load" Name="buttonConfigLoad" Command="{Binding LoadCommand}"  />
-            <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="165,10,0,0" Content="Save" Name="buttonConfigSav" Command="{Binding SaveCommand}"  />
-            <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,10,85,0" Content="&lt; Back" Name="buttonConfigBack" Command="{Binding BackCommand}" IsEnabled="True"  />
-            <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,10,5,0" Content="Next &gt;" Name="buttonConfigNext" Command="{Binding NextCommand}"  />
+        <Grid Name="BottomGrid" Grid.Row="3" Margin="10,0,0,10" VerticalAlignment="Bottom">
+            <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,0,0" Content="Load" Name="buttonConfigLoad" Command="{Binding LoadCommand}"  />
+            <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="80,0,0,0" Content="Save" Name="buttonConfigSav" Command="{Binding SaveCommand}"  />
+            <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,85,0" Content="&lt; Back" Name="buttonConfigBack" Command="{Binding BackCommand}" IsEnabled="True"  />
+            <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0" Content="Next &gt;" Name="buttonConfigNext" Command="{Binding NextCommand}"  />
         </Grid>
     </Grid>
 </UserControl>

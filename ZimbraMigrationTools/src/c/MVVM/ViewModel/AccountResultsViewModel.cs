@@ -38,7 +38,6 @@ namespace MVVM.ViewModel
             this.SelectedTab = "";
             this.m_AccountOnTab = -1;
 
-            this.GetAcctResultsHelpCommand = new ActionCommand(this.GetAcctResultsHelp, () => true);
             this.OpenLogFileCommand = new ActionCommand(this.OpenLogFile, () => true);
             this.StopCommand = new ActionCommand(this.Stop, () => true);
             this.ExitAppCommand = new ActionCommand(this.ExitApp, () => true);
@@ -55,17 +54,6 @@ namespace MVVM.ViewModel
         }
 
         // Commands
-        public ICommand GetAcctResultsHelpCommand
-        {
-            get;
-            private set;
-        }
-
-        private void GetAcctResultsHelp()
-        {
-            DoHelp("acctresults.html");
-        }
-
         public ICommand OpenLogFileCommand
         {
             get;

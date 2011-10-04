@@ -15,17 +15,13 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="40"></RowDefinition>
         </Grid.RowDefinitions>
         <StackPanel Name="ResultsSP">
-            <TabControl Name="ResultsTC" MinHeight="350"  Margin="5" ItemContainerStyle="{StaticResource itemstyleFocus}">
+            <TabControl Name="ResultsTC" MinHeight="280"  Margin="5" ItemContainerStyle="{StaticResource itemstyleFocus}">
                 <TabItem Name="AccountsTabItem" Header="Accounts" >
                     <Grid Name="AccountResultsGrid">
-                        <Grid.Background>
-                            <ImageBrush ImageSource="/MVVM;component/View/Images/bg.png"  />
-                        </Grid.Background>
                         <ListView Margin="5" FontSize="11" Name="lstAccountResults" ItemsSource="{Binding AccountResultsList}" SelectedIndex="{Binding Path=CurrentAccountSelection, Mode=TwoWay}" ItemContainerStyle="{StaticResource itemstyleDouble}">
                             <ListView.View>
                                 <GridView>
@@ -53,14 +49,12 @@
                 </TabItem>
             </TabControl>
         </StackPanel>
-        <ProgressBar Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Height="18" Width="290" Margin="70,10,0,0" Name="pbMigrationS" Visibility="Hidden" Value="{Binding Path=PBValue}" HorizontalAlignment="Left" ></ProgressBar>
-        <Label Grid.Row="2" Grid.ColumnSpan="2" Margin="76,0,0,0" MinWidth="300" HorizontalAlignment="Left" Name="labelSchedInfo" Visibility="Hidden" FontStyle="Italic" Content="{Binding Path=UserPBMsgValue}"/>
-        <Separator Grid.Row="3" Margin="5,14,5,0" VerticalAlignment="Top"/>
-        <Grid Name="BottomGrid" Grid.Row="4" Grid.ColumnSpan="2">
-            <Button MinWidth="75" HorizontalAlignment="Left"  VerticalAlignment="Top" Margin="5,10,0,0" Content="Help" Name="buttonResultsHelp" Command="{Binding GetAcctResultsHelpCommand}"  />
-            <Button MinWidth="75" HorizontalAlignment="Right"  VerticalAlignment="Top" Margin="0,10,85,0" Content="Stop" Name="buttonStop" IsEnabled="{Binding Path=EnableStop}" Command="{Binding StopCommand}"  />
-            <Button MinWidth="75" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,10,165,0" Content="Open Log File" Name="buttonOpenLF" IsEnabled="{Binding OpenLogFileEnabled}" Command="{Binding OpenLogFileCommand}"  />
-            <Button MinWidth="75" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,10,5,0" Content="Exit" Name="buttonExit" Command="{Binding ExitAppCommand}"  />
+        <ProgressBar Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Height="18" Width="330" Margin="76,8,0,0" Name="pbMigrationS" Visibility="Hidden" Value="{Binding Path=PBValue}" HorizontalAlignment="Left" ></ProgressBar>
+        <Label Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="70,0,0,0" MinWidth="300" HorizontalAlignment="Left" Name="labelSchedInfo" Visibility="Hidden" FontStyle="Italic" Content="{Binding Path=UserPBMsgValue}" />
+        <Grid Name="BottomGrid" Grid.Row="3" Grid.ColumnSpan="2" Margin="10,0,0,10" VerticalAlignment="Bottom">
+            <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,0,0" Content="Open Log File" Name="buttonOpenLF" IsEnabled="{Binding OpenLogFileEnabled}" Command="{Binding OpenLogFileCommand}" />
+            <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,85,0" Content="Stop" Name="buttonStop" IsEnabled="{Binding Path=EnableStop}" Command="{Binding StopCommand}" />
+            <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0" Content="Exit" Name="buttonExit" Command="{Binding ExitAppCommand}" />
         </Grid>
     </Grid>
 </UserControl>

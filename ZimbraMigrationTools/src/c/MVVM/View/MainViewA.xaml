@@ -3,8 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:View="clr-namespace:MVVM.View"
         xmlns:ViewModel="clr-namespace:MVVM.ViewModel"
-        FontFamily="Century Schoolbook"
-        Title="Zimbra Migration" Height="555" Width="610">
+        FontFamily="Arial"
+        Title="Zimbra Migration" Height="464" Width="650">
 
     <Window.Resources>
         <DataTemplate DataType="{x:Type ViewModel:IntroViewModel}">
@@ -37,68 +37,48 @@
         <Style TargetType="ListBoxItem">
             <Style.Resources>
                 <!--SelectedItem with focus-->
-                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="DodgerBlue" Opacity=".7"/>
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#2B5480" Opacity=".7"/>
                 <!--SelectedItem without focus-->
-                <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="DodgerBlue" Opacity=".7"/>
+                <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="#2B5480" Opacity=".7"/>
             </Style.Resources>
         </Style>
     </Window.Resources>
 
     <Grid Name="MainGrid">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="102"></ColumnDefinition>
+            <ColumnDefinition Width="132"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="40"></RowDefinition>
+            <RowDefinition Height="45"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
-        <Border Name="headerBorder" Grid.Row="0" Grid.Column="1" Background="Black" BorderThickness="2,4,4,2" BorderBrush="DarkSlateGray">
-            <Grid Name="headerGrid" Grid.Row="0" Grid.Column="1" >
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="40"></RowDefinition>
-                    <RowDefinition Height="*"></RowDefinition>
-                    <RowDefinition Height="*"></RowDefinition>
-                </Grid.RowDefinitions>
-                <Image Grid.Row="0" HorizontalAlignment="Left"  Margin="0,2,0,5" Name="image0" Stretch="None" VerticalAlignment="Center" Source="/MVVM;component/View/Images/AppBanner.png" />
-                <TextBlock Grid.Row="0" HorizontalAlignment="Center" Margin="-5,0,0,5" Name="tbAppTitle" Text="Migration" VerticalAlignment="Center" Foreground="White" FontSize="16" FontWeight="Bold" FontFamily="Lucida Bright" FontStyle="Normal" />
-                <TextBlock Grid.Row="0" HorizontalAlignment="Right" Margin="0,0,15,5" Name="tbAppBuildnum" Text="{Binding Path=BuildNum}" VerticalAlignment="Center" Foreground="White" FontSize="16" FontWeight="Bold" FontFamily="Lucida Bright" FontStyle="Normal" />
+        <Grid Name="headerGrid" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+            <Image HorizontalAlignment="Left"  Margin="0,0,0,0" Name="image0" Stretch="UniformToFill" VerticalAlignment="Center" Source="/MVVM;component/View/Images/banner_left.png" />
+            <Image HorizontalAlignment="Left"  Margin="10,2,0,5" Name="image1" Stretch="None" VerticalAlignment="Center" Source="/MVVM;component/View/Images/VMware_logo.png" />
+            <TextBlock HorizontalAlignment="Left" Margin="118,2,0,5" Name="tbAppTitle" Text="Zimbra Migration" VerticalAlignment="Center" Foreground="White" FontSize="19" FontWeight="Medium" FontFamily="Arial" FontStyle="Normal" />
+            <Grid Name="helpGrid" Visibility="Hidden">
+                <TextBlock HorizontalAlignment="Right" Margin="0,0,38,0" Name="tbHelpLbl" Text="Help" VerticalAlignment="Center" Foreground="White" FontSize="12" FontWeight="Medium" FontFamily="Arial" FontStyle="Normal" />
+                <TextBlock HorizontalAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Center"><Hyperlink TextDecorations="None" Command="{Binding ProcessHelpCommand}"><Image Stretch="None" Source="/MVVM;component/View/Images/Help_Up.png"></Image></Hyperlink></TextBlock>
             </Grid>
-        </Border>
+        </Grid>
 
-        <Border Name="keyBorder" Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" Background="WhiteSmoke"  BorderThickness="4,4,2,4" BorderBrush="DarkSlateGray">
-            <Grid>
-                <Grid.Background>
-                    <ImageBrush ImageSource="/MVVM;component/View/Images/bg.png" />
-                </Grid.Background>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                </Grid.RowDefinitions>
+        <Grid Name="viewsGrid" Grid.Row="1" Grid.Column="0">
+            <StackPanel Orientation="Vertical">
+                <ListBox Name="lbMode" Visibility="Hidden" IsEnabled="False" ScrollViewer.HorizontalScrollBarVisibility="Disabled" BorderThickness="0" ItemsSource="{Binding TheViews}" >
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Margin="10,19,0,0" VerticalAlignment="Top" Orientation="Vertical" Height="28" Width="140">
+                                <TextBlock FontFamily="Arial" FontSize="12" FontWeight="Bold" VerticalAlignment="Center" MouseDown="ViewListTB_MouseDown" Text="{Binding ViewTitle}"></TextBlock>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </StackPanel>
+        </Grid>
 
-                <StackPanel Orientation="Vertical" Grid.RowSpan="2">
-                    <ListBox Name="lbMode" Visibility="Hidden" IsEnabled="False" ItemsSource="{Binding TheViews}" >
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Vertical">
-                                    <Image Source="{Binding ImageName}" Width="90" Height="70" MouseDown="ImageMouseDown" Stretch="UniformToFill"></Image>
-                                    <TextBlock FontFamily="Maiandra GD" FontStyle="Italic" VerticalAlignment="Center" Text="{Binding ViewTitle}"></TextBlock>
-                                </StackPanel>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-                </StackPanel>
-                
-            </Grid>
-        </Border>
-
-        <Border Name="contentBorder" Grid.Row="1" Grid.Column="1" BorderThickness="2,2,4,4" BorderBrush="DarkSlateGray"  Background="WhiteSmoke">
-            <Grid Name="contentGrid">
-                <Grid.Background>
-                    <ImageBrush ImageSource="/MVVM;component/View/Images/bg.png"  />
-                </Grid.Background>
-                <ContentPresenter Name="thePresenter" Grid.Row="1" Grid.Column="1" Content="{Binding ElementName=lbMode, Path=SelectedItem}"/>
-            </Grid>
-        </Border>
+        <Grid Name="contentGrid" Grid.Row="1" Grid.Column="1" >
+            <ContentPresenter Name="thePresenter" Grid.Row="1" Grid.Column="1" Content="{Binding ElementName=lbMode, Path=SelectedItem}"/>
+        </Grid>
     </Grid>
 </Window>

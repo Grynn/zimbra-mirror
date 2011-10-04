@@ -22,7 +22,6 @@ namespace MVVM.ViewModel
 
         public ConfigViewModelS()
         {
-            this.GetConfigSourceHelpCommand = new ActionCommand(this.GetConfigSourceHelp, () => true);
             this.LoadCommand = new ActionCommand(this.Load, () => true);
             this.SaveCommand = new ActionCommand(this.Save, () => true);
             this.NextCommand = new ActionCommand(this.Next, () => true);
@@ -30,17 +29,6 @@ namespace MVVM.ViewModel
             IsmailServer = false;
             CSEnableNext = false;
             iMailSvrInitialized = -1;
-        }
-
-        public ICommand GetConfigSourceHelpCommand
-        {
-            get;
-            private set;
-        }
-
-        private void GetConfigSourceHelp()
-        {
-            DoHelp("cfgS.html");
         }
 
         public ICommand LoadCommand

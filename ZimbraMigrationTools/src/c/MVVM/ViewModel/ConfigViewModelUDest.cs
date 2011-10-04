@@ -16,22 +16,10 @@ namespace MVVM.ViewModel
     {
         public ConfigViewModelUDest()
         {
-            this.GetConfigDestHelpCommand = new ActionCommand(this.GetConfigDestHelp, () => true);
             this.LoadCommand = new ActionCommand(this.Load, () => true);
             this.SaveCommand = new ActionCommand(this.Save, () => true);
             this.BackCommand = new ActionCommand(this.Back, () => true);
             this.NextCommand = new ActionCommand(this.Next, () => true);
-        }
-
-        public ICommand GetConfigDestHelpCommand
-        {
-            get;
-            private set;
-        }
-
-        private void GetConfigDestHelp()
-        {
-            DoHelp("cfgUDest.html");
         }
 
         public ICommand LoadCommand

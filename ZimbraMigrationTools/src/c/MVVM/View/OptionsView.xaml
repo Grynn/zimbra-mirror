@@ -5,38 +5,38 @@
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
     >
     <Grid Name="OptionsGrid">
-        <Grid.Background>
-            <ImageBrush ImageSource="/MVVM;component/View/Images/bg.png"  />
-        </Grid.Background>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="40"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <TextBlock Grid.Row="0" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="36,30,36,0" Name="optionsText" Text="Choose the items and additional folders to migrate, along with any migration options.  Use Load to bring up existing choices, and Save to persist them." TextWrapping="Wrap" VerticalAlignment="Top" />
-        <GroupBox Name="GBItems" Grid.Row="1" Grid.Column="0" Header="Items" Margin="36,20,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="10">
+        <TextBlock Grid.Row="0" HorizontalAlignment="Left" Margin="15,20,30,0" Name="serverOptTitle" Text="Options" TextWrapping="Wrap" FontWeight="Bold" VerticalAlignment="Top" />
+        <TextBlock Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="15,5,36,0" Name="optionsText" Text="Choose the items and additional folders to migrate, along with any migration options.  Use Load to bring up existing choices, and Save to persist them." TextWrapping="Wrap" VerticalAlignment="Top" />
+        <GroupBox Name="GBItems" Grid.Row="2" Grid.Column="0" Header="Items" Margin="15,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="10">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition MinHeight= "20" Height="Auto"></RowDefinition>
                     <RowDefinition MinHeight= "20" Height="Auto"></RowDefinition>
                     <RowDefinition MinHeight= "20" Height="Auto"></RowDefinition>
-                    <RowDefinition MinHeight= "20" Height="Auto"></RowDefinition>
-                    <RowDefinition MinHeight= "20" Height="Auto"></RowDefinition>
                 </Grid.RowDefinitions>
-                <CheckBox Content="Mail" Grid.Row="0" HorizontalAlignment="Left" Name="cbMail" VerticalAlignment="Center" IsChecked="{Binding Path=ImportMailOptions}"/>
-                <CheckBox Content="Calendar" Grid.Row="1" HorizontalAlignment="Left" Name="cbCal" VerticalAlignment="Center"  IsChecked="{Binding Path=ImportCalendarOptions}"/>
-                <CheckBox Content="Contacts" Grid.Row="2" HorizontalAlignment="Left" Name="cbContacts"  VerticalAlignment="Center" IsChecked="{Binding Path=ImportContactOptions}"/>
-                <CheckBox Content="Tasks" Grid.Row="3" HorizontalAlignment="Left" Name="cbTasks" VerticalAlignment="Center"  IsChecked="{Binding Path=ImportTaskOptions}"/>
-                <CheckBox Content="Rules" Grid.Row="4" HorizontalAlignment="Left" Name="cbRules" VerticalAlignment="Center"  IsChecked="{Binding Path=ImportRuleOptions}"/>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition MinWidth="80" Width="Auto"></ColumnDefinition>
+                    <ColumnDefinition MinWidth="80" Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <CheckBox Content="Mail" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Name="cbMail" VerticalAlignment="Center" IsChecked="{Binding Path=ImportMailOptions}"/>
+                <CheckBox Content="Calendar" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" Name="cbCal" VerticalAlignment="Center"  IsChecked="{Binding Path=ImportCalendarOptions}"/>
+                <CheckBox Content="Contacts" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" Name="cbContacts"  VerticalAlignment="Center" IsChecked="{Binding Path=ImportContactOptions}"/>
+                <CheckBox Content="Tasks" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Name="cbTasks" VerticalAlignment="Center"  IsChecked="{Binding Path=ImportTaskOptions}"/>
+                <CheckBox Content="Rules" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" Name="cbRules" VerticalAlignment="Center"  IsChecked="{Binding Path=ImportRuleOptions}"/>
             </Grid>
         </GroupBox>
-        <GroupBox Name="GBAdditionalFolders" Grid.Row="1" Grid.Column="1" MinHeight="{Binding ElementName=GBItems, Path=ActualHeight}" Header="Additional Folders" HorizontalAlignment="Left" Margin="103,20,0,0" VerticalAlignment="Top" Padding="10">
+        <GroupBox Name="GBAdditionalFolders" Grid.Row="2" Grid.Column="1" MinHeight="{Binding ElementName=GBItems, Path=ActualHeight}" Header="Additional Folders" HorizontalAlignment="Left" Margin="85,10,0,0" VerticalAlignment="Top" Padding="10">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition MinHeight= "20" Height="Auto"></RowDefinition>
@@ -48,7 +48,7 @@
                 <CheckBox Content="Junk" Grid.Row="2" HorizontalAlignment="Left" Name="cbJunk" VerticalAlignment="Center"  IsChecked="{Binding Path=ImportJunkOptions}" />
             </Grid>
         </GroupBox>
-        <GroupBox Name="GBOptions" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" MinWidth="330" Header="Options" HorizontalAlignment="Left" Margin="36,16,0,0" VerticalAlignment="Top" Padding="10">
+        <GroupBox Name="GBOptions" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" MinWidth="400" Header="Options" HorizontalAlignment="Left" Margin="15,10,0,0" VerticalAlignment="Top" Padding="10">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition MinHeight= "24" Height="Auto"></RowDefinition>
@@ -57,23 +57,21 @@
                     <RowDefinition MinHeight= "24" Height="Auto"></RowDefinition>
                 </Grid.RowDefinitions>
                 <CheckBox Content="Migrate On or After" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Name="CBoaItems" VerticalAlignment="Center" IsChecked="{Binding Path=Migratedateflag}" />
-                <DatePicker Grid.Row="0" Grid.Column="1" MaxHeight="20" Margin="0,0,20,0" HorizontalAlignment="Right" Name="datePickerItems"  IsEnabled="{Binding ElementName=CBoaItems, Path=IsChecked}" VerticalAlignment="Center" SelectedDate="{Binding Path=MigrateONRAfter, Mode=TwoWay,  
+                <DatePicker Grid.Row="0" Grid.Column="1" MaxHeight="20" Margin="0,0,0,0" HorizontalAlignment="Center" Name="datePickerItems"  IsEnabled="{Binding ElementName=CBoaItems, Path=IsChecked}" VerticalAlignment="Center" SelectedDate="{Binding Path=MigrateONRAfter, Mode=TwoWay,  
                           ValidatesOnExceptions=true,  
                           NotifyOnValidationError=true,  
                           UpdateSourceTrigger=PropertyChanged}"/>
-                <CheckBox Content="Maximum attachment size (MB)" Grid.Row="1" HorizontalAlignment="Left" Name="cbMaxAttach" VerticalAlignment="Center" IsChecked="{Binding Path=Maxattachflag}" />
-                <TextBox HorizontalAlignment="Right" MinWidth="56" MaxHeight="18" Margin="0,0,40,0" Name="tbMaxAttach" VerticalAlignment="Center" Grid.Row="1" Grid.Column="1" IsEnabled="{Binding ElementName=cbMaxAttach, Path=IsChecked}" Text="{Binding Path=MaxAttachementSize}"/>
+                <CheckBox Content="Maximum attachment size (MB)" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" Name="cbMaxAttach" VerticalAlignment="Center" IsChecked="{Binding Path=Maxattachflag}" />
+                <TextBox HorizontalAlignment="Right" MinWidth="56" MaxHeight="18" Margin="0,0,120,0" Name="tbMaxAttach" VerticalAlignment="Center" Grid.Row="1" Grid.Column="1" IsEnabled="{Binding ElementName=cbMaxAttach, Path=IsChecked}" Text="{Binding Path=MaxAttachementSize}"/>
                 <CheckBox Content="Skip these folders (separate with comma)" Grid.Row="2" HorizontalAlignment="Left" Name="cbSkip" VerticalAlignment="Center" IsChecked="{Binding Path=Skipfolderflag}" />
                 <TextBox HorizontalAlignment="Stretch" Margin="16,5,0,0" Name="tbSkip" VerticalAlignment="Top" Grid.Row="3" Grid.Column="0" IsEnabled="{Binding ElementName=cbSkip, Path=IsChecked}" Text="{Binding Path=FoldersToSkip}"/>
             </Grid>
         </GroupBox>
-        <Separator Grid.Row="3" Grid.ColumnSpan="2" Margin="5,36,5,0" VerticalAlignment="Top"/>
-        <Grid Name="BottomGrid" Grid.Row="4" Grid.ColumnSpan="2">
-            <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,10,0,0" Content="Help" Name="buttonOptionsHelp" Command="{Binding GetOptionsHelpCommand}"  />
-            <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="85,10,0,0" Content="Load" Name="buttonOptionsLoad" Command="{Binding LoadCommand}"  />
-            <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="165,10,0,0" Content="Save" Name="buttonOptionsSav" Command="{Binding SaveCommand}"  />
-            <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,10,85,0" Content="&lt; Back" Name="buttonOptionsBack" Command="{Binding BackCommand}" IsEnabled="True"  />
-            <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,10,5,0" Content="Next &gt;" Name="buttonOptionsNext" Command="{Binding NextCommand}"  />
+        <Grid Name="BottomGrid" Grid.Row="4" Grid.ColumnSpan="2" Margin="10,0,0,10" VerticalAlignment="Bottom">
+            <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,0,0" Content="Load" Name="buttonOptionsLoad" Command="{Binding LoadCommand}"  />
+            <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="80,0,0,0" Content="Save" Name="buttonOptionsSav" Command="{Binding SaveCommand}"  />
+            <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,85,0" Content="&lt; Back" Name="buttonOptionsBack" Command="{Binding BackCommand}" IsEnabled="True"  />
+            <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0" Content="Next &gt;" Name="buttonOptionsNext" Command="{Binding NextCommand}"  />
         </Grid>
     </Grid>
 </UserControl>

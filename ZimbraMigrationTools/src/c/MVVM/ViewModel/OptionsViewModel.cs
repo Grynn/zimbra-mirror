@@ -17,7 +17,6 @@ namespace MVVM.ViewModel
     {
         public OptionsViewModel()
         {
-            this.GetOptionsHelpCommand = new ActionCommand(this.GetOptionsHelp, () => true);
             this.LoadCommand = new ActionCommand(this.Load, () => true);
             this.SaveCommand = new ActionCommand(this.Save, () => true);
             this.BackCommand = new ActionCommand(this.Back, () => true);
@@ -25,12 +24,6 @@ namespace MVVM.ViewModel
             Migratedateflag = false;
             Maxattachflag = false;
             Skipfolderflag = false;
-        }
-
-        public ICommand GetOptionsHelpCommand
-        {
-            get;
-            private set;
         }
 
         public ICommand LoadCommand
@@ -192,11 +185,6 @@ namespace MVVM.ViewModel
                 usersViewModel.UsersList.Add(new UsersViewModel(name, ""));
                 scheduleViewModel.Migrate();
             }
-        }
-
-        private void GetOptionsHelp()
-        {
-            DoHelp("options.html");
         }
 
         public bool ImportMailOptions

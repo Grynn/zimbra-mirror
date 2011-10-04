@@ -20,16 +20,18 @@ namespace MVVM.View
     /// </summary>
     public partial class MainViewA
     {
+        private BaseViewModel m_baseViewModel;
         private IntroViewModel m_introViewModel;
 
         public MainViewA()
         {
             InitializeComponent();
 
-            m_introViewModel = new IntroViewModel(lbMode);
+            m_baseViewModel = new BaseViewModel();
+
+            m_introViewModel = new IntroViewModel(lbMode, helpGrid, viewsGrid);
             m_introViewModel.Name = "IntroViewModel";
             m_introViewModel.ViewTitle = "Intro";   
-            m_introViewModel.ImageName = "Images/ConfigSource.jpg"; // doesn't matter since LB is hidden
             m_introViewModel.lb = lbMode;
             m_introViewModel.isBrowser = false;
             Intro intro = new Intro();
@@ -41,19 +43,14 @@ namespace MVVM.View
             DataContext = m_introViewModel;
         }
 
-        private void ImageMouseDown(object sender, MouseButtonEventArgs e)
+        private void ViewListTB_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (sender is Image)
+            TextBlock tb = (TextBlock)sender;
+            if (tb.Text == "Migrate")
             {
-                ImageSource SelectedImageSource = ((Image)sender).Source;
-                string str = SelectedImageSource.ToString();
-                if (str.EndsWith("Penguins.jpg"))
-                {
-                    UsersViewModel usersViewModel = m_introViewModel.GetUsersViewModel();
-                    usersViewModel.ValidateUsersList();
-                }
+                UsersViewModel usersViewModel = m_introViewModel.GetUsersViewModel();
+                usersViewModel.ValidateUsersList();
             }
         }
-
     }
 }

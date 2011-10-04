@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -29,10 +30,14 @@ namespace MVVM.ViewModel
         private UsersViewModel m_usersViewModel;
         private ScheduleViewModel m_scheduleViewModel;
         private AccountResultsViewModel m_resultsViewModel;
+        private Grid hg;
+        private Grid vg;
         public CSMigrationwrapper mw;
-        public IntroViewModel(ListBox lbMode)
+        public IntroViewModel(ListBox lbMode, Grid helpGrid, Grid viewsGrid)
         {
             lb = lbMode;
+            hg = helpGrid;
+            vg = viewsGrid;
             this.GetIntroLicenseCommand = new ActionCommand(this.GetIntroLicense, () => true);
             this.GetIntroUserMigCommand = new ActionCommand(this.GetIntroUserMig, () => true);
             this.GetIntroServerMigCommand = new ActionCommand(this.GetIntroServerMig, () => true);
@@ -123,6 +128,10 @@ namespace MVVM.ViewModel
                 m_optionsViewModel.ImportNextButtonContent = "Migrate";
             }
 
+            hg.Visibility = Visibility.Visible;
+            vg.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#E7E7E7"));
+
+            lb.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#E7E7E7"));
             lb.Visibility = Visibility.Visible;
             lb.IsEnabled = true;
             lb.SelectedIndex = 0;
@@ -190,7 +199,6 @@ namespace MVVM.ViewModel
             m_configViewModelS = new ConfigViewModelS();
             m_configViewModelS.Name = "ConfigViewModelS";
             m_configViewModelS.ViewTitle = "Source";
-            m_configViewModelS.ImageName = "Images/ConfigSource.jpg";
             m_configViewModelS.lb = lb;
             m_configViewModelS.isBrowser = isBrowser;
             m_configViewModelS.OutlookProfile = "";
@@ -201,7 +209,6 @@ namespace MVVM.ViewModel
             m_configViewModelU = new ConfigViewModelU();
             m_configViewModelU.Name = "ConfigViewModelU";
             m_configViewModelU.ViewTitle = "Source";
-            m_configViewModelU.ImageName = "Images/ConfigSource.jpg";
             m_configViewModelU.lb = lb;
             m_configViewModelU.isBrowser = isBrowser;
             m_configViewModelU.OutlookProfile = "";
@@ -211,7 +218,6 @@ namespace MVVM.ViewModel
             m_configViewModelSDest = new ConfigViewModelSDest();
             m_configViewModelSDest.Name = "ConfigViewModelSDest";
             m_configViewModelSDest.ViewTitle = "Destination";
-            m_configViewModelSDest.ImageName = "Images/ConfigDest.jpg";
             m_configViewModelSDest.lb = lb;
             m_configViewModelSDest.isBrowser = isBrowser;
             m_configViewModelSDest.ZimbraServerHostName = "";
@@ -223,7 +229,6 @@ namespace MVVM.ViewModel
             m_configViewModelUDest = new ConfigViewModelUDest();
             m_configViewModelUDest.Name = "ConfigViewModelUDest";
             m_configViewModelUDest.ViewTitle = "Destination";
-            m_configViewModelUDest.ImageName = "Images/ConfigDest.jpg";
             m_configViewModelUDest.lb = lb;
             m_configViewModelUDest.isBrowser = isBrowser;
             m_configViewModelUDest.ZimbraServerHostName = "";
@@ -235,7 +240,6 @@ namespace MVVM.ViewModel
             m_optionsViewModel = new OptionsViewModel();
             m_optionsViewModel.Name = "OptionsViewModel";
             m_optionsViewModel.ViewTitle = "Options";
-            m_optionsViewModel.ImageName = "Images/DMR_120.jpg";
             m_optionsViewModel.lb = lb;     
             m_optionsViewModel.isBrowser = isBrowser;
             m_optionsViewModel.ImportMailOptions = true;
@@ -251,7 +255,6 @@ namespace MVVM.ViewModel
             m_scheduleViewModel = new ScheduleViewModel();
             m_scheduleViewModel.Name = "Schedule";
             m_scheduleViewModel.ViewTitle = "Migrate";
-            m_scheduleViewModel.ImageName = "Images/Penguins.jpg";
             m_scheduleViewModel.lb = lb;
             m_scheduleViewModel.isBrowser = isBrowser;
             m_scheduleViewModel.COS = "default";
@@ -261,7 +264,6 @@ namespace MVVM.ViewModel
             m_usersViewModel = new UsersViewModel("", "");
             m_usersViewModel.Name = "Users";
             m_usersViewModel.ViewTitle = "Users";
-            m_usersViewModel.ImageName = "Images/UnknownPerson_dataNotFound.jpg";
             m_usersViewModel.lb = lb;
             m_usersViewModel.ZimbraDomain = "";
             m_usersViewModel.isBrowser = isBrowser;
@@ -270,7 +272,6 @@ namespace MVVM.ViewModel
             m_resultsViewModel = new AccountResultsViewModel(m_scheduleViewModel, -1, 0, "", "", "", 0, "", 0, 0, false);
             m_resultsViewModel.Name = "Results";
             m_resultsViewModel.ViewTitle = "Results";
-            m_resultsViewModel.ImageName = "Images/Bridge.jpg";
             m_resultsViewModel.isBrowser = isBrowser;
             m_resultsViewModel.CurrentAccountSelection = -1;
 
@@ -279,9 +280,5 @@ namespace MVVM.ViewModel
             TheViews = new ObservableCollection<object>();
             TheViews.Add(this);
         }
-
-       
-
-      
     }
 }

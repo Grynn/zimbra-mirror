@@ -8,23 +8,21 @@
         <Misc:ImageConverter x:Key="ImageConverter" />
     </UserControl.Resources>
     <Grid Name="ScheduleGrid">
-        <Grid.Background>
-            <ImageBrush ImageSource="/MVVM;component/View/Images/bg.png"  />
-        </Grid.Background>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition MaxHeight="40"></RowDefinition>
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Margin="30,30,30,0" Name="migrateText" Text="Migrate the displayed users into Zimbra.  Unprovisioned users will be provisioned.  You can migrate now or schedule the migration for a later time." TextWrapping="Wrap" VerticalAlignment="Top" />
-        <Grid Name="UsersAndSchedulingInfo" Grid.Row="1" Margin="0,30,0,0" >
+        <TextBlock Grid.Row="0" HorizontalAlignment="Left" Margin="15,20,30,0" Name="usersTitle" Text="Migrate" TextWrapping="Wrap" FontWeight="Bold" VerticalAlignment="Top" />
+        <TextBlock Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" Margin="15,5,30,0" Name="migrateText" Text="Migrate the displayed users into Zimbra.  Unprovisioned users will be provisioned.  You can migrate now or schedule the migration for a later time." TextWrapping="Wrap" VerticalAlignment="Top" />
+        <Grid Name="UsersAndSchedulingInfo" Grid.Row="2" Margin="0,15,0,0" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition MaxWidth="200" Width="Auto"></ColumnDefinition>
                 <ColumnDefinition Width="Auto"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <ListBox Grid.Column="0" Grid.RowSpan="2" Margin="30,0,0,0" VerticalAlignment="Top" Name="lbSchedUsers" ItemsSource="{Binding SchedList}" MinHeight="180" MaxHeight="180" MinWidth="150" HorizontalAlignment="Left" >
+            <ListBox Grid.Column="0" Grid.RowSpan="2" Margin="16,0,0,0" VerticalAlignment="Top" Name="lbSchedUsers" ItemsSource="{Binding SchedList}" MinHeight="170" MaxHeight="170" MinWidth="150" HorizontalAlignment="Left" >
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal" >
@@ -40,8 +38,8 @@
             <!--
             <TextBlock Grid.Row="0" Grid.Column="1" Margin="30,20,0,0" HorizontalAlignment="Left" Name="textTasks" Text="Task setup" VerticalAlignment="Top"/>
             -->
-            <RadioButton Grid.Column="1" Margin="25,0,0,0" Name="rbTaskDisable" VerticalAlignment="Top" Content="Migrate Now" IsChecked="True" HorizontalAlignment="Stretch" />
-            <RadioButton Grid.Column="1" Margin="135,0,0,0" Name="rbTaskEnable" VerticalAlignment="Top" Content="Schedule" IsChecked="False" HorizontalAlignment="Stretch" />
+            <RadioButton Grid.Column="1" Margin="15,0,0,0" Name="rbTaskDisable" VerticalAlignment="Top" Content="Migrate Now" IsChecked="True" HorizontalAlignment="Stretch" />
+            <RadioButton Grid.Column="1" Margin="125,0,0,0" Name="rbTaskEnable" VerticalAlignment="Top" Content="Schedule" IsChecked="False" HorizontalAlignment="Stretch" />
             <GroupBox Grid.Column="1" HorizontalAlignment="Left" Margin="20,30,0,0" VerticalAlignment="Top" Name="gbSched" MinHeight="140" MinWidth="200" Grid.RowSpan="3" Header="Schedule">
                 <Grid Name="gbSGrid">
                     <Grid.RowDefinitions>
@@ -95,7 +93,7 @@
     <!--
         <ProgressBar Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Height="18" Width="290" Margin="80,35,89,26" Name="pbMigrationS" Value="{Binding Path=PBValue}" HorizontalAlignment="Center" ></ProgressBar>
         -->
-        <GroupBox Grid.Row="2" Margin="30,25,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Name="gbProv" Header="Provisioning" Padding="10">
+        <GroupBox Grid.Row="3" Margin="15,12,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Name="gbProv" Header="Provisioning" Padding="6">
             <Grid Name="gbPGrid">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"></RowDefinition>
@@ -107,19 +105,15 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Row="0" Grid.Column="0" Margin="0,0,0,0" HorizontalAlignment="Left" Name="textInitialPW" Text="Initial password for unprovisioned users" VerticalAlignment="Center"/>
                 <PasswordBox Grid.Row="0" Grid.Column="1" Margin="10,0,0,0" HorizontalAlignment="Right" MinWidth="122" Name="ipwBox" PasswordChanged="pb_DefPasswordChanged"/>
-                <TextBlock Grid.Row="1" Grid.Column="0" Margin="0,10,0,0" HorizontalAlignment="Left" Name="textSelectCOS" Text="Select the Class of Service" VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="1" Grid.Column="0" Margin="0,7,0,0" HorizontalAlignment="Left" Name="textSelectCOS" Text="Select the Class of Service" VerticalAlignment="Center"/>
                 <ComboBox Grid.Row="1" Grid.Column="1" Margin="10,5,0,0" HorizontalAlignment="Right" MaxHeight="{Binding ElementName=ipwBox, Path=ActualHeight}" MinWidth="{Binding ElementName=ipwBox, Path=ActualWidth}" Name="cbCOS" SelectedIndex="{Binding Path=CurrentCOSSelection, Mode=TwoWay}" ItemsSource="{Binding Path=CosList}" DisplayMemberPath="CosName" >
                 </ComboBox>
             </Grid>
         </GroupBox>
-        <Separator Grid.Row="3" Margin="5,32,5,0" VerticalAlignment="Top"/>
-        <Grid Name="BottomGrid" Grid.Row="4" Grid.ColumnSpan="2">
-            <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,10,0,0" Content="Help" Name="buttonMigrateHelp" Command="{Binding GetSchedHelpCommand}"  />
-            <!-- <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="85,10,0,0" Content="Load" Name="buttonMigrateLoad" IsEnabled="False"  /> -->
-            <!-- <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="165,10,0,0" Content="Save" Name="buttonMigrateSav" IsEnabled="False"  /> -->
-            <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,10,165,0" Content="Preview" Name="buttonConfigPrev" Command="{Binding PreviewCommand}"  />
-            <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,10,85,0" Content="&lt; Back" Name="buttonMigrateBack" Command="{Binding BackCommand}" IsEnabled="True"  />
-            <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,10,5,0" Content="Migrate" Name="buttonMigrateMigrate" IsEnabled="{Binding Path=EnableMigrate}" Command="{Binding MigrateCommand}"  />
+        <Grid Name="BottomGrid" Grid.Row="4" Grid.ColumnSpan="2" Margin="10,0,0,10" VerticalAlignment="Bottom">
+            <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,0,0" Content="Preview" Name="buttonMigratePrev" Command="{Binding PreviewCommand}"  />
+            <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,85,0" Content="&lt; Back" Name="buttonMigrateBack" Command="{Binding BackCommand}" IsEnabled="True" />
+            <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0" Content="Migrate" Name="buttonMigrateMigrate" IsEnabled="{Binding Path=EnableMigrate}" Command="{Binding MigrateCommand}"  />
         </Grid>
     </Grid>
 </UserControl>

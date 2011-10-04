@@ -4,13 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     >
     <Grid Name="IntroGrid">
-        <Grid.Background>
-            <ImageBrush ImageSource="/MVVM;component/View/Images/bg.png"  />
-        </Grid.Background>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
@@ -19,18 +13,23 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"></ColumnDefinition>
             <ColumnDefinition Width="Auto"></ColumnDefinition>
-            <ColumnDefinition Width="Auto"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Left" Margin="55,40,0,0" MaxWidth="395" Name="textBlock1Msg" Text="{Binding Path=WelcomeMsg}" TextWrapping="Wrap" VerticalAlignment="Top" />
-        <TextBlock Grid.Row="1" Grid.Column="0" Margin="55,30,0,0" Name="textBlockLicense" FontSize="12" FontFamily="Times New Roman" VerticalAlignment="Top" HorizontalAlignment="Left" >
-                            <Hyperlink Command="{Binding GetIntroLicenseCommand}">VMware Zimbra License</Hyperlink>
+        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="-85,30,0,0" MaxWidth="550" Name="textBlock1Msg" FontSize="12" Text="{Binding Path=WelcomeMsg}" TextWrapping="Wrap" VerticalAlignment="Top" />
+        <TextBlock Grid.Row="1" Grid.Column="0" Margin="-85,12,0,0" Name="textBlockLicense" FontSize="12" FontFamily="Arial" VerticalAlignment="Top" HorizontalAlignment="Left" >
+            <Hyperlink Command="{Binding GetIntroLicenseCommand}">VMware Zimbra License
+                <Hyperlink.Style>
+                    <Style TargetType="Hyperlink"
+                        BasedOn="{StaticResource {x:Type Hyperlink}}">
+                    <Setter Property="Foreground" Value="#336699"/>
+                    </Style>
+                </Hyperlink.Style>
+            </Hyperlink>
         </TextBlock>
-        <TextBlock Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Left" Margin="55,25,0,0" Name="textBlockCopyright" Text="Copyright © 2006-2011 VMware, Inc.  All rights reserved." VerticalAlignment="Top" />
-        <Separator Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" Margin="10,20,10,0" FontWeight="Bold" VerticalAlignment="Top"/>
-        <TextBlock Grid.Row="4" Grid.Column="0" HorizontalAlignment="Left" Margin="55,30,0,0" FontWeight="Bold" Name="textBlockMLabel" Text="Migration Type:" VerticalAlignment="Top" />
-        <RadioButton Grid.Row="4" Grid.Column="1" HorizontalAlignment="Center" Margin="0,30,0,0" FontWeight="Bold" Name="rbServerMig" VerticalAlignment="Top" Content="Server Migration" IsChecked="True" Command="{Binding GetIntroServerMigCommand}" />
-        <RadioButton Grid.Row="4" Grid.Column="1" HorizontalAlignment="Center" Margin="-12,55,0,0" FontWeight="Bold" Name="rbUserMig" VerticalAlignment="Top" Content="User Migration" IsChecked="False" Command="{Binding GetIntroUserMigCommand}" />
-        <Separator Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3" Margin="10,30,10,0" FontWeight="Bold" VerticalAlignment="Top"/>
-        <Button Grid.Row="6" Grid.Column="2" MinWidth="75" Margin="0,15,10,0" HorizontalAlignment="Right" VerticalAlignment="Top" Content="Begin" Name="buttonBegin" Command="{Binding BeginCommand}"  />
+        <TextBlock Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" Margin="-65,30,0,0" FontWeight="Bold" Name="textBlockMLabel" Text="Select a migration Type:" VerticalAlignment="Top" />
+        <RadioButton Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" Margin="-65,54,0,0" Name="rbServerMig" VerticalAlignment="Top" Content="Server Migration" IsChecked="True" Command="{Binding GetIntroServerMigCommand}" />
+        <RadioButton Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" Margin="-65,78,0,0" Name="rbUserMig" VerticalAlignment="Top" Content="User Migration" IsChecked="False" Command="{Binding GetIntroUserMigCommand}" />
+        <TextBlock Grid.Row="3" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="-85,52,0,0" Name="tbAppBuildnum" Text="{Binding Path=BuildNum}" FontSize="12" FontWeight="Normal" FontFamily="Arial" FontStyle="Normal" />
+        <TextBlock Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="-85,80,0,0" Name="textBlockCopyright" Text="Copyright © 2006-2011 VMware, Inc.  All rights reserved." />
+        <Button Grid.Row="3" Grid.Column="1" MinWidth="75" Margin="-85,80,-27,0" HorizontalAlignment="Right" VerticalAlignment="Bottom" Content="Begin" Name="buttonBegin" Command="{Binding BeginCommand}" />
     </Grid>
 </UserControl>

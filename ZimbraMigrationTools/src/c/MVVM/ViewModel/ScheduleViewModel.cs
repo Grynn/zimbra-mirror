@@ -23,7 +23,6 @@ namespace MVVM.ViewModel
         public ScheduleViewModel()
         {
             this.ScheduleTaskCommand = new ActionCommand(this.ScheduleTask, () => true);
-            this.GetSchedHelpCommand = new ActionCommand(this.GetSchedHelp, () => true);
             this.PreviewCommand = new ActionCommand(this.Preview, () => true);
             this.BackCommand = new ActionCommand(this.Back, () => true);
             this.MigrateCommand = new ActionCommand(this.Migrate, () => true);
@@ -118,17 +117,6 @@ namespace MVVM.ViewModel
         }
 
         // Commands
-        public ICommand GetSchedHelpCommand
-        {
-            get;
-            private set;
-        }
-
-        private void GetSchedHelp()
-        {
-            DoHelp("sched.html");
-        }
-
         public ICommand BackCommand
         {
             get;

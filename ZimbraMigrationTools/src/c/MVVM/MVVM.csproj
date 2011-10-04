@@ -274,26 +274,21 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="View\Images\bg.png" />
-    <Resource Include="View\Images\DMR_120.jpg" />
-    <Resource Include="View\Images\Bridge.jpg" />
-    <Resource Include="View\Images\Penguins.jpg" />
-    <Resource Include="View\Images\UnknownPerson_dataNotFound.jpg" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="View\Images\Usernp.ico" />
     <Resource Include="View\Images\Userp.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="View\Images\ConfigDest.jpg" />
-    <Resource Include="View\Images\ConfigSource.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="View\Images\AppBanner.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="ViewModel\Images\button.ico" />
     <Resource Include="ViewModel\Images\computer.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\banner_left.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\VMware_logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\Help_Up.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
