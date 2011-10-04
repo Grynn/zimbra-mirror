@@ -522,10 +522,10 @@ public class PageAddressbook extends AbsTab {
 	      } else if ( option == Button.O_TAG_REMOVETAG ) {
 						
 	    	 pulldownLocator = "css=td#zb__CNS-main__TAG_MENU_dropdown div.ImgSelectPullDownArrow";
-		     optionLocator = "css=td#contacts_removetag_title"; 
+		     optionLocator = "css=div[id='zb__CNS-main__TAG_MENU|MENU'] div[id='contacts_removetag'] td[id='contacts_removetag_title']"; 
 			 page = null;
 			
-			zWaitForBusyOverlay();
+			
 	      }
 
 	   } else if ( pulldown == Button.B_NEW ) {
@@ -595,20 +595,8 @@ public class PageAddressbook extends AbsTab {
 			zWaitForBusyOverlay();
 			
 			if ( optionLocator != null ) {
-                SleepUtil.sleepLong();
              	// Make sure the locator exists and visible
 				zWaitForElementPresent(optionLocator);
-				/*zClick("css=div#zb__CNS-main__TAG_MENU|MENU>table");
-				zClick("css=div#zb__CNS-main__TAG_MENU|MENU>table>tbody");
-				zClick("css=div#zb__CNS-main__TAG_MENU|MENU>table>tbody>tr:nth-of-type(1)");
-				zClick("css=div#zb__CNS-main__TAG_MENU|MENU>table>tbody>tr:nth-of-type(2)");
-				  ExecuteHarnessMain.ResultListener.captureScreen();
-					
-				zClick("css=div#zb__CNS-main__TAG_MENU|MENU>table>tbody>tr:nth-of-type(3)");
-				zClick("css=div#zb__CNS-main__TAG_MENU|MENU>table>tbody>tr:nth-of-type(3)>td");
-				zClick("css=div#zb__CNS-main__TAG_MENU|MENU>table>tbody>tr:nth-of-type(3)>td>div#contacts_newtag");
-					*/
-				sClick(optionLocator);
 					
 				if (!zIsElementDisabled(optionLocator)) {
 				   zClick(optionLocator);
