@@ -32,7 +32,6 @@ build:
 	(tar xzf src/$(XML_NAME)-$(XML_VERSION).tar.gz; \
 	mv $(XML_NAME)-$(XML_VERSION) $(XML_NAME)-$(XML_VERSION); \
 	cd $(XML_NAME)-$(XML_VERSION); \
-	patch -g0 -N -p1 < ../patches/CVE-2009-2414-CVE-2009-2416.patch; \
 	CFLAGS="-g -O2 -fPIC" \
 	./configure $(XML_CONFIGURE); $(MAKE) $(MAKEARGS); $(MAKE) install)
 	(cp -f $(XML_NAME)-$(XML_VERSION)/COPYING $(INSTALL_PREFIX)/LICENSE)
