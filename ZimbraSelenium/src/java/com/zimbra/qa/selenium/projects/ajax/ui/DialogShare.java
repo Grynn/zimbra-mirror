@@ -62,13 +62,19 @@ public class DialogShare extends AbsDialog {
 
 		// Make sure the locator exists
 		if (!this.sIsElementPresent(locator)) {
-			throw new HarnessException("zSetEmailAddress " + locator
-					+ " is not present");
+			throw new HarnessException("zSetEmailAddress " + locator + " is not present");
 		}
+		
+		
+		// Seems that the client can't handle filling out the new mail form too quickly
+		// Click in the "To" fields, etc, to make sure the client is ready
 		this.sFocus(locator);
-		this.sKeyPress(locator, "\13");
-		this.sType(locator, email);
-		this.sKeyUp(locator, "\13");		
+		this.zClick(locator);
+		this.zWaitForBusyOverlay();
+
+		// Instead of sType() use zKeyboard
+		this.zKeyboard.zTypeCharacters(email + ";");
+		
 
 	}
 	
