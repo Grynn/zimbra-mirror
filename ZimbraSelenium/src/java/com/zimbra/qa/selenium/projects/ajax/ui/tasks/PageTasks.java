@@ -493,7 +493,7 @@ public class PageTasks extends AbsTab {
 			throw new HarnessException("implement Print dialog");
 
 		} else if (button == Button.B_SAVE) {
-			locator = "zb__TKE1__SAVE_left_icon";
+			locator = "zb__TKE-1__SAVE";
 			page = null;
 			//page = new FormTaskNew(this.MyApplication);
 
@@ -566,7 +566,8 @@ public class PageTasks extends AbsTab {
 
 				pulldownLocator = "css=td[id$='__TAG_MENU_dropdown']>div[class='ImgSelectPullDownArrow']";
 
-				optionLocator = "css=td[id$='__TAG_MENU|MENU|NEWTAG_title']";
+				//optionLocator = "css=td[id$='__TAG_MENU|MENU|NEWTAG_title']";
+				optionLocator="css=div[id='zb__TKL__TAG_MENU|MENU'] div[id='tasks_newtag']";
 
 				page = new DialogTag(this.MyApplication, this);
 
@@ -575,7 +576,9 @@ public class PageTasks extends AbsTab {
 
 				pulldownLocator = "css=td[id$='__TAG_MENU_dropdown']>div[class='ImgSelectPullDownArrow']";
 
-				optionLocator = "css=td[id$='__TAG_MENU|MENU|REMOVETAG_title']";
+				//optionLocator = "css=td[id$='__TAG_MENU|MENU|REMOVETAG_title']";
+				optionLocator="css=div[id='zb__TKL__TAG_MENU|MENU'] div[id='tasks_removetag']";
+				
 
 				page = null;
 

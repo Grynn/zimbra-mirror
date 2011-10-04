@@ -163,8 +163,11 @@ public class CreateTask extends AjaxCommonTest {
 		// Click Get Mail button
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 		
+		SleepUtil.sleepMedium();
+		
 		//Click on subject
 		app.zPageMail.zListItem(Action.A_LEFTCLICK, mail.dSubject);
+		
 		
 		//Right click subject >> select Create Task menu item
 		app.zPageMail.zListItem(Action.A_RIGHTCLICK, Button.O_CREATE_TASK, mail.dSubject);

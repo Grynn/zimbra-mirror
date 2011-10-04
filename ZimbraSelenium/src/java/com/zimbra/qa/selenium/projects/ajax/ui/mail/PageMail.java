@@ -1249,7 +1249,7 @@ public class PageMail extends AbsTab {
 
 			String optionLocator = "css=div[id^='zm__CLV2-main__']";
 			if (zGetPropMailView() == PageMailView.BY_MESSAGE) {
-				optionLocator = "css=div[id^='zm__TV__']";
+				optionLocator = "css=div[id^='zm__TV-main__']";
 			}
 
 

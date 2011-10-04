@@ -29,10 +29,11 @@ public class TreeTasks extends AbsTree {
 		public static final String zTagsHeader = "//td[contains(@id,'ztih__main_Tasks__TAG_textCell')]";
 	//	public static final String zDeleteTreeMenuItem = "//div[contains(@class,'ZMenuItem')]//tbody//td[contains(@id,'_left_icon')]/div[contains(@class,'ImgDelete')]";
 	//	public static final String zRenameTreeMenuItem = "//div[contains(@class,'ZMenuItem')]//tbody//td[contains(@id,'_left_icon')]/div[contains(@class,'ImgRename')]";
-		public static final String zDeleteTreeMenuItem = "css=div[id^='POPUP'] tr[id='POPUP_DELETE']";
+		public static final String zDeleteTreeMenuItem = "css=div[id^='DELETE_WITHOUT_SHORTCUT'] tr[id='POPUP_DELETE_WITHOUT_SHORTCUT']";
 		public static final String zRenameTreeMenuItem ="css=tr#POPUP_RENAME_FOLDER";
 		public static final String zEditTreeMenuItem ="css=tr#POPUP_EDIT_PROPS";
 		public static final String zRenameTagTreeMenuItem ="css=div[id='RENAME_TAG'] tr[id='POPUP_RENAME_TAG']";
+		public static final String zNewTagTreeMenuItem="css=div[id='NEW_TAG'] tr[id='POPUP_NEW_TAG']";
 	}
 	
 		
@@ -228,9 +229,8 @@ public class TreeTasks extends AbsTree {
 		}
 		if (option == Button.B_TREE_NEWTAG) {
 			
-			//optionLocator = "//td[contains(@id,'_left_icon')]/div[contains(@class,'ImgNewTag')]";
-			optionLocator="//div[contains(@id,'POPUP_DWT') and contains(@class,'ZHasSubMenu')]//tbody/tr[@id='POPUP_NEW_TAG']";
-
+			optionLocator=Locators.zNewTagTreeMenuItem;
+			
 		} else if (option == Button.B_DELETE) {
 
 			optionLocator = Locators.zDeleteTreeMenuItem;

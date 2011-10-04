@@ -53,7 +53,7 @@ public class FormTaskNew extends AbsForm {
 		//public static final String zTasksubjField = "//td[contains(@id,'zv__TKE1_subject')]/div/input";
 		public static final String zTasksubjField = "css=td[id$='_subject'] div input";
 		public static final String zTasksubjFieldDesktop = "//td[contains(@id,'_subject')]/div/input";
-		public static final String zCancelTask = "zb__TKE1__CANCEL_left_icon";
+		public static final String zCancelTask = "zb__TKE-1__CANCEL_left_icon";
 		
 		
 	}
