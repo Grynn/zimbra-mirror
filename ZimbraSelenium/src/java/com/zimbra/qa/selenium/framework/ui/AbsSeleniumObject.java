@@ -1408,10 +1408,21 @@ public abstract class AbsSeleniumObject {
 
 	/**
 	 * DefaultSeleniu.selectFrame()
+	 * @throws HarnessException 
 	 */
-	public void sSelectFrame(String locator) {
-		ClientSessionFactory.session().selenium().selectFrame(locator);
-		logger.info("sSelectFrame(" + locator + ")");
+	public void sSelectFrame(String locator) throws HarnessException {
+		
+		try {
+
+			ClientSessionFactory.session().selenium().selectFrame(locator);
+			logger.info("sSelectFrame(" + locator + ")");
+		
+		} catch (SeleniumException e) {
+			
+			throw new HarnessException(e); // In case the frame doesn't exist
+			
+		}
+		
 	}
 
 	/**

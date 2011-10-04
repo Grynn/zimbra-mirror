@@ -5,9 +5,7 @@ import java.util.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.staf.Stafpostqueue;
-import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
-import com.zimbra.qa.selenium.projects.ajax.ui.DialogShareAccept;
-import com.zimbra.qa.selenium.projects.ajax.ui.DialogShareDecline;
+import com.zimbra.qa.selenium.projects.ajax.ui.*;
 
 
 
@@ -239,20 +237,20 @@ public class DisplayMail extends AbsDisplay {
 	}
 	
 	public HtmlElement zGetMailPropertyAsHtml(Field field) throws HarnessException {
-		
+
 		String source = null;
-		
+
 		if ( field == Field.Body) {
-			
+
 			try {
-				
-				this.sSelectFrame("//iframe[contains(@id, '__MSG_body__iframe')]");
-				
+
+				this.sSelectFrame("css=iframe[id='azv__TV__TV-main_body__iframe']");
+
 				source = this.sGetHtmlSource();
-				
+
 				// For some reason, we don't get the <html/> tag.  Add it
 				source = "<html>" + source + "</html>";
-										
+
 			} finally {
 				// Make sure to go back to the original iframe
 				this.sSelectFrame("relative=top");
@@ -261,7 +259,7 @@ public class DisplayMail extends AbsDisplay {
 		} else {
 			throw new HarnessException("not implemented for field "+ field);
 		}
-		
+
 		// Make sure source was found
 		if ( source == null )
 			throw new HarnessException("source was null for "+ field);
@@ -271,8 +269,9 @@ public class DisplayMail extends AbsDisplay {
 		// Clean up the HTML code to be valid
 		return (HtmlElement.clean(source));
 
+
 	}
-	
+
 	
 	/**
 	 * Get the string value of the specified field
