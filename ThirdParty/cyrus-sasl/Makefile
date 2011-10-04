@@ -38,7 +38,7 @@ ifneq	(,$(findstring MACOSX,$(BUILD_PLATFORM)))
 	mkdir -p $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/cyrus-sasl
 	_S_='~' ./zimbra-cyrus-sasl-build.sh ${BSTR}
 	(cd build/cyrus-sasl-$(CYRUS_VERSION); $(MAKE) install)
-	(./fix-sasl.pl)
+	(./fix-sasl.pl ${BSTR})
 	(cd $(ZIMBRA_HOME); ln -s cyrus-sasl-$(CYRUS_VERSION) cyrus-sasl; \
 	tar czf $(CYRUS_TGZ_TARGET) \
 	cyrus-sasl-$(CYRUS_VERSION))
