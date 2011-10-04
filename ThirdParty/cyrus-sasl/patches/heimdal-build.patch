@@ -1,0 +1,28 @@
+--- cyrus-sasl-2.1.25/plugins/gs2.c.orig	2011-10-04 13:13:25.560578146 -0700
++++ cyrus-sasl-2.1.25/plugins/gs2.c	2011-10-04 13:13:53.168598001 -0700
+@@ -72,9 +72,11 @@
+ 
+ #include <config.h>
+ #include <gssapi/gssapi.h>
++#ifndef KRB5_HEIMDAL
+ #ifdef HAVE_GSSAPI_GSSAPI_EXT_H
+ #include <gssapi/gssapi_ext.h>
+ #endif
++#endif
+ #include <fcntl.h>
+ #include <stdio.h>
+ #include <sasl.h>
+--- cyrus-sasl-2.1.25/plugins/gs2_token.h.orig	2011-10-04 13:13:33.189579605 -0700
++++ cyrus-sasl-2.1.25/plugins/gs2_token.h	2011-10-04 13:14:08.196602969 -0700
+@@ -26,9 +26,11 @@
+ #include <config.h>
+ 
+ #include <gssapi/gssapi.h>
++#ifndef KRB5_HEIMDAL
+ #ifdef HAVE_GSSAPI_GSSAPI_EXT_H
+ #include <gssapi/gssapi_ext.h>
+ #endif
++#endif
+ 
+ #ifndef HAVE_GSS_DECAPSULATE_TOKEN
+ OM_uint32
