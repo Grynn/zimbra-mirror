@@ -363,42 +363,42 @@ public class PageMail extends AbsTab {
 
 		} else if ( button == Button.B_MAIL_LIST_SORTBY_FLAGGED ) {
 
-			locator = "css=td[id='zlh__TV__fg'] div[class='ImgFlagRed']";
+			locator = "css=td[id='zlh__TV-main__fg'] div[class='ImgFlagRed']";
 			this.zClick(locator);
 			this.zWaitForBusyOverlay();
 			return (null);
 
 		} else if ( button == Button.B_MAIL_LIST_SORTBY_FROM ) {
 
-			locator = "css=td[id='zlh__TV__fr'] td[id='zlhl__TV__fr']";
+			locator = "css=td[id='zlh__TV-main__fr'] td[id='zlhl__TV-main__fr']";
 			this.zClick(locator);
 			this.zWaitForBusyOverlay();
 			return (null);
 
 		} else if ( button == Button.B_MAIL_LIST_SORTBY_ATTACHMENT ) {
 
-			locator = "css=td[id='zlh__TV__at'] div[class='ImgAttachment']";
+			locator = "css=td[id='zlh__TV-main__at'] div[class='ImgAttachment']";
 			this.zClick(locator);
 			this.zWaitForBusyOverlay();
 			return (null);
 
 		} else if ( button == Button.B_MAIL_LIST_SORTBY_SUBJECT ) {
 
-			locator = "css=td[id='zlh__TV__su'] td[id='zlhl__TV__su']";
+			locator = "css=td[id='zlh__TV-main__su'] td[id='zlhl__TV-main__su']";
 			this.zClick(locator);
 			this.zWaitForBusyOverlay();
 			return (null);
 
 		} else if ( button == Button.B_MAIL_LIST_SORTBY_SIZE ) {
 
-			locator = "css=td[id='zlh__TV__sz'] td[id='zlhl__TV__sz']";
+			locator = "css=td[id='zlh__TV-main__sz'] td[id='zlhl__TV-main__sz']";
 			this.zClick(locator);
 			this.zWaitForBusyOverlay();
 			return (null);
 
 		} else if ( button == Button.B_MAIL_LIST_SORTBY_RECEIVED ) {
 
-			locator = "css=td[id='zlh__TV__dt'] td[id='zlhl__TV__dt']";
+			locator = "css=td[id='zlh__TV-main__dt'] td[id='zlhl__TV-main__dt']";
 			this.zClick(locator);
 			this.zWaitForBusyOverlay();
 			return (null);
