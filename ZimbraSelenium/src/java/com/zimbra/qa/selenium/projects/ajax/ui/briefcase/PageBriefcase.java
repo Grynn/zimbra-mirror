@@ -400,7 +400,7 @@ public class PageBriefcase extends AbsTab {
 			if (option == Button.O_TAG_NEWTAG) {
 
 				pulldownLocator = "css=td[id=zb__BDLV__TAG_MENU_dropdown]>div[class='ImgSelectPullDownArrow']";
-				optionLocator = "css=td[id$='__TAG_MENU|MENU|NEWTAG_title']";
+				optionLocator = "css=td[id^=briefcase_newtag]";
 
 				page = new DialogTag(this.MyApplication, this);
 
@@ -411,7 +411,7 @@ public class PageBriefcase extends AbsTab {
 
 				pulldownLocator = "css=td[id$='__TAG_MENU_dropdown']>div[class='ImgSelectPullDownArrow']";
 
-				optionLocator = "css=td[id$='__TAG_MENU|MENU|REMOVETAG_title']";
+				optionLocator = "css=td[id^=briefcase_removetag]";
 
 				page = null;
 
