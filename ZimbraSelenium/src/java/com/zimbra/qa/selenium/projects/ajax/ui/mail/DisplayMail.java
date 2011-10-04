@@ -244,7 +244,7 @@ public class DisplayMail extends AbsDisplay {
 
 			try {
 
-				this.sSelectFrame("css=iframe[id='azv__TV__TV-main_body__iframe']");
+				this.sSelectFrame("css=iframe[id='zv__TV__TV-main_body__iframe']");
 
 				source = this.sGetHtmlSource();
 
