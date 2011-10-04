@@ -50,7 +50,10 @@ public class DragAndDropMessage extends AjaxCommonTest {
 
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 		app.zPageMail.zWaitForDesktopLoadingSpinner(5000);
-		FolderItem subfolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), foldername);
+		FolderItem subfolder = FolderItem.importFromSOAP(app.zGetActiveAccount(),
+		      foldername,
+		      SOAP_DESTINATION_HOST_TYPE.CLIENT,
+            app.zGetActiveAccount().EmailAddress);
 
 		// Send a message to the account
 		ZimbraAccount.AccountA().soapSend(
@@ -78,8 +81,8 @@ public class DragAndDropMessage extends AjaxCommonTest {
 
 		// Select the item
 		app.zPageMail.zDragAndDrop(
-					"css=td[id$='"+ mail.getId() +"__su']",
-				"css=div[id^='zti__" + app.zGetActiveAccount().EmailAddress + ":main_Mail__'][id$=':" + subfolder.getId() +"']"); 
+		      "css=td[id$='"+ mail.getId() +"__su']",
+		      app.zTreeMail.zGetTreeFolderLocator(subfolder, app.zGetActiveAccount().EmailAddress)); 
 
 		Toaster toast = app.zPageMain.zGetToaster();
       String toastMsg = toast.zGetToastMessage();
@@ -91,11 +94,26 @@ public class DragAndDropMessage extends AjaxCommonTest {
 		app.zGetActiveAccount().soapSend(
 				"<GetMsgRequest xmlns='urn:zimbraMail'>" +
 					"<m id='" + mail.getId() +"'/>" +
-				"</GetMsgRequest>");
-		String folderId = app.zGetActiveAccount().soapSelectValue("//mail:m", "l");
+				"</GetMsgRequest>",
+				SOAP_DESTINATION_HOST_TYPE.CLIENT,
+            app.zGetActiveAccount().EmailAddress);
+		String zdFolderId = app.zGetActiveAccount().soapSelectValue("//mail:m", "l");
 
-		ZAssert.assertEquals(folderId, subfolder.getId(), "Verify the subfolder ID that the message was moved into");
+		ZAssert.assertEquals(zdFolderId, subfolder.getId(),
+		      "Verify the subfolder ID in ZD client that the message was moved into");
 
+		// Also verify in ZCS server
+		app.zGetActiveAccount().soapSend(
+            "<GetMsgRequest xmlns='urn:zimbraMail'>" +
+               "<m id='" + mail.getId() +"'/>" +
+            "</GetMsgRequest>");
+
+		String zcsFolderId = app.zGetActiveAccount().soapSelectValue("//mail:m", "l");
+		FolderItem zcsSubFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(),
+		      subfolder.getName());
+      ZAssert.assertEquals(zcsFolderId, zcsSubFolder.getId(),
+            "Verify the subfolder ID in ZCS server that the message was moved into");
+		
 	}
 
 	@Test(  description = "Drag and Drop a message from ZCS Inbox to local mail folder",
@@ -147,8 +165,8 @@ public class DragAndDropMessage extends AjaxCommonTest {
 
       // Select the item
       app.zPageMail.zDragAndDrop(
-               "css=td[id$='"+ mail.getId() +"__su']",
-            "css=div[id^='zti__" + ZimbraAccount.clientAccountName + ":main_Mail__" + localFolder.getId() +"']"); 
+            "css=td[id$='"+ mail.getId() +"__su']",
+            app.zTreeMail.zGetTreeFolderLocator(localFolder, ZimbraAccount.clientAccountName)); 
 
       Toaster toast = app.zPageMain.zGetToaster();
       String toastMsg = toast.zGetToastMessage();
@@ -244,7 +262,7 @@ public class DragAndDropMessage extends AjaxCommonTest {
 	   // Select the item
 	   app.zPageMail.zDragAndDrop(
 	         "css=td[id$='"+ mail.getId() +"__su']",
-	         "css=div[id^='zti__" + ZimbraAccount.clientAccountName + ":main_Mail__" + localSubfolder.getId() +"']"); 
+	         app.zTreeMail.zGetTreeFolderLocator(localSubfolder, ZimbraAccount.clientAccountName)); 
 
 	   Toaster toast = app.zPageMain.zGetToaster();
 	   String toastMsg = toast.zGetToastMessage();

@@ -1119,28 +1119,6 @@ public class PageMail extends AbsTab {
 
 	}
 
-	public String zGetTreeFolderLocator(FolderItem folder) throws HarnessException {
-	   String treeItemLocator = null;
-	   if (folder.getName().equals("USER_ROOT")) {
-
-         treeItemLocator = TreeMail.Locators.zTreeItems.replace(TreeMail.stringToReplace,
-               AjaxCommonTest.defaultAccountName);
-
-      } else if (folder.getName().equals("Inbox")) {
-
-         treeItemLocator = "css=[id^='zti__" +
-               ((AppAjaxClient)MyApplication).zGetActiveAccount().EmailAddress +
-               ":main_Mail__']:contains('Inbox')";
-
-      } else {
-
-         throw new HarnessException("Implement me!");
-
-      }
-
-	   return treeItemLocator;
-	}
-
 	public AbsPage zListItem(Action action, Button option, FolderItem folderItem)
 	throws HarnessException {
 		logger.info(myPageName() + " zListItem("+ action +", "+ option +")");
@@ -1153,7 +1131,7 @@ public class PageMail extends AbsTab {
 		if ( folderItem == null )
 			throw new HarnessException("folderItem cannot be null");
 
-		String treeItemLocator = zGetTreeFolderLocator(folderItem);
+		String treeItemLocator = ((AppAjaxClient)MyApplication).zTreeMail.zGetTreeFolderLocator(folderItem);
 		boolean onRootFolder = false;
 
 		if (folderItem.getName().equals("USER_ROOT")) {

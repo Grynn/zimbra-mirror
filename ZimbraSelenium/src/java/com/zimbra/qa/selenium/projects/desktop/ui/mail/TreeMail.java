@@ -20,6 +20,7 @@ import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
+import com.zimbra.qa.selenium.projects.desktop.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.desktop.ui.AppAjaxClient;
 import com.zimbra.qa.selenium.projects.desktop.ui.ContextMenu;
 import com.zimbra.qa.selenium.projects.desktop.ui.DialogMove;
@@ -36,11 +37,15 @@ import com.zimbra.qa.selenium.projects.desktop.ui.DialogWarning;
  *
  */
 public class TreeMail extends AbsTree {
-	public final static String stringToReplace = "<TREE_ITEM_NAME>";
+   public final static String accountNameToReplace = "<ACCOUNT_NAME>";
+	public final static String stringToReplace = "<TREE_ITEM>";
+
 	public static class Locators {
 		// For desktop, Bug 56273:
 		public final static String zTreeItems = new StringBuffer("//td[text()='").
-		append(stringToReplace).append("']").toString();
+		      append(stringToReplace).append("']").toString();
+		public final static String zTreeFolders = new StringBuffer("css=div[id^='zti__").append(accountNameToReplace).
+            append(":main_Mail__").append(stringToReplace).append("']").toString();
 
 		public static final String createNewFolderButton = "css=div[class^='ImgNewFolder ZWidget']";
 		public static final String ztih__main_Mail__ZIMLET_ID = "ztih__main_Mail__ZIMLET";
@@ -942,10 +947,35 @@ public class TreeMail extends AbsTree {
 		boolean loaded = this.sIsElementPresent(locator);
 		if ( !loaded )
 			return (false);
-
 		return (loaded);
 
 	}
 
+   public String zGetTreeFolderLocator(FolderItem folder) throws HarnessException {
+      return zGetTreeFolderLocator(folder, null);
+   }
 
+   public String zGetTreeFolderLocator(FolderItem folder, String accountName)
+   throws HarnessException {
+      String treeItemLocator = null;
+      if (accountName == null) {
+         accountName = ((AppAjaxClient)MyApplication).zGetActiveAccount().EmailAddress;
+      }
+
+      if (folder.getName().equals("USER_ROOT")) {
+         String folderName = null;
+         if (folder.isDesktopClientLocalFolder()) {
+            folderName = "Local Folders";
+         } else {
+            folderName = AjaxCommonTest.defaultAccountName;
+         }
+         treeItemLocator = Locators.zTreeItems.replace(TreeMail.stringToReplace,
+               folderName);
+      } else {
+         treeItemLocator = Locators.zTreeFolders.replace(accountNameToReplace, accountName);
+         treeItemLocator = treeItemLocator.replace(stringToReplace, folder.getId());
+      }
+
+      return treeItemLocator;
+   }
 }

@@ -732,6 +732,42 @@ public class CreateFolder extends AjaxCommonTest {
       ZAssert.assertNull(desktopFolder, "Verify the folder in ZD server is not created");
    }
 
+   @Test(description = "Create a new local folder using context menu", groups = { "functional2" })
+   public void createLocalMailFolder() throws HarnessException {
+      _folderName = "folder" + ZimbraSeleniumProperties.getUniqueString();
+
+      FolderItem folderItem = FolderItem.importFromSOAP(app.zGetActiveAccount(),
+            SystemFolder.UserRoot,
+            SOAP_DESTINATION_HOST_TYPE.CLIENT,
+            ZimbraAccount.clientAccountName);
+
+      DialogCreateFolder createFolderDialog = (DialogCreateFolder) app.zPageMail
+            .zListItem(Action.A_RIGHTCLICK, Button.B_TREE_NEWFOLDER,
+                  folderItem);
+      createFolderDialog.zEnterFolderName(_folderName);
+      createFolderDialog.zClickButton(Button.B_OK);
+      _folderIsCreated = true;
+
+      // Force-sync
+      GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageMain.zWaitForDesktopLoadingSpinner(5000);
+
+      // Make sure the folder was created on the Desktop Server
+      FolderItem desktopFolder = FolderItem.importFromSOAP(app
+            .zGetActiveAccount(), _folderName,
+            SOAP_DESTINATION_HOST_TYPE.CLIENT,
+            ZimbraAccount.clientAccountName);
+      FolderItem desktopFolderParent = desktopFolder.getParentFolder(app.zGetActiveAccount(),
+            _soapDestination, ZimbraAccount.clientAccountName);
+
+      ZAssert.assertNotNull(desktopFolder, "Verify the folder is created on ZD Client's Local Folders");
+      ZAssert.assertEquals(desktopFolder.getName(), _folderName,
+            "Verify the server and client folder names match");
+      ZAssert.assertEquals(desktopFolderParent.getName(),
+            folderItem.getName(), "Verify the parent folder on ZD server matches");
+
+   }
+
    @AfterMethod(groups = { "always" })
 	public void createFolderTestCleanup() {
 		if (_folderIsCreated) {

@@ -1,7 +1,5 @@
 package com.zimbra.qa.selenium.projects.desktop.tests.mail.folders;
 
-import java.util.ArrayList;
-
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -16,8 +14,6 @@ import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount.SOAP_DESTINATION_HOST_TYPE;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.projects.desktop.core.AjaxCommonTest;
-import com.zimbra.qa.selenium.projects.desktop.ui.ContextMenu;
-import com.zimbra.qa.selenium.projects.desktop.ui.mail.PageMail;
 
 public class ShowContextMenu extends AjaxCommonTest{
 
@@ -42,7 +38,7 @@ public class ShowContextMenu extends AjaxCommonTest{
             .zGetActiveAccount(), FolderItem.SystemFolder.UserRoot,
             _soapDestination, app.zGetActiveAccount().EmailAddress);
 
-      String folderLocator = app.zPageMail.zGetTreeFolderLocator(folderItem);
+      String folderLocator = app.zTreeMail.zGetTreeFolderLocator(folderItem);
 
       // Invoke the context menu
       app.zTreeMail.zTreeItem(Action.A_RIGHTCLICK, folderLocator);
@@ -81,7 +77,7 @@ public class ShowContextMenu extends AjaxCommonTest{
             .zGetActiveAccount(), FolderItem.SystemFolder.Inbox,
             _soapDestination, app.zGetActiveAccount().EmailAddress);
 
-      String folderLocator = app.zPageMail.zGetTreeFolderLocator(folderItem);
+      String folderLocator = app.zTreeMail.zGetTreeFolderLocator(folderItem);
 
       // Invoke the context menu
       app.zTreeMail.zTreeItem(Action.A_RIGHTCLICK, folderLocator);
