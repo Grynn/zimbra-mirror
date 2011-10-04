@@ -26,7 +26,7 @@ public class PageMain extends AbsTab {
 		public static final String zAppbarBriefcase		= "css=td[id='zb__App__Briefcase_left_icon']";
 		public static final String zAppbarPreferences	= "id=zb__App__Options_title";
 
-		public static final String zAppbarSocialLocator	= "css=div[id^='zb__App__com_zimbra_social_']";
+		public static final String zAppbarSocialLocator	= 		"css=div[id^='zb__App__com_zimbra_social_'] td[id$='_title']";
 		
 		// 8.0 D1: public static final String ButtonRefreshLocatorCSS = "css=div[id='CHECK_MAIL'] td[id='CHECK_MAIL_left_icon'] div[class='ImgRefresh']";
 		// 8.0 D2: public static final String ButtonRefreshLocatorCSS = "css=div[id='CHECK_MAIL'] td[id='CHECK_MAIL_left_icon'] div[class='ImgRefreshAll']";
