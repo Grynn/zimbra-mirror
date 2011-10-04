@@ -30,7 +30,7 @@ checksrc:
 check:
 	@echo "Verifying cyrus-sasl build...";
 	$(CYRUS_ROOT)/../zmcheck.pl -s $(ZIMBRA_HOME)/cyrus-sasl-$(CYRUS_VERSION)/sbin/saslauthd
-	$(CYRUS_ROOT)/../zmcheck.pl -l $(ZIMBRA_HOME)/cyrus-sasl-$(CYRUS_VERSION)/lib/sasl2/libgssapiv2.so.2.0.23
+	$(CYRUS_ROOT)/../zmcheck.pl -l $(ZIMBRA_HOME)/cyrus-sasl-$(CYRUS_VERSION)/lib/sasl2/libgssapiv2.so.2.0.$(CYRUS_PATCH)
 
 build: 
 ifneq	(,$(findstring MACOSX,$(BUILD_PLATFORM)))
