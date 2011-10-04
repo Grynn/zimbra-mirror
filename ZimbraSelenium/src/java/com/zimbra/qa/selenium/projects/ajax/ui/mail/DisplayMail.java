@@ -98,7 +98,7 @@ public class DisplayMail extends AbsDisplay {
 
 		if ( button == Button.B_VIEW_ENTIRE_MESSAGE ) {
 			
-			locator = this.ContainerLocator + " span[id$='__MSG_msgTruncation_link']";
+			locator = this.ContainerLocator + " span[id$='_msgTruncation_link']";
 
 			if ( !this.sIsElementPresent(locator) )
 				throw new HarnessException("locator is not present for button "+ button +" : "+ locator);
