@@ -786,8 +786,8 @@ HRESULT Zimbra::MAPI::Util::GetExchangeUsersUsingObjectPicker(
                                 LPWSTR pwszZimbraAlias = new WCHAR[nAlias + nDomain + 1];
                                 wcsncpy(pwszZimbraAlias, pwszStart, nAlias - 1);
                                 pwszZimbraAlias[nAlias - 1] = L'\0';
-                                wcscat_s(pwszZimbraAlias, wcslen(L"@"), L"@");
-                                wcscat_s(pwszZimbraAlias, nDomain, pDomain);
+								wcscat_s(pwszZimbraAlias, (nAlias + nDomain + 1),L"@");
+                                wcscat_s(pwszZimbraAlias, (nAlias + nDomain + 1), pDomain);
 
                                 wstring pwszNameTemp = L"zimbraMailAlias";
 
