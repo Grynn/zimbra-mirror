@@ -222,7 +222,10 @@ function() {
 		monthname:	"("+AjxDateUtil.S_MONTHNAME+")",
 		yearnum:	"(\\d{2}|[1-9]\\d{2,3})",
         fullyearnum:"(\\d{4})",
-		number:		"(\\d+)"
+		number:		"(\\d+)",
+        timenum:    "(1[0-2]:?[0-5][0-9]|[1-9]:?[0-5][0-9]|1[0-2]|[1-9])",         //12hr
+        militarytimenum:    "(2[0-3]:?[0-5][0-9]|[0-1][0-9]:?[0-5][0-9])"        //24hr
+
 	};
 
 	Com_Zimbra_Date.PATTERNS = [];
