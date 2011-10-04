@@ -45,8 +45,11 @@ public class WizardCreateAlias extends AbsWizard {
 		 * If you use normal type method domain is taken as default domain name.
 		 * Below line of code is not grid friendly but this is only solution working currently. 
 		 */
+		
+		sType(Locators.zdlg_ALIAS_DOMAIN_NAME,"");
 		zType(Locators.zdlg_ALIAS_DOMAIN_NAME,"");
 		this.zKeyboard.zTypeCharacters(domain);
+		System.out.println(domain);
 		
 		sType(Locators.zdlg_TARGET_ACCOUNT_NAME, targetAccount);
 		zClick(Locators.zdlg_OK);
