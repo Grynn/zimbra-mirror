@@ -123,8 +123,6 @@
     </fileset>
   </path>
 
-  <taskdef name="odeploy" classname="org.apache.catalina.ant.DeployTask" classpathref="offline.class.path" />
-
   <taskdef resource="net/sf/antcontrib/antlib.xml">
     <classpath>
       <pathelement location="${common.jars.dir}/ant-contrib-1.0b1.jar" />
