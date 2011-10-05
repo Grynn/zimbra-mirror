@@ -25,7 +25,7 @@ else
 endif
 
 ifneq	(,$(findstring MACOSX,$(BUILD_PLATFORM)))
-	FIXOSX	:= ./fix-sasl.pl ${BSTR}
+	FIXOSX	:= (./fix-sasl.pl ${BSTR})
 endif
 CYRUS_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/cyrus-sasl/cyrus-sasl-$(CYRUS_VERSION).tgz
 
@@ -53,7 +53,7 @@ build:
 	$(PATCH))
 	_S_='~' ./zimbra-cyrus-sasl-build.sh ${BSTR}
 	(cd cyrus-sasl-$(CYRUS_VERSION); $(MAKE) install)
-	($(FIXOSX))
+	$(FIXOSX)
 	(cd $(ZIMBRA_HOME); ln -s cyrus-sasl-$(CYRUS_VERSION) cyrus-sasl; \
 	tar czf $(CYRUS_TGZ_TARGET) \
 	cyrus-sasl-$(CYRUS_VERSION))
