@@ -1049,10 +1049,7 @@ public class PageAddressbook extends AbsTab {
 				page = new FormMailNew(MyApplication);	
 			}
 
-			else if (option == Button.B_SEARCHADVANCED) {
-				cmi=CONTEXT_MENU.CONTACT_ADVANCED_SEARCH;
-				page = new PageAdvancedSearch(MyApplication);	
-			}
+		
 			else if (option == Button.B_PRINT) {
 				cmi=CONTEXT_MENU.CONTACT_PRINT;				
 				page = new PagePrint(MyApplication);	
