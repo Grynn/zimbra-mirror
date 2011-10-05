@@ -31,7 +31,17 @@ endif
 
 MODULE_WWW	:= LWP::Protocol::https
 MODULE_NETADDR_IP	:= NetAddr::IP
-MODULE_EXTUTIL_MAKEMAKER	:= ExtUtils::MakeMaker
+MODULE_EXTUTIL_MAKEMAKER	:= \
+	Parse::CPAN::Meta \
+	Version::Requirements \
+	ExtUtils::Manifest \
+	JSON::PP::Compat5006 \
+	File::Copy::Recursive \
+	CPAN::Meta \
+	version \
+	JSON::PP \
+	CPAN::Meta::YAML \
+	ExtUtils::MakeMaker
 
 LWP_LIBS        := \
 	Mozilla::CA \
@@ -62,7 +72,13 @@ ifeq (RHEL4,$(findstring RHEL4,$(BUILD_PLATFORM)))
 	MODULE_BUILD_LIBS	:= K/KW/KWILLIAMS/Module-Build-0.2808.tar.gz
 	MODULE_WWW	:= G/GA/GAAS/libwww-perl-5.837.tar.gz
 	MODULE_NETADDR_IP	:= M/MI/MIKER/NetAddr-IP-4.040.tar.gz
-	MODULE_EXTUTIL_MAKEMAKER	:= M/MS/MSCHWERN/ExtUtils-MakeMaker-6.56.tar.gz
+	MODULE_EXTUTIL_MAKEMAKER	:=  \
+		ExtUtils::Manifest \
+		ExtUtils::Command \
+		ExtUtils::Installed \
+		ExtUtils::Packlist \
+		ExtUtils::Install \
+		M/MS/MSCHWERN/ExtUtils-MakeMaker-6.56.tar.gz
 	LWP_LIBS	:=
 endif
 
@@ -212,7 +228,6 @@ PERL_LIBS 	:= \
 	XML::Simple \
 	IO::Socket::INET6 \
 	$(MODULE_NETADDR_IP) \
-	version \
 	Net::DNS::Resolver::Programmable \
 	Geography::Countries \
 	IP::Country \
