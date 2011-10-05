@@ -19,22 +19,7 @@ else
   source ../versions.sh
 fi
 
-rm -fr build
-mkdir build
-cd build
-tar xfz ../src/cyrus-sasl-${cyrus_release}.tar.gz  -C .
-chmod -R +w cyrus-sasl-${cyrus_release}
-mv cyrus-sasl-${cyrus_release} ${cyrus_src}
-
 cd ${cyrus_src}
-patch -g0 -p1 < ../../sasl-link-order.patch
-patch -g0 -p1 < ../../sasl-darwin.patch
-patch -g0 -p1 < ../../sasl-auth-zimbra.patch
-if [ x$BETA = "xbeta" ]; then
-  patch -g0 -p1 < ../../patches/heimdal-build.patch
-else
-  patch -g0 -p1 < ../../gcc-fix.patch
-fi
 rm config/ltconfig config/libtool.m4
 if [ -x /usr/bin/libtoolize ]; then
 	LIBTOOLIZE=/usr/bin/libtoolize
