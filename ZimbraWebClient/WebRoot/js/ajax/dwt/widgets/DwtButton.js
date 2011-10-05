@@ -102,20 +102,14 @@ DwtButton = function(params) {
 
 	this._actionTiming = params.actionTiming || DwtButton.ACTION_MOUSEUP;
 	this.__preventMenuFocus = null;
+	this._menuPopupStyle = DwtButton.MENU_POPUP_STYLE_BELOW;
 };
 
 DwtButton.prototype = new DwtLabel;
 DwtButton.prototype.constructor = DwtButton;
 
-/**
- * Returns a string representation of the object.
- * 
- * @return		{string}		a string representation of the object
- */
-DwtButton.prototype.toString =
-function() {
-	return "DwtButton";
-};
+DwtButton.prototype.isDwtButton = true;
+DwtButton.prototype.toString = function() { return "DwtButton"; };
 
 //
 // Constants
@@ -124,15 +118,16 @@ DwtButton.PARAMS = ["parent", "style", "className", "posStyle", "actionTiming", 
 DwtButton.TOGGLE_STYLE = DwtLabel._LAST_STYLE * 2; // NOTE: These must be powers of 2 because we do bit-arithmetic to check the style.
 DwtButton.ALWAYS_FLAT = DwtLabel._LAST_STYLE * 4;
 DwtButton._LAST_STYLE = DwtButton.ALWAYS_FLAT;
-/**
- * Defines the "mouse-up" action timing.
- */
+
 DwtButton.ACTION_MOUSEUP = 1;
-/**
- * Defines the "mouse-down" action timing.
- */
 DwtButton.ACTION_MOUSEDOWN = 2; // No special appearance when hovered or active
+
 DwtButton.NOTIFY_WINDOW = 500;  // Time (in ms) during which to block additional clicks from being processed
+
+DwtButton.MENU_POPUP_STYLE_BELOW	= "BELOW";		// menu pops up just below the button (default)
+DwtButton.MENU_POPUP_STYLE_ABOVE	= "ABOVE";		// menu pops up above the button
+DwtButton.MENU_POPUP_STYLE_RIGHT	= "RIGHT";		// menu pops up below the button, with right edges aligned
+DwtButton.MENU_POPUP_STYLE_CASCADE	= "CASCADE";	// menu pops up to right of the button
 
 //
 // Data
@@ -149,7 +144,7 @@ DwtButton.prototype.TEMPLATE = "dwt.Widgets#ZButton";
  */
 DwtButton.prototype.dispose =
 function() {
-	if ((this._menu instanceof DwtMenu) && (this._menu.parent == this)) {
+	if (this._menu && this._menu.isDwtMenu && (this._menu.parent == this)) {
 		this._menu.dispose();
 		this._menu = null;
 	}
@@ -361,25 +356,33 @@ function (hoverImageInfo) {
 };
 
 /**
-* Adds a dropdown menu to the button, available through a small down-arrow.
-*
-* @param {DwtMenu|AjxCallback}	menuOrCallback		the dropdown menu or a callback. If a
-*                           callback is given, it is called the first time the
-*                           menu is requested. The callback must return a valid
-*                           DwtMenu object.
-* @param {boolean}	shouldToggle		if <code>true</code>, toggle
-* @param {string}	followIconStyle		the style of menu item (should be checked or radio style) for
-*							which the button icon should reflect the menu item icon
-* @param {boolean}	popupAbove         if <code>true</code>, pop up the menu above the button
-* @param {boolean}	popupRight         if <code>true</code>, align the right edge of the menu to the right edge of the button
-*/
+ * Adds a dropdown menu to the button, available through a small down-arrow. If a
+ * callback is passed as the dropdown menu, it is called the first time the
+ * menu is requested. The callback must return a valid DwtMenu object.
+ *
+ * @param {hash}				params				hash of params:
+ * @param {DwtMenu|AjxCallback}	menu				the dropdown menu or a callback
+ * @param {boolean}				shouldToggle		if <code>true</code>, toggle
+ * @param {string}				menuPopupStyle		one of DwtButton.MENU_POPUP_STYLE_* (default is BELOW)
+ * @param {boolean}				popupAbove         if <code>true</code>, pop up the menu above the button
+ * @param {boolean}				popupRight         if <code>true</code>, align the right edge of the menu to the right edge of the button
+ */
 DwtButton.prototype.setMenu =
-function(menuOrCallback, shouldToggle, followIconStyle, popupAbove, popupRight) {
-	this._menu = menuOrCallback;
-	this._shouldToggleMenu = (shouldToggle === true);
-	this._followIconStyle = followIconStyle;
-	this._popupAbove = popupAbove;
-	this._popupRight = popupRight;
+function(params) {
+	
+	params = Dwt.getParams(arguments, DwtButton.setMenuParams, (arguments.length == 1 && !arguments[0].menu));
+	
+	this._menu = params.menu;
+	this._shouldToggleMenu = (params.shouldToggle === true);
+	if (params.popupAbove) {
+		this._menuPopupStyle = DwtButton.MENU_POPUP_STYLE_ABOVE;
+	}
+	else if (params.popupRight) {
+		this._menuPopupStyle = DwtButton.MENU_POPUP_STYLE_RIGHT;
+	}
+	else {
+		this._menuPopupStyle = params.menuPopupStyle || DwtButton.MENU_POPUP_STYLE_BELOW;
+	}
 	if (this._menu) {
         if (this._dropDownEl) {
 			var idx = (this._imageCell) ? 1 : 0;
@@ -396,19 +399,20 @@ function(menuOrCallback, shouldToggle, followIconStyle, popupAbove, popupRight) 
 				this._setDropDownCellMouseHandlers(true);
 			}
 
-            if (!(this._menu instanceof AjxCallback)) {
+            if (!this._menu.isAjxCallback) {
                 this._menu.setAssociatedElementId(this._dropDownEl.id);
             }
 		}
-		if ((this.__preventMenuFocus != null) && (this._menu instanceof DwtMenu))
+		if ((this.__preventMenuFocus != null) && this._menu.isDwtMenu) {
 			this._menu.dontStealFocus(this.__preventMenuFocus);
-		
+		}
     }
     else if (this._dropDownEl) {
 		Dwt.delClass(this.getHtmlElement(), "ZHasDropDown");
         this._dropDownEl.innerHTML = "";
     }
 };
+DwtButton.setMenuParams = ["menu", "shouldToggle", "followIconStyle", "popupAbove", "popupRight"];
 
 /**
  * @private
@@ -426,14 +430,15 @@ function(set) {
 */
 DwtButton.prototype.getMenu =
 function(dontCreate) {
-	if (this._menu instanceof AjxCallback) {
+	if (this._menu && this._menu.isAjxCallback) {
 		if (dontCreate) {
 			return null;
 		}
 		var callback = this._menu;
-		this.setMenu(callback.run(this), this._shouldToggleMenu, this._followIconStyle, this._popupAbove);
-		if ((this.__preventMenuFocus != null) && (this._menu instanceof DwtMenu))
+		this.setMenu({menu: callback.run(this)});
+		if ((this.__preventMenuFocus != null) && (this._menu.isDwtMenu)) {
 			this._menu.dontStealFocus(this.__preventMenuFocus);
+		}
 	}
     if (this._menu) {
         this.getHtmlElement().setAttribute("menuId", this._menu._htmlElId);
@@ -535,17 +540,25 @@ function(menu) {
 	var leftBorder = (parentElement.style.borderLeftWidth == "") ? 0 : parseInt(parentElement.style.borderLeftWidth);
 
 	var x;
-	if (this._popupRight) {
+	if (this._menuPopupStyle == DwtButton.MENU_POPUP_STYLE_RIGHT) {
 		x = parentLocation.x + parentBounds.width - menuSize.x;
-	} else {
+	}
+	else if (this._menuPopupStyle == DwtButton.MENU_POPUP_STYLE_CASCADE) {
+		x = parentLocation.x + parentBounds.width;
+	}
+	else {
 		x = parentLocation.x + leftBorder;
 		x = ((x + menuSize.x) >= windowSize.x) ? windowSize.x - menuSize.x : x;
 	}
 
 	var y;
-	if (this._popupAbove) {
+	if (this._menuPopupStyle == DwtButton.MENU_POPUP_STYLE_ABOVE) {
 		y = parentLocation.y - menuSize.y;
-	} else {
+	}
+	else if (this._menuPopupStyle == DwtButton.MENU_POPUP_STYLE_CASCADE) {
+		y = parentLocation.y;
+	}
+	else {
 		var horizontalBorder = (parentElement.style.borderTopWidth == "") ? 0 : parseInt(parentElement.style.borderTopWidth);
 		horizontalBorder += (parentElement.style.borderBottomWidth == "") ? 0 : parseInt(parentElement.style.borderBottomWidth);
 		y = parentLocation.y + parentBounds.height + horizontalBorder;
@@ -717,10 +730,12 @@ function() {
  * @private
  */
 DwtButton.prototype.dontStealFocus = function(val) {
-	if (val == null)
+	if (val == null) {
 		val = true;
-	if (this._menu instanceof DwtMenu)
+	}
+	if (this._menu && this._menu.isDwtMenu) {
 		this._menu.dontStealFocus(val);
+	}
 	this.__preventMenuFocus = val;
 };
 
@@ -761,7 +776,7 @@ function(ev) {
 			this.shell.notifyGlobalSelection(selEv);
 		}
 	} else if (this._menu) {
-		if(this._menu instanceof DwtMenu && !this.isListenerRegistered(DwtEvent.SELECTION)) {
+		if(this._menu.isDwtMenu && !this.isListenerRegistered(DwtEvent.SELECTION)) {
 			this._menu.setAssociatedObj(this);	
 		}		
 		this._toggleMenu();
@@ -831,7 +846,7 @@ function(ev) {
 				obj.getMenu().popdown();
 			}
 			else {
-				if (obj._menu instanceof AjxCallback) {
+				if (obj._menu && obj._menu.isAjxCallback) {
 					obj.popup();
 				}
 

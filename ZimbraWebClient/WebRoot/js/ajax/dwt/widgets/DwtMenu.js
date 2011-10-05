@@ -151,35 +151,15 @@ DwtMenu.PARAMS = ["parent", "style", "className", "posStyle", "cascade", "id"];
 DwtMenu.prototype = new DwtComposite;
 DwtMenu.prototype.constructor = DwtMenu;
 
-DwtMenu.prototype.toString = 
-function() {
-	return "DwtMenu";
-};
+DwtMenu.prototype.isDwtMenu = true;
+DwtMenu.prototype.toString = function() { return "DwtMenu"; };
 
-/**
- * Defines the "bar" style menu.
- */
-DwtMenu.BAR_STYLE = 1;
-/**
- * Defines the "popup" style menu.
- */
-DwtMenu.POPUP_STYLE = 2;
-/**
- * Defines the "dropdown" style menu.
- */
-DwtMenu.DROPDOWN_STYLE = 3;
-/**
- * Defines the "color" style menu.
- */
-DwtMenu.COLOR_PICKER_STYLE =  4;
-/**
- * Defines the "calendar" style menu.
- */
-DwtMenu.CALENDAR_PICKER_STYLE = 5;
-/**
- * Defines the "generic widget" style menu.
- */
-DwtMenu.GENERIC_WIDGET_STYLE = 6;
+DwtMenu.BAR_STYLE				= "BAR";
+DwtMenu.POPUP_STYLE				= "POPUP";
+DwtMenu.DROPDOWN_STYLE			= "DROPDOWN";
+DwtMenu.COLOR_PICKER_STYLE		= "COLOR";
+DwtMenu.CALENDAR_PICKER_STYLE	= "CALENDAR";
+DwtMenu.GENERIC_WIDGET_STYLE	= "GENERIC";
 
 DwtMenu.HAS_ICON = "ZHasIcon";
 DwtMenu.HAS_CHECK = "ZHasCheck";
@@ -954,8 +934,10 @@ function(child) {
     // Color pickers and calendars are not menu aware so we have to deal with
 	// them acordingly
 	if (Dwt.instanceOf(child, "DwtColorPicker") || Dwt.instanceOf(child, "DwtCalendar") ||
-	    (this._style == DwtMenu.GENERIC_WIDGET_STYLE))
+	    (this._style == DwtMenu.GENERIC_WIDGET_STYLE)) {
+		
 		this._addItem(child);
+	}
 
     if (child.addSelectionListener) {
         child.addSelectionListener(this._itemSelectionListener);

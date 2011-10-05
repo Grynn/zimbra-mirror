@@ -1197,15 +1197,16 @@ function(objOrClassName, className) {
  * hash with the given param names.
  * 
  * @param {hash}	args			a hash of arguments
- * @param {array}	paramNames	a ordered list of param names
+ * @param {array}	paramNames		an ordered list of param names
+ * @param {boolean}	force			if true, a single arg is not a params hash
  */
 Dwt.getParams =
-function(args, paramNames) {
+function(args, paramNames, force) {
 	if (!(args && args.length)) { return {}; }
 	
 	// Check for arg-list style of passing params. There will almost always
 	// be more than one arg, and the first one is the parent DwtControl.
-	if (args.length > 1 || args[0]._eventMgr) {
+	if (args.length > 1 || args[0]._eventMgr || force) {
 		var params = {};
 		for (var i = 0; i < args.length; i++) {
 			params[paramNames[i]] = args[i];

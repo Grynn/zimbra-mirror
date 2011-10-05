@@ -355,6 +355,7 @@ function(list) {
 
 AjxUtil.arrayAsHash =
 function(array, valueOrFunc) {
+	array = AjxUtil.toArray(array);
 	var hash = {};
 	var func = typeof valueOrFunc == "function" && valueOrFunc;
 	var value = valueOrFunc || true; 

@@ -40,7 +40,7 @@ DwtMenuItem = function(params) {
 
 	// check parameters
 	var parent = params.parent;
-	if (!(parent instanceof DwtMenu)) {
+	if (!(parent && parent.isDwtMenu)) {
 		throw new DwtException("Parent must be a DwtMenu object", DwtException.INVALIDPARENT, "DwtMenuItem");
 	}
 
@@ -194,8 +194,9 @@ function(text) {
 };
 
 DwtMenuItem.prototype.setMenu =
-function(menuOrCallback, shouldToggle, followIconStyle) {
-	DwtButton.prototype.setMenu.call(this, menuOrCallback, shouldToggle, followIconStyle);
+function(params) {
+	var params = Dwt.getParams(arguments, DwtButton.setMenuParams);
+	DwtButton.prototype.setMenu.call(this, params);
 	this.parent._submenuItemAdded(this);
 };
 
