@@ -13,7 +13,7 @@ ZIMBRA_HOME ?= /opt/zimbra
 
 PATCH	:=
 
-FIXOSX	:=
+FIXOSX	:= @echo "no need to fix anything"
 
 ifdef BETA
 	include $(CYRUS_ROOT)/../beta_versions.def
