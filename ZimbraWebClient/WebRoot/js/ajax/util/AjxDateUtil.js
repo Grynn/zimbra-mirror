@@ -26,10 +26,15 @@ AjxDateUtil.WEEK		= 3;
 AjxDateUtil.DAY			= 4;
 AjxDateUtil.TWO_WEEKS	= 5;
 
+AjxDateUtil.MSEC_PER_MINUTE = 60000;
 AjxDateUtil.MSEC_PER_FIFTEEN_MINUTES = 900000;
 AjxDateUtil.MSEC_PER_HALF_HOUR = 1800000;
 AjxDateUtil.MSEC_PER_HOUR = 3600000;
 AjxDateUtil.MSEC_PER_DAY = 24 * AjxDateUtil.MSEC_PER_HOUR;
+
+AjxDateUtil.MINUTES_PER_DAY = 60 * 24;
+AjxDateUtil.SECONDS_PER_DAY = 60 * 60 * 24;
+
 
 AjxDateUtil.WEEKDAY_SHORT = AjxDateFormat.WeekdaySegment.WEEKDAYS[AjxDateFormat.SHORT];
 AjxDateUtil.WEEKDAY_MEDIUM = AjxDateFormat.WeekdaySegment.WEEKDAYS[AjxDateFormat.MEDIUM];
