@@ -60,7 +60,17 @@ public class Button {
 	public static final Button O_TAG_NEWTAG = new Button("O_TAG_NEWTAG");
 	public static final Button O_TAG_REMOVETAG = new Button("O_TAG_REMOVETAG");
 
-
+	// Accept decline options
+	public static final Button O_ACCEPT_NOTIFY_ORGANIZER = new Button("O_ACCEPT_NOTIFY_ORGANIZER");
+	public static final Button O_ACCEPT_EDIT_REPLY = new Button("O_ACCEPT_EDIT_REPLY");
+	public static final Button O_ACCEPT_DONT_NOTIFY_ORGANIZER = new Button("O_ACCEPT_DONTNOTIFY_ORGANIZER");
+	public static final Button O_TENTATIVE_NOTIFY_ORGANIZER = new Button("O_TENTATIVE_NOTIFY_ORGANIZER");
+	public static final Button O_TENTATIVE_EDIT_REPLY = new Button("O_TENTATIVE_EDIT_REPLY");
+	public static final Button O_TENTATIVE_DONT_NOTIFY_ORGANIZER = new Button("O_TENTATIVE_DONTNOTIFY_ORGANIZER");
+	public static final Button O_DECLINE_NOTIFY_ORGANIZER = new Button("O_DECLINE_NOTIFY_ORGANIZER");
+	public static final Button O_DECLINE_EDIT_REPLY = new Button("O_DECLINE_EDIT_REPLY");
+	public static final Button O_DECLINE_DONT_NOTIFY_ORGANIZER = new Button("O_DECLINE_DONTNOTIFY_ORGANIZER");
+	
 	// General dialog buttons
 	public static final Button B_YES = new Button("B_YES");
 	public static final Button B_NO = new Button("B_NO");
@@ -269,8 +279,11 @@ public class Button {
 
 	// Mail 'Display' buttons
 	public static final Button B_ACCEPT = new Button("B_ACCEPT");
+	public static final Button B_ACCEPT_DROPDOWN = new Button("B_ACCEPT_DROPDOWN");
 	public static final Button B_DECLINE = new Button("B_DECLINE");
+	public static final Button B_DECLINE_DROPDOWN = new Button("B_DECLINE_DROPDOWN");
 	public static final Button B_TENTATIVE = new Button("B_TENTATIVE");
+	public static final Button B_TENTATIVE_DROPDOWN = new Button("B_TENTATIVE_DROPDOWN");
 	public static final Button B_ACCEPT_SHARE = new Button("B_ACCEPT_SHARE");;
 	public static final Button B_DECLINE_SHARE = new Button("B_DECLINE_SHARE");;
 

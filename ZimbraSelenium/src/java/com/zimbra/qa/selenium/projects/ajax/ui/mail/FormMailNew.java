@@ -567,7 +567,37 @@ public class FormMailNew extends AbsForm {
 					this.zWaitForBusyOverlay();
 
 					return;
+					
+				} else if (frames == 2) {
+					// //
+					// HTML compose
+					// //
 
+					try {
+
+						this.sSelectFrame("css=iframe[id$='_content_ifr']"); // iframe index is 0 based
+
+						locator = "css=html body";
+
+						if (!this.sIsElementPresent(locator))
+							throw new HarnessException(
+									"Unable to locate compose body");
+
+						this.sFocus(locator);
+						this.zClick(locator);
+						this.sType(locator, value);
+
+					} finally {
+						// Make sure to go back to the original iframe
+						this.sSelectFrame("relative=top");
+
+					}
+
+					// Is this requried?
+					this.zWaitForBusyOverlay();
+
+					return;
+					
 				} else {
 					throw new HarnessException("Compose //iframe count was " + frames);
 				}

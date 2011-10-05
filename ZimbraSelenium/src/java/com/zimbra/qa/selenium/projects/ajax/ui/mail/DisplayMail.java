@@ -42,10 +42,26 @@ public class DisplayMail extends AbsDisplay {
 		//public static final String ConversationViewPreviewAtBottomCSS	= "css=div[id='zv__CLV2__MSG']";
 		//public static final String ConversationViewPreviewAtRightCSS	= "css=div[id='zv__CLV2__MSG']";
 	
+		// Accept, Decline & Tentative button, menus and dropdown locators
 		public static final String AcceptButton = "css=td[id$='__Inv__REPLY_ACCEPT_title']";
+		public static final String AcceptDropdown = "css=td[id$='__Inv__REPLY_ACCEPT_dropdown']>div";
+		public static final String AcceptNotifyOrganizerMenu = "id=REPLY_ACCEPT_NOTIFY_title";
+		public static final String AcceptEditReplyMenu = "id=INVITE_REPLY_ACCEPT_title";
+		public static final String AcceptDontNotifyOrganizerMenu = "id=REPLY_ACCEPT_IGNORE_title";
+
 		public static final String TentativeButton = "css=td[id$='__Inv__REPLY_TENTATIVE_title']";
+		public static final String TentativeDropdown = "css=td[id$='__Inv__REPLY_TENTATIVE_dropdown']>div";
+		public static final String TentativeNotifyOrganizerMenu = "id=REPLY_TENTATIVE_NOTIFY_title";
+		public static final String TentativeEditReplyMenu = "id=INVITE_REPLY_TENTATIVE_title";
+		public static final String TentativeDontNotifyOrganizerMenu = "id=REPLY_TENTATIVE_IGNORE_title";
+		
 		public static final String DeclineButton = "css=td[id$='__Inv__REPLY_DECLINE_title']";
-		public static final String ProposeNewTimeButton = "id=zb__CV2__Inv__PROPOSE_NEW_TIME_title";
+		public static final String DeclineDropdown = "css=td[id$='__Inv__REPLY_DECLINE_dropdown']>div";
+		public static final String DeclineNotifyOrganizerMenu = "id=REPLY_DECLINE_NOTIFY_title";
+		public static final String DeclineEditReplyMenu = "id=INVITE_REPLY_DECLINE_title";
+		public static final String DeclineDontNotifyOrganizerMenu = "id=REPLY_DECLINE_IGNORE_title";
+		
+		public static final String ProposeNewTimeButton = "css=td[id$='__Inv__PROPOSE_NEW_TIME_title']";
 	}
 
 	/**
@@ -123,21 +139,75 @@ public class DisplayMail extends AbsDisplay {
 
 			return (page);
 
-		} else if ( button == Button.B_ACCEPT ) {
+} else if ( button == Button.B_ACCEPT ) {
 			
 			locator = Locators.AcceptButton;
 			page = null;
 			doPostfixCheck = true;
 		
+		} else if ( button == Button.O_ACCEPT_NOTIFY_ORGANIZER ) {
+			
+			locator = Locators.AcceptNotifyOrganizerMenu;
+			page = null;
+			doPostfixCheck = true;
+			
+		} else if ( button == Button.O_ACCEPT_EDIT_REPLY ) {
+			
+			locator = Locators.AcceptEditReplyMenu;
+			page = null;
+			doPostfixCheck = true;
+			
+		} else if ( button == Button.O_ACCEPT_DONT_NOTIFY_ORGANIZER ) {
+			
+			locator = Locators.AcceptDontNotifyOrganizerMenu;
+			page = null;
+			doPostfixCheck = true;
+			
 		} else if ( button == Button.B_TENTATIVE ) {
 			
 			locator = Locators.TentativeButton;
 			page = null;
 			doPostfixCheck = true;
-
+		
+		} else if ( button == Button.O_TENTATIVE_NOTIFY_ORGANIZER ) {
+			
+			locator = Locators.TentativeNotifyOrganizerMenu;
+			page = null;
+			doPostfixCheck = true;
+			
+		} else if ( button == Button.O_TENTATIVE_EDIT_REPLY ) {
+			
+			locator = Locators.TentativeEditReplyMenu;
+			page = null;
+			doPostfixCheck = true;
+			
+		} else if ( button == Button.O_TENTATIVE_DONT_NOTIFY_ORGANIZER ) {
+			
+			locator = Locators.TentativeDontNotifyOrganizerMenu;
+			page = null;
+			doPostfixCheck = true;
+			
 		} else if ( button == Button.B_DECLINE ) {
 			
 			locator = Locators.DeclineButton;
+			page = null;
+			doPostfixCheck = true;
+			
+		} else if ( button == Button.O_DECLINE_NOTIFY_ORGANIZER ) {
+			
+			locator = Locators.DeclineNotifyOrganizerMenu;
+			page = null;
+			doPostfixCheck = true;
+			
+		} else if ( button == Button.O_DECLINE_EDIT_REPLY ) {
+			
+			locator = Locators.DeclineEditReplyMenu;
+			page = null;
+			doPostfixCheck = true;
+			
+		} else if ( button == Button.O_DECLINE_DONT_NOTIFY_ORGANIZER ) {
+			
+			locator = Locators.DeclineDontNotifyOrganizerMenu;
 			page = null;
 			doPostfixCheck = true;
 			
