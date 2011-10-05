@@ -5,10 +5,16 @@ package com.zimbra.qa.selenium.projects.desktop.ui.briefcase;
 
 import java.util.*;
 
+import org.openqa.selenium.remote.server.handler.interactions.MouseDown;
+
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
+import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
+import com.zimbra.qa.selenium.projects.desktop.ui.AppAjaxClient;
+import com.zimbra.qa.selenium.projects.desktop.ui.briefcase.DialogCreateBriefcaseFolder;
+import com.zimbra.qa.selenium.projects.desktop.ui.briefcase.TreeBriefcase.Locators;
 import com.zimbra.qa.selenium.projects.desktop.ui.*;
 
 /**
@@ -23,8 +29,10 @@ public class TreeBriefcase extends AbsTree {
 		public static final String briefcaseTreeView = "css=[id*=zti__main_Briefcase__";
 		public static final String briefcaseTreeView_Desktop = "css=td[id*='main_Briefcase']";
 		public static final String zNewTagTreeMenuItem = "css=td[id$=_left_icon]>[class=ImgNewTag]";
+		public static final String zNewFolderTreeMenuItem = "css=tr[id=POPUP_NEW_BRIEFCASE]:contains('New Folder')";
 		public static final String zRenameTagTreeMenuItem = "css=td[id$=_left_icon]>[class=ImgRename]";
 		public static final String zDeleteTreeMenuItem = "css=td[id$=_left_icon]>[class=ImgDelete]";
+		//public static final String zDeleteTreeMenuItem = "css=div[id='DELETE_WITHOUT_SHORTCUT'] tr[id^='POPUP_DELETE']:contains(Delete)";
 	}
 
 	public TreeBriefcase(AbsApplication application) {
@@ -55,6 +63,14 @@ public class TreeBriefcase extends AbsTree {
 		   actionLocator = Locators.briefcaseTreeView_Desktop + "[id*='"
                + MyApplication.zGetActiveAccount().EmailAddress + "']"
                + ":contains('" + item.getName() + "')";
+		}else if (item instanceof FolderItem) {
+			actionLocator = Locators.briefcaseTreeView_Desktop + "[id*='"
+		         + MyApplication.zGetActiveAccount().EmailAddress + "']"
+		         + "[id$='" + ((FolderItem) item).getId()
+		         + "_imageCell']";
+			//actionLocator = "zti__main_Briefcase__"
+			//	+ ((FolderItem) item).getId() + "_textCell";
+
 		} else {
 			throw new HarnessException("Must use IItem as argument, but was "
 					+ item.getClass());
@@ -62,7 +78,7 @@ public class TreeBriefcase extends AbsTree {
 
 		if (action == Action.A_RIGHTCLICK) {
 
-			this.zRightClick(actionLocator);
+			this.zRightClickAt(actionLocator, "0,0");
 		} else {
 			throw new HarnessException("implement me! " + action
 					+ ": not implemented");
@@ -85,9 +101,17 @@ public class TreeBriefcase extends AbsTree {
 
 			optionLocator = Locators.zDeleteTreeMenuItem;
 
-			page = new DialogWarning(
-					DialogWarning.DialogWarningID.DeleteTagWarningMessage,
-					MyApplication,
+			if (item instanceof TagItem) {
+				page = new DialogWarning(
+						DialogWarning.DialogWarningID.DeleteTagWarningMessage,
+						MyApplication,
+						((AppAjaxClient) MyApplication).zPageBriefcase);
+			}
+		}else if (option == Button.B_TREE_NEWFOLDER) {
+
+			optionLocator = Locators.zNewFolderTreeMenuItem;
+
+			page = new DialogCreateBriefcaseFolder(MyApplication,
 					((AppAjaxClient) MyApplication).zPageBriefcase);
 
 		} else {
@@ -108,7 +132,7 @@ public class TreeBriefcase extends AbsTree {
 
 		if (page != null) {
 			// Wait for the page to become active, if it was specified
-			page.zWaitForActive();
+			//page.zWaitForActive();
 		}
 		return (page);
 	}
@@ -261,7 +285,15 @@ public class TreeBriefcase extends AbsTree {
 			// TODO: implement me
 
 			// FALL THROUGH
-		} else {
+		} else if(button== Button.O_NEW_BRIEFCASE){
+			
+			locator ="css=div[id='ztb__BDLV'] div[id='zb__BDLV__NEW_MENU'] td[id='zb__BDLV__NEW_MENU_dropdown'] >div";
+				if (!this.sIsElementPresent(locator)) {
+					throw new HarnessException("Unable to locate folder in tree "
+							+ locator);
+				}
+			sMouseDown(locator);
+		}else {
 			throw new HarnessException("no logic defined for button " + button);
 		}
 
