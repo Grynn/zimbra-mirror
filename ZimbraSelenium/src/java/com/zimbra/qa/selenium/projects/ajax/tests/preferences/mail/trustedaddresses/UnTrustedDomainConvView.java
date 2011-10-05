@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import org.testng.annotations.Test;
 
+import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.MailItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
@@ -42,6 +43,7 @@ public class UnTrustedDomainConvView extends AjaxCommonTest {
  * 
  * @throws HarnessException
  */
+	@Bugs(ids="65396")
 	@Test(description = "Verify Display Image link in UnTrusted doamin for conversation view", groups = { "smoke" })
 	public void UnTrustedDomainConvView_01() throws HarnessException {
 
