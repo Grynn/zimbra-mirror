@@ -40,7 +40,6 @@ public class PageAddressbook extends AbsTab {
 		
 		//contact's context menu	
 		public static final ContextMenuItem CONTACT_SEARCH = new ContextMenuItem("POPUP_SEARCH_MENU","Find Emails...","div[class*='ImgSearch']"," div[class*='ImgCascade']");	
-		public static final ContextMenuItem CONTACT_ADVANCED_SEARCH = new ContextMenuItem("POPUP_BROWSE","Advanced Search","div[class*='ImgSearchBuilder']","");	
 		public static final ContextMenuItem CONTACT_NEW_EMAIL = new ContextMenuItem("POPUP_NEW_MESSAGE","New Email","div[class*='ImgNewMessage']",":contains('nm')");  	
     
 		//TODO: contact group: "Edit Group" instead of "Edit Contact"

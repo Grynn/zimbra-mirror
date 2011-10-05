@@ -55,7 +55,6 @@ public class ContextMenuContactGroup extends AjaxCommonTest  {
         
          //verify all items in the context menu list
         ZAssert.assertTrue(list.contains(PageAddressbook.CONTEXT_MENU.CONTACT_SEARCH),"Verify contact search in context menu");
-        ZAssert.assertTrue(list.contains(PageAddressbook.CONTEXT_MENU.CONTACT_ADVANCED_SEARCH),"Verify advanced search in context menu");
         ZAssert.assertTrue(list.contains(PageAddressbook.CONTEXT_MENU.CONTACT_NEW_EMAIL),"Verify new email in context menu");
         ZAssert.assertTrue(list.contains(PageAddressbook.CONTEXT_MENU.CONTACT_EDIT),"Verify edit contact group  in context menu");
         
@@ -75,7 +74,6 @@ public class ContextMenuContactGroup extends AjaxCommonTest  {
 
         //Verify Find Email & Advanced SEarch is disable 
         ZAssert.assertFalse(contextMenu.isEnable(PageAddressbook.CONTEXT_MENU.CONTACT_SEARCH),"Verify contact search is disabled");
-        ZAssert.assertFalse(contextMenu.isEnable(PageAddressbook.CONTEXT_MENU.CONTACT_ADVANCED_SEARCH),"Verify advanced search is disabled");
         ZAssert.assertFalse(contextMenu.isEnable(PageAddressbook.CONTEXT_MENU.CONTACT_FORWARD),"Verify forward email is disabled");
         
         
