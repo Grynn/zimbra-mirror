@@ -32,15 +32,15 @@ endif
 MODULE_WWW	:= LWP::Protocol::https
 MODULE_NETADDR_IP	:= NetAddr::IP
 MODULE_EXTUTIL_MAKEMAKER	:= \
+	CPAN::Meta::YAML \
+	JSON::PP \
 	Parse::CPAN::Meta \
 	Version::Requirements \
 	ExtUtils::Manifest \
 	JSON::PP::Compat5006 \
 	File::Copy::Recursive \
-	CPAN::Meta \
 	version \
-	JSON::PP \
-	CPAN::Meta::YAML \
+	CPAN::Meta \
 	ExtUtils::MakeMaker
 
 LWP_LIBS        := \
