@@ -11,7 +11,7 @@ import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.addressbook.*;
-import com.zimbra.qa.selenium.projects.ajax.ui.addressbook.DialogEditFolder.FolderColor;
+import com.zimbra.qa.selenium.projects.ajax.ui.mail.DialogEditFolder.FolderColor;
 
 
 public class EditProperties extends AjaxCommonTest {
@@ -48,18 +48,21 @@ public class EditProperties extends AjaxCommonTest {
 		dialog.zSetNewColor(FolderColor.Gray);
 		dialog.zClickButton(Button.B_OK);
 
-		throw new HarnessException("Implement me!");
-		// TODO: Verify the new color rendered
-		
-		//FolderItem subfolder2 = FolderItem.importFromSOAP(app
-		//		.zGetActiveAccount(), color);
-		//ZAssert.assertNotNull(subfolder2, "Verify the subfolder is available");
+		// Check the color
+		app.zGetActiveAccount().soapSend(
+				"<GetFolderRequest xmlns='urn:zimbraMail'>"
+			+		"<folder id='" + folderItem.getId() + "'/>"
+			+	"</GetFolderRequest>");
+
+		String color = app.zGetActiveAccount().soapSelectValue("//mail:folder[@name='" + folderItem.getName() + "']", "color");
+		ZAssert.assertEquals(color, "8", "Verify the color of the folder is set to gray (8)");
+
 	}
 	
-	private void RenameChangeColorAndVerify(FolderItem folderItem, DialogEditFolder dialog, FolderItem parent)
+	private void RenameChangeColorAndVerify(FolderItem folderOldName, DialogEditFolder dialog, FolderItem parent)
     throws HarnessException {
 	 	// Set the name, click OK
-		String oldName = folderItem.getName();
+		String oldName = folderOldName.getName();
 		String name    = "folder" + ZimbraSeleniumProperties.getUniqueString();
 
 		dialog.zSetNewName(name);
@@ -68,27 +71,24 @@ public class EditProperties extends AjaxCommonTest {
 		
 		dialog.zClickButton(Button.B_OK);
 	
-		//Verify created folder listed on the left menu
-		boolean isNewFolderDisplayed=false;
-		boolean isOldFolderDisplayed=false;
+		// Verify folder names created on the server
+		FolderItem folder = FolderItem.importFromSOAP(app.zGetActiveAccount(),oldName);
+		ZAssert.assertNull(folder, "Verify the old folder name not found on the server");
 		
-		List<FolderItem> list= app.zPageAddressbook.zListGetFolders(app.zGetActiveAccount(),parent);
-		for (FolderItem i: list) {
-			if (i.getName().equals(name)) {
-				isNewFolderDisplayed=true;			
-			}
-			else if (i.getName().equals(oldName)) {
-				isOldFolderDisplayed=true;			
-			}
-		}
+		folder = FolderItem.importFromSOAP(app.zGetActiveAccount(),name);
+		ZAssert.assertNotNull(folder, "Verify the new folder name found on the server");		
+	
 		
-		ZAssert.assertTrue(isNewFolderDisplayed, "Verify new folder (" + name + ") displayed ");		
-		ZAssert.assertFalse(isOldFolderDisplayed, "Verify old folder (" + oldName + ") not displayed ");		
-		
-		throw new HarnessException("Verify color change");
-		
+		//Verify color changed
+		app.zGetActiveAccount().soapSend(
+				"<GetFolderRequest xmlns='urn:zimbraMail'>"
+			+		"<folder id='" + folder.getId() + "'/>"
+			+	"</GetFolderRequest>");
 
-}
+		String color = app.zGetActiveAccount().soapSelectValue("//mail:folder[@name='" + folder.getName() + "']", "color");
+		ZAssert.assertEquals(color, "8", "Verify the color of the folder is set to gray (8)");
+    }
+	
 	@Test(description = "Edit a folder, change the color (Context menu -> Edit)", groups = { "functional" })
     public void ChangeColorOfTopLevelFolder() throws HarnessException {
 	
@@ -184,18 +184,17 @@ public class EditProperties extends AjaxCommonTest {
 		 ZAssert.assertNotNull(folder, "Verify can get the Contacts ");								
 		 // Rename the folder 
 		 DialogEditFolder dialog = (DialogEditFolder)app.zTreeContacts.zTreeItem(Action.A_RIGHTCLICK, Button.B_TREE_EDIT, folder);
-		 ZAssert.assertNotNull(dialog.zSetNewName(newName), "Verify the folder name input not displayed");;
 		 dialog.zClickButton(Button.B_OK);
 		 
          folder= FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.EmailedContacts);
 	     ZAssert.assertNotNull(folder, "Verify can get the EmailedContacts ");												  
   	     // Rename the folder 
 		 dialog = (DialogEditFolder)app.zTreeContacts.zTreeItem(Action.A_RIGHTCLICK, Button.B_TREE_EDIT, folder);
-		 ZAssert.assertNotNull(dialog.zSetNewName(newName), "Verify the folder name input not displayed");;
 		 dialog.zClickButton(Button.B_OK);
 		 
 	     folder= FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Trash);
-	     ZAssert.assertNotNull(folder, "Verify can get the Trash ");										
+	     ZAssert.assertNotNull(folder, "Verify can get the Trash ");	
+	     
 	     // Rename the folder 
 		 dialog = (DialogEditFolder)app.zTreeContacts.zTreeItem(Action.A_RIGHTCLICK, Button.B_TREE_EDIT, folder);
 		 ZAssert.assertNull(dialog, "Verify Edit Properties not enabled for Trash folder ");		
