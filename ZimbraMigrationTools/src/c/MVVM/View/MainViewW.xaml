@@ -47,41 +47,43 @@
         </Style>
     </Page.Resources>
 
-    <Grid Name="MainGrid">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="132"></ColumnDefinition>
-            <ColumnDefinition Width="*"></ColumnDefinition>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="45"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
-        </Grid.RowDefinitions>
-        <Grid Name="headerGrid" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
-            <Image HorizontalAlignment="Left"  Margin="0,0,0,0" Name="image0" Stretch="UniformToFill" VerticalAlignment="Center" Source="/MVVM;component/View/Images/banner_left.png" />
-            <Image HorizontalAlignment="Left"  Margin="10,2,0,5" Name="image1" Stretch="None" VerticalAlignment="Center" Source="/MVVM;component/View/Images/VMware_logo.png" />
-            <TextBlock HorizontalAlignment="Left" Margin="118,2,0,5" Name="tbAppTitle" Text="Zimbra Migration" VerticalAlignment="Center" Foreground="White" FontSize="19" FontWeight="Medium" FontFamily="Arial" FontStyle="Normal" />
-            <Grid Name="helpGrid" Visibility="Hidden">
-                <TextBlock HorizontalAlignment="Right" Margin="0,0,38,0" Name="tbHelpLbl" Text="Help" VerticalAlignment="Center" Foreground="White" FontSize="12" FontWeight="Medium" FontFamily="Arial" FontStyle="Normal" />
-                <TextBlock HorizontalAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Center"><Hyperlink TextDecorations="None" Command="{Binding ProcessHelpCommand}"><Image Stretch="None" Source="/MVVM;component/View/Images/Help_Up.png"></Image></Hyperlink></TextBlock>
+    <Border Name="mainBorder" Grid.Row="0" Grid.Column="0" Background="White"  BorderThickness="2,2,2,2" BorderBrush="LightBlue">
+        <Grid Name="MainGrid">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="132"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="45"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid Name="headerGrid" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+                <Image HorizontalAlignment="Left"  Margin="0,0,0,0" Name="image0" Stretch="UniformToFill" VerticalAlignment="Center" Source="/MVVM;component/View/Images/banner_left.png" />
+                <Image HorizontalAlignment="Left"  Margin="10,2,0,5" Name="image1" Stretch="None" VerticalAlignment="Center" Source="/MVVM;component/View/Images/VMware_logo.png" />
+                <TextBlock HorizontalAlignment="Left" Margin="118,2,0,5" Name="tbAppTitle" Text="Zimbra Migration" VerticalAlignment="Center" Foreground="White" FontSize="19" FontWeight="Medium" FontFamily="Arial" FontStyle="Normal" />
+                <Grid Name="helpGrid" Visibility="Hidden">
+                    <TextBlock HorizontalAlignment="Right" Margin="0,0,38,0" Name="tbHelpLbl" Text="Help" VerticalAlignment="Center" Foreground="White" FontSize="12" FontWeight="Medium" FontFamily="Arial" FontStyle="Normal" />
+                    <TextBlock HorizontalAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Center"><Hyperlink TextDecorations="None" Command="{Binding ProcessHelpCommand}"><Image Stretch="None" Source="/MVVM;component/View/Images/Help_Up.png"></Image></Hyperlink></TextBlock>
+                </Grid>
+            </Grid>
+
+            <Grid Name="viewsGrid" Grid.Row="1" Grid.Column="0">
+                <StackPanel Orientation="Vertical">
+                    <ListBox Name="lbMode" Margin="0,12,0,0" Visibility="Hidden" IsEnabled="False" ScrollViewer.HorizontalScrollBarVisibility="Disabled" BorderThickness="0" ItemsSource="{Binding TheViews}" >
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Margin="10,8,0,0" VerticalAlignment="Center" Orientation="Vertical" Height="20" Width="140">
+                                    <TextBlock FontFamily="Arial" FontSize="12" FontWeight="Bold" VerticalAlignment="Center" MouseDown="ViewListTB_MouseDown" Text="{Binding ViewTitle}"></TextBlock>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </StackPanel>
+            </Grid>
+
+            <Grid Name="contentGrid" Grid.Row="1" Grid.Column="1" >
+                <ContentPresenter Name="thePresenter" Grid.Row="1" Grid.Column="1" Content="{Binding ElementName=lbMode, Path=SelectedItem}"/>
             </Grid>
         </Grid>
-
-        <Grid Name="viewsGrid" Grid.Row="1" Grid.Column="0">
-            <StackPanel Orientation="Vertical">
-                <ListBox Name="lbMode" Margin="0,12,0,0" Visibility="Hidden" IsEnabled="False" ScrollViewer.HorizontalScrollBarVisibility="Disabled" BorderThickness="0" ItemsSource="{Binding TheViews}" >
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Margin="10,8,0,0" VerticalAlignment="Center" Orientation="Vertical" Height="20" Width="140">
-                                <TextBlock FontFamily="Arial" FontSize="12" FontWeight="Bold" VerticalAlignment="Center" MouseDown="ViewListTB_MouseDown" Text="{Binding ViewTitle}"></TextBlock>
-                            </StackPanel>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-            </StackPanel>
-        </Grid>
-
-        <Grid Name="contentGrid" Grid.Row="1" Grid.Column="1" >
-            <ContentPresenter Name="thePresenter" Grid.Row="1" Grid.Column="1" Content="{Binding ElementName=lbMode, Path=SelectedItem}"/>
-        </Grid>
-    </Grid>
+    </Border>
 </Page>
