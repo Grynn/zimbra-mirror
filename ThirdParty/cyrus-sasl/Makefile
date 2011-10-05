@@ -44,7 +44,7 @@ check:
 build:
 	@echo "Building cyrus-sasl for $(BUILD_PLATFORM)"
 	mkdir -p $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/cyrus-sasl
-	(tar xfz src/cyrus-sasl-$(CYRUS_RELEASE).tgz; \
+	(tar xfz src/cyrus-sasl-$(CYRUS_RELEASE).tar.gz; \
 	mv cyrus-sasl-$(CYRUS_RELEASE) cyrus-sasl-$(CYRUS_VERSION); \
 	cd cyrus-sasl-$(CYRUS_VERSION); \
 	patch -g0 -p1 < ../patches/sasl-link-order.patch; \
