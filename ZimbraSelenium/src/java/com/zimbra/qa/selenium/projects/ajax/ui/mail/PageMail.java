@@ -1249,6 +1249,10 @@ public class PageMail extends AbsTab {
 
 			String optionLocator = "css=div[id^='zm__CLV2-main__']";
 			if (zGetPropMailView() == PageMailView.BY_MESSAGE) {
+				optionLocator = "div[id^='zm__TV-main__']";
+			}
+
+			if (zGetPropMailView() == PageMailView.BY_MESSAGE) {
 				optionLocator = "css=div[id^='zm__TV-main__']";
 			}
 
@@ -1297,11 +1301,7 @@ public class PageMail extends AbsTab {
 
 			} else if ( option == Button.B_REDIRECT ) {
 
-				if (zGetPropMailView() == PageMailView.BY_MESSAGE) {
-					optionLocator="css=td[id^='zmi__TV__REDIRECT__'] div[class='ImgRedirect']";
-				} else {
-					optionLocator="css=td[id^='zmi__CLV2-main__REDIRECT__'] div[class='ImgRedirect']";
-				}
+				optionLocator += " div[id^='REDIRECT'] td[id$='_title']";
 
 				page = new DialogRedirect(this.MyApplication, this);
 

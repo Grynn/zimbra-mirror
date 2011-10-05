@@ -64,7 +64,7 @@ public class RedirectMessage extends PrefGroupMailByMessageTest {
 		// Verify the redirected message is received
 		MailItem received = MailItem.importFromSOAP(ZimbraAccount.AccountB(), "subject:("+ subject +")");
 		ZAssert.assertNotNull(received, "Verify the redirected message is received");
-		ZAssert.assertEquals(received.dRedirectedFromRecipient.dEmailAddress, app.zGetActiveAccount(), "Verify the message shows as redirected from the test account");
+		ZAssert.assertEquals(received.dRedirectedFromRecipient.dEmailAddress, app.zGetActiveAccount().EmailAddress, "Verify the message shows as redirected from the test account");
 
 
 	}
@@ -112,7 +112,7 @@ public class RedirectMessage extends PrefGroupMailByMessageTest {
 		// Verify the redirected message is received
 		MailItem received = MailItem.importFromSOAP(ZimbraAccount.AccountB(), "subject:("+ subject +")");
 		ZAssert.assertNotNull(received, "Verify the redirected message is received");
-		ZAssert.assertEquals(received.dRedirectedFromRecipient.dEmailAddress, app.zGetActiveAccount(), "Verify the message shows as redirected from the test account");
+		ZAssert.assertEquals(received.dRedirectedFromRecipient.dEmailAddress, app.zGetActiveAccount().EmailAddress, "Verify the message shows as redirected from the test account");
 
 
 	}

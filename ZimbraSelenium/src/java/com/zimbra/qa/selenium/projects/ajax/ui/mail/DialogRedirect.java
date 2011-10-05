@@ -29,15 +29,15 @@ public class DialogRedirect extends AbsDialog {
 		
 		// Main dialog locator
 		// TODO: need to update this locator https://bugzilla.zimbra.com/show_bug.cgi?id=61935
-		public static final String RedirectDialogLocator		= "css=TODO#TODO";
+		public static final String RedirectDialogLocator		= "css=div#RedirectDialog";
 
 		// Fields
-		public static final String FieldEmailLocator			= "css=TODO#TODO";
+		public static final String FieldEmailLocator			= "css=input#RedirectDialog_to_control";
 
 		// Buttons
-		public static final String ButtonToButtonLocator		= "css=TODO#TODO";
-		public static final String ButtonOkButtonLocator		= "css=TODO#TODO";
-		public static final String ButtonCancelButtonLocator	= "css=TODO#TODO";
+		public static final String ButtonToButtonLocator		= "css=div[id='zb__RedirectDialog__TO'] td[id$='__TO_title]";
+		public static final String ButtonOkButtonLocator		= "css=div[id='RedirectDialog_buttons'] td[id^='OK'] td[id$='_title']";
+		public static final String ButtonCancelButtonLocator	= "css=div[id='RedirectDialog_buttons'] td[id^='Cancel'] td[id$='_title']";
 	}
 	
 	
