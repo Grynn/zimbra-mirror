@@ -63,7 +63,7 @@ p4edit: $(CYRUS_TGZ_TARGET)
 	p4 edit $(CYRUS_TGZ_TARGET)
 
 clean:
-	rm -rf build
+	rm -rf cyrus-sasl-$(CYRUS_VERSION)
 
 allclean: clean
 	rm -rf $(ZIMBRA_HOME)/cyrus-sasl-$(CYRUS_VERSION)
