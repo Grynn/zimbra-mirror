@@ -732,7 +732,7 @@ public class CreateFolder extends AjaxCommonTest {
       ZAssert.assertNull(desktopFolder, "Verify the folder in ZD server is not created");
    }
 
-   @Test(description = "Create a new local folder using context menu", groups = { "functional2" })
+   @Test(description = "Create a new local folder using context menu", groups = { "functional" })
    public void createLocalMailFolder() throws HarnessException {
       _folderName = "folder" + ZimbraSeleniumProperties.getUniqueString();
 
