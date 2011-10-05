@@ -181,7 +181,7 @@ UINT __stdcall ZShutdown(MSIHANDLE hInstall) {
 	DWORD sz = sizeof(data_root);
 	if (RegOpenKeyEx(HKEY_CURRENT_USER, subkey, 0, KEY_QUERY_VALUE, &hKey) == ERROR_SUCCESS) {
 		if (RegQueryValueEx(hKey, "DataRoot", NULL, NULL, (LPBYTE)data_root, &sz) == ERROR_SUCCESS) {
-			zdctl_path = new char[sz + 20];
+			zdctl_path = new char[sz + 32];
 			sprintf(zdctl_path, "%s\\bin\\zdctl-wrapper.vbs", data_root);
 		}
 		RegCloseKey(hKey);
