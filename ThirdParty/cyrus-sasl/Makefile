@@ -25,8 +25,9 @@ else
 endif
 
 ifneq	(,$(findstring MACOSX,$(BUILD_PLATFORM)))
-	FIXOSX	:= (./fix-sasl.pl ${BSTR})
+	FIXOSX	:= (./fix-sasl.pl $(CYRUS_PATCH))
 endif
+
 CYRUS_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/cyrus-sasl/cyrus-sasl-$(CYRUS_VERSION).tgz
 
 files	:= $(wildcard src/cyrus-sasl-$(CYRUS_RELEASE).tar.gz)
