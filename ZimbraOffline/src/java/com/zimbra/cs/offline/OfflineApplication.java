@@ -39,12 +39,13 @@ import com.zimbra.cs.offline.backup.BackupTimer;
 import com.zimbra.cs.offline.util.HeapDumpTimer;
 import com.zimbra.cs.service.AuthProvider;
 import com.zimbra.cs.service.offline.OfflineZimbraAuthProvider;
-import com.zimbra.cs.store.file.Volume;
 import com.zimbra.cs.util.ZimbraApplication;
+import com.zimbra.cs.volume.Volume;
+import com.zimbra.cs.volume.VolumeManager;
 import com.zimbra.cs.zimlet.ZimletFile;
 import com.zimbra.cs.zimlet.ZimletUtil;
 
-public class OfflineApplication extends ZimbraApplication {
+public final class OfflineApplication extends ZimbraApplication {
     private static String[] sqlScripts = {
         "db", "directory", "wildfire", "versions-init", "default-volumes"
     };
@@ -93,15 +94,15 @@ public class OfflineApplication extends ZimbraApplication {
                 return;
 
             long threshold = OfflineLC.zdesktop_volume_compression_threshold.longValue();
-            Volume vol = Volume.getCurrentMessageVolume();
+            VolumeManager mgr = VolumeManager.getInstance();
+            Volume current = mgr.getCurrentMessageVolume();
 
             // in offline, we always use the relative path "store" for message volume
-            if (vol.getCompressionThreshold() != threshold) {
-                Volume.update(vol.getId(), vol.getType(), vol.getName(),
-                    "store", vol.getMboxGroupBits(), vol.getMboxBits(),
-                    vol.getFileGroupBits(), vol.getFileBits(), threshold != 0,
-                    threshold == 0 ? vol.getCompressionThreshold() : threshold, true);
-                Volume.reloadVolumes();
+            if (current.getCompressionThreshold() != threshold) {
+                Volume vol = Volume.builder(current).setPath("store", true).setCompressBlobs(threshold != 0)
+                        .setCompressionThreshold(threshold == 0 ? current.getCompressionThreshold() : threshold)
+                        .build();
+                mgr.update(vol, true);
             }
         } catch (ServiceException e) {
             OfflineLog.offline.warn("Unable to update volume compression", e);
@@ -110,6 +111,7 @@ public class OfflineApplication extends ZimbraApplication {
         HeapDumpTimer.initialize();
     }
 
+    @Override
     public void initializeZimbraDb(boolean forMailboxd) throws ServiceException {
         if (!forMailboxd)
             return;
@@ -191,7 +193,7 @@ public class OfflineApplication extends ZimbraApplication {
         OfflineLog.offline.debug("Deploying new zimlets...");
 
         File zimletDir = new File(LC.zimbra_home.value() + File.separator + "zimlets");
-        if (zimletDir == null || !zimletDir.exists() || !zimletDir.isDirectory()) {
+        if (!zimletDir.exists() || !zimletDir.isDirectory()) {
             OfflineLog.offline.debug("Invalid zimlets directory: " + zimletDir.getPath());
             return;
         }
