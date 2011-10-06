@@ -32,7 +32,7 @@ public class TreePreferences extends AbsTree {
 	
 	public enum TreeItem {
 		General,
-		Mail, MailComposing, MailSignatures, MailAccounts, MailFilters, MailTrustedAddresses,
+		Mail, MailComposing, MailSignatures, MailAccounts, MailFilters, MailOutOfOffice, MailTrustedAddresses,
 		AddressBook,
 		Calendar,
 		Sharing,
@@ -125,15 +125,16 @@ public class TreePreferences extends AbsTree {
 		Map<TreeItem, String> map = new HashMap<TreeItem, String>();
 		
 		map.put(TreeItem.General, "id=" + Locators.zGeneralTextID);
-		map.put(TreeItem.Mail, null);
+		map.put(TreeItem.Mail, "css=td[id='zti__main_Options__PREF_PAGE_MAIL_textCell']");
 		map.put(TreeItem.MailComposing, "css=td[id='zti__main_Options__PREF_PAGE_COMPOSING_textCell']");
 		map.put(TreeItem.MailSignatures, "id="+Locators.zsignatureTextID);
 		map.put(TreeItem.MailAccounts, "css=td[id='zti__main_Options__PREF_PAGE_ACCOUNTS_textCell']");
 		map.put(TreeItem.MailFilters, "css=td[id='zti__main_Options__PREF_PAGE_FILTERS_textCell']");
-		map.put(TreeItem.MailTrustedAddresses, null);
+		map.put(TreeItem.MailOutOfOffice, "css=td[id='zti__main_Options__PREF_PAGE_OUTOFOFFICE_textCell']");
+		map.put(TreeItem.MailTrustedAddresses, "css=td[id='zti__main_Options__PREF_PAGE_TRUSTED_ADDR_textCell']");
 		map.put(TreeItem.AddressBook, "id=" + Locators.zAddressBookTextID);
 		map.put(TreeItem.Calendar, "css=td[id='zti__main_Options__PREF_PAGE_CALENDAR_textCell']");
-		map.put(TreeItem.Sharing, null);
+		map.put(TreeItem.Sharing, "css=td[id='zti__main_Options__PREF_PAGE_SHARING_textCell']");
 		map.put(TreeItem.Notifications, "css=td[id='zti__main_Options__PREF_PAGE_NOTIFICATIONS_textCell']");
 		map.put(TreeItem.MobileDevices, "css=td[id='zti__main_Options__PREF_PAGE_MOBILE_textCell']");
 		map.put(TreeItem.ImportExport, "css=td[id='zti__main_Options__PREF_PAGE_IMPORT_EXPORT_textCell']");

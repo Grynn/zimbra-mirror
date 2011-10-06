@@ -44,6 +44,8 @@ public class DialogWarning extends AbsDialog {
 
 		public static final DialogWarningID QuickCommandConfirmDelete = new DialogWarningID("ZmQuickCommandConfirmation1");
 
+		public static final DialogWarningID PreferencesSaveChanges = new DialogWarningID("YesNoCancel");
+
 		protected String Id;
 		protected DialogWarningID(String id) {
 			Id = id;
