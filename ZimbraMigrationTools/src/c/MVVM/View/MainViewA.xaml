@@ -42,6 +42,8 @@
                 <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="#2B5480" Opacity=".8"/>
                 <Style TargetType="Border">
                     <Setter Property="CornerRadius" Value="4"/>
+                    <Setter Property="Margin" Value="10,5,4,0"/>
+                    <Setter Property="Height" Value="23"/>
                 </Style>
             </Style.Resources>
         </Style>
@@ -68,10 +70,10 @@
 
         <Grid Name="viewsGrid" Grid.Row="1" Grid.Column="0">
             <StackPanel Orientation="Vertical">
-                <ListBox Name="lbMode" Margin="0,12,0,0" Visibility="Hidden" IsEnabled="False" ScrollViewer.HorizontalScrollBarVisibility="Disabled" BorderThickness="0" ItemsSource="{Binding TheViews}" >
+                <ListBox Name="lbMode" Margin="0,9,0,0" Visibility="Hidden" IsEnabled="False" ScrollViewer.HorizontalScrollBarVisibility="Disabled" BorderThickness="0" ItemsSource="{Binding TheViews}" >
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Margin="10,8,0,0" VerticalAlignment="Center" Orientation="Vertical" Height="20" Width="140">
+                            <StackPanel Margin="10,0,0,0" VerticalAlignment="Center" Orientation="Vertical" Width="140">
                                 <TextBlock FontFamily="Arial" FontSize="12" FontWeight="Bold" VerticalAlignment="Center" MouseDown="ViewListTB_MouseDown" Text="{Binding ViewTitle}"></TextBlock>
                             </StackPanel>
                         </DataTemplate>
