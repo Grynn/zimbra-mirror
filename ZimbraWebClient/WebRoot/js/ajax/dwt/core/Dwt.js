@@ -1675,5 +1675,20 @@ function(htmlElement, id) {
             break;
         }
     }
-    return descendant
-}
+    return descendant;
+};
+
+Dwt.moveCursorToEnd =
+function(input) {
+	if (AjxEnv.isIE) {
+		var tr = input.createTextRange();
+		tr.moveStart('character', input.value.length);
+		tr.collapse();
+		tr.select();
+	 }
+	else {
+		input.focus();
+		var length = input.value.length;
+		input.setSelectionRange(length, length);
+	}
+};

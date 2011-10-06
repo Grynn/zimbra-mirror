@@ -937,15 +937,5 @@ function(){
 
 DwtInputField.prototype.moveCursorToEnd =
 function() {
-	if (AjxEnv.isIE) {
-		var tr = this._inputField.createTextRange();
-		tr.moveStart('character', this._inputField.value.length);
-		tr.collapse();
-		tr.select();
-	 }
-	else {
-		this._inputField.focus();
-		var length = this._inputField.value.length;
-		this._inputField.setSelectionRange(length, length);
-	}
+	Dwt.moveCursorToEnd(this._inputField);
 };
