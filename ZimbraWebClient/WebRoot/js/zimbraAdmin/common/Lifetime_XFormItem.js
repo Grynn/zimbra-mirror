@@ -171,31 +171,35 @@ Lifetime2_XFormItem.prototype.nowrap = false;
 Lifetime2_XFormItem.prototype.labelWrap = true;
 XFormItemFactory.createItemType("_LIFETIME2_", "lifetime2", Lifetime2_XFormItem, Lifetime1_XFormItem);
 
-Lifetime2_XFormItem.prototype.items = [
-	{type:_TEXTFIELD_, ref:".", labelLocation:_NONE_,cssClass:"admin_xform_number_input", 
-		visibilityChecks:[],
-	 	enableDisableChecks:[],		
-		getDisplayValue:function (itemVal) {
-			var val = "";
-			if(itemVal != null && itemVal.length >0) {
-				if(itemVal.length > 1) {
-					val = itemVal.substr(0, itemVal.length-1);				
-				} else {
-					if(itemVal == "0") {
-						val = "0";
+Lifetime2_XFormItem.prototype.initializeItems = function () {
+	this.items = [
+		{type:_TEXTFIELD_, ref:".", labelLocation:_NONE_,cssClass:"admin_xform_number_input", 
+			visibilityChecks:[],
+		 	enableDisableChecks:[],		
+			getDisplayValue:function (itemVal) {
+				var val = "";
+				if(itemVal != null && itemVal.length >0) {
+					if(itemVal.length > 1) {
+						val = itemVal.substr(0, itemVal.length-1);				
 					} else {
-						val = "";
+						if(itemVal == "0") {
+							val = "0";
+						} else {
+							val = "";
+						}
 					}
 				}
+				this.getParentItem()._numericPart = val;
+				this.getParentItem()._stringPart="d";
+				return val;	
+			},
+			elementChanged:function(numericPart, instanceValue, event) {
+				var val = numericPart + "d";
+				this.getForm().itemChanged(this.getParentItem(), val, event);
 			}
-			this.getParentItem()._numericPart = val;
-			this.getParentItem()._stringPart="d";
-			return val;	
 		},
-		elementChanged:function(numericPart, instanceValue, event) {
-			var val = numericPart + "d";
-			this.getForm().itemChanged(this.getParentItem(), val, event);
-		}
-	},
-	{type:_OUTPUT_, ref:null, labelLocation:_NONE_, value:"d",getDisplayValue:function (itemVal){ return AjxMsg.days;}}
-];
+		{type:_OUTPUT_, ref:null, labelLocation:_NONE_, value:"d",getDisplayValue:function (itemVal){ return AjxMsg.days;}}
+	];
+	Composite_XFormItem.prototype.initializeItems.call(this);
+};
+Lifetime2_XFormItem.prototype.items = [];
