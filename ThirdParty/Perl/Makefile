@@ -32,6 +32,7 @@ endif
 MODULE_WWW	:= LWP::Protocol::https
 MODULE_NETADDR_IP	:= NetAddr::IP
 MODULE_EXTUTIL_MAKEMAKER	:= \
+	ExtUtils::MakeMaker \
 	CPAN::Meta::YAML \
 	JSON::PP \
 	Parse::CPAN::Meta \
