@@ -351,7 +351,16 @@ public class AjaxCommonTest {
 
 	}
 
-	/**
+  /**
+    * Going to login page, then going back to the starting page
+    * @throws HarnessException
+    */
+   public void relogin() throws HarnessException {
+      app.zPageLogin.zNavigateTo();
+      startingPage.zNavigateTo();
+   }
+
+   /**
 	 * Add default account using HTTP post
 	 * @throws HarnessException
 	 */

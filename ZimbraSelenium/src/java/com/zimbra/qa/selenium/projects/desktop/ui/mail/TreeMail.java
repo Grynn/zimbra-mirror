@@ -18,6 +18,7 @@ import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.projects.desktop.core.AjaxCommonTest;
@@ -958,9 +959,6 @@ public class TreeMail extends AbsTree {
    public String zGetTreeFolderLocator(FolderItem folder, String accountName)
    throws HarnessException {
       String treeItemLocator = null;
-      if (accountName == null) {
-         accountName = ((AppAjaxClient)MyApplication).zGetActiveAccount().EmailAddress;
-      }
 
       if (folder.getName().equals("USER_ROOT")) {
          String folderName = null;
@@ -972,6 +970,14 @@ public class TreeMail extends AbsTree {
          treeItemLocator = Locators.zTreeItems.replace(TreeMail.stringToReplace,
                folderName);
       } else {
+         if (accountName == null) {
+            if (folder.isDesktopClientLocalFolder()) {
+               accountName = ZimbraAccount.clientAccountName;
+            } else {
+               accountName = ((AppAjaxClient)MyApplication).zGetActiveAccount().EmailAddress;
+            }
+         }
+
          treeItemLocator = Locators.zTreeFolders.replace(accountNameToReplace, accountName);
          treeItemLocator = treeItemLocator.replace(stringToReplace, folder.getId());
       }
