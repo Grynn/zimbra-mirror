@@ -344,14 +344,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link testAttachmentTest }
-     * 
-     */
-    public testAttachmentTest createtestAttachmentTest() {
-        return new testAttachmentTest();
-    }
-
-    /**
      * Create an instance of {@link testCaldavDataSourceId }
      * 
      */
@@ -416,14 +408,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link testReplyAction }
-     * 
-     */
-    public testReplyAction createtestReplyAction() {
-        return new testReplyAction();
-    }
-
-    /**
      * Create an instance of {@link testAddTaskInviteRequest }
      * 
      */
@@ -440,14 +424,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link testHeaderTest }
-     * 
-     */
-    public testHeaderTest createtestHeaderTest() {
-        return new testHeaderTest();
-    }
-
-    /**
      * Create an instance of {@link testRecurrenceInfo }
      * 
      */
@@ -461,14 +437,6 @@ public class ObjectFactory {
      */
     public testGetMiniCalResponse createtestGetMiniCalResponse() {
         return new testGetMiniCalResponse();
-    }
-
-    /**
-     * Create an instance of {@link testAddressTest }
-     * 
-     */
-    public testAddressTest createtestAddressTest() {
-        return new testAddressTest();
     }
 
     /**
@@ -512,27 +480,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link testContactRankingTest }
-     * 
-     */
-    public testContactRankingTest createtestContactRankingTest() {
-        return new testContactRankingTest();
-    }
-
-    /**
      * Create an instance of {@link testCreateContactRequest }
      * 
      */
     public testCreateContactRequest createtestCreateContactRequest() {
         return new testCreateContactRequest();
-    }
-
-    /**
-     * Create an instance of {@link testDlSubscriptionNotification }
-     * 
-     */
-    public testDlSubscriptionNotification createtestDlSubscriptionNotification() {
-        return new testDlSubscriptionNotification();
     }
 
     /**
@@ -592,14 +544,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link testCurrentTimeTest }
-     * 
-     */
-    public testCurrentTimeTest createtestCurrentTimeTest() {
-        return new testCurrentTimeTest();
-    }
-
-    /**
      * Create an instance of {@link testForwardAppointmentResponse }
      * 
      */
@@ -629,14 +573,6 @@ public class ObjectFactory {
      */
     public testTaskData createtestTaskData() {
         return new testTaskData();
-    }
-
-    /**
-     * Create an instance of {@link testTagAction }
-     * 
-     */
-    public testTagAction createtestTagAction() {
-        return new testTagAction();
     }
 
     /**
@@ -1000,14 +936,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link testKeepAction }
-     * 
-     */
-    public testKeepAction createtestKeepAction() {
-        return new testKeepAction();
-    }
-
-    /**
      * Create an instance of {@link testBrowseRequest }
      * 
      */
@@ -1112,27 +1040,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link testMimeHeaderTest }
-     * 
-     */
-    public testMimeHeaderTest createtestMimeHeaderTest() {
-        return new testMimeHeaderTest();
-    }
-
-    /**
      * Create an instance of {@link testRankingActionSpec }
      * 
      */
     public testRankingActionSpec createtestRankingActionSpec() {
         return new testRankingActionSpec();
-    }
-
-    /**
-     * Create an instance of {@link testBulkTest }
-     * 
-     */
-    public testBulkTest createtestBulkTest() {
-        return new testBulkTest();
     }
 
     /**
@@ -1288,14 +1200,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link testStopAction }
-     * 
-     */
-    public testStopAction createtestStopAction() {
-        return new testStopAction();
-    }
-
-    /**
      * Create an instance of {@link testInviteItemRecur }
      * 
      */
@@ -1389,14 +1293,6 @@ public class ObjectFactory {
      */
     public testNewFolderSpec createtestNewFolderSpec() {
         return new testNewFolderSpec();
-    }
-
-    /**
-     * Create an instance of {@link testSocialcastTest }
-     * 
-     */
-    public testSocialcastTest createtestSocialcastTest() {
-        return new testSocialcastTest();
     }
 
     /**
@@ -1576,14 +1472,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link testRedirectAction }
-     * 
-     */
-    public testRedirectAction createtestRedirectAction() {
-        return new testRedirectAction();
-    }
-
-    /**
      * Create an instance of {@link testFilterRule }
      * 
      */
@@ -1669,14 +1557,6 @@ public class ObjectFactory {
      */
     public testGetCommentsResponse createtestGetCommentsResponse() {
         return new testGetCommentsResponse();
-    }
-
-    /**
-     * Create an instance of {@link testImportanceTest }
-     * 
-     */
-    public testImportanceTest createtestImportanceTest() {
-        return new testImportanceTest();
     }
 
     /**
@@ -1808,14 +1688,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link testBodyTest }
-     * 
-     */
-    public testBodyTest createtestBodyTest() {
-        return new testBodyTest();
-    }
-
-    /**
      * Create an instance of {@link testSimpleRepeatingRule }
      * 
      */
@@ -1928,14 +1800,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link testFacebookTest }
-     * 
-     */
-    public testFacebookTest createtestFacebookTest() {
-        return new testFacebookTest();
-    }
-
-    /**
      * Create an instance of {@link testConversationSpec }
      * 
      */
@@ -1960,14 +1824,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link testFileIntoAction }
-     * 
-     */
-    public testFileIntoAction createtestFileIntoAction() {
-        return new testFileIntoAction();
-    }
-
-    /**
      * Create an instance of {@link testExpandedRecurrenceInvite }
      * 
      */
@@ -1989,14 +1845,6 @@ public class ObjectFactory {
      */
     public testModifyFilterRulesRequest createtestModifyFilterRulesRequest() {
         return new testModifyFilterRulesRequest();
-    }
-
-    /**
-     * Create an instance of {@link testSizeTest }
-     * 
-     */
-    public testSizeTest createtestSizeTest() {
-        return new testSizeTest();
     }
 
     /**
@@ -2304,14 +2152,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link testDiscardAction }
-     * 
-     */
-    public testDiscardAction createtestDiscardAction() {
-        return new testDiscardAction();
-    }
-
-    /**
      * Create an instance of {@link testFreeBusyBUSYUNAVAILABLEslot }
      * 
      */
@@ -2477,14 +2317,6 @@ public class ObjectFactory {
      */
     public testSetTaskResponse createtestSetTaskResponse() {
         return new testSetTaskResponse();
-    }
-
-    /**
-     * Create an instance of {@link testMeTest }
-     * 
-     */
-    public testMeTest createtestMeTest() {
-        return new testMeTest();
     }
 
     /**
@@ -2733,14 +2565,6 @@ public class ObjectFactory {
      */
     public testAddAppointmentInviteRequest createtestAddAppointmentInviteRequest() {
         return new testAddAppointmentInviteRequest();
-    }
-
-    /**
-     * Create an instance of {@link testFilterTest }
-     * 
-     */
-    public testFilterTest createtestFilterTest() {
-        return new testFilterTest();
     }
 
     /**
@@ -3024,14 +2848,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link testDateTest }
-     * 
-     */
-    public testDateTest createtestDateTest() {
-        return new testDateTest();
-    }
-
-    /**
      * Create an instance of {@link testChatMessageInfo }
      * 
      */
@@ -3093,14 +2909,6 @@ public class ObjectFactory {
      */
     public testLegacyAppointmentData createtestLegacyAppointmentData() {
         return new testLegacyAppointmentData();
-    }
-
-    /**
-     * Create an instance of {@link testNotifyAction }
-     * 
-     */
-    public testNotifyAction createtestNotifyAction() {
-        return new testNotifyAction();
     }
 
     /**
@@ -3360,14 +3168,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link testLinkedInTest }
-     * 
-     */
-    public testLinkedInTest createtestLinkedInTest() {
-        return new testLinkedInTest();
-    }
-
-    /**
      * Create an instance of {@link testIdAndOperation }
      * 
      */
@@ -3461,14 +3261,6 @@ public class ObjectFactory {
      */
     public testCreateWaitSetResponse createtestCreateWaitSetResponse() {
         return new testCreateWaitSetResponse();
-    }
-
-    /**
-     * Create an instance of {@link testFlagAction }
-     * 
-     */
-    public testFlagAction createtestFlagAction() {
-        return new testFlagAction();
     }
 
     /**
@@ -3840,14 +3632,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link testNotification }
-     * 
-     */
-    public testNotification createtestNotification() {
-        return new testNotification();
-    }
-
-    /**
      * Create an instance of {@link testSyncDeletedInfo }
      * 
      */
@@ -3872,14 +3656,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link testTwitterTest }
-     * 
-     */
-    public testTwitterTest createtestTwitterTest() {
-        return new testTwitterTest();
-    }
-
-    /**
      * Create an instance of {@link testAddTaskInviteResponse }
      * 
      */
@@ -3893,14 +3669,6 @@ public class ObjectFactory {
      */
     public testFolderActionSelector createtestFolderActionSelector() {
         return new testFolderActionSelector();
-    }
-
-    /**
-     * Create an instance of {@link testListTest }
-     * 
-     */
-    public testListTest createtestListTest() {
-        return new testListTest();
     }
 
     /**
@@ -3989,22 +3757,6 @@ public class ObjectFactory {
      */
     public testDeleteDataSourceRequest createtestDeleteDataSourceRequest() {
         return new testDeleteDataSourceRequest();
-    }
-
-    /**
-     * Create an instance of {@link testFlaggedTest }
-     * 
-     */
-    public testFlaggedTest createtestFlaggedTest() {
-        return new testFlaggedTest();
-    }
-
-    /**
-     * Create an instance of {@link testTrueTest }
-     * 
-     */
-    public testTrueTest createtestTrueTest() {
-        return new testTrueTest();
     }
 
     /**
@@ -4168,14 +3920,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link testInviteTest }
-     * 
-     */
-    public testInviteTest createtestInviteTest() {
-        return new testInviteTest();
-    }
-
-    /**
      * Create an instance of {@link testExpandedRecurrenceCancel }
      * 
      */
@@ -4189,14 +3933,6 @@ public class ObjectFactory {
      */
     public testGetWatchersResponse createtestGetWatchersResponse() {
         return new testGetWatchersResponse();
-    }
-
-    /**
-     * Create an instance of {@link testHeaderExistsTest }
-     * 
-     */
-    public testHeaderExistsTest createtestHeaderExistsTest() {
-        return new testHeaderExistsTest();
     }
 
     /**
@@ -4344,14 +4080,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link testConversationTest }
-     * 
-     */
-    public testConversationTest createtestConversationTest() {
-        return new testConversationTest();
-    }
-
-    /**
      * Create an instance of {@link testCreateAppointmentRequest }
      * 
      */
@@ -4405,14 +4133,6 @@ public class ObjectFactory {
      */
     public testContentSpec createtestContentSpec() {
         return new testContentSpec();
-    }
-
-    /**
-     * Create an instance of {@link testCurrentDayOfWeekTest }
-     * 
-     */
-    public testCurrentDayOfWeekTest createtestCurrentDayOfWeekTest() {
-        return new testCurrentDayOfWeekTest();
     }
 
     /**
@@ -4813,14 +4533,6 @@ public class ObjectFactory {
      */
     public testAddMsgResponse createtestAddMsgResponse() {
         return new testAddMsgResponse();
-    }
-
-    /**
-     * Create an instance of {@link testAddressBookTest }
-     * 
-     */
-    public testAddressBookTest createtestAddressBookTest() {
-        return new testAddressBookTest();
     }
 
     /**

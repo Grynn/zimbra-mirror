@@ -584,22 +584,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link testHeaderExistsTest }
-     * 
-     */
-    public testHeaderExistsTest createtestHeaderExistsTest() {
-        return new testHeaderExistsTest();
-    }
-
-    /**
-     * Create an instance of {@link testFileIntoAction }
-     * 
-     */
-    public testFileIntoAction createtestFileIntoAction() {
-        return new testFileIntoAction();
-    }
-
-    /**
      * Create an instance of {@link testModifyDataSourceRequest }
      * 
      */
@@ -952,14 +936,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link testCurrentDayOfWeekTest }
-     * 
-     */
-    public testCurrentDayOfWeekTest createtestCurrentDayOfWeekTest() {
-        return new testCurrentDayOfWeekTest();
-    }
-
-    /**
      * Create an instance of {@link testAddCommentRequest }
      * 
      */
@@ -1029,14 +1005,6 @@ public class ObjectFactory {
      */
     public testMailGalDataSource createtestMailGalDataSource() {
         return new testMailGalDataSource();
-    }
-
-    /**
-     * Create an instance of {@link testSizeTest }
-     * 
-     */
-    public testSizeTest createtestSizeTest() {
-        return new testSizeTest();
     }
 
     /**
@@ -1304,14 +1272,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link testAttachmentTest }
-     * 
-     */
-    public testAttachmentTest createtestAttachmentTest() {
-        return new testAttachmentTest();
-    }
-
-    /**
      * Create an instance of {@link testCalendarItemInfo.Replies }
      * 
      */
@@ -1576,14 +1536,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link testInviteTest }
-     * 
-     */
-    public testInviteTest createtestInviteTest() {
-        return new testInviteTest();
-    }
-
-    /**
      * Create an instance of {@link testNoteActionResponse }
      * 
      */
@@ -1688,14 +1640,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link testTrueTest }
-     * 
-     */
-    public testTrueTest createtestTrueTest() {
-        return new testTrueTest();
-    }
-
-    /**
      * Create an instance of {@link testCancelTaskRequest }
      * 
      */
@@ -1792,14 +1736,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link testCurrentTimeTest }
-     * 
-     */
-    public testCurrentTimeTest createtestCurrentTimeTest() {
-        return new testCurrentTimeTest();
-    }
-
-    /**
      * Create an instance of {@link testConvActionResponse }
      * 
      */
@@ -1885,14 +1821,6 @@ public class ObjectFactory {
      */
     public testGetTagRequest createtestGetTagRequest() {
         return new testGetTagRequest();
-    }
-
-    /**
-     * Create an instance of {@link testFlagAction }
-     * 
-     */
-    public testFlagAction createtestFlagAction() {
-        return new testFlagAction();
     }
 
     /**
@@ -2048,14 +1976,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link testImportanceTest }
-     * 
-     */
-    public testImportanceTest createtestImportanceTest() {
-        return new testImportanceTest();
-    }
-
-    /**
      * Create an instance of {@link testGetWatchingItemsRequest }
      * 
      */
@@ -2109,14 +2029,6 @@ public class ObjectFactory {
      */
     public testMailPop3DataSource createtestMailPop3DataSource() {
         return new testMailPop3DataSource();
-    }
-
-    /**
-     * Create an instance of {@link testDateTest }
-     * 
-     */
-    public testDateTest createtestDateTest() {
-        return new testDateTest();
     }
 
     /**
@@ -2176,14 +2088,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link testNotifyAction }
-     * 
-     */
-    public testNotifyAction createtestNotifyAction() {
-        return new testNotifyAction();
-    }
-
-    /**
      * Create an instance of {@link testIdsAttr }
      * 
      */
@@ -2205,14 +2109,6 @@ public class ObjectFactory {
      */
     public testGetFolderRequest createtestGetFolderRequest() {
         return new testGetFolderRequest();
-    }
-
-    /**
-     * Create an instance of {@link testDiscardAction }
-     * 
-     */
-    public testDiscardAction createtestDiscardAction() {
-        return new testDiscardAction();
     }
 
     /**
@@ -2336,14 +2232,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link testNotification }
-     * 
-     */
-    public testNotification createtestNotification() {
-        return new testNotification();
-    }
-
-    /**
      * Create an instance of {@link testRuleInfo }
      * 
      */
@@ -2365,14 +2253,6 @@ public class ObjectFactory {
      */
     public testCreateMountpointResponse createtestCreateMountpointResponse() {
         return new testCreateMountpointResponse();
-    }
-
-    /**
-     * Create an instance of {@link testStopAction }
-     * 
-     */
-    public testStopAction createtestStopAction() {
-        return new testStopAction();
     }
 
     /**
@@ -2480,14 +2360,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link testConversationTest }
-     * 
-     */
-    public testConversationTest createtestConversationTest() {
-        return new testConversationTest();
-    }
-
-    /**
      * Create an instance of {@link testGrant }
      * 
      */
@@ -2525,14 +2397,6 @@ public class ObjectFactory {
      */
     public testApplyFilterRulesRequest.FilterRules createtestApplyFilterRulesRequestFilterRules() {
         return new testApplyFilterRulesRequest.FilterRules();
-    }
-
-    /**
-     * Create an instance of {@link testHeaderTest }
-     * 
-     */
-    public testHeaderTest createtestHeaderTest() {
-        return new testHeaderTest();
     }
 
     /**
@@ -2704,14 +2568,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link testMimeHeaderTest }
-     * 
-     */
-    public testMimeHeaderTest createtestMimeHeaderTest() {
-        return new testMimeHeaderTest();
-    }
-
-    /**
      * Create an instance of {@link testInviteComponent }
      * 
      */
@@ -2744,14 +2600,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link testTagAction }
-     * 
-     */
-    public testTagAction createtestTagAction() {
-        return new testTagAction();
-    }
-
-    /**
      * Create an instance of {@link testGetSearchFolderRequest }
      * 
      */
@@ -2781,22 +2629,6 @@ public class ObjectFactory {
      */
     public testGenerateUUIDRequest createtestGenerateUUIDRequest() {
         return new testGenerateUUIDRequest();
-    }
-
-    /**
-     * Create an instance of {@link testTwitterTest }
-     * 
-     */
-    public testTwitterTest createtestTwitterTest() {
-        return new testTwitterTest();
-    }
-
-    /**
-     * Create an instance of {@link testListTest }
-     * 
-     */
-    public testListTest createtestListTest() {
-        return new testListTest();
     }
 
     /**
@@ -3032,27 +2864,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link testBulkTest }
-     * 
-     */
-    public testBulkTest createtestBulkTest() {
-        return new testBulkTest();
-    }
-
-    /**
      * Create an instance of {@link testMailKeyValuePairs }
      * 
      */
     public testMailKeyValuePairs createtestMailKeyValuePairs() {
         return new testMailKeyValuePairs();
-    }
-
-    /**
-     * Create an instance of {@link testKeepAction }
-     * 
-     */
-    public testKeepAction createtestKeepAction() {
-        return new testKeepAction();
     }
 
     /**
@@ -3144,14 +2960,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link testBodyTest }
-     * 
-     */
-    public testBodyTest createtestBodyTest() {
-        return new testBodyTest();
-    }
-
-    /**
      * Create an instance of {@link testMsgToSend }
      * 
      */
@@ -3205,14 +3013,6 @@ public class ObjectFactory {
      */
     public testInviteComponentCommon createtestInviteComponentCommon() {
         return new testInviteComponentCommon();
-    }
-
-    /**
-     * Create an instance of {@link testFlaggedTest }
-     * 
-     */
-    public testFlaggedTest createtestFlaggedTest() {
-        return new testFlaggedTest();
     }
 
     /**
@@ -3536,14 +3336,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link testFilterTest }
-     * 
-     */
-    public testFilterTest createtestFilterTest() {
-        return new testFilterTest();
-    }
-
-    /**
      * Create an instance of {@link testGetMiniCalResponse }
      * 
      */
@@ -3581,14 +3373,6 @@ public class ObjectFactory {
      */
     public testMsgWithGroupInfo createtestMsgWithGroupInfo() {
         return new testMsgWithGroupInfo();
-    }
-
-    /**
-     * Create an instance of {@link testMeTest }
-     * 
-     */
-    public testMeTest createtestMeTest() {
-        return new testMeTest();
     }
 
     /**
@@ -3637,14 +3421,6 @@ public class ObjectFactory {
      */
     public testGetYahooCookieRequest createtestGetYahooCookieRequest() {
         return new testGetYahooCookieRequest();
-    }
-
-    /**
-     * Create an instance of {@link testFacebookTest }
-     * 
-     */
-    public testFacebookTest createtestFacebookTest() {
-        return new testFacebookTest();
     }
 
     /**
@@ -3792,14 +3568,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link testRedirectAction }
-     * 
-     */
-    public testRedirectAction createtestRedirectAction() {
-        return new testRedirectAction();
-    }
-
-    /**
      * Create an instance of {@link testGetAllDevicesResponse }
      * 
      */
@@ -3888,14 +3656,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link testContactRankingTest }
-     * 
-     */
-    public testContactRankingTest createtestContactRankingTest() {
-        return new testContactRankingTest();
-    }
-
-    /**
      * Create an instance of {@link testGetPermissionResponse }
      * 
      */
@@ -3933,14 +3693,6 @@ public class ObjectFactory {
      */
     public testSearchResponse createtestSearchResponse() {
         return new testSearchResponse();
-    }
-
-    /**
-     * Create an instance of {@link testSocialcastTest }
-     * 
-     */
-    public testSocialcastTest createtestSocialcastTest() {
-        return new testSocialcastTest();
     }
 
     /**
@@ -4224,14 +3976,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link testDlSubscriptionNotification }
-     * 
-     */
-    public testDlSubscriptionNotification createtestDlSubscriptionNotification() {
-        return new testDlSubscriptionNotification();
-    }
-
-    /**
      * Create an instance of {@link testPurgeRevisionSpec }
      * 
      */
@@ -4432,14 +4176,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link testAddressBookTest }
-     * 
-     */
-    public testAddressBookTest createtestAddressBookTest() {
-        return new testAddressBookTest();
-    }
-
-    /**
      * Create an instance of {@link testByHourRule }
      * 
      */
@@ -4485,14 +4221,6 @@ public class ObjectFactory {
      */
     public testNumAttr createtestNumAttr() {
         return new testNumAttr();
-    }
-
-    /**
-     * Create an instance of {@link testAddressTest }
-     * 
-     */
-    public testAddressTest createtestAddressTest() {
-        return new testAddressTest();
     }
 
     /**
@@ -4792,14 +4520,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link testReplyAction }
-     * 
-     */
-    public testReplyAction createtestReplyAction() {
-        return new testReplyAction();
-    }
-
-    /**
      * Create an instance of {@link testFolderActionSelector }
      * 
      */
@@ -4845,14 +4565,6 @@ public class ObjectFactory {
      */
     public testGrantor createtestGrantor() {
         return new testGrantor();
-    }
-
-    /**
-     * Create an instance of {@link testLinkedInTest }
-     * 
-     */
-    public testLinkedInTest createtestLinkedInTest() {
-        return new testLinkedInTest();
     }
 
     /**
