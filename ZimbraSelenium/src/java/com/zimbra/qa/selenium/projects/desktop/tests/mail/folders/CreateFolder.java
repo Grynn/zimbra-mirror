@@ -738,7 +738,7 @@ public class CreateFolder extends AjaxCommonTest {
    }
 
    @Test(description = "Create a new local folder using context menu", groups = { "functional" })
-   public void createLocalMailFolder() throws HarnessException {
+   public void createLocalMailFolderThroughContextMenu() throws HarnessException {
       _folderName = "folder" + ZimbraSeleniumProperties.getUniqueString();
 
       FolderItem folderItem = FolderItem.importFromSOAP(app.zGetActiveAccount(),
@@ -753,9 +753,6 @@ public class CreateFolder extends AjaxCommonTest {
       createFolderDialog.zClickButton(Button.B_OK);
       _folderIsCreated = true;
       _accountName = ZimbraAccount.clientAccountName;
-
-      // Force-sync
-      relogin();
 
       // Make sure the folder was created on the Desktop Server
       FolderItem desktopFolder = FolderItem.importFromSOAP(app
@@ -774,7 +771,7 @@ public class CreateFolder extends AjaxCommonTest {
    }
 
    @Test(description = "Create a new local subfolder using context menu", groups = { "functional" })
-   public void createLocalMailSubfolder() throws HarnessException {
+   public void createLocalMailSubfolderThroughContextMenu() throws HarnessException {
       _folderName = "folder" + ZimbraSeleniumProperties.getUniqueString();
 
       String subfolderName = "folder" + ZimbraSeleniumProperties.getUniqueString();
@@ -791,8 +788,6 @@ public class CreateFolder extends AjaxCommonTest {
             SOAP_DESTINATION_HOST_TYPE.CLIENT,
             ZimbraAccount.clientAccountName);
 
-      relogin();
-
       // Make sure the folder was created on the Desktop Server
       FolderItem parentFolderItem = FolderItem.importFromSOAP(app
             .zGetActiveAccount(), _folderName,
@@ -808,9 +803,90 @@ public class CreateFolder extends AjaxCommonTest {
       createFolderDialog.zEnterFolderName(subfolderName);
       createFolderDialog.zClickButton(Button.B_OK);
 
-      // Force-sync
-      GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-      app.zPageMain.zWaitForDesktopLoadingSpinner(5000);
+      // Make sure the folder was created on the Desktop Server
+      FolderItem desktopFolder = FolderItem.importFromSOAP(app
+            .zGetActiveAccount(), subfolderName,
+            SOAP_DESTINATION_HOST_TYPE.CLIENT,
+            ZimbraAccount.clientAccountName);
+      FolderItem desktopFolderParent = desktopFolder.getParentFolder(app.zGetActiveAccount(),
+            _soapDestination, ZimbraAccount.clientAccountName);
+
+      ZAssert.assertNotNull(desktopFolder, "Verify the subfolder is created on ZD Client's Local Folders");
+      ZAssert.assertEquals(desktopFolder.getName(), subfolderName,
+            "Verify the back-end sub folder names match");
+      ZAssert.assertEquals(desktopFolderParent.getName(),
+            parentFolderItem.getName(), "Verify the parent folder on ZD server matches");
+
+   }
+
+   @Test(description = "Create a new local folder through SOAP to ZD Client", groups = { "functional" })
+   public void createLocalMailFolderThroughSOAP() throws HarnessException {
+      _folderName = "folder" + ZimbraSeleniumProperties.getUniqueString();
+
+      FolderItem folderItem = FolderItem.importFromSOAP(app.zGetActiveAccount(),
+            SystemFolder.UserRoot,
+            SOAP_DESTINATION_HOST_TYPE.CLIENT,
+            ZimbraAccount.clientAccountName);
+
+      app.zGetActiveAccount().soapSend(
+            "<CreateFolderRequest xmlns='urn:zimbraMail'>" +
+            "<folder name='" + _folderName +"' l='"+ folderItem.getId() +"'/>" +
+            "</CreateFolderRequest>",
+            SOAP_DESTINATION_HOST_TYPE.CLIENT,
+            ZimbraAccount.clientAccountName);
+
+      _folderIsCreated = true;
+      _accountName = ZimbraAccount.clientAccountName;
+
+      // Make sure the folder was created on the Desktop Server
+      FolderItem desktopFolder = FolderItem.importFromSOAP(app
+            .zGetActiveAccount(), _folderName,
+            SOAP_DESTINATION_HOST_TYPE.CLIENT,
+            ZimbraAccount.clientAccountName);
+      FolderItem desktopFolderParent = desktopFolder.getParentFolder(app.zGetActiveAccount(),
+            _soapDestination, ZimbraAccount.clientAccountName);
+
+      ZAssert.assertNotNull(desktopFolder, "Verify the folder is created on ZD Client's Local Folders");
+      ZAssert.assertEquals(desktopFolder.getName(), _folderName,
+            "Verify the server and client folder names match");
+      ZAssert.assertEquals(desktopFolderParent.getName(),
+            folderItem.getName(), "Verify the parent folder on ZD server matches");
+
+   }
+
+   @Test(description = "Create a new local subfolder using SOAP request to ZD client", groups = { "functional" })
+   public void createLocalMailSubfolderThroughSOAP() throws HarnessException {
+      _folderName = "folder" + ZimbraSeleniumProperties.getUniqueString();
+
+      String subfolderName = "folder" + ZimbraSeleniumProperties.getUniqueString();
+
+      // Create a folder under local to create the subfolder
+      //
+      FolderItem rootLocalFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(),
+            SystemFolder.UserRoot, SOAP_DESTINATION_HOST_TYPE.CLIENT, ZimbraAccount.clientAccountName);
+
+      app.zGetActiveAccount().soapSend(
+            "<CreateFolderRequest xmlns='urn:zimbraMail'>" +
+            "<folder name='" + _folderName +"' l='"+ rootLocalFolder.getId() +"'/>" +
+            "</CreateFolderRequest>",
+            SOAP_DESTINATION_HOST_TYPE.CLIENT,
+            ZimbraAccount.clientAccountName);
+
+      // Make sure the folder was created on the Desktop Server
+      FolderItem parentFolderItem = FolderItem.importFromSOAP(app
+            .zGetActiveAccount(), _folderName,
+            SOAP_DESTINATION_HOST_TYPE.CLIENT,
+            ZimbraAccount.clientAccountName);
+
+      _folderIsCreated = true;
+      _accountName = ZimbraAccount.clientAccountName;
+
+      app.zGetActiveAccount().soapSend(
+            "<CreateFolderRequest xmlns='urn:zimbraMail'>" +
+            "<folder name='" + subfolderName +"' l='"+ parentFolderItem.getId() +"'/>" +
+            "</CreateFolderRequest>",
+            SOAP_DESTINATION_HOST_TYPE.CLIENT,
+            ZimbraAccount.clientAccountName);
 
       // Make sure the folder was created on the Desktop Server
       FolderItem desktopFolder = FolderItem.importFromSOAP(app
