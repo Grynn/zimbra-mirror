@@ -57,7 +57,9 @@ public class PageTasks extends AbsTab {
 		public static final String zMoveTaskMenuItem ="css=div[id='zm__Tasks'] tr[id='POPUP_MOVE']";
 		public static final String zNewTaskListMenuItem="css=div[id$='NEWFOLDER']";
 		public static final String zMoveTaskDropDown="css=td#zb__TKL__MOVE_MENU_dropdown>div";
-		
+		public static final String zEditTaskMenuItem ="css=div[id='zm__Tasks'] tr[id='POPUP_EDIT']";
+		public static final String zFilterByTaskDropDown="css=tr[id='ztb__TKL_items'] div[id='zb__TKL__SORTBY_MENU'] td[id='zb__TKL__SORTBY_MENU_dropdown']>div";
+		public static final String zToDoListTaskMenuItem ="css=div[id^='POPUP_DWT'] div[id^='DWT'] tr[id='POPUP_TKVT']";
 	}
 
 	public PageTasks(AbsApplication application) {
@@ -376,7 +378,7 @@ public class PageTasks extends AbsTab {
 		if (action == Action.A_RIGHTCLICK) {
 
 			// Right-Click on the item
-			this.zRightClick(itemLocator);
+			this.zRightClickAt(itemLocator,"");
 
 			// Now the ContextMenu is opened
 			// Click on the specified option
@@ -393,6 +395,10 @@ public class PageTasks extends AbsTab {
 			}else if(option == Button.O_MOVE_MENU){
 				optionLocator= Locators.zMoveTaskMenuItem;
 				page = new DialogMove(MyApplication, this);
+			
+			}else if(option == Button.O_EDIT){
+				optionLocator= Locators.zEditTaskMenuItem;
+				page = new FormTaskNew(this.MyApplication);
 			
 			}else {
 				throw new HarnessException("implement action:" + action
@@ -619,6 +625,16 @@ public class PageTasks extends AbsTab {
 			optionLocator = Locators.zNewTaskListMenuItem;
 
 			page = new DialogCreateTaskFolder(this.MyApplication, this);
+
+		}else if (pulldown == Button.B_TASK_FILTERBY) {
+			
+			if(option==Button.O_TASK_TODOLIST){
+				
+				pulldownLocator= Locators.zFilterByTaskDropDown;
+				optionLocator=Locators.zToDoListTaskMenuItem;
+				
+				page=null;
+			}			
 
 		}
 		// Default behavior
