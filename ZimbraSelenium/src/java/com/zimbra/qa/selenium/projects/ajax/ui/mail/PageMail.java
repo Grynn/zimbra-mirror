@@ -3,35 +3,14 @@
  */
 package com.zimbra.qa.selenium.projects.ajax.ui.mail;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-import com.zimbra.qa.selenium.framework.items.ContextMenuItem;
-import com.zimbra.qa.selenium.framework.items.ConversationItem;
-import com.zimbra.qa.selenium.framework.items.FolderItem;
-import com.zimbra.qa.selenium.framework.items.MailItem;
-import com.zimbra.qa.selenium.framework.items.ContextMenuItem.CONTEXT_MENU_ITEM_NAME;
-import com.zimbra.qa.selenium.framework.ui.AbsApplication;
-import com.zimbra.qa.selenium.framework.ui.AbsPage;
-import com.zimbra.qa.selenium.framework.ui.AbsTab;
-import com.zimbra.qa.selenium.framework.ui.Action;
-import com.zimbra.qa.selenium.framework.ui.Button;
-import com.zimbra.qa.selenium.framework.ui.I18N;
-import com.zimbra.qa.selenium.framework.ui.Shortcut;
-import com.zimbra.qa.selenium.framework.util.GeneralUtility;
-import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.SleepUtil;
-import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
-import com.zimbra.qa.selenium.framework.util.GeneralUtility.WAIT_FOR_OPERAND;
+import com.zimbra.qa.selenium.framework.items.*;
+import com.zimbra.qa.selenium.framework.ui.*;
+import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
-import com.zimbra.qa.selenium.projects.ajax.ui.ContextMenu;
-import com.zimbra.qa.selenium.projects.ajax.ui.DialogAssistant;
-import com.zimbra.qa.selenium.projects.ajax.ui.DialogMove;
+import com.zimbra.qa.selenium.projects.ajax.ui.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogTag;
-import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
-import com.zimbra.qa.selenium.projects.ajax.ui.PageMain;
 
 
 
@@ -1080,97 +1059,6 @@ public class PageMail extends AbsTab {
 
 	}
 
-	public AbsPage zListItem(Action action, Button option, FolderItem folderItem)
-	throws HarnessException {
-		logger.info(myPageName() + " zListItem("+ action +", "+ option +")");
-		tracer.trace(action +" then "+ option +" on Folder Item = "+ folderItem);
-
-		if ( action == null )
-			throw new HarnessException("action cannot be null");
-		if ( option == null )
-			throw new HarnessException("button cannot be null");
-		if ( folderItem == null )
-			throw new HarnessException("folderItem cannot be null");
-
-		String treeItemLocator = null;
-		boolean onRootFolder = false;
-
-		if (folderItem.getName().equals("USER_ROOT")) {
-			onRootFolder = true;
-			switch (ZimbraSeleniumProperties.getAppType()) {
-			case AJAX:
-				treeItemLocator = TreeMail.Locators.ztih_main_Mail__FOLDER_ITEM_ID.replace(
-						TreeMail.stringToReplace, "FOLDER");
-				break;
-
-			case DESKTOP:
-				treeItemLocator = TreeMail.Locators.zTreeItems.replace(TreeMail.stringToReplace,
-						AjaxCommonTest.defaultAccountName);
-				break;
-			default:
-				throw new HarnessException("Implement me!");
-			}
-		} else {
-			throw new HarnessException("Implement me!");
-		}
-
-		AbsPage page = null;
-		if (treeItemLocator == null) throw new HarnessException("treeItemLocator is null, please check!");
-
-		GeneralUtility.waitForElementPresent(this, treeItemLocator);
-
-		if ( action == Action.A_RIGHTCLICK ) {
-
-			if (option == Button.B_TREE_NEWFOLDER) {
-				ContextMenu contextMenu = (ContextMenu)((AppAjaxClient)MyApplication).zTreeMail.zTreeItem(
-						action, treeItemLocator);
-				page = contextMenu.zSelect(CONTEXT_MENU_ITEM_NAME.NEW_FOLDER);
-			}
-			else {
-				throw new HarnessException("implement action:"+ action +" option:"+ option);
-			}
-		} else if (action == Action.A_LEFTCLICK) {
-			if (option == Button.B_TREE_NEWFOLDER) {
-				if (ZimbraSeleniumProperties.getAppType() == AppType.AJAX) {
-					if (((AppAjaxClient)MyApplication).zTreeMail.isCollapsed()) {
-						// Expand it
-						((AppAjaxClient)MyApplication).zTreeMail.zClick(
-								TreeMail.Locators.treeExpandCollapseButton);
-						GeneralUtility.waitFor(null, ((AppAjaxClient)MyApplication).zTreeMail, false,
-								"isCollapsed", null, WAIT_FOR_OPERAND.EQ, false, 30000, 1000);
-					} else {
-						if (onRootFolder) {
-							// TODO: Bug 57414
-							// Collapse the tree and expand it again to select the root folder
-							((AppAjaxClient)MyApplication).zTreeMail.zClick(
-									TreeMail.Locators.treeExpandCollapseButton);
-
-							GeneralUtility.waitFor(null, ((AppAjaxClient)MyApplication).zTreeMail, false,
-									"isCollapsed", null, WAIT_FOR_OPERAND.EQ, true, 30000, 1000);
-
-							((AppAjaxClient)MyApplication).zTreeMail.zClick(
-									TreeMail.Locators.treeExpandCollapseButton);
-
-							page = ((AppAjaxClient)MyApplication).zTreeMail.zPressButton(option);
-						}  else {
-							// Fall Through
-						}
-					}
-
-				} else {
-					// Not available for Desktop
-					throw new HarnessException("Not Supported! Action:" + action + " Option:" + option);
-				}
-
-			} else {
-				throw new HarnessException("implement action:"+ action +" option:"+ option);
-			}
-		} else {
-			throw new HarnessException("implement action:"+ action +" option:"+ option);
-		}
-
-		return page;
-	}
 
 	@Override
 	public AbsPage zListItem(Action action, Button option, Button subOption ,String item)
