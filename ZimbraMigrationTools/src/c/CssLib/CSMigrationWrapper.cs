@@ -335,7 +335,7 @@ public class CSMigrationwrapper
                                         // Console.WriteLine("{0}, {1}", so1, so2);
                                     }
                                 }
-                                api.AccountName = Acct.Accountname;
+                               api.AccountName = Acct.Accountname;
                                 if (dict.Count > 0)
                                 {
                                     int stat = api.CreateContact(dict);
@@ -344,6 +344,52 @@ public class CSMigrationwrapper
                             Acct.migrationFolders[0].CurrentCountOFItems++;
                         }
                     }
+
+
+                    ///lets do mail items migration now...
+                    ///
+
+                    itemobjectarray = userobject.GetItemsForFolderObjects(
+                            folderobject, (int)foldertype.Mail, dt.ToOADate());
+
+                    // Exchange.ItemObject[] Items = Array.ConvertAll(objectArray, Item => (Exchange.ItemObject)Item);
+                    Acct.migrationFolders[0].FolderName = folderobject.Name;
+                    Acct.migrationFolders[0].TotalCountOFItems = itemobjectarray.Count();
+                    Acct.migrationFolders[0].CurrentCountOFItems = 0;
+                    while (Acct.migrationFolders[0].CurrentCountOFItems <
+                            Acct.migrationFolders[0].TotalCountOFItems)
+                    {
+                        foreach (dynamic itemobject in itemobjectarray)
+                        {
+                            if (itemobject != null)
+                            {
+                                Dictionary<string, string> dict = new Dictionary<string, string>();
+                                foldertype type = (foldertype)itemobject.Type;
+                                if (type == foldertype.Mail)
+                                {
+                                    string[,] data = itemobject.GetDataForItemID(
+                                            itemobject.ItemID);
+                                    int bound0 = data.GetUpperBound(0);
+                                    for (int i = 0; i <= bound0; i++)
+                                    {
+                                        string Key = data[0, i];
+                                        string Value = data[1, i];
+                                        dict.Add(Key, Value);
+                                        // Console.WriteLine("{0}, {1}", so1, so2);
+                                    }
+
+                                }
+                                api.AccountName = Acct.Accountname;
+                                if (dict.Count > 0)
+                                {
+                                    //int stat = api.AddMessage(dict);
+                                }
+                            }
+                            Acct.migrationFolders[0].CurrentCountOFItems++;
+                        }
+                    }
+
+
                 }
             }
         }

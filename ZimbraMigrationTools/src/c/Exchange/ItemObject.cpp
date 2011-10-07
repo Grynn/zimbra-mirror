@@ -140,8 +140,15 @@ STDMETHODIMP CItemObject::GetDataForItem(VARIANT *data)
 
 STDMETHODIMP CItemObject::GetDataForItemID(VARIANT ItemId, VARIANT *pVal)
 {
-    ContactItemData cd;
+     HRESULT hr = S_OK;
+    std::map<BSTR, BSTR> pIt;
+    std::map<BSTR, BSTR>::iterator it;
+
     SBinary ItemID;
+
+	FolderType ft;
+	get_Type(&ft);
+
 
     if (ItemId.vt == (VT_ARRAY | VT_UI1))       // (OLE SAFEARRAY)
     {
@@ -156,19 +163,81 @@ STDMETHODIMP CItemObject::GetDataForItemID(VARIANT ItemId, VARIANT *pVal)
             // Copy the bitmap into our buffer
             memcpy(ItemID.lpb, pArrayData, ItemID.cb);  // Unlock the variant data
             SafeArrayUnaccessData(ItemId.parray);
+			if(ft ==2)
+			{
+			ContactItemData cd;
+			maapi->GetItem(ItemID, cd);
+			 pIt[L"BirthDay"] = SysAllocString((cd.Birthday).c_str());
+			pIt[L"FirstName"] = SysAllocString((cd.FirstName).c_str());
+			pIt[L"JobTitle"] = SysAllocString((cd.JobTitle).c_str());
+			pIt[L"CallbackPhone"] = SysAllocString((cd.CallbackPhone).c_str());
+			pIt[L"Email1"] = SysAllocString((cd.Email1).c_str());
+			}
+			else if( ft == 1)
+			{
+				MessageItemData msgdata;
+	
+				printf("Got message item:");
+				maapi->GetItem(ItemID,msgdata);
+				pIt[L"Subject"] = SysAllocString((msgdata.Subject).c_str());
+				pIt[L"Date"] = SysAllocString(( msgdata.DateString).c_str());
+			    pIt[L"JobTitle"] = SysAllocString((msgdata.Urlname).c_str());
+				pIt[L"MIME FILE PATH"] = SysAllocString((msgdata.MimeFile).c_str());
+				pIt[L"UrlName"] = SysAllocString((msgdata.Urlname).c_str());
+				pIt[L"DeliverDate"] =  SysAllocString(( msgdata.DeliveryDateString).c_str());
+			
+				pIt[L"Has Attachments"] = (msgdata.HasAttachments)? L"True":L"False";
+				pIt[L"HasHTML"] = (msgdata.HasHtml)? L"True":L"False";
+				pIt[L"HasText"] = (msgdata.HasText)? L"True":L"False";
+				pIt[L"IsDraft"] = (msgdata.IsDraft)? L"True":L"False";
+				pIt[L"IsFlagged"] = (msgdata.IsFlagged)? L"True":L"False";
+				pIt[L"IsForwared"] = (msgdata.IsForwared)? L"True":L"False";
+				pIt[L"IsFromMe"] = (msgdata.IsFromMe)? L"True":L"False";
+				pIt[L"IsUnread"] = (msgdata.IsUnread)? L"True":L"False";
+				pIt[L"IsUnsent"] = (msgdata.IsUnsent)? L"True":L"False";
+				pIt[L"IsUnread"] = (msgdata.IsUnread)? L"True":L"False";
+				pIt[L"RepliedTo"] = (msgdata.IsUnread)? L"True":L"False";
 
-            maapi->GetItem(ItemID, cd);
+
+				pIt[L"UrlName"] = SysAllocString((msgdata.Urlname).c_str());
+
+				/*printf("Subject: %S Date: %I64X DateString:%S		\
+					DeliveryDate: %I64X deliveryDateString: %S		\
+					Has Attachments: %d Has HTML:%d Has Text:%d	\
+					Is Draft:%d Is Flagged: %d Is Forwarded: %d	\
+					IsFromMe:%d IsUnread:%d IsUnsent:%d IsRepliedTo:%d	\
+					URLName: %S\n",
+					msgdata.Subject.c_str(), msgdata.Date, msgdata.DateString.c_str(),
+					msgdata.deliveryDate, msgdata.DeliveryDateString.c_str(),msgdata.HasAttachments,
+					msgdata.HasHtml, msgdata.HasText,msgdata.IsDraft,msgdata.IsFlagged,msgdata.IsForwared,
+					msgdata.IsFromMe, msgdata.IsUnread, msgdata.IsUnsent,msgdata.RepliedTo,msgdata.Urlname.c_str()
+					);
+
+				printf("MIME FILE PATH: %S\n\n\n\n", msgdata.MimeFile.c_str());*/
+			
+
+
+
+			}
+            
         }
     }
-    HRESULT hr = S_OK;
-    std::map<BSTR, BSTR> pIt;
-    std::map<BSTR, BSTR>::iterator it;
+   
 
-    pIt[L"BirthDay"] = SysAllocString((cd.Birthday).c_str());
-    pIt[L"FirstName"] = SysAllocString((cd.FirstName).c_str());
-    pIt[L"JobTitle"] = SysAllocString((cd.JobTitle).c_str());
-    pIt[L"CallbackPhone"] = SysAllocString((cd.CallbackPhone).c_str());
-    pIt[L"Email1"] = SysAllocString((cd.Email1).c_str());
+	
+	
+	
+
+
+
+
+
+
+
+
+
+
+	////
 
     VariantInit(pVal);
 
@@ -176,9 +245,9 @@ STDMETHODIMP CItemObject::GetDataForItemID(VARIANT ItemId, VARIANT *pVal)
     SAFEARRAY *pSA = NULL;
     SAFEARRAYBOUND aDim[2];                     // two dimensional array
     aDim[0].lLbound = 0;
-    aDim[0].cElements = 5;
+    aDim[0].cElements =  pIt.size();  
     aDim[1].lLbound = 0;
-    aDim[1].cElements = 5;                      // rectangular array
+    aDim[1].cElements = pIt.size();                      // rectangular array
     pSA = SafeArrayCreate(VT_BSTR, 2, aDim);    // again, 2 dimensions
     long aLong[2];
     if (pSA != NULL)
