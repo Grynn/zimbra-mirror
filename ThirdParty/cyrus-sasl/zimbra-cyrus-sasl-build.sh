@@ -78,6 +78,7 @@ LIBS="/opt/zimbra/libxml2/lib/libxml2.a" CFLAGS="-D_REENTRANT -g -O2 -I/opt/zimb
             --with-gss_impl=heimdal \
             --enable-gssapi=/opt/zimbra/heimdal-${heimdal_version} \
             --with-libxml2=/opt/zimbra/libxml2-${xml2_version}/bin/xml2-config \
+            --with-lib-subdir=lib \
             --enable-login
 fi
 if [ $platform = "Darwin" ]; then
