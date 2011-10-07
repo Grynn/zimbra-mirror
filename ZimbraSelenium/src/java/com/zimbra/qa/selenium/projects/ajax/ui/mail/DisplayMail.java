@@ -1,13 +1,10 @@
 package com.zimbra.qa.selenium.projects.ajax.ui.mail;
 
 import java.util.*;
-
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.staf.Stafpostqueue;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
-
-
 
 /**
  * The <code>DisplayMail<code> object defines a read-only view of a message
@@ -139,7 +136,7 @@ public class DisplayMail extends AbsDisplay {
 
 			return (page);
 
-} else if ( button == Button.B_ACCEPT ) {
+		} else if ( button == Button.B_ACCEPT ) {
 			
 			locator = Locators.AcceptButton;
 			page = null;
@@ -255,6 +252,122 @@ public class DisplayMail extends AbsDisplay {
 		}
 
 		return (page);
+	}
+	
+	public AbsPage zPressButtonPulldown(Button pulldown, Button option) throws HarnessException {
+		
+		logger.info(myPageName() + " zPressButtonPulldown(" + pulldown + ", " + option + ")");
+		
+		tracer.trace("Click pulldown " + pulldown + " then " + option);
+
+		if (pulldown == null || option == null) throw new HarnessException("Button/options cannot be null!");
+		
+		String pulldownLocator = null;
+		String optionLocator = null;
+		AbsPage page = this;
+
+		if ( pulldown == Button.B_ACCEPT ) {
+			
+			pulldownLocator = Locators.AcceptDropdown;
+			
+			if (option == Button.O_ACCEPT_NOTIFY_ORGANIZER) {
+
+				optionLocator = Locators.AcceptNotifyOrganizerMenu;
+				
+				page = this;
+
+			} else if (option == Button.O_ACCEPT_EDIT_REPLY) {
+
+				optionLocator = Locators.AcceptEditReplyMenu;
+				
+				page = new FormMailNew(this.MyApplication);
+				
+			} else if (option == Button.O_ACCEPT_DONT_NOTIFY_ORGANIZER) {
+
+				optionLocator = Locators.AcceptEditReplyMenu;
+				
+				page = this;
+				
+			} else {
+	
+				throw new HarnessException("No logic defined for pulldown " + pulldown + " and option " + option);
+
+			}
+
+		} else if ( pulldown == Button.B_TENTATIVE ) {
+			
+			pulldownLocator = Locators.TentativeDropdown;
+			
+			if (option == Button.O_TENTATIVE_NOTIFY_ORGANIZER) {
+
+				optionLocator = Locators.TentativeNotifyOrganizerMenu;
+				
+				page = this;
+
+			} else if (option == Button.O_TENTATIVE_EDIT_REPLY) {
+
+				optionLocator = Locators.TentativeEditReplyMenu;
+				
+				page = new FormMailNew(this.MyApplication);
+				
+			} else if (option == Button.O_TENTATIVE_DONT_NOTIFY_ORGANIZER) {
+
+				optionLocator = Locators.TentativeEditReplyMenu;
+				
+				page = this;
+				
+			} else {
+	
+				throw new HarnessException("No logic defined for pulldown " + pulldown + " and option " + option);
+
+			}
+
+		} else if ( pulldown == Button.B_DECLINE ) {
+			
+			pulldownLocator = Locators.DeclineDropdown;
+			
+			if (option == Button.O_DECLINE_NOTIFY_ORGANIZER) {
+
+				optionLocator = Locators.DeclineNotifyOrganizerMenu;
+				
+				page = this;
+
+			} else if (option == Button.O_DECLINE_EDIT_REPLY) {
+
+				optionLocator = Locators.DeclineEditReplyMenu;
+				
+				page = new FormMailNew(this.MyApplication);
+				
+			} else if (option == Button.O_DECLINE_DONT_NOTIFY_ORGANIZER) {
+
+				optionLocator = Locators.DeclineEditReplyMenu;
+				
+				page = this;
+				
+			} else {
+	
+				throw new HarnessException("No logic defined for pulldown " + pulldown + " and option " + option);
+
+			}
+			
+		}
+
+		// Click to dropdown and corresponding option
+		
+		zClickAt(pulldownLocator, "");
+		
+		zWaitForBusyOverlay();
+		
+		zClick(optionLocator);
+		
+		zWaitForBusyOverlay();
+
+		if (page != null) {
+			page.zWaitForActive();
+		}
+
+		return (page);
+		
 	}
 
 	/**

@@ -1,9 +1,7 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.attendee.invitations.message;
 
 import java.util.*;
-
 import org.testng.annotations.Test;
-
 import com.zimbra.common.soap.Element;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.ui.*;
@@ -11,7 +9,6 @@ import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.DisplayMail;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
-import com.zimbra.qa.selenium.projects.ajax.ui.mail.DisplayMail.Locators;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew.Field;
 
 public class DeclineMeeting extends AjaxCommonTest {
@@ -256,8 +253,7 @@ public class DeclineMeeting extends AjaxCommonTest {
 		SleepUtil.sleepMedium();
 
 		// Click Decline > Notify Organizer
-		display.zClickAt(Locators.DeclineDropdown, "");
-		display.zPressButton(Button.O_DECLINE_NOTIFY_ORGANIZER);
+		display.zPressButtonPulldown(Button.B_DECLINE, Button.O_DECLINE_NOTIFY_ORGANIZER);
 
 		// ---------------- Verification at organizer & invitee side both -------------------------------------       
 
@@ -365,9 +361,9 @@ public class DeclineMeeting extends AjaxCommonTest {
 		DisplayMail display = (DisplayMail)app.zPageMail.zListItem(Action.A_LEFTCLICK, apptSubject);
 
 		// Click Decline > Edit Reply, modify body and send
+		display.zPressButtonPulldown(Button.B_DECLINE, Button.O_DECLINE_EDIT_REPLY);
+
 		FormMailNew sendButton = new FormMailNew(app);
-		display.zClickAt(Locators.DeclineDropdown, "");
-		display.zPressButton(Button.O_DECLINE_EDIT_REPLY);
 		FormMailNew mailForm = new FormMailNew(app);
 		mailForm.zFillField(Field.Body, modifiedBody);     
 		sendButton.zSubmit();
@@ -474,8 +470,7 @@ public class DeclineMeeting extends AjaxCommonTest {
 		SleepUtil.sleepMedium();
 
 		// Click Decline > Don't Notify Organizer
-		display.zClickAt(Locators.DeclineDropdown, "");
-		display.zPressButton(Button.O_DECLINE_DONT_NOTIFY_ORGANIZER);
+		display.zPressButtonPulldown(Button.B_DECLINE, Button.O_DECLINE_DONT_NOTIFY_ORGANIZER);
 
 		// ---------------- Verification at organizer & invitee side both -------------------------------------       
 

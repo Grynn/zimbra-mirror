@@ -2,7 +2,6 @@ package com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.attendee.in
 
 import java.util.*;
 import org.testng.annotations.Test;
-
 import com.zimbra.common.soap.Element;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.ui.*;
@@ -10,7 +9,6 @@ import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.DisplayMail;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
-import com.zimbra.qa.selenium.projects.ajax.ui.mail.DisplayMail.Locators;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew.Field;
 
 public class AcceptMeeting extends AjaxCommonTest {
@@ -97,7 +95,6 @@ public class AcceptMeeting extends AjaxCommonTest {
 
 		// Refresh the view
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
-		app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, FolderItem.importFromSOAP(ZimbraAccount.AccountA(), FolderItem.SystemFolder.Inbox)); //bug 65399
 
 		// Select the invitation
 		DisplayMail display = (DisplayMail)app.zPageMail.zListItem(Action.A_LEFTCLICK, apptSubject);
@@ -171,8 +168,8 @@ public class AcceptMeeting extends AjaxCommonTest {
 
 		
 		// --------------- Login to attendee & accept invitation ----------------------------------------------------
+
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
-		app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, FolderItem.importFromSOAP(ZimbraAccount.AccountA(), FolderItem.SystemFolder.Inbox)); //bug 65399
 
 		// Select the invitation
 		DisplayMail display = (DisplayMail)app.zPageMail.zListItem(Action.A_LEFTCLICK, apptSubject);
@@ -245,15 +242,13 @@ public class AcceptMeeting extends AjaxCommonTest {
 
 		// Refresh the view
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
-		app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, FolderItem.importFromSOAP(ZimbraAccount.AccountA(), FolderItem.SystemFolder.Inbox)); //bug 65399
 
 		// Select the invitation
 		DisplayMail display = (DisplayMail)app.zPageMail.zListItem(Action.A_LEFTCLICK, apptSubject);
 		SleepUtil.sleepMedium();
 
 		// Click Accept > Notify Organizer
-		display.zClickAt(Locators.AcceptDropdown, "");
-		display.zPressButton(Button.O_ACCEPT_NOTIFY_ORGANIZER);
+		display.zPressButtonPulldown(Button.B_ACCEPT, Button.O_ACCEPT_NOTIFY_ORGANIZER);
 
 		// ---------------- Verification at organizer & invitee side both -------------------------------------       
 
@@ -356,17 +351,16 @@ public class AcceptMeeting extends AjaxCommonTest {
 
 		// Refresh the view
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
-		app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, FolderItem.importFromSOAP(ZimbraAccount.AccountA(), FolderItem.SystemFolder.Inbox)); //bug 65399
 		
 		// Select the invitation
 		DisplayMail display = (DisplayMail)app.zPageMail.zListItem(Action.A_LEFTCLICK, apptSubject);
 
-		// Click Accept > Edit Reply, modify body and send
+		// Click Accept > Edit Reply, modify body and send		
+		display.zPressButtonPulldown(Button.B_ACCEPT, Button.O_ACCEPT_EDIT_REPLY);
+		
 		FormMailNew sendButton = new FormMailNew(app);
-		display.zClickAt(Locators.AcceptDropdown, "");
-		display.zPressButton(Button.O_ACCEPT_EDIT_REPLY);
 		FormMailNew mailForm = new FormMailNew(app);
-		mailForm.zFillField(Field.Body, modifiedBody);     
+		mailForm.zFillField(Field.Body, modifiedBody);
 		sendButton.zSubmit();
 		
 		// ---------------- Verification at organizer & invitee side both -------------------------------------       
@@ -465,15 +459,13 @@ public class AcceptMeeting extends AjaxCommonTest {
 
 		// Refresh the view
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
-		app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, FolderItem.importFromSOAP(ZimbraAccount.AccountA(), FolderItem.SystemFolder.Inbox)); //bug 65399
 
 		// Select the invitation
 		DisplayMail display = (DisplayMail)app.zPageMail.zListItem(Action.A_LEFTCLICK, apptSubject);
 		SleepUtil.sleepMedium();
 
 		// Click Accept > Don't Notify Organizer
-		display.zClickAt(Locators.AcceptDropdown, "");
-		display.zPressButton(Button.O_ACCEPT_DONT_NOTIFY_ORGANIZER);
+		display.zPressButtonPulldown(Button.B_ACCEPT, Button.O_ACCEPT_DONT_NOTIFY_ORGANIZER);
 
 		// ---------------- Verification at organizer & invitee side both -------------------------------------       
 
@@ -517,6 +509,7 @@ public class AcceptMeeting extends AjaxCommonTest {
 		// Verify attendee status shows as psts=AC
 		ZAssert.assertEquals(myStatus, "AC", "Verify that the attendee shows as 'ACCEPTED'");
 
+		// Organizer: Search for the appointment response
 		String inboxId = FolderItem.importFromSOAP(ZimbraAccount.AccountA(), FolderItem.SystemFolder.Inbox).getId();
 		
 		ZimbraAccount.AccountA().soapSend(

@@ -1,9 +1,7 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.attendee.invitations.conversation;
 
 import java.util.*;
-
 import org.testng.annotations.Test;
-
 import com.zimbra.common.soap.Element;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.ui.*;
@@ -11,7 +9,6 @@ import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.DisplayMail;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
-import com.zimbra.qa.selenium.projects.ajax.ui.mail.DisplayMail.Locators;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew.Field;
 
 public class TentativeMeeting extends AjaxCommonTest {
@@ -100,7 +97,6 @@ public class TentativeMeeting extends AjaxCommonTest {
 
 		// Refresh the view
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
-		app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, FolderItem.importFromSOAP(ZimbraAccount.AccountA(), FolderItem.SystemFolder.Inbox)); //bug 65399
 
 		// Select the invitation
 		DisplayMail display = (DisplayMail)app.zPageMail.zListItem(Action.A_LEFTCLICK, apptSubject);
@@ -180,7 +176,6 @@ public class TentativeMeeting extends AjaxCommonTest {
 
 		// Refresh the view
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
-		app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, FolderItem.importFromSOAP(ZimbraAccount.AccountA(), FolderItem.SystemFolder.Inbox)); //bug 65399
 
 		// Select the invitation
 		DisplayMail display = (DisplayMail)app.zPageMail.zListItem(Action.A_LEFTCLICK, apptSubject);
@@ -252,15 +247,13 @@ public class TentativeMeeting extends AjaxCommonTest {
 
 		// Refresh the view
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
-		app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, FolderItem.importFromSOAP(ZimbraAccount.AccountA(), FolderItem.SystemFolder.Inbox)); //bug 65399
 
 		// Select the invitation
 		DisplayMail display = (DisplayMail)app.zPageMail.zListItem(Action.A_LEFTCLICK, apptSubject);
 		SleepUtil.sleepMedium();
 
 		// Click Tentative > Notify Organizer
-		display.zClickAt(Locators.TentativeDropdown, "");
-		display.zPressButton(Button.O_TENTATIVE_NOTIFY_ORGANIZER);
+		display.zPressButtonPulldown(Button.B_TENTATIVE, Button.O_TENTATIVE_NOTIFY_ORGANIZER);
 
 		// ---------------- Verification at organizer & invitee side both -------------------------------------       
 
@@ -363,15 +356,14 @@ public class TentativeMeeting extends AjaxCommonTest {
 
 		// Refresh the view
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
-		app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, FolderItem.importFromSOAP(ZimbraAccount.AccountA(), FolderItem.SystemFolder.Inbox)); //bug 65399
 		
 		// Select the invitation
 		DisplayMail display = (DisplayMail)app.zPageMail.zListItem(Action.A_LEFTCLICK, apptSubject);
 
 		// Click Tentative > Edit Reply, modify body and send
+		display.zPressButtonPulldown(Button.B_TENTATIVE, Button.O_TENTATIVE_EDIT_REPLY);
+		
 		FormMailNew sendButton = new FormMailNew(app);
-		display.zClickAt(Locators.TentativeDropdown, "");
-		display.zPressButton(Button.O_TENTATIVE_EDIT_REPLY);
 		FormMailNew mailForm = new FormMailNew(app);
 		mailForm.zFillField(Field.Body, modifiedBody);     
 		sendButton.zSubmit();
@@ -472,15 +464,13 @@ public class TentativeMeeting extends AjaxCommonTest {
 
 		// Refresh the view
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
-		app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, FolderItem.importFromSOAP(ZimbraAccount.AccountA(), FolderItem.SystemFolder.Inbox)); //bug 65399
 
 		// Select the invitation
 		DisplayMail display = (DisplayMail)app.zPageMail.zListItem(Action.A_LEFTCLICK, apptSubject);
 		SleepUtil.sleepMedium();
 
 		// Click Tentative > Don't Notify Organizer
-		display.zClickAt(Locators.TentativeDropdown, "");
-		display.zPressButton(Button.O_TENTATIVE_DONT_NOTIFY_ORGANIZER);
+		display.zPressButtonPulldown(Button.B_TENTATIVE, Button.O_TENTATIVE_DONT_NOTIFY_ORGANIZER);
 
 		// ---------------- Verification at organizer & invitee side both -------------------------------------       
 
