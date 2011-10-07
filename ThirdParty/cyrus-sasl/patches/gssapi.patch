@@ -1,0 +1,20 @@
+--- cyrus-sasl-2.1.25/plugins/gssapi.c.orig	2011-10-07 14:47:07.461866240 -0700
++++ cyrus-sasl-2.1.25/plugins/gssapi.c	2011-10-07 14:47:45.891872589 -0700
+@@ -370,7 +370,7 @@
+     }
+     
+     if (output_token->value && output) {
+-	unsigned char * p = (unsigned char *) text->encode_buf;
++	unsigned char * p;
+ 	
+ 	ret = _plug_buf_alloc(text->utils,
+ 			      &(text->encode_buf),
+@@ -384,6 +384,8 @@
+ 	    return ret;
+ 	}
+ 	
++	p = (unsigned char *) text->encode_buf;
++
+ 	p[0] = (output_token->length>>24) & 0xFF;
+ 	p[1] = (output_token->length>>16) & 0xFF;
+ 	p[2] = (output_token->length>>8) & 0xFF;

@@ -17,11 +17,9 @@ FIXOSX	:= @echo "no need to fix anything"
 
 ifdef BETA
 	include $(CYRUS_ROOT)/../beta_versions.def
-	PATCH	:= patch -g0 -N -p1 < ../patches/heimdal-build.patch;
 	BSTR	:= beta
 else
 	include $(CYRUS_ROOT)/../versions.def
-	PATCH	:= patch -g0 -N -p1 < ../patches/gcc-fix.patch;
 endif
 
 ifneq	(,$(findstring MACOSX,$(BUILD_PLATFORM)))
@@ -51,6 +49,8 @@ build:
 	patch -g0 -p1 < ../patches/sasl-link-order.patch; \
 	patch -g0 -p1 < ../patches/sasl-darwin.patch; \
 	patch -g0 -p1 < ../patches/sasl-auth-zimbra.patch; \
+	patch -g0 -p1 < ../patches/heimdal-build.patch; \
+	patch -g0 -p1 < ../patches/gssapi.patch; \
 	$(PATCH))
 	_S_='~' ./zimbra-cyrus-sasl-build.sh ${BSTR}
 	(cd cyrus-sasl-$(CYRUS_VERSION); $(MAKE) install)
