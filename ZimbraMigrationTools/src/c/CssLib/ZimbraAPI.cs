@@ -11,7 +11,6 @@ namespace CssLib
 public class ZimbraAPI
 {
     // Errors
-    internal const int INCONSISTENT_LISTS = 91;
     internal const int CONTACT_CREATE_FAILED_FLDR = 95;
     internal const int FOLDER_CREATE_FAILED_SYN = 96;
     internal const int FOLDER_CREATE_FAILED_SEM = 97;
@@ -887,18 +886,29 @@ public class ZimbraAPI
         writer.WriteEndElement();               // m
         writer.WriteEndElement();               // AddMsgRequest
     }
-    public int AddMessage(string filepath, ZimbraMessage message)
+    public int AddMessage(Dictionary<string, string> message)
     {
         lastError = "";
         string uploadInfo = "";
         int retval = 0;
+        ZimbraMessage zm = new ZimbraMessage("","","","","");
 
-        FileInfo f = new FileInfo(filepath);
+        System.Type type = typeof(ZimbraMessage);
+        FieldInfo[] myFields = type.GetFields(BindingFlags.Public | BindingFlags.Instance);
+        for (int i = 0; i < myFields.Length; i++)   // use reflection to set ZimbraMessage object values
+        {
+            string nam = (string)myFields[i].Name;
+            if (nam == "folderId")
+                myFields[i].SetValue(zm, FindFolder(message[nam]));
+            else
+                myFields[i].SetValue(zm, message[nam]);
+        }
+        FileInfo f = new FileInfo(zm.filePath);     // use a try/catch?
         bool isInline = (f.Length < INLINE_LIMIT);
         if (isInline)
-            uploadInfo = filepath;
+            uploadInfo = zm.filePath;
         else
-            retval = UploadFile(filepath, STRING_MODE, out uploadInfo);
+            retval = UploadFile(zm.filePath, STRING_MODE, out uploadInfo);
         if (retval == 0)
         {
             WebServiceClient client = new WebServiceClient {
@@ -918,7 +928,7 @@ public class ZimbraAPI
 
                 writer.WriteStartElement("Body", "http://www.w3.org/2003/05/soap-envelope");
 
-                AddMsgRequest(writer, uploadInfo, message, isInline, -1);
+                AddMsgRequest(writer, uploadInfo, zm, isInline, -1);
 
                 writer.WriteEndElement();       // soap body
                 writer.WriteEndElement();       // soap envelope
@@ -944,14 +954,15 @@ public class ZimbraAPI
         }
         return retval;
     }
-    public int AddMessages(List<string> lFilePaths, List<ZimbraMessage> lMessages)
+    public int AddMessages(List<Dictionary<string, string>> lMessages)
     {
-        if (lFilePaths.Count != lMessages.Count)
-            return INCONSISTENT_LISTS;
         int retval = 0;
-        int ufretval = 0;
         lastError = "";
         string uploadInfo = "";
+
+        System.Type type = typeof(ZimbraMessage);
+        FieldInfo[] myFields = type.GetFields(BindingFlags.Public | BindingFlags.Instance);
+
         WebServiceClient client = new WebServiceClient {
             Url = ZimbraValues.GetZimbraValues().Url,
             WSServiceType = WebServiceClient.ServiceType.Traditional
@@ -960,7 +971,8 @@ public class ZimbraAPI
         StringBuilder sb = new StringBuilder();
         XmlWriterSettings settings = new XmlWriterSettings();
         settings.OmitXmlDeclaration = true;
-        using (XmlWriter writer = XmlWriter.Create(sb, settings)) {
+        using (XmlWriter writer = XmlWriter.Create(sb, settings))
+        {
             writer.WriteStartDocument();
             writer.WriteStartElement("soap", "Envelope",
                     "http://www.w3.org/2003/05/soap-envelope");
@@ -969,20 +981,28 @@ public class ZimbraAPI
 
             writer.WriteStartElement("Body", "http://www.w3.org/2003/05/soap-envelope");
             writer.WriteStartElement("BatchRequest", "urn:zimbra");
-            for (int i = 0; i < lFilePaths.Count; i++)
+            for (int i = 0; i < lMessages.Count; i++)
             {
-                FileInfo f = new FileInfo(lFilePaths[i]);
+                Dictionary<string, string> message = lMessages[i];
+                ZimbraMessage zm = new ZimbraMessage("", "", "", "", "");
+                for (int j = 0; j < myFields.Length; j++)   // use reflection to set ZimbraMessage object values
+                {
+                    string nam = (string)myFields[j].Name;
+                    if (nam == "folderId")
+                        myFields[j].SetValue(zm, FindFolder(message[nam]));
+                    else
+                        myFields[j].SetValue(zm, message[nam]);
+                }
+                FileInfo f = new FileInfo(zm.filePath);
                 bool isInline = (f.Length < INLINE_LIMIT);
                 if (isInline)
-                    uploadInfo = lFilePaths[i];
+                    uploadInfo = zm.filePath;
                 else
-                    ufretval = UploadFile(lFilePaths[i], STRING_MODE, out uploadInfo);
-                if (ufretval == 0)
-                {
-                    ZimbraMessage message = lMessages[i];
-                    AddMsgRequest(writer, uploadInfo, message, isInline, -1);
-                }
+                    retval = UploadFile(zm.filePath, STRING_MODE, out uploadInfo);
+                if (retval == 0)
+                    AddMsgRequest(writer, uploadInfo, zm, isInline, -1);               
             }
+
             writer.WriteEndElement();           // BatchRequest
             writer.WriteEndElement();           // soap body
             writer.WriteEndElement();           // soap envelope
@@ -1075,6 +1095,15 @@ public class ZimbraAPI
         //
 
         return true;
+    }
+    private string FindFolder(string folderPath)
+    {
+        // first look if the folder is in the map.  If it is, return the id
+        if (dFolderMap.ContainsKey(folderPath))
+            return dFolderMap[folderPath];
+
+        // wasn't in the map. See if it's a special folder
+        return GetSpecialFolderNum(folderPath);
     }
     public int CreateFolder(string FolderPath, string View = "", string Color = "",
             string Flags = "")

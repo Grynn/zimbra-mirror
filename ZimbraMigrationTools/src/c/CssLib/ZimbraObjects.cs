@@ -9,6 +9,7 @@ namespace CssLib
 {
 public class ZimbraMessage
 {
+    public string filePath;
     public string folderId;
     public string flags;
     public string tags;
@@ -21,8 +22,9 @@ public class ZimbraMessage
         tags = "";
         rcvdDate = "";
     }
-    public ZimbraMessage(string FolderId, string Flags, string Tags, string RcvdDate)
+    public ZimbraMessage(string FilePath, string FolderId, string Flags, string Tags, string RcvdDate)
     {
+        filePath = FilePath;
         folderId = FolderId;
         flags = Flags;
         tags = Tags;
