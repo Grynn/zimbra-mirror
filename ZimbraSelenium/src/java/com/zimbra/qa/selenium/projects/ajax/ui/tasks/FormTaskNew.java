@@ -44,7 +44,7 @@ public class FormTaskNew extends AbsForm {
 		public static final String zPriorityOptionLow	= "css=[id^=zv__COMPOSE][id$=___priority_dropdown]";
 		
 		//added by Girish
-		public static final String zFrame = "css=iframe[id*='DWT']";
+		public static final String zFrame = "css=iframe[id^='iframe_DWT']";
 		public static final String zSaveAndCloseIconBtn = "//*[@id='DWT9_left_icon']";
 		public static final String zBodyField = "css=body";
 		public static final String zNameField = "css=[id^=DWT4] [input$=]";
@@ -54,7 +54,9 @@ public class FormTaskNew extends AbsForm {
 		public static final String zTasksubjField = "css=td[id$='_subject'] div input";
 		public static final String zTasksubjFieldDesktop = "//td[contains(@id,'_subject')]/div/input";
 		public static final String zCancelTask = "zb__TKE-1__CANCEL_left_icon";
-		
+		public static final String zTaskOptionDropDown = "css=div[id^='ztb__TKE'] div[id$='__COMPOSE_OPTIONS'] td[id$='__COMPOSE_OPTIONS_dropdown']>div";
+		public static final String zTaskFormatAsHtml="css=div[id$='_FORMAT_HTML']";
+	
 		
 	}
 
@@ -220,7 +222,17 @@ public class FormTaskNew extends AbsForm {
 				throw new HarnessException("unsupported priority option "+ option);
 			}
 				
-		} else {
+		}else if(pulldown==Button.B_OPTIONS){ 
+			if(option==Button.O_OPTION_FORMAT_AS_HTML){
+				
+				pulldownLocator=Locators.zTaskOptionDropDown;
+				optionLocator=Locators.zTaskFormatAsHtml;
+				page=this;
+				
+			}
+			
+		}else {
+		
 			throw new HarnessException("no logic defined for pulldown "+ pulldown);
 		}
 
@@ -300,7 +312,8 @@ public class FormTaskNew extends AbsForm {
 			   sSelectFrame(Locators.zFrame);
 			   this.sFocus(locator);
 			   this.zClick(locator);
-			   zKeyboard.zTypeCharacters(value);
+			 //  zKeyboard.zTypeCharacters(value);
+			   sType(locator, value);
 			  /* if (!(sGetValue(locator).equalsIgnoreCase(value))) {
 					this.sFocus(locator);
 					this.zClick(locator);

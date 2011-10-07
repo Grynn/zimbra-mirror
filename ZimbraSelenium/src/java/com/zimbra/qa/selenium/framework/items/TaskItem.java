@@ -39,6 +39,7 @@ public class TaskItem implements IItem {
 	public String gDueDate;
 
 	public String gtaskBody;
+	public String gtaskHtmlBody;
 
 	// //
 	// FINISH: GUI Data
@@ -66,6 +67,14 @@ public class TaskItem implements IItem {
 
 	public void settaskBody(String taskBody) {
 		gtaskBody = taskBody;
+	}
+	public String getHtmlTaskBody() {
+
+		return gtaskHtmlBody;
+	}
+
+	public void setHtmlTaskBody(String taskHtmlBody) {
+		gtaskHtmlBody = taskHtmlBody;
 	}
 	public void populateTaskData() {
 		// TODO Auto-generated method stub
@@ -109,7 +118,7 @@ public class TaskItem implements IItem {
 			task.setName(m.getAttribute("name",null));
 			//Set task id
 			task.setId(m.getAttribute("calItemId", null));
-
+			task.setHtmlTaskBody(m.getAttribute("descHtml", null));
 			// TODO: parse the <m/> element
 
 			return (task);
