@@ -424,6 +424,78 @@ public class GetTask extends AjaxCommonTest {
 
 	}
 
+	/**
+	 * Test Case:- No refresh after task is marked complete in filter to-do list
+	 * 1.Create and verify a new task through soap
+	 * 2.Select same task and click "Mark As Completed" option from tool bar
+	 * 3.Preview pane shows Percentage field with 100% value
+	 * 4.Click Filter By dropdown and select To-Do List
+	 * 5.Verify task should not display in list view
+	 * @throws HarnessException
+	 */
+	@Bugs(ids="64681")
+	@Test(	description = "No refresh after task is marked complete in filter to-do list",
+			groups = { "functional" })
+	public void GetTask_07() throws HarnessException {
+		
+		FolderItem taskFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Tasks);
+		
+		
+		String subject = "task"+ ZimbraSeleniumProperties.getUniqueString();
+		String content = "content"+ ZimbraSeleniumProperties.getUniqueString();
+						
+		app.zGetActiveAccount().soapSend(
+				"<CreateTaskRequest xmlns='urn:zimbraMail'>" +
+					"<m >" +
+			        	"<inv>" +
+			        		"<comp name='"+ subject +"'>" +
+			        			"<or a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
+			        		"</comp>" +
+			        	"</inv>" +
+			        	"<su>"+ subject +"</su>" +
+			        	"<mp ct='text/plain'>" +
+			        		"<content>"+ content +"</content>" +
+			        	"</mp>" +
+					"</m>" +
+				"</CreateTaskRequest>");
+
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+
+		TaskItem task = TaskItem.importFromSOAP(app.zGetActiveAccount(), subject);
+		ZAssert.assertNotNull(task, "Verify the task is created");
+		
+		// Refresh the tasks view
+		app.zTreeTasks.zTreeItem(Action.A_LEFTCLICK, taskFolder);
+
+		// Select the message so that it shows in the reading pane
+		 app.zPageTasks.zListItem(Action.A_LEFTCLICK, subject);
+		
+		//Click on Mark As Completed button 
+		app.zPageTasks.zToolbarPressButton(Button.B_TASK_MARKCOMPLETED);
+		
+		DisplayTask actual = (DisplayTask) app.zPageTasks.zListItem(Action.A_LEFTCLICK, subject);
+		
+		//Verify % field in list view
+		ZAssert.assertEquals(actual.zGetTaskListViewProperty(Field.Percentage), "100%", "Verify % field matches");
+		
+		//Click Filter By Drop down and select To-Do List menu item
+		app.zPageTasks.zToolbarPressPulldown(Button.B_TASK_FILTERBY, Button.O_TASK_TODOLIST);
+		
+		//Verify the task is no longer present for Mark as completed Tasks"		
+		List<TaskItem> tasks = app.zPageTasks.zGetTasks();
+		ZAssert.assertNotNull(tasks, "Verify the task list exists");
+
+		TaskItem found = null;
+		for (TaskItem t : tasks) {
+			logger.info("Subject: looking for "+ subject +" found: "+ t.gSubject);
+			if ( subject.equals(t.gSubject) ) {
+				found = t;
+				break;
+			}
+		}
+		ZAssert.assertNull(found, "Verify the task is no longer present for Mark as completed Tasks");
+
+		}
 
 
 }
