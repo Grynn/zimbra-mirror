@@ -169,6 +169,76 @@ public class EditTask extends AjaxCommonTest{
 		ZAssert.assertEquals(actual.zGetTaskListViewProperty(com.zimbra.qa.selenium.projects.ajax.ui.tasks.DisplayTask.Field.DueDate), dueDate.toMM_DD_YYYY(), "Verify the due date matches after refresh");
 			
 	}
+	@Test(	description = "Create task through SOAP - Edit task using Right Click Context Menu & verify through GUI",groups = { "functional" })
+	public void EditTask_03() throws HarnessException {
 
+		FolderItem taskFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Tasks);
+
+
+		String subject = "task"+ ZimbraSeleniumProperties.getUniqueString();
+		String Newsubject = "Edittask"+ ZimbraSeleniumProperties.getUniqueString();
+
+		app.zGetActiveAccount().soapSend(
+				"<CreateTaskRequest xmlns='urn:zimbraMail'>" +
+				"<m >" +
+				"<inv>" +
+				"<comp name='"+ subject +"'>" +
+				"<or a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
+				"</comp>" +
+				"</inv>" +
+				"<su>"+ subject +"</su>" +
+				"<mp ct='text/plain'>" +
+				"<content>content"+ ZimbraSeleniumProperties.getUniqueString() +"</content>" +
+				"</mp>" +
+				"</m>" +
+		"</CreateTaskRequest>");
+
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+
+		TaskItem task = TaskItem.importFromSOAP(app.zGetActiveAccount(), subject);
+		ZAssert.assertNotNull(task, "Verify the task is created");
+
+		// Refresh the tasks view
+		app.zTreeTasks.zTreeItem(Action.A_LEFTCLICK, taskFolder);
+
+		// Select the item
+		app.zPageTasks.zListItem(Action.A_LEFTCLICK, subject);
+
+		// Right click subject and select edit context menu
+		FormTaskNew taskedit = (FormTaskNew) app.zPageTasks.zListItem(Action.A_RIGHTCLICK, Button.O_EDIT, subject);
+
+		//Fill new subject in subject field
+		taskedit.zFillField(Field.Subject, Newsubject);
+		taskedit.zSubmit();
+
+		// Get the list of tasks in the view
+		List<TaskItem> tasks = app.zPageTasks.zGetTasks();
+		ZAssert.assertNotNull(tasks, "Verify the list of edited tasks exists");
+
+		// Iterate over the task list, looking for the new task
+		TaskItem found = null;
+		for (TaskItem t : tasks ) {
+			logger.info("Task: looking for "+ Newsubject +" found: "+ t.gSubject);
+			if ( Newsubject.equals(t.gSubject) ) {
+				// Found it!
+				found = t;
+			}
+		}
+		ZAssert.assertNotNull(found, "Verify the Edited task present in the task list");
+
+		// Iterate over the task list, looking for the old task
+		TaskItem foundoldtask = null;
+		for (TaskItem t : tasks ) {
+			logger.info("Task: looking for "+ subject +" foundeditedtask: "+ t.gSubject);
+			if ( subject.equals(t.gSubject) ) {
+				// Found it!
+				foundoldtask = t;
+				break;
+			}
+		}
+
+		ZAssert.assertNull(foundoldtask, "Verify the old task no longer  present in the task list");
+
+	}
 
 }
