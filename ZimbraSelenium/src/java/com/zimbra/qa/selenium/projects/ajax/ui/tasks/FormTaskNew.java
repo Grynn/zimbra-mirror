@@ -1,5 +1,6 @@
 package com.zimbra.qa.selenium.projects.ajax.ui.tasks;
 
+import com.zimbra.qa.selenium.framework.core.SeleniumService;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
@@ -308,19 +309,23 @@ public class FormTaskNew extends AbsForm {
 
 		}else if (field == Field.HtmlBody) {
 			locator = Locators.zBodyField;
+			String browser = SeleniumService.getInstance().getSeleniumBrowser();			
 			try {
-			   sSelectFrame(Locators.zFrame);
-			   this.sFocus(locator);
-			   this.zClick(locator);
-			 //  zKeyboard.zTypeCharacters(value);
-			   sType(locator, value);
-			  /* if (!(sGetValue(locator).equalsIgnoreCase(value))) {
+
+				if (browser.equalsIgnoreCase("iexplore")) {
+					this.sFocus(Locators.zFrame);
+					this.zClickAt(Locators.zFrame, "");
+					zTypeFormattedText(Locators.zFrame, value);
+					this.zWaitForBusyOverlay();
+					return;
+				} else {
+					sSelectFrame(Locators.zFrame);
 					this.sFocus(locator);
-					this.zClick(locator);
+					this.zClickAt(locator, "");
 					sType(locator, value);
-				}*/
+				}
 			} finally {
-			   sSelectWindow("Zimbra: Tasks");
+				sSelectWindow("Zimbra: Tasks");
 			}
 			return;
 
