@@ -34,8 +34,13 @@ public class TagContact extends AjaxCommonTest  {
 		
 		String contactTags = app.zGetActiveAccount().soapSelectValue("//mail:GetContactsResponse//mail:cn", "t");
 		 
-		ZAssert.assertEquals(contactTags, tagID, "Verify the tag appears on the contact id=" +  contactItem.getId());
-		
+		//if multi-tagged
+		if (contactTags.contains(",")) {
+			ZAssert.assertStringContains(contactTags, tagID, "Verify the tag appears on the contact id=" +  contactItem.getId());
+		}
+		else {
+			ZAssert.assertEquals(contactTags, tagID, "Verify the tag appears on the contact id=" +  contactItem.getId());
+		}
 		//verify toasted message '1 contact tagged ...'
         Toaster toast = app.zPageMain.zGetToaster();
         String toastMsg = toast.zGetToastMessage();
@@ -47,7 +52,7 @@ public class TagContact extends AjaxCommonTest  {
 			groups = { "smoke" })
 	public void ClickPulldownMenuTagNewTag() throws HarnessException {
 
-		  // Create a contact via Soap then select
+		// Create a contact via Soap then select
 		ContactItem contactItem = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_LEFTCLICK);
 
 	    String tagName = "tag"+ ZimbraSeleniumProperties.getUniqueString();
@@ -76,6 +81,62 @@ public class TagContact extends AjaxCommonTest  {
 		Verify(contactItem, tagName); 
 	}
 
+	@Test(	description = "Right click then click Tag Contact->a tag name",
+			groups = { "functional" })	
+	public void ClickContextMenuTagContactExistingTag() throws HarnessException {
+		// Create a tag
+		TagItem tagItem = TagItem.CreateUsingSoap(app);		
+
+		// Create a contact via Soap then select
+		ContactItem contactItem = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_LEFTCLICK);
+			
+		//click Tag Contact->the tag name
+		app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_TAG, tagItem, contactItem.fileAs);        
+    	
+		Verify(contactItem, tagItem.getName()); 
+	}
+
+	@Test(	description = "click pulldown menu Tag->A tag name",
+			groups = { "smoke" })	
+	public void ClickPulldownMenuTagExistingTag() throws HarnessException {
+		// Create a contact via Soap then select
+		ContactItem contactItem = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_LEFTCLICK);
+
+		// Create a tag
+		TagItem tagItem = TagItem.CreateUsingSoap(app);
+		
+		// select the tag
+		app.zPageAddressbook.zToolbarPressPulldown(Button.B_TAG, tagItem);
+
+		Verify(contactItem, tagItem.getName()); 
+	}
+
+	@Test(	description = "Double tag a contact ",
+			groups = { "functional" })	
+	public void DoubleTag() throws HarnessException {
+		// Create a new tag
+		TagItem tagItem = TagItem.CreateUsingSoap(app);
+
+		// Create a contact via Soap then select
+		ContactItem contactItem = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_LEFTCLICK);
+
+		// select the tag
+		app.zPageAddressbook.zToolbarPressPulldown(Button.B_TAG, tagItem);
+
+		Verify(contactItem, tagItem.getName()); 
+
+		// create a new tag name 		
+		String tagName = "tag"+ ZimbraSeleniumProperties.getUniqueString();
+			
+		//click Tag Contact->New Tag	
+        DialogTag dialogTag = (DialogTag) app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_TAG, Button.O_TAG_NEWTAG , contactItem.fileAs);        
+    	dialogTag.zSetTagName(tagName);
+		dialogTag.zClickButton(Button.B_OK);		
+
+		Verify(contactItem, tagName); 
+		
+	}
+
 	
 	@Test(	description = "Tag a contact by dnd on an existing tag",
 			groups = { "functional" })
@@ -98,6 +159,8 @@ public class TagContact extends AjaxCommonTest  {
 		Verify(contactItem, tagItem.getName());
 			  
    	}
-  	
+
+
+
 }
 

@@ -411,7 +411,7 @@ public class PageAddressbook extends AbsTab {
 	
 		
 		if ( page != null ) {
-			sWaitForPageToLoad();			
+			//sWaitForPageToLoad();			
 			  ExecuteHarnessMain.ResultListener.captureScreen();
 			page.zWaitForActive();
 			  ExecuteHarnessMain.ResultListener.captureScreen();
@@ -607,7 +607,7 @@ public class PageAddressbook extends AbsTab {
 			// If we click on pulldown/option and the page is specified, then
 			// wait for the page to go active
 			if ( page != null ) {
-				sWaitForPageToLoad();
+				//sWaitForPageToLoad();
 				page.zWaitForActive();
 			}
 			
@@ -624,9 +624,6 @@ public class PageAddressbook extends AbsTab {
 		if ( pulldown == null )
 			throw new HarnessException("Button cannot be null!");
 
-
-		// Default behavior variables
-		//
 		String pulldownLocator = null;	// If set, this will be expanded
 		String optionLocator = null;	// If set, this will be clicked
 		AbsPage page = null;	// If set, this page will be returned
@@ -639,7 +636,17 @@ public class PageAddressbook extends AbsTab {
 	         //TODO page=?	         
 	      }
 	   }
-	   
+	   else if ( pulldown == Button.B_TAG ) {			
+		   if ( item instanceof TagItem) {
+			 pulldownLocator = "css=td#zb__CNS-main__TAG_MENU_dropdown div.ImgSelectPullDownArrow";
+			
+			 //Selenium cannot find the following optionLocator
+             //optionLocator = "css=div#zb__CNS-main__TAG_MENU|MENU div:contains('" +((TagItem)item).getName()   + "'"; 
+			    
+		     page = null;
+	       }
+	   }
+	  	   
 	   if ( pulldownLocator != null ) {
 						
 			// Make sure the locator exists
@@ -652,9 +659,27 @@ public class PageAddressbook extends AbsTab {
 			zClickAt(pulldownLocator,center);
 			
 			zWaitForBusyOverlay();
+            
+			// find optionLocator
+			if ( pulldown == Button.B_TAG ) {	
+				String tagName = ((TagItem)item).getName();  
+			     
+				//get number of menu's options
+				int countOption= Integer.parseInt(sGetEval("window.document.getElementById('zb__CNS-main__TAG_MENU|MENU').children[0].children[0].children.length"));
+				String id= null;
+				
+				//find option id contains the tag name
+				for (int i=0; i <countOption; i++) {
+				 id= sGetEval("window.document.getElementById('zb__CNS-main__TAG_MENU|MENU').children[0].children[0].children[" + i + "].children[0].children[0].id");
+		     
+				 if (sGetText("css=div#" + id).contains(tagName)) {
+					 optionLocator = "css=div#" + id ; 
+					 break;
+				 }
+				}			 	
+			}	
 			
-			if ( optionLocator != null ) {
-               
+			if ( optionLocator != null ) {              
 				// Make sure the locator exists and visible
 				zWaitForElementPresent(optionLocator);
 				
@@ -946,7 +971,7 @@ public class PageAddressbook extends AbsTab {
 		
 		
 		if ( page != null ) {
-			sWaitForPageToLoad();
+			//sWaitForPageToLoad();
 			page.zWaitForActive();
 		}
 		return (page);
@@ -972,7 +997,7 @@ public class PageAddressbook extends AbsTab {
 													
 				if (item instanceof TagItem) {
 					TagItem ti = (TagItem) item;
-					itemLocator = "css=div#zmi__Contacts__TAG_MENU|MENU td[id$=title]:contains('" + ti.getName() + "')";
+					itemLocator = "css=td[id$=title]:contains('" + ti.getName() + "')";
 					
 				}																	
 			}
@@ -980,21 +1005,20 @@ public class PageAddressbook extends AbsTab {
 				if ( item instanceof ContactGroupItem) {
 					ContactGroupItem cgi= (ContactGroupItem) item;
 					cmi= CONTEXT_MENU.CONTACT_GROUP;
-					//itemLocator = "css=div#zmi__Contacts__CONTACTGROUP_MENU|GROUP_MENU td[id$=title]:contains('" + cgi.fileAs + "')";					
 				    itemLocator = "css=td[id$=title]:contains('" + cgi.fileAs + "')";
 				}				
 			}
 			
 			id = cmi.locator;
-			locator = "id="+ id;
+			locator = "css=div#zm__Contacts tr#"+ id;
 			
 			//  Make sure the context menu exists
 			zWaitForElementPresent(locator) ;
 			
 			// Check if the item is enabled
-			if (sIsElementPresent("css=div[id=" + id + "][class*=ZDisabled]")) {
-				throw new HarnessException("Tried clicking on "+ cmi.text +" but it was disabled ");
-			}
+			//if (sIsElementPresent("css=div[id=" + id + "][class*=ZDisabled]")) {
+			//	throw new HarnessException("Tried clicking on "+ cmi.text +" but it was disabled ");
+			//}
 			
 			// Mouse over the option
 			sFocus(locator);
