@@ -11,6 +11,9 @@ import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.octopus.core.OctopusCommonTest;
+import com.zimbra.qa.selenium.projects.octopus.ui.PageMyFiles;
+import com.zimbra.qa.selenium.projects.octopus.ui.PageSharing;
+import com.zimbra.qa.selenium.projects.octopus.ui.PageOctopus.Locators;
 
 public class CreateMountpoint extends OctopusCommonTest {
 
@@ -20,7 +23,7 @@ public class CreateMountpoint extends OctopusCommonTest {
 		logger.info("New " + CreateMountpoint.class.getCanonicalName());
 
 		// Test starts at the Octopus page
-		super.startingPage = app.zPageMyFiles;
+		super.startingPage = app.zPageSharing;
 		super.startingAccountPreferences = null;
 
 		ownerAccount = new ZimbraAccount();
@@ -84,10 +87,10 @@ public class CreateMountpoint extends OctopusCommonTest {
 				"Verify the mountpoint is available");
 
 		ZAssert.assertEquals(folderMountpointItem.getName(), folderMountpointName,
-				"Verify the server and client mountpoint names match");
+				"Verify the server mountpoint name");
 		
-		// refresh Octopus page
-		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_MY_FILES);
+		// click on My Files tab
+		PageMyFiles pageMyFiles = (PageMyFiles) app.zPageOctopus.zToolbarPressButton(Button.B_TAB_MY_FILES);
 				
 		// Verify the mountpoint exists in the list view
 		List<String> items = app.zPageOctopus.zGetListViewItems();
@@ -95,7 +98,14 @@ public class CreateMountpoint extends OctopusCommonTest {
 		ZAssert.assertNotNull(items, 
 		"Verify list view is not empty");
 		
-		ZAssert.assertContains(items, folderMountpointName,
-		"Verify list view contains mountpoint folder");		
+		//ZAssert.assertContains(items, folderMountpointName,
+		//"Verify list view contains mountpoint folder");	
+		
+		ZAssert
+		.assertTrue(pageMyFiles.zWaitForElementPresent(
+				PageMyFiles.Locators.zMyFilesListViewItems.locator
+						+ ":contains(" + folderMountpointName
+						+ ")", "3000"),
+				"Verify the mountpoint folder is displayed in the My Files list view");
 	}
 }
