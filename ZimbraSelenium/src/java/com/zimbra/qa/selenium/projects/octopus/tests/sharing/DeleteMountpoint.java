@@ -12,6 +12,7 @@ import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.octopus.core.OctopusCommonTest;
 import com.zimbra.qa.selenium.projects.octopus.ui.PageMyFiles;
+import com.zimbra.qa.selenium.projects.octopus.ui.PageTrash;
 
 public class DeleteMountpoint extends OctopusCommonTest {
 
@@ -102,11 +103,15 @@ public class DeleteMountpoint extends OctopusCommonTest {
 				"Verify mountpoint folder disappears from My Files tab");
 
 		// click on Trash tab
-		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_TRASH);
+		PageTrash pageTrash = (PageTrash) app.zPageOctopus
+				.zToolbarPressButton(Button.B_TAB_TRASH);
 
-		// Verify the mountpoint folder is now in the trash
-		ZAssert.assertTrue(app.zPageTrash.zIsItemInTrash(folderMountpointItem),
-				"Verify the mountpoint folder is in the trash");
+		// Verify the mount point folder is now in the trash
+		// ZAssert.assertTrue(app.zPageTrash.zIsItemInTrash(folderMountpointItem),"Verify the mountpoint folder is in the trash");
+		ZAssert.assertTrue(pageTrash.zWaitForElementPresent(
+				PageMyFiles.Locators.zMyFilesListViewItems.locator
+						+ ":contains(" + folderMountpointName + ")", "3000"),
+				"Verify the mountpoint folder is displayed in the Trash list view");
 
 		// Verify on server
 		folderMountpointItem = FolderMountpointItem.importFromSOAP(
