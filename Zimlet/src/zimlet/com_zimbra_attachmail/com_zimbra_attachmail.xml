@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_attachmail" version="1.1" target="main compose-window view-window" label="${msg.label}" description="${msg.description}">
+<zimlet name="com_zimbra_attachmail" version="1.2" target="main compose-window view-window" label="${msg.label}" description="${msg.description}">
 	<include>attachmail.js</include>
 	<include>AMZimletNavToolBar.js</include>
 	<includeCSS>attachmail.css</includeCSS>

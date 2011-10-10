@@ -651,7 +651,7 @@ function(htmlArr, idx, item, field, colIdx, params) {
 	htmlArr[idx++] = "<div class='AttachMailRowDiv'>";
 	htmlArr[idx++] = "<table width=100%>"; 
 	
-	var subject = item.subject ? AjxStringUtil.htmlEncode(item.subject.slice(0, 32)) : "<no subject>";
+	var subject = item.subject ? AjxStringUtil.htmlEncode(item.subject.slice(0, 32)) : ZmMsg.noSubject;
 	htmlArr[idx++] = "<tr>";
 	if (this._showCheckboxColSpan == 1) {
 		htmlArr[idx++] = "<td rowspan=3 style='vertical-align:middle;' width=20><center>";
