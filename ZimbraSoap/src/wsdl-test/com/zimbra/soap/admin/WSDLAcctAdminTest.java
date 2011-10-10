@@ -625,11 +625,12 @@ public class WSDLAcctAdminTest {
         req.setMbox(sel);
         testPurgeMessagesResponse resp = eif.purgeMessagesRequest(req);
         Assert.assertNotNull("PurgeMessagesResponse object", resp);
-        List <testMailboxWithAccountId> mboxids = resp.getMbox();
+        List <testMailboxWithMailboxId> mboxids = resp.getMbox();
         Assert.assertNotNull("List of <mbox> elements", mboxids);
         Assert.assertEquals("Number of <mbox> elements", 1, mboxids.size());
-        String accountId1 = mboxids.get(0).getId();
-        Assert.assertTrue("account id is different from the value passed", accountId.equals(accountId1));
+        long mboxid = mboxids.get(0).getMbxid();
+        Assert.assertTrue("mboxid = " + mboxid + " should be >0", mboxid > 0);
+        Assert.assertTrue("account returned is not the same as account passed", accountId.equals(mboxids.get(0).getId()));
     }
 
     @Test
