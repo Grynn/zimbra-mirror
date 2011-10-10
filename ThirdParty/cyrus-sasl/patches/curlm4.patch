@@ -1,46 +1,3 @@
---- /dev/null	2011-10-03 11:44:12.910711578 -0700
-+++ cyrus-sasl-2.1.25/cmulocal/curl.m4	2011-10-10 11:09:54.031873315 -0700
-@@ -0,0 +1,40 @@
-+dnl
-+dnl macros for configure.in to detect curl
-+dnl $Id: curl.m4,v 1.11 2006/05/17 18:30:19 murch Exp $
-+dnl
-+
-+AC_DEFUN([CMU_HAVE_CURL], [
-+AC_REQUIRE([CMU_FIND_LIB_SUBDIR])
-+AC_ARG_WITH(libcurl,[  --with-libcurl=PATH     use Curl from PATH],
-+	with_curl=$withval, with_curl="yes")
-+
-+	save_CPPFLAGS=$CPPFLAGS
-+	save_LDFLAGS=$LDFLAGS
-+
-+	if test -d $with_curl; then
-+	  CPPFLAGS="${CPPFLAGS} -I${with_curl}/include"
-+	  CMU_ADD_LIBPATH(${with_curl}/$CMU_LIB_SUBDIR)
-+	fi
-+
-+case "$with_curl" in
-+	no)
-+	  with_curl="no";;
-+	*) 
-+	  dnl if curl has been compiled with the rsaref2 libraries,
-+	  dnl we need to include the rsaref libraries in the crypto check
-+                LIB_CURL="-lcurl"
-+		AC_CHECK_HEADER(curl/curl.h, [
-+			AC_CHECK_LIB(curl, curl_easy_getinfo,
-+					with_curl="yes",
-+					with_curl="no", $LIB_CURL)],
-+			with_curl=no)
-+		;;
-+esac
-+
-+	if test "$with_curl" != "no"; then
-+		AC_DEFINE(HAVE_CURL,[],[Do we have Curl?])
-+	else
-+		CPPFLAGS=$save_CPPFLAGS
-+		LDFLAGS=$save_LDFLAGS
-+	fi
-+])
 --- cyrus-sasl-2.1.25/saslauthd/configure.in.orig	2011-10-10 12:44:00.211872522 -0700
 +++ cyrus-sasl-2.1.25/saslauthd/configure.in	2011-10-10 12:44:11.041877515 -0700
 @@ -37,6 +37,10 @@
@@ -79,3 +36,49 @@
  AC_ARG_WITH(pam, [  --with-pam=DIR          use PAM (rooted in DIR) [yes] ],
  	with_pam=$withval,
  	with_pam=yes)
+--- /dev/null	2011-10-03 11:44:12.910711578 -0700
++++ cyrus-sasl-2.1.25/cmulocal/curl.m4	2011-10-10 13:12:50.781873651 -0700
+@@ -0,0 +1,43 @@
++dnl
++dnl macros for configure.in to detect curl
++dnl $Id: curl.m4,v 1.11 2006/05/17 18:30:19 murch Exp $
++dnl
++
++AC_DEFUN([CMU_HAVE_CURL], [
++AC_REQUIRE([CMU_FIND_LIB_SUBDIR])
++AC_ARG_WITH(curl,[  --with-curl=PATH     use Curl from PATH],
++	with_curl=$withval, with_curl="yes")
++
++	save_CPPFLAGS=$CPPFLAGS
++	save_LDFLAGS=$LDFLAGS
++	save_LIBS=$LIBS
++
++	if test -d $with_curl; then
++	  CPPFLAGS="${CPPFLAGS} -I${with_curl}/include"
++	  CMU_ADD_LIBPATH(${with_curl}/$CMU_LIB_SUBDIR)
++	fi
++
++case "$with_curl" in
++	no)
++	  with_curl="no";;
++	*) 
++	  dnl if curl has been compiled with the rsaref2 libraries,
++	  dnl we need to include the rsaref libraries in the crypto check
++                LIB_CURL="-lcurl"
++		AC_CHECK_HEADER(curl/curl.h, [
++			AC_CHECK_LIB(curl, curl_easy_getinfo,
++					with_curl="yes",
++					with_curl="no", $LIB_CURL)],
++			with_curl=no)
++		LIBS="$LIBS $LIB_CURL"
++		;;
++esac
++
++	if test "$with_curl" != "no"; then
++		AC_DEFINE(HAVE_CURL,[],[Do we have Curl?])
++	else
++		CPPFLAGS=$save_CPPFLAGS
++		LDFLAGS=$save_LDFLAGS
++		LIBS=$save_LIBS
++	fi
++])
