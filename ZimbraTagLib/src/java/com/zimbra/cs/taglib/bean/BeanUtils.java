@@ -38,6 +38,7 @@ import com.zimbra.client.ZFilterCondition.ZDateCondition;
 import com.zimbra.client.ZFilterCondition.ZHeaderCondition;
 import com.zimbra.client.ZFilterCondition.ZHeaderExistsCondition;
 import com.zimbra.client.ZFilterCondition.ZSizeCondition;
+import com.zimbra.client.ZFilterCondition.ZAddressCondition;
 import com.zimbra.client.ZFolder.Color;
 import com.zimbra.client.ZFolder.View;
 import com.zimbra.client.ZInvite.ZAttendee;
@@ -747,6 +748,14 @@ public class BeanUtils {
 
     public static ZAddressBookCondition getAddressBook(ZFilterCondition condition) {
         return isAddressBook(condition) ? (ZAddressBookCondition) condition : null;
+    }
+
+    public static boolean isAddress(ZFilterCondition condition) {
+        return condition instanceof ZAddressCondition;
+    }
+
+    public static ZAddressCondition getAddress(ZFilterCondition condition) {
+        return isAddress(condition) ? (ZAddressCondition) condition : null;
     }
 
     public static boolean isBody(ZFilterCondition condition) {

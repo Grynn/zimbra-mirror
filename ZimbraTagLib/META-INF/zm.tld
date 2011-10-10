@@ -4185,6 +4185,55 @@
 
     <tag>
         <description>
+            Checks an address for a particular value.
+        </description>
+
+        <name>addressCondition</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.filter.AddressConditionTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <attribute>
+            <description>
+                Header name
+            </description>
+            <name>name</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                Address Part
+            </description>
+            <name>part</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                Header value to check for
+            </description>
+            <name>value</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+               operation (IS, NOT_IS, CONTAINS, NOT_CONTAINS, MATCHES, NOT_MATCHES)
+            </description>
+            <name>op</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+
+    <tag>
+        <description>
             Size condition.
         </description>
 
@@ -6989,6 +7038,18 @@
         <name>getAddressBook</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>com.zimbra.client.ZFilterCondition.ZAddressBookCondition getAddressBook(com.zimbra.client.ZFilterCondition)</function-signature>
+    </function>
+
+    <function>
+        <name>isAddressCondition</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>boolean isAddress(com.zimbra.client.ZFilterCondition)</function-signature>
+    </function>
+
+    <function>
+        <name>getAddress</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>com.zimbra.client.ZFilterCondition.ZAddressCondition getAddress(com.zimbra.client.ZFilterCondition)</function-signature>
     </function>
 
     <function>
