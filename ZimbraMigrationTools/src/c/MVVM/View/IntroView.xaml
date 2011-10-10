@@ -28,8 +28,8 @@
         <TextBlock Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" Margin="-65,30,0,0" FontWeight="Bold" Name="textBlockMLabel" Text="Select a migration Type:" VerticalAlignment="Top" />
         <RadioButton Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" Margin="-65,54,0,0" Name="rbServerMig" VerticalAlignment="Top" Content="Server Migration" IsChecked="True" Command="{Binding GetIntroServerMigCommand}" />
         <RadioButton Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" Margin="-65,78,0,0" Name="rbUserMig" VerticalAlignment="Top" Content="User Migration" IsChecked="False" Command="{Binding GetIntroUserMigCommand}" />
-        <TextBlock Grid.Row="3" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="-85,52,0,0" Name="tbAppBuildnum" Text="{Binding Path=BuildNum}" FontSize="12" FontWeight="Normal" FontFamily="Arial" FontStyle="Normal" />
-        <TextBlock Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="-85,80,0,0" Name="textBlockCopyright" Text="Copyright © 2006-2011 VMware, Inc.  All rights reserved." />
-        <Button Grid.Row="3" Grid.Column="1" MinWidth="75" Margin="-85,80,-27,0" HorizontalAlignment="Right" VerticalAlignment="Bottom" Content="Begin" Name="buttonBegin" Command="{Binding BeginCommand}" />
+        <TextBlock Grid.Row="3" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="-85,89,0,0" Name="tbAppBuildnum" Text="{Binding Path=BuildNum}" FontSize="12" FontWeight="Normal" FontFamily="Arial" FontStyle="Normal" />
+        <TextBlock Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="-85,117,0,0" Name="textBlockCopyright" Text="Copyright © 2006-2011 VMware, Inc.  All rights reserved." />
+        <Button Grid.Row="3" Grid.Column="1" MinWidth="75" Margin="-85,117,-27,0" HorizontalAlignment="Right" VerticalAlignment="Bottom" Content="Begin" Name="buttonBegin" Command="{Binding BeginCommand}" />
     </Grid>
 </UserControl>

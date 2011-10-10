@@ -19,7 +19,7 @@
             <RowDefinition Height="40"></RowDefinition>
         </Grid.RowDefinitions>
         <StackPanel Name="ResultsSP">
-            <TabControl Name="ResultsTC" MinHeight="280"  Margin="5" ItemContainerStyle="{StaticResource itemstyleFocus}">
+            <TabControl Name="ResultsTC" MinHeight="310"  Margin="5" ItemContainerStyle="{StaticResource itemstyleFocus}">
                 <TabItem Name="AccountsTabItem" Header="Accounts" >
                     <Grid Name="AccountResultsGrid">
                         <ListView Margin="5" FontSize="11" Name="lstAccountResults" ItemsSource="{Binding AccountResultsList}" SelectedIndex="{Binding Path=CurrentAccountSelection, Mode=TwoWay}" ItemContainerStyle="{StaticResource itemstyleDouble}">

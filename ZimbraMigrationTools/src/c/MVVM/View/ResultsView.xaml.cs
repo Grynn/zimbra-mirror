@@ -105,7 +105,7 @@ namespace MVVM.View
             GridViewColumnHeader gvc1H = new GridViewColumnHeader();
             gvc1H.FontSize = 11;
             gvc1H.Width = 140;
-            gvc1H.Content = "Folder";
+            gvc1H.Content = " Folder";
             gvc1H.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Left;
             gvc1.DisplayMemberBinding = new Binding("FolderName");
             gvc1.Header = gvc1H;
@@ -115,7 +115,7 @@ namespace MVVM.View
             GridViewColumnHeader gvc2H = new GridViewColumnHeader();
             gvc2H.FontSize = 11;
             gvc2H.Width = 200;
-            gvc2H.Content = "Type";
+            gvc2H.Content = " Type";
             gvc2H.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Left;
             gvc2.DisplayMemberBinding = new Binding("TypeName");
             gvc2.Header = gvc2H;
@@ -124,8 +124,8 @@ namespace MVVM.View
             GridViewColumn gvc3 = new GridViewColumn();
             GridViewColumnHeader gvc3H = new GridViewColumnHeader();
             gvc3H.FontSize = 11;
-            gvc3H.Width = 120;
-            gvc3H.Content = "Progress";
+            gvc3H.Width = 126;
+            gvc3H.Content = " Progress";
             gvc3H.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Left;
             gvc3.DisplayMemberBinding = new Binding("UserProgressMsg");
             gvc3.Header = gvc3H;

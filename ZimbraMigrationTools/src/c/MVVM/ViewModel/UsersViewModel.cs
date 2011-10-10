@@ -23,7 +23,6 @@ namespace MVVM.ViewModel
             this.ObjectPickerCommand = new ActionCommand(this.ObjectPicker, () => true);
             this.LDAPBrowserCommand = new ActionCommand(this.LDAPBrowser, () => true);
             this.UserMapCommand = new ActionCommand(this.UserMap, () => true);
-            this.PublicFolderCommand = new ActionCommand(this.PublicFolder, () => true);
             this.AddCommand = new ActionCommand(this.Add, () => true);
             this.RemoveCommand = new ActionCommand(this.Remove, () => true);
             this.SaveCSVCommand = new ActionCommand(this.SaveCSV, () => true);
@@ -208,19 +207,6 @@ namespace MVVM.ViewModel
                     MessageBox.Show("Only CSV files are supported", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Exclamation);
                 }
             }
-        }
-
-        public ICommand PublicFolderCommand
-        {
-            get;
-            private set;
-        }
-
-        private void PublicFolder()
-        {
-            EnablePopButtons = false;
-            MessageBox.Show("Public Folder", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Exclamation);
-            EnablePopButtons = true;
         }
 
         public ICommand AddCommand

@@ -4,7 +4,7 @@
         xmlns:View="clr-namespace:MVVM.View"
         xmlns:ViewModel="clr-namespace:MVVM.ViewModel"
         FontFamily="Arial"
-        Title="Zimbra Migration" Height="464" Width="650">
+        Title="Zimbra Migration" Height="510" Width="650">
 
     <Page.Resources>
         <DataTemplate DataType="{x:Type ViewModel:IntroViewModel}">
@@ -56,7 +56,7 @@
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="45"></RowDefinition>
+                <RowDefinition Height="54"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
             <Grid Name="headerGrid" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">

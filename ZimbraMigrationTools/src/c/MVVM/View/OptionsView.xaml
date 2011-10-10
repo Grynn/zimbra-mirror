@@ -18,7 +18,7 @@
         </Grid.ColumnDefinitions>
         <TextBlock Grid.Row="0" HorizontalAlignment="Left" Margin="15,20,30,0" Name="serverOptTitle" Text="Options" TextWrapping="Wrap" FontWeight="Bold" VerticalAlignment="Top" />
         <TextBlock Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="15,5,36,0" Name="optionsText" Text="Choose the items and additional folders to migrate, along with any migration options.  Use Load to bring up existing choices, and Save to persist them." TextWrapping="Wrap" VerticalAlignment="Top" />
-        <GroupBox Name="GBItems" Grid.Row="2" Grid.Column="0" Header="Items" Margin="15,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="10">
+        <GroupBox Name="GBItems" Grid.Row="2" Grid.Column="0" Header="Items" Margin="15,20,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="10">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition MinHeight= "20" Height="Auto"></RowDefinition>
@@ -36,7 +36,7 @@
                 <CheckBox Content="Rules" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" Name="cbRules" VerticalAlignment="Center"  IsChecked="{Binding Path=ImportRuleOptions}"/>
             </Grid>
         </GroupBox>
-        <GroupBox Name="GBAdditionalFolders" Grid.Row="2" Grid.Column="1" MinHeight="{Binding ElementName=GBItems, Path=ActualHeight}" Header="Additional Folders" HorizontalAlignment="Left" Margin="85,10,0,0" VerticalAlignment="Top" Padding="10">
+        <GroupBox Name="GBAdditionalFolders" Grid.Row="2" Grid.Column="1" MinHeight="{Binding ElementName=GBItems, Path=ActualHeight}" Header="Additional Folders" HorizontalAlignment="Left" Margin="85,20,0,0" VerticalAlignment="Top" Padding="10">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition MinHeight= "20" Height="Auto"></RowDefinition>
@@ -48,7 +48,7 @@
                 <CheckBox Content="Junk" Grid.Row="2" HorizontalAlignment="Left" Name="cbJunk" VerticalAlignment="Center"  IsChecked="{Binding Path=ImportJunkOptions}" />
             </Grid>
         </GroupBox>
-        <GroupBox Name="GBOptions" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" MinWidth="400" Header="Options" HorizontalAlignment="Left" Margin="15,10,0,0" VerticalAlignment="Top" Padding="10">
+        <GroupBox Name="GBOptions" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" MinWidth="400" Header="Options" HorizontalAlignment="Left" Margin="15,20,0,0" VerticalAlignment="Top" Padding="10">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition MinHeight= "24" Height="Auto"></RowDefinition>
