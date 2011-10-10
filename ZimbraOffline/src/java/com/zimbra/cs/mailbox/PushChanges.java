@@ -989,6 +989,7 @@ public class PushChanges {
         Color color;
         boolean create = false;
         Contact cn = null;
+        int mask = 0;
         ombx.lock.lock();
         try {
             cn = ombx.getContactById(sContext, id);
@@ -1001,7 +1002,7 @@ public class PushChanges {
             else {
                 colorStr = color.toString();
             }
-            int mask = ombx.getChangeMask(sContext, id, MailItem.Type.CONTACT);
+            mask = ombx.getChangeMask(sContext, id, MailItem.Type.CONTACT);
             if ((mask & Change.CONFLICT) != 0) {
                 // this is a new contact; need to push to the server
                 request = new Element.XMLElement(MailConstants.CREATE_CONTACT_REQUEST);
@@ -1060,6 +1061,12 @@ public class PushChanges {
                     return true;
                 }
                 id = createData.getFirst();
+            } else if ((mask & Change.FOLDER) != 0) {
+                Element moveRequest = new Element.XMLElement(MailConstants.ITEM_ACTION_REQUEST);
+                moveRequest.addElement(MailConstants.E_ACTION)
+                    .addAttribute(MailConstants.A_OPERATION, ItemAction.OP_MOVE).addAttribute(MailConstants.A_ID, id)
+                    .addAttribute(MailConstants.A_FOLDER, folderId);
+                ombx.sendRequest(moveRequest);
             }
         } catch (SoapFaultException sfe) {
             if (!sfe.getCode().equals(MailServiceException.NO_SUCH_CONTACT))
@@ -1073,7 +1080,7 @@ public class PushChanges {
         try {
             cn = ombx.getContactById(sContext, id);
             // check to see if the contact was changed while we were pushing the update...
-            int mask = 0;
+            mask = 0;
             if (flags != cn.getInternalFlagBitmask()) {
                 mask |= Change.FLAGS;
             }
