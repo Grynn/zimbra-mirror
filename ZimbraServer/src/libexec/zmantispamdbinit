@@ -33,7 +33,7 @@ zmassert -x ${zimbra_home}/bin/antispam-mysqladmin
 zmassert -x ${zimbra_home}/bin/antispam-mysql
 zmassert -x ${zimbra_home}/bin/zmlocalconfig
 zmassert -x ${zimbra_home}/bin/zmantispamdbpasswd
-zmassert -x ${antispam_mysql_directory}/bin/mysql_install_db
+zmassert -x ${antispam_mysql_directory}/scripts/mysql_install_db
 zmassert -r ${zimbra_home}/data/amavisd/mysql/antispamdb.sql
 
 #
@@ -59,10 +59,10 @@ fi
 # Create database
 #
 echo '*' Creating database in ${antispam_mysql_data_directory}
-(cd ${antispam_mysql_directory}; ./bin/mysql_install_db \
+(cd ${antispam_mysql_directory}; ./scripts/mysql_install_db \
     --basedir=${antispam_mysql_directory} \
-    --defaults-file=${antispam_mysql_mycnf} \
-    --plugin_dir=${mysql_directory}/lib/mysql/plugin) \
+    --datadir=${antispam_mysql_data_directory} \
+    --defaults-file=${antispam_mysql_mycnf} ) \
     >> ${zimbra_log_directory}/zmantispamdbinit.log 2>&1
 
 #
@@ -89,10 +89,11 @@ echo -n '*' Starting antispam mysql server ...
 cd ${antispam_mysql_directory}; \
 ${antispam_mysql_directory}/bin/mysqld_safe \
     --defaults-file=${antispam_mysql_mycnf} \
+    --basedir=${antispam_mysql_directory} \
+    --datadir=${antispam_mysql_data_directory} \
     --external-locking \
     --log-error=${antispam_mysql_errlogfile} \
-    --plugin_dir=${mysql_directory}/lib/mysql/plugin \
-    --ledir=${antispam_mysql_directory}/libexec < /dev/null > /dev/null 2>&1 &
+    --ledir=${antispam_mysql_directory}/bin < /dev/null > /dev/null 2>&1 &
 SQLSTARTED=0
 for ((i = 0; i < 60; i++))
 do

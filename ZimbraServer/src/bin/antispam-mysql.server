@@ -122,9 +122,9 @@ case "$1" in
       ${antispam_mysql_directory}/bin/mysqld_safe \
       --defaults-file=${antispam_mysql_mycnf} \
       --external-locking \
+      --datadir=${antispam_mysql_data_directory} \
       --log-error=${antispam_mysql_errlogfile} \
-      --plugin_dir=${mysql_directory}/lib/mysql/plugin \
-      --ledir=${antispam_mysql_directory}/libexec < /dev/null > /dev/null 2>&1 &
+      --ledir=${antispam_mysql_directory}/bin < /dev/null > /dev/null 2>&1 &
     SQLSTARTED=0
     for ((i = 0; i < 60; i++))
     do
