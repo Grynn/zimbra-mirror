@@ -37,7 +37,7 @@
  	with_pam=$withval,
  	with_pam=yes)
 --- /dev/null	2011-10-03 11:44:12.910711578 -0700
-+++ cyrus-sasl-2.1.25/cmulocal/curl.m4	2011-10-10 13:12:50.781873651 -0700
++++ cyrus-sasl-2.1.25/cmulocal/curl.m4	2011-10-10 13:16:49.551869903 -0700
 @@ -0,0 +1,43 @@
 +dnl
 +dnl macros for configure.in to detect curl
@@ -46,7 +46,7 @@
 +
 +AC_DEFUN([CMU_HAVE_CURL], [
 +AC_REQUIRE([CMU_FIND_LIB_SUBDIR])
-+AC_ARG_WITH(curl,[  --with-curl=PATH     use Curl from PATH],
++AC_ARG_WITH(libcurl,[  --with-libcurl=PATH     use Curl from PATH],
 +	with_curl=$withval, with_curl="yes")
 +
 +	save_CPPFLAGS=$CPPFLAGS
