@@ -355,13 +355,11 @@ public class AcceptMeeting extends AjaxCommonTest {
 		// Select the invitation
 		DisplayMail display = (DisplayMail)app.zPageMail.zListItem(Action.A_LEFTCLICK, apptSubject);
 
-		// Click Accept > Edit Reply, modify body and send		
-		display.zPressButtonPulldown(Button.B_ACCEPT, Button.O_ACCEPT_EDIT_REPLY);
-		
-		FormMailNew sendButton = new FormMailNew(app);
-		FormMailNew mailForm = new FormMailNew(app);
-		mailForm.zFillField(Field.Body, modifiedBody);
-		sendButton.zSubmit();
+        // Click Accept -> Edit Reply , which will open a new reply compose
+        FormMailNew editReply = (FormMailNew)display.zPressButtonPulldown(Button.B_ACCEPT, Button.O_ACCEPT_EDIT_REPLY);
+        editReply.zFillField(Field.Body, modifiedBody);
+        editReply.zSubmit();
+        
 		
 		// ---------------- Verification at organizer & invitee side both -------------------------------------       
 

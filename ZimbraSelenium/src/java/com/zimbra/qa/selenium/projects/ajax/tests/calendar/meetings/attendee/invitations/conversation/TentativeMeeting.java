@@ -361,12 +361,9 @@ public class TentativeMeeting extends AjaxCommonTest {
 		DisplayMail display = (DisplayMail)app.zPageMail.zListItem(Action.A_LEFTCLICK, apptSubject);
 
 		// Click Tentative > Edit Reply, modify body and send
-		display.zPressButtonPulldown(Button.B_TENTATIVE, Button.O_TENTATIVE_EDIT_REPLY);
-		
-		FormMailNew sendButton = new FormMailNew(app);
-		FormMailNew mailForm = new FormMailNew(app);
-		mailForm.zFillField(Field.Body, modifiedBody);     
-		sendButton.zSubmit();
+		FormMailNew editReply = (FormMailNew)display.zPressButtonPulldown(Button.B_TENTATIVE, Button.O_TENTATIVE_EDIT_REPLY);
+        editReply.zFillField(Field.Body, modifiedBody);
+        editReply.zSubmit();
 		
 		// ---------------- Verification at organizer & invitee side both -------------------------------------       
 
