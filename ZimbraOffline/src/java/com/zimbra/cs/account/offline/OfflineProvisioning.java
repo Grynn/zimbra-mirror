@@ -1382,11 +1382,6 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         return acct;
     }
 
-    @Override
-    public synchronized List<NamedEntry> searchAccounts(String query, String[] returnAttrs, String sortAttr, boolean sortAscending, int flags) throws ServiceException {
-        throw new UnsupportedOperationException();
-    }
-
     private List<String> cachedaccountIds;
 
     public synchronized List<String> getAllAccountIds() throws ServiceException {
@@ -1769,11 +1764,6 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     @SuppressWarnings("unchecked")
     public synchronized List getAllDistributionLists(Domain d) throws ServiceException {
         throw OfflineServiceException.UNSUPPORTED("getAllDistributionLists");
-    }
-
-    @Override
-    public synchronized List<NamedEntry> searchAccounts(Domain d, String query, String[] returnAttrs, String sortAttr, boolean sortAscending, int flags) throws ServiceException {
-        throw new UnsupportedOperationException();
     }
 
     @Override
