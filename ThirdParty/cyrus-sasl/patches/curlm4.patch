@@ -8,7 +8,7 @@
 +
 +AC_DEFUN([CMU_HAVE_CURL], [
 +AC_REQUIRE([CMU_FIND_LIB_SUBDIR])
-+AC_ARG_WITH(curl,[  --with-curl=PATH     use Curl from PATH],
++AC_ARG_WITH(libcurl,[  --with-libcurl=PATH     use Curl from PATH],
 +	with_curl=$withval, with_curl="yes")
 +
 +	save_CPPFLAGS=$CPPFLAGS
