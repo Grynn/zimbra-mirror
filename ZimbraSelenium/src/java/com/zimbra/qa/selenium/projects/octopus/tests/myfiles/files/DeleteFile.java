@@ -8,6 +8,7 @@ import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.octopus.core.OctopusCommonTest;
+import com.zimbra.qa.selenium.projects.octopus.ui.PageMyFiles;
 
 public class DeleteFile extends OctopusCommonTest {
 
@@ -75,15 +76,14 @@ public class DeleteFile extends OctopusCommonTest {
 		ZAssert.assertNotNull(_fileId, "Verify file is uploaded");
 
 		// delete file using SOAP
-		app.zPageOctopus.deleteFileUsingSOAP(_fileId, account);
-
-		SleepUtil.sleepSmall();
+		app.zPageOctopus.deleteItemUsingSOAP(_fileId, account);
 
 		// click on Trash tab
 		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_TRASH);
 
 		// Verify the file is now in the trash
-		app.zPageOctopus.zIsItemInCurentListView(fileName);
+		ZAssert.assertTrue(app.zPageOctopus.zIsItemInCurentListView(fileName),
+				"Verify the file was moved to the trash folder");
 	}
 
 	@Test(description = "Delete file using drop down menu - - verify deleted file in the Trash tab", groups = { "smoke" })
@@ -121,9 +121,15 @@ public class DeleteFile extends OctopusCommonTest {
 		// verify the file is uploaded
 		ZAssert.assertNotNull(_fileId, "Verify file is uploaded");
 
-		// delete file using drop down menu
+		// delete file using right click context menu
 		app.zPageMyFiles.zToolbarPressPulldown(Button.B_MY_FILES_LIST_ITEM,
 				Button.O_DELETE, fileName);
+
+		// Verify the deleted file disappears from My Files tab
+		ZAssert.assertTrue(app.zPageMyFiles.zWaitForElementDeleted(
+				PageMyFiles.Locators.zMyFilesListView.locator + ":contains("
+						+ fileName + ")", "3000"),
+				"Verify the deleted file disappears from My Files tab");
 
 		// click on Trash tab
 		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_TRASH);
@@ -151,7 +157,7 @@ public class DeleteFile extends OctopusCommonTest {
 		if (_fileAttached && _fileId != null) {
 			try {
 				// Delete it from Server
-				app.zPageOctopus.deleteFileUsingSOAP(_fileId,
+				app.zPageOctopus.deleteItemUsingSOAP(_fileId,
 						app.zGetActiveAccount());
 			} catch (Exception e) {
 				logger.info("Failed while deleting the file");

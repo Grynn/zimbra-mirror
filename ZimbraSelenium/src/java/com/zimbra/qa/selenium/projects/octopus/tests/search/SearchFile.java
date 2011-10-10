@@ -31,7 +31,7 @@ public class SearchFile extends OctopusCommonTest {
 		_fileAttached = false;
 	}
 
-	@Test(description = "Upload file through RestUtil - verify by searching file through SOAP", groups = { "smoke" })
+	@Test(description = "Upload file through RestUtil - verify by searching file through the SOAP", groups = { "smoke" })
 	public void SearchFile_01() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 
@@ -48,7 +48,7 @@ public class SearchFile extends OctopusCommonTest {
 		// Upload file to server through RestUtil
 		String attachmentId = account.uploadFile(filePath);
 
-		// Save uploaded file to briefcase through SOAP
+		// Save uploaded file through SOAP
 		account.soapSend("<SaveDocumentRequest xmlns='urn:zimbraMail'>"
 				+ "<doc l='" + briefcaseRootFolder.getId() + "'><upload id='"
 				+ attachmentId + "'/></doc></SaveDocumentRequest>");
@@ -57,12 +57,13 @@ public class SearchFile extends OctopusCommonTest {
 		_fileId = account.soapSelectValue(
 				"//mail:SaveDocumentResponse//mail:doc", "id");
 
-		// Verify file by search using SOAP
+		// Verify file by searching it through the SOAP
 		ZAssert.assertEquals(_fileId, app.zPageOctopus.searchFile(fileName),
 				"Verify file is returned by search");
 	}
 
-	@Test(description = "Delete file through SOAP - verify by searching file in the Trash tab", groups = { "functional" })
+	@Test(description = "" +
+			"Delete file - Search file in the Trash through the SOAP", groups = { "functional" })
 	public void SearchFile_02() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 
@@ -99,11 +100,11 @@ public class SearchFile extends OctopusCommonTest {
 		ZAssert.assertNotNull(_fileId, "Verify file is uploaded");
 
 		// delete file using SOAP
-		app.zPageOctopus.deleteFileUsingSOAP(_fileId, account);
+		app.zPageOctopus.deleteItemUsingSOAP(_fileId, account);
 
 		SleepUtil.sleepSmall();
 
-		// Verify by search file in Trash using SOAP
+		// Verify by searching file in the Trash using SOAP
 		ZAssert.assertEquals(_fileId,
 				app.zPageOctopus.searchFileIn(fileName, trash.getName()),
 				"Verify file is returned by search");
@@ -127,7 +128,7 @@ public class SearchFile extends OctopusCommonTest {
 		if (_fileAttached && _fileId != null) {
 			try {
 				// Delete it from Server
-				app.zPageOctopus.deleteFileUsingSOAP(_fileId,
+				app.zPageOctopus.deleteItemUsingSOAP(_fileId,
 						app.zGetActiveAccount());
 			} catch (Exception e) {
 				logger.info("Failed while deleting the file");

@@ -101,6 +101,7 @@ public class IgnoreShare extends OctopusCommonTest {
 		// click on Ignore button
 		pageSharing.zToolbarPressButton(Button.B_IGNORE, ownerFolderItem);
 
+		// Verify the ignored item appears in the Ignored Items View
 		ZAssert.assertTrue(pageSharing.zWaitForElementPresent(
 				PageSharing.Locators.zIgnoredItemsView.locator + ":contains("
 						+ ownerFolderItem.getName() + ")", "5000"),
@@ -109,7 +110,7 @@ public class IgnoreShare extends OctopusCommonTest {
 		// Click on My Files tab
 		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_MY_FILES);
 
-		// Make sure the ignored folder doesn't appear in My Files list view
+		// Verify the ignored folder doesn't appear in My Files list view
 		ZAssert
 				.assertFalse(app.zPageOctopus.zIsItemInCurentListView(ownerFolderItem.getName()),
 						"Verify the ignored share folder doesn't appears in My Files list view");

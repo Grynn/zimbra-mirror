@@ -35,6 +35,8 @@ public class PageOctopus extends AbsTab {
 				"css=div.octopus-tab-label:contains(Search)");
 		public static final Locators zMyFilesListViewItems = new Locators(
 				"css=div[class*=my-files-list-view]>div.my-files-list-item");
+		public static final Locators zRenameInput = new Locators(
+				"css=div[class*=edit-pane-panel-shim] input[class=field]");
 
 		public final String locator;
 
@@ -282,14 +284,15 @@ public class PageOctopus extends AbsTab {
 		return found;
 	}
 
-	public boolean zIsItemInCurentListView(String itemName) throws HarnessException {
+	public boolean zIsItemInCurentListView(String itemName)
+			throws HarnessException {
 		if (itemName == null)
 			throw new HarnessException("item cannot be null");
 
 		boolean found = false;
 		for (int i = 0; i < 5; i++) {
 			List<String> itemNames = zGetListViewItems();
-			
+
 			for (String str : itemNames)
 				if (str.contains(itemName)) {
 					return true;
@@ -319,11 +322,11 @@ public class PageOctopus extends AbsTab {
 		ZimbraAccount account = MyApplication.zGetActiveAccount();
 		account.soapSend("<SearchRequest xmlns='urn:zimbraMail' types='document'>"
 				+ "<query>" + fileName + "</query>" + "</SearchRequest>");
-		
-		String id = account.soapSelectValue(
-				"//mail:SearchResponse//mail:doc", "id");
 
-			return id;
+		String id = account.soapSelectValue("//mail:SearchResponse//mail:doc",
+				"id");
+
+		return id;
 	}
 
 	public String searchFileIn(String fileName, String folderName)
@@ -337,17 +340,31 @@ public class PageOctopus extends AbsTab {
 				+ "</query>"
 				+ "</SearchRequest>");
 
-		String id = account.soapSelectValue(
-				"//mail:SearchResponse//mail:doc", "id");
+		String id = account.soapSelectValue("//mail:SearchResponse//mail:doc",
+				"id");
 
 		return id;
 	}
 
-	public void deleteFileUsingSOAP(String docId, ZimbraAccount account)
+	public void deleteItemUsingSOAP(String itemId, ZimbraAccount account)
 			throws HarnessException {
 		account.soapSend("<ItemActionRequest xmlns='urn:zimbraMail'>"
-				+ "<action id='" + docId + "' op='trash'/>"
+				+ "<action id='" + itemId + "' op='trash'/>"
 				+ "</ItemActionRequest>");
+	}
+
+	public void rename(String text) throws HarnessException {
+		// ClientSessionFactory.session().selenium().getEval("var x = selenium.browserbot.findElementOrNull(\""+Locators.zFrame.locator+"\");if(x!=null)x=x.contentWindow.document.body;if(browserVersion.isChrome){x.textContent='"+text+"';}else if(browserVersion.isIE){x.innerText='"+text+"';}");
+		logger.info("renaming to: " + text);
+
+		// sSelectFrame("relative=top");
+		if (zWaitForElementPresent(Locators.zRenameInput.locator, "3000"))
+			sType(Locators.zRenameInput.locator, text);
+		else
+			throw new HarnessException(Locators.zRenameInput.locator
+					+ " not present");
+
+		zKeyEvent(Locators.zRenameInput.locator, "13", "keydown");
 	}
 
 	@Override

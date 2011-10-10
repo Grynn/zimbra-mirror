@@ -42,6 +42,8 @@ public class CreateFolder extends OctopusCommonTest {
 		// refresh Octopus page
 		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_MY_FILES);
 
+		SleepUtil.sleepVerySmall();
+
 		// Make sure the folder was created on client
 		int newsize = app.zPageOctopus.zGetListViewItems().size();
 		ZAssert.assertTrue(newsize > clientsize,

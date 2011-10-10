@@ -135,7 +135,7 @@ public class AddToFavorites extends OctopusCommonTest {
 		if (_fileAttached && _fileId != null) {
 			try {
 				// Delete it from Server
-				app.zPageOctopus.deleteFileUsingSOAP(_fileId,
+				app.zPageOctopus.deleteItemUsingSOAP(_fileId,
 						app.zGetActiveAccount());
 			} catch (Exception e) {
 				logger.info("Failed while deleting the file");

@@ -24,12 +24,15 @@ public class PageMyFiles extends AbsTab {
 		public static final Locators zMyFilesListView = new Locators(
 				"css=div[class*=my-files-list-view]");
 		public static final Locators zMyFilesListViewItems = new Locators(
-				"css=div[class*=my-files-list-view]>div.my-files-list-item");
-		public static final Locators zDeleteFolderOption = new Locators(
+				"css=div[class*=my-files-list-view]>div[class^=my-files-list-item]");
+		public static final Locators zDeleteItem = new Locators(
 				"css=div[class^=sc-view sc-menu-item] a[class=menu-item]>span:contains(Delete)");
 		public static final Locators zMarkAsFavorite = new Locators(
 				"css=div[class^=sc-view sc-menu-item] a[class=menu-item]>span:contains(Favorite)");
-
+		public static final Locators zRenameItem = new Locators(
+				"css=div[class^=sc-view sc-menu-item] a[class=menu-item]>span:contains(Rename)");
+	
+		
 		public final String locator;
 
 		private Locators(String locator) {
@@ -135,7 +138,7 @@ public class PageMyFiles extends AbsTab {
 			zWaitForBusyOverlay();
 
 			if (option == Button.O_DELETE) {
-				optionLocator = Locators.zDeleteFolderOption.locator;
+				optionLocator = Locators.zDeleteItem.locator;
 
 				if (!this.zWaitForElementPresent(optionLocator, "2000"))
 					throw new HarnessException("Button is not present locator="
@@ -153,7 +156,20 @@ public class PageMyFiles extends AbsTab {
 				if (!this.zWaitForElementPresent(optionLocator, "2000"))
 					throw new HarnessException("Button is not present locator="
 							+ optionLocator);
+				
+				this.sClickAt(optionLocator, "0,0");
 
+				// If the app is busy, wait for it to become active
+				zWaitForBusyOverlay();
+
+				return page;
+			} else if (option == Button.O_RENAME) {
+				optionLocator = Locators.zRenameItem.locator;
+
+				if (!this.zWaitForElementPresent(optionLocator, "2000"))
+					throw new HarnessException("Button is not present locator="
+							+ optionLocator);
+				
 				this.sClickAt(optionLocator, "0,0");
 
 				// If the app is busy, wait for it to become active

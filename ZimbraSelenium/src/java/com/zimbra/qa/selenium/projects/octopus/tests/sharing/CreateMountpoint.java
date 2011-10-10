@@ -12,9 +12,6 @@ import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.octopus.core.OctopusCommonTest;
 import com.zimbra.qa.selenium.projects.octopus.ui.PageMyFiles;
-import com.zimbra.qa.selenium.projects.octopus.ui.PageSharing;
-import com.zimbra.qa.selenium.projects.octopus.ui.PageOctopus.Locators;
-
 public class CreateMountpoint extends OctopusCommonTest {
 
 	private ZimbraAccount ownerAccount = null;
