@@ -63,7 +63,7 @@ LIBS="/opt/zimbra/libxml2/lib/libxml2.a" CFLAGS="-D_REENTRANT -g -O2 -I/opt/zimb
             --enable-shared \
             --with-dblib=no \
             --with-openssl=/opt/zimbra/openssl-${openssl_version} \
-            --with-libcurl=/opt/zimbra/curl-${curl_version}/bin/curl-config \
+            --with-libcurl=/opt/zimbra/curl-${curl_version} \
             --with-gss_impl=heimdal \
             --enable-gssapi=/opt/zimbra/heimdal-${heimdal_version} \
             --with-libxml2=/opt/zimbra/libxml2-${xml2_version}/bin/xml2-config \
@@ -74,7 +74,7 @@ LIBS="/opt/zimbra/libxml2/lib/libxml2.a" CFLAGS="-D_REENTRANT -g -O2 -I/opt/zimb
             --with-plugindir=/opt/zimbra/${cyrus_src}/lib/sasl2 \
             --with-dblib=no \
             --with-openssl=/opt/zimbra/openssl-${openssl_version} \
-            --with-libcurl=/opt/zimbra/curl-${curl_version}/bin/curl-config \
+            --with-libcurl=/opt/zimbra/curl-${curl_version} \
             --with-gss_impl=heimdal \
             --enable-gssapi=/opt/zimbra/heimdal-${heimdal_version} \
             --with-libxml2=/opt/zimbra/libxml2-${xml2_version}/bin/xml2-config \

@@ -186,37 +186,6 @@ diff -Naur cyrus-sasl-2.1.22/saslauthd/auth_zimbra.h cyrus-sasl-2.1.22-zimbra/sa
 +auth_zimbra_init(void);
 +
 +#endif /* _AUTH_ZIMBRA_H_ */
-diff -Naur cyrus-sasl-2.1.22/saslauthd/configure.in cyrus-sasl-2.1.22-zimbra/saslauthd/configure.in
---- cyrus-sasl-2.1.22/saslauthd/configure.in.orig	2006-05-17 22:16:17.000000000 +0530
-+++ cyrus-sasl-2.1.22-zimbra/saslauthd/configure.in	2007-09-05 05:06:55.000000000 +0530
-@@ -87,6 +87,27 @@
-   AC_DEFINE(HAVE_HTTPFORM,[],[Include HTTP form Support])
- fi
- 
-+AC_ARG_WITH(libxml2, [  --with-libxml2=PROG     script for libxml2 config [xml2-config] ],
-+        with_libxml2=$withval,
-+        with_libxml2=xml2-config)
-+AC_ARG_WITH(libcurl, [  --with-libcurl=PROG     script for curl library config [curl-config] ],
-+        with_libcurl=$withval,
-+        with_libcurl=curl-config)
-+AC_ARG_ENABLE(zimbra, [  --enable-zimbra        enable Zimbra authentication module [yes] ],
-+  authzimbra=$enableval,
-+  authzimbra=yes)
-+if test "$authzimbra" != no; then
-+  if test -z "$with_libxml2"; then
-+     AC_ERROR([Zimbra authentication requires libxml2])
-+  fi
-+  if test -z "$with_libcurl"; then
-+     AC_ERROR([Zimbra authentication requires libcurl])
-+  fi
-+  AC_DEFINE(AUTH_ZIMBRA,[],[Include Zimbra Authentication Support])
-+  LDFLAGS="$LDFLAGS `$with_libxml2 --libs` `$with_libcurl --libs`"
-+  CPPFLAGS="$CPPFLAGS `$with_libxml2 --cflags` `$with_libcurl --cflags`"
-+fi
-+
- AC_ARG_WITH(pam, [  --with-pam=DIR          use PAM (rooted in DIR) [yes] ],
- 	with_pam=$withval,
- 	with_pam=yes)
 diff -Naur cyrus-sasl-2.1.22/saslauthd/Makefile.am cyrus-sasl-2.1.22-zimbra/saslauthd/Makefile.am
 --- cyrus-sasl-2.1.22/saslauthd/Makefile.am	2006-05-17 22:16:17.000000000 +0530
 +++ cyrus-sasl-2.1.22-zimbra/saslauthd/Makefile.am	2007-09-06 04:42:17.000000000 +0530
