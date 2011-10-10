@@ -1449,7 +1449,7 @@ function(parentPath, item) {
 
     var cosTi = new ZaTreeItemData({
                 text: cos.name,
-                //image:"COS",
+                image:"COS",
                 forceNode: true,
                 mappingId: ZaZimbraAdmin._COS_VIEW,
                 path: parentPath + ZaTree.SEPERATOR + cos.name
@@ -1461,7 +1461,8 @@ function(parentPath, item) {
 
     var domainTi = new ZaTreeItemData({
                 text: domainName,
-                //image:"Domain",
+                image:"Domain",
+                forceNode: true,
                 mappingId: ZaZimbraAdmin._DOMAIN_VIEW,
                 path: parentPath + ZaTree.SEPERATOR + domainName
                 }
@@ -1491,7 +1492,7 @@ function(parentPath, item) {
         var accountTi = new ZaTreeItemData({
                     text: ZaMsg.OVP_accounts,
                     count:count,
-                    //image:"Account",
+                    image:"Account",
                     mappingId: ZaZimbraAdmin._COS_ACCOUNT_LIST_VIEW,
                     path: parentPath + ZaTree.SEPERATOR + item.name + ZaTree.SEPERATOR + ZaMsg.OVP_accounts
                     }
@@ -1505,7 +1506,7 @@ function(parentPath, item) {
         var domainTi = new ZaTreeItemData({
                     text: ZaMsg.OVP_domains,
                     count:count,
-                    //image:"Domain",
+                    image:"Domain",
                     mappingId: ZaZimbraAdmin._COS_DOMAIN_LIST_VIEW,
                     path: parentPath + ZaTree.SEPERATOR + item.name + ZaTree.SEPERATOR + ZaMsg.OVP_domains
                     }
@@ -1525,7 +1526,7 @@ function(parentPath, item) {
         var accountTi = new ZaTreeItemData({
                     text: ZaMsg.OVP_accounts,
                     count:count,
-                    //image:"Account",
+                    image:"Account",
                     mappingId: ZaZimbraAdmin._DOMAIN_ACCOUNT_LIST_VIEW,
                     path: parentPath + ZaTree.SEPERATOR + item.name + ZaTree.SEPERATOR + ZaMsg.OVP_accounts
                     }
@@ -1540,7 +1541,7 @@ function(parentPath, item) {
         var aliasTi = new ZaTreeItemData({
                     text: ZaMsg.TABT_Aliases,
                     count:count,
-                    //image:"DomainAlias",
+                    image:"DomainAlias",
                     mappingId: ZaZimbraAdmin._DOMAIN_ALIAS_LIST_VIEW,
                     path: parentPath + ZaTree.SEPERATOR + item.name + ZaTree.SEPERATOR + ZaMsg.OVP_accounts
                     }
@@ -1562,6 +1563,7 @@ function() {
         ti = new ZaTreeItemData({
                 text: objList[i].displayName,
                 type:1,
+                forceNode: (i+1 != objList.length),
                 path: objList[i].path
                 }
             );

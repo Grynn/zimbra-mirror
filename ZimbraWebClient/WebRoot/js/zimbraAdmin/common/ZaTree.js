@@ -388,6 +388,7 @@ function (dataItem) {
         ti = new ZaTreeItemData({
                 text: objList[i].displayName,
                 type:1,
+                forceNode: (i+1 != objList.length),
                 path: objList[i].path
                 }
             );
