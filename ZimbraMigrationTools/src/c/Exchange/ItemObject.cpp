@@ -182,11 +182,51 @@ STDMETHODIMP CItemObject::GetDataForItemID(VARIANT ItemId, VARIANT *pVal)
 				pIt[L"Subject"] = SysAllocString((msgdata.Subject).c_str());
 				pIt[L"Date"] = SysAllocString(( msgdata.DateString).c_str());
 			    pIt[L"JobTitle"] = SysAllocString((msgdata.Urlname).c_str());
-				pIt[L"MIME FILE PATH"] = SysAllocString((msgdata.MimeFile).c_str());
+				pIt[L"filePath"] = SysAllocString((msgdata.MimeFile).c_str());
 				pIt[L"UrlName"] = SysAllocString((msgdata.Urlname).c_str());
-				pIt[L"DeliverDate"] =  SysAllocString(( msgdata.DeliveryDateString).c_str());
+				
+				pIt[L"rcvdDate"] =  SysAllocString(( msgdata.DeliveryDateString.c_str()));
+
 			
-				pIt[L"Has Attachments"] = (msgdata.HasAttachments)? L"True":L"False";
+				CComBSTR flags =L"";
+				if(msgdata.HasAttachments)
+				{
+				flags.AppendBSTR(L"a");
+				}
+				if(msgdata.IsUnread)
+				{
+					flags.AppendBSTR(L"u");
+				}
+				if(msgdata.IsFlagged)
+				{
+					flags.AppendBSTR(L"f");
+				}
+				/*if(msgdata.HasText)
+				{
+					flags.AppendBSTR(L"T");
+				}
+				if(msgdata.HasHtml)
+				{
+					flags.AppendBSTR(L"H");
+				}*/
+				if(msgdata.IsDraft)
+				{
+					flags.AppendBSTR(L"d");
+				}
+				if(msgdata.IsForwared)
+				{
+					flags.AppendBSTR(L"w");
+				}
+				if(msgdata.IsUnsent)
+				{
+					flags.AppendBSTR(L"s");
+				}
+				if(msgdata.RepliedTo)
+				{
+					flags.AppendBSTR(L"r");
+				}
+			
+				/*pIt[L"Has Attachments"] = (msgdata.HasAttachments)? L"True":L"False";
 				pIt[L"HasHTML"] = (msgdata.HasHtml)? L"True":L"False";
 				pIt[L"HasText"] = (msgdata.HasText)? L"True":L"False";
 				pIt[L"IsDraft"] = (msgdata.IsDraft)? L"True":L"False";
@@ -196,7 +236,9 @@ STDMETHODIMP CItemObject::GetDataForItemID(VARIANT ItemId, VARIANT *pVal)
 				pIt[L"IsUnread"] = (msgdata.IsUnread)? L"True":L"False";
 				pIt[L"IsUnsent"] = (msgdata.IsUnsent)? L"True":L"False";
 				pIt[L"IsUnread"] = (msgdata.IsUnread)? L"True":L"False";
-				pIt[L"RepliedTo"] = (msgdata.IsUnread)? L"True":L"False";
+				pIt[L"RepliedTo"] = (msgdata.IsUnread)? L"True":L"False";*/
+				
+				pIt[L"flags"] = SysAllocString(flags);
 
 
 				pIt[L"UrlName"] = SysAllocString((msgdata.Urlname).c_str());

@@ -370,10 +370,19 @@ public class CSMigrationwrapper
                                     string[,] data = itemobject.GetDataForItemID(
                                             itemobject.ItemID);
                                     int bound0 = data.GetUpperBound(0);
+                                    
                                     for (int i = 0; i <= bound0; i++)
                                     {
+                                        
                                         string Key = data[0, i];
                                         string Value = data[1, i];
+
+                                        if (Key == "rcvdDate")
+                                        {
+                                           DateTime dat=  Convert.ToDateTime(Value);
+                                           Value = "" + dat.ToFileTimeUtc();
+                                           
+                                        }
                                         dict.Add(Key, Value);
                                         // Console.WriteLine("{0}, {1}", so1, so2);
                                     }
@@ -382,7 +391,9 @@ public class CSMigrationwrapper
                                 api.AccountName = Acct.Accountname;
                                 if (dict.Count > 0)
                                 {
-                                    //int stat = api.AddMessage(dict);
+                                    dict.Add("folderId", folderobject.ParentPath);
+                                    dict.Add("tags", "");
+                                    int stat = api.AddMessage(dict);
                                 }
                             }
                             Acct.migrationFolders[0].CurrentCountOFItems++;
