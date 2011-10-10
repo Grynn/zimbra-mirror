@@ -41,20 +41,20 @@
 +		LDFLAGS=$save_LDFLAGS
 +	fi
 +])
---- cyrus-sasl-2.1.25/saslauthd/configure.in.orig	2011-10-10 12:40:40.541870748 -0700
-+++ cyrus-sasl-2.1.25/saslauthd/configure.in	2011-10-10 11:20:34.416036958 -0700
-@@ -39,10 +39,6 @@
+--- cyrus-sasl-2.1.25/saslauthd/configure.in.orig	2011-10-10 12:44:00.211872522 -0700
++++ cyrus-sasl-2.1.25/saslauthd/configure.in	2011-10-10 12:44:11.041877515 -0700
+@@ -37,6 +37,10 @@
+ AC_MSG_CHECKING(for OpenSSL)
+ AC_MSG_RESULT($with_openssl)
  
++CMU_HAVE_CURL
++AC_MSG_CHECKING(for Curl)
++AC_MSG_RESULT($with_curl)
++
  SASL_DES_CHK
  
--CMU_HAVE_CURL
--AC_MSG_CHECKING(for Curl)
--AC_MSG_RESULT($with_curl)
--
  dnl mechanism-related checking
- SASL_KERBEROS_V4_CHK
- SASL_GSSAPI_CHK
-@@ -91,6 +87,24 @@
+@@ -87,6 +91,24 @@
    AC_DEFINE(HAVE_HTTPFORM,[],[Include HTTP form Support])
  fi
  
