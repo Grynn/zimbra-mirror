@@ -155,6 +155,7 @@ AjxPackage.require("zimbraAdmin.domains.view.ZaNewDomainXWizard");
 AjxPackage.require("zimbraAdmin.domains.view.ZaDomainAliasWizard");
 AjxPackage.require("zimbraAdmin.domains.view.ZaGALConfigXWizard");
 AjxPackage.require("zimbraAdmin.domains.view.ZaAuthConfigXWizard");
+AjxPackage.require("zimbraAdmin.domains.view.ZaTaskAuthConfigWizard");
 AjxPackage.require("zimbraAdmin.domains.view.ZaTaskAutoProvDialog");
 AjxPackage.require("zimbraAdmin.domains.view.ZaManualProvConfigDialog");
 AjxPackage.require("zimbraAdmin.domains.view.ZaDomainNotebookXWizard");

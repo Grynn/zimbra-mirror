@@ -387,7 +387,10 @@ function(ev) {
 			var item = this._contentView.getSelection()[0];
 			this._currentObject = item;
 			item.load("name", item.attrs[ZaDomain.A_domainName],false,true);
-			this._authWizard = ZaApp.getInstance().dialogs["authWizard"] = new ZaAuthConfigXWizard(this._container);	
+            if(appNewUI)
+			    this._authWizard = ZaApp.getInstance().dialogs["authWizard"] = new ZaTaskAuthConfigWizard(this._container);
+            else
+                this._authWizard = ZaApp.getInstance().dialogs["authWizard"] = new ZaAuthConfigXWizard(this._container);
 			this._authWizard.registerCallback(DwtWizardDialog.FINISH_BUTTON, ZaDomainListController.prototype._finishAuthButtonListener, this, null);			
 			this._authWizard.setObject(item);
 			this._authWizard.popup();

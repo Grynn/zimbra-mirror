@@ -141,7 +141,7 @@ LDAPURL_XFormItem.prototype.items = [
 		}
 	},
 	{type:_CHECKBOX_,width:"40px",containerCssStyle:"width:40px", forceUpdate:true, ref:".", labelLocation:_NONE_, label:null, 
-		visibilityChecks:[],
+		visibilityChecks:[], subLabel:"", align:_RIGHT_,
 	 	enableDisableChecks:[],
 		getDisplayValue:function (itemVal) {
             var instance = this.getForm().getInstance () ;
