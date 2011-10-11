@@ -24,6 +24,7 @@ namespace MVVM.ViewModel
         {
             this.LoadCommand = new ActionCommand(this.Load, () => true);
             this.SaveCommand = new ActionCommand(this.Save, () => true);
+            this.BackCommand = new ActionCommand(this.Back, () => true);
             this.NextCommand = new ActionCommand(this.Next, () => true);
             Isprofile = false;
             IsmailServer = false;
@@ -134,6 +135,17 @@ namespace MVVM.ViewModel
             }
         }
 
+        public ICommand BackCommand
+        {
+            get;
+            private set;
+        }
+
+        private void Back()
+        {
+            lb.SelectedIndex = 0;
+        }
+
         public ICommand NextCommand
         {
             get;
@@ -181,7 +193,7 @@ namespace MVVM.ViewModel
             }
             iMailSvrInitialized = (IsProfile) ? PROFILE_MODE : EXCHSVR_MODE;
             
-            lb.SelectedIndex = 1;
+            lb.SelectedIndex = 2;
         }
 
         private int iMailSvrInitialized;

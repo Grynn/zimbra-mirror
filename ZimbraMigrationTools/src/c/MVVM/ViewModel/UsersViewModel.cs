@@ -297,7 +297,7 @@ namespace MVVM.ViewModel
 
         private void Back()
         {
-            lb.SelectedIndex = 2;
+            lb.SelectedIndex = 3;
         }
 
         public ICommand NextCommand
@@ -344,7 +344,7 @@ namespace MVVM.ViewModel
                 }
             }
 
-            lb.SelectedIndex = 4;
+            lb.SelectedIndex = 5;
         }
 
         public const int TYPE_USERNAME = 1;

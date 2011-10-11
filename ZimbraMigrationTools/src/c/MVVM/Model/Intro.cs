@@ -21,6 +21,18 @@
             set;
         }
 
+        public bool IsServerMigration
+        {
+            get;
+            set;
+        }
+
+        public bool IsUserMigration
+        {
+            get;
+            set;
+        }
+
         public string InstallDir
         {
             get;

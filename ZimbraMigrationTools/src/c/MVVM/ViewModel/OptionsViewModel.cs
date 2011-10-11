@@ -167,14 +167,14 @@ namespace MVVM.ViewModel
 
         private void Back()
         {
-            lb.SelectedIndex = 1;
+            lb.SelectedIndex = 2;
         }
 
         private void Next()
         {
             if (isServer)
             {
-                lb.SelectedIndex = 3;
+                lb.SelectedIndex = 4;
             }
             else
             {

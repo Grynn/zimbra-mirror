@@ -22,6 +22,7 @@ namespace MVVM.ViewModel
         Intro m_intro = new Intro();
         public ObservableCollection<object> TheViews { get; set; }
 
+        private bool m_isBrowser = false;
         private ConfigViewModelS m_configViewModelS;
         private ConfigViewModelU m_configViewModelU;
         private ConfigViewModelSDest m_configViewModelSDest;
@@ -31,13 +32,11 @@ namespace MVVM.ViewModel
         private ScheduleViewModel m_scheduleViewModel;
         private AccountResultsViewModel m_resultsViewModel;
         private Grid hg;
-        private Grid vg;
         public CSMigrationwrapper mw;
-        public IntroViewModel(ListBox lbMode, Grid helpGrid, Grid viewsGrid)
+        public IntroViewModel(ListBox lbMode, Grid helpGrid)
         {
             lb = lbMode;
             hg = helpGrid;
-            vg = viewsGrid;
             this.GetIntroLicenseCommand = new ActionCommand(this.GetIntroLicense, () => true);
             this.GetIntroUserMigCommand = new ActionCommand(this.GetIntroUserMig, () => true);
             this.GetIntroServerMigCommand = new ActionCommand(this.GetIntroServerMig, () => true);
@@ -70,7 +69,17 @@ namespace MVVM.ViewModel
 
         private void GetIntroUserMig()
         {
-            BaseViewModel.isServer = false;
+            if (BaseViewModel.isServer)
+            {
+                for (int i = 6; i > 0; i--)
+                {
+                    TheViews.RemoveAt(i);
+                }
+                BaseViewModel.isServer = false;
+                IsUserMigration = true;
+                IsServerMigration = false;
+                AddViews(m_isBrowser);
+            }
         }
 
         public ICommand GetIntroServerMigCommand
@@ -81,7 +90,17 @@ namespace MVVM.ViewModel
 
         private void GetIntroServerMig()
         {
-            BaseViewModel.isServer = true;
+            if (BaseViewModel.isServer == false)
+            {
+                for (int i = 4; i > 0; i--)
+                {
+                    TheViews.RemoveAt(i);
+                }
+                BaseViewModel.isServer = true;
+                IsServerMigration = true;
+                IsUserMigration = false;
+                AddViews(m_isBrowser);
+            }
         }
 
         public ICommand BeginCommand
@@ -92,49 +111,25 @@ namespace MVVM.ViewModel
 
         private void Begin()
         {
-            TheViews.RemoveAt(0);
-
             // Get data to initialize the profile combo boxes
             mw.MailClient = "MAPI";
             mw.InitializeInterop();
             string[] profiles = mw.GetListofMapiProfiles();
-
-            if (BaseViewModel.isServer)
+            foreach (string s in profiles)
             {
-                BaseViewModel.isServer = true;
-                TheViews.Add(m_configViewModelS);
-                TheViews.Add(m_configViewModelSDest);
-                TheViews.Add(m_optionsViewModel);
-                TheViews.Add(m_usersViewModel);
-                TheViews.Add(m_scheduleViewModel);
-                TheViews.Add(m_resultsViewModel);
-                foreach (string s in profiles)
+                if (isServer)
                 {
                     m_configViewModelS.ProfileList.Add(s);
                 }
-                m_optionsViewModel.ImportNextButtonContent = "Next";
-            }
-            else
-            {
-                BaseViewModel.isServer = false;
-                TheViews.Add(m_configViewModelU);
-                TheViews.Add(m_configViewModelUDest);
-                TheViews.Add(m_optionsViewModel);
-                TheViews.Add(m_resultsViewModel);
-                foreach (string s in profiles)
+                else
                 {
                     m_configViewModelU.ProfileList.Add(s);
                 }
-                m_optionsViewModel.ImportNextButtonContent = "Migrate";
             }
 
             hg.Visibility = Visibility.Visible;
-            vg.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#E7E7E7"));
 
-            lb.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#E7E7E7"));
-            lb.Visibility = Visibility.Visible;
-            lb.IsEnabled = true;
-            lb.SelectedIndex = 0;
+            lb.SelectedIndex = 1;
         }
 
         public string BuildNum
@@ -167,11 +162,41 @@ namespace MVVM.ViewModel
             }
         }
 
+        public bool IsServerMigration
+        {
+            get { return m_intro.IsServerMigration; }
+            set
+            {
+                if (value == m_intro.IsServerMigration)
+                {
+                    return;
+                }
+                m_intro.IsServerMigration = value;
+
+                OnPropertyChanged(new PropertyChangedEventArgs("IsServerMigration"));
+            }
+        }
+
+        public bool IsUserMigration
+        {
+            get { return m_intro.IsUserMigration; }
+            set
+            {
+                if (value == m_intro.IsUserMigration)
+                {
+                    return;
+                }
+                m_intro.IsUserMigration = value;
+
+                OnPropertyChanged(new PropertyChangedEventArgs("IsUserMigration"));
+            }
+        }
+
         public string InstallDir
         {
             get;
             set;
-        } 
+        }
 
         public void SetupViewModelPtrs()
         {
@@ -191,10 +216,12 @@ namespace MVVM.ViewModel
             ViewModelPtrs[(int)ViewType.RESULTS] = m_resultsViewModel;
         }
 
-
         public void SetupViews(bool isBrowser)
         {
+            m_isBrowser = isBrowser;
             BaseViewModel.isServer = true;  // because we start out with Server on -- wouldn't get set by command
+            IsServerMigration = true;
+            IsUserMigration = false;
 
             m_configViewModelS = new ConfigViewModelS();
             m_configViewModelS.Name = "ConfigViewModelS";
@@ -279,6 +306,34 @@ namespace MVVM.ViewModel
 
             TheViews = new ObservableCollection<object>();
             TheViews.Add(this);
+        }
+
+        public void AddViews(bool isBrowser)
+        {
+            if (BaseViewModel.isServer)
+            {
+                BaseViewModel.isServer = true;
+                IsServerMigration = true;
+                IsUserMigration = false;
+                TheViews.Add(m_configViewModelS);
+                TheViews.Add(m_configViewModelSDest);
+                TheViews.Add(m_optionsViewModel);
+                TheViews.Add(m_usersViewModel);
+                TheViews.Add(m_scheduleViewModel);
+                TheViews.Add(m_resultsViewModel);
+                m_optionsViewModel.ImportNextButtonContent = "Next";
+            }
+            else
+            {
+                BaseViewModel.isServer = false;
+                IsUserMigration = true;
+                IsServerMigration = false;
+                TheViews.Add(m_configViewModelU);
+                TheViews.Add(m_configViewModelUDest);
+                TheViews.Add(m_optionsViewModel);
+                TheViews.Add(m_resultsViewModel);
+                m_optionsViewModel.ImportNextButtonContent = "Migrate";
+            }
         }
     }
 }

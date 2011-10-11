@@ -33,7 +33,7 @@
         <Grid Name="BottomGrid" Grid.Row="3" Margin="10,0,0,10" VerticalAlignment="Bottom">
             <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,0,0" Content="Load" Name="buttonConfigLoad" Command="{Binding LoadCommand}"  />
             <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="80,0,0,0" Content="Save" Name="buttonConfigSav" Command="{Binding SaveCommand}"  />
-            <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,85,0" Content="&lt; Back" Name="buttonConfigBack" IsEnabled="False"  />
+            <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,85,0" Content="&lt; Back" Name="buttonConfigBack" Command="{Binding BackCommand}"  />
             <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0" Content="Next &gt;" Name="buttonConfigNext" Command="{Binding NextCommand}"  />
         </Grid>
     </Grid>

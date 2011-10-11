@@ -104,7 +104,7 @@ namespace MVVM.ViewModel
 
         private void Back()
         {
-            lb.SelectedIndex = 0;
+            lb.SelectedIndex = 1;
         }
 
         public ICommand NextCommand
@@ -130,7 +130,7 @@ namespace MVVM.ViewModel
                 if (authToken.Length > 0)
                 {
                     zimbraAPI.GetInfo();
-                    lb.SelectedIndex = 2;
+                    lb.SelectedIndex = 3;
                 }
             }
             else

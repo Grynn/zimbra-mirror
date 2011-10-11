@@ -69,9 +69,9 @@
                 </Grid>
             </Grid>
 
-            <Grid Name="viewsGrid" Grid.Row="1" Grid.Column="0">
+            <Grid Name="viewsGrid" Grid.Row="1" Grid.Column="0" Background="#E7E7E7">
                 <StackPanel Orientation="Vertical">
-                    <ListBox Name="lbMode" Margin="0,9,0,0" Visibility="Hidden" IsEnabled="False" ScrollViewer.HorizontalScrollBarVisibility="Disabled" BorderThickness="0" ItemsSource="{Binding TheViews}" ItemContainerStyle="{StaticResource ViewListStyle}">
+                    <ListBox Name="lbMode" Background="#E7E7E7" Margin="0,9,0,0" ScrollViewer.HorizontalScrollBarVisibility="Disabled" BorderThickness="0" ItemsSource="{Binding TheViews}" ItemContainerStyle="{StaticResource ViewListStyle}">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Margin="10,0,0,0" VerticalAlignment="Center" Orientation="Vertical" Width="140">

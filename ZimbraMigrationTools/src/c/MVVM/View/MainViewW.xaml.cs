@@ -29,15 +29,16 @@ namespace MVVM.View
 
             m_baseViewModel = new BaseViewModel();
 
-            m_introViewModel = new IntroViewModel(lbMode, helpGrid, viewsGrid);
+            m_introViewModel = new IntroViewModel(lbMode, helpGrid);
             m_introViewModel.Name = "IntroViewModel";
-            m_introViewModel.ViewTitle = "Intro";
+            m_introViewModel.ViewTitle = "Welcome";
             m_introViewModel.lb = lbMode;
             m_introViewModel.isBrowser = true;
             Intro intro = new Intro();
             m_introViewModel.WelcomeMsg = intro.WelcomeMsg;
             m_introViewModel.InstallDir = intro.InstallDir;
             m_introViewModel.SetupViews(true);
+            m_introViewModel.AddViews(true);
 
             lbMode.SelectedIndex = 0;
             DataContext = m_introViewModel;

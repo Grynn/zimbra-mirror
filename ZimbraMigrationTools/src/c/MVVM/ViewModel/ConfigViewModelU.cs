@@ -22,6 +22,7 @@ namespace MVVM.ViewModel
             this.GetPSTCommand = new ActionCommand(this.GetPST, () => true);
             this.LoadCommand = new ActionCommand(this.Load, () => true);
             this.SaveCommand = new ActionCommand(this.Save, () => true);
+            this.BackCommand = new ActionCommand(this.Back, () => true);
             this.NextCommand = new ActionCommand(this.Next, () => true);
         }
 
@@ -143,6 +144,17 @@ namespace MVVM.ViewModel
             }
         }
 
+        public ICommand BackCommand
+        {
+            get;
+            private set;
+        }
+
+        private void Back()
+        {
+            lb.SelectedIndex = 0;
+        }
+
         public ICommand NextCommand
         {
             get;
@@ -172,7 +184,7 @@ namespace MVVM.ViewModel
 
         private void Next()
         {
-            lb.SelectedIndex = 1;
+            lb.SelectedIndex = 2;
         }
 
         public string OutlookProfile

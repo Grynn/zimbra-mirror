@@ -107,7 +107,7 @@ namespace MVVM.ViewModel
 
         private void Back()
         {
-            lb.SelectedIndex = 0;
+            lb.SelectedIndex = 1;
         }
 
         public ICommand NextCommand
@@ -146,7 +146,7 @@ namespace MVVM.ViewModel
                     {
                         scheduleViewModel.CosList.Add(new CosInfo(cosinfo.CosName, cosinfo.CosID));
                     }
-                    lb.SelectedIndex = 2;
+                    lb.SelectedIndex = 3;
                 }
             }
             else

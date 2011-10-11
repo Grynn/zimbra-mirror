@@ -125,7 +125,7 @@ namespace MVVM.ViewModel
 
         private void Back()
         {
-            lb.SelectedIndex = 3;
+            lb.SelectedIndex = 4;
         }
 
         public ICommand PreviewCommand
@@ -198,11 +198,11 @@ namespace MVVM.ViewModel
                 zimbraAPI.AccountName = acctName;
                 //
 
-                lb.SelectedIndex = 5;
+                lb.SelectedIndex = 6;
             }
             else
             {
-                lb.SelectedIndex = 3;
+                lb.SelectedIndex = 4;
             }
 
             AccountResultsViewModel accountResultsViewModel = ((AccountResultsViewModel)ViewModelPtrs[(int)ViewType.RESULTS]);
