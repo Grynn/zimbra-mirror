@@ -38,6 +38,8 @@ import com.zimbra.cs.account.DistributionList;
 import com.zimbra.cs.account.Domain;
 import com.zimbra.cs.account.NamedEntry;
 import com.zimbra.cs.account.Provisioning;
+import com.zimbra.cs.account.Provisioning.SearchObjectsOptions;
+import com.zimbra.cs.ldap.ZLdapFilterFactory.FilterId;
 import com.zimbra.cs.service.admin.AdminAccessControl;
 
 /**
@@ -128,21 +130,12 @@ public class SearchResults {
                 throw AccountServiceException.NO_SUCH_DOMAIN(domain);
         }
 
-        int flags = 0;
-
-        if (types.indexOf("accounts") != -1) flags |= Provisioning.SD_ACCOUNT_FLAG;
-        if (types.indexOf("aliases") != -1) flags |= Provisioning.SD_ALIAS_FLAG;
-        if (types.indexOf("distributionlists") != -1) flags |= Provisioning.SD_DISTRIBUTION_LIST_FLAG;
-        if (types.indexOf("resources") != -1) flags |= Provisioning.SD_CALENDAR_RESOURCE_FLAG;
-        if (types.indexOf("domains") != -1) flags |= Provisioning.SD_DOMAIN_FLAG;
-//            if (types.indexOf("coses") != -1) flags |= Provisioning.SD_COS_FLAG;
-
-        Provisioning.SearchOptions options = new Provisioning.SearchOptions();
+        SearchObjectsOptions options = new SearchObjectsOptions();
         options.setDomain(d);
-        options.setFlags(flags);
+        options.setTypes(types);
         //make sure all the results are returned
 //        options.setMaxResults(maxResults);
-        options.setQuery(query);
+        options.setFilterString(FilterId.ADMIN_SEARCH, query);
         options.setReturnAttrs(ACCOUNT_ATTRS);
 //            options.setSortAscending(sortAscending);
 //            options.setSortAttr(sortBy);
