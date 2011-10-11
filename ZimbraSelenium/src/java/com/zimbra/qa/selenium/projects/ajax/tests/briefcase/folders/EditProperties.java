@@ -20,7 +20,7 @@ public class EditProperties extends AjaxCommonTest {
 		super.startingAccountPreferences = null;
 	}
 
-	@Test(description = "Edit Properties - Rename folder using context menu", groups = { "unctional" })
+	@Test(description = "Edit Properties - Rename folder using context menu", groups = { "functional" })
 	public void EditProperties_01() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 
