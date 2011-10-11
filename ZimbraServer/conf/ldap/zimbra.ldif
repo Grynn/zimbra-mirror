@@ -13,6 +13,7 @@ dn: uid=zimbra,cn=admins,cn=zimbra
 uid: zimbra
 objectclass: zimbraAccount
 objectclass: organizationalPerson
+objectClass: inetOrgPerson
 cn: zimbra
 sn: zimbra
 zimbraAccountStatus: active
@@ -27,6 +28,7 @@ dn: uid=zmreplica,cn=admins,cn=zimbra
 uid: zmreplica
 objectclass: zimbraAccount
 objectclass: organizationalPerson
+objectClass: inetOrgPerson
 cn: zmreplica
 sn: zmreplica
 zimbraAccountStatus: active
@@ -45,6 +47,7 @@ dn: uid=zmnginx,cn=appaccts,cn=zimbra
 uid: zmnginx
 objectclass: zimbraAccount
 objectclass: organizationalPerson
+objectClass: inetOrgPerson
 cn: zmnginx
 sn: zmnginx
 zimbraAccountStatus: active
@@ -59,6 +62,7 @@ dn: uid=zmpostfix,cn=appaccts,cn=zimbra
 uid: zmpostfix
 objectclass: zimbraAccount
 objectclass: organizationalPerson
+objectClass: inetOrgPerson
 cn: zmpostfix
 sn: zmpostfix
 zimbraAccountStatus: active
@@ -72,6 +76,7 @@ dn: uid=zmamavis,cn=appaccts,cn=zimbra
 uid: zmamavis
 objectclass: zimbraAccount
 objectclass: organizationalPerson
+objectClass: inetOrgPerson
 cn: zmamavis
 sn: zmamavis
 zimbraAccountStatus: active
@@ -85,6 +90,7 @@ dn: uid=zmbes-searcher,cn=appaccts,cn=zimbra
 uid: zmbes-searcher
 objectclass: zimbraAccount
 objectclass: organizationalPerson
+objectClass: inetOrgPerson
 cn: zmbes-searcher
 sn: zmbes-searcher
 zimbraAccountStatus: active
