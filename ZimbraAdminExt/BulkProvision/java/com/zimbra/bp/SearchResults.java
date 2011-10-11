@@ -38,7 +38,7 @@ import com.zimbra.cs.account.DistributionList;
 import com.zimbra.cs.account.Domain;
 import com.zimbra.cs.account.NamedEntry;
 import com.zimbra.cs.account.Provisioning;
-import com.zimbra.cs.account.Provisioning.SearchObjectsOptions;
+import com.zimbra.cs.account.SearchDirectoryOptions;
 import com.zimbra.cs.ldap.ZLdapFilterFactory.FilterId;
 import com.zimbra.cs.service.admin.AdminAccessControl;
 
@@ -130,7 +130,7 @@ public class SearchResults {
                 throw AccountServiceException.NO_SUCH_DOMAIN(domain);
         }
 
-        SearchObjectsOptions options = new SearchObjectsOptions();
+        SearchDirectoryOptions options = new SearchDirectoryOptions();
         options.setDomain(d);
         options.setTypes(types);
         //make sure all the results are returned

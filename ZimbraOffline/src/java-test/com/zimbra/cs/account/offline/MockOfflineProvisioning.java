@@ -472,11 +472,6 @@ public final class MockOfflineProvisioning extends OfflineProvisioning {
     }
 
     @Override
-    public List<NamedEntry> searchDirectory(SearchOptions options) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public SearchGalResult searchGal(Domain d, String query,
             GalSearchType type, String token) {
         throw new UnsupportedOperationException();

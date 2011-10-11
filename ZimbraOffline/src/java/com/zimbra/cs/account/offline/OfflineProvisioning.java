@@ -1767,13 +1767,6 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
 
     @Override
-    public List<NamedEntry> searchDirectory(SearchOptions options) throws ServiceException {
-        //HACK: we were throwing UnsupportedOperationException, but DeleteAccount now does a searchDirectory to prevent from deleting
-        //domain wiki accounts.  Hence the hack to always return empty.
-        return new ArrayList<NamedEntry>();
-    }
-
-    @Override
     public synchronized SearchGalResult searchGal(Domain d, String query, GalSearchType type, String token) throws ServiceException {
         throw new UnsupportedOperationException();
     }
