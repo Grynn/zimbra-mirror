@@ -20,6 +20,7 @@ import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.SoapFaultException;
 import com.zimbra.common.soap.ZimbraNamespace;
+import com.zimbra.cs.account.AccountServiceException;
 
 import javax.servlet.jsp.JspException;
 import java.util.List;
@@ -60,7 +61,17 @@ public class ZExceptionBean {
         if ((!(e instanceof ServiceException)) && (e.getCause() instanceof ServiceException)) {
             e = e.getCause();
         }
-        ZimbraLog.webclient.error(e.getMessage(), e);
+        if( e instanceof SoapFaultException)  {
+            if(AccountServiceException.AUTH_FAILED.equals(((SoapFaultException)e).getCode())) {
+                ZimbraLog.webclient.debug(e.getMessage(), e);
+            } else {
+                ZimbraLog.webclient.error(e.getMessage(), e);
+            }
+        }
+        else{
+            ZimbraLog.webclient.error(e.getMessage(), e);
+        }
+
         if (e instanceof ServiceException) {
             exception = (ServiceException) e;
         } else {
