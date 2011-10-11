@@ -88,7 +88,7 @@ public class TreePreferences extends AbsTree {
 			throw new HarnessException("locator is not present "+ locator);
 		}
 		
-		zClick(locator);
+		zClickAt(locator,"");
 		
 		zWaitForBusyOverlay();
 		
