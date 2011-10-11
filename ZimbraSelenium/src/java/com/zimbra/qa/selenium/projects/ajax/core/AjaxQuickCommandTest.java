@@ -80,16 +80,17 @@ public class AjaxQuickCommandTest extends AjaxCommonTest {
 
 		// Create the list of actions
 		ArrayList<QCAction> actions = new ArrayList<QCAction>();
-		actions.add(new QCAction(1, QCAction.QCTypeId.actionTag, tag.getId(), true));
-		actions.add(new QCAction(2, QCAction.QCTypeId.actionFlag, "read", true));
-		actions.add(new QCAction(3, QCAction.QCTypeId.actionFlag, "flagged", true));
-		actions.add(new QCAction(4, QCAction.QCTypeId.actionFileInto, folder.getId(), true));
+		actions.add(new QCAction(QCAction.QCTypeId.actionTag, tag.getId(), true));
+		actions.add(new QCAction(QCAction.QCTypeId.actionFlag, "read", true));
+		actions.add(new QCAction(QCAction.QCTypeId.actionFlag, "flagged", true));
+		actions.add(new QCAction(QCAction.QCTypeId.actionFileInto, folder.getId(), true));
 
 
 		String name = "name" + ZimbraSeleniumProperties.getUniqueString();
 		String description = "description" + ZimbraSeleniumProperties.getUniqueString();
 		
-		command1 = new QuickCommand(1, name, description, QCItemTypeId.MSG, true, actions);
+		command1 = new QuickCommand(name, description, QCItemTypeId.MSG, true);
+		command1.addActions(actions);
 
 		return (command1);
 	}
@@ -132,14 +133,15 @@ public class AjaxQuickCommandTest extends AjaxCommonTest {
 
 		// Create the list of actions
 		ArrayList<QCAction> actions = new ArrayList<QCAction>();
-		actions.add(new QCAction(1, QCAction.QCTypeId.actionTag, tag.getId(), true));
-		actions.add(new QCAction(2, QCAction.QCTypeId.actionFileInto, folder.getId(), true));
+		actions.add(new QCAction(QCAction.QCTypeId.actionTag, tag.getId(), true));
+		actions.add(new QCAction(QCAction.QCTypeId.actionFileInto, folder.getId(), true));
 
 
 		String name = "name" + ZimbraSeleniumProperties.getUniqueString();
 		String description = "description" + ZimbraSeleniumProperties.getUniqueString();
 		
-		command2 = new QuickCommand(1, name, description, QCItemTypeId.CONTACT, true, actions);
+		command2 = new QuickCommand(name, description, QCItemTypeId.CONTACT, true);
+		command2.addActions(actions);
 
 		return (command2);
 	}
@@ -183,16 +185,17 @@ public class AjaxQuickCommandTest extends AjaxCommonTest {
 
 		// Create the list of actions
 		ArrayList<QCAction> actions = new ArrayList<QCAction>();
-		actions.add(new QCAction(1, QCAction.QCTypeId.actionTag, tag.getId(), true));
-		actions.add(new QCAction(2, QCAction.QCTypeId.actionFlag, "read", true));
-		actions.add(new QCAction(3, QCAction.QCTypeId.actionFlag, "flagged", true));
-		actions.add(new QCAction(4, QCAction.QCTypeId.actionFileInto, folder.getId(), true));
+		actions.add(new QCAction(QCAction.QCTypeId.actionTag, tag.getId(), true));
+		actions.add(new QCAction(QCAction.QCTypeId.actionFlag, "read", true));
+		actions.add(new QCAction(QCAction.QCTypeId.actionFlag, "flagged", true));
+		actions.add(new QCAction(QCAction.QCTypeId.actionFileInto, folder.getId(), true));
 
 
 		String name = "name" + ZimbraSeleniumProperties.getUniqueString();
 		String description = "description" + ZimbraSeleniumProperties.getUniqueString();
 		
-		command3 = new QuickCommand(1, name, description, QCItemTypeId.APPT, true, actions);
+		command3 = new QuickCommand(name, description, QCItemTypeId.APPT, true);
+		command3.addActions(actions);
 
 		return (command3);
 	}

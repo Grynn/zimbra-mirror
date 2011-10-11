@@ -2,11 +2,11 @@ package com.zimbra.qa.selenium.projects.ajax.tests.preferences.quickcommands;
 
 import org.testng.annotations.Test;
 
-import com.zimbra.qa.selenium.framework.ui.Action;
-import com.zimbra.qa.selenium.framework.ui.Button;
+import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.preferences.DialogEditQuickCommand;
+import com.zimbra.qa.selenium.projects.ajax.ui.preferences.DialogEditQuickCommand.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.preferences.TreePreferences.TreeItem;
 
 
@@ -29,7 +29,7 @@ public class CreateQuickCommand extends AjaxCommonTest {
 		String name = "name"+ ZimbraSeleniumProperties.getUniqueString();
 		String description = "description"+ ZimbraSeleniumProperties.getUniqueString();
 		
-
+		
 
 		// Navigate to preferences -> notifications
 		app.zTreePreferences.zTreeItem(Action.A_LEFTCLICK, TreeItem.QuickCommands);
@@ -42,7 +42,11 @@ public class CreateQuickCommand extends AjaxCommonTest {
 		// Fill out the dialog.  Click OK.
 		dialog.zSetQuickCommandName(name);
 		dialog.zSetQuickCommandDescription(description);
-		dialog.zSetQuickCommandAction();
+		dialog.zSetQuickCommandType(QuickCommandType.Message);
+				
+		dialog.zSetQuickCommandActionActive(1, true);
+		dialog.zSetQuickCommandActionOperation(1, QuickCommandOperation.MarkAs);
+		dialog.zSetQuickCommandActionTarget(1, QuickCommandTarget.MarkAsFlagged);
 		
 		dialog.zClickButton(Button.B_OK);
 		
