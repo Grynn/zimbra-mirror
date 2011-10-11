@@ -753,3 +753,25 @@ ZaSearchBuilderController.prototype.getOptionViews =
 function (){
 	return this._option_views ;
 }
+
+
+/* New UI Start */
+ZaSearchBuilderController.prototype.getFilterTreeItems =
+function () {
+    return [
+        {text: ZaMsg.OVP_idFilter,      filterType: ZaSearchOption.ID_FILTER_ID},
+        {text: ZaMsg.OVP_nameFilter,    filterType: ZaSearchOption.NAME_FILTER_ID},
+        {text: ZaMsg.OVP_statutsFilter, filterType: ZaSearchOption.STATUS_FILTER_ID},
+        {text: ZaMsg.OVP_lltFilter,     filterType: ZaSearchOption.LASTER_LOGIN_TIME_FILTER_ID},
+        {text: ZaMsg.OVP_eeaFilter,     filterType: ZaSearchOption.EXT_EMAIL_ADDRESS_FILTER_ID},
+        {text: ZaMsg.OVP_cosFilter,     filterType: ZaSearchOption.COS_FILTER_ID},
+        {text: ZaMsg.OVP_domainFilter,  filterType: ZaSearchOption.DOMAIN_FILTER_ID},
+        {text: ZaMsg.OVP_serverFilter,  filterType: ZaSearchOption.SERVER_FILTER_ID}
+    ];
+}
+
+ZaSearchBuilderController.searchFilterTreeListener =
+function (ev) {
+    var filterType = ev.item.getData("filterType");
+    var b = filterType + 1;
+}

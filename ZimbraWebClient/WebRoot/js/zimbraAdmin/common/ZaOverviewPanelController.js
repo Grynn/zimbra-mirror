@@ -916,7 +916,7 @@ function() {
     ti = new ZaTreeItemData({
                                     parent:ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_search, ZaMsg.OVP_search]),
                                     id:ZaId.getTreeItemId(ZaId.PANEL_APP,"currentSearch",null, "allResult"),
-                                    text: "All Result",
+                                    text: ZaMsg.OVP_allSearchResult,
                                     mappingId: ZaZimbraAdmin._SEARCH_HOME_VIEW});
     tree.addTreeItemData(ti);
 
@@ -924,79 +924,35 @@ function() {
                                     parent:parentPath,
                                     canShowOnRoot: false,
                                     id:ZaId.getTreeItemId(ZaId.PANEL_APP,"searchHV",null, "searchOption"),
-                                    text: "Search Options" });
+                                    text: ZaMsg.OVP_searchOption });
     tree.addTreeItemData(searchOptionTi);
     currentSearchTi.addSilbings(searchOptionTi);
     // Add Option here.
-    var optionBasePath = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_search, "Search Options"]);
-    ti = new ZaTreeItemData({
-                                    parent:optionBasePath,
-                                    canShowOnRoot: false,
-                                    id:ZaId.getTreeItemId(ZaId.PANEL_APP,"searchOption",null, "name"),
-                                    text: "Name" });
-    tree.addTreeItemData(ti);
-
-    ti = new ZaTreeItemData({
-                                    parent:optionBasePath,
-                                    canShowOnRoot: false,
-                                    id:ZaId.getTreeItemId(ZaId.PANEL_APP,"searchOption",null, "id"),
-                                    text: "ID" });
-    tree.addTreeItemData(ti);
-
-    ti = new ZaTreeItemData({
-                                    parent:optionBasePath,
-                                    canShowOnRoot: false,
-                                    id:ZaId.getTreeItemId(ZaId.PANEL_APP,"searchOption",null, "status"),
-                                    text: "Status" });
-    tree.addTreeItemData(ti);
-
-    ti = new ZaTreeItemData({
-                                    parent:optionBasePath,
-                                    canShowOnRoot: false,
-                                    id:ZaId.getTreeItemId(ZaId.PANEL_APP,"searchOption",null, "llTime"),
-                                    text: "Last Login Time" });
-    tree.addTreeItemData(ti);
-
-    ti = new ZaTreeItemData({
-                                    parent:optionBasePath,
-                                    canShowOnRoot: false,
-                                    id:ZaId.getTreeItemId(ZaId.PANEL_APP,"searchOption",null, "eeAddress"),
-                                    text: "External Email Address" });
-    tree.addTreeItemData(ti);
-
-    ti = new ZaTreeItemData({
-                                    parent:optionBasePath,
-                                    canShowOnRoot: false,
-                                    id:ZaId.getTreeItemId(ZaId.PANEL_APP,"searchOption",null, "cos"),
-                                    text: "COS" });
-    tree.addTreeItemData(ti);
-
-    ti = new ZaTreeItemData({
-                                    parent:optionBasePath,
-                                    canShowOnRoot: false,
-                                    id:ZaId.getTreeItemId(ZaId.PANEL_APP,"searchOption",null, "Server"),
-                                    text: "Server" });
-    tree.addTreeItemData(ti);
-
-
-    ti = new ZaTreeItemData({
-                                    parent:optionBasePath,
-                                    canShowOnRoot: false,
-                                    id:ZaId.getTreeItemId(ZaId.PANEL_APP,"searchOption",null, "domains"),
-                                    text: "Domains" });
-    tree.addTreeItemData(ti);
+    var optionBasePath = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_search, ZaMsg.OVP_searchOption]);
+    var searchOptionTreeItem = ZaApp.getInstance().getSearchBuilderController().getFilterTreeItems();
+    for (var i = 0; i < searchOptionTreeItem.length; i++) {
+        ti = new ZaTreeItemData({
+                                parent:optionBasePath,
+                                canShowOnRoot: false,
+                                id:ZaId.getTreeItemId(ZaId.PANEL_APP,"searchOption",null, i + 1),
+                                mappingId: ZaZimbraAdmin._SEARCH_FILTER_VIEW,
+                                text: searchOptionTreeItem[i].text });
+        ti.setData("filterType", searchOptionTreeItem[i].filterType);
+        tree.addTreeItemData(ti);
+    }
+    ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._SEARCH_FILTER_VIEW] = ZaSearchBuilderController.searchFilterTreeListener;
 
     var savedSearchTi = new ZaTreeItemData({
                                     parent:parentPath,
                                     id:ZaId.getTreeItemId(ZaId.PANEL_APP,"searchHV",null, "savedSearch"),
                                     canShowOnRoot: false,
-                                    text: "Saved Searches" });
+                                    text: ZaMsg.OVP_savedSearch });
     tree.addTreeItemData(savedSearchTi);
     currentSearchTi.addSilbings(savedSearchTi);
     try {
         var savedSearchList = ZaApp.getInstance().getSavedSearchList();
         if(savedSearchList && savedSearchList.length) {
-            var savedSearchPath = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_search, "Saved Searches"]);
+            var savedSearchPath = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_search, ZaMsg.OVP_savedSearch]);
             var cnt = savedSearchList.length;
             for(var ix=0; ix< cnt; ix++) {
                 var ti1 = new ZaTreeItemData({

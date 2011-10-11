@@ -30,6 +30,19 @@ ZaSearchOption.SERVER_ID = ZaSearchOption.ID ++ ;
 ZaSearchOption.ADVANCED_ID = ZaSearchOption.ID ++ ;
 ZaSearchOption.COS_ID = ZaSearchOption.ID ++ ;
 
+
+// New UI
+if (appNewUI) {
+    ZaSearchOption.NAME_FILTER_ID = ZaSearchOption.ID ++ ;
+    ZaSearchOption.ID_FILTER_ID = ZaSearchOption.ID ++ ;
+    ZaSearchOption.STATUS_FILTER_ID = ZaSearchOption.ID ++ ;
+    ZaSearchOption.LASTER_LOGIN_TIME_FILTER_ID = ZaSearchOption.ID ++ ;
+    ZaSearchOption.EXT_EMAIL_ADDRESS_FILTER_ID = ZaSearchOption.ID ++ ;
+    ZaSearchOption.COS_FILTER_ID = ZaSearchOption.ID ++ ;
+    ZaSearchOption.SERVER_FILTER_ID = ZaSearchOption.ID ++ ;
+    ZaSearchOption.DOMAIN_FILTER_ID = ZaSearchOption.ID ++ ;
+}
+
 //ZaSearchOption.REMOVE_ID = ZaSearchOption.ID ++ ;
 
 //ZaSearchOption.A_basic_query = ZaSearch.A_query ;

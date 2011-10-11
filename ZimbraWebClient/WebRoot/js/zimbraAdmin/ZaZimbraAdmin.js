@@ -91,6 +91,7 @@ ZaZimbraAdmin._MANAGE_ACCOUNT_HOME_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
 ZaZimbraAdmin._ADMINISTRATION_HOME_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
 ZaZimbraAdmin._MIGRATION_HOME_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
 ZaZimbraAdmin._SEARCH_HOME_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
+ZaZimbraAdmin._SEARCH_FILTER_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
 ZaZimbraAdmin._SERVER_STATUS_VIEW =  ZaZimbraAdmin.VIEW_INDEX++;
 ZaZimbraAdmin._HOME_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
 ZaZimbraAdmin._XFORM_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
