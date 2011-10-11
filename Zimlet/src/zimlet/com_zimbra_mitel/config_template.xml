@@ -1,0 +1,6 @@
+<zimletConfig name="com_zimbra_mitel" version="0.1">
+	<global>
+		<property name="allowedDomains">*.gmaps.com,*.mitel.com,*.inter-tel.com,*.whitepages.com</property>
+        <property name="mitel_server">acs-core3.inter-tel.com</property>
+	</global>
+</zimletConfig>
