@@ -248,7 +248,9 @@ function () {
 	} else if(this._containedObject[ZaModel.currentStep] == ZaTaskAuthConfigWizard.CONFIG_COMPLETE_STEP
             && (this._containedObject[ZaDomain.A2_zimbraSpnegoAuthEnabled]=="TRUE"
             && this._containedObject.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_ad)) {
-		this.goPage(ZaTaskAuthConfigWizard.SPNEGO_CONFIG_STEP);
+		this.goPage(ZaTaskAuthConfigWizard.SPNEGO_CONFIG_STEP_2);
+    } else if(this._containedObject[ZaModel.currentStep] == ZaTaskAuthConfigWizard.SPNEGO_CONFIG_STEP_2) {
+        this.goPage(ZaTaskAuthConfigWizard.SPNEGO_CONFIG_STEP);
 	} else if(this._containedObject[ZaModel.currentStep] == ZaTaskAuthConfigWizard.SPNEGO_CONFIG_STEP) {
 		this.goPage(ZaTaskAuthConfigWizard.AUTH_CONFIG_SUMMARY_STEP);
 	} else {
@@ -743,7 +745,87 @@ ZaTaskAuthConfigWizard.myXFormModifier = function(xFormObject) {
 					},
 					{type:_CASE_, caseKey:ZaTaskAuthConfigWizard.SPNEGO_CONFIG_STEP_2,
 						items: [
-							{type:_OUTPUT_, value:"Domain Setting Here"}
+							{type:_OUTPUT_, value:"Single Sign-On using SPNEGO", colSpan:2},
+                            {type:_SPACER_, height:10, colSpan:"*"},
+                            {ref:ZaDomain.A_zimbraVirtualHostname, type:_REPEAT_,
+                                label:ZaMsg.Domain_Tab_VirtualHost, repeatInstance:"", showAddButton:true,
+                                labelCssStyle:"text-align:left;vertical-align:top;padding-left:20px;",
+                                showRemoveButton:true,
+                                addButtonLabel:ZaMsg.NAD_AddVirtualHost,
+                                showAddOnNextRow:true,
+                                removeButtonLabel:ZaMsg.NAD_RemoveVirtualHost,
+                                items: [
+                                    {ref:".", type:_TEXTFIELD_, label:null, width:"150px",
+                                        enableDisableChecks:[[ZaItem.hasWritePermission,ZaDomain.A_zimbraVirtualHostname]],
+                                        visibilityChecks:[[ZaItem.hasReadPermission,ZaDomain.A_zimbraVirtualHostname]],
+                                        onChange:ZaDomainXFormView.onFormFieldChanged}
+                                ]
+                            },
+                            {type:_OUTPUT_, value:"These are the virtual host names to access the Zimbra Web Client UI. Example: example.com.",
+                                width:250, colSpan:"*",cssStyle:"padding-left:225px;"
+                            },
+                            {type:_SPACER_, height:20, colSpan:"*"},
+                            {ref: ZaDomain.A_zimbraWebClientLoginURL,useParentTable: false,
+                                colSizes:["275px","*"], colSpan: 2,
+                                type:_TEXTFIELD_, width: "150px",
+                                labelCssStyle:"text-align:left;padding-left:20px;",
+                                msgName: ZaMsg.LBL_zimbraWebClientLoginURL,
+                                label: ZaMsg.LBL_zimbraWebClientLoginURL,
+                                onChange:ZaDomainXFormView.onFormFieldChanged
+                            },
+                            {type:_OUTPUT_, value:"Login URL is the URL to redirect users to when Zimbra auth token expires. Example: ../../service/spnego",
+                                width:250, colSpan:"*",cssStyle:"padding-left:225px;"
+                            },
+                            {ref: ZaDomain.A_zimbraWebClientLogoutURL,useParentTable: false,
+                                colSizes:["275px","*"], colSpan: 2,
+                                type:_TEXTFIELD_, width:"150px",
+                                labelCssStyle:"text-align:left;padding-left:20px;",
+                                msgName: ZaMsg.LBL_zimbraWebClientLogoutURL,
+                                label: ZaMsg.LBL_zimbraWebClientLogoutURL,
+                                onChange:ZaDomainXFormView.onFormFieldChanged
+                            },
+                            {type:_OUTPUT_, value:"Logout URL is the URL to display when users logs out. Example: ../?sso=1",
+                                width:250, colSpan:"*",cssStyle:"padding-left:225px;"
+                            },
+                            {type:_SPACER_, height:20, colSpan:"*"},
+                            {type:_OUTPUT_, value:"Web Client Allowed User Agents", colSpan:2, cssStyle:"padding-left:20px;"},
+                            {type:_SPACER_, height:10, colSpan:"*"},
+                            {ref: ZaDomain.A_zimbraWebClientLoginURLAllowedUA,
+                                label:ZaMsg.LBL_zimbraWebClientLoginURLAllowedUA,
+                                labelCssStyle:"text-align:left;vertical-align:top;padding-left:40px;",
+                                type:_SUPER_REPEAT_,
+                                resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
+                                repeatInstance:"",
+                                colSizes:["275px", "*"],
+                                addButtonLabel:ZaMsg.NAD_Add ,
+                                removeButtonLabel: ZaMsg.NAD_Remove,
+                                showAddButton:true,
+                                showRemoveButton:true,
+                                showAddOnNextRow:true,
+                                repeatItems: [
+                                    {ref:".", type:_TEXTFIELD_,
+                                    width: "150px"}
+                                ],
+                                onChange:ZaDomainXFormView.onFormFieldChanged
+                            },
+                            {ref: ZaDomain.A_zimbraWebClientLogoutURLAllowedUA,
+                                label:ZaMsg.LBL_zimbraWebClientLogoutURLAllowedUA,
+                                labelCssStyle:"text-align:left;vertical-align:top;padding-left:40px;",
+                                type:_SUPER_REPEAT_,
+                                resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
+                                repeatInstance:"",
+                                colSizes:["275px", "*"],
+                                addButtonLabel:ZaMsg.NAD_Add ,
+                                removeButtonLabel: ZaMsg.NAD_Remove,
+                                showAddButton:true,
+                                showRemoveButton:true,
+                                showAddOnNextRow:true,
+                                repeatItems: [
+                                    {ref:".", type:_TEXTFIELD_,
+                                    width: "150px"}
+                                ],
+                                onChange:ZaDomainXFormView.onFormFieldChanged
+                            }
 						]
 					},
 					{type:_CASE_, caseKey:ZaTaskAuthConfigWizard.CONFIG_COMPLETE_STEP,
