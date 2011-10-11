@@ -26,6 +26,7 @@ import com.zimbra.cs.account.Config;
 import com.zimbra.cs.account.Domain;
 import com.zimbra.cs.account.NamedEntry;
 import com.zimbra.cs.account.Provisioning;
+import com.zimbra.cs.account.ldap.LdapObjectClass;
 import com.zimbra.cs.account.ldap.LdapProv;
 import com.zimbra.ldaputils.LDAPUtilsHelper;
 import com.zimbra.qa.unittest.TestLdap;
@@ -79,7 +80,7 @@ public class TestLDAPUtilsHelper extends TestLdap {
         
         if (attrs == null) {
             attrs = new HashMap<String, Object>();
-            attrs.put(Provisioning.A_objectClass, "organizationalPerson");
+            attrs.put(Provisioning.A_objectClass, LdapObjectClass.ZIMBRA_DEFAULT_PERSON_OC);
             attrs.put("sn", "sn");
         }
         NamedEntry ne = LDAPUtilsHelper.getInstance().createLDAPEntry(dn,  attrs);
