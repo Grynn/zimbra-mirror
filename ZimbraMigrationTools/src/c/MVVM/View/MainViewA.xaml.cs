@@ -29,7 +29,7 @@ namespace MVVM.View
 
             m_baseViewModel = new BaseViewModel();
 
-            m_introViewModel = new IntroViewModel(lbMode, helpGrid);
+            m_introViewModel = new IntroViewModel(lbMode);
             m_introViewModel.Name = "IntroViewModel";
             m_introViewModel.ViewTitle = "Welcome";   
             m_introViewModel.lb = lbMode;

@@ -136,6 +136,7 @@
     <Content Include="Help\options.html" />
     <Content Include="Help\sched.html" />
     <Content Include="Help\users.html" />
+    <Content Include="Help\welcome.html" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

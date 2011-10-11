@@ -62,7 +62,7 @@
             <Image HorizontalAlignment="Left"  Margin="0,0,0,0" Name="image0" Stretch="UniformToFill" VerticalAlignment="Center" Source="/MVVM;component/View/Images/banner_left.png" />
             <Image HorizontalAlignment="Left"  Margin="10,2,0,5" Name="image1" Stretch="None" VerticalAlignment="Center" Source="/MVVM;component/View/Images/VMware_logo.png" />
             <TextBlock HorizontalAlignment="Left" Margin="118,2,0,5" Name="tbAppTitle" Text="Zimbra Migration" VerticalAlignment="Center" Foreground="White" FontSize="19" FontWeight="Medium" FontFamily="Arial" FontStyle="Normal" />
-            <Grid Name="helpGrid" Visibility="Hidden">
+            <Grid Name="helpGrid">
                 <TextBlock HorizontalAlignment="Right" Margin="0,0,38,0" Name="tbHelpLbl" Text="Help" VerticalAlignment="Center" Foreground="White" FontSize="12" FontWeight="Medium" FontFamily="Arial" FontStyle="Normal" />
                 <TextBlock HorizontalAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Center"><Hyperlink TextDecorations="None" Command="{Binding ProcessHelpCommand}"><Image Stretch="None" Source="/MVVM;component/View/Images/Help_Up.png"></Image></Hyperlink></TextBlock>
             </Grid>

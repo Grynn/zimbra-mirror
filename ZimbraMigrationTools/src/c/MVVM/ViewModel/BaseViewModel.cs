@@ -64,24 +64,27 @@ namespace MVVM.ViewModel
             switch (lb.SelectedIndex)
             {
                 case 0:
+                    DoHelp("welcome.html");
+                    break;
+                case 1:
                     helpFile = isServer ? "cfgS.html" : "cfgU.html";
                     DoHelp(helpFile);
                     break;
-                case 1:
+                case 2:
                     helpFile = isServer ? "cfgSDest.html" : "cfgUDest.html";
                     DoHelp(helpFile);
                     break;
-                case 2: 
+                case 3: 
                     DoHelp("options.html");
                     break;
-                case 3:
+                case 4:
                     helpFile = isServer ? "users.html" : "acctresults.html";
                     DoHelp(helpFile);
                     break;
-                case 4:
+                case 5:
                     DoHelp("sched.html");
                     break;
-                case 5:
+                case 6:
                     DoHelp("acctresults.html");
                     break;
                 default:

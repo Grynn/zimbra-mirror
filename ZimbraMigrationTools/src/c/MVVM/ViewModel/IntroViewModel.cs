@@ -31,12 +31,10 @@ namespace MVVM.ViewModel
         private UsersViewModel m_usersViewModel;
         private ScheduleViewModel m_scheduleViewModel;
         private AccountResultsViewModel m_resultsViewModel;
-        private Grid hg;
         public CSMigrationwrapper mw;
-        public IntroViewModel(ListBox lbMode, Grid helpGrid)
+        public IntroViewModel(ListBox lbMode)
         {
             lb = lbMode;
-            hg = helpGrid;
             this.GetIntroLicenseCommand = new ActionCommand(this.GetIntroLicense, () => true);
             this.GetIntroUserMigCommand = new ActionCommand(this.GetIntroUserMig, () => true);
             this.GetIntroServerMigCommand = new ActionCommand(this.GetIntroServerMig, () => true);
@@ -126,9 +124,6 @@ namespace MVVM.ViewModel
                     m_configViewModelU.ProfileList.Add(s);
                 }
             }
-
-            hg.Visibility = Visibility.Visible;
-
             lb.SelectedIndex = 1;
         }
 
