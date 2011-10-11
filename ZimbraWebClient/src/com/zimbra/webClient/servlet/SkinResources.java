@@ -1406,6 +1406,10 @@ public class SkinResources
 					} else if (operation.equals("lighten") || operation.equals("-")) {
 						result = outputLighterColor(stack, params);
 					
+					// "invert"
+					} else if (operation.equals("invert")) {
+						result = outputInvertColor(stack, params);
+					
 					// "border"
 					} else if (operation.equals("border")) {
 						result = outputBorder(stack, params);
@@ -1508,6 +1512,22 @@ public class SkinResources
 
 		private int darken(int value, float delta) {
 			return (int) Math.max(0, Math.min(255, value * (1 - delta)));
+		}
+
+		//
+		// replace occurances of @invert(color)@ with the inverted color
+		//
+		private String outputInvertColor(Stack<String> stack, String[] params) throws IOException {
+			Color color = this.getColor(stack, params[0]);
+			return this.invertColor(color);
+		}
+
+		// invert color object
+		private String invertColor(Color color) {
+			return colorToColorString( new Color( Math.abs(color.getRed() - 255),
+                        				Math.abs(color.getGreen() - 255), 
+							Math.abs(color.getBlue() - 255))
+	 					);		
 		}
 
 		// given a color (either '#fffff' or 'ffffff' or a substitution), 
