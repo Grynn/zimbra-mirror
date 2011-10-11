@@ -18,8 +18,8 @@ public class DialogCreateTaskFolder  extends AbsDialog{
 		// Textfields
 		public static final String zNameField = "css=input[id$='_name'][class*='Field']";
 		// Buttons
-		public static final String zOkButton = "css=tr>td>div[id*='button2']";
-		public static final String zCancelButton = "css=tr>td>div[id*='button1']";
+		public static final String zOkButton = "css=div[id='CreateNewFolderDialog'] td[id^='OK_DWT']> div[id^='CreateNewFolderDialog_button']";
+		public static final String zCancelButton = "css=div[id='CreateNewFolderDialog'] td[id^='Cancel_DWT']> div[id^='CreateNewFolderDialog_button']";
 	}
 
 	public DialogCreateTaskFolder(AbsApplication application, AbsTab page) {

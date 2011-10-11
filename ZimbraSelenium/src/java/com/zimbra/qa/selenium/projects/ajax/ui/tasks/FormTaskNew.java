@@ -88,7 +88,7 @@ public class FormTaskNew extends AbsForm {
 	 * 
 	 * @param application
 	 */
-	protected FormTaskNew(AbsApplication application) {
+	public FormTaskNew(AbsApplication application) {
 		super(application);
 		
 		logger.info("new " + FormTaskNew.class.getCanonicalName());
@@ -317,6 +317,8 @@ public class FormTaskNew extends AbsForm {
 					this.zClickAt(Locators.zFrame, "");
 					zTypeFormattedText(Locators.zFrame, value);
 					this.zWaitForBusyOverlay();
+
+					
 					return;
 				} else {
 					sSelectFrame(Locators.zFrame);
@@ -325,7 +327,8 @@ public class FormTaskNew extends AbsForm {
 					sType(locator, value);
 				}
 			} finally {
-				sSelectWindow("Zimbra: Tasks");
+				//sSelectWindow("Zimbra: Tasks");
+				sSelectWindow(null);
 			}
 			return;
 
