@@ -24,6 +24,8 @@ public class TreeBriefcase extends AbsTree {
 		public static final String zNewFolderTreeMenuItem = "css=tr[id=POPUP_NEW_BRIEFCASE]:contains('New Folder')";
 		public static final String zRenameTagTreeMenuItem = "css=td[id$=_left_icon]>[class=ImgRename]";
 		public static final String zDeleteTreeMenuItem = "css=div[id='DELETE_WITHOUT_SHORTCUT'] tr[id^='POPUP_DELETE']:contains(Delete)";
+		public static final String zEditPropertiesTreeMenuItem = "css=div[id=EDIT_PROPS] tr[id=POPUP_EDIT_PROPS]:contains('Edit Properties')";
+	
 	}                                                    
 	public TreeBriefcase(AbsApplication application) {
 		super(application);
@@ -98,6 +100,13 @@ public class TreeBriefcase extends AbsTree {
 			optionLocator = Locators.zNewFolderTreeMenuItem;
 
 			page = new DialogCreateBriefcaseFolder(MyApplication,
+					((AppAjaxClient) MyApplication).zPageBriefcase);
+
+		} else if (option == Button.B_TREE_EDIT_PROPERTIES) {
+
+			optionLocator = Locators.zEditPropertiesTreeMenuItem;
+
+			page = new DialogEditProperties(MyApplication,
 					((AppAjaxClient) MyApplication).zPageBriefcase);
 
 		} else {

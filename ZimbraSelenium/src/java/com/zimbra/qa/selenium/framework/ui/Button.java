@@ -210,6 +210,8 @@ public class Button {
 	public static final Button O_RENAME = new Button("O_RENAME");
 	public static final Button O_CHECK_IN_FILE = new Button("O_CHECK_IN_FILE");
 	public static final Button O_DISCARD_CHECK_OUT = new Button("O_DISCARD_CHECK_OUT");
+	public static final Button B_TREE_EDIT_PROPERTIES = new Button("B_TREE_EDIT_PROPERTIES");
+
 	
     //Addressbook button
 	public static final Button B_EDIT = new Button("zb__CNS__EDIT");
