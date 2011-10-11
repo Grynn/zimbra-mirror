@@ -15,7 +15,7 @@ public class ZimbraPrefComposeFormatText extends AjaxCommonTest {
 
 	@SuppressWarnings("serial")
 	public ZimbraPrefComposeFormatText() {
-		
+
 		super.startingPage = app.zPagePreferences;
 		super.startingAccountPreferences = new HashMap<String, String>() {
 			{
@@ -24,38 +24,29 @@ public class ZimbraPrefComposeFormatText extends AjaxCommonTest {
 		};
 	}
 
-
-	/**
-	 * Test case : ReplyAll Msg with html signature and Verify signature through soap
-	 * Create signature through soap 
-	 * Send message with html signature through soap
-	 * ReplyAll same message
-	 * Verify html signature in replied msg through soap
-	 * @throws HarnessException
-	 */
 	@Test(
 			description = "Set zimbraPrefComposeFormat to 'text'",
 			groups = { "functional" }
-			)
+	)
 	public void ZimbraPrefComposeFormatText_01() throws HarnessException {
 
 		// Navigate to preferences -> mail -> composing
-		app.zTreePreferences.zTreeItem(Action.A_LEFTCLICK, TreeItem.MailComposing);
+		app.zTreePreferences.zTreeItem(Action.A_LEFTCLICK, TreeItem.Mail);
 
 		// Click radio button for compose = html
 		// See http://bugzilla.zimbra.com/show_bug.cgi?id=62322
 		app.zPagePreferences.sClick("css=input[id='COMPOSE_AS_TEXT_input']");
-				
+
 		// Click save
 		app.zPagePreferences.zToolbarPressButton(Button.B_SAVE);
-		
+
 		app.zGetActiveAccount().soapSend(
-						"<GetPrefsRequest xmlns='urn:zimbraAccount'>"
+				"<GetPrefsRequest xmlns='urn:zimbraAccount'>"
 				+			"<pref name='zimbraPrefComposeFormat'/>"
 				+		"</GetPrefsRequest>");
-		
+
 		String value = app.zGetActiveAccount().soapSelectValue("//acct:pref[@name='zimbraPrefComposeFormat']", null);
 		ZAssert.assertEquals(value, "text", "Verify the preference was changed to 'text'");
-		
+
 	}
 }
