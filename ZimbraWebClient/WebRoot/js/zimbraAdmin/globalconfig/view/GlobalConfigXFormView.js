@@ -222,9 +222,9 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
     if(ZaTabView.isTAB_ENABLED(entry,GlobalConfigXFormView.GENERAL_TAB_ATTRS, GlobalConfigXFormView.GENERAL_TAB_RIGHTS)) {
     	_tab1 = ++this.TAB_INDEX;
     	var case1 = {type:_ZATABCASE_, caseKey:_tab1,
-				colSizes:["auto"],numCols:1,
+				colSizes:["auto"],numCols:1,paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),
 				items:[
-					{type:_ZAGROUP_,
+					{type:_ZAGROUP_,numCols:2,colSizes: ["275px","auto"],
 						items:[
 							{ref: ZaGlobalConfig.A_zimbraGalMaxResults, type:_TEXTFIELD_,
 							  label: ZaMsg.LBL_zimbraGalMaxResults, msgName:ZaMsg.MSG_zimbraGalMaxResults, 
@@ -264,7 +264,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
     	_tab2 = ++this.TAB_INDEX;
         tabBarChoices.push ({value:_tab2, label:ZaMsg.NAD_Tab_Attachments});
         var case2 = 	
-        {type:_ZATABCASE_, caseKey:_tab2, id:"gs_form_attachment_tab", numCols:2, colSizes: ["40%","60%"], items:[
+        {type:_ZATABCASE_, caseKey:_tab2, id:"gs_form_attachment_tab",     paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0), numCols:2, colSizes: ["40%","60%"], items:[
  				{type: _GROUP_,  id:"attachment_settings", width: "98%", numCols: 2, colSpan:2, colSizes:[250, "*"], items: [
 					{ref:ZaGlobalConfig.A_zimbraAttachmentsBlocked, type: _CHECKBOX_,
 				  		label: ZaMsg.NAD_GlobalRemoveAllAttachments,
@@ -353,7 +353,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
     	_tab3 = ++this.TAB_INDEX;
 
         tabBarChoices.push ({value:_tab3, label:ZaMsg.NAD_Tab_MTA});
-        var case3 = 		{type:_ZATABCASE_, caseKey:_tab3,
+        var case3 = 		{type:_ZATABCASE_, caseKey:_tab3,         paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),
 					colSizes:["auto"],numCols:1,id:"global_mta_tab",
 					items: [
 						{type:_ZA_TOP_GROUPER_,label:ZaMsg.Global_MTA_AuthenticationGrp,
@@ -582,7 +582,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
     	_tab4 = ++this.TAB_INDEX;
 
         tabBarChoices.push ({value:_tab4, label:ZaMsg.NAD_Tab_IMAP});
-        var case4 ={type:_ZATABCASE_, caseKey:_tab4,
+        var case4 ={type:_ZATABCASE_, caseKey:_tab4,         paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),
 					colSizes:["auto"],numCols:1,id:"global_imap_tab",
 					items: [
 						{ type: _DWT_ALERT_,
@@ -646,7 +646,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
     	_tab5 = ++this.TAB_INDEX;
 
         tabBarChoices.push ({value:_tab5, label:ZaMsg.NAD_Tab_POP});
-        var case5 = 		{type:_ZATABCASE_, caseKey:_tab5,
+        var case5 = 		{type:_ZATABCASE_, caseKey:_tab5,         paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),
 					colSizes:["auto"],numCols:1,id:"global_pop_tab",
 					items: [
 						{ type: _DWT_ALERT_,
@@ -706,7 +706,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 
         tabBarChoices.push ({value:_tab6, label:ZaMsg.NAD_Tab_ASAV});
         var case6 = 	// anti-spam
-				{type: _ZATABCASE_, caseKey:_tab6,
+				{type: _ZATABCASE_, caseKey:_tab6,         paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),
 					colSizes:["auto"],numCols:1,id:"global_asav_tab",
 				 	items: [
 						{type:_ZA_TOP_GROUPER_, label:ZaMsg.NAD_AS_Settings,
@@ -759,7 +759,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 
         tabBarChoices.push ({value:_tab7, label:ZaMsg.TABT_Interop});
         var case7 = 		// Interop
-				{type: _ZATABCASE_, caseKey:_tab7,
+				{type: _ZATABCASE_, caseKey:_tab7,         paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),
 					colSizes:["auto"],numCols:1,id:"global_interop_tab",
 				 	items: [
 						{type:_ZA_TOP_GROUPER_, label:ZaMsg.NAD_Exchange_Settings,
@@ -811,7 +811,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 
         tabBarChoices.push ({value:_tab8, label:ZaMsg.TABT_Themes});
         var case8 =             //skin properties
-                {type: _ZATABCASE_, caseKey:_tab8,
+                {type: _ZATABCASE_, caseKey:_tab8,         paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),
 					colSizes:["auto"],numCols:1,id:"global_skin_tab",
 				 	items: [
                         {type:_ZA_TOP_GROUPER_,  label:ZaMsg.NAD_Skin_Color_Settings,
@@ -864,7 +864,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 
         tabBarChoices.push ({value:_tab9, label:ZaMsg.Domain_Tab_Advanced});
         var case9 = 
-                {type: _ZATABCASE_, caseKey:_tab9,
+                {type: _ZATABCASE_, caseKey:_tab9,         paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),
 		            colSizes:["auto"],numCols:1,id:"global_ad_tab",
 		            items: 	[
                         { type:_ZA_TOP_GROUPER_, label:ZaMsg.Domain_BC_ShareConf,
@@ -905,7 +905,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 
         tabBarChoices.push ({value:_tab10, label:ZaMsg.NAD_Tab_AUTH});
         var case10 =
-                {type: _ZATABCASE_, caseKey:_tab10,
+                {type: _ZATABCASE_, caseKey:_tab10,         paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),
 		            colSizes:["auto"],numCols:1,id:"global_auth_tab",
 		            items:[
                         	{ type:_ZA_TOP_GROUPER_, label:ZaMsg.NAD_SPNEGO_Configure,
