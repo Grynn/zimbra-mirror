@@ -33,6 +33,7 @@ dn: uid=smith,ou=people,dc=widgets,dc=com
 uid: smith
 objectclass: zimbraAccount
 objectclass: organizationalPerson
+objectClass: inetOrgPerson
 zimbraId: 1d5710b0-0744-11d9-bcca-000d93afea2a
 zimbraAccountStatus: active
 zimbraMailStatus: enabled
@@ -58,6 +59,7 @@ dn: uid=lewis,ou=people,dc=widgets,dc=com
 uid: lewis
 objectclass: zimbraAccount
 objectclass: organizationalPerson
+objectClass: inetOrgPerson
 zimbraId: 999c3580-0761-11d9-89db-000d93afea2a
 zimbraAccountStatus: active
 zimbraMailStatus: enabled
