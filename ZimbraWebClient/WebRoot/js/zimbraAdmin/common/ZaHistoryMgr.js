@@ -126,9 +126,10 @@ function(listener) {
 	return this._evtMgr.removeListener(ZaEvent.L_MODIFY, listener);
 }
 
-ZaHistory = function (path, displayName) {
+ZaHistory = function (path, displayName, type) {
     this.path = path;
     this.displayName = displayName;
+    this.type = type;
 }
 
 ZaHistory.prototype.goToView =

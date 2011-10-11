@@ -307,7 +307,10 @@ function(item, ev) {
     var currentDataItem =  item.getData("dataItem");
     var isAlias = currentDataItem.isAlias();
     if (isAlias) {
+        var aliasImage = currentDataItem.image;
         currentDataItem = this.getTreeItemDataByPath(currentDataItem.getRealPath());
+        if(!currentDataItem.image)
+            currentDataItem.image = aliasImage;
         this._updateHistoryObj(currentDataItem);
     }
 	if (currentDataItem.isLeaf() && !isAlias) {
@@ -383,17 +386,56 @@ function (treeItem, isAddHistory) {
 ZaTree.prototype._updateHistoryObj =
 function (dataItem) {
     var text = dataItem.text;
+    var type = ZaItem.ACCOUNT;
     var path = this.getABPath(dataItem);
-    var historyObject = new ZaHistory(path, text);
+
+    switch (dataItem.image) {
+		case "Account":
+			type = ZaItem.ACCOUNT; break ;
+		case "COS" :
+			type = ZaItem.COS ; break ;
+        case "Domain":
+            type = ZaItem.DOMAIN; break;
+		case "Resource":
+			type = ZaItem.RESOURCE; break ;
+        case "DistributionList":
+            type = ZaItem.DL; break;
+        case "AccountAlias":
+            type = ZaItem.ALIAS; break;
+        case "Server":
+            type = ZaItem.SERVER; break;
+		default :
+			type = null;
+	}
+
+
+    var historyObject = new ZaHistory(path, text, type);
     var historyMgr = ZaZimbraAdmin.getInstance().getHisotryMgr();
     historyMgr.addHistoryObj(historyObject);
     var objList = historyMgr.getAllHistoryObj().getArray();
     var ti = null;
+    var image = null;
     var Tis = [];
     for(var i = objList.length - 1; i > -1; i --) {
+        if(objList[i].type == ZaItem.ACCOUNT)
+            image = "Account";
+        else if(objList[i].type == ZaItem.COS)
+            image = "COS";
+        else if(objList[i].type == ZaItem.DOMAIN)
+            image = "Domain";
+        else if(objList[i].type == ZaItem.RESOURCE)
+            image = "Resource";
+        else if(objList[i].type == ZaItem.DL)
+            image = "DistributionList";
+        else if(objList[i].type == ZaItem.ALIAS)
+            image = "AccountAlias";
+        else if(objList[i].type == ZaItem.SERVER)
+            image = "Server";
+
         ti = new ZaTreeItemData({
                 text: objList[i].displayName,
                 type:1,
+                image:image,
                 forceNode: (i+1 != objList.length),
                 path: objList[i].path
                 }

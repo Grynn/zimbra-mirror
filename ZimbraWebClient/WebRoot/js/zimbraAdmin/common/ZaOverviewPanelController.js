@@ -1444,7 +1444,7 @@ ZaOverviewPanelController.prototype.addObjectItem = function (parentPath, name, 
         }
     }
 
-    var historyObject = new ZaHistory(namePath, name);
+    var historyObject = new ZaHistory(namePath, name, item?item.type:null);
     ZaZimbraAdmin.getInstance().getHisotryMgr().addHistoryObj(historyObject);
 
     if (isAddNameNode) {
@@ -1683,10 +1683,27 @@ function() {
     var objList = historyMgr.getAllHistoryObj().getArray();
     var Tis = [];
     var ti = null;
+    var image = null;
     for(var i = objList.length - 1; i > -1; i --) {
+        if(objList[i].type == ZaItem.ACCOUNT)
+            image = "Account";
+        else if(objList[i].type == ZaItem.COS)
+            image = "COS";
+        else if(objList[i].type == ZaItem.DOMAIN)
+            image = "Domain";
+        else if(objList[i].type == ZaItem.RESOURCE)
+            image = "Resource";
+        else if(objList[i].type == ZaItem.DL)
+            image = "DistributionList";
+        else if(objList[i].type == ZaItem.ALIAS)
+            image = "AccountAlias";
+        else if(objList[i].type == ZaItem.SERVER)
+            image = "Server";
+
         ti = new ZaTreeItemData({
                 text: objList[i].displayName,
                 type:1,
+                image:image,
                 forceNode: (i+1 != objList.length),
                 path: objList[i].path
                 }
