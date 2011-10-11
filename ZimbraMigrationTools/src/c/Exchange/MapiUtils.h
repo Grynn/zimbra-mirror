@@ -300,6 +300,7 @@ BOOL GetAppName(wstring &wstrAppName);
 BOOL CreateAppTemporaryDirectory();
 BOOL GetAppTemporaryDirectory(wstring &wstrTempAppDirPath);
 wstring GetUniqueName();
+wstring GetDomainName();
 
 }                                               // end Util
 }                                               // end MAPI

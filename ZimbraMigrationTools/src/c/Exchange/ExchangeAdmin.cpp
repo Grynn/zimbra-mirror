@@ -2,7 +2,7 @@
 #include "Exchange.h"
 #include "ExchangeAdmin.h"
 #include "MAPISession.h"
-
+#include "MAPIAccessAPI.h"
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 // Exception class
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -731,20 +731,10 @@ LPCWSTR ExchangeOps::GlobalInit(LPCWSTR lpMAPITarget, LPCWSTR lpAdminUsername,
                 (LPSTR)ex.SrcFile().c_str(), ex.SrcLine());
         }
     }
-    else                                        // Use Outlook profile
-    {
-        HRESULT hr = S_OK;
-        m_zmmapisession = new Zimbra::MAPI::MAPISession();
-        try
-        {
-            hr = m_zmmapisession->Logon((LPWSTR)lpMAPITarget);
-        }
-        catch (Zimbra::MAPI::MAPISessionException &ex)
-        {
-            lpwstrStatus = FromatExceptionInfo(ex.ErrCode(), (LPWSTR)ex.Description().c_str(),
-                (LPSTR)ex.SrcFile().c_str(), ex.SrcLine());
-        }
-    }
+    
+    //Create Session and Open admin store with profile
+	lpwstrStatus=MAPIAccessAPI::InitGlobalSessionAndStore(lpMAPITarget);
+    
     return lpwstrStatus;
 }
 

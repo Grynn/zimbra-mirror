@@ -1,6 +1,9 @@
 #include "common.h"
 #include "Exchange.h"
 #include <strsafe.h>
+#pragma comment(lib, "netapi32.lib")
+#include <lm.h>
+
 
 enum AttachPropIdx
 {
@@ -209,8 +212,8 @@ HRESULT Zimbra::MAPI::Util::GetUserDNAndLegacyName(LPCWSTR lpszServer, LPCWSTR l
     CComPtr<IDirectorySearch> pDirSearch;
     wstring strADServer = L"LDAP://";
     strADServer += lpszServer;
-    HRESULT hr = ADsOpenObject(
-        strADServer.c_str(), /*lpszUser*/ NULL, lpszPwd /*NULL*/, ADS_SECURE_AUTHENTICATION,
+    HRESULT hr = ADsOpenObject(strADServer.c_str(),
+		/*lpszUser*/ NULL, lpszPwd /*NULL*/, ADS_SECURE_AUTHENTICATION,
         IID_IDirectorySearch,
         (void **)&pDirSearch);
     if (((FAILED(hr))))
@@ -2045,4 +2048,32 @@ wstring Zimbra::MAPI::Util::GetUniqueName()
 	replace( unique.begin(), unique.end(), '-', '_'); 
 	unique += L"_migwiz";
 	return unique;
+}
+
+wstring Zimbra::MAPI::Util::GetDomainName()
+{
+	wstring wDomain=L"";
+	DWORD dwLevel = 102;
+	LPWKSTA_INFO_102 pBuf = NULL;
+	NET_API_STATUS nStatus;
+	LPWSTR pszServerName = NULL;
+
+	nStatus = NetWkstaGetInfo(pszServerName,
+								dwLevel,
+								(LPBYTE *)&pBuf);
+	if (nStatus == NERR_Success)
+	{
+		wDomain= pBuf->wki102_langroup;
+		//printf("\n\tPlatform: %d\n", pBuf->wki102_platform_id);
+		//wprintf(L"\tName:     %s\n", pBuf->wki102_computername);
+		//printf("\tVersion:  %d.%d\n", pBuf->wki102_ver_major,
+		//							pBuf->wki102_ver_minor);
+		//wprintf(L"\tLan Root: %s\n", pBuf->wki102_lanroot);
+		//wprintf(L"\t# Logged On Users: %d\n", pBuf->wki102_logged_on_users);
+	}
+	// Free the allocated memory.
+	if (pBuf != NULL)
+		NetApiBufferFree(pBuf);
+
+	return wDomain;
 }

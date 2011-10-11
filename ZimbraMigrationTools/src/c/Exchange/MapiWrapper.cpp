@@ -58,7 +58,7 @@ STDMETHODIMP CMapiWrapper::ConnectToServer(BSTR ServerHostName, BSTR Port, BSTR 
     (void)AdminID;
     // baseMigrationObj->Connecttoserver();
 
-    MAPIAccessAPI::InitGlobalSessionAndStore(ServerHostName, AdminID);
+    MAPIAccessAPI::InitGlobalSessionAndStore(/*ServerHostName, */AdminID);
     return S_OK;
 }
 

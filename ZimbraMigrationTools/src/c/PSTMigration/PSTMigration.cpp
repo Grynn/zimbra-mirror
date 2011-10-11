@@ -4,6 +4,10 @@
 #include "Zimbra/RPC.h"
 #include "..\Exchange\MAPIAccessAPI.h"
 
+#pragma comment(lib, "netapi32.lib")
+
+#include <lm.h>
+
 LPCWSTR lpProfileName=L"testprofile";
 LPCWSTR lpExchangeServer=L"10.112.16.164";
 LPCWSTR lpServerAddress=L"10.117.82.163";
@@ -299,13 +303,13 @@ DWORD WINAPI AccountMigrationThread( LPVOID lpParameter )
 void MAPIAccessAPITestV()
 {
 	//Create Session and Open admin store.
-	MAPIAccessAPI::InitGlobalSessionAndStore(lpExchangeServer,L"Outlook");
+	MAPIAccessAPI::InitGlobalSessionAndStore(L"Outlook");
 	
-	DWORD const MAX_THREADS=1;
+	DWORD const MAX_THREADS=9;
 	HANDLE hThreadArray[MAX_THREADS]={0}; 
 	migrationThreadParams mtparams[MAX_THREADS];
 	mtparams[0].mailboxname = L"seretary";
-/*	mtparams[1].mailboxname = L"av9 av9";
+	mtparams[1].mailboxname = L"av9 av9";
 	mtparams[2].mailboxname = L"av1";
 	mtparams[3].mailboxname = L"av2 av2";
 	mtparams[4].mailboxname = L"av3 av3";
@@ -313,7 +317,7 @@ void MAPIAccessAPITestV()
 	mtparams[6].mailboxname = L"av5";
 	mtparams[7].mailboxname = L"av7 av7";
 	mtparams[8].mailboxname = L"appt1";
-*/
+
 	//One thread per mailbox.
 	for( int i=0; i<MAX_THREADS; i++ )
     {
@@ -333,6 +337,42 @@ void MAPIAccessAPITestV()
 	MAPIAccessAPI::UnInitGlobalSessionAndStore();
 }
 
+void GetDomainName()
+{
+	DWORD dwLevel = 102;
+	LPWKSTA_INFO_102 pBuf = NULL;
+	NET_API_STATUS nStatus;
+	LPWSTR pszServerName = NULL;
+
+	nStatus = NetWkstaGetInfo(pszServerName,
+								dwLevel,
+								(LPBYTE *)&pBuf);
+	//
+	// If the call is successful,
+	//  print the workstation data.
+	//
+	if (nStatus == NERR_Success)
+	{
+		printf("\n\tPlatform: %d\n", pBuf->wki102_platform_id);
+		wprintf(L"\tName:     %s\n", pBuf->wki102_computername);
+		printf("\tVersion:  %d.%d\n", pBuf->wki102_ver_major,
+									pBuf->wki102_ver_minor);
+		wprintf(L"\tDomain:   %s\n", pBuf->wki102_langroup);
+		wprintf(L"\tLan Root: %s\n", pBuf->wki102_lanroot);
+		wprintf(L"\t# Logged On Users: %d\n", pBuf->wki102_logged_on_users);
+	}
+	//
+	// Otherwise, indicate the system error.
+	//
+	else
+		fprintf(stderr, "A system error has occurred: %d\n", nStatus);
+	//
+	// Free the allocated memory.
+	//
+	if (pBuf != NULL)
+		NetApiBufferFree(pBuf);
+}
+
 int main(int argc, TCHAR *argv[])
 {
 	UNREFERENCED_PARAMETER(argc);
@@ -343,10 +383,10 @@ int main(int argc, TCHAR *argv[])
 //	ZCFileUploadTest();
 //	CreateExchangeMailBox();
 //	GetAllProfiles();	
-	
-MAPIAccessAPITestV();
+//	GetDomainName();
+//MAPIAccessAPITestV();
 //Zimbra::MAPI::Util::ReverseDelimitedString(L"lb1/tv2/cr3/Inbox/TopFolder",L"/");
-//ExchangeMigrationSetupTest();
+ExchangeMigrationSetupTest();
 //CreateExchangeMailBox();
 	
 	return 0;

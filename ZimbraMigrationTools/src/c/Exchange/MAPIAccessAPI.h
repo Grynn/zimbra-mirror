@@ -143,8 +143,7 @@ private:
 
 public:
     // static methods to be used by all mailboxes
-    static LPCWSTR InitGlobalSessionAndStore(wstring strExchangeHostName,
-                LPCWSTR lpcwstrAdminProfile);
+    static LPCWSTR InitGlobalSessionAndStore(LPCWSTR lpcwstrAdminProfile);
     static void UnInitGlobalSessionAndStore();
 
     // Per mailbox methods.

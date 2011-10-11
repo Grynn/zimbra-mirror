@@ -46,12 +46,18 @@ bool MAPIAccessAPI::SkipFolder(ExchangeSpecialFolderId exfid)
     return false;
 }
 
-LPCWSTR MAPIAccessAPI::InitGlobalSessionAndStore(wstring strExchangeHostName,
-    LPCWSTR lpcwstrAdminProfile)
+LPCWSTR MAPIAccessAPI::InitGlobalSessionAndStore(LPCWSTR lpcwstrAdminProfile)
 {
+	LPCWSTR lpwstrStatus = NULL;
     m_strAdminProfileName = lpcwstrAdminProfile;
-    m_strExchangeHostName = strExchangeHostName;
-    LPCWSTR lpwstrStatus = NULL;
+	m_strExchangeHostName = Zimbra::MAPI::Util::GetDomainName();//strExchangeHostName;
+	if(m_strExchangeHostName.empty())
+	{
+		lpwstrStatus = FromatExceptionInfo(E_FAIL, L"GetDomainName Failed.",
+             __FILE__, __LINE__);
+		goto CLEAN_UP;
+	}
+    
     try
     {
         // Logon into Admin profile
