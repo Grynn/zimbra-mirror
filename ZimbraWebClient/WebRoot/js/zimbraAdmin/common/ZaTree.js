@@ -219,6 +219,12 @@ function (showRootNode) {
         this.currentRelated = this._buildNodeItem(this._getDefaultRecentObjects(showRootNode));
         this.currentRelated.setExpanded(true);
     }
+
+    for (var i = 0; i < showRootNode.siblings.size(); i++) {
+        var currentAddNode =  showRootNode.siblings.get(i);
+        var currentShowNode = this._buildNodeItem(currentAddNode);
+        currentShowNode.setExpanded(true);
+    }
     return this.currentRoot;
 }
 

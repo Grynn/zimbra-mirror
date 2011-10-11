@@ -127,6 +127,7 @@ ZaTreeItemData = function(params) {
     this.id = params.id;
     this.text = params.text;
     this.image = params.image;
+    this.siblings = new AjxVector();
     this.forceNode = params.forceNode ;
     this.index = params.index;
     this.count = params.count;
@@ -143,6 +144,11 @@ ZaTreeItemData.prototype.addChild =
 function(child, index) {
 	this.childrenData.add(child, index);
     child.parentObject = this;
+};
+
+ZaTreeItemData.prototype.addSilbings =
+function(sibling, index) {
+	this.siblings.add(sibling, index);
 };
 
 ZaTreeItemData.prototype.setData =
