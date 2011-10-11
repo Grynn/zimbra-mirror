@@ -41,7 +41,6 @@ public class EditQuickCommand extends AjaxQuickCommandTest {
 		DialogEditQuickCommand dialog = (DialogEditQuickCommand)app.zPagePreferences.zToolbarPressButton(Button.B_EDIT_QUICK_COMMAND);
 
 		// TODO: modify the quick command
-		dialog.zSetQuickCommandAction();
 		dialog.zClickButton(Button.B_OK);
 		
 		// Get the quick commands from the server.  Verify the edited quick command is there.
