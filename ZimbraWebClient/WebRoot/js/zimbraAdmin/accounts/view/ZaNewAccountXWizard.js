@@ -2147,8 +2147,8 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
                                     colSizes:["200px", "300px", "*"],colSpan:1, trueValue:"TRUE", falseValue:"FALSE"
 								},
 								{ref:ZaAccount.A_zimbraPasswordLockoutMaxFailures, type:_SUPERWIZ_TEXTFIELD_, 
-									enableDisableChecks: [ZaAccountXFormView.isPasswordLockoutEnabled],
-								 	enableDisableChangeEventSources:[ZaAccount.A_zimbraPasswordLockoutEnabled,ZaAccount.A_COSId],
+									enableDisableChecks: [[ZaAccountXFormView.isPasswordLockoutEnabled],[XForm.checkInstanceValue,ZaAccount.A_zimbraPasswordLockoutEnabled,"TRUE"]],
+								 	enableDisableChangeEventSources:[ZaAccount.A_zimbraPasswordLockoutEnabled,ZaAccount.A_COSId, ZaAccount.A_zimbraPasswordLockoutEnabled],
 									txtBoxLabel:ZaMsg.LBL_zimbraPasswordLockoutMaxFailures,
 									toolTipContent:ZaMsg.TTP_zimbraPasswordLockoutMaxFailuresSub,
 									msgName:ZaMsg.MSG_zimbraPasswordLockoutMaxFailures,
@@ -2158,8 +2158,8 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
                                     colSizes:["200px", "300px", "*"],colSpan:1
 								},
 								{ref:ZaAccount.A_zimbraPasswordLockoutDuration, type:_SUPERWIZ_LIFETIME_, 
-									enableDisableChecks: [ZaAccountXFormView.isPasswordLockoutEnabled],
-								 	enableDisableChangeEventSources:[ZaAccount.A_zimbraPasswordLockoutEnabled,ZaAccount.A_COSId],
+									enableDisableChecks: [[ZaAccountXFormView.isPasswordLockoutEnabled],[XForm.checkInstanceValue,ZaAccount.A_zimbraPasswordLockoutEnabled,"TRUE"]],
+								 	enableDisableChangeEventSources:[ZaAccount.A_zimbraPasswordLockoutEnabled,ZaAccount.A_COSId, ZaAccount.A_zimbraPasswordLockoutEnabled],
 									txtBoxLabel:ZaMsg.LBL_zimbraPasswordLockoutDuration,
 									toolTipContent:ZaMsg.TTP_zimbraPasswordLockoutDurationSub,
 									msgName:ZaMsg.MSG_zimbraPasswordLockoutDuration,
@@ -2168,8 +2168,8 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS
 								},
 								{ref:ZaAccount.A_zimbraPasswordLockoutFailureLifetime, type:_SUPERWIZ_LIFETIME_, 
-									enableDisableChecks: [ZaAccountXFormView.isPasswordLockoutEnabled],
-								 	enableDisableChangeEventSources:[ZaAccount.A_zimbraPasswordLockoutEnabled,ZaAccount.A_COSId],								
+									enableDisableChecks: [[ZaAccountXFormView.isPasswordLockoutEnabled],[XForm.checkInstanceValue,ZaAccount.A_zimbraPasswordLockoutEnabled,"TRUE"]],
+								 	enableDisableChangeEventSources:[ZaAccount.A_zimbraPasswordLockoutEnabled,ZaAccount.A_COSId, ZaAccount.A_zimbraPasswordLockoutEnabled],
 									txtBoxLabel:ZaMsg.LBL_zimbraPasswordLockoutFailureLifetime,
 									toolTipContent:ZaMsg.TTP_zimbraPasswordLockoutFailureLifetimeSub,
 									msgName:ZaMsg.MSG_zimbraPasswordLockoutFailureLifetime,
