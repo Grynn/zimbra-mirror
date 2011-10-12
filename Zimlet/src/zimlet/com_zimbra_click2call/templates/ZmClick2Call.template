@@ -1,0 +1,73 @@
+<template id='ContactDetails'>
+	<table height="100%"  width="100%">
+						<tr>
+							<td colspan=2 style='text-align:left'>
+								<div id='ringingPhoneMsgDiv'>
+									<label  id='click2Call_callingLabel' style='font-size:14px;font-weight:bold;color:maroon;'>${callingStr}</label>
+								</div>
+									<div id='click2callDlg_reDialMsgDiv' style='display:none;'>
+										<div><label  style='font-size:12px;font-weight:bold;color:red;'>${connectionFailedStr}</label></div>
+										<div id='click2CallDlg_errDiv'></div>
+									</div>
+									<div id='click2callDlg_callCompletedMsgDiv' style='display:none;'>
+										<div><label  style='font-size:12px;font-weight:bold;color:green;'>${callSuccessfulStr}</label></div>
+										<div id='click2CallDlg_errDiv'>
+										</div>
+									</div>
+									<div id='click2callDlg_callHungUpMsgDiv' style='display:none;'>
+										<div><label  style='font-size:12px;font-weight:bold;color:green;'>${callHungUpStr}</label></div>
+										<div id='click2CallDlg_errDiv'></div>
+									</div>
+							</td>
+						</tr>
+						<tr>
+							<td valign='top'><div align=center id="click2CallDlg_photoBGDiv"></div></td>
+
+							<td valign='top'><div style='width:100px;' id="click2CallDlg_TextDiv">
+								<$ if (data.firstName && data.lastName) { $>
+									<label style='font-size:13px;font-weight:bold;'><$=data.firstName $> <$= data.lastName $></label><br/>
+									<label style='font-size:12px;font-weight:bold;color:darkblue'><$= AjxStringUtil.htmlEncode(data.toPhoneNumber) $></label><br/>
+								<$ } $>
+								<$ else { $>
+									<label style='font-size:12px;font-weight:bold;'><$= AjxStringUtil.htmlEncode(data.toPhoneNumber) $></label><br/>
+								<$ } $>
+								<$ if (data.jobTitle) { $>
+									<label><$= AjxStringUtil.htmlEncode(data.jobTitle) $></label><br/>
+								<$ } $>
+								<$ if (data.company) { $>
+									<label><$= AjxStringUtil.htmlEncode(data.company) $></label><br/>
+								<$ } $>
+								</div>
+							</td>
+
+						</tr>
+						<tr>
+							<td colspan=2>
+								<table cellpadding=0 cellspacing=0 align=center><tr><td>
+									<div style='padding:2px;display:none;' align=center id='click2CallDlg_hangupBtnDiv'></div>
+									</td><td><div style='padding:2px;display:none' align=center id='click2CallDlg_reDialBtnDiv'></div>
+								</td></tr></table>
+							</td>
+						</tr>
+					</table>
+</template>
+
+<template id='fromPhoneDlg'>
+  <div style='padding:5px;' >
+    <table align=center><tr><td style='text-align:right'>
+    <label style='font-size:12px;font-weight:bold;'>${toStr}</label></td><td><input style='width:200px' type=text id='click2CallDlg_callToPHText'></text></td></tr>
+    <tr><td style='text-align:right'>
+    <label style='font-size:12px;font-weight:bold;'>${fromStr}</label></td>
+    <td><div style='padding-top:10px;' id='click2CallFromPhoneDlg_menuDiv'></div>
+    </td></tr></table>
+    </div><br>
+    <table align=center><tr><td id='click2CallFromPhoneDlg_callBtn'></td></tr></table>
+</template>
+
+<template id='Tooltip'>
+<table cellpadding=2 cellspacing=0 border=0>
+	<tr valign='center'><td><$= AjxImg.getImageHtml("Telephone") $></td>
+	<td><b><div style='white-space:nowrap'>${phoneStr}:</div></b></td>
+	<td><b><div style='white-space:nowrap'><$= AjxStringUtil.htmlEncode(data.contentObjText) $></div></b></td>
+	</tr></table>
+</template>

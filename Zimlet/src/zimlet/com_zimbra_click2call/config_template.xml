@@ -1,0 +1,6 @@
+<zimletConfig name="com_zimbra_click2call" version="0.1">
+	<global>
+		<property name="allowedDomains">*.mitel.com,*.inter-tel.com</property>
+        <property name="click2call_server">acs-core3.inter-tel.com</property>
+	</global>
+</zimletConfig>

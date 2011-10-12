@@ -1,0 +1,15 @@
+<zimlet name="com_zimbra_click2call" version="0.1"  label="${msg.label}" description="${msg.description}">
+	<include>ZmClick2Call.js</include>
+	<include>base64.js</include>
+	<include>ZmClick2CallProviderAPIs.js</include>
+	<include>ZmClick2CallDlg.js</include>
+	<include>ZmClick2CallFromPhoneDlg.js</include>
+	<include>templates/ZmClick2Call.template.js</include>
+	<includeCSS>ZmClick2Call.css</includeCSS>
+	<handlerObject>ZmClick2CallZimlet</handlerObject>
+	<contentObject type="phone">
+		<matchOn>
+			<regex attrs="g">(((\+\d{2}[-\. ]\d{5}[-\. ]?\d{5})|(1\d{10})|(\d{10})|(\b(\d{1}[-. ])?(\(?\d{3}\)?[-. ])?\d{3}[-.]\d{4}\b)|(\(\d{3}\)[-\. ]?\d{7}))(( x| ext)[-#: ]?\d{1,5}){0,1})</regex>
+		</matchOn>
+	</contentObject>
+</zimlet>
