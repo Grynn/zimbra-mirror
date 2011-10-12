@@ -75,6 +75,9 @@ if(ZaDomain) {
     ZaDomain.A2_zimbraSpnegoApplyFor = "zimbraSpnegoApplyFor";
     ZaDomain.A2_zimbraSpnegoAuthPrincipal = "zimbraSpnegoAuthPrincipal";
     ZaDomain.A2_zimbraSpnegoAuthTargetName = "zimbraSpnegoAuthTargetName";
+    ZaDomain.A2_zimbraSpnegoUAAllBrowsers = "zimbraSpnegoUA_AllBrowsers";
+    ZaDomain.A2_zimbraSpnegoUASupportedBrowsers = "zimbraSpnegoUA_SupportedBrowsers";
+    ZaDomain.A2_zimbraSpnegoUACustomBrowsers = "zimbraSpnegoUA_CustomBrowsers";
     if(ZaDomain.myXModel) {
         ZaDomain.myXModel.items.push(
             {id:ZaDomain.A2_zimbraSpnegoApplyFor, ref:ZaDomain.A2_zimbraSpnegoApplyFor, type: _STRING_},
@@ -84,7 +87,10 @@ if(ZaDomain) {
             {id:ZaDomain.A2_zimbraSpnegoAuthErrorURL, ref: ZaDomain.A2_zimbraSpnegoAuthErrorURL, type: _STRING_ },
             {id:ZaDomain.A2_zimbraSpnegoGlobalAuthEnabled, ref:ZaDomain.A2_zimbraSpnegoGlobalAuthEnabled, type: _ENUM_, choices: ZaModel.BOOLEAN_CHOICES},
             {id:ZaDomain.A2_zimbraSpnegoAuthEnabled, ref:ZaDomain.A2_zimbraSpnegoAuthEnabled, type: _ENUM_, choices: ZaModel.BOOLEAN_CHOICES},
-            {id:ZaDomain.A2_zimbraSpnegoAuthSummary, ref:ZaDomain.A2_zimbraSpnegoAuthSummary, type: _ENUM_, choices: ZaModel.BOOLEAN_CHOICES}
+            {id:ZaDomain.A2_zimbraSpnegoAuthSummary, ref:ZaDomain.A2_zimbraSpnegoAuthSummary, type: _ENUM_, choices: ZaModel.BOOLEAN_CHOICES},
+            {id:ZaDomain.A2_zimbraSpnegoUAAllBrowsers, ref:ZaDomain.A2_zimbraSpnegoUAAllBrowsers, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
+            {id:ZaDomain.A2_zimbraSpnegoUASupportedBrowsers, ref:ZaDomain.A2_zimbraSpnegoUASupportedBrowsers, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
+            {id:ZaDomain.A2_zimbraSpnegoUACustomBrowsers, ref:ZaDomain.A2_zimbraSpnegoUACustomBrowsers, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES}
         );
     }
 }
@@ -96,6 +102,11 @@ ZaMsg.SpnegoServerConfig = "Change Server SPNEGO Setting ...";
 ZaMsg.SpnegoDomainConfig = "Change Domain SPNEGO Setting ...";
 
 ZaMsg.EnableSpnegoGlobal = "Enable SPNEGO authentication";
+
+ZaMsg.SpnegoSettingAllBrowsers = "All Browsers";
+ZaMsg.SpnegoSettingSupportedBrowsers = "Supported Browsers";
+ZaMsg.SpnegoSettingCustomBrowsers = "Custom";
+
 
 ZaTaskAuthConfigWizard.prototype.handleXFormChange =
 function () {
@@ -348,6 +359,9 @@ function(entry) {
     }
 
     this._containedObject[ZaModel.currentStep] = ZaTaskAuthConfigWizard.AUTH_CONFIG_STEP_0;
+    this._containedObject[ZaDomain.A2_zimbraSpnegoUAAllBrowsers] = "FALSE";
+    this._containedObject[ZaDomain.A2_zimbraSpnegoUASupportedBrowsers] = "FALSE";
+    this._containedObject[ZaDomain.A2_zimbraSpnegoUACustomBrowsers] = "FALSE";
 	this._localXForm.setInstance(this._containedObject);
 }
 
@@ -696,7 +710,8 @@ ZaTaskAuthConfigWizard.myXFormModifier = function(xFormObject) {
 								visibilityChecks:[[ZaTaskAuthConfigWizard.checkSpnegoApplyType,ZaDomain.A2_zimbraSpnegoApplyFor,ZaItem.GLOBAL_CONFIG]],
 								visibilityChangeEventSources:[ZaDomain.A2_zimbraSpnegoApplyFor],
 								items:[
-                                        {type:_OUTPUT_, value:"Single Sign-On using SPNEGO", colSpan:2},
+                                        {type:_OUTPUT_, value:"<b>Single Sign-On using SPNEGO</b>", colSpan:2},
+                                        {type:_SPACER_, height:10, colSpan:"*"},
                                         {ref: ZaDomain.A2_zimbraSpnegoGlobalAuthEnabled, type: _CHECKBOX_,
                                             label:ZaMsg.EnableSpnegoGlobal, width: "200px", subLabel:"",
                                             labelLocation:_RIGHT_, align:_RIGHT_,
@@ -721,7 +736,8 @@ ZaTaskAuthConfigWizard.myXFormModifier = function(xFormObject) {
 								visibilityChecks:[[ZaTaskAuthConfigWizard.checkSpnegoApplyType,ZaDomain.A2_zimbraSpnegoApplyFor,ZaItem.SERVER]],
 								visibilityChangeEventSources:[ZaDomain.A2_zimbraSpnegoApplyFor],
 								items:[
-                                        {type:_OUTPUT_, value:"Server Configuration", colSpan:2},
+                                        {type:_OUTPUT_, value:"<b>Server Configuration</b>", colSpan:2},
+                                        {type:_SPACER_, height:10, colSpan:"*"},
                                         {ref:ZaDomain.A2_zimbraSpnegoAuthPrincipal, type:_TEXTFIELD_,
                                             labelCssStyle:"text-align:left;padding-left:20px;",
                                             label:ZaMsg.NAD_MTA_SpnegoAuthPrincipal, width: "20em",
@@ -743,9 +759,9 @@ ZaTaskAuthConfigWizard.myXFormModifier = function(xFormObject) {
                             }
 						]
 					},
-					{type:_CASE_, caseKey:ZaTaskAuthConfigWizard.SPNEGO_CONFIG_STEP_2,
+					{type:_CASE_, caseKey:ZaTaskAuthConfigWizard.SPNEGO_CONFIG_STEP_2, colSizes:["200px", "*"],
 						items: [
-							{type:_OUTPUT_, value:"Single Sign-On using SPNEGO", colSpan:2},
+							{type:_OUTPUT_, value:"<b>Single Sign-On using SPNEGO</b>", colSpan:2},
                             {type:_SPACER_, height:10, colSpan:"*"},
                             {ref:ZaDomain.A_zimbraVirtualHostname, type:_REPEAT_,
                                 label:ZaMsg.Domain_Tab_VirtualHost, repeatInstance:"", showAddButton:true,
@@ -762,9 +778,9 @@ ZaTaskAuthConfigWizard.myXFormModifier = function(xFormObject) {
                                 ]
                             },
                             {type:_OUTPUT_, value:"These are the virtual host names to access the Zimbra Web Client UI. Example: example.com.",
-                                width:250, colSpan:"*",cssStyle:"padding-left:225px;"
+                                width:250, colSpan:"*",cssStyle:"padding-left:200px;"
                             },
-                            {type:_SPACER_, height:20, colSpan:"*"},
+                            {type:_SPACER_, height:15, colSpan:"*"},
                             {ref: ZaDomain.A_zimbraWebClientLoginURL,useParentTable: false,
                                 colSizes:["275px","*"], colSpan: 2,
                                 type:_TEXTFIELD_, width: "150px",
@@ -774,7 +790,7 @@ ZaTaskAuthConfigWizard.myXFormModifier = function(xFormObject) {
                                 onChange:ZaDomainXFormView.onFormFieldChanged
                             },
                             {type:_OUTPUT_, value:"Login URL is the URL to redirect users to when Zimbra auth token expires. Example: ../../service/spnego",
-                                width:250, colSpan:"*",cssStyle:"padding-left:225px;"
+                                width:250, colSpan:"*",cssStyle:"padding-left:200px;"
                             },
                             {ref: ZaDomain.A_zimbraWebClientLogoutURL,useParentTable: false,
                                 colSizes:["275px","*"], colSpan: 2,
@@ -785,11 +801,12 @@ ZaTaskAuthConfigWizard.myXFormModifier = function(xFormObject) {
                                 onChange:ZaDomainXFormView.onFormFieldChanged
                             },
                             {type:_OUTPUT_, value:"Logout URL is the URL to display when users logs out. Example: ../?sso=1",
-                                width:250, colSpan:"*",cssStyle:"padding-left:225px;"
+                                width:250, colSpan:"*",cssStyle:"padding-left:200px;"
                             },
-                            {type:_SPACER_, height:20, colSpan:"*"},
+                            {type:_SPACER_, height:15, colSpan:"*"},
                             {type:_OUTPUT_, value:"Web Client Allowed User Agents", colSpan:2, cssStyle:"padding-left:20px;"},
                             {type:_SPACER_, height:10, colSpan:"*"},
+                            /*
                             {ref: ZaDomain.A_zimbraWebClientLoginURLAllowedUA,
                                 label:ZaMsg.LBL_zimbraWebClientLoginURLAllowedUA,
                                 labelCssStyle:"text-align:left;vertical-align:top;padding-left:40px;",
@@ -825,7 +842,60 @@ ZaTaskAuthConfigWizard.myXFormModifier = function(xFormObject) {
                                     width: "150px"}
                                 ],
                                 onChange:ZaDomainXFormView.onFormFieldChanged
-                            }
+                            },
+                            */
+                            {type: _GROUP_,  id:"spnego_user_agent_settings",
+                                numCols: 2, colSpan:2, colSizes:["200px", "*"],
+                                items: [
+                                    {ref:ZaDomain.A2_zimbraSpnegoUAAllBrowsers, type:_RADIO_, groupname:"user_agent_setting",
+										msgName:ZaMsg.SpnegoSettingAllBrowsers,label:ZaMsg.SpnegoSettingAllBrowsers, labelLocation:_RIGHT_,
+										onChange:ZaTabView.onFormFieldChanged,labelCssClass:"xform_label_right", //align:_LEFT_,
+										//valueChangeEventSources:[ZaDomain.A2_zimbraSpnegoUASupportedBrowsers,ZaDomain.A2_zimbraSpnegoUACustomBrowsers],
+										visibilityChecks:[ZaConvertD.isConvertDAvailable],
+										//updateElement:function () {
+										//	this.getElement().checked = "TRUE";
+										//},
+										elementChanged: function(elementValue,instanceValue, event) {
+											this.setInstanceValue("FALSE",ZaDomain.A2_zimbraSpnegoUACustomBrowsers);
+											this.setInstanceValue("FALSE",ZaDomain.A2_zimbraSpnegoUASupportedBrowsers);
+                                            this.setInstanceValue("TRUE",ZaDomain.A2_zimbraSpnegoUAAllBrowsers);
+										//	this.getForm().parent.setDirty(true);
+
+										}
+									},
+                                    {ref:ZaDomain.A2_zimbraSpnegoUASupportedBrowsers, type:_RADIO_, groupname:"user_agent_setting",
+										msgName:ZaMsg.SpnegoSettingSupportedBrowsers,label:ZaMsg.SpnegoSettingSupportedBrowsers, labelLocation:_RIGHT_,
+										onChange:ZaTabView.onFormFieldChanged,labelCssClass:"xform_label_right",
+										visibilityChecks:[ZaConvertD.isConvertDAvailable],
+										elementChanged: function(elementValue,instanceValue, event) {
+											this.setInstanceValue("FALSE",ZaDomain.A2_zimbraSpnegoUACustomBrowsers);
+											this.setInstanceValue("FALSE",ZaDomain.A2_zimbraSpnegoUAAllBrowsers);
+                                            this.setInstanceValue("TRUE",ZaDomain.A2_zimbraSpnegoUASupportedBrowsers);
+										}
+									},
+                                    {ref:ZaDomain.A2_zimbraSpnegoUACustomBrowsers, type:_RADIO_, groupname:"user_agent_setting",
+										msgName:ZaMsg.SpnegoSettingCustomBrowsers,label:ZaMsg.SpnegoSettingCustomBrowsers, labelLocation:_RIGHT_,
+										onChange:ZaTabView.onFormFieldChanged,labelCssClass:"xform_label_right",
+										visibilityChecks:[ZaConvertD.isConvertDAvailable],
+										elementChanged: function(elementValue,instanceValue, event) {
+											this.setInstanceValue("FALSE",ZaDomain.A2_zimbraSpnegoUAAllBrowsers);
+											this.setInstanceValue("FALSE",ZaDomain.A2_zimbraSpnegoUASupportedBrowsers);
+                                            this.setInstanceValue("TRUE",ZaDomain.A2_zimbraSpnegoUACustomBrowsers);
+										}
+									},
+                                    {type:_GROUP_, numCols:3, colSpan:"*", colSizes:["275px","80px","auto"],
+                                        cssStyle:"margin-bottom:10px;padding-bottom:0px;margin-top:0px;margin-left:10px;margin-right:10px;",
+                                        items: [
+                                            {type:_CELLSPACER_},
+                                            {type:_DWT_BUTTON_, label:"Specifiy...",width:"70px",
+                                                enableDisableChangeEventSources:[ZaDomain.A2_zimbraSpnegoUACustomBrowsers],
+                                                enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A2_zimbraSpnegoUACustomBrowsers,'TRUE']],
+                                                onActivate:"ZaTaskAuthConfigWizard.customAllowedUASetting.call(this);"
+                                            }
+                                        ]
+                                    }
+                                ]
+							}
 						]
 					},
 					{type:_CASE_, caseKey:ZaTaskAuthConfigWizard.CONFIG_COMPLETE_STEP,
@@ -908,4 +978,10 @@ ZaTaskAuthConfigWizard.changeSpnegoDomainConfig = function() {
     instance[ZaDomain.A2_zimbraSpnegoApplyFor] = ZaItem.DOMAIN;
     var parent = this.getForm().parent;
     parent.goPage(ZaTaskAuthConfigWizard.SPNEGO_CONFIG_STEP_1);
+}
+
+ZaTaskAuthConfigWizard.customAllowedUASetting = function() {
+    //var parent = this.getForm().parent;
+    //parent.testSetings();
+    //parent.goPage(ZaTaskAuthConfigWizard.AUTH_TEST_STEP);
 }
