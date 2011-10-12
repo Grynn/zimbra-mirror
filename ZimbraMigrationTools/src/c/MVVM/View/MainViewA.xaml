@@ -40,6 +40,8 @@
                 <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#2B5480" Opacity=".8" />
                 <!--SelectedItem without focus-->
                 <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="#2B5480" Opacity=".8"/>
+                <!--Text of SelectedItem without focus-->
+                <SolidColorBrush x:Key="{x:Static SystemColors.ControlTextBrushKey}" Color="White"/>
                 <Style TargetType="Border">
                     <Setter Property="CornerRadius" Value="4"/>
                     <Setter Property="Margin" Value="10,5,4,0"/>
