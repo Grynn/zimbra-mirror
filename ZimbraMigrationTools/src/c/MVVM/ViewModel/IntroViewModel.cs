@@ -38,7 +38,7 @@ namespace MVVM.ViewModel
             this.GetIntroLicenseCommand = new ActionCommand(this.GetIntroLicense, () => true);
             this.GetIntroUserMigCommand = new ActionCommand(this.GetIntroUserMig, () => true);
             this.GetIntroServerMigCommand = new ActionCommand(this.GetIntroServerMig, () => true);
-            this.BeginCommand = new ActionCommand(this.Begin, () => true);
+            this.NextCommand = new ActionCommand(this.Next, () => true);
             mw = new CssLib.CSMigrationwrapper();
         }
 
@@ -101,13 +101,13 @@ namespace MVVM.ViewModel
             }
         }
 
-        public ICommand BeginCommand
+        public ICommand NextCommand
         {
             get;
             private set;
         }
 
-        private void Begin()
+        private void Next()
         {
             // Get data to initialize the profile combo boxes
             mw.MailClient = "MAPI";
