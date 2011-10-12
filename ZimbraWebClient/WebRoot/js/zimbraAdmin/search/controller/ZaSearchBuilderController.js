@@ -82,7 +82,7 @@ ZaSearchBuilderController.handleOptions =
 function (value, event, form){
 //	DBG.println(AjxDebug.DBG3, "Handling the options on the search builder toolbar ...");
 	
-	var controller = form.parent._controller ;
+	var controller = ZaApp.getInstance().getSearchBuilderController();
 	var searchField = ZaApp.getInstance().getSearchListController()._searchField ;
 	
 	var charCode = event.charCode;
@@ -773,5 +773,25 @@ function () {
 ZaSearchBuilderController.searchFilterTreeListener =
 function (ev) {
     var filterType = ev.item.getData("filterType");
-    var b = filterType + 1;
+    var loc = {};
+    var treeItemBound = ev.item.getBounds();
+    loc.x = treeItemBound.x + treeItemBound.width;
+    loc.y = treeItemBound.y;
+    var dialog;
+    var sbController = ZaApp.getInstance().getSearchBuilderController();
+    switch (filterType) {
+        case ZaSearchOption.ID_FILTER_ID:
+            dialog = sbController.getFilterDialogByType (ZaSearchOption.BASIC_TYPE_ID);
+        break;
+    }
+    dialog.popup(loc);
+}
+
+ZaSearchBuilderController.filterDialogSet = {};
+ZaSearchBuilderController.prototype.getFilterDialogByType =
+function (filterType) {
+    if (!ZaSearchBuilderController.filterDialogSet[filterType]) {
+        ZaSearchBuilderController.filterDialogSet[filterType] = new ZaSearchOptionDialog(ZaApp.getInstance().getAppCtxt().getShell(), filterType);
+    }
+    return ZaSearchBuilderController.filterDialogSet[filterType];
 }

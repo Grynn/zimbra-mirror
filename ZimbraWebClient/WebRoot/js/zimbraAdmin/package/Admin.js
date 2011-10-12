@@ -172,6 +172,7 @@ AjxPackage.require("zimbraAdmin.search.view.ZaSearchListView");
 AjxPackage.require("zimbraAdmin.search.view.ZaSearchBuilderToolbarView");
 AjxPackage.require("zimbraAdmin.search.view.ZaSearchOptionView");
 AjxPackage.require("zimbraAdmin.search.view.ZaSearchBuilderView");
+AjxPackage.require("zimbraAdmin.search.view.ZaSearchOptionDialog");
 AjxPackage.require("zimbraAdmin.status.view.ZaServicesListView");
 AjxPackage.require("zimbraAdmin.statistics.view.ZaGlobalStatsView");
 AjxPackage.require("zimbraAdmin.statistics.view.ZaGlobalMessageVolumePage");
