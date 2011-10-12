@@ -9,8 +9,8 @@ import org.testng.annotations.BeforeClass;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.QuickCommand;
 import com.zimbra.qa.selenium.framework.items.TagItem;
-import com.zimbra.qa.selenium.framework.items.QuickCommand.QCAction;
-import com.zimbra.qa.selenium.framework.items.QuickCommand.QCItemTypeId;
+import com.zimbra.qa.selenium.framework.items.QuickCommand.QuickCommandAction;
+import com.zimbra.qa.selenium.framework.items.QuickCommand.ItemTypeId;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
@@ -79,17 +79,17 @@ public class AjaxQuickCommandTest extends AjaxCommonTest {
 		ZAssert.assertNotNull(folder, "Verify the subfolder is available");
 
 		// Create the list of actions
-		ArrayList<QCAction> actions = new ArrayList<QCAction>();
-		actions.add(new QCAction(QCAction.QCTypeId.actionTag, tag.getId(), true));
-		actions.add(new QCAction(QCAction.QCTypeId.actionFlag, "read", true));
-		actions.add(new QCAction(QCAction.QCTypeId.actionFlag, "flagged", true));
-		actions.add(new QCAction(QCAction.QCTypeId.actionFileInto, folder.getId(), true));
+		ArrayList<QuickCommandAction> actions = new ArrayList<QuickCommandAction>();
+		actions.add(new QuickCommandAction(QuickCommandAction.TypeId.actionTag, tag.getId(), true));
+		actions.add(new QuickCommandAction(QuickCommandAction.TypeId.actionFlag, "read", true));
+		actions.add(new QuickCommandAction(QuickCommandAction.TypeId.actionFlag, "flagged", true));
+		actions.add(new QuickCommandAction(QuickCommandAction.TypeId.actionFileInto, folder.getId(), true));
 
 
 		String name = "name" + ZimbraSeleniumProperties.getUniqueString();
 		String description = "description" + ZimbraSeleniumProperties.getUniqueString();
 		
-		command1 = new QuickCommand(name, description, QCItemTypeId.MSG, true);
+		command1 = new QuickCommand(name, description, ItemTypeId.MSG, true);
 		command1.addActions(actions);
 
 		return (command1);
@@ -132,15 +132,15 @@ public class AjaxQuickCommandTest extends AjaxCommonTest {
 		ZAssert.assertNotNull(folder, "Verify the subfolder is available");
 
 		// Create the list of actions
-		ArrayList<QCAction> actions = new ArrayList<QCAction>();
-		actions.add(new QCAction(QCAction.QCTypeId.actionTag, tag.getId(), true));
-		actions.add(new QCAction(QCAction.QCTypeId.actionFileInto, folder.getId(), true));
+		ArrayList<QuickCommandAction> actions = new ArrayList<QuickCommandAction>();
+		actions.add(new QuickCommandAction(QuickCommandAction.TypeId.actionTag, tag.getId(), true));
+		actions.add(new QuickCommandAction(QuickCommandAction.TypeId.actionFileInto, folder.getId(), true));
 
 
 		String name = "name" + ZimbraSeleniumProperties.getUniqueString();
 		String description = "description" + ZimbraSeleniumProperties.getUniqueString();
 		
-		command2 = new QuickCommand(name, description, QCItemTypeId.CONTACT, true);
+		command2 = new QuickCommand(name, description, ItemTypeId.CONTACT, true);
 		command2.addActions(actions);
 
 		return (command2);
@@ -184,17 +184,17 @@ public class AjaxQuickCommandTest extends AjaxCommonTest {
 		ZAssert.assertNotNull(folder, "Verify the subfolder is available");
 
 		// Create the list of actions
-		ArrayList<QCAction> actions = new ArrayList<QCAction>();
-		actions.add(new QCAction(QCAction.QCTypeId.actionTag, tag.getId(), true));
-		actions.add(new QCAction(QCAction.QCTypeId.actionFlag, "read", true));
-		actions.add(new QCAction(QCAction.QCTypeId.actionFlag, "flagged", true));
-		actions.add(new QCAction(QCAction.QCTypeId.actionFileInto, folder.getId(), true));
+		ArrayList<QuickCommandAction> actions = new ArrayList<QuickCommandAction>();
+		actions.add(new QuickCommandAction(QuickCommandAction.TypeId.actionTag, tag.getId(), true));
+		actions.add(new QuickCommandAction(QuickCommandAction.TypeId.actionFlag, "read", true));
+		actions.add(new QuickCommandAction(QuickCommandAction.TypeId.actionFlag, "flagged", true));
+		actions.add(new QuickCommandAction(QuickCommandAction.TypeId.actionFileInto, folder.getId(), true));
 
 
 		String name = "name" + ZimbraSeleniumProperties.getUniqueString();
 		String description = "description" + ZimbraSeleniumProperties.getUniqueString();
 		
-		command3 = new QuickCommand(name, description, QCItemTypeId.APPT, true);
+		command3 = new QuickCommand(name, description, ItemTypeId.APPT, true);
 		command3.addActions(actions);
 
 		return (command3);
