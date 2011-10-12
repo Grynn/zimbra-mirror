@@ -61,7 +61,7 @@ public class PageAddressbook extends AbsTab {
 	public static class CONTEXT_SUB_MENU {
 				
 		public static final ContextMenuItem CONTACT_SUB_NEW_TAG = new ContextMenuItem("div#contacts_newtag","New Tag","div[class='ImgNewTag']",":contains('nt')");
-		public static final ContextMenuItem CONTACT_SUB_REMOVE_TAG = new ContextMenuItem("div#contacts_removetag","Remove Tag","div[class='ImgDeleteTag']","");
+		public static final ContextMenuItem CONTACT_SUB_REMOVE_TAG = new ContextMenuItem("div[id^=contacts_removetag]","Remove Tag","div[class='ImgDeleteTag']","");
 		//public static final ContextMenuItem CONTACT_SUB_REMOVE_TAG = new ContextMenuItem("td#zmi__Contacts__TAG_MENU|MENU|REMOVETAG_title","Remove Tag","div[class='ImgDeleteTag']","");
 
 		
@@ -438,6 +438,9 @@ public class PageAddressbook extends AbsTab {
 		else if ( shortcut == Shortcut.S_ASSISTANT ) {			
 			page = new DialogAssistant(MyApplication, ((AppAjaxClient) MyApplication).zPageAddressbook);
 		}
+		else if ( shortcut == Shortcut.S_MAIL_REMOVETAG ) {			
+			page = null;
+		}
 	    else {		
 		   throw new HarnessException("No logic for shortcut : "+ shortcut);
 	    }
@@ -701,7 +704,104 @@ public class PageAddressbook extends AbsTab {
 	   	   
 	}
 	
-	
+	public AbsPage zToolbarPressPulldown(Button pulldown, Button option, Object item) throws HarnessException {
+		logger.info(myPageName() + " zToolbarPressButtonWithPulldown("+ pulldown +", "+ option + " , " + item +")");
+
+		tracer.trace("Click pulldown "+ pulldown +" then "+ option + " and " + item);
+
+		if ( pulldown == null )
+			throw new HarnessException("Button cannot be null!");
+
+		String pulldownLocator  = null;	// If set, this will be expanded
+		String optionLocator    = null;	// If set, this will be clicked
+		String subOptionLocator = null;	// If set, this will be clicked
+		
+		AbsPage page = null;	// If set, this page will be returned
+		
+		if ( pulldown == Button.B_TAG ) {			
+			 pulldownLocator = "css=td#zb__CNS-main__TAG_MENU_dropdown div.ImgSelectPullDownArrow";
+			
+			 if (option == Button.O_TAG_REMOVETAG) {
+				  optionLocator = "css=div[id='zb__CNS-main__TAG_MENU|MENU'] div[id='contacts_removetag'] td[id='contacts_removetag_title']"; 
+					
+				
+			 }	  
+		     page = null;
+	    }
+	   	
+	  	   
+		if ( pulldownLocator != null ) {
+						
+			// Make sure the locator exists
+			if ( !sIsElementPresent(pulldownLocator) ) {
+				throw new HarnessException("Button "+ pulldown +" folder "+ item +" pulldownLocator "+ pulldownLocator +" not present!");
+			}
+
+			//central coordinate "x,y" 
+			String center= sGetElementWidth(pulldownLocator)/2 + "," + sGetElementHeight(pulldownLocator)/2;
+			zClickAt(pulldownLocator,center);
+			
+			zWaitForBusyOverlay();
+            
+			// find optionLocator
+		
+			if ( optionLocator != null ) {              
+				// Make sure the locator exists and visible
+				zWaitForElementPresent(optionLocator);
+				
+				if (zIsVisiblePerPosition(optionLocator,0,0)) {
+				   sMouseOver(optionLocator);
+				   zWaitForBusyOverlay();
+				   
+				   if (item instanceof TagItem) {
+					   String tagName="";
+					   
+					   if (item == TagItem.Remove_All_Tags) {
+						  tagName = "All Tags"; // DWT291_dropdown ‌·[u]?
+					   }
+					   else {						   
+						  tagName = ((TagItem) item).getName();
+					   }  
+						  
+						// find active menu id
+						  
+					   //get number of z_shell's children
+					   int countOption= Integer.parseInt(sGetEval("window.document.getElementById('z_shell').children.length"));
+					   String parentMenuid= null;
+							
+					   //find id of the active menu
+					   for (int i=countOption-1; i>0;  i--) {
+						   parentMenuid= sGetEval("window.document.getElementById('z_shell').children[" + i + "].id");
+					     
+						   if (sGetEval("window.document.getElementById('" + parentMenuid + "').getAttribute('class')").contains("ActionMenu ZHasIcon")
+								 && sIsVisible(parentMenuid)){
+								 subOptionLocator = "css=div#" + parentMenuid + " td[id$=title]:contains(" + tagName + ")";
+								 break;
+						   }
+					   }					          				     
+				   }
+				   
+				   if (subOptionLocator != null) {
+					   // Make sure the locator exists and visible
+						zWaitForElementPresent(subOptionLocator);
+						
+						if (zIsVisiblePerPosition(subOptionLocator,0,0)) {
+						   zClick(subOptionLocator);
+						   zWaitForBusyOverlay();
+						}	   					   
+				   }
+				}				
+			}
+						
+		}
+		
+		//if ( page != null ) {
+		//	page.zWaitForActive();
+		//}
+
+	    return page;
+	   	   
+	}
 	// return the type of a contact
 	private String getContactType(String locator) throws HarnessException {
 		String imageLocator = locator +" div[class*=";
@@ -844,9 +944,8 @@ public class PageAddressbook extends AbsTab {
 				}
 				
 				else if (subOption == Button.O_TAG_REMOVETAG) {
-					sub_cmi = CONTEXT_SUB_MENU.CONTACT_SUB_REMOVE_TAG;
-					//extraLocator = " td#zmi__Contacts__TAG_MENU|MENU|REMOVETAG_title";
-					//parentLocator= "div#zmi__Contacts__TAG_MENU|MENU";
+					sub_cmi = CONTEXT_SUB_MENU.CONTACT_SUB_REMOVE_TAG;					
+					parentLocator= "div[id^=TAG_MENU__DWT][id$=|MENU]";
 					page = null;	
 				}
 				
@@ -979,6 +1078,94 @@ public class PageAddressbook extends AbsTab {
 	}
 	
   
+	public AbsPage zListItem(Action action, Button option ,Button subOption, String tagName, String contact) throws HarnessException {
+		String locator = null;			// If set, this will be clicked
+		AbsPage page = null;	// If set, this page will be returned
+		String id = null;
+		String parentLocator = null;
+		String extraLocator="";
+		
+		tracer.trace(action +" then "+ option +" then "+ subOption + " and tag " + tagName + " on contact = "+ contact);
+
+        if ( action == Action.A_RIGHTCLICK ) {
+			ContextMenuItem cmi=null;
+		    ContextMenuItem sub_cmi = null;
+		
+		    zRightClickAt(getContactLocator(contact),"0,0");
+		      
+		    
+			if (option == Button.B_TAG) {		        
+				cmi=CONTEXT_MENU.CONTACT_TAG;
+						
+				if (subOption == Button.O_TAG_REMOVETAG) {
+					sub_cmi = CONTEXT_SUB_MENU.CONTACT_SUB_REMOVE_TAG;					
+					parentLocator= "div[id^=TAG_MENU__DWT][id$=|MENU]";
+				
+					//id = cmi.locator;
+					locator = "css=div#zm__Contacts tr#"+ cmi.locator;
+									
+					//  Make sure the context menu exists
+					zWaitForElementPresent(locator) ;
+			
+					// Mouse over the option
+					sFocus(locator);
+					sMouseOver(locator);		    			 
+					zWaitForBusyOverlay();
+	
+										    	
+					locator = "css=" + parentLocator + " " + sub_cmi.locator + extraLocator;		        			
+				    	
+					//  Make sure the sub context menu exists			
+					zWaitForElementPresent(locator) ;
+			
+					// 	make sure the sub context menu enabled			
+					zWaitForElementEnabled(locator);
+						
+					// mouse over the sub menu
+					sFocus(locator);
+				    sMouseOver(locator);
+				     	
+				    zWaitForBusyOverlay();
+					
+				    //find the parent id
+				    
+				    //reset locator
+				    locator =null;
+				    
+				    //get number of z_shell's children
+					int countOption= Integer.parseInt(sGetEval("window.document.getElementById('z_shell').children.length"));
+							
+					//find id of the active menu
+					for (int i=countOption-1; i>0;  i--) {
+						 id= sGetEval("window.document.getElementById('z_shell').children[" + i + "].id");
+				     
+						 if (id.startsWith("DWT") 					
+							 && sGetEval("window.document.getElementById('" + id + "').getAttribute('class')").contains("ActionMenu ZHasIcon")
+							 && sIsVisible(id)){
+							 locator="css=div#" + id + " td[id^=DWT][id$=_title]:contains('" + tagName + "')";							 
+							 break;
+						 }
+					}		
+			          				     
+				    if (locator != null) {
+				    
+				    	//  Make sure the sub context menu exists			
+				    	zWaitForElementPresent(locator) ;
+			
+				    	// 	make sure the sub context menu enabled			
+				    	zWaitForElementEnabled(locator);
+					
+				    	// select the tag name
+				    	zClick(locator);
+				    				     	
+				    	zWaitForBusyOverlay();
+				    }	
+				}
+			}     		       		
+	    }
+		return (page);    
+	}
+	
 	public void zListItem(Action action, Button option ,IItem item, String contact) throws HarnessException {
 		String locator = null;			// If set, this will be clicked
 	

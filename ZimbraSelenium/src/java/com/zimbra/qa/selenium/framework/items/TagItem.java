@@ -21,6 +21,9 @@ import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
  */
 public class TagItem implements IItem {
 	protected static Logger logger = LogManager.getLogger(IItem.class);
+	
+	//just a pseudo object for the option Remove Tag-> All Tags with multi-tagged items 
+	public static TagItem Remove_All_Tags = new TagItem();
 
 	
 	////
@@ -63,7 +66,7 @@ public class TagItem implements IItem {
 	
 	
 	/**
-	 * Create a mail item
+	 * Create a tag item
 	 */
 	public TagItem() {
 	}
