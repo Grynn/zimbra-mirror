@@ -262,6 +262,10 @@ public class Button {
 	public static final Button O_TASK_TODOLIST = new Button("O_TASK_TODOLIST");
 	
 	// Tree buttons
+	public static final Button B_TREE_FOLDERS_PROPERTIES = new Button("B_TREE_FOLDERS_PROPERTIES");
+	public static final Button B_TREE_SEARCHES_PROPERTIES = new Button("B_TREE_FOLDERS_PROPERTIES");
+	public static final Button B_TREE_TAGS_PROPERTIES = new Button("B_TREE_TAGS_PROPERTIES");
+
 	public static final Button B_TREE_NEWFOLDER = new Button("B_TREE_NEWFOLDER");
 	public static final Button B_TREE_NEWADDRESSBOOK = new Button("B_TREE_NEWADDRESSBOOK");
 	public static final Button B_TREE_NEWCALENDAR = new Button("B_TREE_NEWCALENDAR");
