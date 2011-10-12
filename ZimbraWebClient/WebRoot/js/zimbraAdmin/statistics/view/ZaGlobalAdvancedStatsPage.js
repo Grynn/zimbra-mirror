@@ -453,14 +453,16 @@ ZaGlobalAdvancedStatsPage._getCounters = function(hostname, group, counterSelect
     var cb = function(response) {
         var soapResponse = response.getResponse().Body.GetLoggerStatsResponse;
         var statCounters = soapResponse.hostname[0].stats[0].values[0].stat;
-        for (var i = 0, j = statCounters.length; i < j; i++) {
-            var option = document.createElement("option");
-            option.value = statCounters[i].name;
-            ZaGlobalAdvancedStatsPage.setText(option, statCounters[i].name);
-            if (statCounters[i].type) {
-                option.columnUnit = statCounters[i].type;
+        if (statCounters) {
+            for (var i = 0, j = statCounters.length; i < j; i++) {
+                var option = document.createElement("option");
+                option.value = statCounters[i].name;
+                ZaGlobalAdvancedStatsPage.setText(option, statCounters[i].name);
+                if (statCounters[i].type) {
+                    option.columnUnit = statCounters[i].type;
+                }
+                counterSelect.appendChild(option);
             }
-            counterSelect.appendChild(option);
         }
     };
     
@@ -538,8 +540,10 @@ ZaGlobalAdvancedStatsPage.getCounters = function(hostname, group) {
     var soapResponse = ZaRequestMgr.invoke(csfeParams, reqMgrParams).Body.GetLoggerStatsResponse;
     var statCounters = soapResponse.hostname[0].stats[0].values[0].stat;
     var counters = [];
-    for (var i = 0, j = statCounters.length; i < j; i++) {
-        counters.push(statCounters[i].name);
+    if ( statCounters ) {
+        for (var i = 0, j = statCounters.length; i < j; i++) {
+             counters.push(statCounters[i].name);
+        }
     }
     return counters;
 }

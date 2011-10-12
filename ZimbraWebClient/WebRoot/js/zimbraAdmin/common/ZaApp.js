@@ -235,6 +235,19 @@ function(viewId) {
 	}
 }
 
+ZaApp.prototype.getServerStatsListController =
+function(viewId) {
+	if(!viewId)
+		viewId = ZaZimbraAdmin._SERVER_LIST_FOR_STATISTICS_VIEW;
+
+	if (viewId && this._controllers[viewId] != null) {
+		return this._controllers[viewId];
+	}else{
+		var c = this._controllers[viewId] = new ZaServerStatsListController(this._appCtxt, this._container, this);
+		return c ;
+	}
+}
+
 ZaApp.prototype.getGlobalConfigViewController =
 function(viewId) {
 	if(!viewId)

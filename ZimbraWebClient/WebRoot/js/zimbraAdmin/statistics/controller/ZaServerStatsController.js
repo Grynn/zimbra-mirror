@@ -48,49 +48,51 @@ function(item,openInNewTab) {
 		this._view = this._contentView = new this.tabConstructor(this._container);
 		var elements = new Object();
 
-		this._toolbarOperations[ZaOperation.REFRESH] = new ZaOperation(ZaOperation.REFRESH, ZaMsg.TBB_Refresh, ZaMsg.TBB_Refresh_tt, "Refresh", "Refresh", new AjxListener(this, this.refreshListener));
-		this._toolbarOperations[ZaOperation.NONE] = new ZaOperation(ZaOperation.NONE);
-		
-		this._toolbarOperations[ZaOperation.PAGE_BACK] = new ZaOperation(ZaOperation.PAGE_BACK, ZaMsg.Previous, ZaMsg.PrevPage_tt, 
-									"LeftArrow", "LeftArrowDis",  
-									new AjxListener(this, ZaServerStatsController.prototype._prevPageListener));
-		
-		this._toolbarOperations[ZaOperation.SEP]=new ZaOperation(ZaOperation.SEP);								
-		this._toolbarOperations[ZaOperation.LABEL] = new ZaOperation(ZaOperation.LABEL, AjxMessageFormat.format (ZaMsg.MBXStats_PAGEINFO, [1,1]),
-														 null, null, null, null,null,null, "ZaSearchResultCountLabel", "PageInfo");	
-				
-		this._toolbarOperations[ZaOperation.PAGE_FORWARD] = new ZaOperation(ZaOperation.PAGE_FORWARD, ZaMsg.Next, ZaMsg.NextPage_tt,
-									"RightArrow", "RightArrowDis", 
-									new AjxListener(this, ZaServerStatsController.prototype._nextPageListener));
-		
-		this._toolbarOperations[ZaOperation.HELP] = new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener));				
-		
-		
-		this._toolbarOrder.push(ZaOperation.REFRESH);
-		this._toolbarOrder.push(ZaOperation.NONE);
-		this._toolbarOrder.push(ZaOperation.PAGE_BACK);
-		this._toolbarOrder.push(ZaOperation.SEP);
-		this._toolbarOrder.push(ZaOperation.LABEL);
-		this._toolbarOrder.push(ZaOperation.SEP);		
-		this._toolbarOrder.push(ZaOperation.PAGE_FORWARD);
-		this._toolbarOrder.push(ZaOperation.HELP);
-			
-		this._toolbar = new ZaToolBar(this._container, this._toolbarOperations,this._toolbarOrder, null, null, ZaId.VIEW_STATIS);    		
-		
-		//disable the page_forward and page_back at the beginning
-		this._toolbar.enable([ZaOperation.PAGE_FORWARD, ZaOperation.PAGE_BACK, ZaOperation.LABEL], false);
-		
-		elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
-		elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;	
 
-		var tabParams = {
-			openInNewTab: openInNewTab,
-			tabId: this.getContentViewId()
-		};
-		if(!openInNewTab) {
-			tabParams.tab = this.getMainTab();
+		elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
+		if (!appNewUI) {
+			this._toolbarOperations[ZaOperation.REFRESH] = new ZaOperation(ZaOperation.REFRESH, ZaMsg.TBB_Refresh, ZaMsg.TBB_Refresh_tt, "Refresh", "Refresh", new AjxListener(this, this.refreshListener));
+			this._toolbarOperations[ZaOperation.NONE] = new ZaOperation(ZaOperation.NONE);
+			this._toolbarOperations[ZaOperation.PAGE_BACK] = new ZaOperation(ZaOperation.PAGE_BACK, ZaMsg.Previous, ZaMsg.PrevPage_tt, 
+										"LeftArrow", "LeftArrowDis",  
+										new AjxListener(this, ZaServerStatsController.prototype._prevPageListener));
+
+			this._toolbarOperations[ZaOperation.SEP]=new ZaOperation(ZaOperation.SEP);
+			this._toolbarOperations[ZaOperation.LABEL] = new ZaOperation(ZaOperation.LABEL, AjxMessageFormat.format (ZaMsg.MBXStats_PAGEINFO, [1,1]),
+															 null, null, null, null,null,null, "ZaSearchResultCountLabel", "PageInfo");
+					
+			this._toolbarOperations[ZaOperation.PAGE_FORWARD] = new ZaOperation(ZaOperation.PAGE_FORWARD, ZaMsg.Next, ZaMsg.NextPage_tt,
+										"RightArrow", "RightArrowDis", 
+										new AjxListener(this, ZaServerStatsController.prototype._nextPageListener));
+
+			this._toolbarOperations[ZaOperation.HELP] = new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener));				
+
+			this._toolbarOrder.push(ZaOperation.REFRESH);
+			this._toolbarOrder.push(ZaOperation.NONE);
+			this._toolbarOrder.push(ZaOperation.PAGE_BACK);
+			this._toolbarOrder.push(ZaOperation.SEP);
+			this._toolbarOrder.push(ZaOperation.LABEL);
+			this._toolbarOrder.push(ZaOperation.SEP);
+			this._toolbarOrder.push(ZaOperation.PAGE_FORWARD);
+			this._toolbarOrder.push(ZaOperation.HELP);
+			this._toolbar = new ZaToolBar(this._container, this._toolbarOperations,this._toolbarOrder, null, null, ZaId.VIEW_STATIS);
+
+			//disable the page_forward and page_back at the beginning
+			this._toolbar.enable([ZaOperation.PAGE_FORWARD, ZaOperation.PAGE_BACK, ZaOperation.LABEL], false);
+			elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;
+
+			var tabParams = {
+				openInNewTab: openInNewTab,
+				tabId: this.getContentViewId()
+			};
+			if(!openInNewTab) {
+				tabParams.tab = this.getMainTab();
+			}
+			ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams) ;
 		}
-		ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams) ;
+		else{
+			ZaApp.getInstance().getAppViewMgr().createView(this.getContentViewId(), elements);
+		}
 		this._UICreated = true;
 		ZaApp.getInstance()._controllers[this.getContentViewId ()] = this ;
 	}
@@ -99,14 +101,12 @@ function(item,openInNewTab) {
 //	ZaApp.getInstance().setCurrentController(this);
 
 	this._contentView.setObject(item);
-
-	
 	//show the view in the new tab
-	/*
-	var tab = new ZaAppTab (ZaApp.getInstance().getTabGroup(),  
-				item.name, "StatisticsByServer" , null, null, true, true, ZaApp.getInstance()._currentViewId) ;
-	tab.setToolTipContent(ZaMsg.tt_tab_View + " " + item.type + " " + item.name + " " + ZaMsg.tt_tab_Statistics) ;
-	*/	
+
+	//var tab = new ZaAppTab (ZaApp.getInstance().getTabGroup(),  
+	//			item.name, "StatisticsByServer" , null, null, true, true, ZaApp.getInstance()._currentViewId) ;
+	//tab.setToolTipContent(ZaMsg.tt_tab_View + " " + item.type + " " + item.name + " " + ZaMsg.tt_tab_Statistics) ;
+
 }
 ZaController.setViewMethods["ZaServerStatsController"].push(ZaServerStatsController.setViewMethod);
 
@@ -154,3 +154,170 @@ function (ev) {
 		currentTabView.showMe(2) ; //force server side cache to be refreshed.
 	}
 }
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+* @constructor
+* @class ZaServerStatsListController
+* This is a singleton object that controls all the user interaction with the list of ZaServer objects
+* @author wgan
+**/
+ZaServerStatsListController = function(appCtxt, container) {
+    ZaListViewController.call(this, appCtxt, container, "ZaServerStatsListController");
+    this._popupOperations = new Array();
+
+    this._helpURL = location.pathname + ZaUtil.HELP_URL + "monitoring/checking_usage_statistics.htm?locid="+AjxEnv.DEFAULT_LOCALE;
+}
+
+ZaServerStatsListController.prototype = new ZaListViewController();
+ZaServerStatsListController.prototype.constructor = ZaServerStatsListController;
+
+ZaController.initPopupMenuMethods["ZaServerStatsListController"] = new Array();
+ZaController.changeActionsStateMethods["ZaServerStatsListController"] = new Array();
+
+/**
+* @param list {ZaItemList} a list of ZaServer {@link ZaServer} objects
+**/
+ZaServerStatsListController.prototype.show =
+function(list) {
+    if (!this._UICreated) {
+        this._createUI();
+    }
+    if (list != null)
+    this._contentView.set(list.getVector());
+
+    ZaApp.getInstance().pushView(this.getContentViewId());
+    if (list != null)
+    this._list = list;
+
+    this.changeActionsState();
+}
+
+
+ZaServerStatsListController.initPopupMenuMethod =
+function () {
+}
+ZaController.initPopupMenuMethods["ZaServerStatsListController"].push(ZaServerStatsListController.initPopupMenuMethod);
+
+ZaServerStatsListController.prototype._createUI = function () {
+    try {
+        var elements = new Object();
+        this._contentView = new ZaServerListView(this._container);
+
+        this._initPopupMenu();
+        this._actionMenu =  new ZaPopupMenu(this._contentView, "ActionMenu", null, this._popupOperations, ZaId.VIEW_SERLIST, ZaId.MENU_POP);
+        elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
+
+        ZaApp.getInstance().getAppViewMgr().createView(this.getContentViewId(), elements);
+
+        this._contentView.addSelectionListener(new AjxListener(this, this._listSelectionListener));
+        this._contentView.addActionListener(new AjxListener(this, this._listActionListener));
+
+        this._UICreated = true;
+        ZaApp.getInstance()._controllers[this.getContentViewId ()] = this;
+    } catch (ex) {
+        this._handleException(ex, "ZaServerStatsListController.prototype._createUI", null, false);
+    }
+}
+
+ZaServerStatsListController.prototype.set =
+function(serverList) {
+    this.show(serverList);
+}
+
+/**
+* @param ev
+* This listener is invoked by  any controller that can change an ZaServer object
+**/
+ZaServerStatsListController.prototype.handleServerChange =
+function (ev) {
+    //if any of the data that is currently visible has changed - update the view
+    if(ev) {
+        var details = ev.getDetails();
+        //if(details["modFields"] && (details["modFields"][ZaServer.A_description] )) {
+        if (details) {
+            if (this._list) {
+                this._list.replace (details);
+            }
+            if (this._contentView) {
+                this._contentView.setUI();
+            }
+            if(ZaApp.getInstance().getCurrentController() == this) {
+                this.show();
+            }
+            this.changeActionsState();
+        }
+    }
+}
+
+
+/**
+* This listener is called when the item in the list is double clicked. It call ZaServerController.show method
+* in order to display the Server View
+**/
+ZaServerStatsListController.mappingId2handlerMap = null;
+ZaServerStatsListController._getMapForMappingId2handler =
+function (){
+    if (!ZaServerStatsListController.mappingId2handlerMap){
+        ZaServerStatsListController.mappingId2handlerMap = {
+            "mainNode": { "mappingId": ZaZimbraAdmin._STATISTICS_BY_SERVER,
+                          "handler": ZaOverviewPanelController.statsByServerTreeListener
+                        },
+            "tabNodes": { "mappingId": ZaZimbraAdmin._SERVER_STATISTICS_TAB_VIEW,
+                          "handler": ZaOverviewPanelController.statsByServerTabTreeListener
+                        }
+        }
+    } //only be initialized once
+
+    return ZaServerStatsListController.mappingId2handlerMap;
+}
+
+ZaServerStatsListController.parentPathInTree = null;
+ZaServerStatsListController._getparentPathInTree =
+function (){
+    if (!ZaServerStatsListController.parentPathInTree){
+        ZaServerStatsListController.parentPathInTree =
+            ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_monitor, ZaMsg.OVP_statistics]);
+    } //only be initialized once
+    return ZaServerStatsListController.parentPathInTree;
+}
+
+ZaServerStatsListController.prototype._listSelectionListener =
+function(ev) {
+    if (ev.detail == DwtListView.ITEM_DBL_CLICKED) {
+        if (ev.item) {
+            this._selectedItem = ev.item;
+            ZaApp.getInstance().getServerStatsController().show(ev.item);
+            //must switch to the individual server stats view firstly,
+            //then the ZaApp.getInstance().getAppViewMgr().getCurrentView() == server stats view,
+            //let the  addObjectItemForAll get the right view id
+            if (appNewUI) {
+                var overviewPanelController = ZaZimbraAdmin.getInstance().getOverviewPanelController();
+                var parentPath = ZaServerStatsListController._getparentPathInTree();
+                var map = ZaServerStatsListController._getMapForMappingId2handler();
+
+                overviewPanelController.addObjectItem(parentPath, ev.item.name, null,
+                                                            false, false, ev.item, map);
+            }
+        }
+    } else {
+        this.changeActionsState();
+    }
+}
+
+ZaServerStatsListController.prototype._listActionListener =
+function (ev) {
+    this.changeActionsState();
+    this._actionMenu.popup(0, ev.docX, ev.docY);
+}
+
+
+ZaServerStatsListController.changeActionsStateMethod =
+function () {
+    if(this._contentView) {
+    }
+}
+ZaController.changeActionsStateMethods["ZaServerStatsListController"].push(ZaServerStatsListController.changeActionsStateMethod);

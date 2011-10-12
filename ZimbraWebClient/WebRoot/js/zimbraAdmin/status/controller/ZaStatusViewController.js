@@ -82,7 +82,6 @@ ZaStatusViewController.prototype._createUI = function (openInNewTab) {
 		this._initToolbar();
 		if(this._toolbarOperations && this._toolbarOperations.length) {
 			this._toolbar = new ZaToolBar(this._container, this._toolbarOperations,this._toolbarOrder, null, null, ZaId.VIEW_STATUSLIST); 
-			elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;
 		}
 		this._initPopupMenu();
 		if(this._popupOperations && this._popupOperations.length) {
@@ -90,12 +89,17 @@ ZaStatusViewController.prototype._createUI = function (openInNewTab) {
 		}
 		elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
 		//ZaApp.getInstance().createView(ZaZimbraAdmin._STATUS, elements);
-		var tabParams = {
-			openInNewTab: false,
-			tabId: this.getContentViewId(),
-			tab: this.getMainTab()
+		if (!appNewUI) {
+			elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;
+			var tabParams = {
+				openInNewTab: false,
+				tabId: this.getContentViewId(),
+				tab: this.getMainTab()
+			}
+			ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams);
+		} else {
+			ZaApp.getInstance().getAppViewMgr().createView(this.getContentViewId(), elements);
 		}
-		ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams) ;
 		this._UICreated = true;
 		ZaApp.getInstance()._controllers[this.getContentViewId ()] = this ;
 	} catch (ex) {
