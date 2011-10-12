@@ -124,6 +124,14 @@ namespace MVVM.ViewModel
                     m_configViewModelU.ProfileList.Add(s);
                 }
             }
+            if (isServer)
+            {
+                m_configViewModelS.CSEnableNext = (m_configViewModelS.ProfileList.Count > 0);
+            }
+            else
+            {
+                m_configViewModelU.CSEnableNext = (m_configViewModelU.ProfileList.Count > 0);
+            }
             lb.SelectedIndex = 1;
         }
 

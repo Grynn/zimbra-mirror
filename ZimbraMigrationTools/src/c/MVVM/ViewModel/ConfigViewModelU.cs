@@ -26,6 +26,7 @@ namespace MVVM.ViewModel
             this.NextCommand = new ActionCommand(this.Next, () => true);
             Isprofile = true;
             IspST = false;
+            CSEnableNext = false;
         }
 
         public ICommand GetPSTCommand
@@ -179,6 +180,7 @@ namespace MVVM.ViewModel
             set
             {
                 IsPST = value;
+                CSEnableNext = true;
                 OnPropertyChanged(new PropertyChangedEventArgs("IspST"));
             }
         }
@@ -199,7 +201,8 @@ namespace MVVM.ViewModel
                     return;
                 }
                 m_config.OutlookProfile = value;
-               // m_config.mailServer.ProfileName= value; 
+               // m_config.mailServer.ProfileName= value;
+                CSEnableNext = true;
                 OnPropertyChanged(new PropertyChangedEventArgs("OutlookProfile"));
             }
         }
@@ -240,6 +243,17 @@ namespace MVVM.ViewModel
                 m_config.PSTFile = value;
                 //m_config.mailServer.PSTFile = value;
                 OnPropertyChanged(new PropertyChangedEventArgs("PSTFile"));
+            }
+        }
+
+        private bool csenableNext;
+        public bool CSEnableNext
+        {
+            get { return csenableNext; }
+            set
+            {
+                csenableNext = value;
+                OnPropertyChanged(new PropertyChangedEventArgs("CSEnableNext"));
             }
         }
     }
