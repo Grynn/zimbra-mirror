@@ -1355,7 +1355,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
                                         labelWrap: true,trueValue:"TRUE", falseValue:"FALSE"},
                                     {ref:ZaAccount.A_zimbraPrefAdminConsoleWarnOnExit, type:_SUPER_WIZ_CHECKBOX_,
                                         colSpan:2, colSizes:["200px", "300px", "*"],
-                                        resetToSuperLabel:ZaMsg.NAD_ResetToCOS,checkBoxLabel:ZaMsg.LBL_zimbraPrefAdminConsoleWarnOnExit,
+                                        resetToSuperLabel:ZaMsg.NAD_ResetToCOS,checkBoxLabel:ZabMsg.LBL_zimbraPrefAdminConsoleWarnOnExit,
                                         labelWrap: true,trueValue:"TRUE", falseValue:"FALSE"},
                                     {ref:ZaAccount.A_zimbraPrefShowSelectionCheckbox, type:_SUPER_WIZ_CHECKBOX_,
                                         colSpan:2, colSizes:["200px", "300px", "*"],

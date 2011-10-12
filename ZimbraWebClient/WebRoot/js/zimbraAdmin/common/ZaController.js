@@ -174,7 +174,7 @@ function(msg, ex, style)  {
     }
 
 	if (this._errorDialog) {
-        this._errorDialog.setMessage(msg, detailStr, style, ZaMsg.zimbraAdminTitle);
+        this._errorDialog.setMessage(msg, detailStr, style, ZabMsg.zimbraAdminTitle);
 
 	
         if (!this._errorDialog.isPoppedUp()) {
@@ -190,7 +190,7 @@ function(msg, noExecReset)  {
 		this._execFrame = {func: null, args: null, restartOnError: false};
 	
 	// popup alert
-	this._msgDialog.setMessage(msg, DwtMessageDialog.INFO_STYLE, ZaMsg.zimbraAdminTitle);
+	this._msgDialog.setMessage(msg, DwtMessageDialog.INFO_STYLE, ZabMsg.zimbraAdminTitle);
 	if (!this._msgDialog.isPoppedUp()) {
 		this._msgDialog.popup();
 	}
@@ -203,7 +203,7 @@ function(msg, noExecReset)  {
 		this._execFrame = {func: null, args: null, restartOnError: false};
 	
 	// popup alert
-	this._msgDialog.setMessage(msg, DwtMessageDialog.WARNING_STYLE, ZaMsg.zimbraAdminTitle);
+	this._msgDialog.setMessage(msg, DwtMessageDialog.WARNING_STYLE, ZabMsg.zimbraAdminTitle);
 	if (!this._msgDialog.isPoppedUp()) {
 		this._msgDialog.popup();
 	}
@@ -330,9 +330,6 @@ function() {
 	ZaZimbraAdmin._killSplash();
 	this._authenticating = true;
 	this._loginDialog.setVisible(true, false);
-	/*if(!AjxEnv.isFirefox1up && !AjxEnv.isFirefox3up && !AjxEnv.isFirefox2_0up && !AjxEnv.isNav7 && !AjxEnv.isIE6up && !AjxEnv.isIE7up)
-		this._loginDialog.setError(AjxMessageFormat.format(ZaMsg.ERROR_BROWSER_UNSUPORTED, [navigator.userAgent]));
-	*/	
 	try {
 		var uname = "";
 		this._loginDialog.setFocus(uname);
@@ -390,7 +387,7 @@ function(ex, method, params, restartOnError, obj) {
 			this.popupErrorDialog(ZaMsg.JAVASCRIPT_ERROR + " in method " + method, ex);
 		
 		} else if(ex.code == ZmCsfeException.EMPTY_RESPONSE) {
-			this.popupErrorDialog(ZaMsg.ERROR_ZCS_NOT_RUNNING, ex);
+			this.popupErrorDialog(ZabMsg.ERROR_ZCS_NOT_RUNNING, ex);
 		} else if (ex.code == ZmCsfeException.SOAP_ERROR) {
 			this.popupErrorDialog(ZaMsg.SOAP_ERROR, ex);
 		} else if (ex.code == ZmCsfeException.NETWORK_ERROR ||

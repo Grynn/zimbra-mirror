@@ -316,7 +316,7 @@ function () {
 		}
 		if(!islegal) {
 			this._errorDialog.setMessage(AjxMessageFormat.format(ZaMsg.ERROR_MSG_EmailValidReg, regval), 
-				null, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);
+				null, DwtMessageDialog.CRITICAL_STYLE, ZabMsg.zimbraAdminTitle);
                         this._errorDialog.popup();
 			return islegal;
 		}
@@ -742,7 +742,7 @@ function (resp) {
 				msgArray.push(response.entry[i]._content);
 			}
 		}
-		this._errorDialog.setMessage(response.message[0]._content, msgArray.join("<br/>"), DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);
+		this._errorDialog.setMessage(response.message[0]._content, msgArray.join("<br/>"), DwtMessageDialog.CRITICAL_STYLE, ZabMsg.zimbraAdminTitle);
 		this._errorDialog.popup();
 	}
 	
@@ -784,7 +784,7 @@ function(cert, prvkey) {
 		resp = ZaCert.verifyCertKey(ZaApp.getInstance(), params);
 
 		if(!resp){
-                        this._errorDialog.setMessage(ZaMsg.SERVER_ERROR, ZaMsg.ERROR_DOMAIN_CERT_VERIFY, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);
+                        this._errorDialog.setMessage(ZaMsg.SERVER_ERROR, ZaMsg.ERROR_DOMAIN_CERT_VERIFY, DwtMessageDialog.CRITICAL_STYLE, ZabMsg.zimbraAdminTitle);
                         this._errorDialog.popup();
                         return false;
                  
@@ -792,7 +792,7 @@ function(cert, prvkey) {
 
 		var verifyResult = resp.verifyResult;
 		if(verifyResult == "false") {
-	                this._errorDialog.setMessage(ZaMsg.ERROR_DOMAIN_CERT_KEY_VERIFY, ZaMsg.ALERT_DOMAIN_CERT_KEY, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);
+	                this._errorDialog.setMessage(ZaMsg.ERROR_DOMAIN_CERT_KEY_VERIFY, ZaMsg.ALERT_DOMAIN_CERT_KEY, DwtMessageDialog.CRITICAL_STYLE, ZabMsg.zimbraAdminTitle);
         	        this._errorDialog.popup();
 			return false;
 		 }else if(verifyResult == "invalid") {
@@ -805,11 +805,11 @@ zimbraAdminTitle);
 		 } else return false;
 
 	} else if(!cert && prvkey) {
-                        this._errorDialog.setMessage(ZaMsg.ERROR_DOMAIN_CERT_MISSING, null, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);
+                        this._errorDialog.setMessage(ZaMsg.ERROR_DOMAIN_CERT_MISSING, null, DwtMessageDialog.CRITICAL_STYLE, ZabMsg.zimbraAdminTitle);
                         this._errorDialog.popup();
 			return false;
 	} else if(cert && !prvkey) {
-                        this._errorDialog.setMessage(ZaMsg.ERROR_DOMAIN_KEY_MISSING, null, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);
+                        this._errorDialog.setMessage(ZaMsg.ERROR_DOMAIN_KEY_MISSING, null, DwtMessageDialog.CRITICAL_STYLE, ZabMsg.zimbraAdminTitle);
                         this._errorDialog.popup();
                         return false;
 	}

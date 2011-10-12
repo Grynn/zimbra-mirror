@@ -615,7 +615,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
                     trueValue:"TRUE", falseValue:"FALSE"
                 },
                 {ref:ZaCos.A_zimbraPrefAdminConsoleWarnOnExit, type:_CHECKBOX_,
-                    msgName:ZaMsg.LBL_zimbraPrefAdminConsoleWarnOnExit,label:ZaMsg.LBL_zimbraPrefAdminConsoleWarnOnExit,
+                    msgName:ZabMsg.LBL_zimbraPrefAdminConsoleWarnOnExit,label:ZabMsg.LBL_zimbraPrefAdminConsoleWarnOnExit,
                     trueValue:"TRUE", falseValue:"FALSE"
                 },  
                 {ref:ZaCos.A_zimbraPrefShowSelectionCheckbox, type:_CHECKBOX_,

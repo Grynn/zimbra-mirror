@@ -263,7 +263,7 @@ function () {
                 }
                 if(!islegal) {
                         this._errorDialog.setMessage(AjxMessageFormat.format(ZaMsg.ERROR_MSG_EmailValidReg, regval),
-                                null, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);
+                                null, DwtMessageDialog.CRITICAL_STYLE, ZabMsg.zimbraAdminTitle);
                         this._errorDialog.popup();
                         return islegal;
                 }
