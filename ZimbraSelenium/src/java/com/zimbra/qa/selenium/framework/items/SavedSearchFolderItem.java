@@ -17,9 +17,13 @@ import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
  * @author Matt Rhoades
  *
  */
-public class SavedSearchFolderItem extends com.zimbra.soap.mail.type.SearchFolder implements IItem {
+public class SavedSearchFolderItem extends AItem implements IItem {
 	protected static Logger logger = LogManager.getLogger(IItem.class);
 
+	private String name = null;
+	private String query = null;
+	private String types = null;
+	private String parentId = "0";
 	
 	/**
 	 * Create a new SavedSearchFolderItem object
@@ -73,7 +77,7 @@ public class SavedSearchFolderItem extends com.zimbra.soap.mail.type.SearchFolde
 		try {
 			
 			item = new SavedSearchFolderItem();
-			item.setId(Integer.parseInt(search.getAttribute("id")));
+			item.setId(search.getAttribute("id"));
 			item.setParentId(search.getAttribute("l"));
 			item.setName(search.getAttribute("name"));
 			item.setQuery(search.getAttribute("query"));
@@ -116,8 +120,48 @@ public class SavedSearchFolderItem extends com.zimbra.soap.mail.type.SearchFolde
 		sb.append("Name: ").append(super.getName()).append('\n');
 		sb.append("Query: ").append(getQuery()).append('\n');
 		sb.append("Types: ").append(getTypes()).append('\n');
-		sb.append("Parent ID: ").append(super.getParentId()).append('\n');
+		sb.append("Parent ID: ").append(getParentId()).append('\n');
 		return (sb.toString());
+	}
+
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+
+	public String getName() {
+		return name;
+	}
+
+
+	public void setQuery(String query) {
+		this.query = query;
+	}
+
+
+	public String getQuery() {
+		return query;
+	}
+
+
+	public void setTypes(String types) {
+		this.types = types;
+	}
+
+
+	public String getTypes() {
+		return types;
+	}
+
+
+	public void setParentId(String parentId) {
+		this.parentId = parentId;
+	}
+
+
+	public String getParentId() {
+		return parentId;
 	}
 
 
