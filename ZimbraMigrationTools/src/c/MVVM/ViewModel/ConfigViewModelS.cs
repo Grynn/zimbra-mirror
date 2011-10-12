@@ -26,7 +26,7 @@ namespace MVVM.ViewModel
             this.SaveCommand = new ActionCommand(this.Save, () => true);
             this.BackCommand = new ActionCommand(this.Back, () => true);
             this.NextCommand = new ActionCommand(this.Next, () => true);
-            Isprofile = false;
+            Isprofile = true;
             IsmailServer = false;
             CSEnableNext = false;
             iMailSvrInitialized = -1;

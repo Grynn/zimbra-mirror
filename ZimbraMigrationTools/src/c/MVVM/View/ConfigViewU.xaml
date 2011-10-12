@@ -23,9 +23,9 @@
                     <ColumnDefinition Width="*"></ColumnDefinition>
                     <ColumnDefinition Width="Auto"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <RadioButton Grid.Row="0" Grid.Column="0" Margin="15,55,5,5" Name="rbProfile" VerticalAlignment="Center" Content="Outlook Profile" GroupName="SourceGroup" HorizontalAlignment="Stretch" IsChecked="{Binding Path=Isprofile, Mode=OneWay}" />
+                <RadioButton Grid.Row="0" Grid.Column="0" Margin="15,55,5,5" Name="rbProfile" VerticalAlignment="Center" Content="Outlook Profile" GroupName="SourceGroup" HorizontalAlignment="Stretch" IsChecked="{Binding Path=Isprofile, Mode=TwoWay}" />
                 <ComboBox Grid.Row="0" Grid.Column="1" Margin="10,49,20,0" Name="cbOlkProfile" VerticalAlignment="Center" SelectedIndex="{Binding Path=CurrentProfileSelection, Mode=TwoWay}" ItemsSource="{Binding Path=ProfileList}" IsEnabled="{Binding ElementName=rbProfile, Path=IsChecked}" />
-                <RadioButton Grid.Row="1"  Grid.Column="0" Margin="15,27,5,5" Content="PST File" Name="rbPST" VerticalAlignment="Center" GroupName="SourceGroup" IsChecked="{Binding Path=IspST, Mode=OneWay}" />
+                <RadioButton Grid.Row="1"  Grid.Column="0" Margin="15,27,5,5" Content="PST File" Name="rbPST" VerticalAlignment="Center" GroupName="SourceGroup" IsChecked="{Binding Path=IspST, Mode=TwoWay}" />
                 <TextBox Grid.Row="1"  Grid.Column="1" Margin="10,25,20,0" Name="tbPST" VerticalAlignment="Center" IsEnabled="{Binding ElementName=rbPST, Path=IsChecked}" Text="{Binding Path=PSTFile}" HorizontalAlignment="Stretch" />
                 <Button Grid.Row="1"  Grid.Column="2" Margin="0,25,20,0" MinWidth="20" Content="..." HorizontalAlignment="Center" Name="browsePSTButton" Command="{Binding GetPSTCommand}" IsEnabled="{Binding ElementName=rbPST, Path=IsChecked}" />
             </Grid>

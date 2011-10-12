@@ -24,6 +24,8 @@ namespace MVVM.ViewModel
             this.SaveCommand = new ActionCommand(this.Save, () => true);
             this.BackCommand = new ActionCommand(this.Back, () => true);
             this.NextCommand = new ActionCommand(this.Next, () => true);
+            Isprofile = true;
+            IspST = false;
         }
 
         public ICommand GetPSTCommand
