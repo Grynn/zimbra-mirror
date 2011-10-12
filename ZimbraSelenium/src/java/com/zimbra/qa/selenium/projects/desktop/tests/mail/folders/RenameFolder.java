@@ -7,6 +7,7 @@ import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
+import com.zimbra.qa.selenium.framework.util.ZimbraAccount.SOAP_DESTINATION_HOST_TYPE;
 import com.zimbra.qa.selenium.projects.desktop.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.desktop.ui.DialogRenameFolder;
 
@@ -37,12 +38,16 @@ public class RenameFolder extends AjaxCommonTest {
                 	"<folder name='"+ name1 +"' l='"+ inbox.getId() +"'/>" +
                 "</CreateFolderRequest>");
 
-		FolderItem subfolder1 = FolderItem.importFromSOAP(app.zGetActiveAccount(), name1);
-		ZAssert.assertNotNull(subfolder1, "Verify the subfolder is available");
-		
-		
 		// Click on Get Mail to refresh the folder list
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+
+		FolderItem subfolder1 = FolderItem.importFromSOAP(
+		      app.zGetActiveAccount(),
+		      name1,
+		      SOAP_DESTINATION_HOST_TYPE.CLIENT,
+		      app.zGetActiveAccount().EmailAddress);
+
+		ZAssert.assertNotNull(subfolder1, "Verify the subfolder is available");
 
 		// Rename the folder using context menu
 		DialogRenameFolder dialog = (DialogRenameFolder)app.zTreeMail.zTreeItem(Action.A_RIGHTCLICK, Button.B_RENAME, subfolder1);

@@ -5,6 +5,7 @@ import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
+import com.zimbra.qa.selenium.framework.util.ZimbraAccount.SOAP_DESTINATION_HOST_TYPE;
 import com.zimbra.qa.selenium.projects.desktop.core.AjaxCommonTest;
 
 
@@ -34,8 +35,15 @@ public class MarkAllAsReadFolder extends AjaxCommonTest {
 				"<folder name='" + foldername +"' l='" + inbox.getId() +"'/>" +
 		"</CreateFolderRequest>");
 
-		// Make sure the folder was created on the server
-		FolderItem subfolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), foldername);
+	    // Click on Get Mail to refresh the folder list
+      app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+
+      // Make sure the folder was created on the server
+		FolderItem subfolder = FolderItem.importFromSOAP(
+		      app.zGetActiveAccount(),
+		      foldername,
+		      SOAP_DESTINATION_HOST_TYPE.CLIENT,
+		      app.zGetActiveAccount().EmailAddress);
 		ZAssert.assertNotNull(subfolder, "Verify the folder exists on the server");
 
 		// Add an unread message (f=u) to the new subfolder
@@ -56,6 +64,7 @@ public class MarkAllAsReadFolder extends AjaxCommonTest {
 
 		// Click on Get Mail to refresh the folder list
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+
 		// Right click on folder, select "Mark all as read"
 		app.zTreeMail.zTreeItem(Action.A_RIGHTCLICK, Button.B_TREE_FOLDER_MARKASREAD, subfolder);
 

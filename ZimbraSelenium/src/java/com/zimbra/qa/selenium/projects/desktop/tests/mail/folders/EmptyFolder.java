@@ -8,6 +8,7 @@ import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
+import com.zimbra.qa.selenium.framework.util.ZimbraAccount.SOAP_DESTINATION_HOST_TYPE;
 import com.zimbra.qa.selenium.projects.desktop.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.desktop.ui.DialogWarning;
 
@@ -43,9 +44,16 @@ public class EmptyFolder extends AjaxCommonTest {
 						+ "<folder name='" + foldername + "' l='"
 						+ inbox.getId() + "'/>" + "</CreateFolderRequest>");
 
-		// Make sure the folder was created on the server
-		FolderItem subfolder = FolderItem.importFromSOAP(app
-				.zGetActiveAccount(), foldername);
+		// Click on Get Mail to refresh the folder list
+      app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+
+      // Make sure the folder was created on the server
+		FolderItem subfolder = FolderItem.importFromSOAP(
+		      app.zGetActiveAccount(),
+		      foldername,
+		      SOAP_DESTINATION_HOST_TYPE.CLIENT,
+		      app.zGetActiveAccount().EmailAddress);
+
 		ZAssert.assertNotNull(subfolder,
 				"Verify the folder exists on the server");
 
@@ -61,6 +69,7 @@ public class EmptyFolder extends AjaxCommonTest {
 						+ "</m>" + "</AddMsgRequest>");
 
 		MailItem mail = MailItem.importFromSOAP(app.zGetActiveAccount(),"subject:(" + subject + ")");
+
 		// Click on Get Mail to refresh the folder list
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 		
