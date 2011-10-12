@@ -19,7 +19,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;sequence>
  *       &lt;/sequence>
  *       &lt;attribute name="a" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="t" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="t" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="p" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -34,7 +34,7 @@ public class testEmailAddrInfo {
 
     @XmlAttribute(name = "a", required = true)
     protected String a;
-    @XmlAttribute(name = "t", required = true)
+    @XmlAttribute(name = "t")
     protected String t;
     @XmlAttribute(name = "p")
     protected String p;

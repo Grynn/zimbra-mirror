@@ -21,7 +21,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="account" type="{urn:zimbraAccount}account" minOccurs="0"/>
  *         &lt;element name="password" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="preauth" type="{urn:zimbraAccount}preAuth" minOccurs="0"/>
- *         &lt;element name="authToken" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="authToken" type="{urn:zimbraAccount}authToken" minOccurs="0"/>
  *         &lt;element name="virtualHost" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="prefs" minOccurs="0">
  *           &lt;complexType>
@@ -63,7 +63,7 @@ public class testAuthRequest {
     protected testAccount account;
     protected String password;
     protected testPreAuth preauth;
-    protected String authToken;
+    protected testAuthToken authToken;
     protected String virtualHost;
     protected testAuthRequest.Prefs prefs;
     protected testAuthRequest.Attrs attrs;
@@ -146,10 +146,10 @@ public class testAuthRequest {
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link testAuthToken }
      *     
      */
-    public String getAuthToken() {
+    public testAuthToken getAuthToken() {
         return authToken;
     }
 
@@ -158,10 +158,10 @@ public class testAuthRequest {
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link testAuthToken }
      *     
      */
-    public void setAuthToken(String value) {
+    public void setAuthToken(testAuthToken value) {
         this.authToken = value;
     }
 

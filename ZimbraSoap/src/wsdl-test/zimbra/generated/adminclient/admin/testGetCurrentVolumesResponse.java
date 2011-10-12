@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="volume" type="{urn:zimbraAdmin}volumeTypeAndId" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="volume" type="{urn:zimbraAdmin}currentVolumeInfo" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class testGetCurrentVolumesResponse {
 
-    protected List<testVolumeTypeAndId> volume;
+    protected List<testCurrentVolumeInfo> volume;
 
     /**
      * Gets the value of the volume property.
@@ -53,13 +53,13 @@ public class testGetCurrentVolumesResponse {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link testVolumeTypeAndId }
+     * {@link testCurrentVolumeInfo }
      * 
      * 
      */
-    public List<testVolumeTypeAndId> getVolume() {
+    public List<testCurrentVolumeInfo> getVolume() {
         if (volume == null) {
-            volume = new ArrayList<testVolumeTypeAndId>();
+            volume = new ArrayList<testCurrentVolumeInfo>();
         }
         return this.volume;
     }

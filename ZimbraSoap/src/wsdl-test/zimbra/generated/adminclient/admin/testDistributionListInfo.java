@@ -7,6 +7,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
+import zimbra.generated.adminclient.account.testDistributionListOwnerInfo;
 
 
 /**
@@ -20,6 +21,17 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;extension base="{urn:zimbraAdmin}adminObjectInfo">
  *       &lt;sequence>
  *         &lt;element name="dlm" type="{http://www.w3.org/2001/XMLSchema}string" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="owners" minOccurs="0">
+ *           &lt;complexType>
+ *             &lt;complexContent>
+ *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+ *                 &lt;sequence>
+ *                   &lt;element name="owner" type="{urn:zimbraAccount}distributionListOwnerInfo" maxOccurs="unbounded" minOccurs="0"/>
+ *                 &lt;/sequence>
+ *               &lt;/restriction>
+ *             &lt;/complexContent>
+ *           &lt;/complexType>
+ *         &lt;/element>
  *       &lt;/sequence>
  *       &lt;attribute name="dynamic" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *     &lt;/extension>
@@ -31,13 +43,15 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "distributionListInfo", propOrder = {
-    "dlm"
+    "dlm",
+    "owners"
 })
 public class testDistributionListInfo
     extends testAdminObjectInfo
 {
 
     protected List<String> dlm;
+    protected testDistributionListInfo.Owners owners;
     @XmlAttribute(name = "dynamic")
     protected Boolean dynamic;
 
@@ -71,6 +85,30 @@ public class testDistributionListInfo
     }
 
     /**
+     * Gets the value of the owners property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link testDistributionListInfo.Owners }
+     *     
+     */
+    public testDistributionListInfo.Owners getOwners() {
+        return owners;
+    }
+
+    /**
+     * Sets the value of the owners property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link testDistributionListInfo.Owners }
+     *     
+     */
+    public void setOwners(testDistributionListInfo.Owners value) {
+        this.owners = value;
+    }
+
+    /**
      * Gets the value of the dynamic property.
      * 
      * @return
@@ -92,6 +130,65 @@ public class testDistributionListInfo
      */
     public void setDynamic(Boolean value) {
         this.dynamic = value;
+    }
+
+
+    /**
+     * <p>Java class for anonymous complex type.
+     * 
+     * <p>The following schema fragment specifies the expected content contained within this class.
+     * 
+     * <pre>
+     * &lt;complexType>
+     *   &lt;complexContent>
+     *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+     *       &lt;sequence>
+     *         &lt;element name="owner" type="{urn:zimbraAccount}distributionListOwnerInfo" maxOccurs="unbounded" minOccurs="0"/>
+     *       &lt;/sequence>
+     *     &lt;/restriction>
+     *   &lt;/complexContent>
+     * &lt;/complexType>
+     * </pre>
+     * 
+     * 
+     */
+    @XmlAccessorType(XmlAccessType.FIELD)
+    @XmlType(name = "", propOrder = {
+        "owner"
+    })
+    public static class Owners {
+
+        protected List<testDistributionListOwnerInfo> owner;
+
+        /**
+         * Gets the value of the owner property.
+         * 
+         * <p>
+         * This accessor method returns a reference to the live list,
+         * not a snapshot. Therefore any modification you make to the
+         * returned list will be present inside the JAXB object.
+         * This is why there is not a <CODE>set</CODE> method for the owner property.
+         * 
+         * <p>
+         * For example, to add a new item, do as follows:
+         * <pre>
+         *    getOwner().add(newItem);
+         * </pre>
+         * 
+         * 
+         * <p>
+         * Objects of the following type(s) are allowed in the list
+         * {@link testDistributionListOwnerInfo }
+         * 
+         * 
+         */
+        public List<testDistributionListOwnerInfo> getOwner() {
+            if (owner == null) {
+                owner = new ArrayList<testDistributionListOwnerInfo>();
+            }
+            return this.owner;
+        }
+
     }
 
 }

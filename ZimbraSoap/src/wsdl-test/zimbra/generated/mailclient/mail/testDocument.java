@@ -20,6 +20,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="fr" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *       &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="score" use="required" type="{http://www.w3.org/2001/XMLSchema}int" />
  *       &lt;attribute name="name" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="d" use="required" type="{http://www.w3.org/2001/XMLSchema}long" />
  *       &lt;attribute name="s" use="required" type="{http://www.w3.org/2001/XMLSchema}long" />
@@ -40,6 +41,8 @@ public class testDocument {
     protected String fr;
     @XmlAttribute(name = "id")
     protected String id;
+    @XmlAttribute(name = "score", required = true)
+    protected int score;
     @XmlAttribute(name = "name")
     protected String name;
     @XmlAttribute(name = "d", required = true)
@@ -95,6 +98,22 @@ public class testDocument {
      */
     public void setId(String value) {
         this.id = value;
+    }
+
+    /**
+     * Gets the value of the score property.
+     * 
+     */
+    public int getScore() {
+        return score;
+    }
+
+    /**
+     * Sets the value of the score property.
+     * 
+     */
+    public void setScore(int value) {
+        this.score = value;
     }
 
     /**

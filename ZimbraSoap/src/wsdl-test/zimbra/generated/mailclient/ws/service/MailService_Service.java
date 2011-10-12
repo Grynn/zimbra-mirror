@@ -17,7 +17,7 @@ import javax.xml.ws.WebServiceFeature;
  * Generated source version: 2.1
  * 
  */
-@WebServiceClient(name = "MailService", targetNamespace = "http://www.zimbra.com/wsdl/MailService.wsdl", wsdlLocation = "file:/p4/coco/main/ZimbraSoap/build/classes/com/zimbra/soap/MailService.wsdl")
+@WebServiceClient(name = "MailService", targetNamespace = "http://www.zimbra.com/wsdl/MailService.wsdl", wsdlLocation = "file:/p4/coco1/main/ZimbraSoap/build/classes/com/zimbra/soap/MailService.wsdl")
 public class MailService_Service
     extends Service
 {
@@ -30,9 +30,9 @@ public class MailService_Service
         try {
             URL baseUrl;
             baseUrl = zimbra.generated.mailclient.ws.service.MailService_Service.class.getResource(".");
-            url = new URL(baseUrl, "file:/p4/coco/main/ZimbraSoap/build/classes/com/zimbra/soap/MailService.wsdl");
+            url = new URL(baseUrl, "file:/p4/coco1/main/ZimbraSoap/build/classes/com/zimbra/soap/MailService.wsdl");
         } catch (MalformedURLException e) {
-            logger.warn("Failed to create URL for the wsdl Location: 'file:/p4/coco/main/ZimbraSoap/build/classes/com/zimbra/soap/MailService.wsdl', retrying as a local file");
+            logger.warn("Failed to create URL for the wsdl Location: 'file:/p4/coco1/main/ZimbraSoap/build/classes/com/zimbra/soap/MailService.wsdl', retrying as a local file");
             logger.warn(e.getMessage());
         }
         MAILSERVICE_WSDL_LOCATION = url;

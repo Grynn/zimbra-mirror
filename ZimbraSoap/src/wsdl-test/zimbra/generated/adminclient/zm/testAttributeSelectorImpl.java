@@ -14,7 +14,6 @@ import zimbra.generated.adminclient.admin.testGetServerRequest;
 import zimbra.generated.adminclient.admin.testGetXMPPComponentRequest;
 import zimbra.generated.adminclient.admin.testGetZimletRequest;
 import zimbra.generated.adminclient.admin.testSearchAutoProvDirectoryRequest;
-import zimbra.generated.adminclient.admin.testSearchCalendarResourcesRequest;
 import zimbra.generated.adminclient.admin.testSearchDirectoryRequest;
 
 
@@ -49,7 +48,8 @@ import zimbra.generated.adminclient.admin.testSearchDirectoryRequest;
     testSearchAutoProvDirectoryRequest.class,
     testGetDomainRequest.class,
     testGetZimletRequest.class,
-    testSearchCalendarResourcesRequest.class
+    zimbra.generated.adminclient.admin.testSearchCalendarResourcesRequest.class,
+    zimbra.generated.adminclient.account.testSearchCalendarResourcesRequest.class
 })
 public abstract class testAttributeSelectorImpl {
 

@@ -43,6 +43,7 @@ import zimbra.generated.adminclient.zm.testWildcardExpansionQueryInfo;
  *       &lt;attribute name="total" type="{http://www.w3.org/2001/XMLSchema}int" />
  *       &lt;attribute name="f" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="t" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="tn" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -69,6 +70,8 @@ public class testNestedSearchConversation {
     protected String f;
     @XmlAttribute(name = "t")
     protected String t;
+    @XmlAttribute(name = "tn")
+    protected String tn;
 
     /**
      * Gets the value of the m property.
@@ -241,6 +244,30 @@ public class testNestedSearchConversation {
      */
     public void setT(String value) {
         this.t = value;
+    }
+
+    /**
+     * Gets the value of the tn property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getTn() {
+        return tn;
+    }
+
+    /**
+     * Sets the value of the tn property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setTn(String value) {
+        this.tn = value;
     }
 
 

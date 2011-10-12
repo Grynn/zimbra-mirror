@@ -18,8 +18,8 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *       &lt;/sequence>
+ *       &lt;attribute name="id" use="required" type="{http://www.w3.org/2001/XMLSchema}short" />
  *       &lt;attribute name="type" use="required" type="{http://www.w3.org/2001/XMLSchema}short" />
- *       &lt;attribute name="id" use="required" type="{http://www.w3.org/2001/XMLSchema}long" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -31,10 +31,26 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "setCurrentVolumeRequest")
 public class testSetCurrentVolumeRequest {
 
+    @XmlAttribute(name = "id", required = true)
+    protected short id;
     @XmlAttribute(name = "type", required = true)
     protected short type;
-    @XmlAttribute(name = "id", required = true)
-    protected long id;
+
+    /**
+     * Gets the value of the id property.
+     * 
+     */
+    public short getId() {
+        return id;
+    }
+
+    /**
+     * Sets the value of the id property.
+     * 
+     */
+    public void setId(short value) {
+        this.id = value;
+    }
 
     /**
      * Gets the value of the type property.
@@ -50,22 +66,6 @@ public class testSetCurrentVolumeRequest {
      */
     public void setType(short value) {
         this.type = value;
-    }
-
-    /**
-     * Gets the value of the id property.
-     * 
-     */
-    public long getId() {
-        return id;
-    }
-
-    /**
-     * Sets the value of the id property.
-     * 
-     */
-    public void setId(long value) {
-        this.id = value;
     }
 
 }

@@ -60,7 +60,7 @@ import javax.xml.bind.annotation.XmlType;
  *             &lt;complexContent>
  *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *                 &lt;sequence>
- *                   &lt;element name="zimlet" type="{urn:zimbraAccount}zimletInfo" maxOccurs="unbounded" minOccurs="0"/>
+ *                   &lt;element name="zimlet" type="{urn:zimbraAccount}accountZimletInfo" maxOccurs="unbounded" minOccurs="0"/>
  *                 &lt;/sequence>
  *               &lt;/restriction>
  *             &lt;/complexContent>
@@ -105,10 +105,14 @@ import javax.xml.bind.annotation.XmlType;
  *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *                 &lt;sequence>
  *                   &lt;choice maxOccurs="unbounded" minOccurs="0">
- *                     &lt;element name="pop3" type="{urn:zimbraAccount}accountPop3DataSource"/>
  *                     &lt;element name="imap" type="{urn:zimbraAccount}accountImapDataSource"/>
+ *                     &lt;element name="pop3" type="{urn:zimbraAccount}accountPop3DataSource"/>
+ *                     &lt;element name="caldav" type="{urn:zimbraAccount}accountCaldavDataSource"/>
+ *                     &lt;element name="yab" type="{urn:zimbraAccount}accountYabDataSource"/>
  *                     &lt;element name="rss" type="{urn:zimbraAccount}accountRssDataSource"/>
+ *                     &lt;element name="gal" type="{urn:zimbraAccount}accountGalDataSource"/>
  *                     &lt;element name="cal" type="{urn:zimbraAccount}accountCalDataSource"/>
+ *                     &lt;element name="unknown" type="{urn:zimbraAccount}accountUnknownDataSource"/>
  *                   &lt;/choice>
  *                 &lt;/sequence>
  *               &lt;/restriction>
@@ -126,9 +130,10 @@ import javax.xml.bind.annotation.XmlType;
  *             &lt;/complexContent>
  *           &lt;/complexType>
  *         &lt;/element>
- *         &lt;element name="changePasswordURL" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="soapURL" type="{http://www.w3.org/2001/XMLSchema}string" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="publicURL" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="changePasswordURL" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="license" type="{urn:zimbraAccount}licenseInfo" minOccurs="0"/>
  *       &lt;/sequence>
  *       &lt;attribute name="attSizeLimit" type="{http://www.w3.org/2001/XMLSchema}long" />
  *       &lt;attribute name="docSizeLimit" type="{http://www.w3.org/2001/XMLSchema}long" />
@@ -161,9 +166,10 @@ import javax.xml.bind.annotation.XmlType;
     "signatures",
     "dataSources",
     "childAccounts",
-    "changePasswordURL",
     "soapURL",
-    "publicURL"
+    "publicURL",
+    "changePasswordURL",
+    "license"
 })
 public class testGetInfoResponse {
 
@@ -190,9 +196,10 @@ public class testGetInfoResponse {
     protected testGetInfoResponse.Signatures signatures;
     protected testGetInfoResponse.DataSources dataSources;
     protected testGetInfoResponse.ChildAccounts childAccounts;
-    protected String changePasswordURL;
     protected List<String> soapURL;
     protected String publicURL;
+    protected String changePasswordURL;
+    protected testLicenseInfo license;
     @XmlAttribute(name = "attSizeLimit")
     protected Long attSizeLimit;
     @XmlAttribute(name = "docSizeLimit")
@@ -671,30 +678,6 @@ public class testGetInfoResponse {
     }
 
     /**
-     * Gets the value of the changePasswordURL property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getChangePasswordURL() {
-        return changePasswordURL;
-    }
-
-    /**
-     * Sets the value of the changePasswordURL property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setChangePasswordURL(String value) {
-        this.changePasswordURL = value;
-    }
-
-    /**
      * Gets the value of the soapURL property.
      * 
      * <p>
@@ -745,6 +728,54 @@ public class testGetInfoResponse {
      */
     public void setPublicURL(String value) {
         this.publicURL = value;
+    }
+
+    /**
+     * Gets the value of the changePasswordURL property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getChangePasswordURL() {
+        return changePasswordURL;
+    }
+
+    /**
+     * Sets the value of the changePasswordURL property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setChangePasswordURL(String value) {
+        this.changePasswordURL = value;
+    }
+
+    /**
+     * Gets the value of the license property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link testLicenseInfo }
+     *     
+     */
+    public testLicenseInfo getLicense() {
+        return license;
+    }
+
+    /**
+     * Sets the value of the license property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link testLicenseInfo }
+     *     
+     */
+    public void setLicense(testLicenseInfo value) {
+        this.license = value;
     }
 
     /**
@@ -925,10 +956,14 @@ public class testGetInfoResponse {
      *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
      *       &lt;sequence>
      *         &lt;choice maxOccurs="unbounded" minOccurs="0">
-     *           &lt;element name="pop3" type="{urn:zimbraAccount}accountPop3DataSource"/>
      *           &lt;element name="imap" type="{urn:zimbraAccount}accountImapDataSource"/>
+     *           &lt;element name="pop3" type="{urn:zimbraAccount}accountPop3DataSource"/>
+     *           &lt;element name="caldav" type="{urn:zimbraAccount}accountCaldavDataSource"/>
+     *           &lt;element name="yab" type="{urn:zimbraAccount}accountYabDataSource"/>
      *           &lt;element name="rss" type="{urn:zimbraAccount}accountRssDataSource"/>
+     *           &lt;element name="gal" type="{urn:zimbraAccount}accountGalDataSource"/>
      *           &lt;element name="cal" type="{urn:zimbraAccount}accountCalDataSource"/>
+     *           &lt;element name="unknown" type="{urn:zimbraAccount}accountUnknownDataSource"/>
      *         &lt;/choice>
      *       &lt;/sequence>
      *     &lt;/restriction>
@@ -940,48 +975,56 @@ public class testGetInfoResponse {
      */
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "", propOrder = {
-        "pop3OrImapOrRss"
+        "imapOrPop3OrCaldav"
     })
     public static class DataSources {
 
         @XmlElements({
-            @XmlElement(name = "rss", type = testAccountRssDataSource.class),
+            @XmlElement(name = "imap", type = testAccountImapDataSource.class),
             @XmlElement(name = "cal", type = testAccountCalDataSource.class),
+            @XmlElement(name = "rss", type = testAccountRssDataSource.class),
+            @XmlElement(name = "unknown", type = testAccountUnknownDataSource.class),
+            @XmlElement(name = "caldav", type = testAccountCaldavDataSource.class),
             @XmlElement(name = "pop3", type = testAccountPop3DataSource.class),
-            @XmlElement(name = "imap", type = testAccountImapDataSource.class)
+            @XmlElement(name = "yab", type = testAccountYabDataSource.class),
+            @XmlElement(name = "gal", type = testAccountGalDataSource.class)
         })
-        protected List<testAccountDataSource> pop3OrImapOrRss;
+        protected List<testAccountDataSource> imapOrPop3OrCaldav;
 
         /**
-         * Gets the value of the pop3OrImapOrRss property.
+         * Gets the value of the imapOrPop3OrCaldav property.
          * 
          * <p>
          * This accessor method returns a reference to the live list,
          * not a snapshot. Therefore any modification you make to the
          * returned list will be present inside the JAXB object.
-         * This is why there is not a <CODE>set</CODE> method for the pop3OrImapOrRss property.
+         * This is why there is not a <CODE>set</CODE> method for the imapOrPop3OrCaldav property.
          * 
          * <p>
          * For example, to add a new item, do as follows:
          * <pre>
-         *    getPop3OrImapOrRss().add(newItem);
+         *    getImapOrPop3OrCaldav().add(newItem);
          * </pre>
          * 
          * 
          * <p>
          * Objects of the following type(s) are allowed in the list
-         * {@link testAccountRssDataSource }
-         * {@link testAccountCalDataSource }
-         * {@link testAccountPop3DataSource }
          * {@link testAccountImapDataSource }
+         * {@link testAccountCalDataSource }
+         * {@link testAccountRssDataSource }
+         * {@link testAccountUnknownDataSource }
+         * {@link testAccountCaldavDataSource }
+         * {@link testAccountPop3DataSource }
+         * {@link testAccountYabDataSource }
+         * {@link testAccountGalDataSource }
          * 
          * 
          */
-        public List<testAccountDataSource> getPop3OrImapOrRss() {
-            if (pop3OrImapOrRss == null) {
-                pop3OrImapOrRss = new ArrayList<testAccountDataSource>();
+        public List<testAccountDataSource> getImapOrPop3OrCaldav() {
+            if (imapOrPop3OrCaldav == null) {
+                imapOrPop3OrCaldav = new ArrayList<testAccountDataSource>();
             }
-            return this.pop3OrImapOrRss;
+            return this.imapOrPop3OrCaldav;
         }
 
     }
@@ -1233,7 +1276,7 @@ public class testGetInfoResponse {
      *   &lt;complexContent>
      *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
      *       &lt;sequence>
-     *         &lt;element name="zimlet" type="{urn:zimbraAccount}zimletInfo" maxOccurs="unbounded" minOccurs="0"/>
+     *         &lt;element name="zimlet" type="{urn:zimbraAccount}accountZimletInfo" maxOccurs="unbounded" minOccurs="0"/>
      *       &lt;/sequence>
      *     &lt;/restriction>
      *   &lt;/complexContent>
@@ -1248,7 +1291,7 @@ public class testGetInfoResponse {
     })
     public static class Zimlets {
 
-        protected List<testZimletInfo> zimlet;
+        protected List<testAccountZimletInfo> zimlet;
 
         /**
          * Gets the value of the zimlet property.
@@ -1268,13 +1311,13 @@ public class testGetInfoResponse {
          * 
          * <p>
          * Objects of the following type(s) are allowed in the list
-         * {@link testZimletInfo }
+         * {@link testAccountZimletInfo }
          * 
          * 
          */
-        public List<testZimletInfo> getZimlet() {
+        public List<testAccountZimletInfo> getZimlet() {
             if (zimlet == null) {
-                zimlet = new ArrayList<testZimletInfo>();
+                zimlet = new ArrayList<testAccountZimletInfo>();
             }
             return this.zimlet;
         }

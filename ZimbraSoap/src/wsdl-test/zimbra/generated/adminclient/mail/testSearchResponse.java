@@ -70,16 +70,16 @@ import zimbra.generated.adminclient.zm.testWildcardExpansionQueryInfo;
 public class testSearchResponse {
 
     @XmlElements({
-        @XmlElement(name = "m", type = testMessageHitInfo.class),
-        @XmlElement(name = "note", type = testNoteHitInfo.class),
-        @XmlElement(name = "cn", type = testContactInfo.class),
-        @XmlElement(name = "doc", type = testDocumentHitInfo.class),
-        @XmlElement(name = "w", type = testWikiHitInfo.class),
-        @XmlElement(name = "hit", type = testSimpleSearchHit.class),
-        @XmlElement(name = "c", type = testConversationHitInfo.class),
         @XmlElement(name = "mp", type = testMessagePartHitInfo.class),
-        @XmlElement(name = "appt", type = testAppointmentHitInfo.class),
+        @XmlElement(name = "doc", type = testDocumentHitInfo.class),
+        @XmlElement(name = "c", type = testConversationHitInfo.class),
+        @XmlElement(name = "cn", type = testContactInfo.class),
+        @XmlElement(name = "hit", type = testSimpleSearchHit.class),
         @XmlElement(name = "task", type = testTaskHitInfo.class),
+        @XmlElement(name = "note", type = testNoteHitInfo.class),
+        @XmlElement(name = "appt", type = testAppointmentHitInfo.class),
+        @XmlElement(name = "w", type = testWikiHitInfo.class),
+        @XmlElement(name = "m", type = testMessageHitInfo.class),
         @XmlElement(name = "chat", type = testChatHitInfo.class)
     })
     protected List<Object> hitOrCOrM;
@@ -111,16 +111,16 @@ public class testSearchResponse {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link testMessageHitInfo }
-     * {@link testNoteHitInfo }
-     * {@link testContactInfo }
-     * {@link testDocumentHitInfo }
-     * {@link testWikiHitInfo }
-     * {@link testSimpleSearchHit }
-     * {@link testConversationHitInfo }
      * {@link testMessagePartHitInfo }
-     * {@link testAppointmentHitInfo }
+     * {@link testDocumentHitInfo }
+     * {@link testConversationHitInfo }
+     * {@link testContactInfo }
+     * {@link testSimpleSearchHit }
      * {@link testTaskHitInfo }
+     * {@link testNoteHitInfo }
+     * {@link testAppointmentHitInfo }
+     * {@link testWikiHitInfo }
+     * {@link testMessageHitInfo }
      * {@link testChatHitInfo }
      * 
      * 

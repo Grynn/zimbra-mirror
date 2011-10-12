@@ -6,7 +6,15 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
-import zimbra.generated.accountclient.account.testSearchCalendarResourcesRequest;
+import zimbra.generated.accountclient.admin.testGetAccountRequest;
+import zimbra.generated.accountclient.admin.testGetCalendarResourceRequest;
+import zimbra.generated.accountclient.admin.testGetCosRequest;
+import zimbra.generated.accountclient.admin.testGetDomainRequest;
+import zimbra.generated.accountclient.admin.testGetServerRequest;
+import zimbra.generated.accountclient.admin.testGetXMPPComponentRequest;
+import zimbra.generated.accountclient.admin.testGetZimletRequest;
+import zimbra.generated.accountclient.admin.testSearchAutoProvDirectoryRequest;
+import zimbra.generated.accountclient.admin.testSearchDirectoryRequest;
 
 
 /**
@@ -31,7 +39,17 @@ import zimbra.generated.accountclient.account.testSearchCalendarResourcesRequest
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "attributeSelectorImpl")
 @XmlSeeAlso({
-    testSearchCalendarResourcesRequest.class
+    zimbra.generated.accountclient.account.testSearchCalendarResourcesRequest.class,
+    testGetCosRequest.class,
+    testSearchDirectoryRequest.class,
+    testGetServerRequest.class,
+    testGetXMPPComponentRequest.class,
+    testGetCalendarResourceRequest.class,
+    testGetAccountRequest.class,
+    testSearchAutoProvDirectoryRequest.class,
+    testGetDomainRequest.class,
+    testGetZimletRequest.class,
+    zimbra.generated.accountclient.admin.testSearchCalendarResourcesRequest.class
 })
 public abstract class testAttributeSelectorImpl {
 

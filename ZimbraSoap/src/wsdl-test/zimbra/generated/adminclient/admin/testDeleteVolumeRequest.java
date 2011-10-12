@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *       &lt;/sequence>
- *       &lt;attribute name="id" use="required" type="{http://www.w3.org/2001/XMLSchema}long" />
+ *       &lt;attribute name="id" use="required" type="{http://www.w3.org/2001/XMLSchema}short" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -31,13 +31,13 @@ import javax.xml.bind.annotation.XmlType;
 public class testDeleteVolumeRequest {
 
     @XmlAttribute(name = "id", required = true)
-    protected long id;
+    protected short id;
 
     /**
      * Gets the value of the id property.
      * 
      */
-    public long getId() {
+    public short getId() {
         return id;
     }
 
@@ -45,7 +45,7 @@ public class testDeleteVolumeRequest {
      * Sets the value of the id property.
      * 
      */
-    public void setId(long value) {
+    public void setId(short value) {
         this.id = value;
     }
 

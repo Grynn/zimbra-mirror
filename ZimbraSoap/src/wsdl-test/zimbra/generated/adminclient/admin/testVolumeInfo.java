@@ -18,17 +18,17 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *       &lt;/sequence>
- *       &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}short" />
+ *       &lt;attribute name="id" use="required" type="{http://www.w3.org/2001/XMLSchema}short" />
  *       &lt;attribute name="name" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="rootpath" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="type" type="{http://www.w3.org/2001/XMLSchema}short" />
+ *       &lt;attribute name="type" use="required" type="{http://www.w3.org/2001/XMLSchema}short" />
  *       &lt;attribute name="compressBlobs" type="{http://www.w3.org/2001/XMLSchema}boolean" />
- *       &lt;attribute name="compressionThreshold" type="{http://www.w3.org/2001/XMLSchema}long" />
- *       &lt;attribute name="mgbits" type="{http://www.w3.org/2001/XMLSchema}short" />
- *       &lt;attribute name="mbits" type="{http://www.w3.org/2001/XMLSchema}short" />
- *       &lt;attribute name="fgbits" type="{http://www.w3.org/2001/XMLSchema}short" />
- *       &lt;attribute name="fbits" type="{http://www.w3.org/2001/XMLSchema}short" />
- *       &lt;attribute name="isCurrent" type="{http://www.w3.org/2001/XMLSchema}boolean" />
+ *       &lt;attribute name="compressionThreshold" use="required" type="{http://www.w3.org/2001/XMLSchema}long" />
+ *       &lt;attribute name="mgbits" use="required" type="{http://www.w3.org/2001/XMLSchema}short" />
+ *       &lt;attribute name="mbits" use="required" type="{http://www.w3.org/2001/XMLSchema}short" />
+ *       &lt;attribute name="fgbits" use="required" type="{http://www.w3.org/2001/XMLSchema}short" />
+ *       &lt;attribute name="fbits" use="required" type="{http://www.w3.org/2001/XMLSchema}short" />
+ *       &lt;attribute name="isCurrent" use="required" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -40,50 +40,42 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "volumeInfo")
 public class testVolumeInfo {
 
-    @XmlAttribute(name = "id")
-    protected Short id;
+    @XmlAttribute(name = "id", required = true)
+    protected short id;
     @XmlAttribute(name = "name")
     protected String name;
     @XmlAttribute(name = "rootpath")
     protected String rootpath;
-    @XmlAttribute(name = "type")
-    protected Short type;
+    @XmlAttribute(name = "type", required = true)
+    protected short type;
     @XmlAttribute(name = "compressBlobs")
     protected Boolean compressBlobs;
-    @XmlAttribute(name = "compressionThreshold")
-    protected Long compressionThreshold;
-    @XmlAttribute(name = "mgbits")
-    protected Short mgbits;
-    @XmlAttribute(name = "mbits")
-    protected Short mbits;
-    @XmlAttribute(name = "fgbits")
-    protected Short fgbits;
-    @XmlAttribute(name = "fbits")
-    protected Short fbits;
-    @XmlAttribute(name = "isCurrent")
-    protected Boolean isCurrent;
+    @XmlAttribute(name = "compressionThreshold", required = true)
+    protected long compressionThreshold;
+    @XmlAttribute(name = "mgbits", required = true)
+    protected short mgbits;
+    @XmlAttribute(name = "mbits", required = true)
+    protected short mbits;
+    @XmlAttribute(name = "fgbits", required = true)
+    protected short fgbits;
+    @XmlAttribute(name = "fbits", required = true)
+    protected short fbits;
+    @XmlAttribute(name = "isCurrent", required = true)
+    protected boolean isCurrent;
 
     /**
      * Gets the value of the id property.
      * 
-     * @return
-     *     possible object is
-     *     {@link Short }
-     *     
      */
-    public Short getId() {
+    public short getId() {
         return id;
     }
 
     /**
      * Sets the value of the id property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link Short }
-     *     
      */
-    public void setId(Short value) {
+    public void setId(short value) {
         this.id = value;
     }
 
@@ -138,24 +130,16 @@ public class testVolumeInfo {
     /**
      * Gets the value of the type property.
      * 
-     * @return
-     *     possible object is
-     *     {@link Short }
-     *     
      */
-    public Short getType() {
+    public short getType() {
         return type;
     }
 
     /**
      * Sets the value of the type property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link Short }
-     *     
      */
-    public void setType(Short value) {
+    public void setType(short value) {
         this.type = value;
     }
 
@@ -186,144 +170,96 @@ public class testVolumeInfo {
     /**
      * Gets the value of the compressionThreshold property.
      * 
-     * @return
-     *     possible object is
-     *     {@link Long }
-     *     
      */
-    public Long getCompressionThreshold() {
+    public long getCompressionThreshold() {
         return compressionThreshold;
     }
 
     /**
      * Sets the value of the compressionThreshold property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link Long }
-     *     
      */
-    public void setCompressionThreshold(Long value) {
+    public void setCompressionThreshold(long value) {
         this.compressionThreshold = value;
     }
 
     /**
      * Gets the value of the mgbits property.
      * 
-     * @return
-     *     possible object is
-     *     {@link Short }
-     *     
      */
-    public Short getMgbits() {
+    public short getMgbits() {
         return mgbits;
     }
 
     /**
      * Sets the value of the mgbits property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link Short }
-     *     
      */
-    public void setMgbits(Short value) {
+    public void setMgbits(short value) {
         this.mgbits = value;
     }
 
     /**
      * Gets the value of the mbits property.
      * 
-     * @return
-     *     possible object is
-     *     {@link Short }
-     *     
      */
-    public Short getMbits() {
+    public short getMbits() {
         return mbits;
     }
 
     /**
      * Sets the value of the mbits property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link Short }
-     *     
      */
-    public void setMbits(Short value) {
+    public void setMbits(short value) {
         this.mbits = value;
     }
 
     /**
      * Gets the value of the fgbits property.
      * 
-     * @return
-     *     possible object is
-     *     {@link Short }
-     *     
      */
-    public Short getFgbits() {
+    public short getFgbits() {
         return fgbits;
     }
 
     /**
      * Sets the value of the fgbits property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link Short }
-     *     
      */
-    public void setFgbits(Short value) {
+    public void setFgbits(short value) {
         this.fgbits = value;
     }
 
     /**
      * Gets the value of the fbits property.
      * 
-     * @return
-     *     possible object is
-     *     {@link Short }
-     *     
      */
-    public Short getFbits() {
+    public short getFbits() {
         return fbits;
     }
 
     /**
      * Sets the value of the fbits property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link Short }
-     *     
      */
-    public void setFbits(Short value) {
+    public void setFbits(short value) {
         this.fbits = value;
     }
 
     /**
      * Gets the value of the isCurrent property.
      * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
      */
-    public Boolean isIsCurrent() {
+    public boolean isIsCurrent() {
         return isCurrent;
     }
 
     /**
      * Sets the value of the isCurrent property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
      */
-    public void setIsCurrent(Boolean value) {
+    public void setIsCurrent(boolean value) {
         this.isCurrent = value;
     }
 

@@ -17,7 +17,7 @@ import javax.xml.ws.WebServiceFeature;
  * Generated source version: 2.1
  * 
  */
-@WebServiceClient(name = "SyncService", targetNamespace = "http://www.zimbra.com/wsdl/SyncService.wsdl", wsdlLocation = "file:/p4/coco/main/ZimbraSoap/build/classes/com/zimbra/soap/SyncService.wsdl")
+@WebServiceClient(name = "SyncService", targetNamespace = "http://www.zimbra.com/wsdl/SyncService.wsdl", wsdlLocation = "file:/p4/coco1/main/ZimbraSoap/build/classes/com/zimbra/soap/SyncService.wsdl")
 public class SyncService_Service
     extends Service
 {
@@ -30,9 +30,9 @@ public class SyncService_Service
         try {
             URL baseUrl;
             baseUrl = zimbra.generated.syncclient.ws.service.SyncService_Service.class.getResource(".");
-            url = new URL(baseUrl, "file:/p4/coco/main/ZimbraSoap/build/classes/com/zimbra/soap/SyncService.wsdl");
+            url = new URL(baseUrl, "file:/p4/coco1/main/ZimbraSoap/build/classes/com/zimbra/soap/SyncService.wsdl");
         } catch (MalformedURLException e) {
-            logger.warn("Failed to create URL for the wsdl Location: 'file:/p4/coco/main/ZimbraSoap/build/classes/com/zimbra/soap/SyncService.wsdl', retrying as a local file");
+            logger.warn("Failed to create URL for the wsdl Location: 'file:/p4/coco1/main/ZimbraSoap/build/classes/com/zimbra/soap/SyncService.wsdl', retrying as a local file");
             logger.warn(e.getMessage());
         }
         SYNCSERVICE_WSDL_LOCATION = url;

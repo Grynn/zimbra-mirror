@@ -45,11 +45,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link testDeviceStatusInfo }
+     * Create an instance of {@link testResumeDeviceRequest }
      * 
      */
-    public testDeviceStatusInfo createtestDeviceStatusInfo() {
-        return new testDeviceStatusInfo();
+    public testResumeDeviceRequest createtestResumeDeviceRequest() {
+        return new testResumeDeviceRequest();
     }
 
     /**
@@ -58,6 +58,78 @@ public class ObjectFactory {
      */
     public testResumeDeviceResponse createtestResumeDeviceResponse() {
         return new testResumeDeviceResponse();
+    }
+
+    /**
+     * Create an instance of {@link testRemoveDeviceResponse }
+     * 
+     */
+    public testRemoveDeviceResponse createtestRemoveDeviceResponse() {
+        return new testRemoveDeviceResponse();
+    }
+
+    /**
+     * Create an instance of {@link testDeviceId }
+     * 
+     */
+    public testDeviceId createtestDeviceId() {
+        return new testDeviceId();
+    }
+
+    /**
+     * Create an instance of {@link testGetDeviceStatusRequest }
+     * 
+     */
+    public testGetDeviceStatusRequest createtestGetDeviceStatusRequest() {
+        return new testGetDeviceStatusRequest();
+    }
+
+    /**
+     * Create an instance of {@link testGetDeviceStatusResponse }
+     * 
+     */
+    public testGetDeviceStatusResponse createtestGetDeviceStatusResponse() {
+        return new testGetDeviceStatusResponse();
+    }
+
+    /**
+     * Create an instance of {@link testSuspendDeviceRequest }
+     * 
+     */
+    public testSuspendDeviceRequest createtestSuspendDeviceRequest() {
+        return new testSuspendDeviceRequest();
+    }
+
+    /**
+     * Create an instance of {@link testRemoteWipeRequest }
+     * 
+     */
+    public testRemoteWipeRequest createtestRemoteWipeRequest() {
+        return new testRemoteWipeRequest();
+    }
+
+    /**
+     * Create an instance of {@link testSuspendDeviceResponse }
+     * 
+     */
+    public testSuspendDeviceResponse createtestSuspendDeviceResponse() {
+        return new testSuspendDeviceResponse();
+    }
+
+    /**
+     * Create an instance of {@link testDeviceStatusInfo }
+     * 
+     */
+    public testDeviceStatusInfo createtestDeviceStatusInfo() {
+        return new testDeviceStatusInfo();
+    }
+
+    /**
+     * Create an instance of {@link testRemoveDeviceRequest }
+     * 
+     */
+    public testRemoveDeviceRequest createtestRemoveDeviceRequest() {
+        return new testRemoveDeviceRequest();
     }
 
     /**
@@ -77,83 +149,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link testSuspendDeviceRequest }
-     * 
-     */
-    public testSuspendDeviceRequest createtestSuspendDeviceRequest() {
-        return new testSuspendDeviceRequest();
-    }
-
-    /**
      * Create an instance of {@link testCancelPendingRemoteWipeRequest }
      * 
      */
     public testCancelPendingRemoteWipeRequest createtestCancelPendingRemoteWipeRequest() {
         return new testCancelPendingRemoteWipeRequest();
-    }
-
-    /**
-     * Create an instance of {@link testRemoteWipeRequest }
-     * 
-     */
-    public testRemoteWipeRequest createtestRemoteWipeRequest() {
-        return new testRemoteWipeRequest();
-    }
-
-    /**
-     * Create an instance of {@link testGetDeviceStatusResponse }
-     * 
-     */
-    public testGetDeviceStatusResponse createtestGetDeviceStatusResponse() {
-        return new testGetDeviceStatusResponse();
-    }
-
-    /**
-     * Create an instance of {@link testDeviceId }
-     * 
-     */
-    public testDeviceId createtestDeviceId() {
-        return new testDeviceId();
-    }
-
-    /**
-     * Create an instance of {@link testResumeDeviceRequest }
-     * 
-     */
-    public testResumeDeviceRequest createtestResumeDeviceRequest() {
-        return new testResumeDeviceRequest();
-    }
-
-    /**
-     * Create an instance of {@link testGetDeviceStatusRequest }
-     * 
-     */
-    public testGetDeviceStatusRequest createtestGetDeviceStatusRequest() {
-        return new testGetDeviceStatusRequest();
-    }
-
-    /**
-     * Create an instance of {@link testSuspendDeviceResponse }
-     * 
-     */
-    public testSuspendDeviceResponse createtestSuspendDeviceResponse() {
-        return new testSuspendDeviceResponse();
-    }
-
-    /**
-     * Create an instance of {@link testRemoveDeviceResponse }
-     * 
-     */
-    public testRemoveDeviceResponse createtestRemoveDeviceResponse() {
-        return new testRemoveDeviceResponse();
-    }
-
-    /**
-     * Create an instance of {@link testRemoveDeviceRequest }
-     * 
-     */
-    public testRemoveDeviceRequest createtestRemoveDeviceRequest() {
-        return new testRemoveDeviceRequest();
     }
 
     /**

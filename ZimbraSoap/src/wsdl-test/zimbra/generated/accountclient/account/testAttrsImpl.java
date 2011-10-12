@@ -33,6 +33,8 @@ import javax.xml.bind.annotation.XmlType;
     "a"
 })
 @XmlSeeAlso({
+    testDistributionListActionRequest.class,
+    testGetDistributionListRequest.class,
     testIdentity.class
 })
 public abstract class testAttrsImpl {

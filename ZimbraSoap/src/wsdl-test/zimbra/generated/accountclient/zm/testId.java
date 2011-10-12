@@ -4,7 +4,16 @@ package zimbra.generated.accountclient.zm;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
+import zimbra.generated.accountclient.mail.testCalDataSourceId;
+import zimbra.generated.accountclient.mail.testCaldavDataSourceId;
+import zimbra.generated.accountclient.mail.testGalDataSourceId;
+import zimbra.generated.accountclient.mail.testImapDataSourceId;
+import zimbra.generated.accountclient.mail.testPop3DataSourceId;
+import zimbra.generated.accountclient.mail.testRssDataSourceId;
+import zimbra.generated.accountclient.mail.testUnknownDataSourceId;
+import zimbra.generated.accountclient.mail.testYabDataSourceId;
 
 
 /**
@@ -28,6 +37,16 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "id")
+@XmlSeeAlso({
+    testPop3DataSourceId.class,
+    testRssDataSourceId.class,
+    testCaldavDataSourceId.class,
+    testImapDataSourceId.class,
+    testUnknownDataSourceId.class,
+    testYabDataSourceId.class,
+    testGalDataSourceId.class,
+    testCalDataSourceId.class
+})
 public class testId {
 
     @XmlAttribute(name = "id")

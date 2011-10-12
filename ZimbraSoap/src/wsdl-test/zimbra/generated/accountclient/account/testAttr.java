@@ -17,7 +17,8 @@ import javax.xml.bind.annotation.XmlValue;
  * &lt;complexType name="attr">
  *   &lt;simpleContent>
  *     &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema>string">
- *       &lt;attribute name="name" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="name" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="pd" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *     &lt;/extension>
  *   &lt;/simpleContent>
  * &lt;/complexType>
@@ -33,8 +34,10 @@ public class testAttr {
 
     @XmlValue
     protected String value;
-    @XmlAttribute(name = "name")
+    @XmlAttribute(name = "name", required = true)
     protected String name;
+    @XmlAttribute(name = "pd")
+    protected Boolean pd;
 
     /**
      * Gets the value of the value property.
@@ -82,6 +85,30 @@ public class testAttr {
      */
     public void setName(String value) {
         this.name = value;
+    }
+
+    /**
+     * Gets the value of the pd property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isPd() {
+        return pd;
+    }
+
+    /**
+     * Sets the value of the pd property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setPd(Boolean value) {
+        this.pd = value;
     }
 
 }

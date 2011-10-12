@@ -44,8 +44,8 @@ public class testGetRecurResponse {
     protected testCalTZInfo tz;
     @XmlElements({
         @XmlElement(name = "comp", type = testInviteItemRecur.class),
-        @XmlElement(name = "except", type = testExceptionItemRecur.class),
-        @XmlElement(name = "cancel", type = testCancelItemRecur.class)
+        @XmlElement(name = "cancel", type = testCancelItemRecur.class),
+        @XmlElement(name = "except", type = testExceptionItemRecur.class)
     })
     protected List<testCalendarItemRecur> cancelOrExceptOrComp;
 
@@ -92,8 +92,8 @@ public class testGetRecurResponse {
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link testInviteItemRecur }
-     * {@link testExceptionItemRecur }
      * {@link testCancelItemRecur }
+     * {@link testExceptionItemRecur }
      * 
      * 
      */

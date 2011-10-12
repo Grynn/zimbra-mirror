@@ -43,6 +43,7 @@ import zimbra.generated.mailclient.zm.testWildcardExpansionQueryInfo;
  *       &lt;attribute name="total" type="{http://www.w3.org/2001/XMLSchema}int" />
  *       &lt;attribute name="f" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="t" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="tn" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -69,6 +70,8 @@ public class testNestedSearchConversation {
     protected String f;
     @XmlAttribute(name = "t")
     protected String t;
+    @XmlAttribute(name = "tn")
+    protected String tn;
 
     /**
      * Gets the value of the m property.
@@ -243,6 +246,30 @@ public class testNestedSearchConversation {
         this.t = value;
     }
 
+    /**
+     * Gets the value of the tn property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getTn() {
+        return tn;
+    }
+
+    /**
+     * Sets the value of the tn property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setTn(String value) {
+        this.tn = value;
+    }
+
 
     /**
      * <p>Java class for anonymous complex type.
@@ -273,8 +300,8 @@ public class testNestedSearchConversation {
     public static class Info {
 
         @XmlElements({
-            @XmlElement(name = "spell", type = testSpellingSuggestionsQueryInfo.class),
-            @XmlElement(name = "wildcard", type = testWildcardExpansionQueryInfo.class)
+            @XmlElement(name = "wildcard", type = testWildcardExpansionQueryInfo.class),
+            @XmlElement(name = "spell", type = testSpellingSuggestionsQueryInfo.class)
         })
         protected List<Object> spellOrWildcard;
 
@@ -296,8 +323,8 @@ public class testNestedSearchConversation {
          * 
          * <p>
          * Objects of the following type(s) are allowed in the list
-         * {@link testSpellingSuggestionsQueryInfo }
          * {@link testWildcardExpansionQueryInfo }
+         * {@link testSpellingSuggestionsQueryInfo }
          * 
          * 
          */

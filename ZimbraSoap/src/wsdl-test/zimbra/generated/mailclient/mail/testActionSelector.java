@@ -29,6 +29,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;attribute name="name" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="f" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="t" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="tn" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -39,6 +40,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "actionSelector")
 @XmlSeeAlso({
+    testDocumentActionSelector.class,
     testTagActionSelector.class,
     testFolderActionSelector.class,
     testNoteActionSelector.class,
@@ -66,6 +68,8 @@ public class testActionSelector {
     protected String f;
     @XmlAttribute(name = "t")
     protected String t;
+    @XmlAttribute(name = "tn")
+    protected String tn;
 
     /**
      * Gets the value of the id property.
@@ -305,6 +309,30 @@ public class testActionSelector {
      */
     public void setT(String value) {
         this.t = value;
+    }
+
+    /**
+     * Gets the value of the tn property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getTn() {
+        return tn;
+    }
+
+    /**
+     * Sets the value of the tn property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setTn(String value) {
+        this.tn = value;
     }
 
 }

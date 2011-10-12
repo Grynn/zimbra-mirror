@@ -36,6 +36,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;/sequence>
  *       &lt;attribute name="f" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="t" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="tn" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="uid" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="rev" type="{http://www.w3.org/2001/XMLSchema}int" />
@@ -70,6 +71,8 @@ public class testCalendarItemInfo {
     protected String f;
     @XmlAttribute(name = "t")
     protected String t;
+    @XmlAttribute(name = "tn")
+    protected String tn;
     @XmlAttribute(name = "uid")
     protected String uid;
     @XmlAttribute(name = "id")
@@ -217,6 +220,30 @@ public class testCalendarItemInfo {
      */
     public void setT(String value) {
         this.t = value;
+    }
+
+    /**
+     * Gets the value of the tn property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getTn() {
+        return tn;
+    }
+
+    /**
+     * Sets the value of the tn property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setTn(String value) {
+        this.tn = value;
     }
 
     /**

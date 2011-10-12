@@ -59,8 +59,12 @@ import javax.xml.bind.annotation.XmlType;
 @XmlSeeAlso({
     testAccountContactsDataSource.class,
     testAccountPop3DataSource.class,
+    testAccountYabDataSource.class,
     testAccountCalDataSource.class,
+    testAccountUnknownDataSource.class,
+    testAccountCaldavDataSource.class,
     testAccountRssDataSource.class,
+    testAccountGalDataSource.class,
     testAccountImapDataSource.class
 })
 public class testAccountDataSource {

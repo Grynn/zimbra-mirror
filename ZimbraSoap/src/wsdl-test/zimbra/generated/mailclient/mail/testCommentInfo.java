@@ -30,6 +30,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;attribute name="email" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="f" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="t" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="tn" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="color" type="{http://www.w3.org/2001/XMLSchema}byte" />
  *       &lt;attribute name="rgb" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="d" type="{http://www.w3.org/2001/XMLSchema}long" />
@@ -59,6 +60,8 @@ public class testCommentInfo {
     protected String f;
     @XmlAttribute(name = "t")
     protected String t;
+    @XmlAttribute(name = "tn")
+    protected String tn;
     @XmlAttribute(name = "color")
     protected Byte color;
     @XmlAttribute(name = "rgb")
@@ -214,6 +217,30 @@ public class testCommentInfo {
      */
     public void setT(String value) {
         this.t = value;
+    }
+
+    /**
+     * Gets the value of the tn property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getTn() {
+        return tn;
+    }
+
+    /**
+     * Sets the value of the tn property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setTn(String value) {
+        this.tn = value;
     }
 
     /**

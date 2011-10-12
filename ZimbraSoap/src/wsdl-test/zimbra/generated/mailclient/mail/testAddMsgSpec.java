@@ -21,6 +21,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;/sequence>
  *       &lt;attribute name="f" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="t" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="tn" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="l" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="noICal" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *       &lt;attribute name="d" type="{http://www.w3.org/2001/XMLSchema}string" />
@@ -43,6 +44,8 @@ public class testAddMsgSpec {
     protected String f;
     @XmlAttribute(name = "t")
     protected String t;
+    @XmlAttribute(name = "tn")
+    protected String tn;
     @XmlAttribute(name = "l")
     protected String l;
     @XmlAttribute(name = "noICal")
@@ -122,6 +125,30 @@ public class testAddMsgSpec {
      */
     public void setT(String value) {
         this.t = value;
+    }
+
+    /**
+     * Gets the value of the tn property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getTn() {
+        return tn;
+    }
+
+    /**
+     * Sets the value of the tn property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setTn(String value) {
+        this.tn = value;
     }
 
     /**

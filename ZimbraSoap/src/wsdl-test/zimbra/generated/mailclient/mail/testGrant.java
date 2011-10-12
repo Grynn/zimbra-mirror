@@ -21,7 +21,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;attribute name="perm" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="gt" use="required" type="{urn:zimbraMail}granteeType" />
  *       &lt;attribute name="zid" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="d" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="d" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="pw" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="key" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
@@ -43,7 +43,7 @@ public class testGrant {
     protected testGranteeType gt;
     @XmlAttribute(name = "zid", required = true)
     protected String zid;
-    @XmlAttribute(name = "d", required = true)
+    @XmlAttribute(name = "d")
     protected String d;
     @XmlAttribute(name = "pw")
     protected String pw;

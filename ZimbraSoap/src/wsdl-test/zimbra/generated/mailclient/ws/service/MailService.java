@@ -83,6 +83,8 @@ import zimbra.generated.mailclient.mail.testDiffDocumentRequest;
 import zimbra.generated.mailclient.mail.testDiffDocumentResponse;
 import zimbra.generated.mailclient.mail.testDismissCalendarItemAlarmRequest;
 import zimbra.generated.mailclient.mail.testDismissCalendarItemAlarmResponse;
+import zimbra.generated.mailclient.mail.testDocumentActionRequest;
+import zimbra.generated.mailclient.mail.testDocumentActionResponse;
 import zimbra.generated.mailclient.mail.testEmptyDumpsterRequest;
 import zimbra.generated.mailclient.mail.testEmptyDumpsterResponse;
 import zimbra.generated.mailclient.mail.testEnableSharedReminderRequest;
@@ -148,8 +150,6 @@ import zimbra.generated.mailclient.mail.testGetPermissionRequest;
 import zimbra.generated.mailclient.mail.testGetPermissionResponse;
 import zimbra.generated.mailclient.mail.testGetRecurRequest;
 import zimbra.generated.mailclient.mail.testGetRecurResponse;
-import zimbra.generated.mailclient.mail.testGetRulesRequest;
-import zimbra.generated.mailclient.mail.testGetRulesResponse;
 import zimbra.generated.mailclient.mail.testGetSearchFolderRequest;
 import zimbra.generated.mailclient.mail.testGetSearchFolderResponse;
 import zimbra.generated.mailclient.mail.testGetShareNotificationsRequest;
@@ -228,8 +228,6 @@ import zimbra.generated.mailclient.mail.testSaveDocumentRequest;
 import zimbra.generated.mailclient.mail.testSaveDocumentResponse;
 import zimbra.generated.mailclient.mail.testSaveDraftRequest;
 import zimbra.generated.mailclient.mail.testSaveDraftResponse;
-import zimbra.generated.mailclient.mail.testSaveRulesRequest;
-import zimbra.generated.mailclient.mail.testSaveRulesResponse;
 import zimbra.generated.mailclient.mail.testSearchConvRequest;
 import zimbra.generated.mailclient.mail.testSearchConvResponse;
 import zimbra.generated.mailclient.mail.testSearchRequest;
@@ -279,8 +277,8 @@ import zimbra.generated.mailclient.mail.testWikiActionResponse;
 @WebService(name = "MailService", targetNamespace = "http://www.zimbra.com/wsdl/MailService.wsdl")
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
 @XmlSeeAlso({
-    zimbra.generated.mailclient.mail.ObjectFactory.class,
-    zimbra.generated.mailclient.zm.ObjectFactory.class
+    zimbra.generated.mailclient.zm.ObjectFactory.class,
+    zimbra.generated.mailclient.mail.ObjectFactory.class
 })
 public interface MailService {
 
@@ -745,6 +743,18 @@ public interface MailService {
      * 
      * @param parameters
      * @return
+     *     returns zimbra.generated.mailclient.mail.testDocumentActionResponse
+     */
+    @WebMethod(action = "urn:zimbraMail/DocumentAction")
+    @WebResult(name = "DocumentActionResponse", targetNamespace = "urn:zimbraMail", partName = "parameters")
+    public testDocumentActionResponse documentActionRequest(
+        @WebParam(name = "DocumentActionRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
+        testDocumentActionRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
      *     returns zimbra.generated.mailclient.mail.testEmptyDumpsterResponse
      */
     @WebMethod(action = "urn:zimbraMail/EmptyDumpster")
@@ -1136,18 +1146,6 @@ public interface MailService {
     public testGetRecurResponse getRecurRequest(
         @WebParam(name = "GetRecurRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
         testGetRecurRequest parameters);
-
-    /**
-     * 
-     * @param parameters
-     * @return
-     *     returns zimbra.generated.mailclient.mail.testGetRulesResponse
-     */
-    @WebMethod(action = "urn:zimbraMail/GetRules")
-    @WebResult(name = "GetRulesResponse", targetNamespace = "urn:zimbraMail", partName = "parameters")
-    public testGetRulesResponse getRulesRequest(
-        @WebParam(name = "GetRulesRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
-        testGetRulesRequest parameters);
 
     /**
      * 
@@ -1616,18 +1614,6 @@ public interface MailService {
     public testSaveDraftResponse saveDraftRequest(
         @WebParam(name = "SaveDraftRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
         testSaveDraftRequest parameters);
-
-    /**
-     * 
-     * @param parameters
-     * @return
-     *     returns zimbra.generated.mailclient.mail.testSaveRulesResponse
-     */
-    @WebMethod(action = "urn:zimbraMail/SaveRules")
-    @WebResult(name = "SaveRulesResponse", targetNamespace = "urn:zimbraMail", partName = "parameters")
-    public testSaveRulesResponse saveRulesRequest(
-        @WebParam(name = "SaveRulesRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
-        testSaveRulesRequest parameters);
 
     /**
      * 

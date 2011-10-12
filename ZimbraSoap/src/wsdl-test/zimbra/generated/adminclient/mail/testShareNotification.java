@@ -3,7 +3,6 @@ package zimbra.generated.adminclient.mail;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -15,12 +14,10 @@ import javax.xml.bind.annotation.XmlType;
  * <pre>
  * &lt;complexType name="shareNotification">
  *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+ *     &lt;extension base="{urn:zimbraMail}notification">
  *       &lt;sequence>
- *         &lt;element name="content" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
- *       &lt;attribute name="truncated" type="{http://www.w3.org/2001/XMLSchema}boolean" />
- *     &lt;/restriction>
+ *     &lt;/extension>
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
@@ -28,61 +25,10 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "shareNotification", propOrder = {
-    "content"
-})
-public class testShareNotification {
+@XmlType(name = "shareNotification")
+public class testShareNotification
+    extends testNotification
+{
 
-    protected String content;
-    @XmlAttribute(name = "truncated")
-    protected Boolean truncated;
-
-    /**
-     * Gets the value of the content property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getContent() {
-        return content;
-    }
-
-    /**
-     * Sets the value of the content property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setContent(String value) {
-        this.content = value;
-    }
-
-    /**
-     * Gets the value of the truncated property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isTruncated() {
-        return truncated;
-    }
-
-    /**
-     * Sets the value of the truncated property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setTruncated(Boolean value) {
-        this.truncated = value;
-    }
 
 }

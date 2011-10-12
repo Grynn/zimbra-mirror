@@ -17,7 +17,7 @@ import javax.xml.ws.WebServiceFeature;
  * Generated source version: 2.1
  * 
  */
-@WebServiceClient(name = "ReplicationService", targetNamespace = "http://www.zimbra.com/wsdl/ReplicationService.wsdl", wsdlLocation = "file:/p4/coco/main/ZimbraSoap/build/classes/com/zimbra/soap/ReplicationService.wsdl")
+@WebServiceClient(name = "ReplicationService", targetNamespace = "http://www.zimbra.com/wsdl/ReplicationService.wsdl", wsdlLocation = "file:/p4/coco1/main/ZimbraSoap/build/classes/com/zimbra/soap/ReplicationService.wsdl")
 public class ReplicationService_Service
     extends Service
 {
@@ -30,9 +30,9 @@ public class ReplicationService_Service
         try {
             URL baseUrl;
             baseUrl = zimbra.generated.replicationclient.ws.service.ReplicationService_Service.class.getResource(".");
-            url = new URL(baseUrl, "file:/p4/coco/main/ZimbraSoap/build/classes/com/zimbra/soap/ReplicationService.wsdl");
+            url = new URL(baseUrl, "file:/p4/coco1/main/ZimbraSoap/build/classes/com/zimbra/soap/ReplicationService.wsdl");
         } catch (MalformedURLException e) {
-            logger.warn("Failed to create URL for the wsdl Location: 'file:/p4/coco/main/ZimbraSoap/build/classes/com/zimbra/soap/ReplicationService.wsdl', retrying as a local file");
+            logger.warn("Failed to create URL for the wsdl Location: 'file:/p4/coco1/main/ZimbraSoap/build/classes/com/zimbra/soap/ReplicationService.wsdl', retrying as a local file");
             logger.warn(e.getMessage());
         }
         REPLICATIONSERVICE_WSDL_LOCATION = url;

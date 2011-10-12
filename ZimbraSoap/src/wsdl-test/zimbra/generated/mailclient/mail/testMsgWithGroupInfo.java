@@ -33,6 +33,7 @@ import zimbra.generated.mailclient.zm.testUrlAndValue;
  *         &lt;choice maxOccurs="unbounded" minOccurs="0">
  *           &lt;element name="mp" type="{urn:zimbraMail}partInfo"/>
  *           &lt;element name="shr" type="{urn:zimbraMail}shareNotification"/>
+ *           &lt;element name="dlSubs" type="{urn:zimbraMail}dlSubscriptionNotification"/>
  *         &lt;/choice>
  *         &lt;element name="content" type="{urn:zimbra}urlAndValue" minOccurs="0"/>
  *       &lt;/sequence>
@@ -62,7 +63,7 @@ import zimbra.generated.mailclient.zm.testUrlAndValue;
     "irt",
     "inv",
     "header",
-    "mpOrShr",
+    "mpOrShrOrDlSubs",
     "content"
 })
 public class testMsgWithGroupInfo
@@ -77,10 +78,11 @@ public class testMsgWithGroupInfo
     protected testInviteWithGroupInfo inv;
     protected List<testKeyValuePair> header;
     @XmlElements({
+        @XmlElement(name = "dlSubs", type = testDlSubscriptionNotification.class),
         @XmlElement(name = "mp", type = testPartInfo.class),
         @XmlElement(name = "shr", type = testShareNotification.class)
     })
-    protected List<Object> mpOrShr;
+    protected List<Object> mpOrShrOrDlSubs;
     protected testUrlAndValue content;
     @XmlAttribute(name = "id")
     protected String id;
@@ -282,33 +284,34 @@ public class testMsgWithGroupInfo
     }
 
     /**
-     * Gets the value of the mpOrShr property.
+     * Gets the value of the mpOrShrOrDlSubs property.
      * 
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the mpOrShr property.
+     * This is why there is not a <CODE>set</CODE> method for the mpOrShrOrDlSubs property.
      * 
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
-     *    getMpOrShr().add(newItem);
+     *    getMpOrShrOrDlSubs().add(newItem);
      * </pre>
      * 
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
+     * {@link testDlSubscriptionNotification }
      * {@link testPartInfo }
      * {@link testShareNotification }
      * 
      * 
      */
-    public List<Object> getMpOrShr() {
-        if (mpOrShr == null) {
-            mpOrShr = new ArrayList<Object>();
+    public List<Object> getMpOrShrOrDlSubs() {
+        if (mpOrShrOrDlSubs == null) {
+            mpOrShrOrDlSubs = new ArrayList<Object>();
         }
-        return this.mpOrShr;
+        return this.mpOrShrOrDlSubs;
     }
 
     /**

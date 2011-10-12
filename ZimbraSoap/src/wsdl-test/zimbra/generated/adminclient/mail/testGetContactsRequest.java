@@ -47,8 +47,8 @@ import zimbra.generated.adminclient.zm.testId;
 public class testGetContactsRequest {
 
     @XmlElements({
-        @XmlElement(name = "a", type = testAttributeName.class),
-        @XmlElement(name = "cn", type = testId.class)
+        @XmlElement(name = "cn", type = testId.class),
+        @XmlElement(name = "a", type = testAttributeName.class)
     })
     protected List<Object> aOrCn;
     @XmlAttribute(name = "sync")
@@ -80,8 +80,8 @@ public class testGetContactsRequest {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link testAttributeName }
      * {@link testId }
+     * {@link testAttributeName }
      * 
      * 
      */

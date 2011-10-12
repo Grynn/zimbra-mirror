@@ -22,6 +22,17 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;sequence>
  *         &lt;element ref="{urn:zimbraMail}meta" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="fr" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="acl" minOccurs="0">
+ *           &lt;complexType>
+ *             &lt;complexContent>
+ *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+ *                 &lt;sequence>
+ *                   &lt;element name="grant" type="{urn:zimbraMail}grant" maxOccurs="unbounded" minOccurs="0"/>
+ *                 &lt;/sequence>
+ *               &lt;/restriction>
+ *             &lt;/complexContent>
+ *           &lt;/complexType>
+ *         &lt;/element>
  *       &lt;/sequence>
  *       &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="name" type="{http://www.w3.org/2001/XMLSchema}string" />
@@ -33,6 +44,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;attribute name="rev" type="{http://www.w3.org/2001/XMLSchema}int" />
  *       &lt;attribute name="f" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="t" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="tn" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="desc" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="ct" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="descEnabled" type="{http://www.w3.org/2001/XMLSchema}boolean" />
@@ -50,7 +62,8 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "commonDocumentInfo", propOrder = {
     "meta",
-    "fr"
+    "fr",
+    "acl"
 })
 @XmlSeeAlso({
     testDocumentInfo.class,
@@ -60,6 +73,7 @@ public class testCommonDocumentInfo {
 
     protected List<testMailCustomMetadata> meta;
     protected String fr;
+    protected testCommonDocumentInfo.Acl acl;
     @XmlAttribute(name = "id")
     protected String id;
     @XmlAttribute(name = "name")
@@ -80,6 +94,8 @@ public class testCommonDocumentInfo {
     protected String f;
     @XmlAttribute(name = "t")
     protected String t;
+    @XmlAttribute(name = "tn")
+    protected String tn;
     @XmlAttribute(name = "desc")
     protected String desc;
     @XmlAttribute(name = "ct")
@@ -146,6 +162,30 @@ public class testCommonDocumentInfo {
      */
     public void setFr(String value) {
         this.fr = value;
+    }
+
+    /**
+     * Gets the value of the acl property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link testCommonDocumentInfo.Acl }
+     *     
+     */
+    public testCommonDocumentInfo.Acl getAcl() {
+        return acl;
+    }
+
+    /**
+     * Sets the value of the acl property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link testCommonDocumentInfo.Acl }
+     *     
+     */
+    public void setAcl(testCommonDocumentInfo.Acl value) {
+        this.acl = value;
     }
 
     /**
@@ -389,6 +429,30 @@ public class testCommonDocumentInfo {
     }
 
     /**
+     * Gets the value of the tn property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getTn() {
+        return tn;
+    }
+
+    /**
+     * Sets the value of the tn property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setTn(String value) {
+        this.tn = value;
+    }
+
+    /**
      * Gets the value of the desc property.
      * 
      * @return
@@ -554,6 +618,65 @@ public class testCommonDocumentInfo {
      */
     public void setCd(Long value) {
         this.cd = value;
+    }
+
+
+    /**
+     * <p>Java class for anonymous complex type.
+     * 
+     * <p>The following schema fragment specifies the expected content contained within this class.
+     * 
+     * <pre>
+     * &lt;complexType>
+     *   &lt;complexContent>
+     *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+     *       &lt;sequence>
+     *         &lt;element name="grant" type="{urn:zimbraMail}grant" maxOccurs="unbounded" minOccurs="0"/>
+     *       &lt;/sequence>
+     *     &lt;/restriction>
+     *   &lt;/complexContent>
+     * &lt;/complexType>
+     * </pre>
+     * 
+     * 
+     */
+    @XmlAccessorType(XmlAccessType.FIELD)
+    @XmlType(name = "", propOrder = {
+        "grant"
+    })
+    public static class Acl {
+
+        protected List<testGrant> grant;
+
+        /**
+         * Gets the value of the grant property.
+         * 
+         * <p>
+         * This accessor method returns a reference to the live list,
+         * not a snapshot. Therefore any modification you make to the
+         * returned list will be present inside the JAXB object.
+         * This is why there is not a <CODE>set</CODE> method for the grant property.
+         * 
+         * <p>
+         * For example, to add a new item, do as follows:
+         * <pre>
+         *    getGrant().add(newItem);
+         * </pre>
+         * 
+         * 
+         * <p>
+         * Objects of the following type(s) are allowed in the list
+         * {@link testGrant }
+         * 
+         * 
+         */
+        public List<testGrant> getGrant() {
+            if (grant == null) {
+                grant = new ArrayList<testGrant>();
+            }
+            return this.grant;
+        }
+
     }
 
 }

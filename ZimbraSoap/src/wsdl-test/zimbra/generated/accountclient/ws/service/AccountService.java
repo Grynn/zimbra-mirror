@@ -15,6 +15,8 @@ import zimbra.generated.accountclient.account.testChangePasswordRequest;
 import zimbra.generated.accountclient.account.testChangePasswordResponse;
 import zimbra.generated.accountclient.account.testCheckLicenseRequest;
 import zimbra.generated.accountclient.account.testCheckLicenseResponse;
+import zimbra.generated.accountclient.account.testCreateDistributionListRequest;
+import zimbra.generated.accountclient.account.testCreateDistributionListResponse;
 import zimbra.generated.accountclient.account.testCreateIdentityRequest;
 import zimbra.generated.accountclient.account.testCreateIdentityResponse;
 import zimbra.generated.accountclient.account.testCreateSignatureRequest;
@@ -23,10 +25,14 @@ import zimbra.generated.accountclient.account.testDeleteIdentityRequest;
 import zimbra.generated.accountclient.account.testDeleteIdentityResponse;
 import zimbra.generated.accountclient.account.testDeleteSignatureRequest;
 import zimbra.generated.accountclient.account.testDeleteSignatureResponse;
+import zimbra.generated.accountclient.account.testDistributionListActionRequest;
+import zimbra.generated.accountclient.account.testDistributionListActionResponse;
 import zimbra.generated.accountclient.account.testEndSessionRequest;
 import zimbra.generated.accountclient.account.testEndSessionResponse;
 import zimbra.generated.accountclient.account.testGetAccountInfoRequest;
 import zimbra.generated.accountclient.account.testGetAccountInfoResponse;
+import zimbra.generated.accountclient.account.testGetAccountMembershipRequest;
+import zimbra.generated.accountclient.account.testGetAccountMembershipResponse;
 import zimbra.generated.accountclient.account.testGetAllLocalesRequest;
 import zimbra.generated.accountclient.account.testGetAllLocalesResponse;
 import zimbra.generated.accountclient.account.testGetAvailableCsvFormatsRequest;
@@ -37,6 +43,8 @@ import zimbra.generated.accountclient.account.testGetAvailableSkinsRequest;
 import zimbra.generated.accountclient.account.testGetAvailableSkinsResponse;
 import zimbra.generated.accountclient.account.testGetDistributionListMembersRequest;
 import zimbra.generated.accountclient.account.testGetDistributionListMembersResponse;
+import zimbra.generated.accountclient.account.testGetDistributionListRequest;
+import zimbra.generated.accountclient.account.testGetDistributionListResponse;
 import zimbra.generated.accountclient.account.testGetIdentitiesRequest;
 import zimbra.generated.accountclient.account.testGetIdentitiesResponse;
 import zimbra.generated.accountclient.account.testGetInfoRequest;
@@ -69,6 +77,8 @@ import zimbra.generated.accountclient.account.testSearchCalendarResourcesRequest
 import zimbra.generated.accountclient.account.testSearchCalendarResourcesResponse;
 import zimbra.generated.accountclient.account.testSearchGalRequest;
 import zimbra.generated.accountclient.account.testSearchGalResponse;
+import zimbra.generated.accountclient.account.testSubscribeDistributionListRequest;
+import zimbra.generated.accountclient.account.testSubscribeDistributionListResponse;
 import zimbra.generated.accountclient.account.testSyncGalRequest;
 import zimbra.generated.accountclient.account.testSyncGalResponse;
 import zimbra.generated.accountclient.account.testUpdateProfileRequest;
@@ -84,8 +94,10 @@ import zimbra.generated.accountclient.account.testUpdateProfileResponse;
 @WebService(name = "AccountService", targetNamespace = "http://www.zimbra.com/wsdl/AccountService.wsdl")
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
 @XmlSeeAlso({
+    zimbra.generated.accountclient.mail.ObjectFactory.class,
+    zimbra.generated.accountclient.zm.ObjectFactory.class,
     zimbra.generated.accountclient.account.ObjectFactory.class,
-    zimbra.generated.accountclient.zm.ObjectFactory.class
+    zimbra.generated.accountclient.admin.ObjectFactory.class
 })
 public interface AccountService {
 
@@ -142,6 +154,18 @@ public interface AccountService {
      * 
      * @param parameters
      * @return
+     *     returns zimbra.generated.accountclient.account.testCreateDistributionListResponse
+     */
+    @WebMethod(action = "urn:zimbraAccount/CreateDistributionList")
+    @WebResult(name = "CreateDistributionListResponse", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+    public testCreateDistributionListResponse createDistributionListRequest(
+        @WebParam(name = "CreateDistributionListRequest", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+        testCreateDistributionListRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
      *     returns zimbra.generated.accountclient.account.testCreateIdentityResponse
      */
     @WebMethod(action = "urn:zimbraAccount/CreateIdentity")
@@ -190,6 +214,18 @@ public interface AccountService {
      * 
      * @param parameters
      * @return
+     *     returns zimbra.generated.accountclient.account.testDistributionListActionResponse
+     */
+    @WebMethod(action = "urn:zimbraAccount/DistributionListAction")
+    @WebResult(name = "DistributionListActionResponse", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+    public testDistributionListActionResponse distributionListActionRequest(
+        @WebParam(name = "DistributionListActionRequest", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+        testDistributionListActionRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
      *     returns zimbra.generated.accountclient.account.testEndSessionResponse
      */
     @WebMethod(action = "urn:zimbraAccount/EndSession")
@@ -209,6 +245,18 @@ public interface AccountService {
     public testGetAccountInfoResponse getAccountInfoRequest(
         @WebParam(name = "GetAccountInfoRequest", targetNamespace = "urn:zimbraAccount", partName = "parameters")
         testGetAccountInfoRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns zimbra.generated.accountclient.account.testGetAccountMembershipResponse
+     */
+    @WebMethod(action = "urn:zimbraAccount/GetAccountMembership")
+    @WebResult(name = "GetAccountMembershipResponse", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+    public testGetAccountMembershipResponse getAccountMembershipRequest(
+        @WebParam(name = "GetAccountMembershipRequest", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+        testGetAccountMembershipRequest parameters);
 
     /**
      * 
@@ -269,6 +317,18 @@ public interface AccountService {
     public testGetDistributionListMembersResponse getDistributionListMembersRequest(
         @WebParam(name = "GetDistributionListMembersRequest", targetNamespace = "urn:zimbraAccount", partName = "parameters")
         testGetDistributionListMembersRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns zimbra.generated.accountclient.account.testGetDistributionListResponse
+     */
+    @WebMethod(action = "urn:zimbraAccount/GetDistributionList")
+    @WebResult(name = "GetDistributionListResponse", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+    public testGetDistributionListResponse getDistributionListRequest(
+        @WebParam(name = "GetDistributionListRequest", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+        testGetDistributionListRequest parameters);
 
     /**
      * 
@@ -461,6 +521,18 @@ public interface AccountService {
     public testSearchGalResponse searchGalRequest(
         @WebParam(name = "SearchGalRequest", targetNamespace = "urn:zimbraAccount", partName = "parameters")
         testSearchGalRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns zimbra.generated.accountclient.account.testSubscribeDistributionListResponse
+     */
+    @WebMethod(action = "urn:zimbraAccount/SubscribeDistributionList")
+    @WebResult(name = "SubscribeDistributionListResponse", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+    public testSubscribeDistributionListResponse subscribeDistributionListRequest(
+        @WebParam(name = "SubscribeDistributionListRequest", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+        testSubscribeDistributionListRequest parameters);
 
     /**
      * 

@@ -28,15 +28,15 @@ import javax.xml.bind.annotation.XmlType;
  *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *                 &lt;sequence>
  *                   &lt;choice maxOccurs="unbounded" minOccurs="0">
- *                     &lt;element name="actionKeep" type="{urn:zimbraMail}filterActionKeep"/>
- *                     &lt;element name="actionDiscard" type="{urn:zimbraMail}filterActionDiscard"/>
- *                     &lt;element name="actionFileInto" type="{urn:zimbraMail}filterActionFileInto"/>
- *                     &lt;element name="actionFlag" type="{urn:zimbraMail}filterActionFlag"/>
- *                     &lt;element name="actionTag" type="{urn:zimbraMail}filterActionTag"/>
- *                     &lt;element name="actionRedirect" type="{urn:zimbraMail}filterActionRedirect"/>
- *                     &lt;element name="actionReply" type="{urn:zimbraMail}filterActionReply"/>
- *                     &lt;element name="actionNotify" type="{urn:zimbraMail}filterActionNotify"/>
- *                     &lt;element name="actionStop" type="{urn:zimbraMail}filterActionStop"/>
+ *                     &lt;element name="actionKeep" type="{urn:zimbraMail}keepAction"/>
+ *                     &lt;element name="actionDiscard" type="{urn:zimbraMail}discardAction"/>
+ *                     &lt;element name="actionFileInto" type="{urn:zimbraMail}fileIntoAction"/>
+ *                     &lt;element name="actionFlag" type="{urn:zimbraMail}flagAction"/>
+ *                     &lt;element name="actionTag" type="{urn:zimbraMail}tagAction"/>
+ *                     &lt;element name="actionRedirect" type="{urn:zimbraMail}redirectAction"/>
+ *                     &lt;element name="actionReply" type="{urn:zimbraMail}replyAction"/>
+ *                     &lt;element name="actionNotify" type="{urn:zimbraMail}notifyAction"/>
+ *                     &lt;element name="actionStop" type="{urn:zimbraMail}stopAction"/>
  *                   &lt;/choice>
  *                 &lt;/sequence>
  *               &lt;/restriction>
@@ -44,8 +44,8 @@ import javax.xml.bind.annotation.XmlType;
  *           &lt;/complexType>
  *         &lt;/element>
  *       &lt;/sequence>
- *       &lt;attribute name="name" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="active" use="required" type="{http://www.w3.org/2001/XMLSchema}boolean" />
+ *       &lt;attribute name="name" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="active" use="required" type="{http://www.w3.org/2001/XMLSchema}int" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -63,10 +63,10 @@ public class testFilterRule {
     @XmlElement(required = true)
     protected testFilterTests filterTests;
     protected testFilterRule.FilterActions filterActions;
-    @XmlAttribute(name = "name")
+    @XmlAttribute(name = "name", required = true)
     protected String name;
     @XmlAttribute(name = "active", required = true)
-    protected boolean active;
+    protected int active;
 
     /**
      * Gets the value of the filterTests property.
@@ -144,7 +144,7 @@ public class testFilterRule {
      * Gets the value of the active property.
      * 
      */
-    public boolean isActive() {
+    public int getActive() {
         return active;
     }
 
@@ -152,7 +152,7 @@ public class testFilterRule {
      * Sets the value of the active property.
      * 
      */
-    public void setActive(boolean value) {
+    public void setActive(int value) {
         this.active = value;
     }
 
@@ -168,15 +168,15 @@ public class testFilterRule {
      *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
      *       &lt;sequence>
      *         &lt;choice maxOccurs="unbounded" minOccurs="0">
-     *           &lt;element name="actionKeep" type="{urn:zimbraMail}filterActionKeep"/>
-     *           &lt;element name="actionDiscard" type="{urn:zimbraMail}filterActionDiscard"/>
-     *           &lt;element name="actionFileInto" type="{urn:zimbraMail}filterActionFileInto"/>
-     *           &lt;element name="actionFlag" type="{urn:zimbraMail}filterActionFlag"/>
-     *           &lt;element name="actionTag" type="{urn:zimbraMail}filterActionTag"/>
-     *           &lt;element name="actionRedirect" type="{urn:zimbraMail}filterActionRedirect"/>
-     *           &lt;element name="actionReply" type="{urn:zimbraMail}filterActionReply"/>
-     *           &lt;element name="actionNotify" type="{urn:zimbraMail}filterActionNotify"/>
-     *           &lt;element name="actionStop" type="{urn:zimbraMail}filterActionStop"/>
+     *           &lt;element name="actionKeep" type="{urn:zimbraMail}keepAction"/>
+     *           &lt;element name="actionDiscard" type="{urn:zimbraMail}discardAction"/>
+     *           &lt;element name="actionFileInto" type="{urn:zimbraMail}fileIntoAction"/>
+     *           &lt;element name="actionFlag" type="{urn:zimbraMail}flagAction"/>
+     *           &lt;element name="actionTag" type="{urn:zimbraMail}tagAction"/>
+     *           &lt;element name="actionRedirect" type="{urn:zimbraMail}redirectAction"/>
+     *           &lt;element name="actionReply" type="{urn:zimbraMail}replyAction"/>
+     *           &lt;element name="actionNotify" type="{urn:zimbraMail}notifyAction"/>
+     *           &lt;element name="actionStop" type="{urn:zimbraMail}stopAction"/>
      *         &lt;/choice>
      *       &lt;/sequence>
      *     &lt;/restriction>
@@ -193,17 +193,17 @@ public class testFilterRule {
     public static class FilterActions {
 
         @XmlElements({
-            @XmlElement(name = "actionTag", type = testFilterActionTag.class),
-            @XmlElement(name = "actionKeep", type = testFilterActionKeep.class),
-            @XmlElement(name = "actionNotify", type = testFilterActionNotify.class),
-            @XmlElement(name = "actionRedirect", type = testFilterActionRedirect.class),
-            @XmlElement(name = "actionFileInto", type = testFilterActionFileInto.class),
-            @XmlElement(name = "actionFlag", type = testFilterActionFlag.class),
-            @XmlElement(name = "actionReply", type = testFilterActionReply.class),
-            @XmlElement(name = "actionDiscard", type = testFilterActionDiscard.class),
-            @XmlElement(name = "actionStop", type = testFilterActionStop.class)
+            @XmlElement(name = "actionTag", type = testTagAction.class),
+            @XmlElement(name = "actionFlag", type = testFlagAction.class),
+            @XmlElement(name = "actionKeep", type = testKeepAction.class),
+            @XmlElement(name = "actionFileInto", type = testFileIntoAction.class),
+            @XmlElement(name = "actionNotify", type = testNotifyAction.class),
+            @XmlElement(name = "actionDiscard", type = testDiscardAction.class),
+            @XmlElement(name = "actionStop", type = testStopAction.class),
+            @XmlElement(name = "actionReply", type = testReplyAction.class),
+            @XmlElement(name = "actionRedirect", type = testRedirectAction.class)
         })
-        protected List<Object> actionKeepOrActionDiscardOrActionFileInto;
+        protected List<testFilterAction> actionKeepOrActionDiscardOrActionFileInto;
 
         /**
          * Gets the value of the actionKeepOrActionDiscardOrActionFileInto property.
@@ -223,21 +223,21 @@ public class testFilterRule {
          * 
          * <p>
          * Objects of the following type(s) are allowed in the list
-         * {@link testFilterActionTag }
-         * {@link testFilterActionKeep }
-         * {@link testFilterActionNotify }
-         * {@link testFilterActionRedirect }
-         * {@link testFilterActionFileInto }
-         * {@link testFilterActionFlag }
-         * {@link testFilterActionReply }
-         * {@link testFilterActionDiscard }
-         * {@link testFilterActionStop }
+         * {@link testTagAction }
+         * {@link testFlagAction }
+         * {@link testKeepAction }
+         * {@link testFileIntoAction }
+         * {@link testNotifyAction }
+         * {@link testDiscardAction }
+         * {@link testStopAction }
+         * {@link testReplyAction }
+         * {@link testRedirectAction }
          * 
          * 
          */
-        public List<Object> getActionKeepOrActionDiscardOrActionFileInto() {
+        public List<testFilterAction> getActionKeepOrActionDiscardOrActionFileInto() {
             if (actionKeepOrActionDiscardOrActionFileInto == null) {
-                actionKeepOrActionDiscardOrActionFileInto = new ArrayList<Object>();
+                actionKeepOrActionDiscardOrActionFileInto = new ArrayList<testFilterAction>();
             }
             return this.actionKeepOrActionDiscardOrActionFileInto;
         }

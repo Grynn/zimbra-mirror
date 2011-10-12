@@ -7,6 +7,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlValue;
+import zimbra.generated.accountclient.admin.testAttr;
 
 
 /**
@@ -31,7 +32,8 @@ import javax.xml.bind.annotation.XmlValue;
     "value"
 })
 @XmlSeeAlso({
-    testContactAttr.class
+    testContactAttr.class,
+    testAttr.class
 })
 public class testKeyValuePair {
 

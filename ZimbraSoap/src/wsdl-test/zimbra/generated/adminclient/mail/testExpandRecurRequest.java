@@ -47,8 +47,8 @@ public class testExpandRecurRequest {
     protected List<testCalTZInfo> tz;
     @XmlElements({
         @XmlElement(name = "except", type = testExpandedRecurrenceException.class),
-        @XmlElement(name = "comp", type = testExpandedRecurrenceInvite.class),
-        @XmlElement(name = "cancel", type = testExpandedRecurrenceCancel.class)
+        @XmlElement(name = "cancel", type = testExpandedRecurrenceCancel.class),
+        @XmlElement(name = "comp", type = testExpandedRecurrenceInvite.class)
     })
     protected List<testExpandedRecurrenceComponent> cancelOrCompOrExcept;
     @XmlAttribute(name = "s", required = true)
@@ -104,8 +104,8 @@ public class testExpandRecurRequest {
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link testExpandedRecurrenceException }
-     * {@link testExpandedRecurrenceInvite }
      * {@link testExpandedRecurrenceCancel }
+     * {@link testExpandedRecurrenceInvite }
      * 
      * 
      */
