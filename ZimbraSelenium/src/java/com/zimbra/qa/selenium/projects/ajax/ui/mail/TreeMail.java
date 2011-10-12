@@ -42,7 +42,7 @@ public class TreeMail extends AbsTree {
 		public final static String zTreeItems = new StringBuffer("//td[text()='").
 		append(stringToReplace).append("']").toString();
 
-		public static final String createNewFolderButton = "css=div[id='zov__main_Mail'] td[id='ztih__main_Mail__FOLDER_headerCell'] td[id$='_title']";
+		public static final String createNewFolderButton = "css=div[id='zov__main_Mail'] td[id='ztih__main_Mail__FOLDER_optCell'] td[id$='_title']";
 		public static final String ztih__main_Mail__ZIMLET_ID = "ztih__main_Mail__ZIMLET";
 		public static final String ztih__main_Mail__ZIMLET_ID_Desktop = "zt__main_Mail_zimlets__ZIMLET";
 		public static final String ztih__main_Mail__ZIMLET_nodeCell_ID = "ztih__main_Mail__ZIMLET_nodeCell";
@@ -526,6 +526,102 @@ public class TreeMail extends AbsTree {
 		throw new HarnessException("implement me");
 	}
 
+	public AbsPage zPressPulldown(Button pulldown, Button option) throws HarnessException {
+		logger.info(myPageName() + " zPressPulldown("+ pulldown +", "+ option +")");
+
+		tracer.trace("Click "+ pulldown +" then "+ option);
+
+		if ( pulldown == null )
+			throw new HarnessException("Pulldown cannot be null");
+
+		if ( option == null )
+			throw new HarnessException("Option cannot be null");
+
+
+		AbsPage page = null;
+		String pulldownLocator = null;
+		String optionLocator = null;
+		
+		
+		if ( pulldown == Button.B_TREE_FOLDERS_OPTIONS ) {
+			
+			pulldownLocator = "css=div[id='zov__main_Mail'] td[id='ztih__main_Mail__FOLDER_optCell'] td[id$='_title']";
+			
+			if ( option == Button.B_TREE_NEWFOLDER ) {
+				
+				optionLocator = "css=div[id='ZmActionMenu_mail_FOLDER'] div[id='NEW_FOLDER'] td[id$='_title']";
+				page = new DialogCreateFolder(MyApplication, ((AppAjaxClient)MyApplication).zPageMail);
+			
+			} else {
+				throw new HarnessException("Pulldown/Option "+ pulldown +"/"+ option +" not implemented");
+			}
+
+			// FALL THROUGH
+			
+		} else if ( pulldown == Button.B_TREE_TAGS_OPTIONS ) {
+			
+			pulldownLocator = "css=div[id='zov__main_Mail'] td[id='ztih__main_Mail__TAG_optCell'] td[id$='_title']";
+			
+			if ( option == Button.B_TREE_NEWTAG ) {
+
+				optionLocator = "css=div[id='ZmActionMenu_mail_TAG'] div[id='NEW_TAG'] td[id$='_title']";
+				page = new DialogTag(MyApplication,((AppAjaxClient) MyApplication).zPageMail);
+
+			} else {
+				throw new HarnessException("Pulldown/Option "+ pulldown +"/"+ option +" not implemented");
+			}
+
+			// FALL THROUGH
+			
+		} else {
+			throw new HarnessException("Pulldown/Option "+ pulldown +"/"+ option +" not implemented");
+		}
+		
+		
+
+		// Default behavior
+		if (pulldownLocator != null) {
+
+			// Make sure the locator exists
+			if (!this.sIsElementPresent(pulldownLocator)) {
+				throw new HarnessException("Button " + pulldown + " option " + option + " pulldownLocator " + pulldownLocator + " not present!");
+			}
+
+			// 8.0 change ... need zClickAt()
+			// this.zClick(pulldownLocator);
+			this.zClickAt(pulldownLocator, "0,0");
+
+			// If the app is busy, wait for it to become active
+			zWaitForBusyOverlay();
+
+			if (optionLocator != null) {
+
+				// Make sure the locator exists
+				if (!this.sIsElementPresent(optionLocator)) {
+					throw new HarnessException("Button " + pulldown + " option " + option + " optionLocator " + optionLocator + " not present!");
+				}
+
+				// 8.0 change ... need zClickAt()
+				// this.zClick(optionLocator);
+				this.zClickAt(optionLocator, "0,0");
+
+				// If the app is busy, wait for it to become active
+				zWaitForBusyOverlay();
+			}
+
+			// If we click on pulldown/option and the page is specified, then
+			// wait for the page to go active
+			if (page != null) {
+				page.zWaitForActive();
+			}
+		}
+		
+		
+		// Return the specified page, or null if not set
+		return (page);
+
+
+	}
 	/* (non-Javadoc)
 	 * @see com.zimbra.qa.selenium.framework.ui.AbsTree#zPressButton(com.zimbra.qa.selenium.framework.ui.Button)
 	 */
@@ -543,18 +639,12 @@ public class TreeMail extends AbsTree {
 
 		if ( button == Button.B_TREE_NEWFOLDER ) {
 			
-			locator = Locators.createNewFolderButton;
-			page = new DialogCreateFolder(MyApplication, ((AppAjaxClient)MyApplication).zPageMail);
+			// 8.0 behavior - new Pulldown menu
+			return (zPressPulldown(Button.B_TREE_FOLDERS_OPTIONS, Button.B_TREE_NEWFOLDER));
 
 		}else if (button == Button.B_TREE_NEWTAG) {
 
-			locator = Locators.zNewTagIcon;
-
-			if (!this.sIsElementPresent(locator)) {
-				throw new HarnessException("Unable to locator folder in tree "
-						+ locator);
-			}
-			page = new DialogTag(MyApplication,((AppAjaxClient) MyApplication).zPageMail);
+			return (zPressPulldown(Button.B_TREE_TAGS_OPTIONS, Button.B_TREE_NEWTAG));
 
 		} else if ( button == Button.B_TREE_FIND_SHARES ) {
 
