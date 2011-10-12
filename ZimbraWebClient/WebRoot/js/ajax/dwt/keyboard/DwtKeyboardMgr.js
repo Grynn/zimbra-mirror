@@ -72,6 +72,9 @@ DwtKeyboardMgr = function(shell) {
 	this._evtMgr = new AjxEventMgr();
 };
 
+DwtKeyboardMgr.prototype.isDwtKeyboardMgr = true;
+DwtKeyboardMgr.prototype.toString = function() { return "DwtKeyboardMgr"; };
+
 /**@private*/
 DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED	= 1;
 /**@private*/
@@ -88,7 +91,6 @@ DwtKeyboardMgr.FOCUS_FIELD_ID = "kbff";
  * <ul>
  * <li>Alt or Ctrl or Meta plus another key</li>
  * <li>Esc</li>
- * <li>Enter within a text input (but not a textarea)</li>
  * </ul>
  * 
  * @param {DwtKeyEvent}	ev	the key event
@@ -96,20 +98,7 @@ DwtKeyboardMgr.FOCUS_FIELD_ID = "kbff";
  */
 DwtKeyboardMgr.isPossibleInputShortcut =
 function(ev) {
-    var target = DwtUiEvent.getTarget(ev);
-    return (!DwtKeyMap.IS_MODIFIER[ev.keyCode] &&
-			(ev.keyCode == 27 || DwtKeyMapMgr.hasModifier(ev)) ||
-			(target && target.nodeName.toUpperCase() == "INPUT" && (ev.keyCode == 13 || ev.keyCode == 3)));
-};
-
-/**
- * Returns the string representation of this object.
- * 
- * @return	{string}	the string representation of this object
- */
-DwtKeyboardMgr.prototype.toString = 
-function() {
-	return "DwtKeyboardMgr";
+    return (!DwtKeyMap.IS_MODIFIER[ev.keyCode] && (ev.keyCode == 27 || DwtKeyMapMgr.hasModifier(ev)));
 };
 
 /**

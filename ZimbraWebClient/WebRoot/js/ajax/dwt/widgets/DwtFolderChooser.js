@@ -32,13 +32,11 @@ DwtFolderChooser = function(params) {
 	params.className = params.className || "DwtFolderChooser";
 	DwtComposite.call(this, params);
 
-
 	this._overview = {};
 	this._opc = appCtxt.getOverviewController();
 	this._treeView = {};
 	this._folderTreeDivId = this._htmlElId + "_folderTreeDivId";
 
-	this._skipNotifyOnPage = false;
 	this._uuid = Dwt.getNextId();
 
 	this._treeViewListener = this._treeViewSelectionListener.bind(this);
@@ -46,34 +44,36 @@ DwtFolderChooser = function(params) {
 	var moveMenu = params.parent;
 	moveMenu._addItem(this, params.index); //this is what DwtMenuItem does. Allows this item to be in the menu items table - better for layout purposes such as consistent widths
 
-	//add separator menu item on the move menu (the parent)
-	new DwtMenuItem({parent:moveMenu, style:DwtMenuItem.SEPARATOR_STYLE});
-
-	// add static "New Folder" menu item
-	var newFolderItem = this._newButton = new DwtMenuItem({parent:moveMenu, id: moveMenu.getHTMLElId() + "|NEWFOLDER"});
-	var newText = ZmMsg.newFolder;
-	var newImage = "NewFolder";
-	var newShortcut = ZmKeyMap.NEW_FOLDER;
-	var appName = appCtxt.getCurrentAppName();
-	if (appName == ZmApp.CALENDAR) {
-		newText = ZmMsg.newCalendar;
-		newImage = "NewAppointment";
-		newShortcut = ZmKeyMap.NEW_CALENDAR;
+	if (!params.noNewItem) {
+		//add separator menu item on the move menu (the parent)
+		new DwtMenuItem({parent:moveMenu, style:DwtMenuItem.SEPARATOR_STYLE});
+	
+		// add static "New Folder" menu item
+		var newFolderItem = this._newButton = new DwtMenuItem({parent:moveMenu, id: moveMenu.getHTMLElId() + "|NEWFOLDER"});
+		var newText = ZmMsg.newFolder;
+		var newImage = "NewFolder";
+		var newShortcut = ZmKeyMap.NEW_FOLDER;
+		var appName = appCtxt.getCurrentAppName();
+		if (appName == ZmApp.CALENDAR) {
+			newText = ZmMsg.newCalendar;
+			newImage = "NewAppointment";
+			newShortcut = ZmKeyMap.NEW_CALENDAR;
+		}
+		if (appName == ZmApp.TASKS) {
+			newText = ZmMsg.newTaskFolder;
+			newImage = "NewTaskList";
+		}
+		if (appName == ZmApp.CONTACTS) {
+			newText = ZmMsg.newAddrBook;
+			newImage = "NewContactsFolder";
+		}
+	
+		newFolderItem.setText(newText);
+		newFolderItem.setImage(newImage);
+		newFolderItem.setShortcut(appCtxt.getShortcutHint(this._keyMap, newShortcut));
+	
+		newFolderItem.addSelectionListener(this._showNewDialog.bind(this));
 	}
-	if (appName == ZmApp.TASKS) {
-		newText = ZmMsg.newTaskFolder;
-		newImage = "NewTaskList";
-	}
-	if (appName == ZmApp.CONTACTS) {
-		newText = ZmMsg.newAddrBook;
-		newImage = "NewContactsFolder";
-	}
-
-	newFolderItem.setText(newText);
-	newFolderItem.setImage(newImage);
-	newFolderItem.setShortcut(appCtxt.getShortcutHint(this._keyMap, newShortcut));
-
-	newFolderItem.addSelectionListener(this._showNewDialog.bind(this));
 
 	this._init();
 
@@ -82,38 +82,9 @@ DwtFolderChooser = function(params) {
 DwtFolderChooser.prototype = new DwtComposite;
 DwtFolderChooser.prototype.constructor = DwtFolderChooser;
 
+DwtFolderChooser.prototype.isDwtFolderChooser = true;
+DwtFolderChooser.prototype.toString = function() { return "DwtFolderChooser"; };
 
-/**
- * Returns a string representation of the object.
- * 
- * @return		{string}		a string representation of the object
- */
-DwtFolderChooser.prototype.toString = 
-function() {
-	return "DwtFolderChooser";
-};
-
-
-/**
- * Sets the skip notify on page. This method notify (or not) selection when paging arrow buttons
- * are clicked.
- *
- * @param	{boolean}	skip		if <code>true</code>, do not notify selection
- */
-DwtFolderChooser.prototype.setSkipNotifyOnPage =
-function(skip) {
-	this._skipNotifyOnPage = skip;
-};
-
-/**
- * Gets the skip notify on page setting.
- * 
- * @return	{boolean}	<code>true</code>, do not notify selection
- */
-DwtFolderChooser.prototype.getSkipNotifyOnPage = 
-function() {
-	return this._skipNotifyOnPage;
-};
 
 /**
  *
@@ -126,7 +97,6 @@ function(params, selectionCallback) {
 	this._overviewId = params.overviewId;
 
 	ZmChooseFolderDialog.prototype.popup.call(this, params, true);
-
 };
 
 DwtFolderChooser.prototype._getNewButton =
