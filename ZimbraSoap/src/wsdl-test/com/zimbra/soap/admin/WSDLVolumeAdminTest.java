@@ -120,12 +120,12 @@ public class WSDLVolumeAdminTest {
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
         testGetCurrentVolumesResponse resp = eif.getCurrentVolumesRequest(req);
         Assert.assertNotNull("GetCurrentVolumesResponse object", resp);
-        List <testVolumeTypeAndId> volumes = resp.getVolume();
+        List<testCurrentVolumeInfo> volumes = resp.getVolume();
         Assert.assertNotNull("GetCurrentVolumesResponse list of volumes", volumes);
         int len = volumes.size();
         Assert.assertTrue("Number of GetCurrentVolumesResponse children is " +
                 len + " - should be at least 2", len >= 2);
-        testVolumeTypeAndId firstVolume = volumes.get(0);
+        testCurrentVolumeInfo firstVolume = volumes.get(0);
         short id = firstVolume.getId();
         Assert.assertTrue("First Volume id is " +
                 id + " - should be at least 1", id >= 1);
