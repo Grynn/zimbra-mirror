@@ -104,6 +104,7 @@ import org.junit.Assert;
 public class Utility {
     private static final String DEFAULT_PASS = "test123";
     private static AccountService acctSvcEIF = null;
+    private static AccountService nvAcctSvcEIF = null;
     private static AdminService adminSvcEIF = null;
     private static AdminService nvAdminSvcEIF = null;
     private static MailService mailSvcEIF = null;
@@ -186,6 +187,14 @@ public class Utility {
             setAcctSvcEIF(acctSvc.getAccountServicePort(feature));
         }
         return acctSvcEIF;
+    }
+
+    public static AccountService getNonValidatingAcctSvcEIF() throws Exception {
+        if (nvAcctSvcEIF == null) {
+            AccountService_Service acctSvc = new AccountService_Service();
+            nvAcctSvcEIF = acctSvc.getAccountServicePort();
+        }
+        return nvAcctSvcEIF;
     }
 
     public static void addSoapAdminAuthHeader(WSBindingProvider bp) throws Exception {

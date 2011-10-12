@@ -11,10 +11,28 @@
             </jaxb:nameXmlTransform>
         </jaxb:schemaBindings>
     </jaxb:bindings>
+    <jaxb:bindings schemaLocation="../../build/classes/com/zimbra/soap/zimbraAdmin.xsd"
+        node="//xsd:schema[@targetNamespace='urn:zimbraAdmin']">
+        <jaxb:schemaBindings>
+            <jaxb:package name="zimbra.generated.accountclient.admin" />
+            <jaxb:nameXmlTransform>
+                <jaxb:typeName prefix="test" />
+            </jaxb:nameXmlTransform>
+        </jaxb:schemaBindings>
+    </jaxb:bindings>
     <jaxb:bindings schemaLocation="../../build/classes/com/zimbra/soap/zimbraAccount.xsd"
         node="//xsd:schema[@targetNamespace='urn:zimbraAccount']">
         <jaxb:schemaBindings>
             <jaxb:package name="zimbra.generated.accountclient.account" />
+            <jaxb:nameXmlTransform>
+                <jaxb:typeName prefix="test" />
+            </jaxb:nameXmlTransform>
+        </jaxb:schemaBindings>
+    </jaxb:bindings>
+    <jaxb:bindings schemaLocation="../../build/classes/com/zimbra/soap/zimbraMail.xsd"
+        node="//xsd:schema[@targetNamespace='urn:zimbraMail']">
+        <jaxb:schemaBindings>
+            <jaxb:package name="zimbra.generated.accountclient.mail" />
             <jaxb:nameXmlTransform>
                 <jaxb:typeName prefix="test" />
             </jaxb:nameXmlTransform>
