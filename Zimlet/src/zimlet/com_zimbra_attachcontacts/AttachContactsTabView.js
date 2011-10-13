@@ -381,7 +381,7 @@ function(items) {
                 html[idx++] = "</td>";
 
                 html[idx++] = "<td><span style=\"font-weight:bold;\">";
-                html[idx++] = AjxStringUtil.htmlEncode(name);
+                html[idx++] = AjxStringUtil.htmlEncode(name || ZmMsg.noName);
                 html[idx++] = "</span></td></tr>";
 
                 for (var j=0; j<fields.length; j++) {
