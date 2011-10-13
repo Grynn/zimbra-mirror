@@ -57,6 +57,7 @@ public class FormTaskNew extends AbsForm {
 		public static final String zCancelTask = "zb__TKE-1__CANCEL_left_icon";
 		public static final String zTaskOptionDropDown = "css=div[id^='ztb__TKE'] div[id$='__COMPOSE_OPTIONS'] td[id$='__COMPOSE_OPTIONS_dropdown']>div";
 		public static final String zTaskFormatAsHtml="css=div[id$='_FORMAT_HTML']";
+		public static final String zTaskFormatAsText="css=div[id$='_FORMAT_TEXT']";
 	
 		
 	}
@@ -230,7 +231,16 @@ public class FormTaskNew extends AbsForm {
 				optionLocator=Locators.zTaskFormatAsHtml;
 				page=this;
 				
+			}else if(option==Button.O_OPTION_FORMAT_AS_TEXT){
+				pulldownLocator=Locators.zTaskOptionDropDown;
+				optionLocator=Locators.zTaskFormatAsText;
+				page = new DialogWarning(
+						DialogWarning.DialogWarningID.SwitchingToTextWillDiscardHtmlFormatting,
+						this.MyApplication,
+						((AppAjaxClient)this.MyApplication).zPageTasks);
+
 			}
+			
 			
 		}else {
 		
