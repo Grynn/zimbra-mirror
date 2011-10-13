@@ -107,6 +107,106 @@ public class TreeTasks extends AbsTree {
 		return (page);
 
 	}
+	
+	public AbsPage zPressPulldown(Button pulldown, Button option)
+	throws HarnessException {
+		logger.info(myPageName() + " zPressPulldown(" + pulldown + ", "
+				+ option + ")");
+
+		tracer.trace("Click " + pulldown + " then " + option);
+
+		if (pulldown == null)
+			throw new HarnessException("Pulldown cannot be null");
+
+		if (option == null)
+			throw new HarnessException("Option cannot be null");
+
+		AbsPage page = null;
+		String pulldownLocator = null;
+		String optionLocator = null;
+
+		if (pulldown == Button.B_TREE_FOLDERS_OPTIONS) {
+
+			pulldownLocator = "css=div[id='zov__main_Tasks'] td[id='ztih__main_Tasks__TASK_optCell'] td[id$='_title']";
+
+			if (option == Button.B_TREE_NEWTASKLIST) {
+
+				optionLocator = "css=div[id='ZmActionMenu_tasks_TASK'] div[id='NEW_TASK_FOLDER'] td[id$='_title']";
+				page = new DialogCreateTaskFolder(MyApplication,((AppAjaxClient) MyApplication).zPageTasks);
+
+			} else {
+				throw new HarnessException("Pulldown/Option " + pulldown + "/"
+						+ option + " not implemented");
+			}
+
+			// FALL THROUGH
+
+		} else if (pulldown == Button.B_TREE_TAGS_OPTIONS) {
+
+			pulldownLocator = "css=div[id='zov__main_Tasks'] td[id='ztih__main_Tasks__TAG_optCell'] td[id$='_title']";
+
+			if (option == Button.B_TREE_NEWTAG) {
+
+				optionLocator = "css=div[id='ZmActionMenu_tasks_TAG'] div[id='NEW_TAG'] td[id$='_title']";
+				page = new DialogTag(MyApplication,((AppAjaxClient) MyApplication).zPageTasks);
+
+			} else {
+				throw new HarnessException("Pulldown/Option " + pulldown + "/"
+						+ option + " not implemented");
+			}
+
+			// FALL THROUGH
+
+		} else {
+			throw new HarnessException("Pulldown/Option " + pulldown + "/"
+					+ option + " not implemented");
+		}
+
+		// Default behavior
+		if (pulldownLocator != null) {
+
+			// Make sure the locator exists
+			if (!this.sIsElementPresent(pulldownLocator)) {
+				throw new HarnessException("Button " + pulldown + " option "
+						+ option + " pulldownLocator " + pulldownLocator
+						+ " not present!");
+			}
+
+			// 8.0 change ... need zClickAt()
+			// this.zClick(pulldownLocator);
+			this.zClickAt(pulldownLocator, "0,0");
+
+			// If the app is busy, wait for it to become active
+			zWaitForBusyOverlay();
+
+			if (optionLocator != null) {
+
+				// Make sure the locator exists
+				if (!this.sIsElementPresent(optionLocator)) {
+					throw new HarnessException("Button " + pulldown
+							+ " option " + option + " optionLocator "
+							+ optionLocator + " not present!");
+				}
+
+				// 8.0 change ... need zClickAt()
+				// this.zClick(optionLocator);
+				this.zClickAt(optionLocator, "0,0");
+
+				// If the app is busy, wait for it to become active
+				zWaitForBusyOverlay();
+			}
+
+			// If we click on pulldown/option and the page is specified, then
+			// wait for the page to go active
+			if (page != null) {
+				page.zWaitForActive();
+			}
+		}
+
+		// Return the specified page, or null if not set
+		return (page);
+
+	}
 
 	/* (non-Javadoc)
 	 * @see framework.ui.AbsTree#zTreeItem(framework.ui.Action, framework.items.FolderItem)

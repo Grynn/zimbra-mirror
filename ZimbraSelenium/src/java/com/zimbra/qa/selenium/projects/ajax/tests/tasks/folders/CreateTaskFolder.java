@@ -32,7 +32,8 @@ public class CreateTaskFolder extends AjaxCommonTest {
 		_folderName = "taskfolder" + ZimbraSeleniumProperties.getUniqueString();
 		
 		//Create folder
-		DialogCreateTaskFolder createTaskFolderDialog =(DialogCreateTaskFolder)app.zTreeTasks.zPressButton(Button.B_TREE_NEWTASKLIST);
+		//DialogCreateTaskFolder createTaskFolderDialog =(DialogCreateTaskFolder)app.zTreeTasks.zPressButton(Button.B_TREE_NEWTASKLIST);
+		DialogCreateTaskFolder createTaskFolderDialog =(DialogCreateTaskFolder)app.zTreeTasks.zPressPulldown(Button.B_TREE_FOLDERS_OPTIONS, Button.B_TREE_NEWTASKLIST);
 		
 		createTaskFolderDialog.zEnterFolderName(_folderName);
 		createTaskFolderDialog.zClickButton(Button.B_OK);
