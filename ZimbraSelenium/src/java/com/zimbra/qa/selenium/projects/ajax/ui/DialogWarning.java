@@ -46,6 +46,9 @@ public class DialogWarning extends AbsDialog {
 
 		public static final DialogWarningID PreferencesSaveChanges = new DialogWarningID("YesNoCancel");
 		public static final DialogWarningID SwitchingToTextWillDiscardHtmlFormatting = new DialogWarningID("css=div[class='DwtMsgDialog']");
+
+		public static final DialogWarningID SmsVerificationCodeSent = new DialogWarningID("ZmMsgDialog");
+
 		protected String Id;
 		protected DialogWarningID(String id) {
 			Id = id;
