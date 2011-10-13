@@ -45,7 +45,7 @@ public class DialogWarning extends AbsDialog {
 		public static final DialogWarningID QuickCommandConfirmDelete = new DialogWarningID("ZmQuickCommandConfirmation1");
 
 		public static final DialogWarningID PreferencesSaveChanges = new DialogWarningID("YesNoCancel");
-
+		public static final DialogWarningID SwitchingToTextWillDiscardHtmlFormatting = new DialogWarningID("css=div[class='DwtMsgDialog']");
 		protected String Id;
 		protected DialogWarningID(String id) {
 			Id = id;
