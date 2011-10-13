@@ -73,6 +73,8 @@ function(countInfo) {
 	if (this._initialized) {
 		if (this._countCell) {
 			this._countCell.innerHTML = countInfo;
+            // only make css take effect when it has value;
+            this._countCell.className = "AdminTreeItem-Count";
 		}
 		this._countInfo = countInfo;
 	} else {
