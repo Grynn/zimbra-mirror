@@ -144,7 +144,7 @@ public class DialogMove extends AbsDialog {
 		   if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
 		      locator = "css=div[id='" + Locators.zDialogId+ "'] td[id^='zti__" +
 		            MyApplication.zGetActiveAccount().EmailAddress +
-		            ":ZmChooseFolderDialog_Mail__'][id$=':" +
+		            ":ZmChooseFolderDialog_Mail__'][id$='" +
 		            folder.getId() +
 		            "_textCell']"; 
 		   } else {

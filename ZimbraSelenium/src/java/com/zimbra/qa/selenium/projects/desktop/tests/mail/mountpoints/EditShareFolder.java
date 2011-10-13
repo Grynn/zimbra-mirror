@@ -10,6 +10,7 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
+import com.zimbra.qa.selenium.framework.util.ZimbraAccount.SOAP_DESTINATION_HOST_TYPE;
 import com.zimbra.qa.selenium.projects.desktop.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.desktop.ui.DialogShare;
 import com.zimbra.qa.selenium.projects.desktop.ui.DialogShare.ShareRole;
@@ -44,7 +45,11 @@ public class EditShareFolder extends AjaxCommonTest{
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 
 		// Make sure the folder was created on the server
-		FolderItem subfolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), foldername);
+		FolderItem subfolder = FolderItem.importFromSOAP(
+		      app.zGetActiveAccount(),
+		      foldername,
+		      SOAP_DESTINATION_HOST_TYPE.CLIENT,
+		      app.zGetActiveAccount().EmailAddress);
 		ZAssert.assertNotNull(subfolder, "Verify the folder exists on the server");
 
 
