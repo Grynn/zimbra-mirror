@@ -261,11 +261,19 @@ function (treeDataItem) {
 }
 
 ZaTree.prototype._buildNodeItem =
-function(showRootNode, doCheck) {
+function(showRootNode, isRoot) {
     var ti, nextTi, key, currentRoot;
-    currentRoot =  new ZaTreeItem({parent:this,className:"overviewHeader",id:showRootNode.id, forceNotifySelection:true});
+    var clsName;
+    if (isRoot) {
+        clsName = "rootOverviewHeader";
+    } else {
+        clsName = "overviewHeader";
+    }
+
+    currentRoot =  new ZaTreeItem({parent:this,className:clsName,id:showRootNode.id, forceNotifySelection:true});
 	currentRoot.enableSelection(false);
 	currentRoot.setText(showRootNode.text);
+    currentRoot.setImage(showRootNode.image);
 	currentRoot.setData(ZaOverviewPanelController._TID, showRootNode.mappingId);
     currentRoot.setData("dataItem", showRootNode);
     for (key in showRootNode._data) {
@@ -276,7 +284,7 @@ function(showRootNode, doCheck) {
     for (i = 0; i < showRootNode.childrenData.size(); i++) {
         var currentAddNode =  showRootNode.childrenData.get(i);
         // TODO improved latter
-        if (doCheck) {
+        if (isRoot) {
             if (currentAddNode.text == ZaMsg.OVP_related)
                 continue;
             if (currentAddNode.text == ZaMsg.OVP_recent)
