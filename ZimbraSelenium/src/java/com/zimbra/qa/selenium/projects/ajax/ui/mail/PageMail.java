@@ -547,6 +547,13 @@ public class PageMail extends AbsTab {
 				
 				// FALL THROUGH
 
+			} else if ( option == Button.B_MUTE ) {
+				
+				optionLocator += " div[id^='MUTE_CONV'] td[id$='_title']";
+				page = null;
+				
+				// FALL THROUGH
+
 			} else if ( option == Button.O_EDIT_AS_NEW ) {
 				
 				optionLocator += " div[id^='EDIT_AS_NEW'] td[id$='_title']";
@@ -1192,6 +1199,13 @@ public class PageMail extends AbsTab {
 				optionLocator += " div[id^='REDIRECT'] td[id$='_title']";
 
 				page = new DialogRedirect(this.MyApplication, this);
+
+				// FALLTHROUGH
+
+			} else if ( option == Button.B_MUTE ) {
+
+				optionLocator += " div[id^='MUTE_CONV'] td[id$='_title']";
+				page = null;
 
 				// FALLTHROUGH
 
