@@ -32,6 +32,7 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.PageContext;
 import com.zimbra.cs.taglib.tag.i18n.I18nUtil;
+import com.zimbra.soap.type.SearchSortBy;
 import java.io.IOException;
 import java.util.List;
 
@@ -57,7 +58,7 @@ public class ComputeSearchContextTag extends ZimbraSimpleTag {
     private String mVar;
     private String mTypes;
     private String mQuery;
-    private ZMailbox.SearchSortBy mSortBy;
+    private SearchSortBy mSortBy;
     private boolean mUseCache;
     private int mLimit = -1;
 
@@ -186,13 +187,13 @@ public class ComputeSearchContextTag extends ZimbraSimpleTag {
         result.setSt(mTypes);
 
         if (ss != null) {
-            mSortBy = ZMailbox.SearchSortBy.fromString(ss);
+            mSortBy = SearchSortBy.fromString(ss);
         }
 
         if (mSortBy == null)
-            mSortBy = (ZSearchParams.TYPE_CONTACT.equals(mTypes) || ZSearchParams.TYPE_GAL.equals(mTypes)) ? ZMailbox.SearchSortBy.nameAsc :
-                    ZSearchParams.TYPE_TASK.equals(mTypes) ? ZMailbox.SearchSortBy.taskDueDesc :
-                    ZMailbox.SearchSortBy.dateDesc;
+            mSortBy = (ZSearchParams.TYPE_CONTACT.equals(mTypes) || ZSearchParams.TYPE_GAL.equals(mTypes)) ? SearchSortBy.nameAsc :
+                    ZSearchParams.TYPE_TASK.equals(mTypes) ? SearchSortBy.taskDueDesc :
+                    SearchSortBy.dateDesc;
 
         // default to inbox/contacts
         if (sq == null && sti == null && sfi == null) {

@@ -22,6 +22,7 @@ import com.zimbra.client.ZMailbox;
 import com.zimbra.client.ZMailbox.Fetch;
 import com.zimbra.client.ZSearchPagerResult;
 import com.zimbra.client.ZSearchParams;
+import com.zimbra.soap.type.SearchSortBy;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.jsp.JspException;
@@ -41,7 +42,7 @@ public class SearchConvTag extends ZimbraSimpleTag {
     private boolean mWantHtmlSet;
     private boolean mMarkread;
     private Fetch mFetch;
-    private ZMailbox.SearchSortBy mSortBy = ZMailbox.SearchSortBy.dateDesc;
+    private SearchSortBy mSortBy = SearchSortBy.dateDesc;
 
     public void setVar(String var) { this.mVar = var; }
 
@@ -55,7 +56,7 @@ public class SearchConvTag extends ZimbraSimpleTag {
 
     public void setSort(String sortBy) throws ServiceException {
         if (sortBy != null && sortBy.length() > 0)
-            this.mSortBy = ZMailbox.SearchSortBy.fromString(sortBy);
+            this.mSortBy = SearchSortBy.fromString(sortBy);
     }
     
     public void setLimit(int limit) { this.mLimit = limit; }
@@ -77,6 +78,7 @@ public class SearchConvTag extends ZimbraSimpleTag {
         return def;
     }
 
+    @Override
     public void doTag() throws JspException, IOException {
         ZMailbox mailbox = getMailbox();
 

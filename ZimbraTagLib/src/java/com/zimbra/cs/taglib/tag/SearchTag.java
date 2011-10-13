@@ -19,9 +19,9 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.taglib.bean.ZSearchResultBean;
 import com.zimbra.client.ZMailbox;
 import com.zimbra.client.ZMailbox.Fetch;
-import com.zimbra.client.ZMailbox.SearchSortBy;
 import com.zimbra.client.ZSearchParams;
 import com.zimbra.client.ZSearchResult;
+import com.zimbra.soap.type.SearchSortBy;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;

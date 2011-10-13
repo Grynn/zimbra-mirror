@@ -17,16 +17,13 @@ package com.zimbra.cs.taglib.tag;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
-import javax.servlet.jsp.JspTagException;
-import com.zimbra.cs.taglib.tag.i18n.I18nUtil;
 import java.io.IOException;
 
 import com.zimbra.client.ZMailbox;
 import com.zimbra.client.ZFolder;
-import com.zimbra.client.ZSearchFolder;
 import com.zimbra.client.ZSearchParams;
 import com.zimbra.cs.taglib.bean.ZFolderBean;
-import com.zimbra.common.service.ServiceException;
+import com.zimbra.soap.type.SearchSortBy;
 
 public class RetrieveTasksTag extends ZimbraSimpleTag {
     private static final int DEFAULT_TASKS_LIMIT = 50;
@@ -40,10 +37,11 @@ public class RetrieveTasksTag extends ZimbraSimpleTag {
     public void setTasklist(ZFolderBean tasklist) { this.mTasklist = tasklist; }
 
 
+    @Override
     public void doTag() throws JspException, IOException {
             ZMailbox mailbox = getMailbox();
 
-            ZMailbox.SearchSortBy mSortBy = ZMailbox.SearchSortBy.dateDesc;
+            SearchSortBy mSortBy = SearchSortBy.dateDesc;
             String                 mTypes = ZSearchParams.TYPE_TASK;
 
             PageContext pageContext = (PageContext) getJspContext();
