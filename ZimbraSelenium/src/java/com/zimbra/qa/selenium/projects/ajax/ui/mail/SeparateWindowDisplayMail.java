@@ -327,8 +327,8 @@ public class SeparateWindowDisplayMail extends AbsSeparateWindow {
 			} else if (option == Button.B_REDIRECT) {
 				
 				optionLocator = containerActionMenu + " div[id='REDIRECT'] td[id$='_title']";
-				page = null;
-				
+				page = new SeparateWindowDialogRedirect(this.MyApplication, this);
+
 				// FALL THROUGH
 
 			} else if (option == Button.O_EDIT_AS_NEW) {
@@ -356,7 +356,7 @@ public class SeparateWindowDisplayMail extends AbsSeparateWindow {
 				
 			} else if (option == Button.O_TAG_REMOVETAG) {
 
-				optionLocator = "css=td[id$='__TAG_MENU|MENU|REMOVETAG_title']";
+				optionLocator = "css=div[id$='__TAG_MENU|MENU'] div[id='message_removetag'] td[id$='_title']";
 				page = null;
 
 				// FALL THROUGH
@@ -382,6 +382,10 @@ public class SeparateWindowDisplayMail extends AbsSeparateWindow {
 
 			}
 			
+		}
+		
+		if ( page != null ) {
+			page.zWaitForActive();
 		}
 			
 		return (page);

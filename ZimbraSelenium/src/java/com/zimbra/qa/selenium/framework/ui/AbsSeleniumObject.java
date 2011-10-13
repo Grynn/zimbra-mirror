@@ -491,7 +491,7 @@ public abstract class AbsSeleniumObject {
 	 * @param locator
 	 * @param eventName
 	 */
-	public void sFireEvent(String locator, String eventName) {
+	public void sFireEvent(String locator, String eventName) throws HarnessException {
 		ClientSessionFactory.session().selenium().fireEvent(locator, eventName);
 		logger.info("fireEvent(" + locator + ", " + eventName + ")");
 	}
@@ -593,7 +593,7 @@ public abstract class AbsSeleniumObject {
 	 * 
 	 * @param
 	 */
-	public String sGetNextSiblingId(String id) {
+	public String sGetNextSiblingId(String id) throws HarnessException {
 		String sibLingid = ClientSessionFactory.session().selenium().getEval(
 				"this.browserbot.getUserWindow().document.getElementById('"
 						+ id + "')" + ".nextSibling.id");
@@ -606,7 +606,7 @@ public abstract class AbsSeleniumObject {
 	 * 
 	 * @param
 	 */
-	public String sGetPreviousSiblingId(String id) {
+	public String sGetPreviousSiblingId(String id) throws HarnessException {
 		String sibLingid = ClientSessionFactory.session().selenium().getEval(
 				"this.browserbot.getUserWindow().document.getElementById('"
 						+ id + "')" + ".previousSibling.id");
@@ -619,7 +619,7 @@ public abstract class AbsSeleniumObject {
 	 * 
 	 * @param locator
 	 */
-	public String sGetSelectedId(String locator) {
+	public String sGetSelectedId(String locator) throws HarnessException {
 		String id = ClientSessionFactory.session().selenium().getSelectedId(
 				locator);
 		logger.info("getSelectedId(" + locator + ") = " + id);
@@ -629,7 +629,7 @@ public abstract class AbsSeleniumObject {
 	/**
 	 * DefaultSelenium.sClickAt(String locator, String coord)
 	 */
-	public void sClickAt(String locator, String coord) {
+	public void sClickAt(String locator, String coord) throws HarnessException {
 		// Cast to DefaultSelenium ... Workaround until ZimbraSelnium is removed
 		((DefaultSelenium) ClientSessionFactory.session().selenium()).clickAt(
 				locator, coord);
@@ -655,7 +655,7 @@ public abstract class AbsSeleniumObject {
 	/**
 	 * DefaultSelenium.close()
 	 */
-	public void sClose() {
+	public void sClose() throws HarnessException {
 		ClientSessionFactory.session().selenium().close();
 		logger.info("close()");
 	}
@@ -663,7 +663,7 @@ public abstract class AbsSeleniumObject {
 	/**
 	 * DefaultSelenium.doubleClick()
 	 */
-	public void sDoubleClick(String locator) {
+	public void sDoubleClick(String locator) throws HarnessException {
 		// Cast to DefaultSelenium ... Workaround until ZimbraSelnium is removed
 		((DefaultSelenium) ClientSessionFactory.session().selenium())
 				.doubleClick(locator);
@@ -675,7 +675,7 @@ public abstract class AbsSeleniumObject {
 	 * @param locator
 	 * @return
 	 */
-	public String zGetCenterPoint(String locator) {
+	public String zGetCenterPoint(String locator) throws HarnessException {
 	   String centerHeight = Integer.toString(ClientSessionFactory.session().selenium().getElementHeight(locator).intValue() / 2);
 	   String centerWidth = Integer.toString(ClientSessionFactory.session().selenium().getElementWidth(locator).intValue() / 2);
 	   return new StringBuilder("(").append(centerWidth).append(",").append(centerHeight).append(")").toString();
@@ -684,7 +684,7 @@ public abstract class AbsSeleniumObject {
 	/**
 	 * DefaultSelenium.waitForPageToLoad()
 	 */
-	public void sWaitForPageToLoad() {
+	public void sWaitForPageToLoad() throws HarnessException {
 		String timeout = ZimbraSeleniumProperties.getStringProperty(
 				"selenium.maxpageload.msec", "10000");
 
@@ -703,25 +703,26 @@ public abstract class AbsSeleniumObject {
 
 	/**
 	 * DefaultSelenium.mouseDown()
+	 * @throws HarnessException 
 	 */
-	public void sMouseDown(String locator) {
+	public void sMouseDown(String locator) throws HarnessException {
 		ClientSessionFactory.session().selenium().mouseDown(locator);
 		logger.info("mouseDown(" + locator + ")");
 	}
 
-	public void sMouseDownAt(String locator, String coordString) {
+	public void sMouseDownAt(String locator, String coordString) throws HarnessException {
 		ClientSessionFactory.session().selenium().mouseDownAt(locator,
 				coordString);
 		logger.info("mouseDownAt(" + locator + ",'" + coordString + "')");
 	}
 
-	public void sMouseDownRightAt(String locator, String coordString) {
+	public void sMouseDownRightAt(String locator, String coordString) throws HarnessException {
 		ClientSessionFactory.session().selenium().mouseDownRightAt(locator,
 				coordString);
 		logger.info("mouseDownRightAt(" + locator + ",'" + coordString + "')");
 	}
 
-	public void sMouseUpRightAt(String locator, String coordString) {
+	public void sMouseUpRightAt(String locator, String coordString) throws HarnessException {
 		ClientSessionFactory.session().selenium().mouseUpRightAt(locator,
 				coordString);
 		logger.info("mouseUpRightAt(" + locator + ",'" + coordString + "')");
@@ -730,7 +731,7 @@ public abstract class AbsSeleniumObject {
 	/**
 	 * DefaultSelenium.mouseOver()
 	 */
-	public void sMouseOver(String locator) {
+	public void sMouseOver(String locator) throws HarnessException {
 		ClientSessionFactory.session().selenium().mouseOver(locator);
 		logger.info("mouseOver(" + locator + ")");
 	}
@@ -738,7 +739,7 @@ public abstract class AbsSeleniumObject {
 	/**
 	 * DefaultSelenium.mouseOut()
 	 */
-	public void sMouseOut(String locator) {
+	public void sMouseOut(String locator) throws HarnessException {
 		ClientSessionFactory.session().selenium().mouseOut(locator);
 		logger.info("mouseOver(" + locator + ")");
 	}
@@ -746,15 +747,16 @@ public abstract class AbsSeleniumObject {
 	/**
 	 * DefaultSelenium.refresh()
 	 */
-	public void sRefresh() {
+	public void sRefresh() throws HarnessException {
 		ClientSessionFactory.session().selenium().refresh();
 		logger.info("refresh()");
 	}
 
 	/**
 	 * DefaultSelenium.mouseUp()
+	 * @throws HarnessException 
 	 */
-	public void sMouseUp(String locator) {
+	public void sMouseUp(String locator) throws HarnessException {
 		ClientSessionFactory.session().selenium().mouseUp(locator);
 		logger.info("mouseUp(" + locator + ")");
 	}
@@ -762,13 +764,13 @@ public abstract class AbsSeleniumObject {
 	/**
 	 * DefaultSelenium.mouseMoveAt()
 	 */
-	public void sMouseMoveAt(String locator, String coordString) {
+	public void sMouseMoveAt(String locator, String coordString) throws HarnessException {
 		ClientSessionFactory.session().selenium().mouseMoveAt(locator,
 				coordString);
 		logger.info("mouseMoveAt(" + locator + ",'" + coordString + "')");
 	}
 
-	public void sMouseMove(String locator) {
+	public void sMouseMove(String locator) throws HarnessException {
 		ClientSessionFactory.session().selenium().mouseMove(locator);
 		logger.info("mouseMoveAt(" + locator + ")");
 	}
@@ -776,7 +778,7 @@ public abstract class AbsSeleniumObject {
 	/**
 	 * DefaultSelenium.mouseUpAt()
 	 */
-	public void sMouseUpAt(String locator, String coordString) {
+	public void sMouseUpAt(String locator, String coordString) throws HarnessException {
 		ClientSessionFactory.session().selenium().mouseUpAt(locator,
 				coordString);
 		logger.info("mouseUpAt(" + locator + ",'" + coordString + ")'");
@@ -785,7 +787,7 @@ public abstract class AbsSeleniumObject {
 	/**
 	 * DefaultSelenium.mouseDownRight()
 	 */
-	public void sMouseDownRight(String locator) {
+	public void sMouseDownRight(String locator) throws HarnessException {
 		ClientSessionFactory.session().selenium().mouseDownRight(locator);
 		logger.info("mouseDownRight(" + locator + ")");
 	}
@@ -793,15 +795,16 @@ public abstract class AbsSeleniumObject {
 	/**
 	 * DefaultSelenium.mouseUpRight()
 	 */
-	public void sMouseUpRight(String locator) {
+	public void sMouseUpRight(String locator) throws HarnessException {
 		ClientSessionFactory.session().selenium().mouseUpRight(locator);
 		logger.info("mouseUpRight(" + locator + ")");
 	}
 
 	/**
 	 * DefaultSelenium.focus()
+	 * @throws HarnessException 
 	 */
-	public void sFocus(String locator) {
+	public void sFocus(String locator) throws HarnessException {
 		ClientSessionFactory.session().selenium().focus(locator);
 		logger.info("focus(" + locator + ")");
 	}
@@ -835,7 +838,7 @@ public abstract class AbsSeleniumObject {
 	/**
 	 * DefaultSelenium.getXpathCount()
 	 */
-	public int sGetXpathCount(String xpath) {
+	public int sGetXpathCount(String xpath) throws HarnessException {
 		int count = ClientSessionFactory.session().selenium().getXpathCount(
 				xpath).intValue();
 		logger.info("getXpathCount(" + xpath + ") = " + count);
@@ -856,7 +859,7 @@ public abstract class AbsSeleniumObject {
 	/**
 	 * DefaultSelenium.getAllWindowTitles()
 	 */
-	public List<String> sGetAllWindowTitles() {
+	public List<String> sGetAllWindowTitles() throws HarnessException {
 		logger.info("getAllWindowTitles()");
 		String[] windows = ClientSessionFactory.session().selenium()
 				.getAllWindowTitles();
@@ -866,7 +869,7 @@ public abstract class AbsSeleniumObject {
 	/**
 	 * DefaultSelenium.getAllWindowIds()
 	 */
-	public List<String> sGetAllWindowIds() {
+	public List<String> sGetAllWindowIds() throws HarnessException {
 		logger.info("getAllWindowIds()");
 		String[] ids = ClientSessionFactory.session().selenium().getAllWindowIds();
 		return (Arrays.asList(ids));
@@ -875,7 +878,7 @@ public abstract class AbsSeleniumObject {
 	/**
 	 * DefaultSelenium.getAllWindowNames()
 	 */
-	public List<String> sGetAllWindowNames() {
+	public List<String> sGetAllWindowNames() throws HarnessException {
 		logger.info("getAllWindowNames()");
 		String[] windows = ClientSessionFactory.session().selenium()
 				.getAllWindowNames();
@@ -917,7 +920,7 @@ public abstract class AbsSeleniumObject {
 	/**
 	 * DefaultSelenium.isVisible()
 	 */
-	public boolean sIsVisible(String locator) {
+	public boolean sIsVisible(String locator) throws HarnessException {
 		boolean visible = ClientSessionFactory.session().selenium().isVisible(
 				locator);
 		logger.info("isVisible(" + locator + ") = " + visible);
@@ -1237,7 +1240,7 @@ public abstract class AbsSeleniumObject {
 	/**
 	 * DefaultSelenium.check()
 	 */
-	public void sCheck(String locator) {
+	public void sCheck(String locator) throws HarnessException {
 		ClientSessionFactory.session().selenium().check(locator);
 		logger.info("check(" + locator + ")");
 	}
@@ -1245,7 +1248,7 @@ public abstract class AbsSeleniumObject {
 	/**
     * DefaultSelenium.uncheck()
     */
-	public void sUncheck(String locator) {
+	public void sUncheck(String locator) throws HarnessException {
 	   ClientSessionFactory.session().selenium().uncheck(locator);
       logger.info("uncheck(" + locator + ")");
 	}
@@ -1253,7 +1256,7 @@ public abstract class AbsSeleniumObject {
 	/**
 	 * DefaultSelenium.isChecked()
 	 */
-	public boolean sIsChecked(String locator) {
+	public boolean sIsChecked(String locator) throws HarnessException {
 		// Cast to DefaultSelenium ... Workaround until ZimbraSelnium is removed
 		boolean checked = ((DefaultSelenium) ClientSessionFactory.session()
 				.selenium()).isChecked(locator);
@@ -1279,7 +1282,7 @@ public abstract class AbsSeleniumObject {
 	/**
 	 * DefaultSelenium.getValue()
 	 */
-	public String sGetValue(String locator) {
+	public String sGetValue(String locator) throws HarnessException {
 		String text = ClientSessionFactory.session().selenium().getValue(
 				locator);
 		logger.info("DefaultSelenium.getValue(" + locator + ") = " + text);
@@ -1291,7 +1294,7 @@ public abstract class AbsSeleniumObject {
 	 * 
 	 * @return
 	 */
-	public String sGetBodyText() {
+	public String sGetBodyText() throws HarnessException {
 		String text = ClientSessionFactory.session().selenium().getBodyText();
 		return text;
 
@@ -1302,7 +1305,7 @@ public abstract class AbsSeleniumObject {
 	 * 
 	 * @return
 	 */
-	public String sGetTitle() {
+	public String sGetTitle() throws HarnessException {
 		String text = ClientSessionFactory.session().selenium().getTitle();
 		logger.info("DefaultSelenium.getTitle() = " + text);
 		return text;
@@ -1327,7 +1330,7 @@ public abstract class AbsSeleniumObject {
 	/**
 	 * DefaultSelenium.typeKeys()
 	 */
-	public void sTypeKeys(String locator, String text) {
+	public void sTypeKeys(String locator, String text) throws HarnessException {
 		ClientSessionFactory.session().selenium().typeKeys(locator, text);
 		logger.info("typeKeys(" + locator + ", " + text + ")");
 	}
@@ -1335,7 +1338,7 @@ public abstract class AbsSeleniumObject {
 	/**
 	 * DefaultSelenium.getConfirmation()
 	 */
-	public String sGetConfirmation() {
+	public String sGetConfirmation() throws HarnessException {
 		logger.info("getConfirmation()");
 		return ClientSessionFactory.session().selenium().getConfirmation();
 	}
@@ -1343,7 +1346,7 @@ public abstract class AbsSeleniumObject {
 	/**
 	 * DefaultSelenium.keyPressNative()
 	 */
-	public void sKeyPressNative(String code) {
+	public void sKeyPressNative(String code) throws HarnessException {
 		ClientSessionFactory.session().selenium().keyPressNative(code);
 		logger.info("keyPressNative(" + code + ")");
 	}
@@ -1351,7 +1354,7 @@ public abstract class AbsSeleniumObject {
 	/**
 	 * DefaultSelenium.keyPress()
 	 */
-	public void sKeyPress(String locator, String code) {
+	public void sKeyPress(String locator, String code) throws HarnessException {
 		ClientSessionFactory.session().selenium().keyPress(locator, code);
 		logger.info("keypress(" + code + ")");
 	}
@@ -1359,7 +1362,7 @@ public abstract class AbsSeleniumObject {
 	/**
 	 * DefaultSelenium.keyUp()
 	 */
-	public void sKeyUp(String locator, String code) {
+	public void sKeyUp(String locator, String code) throws HarnessException {
 		ClientSessionFactory.session().selenium().keyUp(locator, code);
 		logger.info("keypress(" + code + ")");
 	}
@@ -1367,7 +1370,7 @@ public abstract class AbsSeleniumObject {
 	/**
 	 * DefaultSelenium.keyDownNative()
 	 */
-	public void sKeyDownNative(String code) {
+	public void sKeyDownNative(String code) throws HarnessException {
 		ClientSessionFactory.session().selenium().keyDownNative(code);
 		logger.info("keyDownNative(" + code + ")");
 	}
@@ -1375,7 +1378,7 @@ public abstract class AbsSeleniumObject {
 	/**
 	 * DefaultSelenium.keyUpNative()
 	 */
-	public void sKeyUpNative(String code) {
+	public void sKeyUpNative(String code) throws HarnessException {
 		ClientSessionFactory.session().selenium().keyUpNative(code);
 		logger.info("keyUpNative(" + code + ")");
 	}
@@ -1399,7 +1402,7 @@ public abstract class AbsSeleniumObject {
 	 *            prefix is provided, the default behaviour is to match on
 	 *            label.
 	 */
-	public void sSelectDropDown(String selectLocator, String optionLocator) {
+	public void sSelectDropDown(String selectLocator, String optionLocator) throws HarnessException {
 		ClientSessionFactory.session().selenium().select(selectLocator,
 				optionLocator);
 		logger.info("sSelectDropDown(" + selectLocator + ", " + optionLocator
@@ -1428,7 +1431,7 @@ public abstract class AbsSeleniumObject {
 	/**
 	 * DefaultSelenium.selectWindow()
 	 */
-	public void sSelectWindow(String windowID) {
+	public void sSelectWindow(String windowID) throws HarnessException {
 		ClientSessionFactory.session().selenium().selectWindow(windowID);
 		logger.info("sSelectWindow(" + windowID + ")");
 	}
@@ -1439,7 +1442,7 @@ public abstract class AbsSeleniumObject {
 	 * @param url
 	 * @param windowID
 	 */
-	public void sOpen(String url) {
+	public void sOpen(String url) throws HarnessException {
 		logger.info("open(" + url + ")");
 		ClientSessionFactory.session().selenium().open(url);
 	}
@@ -1450,12 +1453,12 @@ public abstract class AbsSeleniumObject {
 	 * @param url
 	 * @param windowID
 	 */
-	public void sOpenWindow(String url, String windowID) {
+	public void sOpenWindow(String url, String windowID) throws HarnessException {
 		ClientSessionFactory.session().selenium().openWindow(url, windowID);
 		logger.info("openWindow(" + url + ", " + windowID + ")");
 	}
 
-	public void sWaitForPopUp(String windowID, String timeout) {
+	public void sWaitForPopUp(String windowID, String timeout) throws HarnessException {
 		ClientSessionFactory.session().selenium().waitForPopUp(windowID,
 				timeout);
 		logger.info("sWaitForPopUp(" + windowID + ")");
@@ -1464,7 +1467,7 @@ public abstract class AbsSeleniumObject {
 	/**
 	 * DefaultSelenium.windowFocus()
 	 */
-	public void sWindowFocus() {
+	public void sWindowFocus() throws HarnessException {
 		ClientSessionFactory.session().selenium().windowFocus();
 		logger.info("sWindowFocus()");
 	}
@@ -1472,7 +1475,7 @@ public abstract class AbsSeleniumObject {
 	/**
 	 * DefaultSelenium.wwindowMaximize()
 	 */
-	public void sWindowMaximize() {
+	public void sWindowMaximize() throws HarnessException {
 		ClientSessionFactory.session().selenium().windowMaximize();
 		logger.info("sWindowMaximize()");
 	}

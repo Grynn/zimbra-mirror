@@ -1,12 +1,24 @@
 package com.zimbra.qa.selenium.framework.ui;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.apache.log4j.*;
 
 import com.thoughtworks.selenium.SeleniumException;
-import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.SleepUtil;
+import com.zimbra.qa.selenium.framework.util.*;
 
+/**
+ * The <code>AbsSeparateWindow</code> class is a base class that all 
+ * "separate window" objects can derive from.  The main additional
+ * functionality is the ability to switch focus between different windows
+ * (i.e. the 'main' window and the 'separate' window) when
+ * executing Selenium method calls.
+ * <p>
+ * All selenium methods (e.g. sClick(), sType()) must be redefined
+ * in this class, with a wrapper to switch windows.
+ * <p>
+ * 
+ * @author Matt Rhoades
+ * 
+ */
 public abstract class AbsSeparateWindow extends AbsPage {
 	protected static Logger logger = LogManager.getLogger(AbsSeparateWindow.class);
 
@@ -50,7 +62,7 @@ public abstract class AbsSeparateWindow extends AbsPage {
 
 		try {
 			super.sSelectWindow(this.DialogWindowID);
-			if ( DoChangeWindowFocus )			super.sWindowFocus();
+			changeFocus();
 
 			super.sClick(locator);
 
@@ -66,6 +78,16 @@ public abstract class AbsSeparateWindow extends AbsPage {
 
 	}
 
+	/**
+	 * Change focus to the separate window, if DoChangeWindowFocus = true
+	 * @throws HarnessException
+	 */
+	protected void changeFocus() throws HarnessException {
+		if ( DoChangeWindowFocus ) {
+			super.sWindowFocus();
+		}
+	}
+	
 	/* (non-Javadoc)
 	 * @see com.zimbra.qa.selenium.framework.ui.AbsSeleniumObject#sType(java.lang.String, java.lang.String)
 	 */
@@ -75,7 +97,7 @@ public abstract class AbsSeparateWindow extends AbsPage {
 
 		try {
 			super.sSelectWindow(this.DialogWindowID);
-			if ( DoChangeWindowFocus )			super.sWindowFocus();
+			changeFocus();
 			
 			super.sType(locator, value);
 
@@ -96,7 +118,7 @@ public abstract class AbsSeparateWindow extends AbsPage {
 		
 		try {
 			super.sSelectWindow(this.DialogWindowID);
-			if ( DoChangeWindowFocus )			super.sWindowFocus();
+			changeFocus();
 			
 			text = super.sGetText(locator);
 
@@ -115,7 +137,7 @@ public abstract class AbsSeparateWindow extends AbsPage {
 		
 		try {
 			super.sSelectWindow(this.DialogWindowID);
-			if ( DoChangeWindowFocus )			super.sWindowFocus();
+			changeFocus();
 			
 			count = super.sGetCssCount(css);
 
@@ -144,7 +166,7 @@ public abstract class AbsSeparateWindow extends AbsPage {
 		
 		try {
 			super.sSelectWindow(this.DialogWindowID);
-			if ( DoChangeWindowFocus )			super.sWindowFocus();
+			changeFocus();
 			
 
 			/*
@@ -180,7 +202,7 @@ public abstract class AbsSeparateWindow extends AbsPage {
 		
 		try {
 			super.sSelectWindow(this.DialogWindowID);
-			if ( DoChangeWindowFocus )			super.sWindowFocus();
+			changeFocus();
 			
 
 			/*
@@ -207,11 +229,8 @@ public abstract class AbsSeparateWindow extends AbsPage {
 		
 	}
 
-	/**
-	 * Determine if a locator is present
-	 * @param locator
-	 * @return true if present, false otherwise
-	 * @throws HarnessException
+	/* (non-Javadoc)
+	 * @see com.zimbra.qa.selenium.framework.ui.AbsSeleniumObject#sIsElementPresent(java.lang.String)
 	 */
 	public boolean sIsElementPresent(String locator) throws HarnessException {
 		logger.info(myPageName() + " sIsElementPresent("+ locator +")");
@@ -220,7 +239,7 @@ public abstract class AbsSeparateWindow extends AbsPage {
 		
 		try {
 			super.sSelectWindow(this.DialogWindowID);
-			if ( DoChangeWindowFocus )			super.sWindowFocus();
+			changeFocus();
 
 			present = super.sIsElementPresent(locator);
 
@@ -233,6 +252,133 @@ public abstract class AbsSeparateWindow extends AbsPage {
 	}
 
 	/* (non-Javadoc)
+	 * @see com.zimbra.qa.selenium.framework.ui.AbsSeleniumObject#zIsVisiblePerPosition(java.lang.String, int, int)
+	 */
+	public boolean zIsVisiblePerPosition(String locator, int leftLimit, int topLimit)
+	throws HarnessException 
+	{
+		logger.info(myPageName() + " zIsVisiblePerPosition("+ locator +", "+ leftLimit +", "+ topLimit +")");
+		
+		boolean present = false;
+		
+		try {
+			super.sSelectWindow(this.DialogWindowID);
+			changeFocus();
+
+			present = super.zIsVisiblePerPosition(locator, leftLimit, topLimit);
+
+		} finally {
+			super.sSelectWindow(MainWindowID);
+			super.sWindowFocus();
+		}
+
+		return (present);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.zimbra.qa.selenium.framework.ui.AbsSeleniumObject#sGetElementPositionLeft(java.lang.String)
+	 */
+	public int sGetElementPositionLeft(String locator)
+	throws HarnessException 
+	{
+		logger.info(myPageName() + " sGetElementPositionLeft("+ locator +")");
+				
+		try {
+			super.sSelectWindow(this.DialogWindowID);
+			changeFocus();
+
+			int n = super.sGetElementPositionLeft(locator);
+			
+			return (n);
+
+		} finally {
+			super.sSelectWindow(MainWindowID);
+			super.sWindowFocus();
+		}
+
+	}
+
+	/* (non-Javadoc)
+	 * @see com.zimbra.qa.selenium.framework.ui.AbsSeleniumObject#sGetElementPositionTop(java.lang.String)
+	 */
+	public int sGetElementPositionTop(String locator)
+	throws HarnessException 
+	{
+		logger.info(myPageName() + " sGetElementPositionTop("+ locator +")");
+				
+		try {
+			super.sSelectWindow(this.DialogWindowID);
+			changeFocus();
+
+			int n = super.sGetElementPositionTop(locator);
+			
+			return (n);
+
+		} finally {
+			super.sSelectWindow(MainWindowID);
+			super.sWindowFocus();
+		}
+
+	}
+
+	/* (non-Javadoc)
+	 * @see com.zimbra.qa.selenium.framework.ui.AbsSeleniumObject#sFocus(java.lang.String)
+	 */
+	public void sFocus(String locator) throws HarnessException {
+		logger.info(myPageName() + " sFocus("+ locator +")");
+		
+		try {
+			super.sSelectWindow(this.DialogWindowID);
+			changeFocus();
+
+			super.sFocus(locator);
+			
+		} finally {
+			super.sSelectWindow(MainWindowID);
+			super.sWindowFocus();
+		}
+
+	}
+
+	/* (non-Javadoc)
+	 * @see com.zimbra.qa.selenium.framework.ui.AbsSeleniumObject#sMouseDown(java.lang.String)
+	 */
+	public void sMouseDown(String locator) throws HarnessException {
+		logger.info(myPageName() + " sMouseDown("+ locator +")");
+		
+		try {
+			super.sSelectWindow(this.DialogWindowID);
+			changeFocus();
+
+			super.sMouseDown(locator);
+			
+		} finally {
+			super.sSelectWindow(MainWindowID);
+			super.sWindowFocus();
+		}
+
+	}
+
+	/* (non-Javadoc)
+	 * @see com.zimbra.qa.selenium.framework.ui.AbsSeleniumObject#sMouseUp(java.lang.String)
+	 */
+	public void sMouseUp(String locator) throws HarnessException {
+		logger.info(myPageName() + " sMouseUp("+ locator +")");
+		
+		try {
+			super.sSelectWindow(this.DialogWindowID);
+			changeFocus();
+
+			super.sMouseUp(locator);
+			
+		} finally {
+			super.sSelectWindow(MainWindowID);
+			super.sWindowFocus();
+		}
+
+	}
+
+	/* (non-Javadoc)
 	 * @see com.zimbra.qa.selenium.framework.ui.AbsSeleniumObject#zClickAt(java.lang.String, java.lang.String)
 	 */
 	public void zClickAt(String locator, String coord) throws HarnessException {
@@ -241,7 +387,7 @@ public abstract class AbsSeparateWindow extends AbsPage {
 
 		try {
 			super.sSelectWindow(this.DialogWindowID);
-			if ( DoChangeWindowFocus )			super.sWindowFocus();
+			changeFocus();
 
 			if ( !super.sIsElementPresent(locator) )
 				throw new HarnessException("locator not present: "+ locator);

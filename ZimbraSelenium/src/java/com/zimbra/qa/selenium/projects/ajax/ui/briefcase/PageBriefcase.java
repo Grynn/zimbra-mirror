@@ -1489,7 +1489,7 @@ public class PageBriefcase extends AbsTab {
 		return url;
 	}
 
-	public void closeWindow() {
+	public void closeWindow() throws HarnessException {
 		tracer.trace("Close the separate window");
 
 		this.sClose();
