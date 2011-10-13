@@ -35,7 +35,7 @@ public class CreateTag extends AjaxCommonTest {
 			// test is decided.
 			dialog = (DialogTag)app.zPageTasks.zToolbarPressPulldown(Button.B_NEW, Button.O_NEW_TAG);
 		} else {
-			dialog = (DialogTag)app.zTreeTasks.zPressButton(Button.B_TREE_NEWTAG);
+			dialog = (DialogTag)app.zTreeTasks.zPressPulldown(Button.B_TREE_TAGS_OPTIONS, Button.B_TREE_NEWTAG);
 		}
 
 		ZAssert.assertNotNull(dialog, "Verify the new tag dialog opened");
