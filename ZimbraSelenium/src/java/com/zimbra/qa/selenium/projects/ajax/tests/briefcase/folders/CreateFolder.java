@@ -32,7 +32,7 @@ public class CreateFolder extends AjaxCommonTest {
 		_folderName = "folder" + ZimbraSeleniumProperties.getUniqueString();
 
 		DialogCreateBriefcaseFolder createFolderDialog = (DialogCreateBriefcaseFolder) app.zTreeBriefcase
-				.zPressButton(Button.B_TREE_NEWBRIEFCASE);
+				.zPressPulldown(Button.B_TREE_FOLDERS_OPTIONS, Button.B_TREE_NEWFOLDER);
 
 		createFolderDialog.zEnterFolderName(_folderName);
 		createFolderDialog.zClickButton(Button.B_OK);

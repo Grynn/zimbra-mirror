@@ -28,7 +28,7 @@ public class CreateTag extends AjaxCommonTest {
 		String name = "tag" + ZimbraSeleniumProperties.getUniqueString();
 
 		DialogTag dialog = (DialogTag) app.zTreeBriefcase
-				.zPressButton(Button.B_TREE_NEWTAG);
+				.zPressPulldown(Button.B_TREE_TAGS_OPTIONS, Button.B_TREE_NEWTAG);
 		ZAssert.assertNotNull(dialog, "Verify the new dialog opened");
 
 		// Fill out the input field

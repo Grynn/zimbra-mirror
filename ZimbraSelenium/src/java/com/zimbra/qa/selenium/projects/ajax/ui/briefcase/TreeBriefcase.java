@@ -25,8 +25,8 @@ public class TreeBriefcase extends AbsTree {
 		public static final String zRenameTagTreeMenuItem = "css=td[id$=_left_icon]>[class=ImgRename]";
 		public static final String zDeleteTreeMenuItem = "css=div[id='DELETE_WITHOUT_SHORTCUT'] tr[id^='POPUP_DELETE']:contains(Delete)";
 		public static final String zEditPropertiesTreeMenuItem = "css=div[id=EDIT_PROPS] tr[id=POPUP_EDIT_PROPS]:contains('Edit Properties')";
-	
-	}                                                    
+	}
+
 	public TreeBriefcase(AbsApplication application) {
 		super(application);
 		logger.info("new " + TreeBriefcase.class.getCanonicalName());
@@ -119,7 +119,7 @@ public class TreeBriefcase extends AbsTree {
 
 		// Default behavior. Click the locator
 		zClickAt(optionLocator, "0,0");
-	
+
 		// If there is a busy overlay, wait for that to finish
 		this.zWaitForBusyOverlay();
 
@@ -232,13 +232,6 @@ public class TreeBriefcase extends AbsTree {
 		return (page);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.zimbra.qa.selenium.framework.ui.AbsTree#zPressButton(com.zimbra.qa
-	 * .selenium.framework.ui.Button)
-	 */
 	@Override
 	public AbsPage zPressButton(Button button) throws HarnessException {
 		tracer.trace("Click " + button);
@@ -308,6 +301,108 @@ public class TreeBriefcase extends AbsTree {
 			page.zWaitForActive();
 		}
 		return (page);
+	}
+
+	public AbsPage zPressPulldown(Button pulldown, Button option)
+			throws HarnessException {
+		logger.info(myPageName() + " zPressPulldown(" + pulldown + ", "
+				+ option + ")");
+
+		tracer.trace("Click " + pulldown + " then " + option);
+
+		if (pulldown == null)
+			throw new HarnessException("Pulldown cannot be null");
+
+		if (option == null)
+			throw new HarnessException("Option cannot be null");
+
+		AbsPage page = null;
+		String pulldownLocator = null;
+		String optionLocator = null;
+
+		if (pulldown == Button.B_TREE_FOLDERS_OPTIONS) {
+
+			pulldownLocator = "css=div[id='zov__main_Briefcase'] td[id='ztih__main_Briefcase__BRIEFCASE_optCell'] td[id$='_title']";
+
+			if (option == Button.B_TREE_NEWFOLDER) {
+
+				optionLocator = "css=div[id='ZmActionMenu_briefcase_BRIEFCASE'] div[id='NEW_BRIEFCASE'] td[id$='_title']";
+				page = new DialogCreateBriefcaseFolder(MyApplication,
+						((AppAjaxClient) MyApplication).zPageBriefcase);
+
+			} else {
+				throw new HarnessException("Pulldown/Option " + pulldown + "/"
+						+ option + " not implemented");
+			}
+
+			// FALL THROUGH
+
+		} else if (pulldown == Button.B_TREE_TAGS_OPTIONS) {
+
+			pulldownLocator = "css=div[id='zov__main_Briefcase'] td[id='ztih__main_Briefcase__TAG_optCell'] td[id$='_title']";
+
+			if (option == Button.B_TREE_NEWTAG) {
+
+				optionLocator = "css=div[id='ZmActionMenu_briefcase_TAG'] div[id='NEW_TAG'] td[id$='_title']";
+				page = new DialogTag(MyApplication,
+						((AppAjaxClient) MyApplication).zPageBriefcase);
+
+			} else {
+				throw new HarnessException("Pulldown/Option " + pulldown + "/"
+						+ option + " not implemented");
+			}
+
+			// FALL THROUGH
+
+		} else {
+			throw new HarnessException("Pulldown/Option " + pulldown + "/"
+					+ option + " not implemented");
+		}
+
+		// Default behavior
+		if (pulldownLocator != null) {
+
+			// Make sure the locator exists
+			if (!this.sIsElementPresent(pulldownLocator)) {
+				throw new HarnessException("Button " + pulldown + " option "
+						+ option + " pulldownLocator " + pulldownLocator
+						+ " not present!");
+			}
+
+			// 8.0 change ... need zClickAt()
+			// this.zClick(pulldownLocator);
+			this.zClickAt(pulldownLocator, "0,0");
+
+			// If the app is busy, wait for it to become active
+			zWaitForBusyOverlay();
+
+			if (optionLocator != null) {
+
+				// Make sure the locator exists
+				if (!this.sIsElementPresent(optionLocator)) {
+					throw new HarnessException("Button " + pulldown
+							+ " option " + option + " optionLocator "
+							+ optionLocator + " not present!");
+				}
+
+				// 8.0 change ... need zClickAt()
+				// this.zClick(optionLocator);
+				this.zClickAt(optionLocator, "0,0");
+
+				// If the app is busy, wait for it to become active
+				zWaitForBusyOverlay();
+			}
+
+			// If we click on pulldown/option and the page is specified, then
+			// wait for the page to go active
+			if (page != null) {
+				page.zWaitForActive();
+			}
+		}
+
+		// Return the specified page, or null if not set
+		return (page);
+
 	}
 
 	public List<TagItem> zListGetTags() throws HarnessException {
