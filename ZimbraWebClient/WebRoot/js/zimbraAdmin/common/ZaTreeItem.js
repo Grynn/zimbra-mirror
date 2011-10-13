@@ -46,6 +46,8 @@ function(index, realizeDeferred, forceNode) {
 	// initialize count
 	if (this._countCell && this._countInfoParam) {
 	    this._countCell.innerHTML = this._countInfoParam;
+        // only make css take effect when it has value;
+        this._countCell.className = "AdminTreeItem-Count";
 		this._countInfo = this._countInfoParam;
 	}
 
