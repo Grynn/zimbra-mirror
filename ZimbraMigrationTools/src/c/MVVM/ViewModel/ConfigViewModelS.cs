@@ -166,7 +166,7 @@ namespace MVVM.ViewModel
                 }
                 if (iMailSvrInitialized == -1)
                 {
-                    ret = mw.InitializeMailClient(ProfileList[CurrentProfileSelection], null, null);
+                    ret = mw.InitializeMailClient(ProfileList[CurrentProfileSelection], "", "");
                 }
             }
             else

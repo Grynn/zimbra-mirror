@@ -26,7 +26,7 @@ class Migration
          * test.StartMigration(MyAcct);*/
 
         CSMigrationwrapper test = (CSMigrationwrapper)Test;
-        test.StartMigration(MyAcct, false);
+        test.StartMigration(MyAcct);
     }
     // the following method is not been used can comment it for now
 

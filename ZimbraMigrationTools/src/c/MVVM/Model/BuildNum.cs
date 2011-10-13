@@ -6,7 +6,7 @@ namespace MVVM.Model
 
         public BuildNum()
         {
-            BUILD_NUM = "Version 111012";
+            BUILD_NUM = "Version 111013";
         }
     }
 }

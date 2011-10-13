@@ -708,7 +708,7 @@ LPCWSTR ExchangeOps::GlobalInit(LPCWSTR lpMAPITarget, LPCWSTR lpAdminUsername,
 
     // if lpAdminUsername is NULL then we assume that Outlook admin profile exists and we should use it
     // else create a Admin mailbox and create corresponding profile on local machine
-    if (lpAdminUsername)
+    if (lstrlen(lpAdminUsername) > 0)
     {
         if (!Initialized)
         {
