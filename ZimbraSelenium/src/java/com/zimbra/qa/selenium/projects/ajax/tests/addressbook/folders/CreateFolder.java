@@ -77,9 +77,7 @@ public class CreateFolder extends AjaxCommonTest {
 	@Test(description = "Create a new folder using context menu from root folder", groups = { "sanity" })
 	public void ClickContextMenuNewAddressbook() throws HarnessException {	
 		FolderItem folderItem = FolderItem.importFromSOAP(app
-				.zGetActiveAccount(), FolderItem.SystemFolder.UserRoot,
-				_soapDestination, app.zGetActiveAccount().EmailAddress);
-		
+                 .zGetActiveAccount(), FolderItem.SystemFolder.UserRoot);
 	
 		DialogCreateFolder createFolderDialog = (DialogCreateFolder) app.zTreeContacts.zTreeItem
 		    (Action.A_RIGHTCLICK, Button.B_TREE_NEWFOLDER,folderItem);
@@ -90,9 +88,7 @@ public class CreateFolder extends AjaxCommonTest {
 	@Test(description = "Create a new folder using context menu from root folder", groups = { "smoke" })
 	public void CreateSubFolderUnderContactsClickContextMenuNewAddressbook() throws HarnessException {	
 		FolderItem folderItem = FolderItem.importFromSOAP(app
-				.zGetActiveAccount(), FolderItem.SystemFolder.Contacts,
-				_soapDestination, app.zGetActiveAccount().EmailAddress);
-		
+                 .zGetActiveAccount(), FolderItem.SystemFolder.UserRoot);
 	
 		DialogCreateFolder createFolderDialog = (DialogCreateFolder) app.zTreeContacts.zTreeItem
 		    (Action.A_RIGHTCLICK, Button.B_TREE_NEWFOLDER,folderItem);
