@@ -163,6 +163,14 @@ function(stepNum) {
                 }
         }
 
+
+   if(this._containedObject[ZaDomain.A2_create_gal_acc]=="TRUE" && AjxUtil.isEmpty(this._containedObject.attrs[ZaDomain.A_mailHost])){
+            this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
+    }else{
+            this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
+    }
+
+
 }
 /**
 * @method setObject sets the object contained in the view
@@ -753,6 +761,10 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 							enableDisableChangeEventSources:[ZaDomain.A2_create_gal_acc],
 							enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A2_create_gal_acc,"TRUE"]]							
 						},
+                        {ref:ZaDomain.A_mailHost, type: _OSELECT1_, label:ZaMsg.NAD_MailServer,  choices: ZaApp.getInstance().getServerListChoices(),required:true,
+                            enableDisableChangeEventSources:[ZaDomain.A2_create_gal_acc],
+							enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A2_create_gal_acc,"TRUE"]]
+                        },
 						{ref:ZaDomain.A2_new_internal_gal_ds_name, label:ZaMsg.Domain_InternalGALDSName, type:_TEXTFIELD_,
 							visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode],
 							visibilityChecks:[ZaNewDomainXWizard.isDomainModeNotExternal],
