@@ -19,6 +19,7 @@ namespace MVVM.ViewModel
         readonly Schedule m_schedule = new Schedule(0, "", false);
         string m_configFile;
         string m_usermapFile;
+        bool m_isPreview;   // temporary
 
         public ScheduleViewModel()
         {
@@ -28,6 +29,7 @@ namespace MVVM.ViewModel
             this.MigrateCommand = new ActionCommand(this.Migrate, () => true);
             m_configFile = "";
             m_usermapFile = "";
+            m_isPreview = false;
         }
 
         public string GetConfigFile()
@@ -136,7 +138,8 @@ namespace MVVM.ViewModel
 
         private void Preview()
         {
-            MessageBox.Show("Test Run", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+            m_isPreview = true;
+            Migrate();
         }
 
         public ICommand MigrateCommand
@@ -465,7 +468,7 @@ namespace MVVM.ViewModel
             MyAcct.migrationFolders.Insert(0, MyFolder);
             CSMigrationwrapper mw = new CSMigrationwrapper();
 
-            mw.StartMigration(MyAcct);
+            mw.StartMigration(MyAcct, m_isPreview);
             accountResultsViewModel.AccountResultsList[num].PBMsgValue = "Migration complete";
             accountResultsViewModel.AccountResultsList[num].AcctProgressMsg = "Complete";
         }
