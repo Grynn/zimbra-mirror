@@ -1712,11 +1712,6 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
 
     @Override
-    public synchronized List<NamedEntry> searchCalendarResources(EntrySearchFilter filter, String[] returnAttrs, String sortAttr, boolean sortAscending) throws ServiceException {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public synchronized List<Account> getAllAccounts(Domain d) throws ServiceException {
         if (d == null || d.getAttr(A_zimbraDomainName) == null) {
             return getAllAccounts(true);
@@ -1774,12 +1769,6 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     @Override
     public synchronized SearchGalResult autoCompleteGal(Domain d, String query, GalSearchType type, int limit) throws ServiceException {
         throw new UnsupportedOperationException();
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public synchronized List searchCalendarResources(Domain d, EntrySearchFilter filter, String[] returnAttrs, String sortAttr, boolean sortAscending) throws ServiceException {
-        return Collections.emptyList();
     }
 
     @Override
