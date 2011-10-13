@@ -784,7 +784,8 @@ function (ev) {
             dialog = sbController.getFilterDialogByType (ZaSearchOption.BASIC_TYPE_ID);
         break;
     }
-    dialog.popup(loc);
+    if (dialog)
+        dialog.popup(loc);
 }
 
 ZaSearchBuilderController.filterDialogSet = {};
@@ -792,6 +793,13 @@ ZaSearchBuilderController.prototype.getFilterDialogByType =
 function (filterType) {
     if (!ZaSearchBuilderController.filterDialogSet[filterType]) {
         ZaSearchBuilderController.filterDialogSet[filterType] = new ZaSearchOptionDialog(ZaApp.getInstance().getAppCtxt().getShell(), filterType);
+        ZaSearchBuilderController.filterDialogSet[filterType].registerCallback(DwtDialog.OK_BUTTON, this.filterOKListener, this, filterType);
     }
     return ZaSearchBuilderController.filterDialogSet[filterType];
+}
+
+ZaSearchBuilderController.prototype.filterOKListener =
+function (filterType) {
+    var dialog = this.getFilterDialogByType(filterType);
+    dialog.popdown();
 }

@@ -16,12 +16,13 @@ ZaSearchOptionDialog = function(parent, optionId, w, h, contextId) {
 	}
 
 	this._contextId = contextId? contextId:ZaId.DLG_UNDEF;
-
+    this._optionId = optionId;
 	DwtDialog.call(this, {
 		parent:parent,
 		className:clsName,
 		standardButtons:this._standardButtons,
 		extraButtons:this._extraButtons,
+        mode: DwtBaseDialog.MODELESS,
 		id:ZaId.getDialogId(this._contextId)
 	});
 

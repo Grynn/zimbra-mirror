@@ -937,6 +937,27 @@ function() {
                                     mappingId: ZaZimbraAdmin._SEARCH_HOME_VIEW});
     tree.addTreeItemData(ti);
 
+    ti = new ZaTreeItemData({
+                                    parent:ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_search, ZaMsg.OVP_search]),
+                                    id:ZaId.getTreeItemId(ZaId.PANEL_APP,"currentSearch",null, "accountResult"),
+                                    text: ZaMsg.OVP_accountSearchResult,
+                                    mappingId: ZaZimbraAdmin._SEARCH_HOME_VIEW});
+    tree.addTreeItemData(ti);
+
+    ti = new ZaTreeItemData({
+                                    parent:ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_search, ZaMsg.OVP_search]),
+                                    id:ZaId.getTreeItemId(ZaId.PANEL_APP,"currentSearch",null, "domainResult"),
+                                    text: ZaMsg.OVP_domainSearchResult,
+                                    mappingId: ZaZimbraAdmin._SEARCH_HOME_VIEW});
+    tree.addTreeItemData(ti);
+
+    ti = new ZaTreeItemData({
+                                    parent:ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_search, ZaMsg.OVP_search]),
+                                    id:ZaId.getTreeItemId(ZaId.PANEL_APP,"currentSearch",null, "dlResult"),
+                                    text: ZaMsg.OVP_dlSearchResult,
+                                    mappingId: ZaZimbraAdmin._SEARCH_HOME_VIEW});
+    tree.addTreeItemData(ti);
+
     var searchOptionTi = new ZaTreeItemData({
                                     parent:parentPath,
                                     canShowOnRoot: false,
@@ -1302,8 +1323,11 @@ ZaOverviewPanelController.searchListTreeListener = function (ev) {
 
 ZaOverviewPanelController.newSearchListTreeListener = function (ev) {
     var tree = this.getOverviewPanel().getFolderTree();
-    var searchPath = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_search, ZaMsg.OVP_search, "All Result"]);
-    tree.setSelectionByPath(searchPath, true, true);
+    var currentPath = tree.getABPath(ev.item.getData("dataItem"));
+    if (currentPath ==  ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_search])){
+        var searchPath = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_search, ZaMsg.OVP_search]);
+        tree.setSelectionByPath(searchPath, true, true);
+    }
 	var searchField = ZaApp.getInstance().getSearchListController()._searchField ;
 	var name = ev.item.getData("name") ;
 	var query = ev.item.getData("query");
@@ -1311,8 +1335,9 @@ ZaOverviewPanelController.newSearchListTreeListener = function (ev) {
 		//if(window.console && window.console.log) console.debug("Run the saved search ...") ;
         if (query)
 		    searchField.selectSavedSearch(name, query);
-        else
+        else {
             searchField.invokeCallback(); // Use the value in the current search fields;
+        }
 	}
 }
 

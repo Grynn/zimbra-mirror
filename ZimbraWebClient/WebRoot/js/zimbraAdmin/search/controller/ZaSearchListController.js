@@ -263,8 +263,8 @@ function (value, searchCtl,searchQueryList) {
         var controller = searchCtl? searchCtl:this;
 
         var query = "(" + ZaDomain.A_domainName;
-        if(value.length > 1) query += "=" + value[0] + "*)";
-        else query += "=*" + value[0] + "*)";
+        if(value.length > 0) query += "=" + value[0] + "*)";
+        else query = "";
 
         var callback = new AjxCallback(controller, ZaSearchListController.searchAliasDomainCallback,
             {busyId:busyId, searchQueryList:searchQueryList, childQueries:value});
