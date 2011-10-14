@@ -322,11 +322,20 @@ ZaSearchXFormView.getCustomWidth = function () {
 };
 
 ZaSearchXFormView.doQuickSearch = function () {
-
+    var form = this.getForm();
+    var currentQueryValue = form.parent.getQueryField();
+    currentQueryValue = currentQueryValue ? currentQueryValue: "";
+    var searchField = ZaApp.getInstance().getSearchListController()._searchField;
+    searchField.getSearchFieldElement().value = currentQueryValue;
+    searchField.invokeCallback();
 }
 
 ZaSearchXFormView.doSaveSearch = function () {
-
+    var form = this.getForm();
+    var currentQueryValue = form.parent.getQueryField();
+    currentQueryValue = currentQueryValue ? currentQueryValue: "";
+    var searchField = ZaApp.getInstance().getSearchListController()._searchField;
+    searchField.doSaveSearch(currentQueryValue);
 }
 
 ZaSearchXFormView.myXFormModifier = function(xFormObject) {
@@ -338,13 +347,15 @@ ZaSearchXFormView.myXFormModifier = function(xFormObject) {
 		{type:_GROUP_, visibilityChecks:[], colSizes:["*","70px","90px"], colSpan:2, numCols:3, width:"100%", id:"xform_header",
 			items:[
 				{type:_TEXTFIELD_, width:"100%", ref:ZaSearchEdit.A2_currentQuery,
-					containerCssClass:"search_field_container",
+					containerCssClass:"search_field_container", bmolsnr: true,
 					cssClass:"search_input", visibilityChecks:[], enableDisableChecks:[]
 				},
 				{type:_DWT_BUTTON_, label:ZaMsg.LBL_QuickSearch, name: "SearchButton", autoPadding: false,
 						onActivate:ZaSearchXFormView.doQuickSearch, visibilityChecks:[], enableDisableChecks:[]},
 				{type:_DWT_BUTTON_, label:ZaMsg.LBL_SaveSearch, name: "saveSearchButton",  autoPadding: false,
-						onActivate:ZaSearchXFormView.doSaveSearch, visibilityChecks:[], enableDisableChecks:[]}
+						onActivate:ZaSearchXFormView.doSaveSearch, visibilityChecks:[],
+                        visibilityChecks:["(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.SAVE_SEARCH] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])"],
+                        enableDisableChangeEventSources:[ZaSearchEdit.A2_currentQuery],enableDisableChecks:[[XForm.checkInstanceValueNotEmty,ZaSearchEdit.A2_currentQuery]]}
 			]
 		},
 

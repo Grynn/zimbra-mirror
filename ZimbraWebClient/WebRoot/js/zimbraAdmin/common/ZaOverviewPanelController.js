@@ -1333,9 +1333,11 @@ ZaOverviewPanelController.newSearchListTreeListener = function (ev) {
 	var query = ev.item.getData("query");
 	if (ev.detail == DwtTree.ITEM_SELECTED) {
 		//if(window.console && window.console.log) console.debug("Run the saved search ...") ;
-        if (query)
+        if (query) {
+            searchField.setCurrentSavedSearch({name: name, query: query});
 		    searchField.selectSavedSearch(name, query);
-        else {
+        } else {
+            searchField.setCurrentSavedSearch ({});
             searchField.invokeCallback(); // Use the value in the current search fields;
         }
 	}
