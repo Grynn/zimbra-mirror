@@ -228,6 +228,32 @@ function (showRootNode) {
     return this.currentRoot;
 }
 
+ZaTree.prototype.renameTreeItem =
+function (path, newName) {
+    var dataTreeItem  =  this.getTreeItemDataByPath(path);
+    if (!dataTreeItem)
+        return;
+
+    // If this is shown now, then update the Tree Item.
+    var treeItem = this.getTreeItemByPath(path);
+    if (treeItem) {
+        treeItem.setText (newName);
+    }
+
+    dataTreeItem.text = newName;
+    var parentPath = this.getPathItems (dataTreeItem.parent);
+    parentPath.push(newName);
+    var newPath =  this.getPathByArray (parentPath);
+    // TODO we should make it recursive in futher
+    // TODO Currenty it works well for we has only need to rename object name and saved search;
+    for (var i = 0; i < dataTreeItem.childrenData.size(); i++) {
+        var currentNode = dataTreeItem.childrenData.get(i);
+        currentNode.parent = newPath;
+    }
+
+    return newPath;
+}
+
 ZaTree.prototype._getDefaultRelated =
 function (treeDataItem) {
     var related = new ZaTreeItemData({

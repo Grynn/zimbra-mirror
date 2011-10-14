@@ -93,13 +93,41 @@ ZaSearchListController.prototype.show = function (doPush) {
 
 }
 
+ZaSearchListController.version = 1;
 ZaSearchListController.prototype._show = 
 function (list, openInNewTab, openInSearchTab) {
+    if (appNewUI) {
+        this._lastestResult = list;
+        this._lastestResult.getArray()._version = ZaSearchListController.version ++;
+    }
 	this._updateUI(list, openInNewTab, openInSearchTab);
 	//ZaApp.getInstance().pushView(ZaZimbraAdmin._SEARCH_LIST_VIEW);
 	ZaApp.getInstance().pushView(this.getContentViewId());
 }
 
+ZaSearchListController.prototype.getSearchReuslt =
+function (type) {
+    if (!type)
+        return this._lastestResult;
+
+    var currentNode;
+    var vector = this._lastestResult.getVector();
+    var result = new ZaItemList();
+    for (var i = 0; i < vector.size(); i++) {
+        currentNode = vector.get(i);
+        if (currentNode.type == type) {
+            result.add(currentNode);
+        }
+    }
+    return result;
+}
+
+ZaSearchListController.filterResult =
+function (obj, type) {
+    if (!obj)
+        return false;
+    return obj.type == type;
+}
 /**
 * searh panel
 */	

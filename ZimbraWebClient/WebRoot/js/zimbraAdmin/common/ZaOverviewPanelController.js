@@ -929,33 +929,37 @@ function() {
                                     mappingId: ZaZimbraAdmin._SEARCH_HOME_VIEW});
     ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._SEARCH_HOME_VIEW] = ZaOverviewPanelController.newSearchListTreeListener;
     tree.addTreeItemData(currentSearchTi);
+    this.setSearchItemPath (ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_search, ZaMsg.OVP_search]));
 
     ti = new ZaTreeItemData({
                                     parent:ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_search, ZaMsg.OVP_search]),
                                     id:ZaId.getTreeItemId(ZaId.PANEL_APP,"currentSearch",null, "allResult"),
                                     text: ZaMsg.OVP_allSearchResult,
-                                    mappingId: ZaZimbraAdmin._SEARCH_HOME_VIEW});
+                                    mappingId: ZaZimbraAdmin._SEARCH_RESULT_VIEW});
     tree.addTreeItemData(ti);
-
+    ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._SEARCH_RESULT_VIEW] = ZaOverviewPanelController.searchResultTreeListener;
     ti = new ZaTreeItemData({
                                     parent:ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_search, ZaMsg.OVP_search]),
                                     id:ZaId.getTreeItemId(ZaId.PANEL_APP,"currentSearch",null, "accountResult"),
                                     text: ZaMsg.OVP_accountSearchResult,
-                                    mappingId: ZaZimbraAdmin._SEARCH_HOME_VIEW});
+                                    mappingId: ZaZimbraAdmin._SEARCH_RESULT_VIEW});
+    ti.setData("TreeItemType", ZaItem.ACCOUNT);
     tree.addTreeItemData(ti);
 
     ti = new ZaTreeItemData({
                                     parent:ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_search, ZaMsg.OVP_search]),
                                     id:ZaId.getTreeItemId(ZaId.PANEL_APP,"currentSearch",null, "domainResult"),
                                     text: ZaMsg.OVP_domainSearchResult,
-                                    mappingId: ZaZimbraAdmin._SEARCH_HOME_VIEW});
+                                    mappingId: ZaZimbraAdmin._SEARCH_RESULT_VIEW});
+    ti.setData("TreeItemType", ZaItem.DOMAIN);
     tree.addTreeItemData(ti);
 
     ti = new ZaTreeItemData({
                                     parent:ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_search, ZaMsg.OVP_search]),
                                     id:ZaId.getTreeItemId(ZaId.PANEL_APP,"currentSearch",null, "dlResult"),
                                     text: ZaMsg.OVP_dlSearchResult,
-                                    mappingId: ZaZimbraAdmin._SEARCH_HOME_VIEW});
+                                    mappingId: ZaZimbraAdmin._SEARCH_RESULT_VIEW});
+    ti.setData("TreeItemType", ZaItem.DL);
     tree.addTreeItemData(ti);
 
     var searchOptionTi = new ZaTreeItemData({
@@ -1048,6 +1052,14 @@ function(ev) {
 			}
 			this._handleException(ex, "ZaOverviewPanelController.prototype._overviewTreeListener", null, false);
 		}
+}
+
+ZaOverviewPanelController.prototype.setSearchItemPath = function (path) {
+    this._searchItemPath = path;
+}
+
+ZaOverviewPanelController.prototype.getSearchItemPath = function (path) {
+    return this._searchItemPath;
 }
 
 /* default tree listeners */
@@ -1325,7 +1337,7 @@ ZaOverviewPanelController.newSearchListTreeListener = function (ev) {
     var tree = this.getOverviewPanel().getFolderTree();
     var currentPath = tree.getABPath(ev.item.getData("dataItem"));
     if (currentPath ==  ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_search])){
-        var searchPath = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_search, ZaMsg.OVP_search]);
+        var  searchPath = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_search, ZaMsg.OVP_search]);
         tree.setSelectionByPath(searchPath, true, true);
     }
 	var searchField = ZaApp.getInstance().getSearchListController()._searchField ;
@@ -1334,12 +1346,24 @@ ZaOverviewPanelController.newSearchListTreeListener = function (ev) {
 	if (ev.detail == DwtTree.ITEM_SELECTED) {
 		//if(window.console && window.console.log) console.debug("Run the saved search ...") ;
         if (query) {
+            var searchText = ZaMsg.OVP_search + " : " + name;
+            var newPath = tree.renameTreeItem(this.getSearchItemPath(), searchText);
+            this.setSearchItemPath(newPath);
             searchField.setCurrentSavedSearch({name: name, query: query});
 		    searchField.selectSavedSearch(name, query);
         } else {
             searchField.setCurrentSavedSearch ({});
             searchField.invokeCallback(); // Use the value in the current search fields;
         }
+	}
+}
+
+ZaOverviewPanelController.searchResultTreeListener = function (ev) {
+	if (ev.detail == DwtTree.ITEM_SELECTED) {
+        var itemType = ev.item.getData("TreeItemType");
+        var slController = ZaApp.getInstance().getSearchListController();
+        var result = slController.getSearchReuslt (itemType);
+        slController._updateUI (result);
 	}
 }
 
