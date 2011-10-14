@@ -167,11 +167,52 @@ STDMETHODIMP CItemObject::GetDataForItemID(VARIANT ItemId, VARIANT *pVal)
 			{
 			ContactItemData cd;
 			maapi->GetItem(ItemID, cd);
-			 pIt[L"BirthDay"] = SysAllocString((cd.Birthday).c_str());
-			pIt[L"FirstName"] = SysAllocString((cd.FirstName).c_str());
-			pIt[L"JobTitle"] = SysAllocString((cd.JobTitle).c_str());
-			pIt[L"CallbackPhone"] = SysAllocString((cd.CallbackPhone).c_str());
-			pIt[L"Email1"] = SysAllocString((cd.Email1).c_str());
+			pIt[L"birthday"] = SysAllocString((cd.Birthday).c_str());
+			pIt[L"callbackPhone"] = SysAllocString((cd.CallbackPhone).c_str());
+			pIt[L"carPhone"] = SysAllocString((cd.CarPhone).c_str());
+			pIt[L"company"] = SysAllocString((cd.Company).c_str());
+			pIt[L"email"] = SysAllocString((cd.Email1).c_str());
+			pIt[L"email2"] = SysAllocString((cd.Email2).c_str());
+			pIt[L"email3"] = SysAllocString((cd.Email3).c_str());
+			pIt[L"fileAs"] = SysAllocString((cd.FileAs).c_str());
+			pIt[L"firstName"] = SysAllocString((cd.FirstName).c_str());
+			pIt[L"homeCity"] = SysAllocString((cd.HomeCity).c_str());
+			pIt[L"homeCountry"] = SysAllocString((cd.HomeCountry).c_str());
+			pIt[L"homeFax"] = SysAllocString((cd.HomeFax).c_str());
+			pIt[L"homePhone"] = SysAllocString((cd.HomePhone).c_str());
+			pIt[L"homePhone2"] = SysAllocString((cd.HomePhone2).c_str());
+			pIt[L"homePostalCode"] = SysAllocString((cd.HomePostalCode).c_str());
+			pIt[L"homeState"] = SysAllocString((cd.HomeState).c_str());
+			pIt[L"homeStreet"] = SysAllocString((cd.HomeStreet).c_str());
+			pIt[L"homeURL"] = SysAllocString((cd.HomeURL).c_str());
+			pIt[L"jobTitle"] = SysAllocString((cd.JobTitle).c_str());
+			pIt[L"lastName"] = SysAllocString((cd.LastName).c_str());
+			pIt[L"middleName"] = SysAllocString((cd.MiddleName).c_str());
+			pIt[L"mobilePhone"] = SysAllocString((cd.MobilePhone).c_str());
+			pIt[L"namePrefix"] = SysAllocString((cd.NamePrefix).c_str());
+			pIt[L"nameSuffix"] = SysAllocString((cd.NameSuffix).c_str());
+			pIt[L"notes"] = SysAllocString((cd.Notes).c_str());
+			pIt[L"otherCity"] = SysAllocString((cd.OtherCity).c_str());
+			pIt[L"outerCountry"] = SysAllocString((cd.OtherCountry).c_str());
+			pIt[L"otherFax"] = SysAllocString((cd.OtherFax).c_str());
+			pIt[L"otherPhone"] = SysAllocString((cd.OtherPhone).c_str());
+			pIt[L"otherPostalCode"] = SysAllocString((cd.OtherPostalCode).c_str());
+			pIt[L"otherState"] = SysAllocString((cd.OtherState).c_str());
+			pIt[L"otherStreet"] = SysAllocString((cd.OtherStreet).c_str());
+			pIt[L"otherURL"] = SysAllocString((cd.OtherURL).c_str());
+			pIt[L"pager"] = SysAllocString((cd.Pager).c_str());
+			pIt[L"workCity"] = SysAllocString((cd.WorkCity).c_str());
+			pIt[L"workCountry"] = SysAllocString((cd.WorkCountry).c_str());
+			pIt[L"workFax"] = SysAllocString((cd.WorkFax).c_str());
+			pIt[L"workPhone"] = SysAllocString((cd.WorkPhone).c_str());
+			pIt[L"workPostalCode"] = SysAllocString((cd.WorkPostalCode).c_str());
+			pIt[L"workState"] = SysAllocString((cd.WorkState).c_str());
+			pIt[L"workStreet"] = SysAllocString((cd.WorkStreet).c_str());
+			pIt[L"workURL"] = SysAllocString((cd.WorkURL).c_str());
+			pIt[L"outlookUserField1"] = SysAllocString((cd.UserField1).c_str());
+			pIt[L"outlookUserField2"] = SysAllocString((cd.UserField2).c_str());
+			pIt[L"outlookUserField3"] = SysAllocString((cd.UserField3).c_str());
+			pIt[L"outlookUserField4"] = SysAllocString((cd.UserField4).c_str());
 			}
 			else if( ft == 1)
 			{
