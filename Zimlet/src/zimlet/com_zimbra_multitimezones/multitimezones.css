@@ -1,0 +1,23 @@
+.multiTimezone_row {
+	background-color:white;border-bottom:1px solid gray;padding: 2px;
+}
+.multiTimezone_filterDiv {
+    border-radius: 10px;background-color: white; height:22px;width:230px;border:1px solid #a1a1a1;
+}
+
+.multiTimezone_filterField {
+    color:gray;width:200px;height:22px;border: 0px !important; left:15px;position:relative;
+}
+
+.multiTimezone_downArrow {
+  background: url("multiTZDownArrow.png") no-repeat 0 0;
+  width: 16px;
+  height: 16px;
+  overflow: hidden;
+}
+
+
+.multiTimezone_firstCell {
+    border-left:1px solid #909090;
+}
+

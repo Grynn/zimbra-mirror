@@ -1,0 +1,5 @@
+<zimlet name="com_zimbra_multitimezones" version="0.1" label="${msg.label}" description="${msg.description}">
+  <include>multitimezones.js</include>
+  <includeCSS>multitimezones.css</includeCSS>
+  <handlerObject>ZmMultiTimezoneZimlet</handlerObject>
+</zimlet>
