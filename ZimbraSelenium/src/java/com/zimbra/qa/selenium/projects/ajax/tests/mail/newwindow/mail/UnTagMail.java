@@ -2,6 +2,7 @@ package com.zimbra.qa.selenium.projects.ajax.tests.mail.newwindow.mail;
 
 import org.testng.annotations.Test;
 
+import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
@@ -16,7 +17,7 @@ public class UnTagMail extends PrefGroupMailByMessageTest {
 
 
 	}
-
+	@Bugs(ids="65769")
 	@Test(	description = "Tag a message using Toolbar -> Tag -> Existing Tag - in a separate window", 
 			groups = { "smoke" })
 	public void UnTagMail_01() throws HarnessException {
