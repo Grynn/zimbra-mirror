@@ -337,7 +337,7 @@ ZaAccount.REMOVE_ACCOUNT_ALIAS_RIGHT = "removeAccountAlias";
 ZaAccount.GET_ACCOUNT_MEMBERSHIP_RIGHT = "getAccountMembership";
 ZaAccount.GET_MAILBOX_INFO_RIGHT = "getMailboxInfo";
 ZaAccount.GET_ACCOUNT_INFO_RIGHT = "getAccountInfo";
-
+ZaAccount.RIGHT_VIEW_ADMINUI_COMPONENTS = "viewAccountAdminUI";
 ZaAccount.checkValues = 
 function(tmpObj) {
 	/**

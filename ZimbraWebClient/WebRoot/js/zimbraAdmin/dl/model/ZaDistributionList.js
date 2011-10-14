@@ -96,6 +96,7 @@ ZaDistributionList.REMOVE_DL_MEMBER_RIGHT = "removeDistributionListMember";
 ZaDistributionList.ADD_DL_MEMBER_RIGHT = "addDistributionListMember";
 ZaDistributionList.GET_DL_MEMBERSHIP_RIGHT = "getDistributionListMembership";
 ZaDistributionList.GET_DL_SHARE_INFO_RIGHT = "getDistributionListShareInfo";
+ZaDistributionList.RIGHT_VIEW_ADMINUI_COMPONENTS = "viewDistributionListAdminUI";
 
 ZaDistributionList.searchAttributes = AjxBuffer.concat(ZaAccount.A_displayname,",",
 													   ZaItem.A_zimbraId,  "," , 
