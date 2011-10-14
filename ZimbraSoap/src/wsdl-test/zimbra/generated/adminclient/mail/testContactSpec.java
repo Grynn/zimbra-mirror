@@ -21,6 +21,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;sequence>
  *         &lt;element name="vcard" type="{urn:zimbraMail}vCardInfo" minOccurs="0"/>
  *         &lt;element name="a" type="{urn:zimbraMail}newContactAttr" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="m" type="{urn:zimbraMail}contactGroupMember" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *       &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}int" />
  *       &lt;attribute name="l" type="{http://www.w3.org/2001/XMLSchema}string" />
@@ -36,12 +37,14 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "contactSpec", propOrder = {
     "vcard",
-    "a"
+    "a",
+    "m"
 })
 public class testContactSpec {
 
     protected testVCardInfo vcard;
     protected List<testNewContactAttr> a;
+    protected List<testContactGroupMember> m;
     @XmlAttribute(name = "id")
     protected Integer id;
     @XmlAttribute(name = "l")
@@ -102,6 +105,35 @@ public class testContactSpec {
             a = new ArrayList<testNewContactAttr>();
         }
         return this.a;
+    }
+
+    /**
+     * Gets the value of the m property.
+     * 
+     * <p>
+     * This accessor method returns a reference to the live list,
+     * not a snapshot. Therefore any modification you make to the
+     * returned list will be present inside the JAXB object.
+     * This is why there is not a <CODE>set</CODE> method for the m property.
+     * 
+     * <p>
+     * For example, to add a new item, do as follows:
+     * <pre>
+     *    getM().add(newItem);
+     * </pre>
+     * 
+     * 
+     * <p>
+     * Objects of the following type(s) are allowed in the list
+     * {@link testContactGroupMember }
+     * 
+     * 
+     */
+    public List<testContactGroupMember> getM() {
+        if (m == null) {
+            m = new ArrayList<testContactGroupMember>();
+        }
+        return this.m;
     }
 
     /**

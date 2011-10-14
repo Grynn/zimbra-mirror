@@ -6,8 +6,6 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlType;
 import zimbra.generated.adminclient.zm.testAttributeName;
 import zimbra.generated.adminclient.zm.testId;
@@ -23,10 +21,9 @@ import zimbra.generated.adminclient.zm.testId;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;choice maxOccurs="unbounded" minOccurs="0">
- *           &lt;element name="a" type="{urn:zimbra}attributeName"/>
- *           &lt;element name="cn" type="{urn:zimbra}id"/>
- *         &lt;/choice>
+ *         &lt;element name="a" type="{urn:zimbra}attributeName" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="ma" type="{urn:zimbra}attributeName" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="cn" type="{urn:zimbra}id" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *       &lt;attribute name="sync" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *       &lt;attribute name="l" type="{http://www.w3.org/2001/XMLSchema}string" />
@@ -42,15 +39,15 @@ import zimbra.generated.adminclient.zm.testId;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "getContactsRequest", propOrder = {
-    "aOrCn"
+    "a",
+    "ma",
+    "cn"
 })
 public class testGetContactsRequest {
 
-    @XmlElements({
-        @XmlElement(name = "cn", type = testId.class),
-        @XmlElement(name = "a", type = testAttributeName.class)
-    })
-    protected List<Object> aOrCn;
+    protected List<testAttributeName> a;
+    protected List<testAttributeName> ma;
+    protected List<testId> cn;
     @XmlAttribute(name = "sync")
     protected Boolean sync;
     @XmlAttribute(name = "l")
@@ -63,33 +60,90 @@ public class testGetContactsRequest {
     protected Boolean returnHiddenAttrs;
 
     /**
-     * Gets the value of the aOrCn property.
+     * Gets the value of the a property.
      * 
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the aOrCn property.
+     * This is why there is not a <CODE>set</CODE> method for the a property.
      * 
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
-     *    getAOrCn().add(newItem);
+     *    getA().add(newItem);
+     * </pre>
+     * 
+     * 
+     * <p>
+     * Objects of the following type(s) are allowed in the list
+     * {@link testAttributeName }
+     * 
+     * 
+     */
+    public List<testAttributeName> getA() {
+        if (a == null) {
+            a = new ArrayList<testAttributeName>();
+        }
+        return this.a;
+    }
+
+    /**
+     * Gets the value of the ma property.
+     * 
+     * <p>
+     * This accessor method returns a reference to the live list,
+     * not a snapshot. Therefore any modification you make to the
+     * returned list will be present inside the JAXB object.
+     * This is why there is not a <CODE>set</CODE> method for the ma property.
+     * 
+     * <p>
+     * For example, to add a new item, do as follows:
+     * <pre>
+     *    getMa().add(newItem);
+     * </pre>
+     * 
+     * 
+     * <p>
+     * Objects of the following type(s) are allowed in the list
+     * {@link testAttributeName }
+     * 
+     * 
+     */
+    public List<testAttributeName> getMa() {
+        if (ma == null) {
+            ma = new ArrayList<testAttributeName>();
+        }
+        return this.ma;
+    }
+
+    /**
+     * Gets the value of the cn property.
+     * 
+     * <p>
+     * This accessor method returns a reference to the live list,
+     * not a snapshot. Therefore any modification you make to the
+     * returned list will be present inside the JAXB object.
+     * This is why there is not a <CODE>set</CODE> method for the cn property.
+     * 
+     * <p>
+     * For example, to add a new item, do as follows:
+     * <pre>
+     *    getCn().add(newItem);
      * </pre>
      * 
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link testId }
-     * {@link testAttributeName }
      * 
      * 
      */
-    public List<Object> getAOrCn() {
-        if (aOrCn == null) {
-            aOrCn = new ArrayList<Object>();
+    public List<testId> getCn() {
+        if (cn == null) {
+            cn = new ArrayList<testId>();
         }
-        return this.aOrCn;
+        return this.cn;
     }
 
     /**

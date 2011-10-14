@@ -60,6 +60,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;attribute name="i4next" type="{http://www.w3.org/2001/XMLSchema}int" />
  *       &lt;attribute name="url" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="perm" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="recursive" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *       &lt;attribute name="rest" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -128,6 +129,8 @@ public class testFolder {
     protected String url;
     @XmlAttribute(name = "perm")
     protected String perm;
+    @XmlAttribute(name = "recursive")
+    protected Boolean recursive;
     @XmlAttribute(name = "rest")
     protected String rest;
 
@@ -693,6 +696,30 @@ public class testFolder {
      */
     public void setPerm(String value) {
         this.perm = value;
+    }
+
+    /**
+     * Gets the value of the recursive property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isRecursive() {
+        return recursive;
+    }
+
+    /**
+     * Sets the value of the recursive property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setRecursive(Boolean value) {
+        this.recursive = value;
     }
 
     /**

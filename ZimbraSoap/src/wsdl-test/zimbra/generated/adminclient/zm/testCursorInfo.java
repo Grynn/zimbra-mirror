@@ -21,6 +21,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="sortVal" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="endSortVal" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="includeOffset" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -38,6 +39,8 @@ public class testCursorInfo {
     protected String sortVal;
     @XmlAttribute(name = "endSortVal")
     protected String endSortVal;
+    @XmlAttribute(name = "includeOffset")
+    protected Boolean includeOffset;
 
     /**
      * Gets the value of the id property.
@@ -109,6 +112,30 @@ public class testCursorInfo {
      */
     public void setEndSortVal(String value) {
         this.endSortVal = value;
+    }
+
+    /**
+     * Gets the value of the includeOffset property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isIncludeOffset() {
+        return includeOffset;
+    }
+
+    /**
+     * Sets the value of the includeOffset property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setIncludeOffset(Boolean value) {
+        this.includeOffset = value;
     }
 
 }

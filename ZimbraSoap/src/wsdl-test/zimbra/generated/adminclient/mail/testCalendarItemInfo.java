@@ -46,6 +46,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;attribute name="md" type="{http://www.w3.org/2001/XMLSchema}long" />
  *       &lt;attribute name="ms" type="{http://www.w3.org/2001/XMLSchema}int" />
  *       &lt;attribute name="nextAlarm" type="{http://www.w3.org/2001/XMLSchema}long" />
+ *       &lt;attribute name="orphan" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -91,6 +92,8 @@ public class testCalendarItemInfo {
     protected Integer ms;
     @XmlAttribute(name = "nextAlarm")
     protected Long nextAlarm;
+    @XmlAttribute(name = "orphan")
+    protected Boolean orphan;
 
     /**
      * Gets the value of the inv property.
@@ -460,6 +463,30 @@ public class testCalendarItemInfo {
      */
     public void setNextAlarm(Long value) {
         this.nextAlarm = value;
+    }
+
+    /**
+     * Gets the value of the orphan property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isOrphan() {
+        return orphan;
+    }
+
+    /**
+     * Sets the value of the orphan property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setOrphan(Boolean value) {
+        this.orphan = value;
     }
 
 

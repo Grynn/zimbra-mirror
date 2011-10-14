@@ -39,8 +39,8 @@ import javax.xml.bind.annotation.XmlType;
 public class testSnoozeCalendarItemAlarmRequest {
 
     @XmlElements({
-        @XmlElement(name = "appt", type = testSnoozeAppointmentAlarm.class),
-        @XmlElement(name = "task", type = testSnoozeTaskAlarm.class)
+        @XmlElement(name = "task", type = testSnoozeTaskAlarm.class),
+        @XmlElement(name = "appt", type = testSnoozeAppointmentAlarm.class)
     })
     protected List<testSnoozeAlarm> apptOrTask;
 
@@ -62,8 +62,8 @@ public class testSnoozeCalendarItemAlarmRequest {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link testSnoozeAppointmentAlarm }
      * {@link testSnoozeTaskAlarm }
+     * {@link testSnoozeAppointmentAlarm }
      * 
      * 
      */

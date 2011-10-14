@@ -19,6 +19,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="comment" type="{urn:zimbraMail}commentInfo" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="user" type="{urn:zimbraMail}idEmailName" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -29,11 +30,13 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "getCommentsResponse", propOrder = {
-    "comment"
+    "comment",
+    "user"
 })
 public class testGetCommentsResponse {
 
     protected List<testCommentInfo> comment;
+    protected List<testIdEmailName> user;
 
     /**
      * Gets the value of the comment property.
@@ -62,6 +65,35 @@ public class testGetCommentsResponse {
             comment = new ArrayList<testCommentInfo>();
         }
         return this.comment;
+    }
+
+    /**
+     * Gets the value of the user property.
+     * 
+     * <p>
+     * This accessor method returns a reference to the live list,
+     * not a snapshot. Therefore any modification you make to the
+     * returned list will be present inside the JAXB object.
+     * This is why there is not a <CODE>set</CODE> method for the user property.
+     * 
+     * <p>
+     * For example, to add a new item, do as follows:
+     * <pre>
+     *    getUser().add(newItem);
+     * </pre>
+     * 
+     * 
+     * <p>
+     * Objects of the following type(s) are allowed in the list
+     * {@link testIdEmailName }
+     * 
+     * 
+     */
+    public List<testIdEmailName> getUser() {
+        if (user == null) {
+            user = new ArrayList<testIdEmailName>();
+        }
+        return this.user;
     }
 
 }

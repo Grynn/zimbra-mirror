@@ -20,6 +20,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element ref="{urn:zimbraMail}meta" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element ref="{urn:zimbraMail}retentionPolicy" minOccurs="0"/>
  *       &lt;/sequence>
  *       &lt;attribute name="id" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="name" type="{http://www.w3.org/2001/XMLSchema}string" />
@@ -40,11 +41,13 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tagInfo", propOrder = {
-    "meta"
+    "meta",
+    "retentionPolicy"
 })
 public class testTagInfo {
 
     protected List<testMailCustomMetadata> meta;
+    protected testRetentionPolicy retentionPolicy;
     @XmlAttribute(name = "id", required = true)
     protected String id;
     @XmlAttribute(name = "name")
@@ -93,6 +96,30 @@ public class testTagInfo {
             meta = new ArrayList<testMailCustomMetadata>();
         }
         return this.meta;
+    }
+
+    /**
+     * Gets the value of the retentionPolicy property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link testRetentionPolicy }
+     *     
+     */
+    public testRetentionPolicy getRetentionPolicy() {
+        return retentionPolicy;
+    }
+
+    /**
+     * Sets the value of the retentionPolicy property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link testRetentionPolicy }
+     *     
+     */
+    public void setRetentionPolicy(testRetentionPolicy value) {
+        this.retentionPolicy = value;
     }
 
     /**

@@ -38,6 +38,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;attribute name="excludeFreeBusy" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *       &lt;attribute name="zid" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="gt" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="view" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/extension>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -68,6 +69,8 @@ public class testFolderActionSelector
     protected String zid;
     @XmlAttribute(name = "gt")
     protected String gt;
+    @XmlAttribute(name = "view")
+    protected String view;
 
     /**
      * Gets the value of the grant property.
@@ -259,6 +262,30 @@ public class testFolderActionSelector
      */
     public void setGt(String value) {
         this.gt = value;
+    }
+
+    /**
+     * Gets the value of the view property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getView() {
+        return view;
+    }
+
+    /**
+     * Sets the value of the view property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setView(String value) {
+        this.view = value;
     }
 
 

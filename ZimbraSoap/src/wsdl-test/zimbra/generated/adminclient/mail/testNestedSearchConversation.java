@@ -29,7 +29,7 @@ import zimbra.generated.adminclient.zm.testWildcardExpansionQueryInfo;
  *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *                 &lt;sequence>
  *                   &lt;choice maxOccurs="unbounded" minOccurs="0">
- *                     &lt;element name="spell" type="{urn:zimbraMail}spellingSuggestionsQueryInfo"/>
+ *                     &lt;element name="suggest" type="{urn:zimbraMail}spellingSuggestionsQueryInfo"/>
  *                     &lt;element name="wildcard" type="{urn:zimbra}wildcardExpansionQueryInfo"/>
  *                   &lt;/choice>
  *                 &lt;/sequence>
@@ -282,7 +282,7 @@ public class testNestedSearchConversation {
      *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
      *       &lt;sequence>
      *         &lt;choice maxOccurs="unbounded" minOccurs="0">
-     *           &lt;element name="spell" type="{urn:zimbraMail}spellingSuggestionsQueryInfo"/>
+     *           &lt;element name="suggest" type="{urn:zimbraMail}spellingSuggestionsQueryInfo"/>
      *           &lt;element name="wildcard" type="{urn:zimbra}wildcardExpansionQueryInfo"/>
      *         &lt;/choice>
      *       &lt;/sequence>
@@ -295,44 +295,44 @@ public class testNestedSearchConversation {
      */
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "", propOrder = {
-        "spellOrWildcard"
+        "suggestOrWildcard"
     })
     public static class Info {
 
         @XmlElements({
-            @XmlElement(name = "spell", type = testSpellingSuggestionsQueryInfo.class),
-            @XmlElement(name = "wildcard", type = testWildcardExpansionQueryInfo.class)
+            @XmlElement(name = "wildcard", type = testWildcardExpansionQueryInfo.class),
+            @XmlElement(name = "suggest", type = String.class)
         })
-        protected List<Object> spellOrWildcard;
+        protected List<Object> suggestOrWildcard;
 
         /**
-         * Gets the value of the spellOrWildcard property.
+         * Gets the value of the suggestOrWildcard property.
          * 
          * <p>
          * This accessor method returns a reference to the live list,
          * not a snapshot. Therefore any modification you make to the
          * returned list will be present inside the JAXB object.
-         * This is why there is not a <CODE>set</CODE> method for the spellOrWildcard property.
+         * This is why there is not a <CODE>set</CODE> method for the suggestOrWildcard property.
          * 
          * <p>
          * For example, to add a new item, do as follows:
          * <pre>
-         *    getSpellOrWildcard().add(newItem);
+         *    getSuggestOrWildcard().add(newItem);
          * </pre>
          * 
          * 
          * <p>
          * Objects of the following type(s) are allowed in the list
-         * {@link testSpellingSuggestionsQueryInfo }
          * {@link testWildcardExpansionQueryInfo }
+         * {@link String }
          * 
          * 
          */
-        public List<Object> getSpellOrWildcard() {
-            if (spellOrWildcard == null) {
-                spellOrWildcard = new ArrayList<Object>();
+        public List<Object> getSuggestOrWildcard() {
+            if (suggestOrWildcard == null) {
+                suggestOrWildcard = new ArrayList<Object>();
             }
-            return this.spellOrWildcard;
+            return this.suggestOrWildcard;
         }
 
     }

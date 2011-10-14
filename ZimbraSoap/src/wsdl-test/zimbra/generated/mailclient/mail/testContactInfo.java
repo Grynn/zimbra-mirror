@@ -22,6 +22,7 @@ import zimbra.generated.mailclient.zm.testContactAttr;
  *       &lt;sequence>
  *         &lt;element ref="{urn:zimbraMail}meta" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="a" type="{urn:zimbra}contactAttr" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="m" type="{urn:zimbraMail}contactGroupMember" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *       &lt;attribute name="sf" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="exp" type="{http://www.w3.org/2001/XMLSchema}boolean" />
@@ -51,12 +52,14 @@ import zimbra.generated.mailclient.zm.testContactAttr;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "contactInfo", propOrder = {
     "meta",
-    "a"
+    "a",
+    "m"
 })
 public class testContactInfo {
 
     protected List<testMailCustomMetadata> meta;
     protected List<testContactAttr> a;
+    protected List<testContactGroupMember> m;
     @XmlAttribute(name = "sf")
     protected String sf;
     @XmlAttribute(name = "exp")
@@ -150,6 +153,35 @@ public class testContactInfo {
             a = new ArrayList<testContactAttr>();
         }
         return this.a;
+    }
+
+    /**
+     * Gets the value of the m property.
+     * 
+     * <p>
+     * This accessor method returns a reference to the live list,
+     * not a snapshot. Therefore any modification you make to the
+     * returned list will be present inside the JAXB object.
+     * This is why there is not a <CODE>set</CODE> method for the m property.
+     * 
+     * <p>
+     * For example, to add a new item, do as follows:
+     * <pre>
+     *    getM().add(newItem);
+     * </pre>
+     * 
+     * 
+     * <p>
+     * Objects of the following type(s) are allowed in the list
+     * {@link testContactGroupMember }
+     * 
+     * 
+     */
+    public List<testContactGroupMember> getM() {
+        if (m == null) {
+            m = new ArrayList<testContactGroupMember>();
+        }
+        return this.m;
     }
 
     /**

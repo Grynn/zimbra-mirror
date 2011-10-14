@@ -1,5 +1,5 @@
 
-package zimbra.generated.adminclient.mail;
+package zimbra.generated.accountclient.account;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -8,18 +8,18 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for spellingSuggestion complex type.
+ * <p>Java class for contactGroupMember complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="spellingSuggestion">
+ * &lt;complexType name="contactGroupMember">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
+ *         &lt;element name="cn" type="{urn:zimbraAccount}contactInfo" minOccurs="0"/>
  *       &lt;/sequence>
- *       &lt;attribute name="dist" use="required" type="{http://www.w3.org/2001/XMLSchema}int" />
- *       &lt;attribute name="numDocs" use="required" type="{http://www.w3.org/2001/XMLSchema}int" />
+ *       &lt;attribute name="type" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="value" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -29,46 +29,63 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "spellingSuggestion")
-public class testSpellingSuggestion {
+@XmlType(name = "contactGroupMember", propOrder = {
+    "cn"
+})
+public class testContactGroupMember {
 
-    @XmlAttribute(name = "dist", required = true)
-    protected int dist;
-    @XmlAttribute(name = "numDocs", required = true)
-    protected int numDocs;
+    protected testContactInfo cn;
+    @XmlAttribute(name = "type", required = true)
+    protected String type;
     @XmlAttribute(name = "value", required = true)
     protected String value;
 
     /**
-     * Gets the value of the dist property.
+     * Gets the value of the cn property.
      * 
+     * @return
+     *     possible object is
+     *     {@link testContactInfo }
+     *     
      */
-    public int getDist() {
-        return dist;
+    public testContactInfo getCn() {
+        return cn;
     }
 
     /**
-     * Sets the value of the dist property.
+     * Sets the value of the cn property.
      * 
+     * @param value
+     *     allowed object is
+     *     {@link testContactInfo }
+     *     
      */
-    public void setDist(int value) {
-        this.dist = value;
+    public void setCn(testContactInfo value) {
+        this.cn = value;
     }
 
     /**
-     * Gets the value of the numDocs property.
+     * Gets the value of the type property.
      * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
-    public int getNumDocs() {
-        return numDocs;
+    public String getType() {
+        return type;
     }
 
     /**
-     * Sets the value of the numDocs property.
+     * Sets the value of the type property.
      * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
-    public void setNumDocs(int value) {
-        this.numDocs = value;
+    public void setType(String value) {
+        this.type = value;
     }
 
     /**

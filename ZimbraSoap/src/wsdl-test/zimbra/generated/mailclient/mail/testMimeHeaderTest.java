@@ -21,7 +21,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;attribute name="header" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="stringComparison" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="value" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="caseSensitive" type="{http://www.w3.org/2001/XMLSchema}int" />
+ *       &lt;attribute name="caseSensitive" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/extension>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -42,7 +42,7 @@ public class testMimeHeaderTest
     @XmlAttribute(name = "value")
     protected String value;
     @XmlAttribute(name = "caseSensitive")
-    protected Integer caseSensitive;
+    protected String caseSensitive;
 
     /**
      * Gets the value of the header property.
@@ -121,10 +121,10 @@ public class testMimeHeaderTest
      * 
      * @return
      *     possible object is
-     *     {@link Integer }
+     *     {@link String }
      *     
      */
-    public Integer getCaseSensitive() {
+    public String getCaseSensitive() {
         return caseSensitive;
     }
 
@@ -133,10 +133,10 @@ public class testMimeHeaderTest
      * 
      * @param value
      *     allowed object is
-     *     {@link Integer }
+     *     {@link String }
      *     
      */
-    public void setCaseSensitive(Integer value) {
+    public void setCaseSensitive(String value) {
         this.caseSensitive = value;
     }
 

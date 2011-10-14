@@ -56,15 +56,15 @@ public class testSyncResponse {
 
     protected testSyncDeletedInfo deleted;
     @XmlElements({
-        @XmlElement(name = "tag", type = testTagInfo.class),
         @XmlElement(name = "m", type = testMessageSummary.class),
         @XmlElement(name = "c", type = testConversationSummary.class),
-        @XmlElement(name = "cn", type = testContactInfo.class),
-        @XmlElement(name = "chat", type = testChatSummary.class),
-        @XmlElement(name = "w", type = testCommonDocumentInfo.class),
         @XmlElement(name = "note", type = testNoteInfo.class),
         @XmlElement(name = "folder", type = testFolder.class),
+        @XmlElement(name = "cn", type = testContactInfo.class),
+        @XmlElement(name = "chat", type = testChatSummary.class),
+        @XmlElement(name = "tag", type = testTagInfo.class),
         @XmlElement(name = "doc", type = testDocumentInfo.class),
+        @XmlElement(name = "w", type = testCommonDocumentInfo.class),
         @XmlElement(name = "task", type = testTaskItemInfo.class),
         @XmlElement(name = "appt", type = testCalendarItemInfo.class)
     })
@@ -120,15 +120,15 @@ public class testSyncResponse {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link testTagInfo }
      * {@link testMessageSummary }
      * {@link testConversationSummary }
-     * {@link testContactInfo }
-     * {@link testChatSummary }
-     * {@link testCommonDocumentInfo }
      * {@link testNoteInfo }
      * {@link testFolder }
+     * {@link testContactInfo }
+     * {@link testChatSummary }
+     * {@link testTagInfo }
      * {@link testDocumentInfo }
+     * {@link testCommonDocumentInfo }
      * {@link testTaskItemInfo }
      * {@link testCalendarItemInfo }
      * 

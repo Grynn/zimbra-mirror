@@ -78,8 +78,8 @@ public class testMsgWithGroupInfo
     protected testInviteWithGroupInfo inv;
     protected List<testKeyValuePair> header;
     @XmlElements({
-        @XmlElement(name = "dlSubs", type = testDlSubscriptionNotification.class),
         @XmlElement(name = "mp", type = testPartInfo.class),
+        @XmlElement(name = "dlSubs", type = testDlSubscriptionNotification.class),
         @XmlElement(name = "shr", type = testShareNotification.class)
     })
     protected List<Object> mpOrShrOrDlSubs;
@@ -301,8 +301,8 @@ public class testMsgWithGroupInfo
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link testDlSubscriptionNotification }
      * {@link testPartInfo }
+     * {@link testDlSubscriptionNotification }
      * {@link testShareNotification }
      * 
      * 

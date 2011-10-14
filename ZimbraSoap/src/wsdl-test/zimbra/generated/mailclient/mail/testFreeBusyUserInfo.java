@@ -44,9 +44,9 @@ import javax.xml.bind.annotation.XmlType;
 public class testFreeBusyUserInfo {
 
     @XmlElements({
-        @XmlElement(name = "f", type = testFreeBusyFREEslot.class),
-        @XmlElement(name = "u", type = testFreeBusyBUSYUNAVAILABLEslot.class),
         @XmlElement(name = "b", type = testFreeBusyBUSYslot.class),
+        @XmlElement(name = "u", type = testFreeBusyBUSYUNAVAILABLEslot.class),
+        @XmlElement(name = "f", type = testFreeBusyFREEslot.class),
         @XmlElement(name = "n", type = testFreeBusyNODATAslot.class),
         @XmlElement(name = "t", type = testFreeBusyBUSYTENTATIVEslot.class)
     })
@@ -72,9 +72,9 @@ public class testFreeBusyUserInfo {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link testFreeBusyFREEslot }
-     * {@link testFreeBusyBUSYUNAVAILABLEslot }
      * {@link testFreeBusyBUSYslot }
+     * {@link testFreeBusyBUSYUNAVAILABLEslot }
+     * {@link testFreeBusyFREEslot }
      * {@link testFreeBusyNODATAslot }
      * {@link testFreeBusyBUSYTENTATIVEslot }
      * 

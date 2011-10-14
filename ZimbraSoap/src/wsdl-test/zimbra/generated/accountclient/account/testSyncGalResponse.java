@@ -45,8 +45,8 @@ import zimbra.generated.accountclient.zm.testId;
 public class testSyncGalResponse {
 
     @XmlElements({
-        @XmlElement(name = "cn", type = testContactInfo.class),
-        @XmlElement(name = "deleted", type = testId.class)
+        @XmlElement(name = "deleted", type = testId.class),
+        @XmlElement(name = "cn", type = testContactInfo.class)
     })
     protected List<Object> cnOrDeleted;
     @XmlAttribute(name = "sortBy")
@@ -76,8 +76,8 @@ public class testSyncGalResponse {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link testContactInfo }
      * {@link testId }
+     * {@link testContactInfo }
      * 
      * 
      */

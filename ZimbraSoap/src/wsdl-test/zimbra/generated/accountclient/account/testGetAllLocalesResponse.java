@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="locale" type="{urn:zimbraAccount}nameId" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="locale" type="{urn:zimbraAccount}localeInfo" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class testGetAllLocalesResponse {
 
-    protected List<testNameId> locale;
+    protected List<testLocaleInfo> locale;
 
     /**
      * Gets the value of the locale property.
@@ -53,13 +53,13 @@ public class testGetAllLocalesResponse {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link testNameId }
+     * {@link testLocaleInfo }
      * 
      * 
      */
-    public List<testNameId> getLocale() {
+    public List<testLocaleInfo> getLocale() {
         if (locale == null) {
-            locale = new ArrayList<testNameId>();
+            locale = new ArrayList<testLocaleInfo>();
         }
         return this.locale;
     }

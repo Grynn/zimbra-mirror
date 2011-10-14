@@ -5,7 +5,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
-import zimbra.generated.mailclient.zm.testSrchSortBy;
+import zimbra.generated.mailclient.zm.testSearchSortBy;
 
 
 /**
@@ -20,7 +20,7 @@ import zimbra.generated.mailclient.zm.testSrchSortBy;
  *       &lt;sequence>
  *       &lt;/sequence>
  *       &lt;attribute name="query" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="sortBy" type="{urn:zimbra}srchSortBy" />
+ *       &lt;attribute name="sortBy" type="{urn:zimbra}searchSortBy" />
  *       &lt;attribute name="types" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/extension>
  *   &lt;/complexContent>
@@ -38,7 +38,7 @@ public class testSearchFolder
     @XmlAttribute(name = "query")
     protected String query;
     @XmlAttribute(name = "sortBy")
-    protected testSrchSortBy sortBy;
+    protected testSearchSortBy sortBy;
     @XmlAttribute(name = "types")
     protected String types;
 
@@ -71,10 +71,10 @@ public class testSearchFolder
      * 
      * @return
      *     possible object is
-     *     {@link testSrchSortBy }
+     *     {@link testSearchSortBy }
      *     
      */
-    public testSrchSortBy getSortBy() {
+    public testSearchSortBy getSortBy() {
         return sortBy;
     }
 
@@ -83,10 +83,10 @@ public class testSearchFolder
      * 
      * @param value
      *     allowed object is
-     *     {@link testSrchSortBy }
+     *     {@link testSearchSortBy }
      *     
      */
-    public void setSortBy(testSrchSortBy value) {
+    public void setSortBy(testSearchSortBy value) {
         this.sortBy = value;
     }
 

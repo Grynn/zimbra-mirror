@@ -1,5 +1,5 @@
 
-package zimbra.generated.mailclient.zm;
+package zimbra.generated.syncclient.zm;
 
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for srchSortBy.
+ * <p>Java class for searchSortBy.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
- * &lt;simpleType name="srchSortBy">
+ * &lt;simpleType name="searchSortBy">
  *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
  *     &lt;enumeration value="dateDesc"/>
  *     &lt;enumeration value="dateAsc"/>
@@ -34,9 +34,9 @@ import javax.xml.bind.annotation.XmlType;
  * </pre>
  * 
  */
-@XmlType(name = "srchSortBy")
+@XmlType(name = "searchSortBy")
 @XmlEnum
-public enum testSrchSortBy {
+public enum testSearchSortBy {
 
     @XmlEnumValue("dateDesc")
     DATE_DESC("dateDesc"),
@@ -70,7 +70,7 @@ public enum testSrchSortBy {
     TASK_PERC_COMPLETED_DESC("taskPercCompletedDesc");
     private final String value;
 
-    testSrchSortBy(String v) {
+    testSearchSortBy(String v) {
         value = v;
     }
 
@@ -78,8 +78,8 @@ public enum testSrchSortBy {
         return value;
     }
 
-    public static testSrchSortBy fromValue(String v) {
-        for (testSrchSortBy c: testSrchSortBy.values()) {
+    public static testSearchSortBy fromValue(String v) {
+        for (testSearchSortBy c: testSearchSortBy.values()) {
             if (c.value.equals(v)) {
                 return c;
             }
