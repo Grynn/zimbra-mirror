@@ -368,6 +368,7 @@ ZaAppViewMgr.prototype.fitAll = function () {
     var list = [ZaAppViewMgr.C_SEARCH_BUILDER, ZaAppViewMgr.C_SEARCH_BUILDER_TOOLBAR, ZaAppViewMgr.C_SEARCH_BUILDER_SASH,
                 ZaAppViewMgr.C_LOGIN_MESSAGE,
                 ZaAppViewMgr.C_CURRENT_APP, /*ZaAppViewMgr.C_APP_CHOOSER,*/ ZaAppViewMgr.C_APP_TABS,
+                ZaAppViewMgr.C_BANNER,
 				ZaAppViewMgr.C_TREE,ZaAppViewMgr.C_SASH,
 				/*ZaAppViewMgr.C_TREE_FOOTER,*/ ZaAppViewMgr.C_TOOLBAR_TOP, ZaAppViewMgr.C_APP_CONTENT];
 
@@ -396,7 +397,7 @@ function(components) {
 	for (var i = 0; i < components.length; i++) {
 		var cid = components[i];
 		// don't resize logo image (it will tile) or reposition it (centered via style)
-		if (cid == ZaAppViewMgr.C_BANNER) continue;
+		//if (cid == ZaAppViewMgr.C_BANNER) continue;
 		//DBG.println(AjxDebug.DBG3, "fitting to container: " + cid);
 		var cont = this._containers[cid];
 		if (cont) {
@@ -481,22 +482,22 @@ function(ev) {
 			
 		} else {
 			if (deltaHeight) {
-				var list = [ZaAppViewMgr.C_APP_CHOOSER, ZaAppViewMgr.C_SASH, ZaAppViewMgr.C_APP_CONTENT,ZaAppViewMgr.C_TREE, ZaAppViewMgr.C_STATUS];
-    if (appNewUI) {
-       list = [
-            ZaAppViewMgr.C_TREE_TOP	,
-            ZaAppViewMgr.C_TREE	,
-            ZaAppViewMgr.C_TREE_FOOTER ,
-
-            ZaAppViewMgr.C_APP_HEADER,
-            ZaAppViewMgr.C_APP_CONTENT,
-            ZaAppViewMgr.C_APP_FOOTER,
-
-            ZaAppViewMgr.C_TOOL_HEADER ,
-            ZaAppViewMgr.C_TOOL ,
-            ZaAppViewMgr.C_TOOL_FOOTER
-       ];
-    }
+				var list = [ZaAppViewMgr.C_APP_CHOOSER, ZaAppViewMgr.C_SASH, ZaAppViewMgr.C_APP_CONTENT,ZaAppViewMgr.C_TREE/*, ZaAppViewMgr.C_STATUS*/];
+			    if (appNewUI) {
+			       list = [
+			            ZaAppViewMgr.C_TREE_TOP	,
+			            ZaAppViewMgr.C_TREE	,
+			            ZaAppViewMgr.C_TREE_FOOTER ,
+			
+			            ZaAppViewMgr.C_APP_HEADER,
+			            ZaAppViewMgr.C_APP_CONTENT,
+			            ZaAppViewMgr.C_APP_FOOTER,
+			
+			            ZaAppViewMgr.C_TOOL_HEADER ,
+			            ZaAppViewMgr.C_TOOL ,
+			            ZaAppViewMgr.C_TOOL_FOOTER
+			       ];
+			    }
 				this._stickToGrid(list);
 			}
 			if (deltaWidth) {

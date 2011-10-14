@@ -132,11 +132,17 @@ body						{	@ChromeBg@	}
 
 /* status box */
 
-#skin_tr_status	{	}
-#skin_td_status {	
-		padding:0;
+#skin_container_status {
+    height:30;
 }
-#skin_container_status 					{	@SkinBorderStatus@	height:45;		}
+
+.statusBox {
+    background-color: #F9EDBE;
+    border-top: 1px solid #F0C36D;
+    border-bottom: 1px solid #F0C36D;
+    font-weight: bold;    
+	padding:5px 10px;    
+}
 
 .AppSash-vert {
 	height:11px;

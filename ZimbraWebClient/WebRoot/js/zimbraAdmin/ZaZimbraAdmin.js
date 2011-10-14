@@ -482,7 +482,7 @@ function (resp) {
 ZaZimbraAdmin.prototype._setLicenseStatusMessage = function () {
 	if ((typeof ZaLicense == "function") && (ZaSettings.LICENSE_ENABLED)){
 		ZaLicense.setLicenseStatus(this);
-	}
+	} 
 }
 
 ZaZimbraAdmin.prototype.setStatusMsg = 
@@ -490,17 +490,25 @@ function(msg, clear) {
 	if(!ZaSettings.STATUS_ENABLED) {
 		return;
 	}
-    if(!appNewUI)
-	this._statusBox.setText(msg);
+    if(!appNewUI) {
+    	Dwt.show(this._statusBox.getHTMLElId());
+    	this._statusBox.setText(msg);
+    	Dwt.show(ZaSettings.SKIN_STATUS_ID);
+    	ZaApp.getInstance().getAppViewMgr().fitAll();
+    }
 }
 
-ZaZimbraAdmin._clearStatus = 
-function(statusBox) {
+ZaZimbraAdmin.prototype.clearStatus = 
+function() {
 	if(!ZaSettings.STATUS_ENABLED) {
 		return;
 	}
-	statusBox.setText("");
-	statusBox.getHtmlElement().className = "statusBox";
+	if(!appNewUI) {
+		Dwt.hide(this._statusBox.getHTMLElId());
+		this._statusBox.setText("");
+		Dwt.hide(ZaSettings.SKIN_STATUS_ID);
+		ZaApp.getInstance().getAppViewMgr().fitAll();
+	}
 }
 
 ZaZimbraAdmin.prototype._createAppTabs =
@@ -995,10 +1003,9 @@ function() {
 	}
 	if(ZaSettings.STATUS_ENABLED) {
 		elements[ZaAppViewMgr.C_STATUS] = this._statusBox = new DwtText(this._shell, "statusBox", Dwt.ABSOLUTE_STYLE);
-		this._statusBox.setScrollStyle(Dwt.CLIP);
+		this.clearStatus();
 		this._setLicenseStatusMessage();	
 	}
-
 	if(ZaSettings.SEARCH_PANEL_ENABLED) {
         this._createActionStatus();
 		elements[ZaAppViewMgr.C_SEARCH_BUILDER_TOOLBAR] = ZaApp.getInstance().getSearchBuilderToolbarController ().getSearchBuilderTBPanel();
