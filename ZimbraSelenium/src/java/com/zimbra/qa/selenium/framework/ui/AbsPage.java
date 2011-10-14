@@ -108,6 +108,15 @@ public abstract class AbsPage extends AbsSeleniumObject {
 		throw new HarnessException("Page never became active");
 	}
 	
+	/**
+	 * Hover over a specified button
+	 * @param button
+	 * @return
+	 * @throws HarnessException
+	 */
+	public AbsTooltip zHoverOver(Button button) throws HarnessException {
+		throw new HarnessException("implement me");
+	}
 
 	private static class Coordinate {
 		final int X;

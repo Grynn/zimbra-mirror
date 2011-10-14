@@ -1577,6 +1577,71 @@ public class PageMail extends AbsTab {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see com.zimbra.qa.selenium.framework.ui.AbsPage#zHoverOver(com.zimbra.qa.selenium.framework.ui.Button)
+	 */
+	public AbsTooltip zHoverOver(Button button) throws HarnessException {
+		logger.info(myPageName() + " zHoverOverButton("+ button +")");
+
+		tracer.trace("Hover over "+ button);
+		
+		if ( button == null )
+			throw new HarnessException("Button cannot be null");
+		
+		String locator = null;
+
+		if ( button == Button.B_DELETE ) {
+			
+			if ( zGetPropMailView() == PageMailView.BY_MESSAGE ) {
+				locator = "css=td[id='zb__TV-main__DELETE_title']";
+			} else {
+				locator = "css=td[id='zb__CLV2-main__DELETE_title']";
+			}
+			
+		} else if ( button == Button.B_REPLY ) {
+				
+			if ( zGetPropMailView() == PageMailView.BY_MESSAGE ) {
+				locator = "css=td[id='zb__TV-main__REPLY_title']";
+			} else {
+				locator = "css=td[id='zb__CLV2-main__REPLY_title']";
+			}
+
+		} else {
+			throw new HarnessException("no logic defined for button: "+ button);
+		}
+		
+		// If another tooltip is active, sometimes it takes a few seconds for the new text to show
+		// So, wait if the tooltip is already active
+		// Don't wait if the tooltip is not active
+		//
+		
+		Tooltip tooltip = new Tooltip(this);
+		if (tooltip.zIsActive()) {
+			
+			// Mouse over
+			this.sMouseOver(locator);
+			this.zWaitForActive();
+			
+			// Wait for the new text
+			SleepUtil.sleep(5000);
+			
+			// Make sure the tooltip is active
+			tooltip.zWaitForActive();
+
+		} else {
+			
+			// Mouse over
+			this.sMouseOver(locator);
+			this.zWaitForActive();
+
+			// Make sure the tooltip is active
+			tooltip.zWaitForActive();
+
+		}
+		
+		return (tooltip);
+	}
+
 
 
 }
