@@ -81,6 +81,10 @@ ZaHelpView.myXFormModifier = function(xFormObject) {
 	xFormObject.tableCssStyle="width:100%;overflow:auto;";
 	xFormObject.itemDefaults = {_SEPARATOR_: {containerCssStyle:"padding-right:3px;padding-left:3px;"}};
 	xFormObject.items = [
+	        {type:_SWITCH_, align:_LEFT_, valign:_TOP_, items:[{type:_ZATABCASE_,id:"help_view_tab",  numCols:1, width:"100%", caseKey:1,
+	        		paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),
+	        		visibilityChecks:[function() { return true; }],
+	        		items: [
 			{type:_OUTPUT_, label:null, value:ZabMsg.HELP_PAGE_0, colSpan:"*", cssStyle:"font-size:12pt;	font-weight: bold;"},
 			{type:_OUTPUT_, label:null, value:ZabMsg.HELP_PAGE_1, colSpan:"*", cssStyle:"font-size:12px;"},
 
@@ -100,7 +104,7 @@ ZaHelpView.myXFormModifier = function(xFormObject) {
 						]
 					},
 					{type:_SPACER_, colSpan:"*"},					
-					{type:_OUTPUT_, cssStyle:"font-size:12px;", label:null, value:ZbaMsg.HELP_PAGE_3, 
+					{type:_OUTPUT_, cssStyle:"font-size:12px;", label:null, value:ZabMsg.HELP_PAGE_3, 
 					 cssStyle:"padding-right:10px;padding-left:10px;",containerCssStyle: "width:50%;"},
 					{type:_OUTPUT_, cssStyle:"font-size:12px;", label:null, value:ZaMsg.HELP_PAGE_5,
 					 cssStyle:"padding-right:10px;padding-left:10px;",containerCssStyle: "width:50%;"},
@@ -178,7 +182,7 @@ ZaHelpView.myXFormModifier = function(xFormObject) {
                     onActivate:"this.getFormController().showAboutDialog()", width:"125px"}
             ]
         }
-    ];
+    ]}]}];
 
     var zwcUserGuideItem = [
          //ZWC end user guide
