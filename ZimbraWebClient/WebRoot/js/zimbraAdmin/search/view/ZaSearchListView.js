@@ -232,3 +232,141 @@ function(columnItem, bSortAsc) {
 	}
 }
 
+/**
+* @class ZaSearchXFormView
+* @contructor
+* @param parent
+* @author Ming Zhang
+**/
+function ZaSearchXFormView (parent) {
+	ZaTabView.call(this, parent,"ZaSearchXFormView", "DwtTabView ZaXFormListView");
+	this.initForm(ZaSearchEdit.myXModel,this.getMyXForm());
+	this._localXForm.removeListener(DwtEvent.XFORMS_VALUE_CHANGED, this.formChangeListener);
+//	this._localXForm.addListener(DwtEvent.XFORMS_FORM_DIRTY_CHANGE, new AjxListener(this, ZaBackupsXFormView.prototype.handleXFormChange));
+	this._localXForm.setController(ZaApp.getInstance());
+    this._localXForm.setInstance({});
+   // this.widget = this.getItemsById("searchReusltList").getWidget();
+}
+
+ZaSearchXFormView.prototype = new ZaTabView();
+ZaSearchXFormView.prototype.constructor = ZaSearchXFormView;
+ZaTabView.XFormModifiers["ZaSearchXFormView"] = new Array();
+
+ZaSearchXFormView.labelSelectionListener = function (ev) {
+	if (ev.detail == DwtListView.ITEM_DBL_CLICKED) {
+		if(ev.item) {
+			this._selectedItem = ev.item;
+			ZaApp.getInstance().getBackupLabelViewController().show(ev.item);
+		}
+	}
+}
+
+ZaSearchXFormView.prototype.getQueryField = function () {
+    return this._localXForm.getInstanceValue(ZaSearchEdit.A2_currentQuery);
+}
+
+ZaSearchXFormView.prototype.setQueryField = function (query) {
+    this._localXForm.setInstanceValue(query, ZaSearchEdit.A2_currentQuery);
+}
+
+ZaSearchXFormView.createPopupMenu = function (listWidget) {
+	/*ZaApp.getInstance().getCurrentController()._actionMenu = listWidget.actionMenu = new ZaPopupMenu(listWidget, "ActionMenu", null, ZaApp.getInstance().getCurrentController()._popupOperations);
+	listWidget.addActionListener(new AjxListener(ZaApp.getInstance().getCurrentController(), ZaApp.getInstance().getCurrentController().listActionListener));
+	listWidget.xFormItem = this;*/
+    this.getForm().parent.widget = listWidget;
+}
+
+ZaSearchXFormView.getCustomHeight = function () {
+	try {
+		var form = this.getForm();
+		var formParentElement = this.getForm().parent.getHtmlElement();
+		var totalHeight = parseInt(formParentElement.style.height);
+		if(isNaN(totalHeight)) {
+			totalHeight = formParentElement.clientHeight ? formParentElement.clientHeight : formParentElement.offsetHeight;
+		}
+		var formHeaders = form.getItemsById("xform_header");
+		var headerHeight = 0;
+		if(formHeaders) {
+			var formHeader = formHeaders[0];
+			if(formHeader) {
+				headerHeight = formHeader.getElement().clientHeight ? formHeader.getElement().clientHeight : formHeader.getElement().offsetHeight;
+			}
+		}
+		if(totalHeight<=0)
+			return "100%";
+		else
+			return totalHeight - headerHeight - 2;
+	} catch (ex) {
+
+	}
+	return "100%";
+};
+
+ZaSearchXFormView.getCustomWidth = function () {
+	try {
+
+		var formParentElement = this.getForm().parent.getHtmlElement();
+		var totalWidth = parseInt(formParentElement.style.width);
+		if(isNaN(totalWidth)) {
+			totalWidth = formParentElement.clientWidth ? formParentElement.clientWidth : formParentElement.offsetWidth;
+		}
+		//var tabBarHeight = this.getForm().getItemsById("xform_tabbar")[0].getElement().offsetHeight;
+		if(totalWidth<=0)
+			return "100%";
+		else
+			return totalWidth;
+	} catch (ex) {
+
+	}
+	return "100%";
+};
+
+ZaSearchXFormView.doQuickSearch = function () {
+
+}
+
+ZaSearchXFormView.doSaveSearch = function () {
+
+}
+
+ZaSearchXFormView.myXFormModifier = function(xFormObject) {
+	xFormObject.tableCssStyle="width:100%;overflow:auto;";
+
+
+	var headerList = ZaSearchListView.prototype._getHeaderList();
+	xFormObject.items = [
+		{type:_GROUP_, visibilityChecks:[], colSizes:["*","70px","90px"], colSpan:2, numCols:3, width:"100%", id:"xform_header",
+			items:[
+				{type:_TEXTFIELD_, width:"100%", ref:ZaSearchEdit.A2_currentQuery,
+					containerCssClass:"search_field_container",
+					cssClass:"search_input", visibilityChecks:[], enableDisableChecks:[]
+				},
+				{type:_DWT_BUTTON_, label:ZaMsg.LBL_QuickSearch, name: "SearchButton", autoPadding: false,
+						onActivate:ZaSearchXFormView.doQuickSearch, visibilityChecks:[], enableDisableChecks:[]},
+				{type:_DWT_BUTTON_, label:ZaMsg.LBL_SaveSearch, name: "saveSearchButton",  autoPadding: false,
+						onActivate:ZaSearchXFormView.doSaveSearch, visibilityChecks:[], enableDisableChecks:[]}
+			]
+		},
+
+	    {ref:ZaSearchEdit.A2_searchResult, colSpan:2,cssClass: "ZaFullPageXFormListView", id:"searchReusltList",
+	    	onSelection:ZaSearchXFormView.labelSelectionListener, type:_DWT_LIST_,
+            createPopupMenu: ZaSearchXFormView.createPopupMenu,
+	   		multiselect:false, widgetClass:ZaSearchListView,headerList:headerList,getCustomHeight:ZaSearchXFormView.getCustomHeight,
+	   		getCustomWidth:ZaSearchXFormView.getCustomWidth, visibilityChecks:[], enableDisableChecks:[]
+	   	}
+	];
+};
+ZaTabView.XFormModifiers["ZaSearchXFormView"].push(ZaSearchXFormView.myXFormModifier);
+
+ZaSearchEdit = function () {
+}
+
+ZaSearchEdit.A2_currentQuery = "currentQuery";
+ZaSearchEdit.A2_searchResult = "searchResult";
+
+ZaSearchEdit.myXModel = {
+    items: [
+        {id: ZaSearchEdit.A2_currentQuery, type:_STRING_},
+        {id: ZaSearchEdit.A2_searchResult, type:_LIST_}
+    ]
+}

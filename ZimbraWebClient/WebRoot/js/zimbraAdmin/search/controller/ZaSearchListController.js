@@ -400,8 +400,13 @@ function () {
 ZaSearchListController.prototype._createUI = 
 function () {
 	//create accounts list view
-	// create the menu operations/listeners first	
-	this._contentView = new ZaSearchListView(this._container);
+	// create the menu operations/listeners first
+    if (!appNewUI)
+	    this._contentView = new ZaSearchListView(this._container);
+    else {
+        this._uiContainer =  new ZaSearchXFormView(this._container)
+        this._contentView = this._uiContainer.widget;
+    }
 	ZaApp.getInstance()._controllers[this.getContentViewId ()] = this ;
 	this._newDLListener = new AjxListener(this, ZaSearchListController.prototype._newDistributionListListener);
 	this._newAcctListener = new AjxListener(this, ZaSearchListController.prototype._newAccountListener);
@@ -423,9 +428,10 @@ function () {
 	this._toolbar = new ZaToolBar(this._container, this._toolbarOperations,this._toolbarOrder, null, null, ZaId.VIEW_SCHLIST);    
 		
 	var elements = new Object();
-	elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
+
     if (!appNewUI) {
         elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;
+	    elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
         //ZaApp.getInstance().createView(ZaZimbraAdmin._SEARCH_LIST_VIEW, elements);
         //always open the search list view in the search tab
         var tabParams = {
@@ -434,14 +440,17 @@ function () {
             tab: ZaApp.getInstance().getTabGroup().getSearchTab ()
         }
         ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams) ;
-    } else
+    } else {
+	    elements[ZaAppViewMgr.C_APP_CONTENT] = this._uiContainer;
         ZaApp.getInstance().getAppViewMgr().createView(this.getContentViewId(), elements);
-	this._initPopupMenu();
-	this._actionMenu =  new ZaPopupMenu(this._contentView, "ActionMenu", null, this._popupOperations, ZaId.VIEW_SCHLIST, ZaId.MENU_POP);
-	
-	//set a selection listener on the account list view
-	this._contentView.addSelectionListener(new AjxListener(this, this._listSelectionListener));
-	this._contentView.addActionListener(new AjxListener(this, this._listActionListener));			
+    }
+    this._initPopupMenu();
+    this._actionMenu =  new ZaPopupMenu(this._contentView, "ActionMenu", null, this._popupOperations, ZaId.VIEW_SCHLIST, ZaId.MENU_POP);
+
+    //set a selection listener on the account list view
+    this._contentView.addSelectionListener(new AjxListener(this, this._listSelectionListener));
+    this._contentView.addActionListener(new AjxListener(this, this._listActionListener));
+
 	this._removeConfirmMessageDialog = ZaApp.getInstance().dialogs["ConfirmMessageDialog"] = new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON],null,ZaId.CTR_PREFIX + ZaId.VIEW_SCHLIST + "_ConfirmMessage");			
 	this._UICreated = true;
 }
