@@ -1581,6 +1581,7 @@ ZaOverviewPanelController.prototype.addObjectItemOri = function (parentPath, nam
         var parentId = parentDataItem.id;
         nameDataItem =   new ZaTreeItemData({
                             parent:parentPath,
+                            image: (item?this.getIconByType(item.type):null),
                             mappingId: ZaZimbraAdmin._XFORM_VIEW,
                             id:DwtId._makeId(parentId, index + 1),
                             text: name});
@@ -1694,7 +1695,7 @@ function(parentPath, item) {
                     text: ZaMsg.TABT_Aliases,
                     //type: 1,
                     count:alias.length,
-                    //image:"AccountAlias",
+                    image:"AccountAlias",
                     mappingId: ZaZimbraAdmin._ACCOUNT_ALIAS_LIST_VIEW,    //ZaZimbraAdmin._ALIASES_LIST_VIEW,
                     path: parentPath + ZaTree.SEPERATOR + item.name + ZaTree.SEPERATOR + ZaMsg.TABT_Aliases
                     }
@@ -1818,6 +1819,7 @@ function() {
     var ti = null;
     var image = null;
     for(var i = objList.length - 1; i > -1; i --) {
+/*
         if(objList[i].type == ZaItem.ACCOUNT)
             image = "Account";
         else if(objList[i].type == ZaItem.COS)
@@ -1832,7 +1834,8 @@ function() {
             image = "AccountAlias";
         else if(objList[i].type == ZaItem.SERVER)
             image = "Server";
-
+*/
+        image = this.getIconByType(objList[i].type);
         ti = new ZaTreeItemData({
                 text: objList[i].displayName,
                 type:1,
@@ -1844,4 +1847,24 @@ function() {
         Tis.push(ti);
     }
     return Tis;
+}
+
+ZaOverviewPanelController.prototype.getIconByType = function(type) {
+    var image = null;
+    if(type == ZaItem.ACCOUNT)
+        image = "Account";
+    else if(type == ZaItem.COS)
+        image = "COS";
+    else if(type == ZaItem.DOMAIN)
+        image = "Domain";
+    else if(type == ZaItem.RESOURCE)
+        image = "Resource";
+    else if(type == ZaItem.DL)
+        image = "DistributionList";
+    else if(type == ZaItem.ALIAS)
+        image = "AccountAlias";
+    else if(type == ZaItem.SERVER)
+        image = "Server";
+
+    return image;
 }

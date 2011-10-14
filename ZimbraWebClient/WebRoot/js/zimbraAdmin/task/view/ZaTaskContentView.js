@@ -9,6 +9,7 @@
 ZaTaskContentView = function(parent, entry) {
     ZaTabView.call(this, {
 		parent:parent,
+        cssClassName:"ZaTaskTabView DwtTabView",
 		iKeyName:"ZaTaskContentView",
 		contextId:"TabContent"
 	});

@@ -1,0 +1,100 @@
+.XFormCase, .SmallRadioGrouperLabel, .GrouperLabel, .RadioGrouperLabel {
+    background: @viewC@;
+}
+
+.homeGroupHeader {
+    background-color:@AppC@;
+}
+
+.homeGroupBody {
+    border: 1px solid #dcdcdc;
+}
+
+.DwtTreeItemLevel1ChildDiv {
+    background-color:@PanelColor@;
+}
+
+.AdminTreeItem {
+    padding-left:15px;
+}
+
+.AdminTreeItem-selected, .AdminTreeItem-selected-focused  {
+    padding-left:15px;
+}
+
+.rootOverviewHeader {
+    padding-left:5px;
+    padding-top:5px;
+}
+
+.AdminTreeItem-Count {
+    background-color:#708090;
+    width:20px;
+    text-align:right;
+    color:white;
+    padding-right:3px;
+    @tlRadius@:4px;
+    @trRadius@:4px;
+    @blRadius@:4px;
+    @brRadius@:4px;
+}
+
+/*  view xform - header */
+div.ZmSelectedHeaderBg {
+    background-color: #ffffff !important;
+}
+
+/* veiw xform - body */
+
+
+.gridGroupHeader {
+    background-color:#d3d3d3;
+    height:24px;
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.gridGroupBodyLabel {
+    text-align:left;
+    background-color:#DEE5F1 !important;     /* transprant color*/
+    padding-left:10px;
+}
+
+/* list view */
+.DwtListView-Rows {
+   background-color:white;
+}
+
+/*  Task panel */
+/*
+.TaskHeaderPanel {
+    background-color:@PanelColor@;
+    @tlRadius@:4px;
+    @trRadius@:4px;
+}
+*/
+.ZaTaskTabView {
+    background-color:white;
+}
+/* Search panel */
+
+.SearchPanel {
+    background-color:@viewC@;
+    @tlRadius@:4px;
+    @trRadius@:4px;
+    @blRadius@:4px;
+    @brRadius@:4px;
+}
+
+.SearchTBSearchField .oselect, .oselect_check {
+    border:none;
+}
+
+.SearchTBSearchField .dynselect_display {
+    border-color:white;
+}
+
+
+.SearchTBSearchField .ZButtonBorder  {
+    border:none;
+}

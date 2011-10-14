@@ -3145,6 +3145,7 @@ XFormItemFactory.createItemType("_HOMEGROUP_", "homegroup", HomeGroup_XFormItem,
 
 //	type defaults
 HomeGroup_XFormItem.prototype.headCss = "homeGroupHeader";
+HomeGroup_XFormItem.prototype.bodyCss = "homeGroupBody";
 HomeGroup_XFormItem.prototype.numCols = 1;
 HomeGroup_XFormItem.prototype.width = "90%";
 HomeGroup_XFormItem.prototype.cssStyle = "margin-left:5%; margin-top: 10px;";
@@ -3202,7 +3203,8 @@ function () {
 
 HomeGroup_XFormItem.prototype.getContentItems =
 function () {
-    var contentItems = { type:_GROUP_, items:[]
+    var bodyCss = this.getInheritedProperty("bodyCss");
+    var contentItems = { type:_GROUP_, items:[], cssClass:bodyCss
     };
     contentItems.items = [];
     return contentItems;
@@ -3214,7 +3216,8 @@ CollapsedGroup_XFormItem = function() {
 XFormItemFactory.createItemType("_COLLAPSED_GROUP_", "collapsedgroup", CollapsedGroup_XFormItem, Group_XFormItem)
 
 //	type defaults
-CollapsedGroup_XFormItem.prototype.headCss = "homeGroupHeader";
+CollapsedGroup_XFormItem.prototype.headCss = "gridGroupHeader";
+CollapsedGroup_XFormItem.prototype.gridLabelCss = "gridGroupBodyLabel";
 CollapsedGroup_XFormItem.prototype.colSizes = "100%";
 CollapsedGroup_XFormItem.prototype.numCols = 1;
 CollapsedGroup_XFormItem.prototype.width = "100%";
@@ -3226,6 +3229,7 @@ CollapsedGroup_XFormItem.prototype.headerLabel = "Collapsed Group";
 CollapsedGroup_XFormItem.prototype.expandedImg =  "ImgNodeExpanded";
 CollapsedGroup_XFormItem.prototype.collapsedImg =  "ImgNodeCollapsed";
 CollapsedGroup_XFormItem.prototype.initializeItems = function () {
+    var gridLabelCss = this.getInheritedProperty("gridLabelCss");
     var oldItems = this.getItems();
     this.items = [];
     if(this.__attributes.label) {
@@ -3240,7 +3244,8 @@ CollapsedGroup_XFormItem.prototype.initializeItems = function () {
                 if(oldItems[i].type == "radio")
                     continue;  // don't deal with _RADIO_
                 if(oldItems[i].label || oldItems[i].txtBoxLabel)
-                    oldItems[i].labelCssStyle = "text-align:left; background-color:#BBB;";
+                    oldItems[i].labelCssStyle = "text-align:left; background-color:#DEE5F1 !important;padding-left:10px;";
+                    //oldItems[i].labelCssClass = gridLabelCss;
             }
             this.items[1].items =  oldItems;
         }

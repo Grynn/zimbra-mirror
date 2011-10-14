@@ -1196,15 +1196,15 @@ ZaAccountXFormView.getAddressFormItem = function(){
 	if(AjxUtil.isEmpty(ZaAccountXFormView.addressItemsPool)){
 		ZaAccountXFormView.addressItemsPool = new Object();
 		ZaAccountXFormView.addressItemsPool[ZaAccount.A_zip] =  {ref:ZaAccount.A_zip, type:_TEXTFIELD_, msgName:ZaMsg.NAD_zip,label:ZaMsg.NAD_zip,
-            labelCssStyle:(appNewUI?"text-align:left;background-color:#BBB;":null),labelLocation:_LEFT_, width:100};
+            labelCssClass:"gridGroupBodyLabel",labelLocation:_LEFT_, width:100};
 		ZaAccountXFormView.addressItemsPool[ZaAccount.A_state] = {ref:ZaAccount.A_state, type:_TEXTFIELD_, msgName:ZaMsg.NAD_state,label:ZaMsg.NAD_state,
-            labelCssStyle:(appNewUI?"text-align:left;background-color:#BBB;":null),labelLocation:_LEFT_, width:250};
+            labelCssClass:"gridGroupBodyLabel",labelLocation:_LEFT_, width:250};
 		ZaAccountXFormView.addressItemsPool[ZaAccount.A_street] = {ref:ZaAccount.A_street, type:_TEXTAREA_, msgName:ZaMsg.NAD_street,label:ZaMsg.NAD_street,
-            labelCssStyle:(appNewUI?"text-align:left;background-color:#BBB;":null),labelLocation:_LEFT_, width:250};
+            labelCssClass:"gridGroupBodyLabel",labelLocation:_LEFT_, width:250};
 		ZaAccountXFormView.addressItemsPool[ZaAccount.A_city] = {ref:ZaAccount.A_city, type:_TEXTFIELD_, msgName:ZaMsg.NAD_city,label:ZaMsg.NAD_city,
-            labelCssStyle:(appNewUI?"text-align:left;background-color:#BBB;":null),labelLocation:_LEFT_, width:250};
+            labelCssClass:"gridGroupBodyLabel",labelLocation:_LEFT_, width:250};
 		ZaAccountXFormView.addressItemsPool[ZaAccount.A_country] = {ref:ZaAccount.A_country, type:_TEXTFIELD_, msgName:ZaMsg.NAD_country,label:ZaMsg.NAD_country,
-            labelCssStyle:(appNewUI?"text-align:left;background-color:#BBB;":null),labelLocation:_LEFT_, width:250};
+            labelCssClass:"gridGroupBodyLabel",labelLocation:_LEFT_, width:250};
 		
 	}
 	var addressFormItems = new Array();
@@ -1712,25 +1712,25 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 						{type:_ZAGROUP_, displayGrid:appNewUI,width:"100%", numCols:2,colSizes: ["275px","100%"],
 							items:[
 								{ref:ZaAccount.A_telephoneNumber, type:_TEXTFIELD_, msgName:ZaMsg.NAD_telephoneNumber,label:ZaMsg.NAD_telephoneNumber,
-                                 labelCssStyle:(appNewUI?"text-align:left;background-color:#BBB;":null),labelLocation:_LEFT_, width:250} ,
+                                 labelCssClass:"gridGroupBodyLabel",labelLocation:_LEFT_, width:250} ,
                                 {ref:ZaAccount.A_homePhone, type:_TEXTFIELD_, msgName:ZaMsg.NAD_homePhone,label:ZaMsg.NAD_homePhone,
-                                 labelCssStyle:(appNewUI?"text-align:left;background-color:#BBB;":null),labelLocation:_LEFT_, width:250} ,
+                                 labelCssClass:"gridGroupBodyLabel",labelLocation:_LEFT_, width:250} ,
                                 {ref:ZaAccount.A_mobile, type:_TEXTFIELD_, msgName:ZaMsg.NAD_mobile,label:ZaMsg.NAD_mobile,
-                                 labelCssStyle:(appNewUI?"text-align:left;background-color:#BBB;":null),labelLocation:_LEFT_, width:250} ,
+                                 labelCssClass:"gridGroupBodyLabel",labelLocation:_LEFT_, width:250} ,
                                 {ref:ZaAccount.A_pager, type:_TEXTFIELD_, msgName:ZaMsg.NAD_pager,label:ZaMsg.NAD_pager,
-                                 labelCssStyle:(appNewUI?"text-align:left;background-color:#BBB;":null),labelLocation:_LEFT_, width:250},
+                                 labelCssClass:"gridGroupBodyLabel",labelLocation:_LEFT_, width:250},
                                  {ref:ZaAccount.A_facsimileTelephoneNumber, type:_TEXTFIELD_, msgName:ZaMsg.NAD_facsimileTelephoneNumber,
-                                 labelCssStyle:(appNewUI?"text-align:left;background-color:#BBB;":null),label:ZaMsg.NAD_facsimileTelephoneNumber, labelLocation:_LEFT_, width:250}
+                                 labelCssClass:"gridGroupBodyLabel",label:ZaMsg.NAD_facsimileTelephoneNumber, labelLocation:_LEFT_, width:250}
 							]
 						},
 						{type:_ZAGROUP_, displayGrid:appNewUI,width:"100%", numCols:2,colSizes: ["275px","100%"],
 							items:[	
 								{ref:ZaAccount.A_zimbraPhoneticCompany, type:_TEXTFIELD_, msgName:ZaMsg.NAD_zimbraPhoneticCompany,
-                                 labelCssStyle:(appNewUI?"text-align:left;background-color:#BBB;":null),label:ZaMsg.NAD_zimbraPhoneticCompany, labelLocation:_LEFT_, width:250, visibilityChecks:[[ZaZimbraAdmin.isLanguage, "ja"]]},
+                                 labelCssClass:"gridGroupBodyLabel",label:ZaMsg.NAD_zimbraPhoneticCompany, labelLocation:_LEFT_, width:250, visibilityChecks:[[ZaZimbraAdmin.isLanguage, "ja"]]},
 								{ref:ZaAccount.A_company, type:_TEXTFIELD_, msgName:ZaMsg.NAD_company,label:ZaMsg.NAD_company, labelLocation:_LEFT_,
-                                 labelCssStyle:(appNewUI?"text-align:left;background-color:#BBB;":null),width:250} ,
+                                 labelCssClass:"gridGroupBodyLabel",width:250} ,
                                 {ref:ZaAccount.A_title,  type:_TEXTFIELD_, msgName:ZaMsg.NAD_title,label:ZaMsg.NAD_title, labelLocation:_LEFT_,
-                                 labelCssStyle:(appNewUI?"text-align:left;background-color:#BBB;":null),width:250}
+                                 labelCssClass:"gridGroupBodyLabel",width:250}
                                 /*,
 								{ref:ZaAccount.A_orgUnit, type:_TEXTFIELD_, msgName:ZaMsg.NAD_orgUnit,label:ZaMsg.NAD_orgUnit, labelLocation:_LEFT_, width:250},														
 								{ref:ZaAccount.A_office, type:_TEXTFIELD_, msgName:ZaMsg.NAD_office,label:ZaMsg.NAD_office, labelLocation:_LEFT_, width:250} */
@@ -2846,7 +2846,7 @@ nowrap:false, labelWrap:true,
 								{ref:ZaAccount.A_zimbraPrefCalendarForwardInvitesTo, type:_DWT_LIST_, height:"100", width:"350px",
 									forceUpdate: true, preserveSelection:false, multiselect:true,cssClass: "DLSource",
 									headerList:null,onSelection:ZaAccountXFormView.calFwdAddrSelectionListener,label:ZaMsg.zimbraPrefCalendarForwardInvitesTo,
-                                    labelCssStyle:(appNewUI?"text-align:left;background-color:#BBB;":null),
+                                    labelCssClass:"gridGroupBodyLabel",
 									visibilityChecks:[ZaItem.hasReadPermission]
 								},
 								{type:_GROUP_, numCols:6, width:"625px",colSizes:["275","100px","auto","100px","auto","100px"], colSpan:2,
@@ -2881,7 +2881,7 @@ nowrap:false, labelWrap:true,
                                 {ref:ZaAccount.A_zimbraMailForwardingAddress, type:_DWT_LIST_, height:"100", width:"350px",
 									forceUpdate: true, preserveSelection:false, multiselect:true,cssClass: "DLSource", 
 									headerList:null,onSelection:ZaAccountXFormView.fwdAddrSelectionListener,label:ZaMsg.NAD_EditFwdGroup,
-                                    labelCssStyle:(appNewUI?"text-align:left;background-color:#BBB;":null),
+                                    labelCssClass:"gridGroupBodyLabel",
 									visibilityChecks:[ZaItem.hasReadPermission]
 								},
 								{type:_GROUP_, numCols:6, width:"625px",colSizes:["275","100px","auto","100px","auto","100px"], colSpan:2,
@@ -3386,20 +3386,20 @@ nowrap:false, labelWrap:true,
                                             resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
                                             msgName:ZaMsg.MSG_zimbraMailMessageLifetime,
                                             txtBoxLabel:ZaMsg.LBL_zimbraMailMessageLifetime,
-                                            labelCssStyle:(appNewUI?"text-align:left;background-color:#BBB;":null)
+                                            labelCssClass:"gridGroupBodyLabel"
                                         },
                                         {ref:ZaAccount.A_zimbraMailTrashLifetime, type:_SUPER_LIFETIME1_,
 									        colSizes:["275px", "65px'", "210px", "*"],
                                             resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.MSG_zimbraMailTrashLifetime,
                                             txtBoxLabel:ZaMsg.LBL_zimbraMailTrashLifetime,
-                                            labelCssStyle:(appNewUI?"text-align:left;background-color:#BBB;":null)
+                                            labelCssClass:"gridGroupBodyLabel"
                                         },
                                         {ref:ZaAccount.A_zimbraMailSpamLifetime, type:_SUPER_LIFETIME1_,
 									        colSizes:["275px", "65px'", "210px", "*"],
                                             resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
                                             msgName:ZaMsg.MSG_zimbraMailSpamLifetime,
                                             txtBoxLabel:ZaMsg.LBL_zimbraMailSpamLifetime,
-                                            labelCssStyle:(appNewUI?"text-align:left;background-color:#BBB;":null)
+                                            labelCssClass:"gridGroupBodyLabel"
                                         }
                                     ]
                                 }
