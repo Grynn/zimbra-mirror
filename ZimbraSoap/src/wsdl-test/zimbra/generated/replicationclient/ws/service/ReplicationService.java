@@ -36,8 +36,8 @@ import zimbra.generated.replicationclient.replication.testStopFailoverDaemonResp
 @WebService(name = "ReplicationService", targetNamespace = "http://www.zimbra.com/wsdl/ReplicationService.wsdl")
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
 @XmlSeeAlso({
-    zimbra.generated.replicationclient.zm.ObjectFactory.class,
-    zimbra.generated.replicationclient.replication.ObjectFactory.class
+    zimbra.generated.replicationclient.replication.ObjectFactory.class,
+    zimbra.generated.replicationclient.zm.ObjectFactory.class
 })
 public interface ReplicationService {
 

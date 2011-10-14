@@ -63,29 +63,29 @@ import javax.xml.bind.annotation.XmlType;
 public class testFilterTests {
 
     @XmlElements({
-        @XmlElement(name = "headerTest", type = testHeaderTest.class),
-        @XmlElement(name = "bodyTest", type = testBodyTest.class),
-        @XmlElement(name = "attachmentTest", type = testAttachmentTest.class),
-        @XmlElement(name = "dateTest", type = testDateTest.class),
-        @XmlElement(name = "headerExistsTest", type = testHeaderExistsTest.class),
-        @XmlElement(name = "socialcastTest", type = testSocialcastTest.class),
-        @XmlElement(name = "conversationTest", type = testConversationTest.class),
+        @XmlElement(name = "currentDayOfWeekTest", type = testCurrentDayOfWeekTest.class),
         @XmlElement(name = "inviteTest", type = testInviteTest.class),
+        @XmlElement(name = "listTest", type = testListTest.class),
+        @XmlElement(name = "headerExistsTest", type = testHeaderExistsTest.class),
+        @XmlElement(name = "attachmentTest", type = testAttachmentTest.class),
+        @XmlElement(name = "addressTest", type = testAddressTest.class),
+        @XmlElement(name = "bulkTest", type = testBulkTest.class),
+        @XmlElement(name = "sizeTest", type = testSizeTest.class),
+        @XmlElement(name = "facebookTest", type = testFacebookTest.class),
+        @XmlElement(name = "currentTimeTest", type = testCurrentTimeTest.class),
+        @XmlElement(name = "bodyTest", type = testBodyTest.class),
+        @XmlElement(name = "meTest", type = testMeTest.class),
+        @XmlElement(name = "headerTest", type = testHeaderTest.class),
+        @XmlElement(name = "contactRankingTest", type = testContactRankingTest.class),
+        @XmlElement(name = "socialcastTest", type = testSocialcastTest.class),
         @XmlElement(name = "twitterTest", type = testTwitterTest.class),
         @XmlElement(name = "trueTest", type = testTrueTest.class),
-        @XmlElement(name = "importanceTest", type = testImportanceTest.class),
         @XmlElement(name = "linkedinTest", type = testLinkedInTest.class),
-        @XmlElement(name = "bulkTest", type = testBulkTest.class),
-        @XmlElement(name = "currentTimeTest", type = testCurrentTimeTest.class),
-        @XmlElement(name = "mimeHeaderTest", type = testMimeHeaderTest.class),
-        @XmlElement(name = "sizeTest", type = testSizeTest.class),
-        @XmlElement(name = "currentDayOfWeekTest", type = testCurrentDayOfWeekTest.class),
-        @XmlElement(name = "meTest", type = testMeTest.class),
-        @XmlElement(name = "contactRankingTest", type = testContactRankingTest.class),
-        @XmlElement(name = "addressTest", type = testAddressTest.class),
-        @XmlElement(name = "listTest", type = testListTest.class),
-        @XmlElement(name = "facebookTest", type = testFacebookTest.class),
+        @XmlElement(name = "conversationTest", type = testConversationTest.class),
+        @XmlElement(name = "dateTest", type = testDateTest.class),
         @XmlElement(name = "flaggedTest", type = testFlaggedTest.class),
+        @XmlElement(name = "importanceTest", type = testImportanceTest.class),
+        @XmlElement(name = "mimeHeaderTest", type = testMimeHeaderTest.class),
         @XmlElement(name = "addressBookTest", type = testAddressBookTest.class)
     })
     protected List<testFilterTest> addressBookTestOrAddressTestOrAttachmentTest;
@@ -110,29 +110,29 @@ public class testFilterTests {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link testHeaderTest }
-     * {@link testBodyTest }
-     * {@link testAttachmentTest }
-     * {@link testDateTest }
-     * {@link testHeaderExistsTest }
-     * {@link testSocialcastTest }
-     * {@link testConversationTest }
+     * {@link testCurrentDayOfWeekTest }
      * {@link testInviteTest }
+     * {@link testListTest }
+     * {@link testHeaderExistsTest }
+     * {@link testAttachmentTest }
+     * {@link testAddressTest }
+     * {@link testBulkTest }
+     * {@link testSizeTest }
+     * {@link testFacebookTest }
+     * {@link testCurrentTimeTest }
+     * {@link testBodyTest }
+     * {@link testMeTest }
+     * {@link testHeaderTest }
+     * {@link testContactRankingTest }
+     * {@link testSocialcastTest }
      * {@link testTwitterTest }
      * {@link testTrueTest }
-     * {@link testImportanceTest }
      * {@link testLinkedInTest }
-     * {@link testBulkTest }
-     * {@link testCurrentTimeTest }
-     * {@link testMimeHeaderTest }
-     * {@link testSizeTest }
-     * {@link testCurrentDayOfWeekTest }
-     * {@link testMeTest }
-     * {@link testContactRankingTest }
-     * {@link testAddressTest }
-     * {@link testListTest }
-     * {@link testFacebookTest }
+     * {@link testConversationTest }
+     * {@link testDateTest }
      * {@link testFlaggedTest }
+     * {@link testImportanceTest }
+     * {@link testMimeHeaderTest }
      * {@link testAddressBookTest }
      * 
      * 

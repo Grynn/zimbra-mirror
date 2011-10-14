@@ -277,8 +277,8 @@ import zimbra.generated.mailclient.mail.testWikiActionResponse;
 @WebService(name = "MailService", targetNamespace = "http://www.zimbra.com/wsdl/MailService.wsdl")
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
 @XmlSeeAlso({
-    zimbra.generated.mailclient.mail.ObjectFactory.class,
-    zimbra.generated.mailclient.zm.ObjectFactory.class
+    zimbra.generated.mailclient.zm.ObjectFactory.class,
+    zimbra.generated.mailclient.mail.ObjectFactory.class
 })
 public interface MailService {
 

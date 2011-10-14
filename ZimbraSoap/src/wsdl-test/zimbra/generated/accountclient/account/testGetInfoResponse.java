@@ -981,12 +981,12 @@ public class testGetInfoResponse {
 
         @XmlElements({
             @XmlElement(name = "cal", type = testAccountCalDataSource.class),
-            @XmlElement(name = "caldav", type = testAccountCaldavDataSource.class),
-            @XmlElement(name = "gal", type = testAccountGalDataSource.class),
+            @XmlElement(name = "rss", type = testAccountRssDataSource.class),
+            @XmlElement(name = "imap", type = testAccountImapDataSource.class),
             @XmlElement(name = "yab", type = testAccountYabDataSource.class),
             @XmlElement(name = "pop3", type = testAccountPop3DataSource.class),
-            @XmlElement(name = "imap", type = testAccountImapDataSource.class),
-            @XmlElement(name = "rss", type = testAccountRssDataSource.class),
+            @XmlElement(name = "gal", type = testAccountGalDataSource.class),
+            @XmlElement(name = "caldav", type = testAccountCaldavDataSource.class),
             @XmlElement(name = "unknown", type = testAccountUnknownDataSource.class)
         })
         protected List<testAccountDataSource> imapOrPop3OrCaldav;
@@ -1010,12 +1010,12 @@ public class testGetInfoResponse {
          * <p>
          * Objects of the following type(s) are allowed in the list
          * {@link testAccountCalDataSource }
-         * {@link testAccountCaldavDataSource }
-         * {@link testAccountGalDataSource }
+         * {@link testAccountRssDataSource }
+         * {@link testAccountImapDataSource }
          * {@link testAccountYabDataSource }
          * {@link testAccountPop3DataSource }
-         * {@link testAccountImapDataSource }
-         * {@link testAccountRssDataSource }
+         * {@link testAccountGalDataSource }
+         * {@link testAccountCaldavDataSource }
          * {@link testAccountUnknownDataSource }
          * 
          * 

@@ -462,10 +462,10 @@ import zimbra.generated.adminclient.admin.testVersionCheckResponse;
 @WebService(name = "AdminService", targetNamespace = "http://www.zimbra.com/wsdl/AdminService.wsdl")
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
 @XmlSeeAlso({
-    zimbra.generated.adminclient.admin.ObjectFactory.class,
-    zimbra.generated.adminclient.account.ObjectFactory.class,
+    zimbra.generated.adminclient.mail.ObjectFactory.class,
     zimbra.generated.adminclient.zm.ObjectFactory.class,
-    zimbra.generated.adminclient.mail.ObjectFactory.class
+    zimbra.generated.adminclient.admin.ObjectFactory.class,
+    zimbra.generated.adminclient.account.ObjectFactory.class
 })
 public interface AdminService {
 

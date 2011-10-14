@@ -56,17 +56,17 @@ public class testSyncResponse {
 
     protected testSyncDeletedInfo deleted;
     @XmlElements({
-        @XmlElement(name = "w", type = testCommonDocumentInfo.class),
-        @XmlElement(name = "tag", type = testTagInfo.class),
-        @XmlElement(name = "task", type = testTaskItemInfo.class),
         @XmlElement(name = "folder", type = testFolder.class),
-        @XmlElement(name = "c", type = testConversationSummary.class),
-        @XmlElement(name = "appt", type = testCalendarItemInfo.class),
-        @XmlElement(name = "chat", type = testChatSummary.class),
-        @XmlElement(name = "doc", type = testDocumentInfo.class),
-        @XmlElement(name = "note", type = testNoteInfo.class),
         @XmlElement(name = "m", type = testMessageSummary.class),
-        @XmlElement(name = "cn", type = testContactInfo.class)
+        @XmlElement(name = "task", type = testTaskItemInfo.class),
+        @XmlElement(name = "note", type = testNoteInfo.class),
+        @XmlElement(name = "tag", type = testTagInfo.class),
+        @XmlElement(name = "chat", type = testChatSummary.class),
+        @XmlElement(name = "appt", type = testCalendarItemInfo.class),
+        @XmlElement(name = "doc", type = testDocumentInfo.class),
+        @XmlElement(name = "c", type = testConversationSummary.class),
+        @XmlElement(name = "cn", type = testContactInfo.class),
+        @XmlElement(name = "w", type = testCommonDocumentInfo.class)
     })
     protected List<Object> folderOrTagOrNote;
     @XmlAttribute(name = "md", required = true)
@@ -120,17 +120,17 @@ public class testSyncResponse {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link testCommonDocumentInfo }
-     * {@link testTagInfo }
-     * {@link testTaskItemInfo }
      * {@link testFolder }
-     * {@link testConversationSummary }
-     * {@link testCalendarItemInfo }
-     * {@link testChatSummary }
-     * {@link testDocumentInfo }
-     * {@link testNoteInfo }
      * {@link testMessageSummary }
+     * {@link testTaskItemInfo }
+     * {@link testNoteInfo }
+     * {@link testTagInfo }
+     * {@link testChatSummary }
+     * {@link testCalendarItemInfo }
+     * {@link testDocumentInfo }
+     * {@link testConversationSummary }
      * {@link testContactInfo }
+     * {@link testCommonDocumentInfo }
      * 
      * 
      */

@@ -80,9 +80,9 @@ public class testMessageInfo
     protected testInviteInfo inv;
     protected List<testKeyValuePair> header;
     @XmlElements({
+        @XmlElement(name = "mp", type = testPartInfo.class),
         @XmlElement(name = "shr", type = testShareNotification.class),
-        @XmlElement(name = "dlSubs", type = testDlSubscriptionNotification.class),
-        @XmlElement(name = "mp", type = testPartInfo.class)
+        @XmlElement(name = "dlSubs", type = testDlSubscriptionNotification.class)
     })
     protected List<Object> mpOrShrOrDlSubs;
     @XmlAttribute(name = "id")
@@ -302,9 +302,9 @@ public class testMessageInfo
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
+     * {@link testPartInfo }
      * {@link testShareNotification }
      * {@link testDlSubscriptionNotification }
-     * {@link testPartInfo }
      * 
      * 
      */
