@@ -77,39 +77,6 @@ public final class GalSyncUtil {
     }
 
     /**
-     * Fetch distribution list members from ZCS
-     * @param dlName
-     * @param mbox
-     * @return JSON serialization of the members, or null if list has none
-     * @throws ServiceException
-     */
-    public static String fetchDlMembers(String dlName, ZcsMailbox mbox) throws ServiceException {
-        try {
-            XMLElement req = new XMLElement(AccountConstants.GET_DISTRIBUTION_LIST_MEMBERS_REQUEST);
-            req.addElement(AdminConstants.E_DL).setText(dlName);
-            Element response = mbox.sendRequest(req, true, true, OfflineLC.zdesktop_gal_sync_request_timeout.intValue(), SoapProtocol.Soap12);
-            int total = response.getAttributeInt(AccountConstants.A_TOTAL);
-            if (total < 1) {
-                return null;
-            }
-            List<String> members = new ArrayList<String>();
-            for (Element member : response.listElements(AccountConstants.E_DLM)) {
-                members.add(member.getText());
-            }
-            return Contact.encodeMultiValueAttr(members.toArray(new String[members.size()]));
-        } catch (JSONException e) {
-            throw ServiceException.FAILURE("Unable to encode dlist members", e);
-        } catch (ServiceException e) {
-            if (e.getCode().equals(ServiceException.PERM_DENIED)) {
-                OfflineLog.offline.debug("Permission denied fetching dlist members for %s",dlName);
-                return null;
-            } else {
-                throw e;
-            }
-        }
-    }
-
-    /**
      * Create a DataSource instance for gal account
      * @param galAccount
      * @return DataSource for the account
@@ -203,15 +170,6 @@ public final class GalSyncUtil {
         if (type == null) {
             type = map.get(OfflineGal.A_zimbraCalResType) == null ? OfflineGal.CTYPE_ACCOUNT : OfflineGal.CTYPE_RESOURCE;
             map.put(ContactConstants.A_type, type);
-        }
-        if (type.equals(OfflineGal.CTYPE_GROUP) && mbox.getRemoteServerVersion().isAtLeast7xx()) {
-            String dlName = map.get(ContactConstants.A_email);
-            String dlMembers = GalSyncUtil.fetchDlMembers(dlName, mbox);
-            if (dlMembers == null) {
-                OfflineLog.offline.debug("No members in dlist %s",dlName);
-            } else {
-                map.put(ContactConstants.A_member, dlMembers);
-            }
         }
     }
 

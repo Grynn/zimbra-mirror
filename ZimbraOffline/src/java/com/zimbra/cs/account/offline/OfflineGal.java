@@ -40,13 +40,14 @@ import com.zimbra.cs.index.ZimbraHit;
 import com.zimbra.cs.index.ZimbraQueryResults;
 import com.zimbra.cs.mailbox.Contact;
 import com.zimbra.cs.mailbox.ContactAutoComplete;
-import com.zimbra.cs.mailbox.ContactAutoComplete.AutoCompleteResult;
 import com.zimbra.cs.mailbox.Folder;
 import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.mailbox.MailServiceException;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.MailboxManager;
+import com.zimbra.cs.mailbox.OfflineGalContactAutoComplete;
 import com.zimbra.cs.mailbox.OperationContext;
+import com.zimbra.cs.mailbox.ContactAutoComplete.AutoCompleteResult;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.service.util.ItemId;
@@ -208,7 +209,7 @@ public class OfflineGal {
         if (zqr == null) {
             return;
         }
-        ContactAutoComplete ac = new ContactAutoComplete(mAccount, mOpContext);
+        ContactAutoComplete ac = new OfflineGalContactAutoComplete(mAccount, mOpContext);
         ac.setNeedCanExpand(true);
         try {
             while (zqr.hasNext()) {

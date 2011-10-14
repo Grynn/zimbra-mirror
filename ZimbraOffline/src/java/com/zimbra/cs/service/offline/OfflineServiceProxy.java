@@ -94,6 +94,10 @@ public class OfflineServiceProxy extends DocumentHandler {
     public static OfflineServiceProxy CheckRecurConflictsRequest() {
         return new OfflineServiceProxy("check recur conflicts", false, false);
     }
+    
+    public static OfflineServiceProxy GetDLMembersRequest() {
+        return new OfflineServiceProxy("get dl members", false, false);
+    }
 }
 
 

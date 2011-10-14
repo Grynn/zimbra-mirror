@@ -344,10 +344,7 @@ public class GalSync {
                         continue;
                     }
                     Contact contact = galMbox.getContactById(ctxt, contactId);
-                    String listName = contact.getEmailAddresses().size() > 0 ? contact.getEmailAddresses().get(0) : contact.getFileAsString();
-                    String dlJson = GalSyncUtil.fetchDlMembers(listName, mbox);
                     Map<String,String> newFields = new HashMap<String, String>();
-                    newFields.put(ContactConstants.A_member, dlJson);
                     newFields.put(ContactConstants.A_type, OfflineGal.CTYPE_GROUP);
                     ParsedContact pc = new ParsedContact(contact);
                     pc.modify(newFields, null);
