@@ -17,7 +17,7 @@ ZaCurrentAppBar = function(parent, className, buttons) {
 
 ZaCurrentAppBar.prototype = new DwtButton;
 ZaCurrentAppBar.prototype.constructor = ZaCurrentAppBar ;
-ZaCurrentAppBar.defalutImg = "Help";
+ZaCurrentAppBar.defalutImg = "Settings";
 ZaCurrentAppBar.prototype.toString =
 function() {
 	return "ZaCurrentAppBar";

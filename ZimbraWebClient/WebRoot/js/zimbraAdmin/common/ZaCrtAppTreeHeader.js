@@ -20,7 +20,7 @@ ZaCrtAppTreeHeader = function(parent, className, buttons) {
 
 ZaCrtAppTreeHeader.prototype = new DwtButton;
 ZaCrtAppTreeHeader.prototype.constructor = ZaCrtAppTreeHeader ;
-ZaCrtAppTreeHeader.defalutImg = "Help";
+ZaCrtAppTreeHeader.defalutImg = "FastRevArrowSmall";
 ZaCrtAppTreeHeader.prototype.toString =
 function() {
 	return "ZaCrtAppTreeHeader";

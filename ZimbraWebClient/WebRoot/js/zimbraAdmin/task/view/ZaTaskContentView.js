@@ -71,12 +71,12 @@ ZaTaskContentView.myXFormModifier = function(xFormObject, entry) {
     serverStatusHeader[0] = new ZaListHeaderItem(ZaTask.A_serverStatus, ZaMsg.MSG_ServerStatus, null, "auto", null, ZaTask.A_serverStatus, false, true);
     var items = {
         type:_GROUP_, numCols:1,  items:[
-            {type:_AJX_IMAGE_, src: "Help", label:null,
+            {type:_AJX_IMAGE_, src: "TaskViewNotStarted", label:null, containerCssStyle:"text-align:center;",
                 visibilityChecks:[[XForm.checkInstanceValue, ZaTask.A2_isExpanded, false]],
                 visibilityChangeEventSources:[ZaTask.A2_isExpanded]},
             {ref:ZaTask.A_workingInProcess, type:_OUTPUT_,  bmolsnr: true, value:0,
                 visibilityChecks:[[XForm.checkInstanceValue, ZaTask.A2_isExpanded, false]],
-                visibilityChangeEventSources:[ZaTask.A2_isExpanded],
+                visibilityChangeEventSources:[ZaTask.A2_isExpanded], containerCssStyle:"text-align:center;",
                 getDisplayValue: function(newValue) {
                    return newValue.length;
                 }
@@ -88,12 +88,12 @@ ZaTaskContentView.myXFormModifier = function(xFormObject, entry) {
                visibilityChangeEventSources:[ZaTask.A2_isExpanded],
                onSelection:ZaTaskContentView.taskItemSelectionListener
             },
-            {type:_AJX_IMAGE_, src: "Help", label:null,
+            {type:_AJX_IMAGE_, src: "QuickCommand", label:null,containerCssStyle:"text-align:center;",
                 visibilityChecks:[[XForm.checkInstanceValue, ZaTask.A2_isExpanded, false]],
                 visibilityChangeEventSources:[ZaTask.A2_isExpanded]},
             {ref:ZaTask.A_runningTask, type:_OUTPUT_, bmolsnr: true, value:0,
                 visibilityChecks:[[XForm.checkInstanceValue, ZaTask.A2_isExpanded, false]],
-                visibilityChangeEventSources:[ZaTask.A2_isExpanded],
+                visibilityChangeEventSources:[ZaTask.A2_isExpanded], containerCssStyle:"text-align:center;",
                 getDisplayValue: function(newValue) {
                     return newValue.length;
                 }
@@ -105,12 +105,12 @@ ZaTaskContentView.myXFormModifier = function(xFormObject, entry) {
                visibilityChangeEventSources:[ZaTask.A2_isExpanded],
                onSelection:ZaTaskContentView.taskItemSelectionListener
             },
-            {type:_AJX_IMAGE_, src: "Help", label:null,
+            {type:_AJX_IMAGE_, src: "Status", label:null, containerCssStyle:"text-align:center;",
                 visibilityChecks:[[XForm.checkInstanceValue, ZaTask.A2_isExpanded, false]],
                 visibilityChangeEventSources:[ZaTask.A2_isExpanded]},
             {ref:ZaTask.A_serverStatus, type:_OUTPUT_, bmolsnr: true, value:0,
                 visibilityChecks:[[XForm.checkInstanceValue, ZaTask.A2_isExpanded, false]],
-                visibilityChangeEventSources:[ZaTask.A2_isExpanded],
+                visibilityChangeEventSources:[ZaTask.A2_isExpanded], containerCssStyle:"text-align:center;",
                 getDisplayValue: function(newValue) {
                     return newValue.length;
                 }

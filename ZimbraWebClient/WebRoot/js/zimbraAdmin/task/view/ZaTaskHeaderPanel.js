@@ -13,8 +13,8 @@ ZaTaskHeaderPanel = function(parent) {
     this.getHtmlElement().onclick = AjxCallback.simpleClosure(ZaTaskHeaderPanel.__handleClick, this);
 }
 
-ZaTaskHeaderPanel.expandedImg =  "ImgNodeExpanded";
-ZaTaskHeaderPanel.collapsedImg =  "ImgNodeCollapsed";
+ZaTaskHeaderPanel.expandedImg =  "ImgFastFwdArrowSmall";
+ZaTaskHeaderPanel.collapsedImg =  "ImgFastRevArrowSmall";
 
 ZaTaskHeaderPanel.prototype = new DwtComposite;
 ZaTaskHeaderPanel.prototype.constructor = ZaTaskHeaderPanel;

@@ -3194,7 +3194,7 @@ function () {
             items:[
                 {type:_DWT_IMAGE_, value: this.expandedImg, onClick:this.onClick},
                 {type:_OUTPUT_, value: headerLabel},
-                {type:_AJX_IMAGE_, value: "Help"}
+                {type:_AJX_IMAGE_, value: "BorderNone"}
             ],
             cssClass:headerCss
         };

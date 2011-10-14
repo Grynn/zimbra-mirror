@@ -66,13 +66,18 @@ div.ZmSelectedHeaderBg {
 }
 
 /*  Task panel */
-/*
+
 .TaskHeaderPanel {
+/*
     background-color:@PanelColor@;
     @tlRadius@:4px;
     @trRadius@:4px;
-}
 */
+    text-align:center;
+    padding-left:5px;
+    padding-top:10px;
+}
+
 .ZaTaskTabView {
     background-color:white;
 }
@@ -80,14 +85,15 @@ div.ZmSelectedHeaderBg {
 
 .SearchPanel {
     background-color:@viewC@;
-    @tlRadius@:4px;
-    @trRadius@:4px;
-    @blRadius@:4px;
-    @brRadius@:4px;
+    @tlRadius@:5px;
+    @trRadius@:5px;
+    @blRadius@:5px;
+    @brRadius@:5px;
 }
 
 .SearchTBSearchField .oselect, .oselect_check {
     border:none;
+    background-color:white;
 }
 
 .SearchTBSearchField .dynselect_display {
@@ -97,4 +103,13 @@ div.ZmSelectedHeaderBg {
 
 .SearchTBSearchField .ZButtonBorder  {
     border:none;
+}
+/*
+.ZaSearchFieldButton ZWidgetTable ZButtonTable ZButtonBorder .zwidget, .ZaSearchFieldButton ZWidgetTable ZButtonTable ZButtonBorder .zwidget * {
+    background-color:white;
+}
+*/
+
+.SearchTBSearchField .zwidget,.SearchTBSearchField  .zwidget * {
+    background-color:white;
 }

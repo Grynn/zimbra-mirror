@@ -595,7 +595,7 @@ ZaSearchField.prototype._getMyXForm = function() {
                 {type:_MENU_BUTTON_, label:null, choices:ZaSearchField.searchChoices,
                     name: "searchMenuButton",
                     toolTipContent:ZaMsg.searchToolTip,
-                    icon:"SearchAll", cssClass:"DwtToolbarButton"
+                    icon:"SearchAll", cssClass:"ZaSearchFieldButton DwtToolbarButton"
                 },
 
                 {type: _GROUP_,  numCols: 2, width: "100%", cssClass: "oselect",
@@ -634,7 +634,8 @@ ZaSearchField.prototype._getMyXForm = function() {
 
                 {type:_DWT_BUTTON_, toolTipContent:ZaMsg.searchForAll, icon:"Search", name: "searchButton",
                     onActivate:ZaSearchField.srchButtonHndlr, autoPadding: false,
-                    cssClass:"DwtToolbarButton"
+                    cssStyle:"background-color:white;",
+                    cssClass:"ZaSearchFieldButton   DwtToolbarButton"
                 }
             ]
         };
