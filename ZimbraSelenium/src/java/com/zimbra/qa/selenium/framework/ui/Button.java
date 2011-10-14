@@ -309,6 +309,7 @@ public class Button {
 	public static final Button O_LISTVIEW_MONTH = new Button("O_LISTVIEW_MONTH");
 	public static final Button O_LISTVIEW_LIST = new Button("O_LISTVIEW_LIST");
 	public static final Button O_LISTVIEW_SCHEDULE = new Button("O_LISTVIEW_SCHEDULE");
+	public static final Button O_LISTVIEW_FREEBUSY = new Button("O_LISTVIEW_FREEBUSY");
 	
 	public static final Button O_VIEW_DAY_MENU = new Button("O_VIEW_DAY_MENU");
 	public static final Button O_VIEW_WORK_WEEK_MENU = new Button("O_VIEW_WORK_WEEK_MENU");

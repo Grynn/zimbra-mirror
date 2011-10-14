@@ -893,6 +893,11 @@ public class PageCalendar extends AbsTab {
 				optionLocator = "id=POPUP_MONTH_VIEW";
 				page = new ApptMonthView(this.MyApplication);
 
+			} else if (option == Button.O_LISTVIEW_FREEBUSY) {
+
+				optionLocator = "id=POPUP_FB_VIEW";
+				page = null;
+
 			}
 
 		} else {
