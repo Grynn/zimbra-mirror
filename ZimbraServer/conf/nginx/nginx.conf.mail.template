@@ -15,16 +15,10 @@ mail
     # HTTP lookup handlers that will return the route information for a
     # pop3/imap login
     # 
-
-    ${mail.:auth_http}
-
-    # Route lookup timeout
-    auth_http_timeout           ${mail.auth_http_timeout};
-    auth_http_timeout_cache     ${mail.auth_http_timeout_cache};
+    zm_auth_http;
 
     # IMAP/POP3 greeting messages
     # 
-
     imap_greeting            "${mail.imap.greeting}";
     pop3_greeting            "${mail.pop3.greeting}";
 
@@ -50,20 +44,6 @@ mail
     # The imap_id directive may be overridden in a server block
     # 
     imap_id         ${mail.imapid};
-
-    # master authenticating user for cases where nginx must authenticate 
-    # on behalf of the end user -- this is required in those sasl auth
-    # mechanisms where the user's plain-text password is not available,
-    # in these cases, after nginx has deemed that the user has authenticated
-    # himself/herself correctly, then nginx will use the master auth user 
-    # name and master auth password, along with the end user's user name, 
-    # in order to log in to the backend server
-    # such authentication will be done as per the PLAIN sasl mechanism as 
-    # defined in RFC 4616
-    # (presently, this will only be used for auth gssapi)
-    # 
-    master_auth_username    "zmnginx";
-    master_auth_password    "${mail.dpasswd}";
 
     # Default realm (kerberos)
     # For GSSAPI authentication, when the server's realm is the same as 
@@ -184,11 +164,11 @@ mail
     # Currently, only PLAIN and GSSAPI mechanisms are supported
     # 
 
-    ${mail.imap.authplain.enabled} imap_auth         plain;
-    ${mail.imap.authgssapi.enabled} imap_auth         gssapi;
+    ${mail.imap.authplain.enabled}imap_auth         plain;
+    ${mail.imap.authgssapi.enabled}imap_auth         gssapi;
 
-    ${mail.pop3.authplain.enabled} pop3_auth         plain;
-    ${mail.pop3.authgssapi.enabled} pop3_auth         gssapi;
+    ${mail.pop3.authplain.enabled}pop3_auth         plain;
+    ${mail.pop3.authgssapi.enabled}pop3_auth         gssapi;
 
     # Specify whether to use literal strings while issuing the LOGIN command
     # to the upstream server. If set to on, then it means that NGINX will use
@@ -202,10 +182,13 @@ mail
 
     # Auth Wait Interval
     # Specifies the time interval that NGINX will wait before rejecting an
-    # authentication attempt with invalid credentials
-    # If not specified, this value defaults to 10 seconds
-    # 
-    auth_wait               ${mail.authwait};
+    # authentication attempt to the upstream mail server with invalid credentials.
+    # This value is not related to the wait time when Zimbra lookup handler replies
+    # some login error, which is controled by the "Auth-Wait" header returned by the
+    # lookup handler.
+    # If not specified, this value defaults to 10 seconds.
+    #
+    zm_auth_wait               ${mail.authwait};
 
     # TLS configuration
     # 

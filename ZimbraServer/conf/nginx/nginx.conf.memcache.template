@@ -29,19 +29,5 @@ memcache
     # routing information
     # 
     ttl         ${memcache.ttl};
-
-    # Whether or not to cache unqualified login names - this is useful in 
-    # deployments where there is only one domain, but many users, so that a 
-    # user may log in without the @domain suffix to the login name. If this
-    # flag is enabled, then no domain is suffixed to the key of the route
-    # information entry in the cache - If this flag is disabled, then the 
-    # IP address of the network interface of the proxy server is suffixed
-    # to the user's unqualified login name, and that is used as the key 
-    # for the route information - this will make sure that in future, the
-    # same user logging in to the same proxy using an unqualified login 
-    # name will benefit from the previously cached route information, if any
-    # By default, this value is off
-    # 
-    allow_unqualified    ${memcache.unqual};
 }
 

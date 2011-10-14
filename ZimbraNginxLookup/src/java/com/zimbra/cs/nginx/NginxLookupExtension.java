@@ -490,7 +490,7 @@ public class NginxLookupExtension implements ZimbraExtension {
             try {
                 return AuthProvider.getAuthToken(authc).getEncoded();
             } catch (AuthTokenException e) {
-                throw new NginxLookupException("failed to geenrate auth token for " + authc.getName(), e);
+                throw new NginxLookupException("failed to generate auth token for " + authc.getName(), e);
             }
         }
         
@@ -812,7 +812,7 @@ public class NginxLookupExtension implements ZimbraExtension {
                 String authUser = getQualifiedUsername(zlc, config, req);
                 
                 if (req.authMethod.equalsIgnoreCase(AUTHMETH_CERTAUTH)) {
-                	// for cert auth, no need to find the reault port, just
+                	// for cert auth, no need to find the real route, just
                 	// send back zm_auth_token or zm_admin_auth_token
                 	sendResult(req, "127.0.0.1", "9999", authUser);
                 	return;
@@ -1015,6 +1015,9 @@ public class NginxLookupExtension implements ZimbraExtension {
             
             if (authUser != null) {
                 ZimbraLog.nginxlookup.debug("rewrite " + AUTH_USER + " to: " + authUser);
+                /* encode authUser, %-->%25 ' '-->%20 */
+                authUser = authUser.replace(" ", "%20");
+                authUser = authUser.replace("%", "%25");
                 resp.addHeader(AUTH_USER, authUser);
             }
 
@@ -1037,7 +1040,7 @@ public class NginxLookupExtension implements ZimbraExtension {
             
             ZimbraLog.nginxlookup.info(msg);
             resp.setStatus(HttpServletResponse.SC_OK);
-            resp.addHeader(AUTH_STATUS, ERRMSG);
+            resp.addHeader(AUTH_STATUS, msg);
             
             String waitInterval = null;
             try {

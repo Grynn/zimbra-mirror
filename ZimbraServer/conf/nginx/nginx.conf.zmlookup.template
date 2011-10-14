@@ -1,8 +1,40 @@
 zm_lookup {
 
     zm_lookup_handlers  ${zmlookup.:handlers};
+
+    # The timeout to lookup in the lookup handler. This timeout
+    # does not include the time out accessing memcache, which is 
+    # controlled by "timeout" in nginx.conf.memecache.
+    #
     zm_lookup_timeout   ${zmlookup.timeout};
+
+    # The interval that nginx will try to reconnect to a failed lookup handler.
+    #
     zm_lookup_handler_retry_interval ${zmlookup.retryinterval};
+
+    # Whether to turn on lookup result caching. This should be always
+    # turn on in the production environment.
+    #
+    zm_lookup_caching   ${zmlookup.caching};
+
+    # master authenticating user for cases where nginx must authenticate
+    # on behalf of the end user -- this is required in those sasl auth
+    # mechanisms where the user's plain-text password is not available,
+    # in these cases, after nginx has deemed that the user has authenticated
+    # himself/herself correctly, then nginx will use the master auth user
+    # name and master auth password, along with the end user's user name,
+    # in order to log in to the upstream server
+    # such authentication will be done as per the PLAIN sasl mechanism as
+    # defined in RFC 4616
+    # (presently, this feature are used in GSSAPI & cert auth)
+    #
     zm_lookup_master_auth_username "zmnginx";
     zm_lookup_master_auth_password "${zmlookup.dpasswd}";
+
+    # Whether or not to cache unqualified login names in the "account-->route cache"
+    # When this option is set "off", and the login name to be cached is unqualified,
+    # the client IP will be appended to the login name in the format:
+    # <login name>@<client ip>
+    #
+    zm_lookup_allow_unqualified   ${zmlookup.unqual};
 }
