@@ -44,22 +44,14 @@ AjxRpcRequest = function(id) {
 		: (new XMLHttpRequest());
 };
 
-/**
- * Defines the "timed out" exception.
- */
+AjxRpcRequest.prototype.isAjxRpcRequest = true;
+AjxRpcRequest.prototype.toString = function() { return "AjxRpcRequest"; };
+
 AjxRpcRequest.TIMEDOUT		= -1000;		// Timed out exception
+
 AjxRpcRequest.__inited		= false;
 AjxRpcRequest.__msxmlVers	= null;
 
-/**
- * Returns a string representation of the object.
- * 
- * @return		{string}		a string representation of the object
- */
-AjxRpcRequest.prototype.toString = 
-function() {
-	return "AjxRpcRequest";
-};
 
 /**
  * Sends this request to the target URL. If there is a callback, the request is
@@ -133,7 +125,7 @@ function(requestStr, serverUrl, requestHeaders, callback, useGet, timeout) {
 		}
 	}
 
-	DBG.println("req", "RPC send: " + this.id);
+	AjxDebug.println(AjxDebug.RPC, "RPC send: " + this.id);
 	this.__httpReq.send(requestStr);
 	if (asyncMode) {
 		return this.id;
@@ -155,9 +147,7 @@ function() {
 	AjxRpc.freeRpcCtxt(this);
     if (AjxEnv.isFirefox3_5up) {
 		// bug 55911
-		DBG.println("req", "FF - clearing onreadystatechange for: " + this.id);
         this.__httpReq.onreadystatechange = function(){};
-        DBG.println(AjxDebug.DBG1, "AjxRpcRequest.prototype.cancel: clearing onreadystatechange before abort");
     }
     this.__httpReq.abort();
 };
@@ -218,12 +208,13 @@ function(req, callback) {
 			callback.run( {text:req.__httpReq.responseText, xml:req.__httpReq.responseXML, success:false, status:status, reqId:req.id} );
 		}
 
-		// ALWAYS cancel *LAST* otherwise bad things happen.
-		req.cancel();
+		AjxRpc.freeRpcCtxt(req);
 	}
 
 	} catch (ex) {
-		AjxException.reportScriptError(ex);
+		if (window.AjxException) {
+			AjxException.reportScriptError(ex);
+		}
 	}
 };
 

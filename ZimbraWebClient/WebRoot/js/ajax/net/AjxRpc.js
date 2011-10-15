@@ -32,9 +32,11 @@ AjxRpc = function() {
 
 AjxRpc.__rpcCache		= [];		// The pool of RPC contexts available
 AjxRpc.__rpcOutstanding	= {};		// The pool of RPC contexts in use
-AjxRpc.__RPC_CACHE_MAX	= 50;		// maximum number of busy contexts we can have
-AjxRpc.__RPC_COUNT		= 0;
-AjxRpc.__RPC_REAP_AGE	= 300000;	// mark any context older than this (in ms) as free
+
+AjxRpc.__RPC_CACHE_MAX		= 50;		// maximum number of busy contexts we can have
+AjxRpc.__RPC_COUNT			= 0;
+AjxRpc.__RPC_REAP_AGE		= 300000;	// 5 minutes; mark any context older than this (in ms) as free
+AjxRpc.__RPC_REAP_INTERVAL	= 1800000;	// 30 minutes; run the reaper this often
 
 /**
  * Submits a request to a URL. The request is handled through a pool of request
@@ -120,7 +122,7 @@ AjxRpc.freeRpcCtxt =
 function(rpcCtxt) {
 	// we're done using this rpcCtxt. Add it back to the pool
 	if (AjxRpc.__rpcOutstanding[rpcCtxt.id]) {
-		DBG.println("req", "--- freeing rpcCtxt " + rpcCtxt.id);
+		AjxDebug.println(AjxDebug.RPC, "--- freeing rpcCtxt " + rpcCtxt.id);
 		AjxRpc.__rpcCache.push(rpcCtxt);
 		delete AjxRpc.__rpcOutstanding[rpcCtxt.id];
 	}
@@ -128,7 +130,7 @@ function(rpcCtxt) {
 
 AjxRpc.removeRpcCtxt =
 function(rpcCtxt) {
-	DBG.println("req", "REMOVE rpcCtxt " + rpcCtxt.id);
+	AjxDebug.println(AjxDebug.RPC, "REMOVE rpcCtxt " + rpcCtxt.id);
 	if (AjxRpc.__rpcOutstanding[rpcCtxt.id]) {
 		delete AjxRpc.__rpcOutstanding[rpcCtxt.id];
 	}
@@ -162,7 +164,6 @@ function() {
 
 	if (AjxRpc.__rpcCache.length > 0) {
 		rpcCtxt = AjxRpc.__rpcCache.pop();
-		DBG.println("req", "reusing RPC ID " + rpcCtxt.id);
 		AjxDebug.println(AjxDebug.RPC, "reusing RPC ID " + rpcCtxt.id);
 	} else {
 		if (AjxRpc.__RPC_COUNT < AjxRpc.__RPC_CACHE_MAX) {
@@ -170,7 +171,6 @@ function() {
 			var id = "__RpcCtxt_" + AjxRpc.__RPC_COUNT;
 			rpcCtxt = new AjxRpcRequest(id);
 			AjxRpc.__RPC_COUNT++;
-			DBG.println("req", "Created RPC " + id + ", total created: " + AjxRpc.__RPC_COUNT);
 			AjxDebug.println(AjxDebug.RPC, "Created RPC " + id + ", total created: " + AjxRpc.__RPC_COUNT);
 		} else {
 			// yikes, we're out of rpc's! Look for an old one to kill.
@@ -201,23 +201,29 @@ function() {
 };
 
 /**
- * Searches for an "expired" rpc. If found, cancels it and returns it.
+ * Frees expired contexts.
+ * 
+ * @param {boolean}	all		if true, frees all expired contexts; otherwise, returns the first one it finds
  * @private
  */
 AjxRpc.__reap =
-function() {
+function(all) {
 	var rpcCtxt;
 	var time = (new Date()).getTime();
-
+	AjxDebug.println(AjxDebug.RPC, "Running RPC context reaper");
 	for (var i in AjxRpc.__rpcOutstanding) {
 		rpcCtxt = AjxRpc.__rpcOutstanding[i];
-		if (rpcCtxt.timestamp + AjxRpc.__RPC_REAP_AGE < time) {
+		if ((rpcCtxt.timestamp + AjxRpc.__RPC_REAP_AGE) < time) {
 			DBG.println(AjxDebug.DBG1, "AjxRpc.__reap: cleared RPC context " + rpcCtxt.id);
 			AjxDebug.println(AjxDebug.RPC, "AjxRpc.__reap: cleared RPC context " + rpcCtxt.id);
 			rpcCtxt.cancel();
 			delete AjxRpc.__rpcOutstanding[i];
-			return rpcCtxt;
+			if (!all) {
+				return rpcCtxt;
+			}
 		}
 	}
 	return null;
 };
+
+window.setInterval(AjxRpc.__reap.bind(null, true), AjxRpc.__RPC_REAP_INTERVAL);
