@@ -43,6 +43,7 @@ ZaImg.I_SEARCH				= ["Search"];
 ZaImg.I_UNDO				= ["Undo", 16, 16];
 ZaImg.I_PDF					= ["PDFDoc", 16, 16];
 ZaImg.I_MIGRATIONWIZ		= ["MigrationWiz", 16, 16];
+ZaImg.I_NEWACCOUNT			= ["NewAccount", 16, 16];
 ZaImg.I_NEWCOS				= ["NewCOS", 16, 16];
 ZaImg.I_STATS				= ["Statistics", 16, 16];
 ZaImg.I_STATSBYSERVER		= ["StatisticsByServer", 16, 16];

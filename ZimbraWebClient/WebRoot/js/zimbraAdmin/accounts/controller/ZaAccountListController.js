@@ -155,7 +155,7 @@ function () {
 
 	var type = this._defaultType ;
     if (type == ZaItem.ACCOUNT ) {
-        this._popupOperations[ZaOperation.NEW_MENU] = new ZaOperation(ZaOperation.NEW_MENU, ZaMsg.TBB_New, ZaMsg.ACTBB_New_tt, "Account", "AccountDis",new AjxListener(this, ZaAccountListController.prototype._newAccountListener));
+        this._popupOperations[ZaOperation.NEW_MENU] = new ZaOperation(ZaOperation.NEW_MENU, ZaMsg.TBB_New, ZaMsg.ACTBB_New_tt, "NewAccount", "AccountDis",new AjxListener(this, ZaAccountListController.prototype._newAccountListener));
     } else if (type == ZaItem.ALIAS) {
         this._popupOperations[ZaOperation.NEW_MENU] = new ZaOperation(ZaOperation.NEW_MENU, ZaMsg.TBB_New, ZaMsg.ALTBB_New_tt, "AccountAlias", "AccountDis",new AjxListener(this, ZaAccountListController.prototype._newAliasListener));
     } else if (type == ZaItem.DL) {
@@ -258,6 +258,12 @@ function () {
 
 ZaAccountListController.initPopupMenuMethod =
 function () {
+    if(appNewUI) {
+        //push it firstly to make it as the first one
+        this._popupOperations[ZaOperation.NEW_MENU] = new ZaOperation(ZaOperation.NEW_MENU, ZaMsg.TBB_New, ZaMsg.ACTBB_New_tt, "NewAccount", "AccountDis",new AjxListener(this, ZaAccountListController.prototype._newAccountListener));;
+        this._popupOrder.push(ZaOperation.NEW_MENU);
+    }
+
     this._popupOperations[ZaOperation.EDIT] = new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.ACTBB_Edit_tt, "Edit", "EditDis", new AjxListener(this, ZaAccountListController.prototype._editButtonListener));
 	this._popupOperations[ZaOperation.DELETE] = new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.ACTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaAccountListController.prototype._deleteButtonListener));
 	
@@ -270,10 +276,6 @@ function () {
 		this._popupOperations[ZaOperation.MOVE_ALIAS] = new ZaOperation(ZaOperation.MOVE_ALIAS, ZaMsg.ACTBB_MoveAlias, ZaMsg.ACTBB_MoveAlias_tt, "MoveAlias", "MoveAlias", new AjxListener(this, ZaAccountListController.prototype._moveAliasListener));
 		this._popupOperations[ZaOperation.EXPIRE_SESSION] = new ZaOperation(ZaOperation.EXPIRE_SESSION, ZaMsg.ACTBB_ExpireSessions, ZaMsg.ACTBB_ExpireSessions_tt, "ExpireSession", "ExpireSessionDis", new AjxListener(this, ZaAccountListController.prototype._expireSessionListener));
 	}
-    if(appNewUI) {
-        this._popupOperations[ZaOperation.NEW_MENU] = new ZaOperation(ZaOperation.NEW_MENU, ZaMsg.TBB_New, ZaMsg.ACTBB_New_tt, "Account", "AccountDis",new AjxListener(this, ZaAccountListController.prototype._newAccountListener));;
-        this._popupOrder.push(ZaOperation.NEW_MENU);
-    }
 }
 ZaController.initPopupMenuMethods["ZaAccountListController"].push(ZaAccountListController.initPopupMenuMethod);
 
@@ -316,7 +318,7 @@ function () {
 	}
 	
 	if(showNewAccount) {
-		newMenuOpList.push(new ZaOperation(ZaOperation.NEW_WIZARD, ZaMsg.ACTBB_New_menuItem, ZaMsg.ACTBB_New_tt, "Account", "AccountDis", this._newAcctListener));
+		newMenuOpList.push(new ZaOperation(ZaOperation.NEW_WIZARD, ZaMsg.ACTBB_New_menuItem, ZaMsg.ACTBB_New_tt, "NewAccount", "AccountDis", this._newAcctListener));
 	}
 	if(showNewAlias) {
 		newMenuOpList.push(new ZaOperation(ZaOperation.NEW_ALIAS, ZaMsg.ALTBB_New_menuItem, ZaMsg.ALTBB_New_tt, "AccountAlias", "AccountAliasDis", this._newALListener));
@@ -329,7 +331,7 @@ function () {
 	}	
 		
 	if(showNewAccount && this._defaultType == ZaItem.ACCOUNT) {
-		this._toolbarOperations[ZaOperation.NEW_MENU] = new ZaOperation(ZaOperation.NEW_MENU, ZaMsg.TBB_New, ZaMsg.ACTBB_New_tt, "Account", "AccountDis", this._newAcctListener, 
+		this._toolbarOperations[ZaOperation.NEW_MENU] = new ZaOperation(ZaOperation.NEW_MENU, ZaMsg.TBB_New, ZaMsg.ACTBB_New_tt, "NewAccount", "AccountDis", this._newAcctListener, 
 								   ZaOperation.TYPE_MENU, newMenuOpList);
     } else if (showNewAlias && this._defaultType == ZaItem.ALIAS) {
 		this._toolbarOperations[ZaOperation.NEW_MENU] = new ZaOperation(ZaOperation.NEW_MENU, ZaMsg.TBB_New, ZaMsg.ALTBB_New_tt, "AccountAlias", "AccountAliasDis", this._newALListener, 

@@ -71,7 +71,7 @@ ZaTaskContentView.myXFormModifier = function(xFormObject, entry) {
     serverStatusHeader[0] = new ZaListHeaderItem(ZaTask.A_serverStatus, ZaMsg.MSG_ServerStatus, null, "auto", null, ZaTask.A_serverStatus, false, true);
     var items = {
         type:_GROUP_, numCols:1,  items:[
-            {type:_AJX_IMAGE_, src: "TaskViewNotStarted", label:null, containerCssStyle:"text-align:center;",
+            {type:_AJX_IMAGE_, src: "WorkInProgress", label:null, containerCssStyle:"text-align:center;",
                 visibilityChecks:[[XForm.checkInstanceValue, ZaTask.A2_isExpanded, false]],
                 visibilityChangeEventSources:[ZaTask.A2_isExpanded]},
             {ref:ZaTask.A_workingInProcess, type:_OUTPUT_,  bmolsnr: true, value:0,
@@ -88,7 +88,7 @@ ZaTaskContentView.myXFormModifier = function(xFormObject, entry) {
                visibilityChangeEventSources:[ZaTask.A2_isExpanded],
                onSelection:ZaTaskContentView.taskItemSelectionListener
             },
-            {type:_AJX_IMAGE_, src: "QuickCommand", label:null,containerCssStyle:"text-align:center;",
+            {type:_AJX_IMAGE_, src: "TaskViewWaiting", label:null,containerCssStyle:"text-align:center;",
                 visibilityChecks:[[XForm.checkInstanceValue, ZaTask.A2_isExpanded, false]],
                 visibilityChangeEventSources:[ZaTask.A2_isExpanded]},
             {ref:ZaTask.A_runningTask, type:_OUTPUT_, bmolsnr: true, value:0,
