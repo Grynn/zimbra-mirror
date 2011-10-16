@@ -3,14 +3,14 @@
  */
 package com.zimbra.qa.selenium.projects.ajax.ui.mail;
 
-import com.zimbra.qa.selenium.framework.ui.AbsApplication;
-import com.zimbra.qa.selenium.framework.ui.AbsPage;
-import com.zimbra.qa.selenium.framework.ui.AbsSeparateWindow;
-import com.zimbra.qa.selenium.framework.ui.Button;
-import com.zimbra.qa.selenium.framework.ui.Shortcut;
+import java.util.*;
+
+import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
-import com.zimbra.qa.selenium.projects.ajax.ui.mail.DisplayMail.Field;
+import com.zimbra.qa.selenium.framework.util.staf.Stafpostqueue;
+import com.zimbra.qa.selenium.projects.ajax.ui.*;
+import com.zimbra.qa.selenium.projects.ajax.ui.mail.DisplayMail.*;
 
 
 
@@ -26,6 +26,8 @@ public class SeparateWindowDisplayMail extends AbsSeparateWindow {
 
 	}
 	
+	public String ContainerLocator = "css=div[id='zv__MSG-1__MSG']";
+
 
 	public SeparateWindowDisplayMail(AbsApplication application) {
 		super(application);
@@ -474,5 +476,176 @@ public class SeparateWindowDisplayMail extends AbsSeparateWindow {
 
 		return (page);	
 		
+	}
+
+	public boolean zHasShareADButtons() throws HarnessException {
+		// Haven't fully baked this method.  
+		// Maybe it works.  
+		// Maybe it needs to check "visible" and/or x/y/z coordinates
+
+		List<String> locators = Arrays.asList(
+				this.ContainerLocator + " td[id$='__Shr__SHARE_ACCEPT_title']",
+				this.ContainerLocator + " td[id$='__Shr__SHARE_DECLINE_title']");
+
+		for (String locator : locators) {
+			if ( !this.sIsElementPresent(locator) )
+				return (false);
+		}
+		
+		return (true);
+	}
+
+	public AbsPage zPressButton(Button button) throws HarnessException {
+		logger.info(myPageName() + " zDisplayPressButton("+ button +")");
+		
+		tracer.trace("Click "+ button);
+
+		AbsPage page = this;
+		String locator = null;
+		boolean doPostfixCheck = false;
+
+		if ( button == Button.B_VIEW_ENTIRE_MESSAGE ) {
+			
+			locator = this.ContainerLocator + " span[id$='_msgTruncation_link']";
+
+			if ( !this.sIsElementPresent(locator) )
+				throw new HarnessException("locator is not present for button "+ button +" : "+ locator);
+			
+			this.sClick(locator); // sClick() is required for this element
+			
+			this.zWaitForBusyOverlay();
+
+			return (page);
+
+		} else if ( button == Button.B_HIGHLIGHT_OBJECTS ) {
+
+			locator = this.ContainerLocator + " span[id$='_highlightObjects_link']";
+
+
+			if ( !this.sIsElementPresent(locator) )
+				throw new HarnessException("locator is not present for button "+ button +" : "+ locator);
+			
+			this.sClick(locator); // sClick() is required for this element
+			
+			this.zWaitForBusyOverlay();
+
+			return (page);
+
+		} else if ( button == Button.B_ACCEPT ) {
+			
+			locator = DisplayMail.Locators.AcceptButton;
+			page = null;
+			doPostfixCheck = true;
+		
+		} else if ( button == Button.O_ACCEPT_NOTIFY_ORGANIZER ) {
+			
+			locator = DisplayMail.Locators.AcceptNotifyOrganizerMenu;
+			page = null;
+			doPostfixCheck = true;
+			
+		} else if ( button == Button.O_ACCEPT_EDIT_REPLY ) {
+			
+			locator = DisplayMail.Locators.AcceptEditReplyMenu;
+			page = null;
+			doPostfixCheck = true;
+			
+		} else if ( button == Button.O_ACCEPT_DONT_NOTIFY_ORGANIZER ) {
+			
+			locator = DisplayMail.Locators.AcceptDontNotifyOrganizerMenu;
+			page = null;
+			doPostfixCheck = true;
+			
+		} else if ( button == Button.B_TENTATIVE ) {
+			
+			locator = DisplayMail.Locators.TentativeButton;
+			page = null;
+			doPostfixCheck = true;
+		
+		} else if ( button == Button.O_TENTATIVE_NOTIFY_ORGANIZER ) {
+			
+			locator = DisplayMail.Locators.TentativeNotifyOrganizerMenu;
+			page = null;
+			doPostfixCheck = true;
+			
+		} else if ( button == Button.O_TENTATIVE_EDIT_REPLY ) {
+			
+			locator = DisplayMail.Locators.TentativeEditReplyMenu;
+			page = null;
+			doPostfixCheck = true;
+			
+		} else if ( button == Button.O_TENTATIVE_DONT_NOTIFY_ORGANIZER ) {
+			
+			locator = DisplayMail.Locators.TentativeDontNotifyOrganizerMenu;
+			page = null;
+			doPostfixCheck = true;
+			
+		} else if ( button == Button.B_DECLINE ) {
+			
+			locator = DisplayMail.Locators.DeclineButton;
+			page = null;
+			doPostfixCheck = true;
+			
+		} else if ( button == Button.O_DECLINE_NOTIFY_ORGANIZER ) {
+			
+			locator = DisplayMail.Locators.DeclineNotifyOrganizerMenu;
+			page = null;
+			doPostfixCheck = true;
+			
+		} else if ( button == Button.O_DECLINE_EDIT_REPLY ) {
+			
+			locator = DisplayMail.Locators.DeclineEditReplyMenu;
+			page = null;
+			doPostfixCheck = true;
+			
+		} else if ( button == Button.O_DECLINE_DONT_NOTIFY_ORGANIZER ) {
+			
+			locator = DisplayMail.Locators.DeclineDontNotifyOrganizerMenu;
+			page = null;
+			doPostfixCheck = true;
+			
+		} else if ( button == Button.B_PROPOSE_NEW_TIME ) {
+			
+			locator = DisplayMail.Locators.ProposeNewTimeButton;
+			page = null;
+
+		} else if ( button == Button.B_ACCEPT_SHARE ) {
+
+			locator = this.ContainerLocator + " td[id$='__Shr__SHARE_ACCEPT_title']";
+			page = new DialogShareAccept(MyApplication, ((AppAjaxClient) MyApplication).zPageMail);
+			doPostfixCheck = true;
+
+		} else if ( button == Button.B_DECLINE_SHARE ) {
+
+			locator = this.ContainerLocator + " td[id$='__Shr__SHARE_DECLINE_title']";
+			page = new DialogShareDecline(MyApplication, ((AppAjaxClient) MyApplication).zPageMail);
+			doPostfixCheck = true;
+
+		} else  {
+			
+			throw new HarnessException("no implementation for button: "+ button);
+
+		}
+		
+		if ( locator == null )
+			throw new HarnessException("no locator defined for button "+ button);
+		
+		if ( !this.sIsElementPresent(locator) )
+			throw new HarnessException("locator is not present for button "+ button +" : "+ locator);
+		
+		this.zClick(locator);
+		
+		this.zWaitForBusyOverlay();
+
+		if ( page != null ) {
+			page.zWaitForActive();
+		}
+		
+		if ( doPostfixCheck ) {
+			// Make sure the response is delivered before proceeding
+			Stafpostqueue sp = new Stafpostqueue();
+			sp.waitForPostqueue();
+		}
+
+		return (page);
 	}
 }
