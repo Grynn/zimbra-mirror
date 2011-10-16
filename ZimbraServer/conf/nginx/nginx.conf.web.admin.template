@@ -1,0 +1,63 @@
+!{explode vhn_vip_ssl}
+# HTTPS Proxy Configuration
+# 
+server
+{
+    server_name             ${vhn}; 
+    ${core.ipboth.enabled}listen                    ${vip}:${web.admin.port};
+    ${core.ipv4only.enabled}listen                  ${vip}:${web.admin.port};
+    ${core.ipv6only.enabled}listen                  ${vip}:${web.admin.port} ipv6only=on;
+    
+    client_max_body_size    0;
+    ssl                     on;
+    ssl_prefer_server_ciphers ${web.ssl.preferserverciphers};
+    ssl_ciphers             ${web.ssl.ciphers};
+    ssl_certificate         ${ssl.crt};
+    ssl_certificate_key     ${ssl.key};
+
+    location /
+    {
+
+        # Begin stray redirect hack
+        # 
+        # In some cases, we may get a stray redirect out of the mailhost,
+        # which attempts to send us to $host:$mailhostport, where:
+        # 
+        # $host is the host portion (excluding port) of the proxy URL
+        # $mailhostport is the zimbraMailPort as applies to the mailhost
+        #   server being redirected to
+        # 
+        # This is the case when one mailhost in the upstream cluster is
+        # trying to redirect to another mailhost in the same cluster
+        # In this case, we need to trap and fudge this location header
+        # 
+        # NOTE that this will only work in the cases where each mailhost 
+        # within the cluster has the same mailhostport (Limitation)
+        # 
+
+        set $mailhostport ${web.admin.uport};   # replace this with *the* mailhost port
+        set $relhost $host;
+
+        if ($mailhostport != 80) {   # standard HTTP port, do not replace
+            set $relhost $host:$mailhostport;
+        }
+
+        # End stray redirect hack
+
+        # Proxy to Zimbra Upstream
+        proxy_pass          https://${web.admin.upstream.name};
+
+        # For audit
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+        # For Virtual Hosting
+        set $virtual_host $http_host;
+        if ($virtual_host = '') {
+            set $virtual_host $server_addr:$server_port;
+        }
+        proxy_set_header Host            $virtual_host;
+
+        # Fudge inter-mailbox redirects (kludge)
+        proxy_redirect https://$relhost/ https://$http_host/;
+    }
+}

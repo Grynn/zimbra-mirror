@@ -12,6 +12,15 @@ http
         zmauth;
     }
 
+    #  Define the coolection of upstream admin console servers to which we will
+    #  proxy. Define each server:port against a server directive
+    #
+    upstream ${web.admin.upstream.name}
+    {
+        ${web.admin.upstream.:servers}
+        zmauth admin;
+    }
+
     #custom error pages for upstream connection errors
     error_page 502 /zmerror_upstream_bad.html;
     error_page 504 /zmerror_upstream_timeout.html;
@@ -24,4 +33,6 @@ http
     ${web.https.enabled}include ${core.includes}/${core.cprefix}.web.https.default;
     ${web.sso.enabled}include ${core.includes}/${core.cprefix}.web.sso;
     ${web.sso.default.enabled}include ${core.includes}/${core.cprefix}.web.sso.default;
+    ${web.admin.default.enabled}include ${core.includes}/${core.cprefix}.web.admin;
+    ${web.admin.default.enabled}include ${core.includes}/${core.cprefix}.web.admin.default;
 }
