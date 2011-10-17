@@ -38,11 +38,13 @@ ZaListViewController = function(appCtxt, container,iKeyName) {
 ZaListViewController.prototype = new ZaController();
 ZaListViewController.prototype.constructor = ZaListViewController;
 
+
+
 ZaListViewController.prototype._nextPageListener = 
 function (ev) {
 	if(this._currentPageNum < this.numPages) {
 		this._currentPageNum++;
-		this.show();	
+		this.show();
 	} 
 }
 
@@ -67,7 +69,7 @@ function() {
 }
 
 ZaListViewController.prototype._updateUI = 
-function(list, openInNewTab, openInSearchTab) {
+function(list, openInNewTab, openInSearchTab, hasMore) {
     if (!this._UICreated) {
 		this._createUI(openInNewTab, openInSearchTab);
 	} 
@@ -83,6 +85,8 @@ function(list, openInNewTab, openInSearchTab) {
 		//add the default column sortable
 		this._contentView._bSortAsc = (this._currentSortOrder=="1");
 		this._contentView.set(AjxVector.fromArray(tmpArr), this._contentView._defaultColumnSortable);
+        this._contentView.setScrollSearchParams(this.scrollSearchParams);
+        this._contentView.setScrollHasMore(hasMore);
 	}
 	this._removeList = new Array();
 	this.changeActionsState();
@@ -274,8 +278,9 @@ function(params, resp) {
 		}
 		if(resp && resp.isException() && !this._currentRequest.cancelled) {
 			ZaSearch.handleTooManyResultsException(resp.getException(), "ZaListViewController.prototype.searchCallback");
-			this._list = new ZaItemList(params.CONS);	
-			this._searchTotal = 0;
+            this._list = new ZaItemList(params.CONS);
+
+            this._searchTotal = 0;
 			this.numPages = 0;
 			if(params.show)
 				this._show(this._list);			
@@ -288,7 +293,9 @@ function(params, resp) {
 			this._searchTotal = 0;
 			if(resp && !resp.isException()) {
 				var response = resp.getResponse().Body.SearchDirectoryResponse;
+
 				this._list = new ZaItemList(params.CONS);
+
                 tempList.loadFromJS(response);
                 // filter the search result
                 if(params.resultFilter && tempList.size() > 0) {
@@ -307,19 +314,21 @@ function(params, resp) {
                         }
 
                     }
-                } else this._list = tempList;
+                } else  this._list = tempList;
+
 				if(ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraIsAdminAccount] != 'TRUE') {
 					var act = new AjxTimedAction(this._list, ZaItemList.prototype.loadEffectiveRights, null);
 					AjxTimedAction.scheduleAction(act, 150)
-				}	
+				}
+
 				this._searchTotal = response.searchTotal;
 				var limit = params.limit ? params.limit : this.RESULTSPERPAGE; 
 				this.numPages = Math.ceil(this._searchTotal/params.limit);
 			}
 			if(params.show)
-				this._show(this._list, params.openInNewTab, params.openInSearchTab);			
+				this._show(this._list, params.openInNewTab, params.openInSearchTab,response.more);
 			else
-				this._updateUI(this._list, params.openInNewTab, params.openInSearchTab);
+				this._updateUI(this._list, params.openInNewTab, params.openInSearchTab,response.more);
 		}
 	} catch (ex) {
 		if (ex.code != ZmCsfeException.MAIL_QUERY_PARSE_ERROR) {

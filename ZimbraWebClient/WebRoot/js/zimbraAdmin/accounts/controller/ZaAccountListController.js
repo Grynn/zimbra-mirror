@@ -71,13 +71,23 @@ ZaAccountListController.prototype.show = function (doPush) {
 			busyMsg:ZaMsg.BUSY_SEARCHING,
 			skipCallbackIfCancelled:false
 	}
-	
+	this.scrollSearchParams={
+            query:this._currentQuery ,
+			types:this.searchTypes,
+			sortBy:this._currentSortField,
+			sortAscending:this._currentSortOrder,
+            attrs: [this.fetchAttrs, ZaAccount.A_zimbraIsDelegatedAdminAccount, ZaAccount.A_zimbraIsAdminAccount, ZaAccount.A_zimbraIsSystemResource, ZaAccount.A_zimbraIsSystemAccount, ZaAccount.A_zimbraIsExternalVirtualAccount].join(),
+			controller: this,
+			showBusy:true,
+			busyMsg:ZaMsg.BUSY_SEARCHING,
+			skipCallbackIfCancelled:false
+    };
 	ZaSearch.searchDirectory(searchParams);
 }
 
 ZaAccountListController.prototype._show = 
-function (list, openInNewTab, openInSearchTab) {
-	this._updateUI(list, openInNewTab, openInSearchTab);
+function (list, openInNewTab, openInSearchTab, hasMore) {
+	this._updateUI(list, openInNewTab, openInSearchTab, hasMore);
 //	ZaApp.getInstance().pushView(ZaZimbraAdmin._ACCOUNTS_LIST_VIEW);
     this.updatePopupMenu();
 	ZaApp.getInstance().pushView(this.getContentViewId (), openInNewTab, openInSearchTab);
@@ -92,6 +102,10 @@ function (list, openInNewTab, openInSearchTab) {
 		ZaApp.getInstance().updateTab(this.getMainTab(), ZaApp.getInstance()._currentViewId );
 	}
 }
+
+
+
+
 
 ZaAccountListController.prototype.setDefaultType = function (type) {
 	// set the default type,

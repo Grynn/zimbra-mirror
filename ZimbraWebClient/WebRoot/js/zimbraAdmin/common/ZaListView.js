@@ -33,13 +33,20 @@ ZaListView = function(params) {
 
 	//bug: 18787
 	//Set the ListView Div DwtControl.SCROLL(overflow: auto) And the Rows Dwt.VISIBLE
-    //In this way, the view of lists can be controlled by the scroll of the list view 
-    // At the same time, no list row content will be hidden 	
-	this.setScrollStyle(DwtControl.SCROLL);
-	if (this._listDiv) this._listDiv.style.overflow = "visible";  
+    //In this way, the view of lists can be controlled by the scroll of the li st view
+    // At the same time, no list row content will be hidden
+    if (appNewUI&&params.scrollLoading) {
+		Dwt.setHandler(this._getScrollDiv(), DwtEvent.ONSCROLL, ZaListView.handleScroll);
+	}
+
+    this.setScrollStyle(DwtControl.SCROLL);
+	if (this._listDiv) this._listDiv.style.overflow = "visible";
+
+    this.scrollSearchParams=null;
+    this.scrollHasMore=false;
 }
 
-ZaListView.PARAMS = ["parent", "className", "posStyle", "headerList", "view", "id"];
+ZaListView.PARAMS = ["parent", "className", "posStyle", "headerList", "view", "id", "scrollLoading"];
 
 ZaListView.prototype = new DwtListView;
 ZaListView.prototype.constructor = ZaListView;
@@ -154,6 +161,196 @@ function () {
 	}
 }
 
+ZaListView.prototype._getScrollDiv =
+function() {
+	return this.getHtmlElement();
+};
+
+
+ZaListView.prototype.setScrollSearchParams=
+function(searchParams) {
+    this.scrollSearchParams=searchParams;
+}
+
+ZaListView.prototype.setScrollHasMore=
+function(hasMore) {
+    this.scrollHasMore=hasMore;
+}
+
+ZaListView.prototype._loadMsg =
+function (params) {
+		//this.show(null,params);
+    var busyId = Dwt.getNextId();
+	var callback = new AjxCallback(this, this.searchCallback, {CONS:null,busyId:busyId});
+    var searchParams=this.scrollSearchParams;
+    searchParams.offset=params.offset;
+    searchParams.limit=params.limit;
+    searchParams.callback=callback;
+    searchParams.busyId=busyId,
+	ZaSearch.searchDirectory(searchParams);
+}
+
+ZaListView.prototype.searchCallback =
+function(params, resp) {
+	try {
+		if(params.busyId)
+			ZaApp.getInstance().getAppCtxt().getShell().setBusy(false, params.busyId);
+
+		if(!resp && !this._currentRequest.cancelled) {
+			throw(new AjxException(ZaMsg.ERROR_EMPTY_RESPONSE_ARG, AjxException.UNKNOWN, "ZaListView.prototype.searchCallback"));
+		}
+		if(resp && resp.isException() && !this._currentRequest.cancelled) {
+			ZaSearch.handleTooManyResultsException(resp.getException(), "ZaListView.prototype.searchCallback");
+		} else {
+			ZaSearch.TOO_MANY_RESULTS_FLAG = false;
+			//this._list = null;
+            var tempList = new ZaItemList(params.CONS);
+            var tempResultList = new ZaItemList(params.CONS);
+			this._searchTotal = 0;
+			if(resp && !resp.isException()) {
+				var response = resp.getResponse().Body.SearchDirectoryResponse;
+
+                tempList.loadFromJS(response);
+                // filter the search result
+                if(params.resultFilter && tempList.size() > 0) {
+                    var listVec = tempList.getVector();
+                    for(var i = 0; i < listVec.size(); i++) {
+                        var item = listVec.get(i);
+                        var target = null;
+                        if(item.type == ZaItem.ALIAS)
+                            target = item.getAliasTargetObj();
+                        else target = item;
+                        for (var f in params.resultFilter) {
+                            if(target.attrs[f].indexOf(params.resultFilter[f]) >= 0) {
+                                tempResultList.add(item);
+                                break;
+                            }
+                        }
+
+                    }
+                } else {
+                    tempResultList = tempList;
+                }
+				if(ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraIsAdminAccount] != 'TRUE') {
+					var act = new AjxTimedAction(this._list, ZaItemList.prototype.loadEffectiveRights, null);
+					AjxTimedAction.scheduleAction(act, 150)
+				}
+
+                 this.setScrollHasMore(response.more);
+			}
+             if(tempResultList){
+                var tmpArr = new Array();
+		        var cnt = tempResultList.getArray().length;
+		        for(var ix = 0; ix < cnt; ix++) {
+			        tmpArr.push(tempResultList.getArray()[ix]);
+		        }
+               this.replenish(AjxVector.fromArray(tmpArr));
+             }
+		}
+	} catch (ex) {
+		if (ex.code != ZmCsfeException.MAIL_QUERY_PARSE_ERROR) {
+			this._handleException(ex, "ZaListView.prototype.searchCallback");
+		} else {
+			this.popupErrorDialog(ZaMsg.queryParseError, ex);
+			if(this._searchField)
+				this._searchField.setEnabled(true);
+		}
+	}
+}
+
+ZaListView.handleScroll =
+function(ev) {
+	var target = DwtUiEvent.getTarget(ev);
+	var lv = DwtControl.findControl(target);
+	if (lv) {
+		lv._checkItemCount();
+	}
+};
+
+
+ZaListView.prototype._checkItemCount =
+function() {
+	var itemsNeeded =  this._getItemsNeeded();
+	if (itemsNeeded) {
+        var params = {
+                    offset:this._list.size(),
+                    limit:itemsNeeded
+				  };;
+        this. _loadMsg(params);
+	}
+};
+
+
+ZaListView.prototype._getItemsNeeded =
+function(skipMoreCheck) {
+
+	if (!skipMoreCheck) {
+		if (!this.scrollHasMore || !this._list) { return 0; }
+	}
+
+    this._setRowHeight();
+    //if (!this._rendered || !this._rowHeight) { return 0; }
+     if ( !this._rowHeight) { return 0; }
+	DBG.println(AjxDebug.DBG2, "List view: checking item count");
+
+	var sbCallback = new AjxCallback(null, AjxTimedAction.scheduleAction, [new AjxTimedAction(this, this._resetColWidth), 10]);
+	var params = {scrollDiv:	this._getScrollDiv(),
+				  rowHeight:	this._rowHeight,
+				  threshold:	this.getPagelessThreshold(),
+				  limit:		this.getLimit(1),
+				  listSize:		this._list.size(),
+				  sbCallback:	sbCallback};
+	return ZaListView.getRowsNeeded(params);
+};
+
+
+ZaListView.getRowsNeeded =
+function(params) {
+     var div = params.scrollDiv;
+	var sh = div.scrollHeight, st = div.scrollTop, rh = params.rowHeight;
+
+	// view (porthole) height - everything measured relative to its top
+	// prefer clientHeight since (like scrollHeight) it doesn't include borders
+	var h = div.clientHeight || Dwt.getSize(div).y;
+
+	// where we'd like bottom of list view to be (with extra hidden items at bottom)
+	var target = h + (params.threshold * rh);
+
+	// where bottom of list view is (including hidden items)
+	var bottom = sh - st;
+
+	if (bottom == h) {
+		// handle cases where there's no scrollbar, but we have more items (eg tall browser, or replenishment)
+		bottom = (params.listSize * rh) - st;
+		if (st == 0 && params.sbCallback) {
+			// give list view a chance to fix width since it may be getting a scrollbar
+			params.sbCallback.run();
+		}
+	}
+
+	var rowsNeeded = 0;
+	if (bottom < target) {
+		// buffer below visible bottom of list view is not full
+		rowsNeeded = Math.max(Math.floor((target - bottom) / rh), params.limit);
+	}
+	return rowsNeeded;
+};
+
+ZaListView.prototype.getLimit =
+function(offset) {
+    if (appNewUI) {
+		var limit = ZaSettings.RESULTSPERPAGE;
+		return offset ? limit : 2 * limit;
+	} else {
+		return ZaSettings.RESULTSPERPAGE;
+	}
+};
+
+ZaListView.prototype.getPagelessThreshold =
+function() {
+	return Math.ceil(this.getLimit() / 5);
+};
+
 
 ZaListView.prototype.setHeaderList = function(headerList) {
 	this._headerList = headerList;
@@ -180,3 +377,5 @@ ZaListHeaderItem.prototype.getLabel =
 function () {
 	return this._label;
 }
+
+

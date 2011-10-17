@@ -43,7 +43,8 @@ ZaAccountListView = function(parent,listType) {
 		className:className, 
 		posStyle:posStyle, 
 		headerList:headerList, 
-		id:listViewId
+		id:listViewId,
+        scrollLoading:true
 	});
 
 	this._appCtxt = this.shell.getData(ZaAppCtxt.LABEL);
