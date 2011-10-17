@@ -107,7 +107,7 @@ namespace MVVM.ViewModel
             private set;
         }
 
-        private void Next()
+        public void Next()
         {
             // Get data to initialize the profile combo boxes
             mw.MailClient = "MAPI";

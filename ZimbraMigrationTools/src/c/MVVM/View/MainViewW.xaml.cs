@@ -46,6 +46,10 @@ namespace MVVM.View
 
         private void ViewListTB_MouseDown(object sender, MouseButtonEventArgs e)
         {
+            if (m_introViewModel.mw.MailClient == null)
+            {
+                m_introViewModel.Next();
+            }
             TextBlock tb = (TextBlock)sender;
             if (tb.Text == "Migrate")
             {
