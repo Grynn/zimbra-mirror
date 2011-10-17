@@ -57,10 +57,12 @@ public class OpenLinkToMessage extends AjaxCommonTest {
 		// From Briefcase open Mail page by clicking on Mail tab 
 		app.zPageMain.zClickAt("id=zb__App__Mail_title", "0,0");
 		
+		SleepUtil.sleepSmall();
+		
 		// Click Get Mail button to view message in the list
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 
-		SleepUtil.sleepMedium();
+		SleepUtil.sleepSmall();
 
 		MailItem mail = MailItem.importFromSOAP(app.zGetActiveAccount(),
 				"subject:(" + subject + ")");
