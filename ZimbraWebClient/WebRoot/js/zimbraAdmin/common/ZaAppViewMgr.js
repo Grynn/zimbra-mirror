@@ -567,16 +567,22 @@ function(viewId) {
 
 ZaAppViewMgr.prototype._setCurrentBar =
 function(viewId) {
-    var elements = this._views[viewId];
-	var content = elements[ZaAppViewMgr.C_APP_CONTENT];
+    var view = this.getViewContentById(viewId);
     var viewController = ZaApp.getInstance().getControllerById(viewId);
 	var popUpOperations = "" ;
+    var typeImg = "";
 	if (viewController && viewController.getPopUpOperation) {
-		popUpOperations = viewController.getPopUpOperation();
+        popUpOperations = viewController.getPopUpOperation();
 	}
 
-    if(this._components[ZaAppViewMgr.C_APP_HEADER] && this._components[ZaAppViewMgr.C_APP_HEADER].updateMenu ) {
-		this._components[ZaAppViewMgr.C_APP_HEADER].updateMenu (popUpOperations, viewController._popupOrder);
+    if (view && view.getBarImage) {
+        typeImg = view.getBarImage();
+    }
+    if(this._components[ZaAppViewMgr.C_APP_HEADER]) {
+        if (this._components[ZaAppViewMgr.C_APP_HEADER].updateMenu)
+		    this._components[ZaAppViewMgr.C_APP_HEADER].updateMenu (popUpOperations, viewController._popupOrder);
+        if (this._components[ZaAppViewMgr.C_APP_HEADER].setTypeImg && typeImg)
+            this._components[ZaAppViewMgr.C_APP_HEADER].setTypeImg(typeImg);
 	}
 }
 

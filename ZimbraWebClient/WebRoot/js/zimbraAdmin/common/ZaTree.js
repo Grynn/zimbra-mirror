@@ -50,13 +50,16 @@ function(rootData) {
 ZaTree.prototype.addTreeItemData =
 function(treeItemData) {
     var pathItems = this.getPathItems( treeItemData.parent);
+    var result;
     var parentItem = this.getTreeItemData(this._rootData, pathItems, 0);
     if (parentItem) {
         parentItem.addChild(treeItemData);
-        return true;
+        result =  true;
     } else {
-        return false;
+        result = false;
     }
+
+    return result;
 }
 
 ZaTree.prototype.getTreeItemData =
@@ -95,7 +98,7 @@ function(path) {
     return ret;
 }
 
-ZaTree.SEPERATOR = "/";
+ZaTree.SEPERATOR = "%";
 ZaTree.prototype.getPathItems =
 function(path) {
     var temp = path.split(ZaTree.SEPERATOR);
@@ -178,6 +181,7 @@ function (path, isAddHistory, skipNotify, kbNavEvent, noFocus, refresh) {
     this._updateHistory(treeItem, isAddHistory);
 }
 
+//TODO make it recursive
 ZaTree.prototype.getTreeItemByPath =
 function(path) {
     if (!path)
@@ -186,18 +190,22 @@ function(path) {
     if (!this.currentRoot)
         return null;
 
-    var rootDataPath = this.currentRoot.getData("dataItem");
-    var rootPath = this.getABPath(rootDataPath);
-    if (rootPath == path)
-        return this.currentRoot;
+    var firstLevelChildren = this.getChildren();
+    for (var j = 0; j < firstLevelChildren.length; j++) {
+        var currentTreeItem = firstLevelChildren[j];
+        var rootDataPath = currentTreeItem.getData("dataItem");
+        var rootPath = this.getABPath(rootDataPath);
+        if (rootPath == path)
+            return currentTreeItem;
 
-    var children = this.currentRoot.getChildren();
-    for (var i = 0; i < children.length; i++) {
-        var childTreeItem = children[i];
-        var text = childTreeItem.getText();
-        var childPath =  rootPath + ZaTree.SEPERATOR + text;
-        if (path == childPath)
-            return  childTreeItem;
+        var children = currentTreeItem.getChildren();
+        for (var i = 0; i < children.length; i++) {
+            var childTreeItem = children[i];
+            var text = childTreeItem.getText();
+            var childPath =  rootPath + ZaTree.SEPERATOR + text;
+            if (path == childPath)
+                return  childTreeItem;
+        }
     }
     return null;
 }
@@ -252,6 +260,31 @@ function (path, newName) {
     }
 
     return newPath;
+}
+
+ZaTree.prototype.removeTreeItem = function (path) {
+    var treeItemData = this.getTreeItemDataByPath(path);
+    if (!treeItemData)
+        return;
+
+    var treeItem = this.getTreeItemByPath (path);
+    if (treeItem)
+        treeItem.parent.removeChildren(treeItem);
+
+    treeItemData.parentObject.removeChildren (treeItemData);
+}
+
+ZaTree.prototype.removeAllChild = function (path) {
+    var treeItemData = this.getTreeItemDataByPath(path);
+    if (!treeItemData)
+        return;
+
+    var treeItem = this.getTreeItemByPath (path);
+    if (treeItem) {
+        treeItem.removeChildren();
+    }
+
+    treeItemData.childrenData.removeAll();
 }
 
 ZaTree.prototype._getDefaultRelated =

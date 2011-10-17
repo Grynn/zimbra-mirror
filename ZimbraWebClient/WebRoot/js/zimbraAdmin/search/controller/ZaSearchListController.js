@@ -96,13 +96,17 @@ ZaSearchListController.prototype.show = function (doPush) {
 ZaSearchListController.version = 1;
 ZaSearchListController.prototype._show = 
 function (list, openInNewTab, openInSearchTab) {
-    if (appNewUI) {
-        this._lastestResult = list;
-        this._lastestResult.getArray()._version = ZaSearchListController.version ++;
-    }
 	this._updateUI(list, openInNewTab, openInSearchTab);
 	//ZaApp.getInstance().pushView(ZaZimbraAdmin._SEARCH_LIST_VIEW);
 	ZaApp.getInstance().pushView(this.getContentViewId());
+
+    if (appNewUI) {
+        this._lastestResult = list;
+        this._lastestResult.getArray()._version = ZaSearchListController.version ++;
+        if (this._uiContainer) {
+            this._uiContainer.setQueryField(this._currentQuery);
+        }
+    }
 }
 
 ZaSearchListController.prototype.getSearchReuslt =

@@ -13,6 +13,7 @@ ZaCurrentAppBar = function(parent, className, buttons) {
     this.menu.setWidth(150);
     this.setMenu(this.menu);
     this.setSettingImg();
+    this.clearTypeImg();
 }
 
 ZaCurrentAppBar.prototype = new DwtButton;
@@ -29,15 +30,42 @@ ZaCurrentAppBar.prototype.TEMPLATE = "admin.Widgets#ZaCurrentAppBar";
 
 ZaCurrentAppBar.prototype._createHtmlFromTemplate = function(templateId, data) {
     DwtButton.prototype._createHtmlFromTemplate.call(this, templateId, data);
-    this._imgEl = document.getElementById(data.id+"_img");
+    this._typeImgEl = document.getElementById(data.id+"_typeimg");
+    this._settingImgEl = document.getElementById(data.id+"_settingimg");
 };
 
 ZaCurrentAppBar.prototype.setSettingImg = function (imgName) {
-    if (!this._imgEl)
+    if (!this._settingImgEl)
         return;
 
     var localImg = imgName || ZaCurrentAppBar.defalutImg;
-    this._imgEl.innerHTML = AjxImg.getImageHtml(localImg);
+    this._settingImgEl.innerHTML = AjxImg.getImageHtml(localImg);
+}
+
+ZaCurrentAppBar.prototype.clearSettingImg = function () {
+    if (!this._settingImgEl)
+        return;
+
+    this._settingImgEl.innerHTML = "";
+}
+
+ZaCurrentAppBar.prototype.setTypeImg = function (imgName) {
+    if (!this._typeImgEl)
+        return;
+    if (!imgName)
+        return;
+    this._typeImgEl.innerHTML = AjxImg.getImageHtml(imgName);
+    if (!Dwt.getVisible (this._typeImgEl))
+        Dwt.setVisible (this._typeImgEl, true);
+}
+
+ZaCurrentAppBar.prototype.clearTypeImg = function () {
+    if (!this._typeImgEl)
+        return;
+
+    this._typeImgEl.innerHTML = "";
+    if (Dwt.getVisible (this._typeImgEl))
+        Dwt.setVisible (this._typeImgEl, false);
 }
 
 ZaCurrentAppBar.prototype.setText =
@@ -105,8 +133,8 @@ ZaCurrentAppBar.prototype._isDropDownEvent =
 function(ev) {
 	if (this._dropDownEventsEnabled && this._dropDownEl) {
 		var mouseX = ev.docX;
-        if (this._imgEl) {
-            var imgX =  Dwt.toWindow(this._imgEl, 0, 0, window).x;
+        if (this._settingImgEl) {
+            var imgX =  Dwt.toWindow(this._settingImgEl, 0, 0, window).x;
             if (mouseX >= imgX)
                 return true;
         }
@@ -135,7 +163,10 @@ function(popupOperations, popupOrder) {
     if (popupOperations) {
         this.menu = new ZaPopupMenu(this, "ActionMenu", null, popupOperations, ZaId.CURRENT_APP_BAR, ZaId.MENU_POP, popupOrder);
         this.menu.setWidth(150);
+        this.setSettingImg();
         this.setMenu(this.menu);
+    } else {
+        this.clearSettingImg();
     }
 
 }

@@ -165,8 +165,14 @@ function(evt) {
 	}
 
     fieldObj.setCurrentSavedSearch({});
+    if (appNewUI) {
+        var tree = ZaZimbraAdmin.getInstance().getOverviewPanelController().getOverviewPanel().getFolderTree();
+        tree.setSelectionByPath(ZaZimbraAdmin.getInstance().getOverviewPanelController().getSearchItemPath());
+        return;
+    }
 	//fieldObj._isSearchButtonClicked = true ; //to Distinguish the action from the overveiw tree items
 	fieldObj.invokeCallback(evt);
+
 }
 
 ZaSearchField.helpSrchButtonHndlr =
@@ -290,9 +296,6 @@ function (name, query, event){
 	//if(window.console && window.console.log) console.debug("Item " + name + " is selected - " + query);
     var queryString = ZaSearch.parseSavedSearchQuery(query) ;
 	this.getSearchFieldElement().value = queryString;
-    if (appNewUI) {
-        ZaApp.getInstance().getSearchListController()._uiContainer.setQueryField(queryString);
-    }
 	this.invokeCallback() ; //do the real search call (simulate the search button click)
 }
 
@@ -632,7 +635,7 @@ ZaSearchField.prototype._getMyXForm = function() {
 
                 ]},
 
-                {type:_DWT_BUTTON_, toolTipContent:ZaMsg.searchForAll, icon:"Search", name: "searchButton",
+                {type:_DWT_BUTTON_, toolTipContent:ZaMsg.searchForAll, icon:"Search2", name: "searchButton",
                     onActivate:ZaSearchField.srchButtonHndlr, autoPadding: false,
                     cssStyle:"background-color:white;",
                     cssClass:"ZaSearchFieldButton   DwtToolbarButton"
@@ -749,14 +752,15 @@ ZaSearchField.prototype.getDefaultSearchName = function (name) {
     var index = ZaSearchField.nameCache[name].length + 1;
     ZaSearchField.nameCache [name].push(index);
 
-    return name + " { " + index + "}";
+    return name + " {" + index + "}";
 }
+
 ZaSearchField.prototype.doSaveSearch = function (queryString) {
     var currentSearch = this.getCurrentSavedSearch();
     var dialog = this.getSaveAndEditSeachDialog();
     var isCreated = currentSearch.name ? false: true;
     var name = this.getDefaultSearchName(currentSearch.name);
-    dialog.show(name, currentSearch, isCreated);
+    dialog.show(name, queryString, isCreated);
 }
 
 /**

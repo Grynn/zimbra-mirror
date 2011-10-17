@@ -187,6 +187,55 @@ function (params,resp) {
 }
 ZaOverviewPanelController.prototype.updateSavedSearchTreeList =
 function () {
+    if (appNewUI) {
+        var tree =this._overviewPanel.getFolderTree();
+        var savedSearchPath = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_search, ZaMsg.OVP_savedSearch]);
+        tree.removeAllChild(savedSearchPath);
+
+        try {
+            var savedSearchList = ZaApp.getInstance().getSavedSearchList();
+            if(savedSearchList && savedSearchList.length) {
+                var cnt = savedSearchList.length;
+                for(var ix=0; ix< cnt; ix++) {
+                    var ti1 = new ZaTreeItemData({
+                                        parent:savedSearchPath,
+                                        id:ZaId.getTreeItemId(ZaId.PANEL_APP,"currentSearch", null,ix+1),
+                                        text: savedSearchList[ix].name,
+                                        mappingId: ZaZimbraAdmin._SEARCH_HOME_VIEW});
+                    ti1.setData("name", savedSearchList[ix].name);
+                    ti1.setData("query", savedSearchList[ix].query); //keep the query information here
+                    tree.addTreeItemData(ti1);
+                }
+
+                var searchRootNode =  tree.getTreeItemByPath (savedSearchPath);
+                if (searchRootNode) {
+                   // TODO Improve Later
+                    var showRootNode = tree.getTreeItemDataByPath(savedSearchPath);
+                    var ti, currentAddNode, forceNode, key;
+                    for (var i = 0; i < showRootNode.childrenData.size(); i++) {
+                        currentAddNode =  showRootNode.childrenData.get(i);
+                        if( currentAddNode.forceNode !== undefined)
+                            forceNode = currentAddNode.forceNode;
+                        else
+                            forceNode = currentAddNode.childrenData.size() > 0 ? true: false;
+                        ti = new ZaTreeItem({parent: searchRootNode,className:"AdminTreeItem",id:currentAddNode.id, forceNode: forceNode});
+                        ti.setCount(currentAddNode.count);
+                        ti.setText(currentAddNode.text);
+                        ti.setImage(currentAddNode.image);
+                        ti.setData(ZaOverviewPanelController._TID, currentAddNode.mappingId);
+                        ti.setData("dataItem", currentAddNode);
+                        for (key in currentAddNode._data) {
+                            ti.setData(key, currentAddNode._data[key]);
+                        }
+                    }
+                    searchRootNode.setExpanded(true);
+                }
+            }
+        } catch (ex) {
+            this._handleException(ex, "ZaOverviewPanelController.prototype._buildNewFolderTree", null, false);
+        }
+        return;
+    }
 	var isExpanded = this._savedSearchTi.getExpanded();
 	
 	//remove the old treeitems
@@ -801,7 +850,7 @@ function() {
 
     tree.addTreeItemData(accountMgr);
     if(accountMgr) {
-        var refpath = accountMgr.parent? accountMgr.parent + "/" + accountMgr.text:ZaMsg.OVP_home;
+        var refpath = accountMgr.parent? accountMgr.parent + ZaTree.SEPERATOR + accountMgr.text:ZaMsg.OVP_home;
         var acctitem =  new ZaTreeItemData({
                                 parent:refpath,
                                 id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_HOME,null, "actLstHV"),
@@ -1015,6 +1064,7 @@ function() {
         var savedSearchList = ZaApp.getInstance().getSavedSearchList();
         if(savedSearchList && savedSearchList.length) {
             var savedSearchPath = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_search, ZaMsg.OVP_savedSearch]);
+            this._savedSearchPath = savedSearchPath;
             var cnt = savedSearchList.length;
             for(var ix=0; ix< cnt; ix++) {
                 var ti1 = new ZaTreeItemData({
@@ -1028,7 +1078,7 @@ function() {
             }
         }
     } catch (ex) {
-        this._handleException(ex, "ZaOverviewPanelController.prototype._buildFolderTree", null, false);
+        this._handleException(ex, "ZaOverviewPanelController.prototype._buildNewFolderTree", null, false);
     }
 
 	//Instrumentation code start
@@ -1357,7 +1407,7 @@ ZaOverviewPanelController.newSearchListTreeListener = function (ev) {
     var tree = this.getOverviewPanel().getFolderTree();
     var currentPath = tree.getABPath(ev.item.getData("dataItem"));
     if (currentPath ==  ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_search])){
-        var  searchPath = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_search, ZaMsg.OVP_search]);
+        var  searchPath = this.getSearchItemPath();
         tree.setSelectionByPath(searchPath, true, true);
     }
 	var searchField = ZaApp.getInstance().getSearchListController()._searchField ;

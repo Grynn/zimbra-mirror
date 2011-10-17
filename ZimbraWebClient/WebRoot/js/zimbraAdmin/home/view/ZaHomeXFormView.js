@@ -125,3 +125,7 @@ ZaTabView.XFormModifiers["ZaHomeXFormView"].push(ZaHomeXFormView.myXFormModifier
 ZaHomeXFormView.prototype.getCustomWidth = function () {
     return "100%";
 }
+
+ZaHomeXFormView.prototype.getBarImage = function () {
+    return "Home";
+}
