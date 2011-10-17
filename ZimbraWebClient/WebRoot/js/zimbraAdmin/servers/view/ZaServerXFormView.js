@@ -686,10 +686,12 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
     var switchItems = [];
 
     var case1 =  {
-        type:_ZATABCASE_, colSizes:["auto"],numCols:1, caseKey:_tab1,
+        type:_ZATABCASE_, numCols:1, caseKey:_tab1,
             id:"server_general_tab",
+            paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),
             items:[
-                {type:_ZA_PLAIN_GROUPER_, cssStyle:"padding-left:0px; padding-right:0px", width:"100%", items:[
+                //{type:_ZAGROUP_, cssStyle:"padding-left:0px; padding-right:0px", width:"100%", items:[
+                {type:_ZAGROUP_, displayGrid:appNewUI,width:"100%", numCols:2,colSizes: ["275px","100%"], items:[
                     {ref:ZaServer.A_name, type:_OUTPUT_, label:ZaMsg.NAD_DisplayName, labelLocation:_LEFT_},
                     ZaItem.descriptionXFormItem,
                     { ref: ZaServer.A_ServiceHostname, type:_OUTPUT_,
@@ -711,6 +713,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
                       onChange:ZaServerXFormView.onFormFieldChanged
                     },
                     {ref:ZaServer.A_zimbraMailPurgeSleepInterval, type:_SUPER_LIFETIME_,
+                            labelCssStyle:(appNewUI?"text-align:left;background-color:#DEE5F1 !important;padding-left:10px;":null),
                             resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
                             msgName:ZaMsg.MSG_zimbraMailPurgeSleepInterval,
                             txtBoxLabel:ZaMsg.LBL_zimbraMailPurgeSleepInterval,

@@ -97,7 +97,7 @@ ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
                        {value:"Download Zimbra Administrator Guide", onClick:ZaHomeXFormView.onDownloadGuide}];
     var case1 = {type:_ZATABCASE_, numCols: 4,  colSizes:["25%", "25%", "25%", "25%"], caseKey:1,
 //        height:"400px",  align:_LEFT_, valign:_TOP_,
-        getCustomWidth: ZaHomeXFormView.prototype. getCustomWidth,
+        getCustomWidth: ZaHomeXFormView.prototype.getCustomWidth,
         items:[
             {type:_SPACER_, colSpan: "4", height:20},
             {type:_OUTPUT_, label:"VMWare Zimbra Version:", ref: ZaHome.A2_version},
