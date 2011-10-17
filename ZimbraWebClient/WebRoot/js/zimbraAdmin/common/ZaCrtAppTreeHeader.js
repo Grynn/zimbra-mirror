@@ -7,8 +7,8 @@
  */
 
 ZaCrtAppTreeHeader = function(parent, className, buttons) {
-
-	DwtButton.call(this, parent, "", className, Dwt.ABSOLUTE_STYLE);
+    var cssClass = className || "ZaCtrAppTreeHeader";
+	DwtButton.call(this, parent, "", cssClass, Dwt.ABSOLUTE_STYLE);
     this.preObj = null;
 	this._historyMgr = ZaZimbraAdmin.getInstance().getHisotryMgr();
     this._historyMgr.addChangeListener(new AjxListener(this, this.updateMenu));

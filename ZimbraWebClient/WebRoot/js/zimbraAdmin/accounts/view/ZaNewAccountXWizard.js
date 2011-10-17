@@ -494,7 +494,7 @@ ZaNewAccountXWizard.getAccountNameInfoItem = function(){
                                                         enableDisableChangeEventSources:[ZaAccount.A2_autodisplayname],bmolsnr:true,
                                                         visibilityChecks:[]
                                                 },
-                                                {ref:ZaAccount.A2_autodisplayname, type:_CHECKBOX_, msgName:ZaMsg.NAD_Auto,label:ZaMsg.NAD_Auto,labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE",
+                                                {ref:ZaAccount.A2_autodisplayname, type:_CHECKBOX_, msgName:ZaMsg.NAD_Auto,label:ZaMsg.NAD_Auto,labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE", subLabel:"",
                                                         elementChanged: function(elementValue,instanceValue, event) {
                                                                 if(elementValue=="TRUE") {
                                                                         if(ZaAccount.generateDisplayName.call(this, this.getInstance(), this.getInstanceValue(ZaAccount.A_firstName), this.getInstanceValue(ZaAccount.A_lastName),this.getInstanceValue(ZaAccount.A_initials))) {
@@ -510,7 +510,7 @@ ZaNewAccountXWizard.getAccountNameInfoItem = function(){
                                         ]
                                 },
 		ZaNewAccountXWizard.accountNameInfoPool[ZaAccount.A_zimbraHideInGal]={ref:ZaAccount.A_zimbraHideInGal, type:_CHECKBOX_,
-				  			msgName:ZaMsg.LBL_zimbraHideInGal,
+				  			msgName:ZaMsg.LBL_zimbraHideInGal, subLabel:"", labelLocation:_RIGHT_,align:_RIGHT_,
 				  			label:ZaMsg.LBL_zimbraHideInGal, trueValue:"TRUE", falseValue:"FALSE"
 				},
 		ZaNewAccountXWizard.accountNameInfoPool[ZaAccount.A_zimbraPhoneticFirstName] = {
@@ -671,7 +671,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 					},
 					{ref:ZaAccount.A2_autoCos, type:_CHECKBOX_, 
 						msgName:ZaMsg.NAD_Auto,label:ZaMsg.NAD_Auto,labelLocation:_RIGHT_,
-						trueValue:"TRUE", falseValue:"FALSE" ,
+						trueValue:"TRUE", falseValue:"FALSE" , subLabel:"",
 						elementChanged: function(elementValue,instanceValue, event) {
 							if(elementValue=="TRUE") {
 								ZaAccount.setDefaultCos(this.getInstance(), this.getForm().parent._app);	
@@ -684,7 +684,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 				]
 			});
 	
-		setupGroup.items.push({ref:ZaAccount.A_zimbraIsAdminAccount, type:_CHECKBOX_,
+		setupGroup.items.push({ref:ZaAccount.A_zimbraIsAdminAccount, type:_CHECKBOX_, labelLocation:_RIGHT_,align:_RIGHT_,subLabel:"",
 								visibilityChecks:[[ZaItem.hasWritePermission,ZaAccount.A_zimbraIsAdminAccount]],
 								msgName:ZaMsg.NAD_IsSystemAdminAccount,label:ZaMsg.NAD_IsSystemAdminAccount,
 								bmolsnr:true, trueValue:"TRUE", falseValue:"FALSE"
@@ -700,7 +700,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 									tableCssStyle: "height: 15px"
 							  	},
 								{ref:ZaAccount.A2_autoMailServer, type:_CHECKBOX_, msgName:ZaMsg.NAD_Auto,label:ZaMsg.NAD_Auto,labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE",
-									visibilityChecks:[],
+									visibilityChecks:[], labelLocation:_RIGHT_,align:_RIGHT_, subLabel:"",
 									enableDisableChecks:[]
 								}
 							]
@@ -725,7 +725,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 			visibilityChecks:[],enableDisableChecks:[[ZaNewAccountXWizard.isAuthfromInternal, domainName,ZaAccount.A_name]],  
 			cssClass:"admin_xform_name_input"
 		},
-		{ref:ZaAccount.A_zimbraPasswordMustChange,  type:_CHECKBOX_,
+		{ref:ZaAccount.A_zimbraPasswordMustChange,  type:_CHECKBOX_, labelLocation:_RIGHT_,align:_RIGHT_, subLabel:"",
 			msgName:ZaMsg.NAD_MustChangePwd,label:ZaMsg.NAD_MustChangePwd,trueValue:"TRUE", falseValue:"FALSE",
 			visibilityChecks:[], enableDisableChecks:[[ZaNewAccountXWizard.isAuthfromInternal, domainName,ZaAccount.A_name]]
 		},
@@ -950,7 +950,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
                                                     {type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonSearch, width:80,
                                                        onActivate:ZaAccountMemberOfListView.prototype.srchButtonHndlr
                                                     },
-                                                    {ref: ZaAccount.A2_showSameDomain, type: _CHECKBOX_, align:_RIGHT_,
+                                                    {ref: ZaAccount.A2_showSameDomain, type: _CHECKBOX_, labelLocation:_RIGHT_,align:_RIGHT_, subLabel:"",
                                                             label:null,labelLocation:_NONE_, trueValue:"TRUE", falseValue:"FALSE",
                                                             visibilityChecks:[]
                                                     },
@@ -2232,7 +2232,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 			{type:_OUTPUT_, colSpan:2, align:_CENTER_, valign:_TOP_, ref:ZaModel.currentStep, choices:this.stepChoices, valueChangeEventSources:[ZaModel.currentStep]},
 			{type:_SEPARATOR_, align:_CENTER_, valign:_TOP_},
 			{type:_SPACER_,  align:_CENTER_, valign:_TOP_},
-			{type:_SWITCH_, width:680, align:_LEFT_, valign:_TOP_, items:cases}
+			{type:_SWITCH_, width:680, align:_LEFT_, valign:_TOP_, containerCssClass:"ZaNewAccountSwitch",items:cases}
 		];
 };
 ZaXDialog.XFormModifiers["ZaNewAccountXWizard"].push(ZaNewAccountXWizard.myXFormModifier);
