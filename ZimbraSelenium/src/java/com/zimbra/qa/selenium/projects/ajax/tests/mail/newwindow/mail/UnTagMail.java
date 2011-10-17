@@ -18,8 +18,8 @@ public class UnTagMail extends PrefGroupMailByMessageTest {
 
 	}
 	@Bugs(ids="65769")
-	@Test(	description = "Tag a message using Toolbar -> Tag -> Existing Tag - in a separate window", 
-			groups = { "smoke" })
+	@Test(	description = "Un-Tag a message using Toolbar -> Tag -> Remove Tag - in a separate window", 
+			groups = { "deprecated" })
 	public void UnTagMail_01() throws HarnessException {
 
 		// Create the tag to delete
