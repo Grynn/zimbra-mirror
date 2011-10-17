@@ -56,6 +56,7 @@
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/ant-tar-patched.jar" sourcepath="/ThirdParty/ant-tar-patched/src/java"/>
 	<classpathentry kind="lib" path="jars/selenium-java-2.0b2.jar"/>
 	<classpathentry kind="lib" path="jars/selenium-server-standalone-2.0b2.jar"/>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/mysql-connector-java-5.1.13-bin.jar" sourcepath="/ThirdParty/connector-j/mysql-connector-java-5.1.13/src"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraClient"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

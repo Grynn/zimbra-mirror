@@ -1,14 +1,19 @@
 package com.zimbra.qa.selenium.projects.desktop.core;
 
 import java.io.*;
+import java.lang.reflect.Method;
 import java.util.*;
 
 import org.apache.log4j.*;
+import org.testng.ITestContext;
+import org.testng.ITestNGMethod;
+import org.testng.ITestResult;
 import org.testng.annotations.*;
 import org.xml.sax.SAXException;
 
 import com.thoughtworks.selenium.*;
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
+import com.zimbra.qa.selenium.framework.core.Repository;
 import com.zimbra.qa.selenium.framework.ui.AbsTab;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.BuildUtility.*;
@@ -17,7 +22,6 @@ import com.zimbra.qa.selenium.framework.util.OperatingSystem.OsType;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount.SOAP_DESTINATION_HOST_TYPE;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.projects.desktop.ui.*;
-import com.zimbra.qa.selenium.projects.desktop.ui.mail.TreeMail;
 
 /**
  * The <code>AjaxCommonTest</code> class is the base test case class
@@ -112,7 +116,7 @@ public class AjaxCommonTest {
 	private boolean _forceInstall = false;
 	protected String[] desktopZimlets = null;
 	private static StartDesktopClient _startDesktopClient = null;
-
+	private Repository _repository = new Repository();
 	/**
 	 * BeforeMethod variables
 	 * startingPage = the starting page before the test method starts
@@ -144,12 +148,50 @@ public class AjaxCommonTest {
 	 * @throws IOException 
 	 * @throws SAXException 
 	 */
-	@BeforeSuite(alwaysRun=true)
-	public void commonTestBeforeSuite() throws HarnessException, IOException, InterruptedException, SAXException {
-		logger.info("commonTestBeforeSuite: start");
+   @BeforeSuite(alwaysRun=true)
+   public void commonTestBeforeSuite()
+   throws HarnessException, IOException, InterruptedException, SAXException {
+      logger.info("commonTestBeforeSuite: start");
 
-		// Make sure there is a new default account
-		ZimbraAccount.ResetAccountZWC();
+      //Racetrack
+      String DbHostURL = ZimbraSeleniumProperties.getStringProperty("racetrack.dbUrl",
+            "racetrack.eng.vmware.com");
+      String buildNumber = ZimbraSeleniumProperties.getStringProperty("racetrack.buildNumber",
+            "000000");
+      String userName = ZimbraSeleniumProperties.getStringProperty("racetrack.username",
+            "anonymous");
+      String product = ZimbraSeleniumProperties.getStringProperty("racetrack.product",
+            "zdesktop");
+      String description = ZimbraSeleniumProperties.getStringProperty("racetrack.description",
+            "zdesktop description");
+      String branch = ZimbraSeleniumProperties.getStringProperty("racetrack.branch",
+            "ZDESKTOP_7_1_2");
+      String buildType = ZimbraSeleniumProperties.getStringProperty("racetrack.buildType",
+            "beta");
+      String testType = ZimbraSeleniumProperties.getStringProperty("racetrack.testType",
+            "functional");
+      String recordToRacetrack = ZimbraSeleniumProperties.getStringProperty("racetrack.recordToRacetrack",
+            "false");
+      String appendToExisting = ZimbraSeleniumProperties.getStringProperty("racetrack.appendToExisting",
+            "false");
+      String resultId = ZimbraSeleniumProperties.getStringProperty("racetrack.resultId",
+            "");
+
+      _repository.connectingToRacetrack(DbHostURL);
+      _repository.beginTestSet(
+            buildNumber,
+            userName,
+            product,
+            description,
+            branch,
+            buildType,
+            testType,
+            Boolean.parseBoolean(recordToRacetrack),
+            Boolean.parseBoolean(appendToExisting),
+            resultId);
+
+      // Make sure there is a new default account
+      ZimbraAccount.ResetAccountZWC();
 
 		osType = OperatingSystem.getOSType();
 
@@ -351,16 +393,16 @@ public class AjaxCommonTest {
 
 	}
 
-  /**
-    * Going to login page, then going back to the starting page
-    * @throws HarnessException
-    */
-   public void relogin() throws HarnessException {
-      app.zPageLogin.zNavigateTo();
-      startingPage.zNavigateTo();
-   }
+	/**
+	 * Going to login page, then going back to the starting page
+	 * @throws HarnessException
+	 */
+	public void relogin() throws HarnessException {
+	   app.zPageLogin.zNavigateTo();
+	   startingPage.zNavigateTo();
+	}
 
-   /**
+	/**
 	 * Add default account using HTTP post
 	 * @throws HarnessException
 	 */
@@ -415,8 +457,34 @@ public class AjaxCommonTest {
 	 * @throws HarnessException
 	 */
 	@BeforeMethod(alwaysRun=true)
-	public void commonTestBeforeMethod() throws HarnessException {
+	public void commonTestBeforeMethod(Method method, ITestContext testContext)
+	throws HarnessException {
 		logger.info("commonTestBeforeMethod: start");
+
+		String packageName = method.getDeclaringClass().getPackage().getName();
+		String methodName = method.getName();
+
+		// Get the test description
+		// By default, the test description is set to method's name
+		// if it is set, then change it to the specified one
+		String testDescription = methodName;
+		for (ITestNGMethod ngMethod : testContext.getAllTestMethods()) {
+		   String methodClass = ngMethod.getRealClass().getSimpleName();
+		   if (methodClass.equals(method.getDeclaringClass().getSimpleName())
+		         && ngMethod.getMethodName().equals(method.getName())) {
+		      synchronized (AjaxCommonTest.class) {
+		         logger.info("---------BeforeMethod-----------------------");
+		         logger.info("Test       : " + methodClass
+		               + "." + ngMethod.getMethodName());
+		         logger.info("Description: " + ngMethod.getDescription());
+		         logger.info("----------------------------------------");
+		         testDescription = ngMethod.getDescription();
+		      }
+		      break;
+		   }
+		}
+
+		Repository.testCaseBegin(methodName, packageName, testDescription);
 
 		SOAP_DESTINATION_HOST_TYPE destType = null;
 		AppType appType = ZimbraSeleniumProperties.getAppType(); 
@@ -595,9 +663,9 @@ public class AjaxCommonTest {
 
 		ClientSessionFactory.session().selenium().stop();
 
+		_repository.endRepository();
+
 		logger.info("commonTestAfterSuite: finish");
-
-
 
 	}
 
@@ -619,7 +687,8 @@ public class AjaxCommonTest {
 	 * @throws HarnessException
 	 */
 	@AfterMethod(alwaysRun=true)
-	public void commonTestAfterMethod() throws HarnessException {
+	public void commonTestAfterMethod(Method method, ITestResult testResult)
+	throws HarnessException {
 		logger.info("commonTestAfterMethod: start");
 
 		// For Ajax, if account is considered dirty (modified),
@@ -643,11 +712,13 @@ public class AjaxCommonTest {
 
 			currentAccount.authenticateToMailClientHost();
 			currentAccount.modifyZimletPreferences(defaultZimlets,
-					SOAP_DESTINATION_HOST_TYPE.CLIENT);
+			      SOAP_DESTINATION_HOST_TYPE.CLIENT);
 
 		}
 
-		logger.info("commonTestAfterMethod: finish");
+	     String testCaseResult = String.valueOf(testResult.getStatus());
+	     Repository.testCaseEnd(testCaseResult);
+	     logger.info("commonTestAfterMethod: finish");
 	}
 
 }
