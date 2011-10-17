@@ -2,10 +2,9 @@
 
 # Example:
 #
-# 1. Unzip tzdata2008i.tar.gz to tzdata subdir.
-# 2. Run: zmtzdata2ical -o timezones.ics -y 2009 -e extra-data -t tzdata windows-names
+# 1. Unzip tzdata20xxx.tar.gz to tzdata subdir.
+# 2. Run: zmtzdata2ical -o timezones.ics -y 2011 -e extra-data -t tzdata windows-names
 # 3. Install generated timezones.ics under /opt/zimbra/conf.
 # 4. Restart mailboxd.
-# 5. Run: zmtzupdate --rulefile fixup-touch-all.xml -a all
 
 exec zmjava com.zimbra.common.calendar.ZoneInfo2iCalendar "$@"
