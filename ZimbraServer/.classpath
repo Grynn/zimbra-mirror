@@ -81,8 +81,8 @@
       <attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/apache-jsieve-0.4-javadoc.jar!/"/>
     </attributes>
   </classpathentry>
-  <classpathentry kind="lib" path="/ZimbraCommon/jars/lucene-core-3.3.0.jar"/>
-  <classpathentry kind="lib" path="/ZimbraCommon/jars/lucene-analyzers-3.3.0.jar"/>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/lucene-core-3.4.0.jar"/>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/lucene-analyzers-3.4.0.jar"/>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/mina-core-2.0.4.jar"/>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/jetty-util-6.1.22.z6.jar"/>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/guava-r09.jar" sourcepath="/ZimbraCommon/jars-src/guava-src-r09.zip">
