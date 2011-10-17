@@ -7,6 +7,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.MailItem;
+import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
@@ -52,11 +53,12 @@ public class OpenLinkToMessage extends AjaxCommonTest {
 								+ "</content>" + "</mp>" + "</m>"
 								+ "</SendMsgRequest>");
 
-		// Temporary workaround
-		// Click on Mail tab 
+		// The starting page intentionally defined as Briefcase and not Mail
+		// From Briefcase open Mail page by clicking on Mail tab 
 		app.zPageMain.zClickAt("id=zb__App__Mail_title", "0,0");
-		// Click Get Mail button to view folder in list
-		// app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+		
+		// Click Get Mail button to view message in the list
+		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 
 		SleepUtil.sleepMedium();
 

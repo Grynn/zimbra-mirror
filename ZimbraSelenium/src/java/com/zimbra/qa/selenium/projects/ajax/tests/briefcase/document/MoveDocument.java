@@ -51,8 +51,7 @@ public class MoveDocument extends AjaxCommonTest {
 		// refresh briefcase page
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
-		// double click on created subfolder
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		// double click on created subfolder		
 		app.zPageBriefcase.zListItem(Action.A_DOUBLECLICK, subFolderItem);
 
 		// Create document item
