@@ -78,20 +78,23 @@ ZaServerListController.prototype._createUI = function () {
 		var elements = new Object();
 		this._contentView = new ZaServerListView(this._container);
 		this._initToolbar();
-		this._toolbar = new ZaToolBar(this._container, this._toolbarOperations,this._toolbarOrder, null, null, ZaId.VIEW_SERLIST); 
-		elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;
+		this._toolbar = new ZaToolBar(this._container, this._toolbarOperations,this._toolbarOrder, null, null, ZaId.VIEW_SERLIST);
 
 		this._initPopupMenu();
 		this._actionMenu =  new ZaPopupMenu(this._contentView, "ActionMenu", null, this._popupOperations, ZaId.VIEW_SERLIST, ZaId.MENU_POP);
 		elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
 		//ZaApp.getInstance().createView(ZaZimbraAdmin._SERVERS_LIST_VIEW, elements);
-		var tabParams = {
-			openInNewTab: false,
-			tabId: this.getContentViewId(),
-			tab: this.getMainTab() 
-		}
-		ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams) ;
-
+        if (!appNewUI) {
+            elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;
+		    var tabParams = {
+			    openInNewTab: false,
+			    tabId: this.getContentViewId(),
+			    tab: this.getMainTab()
+		    }
+		    ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams) ;
+        } else {
+            ZaApp.getInstance().getAppViewMgr().createView(this.getContentViewId(), elements);
+        }
 		this._contentView.addSelectionListener(new AjxListener(this, this._listSelectionListener));
 		this._contentView.addActionListener(new AjxListener(this, this._listActionListener));								
 			
@@ -174,6 +177,10 @@ function(ev) {
 		if(ev.item) {
 			this._selectedItem = ev.item;
 			ZaApp.getInstance().getServerController().show(ev.item);
+            if (appNewUI) {
+                var parentPath = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_configure, ZaMsg.OVP_servers]);
+                ZaZimbraAdmin.getInstance().getOverviewPanelController().addObjectItem(parentPath, ev.item.name, null, false, false, ev.item);
+            }
 		}
 	} else {
 		this.changeActionsState();	
@@ -195,7 +202,16 @@ function(ev) {
 	if(this._contentView.getSelectionCount() == 1) {
 		var item = this._contentView.getSelection()[0];
 		ZaApp.getInstance().getServerController().show(item);
+        if (appNewUI) {
+            var parentPath = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_configure, ZaMsg.OVP_servers]);
+            ZaZimbraAdmin.getInstance().getOverviewPanelController().addObjectItem(parentPath, item.name, null, false, false, item);
+        }
 	}
+}
+
+ZaServerListController.prototype.getPopUpOperation =
+function () {
+    return this._popupOperations;
 }
 
 ZaServerListController.changeActionsStateMethod = 

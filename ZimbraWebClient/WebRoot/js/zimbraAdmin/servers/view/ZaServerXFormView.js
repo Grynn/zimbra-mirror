@@ -166,8 +166,9 @@ function (entry) {
 	this.formDirtyLsnr = new AjxListener(ZaApp.getInstance().getCurrentController(), ZaXFormViewController.prototype.handleXFormChange);
 	this._localXForm.addListener(DwtEvent.XFORMS_FORM_DIRTY_CHANGE, this.formDirtyLsnr);
 	this._localXForm.addListener(DwtEvent.XFORMS_VALUE_ERROR, this.formDirtyLsnr);	
-	
-	this.updateTab();
+
+    if (!appNewUI)
+	    this.updateTab();
 }
 
 
@@ -1318,6 +1319,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
    }
     xFormObject.tableCssStyle="width:100%;position:static;overflow:auto;";
 
+    this.tabBarChoices = tabBarChoices;
     xFormObject.items = [
 		{type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan: "*", id:"xform_header", 
 			items: [
@@ -1347,6 +1349,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 		{type:_TAB_BAR_, ref:ZaModel.currentTab,
 			containerCssStyle: "padding-top:0px",
 			choices: tabBarChoices ,
+            cssStyle: (appNewUI? "display:none": ""),
 			cssClass:"ZaTabBar", id:"xform_tabbar"
 		},
 		{type:_SWITCH_, items:switchItems }
@@ -1354,6 +1357,10 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
     ];
 };
 ZaTabView.XFormModifiers["ZaServerXFormView"].push(ZaServerXFormView.myXFormModifier);
+
+ZaServerXFormView.prototype.getTabChoices = function () {
+    return this.tabBarChoices;
+}
 
 ZaServerXFormView.showMtaServiceEnableRelatedNotice = function( isMtaEnable ){
 	

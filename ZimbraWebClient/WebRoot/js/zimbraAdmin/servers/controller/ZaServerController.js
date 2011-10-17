@@ -27,6 +27,7 @@ ZaServerController = function(appCtxt, container) {
 	this._UICreated = false;
 	this._helpURL = location.pathname + ZaUtil.HELP_URL + "managing_servers/managing_servers.htm?locid="+AjxEnv.DEFAULT_LOCALE;
 	this._toolbarOperations = new Array();
+    this._popupOperations = new Array();
 	this.deleteMsg = ZaMsg.Q_DELETE_SERVER;	
 	this.objType = ZaEvent.S_SERVER;	
 	this.tabConstructor = ZaServerXFormView ;
@@ -36,6 +37,7 @@ ZaServerController.prototype = new ZaXFormViewController();
 ZaServerController.prototype.constructor = ZaServerController;
 
 ZaController.initToolbarMethods["ZaServerController"] = new Array();
+ZaController.initPopupMenuMethods["ZaServerController"] = new Array();
 ZaController.setViewMethods["ZaServerController"] = new Array();
 ZaController.changeActionsStateMethods["ZaServerController"] = new Array();
 ZaXFormViewController.preSaveValidationMethods["ZaServerController"] = new Array();
@@ -133,6 +135,14 @@ function () {
 }
 ZaController.initToolbarMethods["ZaServerController"].push(ZaServerController.initToolbarMethod);
 
+ZaServerController.initPopupMethod =
+function () {
+	this._popupOperations[ZaOperation.SAVE]=new ZaOperation(ZaOperation.SAVE,ZaMsg.TBB_Save, ZaMsg.SERTBB_Save_tt, "Save", "SaveDis", new AjxListener(this, this.saveButtonListener));
+   	this._popupOperations[ZaOperation.FLUSH_CACHE] = new ZaOperation(ZaOperation.FLUSH_CACHE, ZaMsg.SERTBB_FlushCache, ZaMsg.SERTBB_FlushCache_tt, "FlushCache", "FlushCache", new AjxListener(this, ZaServerController.prototype.flushCacheButtonListener));
+	this._popupOperations[ZaOperation.DOWNLOAD_SERVER_CONFIG]=new ZaOperation(ZaOperation.DOWNLOAD_SERVER_CONFIG,ZaMsg.TBB_DownloadConfig, ZaMsg.SERTBB_DownloadConfig_tt, "DownloadServerConfig", "DownloadServerConfig", new AjxListener(this, this.downloadConfigButtonListener));
+}
+ZaController.initToolbarMethods["ZaServerController"].push(ZaServerController.initPopupMethod);
+
 /**
 *	@method setViewMethod 
 *	@param entry - isntance of ZaDomain class
@@ -140,7 +150,8 @@ ZaController.initToolbarMethods["ZaServerController"].push(ZaServerController.in
 ZaServerController.setViewMethod =
 function(entry) {
 	entry.load("id", entry.id, false, true);
-	this._createUI(entry);
+    if (!this._UICreated)
+	    this._createUI(entry);
 	ZaApp.getInstance().pushView(this.getContentViewId());
 	this._view.setDirty(false);
 	this._view.setObject(entry); 	//setObject is delayed to be called after pushView in order to avoid jumping of the view	
@@ -156,6 +167,7 @@ function (entry) {
 	this._contentView = this._view = new this.tabConstructor(this._container, entry);
 
 	this._initToolbar();
+    this._initPopupMenu();
 	//always add Help button at the end of the toolbar
 	this._toolbarOperations[ZaOperation.NONE] = new ZaOperation(ZaOperation.NONE);
 	this._toolbarOperations[ZaOperation.HELP]=new ZaOperation(ZaOperation.HELP,ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener));
@@ -178,6 +190,11 @@ function (entry) {
 	}
 	this._UICreated = true;
 	ZaApp.getInstance()._controllers[this.getContentViewId ()] = this ;
+}
+
+ZaServerController.prototype.getPopUpOperation =
+function () {
+    return this._popupOperations;
 }
 
 ZaServerController.prototype._saveChanges =

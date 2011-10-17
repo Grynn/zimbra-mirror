@@ -935,6 +935,48 @@ function() {
         tree.addTreeItemData(ti);
         ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._DOMAINS_LIST_VIEW] = ZaOverviewPanelController.domainListTreeListener;
 
+        // Add Configuration /Sever Setting
+        if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.SERVER_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+        	try {
+	        	var serverList = ZaApp.getInstance().getServerList().getArray();
+	        	if(serverList && serverList.length) {
+	        		var cnt = serverList.length;
+                    var serverTi;
+                    if(cnt>0) {
+                        serverTi = new ZaTreeItemData({
+                                        parent:ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_configure]),
+                                        id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_CONFIGURATION,null, "serverHV"),
+                                        text: ZaMsg.OVP_servers,
+                                        canShowOnRoot: false,
+                                        mappingId:  ZaZimbraAdmin._SERVERS_LIST_VIEW});
+                        tree.addTreeItemData(serverTi);
+                        for(var ix=0; ix< cnt; ix++) {
+                            var ti1 = new ZaTreeItemData({
+                                        parent:ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_configure, ZaMsg.OVP_servers]),
+                                        id:DwtId._makeId(postTi.id, ix + 1),
+                                        text: serverList[ix].name,
+                                        image: "Server",
+                                        mappingId: ZaZimbraAdmin._SERVER_VIEW});;
+                            ti1.setData(ZaOverviewPanelController._OBJ_ID, serverList[ix].id);
+                            tree.addTreeItemData(ti1);
+                        }
+                        ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._SERVERS_LIST_VIEW] = ZaOverviewPanelController.serverListTreeListener;
+                    } else {
+                        serverTi = new ZaTreeItemData({
+                                        parent:ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_configure]),
+                                        id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_CONFIGURATION,null, "serverHV"),
+                                        text: ZaMsg.OVP_serverSettings,
+                                        image: "Server",
+                                        mappingId: ZaZimbraAdmin._SERVER_VIEW});
+                        serverTi.setData(ZaOverviewPanelController._OBJ_ID, serverList[0].id);
+                        tree.addTreeItemData(serverTi);
+                    }
+                    ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._SERVER_VIEW] = ZaOverviewPanelController.serverTreeListener;
+	        	}
+            } catch (ex) {
+                this._handleException(ex, "ZaOverviewPanelController.prototype._buildNewFolderTree", null, false);
+            }
+        }
         // Add Configuration / Global Settings
         ti = new ZaTreeItemData({
                                     parent:parentPath,
