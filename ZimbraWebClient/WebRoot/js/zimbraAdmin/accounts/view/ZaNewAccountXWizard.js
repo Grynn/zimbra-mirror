@@ -451,6 +451,7 @@ ZaNewAccountXWizard.getAccountNameInfoItem = function(){
 		ZaNewAccountXWizard.accountNameInfoPool = new Object();
 		ZaNewAccountXWizard.accountNameInfoPool[ZaAccount.A_name] = {ref:ZaAccount.A_name, type:_EMAILADDR_,
 					 msgName:ZaMsg.NAD_AccountName,label:ZaMsg.NAD_AccountName, bmolsnr:false,
+                                        domainPartWidth:"100%",
                                         labelLocation:_LEFT_,onChange:ZaAccount.setDomainChanged,forceUpdate:true,
                                         enableDisableChecks:[[ZaItem.hasRight,ZaAccount.RENAME_ACCOUNT_RIGHT]],
                                         visibilityChecks:[]
