@@ -232,15 +232,15 @@ STDMETHODIMP CItemObject::GetDataForItemID(VARIANT ItemId, VARIANT *pVal)
 				CComBSTR flags =L"";
 				if(msgdata.HasAttachments)
 				{
-				flags.AppendBSTR(L"a");
+					wcscat(flags, L"a");
 				}
 				if(msgdata.IsUnread)
 				{
-					flags.AppendBSTR(L"u");
+					wcscat(flags, L"u");
 				}
 				if(msgdata.IsFlagged)
 				{
-					flags.AppendBSTR(L"f");
+					wcscat(flags, L"f");
 				}
 				/*if(msgdata.HasText)
 				{
@@ -252,19 +252,19 @@ STDMETHODIMP CItemObject::GetDataForItemID(VARIANT ItemId, VARIANT *pVal)
 				}*/
 				if(msgdata.IsDraft)
 				{
-					flags.AppendBSTR(L"d");
+					wcscat(flags, L"d");
 				}
 				if(msgdata.IsForwared)
 				{
-					flags.AppendBSTR(L"w");
+					wcscat(flags, L"w");
 				}
-				if(msgdata.IsUnsent)
+				if((msgdata.IsUnsent) || (msgdata.Urlname.substr(0,11) == L"/Sent Items"))
 				{
-					flags.AppendBSTR(L"s");
+					wcscat(flags, L"s");
 				}
 				if(msgdata.RepliedTo)
 				{
-					flags.AppendBSTR(L"r");
+					wcscat(flags, L"r");
 				}
 			
 				/*pIt[L"Has Attachments"] = (msgdata.HasAttachments)? L"True":L"False";
