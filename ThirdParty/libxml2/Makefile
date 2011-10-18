@@ -15,7 +15,7 @@ endif
 XML_NAME = libxml2
 XML_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/$(XML_NAME)/$(XML_NAME)-$(XML_VERSION).tgz
 INSTALL_PREFIX := $(ZIMBRA_HOME)/$(XML_NAME)-$(XML_VERSION)
-XML_CONFIGURE ?= --prefix=$(INSTALL_PREFIX) --enable-shared=no --enable-static=yes
+XML_CONFIGURE ?= --prefix=$(INSTALL_PREFIX) --enable-shared=no --enable-static=yes --without-python
 
 ifeq ($(BUILD_PLATFORM), )
 	BUILD_PLATFORM := "UNKNOWN"
