@@ -79,6 +79,7 @@ ifeq (RHEL4,$(findstring RHEL4,$(BUILD_PLATFORM)))
 		ExtUtils::Installed \
 		ExtUtils::Packlist \
 		ExtUtils::Install \
+		version \
 		M/MS/MSCHWERN/ExtUtils-MakeMaker-6.56.tar.gz
 	LWP_LIBS	:=
 endif
