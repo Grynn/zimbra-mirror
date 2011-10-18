@@ -31,8 +31,7 @@ public class PageMyFiles extends AbsTab {
 				"css=div[class^=sc-view sc-menu-item] a[class=menu-item]>span:contains(Favorite)");
 		public static final Locators zRenameItem = new Locators(
 				"css=div[class^=sc-view sc-menu-item] a[class=menu-item]>span:contains(Rename)");
-	
-		
+
 		public final String locator;
 
 		private Locators(String locator) {
@@ -122,7 +121,7 @@ public class PageMyFiles extends AbsTab {
 		String optionLocator = null; // If set, this will be clicked
 		AbsPage page = null; // If set, this page will be returned
 
- if (pulldown == Button.B_MY_FILES_LIST_ITEM) {
+		if (pulldown == Button.B_MY_FILES_LIST_ITEM) {
 
 			pulldownLocator = Locators.zMyFilesListViewItems.locator
 					+ ":contains(" + itemName
@@ -156,7 +155,7 @@ public class PageMyFiles extends AbsTab {
 				if (!this.zWaitForElementPresent(optionLocator, "2000"))
 					throw new HarnessException("Button is not present locator="
 							+ optionLocator);
-				
+
 				this.sClickAt(optionLocator, "0,0");
 
 				// If the app is busy, wait for it to become active
@@ -169,7 +168,7 @@ public class PageMyFiles extends AbsTab {
 				if (!this.zWaitForElementPresent(optionLocator, "2000"))
 					throw new HarnessException("Button is not present locator="
 							+ optionLocator);
-				
+
 				this.sClickAt(optionLocator, "0,0");
 
 				// If the app is busy, wait for it to become active
@@ -215,7 +214,7 @@ public class PageMyFiles extends AbsTab {
 		 */
 		return (page);
 	}
-	
+
 	@Override
 	public AbsPage zToolbarPressPulldown(Button pulldown, Button option)
 			throws HarnessException {
@@ -274,15 +273,41 @@ public class PageMyFiles extends AbsTab {
 			} else {
 				logger.info("no logic defined for " + option);
 			}
+		} else {
+			logger.info("no logic defined for " + pulldown + "/" + option);
 		}
+
 		return page;
 	}
 
 	@Override
 	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
-		throw new HarnessException("Implement me");
+		logger.info(myPageName() + " zToolbarPressPulldown(" + button + ")");
+
+		tracer.trace("Click button " + button);
+
+		if (button == null)
+			throw new HarnessException("Pulldown cannot be null!");
+
+		// Default behavior variables
+		String pulldownLocator = null; // If set, this will be expanded
+		AbsPage page = null; // If set, this page will be returned
+
+		// Based on the button specified, take the appropriate action(s)
+		if (button == Button.B_MY_FILES) {
+			pulldownLocator = Locators.zMyFilesArrowButton.locator;
+
+			zClick(pulldownLocator);
+
+			zWaitForBusyOverlay();
+
+		} else {
+			logger.info("no logic defined for " + button);
+		}
+
+		return page;
 	}
-	
+
 	@Override
 	public AbsPage zListItem(Action action, String item)
 			throws HarnessException {
@@ -290,9 +315,52 @@ public class PageMyFiles extends AbsTab {
 	}
 
 	@Override
-	public AbsPage zListItem(Action action, Button option, String item)
+	public AbsPage zListItem(Action action, Button button, String itemName)
 			throws HarnessException {
-		throw new HarnessException("Implement me");
+		logger.info(myPageName() + " zListItem(" + action + ", " + button
+				+ ", " + itemName + ")");
+
+		tracer.trace("Click button " + button);
+
+		// Validate the arguments
+		if (action == null) {
+			throw new HarnessException("Action cannot be null");
+		}
+		if (button == null)
+			throw new HarnessException("Button cannot be null!");
+
+		if (itemName == null)
+			throw new HarnessException("Item name cannot be null!");
+
+		// Default behavior variables
+		String pulldownLocator = null; // If set, this will be expanded
+		AbsPage page = null; // If set, this page will be returned
+
+		// Based on action and the button specified, take the appropriate
+		// action(s)
+		if (action == Action.A_LEFTCLICK) {
+
+			if (button == Button.B_MY_FILES_LIST_ITEM) {
+
+				pulldownLocator = Locators.zMyFilesListViewItems.locator
+						+ ":contains(" + itemName
+						+ ") span[class^=my-files-list-item-action-button]";
+
+				if (!this.zWaitForElementPresent(pulldownLocator, "2000"))
+					throw new HarnessException("Button is not present locator="
+							+ pulldownLocator);
+
+				zClick(pulldownLocator);
+
+				// If the app is busy, wait for it to become active
+				zWaitForBusyOverlay();
+			} else {
+				logger.info("no logic defined for " + button);
+			}
+		} else {
+			logger.info("no logic defined for " + action);
+		}
+		return page;
 	}
 
 	@Override
