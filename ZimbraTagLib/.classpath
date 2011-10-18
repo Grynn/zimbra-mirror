@@ -1,42 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="jars/jsp-api.jar"/>
-	<classpathentry kind="lib" path="jars/jstl.jar"/>
-	<classpathentry kind="lib" path="jars/standard.jar"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-fileupload-1.2.1.jar" sourcepath="/ZimbraCommon/jars-src/commons-fileupload-1.2.1-src.zip">
-		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/commons-fileupload-1.2.1-javadoc.zip!/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-httpclient-3.1.jar" sourcepath="/ZimbraCommon/jars-src/commons-httpclient-3.1-src.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/commons-httpclient-3.1-javadoc.zip!/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/json.jar" sourcepath="/ThirdParty/json/src/java">
-		<attributes>
-			<attribute name="javadoc_location" value="http://www.json.org/javadoc/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/mail.jar"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/dom4j-1.5.2.jar" sourcepath="/ThirdParty/dom4j-1.5.2/src/java">
-		<attributes>
-			<attribute name="javadoc_location" value="http://www.dom4j.org/dom4j-1.5.2/apidocs/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/servlet-api.jar"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/yuicompressor-2.4.2-zimbra.jar"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/guava-r09.jar" sourcepath="/ZimbraCommon/jars-src/guava-src-r09.zip">
-		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/guava-r09-javadoc.jar!/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="src" path="src/java"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraCommon"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraSoap"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/jetty-6.1.22.z6.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraClient"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraServer"/>
-	<classpathentry kind="output" path="build/classes"/>
+  <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+  <classpathentry kind="lib" path="jars/jsp-api.jar"/>
+  <classpathentry kind="lib" path="jars/jstl.jar"/>
+  <classpathentry kind="lib" path="jars/standard.jar"/>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/commons-fileupload-1.2.1.jar" sourcepath="/ZimbraCommon/jars-src/commons-fileupload-1.2.1-src.zip">
+    <attributes>
+      <attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/commons-fileupload-1.2.1-javadoc.zip!/"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/commons-httpclient-3.1.jar" sourcepath="/ZimbraCommon/jars-src/commons-httpclient-3.1-src.jar">
+    <attributes>
+      <attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/commons-httpclient-3.1-javadoc.zip!/"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/json.jar" sourcepath="/ThirdParty/json/src/java">
+    <attributes>
+      <attribute name="javadoc_location" value="http://www.json.org/javadoc/"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/mail.jar"/>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/dom4j-1.5.2.jar" sourcepath="/ThirdParty/dom4j-1.5.2/src/java">
+    <attributes>
+      <attribute name="javadoc_location" value="http://www.dom4j.org/dom4j-1.5.2/apidocs/"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/servlet-api.jar"/>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/yuicompressor-2.4.2-zimbra.jar"/>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/guava-10.0.1.jar" sourcepath="/ZimbraCommon/jars-src/guava-10.0.1-sources.jar">
+    <attributes>
+      <attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/guava-10.0.1-javadoc.jar!/"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="src" path="src/java"/>
+  <classpathentry combineaccessrules="false" kind="src" path="/ZimbraCommon"/>
+  <classpathentry combineaccessrules="false" kind="src" path="/ZimbraSoap"/>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/jetty-6.1.22.z6.jar"/>
+  <classpathentry combineaccessrules="false" kind="src" path="/ZimbraClient"/>
+  <classpathentry combineaccessrules="false" kind="src" path="/ZimbraServer"/>
+  <classpathentry kind="output" path="build/classes"/>
 </classpath>

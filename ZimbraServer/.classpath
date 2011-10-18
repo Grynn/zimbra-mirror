@@ -85,9 +85,9 @@
   <classpathentry kind="lib" path="/ZimbraCommon/jars/lucene-analyzers-3.4.0.jar"/>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/mina-core-2.0.4.jar"/>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/jetty-util-6.1.22.z6.jar"/>
-  <classpathentry kind="lib" path="/ZimbraCommon/jars/guava-r09.jar" sourcepath="/ZimbraCommon/jars-src/guava-src-r09.zip">
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/guava-10.0.1.jar" sourcepath="/ZimbraCommon/jars-src/guava-10.0.1-sources.jar">
     <attributes>
-      <attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/guava-r09-javadoc.jar!/"/>
+      <attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/guava-10.0.1-javadoc.jar!/"/>
     </attributes>
   </classpathentry>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/unboundid-ldapsdk-2.1.0-se.jar" sourcepath="/ZimbraCommon/jars-src/unboundid-ldapsdk-2.1.0-src.zip">

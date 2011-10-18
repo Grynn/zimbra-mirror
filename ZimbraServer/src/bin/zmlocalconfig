@@ -48,7 +48,7 @@ ${PATHSEP}${ZMROOT}/lib/jars/commons-logging.jar\
 ${PATHSEP}${ZMROOT}/lib/jars/commons-cli-1.2.jar\
 ${PATHSEP}${ZMROOT}/lib/jars/commons-httpclient-3.1.jar\
 ${PATHSEP}${ZMROOT}/lib/jars/commons-codec-1.4.jar\
-${PATHSEP}${ZMROOT}/lib/jars/guava-r09.jar\
+${PATHSEP}${ZMROOT}/lib/jars/guava-10.0.1.jar\
 ${PATHSEP}${ZMROOT}/lib/jars/dom4j-1.5.2.jar\
 ${PATHSEP}${ZMROOT}/lib/jars/log4j-1.2.16.jar\
 ${PATHSEP}${ZMROOT}/lib/jars/json.jar
