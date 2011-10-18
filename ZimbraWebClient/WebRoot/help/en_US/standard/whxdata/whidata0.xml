@@ -19,7 +19,7 @@
 <key name="address completion in mail" >
   <topic name="Using address lookup" url="Creating_Messages/Using_address_lookup.htm" />
 </key>
-<key name="Attachment File Types Supported" >
+<key name="attachment file types supported" >
   <topic name="Attachment File Types Supported" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
 </key>
 <key name="attachments" >
@@ -55,10 +55,10 @@
 <key name="draft message" >
   <topic name="Saving a draft message" url="Creating_Messages/saving_a_draft_message.htm" />
 </key>
-<key name="Email Message" >
+<key name="email message" >
   <topic name="Parts of an Email Message" url="Creating_Messages/parts_of_an_email_message.htm" />
 </key>
-<key name="Filter Conditions" >
+<key name="filter condition" >
   <topic name="Filter Conditions and Actions Supported" url="filters/filter_conditions_and_actions_supported.htm" />
 </key>
 <key name="filtering messages" >
@@ -75,11 +75,12 @@
 </key>
 <key name="forget" >
   <topic name="Using address lookup" url="Creating_Messages/Using_address_lookup.htm" />
+  <topic name="How email addresses are ranked for autocomplete" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
 </key>
 <key name="formatting with HTML" >
   <topic name="Using HTML Editor" url="Creating_Messages/Using_HTML_Editor.htm" />
 </key>
-<key name="Forwarding" >
+<key name="forwarding" >
   <topic name="Forwarding a mail message" url="Creating_Messages/forwarding_a_mail_message.htm" />
 </key>
 <key name="forwarding your email" >
@@ -91,20 +92,11 @@
 <key name="group contacts, adding" >
   <topic name="Adding new contacts" url="Contacts/b_Adding_new_contacts.htm" />
 </key>
-<key name="HTML" >
-  <topic name="Using HTML Editor" url="Creating_Messages/Using_HTML_Editor.htm" />
-</key>
 <key name="keyboard shortcuts" >
   <topic name="Keyboard Shortcut keys" url="Navigation_folders_and_tips/b_Keyboard_Shortcut_keys.htm" />
 </key>
 <key name="logging off" >
   <topic name="Logging on and off" url="Userspecific/logging_on_and_off.htm" />
-</key>
-<key name="mail" >
-  <topic name="Reading mail" url="reading_mail/reading_mail.htm" />
-  <key name="Reading" >
-    <topic name="Reading mail" url="reading_mail/reading_mail.htm" />
-  </key>
 </key>
 <key name="mail notification" >
   <topic name="New mail notifications" url="Userspecific/New_mail_notifications.htm" />
@@ -136,14 +128,17 @@
 <key name="print tasks" >
   <topic name="About Tasks" url="Tasks/About_Tasks.htm" />
 </key>
-<key name="Query language description" >
+<key name="query language descriptions" >
   <topic name="Query language description" url="Search/query_language_description.htm" />
 </key>
-<key name="Recovering" >
+<key name="ranking addresses" >
+  <topic name="How email addresses are ranked for autocomplete" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
+</key>
+<key name="reading mail" >
+  <topic name="Reading mail" url="reading_mail/reading_mail.htm" />
+</key>
+<key name="recovering deleted items" >
   <topic name="Recovering deleted mail messages" url="reading_mail/recovering_deleted_mail_messages.htm" />
-  <key name="deleted mail messages" >
-    <topic name="Recovering deleted mail messages" url="reading_mail/recovering_deleted_mail_messages.htm" />
-  </key>
 </key>
 <key name="remember me on this computer" >
   <topic name="Logging on and off" url="Userspecific/logging_on_and_off.htm" />
@@ -151,11 +146,8 @@
 <key name="remote calendar" >
   <topic name="Create New Calendar" url="Calendar/b_Create_New_Calendar.htm" />
 </key>
-<key name="Replying" >
+<key name="replying to email" >
   <topic name="Replying to mail messages" url="reading_mail/replying_to_mail_messages.htm" />
-  <key name="mail messages" >
-    <topic name="Replying to mail messages" url="reading_mail/replying_to_mail_messages.htm" />
-  </key>
 </key>
 <key name="RSS feed" >
   <topic name="Subscribe to RSS/ATOM feed " url="Navigation_folders_and_tips/Subscribe_to_RSS_ATOM_feed_.htm" />
@@ -193,10 +185,10 @@
 <key name="tasks, print" >
   <topic name="About Tasks" url="Tasks/About_Tasks.htm" />
 </key>
-<key name="Undeliverable mail" >
+<key name="undeliverable mail" >
   <topic name="Undeliverable mail" url="Creating_Messages/undeliverable_mail.htm" />
 </key>
-<key name="Vacation message" >
+<key name="vacation message" >
   <topic name="Vacation message" url="Userspecific/vacation_message.htm" />
 </key>
 <key name="view as HTML" >

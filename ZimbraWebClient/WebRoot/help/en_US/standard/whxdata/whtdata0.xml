@@ -19,7 +19,6 @@
   <item name="Printing email messages" url="reading_mail/b_Printing_email_messages.htm" />
   <item name="Setting a forwarding address" url="Userspecific/Setting_a_Forwarding_Address.htm" />
   <item name="Recovering deleted items" url="reading_mail/recovering_deleted_mail_messages.htm" />
-  <item name="Purging email messages" url="reading_mail/b_Purging_email_messages.htm" />
   <book name="Reading Messages" >
     <item name="Reading mail" url="reading_mail/reading_mail.htm" />
     <item name="Marking mail as unread" url="reading_mail/b_Marking_mail_as_unread.htm" />
@@ -32,6 +31,7 @@
   <item name="Parts of an email message" url="Creating_Messages/parts_of_an_email_message.htm" />
   <item name="Adding your signature automatically" url="Userspecific/b_Automatically_adding_your_signature.htm" />
   <item name="Automatic address completion" url="Creating_Messages/Using_address_lookup.htm" />
+  <item name="How email addresses are ranked for autocomplete" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
   <item name="Attaching files to your message" url="Creating_Messages/b_Attaching_files_to_your_message.htm" />
   <item name="Attachment file types supported" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
   <item name="Using HTML editor" url="Creating_Messages/Using_HTML_Editor.htm" />
@@ -47,7 +47,7 @@
   <item name="Exporting a contact list" url="Contacts/Exporting_a_Contact_List.htm" />
   <item name="Printing contact names" url="Contacts/Printing_contact_names.htm" />
 </book>
-<book name="Managing Your  Calendar" >
+<book name="Managing Your Calendar" >
   <item name="About Calendar" url="Calendar/b_About_Calendar.htm" />
   <item name="Create  new calendars" url="Calendar/b_Create_New_Calendar.htm" />
   <item name="Color coding your calendars" url="Calendar/Adding_background_color_to_calendars.htm" />
@@ -66,7 +66,7 @@
   <item name="Change a task" url="Tasks/Change_a_task.htm" />
 </book>
 <book name="Working in Briefcase" >
-  <item name="Working in Briefcase" url="b_Working_in_Briefcase.htm" />
+  <item name="Working in Briefcase" url="Briefcase/b_Working_in_Briefcase.htm" />
 </book>
 <book name="Sharing Folders" >
   <book name="Sharing Calendars" >
@@ -78,6 +78,8 @@
 </book>
 <book name="Searching for Items" >
   <item name="Using search" url="Search/b_Using_Search.htm" />
+  <item name="Searching for messages sent to or received from a contact name" url="Search/Searching_for_messages_sent_to_or_received_from_a_contact_name.htm" />
+  <item name="Searching for messages sent to or from the sender" url="Search/Searching_for_messages_sent_to_or_from_the_sender.htm" />
   <item name="Create and save a search query" url="Search/b_Create_and_Save_a_Search_Query.htm" />
   <item name="Query language description" url="Search/query_language_description.htm" />
 </book>

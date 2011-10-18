@@ -3,13 +3,14 @@
 <head>
 <title> WebHelp Navigation Mini-bar </title>
 
-<meta name="generator" content="Adobe RoboHelp 8" />
+<meta name="generator" content="Adobe RoboHelp 9" />
 <meta name="description" content="WebHelp 5.50" />
 <style>
 <!--
 body {margin:0;}
 -->
 </style>
+<script type="text/javascript" language="javascript" src="xmlreadhelper.js"></script>
 <script language="javascript" src="whver.js"></script>
 <script language="javascript1.2" src="whutils.js"></script>
 <script language="javascript1.2" src="whmsg.js"></script>
@@ -26,6 +27,7 @@ if (window.gbWhTBar)
 setButtonFont("avnext","Arial","9pt","White","Normal","Normal","none");
 setButtonFont("synctoc","Arial","9pt","White","Normal","Normal","none");
 setButtonFont("hide2","Arial","9pt","White","Normal","Normal","none");
+setButtonFont("rolesel","Arial","9pt","White","Normal","Normal","none");
 
 	gsIPrev = "wht_prev.gif";
 	gsIPrevD = "wht_prev_g.gif";
@@ -40,6 +42,7 @@ setButtonFont("hide2","Arial","9pt","White","Normal","Normal","none");
 addButton("avnext",BTN_TEXT|BTN_IMG,"","","","","",0,0,"navbar_next.gif","","","navbar_next_dis.gif","","");
 addButton("synctoc",BTN_TEXT|BTN_IMG,"","","","","",0,0,"navbar_sync.gif","","","","","");
 addButton("hide2",BTN_TEXT|BTN_IMG,"","","","","",0,0,"navbar_close.gif","","","","","");
+addButton("rolesel",BTN_TEXT,"","","","","",0,0,"","","","","","");
 
 	addButton("blankblock");
 	writeStyle(true);
