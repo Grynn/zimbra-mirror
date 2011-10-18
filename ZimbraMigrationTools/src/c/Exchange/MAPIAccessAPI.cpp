@@ -33,7 +33,7 @@ void MAPIAccessAPI::InitFoldersToSkip()
     FolderToSkip[TS_SYNC_ISSUES] = SYNC_ISSUES;
     FolderToSkip[TS_SYNC_LOCAL_FAILURES] = SYNC_LOCAL_FAILURES;
     FolderToSkip[TS_SYNC_SERVER_FAILURES] = SYNC_SERVER_FAILURES;
-    FolderToSkip[TS_JUNK_MAIL] = JUNK_MAIL;
+    //FolderToSkip[TS_JUNK_MAIL] = JUNK_MAIL;
 }
 
 bool MAPIAccessAPI::SkipFolder(ExchangeSpecialFolderId exfid)
