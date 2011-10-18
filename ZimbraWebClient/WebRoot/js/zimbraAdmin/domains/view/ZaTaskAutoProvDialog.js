@@ -39,6 +39,9 @@ ZaTaskAutoProvDialog.APPLY_BUTTON = ++DwtDialog.LAST_BUTTON;
 
 ZaTaskAutoProvDialog.prototype.setObject = function(entry) {
     entry[ZaDomain.A2_zimbraAutoProvSearchActivated] = "TRUE";
+    if(entry.attrs[ZaDomain.A_zimbraAutoProvAttrMap] && (typeof entry.attrs[ZaDomain.A_zimbraAutoProvAttrMap] == "string"))
+         entry.attrs[ZaDomain.A_zimbraAutoProvAttrMap] = [entry.attrs[ZaDomain.A_zimbraAutoProvAttrMap]];
+
     this._separateConfigureValues(entry);
     ZaXDialog.prototype.setObject.call(this,entry);
 
