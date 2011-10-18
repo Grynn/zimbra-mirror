@@ -415,6 +415,12 @@ LPCWSTR MAPIAccessAPI::GetItem(SBinary sbItemEID, BaseItemData &itemData)
             SafeDelete(wstrDateString);
 
             msgdata->deliveryDate = msg.DeliveryDate();
+
+            LPWSTR wstrDelivUnixString;
+            AtoW(msg.DeliveryUnixString(), wstrDelivUnixString);
+            msgdata->DeliveryUnixString = wstrDelivUnixString;
+            SafeDelete(wstrDelivUnixString);
+
             LPWSTR wstrDelivDateString;
             AtoW(msg.DeliveryDateString(), wstrDelivDateString);
             msgdata->DeliveryDateString = wstrDelivDateString;

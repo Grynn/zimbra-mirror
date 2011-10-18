@@ -222,11 +222,10 @@ STDMETHODIMP CItemObject::GetDataForItemID(VARIANT ItemId, VARIANT *pVal)
 				maapi->GetItem(ItemID,msgdata);
 				pIt[L"Subject"] = SysAllocString((msgdata.Subject).c_str());
 				pIt[L"Date"] = SysAllocString(( msgdata.DateString).c_str());
-			    pIt[L"JobTitle"] = SysAllocString((msgdata.Urlname).c_str());
 				pIt[L"filePath"] = SysAllocString((msgdata.MimeFile).c_str());
 				pIt[L"UrlName"] = SysAllocString((msgdata.Urlname).c_str());
-				
-				pIt[L"rcvdDate"] =  SysAllocString(( msgdata.DeliveryDateString.c_str()));
+				pIt[L"rcvdDate"] =  SysAllocString(( msgdata.DeliveryUnixString.c_str()));
+
 
 			
 				CComBSTR flags =L"";
@@ -280,9 +279,6 @@ STDMETHODIMP CItemObject::GetDataForItemID(VARIANT ItemId, VARIANT *pVal)
 				pIt[L"RepliedTo"] = (msgdata.IsUnread)? L"True":L"False";*/
 				
 				pIt[L"flags"] = SysAllocString(flags);
-
-
-				pIt[L"UrlName"] = SysAllocString((msgdata.Urlname).c_str());
 
 				/*printf("Subject: %S Date: %I64X DateString:%S		\
 					DeliveryDate: %I64X deliveryDateString: %S		\

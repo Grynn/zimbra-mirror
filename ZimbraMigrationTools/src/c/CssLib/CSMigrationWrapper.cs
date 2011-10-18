@@ -377,13 +377,6 @@ public class CSMigrationwrapper
                                         
                                         string Key = data[0, i];
                                         string Value = data[1, i];
-
-                                        if (Key == "rcvdDate")
-                                        {
-                                            DateTime dat=  Convert.ToDateTime(Value);
-                                            Value = "" + dat.ToFileTimeUtc();
-                                           
-                                        }
                                         dict.Add(Key, Value);
                                         // Console.WriteLine("{0}, {1}", so1, so2);
                                     }

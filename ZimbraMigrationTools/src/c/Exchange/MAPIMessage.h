@@ -94,6 +94,7 @@ private:
     SBinary m_EntryID;
     CHAR m_pDateTimeStr[32];
     CHAR m_pDeliveryDateTimeStr[32];
+    CHAR m_pDeliveryUnixDateTimeStr[32];
     std::vector<std::string> RTFElement;
     enum EnumRTFElement
     {
@@ -136,6 +137,7 @@ public:
     __int64 Date();
     DWORD Size();
     LPSTR DeliveryDateString();
+    LPSTR DeliveryUnixString();
 
     SBinary EntryID() { return m_EntryID; }
     bool TextBody(LPTSTR *ppBody, unsigned int &nTextChars);

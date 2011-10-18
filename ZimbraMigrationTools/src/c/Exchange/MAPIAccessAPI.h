@@ -115,6 +115,7 @@ typedef struct _MessageItemData: BaseItemData
     bool HasText;
     __int64 deliveryDate;
     wstring DeliveryDateString;
+    wstring DeliveryUnixString;
     __int64 Date;
     wstring DateString;
     data_buffer textbody;
