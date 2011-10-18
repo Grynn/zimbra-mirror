@@ -932,6 +932,18 @@ function () {
     if(this._toolbar) {
     	this._toolbar.enableMoreActionsMenuItems () ;
     }
+
+    // For New UI
+    if (appNewUI) {
+        var settingMenu = ZaZimbraAdmin.getInstance().getSettingMenu();
+        if (this._popupOperations && settingMenu) {
+            for(var i in this._popupOperations) {
+                if(this._popupOperations[i] instanceof ZaOperation && !AjxUtil.isEmpty(settingMenu.getMenuItem(this._popupOperations[i].id))) {
+                    settingMenu.getMenuItem(this._popupOperations[i].id).setEnabled(this._popupOperations[i].enabled);
+                }
+            }
+        }
+    }
 }
 
 ZaController.prototype.closeTabsInRemoveList =

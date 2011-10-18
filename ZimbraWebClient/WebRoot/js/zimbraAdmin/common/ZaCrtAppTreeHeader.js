@@ -101,7 +101,23 @@ ZaCrtAppTreeHeader.prototype.setText = function (historyObject) {
        this.preObj = new ZaHistory(path, displayName);
     }
 
-	DwtLabel.prototype.setText.call(this, this.preObj.displayName);
+    var displayText = this.getDisplayContent(this.preObj.displayName);
+	DwtLabel.prototype.setText.call(this, displayText);
+}
+
+ZaCrtAppTreeHeader.prototype.getDisplayContent= function (text) {
+    var displayText = text;
+    if (text) {
+        var titleWidth = Dwt.getSize(this._textEl);
+        var totalTextWidth = AjxStringUtil.getWidth(text);
+        if (totalTextWidth > titleWidth.x) {
+            var totalNumber = text.length;
+            var textLength = titleWidth.x - AjxStringUtil.getWidth("...");
+            var maxNumberOfLetters = Math.floor(textLength*totalNumber/totalTextWidth);
+            displayText = text.substring(0, maxNumberOfLetters) + "...";
+        }
+    }
+    return displayText;
 }
 
 ZaCrtAppTreeHeader.prototype.popup =

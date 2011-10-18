@@ -150,7 +150,9 @@ function(ev) {
 ZaCurrentAppBar.prototype.updateMenu =
 function(popupOperations, popupOrder) {
     var oldMenu = this.getMenu();
+    var isPopup = false;
     if(oldMenu) {
+        isPopup = oldMenu.isPoppedUp();
         this.setMenu("");
         this.menu = "";
         try {
@@ -169,4 +171,11 @@ function(popupOperations, popupOrder) {
         this.clearSettingImg();
     }
 
+    if (isPopup) {
+        this.popup();
+    }
+}
+
+ZaCurrentAppBar.prototype.getMenu = function () {
+    return this.menu;
 }

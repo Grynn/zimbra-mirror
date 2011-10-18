@@ -163,6 +163,8 @@ ZaCert.certOvTreeModifier = function (tree) {
                                         parent:parentPath,
                                         id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_CONFIGURATION,null, "CertHV"),
                                         text: com_zimbra_cert_manager.OVP_certs,
+                                        canShowOnRoot: false,
+                                        forceNode: false,
                                         mappingId: ZaZimbraAdmin._CERTS_SERVER_LIST_VIEW});
                     tree.addTreeItemData(certTi);
 					//add the server nodes

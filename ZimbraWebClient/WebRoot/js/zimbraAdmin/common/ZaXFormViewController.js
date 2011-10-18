@@ -292,13 +292,37 @@ function (params) {
 **/
 ZaXFormViewController.prototype.setDirty = 
 function (isD) {
-	if(!this._toolbar || !this._toolbar.getButton(ZaOperation.SAVE))
-		return;
-		
-	if(isD)
-		this._toolbar.getButton(ZaOperation.SAVE).setEnabled(true);
-	else
-		this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);
+    if (!appNewUI) {
+        if(!this._toolbar || !this._toolbar.getButton(ZaOperation.SAVE))
+            return;
+
+        if(isD)
+            this._toolbar.getButton(ZaOperation.SAVE).setEnabled(true);
+        else
+            this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);
+    } else {
+        var settingMenu = ZaZimbraAdmin.getInstance().getSettingMenu();
+        if (!settingMenu ||
+            !this._popupOperations ||
+            !this._popupOperations[ZaOperation.SAVE] ||
+            !this._popupOperations[ZaOperation.SAVE].id)
+            return;
+
+        if (!this._popupOperations)
+            return;
+
+        if (!this._popupOperations[ZaOperation.SAVE])
+            return;
+
+        var saveItem = settingMenu.getMenuItem(this._popupOperations[ZaOperation.SAVE].id)
+        if (AjxUtil.isEmpty(saveItem))
+            return;
+
+        if(isD)
+            saveItem.setEnabled(true);
+        else
+            saveItem.setEnabled(false);
+    }
 }
 
 /**

@@ -886,7 +886,7 @@ function() {
         }
     }
     // Section Manager Account Start
-    if (showAdministration) {
+    if (showManageAccount) {
         var accountMgr = new ZaTreeItemData({
                                         parent:ZaMsg.OVP_home,
                                         id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_HOME,null, "manActHV"),
@@ -1104,6 +1104,7 @@ function() {
                                     parent:parentPath,
                                     id:ZaId.getTreeItemId(ZaId.PANEL_APP,"searchHV",null, "currentSearch"),
                                     text: ZaMsg.OVP_search,
+                                    image: "SearchAll",
                                     mappingId: ZaZimbraAdmin._SEARCH_HOME_VIEW});
     ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._SEARCH_HOME_VIEW] = ZaOverviewPanelController.newSearchListTreeListener;
     tree.addTreeItemData(currentSearchTi);

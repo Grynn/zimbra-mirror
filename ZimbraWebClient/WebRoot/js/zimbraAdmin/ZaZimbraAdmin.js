@@ -1047,6 +1047,14 @@ function(historyObject, isAddHistory) {
 
 }
 
+ZaZimbraAdmin.prototype.getSettingMenu =
+function(popupOperation, popupOrder) {
+    if (!this._currentAppBar)
+        return "";
+
+    return this._currentAppBar.getMenu();
+}
+
 ZaZimbraAdmin.prototype._lauchNewApp =
 function() {
 	ZaSettings.TREE_ENABLED = (document.getElementById(ZaSettings.SKIN_TREE_DOM_ID)!=null);
