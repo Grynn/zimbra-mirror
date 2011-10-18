@@ -4,6 +4,8 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.AppointmentItem;
 import com.zimbra.qa.selenium.framework.items.MailItem;
@@ -87,7 +89,7 @@ public class PageCalendar extends AbsTab {
 		public static final String CalendarViewDayCSS		= "css=div[class='ImgCalendarDayGrid']";
 		public static final String CalendarViewWorkWeekCSS	= "css=div[id='TODO']";
 		public static final String CalendarViewWeekCSS		= "css=div[id='TODO']";
-		public static final String CalendarViewMonthCSS		= "css=div[id='TODO']";
+		public static final String CalendarViewMonthCSS		= "css=div[class='calendar_month_body']";
 		public static final String CalendarViewScheduleCSS	= "css=div[id='TODO']";
 
 	}
@@ -1115,8 +1117,149 @@ public class PageCalendar extends AbsTab {
 		throw new HarnessException("implement me");
 	}
 
+	/**
+	 * @param cssLocator
+	 * @return
+	 * @throws HarnessException
+	 */
+	private AppointmentItem parseAllDayApptBody(String cssLocator) throws HarnessException {
+		logger.info(myPageName() + " parseAllDayApptBody("+ cssLocator +")");
+
+		/*
+
+  <table>
+    <tr class="calendar_month_day_item_row" id="DWT125__zli__CLM__266_DWT299">
+      <td class="calendar_month_day_item">
+        <div style="position:relative;" id="DWT125__zli__CLM__266_DWT299_body" class="">
+          <table width="100%" cellspacing="0" cellpadding="0" border="0" style=
+          "table-layout:fixed; background:-moz-linear-gradient(top,#FFFFFF, #ecd49c);"
+          id="DWT125__zli__CLM__266_DWT299_tableBody">
+            <tbody>
+              <tr>
+                <td width="4px" style=
+                "background:-moz-linear-gradient(top,#FFFFFF, #4AA6F1);"></td>
+
+                <td width="100%">
+                  <div style="overflow:hidden;white-space:nowrap;">
+                    &nbsp;2:00 AM subject
+                  </div>
+                </td>
+
+                <td width="20px" style="padding-right:3px;" id=
+                "DWT125__zli__CLM__266_DWT299_tag">
+                  <div style="width:16" class="ImgBlank_16"></div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </td>
+    </tr>
+  </table>
+
+		 */
+		
+		
+		
+		String locator;
+		
+		AppointmentItem appt = new AppointmentItem();
+		appt.setLocator(cssLocator + " table tr td");
+		
+		appt.setGIsAllDay(true);
+		
+		// Get the subject
+		locator = cssLocator + " table tr td + td";
+		appt.setSubject(this.sGetText(locator)); // Subject contains start time + subject
+		
+		// TODO: get the tags
+		
+		
+		return (appt);
+	}
+	
+	private AppointmentItem parseCalendarMonthDayItem(String cssLocator) throws HarnessException {
+		logger.info(myPageName() + " parseCalendarMonthDayItem("+ cssLocator +")");
+
+		/*
+
+  <div style=
+  "position: absolute; width: 135px; height: 20px; overflow: hidden; padding-bottom: 4px; left: 285px; top: 261px;"
+  class="appt" id="DWT125__zli__CLM__258_DWT297">
+    <div class="appt_allday_body ZmSchedulerApptBorder-free" id=
+    "DWT125__zli__CLM__258_DWT297_body" style="width: 135px; height: 16px;">
+      <table cellspacing="0" cellpadding="0" style=
+      "table-layout: fixed; height: 100%; background: -moz-linear-gradient(center top , rgb(255, 255, 255), rgb(235, 175, 96)) repeat scroll 0% 0% transparent; opacity: 0.4;"
+      id="DWT125__zli__CLM__258_DWT297_tableBody">
+        <tbody>
+          <tr style="background:-moz-linear-gradient(top,#FFFFFF, #ebaf60);">
+            <td width="4px" style=
+            "background:-moz-linear-gradient(top,#FFFFFF, #FFFFFF);" class=""></td>
+
+            <td width="100%" class="appt_allday_name">
+              <div style="overflow: hidden; white-space: nowrap;">
+                appointment13189543295934
+              </div>
+            </td>
+
+            <td width="20px" style="padding-right:3px;" id=
+            "DWT125__zli__CLM__258_DWT297_tag">
+              <div style="width:16" class="ImgBlank_16"></div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  
+  
+		 */
+		
+		String locator;
+		
+		AppointmentItem appt = new AppointmentItem();
+		appt.setLocator(cssLocator + " td[class='appt_allday_name']");
+
+
+		appt.setGIsAllDay(false);
+		
+		// Get the subject
+		locator = cssLocator + " td[class='appt_allday_name']";
+		appt.setSubject(this.sGetText(locator));
+		
+		// TODO: get the tags		
+		
+		return (appt);
+	}
+	
 	private List<AppointmentItem> zListGetAppointmentsMonthView() throws HarnessException {
-		throw new HarnessException("implement me");
+		logger.info(myPageName() + " zListGetAppointmentsMonthView()");
+		
+		String itemsLocator;
+		
+		int count;
+		List<AppointmentItem> items = new ArrayList<AppointmentItem>();
+		
+		// Process the all-day items first
+		itemsLocator = "css=div.calendar_month_body div.appt";
+		count = this.sGetCssCount(itemsLocator);
+		logger.info(itemsLocator +" count: "+ count);
+		
+		for (int i = 0; i < count; i++) {
+			
+			String itemLocator = itemsLocator + StringUtils.repeat(" + div.appt", i);
+			
+			String alldayLocator = itemLocator + " div.appt_allday_body";
+			String singleLocator = itemLocator + " td.calendar_month_day_item";
+			if ( this.sIsElementPresent(alldayLocator) ) {
+				items.add(parseAllDayApptBody(alldayLocator));
+			} else if ( this.sIsElementPresent(singleLocator) ) {
+				items.add(this.parseCalendarMonthDayItem(singleLocator));
+			}
+			
+		}
+		
+		return (items);
 	}
 
 	private List<AppointmentItem> zListGetAppointmentsScheduleView() throws HarnessException {
@@ -1134,7 +1277,7 @@ public class PageCalendar extends AbsTab {
 		} else if ( this.zIsVisiblePerPosition(Locators.CalendarViewWeekCSS, 0, 0) ) {
 			return (zListGetAppointmentsDayView());
 		} else if ( this.zIsVisiblePerPosition(Locators.CalendarViewMonthCSS, 0, 0) ) {
-			return (zListGetAppointmentsDayView());
+			return (zListGetAppointmentsMonthView());
 		} else if ( this.zIsVisiblePerPosition(Locators.CalendarViewScheduleCSS, 0, 0) ) {
 			return (zListGetAppointmentsDayView());
 		} else {

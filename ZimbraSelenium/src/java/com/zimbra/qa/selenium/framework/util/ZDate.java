@@ -99,13 +99,24 @@ public class ZDate {
 		
 		if ( d != null ) {
 			
-			SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd'T'HHmmss");
+			SimpleDateFormat formatter;
+			
+			formatter = new SimpleDateFormat("yyyyMMdd'T'HHmmss");
 			try {
 				calendar.setTime( formatter.parse(d) );
+				return;
 			} catch (ParseException ex) {
-				throw new HarnessException("Unable to parse date element "+ e.prettyPrint(), ex);
+				logger.warn("No match for yyyyMMdd'T'HHmmss");
 			}
-			return;
+
+			formatter = new SimpleDateFormat("yyyyMMdd");
+			try {
+				calendar.setTime( formatter.parse(d) );
+				return;
+			} catch (ParseException ex) {
+				logger.warn("yyyyMMdd");
+			}
+
 			
 		}
 		

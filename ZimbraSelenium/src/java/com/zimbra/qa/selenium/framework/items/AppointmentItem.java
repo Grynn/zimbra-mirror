@@ -1,5 +1,7 @@
 package com.zimbra.qa.selenium.framework.items;
 
+import java.util.*;
+
 import org.apache.log4j.*;
 
 import com.zimbra.common.soap.Element;
@@ -29,8 +31,10 @@ public class AppointmentItem implements IItem {
 	protected String gStatus = null;
 	protected String gCalendar = null;
 	protected boolean gIsRecurring = false;
+	protected boolean gIsAllDay = false;
 	protected String gStart = null;
 	protected String gEnd = null;
+	protected String TheLocator = null;
 
 	
 	public AppointmentItem() {	
@@ -41,6 +45,14 @@ public class AppointmentItem implements IItem {
 		return (getSubject());
 	}
 
+	public String getLocator() {
+		return (TheLocator);
+	}
+	
+	public void setLocator(String locator) {
+		TheLocator = locator;
+	}
+	
 	public static AppointmentItem importFromSOAP(Element GetAppointmentResponse) throws HarnessException {
 		
 		if ( GetAppointmentResponse == null )
@@ -243,6 +255,10 @@ public class AppointmentItem implements IItem {
 		return (gIsRecurring);
 	}
 
+	public boolean getGIsAllDay() {
+		return (gIsAllDay);
+	}
+
 	public String getGStartDate() {
 		return (gStart);
 	}
@@ -271,8 +287,109 @@ public class AppointmentItem implements IItem {
 		gIsRecurring = recurring;
 	}
 
+	public void setGIsAllDay(boolean allDay) {
+		gIsAllDay = allDay;
+	}
+
 	public void setGStartDate(String start) {
 		gStart = start;
+	}
+
+	/**
+	 * Create a single-day appointment on the server
+	 * 
+	 * @param account Appointment Organizer
+	 * @param start Start time of the appointment, which will be rounded to the nearest hour
+	 * @param duration Duration of the appointment, in minutes
+	 * @param timezone Timezone of the appointment (null if default)
+	 * @param subject Subject of the appointment
+	 * @param content Content of the appointment (text)
+	 * @param location Location of the appointment (null if none)
+	 * @param attendees List of attendees for the appointment
+	 * @return
+	 * @throws HarnessException
+	 */
+	public static AppointmentItem createAppointmentSingleDay(ZimbraAccount account, Calendar start, int duration, TimeZone tz, String subject, String content, String location, List<ZimbraAccount> attendees)
+	throws HarnessException {
+		
+		// If location is null, don't specify the loc attribute
+		String loc = (location == null ? "" : "loc='"+ location + "'");
+
+		// TODO: determine the timezone
+		String timezoneString = ZTimeZone.TimeZoneEST.getID();
+
+		
+		// Convert the calendar to a ZDate
+		ZDate beginning = new ZDate(start.get(Calendar.YEAR), start.get(Calendar.MONTH) + 1, start.get(Calendar.DAY_OF_MONTH), start.get(Calendar.HOUR_OF_DAY), 0, 0);
+		ZDate ending = beginning.addMinutes(duration);
+		
+		account.soapSend(
+				"<CreateAppointmentRequest xmlns='urn:zimbraMail'>"
+			+		"<m l='10'>"
+			+			"<inv>"
+			+				"<comp name='"+ subject +"' "+ loc + " draft='0' status='CONF' class='PUB' transp='O' fb='F'>"
+			+					"<s d='"+ beginning.toTimeZone(timezoneString).toYYYYMMDDTHHMMSS() +"' tz='"+ timezoneString +"'/>"
+			+					"<e d='"+ ending.toTimeZone(timezoneString).toYYYYMMDDTHHMMSS() +"' tz='"+ timezoneString +"'/>"
+			+					"<or a='" + account.EmailAddress +"'/>"
+			+				"</comp>"
+			+			"</inv>"
+			+			"<su>"+ subject + "</su>"
+			+			"<mp ct='text/plain'>"
+			+				"<content>" + content + "</content>"
+			+			"</mp>"
+			+		"</m>"
+			+	"</CreateAppointmentRequest>");
+
+		AppointmentItem result = AppointmentItem.importFromSOAP(account, "subject:("+ subject +")", beginning.addDays(-7), beginning.addDays(7));
+
+		return (result);
+
+
+	}
+	
+	/**
+	 * Create an all-day appointment on the server
+	 * 
+	 * @param account The appointment organizer
+	 * @param date The appointment start date
+	 * @param duration The appointment duration (in days)
+	 * @param subject The appointment subject
+	 * @param content The appointment text content
+	 * @param location The appointment location (null if none)
+	 * @param attendees A list of attendees (null for none)
+	 * @return
+	 * @throws HarnessException
+	 */
+	public static AppointmentItem createAppointmentAllDay(ZimbraAccount account, Calendar date, int duration, String subject, String content, String location, List<ZimbraAccount> attendees)
+	throws HarnessException {
+
+		// If location is null, don't specify the loc attribute
+		String loc = (location == null ? "" : "loc='"+ location + "'");
+		
+		// Convert the calendar to a ZDate
+		ZDate start = new ZDate(date.get(Calendar.YEAR), date.get(Calendar.MONTH) + 1, date.get(Calendar.DAY_OF_MONTH), 12, 0, 0);
+
+		account.soapSend(
+				"<CreateAppointmentRequest xmlns='urn:zimbraMail'>"
+			+		"<m l='10'>"
+			+			"<inv>"
+			+				"<comp allDay='1' name='"+ subject +"' "+ loc + " draft='0' status='CONF' class='PUB' transp='O' fb='F'>"
+			+					"<s d='" + start.toYYYYMMDD() +"'/>"
+			+					"<e d='" + start.addDays(duration > 0 ? duration - 1 : 0).toYYYYMMDD() +"'/>"
+			+					"<or a='" + account.EmailAddress +"'/>"
+			+				"</comp>"
+			+			"</inv>"
+			+			"<su>"+ subject + "</su>"
+			+			"<mp ct='text/plain'>"
+			+				"<content>" + content + "</content>"
+			+			"</mp>"
+			+		"</m>"
+			+	"</CreateAppointmentRequest>");
+
+		AppointmentItem result = AppointmentItem.importFromSOAP(account, "subject:("+ subject +")", start.addDays(-7), start.addDays(7));
+
+		return (result);
+
 	}
 
 
