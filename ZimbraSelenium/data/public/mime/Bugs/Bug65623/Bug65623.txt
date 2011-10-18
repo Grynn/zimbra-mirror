@@ -1,0 +1,44 @@
+Date: Mon, 10 Oct 2011 09:00:51 +0200 (CEST)
+From: Foo Bar <foo@example.com>
+To: Bar Foo <bar@example.com>
+Subject: subject13189485723753
+Content-Type: multipart/mixed;
+ boundary="=_9838f3f9-dea8-4b54-ba14-652d55621b34"
+MIME-Version: 1.0
+X-Mailer: Zimbra 7.1.3_GA_3346 (ZimbraWebClient - FF3.0 (Win)/7.1.3_GA_3346)
+
+--=_9838f3f9-dea8-4b54-ba14-652d55621b34
+Content-Type: multipart/alternative;
+ boundary="=_8177b923-0e3a-4e7e-96bf-c898143cd16f"
+
+--=_8177b923-0e3a-4e7e-96bf-c898143cd16f
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+
+
+
+
+
+Enrico Medici 
+
+--=_8177b923-0e3a-4e7e-96bf-c898143cd16f
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<html><head></head><body>Enrico Medici<br></body></html>
+--=_8177b923-0e3a-4e7e-96bf-c898143cd16f--
+
+--=_9838f3f9-dea8-4b54-ba14-652d55621b34
+Content-Type: text/html; charset=iso-8859-1; name=Messaggio_2011-10-07.html
+Content-Disposition: attachment; filename=Messaggio_2011-10-07.html
+Content-Transfer-Encoding: base64
+Content-Description: Messaggio
+
+DQogICAgICANCg0KDQoNCjwhRE9DVFlQRSBodG1sIFBVQkxJQyAiLS8vVzNDLy9EVEQgSFRNTCA0
+ZT1GcmkgT2N0IDA3IDExOjMwOjA2IENFU1QgMjAxMTsNCgktLT4NCiA8L2JvZHk+DQo8L2h0bWw+
+
+--=_9838f3f9-dea8-4b54-ba14-652d55621b34--
+
+
+

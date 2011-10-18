@@ -1,0 +1,17 @@
+Date: Sat, 1 Oct 2011 00:01:07 -0400
+From: foo@example.com
+Subject: subject13188948451403
+To: bar@example.com
+MIME-Version: 1.0
+Content-Type: text/html
+
+<title>NETWORKER Index - 29 Sep 2011 to 30 Sep 2011 (#2011-238)</title>
+<body bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#FF0000">
+
+<h1>
+<center>
+Welcome to the NetWorker Listserv list
+</center>
+</h1>
+
+

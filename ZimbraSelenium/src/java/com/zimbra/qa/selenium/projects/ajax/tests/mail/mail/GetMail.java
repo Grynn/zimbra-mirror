@@ -1,9 +1,11 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.mail.mail;
 
+import java.io.File;
 import java.util.List;
 
 import org.testng.annotations.Test;
 
+import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.MailItem;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
@@ -246,6 +248,52 @@ public class GetMail extends PrefGroupMailByMessageTest {
 			}
 		}
 		ZAssert.assertNotNull(found, "Verify the list contains the new message");
+		
+	}
+
+	@Bugs(	ids = "65933,65623")
+	@Test(	description = "Verify message with only HTML part",
+			groups = { "functional", "matt" })
+	public void GetMail_06() throws HarnessException {
+
+		// Inject the sample mime
+		String subject = "subject13188948451403";
+		String content = "Welcome to the NetWorker Listserv list";
+		String MimeFolder = ZimbraSeleniumProperties.getBaseDirectory() + "/data/public/mime/Bugs/Bug65933";
+		LmtpInject.injectFile(app.zGetActiveAccount().EmailAddress, new File(MimeFolder));
+
+		
+		// Refresh the inbox
+		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+
+		// Select the message so that it shows in the reading pane
+		DisplayMail actual = (DisplayMail) app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
+
+		// Verify the To, From, Subject, Body
+		ZAssert.assertStringContains(actual.zGetMailProperty(Field.Body), content, "Verify the body displays correctly");
+		
+	}
+
+	@Bugs(	ids = "65933,65623")
+	@Test(	description = "Verify message with only HTML part and charset",
+			groups = { "functional", "matt" })
+	public void GetMail_07() throws HarnessException {
+
+		// Inject the sample mime
+		String subject = "subject13189485723753";
+		String content = "Enrico Medici";
+		String MimeFolder = ZimbraSeleniumProperties.getBaseDirectory() + "/data/public/mime/Bugs/Bug65623";
+		LmtpInject.injectFile(app.zGetActiveAccount().EmailAddress, new File(MimeFolder));
+
+		
+		// Refresh the inbox
+		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+
+		// Select the message so that it shows in the reading pane
+		DisplayMail actual = (DisplayMail) app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
+
+		// Verify the To, From, Subject, Body
+		ZAssert.assertStringContains(actual.zGetMailProperty(Field.Body), content, "Verify the body displays correctly");
 		
 	}
 
