@@ -26,6 +26,7 @@ olcSockbufMaxIncomingAuth: 16777215
 olcThreads: 8
 olcTLSCertificateFile: /opt/zimbra/conf/slapd.crt
 olcTLSCertificateKeyFile: /opt/zimbra/conf/slapd.key
+olcTLSCACertificatePath: /opt/zimbra/conf/ca
 olcTLSCRLCheck: none
 olcTLSVerifyClient: never
 olcToolThreads: 1
