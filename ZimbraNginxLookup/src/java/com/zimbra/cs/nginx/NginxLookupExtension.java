@@ -178,6 +178,7 @@ public class NginxLookupExtension implements ZimbraExtension {
         public static final String IMAP     = "imap";
         public static final String IMAP_SSL = "imapssl";
         public static final String HTTP     = "http";
+        public static final String HTTP_SSL = "httpssl";
 
         /* auth methods */
         public static final String AUTHMETH_PLAIN = "plain";

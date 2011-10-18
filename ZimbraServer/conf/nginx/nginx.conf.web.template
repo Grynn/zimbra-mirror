@@ -18,7 +18,7 @@ http
     upstream ${web.admin.upstream.name}
     {
         ${web.admin.upstream.:servers}
-        zmauth admin;
+        zmauth_admin;
     }
 
     #custom error pages for upstream connection errors

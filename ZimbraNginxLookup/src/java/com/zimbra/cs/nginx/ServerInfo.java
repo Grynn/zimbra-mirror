@@ -61,10 +61,12 @@ public class ServerInfo extends LookupEntry {
         else if (NginxLookupExtension.NginxLookupHandler.IMAP_SSL.equalsIgnoreCase(proto))
             return mHttpImapSSLPort;
         else if (NginxLookupExtension.NginxLookupHandler.HTTP.equalsIgnoreCase(proto)) {
+            return mHttpPort;            
+        } else if (NginxLookupExtension.NginxLookupHandler.HTTP_SSL.equalsIgnoreCase(proto)) {
             if (isZimbraAdmin) {
                 return mHttpAdminPort;
             } else {
-                return mHttpPort;
+                return "0"; //TODO; return HTTP SSL Port
             }
         }
         

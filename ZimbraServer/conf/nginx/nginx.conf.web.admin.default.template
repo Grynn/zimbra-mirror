@@ -14,47 +14,23 @@ server
 
     location /
     {
-
-        # Begin stray redirect hack
-        # 
-        # In some cases, we may get a stray redirect out of the mailhost,
-        # which attempts to send us to $host:$mailhostport, where:
-        # 
-        # $host is the host portion (excluding port) of the proxy URL
-        # $mailhostport is the zimbraMailPort as applies to the mailhost
-        #   server being redirected to
-        # 
-        # This is the case when one mailhost in the upstream cluster is
-        # trying to redirect to another mailhost in the same cluster
-        # In this case, we need to trap and fudge this location header
-        # 
-        # NOTE that this will only work in the cases where each mailhost 
-        # within the cluster has the same mailhostport (Limitation)
-        # 
-
-        set $mailhostport ${web.admin.uport};   # replace this with *the* mailhost port
-        set $relhost $host;
-
-        if ($mailhostport != 80) {   # standard HTTP port, do not replace
-            set $relhost $host:$mailhostport;
-        }
-
-        # End stray redirect hack
-
         # Proxy to Zimbra Upstream
         proxy_pass          https://${web.admin.upstream.name};
 
         # For audit
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 
-        # For Virtual Hosting
-        set $virtual_host $http_host;
-        if ($virtual_host = '') {
-            set $virtual_host $server_addr:$server_port;
+        # For admin console, the proxied request must have ${web.admin.uport}
+        # in Host header. Otherwise, the web client page or error might be returned.
+        #
+        set $relhost $host;
+        if ($host = '') {
+            set $relhost $server_addr;
         }
-        proxy_set_header Host            $virtual_host;
+        proxy_set_header Host            $relhost:${web.admin.uport};
 
-        # Fudge inter-mailbox redirects (kludge)
-        proxy_redirect https://$relhost/ https://$http_host/;
+        # Avoid leak the ${web.admin.uport} in the response such as 302 redirection
+        #
+        proxy_redirect https://$relhost:${web.admin.uport}/ https://$relhost:${web.admin.port}/;
     }
 }
