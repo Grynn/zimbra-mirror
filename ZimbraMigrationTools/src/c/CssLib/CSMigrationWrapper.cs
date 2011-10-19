@@ -294,13 +294,15 @@ public class CSMigrationwrapper
             ZimbraAPI api = new ZimbraAPI();
             foreach (dynamic folderobject in folderobjectarray)
             {
+                string path ="";
                 if (folderobject.Id == 0)
                 {
                     api.AccountName = Acct.Accountname;
                     int stat = api.CreateFolder(folderobject.ParentPath);
+                     path = folderobject.ParentPath;
                     // stat=  api.CreateFolder("testfolder","2");
                 }
-                else
+               // else //if user folder create and start migration else just migrate
                 {
                     DateTime dt;
                     dt = DateTime.UtcNow;
@@ -339,7 +341,8 @@ public class CSMigrationwrapper
                                 api.AccountName = Acct.Accountname;
                                 if (dict.Count > 0)
                                 {
-                                    int stat = api.CreateContact(dict);
+                                   
+                                    int stat = api.CreateContact(dict,path );
                                 }
                             }
                             Acct.migrationFolders[0].CurrentCountOFItems++;
