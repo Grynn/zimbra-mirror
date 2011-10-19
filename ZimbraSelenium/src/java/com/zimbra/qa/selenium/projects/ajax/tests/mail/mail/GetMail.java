@@ -253,7 +253,7 @@ public class GetMail extends PrefGroupMailByMessageTest {
 
 	@Bugs(	ids = "65933,65623")
 	@Test(	description = "Verify message with only HTML part",
-			groups = { "functional", "matt" })
+			groups = { "functional" })
 	public void GetMail_06() throws HarnessException {
 
 		// Inject the sample mime
@@ -276,13 +276,36 @@ public class GetMail extends PrefGroupMailByMessageTest {
 
 	@Bugs(	ids = "65933,65623")
 	@Test(	description = "Verify message with only HTML part and charset",
-			groups = { "functional", "matt" })
+			groups = { "functional" })
 	public void GetMail_07() throws HarnessException {
 
 		// Inject the sample mime
 		String subject = "subject13189485723753";
 		String content = "Enrico Medici";
 		String MimeFolder = ZimbraSeleniumProperties.getBaseDirectory() + "/data/public/mime/Bugs/Bug65623";
+		LmtpInject.injectFile(app.zGetActiveAccount().EmailAddress, new File(MimeFolder));
+
+		
+		// Refresh the inbox
+		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+
+		// Select the message so that it shows in the reading pane
+		DisplayMail actual = (DisplayMail) app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
+
+		// Verify the To, From, Subject, Body
+		ZAssert.assertStringContains(actual.zGetMailProperty(Field.Body), content, "Verify the body displays correctly");
+		
+	}
+
+	@Bugs(	ids = "65079")
+	@Test(	description = "Verify message with only HTML part and charset",
+			groups = { "functional" })
+	public void GetMail_08() throws HarnessException {
+
+		// Inject the sample mime
+		String subject = "subject13189993282183";
+		String content = "Incident Title";
+		String MimeFolder = ZimbraSeleniumProperties.getBaseDirectory() + "/data/private/mime/Bugs/Bug65079";
 		LmtpInject.injectFile(app.zGetActiveAccount().EmailAddress, new File(MimeFolder));
 
 		
