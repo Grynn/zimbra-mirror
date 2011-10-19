@@ -357,6 +357,10 @@ public class Button {
 	public static final Button O_VIEW_LIST_SUB_MENU = new Button("O_VIEW_LIST_SUB_MENU");
 	public static final Button O_VIEW_SCHEDULE_SUB_MENU = new Button("O_VIEW_SCHEDULE_SUB_MENU");
 
+	// Calendar dialogs
+	public static final Button B_SEND_CANCELLATION = new Button("B_SEND_CANCELLATION");
+	public static final Button B_EDIT_CANCELLATION = new Button("B_EDIT_CANCELLATION");
+
 	// Preferences
 	public static final Button B_CHANGE_PASSWORD 		= new Button("B_CHANGE_PASSWORD");
 	public static final Button B_NEW_FILTER 			= new Button("B_NEW_FILTER");

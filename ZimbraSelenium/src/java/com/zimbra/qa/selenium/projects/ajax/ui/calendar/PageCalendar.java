@@ -187,6 +187,26 @@ public class PageCalendar extends AbsTab {
 	@Override
 	public AbsPage zListItem(Action action, String subject) throws HarnessException {
 
+		if ( this.zIsVisiblePerPosition(Locators.CalendarViewListCSS, 0, 0) ) {
+			return (zListItemListView(action, subject));
+		} else if ( this.zIsVisiblePerPosition(Locators.CalendarViewDayCSS, 0, 0) ) {
+			return (zListItemWorkWeekView(action, subject));
+		} else if ( this.zIsVisiblePerPosition(Locators.CalendarViewWorkWeekCSS, 0, 0) ) {
+			return (zListItemWorkWeekView(action, subject));
+		} else if ( this.zIsVisiblePerPosition(Locators.CalendarViewWeekCSS, 0, 0) ) {
+			return (zListItemWorkWeekView(action, subject));
+		} else if ( this.zIsVisiblePerPosition(Locators.CalendarViewMonthCSS, 0, 0) ) {
+			return (zListItemMonthView(action, subject));
+		} else if ( this.zIsVisiblePerPosition(Locators.CalendarViewScheduleCSS, 0, 0) ) {
+			return (zListItemWorkWeekView(action, subject));
+		} else {
+			throw new HarnessException("Unknown calendar view");
+		}
+
+	}
+	
+	public AbsPage zListItemWorkWeekView(Action action, String subject) throws HarnessException {
+
 		logger.info(myPageName() + " zListItem("+ action +", "+ subject +")");
 		tracer.trace(action +" on subject = "+ subject);
 
@@ -200,15 +220,6 @@ public class PageCalendar extends AbsTab {
 		String locator = null;
 		AbsPage page = null;
 
-		// See note below about the locator TODO task.
-		// As a work around, for the List-view tests, redirect to a sub-method
-		if ( this.zIsVisiblePerPosition(Locators.CalendarViewListCSS, 0, 0) ) {
-			return (zListItemListView(action, subject));
-		}
-
-		// TODO: this locator seems too generic for all the views that are possible
-		// int the calendar.  I'm not sure it will be possible to make it generic
-		// across the views.  It will likely need to be implemented per view.
 		locator = "css=td.appt_name:contains('" + subject + "')";
 		SleepUtil.sleepMedium();
 
@@ -235,6 +246,57 @@ public class PageCalendar extends AbsTab {
 		return (page);
 	}
 
+	private AbsPage zListItemMonthView(Action action, String subject) throws HarnessException {
+		logger.info(myPageName() + " zListItemMonthView("+ action +", "+ subject +")");
+
+		tracer.trace(action +" on subject = "+ subject);
+
+		if ( action == null )
+			throw new HarnessException("action cannot be null");
+
+		if ( subject == null )
+			throw new HarnessException("subject cannot be null");
+
+		// Default behavior variables
+		String locator = null;
+		AbsPage page = null;
+
+		locator = "css=td.appt_allday_name:contains('" + subject + "')";
+
+		if ( action == Action.A_LEFTCLICK ) {
+			
+			this.zClickAt(locator, "");
+			this.zWaitForBusyOverlay();
+
+			page = null;
+			
+			return (page);
+			
+		} else if ( action == Action.A_RIGHTCLICK ) {
+			
+			this.zRightClickAt(locator, "");
+			this.zWaitForBusyOverlay();
+
+			page = null;
+			
+			return (page);
+			
+		} else if ( action == Action.A_DOUBLECLICK) {
+			
+			this.sDoubleClick(locator);
+			this.zWaitForBusyOverlay();
+
+			page = null; // Should probably return the read-only or organizer view of the appointment
+			
+			return (page);
+			
+		} else {
+			throw new HarnessException("implement me!  action = "+ action);
+		}
+
+
+	}
+	
 	private AbsPage zListItemListView(Action action, Button option, String subject) throws HarnessException {
 		
 		logger.info(myPageName() + " zListItemListView("+ action +", "+ option +", "+ subject +")");
@@ -306,7 +368,7 @@ public class PageCalendar extends AbsTab {
 			} else if ( option == Button.O_DELETE ) {
 
 				optionLocator = Locators.DeleteMenu;
-				page = new DialogConfirm(DialogConfirm.Confirmation.DELETE, MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
+				page = new DialogConfirmDelete(MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
 
 			} else if ( option == Button.O_MOVE ) {
 
@@ -730,10 +792,7 @@ public class PageCalendar extends AbsTab {
 		} else if (button == Button.B_DELETE) {
 
 			locator = "css=td[id='zb__CLD__DELETE_title']";
-			page = new DialogConfirm(
-					DialogConfirm.Confirmation.DELETE,
-					MyApplication, 
-					((AppAjaxClient) MyApplication).zPageCalendar);
+			page = new DialogConfirmDelete(MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
 
 
 		} else {
@@ -767,10 +826,7 @@ public class PageCalendar extends AbsTab {
 
 		if ( keyEvent == KeyEvent.VK_DELETE || keyEvent == KeyEvent.VK_BACK_SPACE ) {
 
-			page = new DialogConfirm(
-					DialogConfirm.Confirmation.DELETE,
-					MyApplication, 
-					((AppAjaxClient) MyApplication).zPageCalendar);
+			page = new DialogConfirmDelete(MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
 
 		}
 
@@ -797,19 +853,13 @@ public class PageCalendar extends AbsTab {
 
 		} else if ( shortcut == Shortcut.S_DELETE ) {
 
-			page = new DialogConfirm(
-					DialogConfirm.Confirmation.DELETE,
-					MyApplication, 
-					((AppAjaxClient) MyApplication).zPageCalendar);
+			page = new DialogConfirmDelete(MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
 
 		} else if ( 
 				shortcut == Shortcut.S_MAIL_MOVETOTRASH ||
 				shortcut == Shortcut.S_MAIL_HARDELETE ) {
 
-			page = new DialogConfirm(
-					DialogConfirm.Confirmation.DELETE,
-					MyApplication, 
-					((AppAjaxClient) MyApplication).zPageCalendar);
+			page = new DialogConfirmDelete(MyApplication,  ((AppAjaxClient) MyApplication).zPageCalendar);
 
 		} else if ( shortcut == Shortcut.S_NEWCALENDAR ) {
 

@@ -18,6 +18,7 @@ public class AppointmentItem implements IItem {
 	protected String dContent = null; // TODO: need to separate HTML from text
 	protected ZDate dStart = null;
 	protected ZDate dEnd = null;
+	protected String dFolder = null;
 	
 	////
 	// GUI values
@@ -74,7 +75,11 @@ public class AppointmentItem implements IItem {
 			
 			// Create the object
 			appt = new AppointmentItem();
-						
+					
+			// Get the containing folder
+			String folder = m.getAttribute("l", null);
+			appt.setFolder(folder);
+			
 			Element sElement = ZimbraAccount.SoapClient.selectNode(m, "//mail:s");
 			if ( sElement != null ) {
 				
@@ -120,6 +125,29 @@ public class AppointmentItem implements IItem {
 		
 	}
 
+	/**
+	 * Get an AppointmentItem using start/end +/- 31 days
+	 * @param account
+	 * @param query
+	 * @return
+	 * @throws HarnessException
+	 */
+	public static AppointmentItem importFromSOAP(ZimbraAccount account, String query) throws HarnessException {
+		Calendar now = Calendar.getInstance();
+		ZDate date = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 12, 0, 0);
+		return (importFromSOAP(account, query, date.addDays(-31), date.addDays(31)));
+	}
+
+
+	/**
+	 * Get an AppointmentItem using soap
+	 * @param account
+	 * @param query
+	 * @param start
+	 * @param end
+	 * @return
+	 * @throws HarnessException
+	 */
 	public static AppointmentItem importFromSOAP(ZimbraAccount account, String query, ZDate start, ZDate end) throws HarnessException {
 		
 		try {
@@ -215,6 +243,14 @@ public class AppointmentItem implements IItem {
 		return (dContent);
 	}
 
+	public String getFolder() {
+		return (dFolder);
+	}
+	
+	public void setFolder(String id) {
+		dFolder = id;
+	}
+	
 	public void setStartTime(ZDate date) {
 		dStart = date;
 	}
