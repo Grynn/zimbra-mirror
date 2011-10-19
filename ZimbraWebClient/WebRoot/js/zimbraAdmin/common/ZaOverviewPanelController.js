@@ -1827,6 +1827,7 @@ ZaOverviewPanelController.prototype.addSubTabsToParentTreeItem = function(parent
                 subTabItem = new ZaTreeItemData({
                                     parent: parentPath,
                                     id: subTabItemId,
+                                    isShowHistory: false,
                                     text: subTabInfo.label,
                                     mappingId: mappingIdForAllSubTabs});
                 subTabItem.setData("tabValue", subTabInfo.value);

@@ -126,10 +126,11 @@ function(listener) {
 	return this._evtMgr.removeListener(ZaEvent.L_MODIFY, listener);
 }
 
-ZaHistory = function (path, displayName, type) {
+ZaHistory = function (path, displayName, type, isShowInHistory) {
     this.path = path;
     this.displayName = displayName;
     this.type = type;
+    this.isShowInHistory = (isShowInHistory === undefined) ? true: isShowInHistory;
 }
 
 ZaHistory.prototype.goToView =

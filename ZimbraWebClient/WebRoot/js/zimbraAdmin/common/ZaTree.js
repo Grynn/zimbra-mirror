@@ -380,6 +380,7 @@ function(item, ev) {
             currentDataItem.image = aliasImage;
         this._updateHistoryObj(currentDataItem);
     }
+    var isShowInHistory = currentDataItem.isShowHistory;
 	if (currentDataItem.isLeaf() && !isAlias) {
 		if (numSelectedItems > 0) {
 			for (i = 0; i < numSelectedItems; i++) {
@@ -391,7 +392,7 @@ function(item, ev) {
 		}
 		this._selectedItems.add(item);
 		if (item._setSelected(true)) {
-            this._updateHistory(item, true);
+            this._updateHistory(item, true, isShowInHistory);
 			this._notifyListeners(DwtEvent.SELECTION, [item], DwtTree.ITEM_SELECTED, ev, this._selEv);
 		}
 	} else {
@@ -413,9 +414,9 @@ function(item, ev) {
         this._selectedItems.add(selectedItem);
 		if (selectedItem._setSelected(true)) {
             if (!isAlias)
-                this._updateHistory(selectedItem, true);
+                this._updateHistory(selectedItem, true, isShowInHistory);
             else
-                this._updateHistory(item, true);
+                this._updateHistory(item, true, isShowInHistory);
 			this._notifyListeners(DwtEvent.SELECTION, [selectedItem], DwtTree.ITEM_SELECTED, ev, this._selEv);
 		}
     }
@@ -442,11 +443,11 @@ function(listener, items, detail, srcEv, destEv, kbNavEvent, refresh) {
 };
 
 ZaTree.prototype._updateHistory =
-function (treeItem, isAddHistory) {
+function (treeItem, isAddHistory, isShowInHistory) {
     var text = treeItem.getText();
     var dataItem = treeItem.getData("dataItem");
     var path = this.getABPath(dataItem);
-    var historyObject = new ZaHistory(path, text);
+    var historyObject = new ZaHistory(path, text, undefined, isShowInHistory);
     ZaZimbraAdmin.getInstance().updateHistory(historyObject, isAddHistory);
 }
 

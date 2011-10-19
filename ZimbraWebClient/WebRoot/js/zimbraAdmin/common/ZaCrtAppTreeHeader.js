@@ -162,6 +162,8 @@ ZaCrtAppTreeHeader.prototype.createMenu = function
     var allHistory = this._historyMgr.getAllHistory();
     for (i = 0; i < allHistory.size();i ++) {
         var currentHistory = allHistory.get(i);
+        if (!currentHistory.isShowInHistory)
+            continue;
         mi = new DwtMenuItem({
 		                parent: this.menu,
 		                style:		DwtMenuItem.NO_STYLE,
