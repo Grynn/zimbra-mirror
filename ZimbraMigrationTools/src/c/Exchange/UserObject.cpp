@@ -44,7 +44,7 @@ long CUserObject::UnInitialize()
     return 0;
 }
 
-STDMETHODIMP CUserObject::InitializeUser(BSTR host, BSTR admin, BSTR UserID, BSTR MailType)
+STDMETHODIMP CUserObject::InitializeUser(BSTR host, BSTR admin, BSTR UserID, BSTR MailType, BSTR* pErrorText)
 {
     HRESULT hr = S_OK; long retval = 0;
 
@@ -67,7 +67,12 @@ STDMETHODIMP CUserObject::InitializeUser(BSTR host, BSTR admin, BSTR UserID, BST
         // Specify user.
         maapi = new Zimbra::MAPI::MAPIAccessAPI(UserID);
         // Init session and stores
-        maapi->InitializeUser();
+        LPCWSTR lpStatus = maapi->InitializeUser();
+        *pErrorText = (lpStatus) ? CComBSTR(lpStatus) : SysAllocString(L"");
+    }
+    else
+    {
+        *pErrorText = SysAllocString(L"");
     }
     return hr;
 }

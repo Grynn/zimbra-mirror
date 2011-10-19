@@ -91,7 +91,7 @@ interface IItemObject : IDispatch{
 	pointer_default(unique)
 ]
 interface IUserObject : IDispatch{
-	[id(1)] HRESULT InitializeUser([in]BSTR mailserver,[in] BSTR adminid,[in] BSTR UserID,[in] BSTR MailType);
+	[id(1)] HRESULT InitializeUser([in]BSTR mailserver,[in] BSTR adminid,[in] BSTR UserID,[in] BSTR MailType, [out,retval] BSTR* pErrorText);
 	[id(2), helpstring("method to retreive folder objects")]
 			HRESULT  GetFolderObjects([out, retval] VARIANT* vObjects);
 			[id(3), helpstring("method to retreive Itsm for folder objects")]

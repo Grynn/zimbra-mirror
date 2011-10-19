@@ -55,7 +55,7 @@ public:
     void FinalRelease()
     {}
 public:
-    STDMETHOD(InitializeUser) (BSTR host, BSTR admin, BSTR UserID, BSTR MailType);
+    STDMETHOD(InitializeUser) (BSTR host, BSTR admin, BSTR UserID, BSTR MailType, BSTR* pErrorText);
     STDMETHOD(GetFolderObjects) ( /*[out, retval]*/ VARIANT * vObjects);
     STDMETHOD(GetItemsForFolderObjects) (IfolderObject * FolderObj, FolderType type,
         VARIANT creattiondate, VARIANT * vItems);

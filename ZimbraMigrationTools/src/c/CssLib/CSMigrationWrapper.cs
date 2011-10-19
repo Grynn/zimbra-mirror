@@ -276,7 +276,14 @@ public class CSMigrationwrapper
 
         if (!isPreview)
         {
-            userobject.InitializeUser("", "", Acct.AccountID, "MAPI");
+            string s = userobject.InitializeUser("", "", Acct.AccountID, "MAPI");
+            if (s.Length > 0)
+            {
+                Acct.LastProblemInfo = new ProblemInfo(s, "Error", ProblemInfo.TYPE_ERR);        
+                Acct.TotalNoErrors++;
+                return;
+            }
+
 
             // object[] objectArray;
             // objectArray = userobject.GetFolderObjects();
