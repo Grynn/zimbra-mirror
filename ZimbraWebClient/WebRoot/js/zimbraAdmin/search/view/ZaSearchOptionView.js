@@ -72,7 +72,7 @@ ZaSearchOptionView.prototype.constructor = ZaSearchOptionView ;
 ZaSearchOptionView.HEADER_HEIGHT = 28 ;
 ZaSearchOptionView.WIDTH = 200 ;
 ZaSearchOptionView.BASIC_OPTION_WIDTH = 200 ;
-ZaSearchOptionView.ADVANCED_OPTION_WIDTH = 290 ;
+ZaSearchOptionView.ADVANCED_OPTION_WIDTH = 320 ;
 ZaSearchOptionView.MARGIN = 0 ;
 ZaSearchOptionView.HEIGHT = 225 ;
 
