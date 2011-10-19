@@ -309,9 +309,45 @@ public class PageMyFiles extends AbsTab {
 	}
 
 	@Override
-	public AbsPage zListItem(Action action, String item)
+	public AbsPage zListItem(Action action, String itemName)
 			throws HarnessException {
-		throw new HarnessException("Implement me");
+		logger.info(myPageName() + " zListItem(" + action + ", " + itemName
+				+ ")");
+
+		tracer.trace("Click list item " + itemName);
+
+		// Validate the arguments
+		if (action == null) {
+			throw new HarnessException("Action cannot be null");
+		}
+
+		if (itemName == null)
+			throw new HarnessException("Item name cannot be null!");
+
+		// Default behavior variables
+		String listItemLocator = null; // If set, this will be expanded
+		AbsPage page = null; // If set, this page will be returned
+
+		// Based on action and the button specified, take the appropriate
+		// action(s)
+		if (action == Action.A_LEFTCLICK) {
+
+			listItemLocator = Locators.zMyFilesListViewItems.locator
+					+ ":contains(" + itemName + ")";
+
+			if (!this.zWaitForElementPresent(listItemLocator, "2000"))
+				throw new HarnessException("Item is not present locator="
+						+ listItemLocator);
+
+			zClick(listItemLocator);
+
+			// If the app is busy, wait for it to become active
+			zWaitForBusyOverlay();
+		} else {
+			logger.info("no logic defined for " + action);
+		}
+
+		return page;
 	}
 
 	@Override

@@ -353,6 +353,14 @@ public class PageOctopus extends AbsTab {
 				+ "</ItemActionRequest>");
 	}
 
+	public void moveItemUsingSOAP(String itemId, String targetId, ZimbraAccount account)
+			throws HarnessException {
+		account.soapSend("<ItemActionRequest xmlns='urn:zimbraMail'>"
+				+ "<action id='" + itemId + "' l='" + targetId + "' op='move'/>"
+				+ "</ItemActionRequest>");
+	}
+
+	
 	public void rename(String text) throws HarnessException {
 		// ClientSessionFactory.session().selenium().getEval("var x = selenium.browserbot.findElementOrNull(\""+Locators.zFrame.locator+"\");if(x!=null)x=x.contentWindow.document.body;if(browserVersion.isChrome){x.textContent='"+text+"';}else if(browserVersion.isIE){x.innerText='"+text+"';}");
 		logger.info("renaming to: " + text);

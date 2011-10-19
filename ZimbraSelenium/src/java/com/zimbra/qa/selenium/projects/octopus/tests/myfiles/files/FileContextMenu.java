@@ -89,7 +89,7 @@ public class FileContextMenu extends OctopusCommonTest {
 				.sIsElementPresent(Locators.zRenameItem.locator),
 				"Verify Sharing tab is present");
 
-		// Verify Favorite item is present
+		// Verify Delete item is present
 		ZAssert.assertTrue(app.zPageMyFiles
 				.sIsElementPresent(Locators.zDeleteItem.locator),
 				"Verify Sharing tab is present");

@@ -42,7 +42,7 @@ public class MoveFile extends AjaxCommonTest {
 
 		String name = "subFolder" + ZimbraSeleniumProperties.getUniqueString();
 
-		// Create a subfolder to move the message into i.e. Briefcase/subfolder
+		// Create a subfolder to move the file into i.e. Briefcase/subfolder
 		account.soapSend("<CreateFolderRequest xmlns='urn:zimbraMail'>"
 				+ "<folder name='" + name + "' l='" + briefcaseFolderId + "'/>"
 				+ "</CreateFolderRequest>");
