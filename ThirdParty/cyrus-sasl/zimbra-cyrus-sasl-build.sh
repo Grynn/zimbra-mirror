@@ -67,6 +67,7 @@ LIBS="/opt/zimbra/libxml2/lib/libxml2.a" CFLAGS="-D_REENTRANT -g -O2 -I/opt/zimb
             --with-gss_impl=heimdal \
             --enable-gssapi=/opt/zimbra/heimdal-${heimdal_version} \
             --with-libxml2=/opt/zimbra/libxml2-${xml2_version}/bin/xml2-config \
+            --with-configdir=/opt/zimbra/conf \
             --enable-login
 else 
 LIBS="/opt/zimbra/libxml2/lib/libxml2.a" CFLAGS="-D_REENTRANT -g -O2 -I/opt/zimbra/libxml2/include/libxml2" ./configure --enable-zimbra --prefix=/opt/zimbra/${cyrus_src} \
@@ -79,6 +80,7 @@ LIBS="/opt/zimbra/libxml2/lib/libxml2.a" CFLAGS="-D_REENTRANT -g -O2 -I/opt/zimb
             --enable-gssapi=/opt/zimbra/heimdal-${heimdal_version} \
             --with-libxml2=/opt/zimbra/libxml2-${xml2_version}/bin/xml2-config \
             --with-lib-subdir=lib \
+            --with-configdir=/opt/zimbra/conf \
             --enable-login
 fi
 if [ $platform = "Darwin" ]; then
