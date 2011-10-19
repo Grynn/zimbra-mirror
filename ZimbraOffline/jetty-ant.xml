@@ -49,7 +49,7 @@
 	</path>
 
 	<taskdef classpathref="jetty.plugin.classpath" resource="tasks.properties" loaderref="jetty.loader" />
-	<typedef name="selectChannelConnector" classname="org.mortbay.jetty.nio.SelectChannelConnector" classpathref="jetty.plugin.classpath" loaderref="jetty.loader" />
+	<typedef name="selectChannelConnector" classname="org.eclipse.jetty.server.nio.SelectChannelConnector" classpathref="jetty.plugin.classpath" loaderref="jetty.loader" />
 
 	<target name="jetty.run" depends="jetty.webinf">
 		<jetty tempDirectory="${project.outputDirectory}" jettyXml="jetty-ant-config.xml">

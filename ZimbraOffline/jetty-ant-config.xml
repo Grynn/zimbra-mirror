@@ -6,13 +6,13 @@
 <!-- =============================================================== -->
 
 
-<Configure id="Server" class="org.mortbay.jetty.Server">
+<Configure id="Server" class="org.eclipse.jetty.server.Server">
     
     <!-- =========================================================== -->
     <!-- Set handler Collection Structure                            --> 
     <!-- =========================================================== -->
     <Set name="handler">
-      <New id="Handlers" class="org.mortbay.jetty.handler.RewriteHandler">
+      <New id="Handlers" class="org.eclipse.jetty.server.handler.RewriteHandler">
         <Set name="rewriteRequestURI">true</Set>
         <Set name="rewritePathInfo">false</Set>
         <Set name="originalPathAttribute">requestedPath</Set>
@@ -31,17 +31,17 @@
         <Call name="addRewriteRule"><Arg>/zimlet/*</Arg><Arg></Arg></Call>
         <Call name="addRewriteRule"><Arg>/*</Arg><Arg>/zimbra</Arg></Call>
         <Set name="handler">
-          <New id="Handlers" class="org.mortbay.jetty.handler.HandlerCollection">
+          <New id="Handlers" class="org.eclipse.jetty.server.handler.HandlerCollection">
             <Set name="handlers">
-             <Array type="org.mortbay.jetty.Handler">
+             <Array type="org.eclipse.jetty.server.Handler">
                <Item>
-                 <New id="Contexts" class="org.mortbay.jetty.handler.ContextHandlerCollection"/>
+                 <New id="Contexts" class="org.eclipse.jetty.server.handler.ContextHandlerCollection"/>
                </Item>
                <Item>
-                 <New id="DefaultHandler" class="org.mortbay.jetty.handler.DefaultHandler"/>
+                 <New id="DefaultHandler" class="org.eclipse.jetty.server.handler.DefaultHandler"/>
                </Item>
                <Item>
-                 <New id="RequestLog" class="org.mortbay.jetty.handler.RequestLogHandler"/>
+                 <New id="RequestLog" class="org.eclipse.jetty.server.handler.RequestLogHandler"/>
                </Item>
              </Array>
             </Set>
@@ -52,7 +52,7 @@
 
     <Ref id="RequestLog">
       <Set name="requestLog">
-        <New id="RequestLogImpl" class="org.mortbay.jetty.NCSARequestLog">
+        <New id="RequestLogImpl" class="org.eclipse.jetty.server.NCSARequestLog">
           <Arg><SystemProperty name="jetty.home" default="/opt/zimbra/zdesktop dev/app/jetty"/>/logs/access_log.yyyy_mm_dd</Arg>
           <Set name="logDateFormat">dd/MMM/yyyy:HH:mm:ss Z</Set>
           <Set name="retainDays">30</Set>

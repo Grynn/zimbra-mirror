@@ -167,9 +167,12 @@ public final class SetHeaderFilter extends com.zimbra.cs.servlet.SetHeaderFilter
             isProdMode = getInitParameterBool("ProdMode", true);
 
         try {
-        Context initCtx = new InitialContext();
-        Context envCtx = (Context) initCtx.lookup("java:comp/env");
-        mailUrl = (String) envCtx.lookup("mailUrl");
+            Context initCtx = new InitialContext();
+            // for some reason jetty7 doesn't work with "java:comp/env",
+            // so just use the the env name to lookup. 
+            //Context envCtx = (Context) initCtx.lookup("java:comp/env");
+            //mailUrl = (String) envCtx.lookup("mailUrl");
+            mailUrl = (String) initCtx.lookup("mailUrl");
         } catch (NamingException ne) {
         ne.printStackTrace();
         }
@@ -359,18 +362,18 @@ public final class SetHeaderFilter extends com.zimbra.cs.servlet.SetHeaderFilter
          * setSecureCookies because jetty has already baked the session cookie.
          */
         ServletContext servletContext = config.getServletContext();
-        if (servletContext instanceof org.mortbay.jetty.handler.ContextHandler.SContext) {
-            org.mortbay.jetty.handler.ContextHandler.SContext sContext = (org.mortbay.jetty.handler.ContextHandler.SContext)servletContext;
+        if (servletContext instanceof org.eclipse.jetty.servlet.ServletContextHandler.Context) {
+        	org.eclipse.jetty.servlet.ServletContextHandler.Context sContext = (org.eclipse.jetty.servlet.ServletContextHandler.Context)servletContext;
 
             // get the WebAppContext
-            org.mortbay.jetty.handler.ContextHandler contextHandler = sContext.getContextHandler();
-            if (contextHandler instanceof org.mortbay.jetty.servlet.Context) {
-                org.mortbay.jetty.servlet.Context context= (org.mortbay.jetty.servlet.Context)contextHandler;
+            org.eclipse.jetty.server.handler.ContextHandler contextHandler = sContext.getContextHandler();
+            if (contextHandler instanceof org.eclipse.jetty.servlet.ServletContextHandler) {
+            	org.eclipse.jetty.servlet.ServletContextHandler context= (org.eclipse.jetty.servlet.ServletContextHandler)contextHandler;
 
                 // get SessionManager
-                org.mortbay.jetty.SessionManager sessionManager = context.getSessionHandler().getSessionManager();
-                if (sessionManager instanceof org.mortbay.jetty.servlet.AbstractSessionManager) {
-                    org.mortbay.jetty.servlet.AbstractSessionManager asm = (org.mortbay.jetty.servlet.AbstractSessionManager)sessionManager;
+                org.eclipse.jetty.server.SessionManager sessionManager = context.getSessionHandler().getSessionManager();
+                if (sessionManager instanceof org.eclipse.jetty.server.session.AbstractSessionManager) {
+                    org.eclipse.jetty.server.session.AbstractSessionManager asm = (org.eclipse.jetty.server.session.AbstractSessionManager)sessionManager;
                     asm.setSecureCookies(true);
                 }
             }

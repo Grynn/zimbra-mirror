@@ -84,7 +84,6 @@
   <classpathentry kind="lib" path="/ZimbraCommon/jars/lucene-core-3.4.0.jar"/>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/lucene-analyzers-3.4.0.jar"/>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/mina-core-2.0.4.jar"/>
-  <classpathentry kind="lib" path="/ZimbraCommon/jars/jetty-util-6.1.22.z6.jar"/>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/guava-10.0.1.jar" sourcepath="/ZimbraCommon/jars-src/guava-10.0.1-sources.jar">
     <attributes>
       <attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/guava-10.0.1-javadoc.jar!/"/>
@@ -97,7 +96,6 @@
   </classpathentry>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/icu4j-4.8.1.1.jar"/>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/ews.jar" sourcepath="/ZimbraCommon/jars-src/ews.zip"/>
-  <classpathentry kind="lib" path="/ZimbraCommon/jars/jetty-6.1.22.z6.jar"/>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/cassandra-0.7.5.jar"/>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/libthrift-0.5.jar"/>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/hector-core-0.7.0-29.jar"/>
@@ -125,5 +123,12 @@
       <attribute name="javadoc_location" value="http://kentbeck.github.com/junit/javadoc/latest/"/>
     </attributes>
   </classpathentry>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/jetty-util-7.5.2-SNAPSHOT.jar"/>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/jetty-io-7.5.2-SNAPSHOT.jar"/>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/jetty-server-7.5.2-SNAPSHOT.jar"/>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/jetty-security-7.5.2-SNAPSHOT.jar"/>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/jetty-http-7.5.2-SNAPSHOT.jar"/>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/jetty-continuation-7.5.2-SNAPSHOT.jar"/>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/jetty-servlet-7.5.2-SNAPSHOT.jar"/>
   <classpathentry kind="output" path="build/classes"/>
 </classpath>

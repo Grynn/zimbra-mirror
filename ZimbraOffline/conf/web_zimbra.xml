@@ -6,7 +6,7 @@
 	version="2.4">
 
     <context-param>
-      <param-name>org.mortbay.jetty.servlet.SessionPath</param-name>
+      <param-name>org.eclipse.jetty.servlet.SessionPath</param-name>
       <param-value>/</param-value>
     </context-param>
 

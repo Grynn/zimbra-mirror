@@ -99,8 +99,7 @@
       <attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/commons-cli-1.2-javadoc.zip!/"/>
     </attributes>
   </classpathentry>
-  <classpathentry kind="lib" path="jars/jetty-6.1.22.z6.jar"/>
-  <classpathentry kind="lib" path="jars/jetty-rewrite-handler-6.1.22.z6.jar" sourcepath="/Users/pshao/dev/svn/jetty-6.1.22-z6/contrib/jetty-rewrite-handler/src/main/java"/>
-  <classpathentry kind="lib" path="jars/jetty-util-6.1.22.z6.jar"/>
+  <classpathentry kind="lib" path="jars/jetty-util-7.5.2-SNAPSHOT.jar"/>
+  <classpathentry kind="lib" path="jars/jetty-rewrite-7.5.2-SNAPSHOT.jar"/>
   <classpathentry kind="output" path="build/classes"/>
 </classpath>

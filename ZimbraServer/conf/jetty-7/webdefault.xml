@@ -50,13 +50,6 @@
   </context-param>
   -->
 
-  <context-param>
-    <param-name>org.eclipse.jetty.webapp.NoTLDJarPattern</param-name>
-    <param-value>start.jar|ant-.*\.jar|dojo-.*\.jar|jetty-.*\.jar|jsp-api-.*\.jar|junit-.*\.jar|servlet-api-.*\.jar|dnsns\.jar|rt\.jar|jsse\.jar|tools\.jar|sunpkcs11\.jar|sunjce_provider\.jar|xerces.*\.jar</param-value>
-  </context-param>
-            
-
-
   <!-- ==================================================================== -->
   <!-- The default servlet.                                                 -->
   <!-- This servlet, normally mapped to /, provides the handling for static -->
@@ -123,15 +116,15 @@
     </init-param>
     <init-param>
       <param-name>maxCacheSize</param-name>
-      <param-value>300000</param-value>
+      <param-value>4000000</param-value>
     </init-param>
     <init-param>
       <param-name>maxCachedFileSize</param-name>
-      <param-value>200000</param-value>
+      <param-value>254000</param-value>
     </init-param>
     <init-param>
       <param-name>maxCachedFiles</param-name>
-      <param-value>300</param-value>
+      <param-value>1000</param-value>
     </init-param>
     <init-param>
       <param-name>cacheType</param-name>
@@ -139,7 +132,7 @@
     </init-param>
     <init-param>
       <param-name>gzip</param-name>
-      <param-value>false</param-value>
+      <param-value>true</param-value>
     </init-param>
     <init-param>
       <param-name>useFileMappedBuffer</param-name>
@@ -246,48 +239,16 @@
     <servlet-name>jsp</servlet-name>
     <servlet-class>org.apache.jasper.servlet.JspServlet</servlet-class>
     <init-param>
-        <param-name>checkInterval</param-name>
-        <param-value>3600</param-value>
-    </init-param>
-    <init-param>
-        <param-name>classdebuginfo</param-name>
-        <param-value>@development@</param-value>
-    </init-param>
-    <init-param>
-        <param-name>development</param-name>
-        <param-value>@development@</param-value>
-    </init-param>
-    <init-param>
         <param-name>fork</param-name>
         <param-value>false</param-value>
     </init-param>
     <init-param>
-        <param-name>keepgenerated</param-name>
-        <param-value>@development@</param-value>
-    </init-param>
-    <init-param>
-        <param-name>mappedFile</param-name>
-        <param-value>@development@</param-value>
-    </init-param>
-    <init-param>
-        <param-name>reloading</param-name>
-        <param-value>@development@</param-value>
-    </init-param>
-    <init-param>
-        <param-name>suppressSmap</param-name>
-        <param-value>@production@</param-value>
-    </init-param>
-    <init-param>
-        <param-name>tagpoolMaxSize</param-name>
-        <param-value>3</param-value>
+        <param-name>xpoweredBy</param-name>
+        <param-value>false</param-value>
     </init-param>
     <init-param>
         <param-name>trimSpaces</param-name>
         <param-value>true</param-value>
-    </init-param>
-    <init-param>
-        <param-name>xpoweredBy</param-name>
-        <param-value>false</param-value>
     </init-param>
     <!--  
     <init-param>
@@ -413,6 +374,10 @@
   <mime-mapping>
       <extension>m3u</extension>
       <mime-type>audio/x-mpegurl</mime-type>
+  </mime-mapping>
+  <mime-mapping>
+      <extension>manifest</extension>
+      <mime-type>text/cache-manifest</mime-type>
   </mime-mapping>
   <mime-mapping>
       <extension>mp1</extension>

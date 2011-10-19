@@ -726,8 +726,12 @@ public class BeanUtils {
 
     static {
          try {
-            Context sInitCtxt = new InitialContext();
-            sEnvCtxt = (Context) sInitCtxt.lookup("java:comp/env");
+            // for some reason jetty7 doesn't work with "java:comp/env",
+            // so just use the the env name to lookup. 
+            //Context sInitCtxt = new InitialContext();
+            //sEnvCtxt = (Context) sInitCtxt.lookup("java:comp/env");
+             
+            sEnvCtxt = new InitialContext();
         } catch (NamingException e) {
              /* ignore */
         }
