@@ -51,6 +51,7 @@ build:
 	patch -g0 -p1 < ../patches/sasl-auth-zimbra.patch; \
 	patch -g0 -p1 < ../patches/heimdal-build.patch; \
 	patch -g0 -p1 < ../patches/gssapi.patch; \
+	patch -g0 -p1 < ../patches/saslauthd-conf.patch; \
 	$(PATCH))
 	_S_='~' ./zimbra-cyrus-sasl-build.sh ${BSTR}
 	(cd cyrus-sasl-$(CYRUS_VERSION); $(MAKE) install)

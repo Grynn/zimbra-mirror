@@ -56,7 +56,7 @@ cd ..
 
 sed -i.bak 's/-lRSAglue //' configure
 if [ $platform = "Darwin" ]; then
-LIBS="/opt/zimbra/libxml2/lib/libxml2.a" CFLAGS="-DSASLAUTHD_CONF_FILE_DEFAULT=/opt/zimbra/conf -D_REENTRANT -g -O2 -I/opt/zimbra/libxml2/include/libxml2" ./configure --enable-zimbra --prefix=/opt/zimbra/${cyrus_src} \
+LIBS="/opt/zimbra/libxml2/lib/libxml2.a" CFLAGS="-D_REENTRANT -g -O2 -I/opt/zimbra/libxml2/include/libxml2" ./configure --enable-zimbra --prefix=/opt/zimbra/${cyrus_src} \
             --with-saslauthd=/opt/zimbra/${cyrus_src}/state \
             --with-plugindir=/opt/zimbra/${cyrus_src}/lib/sasl2 \
             --enable-static=no \
@@ -70,7 +70,7 @@ LIBS="/opt/zimbra/libxml2/lib/libxml2.a" CFLAGS="-DSASLAUTHD_CONF_FILE_DEFAULT=/
             --with-configdir=/opt/zimbra/conf \
             --enable-login
 else 
-LIBS="/opt/zimbra/libxml2/lib/libxml2.a" CFLAGS="-DSASLAUTHD_CONF_FILE_DEFAULT=/opt/zimbra/conf -D_REENTRANT -g -O2 -I/opt/zimbra/libxml2/include/libxml2" ./configure --enable-zimbra --prefix=/opt/zimbra/${cyrus_src} \
+LIBS="/opt/zimbra/libxml2/lib/libxml2.a" CFLAGS="-D_REENTRANT -g -O2 -I/opt/zimbra/libxml2/include/libxml2" ./configure --enable-zimbra --prefix=/opt/zimbra/${cyrus_src} \
             --with-saslauthd=/opt/zimbra/${cyrus_src}/state \
             --with-plugindir=/opt/zimbra/${cyrus_src}/lib/sasl2 \
             --with-dblib=no \
