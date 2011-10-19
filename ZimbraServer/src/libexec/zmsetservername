@@ -22,6 +22,7 @@ use Net::LDAP::LDIF;
 use Getopt::Long;
 use File::Basename;
 
+
 my (%c,%loaded,%saved,$rc);
 my ($oldServerName, $newServerName, $help, $verbose, $force, $delete, $skipusers, $usersonly);
 
@@ -46,7 +47,7 @@ GetOptions("help" => \$help,
 
 $c{zmlocalconfig}="/opt/zimbra/bin/zmlocalconfig";
 $c{zimbra_home} = getLocalConfig("zimbra_home");
-$c{zmprov}="$c{zimbra_home}/bin/zmprov -l --";
+$c{zmprov}="$c{zimbra_home}/bin/zmprov -l -m --";
 $c{zmcertmgr}="$c{zimbra_home}/bin/zmcertmgr";
 
 if ($usersonly && !$oldServerName) {
@@ -60,7 +61,6 @@ if ($oldServerName) {
   $c{zimbra_server_hostname} = getLocalConfig("zimbra_server_hostname");
 }
 
-$c{ldap_is_master} = getLocalConfig("ldap_is_master");
 
 if ($c{zimbra_server_hostname} eq $newServerName) {
   print "Hostname is already $newServerName.\n";
@@ -88,9 +88,17 @@ if (!$force) {
 $c{zimbra_ldap_userdn} = getLocalConfig("zimbra_ldap_userdn");
 $c{zimbra_ldap_password} = getLocalConfig("zimbra_ldap_password");
 $c{ldap_is_master} = getLocalConfig("ldap_is_master");
+$c{ldap_url} = getLocalConfig("ldap_url");
 $c{ldap_master_url} = getLocalConfig("ldap_master_url");
 $c{ldap_starttls_supported} = getLocalConfig("ldap_starttls_supported");
-$c{zimbra_log_host} = getLdapGlobalConfig("zimbraLogHostname");
+
+&startLdap if (lc($c{ldap_is_master}) eq "true");
+$c{zimbra_log_host} = getLdapGlobalConfig("zimbraLogHostname") if ($delete);
+
+if ($delete && $c{zimbra_log_host} eq "") {
+  print "Unabled to determine zimbra_log_host to delete.\n";
+  exit 1;
+}
 
 # ***** Main *****
 
@@ -111,16 +119,7 @@ if (!$usersonly) {
   updateLocalConfig("smtp_destination");
   updateLocalConfig("zimbra_server_hostname");
 
-  if (lc($c{ldap_is_master}) eq "true") {
-    print "Starting ldap...";
-    $rc = runCommand("$c{zimbra_home}/bin/ldap start");
-    if ($rc==0) {
-      print "done.\n";
-    } else {
-      print "failed.\n";
-      exit 1;
-    }
-  }
+  &startLdap if (lc($c{ldap_is_master}) eq "true");
 
   $c{zimbraServiceEnabled} = getLdapServerConfig("zimbraServiceEnabled");
 
@@ -659,7 +658,10 @@ sub getLdapGlobalConfig($) {
     if (exists $loaded{gcf}{$key});
 
   print "Getting global config $key=";
-  open(ZMPROV, "$c{zmprov} gcf $key|");
+  unless (open(ZMPROV, "$c{zmprov} gcf $key 2> /dev/null|")) {
+    print "Failed to get global config key $key.\n";
+    return;
+  }
   my @CONFIG = <ZMPROV>;
   close(ZMPROV);
 
@@ -686,3 +688,24 @@ sub runCommand {
   return $rc;
 }
 
+sub isLdapRunning {
+  if (index($c{ldap_url}, "/".$c{zimbra_server_hostname}) != -1) {
+    my $isrunning = 0xffff & system("$c{zimbra_home}/bin/ldap status > /dev/null 2>&1");
+    return ($isrunning)?0:1;
+  } 
+}
+
+sub startLdap {
+  print "Starting ldap...";
+  if (&isLdapRunning) {
+    print "already running.\n";
+    return;
+  }
+  $rc = runCommand("$c{zimbra_home}/bin/ldap start");
+  if ($rc==0) {
+    print "done.\n";
+  } else {
+    print "failed.\n";
+    exit 1;
+  }
+}
