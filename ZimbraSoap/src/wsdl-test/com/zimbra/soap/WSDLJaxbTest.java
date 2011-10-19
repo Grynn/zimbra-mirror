@@ -39,11 +39,11 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.w3c.dom.Node;
 
-import zimbra.generated.mailclient.mail.testActionSelector;
-import zimbra.generated.mailclient.mail.testContactActionSelector;
-import zimbra.generated.mailclient.mail.testConvActionRequest;
-import zimbra.generated.mailclient.mail.testFolderActionSelector;
-import zimbra.generated.mailclient.mail.testNoteActionSelector;
+import generated.zcsclient.mail.testActionSelector;
+import generated.zcsclient.mail.testContactActionSelector;
+import generated.zcsclient.mail.testConvActionRequest;
+import generated.zcsclient.mail.testFolderActionSelector;
+import generated.zcsclient.mail.testNoteActionSelector;
 
 /**
  * Unit test for {@link GetInfoResponse} which exercises

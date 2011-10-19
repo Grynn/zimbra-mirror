@@ -25,22 +25,22 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.zimbra.soap.Utility;
-import zimbra.generated.accountclient.account.testAttr;
-import zimbra.generated.accountclient.account.testCreateIdentityRequest;
-import zimbra.generated.accountclient.account.testCreateIdentityResponse;
-import zimbra.generated.accountclient.account.testDeleteIdentityRequest;
-import zimbra.generated.accountclient.account.testDeleteIdentityResponse;
-import zimbra.generated.accountclient.account.testGetIdentitiesRequest;
-import zimbra.generated.accountclient.account.testGetIdentitiesResponse;
-import zimbra.generated.accountclient.account.testIdentity;
-import zimbra.generated.accountclient.account.testModifyIdentityRequest;
-import zimbra.generated.accountclient.account.testModifyIdentityResponse;
-import zimbra.generated.accountclient.account.testNameId;
-import zimbra.generated.accountclient.ws.service.AccountService;
+import generated.zcsclient.account.testAttr;
+import generated.zcsclient.account.testCreateIdentityRequest;
+import generated.zcsclient.account.testCreateIdentityResponse;
+import generated.zcsclient.account.testDeleteIdentityRequest;
+import generated.zcsclient.account.testDeleteIdentityResponse;
+import generated.zcsclient.account.testGetIdentitiesRequest;
+import generated.zcsclient.account.testGetIdentitiesResponse;
+import generated.zcsclient.account.testIdentity;
+import generated.zcsclient.account.testModifyIdentityRequest;
+import generated.zcsclient.account.testModifyIdentityResponse;
+import generated.zcsclient.account.testNameId;
+import generated.zcsclient.ws.service.ZcsPortType;
 
 public class WSDLIdentitiesTest {
 
-    private static AccountService acctSvcEIF;
+    private static ZcsPortType acctSvcEIF;
 
     private final static String testAcctDomain = "wsdl.acct.domain.example.test";
     private final static String testAcct = "wsdl1@" + testAcctDomain;
@@ -50,7 +50,7 @@ public class WSDLIdentitiesTest {
     @BeforeClass
     public static void init() throws Exception {
         Utility.setUpToAcceptAllHttpsServerCerts();
-        acctSvcEIF = Utility.getAcctSvcEIF();
+        acctSvcEIF = Utility.getZcsSvcEIF();
         oneTimeTearDown();
     }
 

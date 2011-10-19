@@ -21,21 +21,21 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.zimbra.soap.Utility;
-import zimbra.generated.accountclient.account.testGetPrefsRequest;
-import zimbra.generated.accountclient.account.testGetPrefsResponse;
-import zimbra.generated.accountclient.account.testPref;
-import zimbra.generated.accountclient.ws.service.AccountService;
+import generated.zcsclient.account.testGetPrefsRequest;
+import generated.zcsclient.account.testGetPrefsResponse;
+import generated.zcsclient.account.testPref;
+import generated.zcsclient.ws.service.ZcsPortType;
 
 /**
  * Current assumption : user1 exists with password test123
  */
 public class WSDLGetPrefsTest {
 
-    private static AccountService acctSvcEIF;
+    private static ZcsPortType acctSvcEIF;
 
     @BeforeClass
     public static void init() throws Exception {
-        acctSvcEIF = Utility.getAcctSvcEIF();
+        acctSvcEIF = Utility.getZcsSvcEIF();
     }
 
     @Test

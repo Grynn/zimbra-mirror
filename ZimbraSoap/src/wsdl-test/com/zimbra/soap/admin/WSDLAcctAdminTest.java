@@ -18,9 +18,9 @@ import java.util.List;
 
 import com.sun.xml.ws.developer.WSBindingProvider;
 
-import zimbra.generated.adminclient.admin.*;
-import zimbra.generated.adminclient.ws.service.*;
-import zimbra.generated.adminclient.zm.*;
+import generated.zcsclient.admin.*;
+import generated.zcsclient.ws.service.ZcsAdminPortType;
+import generated.zcsclient.zm.*;
 
 import com.zimbra.soap.Utility;
 
@@ -33,13 +33,10 @@ import org.junit.Test;
 
 public class WSDLAcctAdminTest {
 
-    // The AdminService interface is the Java type bound to
-    // the portType section of the WSDL document.
-    private final static String testAcctDomain =
-            "wsdl.acct.domain.example.test";
+    private final static String testAcctDomain = "wsdl.acct.domain.example.test";
     private final static String testAcct = "wsdl1@" + testAcctDomain;
     private final static String testCos = "wsdl.cos.example.test";
-    private static AdminService eif = null;
+    private static ZcsAdminPortType eif = null;
 
     @BeforeClass
     public static void init() throws Exception {

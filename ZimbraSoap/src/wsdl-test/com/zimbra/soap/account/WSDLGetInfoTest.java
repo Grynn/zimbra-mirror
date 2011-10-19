@@ -13,7 +13,6 @@
  * ***** END LICENSE BLOCK *****
  */
 package com.zimbra.soap.account;
-import java.util.List;
 
 import com.sun.xml.ws.developer.WSBindingProvider;
 import org.junit.Assert;
@@ -27,12 +26,12 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.apache.log4j.Level;
 
-import zimbra.generated.accountclient.account.testAccountZimletDesc;
-import zimbra.generated.accountclient.account.testAccountZimletInfo;
-import zimbra.generated.accountclient.account.testGetInfoRequest;
-import zimbra.generated.accountclient.account.testGetInfoResponse;
-import zimbra.generated.accountclient.account.testGetInfoResponse.Zimlets;
-import zimbra.generated.accountclient.ws.service.AccountService;
+import generated.zcsclient.account.testAccountZimletDesc;
+import generated.zcsclient.account.testAccountZimletInfo;
+import generated.zcsclient.account.testGetInfoRequest;
+import generated.zcsclient.account.testGetInfoResponse;
+import generated.zcsclient.account.testGetInfoResponse.Zimlets;
+import generated.zcsclient.ws.service.ZcsPortType;
 
 /**
  * Current assumption : user1 exists with password test123
@@ -47,14 +46,14 @@ public class WSDLGetInfoTest {
         LOG.setLevel(Level.INFO);
     }
 
-    private static AccountService acctSvcEIF;
+    private static ZcsPortType acctSvcEIF;
 
     @BeforeClass
     public static void init() throws Exception {
         // if use validation - get issue processing handlerObject which should be caught by
         // an XmlAnyElement in AccountZimletDesc
-        acctSvcEIF = Utility.getNonValidatingAcctSvcEIF();
-        // acctSvcEIF = Utility.getAcctSvcEIF();
+        acctSvcEIF = Utility.getNonValidatingZcsSvcEIF();
+        // acctSvcEIF = Utility.getZcsSvcEIF();
     }
 
     @Test

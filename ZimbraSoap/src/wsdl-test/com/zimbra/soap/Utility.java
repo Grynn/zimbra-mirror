@@ -28,73 +28,74 @@ import com.sun.xml.ws.developer.SchemaValidationFeature;
 import com.sun.xml.ws.developer.WSBindingProvider;
 import com.sun.xml.bind.api.JAXBRIContext;
 
-import zimbra.generated.accountclient.account.testAccount;
-import zimbra.generated.accountclient.account.testAuthRequest;
-import zimbra.generated.accountclient.account.testAuthResponse;
-import zimbra.generated.accountclient.account.testBy;
-import zimbra.generated.accountclient.ws.service.*;
-import zimbra.generated.adminclient.admin.testAccountInfo;
-import zimbra.generated.adminclient.admin.testAttr;
-import zimbra.generated.adminclient.admin.testCalendarResourceBy;
-import zimbra.generated.adminclient.admin.testCalendarResourceInfo;
-import zimbra.generated.adminclient.admin.testCalendarResourceSelector;
-import zimbra.generated.adminclient.admin.testCosBy;
-import zimbra.generated.adminclient.admin.testCosInfo;
-import zimbra.generated.adminclient.admin.testCosSelector;
-import zimbra.generated.adminclient.admin.testCreateAccountRequest;
-import zimbra.generated.adminclient.admin.testCreateAccountResponse;
-import zimbra.generated.adminclient.admin.testCreateCalendarResourceRequest;
-import zimbra.generated.adminclient.admin.testCreateCalendarResourceResponse;
-import zimbra.generated.adminclient.admin.testCreateCosRequest;
-import zimbra.generated.adminclient.admin.testCreateCosResponse;
-import zimbra.generated.adminclient.admin.testCreateDistributionListRequest;
-import zimbra.generated.adminclient.admin.testCreateDistributionListResponse;
-import zimbra.generated.adminclient.admin.testCreateDomainRequest;
-import zimbra.generated.adminclient.admin.testCreateDomainResponse;
-import zimbra.generated.adminclient.admin.testCreateServerRequest;
-import zimbra.generated.adminclient.admin.testCreateServerResponse;
-import zimbra.generated.adminclient.admin.testCreateVolumeRequest;
-import zimbra.generated.adminclient.admin.testCreateVolumeResponse;
-import zimbra.generated.adminclient.admin.testDeleteAccountRequest;
-import zimbra.generated.adminclient.admin.testDeleteAccountResponse;
-import zimbra.generated.adminclient.admin.testDeleteCalendarResourceRequest;
-import zimbra.generated.adminclient.admin.testDeleteCalendarResourceResponse;
-import zimbra.generated.adminclient.admin.testDeleteCosRequest;
-import zimbra.generated.adminclient.admin.testDeleteCosResponse;
-import zimbra.generated.adminclient.admin.testDeleteDistributionListRequest;
-import zimbra.generated.adminclient.admin.testDeleteDomainRequest;
-import zimbra.generated.adminclient.admin.testDeleteServerRequest;
-import zimbra.generated.adminclient.admin.testDeleteVolumeRequest;
-import zimbra.generated.adminclient.admin.testDistributionListBy;
-import zimbra.generated.adminclient.admin.testDistributionListInfo;
-import zimbra.generated.adminclient.admin.testDistributionListSelector;
-import zimbra.generated.adminclient.admin.testDomainBy;
-import zimbra.generated.adminclient.admin.testDomainInfo;
-import zimbra.generated.adminclient.admin.testDomainSelector;
-import zimbra.generated.adminclient.admin.testGetAccountRequest;
-import zimbra.generated.adminclient.admin.testGetAccountResponse;
-import zimbra.generated.adminclient.admin.testGetAllVolumesRequest;
-import zimbra.generated.adminclient.admin.testGetAllVolumesResponse;
-import zimbra.generated.adminclient.admin.testGetCalendarResourceRequest;
-import zimbra.generated.adminclient.admin.testGetCalendarResourceResponse;
-import zimbra.generated.adminclient.admin.testGetCosRequest;
-import zimbra.generated.adminclient.admin.testGetCosResponse;
-import zimbra.generated.adminclient.admin.testGetDistributionListRequest;
-import zimbra.generated.adminclient.admin.testGetDistributionListResponse;
-import zimbra.generated.adminclient.admin.testGetDomainInfoRequest;
-import zimbra.generated.adminclient.admin.testGetDomainInfoResponse;
-import zimbra.generated.adminclient.admin.testGetDomainRequest;
-import zimbra.generated.adminclient.admin.testGetDomainResponse;
-import zimbra.generated.adminclient.admin.testGetServerRequest;
-import zimbra.generated.adminclient.admin.testGetServerResponse;
-import zimbra.generated.adminclient.admin.testServerBy;
-import zimbra.generated.adminclient.admin.testServerInfo;
-import zimbra.generated.adminclient.admin.testServerSelector;
-import zimbra.generated.adminclient.admin.testVolumeInfo;
-import zimbra.generated.adminclient.ws.service.*;
-import zimbra.generated.adminclient.zm.testAccountBy;
-import zimbra.generated.adminclient.zm.testAccountSelector;
-import zimbra.generated.mailclient.ws.service.*;
+import generated.zcsclient.account.testAccount;
+import generated.zcsclient.account.testAuthRequest;
+import generated.zcsclient.account.testAuthResponse;
+import generated.zcsclient.account.testBy;
+import generated.zcsclient.admin.testAccountInfo;
+import generated.zcsclient.admin.testAttr;
+import generated.zcsclient.admin.testCalendarResourceBy;
+import generated.zcsclient.admin.testCalendarResourceInfo;
+import generated.zcsclient.admin.testCalendarResourceSelector;
+import generated.zcsclient.admin.testCosBy;
+import generated.zcsclient.admin.testCosInfo;
+import generated.zcsclient.admin.testCosSelector;
+import generated.zcsclient.admin.testCreateAccountRequest;
+import generated.zcsclient.admin.testCreateAccountResponse;
+import generated.zcsclient.admin.testCreateCalendarResourceRequest;
+import generated.zcsclient.admin.testCreateCalendarResourceResponse;
+import generated.zcsclient.admin.testCreateCosRequest;
+import generated.zcsclient.admin.testCreateCosResponse;
+import generated.zcsclient.admin.testCreateDistributionListRequest;
+import generated.zcsclient.admin.testCreateDistributionListResponse;
+import generated.zcsclient.admin.testCreateDomainRequest;
+import generated.zcsclient.admin.testCreateDomainResponse;
+import generated.zcsclient.admin.testCreateServerRequest;
+import generated.zcsclient.admin.testCreateServerResponse;
+import generated.zcsclient.admin.testCreateVolumeRequest;
+import generated.zcsclient.admin.testCreateVolumeResponse;
+import generated.zcsclient.admin.testDeleteAccountRequest;
+import generated.zcsclient.admin.testDeleteAccountResponse;
+import generated.zcsclient.admin.testDeleteCalendarResourceRequest;
+import generated.zcsclient.admin.testDeleteCalendarResourceResponse;
+import generated.zcsclient.admin.testDeleteCosRequest;
+import generated.zcsclient.admin.testDeleteCosResponse;
+import generated.zcsclient.admin.testDeleteDistributionListRequest;
+import generated.zcsclient.admin.testDeleteDomainRequest;
+import generated.zcsclient.admin.testDeleteServerRequest;
+import generated.zcsclient.admin.testDeleteVolumeRequest;
+import generated.zcsclient.admin.testDistributionListBy;
+import generated.zcsclient.admin.testDistributionListInfo;
+import generated.zcsclient.admin.testDistributionListSelector;
+import generated.zcsclient.admin.testDomainBy;
+import generated.zcsclient.admin.testDomainInfo;
+import generated.zcsclient.admin.testDomainSelector;
+import generated.zcsclient.admin.testGetAccountRequest;
+import generated.zcsclient.admin.testGetAccountResponse;
+import generated.zcsclient.admin.testGetAllVolumesRequest;
+import generated.zcsclient.admin.testGetAllVolumesResponse;
+import generated.zcsclient.admin.testGetCalendarResourceRequest;
+import generated.zcsclient.admin.testGetCalendarResourceResponse;
+import generated.zcsclient.admin.testGetCosRequest;
+import generated.zcsclient.admin.testGetCosResponse;
+import generated.zcsclient.admin.testGetDistributionListRequest;
+import generated.zcsclient.admin.testGetDistributionListResponse;
+import generated.zcsclient.admin.testGetDomainInfoRequest;
+import generated.zcsclient.admin.testGetDomainInfoResponse;
+import generated.zcsclient.admin.testGetDomainRequest;
+import generated.zcsclient.admin.testGetDomainResponse;
+import generated.zcsclient.admin.testGetServerRequest;
+import generated.zcsclient.admin.testGetServerResponse;
+import generated.zcsclient.admin.testServerBy;
+import generated.zcsclient.admin.testServerInfo;
+import generated.zcsclient.admin.testServerSelector;
+import generated.zcsclient.admin.testVolumeInfo;
+import generated.zcsclient.ws.service.ZcsAdminPortType;
+import generated.zcsclient.ws.service.ZcsAdminService;
+import generated.zcsclient.ws.service.ZcsPortType;
+import generated.zcsclient.ws.service.ZcsService;
+import generated.zcsclient.zm.testAccountBy;
+import generated.zcsclient.zm.testAccountSelector;
 
 import org.junit.Assert;
 
@@ -103,12 +104,10 @@ import org.junit.Assert;
  */
 public class Utility {
     private static final String DEFAULT_PASS = "test123";
-    private static AccountService acctSvcEIF = null;
-    private static AccountService nvAcctSvcEIF = null;
-    private static AdminService adminSvcEIF = null;
-    private static AdminService nvAdminSvcEIF = null;
-    private static MailService mailSvcEIF = null;
-    private static MailService nvMailSvcEIF = null;
+    private static ZcsPortType zcsSvcEIF = null;
+    private static ZcsPortType nvZcsSvcEIF = null;
+    private static ZcsAdminPortType adminSvcEIF = null;
+    private static ZcsAdminPortType nvAdminSvcEIF = null;
     private static String adminAuthToken = null;
     private static Map<String,String> acctAuthToks = Maps.newHashMap();
 
@@ -159,7 +158,7 @@ public class Utility {
     public static String getAccountServiceAuthToken(
                     String acctName, String password)
     throws Exception {
-        Utility.getAcctSvcEIF();
+        Utility.getZcsSvcEIF();
         testAuthRequest authReq = new testAuthRequest();
         testAccount acct = new testAccount();
         acct.setBy(testBy.NAME);
@@ -169,32 +168,61 @@ public class Utility {
         authReq.setPreauth(null);
         authReq.setAuthToken(null);
         // Invoke the methods.
-        testAuthResponse authResponse = getAcctSvcEIF().authRequest(authReq);
+        testAuthResponse authResponse = getZcsSvcEIF().authRequest(authReq);
         Assert.assertNotNull(authResponse);
         return authResponse.getAuthToken();
     }
 
-    private static void setAcctSvcEIF(AccountService acctSvcEIF) {
-        Utility.acctSvcEIF = acctSvcEIF;
+    private static void setZcsSvcEIF(ZcsPortType svcEIF) {
+        Utility.zcsSvcEIF = svcEIF;
     }
 
-    public static AccountService getAcctSvcEIF() throws Exception {
-        if (acctSvcEIF == null) {
-            // The AccountService_Service class is the Java type bound to
-            // the service section of the WSDL document.
-            AccountService_Service acctSvc = new AccountService_Service();
+    private static void setNvZcsSvcEIF(ZcsPortType svcEIF) {
+        Utility.nvZcsSvcEIF = svcEIF;
+    }
+
+    private static void setAdminSvcEIF(ZcsAdminPortType svcEIF) {
+        Utility.adminSvcEIF = svcEIF;
+    }
+
+    private static void setNvAdminSvcEIF(ZcsAdminPortType svcEIF) {
+        Utility.nvAdminSvcEIF = svcEIF;
+    }
+
+    public static ZcsPortType getZcsSvcEIF() throws Exception {
+        if (zcsSvcEIF == null) {
+            // The ZcsService class is the Java type bound to the service section of the WSDL document.
+            ZcsService zcsSvc = new ZcsService();
             SchemaValidationFeature feature = new SchemaValidationFeature();
-            setAcctSvcEIF(acctSvc.getAccountServicePort(feature));
+            setZcsSvcEIF(zcsSvc.getZcsServicePort(feature));
         }
-        return acctSvcEIF;
+        return zcsSvcEIF;
     }
 
-    public static AccountService getNonValidatingAcctSvcEIF() throws Exception {
-        if (nvAcctSvcEIF == null) {
-            AccountService_Service acctSvc = new AccountService_Service();
-            nvAcctSvcEIF = acctSvc.getAccountServicePort();
+    public static ZcsPortType getNonValidatingZcsSvcEIF() throws Exception {
+        if (nvZcsSvcEIF == null) {
+            ZcsService zcsSvc = new ZcsService();
+            setNvZcsSvcEIF(zcsSvc.getZcsServicePort());
         }
-        return nvAcctSvcEIF;
+        return nvZcsSvcEIF;
+    }
+
+    public static ZcsAdminPortType getAdminSvcEIF() throws Exception {
+        if (adminSvcEIF == null) {
+            // The ZcsAdminService class is the Java type bound to the service section of the WSDL document.
+            ZcsAdminService zcsSvc = new ZcsAdminService();
+            SchemaValidationFeature feature = new SchemaValidationFeature();
+            setAdminSvcEIF(zcsSvc.getZcsAdminServicePort(feature));
+        }
+        return adminSvcEIF;
+    }
+
+    public static ZcsAdminPortType getNonValidatingAdminSvcEIF() throws Exception {
+        if (nvAdminSvcEIF == null) {
+            ZcsAdminService zcsSvc = new ZcsAdminService();
+            setNvAdminSvcEIF(zcsSvc.getZcsAdminServicePort());
+        }
+        return nvAdminSvcEIF;
     }
 
     public static void addSoapAdminAuthHeader(WSBindingProvider bp) throws Exception {
@@ -215,17 +243,14 @@ public class Utility {
         Utility.getAdminSvcEIF();
         if (adminAuthToken == null) {
             Utility.getAdminSvcEIF();
-            zimbra.generated.adminclient.admin.testAuthRequest authReq =
-                new zimbra.generated.adminclient.admin.testAuthRequest();
-            zimbra.generated.adminclient.zm.testAccountSelector acct =
-                new zimbra.generated.adminclient.zm.testAccountSelector();
-            acct.setBy(zimbra.generated.adminclient.zm.testAccountBy.NAME);
+            generated.zcsclient.admin.testAuthRequest authReq = new generated.zcsclient.admin.testAuthRequest();
+            generated.zcsclient.zm.testAccountSelector acct = new generated.zcsclient.zm.testAccountSelector();
+            acct.setBy(generated.zcsclient.zm.testAccountBy.NAME);
             acct.setValue("admin");
             authReq.setAccount(acct);
             authReq.setPassword(DEFAULT_PASS);
             authReq.setAuthToken(null);
-            zimbra.generated.adminclient.admin.testAuthResponse authResponse =
-                    getAdminSvcEIF().authRequest(authReq);
+            generated.zcsclient.admin.testAuthResponse authResponse = getAdminSvcEIF().authRequest(authReq);
             Assert.assertNotNull(authResponse);
             adminAuthToken = authResponse.getAuthToken();
             Assert.assertTrue(adminAuthToken != null);
@@ -234,60 +259,17 @@ public class Utility {
         return adminAuthToken;
     }
 
-    private static void setAdminSvcEIF(AdminService adminSvcEIF) {
-        Utility.adminSvcEIF = adminSvcEIF;
-    }
-
-    public static AdminService getAdminSvcEIF() throws Exception {
-        if (adminSvcEIF == null) {
-            // The AdminService_Service class is the Java type bound to
-            // the service section of the WSDL document.
-            AdminService_Service adminSvc = new AdminService_Service();
-            // For Non-validating, use :
-            //    setAdminSvcEIF(adminSvc.getAdminServicePort());
-            SchemaValidationFeature feature = new SchemaValidationFeature();
-            setAdminSvcEIF(adminSvc.getAdminServicePort(feature));
-        }
-        return adminSvcEIF;
-    }
-
-    public static AdminService getNonValidatingAdminSvcEIF() throws Exception {
-        if (nvAdminSvcEIF == null) {
-            AdminService_Service adminSvc = new AdminService_Service();
-            nvAdminSvcEIF = adminSvc.getAdminServicePort();
-        }
-        return nvAdminSvcEIF;
-    }
-
-    private static void setMailSvcEIF(MailService mailSvcEIF) {
-        Utility.mailSvcEIF = mailSvcEIF;
-    }
-
-    public static MailService getMailSvcEIF() {
-        if (mailSvcEIF == null) {
-            MailService_Service mailSvc = new MailService_Service();
-            SchemaValidationFeature feature = new SchemaValidationFeature();
-            Utility.setMailSvcEIF(mailSvc.getMailServicePort(feature));
-        }
-        return mailSvcEIF;
-    }
-
-    public static MailService getNonValidatingMailSvcEIF() throws Exception {
-        if (nvMailSvcEIF == null) {
-            MailService_Service mailSvc = new MailService_Service();
-            nvMailSvcEIF = mailSvc.getMailServicePort();
-        }
-        return nvMailSvcEIF;
-    }
-
     public static void setUpToAcceptAllHttpsServerCerts() {
         // Create a trust manager that does not validate certificate chains
         // without this, we need to import the server certificate into the trust store.
         // when using https as is required for Admin
         javax.net.ssl.TrustManager[] trustAllCerts = new javax.net.ssl.TrustManager[]{
                 new javax.net.ssl.X509TrustManager() {
+                    @Override
                     public java.security.cert.X509Certificate[] getAcceptedIssuers() { return null; }
+                    @Override
                     public void checkClientTrusted( java.security.cert.X509Certificate[] certs, String authType) { }
+                    @Override
                     public void checkServerTrusted( java.security.cert.X509Certificate[] certs, String authType) { }
                     }
                 };

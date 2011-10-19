@@ -22,22 +22,20 @@ import org.junit.Test;
 
 import com.sun.xml.ws.developer.WSBindingProvider;
 
-import zimbra.generated.adminclient.zm.testAccountBy;
-import zimbra.generated.adminclient.zm.testAccountSelector;
-import zimbra.generated.adminclient.admin.testAttr;
-import zimbra.generated.adminclient.admin.testAuthRequest;
-import zimbra.generated.adminclient.admin.testAuthResponse;
-import zimbra.generated.adminclient.admin.testDelegateAuthRequest;
-import zimbra.generated.adminclient.admin.testDelegateAuthResponse;
-import zimbra.generated.adminclient.ws.service.AdminService;
+import generated.zcsclient.zm.testAccountBy;
+import generated.zcsclient.zm.testAccountSelector;
+import generated.zcsclient.admin.testAttr;
+import generated.zcsclient.admin.testAuthRequest;
+import generated.zcsclient.admin.testAuthResponse;
+import generated.zcsclient.admin.testDelegateAuthRequest;
+import generated.zcsclient.admin.testDelegateAuthResponse;
+import generated.zcsclient.ws.service.ZcsAdminPortType;
 
 import com.zimbra.soap.Utility;
 
 public class WSDLAdminAuthRequestTest {
 
-    // The AdminService interface is the Java type bound to
-    // the portType section of the WSDL document.
-    private static AdminService eif;
+    private static ZcsAdminPortType eif;
 
     @BeforeClass
     public static void init() throws Exception {

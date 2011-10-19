@@ -18,8 +18,8 @@ import java.util.List;
 
 import com.sun.xml.ws.developer.WSBindingProvider;
 
-import zimbra.generated.adminclient.admin.*;
-import zimbra.generated.adminclient.ws.service.AdminService;
+import generated.zcsclient.admin.*;
+import generated.zcsclient.ws.service.ZcsAdminPortType;
 
 import com.zimbra.soap.Utility;
 
@@ -36,7 +36,7 @@ public class WSDLDistListTest {
     private final static String testAcct = "wsdl_acct1@" + testDlDomain;
     private final static String testDl = "wsdl_dl1@" + testDlDomain;
     private final static String parentDl = "wsdl_dlparent@" + testDlDomain;
-    private static AdminService eif = null;
+    private static ZcsAdminPortType eif = null;
 
     @BeforeClass
     public static void init() throws Exception {

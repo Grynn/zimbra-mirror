@@ -18,22 +18,22 @@ import java.util.List;
 
 import com.sun.xml.ws.developer.WSBindingProvider;
 import com.zimbra.soap.Utility;
-import zimbra.generated.mailclient.mail.testCalEcho;
-import zimbra.generated.mailclient.mail.testCalOrganizer;
-import zimbra.generated.mailclient.mail.testCalendarAttendee;
-import zimbra.generated.mailclient.mail.testCalendarItemMsg;
-import zimbra.generated.mailclient.mail.testCreateAppointmentRequest;
-import zimbra.generated.mailclient.mail.testCreateAppointmentResponse;
-import zimbra.generated.mailclient.mail.testCreateTaskRequest;
-import zimbra.generated.mailclient.mail.testCreateTaskResponse;
-import zimbra.generated.mailclient.mail.testDtTimeInfo;
-import zimbra.generated.mailclient.mail.testEmailAddrInfo;
-import zimbra.generated.mailclient.mail.testInvitationInfo;
-import zimbra.generated.mailclient.mail.testInviteAsMP;
-import zimbra.generated.mailclient.mail.testInviteComponent;
-import zimbra.generated.mailclient.mail.testMimePartInfo;
-import zimbra.generated.mailclient.mail.testMpInviteInfo;
-import zimbra.generated.mailclient.ws.service.MailService;
+import generated.zcsclient.mail.testCalEcho;
+import generated.zcsclient.mail.testCalOrganizer;
+import generated.zcsclient.mail.testCalendarAttendee;
+import generated.zcsclient.mail.testCalendarItemMsg;
+import generated.zcsclient.mail.testCreateAppointmentRequest;
+import generated.zcsclient.mail.testCreateAppointmentResponse;
+import generated.zcsclient.mail.testCreateTaskRequest;
+import generated.zcsclient.mail.testCreateTaskResponse;
+import generated.zcsclient.mail.testDtTimeInfo;
+import generated.zcsclient.mail.testEmailAddrInfo;
+import generated.zcsclient.mail.testInvitationInfo;
+import generated.zcsclient.mail.testInviteAsMP;
+import generated.zcsclient.mail.testInviteComponent;
+import generated.zcsclient.mail.testMimePartInfo;
+import generated.zcsclient.mail.testMpInviteInfo;
+import generated.zcsclient.ws.service.ZcsPortType;
 
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -44,7 +44,7 @@ import org.junit.Test;
 
 public class WSDLCalendaringTest {
 
-    private static MailService mailSvcEIF = null;
+    private static ZcsPortType mailSvcEIF = null;
 
     private final static String testAcctDomain = "wsdl.cal.example.test";
     private final static String testAcct = "wsdl1@" + testAcctDomain;
@@ -53,7 +53,7 @@ public class WSDLCalendaringTest {
     @BeforeClass
     public static void init() throws Exception {
         Utility.setUpToAcceptAllHttpsServerCerts();
-        mailSvcEIF = Utility.getMailSvcEIF();
+        mailSvcEIF = Utility.getZcsSvcEIF();
         oneTimeTearDown();
     }
 

@@ -20,13 +20,13 @@ import javax.xml.ws.soap.SOAPFaultException;
 
 import com.sun.xml.ws.developer.WSBindingProvider;
 
-import zimbra.generated.adminclient.admin.*;
-import zimbra.generated.adminclient.admin.testDomainAdminRight.Rights;
-import zimbra.generated.adminclient.admin.testEffectiveAttrInfo.Default;
-import zimbra.generated.adminclient.admin.testGetRightsDocResponse.DomainAdminCopypasteToZimbraRightsDomainadminXmlTemplate;
-import zimbra.generated.adminclient.ws.service.AdminService;
-import zimbra.generated.adminclient.zm.testNamedElement;
-import zimbra.generated.adminclient.zm.testTargetType;
+import generated.zcsclient.admin.*;
+import generated.zcsclient.admin.testDomainAdminRight.Rights;
+import generated.zcsclient.admin.testEffectiveAttrInfo.Default;
+import generated.zcsclient.admin.testGetRightsDocResponse.DomainAdminCopypasteToZimbraRightsDomainadminXmlTemplate;
+import generated.zcsclient.ws.service.ZcsAdminPortType;
+import generated.zcsclient.zm.testNamedElement;
+import generated.zcsclient.zm.testTargetType;
 
 import com.zimbra.soap.Utility;
 
@@ -48,7 +48,7 @@ public class WSDLAdminTest {
     private final static String testServer = "wsdl.server.example.test";
     private final static String testCos = "wsdl.cos.example.test";
     private final static String testCosCopy = "wsdl.cos.copy.example.test";
-    private static AdminService eif = null;
+    private static ZcsAdminPortType eif = null;
 
     @BeforeClass
     public static void init() throws Exception {
@@ -432,7 +432,7 @@ public class WSDLAdminTest {
     @Test
     public void getAllRightsTest() throws Exception {
         Utility.ensureAccountExists(testAcct);
-        AdminService nvEif = Utility.getNonValidatingAdminSvcEIF();
+        ZcsAdminPortType nvEif = Utility.getNonValidatingAdminSvcEIF();
         // the validator does not like the @XmlAnyElement used
         // in RightsAttrs
         Utility.addSoapAdminAuthHeader((WSBindingProvider)nvEif);

@@ -19,20 +19,20 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.zimbra.soap.Utility;
-import zimbra.generated.accountclient.account.testEndSessionRequest;
-import zimbra.generated.accountclient.account.testEndSessionResponse;
-import zimbra.generated.accountclient.ws.service.AccountService;
+import generated.zcsclient.account.testEndSessionRequest;
+import generated.zcsclient.account.testEndSessionResponse;
+import generated.zcsclient.ws.service.ZcsPortType;
 
 /**
  * Current assumption : user1 exists with password test123
  */
 public class WSDLEndSessionTest {
 
-    private static AccountService acctSvcEIF;
+    private static ZcsPortType acctSvcEIF;
 
     @BeforeClass
     public static void init() throws Exception {
-        acctSvcEIF = Utility.getAcctSvcEIF();
+        acctSvcEIF = Utility.getZcsSvcEIF();
     }
 
     @Test

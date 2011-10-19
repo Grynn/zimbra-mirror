@@ -16,11 +16,11 @@ package com.zimbra.soap.mail;
 
 import com.sun.xml.ws.developer.WSBindingProvider;
 import com.zimbra.soap.Utility;
-import zimbra.generated.mailclient.mail.testImportContactsRequest;
-import zimbra.generated.mailclient.mail.testImportContactsResponse;
-import zimbra.generated.mailclient.mail.testContent;
-import zimbra.generated.mailclient.mail.testImportContact;
-import zimbra.generated.mailclient.ws.service.MailService;
+import generated.zcsclient.mail.testImportContactsRequest;
+import generated.zcsclient.mail.testImportContactsResponse;
+import generated.zcsclient.mail.testContent;
+import generated.zcsclient.mail.testImportContact;
+import generated.zcsclient.ws.service.ZcsPortType;
 
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -31,7 +31,7 @@ import org.junit.Test;
 
 public class WSDLImportContactsTest {
 
-    private static MailService mailSvcEIF = null;
+    private static ZcsPortType mailSvcEIF = null;
 
     private final static String testAcctDomain = "wsdl.import.example.test";
     private final static String testAcct = "wsdl1@" + testAcctDomain;
@@ -39,7 +39,7 @@ public class WSDLImportContactsTest {
     @BeforeClass
     public static void init() throws Exception {
         Utility.setUpToAcceptAllHttpsServerCerts();
-        mailSvcEIF = Utility.getMailSvcEIF();
+        mailSvcEIF = Utility.getZcsSvcEIF();
         oneTimeTearDown();
     }
 

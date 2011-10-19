@@ -18,8 +18,27 @@ import java.util.List;
 
 import com.sun.xml.ws.developer.WSBindingProvider;
 
-import zimbra.generated.adminclient.admin.*;
-import zimbra.generated.adminclient.ws.service.AdminService;
+import generated.zcsclient.admin.testAttr;
+import generated.zcsclient.admin.testCalendarResourceBy;
+import generated.zcsclient.admin.testCalendarResourceInfo;
+import generated.zcsclient.admin.testCalendarResourceSelector;
+import generated.zcsclient.admin.testCreateCalendarResourceRequest;
+import generated.zcsclient.admin.testCreateCalendarResourceResponse;
+import generated.zcsclient.admin.testDeleteCalendarResourceRequest;
+import generated.zcsclient.admin.testDeleteCalendarResourceResponse;
+import generated.zcsclient.admin.testEntrySearchFilterInfo;
+import generated.zcsclient.admin.testEntrySearchFilterSingleCond;
+import generated.zcsclient.admin.testGetAllCalendarResourcesRequest;
+import generated.zcsclient.admin.testGetAllCalendarResourcesResponse;
+import generated.zcsclient.admin.testGetCalendarResourceRequest;
+import generated.zcsclient.admin.testGetCalendarResourceResponse;
+import generated.zcsclient.admin.testModifyCalendarResourceRequest;
+import generated.zcsclient.admin.testModifyCalendarResourceResponse;
+import generated.zcsclient.admin.testRenameCalendarResourceRequest;
+import generated.zcsclient.admin.testRenameCalendarResourceResponse;
+import generated.zcsclient.admin.testSearchCalendarResourcesRequest;
+import generated.zcsclient.admin.testSearchCalendarResourcesResponse;
+import generated.zcsclient.ws.service.ZcsAdminPortType;
 
 import com.zimbra.soap.Utility;
 
@@ -32,12 +51,10 @@ import org.junit.Test;
 
 public class WSDLCalResourceTest {
 
-    // The AdminService interface is the Java type bound to
-    // the portType section of the WSDL document.
     private final static String testCalResDomain = "wsdl.calr.domain.example.test";
     private final static String testCalRes = "wsdl1@" + testCalResDomain;
     private final static String testCalResDisplayName = "WSDL Test CalResource";
-    private static AdminService eif = null;
+    private static ZcsAdminPortType eif = null;
 
     @BeforeClass
     public static void init() throws Exception {
@@ -72,8 +89,7 @@ public class WSDLCalResourceTest {
         int len;
         Utility.deleteCalendarResourceIfExists(testCalRes);
         Utility.ensureDomainExists(testCalResDomain);
-        testCreateCalendarResourceRequest createReq =
-                new testCreateCalendarResourceRequest();
+        testCreateCalendarResourceRequest createReq = new testCreateCalendarResourceRequest();
         createReq.setName(testCalRes);
         createReq.setPassword("test123");
         createReq.getA().add(Utility.mkAttr("displayName",
@@ -211,8 +227,7 @@ public class WSDLCalResourceTest {
         cond.setValue(testCalResDisplayName);
         filter.setCond(cond);
         req.setSearchFilter(filter);
-        testSearchCalendarResourcesResponse resp =
-            eif.searchCalendarResourcesRequest(req);
+        testSearchCalendarResourcesResponse resp = eif.searchCalendarResourcesRequest(req);
         Assert.assertNotNull(resp);
         Assert.assertEquals("Total found", 1, resp.getSearchTotal());
         Assert.assertEquals("is more", false, resp.isMore());

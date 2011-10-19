@@ -14,17 +14,16 @@
  */
 package com.zimbra.soap.admin;
 
-import java.io.Serializable;
 import java.util.List;
 
 import javax.xml.bind.JAXBElement;
 
 import com.sun.xml.ws.developer.WSBindingProvider;
 
-import zimbra.generated.adminclient.admin.*;
-import zimbra.generated.adminclient.admin.testGetAdminExtensionZimletsResponse.Zimlets;
-import zimbra.generated.adminclient.ws.service.AdminService;
-import zimbra.generated.adminclient.zm.testNamedElement;
+import generated.zcsclient.admin.*;
+import generated.zcsclient.admin.testGetAdminExtensionZimletsResponse.Zimlets;
+import generated.zcsclient.ws.service.ZcsAdminPortType;
+import generated.zcsclient.zm.testNamedElement;
 
 import com.zimbra.soap.Utility;
 
@@ -38,9 +37,7 @@ import org.w3c.dom.Element;
 
 public class WSDLZimletTest {
 
-    // The AdminService interface is the Java type bound to
-    // the portType section of the WSDL document.
-    private static AdminService eif = null;
+    private static ZcsAdminPortType eif = null;
 
     @BeforeClass
     public static void init() throws Exception {
@@ -172,7 +169,7 @@ public class WSDLZimletTest {
     //  (ZimbraServer does not)
     @Test
     public void getAdminExtensionZimletsTest() throws Exception {
-        AdminService nvEif = Utility.getNonValidatingAdminSvcEIF();
+        ZcsAdminPortType nvEif = Utility.getNonValidatingAdminSvcEIF();
         // the validator does not like the @XmlAnyElement used
         // in AdminZimletDesc
         Utility.addSoapAdminAuthHeader((WSBindingProvider)nvEif);

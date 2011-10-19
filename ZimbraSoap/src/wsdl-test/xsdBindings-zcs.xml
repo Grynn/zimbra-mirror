@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jaxb:bindings xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" version="1.0">
+    <jaxb:globalBindings underscoreBinding="asCharInWord" />
+    <jaxb:bindings schemaLocation="../../build/classes/com/zimbra/soap/zimbra.xsd"
+        node="//xsd:schema[@targetNamespace='urn:zimbra']">
+        <jaxb:schemaBindings>
+            <jaxb:package name="generated.zcsclient.zm" />
+            <jaxb:nameXmlTransform>
+                <jaxb:typeName prefix="test" />
+            </jaxb:nameXmlTransform>
+        </jaxb:schemaBindings>
+    </jaxb:bindings>
+    <jaxb:bindings schemaLocation="../../build/classes/com/zimbra/soap/zimbraAdmin.xsd"
+        node="//xsd:schema[@targetNamespace='urn:zimbraAdmin']">
+        <jaxb:schemaBindings>
+            <jaxb:package name="generated.zcsclient.admin" />
+            <jaxb:nameXmlTransform>
+                <jaxb:typeName prefix="test" />
+            </jaxb:nameXmlTransform>
+        </jaxb:schemaBindings>
+    </jaxb:bindings>
+    <jaxb:bindings schemaLocation="../../build/classes/com/zimbra/soap/zimbraAdminExt.xsd"
+        node="//xsd:schema[@targetNamespace='urn:zimbraAdminExt']">
+        <jaxb:schemaBindings>
+            <jaxb:package name="generated.zcsclient.adminext" />
+            <jaxb:nameXmlTransform>
+                <jaxb:typeName prefix="test" />
+            </jaxb:nameXmlTransform>
+        </jaxb:schemaBindings>
+    </jaxb:bindings>
+    <jaxb:bindings schemaLocation="../../build/classes/com/zimbra/soap/zimbraAccount.xsd"
+        node="//xsd:schema[@targetNamespace='urn:zimbraAccount']">
+        <jaxb:schemaBindings>
+            <jaxb:package name="generated.zcsclient.account" />
+            <jaxb:nameXmlTransform>
+                <jaxb:typeName prefix="test" />
+            </jaxb:nameXmlTransform>
+        </jaxb:schemaBindings>
+    </jaxb:bindings>
+    <jaxb:bindings schemaLocation="../../build/classes/com/zimbra/soap/zimbraMail.xsd"
+        node="//xsd:schema[@targetNamespace='urn:zimbraMail']">
+        <jaxb:schemaBindings>
+            <jaxb:package name="generated.zcsclient.mail" />
+            <jaxb:nameXmlTransform>
+                <jaxb:typeName prefix="test" />
+            </jaxb:nameXmlTransform>
+        </jaxb:schemaBindings>
+    </jaxb:bindings>
+    <jaxb:bindings schemaLocation="../../build/classes/com/zimbra/soap/zimbraRepl.xsd"
+        node="//xsd:schema[@targetNamespace='urn:zimbraRepl']">
+        <jaxb:schemaBindings>
+            <jaxb:package name="generated.zcsclient.replication" />
+            <jaxb:nameXmlTransform>
+                <jaxb:typeName prefix="test" />
+            </jaxb:nameXmlTransform>
+        </jaxb:schemaBindings>
+    </jaxb:bindings>
+    <jaxb:bindings schemaLocation="../../build/classes/com/zimbra/soap/zimbraSync.xsd"
+        node="//xsd:schema[@targetNamespace='urn:zimbraSync']">
+        <jaxb:schemaBindings>
+            <jaxb:package name="generated.zcsclient.sync" />
+            <jaxb:nameXmlTransform>
+                <jaxb:typeName prefix="test" />
+            </jaxb:nameXmlTransform>
+        </jaxb:schemaBindings>
+    </jaxb:bindings>
+    <jaxb:bindings schemaLocation="../../build/classes/com/zimbra/soap/zimbraAppblast.xsd"
+        node="//xsd:schema[@targetNamespace='urn:zimbraAppblast']">
+        <jaxb:schemaBindings>
+            <jaxb:package name="generated.zcsclient.appblast" />
+            <jaxb:nameXmlTransform>
+                <jaxb:typeName prefix="test" />
+            </jaxb:nameXmlTransform>
+        </jaxb:schemaBindings>
+    </jaxb:bindings>
+</jaxb:bindings>
+

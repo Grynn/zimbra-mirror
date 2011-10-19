@@ -19,13 +19,13 @@ import javax.xml.ws.soap.SOAPFaultException;
 import com.sun.xml.ws.developer.WSBindingProvider;
 import com.zimbra.soap.Utility;
 
-import zimbra.generated.mailclient.mail.testInvalidateReminderDeviceRequest;
-import zimbra.generated.mailclient.mail.testInvalidateReminderDeviceResponse;
-import zimbra.generated.mailclient.mail.testSendVerificationCodeRequest;
-import zimbra.generated.mailclient.mail.testSendVerificationCodeResponse;
-import zimbra.generated.mailclient.mail.testVerifyCodeRequest;
-import zimbra.generated.mailclient.mail.testVerifyCodeResponse;
-import zimbra.generated.mailclient.ws.service.MailService;
+import generated.zcsclient.mail.testInvalidateReminderDeviceRequest;
+import generated.zcsclient.mail.testInvalidateReminderDeviceResponse;
+import generated.zcsclient.mail.testSendVerificationCodeRequest;
+import generated.zcsclient.mail.testSendVerificationCodeResponse;
+import generated.zcsclient.mail.testVerifyCodeRequest;
+import generated.zcsclient.mail.testVerifyCodeResponse;
+import generated.zcsclient.ws.service.ZcsPortType;
 
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -36,7 +36,7 @@ import org.junit.Test;
 
 public class WSDLReminderCodesTest {
 
-    private static MailService mailSvcEIF = null;
+    private static ZcsPortType mailSvcEIF = null;
 
     private final static String testAcctDomain = "wsdl.example.test";
     private final static String testAcct = "remind@" + testAcctDomain;
@@ -44,7 +44,7 @@ public class WSDLReminderCodesTest {
     @BeforeClass
     public static void init() throws Exception {
         Utility.setUpToAcceptAllHttpsServerCerts();
-        mailSvcEIF = Utility.getMailSvcEIF();
+        mailSvcEIF = Utility.getZcsSvcEIF();
         oneTimeTearDown();
     }
 

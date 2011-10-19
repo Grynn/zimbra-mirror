@@ -16,9 +16,9 @@ package com.zimbra.soap.mail;
 
 import com.sun.xml.ws.developer.WSBindingProvider;
 import com.zimbra.soap.Utility;
-import zimbra.generated.mailclient.mail.testExportContactsRequest;
-import zimbra.generated.mailclient.mail.testExportContactsResponse;
-import zimbra.generated.mailclient.ws.service.MailService;
+import generated.zcsclient.mail.testExportContactsRequest;
+import generated.zcsclient.mail.testExportContactsResponse;
+import generated.zcsclient.ws.service.ZcsPortType;
 
 import org.junit.Assert;
 import org.junit.After;
@@ -28,7 +28,7 @@ import org.junit.Test;
 
 public class WSDLExportContactsTest {
 
-    private static MailService mailSvcEIF;
+    private static ZcsPortType mailSvcEIF;
 
     @Before
     public void setUp() throws Exception {
@@ -40,7 +40,7 @@ public class WSDLExportContactsTest {
 
     @BeforeClass
     public static void init() throws Exception {
-        mailSvcEIF = Utility.getMailSvcEIF();
+        mailSvcEIF = Utility.getZcsSvcEIF();
     }
 
     /**

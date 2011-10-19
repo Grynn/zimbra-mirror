@@ -21,21 +21,19 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.zimbra.soap.Utility;
-import zimbra.generated.accountclient.account.testAccount;
-import zimbra.generated.accountclient.account.testAuthRequest;
-import zimbra.generated.accountclient.account.testAuthResponse;
-import zimbra.generated.accountclient.account.testBy;
-import zimbra.generated.accountclient.ws.service.AccountService;
+import generated.zcsclient.account.testAccount;
+import generated.zcsclient.account.testAuthRequest;
+import generated.zcsclient.account.testAuthResponse;
+import generated.zcsclient.account.testBy;
+import generated.zcsclient.ws.service.ZcsPortType;
 
 public class WSDLAuthRequestTest {
 
-    // The AccountService interface is the Java type bound to
-    // the portType section of the WSDL document.
-    private static AccountService eif;
+    private static ZcsPortType eif;
 
     @BeforeClass
     public static void init() throws Exception {
-        eif = Utility.getAcctSvcEIF();
+        eif = Utility.getZcsSvcEIF();
     }
 
     /**

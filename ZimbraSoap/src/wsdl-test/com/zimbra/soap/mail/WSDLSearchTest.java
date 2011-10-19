@@ -18,11 +18,11 @@ import java.util.List;
 
 import com.sun.xml.ws.developer.WSBindingProvider;
 import com.zimbra.soap.Utility;
-import zimbra.generated.mailclient.mail.testAppointmentHitInfo;
-import zimbra.generated.mailclient.mail.testCalOrganizer;
-import zimbra.generated.mailclient.mail.testSearchRequest;
-import zimbra.generated.mailclient.mail.testSearchResponse;
-import zimbra.generated.mailclient.ws.service.MailService;
+import generated.zcsclient.mail.testAppointmentHitInfo;
+import generated.zcsclient.mail.testCalOrganizer;
+import generated.zcsclient.mail.testSearchRequest;
+import generated.zcsclient.mail.testSearchResponse;
+import generated.zcsclient.ws.service.ZcsPortType;
 
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -33,8 +33,8 @@ import org.junit.Test;
 
 public class WSDLSearchTest {
 
-    private static MailService mailSvcEIF = null;
-    private static MailService nvMailSvcEIF = null;
+    private static ZcsPortType mailSvcEIF = null;
+    private static ZcsPortType nvMailSvcEIF = null;
 
     // private final static String testAcctDomain = "wsdl.cal.example.test";
     // private final static String testAcct = "wsdl1@" + testAcctDomain;
@@ -42,8 +42,8 @@ public class WSDLSearchTest {
     @BeforeClass
     public static void init() throws Exception {
         Utility.setUpToAcceptAllHttpsServerCerts();
-        mailSvcEIF = Utility.getMailSvcEIF();
-        nvMailSvcEIF = Utility.getNonValidatingMailSvcEIF();
+        mailSvcEIF = Utility.getZcsSvcEIF();
+        nvMailSvcEIF = Utility.getNonValidatingZcsSvcEIF();
         oneTimeTearDown();
     }
 
@@ -85,7 +85,7 @@ public class WSDLSearchTest {
         //          cvc-complex-type.2.4.a: Invalid content was found starting with element &apos;fr&apos;.
         //          One of &apos;{&quot;urn:zimbraMail&quot;:inv, &quot;urn:zimbraMail&quot;:replies}&apos; is expected.
         //       Fortunately, non-validating accepts this.
-        MailService myMailSvcEIF = nvMailSvcEIF;
+        ZcsPortType myMailSvcEIF = nvMailSvcEIF;
 
         Utility.addSoapAcctAuthHeaderForAcct((WSBindingProvider)myMailSvcEIF,
                 "user1");

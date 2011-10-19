@@ -4,7 +4,7 @@
     xmlns:jaxws="http://java.sun.com/xml/ns/jaxws"
     xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
     xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-    <jaxws:package name="zimbra.generated.adminextclient.ws.service" />
+    <jaxws:package name="generated.zcsclient.ws.service" />
     <!-- jaxws:enableAsyncMapping>true</jaxws:enableAsyncMapping -->
 </jaxws:bindings>
 
