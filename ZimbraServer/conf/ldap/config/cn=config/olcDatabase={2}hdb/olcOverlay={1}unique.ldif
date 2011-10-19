@@ -3,6 +3,7 @@ objectClass: olcOverlayConfig
 objectClass: olcUniqueConfig
 olcOverlay: {1}unique
 olcUniqueURI: ldap:///?mail?sub
+olcUniqueURI: ldap:///?zimbraId?sub
 structuralObjectClass: olcUniqueConfig
 entryUUID: 07824daa-4842-1030-87fd-079f38aa4278
 creatorsName: cn=config
