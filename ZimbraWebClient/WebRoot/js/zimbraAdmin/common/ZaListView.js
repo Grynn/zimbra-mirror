@@ -203,10 +203,11 @@ function(params, resp) {
 			ZaSearch.handleTooManyResultsException(resp.getException(), "ZaListView.prototype.searchCallback");
 		} else {
 			ZaSearch.TOO_MANY_RESULTS_FLAG = false;
-			//this._list = null;
+
             var tempList = new ZaItemList(params.CONS);
             var tempResultList = new ZaItemList(params.CONS);
-			this._searchTotal = 0;
+			var hasmore=false;
+
 			if(resp && !resp.isException()) {
 				var response = resp.getResponse().Body.SearchDirectoryResponse;
 
@@ -235,8 +236,8 @@ function(params, resp) {
 					var act = new AjxTimedAction(this._list, ZaItemList.prototype.loadEffectiveRights, null);
 					AjxTimedAction.scheduleAction(act, 150)
 				}
+                 hasmore= response.more;
 
-                 this.setScrollHasMore(response.more);
 			}
              if(tempResultList){
                 var tmpArr = new Array();
@@ -245,7 +246,9 @@ function(params, resp) {
 			        tmpArr.push(tempResultList.getArray()[ix]);
 		        }
                this.replenish(AjxVector.fromArray(tmpArr));
+               this.setScrollHasMore(hasmore);
              }
+
 		}
 	} catch (ex) {
 		if (ex.code != ZmCsfeException.MAIL_QUERY_PARSE_ERROR) {
@@ -260,11 +263,13 @@ function(params, resp) {
 
 ZaListView.handleScroll =
 function(ev) {
+
 	var target = DwtUiEvent.getTarget(ev);
 	var lv = DwtControl.findControl(target);
 	if (lv) {
 		lv._checkItemCount();
 	}
+
 };
 
 
@@ -272,6 +277,7 @@ ZaListView.prototype._checkItemCount =
 function() {
 	var itemsNeeded =  this._getItemsNeeded();
 	if (itemsNeeded) {
+        this.setScrollHasMore(false);
         var params = {
                     offset:this._list.size(),
                     limit:itemsNeeded
