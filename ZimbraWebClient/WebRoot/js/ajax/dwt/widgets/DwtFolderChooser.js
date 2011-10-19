@@ -114,7 +114,9 @@ function(data) {
 DwtFolderChooser.prototype._focus =
 function() {
 	var overview = this._overview[this._overviewId];
-	overview.focus();
+	if (overview) {
+		overview.focus();
+	}
 };
 
 /**
