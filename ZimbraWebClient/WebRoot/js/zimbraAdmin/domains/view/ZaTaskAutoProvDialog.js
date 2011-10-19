@@ -614,7 +614,7 @@ ZaTaskAutoProvDialog.srchButtonHndlr = function() {
 	var attr = soapDoc.set("domain", instance.id);
 	attr.setAttribute("by", "id");
 
-    var query = "";
+    var query = "(|(mail=*)(zimbraMailAlias=*)(uid=*))";
 	if(instance[ZaSearch.A_query]) {
 		query = ZaSearch.getSearchByNameQuery (instance[ZaSearch.A_query]);
 	}
