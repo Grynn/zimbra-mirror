@@ -19,6 +19,11 @@ ${web.sso.certauth.default.enabled}        zm_sso certauth;
 ${web.sso.certauth.default.enabled}        zm_sso_redirect_url ${web.https.port};
 ${web.sso.certauth.default.enabled}    }
 
+${web.sso.certauth.default.enabled}    location = /certauth/admin {
+${web.sso.certauth.default.enabled}        zm_sso certauth_admin;
+${web.sso.certauth.default.enabled}        zm_sso_redirect_url ${web.admin.port};
+${web.sso.certauth.default.enabled}    }
+
     location / {
         return 403; #other resource access is forbidden
     }

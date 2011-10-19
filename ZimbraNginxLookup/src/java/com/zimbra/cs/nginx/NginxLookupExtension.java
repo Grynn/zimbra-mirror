@@ -484,12 +484,45 @@ public class NginxLookupExtension implements ZimbraExtension {
             AuthMechanism.doZimbraAuth(prov, null, adminAcct, req.adminPass, authCtxt);  
         }
         
+        /**
+         * verify whether the account is an admin
+         * account could be account name or account ID
+         * @throws ServiceException 
+         */
+        private void verifyAccountAdmin(String account, String authMethod)
+                throws NginxLookupException, ServiceException {
+            Account acct = null;
+            if (authMethod.compareToIgnoreCase(AUTHMETH_ZIMBRAID) == 0) {
+                acct = prov.get(AccountBy.id, account);
+            } else {
+                acct = prov.get(AccountBy.name, account);
+            }
+
+            if (acct == null) {
+                throw new NginxLookupException("account " + account
+                        + " not found");
+            }
+
+            boolean isAdmin = acct.getBooleanAttr(
+                    Provisioning.A_zimbraIsAdminAccount, false);
+            boolean isDelegatedAdmin = acct.getBooleanAttr(
+                    Provisioning.A_zimbraIsDelegatedAdminAccount, false);
+            if (!isAdmin && !isDelegatedAdmin) {
+                throw new NginxLookupException("account " + account
+                        + " is not admin or delegated admin");
+            }
+        }
+        
         private String genAuthToken(Account authc, Config config, NginxLookupRequest req) 
         throws ServiceException, NginxLookupException {
             verifyNginxAdmin(config, req);
             
             try {
-                return AuthProvider.getAuthToken(authc).getEncoded();
+                if (req.isZimbraAdmin) {
+                    return AuthProvider.getAuthToken(authc, true).getEncoded();
+                } else {
+                    return AuthProvider.getAuthToken(authc).getEncoded();
+                }
             } catch (AuthTokenException e) {
                 throw new NginxLookupException("failed to generate auth token for " + authc.getName(), e);
             }
@@ -811,6 +844,12 @@ public class NginxLookupExtension implements ZimbraExtension {
                 Provisioning prov = Provisioning.getInstance();
                 Config config = prov.getConfig();
                 String authUser = getQualifiedUsername(zlc, config, req);
+
+                // verify the account is an admin or delegated admin when request ask for admin
+                // route, certauth, ...
+                if(req.isZimbraAdmin) {
+                    verifyAccountAdmin(authUser, req.authMethod);
+                }
                 
                 if (req.authMethod.equalsIgnoreCase(AUTHMETH_CERTAUTH)) {
                 	// for cert auth, no need to find the real route, just
