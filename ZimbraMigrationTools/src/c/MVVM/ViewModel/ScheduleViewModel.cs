@@ -159,6 +159,20 @@ namespace MVVM.ViewModel
 
                 UsersViewModel usersViewModel = ((UsersViewModel)ViewModelPtrs[(int)ViewType.USERS]);
                 ZimbraAPI zimbraAPI = new ZimbraAPI();
+
+                if (ZimbraValues.zimbraValues.AuthToken.Length == 0)
+                {
+                    MessageBox.Show("You must log on to the Zimbra server", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                ConfigViewModelS sourceModel = ((ConfigViewModelS)ViewModelPtrs[(int)ViewType.SVRSRC]);
+                if (!sourceModel.IsMailServerInitialized)
+                {
+                    MessageBox.Show("You must log on to Exchange", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
                 string domainName = usersViewModel.ZimbraDomain;
                 string defaultPWD = DefaultPWD;
                 string tempMessage = "";

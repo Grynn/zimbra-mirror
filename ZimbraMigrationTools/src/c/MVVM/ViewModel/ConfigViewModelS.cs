@@ -201,6 +201,11 @@ namespace MVVM.ViewModel
         private bool IsProfile;
         private bool IsMailServer;
 
+        public bool IsMailServerInitialized
+        {
+            get { return (iMailSvrInitialized != -1); }
+        }
+
         public bool IsmailServer
         {
             get { return IsMailServer; }
