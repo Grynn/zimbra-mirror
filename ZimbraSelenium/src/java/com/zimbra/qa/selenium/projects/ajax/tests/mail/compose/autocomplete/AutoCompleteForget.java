@@ -423,7 +423,7 @@ public class AutoCompleteForget extends PrefGroupMailByMessageTest {
 	 * @throws HarnessException
 	 */
 	@Test(	description = "Verify 'forget' functionality resets the ranking order - GAL",
-			groups = { "functional", "matt" })
+			groups = { "functional" })
 	public void AutoCompleteForget_05() throws HarnessException {
 		
 		// Create a GAL Entry
