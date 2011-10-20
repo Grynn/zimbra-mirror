@@ -760,6 +760,7 @@ public class ZimbraAPI
                         writer.WriteAttributeString("aid", uploadToken);
                         writer.WriteEndElement();
                     }
+                    File.Delete(val);
                 }
             }
             else
@@ -955,6 +956,7 @@ public class ZimbraAPI
                     lastError = client.exceptionMessage;
             }
         }
+        File.Delete(zm.filePath);
         return retval;
     }
     public int AddMessages(List<Dictionary<string, string>> lMessages)
@@ -1003,7 +1005,8 @@ public class ZimbraAPI
                 else
                     retval = UploadFile(zm.filePath, STRING_MODE, out uploadInfo);
                 if (retval == 0)
-                    AddMsgRequest(writer, uploadInfo, zm, isInline, -1);               
+                    AddMsgRequest(writer, uploadInfo, zm, isInline, -1);
+                File.Delete(zm.filePath);
             }
 
             writer.WriteEndElement();           // BatchRequest
