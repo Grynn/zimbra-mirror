@@ -1221,6 +1221,36 @@ ZaAccountXFormView.getAddressFormItem = function(){
 	}
 	return addressFormItems;
 }
+ZaAccountXFormView.getAddressFormItemForDialog = function(){
+	// the subItems of Address Items only init once;
+	if(AjxUtil.isEmpty(ZaAccountXFormView.addressItemsPool)){
+		ZaAccountXFormView.addressItemsPool = new Object();
+		ZaAccountXFormView.addressItemsPool[ZaAccount.A_zip] =  {ref:ZaAccount.A_zip, type:_TEXTFIELD_, msgName:ZaMsg.NAD_zip,label:ZaMsg.NAD_zip,
+            labelLocation:_LEFT_, width:100};
+		ZaAccountXFormView.addressItemsPool[ZaAccount.A_state] = {ref:ZaAccount.A_state, type:_TEXTFIELD_, msgName:ZaMsg.NAD_state,label:ZaMsg.NAD_state,
+            labelLocation:_LEFT_, width:250};
+		ZaAccountXFormView.addressItemsPool[ZaAccount.A_street] = {ref:ZaAccount.A_street, type:_TEXTAREA_, msgName:ZaMsg.NAD_street,label:ZaMsg.NAD_street,
+            labelLocation:_LEFT_, width:250};
+		ZaAccountXFormView.addressItemsPool[ZaAccount.A_city] = {ref:ZaAccount.A_city, type:_TEXTFIELD_, msgName:ZaMsg.NAD_city,label:ZaMsg.NAD_city,
+            labelLocation:_LEFT_, width:250};
+		ZaAccountXFormView.addressItemsPool[ZaAccount.A_country] = {ref:ZaAccount.A_country, type:_TEXTFIELD_, msgName:ZaMsg.NAD_country,label:ZaMsg.NAD_country,
+            labelLocation:_LEFT_, width:250};
+
+	}
+	var addressFormItems = new Array();
+	var addressFormItemsOrders = new Array();
+	if(ZaZimbraAdmin.isLanguage("ja")){
+		addressFormItemsOrders = [ZaAccount.A_zip, ZaAccount.A_state, ZaAccount.A_city, ZaAccount.A_street, ZaAccount.A_country];
+	}
+	else{
+		addressFormItemsOrders = [ZaAccount.A_street, ZaAccount.A_city, ZaAccount.A_state, ZaAccount.A_zip, ZaAccount.A_country];
+	}
+
+	for(var i = 0; i < addressFormItemsOrders.length; i++){
+		addressFormItems.push(ZaAccountXFormView.addressItemsPool[addressFormItemsOrders[i]]);
+	}
+	return addressFormItems;
+}
 
 ZaAccountXFormView.accountNameInfoPool = null;
 ZaAccountXFormView.getAccountNameInfoItem = function(){
@@ -1712,25 +1742,25 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 						{type:_ZAGROUP_, displayGrid:appNewUI,width:"100%", numCols:2,colSizes: ["275px","100%"],
 							items:[
 								{ref:ZaAccount.A_telephoneNumber, type:_TEXTFIELD_, msgName:ZaMsg.NAD_telephoneNumber,label:ZaMsg.NAD_telephoneNumber,
-                                 labelCssClass:"gridGroupBodyLabel",labelLocation:_LEFT_, width:250} ,
+                                 labelLocation:_LEFT_, width:250} ,
                                 {ref:ZaAccount.A_homePhone, type:_TEXTFIELD_, msgName:ZaMsg.NAD_homePhone,label:ZaMsg.NAD_homePhone,
-                                 labelCssClass:"gridGroupBodyLabel",labelLocation:_LEFT_, width:250} ,
+                                 labelLocation:_LEFT_, width:250} ,
                                 {ref:ZaAccount.A_mobile, type:_TEXTFIELD_, msgName:ZaMsg.NAD_mobile,label:ZaMsg.NAD_mobile,
-                                 labelCssClass:"gridGroupBodyLabel",labelLocation:_LEFT_, width:250} ,
+                                 labelLocation:_LEFT_, width:250} ,
                                 {ref:ZaAccount.A_pager, type:_TEXTFIELD_, msgName:ZaMsg.NAD_pager,label:ZaMsg.NAD_pager,
-                                 labelCssClass:"gridGroupBodyLabel",labelLocation:_LEFT_, width:250},
+                                 labelLocation:_LEFT_, width:250},
                                  {ref:ZaAccount.A_facsimileTelephoneNumber, type:_TEXTFIELD_, msgName:ZaMsg.NAD_facsimileTelephoneNumber,
-                                 labelCssClass:"gridGroupBodyLabel",label:ZaMsg.NAD_facsimileTelephoneNumber, labelLocation:_LEFT_, width:250}
+                                 label:ZaMsg.NAD_facsimileTelephoneNumber, labelLocation:_LEFT_, width:250}
 							]
 						},
 						{type:_ZAGROUP_, displayGrid:appNewUI,width:"100%", numCols:2,colSizes: ["275px","100%"],
 							items:[	
 								{ref:ZaAccount.A_zimbraPhoneticCompany, type:_TEXTFIELD_, msgName:ZaMsg.NAD_zimbraPhoneticCompany,
-                                 labelCssClass:"gridGroupBodyLabel",label:ZaMsg.NAD_zimbraPhoneticCompany, labelLocation:_LEFT_, width:250, visibilityChecks:[[ZaZimbraAdmin.isLanguage, "ja"]]},
+                                 label:ZaMsg.NAD_zimbraPhoneticCompany, labelLocation:_LEFT_, width:250, visibilityChecks:[[ZaZimbraAdmin.isLanguage, "ja"]]},
 								{ref:ZaAccount.A_company, type:_TEXTFIELD_, msgName:ZaMsg.NAD_company,label:ZaMsg.NAD_company, labelLocation:_LEFT_,
-                                 labelCssClass:"gridGroupBodyLabel",width:250} ,
+                                 width:250} ,
                                 {ref:ZaAccount.A_title,  type:_TEXTFIELD_, msgName:ZaMsg.NAD_title,label:ZaMsg.NAD_title, labelLocation:_LEFT_,
-                                 labelCssClass:"gridGroupBodyLabel",width:250}
+                                 width:250}
                                 /*,
 								{ref:ZaAccount.A_orgUnit, type:_TEXTFIELD_, msgName:ZaMsg.NAD_orgUnit,label:ZaMsg.NAD_orgUnit, labelLocation:_LEFT_, width:250},														
 								{ref:ZaAccount.A_office, type:_TEXTFIELD_, msgName:ZaMsg.NAD_office,label:ZaMsg.NAD_office, labelLocation:_LEFT_, width:250} */

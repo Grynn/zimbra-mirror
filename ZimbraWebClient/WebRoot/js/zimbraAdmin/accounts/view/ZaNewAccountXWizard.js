@@ -808,7 +808,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 								]
 							},
 							{type:_ZAWIZGROUP_, 
-								items:ZaAccountXFormView.getAddressFormItem() 
+								items:ZaAccountXFormView.getAddressFormItemForDialog()
 							}							
 						]
 					};

@@ -519,7 +519,7 @@ ZaNewResourceXWizard.myXFormModifier = function(xFormObject) {
 							]
 						},
 						{type:_ZAWIZGROUP_, colSizes:["200px","275px"],
-							items:ZaAccountXFormView.getAddressFormItem()
+							items:ZaAccountXFormView.getAddressFormItemForDialog()
 						}
 					]
 				};
