@@ -213,6 +213,7 @@ STDMETHODIMP CItemObject::GetDataForItemID(VARIANT ItemId, VARIANT *pVal)
 			pIt[L"outlookUserField2"] = SysAllocString((cd.UserField2).c_str());
 			pIt[L"outlookUserField3"] = SysAllocString((cd.UserField3).c_str());
 			pIt[L"outlookUserField4"] = SysAllocString((cd.UserField4).c_str());
+			pIt[L"image"] = SysAllocString((cd.ContactImagePath).c_str());
 			}
 			else if( ft == 1)
 			{

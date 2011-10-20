@@ -750,13 +750,16 @@ public class ZimbraAPI
             string val = pair.Value;
             if (nam == "image")
             {
-                string uploadToken = "";
-                if (UploadFile(val, MIXED_MODE, out uploadToken) == 0)
+                if (val.Length > 0)
                 {
-                    writer.WriteStartElement("a");
-                    writer.WriteAttributeString("n", nam);
-                    writer.WriteAttributeString("aid", uploadToken);
-                    writer.WriteEndElement();
+                    string uploadToken = "";
+                    if (UploadFile(val, MIXED_MODE, out uploadToken) == 0)
+                    {
+                        writer.WriteStartElement("a");
+                        writer.WriteAttributeString("n", nam);
+                        writer.WriteAttributeString("aid", uploadToken);
+                        writer.WriteEndElement();
+                    }
                 }
             }
             else
