@@ -469,9 +469,12 @@ namespace MVVM.ViewModel
 
             int num = (int)e.Argument;
             MigrationAccount MyAcct = new MigrationAccount();
+            UsersViewModel usersViewModel = ((UsersViewModel)ViewModelPtrs[(int)ViewType.USERS]);
             AccountResultsViewModel accountResultsViewModel = ((AccountResultsViewModel)ViewModelPtrs[(int)ViewType.RESULTS]);
-            MyAcct.Accountname = accountResultsViewModel.AccountResultsList[num].AccountName;
-            MyAcct.AccountID = MyAcct.Accountname;
+            string username = accountResultsViewModel.AccountResultsList[num].AccountName;
+            string fullname = username + "@" + usersViewModel.ZimbraDomain;
+            MyAcct.Accountname = fullname;
+            MyAcct.AccountID = username;
             MyAcct.Accountnum = num;
             MyAcct.OnChanged += new MigrationObjectEventHandler(Acct_OnAcctChanged);
 
