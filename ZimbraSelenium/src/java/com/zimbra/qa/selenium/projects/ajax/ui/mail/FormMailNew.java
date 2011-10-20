@@ -281,7 +281,21 @@ public class FormMailNew extends AbsForm {
 		// Based on the button specified, take the appropriate action(s)
 		//
 		
-		if ( pulldown == Button.B_PRIORITY ) {
+		if ( pulldown == Button.B_OPTIONS ) {
+			
+			if ( option == Button.O_OPTION_REQUEST_READ_RECEIPT ) {
+				
+				pulldownLocator = "css=div[id^='ztb__COMPOSE'] div[id$='__COMPOSE_OPTIONS'] td[id$='_dropdown']";
+	            optionLocator = "css=div[id^='zm__COMPOSE'] div[id='REQUEST_READ_RECEIPT'] td[id$='_title']";
+	            page = null;
+	            
+	            // FALL THROUGH
+	            
+			} else {
+				throw new HarnessException("implement "+ pulldown +" and "+ option);
+			}
+
+		} else if ( pulldown == Button.B_PRIORITY ) {
 			
 			if ( option == Button.O_PRIORITY_HIGH ) {
 				

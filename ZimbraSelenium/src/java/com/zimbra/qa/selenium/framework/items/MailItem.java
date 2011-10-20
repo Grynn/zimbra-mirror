@@ -279,6 +279,8 @@ public class MailItem implements IItem {
 					mail.dSenderRecipient = r;
 				} else if ( r.dType == RecipientItem.RecipientType.ReplyTo ) {
 					mail.dReplyToRecipient = r;
+				} else if ( r.dType == RecipientItem.RecipientType.ReadReceipt ) {
+					// Nothing to do for this case
 				} else if ( r.dType == RecipientItem.RecipientType.RedirectedFrom ) {
 					mail.dRedirectedFromRecipient = r;
 				} else {

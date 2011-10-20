@@ -12,7 +12,7 @@ public class RecipientItem implements IItem {
 	protected static Logger logger = LogManager.getLogger(IItem.class);
 
 	public enum RecipientType {
-		To, Cc, Bcc, From, Sender, ReplyTo, RedirectedFrom
+		To, Cc, Bcc, From, Sender, ReplyTo, RedirectedFrom, ReadReceipt
 	}
 	public String dEmailAddress;
 	public String dDisplayName;
@@ -85,6 +85,8 @@ public class RecipientItem implements IItem {
 				recipient.dType = RecipientType.Sender;
 			else if ( type.equals("r") )
 				recipient.dType = RecipientType.ReplyTo;
+			else if ( type.equals("n") )
+				recipient.dType = RecipientType.ReadReceipt;
 			else if ( type.equals("rf") )
 				recipient.dType = RecipientType.RedirectedFrom;
 			else
