@@ -301,6 +301,15 @@ public class TreeContacts extends AbsTree {
 						MyApplication, ((AppAjaxClient) MyApplication).zPageAddressbook);
 
 			}
+			else if (option == Button.B_SHARE) {
+				
+				optionLocator = "css=div[id='ZmActionMenu_contacts_ADDRBOOK'] div[id='SHARE_ADDRBOOK'] td[id$='_title']";
+				page = new DialogShare(MyApplication,((AppAjaxClient) MyApplication).zPageAddressbook);
+				
+				zClickAt(optionLocator,"0,0");				
+				zWaitForBusyOverlay();						
+
+			}
 			else {
 				throw new HarnessException("implement action:"+ action +" option:"+ option);
 			}
