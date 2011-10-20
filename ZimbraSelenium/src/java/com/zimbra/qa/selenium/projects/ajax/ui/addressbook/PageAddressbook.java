@@ -313,7 +313,11 @@ public class PageAddressbook extends AbsTab {
 		String locator = null;			// If set, this will be clicked
 		AbsPage page = null;	// If set, this page will be returned
 
-		if ( button == Button.B_NEW ) {
+		if ( button == Button.B_REFRESH ) {
+			
+			return (((AppAjaxClient)this.MyApplication).zPageMain.zToolbarPressButton(Button.B_REFRESH));
+			
+		} else if ( button == Button.B_NEW ) {
 
 			// For "NEW" without a specified pulldown option, just return the default item
 			// To use "NEW" with a pulldown option, see  zToolbarPressPulldown(Button, Button)

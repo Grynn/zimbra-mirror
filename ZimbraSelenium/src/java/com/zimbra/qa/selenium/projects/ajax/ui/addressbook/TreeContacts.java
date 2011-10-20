@@ -95,19 +95,105 @@ public class TreeContacts extends AbsTree {
 			throw new HarnessException("Must define an action, option, and addressbook");
 		}
 
-		if ( folder instanceof FolderItem ) {
-			return (zTreeItem(action, option, (FolderItem)folder));
+		if ( folder instanceof FolderMountpointItem ) {
+			return (zTreeItem(action, option, (FolderMountpointItem)folder));
 		} else if ( folder instanceof SavedSearchFolderItem ) {
 			return (zTreeItem(action, option, (SavedSearchFolderItem)folder));
 		//} else if ( folder instanceof ZimletItem ) {
 		//	return (zTreeItem(action, option, (ZimletItem)folder));
 		}else if ( folder instanceof TagItem ) {
 			return (zTreeItem(action, option, (TagItem)folder));
+		} else if ( folder instanceof FolderItem ) { // FolderItem needs to go last
+			return (zTreeItem(action, option, (FolderItem)folder));
 		}
 
 		throw new HarnessException("Must use TagItem FolderItem or SavedSearchFolderItem or ZimletItem as argument, but was "+ folder.getClass());
 	}
 
+	protected AbsPage zTreeItem(Action action, Button option, FolderMountpointItem folderItem) 
+	throws HarnessException 
+	{
+		logger.info(myPageName() + " zTreeItem("+ action +", "+ option + "," + folderItem.getName() +")");
+		tracer.trace(action +" then "+ option +" on Folder Item = "+ folderItem.getName());
+
+		AbsPage page = null;
+		String actionLocator = null;
+		String optionLocator = null;
+
+		if ((action == null) || (option == null) || (folderItem == null)) {
+			throw new HarnessException("Must define an action, option, and addressbook");
+		}
+		
+		
+
+	
+		if (folderItem.getName().equals("USER_ROOT")) {
+			actionLocator = "css=div#ztih__main_Contacts__ADDRBOOK_div";
+		} else {
+			actionLocator = "css=div#zti__main_Contacts__" + folderItem.getId() +"_div";			
+		}
+		
+		
+		if ( action == Action.A_RIGHTCLICK ) {
+			
+			
+			optionLocator = "css=div[id='ZmActionMenu_contacts_ADDRBOOK']";
+			
+			if (option == Button.B_TREE_NEWFOLDER) {
+				
+				optionLocator += " div[id='NEW_ADDRBOOK'] td[id$='_title']";
+				page = new DialogCreateFolder(MyApplication, ((AppAjaxClient)MyApplication).zPageAddressbook);			    
+
+			}			
+			else if (option == Button.B_DELETE) {
+				
+				optionLocator += " div[id='DELETE_WITHOUT_SHORTCUT'] td[id$='_title']";
+				page = null;
+				
+		    } 
+			else if (option == Button.B_RENAME) {
+				
+				optionLocator += " div[id='RENAME_FOLDER'] td[id$='_title']";
+			    page = new DialogRenameFolder(MyApplication,((AppAjaxClient) MyApplication).zPageAddressbook);
+
+			}   			
+			else if (option == Button.B_TREE_EDIT) {
+
+				optionLocator += " div[id='EDIT_PROPS'] td[id$='_title']";
+			    page = new DialogEditFolder(MyApplication,((AppAjaxClient) MyApplication).zPageAddressbook);
+
+			} 
+			else if (option == Button.B_TREE_FOLDER_EMPTY) {
+				
+				optionLocator += " div[id='EMPTY_FOLDER'] td[id$='_title']";
+				page = new DialogWarning(DialogWarning.DialogWarningID.EmptyFolderWarningMessage,
+						MyApplication, ((AppAjaxClient) MyApplication).zPageAddressbook);
+
+			}
+			else {
+				throw new HarnessException("implement action:"+ action +" option:"+ option);
+			}
+			
+			// Default right-click behavior
+			zRightClickAt(actionLocator,"0,0");
+			zWaitForBusyOverlay();
+
+			zClickAt(optionLocator, "0,0");
+			zWaitForBusyOverlay();
+
+			if ( page != null ) {
+				page.zWaitForActive();
+			}
+			
+			return (page);
+			
+		} else {
+			throw new HarnessException("implement action:"+ action +" option:"+ option);
+		}
+
+
+	}
+	
 	protected AbsPage zTreeItem(Action action, Button option, FolderItem folderItem)
 	throws HarnessException {
 
