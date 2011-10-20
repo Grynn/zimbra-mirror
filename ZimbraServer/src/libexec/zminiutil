@@ -171,7 +171,6 @@ sub parseFile($) {
 my $inputFile = $ARGV[0];
 my $time = strftime("%Y%m%d%H%M%S", localtime);
 my $outputFile = $inputFile . ".modify." . $$ . $time; # created if needed
-my $backupFile = $inputFile . $opt{backup}; # created if needed
 
 my $linesRef = parseFile($inputFile);
 die "error parsing file $inputFile" if (!defined($linesRef));
@@ -219,6 +218,13 @@ if (defined $opt{isset}) {
 } 
 
 ### SET/SETMIN/SETMAX/UNSET
+my $backupFile;
+if (defined $opt{backup}) {
+    $backupFile = $inputFile . $opt{backup};
+} else {
+    $backupFile = $inputFile . ".bak";
+}
+
 open(BACKUPFILE, ">$backupFile") || die "can't open backup file: $backupFile: $!";
 open(OUTPUTFILE, ">$outputFile") || die "can't open temp file: $outputFile: $!";
 LINE: for my $line (@lines) {
