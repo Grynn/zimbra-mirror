@@ -2949,6 +2949,10 @@ function(ev) {
 DwtControl.__badDrop =
 function(obj, mouseEv) {
 	obj._dragSource._cancelDrag();
+    var targetObj = mouseEv.dwtObj;
+    if (targetObj) {
+       targetObj._drop(mouseEv);
+    }
 	// The following code sets up the drop effect for when an
 	// item is dropped onto an invalid target. Basically the
 	// drag icon will spring back to its starting location.
