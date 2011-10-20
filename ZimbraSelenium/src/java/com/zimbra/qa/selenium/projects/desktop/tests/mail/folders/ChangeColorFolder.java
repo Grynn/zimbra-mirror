@@ -6,6 +6,7 @@ import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
+import com.zimbra.qa.selenium.framework.util.ZimbraAccount.SOAP_DESTINATION_HOST_TYPE;
 import com.zimbra.qa.selenium.projects.desktop.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.desktop.ui.mail.DialogEditFolder;
 import com.zimbra.qa.selenium.projects.desktop.ui.mail.DialogEditFolder.FolderColor;
@@ -36,16 +37,24 @@ public class ChangeColorFolder extends AjaxCommonTest {
             +     "<folder name='" + name1 + "' l='" + inbox.getId() + "'/>"
             +  "</CreateFolderRequest>");
 
-      FolderItem subfolder1 = FolderItem.importFromSOAP(app
-            .zGetActiveAccount(), name1);
-      ZAssert.assertNotNull(subfolder1, "Verify the subfolder is available");
-
       // Click on Get Mail to refresh the folder list
       app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 
+      FolderItem subfolder1 = FolderItem.importFromSOAP(
+            app.zGetActiveAccount(), name1);
+
+      FolderItem subfolderZD1 = FolderItem.importFromSOAP(
+            app.zGetActiveAccount(),
+            name1,
+            SOAP_DESTINATION_HOST_TYPE.CLIENT,
+            app.zGetActiveAccount().EmailAddress);
+
+      ZAssert.assertNotNull(subfolder1, "Verify the subfolder is available");
+
       // Rename the folder using context menu
       DialogEditFolder dialog = (DialogEditFolder) app.zTreeMail.zTreeItem(
-            Action.A_RIGHTCLICK, Button.B_TREE_EDIT, subfolder1);
+            Action.A_RIGHTCLICK, Button.B_TREE_EDIT, subfolderZD1);
+
       ZAssert.assertNotNull(dialog, "Verify the dialog opened");
 
       // Change the color, click OK
