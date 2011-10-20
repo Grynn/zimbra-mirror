@@ -36,6 +36,7 @@ ZmClick2CallFromPhoneDlg = function(shell, parent) {
     //set this to null otherwise esc will throw expn
     this._buttonDesc = {};
     this._isLoaded = false;
+	this.RE = new RegExp("\\+?\\b\\d([0-9\\(\\)\\.\\s\\-]){8,20}\\d\\b", "g");
 };
 
 ZmClick2CallFromPhoneDlg.prototype = new DwtDialog;
@@ -59,6 +60,7 @@ ZmClick2CallFromPhoneDlg.prototype.showDialog =
 function() {
 
     if (!this._isLoaded) {
+		appCtxt.setStatusMsg(ZmMsg.loading);
         this._getVoiceInfoAndShowDlg();
     } else {
         this.setToPhoneText();
@@ -162,14 +164,24 @@ ZmClick2CallFromPhoneDlg.prototype._setFromPhoneMenu = function(phones) {
 ZmClick2CallFromPhoneDlg.prototype._makeCall = function() {
     //set the value from the TO field
     this.click2CallDlg.toPhoneNumber = document.getElementById("click2CallDlg_callToPHText").value;
-
-    this.popdown();
     this.click2CallDlg.fromPhoneNumber = document.getElementById("click2CallFromPhoneDlg_callFromMenu").value;
+	if(!this.isValidPhoneNumber(this.click2CallDlg.toPhoneNumber))  {
+		var errorDialog = appCtxt.getErrorDialog();
+		errorDialog.reset();
+		errorDialog.setMessage(this.zimlet.getMessage("notAValidPhoneNumber"), this.zimlet.getMessage("notAValidPhoneNumber"), DwtMessageDialog.CRITICAL_STYLE, ZmMsg.zimbraTitle);
+		errorDialog.popup();
+		return;
+	}
+	 this.popdown();
     this.click2CallDlg.clickToCall();
 };
 
+ZmClick2CallFromPhoneDlg.prototype.isValidPhoneNumber = function(phoneNumber) {
+	return this.RE.test(phoneNumber);
+};
+
 ZmClick2CallFromPhoneDlg.prototype.setToPhoneText = function() {
-    document.getElementById("click2CallDlg_callToPHText").value = this.toPhoneNumber;
+    document.getElementById("click2CallDlg_callToPHText").value = this.toPhoneNumber ? this.toPhoneNumber : "";
 };
 
 ZmClick2CallFromPhoneDlg.prototype.popdown =

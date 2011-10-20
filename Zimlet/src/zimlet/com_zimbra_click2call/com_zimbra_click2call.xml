@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_click2call" version="0.1"  label="${msg.label}" description="${msg.description}">
+<zimlet name="com_zimbra_click2call" version="0.2"  label="${msg.label}" description="${msg.description}">
 	<include>ZmClick2Call.js</include>
 	<include>base64.js</include>
 	<include>ZmClick2CallProviderAPIs.js</include>
@@ -9,7 +9,11 @@
 	<handlerObject>ZmClick2CallZimlet</handlerObject>
 	<contentObject type="phone">
 		<matchOn>
-			<regex attrs="g">(((\+\d{2}[-\. ]\d{5}[-\. ]?\d{5})|(1\d{10})|(\d{10})|(\b(\d{1}[-. ])?(\(?\d{3}\)?[-. ])?\d{3}[-.]\d{4}\b)|(\(\d{3}\)[-\. ]?\d{7}))(( x| ext)[-#: ]?\d{1,5}){0,1})</regex>
+            <!-- Match total 10-22 chars that start with + or +number and end with number
+                to ensure we match most US and intl Phone numbers including "+"
+                Also have word-boundary inside to ignore partial-matches
+            -->
+			<regex attrs="g">\+?\b\d([0-9\(\)\.\s\-]){8,20}\d\b</regex>
 		</matchOn>
 	</contentObject>
 </zimlet>

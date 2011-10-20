@@ -44,24 +44,6 @@ ZmClick2CallZimlet.prototype.init = function() {
 	if(!this.countryCode) {
 		this.countryCode = 1;
 	}
-	this._showFromPhoneDlg();
-};
-
-ZmClick2CallZimlet.prototype.match =
-function(line, startIndex) {
-	var a = this.regexps;
-	var ret = null;
-	for (var i = 0; i < a.length; ++i) {
-		var re = a[i];
-		re.lastIndex = startIndex;
-		var m = re.exec(line);
-        if (m) {
-            if (!ret || m.index < ret.index) {
-                ret = m;
-            }
-        }
-	}
-	return ret;
 };
 
 ZmClick2CallZimlet.prototype.toolTipPoppedUp = function(spanElement, contentObjText, matchContext, canvas) {
@@ -69,8 +51,12 @@ ZmClick2CallZimlet.prototype.toolTipPoppedUp = function(spanElement, contentObjT
 	canvas.innerHTML = AjxTemplate.expand("com_zimbra_click2call.templates.ZmClick2Call#Tooltip", subs);
 };
 
-
 ZmClick2CallZimlet.prototype.clicked = function(myElement, toPhoneNumber) {
+	this.toPhoneNumber = toPhoneNumber;
+	this._showFromPhoneDlg();
+};
+
+ZmClick2CallZimlet.prototype.display = function(toPhoneNumber) {
 	this.toPhoneNumber = toPhoneNumber;
 	this._showFromPhoneDlg();
 };
