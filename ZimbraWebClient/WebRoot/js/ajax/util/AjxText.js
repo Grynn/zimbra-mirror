@@ -1985,13 +1985,16 @@ AjxChoiceFormat.prototype.format = function(number, index) {
  *                                  the last item in the list (e.g. " and ").
  *                                  If not specified, <code>AjxMsg.separatorListLast</code>
  *                                  is used.
+ * @param {string}    twoSeparator	Optional. Separator used if the list consists of 
+ * 									exactly two items. If not specified, <code>AjxMsg.listSeparatorTwo</code>
+ * 									is used.	
  */
-AjxListFormat = function(formatter, separator, lastSeparator) {
-    if (arguments.length == 0) { return; }
+AjxListFormat = function(formatter, separator, lastSeparator, twoSeparator) {
 	AjxFormat.call(this, formatter ? formatter.toPattern() : "");
 	this._formatter = formatter;
 	this._separator = separator || AjxMsg.listSeparator;
 	this._lastSeparator = lastSeparator || AjxMsg.listSeparatorLast;
+	this._twoSeparator = twoSeparator || AjxMsg.listSeparatorTwo;
 }
 AjxListFormat.prototype = new AjxFormat;
 AjxListFormat.prototype.constructor = AjxListFormat;
@@ -2015,7 +2018,8 @@ AjxListFormat.prototype.format = function(array) {
 	var list = [];
 	for (var i = 0; i < array.length; i++) {
 		if (i > 0) {
-			list.push(i < array.length - 1 ? this._separator : this._lastSeparator);
+			list.push((i < array.length - 1) ? this._separator : (list.length == 2) ?
+					this._twoSeparator : this._lastSeparator);
 		}
 		var item = array[i];
 		list.push(this._formatter ? this._formatter.format(item) : String(item));
