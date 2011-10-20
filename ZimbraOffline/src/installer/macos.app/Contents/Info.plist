@@ -24,5 +24,7 @@
   <string>YHOO</string>
   <key>CFBundleVersion</key>
   <string>@version@</string>
+  <key>LSFileQuarantineEnabled</key>
+  <string>true</string>
 </dict>
 </plist>
