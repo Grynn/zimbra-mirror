@@ -15,6 +15,7 @@ import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.desktop.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.desktop.ui.Toaster;
 import com.zimbra.qa.selenium.projects.desktop.ui.briefcase.DialogConfirm;
 
 public class DeleteFile extends AjaxCommonTest {
@@ -71,7 +72,12 @@ public class DeleteFile extends AjaxCommonTest {
 		// Click OK on Confirmation dialog
 		deleteConfirm.zClickButton(Button.B_YES);
 
-		// refresh briefcase page
+		Toaster toast = app.zPageMain.zGetToaster();
+		String toastMsg = toast.zGetToastMessage();
+		ZAssert.assertStringContains(toastMsg, "1 file moved to Trash",
+		      "Verify toast message" );
+
+	   // refresh briefcase page
 		app.zTreeBriefcase
 				.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, false);
 
@@ -111,7 +117,7 @@ public class DeleteFile extends AjaxCommonTest {
 		String docId = account.soapSelectValue(
 				"//mail:SaveDocumentResponse//mail:doc", "id");
 
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
       app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
 
       // refresh briefcase page
@@ -126,6 +132,11 @@ public class DeleteFile extends AjaxCommonTest {
 
 		// Click OK on Confirmation dialog
 		deleteConfirm.zClickButton(Button.B_YES);
+
+	   Toaster toast = app.zPageMain.zGetToaster();
+	   String toastMsg = toast.zGetToastMessage();
+	   ZAssert.assertStringContains(toastMsg, "1 file moved to Trash",
+	         "Verify toast message" );
 
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
       app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
@@ -202,7 +213,12 @@ public class DeleteFile extends AjaxCommonTest {
 		// Click OK on Confirmation dialog
 		deleteConfirm.zClickButton(Button.B_YES);
 
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      Toaster toast = app.zPageMain.zGetToaster();
+      String toastMsg = toast.zGetToastMessage();
+      ZAssert.assertStringContains(toastMsg, "1 file moved to Trash",
+            "Verify toast message" );
+
+      GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
       app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
 
       // refresh briefcase page
@@ -270,6 +286,11 @@ public class DeleteFile extends AjaxCommonTest {
 
 	     // Click OK on Confirmation dialog
 	     deleteConfirm.zClickButton(Button.B_YES);
+
+	     Toaster toast = app.zPageMain.zGetToaster();
+	     String toastMsg = toast.zGetToastMessage();
+	     ZAssert.assertStringContains(toastMsg, "1 file moved to Trash",
+	           "Verify toast message" );
 
 	     // refresh briefcase page
 	     app.zTreeBriefcase
