@@ -972,12 +972,8 @@ public class BeanUtils {
          int dow = cal.get(Calendar.DAY_OF_WEEK);
 
         // pref goes 0-6, Calendar goes 1-7
-        if ("week".equalsIgnoreCase(view)) {
-                if (dow != prefFirstDayOfWeek)
-                    cal.add(Calendar.DAY_OF_MONTH, - (((dow-1) + (7- (int)prefFirstDayOfWeek)) % 7));
-        } else if ("workWeek".equalsIgnoreCase(view)) {
-                cal.add(Calendar.DAY_OF_MONTH, - (dow -1));
-        }
+         if (dow != prefFirstDayOfWeek)
+             cal.add(Calendar.DAY_OF_MONTH, - (((dow-1) + (7- (int)prefFirstDayOfWeek)) % 7));
         return cal;
     }
 
@@ -1067,6 +1063,49 @@ public class BeanUtils {
             workDays.add(Integer.parseInt(day),true);
         }
         return workDays;
+    }
+
+    /**
+     * Change the zimbraPrefCalendarWorkingHours preference as per the work days selected.
+     *
+     * @param  workWeekPref - zimbraPrefCalendarWorkingHours preference (1:Y/N:start hour:end hour)
+     * @param  days - work days selected in terms of Y/N (0-6 starting Sunday, e.g N,Y,Y,N,Y,Y,N)
+     * @return modified zimbraPrefCalendarWorkingHours as per the work days selected, do not change
+     * the start and end hours.
+     */
+    public static java.lang.String generateWorkWeek(java.lang.String workWeekPref, java.lang.String days) {
+        StringBuilder wDays = new StringBuilder();
+        String daysArr[] = days.split(",");
+        String workDays[] = workWeekPref.split(",");
+        for (int i=0; i <7; i++ ) {
+            String day[] = workDays[i].split(":");
+            day[1] = daysArr[i];
+            String modDay = StringUtil.join(":", day);
+            if (wDays.length() > 0) wDays.append(',');
+            wDays.append(modDay);
+        }
+
+        return wDays.toString();
+    }
+
+    /**
+     * Given the working hours pref, extract only the working days info from the preference since
+     * HTML client only lets the user change the working days. Work hours remain intact.
+     *
+     * @param workWeekPref - zimbraPrefCalendarWorkingHours preference
+     * @return working days string in terms of Y/N (0-6 starting Sunday, e.g N,Y,Y,N,Y,Y,N)
+     */
+    public static java.lang.String convertCalWorkHours(java.lang.String workWeekPref) {
+       StringBuilder wDays = new StringBuilder();
+       String workDays[] = workWeekPref.split(",");
+        for (int i=0; i <7; i++ ) {
+            String day[] = workDays[i].split(":");
+            if(day[1].equals("Y")) {
+                if (wDays.length() > 0) wDays.append(',');
+                wDays.append(Integer.toString(i));
+            }
+        }
+        return wDays.toString();
     }
 
     /** Given the checkedCalendars folder id, returns the canonical folder id for mountpoints
