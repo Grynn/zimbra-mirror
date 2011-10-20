@@ -168,6 +168,7 @@ STDMETHODIMP CItemObject::GetDataForItemID(VARIANT ItemId, VARIANT *pVal)
 			ContactItemData cd;
 			maapi->GetItem(ItemID, cd);
 			pIt[L"birthday"] = SysAllocString((cd.Birthday).c_str());
+			pIt[L"anniversary"] = SysAllocString((cd.Anniversary).c_str());
 			pIt[L"callbackPhone"] = SysAllocString((cd.CallbackPhone).c_str());
 			pIt[L"carPhone"] = SysAllocString((cd.CarPhone).c_str());
 			pIt[L"company"] = SysAllocString((cd.Company).c_str());
