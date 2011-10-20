@@ -254,6 +254,23 @@ if [ -d ${zimbra_home} ]; then
       chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/conf/my.cnf
       chmod 640 ${zimbra_home}/conf/my.cnf
     fi
+
+    if [ -f ${zimbra_home}/conf/saslauthd.conf.in ]; then
+      chmod 640 ${zimbra_home}/conf/saslauthd.conf.in
+      chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/conf/saslauthd.conf.in
+    fi
+    if [ -f ${zimbra_home}/conf/saslauthd.conf ]; then
+      chmod 440 ${zimbra_home}/conf/saslauthd.conf
+      chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/conf/saslauthd.conf
+    fi
+    if [ -f ${zimbra_home}/conf/sasl2/smtpd.conf.in ]; then
+      chmod 640 ${zimbra_home}/conf/sasl2/smtpd.conf.in
+      chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/conf/sasl2/smtpd.conf.in
+    fi
+    if [ -f ${zimbra_home}/conf/sasl2/smtpd.conf ]; then
+      chmod 640 ${zimbra_home}/conf/sasl2/smtpd.conf
+      chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/conf/sasl2/smtpd.conf
+    fi
   fi
 
   if [ -d ${zimbra_home}/docs ]; then
@@ -402,23 +419,6 @@ if [ -L ${zimbra_home}/cyrus-sasl ]; then
   chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/cyrus-sasl/lib/sasl2
   chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/cyrus-sasl/{etc,state}
   chmod 755 ${zimbra_home}/cyrus-sasl/state 
-
-  if [ -f ${zimbra_home}/cyrus-sasl/etc/saslauthd.conf.in ]; then
-    chmod 640 ${zimbra_home}/cyrus-sasl/etc/saslauthd.conf.in
-    chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/cyrus-sasl/etc/saslauthd.conf.in
-  fi
-  if [ -f ${zimbra_home}/cyrus-sasl/etc/saslauthd.conf ]; then
-    chmod 440 ${zimbra_home}/cyrus-sasl/etc/saslauthd.conf
-    chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/cyrus-sasl/etc/saslauthd.conf
-  fi
-  if [ -f ${zimbra_home}/cyrus-sasl/lib/sasl2/smtpd.conf.in ]; then
-    chmod 640 ${zimbra_home}/cyrus-sasl/lib/sasl2/smtpd.conf.in
-    chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/cyrus-sasl/lib/sasl2/smtpd.conf.in
-  fi
-  if [ -f ${zimbra_home}/cyrus-sasl/lib/sasl2/smtpd.conf ]; then
-    chmod 640 ${zimbra_home}/cyrus-sasl/lib/sasl2/smtpd.conf
-    chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/cyrus-sasl/lib/sasl2/smtpd.conf
-  fi
 fi
 
 if [ -L ${zimbra_home}/dspam ]; then
