@@ -38,7 +38,8 @@ private:
         pr_contact_user3_idx,
         pr_contact_user4_idx,
         pr_contact_oneoffmemebrs,
-        pr_imaddress;
+        pr_imaddress,
+		pr_anniversary;
 
     // index of props
     typedef enum _ContactsPropIdx
@@ -50,7 +51,7 @@ private:
         N_BUS_COUNTRY, N_BUS_ZIP, N_BUS_STATE,
         N_BUS_STREET, N_CONTACT_USER1_IDX, N_CONTACT_USER2_IDX,
         N_CONTACT_USER3_IDX, N_CONTACT_USER4_IDX,
-        N_CONTACT_ONEOFFMEMEBRS_IDX, N_IMADDRESS, N_NUM_NAMES
+        N_CONTACT_ONEOFFMEMEBRS_IDX, N_IMADDRESS,N_ANNIVERSARY, N_NUM_NAMES
     } ContactsPropIdx;
 
     // this enum defines the order of the props
@@ -113,6 +114,7 @@ private:
         C_CONTACT_USER4_IDX,
         C_ONEOFFMEMEBRS_IDX,
         C_IMADDRESS,
+		C_ANNIVERSARY,
         C_NUM_PROPS
     };
 
@@ -192,6 +194,8 @@ private:
     wstring m_pPictureID;
     size_t m_size;
     wstring m_pIMAddress1;
+	wstring m_anniversary;
+	wstring m_contact_image_path;
 
     HRESULT Init();
 
@@ -199,7 +203,7 @@ public:
     MAPIContact(Zimbra::MAPI::MAPISession &session, Zimbra::MAPI::MAPIMessage &mMessage);
     ~MAPIContact();
     bool IsPersonalDL() { return m_bPersonalDL; }
-
+	HRESULT GetContactImage(wstring &wstrImagePath);
     void CallbackPhone(LPTSTR pStr)
     {
         m_pCallbackPhone = pStr;
@@ -410,6 +414,11 @@ public:
         m_pBirthday = pStr;
         m_size += m_pBirthday.length();
     }
+	void Anniversary(LPTSTR pStr)
+    {
+        m_anniversary = pStr;
+        m_size += m_anniversary.length();
+    }
     void UserField1(LPTSTR pStr)
     {
         m_pUserField1 = pStr;
@@ -450,6 +459,11 @@ public:
         m_pIMAddress1 = pStr;
         m_size += m_pIMAddress1.length();
     }
+
+	void ContactImagePath(LPTSTR pStr)
+	{
+		m_contact_image_path = pStr;
+	}
     wstring CallbackPhone() { return m_pCallbackPhone; }
     wstring CarPhone() { return m_pCarPhone; }
     wstring Company() { return m_pCompany; }
@@ -492,6 +506,7 @@ public:
     wstring WorkStreet() { return m_pWorkStreet; }
     wstring WorkURL() { return m_pWorkURL; }
     wstring Birthday() { return m_pBirthday; }
+	wstring Anniversary() {return m_anniversary;}
     wstring UserField1() { return m_pUserField1; }
     wstring UserField2() { return m_pUserField2; }
     wstring UserField3() { return m_pUserField3; }
@@ -501,8 +516,9 @@ public:
     wstring Type() { return m_pType; }
     wstring IMAddress1() { return m_pIMAddress1; }
     size_t Size() { return m_size; }
-
+	wstring ContactImagePath() {return m_contact_image_path;}
     wstring Picture() { return m_pPictureID; }
+	wstring Anniverssary() {return m_anniversary;}
     void Picture(LPTSTR pStr, UINT ulFileSize)
     {
         m_pPictureID = pStr;

@@ -553,7 +553,10 @@ LPCWSTR MAPIAccessAPI::GetItem(SBinary sbItemEID, BaseItemData &itemData)
             cd->WorkPostalCode = mapicontact.WorkPostalCode();
             cd->WorkState = mapicontact.WorkState();
             cd->WorkStreet = mapicontact.WorkStreet();
-            cd->WorkURL = mapicontact.WorkURL();
+            cd->WorkURL = mapicontact.WorkURL();	
+			cd->ContactImagePath = mapicontact.ContactImagePath();
+			cd->Anniversary = mapicontact.Anniversary();
+			
         }
         else if (msg.ItemType() == ZT_APPOINTMENTS)
         {

@@ -91,6 +91,8 @@ typedef struct _ContactItemData: BaseItemData
     wstring Type;
     wstring PictureID;
     wstring IMAddress1;
+	wstring Anniversary;
+	wstring ContactImagePath;
 } ContactItemData;
 
 typedef struct
