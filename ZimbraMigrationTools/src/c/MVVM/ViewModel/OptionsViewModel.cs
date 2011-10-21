@@ -111,6 +111,7 @@ namespace MVVM.ViewModel
                     {
                         ((ConfigViewModelS)ViewModelPtrs[(int)ViewType.SVRSRC]).LoadConfig(config);
                         ((ConfigViewModelSDest)ViewModelPtrs[(int)ViewType.SVRDEST]).LoadConfig(config);
+                        ((UsersViewModel)ViewModelPtrs[(int)ViewType.USERS]).LoadDomain(config);
                     }
                     else
                     {

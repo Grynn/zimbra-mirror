@@ -58,6 +58,7 @@ namespace MVVM.ViewModel
                     LoadConfig(config);
                     ((ConfigViewModelS)ViewModelPtrs[(int)ViewType.SVRSRC]).LoadConfig(config);
                     ((OptionsViewModel)ViewModelPtrs[(int)ViewType.OPTIONS]).LoadConfig(config);
+                    ((UsersViewModel)ViewModelPtrs[(int)ViewType.USERS]).LoadDomain(config);
                     ((ScheduleViewModel)ViewModelPtrs[(int)ViewType.SCHED]).SetConfigFile(fDialog.FileName);
                 }
             }                
@@ -134,12 +135,28 @@ namespace MVVM.ViewModel
                 {
                     UsersViewModel usersViewModel = ((UsersViewModel)ViewModelPtrs[(int)ViewType.USERS]);
                     ScheduleViewModel scheduleViewModel = ((ScheduleViewModel)ViewModelPtrs[(int)ViewType.SCHED]);
+                    string currentDomain = (usersViewModel.DomainList.Count > 0) ? usersViewModel.DomainList[usersViewModel.CurrentDomainSelection] : "";
                     usersViewModel.DomainList.Clear();
                     scheduleViewModel.CosList.Clear();
                     zimbraAPI.GetAllDomains();
-                    foreach (string s in ZimbraValues.GetZimbraValues().Domains)
+
+                    for (int i = 0; i < ZimbraValues.GetZimbraValues().Domains.Count; i++)
                     {
+                        string s = ZimbraValues.GetZimbraValues().Domains[i];
                         usersViewModel.DomainList.Add(s);
+
+                        // if we've loaded a config file where the domain was specified, then set it as selected
+                        if (currentDomain != null)
+                        {
+                            if (currentDomain.Length > 0)
+                            {
+                                if (s == currentDomain)
+                                {
+                                    usersViewModel.CurrentDomainSelection = i;
+                                }
+                            }
+                        }
+                           
                     }
                     zimbraAPI.GetAllCos();
                     foreach (CosInfo cosinfo in ZimbraValues.GetZimbraValues().COSes)

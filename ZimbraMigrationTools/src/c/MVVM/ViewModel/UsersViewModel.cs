@@ -196,7 +196,9 @@ namespace MVVM.ViewModel
                                 CurrentDomainSelection = (ZimbraDomain == null) ? 0 : DomainList.IndexOf(ZimbraDomain);
                             }
                             else
-                            DomainList.Add(ZimbraDomain);
+                            {
+                                DomainList.Add(ZimbraDomain);
+                            }
                            
                         }
                         scheduleViewModel.SetUsermapFile(fDialog.FileName);
@@ -402,10 +404,29 @@ namespace MVVM.ViewModel
             return true;
         }
 
+        public void LoadDomain(Config config)
+        {
+            CurrentDomainSelection = 0;
+            string d = config.UserProvision.Domain;
+            if (DomainList.Count > 0)
+            {
+                for (int i = 0; i < DomainList.Count; i++)
+                {
+                    if (d == DomainList[i])
+                    {
+                        CurrentDomainSelection = i;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                DomainList.Add(d);
+            }
+        }
+
         private void SaveDomain()
         {
-
-
             try
             {
                 ScheduleViewModel scheduleViewModel = ((ScheduleViewModel)ViewModelPtrs[(int)ViewType.SCHED]);
