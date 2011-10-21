@@ -117,19 +117,6 @@ ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
 //        height:"400px",  align:_LEFT_, valign:_TOP_,
         getCustomWidth: ZaHomeXFormView.prototype.getCustomWidth,
         items:[
->>>> ORIGINAL //depot/zimbra/main/ZimbraWebClient/WebRoot/js/zimbraAdmin/home/view/ZaHomeXFormView.js#7
-            {type:_SPACER_, colSpan: "4", height:20},
-            {type:_OUTPUT_, label:"VMWare Zimbra Version:", ref: ZaHome.A2_version},
-            {type:_OUTPUT_, label:"Resouce Usage:", value: "tenative"},
-            {type:_OUTPUT_, label:"Accounts:", ref: ZaHome.A2_account},
-            {type:_SPACER_, colSpan: "2"},
-            {type:_OUTPUT_, label: "Status:", value: "running"},
-            {type:_SPACER_, colSpan: "2"},
-			{type:_SEPARATOR_, align:_CENTER_, valign:_TOP_},
-            {type:_HOMEGROUP_, headerLabel: "Get Started with Zimbra", colSpan: "2", valign:_TOP_, contentChoices: startChoices},
-            {type:_HOMEGROUP_, headerLabel: "Migrate Accounts", colSpan: "2", valign:_TOP_, contentChoices:  migrationChoices},
-            {type:_HOMEGROUP_, headerLabel: "Zimbra Help", colSpan:"2", valign:_TOP_,  contentChoices: helpChoices}
-==== THEIRS //depot/zimbra/main/ZimbraWebClient/WebRoot/js/zimbraAdmin/home/view/ZaHomeXFormView.js#8
             {type:_GROUP_, colSpan: "*", numCols:1, containerCssStyle:"background-color:green", width:"100%", items:[
                 {type:_GROUP_, numCols:3,  width:"100%", colSizes:["80px", "*", "100px"], items:[
                     {type:_AJX_IMAGE_, src: "Critical"},
@@ -248,19 +235,6 @@ ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
             {type:_SPACER_, colSpan: "*", height:20 },
             {type:_OUTPUT_, value: ZaMsg.LBL_HomeHelpCenter, colSpan: "*", align:_RIGHT_, onClick: ZaHomeXFormView.onHelpLink,
                 containerCssStyle:"cursor:pointer;color:blue"}
-==== YOURS //wanglu_client/zimbra/main/ZimbraWebClient/WebRoot/js/zimbraAdmin/home/view/ZaHomeXFormView.js
-            {type:_SPACER_, colSpan: "4", height:20},
-            {type:_OUTPUT_, label:"VMware Zimbra Version:", ref: ZaHome.A2_version},
-            {type:_OUTPUT_, label:"Resouce Usage:", value: "tenative"},
-            {type:_OUTPUT_, label:"Accounts:", ref: ZaHome.A2_account},
-            {type:_SPACER_, colSpan: "2"},
-            {type:_OUTPUT_, label: "Status:", value: "running"},
-            {type:_SPACER_, colSpan: "2"},
-			{type:_SEPARATOR_, align:_CENTER_, valign:_TOP_},
-            {type:_HOMEGROUP_, headerLabel: "Get Started with Zimbra", colSpan: "2", valign:_TOP_, contentChoices: startChoices},
-            {type:_HOMEGROUP_, headerLabel: "Migrate Accounts", colSpan: "2", valign:_TOP_, contentChoices:  migrationChoices},
-            {type:_HOMEGROUP_, headerLabel: "Zimbra Help", colSpan:"2", valign:_TOP_,  contentChoices: helpChoices}
-<<<<
         ]
     };
 
