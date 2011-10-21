@@ -1067,11 +1067,6 @@
             <variable-class>com.zimbra.client.ZAuthResult</variable-class>
             <scope>AT_END</scope>
         </variable>
-        <variable>
-            <name-from-attribute>varNeedRefer</name-from-attribute>
-            <variable-class>java.lang.Boolean</variable-class>
-            <scope>AT_END</scope>
-        </variable>
         <attribute>
             <description>
                 Username
@@ -1119,15 +1114,6 @@
             <name>varAuthResult</name>
             <required>true</required>
             <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
-            <description>
-                set to true if we need to redirect to a different server
-            </description>
-            <name>varNeedRefer</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -6854,6 +6840,12 @@
             ]]>
 <![CDATA[ ]]>            
         </example>
+    </function>
+
+    <function>
+        <name>equalsIgnoreCase</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>boolean equalsIgnoreCase(java.lang.String,java.lang.String)</function-signature>
     </function>
 
     <function>

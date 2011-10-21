@@ -318,6 +318,16 @@ public class BeanUtils {
     }
 
     /**
+     * Performs a case-insensitive string comparison
+     */
+    public static boolean equalsIgnoreCase(String str1, String str2) {
+        if (str1 != null && str2 != null)
+            return str1.equalsIgnoreCase(str2);
+        else
+            return false;
+    }
+
+    /**
      * truncat given text at length, then walk back until you hit a whitespace.
      *
      * @param text text to truncate
