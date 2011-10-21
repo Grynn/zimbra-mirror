@@ -1948,6 +1948,10 @@ function(text, isHtml) {
 		original = firstUnknown;
 	}
 
-	return original || text;
+	var effectiveLength = 0;
+	if (original) {
+		effectiveLength = isHtml ? AjxStringUtil.convertHtml2Text(original).length : original.length;
+	}
+	return (effectiveLength > 0) ? original : text;
 };
 
