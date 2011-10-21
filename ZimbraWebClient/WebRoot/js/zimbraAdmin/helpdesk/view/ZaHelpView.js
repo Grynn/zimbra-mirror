@@ -113,20 +113,20 @@ ZaHelpView.myXFormModifier = function(xFormObject) {
 
 					{type:_GROUP_,numCols:2,
 						items: [
-							{type:_OUTPUT_, value:AjxImg.getImageHtml("favicon")},
+							{type:_OUTPUT_, value:AjxImg.getImageHtml("PDFDoc")},
 							{type:_ANCHOR_, cssStyle:"font-size:12px;", href:"http://www.zimbra.com/forums/", showInNewWindow:true,labelLocation:_NONE_,  label:ZabMsg.HELP_PAGE_6 }
 						]
 					},					
 					{type:_GROUP_,numCols:2,
 						items: [
-							{type:_OUTPUT_, value:AjxImg.getImageHtml("favicon")},
-							{type:_ANCHOR_, cssStyle:"font-size:12px;", href:"http://wiki.zimbra.com", showInNewWindow:true,labelLocation:_NONE_,  label:ZabMsg.HELP_PAGE_12 }
+							{type:_OUTPUT_, value:AjxImg.getImageHtml("PDFDoc")},
+							{type:_ANCHOR_, cssStyle:"font-size:12px;", href:"http://wiki.zimbra.com", showInNewWindow:true,labelLocation:_NONE_,  label:ZaMsg.HELP_PAGE_12 }
 						]
 					},
 					{type:_SPACER_, colSpan:"*"},					
 					{type:_OUTPUT_, cssStyle:"font-size:12px;", label:null, value:ZaMsg.HELP_PAGE_7, 
 					 cssStyle:"padding-right:10px;padding-left:10px;"},
-					{type:_OUTPUT_, label:null, value:ZabMsg.HELP_PAGE_13, cssStyle:"padding-right:10px;padding-left:10px;"},
+					{type:_OUTPUT_, label:null, value:ZaMsg.HELP_PAGE_13, cssStyle:"padding-right:10px;padding-left:10px;"},
 					{type:_SEPARATOR_, colSpan:1, cssClass:"helpSeparator"},
 					{type:_SEPARATOR_, colSpan:1, cssClass:"helpSeparator"},
 
@@ -140,15 +140,15 @@ ZaHelpView.myXFormModifier = function(xFormObject) {
 					{type:_GROUP_,numCols:4,
 						items: [
 							{type:_OUTPUT_, value:AjxImg.getImageHtml("PDFDoc")},
-							{type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:ZabMsg.HELP_PAGE_10_EXCHANGE,href:(location.pathname + "adminhelp/pdf/MigrationWizard.pdf?locid="+AjxEnv.DEFAULT_LOCALE)},
+							{type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:ZaMsg.HELP_PAGE_10_EXCHANGE,href:(location.pathname + "adminhelp/pdf/MigrationWizard.pdf?locid="+AjxEnv.DEFAULT_LOCALE)},
 							{type:_OUTPUT_, value:AjxImg.getImageHtml("PDFDoc")},
-							{type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:ZabMsg.HELP_PAGE_10_DOMINO,href:(location.pathname + "adminhelp/pdf/MigrationWizard_Domino.pdf?locid="+AjxEnv.DEFAULT_LOCALE)}
+							{type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:ZaMsg.HELP_PAGE_10_DOMINO,href:(location.pathname + "adminhelp/pdf/MigrationWizard_Domino.pdf?locid="+AjxEnv.DEFAULT_LOCALE)}
 						]
 					},
 					{type:_SPACER_, colSpan:"*"},					
 					{type:_OUTPUT_, cssStyle:"font-size:12px;", label:null, value:ZaMsg.HELP_PAGE_9, 
 					 cssStyle:"padding-right:10px;padding-left:10px;"},
-					{type:_OUTPUT_, cssStyle:"font-size:12px;", label:null, value:ZabMsg.HELP_PAGE_11,
+					{type:_OUTPUT_, cssStyle:"font-size:12px;", label:null, value:ZaMsg.HELP_PAGE_11,
 					 cssStyle:"padding-right:10px;padding-left:10px;"},
 					{type:_SEPARATOR_, colSpan:1, cssClass:"helpSeparator"},
 					{type:_SEPARATOR_, colSpan:1, cssClass:"helpSeparator"},
