@@ -259,7 +259,8 @@ function (params) {
 		var gotLocal = false;
 
 		for(var i=0;i<cnt;i++){
-			if(chunks[i]!=null && chunks[i].length>8) {
+			if(chunks[i]!=null && chunks[i].length>5) {
+                                        //min IPv6 + suffix length:q!
 				if(chunks[i].indexOf("!")==0) {
 					//exclude
 					if(chunks[i].indexOf("/")>0) {

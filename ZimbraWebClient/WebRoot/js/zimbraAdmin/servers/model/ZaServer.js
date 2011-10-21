@@ -382,13 +382,80 @@ ZaServer.applyMask = function (addr1, netMask) {
 }
 
 ZaServer.octetsToLong = function (addrString) {
-	var octets = addrString.split(".");
-	if(octets.length !=4) {
-		return -1;
-	}	
-	var addrNumber = Math.pow(256,3)*parseInt(octets[0]) + Math.pow(256,2)*parseInt(octets[1]) + Math.pow(256,1)*parseInt(octets[2]) + parseInt(octets[3]);
-	return addrNumber;
+        var patrn=/^[A-Fa-f0-9:.]+$/;
+   if(patrn.test(addrString)){
+        var temp1= addrString.indexOf(".");
+        var temp2= addrString.indexOf(":");
+        var temp3= addrString.indexOf("::");
+
+	   if(temp3!=-1){
+        var octets = addrString.split("::");
+        if(octets.length !=2) {
+                return -1;
+        }
+         else if(temp1==-1&&temp2>-1){
+        octetsub0=octets[0].split(":");
+        octetsub1=octets[1].split(":");
+          if (octetsub0.length+octetsub1.length>7)
+           return -1;
+           else{
+                   for(var j=0;j<octetsub0.length;j++){
+                     if(octetsub0[j].length>4)
+                     return -1;
+                   }
+                   for(var j=0;j<octetsub1.length;j++){
+                     if(octetsub1[j].length>4)
+                     return -1;
+                   }
+
+           }
+        }else if((temp1>-1)){
+                      if(octets[0]!="")
+                      return -1;
+                      else{
+                          octetsub=octets[1].split(".");
+                          for(var j=0;j<octetsub.length;j++){
+                          if(octetsub[j]>parseInt("255"))
+                          return -1;
+                          }
+             }
+            }
+                   return 0;
+    }
+
+        if(temp1!=-1){
+              var  octets = addrString.split(".");
+              if(octets.length !=4) {
+                return -1;
+              } else{
+                    for(var i=0;i<octets.length;i++){
+                    var j=octets[i];
+                    if(j>parseInt("255")){
+                    return -1;
+              }
 }
+        var addrNumber = Math.pow(256,3)*parseInt(octets[0]) + Math.pow(256,2)*parseInt(octets[1]) + Math.pow(256,1)*parseInt(octets[2]) + parseInt(octets[3]);
+        return addrNumber;
+             }
+     }
+
+        if(temp2!=-1){
+        var octets = addrString.split(":");
+        if(octets.length !=8) {
+                return -1;
+       } else {
+        for(var i=0;i<octets.length;i++){
+        if(octets[i].length>4)
+        return -1;
+        }
+ return 0;
+    }
+        }
+}
+return -1;
+}
+
+
 
 ZaServer.longToOctets = function(addrNumber) {
 	var ip1 = Math.floor(addrNumber/Math.pow(256,3));
