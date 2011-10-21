@@ -15,6 +15,7 @@ description: Mail Message
 
 dn: cn=text/html,cn=mime,cn=config,cn=zimbra
 zimbraMimeType: text/html
+zimbraMimeType: application/x-zimbra-doc
 cn: text/html
 objectClass: zimbraMimeEntry
 zimbraMimeIndexingEnabled: TRUE
