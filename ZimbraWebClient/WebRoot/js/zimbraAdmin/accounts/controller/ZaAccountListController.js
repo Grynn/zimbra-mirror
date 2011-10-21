@@ -770,6 +770,37 @@ function(acct) {
 	}
 }  
 
+ZaAccountListController._viewMailListenerLauncher =
+function(account) {
+	try {
+		var obj;
+		var accId;
+		if(account.type == ZaItem.ACCOUNT || account.type == ZaItem.RESOURCE) {
+			obj = ZaAccount.getViewMailLink(account.id);
+			accId = account.id;
+		} else if(account.type == ZaItem.ALIAS && account.attrs[ZaAlias.A_AliasTargetId]) {
+			obj = ZaAccount.getViewMailLink(account.attrs[ZaAlias.A_AliasTargetId]);
+			accId = account.attrs[ZaAlias.A_AliasTargetId];
+			account = new ZaAccount();
+		} else {
+			return;
+		}
+		if(!account[ZaAccount.A2_publicMailURL]) {
+			account.load("id", accId);
+		}
+		if(!account[ZaAccount.A2_publicMailURL]) {
+			account[ZaAccount.A2_publicMailURL] = ["http://",ZaAccount.getDomain(account[ZaAccount.A_name]),":7070"].join("");
+		}
+		if(!obj.authToken || !obj.lifetime)
+			throw new AjxException(ZaMsg.ERROR_FAILED_TO_GET_CREDENTIALS, AjxException.UNKNOWN, "ZaAccountListController.prototype._viewMailListener");
+
+		var mServer = [account[ZaAccount.A2_publicMailURL], "/service/preauth?authtoken=",obj.authToken,"&isredirect=1&adminPreAuth=1"].join("");
+		mServer = AjxStringUtil.trim(mServer,true);
+		var win = window.open(mServer, "_blank");
+	} catch (ex) {
+		this._handleException(ex, "ZaAccountListController._viewMailListenerLauncher", null, false);
+	}
+}
 /**
 * This listener is called when the Delete button is clicked. 
 **/
