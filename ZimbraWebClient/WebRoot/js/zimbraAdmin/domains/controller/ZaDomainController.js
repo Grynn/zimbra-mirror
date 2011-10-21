@@ -519,8 +519,13 @@ function(ev) {
 ZaDomainController.prototype._authWizButtonListener =
 function(ev) {
 	try {
-		this._authWizard = ZaApp.getInstance().dialogs["authWizard"] =  new ZaAuthConfigXWizard(this._container);
-		this._authWizard.registerCallback(DwtWizardDialog.FINISH_BUTTON, ZaDomainController.prototype._finishAuthButtonListener, this, null);			
+        if(!this._authWizard) {
+            if(appNewUI)
+                this._authWizard = ZaApp.getInstance().dialogs["authWizard"] =  new ZaTaskAuthConfigWizard(this._container);
+            else
+                this._authWizard = ZaApp.getInstance().dialogs["authWizard"] =  new ZaAuthConfigXWizard(this._container);
+        }
+		this._authWizard.registerCallback(DwtWizardDialog.FINISH_BUTTON, ZaDomainController.prototype._finishAuthButtonListener, this, null);
 		this._authWizard.setObject(this._currentObject);
 		this._authWizard.popup();
 	} catch (ex) {
