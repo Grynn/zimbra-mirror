@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_social" version="3.5" label="${msg.label}" description="${msg.description}">
+<zimlet name="com_zimbra_social" version="3.6" label="${msg.label}" description="${msg.description}">
     <include>socialTwitter.js</include>
     <include>socialFacebook.js</include>
     <include>socialTweetMeme.js</include>

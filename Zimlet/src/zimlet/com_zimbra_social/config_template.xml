@@ -1,4 +1,4 @@
-<zimletConfig name="com_zimbra_social" version="3.5">
+<zimletConfig name="com_zimbra_social" version="3.6">
     <global>
         <property name="allowedDomains">zimbraoauth2support.cloudfoundry.com,twitter.com,*.twitter.com,*.facebook.com,*.tweetmeme.com,api.tr.im,*.digg.com,api.bit.ly,*.socialcast.com</property>
 

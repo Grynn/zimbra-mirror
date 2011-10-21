@@ -49,7 +49,7 @@ SocialcastAddAccountDlg.prototype._createPreferenceView = function() {
 			"<td><input style='width:200px' type='password' id='socialcastAddAccnt_password'/><td>",
 			"</tr>",
 			"<tr>",
-			"<td><label style='font-weight: bold;'>",this.zimlet.getMessage("socialcastServer"),"</label>",
+			"<td><label style='font-weight: bold;'>",this.zimlet.getMessage("communityDomain"),"</label>",
 			"</td>",
 			"<td><input style='width:200px' type='text' id='socialcastAddAccnt_server'/><td>",
 			"</tr>",
