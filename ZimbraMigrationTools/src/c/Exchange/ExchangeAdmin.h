@@ -4,6 +4,11 @@ namespace Zimbra
 {
 namespace MAPI
 {
+
+#define EXCH_UNINITIALIZED          0
+#define EXCH_INITIALIZED_PROFCREATE 1
+#define EXCH_INITIALIZED_PROFEXIST  2
+
 class ExchangeAdminException: public GenericException
 {
 public:
@@ -57,7 +62,7 @@ class ExchangeOps
 {
 private:
     static ExchangeMigrationSetup *m_exchmigsetup;
-    static bool Initialized;
+    static int Initialized;
     static MAPISession *m_zmmapisession;
 
 public:

@@ -697,7 +697,7 @@ HRESULT ExchangeMigrationSetup::GetAllProfiles(vector<string> &vProfileList)
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 // ExchangeOps
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool ExchangeOps::Initialized = false;
+int ExchangeOps::Initialized = EXCH_UNINITIALIZED;
 ExchangeMigrationSetup *ExchangeOps::m_exchmigsetup = NULL;
 MAPISession *ExchangeOps::m_zmmapisession = NULL;
 
@@ -710,11 +710,11 @@ LPCWSTR ExchangeOps::GlobalInit(LPCWSTR lpMAPITarget, LPCWSTR lpAdminUsername,
     // else create a Admin mailbox and create corresponding profile on local machine
     if (lstrlen(lpAdminUsername) > 0)
     {
-        if (!Initialized)
+        if (Initialized == EXCH_UNINITIALIZED)
         {
             m_exchmigsetup = new ExchangeMigrationSetup(lpMAPITarget, lpAdminUsername,
                 lpAdminPassword);
-            Initialized = true;
+            Initialized = EXCH_INITIALIZED_PROFCREATE;
         }
         try
         {
@@ -734,6 +734,10 @@ LPCWSTR ExchangeOps::GlobalInit(LPCWSTR lpMAPITarget, LPCWSTR lpAdminUsername,
     
     //Create Session and Open admin store with profile
 	lpwstrStatus=MAPIAccessAPI::InitGlobalSessionAndStore(lpMAPITarget);
+	if (!lpwstrStatus)
+	{
+	    Initialized = EXCH_INITIALIZED_PROFEXIST;
+	}
     
     return lpwstrStatus;
 }
@@ -742,7 +746,7 @@ LPCWSTR ExchangeOps::GlobalUninit()
 {
     LPCWSTR lpwstrStatus = NULL;
 
-    if (Initialized)
+    if (Initialized == EXCH_INITIALIZED_PROFCREATE)
     {
         try
         {
@@ -760,9 +764,19 @@ LPCWSTR ExchangeOps::GlobalUninit()
                 (LPSTR)ex.SrcFile().c_str(), ex.SrcLine());
         }
     }
-    Initialized = false;
+    else
+    if (Initialized == EXCH_INITIALIZED_PROFEXIST)
+    {
+        MAPIAccessAPI::UnInitGlobalSessionAndStore();
+    }
+
     if (m_zmmapisession)
+    {
         delete m_zmmapisession;
+        m_zmmapisession = NULL;
+    }
+    Initialized = EXCH_UNINITIALIZED;
+
     return lpwstrStatus;
 }
 
