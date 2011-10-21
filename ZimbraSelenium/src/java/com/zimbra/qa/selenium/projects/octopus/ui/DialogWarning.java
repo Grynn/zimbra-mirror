@@ -11,31 +11,10 @@ public class DialogWarning extends AbsDialog {
 
 	public static class DialogWarningID {
 
-		public static DialogWarningID SaveCurrentMessageAsDraft = new DialogWarningID(
-				"YesNoCancel");
-
-		public static DialogWarningID SaveTaskChangeMessage = new DialogWarningID(
-				"YesNoCancel");
-
-		public static DialogWarningID SendLink = new DialogWarningID(
-				"css=div[class=DwtConfirmDialog]");
-		public static DialogWarningID DeleteTagWarningMessage = new DialogWarningID(
-				"YesNoCancel");
 		public static DialogWarningID EmptyFolderWarningMessage = new DialogWarningID(
 				"OkCancel");
-		public static DialogWarningID SaveSignatureChangeMessage = new DialogWarningID(
-				"YesNoCancel");
-		public static DialogWarningID CancelCreateContact = new DialogWarningID(
-				"YesNoCancel");
 		public static DialogWarningID PermanentlyDeleteTheItem = new DialogWarningID(
 				"OkCancel");
-
-		public static DialogWarningID DeleteAppointment = new DialogWarningID(
-				"YesNo");
-
-		// See bug: http://bugzilla.zimbra.com/show_bug.cgi?id=63353
-		public static DialogWarningID SelectedTimeIsInPast = new DialogWarningID(
-				"ShowDelayPastDialog");
 
 		protected String Id;
 
@@ -87,27 +66,21 @@ public class DialogWarning extends AbsDialog {
 		String locator = null;
 		AbsPage page = null; // Does this ever result in a page being returned?
 
-		// See http://bugzilla.zimbra.com/show_bug.cgi?id=54560
-		// Need unique id's for the buttons
-		String buttonsTableLocator = "css=div[id='" + MyDivId
-				+ "'] div[id$='_buttons']";
-
 		if (button == Button.B_YES) {
 
-			locator = buttonsTableLocator + " td[id^='Yes_'] td[id$='_title']";
+			locator = " td[id^='Yes_'] td[id$='_title']";
 
 		} else if (button == Button.B_NO) {
 
-			locator = buttonsTableLocator + " td[id^='No_'] td[id$='_title']";
+			locator = " td[id^='No_'] td[id$='_title']";
 
 		} else if (button == Button.B_CANCEL) {
 
-			locator = buttonsTableLocator
-					+ " td[id^='Cancel_'] td[id$='_title']";
+			locator =  " td[id^='Cancel_'] td[id$='_title']";
 
 		} else if (button == Button.B_OK) {
 
-			locator = buttonsTableLocator + " td[id^='OK_'] td[id$='_title']";
+			locator = " td[id^='OK_'] td[id$='_title']";
 
 		} else {
 			throw new HarnessException("no logic defined for button " + button);
@@ -153,14 +126,6 @@ public class DialogWarning extends AbsDialog {
 		if (!this.sIsElementPresent(MyDivId))
 			return (false);
 
-		// mountpionts.viewer.FlagMail seems to keep failing on this dialog,
-		// even
-		// though the PERM_DENIED dialog is showing correctly
-		//
-		// 7.X: if ( !this.zIsVisiblePerPosition(MyDivId, 225, 300) )
-		// 8.X: dev says any dialogs with non-negative positions should be
-		// visible, so using (0,0)
-		//
 		if (!this.zIsVisiblePerPosition(MyDivId, 0, 0))
 			return (false);
 

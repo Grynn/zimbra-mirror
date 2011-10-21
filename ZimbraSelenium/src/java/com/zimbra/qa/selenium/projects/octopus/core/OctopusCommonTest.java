@@ -160,7 +160,7 @@ public class OctopusCommonTest {
 			}
 
 			DialogError dialog = app.zPageOctopus
-					.zGetErrorDialog(DialogErrorID.ZmMsgDialog);
+					.zGetErrorDialog(DialogErrorID.ErrorDialog);
 			if (dialog.zIsActive()) {
 				dialog.zClickButton(Button.B_OK);
 			}

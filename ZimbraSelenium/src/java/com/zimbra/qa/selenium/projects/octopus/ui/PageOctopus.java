@@ -56,8 +56,8 @@ public class PageOctopus extends AbsTab {
 		return (new Toaster(this.MyApplication));
 	}
 
-	public DialogError zGetErrorDialog(DialogErrorID zimbra) {
-		return (new DialogError(zimbra, this.MyApplication, this));
+	public DialogError zGetErrorDialog(DialogErrorID octopus) {
+		return (new DialogError(octopus, this.MyApplication, this));
 	}
 
 	@Override

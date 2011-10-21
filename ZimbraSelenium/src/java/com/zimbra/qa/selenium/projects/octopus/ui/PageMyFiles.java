@@ -3,8 +3,10 @@
  */
 package com.zimbra.qa.selenium.projects.octopus.ui;
 
+import com.zimbra.qa.selenium.framework.items.DocumentItem;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
+import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.DocumentBriefcaseEdit;
 import com.zimbra.qa.selenium.projects.octopus.ui.DialogError;
 import com.zimbra.qa.selenium.projects.octopus.ui.DialogError.DialogErrorID;
 
@@ -31,6 +33,9 @@ public class PageMyFiles extends AbsTab {
 				"css=div[class^=sc-view sc-menu-item] a[class=menu-item]>span:contains(Favorite)");
 		public static final Locators zRenameItem = new Locators(
 				"css=div[class^=sc-view sc-menu-item] a[class=menu-item]>span:contains(Rename)");
+		public static final Locators zMoveItem = new Locators(
+				"css=div[class^=sc-view sc-menu-item] a[class=menu-item]>span:contains(Move)");
+
 
 		public final String locator;
 
@@ -174,6 +179,21 @@ public class PageMyFiles extends AbsTab {
 				// If the app is busy, wait for it to become active
 				zWaitForBusyOverlay();
 
+				return page;
+			} else if (option == Button.O_MOVE) {
+				optionLocator = Locators.zMoveItem.locator;
+
+				if (!this.zWaitForElementPresent(optionLocator, "2000"))
+					throw new HarnessException("Button is not present locator="
+							+ optionLocator);
+
+				this.sClickAt(optionLocator, "0,0");
+
+				// If the app is busy, wait for it to become active
+				zWaitForBusyOverlay();
+
+				page = new DialogMove(MyApplication, this);
+				
 				return page;
 			} else {
 				logger.info("no logic defined for " + option);

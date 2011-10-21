@@ -8,6 +8,7 @@ import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
+import com.zimbra.qa.selenium.projects.octopus.ui.DialogMove;
 import com.zimbra.qa.selenium.projects.octopus.core.OctopusCommonTest;
 import com.zimbra.qa.selenium.projects.octopus.ui.PageMyFiles;
 
@@ -103,30 +104,29 @@ public class MoveFile extends OctopusCommonTest {
 				"Verify the file was moved to the destination folder");
 	}
 
-	@Test(description = "Move file using context menu - verify file is moved", groups = { "oke" })
+	@Test(description = "Move file using context menu - verify file is moved", groups = { "smoke" })
 	public void DeleteFile_02() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 
 		FolderItem briefcaseRootFolder = FolderItem.importFromSOAP(account,
 				SystemFolder.Briefcase);
 
-		String briefcaseFolderId = briefcaseRootFolder.getId();
-
+		// Create sub-folder
 		String subFolderName = "subFolder"
 				+ ZimbraSeleniumProperties.getUniqueString();
 
 		// Create a subfolder to move the file into i.e. My Files/subfolder
 		account.soapSend("<CreateFolderRequest xmlns='urn:zimbraMail'>"
 				+ "<folder name='" + subFolderName + "' l='"
-				+ briefcaseFolderId + "' view='document'/>"
+				+ briefcaseRootFolder.getId() + "' view='document'/>"
 				+ "</CreateFolderRequest>");
 
+		// Verify the sub-folder exists on the server
 		FolderItem subFolderItem = FolderItem.importFromSOAP(account,
 				subFolderName);
 		ZAssert.assertNotNull(subFolderItem,
 				"Verify the subfolder is available");
 
-		String subFolderId = subFolderItem.getId();
 		_folderName = subFolderName;
 		_folderIsCreated = true;
 
@@ -162,8 +162,12 @@ public class MoveFile extends OctopusCommonTest {
 		ZAssert.assertNotNull(_fileId, "Verify file is uploaded");
 
 		// move file using right click context menu
-		app.zPageMyFiles.zToolbarPressPulldown(Button.B_MY_FILES_LIST_ITEM,
-				Button.O_MOVE, fileName);
+		DialogMove chooseFolder = (DialogMove) app.zPageMyFiles
+				.zToolbarPressPulldown(Button.B_MY_FILES_LIST_ITEM,
+						Button.O_MOVE, fileName);
+
+		// Double click to choose folder
+		chooseFolder.zDoubleClickTreeFolder(subFolderName);
 
 		// Verify the moved file disappears from My Files tab
 		ZAssert.assertTrue(app.zPageMyFiles.zWaitForElementDeleted(
