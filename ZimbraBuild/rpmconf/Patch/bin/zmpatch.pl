@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#-!/usr/bin/perl -w
 # 
 # ***** BEGIN LICENSE BLOCK *****
 # Zimbra Collaboration Suite Server
@@ -104,7 +104,7 @@ unless ($options{config} && -f $options{config}) {
 }
 
 if ($options{config} && -f $options{config}) {
-  $config = XMLin($options{config}, ForceArray => [ 'name', 'patch', 'package', 'file', 'deletefile', 'zimlet','target'], KeyAttr => [ 'name', 'patch', 'package', 'source', 'version' ]);
+  $config = XMLin($options{config}, ForceArray => [ 'name', 'patch', 'package', 'file', 'deletefile', 'zimlet','target', 'preinstall', 'postinstall'], KeyAttr => [ 'name', 'patch', 'package', 'source', 'version', 'postinstall', 'preinstall' ]);
   my $debug_text = Dumper($config);
   debugLog($debug_text);
   
@@ -338,6 +338,16 @@ sub deployPatch($) {
   }
 
   # do postinstall tasks
+  foreach my $task (@{$patch->{postinstall}}) {
+    progress("Running $task...",1,0);
+    if (runAsZimbra($task)) {
+      progress("failed.\n",1,0);
+    } else {
+      progress("done.\n",1,0);
+    }
+  }
+  
+  
 
   # log an install session complete
   logSession("INSTALL SESSION COMPLETE");
