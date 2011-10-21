@@ -233,10 +233,6 @@ ZaController.setViewMethods["ZaAccountViewController"].push(ZaAccountViewControl
 ZaAccountViewController.changeActionsStateMethod = function () {
 	if(!this._currentObject)
 		return;
-		
-	if(!ZaItem.hasRight(ZaAccount.VIEW_MAIL_RIGHT,this._currentObject))	{
-		this._toolbarOperations[ZaOperation.VIEW_MAIL].enabled = false;
-	}
 
 	if(!ZaItem.hasRight(ZaAccount.DELETE_ACCOUNT_RIGHT,this._currentObject))	{
 		this._toolbarOperations[ZaOperation.DELETE].enabled = false;

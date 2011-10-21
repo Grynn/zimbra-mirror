@@ -969,6 +969,14 @@ function() {
 
         if (this._configure) {
             parentPath = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_configure]);
+            if(!ZaZimbraAdmin.hasGlobalCOSSListAccess()) {
+                   var domainNamelist = ZaDomain.getEffectiveDomainList(ZaZimbraAdmin.currentAdminAccount.id);
+                   ZaApp.getInstance()._domainNameList = domainNamelist;
+
+                   var cosNamelist = ZaCos.getEffectiveCosList(ZaZimbraAdmin.currentAdminAccount.id);
+                   ZaApp.getInstance()._cosNameList = cosNamelist;
+
+            }
             // Add Configuration /Cos
             if (ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.COS_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
                 ti = new ZaTreeItemData({
