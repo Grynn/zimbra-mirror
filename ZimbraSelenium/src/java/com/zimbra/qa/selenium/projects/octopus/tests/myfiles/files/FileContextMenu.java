@@ -33,7 +33,7 @@ public class FileContextMenu extends OctopusCommonTest {
 		_fileAttached = false;
 	}
 
-	@Test(description = "Verify the Context menu items in the File drop down menu", groups = { "anity" })
+	@Test(description = "Verify the Context menu items in the File drop down menu", groups = { "sanity" })
 	public void FileContextMenu_01() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 

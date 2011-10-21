@@ -26,7 +26,7 @@ public class FolderContextMenu extends OctopusCommonTest {
 
 	}
 
-	@Test(description = "Verify the Context menu items in the Folder drop down menu", groups = { "anity" })
+	@Test(description = "Verify the Context menu items in the Folder drop down menu", groups = { "sanity" })
 	public void FolderContextMenu_01() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 
