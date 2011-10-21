@@ -25,9 +25,12 @@ function ZmClick2CallZimlet() {
 ZmClick2CallZimlet.prototype = new ZmZimletBase();
 ZmClick2CallZimlet.prototype.constructor = ZmClick2CallZimlet;
 
+ZmClick2CallZimlet.OP_CLICK_2_CALL_ZIMLET_VOICE_PIN = "CLICK_2_CALL_ZIMLET_VOICE_PIN";
 
 ZmClick2CallZimlet.prototype.init = function() {
 	ZmZimletBase.prototype.init.apply(this, arguments);
+
+	//todo - remove this when we get server-support that does single-signon
 	this.toPhoneNumber = "16504274506";
 
 	this.email = "raja";
@@ -36,14 +39,30 @@ ZmClick2CallZimlet.prototype.init = function() {
 	this.voice_pin = "1234";
 	this.server = this.getConfig("click2call_server");
 
-	var regexps = [
-        new RegExp("\\b" + this.getMessage("localPhoneRegEx") + "\\b","ig")
-    ];
-	this.regexps = regexps;
-	this.countryCode = this.getMessage("countryCode");
-	if(!this.countryCode) {
-		this.countryCode = 1;
+};
+
+ZmClick2CallZimlet.prototype.initializeToolbar = function(app, toolbar, controller, viewId) {
+	if(viewId == ZmId.VIEW_VOICEMAIL && !toolbar.getOp(ZmClick2CallZimlet.OP_CLICK_2_CALL_ZIMLET_VOICE_PIN)) {
+		var buttonArgs = {
+			text	: this.getMessage("voicePIN"),
+			tooltip: this.getMessage("voicePINTooltip"),
+			index: toolbar.opList.length,
+			image: "Telephone"
+		};
+		var button = toolbar.createOp(ZmClick2CallZimlet.OP_CLICK_2_CALL_ZIMLET_VOICE_PIN, buttonArgs, true, true);
+		if(controller.operationsToEnableOnZeroSelection && controller.operationsToEnableOnMultiSelection) {
+			controller.operationsToEnableOnZeroSelection.push(ZmClick2CallZimlet.OP_CLICK_2_CALL_ZIMLET_VOICE_PIN);
+			controller.operationsToEnableOnMultiSelection.push(ZmClick2CallZimlet.OP_CLICK_2_CALL_ZIMLET_VOICE_PIN);
+		}
+		button.addSelectionListener(new AjxListener(this, this._changeVoicePinListener, [controller]));
 	}
+};
+
+ZmClick2CallZimlet.prototype._changeVoicePinListener = function() {
+	if(!this._voicePINDlg) {
+		this._voicePINDlg = new ZmClick2CallVoicePINDlg(this);
+	}
+	this._voicePINDlg.popup();
 };
 
 ZmClick2CallZimlet.prototype.toolTipPoppedUp = function(spanElement, contentObjText, matchContext, canvas) {

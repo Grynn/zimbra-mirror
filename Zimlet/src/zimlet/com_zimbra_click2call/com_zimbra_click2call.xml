@@ -4,6 +4,7 @@
 	<include>ZmClick2CallProviderAPIs.js</include>
 	<include>ZmClick2CallDlg.js</include>
 	<include>ZmClick2CallFromPhoneDlg.js</include>
+    <include>ZmClick2CallVoicePINDlg.js</include>
 	<include>templates/ZmClick2Call.template.js</include>
 	<includeCSS>ZmClick2Call.css</includeCSS>
 	<handlerObject>ZmClick2CallZimlet</handlerObject>

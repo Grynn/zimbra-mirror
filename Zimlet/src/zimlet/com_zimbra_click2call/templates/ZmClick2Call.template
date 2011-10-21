@@ -71,3 +71,26 @@
 	<td><b><div style='white-space:nowrap'><$= AjxStringUtil.htmlEncode(data.contentObjText) $></div></b></td>
 	</tr></table>
 </template>
+
+<template id='voicePINDlg'>
+  <div style='padding:5px;' >
+    <table align=center>
+        <tr>
+            <td style='text-align:right'>
+                <label style='font-size:12px;font-weight:bold;'>${pinStr}</label>
+            </td>
+            <td>
+                <input style='width:200px' type=password id='${pinFieldId}'></text>
+            </td>
+        </tr>
+       <tr>
+            <td style='text-align:right'>
+                <label style='font-size:12px;font-weight:bold;'>${confirmPINStr}</label>
+            </td>
+            <td>
+                <input style='width:200px' type=password id='${confirmPinFieldId}'></text>
+            </td>
+        </tr>
+    </table>
+  </div>
+</template>
