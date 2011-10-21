@@ -11,8 +11,21 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
  *
  */
 public abstract class AbsToaster extends AbsSeleniumObject {
-	protected String locator   = "css=div[id='z_toast_text']";
-    protected String idVisibleLocator = "z_toast";
+	
+	public static class Locators {
+		
+		public static final String ToastDivContainerCSS = "css=div[id='z_toast']";
+		public static final String idVisibleLocator = "z_toast";
+		
+		public static final String ToastTextLocatorCSS   = ToastDivContainerCSS + " div[id='z_toast_text']";
+
+		public static final String ToastUndoLocatorCSS = ToastDivContainerCSS + " div[id='z_toast_text'] a";
+		
+
+	}
+    
+    
+    
 	/**
 	 * A pointer to the application that created this object
 	 */
@@ -36,13 +49,13 @@ public abstract class AbsToaster extends AbsSeleniumObject {
 	public String zGetToastMessage() throws HarnessException {
 		String text=null;		
 		
-		zWaitForElementVisible(locator);
-    	text=sGetText(locator);
+		zWaitForElementVisible(Locators.ToastTextLocatorCSS);
+    	text=sGetText(Locators.ToastTextLocatorCSS);
     	    
     	//make the toasted message invisible if it contains "Undo" link
     	sKeyPressNative(String.valueOf(KeyEvent.VK_ESCAPE));
     	    	
-    	zWaitForElementInvisible(locator);
+    	zWaitForElementInvisible(Locators.ToastTextLocatorCSS);
 		return text;					
 	}
 	
@@ -53,7 +66,8 @@ public abstract class AbsToaster extends AbsSeleniumObject {
 	 * @throws HarnessException
 	 */
 	public void zClickUndo() throws HarnessException {
-		throw new HarnessException("implement me!");
+		sClick(Locators.ToastUndoLocatorCSS);
+		zWaitForBusyOverlay();
 	}
 	
     public boolean isContainedText(String text) throws HarnessException {
@@ -66,7 +80,7 @@ public abstract class AbsToaster extends AbsSeleniumObject {
     }
 	
     public boolean zIsActive() throws HarnessException {        
-    	return zIsVisiblePerPosition(locator,0,0);
+    	return zIsVisiblePerPosition(Locators.ToastDivContainerCSS,0,0);
     	
     }
 
