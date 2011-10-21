@@ -42,11 +42,12 @@ ZaTaskAutoProvDialog.prototype.setObject = function(entry) {
     if(entry.attrs[ZaDomain.A_zimbraAutoProvAttrMap] && (typeof entry.attrs[ZaDomain.A_zimbraAutoProvAttrMap] == "string"))
          entry.attrs[ZaDomain.A_zimbraAutoProvAttrMap] = [entry.attrs[ZaDomain.A_zimbraAutoProvAttrMap]];
 
+    // auto provisioning object backup
+    this._backupLdapObj(entry);
+
     this._separateConfigureValues(entry);
     ZaXDialog.prototype.setObject.call(this,entry);
 
-    // auto provisioning object backup
-    this._backupLdapObj(entry);
     this._button[DwtDialog.OK_BUTTON].setEnabled(false);
     this._button[ZaTaskAutoProvDialog.APPLY_BUTTON].setEnabled(false);
 }
@@ -565,31 +566,45 @@ ZaTaskAutoProvDialog.prototype._backupLdapObj = function(entry) {
     if(!entry || !entry.attrs) return;
     if(entry.attrs[ZaDomain.A_zimbraAutoProvLdapURL])
         this._autoprovLdapObject[ZaDomain.A_zimbraAutoProvLdapURL] = entry.attrs[ZaDomain.A_zimbraAutoProvLdapURL];
+    else this._autoprovLdapObject[ZaDomain.A_zimbraAutoProvLdapURL] = null;
     if(entry.attrs[ZaDomain.A_zimbraAutoProvLdapStartTlsEnabled])
         this._autoprovLdapObject[ZaDomain.A_zimbraAutoProvLdapStartTlsEnabled] = entry.attrs[ZaDomain.A_zimbraAutoProvLdapStartTlsEnabled];
+    else this._autoprovLdapObject[ZaDomain.A_zimbraAutoProvLdapStartTlsEnabled] = null;
     if(entry.attrs[ZaDomain.A_zimbraAutoProvLdapAdminBindDn])
         this._autoprovLdapObject[ZaDomain.A_zimbraAutoProvLdapAdminBindDn] = entry.attrs[ZaDomain.A_zimbraAutoProvLdapAdminBindDn];
+    else  this._autoprovLdapObject[ZaDomain.A_zimbraAutoProvLdapAdminBindDn] = null;
     if(entry.attrs[ZaDomain.A_zimbraAutoProvLdapAdminBindPassword])
         this._autoprovLdapObject[ZaDomain.A_zimbraAutoProvLdapAdminBindPassword] = entry.attrs[ZaDomain.A_zimbraAutoProvLdapAdminBindPassword];
+    else this._autoprovLdapObject[ZaDomain.A_zimbraAutoProvLdapAdminBindPassword] = null;
     if(entry.attrs[ZaDomain.A_zimbraAutoProvLdapSearchBase])
         this._autoprovLdapObject[ZaDomain.A_zimbraAutoProvLdapSearchBase] = entry.attrs[ZaDomain.A_zimbraAutoProvLdapSearchBase];
+    else this._autoprovLdapObject[ZaDomain.A_zimbraAutoProvLdapSearchBase] = null;
     if(entry.attrs[ZaDomain.A_zimbraAutoProvLdapSearchFilter])
         this._autoprovLdapObject[ZaDomain.A_zimbraAutoProvLdapSearchFilter] = entry.attrs[ZaDomain.A_zimbraAutoProvLdapSearchFilter];
+    else this._autoprovLdapObject[ZaDomain.A_zimbraAutoProvLdapSearchFilter] = null;
     if(entry.attrs[ZaDomain.A_zimbraAutoProvLdapBindDn])
         this._autoprovLdapObject[ZaDomain.A_zimbraAutoProvLdapBindDn] = entry.attrs[ZaDomain.A_zimbraAutoProvLdapBindDn];
+    else this._autoprovLdapObject[ZaDomain.A_zimbraAutoProvLdapBindDn] = null;
 }
 
 ZaTaskAutoProvDialog.prototype._checkModified = function() {
     var newObj = this.getObject();
     var oldObj = this._autoprovLdapObject;
 
-    if((oldObj[ZaDomain.A_zimbraAutoProvLdapURL] == newObj.attrs[ZaDomain.A_zimbraAutoProvLdapURL])
-    && (oldObj[ZaDomain.A_zimbraAutoProvLdapStartTlsEnabled] == newObj.attrs[ZaDomain.A_zimbraAutoProvLdapStartTlsEnabled])
-    && (oldObj[ZaDomain.A_zimbraAutoProvLdapAdminBindDn] == newObj.attrs[ZaDomain.A_zimbraAutoProvLdapAdminBindDn])
-    && (oldObj[ZaDomain.A_zimbraAutoProvLdapAdminBindPassword] == newObj.attrs[ZaDomain.A_zimbraAutoProvLdapAdminBindPassword])
-    && (oldObj[ZaDomain.A_zimbraAutoProvLdapSearchBase] == newObj.attrs[ZaDomain.A_zimbraAutoProvLdapSearchBase])
-    && (oldObj[ZaDomain.A_zimbraAutoProvLdapSearchFilter] == newObj.attrs[ZaDomain.A_zimbraAutoProvLdapSearchFilter])
-    && (oldObj[ZaDomain.A_zimbraAutoProvLdapBindDn] == newObj.attrs[ZaDomain.A_zimbraAutoProvLdapBindDn]))
+    if((oldObj[ZaDomain.A_zimbraAutoProvLdapURL] == newObj.attrs[ZaDomain.A_zimbraAutoProvLdapURL]
+            || !oldObj[ZaDomain.A_zimbraAutoProvLdapURL] && !newObj.attrs[ZaDomain.A_zimbraAutoProvLdapURL])
+    && (oldObj[ZaDomain.A_zimbraAutoProvLdapStartTlsEnabled] == newObj.attrs[ZaDomain.A_zimbraAutoProvLdapStartTlsEnabled]
+            || !oldObj[ZaDomain.A_zimbraAutoProvLdapStartTlsEnabled] && !newObj.attrs[ZaDomain.A_zimbraAutoProvLdapStartTlsEnabled])
+    && (oldObj[ZaDomain.A_zimbraAutoProvLdapAdminBindDn] == newObj.attrs[ZaDomain.A_zimbraAutoProvLdapAdminBindDn]
+            || !oldObj[ZaDomain.A_zimbraAutoProvLdapAdminBindDn] && !newObj.attrs[ZaDomain.A_zimbraAutoProvLdapAdminBindDn])
+    && (oldObj[ZaDomain.A_zimbraAutoProvLdapAdminBindPassword] == newObj.attrs[ZaDomain.A_zimbraAutoProvLdapAdminBindPassword]
+            || !oldObj[ZaDomain.A_zimbraAutoProvLdapAdminBindPassword] && !newObj.attrs[ZaDomain.A_zimbraAutoProvLdapAdminBindPassword])
+    && (oldObj[ZaDomain.A_zimbraAutoProvLdapSearchBase] == newObj.attrs[ZaDomain.A_zimbraAutoProvLdapSearchBase]
+            || !oldObj[ZaDomain.A_zimbraAutoProvLdapSearchBase] && !newObj.attrs[ZaDomain.A_zimbraAutoProvLdapSearchBase])
+    && (oldObj[ZaDomain.A_zimbraAutoProvLdapSearchFilter] == newObj.attrs[ZaDomain.A_zimbraAutoProvLdapSearchFilter]
+            || !oldObj[ZaDomain.A_zimbraAutoProvLdapSearchFilter] && !newObj.attrs[ZaDomain.A_zimbraAutoProvLdapSearchFilter])
+    && (oldObj[ZaDomain.A_zimbraAutoProvLdapBindDn] == newObj.attrs[ZaDomain.A_zimbraAutoProvLdapBindDn]
+            || !oldObj[ZaDomain.A_zimbraAutoProvLdapBindDn] && !newObj.attrs[ZaDomain.A_zimbraAutoProvLdapBindDn]))
         return false;
     else
         return true;
