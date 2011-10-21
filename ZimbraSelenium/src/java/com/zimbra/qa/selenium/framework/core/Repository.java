@@ -28,22 +28,7 @@ import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 
 import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.Log;/*
-
- * 
- * Zimbra Collaboration Suite Server
- * Copyright (C) 2011 VMware, Inc.
- * 
- * The contents of this file are subject to the Zimbra Public License
- * Version 1.3 ("License"); you may not use this file except in
- * compliance with the License.  You may obtain a copy of the License at
- * http://www.zimbra.com/license.
- * 
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
- * 
- * ***** END LICENSE BLOCK *****
- */
+import com.zimbra.qa.selenium.framework.util.Log;
 
 import com.zimbra.qa.selenium.framework.util.RacetrackWebservice;
 
@@ -157,6 +142,10 @@ public class Repository {
       Repository.branchType = "";
       Repository.serverBuildId = "";
 
+      if (!Repository.recordToRacetrack) {
+         return;
+      }
+
       if (!Repository.appendToExisting && Repository.connectionEstablished
             && Repository.recordToRacetrack)
       {
@@ -176,7 +165,12 @@ public class Repository {
     * whether Complete or Waiting To Triage or Running
     */
    public void endRepository()
-   {  try {
+   {
+      if (!Repository.recordToRacetrack) {
+         return;
+      }
+
+      try {
          RacetrackWebservice.getInstance().testSetEnd(Repository.resultId);
       } catch (HarnessException e) {
          e.printStackTrace();
@@ -189,6 +183,7 @@ public class Repository {
    */
    public boolean connect() throws HarnessException
    {
+
       if( Repository.jdbc == null) {
          loadJdbcDriver( DbDriver );
       }
@@ -216,6 +211,9 @@ public class Repository {
    loadJdbcDriver(@Optional("LibConstants.MYSQL_DRIVER") String DbDriver1)
                   throws HarnessException
    {
+      if (!Repository.recordToRacetrack) {
+         return;
+      }
       try {
          Repository.jdbc = Class.forName(DbDriver);
          Log.info("Successfully loaded jdbc driver: " + DbDriver);
@@ -238,6 +236,7 @@ public class Repository {
                    String user,
                    String pwd) throws HarnessException
    {
+
       switch(type) {
          case ORACLE:
                conString = "jdbc:oracle:thin:@" + DbHostURL + ":1521:" + db;
@@ -263,6 +262,10 @@ public class Repository {
     */
    public static String testCaseBegin(String methodName, String packageName, String description)
    {
+      if (!Repository.recordToRacetrack) {
+         return null;
+      }
+
       try {
          testCaseId = RacetrackWebservice.getInstance().testCaseBegin(Repository.getResultId(),
                methodName, packageName, description, Repository.getHostOs(),
@@ -280,6 +283,10 @@ public class Repository {
     */
    public static void testCaseEnd(String testCaseResult)
    {
+      if (!Repository.recordToRacetrack) {
+         return;
+      }
+
       try {
         RacetrackWebservice.getInstance().testCaseEnd(Repository.getTestCaseId(),
               testCaseResult);
@@ -295,7 +302,12 @@ public class Repository {
                                             String actualValue,
                                             String expectedValue,
                                             boolean verificationResult)
-   { try {
+   {
+      if (!Repository.recordToRacetrack) {
+         return;
+      }
+
+      try {
       if ((actualValue == null) || (expectedValue == null)) {
          if (actualValue == null)
          {
@@ -326,6 +338,10 @@ public class Repository {
     */
    public static void testCaseCaptureScreenShot(String screenShot)
    {
+      if (!Repository.recordToRacetrack) {
+         return;
+      }
+
       try {
          RacetrackWebservice.getInstance().testCaseScreenshot(
                Repository.getTestCaseId(), " ", screenShot);
@@ -339,6 +355,10 @@ public class Repository {
     */
    public static void testCaseComment(String sMessage)
    {
+      if (!Repository.recordToRacetrack) {
+         return;
+      }
+
       try {
          RacetrackWebservice.getInstance().testCaseComment(
             testCaseId, sMessage);
@@ -352,6 +372,10 @@ public class Repository {
     */
    public static void testSetDescription( String methodName)
    {
+      if (!Repository.recordToRacetrack) {
+         return;
+      }
+
       try {
          conn = DriverManager.getConnection(conString, DbUser, DbPassword);
          try {
