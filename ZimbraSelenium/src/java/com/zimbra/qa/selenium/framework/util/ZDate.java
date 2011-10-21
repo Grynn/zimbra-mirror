@@ -25,7 +25,15 @@ public class ZDate {
 	public ZDate(int year, int month, int monthday, int hour, int minutes, int seconds) {
 		this(year, month, monthday, hour, minutes, seconds, ZTimeZone.TimeZoneUTC);
 	}
-	
+
+	/**
+	 * Create a ZDate object based on the given calendar object
+	 * @param calendar
+	 */
+	public ZDate(Calendar calendar) {
+	   this.calendar = calendar;
+	}
+
 	/**
 	 * Create a ZDate object in the specified timezone
 	 * @param year, i.e. 2011
@@ -56,16 +64,16 @@ public class ZDate {
 		// TODO: Handle errors (such as month = 0)
 		
 		calendar = Calendar.getInstance();
-		
+
 		calendar.setTimeZone(timezone);
-		
+
 		calendar.set(Calendar.YEAR, year);
 		calendar.set(Calendar.MONTH, month - 1);
 		calendar.set(Calendar.DAY_OF_MONTH, monthday);
 		calendar.set(Calendar.HOUR_OF_DAY, hour);
 		calendar.set(Calendar.MINUTE, minutes);
 		calendar.set(Calendar.SECOND, seconds);
-		
+
 		logger.info("New "+ ZDate.class.getName());
 	}
 	
@@ -75,43 +83,68 @@ public class ZDate {
 	 * @throws HarnessException
 	 */
 	public ZDate(Element e) throws HarnessException {
-		
+
 		String d = e.getAttribute("d", null);
 		String tz = e.getAttribute("tz", null);
 		String u = e.getAttribute("u", null);
-		
+
 		calendar = Calendar.getInstance();
-		
-		if ( (tz == null) || (tz.trim().length() == 0)) {
-			calendar = Calendar.getInstance(ZTimeZone.TimeZoneUTC);
-		} else {
-			calendar = Calendar.getInstance(TimeZone.getTimeZone(tz));
-		}
-		
+
 		if ( u != null ) {
-			
+
 			// Parse the unix time, which is in GMT
 			long unix = new Long(u).longValue();
 			calendar.setTimeInMillis(unix);
 			return;
-			
+
 		}
 		
 		if ( d != null ) {
 			
 			SimpleDateFormat formatter;
-			
+            Date tempDate = null;
+			Calendar tempCalendar = null;
 			formatter = new SimpleDateFormat("yyyyMMdd'T'HHmmss");
 			try {
-				calendar.setTime( formatter.parse(d) );
-				return;
-			} catch (ParseException ex) {
-				logger.warn("No match for yyyyMMdd'T'HHmmss");
-			}
+			   tempDate = formatter.parse(d);
+			   tempCalendar = Calendar.getInstance();
+			   tempCalendar.setTime(tempDate);
+
+			   if (tz == null || tz.trim().length() == 0) {
+			      calendar.setTimeZone(ZDate.TimeZoneUTC);
+			   } else {
+			      calendar.setTimeZone(TimeZone.getTimeZone(tz));   
+			   }
+
+			   calendar.set(Calendar.YEAR, tempCalendar.get(Calendar.YEAR));
+			   calendar.set(Calendar.MONTH, tempCalendar.get(Calendar.MONTH));
+			   calendar.set(Calendar.DAY_OF_MONTH, tempCalendar.get(Calendar.DAY_OF_MONTH));
+			   calendar.set(Calendar.HOUR, tempCalendar.get(Calendar.HOUR));
+			   calendar.set(Calendar.MINUTE, tempCalendar.get(Calendar.MINUTE));
+			   calendar.set(Calendar.SECOND, tempCalendar.get(Calendar.SECOND));
+
+               return;
+
+            } catch (ParseException ex) {
+                  logger.warn("No match for yyyyMMdd'T'HHmmss");
+            }
 
 			formatter = new SimpleDateFormat("yyyyMMdd");
 			try {
-				calendar.setTime( formatter.parse(d) );
+                tempDate = formatter.parse(d);
+			    tempCalendar = Calendar.getInstance();
+			    tempCalendar.setTime(tempDate);
+
+                if (tz == null || tz.trim().length() == 0) {
+			       calendar.setTimeZone(ZDate.TimeZoneUTC);
+			    } else {
+			       calendar.setTimeZone(TimeZone.getTimeZone(tz));   
+			    }
+
+                calendar.set(Calendar.YEAR, tempCalendar.get(Calendar.YEAR));
+			    calendar.set(Calendar.MONTH, tempCalendar.get(Calendar.MONTH));
+			    calendar.set(Calendar.DAY_OF_MONTH, tempCalendar.get(Calendar.DAY_OF_MONTH));
+
 				return;
 			} catch (ParseException ex) {
 				logger.warn("yyyyMMdd");
@@ -135,7 +168,7 @@ public class ZDate {
 			throw new HarnessException("TimeZone cannot be null");
 		
 		return (toTimeZone(ZTimeZone.getTimeZone(timezone)));
-	}	
+	}
 
 	/**
 	 * Convert the current time + timezone to the specified timezone
@@ -146,16 +179,20 @@ public class ZDate {
 	public ZDate toTimeZone(TimeZone timezone) throws HarnessException {
 		if ( timezone == null )
 			throw new HarnessException("TimeZone cannot be null");
-		
-		// Create the new object to return
-		// Use basic settings for the time, since it will be reset later
-		ZDate other = new ZDate(2011, 2, 22, 12, 0, 0, timezone);
-		
-		// Set the time
-		other.calendar.setTime(this.calendar.getTime());
-		
+
+		Calendar newCalendar = Calendar.getInstance(timezone);
+		String currentDate = this.toYYYYMMDDTHHMMSS();
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd'T'HHmmss");
+		try {
+		   newCalendar.setTime( formatter.parse(currentDate) );
+		} catch (ParseException e) {
+		   throw new HarnessException (e.getMessage(), e);
+		}
+
+		ZDate returnDate = new ZDate(newCalendar);
+
 		// return it
-		return (other);
+		return (returnDate);
 	}
 	
 	/**
