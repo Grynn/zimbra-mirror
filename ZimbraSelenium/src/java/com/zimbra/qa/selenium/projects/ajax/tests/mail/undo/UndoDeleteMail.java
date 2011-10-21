@@ -33,8 +33,10 @@ public class UndoDeleteMail extends PrefGroupMailByMessageTest {
 				"<AddMsgRequest xmlns='urn:zimbraMail'>" 
 			+		"<m l='" + inbox.getId() + "'>"
 			+			"<content>"
-			+				"From: foo@foo.com\n" + "To: foo@foo.com \n"
-			+				"Subject: " + subject + "\n" + "MIME-Version: 1.0 \n"
+			+				"From: foo@foo.com\n" 
+			+ 				"To: foo@foo.com \n"
+			+				"Subject: " + subject + "\n" 
+			+ 				"MIME-Version: 1.0 \n"
 			+				"Content-Type: text/plain; charset=utf-8 \n"
 			+				"Content-Transfer-Encoding: 7bit\n" 
 			+				"\n"
@@ -61,9 +63,8 @@ public class UndoDeleteMail extends PrefGroupMailByMessageTest {
 		MailItem deleted = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject +") is:anywhere");
 		ZAssert.assertEquals(deleted.dFolderId, trash.getId(), "Verify message is in trash");
 
-		Toaster toast = app.zPageMain.zGetToaster();
-		
 		// Click "undo"
+		Toaster toast = app.zPageMain.zGetToaster();	
 		toast.zClickUndo();
 		
 		MailItem undone = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject +") is:anywhere");

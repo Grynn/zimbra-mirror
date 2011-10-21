@@ -42,7 +42,10 @@ public class PageMain extends AbsTab {
 	}
 	
 	public Toaster zGetToaster() throws HarnessException {
-		return (new Toaster(this.MyApplication));
+		this.zWaitForBusyOverlay();
+		Toaster toaster = new Toaster(this.MyApplication);
+		logger.info("toaster is active: "+ toaster.zIsActive());
+		return (toaster);
 	}
 	
 	public DialogWarning zGetWarningDialog(DialogWarningID zimbra) {
