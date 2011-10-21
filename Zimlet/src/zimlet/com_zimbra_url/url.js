@@ -595,7 +595,10 @@ function(ev) {
     var oc = appCtxt.getOverviewController();
 	var treeController = oc.getTreeController(ZmOrganizer.CALENDAR);
 
+    var iCal = {
+                url : Com_Zimbra_Url._actionObject
+            };
     treeController._newListener(ev);
     var dialog = appCtxt.getNewCalendarDialog();
-    dialog.setRemoteURL(Com_Zimbra_Url._actionObject);
+    dialog.setICalData(iCal);
 };
