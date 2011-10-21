@@ -618,7 +618,9 @@ function(ev) {
                 || !this._autoProvWizard._checkLazyConfig()) {
             return;
         }
-		ZaDomain.modifyAutoPovSettings.call(this._currentObject,this._autoProvWizard.getObject());
+        var savedObj = this._autoProvWizard.getObject();
+        this._autoProvWizard._combineConfigureValues(savedObj);
+		ZaDomain.modifyAutoPovSettings.call(this._currentObject,savedObj);
 		this._view.setObject(this._currentObject);
 		this._autoProvWizard.popdown();
 		this._notifyAllOpenTabs();

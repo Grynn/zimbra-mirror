@@ -1466,6 +1466,10 @@ ZaDomain.modifyAutoPovSettings = function(tmpObj) {
 				attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraAutoProvMode][i],modifyDomainDoc);
 				attr.setAttribute("n", ZaDomain.A_zimbraAutoProvMode);
             }
+            if(cnt == 0) {
+				attr = soapDoc.set("a", "",modifyDomainDoc);
+				attr.setAttribute("n", ZaDomain.A_zimbraAutoProvMode);
+            }
         } else {
 				attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraAutoProvMode],modifyDomainDoc);
 				attr.setAttribute("n", ZaDomain.A_zimbraAutoProvMode);

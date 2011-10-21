@@ -390,7 +390,6 @@ function() {
             var savedObj = this.getObject();
             this._combineConfigureValues(savedObj);
             ZaDomain.modifyAutoPovSettings.call(this._containedObject,savedObj);
-            controller._fireDomainChangeEvent(this._containedObject);
             controller._notifyAllOpenTabs();
             if(savedObj.currentTab == 4)
                 this.finishConfig();
