@@ -334,38 +334,72 @@ ZaItem.prototype.initEffectiveRightsFromJS = function(resp) {
 ZaItem.prototype.loadEffectiveRights = function (by, val, expandDefaults) {
 	if(!this.type)
 		return;
-		
-	var soapDoc = AjxSoapDoc.create("GetEffectiveRightsRequest", ZaZimbraAdmin.URN, null);
-	if(expandDefaults) {
-		soapDoc.setMethodAttribute("expandAllAttrs","getAttrs");
-	}
-	
+
 	if(AjxUtil.isUndefined(val) || AjxUtil.isNull(val))
 		val = "";
-		
-	var elTarget = soapDoc.set("target", val);
-	
-	if(!AjxUtil.isEmpty(by))
-		elTarget.setAttribute("by",by);
-		
-	elTarget.setAttribute("type",this.type);
 
-
-	var elGrantee = soapDoc.set("grantee", ZaZimbraAdmin.currentUserId);
-	elGrantee.setAttribute("by","id");
-	
-	var csfeParams = new Object();
-	csfeParams.soapDoc = soapDoc;	
-	var reqMgrParams = {} ;
-	reqMgrParams.controller = (ZaApp.getInstance() && ZaApp.getInstance().getCurrentController()) ? ZaApp.getInstance().getCurrentController() : null;
-	reqMgrParams.busyMsg = ZaMsg.BUSY_REQUESTING_ACCESS_RIGHTS ;
-	
 	try {
-		var resp = ZaRequestMgr.invoke(csfeParams, reqMgrParams ).Body.GetEffectiveRightsResponse;
+		var resp = this._getEffectiveRights(by, val, expandDefaults)
 		this.initEffectiveRightsFromJS(resp);
 	} catch (ex) {
 		throw (ex);
 	}
+}
+
+ZaItem.RightCache = [];
+ZaItem.getCacheName = function (by, val, type, expandDefaults) {
+    var cacheName = by + val + " " + type;
+    if (expandDefaults)
+        cacheName = cacheName + "TRUE";
+    else
+        cacheName = cacheName + "FALSE";
+    return cacheName;
+}
+
+ZaItem.inCacheProcess = function (val) {
+    if (!val)
+        return false;
+
+    return ZaSettings.initializing;
+}
+
+ZaItem.prototype._getEffectiveRights = function (by, val, expandDefaults) {
+	var cacheName = ZaItem.getCacheName(by, val, this.type, expandDefaults);
+    var inCacheProcess =  ZaItem.inCacheProcess(val);
+    var resp;
+    if (((!ZaItem.RightCache[cacheName])&&inCacheProcess) || !inCacheProcess) {
+        var soapDoc = AjxSoapDoc.create("GetEffectiveRightsRequest", ZaZimbraAdmin.URN, null);
+        if(expandDefaults) {
+            soapDoc.setMethodAttribute("expandAllAttrs","getAttrs");
+        }
+
+        var elTarget = soapDoc.set("target", val);
+
+        if(!AjxUtil.isEmpty(by))
+            elTarget.setAttribute("by",by);
+
+        elTarget.setAttribute("type",this.type);
+
+        var elGrantee = soapDoc.set("grantee", ZaZimbraAdmin.currentUserId);
+        elGrantee.setAttribute("by","id");
+
+        var csfeParams = new Object();
+        csfeParams.soapDoc = soapDoc;
+        var reqMgrParams = {} ;
+        reqMgrParams.controller = (ZaApp.getInstance() && ZaApp.getInstance().getCurrentController()) ? ZaApp.getInstance().getCurrentController() : null;
+        reqMgrParams.busyMsg = ZaMsg.BUSY_REQUESTING_ACCESS_RIGHTS ;
+
+        try {
+            resp = ZaRequestMgr.invoke(csfeParams, reqMgrParams ).Body.GetEffectiveRightsResponse;
+        } catch (ex) {
+            throw (ex);
+        }
+        if (inCacheProcess)
+            ZaItem.RightCache[cacheName]= resp;
+    } else {
+        resp = ZaItem.RightCache[cacheName];
+    }
+    return resp;
 }
 
 ZaItem.prototype.loadNewObjectDefaults = function (domainBy, domain, cosBy, cos) {
