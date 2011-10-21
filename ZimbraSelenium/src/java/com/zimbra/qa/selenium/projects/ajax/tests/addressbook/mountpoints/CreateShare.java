@@ -3,15 +3,10 @@ package com.zimbra.qa.selenium.projects.ajax.tests.addressbook.mountpoints;
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.FolderItem;
-import com.zimbra.qa.selenium.framework.ui.Action;
-import com.zimbra.qa.selenium.framework.ui.Button;
-import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.ZAssert;
-import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
-import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
-import com.zimbra.qa.selenium.projects.ajax.core.*;
+import com.zimbra.qa.selenium.framework.ui.*;
+import com.zimbra.qa.selenium.framework.util.*;
+import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogShare;
-import com.zimbra.qa.selenium.projects.ajax.ui.DialogShare.ShareRole;
 
 
 public class CreateShare extends AjaxCommonTest  {
@@ -25,14 +20,14 @@ public class CreateShare extends AjaxCommonTest  {
 
 	}
 	
-	@Test(	description = "Share a folder - Viewer",
+	@Test(	description = "Share an addressbook - Viewer",
 			groups = { "smoke" })
 	public void CreateShare_01() throws HarnessException {
 		
-		String addressbookname = "folder" + ZimbraSeleniumProperties.getUniqueString();
+		String addressbookname = "addressbook" + ZimbraSeleniumProperties.getUniqueString();
 
 
-		// Create a subfolder in Inbox
+		// Create an addressbook
 		app.zGetActiveAccount().soapSend(
 					"<CreateFolderRequest xmlns='urn:zimbraMail'>"
 				+		"<folder name='" + addressbookname +"' l='1' view='contact'/>"

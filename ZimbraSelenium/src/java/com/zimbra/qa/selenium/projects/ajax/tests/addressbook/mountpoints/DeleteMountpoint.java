@@ -70,7 +70,7 @@ public class DeleteMountpoint extends AjaxCommonTest {
 		app.zPageAddressbook.zToolbarPressButton(Button.B_REFRESH);
 		
 		// Delete the folder using context menu
-		AbsPage page= app.zTreeContacts.zTreeItem(Action.A_RIGHTCLICK, Button.B_DELETE, mountpoint);
+		app.zTreeContacts.zTreeItem(Action.A_RIGHTCLICK, Button.B_DELETE, mountpoint);
 		
 		
 		// Verify the folder is now in the trash
