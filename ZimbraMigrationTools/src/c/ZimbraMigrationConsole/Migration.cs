@@ -8,7 +8,7 @@ namespace ZimbraMigrationConsole
 {
 class Migration
 {
-    public void test(string accountname, object Test, string accountid)
+    public void test(string accountname, object Test, string accountid,Options opts)
     {
         MigrationAccount MyAcct = new MigrationAccount();
 
@@ -26,7 +26,7 @@ class Migration
          * test.StartMigration(MyAcct);*/
 
         CSMigrationwrapper test = (CSMigrationwrapper)Test;
-        test.StartMigration(MyAcct);
+        test.StartMigration(MyAcct,opts);
     }
     // the following method is not been used can comment it for now
 

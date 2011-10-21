@@ -52,6 +52,57 @@ class Program
                                 myXmlConfig.ConfigObj.mailServer.SourceHostname,
                                 myXmlConfig.ConfigObj.mailServer.SourceAdminID);
                     }
+
+                    Options importopts = Options.None;
+
+
+
+                    // userAcct.StartMigration(user.UserName, myXmlConfig.ConfigObj.importOptions.Mail.ToString());
+                    if ((myXmlConfig.ConfigObj.importOptions.Mail) && (myXmlConfig.ConfigObj.importOptions.Contacts) && (myXmlConfig.ConfigObj.importOptions.Calendar))
+                    {
+                        importopts = Options.Mail | Options.Contacts | Options.Calendar;
+
+                    }
+                    else
+                    {
+
+                        if ((myXmlConfig.ConfigObj.importOptions.Mail) && (myXmlConfig.ConfigObj.importOptions.Contacts))
+                        {
+
+                            importopts = Options.Mail | Options.Contacts;
+
+
+                        }
+                        else
+
+                            if ((myXmlConfig.ConfigObj.importOptions.Calendar) && (myXmlConfig.ConfigObj.importOptions.Contacts))
+                            {
+
+                                importopts = Options.Calendar | Options.Contacts;
+
+
+                            }
+                            else
+
+                                if (myXmlConfig.ConfigObj.importOptions.Mail)
+                                {
+                                    importopts = Options.Mail;
+
+                                }
+                                else
+                                    if (myXmlConfig.ConfigObj.importOptions.Contacts)
+                                    {
+                                        importopts = Options.Contacts;
+
+                                    }
+                                    else
+                                        if (myXmlConfig.ConfigObj.importOptions.Calendar)
+                                        {
+                                            importopts = Options.Calendar;
+
+                                        }
+                    }
+                        
                     foreach (MVVM.Model.Users user in myXmlConfig.UserList)
                     {
                         // TestObj.InitializeMailClient(myXmlConfig.ConfigObj.mailServer.SourceHostname,myXmlConfig.ConfigObj.mailServer.SourceAdminID,myXmlConfig.ConfigObj.mailServer.SourceAdminID);
@@ -109,7 +160,7 @@ class Program
                             System.Console.WriteLine();
 
                             // userAcct.StartMigration(user.UserName, myXmlConfig.ConfigObj.importOptions.Mail.ToString());
-                            Test.test(acctName, TestObj, user.UserName);
+                            Test.test(acctName, TestObj, user.UserName,importopts);
 
                             // /////////////////
 
@@ -150,7 +201,7 @@ class Program
                                 System.Console.WriteLine();
                                 System.Console.WriteLine();
                                 // userAcct.StartMigration(user.UserName, myXmlConfig.ConfigObj.importOptions.Mail.ToString());
-                                Test.test(acctName, TestObj, user.UserName);
+                                Test.test(acctName, TestObj, user.UserName,importopts);
                                 System.Console.WriteLine("......... \n");
                                 Thread.Sleep(9000);
                             }

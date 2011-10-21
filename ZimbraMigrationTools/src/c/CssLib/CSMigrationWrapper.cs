@@ -9,6 +9,16 @@ using System.Reflection;
 
 namespace CssLib
 {
+    [Flags]
+    public enum Options
+    {
+
+
+        Calendar = 4,
+        Contacts = 2,
+        Mail = 1,
+        None = 0
+    }
 public class CSMigrationwrapper
 {
     /* string m_ConfigXMLFile;
@@ -270,7 +280,7 @@ public class CSMigrationwrapper
         string[] s = (string[])var;
         return s;
     }
-    public void StartMigration(MigrationAccount Acct, bool isPreview = false)
+    public void StartMigration(MigrationAccount Acct, Options importopts,bool isPreview = false)
     {
         // GetListofMapiFolders(Acct.Accountname);
 
@@ -314,93 +324,98 @@ public class CSMigrationwrapper
                     DateTime dt;
                     dt = DateTime.UtcNow;
                     // objectArray = userobject.GetItemsForFolderObjects(folderobject, Exchange.FolderType.Contacts, dt.ToOADate());
-                    itemobjectarray = userobject.GetItemsForFolderObjects(
-                            folderobject, (int)foldertype.Contacts, dt.ToOADate());
-
-                    // Exchange.ItemObject[] Items = Array.ConvertAll(objectArray, Item => (Exchange.ItemObject)Item);
-                    Acct.migrationFolders[0].FolderName = folderobject.Name;
-                    Acct.migrationFolders[0].TotalCountOFItems = itemobjectarray.Count();
-                    Acct.migrationFolders[0].CurrentCountOFItems = 0;
-                    while (Acct.migrationFolders[0].CurrentCountOFItems <
-                            Acct.migrationFolders[0].TotalCountOFItems)
+                    if (importopts.HasFlag(Options.Contacts))
                     {
-                        foreach (dynamic itemobject in itemobjectarray)
-                        {
-                            if (itemobject != null)
-                            {
-                                Dictionary<string, string> dict = new Dictionary<string, string>();
-                                foldertype type = (foldertype)itemobject.Type;
-                                if (type == foldertype.Contacts)
-                                {
-                                    // string[,] data = O1.GetDataForItem(I1.ItemID);
-                                    string[, ] data = itemobject.GetDataForItemID(
-                                            itemobject.ItemID);
+                        itemobjectarray = userobject.GetItemsForFolderObjects(
+                                folderobject, (int)foldertype.Contacts, dt.ToOADate());
 
-                                    int bound0 = data.GetUpperBound(0);
-                                    for (int i = 0; i <= bound0; i++)
+                        // Exchange.ItemObject[] Items = Array.ConvertAll(objectArray, Item => (Exchange.ItemObject)Item);
+                        Acct.migrationFolders[0].FolderName = folderobject.Name;
+                        Acct.migrationFolders[0].TotalCountOFItems = itemobjectarray.Count();
+                        Acct.migrationFolders[0].CurrentCountOFItems = 0;
+                        while (Acct.migrationFolders[0].CurrentCountOFItems <
+                                Acct.migrationFolders[0].TotalCountOFItems)
+                        {
+                            foreach (dynamic itemobject in itemobjectarray)
+                            {
+                                if (itemobject != null)
+                                {
+                                    Dictionary<string, string> dict = new Dictionary<string, string>();
+                                    foldertype type = (foldertype)itemobject.Type;
+                                    if (type == foldertype.Contacts)
                                     {
-                                        string Key = data[0, i];
-                                        string Value = data[1, i];
-                                        dict.Add(Key, Value);
-                                        // Console.WriteLine("{0}, {1}", so1, so2);
+                                        // string[,] data = O1.GetDataForItem(I1.ItemID);
+                                        string[,] data = itemobject.GetDataForItemID(
+                                                itemobject.ItemID);
+
+                                        int bound0 = data.GetUpperBound(0);
+                                        for (int i = 0; i <= bound0; i++)
+                                        {
+                                            string Key = data[0, i];
+                                            string Value = data[1, i];
+                                            dict.Add(Key, Value);
+                                            // Console.WriteLine("{0}, {1}", so1, so2);
+                                        }
+                                    }
+                                    api.AccountName = Acct.Accountname;
+                                    if (dict.Count > 0)
+                                    {
+
+                                        int stat = api.CreateContact(dict, path);
                                     }
                                 }
-                                api.AccountName = Acct.Accountname;
-                                if (dict.Count > 0)
-                                {
-                                   
-                                    int stat = api.CreateContact(dict,path );
-                                }
+                                Acct.migrationFolders[0].CurrentCountOFItems++;
                             }
-                            Acct.migrationFolders[0].CurrentCountOFItems++;
                         }
                     }
 
 
                     ///lets do mail items migration now...
                     ///
-
-                    itemobjectarray = userobject.GetItemsForFolderObjects(
-                            folderobject, (int)foldertype.Mail, dt.ToOADate());
-
-                    // Exchange.ItemObject[] Items = Array.ConvertAll(objectArray, Item => (Exchange.ItemObject)Item);
-                    Acct.migrationFolders[0].FolderName = folderobject.Name;
-                    Acct.migrationFolders[0].TotalCountOFItems = itemobjectarray.Count();
-                    Acct.migrationFolders[0].CurrentCountOFItems = 0;
-                    while (Acct.migrationFolders[0].CurrentCountOFItems <
-                            Acct.migrationFolders[0].TotalCountOFItems)
+                    if (importopts.HasFlag(Options.Mail))
                     {
-                        foreach (dynamic itemobject in itemobjectarray)
-                        {
-                            if (itemobject != null)
-                            {
-                                Dictionary<string, string> dict = new Dictionary<string, string>();
-                                foldertype type = (foldertype)itemobject.Type;
-                                if (type == foldertype.Mail)
-                                {
-                                    string[,] data = itemobject.GetDataForItemID(
-                                            itemobject.ItemID);
-                                    int bound0 = data.GetUpperBound(0);
-                                    
-                                    for (int i = 0; i <= bound0; i++)
-                                    {
-                                        
-                                        string Key = data[0, i];
-                                        string Value = data[1, i];
-                                        dict.Add(Key, Value);
-                                        // Console.WriteLine("{0}, {1}", so1, so2);
-                                    }
+                        itemobjectarray = userobject.GetItemsForFolderObjects(
+                                folderobject, (int)foldertype.Mail, dt.ToOADate());
 
-                                }
-                                api.AccountName = Acct.Accountname;
-                                if (dict.Count > 0)
+                        // Exchange.ItemObject[] Items = Array.ConvertAll(objectArray, Item => (Exchange.ItemObject)Item);
+                        Acct.migrationFolders[0].FolderName = folderobject.Name;
+                        Acct.migrationFolders[0].TotalCountOFItems = itemobjectarray.Count();
+                        Acct.migrationFolders[0].CurrentCountOFItems = 0;
+                        while (Acct.migrationFolders[0].CurrentCountOFItems <
+                                Acct.migrationFolders[0].TotalCountOFItems)
+                        {
+                            foreach (dynamic itemobject in itemobjectarray)
+                            {
+                                if (itemobject != null)
                                 {
-                                    dict.Add("folderId", folderobject.ParentPath);
-                                    dict.Add("tags", "");
-                                    int stat = api.AddMessage(dict);
+                                    Dictionary<string, string> dict = new Dictionary<string, string>();
+                                    foldertype type = (foldertype)itemobject.Type;
+                                    if (type == foldertype.Mail)
+                                    {
+                                        string[,] data = itemobject.GetDataForItemID(
+                                                itemobject.ItemID);
+                                        int bound0 = data.GetUpperBound(0);
+
+                                        for (int i = 0; i <= bound0; i++)
+                                        {
+
+                                            string Key = data[0, i];
+                                            string Value = data[1, i];
+                                            dict.Add(Key, Value);
+                                            // Console.WriteLine("{0}, {1}", so1, so2);
+                                        }
+
+                                    }
+                                    api.AccountName = Acct.Accountname;
+                                    if (dict.Count > 0)
+                                    {
+                                        dict.Add("folderId", folderobject.ParentPath);
+                                        dict.Add("tags", "");
+                                        int stat = api.AddMessage(dict);
+                                    }
                                 }
+                                Acct.migrationFolders[0].CurrentCountOFItems++;
                             }
-                            Acct.migrationFolders[0].CurrentCountOFItems++;
                         }
                     }
 

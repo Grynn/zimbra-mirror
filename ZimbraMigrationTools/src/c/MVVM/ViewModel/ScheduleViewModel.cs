@@ -485,7 +485,7 @@ namespace MVVM.ViewModel
             MyAcct.migrationFolders.Insert(0, MyFolder);
             CSMigrationwrapper mw = new CSMigrationwrapper();
 
-            mw.StartMigration(MyAcct, m_isPreview);
+            mw.StartMigration(MyAcct,Options.Mail | Options.Contacts | Options.Calendar, m_isPreview);
             accountResultsViewModel.AccountResultsList[num].PBMsgValue = "Migration complete";
             accountResultsViewModel.AccountResultsList[num].AcctProgressMsg = "Complete";
         }
