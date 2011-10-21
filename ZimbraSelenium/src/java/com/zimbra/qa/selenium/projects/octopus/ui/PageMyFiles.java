@@ -3,10 +3,8 @@
  */
 package com.zimbra.qa.selenium.projects.octopus.ui;
 
-import com.zimbra.qa.selenium.framework.items.DocumentItem;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
-import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.DocumentBriefcaseEdit;
 import com.zimbra.qa.selenium.projects.octopus.ui.DialogError;
 import com.zimbra.qa.selenium.projects.octopus.ui.DialogError.DialogErrorID;
 
@@ -27,15 +25,19 @@ public class PageMyFiles extends AbsTab {
 				"css=div[class*=my-files-list-view]");
 		public static final Locators zMyFilesListViewItems = new Locators(
 				"css=div[class*=my-files-list-view]>div[class^=my-files-list-item]");
-		public static final Locators zDeleteItem = new Locators(
-				"css=div[class^=sc-view sc-menu-item] a[class=menu-item]>span:contains(Delete)");
-		public static final Locators zMarkAsFavorite = new Locators(
+		public static final Locators zShareItem = new Locators(
+				"css=div[class^=sc-view sc-menu-item] a[class=menu-item]>span:contains(Share)");
+		public static final Locators zFavoriteItem = new Locators(
 				"css=div[class^=sc-view sc-menu-item] a[class=menu-item]>span:contains(Favorite)");
+		public static final Locators zDownloadItem = new Locators(
+				"css=div[class^=sc-view sc-menu-item] a[class=menu-item]>span:contains(Download)");
 		public static final Locators zRenameItem = new Locators(
 				"css=div[class^=sc-view sc-menu-item] a[class=menu-item]>span:contains(Rename)");
 		public static final Locators zMoveItem = new Locators(
 				"css=div[class^=sc-view sc-menu-item] a[class=menu-item]>span:contains(Move)");
-
+		public static final Locators zDeleteItem = new Locators(
+				"css=div[class^=sc-view sc-menu-item] a[class=menu-item]>span:contains(Delete)");
+	
 
 		public final String locator;
 
@@ -155,7 +157,7 @@ public class PageMyFiles extends AbsTab {
 
 				return page;
 			} else if (option == Button.O_FAVORITE) {
-				optionLocator = Locators.zMarkAsFavorite.locator;
+				optionLocator = Locators.zFavoriteItem.locator;
 
 				if (!this.zWaitForElementPresent(optionLocator, "2000"))
 					throw new HarnessException("Button is not present locator="

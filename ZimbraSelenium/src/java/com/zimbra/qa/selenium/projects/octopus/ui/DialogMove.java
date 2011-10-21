@@ -6,8 +6,10 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
 public class DialogMove extends AbsDialog {
 	public static class Locators {
 		public static final Locators zMoveItemPageListView = new Locators(
-				"css=div[class=sc-view] div[id=move-item-page-list-view]>div[class^=sc-view sc-list-item-view]" +
-				">div[class=sc-outline]>label");
+		// "css=div[class=sc-view]
+		// div[id=move-item-page-list-view]>div[class^=sc-view
+		// sc-list-item-view]>div[class=sc-outline]>label
+				"css=div[id=move-item-page-list-view]");
 
 		public final String locator;
 
@@ -101,13 +103,14 @@ public class DialogMove extends AbsDialog {
 		if (folderName == null)
 
 			throw new HarnessException("folder must not be null");
-		String locator = Locators.zMoveItemPageListView.locator +":contains(" + folderName + ")";
-		
+		String locator = Locators.zMoveItemPageListView.locator
+				+ " label:contains(" + folderName + ")";
+
 		if (this.zWaitForElementPresent(locator, "3000")) {
-			sClickAt(locator,"");
-			if(this.sIsElementPresent(locator))
-			sClickAt(locator,"");
-						
+			sClickAt(locator, "");
+			if (this.sIsElementPresent(locator))
+				sClickAt(locator, "");
+
 		} else {
 			throw new HarnessException(locator + " not present");
 		}

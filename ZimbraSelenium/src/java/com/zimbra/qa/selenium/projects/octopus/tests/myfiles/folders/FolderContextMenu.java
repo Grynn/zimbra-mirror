@@ -16,7 +16,7 @@ public class FolderContextMenu extends OctopusCommonTest {
 	private String _folderName = null;
 	private boolean _fileAttached = false;
 	private String _fileId = null;
-	
+
 	public FolderContextMenu() {
 		logger.info("New " + FolderContextMenu.class.getCanonicalName());
 
@@ -26,7 +26,7 @@ public class FolderContextMenu extends OctopusCommonTest {
 
 	}
 
-	@Test(description = "Verify the Context menu items in the Folder drop down menu", groups = { "sanity" })
+	@Test(description = "Verify the Context menu items in the Folder drop down menu", groups = { "anity" })
 	public void FolderContextMenu_01() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 
@@ -52,7 +52,7 @@ public class FolderContextMenu extends OctopusCommonTest {
 
 		_folderIsCreated = true;
 		_folderName = subFolderName;
-		
+
 		// click on My Files tab
 		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_MY_FILES);
 
@@ -62,21 +62,32 @@ public class FolderContextMenu extends OctopusCommonTest {
 		app.zPageMyFiles.zListItem(Action.A_LEFTCLICK,
 				Button.B_MY_FILES_LIST_ITEM, subFolderName);
 
-		// Verify the Context menu items in My Files drop down menu
+		// Verify the items in the list folder context menu
+
+		// Verify Share item is present
+		ZAssert.assertTrue(
+				app.zPageMyFiles.sIsElementPresent(Locators.zShareItem.locator),
+				"Verify Share item is present");
+
 		// Verify Rename item is present
 		ZAssert.assertTrue(app.zPageMyFiles
 				.sIsElementPresent(Locators.zRenameItem.locator),
-				"Verify Sharing tab is present");
+				"Verify Rename item is present");
+
+		// Verify Move item is present
+		ZAssert.assertTrue(
+				app.zPageMyFiles.sIsElementPresent(Locators.zMoveItem.locator),
+				"Verify Move item is present");
 
 		// Verify Delete item is present
 		ZAssert.assertTrue(app.zPageMyFiles
 				.sIsElementPresent(Locators.zDeleteItem.locator),
-				"Verify Sharing tab is present");
+				"Verify Delete item is present");
 
 		// click on My Files tab
 		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_MY_FILES);
 	}
-	
+
 	@AfterMethod(groups = { "always" })
 	public void testCleanup() {
 		if (_folderIsCreated) {
