@@ -346,7 +346,7 @@ WebExZimlet.prototype._initCalendarWebexToolbar = function(toolbar, controller) 
 		//button.addDropDownSelectionListener(new AjxListener(this, this._addMenuItems, [button, menu]));
 		var mi = menu.createMenuItem(Dwt.getNextId(), {image:"WEBEX-panelIcon", text:this.getMessage("WebExZimlet_insertWebExDetails")});
 		mi.addSelectionListener(new AjxListener(this._composerCtrl, this._saveAsWebExHandler, true));
-		var mi = menu.createMenuItem(Dwt.getNextId(), {image:"WEBEX-panelIcon", text:this.getMessage("WebExZimlet_insertWebExDetailsAndSaveAppointment")});
+		var mi = menu.createMenuItem(Dwt.getNextId(), {image:"WEBEX-panelIcon", text:this.getMessage("WebExZimlet_insertWebExDetailsAndSendAppointment")});
 		mi.addSelectionListener(new AjxListener(this._composerCtrl, this._saveAsWebExHandler, false));
 	}
 };
