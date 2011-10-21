@@ -361,6 +361,9 @@ public class Button {
 	public static final Button B_SEND_CANCELLATION = new Button("B_SEND_CANCELLATION");
 	public static final Button B_EDIT_CANCELLATION = new Button("B_EDIT_CANCELLATION");
 
+	// Calendar tree
+	public static final Button B_RELOAD = new Button("B_RELOAD");
+
 	// Preferences
 	public static final Button B_CHANGE_PASSWORD 		= new Button("B_CHANGE_PASSWORD");
 	public static final Button B_NEW_FILTER 			= new Button("B_NEW_FILTER");

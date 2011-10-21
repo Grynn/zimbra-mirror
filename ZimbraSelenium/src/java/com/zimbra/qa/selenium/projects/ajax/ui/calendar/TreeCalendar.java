@@ -18,11 +18,7 @@ import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
-import com.zimbra.qa.selenium.projects.ajax.ui.ContextMenu;
-import com.zimbra.qa.selenium.projects.ajax.ui.DialogMove;
-import com.zimbra.qa.selenium.projects.ajax.ui.DialogShareFind;
-import com.zimbra.qa.selenium.projects.ajax.ui.DialogTag;
+import com.zimbra.qa.selenium.projects.ajax.ui.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.DialogCreateFolder;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.DialogEditFolder;
 
@@ -87,12 +83,12 @@ public class TreeCalendar extends AbsTree {
 		// After  clicking REFRESH, sometimes the links don't appear right away
 		GeneralUtility.waitForElementPresent(this, actionLocator);
 		
-
+		optionLocator = "css=div[id='ZmActionMenu_calendar_CALENDAR']";
 		if ( (action == Action.A_RIGHTCLICK) && (option == Button.B_DELETE) ) {
 
 			// Use default actionLocator
 			// See http://bugzilla.zimbra.com/show_bug.cgi?id=64023 ... POPUP_ needs to be updated
-			optionLocator = "css=div[id^='POPUP_'] tr[id='POPUP_DELETE'] td[id$='_title']";
+			optionLocator += " div[id^='DELETE_WITHOUT_SHORTCUT'] td[id$='_title']";
 			page = null;
 
 			this.zRightClick(actionLocator);
@@ -102,8 +98,7 @@ public class TreeCalendar extends AbsTree {
 		} else if ( (action == Action.A_RIGHTCLICK) && (option == Button.B_TREE_EDIT) ) {
 			
 			// Use default actionLocator
-			// See http://bugzilla.zimbra.com/show_bug.cgi?id=64023 ... POPUP_ needs to be updated
-			optionLocator = "css=div[id^='POPUP_'] tr[id='POPUP_EDIT_PROPS'] td[id$='_title']";
+			optionLocator += " div[id^='EDIT_PROPS'] td[id$='_title']";
 			page = new DialogEditFolder(MyApplication,((AppAjaxClient) MyApplication).zPageCalendar);
 
 			this.zRightClick(actionLocator);
@@ -113,9 +108,48 @@ public class TreeCalendar extends AbsTree {
 		} else if ( (action == Action.A_RIGHTCLICK) && (option == Button.B_MOVE) ) {
 			
 			// Use default actionLocator
-			// See http://bugzilla.zimbra.com/show_bug.cgi?id=64023 ... POPUP_ needs to be updated
-			optionLocator = "css=div[id^='POPUP_'] tr[id='POPUP_MOVE'] td[id$='_title']";
+			optionLocator += " div[id^='MOVE'] td[id$='_title']";
 			page = new DialogMove(MyApplication,((AppAjaxClient) MyApplication).zPageCalendar);
+
+			this.zRightClick(actionLocator);
+
+			// FALL THROUGH
+
+		} else if ( (action == Action.A_RIGHTCLICK) && (option == Button.B_SHARE) ) {
+			
+			// Use default actionLocator
+			optionLocator += " div[id^='SHARE_CALENDAR'] td[id$='_title']";
+			page = new DialogShare(MyApplication,((AppAjaxClient) MyApplication).zPageCalendar);
+
+			this.zRightClick(actionLocator);
+
+			// FALL THROUGH
+
+		} else if ( (action == Action.A_RIGHTCLICK) && (option == Button.B_RELOAD) ) {
+			
+			// Use default actionLocator
+			optionLocator += " div[id^='SYNC'] td[id$='_title']";
+			page = null;
+
+			this.zRightClick(actionLocator);
+
+			// FALL THROUGH
+
+		} else if ( (action == Action.A_RIGHTCLICK) && (option == Button.B_LAUNCH_IN_SEPARATE_WINDOW) ) {
+			
+			// Use default actionLocator
+			optionLocator += " div[id^='DETACH_WIN'] td[id$='_title']";
+			page = null; // TODO
+
+			this.zRightClick(actionLocator);
+
+			// FALL THROUGH
+
+		} else if ( (action == Action.A_RIGHTCLICK) && (option == Button.B_RECOVER_DELETED_ITEMS) ) {
+			
+			// Use default actionLocator
+			optionLocator += " div[id^='RECOVER_DELETED_ITEMS'] td[id$='_title']";
+			page = null; // TODO
 
 			this.zRightClick(actionLocator);
 
