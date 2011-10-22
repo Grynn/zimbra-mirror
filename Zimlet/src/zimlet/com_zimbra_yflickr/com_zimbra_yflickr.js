@@ -843,7 +843,7 @@ FlickrZimlet.prototype.doneAttachPhoto = function (callback, result)
 FlickrZimlet.prototype.addAttachmentHandler = function()
 {
     this._msgController = AjxDispatcher.run("GetMsgController");
-    this._msgController._initializeListView(ZmId.VIEW_MSG);
+    this._msgController._initializeView(ZmId.VIEW_MSG);
     this._msgController._listView[ZmId.VIEW_MSG].addAttachmentLinkHandler (ZmMimeTable.IMG_JPEG,"flickr",this.addSaveToFlickrLink);
 }
 
