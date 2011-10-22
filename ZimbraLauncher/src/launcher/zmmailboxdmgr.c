@@ -564,6 +564,7 @@ Start(int nextArg, int argc, char *argv[])
     AddArgFmt("-DSTART=%s/etc/start.config", MAILBOXD_HOME);
     AddArg("-jar");
     AddArgFmt("%s/start.jar", MAILBOXD_HOME);
+    AddArg("OPTIONS=Server,jsp,jmx,resources,websocket,ext,jta,plus,rewrite,setuid");
     AddArgFmt("%s/etc/jetty.properties", MAILBOXD_HOME);
     AddArgFmt("%s/etc/jetty-setuid.xml", MAILBOXD_HOME);
     AddArgFmt("%s/etc/jetty.xml", MAILBOXD_HOME);
