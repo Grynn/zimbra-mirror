@@ -268,6 +268,10 @@ function () {
 
 ZaOverviewPanelController.prototype.updateDomainList = 
 function (list) {
+	if (appNewUI){
+		return; //new UI no need for this
+	}
+
 	var domainList = list.getArray();
 	for (var key in this._domainsMap) {
 		this._domainsTi.removeChild(this._domainsMap[key]);		
