@@ -44,6 +44,8 @@ ZaTaskAutoProvDialog.prototype.setObject = function(entry) {
 
     // auto provisioning object backup
     this._backupLdapObj(entry);
+    entry[ZaDomain.A2_zimbraAutoProvAccountPool] = [];
+    entry[ZaDomain.A2_zimbraAutoProvAccountTargetPool] = [];
 
     this._separateConfigureValues(entry);
     ZaXDialog.prototype.setObject.call(this,entry);
@@ -114,7 +116,7 @@ function() {
                 label: ZaMsg.LBL_zimbraAutoProvLdapURL
             },
             {ref:ZaDomain.A_zimbraAutoProvLdapStartTlsEnabled, type:_CHECKBOX_,
-                label:ZaMsg.LBL_zimbraAutoProvLdapStartTlsEnabled,
+                label:ZaMsg.LBL_zimbraAutoProvLdapStartTlsEnabled, subLabel:"", align:_RIGHT_,
                 trueValue:"TRUE", falseValue:"FALSE",labelLocation:_RIGHT_
             },
             {ref:ZaDomain.A_zimbraAutoProvLdapAdminBindDn, type:_INPUT_,
@@ -169,7 +171,7 @@ function() {
         items: [
             {type: _SPACER_, height: 20 },
             {ref:ZaDomain.A2_zimbraAutoProvModeEAGEREnabled, type:_CHECKBOX_,
-                label:ZaMsg.LBL_zimbraAutoProvModeEAGER,
+                label:ZaMsg.LBL_zimbraAutoProvModeEAGER, subLabel:"", align:_RIGHT_,
                 trueValue:"TRUE", falseValue:"FALSE",labelLocation:_RIGHT_
             },
             {type: _SPACER_, height: 20 },
@@ -215,7 +217,7 @@ function() {
         items: [
             {type: _SPACER_, height: 20 },
             {ref:ZaDomain.A2_zimbraAutoProvModeLAZYEnabled, type:_CHECKBOX_,
-                label:ZaMsg.LBL_zimbraAutoProvModeLAZY,
+                label:ZaMsg.LBL_zimbraAutoProvModeLAZY, subLabel:"", align:_RIGHT_,
                 trueValue:"TRUE", falseValue:"FALSE",labelLocation:_RIGHT_
             },
             {type: _SPACER_, height: 20 },
@@ -228,19 +230,19 @@ function() {
                     enableDisableChangeEventSources:[ZaDomain.A2_zimbraAutoProvModeLAZYEnabled],
                     items: [
                         {ref:ZaDomain.A2_zimbraAutoProvAuthMechLDAPEnabled, type:_CHECKBOX_,
-                            label:ZaMsg.LBL_zimbraAutoProvAuthMechLDAP,
+                            label:ZaMsg.LBL_zimbraAutoProvAuthMechLDAP, subLabel:"",
                             trueValue:"TRUE", falseValue:"FALSE",labelLocation:_RIGHT_
                         },
                         {ref:ZaDomain.A2_zimbraAutoProvAuthMechPREAUTHEnabled, type:_CHECKBOX_,
-                            label:ZaMsg.LBL_zimbraAutoProvAuthMechPREAUTH,
+                            label:ZaMsg.LBL_zimbraAutoProvAuthMechPREAUTH, subLabel:"",
                             trueValue:"TRUE", falseValue:"FALSE",labelLocation:_RIGHT_
                         },
                         {ref:ZaDomain.A2_zimbraAutoProvAuthMechKRB5Enabled, type:_CHECKBOX_,
-                            label:ZaMsg.LBL_zimbraAutoProvAuthMechKRB5,
+                            label:ZaMsg.LBL_zimbraAutoProvAuthMechKRB5, subLabel:"",
                             trueValue:"TRUE", falseValue:"FALSE",labelLocation:_RIGHT_
                         },
                         {ref:ZaDomain.A2_zimbraAutoProvAuthMechSPNEGOEnabled, type:_CHECKBOX_,
-                            label:ZaMsg.LBL_zimbraAutoProvAuthMechSPNEGO,
+                            label:ZaMsg.LBL_zimbraAutoProvAuthMechSPNEGO, subLabel:"",
                             trueValue:"TRUE", falseValue:"FALSE",labelLocation:_RIGHT_
                         }
                     ]
@@ -261,7 +263,7 @@ function() {
         items: [
             {type: _SPACER_, height: 20 },
             {ref:ZaDomain.A2_zimbraAutoProvModeMANUALEnabled, type:_CHECKBOX_,
-                label:ZaMsg.LBL_zimbraAutoProvModeMANUAL,
+                label:ZaMsg.LBL_zimbraAutoProvModeMANUAL, subLabel:"", align:_RIGHT_,
                 trueValue:"TRUE", falseValue:"FALSE",labelLocation:_RIGHT_,
                 onChange: ZaTaskAutoProvDialog.onFormFieldChanged
             },
@@ -623,6 +625,8 @@ ZaTaskAutoProvDialog.prototype.tabClickHandler = function() {
 ZaTaskAutoProvDialog.srchButtonHndlr = function() {
 	var instance = this.getForm().getInstance();
 	var formParent = this.getForm().parent;
+    if(!formParent._checkGeneralConfig())
+        return;
     var soapDoc = AjxSoapDoc.create("SearchAutoProvDirectoryRequest", ZaZimbraAdmin.URN, null);
     soapDoc.getMethod().setAttribute("keyAttr","name");
 	var attr = soapDoc.set("domain", instance.id);
