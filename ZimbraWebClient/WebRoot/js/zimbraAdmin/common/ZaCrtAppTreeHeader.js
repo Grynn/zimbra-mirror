@@ -15,7 +15,7 @@ ZaCrtAppTreeHeader = function(parent, className, buttons) {
     this.menu = new ZaPopupMenu(this);
     this.menu.setWidth(150);
     this.setMenu(this.menu);
-    this.setRightImg();
+    //this.setRightImg();
 }
 
 ZaCrtAppTreeHeader.prototype = new DwtButton;

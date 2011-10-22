@@ -39,6 +39,7 @@ ZaSearchListController = function(appCtxt, container) {
 	this._searchField = null;
 	this._helpURL = ZaSearchListController.helpURL;
 	this._UICreated = false;
+    this._readFromQuery = false;
 	this._isAdvancedSearch = false ;
 	this._searchFieldInput = null ; //the input of the search field for basic search, it is also be used as the tab title
 	this.objType = ZaEvent.S_ACCOUNT;	
@@ -126,12 +127,6 @@ function (type) {
     return result;
 }
 
-ZaSearchListController.filterResult =
-function (obj, type) {
-    if (!obj)
-        return false;
-    return obj.type == type;
-}
 /**
 * searh panel
 */	

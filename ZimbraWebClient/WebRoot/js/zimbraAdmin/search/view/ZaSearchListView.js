@@ -326,8 +326,7 @@ ZaSearchXFormView.doQuickSearch = function () {
     var currentQueryValue = form.parent.getQueryField();
     currentQueryValue = currentQueryValue ? currentQueryValue: "";
     var searchField = ZaApp.getInstance().getSearchListController()._searchField;
-    searchField.getSearchFieldElement().value = currentQueryValue;
-    searchField.invokeCallback();
+    searchField.startSearch(currentQueryValue);
 }
 
 ZaSearchXFormView.doSaveSearch = function () {

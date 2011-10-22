@@ -1229,7 +1229,8 @@ function(ev) {
 					eventHandler.call(this, ev);
 				
 			}else if (ev.detail == DwtTree.ITEM_ACTIONED) {
-				if (treeItemType == ZaZimbraAdmin._SEARCH_LIST_VIEW) { //saved search item is actioned.
+				if (treeItemType == ZaZimbraAdmin._SEARCH_LIST_VIEW ||
+                    treeItemType == ZaZimbraAdmin._SEARCH_HOME_VIEW) { //saved search item is actioned.
 					//if(window.console && window.console.log) console.debug("Saved Search tree Item is actioned.") ;
 					eventHandler.call(this, ev) ;
 				}	
@@ -1544,6 +1545,9 @@ ZaOverviewPanelController.newSearchListTreeListener = function (ev) {
             searchField.setCurrentSavedSearch ({});
             searchField.invokeCallback(); // Use the value in the current search fields;
         }
+	} if (ev.detail == DwtTree.ITEM_ACTIONED && query){
+		searchField._currentSavedSearch = {name: name, query: query};
+		searchField.getSavedSearchActionMenu().popup(0, ev.docX, ev.docY);
 	}
 }
 
@@ -1551,8 +1555,19 @@ ZaOverviewPanelController.searchResultTreeListener = function (ev) {
 	if (ev.detail == DwtTree.ITEM_SELECTED) {
         var itemType = ev.item.getData("TreeItemType");
         var slController = ZaApp.getInstance().getSearchListController();
-        var result = slController.getSearchReuslt (itemType);
-        slController._updateUI (result);
+        slController.reset();
+        var searchField = slController._searchField;
+        if (itemType == ZaItem.ACCOUNT) {
+            searchField.accFilterSelected();
+        } else if (itemType == ZaItem.DOMAIN) {
+            searchField.domainFilterSelected();
+        } else if (itemType == ZaItem.DL) {
+            searchField.dlFilterSelected();
+        } else {
+            searchField.allFilterSelected();
+        }
+        searchField.setCurrentSavedSearch ({});
+        searchField.invokeCallback(); // Use the value in the current search fields;
 	}
 }
 
