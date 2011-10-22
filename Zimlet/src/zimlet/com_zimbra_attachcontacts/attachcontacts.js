@@ -50,7 +50,9 @@ function(app, toolbar, controller, viewId) {
 	if (viewType == ZmId.VIEW_COMPOSE && !this._addedToMainWindow) {
 		var btn = toolbar.getOp(ZmId.OP_ATTACHMENT);
 		btn.addSelectionListener(new AjxListener(this, this._addTab));	
-	} else if (viewType == ZmId.VIEW_CONTACT_SIMPLE || viewType == ZmId.VIEW_CONTACT) {
+	} else if (viewType == ZmId.VIEW_CONTACT_SIMPLE){ 
+		this._initContactsReminderToolbar(toolbar, controller);
+	} else if (viewType == ZmId.VIEW_CONTACT && this._isOkayToAttach()) {
 		this._initContactsReminderToolbar(toolbar, controller);
 	}
 };
@@ -126,7 +128,7 @@ function(request, isDraft) {
  */
 AttachContactsZimlet.prototype._initContactsReminderToolbar = function(toolbar, controller) {
 	var op = AttachContactsZimlet.SEND_CONTACTS;
-	if (toolbar.getButton(op)) {
+	if (toolbar.getButton(op) || !this._isOkayToAttach()) {
 		return;
 	}
 
