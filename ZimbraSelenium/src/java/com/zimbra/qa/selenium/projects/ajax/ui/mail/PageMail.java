@@ -1526,6 +1526,17 @@ public class PageMail extends AbsTab {
 			page = null;
 
 
+		} else if ( pulldown == Button.B_TAG ) {
+			
+			if ( !(dynamic instanceof TagItem) ) 
+				throw new HarnessException("if pulldown = " + Button.B_TAG +", then dynamic must be TagItem");
+
+			TagItem tag = (TagItem)dynamic;
+
+			pulldownLocator = "css=td[id$='__TAG_MENU_dropdown']>div[class='ImgSelectPullDownArrow']";
+			optionLocator = "css=div[id='zb__TV-main__TAG_MENU|MENU'] td[id$='_title']:contains("+ tag.getName() +")";
+			page = null;
+
 		} else {
 
 			throw new HarnessException("no logic defined for pulldown/dynamic " + pulldown + "/" + dynamic);
