@@ -45,7 +45,7 @@ ZaSearchOptionDialog = function(parent, optionId, w, h, contextId) {
 	this._pageDiv.style["overflow-x"] = "auto";
 
 	this._createContentHtml();
-    this.initForm(ZaSearchOption.getObjectTypeXModel(optionId), ZaSearchOption.getObjectTypeXForm (optionId), ZaSearchOption.getDefaultInstance(optionId));
+    this.initForm(ZaSearchOption.getNewObjectTypeXModel(optionId), ZaSearchOption.getNewObjectTypeXForm (optionId), ZaSearchOption.getDefaultInstance(optionId));
 }
 
 ZaSearchOptionDialog.prototype = new ZaXDialog;
