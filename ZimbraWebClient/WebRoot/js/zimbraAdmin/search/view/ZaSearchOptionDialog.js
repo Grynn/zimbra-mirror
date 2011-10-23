@@ -26,6 +26,7 @@ ZaSearchOptionDialog = function(parent, optionId, w, h, contextId) {
 		id:ZaId.getDialogId(this._contextId)
 	});
 
+    this._controller = ZaApp.getInstance().getSearchBuilderController () ;
 	this._app = ZaApp.getInstance();
 	this._localXForm = null;
 	this._localXModel = null;
@@ -38,7 +39,7 @@ ZaSearchOptionDialog = function(parent, optionId, w, h, contextId) {
     if (w)
 	    this._pageDiv.style.width = w;
     if (h)
-	    this._pageDiv.style.height = v;
+	    this._pageDiv.style.height = h;
 	this._pageDiv.style.overflow = "auto";
 	this._pageDiv.style["overflow-y"] = "auto";
 	this._pageDiv.style["overflow-x"] = "auto";

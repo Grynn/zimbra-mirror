@@ -202,6 +202,26 @@ function () {
 	form.refresh () ;
 }
 
+ZaSearchBuilderController.prototype.updateServerFilter=
+function (dialog) {
+	var serverView = dialog;
+
+	var form = serverView._localXForm;
+	var instance = form.getInstance ()
+	var list = ZaServer.getAll().getArray ();
+	var servers = new Array (list.length) ;
+	for (var i = 0; i < servers.length; i ++) {
+		servers [i] = list [i].name ;
+	}
+
+	//set the list and refresh the list UI
+	instance["options"][ZaSearchOption.A_serverList] = servers ;
+
+	//reset the checked domain list vector
+	instance["options"][ZaSearchOption.A_serverListChecked] = new AjxVector ();
+
+	form.refresh () ;
+}
 
 ZaSearchBuilderController.filterSelectionListener =
 function (value) {
@@ -759,14 +779,14 @@ function (){
 ZaSearchBuilderController.prototype.getFilterTreeItems =
 function () {
     return [
-        {text: ZaMsg.OVP_idFilter,      filterType: ZaSearchOption.ID_FILTER_ID},
-        {text: ZaMsg.OVP_nameFilter,    filterType: ZaSearchOption.NAME_FILTER_ID},
+        {text: ZaMsg.OVP_basicFilter,    filterType: ZaSearchOption.BASIC_FILTER_ID},
         {text: ZaMsg.OVP_statutsFilter, filterType: ZaSearchOption.STATUS_FILTER_ID},
         {text: ZaMsg.OVP_lltFilter,     filterType: ZaSearchOption.LASTER_LOGIN_TIME_FILTER_ID},
         {text: ZaMsg.OVP_eeaFilter,     filterType: ZaSearchOption.EXT_EMAIL_ADDRESS_FILTER_ID},
         {text: ZaMsg.OVP_cosFilter,     filterType: ZaSearchOption.COS_FILTER_ID},
-        {text: ZaMsg.OVP_domainFilter,  filterType: ZaSearchOption.DOMAIN_FILTER_ID},
-        {text: ZaMsg.OVP_serverFilter,  filterType: ZaSearchOption.SERVER_FILTER_ID}
+        {text: ZaMsg.OVP_serverFilter,  filterType: ZaSearchOption.SERVER_FILTER_ID},
+        {text: ZaMsg.OVP_domainFilter,  filterType: ZaSearchOption.DOMAIN_FILTER_ID}
+
     ];
 }
 
@@ -780,8 +800,27 @@ function (ev) {
     var dialog;
     var sbController = ZaApp.getInstance().getSearchBuilderController();
     switch (filterType) {
-        case ZaSearchOption.ID_FILTER_ID:
-            dialog = sbController.getFilterDialogByType (ZaSearchOption.BASIC_TYPE_ID);
+        case ZaSearchOption.BASIC_FILTER_ID:
+            dialog = sbController.getFilterDialogByType (ZaSearchOption.BASIC_FILTER_ID);
+        break;
+        case ZaSearchOption.SERVER_FILTER_ID:
+            dialog = sbController.getFilterDialogByType (ZaSearchOption.SERVER_FILTER_ID);
+            sbController.updateServerFilter(dialog);
+        break;
+        case ZaSearchOption.COS_FILTER_ID:
+            dialog = sbController.getFilterDialogByType (ZaSearchOption.COS_FILTER_ID);
+        break;
+        case ZaSearchOption.DOMAIN_FILTER_ID:
+            dialog = sbController.getFilterDialogByType (ZaSearchOption.DOMAIN_FILTER_ID);
+        break;
+        case ZaSearchOption.EXT_EMAIL_ADDRESS_FILTER_ID:
+            dialog = sbController.getFilterDialogByType (ZaSearchOption.EXT_EMAIL_ADDRESS_FILTER_ID);
+        break;
+        case ZaSearchOption.LASTER_LOGIN_TIME_FILTER_ID:
+            dialog = sbController.getFilterDialogByType (ZaSearchOption.LASTER_LOGIN_TIME_FILTER_ID);
+        break;
+        case ZaSearchOption.STATUS_FILTER_ID:
+            dialog = sbController.getFilterDialogByType (ZaSearchOption.STATUS_FILTER_ID);
         break;
     }
     if (dialog)
@@ -792,7 +831,19 @@ ZaSearchBuilderController.filterDialogSet = {};
 ZaSearchBuilderController.prototype.getFilterDialogByType =
 function (filterType) {
     if (!ZaSearchBuilderController.filterDialogSet[filterType]) {
-        ZaSearchBuilderController.filterDialogSet[filterType] = new ZaSearchOptionDialog(ZaApp.getInstance().getAppCtxt().getShell(), filterType);
+        var w, h;
+        if (filterType == ZaSearchOption.SERVER_FILTER_ID) {
+            w = ZaSearchOptionView.WIDTH;
+            h = 150;
+        } else if (filterType == ZaSearchOption.COS_FILTER_ID ||
+            filterType == ZaSearchOption.DOMAIN_FILTER_ID) {
+            w = ZaSearchOptionView.WIDTH;
+            h = 150;
+        } else if (filterType == ZaSearchOption.EXT_EMAIL_ADDRESS_FILTER_ID) {
+            w = 230;
+            h= 30;
+        }
+        ZaSearchBuilderController.filterDialogSet[filterType] = new ZaSearchOptionDialog(ZaApp.getInstance().getAppCtxt().getShell(), filterType, w, h);
         ZaSearchBuilderController.filterDialogSet[filterType].registerCallback(DwtDialog.OK_BUTTON, this.filterOKListener, this, filterType);
     }
     return ZaSearchBuilderController.filterDialogSet[filterType];
