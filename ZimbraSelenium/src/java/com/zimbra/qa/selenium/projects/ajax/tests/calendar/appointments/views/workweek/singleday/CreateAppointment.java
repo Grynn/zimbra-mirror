@@ -59,6 +59,9 @@ public class CreateAppointment extends AjaxCommonTest {
 	public void CreateAppointment_02() throws HarnessException {
 		
 		// Create appointment data
+		ZimbraResource location = new ZimbraResource(ZimbraResource.Type.LOCATION);
+		ZimbraResource equipment = new ZimbraResource(ZimbraResource.Type.EQUIPMENT);
+		
 		AppointmentItem appt = new AppointmentItem();
 		
 		String apptSubject, apptAttendee1, apptOptional1, apptLocation1, apptEquipment1, apptContent;
@@ -66,8 +69,8 @@ public class CreateAppointment extends AjaxCommonTest {
 		apptSubject = ZimbraSeleniumProperties.getUniqueString();
 		apptAttendee1 = ZimbraAccount.AccountA().EmailAddress;
 		apptOptional1 = ZimbraAccount.AccountB().EmailAddress;
-		apptLocation1 = ZimbraAccount.createLocation();
-		apptEquipment1 = ZimbraAccount.createEquipment();
+		apptLocation1 = location.EmailAddress;
+		apptEquipment1 = equipment.EmailAddress;
 		apptContent = ZimbraSeleniumProperties.getUniqueString();
 		
 		appt.setSubject(apptSubject);
