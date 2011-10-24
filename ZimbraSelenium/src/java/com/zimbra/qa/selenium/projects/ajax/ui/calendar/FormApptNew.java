@@ -36,11 +36,16 @@ public class FormApptNew extends AbsForm {
 		public static final Field Attendees = new Field("Attendees");
 		public static final Field Optional = new Field("Optional");
 		public static final Field Location = new Field("Location");
-		public static final Field Resources = new Field("Resources");
+		public static final Field Equipment = new Field("Equipment");
 		public static final Field StartDate = new Field("StartDate");
 		public static final Field StartTime = new Field("StartTime");
 		public static final Field EndDate = new Field("EndDate");
 		public static final Field EndTime = new Field("EndTime");
+		public static final Field AllDay = new Field("AllDay");
+		public static final Field Repeat = new Field("Repeat");
+		public static final Field Display = new Field("Display");
+		public static final Field CalendarFolder = new Field("CalendarFolder");
+		public static final Field Private = new Field("Private");
 		public static final Field Remdinder = new Field("Remdinder");
 		public static final Field Body = new Field("Body");
 
@@ -280,36 +285,89 @@ public class FormApptNew extends AbsForm {
 
 		String locator = null;
 
+		// subject
 		if (field == Field.Subject) {
 
 			locator = "css=div[id^='APPT_COMPOSE_'] td[id$='_subject'] input";
 
-			// FALL THROUGH
+		// attendees
+		} else if (field == Field.Attendees) {
 
+			locator = "css=input[id$='_person_input']";
+	
+		
+		// optional
+		} else if (field == Field.Optional) {
+
+			locator = "css=input[id$='_optional_input']";
+
+
+		// location
+		} else if (field == Field.Location) {
+
+			locator = "css=input[id$='_location_input']";
+			
+		
+		// equipment
+		} else if (field == Field.Equipment) {
+
+			locator = "css=input[id$='_resourcesData_input']";
+			
+		
+		// start date
 		} else if (field == Field.StartDate) {
 
 			locator = "css=input[id$='_startDateField']";
 
-			// FALL THROUGH
 
+		// start time
 		} else if (field == Field.StartTime) {
 
 			locator = "css=td[id$='_startTimeSelect'] td[id$='_timeSelectInput'] input";
 
-			// FALL THROUGH
-
+			
+		// end date
 		} else if (field == Field.EndDate) {
 
 			locator = "css=input[id$='_endDateField']";
 
-			// FALL THROUGH
 
+		// end time
 		} else if (field == Field.EndTime) {
 
 			locator = "css=td[id$='_endTimeSelect'] td[id$='_timeSelectInput'] input";
 
-			// FALL THROUGH
+		// all day
+		} else if (field == Field.AllDay) {
 
+			locator = "css=td[id$='_allDayCheckbox'] input";
+			
+			
+		// display
+		} else if (field == Field.Display) {
+
+			locator = "css=td[id$='_showAsSelect'] input";
+			
+			
+		// calendar folder 
+		} else if (field == Field.CalendarFolder) {
+
+			locator = "css=td[id$='_folderSelect'] input";
+
+			
+		// is private?
+		} else if (field == Field.Private) {
+
+			locator = "css=td[id$='_privateCheckbox'] input";
+			
+			
+		// repeat
+		} else if (field == Field.Repeat) {
+
+			locator = "css=div[id$='_repeatSelect'] input";
+			
+		
+		// body 
 		} else if (field == Field.Body) {
 
 			int frames = this.sGetCssCount("css=iframe");
@@ -439,37 +497,68 @@ public class FormApptNew extends AbsForm {
 					"Invalid item type - must be AppointmentItem");
 		}
 
-		// Convert object to MailItem
 		AppointmentItem appt = (AppointmentItem) item;
 
-		// Fill out the form
-		//
-
-		// Handle the subject
+		// Subject
 		if (appt.getSubject() != null) {
-
 			zFillField(Field.Subject, appt.getSubject());
-
 		}
-
+		
+		// Attendees
+		if (appt.getAttendees() != null) {
+			zFillField(Field.Attendees, appt.getAttendees());
+		}
+		
+		// Optional
+		if (appt.getOptional() != null) {
+			zFillField(Field.Optional, appt.getOptional());
+		}
+		
+		// Location
+		if (appt.getLocation() != null) {
+			zFillField(Field.Location, appt.getLocation());
+		}
+		
+		// Equipment
+		if (appt.getEquipment() != null) {
+			zFillField(Field.Equipment, appt.getEquipment());
+		}
+		
+		// Start date-time
 		if (appt.getStartTime() != null) {
-
 			zFillField(Field.StartDate, appt.getStartTime());
 			zFillField(Field.StartTime, appt.getStartTime());
-
 		}
 
+		// End date-time
 		if (appt.getEndTime() != null) {
-
 			zFillField(Field.EndDate, appt.getEndTime());
 			zFillField(Field.EndTime, appt.getEndTime());
-
 		}
 
+		// Calendar folder
+		if (appt.getFolder() != null) {
+			zFillField(Field.CalendarFolder, appt.getFolder());
+		}
+		
+		// Is recurring
+		if (appt.getIsRecurring() != null) {
+			zFillField(Field.Repeat, appt.getIsRecurring());
+		}
+		
+		// Is all day
+		if (appt.getIsAllDay() == true) {
+			
+		}
+		
+		// Is private
+		if (appt.getIsPrivate() == true) {
+			
+		}
+		
+		// Body
 		if (appt.getContent() != null) {
-
 			zFillField(Field.Body, appt.getContent());
-
 		}
 
 	}
