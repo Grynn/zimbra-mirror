@@ -623,6 +623,8 @@ ZaId.DLG_AUTPROV_CONFIG         = "AUTOPROV_CONFIG";
 ZaId.DLG_AUTPROV_MANUAL         = "AUTOPROV_MANUAL";
 ZaId.DLG_AUTH_SPNEGO            = "AUTH_SPNEGO";
 ZaId.DLG_AUTH_SPNEGO_UA         = "AUTH_SPNEGO_UA";
+ZaId.DLG_NEW_DL                 = "NEW_DL"
+ZaId.DLG_NEW_COS                = "NEW_COS"
 
 ZaId.DLG_MSG			= "MSG";
 ZaId.DLG_ERR			= "ERR";

@@ -516,7 +516,16 @@ function(ev) {
 		newDL.rights[ZaDistributionList.RENAME_DL_RIGHT]=true;
 		newDL.rights[ZaDistributionList.REMOVE_DL_MEMBER_RIGHT]=true;
 		newDL.rights[ZaDistributionList.ADD_DL_MEMBER_RIGHT]=true;
-		ZaApp.getInstance().getDistributionListController().show(newDL,true,true);
+        if(!appNewUI)
+		    ZaApp.getInstance().getDistributionListController().show(newDL,true,true);
+        else{
+            if(!ZaApp.getInstance().dialogs["newDLWizard"])
+			    ZaApp.getInstance().dialogs["newDLWizard"] = new ZaNewDLXWizard(this._container,newDL);
+
+		    ZaApp.getInstance().dialogs["newDLWizard"].setObject(newDL);
+		    ZaApp.getInstance().dialogs["newDLWizard"].popup();
+        }
+
 	} catch (ex) {
 		this._handleException(ex, "ZaAccountListController.prototype._newDistributionListListener", null, false);
 	}

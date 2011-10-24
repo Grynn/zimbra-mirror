@@ -240,7 +240,16 @@ function(ev) {
 		newCos.attrs[aname] = defCos.attrs[aname];
 	}
 	
-	ZaApp.getInstance().getCosController().show(newCos);
+
+    if(!appNewUI)
+		    ZaApp.getInstance().getCosController().show(newCos);
+    else{
+            if(!ZaApp.getInstance().dialogs["newCosXWizard"])
+			    ZaApp.getInstance().dialogs["newCosXWizard"] = new ZaNewCosXWizard(this._container,newCos);
+
+		    ZaApp.getInstance().dialogs["newCosXWizard"].setObject(newCos);
+		    ZaApp.getInstance().dialogs["newCosXWizard"].popup();
+        }
 }
 
 /**
