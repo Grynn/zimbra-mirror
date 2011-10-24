@@ -578,22 +578,39 @@ namespace MVVM.ViewModel
             int incr = 0;
             switch (f.Accountnum)
             {
-                case 0:     incr = 5; break;
-                case 1:     incr = 4; break;
-                case 2:     incr = 4; break;
-                case 3:     incr = 3; break;
-                default:    incr = 5; break;
+                case 0:     incr = (m_isPreview) ? 7 : 1;   break;
+                case 1:     incr = (m_isPreview) ? 6 : 1;   break;
+                case 2:     incr = (m_isPreview) ? 6 : 1;   break;
+                case 3:     incr = (m_isPreview) ? 5 : 1;   break;
+                default:    incr = (m_isPreview) ? 7 : 1;   break;
             }
             ////////
 
-            accountResultsViewModel.AccountResultsList[f.Accountnum].PBValue += incr;
-            bgwlist[f.Accountnum].ReportProgress(ar.PBValue, f.Accountnum);
+            if (e.PropertyName == "CurrentCountofItems")
+            {
+                if (f.FolderName != null)
+                {
+                    if (e.NewValue.ToString() != "0")
+                    {
+                        accountResultsViewModel.AccountResultsList[f.Accountnum].PBValue += incr;
+                        bgwlist[f.Accountnum].ReportProgress(ar.PBValue, f.Accountnum);
+                    }
+                }
+            }
 
             if (e.PropertyName == "FolderName")
             {
                 if (e.OldValue != null)
                 {
                     ar.AccountFolderInfoList.Add(f.LastFolderInfo);
+
+                    // TEMPORARY HACK (I HOPE).  When backend count processing is in -- get rid of this
+                    if ((e.OldValue.ToString() == "Tasks") && (e.NewValue.ToString() == "Tasks"))
+                    {
+                        accountResultsViewModel.AccountResultsList[f.Accountnum].PBValue = 100;
+                        bgwlist[f.Accountnum].ReportProgress(ar.PBValue, f.Accountnum);
+                    }
+                    /////////////////////////
                 }
             }
         }
