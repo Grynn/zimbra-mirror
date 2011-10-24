@@ -40,7 +40,9 @@ public class AppointmentItem implements IItem {
 	protected String gOptional = null;	
 	protected String gLocation = null;
 	protected String gEquipment = null;
+	protected String gStartDate = null;
 	protected ZDate gStartTime = null;
+	protected String gEndDate = null;
 	protected ZDate gEndTime = null;
 	protected String gDisplay = null;
 	protected String gFolder = null;
@@ -479,6 +481,22 @@ public static AppointmentItem importFromSOAP(Element GetAppointmentResponse) thr
 	
 	public void setGContent(String content) {
 		gContent = content;
+	}
+	
+	public String getGStartDate() {
+		return (gStartDate);
+	}
+	
+	public void setGStartDate(String string) {
+		gStartDate = string;
+	}
+	
+	public String getGEndDate() {
+		return (gEndDate);
+	}
+	
+	public void setGEndDate(String string) {
+		gEndDate = string;
 	}
 	
 	public ZDate getGStartTime() {
