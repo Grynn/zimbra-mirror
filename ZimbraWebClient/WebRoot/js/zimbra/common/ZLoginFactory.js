@@ -94,7 +94,7 @@ function(msgs) {
 		logOffMsg : msgs["loginAsDiff"] || "",
 		logOffAction : "",
 		
-		showButton : false,
+		showButton : true,
 		buttonName : msgs["login"] || "",
 		
 		copyrightText : msgs["splashScreenCopyright"] || ""
@@ -176,6 +176,9 @@ ZLoginFactory.getLoginDialogHTML = function (params) {
 					"<td></td>",
                                         "<td><span class='Img ImgInformation_xtra_small'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><label for='", ZLoginFactory.MORE_ID, "'>",params.moreMsg,"</label></td>",
 		"</tr>",
+ 		"<tr ", (params.showLoading ? " " : "style='display:none'"), ">",
+		 			"<td colspan=2 class='ZLoadingMessage'>" , params.loadingMsg, "</td>",
+		 "</tr>",
                 "<tr ", (params.showUserField ? " " : "style='display:none'"), ">",
 		 			"<td><label for='", ZLoginFactory.USER_ID, "'>",params.userNameMsg,"</label></td>",
 		 			"<td><input id='", ZLoginFactory.USER_ID, "' name='", ZLoginFactory.USER_ID, "' class='zLoginField' type='text' size='40'  autocomplete=OFF/></td>",
@@ -198,7 +201,7 @@ ZLoginFactory.getLoginDialogHTML = function (params) {
                 "<tr>",
 	                "<td>&nbsp;</td>",
 	                "<td style='text-align:right'>",
-	                	"<input id='", ZLoginFactory.LOGIN_BUTTON_ID, "' type='button' onclick='", params.loginAction, ";return false' class='DwtButton' value='",params.buttonName,"' style='float:left;'/>",
+	               	    "<input id='", ZLoginFactory.LOGIN_BUTTON_ID, "' type='button' onclick='", params.loginAction, ";return false' class='DwtButton' value='",params.buttonName,(params.showButton ?"' style='float:left;'/>" :"' style='display:none'/>"),
 	                    "<input id='", ZLoginFactory.REMEMBER_ME_ID, "' value='1' type='checkbox' name='", ZLoginFactory.REMEMBER_ME_ID, "'  ", (params.showRememberMeCheckbox ? "" : "style='display:none'"), "/>",
 	                    "<label ", (params.showRememberMeCheckbox ? "" : "style='display:none'"), " for='", ZLoginFactory.REMEMBER_ME_ID, "'>", params.rememberMeMsg, "</label>",
 	                "</td>",

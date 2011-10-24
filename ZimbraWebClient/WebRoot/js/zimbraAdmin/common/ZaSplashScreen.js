@@ -26,12 +26,13 @@ ZaSplashScreen =function(parent) {
     
 	var params = ZLoginFactory.copyDefaultParams(ZaMsg);
 	params.showPanelBorder = true;
-	params.showForm = false;
-	params.showUserField = false;
+	params.showForm = true;
+	params.showUserField =false ;
 	params.showPasswordField = false;
 	params.showRememberMeCheckbox = false;
 	params.showLogOff = false;
 	params.showButton = false;
+        params.showLoading = true ;
     params.companyURL = ZaAppCtxt.getLogoURI () ;
     var html = ZLoginFactory.getLoginDialogHTML(params);
 	this.setContent(html);

@@ -262,6 +262,14 @@ body						{	@ChromeBg@	}
     font-weight:bold;
     padding-top:20px;
 }
+
+.ZLoadingMessage {
+    color:#FFFFFF;
+    font-size:14px;
+    font-weight:bold;
+    padding-top:50px;
+}
+
 .SplashScreen .switch{
     margin:30px 0px 60px;
 }
