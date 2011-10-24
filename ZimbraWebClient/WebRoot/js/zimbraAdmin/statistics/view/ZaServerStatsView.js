@@ -292,19 +292,24 @@ function() {
 ZaServerStatsView.prototype.getTabChoices =
 function() {
     //var innerTabs = this._tab;
-    var innerTabs = [ZaMsg.TABT_Disk, ZaMsg.TABT_Session, ZaMsg.TABT_MBX,
-                     ZaMsg.TABT_InMsgs, ZaMsg.TABT_InData, ZaMsg.TABT_Spam_Activity];
-    var tabChoices = [];
+    var innerTabs = [ZaMsg.TABT_Disk, ZaMsg.TABT_Session, ZaMsg.TABT_MBX];
 
-    if (tabChoices.length <= 0){
-        //index of _tabs is based on 1 rather than 0
-        for (var i = 1; i <= innerTabs.length; i++){
-            tabChoices.push({ value: i,
-                                label: innerTabs[i-1]
-                                //label: innerTabs[i].title
-                            });
-        }
+    var entry = this._containedObject;
+    if( ZaServerStatsView.prototype._isMtaEnable( entry.id ) ){
+        innerTabs.push(ZaMsg.TABT_InMsgs);
+        innerTabs.push(ZaMsg.TABT_InData);
+        innerTabs.push(ZaMsg.TABT_Spam_Activity);
     }
+
+    var tabChoices = [];
+    //index of _tabs is based on 1 rather than 0
+    for (var i = 1; i <= innerTabs.length; i++){
+        tabChoices.push({ value: i,
+                            label: innerTabs[i-1]
+                            //label: innerTabs[i].title
+                        });
+    }
+
     return tabChoices;
 }
 

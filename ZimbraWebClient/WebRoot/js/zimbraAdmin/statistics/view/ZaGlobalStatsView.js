@@ -96,7 +96,7 @@ ZaGlobalStatsView.prototype.getAllServersInfo = function( ){
 ZaGlobalStatsView.prototype.getAllServersMtaServiceStatus = function( ){
 
     //this._containedObject.name;
-    allServersInfo = ZaGlobalStatsView.prototype.getAllServersInfo( );
+    var allServersInfo = ZaGlobalStatsView.prototype.getAllServersInfo( );
 
     if( !allServersInfo ){
         return null;
@@ -115,7 +115,7 @@ ZaGlobalStatsView.prototype.getAllServersMtaServiceStatus = function( ){
         oneServerDetailInfo = allServersInfo[i].a;
         oneServerBriefInfo.id = allServersInfo[i].id;
         oneServerBriefInfo.name = allServersInfo[i].name;
-
+        var oneService;
         for ( j = 0, isEnabled = isInstalled = false; j < oneServerDetailInfo.length; j++){
             oneService = oneServerDetailInfo[j];
             if( "mta" == oneService._content ){
@@ -142,7 +142,7 @@ ZaGlobalStatsView.prototype.getAllServersMtaServiceStatus = function( ){
 
 ZaGlobalStatsView.prototype.isAllMtaDisable = function( ){
 
-    allServersMtaServiceEnableStatus = ZaGlobalStatsView.prototype.getAllServersMtaServiceStatus();
+    var allServersMtaServiceEnableStatus = ZaGlobalStatsView.prototype.getAllServersMtaServiceStatus();
     if( !allServersMtaServiceEnableStatus ){
         return true; //no info means no zimbraServiceEnabled message sending to the admin
     }
@@ -280,17 +280,32 @@ function() {
 ZaGlobalStatsView.prototype.getTabChoices =
 function() {
     //var innerTabs = this._tab;
-    var innerTabs = [ZaMsg.TABT_Advanced_Stats, ZaMsg.TABT_InMsgs, ZaMsg.TABT_InData, ZaMsg.TABT_Spam_Activity];
-    var tabChoices = [];
+    var innerTabs = [];
+    if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.GLOBAL_ADVANCED_STATS_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]){
+        innerTabs.push(ZaMsg.TABT_Advanced_Stats);
+    }
 
-    if (tabChoices.length <= 0){
-        //index of _tabs is based on 1 rather than 0
-        for (var i = 1; i <= innerTabs.length; i++){
-            tabChoices.push({ value: i,
-                                label: innerTabs[i-1]
-                                //label: innerTabs[i].title
-                            });
+    if( !ZaGlobalStatsView.prototype.isAllMtaDisable()  ){
+        innerTabs.push(ZaMsg.TABT_InMsgs);
+        innerTabs.push(ZaMsg.TABT_InData);
+        innerTabs.push(ZaMsg.TABT_Spam_Activity);
+    }
+
+    for(var i = 0; i < ZaGlobalStatsView.extTabObjects.length; i++) {
+        var tabObj = ZaGlobalStatsView.extTabObjects[i];
+        if(typeof(tabObj.memthod) == "function"){
+            innerTabs.push(tabObj.title);
         }
     }
+    var tabChoices = [];
+
+    //index of _tabs is based on 1 rather than 0
+    for (var i = 1; i <= innerTabs.length; i++){
+        tabChoices.push({ value: i,
+                            label: innerTabs[i-1]
+                            //label: innerTabs[i].title
+                        });
+    }
+
     return tabChoices;
 }
