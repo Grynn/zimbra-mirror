@@ -737,10 +737,10 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject,entry) {
 	var switchGroup = {type:_SWITCH_, items:[]};
 
 if(appNewUI) {
-    var case1 = {type:_ZATABCASE_, caseKey:tabIx,numCols:1, paddingStyle:(appNewUI? "padding-left:15px;":null),
-            width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0)};
+    var case1 = {type:_ZATABCASE_, caseKey:tabIx,numCols:1,paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0) 
+            };
     var case1Items = [
-		{type:_ZAGROUP_, numCols:2,colSizes: ["275px","auto"],
+		{type:_ZAGROUP_,  displayGrid:appNewUI,width:"100%", numCols:2,colSizes: ["275px","100%"],
 			items:[
                 { type: _DWT_ALERT_,
                     visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A_zimbraDomainStatus,ZaDomain.DOMAIN_STATUS_SHUTDOWN]],
@@ -1188,7 +1188,7 @@ if(appNewUI) {
 	if(ZaTabView.isTAB_ENABLED(entry,ZaDomainXFormView.AUTH_TAB_ATTRS, ZaDomainXFormView.AUTH_TAB_RIGHTS)) {
 		tabIx = ++this.TAB_INDEX;
 		tabBar.choices.push({value:tabIx, label:ZaMsg.Domain_Tab_Authentication});
-		var case3 = {type:_ZATABCASE_, caseKey:tabIx,
+		var case3 = {type:_ZATABCASE_, caseKey:tabIx,paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),
 			items: [
 				{ type: _DWT_ALERT_,
 					visibilityChangeEventSources:[ZaDomain.A_zimbraDomainStatus],
@@ -1529,18 +1529,19 @@ if(appNewUI) {
 		tabBar.choices.push({value:tabIx, label:ZaMsg.TABT_Zimlets});
        	var case7 = {type:_ZATABCASE_, id:"account_form_zimlets_tab", numCols:1,
         	caseKey:tabIx,
-			items:[
-            	{type:_ZAGROUP_, numCols:1,colSizes:["auto"],
+			
+items:[
+            	{type:_ZAGROUP_, numCols:1,colSizes:["auto"], displayGrid:false,
 					items: [
-                    	{type: _OUTPUT_, value: ZaMsg.NAD_LimitZimletsToDomain, cssStyle:"margin-left: 275px;" },
-                    	{type:_ZA_ZIMLET_SELECT_COMBO_,
+                    	{type: _OUTPUT_, value: ZaMsg.NAD_LimitZimletsToDomain, cssStyle:"margin-left:275px " },
+                    	{type:_ZA_ZIMLET_SELECT_COMBO_,cssStyle:"margin-left: 275px",
                             selectRef:ZaDomain.A_zimbraZimletDomainAvailableZimlets,
 							ref:ZaDomain.A_zimbraZimletDomainAvailableZimlets,
 							choices:ZaDomainXFormView.zimletChoices
 						}
 					]
 				}
-			]
+			]			
 		};
     	switchGroup.items.push(case7);
 	}
