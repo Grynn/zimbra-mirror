@@ -403,8 +403,7 @@ ZaTaskAuthConfigWizard.myXFormModifier = function(xFormObject) {
 							},
                             {type: _GROUP_, colSpan:2, numCols:2, colSizes: ["80px", "*" ],
                                 items :[
-                                    {type:_OUTPUT_, label:"" , value:"Help text"},
-                                    {type:_OUTPUT_, label:"", value:"Help text 2"}
+                                    {type:_OUTPUT_, label:"" , value:ZaMsg.domainAuthDlgInternalHelp}
                                 ]
                             },
                             {type: _SPACER_, height: 15 },
@@ -420,8 +419,7 @@ ZaTaskAuthConfigWizard.myXFormModifier = function(xFormObject) {
 							},
                             {type: _GROUP_, colSpan:2, numCols:2, colSizes: ["80px", "*" ],
                                 items :[
-                                    {type:_OUTPUT_, label:"" , value:"Help text"},
-                                    {type:_OUTPUT_, label:"", value:"Help text 2"},
+                                    {type:_OUTPUT_, label:"" , value:ZaMsg.domainAuthDlgADHelp},
                                     {ref:ZaDomain.A2_zimbraSpnegoAuthEnabled, type:_CHECKBOX_, label:"<b>" + ZaMsg.NAD_Enable_spnego + "</b>",
                                         //onChange: ZaTaskAuthConfigWizard.startTlsEnabledChanged,
                                         subLabel:"",
@@ -444,8 +442,7 @@ ZaTaskAuthConfigWizard.myXFormModifier = function(xFormObject) {
 							},
                             {type: _GROUP_, colSpan:2, numCols:2, colSizes: ["80px", "*" ],
                                 items :[
-                                    {type:_OUTPUT_, label:"" , value:"Help text"},
-                                    {type:_OUTPUT_, label:"", value:"Help text 2"}
+                                    {type:_OUTPUT_, label:"" , value:ZaMsg.domainAuthDlgExternalHelp}
                                 ]
                             }
                         ]
@@ -1050,7 +1047,7 @@ function() {
                     visibilityChecks:[[ZaTaskAuthConfigWizard.checkSpnegoApplyType,ZaDomain.A2_zimbraSpnegoApplyFor,ZaItem.GLOBAL_CONFIG]],
                     visibilityChangeEventSources:[ZaDomain.A2_zimbraSpnegoApplyFor],
                     items:[
-                            {type:_OUTPUT_, value:"<b>Single Sign-On using SPNEGO</b>", colSpan:2},
+                            {type:_OUTPUT_, value:ZaMsg.spnegoGlobalSettingPageTitle, colSpan:2},
                             {type:_SPACER_, height:10, colSpan:"*"},
                             {ref: ZaDomain.A2_zimbraSpnegoGlobalAuthEnabled, type: _CHECKBOX_,
                                 label:ZaMsg.EnableSpnegoGlobal, width: "200px", subLabel:"",
@@ -1076,7 +1073,7 @@ function() {
                     visibilityChecks:[[ZaTaskAuthConfigWizard.checkSpnegoApplyType,ZaDomain.A2_zimbraSpnegoApplyFor,ZaItem.SERVER]],
                     visibilityChangeEventSources:[ZaDomain.A2_zimbraSpnegoApplyFor],
                     items:[
-                            {type:_OUTPUT_, value:"<b>Server Configuration</b>", colSpan:2},
+                            {type:_OUTPUT_, value:ZaMsg.spnegoServerSettingPageTitle, colSpan:2},
                             {type:_SPACER_, height:10, colSpan:"*"},
                             {ref:ZaDomain.A2_zimbraSpnegoAuthPrincipal, type:_TEXTFIELD_,
                                 labelCssStyle:"text-align:left;padding-left:20px;",
