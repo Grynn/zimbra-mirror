@@ -1732,6 +1732,9 @@ function (parentPath, name, currentView, skipHistory, skipNotify, relatedZaItem,
         needToAddTabNodes = true;
     }
 
+    var historyObject = new ZaHistory(namePath, name, relatedZaItem?relatedZaItem.type:null);
+    ZaZimbraAdmin.getInstance().getHisotryMgr().addHistoryObj(historyObject);
+
     if (needToAddNameNode) {
         var parentDataItem = tree.getTreeItemDataByPath (parentPath);
         var index = parentDataItem.getChildrenNum();
