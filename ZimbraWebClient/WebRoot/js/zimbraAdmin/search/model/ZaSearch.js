@@ -548,8 +548,9 @@ function() {
 
     //ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.ACCOUNTS, ZaSearch.RESOURCES,ZaSearch.DOMAINS, ZaSearch.COSES
     var accDoc = soapDoc.set("SearchDirectoryRequest", null, null, ZaZimbraAdmin.URN);
+    var queryString = "(!("+ ZaAccount.A_zimbraIsSystemAccount +"=TRUE))";
 	accDoc.setAttribute("limit", "1");
-    var elBy = soapDoc.set("query", "", accDoc);
+    var elBy = soapDoc.set("query", queryString, accDoc);
     //elBy.setAttribute("by", by);
     soapDoc.set("limit", 1, accDoc);
     soapDoc.set("types", ZaSearch.ACCOUNTS, accDoc);

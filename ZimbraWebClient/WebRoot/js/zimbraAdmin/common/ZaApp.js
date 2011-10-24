@@ -758,7 +758,7 @@ function(refresh) {
 		if(!ZaZimbraAdmin.isGlobalAdmin()) {
 			var cosNameList = ZaApp.getInstance()._cosNameList;
 			if(!cosNameList || !(cosNameList instanceof Array)) {
-				ZaApp.getInstance()._cosNameList = cosNamelist = ZaCos.getEffectiveCosList(ZaZimbraAdmin.currentAdminAccount.id);	
+				ZaApp.getInstance()._cosNameList = cosNameList = ZaCos.getEffectiveCosList(ZaZimbraAdmin.currentAdminAccount.id);
 			}
 			if(cosNameList.length == 0) {
 				this._cosList = new ZaItemList(ZaCos);
