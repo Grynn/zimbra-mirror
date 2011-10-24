@@ -107,6 +107,7 @@ function(entry) {
 
 	if(entry.setAttrs)
 		this._containedObject.setAttrs = entry.setAttrs;
+    else this._containedObject.setAttrs = {};
 	
 	if(entry.getAttrs)
 		this._containedObject.getAttrs = entry.getAttrs;
@@ -173,7 +174,7 @@ function(entry) {
     this._containedObject[ZaAccount.A2_accountTypes] = domainObj.getAccountTypes () ;
     this._containedObject[ZaAccount.A2_currentAccountType] = entry[ZaAccount.A2_currentAccountType]  ;
 //    ZaAccountXFormView.themeChoices = new XFormChoices([], XFormChoices.SIMPLE_LIST);
-	if(entry.getAttrs[ZaAccount.A_zimbraAvailableSkin] || entry.getAttrs.all) {
+	if(!entry.getAttrs || entry.getAttrs[ZaAccount.A_zimbraAvailableSkin] || entry.getAttrs.all) {
 		var skins = ZaApp.getInstance().getInstalledSkins();
 		
 		if(AjxUtil.isEmpty(skins)) {
@@ -198,7 +199,7 @@ function(entry) {
 		
 	}
 	
-	if(entry.getAttrs[ZaAccount.A_zimbraZimletAvailableZimlets] || entry.getAttrs.all) {
+	if(!entry.getAttrs || entry.getAttrs[ZaAccount.A_zimbraZimletAvailableZimlets] || entry.getAttrs.all) {
 		//get sll Zimlets
 		var allZimlets = ZaZimlet.getAll("extension");
 

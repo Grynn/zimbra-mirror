@@ -1922,8 +1922,8 @@ function(parentPath, item) {
             || ZaCos.getDefaultCos4Account(item[ZaAccount.A_name]);
     var domainName = ZaAccount.getDomain(item[ZaAccount.A_name]);
     var domainObj =  ZaDomain.getDomainByName (domainName) ;
-    var zimletList = item.attrs[ZaAccount.A_zimbraZimletAvailableZimlets]
-            || item._defaultValues.attrs[ZaAccount.A_zimbraZimletAvailableZimlets];
+    //var zimletList = item.attrs[ZaAccount.A_zimbraZimletAvailableZimlets]
+    //        || item._defaultValues.attrs[ZaAccount.A_zimbraZimletAvailableZimlets];
 
     var Tis = [];
     if(alias.length > 0) {
@@ -1964,7 +1964,7 @@ function(parentPath, item) {
     domainTi.setData(ZaOverviewPanelController._OBJ_ID, domainObj.id);
     ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._DOMAIN_VIEW] = ZaOverviewPanelController.domainTreeListener;
     Tis.push(domainTi);
-
+    /*
     var zimletTi = new ZaTreeItemData({
                 text: ZaMsg.TABT_Zimlets,
                 //type: 1,
@@ -1974,7 +1974,7 @@ function(parentPath, item) {
                 }
             );
     ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._ZIMLET_LIST_VIEW] = ZaOverviewPanelController.zimletListTreeListener;
-
+    */
     return Tis;
 }
 
