@@ -890,6 +890,7 @@
 
     <copy todir="${dist.app.dir}" overwrite="true">
       <fileset dir="src/installer" includes="README.txt" />
+      <fileset dir="src/installer" includes="open_source_licenses.txt" />
     </copy>
         <copy todir="${dist.app.dir}/win32" file="src/installer/win32/zdrun.vbs" overwrite="true" />
         <copy todir="${dist.app.dir}/win32" file="src/installer/win32/zdesktop.exe" overwrite="true" />
