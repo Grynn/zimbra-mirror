@@ -58,32 +58,32 @@ class Program
 
 
                     // userAcct.StartMigration(user.UserName, myXmlConfig.ConfigObj.importOptions.Mail.ToString());
-                    if ((myXmlConfig.ConfigObj.importOptions.Mail) && (myXmlConfig.ConfigObj.importOptions.Contacts) && (myXmlConfig.ConfigObj.importOptions.Calendar))
+                    if ((myXmlConfig.ConfigObj.importOptions.Mail) && (myXmlConfig.ConfigObj.importOptions.Contacts) && (myXmlConfig.ConfigObj.importOptions.Calendar) && (myXmlConfig.ConfigObj.importOptions.Sent))
                     {
-                        importopts = Options.Mail | Options.Contacts | Options.Calendar;
+                        importopts = Options.Mail | Options.Contacts | Options.Calendar | Options.Sent ;
 
                     }
                     else
                     {
 
-                        if ((myXmlConfig.ConfigObj.importOptions.Mail) && (myXmlConfig.ConfigObj.importOptions.Contacts))
+                        if ((myXmlConfig.ConfigObj.importOptions.Mail) && (myXmlConfig.ConfigObj.importOptions.Contacts) && (myXmlConfig.ConfigObj.importOptions.Sent))
                         {
 
-                            importopts = Options.Mail | Options.Contacts;
+                            importopts = Options.Mail | Options.Contacts | Options.Sent;
 
 
                         }
                         else
-
-                            if ((myXmlConfig.ConfigObj.importOptions.Calendar) && (myXmlConfig.ConfigObj.importOptions.Contacts))
+                        
+                            if ((myXmlConfig.ConfigObj.importOptions.Calendar) && (myXmlConfig.ConfigObj.importOptions.Contacts)&&(myXmlConfig.ConfigObj.importOptions.Sent))
                             {
 
-                                importopts = Options.Calendar | Options.Contacts;
+                                importopts = Options.Calendar | Options.Contacts |Options.Sent;
 
 
                             }
                             else
-
+                            
                                 if (myXmlConfig.ConfigObj.importOptions.Mail)
                                 {
                                     importopts = Options.Mail;
@@ -101,7 +101,13 @@ class Program
                                             importopts = Options.Calendar;
 
                                         }
-                    }
+                                        else
+                                            if(myXmlConfig.ConfigObj.importOptions.Sent)
+                                            {
+
+                                                 importopts = Options.Sent;
+                                            }
+                            }
                         
                     foreach (MVVM.Model.Users user in myXmlConfig.UserList)
                     {

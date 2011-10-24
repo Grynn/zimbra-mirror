@@ -13,7 +13,11 @@ namespace CssLib
     public enum Options
     {
 
-
+        Junk = 14,
+        DeletedItems = 12,
+        Sent = 10,
+        Rules = 8,
+        Tasks = 6,
         Calendar = 4,
         Contacts = 2,
         Mail = 1,
@@ -241,6 +245,10 @@ public class CSMigrationwrapper
             foreach (dynamic folderobject in folderobjectarray)
             {
                 string path ="";
+                if((folderobject.Name == "Sent Items") && !(importopts.HasFlag(Options.Sent)))
+                {
+                    continue;
+                }
                 if (folderobject.Id == 0)
                 {
                     api.AccountName = Acct.Accountname;
