@@ -67,7 +67,7 @@ cn: zmpostfix
 sn: zmpostfix
 zimbraAccountStatus: active
 zimbraIsSystemResource: TRUE
-zimbraId: DA336C18-4F5E-11DC-8514-DCA8E67A905E
+zimbraId: a8255e5f-142b-4aa0-8aab-f8591b6455ba
 description: The zimbra postfix account
 userPassword: {SSHA}Cx6IUWjKNw5JGsaBQsLOcDmugUPyI0E4
 
