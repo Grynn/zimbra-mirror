@@ -17,9 +17,7 @@ public class AppointmentItem implements IItem {
 	protected String dOptional = null;
 	protected String dLocation = null;
 	protected String dEquipment = null;
-	protected String dStartDate = null;
 	protected ZDate dStartTime = null;
-	protected String dEndDate = null;
 	protected ZDate dEndTime = null;
 	protected String dAllDay = null;
 	protected String dDisplay = null;
@@ -42,9 +40,7 @@ public class AppointmentItem implements IItem {
 	protected String gOptional = null;	
 	protected String gLocation = null;
 	protected String gEquipment = null;
-	protected String gStartDate = null;
 	protected ZDate gStartTime = null;
-	protected ZDate gEndDate = null;	
 	protected ZDate gEndTime = null;
 	protected String gDisplay = null;
 	protected String gFolder = null;
@@ -76,7 +72,7 @@ public class AppointmentItem implements IItem {
 		TheLocator = locator;
 	}
 	
-	public static AppointmentItem importFromSOAP(Element GetAppointmentResponse) throws HarnessException {
+public static AppointmentItem importFromSOAP(Element GetAppointmentResponse) throws HarnessException {
 		
 		if ( GetAppointmentResponse == null )
 			throw new HarnessException("Element cannot be null");
@@ -97,15 +93,11 @@ public class AppointmentItem implements IItem {
 			
 			// Create the object
 			appt = new AppointmentItem();
-					
-			// Get the containing folder
-			String folder = m.getAttribute("l", null);
-			appt.setFolder(folder);
-			
+						
 			Element sElement = ZimbraAccount.SoapClient.selectNode(m, "//mail:s");
 			if ( sElement != null ) {
 				
-				// Parse the start time
+				// Start time
 				appt.dStartTime = new ZDate(sElement);
 
 			}
@@ -113,7 +105,7 @@ public class AppointmentItem implements IItem {
 			Element eElement = ZimbraAccount.SoapClient.selectNode(m, "//mail:e");
 			if ( eElement != null ) {
 				
-				// Parse the start time
+				// End time
 				appt.dEndTime = new ZDate(eElement);
 
 			}
@@ -121,22 +113,51 @@ public class AppointmentItem implements IItem {
 			Element compElement = ZimbraAccount.SoapClient.selectNode(m, "//mail:comp");
 			if ( compElement != null ) {
 
-				// If there is a subject, save it
+				// Subject
 				appt.dSubject = compElement.getAttribute("name");
 				
-				// If there is a location, save it
+				// Location
 				appt.dLocation = compElement.getAttribute("loc");
+				
+				// Display
+				appt.dDisplay = compElement.getAttribute("fb");
 			}
 			
-			Element descElement = ZimbraAccount.SoapClient.selectNode(m, "//mail:desc");
+			Element reqElement = ZimbraAccount.SoapClient.selectNode(m, "//mail:at[@role='REQ']");
+			if ( reqElement != null ) {
+				
+				// Attendees
+				appt.dAttendees = reqElement.getAttribute("a");
+				
+			}
+			
+			Element optElement = ZimbraAccount.SoapClient.selectNode(m, "//mail:at[@role='OPT']");
+			if ( optElement != null ) {
+				
+				// Optional
+				appt.dOptional = optElement.getAttribute("a");
+				
+			}
+			
+			if (appt.dLocation != null) {
+				
+				Element equipElement = ZimbraAccount.SoapClient.selectNode(m, "//mail:at[@cutype='RES'][2]");
+				if ( equipElement != null ) {
+				
+					// Equipment
+					appt.dEquipment = equipElement.getAttribute("a");
+			
+				}
+			}
+			
+			Element descElement = ZimbraAccount.SoapClient.selectNode(m, "//mail:fr");
 			if ( descElement != null ) {
 				
-				// If there is a description, save it
+				// Body
 				appt.dContent = descElement.getTextTrim();
 				
 			}
 
-						
 			return (appt);
 			
 		} catch (Exception e) {
@@ -223,9 +244,7 @@ public class AppointmentItem implements IItem {
 		sb.append("Optional: ").append(dOptional).append('\n');
 		sb.append("Location: ").append(dLocation).append('\n');
 		sb.append("Equipment: ").append(dEquipment).append('\n');
-		sb.append("Start Date: ").append(dStartDate).append('\n');
-		sb.append("Start Time: ").append(dStartTime).append('\n');
-		sb.append("End Date: ").append(dEndDate).append('\n');		
+		sb.append("Start Time: ").append(dStartTime).append('\n');	
 		sb.append("End Time: ").append(dEndTime).append('\n');
 		sb.append("Display: ").append(dDisplay).append('\n');
 		sb.append("Calendar: ").append(dFolder).append('\n');
@@ -249,9 +268,7 @@ public class AppointmentItem implements IItem {
 		sb.append("Optional: ").append(gOptional).append('\n');
 		sb.append("Location: ").append(gLocation).append('\n');
 		sb.append("Equipment: ").append(gEquipment).append('\n');		
-		sb.append("Start Date: ").append(gStartDate).append('\n');
 		sb.append("Start Time: ").append(gStartTime).append('\n');
-		sb.append("End Date: ").append(gEndDate).append('\n');		
 		sb.append("End Time: ").append(gEndTime).append('\n');
 		sb.append("Display: ").append(gDisplay).append('\n');
 		sb.append("Calendar: ").append(gFolder).append('\n');
@@ -468,24 +485,8 @@ public class AppointmentItem implements IItem {
 		return (gStartTime);
 	}
 	
-	public void setGStartDate(String string) {
-		gStartDate = string;
-	}
-	
-	public ZDate getGEndDate() {
-		return (gEndDate);
-	}
-	
 	public void setGStartTime(ZDate date) {
 		gStartTime = date;
-	}
-	
-	public String getGStartDate() {
-		return (gStartDate);
-	}
-	
-	public void setGEndDate(ZDate date) {
-		gEndDate = date;
 	}
 	
 	public ZDate getGEndTime() {
@@ -685,7 +686,5 @@ public class AppointmentItem implements IItem {
 		return (result);
 
 	}
-
-
 
 }

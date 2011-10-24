@@ -22,7 +22,9 @@ public class FormApptNew extends AbsForm {
 	 * Defines Selenium locators for various objects in {@link FormApptNew}
 	 */
 	public static class Locators {
-
+		public static final String ShowOptionalLink = "css=td[id$='_show_optional']";
+		public static final String ShowEquipmentLink = "css=td[id$='_show_resources']";
+		
 		public static final String Button_Send = "css=div[id^='ztb__APPT'] td[id$='_SEND_INVITE_title']";
 		public static final String Button_Save = "css=div[id^='ztb__APPT'] td[id$='_SAVE_title']";
 		public static final String Button_SaveAndClose = "css=div[id^='ztb__APPT'] td[id$='_SAVE_title']";
@@ -397,12 +399,14 @@ public class FormApptNew extends AbsForm {
 
 				try {
 
-					this.sSelectFrame("css=iframe[id^='iframe_DWT']"); // iframe
+					//this.sSelectFrame("css=iframe[id^='iframe_DWT']"); // iframe
 																		// index
 																		// is 0
 																		// based
 
-					locator = "css=html body";
+					locator = "css=textarea[id*='textarea_']";
+					
+					//locator = "css=html body";
 
 					if (!this.sIsElementPresent(locator))
 						throw new HarnessException(
@@ -511,6 +515,7 @@ public class FormApptNew extends AbsForm {
 		
 		// Optional
 		if (appt.getOptional() != null) {
+			this.sClickAt(Locators.ShowOptionalLink, "");
 			zFillField(Field.Optional, appt.getOptional());
 		}
 		
@@ -521,6 +526,7 @@ public class FormApptNew extends AbsForm {
 		
 		// Equipment
 		if (appt.getEquipment() != null) {
+			this.sClickAt(Locators.ShowEquipmentLink, "");
 			zFillField(Field.Equipment, appt.getEquipment());
 		}
 		

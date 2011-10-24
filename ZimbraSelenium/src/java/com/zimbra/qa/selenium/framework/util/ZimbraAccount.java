@@ -1654,6 +1654,48 @@ public class ZimbraAccount {
 
 
 	}
+	
+	/**
+	 * Method to create calendar resource (location)
+	 */
+	public static String createLocation() throws HarnessException {
+		
+		String locEmailAddress = ZimbraSeleniumProperties.getStringProperty("locale", "en_US").replace("_", "").toLowerCase() + ZimbraSeleniumProperties.getUniqueString() + "@" + ZimbraSeleniumProperties.getStringProperty("testdomain", "testdomain.com");
+		
+		ZimbraAdminAccount.GlobalAdmin().soapSend(
+				"<CreateCalendarResourceRequest xmlns='urn:zimbraAdmin'>"
+				+		"<name>"+ locEmailAddress +"</name>"
+				+		"<password>"+ ZimbraSeleniumProperties.getStringProperty("adminPwd", "test123") +"</password>"
+				+		"<a n='zimbraCalResType'>Location</a>"
+				+		"<a n='displayName'>" + locEmailAddress.split("@")[0] + "</a>"
+				+		"<a n='zimbraCalResAutoAcceptDecline'>TRUE</a>"
+				+		"<a n='zimbraCalResAutoDeclineIfBusy'>TRUE</a>"
+				+	"</CreateCalendarResourceRequest>");
+		
+		return (locEmailAddress);
+
+	}	
+
+	/**
+	 * Method to create calendar resource (equipment)
+	 */
+	public static String createEquipment() throws HarnessException {
+		
+		String equipEmailAddress = ZimbraSeleniumProperties.getStringProperty("locale", "en_US").replace("_", "").toLowerCase() + ZimbraSeleniumProperties.getUniqueString() + "@" + ZimbraSeleniumProperties.getStringProperty("testdomain", "testdomain.com");
+		
+		ZimbraAdminAccount.GlobalAdmin().soapSend(
+				"<CreateCalendarResourceRequest xmlns='urn:zimbraAdmin'>"
+				+		"<name>"+ equipEmailAddress +"</name>"
+				+		"<password>"+ ZimbraSeleniumProperties.getStringProperty("adminPwd", "test123") +"</password>"
+				+		"<a n='zimbraCalResType'>Equipment</a>"
+				+		"<a n='displayName'>" + equipEmailAddress.split("@")[0] + "</a>"
+				+		"<a n='zimbraCalResAutoAcceptDecline'>TRUE</a>"
+				+		"<a n='zimbraCalResAutoDeclineIfBusy'>TRUE</a>"
+				+	"</CreateCalendarResourceRequest>");
+		
+		return (equipEmailAddress);
+
+	}
 
 	/**
 	 * @param args
