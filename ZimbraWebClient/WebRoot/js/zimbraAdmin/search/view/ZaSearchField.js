@@ -117,11 +117,13 @@ function (query) {
 ZaSearchField.prototype.startSearch= function (ldapQuery, type) {
 	var params = {};
 
-    if (!type) {
-        type = [];
+    if (!ldapQuery) {
+        ldapQuery = "";
     }
 	var searchListController = ZaApp.getInstance().getSearchListController() ;
-	searchListController._isAdvancedSearch = false ;
+	searchListController._isAdvancedSearch = true ;
+    if (!type)
+        type = ZaSearchOption.getDefaultObjectTypes();
 
 	// reset search controller
 	searchListController._currentDomain = null;
@@ -524,6 +526,8 @@ ZaSearchField.prototype.resetSearchFilter = function () {
 ZaSearchField.prototype.allFilterSelected = function (ev) {
     if (ev)
 	    ev.item.parent.parent.setImage(ev.item.getImage());
+    else
+        this.setIconForSearchMenuButton("SearchAll");
 	this._containedObject[ZaSearch.A_fAccounts] = "TRUE";
 	this._containedObject[ZaSearch.A_fdistributionlists] = "TRUE";	
 	this._containedObject[ZaSearch.A_fAliases] = "TRUE";

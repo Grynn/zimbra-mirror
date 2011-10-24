@@ -347,7 +347,8 @@ ZaSearchXFormView.myXFormModifier = function(xFormObject) {
 			items:[
 				{type:_TEXTFIELD_, width:"100%", ref:ZaSearchEdit.A2_currentQuery,
 					containerCssClass:"search_field_container", bmolsnr: true,
-					cssClass:"search_input", visibilityChecks:[], enableDisableChecks:[]
+					cssClass:"search_input", visibilityChecks:[],
+                    enableDisableChecks:false
 				},
 				{type:_DWT_BUTTON_, label:ZaMsg.LBL_QuickSearch, name: "SearchButton", autoPadding: false,
 						onActivate:ZaSearchXFormView.doQuickSearch, visibilityChecks:[], enableDisableChecks:[]},

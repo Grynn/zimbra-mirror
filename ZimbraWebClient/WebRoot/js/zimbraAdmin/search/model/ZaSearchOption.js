@@ -94,6 +94,7 @@ ZaSearchOption.A2_status_locked = "status_locked";
 ZaSearchOption.A2_status_lockout = "status_lockout";
 ZaSearchOption.A2_status_pending = "status_pending";
 ZaSearchOption.A2_status_maintenance = "status_maintenance";
+ZaSearchOption.A2_status_list = "status_list";
 
 ZaSearchOption.getObjectTypeXModel = 
 function (optionId){
@@ -241,12 +242,13 @@ function (optionId){
             {id: ZaSearchOption.A_zimbraMailForwardingAddress, ref: "options/" + ZaSearchOption.A_zimbraMailForwardingAddress, type:_STRING_}
     ]
     var accountStatusItem = [
-        {id:ZaSearchOption.A2_status_active, ref: "options/" + ZaSearchOption.A2_status_active, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
-        {id:ZaSearchOption.A2_status_closed, ref: "options/" + ZaSearchOption.A2_status_closed, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
-        {id:ZaSearchOption.A2_status_locked, ref: "options/" + ZaSearchOption.A2_status_locked, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
-        {id:ZaSearchOption.A2_status_lockout, ref: "options/" + ZaSearchOption.A2_status_lockout, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
-        {id:ZaSearchOption.A2_status_pending, ref: "options/" + ZaSearchOption.A2_status_pending, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
-        {id:ZaSearchOption.A2_status_maintenance, ref: "options/" + ZaSearchOption.A2_status_maintenance, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES}
+        {id:ZaSearchOption.A2_status_active, ref: "options/" + ZaSearchOption.A2_status_active, type:_STRING_},
+        {id:ZaSearchOption.A2_status_closed, ref: "options/" + ZaSearchOption.A2_status_closed, type:_STRING_},
+        {id:ZaSearchOption.A2_status_locked, ref: "options/" + ZaSearchOption.A2_status_locked, type:_STRING_},
+        {id:ZaSearchOption.A2_status_lockout, ref: "options/" + ZaSearchOption.A2_status_lockout, type:_STRING_},
+        {id:ZaSearchOption.A2_status_pending, ref: "options/" + ZaSearchOption.A2_status_pending, type:_STRING_},
+        {id:ZaSearchOption.A2_status_maintenance, ref: "options/" + ZaSearchOption.A2_status_maintenance, type:_STRING_},
+        {id:ZaSearchOption.A2_status_list, ref: "options/" + ZaSearchOption.A2_status_list, type:_LIST_}
     ];
 
     if(optionId == ZaSearchOption.BASIC_FILTER_ID) {
@@ -575,34 +577,28 @@ function (optionId, height){
 
 ZaSearchOption.getNewObjectTypeXForm =
 function (optionId, height){
-	var marginTop = ZaSearchOptionView.HEADER_HEIGHT + 8 ;
 
     var xform = {
-			numCols:2, width: 150, cssClass: "ZaSearchOptionOverview",
-			cssStyle: (!appNewUI ? "margin-top: " + marginTop + "px" : ""),
+			numCols:2, width: 160, cssClass: "ZaSearchOptionOverview",
 			items: []
 	}
 
     var basicFilterItem =  [
 		 { type: _TEXTFIELD_, ref:  ZaSearchOption.A_basic_uid,
 			label: ZaMsg.search_option_uid, align: _LEFT_, width: 100,
-			onChange: ZaSearchBuilderController.handleOptions,
 		  	toolTipContent: ZaMsg.tt_search_option_uid,
 		  	enableDisableChecks:[],visibilityChecks:[]
 		 },
 		 { type: _TEXTFIELD_, ref:  ZaSearchOption.A_basic_sn,
 			label: ZaMsg.search_option_sn, align: _LEFT_, width: 100,
-			onChange: ZaSearchBuilderController.handleOptions,
 			enableDisableChecks:[],visibilityChecks:[]
 		 },
 		 { type: _TEXTFIELD_, ref:  ZaSearchOption.A_basic_displayName,
 			label: ZaMsg.search_option_displayName, align: _LEFT_, width: 100,
-			onChange: ZaSearchBuilderController.handleOptions,
 			enableDisableChecks:[],visibilityChecks:[]
 		 },
 		 { type: _TEXTFIELD_, ref:  ZaSearchOption.A_basic_zimbraId,
 			label: ZaMsg.search_option_zimbraId, align: _LEFT_, width: 100,
-			onChange: ZaSearchBuilderController.handleOptions,
 			enableDisableChecks:[],visibilityChecks:[]
 		 },
 		 {	type: _GROUP_, name:"special search cases",
@@ -610,41 +606,39 @@ function (optionId, height){
 		 }
 	];
 
-	i = basicFilterItem.length ;
+	var i = basicFilterItem.length ;
 
-	//if (!ZaSettings.isDomainAdmin) {
-		var adminOnlyItem =
-			 	{ type: _CHECKBOX_, ref:  ZaSearchOption.A_objTypeAccountAdmin,
-					trueValue:"TRUE", falseValue:"FALSE",
-					label: ZaMsg.SearchFilter_Accounts_admin,
-					align: _LEFT_, labelLocation:_RIGHT_, subLabel: "",
-					onChange: ZaSearchBuilderController.handleOptions,
-					bmolsnr:true, enableDisableChecks:[],visibilityChecks:[]
-				 };
+    var adminOnlyItem = {
+            type: _CHECKBOX_, ref:  ZaSearchOption.A_objTypeAccountAdmin,
+            trueValue:"TRUE", falseValue:"FALSE",
+            label: ZaMsg.SearchFilter_Accounts_admin,
+            onChange: ZaSearchBuilderController.newHandleOptions,
+            align: _LEFT_, labelLocation:_RIGHT_, subLabel: "",
+            bmolsnr:true, enableDisableChecks:[],visibilityChecks:[]
+        };
 
-		basicFilterItem[i-1].items.push (adminOnlyItem) ;
-	//}
+    basicFilterItem[i-1].items.push (adminOnlyItem) ;
 
 	if (ZaSearchOption.A_objTypeAccountDomainAdmin) {
-			var domainAdminObjTypeItem = {
-					type: _CHECKBOX_, ref:  ZaSearchOption.A_objTypeAccountDomainAdmin,
-					trueValue:"TRUE", falseValue:"FALSE",
-					label: ZaMsg.SearchFilter_Accounts_domainadmin,
-					align: _LEFT_, labelLocation:_RIGHT_, subLabel: "",
-					onChange: ZaSearchBuilderController.handleOptions,
-					bmolsnr:true,enableDisableChecks:[],visibilityChecks:[], labelWrap:true
-				 } ;
-			basicFilterItem[i-1].items.push( domainAdminObjTypeItem ) ;
-		}
+        var domainAdminObjTypeItem = {
+                type: _CHECKBOX_, ref:  ZaSearchOption.A_objTypeAccountDomainAdmin,
+                trueValue:"TRUE", falseValue:"FALSE",
+                onChange: ZaSearchBuilderController.newHandleOptions,
+                label: ZaMsg.SearchFilter_Accounts_domainadmin,
+                align: _LEFT_, labelLocation:_RIGHT_, subLabel: "",
+                bmolsnr:true,enableDisableChecks:[],visibilityChecks:[], labelWrap:true
+             } ;
+        basicFilterItem[i-1].items.push( domainAdminObjTypeItem ) ;
+	}
 
-	var systemAccountOnlyItem =
-                                { type: _CHECKBOX_, ref:  ZaSearchOption.A_objTypeSystemAccount,
-                                        trueValue:"TRUE", falseValue:"FALSE",
-                                        label: ZaMsg.SearchFilter_System_Accounts,
-                                        align: _LEFT_, labelLocation:_RIGHT_,  subLabel: "",
-                                        onChange: ZaSearchBuilderController.handleOptions,
-                                        bmolsnr:true, enableDisableChecks:[],visibilityChecks:[]
-                                 };
+	var systemAccountOnlyItem = {
+        type: _CHECKBOX_, ref:  ZaSearchOption.A_objTypeSystemAccount,
+        trueValue:"TRUE", falseValue:"FALSE",
+        onChange: ZaSearchBuilderController.newHandleOptions,
+        label: ZaMsg.SearchFilter_System_Accounts,
+        align: _LEFT_, labelLocation:_RIGHT_,  subLabel: "",
+        bmolsnr:true, enableDisableChecks:[],visibilityChecks:[]
+    };
 
     basicFilterItem[i-1].items.push (systemAccountOnlyItem) ;
 
@@ -660,7 +654,7 @@ function (optionId, height){
 			label: ZaMsg.search_option_filter, align: _LEFT_, width: ZaSearchOptionView.WIDTH - domainFilterLabelWidth,
 			inputHelp: ZaMsg.search_option_filter_input_help_domain,
 		  	toolTipContent: ZaMsg.tt_domain_search_option_filter,
-			onChange: ZaSearchBuilderController.filterDomains,
+            onChange: ZaSearchBuilderController.filterDomains,
 			enableDisableChecks:[],visibilityChecks:[]
 		 },
 
@@ -731,13 +725,12 @@ function (optionId, height){
 			 				label: ZaMsg.enable_search_option_label_from,
 			 				trueValue:"TRUE", falseValue:"FALSE",   subLabel: "",
 			 				align: _LEFT_, labelLocation:_RIGHT_,
-							onChange: ZaSearchBuilderController.handleOptions,
+                            onChange: ZaSearchBuilderController.newHandleOptions,
 							enableDisableChecks:[],visibilityChecks:[] },
 		 				{type: _CHECKBOX_, ref: ZaSearchOption.A_enableAccountLastLoginTime_To,
 			 				label: ZaMsg.enable_search_option_label_to ,
 			 				trueValue:"TRUE", falseValue:"FALSE",   subLabel: "",
 			 				align: _LEFT_, labelLocation:_RIGHT_,
-							onChange: ZaSearchBuilderController.handleOptions,
 							enableDisableChecks:[],visibilityChecks:[] }
 		 			]
 		 		},
@@ -748,21 +741,19 @@ function (optionId, height){
 			 				label: ZaMsg.includeNeverLoginedAccounts,  subLabel: "",
 			 				trueValue:"TRUE", falseValue:"FALSE",
 			 				align: _LEFT_, labelLocation:_RIGHT_,
-							onChange: ZaSearchBuilderController.handleOptions,
+                            onChange: ZaSearchBuilderController.newHandleOptions,
 							enableDisableChecks:[],visibilityChecks:[], labelWrap: true }
 		 			]
 		 		},
 		 		{type: _GROUP_, colSpan: "*", numCols: 2, colSize: ["60px", "auto"],
 		 			items: [
 			 		{ref:ZaSearchOption.A_accountLastLoginTime_From, colSpan: "*", type:_DWT_DATETIME_,
-			 			onChange: ZaSearchBuilderController.handleOptions,
 			 			visibilityChecks:[[XForm.checkInstanceValue,ZaSearchOption.A_enableAccountLastLoginTime_From,"TRUE"]],
 			 			bmolsnr:true,firstDayOfWeek:ZaZimbraAdmin.FIRST_DAY_OF_WEEK,
                         visibilityChangeEventSources: [ZaSearchOption.A_enableAccountLastLoginTime_From] ,
 			 			label:ZaMsg.search_option_label_from, labelLocation:_LEFT_
 					},
 					{ref:ZaSearchOption.A_accountLastLoginTime_To, colSpan: "*", type:_DWT_DATETIME_,
-			 			onChange: ZaSearchBuilderController.handleOptions,
 			 			visibilityChecks:[[XForm.checkInstanceValue,ZaSearchOption.A_enableAccountLastLoginTime_To,"TRUE"]],
                         visibilityChangeEventSources: [ZaSearchOption.A_enableAccountLastLoginTime_To] ,
 			 			bmolsnr:true,firstDayOfWeek:ZaZimbraAdmin.FIRST_DAY_OF_WEEK,
@@ -776,7 +767,7 @@ function (optionId, height){
     var extMailFilterItem = [
         {type:_OUTPUT_, value: ZaMsg.LBL_New_External_mail, colSpan: 2},
         {type:_TEXTFIELD_, colSpan: 2, ref: ZaSearchOption.A_zimbraMailForwardingAddress, enableDisableChecks:[],
-            onChange: ZaSearchBuilderController.handleOptions, visibilityChecks:[]}
+             visibilityChecks:[]}
     ]
 
     var statusFilterItem = [
@@ -784,31 +775,37 @@ function (optionId, height){
             label: ZaAccount.getAccountStatusMsg(ZaAccount.ACCOUNT_STATUS_ACTIVE),
             trueValue:"TRUE", falseValue:"FALSE",
             align: _LEFT_, labelLocation:_RIGHT_,
+            onChange: ZaSearchBuilderController.newHandleOptions,
             enableDisableChecks:[],visibilityChecks:[], labelWrap: true },
         {type: _CHECKBOX_, ref: ZaSearchOption.A2_status_closed,  subLabel: "",
             label: ZaAccount.getAccountStatusMsg(ZaAccount.ACCOUNT_STATUS_CLOSED),
             trueValue:"TRUE", falseValue:"FALSE",
             align: _LEFT_, labelLocation:_RIGHT_,
+            onChange: ZaSearchBuilderController.newHandleOptions,
             enableDisableChecks:[],visibilityChecks:[], labelWrap: true },
         {type: _CHECKBOX_, ref: ZaSearchOption.A2_status_locked,  subLabel: "",
             label: ZaAccount.getAccountStatusMsg(ZaAccount.ACCOUNT_STATUS_LOCKED),
             trueValue:"TRUE", falseValue:"FALSE",
             align: _LEFT_, labelLocation:_RIGHT_,
+            onChange: ZaSearchBuilderController.newHandleOptions,
             enableDisableChecks:[],visibilityChecks:[], labelWrap: true },
         {type: _CHECKBOX_, ref: ZaSearchOption.A2_status_lockout,  subLabel: "",
             label: ZaAccount.getAccountStatusMsg(ZaAccount.ACCOUNT_STATUS_LOCKOUT),
             trueValue:"TRUE", falseValue:"FALSE",
             align: _LEFT_, labelLocation:_RIGHT_,
+            onChange: ZaSearchBuilderController.newHandleOptions,
             enableDisableChecks:[],visibilityChecks:[], labelWrap: true },
         {type: _CHECKBOX_, ref: ZaSearchOption.A2_status_pending,  subLabel: "",
             label: ZaAccount.getAccountStatusMsg(ZaAccount.ACCOUNT_STATUS_PENDING),
             trueValue:"TRUE", falseValue:"FALSE",
             align: _LEFT_, labelLocation:_RIGHT_,
+            onChange: ZaSearchBuilderController.newHandleOptions,
             enableDisableChecks:[],visibilityChecks:[], labelWrap: true },
         {type: _CHECKBOX_, ref: ZaSearchOption.A2_status_maintenance,  subLabel: "",
             label: ZaAccount.getAccountStatusMsg(ZaAccount.ACCOUNT_STATUS_MAINTENANCE),
             trueValue:"TRUE", falseValue:"FALSE",
             align: _LEFT_, labelLocation:_RIGHT_,
+            onChange: ZaSearchBuilderController.newHandleOptions,
             enableDisableChecks:[],visibilityChecks:[], labelWrap: true }
     ]
 

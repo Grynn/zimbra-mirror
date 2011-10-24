@@ -776,6 +776,343 @@ function (){
 
 
 /* New UI Start */
+
+ZaSearchBuilderController.newHandleOptions =
+function (value, event, form){
+//	DBG.println(AjxDebug.DBG3, "Handling the options on the search builder toolbar ...");
+
+
+	var charCode = event.charCode;
+	if (charCode == 13 || charCode == 3) {
+	   //;
+	} else {
+		this.setInstanceValue(value);
+
+		//handle the special cases
+		//1) domain admin and admin account search option is mutual exclusive.
+		var invertValue ;
+		if (value == "TRUE") {
+			invertValue = "FALSE";
+		}
+
+        var ref = this.getRef () ;
+        //can't each both be set
+		if (invertValue == "FALSE" && ref == ZaSearchOption.A_objTypeAccountDomainAdmin) {
+			this.setInstanceValue (invertValue, ZaSearchOption.A_objTypeAccountAdmin) ;
+			this.setInstanceValue (invertValue, ZaSearchOption.A_objTypeSystemAccount);
+		}else if (invertValue == "FALSE" && ref == ZaSearchOption.A_objTypeAccountAdmin) {
+			this.setInstanceValue (invertValue, ZaSearchOption.A_objTypeAccountDomainAdmin) ;
+			this.setInstanceValue (invertValue, ZaSearchOption.A_objTypeSystemAccount);
+		} else if (invertValue == "FALSE" && ref == ZaSearchOption.A_objTypeSystemAccount) {
+			this.setInstanceValue (invertValue, ZaSearchOption.A_objTypeAccountAdmin) ;
+			this.setInstanceValue (invertValue, ZaSearchOption.A_objTypeAccountDomainAdmin) ;
+		}
+
+        //set the advanced login timestamp attributes value
+        if ((ref == ZaSearchOption.A_enableAccountLastLoginTime_From || ref == ZaSearchOption.A_enableAccountLastLoginTime_To)
+            && ( value == "TRUE" )) {
+            var loginTimeRef ;
+            if (ref == ZaSearchOption.A_enableAccountLastLoginTime_From) loginTimeRef = ZaSearchOption.A_accountLastLoginTime_From ;
+            if (ref == ZaSearchOption.A_enableAccountLastLoginTime_To) loginTimeRef = ZaSearchOption.A_accountLastLoginTime_To ;
+
+            var loginTime = this.getInstanceValue (loginTimeRef);
+            if (!loginTime) {
+                this.setInstanceValue (new Date(), loginTimeRef) ;
+            }
+        }
+
+        if ( ref == ZaSearchOption.A2_status_active
+            || ref ==ZaSearchOption.A2_status_closed
+            || ref ==ZaSearchOption.A2_status_locked
+            || ref ==ZaSearchOption.A2_status_lockout
+            || ref ==ZaSearchOption.A2_status_pending
+            || ref ==ZaSearchOption.A2_status_maintenance) {
+            var statusArr = [];
+            if (this.getInstanceValue(ZaSearchOption.A2_status_active) == "TRUE") {
+                statusArr.push(ZaAccount.ACCOUNT_STATUS_ACTIVE);
+            }
+            if (this.getInstanceValue(ZaSearchOption.A2_status_closed) == "TRUE") {
+                statusArr.push(ZaAccount.ACCOUNT_STATUS_CLOSED);
+            }
+            if (this.getInstanceValue(ZaSearchOption.A2_status_locked) == "TRUE") {
+                statusArr.push(ZaAccount.ACCOUNT_STATUS_LOCKED);
+            }
+            if (this.getInstanceValue(ZaSearchOption.A2_status_lockout) == "TRUE") {
+                statusArr.push(ZaAccount.ACCOUNT_STATUS_LOCKOUT);
+            }
+            if (this.getInstanceValue(ZaSearchOption.A2_status_pending) == "TRUE") {
+                statusArr.push(ZaAccount.ACCOUNT_STATUS_PENDING);
+            }
+            if (this.getInstanceValue(ZaSearchOption.A2_status_maintenance) == "TRUE") {
+                statusArr.push(ZaAccount.ACCOUNT_STATUS_MAINTENANCE);
+            }
+            this.setInstanceValue(statusArr, ZaSearchOption.A2_status_list);
+        }
+
+	}
+}
+
+ZaSearchBuilderController.prototype.newHandleSpecialQueries =
+function () {
+	var optionViews = this.getFilterDialogArray ();
+	this._includeNeverLoggedInAccts = false ; //by default
+    this._includeObjectWithoutCosId = false;  // by default
+	for (var i =0 ; i < optionViews.length; i++) {
+		var optionId = optionViews[i]._optionId ;
+		var instance = optionViews[i]._localXForm.getInstance () ;
+		//handle the special case never logged in accounts
+		if (this._includeNeverLoggedInAccts == false //if it is set, then we won't change it again.
+				&& instance[ZaSearchOption.A_includeNeverLoginedAccounts]
+				&& instance[ZaSearchOption.A_includeNeverLoginedAccounts] == "TRUE" )
+		{
+			this._includeNeverLoggedInAccts = true ;
+		}
+		if (this._includeObjectWithoutCosId == false && instance[ZaSearchOption.A2_cosNotSet]
+				&& instance[ZaSearchOption.A2_cosNotSet] == "TRUE" )
+		{
+			this._includeObjectWithoutCosId = true ;
+		}
+	}
+}
+
+/**
+ * Set the query value based on the LDAP query language for the advanced search
+ * and the query value will be displayed on the search bar also.
+ *
+ */
+ZaSearchBuilderController.prototype.setNewQuery =
+function () {
+	this.newHandleSpecialQueries () ;
+	var optionViews = this.getFilterDialogArray () ;
+
+	this._query = null ;
+	this._searchTypes = null ;
+	//_filterObj holds all the options objects
+	this._filterObj = {} ;
+	this._filterObj [ZaSearchOption.BASIC_FILTER_ID] = [] ;
+	this._filterObj [ZaSearchOption.STATUS_FILTER_ID] = [] ;
+	this._filterObj [ZaSearchOption.LASTER_LOGIN_TIME_FILTER_ID] = [] ;
+	this._filterObj [ZaSearchOption.EXT_EMAIL_ADDRESS_FILTER_ID] = [] ;
+	this._filterObj [ZaSearchOption.SERVER_FILTER_ID] = [] ;
+	this._filterObj [ZaSearchOption.COS_FILTER_ID] = [] ;
+    this._filterObj [ZaSearchOption.DOMAIN_FILTER_ID] = [];
+
+	for (var i =0 ; i < optionViews.length; i++) {
+		var optionId = optionViews[i]._optionId ;
+		var instance = optionViews[i]._localXForm.getInstance () ;
+
+		var options = instance ["options"] ;
+		var filter = [];
+
+        if(optionId == ZaSearchOption.COS_FILTER_ID && this._includeObjectWithoutCosId
+                && (!options[ZaSearchOption.A_cosListChecked] || options[ZaSearchOption.A_cosListChecked].size() == 0))
+             filter.push("(!(" + ZaAccount.A_COSId + "=*))");
+
+		for (var key in options) {
+			var value = options[key] ;
+			if (value != null){
+				var op = null ; //the operator of the filter
+				if (value instanceof Date) { //the date type options
+					value = ZaUtil.getAdminServerDateTime(value, true) ;
+				}
+				if (key == ZaSearchOption.A_accountLastLoginTime_From) {
+					if (instance[ZaSearchOption.A_enableAccountLastLoginTime_From] == "TRUE") {
+						key = ZaAccount.A_zimbraLastLogonTimestamp ;
+						op = ">=" ;
+					}else{
+						continue ;
+					}
+				}
+
+				if (key == ZaSearchOption.A_accountLastLoginTime_To) {
+					if (instance[ZaSearchOption.A_enableAccountLastLoginTime_To] == "TRUE") {
+						key = ZaAccount.A_zimbraLastLogonTimestamp ;
+						op = "<=" ;
+					}else{
+						continue ;
+					}
+				}
+
+				if ((value.length > 0)
+						|| ((value instanceof AjxVector) && (value.size() > 0)))  {
+					//TODO: handle the checkbox TRUE or FALSE value
+					this._newAddFilter (filter, key, value, op) ;
+				}
+			}
+		}
+		this._filterObj[optionId].push(filter);
+	}
+	this._query = this.newGetQueryFromFilters () ;
+	this._searchTypes = this.getSearchTypesFromFilters ();
+	DBG.println(AjxDebug.DBG1, "Current Query String = " + this._query) ;
+
+	//update the search field textbox entry
+	var slController = ZaApp.getInstance().getSearchListController();
+    if (slController._uiContainer) {
+        slController._uiContainer.setQueryField(this._query);
+    }
+}
+
+//add the option value into the LDAP query filter
+ZaSearchBuilderController.prototype._newAddFilter =
+function (filter, key, value, op) {
+	if (value instanceof String ) {
+		value = String(value).replace(/([\\\\\\*\\(\\)])/g, "\\$1");
+	}
+	var entry = null ;
+    var searchListController = ZaApp.getInstance().getSearchListController();
+	if (key == ZaSearchOption.A_domainFilter
+		//|| key == ZaSearchOption.A_domainAll
+		|| key == ZaSearchOption.A_domainList
+		|| key == ZaSearchOption.A_serverList
+		|| key == ZaSearchOption.A_cosFilter
+		|| key == ZaSearchOption.A_cosList
+        || key == ZaSearchOption.A2_status_active
+        || key ==ZaSearchOption.A2_status_closed
+        || key ==ZaSearchOption.A2_status_locked
+        || key ==ZaSearchOption.A2_status_lockout
+        || key ==ZaSearchOption.A2_status_pending
+        || key ==ZaSearchOption.A2_status_maintenance
+        ) {
+		//ignored
+	}else if (key == ZaSearchOption.A_objTypeSystemAccount) {
+                if (value == "TRUE")  entry = "(" + key + "=" + value + ")" ;
+	}else if (key == ZaSearchOption.A_objTypeAccountAdmin) {
+		if (value == "TRUE")  entry = "(" + key + "=" + value + ")" ; //no * for the TRUE or FALSE value
+	}else if (ZaSearchOption.A_objTypeAccountDomainAdmin && key == ZaSearchOption.A_objTypeAccountDomainAdmin){
+		if (value == "TRUE")  entry = "(" + key + "=" + value + ")" ; //no * for the TRUE or FALSE value
+	}else if (key == ZaSearchOption.A_domainListChecked) {
+		if (value.size () > 0) {
+				entry = ZaSearchBuilderController.newGetOrFilter4ListArray (
+						value.getArray(),
+						ZaSearchOption.DOMAIN_FILTER_ID
+						);
+		}
+	}else if (key == ZaSearchOption.A_serverListChecked) {
+		if (value.size () > 0) {
+				entry = ZaSearchBuilderController.newGetOrFilter4ListArray (
+						value.getArray(),
+						ZaSearchOption.SERVER_FILTER_ID
+						);
+		}
+	}else if (key == ZaSearchOption.A_cosListChecked) {
+		if (value.size () > 0) {
+			entry = ZaSearchBuilderController.newGetCosFilter4ListArray(value.getArray());
+		}
+	}else if (key == ZaSearchOption.A2_status_list) {
+		if (value.length > 0) {
+			entry = ZaSearchBuilderController.newGetOrFilter4ListArray(value, ZaSearchOption.STATUS_FILTER_ID);
+		}
+    }else if (key == ZaAccount.A_zimbraLastLogonTimestamp){
+		entry = "("	+ key + op + value + ")";
+	}else if (key == ZaSearchOption.A_zimbraMailForwardingAddress ){
+		entry = "(" + key + "=*" + value + "*)" ;
+        entry += "(" + ZaSearchOption.A_zimbraPrefMailForwardingAddress + "=*" + value + "*)" ;
+        entry = "(|" + entry + ")";
+    } else {
+        entry = "(" + key + "=*" + value + "*)" ;
+	}
+
+	if (entry != null && entry.length > 0) {
+		filter.push (entry) ;
+	}
+
+}
+
+ZaSearchBuilderController.prototype.newGetQueryFromFilters =
+function () {
+	var query = "";
+	var i = 0 ; //count the number of non empty valid options.
+
+	for (var key in this._filterObj) {
+        var filter = this.newGetOrFilter4SameOptionType (this._filterObj [key], key) ;
+        if (filter != null && filter.length > 0) {
+            query += filter ;
+            i ++ ;
+        }
+	}
+
+	if (i > 1) {
+		query = "(&" + query + ")" ;
+	}
+	return query ;
+}
+
+//For the same option types
+ZaSearchBuilderController.prototype.newGetOrFilter4SameOptionType =
+function (arr, key) {
+	var query = "";
+	var numberOfFilters = 0;
+	//special cases for the Never Logged In Accounts
+	if (key == ZaSearchOption.LASTER_LOGIN_TIME_FILTER_ID){ //for the advanced attribute tab
+		if (this._includeNeverLoggedInAccts) {
+			query += "(!(" + ZaAccount.A_zimbraLastLogonTimestamp + "=*))" ;
+			numberOfFilters ++ ;
+		}
+	}
+
+	for (var i=0; i < arr.length; i++) {
+		query += this.newGetAndFilter4EntriesInOneOption (arr[i]);
+		numberOfFilters ++ ;
+	}
+	if (numberOfFilters > 1) {
+		query = "(|" + query + ")";
+	}
+	return query ;
+}
+
+//for the filter entries in an option type
+ZaSearchBuilderController.prototype.newGetAndFilter4EntriesInOneOption =
+function (arr) {
+	var query = arr.join("") ;
+	if (arr.length > 1) {
+		query = "(&" + query + ")";
+	}
+	return query ;
+}
+
+//for domain list and server list
+ZaSearchBuilderController.newGetOrFilter4ListArray=
+function (arr, optionId) {
+	var query = "";
+	for (var i =0; i < arr.length; i ++ ) {
+		if (optionId == ZaSearchOption.DOMAIN_FILTER_ID) {
+			query += "(" + ZaAccount.A_mailDeliveryAddress + "=*@" + arr[i] + ")"
+				   + "(" + ZaAccount.A_zimbraMailAlias+ "=*@" + arr[i] + ")";
+		}else if (optionId == ZaSearchOption.SERVER_FILTER_ID){
+			query += "(" + ZaAccount.A_mailHost + "=" + arr[i] + ")";
+		}else if (optionId == ZaSearchOption.STATUS_FILTER_ID){
+			query += "(" + ZaAccount.A_accountStatus + "=" + arr[i] + ")";
+		}
+	}
+	if (arr.length > 1 || (arr.length > 0 && optionId == ZaSearchOption.DOMAIN_FILTER_ID)) {
+		query = "(|" + query + ")";
+	}
+
+	return query ;
+}
+
+ZaSearchBuilderController.newGetCosFilter4ListArray =
+function (arr) {
+	var query = "";
+	var controller = ZaApp.getInstance().getSearchBuilderController();
+	var cosids = controller._cosids;
+
+    if(controller._includeObjectWithoutCosId) {
+        query += "(!(" + ZaAccount.A_COSId + "=*))";
+    }
+	if(cosids && cosids.length  > 0) {
+		for(var i = 0; i < arr.length && i < cosids.length; i++) {
+			query += "(" + ZaAccount.A_COSId  + "=" + cosids[arr[i]] + ")";
+		}
+	}
+        if (cosids.length > 1 || (cosids.length == 1 && controller._includeObjectWithoutCosId)) {
+                query = "(|" + query + ")";
+        }
+	return query;
+}
+
+
 ZaSearchBuilderController.prototype.getFilterTreeItems =
 function () {
     return [
@@ -790,6 +1127,7 @@ function () {
     ];
 }
 
+ZaSearchBuilderController.currentFilterDilaog = "";
 ZaSearchBuilderController.searchFilterTreeListener =
 function (ev) {
     var filterType = ev.item.getData("filterType");
@@ -823,11 +1161,26 @@ function (ev) {
             dialog = sbController.getFilterDialogByType (ZaSearchOption.STATUS_FILTER_ID);
         break;
     }
-    if (dialog)
+    if (dialog) {
+        if (ZaSearchBuilderController.currentFilterDilaog) {
+            ZaSearchBuilderController.currentFilterDilaog.popdown();
+        }
+        ZaSearchBuilderController.currentFilterDilaog  = dialog;
         dialog.popup(loc);
+    }
 }
 
 ZaSearchBuilderController.filterDialogSet = {};
+ZaSearchBuilderController.currentPopupDialog = undefined;
+ZaSearchBuilderController.prototype.getFilterDialogArray = function () {
+    var result = [];
+    for (var filterType in ZaSearchBuilderController.filterDialogSet) {
+        if (ZaSearchBuilderController.filterDialogSet[filterType])
+            result.push(ZaSearchBuilderController.filterDialogSet[filterType]);
+    }
+    return result;
+}
+
 ZaSearchBuilderController.prototype.getFilterDialogByType =
 function (filterType) {
     if (!ZaSearchBuilderController.filterDialogSet[filterType]) {
@@ -845,6 +1198,7 @@ function (filterType) {
         }
         ZaSearchBuilderController.filterDialogSet[filterType] = new ZaSearchOptionDialog(ZaApp.getInstance().getAppCtxt().getShell(), filterType, w, h);
         ZaSearchBuilderController.filterDialogSet[filterType].registerCallback(DwtDialog.OK_BUTTON, this.filterOKListener, this, filterType);
+        ZaSearchBuilderController.filterDialogSet[filterType].addPopdownListener(new AjxListener(this, this.popdownHookListner));
     }
     return ZaSearchBuilderController.filterDialogSet[filterType];
 }
@@ -853,4 +1207,10 @@ ZaSearchBuilderController.prototype.filterOKListener =
 function (filterType) {
     var dialog = this.getFilterDialogByType(filterType);
     dialog.popdown();
+    dialog._controller.setNewQuery();
+}
+
+ZaSearchBuilderController.prototype.popdownHookListner =
+function () {
+    ZaSearchBuilderController.currentFilterDilaog = undefined;
 }
