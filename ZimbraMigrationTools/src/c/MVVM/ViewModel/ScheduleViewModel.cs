@@ -455,6 +455,37 @@ namespace MVVM.ViewModel
             return retval;
         }
 
+        private Options SetOptions()
+        {
+            Options importOpts = Options.None;
+            OptionsViewModel ovm = ((OptionsViewModel)ViewModelPtrs[(int)ViewType.OPTIONS]);
+            if (ovm.ImportCalendarOptions)
+            {
+                importOpts = importOpts | Options.Calendar;
+            }
+            if (ovm.ImportContactOptions)
+            {
+                importOpts = importOpts | Options.Contacts;
+            }
+            if (ovm.ImportMailOptions)
+            {
+                importOpts = importOpts | Options.Mail;
+            }
+            if (ovm.ImportSentOptions)
+            {
+                importOpts = importOpts | Options.Sent;
+            }
+            if (ovm.ImportDeletedItemOptions)
+            {
+                importOpts = importOpts | Options.DeletedItems;
+            }
+            if (ovm.ImportJunkOptions)
+            {
+                importOpts = importOpts | Options.Junk;
+            }
+            return importOpts;
+        }
+
         private ObservableCollection<CosInfo> coslist = new ObservableCollection<CosInfo>();
         public ObservableCollection<CosInfo> CosList
         {
@@ -483,9 +514,11 @@ namespace MVVM.ViewModel
             MyFolder.OnChanged += new MigrationObjectEventHandler(Folder_OnChanged);
 
             MyAcct.migrationFolders.Insert(0, MyFolder);
+            
             CSMigrationwrapper mw = new CSMigrationwrapper();
+            Options importOpts = SetOptions();           
+            mw.StartMigration(MyAcct, importOpts, m_isPreview);
 
-            mw.StartMigration(MyAcct,Options.Mail | Options.Contacts | Options.Calendar, m_isPreview);
             accountResultsViewModel.AccountResultsList[num].PBMsgValue = "Migration complete";
             accountResultsViewModel.AccountResultsList[num].AcctProgressMsg = "Complete";
         }
@@ -605,6 +638,7 @@ namespace MVVM.ViewModel
                     ar.AccountFolderInfoList.Add(f.LastFolderInfo);
 
                     // TEMPORARY HACK (I HOPE).  When backend count processing is in -- get rid of this
+                    // It doesn't really work anyway
                     if ((e.OldValue.ToString() == "Tasks") && (e.NewValue.ToString() == "Tasks"))
                     {
                         accountResultsViewModel.AccountResultsList[f.Accountnum].PBValue = 100;

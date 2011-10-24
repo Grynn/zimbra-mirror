@@ -779,10 +779,11 @@ public class ZimbraAPI
         string folderId = "7";
         if (folderPath.Length > 0)
         {
-            if (dFolderMap.ContainsKey(folderPath))
-                folderId = dFolderMap[folderPath];
-            else
+            folderId = FindFolder(folderPath);
+            if (folderId.Length == 0)
+            {
                 return CONTACT_CREATE_FAILED_FLDR;
+            }
         }
         // //////
         WebServiceClient client = new WebServiceClient {
@@ -825,10 +826,11 @@ public class ZimbraAPI
         string folderId = "7";
         if (folderPath.Length > 0)
         {
-            if (dFolderMap.ContainsKey(folderPath))
-                folderId = dFolderMap[folderPath];
-            else
+            folderId = FindFolder(folderPath);
+            if (folderId.Length == 0)
+            {
                 return CONTACT_CREATE_FAILED_FLDR;
+            }
         }
         // //////
         WebServiceClient client = new WebServiceClient {

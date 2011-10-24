@@ -13,16 +13,17 @@ namespace CssLib
     public enum Options
     {
 
-        Junk = 14,
-        DeletedItems = 12,
-        Sent = 10,
-        Rules = 8,
-        Tasks = 6,
-        Calendar = 4,
-        Contacts = 2,
-        Mail = 1,
-        None = 0
+        Junk         = 0x0080,
+        DeletedItems = 0x0040,
+        Sent         = 0x0020,
+        Rules        = 0x0010,
+        Tasks        = 0x0008,
+        Calendar     = 0x0004,
+        Contacts     = 0x0002,
+        Mail         = 0x0001,
+        None         = 0x0000
     }
+
 public class CSMigrationwrapper
 {
     /* string m_ConfigXMLFile;
@@ -245,10 +246,22 @@ public class CSMigrationwrapper
             foreach (dynamic folderobject in folderobjectarray)
             {
                 string path ="";
+
+                // FBS NOTE THAT THESE ARE EXCHANGE SPECIFIC.  WE'LL HAVE TO CHANGE THIS GROU GROUPWISE !!!
                 if((folderobject.Name == "Sent Items") && !(importopts.HasFlag(Options.Sent)))
                 {
                     continue;
                 }
+                if ((folderobject.Name == "Deleted Items") && !(importopts.HasFlag(Options.DeletedItems)))
+                {
+                    continue;
+                }
+                if ((folderobject.Name == "Junk E-Mail") && !(importopts.HasFlag(Options.Junk)))
+                {
+                    continue;
+                }
+                ////
+
                 if (folderobject.Id == 0)
                 {
                     api.AccountName = Acct.Accountname;
@@ -258,6 +271,10 @@ public class CSMigrationwrapper
 
                 if (importopts.HasFlag(Options.Contacts))
                 {
+                    if (folderobject.Name == "Deleted Items")   //FBS EXCHANGE SPECIFIC HACK.  CHANGE FOR GROUPWISE !!! 
+                    {
+                        path = "/Top of Information Store/Deleted Items";
+                    }
                     ProcessItems(Acct, folderobject, foldertype.Contacts, api, path);
                 }
                 if (importopts.HasFlag(Options.Mail))
