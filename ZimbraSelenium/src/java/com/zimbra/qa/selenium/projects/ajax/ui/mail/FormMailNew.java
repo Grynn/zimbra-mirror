@@ -64,6 +64,7 @@ public class FormMailNew extends AbsForm {
 		public static final Field To = new Field("To");
 		public static final Field Cc = new Field("Cc");
 		public static final Field Bcc = new Field("Bcc");
+		public static final Field From = new Field("From");
 		public static final Field Subject = new Field("Subject");
 		public static final Field Body = new Field("Body");
 		
@@ -443,6 +444,45 @@ public class FormMailNew extends AbsForm {
 	}
 	
 	/**
+	 * Set the 'From' value
+	 * @param value
+	 */
+	public void zSetFromIdentity(String value) throws HarnessException {
+		logger.info(myPageName() + " zSetFrom("+ value +")");
+
+		String pulldownLocator = "css=div[id^='zv__COMPOSE'] tr[id$='_identity_row'] td[id$='_dropdown']";
+		String optionLocator = "css=td[id$='_title']:contains("+ value +")";
+		
+		// Default behavior
+		if ( pulldownLocator != null ) {
+						
+			// Make sure the locator exists
+			if ( !this.sIsElementPresent(pulldownLocator) ) {
+				throw new HarnessException("pulldownLocator not present! "+ pulldownLocator);
+			}
+			
+			this.zClick(pulldownLocator);
+
+			this.zWaitForBusyOverlay();
+			
+			if ( optionLocator != null ) {
+
+				// Make sure the locator exists
+				if ( !this.sIsElementPresent(optionLocator) ) {
+					throw new HarnessException("optionLocator not present! "+ optionLocator);
+				}
+				
+				this.zClick(optionLocator);
+
+				this.zWaitForBusyOverlay();
+
+			}
+			
+		}
+		
+	}
+	
+	/**
 	 * Fill in the form field with the specified text
 	 * @param field
 	 * @param value
@@ -459,6 +499,11 @@ public class FormMailNew extends AbsForm {
 			locator = Locators.zToField;
 			
 			// FALL THROUGH
+			
+		} else if ( field == Field.From ) {
+			
+			zSetFromIdentity(value);
+			return;
 			
 		} else if ( field == Field.Cc ) {
 			
