@@ -1,0 +1,60 @@
+#chartDataWindow { height: 120; overflow: auto; width: 800px; border: 1px solid #eee; font: 13px Helvetica, Arial; }
+#chartDataWindow p { padding: 8px; margin: 0; }
+#chartDataWindow p:nth-child(odd) { background: #F6F6F6; }
+#chatInputDiv { width: 782px; background: #333; padding: 5px 10px; }
+
+.CloudChatFeedRow {
+	background: none repeat scroll 0 0 white;
+    border-bottom: 1px solid #CCCCCC;
+}
+
+.CloudChatDisabledRow {
+	cursor: not-allowed;
+}
+
+.CloudChatFeedErrorRow {
+	background: none repeat scroll 0 0 white;
+    border-bottom: 1px solid #CCCCCC;
+    color: red;
+}
+
+.Imgcloudchat-icon {
+    background: transparent url("pics/cc.png") no-repeat 0 0;
+    width: 16px;
+    height: 16px;
+    overflow: hidden;
+}
+
+.Imgcc-maximize-icon {
+    background: transparent url("pics/maximize.png") no-repeat 0 0;
+    width: 16px;
+    height: 16px;
+    overflow: hidden;
+}
+
+.Imgcc-minimize-icon {
+    background: transparent url("pics/minimize.gif") no-repeat 0 0;
+    width: 16px;
+    height: 16px;
+    overflow: hidden;
+}
+
+.ImgCCPerson32 {
+    background: transparent url("pics/person.png") no-repeat 0 0;
+    width: 32px;
+    height: 32px;
+    overflow: hidden;
+}
+
+.ImgCCZimbraIcon {
+    background: transparent url("pics/zimbraIcon.gif") no-repeat 0 0;
+    width: 16px;
+    height: 16px;
+    overflow: hidden;
+}
+.CloudChatInfoDiv {
+   padding: 3px;background-color: #ffffe0;
+    border-bottom: 1px solid #CCCCCC;
+
+}
+

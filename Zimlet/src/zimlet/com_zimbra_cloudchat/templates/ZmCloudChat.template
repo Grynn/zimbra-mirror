@@ -1,0 +1,50 @@
+<template id='BuddyListWidget'>
+    <div style='cursor:pointer;' class='overviewHeader'>
+        <table cellpadding='0' cellspacing='0'>
+            <tr>
+                <td>
+                    <div id='cloudchat_buddy_list_expand_icon' class='ImgNodeExpanded' ></div>
+                </td>
+                <td class='overviewHeader-Text' width='100%'>${cloudChatStr}</td>
+                <td id='cloudchat_buddy_list_pref_icon' style='padding-right:20px' class='ImgPreferences'></td>
+            </tr>
+        </table>
+    </div>
+    <div id='cloudchat_content_div' style='cursor: pointer'>
+            <div class='CloudChatInfoDiv'>
+                <div style='padding:3px;'>
+                    <b>${chatStatusStr}</b>
+                </div>
+                <div  id='cloudChat_buddy_login_info_div' style='width:190px'>
+                </div>
+           </div>
+
+            <div id='cloudchat_login_widget_div'>
+                <table align=center>
+                    <tr>
+                        <td id='cloudChat_buddy_login_btn_cell'></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div id='cloudchat_buddyList_widget' style='cursor:pointer;display:none;'>
+                <div id='cloudchat_emailParticipants_hdr' class='overviewHeader' style='width:100%;display:none'><table cellpadding='0' cellspacing='0'><tr><td><b>${emailParticipants}</b></td></tr></table></div>
+
+                <div id='cloudchat_emailParticipants_div'>
+                </div>
+                <div id='cloudchat_buddyList_hdr' class='overviewHeader' style='width:100%'><table cellpadding='0' cellspacing='0'><tr><td><b>${chatUsers}</b></td></tr></table></div>
+
+                <div id='cloudchat_buddyList_div'>
+                </div>
+                <br>
+                <div id='cloudChat_buddy_list_actions_menu_container'>
+                    <table align=center>
+                        <tr>
+                            <td id='cloudChat_buddy_list_actions_menu'></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+    </div>
+<br>
+</template>

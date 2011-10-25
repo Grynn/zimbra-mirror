@@ -1,0 +1,35 @@
+<zimlet name="com_zimbra_cloudchat" version="1.0" label="${msg.label}"
+	description="${msg.description}">
+	<!-- load parent classes and widgets first -->
+	<include>SocketIO/socket.io.js</include>
+	<!--  <include>http://localhost:3000/socket.io/socket.io.js</include> -->
+	<include>model/ZmCloudList.js</include>
+	<include>view/ZmCloudListView.js</include>
+	<include>controller/ZmCloudChatController.js</include>
+
+    <include>templates/ZmCloudChat.template.js</include>
+    <include>model/ZmCloudChatBuddy.js</include>
+    <include>model/ZmCloudChatBuddyList.js</include>
+    <include>model/ZmCloudChatSocket.js</include>
+    <include>view/ZmCloudChatBuddyListView.js</include>
+    <include>controller/ZmCloudChatBuddyListController.js</include>
+
+    <include>widgets/ZmCloudChatWithUsersDlg.js</include>
+    <include>widgets/ZmCloudChatAddUsersDlg.js</include>
+	<include>event/ZmCloudChatEvent.js</include>
+    <include>event/ZmCloudChatBuddyEvent.js</include>
+
+	<!-- Chat app -->
+	<include>model/ZmCloudChatList.js</include>
+	<include>view/ZmCloudChatListView.js</include>
+	<include>view/ZmCloudChatTabPage.js</include>
+    <include>view/ZmCloudChatTabView.js</include>
+
+	<include>controller/ZmCloudChatListController.js</include>
+	<include>apps/ZmCloudChatApp.js</include>
+	
+	<include>ZmCloudChatZimlet.js</include>
+	
+	<includeCSS>cloudchat.css</includeCSS>
+	<handlerObject>ZmCloudChatZimlet</handlerObject>
+</zimlet>

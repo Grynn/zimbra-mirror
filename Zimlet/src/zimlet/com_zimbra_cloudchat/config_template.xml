@@ -1,0 +1,5 @@
+<zimletConfig name="com_zimbra_cloudchat" version="0.1">
+  <global>
+    <property name="cloudChatServer">https://cloudchat.cloudfoundry.com:443/</property>
+  </global>
+</zimletConfig>
