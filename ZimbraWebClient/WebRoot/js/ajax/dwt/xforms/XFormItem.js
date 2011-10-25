@@ -2404,6 +2404,7 @@ Radio_XFormItem.prototype.focusable = true;
 Radio_XFormItem.prototype.groupname=null;
 Radio_XFormItem.prototype.subLabel = (appNewUI?"":null);
 Radio_XFormItem.prototype.align = _RIGHT_;
+Radio_XFormItem.prototype.labelLocation = _RIGHT_;
 //	methods
 
 Radio_XFormItem.prototype.updateElement = function(newValue) {
