@@ -35,20 +35,20 @@ SET LIB=%MSSdk%\lib;%MSVCDir%\ATLMFC\LIB;%MSVCDir%\LIB;%MSVCDir%\PlatformSDK\lib
 SET BASE=%~dp0
 
 REM remove all old binaries and intermediate files
-rmdir /s /q %BASE%\out\
-rmdir /s /q %BASE%\out64\
+rmdir /s /q %BASE%\Win32\
+rmdir /s /q %BASE%\x64\
 
 cd %BASE%\vcproj
 dir *.sln
 
 echo "dbg|Win32"
 echo --------------
-MSBuild ZimbraOutlook2010.sln /t:Build /verbosity:m /p:Configuration=dbg;Platform=Win32
+MSBuild Migration.sln /t:Build /verbosity:m /p:Configuration=dbg;Platform=Win32
 IF ERRORLEVEL 1 exit /B 1 
 
 echo "rtl|Win32"
 echo --------------
-MSBuild ZimbraOutlook2010.sln /t:Build /verbosity:m /p:Configuration=rtl;Platform=Win32
+MSBuild Migration.sln /t:Build /verbosity:m /p:Configuration=rtl;Platform=Win32
 IF ERRORLEVEL 1 exit /B 1 
 
 SET PATH=%DevEnvDir%;%MSVCDir%\BIN\x86_amd64;%VCINSTALLDIR%\Common7\Tools;%VCINSTALLDIR%\Common7\Tools\bin\prerelease;%VCINSTALLDIR%\Common7\Tools\bin;%FrameworkSDKDir%\bin\x64;%Framework64Dir%\%FrameworkVersion%;%ORGPATH%;
@@ -57,12 +57,12 @@ SET LIB=%MSSdk%\lib\x64;%MSVCDir%\ATLMFC\LIB\amd64;%MSVCDir%\LIB\amd64;%MSVCDir%
 
 echo "dbg|x64"
 echo --------------
-MSBuild ZimbraOutlook2010.sln /t:Build /verbosity:m /p:Configuration=dbg;Platform=x64
+MSBuild Migration.sln /t:Build /verbosity:m /p:Configuration=dbg;Platform=x64
 IF ERRORLEVEL 1 exit /B 1 
 
 echo "rtl|x64"
 echo --------------
-MSBuild ZimbraOutlook2010.sln /t:Build /verbosity:m /p:Configuration=rtl;Platform=x64
+MSBuild Migration.sln /t:Build /verbosity:m /p:Configuration=rtl;Platform=x64
 IF ERRORLEVEL 1 exit /B 1 
 
 REM add source server info
@@ -75,8 +75,9 @@ IF ERRORLEVEL 1 exit /B 1
 
 REM add the latest stuff to the symbol server
 ECHO Adding Binaries to the Symbol Server...
-symstore add /r /f %BASE%\out\*.* /s \\10.137.242.250\Zbuild3\symbols\ZCO /t "Zimbra Outlook Connector x86 Modules" /v "build number" /c "comment"
+ECHO symstore add /f %BASE%\Win32\rtl\*.* /s \\%INDEX_HOST%\Zbuild3\symbols\Migration /t "Zimbra Migration Tools Modules" /v "%BUILD_VERSION%" /c "%BUILD_DATE%"
+symstore add /f %BASE%\Win32\*.* /s \\%INDEX_HOST%\Zbuild3\symbols\Migration /t "Zimbra Migration Tools x86 Modules" /v "%BUILD_VERSION%" /c "%BUILD_DATE%"
 IF ERRORLEVEL 1 exit /B 1 
-symstore add /r /f %BASE%\out64\*.* /s \\10.137.242.250\Zbuild3\symbols\ZCO /t "Zimbra Outlook Connector x64 Modules" /v "build number" /c "comment"
+symstore add /f %BASE%\x64\rtl\*.* /s \\%INDEX_HOST%\Zbuild3\symbols\Migration /t "Zimbra Migration Tools x64 Modules" /v "%BUILD_VERSION%" /c "%BUILD_DATE%"
 IF ERRORLEVEL 1 exit /B 1 
 
