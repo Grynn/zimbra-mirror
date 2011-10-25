@@ -335,6 +335,11 @@ function(domElement, attrName) {
 	return AjxCore.objectWithId(domElement[attrName||"dwtObj"]);
 };
 
+Dwt.getElement =
+function(el) {
+	return (typeof(el) == "string") ? document.getElementById(el) : el;
+};
+
 /**
  * Finds an ancestor element with a value for the given attr.
  * 
@@ -713,12 +718,16 @@ function(htmlEl, attr, recursive) {
 
 Dwt.getVisible =
 function(htmlElement) {
+	htmlElement = Dwt.getElement(htmlElement);
+	if (!htmlElement) { return; }
 	var disp = DwtCssStyle.getProperty(htmlElement, "display");
 	return (disp != Dwt.DISPLAY_NONE);
 };
 
 Dwt.setVisible =
 function(htmlElement, visible) {
+	htmlElement = Dwt.getElement(htmlElement);
+	if (!htmlElement) { return; }
 	if (visible) {
 		if (htmlElement.nodeName.match(/tr/i)) {
 			htmlElement.style.display = Dwt.DISPLAY_TABLE_ROW;
