@@ -759,9 +759,10 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 								{type:_OUTPUT_,ref:ZaDomain.A_domainName,label:null,align:_LEFT_}
 							],
 							enableDisableChangeEventSources:[ZaDomain.A2_create_gal_acc],
-							enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A2_create_gal_acc,"TRUE"]]							
+							enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A2_create_gal_acc,"TRUE"]],
+							required:true
 						},
-                        {ref:ZaDomain.A_mailHost, type: _OSELECT1_, label:ZaMsg.NAD_MailServer,  choices: ZaApp.getInstance().getServerListChoices(),required:true,
+                        {ref:ZaDomain.A_mailHost, type: _OSELECT1_, label:ZaMsg.NAD_MailServer,  choices: ZaApp.getInstance().getServerListChoices(), required:true,
                             enableDisableChangeEventSources:[ZaDomain.A2_create_gal_acc],
 							enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A2_create_gal_acc,"TRUE"]]
                         },

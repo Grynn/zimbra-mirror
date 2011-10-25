@@ -178,6 +178,8 @@ function(entry) {
 		this._containedObject[ZaDomain.A2_gal_sync_accounts][0].name = entry[ZaDomain.A2_gal_sync_accounts][0].name;
 		this._containedObject[ZaDomain.A2_gal_sync_accounts][0].id = entry[ZaDomain.A2_gal_sync_accounts][0].id;
 		this._containedObject[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_datasources] = entry[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_datasources]; 
+		this._containedObject[ZaDomain.A2_gal_sync_accounts][0].attrs[ZaDomain.A_mailHost] = entry[ZaDomain.A2_gal_sync_accounts][0].attrs[ZaDomain.A_mailHost]; 
+
 		//this._containedObject[ZaDomain.A2_gal_sync_accounts][0].attrs = ZaItem.deepCloneListItem (entry[ZaDomain.A2_gal_sync_accounts][0].attrs);
 		if(entry[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_zimbra_ds]) {
 			this._containedObject[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_zimbra_ds] = new ZaDataSource();
@@ -1047,6 +1049,10 @@ if(appNewUI) {
 				{ref:(ZaDomain.A2_gal_sync_accounts + "[0].name"), type:_OUTPUT_,label:ZaMsg.Domain_GalSyncAccount,
 					visibilityChecks:[[XForm.checkInstanceValueNotEmty,ZaDomain.A2_gal_sync_accounts]]
 				},
+                {ref:(ZaDomain.A2_gal_sync_accounts + "[0].attrs." + ZaDomain.A_mailHost), type: _OUTPUT_, label:ZaMsg.NAD_MailServer,
+                    visibilityChecks:[[XForm.checkInstanceValueNotEmty,ZaDomain.A2_gal_sync_accounts]],
+                    required:true
+                },
 				{ref:(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_zimbra_ds + ".name"), label:ZaMsg.Domain_InternalGALDSName, type:_OUTPUT_,
 					visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode],
 					visibilityChecks:[
@@ -1126,6 +1132,10 @@ if(appNewUI) {
 				{ref:(ZaDomain.A2_gal_sync_accounts + "[0].name"), type:_OUTPUT_,label:ZaMsg.Domain_GalSyncAccount,
 					visibilityChecks:[[XForm.checkInstanceValueNotEmty,ZaDomain.A2_gal_sync_accounts]]
 				},
+                {ref:(ZaDomain.A2_gal_sync_accounts + "[0].attrs." + ZaDomain.A_mailHost), type: _OUTPUT_, label:ZaMsg.NAD_MailServer,
+                    visibilityChecks:[[XForm.checkInstanceValueNotEmty,ZaDomain.A2_gal_sync_accounts]],
+                    required:true
+                },
 				{ref:(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_zimbra_ds + ".name"), label:ZaMsg.Domain_InternalGALDSName, type:_OUTPUT_,
 					visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode],
 					visibilityChecks:[
