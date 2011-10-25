@@ -5,6 +5,7 @@ package com.zimbra.qa.selenium.projects.ajax.tests.mail.compose.drafts;
 
 import org.testng.annotations.Test;
 
+import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.MailItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
@@ -28,9 +29,11 @@ public class AutoSaveDraftMail extends PrefGroupMailByMessageTest {
 		
 		
 		super.startingAccountPreferences.put("zimbraPrefAutoSaveDraftInterval", ""+ PrefAutoSaveDraftInterval +"s");
+		super.startingAccountPreferences.put("zimbraPrefComposeFormat", "text");
 
 	}
 
+	@Bugs(ids = "66393")
 	@Test(	description = "Auto save a basic draft (subject only)",
 			groups = { "smoke" })
 	public void AutoSaveDraftMail_01() throws HarnessException {
@@ -38,6 +41,7 @@ public class AutoSaveDraftMail extends PrefGroupMailByMessageTest {
 
 		// Create the message data to be sent
 		String subject = "subject" + ZimbraSeleniumProperties.getUniqueString();
+		String body = "body" + ZimbraSeleniumProperties.getUniqueString();
 
 
 		FormMailNew mailform = null;
@@ -50,6 +54,7 @@ public class AutoSaveDraftMail extends PrefGroupMailByMessageTest {
 
 			// Fill out the form with the data
 			mailform.zFillField(Field.Subject, subject);
+			mailform.zFillField(Field.Body, body);
 
 			// Wait for twice the amount
 			SleepUtil.sleep(PrefAutoSaveDraftInterval * 2 * 1000);
