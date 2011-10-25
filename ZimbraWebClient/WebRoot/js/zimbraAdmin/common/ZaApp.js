@@ -117,8 +117,10 @@ function(appCtxt) {
 		}
 	} else if(appNewUI) {
         var ctl = this._appCtxt.getAppController().getOverviewPanelController();
-		ctl.getOverviewPanel().getFolderTree().setSelectionByPath("Home", true);
-
+        var homePath = ZaTree.getPathByArray([ZaMsg.OVP_home]);
+		ctl.getOverviewPanel().getFolderTree().setSelectionByPath(homePath);
+        var historyObject = new ZaHistory(homePath, ZaMsg.OVP_home);
+        ZaZimbraAdmin.getInstance().updateHistory(historyObject, true);
     }
     else {
 		if(ZaSettings.TREE_ENABLED) {	

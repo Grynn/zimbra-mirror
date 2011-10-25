@@ -23,6 +23,9 @@ ZaHistoryMgr.prototype.constructor = ZaHistoryMgr;
 
 ZaHistoryMgr.prototype.addHistory =
 function (historyObject) {
+    var last = this._history.getLast();
+    if (last && last.equal(historyObject))
+        return;
     this._history.add(historyObject);
     // Here we always relocates the currentLocation to the current page.
     this._currentLocation = this._history.size() -1;
@@ -126,15 +129,32 @@ function(listener) {
 	return this._evtMgr.removeListener(ZaEvent.L_MODIFY, listener);
 }
 
-ZaHistory = function (path, displayName, type, isShowInHistory) {
+/*
+ * Path: current path of item
+ * dispalyName: name showed in Tree Header
+ * type: This is attribute used for related object and recent object account/dl...etc
+ * isShowInHistory: is show this history in Tree Header
+ */
+ZaHistory = function (path, displayName, type, isShowInHistory, viewMethod) {
     this.path = path;
     this.displayName = displayName;
     this.type = type;
     this.isShowInHistory = (isShowInHistory === undefined) ? true: isShowInHistory;
+    this.viewMethod = (viewMethod instanceof AjxCallback) ? viewMethod : new AjxCallback(this, this.defaultGoToView);
 }
 
 ZaHistory.prototype.goToView =
 function(refresh) {
+    if (this.viewMethod) {
+        this.viewMethod.run(refresh);
+    }
+}
+
+ZaHistory.prototype.defaultGoToView = function(refresh) {
     var tree = ZaZimbraAdmin.getInstance().getOverviewPanelController().getOverviewPanel().getFolderTree();
     tree.setSelectionByPath(this.path, false, undefined, undefined, undefined, refresh);
+}
+
+ZaHistory.prototype.equal = function (newObj) {
+    return this.path == newObj.path;
 }

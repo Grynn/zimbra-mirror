@@ -834,7 +834,7 @@ function() {
         // Add Monitor/Statistics
         //insert all the statistics view's subs to the /ZaMsg.OVP_home/ZaMsg.OVP_monitor/, and statistics view itself is the container of those subs
         if (ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.SERVER_STATS_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
-            this.addSubTabsToParentTreeItem(mi, ZaGlobalStatsView.prototype.getTabChoices(), ZaZimbraAdmin._SERVER_STATISTICS_VIEW);
+            this.addSubTabsToParentTreeItem(mi, ZaGlobalStatsView.prototype.getTabChoices(), ZaZimbraAdmin._SERVER_STATISTICS_VIEW, true);
             ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._SERVER_STATISTICS_VIEW] = ZaOverviewPanelController.statsTreeListener;
 
             ti = new ZaTreeItemData({
@@ -1844,11 +1844,11 @@ ZaOverviewPanelController.prototype.addObjectItemOri = function (parentPath, nam
     tree.setSelectionByPath(namePath, !skipHistory, skipNotify);
 }
 
-ZaOverviewPanelController.prototype.addSubTabsToParentTreeItem = function(parentItem, subTabs, mappingIdForAllSubTabs) {
+ZaOverviewPanelController.prototype.addSubTabsToParentTreeItem = function(parentItem, subTabs, mappingIdForAllSubTabs, isShowHistory) {
         var subTabItem, subTabInfo, subTabItemId;
         var tree = this.getOverviewPanel().getFolderTree();
         var parentPath = tree.getABPath(parentItem);
-
+        var isShow = isShowHistory ? true: false;
         if (subTabs && subTabs.length > 0) {
             parentItem.setData("firstTab", subTabs[0].value);
             for (var i = 0; i < subTabs.length; i++) {
@@ -1857,7 +1857,7 @@ ZaOverviewPanelController.prototype.addSubTabsToParentTreeItem = function(parent
                 subTabItem = new ZaTreeItemData({
                                     parent: parentPath,
                                     id: subTabItemId,
-                                    isShowHistory: false,
+                                    isShowHistory: isShow,
                                     text: subTabInfo.label,
                                     mappingId: mappingIdForAllSubTabs});
                 subTabItem.setData("tabValue", subTabInfo.value);

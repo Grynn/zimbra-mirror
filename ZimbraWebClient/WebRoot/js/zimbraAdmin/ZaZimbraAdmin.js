@@ -749,6 +749,11 @@ function(ev) {
 	} else {					
 		ZaApp.getInstance().getHelpViewController().show();
 	}
+
+    if (appNewUI) {
+        var historyObject = new ZaHistory("HelpView", undefined, undefined, false, new AjxCallback(this, this._helpListener));
+        this._historyMgr.addHistory(historyObject);
+    }
 }
 
 ZaZimbraAdmin.prototype._dwListener = 
@@ -1042,8 +1047,12 @@ ZaZimbraAdmin.prototype.updateHistory =
 function(historyObject, isAddHistory) {
     if(isAddHistory)
         this._historyMgr.addHistory(historyObject);
-    this._header.setText(historyObject);
-    this._currentAppBar.setText(historyObject.path);
+
+    if (historyObject.displayName)
+        this._header.setText(historyObject);
+
+    if (historyObject.path)
+        this._currentAppBar.setText(historyObject.path);
 
 }
 

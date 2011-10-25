@@ -150,6 +150,12 @@ function(treeItem, skipNotify, kbNavEvent, noFocus) {
 	}
 };
 
+/*
+ * Remove isAddHistory Now(By ming@zimbra.com).
+ * Currenty, we won't add history in this function.
+ * For it won't easy for us to decide when we should add history.
+ * We only add history automatically when user click the tree item
+ */
 ZaTree.prototype.setSelectionByPath =
 function (path, isAddHistory, skipNotify, kbNavEvent, noFocus, refresh) {
 
@@ -178,7 +184,10 @@ function (path, isAddHistory, skipNotify, kbNavEvent, noFocus, refresh) {
     if (treeItem._setSelected(true, noFocus) && !skipNotify) {
     	this._notifyListeners(DwtEvent.SELECTION, [treeItem], DwtTree.ITEM_SELECTED, null, this._selEv, kbNavEvent, refresh);
 	}
-    this._updateHistory(treeItem, isAddHistory);
+
+    if (isAddHistory) {
+        this._updateHistory(treeItem, true);
+    }
 }
 
 //TODO make it recursive
