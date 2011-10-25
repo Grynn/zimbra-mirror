@@ -592,8 +592,8 @@ DwtSelect.prototype._createMenu =
 function() {
     var menu = new DwtSelectMenu(this);
     for (var i = 0, len = this._options.size(); i < len; ++i) {
-		var mi = new DwtSelectMenuItem(menu);
-		var option = this._options.get(i);
+	var option = this._options.get(i);
+	var mi = new DwtSelectMenuItem(menu, Dwt.getNextId(option._value + "_"));
         var image = option.getImage();
         if (image) {
             mi.setImage(image);
@@ -895,8 +895,8 @@ function() {
  * 
  * @extends 	DwtMenuItem
  */
-DwtSelectMenuItem = function(parent) {
-    DwtMenuItem.call(this, {parent:parent, style:DwtMenuItem.SELECT_STYLE, className:"ZSelectMenuItem"});
+DwtSelectMenuItem = function(parent, id) {
+    DwtMenuItem.call(this, {parent:parent, style:DwtMenuItem.SELECT_STYLE, className:"ZSelectMenuItem", id: id});
 };
 DwtSelectMenuItem.prototype = new DwtMenuItem;
 DwtSelectMenuItem.prototype.constructor = DwtSelectMenuItem;
