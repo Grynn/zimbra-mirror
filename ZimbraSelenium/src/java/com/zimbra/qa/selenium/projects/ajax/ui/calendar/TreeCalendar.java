@@ -288,6 +288,114 @@ public class TreeCalendar extends AbsTree {
 		throw new HarnessException("implement me");
 	}
 
+	public AbsPage zPressPulldown(Button pulldown, Button option) throws HarnessException {
+		logger.info(myPageName() + " zPressPulldown("+ pulldown +", "+ option +")");
+
+		tracer.trace("Click "+ pulldown +" then "+ option);
+
+		if ( pulldown == null )
+			throw new HarnessException("Pulldown cannot be null");
+
+		if ( option == null )
+			throw new HarnessException("Option cannot be null");
+
+
+		AbsPage page = null;
+		String pulldownLocator = null;
+		String optionLocator = null;
+		
+		
+		if ( pulldown == Button.B_TREE_FOLDERS_OPTIONS ) {
+			
+			pulldownLocator = "css=div[id='zov__main_Calendar'] td[id='ztih__main_Calendar__CALENDAR_optCell'] td[id$='_title']";
+			
+			if ( option == Button.B_TREE_NEWFOLDER ) {
+				
+				optionLocator = "css=div[id='ZmActionMenu_calendar_CALENDAR'] div[id='NEW_CALENDAR'] td[id$='_title']";
+				page = new DialogCreateFolder(MyApplication, ((AppAjaxClient)MyApplication).zPageMail);
+			
+				/**
+				 * TODO: add other options:
+				 * 
+				optionLocator = "css=div[id='ZmActionMenu_calendar_CALENDAR'] div[id='ADD_EXTERNAL_CALENDAR'] td[id$='_title']";
+				optionLocator = "css=div[id='ZmActionMenu_calendar_CALENDAR'] div[id='CHECK_ALL'] td[id$='_title']";
+				optionLocator = "css=div[id='ZmActionMenu_calendar_CALENDAR'] div[id='CLEAR_ALL'] td[id$='_title']";
+				optionLocator = "css=div[id='ZmActionMenu_calendar_CALENDAR'] div[id='FREE_BUSY_LINK'] td[id$='_title']";
+
+				 */
+				// TODO: 
+
+			} else {
+				throw new HarnessException("Pulldown/Option "+ pulldown +"/"+ option +" not implemented");
+			}
+
+			// FALL THROUGH
+			
+		} else if ( pulldown == Button.B_TREE_TAGS_OPTIONS ) {
+			
+			pulldownLocator = "css=div[id='zov__main_Calendar'] td[id='ztih__main_Mail__TAG_optCell'] td[id$='_title']";
+			
+			if ( option == Button.B_TREE_NEWTAG ) {
+
+				optionLocator = "css=div[id='ZmActionMenu_calendar_TAG'] div[id='NEW_TAG'] td[id$='_title']";
+				page = new DialogTag(MyApplication,((AppAjaxClient) MyApplication).zPageCalendar);
+
+			} else {
+				throw new HarnessException("Pulldown/Option "+ pulldown +"/"+ option +" not implemented");
+			}
+
+			// FALL THROUGH
+			
+		} else {
+			throw new HarnessException("Pulldown/Option "+ pulldown +"/"+ option +" not implemented");
+		}
+		
+		
+
+		// Default behavior
+		if (pulldownLocator != null) {
+
+			// Make sure the locator exists
+			if (!this.sIsElementPresent(pulldownLocator)) {
+				throw new HarnessException("Button " + pulldown + " option " + option + " pulldownLocator " + pulldownLocator + " not present!");
+			}
+
+			// 8.0 change ... need zClickAt()
+			// this.zClick(pulldownLocator);
+			this.zClickAt(pulldownLocator, "0,0");
+
+			// If the app is busy, wait for it to become active
+			zWaitForBusyOverlay();
+
+			if (optionLocator != null) {
+
+				// Make sure the locator exists
+				if (!this.sIsElementPresent(optionLocator)) {
+					throw new HarnessException("Button " + pulldown + " option " + option + " optionLocator " + optionLocator + " not present!");
+				}
+
+				// 8.0 change ... need zClickAt()
+				// this.zClick(optionLocator);
+				this.zClickAt(optionLocator, "0,0");
+
+				// If the app is busy, wait for it to become active
+				zWaitForBusyOverlay();
+			}
+
+			// If we click on pulldown/option and the page is specified, then
+			// wait for the page to go active
+			if (page != null) {
+				page.zWaitForActive();
+			}
+		}
+		
+		
+		// Return the specified page, or null if not set
+		return (page);
+
+
+	}
+
 	/* (non-Javadoc)
 	 * @see com.zimbra.qa.selenium.framework.ui.AbsTree#zPressButton(com.zimbra.qa.selenium.framework.ui.Button)
 	 */
@@ -304,14 +412,12 @@ public class TreeCalendar extends AbsTree {
 
 		if ( button == Button.B_TREE_NEWFOLDER ) {
 			
-			locator = Locators.CreateNewFolderIconCSS;
-			page = new DialogCreateFolder(MyApplication, ((AppAjaxClient)MyApplication).zPageCalendar);
+			return (zPressPulldown(Button.B_TREE_FOLDERS_OPTIONS, Button.B_TREE_NEWFOLDER));
 
-		}else if (button == Button.B_TREE_NEWTAG) {
+		} else if (button == Button.B_TREE_NEWTAG) {
 
-			locator = "css=TODO#TODO";
-			page = new DialogTag(MyApplication,((AppAjaxClient) MyApplication).zPageCalendar);
-			
+			return (zPressPulldown(Button.B_TREE_TAGS_OPTIONS, Button.B_TREE_NEWTAG));
+
 		} else if ( button == Button.B_TREE_FIND_SHARES ) {
 
 			locator = "css=TODO#TODO";
