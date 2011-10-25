@@ -1010,7 +1010,8 @@ public class PageTasks extends AbsTab {
 	
 	public String zGetHtmlBodyText() throws HarnessException {
 		try {
-			sSelectFrame("css=iframe[id='zv__TKL_body__iframe']");
+			//sSelectFrame("css=iframe[id='zv__TKL_body__iframe']");
+			sSelectFrame("css=div[id='zv__TKL'] iframe[id$='__body__iframe']");
 			String bodyhtml = this.sGetHtmlSource();
 			return bodyhtml;
 		} finally {

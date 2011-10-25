@@ -131,7 +131,8 @@ public class DisplayTask extends AbsDisplay {
 			try {
 				
 				//this.sSelectFrame("css=iframe[id='zv__MSG_body__iframe']");
-				this.sSelectFrame("css=iframe[id='zv__TKL_body__iframe']");
+				//this.sSelectFrame("css=iframe[id='zv__TKL_body__iframe']");
+				this.sSelectFrame("css=div[id='zv__TKL'] iframe[id$='__body__iframe']");
 				
 				String bodyLocator = "css=body";
 				
