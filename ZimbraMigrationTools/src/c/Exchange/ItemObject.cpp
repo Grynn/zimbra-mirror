@@ -138,16 +138,21 @@ STDMETHODIMP CItemObject::GetDataForItem(VARIANT *data)
     return S_OK;
 }
 
-STDMETHODIMP CItemObject::GetDataForItemID(VARIANT ItemId, VARIANT *pVal)
+STDMETHODIMP CItemObject::GetDataForItemID(VARIANT ItemId,FolderType type, VARIANT *pVal)
 {
      HRESULT hr = S_OK;
     std::map<BSTR, BSTR> pIt;
     std::map<BSTR, BSTR>::iterator it;
 
     SBinary ItemID;
-
 	FolderType ft;
+	if(type == NULL)
+	{
+	
 	get_Type(&ft);
+	}
+	else
+		ft = type;
 
 
     if (ItemId.vt == (VT_ARRAY | VT_UI1))       // (OLE SAFEARRAY)

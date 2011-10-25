@@ -76,7 +76,7 @@ public:
 
     STDMETHOD(put_ItemID) (VARIANT id);
     STDMETHOD(get_ItemID) (VARIANT * id);
-    STDMETHOD(GetDataForItemID) (VARIANT ItemId, VARIANT * pVal);
+    STDMETHOD(GetDataForItemID) (VARIANT ItemId,FolderType type, VARIANT * pVal);
 };
 
 OBJECT_ENTRY_AUTO(__uuidof(ItemObject), CItemObject)

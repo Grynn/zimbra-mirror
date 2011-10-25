@@ -517,7 +517,7 @@ namespace MVVM.ViewModel
             
             CSMigrationwrapper mw = new CSMigrationwrapper();
             Options importOpts = SetOptions();           
-            mw.StartMigration(MyAcct, importOpts, m_isPreview);
+            mw.testStartMigration(MyAcct, importOpts, m_isPreview);
 
             accountResultsViewModel.AccountResultsList[num].PBMsgValue = "Migration complete";
             accountResultsViewModel.AccountResultsList[num].AcctProgressMsg = "Complete";

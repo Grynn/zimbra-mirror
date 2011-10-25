@@ -152,7 +152,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>comsupp.lib;ActiveDS.lib;adsiid.lib;mapi32.lib;Rpcrt4.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>Exchange.def</ModuleDefinitionFile>
-      <RegisterOutput>true</RegisterOutput>
+      <RegisterOutput>false</RegisterOutput>
     </Link>
     <PostBuildEvent>
       <Command>

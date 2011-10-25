@@ -81,7 +81,7 @@ interface IItemObject : IDispatch{
 	[id(5)] HRESULT GetDataForItem([out, retval] VARIANT* pVal);
 	[propput,id(6)] HRESULT ItemID([in] VARIANT newVal);
 	[propget,id(6)] HRESULT ItemID([out,retval] VARIANT* newVal);
-	[id(7)] HRESULT GetDataForItemID([in] VARIANT ItemId,[out, retval] VARIANT* pVal);
+	[id(7)] HRESULT GetDataForItemID([in] VARIANT ItemId,[in] FolderType type,[out, retval] VARIANT* pVal);
 };
 [
 	object,
