@@ -1276,7 +1276,8 @@ ZaOverviewPanelController.cosTreeListener = function (ev) {
 	}
     if(appNewUI) {
         var parentPath = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_configure, ZaMsg.OVP_cos]);
-        ZaZimbraAdmin.getInstance().getOverviewPanelController().addObjectItem(parentPath, cos.name, null, false, false, cos);
+        var skipHistory = ev.item.getData("skipHistory");
+        ZaZimbraAdmin.getInstance().getOverviewPanelController().addObjectItem(parentPath, cos.name, null, (skipHistory == "TRUE"), false, cos);
     }
 }
 
@@ -1307,7 +1308,8 @@ ZaOverviewPanelController.domainTreeListener = function (ev) {
 
     if (appNewUI) {
         var parentPath = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_configure, ZaMsg.OVP_domains]);
-        ZaZimbraAdmin.getInstance().getOverviewPanelController().addObjectItem(parentPath, domain.name, null, false, false, domain);
+        var skipHistory = ev.item.getData("skipHistory");
+        ZaZimbraAdmin.getInstance().getOverviewPanelController().addObjectItem(parentPath, domain.name, null, (skipHistory == "TRUE"), false, domain);
     }
 }
 
@@ -1953,6 +1955,7 @@ function(parentPath, item) {
                 }
             );
     cosTi.setData(ZaOverviewPanelController._OBJ_ID, cos.id);
+    cosTi.setData("skipHistory", "TRUE");
     ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._COS_VIEW] = ZaOverviewPanelController.cosTreeListener;
     Tis.push(cosTi);
 
@@ -1965,6 +1968,7 @@ function(parentPath, item) {
                 }
             );
     domainTi.setData(ZaOverviewPanelController._OBJ_ID, domainObj.id);
+    domainTi.setData("skipHistory", "TRUE");
     ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._DOMAIN_VIEW] = ZaOverviewPanelController.domainTreeListener;
     Tis.push(domainTi);
     /*
