@@ -31,6 +31,8 @@ interface IfolderObject : IDispatch{
 	[propput, id(3)] HRESULT ParentPath([in] BSTR newVal);
 	[propput,id(4)] HRESULT FolderID([in] VARIANT newVal);
 	[propget,id(4)] HRESULT FolderID([out,retval] VARIANT* newVal);
+	[propget, id(5)] HRESULT ItemCount([out, retval] LONG* pVal);
+	[propput, id(5)] HRESULT ItemCount([in] LONG newVal);
 };
 [
     object,

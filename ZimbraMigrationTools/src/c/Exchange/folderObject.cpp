@@ -50,7 +50,19 @@ STDMETHODIMP CfolderObject::put_Id(LONG newVal)
     LngID = newVal;
     return S_OK;
 }
+STDMETHODIMP CfolderObject::get_ItemCount(LONG *pVal)
+{
+    // TODO: Add your implementation code here
+    *pVal = Itemcnt;
+    return S_OK;
+}
 
+STDMETHODIMP CfolderObject::put_ItemCount(LONG newVal)
+{
+    // TODO: Add your implementation code here
+    Itemcnt = newVal;
+    return S_OK;
+}
 STDMETHODIMP CfolderObject::get_ParentPath(BSTR *pVal)
 {
     // TODO: Add your implementation code here

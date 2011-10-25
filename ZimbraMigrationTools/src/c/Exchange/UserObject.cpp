@@ -120,6 +120,7 @@ STDMETHODIMP CUserObject::GetFolderObjects( /*[out, retval]*/ VARIANT *vObjects)
             CComBSTR tempS((*it).folderpath.c_str());
             pIFolderObject->put_ParentPath(SysAllocString(tempS));
 
+			pIFolderObject->put_ItemCount((*it).itemcount);
             // /////////////////////////////////////
             VARIANT var;
             SBinary Folderid = (*it).sbin;

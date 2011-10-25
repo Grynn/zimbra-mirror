@@ -29,6 +29,7 @@ private:
      * LONG LngID;
      * BSTR parentPath;*/
     SBinary FolderId;
+	LONG Itemcnt;
 
 public:
     CfolderObject()
@@ -60,6 +61,8 @@ public:
 
     STDMETHOD(put_FolderID) (VARIANT id);
     STDMETHOD(get_FolderID) (VARIANT * id);
+	STDMETHOD(get_ItemCount) (LONG *pVal);
+    STDMETHOD(put_ItemCount) (LONG newVal);
 };
 
 OBJECT_ENTRY_AUTO(__uuidof(folderObject), CfolderObject)
