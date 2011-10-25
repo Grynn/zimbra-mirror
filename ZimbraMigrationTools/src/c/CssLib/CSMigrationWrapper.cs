@@ -266,9 +266,21 @@ public class CSMigrationwrapper
     {
         // Change this to above signature when I start getting the real ObjectPicker object back
         object var = new object();
+        
+        Type calcType = testAssembly.GetType("Exchange.MapiWrapperClass");
+        object calcInstance = Activator.CreateInstance(calcType);
+        ParameterModifier pm = new ParameterModifier(1);
+        pm[0] = true;
+        ParameterModifier[] mods = { pm };
 
-        MailWrapper.SelectExchangeUsers(out var);
-        string[] s = (string[])var;
+        object[] MyArgs = new object[1];
+
+        var = calcType.InvokeMember("SelectExchangeUsers",
+                 BindingFlags.InvokeMethod | BindingFlags.Instance | BindingFlags.Public,
+                 null, calcInstance, MyArgs, mods, null, null);
+        
+        //MailWrapper.SelectExchangeUsers(out var);
+        string[] s = (string[])MyArgs[0];
         return s;
     }
 
