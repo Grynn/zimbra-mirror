@@ -294,6 +294,14 @@ body						{	@ChromeBg@	}
     -moz-border-radius-topright:15px;
     -webkit-border-top-right-radius:15px;
 }
+
+.ZLoadingMessage {
+    color:#FFFFFF;
+    font-size:14px;
+    font-weight:bold;
+    padding-top:50px;
+}
+
 .SplashScreen { 
     position:absolute;
     left:0px;
