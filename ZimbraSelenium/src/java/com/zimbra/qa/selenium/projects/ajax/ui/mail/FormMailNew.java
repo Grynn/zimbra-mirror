@@ -561,15 +561,21 @@ public class FormMailNew extends AbsForm {
 
 						this.sSelectFrame("index=0"); // iframe index is 0 based
 
-						locator = "css=html body";
+						locator = "css=body[id='tinymce']";
 
 						if (!this.sIsElementPresent(locator))
-							throw new HarnessException(
-									"Unable to locate compose body");
+							throw new HarnessException("Unable to locate compose body");
 
 						this.sFocus(locator);
 						this.zClick(locator);
-						this.sType(locator, value);
+						
+						/*
+						 * Oct 25, 2011: The new TinyMCE editor broke sType().  Use zKeyboard instead,
+						 * however, it is preferred to use sType() if possible, but I can't find a
+						 * solution right now. 
+						 */
+						// this.sType(locator, value);
+						this.zKeyboard.zTypeCharacters(value);
 
 					} finally {
 						// Make sure to go back to the original iframe
