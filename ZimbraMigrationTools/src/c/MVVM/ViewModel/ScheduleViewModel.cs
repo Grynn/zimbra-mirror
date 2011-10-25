@@ -635,7 +635,12 @@ namespace MVVM.ViewModel
             {
                 if (e.OldValue != null)
                 {
-                    ar.AccountFolderInfoList.Add(f.LastFolderInfo);
+                    if ((e.NewValue.ToString() == e.OldValue.ToString()) || (m_isPreview))  // || (m_isPreview)) is temporary
+                    {
+                        f.LastFolderInfo = new FolderInfo(e.NewValue.ToString(), "", string.Format("{0} of {1}",
+                                                          f.TotalCountOFItems, f.TotalCountOFItems));
+                        ar.AccountFolderInfoList.Add(f.LastFolderInfo);
+                    }
 
                     // TEMPORARY HACK (I HOPE).  When backend count processing is in -- get rid of this
                     // It doesn't really work anyway

@@ -87,6 +87,7 @@ namespace MVVM.View
             RowDefinition rowDef2 = new RowDefinition();
             rowDef1.MaxHeight = 250;
             rowDef2.Height = GridLength.Auto;
+            urGrid.Height = 280;    // so we'll get  Vertical scrollviewer
             urGrid.RowDefinitions.Add(rowDef1);
             urGrid.RowDefinitions.Add(rowDef2);
             //
@@ -102,9 +103,10 @@ namespace MVVM.View
 
             GridViewColumn gvc1 = new GridViewColumn();
 
+            // set up columns widths so we won't get a horizontal scrollbar
             GridViewColumnHeader gvc1H = new GridViewColumnHeader();
             gvc1H.FontSize = 11;
-            gvc1H.Width = 140;
+            gvc1H.Width = 195;
             gvc1H.Content = " Folder";
             gvc1H.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Left;
             gvc1.DisplayMemberBinding = new Binding("FolderName");
@@ -114,7 +116,7 @@ namespace MVVM.View
             GridViewColumn gvc2 = new GridViewColumn();
             GridViewColumnHeader gvc2H = new GridViewColumnHeader();
             gvc2H.FontSize = 11;
-            gvc2H.Width = 200;
+            gvc2H.Width = 130;
             gvc2H.Content = " Type";
             gvc2H.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Left;
             gvc2.DisplayMemberBinding = new Binding("TypeName");
@@ -124,7 +126,7 @@ namespace MVVM.View
             GridViewColumn gvc3 = new GridViewColumn();
             GridViewColumnHeader gvc3H = new GridViewColumnHeader();
             gvc3H.FontSize = 11;
-            gvc3H.Width = 126;
+            gvc3H.Width = 120;
             gvc3H.Content = " Progress";
             gvc3H.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Left;
             gvc3.DisplayMemberBinding = new Binding("UserProgressMsg");
