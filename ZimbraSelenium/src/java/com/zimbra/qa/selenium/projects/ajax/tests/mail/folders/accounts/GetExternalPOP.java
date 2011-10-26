@@ -12,10 +12,10 @@ import com.zimbra.qa.selenium.projects.ajax.core.PrefGroupMailByMessageTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.Toaster;
 
 
-public class GetExternal extends PrefGroupMailByMessageTest {
+public class GetExternalPOP extends PrefGroupMailByMessageTest {
 
-	public GetExternal() {
-		logger.info("New "+ GetExternal.class.getCanonicalName());
+	public GetExternalPOP() {
+		logger.info("New "+ GetExternalPOP.class.getCanonicalName());
 		
 	}
 	
@@ -34,7 +34,7 @@ public class GetExternal extends PrefGroupMailByMessageTest {
 	 */
 	@Test(	description = "View an external folder - POP",
 			groups = { "smoke" })
-	public void GetExternal_01() throws HarnessException {
+	public void GetExternalPOP_01() throws HarnessException {
 		
 		
 		// Create the external data source on the same server
@@ -132,6 +132,7 @@ public class GetExternal extends PrefGroupMailByMessageTest {
 
 		
 	}	
+
 
 
 }
