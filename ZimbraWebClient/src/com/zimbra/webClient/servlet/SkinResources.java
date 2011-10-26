@@ -910,6 +910,12 @@ public class SkinResources
 		boolean isIE6up = false;
 		boolean isIE7 = false;
 		boolean isIE7up = false;
+		boolean isIE8 = false;
+		boolean isIE8up = false;
+		boolean isIE9 = false;
+		boolean isIE9up = false;
+		boolean isIE10 = false;
+		boolean isIE10up = false;
 		boolean isFirefox = false;
 		boolean isFirefox1up = false;
 		boolean isFirefox1_5up = false;
@@ -1017,6 +1023,12 @@ public class SkinResources
 			isIE6up = (isIE && (browserVersion >= 6.0));
 			isIE7 = (isIE && (browserVersion == 7.0));
 			isIE7up = (isIE && (browserVersion >= 7.0));
+			isIE8 = (isIE && (browserVersion == 8.0));
+			isIE8up = (isIE && (browserVersion >= 8.0));
+			isIE9 = (isIE && (browserVersion == 9.0));
+			isIE9up = (isIE && (browserVersion >= 9.0));
+			isIE10 = (isIE && (browserVersion == 10.0));
+			isIE10up = (isIE && (browserVersion >= 10.0));
 
 			// Note: Opera and WebTV spoof Navigator. We do strict client detection.
 			isNav = (beginsWithMozilla && !isSpoofer && !isCompatible && !isOpera && !isWebTv && !isHotJava && !isSafari && !isChrome);
@@ -1061,6 +1073,12 @@ public class SkinResources
 			define(macros, "MSIE_6_OR_HIGHER", isIE6up);
 			define(macros, "MSIE_7", isIE7);
 			define(macros, "MSIE_7_OR_HIGHER", isIE7up);
+			define(macros, "MSIE_8", isIE8);
+			define(macros, "MSIE_8_OR_HIGHER", isIE8up);
+			define(macros, "MSIE_9", isIE9);
+			define(macros, "MSIE_9_OR_HIGHER", isIE9up);
+			define(macros, "MSIE_10", isIE10);
+			define(macros, "MSIE_10_OR_HIGHER", isIE10up);
 			define(macros, "NAVIGATOR", isNav);
 			define(macros, "NAVIGATOR_4", isNav4);
 			define(macros, "NAVIGATOR_6", isNav6);
@@ -1414,6 +1432,10 @@ public class SkinResources
 					} else if (operation.equals("border")) {
 						result = outputBorder(stack, params);
 					
+					// "grad"
+					} else if (operation.equals("grad")){
+						result = outputGrad(stack, params);
+					
 					// "image" or "img"
 					} else if (operation.equals("image") || operation.equals("img")) {
 						result = outputImage(stack, params);
@@ -1600,6 +1622,48 @@ public class SkinResources
 			throw new IOException("border("+type+"): type not understood: use 'transparent', 'solid', 'inset' or 'outset'");
 		}
 					
+		//
+		// replace occurances of @grad(to, from, type)@, @grad(to, from) with the CSS for the cross-browser linear gradient 
+		// default type is linear-vertical
+		//
+		private String outputGrad(Stack<String> stack, String[] params) throws IOException {
+			String from = (params.length > 0 ? params[0] : null);
+			String to = (params.length > 1 ? params[1] : null);
+			String type = (params.length > 2 ? params[2] : "linear-vertical");
+			String endDirection = "bottom";
+			String topLeft = "";
+			String result = "background-color:" + from;   // Default
+			int gradType = 0;
+
+			if (from == null || to == null) 
+				throw new IOException("grad(): specify from, to");
+
+			if (type.equals("linear-horizontal")){
+				endDirection = "right";
+				gradType = 1; // for IE 9 or lower vertical:0, horizontal: 1
+				topLeft = "left"; // used for horizontal gradient only
+			} else if (!type.equals("linear-vertical")){
+				throw new IOException("grad():type not understood: use 'linear-vertical', 'linear-horizontal");
+			}
+			if (isBrowser("MSIE")){
+				if (isBrowser("MSIE_10_OR_HIGHER")){
+					result = String.format("background-image: -ms-linear-gradient(top %s, %s, %s)\n"+ topLeft, from, to);
+				} else if (isBrowser("MSIE_8_OR_HIGHER")){ //IE 8 and IE 9
+					result = String.format("-ms-filter: \"progid:DXImageTransform.Microsoft.gradient(startColorstr='%s',endColorstr='%s',GradientType=%d\")",gradType,from, to);
+				} else { // IE 7 or lower
+					result = String.format("filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='%s', EndColorStr='%s' , GradientType=%d)", from, to, gradType );
+				}
+			} else if (isBrowser("FIREFOX")) {
+				result = String.format("background-image: -moz-linear-gradient(top %s, %s, %s);",topLeft, from, to);
+			} else if (isBrowser("WEBKIT")){
+				result = String.format("background-image: -webkit-gradient(linear, left top, %s bottom, to(%s), from(%s)",endDirection, from, to );
+			} else { // All other browsers
+				result = String.format("background-image: linear-gradient(top %s, %s, %s);",topLeft, from, to);
+			}
+
+			return result;
+		}
+		
 		//
 		// replace occurances of @image(dir, filename.extension, width, height, repeat)@ with the CSS for the image 
 		//		as a background-image (or filter for PNG's in IE)
