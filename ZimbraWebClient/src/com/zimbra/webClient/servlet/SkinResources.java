@@ -1656,7 +1656,7 @@ public class SkinResources
 			} else if (isBrowser("FIREFOX")) {
 				result = String.format("background-image: -moz-linear-gradient(top %s, %s, %s);",topLeft, from, to);
 			} else if (isBrowser("WEBKIT")){
-				result = String.format("background-image: -webkit-gradient(linear, left top, %s bottom, to(%s), from(%s)",endDirection, from, to );
+				result = String.format("background-image: -webkit-gradient(linear, left top, %s bottom, to(%s), from(%s))",endDirection, from, to );
 			} else { // All other browsers
 				result = String.format("background-image: linear-gradient(top %s, %s, %s);",topLeft, from, to);
 			}
