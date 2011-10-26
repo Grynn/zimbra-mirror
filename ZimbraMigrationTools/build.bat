@@ -38,7 +38,7 @@ REM remove all old binaries and intermediate files
 rmdir /s /q %BASE%\Win32\
 rmdir /s /q %BASE%\x64\
 
-cd %BASE%\vcproj
+cd %BASE%
 dir *.sln
 
 echo "dbg|Win32"
