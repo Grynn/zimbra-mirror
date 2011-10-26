@@ -162,13 +162,13 @@ public class TreeMail extends AbsTree {
 
 				// FALL THROUGH
 
-//			} else if (option == Button.B_TREE_FOLDER_SYNC) {
-//
-//				optionLocator += " div[id^='SYNC'] td[id$='_title']";
-//				page = null;
-//
-//				// FALL THROUGH
-//
+			} else if (option == Button.B_TREE_FOLDER_GET_EXTERNAL) {
+
+				optionLocator += " div[id^='SYNC'] td[id$='_title']";
+				page = null;
+
+				// FALL THROUGH
+
 //			} else if (option == Button.B_TREE_FOLDER_SYNC_ALL) {
 //
 //				optionLocator += " div[id^='SYNC_ALL'] td[id$='_title']";
