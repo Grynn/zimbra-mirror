@@ -385,31 +385,50 @@ public class CSMigrationwrapper
         }
     }
 
-    public void StartMigration(MigrationAccount Acct, Options importopts,bool isPreview = false)
+    public void StartMigration(MigrationAccount Acct, Options importopts, bool isPreview = false)
     {
-        // GetListofMapiFolders(Acct.Accountname);
+        Type userobject;
+        object userinstance;
+
+        userobject = testAssembly.GetType("Exchange.UserObjectClass");
+        userinstance = Activator.CreateInstance(userobject);
 
         if (!isPreview)
         {
-            string s = userobject.InitializeUser("", "", Acct.AccountID, "MAPI");
-            if (s.Length > 0)
+            ParameterModifier pm = new ParameterModifier(1);
+            pm[0] = true;
+            ParameterModifier[] mods = { pm };
+
+            object[] MyArgs = new object[4];
+            MyArgs[0] = "";
+            MyArgs[1] = "";
+            MyArgs[2] = Acct.AccountID;
+            MyArgs[3] = "MAPI";
+
+            string value = (string)userobject.InvokeMember("InitializeUser",
+                    BindingFlags.InvokeMethod | BindingFlags.Instance | BindingFlags.Public,
+                    null, userinstance, MyArgs, mods, null, null);
+
+
+            if (value.Length > 0)
             {
-                Acct.LastProblemInfo = new ProblemInfo(s, "Error", ProblemInfo.TYPE_ERR);        
+                Acct.LastProblemInfo = new ProblemInfo(value, "Error", ProblemInfo.TYPE_ERR);
                 Acct.TotalNoErrors++;
                 return;
             }
 
-            folderobjectarray = userobject.GetFolderObjects();
-
+            folderobjectarray = (object[])userobject.InvokeMember("GetFolderObjects",
+                   BindingFlags.InvokeMethod | BindingFlags.Instance | BindingFlags.Public,
+                   null, userinstance, null, null, null, null);
             Acct.migrationFolders[0].CurrentCountOFItems = folderobjectarray.Count();
 
             ZimbraAPI api = new ZimbraAPI();
             foreach (dynamic folderobject in folderobjectarray)
             {
-                string path ="";
+                string path = "";
 
                 // FBS NOTE THAT THESE ARE EXCHANGE SPECIFIC.  WE'LL HAVE TO CHANGE THIS GROU GROUPWISE !!!
-                if((folderobject.Name == "Sent Items") && !(importopts.HasFlag(Options.Sent)))
+                if ((folderobject.Name == "Sent Items") && !(importopts.HasFlag(Options.Sent)))
                 {
                     continue;
                 }
@@ -457,21 +476,21 @@ public class CSMigrationwrapper
             long totalCount = 0;
             switch (Acct.Accountnum)
             {
-            case 0:
-                totalCount = 100;
-                break;
-            case 1:
-                totalCount = 200;
-                break;
-            case 2:
-                totalCount = 300;
-                break;
-            case 3:
-                totalCount = 400;
-                break;
-            default:
-                totalCount = 100;
-                break;
+                case 0:
+                    totalCount = 100;
+                    break;
+                case 1:
+                    totalCount = 200;
+                    break;
+                case 2:
+                    totalCount = 300;
+                    break;
+                case 3:
+                    totalCount = 400;
+                    break;
+                default:
+                    totalCount = 100;
+                    break;
             }
             Acct.migrationFolders[0].FolderName = "Contacts";
             Acct.migrationFolders[0].TotalCountOFItems = totalCount;
@@ -497,21 +516,21 @@ public class CSMigrationwrapper
                         totalCount.ToString(), totalCount.ToString()));
             switch (Acct.Accountnum)
             {
-            case 0:
-                totalCount = 700;
-                break;
-            case 1:
-                totalCount = 800;
-                break;
-            case 2:
-                totalCount = 900;
-                break;
-            case 3:
-                totalCount = 1000;
-                break;
-            default:
-                totalCount = 1100;
-                break;
+                case 0:
+                    totalCount = 700;
+                    break;
+                case 1:
+                    totalCount = 800;
+                    break;
+                case 2:
+                    totalCount = 900;
+                    break;
+                case 3:
+                    totalCount = 1000;
+                    break;
+                default:
+                    totalCount = 1100;
+                    break;
             }
             Acct.migrationFolders[0].FolderName = "Mails";
             Acct.migrationFolders[0].TotalCountOFItems = totalCount;
@@ -574,21 +593,21 @@ public class CSMigrationwrapper
                         totalCount.ToString(), totalCount.ToString()));
             switch (Acct.Accountnum)
             {
-            case 0:
-                totalCount = 11;
-                break;
-            case 1:
-                totalCount = 12;
-                break;
-            case 2:
-                totalCount = 13
-                ; break;
-            case 3:
-                totalCount = 14;
-                break;
-            default:
-                totalCount = 10;
-                break;
+                case 0:
+                    totalCount = 11;
+                    break;
+                case 1:
+                    totalCount = 12;
+                    break;
+                case 2:
+                    totalCount = 13
+                    ; break;
+                case 3:
+                    totalCount = 14;
+                    break;
+                default:
+                    totalCount = 10;
+                    break;
             }
             Acct.migrationFolders[0].FolderName = "Rules";
             Acct.migrationFolders[0].TotalCountOFItems = totalCount;
@@ -617,6 +636,7 @@ public class CSMigrationwrapper
                         totalCount.ToString(), totalCount.ToString()));
         }
     }
+
     // This code is for loading the exchange.dll at runtime instead of adding it as a reference.
     // We will use this code after the Com itnerfaces get finalised and no more changes are required for the COM and MAPI libraires.
 
@@ -690,86 +710,5 @@ public class CSMigrationwrapper
         api = new ZimbraAPI();
     }
 
-    public void testStartMigration(MigrationAccount Acct, Options importopts, bool UIflag = false)
-    {
-        Type userobject;
-        object userinstance;
-       
-        userobject = testAssembly.GetType("Exchange.UserObjectClass");
-        userinstance = Activator.CreateInstance(userobject);
-        // GetListofMapiFolders(Acct.Accountname);
-        if (!UIflag)
-        {
-            ParameterModifier pm = new ParameterModifier(1);
-            pm[0] = true;
-            ParameterModifier[] mods = { pm };
-
-            object[] MyArgs = new object[4];
-            MyArgs[0] = "";
-            MyArgs[1] = "";
-            MyArgs[2] = Acct.AccountID;
-            MyArgs[3] = "MAPI";
-
-            string value = (string)userobject.InvokeMember("InitializeUser",
-                    BindingFlags.InvokeMethod | BindingFlags.Instance | BindingFlags.Public,
-                    null, userinstance, MyArgs, mods, null, null);
-
-
-            if (value.Length > 0)
-            {
-                Acct.LastProblemInfo = new ProblemInfo(value, "Error", ProblemInfo.TYPE_ERR);
-                Acct.TotalNoErrors++;
-                return;
-            }
-
-            folderobjectarray = (object[])userobject.InvokeMember("GetFolderObjects",
-                   BindingFlags.InvokeMethod | BindingFlags.Instance | BindingFlags.Public,
-                   null, userinstance, null, null, null, null);
-
-
-
-            Acct.migrationFolders[0].CurrentCountOFItems = folderobjectarray.Count();
-
-            ZimbraAPI api = new ZimbraAPI();
-            foreach (dynamic folderobject in folderobjectarray)
-            {
-                string path = "";
-                // FBS NOTE THAT THESE ARE EXCHANGE SPECIFIC.  WE'LL HAVE TO CHANGE THIS GROU GROUPWISE !!!
-                if ((folderobject.Name == "Sent Items") && !(importopts.HasFlag(Options.Sent)))
-                {
-                    continue;
-                }
-                if ((folderobject.Name == "Deleted Items") && !(importopts.HasFlag(Options.DeletedItems)))
-                {
-                    continue;
-                }
-                if ((folderobject.Name == "Junk E-Mail") && !(importopts.HasFlag(Options.Junk)))
-                {
-                    continue;
-                }
-                ////
-                
-                if (folderobject.Id == 0)
-                {
-                    api.AccountName = Acct.Accountname;
-                    int stat = api.CreateFolder(folderobject.ParentPath);
-                    path = folderobject.ParentPath;
-                }
-
-                if (importopts.HasFlag(Options.Contacts))
-                {
-                    ProcessItems(Acct, folderobject, foldertype.Contacts, api, path);
-                }
-                if (importopts.HasFlag(Options.Mail))
-                {
-                    ProcessItems(Acct, folderobject, foldertype.Mail, api, path);
-                }
-            }
-        }
-
-
-
-
-    }
 }
 }
