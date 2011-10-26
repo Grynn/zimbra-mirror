@@ -76,7 +76,7 @@ DwtControl = function(params) {
 	 * @private
 	 */
 	var parent = this.parent = params.parent;
-	if (parent && !(parent instanceof DwtComposite)) {
+	if (parent && !(parent.isDwtComposite)) {
 		throw new DwtException("Parent must be a subclass of Composite", DwtException.INVALIDPARENT, "DwtControl");
 	}
 
@@ -564,7 +564,7 @@ DwtControl.prototype.dispose =
 function() {
 	if (this._disposed) { return; }
 
-	if (this.parent != null && this.parent instanceof DwtComposite) {
+	if (this.parent && this.parent.isDwtComposite) {
 		this.parent.removeChild(this);
 	}
 	this._elRef = null;
@@ -3264,7 +3264,7 @@ function(event) {
 		content = "";
 	} else if (typeof(tooltip) == "string") {
 		content = tooltip;
-	} else if (tooltip instanceof AjxCallback) {
+	} else if (tooltip.isAjxCallback) {
 		callback = tooltip;
 	} else if (typeof(tooltip) == "object") {
 		content = tooltip.content;

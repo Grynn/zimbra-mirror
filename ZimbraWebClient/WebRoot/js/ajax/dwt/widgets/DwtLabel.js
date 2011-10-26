@@ -64,7 +64,7 @@ DwtLabel = function(params) {
 	params = Dwt.getParams(arguments, DwtLabel.PARAMS);
 	
 	params.className = params.className || "DwtLabel";
-	DwtControl.call(this, params);
+	DwtComposite.call(this, params);
 
 	/**
 	 * The label style. See the constructor for more info.
@@ -87,7 +87,7 @@ DwtLabel = function(params) {
 
 DwtLabel.PARAMS = ["parent", "style", "className", "posStyle", "id", "index"];
 
-DwtLabel.prototype = new DwtControl;
+DwtLabel.prototype = new DwtComposite;
 DwtLabel.prototype.constructor = DwtLabel;
 
 /**

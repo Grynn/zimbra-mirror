@@ -53,16 +53,17 @@ DwtComposite.PARAMS = DwtControl.PARAMS.concat();
 DwtComposite.prototype = new DwtControl;
 DwtComposite.prototype.constructor = DwtComposite;
 
+DwtComposite.prototype.isDwtComposite = true;
+DwtComposite.prototype.toString = function() { return "DwtComposite"; }
+
+
+
 /**
  * Pending elements hash (i.e. elements that have not yet been realized).
  * @private
  */
 DwtComposite._pendingElements = new Object();
 
-DwtComposite.prototype.toString = 
-function() {
-	return "DwtComposite";
-}
 
 /**
  * Disposes of the control. This method will remove the control from under the
