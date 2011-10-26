@@ -1053,10 +1053,10 @@ void Zimbra::MAPI::Util::CreateMimeSubject(IN LPTSTR pSubject, IN UINT codepage,
 #endif
 }
 
-void ReplaceLFWithCRLF(LPSTR pszMimeMsg, UINT mimeLength, LPSTR *ppszNewMsg, UINT *pNewLength)
+void ReplaceLFWithCRLF(LPSTR pszMimeMsg, UINT mimeLength, LPSTR *ppszNewMsg, size_t *pNewLength)
 {
     LPSTR pNewMsg = new CHAR[mimeLength * 2 + 2];
-    UINT nNewLen = 0;
+    size_t nNewLen = 0;
 
     *ppszNewMsg = pNewMsg;
     bool bLastCr = false;
@@ -1086,7 +1086,6 @@ void Zimbra::MAPI::Util::AddBodyToPart(mimepp::BodyPart *pPart, LPSTR pStr, size
         // TRACE( _T("Zimbra::MAPI::Util::AddBodyToPart: No body pStr found"));
         return;
     }
-    void ReplaceLFWithCRLF(LPSTR, UINT, LPSTR *, UINT *);
     LPSTR pBuf = NULL;
     if (bConvertLFToCRLF)
         ReplaceLFWithCRLF(pStr, (UINT)length, &pBuf, &length);

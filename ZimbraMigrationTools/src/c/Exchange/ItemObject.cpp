@@ -331,9 +331,9 @@ STDMETHODIMP CItemObject::GetDataForItemID(VARIANT ItemId,FolderType type, VARIA
     SAFEARRAY *pSA = NULL;
     SAFEARRAYBOUND aDim[2];                     // two dimensional array
     aDim[0].lLbound = 0;
-    aDim[0].cElements =  pIt.size();  
+    aDim[0].cElements =  (ULONG)pIt.size();  
     aDim[1].lLbound = 0;
-    aDim[1].cElements = pIt.size();                      // rectangular array
+    aDim[1].cElements = (ULONG)pIt.size();      // rectangular array
     pSA = SafeArrayCreate(VT_BSTR, 2, aDim);    // again, 2 dimensions
     long aLong[2];
     if (pSA != NULL)

@@ -600,10 +600,10 @@ bool MAPIMessage::UTF8EncBody(LPTSTR *ppBody, unsigned int &nTextChars)
     if ((*ppBody == NULL) || !(nLen))
         return false;
     int ctbuf = WideCharToMultiByte(
-        CodePageId(), 0, (LPCWSTR)*ppBody, nLen, NULL, 0, NULL, NULL);
+        CodePageId(), 0, (LPCWSTR)*ppBody, (int)nLen, NULL, 0, NULL, NULL);
     tBuff = new char[(ctbuf + 5) * sizeof (WCHAR)];
     ZeroMemory(tBuff, (ctbuf + 5) * sizeof (WCHAR));
-    WideCharToMultiByte(CodePageId(), 0, (LPCWSTR)*ppBody, nLen, tBuff, ctbuf, NULL, NULL);
+    WideCharToMultiByte(CodePageId(), 0, (LPCWSTR)*ppBody, (int)nLen, tBuff, ctbuf, NULL, NULL);
     // Zimbra::Rpc::Connection::LogRawText(tBuff,ctbuf,"EXFROMHTML_");
     delete[] tBuff;
     MAPIFreeBuffer(pTempBuff);

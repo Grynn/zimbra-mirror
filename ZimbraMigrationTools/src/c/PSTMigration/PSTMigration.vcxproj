@@ -206,7 +206,7 @@
       <ExceptionHandling>Async</ExceptionHandling>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>comsupp.lib;ActiveDS.lib;adsiid.lib;mapi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>comsupp.lib;ActiveDS.lib;adsiid.lib;mapi32.lib;Rpcrt4.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
@@ -255,7 +255,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <TargetMachine>MachineX86</TargetMachine>
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
-      <AdditionalDependencies>comsupp.lib;ActiveDS.lib;adsiid.lib;mapi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>comsupp.lib;ActiveDS.lib;adsiid.lib;mapi32.lib;Rpcrt4.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
     </Link>
     <Midl>
@@ -303,7 +303,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <TargetMachine>MachineX86</TargetMachine>
-      <AdditionalDependencies>comsupp.lib;ActiveDS.lib;adsiid.lib;mapi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>comsupp.lib;ActiveDS.lib;adsiid.lib;mapi32.lib;Rpcrt4.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <LinkTimeCodeGeneration>
       </LinkTimeCodeGeneration>
@@ -350,7 +350,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
-      <AdditionalDependencies>comsupp.lib;ActiveDS.lib;adsiid.lib;mapi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>comsupp.lib;ActiveDS.lib;adsiid.lib;mapi32.lib;Rpcrt4.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
     </Link>
     <Midl>
@@ -396,7 +396,7 @@
       <SubSystem>Console</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <AdditionalDependencies>comsupp.lib;ActiveDS.lib;adsiid.lib;mapi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>comsupp.lib;ActiveDS.lib;adsiid.lib;mapi32.lib;Rpcrt4.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <LinkTimeCodeGeneration>
       </LinkTimeCodeGeneration>
