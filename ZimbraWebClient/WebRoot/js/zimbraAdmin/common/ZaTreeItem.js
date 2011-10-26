@@ -139,11 +139,12 @@ ZaTreeItemData = function(params) {
     this.canShowOnRoot = (params.canShowOnRoot === undefined? true : params.canShowOnRoot) ;
     this.mappingId = params.mappingId;
     this.callback = params.callback;
+    this.buildPath = (params.buildPath ? params.buildPath : undefined);
     this._data = {};
     this.childrenData = new AjxVector();
 }
 
-ZaTreeItemData.PARAMS = ["parent", "id", "text", "image", "index", "count", "mappingId", "callback", "relatedObject", "recentObject", "type", "path", "canShowOnRoot", "forceNode", "isShowHistory"];
+ZaTreeItemData.PARAMS = ["parent", "id", "text", "image", "index", "count", "mappingId", "callback", "relatedObject", "recentObject", "type", "path", "canShowOnRoot", "forceNode", "isShowHistory", "buildPath"];
 
 ZaTreeItemData.prototype.addChild =
 function(child, index) {

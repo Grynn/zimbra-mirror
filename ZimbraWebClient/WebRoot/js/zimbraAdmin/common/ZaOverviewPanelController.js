@@ -201,6 +201,7 @@ function () {
                                         parent:savedSearchPath,
                                         id:ZaId.getTreeItemId(ZaId.PANEL_APP,"currentSearch", null,ix+1),
                                         text: savedSearchList[ix].name,
+                                        buildPath: this.getSearchItemPath(),
                                         mappingId: ZaZimbraAdmin._SEARCH_HOME_VIEW});
                     ti1.setData("name", savedSearchList[ix].name);
                     ti1.setData("query", savedSearchList[ix].query); //keep the query information here
@@ -1169,6 +1170,7 @@ function() {
                                 canShowOnRoot: false,
                                 id:ZaId.getTreeItemId(ZaId.PANEL_APP,"searchOption",null, i + 1),
                                 mappingId: ZaZimbraAdmin._SEARCH_FILTER_VIEW,
+                                buildPath: this.getSearchItemPath(),
                                 text: searchOptionTreeItem[i].text });
         ti.setData("filterType", searchOptionTreeItem[i].filterType);
         tree.addTreeItemData(ti);
@@ -1194,6 +1196,7 @@ function() {
                                         parent:savedSearchPath,
                                         id:ZaId.getTreeItemId(ZaId.PANEL_APP,"currentSearch", null,ix+1),
                                         text: savedSearchList[ix].name,
+                                        buildPath: this.getSearchItemPath(),
                                         mappingId: ZaZimbraAdmin._SEARCH_HOME_VIEW});
                     ti1.setData("name", savedSearchList[ix].name);
                     ti1.setData("query", savedSearchList[ix].query); //keep the query information here
@@ -1542,9 +1545,13 @@ ZaOverviewPanelController.newSearchListTreeListener = function (ev) {
 	if (ev.detail == DwtTree.ITEM_SELECTED) {
 		//if(window.console && window.console.log) console.debug("Run the saved search ...") ;
         if (query) {
+            /*
+            TODO:
+            Improve it in D3
             var searchText = ZaMsg.OVP_search + " : " + name;
             var newPath = tree.renameTreeItem(this.getSearchItemPath(), searchText);
             this.setSearchItemPath(newPath);
+            */
             searchField.setCurrentSavedSearch({name: name, query: query});
 		    searchField.selectSavedSearch(name, query);
         } else {

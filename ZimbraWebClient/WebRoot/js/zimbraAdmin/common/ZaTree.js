@@ -322,7 +322,13 @@ ZaTree.prototype.removeAllChild = function (path) {
 
     var treeItem = this.getTreeItemByPath (path);
     if (treeItem) {
-        treeItem.removeChildren();
+        var removeTi = [];
+        removeTi = treeItem.getChildren();
+        for (var i = 0; i < removeTi.length; i++) {
+            treeItem.removeChild(removeTi[i]);
+            removeTi[i] = null;
+        }
+        removeTi = [];
     }
 
     treeItemData.childrenData.removeAll();

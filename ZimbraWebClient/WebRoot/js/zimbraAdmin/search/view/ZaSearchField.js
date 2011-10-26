@@ -218,8 +218,13 @@ function(evt) {
     if (appNewUI) {
         var overviewController =  ZaZimbraAdmin.getInstance().getOverviewPanelController();
         var tree = overviewController.getOverviewPanel().getFolderTree();
+        /*
+        It will introduce many issues when renaming for this items.
+        Fix it in future
         var searchText = ZaMsg.OVP_search;
         var newPath = tree.renameTreeItem(overviewController.getSearchItemPath(), searchText);
+        */
+        var newPath = overviewController.getSearchItemPath();
         overviewController.setSearchItemPath(newPath);
         tree.setSelectionByPath(newPath);
         return;
