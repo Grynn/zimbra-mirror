@@ -39,7 +39,6 @@ namespace MVVM.ViewModel
             this.GetIntroUserMigCommand = new ActionCommand(this.GetIntroUserMig, () => true);
             this.GetIntroServerMigCommand = new ActionCommand(this.GetIntroServerMig, () => true);
             this.NextCommand = new ActionCommand(this.Next, () => true);
-            mw = new CssLib.CSMigrationwrapper();
         }
 
         public UsersViewModel GetUsersViewModel()
@@ -109,6 +108,8 @@ namespace MVVM.ViewModel
 
         public void Next()
         {
+            mw = new CssLib.CSMigrationwrapper();
+
             // Get data to initialize the profile combo boxes
             mw.MailClient = "MAPI";
             mw.InitializeInterop();
