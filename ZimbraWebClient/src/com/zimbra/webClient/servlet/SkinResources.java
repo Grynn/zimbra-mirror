@@ -1627,8 +1627,8 @@ public class SkinResources
 		// default type is linear-vertical
 		//
 		private String outputGrad(Stack<String> stack, String[] params) throws IOException {
-			String from = (params.length > 0 ? params[0] : null);
-			String to = (params.length > 1 ? params[1] : null);
+			String from = (params.length > 0 ? this.colorToColorString(this.getColor(null, params[0])) : null);
+			String to = (params.length > 1 ? this.colorToColorString(this.getColor(null, params[1])) : null);
 			String type = (params.length > 2 ? params[2] : "linear-vertical");
 			String endDirection = "bottom";
 			String topLeft = "";
