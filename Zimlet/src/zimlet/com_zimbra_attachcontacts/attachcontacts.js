@@ -167,12 +167,15 @@ AttachContactsZimlet.prototype._contactListSendListener = function() {
 
 AttachContactsZimlet.prototype._getContactListIds = function() {
 	var controller = appCtxt.getApp(ZmApp.CONTACTS).getContactListController();
-	var items = controller.getListView().getSelection();
 	this.contactIdsToAttach = [];
-	for (var i=0; i<items.length; i++) {
-        if (!items[i].isGroup()) {
-		    this.contactIdsToAttach.push(items[i].id);
-        }
+	var listView = controller.getListView();
+	if (listView) {
+		var items = listView.getSelection();
+		for (var i=0; i<items.length; i++) {
+			if (!items[i].isGroup()) {
+				this.contactIdsToAttach.push(items[i].id);
+			}
+		}
 	}
 	return this.contactIdsToAttach;
 };
