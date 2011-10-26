@@ -15,19 +15,18 @@ public class DialogCreateBriefcaseFolder extends AbsDialog {
 
 	public static class Locators {
 
-		public static final String zDialogId = "ChooseFolderDialog";
+		public static final String zDialogId = "CreateNewFolderDialog";
 
-		public static final String zTitleId = "ChooseFolderDialog_title";
+		public static final String zTitleId = "CreateNewFolderDialog_title";
 
-		public static final String zDialogContentId = "ChooseFolderDialog_content";
+		public static final String zDialogContentId = "CreateNewFolderDialog_content";
 
 		// TODO: Tree
-		public static final String zDialogInputId = "ChooseFolderDialog_inputDivId";
+		public static final String zDialogInputId = "CreateNewFolderDialog_name";
 		public static final String zDialogInputLocator = "css=div[id='"
-				+ zDialogId + "'] div[id='" + zDialogInputId
-				+ "'] > div > input";
+				+ zDialogId + "'] input[id='" + zDialogInputId + "']";
 
-		public static final String zDialogButtonsId = "ChooseFolderDialog_buttons";
+		public static final String zDialogButtonsId = "CreateNewFolderDialog_buttons";
 
 	}
 

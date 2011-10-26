@@ -21,12 +21,17 @@ import com.zimbra.qa.selenium.projects.desktop.ui.*;
 
 public class TreeBriefcase extends AbsTree {
 
-	public static class Locators {
+   public final static String stringToReplace = "<TREE_ITEM>";
+
+   public static class Locators {
+	   public final static String zTreeItems = new StringBuffer("css=div[id='zovc__main_Briefcase'] td:contains('").
+            append(stringToReplace).append("')").toString();
 		public static final String briefcaseListView = "css=[id='zl__BDLV__rows']";
 		public static final String briefcaseTreeView = "css=[id*=zti__main_Briefcase__";
 		public static final String briefcaseTreeView_Desktop = "css=td[id*='main_Briefcase']";
 		public static final String zNewTagTreeMenuItem = "css=td[id$=_left_icon]>[class=ImgNewTag]";
 		public static final String zNewFolderTreeMenuItem = "css=tr[id=POPUP_NEW_BRIEFCASE]:contains('New Folder')";
+		public static final String zNewBriefcaseTreeMenuItem = "css=tr[id=POPUP_NEW_BRIEFCASE]:contains('New Briefcase')";
 		public static final String zRenameTagTreeMenuItem = "css=td[id$=_left_icon]>[class=ImgRename]";
 		public static final String zDeleteTreeMenuItem = "css=td[id$=_left_icon]>[class=ImgDelete]";
 		//public static final String zDeleteTreeMenuItem = "css=div[id='DELETE_WITHOUT_SHORTCUT'] tr[id^='POPUP_DELETE']:contains(Delete)";
@@ -61,12 +66,24 @@ public class TreeBriefcase extends AbsTree {
                + MyApplication.zGetActiveAccount().EmailAddress + "']"
                + ":contains('" + item.getName() + "')";
 		}else if (item instanceof FolderItem) {
-			actionLocator = Locators.briefcaseTreeView_Desktop + "[id*='"
-		         + MyApplication.zGetActiveAccount().EmailAddress + "']"
-		         + "[id$='" + ((FolderItem) item).getId()
-		         + "_imageCell']";
-			//actionLocator = "zti__main_Briefcase__"
-			//	+ ((FolderItem) item).getId() + "_textCell";
+		   FolderItem folder = (FolderItem) item;
+
+		   String emailAddress = folder.isDesktopClientLocalFolder() ? 
+		         ZimbraAccount.clientAccountName :
+		            MyApplication.zGetActiveAccount().EmailAddress;
+
+		   if (folder.getName().equals("USER_ROOT")) {
+		      //TODO: Bug 65039
+		      actionLocator = Locators.zTreeItems.replace(TreeBriefcase.stringToReplace,
+		            "Local Folders");
+
+		   } else {
+		      actionLocator = Locators.briefcaseTreeView_Desktop + "[id*='"
+		            + emailAddress + "']"
+		            + "[id$='" + ((FolderItem) item).getId()
+		            + "_imageCell']";
+
+		   }
 
 		} else {
 			throw new HarnessException("Must use IItem as argument, but was "
@@ -105,8 +122,13 @@ public class TreeBriefcase extends AbsTree {
 						((AppAjaxClient) MyApplication).zPageBriefcase);
 			}
 		}else if (option == Button.B_TREE_NEWFOLDER) {
+		   FolderItem folder = (FolderItem) item;
 
-			optionLocator = Locators.zNewFolderTreeMenuItem;
+		   if (folder.getName().equals("USER_ROOT")) {
+		      optionLocator = Locators.zNewBriefcaseTreeMenuItem;
+		   } else {
+		      optionLocator = Locators.zNewFolderTreeMenuItem;		      
+		   }
 
 			page = new DialogCreateBriefcaseFolder(MyApplication,
 					((AppAjaxClient) MyApplication).zPageBriefcase);
@@ -181,8 +203,14 @@ public class TreeBriefcase extends AbsTree {
                + MyApplication.zGetActiveAccount().EmailAddress + "']"
                + ":contains('" + item.getName() + "')";
 		} else if (item instanceof FolderItem) {
+		   FolderItem folder = (FolderItem) item;
+
+		   String emailAddress = folder.isDesktopClientLocalFolder() ?
+		         ZimbraAccount.clientAccountName :
+		            MyApplication.zGetActiveAccount().EmailAddress;
+
 		   locator = Locators.briefcaseTreeView_Desktop + "[id*='"
-		         + MyApplication.zGetActiveAccount().EmailAddress + "']"
+		         + emailAddress + "']"
 		         + "[id$='" + ((FolderItem) item).getId()
 		         + "_imageCell']";
 
