@@ -1127,7 +1127,6 @@ function () {
     ];
 }
 
-ZaSearchBuilderController.currentFilterDilaog = "";
 ZaSearchBuilderController.searchFilterTreeListener =
 function (ev) {
     var filterType = ev.item.getData("filterType");
@@ -1162,16 +1161,21 @@ function (ev) {
         break;
     }
     if (dialog) {
-        if (ZaSearchBuilderController.currentFilterDilaog) {
-            ZaSearchBuilderController.currentFilterDilaog.popdown();
-        }
-        ZaSearchBuilderController.currentFilterDilaog  = dialog;
+        ZaSearchBuilderController.currentPopupDialog  = dialog;
         dialog.popup(loc);
+	    var omem = DwtOutsideMouseEventMgr.INSTANCE;
+	    var omemParams = {
+		    id:					"ZaOptionView",
+		    obj:				dialog,
+		    outsideListener:	ZaSearchBuilderController.getOutsideListener()
+	    }
+	    omem.startListening(omemParams);
     }
 }
 
 ZaSearchBuilderController.filterDialogSet = {};
 ZaSearchBuilderController.currentPopupDialog = undefined;
+ZaSearchBuilderController.outSideListener = undefined;
 ZaSearchBuilderController.prototype.getFilterDialogArray = function () {
     var result = [];
     for (var filterType in ZaSearchBuilderController.filterDialogSet) {
@@ -1179,6 +1183,22 @@ ZaSearchBuilderController.prototype.getFilterDialogArray = function () {
             result.push(ZaSearchBuilderController.filterDialogSet[filterType]);
     }
     return result;
+}
+
+ZaSearchBuilderController.getOutsideListener = function () {
+    if (!ZaSearchBuilderController.outSideListener) {
+        ZaSearchBuilderController.outSideListener = new AjxListener(null, ZaSearchBuilderController.outsideListener);
+    }
+    return ZaSearchBuilderController.outSideListener;
+}
+
+ZaSearchBuilderController.outsideListener = function () {
+    if(ZaSearchBuilderController.currentPopupDialog) {
+        ZaSearchBuilderController.currentPopupDialog.popdown();
+        var omem = DwtOutsideMouseEventMgr.INSTANCE;
+        omem.stopListening({id:"ZaOptionView", obj:ZaSearchBuilderController.currentPopupDialog});
+        ZaSearchBuilderController.currentPopupDialog = undefined;
+    }
 }
 
 ZaSearchBuilderController.prototype.getFilterDialogByType =
@@ -1198,7 +1218,6 @@ function (filterType) {
         }
         ZaSearchBuilderController.filterDialogSet[filterType] = new ZaSearchOptionDialog(ZaApp.getInstance().getAppCtxt().getShell(), filterType, w, h);
         ZaSearchBuilderController.filterDialogSet[filterType].registerCallback(DwtDialog.OK_BUTTON, this.filterOKListener, this, filterType);
-        ZaSearchBuilderController.filterDialogSet[filterType].addPopdownListener(new AjxListener(this, this.popdownHookListner));
     }
     return ZaSearchBuilderController.filterDialogSet[filterType];
 }
@@ -1208,9 +1227,7 @@ function (filterType) {
     var dialog = this.getFilterDialogByType(filterType);
     dialog.popdown();
     dialog._controller.setNewQuery();
-}
-
-ZaSearchBuilderController.prototype.popdownHookListner =
-function () {
-    ZaSearchBuilderController.currentFilterDilaog = undefined;
+    var omem = DwtOutsideMouseEventMgr.INSTANCE;
+    omem.stopListening({id:"ZaOptionView", obj:dialog});
+    ZaSearchBuilderController.currentPopupDialog = undefined;
 }
