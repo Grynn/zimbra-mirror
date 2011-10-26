@@ -247,11 +247,37 @@ public class SeparateWindowFormMailNew extends AbsSeparateWindow {
 					return;
 
 				} else if (frames == 1) {
+					
 					// //
 					// HTML compose
 					// //
+					try {
 
-					sType("css=iframe[id$='_content_ifr']", "css=html body", value);
+						sSelectFrame("index=0"); // iframe index is 0 based
+
+						locator = "css=body[id='tinymce']";
+
+						if (!sIsElementPresent(locator))
+							throw new HarnessException("Unable to locate compose body");
+
+						sFocus(locator);
+						zClick(locator);
+
+						/*
+						 * Oct 25, 2011: The new TinyMCE editor broke sType().  Use zKeyboard instead,
+						 * however, it is preferred to use sType() if possible, but I can't find a
+						 * solution right now. 
+						 */
+						// sType("css=iframe[id$='_content_ifr']", "css=html body", value);
+
+						// this.sType(locator, value);
+						zTypeCharacters(value);
+						
+					} finally {
+						// Make sure to go back to the original iframe
+						this.sSelectFrame("relative=top");
+
+					}
 
 					return;
 

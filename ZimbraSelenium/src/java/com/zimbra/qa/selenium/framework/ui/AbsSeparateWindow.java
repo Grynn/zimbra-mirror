@@ -130,6 +130,21 @@ public abstract class AbsSeparateWindow extends AbsPage {
 		return (text);
 	}
 
+	public void sSelectFrame(String locator) throws HarnessException {
+		logger.info(myPageName() + " sSelectFrame("+ locator +")");
+	
+		try {
+			super.sSelectWindow(this.DialogWindowID);
+			changeFocus();
+
+			super.sSelectFrame(locator);
+		
+		} finally {
+			super.sSelectWindow(MainWindowID);
+			super.sWindowFocus();
+		}
+		
+	}
 	public int sGetCssCount(String css) throws HarnessException {
 		logger.info(myPageName() + " sGetCssCount("+ css +")");
 		
