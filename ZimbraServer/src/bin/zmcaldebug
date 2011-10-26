@@ -1,0 +1,529 @@
+#!/usr/bin/perl -w
+# 
+# ***** BEGIN LICENSE BLOCK *****
+# Zimbra Collaboration Suite Server
+# Copyright (C) 2011 Zimbra, Inc.
+# 
+# The contents of this file are subject to the Zimbra Public License
+# Version 1.3 ("License"); you may not use this file except in
+# compliance with the License.  You may obtain a copy of the License at
+# http://www.zimbra.com/license.
+# 
+# Software distributed under the License is distributed on an "AS IS"
+# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
+# ***** END LICENSE BLOCK *****
+# 
+
+# Script for collecting data useful for debugging calendar problems
+
+use strict;
+use Getopt::Long;
+use IPC::Open2;
+use FileHandle;
+use File::Copy;
+
+sub printMsg($$) {
+    my ($handle, $msg) = @_;
+    print $msg;
+    print $handle $msg;
+}
+
+sub getAdminUserPasswd() {
+    my ($user, $passwd);
+    open(LC, "zmlocalconfig -s zimbra_ldap_user zimbra_ldap_password |")
+        or die "can't invoke zmlocalconfig: $!";
+    my $line;
+    while (defined($line = <LC>)) {
+        chomp($line);
+        my ($key, $val) = split(/ = /, $line, 2);
+	if ($key eq 'zimbra_ldap_user') {
+            $user = $val;
+	} elsif ($key eq 'zimbra_ldap_password') {
+            $passwd = $val;
+        }
+    }
+    close(LC);
+    return ($user, $passwd);
+}
+
+sub getAuthRequest($$) {
+    my ($user, $password) = @_;
+    my $req = <<_REQUEST_;
+<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope">
+  <soap:Header>
+    <context xmlns="urn:zimbra">
+      <authToken/>
+      <nosession/>
+      <userAgent name="$0"/>
+    </context>
+  </soap:Header>
+  <soap:Body>
+    <AuthRequest xmlns="urn:zimbraAdmin">
+      <name>$user</name>
+      <password>$password</password>
+    </AuthRequest>
+  </soap:Body>
+</soap:Envelope>
+_REQUEST_
+    return $req;
+}
+
+sub makeAuthRequest($$$) {
+    my ($hostname, $port, $req) = @_;
+    my $url = "https://$hostname:$port/service/admin/soap/AuthRequest";
+    open2(\*COUT, \*CIN, "curl -s -k -X POST -T - '$url'")
+        or die "can't invoke curl: $!";
+    print CIN $req;
+    close(CIN);
+    my $line;
+    my $authToken;
+    while (defined($line = <COUT>)) {
+        chomp($line);
+        if ($line =~ /<authToken>\s*([^<>\s]+)\s*<\/authToken>/) {
+            $authToken = $1;
+            last;
+        }
+    }
+    close(COUT);
+    return $authToken;
+}
+
+sub getMainEmailAddress($) {
+    my $email = shift;
+    my $mainEmail = $email;
+    my $attr = 'zimbraMailDeliveryAddress';
+    my $cmd = "zmprov -l ga $email $attr";
+    open(ZMPROV, "$cmd |") or die "can't invoke zmprov: $!";
+    my $line;
+    while (defined($line = <ZMPROV>)) {
+        chomp($line);
+        if ($line =~ /^$attr: (.+)$/) {
+            $mainEmail = $1;
+            last;
+        }
+    }
+    close(ZMPROV);
+    return $mainEmail;
+}
+
+sub queryMboxAndGroupIds($) {
+    my $email = shift;
+    my ($mboxId, $groupId);
+    my $mainEmail = getMainEmailAddress($email);
+    if (!defined($mainEmail)) {
+        die "can't determine main email address for $email";
+    }
+    my $query = "SELECT id, group_id FROM zimbra.mailbox WHERE comment='$mainEmail'";
+    my $cmd = "mysql -A zimbra -e \"$query\" -s --skip-column-names";
+    open(MYSQL, "$cmd |") or die "can't invoke $cmd: $!";
+    my $line;
+    if (defined($line = <MYSQL>)) {
+        chomp($line);
+        if ($line =~ /^(\d+)\s+(\d+)$/) {
+            ($mboxId, $groupId) = ($1, $2);
+        }
+    }
+    close(MYSQL);
+    if (!defined($mboxId) || !defined($groupId)) {
+        die "can't get mailbox and group id for $email";
+    }
+    return ($mboxId, $groupId, $mainEmail);
+}
+
+sub queryGroupId($) {
+    my $mboxId = shift;
+    my ($groupId, $email);
+    my $query = "SELECT group_id, comment FROM zimbra.mailbox WHERE id=$mboxId";
+    my $cmd = "mysql -A zimbra -e \"$query\" -s --skip-column-names";
+    open(MYSQL, "$cmd |") or die "can't invoke $cmd: $!";
+    my $line;
+    if (defined($line = <MYSQL>)) {
+        chomp($line);
+        if ($line =~ /^(\d+)\s+([^\s]+)$/) {
+            ($groupId, $email) = ($1, $2);
+        }
+    }
+    close(MYSQL);
+    if (!defined($groupId) || !defined($email)) {
+        die "can't get group id and email for mailbox $mboxId";
+    }
+    return ($groupId, $email);
+}
+
+sub getCalItemIdAndSubjectFromUID($$$) {
+    my ($mboxId, $groupId, $uid) = @_;
+    my ($calItemId, $subject);
+    my $query = "SELECT appt.item_id, mi.subject FROM mboxgroup$groupId.appointment appt, mboxgroup$groupId.mail_item mi WHERE appt.mailbox_id=$mboxId AND appt.uid='$uid' AND mi.mailbox_id=$mboxId AND mi.id=appt.item_id";
+    my $cmd = "mysql -A zimbra -e \"$query\" -s --skip-column-names";
+    open(MYSQL, "$cmd |") or die "can't invoke $cmd: $!";
+    my $line;
+    if (defined($line = <MYSQL>)) {
+        chomp($line);
+        if ($line =~ /^(\d+)\s+(.+)$/) {
+            ($calItemId, $subject) = ($1, $2);
+        }
+    }
+    close(MYSQL);
+    if (!defined($calItemId) || !defined($subject)) {
+        die "can't get calendar item id and subject for UID \"$uid\"";
+    }
+    return ($calItemId, $subject);
+}
+
+sub parseRow($;$) {
+    my ($row, $numCols) = @_;
+    $row =~ s/^\|\s*//;    # remove leading "|"
+    $row =~ s/\s*\|\s*$//; # remove trailing "|"
+    if (defined($numCols)) {
+        return split(/\s*\|\s*/, $row, $numCols);
+    } else {
+        return split(/\s*\|\s*/, $row);
+    }
+}
+
+sub makeRowHash($$) {
+    my ($nameAref, $valAref) = @_;
+    my %hash;
+    my $numCols = scalar(@$nameAref);
+    for (my $i = 0; $i < $numCols; ++$i) {
+        $hash{$nameAref->[$i]} = $valAref->[$i];
+    }
+    return \%hash;
+}
+
+sub runQuery($) {
+    my $query = shift;
+    my $cmd = "mysql -A zimbra -e \"$query\" -t";
+    open(MYSQL, "$cmd |") or die "can't invoke $cmd: $!";
+    my $queryOutput = "sql> $query;\n";
+    my @colNames;
+    my $numCols;
+    my @rows;
+    my $line;
+    while (defined($line = <MYSQL>)) {
+        chomp($line);
+        $queryOutput .= "$line\n";
+        if ($line =~ /^\|/) {
+            if (!defined($numCols)) {
+                @colNames = parseRow($line);
+                $numCols = scalar(@colNames);
+            } else {
+                my @fields = parseRow($line, $numCols);
+                my $rowHref = makeRowHash(\@colNames, \@fields);
+                push(@rows, $rowHref);
+            }
+        }
+    }
+    close(MYSQL);
+    return ($queryOutput, \@rows);
+}
+
+sub queryMailItemTableBySubject($$$$) {
+    my ($mboxId, $groupId, $subject, $dumpster) = @_;
+    my $table = 'mail_item';
+    $table .= '_dumpster' if $dumpster;
+    my $query = "SELECT id, type, folder_id, from_unixtime(date) as date, from_unixtime(change_date) as change_date, mod_metadata, mod_content, size, sender, subject, name FROM mboxgroup$groupId.$table WHERE mailbox_id=$mboxId AND subject LIKE '\%$subject\%' ORDER BY mailbox_id, id";
+    return runQuery($query);
+}
+
+sub queryAppointmentTableByItemIds($$$$) {
+    my ($mboxId, $groupId, $itemIdsAref, $dumpster) = @_;
+    my $table = 'appointment';
+    $table .= '_dumpster' if $dumpster;
+    my $ids = join(', ', @$itemIdsAref);
+    my $query = "SELECT item_id, uid, start_time, end_time FROM mboxgroup$groupId.$table WHERE mailbox_id=$mboxId AND item_id IN ($ids) ORDER BY mailbox_id, item_id";
+    return runQuery($query);
+}
+
+sub queryAppointmentTableBySubject($$$$) {
+    my ($mboxId, $groupId, $subject, $dumpster) = @_;
+    my ($apptTable, $miTable) = ('appointment', 'mail_item');
+    if ($dumpster) {
+        $apptTable .= '_dumpster';
+        $miTable .= '_dumpster';
+    }
+    my $query = "SELECT item_id, uid, start_time, end_time FROM mboxgroup$groupId.$apptTable WHERE mailbox_id=$mboxId AND item_id IN (SELECT id FROM mboxgroup$groupId.$miTable WHERE mailbox_id=$mboxId AND type IN (11, 15) AND subject LIKE '\%$subject\%') ORDER BY mailbox_id, item_id";
+    return runQuery($query);
+}
+
+sub parseBlobList($$) {
+    my ($metaDumpFile, $logger) = @_;
+    my @blobs;
+    my $rc = open(META, "< $metaDumpFile");
+    if (!$rc) {
+        printMsg($logger, "ERROR: can't open $metaDumpFile: $!\n");
+        return @blobs;
+    }
+    my $line;
+    while (defined($line = <META>)) {
+        chomp($line);
+        if ($line =~ /^\[Blob Path\]$/i) {
+            my $path = <META>;
+            if (defined($path)) {
+                chomp($path);
+                if ($path ne '') {
+                    printMsg($logger, "  metadata mentions blob $path\n");
+                    push(@blobs, $path);
+                }
+            }
+        }
+    }
+    close(META);
+    return @blobs;
+}
+
+sub usage(;$) {
+    my $msg = shift;
+    print STDERR "$msg\n" if defined($msg);
+    my $prog = $0;
+    if ($prog =~ /\/([^\/]+)$/) {
+        $prog = $1;
+    }
+    print STDERR <<_USAGE_;
+Usage: $prog --mailbox <mailbox id or email> --subject <subject substring> --outdir <output directory>
+       $prog --mailbox <mailbox id or email> --uid <UID> --outdir <output directory>
+
+Collects various calendar debugging data for the given subject or UID.
+_USAGE_
+    exit(1);
+}
+
+
+#
+# main
+#
+
+my ($mbox, $subject, $uid, $outdir);
+my $optResult = GetOptions("mailbox=s" => \$mbox,
+                           "subject=s" => \$subject,
+                           "uid=s"     => \$uid,
+                           "outdir=s"  => \$outdir);
+if (!$optResult || !defined($mbox) ||
+    (!defined($subject) && !defined($uid)) ||
+    (defined($subject) && defined($uid)) ||
+    !defined($outdir)) {
+    usage();
+}
+if (!(-d $outdir) || !(-w $outdir)) {
+    usage("can't find output directory $outdir");
+}
+
+
+# Get admin auth token for use later.
+my ($user, $pwd) = getAdminUserPasswd();
+my $request = getAuthRequest($user, $pwd);
+my $adminAuthToken = makeAuthRequest('localhost', '7071', $request);
+if (!defined($adminAuthToken)) {
+    print STDERR "admin auth failed\n";
+    exit(1);
+}
+
+
+my $out = FileHandle->new;
+my $outfile = "$outdir/output.txt";
+$out->open("> $outfile") or die "can't open output file $outfile: $!";
+if (defined($subject)) {
+    printMsg($out, "Args: --mailbox $mbox --subject \"$subject\" --outdir $outdir\n");
+} else {
+    printMsg($out, "Args: --mailbox $mbox --uid $uid --outdir $outdir\n");
+}
+my $date = `date`;
+chomp($date);
+printMsg($out, "Date: $date\n");
+my $hostname = `hostname`;
+chomp($hostname);
+printMsg($out, "Hostname: $hostname\n");
+printMsg($out, "\n\n");
+
+
+printMsg($out, "# Looking up mailbox id and group id\n");
+my ($mboxId, $groupId, $email);
+if ($mbox =~ /^\d+$/) {
+    $mboxId = $mbox;
+    ($groupId, $email) = queryGroupId($mboxId);
+} else {
+    ($mboxId, $groupId, $email) = queryMboxAndGroupIds($mbox);
+}
+printMsg($out, "mailbox id = $mboxId, group = $groupId, email = $email\n");
+printMsg($out, "\n\n");
+
+
+printMsg($out, "# Getting user attributes\n");
+my $zmprovOut = "$outdir/zmprov-ga.txt";
+my $rc = system("zmprov -l ga $email > $zmprovOut");
+if ($rc != 0) {
+    printMsg($out, "ERROR: command failed: $?\n");
+    die;
+}
+printMsg($out, "saved in $zmprovOut\n");
+printMsg($out, "\n\n");
+
+
+# UID and subject are mutually exclusive.  Look up item id and subject if
+# we're starting with the UID.
+if (defined($uid)) {
+    printMsg($out, "# Looking up calendar item id and subject from UID\n");
+    my $itemId;
+    ($itemId, $subject) = getCalItemIdAndSubjectFromUID($mboxId, $groupId, $uid);
+    printMsg($out, "item id = $itemId, subject = \"$subject\"\n");
+    printMsg($out, "\n\n");
+}
+
+
+my ($queryOutput, $miRows, $miRowsDumpster, $apptRows, $apptRowsDumpster);
+
+printMsg($out, "# Items containing subject substring \"$subject\"\n\n");
+($queryOutput, $miRows) = queryMailItemTableBySubject($mboxId, $groupId, $subject, 0);
+printMsg($out, $queryOutput);
+# Get appointment/task ids.
+my @calItemIds;
+foreach my $row (@$miRows) {
+    my $type = $row->{'type'};
+    if ($type == 11 || $type == 15) {
+        push(@calItemIds, $row->{'id'});
+    }
+}
+printMsg($out, "(" . scalar(@$miRows) . " rows returned)\n");
+printMsg($out, "\n\n");
+if (scalar(@calItemIds) > 0) {
+    printMsg($out, "# Calendar items " . join(', ', @calItemIds) . "\n\n");
+    ($queryOutput, $apptRows) = queryAppointmentTableByItemIds($mboxId, $groupId, \@calItemIds, 0);
+    printMsg($out, $queryOutput);
+    printMsg($out, "(" . scalar(@$apptRows) . " rows returned)\n");
+    printMsg($out, "\n\n");
+}
+
+
+printMsg($out, "# Items in dumpster containing subject substring \"$subject\"\n\n");
+($queryOutput, $miRowsDumpster) = queryMailItemTableBySubject($mboxId, $groupId, $subject, 1);
+printMsg($out, $queryOutput);
+# Get appointment/task ids.
+my @calItemIdsDumpster;
+foreach my $row (@$miRowsDumpster) {
+    my $type = $row->{'type'};
+    if ($type == 11 || $type == 15) {
+        push(@calItemIdsDumpster, $row->{'id'});
+    }
+}
+printMsg($out, "(" . scalar(@$miRowsDumpster) . " rows returned)\n");
+printMsg($out, "\n\n");
+if (scalar(@calItemIdsDumpster) > 0) {
+    printMsg($out, "# Calendar items in dumpster " . join(', ', @calItemIdsDumpster) . "\n\n");
+    ($queryOutput, $apptRowsDumpster) = queryAppointmentTableByItemIds($mboxId, $groupId, \@calItemIdsDumpster, 1);
+    printMsg($out, $queryOutput);
+    printMsg($out, "(" . scalar(@$apptRowsDumpster) . " rows returned)\n");
+    printMsg($out, "\n\n");
+}
+
+
+# Call zmmetadump on each item.
+printMsg($out, "# Dumping metadata for items\n\n");
+my $metadir = "$outdir/metadump";
+mkdir($metadir);
+if (!(-d $metadir) || !(-w $metadir)) {
+    die "can't create $metadir directory: $!";
+}
+my @blobs;
+foreach my $row (@$miRows) {
+    my $itemId = $row->{'id'};
+    my $cmd = "zmmetadump -m $mboxId -i $itemId";
+    my $fname = "$metadir/$itemId.meta";
+    printMsg($out, "Running: $cmd > $fname\n");
+    my $rc = system("$cmd > $fname");
+    if ($rc != 0) {
+        printMsg($out, "ERROR: command failed: $?\n");
+    } elsif (-f $fname) {
+        push(@blobs, parseBlobList($fname, $out));
+    }
+}
+foreach my $row (@$miRowsDumpster) {
+    my $itemId = $row->{'id'};
+    my $cmd = "zmmetadump -m $mboxId -i $itemId --dumpster";
+    my $fname = "$metadir/$itemId.meta";
+    printMsg($out, "Running: $cmd > $fname\n");
+    my $rc = system("$cmd > $fname");
+    if ($rc != 0) {
+        printMsg($out, "ERROR: command failed: $?\n");
+    } elsif (-f $fname) {
+        push(@blobs, parseBlobList($fname, $out));
+    }
+}
+printMsg($out, "\n\n");
+
+
+# Copy blobs.
+if (scalar(@blobs) > 0) {
+    printMsg($out, "# Copying blobs\n\n");
+    my $blobdir = "$outdir/blobs";
+    mkdir($blobdir);
+    if (!(-d $blobdir) || !(-w $blobdir)) {
+        die "can't create $blobdir directory: $!";
+    }
+    foreach my $blob (@blobs) {
+        if ($blob =~ /([^\/]+)$/) {
+            my $fname = $1;
+            printMsg($out, "copying $blob to $blobdir/$fname\n");
+            my $rc = copy($blob, "$blobdir/$fname");
+            if (!$rc) {
+                printMsg($out, "ERROR: copy failed: $!\n");
+            }
+        }
+    }
+}
+printMsg($out, "\n\n");
+
+
+# Get ics dump of the calendar items.
+if (scalar(@calItemIds) > 0) {
+    printMsg($out, "# Getting ics dump of calendar items\n\n");
+    my $icsdir = "$outdir/ics";
+    mkdir($icsdir);
+    if (!(-d $icsdir) || !(-w $icsdir)) {
+        die "can't create $icsdir directory: $!";
+    }
+    foreach my $calItemId (@calItemIds) {
+        my $cmd = "curl -k -s 'https://localhost:7071/home/$email?fmt=ics&id=$calItemId&zauthtoken=$adminAuthToken'";
+        my $fname = "$icsdir/$calItemId.ics";
+        printMsg($out, "Fetching calendar item $calItemId -> $fname\n");
+        my $rc = system("$cmd > $fname");
+        if ($rc != 0) {
+            printMsg($out, "ERROR: command failed: $?\n");
+        }
+    }
+}
+printMsg($out, "\n\n");
+
+
+# Get calendar search result for 6-month window around current time.
+# (starting 90 days ago, ending 90 days later)
+printMsg($out, "# Getting 6-month calendar search result\n\n");
+my $now = time();
+my $ninetyDays = 90 * 24 * 60 * 60;
+my $startTime = ($now - $ninetyDays) * 1000;  # millis
+my $endTime = ($now + $ninetyDays) * 1000;    # millis
+my $calSearchCmd = "zmsoap -v -z -m $email SearchRequest \@calExpandInstStart=$startTime \@calExpandInstEnd=$endTime \@sortBy=none \@types=appointment query='is:anywhere'";
+my $calSearchOutput = "$outdir/search-req-resp.xml";
+printMsg($out, "Running: $calSearchCmd > $calSearchOutput\n");
+$rc = system("$calSearchCmd > $calSearchOutput");
+if ($rc != 0) {
+    printMsg($out, "ERROR: command failed: $?\n");
+}
+printMsg($out, "\n\n");
+
+
+# Tar/gzip everything.
+printMsg($out, "# Putting all files in tar.gz archive\n\n");
+my $tgz = "$outdir/all-files.tar.gz";
+my $cmd = "tar cfz $tgz $outdir/*";
+$rc = system($cmd);
+if ($rc == 0) {
+    printMsg($out, "Created $tgz\n");
+} else {
+    printMsg($out, "ERROR: command failed: $?\n");
+}
+printMsg($out, "\n\n");
+
+
+printMsg($out, "All done.\n");
+$out->close;
+print "(Output saved in $outfile)\n";
