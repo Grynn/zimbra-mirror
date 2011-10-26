@@ -486,6 +486,26 @@ namespace MVVM.ViewModel
             return importOpts;
         }
 
+        private string GetFolderTypeForUserResults(string containerClass)
+        {
+            string retval = "Message";
+            if (containerClass == "IPF.Contact")
+            {
+                retval = "Contact";
+            }
+            else
+            if (containerClass == "IPF.Appointment")
+            {
+                retval = "Appointment";
+            }
+            else
+            if (containerClass == "IPF.Task")
+            {
+                retval = "Task";
+            }
+            return retval;
+        }
+
         private ObservableCollection<CosInfo> coslist = new ObservableCollection<CosInfo>();
         public ObservableCollection<CosInfo> CosList
         {
@@ -637,7 +657,8 @@ namespace MVVM.ViewModel
                 {
                     if ((e.NewValue.ToString() == e.OldValue.ToString()) || (m_isPreview))  // || (m_isPreview)) is temporary
                     {
-                        f.LastFolderInfo = new FolderInfo(e.NewValue.ToString(), "", string.Format("{0} of {1}",
+                        string folderType = GetFolderTypeForUserResults(f.FolderView);
+                        f.LastFolderInfo = new FolderInfo(e.NewValue.ToString(), folderType, string.Format("{0} of {1}",
                                                           f.TotalCountOFItems, f.TotalCountOFItems));
                         ar.AccountFolderInfoList.Add(f.LastFolderInfo);
                     }

@@ -259,6 +259,15 @@ public class MigrationFolder
             this.AccountNum = value;
         }
     }
+
+    // this prop doesn't need OnChanged
+    private string strFolderView;
+    public string FolderView
+    {
+        get { return strFolderView; }
+        set { strFolderView = value; }
+    }
+
     /* private string statusMessage;
      * private string errorMessage;*/
     public MigrationFolder()

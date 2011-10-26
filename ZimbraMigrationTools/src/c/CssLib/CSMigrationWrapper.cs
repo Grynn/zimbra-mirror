@@ -344,6 +344,7 @@ public class CSMigrationwrapper
 
         // Exchange.ItemObject[] Items = Array.ConvertAll(objectArray, Item => (Exchange.ItemObject)Item);
         Acct.migrationFolders[0].FolderName = folderobject.Name;
+        Acct.migrationFolders[0].FolderView = folderobject.ContainerClass;
         Acct.migrationFolders[0].TotalCountOFItems = folderobject.ItemCount;//itemobjectarray.Count();
         Acct.migrationFolders[0].CurrentCountOFItems = 0;
         int iProcessedItems = 0;
