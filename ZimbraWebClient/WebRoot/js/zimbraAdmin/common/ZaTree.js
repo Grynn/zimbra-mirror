@@ -164,28 +164,62 @@ function (path, isAddHistory, skipNotify, kbNavEvent, noFocus, refresh) {
         path = dataItem.getRealPath();
         isAddHistory = false;
     }
-    var rootDataItem;
-    if (dataItem.isLeaf() && dataItem.parentObject) {
-        rootDataItem = dataItem.parentObject;
-    } else {
-        rootDataItem = dataItem;
+
+    var result = this._getBuildNode(dataItem);
+    if (result.isNeed)
+        this.buildTree(result.resultItem);
+    else {
+	    var a = this._selectedItems.getArray();
+	    var numSelectedItems = this._selectedItems.size();
+        if (numSelectedItems > 0) {
+			for (var i = 0; i < numSelectedItems; i++) {
+				a[i]._setSelected(false);
+			}
+		}
     }
-    this.buildTree(rootDataItem);
+
     this._selectedItems.removeAll();
 
-    var treeItem;
-    if (dataItem == rootDataItem) {
-        treeItem = this.currentRoot;
-    }  else {
-        treeItem = this.getTreeItemByPath(path);
-    }
+    var treeItem = this.getTreeItemByPath(path);
+
     this._selectedItems.add(treeItem);
 
     if (treeItem._setSelected(true, noFocus) && !skipNotify) {
     	this._notifyListeners(DwtEvent.SELECTION, [treeItem], DwtTree.ITEM_SELECTED, null, this._selEv, kbNavEvent, refresh);
 	}
 
-    this._updateHistory(treeItem, true);
+    this._updateHistory(treeItem, isAddHistory);
+}
+
+
+ZaTree.prototype._getBuildNode = function (currentDataItem) {
+    var result = {
+        isNeed : true,
+        resultItem : currentDataItem
+    };
+
+    if (!this.currentRoot)
+        return result;
+
+    var lastDataItem = this.currentRoot.getData("dataItem");
+    var lastPath = this.getABPath(lastDataItem);
+
+    if (currentDataItem.buildPath) {
+        result.resultItem = this.getTreeItemDataByPath(currentDataItem.buildPath);
+    } else {
+        if (currentDataItem.isLeaf() && currentDataItem.parentObject) {
+            result.resultItem = currentDataItem.parentObject;
+        } else {
+            result.resultItem = currentDataItem;
+        }
+    }
+
+    var currentPath = this.getABPath(result.resultItem);
+    if (lastPath == currentPath) {
+        result.isNeed = false;
+    }
+
+    return result;
 }
 
 //TODO make it recursive
