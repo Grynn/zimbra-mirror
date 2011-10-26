@@ -185,9 +185,7 @@ function (path, isAddHistory, skipNotify, kbNavEvent, noFocus, refresh) {
     	this._notifyListeners(DwtEvent.SELECTION, [treeItem], DwtTree.ITEM_SELECTED, null, this._selEv, kbNavEvent, refresh);
 	}
 
-    if (isAddHistory) {
-        this._updateHistory(treeItem, true);
-    }
+    this._updateHistory(treeItem, true);
 }
 
 //TODO make it recursive

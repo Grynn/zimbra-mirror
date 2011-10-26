@@ -61,7 +61,7 @@ DeleteAcctsPgrsDlg.myXModel = {
 DeleteAcctsPgrsDlg.prototype = new ZaXDialog;
 DeleteAcctsPgrsDlg.prototype.constructor = DeleteAcctsPgrsDlg;
 DeleteAcctsPgrsDlg.prototype.miniType= 2;
-DeleteAcctsPgrsDlg.prototype._supportMinimize = true;
+DeleteAcctsPgrsDlg.prototype.supportMinimize = true;
 DeleteAcctsPgrsDlg.prototype.toString = function() {
     return "DeleteAcctsPgrsDlg";
 }
