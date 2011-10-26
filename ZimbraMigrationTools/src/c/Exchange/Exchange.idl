@@ -27,12 +27,14 @@ interface IfolderObject : IDispatch{
 	[propput, id(1)] HRESULT Name([in] BSTR newVal);
 	[propget, id(2)] HRESULT Id([out, retval] LONG* pVal);
 	[propput, id(2)] HRESULT Id([in] LONG newVal);
-	[propget, id(3)] HRESULT ParentPath([out, retval] BSTR* pVal);
-	[propput, id(3)] HRESULT ParentPath([in] BSTR newVal);
+	[propget, id(3)] HRESULT FolderPath([out, retval] BSTR* pVal);
+	[propput, id(3)] HRESULT FolderPath([in] BSTR newVal);
 	[propput,id(4)] HRESULT FolderID([in] VARIANT newVal);
 	[propget,id(4)] HRESULT FolderID([out,retval] VARIANT* newVal);
 	[propget, id(5)] HRESULT ItemCount([out, retval] LONG* pVal);
 	[propput, id(5)] HRESULT ItemCount([in] LONG newVal);
+	[propget, id(6)] HRESULT ContainerClass([out, retval] BSTR* pVal);
+	[propput, id(6)] HRESULT ContainerClass([in] BSTR newVal);
 };
 [
     object,

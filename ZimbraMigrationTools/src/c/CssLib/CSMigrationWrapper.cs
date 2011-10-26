@@ -284,6 +284,26 @@ public class CSMigrationwrapper
         return s;
     }
 
+    private string GetFolderViewType(string containerClass)
+    {
+        string retval = "";     // if it's a "message", blanks are cool
+        if (containerClass == "IPF.Contact")
+        {
+            retval = "contact";
+        }
+        else
+        if (containerClass == "IPF.Appointment")
+        {
+            retval = "appointment";
+        }
+        else
+        if (containerClass == "IPF.Task")
+        {
+            retval = "task";
+        }
+        return retval;
+    }
+
     private void ProcessItems(MigrationAccount Acct, dynamic folderobject, foldertype ftype, ZimbraAPI api, string path)
     {
         DateTime dt;
@@ -368,7 +388,7 @@ public class CSMigrationwrapper
                         int stat = 0;
                         if (ftype == foldertype.Mail)
                         {
-                            dict.Add("folderId", folderobject.ParentPath);
+                            dict.Add("folderId", folderobject.FolderPath);
                             dict.Add("tags", "");
                             stat = api.AddMessage(dict);
                         }
@@ -445,8 +465,9 @@ public class CSMigrationwrapper
                 if (folderobject.Id == 0)
                 {
                     api.AccountName = Acct.Accountname;
-                    int stat = api.CreateFolder(folderobject.ParentPath);
-                    path = folderobject.ParentPath;
+                    string ViewType = GetFolderViewType(folderobject.ContainerClass);
+                    int stat = api.CreateFolder(folderobject.FolderPath, ViewType);
+                    path = folderobject.FolderPath;
                 }
 
                 if (importopts.HasFlag(Options.Contacts))

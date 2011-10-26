@@ -63,19 +63,36 @@ STDMETHODIMP CfolderObject::put_ItemCount(LONG newVal)
     Itemcnt = newVal;
     return S_OK;
 }
-STDMETHODIMP CfolderObject::get_ParentPath(BSTR *pVal)
+STDMETHODIMP CfolderObject::get_FolderPath(BSTR *pVal)
 {
     // TODO: Add your implementation code here
-    CComBSTR str(parentPath);
+    CComBSTR str(folderPath);
 
     *pVal = str.m_str;
     return S_OK;
 }
 
-STDMETHODIMP CfolderObject::put_ParentPath(BSTR newVal)
+STDMETHODIMP CfolderObject::put_FolderPath(BSTR newVal)
 {
     // TODO: Add your implementation code here
-    parentPath = newVal;
+    folderPath = newVal;
+
+    return S_OK;
+}
+
+STDMETHODIMP CfolderObject::get_ContainerClass(BSTR *pVal)
+{
+    // TODO: Add your implementation code here
+    CComBSTR str(containerClass);
+
+    *pVal = str.m_str;
+    return S_OK;
+}
+
+STDMETHODIMP CfolderObject::put_ContainerClass(BSTR newVal)
+{
+    // TODO: Add your implementation code here
+    containerClass = newVal;
 
     return S_OK;
 }

@@ -118,9 +118,11 @@ STDMETHODIMP CUserObject::GetFolderObjects( /*[out, retval]*/ VARIANT *vObjects)
             pIFolderObject->put_Name(SysAllocString(temp));
             pIFolderObject->put_Id((*it).zimbraid);
             CComBSTR tempS((*it).folderpath.c_str());
-            pIFolderObject->put_ParentPath(SysAllocString(tempS));
+            pIFolderObject->put_FolderPath(SysAllocString(tempS));
+            CComBSTR temp3((*it).containerclass.c_str());
+            pIFolderObject->put_ContainerClass(SysAllocString(temp3));
 
-			pIFolderObject->put_ItemCount((*it).itemcount);
+            pIFolderObject->put_ItemCount((*it).itemcount);
             // /////////////////////////////////////
             VARIANT var;
             SBinary Folderid = (*it).sbin;

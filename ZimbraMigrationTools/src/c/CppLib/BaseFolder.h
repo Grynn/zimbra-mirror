@@ -7,7 +7,8 @@ class BaseFolder
 protected:
     BSTR Strname;
     LONG LngID;
-    BSTR parentPath;
+    BSTR folderPath;
+    BSTR containerClass;
     SHORT ZimbraID;
 
 public:

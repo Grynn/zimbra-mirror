@@ -10,6 +10,7 @@ typedef struct _Folder_Data
     wstring name;
     SBinary sbin;
     wstring folderpath;
+    wstring containerclass;
     long zimbraid;
     unsigned long itemcount;
 } Folder_Data;

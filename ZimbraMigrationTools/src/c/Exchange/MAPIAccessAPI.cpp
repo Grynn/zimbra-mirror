@@ -260,6 +260,9 @@ HRESULT MAPIAccessAPI::Iterate_folders(Zimbra::MAPI::MAPIFolder &folder,
             // folder path
             flderdata.folderpath = childFolder->GetFolderPath();
 
+            // container class
+            flderdata.containerclass = wstrContainerClass;
+
             // ExchangeFolderID
             flderdata.zimbraid = (long)childFolder->GetZimbraFolderId();
 

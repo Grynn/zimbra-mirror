@@ -56,12 +56,14 @@ public:
     STDMETHOD(put_Name) (BSTR newVal);
     STDMETHOD(get_Id) (LONG *pVal);
     STDMETHOD(put_Id) (LONG newVal);
-    STDMETHOD(get_ParentPath) (BSTR *pVal);
-    STDMETHOD(put_ParentPath) (BSTR newVal);
+    STDMETHOD(get_FolderPath) (BSTR *pVal);
+    STDMETHOD(put_FolderPath) (BSTR newVal);
+    STDMETHOD(get_ContainerClass) (BSTR *pVal);
+    STDMETHOD(put_ContainerClass) (BSTR newVal);
 
     STDMETHOD(put_FolderID) (VARIANT id);
     STDMETHOD(get_FolderID) (VARIANT * id);
-	STDMETHOD(get_ItemCount) (LONG *pVal);
+    STDMETHOD(get_ItemCount) (LONG *pVal);
     STDMETHOD(put_ItemCount) (LONG newVal);
 };
 

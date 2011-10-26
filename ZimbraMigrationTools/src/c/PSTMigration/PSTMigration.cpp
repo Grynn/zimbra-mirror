@@ -233,6 +233,7 @@ DWORD WINAPI AccountMigrationThread( LPVOID lpParameter )
 		printf("MailboxName: %S ",mtparams->mailboxname.c_str());
 		printf("FolderName:  %S ",(*it).name.c_str());
 		printf("FolderPath: %S ",(*it).folderpath.c_str());
+		printf("ContainerClass: %S ",(*it).containerclass.c_str());
 		printf("ItemCount: %d ",(*it).itemcount);
 		printf("ZimbraId: %d\n",(*it).zimbraid);
 		printf("\n\n");

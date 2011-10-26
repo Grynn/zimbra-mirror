@@ -158,7 +158,7 @@ STDMETHODIMP CMapiWrapper::GetFolderObjects(VARIANT *vObjects)
         {
             pIFolderObject->put_Name(L"testoing");      // so far so good
             pIFolderObject->put_Id(12222);
-            pIFolderObject->put_ParentPath(L"\\Inbox\\personal\\mine");
+            pIFolderObject->put_FolderPath(L"\\Inbox\\personal\\mine");
         }
         if (FAILED(hr))
             return S_FALSE;
