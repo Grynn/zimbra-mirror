@@ -46,6 +46,11 @@ namespace MVVM.View
 
         private void ViewListTB_MouseDown(object sender, MouseButtonEventArgs e)
         {
+            if (m_introViewModel.mw == null)
+            {
+                m_introViewModel.Next();
+            }
+            else
             if (m_introViewModel.mw.MailClient == null)
             {
                 m_introViewModel.Next();
