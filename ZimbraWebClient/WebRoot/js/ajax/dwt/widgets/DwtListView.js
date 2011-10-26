@@ -1980,7 +1980,7 @@ function(next) {
 		Dwt.addClass(this._kbAnchor, this._kbFocusClass);
 	}
 
-	if (this._kbAnchor) {
+	if (this._kbAnchor && !this._duringFocusByMouseDown) {
 		this._scrollList(this._kbAnchor);
 	}
 };

@@ -1943,7 +1943,9 @@ function(ev)  {
  */
 DwtControl.prototype._focusByMouseDownEvent =
 function(ev) {
+	this._duringFocusByMouseDown = true;
 	this._focusByMouseUpEvent(ev);
+	this._duringFocusByMouseDown = false;
 };
 
 /**
