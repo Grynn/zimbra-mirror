@@ -499,10 +499,9 @@ public class OfflineSyncManager implements FormatListener {
         if (exception instanceof ServiceException) {
             ServiceException e = (ServiceException)exception;
             if (e.getCode() != null && e.getCode().equals(ServiceException.RESOURCE_UNREACHABLE)) {
-                if (e.getArgs() != null)
-                    for (Argument arg : e.getArgs())
-                        if (UserServlet.HTTP_STATUS_CODE.equals(arg.mName) && arg.mValue.startsWith("5"))
-                            return false;
+                for (Argument arg : e.getArgs())
+                    if (UserServlet.HTTP_STATUS_CODE.equals(arg.name) && arg.value.startsWith("5"))
+                        return false;
                 return true;
             }
         }
@@ -589,7 +588,7 @@ public class OfflineSyncManager implements FormatListener {
             OfflineLog.offline.error("sync failure: " + entry.getName(), exception);
             if (exception instanceof SoapFaultException) {
                 SoapFaultException x = (SoapFaultException)exception;
-                OfflineLog.offline.warn("SoapFaultException: " + x.getReason() + "\nFaultRequest:\n" + x.getFaultRequest() + "\nFaultResponse:\n" + x.getFaultResponse());
+                OfflineLog.offline.warn("SoapFaultException: " + x.getMessage() + "\nFaultRequest:\n" + x.getFaultRequest() + "\nFaultResponse:\n" + x.getFaultResponse());
             }
         }
     }
