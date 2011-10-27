@@ -42,6 +42,8 @@ ZaXWizardDialog = function(parent,className, title, w, h,iKeyName, extraButtons,
 		this._extraButtons = [helpButton,prevButton,nextButton,finishButton];
 	}
 	this._contextId = contextId? contextId:ZaId.DLG_UNDEF;
+    if (w)
+        w= this._correntWidth(w);
 	ZaXDialog.call(this, parent,className,title, w, h,iKeyName, this._contextId);
 	this._pageIx = 1;
 	this._currentPage = 1;
@@ -79,7 +81,25 @@ function () {
 	}
 }
 
-
+ZaXWizardDialog.prototype._correntWidth = function (w) {
+    if (appNewUI && this.supportMinimize) {
+        if (typeof(w) == "number") {
+            return w + 100;
+        } else if (typeof(w) == "string") {
+            var number = parseInt(w);
+            if (!isNaN(number)) {
+                number = number + 105;
+                w = number + "px";
+                return w;
+            }
+            return w;
+        } else {
+            return w;
+        }
+    } else {
+        return w;
+    }
+}
 
 /**
 * pageKey is the value returned from {@link ZaXWizardDialog#addPage} method
