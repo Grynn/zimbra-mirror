@@ -198,7 +198,6 @@ PERL_LIBS 	:= \
 	Pod::Coverage \
 	Test::Pod::Coverage \
 	S/SB/SBECK/Date-Manip-5.56.tar.gz \
-	Date::Parse \
 	Time::HiRes \
 	Convert::ASN1 \
 	Net::LDAP \
