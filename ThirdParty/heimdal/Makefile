@@ -24,11 +24,6 @@ ifeq (MACOSXx86,$(findstring MACOSXx86,$(BUILD_PLATFORM)))
 	LIBEXT	:= dylib
 endif
 
-CC	:=
-ifeq ($(BUILD_PLATFORM), MACOSXx86_10.7)
-        CC      := CC=gcc-4.2
-endif
-
 HEIMDAL_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/heimdal/heimdal-$(HEIMDAL_VERSION).tgz
 HEIMDAL_SOURCE := $(HEIMDAL_ROOT)/heimdal-$(HEIMDAL_VERSION)
 
@@ -49,7 +44,6 @@ build:
 	(tar xzf src/heimdal-$(HEIMDAL_VERSION).tar.gz; \
 	cd heimdal-$(HEIMDAL_VERSION); \
 	$(PATCH) \
-	$(CC) \
 	CFLAGS="-g -O2 -D_REENTRANT" \
 	CCFLAGS="-g -O2 -D_REENTRANT" \
 	COMPILE_ET="NO" \
