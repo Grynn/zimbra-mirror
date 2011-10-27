@@ -10,6 +10,7 @@ import org.apache.commons.httpclient.HttpStatus;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
+import com.zimbra.qa.selenium.framework.util.ZimbraAccount.SOAP_DESTINATION_HOST_TYPE;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.projects.desktop.ui.*;
 import com.zimbra.qa.selenium.projects.desktop.ui.mail.FormMailNew;
@@ -1083,28 +1084,55 @@ public class PageBriefcase extends AbsTab {
 	}
 
 	public void deleteFileByName(String docName) throws HarnessException {
+	   deleteFileByName(docName, SOAP_DESTINATION_HOST_TYPE.SERVER, null);
+	}
+
+	public void deleteFileByName(String docName,
+	      SOAP_DESTINATION_HOST_TYPE destType,
+         String accountName) throws HarnessException {
 		ZimbraAccount account = MyApplication.zGetActiveAccount();
 		account
 				.soapSend("<SearchRequest xmlns='urn:zimbraMail' types='document'>"
-						+ "<query>" + docName + "</query>" + "</SearchRequest>");
+						+ "<query>" + docName + "</query>" + "</SearchRequest>",
+						destType, accountName);
 		String id = account.soapSelectValue("//mail:doc", "id");
-		deleteFileById(id);
+		deleteFileById(id, destType, accountName);
 	}
 
 	public void deleteFileById(String docId) throws HarnessException {
+	   deleteFileById(docId, SOAP_DESTINATION_HOST_TYPE.SERVER, null);
+	}
+
+	public void deleteFileById(String docId,
+	      SOAP_DESTINATION_HOST_TYPE destType,
+         String accountName) throws HarnessException {
 		ZimbraAccount account = MyApplication.zGetActiveAccount();
 		account.soapSend("<ItemActionRequest xmlns='urn:zimbraMail'>"
 				+ "<action id='" + docId + "' op='trash'/>"
-				+ "</ItemActionRequest>");
+				+ "</ItemActionRequest>",
+				destType, accountName);
 	}
 
 	public EnumMap<Response.ResponsePart, String> displayFile(String filename,
-			Map<String, String> params) throws HarnessException {
+         Map<String, String> params) throws HarnessException {
+	   return displayFile(filename, params, SOAP_DESTINATION_HOST_TYPE.SERVER);
+	}
+
+	public EnumMap<Response.ResponsePart, String> displayFile(String filename,
+			Map<String, String> params,
+			SOAP_DESTINATION_HOST_TYPE destType) throws HarnessException {
 		ZimbraAccount account = MyApplication.zGetActiveAccount();
 		
 		RestUtil util = new RestUtil();
-	
-		util.setAuthentication(account);
+
+		switch (destType) {
+		case SERVER:
+		   util.setAuthentication(account);
+		   break;
+		case CLIENT:
+		   util.setZDAuthentication(account);
+		   break;
+		}
 		
 		util.setPath("/home/~/Briefcase/" + filename);
 

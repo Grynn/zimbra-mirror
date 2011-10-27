@@ -118,8 +118,22 @@ public class RestUtil {
 		}
 		return (account);
 	}
-	
+
 	/**
+    * Set the host and auth token to the values associated with the specified account
+    * @param account
+    * @return
+    */
+   public ZimbraAccount setZDAuthentication(ZimbraAccount account) {
+      ZimbraDesktopProperties zdp = ZimbraDesktopProperties.getInstance();
+      port = Integer.parseInt(zdp.getConnectionPort());
+      host = account.ZimbraMailClientHost;
+      authToken = account.MyClientAuthToken;       
+
+      return (account);
+   }
+
+   /**
 	 * Use the specified file for the HTTP POST
 	 * @param file
 	 */

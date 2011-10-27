@@ -18,6 +18,7 @@ import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
+import com.zimbra.qa.selenium.framework.util.ZimbraAccount.SOAP_DESTINATION_HOST_TYPE;
 import com.zimbra.qa.selenium.projects.desktop.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.desktop.ui.briefcase.DocumentBriefcaseNew;
 import com.zimbra.qa.selenium.projects.desktop.ui.briefcase.DocumentBriefcaseOpen;
@@ -245,22 +246,101 @@ public class CreateDocument extends AjaxCommonTest {
 		app.zPageBriefcase.deleteFileByName(docName);
 	}
 
-	  @AfterMethod(alwaysRun=true)
-	   public void afterMethod() throws HarnessException {
-	      logger.info("Checking for the opened window ...");
+   @Test(description = "Create local document using New menu pulldown menu - verify through SOAP & RestUtil", groups = { "smoke" })
+   public void createLocalDocument() throws HarnessException {
+      ZimbraAccount account = app.zGetActiveAccount();
 
-	      // Check if the window is still open
-	      List<String> windows = app.zPageMain.sGetAllWindowNames();
-	      for (String window : windows) {
-	         if (!window.isEmpty() && !window.contains("null")
-	               && !window.contains(PageBriefcase.pageTitle)
-	               && !window.contains("main_app_window")
-	               && !window.contains("undefined")) {
-	            logger.warn(window + " window was still active. Closing ...");
-	            app.zPageBriefcase.zSelectWindow(window);
-	            app.zPageBriefcase.closeWindow();
-	         }
+      // Create document item
+      DocumentItem document = new DocumentItem();
+
+      String docName = document.getName();
+      String docText = document.getDocText();
+
+      FolderItem localBriefcaseFolder = FolderItem.importFromSOAP(
+            app.zGetActiveAccount(),
+            SystemFolder.Briefcase,
+            SOAP_DESTINATION_HOST_TYPE.CLIENT,
+            ZimbraAccount.clientAccountName);
+
+      app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, localBriefcaseFolder);
+
+      // Open new document page using Pulldown menu
+      DocumentBriefcaseNew documentBriefcaseNew = (DocumentBriefcaseNew) app.zPageBriefcase
+            .zToolbarPressPulldown(Button.B_NEW, Button.O_NEW_DOCUMENT);
+
+      try {
+         app.zPageBriefcase.zSelectWindow(DocumentBriefcaseNew.pageTitle);
+
+         // Fill out the document with the data
+         documentBriefcaseNew.zFillField(DocumentBriefcaseNew.Field.Name,
+               docName);
+         documentBriefcaseNew.zFillField(DocumentBriefcaseNew.Field.Body,
+               docText);
+
+         // Save and close
+         app.zPageBriefcase.zSelectWindow(DocumentBriefcaseNew.pageTitle);
+
+         documentBriefcaseNew.zSubmit();
+      } finally {
+         app.zPageBriefcase.zSelectWindow(PageBriefcase.pageTitle);
+      }
+
+      app.zPageBriefcase.zWaitForWindowClosed(DocumentBriefcaseNew.pageTitle);
+
+      // Display file through RestUtil
+      EnumMap<PageBriefcase.Response.ResponsePart, String> response = app.zPageBriefcase
+            .displayFile(docName, new HashMap<String, String>() {
+               private static final long serialVersionUID = 1L;
+               {
+                  put("fmt", PageBriefcase.Response.Format.NATIVE
+                        .getFormat());
+               }
+            },
+            SOAP_DESTINATION_HOST_TYPE.CLIENT);
+
+      // Search for created document
+      account.soapSend(
+            "<SearchRequest xmlns='urn:zimbraMail' types='document'>"
+                  + "<query>" + docName + "</query>" + "</SearchRequest>",
+             SOAP_DESTINATION_HOST_TYPE.CLIENT,
+             ZimbraAccount.clientAccountName);
+
+      String name = account.soapSelectValue("//mail:doc", "name");
+
+      ZAssert.assertStringContains(docName, name,
+            "Verify document name through GUI");
+
+      HtmlElement element = HtmlElement.clean(response
+            .get(PageBriefcase.Response.ResponsePart.BODY));
+      HtmlElement.evaluate(element, "//body", null, Pattern.compile(".*"
+            + docText + ".*"), 1);
+
+      ZAssert.assertStringContains(response
+            .get(PageBriefcase.Response.ResponsePart.BODY), docText,
+            "Verify document content through GUI");
+
+      // delete file upon test completion
+      app.zPageBriefcase.deleteFileByName(docName,
+            SOAP_DESTINATION_HOST_TYPE.CLIENT,
+            ZimbraAccount.clientAccountName);
+   }
+
+   @AfterMethod(alwaysRun=true)
+	public void afterMethod() throws HarnessException {
+	   logger.info("Checking for the opened window ...");
+
+	   // Check if the window is still open
+	   List<String> windows = app.zPageMain.sGetAllWindowNames();
+	   for (String window : windows) {
+	      if (!window.isEmpty() && !window.contains("null")
+	            && !window.contains(PageBriefcase.pageTitle)
+	            && !window.contains("main_app_window")
+	            && !window.contains("undefined")) {
+	         logger.warn(window + " window was still active. Closing ...");
+	         app.zPageBriefcase.zSelectWindow(window);
+	         app.zPageBriefcase.closeWindow();
 	      }
-	      app.zPageBriefcase.zSelectWindow(PageBriefcase.pageTitle);
 	   }
+	   app.zPageBriefcase.zSelectWindow(PageBriefcase.pageTitle);
+	}
 }
