@@ -2,7 +2,7 @@ package com.zimbra.qa.selenium.framework.ui;
 
 import java.awt.event.KeyEvent;
 
-import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.*;
 
 
 /**
@@ -84,6 +84,56 @@ public abstract class AbsToaster extends AbsSeleniumObject {
     	
     }
 
+	public void zWaitForActive() throws HarnessException {
+		zWaitForActive(AbsPage.PageLoadDelay);
+	}
+    
+	public void zWaitForActive(long millis) throws HarnessException {
+		if ( zIsActive() ) {
+			return; // Toaster is already active
+		}
+		
+		do {
+			SleepUtil.sleep(SleepUtil.SleepGranularity);
+			millis = millis - SleepUtil.SleepGranularity;
+			if ( zIsActive() ) {
+				return; // Toaster became active
+			}
+		} while (millis > SleepUtil.SleepGranularity);
+		
+		SleepUtil.sleep(millis);
+		if ( zIsActive() ) {
+			return;	// Toaster became active
+		}
+
+		throw new HarnessException("Toaster never became active");
+	}
+
+	public void zWaitForClose() throws HarnessException {
+		zWaitForClose(AbsPage.PageLoadDelay);
+	}
+    
+	public void zWaitForClose(long millis) throws HarnessException {
+		if ( !zIsActive() ) {
+			return; // Toaster is already closed
+		}
+		
+		do {
+			SleepUtil.sleep(SleepUtil.SleepGranularity);
+			millis = millis - SleepUtil.SleepGranularity;
+			if ( !zIsActive() ) {
+				return; // Toaster closed
+			}
+		} while (millis > SleepUtil.SleepGranularity);
+		
+		SleepUtil.sleep(millis);
+		if ( !zIsActive() ) {
+			return;	// Toaster closed
+		}
+
+		throw new HarnessException("Toaster never closed");
+	}
+	
     public boolean clickLink(String innerText) throws HarnessException {
     	throw new HarnessException("fill in later");
     }
