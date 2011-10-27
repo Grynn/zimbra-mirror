@@ -1,5 +1,5 @@
-check_sender_access regexp:/opt/zimbra/postfix/conf/tag_as_originating.re
-permit_mynetworks
-permit_sasl_authenticated
-permit_tls_clientcerts
-check_sender_access regexp:/opt/zimbra/postfix/conf/tag_as_foreign.re
+%%contains VAR:zimbraServiceEnabled antivirus, check_sender_access regexp:/opt/zimbra/postfix/conf/tag_as_originating.re%%
+%%contains VAR:zimbraServiceEnabled antivirus, permit_mynetworks%%
+%%contains VAR:zimbraServiceEnabled antivirus, permit_sasl_authenticated%%
+%%contains VAR:zimbraServiceEnabled antivirus, permit_tls_clientcerts%%
+%%contains VAR:zimbraServiceEnabled antivirus, check_sender_access regexp:/opt/zimbra/postfix/conf/tag_as_foreign.re%%
