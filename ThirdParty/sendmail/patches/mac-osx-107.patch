@@ -7,7 +7,7 @@
 +dnl	Place personal settings in devtools/Site/site.config.m4
 +
 +#
-+define(`confCC', `gcc-4.2 -pipe ${Extra_CC_Flags}')
++define(`confCC', `gcc -pipe ${Extra_CC_Flags}')
 +define(`confMAPDEF', `-DNEWDB -DNIS -DMAP_REGEX')
 +define(`confENVDEF', `-DDARWIN=90000 -DBIND_8_COMPAT -DNETINET6')
 +define(`confLDOPTS', `${Extra_LD_Flags}')
