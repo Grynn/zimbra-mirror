@@ -40,9 +40,9 @@ call ssindex.cmd -system=p4
 IF ERRORLEVEL 1 exit /B 1 
 
 ECHO Adding Binaries to the Symbol Server...
-ECHO symstore add /f %BASE%\src\c\*\rtl\*.* /s \\%INDEX_HOST%\Zbuild3\symbols\Migration /t "Zimbra Migration Tools Modules" /v "%BUILD_VERSION%" /c "%BUILD_DATE%"
-symstore add /f %BASE%\src\c\Win32\rtl\*.* /s \\%INDEX_HOST%\Zbuild3\symbols\Migration /t "Zimbra Migration Tools x86 Modules" /v "%BUILD_VERSION%" /c "%BUILD_DATE%"
+ECHO symstore add /f %BASE%\src\c\*\rtl\*.* /s \\%INDEX_HOST%\Zbuild3\symbols\ZCO /t "Zimbra Migration Tools" /v "%BUILD_VERSION%" /c "%BUILD_DATE%"
+symstore add /f %BASE%\src\c\Win32\rtl\*.* /s \\%INDEX_HOST%\Zbuild3\symbols\ZCO /t "Zimbra Migration Tools x86" /v "%BUILD_VERSION%" /c "%BUILD_DATE%"
 IF ERRORLEVEL 1 exit /B 1 
-symstore add /f %BASE%\src\c\x64\rtl\*.* /s \\%INDEX_HOST%\Zbuild3\symbols\Migration /t "Zimbra Migration Tools x64 Modules" /v "%BUILD_VERSION%" /c "%BUILD_DATE%"
+symstore add /f %BASE%\src\c\x64\rtl\*.* /s \\%INDEX_HOST%\Zbuild3\symbols\ZCO /t "Zimbra Migration Tools x64" /v "%BUILD_VERSION%" /c "%BUILD_DATE%"
 IF ERRORLEVEL 1 exit /B 1 
 
