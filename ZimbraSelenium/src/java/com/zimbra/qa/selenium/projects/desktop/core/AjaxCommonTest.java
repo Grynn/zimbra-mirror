@@ -88,8 +88,10 @@ public class AjaxCommonTest {
 	private String [] _params = null;
 	public final static String accountFlavor = "Zimbra";
 	public final static String defaultAccountName = ZimbraSeleniumProperties.getUniqueString();
-	public final static String yahooUserName = ZimbraSeleniumProperties.getStringProperty("desktop.yahoo.login");
-	public final static String yahooPassword = ZimbraSeleniumProperties.getStringProperty("desktop.yahoo.password");
+	public final static String yahooUserName = ZimbraSeleniumProperties.getStringProperty(
+	      ZimbraSeleniumProperties.getLocalHost() + ".desktop.yahoo.login");
+	public final static String yahooPassword = ZimbraSeleniumProperties.getStringProperty(
+	      ZimbraSeleniumProperties.getLocalHost() + ".desktop.yahoo.password");
 	public final static String gmailUserName = ZimbraSeleniumProperties.getStringProperty("desktop.gmail.login");
 	public final static String gmailPassword = ZimbraSeleniumProperties.getStringProperty("desktop.gmail.password");
 	public final static String hotmailUserName = ZimbraSeleniumProperties.getStringProperty("desktop.hotmail.login");
