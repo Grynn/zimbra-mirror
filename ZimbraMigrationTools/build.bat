@@ -8,6 +8,8 @@ rmdir /s /q %BASE%\x64\
 cd %BASE%
 dir *.sln
 
+call "C:\Program Files (x86)\Microsoft Visual Studio 10.0\vc\bin\vcvars32.bat"
+
 echo "dbg|Win32"
 echo --------------
 MSBuild Migration.sln /t:Build /verbosity:m /p:Configuration=dbg;Platform=Win32
@@ -17,6 +19,8 @@ echo "rtl|Win32"
 echo --------------
 MSBuild Migration.sln /t:Build /verbosity:m /p:Configuration=rtl;Platform=Win32
 IF ERRORLEVEL 1 exit /B 1 
+
+call "C:\Program Files (x86)\Microsoft Visual Studio 10.0\vc\bin\amd64\vcvars64.bat"
 
 echo "dbg|x64"
 echo --------------
