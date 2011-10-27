@@ -35,6 +35,10 @@ public class TreeBriefcase extends AbsTree {
 		public static final String zRenameTagTreeMenuItem = "css=td[id$=_left_icon]>[class=ImgRename]";
 		public static final String zDeleteTreeMenuItem = "css=td[id$=_left_icon]>[class=ImgDelete]";
 		//public static final String zDeleteTreeMenuItem = "css=div[id='DELETE_WITHOUT_SHORTCUT'] tr[id^='POPUP_DELETE']:contains(Delete)";
+		public static final String treeExpandCollapseButton = "css=div[id='zovc__main_Briefcase'] div[id^='DWT'][class='DwtTreeItem'] [class^='ImgNode']";
+      public static final String multipleTrees = "css=div[id='zovc__main_Briefcase'] div[id^='DWT'][class^='DwtComposite ZmOverview']:nth-of-type(<NUM>)";
+      public static final String multipleTreesExpandCollapseButton = multipleTrees + " div[id^='DWT'] [class^='ImgNode']";
+      public static final String multipleLocalFolderTreesExpandCollapseButton = multipleTrees + " div[class='DwtTreeItemLevel1ChildDiv'] [class^='ImgNode']";
 	}
 
 	public TreeBriefcase(AbsApplication application) {
@@ -354,7 +358,82 @@ public class TreeBriefcase extends AbsTree {
 		return (items);
 	}
 
-	public void zExpandFolders() throws HarnessException {
+	  /**
+    * Expand all the folders tree
+    * @return
+    * @throws HarnessException
+    */
+   public void zExpandAll() throws HarnessException {
+        // Browse all inventory in case of multiple accounts situation
+      int i = 1;
+      String locator = null;
+      String expandCollapseLocator = null;
+      String expandCollapseLocalFoldersLocator = null;
+      for (i = 1; i < 100; i++) {
+         locator = Locators.multipleTrees.replace("<NUM>",
+               Integer.toString(i));
+         if (!sIsElementPresent(locator)) {
+            break;
+         } else {
+            expandCollapseLocator = Locators.multipleTreesExpandCollapseButton.replace("<NUM>",
+                  Integer.toString(i));
+            expandCollapseLocator = expandCollapseLocator.replace(
+                  "ImgNode", "ImgNodeCollapsed");
+            expandCollapseLocalFoldersLocator = Locators.multipleLocalFolderTreesExpandCollapseButton.replace("<NUM>",
+                  Integer.toString(i));
+            expandCollapseLocalFoldersLocator = expandCollapseLocalFoldersLocator.replace(
+                  "ImgNode", "ImgNodeCollapsed");
+            while (sIsElementPresent(expandCollapseLocator)) {
+               sMouseDownAt(expandCollapseLocator, "0,0");
+            }
+
+            while (sIsElementPresent(expandCollapseLocalFoldersLocator)) {
+               sMouseDownAt(expandCollapseLocalFoldersLocator, "0,0");
+            }
+         }
+      }
+
+   }
+
+   /**
+    * Collapse all the folders tree
+    * @return
+    * @throws HarnessException
+    */
+   public void zCollapseAll() throws HarnessException {
+      // Browse all inventory in case of multiple accounts situation
+      int i = 1;
+      String locator = null;
+      String expandCollapseLocator = null;
+      String expandCollapseLocalFoldersLocator = null;
+      for (i = 1; i < 100; i++) {
+         locator = Locators.multipleTrees.replace("<NUM>",
+               Integer.toString(i));
+         if (!sIsElementPresent(locator)) {
+            break;
+         } else {
+            expandCollapseLocator = Locators.multipleTreesExpandCollapseButton.replace("<NUM>",
+                  Integer.toString(i));
+            expandCollapseLocator = expandCollapseLocator.replace(
+                  "ImgNode", "ImgNodeExpanded");
+            expandCollapseLocalFoldersLocator = Locators.multipleLocalFolderTreesExpandCollapseButton.replace("<NUM>",
+                  Integer.toString(i));
+            expandCollapseLocalFoldersLocator = expandCollapseLocalFoldersLocator.replace(
+                  "ImgNode", "ImgNodeExpanded");
+
+            while (sIsElementPresent(expandCollapseLocator)) {
+               sMouseDownAt(expandCollapseLocator, "0,0");
+            }
+
+            while (sIsElementPresent(expandCollapseLocalFoldersLocator)) {
+               sMouseDownAt(expandCollapseLocalFoldersLocator, "0,0");
+            }
+         }
+      }
+
+   }
+
+   public void zExpandFolders() throws HarnessException {
 		throw new HarnessException("implement me!");
 	}
 
