@@ -1304,7 +1304,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
                     }
                 ]
             },
-            {type:_ZA_TOP_GROUPER_,
+            {type:_ZA_TOP_GROUPER_, id:"cos_timeout_settings",
                 label:ZaMsg.NAD_TimeoutGrouper,
                 items: [
                     {ref:ZaCos.A_zimbraAdminAuthTokenLifetime, type:_LIFETIME_, msgName:ZaMsg.MSG_zimbraAdminAuthTokenLifetime,label:ZaMsg.LBL_zimbraAdminAuthTokenLifetime,labelLocation:_LEFT_},
@@ -1312,7 +1312,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
                     {ref:ZaCos.A_zimbraMailIdleSessionTimeout, type:_LIFETIME_, msgName:ZaMsg.MSG_zimbraMailIdleSessionTimeout,label:ZaMsg.LBL_zimbraMailIdleSessionTimeout,labelLocation:_LEFT_}
                 ]
             },
-            {type:_ZA_TOP_GROUPER_,
+            {type:_ZA_TOP_GROUPER_, id:"cos_mail_retention_settings",
                 label:ZaMsg.NAD_MailRetentionGrouper,
                 items: [
                     { type: _DWT_ALERT_,
