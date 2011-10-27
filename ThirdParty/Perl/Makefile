@@ -209,7 +209,6 @@ PERL_LIBS 	:= \
 	Digest::SHA \
 	Digest::SHA1 \
 	Digest::HMAC \
-	Digest::HMAC_MD5 \
 	Convert::TNEF \
 	Convert::UUlib \
 	Net::IP \
