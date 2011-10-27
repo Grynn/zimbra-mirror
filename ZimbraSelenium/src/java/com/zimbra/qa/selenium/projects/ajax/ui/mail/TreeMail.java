@@ -62,9 +62,11 @@ public class TreeMail extends AbsTree {
 		public static final String ContextMenuCLVFoldersCSS = "css=div[id='ZmActionMenu_conversationList_FOLDER']";
 		public static final String ContextMenuCLVSearchesCSS = "css=div[id='ZmActionMenu_conversationList_SEARCH']";
 		public static final String ContextMenuCLVTagsCSS = "css=div[id='ZmActionMenu_conversationList_TAG']";
+		public static final String ContextMenuCLVTagsCSS2 = "css=div[id^='ZmActionMenu_conversationList_TAG__']";
 		public static final String ContextMenuTVFoldersCSS = "css=div[id='ZmActionMenu_mail_FOLDER']";
 		public static final String ContextMenuTVSearchesCSS = "css=div[id='ZmActionMenu_mail_SEARCH']";
 		public static final String ContextMenuTVTagsCSS = "css=div[id='ZmActionMenu_mail_TAG']";
+		public static final String ContextMenuTVTagsCSS2 = "css=div[id^='ZmActionMenu_mail_TAG__']";
 
 	}
 
@@ -338,13 +340,32 @@ public class TreeMail extends AbsTree {
 			
 			this.zWaitForBusyOverlay();
 
-			optionLocator = Locators.ContextMenuTVTagsCSS; // css=div[id='ZmActionMenu_conversationList_TAG']
 			page = new DialogTag(MyApplication,
 					((AppAjaxClient) MyApplication).zPageMail);
 			
+			// REF: http://bugzilla.zimbra.com/show_bug.cgi?id=64616#c9
+			// 
+			// The context menu has 4 forms:
+			//
+			// css=div[id='ZmActionMenu_mail_TAG']
+			// css=div[id='ZmActionMenu_mail_TAG_DWTxyz']
+			// css=div[id='ZmActionMenu_conversationList_TAG']
+			// css=div[id='ZmActionMenu_conversationList_TAG_DWTxyz']
+			//
+			// Choose whichever is visible
+			//
+			optionLocator = Locators.ContextMenuTVTagsCSS; // css=div[id='ZmActionMenu_mail_TAG']
 			if ( !(this.sIsElementPresent(optionLocator) && this.zIsVisiblePerPosition(optionLocator, 0, 0)) ) {
-				// The app could use the conversation div, if it was ever activated previously
-				optionLocator = Locators.ContextMenuCLVTagsCSS;
+				optionLocator = Locators.ContextMenuTVTagsCSS2;  // css=div[id^='ZmActionMenu_mail_TAG__']
+				if ( !(this.sIsElementPresent(optionLocator) && this.zIsVisiblePerPosition(optionLocator, 0, 0)) ) {
+					optionLocator = Locators.ContextMenuCLVTagsCSS;  // css=div[id='ZmActionMenu_conversationList_TAG']
+					if ( !(this.sIsElementPresent(optionLocator) && this.zIsVisiblePerPosition(optionLocator, 0, 0)) ) {
+						optionLocator = Locators.ContextMenuCLVTagsCSS2;  // css=div[id^='ZmActionMenu_conversationList_TAG__']
+						if ( !(this.sIsElementPresent(optionLocator) && this.zIsVisiblePerPosition(optionLocator, 0, 0)) ) {
+							throw new HarnessException("No context menu!");
+						}
+					}
+				}
 			}
 			
 
@@ -360,12 +381,12 @@ public class TreeMail extends AbsTree {
 			// optionLocator = "//td[contains(@id,'_left_icon')]/div[contains(@class,'ImgNewTag')]";
 			// optionLocator="//div[contains(@id,'POPUP_DWT') and contains(@class,'ZHasSubMenu')]//tbody/tr[@id='POPUP_NEW_TAG']";
 			// optionLocator = css=div[id='ZmActionMenu_conversationList_TAG'] div[id='NEW_TAG'] td[id$='_title']
-			optionLocator += " div[id='NEW_TAG'] td[id$='_title']";
+			optionLocator += " div[id^='NEW_TAG'] td[id$='_title']";
 
 		} else if (option == Button.B_DELETE) {
 
 			// optionLocator = Locators.zDeleteTreeMenuItem;
-			optionLocator += " div[id='DELETE_WITHOUT_SHORTCUT'] td[id$='_title']";
+			optionLocator += " div[id^='DELETE_WITHOUT_SHORTCUT'] td[id$='_title']";
 
 			page = new DialogWarning(
 					DialogWarning.DialogWarningID.DeleteTagWarningMessage,
@@ -373,12 +394,12 @@ public class TreeMail extends AbsTree {
 
 		} else if (option == Button.O_MARK_AS_READ) {
 
-			optionLocator += " div[id='MARK_ALL_READ'] td[id$='_title']";
+			optionLocator += " div[id^='MARK_ALL_READ'] td[id$='_title']";
 
 		} else if (option == Button.B_RENAME) {
 
 			// optionLocator = Locators.zRenameTreeMenuItem;
-			optionLocator += " div[id='RENAME_TAG'] td[id$='_title']";
+			optionLocator += " div[id^='RENAME_TAG'] td[id$='_title']";
 
 			page = new DialogRenameTag(MyApplication,
 					((AppAjaxClient) MyApplication).zPageMail);
