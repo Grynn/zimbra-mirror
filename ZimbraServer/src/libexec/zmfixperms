@@ -417,7 +417,7 @@ if [ -L ${zimbra_home}/cyrus-sasl ]; then
     mkdir -p ${zimbra_home}/cyrus-sasl/state
   fi
   chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/cyrus-sasl/lib/sasl2
-  chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/cyrus-sasl/{etc,state}
+  chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/cyrus-sasl/state
   chmod 755 ${zimbra_home}/cyrus-sasl/state 
 fi
 
