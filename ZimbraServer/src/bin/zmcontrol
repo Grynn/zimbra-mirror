@@ -63,6 +63,7 @@ my %startorder = (
 	"spell" 	=> 100,
 	"mta" 		=> 110,
 	"stats"		=> 120,
+  "vmware-ha" => 150,  # this should remain last
 );
 
 my %stoporder = ( 
@@ -81,6 +82,7 @@ my %stoporder = (
 	"mta" 		=> 110,
 	"stats"		=> 120,
 	"zmconfigd"	=> 130,
+	"vmware-ha"	=> 140,
 );
 
 my %allservices = ( 
@@ -99,6 +101,7 @@ my %allservices = (
 	"stats" => "/opt/zimbra/bin/zmstatctl",
 	"zmconfigd" => "/opt/zimbra/bin/zmconfigdctl",
 	"cbpolicyd" => "/opt/zimbra/bin/zmcbpolicydctl",
+	"vmware-ha" => "/opt/zimbra/bin/zmhactl",
 );
 
 my %rewrites = ( 
