@@ -177,17 +177,284 @@ function(hasMore) {
     this.scrollHasMore=hasMore;
 }
 
+ZaListView._getSearchKeyWord =
+function(query) {
+	var keyword = "";
+	var sw = "zimbraDomainName=*";
+        var domflag = "@";
+	var ew = "*";
+	if(!query) return keyword;
+	var start = query.indexOf(sw);
+	if(start < 0 || start > query.length-1)
+	    return [];
+	var end = query.indexOf(ew,start+sw.length);
+	if(end > query.length-1)
+	    return [];
+	keyword = query.substr(start+sw.length,end-start-sw.length);
+        // handle the case of "str@str"
+        start = keyword.indexOf(domflag);
+	if(start < 0 || start > query.length-1)
+	    return [keyword];
+	return [keyword.substr(start+1,keyword.length),keyword.substr(0,start)];
+}
+
+ZaListView.prototype.searchAliasDomain =
+function (value, searchCtl,searchQueryList, offset, limit) {
+        var busyId = Dwt.getNextId();
+        var controller = searchCtl;
+
+        var query = "(" + ZaDomain.A_domainName;
+        if(value.length > 0) query += "=" + value[0] + "*)";
+        else query = "";
+
+        var callback = new AjxCallback(this, this.searchAliasDomainCallback,
+            {busyId:busyId, searchQueryList:searchQueryList, childQueries:value, offset:offset, limit:limit});
+        var searchParams = {
+                        query: query,
+                        types: [ZaSearch.DOMAINS],
+                        sortBy: ZaDomain.A_domainName,
+                        attrs: [ZaDomain.A_domainName],
+                        callback:callback,
+                        controller: controller,
+                        showBusy:true,
+                        busyId:busyId,
+                        busyMsg:ZaMsg.BUSY_SEARCHING_DOMAINS,
+			skipCallbackIfCancelled:false
+        }
+        ZaSearch.searchDirectory(searchParams);
+
+}
+
+ZaListView.prototype.searchAliasDomainCallback =
+function(params,resp) {
+
+        if(params.busyId)
+                   ZaApp.getInstance().getAppCtxt().getShell().setBusy(false, params.busyId);
+        try {
+                if(!resp) {
+                        throw(new AjxException(ZaMsg.ERROR_EMPTY_RESPONSE_ARG, AjxException.UNKNOWN, "ZaListView.searchAliasDomainCallback"));
+                }
+                if(resp.isException()) {
+                        throw(resp.getException());
+                } else {
+                        var response = resp.getResponse().Body.SearchDirectoryResponse;
+			var domainArr = new Array();
+                        if (response.domain && response.domain.length > 0) {
+                                for (var i =0; i < response.domain.length; i ++) {
+                                       var domain = response.domain[i].name ;
+						domainArr.push(domain);
+                                }
+
+                        }
+			this._batchSearchforDomain(domainArr,params.searchQueryList, params.childQueries, params.offset, params.limit);
+                }
+        } catch (ex) {
+		this._handleException(ex, "ZaListView.searchAliasDomainCallback", null, false);
+	}
+
+}
+
+ZaListView.prototype._batchSearchforDomain =
+function (domainArr, searchQueryList, childQueries, offset, limit) {
+	var paramsArr;
+    var searchTypes = ZaSearch.ALIASES;
+    var searchQuery = "(uid=*";
+    if(!childQueries) searchQuery += ")";
+    else if(childQueries && !(childQueries instanceof Array)) searchQuery += childQueries + "*)";
+    else if(childQueries instanceof Array && childQueries.length == 1) searchQuery += childQueries[0] + "*)";
+    else if(childQueries instanceof Array && childQueries.length > 1)  searchQuery += childQueries[1] + ")";
+
+    var controller = ZaApp.getInstance().getSearchListController();
+
+	if(searchQueryList && searchQueryList instanceof Array)
+		paramsArr = searchQueryList;
+	else paramsArr = new Array();
+        var busyId = Dwt.getNextId();
+	var inParams = {limit:controller.RESULTSPERPAGE,show:true, openInSearchTab: true,busyId:busyId};
+        var callback = new AjxCallback(this, this.searchCallback, inParams);
+	for(var i =0; i < domainArr.length; i++) {
+	        var searchParams = {
+                            offset:offset,
+                            limit :limit,
+        	                query:searchQuery,
+                	        types:searchTypes,
+	                        showBusy:true,
+        	                busyId:busyId,
+	                        busyMsg:ZaMsg.BUSY_SEARCHING,
+        	                skipCallbackIfCancelled:false,
+	                        sortBy:controller._currentSortField,
+        	                attrs:ZaSearch.standardAttributes,
+                	        callback:callback,
+	                        controller: controller,
+        	                domain: domainArr[i]
+	        }
+		paramsArr.push(searchParams);
+	}
+	this.multipleSearchCallback(inParams, paramsArr);
+
+}
+
+
+ZaListView.prototype.multipleSearchCallback =
+function(preParams, paramsArr) {
+	var sortBy, limit, offset, sortAscending, soapDoc, cnt;
+	var paramList = null;
+	if(!paramsArr) return;
+	if(paramsArr instanceof Array && paramsArr.length > 0)
+		paramList = paramsArr;
+	else {
+		paramList = new Array();
+		paramList.push(paramsArr);
+	}
+
+	cnt = paramList.length;
+	soapDoc = AjxSoapDoc.create("BatchRequest", "urn:zimbra");
+	soapDoc.setMethodAttribute("onerror", "continue");
+
+	for(var i = 0; i < cnt; i++) {
+		var getSearchDirDoc = soapDoc.set("SearchDirectoryRequest", null, null, ZaZimbraAdmin.URN);
+		var squery = soapDoc.set("query", paramList[i].query, getSearchDirDoc);
+
+                sortBy = (paramList[i].sortBy != undefined)? paramList[i].sortBy: ZaAccount.A_name;
+                limit = (paramList[i].limit != undefined)? paramList[i].limit: ZaAccount.RESULTSPERPAGE;
+                offset = (paramList[i].offset != undefined) ? paramList[i].offset : "0";
+                sortAscending = (paramList[i].sortAscending != null)? paramList[i].sortAscending : "1";
+
+
+                getSearchDirDoc.setAttribute("offset", offset);
+                getSearchDirDoc.setAttribute("limit", limit);
+                getSearchDirDoc.setAttribute("sortBy", sortBy);
+                getSearchDirDoc.setAttribute("sortAscending", sortAscending);
+
+                if(paramList[i].applyCos)
+                        getSearchDirDoc.setAttribute("applyCos", paramList[i].applyCos);
+                else
+                        getSearchDirDoc.setAttribute("applyCos", false);
+
+
+                if(paramList[i].applyConfig)
+                        getSearchDirDoc.setAttribute("applyConfig", paramList[i].applyConfig);
+                else
+                        getSearchDirDoc.setAttribute("applyConfig", "false");
+
+                if(paramList[i].domain)  {
+                        getSearchDirDoc.setAttribute("domain", paramList[i].domain);
+
+                }
+                if(paramList[i].attrs && paramList[i].attrs.length>0)
+                        getSearchDirDoc.setAttribute("attrs", paramList[i].attrs.toString());
+
+                if(paramList[i].types && paramList[i].types.length>0)
+                        getSearchDirDoc.setAttribute("types", paramList[i].types.toString());
+
+                if(paramList[i].maxResults) {
+                        getSearchDirDoc.setAttribute("maxResults", paramList[i].maxResults.toString());
+                }
+
+
+	}
+
+	var params = new Object();
+	params.soapDoc = soapDoc;
+	var reqMgrParams ={
+		//controller:this,
+		busyMsg:ZaMsg.BUSY_REQUESTING_ACCESS_RIGHTS
+	}
+
+	var respObj = ZaRequestMgr.invoke(params, reqMgrParams);
+	if(respObj.isException && respObj.isException()) {
+		ZaApp.getInstance().getCurrentController()._handleException(respObj.getException(), "ZaListViewController.prototype.multipleSearchCallback", null, false);
+	} else if(respObj.Body.BatchResponse.Fault) {
+		var fault = respObj.Body.BatchResponse.Fault;
+		if(fault instanceof Array)
+			fault = fault[0];
+
+		if (fault) {
+			var ex = ZmCsfeCommand.faultToEx(fault);
+			ZaApp.getInstance().getCurrentController()._handleException(ex,"ZaListViewController.prototype.multipleSearchCallback", null, false);
+		}
+	} else {
+		var batchResp = respObj.Body.BatchResponse;
+		if(batchResp.SearchDirectoryResponse && batchResp.SearchDirectoryResponse instanceof Array) {
+			var cnt2 = batchResp.SearchDirectoryResponse.length;
+			ZaSearch.TOO_MANY_RESULTS_FLAG = false;
+			//this._searchTotal = 0;
+			//this._list = null;
+             var tempResultList = null;
+             var hasmore=false;
+			for(var i = 0; i < cnt2; i++) {
+				resp = batchResp.SearchDirectoryResponse[i];
+				var subList = new ZaItemList(preParams.CONS);
+
+		                subList.loadFromJS(resp);
+				//combine the search results
+				if(!tempResultList) tempResultList = subList;
+				else {
+					if(tempResultList instanceof ZaItemList && subList.size() > 0) {
+						var listVec = subList.getVector();
+						for(var j = 0; j < listVec.size(); j++) {
+							var item = listVec.get(j);
+							if(!tempResultList.getVector().contains(item))
+								tempResultList.add(item);
+						}
+					}
+				}
+
+				//this._searchTotal += resp.searchTotal;
+                 hasmore= resp.more|hasmore;
+			}
+		        if(ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraIsAdminAccount] != 'TRUE') {
+		                var act = new AjxTimedAction(this._list, ZaItemList.prototype.loadEffectiveRights, null);
+		                AjxTimedAction.scheduleAction(act, 150)
+		        }
+
+
+            if(tempResultList){
+                var tmpArr = new Array();
+		        var cnt = tempResultList.getArray().length;
+		        for(var ix = 0; ix < cnt; ix++) {
+                    var flag=false;
+                    for (var i = 0; i < this._list.size(); i++) {
+		                if (this._list.get(i).id == tempResultList.getArray()[ix].id)
+                        {
+                            flag=true;
+                            break;
+                        }
+	                }
+                    if(!flag)
+			        tmpArr.push(tempResultList.getArray()[ix]);
+		        }
+            }
+               this.replenish(AjxVector.fromArray(tmpArr));
+               this.setScrollHasMore(hasmore);
+
+		}
+	}
+}
+
+
+
 ZaListView.prototype._loadMsg =
 function (params) {
 		//this.show(null,params);
-    var busyId = Dwt.getNextId();
-	var callback = new AjxCallback(this, this.searchCallback, {CONS:null,busyId:busyId});
-    var searchParams=this.scrollSearchParams;
-    searchParams.offset=params.offset;
-    searchParams.limit=params.limit;
-    searchParams.callback=callback;
-    searchParams.busyId=busyId,
-	ZaSearch.searchDirectory(searchParams);
+        var busyId = Dwt.getNextId();
+	    var callback = new AjxCallback(this, this.searchCallback, {CONS:null,busyId:busyId});
+        var searchParams=this.scrollSearchParams;
+        searchParams.offset=params.offset;
+        searchParams.limit=params.limit;
+        searchParams.callback=callback;
+        searchParams.busyId=busyId;
+
+    if(searchParams&&searchParams.scrollType=="isAliasSearch"){
+        var searchQueryList = new Array();
+        searchQueryList.push(searchParams);
+		var keyword = ZaListView._getSearchKeyWord(searchParams.query);
+		this.searchAliasDomain(keyword,searchParams.controller,searchQueryList,params.offset,params.limit);
+    }
+    else{
+
+	    ZaSearch.searchDirectory(searchParams);
+    }
 }
 
 ZaListView.prototype.searchCallback =

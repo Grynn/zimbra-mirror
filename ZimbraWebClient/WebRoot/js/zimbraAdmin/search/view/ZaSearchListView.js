@@ -32,7 +32,8 @@ ZaSearchListView = function(parent) {
 		className:className, 
 		posStyle:posStyle, 
 		headerList:headerList,
-		id:ZaId.TAB_SEARCH_MANAGE
+		id:ZaId.TAB_SEARCH_MANAGE,
+        scrollLoading:true
 	});
 
 	this._appCtxt = this.shell.getData(ZaAppCtxt.LABEL);

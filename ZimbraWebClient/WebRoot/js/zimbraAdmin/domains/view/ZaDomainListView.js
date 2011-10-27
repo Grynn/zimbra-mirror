@@ -34,7 +34,8 @@ ZaDomainListView = function(parent) {
 		className:className, 
 		posStyle:posStyle, 
 		headerList:headerList,
-		id: ZaId.TAB_DOMAIN_MANAGE
+		id: ZaId.TAB_DOMAIN_MANAGE,
+        scrollLoading:true
 	});
 
 	this._appCtxt = this.shell.getData(ZaAppCtxt.LABEL);

@@ -228,6 +228,7 @@ function(preParams, paramsArr) {
 			ZaSearch.TOO_MANY_RESULTS_FLAG = false;
 			this._searchTotal = 0;
 			this._list = null;
+            var hasmore=false;
 			for(var i = 0; i < cnt2; i++) {
 				resp = batchResp.SearchDirectoryResponse[i];
 				var subList = new ZaItemList(preParams.CONS);
@@ -245,7 +246,7 @@ function(preParams, paramsArr) {
 						}
 					}
 				}
-	
+	            hasmore= resp.more|hasmore;
 				this._searchTotal += resp.searchTotal;
 			}
 		        if(ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraIsAdminAccount] != 'TRUE') {
@@ -257,9 +258,9 @@ function(preParams, paramsArr) {
 		        this.numPages = Math.ceil(this._searchTotal/preParams.limit);
 
                         if(preParams.show)
-                                this._show(this._list, preParams.openInNewTab, preParams.openInSearchTab);
+                                this._show(this._list, preParams.openInNewTab, preParams.openInSearchTab,hasmore);
                         else
-                                this._updateUI(this._list, preParams.openInNewTab, preParams.openInSearchTab);
+                                this._updateUI(this._list, preParams.openInNewTab, preParams.openInSearchTab,hasmore);
 
 		}
 	}

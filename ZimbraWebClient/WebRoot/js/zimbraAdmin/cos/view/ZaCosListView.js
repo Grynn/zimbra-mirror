@@ -31,7 +31,9 @@ ZaCosListView = function(parent) {
 		className:className, 
 		posStyle:posStyle, 
 		headerList:headerList,
-		id: ZaId.TAB_COS_MANAGE
+		id: ZaId.TAB_COS_MANAGE,
+        scrollLoading:true
+
 	});
 
 	this._appCtxt = this.shell.getData(ZaAppCtxt.LABEL);

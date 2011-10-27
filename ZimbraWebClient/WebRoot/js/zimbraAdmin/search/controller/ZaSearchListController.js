@@ -96,8 +96,8 @@ ZaSearchListController.prototype.show = function (doPush) {
 
 ZaSearchListController.version = 1;
 ZaSearchListController.prototype._show = 
-function (list, openInNewTab, openInSearchTab) {
-	this._updateUI(list, openInNewTab, openInSearchTab);
+function (list, openInNewTab, openInSearchTab,hasmore) {
+	this._updateUI(list, openInNewTab, openInSearchTab,hasmore);
 	//ZaApp.getInstance().pushView(ZaZimbraAdmin._SEARCH_LIST_VIEW);
 	ZaApp.getInstance().pushView(this.getContentViewId());
 
@@ -368,11 +368,37 @@ function(params) {
 	}
 
 	if(isAliasSpec) {
+          this.scrollSearchParams={
+                        query:controller._currentQuery,//params.query,
+                        types:params.types,
+                        showBusy:true,
+                        busyId:busyId,
+                        busyMsg:ZaMsg.BUSY_SEARCHING,
+                        skipCallbackIfCancelled:false,
+                        sortBy:params.sortBy,
+                        sortAscending:this._currentSortOrder,
+                        attrs:ZaSearch.standardAttributes,
+                        controller: controller,
+                        scrollType:"isAliasSearch"
+         }
 		searchQueryList.push(searchParams);
 		var keyword = ZaSearchListController._getSearchKeyWord(params.query);
 		ZaSearchListController.searchAliasDomain(keyword,controller,searchQueryList);
-	}else
+	}else {
+        this.scrollSearchParams={
+                        query:controller._currentQuery,//params.query,
+                        types:params.types,
+                        showBusy:true,
+                        busyId:busyId,
+                        busyMsg:ZaMsg.BUSY_SEARCHING,
+                        skipCallbackIfCancelled:false,
+                        sortBy:params.sortBy,
+                        sortAscending:this._currentSortOrder,
+                        attrs:ZaSearch.standardAttributes,
+                        controller: controller
+        }
 		ZaSearch.searchDirectory(searchParams);
+    }
 }
 
 

@@ -72,12 +72,23 @@ ZaDomainListController.prototype.show = function (doPush,openInNewTab) {
 			skipCallbackIfCancelled:false,
 			attrs:[ZaDomain.A_description, ZaDomain.A_domainName,ZaDomain.A_zimbraDomainStatus,ZaItem.A_zimbraId, ZaDomain.A_domainType]		
 	}
+    this.scrollSearchParams={
+        query:this._currentQuery,
+			types:[ZaSearch.DOMAINS],
+			sortBy:ZaDomain.A_domainName,
+			sortAscending:"1",
+			controller: this,
+			showBusy:true,
+			busyMsg:ZaMsg.BUSY_SEARCHING_DOMAINS,
+			skipCallbackIfCancelled:false,
+			attrs:[ZaDomain.A_description, ZaDomain.A_domainName,ZaDomain.A_zimbraDomainStatus,ZaItem.A_zimbraId, ZaDomain.A_domainType]
+    };
 	ZaSearch.searchDirectory(searchParams);
 }
 
 ZaDomainListController.prototype._show = 
-function (list,  openInNewTab, openInSearchTab) {
-	this._updateUI(list, openInNewTab, openInSearchTab);
+function (list,  openInNewTab, openInSearchTab, hasMore) {
+	this._updateUI(list, openInNewTab, openInSearchTab, hasMore);
 	//ZaApp.getInstance().pushView(ZaZimbraAdmin._DOMAINS_LIST_VIEW);
 	ZaApp.getInstance().pushView(this.getContentViewId(), openInNewTab, openInSearchTab);
 	if (appNewUI)

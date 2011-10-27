@@ -71,12 +71,23 @@ ZaCosListController.prototype.show = function (doPush,openInNewTab) {
 			busyMsg:ZaMsg.BUSY_SEARCHING_COSES,
 			skipCallbackIfCancelled:false			
 	}
+    this.scrollSearchParams={
+        query:this._currentQuery ,
+			types:[ZaSearch.COSES],
+			sortBy:this._currentSortField,
+			sortAscending:this._currentSortOrder,
+			attrs:this.fetchAttrs,
+			controller: this,
+			showBusy:true,
+			busyMsg:ZaMsg.BUSY_SEARCHING_COSES,
+			skipCallbackIfCancelled:false
+    };
 	ZaSearch.searchDirectory(searchParams);
 }
 
 ZaCosListController.prototype._show = 
-function (list, openInNewTab, openInSearchTab) {
-	this._updateUI(list, openInNewTab, openInSearchTab);
+function (list, openInNewTab, openInSearchTab, hasMore) {
+	this._updateUI(list, openInNewTab, openInSearchTab, hasMore);
 	ZaApp.getInstance().pushView(this.getContentViewId (), openInNewTab, openInSearchTab);
     if (appNewUI)
         return;
