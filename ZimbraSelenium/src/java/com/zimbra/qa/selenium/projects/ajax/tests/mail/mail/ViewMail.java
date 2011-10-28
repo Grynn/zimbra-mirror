@@ -165,5 +165,56 @@ public class ViewMail extends PrefGroupMailByMessageTest {
 		
 	}
 
+	@Bugs(	ids = "66565")
+	@Test(	description = "Receive a mail formatting in the subject",
+			groups = { "functional" })
+	public void ViewMail_05() throws HarnessException {
+		
+		final String mime = ZimbraSeleniumProperties.getBaseDirectory() + "/data/public/mime/Bugs/Bug66565";
+		final String subject = "subject13197565510464";
+		final String subjectText = "<u><i> subject13197565510464 </i></u>";
+
+		LmtpInject.injectFile(app.zGetActiveAccount().EmailAddress, new File(mime));
+
+
+		
+		MailItem mail = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:(" + subject +")");
+		ZAssert.assertNotNull(mail, "Verify message is received");
+		
+		// Click Get Mail button
+		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+
+		// Select the message so that it shows in the reading pane
+		DisplayMail actual = (DisplayMail) app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
+
+		// Verify the Subject
+		ZAssert.assertEquals(	actual.zGetMailProperty(Field.Subject), subjectText, "Verify the Subject matches");
+		
+		// Verify the <u> and <i> elements are not in the DOM (only in text)
+		//
+		// i.e. this woud be wrong:
+		//
+		// <td width="100%" class="subject">
+		//  <u>
+		//   <i>
+		//    subject13197565510464 
+		//   </i>
+		//  </u>
+		// </td>
+		//
+		// Expected:
+		// <td width="100%" class="subject">
+		//  &lt;u&gt;&lt;i&gt; subject13197565510464 &lt;/i&gt;&lt;/u&gt;
+		// </td>
+		//
+		String locator = "css=div[id='zv__TV-main__MSG'] tr[id$='_hdrTableTopRow'] td[class~='SubjectCol']";
+		ZAssert.assertFalse( actual.sIsElementPresent(locator + " u"), "Verify the <u> element is not in the DOM");
+		ZAssert.assertFalse( actual.sIsElementPresent(locator + " i"), "Verify the <i> element is not in the DOM");
+
+
+
+		
+	}
+
 
 }

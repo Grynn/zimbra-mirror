@@ -1,0 +1,16 @@
+Date: Thu, 08 Sep 2011 10:16:46 -0700 (PDT)
+From: foo@example.com
+To: bar@example.com
+Subject: <u><i> subject13197565510464 </i></u>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+
+The Statue of Liberty (Liberty Enlightening the World; French: La Liberté éclairant le 
+monde) is a colossal neoclassical sculpture on Liberty Island in New York Harbor, designed 
+by Frédéric Bartholdi and dedicated on October 28, 1886. The statue, a gift to the United 
+States from the people of France, is of a robed female figure representing Libertas, the 
+Roman goddess of freedom, who bears a torch and a tabula ansata (a tablet evoking the 
+law) upon which is inscribed the date of the American Declaration of Independence, 
+July 4, 1776. A broken chain lies at her feet. The statue has become an icon of 
+freedom and of the United States. 
