@@ -271,8 +271,9 @@ namespace MVVM.ViewModel
                 UsersViewModel usersViewModel = ((UsersViewModel)ViewModelPtrs[(int)ViewType.USERS]);
                 foreach (UsersViewModel obj in usersViewModel.UsersList)
                 {
-                    int idx = obj.Username.IndexOf("@");
-                    string NameToAdd = (idx != -1) ? obj.Username.Substring(0, idx) : obj.Username;
+                    string NameToCheck = (obj.MappedName.Length > 0) ? obj.MappedName : obj.Username;
+                    int idx = NameToCheck.IndexOf("@");
+                    string NameToAdd = (idx != -1) ? NameToCheck.Substring(0, idx) : NameToCheck;
                     schedlist.Add(new SchedUser(NameToAdd, obj.IsProvisioned));
                 }
                 return schedlist;
@@ -522,10 +523,18 @@ namespace MVVM.ViewModel
             MigrationAccount MyAcct = new MigrationAccount();
             UsersViewModel usersViewModel = ((UsersViewModel)ViewModelPtrs[(int)ViewType.USERS]);
             AccountResultsViewModel accountResultsViewModel = ((AccountResultsViewModel)ViewModelPtrs[(int)ViewType.RESULTS]);
-            string username = accountResultsViewModel.AccountResultsList[num].AccountName;
-            string fullname = username + "@" + usersViewModel.ZimbraDomain;
-            MyAcct.Accountname = fullname;
-            MyAcct.AccountID = username;
+
+            string accountname = accountResultsViewModel.AccountResultsList[num].AccountName;
+            accountname = accountname + "@" + usersViewModel.ZimbraDomain;
+            string accountid = usersViewModel.UsersList[num].Username;
+            int idx = accountid.IndexOf("@");
+            if (idx != -1) // domain would be Exchange domain, not Zimbra domain
+            {
+                accountid = accountid.Substring(0, idx);
+            }
+
+            MyAcct.Accountname = accountname;
+            MyAcct.AccountID = accountid;
             MyAcct.Accountnum = num;
             MyAcct.OnChanged += new MigrationObjectEventHandler(Acct_OnAcctChanged);
 
