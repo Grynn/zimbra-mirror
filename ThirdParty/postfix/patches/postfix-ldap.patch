@@ -37,7 +37,7 @@
  
  #define FREE_RESULT 1
 -    return (ldap_parse_sasl_bind_result(dict_ldap->ld, res, 0, FREE_RESULT));
-+    rc = ldap_parse_result(ld, res, &err, 0, 0, 0, 0, FREE_RESULT);
++    rc = ldap_parse_result(dict_ldap->ld, res, &err, 0, 0, 0, 0, FREE_RESULT);
 +    return (rc == LDAP_SUCCESS ? err : rc);
  }
  
