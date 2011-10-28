@@ -2,8 +2,6 @@
 using System.Linq;
 using System.Text;
 using System;
-// using MVVM;
-// using Exchange;
 using System.IO;
 using System.Reflection;
 
@@ -43,7 +41,7 @@ public class CSMigrationwrapper
      * }*/
 
   
-    Assembly testAssembly; 
+    Assembly sourceProvider; 
 
     string m_MailClient;
 
@@ -73,40 +71,27 @@ public class CSMigrationwrapper
 
     public CSMigrationwrapper()
     {
-        /*userobject = new Exchange.UserObject();
-        folderobject = new Exchange.folderObject();
-        folderobjectarray = new Exchange.folderObject[20];
-        itemobject = new Exchange.ItemObject();
-        itemobjectarray = new Exchange.ItemObject[20];*/
-      // string sAppPath = Environment.CurrentDirectory;
-       string sPath = System.AppDomain.CurrentDomain.BaseDirectory;
-       int x = sPath.IndexOf("\\c\\");
-       if (x > 0)
-       {
-           string newPath = sPath.Substring(0, x);
-           newPath = newPath + "\\c\\CssLib\\interop.Exchange.dll";
-           testAssembly = Assembly.LoadFile(newPath);
-       }
-       else
-       {
-           Console.WriteLine(" Assembly dll file cannot be found");
-       }
-   
-   
-            object userinstance;
-            Type[] types = testAssembly.GetTypes();
+        string path = System.AppDomain.CurrentDomain.BaseDirectory + "interop.Exchange.dll";
 
-                       
-            userobject = testAssembly.GetType("Exchange.UserObjectClass");
-            userinstance = Activator.CreateInstance(userobject);
+        sourceProvider = Assembly.LoadFile(path);
+        if (sourceProvider == null)
+        {
+            Console.WriteLine("Assembly dll file cannot be found");
+            return;
+        }
+        object userinstance;
+        Type[] types = sourceProvider.GetTypes();
 
-            folderobject = testAssembly.GetType("Exchange.folderObjectClass");
+        userobject = sourceProvider.GetType("Exchange.UserObjectClass");
+        userinstance = Activator.CreateInstance(userobject);
+
+        folderobject = sourceProvider.GetType("Exchange.folderObjectClass");
           
 
-            itemobject = testAssembly.GetType("Exchange.ItemObjectClass");
+        itemobject = sourceProvider.GetType("Exchange.ItemObjectClass");
            
 
-            MailWrapper = testAssembly.GetType("Exchange.MapiWrapperClass");
+        MailWrapper = sourceProvider.GetType("Exchange.MapiWrapperClass");
             
 
         api = new ZimbraAPI();
@@ -132,8 +117,7 @@ public class CSMigrationwrapper
     {
         if (MailClient == "MAPI")
         {
-            //MailWrapper = new Exchange.MapiWrapper();
-            Type calcType = testAssembly.GetType("Exchange.MapiWrapperClass");
+            Type calcType = sourceProvider.GetType("Exchange.MapiWrapperClass");
 
             object calcInstance = Activator.CreateInstance(calcType);
             
@@ -146,10 +130,7 @@ public class CSMigrationwrapper
 
         if (MailClient == "MAPI")
         {
-           /* MailWrapper = new Exchange.MapiWrapper();
-            s = MailWrapper.GlobalInit(Target, AdminUser, AdminPassword);*/
-
-            Type calcType = testAssembly.GetType("Exchange.MapiWrapperClass");
+            Type calcType = sourceProvider.GetType("Exchange.MapiWrapperClass");
 
             object calcInstance = Activator.CreateInstance(calcType);
             ParameterModifier pm = new ParameterModifier(1);
@@ -176,10 +157,7 @@ public class CSMigrationwrapper
 
         if (MailClient == "MAPI")
         {
-        /*    MailWrapper = new Exchange.MapiWrapper();
-            s = MailWrapper.GlobalUninit();
-            */
-            Type calcType = testAssembly.GetType("Exchange.MapiWrapperClass");
+            Type calcType = sourceProvider.GetType("Exchange.MapiWrapperClass");
 
             object calcInstance = Activator.CreateInstance(calcType);
 
@@ -199,11 +177,10 @@ public class CSMigrationwrapper
         // CreateConfig(ConfigXMLFile);
         int status = 0;
 
-        Type calcType = testAssembly.GetType("Exchange.MapiWrapperClass");
+        Type calcType = sourceProvider.GetType("Exchange.MapiWrapperClass");
 
         object calcInstance = Activator.CreateInstance(calcType);
 
-        // object o = null;
         ParameterModifier pm = new ParameterModifier(1);
         pm[0] = true;
         ParameterModifier[] mods = { pm };
@@ -217,9 +194,6 @@ public class CSMigrationwrapper
                 BindingFlags.InvokeMethod | BindingFlags.Instance | BindingFlags.Public,
                 null, calcInstance, MyArgs, mods, null, null);
             
-        /*MailWrapper = new Exchange.MapiWrapper();
-        MailWrapper.ConnectToServer(Mailserver, Port, AdminID);*/
-
         status = api.Logon(HostName, Port, AdminAccount, "test123", true);
 
         // Initilaize user object
@@ -236,7 +210,7 @@ public class CSMigrationwrapper
         object var = new object();
 
 
-        Type calcType = testAssembly.GetType("Exchange.MapiWrapperClass");
+        Type calcType = sourceProvider.GetType("Exchange.MapiWrapperClass");
 
         object calcInstance = Activator.CreateInstance(calcType);
 
@@ -267,7 +241,7 @@ public class CSMigrationwrapper
         // Change this to above signature when I start getting the real ObjectPicker object back
         object var = new object();
         
-        Type calcType = testAssembly.GetType("Exchange.MapiWrapperClass");
+        Type calcType = sourceProvider.GetType("Exchange.MapiWrapperClass");
         object calcInstance = Activator.CreateInstance(calcType);
         ParameterModifier pm = new ParameterModifier(1);
         pm[0] = true;
@@ -345,7 +319,7 @@ public class CSMigrationwrapper
         Type userobject;
         object userinstance;
         
-        userobject = testAssembly.GetType("Exchange.UserObjectClass");
+        userobject = sourceProvider.GetType("Exchange.UserObjectClass");
         userinstance = Activator.CreateInstance(userobject);
         // GetListofMapiFolders(Acct.Accountname);
 
@@ -369,7 +343,7 @@ public class CSMigrationwrapper
         Type itemObject;
         object iteminstance;
 
-        itemObject = testAssembly.GetType("Exchange.ItemObjectClass");
+        itemObject = sourceProvider.GetType("Exchange.ItemObjectClass");
         iteminstance = Activator.CreateInstance(itemObject);
             
 
@@ -442,7 +416,7 @@ public class CSMigrationwrapper
         Type userobject;
         object userinstance;
 
-        userobject = testAssembly.GetType("Exchange.UserObjectClass");
+        userobject = sourceProvider.GetType("Exchange.UserObjectClass");
         userinstance = Activator.CreateInstance(userobject);
 
         if (!isPreview)
@@ -737,9 +711,9 @@ public class CSMigrationwrapper
         Type userobject;
         object userinstance;
         // Assembly testAssembly = Assembly.LoadFile(@"C:\Users\knuthi\Documents\Visual Studio 2010\Projects\TestRegClint\TestRegClint\bin\Debug\exploretest.dll");
-        Type[] types = testAssembly.GetTypes();
+        Type[] types = sourceProvider.GetTypes();
 
-        Type calcType = testAssembly.GetType("Exchange.MapiWrapperClass");
+        Type calcType = sourceProvider.GetType("Exchange.MapiWrapperClass");
 
         object calcInstance = Activator.CreateInstance(calcType);
 
@@ -760,7 +734,7 @@ public class CSMigrationwrapper
         Console.WriteLine(MyArgs[0]);
         Console.ReadLine();
 
-        userobject = testAssembly.GetType("Exchange.UserObjectClass");
+        userobject = sourceProvider.GetType("Exchange.UserObjectClass");
         userinstance = Activator.CreateInstance(userobject);
 
         api = new ZimbraAPI();
