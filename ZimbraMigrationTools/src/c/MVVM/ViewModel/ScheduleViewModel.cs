@@ -158,7 +158,6 @@ namespace MVVM.ViewModel
                 }
 
                 UsersViewModel usersViewModel = ((UsersViewModel)ViewModelPtrs[(int)ViewType.USERS]);
-                ZimbraAPI zimbraAPI = new ZimbraAPI();
 
                 if (ZimbraValues.zimbraValues.AuthToken.Length == 0)
                 {
@@ -191,6 +190,7 @@ namespace MVVM.ViewModel
                             return;
                         }
                         string cosID = CosList[CurrentCOSSelection].CosID;
+                        ZimbraAPI zimbraAPI = new ZimbraAPI();
                         if (zimbraAPI.CreateAccount(accountName, defaultPWD, cosID) == 0)
                         {
                             tempMessage += string.Format("{0} Provisioned", userName) + "\n";
@@ -208,12 +208,6 @@ namespace MVVM.ViewModel
                 {
                     MessageBox.Show(tempMessage, "Zimbra Migration", MessageBoxButton.OK, mbi);
                 }
-
-                // Make sure account name is set
-                string usrName = (usersViewModel.UsersList[0].MappedName.Length > 0) ? usersViewModel.UsersList[0].MappedName : usersViewModel.UsersList[0].Username;
-                string acctName = usrName + "@" + domainName;
-                zimbraAPI.AccountName = acctName;
-                //
 
                 lb.SelectedIndex = 6;
             }
