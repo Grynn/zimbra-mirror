@@ -527,7 +527,7 @@ function() {
     var refreshEl = refreshLabel.getHtmlElement();
     refreshLabel.setCursor ("pointer");
     refreshEl.onclick = function () { ZaZimbraAdmin.prototype._refreshListener.call(ZaZimbraAdmin.getInstance());};
-    refreshEl.innerHTML = this._getAppLink(null, "Refresh");
+    refreshEl.innerHTML = this._getAppLink(null, "SearchRefreshWhite");
     refreshLabel.reparentHtmlElement (ZaSettings.SKIN_REFRESH_DOM_ID) ;
 }
 
@@ -542,7 +542,7 @@ function() {
     var previousEl = previousLabel.getHtmlElement();
     previousLabel.setCursor ("pointer");
     previousEl.onclick = function () { ZaZimbraAdmin.prototype._goPrevListener.call(ZaZimbraAdmin.getInstance());};
-    previousEl.innerHTML = this._getAppLink(null, "LeftArrow");
+    previousEl.innerHTML = this._getAppLink(null, "LeftArrowWhite");
     previousLabel.reparentHtmlElement (ZaSettings.SKIN_PREVIOUS_DOM_ID) ;
 }
 
@@ -556,7 +556,7 @@ function() {
     var nextEl = nextLabel.getHtmlElement();
     nextLabel.setCursor ("pointer");
     nextEl.onclick = function () { ZaZimbraAdmin.prototype._goNextListener.call(ZaZimbraAdmin.getInstance());};
-    nextEl.innerHTML = this._getAppLink(null, "RightArrow");
+    nextEl.innerHTML = this._getAppLink(null, "RightArrowWhite");
     nextLabel.reparentHtmlElement (ZaSettings.SKIN_NEXT_DOM_ID) ;
 }
 
@@ -612,7 +612,7 @@ function() {
         var adminObj = this ;
         helpLabel.getHtmlElement().onclick = function () { ZaZimbraAdmin.prototype._helpListener.call(adminObj) ;};
         helpLabel.getHtmlElement().innerHTML =
-             this._getAppLink(null, "Help",  ZaMsg.helpDesk, skin.skin_container_help_max_str_length);
+             this._getAppLink(null, "NodeExpandedWhite",  ZaMsg.helpDesk, skin.skin_container_help_max_str_length);
     }
     helpLabel.reparentHtmlElement (ZaSettings.SKIN_HELP_DOM_ID) ;
 }
@@ -703,6 +703,7 @@ function () {
 	}
 
 	dwButton.setText(innerContent);
+	dwButton.setDropDownImages("NodeExpandedWhite");
 	if(innerContent != ZaZimbraAdmin.currentUserName){
 		dwButton.setToolTipContent( ZaZimbraAdmin.currentUserName );
 	}

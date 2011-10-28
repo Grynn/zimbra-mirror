@@ -99,7 +99,7 @@ function(templateId, data) {
 ZaXDialog.prototype.addMiniIcon =
 function () {
     if (this._minEl) {
-        this._minEl.innerHTML = AjxImg.getImageHtml("Help");
+        this._minEl.innerHTML = AjxImg.getImageHtml("SlideCaratWhite");
 	    this._minEl.onclick = AjxCallback.simpleClosure(ZaXDialog.prototype.__handleMinClick, this);
     }
 }
