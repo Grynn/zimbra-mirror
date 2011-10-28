@@ -49,7 +49,7 @@ public class MigrationAccount
         {
             if (OnChanged != null)
                 OnChanged(this,
-                        new MigrationObjectEventArgs("TotalNoTasks", this.TotalItems, value));
+                        new MigrationObjectEventArgs("TotalNoItems", this.TotalItems, value));
             TotalItems = value;
         }
     }
@@ -69,7 +69,7 @@ public class MigrationAccount
         {
             if (OnChanged != null)
                 OnChanged(this,
-                        new MigrationObjectEventArgs("TotalNoContacts", this.TotalSent, value));
+                        new MigrationObjectEventArgs("TotalNoSent", this.TotalSent, value));
             TotalSent = value;
         }
     }

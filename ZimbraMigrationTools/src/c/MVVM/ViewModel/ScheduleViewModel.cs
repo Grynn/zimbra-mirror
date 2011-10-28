@@ -588,6 +588,10 @@ namespace MVVM.ViewModel
             MigrationAccount a = (MigrationAccount)sender;
             AccountResultsViewModel accountResultsViewModel = ((AccountResultsViewModel)ViewModelPtrs[(int)ViewType.RESULTS]);    // main one
             AccountResultsViewModel ar = accountResultsViewModel.AccountResultsList[a.Accountnum];
+            if (e.PropertyName == "TotalNoItems")
+            {
+                ar.TotalItemsToMigrate = Int32.Parse(e.NewValue.ToString());
+            }
             if (e.PropertyName == "TotalNoErrors")
             {
                 ar.NumErrs = (int)a.TotalNoErrors + 1;      // this happens first
@@ -627,25 +631,34 @@ namespace MVVM.ViewModel
             string msg2 = "{0} of {1}";
             ar.AcctProgressMsg = String.Format(msg2, f.CurrentCountOFItems, f.TotalCountOFItems);
 
-            // temporary -- eventually, for each account, get totals of all, and figure out incr            
-            int incr = 0;
-            switch (f.Accountnum)
-            {
-                case 0:     incr = (m_isPreview) ? 7 : 1;   break;
-                case 1:     incr = (m_isPreview) ? 6 : 1;   break;
-                case 2:     incr = (m_isPreview) ? 6 : 1;   break;
-                case 3:     incr = (m_isPreview) ? 5 : 1;   break;
-                default:    incr = (m_isPreview) ? 7 : 1;   break;
-            }
-            ////////
-
             if (e.PropertyName == "CurrentCountofItems")
             {
                 if (f.FolderName != null)
                 {
                     if (e.NewValue.ToString() != "0")
                     {
-                        accountResultsViewModel.AccountResultsList[f.Accountnum].PBValue += incr;
+                        //  TEMPORARY !!! WHEN I GET RID OF FAKE PREVIEW, TAKE THIS OUT AND REPLACE WITH ar.CurrentItemNum++
+                        if (m_isPreview)
+                        {
+                            ar.CurrentItemNum += Int32.Parse(e.NewValue.ToString()) - Int32.Parse(e.OldValue.ToString());
+                        }
+                        else
+                        {
+                            ar.CurrentItemNum++;
+                        }
+                        /////////////////
+
+                        // ANOTHER TEMPORARY RIDICULOUS HACK FOR PREVIEW.  TAKE THIS OUT AND REPLACE WITH ar.PBValue = (int)Math.Round, etc.
+                        if ((m_isPreview) && (f.FolderName == "Rules") && (ar.PBValue == 64))
+                        {
+                            ar.PBValue = 100;
+                        }
+                        else
+                        {
+                            ar.PBValue = (int)Math.Round(((Decimal)ar.CurrentItemNum / (Decimal)ar.TotalItemsToMigrate) * 100);
+                        }
+                        ///////////////////////
+
                         bgwlist[f.Accountnum].ReportProgress(ar.PBValue, f.Accountnum);
                     }
                 }
@@ -664,10 +677,10 @@ namespace MVVM.ViewModel
                     }
 
                     // TEMPORARY HACK (I HOPE).  When backend count processing is in -- get rid of this
-                    // It doesn't really work anyway
+                    // It doesn't really work anyway.
                     if ((e.OldValue.ToString() == "Tasks") && (e.NewValue.ToString() == "Tasks"))
                     {
-                        accountResultsViewModel.AccountResultsList[f.Accountnum].PBValue = 100;
+                        ar.PBValue = 100;
                         bgwlist[f.Accountnum].ReportProgress(ar.PBValue, f.Accountnum);
                     }
                     /////////////////////////

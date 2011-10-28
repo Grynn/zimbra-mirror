@@ -284,6 +284,37 @@ public class CSMigrationwrapper
         return s;
     }
 
+    private int ComputeTotalMigrationCount(Options importopts)
+    {
+        int count = 0;
+        foreach (dynamic folderobject in folderobjectarray)
+        {
+            // FBS NOTE THAT THESE ARE EXCHANGE SPECIFIC.  WE'LL HAVE TO CHANGE THIS GROU GROUPWISE !!!
+            if ((folderobject.Name == "Sent Items") && !(importopts.HasFlag(Options.Sent)))
+            {
+                continue;
+            }
+            if ((folderobject.Name == "Deleted Items") && !(importopts.HasFlag(Options.DeletedItems)))
+            {
+                continue;
+            }
+            if ((folderobject.Name == "Junk E-Mail") && !(importopts.HasFlag(Options.Junk)))
+            {
+                continue;
+            }
+            ////
+
+            // ANOTHER TEMP -- REMOVE WHEN WE DO APPOINTMENTS
+            if (folderobject.ContainerClass == "IPF.Appointment")
+            {
+                continue;
+            }
+
+            count += folderobject.ItemCount;
+        }
+        return count;
+    }
+
     private string GetFolderViewType(string containerClass)
     {
         string retval = "";     // if it's a "message", blanks are cool
@@ -443,7 +474,10 @@ public class CSMigrationwrapper
                    null, userinstance, null, null, null, null);
             Acct.migrationFolders[0].CurrentCountOFItems = folderobjectarray.Count();
 
-            ZimbraAPI api = new ZimbraAPI();
+            Acct.TotalNoItems = ComputeTotalMigrationCount(importopts);
+
+            ZimbraAPI api = new ZimbraAPI();          
+
             foreach (dynamic folderobject in folderobjectarray)
             {
                 string path = "";
@@ -554,7 +588,7 @@ public class CSMigrationwrapper
                     totalCount = 1100;
                     break;
             }
-            Acct.migrationFolders[0].FolderName = "Mails";
+            Acct.migrationFolders[0].FolderName = "Inbox";
             Acct.migrationFolders[0].TotalCountOFItems = totalCount;
             Acct.migrationFolders[0].CurrentCountOFItems = 0;
             while ((count >= 100) & (count < totalCount))

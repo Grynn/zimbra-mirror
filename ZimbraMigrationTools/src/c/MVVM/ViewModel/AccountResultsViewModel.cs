@@ -16,7 +16,7 @@ namespace MVVM.ViewModel
 {
     public class AccountResultsViewModel : BaseViewModel
     {
-        readonly AccountResults m_accountResults = new AccountResults(0, "", "", 0, "", 0, 0, false);
+        readonly AccountResults m_accountResults = new AccountResults();
         ScheduleViewModel m_scheduleViewModel;
         int m_accountnum;
         int m_AccountOnTab;
@@ -34,6 +34,9 @@ namespace MVVM.ViewModel
             this.NumErrs = numErrs;
             this.NumWarns = numWarns;
             this.EnableStop = enableStop;
+
+            this.CurrentItemNum = 0;
+            this.TotalItemsToMigrate = 0;
 
             this.SelectedTab = "";
             this.m_AccountOnTab = -1;
@@ -172,6 +175,34 @@ namespace MVVM.ViewModel
                 }
                 m_accountResults.AccountName = value;
                 OnPropertyChanged(new PropertyChangedEventArgs("AccountName"));
+            }
+        }
+
+        public int CurrentItemNum
+        {
+            get { return m_accountResults.CurrentItemNum; }
+            set
+            {
+                if (value == m_accountResults.CurrentItemNum)
+                {
+                    return;
+                }
+                m_accountResults.CurrentItemNum = value;
+                OnPropertyChanged(new PropertyChangedEventArgs("CurrentItemNum"));
+            }
+        }
+
+        public int TotalItemsToMigrate
+        {
+            get { return m_accountResults.TotalItemsToMigrate; }
+            set
+            {
+                if (value == m_accountResults.TotalItemsToMigrate)
+                {
+                    return;
+                }
+                m_accountResults.TotalItemsToMigrate = value;
+                OnPropertyChanged(new PropertyChangedEventArgs("TotalItemsToMigrate"));
             }
         }
 

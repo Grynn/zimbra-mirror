@@ -5,17 +5,19 @@ namespace MVVM.Model
 
     public class AccountResults
     {
-        internal AccountResults(int pbValue, string pbMsgValue, string accountName, int accountProgress, string acctProgressMsg, int numErrs, int numWarns, bool enableStop)
+        internal AccountResults()
         {
-            this.PBValue = pbValue;
-            this.PBMsgValue = pbMsgValue;
-            this.AccountName = accountName;
-            this.AccountProgress = accountProgress;
-            this.AcctProgressMsg = acctProgressMsg;
-            this.NumErrs = numErrs;
-            this.NumWarns = numWarns;
-            this.EnableStop = enableStop;
+            this.PBValue = 0;
+            this.PBMsgValue = "";
+            this.AccountName = "";
+            this.AccountProgress = 0;
+            this.AcctProgressMsg = "";
+            this.NumErrs = 0;
+            this.NumWarns = 0;
+            this.EnableStop = false;
             this.UserPBMsgValue = "";
+            this.CurrentItemNum = 0;
+            this.TotalItemsToMigrate = 0;
         }
 
         public int PBValue
@@ -39,6 +41,18 @@ namespace MVVM.Model
         public string AccountName
         {
             get; set;
+        }
+
+        public int CurrentItemNum
+        {
+            get;
+            set;
+        }
+
+        public int TotalItemsToMigrate
+        {
+            get;
+            set;
         }
 
         public int AccountProgress
