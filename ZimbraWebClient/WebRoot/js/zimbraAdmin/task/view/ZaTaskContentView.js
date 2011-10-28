@@ -22,12 +22,18 @@ ZaTabView.XFormModifiers["ZaTaskContentView"] = new Array();
 
 ZaTaskContentView._dialogCache = new Array();
 ZaTaskContentView._getDialog =
-function(cacheName, myConstructor) {
+function(selectedItem) {
+    var cacheName = selectedItem.cacheName;
+    var myConstructor = selectedItem.constructor;
+    var entry = selectedItem.data
     if (!ZaTaskContentView._dialogCache[cacheName]) {
         if (ZaApp.getInstance().dialogs[cacheName])
             ZaTaskContentView._dialogCache[cacheName] = ZaApp.getInstance().dialogs[cacheName];
-        else
-            ZaTaskContentView._dialogCache[cacheName] = new myConstructor(ZaApp.getInstance().getAppCtxt().getShell());
+        else {
+            ZaTaskContentView._dialogCache[cacheName] = new myConstructor(ZaApp.getInstance().getAppCtxt().getShell(), entry);
+            if (selectedItem.finishCallback)
+                ZaTaskContentView._dialogCache[cacheName].registerCallback(selectedItem.finishCallback.id, selectedItem.finishCallback.callback);
+        }
     }
     return ZaTaskContentView._dialogCache[cacheName];
 }
@@ -49,7 +55,7 @@ function (ev) {
 	var arr = this.widget.getSelection();
 	if(arr && arr.length) {
 		var selectedItem = arr[0];
-        var dialog = ZaTaskContentView._getDialog(selectedItem.cacheName, selectedItem.constructor);
+        var dialog = ZaTaskContentView._getDialog(selectedItem);
         dialog.setObject(selectedItem.data);
         dialog.popup();
         var position = selectedItem.position;

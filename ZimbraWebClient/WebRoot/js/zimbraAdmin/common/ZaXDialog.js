@@ -105,15 +105,38 @@ function () {
 }
 
 ZaXDialog.prototype.getTaskItem = function() {
-    var cacheName = this.getCacheName? this.getCacheName() : this.toString();
+    var cacheName = this.getCacheName? this.getCacheName() : "";
+    if (!cacheName) {
+        cacheName = this._iKeyName ? this._iKeyName : this.toString();
+    }
+
     var title = this.getTitle();
     if (!title) {
         title = this.toString();
     }
-    var taskItem = new ZaTaskItem(this.constructor, cacheName, title, this.getObject(), this.getBounds(), this.miniType);
+    var taskItem = new ZaTaskItem(this.constructor, cacheName, title, this.getObject(), this.getBounds(), this.miniType, undefined, this.getFinishBtnCallback());
     return taskItem;
 }
 
+ZaXDialog.prototype.getFinishBtnCallback = function (finishBtnId) {
+   if (!finishBtnId)
+    finishBtnId = DwtWizardDialog.FINISH_BUTTON;
+
+    var button;
+    button = this._buttonDesc[finishBtnId];
+    if (!button) {
+        finishBtnId = DwtDialog.OK_BUTTON;
+        button = this._buttonDesc[finishBtnId];
+    }
+
+    if (!button)
+        return;
+
+    if (!button.callback)
+        return;
+
+    return {id: finishBtnId, callback: button.callback};
+}
 ZaXDialog.prototype.popdownHookListner =
 function() {
     if (!this._inMin) {
