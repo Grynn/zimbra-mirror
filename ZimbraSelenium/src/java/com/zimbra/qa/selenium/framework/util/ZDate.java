@@ -70,6 +70,11 @@ public class ZDate {
 		calendar.set(Calendar.YEAR, year);
 		calendar.set(Calendar.MONTH, month - 1);
 		calendar.set(Calendar.DAY_OF_MONTH, monthday);
+
+		if (hour <= 12) {
+		   calendar.set(Calendar.AM_PM, 0);
+		}
+
 		calendar.set(Calendar.HOUR_OF_DAY, hour);
 		calendar.set(Calendar.MINUTE, minutes);
 		calendar.set(Calendar.SECOND, seconds);
@@ -119,6 +124,7 @@ public class ZDate {
 			   calendar.set(Calendar.YEAR, tempCalendar.get(Calendar.YEAR));
 			   calendar.set(Calendar.MONTH, tempCalendar.get(Calendar.MONTH));
 			   calendar.set(Calendar.DAY_OF_MONTH, tempCalendar.get(Calendar.DAY_OF_MONTH));
+			   calendar.set(Calendar.AM_PM, tempCalendar.get(Calendar.AM_PM));
 			   calendar.set(Calendar.HOUR, tempCalendar.get(Calendar.HOUR));
 			   calendar.set(Calendar.MINUTE, tempCalendar.get(Calendar.MINUTE));
 			   calendar.set(Calendar.SECOND, tempCalendar.get(Calendar.SECOND));
