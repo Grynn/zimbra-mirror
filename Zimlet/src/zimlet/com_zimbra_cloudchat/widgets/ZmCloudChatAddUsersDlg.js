@@ -34,6 +34,7 @@ ZmCloudChatAddUsersDlg.prototype.popup = function() {
 		this._addAutoCompleteHandler();
 		this._isInitialized = true;
 	}
+	this._addUsersField.focus();
 };
 
 ZmCloudChatAddUsersDlg.prototype._addAutoCompleteHandler =

@@ -1,8 +1,14 @@
 function ZmCloudChatListView(zimlet, model, controller, tabPage, dontShowUsersInTab) {
-	ZmCloudListView.call(this, zimlet, model, controller, tabPage.postsDiv);
+	ZmCloudListView.call(this, zimlet, model, controller);
+	controller.view = this;//store myself
 	this.id = "ZmCloudChatListView_feed_div_" + Dwt.getNextId();
+	this._isTypingStr = " " + this.zimlet.getMessage("isTyping");
 	this.chatUsers = this.controller.users;
-	this.parentView = document.getElementById(this.parentViewId);
+	this.parentView = document.getElementById(tabPage.postsDiv);
+	this.chatInfoDiv = document.getElementById(tabPage.chatInfoDivId);
+	this.currentUsersEmailOrAliasForThisChat = controller.currentUsersEmailOrAliasForThisChat;
+	this._dateFormatter = AjxDateFormat.getDateTimeInstance(AjxDateFormat.LONG, AjxDateFormat.SHORT);
+
 	this._userAndPresenceMap = [];
 	this.tabPage = tabPage;
 	this.userListViewId = tabPage.userListViewId;
@@ -12,10 +18,9 @@ function ZmCloudChatListView(zimlet, model, controller, tabPage, dontShowUsersIn
 	this.model.connectionEvent.attach(AjxCallback.simpleClosure(
 			this._handleConnectionEvent, this));
 
-		this.model.itemPresenceUpdated.attach(AjxCallback.simpleClosure(
+	this.model.itemPresenceUpdated.attach(AjxCallback.simpleClosure(
 			this._updateItemPresence, this));
 
-	this._dateFormatter = AjxDateFormat.getDateTimeInstance(AjxDateFormat.LONG, AjxDateFormat.SHORT);
 }
 
 ZmCloudChatListView.prototype = new ZmCloudListView;
@@ -54,9 +59,22 @@ ZmCloudChatListView.prototype._insertIncomingMessage = function(jsonObj) {
 			this.__appendMessage(jsonObj[i]);
 		}
 	} else {
+		this._clearUserIsTyping();
 		this.__appendMessage(jsonObj);
 	}
 
+};
+
+ZmCloudChatListView.prototype.handleUserIsTyping = function(jsonObj) {
+	if(jsonObj.user != this.currentUsersEmailOrAliasForThisChat) {
+	 	this.chatInfoDiv.innerHTML  = jsonObj.user + this._isTypingStr;
+		//clear after 5 secs
+		setTimeout(AjxCallback.simpleClosure(this._clearUserIsTyping, this), 5000);
+	}
+};
+
+ZmCloudChatListView.prototype._clearUserIsTyping = function() {
+	this.chatInfoDiv.innerHTML = "";
 };
 
 ZmCloudChatListView.prototype.getParsedMsg = function(message) {
@@ -277,7 +295,7 @@ ZmCloudChatListView.prototype._getUserNameAndPresenceHtml = function(text, prese
 		text = "<b>" + text + "</b>";
 		pClass = "ImgMsgUnread";
 	} else {
-		text = "<label style='color:gray;font-style: italic;'>" + text + "</label>";
+		text = "<label style='color:gray;cursor: pointer;'>" + text + "</label>";
 	}
 	var html = [];
 	var idx = 0;

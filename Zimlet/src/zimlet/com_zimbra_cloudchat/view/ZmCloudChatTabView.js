@@ -37,7 +37,7 @@ ZmCloudChatTabView.prototype.addRemovableTab = function(name, routingKey, chatCo
 };
 
 ZmCloudChatTabView.prototype._handleIncomingMsg = function(item) {
-   if(!item.action && item.routingKey) {//item.action means actual msg & not presence info
+   if(item.action == "PUBLISH" && item.routingKey) {
 	   var tabButton = this._routingKeyAndTabBtnMap[item.routingKey];
 	    if(!tabButton._isSelected) {
 			this._setTabBtnAs(tabButton, "ALERT");

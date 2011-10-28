@@ -181,13 +181,15 @@ ZmCloudChatBuddyListView.prototype._addBuddyItem = function(item) {
         labelClassId: "cloudChatZimlet_buddy_label_" + nextId,
         presenceClassId: "cloudChatZimlet_buddy_presence_" + nextId,
         divId: "cloudChatZimlet_buddy_div_" + nextId,
-        divClass: (item.isReadOnly ? "CloudChatFeedRow CloudChatDisabledRow" : "CloudChatFeedRow"),
+        //divClass: (item.isReadOnly ? "CloudChatFeedRow CloudChatDisabledRow" : "CloudChatFeedRow"),
+		divClass: "CloudChatFeedRow",
 		dontAllowGroupChat: item.dontAllowGroupChat,
 		label : item.label,
 		isEmailParticipant : item.isEmailParticipant
     };
 	this._addBuddyRow(this._emailAndInfoMap[item.email]);
 };
+
  ZmCloudChatBuddyListView.prototype._removeBuddyItem = function(item) {
 	 var info = this._emailAndInfoMap[item.email];
 	 var row = document.getElementById(info.divId);
@@ -353,7 +355,7 @@ function(params) {
 
 ZmCloudChatBuddyListView.prototype._getBuddyLabelHtml =
 function(email, presence) {
-    return presence == "ONLINE" ? "<b>" + email + "</b>": "<label style='color:gray;font-style: italic;'>" + email + "</label>";
+    return presence == "ONLINE" ? "<b>" + email + "</b>": "<label style='color:gray;cursor:pointer;'>" + email + "</label>";
 };
 
 ZmCloudChatBuddyListView.prototype._getPresenceClass =

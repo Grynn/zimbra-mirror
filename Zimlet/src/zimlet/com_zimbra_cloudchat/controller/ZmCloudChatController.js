@@ -2,7 +2,12 @@ function ZmCloudChatController(zimlet, model, socket) {
 	this.zimlet = zimlet;
 	this.model = model;
 	this._socket = socket;
+	this.view; //chatlistview set itself as the view
 }
+
+ZmCloudChatController.prototype.setView = function(view) {
+	this.view = view;
+};
 
 ZmCloudChatController.prototype.sendMessage = function(message) {
 	this._socket.send(message);
@@ -33,14 +38,4 @@ ZmCloudChatController.prototype.displayMessage = function(message) {
 
 ZmCloudChatController.prototype.displayConnectionMessage = function(message) {
 	this.model.addConnectionMessage(message);
-};
-
-ZmCloudChatController.prototype._getZimbraHostName = function() {
-	var soapURL = appCtxt.getSettings().getInfoResponse.soapURL;
-	var hostName = soapURL.replace("http://","").replace("https://", "");
-	hostName = hostName.split("/")[0];
-	if(hostName.indexOf(":") >0) {
-		hostName = hostName.split(":")[0];
-	}
-	return hostName;
 };

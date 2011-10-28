@@ -8,10 +8,6 @@
     border-bottom: 1px solid #CCCCCC;
 }
 
-.CloudChatDisabledRow {
-	cursor: not-allowed;
-}
-
 .CloudChatFeedErrorRow {
 	background: none repeat scroll 0 0 white;
     border-bottom: 1px solid #CCCCCC;

@@ -1,13 +1,13 @@
-function ZmCloudListView(zimlet, model, controller, parentViewId, userListViewId) {
-	this.controller = controller;
-	this.model = model;
+function ZmCloudListView(zimlet, model, controller) {
 	this.zimlet = zimlet;
-	this.parentViewId = parentViewId;
-	this.userListViewId = userListViewId;
+	this.model = model;
+	this.controller = controller;
+
 	if(controller) {
 		this.routingKey = controller.routingKey ? controller.routingKey : "";
 	}
 	this.isRendered = false;
+	this._oldIsTypingCharCount = 0;
 }
 
 ZmCloudListView.prototype.setCloudChatFolder = function(folder) {
@@ -30,9 +30,21 @@ function(ev) {
 		return;
 	}
 	if (event.keyCode != 13) {//if not enter key
+		this._sendIsTyping();
 		return;
 	}
+	this._oldIsTypingCharCount = 0;//reset
 	this._handleSendBtn();
+};
+
+ZmCloudListView.prototype._sendIsTyping = function() {
+	if(this._oldIsTypingCharCount == 0
+			|| (this.inputField.value.length - this._oldIsTypingCharCount) > 10
+			|| (this.inputField.value.length - this._oldIsTypingCharCount) < 0) {
+		this._oldIsTypingCharCount = this.inputField.value.length;
+		this.controller.sendUserIsTyping(this.routingKey);
+	}
+
 };
 
 ZmCloudListView.prototype._handleSendBtn = function() {

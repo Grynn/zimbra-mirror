@@ -40,8 +40,10 @@ function ZmCloudChatApp(zimlet) {
 	this.logoutEvent = new ZmCloudChatEvent(this);
 	this.currentUserName = appCtxt.getSettings().getInfoResponse.name;
 	this.myCoWorkersEmail = "0000AAAA_mycoworkers@work.com"; //show at the top
+
 	this._setPrefs();
 	this.createBuddyListWidget();
+	this._loadCurrentUsersEmails();
 }
 
 ZmCloudChatApp.prototype = new DwtDialog;
@@ -310,6 +312,15 @@ ZmCloudChatApp.prototype.sendAcceptChatRequest = function(routingKey) {
     }));
 };
 
+ZmCloudChatApp.prototype.sendUserIsTyping = function(params) {
+    this.cloudChatSocket.send(JSON.stringify({
+        action: "SEND_USER_IS_TYPING",
+        routingKey: params.routingKey,
+		user: params.user
+    }));
+};
+
+
 ZmCloudChatApp.prototype.sendReconnectChatRequest = function(params) {
 	this.__loginRoutingKey = null;
     this.cloudChatSocket.send(JSON.stringify({
@@ -369,8 +380,6 @@ ZmCloudChatApp.prototype.removeUsers = function(emails) {
 	}));
 };
 
-
-
 ZmCloudChatApp.prototype.createBuddyListWidget = function () {
 	var ccDiv = document.createElement("div");
 	ccDiv.id = "cloudchat_buddy_list";
@@ -379,7 +388,8 @@ ZmCloudChatApp.prototype.createBuddyListWidget = function () {
 	var treeView = overview.getTreeView(ZmOrganizer.FOLDER);
 	if(treeView) {
 		var el = treeView.getHtmlElement();
-		el.parentNode.appendChild(ccDiv);
+		var refEl = el.parentNode;
+		refEl.parentNode.insertBefore(ccDiv, refEl.nextSibling);
 	}
 	var model = new ZmCloudChatBuddyList();
 	this._buddyListController = new ZmCloudChatBuddyListController(model, this);
@@ -481,34 +491,7 @@ ZmCloudChatApp.prototype._handleIncomingMessage = function(message) {
     var jsonObj = JSON.parse(message);
 	var action = jsonObj.action;
 	var routingKey = jsonObj.routingKey;
-
-	if(action == "GET_BUDDY_LIST_AND_PRESENCE") {
-		this.createBuddylist(jsonObj);
-	} else if(action == "GET_EMAIL_PARTICIPANTS_AND_PRESENCE") {
-		   this.createEmailParticipantsList(jsonObj);
-	}else if(action == "PRESENCE") {
-		var presence = jsonObj.presence;
-		var item;
-		if(presence && presence.indexOf(":") > 0) {
-			var tmp = presence.split(":");
-			item =  new ZmCloudChatBuddy({email:tmp[0], presence:tmp[1]});
-		} else {
-			item = new ZmCloudChatBuddy({email:jsonObj.email, presence:"OFFLINE"});
-		}
-		this.onPresenceEvent.notify(item);
-
-	} else if (jsonObj.routingKey) {
-        if (action == "SEND_CHAT_REQUEST" || action == "SEND_RECONNECT_CHAT_REQUEST") {
-			if(jsonObj.tabRoutingKey) {
-				routingKey = this.replaceTabInfoRoutingKey(jsonObj.tabRoutingKey, routingKey);
-			}
-			this.sendAcceptChatRequest(routingKey);
-			this.setTabInfo({routingKey:routingKey, users:jsonObj.users});//store
-			if(this.currentUserName == jsonObj.from) {
-           		this.display(routingKey, jsonObj.users);
-			}
-        } else {
-            //if no action, its publish
+	if(action == "PUBLISH" || action == "GET_PRESENCE") {
 			var tabInfo = this.getTabInfo(routingKey);
 			var controller;
 			if(tabInfo) {
@@ -523,21 +506,63 @@ ZmCloudChatApp.prototype._handleIncomingMessage = function(message) {
 					this.display(routingKey, this.getTabInfo(routingKey).users, jsonObj);
 				}
 			}
-        }
+    } else if(action == "SEND_USER_IS_TYPING") {
+	   var tabInfo = this.getTabInfo(routingKey);
+		if(tabInfo && tabInfo.controller) {
+			tabInfo.controller.handleUserIsTyping(jsonObj);
+		}
+	} else if(action == "PRESENCE") {
+		var presence = jsonObj.presence;
+		var item;
+		if(presence && presence.indexOf(":") > 0) {
+			var tmp = presence.split(":");
+			item =  new ZmCloudChatBuddy({email:tmp[0], presence:tmp[1]});
+		} else {
+			item = new ZmCloudChatBuddy({email:jsonObj.email, presence:"OFFLINE"});
+		}
+		this.onPresenceEvent.notify(item);
+
+	} else if(action == "GET_BUDDY_LIST_AND_PRESENCE") {
+		this.createBuddylist(jsonObj);
+	} else if(action == "GET_EMAIL_PARTICIPANTS_AND_PRESENCE") {
+		   this.createEmailParticipantsList(jsonObj);
+	} else if (action == "SEND_CHAT_REQUEST" || action == "SEND_RECONNECT_CHAT_REQUEST") {
+			if(jsonObj.tabRoutingKey) {
+				routingKey = this.replaceTabInfoRoutingKey(jsonObj.tabRoutingKey, routingKey);
+			}
+			this.sendAcceptChatRequest(routingKey);
+			this.setTabInfo({routingKey:routingKey, users:jsonObj.users});//store
+			if(this.currentUserName == jsonObj.from) {
+				if(action != "SEND_RECONNECT_CHAT_REQUEST"){ //dont open dlg if its reconnect request
+					this.display(routingKey, jsonObj.users);
+				}
+			}
     } else {
 		//var transitions = [ZmToast.FADE_IN, ZmToast.PAUSE, ZmToast.FADE_OUT];
 		//appCtxt.setStatusMsg(message, ZmStatusView.LEVEL_INFO, null, transitions);
 		this.loginEvent.notify(message);
-
     }
 };
 
-ZmCloudChatApp.prototype._getZimbraHostName = function() {
-    var soapURL = appCtxt.getSettings().getInfoResponse.soapURL;
-    var hostName = soapURL.replace("http://", "").replace("https://", "");
-    hostName = hostName.split("/")[0];
-    if (hostName.indexOf(":") > 0) {
-        hostName = hostName.split(":")[0];
-    }
-    return hostName;
+ZmCloudChatApp.prototype._loadCurrentUsersEmails = function() {
+	this.currentUserEmails = [];
+	var infoResp = appCtxt.getSettings().getInfoResponse;
+	this.currentUserEmails.push(infoResp.name);
+	try {
+		var allowFromAddress = infoResp.attrs._attrs.zimbraAllowFromAddress;
+		if(allowFromAddress) {
+			this.currentUserEmails = (allowFromAddress instanceof Array) ? this.currentUserEmails.concat(allowFromAddress) : this.currentUserEmails.concat([allowFromAddress]);
+		}
+	} catch(e){
+		//ignore, this guy doesnt have allowFromAddress
+	}
+	//add aliases
+	try {
+		var zimbraMailAlias = infoResp.attrs._attrs.zimbraMailAlias;
+		if(zimbraMailAlias) {
+			this.currentUserEmails = (zimbraMailAlias instanceof Array) ? this.currentUserEmails.concat(zimbraMailAlias) : this.currentUserEmails.concat([zimbraMailAlias]);
+		}
+	} catch(e){
+		//ignore, this guy doesnt have aliases
+	}
 };
