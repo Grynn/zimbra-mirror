@@ -540,7 +540,7 @@ ZaSettings.INIT[ZaSettings.SKIN_APP_TABS_ID]            = [null, ZaSettings.T_CO
 if (appNewUI) {
 // here new skin start.....
 
-ZaSettings.LICENSE_ENABLED = false;
+ZaSettings.LICENSE_ENABLED = true;
 ZaSettings.ADMIN_ZIMLETS_ENABLED = true;
 ZaSettings.SAVE_SEARCH_ENABLED = true ;
 ZaSettings.TREE_ENABLED = true;
