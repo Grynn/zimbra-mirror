@@ -440,28 +440,25 @@ public class TreeContacts extends AbsTree {
 			
 		AbsPage page = null;
 		String locator = null;
-		
+		String subLocator = null;
 		if ( button == Button.B_TREE_NEWADDRESSBOOK ) {
 			
-			locator = null;
-			page = null;
+			locator = "css=div#main_Contacts-parent-ADDRBOOK td[id$=_title][id^=DWT]";
+		    subLocator ="css=div#ZmActionMenu_contacts_ADDRBOOK td#NEW_ADDRBOOK_title";
+			page = new DialogCreateFolder(MyApplication, ((AppAjaxClient)MyApplication).zPageAddressbook);			    
 			
-			// TODO: implement me
-			
-			// FALL THROUGH
-
+		
 		} else if ( button == Button.B_TREE_NEWTAG ) { 			
-			locator = zNewTagIcon;
-
+			//locator = zNewTagIcon;
+			locator = "css=div#main_Contacts-parent-TAG td[id$=_title][id^=DWT]"; //td#ztih__main_Contacts__TAG_optCell";
+            subLocator ="css=div#ZmActionMenu_contacts_TAG td#NEW_TAG_title";
 			page = new DialogTag(MyApplication,((AppAjaxClient) MyApplication).zPageAddressbook);
 				
 		} else {
 			throw new HarnessException("no logic defined for button "+ button);
 		}
 
-		if ( locator == null ) {
-			throw new HarnessException("locator was null for button "+ button);
-		}
+	
 		
 		// Default behavior, process the locator by clicking on it
 		//
@@ -471,11 +468,20 @@ public class TreeContacts extends AbsTree {
 			throw new HarnessException("Button is not present locator="+ locator +" button="+ button);
 		
 		// Click it
-		this.zClick(locator);
+		this.zClickAt(locator,"");
 		
 		// If the app is busy, wait for that to finish
 		this.zWaitForBusyOverlay();
-
+		
+		// Make sure the subLocator exists
+		if ( !this.sIsElementPresent(subLocator) )
+			throw new HarnessException("Button is not present locator="+ subLocator );
+		
+		this.zClick(subLocator);
+		
+		// If the app is busy, wait for that to finish
+		this.zWaitForBusyOverlay();
+		
 		// If page was specified, make sure it is active
 		if ( page != null ) {
 			
