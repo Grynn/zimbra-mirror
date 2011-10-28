@@ -65,7 +65,7 @@
     $ zmprov ms ${develbox} zimbraMemcachedBindPort 11211
     $ zmprov ms ${develbox} zimbraReverseProxyMailEnabled TRUE
     $ zmprov ms ${develbox} zimbraReverseProxyLookupTarget TRUE
-    $ zmprov ms ${develbox} +zimbraServiceEnabled imapproxy
+    $ zmprov ms ${develbox} +zimbraServiceEnabled proxy
 
     $ zmprov ms ${develbox} zimbraReverseProxyImapSaslGssapiEnabled TRUE
     $ zmprov ms ${develbox} zimbraReverseProxyPop3SaslGssapiEnabled TRUE

@@ -32,7 +32,7 @@ exe = {
 	"ZMPROV"        : "bin/zmprov -l",
 	"ZMLOCALCONFIG" : "bin/zmlocalconfig",
 	'PERDITION'     : "bin/zmperditionctl",
-	'IMAPPROXY'     : "bin/zmproxyctl",
+	'PROXY'         : "bin/zmproxyctl",
 	'STATS'         : "bin/zmstatctl",
 	'ARCHIVING'     : "bin/zmamavisdctl",
 	'MEMCACHED'     : "bin/zmmemcachedctl",
@@ -353,10 +353,10 @@ commands = {
 		name = "perdition",
 		cmd  = exe["PERDITION"] + " %s",
 	),
-	"imapproxy" : Command(
-		desc = "imapproxy",
-		name = "imapproxy",
-		cmd  = exe["IMAPPROXY"] + " %s",
+	"proxy" : Command(
+		desc = "proxy",
+		name = "proxy",
+		cmd  = exe["PROXY"] + " %s",
 	),
 	"stats" : Command(
 		desc = "stats",

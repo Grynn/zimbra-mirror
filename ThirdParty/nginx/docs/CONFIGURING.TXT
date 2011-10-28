@@ -331,7 +331,7 @@
     To customize the NGINX configuration, modify these attributes, and 
     generate the proxy configuration by running the command 
 
-    $ /opt/zimbra/libexec/zmmtaconfig imapproxy
+    $ /opt/zimbra/libexec/zmmtaconfig proxy
 
     If the nginx keyword that you wish to customize does not appear in the 
     list below, then the template file should be directly modified on disk

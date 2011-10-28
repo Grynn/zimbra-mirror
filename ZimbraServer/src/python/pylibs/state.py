@@ -42,7 +42,7 @@ class State:
 		"mailbox"   : 30,
 		"mailboxd"  : 35,
 		"memcached" : 40,
-		"imapproxy" : 50,
+		"proxy"     : 50,
 		"antispam"  : 60,
 		"antivirus" : 70,
 		"cbpolicyd" : 72,
@@ -489,7 +489,7 @@ class State:
 				for postconf in section.postconf():
 					self.curPostconf(postconf, section.postconf(postconf))
 
-				if section.name == "imapproxy":
+				if section.name == "proxy":
 					Log.logMsg(5, "Section %s changed compiling proxygen" % (section.name,))
 					self.proxygen(True)
 

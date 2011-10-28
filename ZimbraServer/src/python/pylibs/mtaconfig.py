@@ -93,7 +93,7 @@ class MtaConfig():
 				"amavis"     : "mta",
 				"sasl"       : "mta",
 				"webxml"     : "mailbox",
-				"nginx"      : "imapproxy",
+				"nginx"      : "proxy",
 				}
 
 	def getSection(self,name):
@@ -139,7 +139,7 @@ class MtaConfig():
 			i += 1
 
 			# the previous version continued to add the section to the list, with
-			# no data; this resulted in the forced run of proxyconfgen even when imapproxy
+			# no data; this resulted in the forced run of proxyconfgen even when proxy
 			# was disabled.  Probably a bug, not replicating.
 			if not state.checkConditional("SERVICE", servicemap):
 				Log.logMsg(4, "Service %s is not enabled.  Skipping %s" % (servicemap, section.name))
@@ -193,7 +193,7 @@ class MtaConfig():
 					else:
 						section.postconf(fields[1],"")
 				elif re.match(r"PROXYGEN", ln):
-					# ignore this; proxygen hardcoded in the imapproxy section logic
+					# ignore this; proxygen hardcoded in the proxy section logic
 					pass
 				elif re.match(r"LDAP", ln):
 					if (re.match(r"LOCAL", fields[2])):

@@ -64,7 +64,7 @@ sub getProcList() {
     if ($all || arrayContains(\@services, 'convertd')) {
         push(@procs, 'convertd');
     }
-    if ($all || arrayContains(\@services, 'imapproxy')) {
+    if ($all || arrayContains(\@services, 'proxy')) {
         push(@procs, 'nginx');
     }
     if ($all || arrayContains(\@services, 'ldap')) {
