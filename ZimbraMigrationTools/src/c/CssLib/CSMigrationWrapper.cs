@@ -522,6 +522,11 @@ public class CSMigrationwrapper
                 }
                 ////
 
+                if (folderobject.ItemCount == 0)
+                {
+                    continue;
+                }
+
                 // check if we want to skip any folders
                 bool bSkipIt = false;
                 for (int i = 0; i < skipList.Count; i++)
