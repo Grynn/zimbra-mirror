@@ -7,20 +7,28 @@ using System.Reflection;
 
 namespace CssLib
 {
-    [Flags]
-    public enum Options
-    {
+[Flags]
+public enum ItemsAndFoldersOptions
+{
 
-        Junk         = 0x0080,
-        DeletedItems = 0x0040,
-        Sent         = 0x0020,
-        Rules        = 0x0010,
-        Tasks        = 0x0008,
-        Calendar     = 0x0004,
-        Contacts     = 0x0002,
-        Mail         = 0x0001,
-        None         = 0x0000
-    }
+    Junk         = 0x0080,
+    DeletedItems = 0x0040,
+    Sent         = 0x0020,
+    Rules        = 0x0010,
+    Tasks        = 0x0008,
+    Calendar     = 0x0004,
+    Contacts     = 0x0002,
+    Mail         = 0x0001,
+    None         = 0x0000
+}
+
+public class MigrationOptions
+{
+    public ItemsAndFoldersOptions ItemsAndFolders;
+    public string DateFilter;
+    public string AttachmentFilter;
+    public string SkipFolders;
+}
 
         
 public class CSMigrationwrapper
@@ -258,21 +266,51 @@ public class CSMigrationwrapper
         return s;
     }
 
-    private int ComputeTotalMigrationCount(Options importopts)
+    private int ComputeTotalMigrationCount(MigrationOptions importopts)
     {
         int count = 0;
+
+        // set up check for skipping folders
+        List<string> skipList = new List<string>();
+        string skipfolders = importopts.SkipFolders;
+        if (skipfolders.Length > 0)
+        {
+            string[] tokens = skipfolders.Split(',');
+            for (int i = 0; i < tokens.Length; i++)
+            {
+                skipList.Add(tokens.GetValue(i).ToString());
+            }
+        }
+        ///
+
         foreach (dynamic folderobject in folderobjectarray)
         {
             // FBS NOTE THAT THESE ARE EXCHANGE SPECIFIC.  WE'LL HAVE TO CHANGE THIS GROU GROUPWISE !!!
-            if ((folderobject.Name == "Sent Items") && !(importopts.HasFlag(Options.Sent)))
+            if ((folderobject.Name == "Sent Items") && !(importopts.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Sent)))
             {
                 continue;
             }
-            if ((folderobject.Name == "Deleted Items") && !(importopts.HasFlag(Options.DeletedItems)))
+            if ((folderobject.Name == "Deleted Items") && !(importopts.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.DeletedItems)))
             {
                 continue;
             }
-            if ((folderobject.Name == "Junk E-Mail") && !(importopts.HasFlag(Options.Junk)))
+            if ((folderobject.Name == "Junk E-Mail") && !(importopts.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Junk)))
+            {
+                continue;
+            }
+            ////
+
+            // check if we want to skip any folders
+            bool bSkipIt = false;
+            for (int i = 0; i < skipList.Count; i++)
+            {
+                if (folderobject.Name == skipList[i])
+                {
+                    bSkipIt = true;
+                    break;
+                }
+            }
+            if (bSkipIt)
             {
                 continue;
             }
@@ -411,7 +449,7 @@ public class CSMigrationwrapper
         }
     }
 
-    public void StartMigration(MigrationAccount Acct, Options importopts, bool isPreview = false)
+    public void StartMigration(MigrationAccount Acct, MigrationOptions importopts, bool isPreview = false)
     {
         Type userobject;
         object userinstance;
@@ -450,22 +488,51 @@ public class CSMigrationwrapper
 
             Acct.TotalNoItems = ComputeTotalMigrationCount(importopts);
 
-            ZimbraAPI api = new ZimbraAPI();          
+            ZimbraAPI api = new ZimbraAPI();
+
+            // set up check for skipping folders
+            List <string> skipList = new List<string>();
+            string skipfolders = importopts.SkipFolders;
+            if (skipfolders.Length > 0)
+            {
+                string[] tokens = skipfolders.Split(',');
+                for (int i = 0; i < tokens.Length; i++)
+                {
+                    skipList.Add(tokens.GetValue(i).ToString());
+                }
+            }
+            ///
 
             foreach (dynamic folderobject in folderobjectarray)
             {
                 string path = "";
 
                 // FBS NOTE THAT THESE ARE EXCHANGE SPECIFIC.  WE'LL HAVE TO CHANGE THIS GROU GROUPWISE !!!
-                if ((folderobject.Name == "Sent Items") && !(importopts.HasFlag(Options.Sent)))
+                if ((folderobject.Name == "Sent Items") && !(importopts.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Sent)))
                 {
                     continue;
                 }
-                if ((folderobject.Name == "Deleted Items") && !(importopts.HasFlag(Options.DeletedItems)))
+                if ((folderobject.Name == "Deleted Items") && !(importopts.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.DeletedItems)))
                 {
                     continue;
                 }
-                if ((folderobject.Name == "Junk E-Mail") && !(importopts.HasFlag(Options.Junk)))
+                if ((folderobject.Name == "Junk E-Mail") && !(importopts.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Junk)))
+                {
+                    continue;
+                }
+                ////
+
+                // check if we want to skip any folders
+                bool bSkipIt = false;
+                for (int i = 0; i < skipList.Count; i++)
+                {
+                    if (folderobject.Name == skipList[i])
+                    {
+                        bSkipIt = true;
+                        break;
+                    }
+                }
+                if (bSkipIt)
                 {
                     continue;
                 }
@@ -479,7 +546,7 @@ public class CSMigrationwrapper
                     path = folderobject.FolderPath;
                 }
 
-                if (importopts.HasFlag(Options.Contacts))
+                if (importopts.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Contacts))
                 {
                     if (folderobject.Name == "Deleted Items")   //FBS EXCHANGE SPECIFIC HACK.  CHANGE FOR GROUPWISE !!! 
                     {
@@ -487,7 +554,7 @@ public class CSMigrationwrapper
                     }
                     ProcessItems(Acct, folderobject, foldertype.Contacts, api, path);
                 }
-                if (importopts.HasFlag(Options.Mail))
+                if (importopts.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Mail))
                 {
                     ProcessItems(Acct, folderobject, foldertype.Mail, api, path);
                 }

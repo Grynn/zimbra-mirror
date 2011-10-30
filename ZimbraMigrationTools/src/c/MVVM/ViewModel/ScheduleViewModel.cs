@@ -450,34 +450,40 @@ namespace MVVM.ViewModel
             return retval;
         }
 
-        private Options SetOptions()
+        private MigrationOptions SetOptions()
         {
-            Options importOpts = Options.None;
+            MigrationOptions importOpts = new MigrationOptions();
+            ItemsAndFoldersOptions itemFolderFlags = ItemsAndFoldersOptions.None;
             OptionsViewModel ovm = ((OptionsViewModel)ViewModelPtrs[(int)ViewType.OPTIONS]);
             if (ovm.ImportCalendarOptions)
             {
-                importOpts = importOpts | Options.Calendar;
+                itemFolderFlags = itemFolderFlags | ItemsAndFoldersOptions.Calendar;
             }
             if (ovm.ImportContactOptions)
             {
-                importOpts = importOpts | Options.Contacts;
+                itemFolderFlags = itemFolderFlags | ItemsAndFoldersOptions.Contacts;
             }
             if (ovm.ImportMailOptions)
             {
-                importOpts = importOpts | Options.Mail;
+                itemFolderFlags = itemFolderFlags | ItemsAndFoldersOptions.Mail;
             }
             if (ovm.ImportSentOptions)
             {
-                importOpts = importOpts | Options.Sent;
+                itemFolderFlags = itemFolderFlags | ItemsAndFoldersOptions.Sent;
             }
             if (ovm.ImportDeletedItemOptions)
             {
-                importOpts = importOpts | Options.DeletedItems;
+                itemFolderFlags = itemFolderFlags | ItemsAndFoldersOptions.DeletedItems;
             }
             if (ovm.ImportJunkOptions)
             {
-                importOpts = importOpts | Options.Junk;
+                itemFolderFlags = itemFolderFlags | ItemsAndFoldersOptions.Junk;
             }
+
+            importOpts.ItemsAndFolders = itemFolderFlags;
+            importOpts.DateFilter = ovm.MigrateONRAfter;
+            importOpts.AttachmentFilter = ovm.MaxAttachementSize;
+            importOpts.SkipFolders = ovm.FoldersToSkip;
             return importOpts;
         }
 
@@ -539,7 +545,7 @@ namespace MVVM.ViewModel
             MyAcct.migrationFolders.Insert(0, MyFolder);
             
             CSMigrationwrapper mw = new CSMigrationwrapper();
-            Options importOpts = SetOptions();           
+            MigrationOptions importOpts = SetOptions();           
             mw.StartMigration(MyAcct, importOpts, m_isPreview);
 
             accountResultsViewModel.AccountResultsList[num].PBMsgValue = "Migration complete";

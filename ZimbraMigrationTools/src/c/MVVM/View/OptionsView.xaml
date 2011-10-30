@@ -48,7 +48,7 @@
                 <CheckBox Content="Junk" Grid.Row="2" HorizontalAlignment="Left" Name="cbJunk" VerticalAlignment="Center"  IsChecked="{Binding Path=ImportJunkOptions}" />
             </Grid>
         </GroupBox>
-        <GroupBox Name="GBOptions" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" MinWidth="400" Header="Options" HorizontalAlignment="Left" Margin="15,20,0,0" VerticalAlignment="Top" Padding="10">
+        <GroupBox Name="GBOptions" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" MinWidth="400" Header="Filters" HorizontalAlignment="Left" Margin="15,20,0,0" VerticalAlignment="Top" Padding="10">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition MinHeight= "24" Height="Auto"></RowDefinition>

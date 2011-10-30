@@ -8,7 +8,7 @@ namespace ZimbraMigrationConsole
 {
 class Migration
 {
-    public void test(string accountname, object Test, string accountid,Options opts)
+    public void test(string accountname, object Test, string accountid, MigrationOptions opts)
     {
         MigrationAccount MyAcct = new MigrationAccount();
 

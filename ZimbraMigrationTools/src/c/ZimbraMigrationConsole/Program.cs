@@ -53,14 +53,14 @@ class Program
                                 myXmlConfig.ConfigObj.mailServer.SourceAdminID);
                     }
 
-                    Options importopts = Options.None;
-
+                    MigrationOptions importopts = new MigrationOptions();
+                    ItemsAndFoldersOptions itemFolderFlags = ItemsAndFoldersOptions.None;
 
 
                     // userAcct.StartMigration(user.UserName, myXmlConfig.ConfigObj.importOptions.Mail.ToString());
                     if ((myXmlConfig.ConfigObj.importOptions.Mail) && (myXmlConfig.ConfigObj.importOptions.Contacts) && (myXmlConfig.ConfigObj.importOptions.Calendar) && (myXmlConfig.ConfigObj.importOptions.Sent))
                     {
-                        importopts = Options.Mail | Options.Contacts | Options.Calendar | Options.Sent ;
+                        itemFolderFlags = ItemsAndFoldersOptions.Mail | ItemsAndFoldersOptions.Contacts | ItemsAndFoldersOptions.Calendar | ItemsAndFoldersOptions.Sent;
 
                     }
                     else
@@ -69,7 +69,7 @@ class Program
                         if ((myXmlConfig.ConfigObj.importOptions.Mail) && (myXmlConfig.ConfigObj.importOptions.Contacts) && (myXmlConfig.ConfigObj.importOptions.Sent))
                         {
 
-                            importopts = Options.Mail | Options.Contacts | Options.Sent;
+                            itemFolderFlags = ItemsAndFoldersOptions.Mail | ItemsAndFoldersOptions.Contacts | ItemsAndFoldersOptions.Sent;
 
 
                         }
@@ -78,7 +78,7 @@ class Program
                             if ((myXmlConfig.ConfigObj.importOptions.Calendar) && (myXmlConfig.ConfigObj.importOptions.Contacts)&&(myXmlConfig.ConfigObj.importOptions.Sent))
                             {
 
-                                importopts = Options.Calendar | Options.Contacts |Options.Sent;
+                                itemFolderFlags = ItemsAndFoldersOptions.Calendar | ItemsAndFoldersOptions.Contacts | ItemsAndFoldersOptions.Sent;
 
 
                             }
@@ -86,28 +86,30 @@ class Program
                             
                                 if (myXmlConfig.ConfigObj.importOptions.Mail)
                                 {
-                                    importopts = Options.Mail;
+                                    itemFolderFlags = ItemsAndFoldersOptions.Mail;
 
                                 }
                                 else
                                     if (myXmlConfig.ConfigObj.importOptions.Contacts)
                                     {
-                                        importopts = Options.Contacts;
+                                        itemFolderFlags = ItemsAndFoldersOptions.Contacts;
 
                                     }
                                     else
                                         if (myXmlConfig.ConfigObj.importOptions.Calendar)
                                         {
-                                            importopts = Options.Calendar;
+                                            itemFolderFlags = ItemsAndFoldersOptions.Calendar;
 
                                         }
                                         else
                                             if(myXmlConfig.ConfigObj.importOptions.Sent)
                                             {
 
-                                                 importopts = Options.Sent;
+                                                itemFolderFlags = ItemsAndFoldersOptions.Sent;
                                             }
                             }
+
+                    importopts.ItemsAndFolders = itemFolderFlags;
                         
                     foreach (MVVM.Model.Users user in myXmlConfig.UserList)
                     {
