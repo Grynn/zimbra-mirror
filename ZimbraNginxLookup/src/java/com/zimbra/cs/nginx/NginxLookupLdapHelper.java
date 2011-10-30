@@ -28,7 +28,7 @@ import com.zimbra.cs.ldap.LdapClient;
 import com.zimbra.cs.ldap.LdapConstants;
 import com.zimbra.cs.ldap.LdapException;
 import com.zimbra.cs.ldap.LdapUsage;
-import com.zimbra.cs.ldap.LdapUtilCommon;
+import com.zimbra.cs.ldap.LdapUtil;
 import com.zimbra.cs.ldap.ZAttributes;
 import com.zimbra.cs.ldap.ZLdapContext;
 import com.zimbra.cs.ldap.ZLdapFilter;
@@ -106,7 +106,7 @@ public class NginxLookupLdapHelper extends AbstractNginxLookupLdapHelper {
         ZLdapContext zlc = LdapClient.toZLdapContext(prov, ldapContext);
         
         HashMap<String, String> kv = new HashMap<String,String>();
-        kv.put(templateKey, LdapUtilCommon.escapeSearchFilterArg(templateVal));
+        kv.put(templateKey, LdapUtil.escapeSearchFilterArg(templateVal));
         String query = config.getAttr(queryTemplate);
         String base  = config.getAttr(searchBase);
         if (query == null)

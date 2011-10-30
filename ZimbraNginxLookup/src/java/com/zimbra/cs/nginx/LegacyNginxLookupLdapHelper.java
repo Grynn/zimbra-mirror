@@ -33,7 +33,7 @@ import com.zimbra.cs.account.ldap.legacy.LegacyLdapUtil;
 import com.zimbra.cs.account.ldap.legacy.LegacyZimbraLdapContext;
 import com.zimbra.cs.ldap.ILdapContext;
 import com.zimbra.cs.ldap.LdapClient;
-import com.zimbra.cs.ldap.LdapUtilCommon;
+import com.zimbra.cs.ldap.LdapUtil;
 import com.zimbra.cs.ldap.ZLdapFilter;
 import com.zimbra.cs.ldap.ZLdapFilterFactory.FilterId;
 import com.zimbra.cs.nginx.NginxLookupExtension.EntryNotFoundException;
@@ -111,7 +111,7 @@ public class LegacyNginxLookupLdapHelper extends AbstractNginxLookupLdapHelper {
                 prov, ldapContext);
         
         HashMap<String, String> kv = new HashMap<String,String>();
-        kv.put(templateKey, LdapUtilCommon.escapeSearchFilterArg(templateVal));
+        kv.put(templateKey, LdapUtil.escapeSearchFilterArg(templateVal));
         String query = config.getAttr(queryTemplate);
         String base  = config.getAttr(searchBase);
         if (query == null)
