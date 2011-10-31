@@ -96,6 +96,31 @@ if(ZaOverviewPanelController.treeModifiers)
 	}
     ZaController.initToolbarMethods["ZaAccountListController"].push(ZaAccountListController.initExtraToolbarMethod);
 }*/
+ if(ZaTabView.XFormModifiers["ZaHomeXFormView"]) {
+
+    ZaHomeXFormView.onDoMigration = function (ev) {
+        ZaBulkProvisionTasksController.prototype.bulkDataImportListener.call(ZaApp.getInstance().getCurrentController(), ev);
+    }
+
+    bulkprovision.HomeXFormModifier = function(xFormObject) {
+        var setupItem = xFormObject.items[0].items[0].items[5];
+        var labelItem = setupItem.headerLabels;
+        var contentItem = setupItem.contentItems;
+        var index;
+        for (var index = 0; index < labelItem.length; index ++ ) {
+            if (labelItem[index] == ZaMsg.LBL_HomeAddAccounts) {
+                break;
+            }
+        }
+        if (index != labelItem.length) {
+            var content = contentItem[index];
+            content.push({value:ZaMsg.LBL_HomeMigration, onClick: ZaHomeXFormView.onDoMigration});
+        }
+
+    }
+
+    ZaTabView.XFormModifiers["ZaHomeXFormView"].push(bulkprovision.HomeXFormModifier);
+}
 
  ZaAccountListController.prototype._bulkProvisionListener =
  function (ev) {

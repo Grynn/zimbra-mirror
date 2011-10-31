@@ -84,16 +84,6 @@ ZaHomeXFormView.onConfigAuth = function(ev) {
     }
 }
 
-ZaHomeXFormView.onInstallCertficate = function (ev) {
-    var certServerList = ZaApp.getInstance().getCertsServerListController();
-    var serverList = ZaServer.getAll();
-    if (serverList.size() > 0) {
-        var lastServer = serverList.getVector().getLast();
-        var certServerList = ZaApp.getInstance().getCertsServerListController();
-	    ZaCert.launchNewCertWizard.call (certServerList, lastServer.id) ;
-    }
-}
-
 ZaHomeXFormView.onConfigDefaultCos = function() {
     var cosList = ZaApp.getInstance().getCosList();
     if (cosList.size() > 0) {
@@ -122,10 +112,6 @@ ZaHomeXFormView.onManageAccount = function(ev) {
     tree.setSelectionByPath(path, false);
 }
 
-ZaHomeXFormView.onDoMigration = function (ev) {
-    ZaBulkProvisionTasksController.prototype.bulkDataImportListener.call(ZaApp.getInstance().getCurrentController(), ev);
-}
-
 ZaHomeXFormView.onSearchZimbraHelp = function(ev) {
     var url = "http://support.zimbra.com/help/index.php";
     window.open(url, "_blank");
@@ -151,10 +137,10 @@ ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
     startContentChoices.push({});
     startContentChoices.push({});
     startContentChoices.push({});
-    startContentChoices.push({value:ZaMsg.LBL_HomeConfigBackup, onClick: ZaHomeXFormView.onSearchZimbraHelp});
-    startContentChoices.push({value:ZaMsg.LBL_HomeInstallCert, onClick: ZaHomeXFormView.onInstallCertficate});
+    startContentChoices[1] = {value:ZaMsg.LBL_HomeConfigBackup, onClick: ZaHomeXFormView.onSearchZimbraHelp};
+
     if (ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNT_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
-        startContentChoices.push({value:ZaMsg.LBL_HomeConfigureCos, onClick: ZaHomeXFormView.onConfigDefaultCos});
+        startContentChoices[3] = {value:ZaMsg.LBL_HomeConfigureCos, onClick: ZaHomeXFormView.onConfigDefaultCos};
     }
 
     if (ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DOMAIN_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
@@ -173,7 +159,6 @@ ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
         var addAccountChoices = [];
         addAccountChoices.push({value:ZaMsg.LBL_HomeAddAccount, onClick: ZaHomeXFormView.onCreateAccount});
         addAccountChoices.push({value:ZaMsg.LBL_HomeManageAccount, onClick: ZaHomeXFormView.onManageAccount});
-        addAccountChoices.push({value:ZaMsg.LBL_HomeMigration, onClick: ZaHomeXFormView.onDoMigration});
         contentChoices.push(addAccountChoices);
     }
 

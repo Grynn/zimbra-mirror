@@ -27,3 +27,36 @@ function() {
 	return this._controllers[ZaZimbraAdmin._CERTS_SERVER_LIST_VIEW];
 }
 }
+
+if(ZaTabView.XFormModifiers["ZaHomeXFormView"]) {
+
+
+    ZaHomeXFormView.onInstallCertficate = function (ev) {
+        var certServerList = ZaApp.getInstance().getCertsServerListController();
+        var serverList = ZaServer.getAll();
+        if (serverList.size() > 0) {
+            var lastServer = serverList.getVector().getLast();
+            var certServerList = ZaApp.getInstance().getCertsServerListController();
+            ZaCert.launchNewCertWizard.call (certServerList, lastServer.id) ;
+        }
+    }
+
+    ZaCert.HomeXFormModifier = function(xFormObject) {
+        var setupItem = xFormObject.items[0].items[0].items[5];
+        var labelItem = setupItem.headerLabels;
+        var contentItem = setupItem.contentItems;
+        var index;
+        for (var index = 0; index < labelItem.length; index ++ ) {
+            if (labelItem[index] == ZaMsg.LBL_HomeGetStared) {
+                break;
+            }
+        }
+        if (index != labelItem.length) {
+            var content = contentItem[index];
+            content[2] = {value:ZaMsg.LBL_HomeInstallCert, onClick: ZaHomeXFormView.onInstallCertficate};
+        }
+
+    }
+
+    ZaTabView.XFormModifiers["ZaHomeXFormView"].push(ZaCert.HomeXFormModifier);
+}
