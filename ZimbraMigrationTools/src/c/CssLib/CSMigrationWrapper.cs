@@ -299,6 +299,18 @@ public class CSMigrationwrapper
             {
                 continue;
             }
+            if ((folderobject.ContainerClass == "IPF.Contact") && !(importopts.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Contacts)))
+            {
+                continue;
+            }
+            if ((folderobject.ContainerClass == "IPF.Appointment") && !(importopts.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Calendar)))
+            {
+                continue;
+            }
+            if ((folderobject.ContainerClass == "IPF.Note") && !(importopts.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Mail)))
+            {
+                continue;
+            }
             ////
 
             // check if we want to skip any folders
@@ -392,8 +404,7 @@ public class CSMigrationwrapper
         Acct.migrationFolders[0].TotalCountOFItems = folderobject.ItemCount;//itemobjectarray.Count();
         Acct.migrationFolders[0].CurrentCountOFItems = 0;
         int iProcessedItems = 0;
-        while (iProcessedItems <
-                Acct.migrationFolders[0].TotalCountOFItems)
+        while (iProcessedItems < Acct.migrationFolders[0].TotalCountOFItems)               
         {
             foreach (dynamic itemobject in itemobjectarray)
             {
@@ -522,6 +533,18 @@ public class CSMigrationwrapper
                 {
                     continue;
                 }
+                if ((folderobject.ContainerClass == "IPF.Contact") && !(importopts.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Contacts)))
+                {
+                    continue;
+                }
+                if ((folderobject.ContainerClass == "IPF.Appointment") && !(importopts.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Calendar)))
+                {
+                    continue;
+                }
+                if ((folderobject.ContainerClass == "IPF.Note") && !(importopts.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Mail)))
+                {
+                    continue;
+                }
                 ////
 
                 if (folderobject.ItemCount == 0)
@@ -544,6 +567,12 @@ public class CSMigrationwrapper
                     continue;
                 }
                 ////
+
+                // ANOTHER TEMP -- REMOVE WHEN WE DO APPOINTMENTS
+                if (folderobject.ContainerClass == "IPF.Appointment")
+                {
+                    continue;
+                }
 
                 if (folderobject.Id == 0)
                 {
