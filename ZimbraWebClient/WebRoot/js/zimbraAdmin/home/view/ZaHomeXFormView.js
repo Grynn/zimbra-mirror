@@ -62,15 +62,68 @@ function(entry) {
 }
 
 ZaHomeXFormView.onCreateDomain = function(ev) {
-    ZaDomainListController.prototype._newButtonListener.call(ZaApp.getInstance().getCurrentController(), ev);
+    var domainListController =  ZaApp.getInstance().getDomainListController();
+    ZaDomainListController.prototype._newButtonListener.call(domainListController, ev);
 }
 
 ZaHomeXFormView.onConfigGAL = function(ev) {
-    ZaDomainListController.prototype._newButtonListener.call(ZaApp.getInstance().getCurrentController(), ev);
+    var domainList = ZaApp.getInstance().getDomainList();
+    if (domainList.size() > 0) {
+        var lastDomain = domainList.getVector().getLast();
+        var domainListController = ZaApp.getInstance().getDomainListController();
+        ZaDomainListController.prototype._openConfigGAL.call(domainListController, lastDomain);
+    }
+}
+
+ZaHomeXFormView.onConfigAuth = function(ev) {
+    var domainList = ZaApp.getInstance().getDomainList();
+    if (domainList.size() > 0) {
+        var lastDomain = domainList.getVector().getLast();
+        var domainListController = ZaApp.getInstance().getDomainListController();
+        ZaDomainListController.prototype._openAuthWiz.call(domainListController, lastDomain);
+    }
+}
+
+ZaHomeXFormView.onInstallCertficate = function (ev) {
+    var certServerList = ZaApp.getInstance().getCertsServerListController();
+    var serverList = ZaServer.getAll();
+    if (serverList.size() > 0) {
+        var lastServer = serverList.getVector().getLast();
+        var certServerList = ZaApp.getInstance().getCertsServerListController();
+	    ZaCert.launchNewCertWizard.call (certServerList, lastServer.id) ;
+    }
+}
+
+ZaHomeXFormView.onConfigDefaultCos = function() {
+    var cosList = ZaApp.getInstance().getCosList();
+    if (cosList.size() > 0) {
+        var vector = cosList.getVector();
+        var cos;
+        for(var i = 0; i < vector.size(); i++) {
+            cos = vector.get(i);
+            if (cos.name == "default")
+                break;
+        }
+        if (i != vector.size()) {
+            ZaApp.getInstance().getCosController().show(cos);
+            var parentPath = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_configure, ZaMsg.OVP_cos]);
+            ZaZimbraAdmin.getInstance().getOverviewPanelController().addObjectItem(parentPath, cos.name, null, true, false, cos);
+        }
+    }
 }
 
 ZaHomeXFormView.onCreateAccount = function(ev) {
-    ZaAccountListController.prototype._newAccountListener.call(ZaApp.getInstance().getCurrentController(), ev);
+    ZaAccountListController.prototype._newAccountListener.call(ZaApp.getInstance().getAccountListController(), ev);
+}
+
+ZaHomeXFormView.onManageAccount = function(ev) {
+    var tree = ZaZimbraAdmin.getInstance().getOverviewPanelController().getOverviewPanel().getFolderTree();
+    var path = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_manageAccounts]);
+    tree.setSelectionByPath(path, false);
+}
+
+ZaHomeXFormView.onDoMigration = function (ev) {
+    ZaBulkProvisionTasksController.prototype.bulkDataImportListener.call(ZaApp.getInstance().getCurrentController(), ev);
 }
 
 ZaHomeXFormView.onSearchZimbraHelp = function(ev) {
@@ -92,26 +145,37 @@ ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
     var contentChoices = [];
 
     labelChoices.push(ZaMsg.LBL_HomeGetStared);
-    var startContentChoices = [];
-    startContentChoices.push({value:ZaMsg.LBL_HomeInstallLicense, onClick: ZaHomeXFormView.onSearchZimbraHelp});
+    contentChoices.push([]);
+    var startContentChoices = contentChoices[contentChoices.length - 1];
+    startContentChoices.push({});
+    startContentChoices.push({});
+    startContentChoices.push({});
+    startContentChoices.push({});
     startContentChoices.push({value:ZaMsg.LBL_HomeConfigBackup, onClick: ZaHomeXFormView.onSearchZimbraHelp});
-    startContentChoices.push({value:ZaMsg.LBL_HomeInstallCert, onClick: ZaHomeXFormView.onSearchZimbraHelp});
-    startContentChoices.push({value:ZaMsg.LBL_HomeConfigureCos, onClick: ZaHomeXFormView.onSearchZimbraHelp});
-    contentChoices.push(startContentChoices);
+    startContentChoices.push({value:ZaMsg.LBL_HomeInstallCert, onClick: ZaHomeXFormView.onInstallCertficate});
+    if (ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNT_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+        startContentChoices.push({value:ZaMsg.LBL_HomeConfigureCos, onClick: ZaHomeXFormView.onConfigDefaultCos});
+    }
 
-    labelChoices.push(ZaMsg.LBL_HomeSetupDomain);
-    var domainContentChoices = [];
-    domainContentChoices.push({value:ZaMsg.LBL_HomeCreateDomain, onClick: ZaHomeXFormView.onCreateDomain});
-    domainContentChoices.push({value:ZaMsg.LBL_HomeConfigureGAL, onClick: ZaHomeXFormView.onSearchZimbraHelp});
-    domainContentChoices.push({value:ZaMsg.LBL_HomeCOnfigureAuth, onClick: ZaHomeXFormView.onSearchZimbraHelp});
-    contentChoices.push(domainContentChoices);
+    if (ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DOMAIN_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+        labelChoices.push(ZaMsg.LBL_HomeSetupDomain);
+        var domainContentChoices = [];
+	    if(ZaItem.hasRight(ZaDomain.RIGHT_CREATE_TOP_DOMAIN, ZaZimbraAdmin.currentAdminAccount)) {
+            domainContentChoices.push({value:ZaMsg.LBL_HomeCreateDomain, onClick: ZaHomeXFormView.onCreateDomain});
+        }
+        domainContentChoices.push({value:ZaMsg.LBL_HomeConfigureGAL, onClick: ZaHomeXFormView.onConfigGAL});
+        domainContentChoices.push({value:ZaMsg.LBL_HomeCOnfigureAuth, onClick: ZaHomeXFormView.onConfigAuth});
+        contentChoices.push(domainContentChoices);
+    }
 
-    labelChoices.push(ZaMsg.LBL_HomeAddAccounts);
-    var addAccountChoices = [];
-    addAccountChoices.push({value:ZaMsg.LBL_HomeAddAccount, onClick: ZaHomeXFormView.onCreateAccount});
-    addAccountChoices.push({value:ZaMsg.LBL_HomeManageAccount, onClick: ZaHomeXFormView.onSearchZimbraHelp});
-    addAccountChoices.push({value:ZaMsg.LBL_HomeMigration, onClick: ZaHomeXFormView.onSearchZimbraHelp});
-    contentChoices.push(addAccountChoices);
+    if (ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNT_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+        labelChoices.push(ZaMsg.LBL_HomeAddAccounts);
+        var addAccountChoices = [];
+        addAccountChoices.push({value:ZaMsg.LBL_HomeAddAccount, onClick: ZaHomeXFormView.onCreateAccount});
+        addAccountChoices.push({value:ZaMsg.LBL_HomeManageAccount, onClick: ZaHomeXFormView.onManageAccount});
+        addAccountChoices.push({value:ZaMsg.LBL_HomeMigration, onClick: ZaHomeXFormView.onDoMigration});
+        contentChoices.push(addAccountChoices);
+    }
 
     var case1 = {type:_ZATABCASE_, numCols: 3,  colSizes:["33%", "34%", "33%"], caseKey:1,
 //        height:"400px",  align:_LEFT_, valign:_TOP_,

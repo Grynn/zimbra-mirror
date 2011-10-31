@@ -361,9 +361,9 @@ function(ev) {
 		domain.rights = {};
 		domain._defaultValues = {attrs:{}};*/
 		domain.loadNewObjectDefaults("name","domain.tld");
-        if(!ZaApp.getInstance().dialogs["newDomainWizard"])
-		    ZaApp.getInstance().dialogs["newDomainWizard"] = new ZaNewDomainXWizard(this._container, domain);
-        this._newDomainWizard = ZaApp.getInstance().dialogs["newDomainWizard"];
+        if(!ZaApp.getInstance().dialogs["ZaNewDomainXWizard"])
+		    ZaApp.getInstance().dialogs["ZaNewDomainXWizard"] = new ZaNewDomainXWizard(this._container, domain);
+        this._newDomainWizard = ZaApp.getInstance().dialogs["ZaNewDomainXWizard"];
 		this._newDomainWizard.registerCallback(DwtWizardDialog.FINISH_BUTTON, ZaDomainListController.prototype._finishNewButtonListener, this, null);			
 		this._newDomainWizard.setObject(domain);
 		this._newDomainWizard.popup();
@@ -378,37 +378,48 @@ function(ev) {
 	try {
 		if(this._contentView.getSelectionCount() == 1) {
 			var item = this._contentView.getSelection()[0];
-			this._currentObject = item;
-			item.load("name", item.attrs[ZaDomain.A_domainName],false,true);
-			this._galWizard = ZaApp.getInstance().dialogs["galWizard"] = new ZaGALConfigXWizard(this._container,item);	
-			this._galWizard.registerCallback(DwtWizardDialog.FINISH_BUTTON, ZaDomainListController.prototype._finishGalButtonListener, this, null);			
-			this._galWizard.setObject(item);
-			this._galWizard.popup();
+			this._openConfigGAL(item);
 		}
 	} catch (ex) {
 		this._handleException(ex, "ZaDomainListController.prototype._showGalWizard", null, false);
 	}
 }
 
+ZaDomainListController.prototype._openConfigGAL =
+function(item) {
+	this._currentObject = item;
+    item.load("name", item.attrs[ZaDomain.A_domainName],false,true);
+
+    ZaApp.getInstance().dialogs["ZaGALConfigXWizard"] = new ZaGALConfigXWizard(this._container,item)
+    this._galWizard = ZaApp.getInstance().dialogs["ZaGALConfigXWizard"];
+    this._galWizard.registerCallback(DwtWizardDialog.FINISH_BUTTON, ZaDomainListController.prototype._finishGalButtonListener, this, null);
+    this._galWizard.setObject(item);
+    this._galWizard.popup();
+}
 
 ZaDomainListController.prototype._authWizButtonListener =
 function(ev) {
 	try {
 		if(this._contentView.getSelectionCount() == 1) {
 			var item = this._contentView.getSelection()[0];
-			this._currentObject = item;
-			item.load("name", item.attrs[ZaDomain.A_domainName],false,true);
-            if(appNewUI)
-			    this._authWizard = ZaApp.getInstance().dialogs["authWizard"] = new ZaTaskAuthConfigWizard(this._container);
-            else
-                this._authWizard = ZaApp.getInstance().dialogs["authWizard"] = new ZaAuthConfigXWizard(this._container);
-			this._authWizard.registerCallback(DwtWizardDialog.FINISH_BUTTON, ZaDomainListController.prototype._finishAuthButtonListener, this, null);			
-			this._authWizard.setObject(item);
-			this._authWizard.popup();
+			this._openAuthWiz(item);
 		}
 	} catch (ex) {
 		this._handleException(ex, "ZaDomainListController.prototype._showAuthWizard", null, false);
 	}
+}
+
+ZaDomainListController.prototype._openAuthWiz =
+function (item) {
+    this._currentObject = item;
+    item.load("name", item.attrs[ZaDomain.A_domainName],false,true);
+    if(appNewUI)
+        this._authWizard = ZaApp.getInstance().dialogs["ZaTaskAuthConfigWizard"] = new ZaTaskAuthConfigWizard(this._container);
+    else
+        this._authWizard = ZaApp.getInstance().dialogs["ZaAuthConfigXWizard"] = new ZaAuthConfigXWizard(this._container);
+    this._authWizard.registerCallback(DwtWizardDialog.FINISH_BUTTON, ZaDomainListController.prototype._finishAuthButtonListener, this, null);
+    this._authWizard.setObject(item);
+    this._authWizard.popup();
 }
 
 ZaDomainListController.prototype._autoProvWizButtonListener =
@@ -419,10 +430,10 @@ function(ev) {
 			this._currentObject = item;
 			item.load("name", item.attrs[ZaDomain.A_domainName],false,true);
             if(!this._autoProvWizard) {
-                if(ZaApp.getInstance().dialogs["autoProvWizard"])
-                     this._autoProvWizard = ZaApp.getInstance().dialogs["autoProvWizard"];
+                if(ZaApp.getInstance().dialogs["ZaTaskAutoProvDialog"])
+                     this._autoProvWizard = ZaApp.getInstance().dialogs["ZaTaskAutoProvDialog"];
                 else
-			        this._autoProvWizard = ZaApp.getInstance().dialogs["autoProvWizard"] = new ZaTaskAutoProvDialog(this._container, ZaMsg.NAD_AutoProvConfigTitle);//ZaAutoProvConfigXWizard(this._container);
+			        this._autoProvWizard = ZaApp.getInstance().dialogs["ZaTaskAutoProvDialog"] = new ZaTaskAutoProvDialog(this._container, ZaMsg.NAD_AutoProvConfigTitle);//ZaAutoProvConfigXWizard(this._container);
             }
             this._autoProvWizard.registerCallback(DwtDialog.OK_BUTTON, ZaDomainListController.prototype._finishAutoProvButtonListener, this, null);
             item.currentTab = "1";

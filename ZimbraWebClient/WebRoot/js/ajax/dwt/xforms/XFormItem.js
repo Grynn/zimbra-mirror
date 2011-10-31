@@ -4031,9 +4031,16 @@ SetupGroup_XFormItem.prototype.initializeItems = function () {
     var contentItems = this.getInheritedProperty("contentItems");
     this.items = [];
     this.width="100%";
+
     if (headerLabels.length!= 0 && headerLabels.length == contentItems.length) {
-        for (var i = 0; i < headerLabels.length; i++)
-            this.items.push(this.constructSingleGroup(headerLabels[i], contentItems[i], i ));
+        var firstlabel = 1;
+        for (var i = 0; i < headerLabels.length; i++) {
+            var result =  this.constructSingleGroup(headerLabels[i], contentItems[i], firstlabel);
+            if (result != undefined) {
+                this.items.push(result);
+                firstlabel ++;
+            }
+        }
     }
     this.numCols = this.items.length;
     if (this.numCols > 1)  {
@@ -4051,15 +4058,24 @@ SetupGroup_XFormItem.prototype.initializeItems = function () {
 
 SetupGroup_XFormItem.prototype.constructSingleGroup = function (headerLabel, contentItem, index) {
     var currentGroup = {type:_GROUP_, numCols:2, width: "100%", items:[]};
-    var labelMessage = (index  + 1) + "  " + headerLabel;
+    var labelMessage = (index) + "  " + headerLabel;
     var headerItem = {type:_OUTPUT_, colSpan: "*", value: labelMessage, cssStyle: "font-size:22px;padding-left: 5px; color: grey"};
     currentGroup.items.push(headerItem);
     var singleContentItem;
+    var isAdd = false;
+    var labelNumber = 1;
     for (var i = 0; i < contentItem.length; i++) {
-        singleContentItem = {type:_OUTPUT_, label: i + 1, value: contentItem[i].value, onClick: contentItem[i].onClick, labelCssStyle:"padding-left:20px; color: grey", containerCssStyle:"color:blue;cursor:pointer"};
-        currentGroup.items.push(singleContentItem);
+        if (contentItem[i] && contentItem[i].value) {
+            isAdd = true;
+            singleContentItem = {type:_OUTPUT_, label: labelNumber ++, value: contentItem[i].value, onClick: contentItem[i].onClick, labelCssStyle:"padding-left:20px; color: grey", containerCssStyle:"color:blue;cursor:pointer"};
+            currentGroup.items.push(singleContentItem);
+        }
     }
-    return currentGroup;
+
+    if (!isAdd)
+        return undefined;
+    else
+        return currentGroup;
 }
 //Composite_XFormItem.prototype.getErrorContainer = function () {
 //	
