@@ -6,11 +6,19 @@ Zimbra::MAPI::MAPISession *MAPIAccessAPI::m_zmmapisession = NULL;
 Zimbra::MAPI::MAPIStore *MAPIAccessAPI::m_defaultStore = NULL;
 std::wstring MAPIAccessAPI::m_strAdminProfileName = L"";
 std::wstring MAPIAccessAPI::m_strExchangeHostName = L"";
+bool MAPIAccessAPI::m_bSingleMailBoxMigration=false;
 
 // Initialize with Exchange Sever hostname, Outlook Admin profile name, Exchange mailbox name to be migrated
 MAPIAccessAPI::MAPIAccessAPI(wstring strUserName): m_userStore(NULL), m_rootFolder(NULL)
 {
-    m_strUserName = strUserName;
+	if(strUserName.empty())
+	{
+		m_bSingleMailBoxMigration=true;
+	}
+	else
+	{
+		m_strUserName = strUserName;
+	}
     MAPIInitialize(NULL);
     Zimbra::Mapi::Memory::SetMemAllocRoutines(NULL, MAPIAllocateBuffer, MAPIAllocateMore,
         MAPIFreeBuffer);
@@ -19,10 +27,11 @@ MAPIAccessAPI::MAPIAccessAPI(wstring strUserName): m_userStore(NULL), m_rootFold
 
 MAPIAccessAPI::~MAPIAccessAPI()
 {
-    if (m_userStore)
+    if ((m_userStore)&&(!m_bSingleMailBoxMigration))
         delete m_userStore;
     m_userStore = NULL;
     MAPIUninitialize();
+	m_bSingleMailBoxMigration=false;
 }
 
 void MAPIAccessAPI::InitFoldersToSkip()
@@ -175,12 +184,20 @@ LPCWSTR MAPIAccessAPI::InitializeUser()
 {
     LPCWSTR lpwstrStatus = NULL;
     HRESULT hr = S_OK;
-
+	
     try
     {
-        lpwstrStatus = OpenUserStore();
-        if (lpwstrStatus)
-            return lpwstrStatus;
+        if(!m_bSingleMailBoxMigration)
+		{
+			lpwstrStatus = OpenUserStore();
+			if (lpwstrStatus)
+				return lpwstrStatus;
+		}
+		else
+		{
+			//if profile to be migrated
+			m_userStore= m_defaultStore;
+		}
         // Get root folder from user store
         m_rootFolder = new Zimbra::MAPI::MAPIFolder(*m_zmmapisession, *m_userStore);
         if (FAILED(hr = m_userStore->GetRootFolder(*m_rootFolder)))

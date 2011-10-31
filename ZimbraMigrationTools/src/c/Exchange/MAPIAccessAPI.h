@@ -132,6 +132,7 @@ private:
     static std::wstring m_strExchangeHostName;
     static Zimbra::MAPI::MAPISession *m_zmmapisession;
     static Zimbra::MAPI::MAPIStore *m_defaultStore;
+	static bool m_bSingleMailBoxMigration;
 
     std::wstring m_strUserName;
     Zimbra::MAPI::MAPIStore *m_userStore;

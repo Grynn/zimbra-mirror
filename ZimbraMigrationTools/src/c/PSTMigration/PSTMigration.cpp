@@ -8,6 +8,8 @@
 
 #include <lm.h>
 
+#define PROFILE_MIGARTION 1
+
 LPCWSTR lpProfileName=L"testprofile";
 LPCWSTR lpExchangeServer=L"10.112.16.164";
 LPCWSTR lpServerAddress=L"10.117.82.163";
@@ -212,9 +214,18 @@ DWORD WINAPI AccountMigrationThread( LPVOID lpParameter )
 {
 	migrationThreadParams * mtparams = (migrationThreadParams*)lpParameter;
 	vector<Folder_Data> vfolderlist;
-	//Create class instance with Exchange mailbox to be migrated
-	Zimbra::MAPI::MAPIAccessAPI *maapi = new Zimbra::MAPI::MAPIAccessAPI(mtparams->mailboxname);
-	printf("MAILBOXNAME: %S\n",mtparams->mailboxname.c_str());
+	Zimbra::MAPI::MAPIAccessAPI *maapi =NULL;
+	if(PROFILE_MIGARTION)
+	{
+		maapi = new Zimbra::MAPI::MAPIAccessAPI(L"");
+	}
+	else
+	{
+		//Create class instance with Exchange mailbox to be migrated
+		maapi = new Zimbra::MAPI::MAPIAccessAPI(mtparams->mailboxname);
+		printf("MAILBOXNAME: %S\n",mtparams->mailboxname.c_str());
+	}
+
 	//Init user stores
 	LPCWSTR lpStatus =maapi->InitializeUser();
 	if (lpStatus)
@@ -230,7 +241,8 @@ DWORD WINAPI AccountMigrationThread( LPVOID lpParameter )
 	vector<Item_Data>::iterator idItr;
 	for(it=vfolderlist.begin();it!=vfolderlist.end();it++)
 	{
-		printf("MailboxName: %S ",mtparams->mailboxname.c_str());
+		if(!PROFILE_MIGARTION)
+			printf("MailboxName: %S ",mtparams->mailboxname.c_str());
 		printf("FolderName:  %S ",(*it).name.c_str());
 		printf("FolderPath: %S ",(*it).folderpath.c_str());
 		printf("ContainerClass: %S ",(*it).containerclass.c_str());
@@ -305,37 +317,49 @@ DWORD WINAPI AccountMigrationThread( LPVOID lpParameter )
 
 void MAPIAccessAPITestV()
 {
-	//Create Session and Open admin store.
-	MAPIAccessAPI::InitGlobalSessionAndStore(L"Outlook");
+	if(PROFILE_MIGARTION)
+	{
+		//Outlook profile to be migrated
+		MAPIAccessAPI::InitGlobalSessionAndStore(L"user1");
+		HANDLE hThread=::CreateThread( NULL, 0, AccountMigrationThread, NULL, 0L, NULL ) ;
+		//wait till all finished
+		WaitForSingleObject(hThread, INFINITE);
+		//close handle
+		CloseHandle(hThread);
+	}
+	else
+	{	
+		//Create Session and Open admin store.
+		MAPIAccessAPI::InitGlobalSessionAndStore(L"Admin@Exch2k7");
 	
-	DWORD const MAX_THREADS=1;
-	HANDLE hThreadArray[MAX_THREADS]={0}; 
-	migrationThreadParams mtparams[MAX_THREADS];
-	mtparams[0].mailboxname = L"seretary";
-/*	mtparams[1].mailboxname = L"av9 av9";
-	mtparams[2].mailboxname = L"av1";
-	mtparams[3].mailboxname = L"av2 av2";
-	mtparams[4].mailboxname = L"av3 av3";
-	mtparams[5].mailboxname = L"av4";
-	mtparams[6].mailboxname = L"av5";
-	mtparams[7].mailboxname = L"av7 av7";
-	mtparams[8].mailboxname = L"appt1";
-*/
-	//One thread per mailbox.
-	for( int i=0; i<MAX_THREADS; i++ )
-    {
-		hThreadArray[i]=::CreateThread( NULL, 0, AccountMigrationThread, &mtparams[i], 0L, NULL ) ;
+		DWORD const MAX_THREADS=1;
+		HANDLE hThreadArray[MAX_THREADS]={0}; 
+		migrationThreadParams mtparams[MAX_THREADS];
+		mtparams[0].mailboxname = L"user1";
+	/*	mtparams[1].mailboxname = L"av9 av9";
+		mtparams[2].mailboxname = L"av1";
+		mtparams[3].mailboxname = L"av2 av2";
+		mtparams[4].mailboxname = L"av3 av3";
+		mtparams[5].mailboxname = L"av4";
+		mtparams[6].mailboxname = L"av5";
+		mtparams[7].mailboxname = L"av7 av7";
+		mtparams[8].mailboxname = L"appt1";
+	*/
+		//One thread per mailbox.
+		for( int i=0; i<MAX_THREADS; i++ )
+		{
+			hThreadArray[i]=::CreateThread( NULL, 0, AccountMigrationThread, &mtparams[i], 0L, NULL ) ;
+		}
+
+		//wait till all finished
+		WaitForMultipleObjects(MAX_THREADS, hThreadArray, TRUE, INFINITE);
+
+		//close handles
+		for(int i=0; i<MAX_THREADS; i++)
+		{
+			CloseHandle(hThreadArray[i]);
+		}
 	}
-
-	//wait till all finished
-	WaitForMultipleObjects(MAX_THREADS, hThreadArray, TRUE, INFINITE);
-
-	//close handles
-	for(int i=0; i<MAX_THREADS; i++)
-    {
-        CloseHandle(hThreadArray[i]);
-	}
-
 	//destroy session and admin store.
 	MAPIAccessAPI::UnInitGlobalSessionAndStore();
 }
