@@ -202,8 +202,6 @@ public class MigrationFolder
             {
                 OnChanged(this,
                         new MigrationObjectEventArgs("FolderName", this.FolderName, value));
-                TotalCountofItems = 0;
-                CurrentCountofItems = 0;
             }
             strFolderName = value;
         }

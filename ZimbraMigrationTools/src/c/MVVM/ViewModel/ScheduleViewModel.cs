@@ -633,19 +633,15 @@ namespace MVVM.ViewModel
                 return;
             }
 
-            string msg1 = "Migrating {0}";
-            ar.PBMsgValue = String.Format(msg1, f.FolderName);
-            accountResultsViewModel.PBMsgValue = String.Format(msg1, f.FolderName); // for the user results window
-
-            string msg2 = "{0} of {1}";
-            ar.AcctProgressMsg = String.Format(msg2, f.CurrentCountOFItems, f.TotalCountOFItems);
-
             if (e.PropertyName == "CurrentCountofItems")
             {
                 if (f.FolderName != null)
                 {
                     if (e.NewValue.ToString() != "0")
                     {
+                        string msg2 = "{0} of {1}";
+                        ar.AcctProgressMsg = String.Format(msg2, f.CurrentCountOFItems, f.TotalCountOFItems);
+
                         //  TEMPORARY !!! WHEN I GET RID OF FAKE PREVIEW, TAKE THIS OUT AND REPLACE WITH ar.CurrentItemNum++
                         if (m_isPreview)
                         {
@@ -675,24 +671,17 @@ namespace MVVM.ViewModel
 
             if (e.PropertyName == "FolderName")
             {
-                if (e.OldValue != null)
-                {
-                    if ((e.NewValue.ToString() == e.OldValue.ToString()) || (m_isPreview))  // || (m_isPreview)) is temporary
-                    {
-                        string folderType = GetFolderTypeForUserResults(f.FolderView);
-                        f.LastFolderInfo = new FolderInfo(e.NewValue.ToString(), folderType, string.Format("{0} of {1}",
-                                                          f.TotalCountOFItems, f.TotalCountOFItems));
-                        ar.AccountFolderInfoList.Add(f.LastFolderInfo);
-                    }
+                string folderName = e.NewValue.ToString();
+                string folderType = GetFolderTypeForUserResults(f.FolderView);
 
-                    // TEMPORARY HACK (I HOPE).  When backend count processing is in -- get rid of this
-                    // It doesn't really work anyway.
-                    if ((e.OldValue.ToString() == "Tasks") && (e.NewValue.ToString() == "Tasks"))
-                    {
-                        ar.PBValue = 100;
-                        bgwlist[f.Accountnum].ReportProgress(ar.PBValue, f.Accountnum);
-                    }
-                    /////////////////////////
+                if (e.NewValue != null)
+                {
+                    string msg1 = "Migrating {0}";
+                    ar.PBMsgValue = String.Format(msg1, folderName);
+                    accountResultsViewModel.PBMsgValue = String.Format(msg1, folderName); // for the user results window
+                    f.LastFolderInfo = new FolderInfo(e.NewValue.ToString(), folderType, string.Format("{0} of {1}",
+                                                      f.TotalCountOFItems, f.TotalCountOFItems));
+                    ar.AccountFolderInfoList.Add(f.LastFolderInfo);
                 }
             }
         }

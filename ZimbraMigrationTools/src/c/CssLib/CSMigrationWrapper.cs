@@ -307,6 +307,10 @@ public class CSMigrationwrapper
             {
                 continue;
             }
+            if ((folderobject.ContainerClass == "IPF.Task") && !(importopts.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Tasks)))
+            {
+                continue;
+            }
             if ((folderobject.ContainerClass == "IPF.Note") && !(importopts.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Mail)))
             {
                 continue;
@@ -331,6 +335,12 @@ public class CSMigrationwrapper
 
             // ANOTHER TEMP -- REMOVE WHEN WE DO APPOINTMENTS
             if (folderobject.ContainerClass == "IPF.Appointment")
+            {
+                continue;
+            }
+
+            // ANOTHER TEMP -- REMOVE WHEN WE DO TASKS
+            if (folderobject.ContainerClass == "IPF.Task")
             {
                 continue;
             }
@@ -397,12 +407,6 @@ public class CSMigrationwrapper
         itemObject = sourceProvider.GetType("Exchange.ItemObjectClass");
         iteminstance = Activator.CreateInstance(itemObject);
 
-
-        // Exchange.ItemObject[] Items = Array.ConvertAll(objectArray, Item => (Exchange.ItemObject)Item);
-        Acct.migrationFolders[0].FolderName = folderobject.Name;
-        Acct.migrationFolders[0].FolderView = folderobject.ContainerClass;
-        Acct.migrationFolders[0].TotalCountOFItems = folderobject.ItemCount;//itemobjectarray.Count();
-        Acct.migrationFolders[0].CurrentCountOFItems = 0;
         int iProcessedItems = 0;
         while (iProcessedItems < Acct.migrationFolders[0].TotalCountOFItems)               
         {
@@ -574,6 +578,12 @@ public class CSMigrationwrapper
                     continue;
                 }
 
+                // ANOTHER TEMP -- REMOVE WHEN WE DO TASKS
+                if (folderobject.ContainerClass == "IPF.Task")
+                {
+                    continue;
+                }
+
                 if (folderobject.Id == 0)
                 {
                     api.AccountName = Acct.Accountname;
@@ -581,6 +591,12 @@ public class CSMigrationwrapper
                     int stat = api.CreateFolder(folderobject.FolderPath, ViewType);
                     path = folderobject.FolderPath;
                 }
+
+                // Set FolderName at the end, since we trigger results on that, so we need all the values set
+                Acct.migrationFolders[0].TotalCountOFItems = folderobject.ItemCount;//itemobjectarray.Count();
+                Acct.migrationFolders[0].CurrentCountOFItems = 0;
+                Acct.migrationFolders[0].FolderView = folderobject.ContainerClass;
+                Acct.migrationFolders[0].FolderName = folderobject.Name;
 
                 if (importopts.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Contacts))
                 {
