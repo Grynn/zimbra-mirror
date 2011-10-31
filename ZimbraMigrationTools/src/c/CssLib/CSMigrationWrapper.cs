@@ -278,7 +278,8 @@ public class CSMigrationwrapper
             string[] tokens = skipfolders.Split(',');
             for (int i = 0; i < tokens.Length; i++)
             {
-                skipList.Add(tokens.GetValue(i).ToString());
+                string token = tokens.GetValue(i).ToString();
+                skipList.Add(token.Trim());
             }
         }
         ///
@@ -383,7 +384,7 @@ public class CSMigrationwrapper
 
         itemObject = sourceProvider.GetType("Exchange.ItemObjectClass");
         iteminstance = Activator.CreateInstance(itemObject);
-            
+
 
         // Exchange.ItemObject[] Items = Array.ConvertAll(objectArray, Item => (Exchange.ItemObject)Item);
         Acct.migrationFolders[0].FolderName = folderobject.Name;
@@ -498,7 +499,8 @@ public class CSMigrationwrapper
                 string[] tokens = skipfolders.Split(',');
                 for (int i = 0; i < tokens.Length; i++)
                 {
-                    skipList.Add(tokens.GetValue(i).ToString());
+                    string token = tokens.GetValue(i).ToString();
+                    skipList.Add(token.Trim());
                 }
             }
             ///
