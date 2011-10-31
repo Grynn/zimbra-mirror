@@ -106,6 +106,8 @@ AjxEnv.isFirefox1_5up;
 AjxEnv.isFirefox3up;
 /** Mozilla Firefox version 3.6 (or higher). */
 AjxEnv.isFirefox3_6up;
+/** Mozilla Firefox version 4 (or higher). */
+AjxEnv.isFirefox4up;
 /** Mozilla. */
 AjxEnv.isMozilla;
 /** Mozilla version 1.4 (or higher). */
@@ -197,6 +199,7 @@ function() {
 	AjxEnv.isFirefox1_5up = false;
 	AjxEnv.isFirefox3up = false;
 	AjxEnv.isFirefox3_6up = false;
+	AjxEnv.isFirefox4up = false;
 	AjxEnv.isMozilla = false;
 	AjxEnv.isMozilla1_4up = false;
 	AjxEnv.isSafari = false;
@@ -345,6 +348,7 @@ function() {
 		AjxEnv.isFirefox3up		= (AjxEnv.isFirefox && browserVersion >= 3.0);
 		AjxEnv.isFirefox3_5up	= (AjxEnv.isFirefox && browserVersion >= 3.5);
 		AjxEnv.isFirefox3_6up	= (AjxEnv.isFirefox && browserVersion >= 3.6);
+		AjxEnv.isFirefox4up		= (AjxEnv.isFirefox && browserVersion >= 4.0);
 		AjxEnv.isSafari2		= (AjxEnv.isSafari && browserVersion >= 2.0 && browserVersion < 3.0);
 		AjxEnv.isSafari3		= (AjxEnv.isSafari && browserVersion >= 3.0 && browserVersion < 4.0) || AjxEnv.isChrome;
         AjxEnv.isSafari4        = (AjxEnv.isSafari && browserVersion >= 4.0);
@@ -360,27 +364,17 @@ function() {
 		AjxEnv.browser = "[unknown]";
 		if (AjxEnv.isOpera) 				{	AjxEnv.browser = "OPERA";	}
 		else if (AjxEnv.isChrome)			{	AjxEnv.browser = "GC" + browserVersion;	}
-		else if (AjxEnv.isSafari3up)		{	AjxEnv.browser = "SAF3";	}
-		else if (AjxEnv.isSafari)			{	AjxEnv.browser = "SAF";		}
+		else if (AjxEnv.isSafari)			{	AjxEnv.browser = "SAF" + browserVersion; }
 		else if (AjxEnv.isCamino)			{	AjxEnv.browser = "CAM";		}
 		else if (isWebTv)					{	AjxEnv.browser = "WEBTV";	}
 		else if (isHotJava)					{	AjxEnv.browser = "HOTJAVA";	}
-		else if (AjxEnv.isFirefox3up)		{	AjxEnv.browser = "FF3.0";	}
-		else if (AjxEnv.isFirefox2_0up)		{	AjxEnv.browser = "FF2.0";	}
-		else if (AjxEnv.isFirefox1_5up)		{	AjxEnv.browser = "FF1.5";	}
-		else if (AjxEnv.isFirefox1up)		{	AjxEnv.browser = "FF1.0";	}
-		else if (AjxEnv.isFirefox)			{	AjxEnv.browser = "FF";		}
+		else if (AjxEnv.isFirefox)			{	AjxEnv.browser = "FF" + browserVersion; }
 		else if (AjxEnv.isPrism)			{	AjxEnv.browser = "PRISM";	}
 		else if (AjxEnv.isNav7)				{	AjxEnv.browser = "NAV7";	}
 		else if (AjxEnv.isNav6)				{	AjxEnv.browser = "NAV6";	}
 		else if (AjxEnv.isNav4)				{	AjxEnv.browser = "NAV4";	}
-		else if (AjxEnv.isIE8)				{	AjxEnv.browser = "IE8";		}
-		else if (AjxEnv.isIE7)				{	AjxEnv.browser = "IE7";		}
-		else if (AjxEnv.isIE6)				{	AjxEnv.browser = "IE6";		}
-		else if (AjxEnv.isIE5)				{	AjxEnv.browser = "IE5";		}
-		else if (AjxEnv.isIE4)				{	AjxEnv.browser = "IE4";		}
-		else if (AjxEnv.isIE3)				{	AjxEnv.browser = "IE";		}
-		else if (AjxEnv.isDesktop)			{	AjxEnv.browser = "ZDESKTOP";}
+		else if (AjxEnv.isIE)				{	AjxEnv.browser = "IE" + browserVersion; }
+		else if (AjxEnv.isDesktop)			{	AjxEnv.browser = "ZD" + browserVersion; }
 
 		AjxEnv.platform = "[unknown]";
 		if (AjxEnv.isWindows)				{	AjxEnv.platform = "Win";	}
