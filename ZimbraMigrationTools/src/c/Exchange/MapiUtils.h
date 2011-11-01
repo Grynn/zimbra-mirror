@@ -157,6 +157,9 @@ namespace MAPI
 {
 namespace Util
 {
+
+const std::string PSTMIG_PROFILE_PREFIX = "Z1mbr4PST23Migration";
+
 enum MIME_ENCODING
 {
     ME_7BIT,
@@ -301,6 +304,9 @@ BOOL CreateAppTemporaryDirectory();
 BOOL GetAppTemporaryDirectory(wstring &wstrTempAppDirPath);
 wstring GetUniqueName();
 wstring GetDomainName();
+LONG GetOutlookVersion(int &iVersion);
+BOOL CreatePSTProfile (LPSTR lpstrProfileName, LPSTR lpstrPSTFQPathName, bool bNoUI=true);
+BOOL DeleteAlikeProfiles(LPCSTR lpstrProfileName);
 
 }                                               // end Util
 }                                               // end MAPI

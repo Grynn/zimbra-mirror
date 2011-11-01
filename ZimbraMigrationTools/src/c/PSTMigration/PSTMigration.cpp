@@ -8,7 +8,7 @@
 
 #include <lm.h>
 
-#define PROFILE_MIGARTION 1
+#define PROFILE_MIGARTION 0
 
 LPCWSTR lpProfileName=L"testprofile";
 LPCWSTR lpExchangeServer=L"10.112.16.164";
@@ -320,7 +320,7 @@ void MAPIAccessAPITestV()
 	if(PROFILE_MIGARTION)
 	{
 		//Outlook profile to be migrated
-		MAPIAccessAPI::InitGlobalSessionAndStore(L"user1");
+		MAPIAccessAPI::InitGlobalSessionAndStore(L"user1");//(L"E:\\temp\\PST\\OriginalEmailCalendar.pst");//
 		HANDLE hThread=::CreateThread( NULL, 0, AccountMigrationThread, NULL, 0L, NULL ) ;
 		//wait till all finished
 		WaitForSingleObject(hThread, INFINITE);

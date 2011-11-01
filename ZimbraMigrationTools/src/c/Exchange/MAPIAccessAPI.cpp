@@ -4,7 +4,7 @@
 
 Zimbra::MAPI::MAPISession *MAPIAccessAPI::m_zmmapisession = NULL;
 Zimbra::MAPI::MAPIStore *MAPIAccessAPI::m_defaultStore = NULL;
-std::wstring MAPIAccessAPI::m_strAdminProfileName = L"";
+std::wstring MAPIAccessAPI::m_strTargetProfileName = L"";
 std::wstring MAPIAccessAPI::m_strExchangeHostName = L"";
 bool MAPIAccessAPI::m_bSingleMailBoxMigration=false;
 
@@ -55,11 +55,11 @@ bool MAPIAccessAPI::SkipFolder(ExchangeSpecialFolderId exfid)
     return false;
 }
 
-LPCWSTR MAPIAccessAPI::InitGlobalSessionAndStore(LPCWSTR lpcwstrAdminProfile)
+LPCWSTR MAPIAccessAPI::InitGlobalSessionAndStore(LPCWSTR lpcwstrMigTarget)
 {
-	LPCWSTR lpwstrStatus = NULL;
-    m_strAdminProfileName = lpcwstrAdminProfile;
-	m_strExchangeHostName = Zimbra::MAPI::Util::GetDomainName();//strExchangeHostName;
+	LPCWSTR lpwstrStatus = NULL;	
+	//Get Domain
+	m_strExchangeHostName = Zimbra::MAPI::Util::GetDomainName();
 	if(m_strExchangeHostName.empty())
 	{
 		lpwstrStatus = FromatExceptionInfo(E_FAIL, L"GetDomainName Failed.",
@@ -69,14 +69,55 @@ LPCWSTR MAPIAccessAPI::InitGlobalSessionAndStore(LPCWSTR lpcwstrAdminProfile)
     
     try
     {
-        // Logon into Admin profile
+        // Logon into target profile
         m_zmmapisession = new Zimbra::MAPI::MAPISession();
-        HRESULT hr = m_zmmapisession->Logon((LPWSTR)lpcwstrAdminProfile);
+
+		//Detreming if its a profile or PST by extension
+		wstring strMigTarget = lpcwstrMigTarget;
+		std::transform(strMigTarget.begin(), strMigTarget.end(),strMigTarget.begin(), ::toupper);
+
+		//if pst file, create associated MAPI profile for migration
+		if (strMigTarget.find(L".PST")!=std::wstring::npos)
+		{
+			LPSTR lpstrMigTarget;
+			WtoA((LPWSTR)lpcwstrMigTarget,lpstrMigTarget);
+
+			//delete any left over profiles from previous migration
+			Zimbra::MAPI::Util::DeleteAlikeProfiles(Zimbra::MAPI::Util::PSTMIG_PROFILE_PREFIX.c_str());
+
+			string strPSTProfileName = Zimbra::MAPI::Util::PSTMIG_PROFILE_PREFIX;
+
+			//Add timestamp to profile to make it unique
+			char timeStr[9];
+			_strtime(timeStr);
+			string strTmpProfile(timeStr);
+			replace( strTmpProfile.begin(), strTmpProfile.end(), ':', '_'); 
+			strPSTProfileName += strTmpProfile;
+			//create PST profile
+			if(!Zimbra::MAPI::Util::CreatePSTProfile((LPSTR)strPSTProfileName.c_str(),lpstrMigTarget))
+			{
+				SafeDelete(lpstrMigTarget);
+				lpwstrStatus = FromatExceptionInfo(E_FAIL, L"CreatePSTProfile Failed.",
+					__FILE__, __LINE__);
+				goto CLEAN_UP;
+			}
+			SafeDelete(lpstrMigTarget);
+			LPWSTR wstrProfileName;
+			AtoW((LPSTR)strPSTProfileName.c_str(),wstrProfileName);
+			m_strTargetProfileName= wstrProfileName;
+			SafeDelete(wstrProfileName);
+		}
+		else
+		{
+			m_strTargetProfileName = lpcwstrMigTarget;
+		}
+
+		HRESULT hr = m_zmmapisession->Logon((LPWSTR)m_strTargetProfileName.c_str());
         if (hr != S_OK)
             goto CLEAN_UP;
         m_defaultStore = new Zimbra::MAPI::MAPIStore();
 
-        // Open Admin default store
+        // Open target default store
         hr = m_zmmapisession->OpenDefaultStore(*m_defaultStore);
         if (hr != S_OK)
             goto CLEAN_UP;
@@ -114,6 +155,9 @@ CLEAN_UP:
 
 void MAPIAccessAPI::UnInitGlobalSessionAndStore()
 {
+	//Delete any PST migration profiles
+	Zimbra::MAPI::Util::DeleteAlikeProfiles(Zimbra::MAPI::Util::PSTMIG_PROFILE_PREFIX.c_str());
+
     if (m_defaultStore)
         delete m_defaultStore;
     m_defaultStore = NULL;

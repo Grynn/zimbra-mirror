@@ -128,7 +128,7 @@ typedef struct _MessageItemData: BaseItemData
 class MAPIAccessAPI
 {
 private:
-    static std::wstring m_strAdminProfileName;
+    static std::wstring m_strTargetProfileName;
     static std::wstring m_strExchangeHostName;
     static Zimbra::MAPI::MAPISession *m_zmmapisession;
     static Zimbra::MAPI::MAPIStore *m_defaultStore;
@@ -147,8 +147,11 @@ private:
     HRESULT GetInternalFolder(SBinary sbFolderEID, MAPIFolder &folder);
 
 public:
-    // static methods to be used by all mailboxes
-    static LPCWSTR InitGlobalSessionAndStore(LPCWSTR lpcwstrAdminProfile);
+    //static methods to be used by all mailboxes/profile/PST
+	//lpcwstrMigTarget -> Exchange Admin Profile for Exchange mailboxes migration
+	//lpcwstrMigTarget -> Local Exchange profile migration
+	//lpcwstrMigTarget -> PST file path for PST migration
+    static LPCWSTR InitGlobalSessionAndStore(LPCWSTR lpcwstrMigTarget);
     static void UnInitGlobalSessionAndStore();
 
     // Per mailbox methods.

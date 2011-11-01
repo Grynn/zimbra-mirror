@@ -3,7 +3,7 @@
 #include <strsafe.h>
 #pragma comment(lib, "netapi32.lib")
 #include <lm.h>
-
+#include <mspst.h>
 
 enum AttachPropIdx
 {
@@ -2075,4 +2075,181 @@ wstring Zimbra::MAPI::Util::GetDomainName()
 		NetApiBufferFree(pBuf);
 
 	return wDomain;
+}
+
+BOOL Zimbra::MAPI::Util::CreatePSTProfile (LPSTR lpstrProfileName, LPSTR lpstrPSTFQPathName, bool bNoUI)
+{
+	HRESULT hr=S_OK;
+	Zimbra::Util::ScopedInterface<IProfAdmin> iprofadmin;
+	Zimbra::Util::ScopedInterface<IMsgServiceAdmin> imsadmin;
+	Zimbra::Util::ScopedInterface<IMAPITable> mstable;
+	Zimbra::Util::ScopedRowSet msrows;
+
+    // Get IProfAdmin interface pointer
+	if(FAILED(hr = MAPIAdminProfiles(0, iprofadmin.getptr())))
+		throw MapiUtilsException(
+            hr, L"Util:: CreatePSTProfile(): MAPIAdminProfiles Failed.", __LINE__,
+            __FILE__);
+
+	if(FAILED(hr = iprofadmin->CreateProfile((LPTSTR)lpstrProfileName, NULL, NULL, 0)))
+		throw MapiUtilsException(
+            hr, L"Util:: CreatePSTProfile(): CreateProfile Failed.", __LINE__,
+            __FILE__);
+	
+	if(FAILED(hr = iprofadmin->AdminServices((LPTSTR)lpstrProfileName, NULL, NULL, 0, imsadmin.getptr())))
+		throw MapiUtilsException(
+            hr, L"Util:: CreatePSTProfile(): AdminServices Failed.", __LINE__,
+            __FILE__);
+
+	// Now create the message-store-service.
+    hr = imsadmin->CreateMsgService((LPTSTR)"MSUPST MS",
+        (LPTSTR)"ZimbraPSTMigration Message Store",
+        NULL, !bNoUI ? SERVICE_UI_ALLOWED : 0);
+    if (hr == MAPI_E_UNKNOWN_FLAGS)
+    {
+        hr = imsadmin->CreateMsgService((LPTSTR)"MSUPST MS",
+            (LPTSTR)"ZimbraPSTMigration Message Store",
+            0,0);
+    }
+	if (hr != S_OK)
+		throw MapiUtilsException(
+            hr, L"Util:: CreatePSTProfile(): CreateMsgService Failed.", __LINE__,
+            __FILE__);
+
+	 // We need to get hold of the MAPIUID for this message-service. We do this
+    // by enumerating the message-stores (there will be only one!) and picking it up.
+    // Actually, we set up 'mscols' to retrieve the name as well as the MAPIUID, for
+    // reasons that will become apparent in just a moment.
+    if(FAILED(hr = imsadmin->GetMsgServiceTable(0, mstable.getptr())))
+		throw MapiUtilsException(
+            hr, L"Util:: CreatePSTProfile(): CreateMsgService Failed.", __LINE__,
+            __FILE__);
+
+    SizedSPropTagArray(2, mscols) = {
+        2, { PR_SERVICE_UID, PR_DISPLAY_NAME }
+    };
+    mstable->SetColumns((SPropTagArray *)&mscols, 0);
+    
+	if(FAILED(hr = mstable->QueryRows(1, 0, msrows.getptr())))
+		throw MapiUtilsException(
+            hr, L"Util:: CreatePSTProfile(): QueryRows Failed.", __LINE__,
+            __FILE__);
+
+    MAPIUID msuid = *((MAPIUID *)msrows->aRow[0].lpProps[0].Value.bin.lpb);
+    
+	// Now we wish to configure our message-store to use the PST filename.
+    SPropValue msprops[1];
+    msprops[0].ulPropTag = PR_PST_PATH; 
+	msprops[0].Value.lpszA = (char *)lpstrPSTFQPathName;
+    if(FAILED(hr = imsadmin->ConfigureMsgService(&msuid, NULL, 
+		!bNoUI ? SERVICE_UI_ALLOWED : 0, 1, msprops)))
+		throw MapiUtilsException(
+            hr, L"Util:: CreatePSTProfile(): ConfigureMsgService Failed.", __LINE__,
+            __FILE__);
+	int iOLVersion=-1;
+	LONG lRet=GetOutlookVersion(iOLVersion);
+	if (lRet == ERROR_SUCCESS)
+	{
+		// Outlook 2007 requires a key to be able to login to MAPI namespace.
+		// Without this key, OOM throws an exception
+		if (iOLVersion == 12)
+		{
+			string cstrRegistryKeyPath = "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\";
+			cstrRegistryKeyPath += "Windows Messaging Subsystem\\Profiles\\";
+			cstrRegistryKeyPath+= lpstrProfileName;
+			cstrRegistryKeyPath += "\\0a0d020000000000c000000000000046";
+
+			DWORD dwDisposition = 0;
+			HKEY hKey = NULL;
+			LONG lRetCode = RegCreateKeyEx(HKEY_CURRENT_USER, (LPTSTR)cstrRegistryKeyPath.c_str(), 0,
+				NULL, REG_OPTION_NON_VOLATILE, KEY_SET_VALUE, NULL, &hKey, &dwDisposition);
+			if (lRetCode == ERROR_SUCCESS)
+			{
+				BYTE pData[4] = { 0x66, 0xe6, 0x01, 0x00 };
+				RegSetValueEx(hKey, _T("0003036f"), 0, REG_BINARY, pData, sizeof (pData));
+
+				BYTE pData2[4] = { 0x64, 0x00, 0x000, 0x00 };
+				RegSetValueEx(hKey, _T("00030397"), 0, REG_BINARY, pData2, sizeof (pData2));
+
+				BYTE pData3[4] = { 0x02, 0x00, 0x00, 0x00 };
+				RegSetValueEx(hKey, _T("00030429"), 0, REG_BINARY, pData3, sizeof (pData3));
+
+				RegCloseKey(hKey);
+			}
+			else
+			{
+				throw MapiUtilsException(
+					lRetCode, L"Util:: CreatePSTProfile(): RegCreateKeyEx Failed.", __LINE__,
+					__FILE__);
+			}
+		}
+	}
+
+	return TRUE;
+}
+
+BOOL Zimbra::MAPI::Util::DeleteAlikeProfiles(LPCSTR lpstrProfileName)
+{
+	HRESULT hr = S_OK;
+	Zimbra::Util::ScopedInterface<IMAPITable> proftable;
+	Zimbra::Util::ScopedInterface<IProfAdmin> iprofadmin;
+
+    // Get IProfAdmin interface pointer
+	if(FAILED(hr = MAPIAdminProfiles(0, iprofadmin.getptr())))
+		throw MapiUtilsException(
+            hr, L"Util:: DeleteAlikeProfiles(): MAPIAdminProfiles Failed.", __LINE__,
+            __FILE__);
+
+	if(FAILED(hr = iprofadmin->GetProfileTable(0, proftable.getptr())))
+		throw MapiUtilsException(
+            hr, L"Util:: DeleteAlikeProfiles(): GetProfileTable Failed.", __LINE__,
+            __FILE__);
+
+    SizedSPropTagArray(2, proftablecols) = {
+        2, { PR_DISPLAY_NAME_A, PR_DEFAULT_PROFILE }
+    };
+    Zimbra::Util::ScopedRowSet profrows;
+
+	if(SUCCEEDED(hr = HrQueryAllRows(proftable.get(), (SPropTagArray *)&proftablecols, NULL, NULL, 0,
+		profrows.getptr())))
+    {
+        for (unsigned int i = 0; i < profrows->cRows; i++)
+        {
+            std::string name = "";
+            if (profrows->aRow[i].lpProps[0].ulPropTag == PR_DISPLAY_NAME_A)
+                name = profrows->aRow[i].lpProps[0].Value.lpszA;
+            if (name.find(lpstrProfileName) != std::string::npos)
+                hr = iprofadmin->DeleteProfile((LPTSTR)name.c_str(), 0);
+        }
+    }
+
+	return TRUE;
+}
+
+LONG Zimbra::MAPI::Util::GetOutlookVersion(int &iVersion)
+{
+	HKEY hKey = NULL;
+	// Get the outlook version if its installed
+    LONG lRetCode = RegOpenKeyEx(HKEY_CLASSES_ROOT, _T("Outlook.Application\\CurVer"),
+        0, KEY_READ, &hKey);
+    if (ERROR_SUCCESS == lRetCode)
+    {
+        DWORD cData = 0, dwType = REG_SZ;
+        RegQueryValueEx(hKey, NULL, 0, &dwType, NULL, &cData);
+        LPTSTR pszOlkVer = reinterpret_cast<LPTSTR>(new BYTE[cData]);
+        lRetCode = RegQueryValueEx(hKey, NULL, 0, &dwType,
+            reinterpret_cast<LPBYTE>(pszOlkVer), &cData);
+        if (ERROR_SUCCESS == lRetCode)
+        {
+            int nOlkVer = 0;
+            _stscanf(pszOlkVer, _T("Outlook.Application.%d"), &nOlkVer);
+            // Set the OOM version only if its outlook 2003 or 2007
+            if ((11 == nOlkVer) || (12 == nOlkVer) || (14 == nOlkVer))
+                iVersion =nOlkVer;
+        }
+        delete[] pszOlkVer;
+        RegCloseKey(hKey);
+    }
+
+	return lRetCode;
 }
