@@ -178,6 +178,41 @@ function _getPath(strURL)
 		return "";
 }
 
+function _isHTTPUrl(strUrl)
+{
+    strUrl = strUrl.toUpperCase();
+    str1 = strUrl.substring(0, 7);
+    str2 = strUrl.substring(0, 8);
+    if(str1 == "HTTP://" || str1 == "HTTP:\\\\" ||
+    str2 == "HTTPS://" || str2 == "HTTPS:\\\\")
+        return true;
+	else 
+	{
+	    str3 = strUrl.substring(0, 4);
+	    if(str3 == "WWW.")
+	        return true;
+	}
+	return false;
+}
+
+function _isRemoteUrl(strUrl)
+{
+    strUrl.toUpperCase();
+    if(_isHTTPUrl(strUrl)) return true;
+
+    str1 = strUrl.substring(0, 7);
+    if (str1 == "MAILTO:")	return true;
+    if (str1 == "TELNET:")	return true;
+    if (str1 == "GOPHER:")	return true;
+    str1 = strUrl.substring(0, 5);
+    if (str1 == "FTP://")	return true;
+    if (str1 == "NEWS:")	return true;
+    if (str1 == "FILE:")	return true;
+    if (str1 == "FTP:\\\\") return true;
+
+    return false;
+}
+
 function removeItemFromArray(oArray,i)
 {
 	if(oArray.length&&i>=0&&i<oArray.length)
@@ -259,37 +294,40 @@ try
 {
 	var sCurrentDocPath=_getPath(document.location.href);
 	var bAsyncReq = true ;
-	if (bAsync !='undefined' )
+	if (typeof(bAsync) !='undefined' )
 		bAsyncReq = bAsync ;
 	sdocPath=_getFullPath(sCurrentDocPath,sFileName);
 	if(gbIE5)
 	{
 		// use xmlhttp for 304 support, xmldom doesn't support it, IE5 or later
-		var bIsHTTPURL = false;
-		if(gbAIRSSL)
+		var bIsHTTPURL = IsHTTPURL(sdocPath);
+		if (bIsHTTPURL) 
 		{
-		    bIsHTTPURL = IsHTTPURL(sdocPath);
-		}
-		else
-		    bIsHTTPURL = mrIsOnEngine();
-
-	    if( bIsHTTPURL )
-	    {
-		    xmlDoc=new ActiveXObject("Microsoft.XMLHTTP");
-		    xmlDoc.onreadystatechange=checkState;
-		    if(document.body!=null)
-		    {
-			    xmlDoc.Open("get", sdocPath, bAsyncReq);
-			    xmlDoc.Send("");
-		    };
-	    }else
-	    {
+			if (window.XMLHttpRequest) 
+			{
+				xmlDoc = new XMLHttpRequest();
+			}
+			else
+			{
+				if (window.ActiveXObject) 
+	    			{
+		   			 xmlDoc=new ActiveXObject("Microsoft.XMLHTTP");
+				} 
+			}
+		    	xmlDoc.onreadystatechange=checkState;
+		    	if(document.body!=null)
+		   	{
+				xmlDoc.open("GET", sdocPath, bAsyncReq);
+				xmlDoc.send(null);
+		    	};
+	   	 }else
+	    	 {
 		    xmlDoc=new ActiveXObject("Microsoft.XMLDOM");
 		    xmlDoc.onreadystatechange=checkState;
 		    xmlDoc.async=bAsyncReq;
 		    if(document.body!=null)
 			    xmlDoc.load(sdocPath);
-	    };
+	   	 };
 	}
 	else if(gbNav6 && !gbAIR)
 	{
@@ -355,8 +393,28 @@ function checkState()
 		if(state==4)
 		{
 			// engine version uses xmlhttp, xml data in the responseXML
-			if( xmlDoc.responseXML!=null )
+			if(typeof(xmlDoc.responseXML) != 'undefined')
+			{
+				if (gbIE5 && !xmlDoc.responseXML.documentElement) 
+				{
+					var indx = xmlDoc.responseText.indexOf("<?xml");
+					if(indx != -1)
+					{
+						indx = xmlDoc.responseText.indexOf("?>", indx);
+						if(indx != -1)
+						{
+							var strXML = xmlDoc.responseText.substr(indx+2);
+							xmlDoc.responseXML.loadXML(strXML); 
+						}
+					}
+					else
+					{
+						xmlDoc.responseXML.loadXML(xmlDoc.responseText);
+					}
+					
+				}
 				xmlDoc=xmlDoc.responseXML;
+			}
 
 			var err=xmlDoc.parseError;
 			if(err.errorCode==0)

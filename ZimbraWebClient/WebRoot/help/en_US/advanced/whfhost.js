@@ -14,10 +14,12 @@ var gsCancel="Cancel";
 var gsCanceled="Canceled";
 
 var gsSubstrSrch=0;
+var gsHideRankColumn=0;
 
 var g_RunesVowels="\x61\x65\x69\x6F\x75\x79";
 var g_RunesWordBreaks="\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0A\x0B\x0C\x0D\x0E\x0F\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1A\x1B\x1C\x1D\x1E\x1F\x22\x5C\x20\x2E\x2C\x21\x40\x23\x24\x25\x5E\x26\x2A\x28\x29\x7E\x27\x60\x3A\x3B\x3C\x3E\x3F\x2F\x7B\x7D\x5B\x5D\x7C\x2B\x2D\x3D\xC2\x81\xC2\x82\xC2\x83\xC2\x84\xC2\x85\xC2\x86\xC2\x87\xC2\x88\xC2\x89\xC2\x8A\xC2\x8B\xC2\x8C\xC2\x8D\xC2\x8E\xC2\x8F\xC2\x90\xC2\x91\xC2\x92\xC2\x93\xC2\x94\xC2\x95\xC2\x96\xC2\x97\xC2\x98\xC2\x99\xC2\x9A\xC2\x9B\xC2\x9C\xC2\x9D\xC2\x9E\xC2\x9F\xC2\xA1\xC2\xA9\xC2\xAB\xC2\xAE\xC2\xB7\xC2\xBB\xC2\xBF\xC2\xA0";
 var g_RunesWhiteSpaces="\x20\x09\x0D\x0A\xC2\xA0";
+var g_RunesSpecialBreaks = ",!@#$%^&*()~'`:;<>?/{}[]|+-=" ;
 var g_RunesQuote='\x22';
 var g_RunesHelSuffixes=new Array("ed,0","ingly,0","ings,0","ing,0","ly,1","s,1","e,1");
 
@@ -1605,6 +1607,10 @@ function LanguageService()
 	{
 		return ( g_RunesWhiteSpaces.indexOf( a_ch ) >= 0 );
 	}
+	this.isSpecialBreak = function( a_ch )
+	{
+		return ( g_RunesSpecialBreaks.indexOf( a_ch ) >= 0 );
+	}
 	this.isQuote = function( a_ch )
 	{
 		return ( a_ch == g_RunesQuote );
@@ -1918,14 +1924,43 @@ function RunesService()
 		var strWord = "";
 
 		nCur += this.getLengthOfWordBreak( a_strSrc, nCur );
+		if ( nCur > 0 )
+		{
+			//search query begins with break chars; check for special break chars
+			var nTemp = 0 ;
+			while ( nTemp < nCur )
+			{
+				if ( this.langSev.isSpecialBreak( a_strSrc.charAt( nTemp ) ) )
+				{
+					//it's a special word break, include it in search
+					a_Result[a_Result.length] = new DolWord( a_strSrc.charAt( nTemp ), nPosition );
+					nPosition++;
+				}
+				nTemp++ ;
+			}
+		}
 		while ( nCur < nLen )
 		{
 			strWord = this.getWord( a_strSrc, nCur );
 			a_Result[a_Result.length] = new DolWord( strWord, nPosition );
 			
 			nCur += strWord.length;
-			nPosition += this.getPositionInc( a_strSrc, nCur );
-			nCur += this.getLengthOfWordBreak( a_strSrc, nCur );
+			nPosition++ ;
+			
+			//check if we can find some special break characters in between this and next word
+			while ( nCur < nLen && this.langSev.isWordBreak( a_strSrc.charAt( nCur ) ) )
+			{
+				if ( this.langSev.isSpecialBreak( a_strSrc.charAt( nCur ) ) )
+				{
+					//it's a special word break, include it in search
+					a_Result[a_Result.length] = new DolWord( a_strSrc.charAt( nCur ), nPosition );
+					nPosition++;
+				}
+				nCur++;
+			}
+			
+			//nPosition += this.getPositionInc( a_strSrc, nCur );
+			//nCur += this.getLengthOfWordBreak( a_strSrc, nCur );
 		}
 	}
 	
@@ -2120,10 +2155,11 @@ function _computeSingleWordScore( a_TopicImage, a_nWordId )
 		return 0.0;
 
 	var emphasis = a_TopicImage.aWords[a_nWordId].uEmphasis ;
-	if (emphasis == 0 )
-	    emphasis = a_TopicImage.aWords[a_nWordId].uFreq; 
-	else
+	if (emphasis != 0 )
 	    emphasis = _emphasisToScore(emphasis ) ;
+		
+	emphasis += a_TopicImage.aWords[a_nWordId].uFreq; 	
+	    
 	var fWeightScore = _rank_Weaken( _rank_ULaw( emphasis ), WEIGHT_OF_SINGLE_WORD_SCORE );
 
 	if ( _isTitle( a_TopicImage.aWords[a_nWordId].uEmphasis ) )		// Words in title are important than key words and the rest.
@@ -2183,7 +2219,11 @@ function _getPhraseMatch(a_aTiles, iPosition, a_aWords, a_nCurIdx )
 	var nCurWordId = a_aWords[a_nCurIdx].nWordId ;
 	if(!a_aTiles[iPosition])
 		return false ;
-	var wordAtPos = a_aTiles[iPosition].aWords[0].nWordId	;
+		
+	var i  ;
+	for ( i = 0 ; i < a_aTiles[iPosition].aWords.length ; i++)
+	{
+		var wordAtPos = a_aTiles[iPosition].aWords[i].nWordId	;
 	if (wordAtPos == nCurWordId)
 	{
 		if (a_nCurIdx == (a_aWords.length -1 ))
@@ -2197,7 +2237,7 @@ function _getPhraseMatch(a_aTiles, iPosition, a_aWords, a_nCurIdx )
 			return _getPhraseMatch(a_aTiles , iPosition + wordLen , a_aWords , a_nCurIdx+1);
 		}
 	}
-	else
+	}
 		return false ;
 }
 
@@ -2538,8 +2578,7 @@ function HuginHunter()
 		var wordImage = this.getWordImageToAdd( a_nWordId, a_Image.aWords );
 
 		wordImage.uEmphasis |= a_Record.uEmphasis;
-		if (a_Record.uEmphasis == 0 )
-		    wordImage.uFreq = a_Record.aPositions.length ;
+		wordImage.uFreq = a_Record.aPositions.length ;
 		for ( var strPosition in a_Record.aPositions )
 		{
 			var tileImage = this.getTileImageToAdd( a_Record.aPositions[strPosition],
@@ -2730,7 +2769,9 @@ function HuginHunter()
 			{
 				nLen = a_this.queryResult.aTopics.length;
 				a_this.queryResult.aTopics[nLen] = a_this.aRankedTopics[i][j];
-				a_this.queryResult.aTopics[nLen].strUrl = a_this.aProjPathes[i].strProjDir
+				strTopicUrl = a_this.queryResult.aTopics[nLen].strUrl;
+				if(!(_isAbsPath(strTopicUrl) || _isRemoteUrl(strTopicUrl)))
+				    a_this.queryResult.aTopics[nLen].strUrl = a_this.aProjPathes[i].strProjDir
 														  + a_this.queryResult.aTopics[nLen].strUrl;
 				a_this.queryResult.aTopics[nLen].fRanking = a_this.aRankedTopics[i][j].fRanking;
 			}
@@ -2897,6 +2938,11 @@ function quickSortResult()
 	var tbl = getElement( "OdinFtsRslt" );
 	if ( tbl == null )
 		return;
+	
+	var tdRank = getElement( "OdinFtsRank" );
+		if ( tdRank == null )
+			return;
+
 	var comp = g_nSortType == 0 ? compByRank
 								: g_nSortType == 1 ? compByTitleAscend
 													: compByTitleDescend;
@@ -3140,25 +3186,35 @@ function displayMsg( a_strMsg )
 
 function writeTableHead()
 {
-	if(gbAIRSSL)
-		return	"<TABLE CELLSPACING=0 CEllPADDING=0 STYLE='table-layout:fixed; width:100%'>" +
-				"<THEAD>" + 
-					"<TR STYLE='font-weight:bold'>" +
-						"<TD ID='OdinFtsTitle'	CLASS='fr_tt' STYLE='cursor:pointer'>"+gsTitle+"</TD>" +
-						"<TD ID='DragSep'		CLASS='fr_ts' STYLE='cursor:w-resize; width:4px'>&nbsp;</TD>" +
-						"<TD ID='OdinFtsRank'	CLASS='fr_tt' STYLE='cursor:pointer; width:60px'>"+gsRank+"^</TD>" +
-					"</TR>" +
-				"</THEAD>" +
-				"<TBODY ID='OdinFtsRslt'>";
-
-	return	"<TABLE CELLSPACING=0 CEllPADDING=0 STYLE='table-layout:fixed; width:110%'>" +
-				"<THEAD>" + 
-					"<TR STYLE='font-weight:bold'>" +
-						"<TD ID='OdinFtsTitle'	CLASS='fr_tt' STYLE='cursor:pointer'>"+gsTitle+"</TD>" +
-						"<TD ID='DragSep'		CLASS='fr_ts' STYLE='cursor:w-resize; width:4px'>&nbsp;</TD>" +
-						"<TD ID='OdinFtsRank'	CLASS='fr_tt' STYLE='cursor:pointer; width:0px'>"+gsRank+"^</TD>" +
-					"</TR>" +
-				"</THEAD>" +
+	if(!gsHideRankColumn)
+	{
+		if(gbAIRSSL)
+		{
+				return	"<TABLE CELLSPACING=0 CEllPADDING=0 STYLE='table-layout:fixed; width:100%'>" +
+						"<THEAD>" + 
+							"<TR STYLE='font-weight:bold'>" +
+								"<TD ID='OdinFtsTitle'	CLASS='fr_tt' STYLE='cursor:pointer'>"+gsTitle+"</TD>" +
+								"<TD ID='DragSep'		CLASS='fr_ts' STYLE='cursor:w-resize; width:4px'>&nbsp;</TD>" +
+								"<TD ID='OdinFtsRank'	CLASS='fr_tt' STYLE='cursor:pointer; width:60px'>"+gsRank+"^</TD>" +
+							"</TR>" +
+						"</THEAD>" +
+						"<TBODY ID='OdinFtsRslt'>";
+		}
+		else
+		{
+				return	"<TABLE CELLSPACING=0 CEllPADDING=0 STYLE='table-layout:fixed; width:110%'>" +
+						"<THEAD>" + 
+							"<TR STYLE='font-weight:bold'>" +
+								"<TD ID='OdinFtsTitle'	CLASS='fr_tt' STYLE='cursor:pointer'>"+gsTitle+"</TD>" +
+								"<TD ID='DragSep'		CLASS='fr_ts' STYLE='cursor:w-resize; width:4px'>&nbsp;</TD>" +
+								"<TD ID='OdinFtsRank'	CLASS='fr_tt' STYLE='cursor:pointer'>"+gsRank+"^</TD>" +
+							"</TR>" +
+						"</THEAD>" +
+						"<TBODY ID='OdinFtsRslt'>";
+		}
+	}
+	else
+		return "<TABLE CELLSPACING=0 CEllPADDING=0 STYLE='table-layout:fixed; width:110%'>" +
 				"<TBODY ID='OdinFtsRslt'>";
 }
 
@@ -3169,19 +3225,25 @@ function writeResult( a_strUrl, a_strHighlight, a_strTitle, a_strFont, a_nIndex,
 	{
 		strOutput = "<TR>" +
 				"<TD CLASS='fr_tc'><A CLASS='fr_tc'" +
-				" HREF='" + a_strUrl + "'" + ">" + _textToHtml_nonbsp(a_strTitle) + "</A><div>" + _textToHtml_nonbsp(a_sSummary) + "</div><br></TD>" +
-				"<TD CLASS='fr_tc'>&nbsp;</TD>" +
-				"<TD CLASS='fr_tc' STYLE='text-align:center'>" + a_nIndex + "</TD>" +
-			"</TR>";
+				" HREF='" + a_strUrl + "'" + ">" + _textToHtml_nonbsp(a_strTitle) + "</A><div>" + _textToHtml_nonbsp(a_sSummary) + "</div><br></TD>";
+		if(!gsHideRankColumn)
+		{
+				strOutput += "<TD CLASS='fr_tc'>&nbsp;</TD>" +
+				"<TD CLASS='fr_tc' STYLE='text-align:center'>" + a_nIndex + "</TD>";
+		}
+		strOutput += "</TR>";
 	}
 	else
 	{
 		strOutput = "<TR>" +
 				"<TD CLASS='fr_tc'><A CLASS='fr_tc' STYLE='font-weight:normal;'" +
-				" HREF='" + a_strUrl + "'" + ">" + _textToHtml_nonbsp(a_strTitle) + "</A></TD>" +
-				"<TD CLASS='fr_tc'>&nbsp;</TD>" +
-				"<TD CLASS='fr_tc' STYLE='text-align:center'>" + a_nIndex + "</TD>" +
-			"</TR>";
+				" HREF='" + a_strUrl + "'" + ">" + _textToHtml_nonbsp(a_strTitle) + "</A></TD>";
+		if(!gsHideRankColumn)
+		{
+				strOutput += "<TD CLASS='fr_tc'>&nbsp;</TD>" +
+				"<TD CLASS='fr_tc' STYLE='text-align:center'>" + a_nIndex + "</TD>";
+		}
+		strOutput += "</TR>";
 	}
 
 	return strOutput;
@@ -3254,7 +3316,7 @@ function displayTopics( a_QueryResult )
 		for( i = (g_CurPage-1)*nMaxResult; (i < a_QueryResult.aTopics.length)&&(i<(g_CurPage*nMaxResult)); i++ )
 		{
 			var szTopicURL = a_QueryResult.aTopics[i].strUrl;
-			if(gbAIRSSL)
+			if(gbAIRSSL && !_isRemoteUrl(szTopicURL))
 			{
 				//if it is AIR, we need to add the highlight option now
 				szTopicURL += sHighlight;
@@ -3429,7 +3491,7 @@ function GetSearchTextFromURL()
 	}
 	strQuery = decodeURIComponent(strQuery);
 	strQuery= unescape(strQuery);
- 	strQuery = strQuery.toUpperCase();
+ 	//strQuery = strQuery.toUpperCase();
 	return strQuery;
 }
 
