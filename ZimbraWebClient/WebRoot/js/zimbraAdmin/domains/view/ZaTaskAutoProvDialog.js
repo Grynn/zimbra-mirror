@@ -897,6 +897,29 @@ ZaTaskAutoProvDialog.prototype.finishConfig = function () {
     ZaRequestMgr.invoke(params, reqMgrParams);
 }
 
+ZaTaskAutoProvDialog.filterSelectionListener =
+function (value) {
+	var targetEl = value.target ;
+	if (targetEl.type && targetEl.type == "checkbox") {
+
+		var item = targetEl.value ;
+		var form = this.getForm ();
+		var instance = form.getInstance ();
+
+		var checkedFiltersVector = null ;
+
+        checkedFiltersVector = instance[ZaDomain.A2_zimbraAutoProvSelectedServerList];
+
+		if (targetEl.checked) {
+			checkedFiltersVector.remove(item);
+
+		}else{
+
+			checkedFiltersVector.add(item);
+
+		}
+	}
+}
 
 /////////////////////////////
 ZaServerOptionList = function(parent,className) {

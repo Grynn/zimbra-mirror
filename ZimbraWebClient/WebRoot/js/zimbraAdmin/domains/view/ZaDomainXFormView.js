@@ -1753,8 +1753,9 @@ if(appNewUI) {
                         getDisplayValue:function() {
                             var val = [];
                             var instance = this.getInstance();
-                            for(var i = 0; i < instance[ZaDomain.A2_zimbraAutoProvServerList].length; i++) {
-                                var server = instance[ZaDomain.A2_zimbraAutoProvServerList][i];
+                            var serverList = ZaApp.getInstance().getServerList().getArray();
+                            for(var i = 0; i < serverList.length; i++) {
+                                var server = serverList[i];
                                 var scheduledDomains = server.attrs[ZaServer.A_zimbraAutoProvScheduledDomains];
                                 for(var j = 0; scheduledDomains && j < scheduledDomains.length; j++) {
                                     if(scheduledDomains[j] == instance.name) {
@@ -1895,8 +1896,9 @@ if(appNewUI) {
                         getDisplayValue:function() {
                             var val = [];
                             var instance = this.getInstance();
-                            for(var i = 0; i < instance[ZaDomain.A2_zimbraAutoProvServerList].length; i++) {
-                                var server = instance[ZaDomain.A2_zimbraAutoProvServerList][i];
+                            var serverList = ZaApp.getInstance().getServerList().getArray();
+                            for(var i = 0; i < serverList.length; i++) {
+                                var server = serverList[i];
                                 var scheduledDomains = server.attrs[ZaServer.A_zimbraAutoProvScheduledDomains];
                                 for(var j = 0; scheduledDomains && j < scheduledDomains.length; j++) {
                                     if(scheduledDomains[j] == instance.name) {
