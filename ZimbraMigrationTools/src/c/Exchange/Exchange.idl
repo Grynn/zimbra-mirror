@@ -97,10 +97,11 @@ interface IItemObject : IDispatch{
 interface IUserObject : IDispatch{
 	[id(1)] HRESULT InitializeUser([in]BSTR mailserver,[in] BSTR adminid,[in] BSTR UserID,[in] BSTR MailType, [out,retval] BSTR* pErrorText);
 	[id(2), helpstring("method to retreive folder objects")]
-			HRESULT  GetFolderObjects([out, retval] VARIANT* vObjects);
-			[id(3), helpstring("method to retreive Itsm for folder objects")]
-			HRESULT  GetItemsForFolderObjects([in] IfolderObject* FolderObj ,[in] FolderType type, [in] VARIANT creattiondate,[out, retval] VARIANT* vItems);
-			[id(4)] HRESULT GetDataForItem([in] VARIANT ItemId,[out, retval] VARIANT* pVal);
+	HRESULT  GetFolderObjects([out, retval] VARIANT* vObjects);
+	[id(3), helpstring("method to retreive Itsm for folder objects")]
+	HRESULT  GetItemsForFolderObjects([in] IfolderObject* FolderObj ,[in] FolderType type, [in] VARIANT creattiondate,[out, retval] VARIANT* vItems);
+	[id(4)] HRESULT GetDataForItem([in] VARIANT ItemId,[out, retval] VARIANT* pVal);
+	[id(5)] HRESULT UMInitializeUser([in]BSTR ProfileName,[in] BSTR MailType, [out,retval] BSTR* pErrorText);
 };
 [
     uuid(33449EAA-8056-4D28-8D42-552B7C6C8954),

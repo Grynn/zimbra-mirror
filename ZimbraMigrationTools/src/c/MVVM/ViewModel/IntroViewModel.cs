@@ -325,7 +325,7 @@ namespace MVVM.ViewModel
                 TheViews.Add(m_usersViewModel);
                 TheViews.Add(m_scheduleViewModel);
                 TheViews.Add(m_resultsViewModel);
-                m_optionsViewModel.ImportNextButtonContent = "Next";
+                m_optionsViewModel.ImportNextButtonContent = "Next >";
             }
             else
             {

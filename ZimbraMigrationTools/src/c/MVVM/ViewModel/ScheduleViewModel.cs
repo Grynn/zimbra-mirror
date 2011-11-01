@@ -525,12 +525,23 @@ namespace MVVM.ViewModel
             AccountResultsViewModel accountResultsViewModel = ((AccountResultsViewModel)ViewModelPtrs[(int)ViewType.RESULTS]);
 
             string accountname = accountResultsViewModel.AccountResultsList[num].AccountName;
-            accountname = accountname + "@" + usersViewModel.ZimbraDomain;
-            string accountid = usersViewModel.UsersList[num].Username;
-            int idx = accountid.IndexOf("@");
-            if (idx != -1) // domain would be Exchange domain, not Zimbra domain
+            string accountid = "";
+            if (isServer)
             {
-                accountid = accountid.Substring(0, idx);
+                accountname = accountname + "@" + usersViewModel.ZimbraDomain;
+                accountid = usersViewModel.UsersList[num].Username;
+                int idx = accountid.IndexOf("@");
+                if (idx != -1) // domain would be Exchange domain, not Zimbra domain
+                {
+                    accountid = accountid.Substring(0, idx);
+                }
+            }
+            else
+            {
+                ConfigViewModelU sourceModel = ((ConfigViewModelU)ViewModelPtrs[(int)ViewType.USRSRC]);
+                ConfigViewModelUDest destModel   = ((ConfigViewModelUDest)ViewModelPtrs[(int)ViewType.USRDEST]);
+                accountname = accountname + "@" + destModel.ZimbraServerHostName;
+                accountid = (sourceModel.IspST) ? sourceModel.PSTFile : sourceModel.ProfileList[sourceModel.CurrentProfileSelection];
             }
 
             MyAcct.Accountname = accountname;
@@ -546,7 +557,7 @@ namespace MVVM.ViewModel
             
             CSMigrationwrapper mw = new CSMigrationwrapper();
             MigrationOptions importOpts = SetOptions();           
-            mw.StartMigration(MyAcct, importOpts, m_isPreview);
+            mw.StartMigration(MyAcct, importOpts, isServer, m_isPreview);
 
             accountResultsViewModel.AccountResultsList[num].PBMsgValue = "Migration complete";
             accountResultsViewModel.AccountResultsList[num].AcctProgressMsg = "Complete";

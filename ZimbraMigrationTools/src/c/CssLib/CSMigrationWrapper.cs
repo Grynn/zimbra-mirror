@@ -465,7 +465,7 @@ public class CSMigrationwrapper
         }
     }
 
-    public void StartMigration(MigrationAccount Acct, MigrationOptions importopts, bool isPreview = false)
+    public void StartMigration(MigrationAccount Acct, MigrationOptions importopts, bool isServer = true, bool isPreview = false)
     {
         Type userobject;
         object userinstance;
@@ -479,16 +479,29 @@ public class CSMigrationwrapper
             pm[0] = true;
             ParameterModifier[] mods = { pm };
 
-            object[] MyArgs = new object[4];
-            MyArgs[0] = "";
-            MyArgs[1] = "";
-            MyArgs[2] = Acct.AccountID;
-            MyArgs[3] = "MAPI";
+            string value = "";
+            if (isServer)
+            {
+                object[] MyArgs = new object[4];
+                MyArgs[0] = "";
+                MyArgs[1] = "";
+                MyArgs[2] = Acct.AccountID;
+                MyArgs[3] = "MAPI";
 
-            string value = (string)userobject.InvokeMember("InitializeUser",
-                    BindingFlags.InvokeMethod | BindingFlags.Instance | BindingFlags.Public,
-                    null, userinstance, MyArgs, mods, null, null);
+                value = (string)userobject.InvokeMember("InitializeUser",
+                        BindingFlags.InvokeMethod | BindingFlags.Instance | BindingFlags.Public,
+                        null, userinstance, MyArgs, mods, null, null);
+            }
+            else
+            {
+                object[] MyArgs = new object[2];
+                MyArgs[0] = Acct.AccountID;
+                MyArgs[1] = "MAPI";
 
+                value = (string)userobject.InvokeMember("UMInitializeUser",
+                        BindingFlags.InvokeMethod | BindingFlags.Instance | BindingFlags.Public,
+                        null, userinstance, MyArgs, mods, null, null);
+            }
 
             if (value.Length > 0)
             {
@@ -505,6 +518,11 @@ public class CSMigrationwrapper
             Acct.TotalNoItems = ComputeTotalMigrationCount(importopts);
 
             ZimbraAPI api = new ZimbraAPI();
+
+            // see if we're migrating a .pst file. If we are, we need to know that so we can mess with folder names in ZimbraAPI
+            string u = Acct.AccountID.ToUpper();
+            api.AcctIdIsPST = u.EndsWith(".PST");
+            /////
 
             // set up check for skipping folders
             List <string> skipList = new List<string>();
@@ -524,7 +542,7 @@ public class CSMigrationwrapper
             {
                 string path = "";
 
-                // FBS NOTE THAT THESE ARE EXCHANGE SPECIFIC.  WE'LL HAVE TO CHANGE THIS GROU GROUPWISE !!!
+                // FBS NOTE THAT THESE ARE EXCHANGE SPECIFIC.  WE'LL HAVE TO CHANGE THIS FOR GROUPWISE !!!
                 if ((folderobject.Name == "Sent Items") && !(importopts.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Sent)))
                 {
                     continue;
@@ -602,7 +620,7 @@ public class CSMigrationwrapper
                 {
                     if (folderobject.Name == "Deleted Items")   //FBS EXCHANGE SPECIFIC HACK.  CHANGE FOR GROUPWISE !!! 
                     {
-                        path = "/Top of Information Store/Deleted Items";
+                        path = api.AcctIdIsPST ? "/Top of Outlook data file/Deleted Items" : "/Top of Information Store/Deleted Items";
                     }
                     ProcessItems(Acct, folderobject, foldertype.Contacts, api, path);
                 }

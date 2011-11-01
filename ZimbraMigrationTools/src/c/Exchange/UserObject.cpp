@@ -77,6 +77,35 @@ STDMETHODIMP CUserObject::InitializeUser(BSTR host, BSTR admin, BSTR UserID, BST
     return hr;
 }
 
+STDMETHODIMP CUserObject::UMInitializeUser(BSTR ProfileName, BSTR MailType, BSTR* pErrorText)
+{
+    HRESULT hr = S_OK; long retval = 0;
+
+    ProfileName = ProfileName;
+    MailType = MailType;
+    retval = Initialize(L"");
+    // Logger = CSingleton::getInstance();
+    if (wcscmp(MailType, L"MAPI") == 0)
+    {
+        // Initialize the Mapi API..
+
+        m_pLogger->doSomething(DBG, "In UMInitializeUser");
+
+	LPCWSTR lpwstrStatus = MAPIAccessAPI::InitGlobalSessionAndStore(ProfileName);
+	if (!lpwstrStatus)
+	{
+	    maapi = new Zimbra::MAPI::MAPIAccessAPI(L"");
+	    lpwstrStatus = maapi->InitializeUser();
+	}
+        *pErrorText = (lpwstrStatus) ? CComBSTR(lpwstrStatus) : SysAllocString(L"");
+    }
+    else
+    {
+        *pErrorText = SysAllocString(L"");
+    }
+    return hr;
+}
+
 STDMETHODIMP CUserObject::GetFolderObjects( /*[out, retval]*/ VARIANT *vObjects)
 {
     HRESULT hr = S_OK;

@@ -60,6 +60,7 @@ public:
     STDMETHOD(GetItemsForFolderObjects) (IfolderObject * FolderObj, FolderType type,
         VARIANT creattiondate, VARIANT * vItems);
     STDMETHOD(GetDataForItem) (VARIANT ItemId, VARIANT * pVal);
+    STDMETHOD(UMInitializeUser) (BSTR ProfileName, BSTR MailType, BSTR* pErrorText);
 
     // /base class functions
     virtual long Initialize(BSTR Id);

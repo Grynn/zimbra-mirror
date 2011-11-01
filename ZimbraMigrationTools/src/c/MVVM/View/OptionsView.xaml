@@ -71,7 +71,7 @@
             <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,0,0" Content="Load" Name="buttonOptionsLoad" Command="{Binding LoadCommand}"  />
             <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="81,0,0,0" Content="Save" Name="buttonOptionsSav" Command="{Binding SaveCommand}"  />
             <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,91,0" Content="&lt; Back" Name="buttonOptionsBack" Command="{Binding BackCommand}" IsEnabled="True"  />
-            <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,10,0" Content="Next &gt;" Name="buttonOptionsNext" Command="{Binding NextCommand}"  />
+            <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,10,0" Content="{Binding Path=ImportNextButtonContent}" Name="buttonOptionsNext" Command="{Binding NextCommand}"  />
         </Grid>
     </Grid>
 </UserControl>

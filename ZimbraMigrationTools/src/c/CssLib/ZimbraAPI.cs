@@ -46,6 +46,25 @@ public class ZimbraAPI
         "/Top of Information Store/Tasks"
     };
 
+    string[] specialFoldersPST = {
+        "",
+        "/Top of Outlook data file",
+        "/Top of Outlook data file/Inbox",
+        "/Top of Outlook data file/Deleted Items",
+        "/Top of Outlook data file/Junk E-Mail",
+        "/Top of Outlook data file/Sent Items",
+        "/Top of Outlook data file/Drafts",
+        "/Top of Outlook data file/Contacts",
+        "/Top of Outlook data file/Tags",
+        "/Top of Outlook data file/Conversations",
+        "/Top of Outlook data file/Calendar",
+        "",
+        "/Top of Outlook data file/Wiki",
+        "/Top of Outlook data file/Emailed Contacts",
+        "/Top of Outlook data file/Chats",
+        "/Top of Outlook data file/Tasks"
+    };
+
     private string lastError;
     public string LastError {
         get { return lastError; }
@@ -78,18 +97,29 @@ public class ZimbraAPI
             bIsDomainAdminAccount = value;
         }
     }
+    private bool bAcctIdIsPST;
+    public bool AcctIdIsPST
+    {
+        get { return bAcctIdIsPST; }
+        set
+        {
+            bAcctIdIsPST = value;
+        }
+    }
     private Dictionary<string, string> dFolderMap;
 
     public ZimbraAPI()
     {
+        AcctIdIsPST = false;
         ZimbraValues.GetZimbraValues();
         dFolderMap = new Dictionary<string, string>();
     }
     private string GetSpecialFolderNum(string folderPath)
     {
-        for (int i = 0; i < specialFolders.Length; i++)
+        string[] arr = AcctIdIsPST ? specialFoldersPST : specialFolders;
+        for (int i = 0; i < arr.Length; i++)
         {
-            if (folderPath == specialFolders[i])
+            if (folderPath == arr[i])
                 return i.ToString();
         }
         return "";
