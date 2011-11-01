@@ -535,6 +535,9 @@ function(entry) {
             if(scheduledDomains[j] == entry.name) {
                entry[ZaDomain.A2_zimbraAutoProvSelectedServerList].add(server.name);
                 server["checked"] = true;
+
+                if(server.attrs[ZaServer.A_zimbraAutoProvPollingInterval])
+                    entry[ZaDomain.A2_zimbraAutoProvPollingInterval] = server.attrs[ZaServer.A_zimbraAutoProvPollingInterval];
             }
         }
     }
