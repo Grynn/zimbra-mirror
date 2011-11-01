@@ -286,6 +286,9 @@ public class PageAddressbook extends AbsTab {
 			else if (  contactType.equals(ContactItem.IMAGE_CLASS) ) {
 				ci=new ContactItem(fileAs);		    			
 			}
+			else if (  contactType.equals(DistributionListItem.IMAGE_CLASS) ) {
+				ci=new DistributionListItem(fileAs);		    			
+			}
 			else {
 				throw new HarnessException("Image not neither conntact group nor contact.");		
 			}
@@ -819,7 +822,10 @@ public class PageAddressbook extends AbsTab {
 		{
 			return ContactItem.IMAGE_CLASS;		
 		}
-				
+		else if (sIsElementPresent(imageLocator + DistributionListItem.IMAGE_CLASS + "]"))
+		{
+			return DistributionListItem.IMAGE_CLASS;		
+		}	
 		logger.info(sGetAttribute(locator+ " div@class") + " not contain neither " + ContactGroupItem.IMAGE_CLASS + " nor " + ContactItem.IMAGE_CLASS );
 		return null;
 	}

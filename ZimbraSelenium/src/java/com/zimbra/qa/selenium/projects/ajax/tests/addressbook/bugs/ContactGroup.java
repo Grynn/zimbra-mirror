@@ -156,5 +156,66 @@ public class ContactGroup extends AjaxCommonTest  {
 
 
    	}
+	
+	@Test( description="create a new contact group from GAL search result",
+		   groups=("smoke"))
+	public void Bug66623_AddingAGALToAContactGroup() throws HarnessException{
+		String email=ZimbraAccount.AccountB().EmailAddress.substring(0,ZimbraAccount.AccountB().EmailAddress.indexOf('@'));
+		
+		// search for a GAL
+		app.zPageSearch.zToolbarPressPulldown(Button.B_SEARCHTYPE, Button.O_SEARCHTYPE_GAL); 		
+		app.zPageSearch.zAddSearchQuery(email);	
+		app.zPageSearch.zToolbarPressButton(Button.B_SEARCH);		
+					
+	
+		//Right click and select New Contact Group
+	 	 SimpleFormContactGroupNew simpleFormGroup = (SimpleFormContactGroupNew) app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_CONTACTGROUP, Button.O_NEW_CONTACTGROUP , email);     
+	
+	 	//Create a contact item
+	 	ContactItem contactItem = new ContactItem(email);
+	 	contactItem.email = ZimbraAccount.AccountB().EmailAddress;
+	 	
+	 	//Create contact group 
+		 ContactGroupItem newGroup = new ContactGroupItem("group_" + ZimbraSeleniumProperties.getUniqueString().substring(8));
+		 
+		 //Add the member to the group	 
+		 newGroup.addDListMember(contactItem);
+	
+		 
+	 	//fill in group name 
+		simpleFormGroup.zFill(newGroup);
+		   
+		//click Save
+		simpleFormGroup.zSubmit(); 
+		
+		//verify toasted message 'group created'  
+        String expectedMsg ="Group Created";
+        ZAssert.assertStringContains(app.zPageMain.zGetToaster().zGetToastMessage(),
+        		        expectedMsg , "Verify toast message '" + expectedMsg + "'");
+    
+	    
+        
+
+        //click "Contacts" folder
+		FolderItem folder= FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Contacts);
+	    app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, folder);
+		
+	    //verify group name is displayed		        
+			List<ContactItem> contacts = app.zPageAddressbook.zListGetContacts();
+			boolean isFileAsEqual=false;
+			for (ContactItem ci : contacts) {
+				if (ci.fileAs.equals(ci.fileAs)) {
+		            isFileAsEqual = true;	
+					break;
+				}
+			}
+		ZAssert.assertTrue(isFileAsEqual, "Verify group name (" + newGroup.fileAs + ") displayed");
+
+	    //verify the location is System folder "Contacts"
+		ZAssert.assertEquals(app.zPageAddressbook.sGetText("css=td.companyFolder"), SystemFolder.Contacts.getName(), "Verify location (folder) is " + SystemFolder.Contacts.getName());
+		
+	}
+	     
+	
 
 }
