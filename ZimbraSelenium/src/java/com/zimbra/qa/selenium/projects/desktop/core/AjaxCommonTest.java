@@ -21,6 +21,8 @@ import com.zimbra.qa.selenium.framework.util.GeneralUtility.WAIT_FOR_OPERAND;
 import com.zimbra.qa.selenium.framework.util.OperatingSystem.OsType;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount.SOAP_DESTINATION_HOST_TYPE;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
+import com.zimbra.qa.selenium.framework.util.staf.Stafzmtlsctl;
+import com.zimbra.qa.selenium.framework.util.staf.Stafzmtlsctl.SERVER_ACCESS;
 import com.zimbra.qa.selenium.projects.desktop.ui.*;
 
 /**
@@ -154,6 +156,13 @@ public class AjaxCommonTest {
    public void commonTestBeforeSuite()
    throws HarnessException, IOException, InterruptedException, SAXException {
       logger.info("commonTestBeforeSuite: start");
+
+      // Most of the tests require the HTTP and HTTPS to be enabled, thus
+      // enabling both mode at the very beginning of the test, so that it is buying
+      // enough time for the server to recover after resetting the mailbox service,
+      // which is usually down for 1 - 2 minutes after restart.
+      Stafzmtlsctl stafzmtlsctl = new Stafzmtlsctl();
+      stafzmtlsctl.setServerAccess(SERVER_ACCESS.BOTH);
 
       //Racetrack
       String DbHostURL = ZimbraSeleniumProperties.getStringProperty("racetrack.dbUrl",
