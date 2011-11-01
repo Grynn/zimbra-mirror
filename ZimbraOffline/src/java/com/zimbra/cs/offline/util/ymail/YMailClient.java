@@ -247,7 +247,7 @@ public class YMailClient {
         addAttributes(cmp, mbp);
         String type = mbp.getContentType();
         boolean isAttachment = (mbp.getDisposition() != null) && (mbp.getDisposition().equals("attachment"));
-        if (!isAttachment && isAsciiText(mbp) && !mustAttach(mbp)) {
+        if (!isAttachment && isAsciiText(mbp)) {
             addElement(cmp, "data", getContentString(mbp));
         } else if (type.startsWith("multipart/")) {
             addSubparts(cmp, (Multipart) mbp.getContent());
@@ -255,12 +255,6 @@ public class YMailClient {
             cmp.addAttribute("attachment", "upload://" + uploadAttachment(mbp));
         }
         return cmp;
-    }
-
-    private boolean mustAttach(MimeBodyPart mbp)
-        throws MessagingException, IOException {
-        int size = getContentSize(mbp);
-        return size < 0 || size > MAX_INLINE_DATA_SIZE;
     }
 
     private static boolean isAsciiText(MimeBodyPart mbp)
