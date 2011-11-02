@@ -873,7 +873,8 @@ function() {
  * @extends		DwtMenu
  */
 DwtSelectMenu = function(parent) {
-    DwtMenu.call(this, {parent:parent, style:DwtMenu.DROPDOWN_STYLE, className:"DwtMenu", layout:parent._layout, maxRows:parent._maxRows});
+    DwtMenu.call(this, {parent:parent, style:DwtMenu.DROPDOWN_STYLE, className:"DwtMenu", layout:parent._layout, maxRows:parent._maxRows, id:Dwt.getNextId(parent.getHTMLElId() + "_Menu_")});
+// Dwt.getNextId should be removed once Bug 66510 is fixed
 };
 DwtSelectMenu.prototype = new DwtMenu;
 DwtSelectMenu.prototype.constructor = DwtSelectMenu;
