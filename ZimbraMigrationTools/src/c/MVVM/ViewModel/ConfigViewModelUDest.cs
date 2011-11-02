@@ -121,6 +121,16 @@ namespace MVVM.ViewModel
                 return;
             }
 
+            try
+            {
+                System.Net.IPAddress address = System.Net.IPAddress.Parse(ZimbraServerHostName);
+                MessageBox.Show("Please enter a valid host name rather than an IP address", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            catch (Exception)
+            {
+            }
+
             ZimbraAPI zimbraAPI = new ZimbraAPI();
 
             int stat = zimbraAPI.Logon(this.ZimbraServerHostName, this.ZimbraPort, this.ZimbraUser,this.ZimbraUserPasswd, false);

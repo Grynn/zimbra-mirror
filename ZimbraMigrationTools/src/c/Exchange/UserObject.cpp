@@ -48,11 +48,13 @@ STDMETHODIMP CUserObject::InitializeUser(BSTR host, BSTR admin, BSTR UserID, BST
 {
     HRESULT hr = S_OK; long retval = 0;
 
+    // if we don't need these, we should get rid of them in the signature
     UserID = UserID;
-    MailType = MailType;
     BSTR temp;
     temp = host;
     temp = admin;
+    //////////////
+
     retval = Initialize(UserID);
     // Logger = CSingleton::getInstance();
     if (wcscmp(MailType, L"MAPI") == 0)
@@ -81,8 +83,6 @@ STDMETHODIMP CUserObject::UMInitializeUser(BSTR ProfileName, BSTR MailType, BSTR
 {
     HRESULT hr = S_OK; long retval = 0;
 
-    ProfileName = ProfileName;
-    MailType = MailType;
     retval = Initialize(L"");
     // Logger = CSingleton::getInstance();
     if (wcscmp(MailType, L"MAPI") == 0)
