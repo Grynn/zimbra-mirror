@@ -273,13 +273,16 @@ public class CSMigrationwrapper
         // set up check for skipping folders
         List<string> skipList = new List<string>();
         string skipfolders = importopts.SkipFolders;
-        if (skipfolders.Length > 0)
+        if (skipfolders != null)
         {
-            string[] tokens = skipfolders.Split(',');
-            for (int i = 0; i < tokens.Length; i++)
+            if (skipfolders.Length > 0)
             {
-                string token = tokens.GetValue(i).ToString();
-                skipList.Add(token.Trim());
+                string[] tokens = skipfolders.Split(',');
+                for (int i = 0; i < tokens.Length; i++)
+                {
+                    string token = tokens.GetValue(i).ToString();
+                    skipList.Add(token.Trim());
+                }
             }
         }
         ///
@@ -546,13 +549,16 @@ public class CSMigrationwrapper
             // set up check for skipping folders
             List <string> skipList = new List<string>();
             string skipfolders = importopts.SkipFolders;
-            if (skipfolders.Length > 0)
+            if (skipfolders != null)
             {
-                string[] tokens = skipfolders.Split(',');
-                for (int i = 0; i < tokens.Length; i++)
+                if (skipfolders.Length > 0)
                 {
-                    string token = tokens.GetValue(i).ToString();
-                    skipList.Add(token.Trim());
+                    string[] tokens = skipfolders.Split(',');
+                    for (int i = 0; i < tokens.Length; i++)
+                    {
+                        string token = tokens.GetValue(i).ToString();
+                        skipList.Add(token.Trim());
+                    }
                 }
             }
             ///
