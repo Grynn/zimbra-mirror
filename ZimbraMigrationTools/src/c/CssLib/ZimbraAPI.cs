@@ -364,18 +364,30 @@ public class ZimbraAPI
     // private UploadFile method
     private int UploadFile(string filepath, int mode, out string uploadToken)
     {
-        WebServiceClient client = new WebServiceClient {
-            Url = "https://" + ZimbraValues.GetZimbraValues().HostName + ":" +
-                    ZimbraValues.GetZimbraValues().Port + "/service/upload?fmt=raw",
-            WSServiceType = WebServiceClient.ServiceType.Traditional
-        };
+        bool isSecure = (ZimbraValues.GetZimbraValues().Url).Substring(0, 5) == "https";
+        WebServiceClient client =
+            (isSecure)
+            ?
+                new WebServiceClient
+                {
+                    Url = "https://" + ZimbraValues.GetZimbraValues().HostName + ":" +
+                            ZimbraValues.GetZimbraValues().Port + "/service/upload?fmt=raw",
+                    WSServiceType = WebServiceClient.ServiceType.Traditional
+                }
+            :
+                new WebServiceClient
+                {
+                    Url = "http://" + ZimbraValues.GetZimbraValues().HostName + ":" +
+                            ZimbraValues.GetZimbraValues().Port + "/service/upload?fmt=raw",
+                    WSServiceType = WebServiceClient.ServiceType.Traditional
+                };
 
         int retval = 0;
         string rsp = "";
         uploadToken = "";
 
         client.InvokeUploadService(
-                ZimbraValues.GetZimbraValues().AuthToken, filepath, mode, out rsp);
+                ZimbraValues.GetZimbraValues().AuthToken, isSecure, filepath, mode, out rsp);
         retval = client.status;
         if (retval == 0)
         {
