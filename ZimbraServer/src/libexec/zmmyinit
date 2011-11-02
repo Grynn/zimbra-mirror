@@ -142,6 +142,10 @@ if [ -f "${zimbra_db_directory}/backup-version-init.sql" ]; then
     ${zimbra_db_directory}/backup-version-init.sql
 fi
 
+#
+# Delete wildcard user login entries
+#
+${zimbra_home}/bin/mysql -u root --password= -e "DROP USER ''@'localhost'; DROP USER ''@'`hostname`';"
 
 #
 # Generate passwords for mysql into local config
@@ -167,7 +171,13 @@ fi
 #
 zmsetvars -f mysql_root_password zimbra_mysql_password
 echo '*' Changing mysql root user password
-${zimbra_home}/bin/mysqladmin -u root --password= password ${mysql_root_password}
+cat <<EOF | ${zimbra_home}/bin/mysql -u root --password=
+    SET PASSWORD FOR 'root'@'localhost' = PASSWORD('${mysql_root_password}');
+    SET PASSWORD FOR 'root'@'`hostname`' = PASSWORD('${mysql_root_password}');
+    SET PASSWORD FOR 'root'@'127.0.0.1' = PASSWORD('${mysql_root_password}');
+    SET PASSWORD FOR 'root'@'::1' = PASSWORD('${mysql_root_password}');
+    SET PASSWORD FOR 'root'@'localhost.localdomain' = PASSWORD('${mysql_root_password}');
+EOF
 
 echo '*' Changing mysql zimbra user password
 ${zimbra_home}/bin/zmmypasswd ${zimbra_mysql_password}
