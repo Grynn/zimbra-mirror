@@ -56,8 +56,7 @@ public class ZmCalendarApp_ViewWorkWeek_Appointment1 extends AjaxCommonTest {
 		// Wait for the app to load
 		app.zPageCalendar.zWaitForActive();
 		
-		app.zPageMain.zLogout();
-
+		
 	}
 
 
