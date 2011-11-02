@@ -411,7 +411,7 @@ public class CSMigrationwrapper
         iteminstance = Activator.CreateInstance(itemObject);
 
         int iProcessedItems = 0;
-        while (iProcessedItems < Acct.migrationFolders[0].TotalCountOFItems)               
+        while (iProcessedItems < Acct.migrationFolder.TotalCountOFItems)               
         {
             foreach (dynamic itemobject in itemobjectarray)
             {
@@ -461,7 +461,7 @@ public class CSMigrationwrapper
                             stat = api.CreateContact(dict, path);
                         }
                     }
-                    Acct.migrationFolders[0].CurrentCountOFItems++;
+                    Acct.migrationFolder.CurrentCountOFItems++;
                 }
                 iProcessedItems++;
             }
@@ -535,7 +535,7 @@ public class CSMigrationwrapper
             folderobjectarray = (object[])userobject.InvokeMember("GetFolderObjects",
                    BindingFlags.InvokeMethod | BindingFlags.Instance | BindingFlags.Public,
                    null, userinstance, null, null, null, null);
-            Acct.migrationFolders[0].CurrentCountOFItems = folderobjectarray.Count();
+            Acct.migrationFolder.CurrentCountOFItems = folderobjectarray.Count();
 
             Acct.TotalNoItems = ComputeTotalMigrationCount(importopts);
 
@@ -636,10 +636,10 @@ public class CSMigrationwrapper
                 }
 
                 // Set FolderName at the end, since we trigger results on that, so we need all the values set
-                Acct.migrationFolders[0].TotalCountOFItems = folderobject.ItemCount;//itemobjectarray.Count();
-                Acct.migrationFolders[0].CurrentCountOFItems = 0;
-                Acct.migrationFolders[0].FolderView = folderobject.ContainerClass;
-                Acct.migrationFolders[0].FolderName = folderobject.Name;
+                Acct.migrationFolder.TotalCountOFItems = folderobject.ItemCount;//itemobjectarray.Count();
+                Acct.migrationFolder.CurrentCountOFItems = 0;
+                Acct.migrationFolder.FolderView = folderobject.ContainerClass;
+                Acct.migrationFolder.FolderName = folderobject.Name;
 
                 if (importopts.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Contacts))
                 {
@@ -684,14 +684,14 @@ public class CSMigrationwrapper
                     totalCount = 100;
                     break;
             }
-            Acct.migrationFolders[0].FolderName = "Contacts";
-            Acct.migrationFolders[0].TotalCountOFItems = totalCount;
-            Acct.migrationFolders[0].CurrentCountOFItems = 0;
+            Acct.migrationFolder.FolderName = "Contacts";
+            Acct.migrationFolder.TotalCountOFItems = totalCount;
+            Acct.migrationFolder.CurrentCountOFItems = 0;
             while (count < totalCount)
             {
                 System.Threading.Thread.Sleep(2000);
-                Acct.migrationFolders[0].CurrentCountOFItems =
-                        Acct.migrationFolders[0].CurrentCountOFItems + 20;
+                Acct.migrationFolder.CurrentCountOFItems =
+                        Acct.migrationFolder.CurrentCountOFItems + 20;
                 if (Acct.Accountnum == 0)
                 {
                     if (count == 60)
@@ -703,7 +703,7 @@ public class CSMigrationwrapper
                 }
                 count = count + 20;
             }
-            Acct.migrationFolders[0].LastFolderInfo =
+            Acct.migrationFolder.LastFolderInfo =
                     new FolderInfo("Contacts", "Contact", string.Format("{0} of {1}",
                         totalCount.ToString(), totalCount.ToString()));
             switch (Acct.Accountnum)
@@ -724,9 +724,9 @@ public class CSMigrationwrapper
                     totalCount = 1100;
                     break;
             }
-            Acct.migrationFolders[0].FolderName = "Inbox";
-            Acct.migrationFolders[0].TotalCountOFItems = totalCount;
-            Acct.migrationFolders[0].CurrentCountOFItems = 0;
+            Acct.migrationFolder.FolderName = "Inbox";
+            Acct.migrationFolder.TotalCountOFItems = totalCount;
+            Acct.migrationFolder.CurrentCountOFItems = 0;
             while ((count >= 100) & (count < totalCount))
             {
                 if (Acct.Accountnum == 0)
@@ -776,11 +776,11 @@ public class CSMigrationwrapper
                     }
                 }
                 System.Threading.Thread.Sleep(2000);
-                Acct.migrationFolders[0].CurrentCountOFItems =
-                        Acct.migrationFolders[0].CurrentCountOFItems + 100;
+                Acct.migrationFolder.CurrentCountOFItems =
+                        Acct.migrationFolder.CurrentCountOFItems + 100;
                 count = count + 100;
             }
-            Acct.migrationFolders[0].LastFolderInfo =
+            Acct.migrationFolder.LastFolderInfo =
                     new FolderInfo("Inbox", "Message", string.Format("{0} of {1}",
                         totalCount.ToString(), totalCount.ToString()));
             switch (Acct.Accountnum)
@@ -801,16 +801,16 @@ public class CSMigrationwrapper
                     totalCount = 10;
                     break;
             }
-            Acct.migrationFolders[0].FolderName = "Rules";
-            Acct.migrationFolders[0].TotalCountOFItems = totalCount;
-            Acct.migrationFolders[0].CurrentCountOFItems = 0;
+            Acct.migrationFolder.FolderName = "Rules";
+            Acct.migrationFolder.TotalCountOFItems = totalCount;
+            Acct.migrationFolder.CurrentCountOFItems = 0;
 
             long tempCount = count;
             while ((count >= tempCount) & (count <= (tempCount + 10)))
             {
                 System.Threading.Thread.Sleep(2000);
-                Acct.migrationFolders[0].CurrentCountOFItems =
-                        Acct.migrationFolders[0].CurrentCountOFItems + 10;
+                Acct.migrationFolder.CurrentCountOFItems =
+                        Acct.migrationFolder.CurrentCountOFItems + 10;
                 if (Acct.Accountnum == 0)
                 {
                     if (count == 710)
@@ -823,7 +823,7 @@ public class CSMigrationwrapper
                 }
                 count = count + 10;
             }
-            Acct.migrationFolders[0].LastFolderInfo =
+            Acct.migrationFolder.LastFolderInfo =
                     new FolderInfo("Inbox", "Rule", string.Format("{0} of {1}",
                         totalCount.ToString(), totalCount.ToString()));
         }

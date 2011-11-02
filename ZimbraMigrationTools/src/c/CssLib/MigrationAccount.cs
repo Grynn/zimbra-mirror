@@ -14,7 +14,7 @@ public class MigrationAccount
         Accountnum = -1;
         AccountID = "";
 
-        migrationFolders = new List<MigrationFolder>();
+        migrationFolder = new MigrationFolder();
     }
     private string AccountName;
     private int AccountNum;
@@ -31,14 +31,8 @@ public class MigrationAccount
     private Int64 TotalWarnings;
     private ProblemInfo lastProblemInfo;
 
-    public List<MigrationFolder> migrationFolders;
+    public MigrationFolder migrationFolder;
     public string AccountID;
-
-    /*public MigrationFolder MigrationFolders
-     * {
-     *  get { return migrationFolders[10]; }
-     *  set { migrationFolders = value; }
-     * }*/
 
     private System.DateTime dtmDateRaised;
 

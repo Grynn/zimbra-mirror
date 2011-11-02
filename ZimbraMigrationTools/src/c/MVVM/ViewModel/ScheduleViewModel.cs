@@ -553,7 +553,7 @@ namespace MVVM.ViewModel
             MyFolder.Accountnum = num;
             MyFolder.OnChanged += new MigrationObjectEventHandler(Folder_OnChanged);
 
-            MyAcct.migrationFolders.Insert(0, MyFolder);
+            MyAcct.migrationFolder = MyFolder;
             
             CSMigrationwrapper mw = new CSMigrationwrapper();
             MigrationOptions importOpts = SetOptions();           

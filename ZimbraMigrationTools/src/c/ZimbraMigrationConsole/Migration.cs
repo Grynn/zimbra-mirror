@@ -20,7 +20,7 @@ class Migration
         MigrationFolder MyFolder = new MigrationFolder();
         MyFolder.OnChanged += new MigrationObjectEventHandler(i_OnChanged12);
 
-        MyAcct.migrationFolders.Insert(0, MyFolder);
+        MyAcct.migrationFolder = MyFolder;
 
         /* CSMigrationwrapper test = new CSMigrationwrapper();
          * test.StartMigration(MyAcct);*/
