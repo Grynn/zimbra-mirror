@@ -41,7 +41,7 @@ ZaPopupMenu = function(parent, className, dialog, opList, contextId, menuType, b
                     continue;
 
                 var style = (opList[btnOrder[ix]].id == ZaOperation.SEP) ? DwtMenuItem.SEPARATOR_STYLE : DwtMenuItem.NO_STYLE;
-                this.createMenuItem(opList[btnOrder[ix]].id, opList[btnOrder[ix]].imageId, opList[btnOrder[ix]].caption, null, true,style,null);
+                this.createMenuItem(opList[btnOrder[ix]].id, opList[btnOrder[ix]].imageId, opList[btnOrder[ix]].caption, null, opList[btnOrder[ix]].enabled,style,null);
                 this.addSelectionListener(opList[btnOrder[ix]].id, opList[btnOrder[ix]].listener);
             }
         }
@@ -53,7 +53,7 @@ ZaPopupMenu = function(parent, className, dialog, opList, contextId, menuType, b
                         continue;
 
                     var style = (opList[ix].id == ZaOperation.SEP) ? DwtMenuItem.SEPARATOR_STYLE : DwtMenuItem.NO_STYLE;
-                    this.createMenuItem(opList[ix].id, opList[ix].imageId, opList[ix].caption, null, true,style,null);
+                    this.createMenuItem(opList[ix].id, opList[ix].imageId, opList[ix].caption, null, opList[ix].enabled,style,null);
                     this.addSelectionListener(opList[ix].id, opList[ix].listener);
                 }
             }
