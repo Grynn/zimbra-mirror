@@ -650,8 +650,8 @@ namespace MVVM.ViewModel
                 {
                     if (e.NewValue.ToString() != "0")
                     {
-                        string msg2 = "{0} of {1}";
-                        ar.AcctProgressMsg = String.Format(msg2, f.CurrentCountOFItems, f.TotalCountOFItems);
+                        string msg1 = "{0} of {1}";
+                        ar.AcctProgressMsg = String.Format(msg1, f.CurrentCountOFItems, f.TotalCountOFItems);
 
                         //  TEMPORARY !!! WHEN I GET RID OF FAKE PREVIEW, TAKE THIS OUT AND REPLACE WITH ar.CurrentItemNum++
                         if (m_isPreview)
@@ -680,6 +680,15 @@ namespace MVVM.ViewModel
                 }
             }
 
+            if (e.PropertyName == "TotalCountOFItems")  // finish up with the last folder
+            {
+                if (f.FolderName != null)
+                {
+                    string msg2 = "{0} of {1}";
+                    ar.AcctProgressMsg = String.Format(msg2, f.CurrentCountOFItems, f.TotalCountOFItems);
+                }
+            }
+
             if (e.PropertyName == "FolderName")
             {
                 string folderName = e.NewValue.ToString();
@@ -687,11 +696,16 @@ namespace MVVM.ViewModel
 
                 if (e.NewValue != null)
                 {
-                    string msg1 = "Migrating {0}";
-                    ar.PBMsgValue = String.Format(msg1, folderName);
-                    accountResultsViewModel.PBMsgValue = String.Format(msg1, folderName); // for the user results window
+                    string msg3 = "Migrating {0}";
+                    ar.PBMsgValue = String.Format(msg3, folderName);
+                    accountResultsViewModel.PBMsgValue = String.Format(msg3, folderName); // for the user results window
                     f.LastFolderInfo = new FolderInfo(e.NewValue.ToString(), folderType, string.Format("{0} of {1}",
-                                                      f.TotalCountOFItems, f.TotalCountOFItems));
+                                                      f.CurrentCountOFItems, f.TotalCountOFItems));
+                    if (e.OldValue != null)
+                    {
+                        int count = ar.AccountFolderInfoList.Count;
+                        ar.AccountFolderInfoList[count - 1].FolderProgress = ar.AcctProgressMsg;
+                    }
                     ar.AccountFolderInfoList.Add(f.LastFolderInfo);
                 }
             }

@@ -180,12 +180,14 @@ namespace MVVM.View
                 BindingOperations.SetBinding(urListView[accountnum], ListView.ItemsSourceProperty, binding);
 
                 AccountResultsViewModel ar = ViewModel.AccountResultsList[accountnum];
+                int count = ar.AccountFolderInfoList.Count;
                 for (int i = 0; i < ar.AccountFolderInfoList.Count; i++)
                 {
                     FolderInfo folderInfo = ar.AccountFolderInfoList[i];
                     if (folderInfo != null)
                     {
-                        UserResults ur = new UserResults(folderInfo.FolderName, folderInfo.FolderType, folderInfo.FolderProgress);
+                        string msg = (i == (count - 1)) ? ar.AcctProgressMsg : folderInfo.FolderProgress;
+                        UserResults ur = new UserResults(folderInfo.FolderName, folderInfo.FolderType, msg);
                         userResultsList.Add(ur);
                     }
                 }
