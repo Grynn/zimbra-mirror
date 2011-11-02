@@ -60,9 +60,14 @@ ZaNewDLXWizard.prototype.handleXFormChange = function (ev) {
 			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
 	} else {
 		if(this._containedObject[ZaAccount.A_name]
-                && this._containedObject[ZaAccount.A_name].indexOf("@") > 0){
-            this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
+                && this._containedObject[ZaAccount.A_name].indexOf("@") > 0) {
 			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
+            if (this._containedObject[ZaModel.currentStep] != this._lastStep) {
+                 this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
+            }
+            if (this._containedObject[ZaModel.currentStep] != 1) {
+                 this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
+            }
         }
 	}
 }
