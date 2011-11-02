@@ -72,6 +72,8 @@ function() {
 			this._optButtonItem.callback = this._optButton.callback;
 			this._optButtonItem.addSelectionListener(new AjxListener(this, this._onclickHandler));
 			this._optButtonItem.replaceElement(this._optButtonId);
+			this._optButtonItem.setHoverImage("ContextMenuHover");
+			this._optButtonItem.setIconEl(this._optButtonItem.getHtmlElement()); // image container is button
 		}
 	}
 };

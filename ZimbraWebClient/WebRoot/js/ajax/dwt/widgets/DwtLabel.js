@@ -194,6 +194,17 @@ function(imageInfo) {
 }
 
 /**
+ *
+ * Set _iconEl, used for buttons that contains only images
+ *
+ * @param       htmlElement/DOM node
+ *
+ */
+DwtLabel.prototype.setIconEl = function(iconElement) {
+        this._iconEl =  iconElement;
+}
+
+/**
  * Sets the disabled image. If the label is currently disabled, its image is updated.
  *
  * @param	{string}	imageInfo		the image
