@@ -27,6 +27,8 @@ namespace MVVM.View
         {
             InitializeComponent();
 
+            Application.Current.Properties["migrationmode"] = "server";
+
             m_baseViewModel = new BaseViewModel();
 
             m_introViewModel = new IntroViewModel(lbMode);

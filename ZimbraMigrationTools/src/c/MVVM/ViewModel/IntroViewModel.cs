@@ -75,6 +75,7 @@ namespace MVVM.ViewModel
                 BaseViewModel.isServer = false;
                 IsUserMigration = true;
                 IsServerMigration = false;
+                Application.Current.Properties["migrationmode"] = "user";
                 AddViews(m_isBrowser);
             }
         }
@@ -96,6 +97,7 @@ namespace MVVM.ViewModel
                 BaseViewModel.isServer = true;
                 IsServerMigration = true;
                 IsUserMigration = false;
+                Application.Current.Properties["migrationmode"] = "server";
                 AddViews(m_isBrowser);
             }
         }

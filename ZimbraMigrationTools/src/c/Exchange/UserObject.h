@@ -61,6 +61,7 @@ public:
         VARIANT creattiondate, VARIANT * vItems);
     STDMETHOD(GetDataForItem) (VARIANT ItemId, VARIANT * pVal);
     STDMETHOD(UMInitializeUser) (BSTR ProfileName, BSTR MailType, BSTR* pErrorText);
+    STDMETHOD(UMUnInitializeUser) (BSTR MailType);
 
     // /base class functions
     virtual long Initialize(BSTR Id);

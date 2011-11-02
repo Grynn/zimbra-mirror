@@ -15,12 +15,20 @@ public partial class App: Application
 {
     private void Application_Exit(object sender, ExitEventArgs e)
     {
+        string mode = Properties["migrationmode"].ToString();
         CSMigrationwrapper mw = new CSMigrationwrapper();
 
         mw.MailClient = "MAPI";
-        string s = mw.UninitializeMailClient();
-        if (s.Length > 0)
-            MessageBox.Show(s, "Shutdown error", MessageBoxButton.OK, MessageBoxImage.Error);
+        if (mode == "server")
+        {
+            string s = mw.UninitializeMailClient();
+            if (s.Length > 0)
+                MessageBox.Show(s, "Shutdown error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        else
+        {
+            mw.EndUserMigration();
+        }
     }
 }
 }

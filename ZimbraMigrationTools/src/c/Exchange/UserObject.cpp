@@ -106,6 +106,18 @@ STDMETHODIMP CUserObject::UMInitializeUser(BSTR ProfileName, BSTR MailType, BSTR
     return hr;
 }
 
+STDMETHODIMP CUserObject::UMUnInitializeUser(BSTR MailType)
+{
+    HRESULT hr = S_OK;
+
+    if (wcscmp(MailType, L"MAPI") == 0)
+    {
+	MAPIAccessAPI::UnInitGlobalSessionAndStore();
+    }
+
+    return hr;
+}
+
 STDMETHODIMP CUserObject::GetFolderObjects( /*[out, retval]*/ VARIANT *vObjects)
 {
     HRESULT hr = S_OK;

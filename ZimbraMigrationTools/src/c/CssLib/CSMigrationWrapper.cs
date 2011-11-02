@@ -465,6 +465,25 @@ public class CSMigrationwrapper
         }
     }
 
+    public void EndUserMigration()
+    {
+        Type userobject;
+        object userinstance;
+
+        userobject = sourceProvider.GetType("Exchange.UserObjectClass");
+        userinstance = Activator.CreateInstance(userobject);
+
+        ParameterModifier pm = new ParameterModifier(1);
+        pm[0] = true;
+        ParameterModifier[] mods = { pm };
+
+        object[] MyArgs = new object[1];
+        MyArgs[0] = "MAPI";
+        userobject.InvokeMember("UMUnInitializeUser",
+                BindingFlags.InvokeMethod | BindingFlags.Instance | BindingFlags.Public,
+                null, userinstance, MyArgs, mods, null, null);
+    }
+
     public void StartMigration(MigrationAccount Acct, MigrationOptions importopts, bool isServer = true, bool isPreview = false)
     {
         Type userobject;
