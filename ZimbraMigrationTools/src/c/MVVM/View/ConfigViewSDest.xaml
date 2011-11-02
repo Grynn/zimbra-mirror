@@ -28,7 +28,7 @@
                 <TextBox MinWidth="240" Margin="0,0,50,0" Name="tbHost" VerticalAlignment="Center" Grid.Row="0" Grid.Column="1"  Text="{Binding Path=ZimbraServerHostName}"/>
                 <Label Content="Admin Port" Margin="11,0,0,0" HorizontalAlignment="Left" Name="label2" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0" />
                 <TextBox HorizontalAlignment="Left" MinWidth="50" Name="tbPort" VerticalAlignment="Center" Grid.Row="1" Grid.Column="1" Text="{Binding Path=ZimbraPort}"/>
-                <CheckBox Content="Use Secure Connection" Margin="-80,0,0,0" HorizontalAlignment="Center"  Name="cbSecure" VerticalAlignment="Center" Grid.Row="1" Grid.Column="1" IsChecked="{Binding Path=ZimbraSSL}"/>
+                <CheckBox Content="Use Secure Connection" Margin="-80,0,0,0" Visibility="Hidden" HorizontalAlignment="Center"  Name="cbSecure" VerticalAlignment="Center" Grid.Row="1" Grid.Column="1" IsChecked="{Binding Path=ZimbraSSL}"/>
                 <Label Content="Admin ID" Margin="11,0,0,0" HorizontalAlignment="Left" Name="label3" VerticalAlignment="Center" Grid.Row="2" Grid.Column="0" />
                 <TextBox MinWidth="240" Margin="0,0,50,0" Name="tbUser" VerticalAlignment="Center" Grid.Row="2" Grid.Column="1" Text="{Binding Path=ZimbraAdmin}"/>
                 <Label Content="Password" Margin="11,0,0,0" HorizontalAlignment="Left" Name="label4" VerticalAlignment="Center" Grid.Row="3" Grid.Column="0"  />
