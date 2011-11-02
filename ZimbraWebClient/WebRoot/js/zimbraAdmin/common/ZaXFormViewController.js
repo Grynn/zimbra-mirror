@@ -112,6 +112,18 @@ function(ev, noPopView, func, obj, params) {
 		//this._app.getTabGroup().removeCurrentTab(true) ;
 		ZaApp.getInstance().popView();
 		//ZaApp.getInstance().getTabGroup().removeCurrentTab(true) ;
+        if(appNewUI) {
+            var tree = ZaZimbraAdmin.getInstance().getOverviewPanelController().getOverviewPanel().getFolderTree();
+            var rootItem = tree.getCurrentRootItem();
+            var rootPath = tree.getABPath(rootItem.getData("dataItem"));
+            var topPath = "";
+            var lastLoc = rootPath.lastIndexOf(ZaTree.SEPERATOR);
+            if(lastLoc > 0) {
+                topPath = rootPath.substring(0,lastLoc);
+            }
+            tree.setSelectionByPath(topPath);
+        }
+
 	}
 }
 
@@ -197,7 +209,18 @@ function () {
 		}
 		this.closeCnfrmDlg();	
 		ZaApp.getInstance().popView();		
-		//ZaApp.getInstance().getTabGroup().removeCurrentTab(true) ;	
+		//ZaApp.getInstance().getTabGroup().removeCurrentTab(true) ;
+        if(appNewUI) {
+            var tree = ZaZimbraAdmin.getInstance().getOverviewPanelController().getOverviewPanel().getFolderTree();
+            var rootItem = tree.getCurrentRootItem();
+            var rootPath = tree.getABPath(rootItem.getData("dataItem"));
+            var topPath = "";
+            var lastLoc = rootPath.lastIndexOf(ZaTree.SEPERATOR);
+            if(lastLoc > 0) {
+                topPath = rootPath.substring(0,lastLoc);
+            }
+            tree.setSelectionByPath(topPath);
+        }
 	} catch (ex) {
 		this.closeCnfrmDlg();	
 		this._handleException(ex, "ZaXFormViewController.prototype.deleteAndGoAway", null, false);				
