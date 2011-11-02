@@ -1462,7 +1462,7 @@ ZaNewCosXWizard.myXFormModifier = function(xFormObject, entry) {
     if(_tab4) {
         var case4 = {type:_CASE_, numCols:1, caseKey:_tab4};
         var case4Items = [
-            {type:_GROUP_,items:[							{
+            {type:_GROUP_,numCols:2,colSizes:["275","auto"],items:[							{
                 ref:ZaCos.A_zimbraPrefSkin, type:_OSELECT1_,
                 msgName:ZaMsg.LBL_zimbraPrefSkin,label:ZaMsg.LBL_zimbraPrefSkin, labelLocation:_LEFT_,choices:ZaApp.getInstance().getInstalledSkins(),
                 visibilityChecks:[ZaNewCosXWizard.gotSkins]
@@ -1474,8 +1474,8 @@ ZaNewCosXWizard.myXFormModifier = function(xFormObject, entry) {
                         ref:ZaCos.A_zimbraAvailableSkin,
                         choices:ZaNewCosXWizard.themeChoices,
                         visibilityChecks:[Case_XFormItem.prototype.isCurrentTab],
-                        visibilityChangeEventSources:[ZaModel.currentTab],
-                        caseKey:_tab4, caseVarRef:ZaModel.currentTab,
+                        visibilityChangeEventSources:[ZaModel.currentStep],
+                        caseKey:_tab4, caseVarRef:ZaModel.currentStep,
                         radioBoxLabel1:ZaMsg.COS_DontLimitThemes,
                         radioBoxLabel2:ZaMsg.COS_LimitThemesTo
                     }
@@ -1497,9 +1497,9 @@ ZaNewCosXWizard.myXFormModifier = function(xFormObject, entry) {
                         selectRef:ZaCos.A_zimbraZimletAvailableZimlets,
                         ref:ZaCos.A_zimbraZimletAvailableZimlets,
                         choices:ZaNewCosXWizard.zimletChoices,
-                       // visibilityChecks:[Case_XFormItem.prototype.isCurrentTab],
-                       // visibilityChangeEventSources:[ZaModel.currentTab],
-                        caseKey:_tab5, caseVarRef:ZaModel.currentTab,
+                       visibilityChecks:[Case_XFormItem.prototype.isCurrentTab],
+                        visibilityChangeEventSources:[ZaModel.currentStep],
+                        caseKey:_tab5, caseVarRef:ZaModel.currentStep,
                         selectLabel:"",selectLabelLocation:_NONE_
                     }
                 ]
@@ -1519,9 +1519,9 @@ ZaNewCosXWizard.myXFormModifier = function(xFormObject, entry) {
                         selectRef:ZaCos.A_zimbraMailHostPool,
                         ref:ZaCos.A_zimbraMailHostPool,
                         choices:ZaApp.getInstance().getServerIdListChoices(),
-                      //  visibilityChecks:[Case_XFormItem.prototype.isCurrentTab],
-                      //  visibilityChangeEventSources:[ZaModel.currentTab],
-                        caseKey:_tab6, caseVarRef:ZaModel.currentTab,
+                        visibilityChecks:[Case_XFormItem.prototype.isCurrentTab],
+                        visibilityChangeEventSources:[ZaModel.currentStep],
+                        caseKey:_tab6, caseVarRef:ZaModel.currentStep,
                         radioBoxLabel1:ZaMsg.ServerPool_Donotlimit,
                         radioBoxLabel2:ZaMsg.COS_LimitServersTo
                     }
