@@ -1,14 +1,6 @@
 package com.zimbra.qa.selenium.framework.util;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Date;
@@ -676,4 +668,57 @@ public class RestUtil {
 		return (count);
 	}
 
+	public static class FileUtils {
+		
+		/**
+		 * Replace all occurences of a string with a new string in a file
+		 * @param oldString
+		 * @param newString
+		 * @param oldFile
+		 * @param newFile
+		 * @return the modified file
+		 * @throws HarnessException 
+		 */
+		public static File replaceInFile(String oldString, String newString, File in) throws HarnessException {
+			
+			BufferedReader reader = null;
+			PrintWriter writer = null;
+			
+			File result = null;
+			
+			try {
+				
+				try {
+					
+					// Create the output file
+					result = File.createTempFile("temp" + ZimbraSeleniumProperties.getUniqueString(), ".dat");
+
+					reader = new BufferedReader(new FileReader(in));
+					writer = new PrintWriter(new FileWriter(result));
+					
+					String line = null;
+					while ( (line = reader.readLine()) != null ) {
+						writer.println(line.replaceAll(oldString, newString));
+					}
+					
+				} finally {
+					if ( reader != null ) {
+						reader.close();
+						reader = null;
+					}
+					if ( writer != null ) {
+						writer.close();
+						writer = null;
+					}
+				}
+				
+			} catch (FileNotFoundException e) {
+				throw new HarnessException(e);
+			} catch (IOException e) {
+				throw new HarnessException(e);
+			}
+		
+			return (result);
+		}
+	}
 }
