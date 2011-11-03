@@ -21,6 +21,7 @@ import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.MailConstants;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.ZcsMailbox;
+import com.zimbra.cs.service.FeedManager;
 import com.zimbra.cs.service.mail.CreateFolder;
 import com.zimbra.soap.ZimbraSoapContext;
 
@@ -34,8 +35,11 @@ public class OfflineCreateFolder extends CreateFolder {
             
         Element t = request.getElement(MailConstants.E_FOLDER);
         String url = t.getAttribute(MailConstants.A_URL, null);
-        if (url != null && !url.equals(""))
+
+        if (url != null && !url.equals("")) {
+            FeedManager.retrieveRemoteDatasource(mbox.getAccount(), url, null);
             t.addAttribute(MailConstants.A_SYNC, false); // for zimbra accounts don't load rss on folder creation
+        }
         return super.handle(request, context);
     }
 }
