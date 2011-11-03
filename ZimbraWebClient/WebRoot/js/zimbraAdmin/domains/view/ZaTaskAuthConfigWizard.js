@@ -39,6 +39,7 @@ ZaTaskAuthConfigWizard = function(parent) {
 	ZaTaskAuthConfigWizard.AUTH_TEST_RESULT_STEP = ++this.TAB_INDEX;
     ZaTaskAuthConfigWizard.SPNEGO_CONFIG_STEP = ++this.TAB_INDEX;
     ZaTaskAuthConfigWizard.SPNEGO_CONFIG_STEP_2 = ++this.TAB_INDEX;
+    ZaTaskAuthConfigWizard.EXTERNAL_LDAP_GROUP_STEP = ++this.TAB_INDEX;
 	ZaTaskAuthConfigWizard.CONFIG_COMPLETE_STEP = ++this.TAB_INDEX;
 
 	this.stepChoices = [
@@ -50,6 +51,7 @@ ZaTaskAuthConfigWizard = function(parent) {
 		{label:ZaMsg.AuthTestResult, value:ZaTaskAuthConfigWizard.AUTH_TEST_RESULT_STEP},
         {label:ZaMsg.AuthSetting_Spnego, value:ZaTaskAuthConfigWizard.SPNEGO_CONFIG_STEP},
         {label:ZaMsg.AuthSetting_SpnegoDomain, value:ZaTaskAuthConfigWizard.SPNEGO_CONFIG_STEP_2},
+        {label:ZaMsg.NAD_ExternalGroup_Setting, value:ZaTaskAuthConfigWizard.EXTERNAL_LDAP_GROUP_STEP},
 		{label:ZaMsg.DomainConfigComplete, value:ZaTaskAuthConfigWizard.CONFIG_COMPLETE_STEP}
 	];
 
@@ -79,6 +81,12 @@ if(ZaDomain) {
     ZaDomain.A2_zimbraWebClientURLAllowedUA = "zimbraWebClientURLAllowedUA";
     ZaDomain.A2_zimbraSpnegoTargetServer = "zimbraSpnegoTargetServer";
     ZaDomain.A2_zimbraSpnegoGlobalSettingStatus = "zimbraSpnegoGlobalSettingStatus";
+
+    ZaDomain.A_zimbraExternalGroupLdapSearchBase = "zimbraExternalGroupLdapSearchBase";
+    ZaDomain.A_zimbraExternalGroupLdapSearchFilter = "zimbraExternalGroupLdapSearchFilter";
+    ZaDomain.A_zimbraExternalGroupHandlerClass = "zimbraExternalGroupHandlerClass";
+    ZaDomain.A_zimbraAuthMechAdmin = "zimbraAuthMechAdmin";
+    ZaDomain.A2_zimbraExternalGroupLdapEnabled = "zimbraExternalGroupLdapEnabled";
     if(ZaDomain.myXModel) {
         ZaDomain.myXModel.items.push(
             {id:ZaDomain.A2_zimbraSpnegoApplyFor, ref:ZaDomain.A2_zimbraSpnegoApplyFor, type: _STRING_},
@@ -96,7 +104,29 @@ if(ZaDomain) {
             {id:ZaDomain.A2_zimbraSpnegoUASupportedBrowsers, ref:ZaDomain.A2_zimbraSpnegoUASupportedBrowsers, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
             {id:ZaDomain.A2_zimbraSpnegoUACustomBrowsers, ref:ZaDomain.A2_zimbraSpnegoUACustomBrowsers, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES}
         );
+        ZaDomain.myXModel.items.push(
+            {id:ZaDomain.A2_zimbraExternalGroupLdapEnabled, ref: ZaDomain.A2_zimbraExternalGroupLdapEnabled, type: _ENUM_, choices: ZaModel.BOOLEAN_CHOICES},
+            {id:ZaDomain.A_zimbraExternalGroupLdapSearchBase, type:_STRING_, ref:"attrs/" + ZaDomain.A_zimbraExternalGroupLdapSearchBase},
+            {id:ZaDomain.A_zimbraExternalGroupLdapSearchFilter, type:_STRING_, ref:"attrs/" + ZaDomain.A_zimbraExternalGroupLdapSearchFilter},
+            {id:ZaDomain.A_zimbraExternalGroupHandlerClass, type:_STRING_, ref:"attrs/" + ZaDomain.A_zimbraExternalGroupHandlerClass},
+            {id:ZaDomain.A_zimbraAuthMechAdmin, type:_STRING_, ref:"attrs/" + ZaDomain.A_zimbraAuthMechAdmin}
+        );
     }
+    ZaTaskAuthConfigWizard.loadExtLdapGroup = function (entry) {
+        if (!this.attrs[ZaDomain.A_zimbraExternalGroupHandlerClass]) {
+            this.attrs[ZaDomain.A_zimbraExternalGroupHandlerClass] = "com.zimbra.cs.account.grouperhandle.ADGroupHandler";
+        }
+        if (!this.attrs[ZaDomain.A_zimbraAuthMechAdmin]) {
+            this.attrs[ZaDomain.A_zimbraAuthMechAdmin] = ZaDomain.AuthMech_ad;
+        }
+
+        if (this.attrs[ZaDomain.A_AuthMech]!=ZaDomain.AuthMech_zimbra ) {
+            this[ZaDomain.A2_zimbraExternalGroupLdapEnabled] = "TRUE";
+        } else {
+            this[ZaDomain.A2_zimbraExternalGroupLdapEnabled] = "FALSE";
+        }
+    }
+    ZaItem.loadMethods["ZaDomain"].push(ZaTaskAuthConfigWizard.loadExtLdapGroup);
 }
 
 ZaDomain.TARGET_SERVER_CHOICES = [];
@@ -228,24 +258,47 @@ ZaTaskAuthConfigWizard.prototype.goPrev =
 function () {
 	if(this._containedObject[ZaModel.currentStep] == ZaTaskAuthConfigWizard.AUTH_TEST_RESULT_STEP) {
 		//skip ZaTaskAuthConfigWizard.AUTH_TEST_STEP step
-		this.goPage(ZaTaskAuthConfigWizard.AUTH_CONFIG_SUMMARY_STEP);
+        if (this._containedObject.attrs[ZaDomain.A2_zimbraExternalGroupLdapEnabled]=="TRUE"
+            && this._containedObject.attrs[ZaDomain.A_AuthMech]!=ZaDomain.AuthMech_zimbra)
+            this.goPage(ZaTaskAuthConfigWizard.EXTERNAL_LDAP_GROUP_STEP);
+        else
+		    this.goPage(ZaTaskAuthConfigWizard.AUTH_CONFIG_SUMMARY_STEP);
 	} else if (this._containedObject[ZaModel.currentStep] == ZaTaskAuthConfigWizard.AUTH_CONFIG_SUMMARY_STEP && this._containedObject.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_ad) {
 		this.goPage(ZaTaskAuthConfigWizard.AUTH_CONFIG_STEP_1);//skip ZaTaskAuthConfigWizard.AUTH_CONFIG_BIND_PWD_STEP step for Active Directory
-	} else if(this._containedObject[ZaModel.currentStep] == ZaTaskAuthConfigWizard.CONFIG_COMPLETE_STEP && this._containedObject.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_zimbra) {
-		this.goPage(ZaTaskAuthConfigWizard.AUTH_CONFIG_STEP_0);
-	} else if(this._containedObject[ZaModel.currentStep] == ZaTaskAuthConfigWizard.CONFIG_COMPLETE_STEP
-            && (this._containedObject[ZaDomain.A2_zimbraSpnegoAuthEnabled]!="TRUE"
-            || this._containedObject.attrs[ZaDomain.A_AuthMech]!=ZaDomain.AuthMech_ad)) {
-		this.goPage(ZaTaskAuthConfigWizard.AUTH_CONFIG_SUMMARY_STEP);
-	} else if(this._containedObject[ZaModel.currentStep] == ZaTaskAuthConfigWizard.CONFIG_COMPLETE_STEP
-            && (this._containedObject[ZaDomain.A2_zimbraSpnegoAuthEnabled]=="TRUE"
-            && this._containedObject.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_ad)) {
-		this.goPage(ZaTaskAuthConfigWizard.SPNEGO_CONFIG_STEP_2);
+    } else if (this._containedObject[ZaModel.currentStep] == ZaTaskAuthConfigWizard.CONFIG_COMPLETE_STEP) {
+        if (this._containedObject.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_zimbra) {
+            this.goPage(ZaTaskAuthConfigWizard.AUTH_CONFIG_STEP_0);
+        } else if (this._containedObject.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_ldap) {
+            if (this._containedObject[ZaDomain.A2_zimbraExternalGroupLdapEnabled]=="TRUE") {
+                this.goPage(ZaTaskAuthConfigWizard.EXTERNAL_LDAP_GROUP_STEP);
+            } else {
+                this.goPage(ZaTaskAuthConfigWizard.AUTH_CONFIG_SUMMARY_STEP);
+            }
+        } else if (this._containedObject.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_ad) {
+            if (this._containedObject[ZaDomain.A2_zimbraSpnegoAuthEnabled]!="TRUE") {
+                if (this._containedObject[ZaDomain.A2_zimbraExternalGroupLdapEnabled]=="TRUE") {
+                    this.goPage(ZaTaskAuthConfigWizard.EXTERNAL_LDAP_GROUP_STEP);
+                } else {
+                    this.goPage(ZaTaskAuthConfigWizard.AUTH_CONFIG_SUMMARY_STEP);
+                }
+            } else {
+                if (this._containedObject[ZaDomain.A2_zimbraExternalGroupLdapEnabled]=="TRUE") {
+                    this.goPage(ZaTaskAuthConfigWizard.EXTERNAL_LDAP_GROUP_STEP);
+                } else {
+                    this.goPage(ZaTaskAuthConfigWizard.SPNEGO_CONFIG_STEP_2);
+                }
+            }
+        }
     } else if(this._containedObject[ZaModel.currentStep] == ZaTaskAuthConfigWizard.SPNEGO_CONFIG_STEP_2) {
         this.goPage(ZaTaskAuthConfigWizard.SPNEGO_CONFIG_STEP);
 	} else if(this._containedObject[ZaModel.currentStep] == ZaTaskAuthConfigWizard.SPNEGO_CONFIG_STEP) {
 		this.goPage(ZaTaskAuthConfigWizard.AUTH_CONFIG_SUMMARY_STEP);
-	} else {
+	} else if (this._containedObject[ZaModel.currentStep] == ZaTaskAuthConfigWizard.EXTERNAL_LDAP_GROUP_STEP) {
+        if (this._containedObject.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_ad && this._containedObject[ZaDomain.A2_zimbraSpnegoAuthEnabled]=="TRUE")
+            this.goPage(ZaTaskAuthConfigWizard.SPNEGO_CONFIG_STEP_2);
+        else
+ 		    this.goPage(ZaTaskAuthConfigWizard.AUTH_CONFIG_SUMMARY_STEP);
+    } else {
 		this.goPage(this._containedObject[ZaModel.currentStep]-1);
 	}
 }
@@ -258,6 +311,9 @@ function() {
         if(this._containedObject[ZaDomain.A2_zimbraSpnegoAuthEnabled]=="TRUE"
             && this._containedObject.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_ad)
             this.goPage(ZaTaskAuthConfigWizard.SPNEGO_CONFIG_STEP);
+        else if(this._containedObject[ZaDomain.A2_zimbraExternalGroupLdapEnabled]=="TRUE"
+            && this._containedObject.attrs[ZaDomain.A_AuthMech]!=ZaDomain.AuthMech_zimbra)
+            this.goPage(ZaTaskAuthConfigWizard.EXTERNAL_LDAP_GROUP_STEP);
         else
             this.goPage(ZaTaskAuthConfigWizard.CONFIG_COMPLETE_STEP);
 	} else if (this._containedObject[ZaModel.currentStep]==ZaTaskAuthConfigWizard.AUTH_CONFIG_STEP_1 && this._containedObject.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_ad) {
@@ -328,6 +384,8 @@ function(entry) {
 	if(entry._defaultValues)
 		this._containedObject._defaultValues = entry._defaultValues;
 
+    if(entry[ZaDomain.A2_zimbraExternalGroupLdapEnabled])
+        this._containedObject[ZaDomain.A2_zimbraExternalGroupLdapEnabled]= entry[ZaDomain.A2_zimbraExternalGroupLdapEnabled];
 
 	this._containedObject[ZaDomain.A_AuthUseBindPassword] = entry[ZaDomain.A_AuthUseBindPassword];
 	this.setTitle(ZaMsg.NCD_AuthConfigTitle + " (" + entry.name + ")");
@@ -371,6 +429,7 @@ function(entry) {
     this._containedObject[ZaDomain.A2_zimbraSpnegoUAAllBrowsers] = "FALSE";
     this._containedObject[ZaDomain.A2_zimbraSpnegoUASupportedBrowsers] = "FALSE";
     this._containedObject[ZaDomain.A2_zimbraSpnegoUACustomBrowsers] = "FALSE";
+
 	this._localXForm.setInstance(this._containedObject);
 }
 
@@ -398,6 +457,7 @@ ZaTaskAuthConfigWizard.myXFormModifier = function(xFormObject) {
 								},
 								elementChanged: function(elementValue,instanceValue, event) {
 									this.getForm().itemChanged(this, ZaDomain.AuthMech_zimbra, event);
+                                    this.setInstanceValue("FALSE", ZaDomain.A2_zimbraExternalGroupLdapEnabled);
 								},
 								visibilityChecks:[],enableDisableChecks:[]
 							},
@@ -414,6 +474,7 @@ ZaTaskAuthConfigWizard.myXFormModifier = function(xFormObject) {
 								},
 								elementChanged: function(elementValue,instanceValue, event) {
 									this.getForm().itemChanged(this, ZaDomain.AuthMech_ad, event);
+                                    this.setInstanceValue("TRUE", ZaDomain.A2_zimbraExternalGroupLdapEnabled);
 								},
 								visibilityChecks:[],enableDisableChecks:[]
 							},
@@ -437,6 +498,7 @@ ZaTaskAuthConfigWizard.myXFormModifier = function(xFormObject) {
 								},
 								elementChanged: function(elementValue,instanceValue, event) {
 									this.getForm().itemChanged(this, ZaDomain.AuthMech_ldap, event);
+                                    this.setInstanceValue("TRUE", ZaDomain.A2_zimbraExternalGroupLdapEnabled);
 								},
 								visibilityChecks:[],enableDisableChecks:[]
 							},
@@ -802,6 +864,14 @@ ZaTaskAuthConfigWizard.myXFormModifier = function(xFormObject) {
                                     }
                                 ]
 							}
+						]
+					},
+					{type:_CASE_, caseKey:ZaTaskAuthConfigWizard.EXTERNAL_LDAP_GROUP_STEP, colSizes:["200px", "*"],
+						items: [
+                            {type:_OUTPUT_, ref: ZaDomain.A_zimbraAuthMechAdmin, label: "Auth Mech for Admin:"},
+                            {type:_TEXTAREA_, ref:ZaDomain.A_zimbraExternalGroupLdapSearchBase, label: "External Group LDAP Search Base:"},
+                            {type:_TEXTAREA_, ref:ZaDomain.A_zimbraExternalGroupLdapSearchFilter, label: "External Group LDAP Search Filter:"},
+                            {type:_TEXTFIELD_, ref:ZaDomain.A_zimbraExternalGroupHandlerClass, width:"100%", label :"External Group Handle Class Name:"}
 						]
 					},
 					{type:_CASE_, caseKey:ZaTaskAuthConfigWizard.CONFIG_COMPLETE_STEP,

@@ -35,6 +35,8 @@ ZaDomain = function() {
 	this.notebookAcls = {};
 	this[ZaDomain.A_NotebookTemplateFolder] = "Template";
 	this[ZaDomain.A_NotebookTemplateDir] = "/opt/zimbra/wiki/Template";
+    this.attrs[ZaDomain.A_zimbraExternalGroupLdapSearchBase] = "com.zimbra.cs.account.grouperhandle.ADGroupHandler";
+    this.attrs[ZaDomain.A_zimbraAuthMechAdmin] = ZaDomain.AuthMech_ad;
 	this.notebookAcls[ZaDomain.A_NotebookAllACLs] = {r:0,w:0,i:0,d:0,a:0,x:0};
 	this.notebookAcls[ZaDomain.A_NotebookPublicACLs] = {r:0,w:0,i:0,d:0,a:0,x:0};
 	this.notebookAcls[ZaDomain.A_NotebookDomainACLs] = {r:1,w:1,i:1,d:1,a:0,x:0};
@@ -1432,12 +1434,26 @@ function(tmpObj) {
 			attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_AuthLdapSearchBindPassword]);
 			attr.setAttribute("n", ZaDomain.A_AuthLdapSearchBindPassword);			
 		}
-		
 		/*attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_AuthLdapUserDn]);
 		attr.setAttribute("n", ZaDomain.A_AuthLdapUserDn);	
 		*/
 
 	}
+
+    if (tmpObj.attrs[ZaDomain.A_AuthMech] != ZaDomain.AuthMech_zimbra &&
+        tmpObj[ZaDomain.A2_zimbraExternalGroupLdapEnabled] == "TRUE") {
+        attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraExternalGroupLdapSearchBase]);
+        attr.setAttribute("n", ZaDomain.A_zimbraExternalGroupLdapSearchBase);
+
+        attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraExternalGroupLdapSearchFilter]);
+        attr.setAttribute("n", ZaDomain.A_zimbraExternalGroupLdapSearchFilter);
+
+        attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraExternalGroupHandlerClass]);
+        attr.setAttribute("n", ZaDomain.A_zimbraExternalGroupHandlerClass);
+
+        attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraAuthMechAdmin]);
+        attr.setAttribute("n", ZaDomain.A_zimbraAuthMechAdmin);
+    }
 	//var command = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
