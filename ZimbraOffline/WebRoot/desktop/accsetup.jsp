@@ -469,7 +469,7 @@ function changeDateFields(selectObj) {
                                             <td>
                                                 <div class="${zdf:isValid(bean, 'accountName') ? 'ZFieldLabel' : 'ZFieldError'}"><fmt:message key='AccountName'/>:</div>
                                             </td>
-                                            <td>
+                                            <td width=90%>
                                                 <input class="ZField" type="text" id="accountName" name="accountName" value="${bean.accountName}">
                                             </td>
                                         </tr>
@@ -778,9 +778,9 @@ function changeDateFields(selectObj) {
                                                      <span id="relativeFields" style="${bean.syncEmailDate == 2 ? 'display:inline' : 'display:none'}">
                                                                 <input type="text" id="syncRelativeDate" name="syncRelativeDate" value="${bean.syncRelativeDate}" size=5">
                                                                 <select id="syncFieldName" name="syncFieldName">
-                                                                    <option value="Week" ${bean.syncFieldName == Week ? 'selected' : ''}><fmt:message key='SyncWeeks'/></option>
-                                                                    <option value="Month" ${bean.syncFieldName == Month ? 'selected' : ''}><fmt:message key='SyncMonths'/></option>
-                                                                    <option value="Year" ${bean.syncFieldName == Year ? 'selected' : ''}><fmt:message key='SyncYears'/></option>
+                                                                    <option value="Week" ${bean.syncFieldName == 'Week' ? 'selected' : ''}><fmt:message key='SyncWeeks'/></option>
+                                                                    <option value="Month" ${bean.syncFieldName == 'Month' ? 'selected' : ''}><fmt:message key='SyncMonths'/></option>
+                                                                    <option value="Year" ${bean.syncFieldName == 'Year' ? 'selected' : ''}><fmt:message key='SyncYears'/></option>
                                                                 </select>
                                                      </span>
                                             </td>
