@@ -1,4 +1,4 @@
-package com.zimbra.qa.selenium.projects.ajax.tests.mail.performance;
+package com.zimbra.qa.selenium.projects.ajax.tests.conversation.performance;
 
 import java.io.File;
 import java.util.HashMap;
@@ -22,13 +22,13 @@ public class ZmMailApp extends AjaxCommonTest {
 		super.startingAccountPreferences = new HashMap<String, String>() {
 			private static final long serialVersionUID = 7525760124523255182L;
 		{
-			put("zimbraPrefGroupMailBy", "message");
+			put("zimbraPrefGroupMailBy", "conversation");
 			put("zimbraPrefMessageViewHtmlPreferred", "TRUE");
 		}};
 		
 	}
 	
-	@Test(	description = "Measure the time to load the mail app, message view, initial load",
+	@Test(	description = "Measure the time to load the mail app, conversation view, initial load",
 			groups = { "performance" })
 	public void ZmMailApp_01() throws HarnessException {
 		
@@ -36,7 +36,7 @@ public class ZmMailApp extends AjaxCommonTest {
 		app.zPageLogin.zSetLoginName(ZimbraAccount.AccountZWC().EmailAddress);
 		app.zPageLogin.zSetLoginPassword(ZimbraAccount.AccountZWC().Password);
 
-		PerfToken token = PerfMetrics.startTimestamp(PerfKey.ZmMailApp, "Load the mail app, message view, initial load");
+		PerfToken token = PerfMetrics.startTimestamp(PerfKey.ZmMailApp, "Load the mail app, conversation view, initial load");
 
 		// Click the Login button
 		app.zPageLogin.sClick(Locators.zBtnLogin);
@@ -49,7 +49,7 @@ public class ZmMailApp extends AjaxCommonTest {
 		
 	}
 
-	@Test(	description = "Measure the time to load the mail app, message view, 1 message",
+	@Test(	description = "Measure the time to load the mail app, conversation view, 1 conversation",
 			groups = { "performance" })
 	public void ZmMailApp_02() throws HarnessException {
 		
@@ -60,7 +60,7 @@ public class ZmMailApp extends AjaxCommonTest {
 		app.zPageLogin.zSetLoginName(ZimbraAccount.AccountZWC().EmailAddress);
 		app.zPageLogin.zSetLoginPassword(ZimbraAccount.AccountZWC().Password);
 
-		PerfToken token = PerfMetrics.startTimestamp(PerfKey.ZmMailApp, "Load the mail app, message view, 1 message");
+		PerfToken token = PerfMetrics.startTimestamp(PerfKey.ZmMailApp, "Load the mail app, conversation view, 1 conversations");
 
 		// Click the Login button
 		app.zPageLogin.sClick(Locators.zBtnLogin);
@@ -73,7 +73,7 @@ public class ZmMailApp extends AjaxCommonTest {
 		
 	}
 
-	@Test(	description = "Measure the time to load the mail app, message view, 100 messages",
+	@Test(	description = "Measure the time to load the mail app, conversation view, 100 conversations",
 			groups = { "performance" })
 	public void ZmMailApp_03() throws HarnessException {
 		
@@ -84,7 +84,7 @@ public class ZmMailApp extends AjaxCommonTest {
 		app.zPageLogin.zSetLoginName(ZimbraAccount.AccountZWC().EmailAddress);
 		app.zPageLogin.zSetLoginPassword(ZimbraAccount.AccountZWC().Password);
 
-		PerfToken token = PerfMetrics.startTimestamp(PerfKey.ZmMailApp, "Load the mail app, message view, 100 messages");
+		PerfToken token = PerfMetrics.startTimestamp(PerfKey.ZmMailApp, "Load the mail app, conversation view, 100 conversations");
 
 		// Click the Login button
 		app.zPageLogin.sClick(Locators.zBtnLogin);

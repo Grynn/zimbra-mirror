@@ -14,26 +14,26 @@ import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.*;
 
 
-public class ZmMailItem extends AjaxCommonTest {
+public class ZmMailItemHTML extends AjaxCommonTest {
 
 	
 	@SuppressWarnings("serial")
-	public ZmMailItem() throws HarnessException {
-		logger.info("New "+ ZmMailItem.class.getCanonicalName());
+	public ZmMailItemHTML() throws HarnessException {
+		logger.info("New "+ ZmMailItemHTML.class.getCanonicalName());
 		
 		super.startingPage = app.zPageMail;
 
 		
 		super.startingAccountPreferences = new HashMap<String, String>() {{
 				    put("zimbraPrefGroupMailBy", "message");
-				    put("zimbraPrefMessageViewHtmlPreferred", "FALSE");
+				    put("zimbraPrefMessageViewHtmlPreferred", "TRUE");
 				}};
 
 
 	}
 	
 	
-	@Test(	description = "Measure the performance for preview pane, text message, initial load",
+	@Test(	description = "Measure the performance for preview pane, html message, initial load",
 			groups = { "performance" })
 	public void ZmMailItem_01() throws HarnessException {
 		
@@ -47,7 +47,7 @@ public class ZmMailItem extends AjaxCommonTest {
 		// Click Get Mail button
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 
-		PerfToken token = PerfMetrics.startTimestamp(PerfKey.ZmMailItem, "Load preview pane, text message, initial load");
+		PerfToken token = PerfMetrics.startTimestamp(PerfKey.ZmMailItem, "Load preview pane, html message, initial load");
 
 		// Select the message so that it shows in the reading pane
 		app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
@@ -70,7 +70,7 @@ public class ZmMailItem extends AjaxCommonTest {
 		// Click Get Mail button
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 
-		PerfToken token = PerfMetrics.startTimestamp(PerfKey.ZmMailItem, "Load preview pane, text message, 1 message");
+		PerfToken token = PerfMetrics.startTimestamp(PerfKey.ZmMailItem, "Load preview pane, html message, 1 message");
 
 		// Select the message so that it shows in the reading pane
 		app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
