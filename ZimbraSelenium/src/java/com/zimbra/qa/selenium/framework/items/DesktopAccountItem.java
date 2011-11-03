@@ -8,6 +8,7 @@ import com.zimbra.qa.selenium.framework.util.OperatingSystem;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.framework.util.OperatingSystem.OsType;
+import com.zimbra.qa.selenium.projects.desktop.core.AjaxCommonTest;
 
 public class DesktopAccountItem implements IItem {
    protected static Logger logger = LogManager.getLogger(IItem.class);
@@ -154,6 +155,14 @@ public class DesktopAccountItem implements IItem {
          String sendingPort,
          String sendingUserName,
          String sendingPassword) throws HarnessException{
+
+      // TODO: Please remove this once issue in Mac is fixed.
+      if (emailAddress.equals(AjaxCommonTest.gmailUserName) &&
+            OperatingSystem.getOSType() == OsType.MAC) {
+         throw new HarnessException(
+               "Fail due to bug 61517, also refers to helpzilla ticket #811085");
+      }
+
       DesktopAccountItem desktopAccountItem = new DesktopAccountItem();
       desktopAccountItem.accountName = "name" + ZimbraSeleniumProperties.getUniqueString();
       desktopAccountItem.fullName = "Imap" + ZimbraSeleniumProperties.getUniqueString();
