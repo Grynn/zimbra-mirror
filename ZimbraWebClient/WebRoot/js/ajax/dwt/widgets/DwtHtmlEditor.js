@@ -1442,7 +1442,7 @@ function(ev) {
 				ke.setToDhtmlEvent(ev);
 				retVal = false;
 			}
-			else if (AjxEnv.isFirefox) { //Chrome/Safari/WebKit naturally does the tabs correctly
+			else if (AjxEnv.isFirefox || AjxEnv.isPrism) { //Chrome/Safari/WebKit naturally does the tabs correctly
 				if (!ev.shiftKey) {
 					this._insertHTML(DwtHtmlEditor.TAB, true);
 					DwtUiEvent.setDhtmlBehaviour(ev, true, false);
