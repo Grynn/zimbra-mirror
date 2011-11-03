@@ -138,7 +138,6 @@ public class ZmCalendarApp_ViewWorkWeek_Appointment1 extends AjaxCommonTest {
 		app.zPageCalendar.zWaitForActive();
 		
 		
-		throw new HarnessException("snapshot");
 	}
 
 
