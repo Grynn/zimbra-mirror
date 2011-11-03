@@ -28,25 +28,14 @@ public class ZimbraAPI
 
     // Special folders array
     string[] specialFolders = {
-        "", "/Top of Information Store", "/Top of Information Store/Inbox",
-        "/Top of Information Store/Deleted Items",
-        "/Top of Information Store/Junk E-Mail", "/Top of Information Store/Sent Items",
-        "/Top of Information Store/Drafts", "/Top of Information Store/Contacts",
-        "/Top of Information Store/Tags", "/Top of Information Store/Conversations",
-        "/Top of Information Store/Calendar", "", "/Top of Information Store/Wiki",
-        "/Top of Information Store/Emailed Contacts", "/Top of Information Store/Chats",
-        "/Top of Information Store/Tasks"
-    };
-
-    string[] specialFoldersPST = {
-        "", "/Top of Outlook data file", "/Top of Outlook data file/Inbox",
-        "/Top of Outlook data file/Deleted Items",
-        "/Top of Outlook data file/Junk E-Mail", "/Top of Outlook data file/Sent Items",
-        "/Top of Outlook data file/Drafts", "/Top of Outlook data file/Contacts",
-        "/Top of Outlook data file/Tags", "/Top of Outlook data file/Conversations",
-        "/Top of Outlook data file/Calendar", "", "/Top of Outlook data file/Wiki",
-        "/Top of Outlook data file/Emailed Contacts", "/Top of Outlook data file/Chats",
-        "/Top of Outlook data file/Tasks"
+        "", "/MAPIRoot", "/MAPIRoot/Inbox",
+        "/MAPIRoot/Deleted Items",
+        "/MAPIRoot/Junk E-Mail", "/MAPIRoot/Sent Items",
+        "/MAPIRoot/Drafts", "/MAPIRoot/Contacts",
+        "/MAPIRoot/Tags", "/MAPIRoot/Conversations",
+        "/MAPIRoot/Calendar", "", "/MAPIRoot/Wiki",
+        "/MAPIRoot/Emailed Contacts", "/MAPIRoot/Chats",
+        "/MAPIRoot/Tasks"
     };
 
     private string lastError;
@@ -81,29 +70,19 @@ public class ZimbraAPI
             bIsDomainAdminAccount = value;
         }
     }
-    private bool bAcctIdIsPST;
-    public bool AcctIdIsPST {
-        get { return bAcctIdIsPST; }
-        set
-        {
-            bAcctIdIsPST = value;
-        }
-    }
     private Dictionary<string, string> dFolderMap;
 
     public ZimbraAPI()
     {
-        AcctIdIsPST = false;
         ZimbraValues.GetZimbraValues();
         dFolderMap = new Dictionary<string, string>();
     }
 
     private string GetSpecialFolderNum(string folderPath)
     {
-        string[] arr = AcctIdIsPST ? specialFoldersPST : specialFolders;
-        for (int i = 0; i < arr.Length; i++)
+        for (int i = 0; i < specialFolders.Length; i++)
         {
-            if (folderPath == arr[i])
+            if (folderPath == specialFolders[i])
                 return i.ToString();
         }
         return "";

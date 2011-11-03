@@ -506,9 +506,7 @@ public class CSMigrationwrapper
 
             // see if we're migrating a .pst file. If we are, we need to know that so we can mess with folder names in ZimbraAPI
             string u = Acct.AccountID.ToUpper();
-
-            api.AcctIdIsPST = u.EndsWith(".PST");
-            // ///
+            /////
 
             // set up check for skipping folders
             List<string> skipList = new List<string>();
@@ -594,8 +592,9 @@ public class CSMigrationwrapper
                 if (importopts.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Contacts))
                 {
                     if (folderobject.Name == "Deleted Items")   // FBS EXCHANGE SPECIFIC HACK.  CHANGE FOR GROUPWISE !!!
-                        path = api.AcctIdIsPST ? "/Top of Outlook data file/Deleted Items" :
-                            "/Top of Information Store/Deleted Items";
+                    {
+                        path = "/MAPIRoot/Deleted Items";
+                    }
                     ProcessItems(Acct, folderobject, foldertype.Contacts, api, path);
                 }
                 if (importopts.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Mail))

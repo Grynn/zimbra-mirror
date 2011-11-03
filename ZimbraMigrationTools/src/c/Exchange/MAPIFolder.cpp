@@ -244,6 +244,14 @@ wstring MAPIFolder::FindFolderPath()
         }
     }
     wstrPath = Zimbra::MAPI::Util::ReverseDelimitedString(wstrPath, L"/");
+    if (wstrPath.length() > 2)
+    {
+        size_t npos = wstrPath.find('/', 1);
+        if (npos != std::string::npos)
+        {
+            wstrPath.replace(1, (npos-1), L"MAPIRoot");
+        }
+    }
     return wstrPath;
 }
 
