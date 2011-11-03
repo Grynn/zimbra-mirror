@@ -44,16 +44,20 @@ long CUserObject::UnInitialize()
     return 0;
 }
 
-STDMETHODIMP CUserObject::InitializeUser(BSTR host, BSTR admin, BSTR UserID, BSTR MailType, BSTR* pErrorText)
+STDMETHODIMP CUserObject::InitializeUser(BSTR host, BSTR admin, BSTR UserID, BSTR MailType,
+    BSTR *pErrorText)
 {
-    HRESULT hr = S_OK; long retval = 0;
+    HRESULT hr = S_OK;
+    long retval = 0;
 
     // if we don't need these, we should get rid of them in the signature
     UserID = UserID;
+
     BSTR temp;
+
     temp = host;
     temp = admin;
-    //////////////
+    // ////////////
 
     retval = Initialize(UserID);
     // Logger = CSingleton::getInstance();
@@ -68,8 +72,10 @@ STDMETHODIMP CUserObject::InitializeUser(BSTR host, BSTR admin, BSTR UserID, BST
         // TODO for Karuna: Call MAPIAccessAPI::UnInitGlobalSessionAndStore() to realse global session and store.
         // Specify user.
         maapi = new Zimbra::MAPI::MAPIAccessAPI(UserID);
+
         // Init session and stores
         LPCWSTR lpStatus = maapi->InitializeUser();
+
         *pErrorText = (lpStatus) ? CComBSTR(lpStatus) : SysAllocString(L"");
     }
     else
@@ -79,9 +85,10 @@ STDMETHODIMP CUserObject::InitializeUser(BSTR host, BSTR admin, BSTR UserID, BST
     return hr;
 }
 
-STDMETHODIMP CUserObject::UMInitializeUser(BSTR ProfileName, BSTR MailType, BSTR* pErrorText)
+STDMETHODIMP CUserObject::UMInitializeUser(BSTR ProfileName, BSTR MailType, BSTR *pErrorText)
 {
-    HRESULT hr = S_OK; long retval = 0;
+    HRESULT hr = S_OK;
+    long retval = 0;
 
     retval = Initialize(L"");
     // Logger = CSingleton::getInstance();
@@ -91,12 +98,13 @@ STDMETHODIMP CUserObject::UMInitializeUser(BSTR ProfileName, BSTR MailType, BSTR
 
         m_pLogger->doSomething(DBG, "In UMInitializeUser");
 
-	LPCWSTR lpwstrStatus = MAPIAccessAPI::InitGlobalSessionAndStore(ProfileName);
-	if (!lpwstrStatus)
-	{
-	    maapi = new Zimbra::MAPI::MAPIAccessAPI(L"");
-	    lpwstrStatus = maapi->InitializeUser();
-	}
+        LPCWSTR lpwstrStatus = MAPIAccessAPI::InitGlobalSessionAndStore(ProfileName);
+
+        if (!lpwstrStatus)
+        {
+            maapi = new Zimbra::MAPI::MAPIAccessAPI(L"");
+            lpwstrStatus = maapi->InitializeUser();
+        }
         *pErrorText = (lpwstrStatus) ? CComBSTR(lpwstrStatus) : SysAllocString(L"");
     }
     else
@@ -111,10 +119,7 @@ STDMETHODIMP CUserObject::UMUnInitializeUser(BSTR MailType)
     HRESULT hr = S_OK;
 
     if (wcscmp(MailType, L"MAPI") == 0)
-    {
-	MAPIAccessAPI::UnInitGlobalSessionAndStore();
-    }
-
+        MAPIAccessAPI::UnInitGlobalSessionAndStore();
     return hr;
 }
 
@@ -124,6 +129,7 @@ STDMETHODIMP CUserObject::GetFolderObjects( /*[out, retval]*/ VARIANT *vObjects)
 
     VariantInit(vObjects);
     vObjects->vt = VT_ARRAY | VT_DISPATCH;
+
     SAFEARRAY *psa;
 
     USES_CONVERSION;
@@ -137,11 +143,15 @@ STDMETHODIMP CUserObject::GetFolderObjects( /*[out, retval]*/ VARIANT *vObjects)
 
     std::vector<Folder_Data>::iterator it;
     size_t size = vfolderlist.size();
+
     it = vfolderlist.begin();
+
     SAFEARRAYBOUND bounds = { (ULONG)size, 0 };
 
     psa = SafeArrayCreate(VT_DISPATCH, 1, &bounds);
+
     IfolderObject **pfolders;
+
     SafeArrayAccessData(psa, (void **)&pfolders);
     for (size_t i = 0; i < size; i++, it++)
     {
@@ -156,22 +166,31 @@ STDMETHODIMP CUserObject::GetFolderObjects( /*[out, retval]*/ VARIANT *vObjects)
              * pIFolderObject->put_ParentPath(L"\\Inbox\\personal\\mine");*/
 
             CComBSTR temp((*it).name.c_str());
+
             pIFolderObject->put_Name(SysAllocString(temp));
             pIFolderObject->put_Id((*it).zimbraid);
+
             CComBSTR tempS((*it).folderpath.c_str());
+
             pIFolderObject->put_FolderPath(SysAllocString(tempS));
+
             CComBSTR temp3((*it).containerclass.c_str());
+
             pIFolderObject->put_ContainerClass(SysAllocString(temp3));
 
             pIFolderObject->put_ItemCount((*it).itemcount);
+
             // /////////////////////////////////////
             VARIANT var;
             SBinary Folderid = (*it).sbin;
+
             VariantInit(&var);                  // Initialize our variant
             // Set the type to an array of unsigned chars (OLE SAFEARRAY)
             var.vt = VT_ARRAY | VT_UI1;
+
             // Set up the bounds structure
             SAFEARRAYBOUND rgsabound[1];
+
             rgsabound[0].cElements = Folderid.cb;
             rgsabound[0].lLbound = 0;
             // Create an OLE SAFEARRAY
@@ -179,6 +198,7 @@ STDMETHODIMP CUserObject::GetFolderObjects( /*[out, retval]*/ VARIANT *vObjects)
             if (var.parray != NULL)
             {
                 void *pArrayData = NULL;
+
                 // Get a safe pointer to the array
                 SafeArrayAccessData(var.parray, &pArrayData);
                 // Copy data to it
@@ -200,21 +220,24 @@ STDMETHODIMP CUserObject::GetFolderObjects( /*[out, retval]*/ VARIANT *vObjects)
 }
 
 STDMETHODIMP CUserObject::GetItemsForFolderObjects(IfolderObject *FolderObj, FolderType type,
-    VARIANT creattiondate,
-    VARIANT *vItems)
+    VARIANT creattiondate, VARIANT *vItems)
 {
     HRESULT hr = S_OK;
 
     VariantInit(vItems);
     vItems->vt = VT_ARRAY | VT_DISPATCH;
+
     SAFEARRAY *psa;
 
     vector<Item_Data> vItemDataList;
     vector<Item_Data>::iterator it;
+
     SBinary folderEntryid;
+
     USES_CONVERSION;
 
     VARIANT vararg;
+
     VariantInit(&vararg);
     vararg.vt = (VT_ARRAY | VT_UI1);
 
@@ -223,11 +246,14 @@ STDMETHODIMP CUserObject::GetItemsForFolderObjects(IfolderObject *FolderObj, Fol
     {
         // Retrieve size of array
         folderEntryid.cb = vararg.parray->rgsabound[0].cElements;
+
         ULONG size = folderEntryid.cb;
+
         folderEntryid.lpb = new BYTE[size];     // Allocate a buffer to store the data
         if (folderEntryid.lpb != NULL)
         {
             void *pArrayData;
+
             // Obtain safe pointer to the array
             SafeArrayAccessData(vararg.parray, &pArrayData);
             // Copy the bitmap into our buffer
@@ -237,16 +263,22 @@ STDMETHODIMP CUserObject::GetItemsForFolderObjects(IfolderObject *FolderObj, Fol
             maapi->GetFolderItemsList(folderEntryid, vItemDataList);
         }
     }
+
     size_t size = vItemDataList.size();
+
     it = vItemDataList.begin();
+
     SAFEARRAYBOUND bounds = { (ULONG)size, 0 };
 
     psa = SafeArrayCreate(VT_DISPATCH, 1, &bounds);
+
     IItemObject **pItems;
+
     SafeArrayAccessData(psa, (void **)&pItems);
     for (size_t i = 0; i < size; i++, it++)
     {
         FolderType T1 = (FolderType)(*it).lItemType;
+
         if (type == T1)
         {
             CComPtr<IItemObject> pIItemObject;
@@ -269,11 +301,14 @@ STDMETHODIMP CUserObject::GetItemsForFolderObjects(IfolderObject *FolderObj, Fol
 
                 VARIANT var;
                 SBinary Itemid = (*it).sbMessageID;
+
                 VariantInit(&var);              // Initialize our variant
                 // Set the type to an array of unsigned chars (OLE SAFEARRAY)
                 var.vt = VT_ARRAY | VT_UI1;
+
                 // Set up the bounds structure
                 SAFEARRAYBOUND rgsabound[1];
+
                 rgsabound[0].cElements = Itemid.cb;
                 rgsabound[0].lLbound = 0;
                 // Create an OLE SAFEARRAY
@@ -281,6 +316,7 @@ STDMETHODIMP CUserObject::GetItemsForFolderObjects(IfolderObject *FolderObj, Fol
                 if (var.parray != NULL)
                 {
                     void *pArrayData = NULL;
+
                     // Get a safe pointer to the array
                     SafeArrayAccessData(var.parray, &pArrayData);
                     // Copy data to it
@@ -292,7 +328,7 @@ STDMETHODIMP CUserObject::GetItemsForFolderObjects(IfolderObject *FolderObj, Fol
             }
             if (FAILED(hr))
                 return S_FALSE;
-                 // if
+            // if
 
             {
                 pIItemObject.CopyTo(&pItems[i]);
@@ -318,6 +354,7 @@ STDMETHODIMP CUserObject::GetDataForItem(VARIANT ItemId, VARIANT *pVal)
         if (ItemID.lpb != NULL)
         {
             void *pArrayData;
+
             // Obtain safe pointer to the array
             SafeArrayAccessData(ItemId.parray, &pArrayData);
             // Copy the bitmap into our buffer
@@ -327,6 +364,7 @@ STDMETHODIMP CUserObject::GetDataForItem(VARIANT ItemId, VARIANT *pVal)
             maapi->GetItem(ItemID, cd);
         }
     }
+
     HRESULT hr = S_OK;
     std::map<BSTR, BSTR> pIt;
     std::map<BSTR, BSTR>::iterator it;
@@ -342,15 +380,19 @@ STDMETHODIMP CUserObject::GetDataForItem(VARIANT ItemId, VARIANT *pVal)
     // Create SafeArray of VARIANT BSTRs
     SAFEARRAY *pSA = NULL;
     SAFEARRAYBOUND aDim[2];                     // two dimensional array
+
     aDim[0].lLbound = 0;
     aDim[0].cElements = 5;
     aDim[1].lLbound = 0;
     aDim[1].cElements = 5;                      // rectangular array
     pSA = SafeArrayCreate(VT_BSTR, 2, aDim);    // again, 2 dimensions
+
     long aLong[2];
+
     if (pSA != NULL)
     {
         BSTR temp;
+
         for (long x = aDim[0].lLbound; x < 2 /*(aDim[0].cElements + aDim[0].lLbound)*/; x++)
         {
             aLong[0] = x;                       // set x index

@@ -14,7 +14,6 @@ typedef struct _Folder_Data
     long zimbraid;
     unsigned long itemcount;
 } Folder_Data;
-
 typedef struct _Item_Data
 {
     SBinary sbMessageID;
@@ -33,9 +32,8 @@ typedef struct _BaseItemData
 // folders to skip
 enum
 {
-    TS_JOURNAL = 0, TS_OUTBOX, TS_SYNC_CONFLICTS,
-    TS_SYNC_ISSUES, TS_SYNC_LOCAL_FAILURES, TS_SYNC_SERVER_FAILURES,
-    TS_JUNK_MAIL, TS_FOLDERS_MAX
+    TS_JOURNAL = 0, TS_OUTBOX, TS_SYNC_CONFLICTS, TS_SYNC_ISSUES, TS_SYNC_LOCAL_FAILURES,
+    TS_SYNC_SERVER_FAILURES, TS_JUNK_MAIL, TS_FOLDERS_MAX
 };
 
 // contact item data
@@ -92,16 +90,14 @@ typedef struct _ContactItemData: BaseItemData
     wstring Type;
     wstring PictureID;
     wstring IMAddress1;
-	wstring Anniversary;
-	wstring ContactImagePath;
+    wstring Anniversary;
+    wstring ContactImagePath;
 } ContactItemData;
-
 typedef struct
 {
     LPTSTR buffer;
     unsigned long size;
 } data_buffer;
-
 typedef struct _MessageItemData: BaseItemData
 {
     wstring Subject;
@@ -123,8 +119,9 @@ typedef struct _MessageItemData: BaseItemData
     wstring DateString;
     data_buffer textbody;
     data_buffer htmlbody;
-	wstring MimeFile;
+    wstring MimeFile;
 } MessageItemData;
+
 class MAPIAccessAPI
 {
 private:
@@ -132,8 +129,7 @@ private:
     static std::wstring m_strExchangeHostName;
     static Zimbra::MAPI::MAPISession *m_zmmapisession;
     static Zimbra::MAPI::MAPIStore *m_defaultStore;
-	static bool m_bSingleMailBoxMigration;
-
+    static bool m_bSingleMailBoxMigration;
     std::wstring m_strUserName;
     Zimbra::MAPI::MAPIStore *m_userStore;
     Zimbra::MAPI::MAPIFolder *m_rootFolder;
@@ -147,15 +143,16 @@ private:
     HRESULT GetInternalFolder(SBinary sbFolderEID, MAPIFolder &folder);
 
 public:
-    //static methods to be used by all mailboxes/profile/PST
-	//lpcwstrMigTarget -> Exchange Admin Profile for Exchange mailboxes migration
-	//lpcwstrMigTarget -> Local Exchange profile migration
-	//lpcwstrMigTarget -> PST file path for PST migration
+    // static methods to be used by all mailboxes/profile/PST
+    // lpcwstrMigTarget -> Exchange Admin Profile for Exchange mailboxes migration
+    // lpcwstrMigTarget -> Local Exchange profile migration
+    // lpcwstrMigTarget -> PST file path for PST migration
     static LPCWSTR InitGlobalSessionAndStore(LPCWSTR lpcwstrMigTarget);
     static void UnInitGlobalSessionAndStore();
 
     // Per mailbox methods.
     MAPIAccessAPI(wstring strUserName);
+
     ~MAPIAccessAPI();
     LPCWSTR InitializeUser();
     LPCWSTR GetRootFolderHierarchy(vector<Folder_Data> &vfolderlist);

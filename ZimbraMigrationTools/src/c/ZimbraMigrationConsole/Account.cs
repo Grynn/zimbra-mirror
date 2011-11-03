@@ -27,39 +27,39 @@ class Account: BackgroundWorker
         set { highestPercentageReached = value; }
     }
     CssLib.CSMigrationwrapper TestObj;
+
     MVVM.Model.Users Currentuser;
+
     private string migrateOptions;
     public string MigrateOptions {
         get { return migrateOptions; }
         set { migrateOptions = value; }
     }
-    public void InitializeMigration(string Hostname, string Port, String Adminacct,
-            string UserID)
+    public void InitializeMigration(string Hostname, string Port, String Adminacct, string
+        UserID)
     {
         TestObj = new CssLib.CSMigrationwrapper();
         TestObj.MailClient = "MAPI";
         // TestObj.Initalize(Hostname, Port,Adminacct,UserID);
         Currentuser = new MVVM.Model.Users();
     }
+
     public void StartMigration(string AcctName, string MailOptions)
     {
         // Account myAccount = new Account();
         AccountName = AcctName;
 
         Currentuser.UserName = AcctName;
-        DoWork +=
-                new DoWorkEventHandler(accountToMigrate_DoWork);
-        RunWorkerCompleted +=
-                new RunWorkerCompletedEventHandler(
-                accountToMigrate_RunWorkerCompleted);
-        ProgressChanged +=
-                new ProgressChangedEventHandler(
-                accountToMigrate_ProgressChanged);
+        DoWork += new DoWorkEventHandler(accountToMigrate_DoWork);
+        RunWorkerCompleted += new RunWorkerCompletedEventHandler(
+            accountToMigrate_RunWorkerCompleted);
+        ProgressChanged += new ProgressChangedEventHandler(accountToMigrate_ProgressChanged);
         WorkerReportsProgress = true;
         WorkerSupportsCancellation = true;
         MigrateOptions = MailOptions;
         RunWorkerAsync(MigrateOptions);
     }
+
     private void accountToMigrate_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
     {
         BackgroundWorker worker = sender as BackgroundWorker;
@@ -94,6 +94,7 @@ class Account: BackgroundWorker
             }
         }
     }
+
     private void accountToMigrate_ProgressChanged(object sender, ProgressChangedEventArgs e)
     {
         AccountStatus = e.ProgressPercentage.ToString();
@@ -102,13 +103,11 @@ class Account: BackgroundWorker
             // System.Console.WriteLine("Migrating messages For UserAccount   " + AccountName.ToString());
             System.Console.WriteLine();
 
-            ProgressUtil.RenderConsoleProgress(
-                    30, '\u2591', ConsoleColor.Yellow,
-                    "Migrating messages For UserAccount   " +
-                    AccountName.ToString());
+            ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Yellow,
+                "Migrating messages For UserAccount   " + AccountName.ToString());
 
             Currentuser.StatusMessage = "Migrating messages For UserAccount   " +
-                    AccountName.ToString();
+                AccountName.ToString();
             System.Console.WriteLine();
             System.Console.WriteLine();
         }
@@ -116,12 +115,10 @@ class Account: BackgroundWorker
         {
             // System.Console.WriteLine("Migrating appointments For UserAccount   " + AccountName.ToString());
             System.Console.WriteLine();
-            ProgressUtil.RenderConsoleProgress(
-                    40, '\u2591', ConsoleColor.Green,
-                    "Migrating appointments For UserAccount   " +
-                    AccountName.ToString());
+            ProgressUtil.RenderConsoleProgress(40, '\u2591', ConsoleColor.Green,
+                "Migrating appointments For UserAccount   " + AccountName.ToString());
             Currentuser.StatusMessage = "Migrating appointments For UserAccount   " +
-                    AccountName.ToString();
+                AccountName.ToString();
             System.Console.WriteLine();
             System.Console.WriteLine();
         }
@@ -129,12 +126,10 @@ class Account: BackgroundWorker
         {
             // System.Console.WriteLine("Migrating contacts For UserAccount   " + AccountName.ToString());
             System.Console.WriteLine();
-            ProgressUtil.RenderConsoleProgress(
-                    60, '\u2591', ConsoleColor.Yellow,
-                    "Migrating contacts For UserAccount   " +
-                    AccountName.ToString());
+            ProgressUtil.RenderConsoleProgress(60, '\u2591', ConsoleColor.Yellow,
+                "Migrating contacts For UserAccount   " + AccountName.ToString());
             Currentuser.StatusMessage = "Migrating Contacts For UserAccount   " +
-                    AccountName.ToString();
+                AccountName.ToString();
             System.Console.WriteLine();
             System.Console.WriteLine();
         }
@@ -142,17 +137,17 @@ class Account: BackgroundWorker
         {
             // System.Console.WriteLine("Migrating rules For UserAccount   " + AccountName.ToString());
             System.Console.WriteLine();
-            ProgressUtil.RenderConsoleProgress(
-                    60, '\u2591', ConsoleColor.Green, "Migrating Rules For UserAccount   " +
-                    AccountName.ToString());
+            ProgressUtil.RenderConsoleProgress(60, '\u2591', ConsoleColor.Green,
+                "Migrating Rules For UserAccount   " + AccountName.ToString());
             Currentuser.StatusMessage = "Migrating  Rules For UserAccount   " +
-                    AccountName.ToString();
+                AccountName.ToString();
             System.Console.WriteLine();
             System.Console.WriteLine();
         }
     }
-    private void accountToMigrate_RunWorkerCompleted(object sender,
-            RunWorkerCompletedEventArgs e)
+
+    private void accountToMigrate_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs
+        e)
     {
         // First, handle the case where an exception was thrown.
         if (e.Error != null)
@@ -173,7 +168,7 @@ class Account: BackgroundWorker
         {
             // Finally, handle the case where the operation
             // succeeded.
-            AccountStatus = "Completed";    // e.Result.ToString();
+            AccountStatus = "Completed";        // e.Result.ToString();
         }
     }
 }

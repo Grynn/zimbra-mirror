@@ -5,8 +5,8 @@
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 // Exception class
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-MAPIFolderException::MAPIFolderException(HRESULT hrErrCode,
-    LPCWSTR lpszDescription): GenericException(hrErrCode, lpszDescription)
+MAPIFolderException::MAPIFolderException(HRESULT hrErrCode, LPCWSTR
+    lpszDescription): GenericException(hrErrCode, lpszDescription)
 {
     //
 }
@@ -25,14 +25,12 @@ FolderIterator::FolderIterator()
     m_pParentFolder = NULL;
 }
 
-FolderIterator::~FolderIterator()
-{}
+FolderIterator::~FolderIterator() {}
 
 FolderIterator::FolderIterPropTags FolderIterator::m_props = {
-    NFOLDERPROPS,
-    { PR_DISPLAY_NAME, PR_ENTRYID, PR_LONGTERM_ENTRYID_FROM_TABLE, PR_FOLDER_FLAGS }
+    NFOLDERPROPS, { PR_DISPLAY_NAME, PR_ENTRYID, PR_LONGTERM_ENTRYID_FROM_TABLE,
+                    PR_FOLDER_FLAGS }
 };
-
 LPSPropTagArray FolderIterator::GetProps()
 {
     return (LPSPropTagArray) & m_props;
@@ -49,14 +47,15 @@ BOOL FolderIterator::GetNext(MAPIFolder &folder)
             return FALSE;
     }
     while ((pRow->lpProps[FI_FLAGS].Value.l & MDB_FOLDER_NORMAL) == 0);
+
     LPMAPIFOLDER pFolder = NULL;
     HRESULT hr = S_OK;
     ULONG objtype;
     ULONG cb = pRow->lpProps[FI_ENTRYID].Value.bin.cb;
     LPENTRYID peid = (LPENTRYID)(pRow->lpProps[FI_ENTRYID].Value.bin.lpb);
-    if ((hr =
-                m_pParentFolder->OpenEntry(cb, peid, NULL, MAPI_BEST_ACCESS, &objtype,
-                (LPUNKNOWN *)&pFolder)) != S_OK)
+
+    if ((hr = m_pParentFolder->OpenEntry(cb, peid, NULL, MAPI_BEST_ACCESS, &objtype,
+            (LPUNKNOWN *)&pFolder)) != S_OK)
         throw GenericException(hr, L"FolderIterator::GetNext():OpenEntry Failed.", __LINE__,
             __FILE__);
     folder.Initialize(pFolder, pRow->lpProps[FI_DISPLAY_NAME].Value.LPSZ,
@@ -112,6 +111,7 @@ void MAPIFolder::Initialize(LPMAPIFOLDER pFolder, LPTSTR displayName, LPSBinary 
     if (m_session)
     {
         wstring wstrFolderPath = FindFolderPath();
+
         m_folderpath = wstrFolderPath;
     }
 }
@@ -121,6 +121,7 @@ ExchangeSpecialFolderId MAPIFolder::GetExchangeFolderId()
     if (m_store && m_session)
     {
         SBinaryArray specialFolderIds = m_store->GetSpecialFolderIds();
+
         return Zimbra::MAPI::Util::GetExchangeSpecialFolderId(m_store->GetInternalMAPIStore(),
             m_EntryID.cb, (LPENTRYID)(m_EntryID.lpb), &specialFolderIds);
     }
@@ -130,17 +131,16 @@ ExchangeSpecialFolderId MAPIFolder::GetExchangeFolderId()
 ZimbraSpecialFolderId MAPIFolder::GetZimbraFolderId()
 {
     ZimbraSpecialFolderId ZimbraSpecialFolderIdArray[TOTAL_NUM_SPECIAL_FOLDERS] = {
-        ZM_INBOX, ZM_ROOT, ZM_CALENDAR,
-        ZM_CONTACTS, ZM_DRAFTS, ZM_SFID_NONE /*JOURNAL*/,
-        ZM_SFID_NONE /*NOTES*/, ZM_TASKS, ZM_SFID_NONE /*OUTBOX*/,
-        ZM_SENT_MAIL, ZM_TRASH, ZM_SFID_NONE /*SYNC_CONFLICTS*/,
-        ZM_SFID_NONE /*SYNC_ISSUES*/, ZM_SFID_NONE /*SYNC_LOCAL_FAILURES*/, ZM_SFID_NONE /*SYNC_SERVER_FAILURES*/,
-        ZM_SPAM
+        ZM_INBOX, ZM_ROOT, ZM_CALENDAR, ZM_CONTACTS, ZM_DRAFTS, ZM_SFID_NONE /*JOURNAL*/,
+        ZM_SFID_NONE /*NOTES*/, ZM_TASKS, ZM_SFID_NONE /*OUTBOX*/, ZM_SENT_MAIL, ZM_TRASH,
+        ZM_SFID_NONE /*SYNC_CONFLICTS*/, ZM_SFID_NONE /*SYNC_ISSUES*/,
+        ZM_SFID_NONE /*SYNC_LOCAL_FAILURES*/, ZM_SFID_NONE /*SYNC_SERVER_FAILURES*/, ZM_SPAM
     };
 
     if (m_store && m_session)
     {
         int idx = GetExchangeFolderId();
+
         if (idx < ZM_SFID_MAX)
             return ZimbraSpecialFolderIdArray[idx];
         else
@@ -153,9 +153,11 @@ bool MAPIFolder::HiddenFolder()
 {
     if (!m_folder)
         return false;
+
     HRESULT hr = S_OK;
     bool bRet = false;
     Zimbra::Util::ScopedBuffer<SPropValue> pPropValues;
+
     if (SUCCEEDED(hr = HrGetOneProp(m_folder, PR_ATTR_HIDDEN, pPropValues.getptr())))
         bRet = (pPropValues->Value.b != 0);
     return bRet;
@@ -165,8 +167,10 @@ HRESULT MAPIFolder::ContainerClass(wstring &wstrContainerClass)
 {
     if (!m_folder)
         return E_FAIL;
+
     HRESULT hr = S_OK;
     Zimbra::Util::ScopedBuffer<SPropValue> pPropValues;
+
     wstrContainerClass = L"";
     if (SUCCEEDED(hr = HrGetOneProp(m_folder, PR_CONTAINER_CLASS, pPropValues.getptr())))
         wstrContainerClass = pPropValues->Value.LPSZ;
@@ -178,6 +182,7 @@ wstring MAPIFolder::FindFolderPath()
     // return if no session object to compare ids
     if (!m_session)
         return L"";
+
     HRESULT hr = S_OK;
     ULONG ulResult = FALSE;
     wstring wstrPath = m_displayname;
@@ -205,15 +210,15 @@ wstring MAPIFolder::FindFolderPath()
                 continue;
             }
             // Get Parent MAPI Folder
-            if (SUCCEEDED(hr =
-                        m_session->OpenEntry(pPropVal->Value.bin.cb,
-                        (LPENTRYID)pPropVal->Value.bin.lpb,
-                        NULL, 0, &ulType, (LPUNKNOWN *)&lpMAPIFolder)))
+            if (SUCCEEDED(hr = m_session->OpenEntry(pPropVal->Value.bin.cb,
+                    (LPENTRYID)pPropVal->Value.bin.lpb, NULL, 0, &ulType,
+                    (LPUNKNOWN *)&lpMAPIFolder)))
             {
                 // Get parent folder name
                 LPSPropValue pDisplayPropVal = NULL;
-                if (SUCCEEDED(hr =
-                            HrGetOneProp(lpMAPIFolder, PR_DISPLAY_NAME, &pDisplayPropVal)))
+
+                if (SUCCEEDED(hr = HrGetOneProp(lpMAPIFolder, PR_DISPLAY_NAME,
+                        &pDisplayPropVal)))
                 {
                     wstrPath = wstrPath + L"/" + pDisplayPropVal->Value.lpszW;
                     MAPIFreeBuffer(pDisplayPropVal);
@@ -248,24 +253,25 @@ HRESULT MAPIFolder::GetItemCount(ULONG &ulCount)
     if (m_folder == NULL)
         throw MAPIFolderException(E_FAIL, L"GetItemCount(): Folder Object is NULL.", __LINE__,
             __FILE__);
+
     HRESULT hr = S_OK;
     Zimbra::Util::ScopedBuffer<SPropValue> pPropValues;
+
     // Get PR_CONTENT_COUNT
     if (FAILED(hr = HrGetOneProp(m_folder, PR_CONTENT_COUNT, pPropValues.getptr())))
     {
         // if failed, try to read contents table and get count out of it.
         Zimbra::Util::ScopedInterface<IMAPITable> lpTable;
+
         if (FAILED(hr = m_folder->GetContentsTable(fMapiUnicode, lpTable.getptr())))
         {
             throw MAPIFolderException(E_FAIL, L"GetItemCount(): GetContentsTable() Failed.",
-                __LINE__,
-                __FILE__);
+                __LINE__, __FILE__);
         }
         if (FAILED(hr = lpTable->GetRowCount(0, &ulCount)))
         {
             throw MAPIFolderException(E_FAIL, L"GetItemCount(): GetRowCount() Failed.",
-                __LINE__,
-                __FILE__);
+                __LINE__, __FILE__);
         }
     }
     else
@@ -281,12 +287,13 @@ HRESULT MAPIFolder::GetFolderIterator(FolderIterator &folderIter)
 
     if (m_folder == NULL)
         return MAPI_E_NOT_FOUND;
+
     LPMAPITABLE pTable = NULL;
+
     if (FAILED(hr = m_folder->GetHierarchyTable(fMapiUnicode, &pTable)))
     {
         throw MAPIFolderException(E_FAIL, L"GetFolderIterator(): GetHierarchyTable Failed.",
-            __LINE__,
-            __FILE__);
+            __LINE__, __FILE__);
     }
 
 /*
@@ -344,16 +351,16 @@ HRESULT MAPIFolder::GetMessageIterator(MessageIterator &msgIterator)
     if (m_folder == NULL)
     {
         throw MAPIFolderException(E_FAIL, L"GetMessageIterator(): Folder Object is NULL.",
-            __LINE__,
-            __FILE__);
+            __LINE__, __FILE__);
     }
+
     HRESULT hr = S_OK;
     LPMAPITABLE pContentsTable = NULL;
+
     if (FAILED(hr = m_folder->GetContentsTable(fMapiUnicode, &pContentsTable)))
     {
         throw MAPIFolderException(E_FAIL, L"GetMessageIterator(): GetContentsTable Failed.",
-            __LINE__,
-            __FILE__);
+            __LINE__, __FILE__);
     }
     // Init message iterator
     msgIterator.Initialize(pContentsTable, m_folder, *m_session);

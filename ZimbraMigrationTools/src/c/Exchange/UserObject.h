@@ -22,9 +22,8 @@
 // CUserObject
 extern Zimbra::MAPI::MAPIAccessAPI *maapi;
 
-class ATL_NO_VTABLE CUserObject: public CComObjectRootEx<CComSingleThreadModel>,
-    public CComCoClass<CUserObject,
-    &CLSID_UserObject>, public BaseUser, public ISupportErrorInfo,
+class ATL_NO_VTABLE CUserObject: public CComObjectRootEx<CComSingleThreadModel>, public
+    CComCoClass<CUserObject, &CLSID_UserObject>, public BaseUser, public ISupportErrorInfo,
     public IDispatchImpl<IUserObject, &IID_IUserObject, &LIBID_Exchange, /*wMajor =*/ 1,
     /*wMinor =*/ 0>
 {
@@ -33,39 +32,32 @@ private:
      * BSTR Mailtype;*/
 
 public:
-    CUserObject()
-    {}
-    DECLARE_REGISTRY_RESOURCEID(IDR_USEROBJECT)
-
-    BEGIN_COM_MAP(CUserObject)
-    COM_INTERFACE_ENTRY(IUserObject)
-    COM_INTERFACE_ENTRY(IDispatch)
-    COM_INTERFACE_ENTRY(ISupportErrorInfo)
-    END_COM_MAP()
-
+    CUserObject() {}
+    DECLARE_REGISTRY_RESOURCEID(IDR_USEROBJECT) BEGIN_COM_MAP(CUserObject) COM_INTERFACE_ENTRY(
+        IUserObject) COM_INTERFACE_ENTRY(IDispatch) COM_INTERFACE_ENTRY(
+        ISupportErrorInfo) END_COM_MAP()
 // ISupportsErrorInfo
     STDMETHOD(InterfaceSupportsErrorInfo) (REFIID riid);
 
-    DECLARE_PROTECT_FINAL_CONSTRUCT()
-
-    HRESULT FinalConstruct()
+    DECLARE_PROTECT_FINAL_CONSTRUCT() HRESULT FinalConstruct()
     {
         return S_OK;
     }
-    void FinalRelease()
-    {}
+
+    void FinalRelease() {}
+
 public:
-    STDMETHOD(InitializeUser) (BSTR host, BSTR admin, BSTR UserID, BSTR MailType, BSTR* pErrorText);
+    STDMETHOD(InitializeUser) (BSTR host, BSTR admin, BSTR UserID, BSTR MailType,
+        BSTR *pErrorText);
     STDMETHOD(GetFolderObjects) ( /*[out, retval]*/ VARIANT * vObjects);
-    STDMETHOD(GetItemsForFolderObjects) (IfolderObject * FolderObj, FolderType type,
-        VARIANT creattiondate, VARIANT * vItems);
+    STDMETHOD(GetItemsForFolderObjects) (IfolderObject * FolderObj, FolderType type, VARIANT
+        creattiondate, VARIANT * vItems);
     STDMETHOD(GetDataForItem) (VARIANT ItemId, VARIANT * pVal);
-    STDMETHOD(UMInitializeUser) (BSTR ProfileName, BSTR MailType, BSTR* pErrorText);
+    STDMETHOD(UMInitializeUser) (BSTR ProfileName, BSTR MailType, BSTR *pErrorText);
     STDMETHOD(UMUnInitializeUser) (BSTR MailType);
 
     // /base class functions
     virtual long Initialize(BSTR Id);
-
     virtual long GetFolders(VARIANT *folders);
     virtual long GetItems(VARIANT *Items);
     virtual long UnInitialize();

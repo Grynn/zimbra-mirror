@@ -1,11 +1,10 @@
 ﻿namespace MVVM.View
 {
-    public partial class IntroView
+public partial class IntroView
+{
+    public IntroView()
     {
-        public IntroView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
-
+}
 }

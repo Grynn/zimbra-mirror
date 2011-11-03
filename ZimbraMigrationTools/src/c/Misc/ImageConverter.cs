@@ -6,7 +6,7 @@ using System;
 public class ImageConverter: IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter,
-            System.Globalization.CultureInfo culture)
+        System.Globalization.CultureInfo culture)
     {
         SchedUser su = (SchedUser)value;
 
@@ -15,8 +15,9 @@ public class ImageConverter: IValueConverter
         else
             return "/MVVM;component/View/Images/usernp.ico";
     }
+
     public object ConvertBack(object value, Type targetType, object parameter,
-            System.Globalization.CultureInfo culture)
+        System.Globalization.CultureInfo culture)
     {
         throw new NotSupportedException();
     }

@@ -1,5 +1,4 @@
 // main base class for migration
-
 // This will be a absatrct class with all virtual functions
 
 class CMigration
@@ -18,10 +17,12 @@ public:
     {
         MessageBox(NULL, Msg, _T("Migartion tool"), MB_OK | MB_ICONEXCLAMATION);
     }
+
     virtual void SetConfigXMLFile(ATL::CComBSTR filename)
     {
         XMLConfigFileName = filename;
     }
+
     virtual void SetUserMapFile(ATL::CComBSTR filename)
     {
         USerMapfilename = filename;

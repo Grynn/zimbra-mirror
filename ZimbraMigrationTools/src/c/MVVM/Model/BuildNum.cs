@@ -1,12 +1,12 @@
 namespace MVVM.Model
 {
-    public class BuildNum
-    {
-        public string BUILD_NUM;
+public class BuildNum
+{
+    public string BUILD_NUM;
 
-        public BuildNum()
-        {
+    public BuildNum()
+    {
         BUILD_NUM = "8.0.0.330";
-        }
     }
+}
 }

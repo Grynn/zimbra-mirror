@@ -18,10 +18,9 @@
  */
 // CfolderObject
 
-class ATL_NO_VTABLE CfolderObject: public CComObjectRootEx<CComSingleThreadModel>,
-    public CComCoClass<CfolderObject,
-    &CLSID_folderObject>, public BaseFolder,
-    public IDispatchImpl<IfolderObject, &IID_IfolderObject, &LIBID_Exchange, /*wMajor =*/ 1,
+class ATL_NO_VTABLE CfolderObject: public CComObjectRootEx<CComSingleThreadModel>, public
+    CComCoClass<CfolderObject, &CLSID_folderObject>, public BaseFolder, public
+    IDispatchImpl<IfolderObject, &IID_IfolderObject, &LIBID_Exchange, /*wMajor =*/ 1,
     /*wMinor =*/ 0>
 {
 private:
@@ -29,28 +28,21 @@ private:
      * LONG LngID;
      * BSTR parentPath;*/
     SBinary FolderId;
-	LONG Itemcnt;
+    LONG Itemcnt;
 
 public:
-    CfolderObject()
-    {}
-    DECLARE_REGISTRY_RESOURCEID(IDR_FOLDEROBJECT)
+    CfolderObject() {}
+    DECLARE_REGISTRY_RESOURCEID(IDR_FOLDEROBJECT) BEGIN_COM_MAP(
+        CfolderObject) COM_INTERFACE_ENTRY(IfolderObject) COM_INTERFACE_ENTRY(
+        IDispatch) END_COM_MAP() STDMETHOD(InterfaceSupportsErrorInfo) (REFIID riid);
 
-    BEGIN_COM_MAP(CfolderObject)
-    COM_INTERFACE_ENTRY(IfolderObject)
-    COM_INTERFACE_ENTRY(IDispatch)
-    END_COM_MAP()
-
-    STDMETHOD(InterfaceSupportsErrorInfo) (REFIID riid);
-
-    DECLARE_PROTECT_FINAL_CONSTRUCT()
-
-    HRESULT FinalConstruct()
+    DECLARE_PROTECT_FINAL_CONSTRUCT() HRESULT FinalConstruct()
     {
         return S_OK;
     }
-    void FinalRelease()
-    {}
+
+    void FinalRelease() {}
+
 public:
     STDMETHOD(get_Name) (BSTR *pVal);
     STDMETHOD(put_Name) (BSTR newVal);

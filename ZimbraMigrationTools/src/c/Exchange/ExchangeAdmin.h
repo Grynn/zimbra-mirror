@@ -4,17 +4,16 @@ namespace Zimbra
 {
 namespace MAPI
 {
-
-#define EXCH_UNINITIALIZED          0
-#define EXCH_INITIALIZED_PROFCREATE 1
-#define EXCH_INITIALIZED_PROFEXIST  2
+#define EXCH_UNINITIALIZED              0
+#define EXCH_INITIALIZED_PROFCREATE     1
+#define EXCH_INITIALIZED_PROFEXIST      2
 
 class ExchangeAdminException: public GenericException
 {
 public:
     ExchangeAdminException(HRESULT hrErrCode, LPCWSTR lpszDescription);
-    ExchangeAdminException(HRESULT hrErrCode, LPCWSTR lpszDescription, int nLine,
-                LPCSTR strFile);
+    ExchangeAdminException(HRESULT hrErrCode, LPCWSTR lpszDescription, int nLine, LPCSTR
+        strFile);
     virtual ~ExchangeAdminException() {}
 };
 
@@ -34,11 +33,10 @@ public:
     HRESULT DeleteProfile(wstring strProfile);
     HRESULT GetAllProfiles(vector<string> &vProfileList);
     HRESULT SetDefaultProfile(wstring strProfile);
-    HRESULT CreateExchangeMailBox(LPCWSTR lpwstrNewUser, LPCWSTR lpwstrNewUserPwd,
-                LPCWSTR lpwstrlogonuser,
-                LPCWSTR lpwstrLogonUsrPwd);
-    HRESULT DeleteExchangeMailBox(LPCWSTR lpwstrMailBox, LPCWSTR lpwstrlogonuser,
-                LPCWSTR lpwstrLogonUsrPwd);
+    HRESULT CreateExchangeMailBox(LPCWSTR lpwstrNewUser, LPCWSTR lpwstrNewUserPwd, LPCWSTR
+        lpwstrlogonuser, LPCWSTR lpwstrLogonUsrPwd);
+    HRESULT DeleteExchangeMailBox(LPCWSTR lpwstrMailBox, LPCWSTR lpwstrlogonuser, LPCWSTR
+        lpwstrLogonUsrPwd);
 };
 
 class ExchangeMigrationSetup
@@ -50,8 +48,8 @@ private:
     wstring m_ExchangeAdminPwd;
 
 public:
-    ExchangeMigrationSetup(LPCWSTR strExhangeHost, LPCWSTR ExchangeAdminName,
-                LPCWSTR ExchangeAdminPwd);
+    ExchangeMigrationSetup(LPCWSTR strExhangeHost, LPCWSTR ExchangeAdminName, LPCWSTR
+        ExchangeAdminPwd);
     ~ExchangeMigrationSetup();
     HRESULT Setup();
     HRESULT Clean();
@@ -66,8 +64,8 @@ private:
     static MAPISession *m_zmmapisession;
 
 public:
-    static LPCWSTR GlobalInit(LPCWSTR lpMAPITarget, LPCWSTR lpAdminUsername = NULL,
-                LPCWSTR lpAdminPassword = NULL);
+    static LPCWSTR GlobalInit(LPCWSTR lpMAPITarget, LPCWSTR lpAdminUsername = NULL, LPCWSTR
+        lpAdminPassword = NULL);
     static LPCWSTR GlobalUninit();
     static LPCWSTR SelectExchangeUsers(vector<ObjectPickerData> &vUserList);
 };

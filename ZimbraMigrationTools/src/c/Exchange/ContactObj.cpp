@@ -1,11 +1,9 @@
 #include "common.h"
 #include "ContactObj.h"
 
-ContactObj::ContactObj(void)
-{}
+ContactObj::ContactObj(void) {}
 
-ContactObj::~ContactObj(void)
-{}
+ContactObj::~ContactObj(void) {}
 
 void ContactObj::GetData(contactattributes &attributes)
 {

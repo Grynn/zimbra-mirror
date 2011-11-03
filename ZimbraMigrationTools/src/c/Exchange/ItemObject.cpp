@@ -94,9 +94,11 @@ STDMETHODIMP CItemObject::GetDataForItem(VARIANT *data)
     std::map<BSTR, BSTR>::iterator it;
     FolderType Type;
     HRESULT hr = get_Type(&Type);
+
     if (Type == 2)
     {
         ContactObj *C1 = new ContactObj();
+
         C1->GetData(pIt);
 
         VariantInit(data);
@@ -104,15 +106,19 @@ STDMETHODIMP CItemObject::GetDataForItem(VARIANT *data)
         // Create SafeArray of VARIANT BSTRs
         SAFEARRAY *pSA = NULL;
         SAFEARRAYBOUND aDim[2];                 // two dimensional array
+
         aDim[0].lLbound = 0;
         aDim[0].cElements = 5;
         aDim[1].lLbound = 0;
-        aDim[1].cElements = 5;                  // rectangular array
+        aDim[1].cElements = 5;                          // rectangular array
         pSA = SafeArrayCreate(VT_BSTR, 2, aDim);        // again, 2 dimensions
+
         long aLong[2];
+
         if (pSA != NULL)
         {
             BSTR temp;
+
             for (long x = aDim[0].lLbound; x < 2 /*(aDim[0].cElements + aDim[0].lLbound)*/; x++)
             {
                 aLong[0] = x;                   // set x index
@@ -138,23 +144,22 @@ STDMETHODIMP CItemObject::GetDataForItem(VARIANT *data)
     return S_OK;
 }
 
-STDMETHODIMP CItemObject::GetDataForItemID(VARIANT ItemId,FolderType type, VARIANT *pVal)
+STDMETHODIMP CItemObject::GetDataForItemID(VARIANT ItemId, FolderType type, VARIANT *pVal)
 {
-     HRESULT hr = S_OK;
+    HRESULT hr = S_OK;
     std::map<BSTR, BSTR> pIt;
     std::map<BSTR, BSTR>::iterator it;
-
     SBinary ItemID;
-	FolderType ft;
-	if(type == NULL)
-	{
-	
-	get_Type(&ft);
-	}
-	else
-		ft = type;
+    FolderType ft;
 
-
+    if (type == NULL)
+    {
+        get_Type(&ft);
+    }
+    else
+    {
+        ft = type;
+    }
     if (ItemId.vt == (VT_ARRAY | VT_UI1))       // (OLE SAFEARRAY)
     {
         // Retrieve size of array
@@ -163,182 +168,152 @@ STDMETHODIMP CItemObject::GetDataForItemID(VARIANT ItemId,FolderType type, VARIA
         if (ItemID.lpb != NULL)
         {
             void *pArrayData;
+
             // Obtain safe pointer to the array
             SafeArrayAccessData(ItemId.parray, &pArrayData);
             // Copy the bitmap into our buffer
             memcpy(ItemID.lpb, pArrayData, ItemID.cb);  // Unlock the variant data
             SafeArrayUnaccessData(ItemId.parray);
-			if(ft ==2)
-			{
-			ContactItemData cd;
-			maapi->GetItem(ItemID, cd);
-			pIt[L"birthday"] = SysAllocString((cd.Birthday).c_str());
-			pIt[L"anniversary"] = SysAllocString((cd.Anniversary).c_str());
-			pIt[L"callbackPhone"] = SysAllocString((cd.CallbackPhone).c_str());
-			pIt[L"carPhone"] = SysAllocString((cd.CarPhone).c_str());
-			pIt[L"company"] = SysAllocString((cd.Company).c_str());
-			pIt[L"email"] = SysAllocString((cd.Email1).c_str());
-			pIt[L"email2"] = SysAllocString((cd.Email2).c_str());
-			pIt[L"email3"] = SysAllocString((cd.Email3).c_str());
-			pIt[L"fileAs"] = SysAllocString((cd.FileAs).c_str());
-			pIt[L"firstName"] = SysAllocString((cd.FirstName).c_str());
-			pIt[L"homeCity"] = SysAllocString((cd.HomeCity).c_str());
-			pIt[L"homeCountry"] = SysAllocString((cd.HomeCountry).c_str());
-			pIt[L"homeFax"] = SysAllocString((cd.HomeFax).c_str());
-			pIt[L"homePhone"] = SysAllocString((cd.HomePhone).c_str());
-			pIt[L"homePhone2"] = SysAllocString((cd.HomePhone2).c_str());
-			pIt[L"homePostalCode"] = SysAllocString((cd.HomePostalCode).c_str());
-			pIt[L"homeState"] = SysAllocString((cd.HomeState).c_str());
-			pIt[L"homeStreet"] = SysAllocString((cd.HomeStreet).c_str());
-			pIt[L"homeURL"] = SysAllocString((cd.HomeURL).c_str());
-			pIt[L"jobTitle"] = SysAllocString((cd.JobTitle).c_str());
-			pIt[L"lastName"] = SysAllocString((cd.LastName).c_str());
-			pIt[L"middleName"] = SysAllocString((cd.MiddleName).c_str());
-			pIt[L"mobilePhone"] = SysAllocString((cd.MobilePhone).c_str());
-			pIt[L"namePrefix"] = SysAllocString((cd.NamePrefix).c_str());
-			pIt[L"nameSuffix"] = SysAllocString((cd.NameSuffix).c_str());
-			pIt[L"notes"] = SysAllocString((cd.Notes).c_str());
-			pIt[L"otherCity"] = SysAllocString((cd.OtherCity).c_str());
-			pIt[L"outerCountry"] = SysAllocString((cd.OtherCountry).c_str());
-			pIt[L"otherFax"] = SysAllocString((cd.OtherFax).c_str());
-			pIt[L"otherPhone"] = SysAllocString((cd.OtherPhone).c_str());
-			pIt[L"otherPostalCode"] = SysAllocString((cd.OtherPostalCode).c_str());
-			pIt[L"otherState"] = SysAllocString((cd.OtherState).c_str());
-			pIt[L"otherStreet"] = SysAllocString((cd.OtherStreet).c_str());
-			pIt[L"otherURL"] = SysAllocString((cd.OtherURL).c_str());
-			pIt[L"pager"] = SysAllocString((cd.Pager).c_str());
-			pIt[L"workCity"] = SysAllocString((cd.WorkCity).c_str());
-			pIt[L"workCountry"] = SysAllocString((cd.WorkCountry).c_str());
-			pIt[L"workFax"] = SysAllocString((cd.WorkFax).c_str());
-			pIt[L"workPhone"] = SysAllocString((cd.WorkPhone).c_str());
-			pIt[L"workPostalCode"] = SysAllocString((cd.WorkPostalCode).c_str());
-			pIt[L"workState"] = SysAllocString((cd.WorkState).c_str());
-			pIt[L"workStreet"] = SysAllocString((cd.WorkStreet).c_str());
-			pIt[L"workURL"] = SysAllocString((cd.WorkURL).c_str());
-			pIt[L"outlookUserField1"] = SysAllocString((cd.UserField1).c_str());
-			pIt[L"outlookUserField2"] = SysAllocString((cd.UserField2).c_str());
-			pIt[L"outlookUserField3"] = SysAllocString((cd.UserField3).c_str());
-			pIt[L"outlookUserField4"] = SysAllocString((cd.UserField4).c_str());
-			pIt[L"image"] = SysAllocString((cd.ContactImagePath).c_str());
-			}
-			else if( ft == 1)
-			{
-				MessageItemData msgdata;
-	
-				printf("Got message item:");
-				maapi->GetItem(ItemID,msgdata);
-				pIt[L"Subject"] = SysAllocString((msgdata.Subject).c_str());
-				pIt[L"Date"] = SysAllocString(( msgdata.DateString).c_str());
-				pIt[L"filePath"] = SysAllocString((msgdata.MimeFile).c_str());
-				pIt[L"UrlName"] = SysAllocString((msgdata.Urlname).c_str());
-				pIt[L"rcvdDate"] =  SysAllocString(( msgdata.DeliveryUnixString.c_str()));
+            if (ft == 2)
+            {
+                ContactItemData cd;
 
+                maapi->GetItem(ItemID, cd);
+                pIt[L"birthday"] = SysAllocString((cd.Birthday).c_str());
+                pIt[L"anniversary"] = SysAllocString((cd.Anniversary).c_str());
+                pIt[L"callbackPhone"] = SysAllocString((cd.CallbackPhone).c_str());
+                pIt[L"carPhone"] = SysAllocString((cd.CarPhone).c_str());
+                pIt[L"company"] = SysAllocString((cd.Company).c_str());
+                pIt[L"email"] = SysAllocString((cd.Email1).c_str());
+                pIt[L"email2"] = SysAllocString((cd.Email2).c_str());
+                pIt[L"email3"] = SysAllocString((cd.Email3).c_str());
+                pIt[L"fileAs"] = SysAllocString((cd.FileAs).c_str());
+                pIt[L"firstName"] = SysAllocString((cd.FirstName).c_str());
+                pIt[L"homeCity"] = SysAllocString((cd.HomeCity).c_str());
+                pIt[L"homeCountry"] = SysAllocString((cd.HomeCountry).c_str());
+                pIt[L"homeFax"] = SysAllocString((cd.HomeFax).c_str());
+                pIt[L"homePhone"] = SysAllocString((cd.HomePhone).c_str());
+                pIt[L"homePhone2"] = SysAllocString((cd.HomePhone2).c_str());
+                pIt[L"homePostalCode"] = SysAllocString((cd.HomePostalCode).c_str());
+                pIt[L"homeState"] = SysAllocString((cd.HomeState).c_str());
+                pIt[L"homeStreet"] = SysAllocString((cd.HomeStreet).c_str());
+                pIt[L"homeURL"] = SysAllocString((cd.HomeURL).c_str());
+                pIt[L"jobTitle"] = SysAllocString((cd.JobTitle).c_str());
+                pIt[L"lastName"] = SysAllocString((cd.LastName).c_str());
+                pIt[L"middleName"] = SysAllocString((cd.MiddleName).c_str());
+                pIt[L"mobilePhone"] = SysAllocString((cd.MobilePhone).c_str());
+                pIt[L"namePrefix"] = SysAllocString((cd.NamePrefix).c_str());
+                pIt[L"nameSuffix"] = SysAllocString((cd.NameSuffix).c_str());
+                pIt[L"notes"] = SysAllocString((cd.Notes).c_str());
+                pIt[L"otherCity"] = SysAllocString((cd.OtherCity).c_str());
+                pIt[L"outerCountry"] = SysAllocString((cd.OtherCountry).c_str());
+                pIt[L"otherFax"] = SysAllocString((cd.OtherFax).c_str());
+                pIt[L"otherPhone"] = SysAllocString((cd.OtherPhone).c_str());
+                pIt[L"otherPostalCode"] = SysAllocString((cd.OtherPostalCode).c_str());
+                pIt[L"otherState"] = SysAllocString((cd.OtherState).c_str());
+                pIt[L"otherStreet"] = SysAllocString((cd.OtherStreet).c_str());
+                pIt[L"otherURL"] = SysAllocString((cd.OtherURL).c_str());
+                pIt[L"pager"] = SysAllocString((cd.Pager).c_str());
+                pIt[L"workCity"] = SysAllocString((cd.WorkCity).c_str());
+                pIt[L"workCountry"] = SysAllocString((cd.WorkCountry).c_str());
+                pIt[L"workFax"] = SysAllocString((cd.WorkFax).c_str());
+                pIt[L"workPhone"] = SysAllocString((cd.WorkPhone).c_str());
+                pIt[L"workPostalCode"] = SysAllocString((cd.WorkPostalCode).c_str());
+                pIt[L"workState"] = SysAllocString((cd.WorkState).c_str());
+                pIt[L"workStreet"] = SysAllocString((cd.WorkStreet).c_str());
+                pIt[L"workURL"] = SysAllocString((cd.WorkURL).c_str());
+                pIt[L"outlookUserField1"] = SysAllocString((cd.UserField1).c_str());
+                pIt[L"outlookUserField2"] = SysAllocString((cd.UserField2).c_str());
+                pIt[L"outlookUserField3"] = SysAllocString((cd.UserField3).c_str());
+                pIt[L"outlookUserField4"] = SysAllocString((cd.UserField4).c_str());
+                pIt[L"image"] = SysAllocString((cd.ContactImagePath).c_str());
+            }
+            else if (ft == 1)
+            {
+                MessageItemData msgdata;
 
-			
-				CComBSTR flags =L"";
-				if(msgdata.HasAttachments)
-				{
-					wcscat(flags, L"a");
-				}
-				if(msgdata.IsUnread)
-				{
-					wcscat(flags, L"u");
-				}
-				if(msgdata.IsFlagged)
-				{
-					wcscat(flags, L"f");
-				}
-				/*if(msgdata.HasText)
-				{
-					flags.AppendBSTR(L"T");
-				}
-				if(msgdata.HasHtml)
-				{
-					flags.AppendBSTR(L"H");
-				}*/
-				if(msgdata.IsDraft)
-				{
-					wcscat(flags, L"d");
-				}
-				if(msgdata.IsForwared)
-				{
-					wcscat(flags, L"w");
-				}
-				if((msgdata.IsUnsent) || (msgdata.Urlname.substr(0,11) == L"/Sent Items"))
-				{
-					wcscat(flags, L"s");
-				}
-				if(msgdata.RepliedTo)
-				{
-					wcscat(flags, L"r");
-				}
-			
-				/*pIt[L"Has Attachments"] = (msgdata.HasAttachments)? L"True":L"False";
-				pIt[L"HasHTML"] = (msgdata.HasHtml)? L"True":L"False";
-				pIt[L"HasText"] = (msgdata.HasText)? L"True":L"False";
-				pIt[L"IsDraft"] = (msgdata.IsDraft)? L"True":L"False";
-				pIt[L"IsFlagged"] = (msgdata.IsFlagged)? L"True":L"False";
-				pIt[L"IsForwared"] = (msgdata.IsForwared)? L"True":L"False";
-				pIt[L"IsFromMe"] = (msgdata.IsFromMe)? L"True":L"False";
-				pIt[L"IsUnread"] = (msgdata.IsUnread)? L"True":L"False";
-				pIt[L"IsUnsent"] = (msgdata.IsUnsent)? L"True":L"False";
-				pIt[L"IsUnread"] = (msgdata.IsUnread)? L"True":L"False";
-				pIt[L"RepliedTo"] = (msgdata.IsUnread)? L"True":L"False";*/
-				
-				pIt[L"flags"] = SysAllocString(flags);
+                printf("Got message item:");
+                maapi->GetItem(ItemID, msgdata);
+                pIt[L"Subject"] = SysAllocString((msgdata.Subject).c_str());
+                pIt[L"Date"] = SysAllocString((msgdata.DateString).c_str());
+                pIt[L"filePath"] = SysAllocString((msgdata.MimeFile).c_str());
+                pIt[L"UrlName"] = SysAllocString((msgdata.Urlname).c_str());
+                pIt[L"rcvdDate"] = SysAllocString((msgdata.DeliveryUnixString.c_str()));
 
-				/*printf("Subject: %S Date: %I64X DateString:%S		\
-					DeliveryDate: %I64X deliveryDateString: %S		\
-					Has Attachments: %d Has HTML:%d Has Text:%d	\
-					Is Draft:%d Is Flagged: %d Is Forwarded: %d	\
-					IsFromMe:%d IsUnread:%d IsUnsent:%d IsRepliedTo:%d	\
-					URLName: %S\n",
-					msgdata.Subject.c_str(), msgdata.Date, msgdata.DateString.c_str(),
-					msgdata.deliveryDate, msgdata.DeliveryDateString.c_str(),msgdata.HasAttachments,
-					msgdata.HasHtml, msgdata.HasText,msgdata.IsDraft,msgdata.IsFlagged,msgdata.IsForwared,
-					msgdata.IsFromMe, msgdata.IsUnread, msgdata.IsUnsent,msgdata.RepliedTo,msgdata.Urlname.c_str()
-					);
+                CComBSTR flags = L"";
 
-				printf("MIME FILE PATH: %S\n\n\n\n", msgdata.MimeFile.c_str());*/
-			
+                if (msgdata.HasAttachments)
+                    wcscat(flags, L"a");
+                if (msgdata.IsUnread)
+                    wcscat(flags, L"u");
+                if (msgdata.IsFlagged)
+                    wcscat(flags, L"f");
+                                 /*if(msgdata.HasText)
+                                  * {
+                                  *      flags.AppendBSTR(L"T");
+                                  * }
+                                  * if(msgdata.HasHtml)
+                                  * {
+                                  *      flags.AppendBSTR(L"H");
+                                  * }*/
+                if (msgdata.IsDraft)
+                    wcscat(flags, L"d");
+                if (msgdata.IsForwared)
+                    wcscat(flags, L"w");
+                if ((msgdata.IsUnsent) || (msgdata.Urlname.substr(0, 11) == L"/Sent Items"))
+                    wcscat(flags, L"s");
+                if (msgdata.RepliedTo)
+                    wcscat(flags, L"r");
+                                 /*pIt[L"Has Attachments"] = (msgdata.HasAttachments)? L"True":L"False";
+                                  * pIt[L"HasHTML"] = (msgdata.HasHtml)? L"True":L"False";
+                                  * pIt[L"HasText"] = (msgdata.HasText)? L"True":L"False";
+                                  * pIt[L"IsDraft"] = (msgdata.IsDraft)? L"True":L"False";
+                                  * pIt[L"IsFlagged"] = (msgdata.IsFlagged)? L"True":L"False";
+                                  * pIt[L"IsForwared"] = (msgdata.IsForwared)? L"True":L"False";
+                                  * pIt[L"IsFromMe"] = (msgdata.IsFromMe)? L"True":L"False";
+                                  * pIt[L"IsUnread"] = (msgdata.IsUnread)? L"True":L"False";
+                                  * pIt[L"IsUnsent"] = (msgdata.IsUnsent)? L"True":L"False";
+                                  * pIt[L"IsUnread"] = (msgdata.IsUnread)? L"True":L"False";
+                                  * pIt[L"RepliedTo"] = (msgdata.IsUnread)? L"True":L"False";*/
 
+                pIt[L"flags"] = SysAllocString(flags);
 
-
-			}
-            
+                /*printf("Subject: %S Date: %I64X DateString:%S		\
+                 *      DeliveryDate: %I64X deliveryDateString: %S		\
+                 *      Has Attachments: %d Has HTML:%d Has Text:%d	\
+                 *      Is Draft:%d Is Flagged: %d Is Forwarded: %d	\
+                 *      IsFromMe:%d IsUnread:%d IsUnsent:%d IsRepliedTo:%d	\
+                 *      URLName: %S\n",
+                 *      msgdata.Subject.c_str(), msgdata.Date, msgdata.DateString.c_str(),
+                 *      msgdata.deliveryDate, msgdata.DeliveryDateString.c_str(),msgdata.HasAttachments,
+                 *      msgdata.HasHtml, msgdata.HasText,msgdata.IsDraft,msgdata.IsFlagged,msgdata.IsForwared,
+                 *      msgdata.IsFromMe, msgdata.IsUnread, msgdata.IsUnsent,msgdata.RepliedTo,msgdata.Urlname.c_str()
+                 *      );
+                 *
+                 * printf("MIME FILE PATH: %S\n\n\n\n", msgdata.MimeFile.c_str());*/
+            }
         }
     }
-   
-
-	
-	
-	
-
-
-
-
-
-
-
-
-
-
-	////
+    // //
 
     VariantInit(pVal);
 
     // Create SafeArray of VARIANT BSTRs
     SAFEARRAY *pSA = NULL;
     SAFEARRAYBOUND aDim[2];                     // two dimensional array
+
     aDim[0].lLbound = 0;
-    aDim[0].cElements =  (ULONG)pIt.size();  
+    aDim[0].cElements = (ULONG)pIt.size();
     aDim[1].lLbound = 0;
     aDim[1].cElements = (ULONG)pIt.size();      // rectangular array
     pSA = SafeArrayCreate(VT_BSTR, 2, aDim);    // again, 2 dimensions
+
     long aLong[2];
+
     if (pSA != NULL)
     {
         BSTR temp;
+
         for (long x = aDim[0].lLbound; x < 2 /*(aDim[0].cElements + aDim[0].lLbound)*/; x++)
         {
             aLong[0] = x;                       // set x index
@@ -374,6 +349,7 @@ STDMETHODIMP CItemObject::put_ItemID(VARIANT id)
         if (ItemID.lpb != NULL)
         {
             void *pArrayData;
+
             // Obtain safe pointer to the array
             SafeArrayAccessData(id.parray, &pArrayData);
             // Copy the bitmap into our buffer
@@ -417,8 +393,10 @@ STDMETHODIMP CItemObject::get_ItemID(VARIANT *id)
 
     VariantInit(id);
     id->vt = VT_ARRAY | VT_UI1;
+
     SAFEARRAY *psa;
-    SAFEARRAYBOUND bounds[1];    // ={1,0};
+    SAFEARRAYBOUND bounds[1];                   // ={1,0};
+
     bounds[0].cElements = ItemID.cb;
     bounds[0].lLbound = 0;
 
@@ -426,6 +404,7 @@ STDMETHODIMP CItemObject::get_ItemID(VARIANT *id)
     if (psa != NULL)
     {
         void *pArrayData = NULL;
+
         SafeArrayAccessData(psa, &pArrayData);
         memcpy(pArrayData, ItemID.lpb, ItemID.cb);
         // Unlock the variant data

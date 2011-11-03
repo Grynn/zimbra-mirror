@@ -15,6 +15,7 @@ class XmlConfig
         ConfigObj = new MVVM.Model.Config();
         UserList = new List<MVVM.Model.Users>();
     }
+
     private string filename;
     public string Filename {
         get { return filename; }
@@ -27,19 +28,18 @@ class XmlConfig
     }
     public MVVM.Model.Config ConfigObj;
     public List<MVVM.Model.Users> UserList;
-
     public void InitializeConfig()
     {
         System.Xml.Serialization.XmlSerializer reader =
-                new System.Xml.Serialization.XmlSerializer(typeof (MVVM.Model.Config));
+            new System.Xml.Serialization.XmlSerializer(typeof (MVVM.Model.Config));
         if (File.Exists(filename))
         {
-            System.IO.StreamReader fileRead = new System.IO.StreamReader(
-                    filename);
+            System.IO.StreamReader fileRead = new System.IO.StreamReader(filename);
 
             ConfigObj = (MVVM.Model.Config)reader.Deserialize(fileRead);
         }
     }
+
     public void InitializeGeneralConfig(string args1)
     {
         string[] parameters = args1.Split('&');
@@ -74,6 +74,7 @@ class XmlConfig
             // ConfigObj.GeneralOptions.MaxThreadCount = Convert.ToInt32(args1.Substring((args1.IndexOf("-T") + 2),1));
         }
     }
+
     public void GetUserList()
     {
         List<string[]> parsedData = new List<string[]>();
@@ -83,6 +84,7 @@ class XmlConfig
             {
                 using (StreamReader readFile = new StreamReader(Usermap)) {
                     string line;
+
                     string[] row;
                     while ((line = readFile.ReadLine()) != null)
                     {
@@ -94,7 +96,7 @@ class XmlConfig
             }
             else
             {
-                Console.WriteLine("There is no UserMap file");    // "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
+                Console.WriteLine("There is no UserMap file");  // "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
         catch (Exception e)
@@ -106,6 +108,7 @@ class XmlConfig
             string[] strres = new string[parsedData.Count];
 
             int index = 0;
+
             for (int j = 1; j < parsedData.Count; j++)
             {
                 MVVM.Model.Users tempuser = new MVVM.Model.Users();

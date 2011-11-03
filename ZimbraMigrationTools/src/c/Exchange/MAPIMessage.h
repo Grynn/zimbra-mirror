@@ -6,7 +6,7 @@ namespace Zimbra
 {
 namespace MAPI
 {
-#define PR_URL_NAME PROP_TAG(PT_TSTRING, 0x6707)
+#define PR_URL_NAME                     PROP_TAG(PT_TSTRING, 0x6707)
 
 #define EXCHIVERB_OPEN                  0
 #define EXCHIVERB_RESERVED_COMPOSE      100
@@ -21,8 +21,7 @@ namespace MAPI
 
 typedef enum _ZM_ITEM_TYPE
 {
-    ZT_NONE = 0, ZT_MAIL, ZT_CONTACTS,
-    ZT_APPOINTMENTS, ZT_TASKS, ZT_MEETREQ_RESP, ZTMAX
+    ZT_NONE = 0, ZT_MAIL, ZT_CONTACTS, ZT_APPOINTMENTS, ZT_TASKS, ZT_MEETREQ_RESP, ZTMAX
 } ZM_ITEM_TYPE;
 
 // MAPIMessageException class
@@ -41,16 +40,12 @@ private:
     // order of the message properties in _pMessagePropVals
     typedef enum _MessagePropIndex
     {
-        MESSAGE_CLASS, MESSAGE_FLAGS, MESSAGE_DATE,
-        SENDER_ADDRTYPE, SENDER_EMAIL_ADDR, SENDER_NAME,
-        SENDER_ENTRYID, SUBJECT, TEXT_BODY,
-        HTML_BODY, INTERNET_CPID, MESSAGE_CODEPAGE,
-        LAST_VERB_EXECUTED, FLAG_STATUS, ENTRYID,
-        SENT_ADDRTYPE, SENT_ENTRYID, SENT_EMAIL_ADDR,
-        SENT_NAME, REPLY_NAMES, REPLY_ENTRIES,
-        MIME_HEADERS, IMPORTANCE, INTERNET_MESSAGE_ID,
-        DELIVERY_DATE, URL_NAME, MESSAGE_SIZE,
-        STORE_SUPPORT_MASK, RTF_IN_SYNC, NMSGPROPS
+        MESSAGE_CLASS, MESSAGE_FLAGS, MESSAGE_DATE, SENDER_ADDRTYPE, SENDER_EMAIL_ADDR,
+        SENDER_NAME, SENDER_ENTRYID, SUBJECT, TEXT_BODY, HTML_BODY, INTERNET_CPID,
+        MESSAGE_CODEPAGE, LAST_VERB_EXECUTED, FLAG_STATUS, ENTRYID, SENT_ADDRTYPE,
+        SENT_ENTRYID, SENT_EMAIL_ADDR, SENT_NAME, REPLY_NAMES, REPLY_ENTRIES,
+        MIME_HEADERS, IMPORTANCE, INTERNET_MESSAGE_ID, DELIVERY_DATE, URL_NAME,
+        MESSAGE_SIZE, STORE_SUPPORT_MASK, RTF_IN_SYNC, NMSGPROPS
     } MessagePropIndex;
 
     // defined so a static variable can hold the message props to retrieve
@@ -98,17 +93,17 @@ private:
     std::vector<std::string> RTFElement;
     enum EnumRTFElement
     {
-        NOTFOUND = -1, OPENBRACE = 0, CLOSEBRACE, HTMLTAG,
-        MHTMLTAG, PAR, TAB, LI, FI, HEXCHAR, PNTEXT, HTMLRTF,
-        OPENBRACEESC, CLOSEBRACEESC, END, HTMLRTF0
+        NOTFOUND = -1, OPENBRACE = 0, CLOSEBRACE, HTMLTAG, MHTMLTAG, PAR, TAB, LI, FI, HEXCHAR,
+        PNTEXT, HTMLRTF, OPENBRACEESC, CLOSEBRACEESC, END, HTMLRTF0
     };
 
     static MessagePropTags m_messagePropTags;
     static RecipientPropTags m_recipientPropTags;
     static ReplyToPropTags m_replyToPropTags;
-
     unsigned int CodePageId();
+
     EnumRTFElement MatchRTFElement(const char *psz);
+
     const char *Advance(const char *psz, const char *pszCharSet);
 
 public:
@@ -131,7 +126,9 @@ public:
     BOOL IsUnsent();
     bool HasHtmlPart();
     bool HasTextPart();
+
     SBinary &UniqueId();
+
     __int64 DeliveryDate();
     LPSTR DateString();
     __int64 Date();
@@ -157,17 +154,16 @@ class MessageIterator: public MAPITableIterator
 {
 private:
     class MIRestriction;
+
     typedef enum _MessageIterPropTagIdx
     {
-        MI_ENTRYID, MI_LONGTERM_ENTRYID_FROM_TABLE, MI_DATE,
-        MI_MESSAGE_CLASS, NMSGPROPS
+        MI_ENTRYID, MI_LONGTERM_ENTRYID_FROM_TABLE, MI_DATE, MI_MESSAGE_CLASS, NMSGPROPS
     } MessageIterPropTagIdx;
     typedef struct _MessageIterPropTags
     {
         ULONG cValues;
         ULONG aulPropTags[NMSGPROPS];
     } MessageIterPropTags;
-
     typedef struct _MessageIterSort
     {
         ULONG cSorts;
@@ -179,9 +175,11 @@ private:
 public:
     MessageIterator();
     virtual ~MessageIterator();
+
     virtual LPSPropTagArray GetProps();
     virtual LPSSortOrderSet GetSortOrder();
     virtual LPSRestriction GetRestriction(ULONG TypeMask, FILETIME startDate);
+
     BOOL GetNext(MAPIMessage &msg);
     BOOL GetNext(__int64 &date, SBinary &bin);
 
@@ -207,22 +205,16 @@ private:
     SPropValue _propValSTime;
     SPropValue _propValCanbeMail;
     SPropValue _propValCanbeMailPost;
-
     SPropValue _propValAppt;
     LPWSTR _pApptClass;
-
     SPropValue _propValTask;
     LPWSTR _pTaskClass;
-
     SPropValue _propValReqAndRes;
     LPWSTR _pReqAndResClass;
-
     SPropValue _propValDistList;
     LPWSTR _pDistListClass;
-
     LPWSTR _pContactClass;
     LPWSTR _pMailClass;
-
     SPropValue _propValIMAPHeaderOnly;
 };
 

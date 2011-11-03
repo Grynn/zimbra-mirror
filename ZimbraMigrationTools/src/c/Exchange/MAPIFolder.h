@@ -2,7 +2,7 @@
 
 // use this flag on OpenMsgStore to force cached mode connections
 // to read remote data and not local data
-#define MDB_ONLINE ((ULONG)0x00000100)
+#define MDB_ONLINE              ((ULONG)0x00000100)
 
 #define GLOBAL_PROFILE_SECTION_GUID \
     "\x13\xDB\xB0\xC8\xAA\x05\x10\x1A\x9B\xB0\x00\xAA\x00\x2F\xC4\x5A"
@@ -10,7 +10,7 @@ DEFINE_OLEGUID(PSETID_COMMON, MAKELONG(0x2000 + (8), 0x0006), 0, 0);
 
 // A named property which specifies whether the mail is
 // completely downloaded or in header only form in case of IMAP
-#define DISPID_HEADER_ITEM 0x8578
+#define DISPID_HEADER_ITEM      0x8578
 
 namespace Zimbra
 {
@@ -32,9 +32,7 @@ class FolderIterator: public MAPITableIterator
 private:
     typedef enum _FolderIterPropTagIdx
     {
-        FI_DISPLAY_NAME, FI_ENTRYID,
-        FI_PR_LONGTERM_ENTRYID_FROM_TABLE, FI_FLAGS,
-        NFOLDERPROPS
+        FI_DISPLAY_NAME, FI_ENTRYID, FI_PR_LONGTERM_ENTRYID_FROM_TABLE, FI_FLAGS, NFOLDERPROPS
     } FolerIterPropTagIdx;
     typedef struct _FolderIterPropTags
     {
@@ -48,6 +46,7 @@ protected:
 public:
     FolderIterator();
     ~FolderIterator();
+
     virtual LPSPropTagArray GetProps();
 
     virtual LPSSortOrderSet GetSortOrder() { return NULL; }
@@ -57,42 +56,25 @@ public:
         UNREFERENCED_PARAMETER(startDate);
         return NULL;
     }
+
     BOOL GetNext(MAPIFolder &folder);
 };
 
 // Exchange System folder enumeration
 typedef enum _ExchangeSpecialFolderId
 {
-    INBOX = 0,
-    IPM_SUBTREE = 1,
-    CALENDAR = 2,
-    CONTACTS = 3,
-    DRAFTS = 4,
-    JOURNAL = 5,
-    NOTE = 6,
-    TASK = 7,
-    OUTBOX = 8,
-    SENTMAIL = 9,
-    TRASH = 10,
-    SYNC_CONFLICTS = 11,
-    SYNC_ISSUES = 12,
-    SYNC_LOCAL_FAILURES = 13,
-    SYNC_SERVER_FAILURES = 14,
-    JUNK_MAIL = 15,
-    TOTAL_NUM_SPECIAL_FOLDERS = 16,
-
-    SPECIAL_FOLDER_ID_NONE = 1000
+    INBOX = 0, IPM_SUBTREE = 1, CALENDAR = 2, CONTACTS = 3, DRAFTS = 4, JOURNAL = 5, NOTE = 6,
+    TASK = 7, OUTBOX = 8, SENTMAIL = 9, TRASH = 10, SYNC_CONFLICTS = 11,
+    SYNC_ISSUES = 12, SYNC_LOCAL_FAILURES = 13, SYNC_SERVER_FAILURES = 14,
+    JUNK_MAIL = 15, TOTAL_NUM_SPECIAL_FOLDERS = 16, SPECIAL_FOLDER_ID_NONE = 1000
 } ExchangeSpecialFolderId;
 
 // Zimbra system folder enumeration
 typedef enum _ZimbraSpecialFolderId
 {
-    ZM_SFID_MIN = 0,
-    ZM_SFID_NONE = 0,
-    ZM_ROOT = 1,
-    ZM_INBOX, ZM_TRASH, ZM_SPAM,
-    ZM_SENT_MAIL, ZM_DRAFTS, ZM_CONTACTS, ZM_TAGS, ZM_CONVERSATIONS, ZM_CALENDAR,
-    ZM_MAILBOX_ROOT, ZM_WIKI, ZM_EMAILEDCONTACTS, ZM_CHATS, ZM_TASKS, ZM_SFID_MAX
+    ZM_SFID_MIN = 0, ZM_SFID_NONE = 0, ZM_ROOT = 1, ZM_INBOX, ZM_TRASH, ZM_SPAM, ZM_SENT_MAIL,
+    ZM_DRAFTS, ZM_CONTACTS, ZM_TAGS, ZM_CONVERSATIONS, ZM_CALENDAR, ZM_MAILBOX_ROOT,
+    ZM_WIKI, ZM_EMAILEDCONTACTS, ZM_CHATS, ZM_TASKS, ZM_SFID_MAX
 } ZimbraSpecialFolderId;
 
 // MapiFolder class
@@ -105,6 +87,7 @@ private:
     MAPISession *m_session;
     MAPIStore *m_store;
     wstring m_folderpath;
+
     wstring FindFolderPath();
 
 public:

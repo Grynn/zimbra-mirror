@@ -1,11 +1,10 @@
 ﻿namespace MVVM.View
 {
-    public partial class OptionsView
+public partial class OptionsView
+{
+    public OptionsView()
     {
-        public OptionsView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
-
+}
 }

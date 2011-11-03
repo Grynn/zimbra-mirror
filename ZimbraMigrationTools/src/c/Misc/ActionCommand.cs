@@ -33,6 +33,7 @@ public class ActionCommand: ICommand
         this.execute = executeAction;
         this.canExecute = canExecuteFunc;
     }
+
     // / <summary>
     // / Initializes a new instance of the <see cref="ActionCommand"/> class.
     // / </summary>
@@ -43,6 +44,7 @@ public class ActionCommand: ICommand
         this.executeParam = executeAction;
         this.canExecute = canExecuteFunc;
     }
+
     // / <summary>
     // / Occurs when changes occur that affect whether or not the command should execute.
     // / </summary>
@@ -63,6 +65,7 @@ public class ActionCommand: ICommand
             return this.canExecute();
         return true;
     }
+
     // / <summary>
     // / Defines the method to be called when the command is invoked.
     // / </summary>

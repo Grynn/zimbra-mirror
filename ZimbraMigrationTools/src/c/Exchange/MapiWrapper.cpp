@@ -8,35 +8,15 @@
 
 // C5E4267B-AE6C-4E31-956A-06D8094D0CBE
 const IID UDTVariable_IID = {
-    0xC5E4267B,
-    0xAE6C,
-    0x4E31, {
-        0x95,
-        0x6A,
-        0x06,
-        0xD8,
-        0x09,
-        0x4D,
-        0x0C,
-        0xBE
+    0xC5E4267B, 0xAE6C, 0x4E31, {
+        0x95, 0x6A, 0x06, 0xD8, 0x09, 0x4D, 0x0C, 0xBE
     }
 };
-
 const IID UDTItem_IID = {
-    0xC5E4267A,
-    0xAE6C,
-    0x4E31, {
-        0x95,
-        0x6A,
-        0x06,
-        0xD8,
-        0x09,
-        0x4D,
-        0x0C,
-        0xBE
+    0xC5E4267A, 0xAE6C, 0x4E31, {
+        0x95, 0x6A, 0x06, 0xD8, 0x09, 0x4D, 0x0C, 0xBE
     }
 };
-
 STDMETHODIMP CMapiWrapper::InterfaceSupportsErrorInfo(REFIID riid)
 {
     static const IID *const arr[] = {
@@ -56,9 +36,11 @@ STDMETHODIMP CMapiWrapper::ConnectToServer(BSTR ServerHostName, BSTR Port, BSTR 
     (void)ServerHostName;
     (void)Port;
     (void)AdminID;
+
     // baseMigrationObj->Connecttoserver();
 
-    MAPIAccessAPI::InitGlobalSessionAndStore(/*ServerHostName, */AdminID);
+    MAPIAccessAPI::InitGlobalSessionAndStore( /*ServerHostName, */ AdminID);
+
     return S_OK;
 }
 
@@ -69,9 +51,10 @@ STDMETHODIMP CMapiWrapper::GlobalInit(BSTR pMAPITarget, BSTR pAdminUser, BSTR pA
     (void)pAdminUser;
     (void)pAdminPassword;
     (void)pErrorText;
-    LPCWSTR lpszErrorText =
-        ExchangeOps::GlobalInit((LPCWSTR)pMAPITarget, (LPCWSTR)pAdminUser,
+
+    LPCWSTR lpszErrorText = ExchangeOps::GlobalInit((LPCWSTR)pMAPITarget, (LPCWSTR)pAdminUser,
         (LPCWSTR)pAdminPassword);
+
     *pErrorText = (lpszErrorText) ? CComBSTR(lpszErrorText) : CComBSTR("");
     return S_OK;
 }
@@ -92,30 +75,36 @@ STDMETHODIMP CMapiWrapper::GetProfilelist(VARIANT *Profiles)
 
     Zimbra::Mapi::Memory::SetMemAllocRoutines(NULL, MAPIAllocateBuffer, MAPIAllocateMore,
         MAPIFreeBuffer);
+
     vector<string> vProfileList;
     exchadmin->GetAllProfiles(vProfileList);
 
     vector<CComBSTR> tempvectors;
+
     std::vector<string>::iterator its;
+
     for (its = (vProfileList.begin()); its != vProfileList.end(); its++)
     {
         string str = (*its).c_str();
-
         CComBSTR temp = SysAllocString(str_to_wstr(str).c_str());
 
         tempvectors.push_back(temp);
     }
     VariantInit(Profiles);
     Profiles->vt = VT_ARRAY | VT_BSTR;
+
     SAFEARRAY *psa;
     SAFEARRAYBOUND bounds = { (ULONG)vProfileList.size(), 0 };
+
     psa = SafeArrayCreate(VT_BSTR, 1, &bounds);
 
     BSTR *bstrArray;
 
     SafeArrayAccessData(psa, (void **)&bstrArray);
+
     std::vector<CComBSTR>::iterator it;
     int i = 0;
+
     for (it = (tempvectors.begin()); it != tempvectors.end(); it++, i++)
         bstrArray[i] = SysAllocString((*it).m_str);
     SafeArrayUnaccessData(psa);
@@ -128,12 +117,7 @@ std::wstring CMapiWrapper::str_to_wstr(const std::string &str)
 {
     std::wstring wstr(str.length() + 1, 0);
 
-    MultiByteToWideChar(CP_ACP,
-        0,
-        str.c_str(),
-        (int)str.length(),
-        &wstr[0],
-        (int)str.length());
+    MultiByteToWideChar(CP_ACP, 0, str.c_str(), (int)str.length(), &wstr[0], (int)str.length());
     return wstr;
 }
 
@@ -143,10 +127,14 @@ STDMETHODIMP CMapiWrapper::GetFolderObjects(VARIANT *vObjects)
 
     VariantInit(vObjects);
     vObjects->vt = VT_ARRAY | VT_DISPATCH;
+
     SAFEARRAY *psa;
     SAFEARRAYBOUND bounds = { 2, 0 };
+
     psa = SafeArrayCreate(VT_DISPATCH, 1, &bounds);
+
     IfolderObject **pfolders;
+
     SafeArrayAccessData(psa, (void **)&pfolders);
     for (int i = 0; i < 2; i++)
     {
@@ -173,7 +161,9 @@ STDMETHODIMP CMapiWrapper::GetFolderObjects(VARIANT *vObjects)
 STDMETHODIMP CMapiWrapper::GlobalUninit(BSTR *pErrorText)
 {
     (void)pErrorText;
+
     LPCWSTR lpszErrorText = ExchangeOps::GlobalUninit();
+
     *pErrorText = (lpszErrorText) ? CComBSTR(lpszErrorText) : CComBSTR("");
     return S_OK;
 }
@@ -181,10 +171,13 @@ STDMETHODIMP CMapiWrapper::GlobalUninit(BSTR *pErrorText)
 STDMETHODIMP CMapiWrapper::SelectExchangeUsers(VARIANT *Users, BSTR *pErrorText)
 {
     vector<ObjectPickerData> vUserList;
+
     LPCWSTR lpszErrorText = ExchangeOps::SelectExchangeUsers(vUserList);
 
     vector<CComBSTR> tempvectors;
+
     std::vector<ObjectPickerData>::iterator its;
+
     for (its = (vUserList.begin()); its != vUserList.end(); its++)
     {
         ObjectPickerData obj = (*its);
@@ -196,20 +189,26 @@ STDMETHODIMP CMapiWrapper::SelectExchangeUsers(VARIANT *Users, BSTR *pErrorText)
         // return a struct that will have username and displayname (as destination name)
         wstring strUsername = (*its).pAttributeList[0].second;
         CComBSTR temp = SysAllocString(strUsername.c_str());
+
         // //
 
         tempvectors.push_back(temp);
     }
     VariantInit(Users);
     Users->vt = VT_ARRAY | VT_BSTR;
+
     SAFEARRAY *psa;
     SAFEARRAYBOUND bounds = { (ULONG)vUserList.size(), 0 };
+
     psa = SafeArrayCreate(VT_BSTR, 1, &bounds);
 
     BSTR *bstrArray;
+
     SafeArrayAccessData(psa, (void **)&bstrArray);
+
     std::vector<CComBSTR>::iterator it;
     int i = 0;
+
     for (it = (tempvectors.begin()); it != tempvectors.end(); it++, i++)
         bstrArray[i] = SysAllocString((*it).m_str);
     SafeArrayUnaccessData(psa);

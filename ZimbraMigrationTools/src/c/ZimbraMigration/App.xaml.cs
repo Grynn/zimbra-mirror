@@ -22,8 +22,10 @@ public partial class App: Application
         if (mode == "server")
         {
             string s = mw.UninitializeMailClient();
+
             if (s.Length > 0)
-                MessageBox.Show(s, "Shutdown error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(s, "Shutdown error", MessageBoxButton.OK,
+                    MessageBoxImage.Error);
         }
         else
         {

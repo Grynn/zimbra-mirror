@@ -50,6 +50,7 @@ STDMETHODIMP CfolderObject::put_Id(LONG newVal)
     LngID = newVal;
     return S_OK;
 }
+
 STDMETHODIMP CfolderObject::get_ItemCount(LONG *pVal)
 {
     // TODO: Add your implementation code here
@@ -63,6 +64,7 @@ STDMETHODIMP CfolderObject::put_ItemCount(LONG newVal)
     Itemcnt = newVal;
     return S_OK;
 }
+
 STDMETHODIMP CfolderObject::get_FolderPath(BSTR *pVal)
 {
     // TODO: Add your implementation code here
@@ -109,6 +111,7 @@ STDMETHODIMP CfolderObject::put_FolderID(VARIANT id)
         if (FolderId.lpb != NULL)
         {
             void *pArrayData;
+
             // Obtain safe pointer to the array
             SafeArrayAccessData(id.parray, &pArrayData);
             // Copy the bitmap into our buffer
@@ -152,8 +155,10 @@ STDMETHODIMP CfolderObject::get_FolderID(VARIANT *id)
 
     VariantInit(id);
     id->vt = VT_ARRAY | VT_UI1;
+
     SAFEARRAY *psa;
-    SAFEARRAYBOUND bounds[1];    // ={1,0};
+    SAFEARRAYBOUND bounds[1];                   // ={1,0};
+
     bounds[0].cElements = FolderId.cb;
     bounds[0].lLbound = 0;
 
@@ -161,6 +166,7 @@ STDMETHODIMP CfolderObject::get_FolderID(VARIANT *id)
     if (psa != NULL)
     {
         void *pArrayData = NULL;
+
         SafeArrayAccessData(psa, &pArrayData);
         memcpy(pArrayData, FolderId.lpb, FolderId.cb);
         // Unlock the variant data

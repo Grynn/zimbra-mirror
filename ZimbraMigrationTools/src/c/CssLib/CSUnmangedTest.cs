@@ -10,11 +10,11 @@ namespace CssLib
 public class CSUnmanagedTestClass: IDisposable
 {
     #region PInvokes
-    [DllImport("CppLib.dll", CallingConvention = CallingConvention.Cdecl)]
-    static private extern IntPtr GetInstance();
+    [DllImport("CppLib.dll", CallingConvention = CallingConvention.Cdecl)] static private extern
+    IntPtr GetInstance();
 
-    [DllImport("CppLib.dll", CallingConvention = CallingConvention.Cdecl)]
-    static private extern void DisposeTestClass(IntPtr pTestClassObject);
+    [DllImport("CppLib.dll", CallingConvention = CallingConvention.Cdecl)] static private extern
+    void DisposeTestClass(IntPtr pTestClassObject);
 
     /*
      * [DllImport("ExampleUnmanagedDLL.dll",
@@ -24,14 +24,15 @@ public class CSUnmanagedTestClass: IDisposable
      */
 
     [DllImport("CppLib.dll", CharSet = CharSet.Ansi, CallingConvention =
-                    CallingConvention.Cdecl)]
-    static private extern void CallDoSomething(IntPtr pTestClassObject, string strValue,
-            int type);
+    CallingConvention.Cdecl)] static private extern void CallDoSomething(IntPtr
+        pTestClassObject, string strValue, int type);
 
     #endregion PInvokes
 
     #region Members
+
     private IntPtr m_pNativeObject;             // Variable to hold the C++ class's this pointer
+
     #endregion Members
 
     public CSUnmanagedTestClass()
@@ -39,10 +40,12 @@ public class CSUnmanagedTestClass: IDisposable
         // We have to Create an instance of this class through an exported function
         this.m_pNativeObject = GetInstance();
     }
+
     public void Dispose()
     {
         Dispose(true);
     }
+
     protected virtual void Dispose(bool bDisposing)
     {
         if (this.m_pNativeObject != IntPtr.Zero)
@@ -58,18 +61,21 @@ public class CSUnmanagedTestClass: IDisposable
             GC.SuppressFinalize(this);
         }
     }
+
     // This finalizer is called when Garbage collection occurs, but only if
     // the IDisposable.Dispose method wasn't already called.
     ~CSUnmanagedTestClass()
     {
         Dispose(false);
     }
+
     #region Wrapper methods
 
     public void DoSomething(string strValue, int type)
     {
         CallDoSomething(this.m_pNativeObject, strValue, type);
     }
+
     #endregion Wrapper methods
 }
 }

@@ -22,7 +22,9 @@ public class ZimbraMessage
         tags = "";
         rcvdDate = "";
     }
-    public ZimbraMessage(string FilePath, string FolderId, string Flags, string Tags, string RcvdDate)
+
+    public ZimbraMessage(string FilePath, string FolderId, string Flags, string Tags, string
+        RcvdDate)
     {
         filePath = FilePath;
         folderId = FolderId;
@@ -48,6 +50,7 @@ public class ZimbraFolder
         color = "";
         flags = "";
     }
+
     public ZimbraFolder(string Name, string Parent, string View, string Color, string Flags)
     {
         name = Name;

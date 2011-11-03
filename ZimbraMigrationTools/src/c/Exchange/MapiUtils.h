@@ -6,10 +6,10 @@ typedef struct _ObjectPickerData
 {
     wstring wstrUsername;
     wstring wstrExchangeStore;
+
     vector<wstring> vAliases;
     vector<std::pair<wstring, wstring> > pAttributeList;
 } ObjectPickerData;
-
 typedef struct _RecipInfo
 {
     LPTSTR pAddrType;
@@ -28,6 +28,7 @@ inline void HexStrFromBSTR(_bstr_t bstr, LPTSTR &szHex)
     ZeroMemory(szHex, 2 * len * sizeof (TCHAR) + 1);
 
     LPTSTR szTemp = szHex;
+
     while (i++ < len)
         szTemp += wsprintf(szTemp, _T("%X"), *bstrChar++);
 }
@@ -107,7 +108,9 @@ inline int CopyString(LPWSTR &pDest, LPWSTR pSrc)
         pDest = NULL;
         return 0;
     }
+
     int nLength = (int)wcslen(pSrc);
+
     pDest = new WCHAR[nLength + 1];
     wcscpy(pDest, pSrc);
     return nLength;
@@ -128,12 +131,11 @@ inline void FreeEntryID(SBinary &bin)
 }
 
 #define UNICODE_EXCEPTION_STRING L"ErrCode:%s Description:%s SrcFile:%s SrcLine:%s"
-inline LPTSTR FromatExceptionInfo(HRESULT errCode, LPWSTR errDescription, LPSTR srcFile,
-    int srcLine)
+inline LPTSTR FromatExceptionInfo(HRESULT errCode, LPWSTR errDescription, LPSTR srcFile, int
+    srcLine)
 {
     LPWSTR lpBuffer = NULL;
     LPWSTR lpstrSrcFile = NULL;
-
     LPWSTR lpstrErrCode = LongToHexString(errCode);
     LPWSTR lpstrSrecline = Int32ToString(srcLine);
 
@@ -141,6 +143,7 @@ inline LPTSTR FromatExceptionInfo(HRESULT errCode, LPWSTR errDescription, LPSTR 
 
     size_t totalLen = wcslen(lpstrErrCode) + wcslen(errDescription) + wcslen(lpstrSrcFile) +
         wcslen(lpstrSrecline) + (sizeof (WCHAR) * 2);
+
     lpBuffer = new TCHAR[totalLen * sizeof (WCHAR)];
     wsprintf(lpBuffer, UNICODE_EXCEPTION_STRING, lpstrErrCode, errDescription, lpstrSrcFile,
         lpstrSrecline);
@@ -157,22 +160,15 @@ namespace MAPI
 {
 namespace Util
 {
-
 const std::string PSTMIG_PROFILE_PREFIX = "Z1mbr4PST23Migration";
 
 enum MIME_ENCODING
 {
-    ME_7BIT,
-    ME_QUOTED_PRINTABLE,
-    ME_BASE64
+    ME_7BIT, ME_QUOTED_PRINTABLE, ME_BASE64
 };
 
-typedef BOOL (STDAPICALLTYPE FGETCOMPONENTPATH)
-    (LPSTR szComponent,
-                LPSTR szQualifier,
-                LPSTR szDllPath,
-                DWORD cchBufferSize,
-                BOOL fInstall);
+typedef BOOL (STDAPICALLTYPE FGETCOMPONENTPATH)(LPSTR szComponent, LPSTR szQualifier, LPSTR
+    szDllPath, DWORD cchBufferSize, BOOL fInstall);
 typedef FGETCOMPONENTPATH FAR *LPFGETCOMPONENTPATH;
 #define MAPI_NATIVE_BODY                0x00010000
 #define MAPI_NATIVE_BODY_TYPE_RTF       0x00000001
@@ -192,8 +188,8 @@ typedef struct
     ULONG ulOutCodePage;
 } RTF_WCSINFO;
 typedef HRESULT (STDMETHODCALLTYPE * WRAPCOMPRESSEDRTFSTREAMEX)(LPSTREAM lpCompressedRTFStream,
-                CONST RTF_WCSINFO *pWCSInfo, LPSTREAM *lppUncompressedRTFStream,
-                RTF_WCSRETINFO *pRetInfo);
+    CONST RTF_WCSINFO *pWCSInfo, LPSTREAM *lppUncompressedRTFStream,
+    RTF_WCSRETINFO *pRetInfo);
 
 class CriticalSection
 {
@@ -222,42 +218,39 @@ class MapiUtilsException: public GenericException
 {
 public:
     MapiUtilsException(HRESULT hrErrCode, LPCWSTR lpszDescription): GenericException(hrErrCode,
-                    lpszDescription) {}
-    MapiUtilsException(HRESULT hrErrCode, LPCWSTR lpszDescription, int nLine,
-                    LPCSTR strFile): GenericException(hrErrCode, lpszDescription, nLine,
-                    strFile) {}
+        lpszDescription) {}
+    MapiUtilsException(HRESULT hrErrCode, LPCWSTR lpszDescription, int nLine, LPCSTR
+        strFile): GenericException(hrErrCode, lpszDescription, nLine, strFile) {}
     virtual ~MapiUtilsException() {}
 };
 
 HRESULT HrMAPIFindDefaultMsgStore(LPMAPISESSION lplhSession, SBinary &bin);
 HRESULT MailboxLogon(LPMAPISESSION pSession, LPMDB pMdb, LPWSTR pStoreDn, LPWSTR pMailboxDn,
-                LPMDB *ppMdb);
+    LPMDB *ppMdb);
 HRESULT GetUserDNAndLegacyName(LPCWSTR lpszServer, LPCWSTR lpszUser, LPCWSTR lpszPwd,
-                wstring &wstruserdn,
-                wstring &wstrlegacyname);
+    wstring &wstruserdn, wstring &wstrlegacyname);
 HRESULT GetUserDnAndServerDnFromProfile(LPMAPISESSION pSession, LPSTR &pExchangeServerDn,
-                LPSTR &pExchangeUserDn);
+    LPSTR &pExchangeUserDn);
 HRESULT HrMAPIFindIPMSubtree(LPMDB lpMdb, SBinary &bin);
 HRESULT GetMdbSpecialFolders(IN LPMDB lpMdb, IN OUT SBinaryArray *pEntryIds);
 HRESULT GetInboxSpecialFolders(LPMAPIFOLDER pInbox, SBinaryArray *pEntryIds);
 HRESULT GetAllSpecialFolders(IN LPMDB lpMdb, IN OUT SBinaryArray *pEntryIds);
 HRESULT FreeAllSpecialFolders(IN SBinaryArray *lpSFIds);
-ExchangeSpecialFolderId GetExchangeSpecialFolderId(LPMDB userStore, IN ULONG cbEntryId,
-                IN LPENTRYID pFolderEntryId,
-                SBinaryArray *pEntryIds);
+ExchangeSpecialFolderId GetExchangeSpecialFolderId(LPMDB userStore, IN ULONG cbEntryId, IN
+    LPENTRYID pFolderEntryId, SBinaryArray *pEntryIds);
 HRESULT GetExchangeUsersUsingObjectPicker(vector<ObjectPickerData> &vUserList);
-HRESULT HrMAPIGetSMTPAddress(IN MAPISession &session, IN RECIP_INFO &recipInfo,
-                OUT wstring &strSmtpAddress);
+HRESULT HrMAPIGetSMTPAddress(IN MAPISession &session, IN RECIP_INFO &recipInfo, OUT
+    wstring &strSmtpAddress);
 BOOL CompareRecipients(MAPISession &session, RECIP_INFO &r1, RECIP_INFO &r2);
 void CreateMimeSubject(IN LPTSTR pSubject, IN UINT codepage, IN OUT LPSTR *ppMimeSubject);
 bool NeedsEncoding(LPSTR pStr);
 ULONG IMAPHeaderInfoPropTag(LPMAPIPROP lpMapiProp);
 wstring ReverseDelimitedString(wstring wstrString, WCHAR *delimiter);
-void AddBodyToPart(mimepp::BodyPart *pPart, LPSTR pStr, size_t length,
-                BOOL bConvertLFToCRLF = TRUE);
+void AddBodyToPart(mimepp::BodyPart *pPart, LPSTR pStr, size_t length, BOOL bConvertLFToCRLF =
+    TRUE);
 mimepp::BodyPart *AttachTooLargeAttachPart(ULONG attachSize, LPATTACH pAttach, LPSTR pCharset);
 mimepp::BodyPart *AttachPartFromIAttach(MAPISession &session, LPATTACH pAttach, LPSTR pCharset,
-                LONG codepage);
+    LONG codepage);
 
 namespace CharsetUtil
 {
@@ -271,6 +264,7 @@ private:
     static StoreUtils *stUtilsInst;
     HINSTANCE _hinstLib;
     WRAPCOMPRESSEDRTFSTREAMEX pWrapCompressedRTFEx;
+
     void HrGetRegMultiSZValueA(IN HKEY hKey, IN LPCSTR lpszValue, OUT LPVOID *lppData);
     void GetMAPIDLLPath(LPSTR szMAPIDir, ULONG cchMAPIDir);
     void UnInit();
@@ -284,17 +278,21 @@ public:
             stUtilsInst = new StoreUtils;
         return stUtilsInst;
     }
+
     void DeleteStoreUtils()
     {
         if (stUtilsInst)
             delete stUtilsInst;
         stUtilsInst = NULL;
     }
+
     ~StoreUtils()
     {
         UnInit();
     }
+
     bool Init();
+
     bool isUnicodeStore(LPMESSAGE pMsg);
     bool GetAnsiStoreMsgNativeType(LPMESSAGE pMsg, ULONG *nBody);
 };                                              // end StoreUtils
@@ -305,9 +303,8 @@ BOOL GetAppTemporaryDirectory(wstring &wstrTempAppDirPath);
 wstring GetUniqueName();
 wstring GetDomainName();
 LONG GetOutlookVersion(int &iVersion);
-BOOL CreatePSTProfile (LPSTR lpstrProfileName, LPSTR lpstrPSTFQPathName, bool bNoUI=true);
+BOOL CreatePSTProfile(LPSTR lpstrProfileName, LPSTR lpstrPSTFQPathName, bool bNoUI = true);
 BOOL DeleteAlikeProfiles(LPCSTR lpstrProfileName);
-
 }                                               // end Util
 }                                               // end MAPI
 }                                               // end Zimbra

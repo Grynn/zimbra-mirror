@@ -16,9 +16,9 @@ public class MigrationAccount
 
         migrationFolder = new MigrationFolder();
     }
+
     private string AccountName;
     private int AccountNum;
-
     private Int64 TotalMails;
     private Int64 TotalContacts;
     private Int64 TotalRules;
@@ -26,24 +26,20 @@ public class MigrationAccount
     private Int64 TotalTasks;
     private Int64 TotalSent;
     private Int64 TotalItems;
-
     private Int64 TotalErrors;
     private Int64 TotalWarnings;
     private ProblemInfo lastProblemInfo;
-
     public MigrationFolder migrationFolder;
     public string AccountID;
-
     private System.DateTime dtmDateRaised;
-
     public event MigrationObjectEventHandler OnChanged;
     public Int64 TotalNoItems {
         get { return TotalItems; }
         set
         {
             if (OnChanged != null)
-                OnChanged(this,
-                        new MigrationObjectEventArgs("TotalNoItems", this.TotalItems, value));
+                OnChanged(this, new MigrationObjectEventArgs("TotalNoItems", this.TotalItems,
+                    value));
             TotalItems = value;
         }
     }
@@ -52,8 +48,8 @@ public class MigrationAccount
         set
         {
             if (OnChanged != null)
-                OnChanged(this,
-                        new MigrationObjectEventArgs("TotalNoTasks", this.TotalTasks, value));
+                OnChanged(this, new MigrationObjectEventArgs("TotalNoTasks", this.TotalTasks,
+                    value));
             TotalTasks = value;
         }
     }
@@ -62,8 +58,8 @@ public class MigrationAccount
         set
         {
             if (OnChanged != null)
-                OnChanged(this,
-                        new MigrationObjectEventArgs("TotalNoSent", this.TotalSent, value));
+                OnChanged(this, new MigrationObjectEventArgs("TotalNoSent", this.TotalSent,
+                    value));
             TotalSent = value;
         }
     }
@@ -75,8 +71,8 @@ public class MigrationAccount
         set
         {
             if (OnChanged != null)
-                OnChanged(this,
-                        new MigrationObjectEventArgs("AccountID", this.AccountName, value));
+                OnChanged(this, new MigrationObjectEventArgs("AccountID", this.AccountName,
+                    value));
             this.AccountName = value;
         }
     }
@@ -88,8 +84,8 @@ public class MigrationAccount
         set
         {
             if (OnChanged != null)
-                OnChanged(this,
-                        new MigrationObjectEventArgs("AccountNum", this.AccountNum, value));
+                OnChanged(this, new MigrationObjectEventArgs("AccountNum", this.AccountNum,
+                    value));
             this.AccountNum = value;
         }
     }
@@ -98,8 +94,8 @@ public class MigrationAccount
         set
         {
             if (OnChanged != null)
-                OnChanged(this,
-                        new MigrationObjectEventArgs("TotalNoMails", this.TotalMails, value));
+                OnChanged(this, new MigrationObjectEventArgs("TotalNoMails", this.TotalMails,
+                    value));
             TotalMails = value;
         }
     }
@@ -108,9 +104,10 @@ public class MigrationAccount
         set
         {
             if (OnChanged != null)
-                OnChanged(this,
-                        new MigrationObjectEventArgs("TotalNoContacts", this.TotalContacts,
-                            value));
+            {
+                OnChanged(this, new MigrationObjectEventArgs("TotalNoContacts",
+                    this.TotalContacts, value));
+            }
             TotalContacts = value;
         }
     }
@@ -119,8 +116,8 @@ public class MigrationAccount
         set
         {
             if (OnChanged != null)
-                OnChanged(this,
-                        new MigrationObjectEventArgs("TotalRules", this.TotalRules, value));
+                OnChanged(this, new MigrationObjectEventArgs("TotalRules", this.TotalRules,
+                    value));
             TotalRules = value;
         }
     }
@@ -129,10 +126,10 @@ public class MigrationAccount
         set
         {
             if (OnChanged != null)
-                OnChanged(this,
-                        new MigrationObjectEventArgs("TotalNoAppointments",
-                            this.TotalAppointments,
-                            value));
+            {
+                OnChanged(this, new MigrationObjectEventArgs("TotalNoAppointments",
+                    this.TotalAppointments, value));
+            }
             TotalAppointments = value;
         }
     }
@@ -141,8 +138,8 @@ public class MigrationAccount
         set
         {
             if (OnChanged != null)
-                OnChanged(this,
-                        new MigrationObjectEventArgs("TotalNoErrors", this.TotalErrors, value));
+                OnChanged(this, new MigrationObjectEventArgs("TotalNoErrors", this.TotalErrors,
+                    value));
             TotalErrors = value;
         }
     }
@@ -151,9 +148,10 @@ public class MigrationAccount
         set
         {
             if (OnChanged != null)
-                OnChanged(this,
-                        new MigrationObjectEventArgs("TotalNoWarnings", this.TotalWarnings,
-                            value));
+            {
+                OnChanged(this, new MigrationObjectEventArgs("TotalNoWarnings",
+                    this.TotalWarnings, value));
+            }
             TotalWarnings = value;
         }
     }
@@ -177,8 +175,8 @@ public class MigrationAccount
         set
         {
             if (OnChanged != null)
-                OnChanged(this,
-                        new MigrationObjectEventArgs("dateRaised", this.dtmDateRaised, value));
+                OnChanged(this, new MigrationObjectEventArgs("dateRaised", this.dtmDateRaised,
+                    value));
             this.dtmDateRaised = value;
         }
     }
@@ -194,8 +192,8 @@ public class MigrationFolder
         {
             if (OnChanged != null)
             {
-                OnChanged(this,
-                        new MigrationObjectEventArgs("FolderName", this.FolderName, value));
+                OnChanged(this, new MigrationObjectEventArgs("FolderName", this.FolderName,
+                    value));
             }
             strFolderName = value;
         }
@@ -206,10 +204,10 @@ public class MigrationFolder
         set
         {
             if (OnChanged != null)
-                OnChanged(this,
-                        new MigrationObjectEventArgs("TotalCountOFItems",
-                            this.TotalCountofItems,
-                            value));
+            {
+                OnChanged(this, new MigrationObjectEventArgs("TotalCountOFItems",
+                    this.TotalCountofItems, value));
+            }
             TotalCountofItems = value;
         }
     }
@@ -219,10 +217,10 @@ public class MigrationFolder
         set
         {
             if (OnChanged != null)
-                OnChanged(this,
-                        new MigrationObjectEventArgs("CurrentCountofItems",
-                            this.CurrentCountofItems,
-                            value));
+            {
+                OnChanged(this, new MigrationObjectEventArgs("CurrentCountofItems",
+                    this.CurrentCountofItems, value));
+            }
             CurrentCountofItems = value;
         }
     }
@@ -230,10 +228,10 @@ public class MigrationFolder
     public FolderInfo LastFolderInfo {
         get { return lastFolderInfo; }
         set                                     // handled when folder name changes
-        {       // if (OnChanged != null)
-                // {
-                // OnChanged(this, new MigrationObjectEventArgs("LastFolder", this.lastFolderInfo, value));
-                // }
+        {                                       // if (OnChanged != null)
+          // {
+          // OnChanged(this, new MigrationObjectEventArgs("LastFolder", this.lastFolderInfo, value));
+          // }
             lastFolderInfo = value;
         }
     }
@@ -246,20 +244,17 @@ public class MigrationFolder
         set
         {
             if (OnChanged != null)
-                OnChanged(this,
-                        new MigrationObjectEventArgs("AccountNum", this.AccountNum, value));
+                OnChanged(this, new MigrationObjectEventArgs("AccountNum", this.AccountNum,
+                    value));
             this.AccountNum = value;
         }
     }
-
     // this prop doesn't need OnChanged
     private string strFolderView;
-    public string FolderView
-    {
+    public string FolderView {
         get { return strFolderView; }
         set { strFolderView = value; }
     }
-
     /* private string statusMessage;
      * private string errorMessage;*/
     public MigrationFolder()
@@ -300,7 +295,6 @@ public class ProblemInfo
 {
     public const int TYPE_ERR = 1;
     public const int TYPE_WARN = 2;
-
     private string objectName;
     private string msg;
     private int msgType;

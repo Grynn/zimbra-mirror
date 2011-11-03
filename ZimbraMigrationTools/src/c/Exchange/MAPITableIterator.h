@@ -19,8 +19,9 @@ protected:
 public:
     MAPITableIterator();
     virtual ~MAPITableIterator();
+
     virtual void Initialize(LPMAPITABLE pTable, LPMAPIFOLDER pFolder, MAPISession &session,
-                ULONG ulItemTypeMask = ZCM_ALL);
+        ULONG ulItemTypeMask = ZCM_ALL);
     virtual LPSPropTagArray GetProps() = 0;
     virtual LPSSortOrderSet GetSortOrder() = 0;
     virtual LPSRestriction GetRestriction(ULONG TypeMask, FILETIME startDate) = 0;

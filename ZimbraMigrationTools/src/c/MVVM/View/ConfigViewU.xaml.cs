@@ -3,12 +3,11 @@ using System.Windows;
 
 namespace MVVM.View
 {
-    public partial class ConfigViewU
+public partial class ConfigViewU
+{
+    public ConfigViewU()
     {
-        public ConfigViewU()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
-
+}
 }

@@ -1,11 +1,10 @@
 ﻿namespace MVVM.View
 {
-    public partial class UsersView
+public partial class UsersView
+{
+    public UsersView()
     {
-        public UsersView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
-
+}
 }

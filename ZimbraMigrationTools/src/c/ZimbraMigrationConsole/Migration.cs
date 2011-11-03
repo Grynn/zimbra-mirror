@@ -14,10 +14,10 @@ class Migration
 
         MyAcct.Accountname = accountname;
         MyAcct.AccountID = accountid;
-        MyAcct.OnChanged +=
-                new MigrationObjectEventHandler(i_OnChanged1);
+        MyAcct.OnChanged += new MigrationObjectEventHandler(i_OnChanged1);
 
         MigrationFolder MyFolder = new MigrationFolder();
+
         MyFolder.OnChanged += new MigrationObjectEventHandler(i_OnChanged12);
 
         MyAcct.migrationFolder = MyFolder;
@@ -25,12 +25,12 @@ class Migration
         /* CSMigrationwrapper test = new CSMigrationwrapper();
          * test.StartMigration(MyAcct);*/
 
-        
-
         CSMigrationwrapper test = (CSMigrationwrapper)Test;
-        //test.StartMigration(MyAcct,opts);
-       test.StartMigration(MyAcct, opts);
+
+        // test.StartMigration(MyAcct,opts);
+        test.StartMigration(MyAcct, opts);
     }
+
     // the following method is not been used can comment it for now
 
     /*
@@ -80,7 +80,7 @@ class Migration
      * // MyAcct.migrationFolders = new MigrationFolder();
      * /*  MyAcct.migrationFolders.FolderName = "Contacts";
      *   MyAcct.migrationFolders.TotalCountOFItems = 252;
-     *   MyAcct.migrationFolders.CurrentCountOFItems = 0;*/                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             // ..this works
+     *   MyAcct.migrationFolders.CurrentCountOFItems = 0;*/                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                // ..this works
 
     // MyAcct.migrationFolders[0] = MigFolder;
 
@@ -95,20 +95,20 @@ class Migration
     {
         MigrationAccount i = (MigrationAccount)sender;
         string Message =
-                " Migration started for user : {0} with TotalContacts  {1} ,TotalMails {2}, TotalRules {3}";
+            " Migration started for user : {0} with TotalContacts  {1} ,TotalMails {2}, TotalRules {3}";
 
         Console.WriteLine(String.Format(Message, i.Accountname, i.TotalNoContacts,
-                    i.TotalNoMails, i.TotalNoRules));
+            i.TotalNoMails, i.TotalNoRules));
     }
+
     public void i_OnChanged12(object sender, MigrationObjectEventArgs e)
     {
         MigrationFolder i = (MigrationFolder)sender;
-
         string Message = "Migrating {0} folder \n " +
-                "Migrating........................... {1} of {2} {0}";
+            "Migrating........................... {1} of {2} {0}";
 
         Console.WriteLine(String.Format(Message, i.FolderName, i.CurrentCountOFItems,
-                    i.TotalCountOFItems));
+            i.TotalCountOFItems));
     }
 }
 }

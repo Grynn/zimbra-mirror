@@ -12,8 +12,6 @@ protected:
     SHORT ZimbraID;
 
 public:
-    BaseFolder(void)
-    {}
-    virtual ~BaseFolder(void)
-    {}
+    BaseFolder(void) {}
+    virtual ~BaseFolder(void) {}
 };

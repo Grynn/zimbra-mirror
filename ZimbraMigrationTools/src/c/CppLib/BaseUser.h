@@ -11,12 +11,10 @@ protected:
     CSingleton *m_pLogger;
 
 public:
-    BaseUser(void)
-    {}
-    virtual ~BaseUser(void)
-    {}
-    virtual long Initialize(BSTR Id) = 0;
+    BaseUser(void) {}
+    virtual ~BaseUser(void) {}
 
+    virtual long Initialize(BSTR Id) = 0;
     virtual long GetFolders(VARIANT *folders) = 0;
     virtual long GetItems(VARIANT *Items) = 0;
     virtual long UnInitialize() = 0;

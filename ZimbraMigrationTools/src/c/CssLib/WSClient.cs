@@ -11,18 +11,15 @@ public class WebServiceClient
 {
     public enum ServiceType
     {
-        Traditional = 0,
-        WCF = 1
+        Traditional = 0, WCF = 1
     }
     public ServiceType WSServiceType { get; set; }
     public string Url { get; set; }
     public int status;
-
     public HttpStatusCode httpStatusCode;
     public string httpStatusDescription;
     public string exceptionMessage;
     public string errResponseMessage;
-
     private void setErrors(System.Net.WebException wex)
     {
         status = (int)wex.Status;
@@ -31,16 +28,21 @@ public class WebServiceClient
         {
             httpStatusCode = ((HttpWebResponse)wex.Response).StatusCode;
             httpStatusDescription = ((HttpWebResponse)wex.Response).StatusDescription;
+
             HttpWebResponse errResponse = (HttpWebResponse)wex.Response;
             long rlen = errResponse.ContentLength;
             Stream ReceiveStream = errResponse.GetResponseStream();
             Encoding encode = System.Text.Encoding.GetEncoding("utf-8");
             StreamReader readStream = new StreamReader(ReceiveStream, encode);
+
             Char[] utf8Msg = new Char[rlen];
+
             int count = readStream.Read(utf8Msg, 0, (int)rlen);
+
             errResponseMessage = new string(utf8Msg);
         }
     }
+
     private HttpWebRequest CreateWebRequest()
     {
         HttpWebRequest webRequest = (HttpWebRequest)WebRequest.Create(this.Url);
@@ -50,6 +52,7 @@ public class WebServiceClient
         webRequest.Method = "POST";
         return webRequest;
     }
+
     public void InvokeService(string req, out string rsp)
     {
         WebResponse response = null;
@@ -60,16 +63,11 @@ public class WebServiceClient
         errResponseMessage = "";
 
         ServicePointManager.ServerCertificateValidationCallback =
-                new RemoteCertificateValidationCallback(
-                delegate(
-                    object sender2,
-                    X509Certificate certificate,
-                    X509Chain chain,
-                    SslPolicyErrors sslPolicyErrors)
-                {
-                    return true;
-                }
-                );
+            new RemoteCertificateValidationCallback(delegate(object sender2, X509Certificate
+            certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors) {
+                return true;
+            }
+            );
 
         // Create the request
         HttpWebRequest webReq = this.CreateWebRequest();
@@ -105,26 +103,31 @@ public class WebServiceClient
         }
         Stream str = response.GetResponseStream();
         StreamReader sr = new StreamReader(str);
+
         strResponse = sr.ReadToEnd();
 
         status = 0;
         rsp = strResponse;
     }
+
     private HttpWebRequest CreateWebRequestRaw(string authtoken, bool isSecure)
     {
         CookieContainer cookieContainer = new CookieContainer();
-        Cookie cookie = (isSecure) ? new Cookie("ZM_ADMIN_AUTH_TOKEN", authtoken)
-                                   : new Cookie("ZM_AUTH_TOKEN", authtoken);
+        Cookie cookie = (isSecure) ? new Cookie("ZM_ADMIN_AUTH_TOKEN", authtoken) : new Cookie(
+            "ZM_AUTH_TOKEN", authtoken);
 
         cookieContainer.Add(new Uri(this.Url), cookie);
 
         HttpWebRequest webRequest = (HttpWebRequest)WebRequest.Create(this.Url);
+
         webRequest.CookieContainer = cookieContainer;
         webRequest.UserAgent = "Zimbra Systems Client";
         webRequest.Method = "POST";
         return webRequest;
     }
-    public void InvokeUploadService(string authtoken, bool isSecure, string filePath, int mode, out string rsp)
+
+    public void InvokeUploadService(string authtoken, bool isSecure, string filePath, int mode,
+        out string rsp)
     {
         WebResponse response = null;
         string strResponse = "";
@@ -134,38 +137,30 @@ public class WebServiceClient
         errResponseMessage = "";
 
         ServicePointManager.ServerCertificateValidationCallback =
-                new RemoteCertificateValidationCallback(
-                delegate(
-                    object sender2,
-                    X509Certificate certificate,
-                    X509Chain chain,
-                    SslPolicyErrors sslPolicyErrors)
-                {
-                    return true;
-                }
-                );
+            new RemoteCertificateValidationCallback(delegate(object sender2, X509Certificate
+            certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors) {
+                return true;
+            }
+            );
 
         // Create the request
         HttpWebRequest webReq = this.CreateWebRequestRaw(authtoken, isSecure);
-
         string boundary = "--B-00=_" + DateTime.Now.Ticks.ToString("x");
         string endBoundary = Environment.NewLine + Environment.NewLine + "--" + boundary +
-                "--" + Environment.NewLine;
+            "--" + Environment.NewLine;
 
         webReq.ContentType = "multipart/form-data; boundary=" + boundary;
 
         string contentDisposition1 = "--" + boundary + Environment.NewLine +
-                "Content-Disposition: form-data; name=\"requestId\"" +
-                Environment.NewLine + Environment.NewLine +
-                "lsrpc32-client-id" + Environment.NewLine;
-
+            "Content-Disposition: form-data; name=\"requestId\"" + Environment.NewLine +
+            Environment.NewLine + "lsrpc32-client-id" + Environment.NewLine;
         string contentDisposition2 = "--" + boundary + Environment.NewLine +
-                "Content-Disposition : form-data; name=\"lslib32\"; filename=\"lslib32.bin\"";
-
+            "Content-Disposition : form-data; name=\"lslib32\"; filename=\"lslib32.bin\"";
         string contentType = Environment.NewLine + "Content-Type: application/octet-stream" +
-                Environment.NewLine;
+            Environment.NewLine;
         string contentTransfer = "Content-Transfer-Encoding: binary" + Environment.NewLine +
-                Environment.NewLine;
+            Environment.NewLine;
+
         if (mode == ZimbraAPI.STRING_MODE)      // easier -- all text in the request
         {
             try
@@ -176,8 +171,8 @@ public class WebServiceClient
                 int buflen = fcLen + 400;
 
                 using (Stream stm = webReq.GetRequestStream()) {
-                    using (StreamWriter stmw =
-                                new StreamWriter(stm, System.Text.Encoding.Default, buflen)) {
+                    using (StreamWriter stmw = new StreamWriter(stm,
+                            System.Text.Encoding.Default, buflen)) {
                         stmw.Write(contentDisposition1);
                         stmw.Write(contentDisposition2);
                         stmw.Write(contentType);
@@ -203,10 +198,12 @@ public class WebServiceClient
             {
                 // first get the bytes from the file -- this is the attachment data
                 byte[] buf = null;
-                System.IO.FileStream fileStream = new System.IO.FileStream(
-                        filePath, System.IO.FileMode.Open, System.IO.FileAccess.Read);
+                System.IO.FileStream fileStream = new System.IO.FileStream(filePath,
+                    System.IO.FileMode.Open, System.IO.FileAccess.Read);
                 System.IO.BinaryReader binaryReader = new System.IO.BinaryReader(fileStream);
+
                 long datalen = new System.IO.FileInfo(filePath).Length;
+
                 buf = binaryReader.ReadBytes((Int32)datalen);
                 fileStream.Close();
                 fileStream.Dispose();
@@ -230,7 +227,9 @@ public class WebServiceClient
 
                     // set up the web request to use our memory stream
                     webReq.ContentLength = memStream.Length;
+
                     Stream requestStream = webReq.GetRequestStream();
+
                     memStream.Position = 0;
                     byte[] tempBuffer = new byte[memStream.Length];
                     memStream.Read(tempBuffer, 0, tempBuffer.Length);
@@ -262,6 +261,7 @@ public class WebServiceClient
         }
         Stream str = response.GetResponseStream();
         StreamReader sr = new StreamReader(str);
+
         strResponse = sr.ReadToEnd();
 
         status = 0;

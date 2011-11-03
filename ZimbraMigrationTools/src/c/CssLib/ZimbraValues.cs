@@ -15,12 +15,14 @@ public class ZimbraValues
         lDomains = new List<string>();
         lCOSes = new List<CosInfo>();
     }
+
     public static ZimbraValues GetZimbraValues()
     {
         if (zimbraValues == null)
             zimbraValues = new ZimbraValues();
         return zimbraValues;
     }
+
     private string sUrl;
     public string Url {
         get { return sUrl; }

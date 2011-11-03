@@ -33,8 +33,7 @@ public:
     LPMDB GetInternalMAPIStore() { return m_Store; }
     SBinaryArray GetSpecialFolderIds() { return m_specialFolderIds; }
     HRESULT OpenEntry(ULONG cbEntryID, LPENTRYID lpEntryID, LPCIID lpInterface, ULONG ulFlags,
-                ULONG FAR *lpulObjType,
-                LPUNKNOWN FAR *lppUnk);
+        ULONG FAR *lpulObjType, LPUNKNOWN FAR *lppUnk);
 };
 }
 }

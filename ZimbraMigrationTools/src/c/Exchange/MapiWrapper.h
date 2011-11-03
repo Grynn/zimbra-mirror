@@ -5,11 +5,9 @@
 #include "folderObject.h"
 #include "..\Exchange\MAPIAccessAPI.h"
 
-class ATL_NO_VTABLE CMapiWrapper: public CComObjectRootEx<CComSingleThreadModel>,
-    public CComCoClass<CMapiWrapper,
-    &CLSID_MapiWrapper>, public ISupportErrorInfo,
-    public IDispatchImpl<IMapiWrapper, &IID_IMapiWrapper, &LIBID_Exchange,
-
+class ATL_NO_VTABLE CMapiWrapper: public CComObjectRootEx<CComSingleThreadModel>, public
+    CComCoClass<CMapiWrapper, &CLSID_MapiWrapper>, public ISupportErrorInfo, public
+    IDispatchImpl<IMapiWrapper, &IID_IMapiWrapper, &LIBID_Exchange,
     /*wMajor =*/ 1, /*wMinor =*/ 0>
 {
 public:
@@ -18,19 +16,13 @@ public:
         baseMigrationObj = new MapiMigration();
         exchadmin = new Zimbra::MAPI::ExchangeAdmin(L"10.117.82.161");
     }
-    DECLARE_REGISTRY_RESOURCEID(IDR_MAPIWRAPPER)
 
-    BEGIN_COM_MAP(CMapiWrapper)
-    COM_INTERFACE_ENTRY(IMapiWrapper)
-    COM_INTERFACE_ENTRY(IDispatch)
-    COM_INTERFACE_ENTRY(ISupportErrorInfo)
-    END_COM_MAP()
+    DECLARE_REGISTRY_RESOURCEID(IDR_MAPIWRAPPER) BEGIN_COM_MAP(
+        CMapiWrapper) COM_INTERFACE_ENTRY(IMapiWrapper) COM_INTERFACE_ENTRY(
+        IDispatch) COM_INTERFACE_ENTRY(ISupportErrorInfo) END_COM_MAP() STDMETHOD(
+        InterfaceSupportsErrorInfo) (REFIID riid);
 
-    STDMETHOD(InterfaceSupportsErrorInfo) (REFIID riid);
-
-    DECLARE_PROTECT_FINAL_CONSTRUCT()
-
-    HRESULT FinalConstruct() { return S_OK; }
+    DECLARE_PROTECT_FINAL_CONSTRUCT() HRESULT FinalConstruct() { return S_OK; }
 
     void FinalRelease() {}
 
@@ -44,7 +36,6 @@ public:
     STDMETHOD(GetProfilelist) (VARIANT * Profiles);
 
     std::vector<CComBSTR> m_vecColors;
-
     std::wstring str_to_wstr(const std::string &str);
 
     // /STDMETHOD(GetFolderObjects)(/*[in]*/ long start,

@@ -21,9 +21,9 @@
 
 // CItemObject
 Zimbra::MAPI::MAPIAccessAPI *maapi;
-class ATL_NO_VTABLE CItemObject: public CComObjectRootEx<CComSingleThreadModel>,
-    public CComCoClass<CItemObject,
-    &CLSID_ItemObject>, public ISupportErrorInfo, public BaseItem,
+
+class ATL_NO_VTABLE CItemObject: public CComObjectRootEx<CComSingleThreadModel>, public
+    CComCoClass<CItemObject, &CLSID_ItemObject>, public ISupportErrorInfo, public BaseItem,
     public IDispatchImpl<IItemObject, &IID_IItemObject, &LIBID_Exchange, /*wMajor =*/ 1,
     /*wMinor =*/ 0>
 {
@@ -35,22 +35,14 @@ private:
     CComQIPtr<IfolderObject, &IID_IfolderObject> parentObj;
 
 public:
-    CItemObject()
-    {}
-    DECLARE_REGISTRY_RESOURCEID(IDR_ITEMOBJECT)
-
-    BEGIN_COM_MAP(CItemObject)
-    COM_INTERFACE_ENTRY(IItemObject)
-    COM_INTERFACE_ENTRY(IDispatch)
-    COM_INTERFACE_ENTRY(ISupportErrorInfo)
-    END_COM_MAP()
-
+    CItemObject() {}
+    DECLARE_REGISTRY_RESOURCEID(IDR_ITEMOBJECT) BEGIN_COM_MAP(CItemObject) COM_INTERFACE_ENTRY(
+        IItemObject) COM_INTERFACE_ENTRY(IDispatch) COM_INTERFACE_ENTRY(
+        ISupportErrorInfo) END_COM_MAP()
 // ISupportsErrorInfo
     STDMETHOD(InterfaceSupportsErrorInfo) (REFIID riid);
 
-    DECLARE_PROTECT_FINAL_CONSTRUCT()
-
-    HRESULT FinalConstruct()
+    DECLARE_PROTECT_FINAL_CONSTRUCT() HRESULT FinalConstruct()
     {
         CComObject<CfolderObject> *obj = NULL;
         CComObject<CfolderObject>::CreateInstance(&obj);
@@ -61,8 +53,9 @@ public:
 
         return S_OK;
     }
-    void FinalRelease()
-    {}
+
+    void FinalRelease() {}
+
 public:
     STDMETHOD(get_ID) (BSTR *pVal);
     STDMETHOD(put_ID) (BSTR newVal);
@@ -76,7 +69,7 @@ public:
 
     STDMETHOD(put_ItemID) (VARIANT id);
     STDMETHOD(get_ItemID) (VARIANT * id);
-    STDMETHOD(GetDataForItemID) (VARIANT ItemId,FolderType type, VARIANT * pVal);
+    STDMETHOD(GetDataForItemID) (VARIANT ItemId, FolderType type, VARIANT * pVal);
 };
 
 OBJECT_ENTRY_AUTO(__uuidof(ItemObject), CItemObject)
