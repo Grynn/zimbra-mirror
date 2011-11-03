@@ -1,5 +1,6 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.tasks.performance;
 
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.util.HarnessException;
@@ -21,9 +22,17 @@ public class ZmTasksApp_InList_Task1 extends AjaxCommonTest {
       super.startingAccountPreferences = null;
    }
 
-   @Test(description="Measure the time to load Tasks page with 1 task",
-         groups={"performance"})
-   public void ZmTasksApp_01() throws HarnessException {
+   @DataProvider(name = "DataProvider_LoadingApp_1Task")
+   public Object[][] DataProvideNewMessageShortcuts() {
+     return new Object[][] {
+           new Object[] { "Load (initial) the Tasks app, 1 task in list"},
+           new Object[] { "Load (from cache) the Tasks app, 1 task in list"}
+     };
+   }
+
+   @Test(description = "Measure the time to load Tasks page with 1 task",
+         groups = {"performance"}, dataProvider = "DataProvider_LoadingApp_1Task")
+   public void ZmTasksApp_01(String logMessage) throws HarnessException {
 
       String subject = "task"+ ZimbraSeleniumProperties.getUniqueString();
 
@@ -43,7 +52,7 @@ public class ZmTasksApp_InList_Task1 extends AjaxCommonTest {
       "</CreateTaskRequest>");
 
       PerfToken token = PerfMetrics.startTimestamp(PerfKey.ZmTasksApp,
-            "Load the Tasks app, 1 task in list");
+            logMessage);
 
       app.zPageTasks.zNavigateTo();
 
@@ -55,7 +64,7 @@ public class ZmTasksApp_InList_Task1 extends AjaxCommonTest {
 
    @Test(description="Measure the time to load Tasks page with 100 tasks",
          groups={"performance"})
-   public void ZmTaskApp_02() throws HarnessException {
+   public void ZmTasksApp_02() throws HarnessException {
 
       for (int i = 0; i < 100; i++) {
          String subject = "task"+ ZimbraSeleniumProperties.getUniqueString();

@@ -1,5 +1,6 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.addressbook.performance;
 
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.ContactItem;
@@ -21,13 +22,20 @@ public class ZmContactsApp_InList_BasicContact1 extends AjaxCommonTest {
       super.startingAccountPreferences = null;
    }
 
-   @Test(description="Measure the time to load address book page with 1 contact item",
-         groups={"performance"})
-   public void ZmContactsApp_01() throws HarnessException {
+   @DataProvider(name = "DataProvider_LoadingApp_1Contact")
+   public Object[][] DataProvideNewMessageShortcuts() {
+     return new Object[][] {
+           new Object[] { "Load (initial) the Address Book app, 1 contact in list"},
+           new Object[] { "Load (from cache) the Address Book app, 1 contact in list"}
+     };
+   }
+   @Test(description = "Measure the time to load address book page with 1 contact item",
+         groups = {"performance"}, dataProvider = "DataProvider_LoadingApp_1Contact")
+   public void ZmContactsApp_01(String logMessage) throws HarnessException {
       ContactItem.createUsingSOAP(app);
 
       PerfToken token = PerfMetrics.startTimestamp(PerfKey.ZmContactsApp,
-            "Load the Address Book app, 1 contact in list");
+            logMessage);
       app.zPageAddressbook.zNavigateTo();
 
       PerfMetrics.waitTimestamp(token);
@@ -36,8 +44,8 @@ public class ZmContactsApp_InList_BasicContact1 extends AjaxCommonTest {
       app.zPageAddressbook.zWaitForActive();
    }
 
-   @Test(description="Measure the time to load address book page with 100 contact items",
-         groups={"performance"})
+   @Test(description = "Measure the time to load address book page with 100 contact items",
+         groups = {"performance"})
    public void ZmContactsApp_02() throws HarnessException {
       //Create 100 contact items
       for (int i = 0; i < 100; i++) {
