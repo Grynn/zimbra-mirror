@@ -34,6 +34,37 @@ class Program
                 myXmlConfig.InitializeConfig();
 
                 myXmlConfig.GetUserList();
+
+                MigrationOptions importopts = new MigrationOptions();
+                ItemsAndFoldersOptions itemFolderFlags = ItemsAndFoldersOptions.None;
+                if (myXmlConfig.ConfigObj.importOptions.Calendar)
+                {
+                    itemFolderFlags = itemFolderFlags | ItemsAndFoldersOptions.Calendar;
+                }
+                if (myXmlConfig.ConfigObj.importOptions.Contacts)
+                {
+                    itemFolderFlags = itemFolderFlags | ItemsAndFoldersOptions.Contacts;
+                }
+                if (myXmlConfig.ConfigObj.importOptions.Mail)
+                {
+                    itemFolderFlags = itemFolderFlags | ItemsAndFoldersOptions.Mail;
+                }
+                if (myXmlConfig.ConfigObj.importOptions.Sent)
+                {
+                    itemFolderFlags = itemFolderFlags | ItemsAndFoldersOptions.Sent;
+                }
+                if (myXmlConfig.ConfigObj.importOptions.DeletedItems)
+                {
+                    itemFolderFlags = itemFolderFlags | ItemsAndFoldersOptions.DeletedItems;
+                }
+                if (myXmlConfig.ConfigObj.importOptions.Junk)
+                {
+                    itemFolderFlags = itemFolderFlags | ItemsAndFoldersOptions.Junk;
+                }
+
+                importopts.ItemsAndFolders = itemFolderFlags;
+                   
+                    
                 if (myXmlConfig.UserList.Count > 0)
                 {
                     if (myXmlConfig.ConfigObj.OutlookProfile != "")
@@ -53,55 +84,6 @@ class Program
                             myXmlConfig.ConfigObj.mailServer.SourceAdminID);
                     }
 
-                    MigrationOptions importopts = new MigrationOptions();
-                    ItemsAndFoldersOptions itemFolderFlags = ItemsAndFoldersOptions.None;
-
-                    // userAcct.StartMigration(user.UserName, myXmlConfig.ConfigObj.importOptions.Mail.ToString());
-                    if ((myXmlConfig.ConfigObj.importOptions.Mail) &&
-                        (myXmlConfig.ConfigObj.importOptions.Contacts) &&
-                        (myXmlConfig.ConfigObj.importOptions.Calendar) &&
-                        (myXmlConfig.ConfigObj.importOptions.Sent))
-                    {
-                        itemFolderFlags = ItemsAndFoldersOptions.Mail |
-                            ItemsAndFoldersOptions.Contacts |
-                            ItemsAndFoldersOptions.Calendar | ItemsAndFoldersOptions.Sent;
-                    }
-                    else
-                    {
-                        if ((myXmlConfig.ConfigObj.importOptions.Mail) &&
-                            (myXmlConfig.ConfigObj.importOptions.Contacts) &&
-                            (myXmlConfig.ConfigObj.importOptions.Sent))
-                        {
-                            itemFolderFlags = ItemsAndFoldersOptions.Mail |
-                                ItemsAndFoldersOptions.Contacts |
-                                ItemsAndFoldersOptions.Sent;
-                        }
-                        else if ((myXmlConfig.ConfigObj.importOptions.Calendar) &&
-                            (myXmlConfig.ConfigObj.importOptions.Contacts) &&
-                            (myXmlConfig.ConfigObj.importOptions.Sent))
-                        {
-                            itemFolderFlags = ItemsAndFoldersOptions.Calendar |
-                                ItemsAndFoldersOptions.Contacts |
-                                ItemsAndFoldersOptions.Sent;
-                        }
-                        else if (myXmlConfig.ConfigObj.importOptions.Mail)
-                        {
-                            itemFolderFlags = ItemsAndFoldersOptions.Mail;
-                        }
-                        else if (myXmlConfig.ConfigObj.importOptions.Contacts)
-                        {
-                            itemFolderFlags = ItemsAndFoldersOptions.Contacts;
-                        }
-                        else if (myXmlConfig.ConfigObj.importOptions.Calendar)
-                        {
-                            itemFolderFlags = ItemsAndFoldersOptions.Calendar;
-                        }
-                        else if (myXmlConfig.ConfigObj.importOptions.Sent)
-                        {
-                            itemFolderFlags = ItemsAndFoldersOptions.Sent;
-                        }
-                    }
-                    importopts.ItemsAndFolders = itemFolderFlags;
                     foreach (MVVM.Model.Users user in myXmlConfig.UserList)
                     {
                         // TestObj.InitializeMailClient(myXmlConfig.ConfigObj.mailServer.SourceHostname,myXmlConfig.ConfigObj.mailServer.SourceAdminID,myXmlConfig.ConfigObj.mailServer.SourceAdminID);
@@ -158,7 +140,7 @@ class Program
                             System.Console.WriteLine();
 
                             // userAcct.StartMigration(user.UserName, myXmlConfig.ConfigObj.importOptions.Mail.ToString());
-                            Test.test(acctName, TestObj, user.UserName, importopts);
+                            Test.test(acctName, TestObj, user.UserName, importopts,true);
 
                             // /////////////////
 
@@ -198,7 +180,7 @@ class Program
                                 System.Console.WriteLine();
                                 System.Console.WriteLine();
                                 // userAcct.StartMigration(user.UserName, myXmlConfig.ConfigObj.importOptions.Mail.ToString());
-                                Test.test(acctName, TestObj, user.UserName, importopts);
+                                Test.test(acctName, TestObj, user.UserName, importopts,true);
                                 System.Console.WriteLine("......... \n");
                                 Thread.Sleep(9000);
                             }
@@ -219,10 +201,77 @@ class Program
                 }
                 else
                 {
-                    System.Console.WriteLine();
-                    ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
-                        " There are no user accounts to be migrated in the usermap file \n");
-                    System.Console.WriteLine();
+
+                    if ((myXmlConfig.ConfigObj.OutlookProfile != "") || (myXmlConfig.ConfigObj.PSTFile != ""))
+                    {
+                        // ServerMigration = false;
+
+                        // profile migration
+
+
+                        string accountname = myXmlConfig.ConfigObj.zimbraServer.UserAccount;
+                        accountname = accountname + "@" + myXmlConfig.ConfigObj.zimbraServer.ZimbraHostname;
+                        string accountid = (myXmlConfig.ConfigObj.PSTFile != "") ? myXmlConfig.ConfigObj.PSTFile : myXmlConfig.ConfigObj.OutlookProfile;
+
+                        if (myXmlConfig.ConfigObj.OutlookProfile != "")
+                        {
+                            TestObj.Initalize(myXmlConfig.ConfigObj.zimbraServer.ZimbraHostname,
+                                   myXmlConfig.ConfigObj.zimbraServer.Port,
+                                   myXmlConfig.ConfigObj.zimbraServer.UserAccount,
+                                   myXmlConfig.ConfigObj.OutlookProfile, "",
+                                   "");
+                        }
+                        else
+                        {
+
+                            ZimbraAPI zimbraAPI = new ZimbraAPI();
+
+                            System.Console.WriteLine();
+                            ProgressUtil.RenderConsoleProgress(
+                                    30, '\u2591', ConsoleColor.Green,
+                                    "Connecting to to Zimbra Server \n   ");
+                            System.Console.WriteLine();
+
+                            int stat = zimbraAPI.Logon(
+                                    myXmlConfig.ConfigObj.zimbraServer.ZimbraHostname,
+                                    myXmlConfig.ConfigObj.zimbraServer.Port,
+                                    myXmlConfig.ConfigObj.zimbraServer.UserAccount,
+                                    myXmlConfig.ConfigObj.zimbraServer.UserPassword, false);
+
+                            if (stat != 0)
+                            {
+                                zimbraAPI.LastError.Count();
+
+                                System.Console.WriteLine();
+                                ProgressUtil.RenderConsoleProgress(
+                                        30, '\u2591', ConsoleColor.Red,
+                                        "Logon to to Zimbra Server  for userAccount failed " +
+                                        myXmlConfig.ConfigObj.zimbraServer.ZimbraAdminID);
+                                System.Console.WriteLine("......... \n");
+                                System.Console.WriteLine();
+                                Thread.Sleep(2000);
+                                // return;
+                            }
+
+                        }
+                        System.Console.WriteLine();
+                        ProgressUtil.RenderConsoleProgress(
+                                30, '\u2591', ConsoleColor.Green,
+                                " Migration to Zimbra Started  for Profile/PST  " +
+                                accountid);
+                        System.Console.WriteLine();
+                        System.Console.WriteLine();
+
+                        Test.test(accountname, TestObj, accountid, importopts, false);
+
+                    }
+                    else
+                    {
+                        System.Console.WriteLine();
+                        ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
+                            " There are no user accounts to be migrated in the usermap file \n");
+                        System.Console.WriteLine();
+                    }
                 }
             }
             else
