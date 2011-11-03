@@ -16,7 +16,13 @@ package com.zimbra.cs.offline.jsp;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.text.DateFormat;
 import java.text.MessageFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -175,7 +181,56 @@ public abstract class FormBean extends PageBean {
             return false;
         }
     }
-    
+
+    protected boolean isValidSyncFixedDate(String input) {
+        if (isEmpty(input))
+            return false;
+
+        if (input.indexOf('/') > 0) {
+            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+            Date testDate = null;
+            try {
+              testDate = sdf.parse(input);
+            } catch (ParseException e) {
+              return false;
+            }
+            if (!sdf.format(testDate).equals(input)) {
+              return false;
+            }
+        } else {
+                return false;
+            }
+        return true;
+    }
+
+    protected boolean isValidSyncRelativeDate(String input) {
+        if (isEmpty(input))
+            return false;
+
+        try {
+            int relativedate = Integer.parseInt(input);
+            if (relativedate < 0)
+                return false;
+        } catch (NumberFormatException x) {
+            return false;
+        }
+        return true;
+    }
+
+    protected boolean isValidSyncEmailDate(String input) {
+        if (isEmpty(input))
+            return false;
+
+        try {
+            int relativedate = Integer.parseInt(input);
+            if (relativedate < 0 || relativedate > 2)
+                return false;
+        } catch (NumberFormatException x) {
+            return false;
+        }
+        return true;
+    }
+
     protected boolean isValidPort(String input) {
         if (isEmpty(input))
             return false;
@@ -188,7 +243,7 @@ public abstract class FormBean extends PageBean {
             return false;
         }
     }
-    
+
     protected boolean isValidHost(String input) {
         return !isEmpty(input) && input.indexOf(':') < 0 && input.indexOf('/') < 0;
     }

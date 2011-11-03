@@ -196,6 +196,7 @@ function OnSubmit() {
     document.accountForm.submit();
 }
 
+
 function onEditLink(id, keep, makeInvisible) {
     var elem = document.getElementById(id + "Link");
 
@@ -244,6 +245,27 @@ function onAuth() {
 	    }
     }
     </c:if>
+}
+
+function changeDateFields(selectObj) {
+    var idx = selectObj.selectedIndex;
+    var which = selectObj.options[idx].value;
+
+    switch(which)
+    {
+    case "0":
+        document.getElementById("fixedDateFields").style.display="none";
+        document.getElementById("relativeFields").style.display="none";
+        break;
+    case "1":
+        document.getElementById("fixedDateFields").style.display="inline";
+        document.getElementById("relativeFields").style.display="none";
+        break;
+    case "2":
+        document.getElementById("fixedDateFields").style.display="none";
+        document.getElementById("relativeFields").style.display="inline";
+        break;
+    }
 }
 
 <c:if test="${not empty accountFlavor}">
@@ -463,7 +485,7 @@ function onAuth() {
                                         </c:if>
                                         <tr id="emailRow">
                                             <td>
-                                                <div class="${zdf:isValid(bean, 'email') ? 'ZFieldLabel' : 'ZFieldError'}"><fmt:message key='EmailAddress'/>:</div>
+                                                <div class="${zdf:isValid(bean, 'email') ? 'ZFieldLabel' : 'ZFieldError'}" ><fmt:message key='EmailAddress'/>:</div>
                                             </td>
                                             <td>
                                                 <input class="ZField" type="text" id="email" name="email" value="${bean.email}" <c:if test="${not empty bean.accountId}">disabled="disabled"</c:if>>
@@ -722,6 +744,49 @@ function onAuth() {
                                                 </select>
                                             </td>
                                         </tr>
+
+                                        <c:if test="${bean.type eq 'zimbra' or bean.type eq 'xsync'}">
+                                        <tr>
+                                            <td>
+                                            <c:choose>
+                                                <c:when test="${bean.syncEmailDate == 1}">
+                                                    <c:set var="class" value="${zdf:isValid(bean, 'syncFixedDate') ? 'ZFieldLabel' : 'ZFieldError'}" />
+                                                </c:when>
+                                                <c:when test="${bean.syncEmailDate == 2}">
+                                                    <c:set var="class" value="${zdf:isValid(bean, 'syncRelativeDate') ? 'ZFieldLabel' : 'ZFieldError'}" />
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <c:set var="class" value="ZFieldLabel" />
+                                                </c:otherwise>
+                                            </c:choose>
+                                                <div class="${class}">
+                                                <fmt:message key='SyncEmail'/>:
+                                                </div>
+                                            </td>
+                                            <td width=60%>
+                                                <select class="ZSelect" id="syncEmailDate" name="syncEmailDate" onclick="changeDateFields(this)" >
+                                                    <option value="0" ${bean.syncEmailDate == 0 ? 'selected' : ''}><fmt:message key='SyncEverything'/></option>
+                                                    <option value="1" ${bean.syncEmailDate == 1 ? 'selected' : ''}><fmt:message key='SyncFixedDate'/></option>
+                                                    <option value="2" ${bean.syncEmailDate == 2 ? 'selected' : ''}><fmt:message key='SyncRelativeDate'/></option>
+                                                </select>
+
+                                                     <span id="fixedDateFields" style="${bean.syncEmailDate == 1 ? 'display:inline' : 'display:none'}">
+                                                         <input type="text" id="syncFixedDate" name="syncFixedDate" value="${bean.syncFixedDate}" size=15>
+                                                     <span class="ZAccountHelp" ><fmt:message key='DateFormat'/></span>
+                                                     </span>
+
+                                                     <span id="relativeFields" style="${bean.syncEmailDate == 2 ? 'display:inline' : 'display:none'}">
+                                                                <input type="text" id="syncRelativeDate" name="syncRelativeDate" value="${bean.syncRelativeDate}" size=5">
+                                                                <select id="syncFieldName" name="syncFieldName">
+                                                                    <option value="Week" ${bean.syncFieldName == Week ? 'selected' : ''}><fmt:message key='SyncWeeks'/></option>
+                                                                    <option value="Month" ${bean.syncFieldName == Month ? 'selected' : ''}><fmt:message key='SyncMonths'/></option>
+                                                                    <option value="Year" ${bean.syncFieldName == Year ? 'selected' : ''}><fmt:message key='SyncYears'/></option>
+                                                                </select>
+                                                     </span>
+                                            </td>
+                                        </tr>
+                                        </c:if>
+
                                         <c:if test="${bean.type eq 'pop3'}">
                                             <tr id="popSettingsRow">
                                                 <td>

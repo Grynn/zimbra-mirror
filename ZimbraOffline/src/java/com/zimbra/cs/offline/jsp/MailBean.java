@@ -45,6 +45,11 @@ public class MailBean extends FormBean {
     
     protected long syncFreqSecs = OfflineConstants.DEFAULT_SYNC_FREQ / 1000;
 
+    protected String syncEmailDate = "";
+    protected String syncFixedDate =  "";
+    protected String syncRelativeDate = "";
+    protected String syncFieldName= "";
+
     protected boolean isDebugTraceEnabled;
     
     public String getAccountId() {
@@ -124,21 +129,53 @@ public class MailBean extends FormBean {
     }
     
     public boolean isDebugTraceEnabled() {
-	return isDebugTraceEnabled;
+        return isDebugTraceEnabled;
     }
-    
+
     public void setDebugTraceEnabled(boolean isDebugTraceEnabled) {
-	this.isDebugTraceEnabled = isDebugTraceEnabled;
+        this.isDebugTraceEnabled = isDebugTraceEnabled;
     }
-    
+
+    public String getsyncEmailDate() {
+        return syncEmailDate;
+    }
+
+    public void setsyncEmailDate(String syncEmailDate) {
+        this.syncEmailDate = syncEmailDate;
+    }
+
+    public String getsyncFixedDate() {
+        return syncFixedDate;
+    }
+
+    public void setsyncFixedDate(String syncFixedDate) {
+        this.syncFixedDate = syncFixedDate;
+    }
+
+    public String getsyncRelativeDate() {
+        return syncRelativeDate;
+    }
+
+    public void setsyncRelativeDate(String syncRelativeDate) {
+        this.syncRelativeDate = syncRelativeDate;
+    }
+
+    public String getsyncFieldName() {
+        return syncFieldName;
+    }
+
+    public void setsyncFieldName(String syncFieldName) {
+        this.syncFieldName = syncFieldName;
+    }
+
     public long getSyncFreqSecs() {
-	return syncFreqSecs;
+        return syncFreqSecs;
     }
-    
+
     public void setSyncFreqSecs(long syncFreqSecs) {
-	this.syncFreqSecs = syncFreqSecs;
+        this.syncFreqSecs = syncFreqSecs;
     }
-    
+
     public boolean getZmail() {
 	try {
 	    JspProvStub stub = JspProvStub.getInstance();

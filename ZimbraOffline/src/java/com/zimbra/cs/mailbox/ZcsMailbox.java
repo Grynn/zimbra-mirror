@@ -79,6 +79,7 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
 
     private Map<Integer,Integer> mRenumbers = new HashMap<Integer,Integer>();
     private Set<Integer> mLocalTagDeletes = new HashSet<Integer>();
+    private boolean runInitSync = false;
 
     private static final OfflineAccount.Version MIN_ZCS_VER_PUSH = new OfflineAccount.Version("5.0.6");
 
@@ -840,5 +841,13 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
     @Override
     public boolean isNewItemIdValid(int id) {
         return true;
+    }
+
+    public void setRunInitSync(boolean runInitSync) {
+        this.runInitSync = runInitSync;
+    }
+
+    public boolean isRunInitSync() {
+        return runInitSync;
     }
 }

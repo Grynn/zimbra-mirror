@@ -46,6 +46,7 @@ import com.zimbra.common.net.TrustManagers;
 import com.zimbra.common.service.RemoteServiceException;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.AccountConstants;
+import com.zimbra.common.soap.MailConstants;
 import com.zimbra.common.util.Constants;
 import com.zimbra.common.util.StringUtil;
 import com.zimbra.common.util.SystemUtil;
@@ -60,6 +61,7 @@ import com.zimbra.cs.db.DbOfflineDirectory;
 import com.zimbra.cs.db.DbPool;
 import com.zimbra.cs.mailbox.DesktopMailbox;
 import com.zimbra.cs.mailbox.Folder;
+import com.zimbra.cs.mailbox.InitialSync;
 import com.zimbra.cs.mailbox.LocalJMSession;
 import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.mailbox.Mailbox;
@@ -68,6 +70,7 @@ import com.zimbra.cs.mailbox.Metadata;
 import com.zimbra.cs.mailbox.OfflineMailboxManager;
 import com.zimbra.cs.mailbox.OfflineServiceException;
 import com.zimbra.cs.mailbox.OperationContext;
+import com.zimbra.cs.mailbox.SyncMailbox;
 import com.zimbra.cs.mailbox.YContactSync;
 import com.zimbra.cs.mailbox.ZcsMailbox;
 import com.zimbra.cs.mailclient.smtp.SmtpTransport;
@@ -78,6 +81,7 @@ import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineSyncManager;
 import com.zimbra.cs.offline.ab.gab.GDataServiceException;
 import com.zimbra.cs.offline.common.OfflineConstants;
+import com.zimbra.cs.offline.common.OfflineConstants.SyncMsgOptions;
 import com.zimbra.cs.offline.util.OfflineUtil;
 import com.zimbra.cs.offline.util.OfflineYAuth;
 import com.zimbra.cs.offline.util.yc.oauth.OAuthManager;
@@ -274,10 +278,11 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         // only tracking changes on account entries
         markChanged &= e instanceof OfflineAccount;
 
+        Map<String, ? extends Object> old = e.getAttrs();
+        List<String> modattrs = new ArrayList<String>();
         if (markChanged) {
             attrs.remove(A_offlineModifiedAttrs);
 
-            List<String> modattrs = new ArrayList<String>();
             for (String attr : attrs.keySet()) {
                 if (attr.startsWith("-") || attr.startsWith("+"))
                     attr = attr.substring(1);
@@ -315,6 +320,65 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         reload(e);
         if (!skipAttrMgr)
             AttributeManager.getInstance().postModify(attrs, e, context, false, allowCallback);
+
+        long newTime = 0;
+        long oldTime = 0;
+        boolean syncEverything = false;
+        String syncEmailoption = (String) attrs.get(OfflineConstants.A_offlinesyncEmailDate);
+
+        if (syncEmailoption != null) {
+            try {
+                final ZcsMailbox mbox = (ZcsMailbox) MailboxManager.getInstance().getMailboxByAccount((OfflineAccount)e);
+                //get the new time
+                switch (SyncMsgOptions.getOption(syncEmailoption)) {
+                case SYNCEVERYTHING:
+                    if(!(old.get(OfflineConstants.A_offlinesyncEmailDate).equals(attrs.get(OfflineConstants.A_offlinesyncEmailDate)))) {
+                        syncEverything = true;
+                    }
+                    break;
+                case SYNCTOFIXEDDATE:
+                    if(!(old.get(OfflineConstants.A_offlinesyncEmailDate).equals(attrs.get(OfflineConstants.A_offlinesyncEmailDate))) ||
+                            !(old.get(OfflineConstants.A_offlinesyncFixedDate).equals(attrs.get(OfflineConstants.A_offlinesyncFixedDate))) ) {
+                        newTime = Long.parseLong(InitialSync.convertDateToLong((String)attrs.get(OfflineConstants.A_offlinesyncFixedDate)));
+                    }
+                    break;
+                case SYNCTORELATIVEDATE:
+                    if(!(old.get(OfflineConstants.A_offlinesyncEmailDate).equals(attrs.get(OfflineConstants.A_offlinesyncEmailDate))) ||
+                            !(old.get(OfflineConstants.A_offlinesyncRelativeDate).equals(attrs.get(OfflineConstants.A_offlinesyncRelativeDate))) ||
+                            !(old.get(OfflineConstants.A_offlinesyncFieldName).equals(attrs.get(OfflineConstants.A_offlinesyncFieldName))) ) {
+                        newTime = Long.parseLong(InitialSync.convertRelativeDatetoLong((String)attrs.get(OfflineConstants.A_offlinesyncRelativeDate) ,
+                                    (String)attrs.get(OfflineConstants.A_offlinesyncFieldName)));
+                    }
+                    break;
+                }
+
+                if( newTime > 0) {
+                    //syncmail date is updated, get the old date/time
+                    switch (SyncMsgOptions.getOption((String) old.get(OfflineConstants.A_offlinesyncEmailDate))) {
+                    case SYNCTOFIXEDDATE:
+                        oldTime = Long.parseLong(InitialSync.convertDateToLong((String)old.get(OfflineConstants.A_offlinesyncFixedDate)));
+                        break;
+                    case SYNCTORELATIVEDATE:
+                        oldTime = Long.parseLong(InitialSync.convertRelativeDatetoLong((String)old.get(OfflineConstants.A_offlinesyncRelativeDate) ,
+                                (String)old.get(OfflineConstants.A_offlinesyncFieldName)));
+                        break;
+                    }
+                }
+
+                if (newTime > oldTime) {
+                    //reset the runInitSync variable if set to true
+                    if (mbox.isRunInitSync()) {
+                        mbox.setRunInitSync(false);
+                    }
+                } else if (syncEverything || (newTime < oldTime)) {
+                    if (!mbox.isRunInitSync()) {
+                        mbox.setRunInitSync(true);
+                    }
+                }
+            } catch (NumberFormatException x) {
+                OfflineLog.offline.warn("unable to parse syncEmailDate", x);
+            }
+        }
     }
 
     public void setAccountAttribute(Account account, String key, Object value) throws ServiceException {

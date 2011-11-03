@@ -182,9 +182,10 @@ public class MailboxSync {
                         " " + System.getProperty("os.version"),
                         ombx.getOfflineAccount().getRemoteServerVersion());
                     syncMan.syncStart(ombx.getAccount());
-                    if (mStage == SyncStage.BLANK)
+                    if (mStage == SyncStage.BLANK || ombx.isRunInitSync()) {
                         InitialSync.sync(ombx);
-                    else if (mStage == SyncStage.INITIAL)
+                        ombx.setRunInitSync(false);
+                    } else if (mStage == SyncStage.INITIAL)
                         InitialSync.resume(ombx);
                     DeltaSync.sync(ombx);
                     if (PushChanges.sync(ombx, isOnRequest))

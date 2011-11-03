@@ -63,6 +63,29 @@ public interface OfflineConstants {
         unknown, offline, online, running, authfail, error
     }
 
+    public enum SyncMsgOptions {
+        SYNCEVERYTHING("0"), SYNCTOFIXEDDATE("1"), SYNCTORELATIVEDATE("2");
+
+        private String option;
+
+        SyncMsgOptions(String option) {
+            this.option = option;
+        }
+
+        public String getOption() {
+            return this.option;
+        }
+
+        public static SyncMsgOptions getOption(String value) {
+            for (SyncMsgOptions opt : SyncMsgOptions.values()) {
+                if (value.equalsIgnoreCase(opt.option)) {
+                    return opt;
+                }
+            }
+            return null;
+          }
+    }
+
     public static final String A_offlineAccountsOrder = "offlineAccountsOrder";
     
     public static final String A_offlineRemoteServerVersion = "offlineRemoteServerVersion";
@@ -98,7 +121,10 @@ public interface OfflineConstants {
     public static final String A_offlineAccountSetup = "offlineAccountSetup";
     
     public static final String A_offlineYContactTokenReady = "offlineYContactTokenReady";
-    
+    public static final String A_offlinesyncFieldName = "offlinesyncFieldName";
+    public static final String A_offlinesyncFixedDate = "offlinesyncFixedDate";
+    public static final String A_offlinesyncRelativeDate = "offlinesyncRelativeDate";
+    public static final String A_offlinesyncEmailDate = "offlinesyncEmailDate";
     public static final String A_zimbraDataSourceSmtpEnabled = "zimbraDataSourceSmtpEnabled";
     public static final String A_zimbraDataSourceSmtpHost = "zimbraDataSourceSmtpHost";
     public static final String A_zimbraDataSourceSmtpPort = "zimbraDataSourceSmtpPort";

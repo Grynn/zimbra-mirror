@@ -88,7 +88,7 @@
   <property name="jetty.src.dir" location="../ThirdParty/jetty" />
   <property name="prism.src.dir" location="../ThirdParty/prism" />
   <property name="xulrunner.src.dir" location="../ThirdParty/xulrunner" />
-  <property name="jetty.version" value="6.1.22.z6" />
+  <property name="jetty.version" value="distribution-7.5.2-SNAPSHOT" />
   <property name="db.driver.jar" value="sqlitejdbc*.jar"/>
   <property name="server.db.dir" value="${server.src.dir}/db/sqlite"/>
   <property name="src.db.dir" value="${src.dir}/db/sqlite"/>
@@ -440,7 +440,7 @@
       <then><copy tofile="${dist.dir}/conf/keystore" file="${dist.dir}/conf/keystore.base" overwrite="true" /></then>
     </if>
 
-    <copy todir="${dist.dir}/jetty/etc" file="${config.dir}/jetty-6.1/start.config" overwrite="true" />
+    <copy todir="${dist.dir}/jetty/etc" file="${config.dir}/jetty-7.5/start.config" overwrite="true" />
     <copy todir="${dist.dir}/jetty/etc" file="${config.dir}/webdefault.xml" overwrite="true"/>
 
     <copy todir="${dist.dir}/jetty/common/lib" overwrite="true">
@@ -456,7 +456,7 @@
       <fileset file="${common.jars.dir}/apache-log4j-extras-1.0.jar"/>
       <fileset file="${common.jars.dir}/slf4j*.jar"/>
     </copy>
-    <copy tofile="${dist.dir}/jetty/resources/log4j.properties" file="${server.conf.dir}/jetty-6.1/log4j.properties.production" overwrite="true" />
+    <copy tofile="${dist.dir}/jetty/resources/log4j.properties" file="${server.conf.dir}/jetty-7.5/log4j.properties.production" overwrite="true" />
 
     <!-- db schema, config and jars -->
     <antcall target="db-versions-init" />
