@@ -121,7 +121,8 @@ public class Stafpostqueue extends StafServicePROCESS {
     	Hashtable<String, String> idTable = new Hashtable<String, String>();
 
     	// Look for all instances of a 10 digit hex number (The queue ID)
-    	Pattern pattern = Pattern.compile("\\b[0-9A-F]{10}\\b");
+    	// Pattern patter = Pattern.compile("\\b[0-9A-F]{10}\\b");
+    	Pattern pattern = Pattern.compile("^[0-9A-F]+\\b", Pattern.MULTILINE);
     	Matcher matcher = pattern.matcher(output);
     	
     	while (matcher.find()) {
