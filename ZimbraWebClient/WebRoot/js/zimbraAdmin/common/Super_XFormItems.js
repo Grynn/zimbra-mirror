@@ -543,13 +543,13 @@ Super_Checkbox_XFormItem.prototype.numCols = 3;
 Super_Checkbox_XFormItem.prototype.colSizes = ["275px","275px","*"];
 Super_Checkbox_XFormItem.prototype.nowrap = false;
 Super_Checkbox_XFormItem.prototype.labelWrap = true;
-Super_Checkbox_XFormItem.prototype.checkboxSubLable = null;
+Super_Checkbox_XFormItem.prototype.checkboxSubLabel = null;
 
 Super_Checkbox_XFormItem.prototype.initializeItems = function() {
 	var anchorCssStyle = this.getInheritedProperty("anchorCssStyle");
-	var checkboxSubLable = this.getInheritedProperty("checkboxSubLable");
-	var chkBox = {	
-		type:_CHECKBOX_, ref:".",  labelCssClass:"gridGroupBodyLabel", subLabel:checkboxSubLable,
+	var checkboxSubLabel = this.getInheritedProperty("checkboxSubLabel");
+	var chkBox = {
+		type:_CHECKBOX_, ref:".",  labelCssClass:"gridGroupBodyLabel", subLabel:checkboxSubLabel,
 		onChange:Composite_XFormItem.onFieldChange,
 		updateElement:function(value) {
 			Super_XFormItem.updateCss.call(this,5);

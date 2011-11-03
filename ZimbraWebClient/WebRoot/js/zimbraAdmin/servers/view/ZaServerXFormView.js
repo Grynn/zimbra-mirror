@@ -222,6 +222,11 @@ ZaServerXFormView.getPOP3SSLProxyEnabled = function () {
 	return (ZaServerXFormView.getMailProxyEnabled.call(this) && ZaServerXFormView.getPOP3SSLEnabled.call(this));
 }
 
+ZaServerXFormView.getAdminProxyEnabled = function () {
+	var value = this.getModel().getInstanceValue(this.getInstance(), ZaServer.A_zimbraReverseProxyAdminEnabled);
+	return value == 'TRUE';
+}
+
 ZaServerXFormView.getIsReverseProxyLookupTarget = function () {
 	return (this.getModel().getInstanceValue(this.getInstance(),ZaServer.A_zimbraReverseProxyLookupTarget) == "TRUE");
 }
@@ -625,6 +630,9 @@ ZaServerXFormView.POP_TAB_RIGHTS = [];
 ZaServerXFormView.VOLUMES_TAB_ATTRS = [];
 ZaServerXFormView.VOLUMES_TAB_RIGHTS = [ZaServer.MANAGE_VOLUME_RIGHT];
 
+ZaServerXFormView.PROXY_TAB_ATTRS = [ZaServer.A_zimbraReverseProxyAdminEnabled, ZaServer.A_zimbraAdminProxyPort];
+ZaServerXFormView.PROXY_TAB_RIGHTS = [];
+
 ZaServerXFormView.MTA_NETWORK_GROUP_ATTRS = [ZaServer.A_zimbraImapBindPort,
 								ZaServer.A_ImapSSLBindPort,ZaServer.A_zimbraImapProxyBindPort,ZaServer.A_zimbraImapProxyBindPort,
 								ZaServer.A_zimbraImapSSLProxyBindPort];
@@ -646,7 +654,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 	headerList[4] = new ZaListHeaderItem(ZaServer.A_VolumeCompressionThreshold, ZaMsg.VM_VolumeCompressThreshold, null, "120px", null, null, false, true);									
 	headerList[5] = new ZaListHeaderItem(ZaServer.A_isCurrentVolume, ZaMsg.VM_CurrentVolume, null, "auto", null, null, false, true);										
 
-	var _tab1, _tab2, _tab3, _tab4, _tab5, _tab6, _tab7;
+	var _tab1, _tab2, _tab3, _tab4, _tab5, _tab6, _tab7, _tab8;
 
     var tabBarChoices = [] ;
     
@@ -682,6 +690,11 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
     if(ZaTabView.isTAB_ENABLED(entry,ZaServerXFormView.VOLUMES_TAB_ATTRS, ZaServerXFormView.VOLUMES_TAB_RIGHTS)) {
     	_tab7 = ++this.TAB_INDEX;
         tabBarChoices.push ({value:_tab7, label:ZaMsg.NAD_Tab_VolumeMgt});
+    }
+
+    if(ZaTabView.isTAB_ENABLED(entry,ZaServerXFormView.PROXY_TAB_ATTRS, ZaServerXFormView.PROXY_TAB_RIGHTS)) {
+        _tab8 = ++this.TAB_INDEX;
+        tabBarChoices.push ({value:_tab8, label:ZaMsg.NAD_Tab_Proxy});
     }
     var switchItems = [];
 
@@ -1320,6 +1333,48 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 				};
        switchItems.push (case7_2) ;
    }
+   
+   if(_tab8) {
+		var case8 = {	type: _ZATABCASE_, id:"server_proxy_tab", caseKey:_tab8,
+						colSizes:["auto"],numCols:1,
+						items: [
+							{type: _DWT_ALERT_,
+								  containerCssStyle: "padding-bottom:0px",
+								  style: DwtAlert.WARNING,
+								  iconVisible: false,
+								  content: ZaMsg.Alert_ProxyConfig
+							},
+							{type:_ZA_TOP_GROUPER_, colSizes:["275px","*"], numCols:2, label:ZaMsg.NAD_Proxy_Admin_Configure,
+								items:[
+									{ ref: ZaServer.A_zimbraReverseProxyAdminEnabled, type: _SUPER_CHECKBOX_,
+									  checkboxSubLabel:"",
+									  enableDisableChangeEventSources:[ZaServer.A_zimbraMailProxyServiceInstalled,
+									                                   ZaServer.A_zimbraMailProxyServiceEnabled],
+									  enableDisableChecks:[ZaItem.hasWritePermission, ZaServerXFormView.getMailProxyEnabled], 
+									  trueValue: "TRUE", falseValue: "FALSE",
+									  onChange: ZaServerXFormView.onFormFieldChanged,
+									  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
+									  checkBoxLabel:ZaMsg.NAD_Proxy_Admin_Enabled
+									},
+									{ ref: ZaServer.A_zimbraAdminProxyPort, type:_SUPER_TEXTFIELD_,
+									  colSizes:["275px","275px","*"],
+									  enableDisableChangeEventSources:[ZaServer.A_zimbraMailProxyServiceInstalled,
+									                                   ZaServer.A_zimbraMailProxyServiceEnabled,
+									                                   ZaServer.A_zimbraReverseProxyAdminEnabled],
+									  enableDisableChecks:[ZaItem.hasWritePermission, ZaServerXFormView.getMailProxyEnabled, ZaServerXFormView.getAdminProxyEnabled], 
+									  labelLocation:_LEFT_,
+									  textFieldCssClass:"admin_xform_number_input",
+									  txtBoxLabel: ZaMsg.NAD_Proxy_Admin_Port,
+									  onChange: ZaServerXFormView.onFormFieldChanged,
+							      	  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal
+									}
+								]
+							}
+					    ]
+					};
+			switchItems.push (case8) ;
+		}
+
     xFormObject.tableCssStyle="width:100%;position:static;overflow:auto;";
 
     this.tabBarChoices = tabBarChoices;

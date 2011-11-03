@@ -154,6 +154,8 @@ ZaServer.A_zimbraImapSSLProxyBindPort="zimbraImapSSLProxyBindPort";
 ZaServer.A_zimbraPop3ProxyBindPort="zimbraPop3ProxyBindPort";
 ZaServer.A_zimbraPop3SSLProxyBindPort="zimbraPop3SSLProxyBindPort";
 ZaServer.A_zimbraReverseProxyLookupTarget = "zimbraReverseProxyLookupTarget";
+ZaServer.A_zimbraReverseProxyAdminEnabled = "zimbraReverseProxyAdminEnabled";
+ZaServer.A_zimbraAdminProxyPort = "zimbraAdminProxyPort"
 
 //spnego
 ZaServer.A_zimbraSpnegoAuthPrincipal = "zimbraSpnegoAuthPrincipal";
@@ -560,6 +562,8 @@ ZaServer.myXModel = {
 		{id:ZaServer.A_zimbraImapSSLProxyBindPort, ref:"attrs/" +  ZaServer.A_zimbraImapSSLProxyBindPort, type:_COS_PORT_ },
 		{id:ZaServer.A_zimbraPop3ProxyBindPort, ref:"attrs/" +  ZaServer.A_zimbraPop3ProxyBindPort, type:_COS_PORT_ },
 		{id:ZaServer.A_zimbraPop3SSLProxyBindPort, ref:"attrs/" +  ZaServer.A_zimbraPop3SSLProxyBindPort, type:_COS_PORT_ },
+		{id:ZaServer.A_zimbraAdminProxyPort, ref:"attrs/" + ZaServer.A_zimbraAdminProxyPort, type:_COS_PORT_ },
+		{id:ZaServer.A_zimbraReverseProxyAdminEnabled, ref:"attrs/" + ZaServer.A_zimbraReverseProxyAdminEnabled, type:_COS_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
 
         // auto provision
         {id:ZaServer.A_zimbraAutoProvPollingInterval, ref:"attrs/" + ZaServer.A_zimbraAutoProvPollingInterval, type: _COS_MLIFETIME_, minInclusive: 0 },
