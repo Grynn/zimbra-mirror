@@ -33,9 +33,8 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
 import com.zimbra.common.account.Key;
-import com.zimbra.common.account.Key.DataSourceBy;
-import com.zimbra.common.account.Key.IdentityBy;
 import com.zimbra.soap.admin.type.DataSourceType;
+import com.zimbra.common.localconfig.DebugConfig;
 import com.zimbra.common.mailbox.Color;
 import com.zimbra.common.mime.MimeConstants;
 import com.zimbra.common.mime.shim.JavaMailInternetAddress;
@@ -54,10 +53,7 @@ import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineDataSource;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.datasource.DataSourceManager;
-import com.zimbra.cs.datasource.imap.ImapSync;
-import com.zimbra.cs.db.DbMailItem;
 import com.zimbra.cs.filter.RuleManager;
-import com.zimbra.cs.localconfig.DebugConfig;
 import com.zimbra.cs.db.DbTag;
 import com.zimbra.cs.mailbox.MailItem.TargetConstraint;
 import com.zimbra.cs.mailbox.MailSender.SafeSendFailedException;
@@ -322,7 +318,7 @@ public class DataSourceMailbox extends SyncMailbox {
             if (ds.isYahoo() && !isYBizmail) {
                 YMailSender ms = YMailSender.newInstance(ds);
                 try {
-                    ms.sendMimeMessage(context, this, saveToSent, mm, null, null,
+                    ms.sendMimeMessage(context, this, saveToSent, mm, null,
                         origMsgId, msg.getDraftReplyType(), identity, false);
 
                     if (!DebugConfig.disableOutgoingFilter) {
