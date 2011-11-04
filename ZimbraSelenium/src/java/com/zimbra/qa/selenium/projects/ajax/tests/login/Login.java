@@ -1,10 +1,11 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.login;
 
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 
 import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.util.*;
+import com.zimbra.qa.selenium.framework.util.staf.StafServicePROCESS;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 
 
@@ -187,6 +188,92 @@ public class Login extends AjaxCommonTest {
 		
 	}
 
+	@DataProvider(name = "DataProvider_zimbraMailURL")
+	public Object[][] DataProvider_zimbraMailURL() {
+		  return new Object[][] {
+				    new Object[] { "", null },
+				    new Object[] { "/", null },
+				    new Object[] { "/foobar", null },
+				    new Object[] { "/foobar/", null },
+				  };
+		}
+
+	@Bugs(	ids = "66788")
+	@Test(	description = "Change the zimbraMailURL and login",
+			groups = { "inprogress" },
+			dataProvider = "DataProvider_zimbraMailURL")
+	public void Login04(String zimbraMailURLtemp, String notused) throws HarnessException {
+		
+		String zimbraMailURL = null;
+
+		// Need to do a try/finally to make sure the old setting works
+		try {
+			
+			// Get the original zimbraMailURL value
+			ZimbraAdminAccount.GlobalAdmin().soapSend(
+						"<GetConfigRequest xmlns='urn:zimbraAdmin'>"
+					+		"<a n='zimbraMailURL'/>"
+					+	"</GetConfigRequest>");
+			zimbraMailURL = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:a[@n='zimbraMailURL']", null);
+			
+			// Change to the new zimbraMailURL temp value
+			ZimbraAdminAccount.GlobalAdmin().soapSend(
+					"<ModifyConfigRequest xmlns='urn:zimbraAdmin'>"
+				+		"<a n='zimbraMailURL'>"+ zimbraMailURLtemp + "</a>"
+				+	"</ModifyConfigRequest>");
+
+			StafServicePROCESS staf = new StafServicePROCESS();
+			staf.execute("zmmailboxdctl restart");
+
+			// Wait for the service to come up
+			SleepUtil.sleep(60000);
+			
+			staf.execute("zmcontrol status");
+
+			
+			// Open the login page
+			// (use the base URL, since leftovers from the previous test may affect the URL)
+			app.zPageLogin.sOpen(ZimbraSeleniumProperties.getBaseURL());
+			
+			// Login
+			app.zPageLogin.zLogin(ZimbraAccount.AccountZWC());		
+			
+			// Verify main page becomes active
+			ZAssert.assertTrue(app.zPageMain.zIsActive(), "Verify that the account is logged in");
+
+			
+		} finally {
+			
+			if ( zimbraMailURL != null ) {
+				
+				// Delete any authToken/SessionID
+				app.zPageLogin.sDeleteAllVisibleCookies();
+				
+				// Change the URL back to the original
+				ZimbraAdminAccount.GlobalAdmin().soapSend(
+						"<ModifyConfigRequest xmlns='urn:zimbraAdmin'>"
+					+		"<a n='zimbraMailURL'>"+ zimbraMailURL + "</a>"
+					+	"</ModifyConfigRequest>");
+				
+				StafServicePROCESS staf = new StafServicePROCESS();
+				staf.execute("zmmailboxdctl restart");
+
+				// Wait for the service to come up
+				SleepUtil.sleep(60000);
+				
+				staf.execute("zmcontrol status");
+
+				
+				// Open the base URL
+				app.zPageLogin.sOpen(ZimbraSeleniumProperties.getBaseURL());
+
+			}
+
+		}
+		
+		
+		
+	}
 
 
 }
