@@ -194,8 +194,8 @@ function(ev) {
 // duplicate button was pressed
 ZaCosListController.prototype._duplicateButtonListener =
 function(ev) {
-	var newCos = new ZaCos(); //new COS
 	if(this._contentView && (this._contentView.getSelectionCount() == 1)) {
+		var newCos = new ZaCos(); //new COS
 		var item = this._contentView.getSelection()[0];
 		if(item) { //copy the attributes from the selected COS to the new COS
             //need to get the cos first since rights, getAttrs and setAttrs are not in the cos list object
@@ -205,7 +205,7 @@ function(ev) {
 
             if ( item.attrs ) {
                 for(var aname in item.attrs) {
-                    if( (aname == ZaItem.A_objectClass) || (aname == ZaItem.A_zimbraId) || (aname == ZaCos.A_name) || (aname == ZaCos.A_description) || (aname == ZaCos.A_notes) || (aname == ZaItem.A_zimbraCreateTimestamp) )
+                    if( (aname == ZaItem.A_objectClass) || (aname == ZaItem.A_zimbraId) || (aname == ZaCos.A_name) || (aname == ZaCos.A_description) || (aname == ZaCos.A_zimbraNotes) || (aname == ZaItem.A_zimbraCreateTimestamp) )
                         continue;
 
                     if ( (typeof item.attrs[aname] == "object") || (item.attrs[aname] instanceof Array)) {
@@ -219,6 +219,11 @@ function(ev) {
                 }
             }
 
+
+            newCos.attrs[ZaCos.A_zimbraNotes] = AjxMessageFormat.format(ZaMsg.COSTBB_DuplicatingFrom_tt, [item.attrs[ZaCos.A_name]]);
+            //explicitly note the user this is duplicated from the one they select,
+            //instead of showing nothing at the first page of ZaNewCosXWizard
+
             if (item.getAttrs)   {
                 newCos.getAttrs = item.getAttrs ;
             }
@@ -231,8 +236,9 @@ function(ev) {
                 newCos.rights = item.rights ;
             }
         }
-	}	
-	ZaApp.getInstance().getCosController().show(newCos);
+
+        ZaCosListController.showMe.call(this, newCos);
+	}
 }
 
 // new button was pressed
@@ -250,17 +256,8 @@ function(ev) {
 			continue;			
 		newCos.attrs[aname] = defCos.attrs[aname];
 	}
-	
 
-    if(!appNewUI)
-		    ZaApp.getInstance().getCosController().show(newCos);
-    else{
-            if(!ZaApp.getInstance().dialogs["newCosXWizard"])
-			    ZaApp.getInstance().dialogs["newCosXWizard"] = new ZaNewCosXWizard(this._container,newCos);
-
-		    ZaApp.getInstance().dialogs["newCosXWizard"].setObject(newCos);
-		    ZaApp.getInstance().dialogs["newCosXWizard"].popup();
-        }
+    ZaCosListController.showMe.call(this, newCos);
 }
 
 /**
@@ -541,4 +538,15 @@ function (enableArray,disableArray) {
 }
 ZaController.changeActionsStateMethods["ZaCosListController"].push(ZaCosListController.changeActionsStateMethod);
 
-
+ZaCosListController.showMe = function(newCos)
+{
+    if(!appNewUI)
+        ZaApp.getInstance().getCosController().show(newCos);
+    else{
+        if(!ZaApp.getInstance().dialogs["newCosXWizard"]){
+            ZaApp.getInstance().dialogs["newCosXWizard"] = new ZaNewCosXWizard(this._container,newCos);
+        }
+        ZaApp.getInstance().dialogs["newCosXWizard"].setObject(newCos);
+        ZaApp.getInstance().dialogs["newCosXWizard"].popup();
+    }
+}
