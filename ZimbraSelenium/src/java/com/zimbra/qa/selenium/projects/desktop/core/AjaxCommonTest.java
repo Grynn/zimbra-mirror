@@ -438,7 +438,11 @@ public class AjaxCommonTest {
 		.append(ZimbraAccount.AccountZWC().Password).append("&host=") 
 		.append(emailServerName).append("&port=")
 		.append(emailServerPort).append("&syncFreqSecs=900&debugTraceEnabled=on")
-		.append(securityType).toString();
+		.append(securityType)
+		.append("&syncEmailDate=0")
+		.append("&syncFixedDate=")
+		.append("&syncRelativeDate=")
+		.append("&syncFieldName=Week").toString();
 		//.append("&dev=1&scripterrors=1").toString();
 		logger.info("accountSetupUrl: " + accountSetupUrl);
 		GeneralUtility.doHttpPost(accountSetupUrl);
