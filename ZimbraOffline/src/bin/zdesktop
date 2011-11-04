@@ -100,6 +100,7 @@ ACTION=$1
 ZIMBRA_HOME="@install.data.root@"
 JETTY_HOME="@install.app.root@/jetty"
 CONFIGS="${ZIMBRA_HOME}/jetty/etc/jetty.xml"
+JETTY_ARGS=" --ini OPTIONS=Server,jsp,jmx,resources,websocket,ext,jta,plus,rewrite"
 #@install.leopard.java.home@
 #@install.linux.java.home@
 

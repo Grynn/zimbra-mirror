@@ -37,7 +37,7 @@ ${zdf:onLogin(eventBean)}
 <c:catch var="loginException">
     <zm:login username="${empty param.username ? bean.loginUsername : param.username}" password="${zdf:getLocalConfig('zdesktop_installation_key')}"
         varRedirectUrl="postLoginUrl" varAuthResult="authResult" rememberme="true"
-        prefs="${prefsToFetch}" attrs="${attrsToFetch}" requestedSkin="${param.skin}" varNeedRefer="needRefer"/>
+        prefs="${prefsToFetch}" attrs="${attrsToFetch}" requestedSkin="${param.skin}"/>
 </c:catch>
 
 <c:if test="${not empty loginException}">
@@ -47,7 +47,7 @@ ${zdf:onLogin(eventBean)}
         <zm:login authtoken="${authtoken}" authtokenInUrl="${not empty param.zauthtoken}"
             varRedirectUrl="postLoginUrl" varAuthResult="authResult"
             rememberme="true" prefs="${prefsToFetch}" attrs="${attrsToFetch}"
-            requestedSkin="${param.skin}" varNeedRefer="needRefer"/>
+            requestedSkin="${param.skin}"/>
     </c:if>
 </c:if>
 
