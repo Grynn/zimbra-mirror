@@ -14,6 +14,13 @@
  */
 package com.zimbra.cs.account.offline;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import com.google.common.base.Objects;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.DataSource;
@@ -21,13 +28,12 @@ import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.common.OfflineConstants;
+import com.zimbra.cs.offline.jsp.JspConstants;
 import com.zimbra.cs.offline.util.OfflineUtil;
-
-import java.util.*;
 
 public class OfflineAccount extends Account {
 
-    Account localAccount; //the local account that acts as everyone's parent. this will be null if this account itself is the local account
+    Account localAccount; // the local account that acts as everyone's parent. this will be null if this account itself is the local account
 
     public static class Version {
         private static Version v6 = new Version("6.0.0");
@@ -61,19 +67,27 @@ public class OfflineAccount extends Account {
             }
         }
 
-        public int getMajor()        { return major; }
-        public int getMinor()        { return minor; }
-        public int getMaintenance()  { return maintenance; }
+        public int getMajor() {
+            return major;
+        }
+
+        public int getMinor() {
+            return minor;
+        }
+
+        public int getMaintenance() {
+            return maintenance;
+        }
 
         public boolean isAtLeast(Version required) {
-            return major > required.major || major == required.major && minor > required.minor ||
-            major == required.major && minor == required.minor && maintenance >= required.maintenance;
+            return major > required.major || major == required.major && minor > required.minor
+                    || major == required.major && minor == required.minor && maintenance >= required.maintenance;
         }
 
         public boolean isAtLeast6xx() {
             return isAtLeast(v6);
         }
-        
+
         public boolean isAtLeast7xx() {
             return isAtLeast(v7);
         }
@@ -82,7 +96,9 @@ public class OfflineAccount extends Account {
             return isAtLeast(v8);
         }
 
-        public String toString() { return "" + major + "." + minor + "." + maintenance; }
+        public String toString() {
+            return "" + major + "." + minor + "." + maintenance;
+        }
     }
 
     private Version mRemoteServerVersion;
@@ -97,33 +113,28 @@ public class OfflineAccount extends Account {
         mRemoteServerVersion = null;
     }
 
-    public OfflineAccount(String name, String id, Map<String, Object> attrs, Map<String, Object> defaults, Account localAccount, Provisioning prov) {
+    public OfflineAccount(String name, String id, Map<String, Object> attrs, Map<String, Object> defaults,
+            Account localAccount, Provisioning prov) {
         super(name, id, attrs, defaults, prov);
         this.localAccount = localAccount;
     }
 
-    private static final String[] sDisabledFeatures = new String[] {
-        Provisioning.A_zimbraFeatureIMEnabled,
-        Provisioning.A_zimbraFeatureViewInHtmlEnabled,
-        Provisioning.A_zimbraFeatureNotebookEnabled,
-        Provisioning.A_zimbraDumpsterEnabled
-    };
+    private static final String[] sDisabledFeatures = new String[] { Provisioning.A_zimbraFeatureIMEnabled,
+            Provisioning.A_zimbraFeatureViewInHtmlEnabled, Provisioning.A_zimbraFeatureNotebookEnabled,
+            Provisioning.A_zimbraDumpsterEnabled };
 
     private static final Set<String> sDisabledFeaturesSet = new HashSet<String>();
-    
+
     static {
         for (String feature : sDisabledFeatures)
             sDisabledFeaturesSet.add(feature.toLowerCase());
     }
 
-
-    private static final String[] sGlobalAttributes = new String[] {
-        Provisioning.A_zimbraPrefIncludeTrashInSearch,
-        Provisioning.A_zimbraPrefIncludeSpamInSearch
-    };
+    private static final String[] sGlobalAttributes = new String[] { Provisioning.A_zimbraPrefIncludeTrashInSearch,
+            Provisioning.A_zimbraPrefIncludeSpamInSearch };
 
     private static final Set<String> sGlobalAttributesSet = new HashSet<String>();
-    
+
     static {
         for (String attr : sGlobalAttributes)
             sGlobalAttributesSet.add(attr.toLowerCase());
@@ -147,7 +158,7 @@ public class OfflineAccount extends Account {
     @Override
     protected Map<String, Object> getRawAttrs() {
         Map<String, Object> attrs = new HashMap<String, Object>(super.getRawAttrs());
-        
+
         for (String feature : sDisabledFeatures)
             attrs.put(feature, "FALSE");
         if (localAccount != null)
@@ -161,7 +172,7 @@ public class OfflineAccount extends Account {
     @Override
     public Map<String, Object> getAttrs(boolean applyDefaults) {
         Map<String, Object> attrs = new HashMap<String, Object>(super.getAttrs(applyDefaults));
-        
+
         for (String feature : sDisabledFeatures)
             attrs.put(feature, "FALSE");
         if (localAccount != null)
@@ -174,7 +185,9 @@ public class OfflineAccount extends Account {
 
     @Override
     public String[] getMultiAttr(String name) {
-        if (isLocalAccount() && (name.equals(Provisioning.A_zimbraChildAccount) || name.equals(Provisioning.A_zimbraPrefChildVisibleAccount))) {
+        if (isLocalAccount()
+                && (name.equals(Provisioning.A_zimbraChildAccount) || name
+                        .equals(Provisioning.A_zimbraPrefChildVisibleAccount))) {
             try {
                 OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
                 List<Account> accounts = prov.getAllAccounts();
@@ -183,7 +196,8 @@ public class OfflineAccount extends Account {
                     accountIds = new String[accounts.size()];
                     for (int i = 0; i < accounts.size(); ++i)
                         accountIds[i] = accounts.get(i).getId();
-                    String[] order = prov.getLocalAccount().getAttr(OfflineConstants.A_offlineAccountsOrder, "").split(",");
+                    String[] order = prov.getLocalAccount().getAttr(OfflineConstants.A_offlineAccountsOrder, "")
+                            .split(",");
                     OfflineUtil.fixItemOrder(order, accountIds);
                 } else {
                     accountIds = new String[0];
@@ -193,11 +207,11 @@ public class OfflineAccount extends Account {
                 OfflineLog.offline.error(x);
             }
         }
-        
+
         // no need to return this multi-attr for any child accounts
         if (!isLocalAccount() && name.equals(Provisioning.A_zimbraZimletAvailableZimlets))
             return new String[0];
-        
+
         return super.getMultiAttr(name);
     }
 
@@ -223,7 +237,7 @@ public class OfflineAccount extends Account {
     }
 
     public boolean isLocalAccount() {
-        return localAccount == null; //the localAccount field will be null if this account is the local account
+        return localAccount == null; // the localAccount field will be null if this account is the local account
     }
 
     public boolean isDataSourceAccount() {
@@ -240,14 +254,17 @@ public class OfflineAccount extends Account {
 
     private void setLastSyncTimestampInternal(long time) throws ServiceException {
         if (isZcsAccount()) {
-            OfflineProvisioning.getOfflineInstance().setAccountAttribute(this, OfflineConstants.A_offlineLastSync, Long.toString(time));
+            OfflineProvisioning.getOfflineInstance().setAccountAttribute(this, OfflineConstants.A_offlineLastSync,
+                    Long.toString(time));
         } else if (isDataSourceAccount()) {
             DataSource ds = OfflineProvisioning.getOfflineInstance().getDataSource(this);
-            OfflineProvisioning.getOfflineInstance().setDataSourceAttribute(ds, OfflineConstants.A_zimbraDataSourceLastSync, Long.toString(time));
+            OfflineProvisioning.getOfflineInstance().setDataSourceAttribute(ds,
+                    OfflineConstants.A_zimbraDataSourceLastSync, Long.toString(time));
         }
     }
 
     boolean isRequestScopeDebugTraceOn = false;
+
     public synchronized void setRequestScopeDebugTraceOn(boolean b) {
         isRequestScopeDebugTraceOn = b;
     }
@@ -255,24 +272,64 @@ public class OfflineAccount extends Account {
     public synchronized boolean isDebugTraceEnabled() {
         return isRequestScopeDebugTraceOn || getBooleanAttr(OfflineConstants.A_offlineEnableTrace, false);
     }
-    
+
     boolean isDisabledDueToError = false;
+
     public void setDisabledDueToError(boolean disabled) {
         isDisabledDueToError = disabled;
     }
-    
+
     public boolean isDisabledDueToError() {
         return isDisabledDueToError;
     }
 
     boolean isGalSyncRetryOn = true;
-    
+
     public boolean isGalSyncRetryOn() {
         return isGalSyncRetryOn;
     }
 
     public void setGalSyncRetryOn(boolean isGalSyncRetryOn) {
         this.isGalSyncRetryOn = isGalSyncRetryOn;
+    }
+
+    /**
+     * @return the value of offlineRemoteHost (server name, not domain name)
+     */
+    public String getRemoteHost() {
+        return getAttr(JspConstants.OFFLINE_REMOTE_HOST);
+    }
+
+    /**
+     * @return domain name of the account, e.g. yy.com of xx@yy.com
+     */
+    public String getDomain() {
+        if (!isGalAccount()) {
+            String mailAddr = getMail();
+            if (mailAddr != null) {
+                return mailAddr.substring(mailAddr.lastIndexOf("@") + 1);
+            }
+        } else {
+            // should be consistent with OfflineProvisioning::getOfflineGalMailboxName
+            String mailAddr = getMail();
+            return mailAddr.substring(mailAddr.lastIndexOf("@") + 1,
+                    mailAddr.lastIndexOf(OfflineConstants.GAL_ACCOUNT_SUFFIX));
+        }
+        return null;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(getId());
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null || obj.getClass() != getClass()) {
+            return false;
+        }
+        final OfflineAccount anotherAccount = (OfflineAccount) obj;
+        return Objects.equal(getId(), anotherAccount.getId());
     }
 
     public static void main(String[] args) {

@@ -74,7 +74,7 @@ public class OfflineGalGroupInfoProvider extends GalGroupInfoProvider {
         }
     }
 
-    private void encodeGroups(Map<String, Element> emailElems, Account requestedAcct) {
+    private void encodeGroups(Map<String, Element> emailElems, OfflineAccount requestedAcct) {
         try {
             if (emailElems == null || emailElems.size() <= 0) {
                 return;

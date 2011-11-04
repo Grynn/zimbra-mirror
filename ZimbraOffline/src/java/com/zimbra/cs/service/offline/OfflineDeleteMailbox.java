@@ -65,13 +65,6 @@ public class OfflineDeleteMailbox extends DeleteMailbox {
             checkAccountRight(zsc, account, Admin.R_deleteAccount);   
         }
 
-        if (account != null) {
-            
-            if (prov.isZcsAccount(account)) {
-                prov.setAccountAttribute(account, OfflineConstants.A_offlineGalAccountSyncToken, ""); // to trigger full gal sync
-            }
-        }
-        
         //test if the mbox is fetchable; if it is not (e.g. due to corrupt db files) then we want to force-remove it from mgr so next req makes new db files. 
         try {
             MailboxManager.getInstance().getMailboxByAccountId(accountId, false);

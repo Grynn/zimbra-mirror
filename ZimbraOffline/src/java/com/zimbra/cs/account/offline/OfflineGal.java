@@ -76,7 +76,17 @@ public class OfflineGal {
     private SearchParams searchParams = null;
 
     public OfflineGal(OfflineAccount account) {
-        mAccount = account;
+        if (account.isGalAccount()) {
+            mAccount = account;
+        } else if (account.isZcsAccount() && account.isFeatureGalEnabled() && account.isFeatureGalSyncEnabled()) {
+            try {
+                mAccount = (OfflineAccount) OfflineProvisioning.getOfflineInstance().getGalAccountByAccount(account);
+            } catch (ServiceException e) {
+                OfflineLog.offline.debug("failed to get GAL account for account %s", account.getName());
+            }
+        } else {
+            mAccount = account;
+        }
     }
 
     public OfflineAccount getAccount() {
@@ -100,7 +110,7 @@ public class OfflineGal {
 
     public ZimbraQueryResults search(Set<String> names, String type, SortBy sortBy, int offset, int limit,
             Element cursor) throws ServiceException {
-        String galAcctId = mAccount.getAttr(OfflineConstants.A_offlineGalAccountId, false);
+        String galAcctId = mAccount.getId();
         mGalMbox = null;
 
         if (galAcctId != null && galAcctId.length() > 0)

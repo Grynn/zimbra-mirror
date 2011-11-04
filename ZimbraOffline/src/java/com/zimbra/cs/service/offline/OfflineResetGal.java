@@ -10,10 +10,6 @@ import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.mailbox.GalSync;
-import com.zimbra.cs.mailbox.Mailbox;
-import com.zimbra.cs.mailbox.MailboxManager;
-import com.zimbra.cs.mailbox.OfflineMailboxManager;
-import com.zimbra.cs.mailbox.ZcsMailbox;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.service.admin.AdminDocumentHandler;
@@ -26,17 +22,10 @@ public class OfflineResetGal extends AdminDocumentHandler {
         String accountId = request.getAttribute(AdminConstants.E_ID);
         OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
         OfflineAccount account = (OfflineAccount) prov.get(AccountBy.id, accountId);
-        ZcsMailbox mbox = (ZcsMailbox) OfflineMailboxManager.getInstance().getMailboxByAccount(account);
-
-        boolean isGalFullSynced = GalSync.isFullSynced(account);
-        if (account.getBooleanAttr(Provisioning.A_zimbraFeatureGalEnabled, false)
-                && account.getBooleanAttr(Provisioning.A_zimbraFeatureGalSyncEnabled, false)) {
-            if (isGalFullSynced) {
-                String galAccountId = account.getAttr(OfflineConstants.A_offlineGalAccountId, false);
-                Mailbox galMbox = MailboxManager.getInstance().getMailboxByAccountId(galAccountId, false);
-                OfflineAccount galAccount = (OfflineAccount) prov.get(AccountBy.id, galAccountId);
-
-                boolean isReset = GalSync.getInstance().resetGal(mbox, galMbox, account, galAccount);
+        if (account.isFeatureGalEnabled() && account.isFeatureGalSyncEnabled()) {
+            OfflineAccount galAccount = (OfflineAccount) prov.getGalAccountByAccount(account);
+            if (GalSync.isFullSynced(galAccount)) {
+                boolean isReset = GalSync.getInstance().resetGal(galAccount);
                 if (!isReset) {
                     OfflineLog.offline.debug("reseting gal for account %s -- Skipped because GAL is recently synced",
                             account.getName());
@@ -47,7 +36,7 @@ public class OfflineResetGal extends AdminDocumentHandler {
                         account.getName());
             }
         } else {
-            OfflineLog.offline.debug("Offline GAL sync is disabled for %s, resetting skipped." + account.getName());
+            OfflineLog.offline.debug("Offline GAL sync is disabled for %s, resetting skipped.", account.getName());
         }
 
         ZimbraSoapContext zsc = getZimbraSoapContext(context);
