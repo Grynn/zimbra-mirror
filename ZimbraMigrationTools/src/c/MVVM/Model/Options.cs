@@ -61,10 +61,10 @@ public class AdvancedImportOptions
         get { return m_MigrateONRAfter; }
         set { m_MigrateONRAfter = value; }
     }
-    private string m_MaxAttachementSize;
-    public string MaxAttachementSize {
-        get { return m_MaxAttachementSize; }
-        set { m_MaxAttachementSize = value; }
+    private string m_MaxMessageSize;
+    public string MaxMessageSize {
+        get { return m_MaxMessageSize; }
+        set { m_MaxMessageSize = value; }
     }
     public Folder[] FoldersToSkip;
 }

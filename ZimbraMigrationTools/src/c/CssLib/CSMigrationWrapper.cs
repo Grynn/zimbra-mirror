@@ -18,7 +18,7 @@ public class MigrationOptions
     public ItemsAndFoldersOptions ItemsAndFolders;
 
     public string DateFilter;
-    public string AttachmentFilter;
+    public string MessageSizeFilter;
     public string SkipFolders;
 }
 
@@ -329,7 +329,7 @@ public class CSMigrationwrapper
     }
 
     private void ProcessItems(MigrationAccount Acct, dynamic folderobject, foldertype ftype,
-        ZimbraAPI api, string path)
+        ZimbraAPI api, string path, MigrationOptions importopts)
     {
         DateTime dt;
 
@@ -374,6 +374,7 @@ public class CSMigrationwrapper
             {
                 if (itemobject != null)
                 {
+                    bool bSkipMessage = false;
                     Dictionary<string, string> dict = new Dictionary<string, string>();
 
                     foldertype type = (foldertype)itemobject.Type;
@@ -414,16 +415,45 @@ public class CSMigrationwrapper
 
                         if (ftype == foldertype.Mail)
                         {
-                            dict.Add("folderId", folderobject.FolderPath);
-                            dict.Add("tags", "");
-                            stat = api.AddMessage(dict);
+                            int msf = 0;
+                            if (importopts.MessageSizeFilter != null)
+                            {
+                                msf = Int32.Parse(importopts.MessageSizeFilter);
+                                msf *= 1000000;
+                                try
+                                {
+                                    FileInfo f = new FileInfo(dict["filePath"]);
+                                    if (f.Length > msf)
+                                    {
+                                        bSkipMessage = true;
+                                        File.Delete(dict["filePath"]);
+                                        // FBS -- When logging implemented, we should log this
+                                        // Should we put a message in the UI as well?
+                                    }
+                                }
+                                catch (Exception)
+                                {
+                                }
+                            }
+
+                            if (!bSkipMessage)
+                            {
+                                dict.Add("folderId", folderobject.FolderPath);
+                                dict.Add("tags", "");
+                                stat = api.AddMessage(dict);
+                            }
                         }
                         else if (ftype == foldertype.Contacts)
                         {
                             stat = api.CreateContact(dict, path);
                         }
                     }
-                    Acct.migrationFolder.CurrentCountOFItems++;
+
+                    // Note the : statement.  It seems weird to set Acct.migrationFolder.CurrentCountOFItems
+                    // to itself, but this is done so the method will be called to increment the progress bar
+                    Acct.migrationFolder.CurrentCountOFItems = (!bSkipMessage)
+                                                               ? Acct.migrationFolder.CurrentCountOFItems + 1
+                                                               : Acct.migrationFolder.CurrentCountOFItems;
                 }
                 iProcessedItems++;
             }
@@ -595,10 +625,12 @@ public class CSMigrationwrapper
                     {
                         path = "/MAPIRoot/Deleted Items";
                     }
-                    ProcessItems(Acct, folderobject, foldertype.Contacts, api, path);
+                    ProcessItems(Acct, folderobject, foldertype.Contacts, api, path, importopts);
                 }
                 if (importopts.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Mail))
-                    ProcessItems(Acct, folderobject, foldertype.Mail, api, path);
+                {
+                    ProcessItems(Acct, folderobject, foldertype.Mail, api, path, importopts);
+                }
             }
         }
         else

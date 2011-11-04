@@ -22,7 +22,7 @@ public class OptionsViewModel: BaseViewModel
         this.BackCommand = new ActionCommand(this.Back, () => true);
         this.NextCommand = new ActionCommand(this.Next, () => true);
         Migratedateflag = false;
-        Maxattachflag = false;
+        Maxmessageflag = false;
         Skipfolderflag = false;
     }
     public ICommand LoadCommand {
@@ -53,7 +53,7 @@ public class OptionsViewModel: BaseViewModel
         ImportRuleOptions = config.importOptions.Rules;
 
         MigrateONRAfter = config.AdvancedImportOptions.MigrateONRAfter.ToLongDateString();
-        MaxAttachementSize = config.AdvancedImportOptions.MaxAttachementSize;
+        MaxMessageSize = config.AdvancedImportOptions.MaxMessageSize;
 
         string returnval = "";
 
@@ -65,10 +65,10 @@ public class OptionsViewModel: BaseViewModel
             Migratedateflag = true;
         else
             Migratedateflag = false;
-        if ((MaxAttachementSize != "") && (MaxAttachementSize != null))
-            Maxattachflag = true;
+        if ((MaxMessageSize != "") && (MaxMessageSize != null))
+            Maxmessageflag = true;
         else
-            Maxattachflag = false;
+            Maxmessageflag = false;
         if ((placeholderstring != "") && (placeholderstring != null))
             Skipfolderflag = true;
         else
@@ -299,15 +299,16 @@ public class OptionsViewModel: BaseViewModel
             OnPropertyChanged(new PropertyChangedEventArgs("MigrateONRAfter"));
         }
     }
-    public string MaxAttachementSize {
-        get { return m_config.AdvancedImportOptions.MaxAttachementSize; }
+    public string MaxMessageSize
+    {
+        get { return m_config.AdvancedImportOptions.MaxMessageSize; }
         set
         {
-            if (value == m_config.AdvancedImportOptions.MaxAttachementSize)
+            if (value == m_config.AdvancedImportOptions.MaxMessageSize)
                 return;
-            m_config.AdvancedImportOptions.MaxAttachementSize = value;
+            m_config.AdvancedImportOptions.MaxMessageSize = value;
 
-            OnPropertyChanged(new PropertyChangedEventArgs("MaxAttachementSize"));
+            OnPropertyChanged(new PropertyChangedEventArgs("MaxMessageSize"));
         }
     }
     private string placeholderstring;
@@ -355,13 +356,13 @@ public class OptionsViewModel: BaseViewModel
             OnPropertyChanged(new PropertyChangedEventArgs("Migratedateflag"));
         }
     }
-    private bool m_maxattachflag;
-    public bool Maxattachflag {
-        get { return m_maxattachflag; }
+    private bool m_maxmessageflag;
+    public bool Maxmessageflag {
+        get { return m_maxmessageflag; }
         set
         {
-            m_maxattachflag = value;
-            OnPropertyChanged(new PropertyChangedEventArgs("Maxattachflag"));
+            m_maxmessageflag = value;
+            OnPropertyChanged(new PropertyChangedEventArgs("Maxmessageflag"));
         }
     }
     private bool m_skipfolderflag;
