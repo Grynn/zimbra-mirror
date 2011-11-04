@@ -53,9 +53,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CssLib", "src\c\CssLib\CssL
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZimbraMigrationConsole", "src\c\ZimbraMigrationConsole\ZimbraMigrationConsole.csproj", "{DEBF5F38-2B24-4958-9895-A201E3C133BC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GroupWise", "src\c\GroupWise\GroupWise.csproj", "{1E39385E-ED50-4230-CBF8-49AE7E224FFA}"
+EndProject
 Global
 	GlobalSection(SourceCodeControl) = preSolution
-		SccNumberOfProjects = 13
+		SccNumberOfProjects = 14
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = ..\\ZimbraMAPI\\vcproj\\Util.vcxproj
 		SccLocalPath1 = ..\\ZimbraMAPI
@@ -93,6 +95,8 @@ Global
 		SccProjectUniqueName12 = ..\\ZimbraMAPI\\vcproj\\ZimbraMime.vcxproj
 		SccLocalPath12 = ..\\ZimbraMAPI
 		SccProjectFilePathRelativizedFromConnection12 = vcproj\\
+		SccProjectUniqueName13 = src\\c\\GroupWise\\GroupWise.csproj
+		SccLocalPath13 = src\\c\\GroupWise
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		dbg|Win32 = dbg|Win32
@@ -247,6 +251,18 @@ Global
 		{DEBF5F38-2B24-4958-9895-A201E3C133BC}.tst|Win32.Build.0 = tst|Win32
 		{DEBF5F38-2B24-4958-9895-A201E3C133BC}.tst|x64.ActiveCfg = tst|x64
 		{DEBF5F38-2B24-4958-9895-A201E3C133BC}.tst|x64.Build.0 = tst|x64
+		{1E39385E-ED50-4230-CBF8-49AE7E224FFA}.dbg|Win32.ActiveCfg = dbg|Win32
+		{1E39385E-ED50-4230-CBF8-49AE7E224FFA}.dbg|Win32.Build.0 = dbg|Win32
+		{1E39385E-ED50-4230-CBF8-49AE7E224FFA}.dbg|x64.ActiveCfg = dbg|x64
+		{1E39385E-ED50-4230-CBF8-49AE7E224FFA}.dbg|x64.Build.0 = dbg|x64
+		{1E39385E-ED50-4230-CBF8-49AE7E224FFA}.rtl|Win32.ActiveCfg = rtl|Win32
+		{1E39385E-ED50-4230-CBF8-49AE7E224FFA}.rtl|Win32.Build.0 = rtl|Win32
+		{1E39385E-ED50-4230-CBF8-49AE7E224FFA}.rtl|x64.ActiveCfg = rtl|x64
+		{1E39385E-ED50-4230-CBF8-49AE7E224FFA}.rtl|x64.Build.0 = rtl|x64
+		{1E39385E-ED50-4230-CBF8-49AE7E224FFA}.tst|Win32.ActiveCfg = tst|Win32
+		{1E39385E-ED50-4230-CBF8-49AE7E224FFA}.tst|Win32.Build.0 = tst|Win32
+		{1E39385E-ED50-4230-CBF8-49AE7E224FFA}.tst|x64.ActiveCfg = tst|x64
+		{1E39385E-ED50-4230-CBF8-49AE7E224FFA}.tst|x64.Build.0 = tst|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
