@@ -867,8 +867,10 @@ function () {
 /////////////////////////////////////////////////////////////////////////////////////
 //the list view for the domain and server filter
 ZaOptionList = function(parent,className) {
-	//DwtListView.call(this, parent, null, Dwt.STATIC_STYLE);
-	DwtListView.call(this, parent, null, Dwt.ABSOLUTE_STYLE);
+    if (appNewUI)
+	    DwtListView.call(this, parent, null, Dwt.STATIC_STYLE);
+    else
+	    DwtListView.call(this, parent, null, Dwt.ABSOLUTE_STYLE);
 }
 
 ZaOptionList.prototype = new DwtListView;

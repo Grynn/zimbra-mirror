@@ -257,7 +257,8 @@ function () {
 
 	this._table = document.createElement("table");
 	this._table.border = 0;
-	this._table.width=this._contentW;
+    if (this._contentW)
+	    this._table.width=this._contentW;
 	this._table.cellPadding = 0;
 	this._table.cellSpacing = 0;
 	Dwt.associateElementWithObject(this._table, this);
@@ -272,8 +273,9 @@ function () {
 	col2 = row2.insertCell(row2.cells.length);
 	col2.align = "left";
 	col2.vAlign = "middle";
-	col2.noWrap = true;	
-	col2.width = this._contentW;
+	col2.noWrap = true;
+    if (this._contentW)
+	    col2.width = this._contentW;
 	col2.appendChild(this._pageDiv);
 
 	this._getContentDiv().appendChild(this._table);
