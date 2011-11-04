@@ -2650,6 +2650,16 @@ function (domainName) {
                                 busyMsg:ZaMsg.BUSY_SEARCHING,
                                 skipCallbackIfCancelled:false                
         }
+         controller.scrollSearchParams={
+                query:controller._currentQuery,
+                domain: controller._currentDomain,
+                types:searchTypes,
+                attrs:controller.fetchAttrs,
+                controller: controller,
+                                showBusy:true,
+                                busyMsg:ZaMsg.BUSY_SEARCHING,
+                                skipCallbackIfCancelled:false
+         }
         ZaSearch.searchDirectory(searchParams);
     }else {
         var currentController = ZaApp.getInstance().getCurrentController () ;
