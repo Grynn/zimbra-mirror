@@ -47,6 +47,9 @@ ZaItem.initMethods["ZaHome"].push(ZaHome.initMethod);
 // Fake here no soap request, just collect all kinds of information everywhere
 ZaHome.loadMethod =
 function () {
+    var now = new Date();
+    var formatter = AjxDateFormat.getDateInstance(AjxDateFormat.LONG);
+    var currentTime = formatter.format(now);
     this.attrs[ZaHome.A2_account] = ZaZimbraAdmin.currentAdminAccount.attrs.mail;
     this.attrs[ZaHome.A2_version] = ZaServerVersionInfo.version;
     this.attrs[ZaHome.A2_accountNum] = ZaApp.getInstance().getAccountStats()[ZaItem.ACCOUNT];
@@ -54,18 +57,19 @@ function () {
     this.attrs[ZaHome.A2_domainNum] = ZaApp.getInstance().getDomainList().size();
     this.attrs[ZaHome.A2_serverNum] = ZaApp.getInstance().getServerList().size();
     this.attrs[ZaHome.A2_lastBackup] = true;
-    this.attrs[ZaHome.A2_lastBackupTime] = "2011";
+    this.attrs[ZaHome.A2_lastBackupTime] = currentTime;
     this.attrs[ZaHome.A2_lastCleanup] = true;
-    this.attrs[ZaHome.A2_lastCleanupTime] = "2012";
-    this.attrs[ZaHome.A2_lastLogPurge] = false;
-    this.attrs[ZaHome.A2_lastLogPurgeTime] = "2013";
-    this.attrs[ZaHome.A2_expiredType] = false;
-    this.attrs[ZaHome.A2_expiredMessage] = "OK";
-    this.attrs[ZaHome.A2_DBCheckType] = false;
-    this.attrs[ZaHome.A2_DBCheckMessage] = "OK";
-    this.attrs[ZaHome.A2_serviceStatusMessage] = "Running";
+    this.attrs[ZaHome.A2_lastCleanupTime] = currentTime;
+    this.attrs[ZaHome.A2_lastLogPurge] = true;
+    this.attrs[ZaHome.A2_lastLogPurgeTime] = currentTime;
+    this.attrs[ZaHome.A2_expiredType] = true;
+    this.attrs[ZaHome.A2_expiredMessage] = ZaMsg.LBL_HomeStatusOK;
+    this.attrs[ZaHome.A2_DBCheckType] = true;
+    this.attrs[ZaHome.A2_DBCheckMessage] = ZaMsg.LBL_HomeStatusOK;
+    this.attrs[ZaHome.A2_serviceStatusMessage] = ZaMsg.LBL_HomeStatusRunning ;
     this.attrs[ZaHome.A2_serviceStatus] = true;
     this.attrs[ZaHome.A2_activeSession] = 3;
+    this.attrs[ZaHome.A2_queueLength] = 1;
     this.attrs[ZaHome.A2_messageCount] = "120/h";
     this.attrs[ZaHome.A2_messageVolume] = "34MB/h";
 }
@@ -93,6 +97,7 @@ ZaHome.myXModel = {
         {id:ZaHome.A2_serviceStatusMessage, type:_STRING_, ref: "attrs/" + ZaHome.A2_serviceStatusMessage},
         {id:ZaHome.A2_serviceStatus, type:_ENUM_, ref: "attrs/" + ZaHome.A2_serviceStatus, choices: ZaModel.BOOLEAN_CHOICES},
         {id:ZaHome.A2_activeSession, type:_NUMBER_, ref:"attrs/" + ZaHome.A2_activeSession},
+        {id:ZaHome.A2_queueLength, type:_NUMBER_, ref:"attrs/" + ZaHome.A2_queueLength},
         {id:ZaHome.A2_messageCount, type:_NUMBER_, ref:"attrs/" + ZaHome.A2_messageCount},
         {id:ZaHome.A2_messageVolume, type:_NUMBER_, ref:"attrs/" + ZaHome.A2_messageVolume}
     ]
