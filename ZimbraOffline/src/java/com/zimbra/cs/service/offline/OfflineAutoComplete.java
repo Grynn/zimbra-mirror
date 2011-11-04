@@ -25,7 +25,6 @@ import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.Element.XMLElement;
 import com.zimbra.common.soap.MailConstants;
 import com.zimbra.cs.account.Account;
-import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineGal;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
@@ -110,7 +109,7 @@ public class OfflineAutoComplete extends AutoComplete {
 
     // search local account, zcs accounts, data source accounts in order
     private void autoCompleteFromOtherAccountsContacts(Element request, ZimbraSoapContext ctxt, OfflineAccount reqAcct,
-            String name, final int limit, Provisioning.GalSearchType stype, AutoCompleteResult result,
+            String name, final int limit, GalSearchType stype, AutoCompleteResult result,
             OperationContext octxt, String typeStr) throws ServiceException {
         OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
         Account localAccount = prov.getLocalAccount();
@@ -150,7 +149,7 @@ public class OfflineAutoComplete extends AutoComplete {
     }
 
     private void autoCompleteFromOtherAccountsGal(Element request, ZimbraSoapContext ctxt, Account reqAcct,
-            String name, final int limit, Provisioning.GalSearchType stype, AutoCompleteResult result,
+            String name, final int limit, GalSearchType stype, AutoCompleteResult result,
             OperationContext octxt, String typeStr) throws ServiceException {
         OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
         List<Account> zcsAccounts = prov.getAllZcsAccounts();

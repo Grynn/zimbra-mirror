@@ -22,7 +22,6 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.NamedEntry;
 import com.zimbra.cs.account.Provisioning;
-import com.zimbra.cs.account.offline.OfflineProvisioning.EntryType;
 import com.zimbra.cs.db.DbOfflineDirectory;
 import com.zimbra.cs.offline.common.OfflineConstants;
 
@@ -51,9 +50,9 @@ public class OfflineDomainGal extends NamedEntry {
     public static Map<String, OfflineDomainGal> instantiateAll(OfflineProvisioning prov) {
         Map<String, OfflineDomainGal> map = new HashMap<String, OfflineDomainGal>();
         try {
-            List<String> ids = DbOfflineDirectory.listAllDirectoryEntries(EntryType.GAL);
+            List<String> ids = DbOfflineDirectory.listAllDirectoryEntries(OfflineProvisioning.EntryType.GAL);
             for (String id : ids) {
-                Map<String, Object> attrs = DbOfflineDirectory.readDirectoryEntry(EntryType.GAL,
+                Map<String, Object> attrs = DbOfflineDirectory.readDirectoryEntry(OfflineProvisioning.EntryType.GAL,
                         Provisioning.A_zimbraId, id);
                 if (attrs == null)
                     continue;

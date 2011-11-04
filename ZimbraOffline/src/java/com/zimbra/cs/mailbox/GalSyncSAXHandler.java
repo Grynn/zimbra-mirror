@@ -263,7 +263,7 @@ public class GalSyncSAXHandler implements ElementHandler {
         boolean success = false;
         try {
             galMbox.beginTransaction("saveUnparsedContact", null);
-            GalSyncUtil.fillContactAttrMap(this.galMbox, map);
+            GalSyncUtil.fillContactAttrMap(map);
             ParsedContact contact = new ParsedContact(map);
             String logstr = GalSyncUtil.getContactLogStr(contact);
             if (fullSync) {
