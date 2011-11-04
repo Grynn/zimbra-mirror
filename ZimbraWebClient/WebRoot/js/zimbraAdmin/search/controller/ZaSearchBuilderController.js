@@ -801,11 +801,13 @@ function (value, event, form){
 			this.setInstanceValue (invertValue, ZaSearchOption.A_objTypeAccountAdmin) ;
 			this.setInstanceValue (invertValue, ZaSearchOption.A_objTypeSystemAccount);
 		}else if (invertValue == "FALSE" && ref == ZaSearchOption.A_objTypeAccountAdmin) {
-			this.setInstanceValue (invertValue, ZaSearchOption.A_objTypeAccountDomainAdmin) ;
+            if (ZaSearchOption.A_objTypeAccountDomainAdmin)
+			    this.setInstanceValue (invertValue, ZaSearchOption.A_objTypeAccountDomainAdmin) ;
 			this.setInstanceValue (invertValue, ZaSearchOption.A_objTypeSystemAccount);
 		} else if (invertValue == "FALSE" && ref == ZaSearchOption.A_objTypeSystemAccount) {
 			this.setInstanceValue (invertValue, ZaSearchOption.A_objTypeAccountAdmin) ;
-			this.setInstanceValue (invertValue, ZaSearchOption.A_objTypeAccountDomainAdmin) ;
+            if (ZaSearchOption.A_objTypeAccountDomainAdmin)
+			    this.setInstanceValue (invertValue, ZaSearchOption.A_objTypeAccountDomainAdmin) ;
 		}
 
         //set the advanced login timestamp attributes value
