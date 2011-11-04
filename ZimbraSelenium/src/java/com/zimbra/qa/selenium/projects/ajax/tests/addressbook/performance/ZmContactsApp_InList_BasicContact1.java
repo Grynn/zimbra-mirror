@@ -1,10 +1,14 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.addressbook.performance;
 
+import java.io.File;
+
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.ContactItem;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.RestUtil;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.framework.util.performance.PerfKey;
 import com.zimbra.qa.selenium.framework.util.performance.PerfMetrics;
 import com.zimbra.qa.selenium.framework.util.performance.PerfToken;
@@ -47,10 +51,16 @@ public class ZmContactsApp_InList_BasicContact1 extends AjaxCommonTest {
    @Test(description = "Measure the time to load address book page with 100 contact items",
          groups = {"performance"})
    public void ZmContactsApp_02() throws HarnessException {
-      //Create 100 contact items
-      for (int i = 0; i < 100; i++) {
-         ContactItem.createUsingSOAP(app);
-      }
+
+      // Loading csv file that has information for 100 contacts to speed up the setup
+      String filename = ZimbraSeleniumProperties.getBaseDirectory() + "/data/public/csv/100contacts.csv";
+
+      RestUtil rest = new RestUtil();
+      rest.setAuthentication(app.zGetActiveAccount());
+      rest.setPath("/service/home/~/Contacts");
+      rest.setQueryParameter("fmt", "csv");
+      rest.setUploadFile(new File(filename));
+      rest.doPost();
 
       PerfToken token = PerfMetrics.startTimestamp(PerfKey.ZmContactsApp,
             "Load the Address Book app, 100 contacts in list");
