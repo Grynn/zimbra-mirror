@@ -240,7 +240,11 @@ function(ev) {
 DwtOutsideMouseEventMgr._mouseEventHdlr =
 function(ev) {
 
-	var omem = DwtOutsideMouseEventMgr.INSTANCE;
+    ev = DwtUiEvent.getEvent(ev);
+    if (!ev)
+        return;
+
+    var omem = DwtOutsideMouseEventMgr.INSTANCE;
 	var targetEl = DwtUiEvent.getTarget(ev);
 	DBG.println("out", "event type: " + ev.type);
 	DBG.println("out", "target: " + targetEl.id);
