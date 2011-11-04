@@ -1437,6 +1437,22 @@ public abstract class AbsSeleniumObject {
 	}
 
 	/**
+	 * DefaultSelenium.deleteAllVisibleCookies()
+	 */
+	public void sDeleteAllVisibleCookies() {
+		logger.info("sDeleteAllVisibleCookies()");
+		ClientSessionFactory.session().selenium().deleteAllVisibleCookies();	
+	}
+	
+	/**
+	 * DefaultSelenium.deleteCookie()
+	 */
+	public void sDeleteCookie(String name, String optionString) {
+		logger.info("sDeleteCookie("+ name +", "+ optionString +")");
+		ClientSessionFactory.session().selenium().deleteCookie(name , optionString);	
+	}
+	
+	/**
 	 * DefaultSelenium.openWindow()
 	 * 
 	 * @param url
