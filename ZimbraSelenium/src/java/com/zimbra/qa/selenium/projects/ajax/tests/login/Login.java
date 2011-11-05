@@ -93,7 +93,7 @@ public class Login extends AjaxCommonTest {
 		ZAssert.assertNotNull(mountpoint, "Verify active account's mountpoint is created");
 		
 		// Login
-		app.zPageLogin.zLogin(ZimbraAccount.AccountZMC());
+		app.zPageLogin.zLogin(ZimbraAccount.AccountZWC());
 		
 		// Verify main page becomes active
 		ZAssert.assertTrue(app.zPageMain.zIsActive(), "Verify that the account is logged in");
@@ -174,17 +174,11 @@ public class Login extends AjaxCommonTest {
 		
 		
 		// Login
-		app.zPageLogin.zLogin(ZimbraAccount.AccountZMC());
+		app.zPageLogin.zLogin(ZimbraAccount.AccountZWC());
 		
 		// Verify main page becomes active
 		ZAssert.assertTrue(app.zPageMain.zIsActive(), "Verify that the account is logged in");
 		
-		
-		// Login
-		app.zPageLogin.zLogin(ZimbraAccount.AccountZMC());
-		
-		// Verify main page becomes active
-		ZAssert.assertTrue(app.zPageMain.zIsActive(), "Verify that the account is logged in");
 		
 	}
 

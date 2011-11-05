@@ -171,7 +171,7 @@ public class HtmlCommonTest {
 
 
 			// Set the flag so the account is reset for the next test
-			ZimbraAccount.AccountZWC().accountIsDirty = true;
+			ZimbraAccount.AccountHTML().accountIsDirty = true;
 		}
 
 		// If test account zimlet preferences are defined, then make sure the test account
