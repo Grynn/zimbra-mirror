@@ -18,6 +18,7 @@ import org.dom4j.Namespace;
 import org.dom4j.QName;
 
 import com.zimbra.common.util.Constants;
+import com.zimbra.common.util.StringUtil;
 
 public interface OfflineConstants {
 
@@ -78,7 +79,7 @@ public interface OfflineConstants {
 
         public static SyncMsgOptions getOption(String value) {
             for (SyncMsgOptions opt : SyncMsgOptions.values()) {
-                if (value.equalsIgnoreCase(opt.option)) {
+                if (StringUtil.equalIgnoreCase(value, opt.option)) {
                     return opt;
                 }
             }
