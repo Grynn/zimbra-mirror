@@ -26,9 +26,11 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.UUID;
 
+import com.google.common.base.Strings;
 import com.google.common.io.Closeables;
 import com.zimbra.common.mailbox.ContactConstants;
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.service.ServiceException.Argument;
 import com.zimbra.common.soap.AccountConstants;
 import com.zimbra.common.soap.AdminConstants;
 import com.zimbra.common.soap.Element;
@@ -254,10 +256,33 @@ public final class GalSyncUtil {
             String galAcctId) throws ServiceException, IOException {
         XMLElement req = new XMLElement(MailConstants.GET_CONTACTS_REQUEST);
         req.addElement(AdminConstants.E_CN).addAttribute(AccountConstants.A_ID, reqIds);
-
-        Element response = randMailbox.sendRequest(req, true, true,
-                OfflineLC.zdesktop_gal_sync_request_timeout.intValue(), SoapProtocol.Soap12);
-
+        Element response = null;
+        try {
+            response = randMailbox.sendRequest(req, true, true, OfflineLC.zdesktop_gal_sync_request_timeout.intValue(), SoapProtocol.Soap12);
+        } catch (ServiceException e) {
+            //resolve mail.NO_SUCH_CONTACT, recursively exclude the bad id and try the good ids.
+            if (MailServiceException.NO_SUCH_CONTACT.equals(((ServiceException) e).getCode())) {
+                OfflineLog.offline.warn("GAL sync got NO_SUCH_CONTACT error, trying to isolate it", e);
+                Argument badIdArg = e.getArgs().get(0);
+                String badId = galAcctId + ":" + badIdArg.value;
+                retryContactIds.add(badId);
+                String[] goodIds = new String[2];
+                int badIdIdx = reqIds.indexOf(badId);
+                goodIds[0] = reqIds.substring(0, badIdIdx);
+                goodIds[1] = reqIds.substring(badIdIdx + badId.length());
+                for (String ids : goodIds) {
+                    String newIds = retrofitIds(ids);
+                    if (!Strings.isNullOrEmpty(newIds)) {
+                        fetchContacts(randMailbox, galMbox, ctxt, syncFolder, newIds, isFullSync, ds, retryContactIds, token, galAcctId);
+                    }
+                }
+            } else {
+                throw e;
+            }
+        }
+        if (response == null) {
+            return;
+        }
         List<Element> contacts = response.listElements(MailConstants.E_CONTACT);
         LinkedHashMap<String, ParsedContact> parsedContacts = getParsedContacts(contacts, retryContactIds);
 
@@ -292,6 +317,20 @@ public final class GalSyncUtil {
                 galMbox.endTransaction(success);
             }
         }
+    }
+
+    private static String retrofitIds(String ids) {
+        if (ids != null) {
+            ids = ids.trim();
+            if (ids.startsWith(",")) {
+                ids = ids.substring(1);
+            }
+            if (ids.endsWith(",")) {
+                ids = ids.substring(0, ids.length()-1);
+            }
+            ids = ids.trim();
+        }
+        return ids;
     }
 
     public static void fetchContacts(Mailbox galMbox, OperationContext ctxt, int syncFolder, String reqIds,
