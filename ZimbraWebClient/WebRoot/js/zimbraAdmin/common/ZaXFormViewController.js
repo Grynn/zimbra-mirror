@@ -383,12 +383,19 @@ function () {
 	
 	var elements = new Object();
 	elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
-	elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;		
-    var tabParams = {
-		openInNewTab: true,
-		tabId: this.getContentViewId()
-	}
-	ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams) ;
+
+
+
+    if(!appNewUI) {
+        elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;
+        var tabParams = {
+		        openInNewTab: true,
+		        tabId: this.getContentViewId()
+	        }
+	    ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams) ;
+    } else
+        ZaApp.getInstance().getAppViewMgr().createView(this.getContentViewId(), elements);
+
 	this._UICreated = true;
 	ZaApp.getInstance()._controllers[this.getContentViewId ()] = this ;
 }
