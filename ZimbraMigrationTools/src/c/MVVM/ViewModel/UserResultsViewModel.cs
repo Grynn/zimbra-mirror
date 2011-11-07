@@ -16,7 +16,12 @@ public class UserResultsViewModel: BaseViewModel
 {
     readonly UserResults m_userResults = new UserResults("", "", "");
 
-    public UserResultsViewModel() {}
+    public UserResultsViewModel(string folderName, string typeName, string progressMsg)
+    {
+        this.FolderName = folderName;
+        this.TypeName = typeName;
+        this.UserProgressMsg = progressMsg;
+    }
 
     private ObservableCollection<UserResultsViewModel> userResultsList =
         new ObservableCollection<UserResultsViewModel>();

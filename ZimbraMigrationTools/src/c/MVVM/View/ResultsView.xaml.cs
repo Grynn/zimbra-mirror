@@ -178,8 +178,8 @@ public partial class ResultsView
             ViewModel.UserPBMsgValue = ViewModel.AccountResultsList[accountnum].PBMsgValue;
             ViewModel.AccountOnTab = accountnum;
 
-            ObservableCollection<UserResults> userResultsList =
-                new ObservableCollection<UserResults>();
+            ObservableCollection<UserResultsViewModel> userResultsList =
+                new ObservableCollection<UserResultsViewModel>();
 
             Binding binding = new Binding();
 
@@ -198,10 +198,10 @@ public partial class ResultsView
                 {
                     string msg = (i == (count - 1)) ? ar.AcctProgressMsg :
                         folderInfo.FolderProgress;
-                    UserResults ur = new UserResults(folderInfo.FolderName,
+                    UserResultsViewModel urvm = new UserResultsViewModel(folderInfo.FolderName,
                         folderInfo.FolderType, msg);
 
-                    userResultsList.Add(ur);
+                    userResultsList.Add(urvm);
                 }
             }
             lbErrors[accountnum].Items.Clear();
