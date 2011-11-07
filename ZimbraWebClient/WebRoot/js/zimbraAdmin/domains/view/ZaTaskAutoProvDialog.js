@@ -24,8 +24,6 @@ ZaTaskAutoProvDialog = function(parent, title, width, height) {
 
 	this._forceApplyMessageDialog = new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON],null,ZaId.CTR_PREFIX + ZaId.VIEW_DMLIST + "_forceApplyConfirm");
     this._forceApplyMessageDialog.registerCallback(DwtDialog.YES_BUTTON, ZaTaskAutoProvDialog.prototype._forceApplyCallback, this);
-    //this._forceApplyMessageDialog.registerCallback(DwtDialog.NO_BUTTON, ZaDomainListController.prototype._donotForceDeleteDomainsCallback, this);
-    //this._forceApplyMessageDialog._button[DwtDialog.YES_BUTTON].setText("Apply");
 
 	this._localXForm.addListener(DwtEvent.XFORMS_FORM_DIRTY_CHANGE, new AjxListener(this, ZaTaskAutoProvDialog.prototype.handleXFormChange));
 	this._localXForm.addListener(DwtEvent.XFORMS_VALUE_ERROR, new AjxListener(this, ZaTaskAutoProvDialog.prototype.handleXFormChange));
@@ -375,6 +373,15 @@ function() {
     this._applyButtonListener();
 }
 
+ZaTaskAutoProvDialog.prototype._confirmPasswordSettingCallback =
+function() {
+    if(this._confirmPasswordSettingDialog)
+        this._confirmPasswordSettingDialog.popdown();
+    var obj = this.getObject();
+    if(obj[ZaDomain.A2_zimbraAutoProvAccountPassword + "_dlg"])
+        obj[ZaDomain.A2_zimbraAutoProvAccountPassword] = obj[ZaDomain.A2_zimbraAutoProvAccountPassword + "_dlg"]
+}
+
 ZaTaskAutoProvDialog.getCustomWidth = function() {
 	return "100%";
 }
@@ -394,8 +401,11 @@ function() {
             this._combineConfigureValues(savedObj);
             ZaDomain.modifyAutoPovSettings.call(this._containedObject,savedObj);
             controller._notifyAllOpenTabs();
-            if(savedObj.currentTab == 4)
-                this.finishConfig();
+            if(savedObj.currentTab == 4) {
+                if(this._checkManualConfig())
+                    this.finishConfig();
+                else return;
+            }
             this._button[DwtDialog.OK_BUTTON].setEnabled(false);
             this._button[ZaTaskAutoProvDialog.APPLY_BUTTON].setEnabled(false);
             this._backupLdapObj(savedObj);
@@ -478,7 +488,29 @@ function() {
 
 ZaTaskAutoProvDialog.prototype._checkManualConfig =
 function() {
-
+    var attrMaps =  this._containedObject.attrs[ZaDomain.A_zimbraAutoProvAttrMap];
+    var obj = this.getObject();
+    var isGiven = false;
+    if(attrMaps) {
+        if(!(attrMaps instanceof Array))
+            attrMaps = [attrMaps];
+        for(var i = 0; i < attrMaps.length && !isGiven; i ++ ) {
+            var kv = attrMaps[i].split("=");
+            if(kv.length > 0 && kv[0].indexOf("userPassword") == 0)
+                isGiven = true;
+        }
+    }
+    if(obj[ZaDomain.A2_zimbraAutoProvAccountPassword])
+        return true;
+    else if(!isGiven) {
+        if(!this._confirmPasswordSettingDialog) {
+			this._confirmPasswordSettingDialog = new ZaConfirmPasswordDialog(ZaApp.getInstance().getAppCtxt().getShell(), "450px", "90px",ZaMsg.DLG_TITILE_MANUAL_PROV);
+        }
+        this._confirmPasswordSettingDialog.registerCallback(DwtDialog.OK_BUTTON, ZaTaskAutoProvDialog.prototype._confirmPasswordSettingCallback, this, null);
+		this._confirmPasswordSettingDialog.setObject(this._containedObject);
+		this._confirmPasswordSettingDialog.popup();
+    }
+    return isGiven;
 }
 
 ZaTaskAutoProvDialog.prototype._separateConfigureValues =
@@ -885,6 +917,10 @@ ZaTaskAutoProvDialog.prototype.finishConfig = function () {
 
         attr = soapDoc.set("principal", acctlist[i].dn, autoProvDoc);
         attr.setAttribute("by", "dn");
+
+        if(instance[ZaDomain.A2_zimbraAutoProvAccountPassword]) {
+            attr = soapDoc.set("password", instance[ZaDomain.A2_zimbraAutoProvAccountPassword], autoProvDoc);
+        }
     }
 
     var params = new Object();
@@ -952,4 +988,37 @@ function(item) {
 
 	div.innerHTML = html.join("");
 	return div;
+}
+
+/////////////////////////////
+ZaConfirmPasswordDialog = function(parent,   w, h, title) {
+	if (arguments.length == 0) return;
+	this._standardButtons = [DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON];
+	ZaXDialog.call(this, parent, null, title, w, h, null, ZaId.DLG_AUTPROV_MANUAL_PWD);
+	this._containedObject = {};
+	this.initForm(ZaAlias.myXModel,this.getMyXForm());
+	this._helpURL = ZaConfirmPasswordDialog.helpURL;
+}
+
+ZaConfirmPasswordDialog.prototype = new ZaXDialog;
+ZaConfirmPasswordDialog.prototype.constructor = ZaConfirmPasswordDialog;
+ZaConfirmPasswordDialog.helpURL = location.pathname + ZaUtil.HELP_URL + "managing_domain/autoprov_manual_config.htm?locid="+AjxEnv.DEFAULT_LOCALE;
+
+ZaConfirmPasswordDialog.prototype.getMyXForm =
+function() {
+	var xFormObject = {
+		numCols:1,
+		items:[
+            {type:_GROUP_, numCols:2, colSizes:["200px","*"], colSpan:"*",
+            	items: [
+                    {type:_OUTPUT_, value:ZaMsg.MSG_AUTOPROV_MANUAL_PASSSET, colSpan:"*"},
+                    {type:_SPACER_, height:10, colSpan:"*"},
+                	{ref:ZaDomain.A2_zimbraAutoProvAccountPassword + "_dlg",
+                        type:_TEXTFIELD_, label:ZaMsg.LBL_provisionedAccountPassword
+                    }
+                ]
+            }
+        ]
+	};
+	return xFormObject;
 }

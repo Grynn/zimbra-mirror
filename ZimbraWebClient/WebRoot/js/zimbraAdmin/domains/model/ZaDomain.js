@@ -289,6 +289,7 @@ ZaDomain.A2_zimbraAutoProvAccountSrcSelectedPool = "zimbraAutoProvAccountSrcSele
 ZaDomain.A2_zimbraAutoProvAccountTargetPool = "zimbraAutoProvAccountTargetPool";
 ZaDomain.A2_zimbraAutoProvAccountTgtSelectedPool = "zimbraAutoProvAccountTgtSelectedPool";
 ZaDomain.A2_zimbraAutoProvAccountPoolPageTotal = "zimbraAutoProvAccountPoolPageTotal";
+ZaDomain.A2_zimbraAutoProvAccountPassword = "zimbraAutoProvAccountPassword";
 
 //skin properties
 ZaDomain.A_zimbraSkinForegroundColor = "zimbraSkinForegroundColor" ;
@@ -1493,7 +1494,8 @@ ZaDomain.modifyAutoPovSettings = function(tmpObj) {
     }
 
     if(tmpObj.attrs[ZaDomain.A_zimbraAutoProvAuthMech]) {
-        if(tmpObj.attrs[ZaDomain.A_zimbraAutoProvAuthMech] instanceof Array) {
+        if(tmpObj.attrs[ZaDomain.A_zimbraAutoProvAuthMech] instanceof Array
+                && tmpObj.attrs[ZaDomain.A_zimbraAutoProvAuthMech].length > 0) {
             var cnt =  tmpObj.attrs[ZaDomain.A_zimbraAutoProvAuthMech].length;
             for(var i = 0; i < cnt; i ++) {
 				attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraAutoProvAuthMech][i],modifyDomainDoc);
@@ -1505,7 +1507,8 @@ ZaDomain.modifyAutoPovSettings = function(tmpObj) {
         }
     }
     if(tmpObj.attrs[ZaDomain.A_zimbraAutoProvAttrMap]) {
-        if(tmpObj.attrs[ZaDomain.A_zimbraAutoProvAttrMap] instanceof Array) {
+        if((tmpObj.attrs[ZaDomain.A_zimbraAutoProvAttrMap] instanceof Array)
+                && tmpObj.attrs[ZaDomain.A_zimbraAutoProvAttrMap].length > 0) {
             var cnt =  tmpObj.attrs[ZaDomain.A_zimbraAutoProvAttrMap].length;
             for(var i = 0; i < cnt; i ++) {
 				attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraAutoProvAttrMap][i],modifyDomainDoc);
@@ -2274,6 +2277,7 @@ ZaDomain.myXModel = {
         {id:ZaDomain.A2_zimbraAutoProvAccountTargetPool,type:_LIST_,ref:ZaDomain.A2_zimbraAutoProvAccountTargetPool},
         {id:ZaDomain.A2_zimbraAutoProvAccountTgtSelectedPool,type:_LIST_,ref:ZaDomain.A2_zimbraAutoProvAccountTgtSelectedPool},
         {id:ZaDomain.A2_zimbraAutoProvAccountPoolPageTotal,ref:ZaDomain.A2_zimbraAutoProvAccountPoolPageTotal, type:_NUMBER_,defaultValue:1},
+        {id:ZaDomain.A2_zimbraAutoProvAccountPassword	, type:_STRING_, ref:ZaDomain.A2_zimbraAutoProvAccountPassword, maxLength:256},
 
 		{id:ZaDomain.A_zimbraPrefTimeZoneId,type:_STRING_, ref:"attrs/"+ZaDomain.A_zimbraPrefTimeZoneId, choices:ZaSettings.timeZoneChoices},
         {id:ZaModel.currentStep, type:_NUMBER_, ref:ZaModel.currentStep, maxInclusive:2147483647},
