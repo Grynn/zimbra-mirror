@@ -112,6 +112,12 @@ ZaHomeXFormView.onManageAccount = function(ev) {
     tree.setSelectionByPath(path, false);
 }
 
+ZaHomeXFormView.onViewService = function(ev) {
+    var tree = ZaZimbraAdmin.getInstance().getOverviewPanelController().getOverviewPanel().getFolderTree();
+    var path = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_monitor, ZaMsg.OVP_status]);
+    tree.setSelectionByPath(path, false);
+}
+
 ZaHomeXFormView.onSearchZimbraHelp = function(ev) {
     var url = "http://support.zimbra.com/help/index.php";
     window.open(url, "_blank");
@@ -166,12 +172,24 @@ ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
         getCustomWidth: ZaHomeXFormView.prototype.getCustomWidth,
         items:[
             {type:_GROUP_, colSpan: "*", numCols:1, containerCssStyle:"background-color:green", width:"100%", items:[
-                /*
-                {type:_GROUP_, numCols:3,  width:"100%", colSizes:["80px", "*", "100px"], items:[
-                    {type:_AJX_IMAGE_, src: "Critical"},
-                    {type:_OUTPUT_, value:"3 Services are not running"},
-                    {type:_OUTPUT_, value:ZaMsg.LBL_HomeLinkServerStatus, containerCssStyle:"cursor:pointer;color:white",onClick: ZaHomeXFormView.onSearchZimbraHelp}
-                ]},*/
+
+                {type:_GROUP_, numCols:3,  width:"100%", colSizes:["80px", "*", "100px"],
+                    visibilityChecks:[[XForm.checkInstanceValueNot,ZaHome.A2_serviceStatus,true]],
+                    items:[
+                        {type:_OUTPUT_, ref: ZaHome.A2_serviceStatus,
+                            getDisplayValue: function (value){
+                                if (value === undefined) {
+                                    return AjxImg.getImageHtml ("Help");
+                                }else if (value === false) {
+                                    return AjxImg.getImageHtml ("Critical");
+                                } else {
+                                    return AjxImg.getImageHtml ("Information");
+                                }
+                            }
+                        },
+                        {type:_OUTPUT_, ref: ZaHome.A2_serviceStatusMessage},
+                        {type:_OUTPUT_, value:ZaMsg.LBL_HomeLinkServerStatus, containerCssStyle:"cursor:pointer;color:white",onClick: ZaHomeXFormView.onViewService}
+                ]}
             ]},
             {type:_GROUP_, numCols: 2, items:[
                 {type:_OUTPUT_, colSpan:"2", value:ZaMsg.LBL_HomeSummary, cssStyle:"font-size:22px;text-align:center; color: grey"},
@@ -245,10 +263,12 @@ ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
                     {type:_OUTPUT_, value:ZaMsg.LBL_HomeService, align:_RIGHT_},
                     {type:_OUTPUT_, ref: ZaHome.A2_serviceStatus,
                         getDisplayValue: function (value){
-                            if (value) {
-                                return AjxImg.getImageHtml ("Check");
+                            if (value === undefined) {
+                                return AjxImg.getImageHtml ("Help");
+                            }else if (value === false) {
+                                return AjxImg.getImageHtml ("Critical");
                             } else {
-                                return AjxImg.getImageHtml ("Cancel");
+                                return AjxImg.getImageHtml ("Information");
                             }
                         }
                     },

@@ -63,13 +63,34 @@ function () {
     this.attrs[ZaHome.A2_DBCheckType] = true;
     this.attrs[ZaHome.A2_DBCheckMessage] = ZaMsg.LBL_HomeStatusOK;
     this.attrs[ZaHome.A2_serviceStatusMessage] = ZaMsg.LBL_HomeStatusRunning ;
-    this.attrs[ZaHome.A2_serviceStatus] = true;
     this.attrs[ZaHome.A2_activeSession] = 3;
     this.attrs[ZaHome.A2_queueLength] = 1;
     this.attrs[ZaHome.A2_messageCount] = "120/h";
     this.attrs[ZaHome.A2_messageVolume] = "34MB/h";
 }
 ZaItem.loadMethods["ZaHome"].push(ZaHome.loadMethod);
+
+ZaHome.loadStatusfo = function () {
+    var status = new ZaStatus();
+    status.load();
+    var statusVector = status.getStatusVector();
+    var serverStatus;
+    if (statusVector.size() > 0) {
+        this.attrs[ZaHome.A2_serviceStatus] = true;
+        this.attrs[ZaHome.A2_serviceStatusMessage] = ZaMsg.LBL_HomeStatusRunning ;
+        for(var i = 0; i < statusVector.size(); i++) {
+            serverStatus = statusVector.get(i);
+            if (serverStatus.status != 1) {
+                this.attrs[ZaHome.A2_serviceStatus] = false;
+                this.attrs[ZaHome.A2_serviceStatusMessage] = ZaMsg.LBL_HomeStatusFailed;
+                break;
+            }
+        }
+    } else {
+        this.attrs[ZaHome.A2_serviceStatusMessage] = ZaMsg.LBL_HOmeStatusUnknown ;
+    }
+}
+ZaItem.loadMethods["ZaHome"].push(ZaHome.loadStatusfo);
 
 ZaHome.myXModel = {
     items: [
