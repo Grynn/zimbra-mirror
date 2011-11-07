@@ -257,7 +257,7 @@ ZaSearchXFormView.labelSelectionListener = function (ev) {
 	if (ev.detail == DwtListView.ITEM_DBL_CLICKED) {
 		if(ev.item) {
 			this._selectedItem = ev.item;
-			ZaApp.getInstance().getBackupLabelViewController().show(ev.item);
+			ZaApp.getInstance().getAccountViewController().show(ev.item);
 		}
 	}
 }
@@ -361,7 +361,7 @@ ZaSearchXFormView.myXFormModifier = function(xFormObject) {
 		},
 
 	    {ref:ZaSearchEdit.A2_searchResult, colSpan:2,cssClass: "ZaFullPageXFormListView", id:"searchReusltList",
-	    	onSelection:ZaSearchXFormView.labelSelectionListener, type:_DWT_LIST_,
+	    	type:_DWT_LIST_,
             createPopupMenu: ZaSearchXFormView.createPopupMenu,
 	   		multiselect:true, widgetClass:ZaSearchListView,headerList:headerList,getCustomHeight:ZaSearchXFormView.getCustomHeight,
 	   		getCustomWidth:ZaSearchXFormView.getCustomWidth, visibilityChecks:[], enableDisableChecks:[]
