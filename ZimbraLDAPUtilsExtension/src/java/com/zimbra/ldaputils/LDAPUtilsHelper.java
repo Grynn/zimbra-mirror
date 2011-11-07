@@ -29,6 +29,7 @@ import com.zimbra.cs.account.AttributeManager;
 import com.zimbra.cs.account.NamedEntry;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.NamedEntry.Visitor;
+import com.zimbra.cs.account.callback.CallbackContext;
 import com.zimbra.cs.account.ldap.LdapProv;
 import com.zimbra.cs.account.ldap.entry.LdapCos;
 import com.zimbra.cs.account.ldap.entry.LdapDomain;
@@ -132,8 +133,8 @@ abstract class LDAPUtilsHelper {
         @Override
         NamedEntry createLDAPEntry(String dn, Map<String, Object> entryAttrs) 
         throws ServiceException {
-            HashMap attrManagerContext = new HashMap();
-            AttributeManager.getInstance().preModify(entryAttrs, null, attrManagerContext, true, true);
+            CallbackContext callbackContext = new CallbackContext(CallbackContext.Op.CREATE);
+            AttributeManager.getInstance().preModify(entryAttrs, null, callbackContext, true);
 
             LegacyZimbraLdapContext zlc = null;
             try {
@@ -145,7 +146,7 @@ abstract class LDAPUtilsHelper {
                 zlc.createEntry(dn, attrs, "createLDAPEntry");
 
                 NamedEntry entry = getObjectByDN(dn, zlc);
-                AttributeManager.getInstance().postModify(entryAttrs, entry, attrManagerContext, true);
+                AttributeManager.getInstance().postModify(entryAttrs, entry, callbackContext);
                 return entry;
             } catch (NameAlreadyBoundException nabe) {
                 throw ZimbraLDAPUtilsServiceException.DN_EXISTS(dn);
@@ -308,8 +309,8 @@ abstract class LDAPUtilsHelper {
         @Override
         NamedEntry createLDAPEntry(String dn, Map<String, Object> entryAttrs)
         throws ServiceException {
-            HashMap attrManagerContext = new HashMap();
-            AttributeManager.getInstance().preModify(entryAttrs, null, attrManagerContext, true, true);
+            CallbackContext callbackContext = new CallbackContext(CallbackContext.Op.CREATE);
+            AttributeManager.getInstance().preModify(entryAttrs, null, callbackContext, true);
             
             ZMutableEntry entry = LdapClient.createMutableEntry();
             entry.mapToAttrs(entryAttrs);
@@ -321,7 +322,7 @@ abstract class LDAPUtilsHelper {
                 zlc.createEntry(entry);
                 
                 NamedEntry namedEntry = getObjectByDN(dn, zlc);
-                AttributeManager.getInstance().postModify(entryAttrs, namedEntry, attrManagerContext, true);
+                AttributeManager.getInstance().postModify(entryAttrs, namedEntry, callbackContext);
                 return namedEntry;
             } catch (LdapEntryAlreadyExistException nabe) {   
                 throw ZimbraLDAPUtilsServiceException.DN_EXISTS(dn);

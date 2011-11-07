@@ -56,6 +56,7 @@ import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.*;
 import com.zimbra.cs.account.NamedEntry.Visitor;
 import com.zimbra.cs.account.auth.AuthContext;
+import com.zimbra.cs.account.callback.CallbackContext;
 import com.zimbra.cs.datasource.DataSourceManager;
 import com.zimbra.cs.datasource.SyncErrorManager;
 import com.zimbra.cs.datasource.imap.ImapSync;
@@ -307,10 +308,10 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             }
         }
 
-        Map<String, Object> context = null;
+        CallbackContext callbackContext = null;
         if (!skipAttrMgr) {
-            context = new HashMap<String, Object>();
-            AttributeManager.getInstance().preModify(attrs, e, context, false, checkImmutable, allowCallback);
+            callbackContext = new CallbackContext(CallbackContext.Op.MODIFY);
+            AttributeManager.getInstance().preModify(attrs, e, callbackContext, checkImmutable, allowCallback);
         }
 
         boolean isAccountSetup = attrs.remove(A_offlineAccountSetup) != null;
@@ -329,7 +330,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         }
         reload(e);
         if (!skipAttrMgr)
-            AttributeManager.getInstance().postModify(attrs, e, context, false, allowCallback);
+            AttributeManager.getInstance().postModify(attrs, e, callbackContext, allowCallback);
 
         long newTime = 0;
         long oldTime = 0;
@@ -1116,7 +1117,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
 
     private synchronized Account createAccountInternal(String emailAddress, String accountId, Map<String, Object> attrs, boolean initMailbox, boolean skipAttrMgr) throws ServiceException {
-        Map<String, Object> context = null;
+        CallbackContext callbackContext = null;
         String flavor = (String)attrs.get(A_offlineAccountFlavor);
         Map<String,Object> immutable = new HashMap<String, Object>();
 
@@ -1126,8 +1127,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         }
 
         if (!skipAttrMgr) {
-            context = new HashMap<String, Object>();
-            AttributeManager.getInstance().preModify(attrs, null, context, true, true);
+            callbackContext = new CallbackContext(CallbackContext.Op.CREATE);
+            AttributeManager.getInstance().preModify(attrs, null, callbackContext, true);
         }
 
         attrs.putAll(immutable);
@@ -1143,7 +1144,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         mAccountCache.put(acct);
 
         if (!skipAttrMgr)
-            AttributeManager.getInstance().postModify(attrs, acct, context, true);
+            AttributeManager.getInstance().postModify(attrs, acct, callbackContext);
 
         if (initMailbox) {
             try {
@@ -1732,8 +1733,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     public synchronized Zimlet createZimlet(String name, Map<String, Object> attrs) throws ServiceException {
         name = name.toLowerCase();
 
-        Map<String, Object> context = new HashMap<String, Object>();
-        AttributeManager.getInstance().preModify(attrs, null, context, true, true);
+        CallbackContext callbackContext = new CallbackContext(CallbackContext.Op.CREATE);
+        AttributeManager.getInstance().preModify(attrs, null, callbackContext, true);
         if (!(attrs.get(A_zimbraId) instanceof String))
             attrs.put(A_zimbraId, UUID.randomUUID().toString());
         attrs.put(A_cn, name);
@@ -1744,7 +1745,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         DbOfflineDirectory.createDirectoryEntry(EntryType.ZIMLET, name, attrs, false);
         Zimlet zimlet = new OfflineZimlet(name, (String) attrs.get(A_zimbraId), attrs, this);
         mZimlets.put(name, zimlet);
-        AttributeManager.getInstance().postModify(attrs, zimlet, context, true);
+        AttributeManager.getInstance().postModify(attrs, zimlet, callbackContext);
         return zimlet;
     }
 
@@ -1888,8 +1889,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             if (attrs.containsKey(attr))
                 immutable.put(attr, attrs.remove(attr));
 
-        Map<String, Object> context = new HashMap<String, Object>();
-        AttributeManager.getInstance().preModify(attrs, null, context, true, true);
+        CallbackContext callbackContext = new CallbackContext(CallbackContext.Op.CREATE);
+        AttributeManager.getInstance().preModify(attrs, null, callbackContext, true);
 
         attrs.putAll(immutable);
 
@@ -1897,7 +1898,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         Identity identity = new OfflineIdentity(account, name, attrs, this);
         mHasDirtyAccounts |= markChanged;
 
-        AttributeManager.getInstance().postModify(attrs, identity, context, true);
+        AttributeManager.getInstance().postModify(attrs, identity, callbackContext);
         return identity;
     }
 
@@ -1963,14 +1964,14 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         if (newName == null)
             newName = (String) attrs.get('+' + A_zimbraPrefIdentityName);
 
-        Map<String, Object> context = new HashMap<String, Object>();
-        AttributeManager.getInstance().preModify(attrs, identity, context, false, true, true);
+        CallbackContext callbackContext = new CallbackContext(CallbackContext.Op.MODIFY);
+        AttributeManager.getInstance().preModify(attrs, identity, callbackContext, true, true);
 
         DbOfflineDirectory.modifyDirectoryLeaf(EntryType.IDENTITY, account, A_offlineDn, name, attrs, markChanged, newName);
         reload(identity);
         mHasDirtyAccounts |= markChanged;
 
-        AttributeManager.getInstance().postModify(attrs, identity, context, false, true);
+        AttributeManager.getInstance().postModify(attrs, identity, callbackContext, true);
     }
 
     @Override
@@ -2036,8 +2037,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             if (attrs.containsKey(attr))
                 immutable.put(attr, attrs.remove(attr));
 
-        Map<String, Object> context = new HashMap<String, Object>();
-        AttributeManager.getInstance().preModify(attrs, null, context, true, true);
+        CallbackContext callbackContext = new CallbackContext(CallbackContext.Op.CREATE);
+        AttributeManager.getInstance().preModify(attrs, null, callbackContext, true);
 
         attrs.putAll(immutable);
 
@@ -2045,7 +2046,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         Signature signature = get(account, Key.SignatureBy.id, signatureId);
         mHasDirtyAccounts |= markChanged;
 
-        AttributeManager.getInstance().postModify(attrs, signature, context, true);
+        AttributeManager.getInstance().postModify(attrs, signature, callbackContext);
 
         if (setAsDefault && markChanged) {
             setDefaultSignature(account, signatureId);
@@ -2103,14 +2104,14 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             }
         }
 
-        Map<String, Object> context = new HashMap<String, Object>();
-        AttributeManager.getInstance().preModify(attrs, signature, context, false, true);
+        CallbackContext callbackContext = new CallbackContext(CallbackContext.Op.MODIFY);
+        AttributeManager.getInstance().preModify(attrs, signature, callbackContext, true);
 
         DbOfflineDirectory.modifyDirectoryLeaf(EntryType.SIGNATURE, account, Provisioning.A_zimbraId, signatureId, attrs, markChanged, newName);
         reload(signature);
         mHasDirtyAccounts |= markChanged;
 
-        AttributeManager.getInstance().postModify(attrs, signature, context, false, true);
+        AttributeManager.getInstance().postModify(attrs, signature, callbackContext, true);
     }
 
     @Override
@@ -2208,8 +2209,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             if (attrs.containsKey(attr))
                 immutable.put(attr, attrs.remove(attr));
 
-        Map<String, Object> context = new HashMap<String, Object>();
-        AttributeManager.getInstance().preModify(attrs, null, context, true, true);
+        CallbackContext callbackContext = new CallbackContext(CallbackContext.Op.CREATE);
+        AttributeManager.getInstance().preModify(attrs, null, callbackContext, true);
 
         attrs.putAll(immutable);
 
@@ -2217,7 +2218,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         DataSource ds = new OfflineDataSource(account, type, name, dsid, attrs, this);
         mHasDirtyAccounts |= markChanged;
 
-        AttributeManager.getInstance().postModify(attrs, ds, context, true);
+        AttributeManager.getInstance().postModify(attrs, ds, callbackContext);
 
         cachedDataSources.remove(account.getId());
 
@@ -2360,16 +2361,16 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             attrs.put(A_zimbraDataSourceEnabled, ProvisioningConstants.TRUE);
         }
 
-        Map<String, Object> context = new HashMap<String, Object>();
+        CallbackContext callbackContext = new CallbackContext(CallbackContext.Op.MODIFY);
 
         synchronized (this) {
-            AttributeManager.getInstance().preModify(attrs, ds, context, false, true, true);
+            AttributeManager.getInstance().preModify(attrs, ds, callbackContext, true, true);
 
             DbOfflineDirectory.modifyDirectoryLeaf(EntryType.DATASOURCE, account, A_zimbraId, dataSourceId, attrs, markChanged, newName);
             reload(ds);
             mHasDirtyAccounts |= markChanged;
 
-            AttributeManager.getInstance().postModify(attrs, ds, context, false, true);
+            AttributeManager.getInstance().postModify(attrs, ds, callbackContext, true);
         }
         if (!isLocalAccount(account) && isDataSourceAccount(account)) {
             setAccountAttribute(account, A_zimbraFeatureCalendarEnabled, ds.getBooleanAttr(A_zimbraDataSourceCalendarSyncEnabled, false) ? ProvisioningConstants.TRUE : ProvisioningConstants.FALSE);
@@ -2600,8 +2601,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 
     public OfflineDomainGal createDomainGal(String domain, Map<String, Object> attrs) throws ServiceException {
         domain = domain.toLowerCase();
-        Map<String, Object> context = new HashMap<String, Object>();
-        AttributeManager.getInstance().preModify(attrs, null, context, true, true);
+        CallbackContext callbackContext = new CallbackContext(CallbackContext.Op.CREATE);
+        AttributeManager.getInstance().preModify(attrs, null, callbackContext, true);
         String zimbraId = UUID.randomUUID().toString();
         attrs.put(A_zimbraId, zimbraId);
         attrs.put(A_cn, domain);
@@ -2611,7 +2612,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         DbOfflineDirectory.createDirectoryEntry(EntryType.GAL, domain, attrs, false);
         OfflineDomainGal gal = new OfflineDomainGal(domain, zimbraId, attrs, this);
         domainGals.put(domain, gal);
-        AttributeManager.getInstance().postModify(attrs, gal, context, true);
+        AttributeManager.getInstance().postModify(attrs, gal, callbackContext);
         OfflineLog.offline.debug("created domain %s for offline GAL", domain);
         return gal;
     }
