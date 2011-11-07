@@ -137,7 +137,6 @@ ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
     startContentChoices.push({});
     startContentChoices.push({});
     startContentChoices.push({});
-    startContentChoices[1] = {value:ZaMsg.LBL_HomeConfigBackup, onClick: ZaHomeXFormView.onSearchZimbraHelp};
 
     if (ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNT_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
         startContentChoices[3] = {value:ZaMsg.LBL_HomeConfigureCos, onClick: ZaHomeXFormView.onConfigDefaultCos};
@@ -184,18 +183,8 @@ ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
             ]},
             {type:_GROUP_, numCols: 2, width:"100%", items:[
                 {type:_OUTPUT_, colSpan:"*", value:ZaMsg.LBL_HomeMaintenance, cssStyle:"font-size:22px; text-align:center; color: grey"},
+                // Resever for Backup Extension
                 {type:_GROUP_, colSpan:"*", numCols:3, width: "100%", colSizes:["*", "30px", "100px"],items:[
-                    {type:_OUTPUT_, value:ZaMsg.LBL_HomeLastBackup},
-                    {type:_OUTPUT_, ref: ZaHome.A2_lastBackup,
-                        getDisplayValue: function (value){
-                            if (value) {
-                                return AjxImg.getImageHtml ("Check");
-                            } else {
-                                return AjxImg.getImageHtml ("Cancel");
-                            }
-                        }
-                    },
-                    {type:_OUTPUT_, ref: ZaHome.A2_lastBackupTime}
                 ]},
                 {type:_GROUP_, colSpan:"*", numCols:3, width: "100%", colSizes:["*", "30px", "100px"],items:[
                     {type:_OUTPUT_, value:ZaMsg.LBL_HomeLastCleanup},

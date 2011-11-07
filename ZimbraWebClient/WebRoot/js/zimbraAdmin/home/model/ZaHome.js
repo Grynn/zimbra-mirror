@@ -21,8 +21,6 @@ ZaHome.A2_serverNum = "serverNum";
 ZaHome.A2_accountNum = "accountNum";
 ZaHome.A2_cosNum = "cosNum";
 ZaHome.A2_domainNum = "domainNum";
-ZaHome.A2_lastBackup = "lastBackup";
-ZaHome.A2_lastBackupTime = "lastBackupTime";
 ZaHome.A2_lastCleanup = "lastCleanup";
 ZaHome.A2_lastCleanupTime = "lastCleanupTime";
 ZaHome.A2_lastLogPurge = "lastLogPurge";
@@ -56,8 +54,6 @@ function () {
     this.attrs[ZaHome.A2_cosNum] = ZaApp.getInstance().getCosList().size();
     this.attrs[ZaHome.A2_domainNum] = ZaApp.getInstance().getDomainList().size();
     this.attrs[ZaHome.A2_serverNum] = ZaApp.getInstance().getServerList().size();
-    this.attrs[ZaHome.A2_lastBackup] = true;
-    this.attrs[ZaHome.A2_lastBackupTime] = currentTime;
     this.attrs[ZaHome.A2_lastCleanup] = true;
     this.attrs[ZaHome.A2_lastCleanupTime] = currentTime;
     this.attrs[ZaHome.A2_lastLogPurge] = true;
@@ -73,7 +69,6 @@ function () {
     this.attrs[ZaHome.A2_messageCount] = "120/h";
     this.attrs[ZaHome.A2_messageVolume] = "34MB/h";
 }
-
 ZaItem.loadMethods["ZaHome"].push(ZaHome.loadMethod);
 
 ZaHome.myXModel = {
@@ -84,8 +79,8 @@ ZaHome.myXModel = {
     	{id:ZaHome.A2_cosNum,type:_STRING_, ref:"attrs/" + ZaHome.A2_cosNum},
     	{id:ZaHome.A2_serverNum,type:_STRING_, ref:"attrs/" + ZaHome.A2_serverNum},
     	{id:ZaHome.A2_accountNum,type:_STRING_, ref:"attrs/" + ZaHome.A2_accountNum},
-        {id:ZaHome.A2_lastBackupTime, type:_STRING_, ref: "attrs/" + ZaHome.A2_lastBackupTime},
-        {id:ZaHome.A2_lastBackup, type:_ENUM_, ref: "attrs/" + ZaHome.A2_lastBackupTime, choices: ZaModel.BOOLEAN_CHOICES},
+
+
         {id:ZaHome.A2_lastCleanupTime, type:_STRING_, ref: "attrs/" + ZaHome.A2_lastCleanupTime},
         {id:ZaHome.A2_lastCleanup, type:_ENUM_, ref: "attrs/" + ZaHome.A2_lastCleanupTime, choices: ZaModel.BOOLEAN_CHOICES},
         {id:ZaHome.A2_lastLogPurgeTime, type:_STRING_, ref: "attrs/" + ZaHome.A2_lastLogPurgeTime},
