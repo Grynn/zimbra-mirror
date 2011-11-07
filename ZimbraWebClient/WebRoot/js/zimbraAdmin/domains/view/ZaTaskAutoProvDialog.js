@@ -971,7 +971,7 @@ function() {
 }
 
 ZaServerOptionList.prototype._createItemHtml =
-function(item) {
+function(item, params, asHtml, count) {
 	var html = new Array(10);
 	var	div = document.createElement("div");
 	div[DwtListView._STYLE_CLASS] = "Row";
@@ -981,14 +981,20 @@ function(item) {
 
 	var idx = 0;
     var checked = "";
-    if(item.checked) checked = "checked";
-	html[idx++] = "<table width='100%' cellspacing='0' cellpadding='0'><tr><td width=20>"
-	html[idx++] = "<input type=checkbox value='" + item + "' " + checked + "/></td>" ;
-	html[idx++] = "<td>"+ item + "</td></tr></table>";
 
+    if(item.checked) checked = "checked";
+	html[idx++] = "<table width='100%' cellspacing='0' cellpadding='0' ><tr><td width=20>"
+
+    if(this.initializeDisable)
+	    html[idx++] = "<input id='"+this._htmlElId+"_schedule_"+count+"'  disabled type=checkbox value='" + item + "' " + checked + "/></td>" ;
+	else
+        html[idx++] = "<input id='"+this._htmlElId+"_schedule_"+count+"' type=checkbox value='" + item + "' " + checked + "/></td>" ;
+
+    html[idx++] = "<td>"+ item + "</td></tr></table>";
 	div.innerHTML = html.join("");
 	return div;
 }
+
 
 /////////////////////////////
 ZaConfirmPasswordDialog = function(parent,   w, h, title) {
@@ -1021,4 +1027,16 @@ function() {
         ]
 	};
 	return xFormObject;
+}
+ZaServerOptionList.prototype.setEnabled =
+function(enabled) {
+	 DwtListView.prototype.setEnabled.call(this, enabled);
+    //
+     this.initializeDisable=!enabled;
+     if(!AjxUtil.isEmpty(this._list)){
+        for(var i=0;i<this._list.size();i++){
+            document.getElementById(this._htmlElId+"_schedule_"+i).disabled=!enabled;
+        }
+     }
+
 }
