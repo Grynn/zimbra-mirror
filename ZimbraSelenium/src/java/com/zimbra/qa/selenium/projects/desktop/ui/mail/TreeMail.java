@@ -58,7 +58,7 @@ public class TreeMail extends AbsTree {
 
 		// For mail folders tree
 		public static final String treeExpandCollapseButton = "css=div[id='zovc__main_Mail'] div[id^='DWT'][class='DwtTreeItem'] [class^='ImgNode']";
-		public static final String multipleTrees = "css=div[id='zovc__main_Mail'] div[id^='DWT'][class^='DwtComposite ZmOverview']:nth-of-type(<NUM>)";
+		public static final String multipleTrees = "css=div[id='zovc__main_Mail'] div[id^='zovc__main_Mail'][id$='__SECTION'][class^='DwtComposite ZmOverview']:nth-of-type(<NUM>)";
 		public static final String multipleTreesExpandCollapseButton = multipleTrees + " div[id^='DWT'] [class^='ImgNode']";
 		public static final String multipleLocalFolderTreesExpandCollapseButton = multipleTrees + " div[class='DwtTreeItemLevel1ChildDiv'] [class^='ImgNode']";
 
