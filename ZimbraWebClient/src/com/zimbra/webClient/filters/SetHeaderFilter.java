@@ -168,11 +168,8 @@ public final class SetHeaderFilter extends com.zimbra.cs.servlet.SetHeaderFilter
 
         try {
             Context initCtx = new InitialContext();
-            // for some reason jetty7 doesn't work with "java:comp/env",
-            // so just use the the env name to lookup. 
-            //Context envCtx = (Context) initCtx.lookup("java:comp/env");
-            //mailUrl = (String) envCtx.lookup("mailUrl");
-            mailUrl = (String) initCtx.lookup("mailUrl");
+            Context envCtx = (Context) initCtx.lookup("java:comp/env");
+            mailUrl = (String) envCtx.lookup("mailUrl");
         } catch (NamingException ne) {
         ne.printStackTrace();
         }
