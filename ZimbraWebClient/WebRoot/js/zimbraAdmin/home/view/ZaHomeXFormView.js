@@ -173,11 +173,6 @@ ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
                     {type:_OUTPUT_, value:"3 Services are not running"},
                     {type:_OUTPUT_, value:ZaMsg.LBL_HomeLinkServerStatus, containerCssStyle:"cursor:pointer;color:white",onClick: ZaHomeXFormView.onSearchZimbraHelp}
                 ]},*/
-                {type:_GROUP_, numCols:3,  width:"100%", colSizes:["80px", "*", "100px"], items:[
-                    {type:_AJX_IMAGE_, src: "Information"},
-                    {type:_OUTPUT_, value:"Zimbra Version 8.1 is availble"},
-                    {type:_OUTPUT_, value:ZaMsg.LBL_HomeLinkViewUpdate, containerCssStyle:"cursor:pointer;color:white",onClick: ZaHomeXFormView.onSearchZimbraHelp}
-                ]}
             ]},
             {type:_GROUP_, numCols: 2, items:[
                 {type:_OUTPUT_, colSpan:"2", value:ZaMsg.LBL_HomeSummary, cssStyle:"font-size:22px;text-align:center; color: grey"},

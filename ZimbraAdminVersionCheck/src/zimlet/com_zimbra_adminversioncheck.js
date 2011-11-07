@@ -270,3 +270,52 @@ if(ZaOverviewPanelController.treeModifiers)
 	ZaOverviewPanelController.treeModifiers.push(ZaVersionCheck.versionCheckTreeModifier);
 }
 
+if (ZaHome && ZaHome.myXModel) {
+    ZaHome.A2_versionUpdateAvailable = "versionUpdateAvailable";
+    ZaHome.A2_updateMessage = "A2_updateMessage";
+    ZaHome.myXModel.items.push(
+        {id:ZaHome.A2_versionUpdateAvailable, type:_ENUM_, ref: "attrs/" + ZaHome.A2_versionUpdateAvailable, choices: ZaModel.BOOLEAN_CHOICES}
+    );
+    ZaHome.myXModel.items.push(
+        {id:ZaHome.A2_updateMessage, type:_STRING_, ref: "attrs/" + ZaHome.A2_updateMessage}
+    );
+    ZaHome.loadVersionMethod =
+    function () {
+
+        // TODO using the load method to get version information
+        this.attrs[ZaHome.A2_versionUpdateAvailable] = false;
+        this.attrs[ZaHome.A2_updateMessage] = "Zimbra 8 is available";
+    }
+    ZaItem.loadMethods["ZaHome"].push(ZaHome.loadVersionMethod);
+}
+
+if(ZaTabView.XFormModifiers["ZaHomeXFormView"]) {
+
+    ZaHomeXFormView.onViewVersionUpdate = function(ev) {
+        var tree = ZaZimbraAdmin.getInstance().getOverviewPanelController().getOverviewPanel().getFolderTree();
+        var path = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_toolMig, com_zimbra_adminversioncheck.OVP_versionCheck]);
+        tree.setSelectionByPath(path, false);
+    }
+
+    ZaVersionCheck.HomeXFormModifier = function(xFormObject) {
+        var infoItem = xFormObject.items[0].items[0].items[0].items;
+        infoItem.push(
+            {type:_GROUP_, numCols:3,  width:"100%", colSizes:["80px", "*", "100px"],
+                visibilityChecks:[[XForm.checkInstanceValue,ZaHome.A2_versionUpdateAvailable,true]],
+                items:[
+                {type:_OUTPUT_, ref: ZaHome.A2_versionUpdateAvailable,
+                    getDisplayValue: function (value){
+                        if (value) {
+                            return AjxImg.getImageHtml ("Information");
+                        }
+                    }
+                },
+                {type:_OUTPUT_, ref: ZaHome.A2_updateMessage},
+                {type:_OUTPUT_, value:com_zimbra_adminversioncheck.LBL_ViewUpdate, containerCssStyle:"cursor:pointer;color:white",onClick: ZaHomeXFormView.onViewVersionUpdate}
+            ]});
+
+    }
+
+    ZaTabView.XFormModifiers["ZaHomeXFormView"].push(ZaVersionCheck.HomeXFormModifier);
+}
+
