@@ -9,6 +9,7 @@ import com.zimbra.qa.selenium.framework.items.ContactItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.Action;
+import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.preferences.TreePreferences.TreeItem;
@@ -25,7 +26,26 @@ public class AddNewContactsToEmailedContactOptOut extends AjaxCommonTest {
 		};
 	}
 
+	/**
+	 * Test case : Verify select checkbox works (e.g make the option changed to opt-in)
+	 * @throws HarnessException
+	 */
+	@Test(description= " select the checkbox to toggle the opt-out option to opt-in ", groups= {"smoke" })
+	public void SelectAutoAddAddressCheckbox() throws HarnessException {
+		// Verify the status of the checkbox is FALSE
+		ZAssert.assertFalse(app.zPagePreferences.zGetCheckboxStatus("zimbraPrefAutoAddAddressEnabled"),
+				  "Verify if zimbraPrefAutoAddAddressEnabled is FALSE, the preference box is unchecked" );			
 	
+		// Check the box
+		app.zPagePreferences.zCheckboxSet("css=input[id$=_AUTO_ADD_ADDRESS]",true);
+			
+		// Click save
+		app.zPagePreferences.zToolbarPressButton(Button.B_SAVE);		
+		
+		// Verify the status of the checkbox is TRUE
+		ZAssert.assertTrue(app.zPagePreferences.zGetCheckboxStatus("zimbraPrefAutoAddAddressEnabled"),
+				  "Verify if zimbraPrefAutoAddAddressEnabled is TRUE, the preference box is checked" );			
+	}
 	/**
 	 * Test case : Opt-out Add New Contacts To emailed contact
 	 * Verify receiver' addresses of out-going mails not added to "Emailed Contacts" folder automatically 
