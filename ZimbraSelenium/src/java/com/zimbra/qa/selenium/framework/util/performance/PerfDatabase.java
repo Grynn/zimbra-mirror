@@ -63,7 +63,12 @@ mysql> create table clients (
  name VARCHAR(35) 
  );
 
-mysql> create table perf (
+mysql> create table messages ( 
+ id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
+ name VARCHAR(512) 
+ );
+
+mysql> create table perf2 (
  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
  created TIMESTAMP(8),
  name VARCHAR(35),
@@ -77,7 +82,7 @@ mysql> create table perf (
  loaded BIGINT,
  delta BIGINT,
  delta_internal BIGINT,
- description VARCHAR(255)
+ messageid INT
  );
 
  **/
@@ -105,6 +110,7 @@ public class PerfDatabase {
 		table.put("milestoneid", "" + PerfDatabase.getInstance().getMilestoneID());
 		table.put("browserid", "" + PerfDatabase.getInstance().getBrowserID());
 		table.put("clientid", "" + PerfDatabase.getInstance().getClientID());
+		table.put("messageid", "" + PerfDatabase.getInstance().getMessageKey(data.Message));
 
 		table.put("start", "" + data.StartStamp);
 		table.put("launched", "" + data.LaunchStamp);
@@ -117,8 +123,6 @@ public class PerfDatabase {
 			delta_internal = "" + (Long.parseLong(data.FinishStamp) - Long.parseLong(data.LaunchStamp));
 		}
 		table.put("delta_internal", delta_internal);
-
-		table.put("description", "'" + data.Message +"'");		// VARCHAR ... enclose in single quotes
 
 		// Insert the map into the database
 		PerfDatabase.getInstance().insertPerf(table);
@@ -133,7 +137,7 @@ public class PerfDatabase {
 
 		try {
 
-			String command = String.format("INSERT INTO perf (%s) VALUES (%s)", columns, values);
+			String command = String.format("INSERT INTO perf2 (%s) VALUES (%s)", columns, values);
 			logger.info("Statement: "+ command);
 
 			Statement statement = DatabaseConnection.getInstance().createStatement();
@@ -545,6 +549,75 @@ public class PerfDatabase {
 		return (versionString);
 	}
 
+	/**
+	 * Get the ID corresponding to the key from the perf DB
+	 * @return
+	 * @throws HarnessException
+	 */
+	protected int getMessageKey(String description) throws HarnessException {
+		getMessageTable();
+
+		if (!messageTable.containsKey(description)) {
+			insertMessage(description);
+		}
+
+		return (messageTable.get(description));
+	}
+
+	protected static HashMap<String, Integer> messageTable = null;
+	protected void getMessageTable() throws HarnessException {
+		if ( messageTable == null ) {
+			messageTable = new HashMap<String, Integer>();
+
+			try {
+
+				String query = "SELECT id, name FROM messages";
+
+				Statement statement = DatabaseConnection.getInstance().createStatement();
+				ResultSet rs = statement.executeQuery(query);
+				while (rs.next()) {
+
+					Integer id = rs.getInt("id");
+					String name = rs.getString("name");
+
+					logger.info("getMessageTable(): id="+ id +" name="+ name);
+
+					messageTable.put(name, id);
+
+				}
+
+			} catch (SQLException e) {
+				throw new HarnessException(e);
+			}
+
+
+		}
+	}
+	protected void insertMessage(String description) throws HarnessException {
+
+		if ( messageTable.containsKey(description) )
+			throw new HarnessException("messageTable already contains "+ description);
+
+		try {
+
+			String command = String.format("INSERT INTO messages (name) VALUES ('%s')", description);
+			logger.info("Statement: "+ command);
+
+			Statement statement = DatabaseConnection.getInstance().createStatement();
+			int ret = statement.executeUpdate(command);
+			logger.info("Statement: ret="+ ret);
+
+
+		} catch (SQLException e) {
+			throw new HarnessException(e);
+		}
+
+		// Reset the description table to pick up the new ID
+		messageTable = null;
+		getMessageTable();
+
+	}
+	
 	public static PerfDatabase getInstance() {
 		if (Instance == null) {
 			synchronized(PerfDatabase.class) {
