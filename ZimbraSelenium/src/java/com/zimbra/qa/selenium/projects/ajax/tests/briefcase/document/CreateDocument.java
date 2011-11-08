@@ -31,7 +31,14 @@ public class CreateDocument extends AjaxCommonTest {
 
 		super.startingPage = app.zPageBriefcase;
 
-		super.startingAccountPreferences = null;
+		super.startingAccountPreferences = new HashMap<String, String>() {
+			
+			private static final long serialVersionUID = 1L;
+			
+			{
+				put("zimbraPrefBriefcaseReadingPaneLocation", "bottom");				
+			}
+		};		
 	}
 
 	@Test(description = "Create document through GUI - verify through GUI", groups = { "sanity" })

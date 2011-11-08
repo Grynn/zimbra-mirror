@@ -1,5 +1,7 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.briefcase.file;
 
+import java.util.HashMap;
+
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.FileItem;
@@ -26,6 +28,15 @@ public class MoveFile extends AjaxCommonTest {
 
 		super.startingPage = app.zPageBriefcase;
 
+		super.startingAccountPreferences = new HashMap<String, String>() {
+			
+			private static final long serialVersionUID = 1L;
+			
+			{
+				put("zimbraPrefBriefcaseReadingPaneLocation", "bottom");				
+			}
+		};
+		
 		// Make sure we are using an account with message view
 		// super.startingAccountPreferences = new HashMap<String, String>()
 		// {{put("zimbraPrefGroupMailBy", "message");}};

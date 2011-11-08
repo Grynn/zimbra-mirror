@@ -1,5 +1,7 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.briefcase.file;
 
+import java.util.HashMap;
+
 import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.items.FileItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
@@ -22,7 +24,14 @@ public class SendFileAttachment extends AjaxCommonTest {
 
 		super.startingPage = app.zPageBriefcase;
 
-		super.startingAccountPreferences = null;
+		super.startingAccountPreferences = new HashMap<String, String>() {
+			
+			private static final long serialVersionUID = 1L;
+			
+			{
+				put("zimbraPrefBriefcaseReadingPaneLocation", "bottom");				
+			}
+		};
 	}
 
 	@Test(description = "Upload file through RestUtil - click Send as attachment, Cancel & verify through GUI", groups = { "functional" })

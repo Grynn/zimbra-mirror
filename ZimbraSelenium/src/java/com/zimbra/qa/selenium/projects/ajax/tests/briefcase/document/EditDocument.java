@@ -1,5 +1,7 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.briefcase.document;
 
+import java.util.HashMap;
+
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
@@ -28,7 +30,14 @@ public class EditDocument extends AjaxCommonTest {
 
 		super.startingPage = app.zPageBriefcase;
 
-		super.startingAccountPreferences = null;
+		super.startingAccountPreferences = new HashMap<String, String>() {
+
+			private static final long serialVersionUID = 1L;
+
+			{
+				put("zimbraPrefBriefcaseReadingPaneLocation", "bottom");				
+			}
+		};		
 	}
 
 	@Test(description = "Create document through SOAP - edit name & verify through GUI", groups = { "smoke" })

@@ -29,6 +29,7 @@ public class SendFileLink extends AjaxCommonTest {
 		super.startingAccountPreferences = new HashMap<String, String>() {
 			{
 				put("zimbraPrefComposeFormat", "html");
+				put("zimbraPrefBriefcaseReadingPaneLocation", "bottom");
 			}
 		};
 	}

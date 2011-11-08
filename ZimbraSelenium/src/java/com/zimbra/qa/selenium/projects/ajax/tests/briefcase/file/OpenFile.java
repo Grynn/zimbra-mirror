@@ -1,5 +1,6 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.briefcase.file;
 
+import java.util.HashMap;
 import java.util.List;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
@@ -24,7 +25,14 @@ public class OpenFile extends AjaxCommonTest {
 
 		super.startingPage = app.zPageBriefcase;
 
-		super.startingAccountPreferences = null;
+		super.startingAccountPreferences = new HashMap<String, String>() {
+			
+			private static final long serialVersionUID = 1L;
+			
+			{
+				put("zimbraPrefBriefcaseReadingPaneLocation", "bottom");
+			}
+		};
 	}
 
 	@Test(description = "Upload file through RestUtil - open & verify through GUI", groups = { "smoke" })

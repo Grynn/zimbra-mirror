@@ -1,5 +1,7 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.briefcase.folders;
 
+import java.util.HashMap;
+
 import org.testng.annotations.*;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
@@ -18,7 +20,15 @@ public class CreateFolder extends AjaxCommonTest {
 
 		// test starts at the briefcase tab
 		super.startingPage = app.zPageBriefcase;
-		super.startingAccountPreferences = null;
+		
+		super.startingAccountPreferences = new HashMap<String, String>() {
+			
+			private static final long serialVersionUID = 1L;
+			
+			{
+				put("zimbraPrefBriefcaseReadingPaneLocation", "bottom");
+			}
+		};
 	}
 
 	@Test(description = "Create a new folder by clicking 'Create a new briefcase' on folders tree", groups = { "sanity" })

@@ -1,5 +1,7 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.briefcase.document;
 
+import java.util.HashMap;
+
 import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.items.DocumentItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
@@ -23,7 +25,14 @@ public class SendDocAttachment extends AjaxCommonTest {
 
 		super.startingPage = app.zPageBriefcase;
 
-		super.startingAccountPreferences = null;
+		super.startingAccountPreferences = new HashMap<String, String>() {
+			
+			private static final long serialVersionUID = 1L;
+			
+			{
+				put("zimbraPrefBriefcaseReadingPaneLocation", "bottom");
+			}
+		};
 	}
 
 	@Test(description = "Create document through SOAP - click Send as attachment, Cancel & verify through GUI", groups = { "functional" })

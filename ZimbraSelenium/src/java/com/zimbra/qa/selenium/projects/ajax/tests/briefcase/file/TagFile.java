@@ -1,5 +1,7 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.briefcase.file;
 
+import java.util.HashMap;
+
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 
@@ -20,7 +22,14 @@ public class TagFile extends AjaxCommonTest {
 		// All tests start at the Briefcase page
 		super.startingPage = app.zPageBriefcase;
 
-		super.startingAccountPreferences = null;
+		super.startingAccountPreferences = new HashMap<String, String>() {
+			
+			private static final long serialVersionUID = 1L;
+			
+			{
+				put("zimbraPrefBriefcaseReadingPaneLocation", "bottom");
+			}
+		};
 	}
 
 	@Test(description = "Tag a File using Toolbar -> Tag -> New Tag", groups = { "smoke" })

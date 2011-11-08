@@ -1,5 +1,7 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.briefcase.file;
 
+import java.util.HashMap;
+
 import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.items.FileItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
@@ -22,6 +24,15 @@ public class DeleteFile extends AjaxCommonTest {
 		logger.info("New " + DeleteFile.class.getCanonicalName());
 
 		super.startingPage = app.zPageBriefcase;
+		
+		super.startingAccountPreferences = new HashMap<String, String>() {
+			
+			private static final long serialVersionUID = 1L;
+			
+			{
+				put("zimbraPrefBriefcaseReadingPaneLocation", "bottom");				
+			}
+		};
 
 	}
 

@@ -27,7 +27,14 @@ public class EditFile extends AjaxCommonTest {
 
 		super.startingPage = app.zPageBriefcase;
 
-		super.startingAccountPreferences = null;
+		super.startingAccountPreferences = new HashMap<String, String>() {
+			
+			private static final long serialVersionUID = 1L;
+			
+			{
+				put("zimbraPrefBriefcaseReadingPaneLocation", "bottom");				
+			}
+		};
 	}
 
 	@Test(description = "Upload file through RestUtil - Rename File using Right Click Context Menu & verify through GUI", groups = { "smoke" })

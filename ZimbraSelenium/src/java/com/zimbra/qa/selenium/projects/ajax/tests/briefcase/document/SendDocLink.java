@@ -22,15 +22,18 @@ import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 
 public class SendDocLink extends AjaxCommonTest {
 
-	@SuppressWarnings("serial")
 	public SendDocLink() {
 		logger.info("New " + SendDocLink.class.getCanonicalName());
 
 		super.startingPage = app.zPageBriefcase;
 
 		super.startingAccountPreferences = new HashMap<String, String>() {
+			
+			private static final long serialVersionUID = 1L;
+			
 			{
 				put("zimbraPrefComposeFormat", "html");
+				put("zimbraPrefBriefcaseReadingPaneLocation", "bottom");				
 			}
 		};
 	}
