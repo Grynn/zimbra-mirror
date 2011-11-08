@@ -844,6 +844,7 @@
       <fileset dir="${dist.dir}" includes="**/high-scale-lib-*.jar"/>
       <fileset dir="${dist.dir}" includes="**/libthrift-*.jar"/>
       <fileset dir="${dist.dir}" includes="**/perf4j-*.jar"/>
+      <fileset dir="${dist.dir}" includes="**/ehcache*.jar"/>
     </delete>
   </target>
 
