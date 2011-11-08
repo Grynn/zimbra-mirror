@@ -193,8 +193,10 @@ function (xModelMetaData, xFormMetaData,entry) {
     var newXFormMetaData = {items:[]};
     var stepChoices = xFormMetaData.items[0];
     stepChoices.type = _STEPCHOICE_;
+    stepChoices.containerCssClass = "step_container";
     stepChoices.colSpan = 1;
     var content = xFormMetaData.items[3];
+    newXFormMetaData.tableCssStyle = "width:100%;height:100%";
     newXFormMetaData.numCols = 2;
     newXFormMetaData.colSizes = ["100px", "*"];
     newXFormMetaData.items =[

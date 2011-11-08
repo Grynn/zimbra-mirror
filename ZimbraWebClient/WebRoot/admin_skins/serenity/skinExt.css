@@ -154,6 +154,7 @@ div.ZmSelectedHeaderBg {
 /* new account dialog */
 .AdminOutputTabSelect {
     background-color:#4682b4;
+    color: white;
     @tlRadius@:4px;
     @trRadius@:4px;
     @blRadius@:4px;
@@ -162,4 +163,30 @@ div.ZmSelectedHeaderBg {
 
 .ZaNewAccountSwitch {
     padding-left:5px;
+}
+
+.WindowOuterContainer {
+    background-color: #EAEAEA;
+    border: 0px;
+    padding: 1px;
+}
+
+.step_container, .WindowInnerContainer {
+    background-color: #DADADA;
+    border: 0px;
+    padding: 0px;
+}
+
+.DwtDialogTitle {
+    color: black;
+    width: 100%;
+}
+
+.DwtDialogBody {
+    background-color: #FCFCFC;
+}
+
+.horizSep {
+    border-bottom: 2px solid @SelC@;
+    margin: 0px;
 }
