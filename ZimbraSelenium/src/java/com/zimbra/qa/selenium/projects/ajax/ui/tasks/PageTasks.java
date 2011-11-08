@@ -941,7 +941,15 @@ public class PageTasks extends AbsTab {
 			page= null;
 			keyCode= "8";
 			
-		}else{
+		}else if (shortcut== Shortcut.S_MAIL_MOVETOTRASH){
+			
+			zKeyboard.zTypeCharacters(shortcut.getKeys());
+			page= null;
+			return page;
+		}
+		
+		else{
+		
 			throw new HarnessException("implement shortcut: " + shortcut);
 		}
 		
