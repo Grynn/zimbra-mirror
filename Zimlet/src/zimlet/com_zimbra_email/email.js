@@ -684,8 +684,17 @@ function(obj, span, context) {
 
 	var contactsApp = appCtxt.getApp(ZmApp.CONTACTS);
 	var contact = contactsApp && contactsApp.getContactByEmail(addr);
+	var newContactAction = actionMenu.getOp("NEWCONTACT");
+	if (newContactAction) {
+		newContactAction.setVisible(true);
+	}
 	if (contact) {
 		// contact for this address was found in the cache
+		if (contact.isDistributionList() && newContactAction) {
+			//do not allow editing a DL in this way (if user is owner, they can edit via the DL folder/toolbar)
+			// And most likley this is a regular user that is not the owner anyway. So let's keep it simple
+			newContactAction.setVisible(false);
+		}
 		ZmOperation.setOperation(actionMenu, "NEWCONTACT", ZmOperation.EDIT_CONTACT);
 	} else {
 		// contact not found, do a search
