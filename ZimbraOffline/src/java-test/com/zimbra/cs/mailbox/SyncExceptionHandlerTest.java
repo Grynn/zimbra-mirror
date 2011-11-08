@@ -15,7 +15,9 @@
 
 package com.zimbra.cs.mailbox;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 
 import junit.framework.Assert;
 
@@ -196,5 +198,24 @@ public class SyncExceptionHandlerTest {
             Assert.assertTrue(se.getCause() instanceof RecoverableException);
         }
 
+    }
+
+    private static class FakeException extends Exception {
+        public FakeException(Throwable cause) {
+            super(cause);
+        }
+    }
+
+    @Test
+    public void testIsCausedBy() {
+        FakeException fakeException = new FakeException(new FileNotFoundException());
+        Assert.assertEquals(true, SyncExceptionHandler.isCausedBy(fakeException, FileNotFoundException.class));
+        Assert.assertEquals(false, SyncExceptionHandler.isCausedBy(fakeException, IOException.class));
+
+        fakeException = new FakeException(new IOException());
+        Assert.assertEquals(true, SyncExceptionHandler.isCausedBy(fakeException, IOException.class));
+        Assert.assertEquals(false, SyncExceptionHandler.isCausedBy(fakeException, Exception.class));
+        Assert.assertEquals(true, SyncExceptionHandler.isCausedBy(fakeException, FileNotFoundException.class));
+        Assert.assertEquals(true, SyncExceptionHandler.isCausedBy(fakeException, SocketTimeoutException.class));
     }
 }
