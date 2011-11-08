@@ -78,8 +78,8 @@ typedef enum _ZimbraSpecialFolderId
 } ZimbraSpecialFolderId;
 
 //IPM folders strings if pst doesn't have IPM EntryIDs in Inbox folder
-const int g_MAX_STR_IPM_FOLDERS=6;
-const wstring g_strIPM_FOLDERS[g_MAX_STR_IPM_FOLDERS] ={L"Calendar",L"Contacts",L"Drafts",L"Journal",L"Notes",L"Tasks"};
+const int g_MAX_STR_IPM_FOLDERS=7;
+const wstring g_strIPM_FOLDERS[g_MAX_STR_IPM_FOLDERS] ={L"Calendar",L"Contacts",L"Drafts",L"Journal",L"Notes",L"Tasks",L"Junk E-Mail"};
 // MapiFolder class
 class MAPIFolder
 {

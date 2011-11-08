@@ -13,6 +13,13 @@ namespace CssLib
     Calendar = 0x0004, Contacts = 0x0002, Mail = 0x0001, None = 0x0000
 }
 
+public enum ZimbraFolders
+{
+    Min = 0, UserRoot = 1, Inbox = 2, Trash = 3, Junk = 4, Sent = 5, Drafts = 6,
+    Contacts = 7, Tags = 8, Conversations = 9, Calendar = 10, MailboxRoot = 11, Wiki = 12,
+    EmailedContacts = 13, Chats = 14, Tasks = 15, Max = 16
+}
+
 public class MigrationOptions
 {
     public ItemsAndFoldersOptions ItemsAndFolders;
@@ -264,14 +271,13 @@ public class CSMigrationwrapper
         // /
         foreach (dynamic folderobject in folderobjectarray)
         {
-            // FBS NOTE THAT THESE ARE EXCHANGE SPECIFIC.  WE'LL HAVE TO CHANGE THIS GROU GROUPWISE !!!
-            if ((folderobject.Name == "Sent Items") && !(importopts.ItemsAndFolders.HasFlag(
-                ItemsAndFoldersOptions.Sent)))
-                continue;
-            if ((folderobject.Name == "Deleted Items") && !(importopts.ItemsAndFolders.HasFlag(
+            if ((folderobject.Id == (int)ZimbraFolders.Sent) && !(importopts.ItemsAndFolders.HasFlag(
+                    ItemsAndFoldersOptions.Sent)))
+                    continue;
+            if ((folderobject.Id == (int)ZimbraFolders.Trash) && !(importopts.ItemsAndFolders.HasFlag(
                 ItemsAndFoldersOptions.DeletedItems)))
                 continue;
-            if ((folderobject.Name == "Junk E-Mail") && !(importopts.ItemsAndFolders.HasFlag(
+            if ((folderobject.Id == (int)ZimbraFolders.Junk) && !(importopts.ItemsAndFolders.HasFlag(
                 ItemsAndFoldersOptions.Junk)))
                 continue;
             if ((folderobject.ContainerClass == "IPF.Contact") &&
@@ -562,14 +568,14 @@ public class CSMigrationwrapper
                 string path = "";
 
                 // FBS NOTE THAT THESE ARE EXCHANGE SPECIFIC.  WE'LL HAVE TO CHANGE THIS FOR GROUPWISE !!!
-                if ((folderobject.Name == "Sent Items") && !(importopts.ItemsAndFolders.HasFlag(
+                if ((folderobject.Id == (int)ZimbraFolders.Sent) && !(importopts.ItemsAndFolders.HasFlag(
                     ItemsAndFoldersOptions.Sent)))
                     continue;
-                if ((folderobject.Name == "Deleted Items") &&
+                if ((folderobject.Id == (int)ZimbraFolders.Trash) &&
                     !(importopts.ItemsAndFolders.HasFlag(
                     ItemsAndFoldersOptions.DeletedItems)))
                     continue;
-                if ((folderobject.Name == "Junk E-Mail") &&
+                if ((folderobject.Id == (int)ZimbraFolders.Junk) &&
                     !(importopts.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Junk)))
                     continue;
                 if ((folderobject.ContainerClass == "IPF.Contact") &&
@@ -621,9 +627,9 @@ public class CSMigrationwrapper
                 Acct.migrationFolder.FolderName = folderobject.Name;
                 if (importopts.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Contacts))
                 {
-                    if (folderobject.Name == "Deleted Items")   // FBS EXCHANGE SPECIFIC HACK.  CHANGE FOR GROUPWISE !!!
+                    if (folderobject.Id == (int)ZimbraFolders.Trash)   
                     {
-                        path = "/MAPIRoot/Deleted Items";
+                        path = "/MAPIRoot/Deleted Items";   // FBS EXCHANGE SPECIFIC HACK !!!
                     }
                     ProcessItems(Acct, folderobject, foldertype.Contacts, api, path, importopts);
                 }

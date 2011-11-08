@@ -135,7 +135,7 @@ ExchangeSpecialFolderId MAPIFolder::GetExchangeFolderId()
 			{
 				if(m_displayname.compare(g_strIPM_FOLDERS[i].c_str())==0)
 				{
-					efid= (ExchangeSpecialFolderId)(i+2);
+					efid= (i == 6) ? JUNK_MAIL : (ExchangeSpecialFolderId)(i+2);
 					break;
 				}
 			}
