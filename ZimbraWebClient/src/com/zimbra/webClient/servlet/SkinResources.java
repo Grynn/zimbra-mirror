@@ -1648,8 +1648,8 @@ public class SkinResources
 			if (isBrowser("MSIE")){
 				if (isBrowser("MSIE_10_OR_HIGHER")){
 					result = String.format("background-image: -ms-linear-gradient(top %s, %s, %s)\n", topLeft, from, to);
-				} else if (isBrowser("MSIE_8_OR_HIGHER")){ //IE 8 and IE 9
-					result = String.format("-ms-filter: \"progid:DXImageTransform.Microsoft.gradient(startColorstr='%s',endColorstr='%s',GradientType=%d\")",from, to, gradType);
+				//} else if (isBrowser("MSIE_8_OR_HIGHER")){ //IE 8 and IE 9
+					//result = String.format("-ms-filter: \"progid:DXImageTransform.Microsoft.gradient(startColorstr='%s',endColorstr='%s',GradientType=%d\")",from, to, gradType);
 				} else { // IE 7 or lower
 					result = String.format("filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='%s', EndColorStr='%s' , GradientType=%d)", from, to, gradType );
 				}
