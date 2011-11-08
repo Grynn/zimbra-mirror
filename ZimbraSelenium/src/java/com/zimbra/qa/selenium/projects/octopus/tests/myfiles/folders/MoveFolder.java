@@ -161,6 +161,13 @@ public class MoveFolder extends OctopusCommonTest {
 				_folderName = null;
 				_folderIsCreated = false;
 			}
+			try {
+				// click on Trash tab to move out from the current view
+				app.zPageOctopus.zToolbarPressButton(Button.B_TAB_TRASH);
+			} catch (Exception e) {
+				logger.info("Failed while opening Trash tab");
+				e.printStackTrace();
+			}
 		}
 	}
 }

@@ -105,19 +105,6 @@ public class UploadFile extends OctopusCommonTest {
 
 	@AfterMethod(groups = { "always" })
 	public void testCleanup() {
-		if (_folderIsCreated) {
-			try {
-				// Delete it from Server
-				FolderItem
-						.deleteUsingSOAP(app.zGetActiveAccount(), _folderName);
-			} catch (Exception e) {
-				logger.info("Failed while removing the folder.");
-				e.printStackTrace();
-			} finally {
-				_folderName = null;
-				_folderIsCreated = false;
-			}
-		}
 		if (_fileAttached && _fileId != null) {
 			try {
 				// Delete it from Server
@@ -131,6 +118,18 @@ public class UploadFile extends OctopusCommonTest {
 				_fileAttached = false;
 			}
 		}
-
+		if (_folderIsCreated) {
+			try {
+				// Delete it from Server
+				FolderItem
+						.deleteUsingSOAP(app.zGetActiveAccount(), _folderName);
+			} catch (Exception e) {
+				logger.info("Failed while removing the folder.");
+				e.printStackTrace();
+			} finally {
+				_folderName = null;
+				_folderIsCreated = false;
+			}
+		}
 	}
 }

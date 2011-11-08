@@ -105,7 +105,7 @@ public class MoveFile extends OctopusCommonTest {
 	}
 
 	@Test(description = "Move file using context menu - verify file is moved", groups = { "smoke" })
-	public void DeleteFile_02() throws HarnessException {
+	public void MoveFile_02() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 
 		FolderItem briefcaseRootFolder = FolderItem.importFromSOAP(account,
@@ -181,24 +181,10 @@ public class MoveFile extends OctopusCommonTest {
 		// Verify the file is now in the destination folder
 		ZAssert.assertTrue(app.zPageOctopus.zIsItemInCurentListView(fileName),
 				"Verify the file was moved to the destination folder");
-
 	}
 
 	@AfterMethod(groups = { "always" })
 	public void testCleanup() {
-		if (_folderIsCreated) {
-			try {
-				// Delete it from Server
-				FolderItem
-						.deleteUsingSOAP(app.zGetActiveAccount(), _folderName);
-			} catch (Exception e) {
-				logger.info("Failed while removing the folder.");
-				e.printStackTrace();
-			} finally {
-				_folderName = null;
-				_folderIsCreated = false;
-			}
-		}
 		if (_fileAttached && _fileId != null) {
 			try {
 				// Delete it from Server
@@ -212,6 +198,25 @@ public class MoveFile extends OctopusCommonTest {
 				_fileAttached = false;
 			}
 		}
-
+		if (_folderIsCreated) {
+			try {
+				// Delete it from Server
+				FolderItem
+						.deleteUsingSOAP(app.zGetActiveAccount(), _folderName);
+			} catch (Exception e) {
+				logger.info("Failed while removing the folder.");
+				e.printStackTrace();
+			} finally {
+				_folderName = null;
+				_folderIsCreated = false;
+			}
+		}
+		try {
+			// click on Trash tab to move out from the current view
+			app.zPageOctopus.zToolbarPressButton(Button.B_TAB_TRASH);
+		} catch (Exception e) {
+			logger.info("Failed while opening Trash tab");
+			e.printStackTrace();
+		}
 	}
 }
