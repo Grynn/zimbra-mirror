@@ -131,6 +131,10 @@ sub get_mboxd_pid() {
 sub sighup {
     if (!$CONSOLE) {
         $LOGFH = rotateLogFile($LOGFH, $LOGFILE, $HEADING);
+        my ($name, $path) = File::Basename::fileparse($LOGFILE);
+        my $date = getDate();
+        my $rotatefile = "$path/$date/$name.gz";
+        chown $zuid, $zgid, $rotatefile;
         chown $zuid, $zgid, $LOGFILE;
         my $fmode = 0640; chmod $fmode, $LOGFILE;
     } else {
@@ -188,6 +192,9 @@ while (1) {
     my $currDate = getDate();
     if ($currDate ne $date && !$CONSOLE) {
         $LOGFH = rotateLogFile($LOGFH, $LOGFILE, $HEADING, $date);
+        my ($name, $path) = File::Basename::fileparse($LOGFILE);
+        my $rotatefile = "$path/$date/$name.gz";
+        chown $zuid, $zgid, $rotatefile;
         chown $zuid, $zgid, $LOGFILE;
         my $fmode = 0640; chmod $fmode, $LOGFILE;
         $date = $currDate;
@@ -200,6 +207,12 @@ while (1) {
     if ($ROTATE_NOW) {
         $ROTATE_NOW = 0;
         $LOGFH = rotateLogFile($LOGFH, $LOGFILE, $HEADING);
+        my ($name, $path) = File::Basename::fileparse($LOGFILE);
+        my $date = getDate();
+        my $rotatefile = "$path/$date/$name.gz";
+        chown $zuid, $zgid, $rotatefile;
+        chown $zuid, $zgid, $LOGFILE;
+        my $fmode = 0640; chmod $fmode, $LOGFILE;
     }
     sleep($interval);
 }
