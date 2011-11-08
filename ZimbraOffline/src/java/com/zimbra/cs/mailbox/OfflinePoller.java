@@ -128,7 +128,9 @@ public final class OfflinePoller implements Runnable {
             if (AdminServiceException.NO_SUCH_WAITSET.equals(x.getCode())
                     || ServiceException.PERM_DENIED.equals(x.getCode())
                     || ServiceException.PROXY_ERROR.equals(x.getCode())) {
-                OfflineLog.offline.debug("failed sending request in waitsetRequest(), error code: %s", x.getCode(), x);
+                if (!SyncExceptionHandler.isCausedBy(x, SocketTimeoutException.class)) { // we only care about those not caused by socket-time-out
+                    OfflineLog.offline.debug("failed sending request in waitsetRequest(), error code: %s", x.getCode(), x);    
+                }
                 setId = null;
                 lastSequence = null;
                 return;
