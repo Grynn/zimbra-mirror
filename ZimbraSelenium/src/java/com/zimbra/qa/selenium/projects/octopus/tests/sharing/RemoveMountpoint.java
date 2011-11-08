@@ -12,14 +12,14 @@ import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.octopus.core.OctopusCommonTest;
 import com.zimbra.qa.selenium.projects.octopus.ui.PageMyFiles;
-import com.zimbra.qa.selenium.projects.octopus.ui.PageTrash;
+import com.zimbra.qa.selenium.projects.octopus.ui.PageSharing;
 
-public class DeleteMountpoint extends OctopusCommonTest {
+public class RemoveMountpoint extends OctopusCommonTest {
 
 	private ZimbraAccount ownerAccount = null;
 
-	public DeleteMountpoint() {
-		logger.info("New " + DeleteMountpoint.class.getCanonicalName());
+	public RemoveMountpoint() {
+		logger.info("New " + RemoveMountpoint.class.getCanonicalName());
 
 		// Test starts at the Octopus page
 		super.startingPage = app.zPageMyFiles;
@@ -30,17 +30,13 @@ public class DeleteMountpoint extends OctopusCommonTest {
 		ownerAccount.authenticate();
 	}
 
-	@Test(description = "Delete a mountpoint to a shared folder using pull down list", groups = { "functional" })
-	public void DeleteMountpoint_01() throws HarnessException {
+	@Test(description = "Remove a mountpoint to a shared folder using pull down list", groups = { "unctional" })
+	public void RemoveMountpoint_01() throws HarnessException {
 		FolderItem ownerBriefcaseRootFolder = FolderItem.importFromSOAP(
 				ownerAccount, SystemFolder.Briefcase);
 
 		ZAssert.assertNotNull(ownerBriefcaseRootFolder,
 				"Verify the owner Briefcase root folder exists");
-
-		FolderItem trash = FolderItem.importFromSOAP(app.zGetActiveAccount(),
-				SystemFolder.Trash);
-		ZAssert.assertNotNull(trash, "Verify the trash is available");
 
 		// Owner creates a folder, shares it with current user
 		String ownerFoldername = "ownerFolder"
@@ -92,9 +88,9 @@ public class DeleteMountpoint extends OctopusCommonTest {
 
 		SleepUtil.sleepVerySmall();
 
-		// Delete the mountpoint folder using drop down list option
+		// Remove the mountpoint folder using drop down list option
 		app.zPageMyFiles.zToolbarPressPulldown(Button.B_MY_FILES_LIST_ITEM,
-				Button.O_DELETE, folderMountpointName);
+				Button.O_LEAVE_THIS_SHARED_FOLDER, folderMountpointName);
 
 		// Verify the mountpoint folder disappears from My Files tab
 		ZAssert.assertTrue(app.zPageMyFiles.zWaitForElementDeleted(
@@ -102,24 +98,14 @@ public class DeleteMountpoint extends OctopusCommonTest {
 						+ folderMountpointItem.getName() + ")", "3000"),
 				"Verify mountpoint folder disappears from My Files tab");
 
-		// click on Trash tab
-		PageTrash pageTrash = (PageTrash) app.zPageOctopus
-				.zToolbarPressButton(Button.B_TAB_TRASH);
+		// click on Sharing tab
+		PageSharing pageSharing = (PageSharing) app.zPageOctopus
+				.zToolbarPressButton(Button.B_TAB_SHARING);
 
-		// Verify the mount point folder is now in the trash
-		// ZAssert.assertTrue(app.zPageTrash.zIsItemInTrash(folderMountpointItem),"Verify the mountpoint folder is in the trash");
-		ZAssert.assertTrue(pageTrash.zWaitForElementPresent(
-				PageMyFiles.Locators.zMyFilesListViewItems.locator
-						+ ":contains(" + folderMountpointName + ")", "3000"),
-				"Verify the mountpoint folder is displayed in the Trash list view");
-
-		// Verify on server
-		folderMountpointItem = FolderMountpointItem.importFromSOAP(
-				currentAccount, folderMountpointName);
-
-		ZAssert.assertNotNull(folderMountpointItem,
-				"Verify the mountpoint is again available");
-		ZAssert.assertEquals(trash.getId(), folderMountpointItem.getParentId(),
-				"Verify the mountpoint's parent is now the trash folder");
+		// Verify the removed mount point appears in the Ignored Items List View
+		ZAssert.assertTrue(pageSharing.zWaitForElementPresent(
+				PageSharing.Locators.zIgnoredItemsView.locator + ":contains("
+						+ folderMountpointItem.getName() + ")", "5000"),
+				"Verify removed mount point appears in the Ignored Items List View");
 	}
 }

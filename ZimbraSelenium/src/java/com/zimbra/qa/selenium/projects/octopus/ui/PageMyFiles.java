@@ -37,6 +37,8 @@ public class PageMyFiles extends AbsTab {
 				"css=div[class^=sc-view sc-menu-item] a[class=menu-item]>span:contains(Move)");
 		public static final Locators zDeleteItem = new Locators(
 				"css=div[class^=sc-view sc-menu-item] a[class=menu-item]>span:contains(Delete)");
+		public static final Locators zLeaveThisSharedFolder = new Locators(
+				"css=div[class^=sc-view sc-menu-item] a[class=menu-item]>span:contains('Leave this Shared Folder')");
 	
 
 		public final String locator;
@@ -143,8 +145,8 @@ public class PageMyFiles extends AbsTab {
 			// If the app is busy, wait for it to become active
 			zWaitForBusyOverlay();
 
-			if (option == Button.O_DELETE) {
-				optionLocator = Locators.zDeleteItem.locator;
+			if (option == Button.O_LEAVE_THIS_SHARED_FOLDER) {
+				optionLocator = Locators.zLeaveThisSharedFolder.locator;
 
 				if (!this.zWaitForElementPresent(optionLocator, "2000"))
 					throw new HarnessException("Button is not present locator="
@@ -196,6 +198,19 @@ public class PageMyFiles extends AbsTab {
 
 				page = new DialogMove(MyApplication, this);
 				
+				return page;
+			} else if (option == Button.O_DELETE) {
+				optionLocator = Locators.zDeleteItem.locator;
+
+				if (!this.zWaitForElementPresent(optionLocator, "2000"))
+					throw new HarnessException("Button is not present locator="
+							+ optionLocator);
+
+				this.sClickAt(optionLocator, "0,0");
+
+				// If the app is busy, wait for it to become active
+				zWaitForBusyOverlay();
+
 				return page;
 			} else {
 				logger.info("no logic defined for " + option);
