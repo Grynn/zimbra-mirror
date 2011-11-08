@@ -62,6 +62,7 @@ LIBS="/opt/zimbra/libxml2/lib/libxml2.a" CFLAGS="-D_REENTRANT -g -O2 -I/opt/zimb
             --enable-static=no \
             --enable-shared \
             --with-dblib=no \
+            --with-devrandom=/dev/urandom \
             --with-openssl=/opt/zimbra/openssl-${openssl_version} \
             --with-libcurl=/opt/zimbra/curl-${curl_version} \
             --with-gss_impl=heimdal \
@@ -74,6 +75,7 @@ LIBS="/opt/zimbra/libxml2/lib/libxml2.a" CFLAGS="-D_REENTRANT -g -O2 -I/opt/zimb
             --with-saslauthd=/opt/zimbra/${cyrus_src}/state \
             --with-plugindir=/opt/zimbra/${cyrus_src}/lib/sasl2 \
             --with-dblib=no \
+            --with-devrandom=/dev/urandom \
             --with-openssl=/opt/zimbra/openssl-${openssl_version} \
             --with-libcurl=/opt/zimbra/curl-${curl_version} \
             --with-gss_impl=heimdal \
