@@ -1,7 +1,11 @@
 package com.zimbra.qa.selenium.projects.desktop.tests.mail.mail;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.*;
@@ -15,7 +19,10 @@ import com.zimbra.qa.selenium.projects.desktop.core.AjaxCommonTest;
 
 public class DragAndDropMessage extends AjaxCommonTest {
 
-	@SuppressWarnings("serial")
+   private List<FolderItem> _folders = null;
+   private List<FolderItem> _localFolders = null;
+
+   @SuppressWarnings("serial")
 	public DragAndDropMessage() {
 		logger.info("New "+ DragAndDropMessage.class.getCanonicalName());
 
@@ -25,8 +32,14 @@ public class DragAndDropMessage extends AjaxCommonTest {
 		// Make sure we are using an account with message view
 		super.startingAccountPreferences = new HashMap<String, String>() {{
 				    put("zimbraPrefGroupMailBy", "message");
-				}};
+		}};
 
+	}
+
+	@BeforeMethod(alwaysRun = true)
+	public void setup() {
+	   _folders = null;
+	   _localFolders = null;
 	}
 
 	@Test(	description = "Drag and Drop a message from Inbox to subfolder",
@@ -54,6 +67,9 @@ public class DragAndDropMessage extends AjaxCommonTest {
 		      foldername,
 		      SOAP_DESTINATION_HOST_TYPE.CLIENT,
             app.zGetActiveAccount().EmailAddress);
+
+		_folders = new ArrayList<FolderItem> ();
+		_folders.add(subfolder);
 
 		// Send a message to the account
 		ZimbraAccount.AccountA().soapSend(
@@ -141,6 +157,8 @@ public class DragAndDropMessage extends AjaxCommonTest {
             foldername,
             SOAP_DESTINATION_HOST_TYPE.CLIENT,
             ZimbraAccount.clientAccountName);
+      _localFolders = new ArrayList<FolderItem>();
+      _localFolders.add(localFolder);
 
       // Send a message to the account
       ZimbraAccount.AccountA().soapSend(
@@ -222,7 +240,10 @@ public class DragAndDropMessage extends AjaxCommonTest {
 	         SOAP_DESTINATION_HOST_TYPE.CLIENT,
 	         ZimbraAccount.clientAccountName);
 
-	   // Create local sub folder
+      _localFolders = new ArrayList<FolderItem>();
+      _localFolders.add(localFolder);
+
+      // Create local sub folder
 	   app.zGetActiveAccount().soapSend(
 	         "<CreateFolderRequest xmlns='urn:zimbraMail'>" +
 	         "<folder name='" + subfoldername +"' l='"+ localFolder.getId() +"'/>" +
@@ -238,7 +259,9 @@ public class DragAndDropMessage extends AjaxCommonTest {
             SOAP_DESTINATION_HOST_TYPE.CLIENT,
             ZimbraAccount.clientAccountName);
 
-	   // Send a message to the account
+      _localFolders.add(localSubfolder);
+
+      // Send a message to the account
 	   ZimbraAccount.AccountA().soapSend(
 	         "<SendMsgRequest xmlns='urn:zimbraMail'>" +
 	         "<m>" +
@@ -288,5 +311,26 @@ public class DragAndDropMessage extends AjaxCommonTest {
 	      // This is expected because zcsMailAfterMove is supposed to be null
 	   }
 	   ZAssert.assertNull(zcsMailAfterMove, "Verifying Mail Item on ZCS server after being moved to local folders");
+	}
+
+	@AfterMethod(alwaysRun = true)
+	public void testCleanup() throws HarnessException {
+	   if (_folders != null) {
+	      for (int i = _folders.size() - 1; i >= 0; i--) {
+            FolderItem.deleteUsingSOAP(
+                  app.zGetActiveAccount(),
+                  ((FolderItem)_folders.get(i)).getName());
+         }
+	   }
+
+	   if (_localFolders != null) {
+	      for (int i = _localFolders.size() - 1; i >= 0; i--) {
+	         FolderItem.deleteUsingSOAP(
+	               app.zGetActiveAccount(),
+	               ((FolderItem)_localFolders.get(i)).getName(),
+	               SOAP_DESTINATION_HOST_TYPE.CLIENT,
+	               ZimbraAccount.clientAccountName);
+	      }
+	   }
 	}
 }
