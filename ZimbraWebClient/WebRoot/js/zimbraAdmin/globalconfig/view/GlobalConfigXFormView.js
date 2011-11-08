@@ -230,7 +230,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 							  label: ZaMsg.LBL_zimbraGalMaxResults, msgName:ZaMsg.MSG_zimbraGalMaxResults, 
 							  labelLocation:_LEFT_, cssClass:"admin_xform_number_input"
 							},
-							{ref:ZaGlobalConfig.A_zimbraDefaultDomainName, type:_DYNSELECT_,
+						{ref:ZaGlobalConfig.A_zimbraDefaultDomainName, type:_TEXTFIELD_,
 								label: ZaMsg.NAD_DefaultDomainName,
 								toolTipContent:ZaMsg.tt_StartTypingDomainName,
 								dataFetcherMethod:ZaSearch.prototype.dynSelectSearchDomains,
@@ -246,7 +246,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 								  label: ZaMsg.NAD_DOC_MaxUploadSize, labelLocation:_LEFT_, cssClass:"admin_xform_number_input"
 	  						},
 							// help URL
-							{type: _SPACER_, height: 10},
+							//{type: _SPACER_, height: 10},
 							{ ref: ZaGlobalConfig.A_zimbraHelpAdminURL, type: _TEXTFIELD_,
                                                                   label: ZaMsg.Domain_zimbraHelpAdminURL, labelLocation:_LEFT_, width:200
                                                         },
