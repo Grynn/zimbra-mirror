@@ -24,21 +24,26 @@ use warnings;
 my $locale = "en_US";
 my $home_dir = $ENV{HOME} || die("Error: unable to get user home directory");
 my $app_root;
+my $data_root;
+my $default_data_root = "$home_dir/zdesktop";
 
 my $messages = {
     en_US => {
-        ChooseDataRoot => "Choose the folder where you would like to install Zimbra Desktop's user data files",
+        ChooseDataRoot => "Choose the folder where you would like to install Zimbra Desktop's user data files, full path please",
+        ConfirmDataRoot => "Are you sure you would like to install Zimbra Desktop's user data under folder [{0}] ? NOTE: All non-ZD data under this directory will be deleted.",
         ChooseIconDir => "Choose the folder where you would like to create desktop icon",
         Configuring => "Initializing user data...",
         CreateIcon => "Creating desktop icon...",
 		Installing => "Installing user data files...",
         InvalidDataRoot1 => "*** Error: User data directory can not be the same as, or a subdirectory of, the application directory.",
         InvalidDataRoot2 => "*** Error: User data directory can not be a parent directory of the application directory.",
+        InvalidDataRoot3 => "*** Error: User data directory can not be your home directory.",
         Done => "done",
         RunCommand => "You can start Zimbra Desktop by double-clicking the desktop icon or by running the following command:",
 		RunWithAbsPath => '*** Error: You must run user-install.pl with absolute path.',
         Success => 'Zimbra Desktop has been installed successfully for user {0}.',
-        LaunchZD => 'Press "Enter" to launch Zimbra Desktop; Press "Ctrl-c" to exit: '
+        LaunchZD => 'Press "Enter" to launch Zimbra Desktop; Press "Ctrl-c" to exit: ',
+        YesNo => "(Y)es or (N)o"
     }
 };
 
@@ -145,9 +150,19 @@ sub dialog_data_root() {
             print get_message("InvalidDataRoot1"), "\n";
         } elsif (index($app_root, $dr) >= 0) {
             print get_message("InvalidDataRoot2"), "\n";
+        } elsif (index($home_dir, $dr) >= 0) {
+            print get_message("InvalidDataRoot3"), "\n";
         } else {
             return $dr;
         }
+    }
+}
+
+sub dialog_confirm_data_root() {
+    if ($data_root ne $default_data_root) {
+        print get_message('ConfirmDataRoot', [$data_root]), "\n";
+        my $in = lc(get_input(get_message('YesNo'), 'Y'));
+        exit 1 if (substr($in, 0, 1) ne 'y');
     }
 }
 
@@ -156,7 +171,7 @@ sub dialog_desktop_icon() {
 }
 
 # main
-my ($data_root, $icon_dir);
+my $icon_dir;
 
 my $script_path = $0;
 if ($script_path eq 'user-install.pl' || $script_path eq './user-install.pl') {
@@ -174,6 +189,7 @@ $app_root = substr($script_path, 0, length($script_path) - 22); # 22: "/linux/us
 chdir($app_root);
 
 $data_root = dialog_data_root();
+dialog_confirm_data_root();
 $icon_dir = dialog_desktop_icon();
 
 my $tmpdir = "$data_root" . ".tmp";
