@@ -80,9 +80,7 @@ function() {
 
 DwtHeaderTreeItem.prototype._onclickHandler =
 function(ev) {
-	var mouseEv = DwtShell.mouseEvent;
-	mouseEv.setFromDhtmlEvent(ev, this);
-	this._optButtonItem.callback.run(mouseEv);
+    this._tree._itemActioned(this, ev);
 };
 
 
