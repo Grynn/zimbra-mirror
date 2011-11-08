@@ -549,7 +549,7 @@ ExchangeSpecialFolderId Zimbra::MAPI::Util::GetExchangeSpecialFolderId(IN LPMDB 
 
         userStore->CompareEntryIDs(cbEntryId, pFolderEntryId, pCurr->cb, (LPENTRYID)pCurr->lpb,
             0, &bResult);
-        if (bResult)
+        if (bResult && pCurr->cb)
             return (ExchangeSpecialFolderId)i;
     }
     return SPECIAL_FOLDER_ID_NONE;

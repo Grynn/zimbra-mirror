@@ -116,16 +116,33 @@ void MAPIFolder::Initialize(LPMAPIFOLDER pFolder, LPTSTR displayName, LPSBinary 
     }
 }
 
+
 ExchangeSpecialFolderId MAPIFolder::GetExchangeFolderId()
 {
+	ExchangeSpecialFolderId efid= SPECIAL_FOLDER_ID_NONE;
     if (m_store && m_session)
     {
         SBinaryArray specialFolderIds = m_store->GetSpecialFolderIds();
 
-        return Zimbra::MAPI::Util::GetExchangeSpecialFolderId(m_store->GetInternalMAPIStore(),
+        efid= Zimbra::MAPI::Util::GetExchangeSpecialFolderId(m_store->GetInternalMAPIStore(),
             m_EntryID.cb, (LPENTRYID)(m_EntryID.lpb), &specialFolderIds);
+		//it is possible that if its a pst migration then PR_IPM entries are not
+		//available so use english inbox contained IPM folder names to compare 
+		//current folder name
+		if(efid==SPECIAL_FOLDER_ID_NONE)
+		{
+			for (int i=0;i<g_MAX_STR_IPM_FOLDERS;i++)
+			{
+				if(m_displayname.compare(g_strIPM_FOLDERS[i].c_str())==0)
+				{
+					efid= (ExchangeSpecialFolderId)(i+2);
+					break;
+				}
+			}
+		}
+		return efid;
     }
-    return SPECIAL_FOLDER_ID_NONE;
+    return efid;
 }
 
 ZimbraSpecialFolderId MAPIFolder::GetZimbraFolderId()

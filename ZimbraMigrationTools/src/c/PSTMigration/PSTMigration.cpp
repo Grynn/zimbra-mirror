@@ -319,6 +319,7 @@ DWORD WINAPI AccountMigrationThread(LPVOID lpParameter)
             }
             FreeEntryID((*idItr).sbMessageID);
         }
+		FreeEntryID(sbin);
         vItemDataList.clear();
     }
     delete maapi;
