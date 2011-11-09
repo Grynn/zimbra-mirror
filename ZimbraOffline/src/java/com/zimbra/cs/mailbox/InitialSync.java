@@ -441,6 +441,7 @@ public class InitialSync {
             boolean isForceSync, boolean isDeltaSync) throws ServiceException {
         int counter = 0, lastItem = mMailboxSync.getLastSyncedItem();
         List<Integer> itemList = new ArrayList<Integer>();
+        syncMsgCutoffReached = false;
         for (int id : ids) {
             if (interrupted && lastItem > 0) {
                 if (id != lastItem) {
@@ -450,6 +451,12 @@ public class InitialSync {
                 }
             }
             if (!isForceSync && isAlreadySynced(id, MailItem.Type.UNKNOWN)) {
+                continue;
+            }
+            if (syncMsgCutoffReached) {
+                //Sync Msg cut off time reached
+                //rest of the messages in the loop will have msg date < cutofftime
+                OfflineLog.offline.debug("Cut-Off time reached, ignoring rest of the messages");
                 continue;
             }
             int batchSize = OfflineLC.zdesktop_sync_batch_size.intValue();
@@ -1099,7 +1106,6 @@ public class InitialSync {
             try {
                 int msgId = 0;
                 TarEntry te;
-                syncMsgCutoffReached = false;
                 tin = new TarInputStream(new GZIPInputStream(in), "UTF-8");
                 while ((te = tin.getNextEntry()) != null) {
                     if (te.getName().endsWith(".meta")) {
@@ -1110,12 +1116,6 @@ public class InitialSync {
                         assert (ud.getBlobDigest() != null);
                         msgId = ud.id;
                         te = tin.getNextEntry(); //message always has a blob
-                        if (syncMsgCutoffReached) {
-                            //Sync Msg cut off time reached
-                            //rest of the messages in the loop will have msg date < cutofftime
-                            idSet.remove(ud.id);
-                            continue;
-                        }
                         if (te != null) {
                             try {
                                 ombx.recordItemSync(ud.id);
