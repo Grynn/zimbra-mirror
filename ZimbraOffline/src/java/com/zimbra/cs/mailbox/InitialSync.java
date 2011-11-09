@@ -1099,23 +1099,23 @@ public class InitialSync {
             try {
                 int msgId = 0;
                 TarEntry te;
-
+                syncMsgCutoffReached = false;
                 tin = new TarInputStream(new GZIPInputStream(in), "UTF-8");
                 while ((te = tin.getNextEntry()) != null) {
                     if (te.getName().endsWith(".meta")) {
                         ItemData itemData = new ItemData(readTarEntry(tin, te));
                         UnderlyingData ud = itemData.ud;
 
+                        assert (ud.type == type.toByte());
+                        assert (ud.getBlobDigest() != null);
+                        msgId = ud.id;
+                        te = tin.getNextEntry(); //message always has a blob
                         if (syncMsgCutoffReached) {
                             //Sync Msg cut off time reached
                             //rest of the messages in the loop will have msg date < cutofftime
                             idSet.remove(ud.id);
                             continue;
                         }
-                        assert (ud.type == type.toByte());
-                        assert (ud.getBlobDigest() != null);
-                        msgId = ud.id;
-                        te = tin.getNextEntry(); //message always has a blob
                         if (te != null) {
                             try {
                                 ombx.recordItemSync(ud.id);
