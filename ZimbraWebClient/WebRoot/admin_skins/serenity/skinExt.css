@@ -167,26 +167,79 @@ div.ZmSelectedHeaderBg {
 
 .WindowOuterContainer {
     background-color: #EAEAEA;
-    border: 0px;
+    @tlRadius@:5px;
+    @trRadius@:5px;
+    @blRadius@:5px;
+    @brRadius@:5px;
+    border: 1px solid;
     padding: 1px;
 }
 
-.step_container, .WindowInnerContainer {
+.WindowInnerContainer {
     background-color: #DADADA;
     border: 0px;
     padding: 0px;
 }
 
+.step_container {
+    font: Arial bold 16pt;
+    color: #666666;
+    background-color: #e4eff6;
+    border: 0px;
+    padding: 5px;
+}
+
+.DwtDialogHeader {
+    background-color: #dfe1e5;
+}
+
 .DwtDialogTitle {
-    color: black;
+    vertical-align: middle;
+    font-family: Arial;
+    font-size: 12pt;
+    font-weight: bold;
+    height: 27px;
+    color: #333333;
     width: 100%;
 }
 
 .DwtDialogBody {
     background-color: #FCFCFC;
+    padding-right: 15px;
+}
+
+.DwtDialogButtonBar {
+    height: 40px;
+    background-color: #dadfe5;
+    @opacity(50)@;
+}
+
+.DwtDialogButtonBar .ZButtonBorder {
+    border: 1px solid #949494;
+    @borderRadius@:3px;
+    background-color: #fefefe;
+}
+
+.DwtDialogButtonBar .ZDisabled .ZButtonTable .ZWidgetTitle{
+    border: 1px solid #949494;
+    @borderRadius@:3px;
+    font: Arial 12px normal;
+    color: #999999;
+}
+
+.DwtDialogButtonBar .ZHover .ZButtonBorder{
+    border: 1px solid #949494;
+    @borderRadius@:3px;
+    font: Arial 12px normal;
+    background-color: #C7E9FF;
 }
 
 .horizSep {
-    border-bottom: 2px solid @SelC@;
+    border-bottom: 1px solid #E0E0E0;
     margin: 0px;
+}
+
+.VeilOverlay {
+    background-color: black;
+    @opacity(35)@;
 }

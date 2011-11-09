@@ -88,7 +88,7 @@ ZaXWizardDialog.prototype._correntWidth = function (w) {
         } else if (typeof(w) == "string") {
             var number = parseInt(w);
             if (!isNaN(number)) {
-                number = number + 105;
+                number = number + 155;
                 w = number + "px";
                 return w;
             }
@@ -198,7 +198,7 @@ function (xModelMetaData, xFormMetaData,entry) {
     var content = xFormMetaData.items[3];
     newXFormMetaData.tableCssStyle = "width:100%;height:100%";
     newXFormMetaData.numCols = 2;
-    newXFormMetaData.colSizes = ["100px", "*"];
+    newXFormMetaData.colSizes = ["150px", "*"];
     newXFormMetaData.items =[
                 stepChoices,
                 content
