@@ -1128,7 +1128,22 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 
         if (!skipAttrMgr) {
             callbackContext = new CallbackContext(CallbackContext.Op.CREATE);
-            AttributeManager.getInstance().preModify(attrs, null, callbackContext, true);
+            Map<String, Object> validAttrs = new HashMap<String, Object>(attrs);
+            //premodify modifies attrs; need a tmp copy in case we need to drop some attrs and try again
+            try {
+                AttributeManager.getInstance().preModify(validAttrs, null, callbackContext, true);
+                attrs = validAttrs;
+            } catch (ServiceException e) {
+                if (e.getMessage().contains(A_zimbraPrefMailSignature)) {
+                    OfflineLog.offline.warn("invalid signature exists in ZCS account. Perhaps server decreased limit after signature was created?");
+                    attrs.remove(A_zimbraPrefMailSignature);
+                    AttributeManager.getInstance().preModify(attrs, null, callbackContext, true);
+                    OfflineLog.offline.debug("attrs otherwise valid; just ignoring signatures for now");
+                } else {
+                    throw e;
+                }
+            }
+
         }
 
         attrs.putAll(immutable);
