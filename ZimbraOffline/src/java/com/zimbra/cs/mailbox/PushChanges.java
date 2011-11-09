@@ -1378,6 +1378,12 @@ public class PushChanges {
                 //let it fall through so we clear the dirty bit so we don't try to push it up any more
             } else if (e.getCode().equals(MailServiceException.NO_SUCH_MSG)) {
                 OfflineLog.offline.info("push: remote message " + id + " has been deleted; skipping");
+            } else if (!StringUtil.equal(digest, msg.getDigest())) {
+                //message is still there but the attachment is changed
+                OfflineLog.offline.debug("push: message %d is still there but the attachment is removed", id);
+                //our intention is to just change lastChangeTime, so that the updated content/attachments is pushed
+                ombx.trackChangeModified(msg, Change.NONE);
+                return false;
             } else {
                 throw e;
             }
