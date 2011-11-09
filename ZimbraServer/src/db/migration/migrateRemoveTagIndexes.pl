@@ -15,6 +15,7 @@
 #
 
 use strict;
+use lib "/opt/zimbra/zimbramon/lib";
 use Migrate;
 
 Migrate::loadOutdatedMailboxes("2.2");
