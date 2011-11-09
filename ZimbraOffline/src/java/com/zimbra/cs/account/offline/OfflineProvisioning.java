@@ -343,20 +343,20 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
                 //get the new time
                 switch (SyncMsgOptions.getOption(syncEmailoption)) {
                 case SYNCEVERYTHING:
-                    if(!(old.get(OfflineConstants.A_offlinesyncEmailDate).equals(attrs.get(OfflineConstants.A_offlinesyncEmailDate)))) {
+                    if (!StringUtil.equalIgnoreCase((String)old.get(OfflineConstants.A_offlinesyncEmailDate), (String)attrs.get(OfflineConstants.A_offlinesyncEmailDate))) {
                         syncEverything = true;
                     }
                     break;
                 case SYNCTOFIXEDDATE:
-                    if(!(old.get(OfflineConstants.A_offlinesyncEmailDate).equals(attrs.get(OfflineConstants.A_offlinesyncEmailDate))) ||
-                            !(old.get(OfflineConstants.A_offlinesyncFixedDate).equals(attrs.get(OfflineConstants.A_offlinesyncFixedDate))) ) {
+                    if (!StringUtil.equalIgnoreCase((String)old.get(OfflineConstants.A_offlinesyncEmailDate), (String)attrs.get(OfflineConstants.A_offlinesyncEmailDate)) ||
+                            !StringUtil.equalIgnoreCase((String)old.get(OfflineConstants.A_offlinesyncFixedDate), (String)attrs.get(OfflineConstants.A_offlinesyncFixedDate))) {
                         newTime = Long.parseLong(InitialSync.convertDateToLong((String)attrs.get(OfflineConstants.A_offlinesyncFixedDate)));
                     }
                     break;
                 case SYNCTORELATIVEDATE:
-                    if(!(old.get(OfflineConstants.A_offlinesyncEmailDate).equals(attrs.get(OfflineConstants.A_offlinesyncEmailDate))) ||
-                            !(old.get(OfflineConstants.A_offlinesyncRelativeDate).equals(attrs.get(OfflineConstants.A_offlinesyncRelativeDate))) ||
-                            !(old.get(OfflineConstants.A_offlinesyncFieldName).equals(attrs.get(OfflineConstants.A_offlinesyncFieldName))) ) {
+                    if (!StringUtil.equalIgnoreCase((String)old.get(OfflineConstants.A_offlinesyncEmailDate), (String)attrs.get(OfflineConstants.A_offlinesyncEmailDate)) ||
+                            !StringUtil.equalIgnoreCase((String)old.get(OfflineConstants.A_offlinesyncRelativeDate), (String)attrs.get(OfflineConstants.A_offlinesyncRelativeDate)) ||
+                            !StringUtil.equalIgnoreCase((String)old.get(OfflineConstants.A_offlinesyncFieldName), (String)attrs.get(OfflineConstants.A_offlinesyncFieldName))) {
                         newTime = Long.parseLong(InitialSync.convertRelativeDatetoLong((String)attrs.get(OfflineConstants.A_offlinesyncRelativeDate) ,
                                     (String)attrs.get(OfflineConstants.A_offlinesyncFieldName)));
                     }
