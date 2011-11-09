@@ -215,9 +215,6 @@ public class InitialSync {
                 request.addAttribute(MailConstants.A_MSG_CUTOFF, convertRelativeDatetoLong(ombx.getOfflineAccount().getAttr(OfflineConstants.A_offlinesyncRelativeDate) ,
                         ombx.getOfflineAccount().getAttr(OfflineConstants.A_offlinesyncFieldName)));
                 break;
-            default:
-                request.addAttribute(MailConstants.A_MSG_CUTOFF, "0");
-                break;
             }
         } catch (NumberFormatException x) {
                 OfflineLog.offline.warn("unable to parse syncEmailDate", x);

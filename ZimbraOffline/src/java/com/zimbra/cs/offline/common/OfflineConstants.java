@@ -83,7 +83,7 @@ public interface OfflineConstants {
                     return opt;
                 }
             }
-            return null;
+            return SYNCEVERYTHING;
           }
     }
 
