@@ -2,6 +2,8 @@ package com.zimbra.qa.selenium.projects.ajax.tests.tasks.assistant;
 
 
 
+import java.util.HashMap;
+
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.core.Bugs;
@@ -17,11 +19,14 @@ import com.zimbra.qa.selenium.projects.ajax.ui.DialogAssistant;
 
 public class CreateTask extends AjaxCommonTest {
 
+	@SuppressWarnings("serial")
 	public CreateTask() {
 		logger.info("New " + CreateTask.class.getCanonicalName());
 		
 		super.startingPage = app.zPageTasks;
-		super.startingAccountPreferences = null;
+		super.startingAccountPreferences = new HashMap<String , String>() {{
+			put("zimbraPrefTasksReadingPaneLocation", "bottom");
+		}};
 
 	}
 /**

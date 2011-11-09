@@ -2,6 +2,8 @@ package com.zimbra.qa.selenium.projects.ajax.tests.tasks.folders;
 
 
 
+import java.util.HashMap;
+
 import org.testng.annotations.Test;
 
 import com.zimbra.common.soap.Element;
@@ -23,12 +25,15 @@ import com.zimbra.qa.selenium.projects.ajax.ui.mail.DialogEditFolder;
 
 
 public class RenameTaskFolder extends AjaxCommonTest {
+	@SuppressWarnings("serial")
 	public RenameTaskFolder() {
 		logger.info("New " + RenameTaskFolder.class.getCanonicalName());
 
 		// test starts at the task tab
 		super.startingPage = app.zPageTasks;
-		super.startingAccountPreferences = null;
+		super.startingAccountPreferences = new HashMap<String , String>() {{
+			put("zimbraPrefTasksReadingPaneLocation", "bottom");
+		}};
 	}	
 
 	

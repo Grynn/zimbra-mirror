@@ -1,4 +1,5 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.tasks;
+import java.util.HashMap;
 import java.util.List;
 import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.items.*;
@@ -10,10 +11,14 @@ import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 
 public class DragAndDropTask extends AjaxCommonTest {
 
+	@SuppressWarnings("serial")
 	public DragAndDropTask() {
 		logger.info("DragAndDropTask " + DragAndDropTask.class.getCanonicalName());		
 		super.startingPage = app.zPageTasks;
 		super.startingAccountPreferences = null;
+		super.startingAccountPreferences = new HashMap<String , String>() {{
+			put("zimbraPrefTasksReadingPaneLocation", "bottom");
+		}};
 	}
 	
 	@Test(description = "Drag and Drop a task from Tasks to subfolder", groups = { "smoke" })

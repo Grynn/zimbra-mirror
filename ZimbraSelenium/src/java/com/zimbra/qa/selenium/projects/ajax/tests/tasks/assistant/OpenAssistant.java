@@ -1,5 +1,7 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.tasks.assistant;
 
+import java.util.HashMap;
+
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.ui.Button;
@@ -10,11 +12,14 @@ import com.zimbra.qa.selenium.projects.ajax.ui.DialogAssistant;
 
 public class OpenAssistant extends AjaxCommonTest {
 
+	@SuppressWarnings("serial")
 	public OpenAssistant() {
 		logger.info("New " + OpenAssistant.class.getCanonicalName());
 		
 		super.startingPage = app.zPageTasks;
-		super.startingAccountPreferences = null;
+		super.startingAccountPreferences = new HashMap<String , String>() {{
+			put("zimbraPrefTasksReadingPaneLocation", "bottom");
+		}};
 
 	}
 /**

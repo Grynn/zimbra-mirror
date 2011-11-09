@@ -1,5 +1,6 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.tasks;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.testng.annotations.AfterMethod;
@@ -16,13 +17,16 @@ import com.zimbra.qa.selenium.projects.ajax.ui.tasks.DialogCreateTaskFolder;
 
 public class MoveTask extends AjaxCommonTest {
 
+	@SuppressWarnings("serial")
 	public MoveTask() {
 		logger.info("Move " + EditTask.class.getCanonicalName());
 
 		// All tests start at the login page
 		super.startingPage = app.zPageTasks;
 
-		super.startingAccountPreferences = null;
+		super.startingAccountPreferences = new HashMap<String , String>() {{
+			put("zimbraPrefTasksReadingPaneLocation", "bottom");
+		}};
 	}
 	//@Bugs(ids="61471")
 	@Test(description = "Create task through SOAP - move & verify through GUI", groups = { "smoke" })

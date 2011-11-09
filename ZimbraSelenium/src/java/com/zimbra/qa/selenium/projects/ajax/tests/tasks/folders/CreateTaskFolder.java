@@ -1,5 +1,7 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.tasks.folders;
 
+import java.util.HashMap;
+
 import org.testng.annotations.*;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
@@ -15,12 +17,15 @@ public class CreateTaskFolder extends AjaxCommonTest {
 	private String _folderName = null;
 	
 
+	@SuppressWarnings("serial")
 	public CreateTaskFolder() {
 		logger.info("New " + CreateTaskFolder.class.getCanonicalName());
 
 		// test starts at the task tab
 		super.startingPage = app.zPageTasks;
-		super.startingAccountPreferences = null;
+		super.startingAccountPreferences = new HashMap<String , String>() {{
+			put("zimbraPrefTasksReadingPaneLocation", "bottom");
+		}};
 	}	
 
 	@Test(description = "Create a new tasklist by clicking 'Create a new task' on task folders tree", groups = { "sanity" })

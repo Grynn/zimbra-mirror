@@ -27,6 +27,7 @@ public class CreateTask extends AjaxCommonTest {
 		super.startingAccountPreferences = new HashMap<String , String>() {{
 			put("zimbraPrefComposeFormat", "html");
 			put("zimbraPrefGroupMailBy", "message");
+			put("zimbraPrefTasksReadingPaneLocation", "bottom");
 		}};
 	}
 

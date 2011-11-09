@@ -1,6 +1,7 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.tasks;
 
 import java.awt.event.KeyEvent;
+import java.util.HashMap;
 import java.util.List;
 
 import org.testng.annotations.*;
@@ -14,14 +15,13 @@ import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 
 public class DeleteHtmlTask extends AjaxCommonTest {
 
+	@SuppressWarnings("serial")
 	public DeleteHtmlTask() {
 		logger.info("New "+ DeleteHtmlTask.class.getCanonicalName());
-		
-		// All tests start at the login page
 		super.startingPage = app.zPageTasks;
-
-		// Make sure we are using an account with message view
-		super.startingAccountPreferences = null;
+		super.startingAccountPreferences = new HashMap<String , String>() {{
+			put("zimbraPrefTasksReadingPaneLocation", "bottom");
+		}};
 		
 	}
 	

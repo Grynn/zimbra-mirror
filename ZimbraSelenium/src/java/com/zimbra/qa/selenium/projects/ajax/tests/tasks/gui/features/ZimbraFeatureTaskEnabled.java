@@ -35,6 +35,9 @@ public class ZimbraFeatureTaskEnabled extends AjaxCommonTest {
 
 			    // https://bugzilla.zimbra.com/show_bug.cgi?id=62161#c3
 			    // put("zimbraFeatureOptionsEnabled", "FALSE");
+				
+				put("zimbraPrefTasksReadingPaneLocation", "bottom");
+				
 
 			}
 		};

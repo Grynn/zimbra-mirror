@@ -1,5 +1,7 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.tasks;
 
+import java.util.HashMap;
+
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
@@ -16,13 +18,16 @@ import com.zimbra.qa.selenium.projects.ajax.ui.DialogTag;
 
 public class TagTask extends AjaxCommonTest{
 
+	@SuppressWarnings("serial")
 	public TagTask(){
 		logger.info("Tag " + TagTask.class.getCanonicalName());
 
 		// All tests start at the login page
 		super.startingPage = app.zPageTasks;
 
-		super.startingAccountPreferences = null;
+		super.startingAccountPreferences = new HashMap<String , String>() {{
+			put("zimbraPrefTasksReadingPaneLocation", "bottom");
+		}};
 	}
 
 	@Test(description = "Tag a Task using Toolbar -> Tag -> New Tag", groups = { "smoke" })

@@ -1,5 +1,6 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.tasks;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.testng.annotations.Test;
@@ -25,14 +26,16 @@ import com.zimbra.qa.selenium.projects.ajax.ui.tasks.FormTaskNew.Field;
 
 public class EditHtmlTask extends AjaxCommonTest{
 
+	@SuppressWarnings("serial")
 	public EditHtmlTask() {
 		logger.info("Edit " + EditHtmlTask.class.getCanonicalName());
 
 		// All tests start at the login page
 		super.startingPage = app.zPageTasks;
 
-		// Make sure we are using an account with message view
-		super.startingAccountPreferences = null;
+		super.startingAccountPreferences = new HashMap<String , String>() {{
+			put("zimbraPrefTasksReadingPaneLocation", "bottom");
+		}};
 	}
 
 	@Test(	description = "Create Html task through SOAP - edit subject and verify through Soap",groups = { "smoke" })

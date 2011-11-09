@@ -2,6 +2,8 @@ package com.zimbra.qa.selenium.projects.ajax.tests.tasks.folders;
 
 
 
+import java.util.HashMap;
+
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.FolderItem;
@@ -15,12 +17,15 @@ import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 
 
 public class DragAndDropTaskFolder extends AjaxCommonTest {
+	@SuppressWarnings("serial")
 	public DragAndDropTaskFolder() {
 		logger.info("New " + DragAndDropTaskFolder.class.getCanonicalName());
 
 		// test starts at the task tab
 		super.startingPage = app.zPageTasks;
-		super.startingAccountPreferences = null;
+		super.startingAccountPreferences = new HashMap<String , String>() {{
+			put("zimbraPrefTasksReadingPaneLocation", "bottom");
+		}};
 	}	
 
 	

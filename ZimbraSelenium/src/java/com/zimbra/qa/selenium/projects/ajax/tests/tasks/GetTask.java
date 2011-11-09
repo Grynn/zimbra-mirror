@@ -4,8 +4,6 @@ import java.util.*;
 
 import org.testng.annotations.Test;
 
-
-
 import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
@@ -16,12 +14,6 @@ import com.zimbra.qa.selenium.projects.ajax.ui.tasks.DisplayTask;
 import com.zimbra.qa.selenium.projects.ajax.ui.tasks.FormTaskNew;
 import com.zimbra.qa.selenium.projects.ajax.ui.tasks.DisplayTask.Field;
 //import com.zimbra.qa.selenium.projects.ajax.ui.tasks.FormTaskNew.Field;;
-
-
-
-
-
-
 
 public class GetTask extends AjaxCommonTest {
 
@@ -50,14 +42,16 @@ public class GetTask extends AjaxCommonTest {
 	 * 
 	 */
 	
+	@SuppressWarnings("serial")
 	public GetTask() {
 		logger.info("New "+ GetTask.class.getCanonicalName());
 		
 		// All tests start at the login page
 		super.startingPage = app.zPageTasks;
 
-		// Make sure we are using an account with message view
-		super.startingAccountPreferences = null;
+		super.startingAccountPreferences = new HashMap<String , String>() {{
+			put("zimbraPrefTasksReadingPaneLocation", "bottom");
+		}};
 
 
 	}
