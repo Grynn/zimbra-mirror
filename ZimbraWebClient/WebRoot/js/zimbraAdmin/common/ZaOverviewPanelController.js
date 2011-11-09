@@ -797,6 +797,9 @@ function() {
 			}
 		}
 	}
+    //
+    // There is no ACL for Download Page in the tool tree items. So tool will be shown here.
+    showTool = true;
     // Home is always added;
     var home = new ZaTreeItemData({parent:"",
                                    id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_HOME, true),
@@ -1097,6 +1100,15 @@ function() {
                                         image: "ToolsAndMigration"
                                         });
 
+        tree.addTreeItemData(ti);
+
+        ti = new ZaTreeItemData({
+                                        parent: ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_toolMig]),
+                                        id:ZaId.getTreeItemId(ZaId.PANEL_APP,"magHV",null, "download"),
+                                        text: ZaMsg.goToMigrationWiz,
+                                        mappingId: ZaZimbraAdmin._DOWNLOAD_VIEW
+                                        });
+        ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._DOWNLOAD_VIEW] = ZaOverviewPanelController.downloadTreeListener;
         tree.addTreeItemData(ti);
     }
 
@@ -1581,6 +1593,14 @@ ZaOverviewPanelController.searchResultTreeListener = function (ev) {
         }
         searchField.setCurrentSavedSearch ({});
         searchField.invokeCallback(); // Use the value in the current search fields;
+	}
+}
+
+ZaOverviewPanelController.downloadTreeListener = function(ev) {
+	if(ZaApp.getInstance().getCurrentController()) {
+		ZaApp.getInstance().getCurrentController().switchToNextView(ZaApp.getInstance().getMigrationWizController(), ZaMigrationWizController.prototype.show, null);
+	} else {
+		ZaApp.getInstance().getMigrationWizController().show();
 	}
 }
 

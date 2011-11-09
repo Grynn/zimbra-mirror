@@ -90,6 +90,7 @@ ZaZimbraAdmin._MONITOR_HOME_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
 ZaZimbraAdmin._MANAGE_ACCOUNT_HOME_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
 ZaZimbraAdmin._ADMINISTRATION_HOME_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
 ZaZimbraAdmin._MIGRATION_HOME_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
+ZaZimbraAdmin._DOWNLOAD_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
 ZaZimbraAdmin._SEARCH_HOME_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
 ZaZimbraAdmin._SEARCH_RESULT_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
 ZaZimbraAdmin._SEARCH_FILTER_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
@@ -612,7 +613,7 @@ function() {
         var adminObj = this ;
         helpLabel.getHtmlElement().onclick = function () { ZaZimbraAdmin.prototype._helpListener.call(adminObj) ;};
         helpLabel.getHtmlElement().innerHTML =
-             this._getAppLink(null, "NodeExpandedWhite",  ZaMsg.helpDesk, skin.skin_container_help_max_str_length);
+             this._getAppLink(null, "Help",  ZaMsg.helpDesk, skin.skin_container_help_max_str_length);
     }
     helpLabel.reparentHtmlElement (ZaSettings.SKIN_HELP_DOM_ID) ;
 }
@@ -703,7 +704,8 @@ function () {
 	}
 
 	dwButton.setText(innerContent);
-	dwButton.setDropDownImages("NodeExpandedWhite");
+    if (appNewUI)
+	    dwButton.setDropDownImages("NodeExpandedWhite");
 	if(innerContent != ZaZimbraAdmin.currentUserName){
 		dwButton.setToolTipContent( ZaZimbraAdmin.currentUserName );
 	}
