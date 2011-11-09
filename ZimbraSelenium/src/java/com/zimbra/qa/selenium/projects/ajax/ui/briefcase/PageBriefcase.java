@@ -1108,7 +1108,7 @@ public class PageBriefcase extends AbsTab {
 
 			if (option == Button.O_TAG_FILE) {
 
-				optionLocator = "css=div[id=zm__Briefcase] tr[id=POPUP_TAG_MENU]>td[id^=TAG_MENU__]>div[class=ImgCascade]";
+				optionLocator = "css=div[id=zm__Briefcase] tr[id=POPUP_TAG_MENU]>td[id^=TAG_MENU_dropdown]>div[class=ImgCascade]";
 
 			} else {
 				throw new HarnessException("implement action: " + action
@@ -1120,7 +1120,7 @@ public class PageBriefcase extends AbsTab {
 
 			// Now the ContextMenu option is opened
 			// Click on the specified sub option
-			String subOptionLocator = "css=div[id^=TAG_MENU_][id$=|MENU] [class=ZWidgetTitle]:contains("
+			String subOptionLocator = "css=div[id^=TAG_MENU][id$=|MENU] [class=ZWidgetTitle]:contains("
 					+ subOption + ")";
 
 			// click on the sub option
