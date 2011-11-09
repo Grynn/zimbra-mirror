@@ -36,6 +36,9 @@ public class AddNewContactsToEmailedContactOptIn extends AjaxCommonTest {
 	 */
 	@Test(description= " select the checkbox to toggle the opt-in option to opt-out ", groups= {"smoke" })
 	public void UnSelectAutoAddAddressCheckbox() throws HarnessException {
+		// Go to "Addressbook"
+		app.zTreePreferences.zTreeItem(Action.A_LEFTCLICK, TreeItem.AddressBook);
+
 		// Verify the status of the checkbox is TRUE
 		ZAssert.assertTrue(app.zPagePreferences.zGetCheckboxStatus("zimbraPrefAutoAddAddressEnabled"),
 				  "Verify if zimbraPrefAutoAddAddressEnabled is TRUE, the preference box is checked" );			
@@ -47,8 +50,26 @@ public class AddNewContactsToEmailedContactOptIn extends AjaxCommonTest {
 		app.zPagePreferences.zToolbarPressButton(Button.B_SAVE);		
 		
 		// Verify the status of the checkbox is FALSE
+		// frontend check
 		ZAssert.assertFalse(app.zPagePreferences.zGetCheckboxStatus("zimbraPrefAutoAddAddressEnabled"),
-				  "Verify if zimbraPrefAutoAddAddressEnabled is FALSE, the preference box is unchecked" );			
+				  "Verify the preference box is unchecked" );
+		
+		// backend check
+		app.zGetActiveAccount().soapSend(
+                   "<GetPrefsRequest xmlns='urn:zimbraAccount'>"
+                 +     "<pref name='zimbraPrefAutoAddAddressEnabled'/>"
+                 + "</GetPrefsRequest>");
+
+		ZAssert.assertEquals(app.zGetActiveAccount().soapSelectValue("//acct:pref[@name='zimbraPrefAutoAddAddressEnabled']", null),
+				"FALSE", "Verify zimbraPrefAutoAddAddressEnabled is FALSE" );
+				
+		// Revert to original value for subsequent test cases
+		// Check the box
+		app.zPagePreferences.zCheckboxSet("css=input[id$=_AUTO_ADD_ADDRESS]",true);
+			
+		// Click save
+		app.zPagePreferences.zToolbarPressButton(Button.B_SAVE);		
+		
 	}
 	/**
 	 * Test case : Opt-in Add New Contacts To emailed contact
