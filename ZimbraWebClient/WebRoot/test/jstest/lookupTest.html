@@ -1,64 +1,1 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
-  <head>
-    <title>lookupTest</title>
-  </head>
-
-  <body>
-    <h1>lookupTest</h1>
-    <div id=content></div>
-    <a href="javascript:lookupDocAll()">lookup with
-      document.all</a><div id=results1></div><br><br>
-    <a href="javascript:lookupGetEl()">lookup with
-      document.getElementById</a><div id=results2></div><br><br>
-    
-    
-  </body>
-  <script>
-var totalEl = 2000;
-var strArray = new Array();
-var arr = new Array();
-var idx = 0;
-var t = null;
-for (var i = 0; i < totalEl; ++i) {
-    t =  "EL" +i;
-    strArray.push(t);
-    arr[idx++] = "<div id="+t+">EL" +i+"</div>\n";
-}
-
-document.getElementById("content").innerHTML = arr.join("");
-
-function lookupDocAll () {
-    var temp = null;
-    var id = null;
-    var idArr = new Array();
-    var startTime = new Date();
-    for (var i = 0; i < totalEl; ++i) {
-	temp = document.all[strArray[i]];
-	idArr.push(temp.id);
-    }
-    var endTime = new Date();
-    var elapsed = endTime.getTime() - startTime.getTime();
-    document.getElementById("results1").innerHTML = "Total time = " +
-	elapsed + " number of elements = " + totalEl + "<br>Avg = " +
-	elapsed/totalEl + "<br>els=<br>"+idArr.join("<br>");
-}
-
-function lookupGetEl () {
-    var temp = null;
-    var id = null;
-    var idArr = new Array();
-    var startTime = new Date();
-    for (var i = 0; i < totalEl; ++i) {
-	temp = document.getElementById(strArray[i]);
-	idArr.push(temp.id);
-    }
-    var endTime = new Date();
-    var elapsed = endTime.getTime() - startTime.getTime();
-    document.getElementById("results2").innerHTML = "Total time = " +
-    elapsed + " number of elements = " + totalEl + "<br>Avg = " +
-    elapsed/totalEl +  "<br>els=<br>"+idArr.join("<br>");;
-    
-}
-  </script>
-</html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"><html>  <head>    <title>lookupTest</title>  </head>  <body>    <h1>lookupTest</h1>    <div id=content></div>    <a href="javascript:lookupDocAll()">lookup with      document.all</a><div id=results1></div><br><br>    <a href="javascript:lookupGetEl()">lookup with      document.getElementById</a><div id=results2></div><br><br>  </body>  <script>var totalEl = 2000;var strArray = new Array();var arr = new Array();var idx = 0;var t = null;for (var i = 0; i < totalEl; ++i) {	t =  "EL" +i;	strArray.push(t);	arr[idx++] = "<div id="+t+">EL" +i+"</div>\n";}document.getElementById("content").innerHTML = arr.join("");function lookupDocAll () {    var temp = null;    var id = null;    var idArr = new Array();    var startTime = new Date();    for (var i = 0; i < totalEl; ++i) {	temp = document.all[strArray[i]];	idArr.push(temp.id);    }    var endTime = new Date();    var elapsed = endTime.getTime() - startTime.getTime();    document.getElementById("results1").innerHTML = "Total time = " +	elapsed + " number of elements = " + totalEl + "<br>Avg = " +	elapsed/totalEl + "<br>els=<br>"+idArr.join("<br>");}function lookupGetEl () {    var temp = null;    var id = null;    var idArr = new Array();    var startTime = new Date();    for (var i = 0; i < totalEl; ++i) {	temp = document.getElementById(strArray[i]);	idArr.push(temp.id);    }    var endTime = new Date();    var elapsed = endTime.getTime() - startTime.getTime();    document.getElementById("results2").innerHTML = "Total time = " +    elapsed + " number of elements = " + totalEl + "<br>Avg = " +    elapsed/totalEl +  "<br>els=<br>"+idArr.join("<br>");;    }</script></html>
