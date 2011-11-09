@@ -200,12 +200,14 @@ div.ZmSelectedHeaderBg {
     font-weight: bold;
     height: 27px;
     color: #333333;
-    width: 100%;
+}
+
+.DwtDialogMinIcon {
+
 }
 
 .DwtDialogBody {
     background-color: #FCFCFC;
-    padding-right: 15px;
 }
 
 .DwtDialogButtonBar {
