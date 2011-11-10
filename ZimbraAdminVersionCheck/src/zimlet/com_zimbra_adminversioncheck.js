@@ -268,7 +268,6 @@ ZaVersionCheck.versionCheckTreeModifier = function (tree) {
 
 if(ZaOverviewPanelController.treeModifiers)
 	ZaOverviewPanelController.treeModifiers.push(ZaVersionCheck.versionCheckTreeModifier);
-}
 
 if (ZaHome && ZaHome.myXModel) {
     ZaHome.A2_versionUpdateAvailable = "versionUpdateAvailable";
@@ -317,5 +316,7 @@ if(ZaTabView.XFormModifiers["ZaHomeXFormView"]) {
     }
 
     ZaTabView.XFormModifiers["ZaHomeXFormView"].push(ZaVersionCheck.HomeXFormModifier);
+}
+
 }
 
