@@ -63,7 +63,6 @@ function () {
     this.attrs[ZaHome.A2_DBCheckType] = true;
     this.attrs[ZaHome.A2_DBCheckMessage] = ZaMsg.LBL_HomeStatusOK;
     this.attrs[ZaHome.A2_serviceStatusMessage] = ZaMsg.LBL_HomeStatusRunning ;
-    this.attrs[ZaHome.A2_queueLength] = 1;
     this.attrs[ZaHome.A2_messageCount] = "120/h";
     this.attrs[ZaHome.A2_messageVolume] = "34MB/h";
 }
@@ -135,6 +134,40 @@ ZaHome.loadActiveSesson = function () {
 }
 ZaItem.loadMethods["ZaHome"].push(ZaHome.loadActiveSesson);
 
+ZaHome.loadQueueLength = function () {
+    var mtaList = ZaApp.getInstance().getPostQList().getArray();
+    var totalQueueLength = 0;
+    if(mtaList && mtaList.length) {
+        var cnt = mtaList.length;
+        try {
+            for (var i = 0; i < cnt; i++) {
+                var currentMta = mtaList[i];
+                var soapDoc = AjxSoapDoc.create("GetMailQueueInfoRequest", ZaZimbraAdmin.URN, null);
+                var attr = soapDoc.set("server", "");
+                attr.setAttribute("name", currentMta.name);
+                var command = new ZmCsfeCommand();
+                var params = new Object();
+                params.soapDoc = soapDoc;
+                var resp = command.invoke(params);
+                var body = resp.Body;
+                if(body && body.GetMailQueueInfoResponse.server && body.GetMailQueueInfoResponse.server[0]) {
+                    var queue =  body.GetMailQueueInfoResponse.server[0].queue;
+                    for ( var j in queue) {
+                        if (queue[j].n) {
+                            totalQueueLength += parseInt(queue[j].n);
+                        }
+                    }
+                }
+            }
+        } catch (ex) {
+            // Won't do anything here to avoid disturbe the loading process.
+        }
+
+    }
+    this.attrs[ZaHome.A2_queueLength] = totalQueueLength;
+}
+
+ZaItem.loadMethods["ZaHome"].push(ZaHome.loadQueueLength);
 
 ZaHome.myXModel = {
     items: [
