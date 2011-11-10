@@ -26,11 +26,11 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.UUID;
 
+import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.io.Closeables;
 import com.zimbra.common.mailbox.ContactConstants;
 import com.zimbra.common.service.ServiceException;
-import com.zimbra.common.service.ServiceException.Argument;
 import com.zimbra.common.soap.AccountConstants;
 import com.zimbra.common.soap.AdminConstants;
 import com.zimbra.common.soap.Element;
@@ -261,16 +261,15 @@ public final class GalSyncUtil {
             response = randMailbox.sendRequest(req, true, true, OfflineLC.zdesktop_gal_sync_request_timeout.intValue(), SoapProtocol.Soap12);
         } catch (ServiceException e) {
             //resolve mail.NO_SUCH_CONTACT, recursively exclude the bad id and try the good ids.
-            if (MailServiceException.NO_SUCH_CONTACT.equals(((ServiceException) e).getCode())) {
-                OfflineLog.offline.warn("GAL sync got NO_SUCH_CONTACT error, trying to isolate it", e);
-                Argument badIdArg = e.getArgs().get(0);
-                String badId = galAcctId + ":" + badIdArg.value;
+            if (MailServiceException.NO_SUCH_CONTACT.equals(e.getCode())) {
+                OfflineLog.offline.warn(
+                        "GAL sync got NO_SUCH_CONTACT error, trying to isolate it, code: %s", e.getCode(), e);
+                String err = e.toString();
+                String key = "no such contact: ";
+                String badIdStr = err.substring(err.indexOf(key)+key.length(), err.indexOf("ExceptionId"));
+                String badId = galAcctId + ":" + badIdStr;
                 retryContactIds.add(badId);
-                String[] goodIds = new String[2];
-                int badIdIdx = reqIds.indexOf(badId);
-                goodIds[0] = reqIds.substring(0, badIdIdx);
-                goodIds[1] = reqIds.substring(badIdIdx + badId.length());
-                for (String ids : goodIds) {
+                for (String ids : Splitter.on(badId).split(reqIds)) {
                     String newIds = retrofitIds(ids);
                     if (!Strings.isNullOrEmpty(newIds)) {
                         fetchContacts(randMailbox, galMbox, ctxt, syncFolder, newIds, isFullSync, ds, retryContactIds, token, galAcctId);
