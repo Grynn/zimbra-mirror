@@ -432,6 +432,7 @@ body						{	@ChromeBg@	}
     #ENDIF
 }
 
+
 .form input[type='text'], 
 .form input[type='password'] {
     border:1px solid @LoginColor@;
@@ -469,7 +470,9 @@ body						{	@ChromeBg@	}
 }
 #ENDIF
 
-.AboutScreen .WindowInnerContainer {
+.AboutScreen .WindowInnerContainer,
+.AboutScreen .WindowOuterContainer,
+.AboutScreen .DwtDialogBody {
     /*Linear gradient backgrounds*/
     background-color: @darken(LoginColor,30)@;
     background-image: -moz-linear-gradient(top, @LoginColor@, @darken(LoginColor,50)@); /* FF3.6 */
