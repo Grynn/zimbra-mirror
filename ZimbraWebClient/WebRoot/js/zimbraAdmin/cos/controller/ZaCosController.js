@@ -52,8 +52,10 @@ function(entry) {
 ZaCosController.changeActionsStateMethod = function () {
 	if(this._currentObject.name == "default") {
 		this._toolbarOperations[ZaOperation.DELETE].enabled = false;
+        this._popupOperations[ZaOperation.DELETE].enabled = false;
 	} else if(!ZaItem.hasRight(ZaCos.DELETE_COS_RIGHT,this._currentObject))	{
 		this._toolbarOperations[ZaOperation.DELETE].enabled = false;
+        this._popupOperations[ZaOperation.DELETE].enabled = false;
 	}
 	
 
