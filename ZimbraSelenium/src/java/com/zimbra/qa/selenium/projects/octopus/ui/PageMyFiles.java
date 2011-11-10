@@ -29,6 +29,8 @@ public class PageMyFiles extends AbsTab {
 				"css=div[class^=sc-view sc-menu-item] a[class=menu-item]>span:contains(Share)");
 		public static final Locators zFavoriteItem = new Locators(
 				"css=div[class^=sc-view sc-menu-item] a[class=menu-item]>span:contains(Favorite)");
+		public static final Locators zNotFavoriteItem = new Locators(
+				"css=div[class^=sc-view sc-menu-item] a[class=menu-item]>span:contains('Not Favorite')");
 		public static final Locators zDownloadItem = new Locators(
 				"css=div[class^=sc-view sc-menu-item] a[class=menu-item]>span:contains(Download)");
 		public static final Locators zRenameItem = new Locators(
@@ -160,6 +162,19 @@ public class PageMyFiles extends AbsTab {
 				return page;
 			} else if (option == Button.O_FAVORITE) {
 				optionLocator = Locators.zFavoriteItem.locator;
+
+				if (!this.zWaitForElementPresent(optionLocator, "2000"))
+					throw new HarnessException("Button is not present locator="
+							+ optionLocator);
+
+				this.sClickAt(optionLocator, "0,0");
+
+				// If the app is busy, wait for it to become active
+				zWaitForBusyOverlay();
+
+				return page;
+			} else if (option == Button.O_NOT_FAVORITE) {
+				optionLocator = Locators.zNotFavoriteItem.locator;
 
 				if (!this.zWaitForElementPresent(optionLocator, "2000"))
 					throw new HarnessException("Button is not present locator="

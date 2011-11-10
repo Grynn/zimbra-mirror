@@ -1,7 +1,6 @@
-package com.zimbra.qa.selenium.projects.octopus.tests.favorites;
+package com.zimbra.qa.selenium.projects.octopus.tests.myfiles.files;
 
 import org.testng.annotations.*;
-
 import com.zimbra.qa.selenium.framework.items.FileItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
@@ -10,20 +9,12 @@ import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.octopus.core.OctopusCommonTest;
 import com.zimbra.qa.selenium.projects.octopus.ui.FilePreview;
 
-public class AddToFavorites extends OctopusCommonTest {
+public class FavoriteFile extends OctopusCommonTest {
 
 	private boolean _folderIsCreated = false;
 	private String _folderName = null;
 	private boolean _fileAttached = false;
 	private String _fileId = null;
-
-	public AddToFavorites() {
-		logger.info("New " + AddToFavorites.class.getCanonicalName());
-
-		// test starts at the My Files tab
-		super.startingPage = app.zPageMyFiles;
-		super.startingAccountPreferences = null;
-	}
 
 	@BeforeMethod(groups = { "always" })
 	public void testReset() {
@@ -33,45 +24,16 @@ public class AddToFavorites extends OctopusCommonTest {
 		_fileAttached = false;
 	}
 
-	@Test(description = "Mark file as Favorite through SOAP - verify file was added to Favorites using SOAP", groups = { "sanity" })
-	public void AddToFavorites_01() throws HarnessException {
-		ZimbraAccount account = app.zGetActiveAccount();
+	public FavoriteFile() {
+		logger.info("New " + FavoriteFile.class.getCanonicalName());
 
-		FolderItem briefcaseRootFolder = FolderItem.importFromSOAP(account,
-				SystemFolder.Briefcase);
-
-		// Create file item
-		String filePath = ZimbraSeleniumProperties.getBaseDirectory()
-				+ "/data/public/other/testsoundfile.wav";
-
-		// Upload file to server through RestUtil
-		String attachmentId = account.uploadFile(filePath);
-
-		// Save uploaded file to briefcase through SOAP
-		account.soapSend("<SaveDocumentRequest xmlns='urn:zimbraMail'>"
-				+ "<doc l='" + briefcaseRootFolder.getId() + "'><upload id='"
-				+ attachmentId + "'/></doc></SaveDocumentRequest>");
-
-		_fileAttached = true;
-		_fileId = account.soapSelectValue(
-				"//mail:SaveDocumentResponse//mail:doc", "id");
-
-		// Add file to the Favorites
-		account.soapSend("<DocumentActionRequest xmlns='urn:zimbraMail'>"
-				+ "<action id='" + _fileId + "' op='watch'/>"
-				+ "</DocumentActionRequest>");
-
-		// Verify the file was added to the Favorites using SOAP
-		account.soapSend("<GetWatchingItemsRequest xmlns='urn:zimbraMail'>"
-				+ "</GetWatchingItemsRequest>");
-
-		ZAssert.assertTrue(account.soapMatch(
-				"//mail:GetWatchingItemsResponse//mail:item", "id", _fileId),
-				"Verify file is added to Favorites");
+		// test starts at the My Files tab
+		super.startingPage = app.zPageMyFiles;
+		super.startingAccountPreferences = null;
 	}
 
-	@Test(description = "Mark file as Favorite using Context menu - verify file appears in the Favorites tab", groups = { "smoke" })
-	public void AddToFavorites_02() throws HarnessException {
+	@Test(description = "Mark file as Favorite using Context menu - verify favorite icon becomes enabled in the preview panel", groups = { "smoke" })
+	public void FavoriteFile_01() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 
 		FolderItem briefcaseRootFolder = FolderItem.importFromSOAP(account,
@@ -79,7 +41,7 @@ public class AddToFavorites extends OctopusCommonTest {
 
 		// Create file item
 		String filePath = ZimbraSeleniumProperties.getBaseDirectory()
-				+ "/data/public/other/structure.jpg";
+				+ "/data/public/other/putty.log";
 
 		FileItem file = new FileItem(filePath);
 		String fileName = file.getName();
@@ -103,19 +65,77 @@ public class AddToFavorites extends OctopusCommonTest {
 		app.zPageMyFiles.zToolbarPressPulldown(Button.B_MY_FILES_LIST_ITEM,
 				Button.O_FAVORITE, fileName);
 
-		// SleepUtil.sleepSmall();
-
-		// Wait for Watch icon become enabled
-		app.zPageMyFiles.zWaitForElementPresent(
+		// Verify Watch icon becomes enabled
+		ZAssert.assertTrue(app.zPageMyFiles.zWaitForElementPresent(
 				FilePreview.Locators.zFileWatchIcon.locator
-						+ " span[class^=watched-icon]", "3000");
+						+ " span[class^=watched-icon]", "3000"),
+				"Verify the favorite icon becomes enabled in the preview panel");
 
-		// click on the Favorites tab
-		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_FAVORITES);
+		// Verify the file was added to the Favorites using SOAP
+		account.soapSend("<GetWatchingItemsRequest xmlns='urn:zimbraMail'>"
+				+ "</GetWatchingItemsRequest>");
 
-		// Verify the file appears in the Favorites tab
-		ZAssert.assertTrue(app.zPageOctopus.zIsItemInCurentListView(fileName),
-				"Verify the file appears in the Favorites tab");
+		ZAssert.assertTrue(account.soapMatch(
+				"//mail:GetWatchingItemsResponse//mail:item", "id", _fileId),
+				"Verify file is added to Favorites");
+	}
+
+	@Test(description = "Mark file as Favorite / Not Favorite using Context menu - verify watch icon becomes enabled / disabled in the preview panel", groups = { "functional" })
+	public void FavoriteFile_02() throws HarnessException {
+		ZimbraAccount account = app.zGetActiveAccount();
+
+		FolderItem briefcaseRootFolder = FolderItem.importFromSOAP(account,
+				SystemFolder.Briefcase);
+
+		// Create file item
+		String filePath = ZimbraSeleniumProperties.getBaseDirectory()
+				+ "/data/public/other/testtextfile.txt";
+
+		FileItem file = new FileItem(filePath);
+		String fileName = file.getName();
+
+		// Upload file to server through RestUtil
+		String attachmentId = account.uploadFile(filePath);
+
+		// Save uploaded file to briefcase through SOAP
+		account.soapSend("<SaveDocumentRequest xmlns='urn:zimbraMail'>"
+				+ "<doc l='" + briefcaseRootFolder.getId() + "'><upload id='"
+				+ attachmentId + "'/></doc></SaveDocumentRequest>");
+
+		_fileAttached = true;
+		_fileId = account.soapSelectValue(
+				"//mail:SaveDocumentResponse//mail:doc", "id");
+
+		// click on the My Files tab
+		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_MY_FILES);
+
+		// mark file as favorite using drop down menu
+		app.zPageMyFiles.zToolbarPressPulldown(Button.B_MY_FILES_LIST_ITEM,
+				Button.O_FAVORITE, fileName);
+
+		// Verify Watch icon becomes enabled
+		ZAssert.assertTrue(app.zPageMyFiles.zWaitForElementPresent(
+				FilePreview.Locators.zFileWatchIcon.locator
+						+ " span[class^=watched-icon]", "3000"),
+				"Verify the favorite icon becomes enabled in the preview panel");
+
+		// Verify the file was added to the Favorites using SOAP
+		account.soapSend("<GetWatchingItemsRequest xmlns='urn:zimbraMail'>"
+				+ "</GetWatchingItemsRequest>");
+
+		ZAssert.assertTrue(account.soapMatch(
+				"//mail:GetWatchingItemsResponse//mail:item", "id", _fileId),
+				"Verify file is added to Favorites");
+
+		// mark file as Not Favorite using drop down menu
+		app.zPageMyFiles.zToolbarPressPulldown(Button.B_MY_FILES_LIST_ITEM,
+				Button.O_NOT_FAVORITE, fileName);
+
+		// Verify Watch icon becomes disabled
+		ZAssert.assertTrue(app.zPageMyFiles.zWaitForElementPresent(
+				FilePreview.Locators.zFileWatchIcon.locator
+						+ " span[class^=unwatched-icon]", "3000"),
+				"Verify the favorite icon becomes disabled in the preview panel");
 	}
 
 	@AfterMethod(groups = { "always" })
@@ -146,6 +166,5 @@ public class AddToFavorites extends OctopusCommonTest {
 				_folderIsCreated = false;
 			}
 		}
-
 	}
 }

@@ -764,7 +764,7 @@ public class ZimbraAccount {
 			if ( attr == null ) {
 				value = e.getText();
 			} else {
-				value = e.getAttribute("attr", null);
+				value = e.getAttribute(attr, null);
 			}
 
 			if ( value == null )
