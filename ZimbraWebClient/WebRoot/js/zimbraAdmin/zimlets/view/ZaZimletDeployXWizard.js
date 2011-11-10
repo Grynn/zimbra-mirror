@@ -268,7 +268,7 @@ ZaZimletDeployXWizard.myXFormModifier = function(xFormObject) {
 			{ type:_OUTPUT_, value: ZaMsg.ZMLT_uploadTitle, align: _LEFT_,colSpan:2},
 			{ type:_OUTPUT_, value: this.getUploadFormHtml() ,colSpan:2,width:"480px"},
 			{type:_SPACER_, colSpan:2},
-			{ type:_CHECKBOX_,ref:ZaZimlet.A_flushCache,label:ZaMsg.ZMLT_flushCache,visibilityChecks:[], enableDisableChecks:[]},
+			{ ref:ZaZimlet.A_flushCache, type:_CHECKBOX_,align:_RIGHT_,subLabel:"",label:ZaMsg.ZMLT_flushCache,labelLocation:_RIGHT_,visibilityChecks:[], enableDisableChecks:[]},
 			{type:_SPACER_, colSpan:2}
 		]
 	};
