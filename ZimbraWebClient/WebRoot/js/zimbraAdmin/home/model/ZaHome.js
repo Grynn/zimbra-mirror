@@ -63,7 +63,6 @@ function () {
     this.attrs[ZaHome.A2_DBCheckType] = true;
     this.attrs[ZaHome.A2_DBCheckMessage] = ZaMsg.LBL_HomeStatusOK;
     this.attrs[ZaHome.A2_serviceStatusMessage] = ZaMsg.LBL_HomeStatusRunning ;
-    this.attrs[ZaHome.A2_activeSession] = 3;
     this.attrs[ZaHome.A2_queueLength] = 1;
     this.attrs[ZaHome.A2_messageCount] = "120/h";
     this.attrs[ZaHome.A2_messageVolume] = "34MB/h";
@@ -92,6 +91,51 @@ ZaHome.loadStatusfo = function () {
 }
 ZaItem.loadMethods["ZaHome"].push(ZaHome.loadStatusfo);
 
+ZaHome.loadActiveSesson = function () {
+    var serverList = ZaApp.getInstance().getServerList().getArray();
+    var totalSession = 0;
+    if(serverList && serverList.length) {
+        var sessionType = ["soap", "admin", "imap"];
+        var cnt = serverList.length;
+        for(var i=0; i< cnt; i++) {
+            var serverInfo = serverList[i];
+            for (var j = 0; j < sessionType.length; j++) {
+                var soapDoc = AjxSoapDoc.create("GetSessionsRequest", ZaZimbraAdmin.URN, null);
+                var params = {};
+                params.type = sessionType[j];
+
+                soapDoc.getMethod().setAttribute("type", params.type);
+
+                params.fresh = 1;
+                soapDoc.getMethod().setAttribute("refresh", params.fresh);
+
+                soapDoc.getMethod().setAttribute("limit", ZaServerSessionStatsPage.PAGE_LIMIT);
+
+                params.offset = 0 ;
+
+                soapDoc.getMethod().setAttribute("offset", params.offset);
+
+                params.sortBy = "nameAsc";
+
+                soapDoc.getMethod().setAttribute("sortBy", params.sortBy);
+
+                var getSessCmd = new ZmCsfeCommand ();
+                params.soapDoc = soapDoc ;
+                params.targetServer = serverInfo.id ;
+
+                var resp = getSessCmd.invoke(params);
+                if (resp && resp.Body && resp.Body.GetSessionsResponse) {
+                    var sessionStats = resp.Body.GetSessionsResponse;
+                    totalSession += sessionStats.total;
+                }
+            }
+        }
+    }
+    this.attrs[ZaHome.A2_activeSession] = totalSession;
+}
+ZaItem.loadMethods["ZaHome"].push(ZaHome.loadActiveSesson);
+
+
 ZaHome.myXModel = {
     items: [
         {id:ZaHome.A2_version,type:_STRING_,  ref:"attrs/" + ZaHome.A2_version},
@@ -100,8 +144,6 @@ ZaHome.myXModel = {
     	{id:ZaHome.A2_cosNum,type:_STRING_, ref:"attrs/" + ZaHome.A2_cosNum},
     	{id:ZaHome.A2_serverNum,type:_STRING_, ref:"attrs/" + ZaHome.A2_serverNum},
     	{id:ZaHome.A2_accountNum,type:_STRING_, ref:"attrs/" + ZaHome.A2_accountNum},
-
-
         {id:ZaHome.A2_lastCleanupTime, type:_STRING_, ref: "attrs/" + ZaHome.A2_lastCleanupTime},
         {id:ZaHome.A2_lastCleanup, type:_ENUM_, ref: "attrs/" + ZaHome.A2_lastCleanupTime, choices: ZaModel.BOOLEAN_CHOICES},
         {id:ZaHome.A2_lastLogPurgeTime, type:_STRING_, ref: "attrs/" + ZaHome.A2_lastLogPurgeTime},
