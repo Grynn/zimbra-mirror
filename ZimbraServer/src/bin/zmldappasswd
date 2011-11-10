@@ -51,7 +51,7 @@ if ( !-d $zimbra_tmp_directory ) {
   File::Path::mkpath("$zimbra_tmp_directory");
 }
 
-getopts('arclnph',\%options) or die "Unable to set options\n";
+getopts('arcblnph',\%options) or die "Unable to set options\n";
 
 if ($options{h})  {
    usage();
