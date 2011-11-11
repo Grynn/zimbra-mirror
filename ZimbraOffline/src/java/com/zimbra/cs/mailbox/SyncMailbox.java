@@ -56,15 +56,11 @@ import com.zimbra.cs.util.ZimbraApplication;
 public abstract class SyncMailbox extends DesktopMailbox {
     static final String DELETING_MID_SUFFIX = ":delete";
     static final long OPTIMIZE_INTERVAL = 48 * Constants.MILLIS_PER_HOUR;
-    static final int FIFTEEN_MIN = 15;
     private String accountName;
     private volatile boolean isDeleting;
 
     private Timer timer;
     private TimerTask currentTask;
-
-    private Timer syncMaildeltimer;
-    private TimerTask syncMaildelcurrentTask;
 
     final Object syncLock = new Object();
     private boolean deleteAsync;
@@ -264,10 +260,7 @@ public abstract class SyncMailbox extends DesktopMailbox {
             if (currentTask != null) {
                 currentTask.cancel();
             }
-            if (syncMaildelcurrentTask != null) {
-                syncMaildelcurrentTask.cancel();
-            }
-            currentTask = null; syncMaildelcurrentTask = null;
+            currentTask = null;
         } finally {
             lock.release();
         }
@@ -317,57 +310,9 @@ public abstract class SyncMailbox extends DesktopMailbox {
                 }
             };
 
-	    timer = new Timer("sync-mbox-" + getAccount().getName());
-       	    timer.schedule(currentTask, 10 * Constants.MILLIS_PER_SECOND, 5 * Constants.MILLIS_PER_SECOND);
-
-        syncMaildelcurrentTask = new TimerTask() {
-            public void run() {
-
-                if (ZimbraApplication.getInstance().isShutdown()) {
-                    cancelCurrentTask();
-                    return;
-                }
-
-                OfflineAccount account = null;
-                try {
-                    account = (OfflineAccount)getAccount();
-                } catch (ServiceException e) {
-                    ZimbraLog.store.warn("Failed to retrive the account", e);
-                }
-
-                long cutoffTime = 0L;
-                try {
-                    switch (SyncMsgOptions.getOption(account.getAttr(OfflineConstants.A_offlinesyncEmailDate))) {
-                    case SYNCTORELATIVEDATE :
-                        //task is performed only if the sync is set to a relative date
-                        cutoffTime = Long.parseLong(InitialSync.convertRelativeDatetoLong(account.getAttr(OfflineConstants.A_offlinesyncRelativeDate) ,
-                                account.getAttr(OfflineConstants.A_offlinesyncFieldName)));
-                        if (cutoffTime > 0) {
-                            OfflineLog.offline.info("deleting messages from %s older than %d", getAccountName(), cutoffTime);
-                            Folder root = null;
-                            Set<Folder> visible = null;
-                            try {
-                                OperationContext octxtOwner = new OperationContext(SyncMailbox.this);
-                                root = getFolderById(octxtOwner, Mailbox.ID_FOLDER_ROOT);
-                                deleteMsginFolder(cutoffTime, root, visible);
-                            } catch (ServiceException e) {
-                                OfflineLog.offline.info("error in (%s) while deleting stale messages", getAccountName());
-                            }
-                            OfflineLog.offline.info("message in (%s) are deleted", getAccountName());
-                        }
-                        break;
-                    }
-                } catch (NumberFormatException x) {
-                    OfflineLog.offline.warn("unable to parse syncEmailDate", x);
-                }
-            }
-        };
-
-        syncMaildeltimer = new Timer("delEmail" + getAccount().getName());
-
-        Calendar threadRunTime = GregorianCalendar.getInstance();
-        threadRunTime.add(Calendar.MINUTE, FIFTEEN_MIN);
-        syncMaildeltimer.scheduleAtFixedRate(syncMaildelcurrentTask, threadRunTime.getTime(), Constants.MILLIS_PER_DAY);
+        timer = new Timer("sync-mbox-" + getAccount().getName());
+        timer.schedule(currentTask, 10 * Constants.MILLIS_PER_SECOND,
+            5 * Constants.MILLIS_PER_SECOND);
         } finally {
             lock.release();
         }

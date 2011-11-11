@@ -36,6 +36,7 @@ import com.zimbra.cs.db.DbUtil;
 import com.zimbra.cs.db.OfflineDbPool;
 import com.zimbra.cs.db.OfflineVersions;
 import com.zimbra.cs.offline.backup.BackupTimer;
+import com.zimbra.cs.offline.backup.DelEmailTimer;
 import com.zimbra.cs.offline.util.HeapDumpTimer;
 import com.zimbra.cs.service.AuthProvider;
 import com.zimbra.cs.service.offline.OfflineZimbraAuthProvider;
@@ -109,6 +110,7 @@ public final class OfflineApplication extends ZimbraApplication {
         }
         BackupTimer.initialize();
         HeapDumpTimer.initialize();
+        DelEmailTimer.initialize();
     }
 
     @Override
@@ -175,6 +177,7 @@ public final class OfflineApplication extends ZimbraApplication {
         }
         OfflineSyncManager.getInstance().shutdown();
         BackupTimer.shutdown();
+        DelEmailTimer.shutdown();
     }
 
     private void migrateDb(DbPool.DbConnection conn) {

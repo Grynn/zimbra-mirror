@@ -117,6 +117,7 @@ public interface OfflineConstants {
     
     public static final String A_offlineLastSync = "offlineLastSync";
     public static final String A_offlineEnableTrace = "offlineEnableTrace";
+    public static final String A_offlineEnableExpireOldEmails = "offlineEnableExpireOldEmails";
     
     public static final String A_offlineSslCertAlias = "offlineSslCertAlias";
     public static final String A_offlineAccountSetup = "offlineAccountSetup";

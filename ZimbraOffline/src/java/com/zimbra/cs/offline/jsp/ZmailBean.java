@@ -62,6 +62,7 @@ public class ZmailBean extends MailBean {
         syncEmailDate = account.getAttr(OfflineConstants.A_offlinesyncEmailDate);
         syncFieldName = account.getAttr(OfflineConstants.A_offlinesyncFieldName);
         isDebugTraceEnabled = account.getBooleanAttr(OfflineConstants.A_offlineEnableTrace, false);
+        isExpireOldEmailsEnabled = account.getBooleanAttr(OfflineConstants.A_offlineEnableExpireOldEmails, true);
     }
 
     @Override
@@ -130,6 +131,9 @@ public class ZmailBean extends MailBean {
                     }
                     attrs.put(OfflineConstants.A_offlineEnableTrace,
                         isDebugTraceEnabled ? ProvisioningConstants.TRUE : ProvisioningConstants.FALSE);
+                    //setting the expire old emails to true as default value
+                    attrs.put(OfflineConstants.A_offlineEnableExpireOldEmails,
+                            isExpireOldEmailsEnabled ? ProvisioningConstants.TRUE : ProvisioningConstants.FALSE);
                     if (!password.equals(JspConstants.MASKED_PASSWORD))
                         attrs.put(OfflineConstants.A_offlineRemotePassword, password);
                     if (sslCertAlias != null && sslCertAlias.length() > 0)
@@ -211,6 +215,7 @@ public class ZmailBean extends MailBean {
         xb.port = "" + port;
         xb.connectionType = isSSL ? ConnectionType.ssl : ConnectionType.cleartext;
         xb.isDebugTraceEnabled = true;
+        xb.isExpireOldEmailsEnabled = true;
         xb.syncFreqSecs = -1;
         xb.syncFixedDate = "0";
         xb.syncRelativeDate = "0";

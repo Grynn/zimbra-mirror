@@ -51,6 +51,7 @@ public class MailBean extends FormBean {
     protected String syncFieldName= "";
 
     protected boolean isDebugTraceEnabled;
+    protected boolean isExpireOldEmailsEnabled;
     
     public String getAccountId() {
 	return accountId;
@@ -134,6 +135,14 @@ public class MailBean extends FormBean {
 
     public void setDebugTraceEnabled(boolean isDebugTraceEnabled) {
         this.isDebugTraceEnabled = isDebugTraceEnabled;
+    }
+
+    public boolean isExpireOldEmailsEnabled() {
+        return isExpireOldEmailsEnabled;
+    }
+
+    public void setExpireOldEmailsEnabled(boolean isExpireOldEmailsEnabled) {
+        this.isExpireOldEmailsEnabled = isExpireOldEmailsEnabled;
     }
 
     public String getsyncEmailDate() {
