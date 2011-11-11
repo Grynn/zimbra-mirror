@@ -53,7 +53,6 @@ import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineDataSource;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.datasource.DataSourceManager;
-import com.zimbra.cs.filter.RuleManager;
 import com.zimbra.cs.db.DbTag;
 import com.zimbra.cs.mailbox.MailItem.TargetConstraint;
 import com.zimbra.cs.mailbox.MailSender.SafeSendFailedException;
@@ -307,23 +306,12 @@ public class DataSourceMailbox extends SyncMailbox {
 
             // Do we need to save a copy of the message ourselves to the Sent folder?
             boolean saveToSent = (isYBizmail || ds.isSaveToSent()) && getAccount().isPrefSaveToSent();
-            int sentFolderId = MailSender.getSentFolderId(this, identity);
-            ParsedMessage pm = null;
-            try {
-                pm = new ParsedMessage(mm, mm.getSentDate().getTime(), this.attachmentsIndexingEnabled());
-            } catch (MessagingException me) {
-                throw ServiceException.PARSE_ERROR("error in MimeMessage", me);
-            }
-            int flags = Flag.BITMASK_FROM_ME;
+
             if (ds.isYahoo() && !isYBizmail) {
                 YMailSender ms = YMailSender.newInstance(ds);
                 try {
                     ms.sendMimeMessage(context, this, saveToSent, mm, null,
                         origMsgId, msg.getDraftReplyType(), identity, false);
-
-                    if (!DebugConfig.disableOutgoingFilter) {
-                        RuleManager.applyRulesToOutgoingMessage(context, this, pm, sentFolderId, true, flags, null, Mailbox.ID_AUTO_INCREMENT);
-                    }
                 } catch (ServiceException e) {
                     Throwable cause = e.getCause();
                     if (cause != null && cause instanceof YMailException) {
@@ -344,10 +332,6 @@ public class DataSourceMailbox extends SyncMailbox {
                 try {
                     ms.sendMimeMessage(context, this, saveToSent, mm, null,
                         origMsgId, msg.getDraftReplyType(), identity, false);
-
-                    if (!DebugConfig.disableOutgoingFilter) {
-                        RuleManager.applyRulesToOutgoingMessage(context, this, pm, sentFolderId, true, flags, null, Mailbox.ID_AUTO_INCREMENT);
-                    }
                 } catch (ServiceException e) {
                     Throwable cause = e.getCause();
                     if (cause instanceof MessagingException) {
