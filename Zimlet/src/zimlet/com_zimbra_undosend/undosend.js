@@ -105,8 +105,15 @@ function(controller) {
 	var viewId = this.appViewMgr.getCurrentViewId();
 
 	if(!appCtxt.isChildWindow) {
-		if (this.appViewMgr._isTabView[viewId]) {
-			var tab = appCtxt.getAppChooser().getButton(this.appViewMgr._tabParams[viewId].id);
+		var tabBtnId;
+		if(this.appViewMgr && this.appViewMgr._isTabView && this.appViewMgr._isTabView[viewId]) {
+			tabBtnId = this.appViewMgr._tabParams[viewId].id;
+		} else if(this.appViewMgr._view && this.appViewMgr._view[viewId] && this.appViewMgr._view[viewId].tabParams) {
+			tabBtnId = this.appViewMgr._view[viewId].tabParams.id;
+		}
+
+		if (tabBtnId) {
+			var tab = appCtxt.getAppChooser().getButton(tabBtnId);
 			var title = this._getComposeTabTitle(viewId);//store the title as when we push the view back, it doesnt seem to work
 		}
 	}
