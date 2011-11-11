@@ -22,34 +22,7 @@ Com_Zimbra_Phone.prototype.constructor = Com_Zimbra_Phone;
 // Consts
 Com_Zimbra_Phone.PEOPLE_SEARCH_TOOLBAR_ID	= "phone";
 
-Com_Zimbra_Phone.prototype.match =
-function(line, startIndex) {
-	var a = this.regexps;
-	var ret = null;
-	for (var i = 0; i < a.length; ++i) {
-		var re = a[i];
-		re.lastIndex = startIndex;
-		var m = re.exec(line);
-        if (m) {
-            if (!ret || m.index < ret.index) {
-                ret = m;
-            }
-        }
-	}
-	return ret;
-};
 
-Com_Zimbra_Phone.prototype.init =
-function() {
-	var regexps = [
-        new RegExp("\\b" + this.getMessage("localPhoneRegEx") + "\\b","ig")
-    ];
-	this.regexps = regexps;
-	this.countryCode = this.getMessage("countryCode");
-	if(!this.countryCode) {
-		this.countryCode = 1;
-	}
-};
 
 Com_Zimbra_Phone.prototype._getHtmlContent =
 function(html, idx, phone, context) {

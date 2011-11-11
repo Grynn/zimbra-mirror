@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_phone" version="2.5" label="${msg.label}" target="main view-window" description="${msg.description}">
+<zimlet name="com_zimbra_phone" version="2.6" label="${msg.label}" target="main view-window" description="${msg.description}">
 	<include>phone.js</include>
 	<include>templates/Phone.template.js</include>
 	<handlerObject>Com_Zimbra_Phone</handlerObject>
@@ -9,5 +9,12 @@
 			<menuItem label="${msg.addToContacts}" icon="NewContact" id="ADDCONTACT"/>
 			<menuItem label="${msg.call}" icon="Telephone" id="CALL"/>
 		</contextMenu>
+		<matchOn>
+            <!-- Match total 10-22 chars that start with + or +number and end with number
+                to ensure we match most US and intl Phone numbers including "+"
+                Also have word-boundary inside to ignore partial-matches
+            -->
+			<regex attrs="g">\+?\b\d([0-9\(\)\.\s\-]){8,20}\d\b</regex>
+		</matchOn>
 	</contentObject>
 </zimlet>
