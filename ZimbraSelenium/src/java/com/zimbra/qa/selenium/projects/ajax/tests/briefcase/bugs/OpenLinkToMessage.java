@@ -36,7 +36,7 @@ public class OpenLinkToMessage extends AjaxCommonTest {
 		};
 	}
 
-	@Bugs(ids = "56802,64833")
+	@Bugs(ids = "56802,64833,65939,67059")
 	@Test(description = "Open link to the message - Verify List View Rows are displayed after message closed", groups = { "functional" })
 	public void OpenLinkToMessage_01() throws HarnessException {
 		// Create the message data to be sent
@@ -89,7 +89,7 @@ public class OpenLinkToMessage extends AjaxCommonTest {
 
 		map.put("id", mail.getId());
 
-		app.zPageBriefcase.openUrl("zimbra", map);
+		app.zPageBriefcase.openUrl("", map);
 
 		app.zPageBriefcase
 				.zWaitForElementPresent(PageMail.Locators.zCloseIconBtn_messageWindow);
