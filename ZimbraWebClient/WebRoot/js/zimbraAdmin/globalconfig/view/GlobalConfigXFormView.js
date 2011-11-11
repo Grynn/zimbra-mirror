@@ -230,7 +230,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 							  label: ZaMsg.LBL_zimbraGalMaxResults, msgName:ZaMsg.MSG_zimbraGalMaxResults, 
 							  labelLocation:_LEFT_, cssClass:"admin_xform_number_input"
 							},
-						{ref:ZaGlobalConfig.A_zimbraDefaultDomainName, type:_TEXTFIELD_,
+						{ref:ZaGlobalConfig.A_zimbraDefaultDomainName, type:_DYNSELECT_,
 								label: ZaMsg.NAD_DefaultDomainName,
 								toolTipContent:ZaMsg.tt_StartTypingDomainName,
 								dataFetcherMethod:ZaSearch.prototype.dynSelectSearchDomains,

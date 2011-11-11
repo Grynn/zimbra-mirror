@@ -255,7 +255,7 @@ DynSelect_XFormItem.prototype.outputHTML = function (HTMLoutput) {
 			" onclick=\"", this.getFormGlobalRef(), ".getItemById('",this.getId(),"').onClick(event)\"",
 			" onselectstart=\"return false\"",
 			">",
-			"<table ", this.getTableCssString(), ">", 
+			"<table ", this.getTableCssString(), " cellspacing='0'>", 
 				"<tr><td width=100%>",inputHtml,"</td>",
 				"</tr>", 
 			"</table>", 
