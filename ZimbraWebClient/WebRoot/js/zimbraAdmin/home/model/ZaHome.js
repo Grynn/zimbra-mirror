@@ -25,8 +25,6 @@ ZaHome.A2_lastCleanup = "lastCleanup";
 ZaHome.A2_lastCleanupTime = "lastCleanupTime";
 ZaHome.A2_lastLogPurge = "lastLogPurge";
 ZaHome.A2_lastLogPurgeTime = "lastLogPurgeTime";
-ZaHome.A2_expiredType = "expiredType";
-ZaHome.A2_expiredMessage = "expiredMessage";
 ZaHome.A2_DBCheckType = "dbCheckType";
 ZaHome.A2_DBCheckMessage= "dbCheckMessage";
 ZaHome.A2_serviceStatus = "serviceStatus";
@@ -58,8 +56,6 @@ function () {
     this.attrs[ZaHome.A2_lastCleanupTime] = currentTime;
     this.attrs[ZaHome.A2_lastLogPurge] = true;
     this.attrs[ZaHome.A2_lastLogPurgeTime] = currentTime;
-    this.attrs[ZaHome.A2_expiredType] = true;
-    this.attrs[ZaHome.A2_expiredMessage] = ZaMsg.LBL_HomeStatusOK;
     this.attrs[ZaHome.A2_DBCheckType] = true;
     this.attrs[ZaHome.A2_DBCheckMessage] = ZaMsg.LBL_HomeStatusOK;
     this.attrs[ZaHome.A2_serviceStatusMessage] = ZaMsg.LBL_HomeStatusRunning ;
@@ -181,8 +177,6 @@ ZaHome.myXModel = {
         {id:ZaHome.A2_lastCleanup, type:_ENUM_, ref: "attrs/" + ZaHome.A2_lastCleanupTime, choices: ZaModel.BOOLEAN_CHOICES},
         {id:ZaHome.A2_lastLogPurgeTime, type:_STRING_, ref: "attrs/" + ZaHome.A2_lastLogPurgeTime},
         {id:ZaHome.A2_lastLogPurge, type:_ENUM_, ref: "attrs/" + ZaHome.A2_lastLogPurge, choices: ZaModel.BOOLEAN_CHOICES},
-        {id:ZaHome.A2_expiredMessage, type:_STRING_, ref: "attrs/" + ZaHome.A2_expiredMessage},
-        {id:ZaHome.A2_expiredType, type:_ENUM_, ref: "attrs/" + ZaHome.A2_expiredType, choices: ZaModel.BOOLEAN_CHOICES},
         {id:ZaHome.A2_DBCheckMessage, type:_STRING_, ref: "attrs/" + ZaHome.A2_DBCheckMessage},
         {id:ZaHome.A2_DBCheckType, type:_ENUM_, ref: "attrs/" + ZaHome.A2_DBCheckType, choices: ZaModel.BOOLEAN_CHOICES},
         {id:ZaHome.A2_serviceStatusMessage, type:_STRING_, ref: "attrs/" + ZaHome.A2_serviceStatusMessage},

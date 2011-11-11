@@ -262,6 +262,21 @@ ZaCert.certsServerNodeTreeListener = function (ev) {
 	}
 }
 
+if (ZaHome && ZaHome.myXModel) {
+    ZaHome.A2_expiredType = "expiredType";
+    ZaHome.A2_expiredMessage = "expiredMessage";
+    ZaHome.myXModel.items.push(
+       {id:ZaHome.A2_expiredMessage, type:_STRING_, ref: "attrs/" + ZaHome.A2_expiredMessage}
+    );
+    ZaHome.myXModel.items.push(
+       {id:ZaHome.A2_expiredType, type:_ENUM_, ref: "attrs/" + ZaHome.A2_expiredType, choices: ZaModel.BOOLEAN_CHOICES}
+    );
+    ZaHome.loadCert = function () {
+        this.attrs[ZaHome.A2_expiredType] = true;
+        this.attrs[ZaHome.A2_expiredMessage] = ZaMsg.LBL_HomeStatusOK;
+    }
+    ZaItem.loadMethods["ZaHome"].push(ZaHome.loadCert);
+}
 
 if(ZaTabView.XFormModifiers["ZaHomeXFormView"]) {
 
@@ -277,20 +292,37 @@ if(ZaTabView.XFormModifiers["ZaHomeXFormView"]) {
     }
 
     ZaCert.HomeXFormModifier = function(xFormObject) {
-        var setupItem = xFormObject.items[0].items[0].items[5];
-        var labelItem = setupItem.headerLabels;
-        var contentItem = setupItem.contentItems;
-        var index;
-        for (var index = 0; index < labelItem.length; index ++ ) {
-            if (labelItem[index] == ZaMsg.LBL_HomeGetStared) {
-                break;
+        if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CERTS_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+            var maintainItem;
+            maintainItem = xFormObject.items[0].items[0].items[2];
+            maintainItem.items[4].items = [
+                    {type:_OUTPUT_, value: ZaMsg.LBL_HomeExpiredCerts},
+                    {type:_OUTPUT_, ref: ZaHome.A2_expiredType,
+                        getDisplayValue: function (value){
+                            if (value) {
+                                return AjxImg.getImageHtml ("Check");
+                            } else {
+                                return AjxImg.getImageHtml ("Cancel");
+                            }
+                        }
+                    },
+                    {type:_OUTPUT_, ref: ZaHome.A2_expiredMessage}
+            ];
+
+            var setupItem = xFormObject.items[0].items[0].items[5];
+            var labelItem = setupItem.headerLabels;
+            var contentItem = setupItem.contentItems;
+            var index;
+            for (var index = 0; index < labelItem.length; index ++ ) {
+                if (labelItem[index] == ZaMsg.LBL_HomeGetStared) {
+                    break;
+                }
+            }
+            if (index != labelItem.length) {
+                var content = contentItem[index];
+                content[2] = {value:ZaMsg.LBL_HomeInstallCert, onClick: ZaHomeXFormView.onInstallCertficate};
             }
         }
-        if (index != labelItem.length) {
-            var content = contentItem[index];
-            content[2] = {value:ZaMsg.LBL_HomeInstallCert, onClick: ZaHomeXFormView.onInstallCertficate};
-        }
-
     }
 
     ZaTabView.XFormModifiers["ZaHomeXFormView"].push(ZaCert.HomeXFormModifier);

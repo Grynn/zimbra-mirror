@@ -181,9 +181,9 @@ ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
                                 if (value === undefined) {
                                     return AjxImg.getImageHtml ("Help");
                                 }else if (value === false) {
-                                    return AjxImg.getImageHtml ("Critical");
+                                    return AjxImg.getImageHtml ("Cancel");
                                 } else {
-                                    return AjxImg.getImageHtml ("Information");
+                                    return AjxImg.getImageHtml ("Check");
                                 }
                             }
                         },
@@ -230,18 +230,8 @@ ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
                     },
                     {type:_OUTPUT_, ref: ZaHome.A2_lastLogPurgeTime}
                 ]},
+                // Reserver for Cert admin extension
                 {type:_GROUP_, colSpan:"*", numCols:3, width: "100%", colSizes:["*", "30px", "100px"],items:[
-                    {type:_OUTPUT_, value: ZaMsg.LBL_HomeExpiredCerts},
-                    {type:_OUTPUT_, ref: ZaHome.A2_expiredType,
-                        getDisplayValue: function (value){
-                            if (value) {
-                                return AjxImg.getImageHtml ("Check");
-                            } else {
-                                return AjxImg.getImageHtml ("Cancel");
-                            }
-                        }
-                    },
-                    {type:_OUTPUT_, ref: ZaHome.A2_expiredMessage}
                 ]},
                 {type:_GROUP_, colSpan:"*", numCols:3, width: "100%", colSizes:["*", "30px", "100px"],items:[
                     {type:_OUTPUT_, value: ZaMsg.LBL_HomeDBCheck},
