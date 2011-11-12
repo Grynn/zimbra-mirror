@@ -67,12 +67,12 @@ function() {
 		this._optButtonId = this._htmlElId + "_optButton";
 		var optButtonEl = document.getElementById(this._optButtonId);
 		if (optButtonEl) {
-			this._optButtonItem = new DwtBorderlessButton({parent:this, style:DwtLabel.IMAGE_LEFT, className:"Img"+this._optButton.image});
+			this._optButtonItem = new DwtBorderlessButton({parent:this, style:DwtLabel.IMAGE_LEFT});
 			this._optButtonItem.setToolTipContent(this._optButton.tooltip);
 			this._optButtonItem.callback = this._optButton.callback;
 			this._optButtonItem.addSelectionListener(new AjxListener(this, this._onclickHandler));
 			this._optButtonItem.replaceElement(this._optButtonId);
-			this._optButtonItem.setHoverImage("ContextMenuHover");
+			this._optButtonItem.setImage("ContextMenu");
 			this._optButtonItem.setIconEl(this._optButtonItem.getHtmlElement()); // image container is button
 		}
 	}
