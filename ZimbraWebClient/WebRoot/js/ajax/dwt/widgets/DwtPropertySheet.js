@@ -29,9 +29,10 @@ DwtPropertySheet = function(parent, className, posStyle, labelSide) {
 	this._propertyMap = {};
 	
 	this._tableEl = document.createElement("TABLE");
-	this._tableEl.border = 0;
-	this._tableEl.cellSpacing = 3;
-	this._tableEl.cellPadding = 0;
+	//Better to handle this in dwt.css
+	//this._tableEl.border = 0;
+	//this._tableEl.cellSpacing = 3;
+	//this._tableEl.cellPadding = 0;
 	
 	var element = this.getHtmlElement();
 	element.appendChild(this._tableEl);
