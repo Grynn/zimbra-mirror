@@ -256,14 +256,17 @@ function changeDateFields(selectObj) {
     case "0":
         document.getElementById("fixedDateFields").style.display="none";
         document.getElementById("relativeFields").style.display="none";
+        document.getElementById("expirationFields").style.display="none";
         break;
     case "1":
         document.getElementById("fixedDateFields").style.display="inline";
         document.getElementById("relativeFields").style.display="none";
+        document.getElementById("expirationFields").style.display="none";
         break;
     case "2":
         document.getElementById("fixedDateFields").style.display="none";
         document.getElementById("relativeFields").style.display="inline";
+        document.getElementById("expirationFields").style.display="inline";
         break;
     }
 }
@@ -783,6 +786,15 @@ function changeDateFields(selectObj) {
                                                                     <option value="Year" ${bean.syncFieldName == 'Year' ? 'selected' : ''}><fmt:message key='SyncYears'/></option>
                                                                 </select>
                                                      </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td width=60%>
+                                                <span id="expirationFields" style="${bean.syncEmailDate == 2 ? 'display:inline' : 'display:none'}">
+                                                    <input type="checkbox" id="expireOldEmailsEnabled" name="expireOldEmailsEnabled" ${bean.expireOldEmailsEnabled ? 'checked' : ''}>
+                                                    <label class="ZCheckboxLabel" for="expireOldEmailsEnabled"><fmt:message key='EnableExpiration'/></label>
+                                                </span>
                                             </td>
                                         </tr>
                                         </c:if>
