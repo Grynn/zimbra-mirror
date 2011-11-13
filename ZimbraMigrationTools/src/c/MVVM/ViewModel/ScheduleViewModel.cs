@@ -613,7 +613,9 @@ public class ScheduleViewModel: BaseViewModel
         AccountResultsViewModel ar = accountResultsViewModel.AccountResultsList[a.Accountnum];
 
         if (e.PropertyName == "TotalNoItems")
+        {
             ar.TotalItemsToMigrate = Int32.Parse(e.NewValue.ToString());
+        }
         if (e.PropertyName == "TotalNoErrors")
         {
             ar.NumErrs = (int)a.TotalNoErrors + 1;      // this happens first
@@ -687,11 +689,10 @@ public class ScheduleViewModel: BaseViewModel
         }
         if (e.PropertyName == "FolderName")
         {
-            string folderName = e.NewValue.ToString();
-            string folderType = GetFolderTypeForUserResults(f.FolderView);
-
             if (e.NewValue != null)
             {
+                string folderName = e.NewValue.ToString();
+                string folderType = GetFolderTypeForUserResults(f.FolderView);
                 string msg3 = "Migrating {0}";
 
                 ar.PBMsgValue = String.Format(msg3, folderName);
