@@ -20,7 +20,6 @@
  *
  */
 // CUserObject
-extern Zimbra::MAPI::MAPIAccessAPI *maapi;
 
 class ATL_NO_VTABLE CUserObject: public CComObjectRootEx<CComSingleThreadModel>, public
     CComCoClass<CUserObject, &CLSID_UserObject>, public BaseUser, public ISupportErrorInfo,
@@ -61,6 +60,9 @@ public:
     virtual long GetFolders(VARIANT *folders);
     virtual long GetItems(VARIANT *Items);
     virtual long UnInitialize();
+
+public:
+	Zimbra::MAPI::MAPIAccessAPI *maapi;
 
 protected:
     // CSingleton* Logger;

@@ -20,7 +20,6 @@
  */
 
 // CItemObject
-Zimbra::MAPI::MAPIAccessAPI *maapi;
 
 class ATL_NO_VTABLE CItemObject: public CComObjectRootEx<CComSingleThreadModel>, public
     CComCoClass<CItemObject, &CLSID_ItemObject>, public ISupportErrorInfo, public BaseItem,
@@ -69,7 +68,7 @@ public:
 
     STDMETHOD(put_ItemID) (VARIANT id);
     STDMETHOD(get_ItemID) (VARIANT * id);
-    STDMETHOD(GetDataForItemID) (VARIANT ItemId, FolderType type, VARIANT * pVal);
+    STDMETHOD(GetDataForItemID) (BSTR UserId, VARIANT ItemId, FolderType type, VARIANT * pVal);
 };
 
 OBJECT_ENTRY_AUTO(__uuidof(ItemObject), CItemObject)

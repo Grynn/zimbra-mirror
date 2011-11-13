@@ -144,7 +144,7 @@ STDMETHODIMP CItemObject::GetDataForItem(VARIANT *data)
     return S_OK;
 }
 
-STDMETHODIMP CItemObject::GetDataForItemID(VARIANT ItemId, FolderType type, VARIANT *pVal)
+STDMETHODIMP CItemObject::GetDataForItemID(BSTR UserId, VARIANT ItemId, FolderType type, VARIANT *pVal)
 {
     HRESULT hr = S_OK;
     std::map<BSTR, BSTR> pIt;
@@ -163,7 +163,7 @@ STDMETHODIMP CItemObject::GetDataForItemID(VARIANT ItemId, FolderType type, VARI
     if (ItemId.vt == (VT_ARRAY | VT_UI1))       // (OLE SAFEARRAY)
     {
         // Retrieve size of array
-        ItemID.cb = ItemId.parray->rgsabound[0].cElements;
+		ItemID.cb = ItemId.parray->rgsabound[0].cElements;
         ItemID.lpb = new BYTE[ItemID.cb];       // Allocate a buffer to store the data
         if (ItemID.lpb != NULL)
         {
@@ -174,11 +174,16 @@ STDMETHODIMP CItemObject::GetDataForItemID(VARIANT ItemId, FolderType type, VARI
             // Copy the bitmap into our buffer
             memcpy(ItemID.lpb, pArrayData, ItemID.cb);  // Unlock the variant data
             SafeArrayUnaccessData(ItemId.parray);
+
+			// We can do better than this.  Should get the pointer.  This is temporary
+			Zimbra::MAPI::MAPIAccessAPI *maapi = new Zimbra::MAPI::MAPIAccessAPI(UserId);
+			maapi->InitializeUser();
+
             if (ft == 2)
             {
                 ContactItemData cd;
 
-                maapi->GetItem(ItemID, cd);
+				maapi->GetItem(ItemID, cd);
                 pIt[L"birthday"] = SysAllocString((cd.Birthday).c_str());
                 pIt[L"anniversary"] = SysAllocString((cd.Anniversary).c_str());
                 pIt[L"callbackPhone"] = SysAllocString((cd.CallbackPhone).c_str());
@@ -292,6 +297,7 @@ STDMETHODIMP CItemObject::GetDataForItemID(VARIANT ItemId, FolderType type, VARI
                  *
                  * printf("MIME FILE PATH: %S\n\n\n\n", msgdata.MimeFile.c_str());*/
             }
+			delete maapi;	// temporary
         }
     }
     // //

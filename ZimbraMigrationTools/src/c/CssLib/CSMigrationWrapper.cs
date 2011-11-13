@@ -48,14 +48,6 @@ public class CSMigrationwrapper
 
     Assembly sourceProvider;
     string m_MailClient;
-    dynamic userobject;
-    dynamic folderobject;
-
-    dynamic[] folderobjectarray;
-
-    dynamic itemobject;
-
-    dynamic[] itemobjectarray;
 
     ZimbraAPI api;
     enum foldertype
@@ -83,16 +75,7 @@ public class CSMigrationwrapper
             return;
         }
 
-        object userinstance;
-
         Type[] types = sourceProvider.GetTypes();
-
-        userobject = sourceProvider.GetType("Exchange.UserObjectClass");
-        userinstance = Activator.CreateInstance(userobject);
-
-        folderobject = sourceProvider.GetType("Exchange.folderObjectClass");
-
-        itemobject = sourceProvider.GetType("Exchange.ItemObjectClass");
 
         MailWrapper = sourceProvider.GetType("Exchange.MapiWrapperClass");
 
@@ -246,7 +229,7 @@ public class CSMigrationwrapper
         return s;
     }
 
-    private int ComputeTotalMigrationCount(MigrationOptions importopts)
+    private int ComputeTotalMigrationCount(MigrationOptions importopts, dynamic[] folderobjectarray)
     {
         int count = 0;
 
@@ -334,22 +317,14 @@ public class CSMigrationwrapper
         return retval;
     }
 
-    private void ProcessItems(MigrationAccount Acct, dynamic folderobject, foldertype ftype,
+    private void ProcessItems(MigrationAccount Acct, bool isServer, dynamic userobject, object userinstance, dynamic folderobject, foldertype ftype,
         ZimbraAPI api, string path, MigrationOptions importopts)
     {
         DateTime dt;
 
         dt = DateTime.UtcNow;
 
-        /* itemobjectarray = userobject.GetItemsForFolderObjects(
-         *       folderobject, (int)ftype, dt.ToOADate());*/
-        Type userobject;
-        object userinstance;
-
-        userobject = sourceProvider.GetType("Exchange.UserObjectClass");
-        userinstance = Activator.CreateInstance(userobject);
-
-        // GetListofMapiFolders(Acct.Accountname);
+        dynamic[] itemobjectarray;
 
         ParameterModifier pm = new ParameterModifier(1);
 
@@ -374,94 +349,96 @@ public class CSMigrationwrapper
 
         int iProcessedItems = 0;
 
-        while (iProcessedItems < Acct.migrationFolder.TotalCountOFItems)
+        if (itemobjectarray.GetLength(0) > 0)
         {
-            foreach (dynamic itemobject in itemobjectarray)
+            while (iProcessedItems < Acct.migrationFolder.TotalCountOFItems)
             {
-                if (itemobject != null)
+                foreach (dynamic itemobject in itemobjectarray)
                 {
-                    bool bSkipMessage = false;
-                    Dictionary<string, string> dict = new Dictionary<string, string>();
-
-                    foldertype type = (foldertype)itemobject.Type;
-
-                    if (type == ftype)
+                    if (itemobject != null)
                     {
-                        // string[,] data = O1.GetDataForItem(I1.ItemID);
+                        bool bSkipMessage = false;
+                        Dictionary<string, string> dict = new Dictionary<string, string>();
 
-                        object[] MyArgas = new object[2];
-                        MyArgas[0] = itemobject.ItemID;
-                        MyArgas[1] = itemobject.Type;
+                        foldertype type = (foldertype)itemobject.Type;
 
-                        // MyArgs[3] = "MAPI";
-
-                        string[, ] data = (string[, ])itemObject.InvokeMember(
-                            "GetDataForItemID", BindingFlags.InvokeMethod |
-                            BindingFlags.Instance | BindingFlags.Public, null, iteminstance,
-                            MyArgas, null, null, null);
-
-                        /*  string[,] data = itemobject.GetDataForItemID(
-                         *        itemobject.ItemID);*/
-
-                        int bound0 = data.GetUpperBound(0);
-
-                        for (int i = 0; i <= bound0; i++)
+                        if (type == ftype)
                         {
-                            string Key = data[0, i];
-                            string Value = data[1, i];
+                            object[] MyArgas = new object[3];
+                            MyArgas[0] = isServer ? Acct.AccountID : "";
+                            MyArgas[1] = itemobject.ItemID;
+                            MyArgas[2] = itemobject.Type;
 
-                            dict.Add(Key, Value);
-                            // Console.WriteLine("{0}, {1}", so1, so2);
-                        }
-                    }
-                    api.AccountName = Acct.Accountname;
-                    if (dict.Count > 0)
-                    {
-                        int stat = 0;
+                            // MyArgs[3] = "MAPI";
 
-                        if (ftype == foldertype.Mail)
-                        {
-                            int msf = 0;
-                            if (importopts.MessageSizeFilter != null)
+                            string[,] data = (string[,])itemObject.InvokeMember(
+                                    "GetDataForItemID", BindingFlags.InvokeMethod |
+                                    BindingFlags.Instance | BindingFlags.Public, null, iteminstance,
+                                    MyArgas, null, null, null);
+
+                                /*  string[,] data = itemobject.GetDataForItemID(
+                                    *        itemobject.ItemID);*/
+
+                            int bound0 = data.GetUpperBound(0);
+
+                            for (int i = 0; i <= bound0; i++)
                             {
-                                msf = Int32.Parse(importopts.MessageSizeFilter);
-                                msf *= 1000000;
-                                try
+                                string Key = data[0, i];
+                                string Value = data[1, i];
+
+                                dict.Add(Key, Value);
+                                // Console.WriteLine("{0}, {1}", so1, so2);
+                            }
+                        }
+                        api.AccountName = Acct.Accountname;
+                        if (dict.Count > 0)
+                        {
+                            int stat = 0;
+
+                            if (ftype == foldertype.Mail)
+                            {
+                                int msf = 0;
+                                if (importopts.MessageSizeFilter != null)
                                 {
-                                    FileInfo f = new FileInfo(dict["filePath"]);
-                                    if (f.Length > msf)
+                                    msf = Int32.Parse(importopts.MessageSizeFilter);
+                                    msf *= 1000000;
+                                    try
                                     {
-                                        bSkipMessage = true;
-                                        File.Delete(dict["filePath"]);
-                                        // FBS -- When logging implemented, we should log this
-                                        // Should we put a message in the UI as well?
+                                        FileInfo f = new FileInfo(dict["filePath"]);
+                                        if (f.Length > msf)
+                                        {
+                                            bSkipMessage = true;
+                                            File.Delete(dict["filePath"]);
+                                            // FBS -- When logging implemented, we should log this
+                                            // Should we put a message in the UI as well?
+                                        }
+                                    }
+                                    catch (Exception)
+                                    {
                                     }
                                 }
-                                catch (Exception)
+
+                                if (!bSkipMessage)
                                 {
+                                    dict.Add("folderId", folderobject.FolderPath);
+                                    dict.Add("tags", "");
+                                    stat = api.AddMessage(dict);
                                 }
                             }
-
-                            if (!bSkipMessage)
+                            else if (ftype == foldertype.Contacts)
                             {
-                                dict.Add("folderId", folderobject.FolderPath);
-                                dict.Add("tags", "");
-                                stat = api.AddMessage(dict);
+                                stat = api.CreateContact(dict, path);
                             }
                         }
-                        else if (ftype == foldertype.Contacts)
-                        {
-                            stat = api.CreateContact(dict, path);
-                        }
-                    }
 
-                    // Note the : statement.  It seems weird to set Acct.migrationFolder.CurrentCountOFItems
-                    // to itself, but this is done so the method will be called to increment the progress bar
-                    Acct.migrationFolder.CurrentCountOFItems = (!bSkipMessage)
-                                                               ? Acct.migrationFolder.CurrentCountOFItems + 1
-                                                               : Acct.migrationFolder.CurrentCountOFItems;
+                        // Note the : statement.  It seems weird to set Acct.migrationFolder.CurrentCountOFItems
+                        // to itself, but this is done so the method will be called to increment the progress bar
+                        Acct.migrationFolder.CurrentCountOFItems = (!bSkipMessage)
+                                                                    ? Acct.migrationFolder.CurrentCountOFItems + 1
+                                                                    : Acct.migrationFolder.CurrentCountOFItems;
+                    }
+                    iProcessedItems++;
                 }
-                iProcessedItems++;
             }
         }
     }
@@ -489,11 +466,16 @@ public class CSMigrationwrapper
     public void StartMigration(MigrationAccount Acct, MigrationOptions importopts, bool
         isServer = true, bool isPreview = false)
     {
-        Type userobject;
+
+        dynamic userobject;
+        dynamic[] folderobjectarray;
+        dynamic itemobject;
         object userinstance;
 
         userobject = sourceProvider.GetType("Exchange.UserObjectClass");
         userinstance = Activator.CreateInstance(userobject);
+        itemobject = sourceProvider.GetType("Exchange.ItemObjectClass");
+
         if (!isPreview)
         {
             ParameterModifier pm = new ParameterModifier(1);
@@ -536,7 +518,7 @@ public class CSMigrationwrapper
                 null, userinstance, null, null, null, null);
             Acct.migrationFolder.CurrentCountOFItems = folderobjectarray.Count();
 
-            Acct.TotalNoItems = ComputeTotalMigrationCount(importopts);
+            Acct.TotalNoItems = ComputeTotalMigrationCount(importopts, folderobjectarray);
 
             ZimbraAPI api = new ZimbraAPI();
 
@@ -631,11 +613,11 @@ public class CSMigrationwrapper
                     {
                         path = "/MAPIRoot/Deleted Items";   // FBS EXCHANGE SPECIFIC HACK !!!
                     }
-                    ProcessItems(Acct, folderobject, foldertype.Contacts, api, path, importopts);
+                    ProcessItems(Acct, isServer, userobject, userinstance, folderobject, foldertype.Contacts, api, path, importopts);
                 }
                 if (importopts.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Mail))
                 {
-                    ProcessItems(Acct, folderobject, foldertype.Mail, api, path, importopts);
+                    ProcessItems(Acct, isServer, userobject, userinstance, folderobject, foldertype.Mail, api, path, importopts);
                 }
             }
         }
