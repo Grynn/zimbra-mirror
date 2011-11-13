@@ -115,9 +115,6 @@ public class ExecuteHarnessMain {
 				ZimbraSeleniumProperties.getLocalHost() + ".browser",
 				ZimbraSeleniumProperties.getStringProperty("browser"));
 		
-		// Save the browser value (for logging)
-		ZimbraSeleniumProperties.setStringProperty("CalculatedBrowser", browser);
-		
 		if (browser.charAt(0) == '*') {
 			browser = browser.substring(1);
 			if ((browser.indexOf(" ")) > 0) {
@@ -129,6 +126,11 @@ public class ExecuteHarnessMain {
 				browser = str;
 			}
 		}
+		
+		// Save the browser value (for logging)
+		ZimbraSeleniumProperties.setStringProperty("CalculatedBrowser", browser);
+		
+
 		// Append the app, browser, locale
 		path += "/"
 			+ ZimbraSeleniumProperties.getAppType()
