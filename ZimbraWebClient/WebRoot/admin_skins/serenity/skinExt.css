@@ -245,3 +245,7 @@ div.ZmSelectedHeaderBg {
     background-color: black;
     @opacity(35)@;
 }
+
+.ZaToolBar {
+    display:none;
+}

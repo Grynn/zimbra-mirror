@@ -604,16 +604,17 @@ function() {
     var helpLabel = new DwtComposite (this._shell, "HelpContainer", Dwt.RELATIVE_STYLE);
     var helpEl = helpLabel.getHtmlElement();
     helpLabel.setCursor ("pointer") ;
-    
+
+    var iconName = (appNewUI)?"NodeExpandedWhite":"Help";
     if (ZaSettings.isYahooSmbPADomainAdmin)   {
         helpLabel.getHtmlElement().innerHTML =
-            this._getAppLink("SMBAccount.openHelpDesk();", "Help",  ZaMsg.helpDesk, skin.skin_container_help_max_str_length);
+            this._getAppLink("SMBAccount.openHelpDesk();", iconName,  ZaMsg.helpDesk, skin.skin_container_help_max_str_length);
     } else { //this is the help link for the regular admin
         var listener = new AjxListener(this, this._helpListener);
         var adminObj = this ;
         helpLabel.getHtmlElement().onclick = function () { ZaZimbraAdmin.prototype._helpListener.call(adminObj) ;};
         helpLabel.getHtmlElement().innerHTML =
-             this._getAppLink(null, "Help",  ZaMsg.helpDesk, skin.skin_container_help_max_str_length);
+             this._getAppLink(null, iconName,  ZaMsg.helpDesk, skin.skin_container_help_max_str_length);
     }
     helpLabel.reparentHtmlElement (ZaSettings.SKIN_HELP_DOM_ID) ;
 }
@@ -781,7 +782,7 @@ function() {
 	var i = 0;
 	html[i++] = "<a href='";
 	html[i++] = ZaAppCtxt.getLogoURI ();
-	html[i++] = "' target='_blank'><div class='"+AjxImg.getClassForImage("AppBanner")+"'></div></a>";
+	html[i++] = "' target='_blank'><div style='width:300px' class='"+AjxImg.getClassForImage("AppBanner")+"'></div></a>";
 	banner.getHtmlElement().innerHTML = html.join("");
 	return banner;
 }

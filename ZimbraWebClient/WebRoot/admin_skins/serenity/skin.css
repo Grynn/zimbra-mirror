@@ -14,7 +14,45 @@
  */
 
 
-body						{	@ChromeBg@	}
+html {
+	margin: 0;
+	padding: 0;
+
+	height: auto;
+	min-height: 900px;
+	padding: 0;
+
+
+	/*background: #1d3a62 url(@SkinImgDir@/body-gradient-bg.png ) repeat-x;*/
+	/* This default setting defined for all */
+
+	/* For opera */
+	/* background-image: -o-linear-gradient(#079bdc, #153451);    <== only works in ver 11.1+   */
+
+
+	/* For WebKit (Safari, Google Chrome etc)	*/
+	background: #1d3a62 -webkit-gradient(linear, left top, left bottom, from(#57a3d5), to(#1d3a62)) no-repeat;
+
+	/* For Mozilla/Gecko (Firefox etc)	*/
+	background: #1d3a62  -moz-linear-gradient(top, #57a3d5, #1d3a62) no-repeat;
+
+	/* For Internet Explorer 5.5 - 7	*/
+	filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#57a3d5', endColorstr='#1d3a62');"
+
+	/* For Internet Explorer 8	*/
+	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#079bdc', endColorstr='#153451')";
+
+	background-image: url(@SkinImgDir@/gradient-bg.png);
+	background-repeat:  repeat-x;
+	background-color: #1d3a62;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+
+	background:transparent url(@SkinImgDir@/marge-mosaic-bg.png) no-repeat;
+}
 
 /* classes for the skin around the various pieces of the app */
 
@@ -22,7 +60,7 @@ body						{	@ChromeBg@	}
 .skin_table	{	@FullSize@ }	
 .full_height {height:100%; } 	
 
-#skin_outer							{	@SkinOuter@	@FullSize@		}
+#skin_outer							{	background-color:transparent;	@FullSize@		}
 #skin_top_td					{	height:40px;	}
 #skin_outer *	{ 	@FixBoxModel@
 }
@@ -82,7 +120,13 @@ body						{	@ChromeBg@	}
 }
 
 #skin_container_username *	{
+    @SkinElementAlign@
     @SkinTextUsername@
+}
+
+#skin_container_help *	{
+    @SkinElementAlign@
+    @SkinTextHelp@
 }
 
 #skin_container_refresh {
