@@ -23,11 +23,6 @@ public class UserResultsViewModel: BaseViewModel
         this.UserProgressMsg = progressMsg;
     }
 
-    private ObservableCollection<UserResultsViewModel> userResultsList =
-        new ObservableCollection<UserResultsViewModel>();
-    public ObservableCollection<UserResultsViewModel> UserResultsViewModelList {
-        get { return userResultsList; }
-    }
     public string FolderName {
         get { return m_userResults.FolderName; }
         set

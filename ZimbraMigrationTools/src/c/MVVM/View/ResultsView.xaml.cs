@@ -1,5 +1,6 @@
 ﻿using CssLib;
 using MVVM.Model;
+using Misc;
 using MVVM.View.CTI;
 using MVVM.ViewModel;
 using System.Collections.Generic;
@@ -159,6 +160,17 @@ public partial class ResultsView
 
         tabCtrl.Items.Add(userItem);
         userItem.IsSelected = true;
+
+        AccountResultsViewModel ar = ViewModel.AccountResultsList[accountnum];
+        Binding binding = new Binding();
+
+        // wrap in NotifyCollectionChangedWrapper so we can update collection from a different thread
+        binding.Source = new NotifyCollectionChangedWrapper<UserResultsViewModel>(ar.UserResultsList);
+        //
+
+        BindingOperations.SetBinding(urListView[accountnum], ListView.ItemsSourceProperty,
+            binding);
+
     }
 
     protected void HandleGotFocus(object sender, EventArgs e)
@@ -168,42 +180,13 @@ public partial class ResultsView
 
         ViewModel.SelectedTab = hdr;
 
+        // Need to figure this out
         int accountnum = -1;
-
         if (hdr != "Accounts")
             accountnum = GetAcctNum(hdr);
         if (accountnum != -1)
         {
-            ViewModel.PBValue = ViewModel.AccountResultsList[accountnum].PBValue;
-            ViewModel.UserPBMsgValue = ViewModel.AccountResultsList[accountnum].PBMsgValue;
-            ViewModel.AccountOnTab = accountnum;
-
-            ObservableCollection<UserResultsViewModel> userResultsList =
-                new ObservableCollection<UserResultsViewModel>();
-
-            Binding binding = new Binding();
-
-            binding.Source = userResultsList;
-            BindingOperations.SetBinding(urListView[accountnum], ListView.ItemsSourceProperty,
-                binding);
-
             AccountResultsViewModel ar = ViewModel.AccountResultsList[accountnum];
-            int count = ar.AccountFolderInfoList.Count;
-
-            for (int i = 0; i < ar.AccountFolderInfoList.Count; i++)
-            {
-                FolderInfo folderInfo = ar.AccountFolderInfoList[i];
-
-                if (folderInfo != null)
-                {
-                    string msg = (i == (count - 1)) ? ar.AcctProgressMsg :
-                        folderInfo.FolderProgress;
-                    UserResultsViewModel urvm = new UserResultsViewModel(folderInfo.FolderName,
-                        folderInfo.FolderType, msg);
-
-                    userResultsList.Add(urvm);
-                }
-            }
             lbErrors[accountnum].Items.Clear();
             for (int i = 0; i < ar.AccountProblemsList.Count; i++)
             {
@@ -218,6 +201,8 @@ public partial class ResultsView
                 }
             }
         }
+        /////
+
         // show the progress bar if an account tab has the focus
         System.Windows.Visibility swv = (hdr == "Accounts") ? System.Windows.Visibility.Hidden :
             System.Windows.Visibility.Visible;

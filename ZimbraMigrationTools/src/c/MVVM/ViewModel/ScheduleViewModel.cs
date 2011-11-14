@@ -511,7 +511,7 @@ public class ScheduleViewModel: BaseViewModel
         MigrationAccount MyAcct = new MigrationAccount();
         UsersViewModel usersViewModel = ((UsersViewModel)ViewModelPtrs[(int)ViewType.USERS]);
         AccountResultsViewModel accountResultsViewModel =
-            ((AccountResultsViewModel)ViewModelPtrs[(int)ViewType.RESULTS]);
+            ((AccountResultsViewModel)ViewModelPtrs[(int)ViewType.RESULTS]);    // main one
         string accountname = accountResultsViewModel.AccountResultsList[num].AccountName;
         string accountid = "";
 
@@ -552,6 +552,17 @@ public class ScheduleViewModel: BaseViewModel
         MigrationOptions importOpts = SetOptions();
 
         mw.StartMigration(MyAcct, importOpts, isServer, m_isPreview);
+
+        // special case to format last user progress message
+        int count = accountResultsViewModel.AccountResultsList[num].UserResultsList.Count;
+        string lastmsg = accountResultsViewModel.AccountResultsList[num].UserResultsList[count - 1].UserProgressMsg;
+        int len = lastmsg.Length;
+        int idxof = lastmsg.IndexOf("of");
+        string theNum = lastmsg.Substring(idxof + 3, (len - (idxof + 3)));
+        lastmsg = "{0} of {1}";
+        accountResultsViewModel.AccountResultsList[num].UserResultsList[count - 1].UserProgressMsg = String.Format(lastmsg, theNum, theNum);
+        accountResultsViewModel.PBValue = 100;  // just to make sure
+        /////
 
         accountResultsViewModel.AccountResultsList[num].PBMsgValue = "Migration complete";
         accountResultsViewModel.AccountResultsList[num].AcctProgressMsg = "Complete";
@@ -653,9 +664,14 @@ public class ScheduleViewModel: BaseViewModel
                 if (e.NewValue.ToString() != "0")
                 {
                     string msg1 = "{0} of {1}";
+                    string msgF = String.Format(msg1, f.CurrentCountOFItems, f.TotalCountOFItems);
+                    ar.AcctProgressMsg = msgF;
 
-                    ar.AcctProgressMsg = String.Format(msg1, f.CurrentCountOFItems,
-                        f.TotalCountOFItems);
+                    int count = ar.UserResultsList.Count;
+                    ar.UserResultsList[count - 1].UserProgressMsg = msgF;
+                    accountResultsViewModel.PBValue = accountResultsViewModel.AccountResultsList[f.Accountnum].PBValue;
+                    accountResultsViewModel.UserPBMsgValue = accountResultsViewModel.AccountResultsList[f.Accountnum].PBMsgValue;
+
                     // TEMPORARY !!! WHEN I GET RID OF FAKE PREVIEW, TAKE THIS OUT AND REPLACE WITH ar.CurrentItemNum++
                     if (m_isPreview)
                         ar.CurrentItemNum += Int32.Parse(e.NewValue.ToString()) - Int32.Parse(
@@ -682,9 +698,13 @@ public class ScheduleViewModel: BaseViewModel
             if (f.FolderName != null)
             {
                 string msg2 = "{0} of {1}";
+                string msgF = String.Format(msg2, f.CurrentCountOFItems, f.TotalCountOFItems);
+                ar.AcctProgressMsg = msgF;
 
-                ar.AcctProgressMsg = String.Format(msg2, f.CurrentCountOFItems,
-                    f.TotalCountOFItems);
+                int count = ar.UserResultsList.Count;
+                ar.UserResultsList[count - 1].UserProgressMsg = msgF;
+                accountResultsViewModel.PBValue = accountResultsViewModel.AccountResultsList[f.Accountnum].PBValue;
+                accountResultsViewModel.UserPBMsgValue = accountResultsViewModel.AccountResultsList[f.Accountnum].PBMsgValue;
             }
         }
         if (e.PropertyName == "FolderName")
@@ -700,13 +720,8 @@ public class ScheduleViewModel: BaseViewModel
                 f.LastFolderInfo = new FolderInfo(e.NewValue.ToString(), folderType,
                     string.Format("{0} of {1}", f.CurrentCountOFItems,
                     f.TotalCountOFItems));
-                if (e.OldValue != null)
-                {
-                    int count = ar.AccountFolderInfoList.Count;
 
-                    ar.AccountFolderInfoList[count - 1].FolderProgress = ar.AcctProgressMsg;
-                }
-                ar.AccountFolderInfoList.Add(f.LastFolderInfo);
+                ar.UserResultsList.Add(new UserResultsViewModel(folderName, folderType, ar.AcctProgressMsg));
             }
         }
     }

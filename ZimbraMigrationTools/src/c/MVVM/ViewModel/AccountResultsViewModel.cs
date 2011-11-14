@@ -10,6 +10,7 @@ using System.IO;
 using System.Threading;
 using System.Windows.Input;
 using System.Windows;
+using System.Windows.Threading;
 using System;
 
 namespace MVVM.ViewModel
@@ -46,11 +47,6 @@ public class AccountResultsViewModel: BaseViewModel
         this.OpenLogFileCommand = new ActionCommand(this.OpenLogFile, () => true);
         this.StopCommand = new ActionCommand(this.Stop, () => true);
         this.ExitAppCommand = new ActionCommand(this.ExitApp, () => true);
-    }
-
-    public ScheduleViewModel GetScheduleViewModel()
-    {
-        return m_scheduleViewModel;
     }
 
     public int GetAccountNum()
@@ -106,16 +102,18 @@ public class AccountResultsViewModel: BaseViewModel
     public ObservableCollection<AccountResultsViewModel> AccountResultsList {
         get { return accountResultsList; }
     }
-    private ObservableCollection<FolderInfo> accountFolderInfoList =
-        new ObservableCollection<FolderInfo>();
-    public ObservableCollection<FolderInfo> AccountFolderInfoList {
-        get { return accountFolderInfoList; }
-    }
     private ObservableCollection<ProblemInfo> accountProblemsList =
         new ObservableCollection<ProblemInfo>();
     public ObservableCollection<ProblemInfo> AccountProblemsList {
         get { return accountProblemsList; }
     }
+    private ObservableCollection<UserResultsViewModel> m_userResultsList =
+        new ObservableCollection<UserResultsViewModel>();
+    public ObservableCollection<UserResultsViewModel> UserResultsList
+    {
+        get { return m_userResultsList; }
+    }
+
     public int PBValue {
         get { return m_accountResults.PBValue; }
         set
