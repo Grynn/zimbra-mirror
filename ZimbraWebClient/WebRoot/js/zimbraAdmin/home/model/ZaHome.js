@@ -29,6 +29,7 @@ ZaHome.A2_DBCheckType = "dbCheckType";
 ZaHome.A2_DBCheckMessage= "dbCheckMessage";
 ZaHome.A2_serviceStatus = "serviceStatus";
 ZaHome.A2_serviceStatusMessage = "serviceStatusMessage";
+ZaHome.A2_serviceDetailedMessage = "serviceDetailedMessage";
 ZaHome.A2_activeSession = "activeSession";
 ZaHome.A2_queueLength = "queueLength";
 ZaHome.A2_messageCount = "messageCount";
@@ -77,11 +78,13 @@ ZaHome.loadStatusfo = function () {
             if (serverStatus.status != 1) {
                 this.attrs[ZaHome.A2_serviceStatus] = false;
                 this.attrs[ZaHome.A2_serviceStatusMessage] = ZaMsg.LBL_HomeStatusFailed;
+                this.attrs[ZaHome.A2_serviceDetailedMessage] = ZaMsg.LBL_HomeDetailedServiceNotRunning;
                 break;
             }
         }
     } else {
         this.attrs[ZaHome.A2_serviceStatusMessage] = ZaMsg.LBL_HOmeStatusUnknown ;
+        this.attrs[ZaHome.A2_serviceDetailedMessage] = ZaMsg.LBL_HomeDetailedServiceUnknown;
     }
 }
 ZaItem.loadMethods["ZaHome"].push(ZaHome.loadStatusfo);
@@ -180,6 +183,7 @@ ZaHome.myXModel = {
         {id:ZaHome.A2_DBCheckMessage, type:_STRING_, ref: "attrs/" + ZaHome.A2_DBCheckMessage},
         {id:ZaHome.A2_DBCheckType, type:_ENUM_, ref: "attrs/" + ZaHome.A2_DBCheckType, choices: ZaModel.BOOLEAN_CHOICES},
         {id:ZaHome.A2_serviceStatusMessage, type:_STRING_, ref: "attrs/" + ZaHome.A2_serviceStatusMessage},
+        {id:ZaHome.A2_serviceDetailedMessage, type:_STRING_, ref: "attrs/" + ZaHome.A2_serviceDetailedMessage},
         {id:ZaHome.A2_serviceStatus, type:_ENUM_, ref: "attrs/" + ZaHome.A2_serviceStatus, choices: ZaModel.BOOLEAN_CHOICES},
         {id:ZaHome.A2_activeSession, type:_NUMBER_, ref:"attrs/" + ZaHome.A2_activeSession},
         {id:ZaHome.A2_queueLength, type:_NUMBER_, ref:"attrs/" + ZaHome.A2_queueLength},

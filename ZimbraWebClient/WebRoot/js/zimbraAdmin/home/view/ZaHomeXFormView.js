@@ -187,7 +187,7 @@ ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
                                 }
                             }
                         },
-                        {type:_OUTPUT_, ref: ZaHome.A2_serviceStatusMessage},
+                        {type:_OUTPUT_, ref: ZaHome.A2_serviceDetailedMessage},
                         {type:_OUTPUT_, value:ZaMsg.LBL_HomeLinkServerStatus, containerCssStyle:"cursor:pointer;color:white",onClick: ZaHomeXFormView.onViewService}
                 ]}
             ]},

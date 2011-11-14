@@ -321,6 +321,115 @@ body						{	@ChromeBg@	}
     #ENDIF
 }
 
+.LoginScreen .h1 {
+    margin: 22px 20px 32px;
+}
+
+.LoginScreen .center {
+    left: 50%;
+    top: 50%;
+    z-index: 11;
+    position: absolute;
+    overflow: visible;
+    width: 500px;
+    min-height: 300px;
+    margin-left: -250px;
+    margin-top: -150px;
+}
+
+.LoginScreen h1 {margin:22px 20px 32px 20px;}
+
+.LoginScreen form {text-align:center;}  /* fixes IE centering of form */
+.form {
+	color: @darken(AppC,50)@;
+	margin: 0px auto;
+	border-collapse:collapse;
+	text-align:left;
+}
+
+.LoginScreen #ZLoginErrorPanel {
+	margin:10px 10%;
+	padding:5px;
+	background-color:#FF9;
+	border-width:0px;
+	border-radius:10px;
+#IFDEF GECKO
+	-moz-border-radius:10px;
+	-moz-box-shadow:0px 0px 10px #FF9;
+#ENDIF
+#IFDEF SAFARI
+	-webkit-border-radius:10px;
+	-webkit-box-shadow:0px 0px 10px #FF9;
+#ENDIF
+	box-shadow:0px 0px 10px #FF9;
+	position:relative;
+	left:auto;
+}
+
+.LoginScreen #ZLoginWhatsThisAnchor {
+	color: @darken(AppC,50)@;
+	font-size:10px;
+	margin-left:5px;
+#IFDEF GECKO
+	-moz-border-radius: 10px;
+#ENDIF
+#IFDEF SAFARI
+	-webkit-border-radius: 10px;
+#ENDIF
+	border-radius: 10px;
+}
+
+.LoginScreen #ZLoginWhatsThis {
+	margin-left:-10em;
+	position:absolute;
+	width:40em;
+	top: 25px;
+	left: 0;
+	z-index: 30;
+}
+
+.LoginScreen .ZLoginInfoMessage {
+	background-color: @lighten(AltC,53)@;
+	border:1px solid @lighten(AltC,25)@;
+	padding:3px;
+	text-align:left;
+}
+
+.LoginScreen .Footer{
+	position: absolute;
+	bottom: 0;
+	z-index: 10;
+	width: 100%;
+	text-align: center;
+}
+
+.LoginScreen #ZLoginNotice {
+	color:@darken(AppC,50)@;
+	font-size:11px;
+    margin-bottom: 10px;
+}
+
+.LoginScreen #ZLoginNotice A {
+	color:@darken(AppC,50)@;
+}
+
+.LoginScreen #login {  /*Is this used?*/
+	float:right;
+}
+
+.LoginScreen .copyright {
+    color: @darken(AppC,50)@;
+ 	font-size:11px;
+ 	margin-bottom:5px;
+	text-align:center;
+}
+
+.LoginScreen .ImgLoginBanner, .LoginScreen .ImgAppBanner {
+    background-repeat: no-repeat;
+    cursor: pointer;
+    display: block;
+}
+
 .form input[type='text'], 
 .form input[type='password'] {
     border:1px solid @LoginColor@;
