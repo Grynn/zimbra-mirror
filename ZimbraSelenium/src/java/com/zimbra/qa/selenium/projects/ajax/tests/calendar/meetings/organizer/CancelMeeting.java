@@ -199,7 +199,7 @@ public class CancelMeeting extends AjaxCommonTest {
 	}
 	
 	@Test(description = "Don't cancel an meeting (press Cancel button in meeting cancellation dialog)",
-			groups = { "sanity" })
+			groups = { "smoke" })
 	public void CancelMeeting_04() throws HarnessException {
 		
 		// Creating object for meeting data
@@ -248,7 +248,7 @@ public class CancelMeeting extends AjaxCommonTest {
 	}
 	
 	@Test(description = "Send meeting cancellation message to attendee while cancelling appointment",
-			groups = { "sanity" })
+			groups = { "smoke" })
 	public void CancelMeeting_05() throws HarnessException {
 		
 		// Creating object for meeting data
