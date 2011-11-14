@@ -21,7 +21,11 @@ http
         zmauth_admin;
     }
 
-    #custom error pages for upstream connection errors
+    # Set proxy timeout
+    proxy_read_timeout ${web.upstream.read.timeout};
+    proxy_send_timeout ${web.upstream.send.timeout};
+
+    # Custom error pages for upstream connection errors
     ${web.:error_pages}
 
     ${ssl.clientcertca.enabled}ssl_client_certificate  ${ssl.clientcertca.default};
