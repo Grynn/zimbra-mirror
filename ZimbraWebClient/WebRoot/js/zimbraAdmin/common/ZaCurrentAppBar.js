@@ -10,7 +10,7 @@ ZaCurrentAppBar = function(parent, className, buttons) {
 	DwtButton.call(this, parent, "", className, Dwt.ABSOLUTE_STYLE);
     this._currentPathItems = new Array();
     this.menu = new ZaPopupMenu(this);
-    this.menu.setWidth(150);
+    this.menu.setWidth(Dwt.__checkPxVal(150,true));
     this.setMenu(this.menu);
     this.setSettingImg();
     this.clearTypeImg();
@@ -164,7 +164,7 @@ function(popupOperations, popupOrder) {
 
     if (popupOperations) {
         this.menu = new ZaPopupMenu(this, "ActionMenu", null, popupOperations, ZaId.CURRENT_APP_BAR, ZaId.MENU_POP, popupOrder);
-        this.menu.setWidth(150);
+        this.menu.setWidth(Dwt.__checkPxVal(150,true));
         this.setSettingImg();
         this.setMenu(this.menu);
     } else {
