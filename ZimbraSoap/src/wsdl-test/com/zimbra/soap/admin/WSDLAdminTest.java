@@ -27,7 +27,6 @@ import generated.zcsclient.admin.testGetRightsDocResponse.DomainAdminCopypasteTo
 import generated.zcsclient.ws.service.ZcsAdminPortType;
 import generated.zcsclient.zm.testNamedElement;
 import generated.zcsclient.zm.testTargetType;
-import generated.zcsclient.zm.testTargetBy;
 
 import com.zimbra.soap.Utility;
 
