@@ -1196,8 +1196,8 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
                                  visibilityChecks:[],
                                  width: "15em"}
                                ]
-                    },	
-             	]
+                    }
+                ]
             },
 
             {type:_ZA_TOP_GROUPER_,id:"cos_password_settings",

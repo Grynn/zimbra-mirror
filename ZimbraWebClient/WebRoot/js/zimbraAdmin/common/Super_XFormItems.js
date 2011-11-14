@@ -1018,7 +1018,7 @@ SuperZimlet_Select_XFormItem.prototype.initializeItems = function() {
 					}
 				}
 			},
-			{type:_CELLSPACER_,width:"235px"},
+			{type:_CELLSPACER_,width:"235px"}
 		]
 		
 	}

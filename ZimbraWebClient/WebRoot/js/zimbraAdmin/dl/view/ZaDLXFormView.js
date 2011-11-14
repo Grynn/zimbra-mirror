@@ -844,7 +844,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
                                                                 },
                                                                 {type:_CELLSPACER_}
                                                         ]
-                                                },
+                                                }
                                         ]
                                 },
                                                 {type:_SPACER_, height:"5"}
@@ -1018,7 +1018,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
 						    		},								       
 								{type:_CELLSPACER_}									
 							]
-						},
+						}
 					]
 				},	
 						{type:_SPACER_, height:"5"}

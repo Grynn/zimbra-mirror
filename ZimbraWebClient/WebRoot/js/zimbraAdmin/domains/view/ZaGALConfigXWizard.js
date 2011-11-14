@@ -813,7 +813,7 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 							style: DwtAlert.WARNING,
 							visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A_GALSearchTestResultCode,ZaDomain.Check_SKIPPED]],
 							visibilityChangeEventSources:[ZaDomain.A_GALSearchTestResultCode]									
-						},
+						}
 					]
 				},
 				{

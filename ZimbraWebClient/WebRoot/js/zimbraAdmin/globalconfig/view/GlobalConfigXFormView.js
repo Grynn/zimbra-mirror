@@ -572,9 +572,9 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
                             }
                         ]
                         },
-                        {type: _SPACER_, height: 10 },
-
-				]};
+                        {type: _SPACER_, height: 10 }
+                ]
+            };
         switchItems.push (case3) ;
     }
 
