@@ -309,11 +309,14 @@ function() {
 **/
 ZaMigrationXWizard.prototype.setObject =
 function(entry) {
-	this._containedObject = new Object();
+	this._containedObject = new ZaBulkProvision();
 	this._containedObject = entry ;
 
 	this._containedObject[ZaModel.currentStep] = ZaMigrationXWizard.STEP_INTRODUCTION;
 	this._containedObject[ZaBulkProvision.A_mustChangePassword] = "TRUE";
+    if(entry._uuid) {
+        this._containedObject._uuid = entry._uuid;
+    }
     this._localXForm.setInstance(this._containedObject);
 }
 

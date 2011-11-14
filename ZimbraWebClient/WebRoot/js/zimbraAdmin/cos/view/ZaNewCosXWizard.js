@@ -436,9 +436,9 @@ function() {
 			return false;
 		}
 		var cos = ZaItem.create(this._containedObject, ZaCos, "ZaCos");
-        cos.name= this._containedObject.attrs[ZaCos.A_name];
-		if(this.currentObject!=null) {
-            this.currentObject.create(cos.name,this._containedObject.attrs);
+		if(cos!=null) {
+            cos.name= this._containedObject.attrs[ZaCos.A_name];
+            cos.create(cos.name,this._containedObject.attrs);
             ZaApp.getInstance().getCosController().fireCreationEvent(cos);
 			this.popdown();
             ZaApp.getInstance().getAppCtxt().getAppController().setActionStatusMsg(AjxMessageFormat.format(ZaMsg.CosCreated,[cos.name]));
@@ -498,8 +498,8 @@ ZaNewCosXWizard.prototype.setObject =
 function(entry) {
 	//handle the special attributes to be displayed in xform
 	entry.manageSpecialAttrs();
-    this.currentObject=entry;
-	this._containedObject = new Object();
+
+	this._containedObject = new ZaCos();
 	this._containedObject.attrs = new Object();
      this._containedObject[ZaModel.currentStep] = 1;
 	
@@ -521,7 +521,11 @@ function(entry) {
 		
 	if(entry.id)
 		this._containedObject.id = entry.id;
-    
+
+    if(entry._uuid) {
+        this._containedObject._uuid = entry._uuid;
+    }
+
     for (var a in entry.attrs) {
         var modelItem = this._localXForm.getModel().getItem(a) ;
         if ((modelItem != null && modelItem.type == _LIST_)

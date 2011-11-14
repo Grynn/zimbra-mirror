@@ -201,13 +201,15 @@ function() {
 **/
 ZaNewResourceXWizard.prototype.setObject =
 function(entry) {
-	this._containedObject = new Object();
+	this._containedObject = new ZaResource();
 	this._containedObject.attrs = new Object();
 
 	for (var a in entry.attrs) {
 		this._containedObject.attrs[a] = entry.attrs[a];
 	}
-	this._containedObject.name = "";
+
+    if (entry.name)
+	    this._containedObject.name = entry.name;
 	if(entry.rights)
 		this._containedObject.rights = entry.rights;
 
@@ -221,7 +223,9 @@ function(entry) {
 		this._containedObject._defaultValues = entry._defaultValues;
 
 	this._containedObject.id = null;
-
+    if(entry._uuid) {
+        this._containedObject._uuid = entry._uuid;
+    }
 	//set the default value of resource type and schedule policy
 	this._containedObject.attrs[ZaResource.A_zimbraCalResType] = ZaResource.RESOURCE_TYPE_LOCATION;
 	this._containedObject[ZaResource.A2_schedulePolicy] = ZaResource.SCHEDULE_POLICY_TT;
@@ -253,7 +257,11 @@ function(entry) {
 	if(!domainName) {
 		domainName =  ZaSettings.myDomainName;
 	}
-	this._containedObject[ZaResource.A_name] = "@" + domainName;
+
+    if (entry[ZaResource.A_name])
+	    this._containedObject[ZaResource.A_name] = entry[ZaResource.A_name];
+    else
+	    this._containedObject[ZaResource.A_name] = "@" + domainName;
 	this._localXForm.setInstance(this._containedObject);
 }
 

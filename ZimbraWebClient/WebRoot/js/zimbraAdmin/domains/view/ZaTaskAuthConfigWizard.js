@@ -64,6 +64,7 @@ ZaTaskAuthConfigWizard = function(parent) {
 
 ZaTaskAuthConfigWizard.prototype = new ZaXWizardDialog;
 ZaTaskAuthConfigWizard.prototype.constructor = ZaTaskAuthConfigWizard;
+ZaTaskAuthConfigWizard.prototype.registerFinishMethod = true;
 ZaXDialog.XFormModifiers["ZaTaskAuthConfigWizard"] = new Array();
 
 if(ZaDomain) {

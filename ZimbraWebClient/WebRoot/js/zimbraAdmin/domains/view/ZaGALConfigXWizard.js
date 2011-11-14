@@ -72,6 +72,7 @@ ZaGALConfigXWizard = function(parent, entry) {
 
 ZaGALConfigXWizard.prototype = new ZaXWizardDialog;
 ZaGALConfigXWizard.prototype.constructor = ZaGALConfigXWizard;
+ZaGALConfigXWizard.prototype.registerFinishMethod = true;
 ZaXDialog.XFormModifiers["ZaGALConfigXWizard"] = new Array();
 
 

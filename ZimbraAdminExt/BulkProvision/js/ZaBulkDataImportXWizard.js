@@ -71,6 +71,9 @@ function(entry) {
 		this._containedObject[ZaBulkProvision.A2_sourceType] = ZaBulkProvision.SOURCE_TYPE_XML;
 		this.goPage(ZaBulkDataImportXWizard.STEP_FILE_UPLOAD);
 	}	*/
+    if(entry._uuid) {
+        this._containedObject._uuid = entry._uuid;
+    }
 	this._localXForm.setInstance(this._containedObject);
 	if(this._containedObject[ZaModel.currentStep] > 0)
 		this.goPage(this._containedObject[ZaModel.currentStep]);

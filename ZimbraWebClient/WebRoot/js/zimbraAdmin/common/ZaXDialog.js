@@ -86,6 +86,7 @@ ZaXDialog.prototype.constructor = ZaXDialog;
 if (appNewUI) {
 ZaXDialog.TEMPLATE = "admin.Widgets#ZaBaseDialog";
 ZaXDialog.prototype.supportMinimize = false;
+ZaXDialog.prototype.registerFinishMethod = false;
 ZaXDialog.prototype.miniType = 1; // default is working in process
 ZaXDialog.prototype._createHtmlFromTemplate =
 function(templateId, data) {
@@ -119,8 +120,11 @@ ZaXDialog.prototype.getTaskItem = function() {
 }
 
 ZaXDialog.prototype.getFinishBtnCallback = function (finishBtnId) {
-   if (!finishBtnId)
-    finishBtnId = DwtWizardDialog.FINISH_BUTTON;
+    if (!this.registerFinishMethod)
+        return;
+
+    if (!finishBtnId)
+        finishBtnId = DwtWizardDialog.FINISH_BUTTON;
 
     var button;
     button = this._buttonDesc[finishBtnId];
