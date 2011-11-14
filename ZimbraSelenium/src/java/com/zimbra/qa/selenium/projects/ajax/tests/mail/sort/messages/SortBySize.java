@@ -17,7 +17,7 @@ public class SortBySize extends PrefGroupMailByMessageTest {
 	public SortBySize() {
 		logger.info("New "+ SortBySize.class.getCanonicalName());
 		
-
+		super.startingAccountPreferences.put("zimbraPrefReadingPaneLocation", "bottom");
 	}
 	
 	@Test(	description = "Sort a list of messages by size (large->small)",

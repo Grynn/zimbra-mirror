@@ -17,7 +17,7 @@ public class SortByFrom extends PrefGroupMailByMessageTest {
 	public SortByFrom() {
 		logger.info("New "+ SortByFrom.class.getCanonicalName());
 		
-
+		super.startingAccountPreferences.put("zimbraPrefReadingPaneLocation", "bottom");
 	}
 	
 	@Test(	description = "Sort a list of messages by from (Z->A)",

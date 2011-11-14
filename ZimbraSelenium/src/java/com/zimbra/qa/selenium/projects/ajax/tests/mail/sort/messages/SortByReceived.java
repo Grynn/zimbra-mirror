@@ -17,7 +17,7 @@ public class SortByReceived extends PrefGroupMailByMessageTest {
 	public SortByReceived() {
 		logger.info("New "+ SortByReceived.class.getCanonicalName());
 		
-
+		super.startingAccountPreferences.put("zimbraPrefReadingPaneLocation", "bottom");
 	}
 	
 	@Test(	description = "Sort a list of messages by received (oldest -> newest)",

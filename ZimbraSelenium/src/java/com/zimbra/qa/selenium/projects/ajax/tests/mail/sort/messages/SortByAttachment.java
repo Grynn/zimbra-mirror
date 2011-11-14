@@ -17,7 +17,7 @@ public class SortByAttachment extends PrefGroupMailByMessageTest {
 	public SortByAttachment() {
 		logger.info("New "+ SortByAttachment.class.getCanonicalName());
 		
-
+		super.startingAccountPreferences.put("zimbraPrefReadingPaneLocation", "bottom");
 	}
 	
 	@Test(	description = "Sort a list of messages by attachment",

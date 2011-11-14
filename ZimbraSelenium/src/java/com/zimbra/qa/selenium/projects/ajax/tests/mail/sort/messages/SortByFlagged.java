@@ -18,7 +18,7 @@ public class SortByFlagged extends PrefGroupMailByMessageTest {
 		logger.info("New "+ SortByFlagged.class.getCanonicalName());
 		
 
-
+		super.startingAccountPreferences.put("zimbraPrefReadingPaneLocation", "bottom");
 	}
 	
 	@Test(	description = "Sort a list of messages by unflagged",

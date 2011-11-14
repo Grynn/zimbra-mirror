@@ -17,7 +17,7 @@ public class SortBySubject extends PrefGroupMailByMessageTest {
 	public SortBySubject() {
 		logger.info("New "+ SortBySubject.class.getCanonicalName());
 		
-
+		super.startingAccountPreferences.put("zimbraPrefReadingPaneLocation", "bottom");
 
 	}
 	
