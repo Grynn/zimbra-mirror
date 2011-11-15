@@ -206,7 +206,7 @@ ZaHelpView.myXFormModifier = function(xFormObject) {
     if (ZaSettings.isNetworkVersion ()) {
         //zwcUserGuide Item will be added in delegated admin extension
     }else {
-        var helpItems = xFormObject.items ;
+        var helpItems = xFormObject.items[0].items[0].items ;
         for (var i=0; i< helpItems.length; i++) {
             //insert teh networkHelpItems before the About button
             if (helpItems[i].id == "ZimbraHelpPageDownloadItems") {
