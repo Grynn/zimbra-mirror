@@ -1738,9 +1738,10 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 
 	if(_tab2) {
 		var case2={type:_ZATABCASE_, numCols:1, caseKey:_tab2,
-            paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),
+            paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),  align:_CENTER_,
 					items: [
-						{type:_ZAGROUP_, displayGrid:appNewUI,width:"100%", numCols:2,colSizes: ["275px","100%"],
+						{type:_ZA_TOP_GROUPER_, label:ZaMsg.LBL_phone, id:"contact_form_phone_group",
+							displayGrid:appNewUI, width:"100%", numCols:2,colSizes: ["275px","100%"],
 							items:[
 								{ref:ZaAccount.A_telephoneNumber, type:_TEXTFIELD_, msgName:ZaMsg.NAD_telephoneNumber,label:ZaMsg.NAD_telephoneNumber,
                                  labelLocation:_LEFT_, width:250} ,
@@ -1754,7 +1755,8 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
                                  label:ZaMsg.NAD_facsimileTelephoneNumber, labelLocation:_LEFT_, width:250}
 							]
 						},
-						{type:_ZAGROUP_, displayGrid:appNewUI,width:"100%", numCols:2,colSizes: ["275px","100%"],
+						{type:_ZA_TOP_GROUPER_, label:ZaMsg.LBL_company, id:"contact_form_company_group",
+							displayGrid:appNewUI,width:"100%", numCols:2,colSizes: ["275px","100%"],
 							items:[	
 								{ref:ZaAccount.A_zimbraPhoneticCompany, type:_TEXTFIELD_, msgName:ZaMsg.NAD_zimbraPhoneticCompany,
                                  label:ZaMsg.NAD_zimbraPhoneticCompany, labelLocation:_LEFT_, width:250, visibilityChecks:[[ZaZimbraAdmin.isLanguage, "ja"]]},
@@ -1767,7 +1769,8 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 								{ref:ZaAccount.A_office, type:_TEXTFIELD_, msgName:ZaMsg.NAD_office,label:ZaMsg.NAD_office, labelLocation:_LEFT_, width:250} */
 							]
 						},
-						{type:_ZAGROUP_,displayGrid:appNewUI,width:"100%", numCols:2,colSizes: ["275px","100%"],
+						{type:_ZA_TOP_GROUPER_, label:ZaMsg.LBL_address, id:"contact_form_address_group",
+							displayGrid:appNewUI,width:"100%", numCols:2,colSizes: ["275px","100%"],
 							items: ZaAccountXFormView.getAddressFormItem() 
 						}							
 					]
