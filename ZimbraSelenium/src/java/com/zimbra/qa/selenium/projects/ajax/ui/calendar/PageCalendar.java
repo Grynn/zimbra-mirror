@@ -1177,36 +1177,33 @@ public class PageCalendar extends AbsTab {
 
 		/*
 
-  <table>
-    <tr class="calendar_month_day_item_row" id="DWT125__zli__CLM__266_DWT299">
-      <td class="calendar_month_day_item">
-        <div style="position:relative;" id="DWT125__zli__CLM__266_DWT299_body" class="">
-          <table width="100%" cellspacing="0" cellpadding="0" border="0" style=
-          "table-layout:fixed; background:-moz-linear-gradient(top,#FFFFFF, #ecd49c);"
-          id="DWT125__zli__CLM__266_DWT299_tableBody">
-            <tbody>
-              <tr>
-                <td width="4px" style=
-                "background:-moz-linear-gradient(top,#FFFFFF, #4AA6F1);"></td>
+  <div style=
+  "position: absolute; width: 119px; height: 20px; overflow: hidden; padding-bottom: 4px; left: 133.208px; top: 85px;"
+  class="appt" id="zli__CLM__258_DWT557">
+    <div class="appt_allday_body ZmSchedulerApptBorder-free" id=
+    "zli__CLM__258_DWT557_body" style="width: 119px; height: 16px;">
+      <table cellspacing="0" cellpadding="0" style=
+      "table-layout: fixed; height: 100%; background: -moz-linear-gradient(center top , rgb(255, 255, 255), rgb(235, 175, 96)) repeat scroll 0% 0% transparent; opacity: 0.4;"
+      id="zli__CLM__258_DWT557_tableBody">
+        <tbody>
+          <tr style="background:-moz-linear-gradient(top,#FFFFFF, #ebaf60);">
+            <td width="4px" style=
+            "background:-moz-linear-gradient(top,#FFFFFF, #FFFFFF);" class=""></td>
 
-                <td width="100%">
-                  <div style="overflow:hidden;white-space:nowrap;">
-                    &nbsp;2:00 AM subject
-                  </div>
-                </td>
+            <td width="100%" class="appt_allday_name">
+              <div style="overflow: hidden; white-space: nowrap;">
+                appointment13213151729848
+              </div>
+            </td>
 
-                <td width="20px" style="padding-right:3px;" id=
-                "DWT125__zli__CLM__266_DWT299_tag">
-                  <div style="width:16" class="ImgBlank_16"></div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </td>
-    </tr>
-  </table>
-
+            <td width="20px" style="padding-right:3px;" id="zli__CLM__258_DWT557_tag">
+              <div style="width:16" class="ImgBlank_16"></div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 		 */
 		
 		
@@ -1233,48 +1230,45 @@ public class PageCalendar extends AbsTab {
 
 		/*
 
-  <div style=
-  "position: absolute; width: 135px; height: 20px; overflow: hidden; padding-bottom: 4px; left: 285px; top: 261px;"
-  class="appt" id="DWT125__zli__CLM__258_DWT297">
-    <div class="appt_allday_body ZmSchedulerApptBorder-free" id=
-    "DWT125__zli__CLM__258_DWT297_body" style="width: 135px; height: 16px;">
-      <table cellspacing="0" cellpadding="0" style=
-      "table-layout: fixed; height: 100%; background: -moz-linear-gradient(center top , rgb(255, 255, 255), rgb(235, 175, 96)) repeat scroll 0% 0% transparent; opacity: 0.4;"
-      id="DWT125__zli__CLM__258_DWT297_tableBody">
-        <tbody>
-          <tr style="background:-moz-linear-gradient(top,#FFFFFF, #ebaf60);">
-            <td width="4px" style=
-            "background:-moz-linear-gradient(top,#FFFFFF, #FFFFFF);" class=""></td>
+    <tr class="calendar_month_day_item_row" id="zli__CLM__260_DWT558">
+      <td class="calendar_month_day_item">
+        <div style="position:relative;" id="zli__CLM__260_DWT558_body" class="">
+          <table width="100%" cellspacing="0" cellpadding="0" border="0" style=
+          "table-layout:fixed; background:-moz-linear-gradient(top,#FFFFFF, #ecd49c);"
+          id="zli__CLM__260_DWT558_tableBody">
+            <tbody>
+              <tr>
+                <td width="4px" style=
+                "background:-moz-linear-gradient(top,#FFFFFF, #4AA6F1);"></td>
 
-            <td width="100%" class="appt_allday_name">
-              <div style="overflow: hidden; white-space: nowrap;">
-                appointment13189543295934
-              </div>
-            </td>
+                <td width="100%">
+                  <div style="overflow:hidden;white-space:nowrap;">
+                    &nbsp;4:30 PM asdfasdf
+                  </div>
+                </td>
 
-            <td width="20px" style="padding-right:3px;" id=
-            "DWT125__zli__CLM__258_DWT297_tag">
-              <div style="width:16" class="ImgBlank_16"></div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-  
-  
+                <td width="20px" style="padding-right:3px;" id=
+                "zli__CLM__260_DWT558_tag">
+                  <div style="width:16" class="ImgBlank_16"></div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </td>
+    </tr>  
 		 */
 		
 		String locator;
 		
 		AppointmentItem appt = new AppointmentItem();
-		appt.setLocator(cssLocator + " td[class='appt_allday_name']");
+		appt.setLocator(cssLocator + " tr td + td"); // Point at the appt name
 
 
 		appt.setGIsAllDay(false);
 		
 		// Get the subject
-		locator = cssLocator + " td[class='appt_allday_name']";
+		locator = cssLocator + " tr td + td";
 		appt.setSubject(this.sGetText(locator));
 		
 		// TODO: get the tags		
@@ -1291,7 +1285,7 @@ public class PageCalendar extends AbsTab {
 		List<AppointmentItem> items = new ArrayList<AppointmentItem>();
 		
 		// Process the all-day items first
-		itemsLocator = "css=div.calendar_month_body div.appt";
+		itemsLocator = Locators.CalendarViewMonthCSS + " div.appt";
 		count = this.sGetCssCount(itemsLocator);
 		logger.info(itemsLocator +" count: "+ count);
 		
@@ -1300,15 +1294,24 @@ public class PageCalendar extends AbsTab {
 			String itemLocator = itemsLocator + StringUtils.repeat(" + div.appt", i);
 			
 			String alldayLocator = itemLocator + " div.appt_allday_body";
-			String singleLocator = itemLocator + " td.calendar_month_day_item";
 			if ( this.sIsElementPresent(alldayLocator) ) {
 				items.add(parseMonthViewAllDay(alldayLocator));
-			} else if ( this.sIsElementPresent(singleLocator) ) {
-				items.add(parseMonthViewNonAllDay(singleLocator));
-			}
-			
+			}			
 		}
 		
+		// Process the non-all-day items next
+		itemsLocator = Locators.CalendarViewMonthCSS + " tr.calendar_month_day_item_row";
+		count = this.sGetCssCount(itemsLocator);
+		logger.info(itemsLocator +" count: "+ count);
+		
+		for (int i = 0; i < count; i++) {
+			
+			String itemLocator = itemsLocator + StringUtils.repeat(" + tr.calendar_month_day_item_row", i);
+			if ( this.sIsElementPresent(itemLocator + ">td.calendar_month_day_item") ) {
+				items.add(parseMonthViewNonAllDay(itemLocator));
+			}
+		}
+
 		return (items);
 	}
 
