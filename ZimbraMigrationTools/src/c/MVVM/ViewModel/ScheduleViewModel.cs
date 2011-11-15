@@ -16,7 +16,7 @@ namespace MVVM.ViewModel
 {
 public class ScheduleViewModel: BaseViewModel
 {
-    readonly Schedule m_schedule = new Schedule(0, "", false);
+    readonly Schedule m_schedule = new Schedule(false);
     string m_configFile;
     string m_usermapFile;
     bool m_isPreview;                           // temporary
@@ -300,26 +300,6 @@ public class ScheduleViewModel: BaseViewModel
             m_config.UserProvision.DefaultPWD = value;
 
             OnPropertyChanged(new PropertyChangedEventArgs("DefaultPWD"));
-        }
-    }
-    public int PBValue {
-        get { return m_schedule.PBValue; }
-        set
-        {
-            if (value == m_schedule.PBValue)
-                return;
-            m_schedule.PBValue = value;
-            OnPropertyChanged(new PropertyChangedEventArgs("PBValue"));
-        }
-    }
-    public string PBMsgValue {
-        get { return m_schedule.PBMsgValue; }
-        set
-        {
-            if (value == m_schedule.PBMsgValue)
-                return;
-            m_schedule.PBMsgValue = value;
-            OnPropertyChanged(new PropertyChangedEventArgs("PBMsgValue"));
         }
     }
     public bool EnableMigrate {
