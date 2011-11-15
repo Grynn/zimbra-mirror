@@ -395,6 +395,19 @@ function(src, dontExecCommand, width, height) {
     }
 };
 
+DwtHtmlEditor.prototype.replaceImage =
+function(id, src){
+    var doc = this._getIframeDoc();
+    if(doc){
+        var img = doc.getElementById(id);
+        if( img && img.getAttribute("data-zim-uri") === id ){
+            img.src = src;
+            img.removeAttribute("id");
+            img.removeAttribute("data-zim-uri");
+        }
+    }
+};
+
 /** Inserts a table at the current cursor position
  *
  * @param {number}	rows	the number of rows in the table
