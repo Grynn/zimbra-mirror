@@ -47,6 +47,8 @@ public class L10nUtil {
         accountAutoProvisionedBody,
         accountAutoProvisionedSubject,
 
+        replySubjectPrefix,
+
         // calendar messages
         calendarSubjectCancelled,
         calendarSubjectWithheld,
