@@ -27,7 +27,7 @@ public class AddRemoveFavorites extends OctopusCommonTest {
 		logger.info("New " + AddRemoveFavorites.class.getCanonicalName());
 
 		// test starts at the My Files tab
-		super.startingPage = app.zPageMyFiles;
+		super.startingPage = app.zPageFavorites;
 		super.startingAccountPreferences = null;
 	}
 
@@ -47,6 +47,18 @@ public class AddRemoveFavorites extends OctopusCommonTest {
 		FolderItem briefcaseRootFolder = FolderItem.importFromSOAP(account,
 				SystemFolder.Briefcase);
 
+		String subFolderName = "folder"
+				+ ZimbraSeleniumProperties.getUniqueString();
+
+		account.soapSend("<CreateFolderRequest xmlns='urn:zimbraMail'>"
+				+ "<folder name='" + subFolderName + "' l='"
+				+ briefcaseRootFolder.getId() + "' view='document'/>"
+				+ "</CreateFolderRequest>");
+
+		// Verify the sub-folder exists on the server
+		FolderItem subFolderItem = FolderItem.importFromSOAP(account,
+				subFolderName);
+
 		// Create file item
 		String filePath = ZimbraSeleniumProperties.getBaseDirectory()
 				+ "/data/public/other/testsoundfile.wav";
@@ -56,16 +68,12 @@ public class AddRemoveFavorites extends OctopusCommonTest {
 
 		// Save uploaded file to briefcase through SOAP
 		account.soapSend("<SaveDocumentRequest xmlns='urn:zimbraMail'>"
-				+ "<doc l='" + briefcaseRootFolder.getId() + "'><upload id='"
+				+ "<doc l='" + subFolderItem.getId() + "'><upload id='"
 				+ attachmentId + "'/></doc></SaveDocumentRequest>");
 
 		_fileAttached = true;
 		_fileId = account.soapSelectValue(
 				"//mail:SaveDocumentResponse//mail:doc", "id");
-
-		// add item to the list
-		fileIdList = new ArrayList<String>();
-		fileIdList.add(_fileId);
 
 		// Add file to the Favorites
 		account.soapSend("<DocumentActionRequest xmlns='urn:zimbraMail'>"
@@ -73,7 +81,7 @@ public class AddRemoveFavorites extends OctopusCommonTest {
 				+ "</DocumentActionRequest>");
 
 		SleepUtil.sleepSmall();
-		
+
 		// Verify the file was added to the Favorites using SOAP
 		account.soapSend("<GetWatchingItemsRequest xmlns='urn:zimbraMail'>"
 				+ "</GetWatchingItemsRequest>");
@@ -92,7 +100,7 @@ public class AddRemoveFavorites extends OctopusCommonTest {
 
 		// Create file item
 		String filePath = ZimbraSeleniumProperties.getBaseDirectory()
-				+ "/data/public/other/structure.jpg";
+				+ "/data/public/other/testtextfile.txt";
 
 		FileItem file = new FileItem(filePath);
 		String fileName = file.getName();
@@ -143,14 +151,14 @@ public class AddRemoveFavorites extends OctopusCommonTest {
 				SystemFolder.Briefcase);
 
 		// Create first file item
-		String filePath1 = ZimbraSeleniumProperties.getBaseDirectory()
+		String filePath = ZimbraSeleniumProperties.getBaseDirectory()
 				+ "/data/public/other/structure.jpg";
 
-		FileItem file1 = new FileItem(filePath1);
-		String fileName1 = file1.getName();
+		FileItem file = new FileItem(filePath);
+		String fileName = file.getName();
 
 		// Upload first file to the server through RestUtil
-		String attachmentId1 = account.uploadFile(filePath1);
+		String attachmentId1 = account.uploadFile(filePath);
 
 		// Save uploaded files through SOAP
 		account.soapSend("<SaveDocumentRequest xmlns='urn:zimbraMail'>"
@@ -165,45 +173,15 @@ public class AddRemoveFavorites extends OctopusCommonTest {
 		fileIdList = new ArrayList<String>();
 		fileIdList.add(_fileId);
 
-		// Create second file item
-		String filePath2 = ZimbraSeleniumProperties.getBaseDirectory()
-				+ "/data/public/other/putty.log";
-
-		FileItem file2 = new FileItem(filePath2);
-		String fileName2 = file2.getName();
-
-		// Upload file to server through RestUtil
-		String attachmentId2 = account.uploadFile(filePath2);
-
-		// Save uploaded files through SOAP
-		account.soapSend("<SaveDocumentRequest xmlns='urn:zimbraMail'>"
-				+ "<doc l='" + briefcaseRootFolder.getId() + "'><upload id='"
-				+ attachmentId2 + "'/></doc></SaveDocumentRequest>");
-
-		_fileAttached = true;
-		_fileId = account.soapSelectValue(
-				"//mail:SaveDocumentResponse//mail:doc", "id");
-
-		// add item to the list
-		fileIdList.add(_fileId);
-
+		// click on the Favorites tab
+		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_FAVORITES);
+		
 		// click on the My Files tab
 		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_MY_FILES);
 
-		// mark first file as favorite using drop down menu
+		// mark file as favorite using drop down menu
 		app.zPageMyFiles.zToolbarPressPulldown(Button.B_MY_FILES_LIST_ITEM,
-				Button.O_FAVORITE, fileName1);
-
-		// Wait for Watch icon become enabled
-		app.zPageMyFiles.zWaitForElementPresent(
-				FilePreview.Locators.zFileWatchIcon.locator
-						+ " span[class^=watched-icon]", "3000");
-
-		// mark second file as favorite using drop down menu
-		app.zPageMyFiles.zToolbarPressPulldown(Button.B_MY_FILES_LIST_ITEM,
-				Button.O_FAVORITE, fileName2);
-
-		// SleepUtil.sleepSmall();
+				Button.O_FAVORITE, fileName);
 
 		// Wait for Watch icon become enabled
 		app.zPageMyFiles.zWaitForElementPresent(
@@ -214,11 +192,7 @@ public class AddRemoveFavorites extends OctopusCommonTest {
 		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_FAVORITES);
 
 		// Verify the file appears in the Favorites tab
-		ZAssert.assertTrue(app.zPageOctopus.zIsItemInCurentListView(fileName1),
-				"Verify the file appears in the Favorites tab");
-
-		// Verify the file appears in the Favorites tab
-		ZAssert.assertTrue(app.zPageOctopus.zIsItemInCurentListView(fileName2),
+		ZAssert.assertTrue(app.zPageOctopus.zIsItemInCurentListView(fileName),
 				"Verify the file appears in the Favorites tab");
 
 		// click on the My Files tab
@@ -226,9 +200,7 @@ public class AddRemoveFavorites extends OctopusCommonTest {
 
 		// mark first file as NOT favorite using drop down menu
 		app.zPageMyFiles.zToolbarPressPulldown(Button.B_MY_FILES_LIST_ITEM,
-				Button.O_NOT_FAVORITE, fileName1);
-
-		// SleepUtil.sleepSmall();
+				Button.O_NOT_FAVORITE, fileName);
 
 		// Wait for Watch icon become disabled
 		app.zPageMyFiles.zWaitForElementPresent(
@@ -238,21 +210,22 @@ public class AddRemoveFavorites extends OctopusCommonTest {
 		// click on the Favorites tab
 		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_FAVORITES);
 
-		// Verify the first file disappears from the Favorites tab
+		// Verify the file marked as Not Favorite disappears from the Favorites
+		// tab
 		ZAssert.assertTrue(app.zPageFavorites.zWaitForElementDeleted(
 				PageFavorites.Locators.zFavoritesItemsView.locator
-						+ ":contains(" + fileName1 + ")", "3000"),
-				"Verify the deleted file disappears from Favorites tab");
+						+ ":contains(" + fileName + ")", "3000"),
+				"Verify the file marked as Not Favorite disappears from the Favorites tab");
 	}
 
 	@AfterMethod(groups = { "always" })
 	public void testCleanup() {
 		if (_fileAttached && fileIdList != null) {
 			try {
-				for(String id : fileIdList){
-				// Delete it from Server
-				app.zPageOctopus.deleteItemUsingSOAP(id,
-						app.zGetActiveAccount());
+				for (String id : fileIdList) {
+					// Delete it from Server
+					app.zPageOctopus.trashItemUsingSOAP(id,
+							app.zGetActiveAccount());
 				}
 			} catch (Exception e) {
 				logger.info("Failed while deleting the file");
@@ -277,11 +250,11 @@ public class AddRemoveFavorites extends OctopusCommonTest {
 		}
 		try {
 			// click on Trash tab to move out from the current view
-			//PageTrash pageTrash = (PageTrash) app.zPageOctopus
-			//		.zToolbarPressButton(Button.B_TAB_TRASH);
+			PageTrash pageTrash = (PageTrash) app.zPageOctopus
+					.zToolbarPressButton(Button.B_TAB_TRASH);
 
 			// Empty trash
-			//pageTrash.emptyTrashUsingSOAP(app.zGetActiveAccount());
+			pageTrash.emptyTrashUsingSOAP(app.zGetActiveAccount());
 		} catch (Exception e) {
 			logger.info("Failed while opening Trash tab");
 			e.printStackTrace();
