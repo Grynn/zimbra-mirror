@@ -22,6 +22,9 @@ public partial class ResultsView
     ListView[] urListView = new ListView[16];
     ListBox[] lbErrors = new ListBox[16];
 
+    ProgressBar userProgressBar = null;
+    Label userStatusMsg = null;
+
     int iTabCount = 0;
 
     public ResultsView()
@@ -65,6 +68,7 @@ public partial class ResultsView
 
         // get accountnum so we can keep the listboxes and listviews straight
         int accountnum = GetAcctNum((string)userItem.Header);
+        AccountResultsViewModel ar = ViewModel.AccountResultsList[accountnum];
 
         if (urListView[accountnum] != null)
         {
@@ -87,12 +91,18 @@ public partial class ResultsView
         // set up the grid's rows
         RowDefinition rowDef1 = new RowDefinition();
         RowDefinition rowDef2 = new RowDefinition();
+        RowDefinition rowDef3 = new RowDefinition();
+        RowDefinition rowDef4 = new RowDefinition();
 
-        rowDef1.MaxHeight = 250;
-        rowDef2.Height = GridLength.Auto;
-        urGrid.Height = 280;                    // so we'll get  Vertical scrollviewer
+        rowDef1.MaxHeight = 145;
+        rowDef2.MaxHeight = 145;
+        rowDef3.Height = GridLength.Auto;
+        rowDef4.Height = GridLength.Auto;
+        urGrid.Height = 330;                    // so we'll get  Vertical scrollviewer
         urGrid.RowDefinitions.Add(rowDef1);
         urGrid.RowDefinitions.Add(rowDef2);
+        urGrid.RowDefinitions.Add(rowDef3);
+        urGrid.RowDefinitions.Add(rowDef4);
         //
 
         // Set up the ListView
@@ -156,12 +166,42 @@ public partial class ResultsView
         urGrid.Children.Add(lbErrors[accountnum]);
         //
 
+        // Now set up the progressbar and message status in another grid
+        userProgressBar = new ProgressBar();
+        userProgressBar.SetValue(Grid.RowProperty, 2);
+        userProgressBar.SetValue(Grid.ColumnProperty, 0);
+        userProgressBar.SetValue(Grid.ColumnSpanProperty, 2);
+        userProgressBar.IsIndeterminate = false;
+        userProgressBar.Orientation = Orientation.Horizontal;
+        userProgressBar.Width = 330;
+        userProgressBar.Height = 18;
+        userProgressBar.Margin = new Thickness(76, 0, 0, 0);
+        userProgressBar.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
+        Binding upbBinding = new Binding("PBValue");
+        upbBinding.Source = ar;
+        userProgressBar.SetBinding(ProgressBar.ValueProperty, upbBinding);
+        urGrid.Children.Add(userProgressBar);
+
+        userStatusMsg = new Label();
+        userStatusMsg.Visibility = System.Windows.Visibility.Visible;
+        userStatusMsg.SetValue(Grid.RowProperty, 3);
+        userStatusMsg.SetValue(Grid.ColumnProperty, 0);
+        userStatusMsg.SetValue(Grid.ColumnSpanProperty, 2);
+        userStatusMsg.MinWidth = 300;
+        userStatusMsg.Margin = new Thickness(70, 0, 0, 0);
+        userStatusMsg.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
+        userStatusMsg.FontStyle = FontStyles.Italic;
+        Binding usmBinding = new Binding("PBMsgValue");
+        usmBinding.Source = ar;
+        userStatusMsg.SetBinding(Label.ContentProperty, usmBinding);
+        urGrid.Children.Add(userStatusMsg);
+        //////////////
+
         userItem.Content = urGrid;
 
         tabCtrl.Items.Add(userItem);
         userItem.IsSelected = true;
 
-        AccountResultsViewModel ar = ViewModel.AccountResultsList[accountnum];
         Binding binding = new Binding();
 
         // wrap in NotifyCollectionChangedWrapper so we can update collection from a different thread
@@ -201,14 +241,6 @@ public partial class ResultsView
                 }
             }
         }
-        /////
-
-        // show the progress bar if an account tab has the focus
-        System.Windows.Visibility swv = (hdr == "Accounts") ? System.Windows.Visibility.Hidden :
-            System.Windows.Visibility.Visible;
-        pbMigrationS.Visibility = swv;
-        labelSchedInfo.Visibility = swv;
-        //
     }
 
     private void CloseTab(object source, RoutedEventArgs args)

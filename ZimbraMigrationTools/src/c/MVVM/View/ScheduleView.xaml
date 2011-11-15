@@ -90,9 +90,6 @@
                 </Grid>
             </GroupBox>
         </Grid>
-    <!--
-        <ProgressBar Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Height="18" Width="290" Margin="80,35,89,26" Name="pbMigrationS" Value="{Binding Path=PBValue}" HorizontalAlignment="Center" ></ProgressBar>
-        -->
         <GroupBox Grid.Row="3" Margin="15,12,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Name="gbProv" Header="Provisioning" Padding="6">
             <Grid Name="gbPGrid">
                 <Grid.RowDefinitions>

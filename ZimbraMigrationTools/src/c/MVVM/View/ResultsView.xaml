@@ -19,7 +19,7 @@
             <RowDefinition Height="40"></RowDefinition>
         </Grid.RowDefinitions>
         <StackPanel Name="ResultsSP">
-            <TabControl Name="ResultsTC" MinHeight="310"  Margin="5" ItemContainerStyle="{StaticResource itemstyleFocus}">
+            <TabControl Name="ResultsTC" MinHeight="360"  Margin="5" ItemContainerStyle="{StaticResource itemstyleFocus}">
                 <TabItem Name="AccountsTabItem" Header="Accounts" >
                     <Grid Name="AccountResultsGrid">
                         <ListView Margin="5" FontSize="11" Name="lstAccountResults" ItemsSource="{Binding AccountResultsList}" SelectedIndex="{Binding Path=CurrentAccountSelection, Mode=TwoWay}" ItemContainerStyle="{StaticResource itemstyleDouble}">
@@ -49,8 +49,6 @@
                 </TabItem>
             </TabControl>
         </StackPanel>
-        <ProgressBar Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Height="18" Width="330" Margin="76,8,0,0" Name="pbMigrationS" Visibility="Hidden" Value="{Binding Path=PBValue}" HorizontalAlignment="Left" ></ProgressBar>
-        <Label Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="70,0,0,0" MinWidth="300" HorizontalAlignment="Left" Name="labelSchedInfo" Visibility="Hidden" FontStyle="Italic" Content="{Binding Path=UserPBMsgValue}" />
         <Grid Name="BottomGrid" Grid.Row="3" Grid.ColumnSpan="2" Margin="10,0,0,10" VerticalAlignment="Bottom">
             <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,0,0" Content="Open Log File" Name="buttonOpenLF" IsEnabled="{Binding OpenLogFileEnabled}" Command="{Binding OpenLogFileCommand}" />
             <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,91,0" Content="Stop" Name="buttonStop" IsEnabled="{Binding Path=EnableStop}" Command="{Binding StopCommand}" />

@@ -571,18 +571,8 @@ public class ScheduleViewModel: BaseViewModel
     private void worker_ProgressChanged(object sender,
         System.ComponentModel.ProgressChangedEventArgs e)
     {
-        // We want to update the main accountResultViewModel, but we have to make sure we only do it for
-        // the account whose tab has the focus.  That's why we check against accountResultsViewModel.AccountOnTab
-        AccountResultsViewModel accountResultsViewModel =
-            ((AccountResultsViewModel)ViewModelPtrs[(int)ViewType.RESULTS]);
-
-        if ((int)e.UserState == accountResultsViewModel.AccountOnTab)
-        {
-            accountResultsViewModel.AccountProgress = e.ProgressPercentage;
-            accountResultsViewModel.PBValue = e.ProgressPercentage;
-        }
     }
-
+    
     private void worker_RunWorkerCompleted(object sender,
         System.ComponentModel.RunWorkerCompletedEventArgs e)
     {
