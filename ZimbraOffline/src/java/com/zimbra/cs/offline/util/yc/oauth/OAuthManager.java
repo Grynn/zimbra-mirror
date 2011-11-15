@@ -24,6 +24,7 @@ import com.zimbra.cs.mailbox.MailboxManager;
 import com.zimbra.cs.mailbox.Metadata;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.util.yc.YContactException;
+import com.zimbra.cs.util.Zimbra;
 
 /**
  * every yahoo mailbox should have one corresponding OAuthCredential
@@ -40,14 +41,23 @@ public class OAuthManager {
         private static final OAuthManager instance = new OAuthManager();
     }
 
-    private synchronized OAuthCredential getMboxAuthCredential(String accountId) {
+    private OAuthCredential getMboxAuthCredential(String accountId) {
         if (!this.mboxOAuthCredentials.containsKey(accountId)) {
             OAuthCredential cred = new OAuthCredential(accountId);
             this.mboxOAuthCredentials.put(accountId, cred);
+            return cred;
         }
-        return this.mboxOAuthCredentials.get(accountId);
+        OAuthCredential credential = this.mboxOAuthCredentials.get(accountId);
+        if (Zimbra.started() && credential.authToken.isNew()) {
+            try {
+                credential.load();
+            } catch (YContactException e) {
+                OfflineLog.yab.warn("load credential/token failed", e);
+            }
+        }
+        return credential;
     }
-    
+
     public static boolean hasOAuthToken(String accountId) throws YContactException {
         if (StringUtil.isNullOrEmpty(accountId)) {
             return false;
@@ -72,20 +82,14 @@ public class OAuthManager {
         return oauth.authToken;
     }
 
-    public static void loadCredential(String accountId) throws YContactException {
-        OAuthCredential oauth = LazyHolder.instance.getMboxAuthCredential(accountId);
-        oauth.load();
-    }
-
     public static void persistCredential(String accountId, String token, String tokenSecret, String sessionHandle,
             String guid, String tokenTimestamp, String verifier) throws YContactException {
         if (StringUtil.isNullOrEmpty(verifier) && StringUtil.isNullOrEmpty(sessionHandle)) {
             return;
         }
         OAuthCredential oauth = LazyHolder.instance.mboxOAuthCredentials.get(accountId);
-        if ((oauth != null) &&
-            (verifier != null && verifier.equals(oauth.verifier))) {
-            //might be called by OfflineProvisioning modifyDataSource right after createDataSource
+        if ((oauth != null) && (verifier != null && verifier.equals(oauth.verifier))) {
+            // might be called by OfflineProvisioning modifyDataSource right after createDataSource
             return;
         }
         OAuthToken t = new OAuthToken(token, tokenSecret);
@@ -112,14 +116,12 @@ public class OAuthManager {
     }
 
     /**
-     * second method to be called, already have auth token at this point,
-     * together with user's verifier, ready to make api calls
+     * second method to be called, already have auth token at this point, together with user's verifier, ready to make api calls
      * 
      * @param accountId
      *            Account id
      * @param verifier
-     *            user get it back by granting access using url we provided
-     *            earlier
+     *            user get it back by granting access using url we provided earlier
      * @throws YContactException
      */
     public static OAuthToken getTokenUsingVerifier(String accountId, String verifier) throws YContactException {
@@ -161,12 +163,14 @@ public class OAuthManager {
             OAuthResponse response = new OAuthGetTokenResponse(resp);
             this.authToken = response.getToken();
             this.authToken.setLastAccessTime(System.currentTimeMillis());
+            OfflineLog.yab.debug("[OAuth] get new token {%s}", this.authToken);
         }
 
         private void refreshToken() throws YContactException {
             OAuthRequest req = new OAuthGetTokenRefreshRequest(this.authToken);
             OAuthResponse resp = new OAuthGetTokenResponse(req.send());
             this.authToken = resp.getToken();
+            OfflineLog.yab.debug("[OAuth] refreshed token {%s}", this.authToken);
         }
 
         private void setVerifier(String verif) throws YContactException {
@@ -192,7 +196,13 @@ public class OAuthManager {
             try {
                 Mailbox mbox = MailboxManager.getInstance().getMailboxByAccountId(this.accountId);
                 Metadata md = mbox.getConfig(null, OFFLINE_YC_OAUTH);
-                OfflineLog.yab.debug("[verifier:tokeen:token_secret:lastsynctime]: %s", md.get(this.accountId));
+                if (md == null && this.authToken != null && !this.authToken.isNew()) {
+                    OfflineLog.yab.debug("account might be reseted, persists in memory token.");
+                    persist();
+                    return;
+                }
+                OfflineLog.yab.debug("loaded OAuth credential, [verifier:tokeen:token_secret:lastsynctime]: %s",
+                        md.get(this.accountId));
                 String[] tokens = md.get(this.accountId).split(",");
                 this.verifier = tokens[0];
                 this.authToken = new OAuthToken(tokens[1], tokens[2]);

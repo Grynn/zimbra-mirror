@@ -88,6 +88,7 @@ public abstract class OAuthRequest {
 
             HttpMethod httpMethod = "POST".equals(getHttpMethod()) ? new PostMethod(getEndpointURL()) : new GetMethod(
                     getEndpointURL());
+            OfflineLog.yab.info("[Yahoo OAuth] sending request [%s], token {%s}", getEndpointURL(), getToken());
             String header = OAuthHelper.extractHeader(this.params);
             httpMethod.setRequestHeader("Authorization", header);
             int code = HttpClientUtil.executeMethod(httpClient, httpMethod);

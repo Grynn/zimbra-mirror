@@ -26,6 +26,7 @@ public class OAuthException extends YContactException {
     public static final String FORBIDDEN = "oauth.Forbidden"; // 403
     public static final String INTERNAL_ERROR = "oauth.Internal_Error"; // 500
     public static final String UNSUPPORTED = "oauth.Unsupported"; // 501
+    public static final String EXCESSIVE_REQ = "oauth.ExcessiveRequests"; // 999
 
     protected OAuthException(String message, String code, boolean isReceiversFault, Throwable cause,
             Argument[] arguments) {
@@ -58,6 +59,11 @@ public class OAuthException extends YContactException {
         String msg = " .Unsupported HTTP Method";
         return new OAuthException("unsupported error (501) at " + phase + msg, UNSUPPORTED, SENDERS_FAULT, null, null);
     }
+    
+    public static OAuthException EXCESSIVE_REQ(String phase) {
+        String msg = " .Excessive OAuth requests";
+        return new OAuthException("excessive OAuth requests (999) at " + phase + msg, EXCESSIVE_REQ, SENDERS_FAULT, null, null);
+    }
 
     public static OAuthException UNKNOWN_ERROR(int errorCode, String phase) {
         return new OAuthException("Unknown error (" + errorCode + ") at " + phase, "" + errorCode, SENDERS_FAULT, null, null);
@@ -75,6 +81,8 @@ public class OAuthException extends YContactException {
             return INTERNAL_ERROR(phase);
         case 501:
             return UNSUPPORTED(phase);
+        case 999:
+            return EXCESSIVE_REQ(phase);
         default:
             return UNKNOWN_ERROR(errorCode, phase);
         }
