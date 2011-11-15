@@ -86,11 +86,11 @@ public class PageCalendar extends AbsTab {
 		public static final String OpenThisSeriesRadioButton = "id=";
 
 		public static final String CalendarViewListCSS		= "css=div[id='zv__CLL']";
-		public static final String CalendarViewDayCSS		= "css=div[class='ImgCalendarDayGrid']";
-		public static final String CalendarViewWorkWeekCSS	= "css=div[id='TODO']";
-		public static final String CalendarViewWeekCSS		= "css=div[id='TODO']";
-		public static final String CalendarViewMonthCSS		= "css=div[class='calendar_month_body']";
-		public static final String CalendarViewScheduleCSS	= "css=div[id='TODO']";
+		public static final String CalendarViewDayCSS		= "css=div[id='zv__CLD']";
+		public static final String CalendarViewWorkWeekCSS	= "css=div[id='zv__CLWW']";
+		public static final String CalendarViewWeekCSS		= "css=div[id='zv__CLW']";
+		public static final String CalendarViewMonthCSS		= "css=div[id='zv__CLM']";
+		public static final String CalendarViewScheduleCSS	= "css=div[id='zv__CLS']";
 
 	}
 
@@ -1172,8 +1172,8 @@ public class PageCalendar extends AbsTab {
 	 * @return
 	 * @throws HarnessException
 	 */
-	private AppointmentItem parseAllDayApptBody(String cssLocator) throws HarnessException {
-		logger.info(myPageName() + " parseAllDayApptBody("+ cssLocator +")");
+	private AppointmentItem parseMonthViewAllDay(String cssLocator) throws HarnessException {
+		logger.info(myPageName() + " parseMonthViewAllDay("+ cssLocator +")");
 
 		/*
 
@@ -1228,8 +1228,8 @@ public class PageCalendar extends AbsTab {
 		return (appt);
 	}
 	
-	private AppointmentItem parseCalendarMonthDayItem(String cssLocator) throws HarnessException {
-		logger.info(myPageName() + " parseCalendarMonthDayItem("+ cssLocator +")");
+	private AppointmentItem parseMonthViewNonAllDay(String cssLocator) throws HarnessException {
+		logger.info(myPageName() + " parseMonthViewNonAllDay("+ cssLocator +")");
 
 		/*
 
@@ -1302,9 +1302,9 @@ public class PageCalendar extends AbsTab {
 			String alldayLocator = itemLocator + " div.appt_allday_body";
 			String singleLocator = itemLocator + " td.calendar_month_day_item";
 			if ( this.sIsElementPresent(alldayLocator) ) {
-				items.add(parseAllDayApptBody(alldayLocator));
+				items.add(parseMonthViewAllDay(alldayLocator));
 			} else if ( this.sIsElementPresent(singleLocator) ) {
-				items.add(this.parseCalendarMonthDayItem(singleLocator));
+				items.add(parseMonthViewNonAllDay(singleLocator));
 			}
 			
 		}
