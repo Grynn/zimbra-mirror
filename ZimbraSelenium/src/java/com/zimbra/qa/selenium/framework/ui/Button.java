@@ -78,6 +78,8 @@ public class Button {
 	public static final Button B_CANCEL = new Button("B_CANCEL");
 	public static final Button B_OK = new Button("B_OK");
 	public static final Button B_ADD = new Button("B_ADD");
+	public static final Button B_BACK = new Button("B_BACK");
+	public static final Button B_NEXT = new Button("B_NEXT");
 	public static final Button O_EDIT_LINK = new Button("O_EDIT_LINK");
 	public static final Button O_REVOKE_LINK = new Button("O_REVOKE_LINK");
 	public static final Button O_RESEND_LINK = new Button("O_RESEND_LINK");
@@ -273,6 +275,7 @@ public class Button {
 	public static final Button B_TREE_NEWFOLDER = new Button("B_TREE_NEWFOLDER");
 	public static final Button B_TREE_NEWADDRESSBOOK = new Button("B_TREE_NEWADDRESSBOOK");
 	public static final Button B_TREE_NEWCALENDAR = new Button("B_TREE_NEWCALENDAR");
+	public static final Button B_TREE_NEW_EXTERNAL_CALENDAR = new Button("B_TREE_NEW_EXTERNAL_CALENDAR");
 	public static final Button B_TREE_NEWTASKLIST = new Button("B_TREE_NEWTASKLIST");
 	public static final Button B_TREE_NEWBRIEFCASE = new Button("B_TREE_NEWBRIEFCASE");
 	public static final Button B_TREE_BRIEFCASE_EXPANDCOLLAPSE = new Button("B_TREE_BRIEFCASE_EXPANDCOLLAPSE");

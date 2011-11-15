@@ -323,8 +323,14 @@ public class TreeCalendar extends AbsTree {
 				optionLocator = "css=div[id='ZmActionMenu_calendar_CALENDAR'] div[id='FREE_BUSY_LINK'] td[id$='_title']";
 
 				 */
-				// TODO: 
 
+			} else if ( option == Button.B_TREE_NEW_EXTERNAL_CALENDAR ) {
+				
+				optionLocator = "css=div[id='ZmActionMenu_calendar_CALENDAR'] div[id='ADD_EXTERNAL_CALENDAR'] td[id$='_title']";
+				page = new DialogAddExternalCalendar(MyApplication, ((AppAjaxClient)MyApplication).zPageMail);
+				
+				// FALL THROUGH
+				
 			} else {
 				throw new HarnessException("Pulldown/Option "+ pulldown +"/"+ option +" not implemented");
 			}
