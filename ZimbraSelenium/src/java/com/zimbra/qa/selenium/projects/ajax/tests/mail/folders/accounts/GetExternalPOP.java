@@ -126,6 +126,20 @@ public class GetExternalPOP extends PrefGroupMailByMessageTest {
 	}	
 
 
+	/**
+	 * Objective: View an external folder - POP
+	 * 
+	 * 1. Create an account on the server
+	 * 2. Put a message in the inbox
+	 * 3. Login to ajax
+	 * 4. Create a folder
+	 * 5. Add a data source to the account from step 1, associate with the folder in step 4
+	 * 6. Select the folder (http://bugzilla.zimbra.com/show_bug.cgi?id=66528#c5)
+	 * 7. Click "Refresh"
+	 * 7. Verify the message from step 2 appears
+	 * 
+	 * @throws HarnessException
+	 */
 	@Test(	description = "POP: get updates from the external account - 'refresh' button",
 			groups = { "functional" })
 	public void GetExternalPOP_02() throws HarnessException {
@@ -215,6 +229,14 @@ public class GetExternalPOP extends PrefGroupMailByMessageTest {
         	+			"</content>"
         	+		"</m>"
 			+	"</AddMsgRequest>");
+
+		
+		// Click on the folder to change focus
+		// 
+		// Required step, as per http://bugzilla.zimbra.com/show_bug.cgi?id=66528#c5
+		//
+		app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, folder);
+
 
 		// Click REFRESH
 		app.zPageMain.zToolbarPressButton(Button.B_REFRESH);
