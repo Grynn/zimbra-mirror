@@ -31,6 +31,8 @@ import com.zimbra.common.account.Key;
 import com.zimbra.common.httpclient.HttpClientUtil;
 import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.soap.Element;
+import com.zimbra.common.soap.MailConstants;
 import com.zimbra.common.util.BufferStreamRequestEntity;
 import com.zimbra.common.util.ByteUtil;
 import com.zimbra.common.util.ZimbraHttpConnectionManager;
@@ -40,6 +42,7 @@ import com.zimbra.cs.account.ZimbraAuthTokenEncoded;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.service.FileUploadServlet;
+import com.zimbra.cs.service.util.ItemId;
 import com.zimbra.soap.ZimbraSoapContext;
 
 public class OfflineDocumentHandlers {
@@ -128,7 +131,28 @@ public class OfflineDocumentHandlers {
             post.releaseConnection();
             if (bsre != null)
                 bsre.close();
-        }        
+        }
         return newId;
+    }
+
+    /**
+     * upload attachment to remote server (shared folder's host) and use that id as attachment id
+     * @param request ModifyContact or CreateContact request
+     * @param iidRequested accountId part is remote account id
+     * @param iidResolved id part is local attachment id
+     * @throws ServiceException
+     */
+    static void uploadAttachmentToRemoteServer(Element request, ItemId iidRequested, ItemId iidResolved)
+            throws ServiceException {
+        Element eUpload = request.getElement(MailConstants.E_CONTACT);
+        if (eUpload != null && OfflineProvisioning.getOfflineInstance().isMountpointAccount(iidResolved.getAccountId())) {
+            Element attachment = eUpload.getElement(MailConstants.E_ATTRIBUTE);
+            if (attachment != null) {
+                String attachmentId = attachment.getAttribute(MailConstants.A_ATTACHMENT_ID);
+                String acctId = iidRequested.getAccountId();
+                attachment.addAttribute(MailConstants.A_ATTACHMENT_ID,
+                        OfflineDocumentHandlers.uploadOfflineDocument(attachmentId, acctId));
+            }
+        }
     }
 }
