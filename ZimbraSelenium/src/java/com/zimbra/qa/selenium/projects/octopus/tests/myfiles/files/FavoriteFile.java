@@ -4,10 +4,12 @@ import org.testng.annotations.*;
 import com.zimbra.qa.selenium.framework.items.FileItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
+import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.octopus.core.OctopusCommonTest;
 import com.zimbra.qa.selenium.projects.octopus.ui.FilePreview;
+import com.zimbra.qa.selenium.projects.octopus.ui.PageTrash;
 
 public class FavoriteFile extends OctopusCommonTest {
 
@@ -138,6 +140,69 @@ public class FavoriteFile extends OctopusCommonTest {
 				"Verify the favorite icon becomes disabled in the preview panel");
 	}
 
+	@Test(description = "Mark file as Favorite / Not Favorite clicking on watch icon - verify watch icon becomes enabled / disabled in the preview panel", groups = { "functional" })
+	public void FavoriteFile_03() throws HarnessException {
+		ZimbraAccount account = app.zGetActiveAccount();
+
+		FolderItem briefcaseRootFolder = FolderItem.importFromSOAP(account,
+				SystemFolder.Briefcase);
+
+		// Create file item
+		String filePath = ZimbraSeleniumProperties.getBaseDirectory()
+				+ "/data/public/other/testtextfile.txt";
+
+		FileItem file = new FileItem(filePath);
+		String fileName = file.getName();
+
+		// Upload file to server through RestUtil
+		String attachmentId = account.uploadFile(filePath);
+
+		// Save uploaded file to briefcase through SOAP
+		account.soapSend("<SaveDocumentRequest xmlns='urn:zimbraMail'>"
+				+ "<doc l='" + briefcaseRootFolder.getId() + "'><upload id='"
+				+ attachmentId + "'/></doc></SaveDocumentRequest>");
+
+		_fileAttached = true;
+		_fileId = account.soapSelectValue(
+				"//mail:SaveDocumentResponse//mail:doc", "id");
+
+		// click on the My Files tab
+		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_MY_FILES);
+
+		//Select file
+		FilePreview filePreview = (FilePreview) app.zPageMyFiles.zListItem(Action.A_LEFTCLICK, fileName);
+		
+		// mark file as favorite clicking on watch icon
+		filePreview.zPressButton(Button.B_WATCH);		
+
+		// Verify Watch icon becomes enabled
+		ZAssert.assertTrue(app.zPageMyFiles.zWaitForElementPresent(
+				FilePreview.Locators.zFileWatchIcon.locator
+						+ " span[class^=watched-icon]", "3000"),
+				"Verify the favorite icon becomes enabled in the preview panel");
+
+		// Verify the file was added to the Favorites using SOAP
+		account.soapSend("<GetWatchingItemsRequest xmlns='urn:zimbraMail'>"
+				+ "</GetWatchingItemsRequest>");
+
+		ZAssert.assertTrue(account.soapMatch(
+				"//mail:GetWatchingItemsResponse//mail:item", "id", _fileId),
+				"Verify file is added to Favorites");
+
+		//Select file
+		filePreview = (FilePreview) app.zPageMyFiles.zListItem(Action.A_LEFTCLICK, fileName);
+		
+		// unmark file as favorite clicking on unwatch icon
+		filePreview.zPressButton(Button.B_UNWATCH);	
+
+		// Verify Watch icon becomes disabled
+		ZAssert.assertTrue(app.zPageMyFiles.zWaitForElementPresent(
+				FilePreview.Locators.zFileWatchIcon.locator
+						+ " span[class^=unwatched-icon]", "3000"),
+				"Verify the favorite icon becomes disabled in the preview panel");
+	}
+
+	
 	@AfterMethod(groups = { "always" })
 	public void testCleanup() {
 		if (_fileAttached && _fileId != null) {
@@ -165,6 +230,16 @@ public class FavoriteFile extends OctopusCommonTest {
 				_folderName = null;
 				_folderIsCreated = false;
 			}
+		}
+		try {
+			// click on Trash tab to move out from the current view
+			PageTrash pageTrash = (PageTrash) app.zPageOctopus.zToolbarPressButton(Button.B_TAB_TRASH);
+			
+			//Empty trash
+			pageTrash.emptyTrashUsingSOAP(app.zGetActiveAccount());
+		} catch (Exception e) {
+			logger.info("Failed while opening Trash tab");
+			e.printStackTrace();
 		}
 	}
 }

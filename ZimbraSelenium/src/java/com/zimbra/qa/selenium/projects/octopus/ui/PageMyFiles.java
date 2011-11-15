@@ -99,12 +99,12 @@ public class PageMyFiles extends AbsTab {
 
 		String locator = Locators.zTabMyFiles.locator;
 
-		if (!zWaitForElementPresent(locator, "5000")) {
+		if (!zWaitForElementPresent(locator, "10000")) {
 			throw new HarnessException(locator + " Not Present!");
 		}
 
 		// Click on My Files tab
-		zClickAt(locator, "0,0");
+		zClick(locator);
 
 		zWaitForBusyOverlay();
 
@@ -393,6 +393,8 @@ public class PageMyFiles extends AbsTab {
 
 			zClick(listItemLocator);
 
+			page = new FilePreview(MyApplication);
+			
 			// If the app is busy, wait for it to become active
 			zWaitForBusyOverlay();
 		} else {

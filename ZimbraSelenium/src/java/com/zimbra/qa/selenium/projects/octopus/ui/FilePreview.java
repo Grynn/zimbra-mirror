@@ -22,7 +22,7 @@ public class FilePreview extends AbsDisplay {
 		Name, Version, Size, Body
 	}
 
-	protected FilePreview(AbsApplication application) {
+	public FilePreview(AbsApplication application) {
 		super(application);
 		logger.info("new " + FilePreview.class.getCanonicalName());
 	}
@@ -36,12 +36,40 @@ public class FilePreview extends AbsDisplay {
 	public AbsPage zPressButton(Button button) throws HarnessException {
 		logger.info(myPageName() + " zPressButton(" + button + ")");
 
-		tracer.trace("Click " + button);
+		tracer.trace("Click button " + button);
 
-		throw new HarnessException("no logic defined for button: " + button);
+		if (button == null)
+			throw new HarnessException("Button cannot be null!");
 
+		// Default behavior variables
+		String buttonLocator = null;
+		AbsPage page = null; // If set, this page will be returned
+
+		// Based on the button specified, take the appropriate action(s)
+		if (button == Button.B_WATCH) {
+			buttonLocator = Locators.zFileWatchIcon.locator
+					+ " span[class^=unwatched-icon]";
+
+			zClick(buttonLocator);
+
+			zWaitForBusyOverlay();
+
+		} else if (button == Button.B_UNWATCH) {
+			buttonLocator = Locators.zFileWatchIcon.locator
+					+ " span[class^=watched-icon]";
+
+			zClick(buttonLocator);
+
+			zWaitForBusyOverlay();
+
+		} else {
+			logger.info("no logic defined for " + button);
+		}
+
+		return page;
 	}
 
+	
 	/**
 	 * Get the string value of the specified field
 	 * 

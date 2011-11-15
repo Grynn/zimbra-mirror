@@ -8,6 +8,7 @@ import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.octopus.core.OctopusCommonTest;
+import com.zimbra.qa.selenium.projects.octopus.ui.PageTrash;
 
 public class UploadFile extends OctopusCommonTest {
 
@@ -130,6 +131,16 @@ public class UploadFile extends OctopusCommonTest {
 				_folderName = null;
 				_folderIsCreated = false;
 			}
+		}
+		try {
+			// click on Trash tab to move out from the current view
+			PageTrash pageTrash = (PageTrash) app.zPageOctopus.zToolbarPressButton(Button.B_TAB_TRASH);
+			
+			//Empty trash
+			pageTrash.emptyTrashUsingSOAP(app.zGetActiveAccount());
+		} catch (Exception e) {
+			logger.info("Failed while opening Trash tab");
+			e.printStackTrace();
 		}
 	}
 }

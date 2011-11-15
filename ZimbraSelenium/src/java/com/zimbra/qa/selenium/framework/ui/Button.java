@@ -191,6 +191,8 @@ public class Button {
 	public static final Button B_TAB_FAVORITES = new Button("B_TAB_FAVORITES");
 	public static final Button O_FAVORITE =  new Button("O_FAVORITE");
 	public static final Button O_NOT_FAVORITE =  new Button("O_NOT_FAVORITE");
+	public static final Button B_WATCH =  new Button("B_WATCH");
+	public static final Button B_UNWATCH =  new Button("B_UNWATCH");
 
 	public static final Button B_TAB_HISTORY = new Button("B_TAB_HISTORY");
 

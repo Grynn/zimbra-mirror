@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.IItem;
+import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.octopus.ui.DialogError;
@@ -263,6 +264,22 @@ public class PageTrash extends AbsTab {
 		return items;
 	}
 
+	public void deleteItemUsingSOAP(String itemId, ZimbraAccount account)
+			throws HarnessException {
+		account.soapSend("<ItemActionRequest xmlns='urn:zimbraMail'>"
+				+ "<action id='" + itemId + "' op='delete'/>"
+				+ "</ItemActionRequest>");
+	}
+	
+	public void emptyTrashUsingSOAP(ZimbraAccount account)
+			throws HarnessException {
+		FolderItem trash = FolderItem.importFromSOAP(account,
+				SystemFolder.Trash);
+		account.soapSend("<FolderActionRequest xmlns='urn:zimbraMail'>"
+				+ "<action id='" + trash.getId() + "' op='empty' recursive='true'/>"
+				+ "</FolderActionRequest>");
+	}
+	
 	@Override
 	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
 		throw new HarnessException("Implement me");

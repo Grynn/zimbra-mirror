@@ -99,8 +99,8 @@ public class SearchFile extends OctopusCommonTest {
 		// verify the file is uploaded
 		ZAssert.assertNotNull(_fileId, "Verify file is uploaded");
 
-		// delete file using SOAP
-		app.zPageOctopus.deleteItemUsingSOAP(_fileId, account);
+		// trash file using SOAP
+		app.zPageOctopus.trashItemUsingSOAP(_fileId, account);
 
 		SleepUtil.sleepSmall();
 
@@ -138,6 +138,5 @@ public class SearchFile extends OctopusCommonTest {
 				_fileAttached = false;
 			}
 		}
-
 	}
 }

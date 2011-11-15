@@ -12,6 +12,7 @@ import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.octopus.core.OctopusCommonTest;
 import com.zimbra.qa.selenium.projects.octopus.ui.DialogMove;
 import com.zimbra.qa.selenium.projects.octopus.ui.PageMyFiles;
+import com.zimbra.qa.selenium.projects.octopus.ui.PageTrash;
 
 public class MoveFolder extends OctopusCommonTest {
 
@@ -163,7 +164,10 @@ public class MoveFolder extends OctopusCommonTest {
 			}
 			try {
 				// click on Trash tab to move out from the current view
-				app.zPageOctopus.zToolbarPressButton(Button.B_TAB_TRASH);
+				PageTrash pageTrash = (PageTrash)app.zPageOctopus.zToolbarPressButton(Button.B_TAB_TRASH);
+				
+				//Empty trash
+				pageTrash.emptyTrashUsingSOAP(app.zGetActiveAccount());
 			} catch (Exception e) {
 				logger.info("Failed while opening Trash tab");
 				e.printStackTrace();

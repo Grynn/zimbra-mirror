@@ -49,7 +49,7 @@ public class DeleteFolder extends OctopusCommonTest {
 		ZAssert.assertNotNull(subFolder, "Verify the subfolder is available");
 
 		// delete folder using SOAP
-		app.zPageOctopus.deleteItemUsingSOAP(subFolder.getId(), account);
+		app.zPageOctopus.trashItemUsingSOAP(subFolder.getId(), account);
 
 		// Verify the folder is now in the trash
 		ZAssert.assertTrue(

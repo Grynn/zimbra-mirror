@@ -346,13 +346,21 @@ public class PageOctopus extends AbsTab {
 		return id;
 	}
 
-	public void deleteItemUsingSOAP(String itemId, ZimbraAccount account)
+	public void trashItemUsingSOAP(String itemId, ZimbraAccount account)
 			throws HarnessException {
 		account.soapSend("<ItemActionRequest xmlns='urn:zimbraMail'>"
 				+ "<action id='" + itemId + "' op='trash'/>"
 				+ "</ItemActionRequest>");
 	}
 
+	public void deleteItemUsingSOAP(String itemId, ZimbraAccount account)
+			throws HarnessException {
+		account.soapSend("<ItemActionRequest xmlns='urn:zimbraMail'>"
+				+ "<action id='" + itemId + "' op='delete'/>"
+				+ "</ItemActionRequest>");
+	}
+
+	
 	public void moveItemUsingSOAP(String itemId, String targetId, ZimbraAccount account)
 			throws HarnessException {
 		account.soapSend("<ItemActionRequest xmlns='urn:zimbraMail'>"
