@@ -722,7 +722,7 @@ public class PageMail extends AbsTab {
 			locator = "xpath=("+ msglocator +"//div[contains(@id, '__pr')])@class";
 			String priority = this.sGetAttribute(locator);
 			if ( priority.equals("ImgPriorityHigh_list") ) {
-				item.gPriority = "high";
+				item.gPriority = MailItem.Priority.High;
 			} else {
 				// TODO - handle other priorities
 			}
@@ -829,7 +829,7 @@ public class PageMail extends AbsTab {
 				throw new HarnessException("Unable to locator priority field");
 			String priority = this.sGetAttribute("xpath="+locator+"@class");
 			if ( priority.equals("ImgPriorityHigh_list") ) {
-				item.gPriority = "high";
+				item.gPriority = MailItem.Priority.High;
 			} else {
 				// TODO - handle other priorities
 			}

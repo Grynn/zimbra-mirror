@@ -109,7 +109,12 @@ public class MailItem implements IItem {
 	
 	public boolean gIsFlagged;
 
-	public String gPriority; // TODO: how to represent the icon?
+	public enum Priority {
+		High,
+		Normal,
+		Low
+	}
+	public Priority gPriority; // TODO: how to represent the icon?
 	
 	public String gTags; // TODO: how to represent the icon?
 

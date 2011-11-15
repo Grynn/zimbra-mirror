@@ -745,10 +745,11 @@ public class PageMail extends AbsTab {
 		item.gIsFlagged = this.sIsElementPresent(locator);
 
 		// Is it high priority?
-		locator = msglocator + " div[id$='__pr'][class*=ImgPriorityHigh_list]";
-		if ( this.sIsElementPresent(locator) )
-			item.gPriority = "high";
-		// TODO - handle other priorities
+		item.gPriority = MailItem.Priority.Normal;
+		if ( this.sIsElementPresent(msglocator + " div[id$='__pr'][class*=ImgPriorityHigh_list]") )
+			item.gPriority = MailItem.Priority.High;
+		if ( this.sIsElementPresent(msglocator + " div[id$='__pr'][class*=ImgPriorityLow_list]") )
+			item.gPriority = MailItem.Priority.Low;
 
 
 		locator = msglocator + " div[id$='__tg']";
