@@ -368,7 +368,6 @@ public class ExecuteHarnessMain {
 		Date finish;
 
 		StringBuilder result = new StringBuilder();
-		PerfMetrics.setOutputFolder(testoutputfoldername);
 
 		try {
 

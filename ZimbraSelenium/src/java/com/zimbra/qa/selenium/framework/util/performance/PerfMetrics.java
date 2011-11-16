@@ -1,21 +1,11 @@
 package com.zimbra.qa.selenium.framework.util.performance;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Map;
+import java.util.*;
 
-import org.apache.log4j.FileAppender;
-import org.apache.log4j.Level;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
-import org.apache.log4j.PatternLayout;
+import org.apache.log4j.*;
 
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
-import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.SleepUtil;
-import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
+import com.zimbra.qa.selenium.framework.util.*;
 
 
 /**
@@ -27,7 +17,24 @@ public class PerfMetrics {
 	protected static Logger logger = LogManager.getLogger(PerfMetrics.class);
 
 	protected static Logger traceLog = LogManager.getLogger(PerfMetrics.class.getName() + ".trace");
+	protected boolean isTraceLogInitialized = false;
+	protected void initializeTraceLog() {
+		if ( isTraceLogInitialized )
+			return;
+		
+		isTraceLogInitialized = true;
+		
+		// Print the server version
+		try {
+			traceLog.info("Server Version: "+ ZimbraSeleniumProperties.zimbraGetVersionString());
+		} catch (HarnessException e) {
+			logger.warn("Unable to determine the server version to log into the perf output.", e);
+		}
+		
+		// Print the header
+		traceLog.info(PerfData.prettyPrintHeaders());
 
+	}
 	/**
 	 * Start monitoring the specified perf metric
 	 * @param key the perf metric to watch
@@ -94,6 +101,7 @@ public class PerfMetrics {
 		data.LaunchStamp = getInstance().getValue(data.Key.LaunchKey);
 		
 		// Log the data to a text file
+		getInstance().initializeTraceLog();
 		traceLog.info(data.prettyPrint());
 		
 		// Log the data to the database
@@ -134,36 +142,6 @@ public class PerfMetrics {
 	}
 
 	/**
-	 * Set the folder where perf metric data will be logged
-	 * @param folder
-	 * @throws IOException
-	 */
-	public static void setOutputFolder(String folder) throws IOException {
-		File f = new File(folder + "/perf.txt");
-		
-		logger.info("setOutputFolder("+ f.getCanonicalPath() +")");
-
-		// Remove any old appenders
-		traceLog.removeAllAppenders();
-		
-		// Add a new appender
-		FileAppender perfAppender = new FileAppender(new PatternLayout("%-4r %-5p - %m%n"), folder + "/perf.txt", false);
-		traceLog.addAppender(perfAppender);
-		traceLog.setLevel(Level.TRACE);
-		
-		// Print the server version
-		try {
-			traceLog.info("Server Version: "+ ZimbraSeleniumProperties.zimbraGetVersionString());
-		} catch (HarnessException e) {
-			logger.warn("Unable to determine the server version to log into the perf output.", e);
-		}
-		
-		// Print the header
-		traceLog.info(PerfData.prettyPrintHeaders());
-		
-	}
-
-	/**
 	 * Get the perf metric value.  See http://bugzilla.zimbra.com/show_bug.cgi?id=61972
 	 * @param key
 	 * @param type
@@ -201,7 +179,6 @@ public class PerfMetrics {
 		logger.info("New "+ this.getClass().getCanonicalName());
 		
 		metrics = new Hashtable<PerfToken, PerfData>();
-		
 		
 	}
 
