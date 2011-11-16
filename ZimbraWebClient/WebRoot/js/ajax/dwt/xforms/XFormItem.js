@@ -4057,17 +4057,20 @@ SetupGroup_XFormItem.prototype.initializeItems = function () {
 }
 
 SetupGroup_XFormItem.prototype.constructSingleGroup = function (headerLabel, contentItem, index) {
-    var currentGroup = {type:_GROUP_, numCols:2, width: "100%", items:[]};
+    var currentGroup = {type:_GROUP_, numCols:2, width: "100%", valign:_TOP_, items:[]};
     var labelMessage = (index) + "  " + headerLabel;
-    var headerItem = {type:_OUTPUT_, colSpan: "*", value: labelMessage, cssStyle: "font-size:22px;padding-left: 5px; color: grey"};
+    var headerItem = {type:_OUTPUT_, colSpan: "*", value: labelMessage, cssClass: "ZaHomeSetupTitle"};
     currentGroup.items.push(headerItem);
     var singleContentItem;
     var isAdd = false;
     var labelNumber = 1;
+    var currentLabel ;
     for (var i = 0; i < contentItem.length; i++) {
         if (contentItem[i] && contentItem[i].value) {
             isAdd = true;
-            singleContentItem = {type:_OUTPUT_, label: labelNumber ++, value: contentItem[i].value, onClick: contentItem[i].onClick, labelCssStyle:"padding-left:20px; color: grey", containerCssStyle:"color:blue;cursor:pointer"};
+            currentLabel = labelNumber + ".";
+            labelNumber ++;
+            singleContentItem = {type:_OUTPUT_, label: currentLabel, value: contentItem[i].value, onClick: contentItem[i].onClick, labelCssClass:"ZaHomeLinkItemLabel", containerCssClass:"ZaLinkedItem"};
             currentGroup.items.push(singleContentItem);
         }
     }

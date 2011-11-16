@@ -103,20 +103,21 @@ if(ZaOverviewPanelController.treeModifiers)
     }
 
     bulkprovision.HomeXFormModifier = function(xFormObject) {
-        var setupItem = xFormObject.items[0].items[0].items[5];
-        var labelItem = setupItem.headerLabels;
-        var contentItem = setupItem.contentItems;
-        var index;
-        for (var index = 0; index < labelItem.length; index ++ ) {
-            if (labelItem[index] == ZaMsg.LBL_HomeAddAccounts) {
-                break;
+        if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.BULK_PROVISION_TASKS_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+            var setupItem = ZaHomeXFormView.getHomeSetupItem(xFormObject);
+            var labelItem = setupItem.headerLabels;
+            var contentItem = setupItem.contentItems;
+            var index;
+            for (var index = 0; index < labelItem.length; index ++ ) {
+                if (labelItem[index] == ZaMsg.LBL_HomeAddAccounts) {
+                    break;
+                }
+            }
+            if (index != labelItem.length) {
+                var content = contentItem[index];
+                content.push({value:ZaMsg.LBL_HomeMigration, onClick: ZaHomeXFormView.onDoMigration});
             }
         }
-        if (index != labelItem.length) {
-            var content = contentItem[index];
-            content.push({value:ZaMsg.LBL_HomeMigration, onClick: ZaHomeXFormView.onDoMigration});
-        }
-
     }
 
     ZaTabView.XFormModifiers["ZaHomeXFormView"].push(bulkprovision.HomeXFormModifier);

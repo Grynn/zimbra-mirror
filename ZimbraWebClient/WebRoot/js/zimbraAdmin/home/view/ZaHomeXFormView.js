@@ -8,6 +8,7 @@
 ZaHomeXFormView = function(parent, entry) {
 	ZaTabView.call(this, {
 		parent:parent,
+        cssClassName:"ZaHomeTabView DwtTabView",
 		iKeyName:"ZaHomeXFormView",
 		contextId:ZaId.VIEW_HOME
 	});
@@ -130,6 +131,25 @@ ZaHomeXFormView.onDownloadGuide = function(ev) {
 ZaHomeXFormView.onHelpLink = function (ev) {
     ZaZimbraAdmin.prototype._helpListener.call(ZaZimbraAdmin.getInstance());
 }
+
+ZaHomeXFormView.onCloseSetup = function(ev) {
+    var form =this.getForm();
+    var setupGroupItem = form.getItemById(form.getId() + "_homeSetupGroup");
+    setupGroupItem.hide();
+}
+
+ZaHomeXFormView.getWarningPanelItem = function (xFormObject) {
+    return xFormObject.items[0].items[0].items[0];
+}
+
+ZaHomeXFormView.getHomeMaintenanceItem = function (xFormObject) {
+    return xFormObject.items[0].items[0].items[1].items[1];
+}
+
+ZaHomeXFormView.getHomeSetupItem = function (xFormObject) {
+    return xFormObject.items[0].items[0].items[2].items[0].items[1];
+}
+
 ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
     var cases = [];
 
@@ -167,13 +187,13 @@ ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
         contentChoices.push(addAccountChoices);
     }
 
-    var case1 = {type:_ZATABCASE_, numCols: 3,  colSizes:["33%", "34%", "33%"], caseKey:1,
+    var case1 = {type:_ZATABCASE_, numCols: 3,  colSizes:["37%", "34%", "29%"], caseKey:1,
 //        height:"400px",  align:_LEFT_, valign:_TOP_,
         getCustomWidth: ZaHomeXFormView.prototype.getCustomWidth,
         items:[
-            {type:_GROUP_, colSpan: "*", numCols:1, containerCssStyle:"background-color:green", width:"100%", items:[
+            {type:_GROUP_, colSpan: "*", numCols:1, containerCssClass:"ZaHomeWarningPanel", width:"100%", items:[
 
-                {type:_GROUP_, numCols:3,  width:"100%", colSizes:["80px", "*", "100px"],
+                {type:_GROUP_, numCols:3,  width:"100%", colSizes:["20px", "*", "100px"], containerCssClass:"ZaHomeWarnginItem",
                     visibilityChecks:[[XForm.checkInstanceValueNot,ZaHome.A2_serviceStatus,true]],
                     items:[
                         {type:_OUTPUT_, ref: ZaHome.A2_serviceStatus,
@@ -188,92 +208,102 @@ ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
                             }
                         },
                         {type:_OUTPUT_, ref: ZaHome.A2_serviceDetailedMessage},
-                        {type:_OUTPUT_, value:ZaMsg.LBL_HomeLinkServerStatus, containerCssStyle:"cursor:pointer;color:white",onClick: ZaHomeXFormView.onViewService}
+                        {type:_OUTPUT_, value:ZaMsg.LBL_HomeLinkServerStatus, containerCssClass:"ZaLinkedItem",onClick: ZaHomeXFormView.onViewService}
                 ]}
             ]},
-            {type:_GROUP_, numCols: 2, items:[
-                {type:_OUTPUT_, colSpan:"2", value:ZaMsg.LBL_HomeSummary, cssStyle:"font-size:22px;text-align:center; color: grey"},
-                {type:_OUTPUT_, label:ZaMsg.LBL_HomeZimbraVersion, ref: ZaHome.A2_version},
-                {type:_OUTPUT_, label:ZaMsg.LBL_HomeServerNum, ref: ZaHome.A2_serverNum},
-                {type:_OUTPUT_, label:ZaMsg.LBL_HomeAccountNum, ref: ZaHome.A2_accountNum},
-                {type:_OUTPUT_, label:ZaMsg.LBL_HomeDomainNum, ref: ZaHome.A2_domainNum},
-                {type:_OUTPUT_, label:ZaMsg.LBL_HomeCosNum, ref: ZaHome.A2_cosNum}
-            ]},
-            {type:_GROUP_, numCols: 2, width:"100%", items:[
-                {type:_OUTPUT_, colSpan:"*", value:ZaMsg.LBL_HomeMaintenance, cssStyle:"font-size:22px; text-align:center; color: grey"},
-                // Resever for Backup Extension
-                {type:_GROUP_, colSpan:"*", numCols:3, width: "100%", colSizes:["*", "30px", "100px"],items:[
+            {type:_GROUP_, colSpan: "*", numCols: 3,  colSizes:["37%", "34%", "29%"],
+                containerCssClass:"ZaHomeInfoPanel",items:[
+                {type:_GROUP_, numCols: 2, valign: _TOP_, items:[
+                    {type:_OUTPUT_, colSpan:"2", value:ZaMsg.LBL_HomeSummary, cssClass:"ZaHomeInfoTitle"},
+                    {type:_OUTPUT_, label:ZaMsg.LBL_HomeZimbraVersion, ref: ZaHome.A2_version},
+                    {type:_OUTPUT_, label:ZaMsg.LBL_HomeServerNum, ref: ZaHome.A2_serverNum},
+                    {type:_OUTPUT_, label:ZaMsg.LBL_HomeAccountNum, ref: ZaHome.A2_accountNum},
+                    {type:_OUTPUT_, label:ZaMsg.LBL_HomeDomainNum, ref: ZaHome.A2_domainNum},
+                    {type:_OUTPUT_, label:ZaMsg.LBL_HomeCosNum, ref: ZaHome.A2_cosNum}
                 ]},
-                {type:_GROUP_, colSpan:"*", numCols:3, width: "100%", colSizes:["*", "30px", "100px"],items:[
-                    {type:_OUTPUT_, value:ZaMsg.LBL_HomeLastCleanup},
-                    {type:_OUTPUT_, ref: ZaHome.A2_lastCleanup,
-                        getDisplayValue: function (value){
-                            if (value) {
-                                return AjxImg.getImageHtml ("Check");
-                            } else {
-                                return AjxImg.getImageHtml ("Cancel");
+                {type:_GROUP_, numCols: 2, valign: _TOP_, width:"100%", items:[
+                    {type:_OUTPUT_, colSpan:"*", value:ZaMsg.LBL_HomeMaintenance, cssClass:"ZaHomeInfoTitle"},
+                    // Resever for Backup Extension
+                    {type:_GROUP_, colSpan:"*", numCols:3, width: "100%", colSizes:["*", "30px", "120px"],items:[
+                    ]},
+                    {type:_GROUP_, colSpan:"*", numCols:3, width: "100%", colSizes:["*", "30px", "120px"],items:[
+                        {type:_OUTPUT_, value:ZaMsg.LBL_HomeLastCleanup},
+                        {type:_OUTPUT_, ref: ZaHome.A2_lastCleanup,
+                            getDisplayValue: function (value){
+                                if (value) {
+                                    return AjxImg.getImageHtml ("Check");
+                                } else {
+                                    return AjxImg.getImageHtml ("Cancel");
+                                }
                             }
-                        }
-                    },
-                    {type:_OUTPUT_, ref: ZaHome.A2_lastCleanupTime}
-                ]},
-                {type:_GROUP_, colSpan:"*", numCols:3, width: "100%", colSizes:["*", "30px", "100px"],items:[
-                    {type:_OUTPUT_, value:ZaMsg.LBL_HomeLastLogPurge},
-                    {type:_OUTPUT_, ref: ZaHome.A2_lastLogPurge,
-                        getDisplayValue: function (value){
-                            if (value) {
-                                return AjxImg.getImageHtml ("Check");
-                            } else {
-                                return AjxImg.getImageHtml ("Cancel");
+                        },
+                        {type:_OUTPUT_, ref: ZaHome.A2_lastCleanupTime}
+                    ]},
+                    {type:_GROUP_, colSpan:"*", numCols:3, width: "100%", colSizes:["*", "30px", "120px"],items:[
+                        {type:_OUTPUT_, value:ZaMsg.LBL_HomeLastLogPurge},
+                        {type:_OUTPUT_, ref: ZaHome.A2_lastLogPurge,
+                            getDisplayValue: function (value){
+                                if (value) {
+                                    return AjxImg.getImageHtml ("Check");
+                                } else {
+                                    return AjxImg.getImageHtml ("Cancel");
+                                }
                             }
-                        }
-                    },
-                    {type:_OUTPUT_, ref: ZaHome.A2_lastLogPurgeTime}
-                ]},
-                // Reserver for Cert admin extension
-                {type:_GROUP_, colSpan:"*", numCols:3, width: "100%", colSizes:["*", "30px", "100px"],items:[
-                ]},
-                {type:_GROUP_, colSpan:"*", numCols:3, width: "100%", colSizes:["*", "30px", "100px"],items:[
-                    {type:_OUTPUT_, value: ZaMsg.LBL_HomeDBCheck},
-                    {type:_OUTPUT_, ref: ZaHome.A2_DBCheckType,
-                        getDisplayValue: function (value){
-                            if (value) {
-                                return AjxImg.getImageHtml ("Check");
-                            } else {
-                                return AjxImg.getImageHtml ("Cancel");
+                        },
+                        {type:_OUTPUT_, ref: ZaHome.A2_lastLogPurgeTime}
+                    ]},
+                    // Reserver for Cert admin extension
+                    {type:_GROUP_, colSpan:"*", numCols:3, width: "100%", colSizes:["*", "30px", "120px"],items:[
+                    ]},
+                    {type:_GROUP_, colSpan:"*", numCols:3, width: "100%", colSizes:["*", "30px", "120px"],items:[
+                        {type:_OUTPUT_, value: ZaMsg.LBL_HomeDBCheck},
+                        {type:_OUTPUT_, ref: ZaHome.A2_DBCheckType,
+                            getDisplayValue: function (value){
+                                if (value) {
+                                    return AjxImg.getImageHtml ("Check");
+                                } else {
+                                    return AjxImg.getImageHtml ("Cancel");
+                                }
                             }
-                        }
-                    },
-                    {type:_OUTPUT_, ref: ZaHome.A2_DBCheckMessage}
+                        },
+                        {type:_OUTPUT_, ref: ZaHome.A2_DBCheckMessage}
+                    ]}
+                ]},
+                {type:_GROUP_, numCols: 2, colSizes:["*", "90px"], valign: _TOP_, width: "100%", items:[
+                    {type:_OUTPUT_, colSpan:"2", value:ZaMsg.LBL_HomeRuntime, cssClass:"ZaHomeInfoTitle"},
+                    {type:_GROUP_, colSpan:"*", numCols:3, width: "100%", colSizes:["*", "30px", "60px"],items:[
+                        {type:_OUTPUT_, value:ZaMsg.LBL_HomeService},
+                        {type:_OUTPUT_, ref: ZaHome.A2_serviceStatus,
+                            getDisplayValue: function (value){
+                                if (value === undefined) {
+                                    return AjxImg.getImageHtml ("Help");
+                                }else if (value === false) {
+                                    return AjxImg.getImageHtml ("Critical");
+                                } else {
+                                    return AjxImg.getImageHtml ("Information");
+                                }
+                            }
+                        },
+                        {type:_OUTPUT_, ref: ZaHome.A2_serviceStatusMessage}
+                    ]},
+                    {type:_OUTPUT_, label:ZaMsg.LBL_HomeActiveSession, align:_LEFT_, ref: ZaHome.A2_activeSession},
+                    {type:_OUTPUT_, label:ZaMsg.LBL_HomeQueueLength, ref: ZaHome.A2_queueLength},
+                    {type:_OUTPUT_, label:ZaMsg.LBL_HomeMsgCount, ref: ZaHome.A2_messageCount},
+                    {type:_OUTPUT_, label:ZaMsg.LBL_HomeMsgVolume, ref: ZaHome.A2_messageVolume}
                 ]}
             ]},
-            {type:_GROUP_, numCols: 2, colSizes:["*", "90px"], width: "100%", items:[
-                {type:_OUTPUT_, colSpan:"2", value:ZaMsg.LBL_HomeRuntime, cssStyle:"font-size:22px;text-align:center; color: grey"},
-                {type:_GROUP_, colSpan:"*", numCols:3, width: "100%", colSizes:["*", "30px", "60px"],items:[
-                    {type:_OUTPUT_, value:ZaMsg.LBL_HomeService, align:_RIGHT_},
-                    {type:_OUTPUT_, ref: ZaHome.A2_serviceStatus,
-                        getDisplayValue: function (value){
-                            if (value === undefined) {
-                                return AjxImg.getImageHtml ("Help");
-                            }else if (value === false) {
-                                return AjxImg.getImageHtml ("Critical");
-                            } else {
-                                return AjxImg.getImageHtml ("Information");
-                            }
-                        }
-                    },
-                    {type:_OUTPUT_, ref: ZaHome.A2_serviceStatusMessage}
-                ]},
-                {type:_OUTPUT_, label:ZaMsg.LBL_HomeActiveSession, align:_LEFT_, ref: ZaHome.A2_activeSession},
-                {type:_OUTPUT_, label:ZaMsg.LBL_HomeQueueLength, ref: ZaHome.A2_queueLength},
-                {type:_OUTPUT_, label:ZaMsg.LBL_HomeMsgCount, ref: ZaHome.A2_messageCount},
-                {type:_OUTPUT_, label:ZaMsg.LBL_HomeMsgVolume, ref: ZaHome.A2_messageVolume}
-            ]},
-            {type:_SPACER_, colSpan: "*", height:20},
-            {type:_SETUPGROUP_, colSpan: "*", headerLabels: labelChoices, contentItems: contentChoices},
-            {type:_SPACER_, colSpan: "*", height:20 },
-            {type:_OUTPUT_, value: ZaMsg.LBL_HomeHelpCenter, colSpan: "*", align:_RIGHT_, onClick: ZaHomeXFormView.onHelpLink,
-                containerCssStyle:"cursor:pointer;color:blue"}
+            {type:_GROUP_, colSpan: "*", id:"homeSetupGroup", containerCssClass:"ZaHomeSetupPanelContainer", cssClass:"ZaHomeSetupPanel", numCols:1, items:[
+                {type:_GROUP_, colSpan: "*", numCols: 3,  colSizes:["37%", "34%", "29%"],
+                    containerCssClass:"ZaHomeSetupPanelContent", items:[
+                    {type:_GROUP_, colSpan: "*", numCols:2, colSizes:["100%", "20px"], items:[
+                        {type:_CELL_SPACER_},
+                        {type:_DWT_IMAGE_, value: "ImgClose", containerCssStyle:"cursor: pointer;", onClick:ZaHomeXFormView.onCloseSetup}
+                    ]},
+                    {type:_SETUPGROUP_, colSpan: "*", headerLabels: labelChoices, contentItems: contentChoices},
+                    {type:_OUTPUT_, value: ZaMsg.LBL_HomeHelpCenter, colSpan: "*", align:_RIGHT_, onClick: ZaHomeXFormView.onHelpLink,
+                        containerCssClass:"ZaLinkedItem"}
+                ]}
+            ]}
         ]
     };
 

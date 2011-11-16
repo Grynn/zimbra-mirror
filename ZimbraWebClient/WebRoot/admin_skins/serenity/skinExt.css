@@ -50,6 +50,7 @@
 .rootOverviewHeader {
     padding-left:5px;
     padding-top:5px;
+    background-color: #265480;
 }
 
 .AdminTreeItem-Count {
@@ -95,26 +96,20 @@ div.ZmSelectedHeaderBg {
     padding-left:10px;
 }
 
-/* list view */
-.DwtListView-Rows {
-   background-color:white;
-}
-
 /* -- Task panel -- */
 
 .TaskHeaderPanel {
-/*
-    background-color:@PanelColor@;
-    @tlRadius@:4px;
-    @trRadius@:4px;
-*/
-    text-align:center;
-    padding-left:5px;
+    direction: rtl;
+    padding-right:5px;
     padding-top:10px;
 }
 
-.ZaTaskTabView {
-    background-color:white;
+.ZaTaskTabView .DwtListView-ColHeader td{
+    font-weight: bold;
+}
+
+.ZaTaskTabView .XFormCase {
+    @AppBg@
 }
 /* -- Search panel -- */
 
@@ -248,4 +243,59 @@ div.ZmSelectedHeaderBg {
 
 .ZaToolBar {
     display:none;
+}
+
+.ZaHomeWarningPanel {
+    padding: 12px;
+    background-color: #ffffcc;
+}
+
+.ZaHomeWarnginItem {
+    padding: 2px 0px 3px;
+}
+
+.ZaLinkedItem {
+    cursor: pointer;
+    color:  #336699;
+}
+
+.ZaHomeInfoTitle {
+    color: #86a1b6;
+    font-size: 16pt;
+    font-weight: bold;
+}
+
+.ZaHomeInfoPanel {
+    padding: 12px;
+}
+
+.ZaHomeTabView .xform_label {
+    text-align: left;
+}
+
+.ZaHomeSetupPanelContainer {
+    padding: 12px;
+}
+
+.ZaHomeSetupPanel{
+    @borderRadius@:10px;
+    background-color: #f3f7fb;
+    border: 1px solid #e7ecf2;
+}
+
+.ZaHomeSetupPanelContent {
+    padding: 12px;
+}
+
+.ZaHomeSetupTitle {
+    color: #86a1b6;
+    font-size: 16pt;
+}
+
+.ZaHomeLinkItemLabel {
+    color: #86a1b6;
+}
+
+.NoResults {
+    @FontFamily-default@
 }

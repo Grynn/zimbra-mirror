@@ -30,6 +30,8 @@ function(entry) {
         if(!entry) {
             entry = new ZaTask();
             entry.load(false, false, true);
+            entry[ZaModel.currentTab] = "1";
+            entry[ZaModel.currentStep] = 1;
         }
         this._taskContentPanel = new ZaTaskContentView(this._container, entry);
         this._taskContentPanel.setObject(entry);
@@ -82,7 +84,7 @@ ZaTaskController.prototype.setExpanded = function(isExpanded) {
     // TODO  remove this to view manager
     var width;
     if (isExpanded) {
-        width = 100;
+        width = 170;
     } else {
         width = 20;
     }

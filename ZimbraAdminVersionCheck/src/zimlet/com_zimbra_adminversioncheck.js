@@ -297,8 +297,8 @@ if(ZaTabView.XFormModifiers["ZaHomeXFormView"]) {
     }
 
     ZaVersionCheck.HomeXFormModifier = function(xFormObject) {
-        var infoItem = xFormObject.items[0].items[0].items[0].items;
-        infoItem.push(
+        var infoItem = ZaHomeXFormView.getWarningPanelItem(xFormObject);
+        infoItem.items.push(
             {type:_GROUP_, numCols:3,  width:"100%", colSizes:["80px", "*", "100px"],
                 visibilityChecks:[[XForm.checkInstanceValue,ZaHome.A2_versionUpdateAvailable,true]],
                 items:[

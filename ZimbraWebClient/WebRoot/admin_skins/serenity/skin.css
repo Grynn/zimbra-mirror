@@ -308,7 +308,6 @@ body {
 }
 
 .overviewHeader,
-.DwtListView-Column,
 .ZaToolbar                         {
   background-color: @lighten(AppC,27)@;
   background-image: -moz-linear-gradient(top, @lighten(AppC,27)@, @darken(AppC,3)@); /* FF3.6 */
@@ -317,6 +316,13 @@ body {
   -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='@lighten(AppC,27)@', EndColorStr='@darken(AppC,3)@')"; /* IE8 */
 }
 
+.DwtListView-Column {
+  background-color: #c5c6cb;
+  background-image: -moz-linear-gradient(top, #dfe1ef, #b9bbbf); /* FF3.6 */
+  background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, #dfe1ef),color-stop(1, #b9bbbf)); /* Saf4+, Chrome */
+  filter:  progid:DXImageTransform.Microsoft.gradient(startColorStr='#dfe1ef', EndColorStr='#b9bbbf'); /* IE6,IE7 */
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#dfe1ef', EndColorStr='#b9bbbf')"; /* IE8 */
+}
 /** LoginPanel and Splash screen **/
 #skin_container_splash_screen           {   @SkinOuter@ @FullWindow@ z-index:90000000;      }
 

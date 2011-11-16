@@ -294,7 +294,7 @@ if(ZaTabView.XFormModifiers["ZaHomeXFormView"]) {
     ZaCert.HomeXFormModifier = function(xFormObject) {
         if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CERTS_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
             var maintainItem;
-            maintainItem = xFormObject.items[0].items[0].items[2];
+            maintainItem = ZaHomeXFormView.getHomeMaintenanceItem(xFormObject);
             maintainItem.items[4].items = [
                     {type:_OUTPUT_, value: ZaMsg.LBL_HomeExpiredCerts},
                     {type:_OUTPUT_, ref: ZaHome.A2_expiredType,
@@ -309,7 +309,7 @@ if(ZaTabView.XFormModifiers["ZaHomeXFormView"]) {
                     {type:_OUTPUT_, ref: ZaHome.A2_expiredMessage}
             ];
 
-            var setupItem = xFormObject.items[0].items[0].items[5];
+            var setupItem = ZaHomeXFormView.getHomeSetupItem(xFormObject);
             var labelItem = setupItem.headerLabels;
             var contentItem = setupItem.contentItems;
             var index;
