@@ -8,6 +8,22 @@ namespace GroupWise
         public static string name = "GroupWise";
 
         GroupWiseBinding ws;
+        GWadmin admin;
+
+        public void InitializeMailClient(string gwadmin, string adminpwd, string domainpath, string serverip)
+        {
+            try
+            {
+                admin = new GWadmin(gwadmin, adminpwd);
+                admin.Initialize(domainpath);
+            }
+            catch (Exception e)
+            {
+                System.Console.WriteLine("Exception occured at Initializemailcleint " + e.Message);
+            }
+
+
+        }
 
         public void Login()
         {
@@ -27,13 +43,24 @@ namespace GroupWise
             ws.Url = str;
 
             //    ws.Discover();
-
+            
             ws.Timeout = 100000;
+            //commenting out the following since we will have to use trusted connection thru the admin acoount.
 
-            pt.username = "knuthi";
+           /* pt.username = "knuthi";
             pt.password = "zimbra";
-            req.auth = pt;
+            req.auth = pt;*/
 
+            TrustedApplication trustedapp = new TrustedApplication();
+            trustedapp.name = "ZimbraGWmigration";
+            trustedapp.key = admin.Key;
+            trustedapp.username = admin.Username;
+
+            req.auth = trustedapp;
+
+
+           
+ 
 
 
             try
@@ -58,9 +85,14 @@ namespace GroupWise
                 ws.session.Text = new String[1];
                 ws.session.Text[0] = resp.session;
 
+
+                ws.Timeout = 300000;
                 string uid = resp.userinfo.uuid;
+
+               string sessioninfo = resp.session;
                 //bLogin = false;
-                getFolders();
+                getFolders(sessioninfo);
+
 
                 
             }
@@ -73,7 +105,7 @@ namespace GroupWise
 
         }
 
-        public void getFolders()
+        public void getFolders(string sessioninfo)
         {
             String str;
             getFolderListRequest req = new getFolderListRequest();
@@ -103,14 +135,35 @@ namespace GroupWise
                 }
                 System.Console.WriteLine(str);
 
+               
+
                 foreach (SystemFolder f1 in resp.folders)
                 {
-                    if((f1.folderType.ToString() == "MailBox") ||(f1.folderType.ToString() == "SentItems"))
 
+                    ws.session = new @string();
+                    ws.session.Text = new String[1];
+                    ws.session.Text[0] = sessioninfo;
+
+                    if ((f1.folderType.ToString() == "Mailbox") /*|| (f1.folderType.ToString() == "SentItems")*/)
+                    {
+                        getItems(f1.id);
+
+                        getTimestampRequest gt = new getTimestampRequest();
+                        gt.noop = true;
+                    }
+                    else
+                    {
+                        if ((f1.folderType.ToString() == "SentItems"))
+                        {
                             getItems(f1.id);
 
-                    else
-                        System.Console.WriteLine("Not a Mail Folder Sorry>>>>");
+                            getTimestampRequest gt = new getTimestampRequest();
+                            gt.noop = true;
+                        }
+
+                        else
+                            System.Console.WriteLine("Not a Mail Folder Sorry>>>>");
+                    }
                 }
 
                 
