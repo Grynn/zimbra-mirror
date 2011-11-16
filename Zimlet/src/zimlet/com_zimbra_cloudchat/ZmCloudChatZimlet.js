@@ -48,7 +48,7 @@ ZmCloudChatZimlet.prototype.initializeToolbar = function(app, toolbar, controlle
 		return;
 	}
 	var viewType = appCtxt.getViewTypeFromId(viewId);
-	if (viewType == appCtxt.get(ZmSetting.CONV_MODE) || viewType == ZmId.VIEW_CONV || viewType == ZmId.VIEW_TRAD
+	if (viewType == ZmId.VIEW_CONVLIST || viewType == ZmId.VIEW_CONV || viewType == ZmId.VIEW_TRAD
 			|| viewType == ZmId.VIEW_CONTACT_SIMPLE || viewType == ZmId.VIEW_CAL_DAY) {
 
 		var op = toolbar.getOp(ZmId.OP_ACTIONS_MENU);

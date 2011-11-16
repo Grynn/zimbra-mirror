@@ -31,7 +31,7 @@ function() {
 
 com_zimbra_speak.prototype.initializeToolbar =
 function(app, toolbar, controller, view) {
-	if (view == appCtxt.get(ZmSetting.CONV_MODE) ||
+	if (view == ZmId.VIEW_CONVLIST ||
 		view == ZmId.VIEW_CONV ||
 		view == ZmId.VIEW_TRAD)
 	{

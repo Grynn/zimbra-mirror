@@ -26,7 +26,7 @@ com_zimbra_example_toolbarhook_HandlerObject.prototype.constructor = com_zimbra_
 com_zimbra_example_toolbarhook_HandlerObject.prototype.initializeToolbar =
 function(app, toolbar, controller, viewId) {
 
-    if (viewId == appCtxt.get(ZmSetting.CONV_MODE) || viewId == ZmId.VIEW_TRAD) {
+    if (viewId == ZmId.VIEW_CONVLIST || viewId == ZmId.VIEW_TRAD) {
         // get the index of "View" menu so we can display the button after that
         var buttonIndex = 0;
         for (var i = 0; i < toolbar.opList.length; i++) {

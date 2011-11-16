@@ -119,7 +119,7 @@ DiscoverZimlet.prototype.initToolbarButton = function() {
 		return;
 	// Add the discover Button to the conversation page
 	var viewid = appCtxt.getAppViewMgr().getCurrentViewId();
-	if(viewid == appCtxt.get(ZmSetting.CONV_MODE)) {
+	if(viewid == ZmId.VIEW_CONVLIST) {
 		this._cnvController = AjxDispatcher.run("GetConvListController");
 		this._cnvController._discover = this;
 		if (!this._cnvController._toolbar) {

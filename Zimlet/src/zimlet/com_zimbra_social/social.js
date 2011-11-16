@@ -39,8 +39,7 @@ SocialZimlet.prototype.init =
 
 			 if (view == ZmId.VIEW_CONVLIST ||
 					 view == ZmId.VIEW_CONV ||
-					 view == ZmId.VIEW_TRAD ||
-					 view == ZmId.VIEW_CONVLIST2) {
+					 view == ZmId.VIEW_TRAD) {
 
 				 var op = toolbar.getOp(ZmId.OP_ACTIONS_MENU);
 				 if(op) {

@@ -181,7 +181,7 @@ WebExZimlet.prototype.initializeToolbar = function(app, toolbar, controller, vie
 	var viewType = appCtxt.getViewTypeFromId(viewId);
 	if (viewType == ZmId.VIEW_APPOINTMENT) {
 		this._initCalendarWebexToolbar(toolbar, controller);
-	} else 	if (viewType == appCtxt.get(ZmSetting.CONV_MODE) || viewType == ZmId.VIEW_CONV || viewType == ZmId.VIEW_TRAD
+	} else 	if (viewType == ZmId.VIEW_CONVLIST || viewType == ZmId.VIEW_CONV || viewType == ZmId.VIEW_TRAD
 			|| viewType == ZmId.VIEW_CONTACT_SIMPLE || viewType == ZmId.VIEW_CAL_DAY) {
 
 		var op = toolbar.getOp(ZmId.OP_ACTIONS_MENU);

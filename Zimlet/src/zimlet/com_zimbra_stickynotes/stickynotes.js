@@ -340,7 +340,7 @@ function(app, toolbar, controller, view) {
 		return;
 	}
 	var viewType = appCtxt.getViewTypeFromId(view);
-	if (viewType == appCtxt.get(ZmSetting.CONV_MODE) || viewType == ZmId.VIEW_CONV || viewType == ZmId.VIEW_TRAD ||
+	if (viewType == ZmId.VIEW_CONVLIST || viewType == ZmId.VIEW_CONV || viewType == ZmId.VIEW_TRAD ||
 			viewType == ZmId.VIEW_CONTACT_SIMPLE || viewType == ZmId.VIEW_CAL_DAY) {
 		var buttonIndex = -1;
 		for (var i = 0, count = toolbar.opList.length; i < count; i++) {
