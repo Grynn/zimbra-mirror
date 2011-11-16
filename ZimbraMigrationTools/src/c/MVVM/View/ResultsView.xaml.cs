@@ -177,13 +177,13 @@ public partial class ResultsView
         userProgressBar.Height = 18;
         userProgressBar.Margin = new Thickness(36, 0, 0, 0);
         userProgressBar.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
-        userProgressBar.Foreground = Brushes.DodgerBlue;    // Get rid of the green
 
-        // Here's how to set Brushes.DodgerBlue with Color values
-        //SolidColorBrush mySolidColorBrush = new SolidColorBrush();
-        //mySolidColorBrush.Color = Color.FromArgb(255, 30, 144, 255);    // #FF1E90FF
-        //userProgressBar.Foreground = mySolidColorBrush;
-        //
+        // Change the background and foreground colors
+        SolidColorBrush scbBack = new SolidColorBrush();
+        scbBack.Color = Color.FromArgb(255, 218, 227, 235);   // #FFDAE3EB
+        userProgressBar.Background = scbBack;
+        userProgressBar.Foreground = Brushes.DodgerBlue;
+        ///
 
         Binding upbBinding = new Binding("PBValue");
         upbBinding.Source = ar;
@@ -196,7 +196,7 @@ public partial class ResultsView
         userStatusMsg.SetValue(Grid.ColumnProperty, 0);
         userStatusMsg.SetValue(Grid.ColumnSpanProperty, 2);
         userStatusMsg.MinWidth = 300;
-        userStatusMsg.Margin = new Thickness(70, 0, 0, 0);
+        userStatusMsg.Margin = new Thickness(30, 0, 0, 0);
         userStatusMsg.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
         userStatusMsg.FontStyle = FontStyles.Italic;
         Binding usmBinding = new Binding("PBMsgValue");
