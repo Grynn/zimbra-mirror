@@ -285,5 +285,79 @@ public class ViewMail extends PrefGroupMailByMessageTest {
 		
 	}
 
+	@Test(	description = "zimbraPrefMessageViewHtmlPreferred=TRUE: Receive message with text only parts - should be rendered as text",
+			groups = { "functional" })
+	public void ViewMail_09() throws HarnessException {
+		
+		final String mimeFile = ZimbraSeleniumProperties.getBaseDirectory() + "/data/public/mime/email04/mimeTextOnly.txt";
+		final String subject = "subject13214016725788";
+		final String content = "The Ming Dynasty";
+
+		LmtpInject.injectFile(app.zGetActiveAccount().EmailAddress, new File(mimeFile));
+
+
+		
+		
+		// Click Get Mail button
+		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+
+		// Select the message so that it shows in the reading pane
+		DisplayMail actual = (DisplayMail) app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
+
+		// Verify the To, From, Subject, Body
+		ZAssert.assertStringContains(	actual.zGetMailProperty(Field.Body), content, "Verify the text content");
+		
+	}
+
+	@Test(	description = "zimbraPrefMessageViewHtmlPreferred=TRUE: Receive message with html only parts - should be rendered as html",
+			groups = { "functional" })
+	public void ViewMail_10() throws HarnessException {
+		
+		final String mimeFile = ZimbraSeleniumProperties.getBaseDirectory() + "/data/public/mime/email04/mimeHtmlOnly.txt";
+		final String subject = "subject13214016672655";
+		final String content = "Bold";
+
+		LmtpInject.injectFile(app.zGetActiveAccount().EmailAddress, new File(mimeFile));
+
+
+		
+		
+		// Click Get Mail button
+		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+
+		// Select the message so that it shows in the reading pane
+		DisplayMail actual = (DisplayMail) app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
+
+		// Verify the To, From, Subject, Body
+		ZAssert.assertStringContains(	actual.zGetMailProperty(Field.Body), content, "Verify the text content");
+		
+		
+	}
+	
+	@Test(	description = "zimbraPrefMessageViewHtmlPreferred=TRUE: Receive message with text and html  parts - should be rendered as html",
+			groups = { "functional" })
+	public void ViewMail_11() throws HarnessException {
+		
+		final String mimeFile = ZimbraSeleniumProperties.getBaseDirectory() + "/data/public/mime/email04/mimeTextAndHtml.txt";
+		final String subject = "subject13214016621403";
+		final String content = "Bold";
+
+		LmtpInject.injectFile(app.zGetActiveAccount().EmailAddress, new File(mimeFile));
+
+
+		
+		
+		// Click Get Mail button
+		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+
+		// Select the message so that it shows in the reading pane
+		DisplayMail actual = (DisplayMail) app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
+
+		// Verify the To, From, Subject, Body
+		ZAssert.assertStringContains(	actual.zGetMailProperty(Field.Body), content, "Verify the text content");
+		
+		
+	}
+
 
 }

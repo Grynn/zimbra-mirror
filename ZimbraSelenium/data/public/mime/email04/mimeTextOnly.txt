@@ -1,0 +1,16 @@
+Date: Tue, 15 Nov 2011 17:06:47 -0800 (PST)
+From: foo@example.com
+To: bar@example.com
+Subject: subject13214016725788
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+
+The Ming Dynasty, also Empire of the Great Ming, was the ruling dynasty of 
+China from 1368 to 1644, following the collapse of the Mongol-led Yuan 
+Dynasty. The Ming, "one of the greatest eras of orderly government and 
+social stability in human history",[2] was the last dynasty in China ruled 
+by ethnic Han Chinese. Although the Ming capital Beijing fell in 1644 to a 
+rebellion led by Li Zicheng who established the Shun Dynasty, which was soon 
+replaced by the Manchu-led Qing Dynasty, regimes loyal to the Ming throne 
+(collectively called the Southern Ming) survived until 1662.

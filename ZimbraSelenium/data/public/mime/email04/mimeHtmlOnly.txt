@@ -1,0 +1,12 @@
+Date: Tue, 15 Nov 2011 17:10:42 -0800 (PST)
+From: foo@example.com
+To: bar@example.com
+Subject: subject13214016672655
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+
+
+<html><head><style type='text/css'>p { margin: 0; }</style></head><body><div style='font-family: arial,helvetica,sans-serif; font-size: 12pt; color: #000000' ><div><strong>Bold</strong> and <em>Italics</em><br><br></div></div></body></html>
+
+
