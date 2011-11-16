@@ -106,6 +106,8 @@ public class ExecuteHarnessMain {
 	protected String testoutputfoldername = null;
 	public void setTestOutputFolderName(String path) {
 		
+		System.setProperty("zimbraSelenium.output", path);
+		
 		// The Code Coverage report should exist at the root
 		File coverage = new File(path + "/coverage");
 		if ( !coverage.exists() )	coverage.mkdirs();
@@ -366,14 +368,10 @@ public class ExecuteHarnessMain {
 		Date finish;
 
 		StringBuilder result = new StringBuilder();
-		FileAppender appender = new FileAppender(new PatternLayout("%-4r %-5p %c %x - %m%n"), testoutputfoldername + "/debug.txt", false);
 		PerfMetrics.setOutputFolder(testoutputfoldername);
 
 		try {
 
-			// Always add a file appender for all debugging
-			Logger.getRootLogger().addAppender(appender);
-			
 			// Each method handles different subsystem ...
 			// executeCodeCoverage() ... if configured, instrument/uninstrument server code
 			// executeSelenium() ... if configured, start/stop seleneium
@@ -382,7 +380,6 @@ public class ExecuteHarnessMain {
 			result.append(response).append('\n');
 			
 		} finally {
-			Logger.getRootLogger().removeAppender(appender);
 			finish = new Date();
 		}
 		
@@ -802,13 +799,6 @@ public class ExecuteHarnessMain {
 	        CommandLineParser parser = new GnuParser();
 	        CommandLine cmd = parser.parse(options, arguments);
 	        
-	        // Processing log4j must come first so debugging can happen
-	        if ( cmd.hasOption('l') ) {
-	        	PropertyConfigurator.configure(cmd.getOptionValue('l'));
-	        } else {
-	        	BasicConfigurator.configure();
-	        }
-	        	        
 	        if ( cmd.hasOption('h') ) {
 	    		HelpFormatter formatter = new HelpFormatter();
 	    		formatter.printHelp("ExecuteTests", options);
@@ -875,6 +865,13 @@ public class ExecuteHarnessMain {
 	        }
 	        
 	        	
+	        // Processing log4j must come first so debugging can happen
+	        if ( cmd.hasOption('l') ) {
+	        	PropertyConfigurator.configure(cmd.getOptionValue('l'));
+	        } else {
+	        	BasicConfigurator.configure();
+	        }
+	        	        
 	        if ( cmd.hasOption('j') ) {
 	        	this.jarfilename = cmd.getOptionValue('j'); 
 	        }
