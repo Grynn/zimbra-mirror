@@ -173,10 +173,18 @@ public partial class ResultsView
         userProgressBar.SetValue(Grid.ColumnSpanProperty, 2);
         userProgressBar.IsIndeterminate = false;
         userProgressBar.Orientation = Orientation.Horizontal;
-        userProgressBar.Width = 330;
+        userProgressBar.Width = 412;
         userProgressBar.Height = 18;
-        userProgressBar.Margin = new Thickness(76, 0, 0, 0);
+        userProgressBar.Margin = new Thickness(36, 0, 0, 0);
         userProgressBar.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
+        userProgressBar.Foreground = Brushes.DodgerBlue;    // Get rid of the green
+
+        // Here's how to set Brushes.DodgerBlue with Color values
+        //SolidColorBrush mySolidColorBrush = new SolidColorBrush();
+        //mySolidColorBrush.Color = Color.FromArgb(255, 30, 144, 255);    // #FF1E90FF
+        //userProgressBar.Foreground = mySolidColorBrush;
+        //
+
         Binding upbBinding = new Binding("PBValue");
         upbBinding.Source = ar;
         userProgressBar.SetBinding(ProgressBar.ValueProperty, upbBinding);
