@@ -355,7 +355,8 @@ function(ex, method, params, restartOnError, obj) {
 							    ex.code == ZmCsfeException.AUTH_TOKEN_CHANGED
 							   )) 
 			{
-				ZmCsfeCommand._curAuthToken = null;
+				// Must clear Cookie in browser
+				ZmCsfeCommand.setAuthToken(null);
 
 				var dlgs = ZaApp.getInstance().dialogs;
 				for (var dlg in dlgs) {
@@ -364,7 +365,7 @@ function(ex, method, params, restartOnError, obj) {
 				this._execFrame = {obj: obj, func: method, args: params, restartOnError: restartOnError};
 				this._loginDialog.registerCallback(this.loginCallback, this);
 				this._loginDialog.setError(ZaMsg.ERROR_SESSION_EXPIRED);
-//				this._loginDialog.disableUnameField();
+				this._loginDialog.disableUnameField();
 				this._loginDialog.clearPassword();
 			} else {
 				this._loginDialog.setError(null);
