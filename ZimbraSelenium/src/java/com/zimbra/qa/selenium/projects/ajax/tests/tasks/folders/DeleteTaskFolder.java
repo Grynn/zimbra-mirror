@@ -12,7 +12,7 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.DialogConfirm;
+
 
 
 public class DeleteTaskFolder extends AjaxCommonTest {
@@ -34,6 +34,9 @@ public class DeleteTaskFolder extends AjaxCommonTest {
 		FolderItem taskFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Tasks);
 		ZAssert.assertNotNull(taskFolder, "Verify the task is available");
 		
+		FolderItem trash = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Trash);
+		ZAssert.assertNotNull(trash, "Verify the trash is available");
+		
 		// Create the subTaskList
 		String name = "taskList" + ZimbraSeleniumProperties.getUniqueString();
 		
@@ -49,13 +52,13 @@ public class DeleteTaskFolder extends AjaxCommonTest {
 		app.zTreeTasks.zTreeItem(Action.A_LEFTCLICK, taskFolder);
 
 		// Delete the folder using context menu
-		DialogConfirm dlgConfirm =(DialogConfirm)app.zTreeTasks.zTreeItem(Action.A_RIGHTCLICK, Button.B_DELETE, subTaskList);
-		dlgConfirm.zClickButton(Button.B_YES);
+		app.zTreeTasks.zTreeItem(Action.A_RIGHTCLICK, Button.B_DELETE, subTaskList);
 		
-		app.zGetActiveAccount().soapSend("<GetFolderRequest xmlns = 'urn:zimbraMail'/>");
-		String id = app.zGetActiveAccount().soapSelectValue("//mail:folder[@name='"+ name +"']", "id");
-		
-		ZAssert.assertNull(id, "Verify the subfolder is deleted");
+		// Verify the folder is now in the trash
+		subTaskList = FolderItem.importFromSOAP(app.zGetActiveAccount(), name);
+		ZAssert.assertNotNull(subTaskList, "Verify the subfolder is again available");
+		ZAssert.assertEquals(trash.getId(), subTaskList.getParentId(), "Verify the subfolder's parent is now the trash folder ID");
+
 	}
 
 }
