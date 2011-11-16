@@ -175,9 +175,9 @@ STDMETHODIMP CItemObject::GetDataForItemID(BSTR UserId, VARIANT ItemId, FolderTy
             memcpy(ItemID.lpb, pArrayData, ItemID.cb);  // Unlock the variant data
             SafeArrayUnaccessData(ItemId.parray);
 
-			// We can do better than this.  Should get the pointer.  This is temporary
-			Zimbra::MAPI::MAPIAccessAPI *maapi = new Zimbra::MAPI::MAPIAccessAPI(UserId);
-			maapi->InitializeUser();
+	    // We can do better than this.  Should get the pointer.  This is temporary
+	    Zimbra::MAPI::MAPIAccessAPI *maapi = new Zimbra::MAPI::MAPIAccessAPI(UserId);
+	    maapi->InitializeUser();
 
             if (ft == 2)
             {
@@ -297,7 +297,7 @@ STDMETHODIMP CItemObject::GetDataForItemID(BSTR UserId, VARIANT ItemId, FolderTy
                  *
                  * printf("MIME FILE PATH: %S\n\n\n\n", msgdata.MimeFile.c_str());*/
             }
-			delete maapi;	// temporary
+	    delete maapi;	// temporary
         }
     }
     // //
