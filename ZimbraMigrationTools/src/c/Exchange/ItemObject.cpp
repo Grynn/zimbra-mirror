@@ -183,7 +183,7 @@ STDMETHODIMP CItemObject::GetDataForItemID(BSTR UserId, VARIANT ItemId, FolderTy
             {
                 ContactItemData cd;
 
-				maapi->GetItem(ItemID, cd);
+                maapi->GetItem(ItemID, cd);
                 pIt[L"birthday"] = SysAllocString((cd.Birthday).c_str());
                 pIt[L"anniversary"] = SysAllocString((cd.Anniversary).c_str());
                 pIt[L"callbackPhone"] = SysAllocString((cd.CallbackPhone).c_str());
@@ -299,6 +299,7 @@ STDMETHODIMP CItemObject::GetDataForItemID(BSTR UserId, VARIANT ItemId, FolderTy
             }
 	    delete maapi;	// temporary
         }
+	delete ItemID.lpb;
     }
     // //
 

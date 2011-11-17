@@ -233,6 +233,8 @@ STDMETHODIMP CUserObject::GetItemsForFolderObjects(IfolderObject *FolderObj, Fol
     vector<Item_Data>::iterator it;
 
     SBinary folderEntryid;
+    folderEntryid.cb = 0;
+    folderEntryid.lpb = NULL;
 
     USES_CONVERSION;
 
@@ -338,6 +340,11 @@ STDMETHODIMP CUserObject::GetItemsForFolderObjects(IfolderObject *FolderObj, Fol
     SafeArrayUnaccessData(psa);
     vItems->parray = psa;
 
+    if (folderEntryid.lpb != NULL)
+    {
+        delete folderEntryid.lpb;
+    }
+
     return S_OK;
 }
 
@@ -362,6 +369,7 @@ STDMETHODIMP CUserObject::GetDataForItem(VARIANT ItemId, VARIANT *pVal)
             SafeArrayUnaccessData(ItemId.parray);
 
             maapi->GetItem(ItemID, cd);
+	    delete ItemID.lpb;
         }
     }
 
