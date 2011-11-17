@@ -427,6 +427,9 @@ function () {
 			mods[ZaAccount.A_zimbraZimletAvailableZimlets] = "";
 		}
 	}
+     //  save and keep the current tab
+    if (this._currentObject[ZaModel.currentTab]!= tmpObj[ZaModel.currentTab])
+             this._currentObject[ZaModel.currentTab] = tmpObj[ZaModel.currentTab];
 	//save changed fields
 	try {	
 		this._currentObject.modify(mods, tmpObj);

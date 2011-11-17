@@ -418,6 +418,10 @@ function () {
             	}
            	
             }
+
+            if (this._currentObject[ZaModel.currentTab]!= tmpObj[ZaModel.currentTab])
+                this._currentObject[ZaModel.currentTab] = tmpObj[ZaModel.currentTab];
+
             ZaApp.getInstance().getAppCtxt().getAppController().setActionStatusMsg(AjxMessageFormat.format(ZaMsg.DomainModified,[this._currentObject.name]));
 			return true;
 		} catch (ex) {

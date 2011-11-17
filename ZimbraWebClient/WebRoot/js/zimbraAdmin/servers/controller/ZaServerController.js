@@ -200,6 +200,8 @@ function () {
 ZaServerController.prototype._saveChanges =
 function () {
 	var obj = this._view.getObject();
+    if (this._currentObject[ZaModel.currentTab]!= obj[ZaModel.currentTab])
+             this._currentObject[ZaModel.currentTab] = obj[ZaModel.currentTab];
 	this._currentObject.modify(obj);
 	this._view.setDirty(false);
     ZaApp.getInstance().getAppCtxt().getAppController().setActionStatusMsg(AjxMessageFormat.format(ZaMsg.ServerModified,[this._currentObject.name]));

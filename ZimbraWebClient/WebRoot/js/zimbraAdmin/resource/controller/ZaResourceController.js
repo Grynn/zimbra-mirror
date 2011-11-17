@@ -366,7 +366,8 @@ function () {
 			}				
 		}
 	}
-
+      if (this._currentObject[ZaModel.currentTab]!= tmpObj[ZaModel.currentTab])
+             this._currentObject[ZaModel.currentTab] = tmpObj[ZaModel.currentTab];
 	//save changed fields
 	try {	
 		this._currentObject.modify(mods);

@@ -729,8 +729,11 @@ function () {
 			}
 		}
 	}
+
+    if (this._currentObject[ZaModel.currentTab]!= tmpObj[ZaModel.currentTab])
+             this._currentObject[ZaModel.currentTab] = tmpObj[ZaModel.currentTab];
 	//save changed fields
-	try {	
+	try {
 		if(isNew) {
 			this._currentObject.create(tmpObj.name, mods);
 			//if creation took place - fire a CreationEvent

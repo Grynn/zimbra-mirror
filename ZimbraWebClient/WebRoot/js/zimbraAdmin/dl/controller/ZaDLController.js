@@ -260,7 +260,10 @@ ZaDLController.prototype._saveChanges = function () {
 			
 		if(!ZaDistributionList.checkValues(obj))
 			return retval;
-		
+
+        if (this._currentObject[ZaModel.currentTab]!= obj[ZaModel.currentTab])
+             this._currentObject[ZaModel.currentTab] = obj[ZaModel.currentTab];
+
 		if (this._currentObject.id){
 
 			this._currentObject.modify(null, obj);
