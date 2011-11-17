@@ -3,21 +3,19 @@ package com.zimbra.qa.selenium.projects.ajax.core;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.*;
+
 import org.apache.log4j.*;
-import org.testng.ITestContext;
-import org.testng.ITestNGMethod;
-import org.testng.ITestResult;
+import org.testng.*;
 import org.testng.annotations.*;
 import org.xml.sax.SAXException;
+
 import com.thoughtworks.selenium.*;
-import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
-import com.zimbra.qa.selenium.framework.core.Repository;
-import com.zimbra.qa.selenium.framework.ui.*;
+import com.zimbra.qa.selenium.framework.core.*;
+import com.zimbra.qa.selenium.framework.ui.AbsTab;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.OperatingSystem.OsType;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount.SOAP_DESTINATION_HOST_TYPE;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
-import com.zimbra.qa.selenium.projects.ajax.ui.DialogError.DialogErrorID;
 
 /**
  * The <code>AjaxCommonTest</code> class is the base test case class
@@ -378,26 +376,6 @@ public class AjaxCommonTest {
 
 			if ( app.zPageMain.zIsActive() )
 				app.zPageMain.zLogout();
-			app.zPageLogin.zLogin(ZimbraAccount.AccountZWC());
-
-			// Confirm
-			if ( !ZimbraAccount.AccountZWC().equals(app.zGetActiveAccount())) {
-				throw new HarnessException("Unable to authenticate as "+ ZimbraAccount.AccountZWC().EmailAddress);
-			}
-
-			// Handle http://wiki.zimbra.com/wiki/File:ZimbraSeleniumScreenshotPopups1.jpeg
-			// START REF: https://bugzilla.zimbra.com/show_bug.cgi?id=63711
-			// Depending on how bug 63711 is implemented, need to add/update/remove the 
-			// code below.  Checking for a dialog after login is too generic - it
-			// could miss other un-wanted dialog boxes that are bugs.
-			//
-			DialogError dialog = app.zPageMain.zGetErrorDialog(DialogErrorID.ZmMsgDialog);
-			if ( dialog.zIsActive() ) {
-				dialog.zClickButton(Button.B_OK);
-			}
-			//
-			// END REF: https://bugzilla.zimbra.com/show_bug.cgi?id=63711
-
 			
 		}
 
@@ -483,7 +461,18 @@ public class AjaxCommonTest {
 		logger.info("commonTestAfterMethod: start");
 
 		String testCaseResult = String.valueOf(testResult.getStatus());
-      Repository.testCaseEnd(testCaseResult);
+		Repository.testCaseEnd(testCaseResult);
+
+		// If neither the main page or login page are active, then
+		// The app may be in a confused state.
+		//
+		// Clear the cookies and reload
+		//
+		if ( (!app.zPageMain.zIsActive()) && (!app.zPageLogin.zIsActive()) ) {
+			logger.error("Neither login page nor main page were active.  Clear cookies and reload.", new Exception());
+			app.zPageLogin.sDeleteAllVisibleCookies();
+			app.zPageLogin.sOpen(ZimbraSeleniumProperties.getBaseURL());
+		}
 
 		logger.info("commonTestAfterMethod: finish");
 	}
