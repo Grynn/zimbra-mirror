@@ -25,6 +25,8 @@ namespace GroupWise
 
         }
 
+
+
         public void Login()
         {
 
@@ -105,6 +107,90 @@ namespace GroupWise
 
         }
 
+
+        public void GetUsersList()
+        {
+
+            getUserListRequest listreq = new getUserListRequest();
+            getUserListResponse listresp = new getUserListResponse();
+            listreq.name = "ZimbraGWmigration";
+            listreq.key = admin.Key;
+            try
+            {
+
+                listresp = ws.getUserListRequest(listreq);
+                int count = listresp.users.Length;
+                System.Console.WriteLine("Total users on this Postoffice are :" + count);
+
+                string message = " users are : ";
+                while (count >= 0)
+                {
+                    message += listresp.users[count].name;
+
+                    count--;
+
+
+                }
+
+                System.Console.WriteLine(message);
+                
+            }
+            catch (Exception e)
+            {
+
+                System.Console.WriteLine("Exception in Getuserlist : " + e.Message);
+
+
+            }
+
+
+
+
+        }
+
+        public void UserLogin(string username)
+        {
+
+            ws = new GroupWiseBinding();
+            string str = "http://";
+            str += "10.20.136.206";
+            str += ":";
+            str += "7191";
+            str += "/soap";
+            ws.Url = str;
+            TrustedApplication trusted = new TrustedApplication();
+
+            trusted.name = "ZimbraGWmigration";
+            trusted.key = admin.Key;//outkey.ToString();
+
+
+            trusted.username = username;
+
+
+
+            loginRequest reql = new loginRequest();
+            reql.auth = trusted;
+
+            loginResponse respl;
+
+            try
+            {
+
+                respl = ws.loginRequest(reql);
+
+                ws.session = new @string();
+                ws.session.Text = new String[1];
+                ws.session.Text[0] = respl.session;
+
+            }
+            catch (Exception e)
+            {
+                System.Console.WriteLine("Exception in Getuserlist : " + e.Message);
+
+            }
+
+
+        }
         public void getFolders(string sessioninfo)
         {
             String str;
@@ -135,17 +221,36 @@ namespace GroupWise
                 }
                 System.Console.WriteLine(str);
 
+                 foreach (Folder f in resp.folders)
+                {
+                    if ((f.name.ToString() == "Mailbox") || (f.name.ToString() == "SentItems"))
+                    {
+                        getItems(f.id);
+                        ws.session = new @string();
+                        ws.session.Text = new String[1];
+                        ws.session.Text[0] = sessioninfo;
+                    }
+                    if (f.name.ToString() == "Contacts")
+                    {
+                        getContactItems(f.id);
+                        ws.session = new @string();
+                        ws.session.Text = new String[1];
+                        ws.session.Text[0] =sessioninfo;
+
+                    }
+
+                }
                
 
-                foreach (SystemFolder f1 in resp.folders)
+               /* foreach (SystemFolder f1 in resp.folders)
                 {
 
                     ws.session = new @string();
                     ws.session.Text = new String[1];
                     ws.session.Text[0] = sessioninfo;
-
-                    if ((f1.folderType.ToString() == "Mailbox") /*|| (f1.folderType.ToString() == "SentItems")*/)
-                    {
+                    
+                    //if ((f1.folderType.ToString() == "Mailbox") /*|| (f1.folderType.ToString() == "SentItems")*/
+                   /* {
                         getItems(f1.id);
 
                         getTimestampRequest gt = new getTimestampRequest();
@@ -164,7 +269,7 @@ namespace GroupWise
                         else
                             System.Console.WriteLine("Not a Mail Folder Sorry>>>>");
                     }
-                }
+                }*/
 
                 
             }
@@ -248,6 +353,52 @@ namespace GroupWise
             {
                 //lblStatus.Text = resp.status.code.ToString();
                 System.Console.WriteLine( resp.status.description);
+            }
+        }
+
+
+        protected void getContactItems(string uid)
+        {
+            String str;
+            getItemsRequest req = new getItemsRequest();
+            getItemsResponse resp;
+
+            req.container = uid;
+
+            resp = ws.getItemsRequest(req);
+            //  resp = ws.getItemRequest(req);
+            if (0 == resp.status.code)
+            {
+                str = "Items: for Contact folder ";
+                if (null != resp.items)
+                {
+                    str += resp.items.Length;
+
+                    int cnt = resp.items.Length;
+                    cnt = cnt - 1;
+
+
+                    while (cnt >= 0)
+                    {
+
+                        Contact mt = (Contact)resp.items[cnt];
+
+                        str += mt.officeInfo;
+                        str += "\n";
+                        str += mt.name;
+                        cnt--;
+                    }
+
+                   
+                    str += resp.status.code.ToString();
+                }
+                System.Console.WriteLine(str);
+            }
+            else
+            {
+               
+
+                System.Console.WriteLine(resp.status.description);
             }
         }
 
