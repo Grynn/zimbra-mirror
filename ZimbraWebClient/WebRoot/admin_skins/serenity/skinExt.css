@@ -15,7 +15,7 @@
 }
 
 /*  -- Navigator -- */
-
+/*
 .ZaCtrAppTreeHeader .DwtLinkButtonTable {
     height:12px;
     margin-top:5px;
@@ -36,6 +36,11 @@
     height:12px;
     @trRadius@:5px;
     @brRadius@:5px;
+}
+ */
+
+.ZaCtrAppTreeHeader {
+    padding: 5px 0px 0px 5px;
 }
 
 .AdminTreeItem {

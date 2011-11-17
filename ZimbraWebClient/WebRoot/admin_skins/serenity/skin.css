@@ -652,17 +652,8 @@ body {
     color:@lighten(LoginColor,36)@;
 }
 
-.DwtLinkButtonDropDownArrowRow {
-    border-right:1px solid #000000;
-}
-
 .DwtLinkButtonDropDownArrow {
     width :   17px;
-    padding-left:   7px;
-}
-
-.DwtLinkButtonTable {
-    height  :   100%;
 }
 
 /*Here start for new ui*/

@@ -20,6 +20,9 @@ ZaCrtAppTreeHeader = function(parent, className, buttons) {
 
 ZaCrtAppTreeHeader.prototype = new DwtButton;
 ZaCrtAppTreeHeader.prototype.constructor = ZaCrtAppTreeHeader ;
+ZaCrtAppTreeHeader.prototype._dropDownImg = "";
+ZaCrtAppTreeHeader.prototype._dropDownDepImg = "";
+ZaCrtAppTreeHeader.prototype._dropDownHovImg = "";
 ZaCrtAppTreeHeader.defalutImg = "CollapseLeft";
 
 ZaCrtAppTreeHeader.prototype.toString =

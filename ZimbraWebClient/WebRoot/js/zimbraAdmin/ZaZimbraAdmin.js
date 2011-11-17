@@ -543,7 +543,7 @@ function() {
     var previousEl = previousLabel.getHtmlElement();
     previousLabel.setCursor ("pointer");
     previousEl.onclick = function () { ZaZimbraAdmin.prototype._goPrevListener.call(ZaZimbraAdmin.getInstance());};
-    previousEl.innerHTML = this._getAppLink(null, "LeftArrowWhite");
+    previousEl.innerHTML = this._getAppLink(null, "LeftArrowNormal");
     previousLabel.reparentHtmlElement (ZaSettings.SKIN_PREVIOUS_DOM_ID) ;
 }
 
@@ -557,7 +557,7 @@ function() {
     var nextEl = nextLabel.getHtmlElement();
     nextLabel.setCursor ("pointer");
     nextEl.onclick = function () { ZaZimbraAdmin.prototype._goNextListener.call(ZaZimbraAdmin.getInstance());};
-    nextEl.innerHTML = this._getAppLink(null, "RightArrowWhite");
+    nextEl.innerHTML = this._getAppLink(null, "RightArrowNormal");
     nextLabel.reparentHtmlElement (ZaSettings.SKIN_NEXT_DOM_ID) ;
 }
 
