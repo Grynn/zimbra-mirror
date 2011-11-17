@@ -30,7 +30,7 @@
 
 	<property name="project.outputDirectory" value="build" />
 
-	<property name="jetty.version" value="6.1.5" />
+	<property name="jetty.version" value="7.5.5-SNAPSHOT" />
 	<property name="jetty_run_base" location="/opt/zimbra/zdesktop dev" />
 
 	<path id="jetty.plugin.classpath">
@@ -38,7 +38,9 @@
 			<include name="*.jar" />
 			<include name="plus/*.jar" />
 			<include name="naming/*.jar" />
-			<include name="jsp-2.1/*.jar" />
+			<include name="jsp/*.jar" />
+			<include name="ext/*.jar" />
+			<include name="annotations/*.jar" />
 		</fileset>
 		<fileset dir="../ZimbraServer/jars">
 			<include name="jetty-ant-${jetty.version}.jar" />
@@ -76,11 +78,14 @@
 				<!--classes dir="../ZimbraSyncCommon/build/classes" />
 				<classes dir="../ZimbraSyncClient/build/classes" />
 				<classes dir="../ZimbraOfflineExt/build/classes" /-->
+				<attributes>
+				    <attribute name="org.eclipse.jetty.server.webapp.ContainerIncludeJarPattern" value=".*/.*jsp-api-[^/]*\.jar$|.*/.*jsp-[^/]*\.jar$|.*/.*taglibs[^/]*\.jar$"/>
+				</attributes>
 			</webApp>
 
 			<webApp name="ZimbraWebClient" warfile="build/dist/app/jetty/webapps/zimbra" contextpath="/zimbra">
 				<lib dir="${jetty_run_base}/app/jetty/common/lib" includes="*.jar" excludes="not-needed.jar,zimbracommon.jar,zimbra-native.jar" />
-		        <lib dir="${jetty_run_base}/app/jetty/lib/jsp-2.1" includes="*.jar" excludes="not-needed.jar"/> 
+		        <lib dir="${jetty_run_base}/app/jetty/lib/jsp" includes="*.jar" excludes="not-needed.jar"/> 
 				<classes dir="build/classes"/>
 				<classes dir="../ZimbraCommon/build/classes" />
 		        <classes dir="../ZimbraSoap/build/classes" />
@@ -88,9 +93,15 @@
 				<classes dir="../ZimbraWebClient/build/classes" />
 		        <classes dir="../ZimbraClient/build/classes" />
 				<classes dir="${jetty_run_base}/app/jetty/webapps/zimbra/WEB-INF/classes"/>
+				<attributes>
+				    <attribute name="org.eclipse.jetty.server.webapp.ContainerIncludeJarPattern" value=".*/.*jsp-api-[^/]*\.jar$|.*/.*jsp-[^/]*\.jar$|.*/.*taglibs[^/]*\.jar$"/>
+				</attributes>
 			</webApp>
 
 			<webApp name="Zimlet" warfile="build/dist/app/jetty/webapps/zimlet" contextpath="/zimlet">
+			<attributes>
+			     <attribute name="org.eclipse.jetty.server.webapp.ContainerIncludeJarPattern" value=".*/.*jsp-api-[^/]*\.jar$|.*/.*jsp-[^/]*\.jar$|.*/.*taglibs[^/]*\.jar$"/>
+			</attributes>
 			</webApp>
 
 		</jetty>
