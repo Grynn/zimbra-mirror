@@ -399,7 +399,8 @@ public abstract class SyncMailbox extends DesktopMailbox {
             return;
 
         if (pms.created != null) {
-            for (MailItem item : pms.created.values()) {
+            for (Change change : pms.created.values()) {
+                MailItem item = (MailItem) change.what;
                 if ((item.getId() >= FIRST_USER_ID || item instanceof Tag) && item.getFolderId() != ID_FOLDER_FAILURE) {
                     itemCreated(item);
                     trackChangeNew(item);
