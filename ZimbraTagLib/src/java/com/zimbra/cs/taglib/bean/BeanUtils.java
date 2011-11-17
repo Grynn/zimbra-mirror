@@ -718,7 +718,7 @@ public class BeanUtils {
         if (f == null) return null;
 		StringBuilder builder = new StringBuilder(256);
 		getFolderPath(pc, f, builder);
-		return builder.toString();
+		return BeanUtils.cook(builder.toString());
     }
 
     private static long sUrlRandSalt = 0;
