@@ -76,6 +76,23 @@ ZaHomeXFormView.onConfigGAL = function(ev) {
     }
 }
 
+ZaHomeXFormView.canConfigGAL =function (ev) {
+    var domainList = ZaApp.getInstance().getDomainList();
+    var canConfigGAL = false;
+    if (domainList.size() > 0) {
+        var currentDomain;
+        var vector = domainList.getVector();
+        for (var i = vector.size() -1; i >= 0; i--) {
+            currentDomain = vector.get(i);
+            if (ZaDomain.canConfigureGal(currentDomain)) {
+                canConfigGAL = true;
+                break;
+            }
+        }
+    }
+    return canConfigGAL;
+}
+
 ZaHomeXFormView.onConfigAuth = function(ev) {
     var domainList = ZaApp.getInstance().getDomainList();
     if (domainList.size() > 0) {
@@ -83,6 +100,23 @@ ZaHomeXFormView.onConfigAuth = function(ev) {
         var domainListController = ZaApp.getInstance().getDomainListController();
         ZaDomainListController.prototype._openAuthWiz.call(domainListController, lastDomain);
     }
+}
+
+ZaHomeXFormView.canConfigAuth =function (ev) {
+    var domainList = ZaApp.getInstance().getDomainList();
+    var canConfigAuth = false;
+    if (domainList.size() > 0) {
+        var currentDomain;
+        var vector = domainList.getVector();
+        for (var i = vector.size() -1; i >= 0; i--) {
+            currentDomain = vector.get(i);
+            if (ZaDomain.canConfigureAuth(currentDomain)) {
+                canConfigAuth = true;
+                break;
+            }
+        }
+    }
+    return canConfigAuth;
 }
 
 ZaHomeXFormView.onConfigDefaultCos = function() {
@@ -164,19 +198,28 @@ ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
     startContentChoices.push({});
     startContentChoices.push({});
 
-    if (ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNT_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+    if (ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.COS_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
         startContentChoices[3] = {value:ZaMsg.LBL_HomeConfigureCos, onClick: ZaHomeXFormView.onConfigDefaultCos};
     }
 
     if (ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DOMAIN_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
-        labelChoices.push(ZaMsg.LBL_HomeSetupDomain);
         var domainContentChoices = [];
 	    if(ZaItem.hasRight(ZaDomain.RIGHT_CREATE_TOP_DOMAIN, ZaZimbraAdmin.currentAdminAccount)) {
             domainContentChoices.push({value:ZaMsg.LBL_HomeCreateDomain, onClick: ZaHomeXFormView.onCreateDomain});
         }
-        domainContentChoices.push({value:ZaMsg.LBL_HomeConfigureGAL, onClick: ZaHomeXFormView.onConfigGAL});
-        domainContentChoices.push({value:ZaMsg.LBL_HomeCOnfigureAuth, onClick: ZaHomeXFormView.onConfigAuth});
-        contentChoices.push(domainContentChoices);
+
+        if (ZaHomeXFormView.canConfigGAL()) {
+            domainContentChoices.push({value:ZaMsg.LBL_HomeConfigureGAL, onClick: ZaHomeXFormView.onConfigGAL});
+        }
+
+        if (ZaHomeXFormView.canConfigAuth()) {
+            domainContentChoices.push({value:ZaMsg.LBL_HomeCOnfigureAuth, onClick: ZaHomeXFormView.onConfigAuth});
+        }
+
+        if (domainContentChoices.length > 0) {
+            labelChoices.push(ZaMsg.LBL_HomeSetupDomain);
+            contentChoices.push(domainContentChoices);
+        }
     }
 
     if (ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNT_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
@@ -293,9 +336,9 @@ ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
                 ]}
             ]},
             {type:_GROUP_, colSpan: "*", id:"homeSetupGroup", containerCssClass:"ZaHomeSetupPanelContainer", cssClass:"ZaHomeSetupPanel", numCols:1, items:[
-                {type:_GROUP_, colSpan: "*", numCols: 3,  colSizes:["37%", "34%", "29%"],
+                {type:_GROUP_, colSpan: "*", numCols: 3,  width:"100%", colSizes:["37%", "34%", "29%"],
                     containerCssClass:"ZaHomeSetupPanelContent", items:[
-                    {type:_GROUP_, colSpan: "*", numCols:2, colSizes:["100%", "20px"], items:[
+                    {type:_GROUP_, colSpan: "*", width:"100%", numCols:2, colSizes:["100%", "20px"], items:[
                         {type:_CELL_SPACER_},
                         {type:_DWT_IMAGE_, value: "ImgClose", containerCssStyle:"cursor: pointer;", onClick:ZaHomeXFormView.onCloseSetup}
                     ]},

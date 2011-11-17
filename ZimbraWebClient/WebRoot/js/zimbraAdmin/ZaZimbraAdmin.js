@@ -689,6 +689,9 @@ function () {
 
 	var dwButton = new DwtBorderlessButton(this._shell, "", "", Dwt.RELATIVE_STYLE);
 	var containerWidth = Dwt.getSize(userNameContainer).x;
+    if (appNewUI) {
+        containerWidth = containerWidth - 16; // substract drop-down icon's width
+    }
 	var innerContent = null;
 	if(containerWidth <= 40) {
 		// if there are not enough space, just follow skin's setting
