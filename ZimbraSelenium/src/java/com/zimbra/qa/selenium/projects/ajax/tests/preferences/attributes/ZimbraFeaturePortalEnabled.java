@@ -14,7 +14,7 @@
  * 
  * ***** END LICENSE BLOCK *****
  */
-package com.zimbra.qa.selenium.projects.ajax.tests.login.portal;
+package com.zimbra.qa.selenium.projects.ajax.tests.preferences.attributes;
 
 import java.util.HashMap;
 
@@ -27,10 +27,10 @@ import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 
 
 
-public class ExamplePortal extends AjaxCommonTest {
+public class ZimbraFeaturePortalEnabled extends AjaxCommonTest {
 	
-	public ExamplePortal() {
-		logger.info("New "+ ExamplePortal.class.getCanonicalName());
+	public ZimbraFeaturePortalEnabled() {
+		logger.info("New "+ ZimbraFeaturePortalEnabled.class.getCanonicalName());
 		
 		// All tests start at the login page
 		super.startingPage = app.zPageLogin;
