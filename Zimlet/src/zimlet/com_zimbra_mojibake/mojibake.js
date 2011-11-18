@@ -44,7 +44,7 @@ function(droppedItem) {
 	} else {
 		return;
 	}
-	if(msg.loaded) {
+	if(!msg._loaded) {
 		msg.load({});
 	}
 	this._showEmailInNewWindow(msg);
