@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlValue;
  *   &lt;simpleContent>
  *     &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema>string">
  *       &lt;attribute name="op" use="required" type="{urn:zimbraAccount}distributionListSubscribeOp" />
- *       &lt;attribute name="bccOwners" use="required" type="{http://www.w3.org/2001/XMLSchema}boolean" />
+ *       &lt;attribute name="bccOwners" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *     &lt;/extension>
  *   &lt;/simpleContent>
  * &lt;/complexType>
@@ -36,8 +36,8 @@ public class testDistributionListSubscribeReq {
     protected String value;
     @XmlAttribute(name = "op", required = true)
     protected testDistributionListSubscribeOp op;
-    @XmlAttribute(name = "bccOwners", required = true)
-    protected boolean bccOwners;
+    @XmlAttribute(name = "bccOwners")
+    protected Boolean bccOwners;
 
     /**
      * Gets the value of the value property.
@@ -90,16 +90,24 @@ public class testDistributionListSubscribeReq {
     /**
      * Gets the value of the bccOwners property.
      * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
      */
-    public boolean isBccOwners() {
+    public Boolean isBccOwners() {
         return bccOwners;
     }
 
     /**
      * Sets the value of the bccOwners property.
      * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
      */
-    public void setBccOwners(boolean value) {
+    public void setBccOwners(Boolean value) {
         this.bccOwners = value;
     }
 

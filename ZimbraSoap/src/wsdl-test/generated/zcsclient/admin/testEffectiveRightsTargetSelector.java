@@ -6,6 +6,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlValue;
+import generated.zcsclient.zm.testTargetBy;
 import generated.zcsclient.zm.testTargetType;
 
 
@@ -19,7 +20,7 @@ import generated.zcsclient.zm.testTargetType;
  *   &lt;simpleContent>
  *     &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema>string">
  *       &lt;attribute name="type" use="required" type="{urn:zimbra}targetType" />
- *       &lt;attribute name="by" type="{urn:zimbraAdmin}targetBy" />
+ *       &lt;attribute name="by" type="{urn:zimbra}targetBy" />
  *     &lt;/extension>
  *   &lt;/simpleContent>
  * &lt;/complexType>

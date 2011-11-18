@@ -20,7 +20,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="folder" type="{urn:zimbraMail}getFolderSpec" minOccurs="0"/>
  *       &lt;/sequence>
  *       &lt;attribute name="visible" type="{http://www.w3.org/2001/XMLSchema}boolean" />
- *       &lt;attribute name="needGranteeName" use="required" type="{http://www.w3.org/2001/XMLSchema}boolean" />
+ *       &lt;attribute name="needGranteeName" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *       &lt;attribute name="view" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="depth" type="{http://www.w3.org/2001/XMLSchema}int" />
  *     &lt;/restriction>
@@ -39,8 +39,8 @@ public class testGetFolderRequest {
     protected testGetFolderSpec folder;
     @XmlAttribute(name = "visible")
     protected Boolean visible;
-    @XmlAttribute(name = "needGranteeName", required = true)
-    protected boolean needGranteeName;
+    @XmlAttribute(name = "needGranteeName")
+    protected Boolean needGranteeName;
     @XmlAttribute(name = "view")
     protected String view;
     @XmlAttribute(name = "depth")
@@ -97,16 +97,24 @@ public class testGetFolderRequest {
     /**
      * Gets the value of the needGranteeName property.
      * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
      */
-    public boolean isNeedGranteeName() {
+    public Boolean isNeedGranteeName() {
         return needGranteeName;
     }
 
     /**
      * Sets the value of the needGranteeName property.
      * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
      */
-    public void setNeedGranteeName(boolean value) {
+    public void setNeedGranteeName(Boolean value) {
         this.needGranteeName = value;
     }
 

@@ -30,6 +30,7 @@ import generated.zcsclient.zm.testId;
  *       &lt;attribute name="sortBy" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="derefGroupMember" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *       &lt;attribute name="returnHiddenAttrs" type="{http://www.w3.org/2001/XMLSchema}boolean" />
+ *       &lt;attribute name="maxMembers" type="{http://www.w3.org/2001/XMLSchema}long" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -58,6 +59,8 @@ public class testGetContactsRequest {
     protected Boolean derefGroupMember;
     @XmlAttribute(name = "returnHiddenAttrs")
     protected Boolean returnHiddenAttrs;
+    @XmlAttribute(name = "maxMembers")
+    protected Long maxMembers;
 
     /**
      * Gets the value of the a property.
@@ -264,6 +267,30 @@ public class testGetContactsRequest {
      */
     public void setReturnHiddenAttrs(Boolean value) {
         this.returnHiddenAttrs = value;
+    }
+
+    /**
+     * Gets the value of the maxMembers property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Long }
+     *     
+     */
+    public Long getMaxMembers() {
+        return maxMembers;
+    }
+
+    /**
+     * Sets the value of the maxMembers property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Long }
+     *     
+     */
+    public void setMaxMembers(Long value) {
+        this.maxMembers = value;
     }
 
 }

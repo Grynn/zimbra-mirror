@@ -1,31 +1,28 @@
 
-package generated.zcsclient.admin;
+package generated.zcsclient.account;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElementRef;
-import javax.xml.bind.annotation.XmlMixed;
 import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for statsSpec complex type.
+ * <p>Java class for discoverRightsTarget complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="statsSpec">
+ * &lt;complexType name="discoverRightsTarget">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element ref="{urn:zimbraAdmin}values" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="email" type="{urn:zimbraAccount}discoverRightsEmail" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
- *       &lt;attribute name="limit" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="type" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="name" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -35,71 +32,94 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "statsSpec", propOrder = {
-    "content"
+@XmlType(name = "discoverRightsTarget", propOrder = {
+    "email"
 })
-public class testStatsSpec {
+public class testDiscoverRightsTarget {
 
-    @XmlElementRef(name = "values", namespace = "urn:zimbraAdmin", type = JAXBElement.class)
-    @XmlMixed
-    protected List<Serializable> content;
-    @XmlAttribute(name = "limit")
-    protected String limit;
+    protected List<testDiscoverRightsEmail> email;
+    @XmlAttribute(name = "type", required = true)
+    protected String type;
+    @XmlAttribute(name = "id")
+    protected String id;
     @XmlAttribute(name = "name")
     protected String name;
 
     /**
-     * Gets the value of the content property.
+     * Gets the value of the email property.
      * 
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the content property.
+     * This is why there is not a <CODE>set</CODE> method for the email property.
      * 
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
-     *    getContent().add(newItem);
+     *    getEmail().add(newItem);
      * </pre>
      * 
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link JAXBElement }{@code <}{@link testStatsValueWrapper }{@code >}
-     * {@link String }
+     * {@link testDiscoverRightsEmail }
      * 
      * 
      */
-    public List<Serializable> getContent() {
-        if (content == null) {
-            content = new ArrayList<Serializable>();
+    public List<testDiscoverRightsEmail> getEmail() {
+        if (email == null) {
+            email = new ArrayList<testDiscoverRightsEmail>();
         }
-        return this.content;
+        return this.email;
     }
 
     /**
-     * Gets the value of the limit property.
+     * Gets the value of the type property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getLimit() {
-        return limit;
+    public String getType() {
+        return type;
     }
 
     /**
-     * Sets the value of the limit property.
+     * Sets the value of the type property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setLimit(String value) {
-        this.limit = value;
+    public void setType(String value) {
+        this.type = value;
+    }
+
+    /**
+     * Gets the value of the id property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * Sets the value of the id property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setId(String value) {
+        this.id = value;
     }
 
     /**

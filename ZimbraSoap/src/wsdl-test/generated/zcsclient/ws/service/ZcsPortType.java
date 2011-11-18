@@ -15,6 +15,8 @@ import generated.zcsclient.account.testChangePasswordRequest;
 import generated.zcsclient.account.testChangePasswordResponse;
 import generated.zcsclient.account.testCheckLicenseRequest;
 import generated.zcsclient.account.testCheckLicenseResponse;
+import generated.zcsclient.account.testCheckRightsRequest;
+import generated.zcsclient.account.testCheckRightsResponse;
 import generated.zcsclient.account.testCreateDistributionListRequest;
 import generated.zcsclient.account.testCreateDistributionListResponse;
 import generated.zcsclient.account.testCreateIdentityRequest;
@@ -25,6 +27,8 @@ import generated.zcsclient.account.testDeleteIdentityRequest;
 import generated.zcsclient.account.testDeleteIdentityResponse;
 import generated.zcsclient.account.testDeleteSignatureRequest;
 import generated.zcsclient.account.testDeleteSignatureResponse;
+import generated.zcsclient.account.testDiscoverRightsRequest;
+import generated.zcsclient.account.testDiscoverRightsResponse;
 import generated.zcsclient.account.testDistributionListActionRequest;
 import generated.zcsclient.account.testDistributionListActionResponse;
 import generated.zcsclient.account.testEndSessionRequest;
@@ -387,14 +391,14 @@ import generated.zcsclient.sync.testSuspendDeviceResponse;
 @WebService(name = "zcsPortType", targetNamespace = "http://www.zimbra.com/wsdl/ZimbraService.wsdl")
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
 @XmlSeeAlso({
-    generated.zcsclient.appblast.ObjectFactory.class,
-    generated.zcsclient.sync.ObjectFactory.class,
-    generated.zcsclient.admin.ObjectFactory.class,
-    generated.zcsclient.mail.ObjectFactory.class,
-    generated.zcsclient.replication.ObjectFactory.class,
     generated.zcsclient.zm.ObjectFactory.class,
+    generated.zcsclient.admin.ObjectFactory.class,
+    generated.zcsclient.replication.ObjectFactory.class,
+    generated.zcsclient.account.ObjectFactory.class,
+    generated.zcsclient.mail.ObjectFactory.class,
+    generated.zcsclient.sync.ObjectFactory.class,
     generated.zcsclient.adminext.ObjectFactory.class,
-    generated.zcsclient.account.ObjectFactory.class
+    generated.zcsclient.appblast.ObjectFactory.class
 })
 public interface ZcsPortType {
 
@@ -446,6 +450,18 @@ public interface ZcsPortType {
     public testCheckLicenseResponse checkLicenseRequest(
         @WebParam(name = "CheckLicenseRequest", targetNamespace = "urn:zimbraAccount", partName = "parameters")
         testCheckLicenseRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns generated.zcsclient.account.testCheckRightsResponse
+     */
+    @WebMethod(action = "urn:zimbraAccount/CheckRights")
+    @WebResult(name = "CheckRightsResponse", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+    public testCheckRightsResponse checkRightsRequest(
+        @WebParam(name = "CheckRightsRequest", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+        testCheckRightsRequest parameters);
 
     /**
      * 
@@ -506,6 +522,18 @@ public interface ZcsPortType {
     public testDeleteSignatureResponse deleteSignatureRequest(
         @WebParam(name = "DeleteSignatureRequest", targetNamespace = "urn:zimbraAccount", partName = "parameters")
         testDeleteSignatureRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns generated.zcsclient.account.testDiscoverRightsResponse
+     */
+    @WebMethod(action = "urn:zimbraAccount/DiscoverRights")
+    @WebResult(name = "DiscoverRightsResponse", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+    public testDiscoverRightsResponse discoverRightsRequest(
+        @WebParam(name = "DiscoverRightsRequest", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+        testDiscoverRightsRequest parameters);
 
     /**
      * 

@@ -21,7 +21,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;attribute name="header" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="part" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="stringComparison" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="caseSensitive" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="caseSensitive" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *       &lt;attribute name="value" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/extension>
  *   &lt;/complexContent>
@@ -43,7 +43,7 @@ public class testAddressTest
     @XmlAttribute(name = "stringComparison", required = true)
     protected String stringComparison;
     @XmlAttribute(name = "caseSensitive")
-    protected String caseSensitive;
+    protected Boolean caseSensitive;
     @XmlAttribute(name = "value", required = true)
     protected String value;
 
@@ -124,10 +124,10 @@ public class testAddressTest
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link Boolean }
      *     
      */
-    public String getCaseSensitive() {
+    public Boolean isCaseSensitive() {
         return caseSensitive;
     }
 
@@ -136,10 +136,10 @@ public class testAddressTest
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link Boolean }
      *     
      */
-    public void setCaseSensitive(String value) {
+    public void setCaseSensitive(Boolean value) {
         this.caseSensitive = value;
     }
 

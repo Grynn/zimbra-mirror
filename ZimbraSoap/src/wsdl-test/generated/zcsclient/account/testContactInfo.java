@@ -42,6 +42,7 @@ import generated.zcsclient.zm.testContactAttr;
  *       &lt;attribute name="type" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="dlist" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="ref" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="tooManyMembers" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -96,6 +97,8 @@ public class testContactInfo {
     protected String dlist;
     @XmlAttribute(name = "ref")
     protected String ref;
+    @XmlAttribute(name = "tooManyMembers")
+    protected Boolean tooManyMembers;
 
     /**
      * Gets the value of the meta property.
@@ -614,6 +617,30 @@ public class testContactInfo {
      */
     public void setRef(String value) {
         this.ref = value;
+    }
+
+    /**
+     * Gets the value of the tooManyMembers property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isTooManyMembers() {
+        return tooManyMembers;
+    }
+
+    /**
+     * Sets the value of the tooManyMembers property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setTooManyMembers(Boolean value) {
+        this.tooManyMembers = value;
     }
 
 }

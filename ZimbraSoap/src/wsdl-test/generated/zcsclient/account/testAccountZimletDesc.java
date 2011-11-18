@@ -52,9 +52,9 @@ import org.w3c.dom.Element;
 public class testAccountZimletDesc {
 
     @XmlElementRefs({
-        @XmlElementRef(name = "target", namespace = "urn:zimbraAccount", type = JAXBElement.class),
-        @XmlElementRef(name = "serverExtension", namespace = "urn:zimbraAccount", type = JAXBElement.class),
         @XmlElementRef(name = "includeCSS", namespace = "urn:zimbraAccount", type = JAXBElement.class),
+        @XmlElementRef(name = "serverExtension", namespace = "urn:zimbraAccount", type = JAXBElement.class),
+        @XmlElementRef(name = "target", namespace = "urn:zimbraAccount", type = JAXBElement.class),
         @XmlElementRef(name = "include", namespace = "urn:zimbraAccount", type = JAXBElement.class)
     })
     @XmlAnyElement

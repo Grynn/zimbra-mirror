@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;attribute name="mbits" use="required" type="{http://www.w3.org/2001/XMLSchema}short" />
  *       &lt;attribute name="fgbits" use="required" type="{http://www.w3.org/2001/XMLSchema}short" />
  *       &lt;attribute name="fbits" use="required" type="{http://www.w3.org/2001/XMLSchema}short" />
- *       &lt;attribute name="isCurrent" use="required" type="{http://www.w3.org/2001/XMLSchema}boolean" />
+ *       &lt;attribute name="isCurrent" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -60,8 +60,8 @@ public class testVolumeInfo {
     protected short fgbits;
     @XmlAttribute(name = "fbits", required = true)
     protected short fbits;
-    @XmlAttribute(name = "isCurrent", required = true)
-    protected boolean isCurrent;
+    @XmlAttribute(name = "isCurrent")
+    protected Boolean isCurrent;
 
     /**
      * Gets the value of the id property.
@@ -250,16 +250,24 @@ public class testVolumeInfo {
     /**
      * Gets the value of the isCurrent property.
      * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
      */
-    public boolean isIsCurrent() {
+    public Boolean isIsCurrent() {
         return isCurrent;
     }
 
     /**
      * Sets the value of the isCurrent property.
      * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
      */
-    public void setIsCurrent(boolean value) {
+    public void setIsCurrent(Boolean value) {
         this.isCurrent = value;
     }
 

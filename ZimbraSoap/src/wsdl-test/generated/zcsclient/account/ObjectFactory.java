@@ -37,6 +37,7 @@ public class ObjectFactory {
     private final static QName _UpdateProfileRequest_QNAME = new QName("urn:zimbraAccount", "UpdateProfileRequest");
     private final static QName _ModifyZimletPrefsResponse_QNAME = new QName("urn:zimbraAccount", "ModifyZimletPrefsResponse");
     private final static QName _CheckLicenseRequest_QNAME = new QName("urn:zimbraAccount", "CheckLicenseRequest");
+    private final static QName _DiscoverRightsResponse_QNAME = new QName("urn:zimbraAccount", "DiscoverRightsResponse");
     private final static QName _SearchGalResponse_QNAME = new QName("urn:zimbraAccount", "SearchGalResponse");
     private final static QName _UpdateProfileResponse_QNAME = new QName("urn:zimbraAccount", "UpdateProfileResponse");
     private final static QName _ModifyIdentityResponse_QNAME = new QName("urn:zimbraAccount", "ModifyIdentityResponse");
@@ -46,6 +47,7 @@ public class ObjectFactory {
     private final static QName _Dl_QNAME = new QName("urn:zimbraAccount", "dl");
     private final static QName _GetShareInfoResponse_QNAME = new QName("urn:zimbraAccount", "GetShareInfoResponse");
     private final static QName _GetIdentitiesRequest_QNAME = new QName("urn:zimbraAccount", "GetIdentitiesRequest");
+    private final static QName _CheckRightsResponse_QNAME = new QName("urn:zimbraAccount", "CheckRightsResponse");
     private final static QName _SubscribeDistributionListResponse_QNAME = new QName("urn:zimbraAccount", "SubscribeDistributionListResponse");
     private final static QName _SyncGalResponse_QNAME = new QName("urn:zimbraAccount", "SyncGalResponse");
     private final static QName _GetPrefsRequest_QNAME = new QName("urn:zimbraAccount", "GetPrefsRequest");
@@ -63,6 +65,7 @@ public class ObjectFactory {
     private final static QName _CreateSignatureRequest_QNAME = new QName("urn:zimbraAccount", "CreateSignatureRequest");
     private final static QName _EndSessionResponse_QNAME = new QName("urn:zimbraAccount", "EndSessionResponse");
     private final static QName _ModifyPrefsRequest_QNAME = new QName("urn:zimbraAccount", "ModifyPrefsRequest");
+    private final static QName _CheckRightsRequest_QNAME = new QName("urn:zimbraAccount", "CheckRightsRequest");
     private final static QName _DeleteSignatureRequest_QNAME = new QName("urn:zimbraAccount", "DeleteSignatureRequest");
     private final static QName _GetAvailableLocalesRequest_QNAME = new QName("urn:zimbraAccount", "GetAvailableLocalesRequest");
     private final static QName _Meta_QNAME = new QName("urn:zimbraAccount", "meta");
@@ -91,6 +94,7 @@ public class ObjectFactory {
     private final static QName _ModifyWhiteBlackListRequest_QNAME = new QName("urn:zimbraAccount", "ModifyWhiteBlackListRequest");
     private final static QName _Target_QNAME = new QName("urn:zimbraAccount", "target");
     private final static QName _SubscribeDistributionListRequest_QNAME = new QName("urn:zimbraAccount", "SubscribeDistributionListRequest");
+    private final static QName _DiscoverRightsRequest_QNAME = new QName("urn:zimbraAccount", "DiscoverRightsRequest");
     private final static QName _GetAvailableCsvFormatsResponse_QNAME = new QName("urn:zimbraAccount", "GetAvailableCsvFormatsResponse");
     private final static QName _DeleteIdentityRequest_QNAME = new QName("urn:zimbraAccount", "DeleteIdentityRequest");
     private final static QName _GetAccountMembershipResponse_QNAME = new QName("urn:zimbraAccount", "GetAccountMembershipResponse");
@@ -120,171 +124,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link testGetInfoResponse.Signatures }
+     * Create an instance of {@link testPreAuth }
      * 
      */
-    public testGetInfoResponse.Signatures createtestGetInfoResponseSignatures() {
-        return new testGetInfoResponse.Signatures();
-    }
-
-    /**
-     * Create an instance of {@link testAutoCompleteGalResponse }
-     * 
-     */
-    public testAutoCompleteGalResponse createtestAutoCompleteGalResponse() {
-        return new testAutoCompleteGalResponse();
-    }
-
-    /**
-     * Create an instance of {@link testSearchCalendarResourcesResponse }
-     * 
-     */
-    public testSearchCalendarResourcesResponse createtestSearchCalendarResourcesResponse() {
-        return new testSearchCalendarResourcesResponse();
-    }
-
-    /**
-     * Create an instance of {@link testDistributionListActionResponse }
-     * 
-     */
-    public testDistributionListActionResponse createtestDistributionListActionResponse() {
-        return new testDistributionListActionResponse();
-    }
-
-    /**
-     * Create an instance of {@link testSyncGalResponse }
-     * 
-     */
-    public testSyncGalResponse createtestSyncGalResponse() {
-        return new testSyncGalResponse();
-    }
-
-    /**
-     * Create an instance of {@link testAccountDataSource }
-     * 
-     */
-    public testAccountDataSource createtestAccountDataSource() {
-        return new testAccountDataSource();
-    }
-
-    /**
-     * Create an instance of {@link testModifySignatureResponse }
-     * 
-     */
-    public testModifySignatureResponse createtestModifySignatureResponse() {
-        return new testModifySignatureResponse();
-    }
-
-    /**
-     * Create an instance of {@link testModifyWhiteBlackListRequest.WhiteList }
-     * 
-     */
-    public testModifyWhiteBlackListRequest.WhiteList createtestModifyWhiteBlackListRequestWhiteList() {
-        return new testModifyWhiteBlackListRequest.WhiteList();
-    }
-
-    /**
-     * Create an instance of {@link testAccountYabDataSource }
-     * 
-     */
-    public testAccountYabDataSource createtestAccountYabDataSource() {
-        return new testAccountYabDataSource();
-    }
-
-    /**
-     * Create an instance of {@link testCos }
-     * 
-     */
-    public testCos createtestCos() {
-        return new testCos();
-    }
-
-    /**
-     * Create an instance of {@link testAuthToken }
-     * 
-     */
-    public testAuthToken createtestAuthToken() {
-        return new testAuthToken();
-    }
-
-    /**
-     * Create an instance of {@link testGetSignaturesResponse }
-     * 
-     */
-    public testGetSignaturesResponse createtestGetSignaturesResponse() {
-        return new testGetSignaturesResponse();
-    }
-
-    /**
-     * Create an instance of {@link testModifyWhiteBlackListRequest }
-     * 
-     */
-    public testModifyWhiteBlackListRequest createtestModifyWhiteBlackListRequest() {
-        return new testModifyWhiteBlackListRequest();
-    }
-
-    /**
-     * Create an instance of {@link testModifyZimletPrefsResponse }
-     * 
-     */
-    public testModifyZimletPrefsResponse createtestModifyZimletPrefsResponse() {
-        return new testModifyZimletPrefsResponse();
-    }
-
-    /**
-     * Create an instance of {@link testModifyPrefsRequest }
-     * 
-     */
-    public testModifyPrefsRequest createtestModifyPrefsRequest() {
-        return new testModifyPrefsRequest();
-    }
-
-    /**
-     * Create an instance of {@link testGetAllLocalesRequest }
-     * 
-     */
-    public testGetAllLocalesRequest createtestGetAllLocalesRequest() {
-        return new testGetAllLocalesRequest();
-    }
-
-    /**
-     * Create an instance of {@link testGetSMIMEPublicCertsRequest }
-     * 
-     */
-    public testGetSMIMEPublicCertsRequest createtestGetSMIMEPublicCertsRequest() {
-        return new testGetSMIMEPublicCertsRequest();
-    }
-
-    /**
-     * Create an instance of {@link testNameId }
-     * 
-     */
-    public testNameId createtestNameId() {
-        return new testNameId();
-    }
-
-    /**
-     * Create an instance of {@link testGetAvailableLocalesResponse }
-     * 
-     */
-    public testGetAvailableLocalesResponse createtestGetAvailableLocalesResponse() {
-        return new testGetAvailableLocalesResponse();
-    }
-
-    /**
-     * Create an instance of {@link testAccountContactsDataSource }
-     * 
-     */
-    public testAccountContactsDataSource createtestAccountContactsDataSource() {
-        return new testAccountContactsDataSource();
-    }
-
-    /**
-     * Create an instance of {@link testAccountGalDataSource }
-     * 
-     */
-    public testAccountGalDataSource createtestAccountGalDataSource() {
-        return new testAccountGalDataSource();
+    public testPreAuth createtestPreAuth() {
+        return new testPreAuth();
     }
 
     /**
@@ -296,843 +140,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link testSearchGalRequest }
-     * 
-     */
-    public testSearchGalRequest createtestSearchGalRequest() {
-        return new testSearchGalRequest();
-    }
-
-    /**
-     * Create an instance of {@link testAuthRequest.Attrs }
-     * 
-     */
-    public testAuthRequest.Attrs createtestAuthRequestAttrs() {
-        return new testAuthRequest.Attrs();
-    }
-
-    /**
-     * Create an instance of {@link testSubscribeDistributionListResponse }
-     * 
-     */
-    public testSubscribeDistributionListResponse createtestSubscribeDistributionListResponse() {
-        return new testSubscribeDistributionListResponse();
-    }
-
-    /**
-     * Create an instance of {@link testGetPrefsResponse }
-     * 
-     */
-    public testGetPrefsResponse createtestGetPrefsResponse() {
-        return new testGetPrefsResponse();
-    }
-
-    /**
-     * Create an instance of {@link testGetAvailableCsvFormatsResponse }
-     * 
-     */
-    public testGetAvailableCsvFormatsResponse createtestGetAvailableCsvFormatsResponse() {
-        return new testGetAvailableCsvFormatsResponse();
-    }
-
-    /**
-     * Create an instance of {@link testChangePasswordResponse }
-     * 
-     */
-    public testChangePasswordResponse createtestChangePasswordResponse() {
-        return new testChangePasswordResponse();
-    }
-
-    /**
-     * Create an instance of {@link testAccountZimletDesc }
-     * 
-     */
-    public testAccountZimletDesc createtestAccountZimletDesc() {
-        return new testAccountZimletDesc();
-    }
-
-    /**
-     * Create an instance of {@link testGetInfoResponse.Props }
-     * 
-     */
-    public testGetInfoResponse.Props createtestGetInfoResponseProps() {
-        return new testGetInfoResponse.Props();
-    }
-
-    /**
-     * Create an instance of {@link testAccountZimletHostConfigInfo }
-     * 
-     */
-    public testAccountZimletHostConfigInfo createtestAccountZimletHostConfigInfo() {
-        return new testAccountZimletHostConfigInfo();
-    }
-
-    /**
-     * Create an instance of {@link testAccountZimletConfigInfo }
-     * 
-     */
-    public testAccountZimletConfigInfo createtestAccountZimletConfigInfo() {
-        return new testAccountZimletConfigInfo();
-    }
-
-    /**
-     * Create an instance of {@link testAccountZimletInfo }
-     * 
-     */
-    public testAccountZimletInfo createtestAccountZimletInfo() {
-        return new testAccountZimletInfo();
-    }
-
-    /**
-     * Create an instance of {@link testLocaleInfo }
-     * 
-     */
-    public testLocaleInfo createtestLocaleInfo() {
-        return new testLocaleInfo();
-    }
-
-    /**
-     * Create an instance of {@link testAccountImapDataSource }
-     * 
-     */
-    public testAccountImapDataSource createtestAccountImapDataSource() {
-        return new testAccountImapDataSource();
-    }
-
-    /**
-     * Create an instance of {@link testDeleteSignatureResponse }
-     * 
-     */
-    public testDeleteSignatureResponse createtestDeleteSignatureResponse() {
-        return new testDeleteSignatureResponse();
-    }
-
-    /**
-     * Create an instance of {@link testDistributionListSubscribeReq }
-     * 
-     */
-    public testDistributionListSubscribeReq createtestDistributionListSubscribeReq() {
-        return new testDistributionListSubscribeReq();
-    }
-
-    /**
-     * Create an instance of {@link testGetAccountMembershipRequest }
-     * 
-     */
-    public testGetAccountMembershipRequest createtestGetAccountMembershipRequest() {
-        return new testGetAccountMembershipRequest();
-    }
-
-    /**
-     * Create an instance of {@link testAccountZimletProperty }
-     * 
-     */
-    public testAccountZimletProperty createtestAccountZimletProperty() {
-        return new testAccountZimletProperty();
-    }
-
-    /**
-     * Create an instance of {@link testCreateDistributionListResponse }
-     * 
-     */
-    public testCreateDistributionListResponse createtestCreateDistributionListResponse() {
-        return new testCreateDistributionListResponse();
-    }
-
-    /**
-     * Create an instance of {@link testAutoCompleteGalRequest }
-     * 
-     */
-    public testAutoCompleteGalRequest createtestAutoCompleteGalRequest() {
-        return new testAutoCompleteGalRequest();
-    }
-
-    /**
-     * Create an instance of {@link testDistributionListActionRequest }
-     * 
-     */
-    public testDistributionListActionRequest createtestDistributionListActionRequest() {
-        return new testDistributionListActionRequest();
-    }
-
-    /**
-     * Create an instance of {@link testGetAllLocalesResponse }
-     * 
-     */
-    public testGetAllLocalesResponse createtestGetAllLocalesResponse() {
-        return new testGetAllLocalesResponse();
-    }
-
-    /**
-     * Create an instance of {@link testGetAvailableLocalesRequest }
-     * 
-     */
-    public testGetAvailableLocalesRequest createtestGetAvailableLocalesRequest() {
-        return new testGetAvailableLocalesRequest();
-    }
-
-    /**
-     * Create an instance of {@link testGetAccountInfoRequest }
-     * 
-     */
-    public testGetAccountInfoRequest createtestGetAccountInfoRequest() {
-        return new testGetAccountInfoRequest();
-    }
-
-    /**
-     * Create an instance of {@link testGetDistributionListRequest }
-     * 
-     */
-    public testGetDistributionListRequest createtestGetDistributionListRequest() {
-        return new testGetDistributionListRequest();
-    }
-
-    /**
-     * Create an instance of {@link testGetDistributionListResponse }
-     * 
-     */
-    public testGetDistributionListResponse createtestGetDistributionListResponse() {
-        return new testGetDistributionListResponse();
-    }
-
-    /**
-     * Create an instance of {@link testGetInfoResponse.Identities }
-     * 
-     */
-    public testGetInfoResponse.Identities createtestGetInfoResponseIdentities() {
-        return new testGetInfoResponse.Identities();
-    }
-
-    /**
-     * Create an instance of {@link testDeleteSignatureRequest }
-     * 
-     */
-    public testDeleteSignatureRequest createtestDeleteSignatureRequest() {
-        return new testDeleteSignatureRequest();
-    }
-
-    /**
      * Create an instance of {@link testModifyWhiteBlackListResponse }
      * 
      */
     public testModifyWhiteBlackListResponse createtestModifyWhiteBlackListResponse() {
         return new testModifyWhiteBlackListResponse();
-    }
-
-    /**
-     * Create an instance of {@link testGetAccountInfoResponse }
-     * 
-     */
-    public testGetAccountInfoResponse createtestGetAccountInfoResponse() {
-        return new testGetAccountInfoResponse();
-    }
-
-    /**
-     * Create an instance of {@link testGetInfoResponse.Prefs }
-     * 
-     */
-    public testGetInfoResponse.Prefs createtestGetInfoResponsePrefs() {
-        return new testGetInfoResponse.Prefs();
-    }
-
-    /**
-     * Create an instance of {@link testDeleteIdentityRequest }
-     * 
-     */
-    public testDeleteIdentityRequest createtestDeleteIdentityRequest() {
-        return new testDeleteIdentityRequest();
-    }
-
-    /**
-     * Create an instance of {@link testGetAvailableSkinsResponse }
-     * 
-     */
-    public testGetAvailableSkinsResponse createtestGetAvailableSkinsResponse() {
-        return new testGetAvailableSkinsResponse();
-    }
-
-    /**
-     * Create an instance of {@link testGetAvailableSkinsRequest }
-     * 
-     */
-    public testGetAvailableSkinsRequest createtestGetAvailableSkinsRequest() {
-        return new testGetAvailableSkinsRequest();
-    }
-
-    /**
-     * Create an instance of {@link testGetInfoResponse }
-     * 
-     */
-    public testGetInfoResponse createtestGetInfoResponse() {
-        return new testGetInfoResponse();
-    }
-
-    /**
-     * Create an instance of {@link testSmimePublicCertInfo }
-     * 
-     */
-    public testSmimePublicCertInfo createtestSmimePublicCertInfo() {
-        return new testSmimePublicCertInfo();
-    }
-
-    /**
-     * Create an instance of {@link testEntrySearchFilterSingleCond }
-     * 
-     */
-    public testEntrySearchFilterSingleCond createtestEntrySearchFilterSingleCond() {
-        return new testEntrySearchFilterSingleCond();
-    }
-
-    /**
-     * Create an instance of {@link testCreateIdentityResponse }
-     * 
-     */
-    public testCreateIdentityResponse createtestCreateIdentityResponse() {
-        return new testCreateIdentityResponse();
-    }
-
-    /**
-     * Create an instance of {@link testDeleteIdentityResponse }
-     * 
-     */
-    public testDeleteIdentityResponse createtestDeleteIdentityResponse() {
-        return new testDeleteIdentityResponse();
-    }
-
-    /**
-     * Create an instance of {@link testAuthResponse.Prefs }
-     * 
-     */
-    public testAuthResponse.Prefs createtestAuthResponsePrefs() {
-        return new testAuthResponse.Prefs();
-    }
-
-    /**
-     * Create an instance of {@link testModifyPropertiesRequest }
-     * 
-     */
-    public testModifyPropertiesRequest createtestModifyPropertiesRequest() {
-        return new testModifyPropertiesRequest();
-    }
-
-    /**
-     * Create an instance of {@link testGetInfoRequest }
-     * 
-     */
-    public testGetInfoRequest createtestGetInfoRequest() {
-        return new testGetInfoRequest();
-    }
-
-    /**
-     * Create an instance of {@link testContactInfo }
-     * 
-     */
-    public testContactInfo createtestContactInfo() {
-        return new testContactInfo();
-    }
-
-    /**
-     * Create an instance of {@link testGetDistributionListMembersResponse }
-     * 
-     */
-    public testGetDistributionListMembersResponse createtestGetDistributionListMembersResponse() {
-        return new testGetDistributionListMembersResponse();
-    }
-
-    /**
-     * Create an instance of {@link testLicenseAttr }
-     * 
-     */
-    public testLicenseAttr createtestLicenseAttr() {
-        return new testLicenseAttr();
-    }
-
-    /**
-     * Create an instance of {@link testUpdateProfileResponse }
-     * 
-     */
-    public testUpdateProfileResponse createtestUpdateProfileResponse() {
-        return new testUpdateProfileResponse();
-    }
-
-    /**
-     * Create an instance of {@link testGetSignaturesRequest }
-     * 
-     */
-    public testGetSignaturesRequest createtestGetSignaturesRequest() {
-        return new testGetSignaturesRequest();
-    }
-
-    /**
-     * Create an instance of {@link testProfileInfo }
-     * 
-     */
-    public testProfileInfo createtestProfileInfo() {
-        return new testProfileInfo();
-    }
-
-    /**
-     * Create an instance of {@link testPreAuth }
-     * 
-     */
-    public testPreAuth createtestPreAuth() {
-        return new testPreAuth();
-    }
-
-    /**
-     * Create an instance of {@link testGetAvailableCsvFormatsRequest }
-     * 
-     */
-    public testGetAvailableCsvFormatsRequest createtestGetAvailableCsvFormatsRequest() {
-        return new testGetAvailableCsvFormatsRequest();
-    }
-
-    /**
-     * Create an instance of {@link testSignature }
-     * 
-     */
-    public testSignature createtestSignature() {
-        return new testSignature();
-    }
-
-    /**
-     * Create an instance of {@link testAuthRequest.Prefs }
-     * 
-     */
-    public testAuthRequest.Prefs createtestAuthRequestPrefs() {
-        return new testAuthRequest.Prefs();
-    }
-
-    /**
-     * Create an instance of {@link testAccountRssDataSource }
-     * 
-     */
-    public testAccountRssDataSource createtestAccountRssDataSource() {
-        return new testAccountRssDataSource();
-    }
-
-    /**
-     * Create an instance of {@link testEndSessionResponse }
-     * 
-     */
-    public testEndSessionResponse createtestEndSessionResponse() {
-        return new testEndSessionResponse();
-    }
-
-    /**
-     * Create an instance of {@link testAccount }
-     * 
-     */
-    public testAccount createtestAccount() {
-        return new testAccount();
-    }
-
-    /**
-     * Create an instance of {@link testChildAccount.Attrs }
-     * 
-     */
-    public testChildAccount.Attrs createtestChildAccountAttrs() {
-        return new testChildAccount.Attrs();
-    }
-
-    /**
-     * Create an instance of {@link testAccountPop3DataSource }
-     * 
-     */
-    public testAccountPop3DataSource createtestAccountPop3DataSource() {
-        return new testAccountPop3DataSource();
-    }
-
-    /**
-     * Create an instance of {@link testModifyIdentityRequest }
-     * 
-     */
-    public testModifyIdentityRequest createtestModifyIdentityRequest() {
-        return new testModifyIdentityRequest();
-    }
-
-    /**
-     * Create an instance of {@link testGetVersionInfoRequest }
-     * 
-     */
-    public testGetVersionInfoRequest createtestGetVersionInfoRequest() {
-        return new testGetVersionInfoRequest();
-    }
-
-    /**
-     * Create an instance of {@link testCreateIdentityRequest }
-     * 
-     */
-    public testCreateIdentityRequest createtestCreateIdentityRequest() {
-        return new testCreateIdentityRequest();
-    }
-
-    /**
-     * Create an instance of {@link testAuthResponse }
-     * 
-     */
-    public testAuthResponse createtestAuthResponse() {
-        return new testAuthResponse();
-    }
-
-    /**
-     * Create an instance of {@link testCreateSignatureResponse }
-     * 
-     */
-    public testCreateSignatureResponse createtestCreateSignatureResponse() {
-        return new testCreateSignatureResponse();
-    }
-
-    /**
-     * Create an instance of {@link testGetIdentitiesResponse }
-     * 
-     */
-    public testGetIdentitiesResponse createtestGetIdentitiesResponse() {
-        return new testGetIdentitiesResponse();
-    }
-
-    /**
-     * Create an instance of {@link testGetWhiteBlackListResponse }
-     * 
-     */
-    public testGetWhiteBlackListResponse createtestGetWhiteBlackListResponse() {
-        return new testGetWhiteBlackListResponse();
-    }
-
-    /**
-     * Create an instance of {@link testGetPrefsRequest }
-     * 
-     */
-    public testGetPrefsRequest createtestGetPrefsRequest() {
-        return new testGetPrefsRequest();
-    }
-
-    /**
-     * Create an instance of {@link testLicenseInfo }
-     * 
-     */
-    public testLicenseInfo createtestLicenseInfo() {
-        return new testLicenseInfo();
-    }
-
-    /**
-     * Create an instance of {@link testDistributionListOwnerInfo }
-     * 
-     */
-    public testDistributionListOwnerInfo createtestDistributionListOwnerInfo() {
-        return new testDistributionListOwnerInfo();
-    }
-
-    /**
-     * Create an instance of {@link testCheckLicenseRequest }
-     * 
-     */
-    public testCheckLicenseRequest createtestCheckLicenseRequest() {
-        return new testCheckLicenseRequest();
-    }
-
-    /**
-     * Create an instance of {@link testSearchCalendarResourcesRequest }
-     * 
-     */
-    public testSearchCalendarResourcesRequest createtestSearchCalendarResourcesRequest() {
-        return new testSearchCalendarResourcesRequest();
-    }
-
-    /**
-     * Create an instance of {@link testAuthResponse.Attrs }
-     * 
-     */
-    public testAuthResponse.Attrs createtestAuthResponseAttrs() {
-        return new testAuthResponse.Attrs();
-    }
-
-    /**
-     * Create an instance of {@link testObjectInfo }
-     * 
-     */
-    public testObjectInfo createtestObjectInfo() {
-        return new testObjectInfo();
-    }
-
-    /**
-     * Create an instance of {@link testCreateDistributionListRequest }
-     * 
-     */
-    public testCreateDistributionListRequest createtestCreateDistributionListRequest() {
-        return new testCreateDistributionListRequest();
-    }
-
-    /**
-     * Create an instance of {@link testGetShareInfoRequest }
-     * 
-     */
-    public testGetShareInfoRequest createtestGetShareInfoRequest() {
-        return new testGetShareInfoRequest();
-    }
-
-    /**
-     * Create an instance of {@link testAccountKeyValuePairs }
-     * 
-     */
-    public testAccountKeyValuePairs createtestAccountKeyValuePairs() {
-        return new testAccountKeyValuePairs();
-    }
-
-    /**
-     * Create an instance of {@link testCalTZInfo }
-     * 
-     */
-    public testCalTZInfo createtestCalTZInfo() {
-        return new testCalTZInfo();
-    }
-
-    /**
-     * Create an instance of {@link testGetDistributionListMembersRequest }
-     * 
-     */
-    public testGetDistributionListMembersRequest createtestGetDistributionListMembersRequest() {
-        return new testGetDistributionListMembersRequest();
-    }
-
-    /**
-     * Create an instance of {@link testModifyIdentityResponse }
-     * 
-     */
-    public testModifyIdentityResponse createtestModifyIdentityResponse() {
-        return new testModifyIdentityResponse();
-    }
-
-    /**
-     * Create an instance of {@link testDistributionListInfo.Owners }
-     * 
-     */
-    public testDistributionListInfo.Owners createtestDistributionListInfoOwners() {
-        return new testDistributionListInfo.Owners();
-    }
-
-    /**
-     * Create an instance of {@link testChildAccount }
-     * 
-     */
-    public testChildAccount createtestChildAccount() {
-        return new testChildAccount();
-    }
-
-    /**
-     * Create an instance of {@link testGetWhiteBlackListResponse.WhiteList }
-     * 
-     */
-    public testGetWhiteBlackListResponse.WhiteList createtestGetWhiteBlackListResponseWhiteList() {
-        return new testGetWhiteBlackListResponse.WhiteList();
-    }
-
-    /**
-     * Create an instance of {@link testEntrySearchFilterMultiCond }
-     * 
-     */
-    public testEntrySearchFilterMultiCond createtestEntrySearchFilterMultiCond() {
-        return new testEntrySearchFilterMultiCond();
-    }
-
-    /**
-     * Create an instance of {@link testAuthRequest }
-     * 
-     */
-    public testAuthRequest createtestAuthRequest() {
-        return new testAuthRequest();
-    }
-
-    /**
-     * Create an instance of {@link testModifyZimletPrefsSpec }
-     * 
-     */
-    public testModifyZimletPrefsSpec createtestModifyZimletPrefsSpec() {
-        return new testModifyZimletPrefsSpec();
-    }
-
-    /**
-     * Create an instance of {@link testModifyWhiteBlackListRequest.BlackList }
-     * 
-     */
-    public testModifyWhiteBlackListRequest.BlackList createtestModifyWhiteBlackListRequestBlackList() {
-        return new testModifyWhiteBlackListRequest.BlackList();
-    }
-
-    /**
-     * Create an instance of {@link testAccountCustomMetadata }
-     * 
-     */
-    public testAccountCustomMetadata createtestAccountCustomMetadata() {
-        return new testAccountCustomMetadata();
-    }
-
-    /**
-     * Create an instance of {@link testVersionInfo }
-     * 
-     */
-    public testVersionInfo createtestVersionInfo() {
-        return new testVersionInfo();
-    }
-
-    /**
-     * Create an instance of {@link testCheckLicenseResponse }
-     * 
-     */
-    public testCheckLicenseResponse createtestCheckLicenseResponse() {
-        return new testCheckLicenseResponse();
-    }
-
-    /**
-     * Create an instance of {@link testAccountCalDataSource }
-     * 
-     */
-    public testAccountCalDataSource createtestAccountCalDataSource() {
-        return new testAccountCalDataSource();
-    }
-
-    /**
-     * Create an instance of {@link testSession }
-     * 
-     */
-    public testSession createtestSession() {
-        return new testSession();
-    }
-
-    /**
-     * Create an instance of {@link testChangePasswordRequest }
-     * 
-     */
-    public testChangePasswordRequest createtestChangePasswordRequest() {
-        return new testChangePasswordRequest();
-    }
-
-    /**
-     * Create an instance of {@link testModifySignatureRequest }
-     * 
-     */
-    public testModifySignatureRequest createtestModifySignatureRequest() {
-        return new testModifySignatureRequest();
-    }
-
-    /**
-     * Create an instance of {@link testContactGroupMember }
-     * 
-     */
-    public testContactGroupMember createtestContactGroupMember() {
-        return new testContactGroupMember();
-    }
-
-    /**
-     * Create an instance of {@link testAccountUnknownDataSource }
-     * 
-     */
-    public testAccountUnknownDataSource createtestAccountUnknownDataSource() {
-        return new testAccountUnknownDataSource();
-    }
-
-    /**
-     * Create an instance of {@link testGetWhiteBlackListResponse.BlackList }
-     * 
-     */
-    public testGetWhiteBlackListResponse.BlackList createtestGetWhiteBlackListResponseBlackList() {
-        return new testGetWhiteBlackListResponse.BlackList();
-    }
-
-    /**
-     * Create an instance of {@link testEntrySearchFilterInfo }
-     * 
-     */
-    public testEntrySearchFilterInfo createtestEntrySearchFilterInfo() {
-        return new testEntrySearchFilterInfo();
-    }
-
-    /**
-     * Create an instance of {@link testGetIdentitiesRequest }
-     * 
-     */
-    public testGetIdentitiesRequest createtestGetIdentitiesRequest() {
-        return new testGetIdentitiesRequest();
-    }
-
-    /**
-     * Create an instance of {@link testIdentity }
-     * 
-     */
-    public testIdentity createtestIdentity() {
-        return new testIdentity();
-    }
-
-    /**
-     * Create an instance of {@link testModifyPrefsResponse }
-     * 
-     */
-    public testModifyPrefsResponse createtestModifyPrefsResponse() {
-        return new testModifyPrefsResponse();
-    }
-
-    /**
-     * Create an instance of {@link testCreateSignatureRequest }
-     * 
-     */
-    public testCreateSignatureRequest createtestCreateSignatureRequest() {
-        return new testCreateSignatureRequest();
-    }
-
-    /**
-     * Create an instance of {@link testZimletServerExtension }
-     * 
-     */
-    public testZimletServerExtension createtestZimletServerExtension() {
-        return new testZimletServerExtension();
-    }
-
-    /**
-     * Create an instance of {@link testDistributionListInfo }
-     * 
-     */
-    public testDistributionListInfo createtestDistributionListInfo() {
-        return new testDistributionListInfo();
-    }
-
-    /**
-     * Create an instance of {@link testAccountZimletContext }
-     * 
-     */
-    public testAccountZimletContext createtestAccountZimletContext() {
-        return new testAccountZimletContext();
-    }
-
-    /**
-     * Create an instance of {@link testGetWhiteBlackListRequest }
-     * 
-     */
-    public testGetWhiteBlackListRequest createtestGetWhiteBlackListRequest() {
-        return new testGetWhiteBlackListRequest();
-    }
-
-    /**
-     * Create an instance of {@link testPref }
-     * 
-     */
-    public testPref createtestPref() {
-        return new testPref();
-    }
-
-    /**
-     * Create an instance of {@link testGetShareInfoResponse }
-     * 
-     */
-    public testGetShareInfoResponse createtestGetShareInfoResponse() {
-        return new testGetShareInfoResponse();
-    }
-
-    /**
-     * Create an instance of {@link testSubscribeDistributionListRequest }
-     * 
-     */
-    public testSubscribeDistributionListRequest createtestSubscribeDistributionListRequest() {
-        return new testSubscribeDistributionListRequest();
     }
 
     /**
@@ -1144,6 +156,62 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link testDiscoverRightsTarget }
+     * 
+     */
+    public testDiscoverRightsTarget createtestDiscoverRightsTarget() {
+        return new testDiscoverRightsTarget();
+    }
+
+    /**
+     * Create an instance of {@link testCreateIdentityResponse }
+     * 
+     */
+    public testCreateIdentityResponse createtestCreateIdentityResponse() {
+        return new testCreateIdentityResponse();
+    }
+
+    /**
+     * Create an instance of {@link testAutoCompleteGalResponse }
+     * 
+     */
+    public testAutoCompleteGalResponse createtestAutoCompleteGalResponse() {
+        return new testAutoCompleteGalResponse();
+    }
+
+    /**
+     * Create an instance of {@link testGetSMIMEPublicCertsRequest }
+     * 
+     */
+    public testGetSMIMEPublicCertsRequest createtestGetSMIMEPublicCertsRequest() {
+        return new testGetSMIMEPublicCertsRequest();
+    }
+
+    /**
+     * Create an instance of {@link testAccountCaldavDataSource }
+     * 
+     */
+    public testAccountCaldavDataSource createtestAccountCaldavDataSource() {
+        return new testAccountCaldavDataSource();
+    }
+
+    /**
+     * Create an instance of {@link testDeleteIdentityResponse }
+     * 
+     */
+    public testDeleteIdentityResponse createtestDeleteIdentityResponse() {
+        return new testDeleteIdentityResponse();
+    }
+
+    /**
+     * Create an instance of {@link testGetAvailableLocalesRequest }
+     * 
+     */
+    public testGetAvailableLocalesRequest createtestGetAvailableLocalesRequest() {
+        return new testGetAvailableLocalesRequest();
+    }
+
+    /**
      * Create an instance of {@link testSignatureContent }
      * 
      */
@@ -1152,27 +220,179 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link testEndSessionRequest }
+     * Create an instance of {@link testCheckLicenseRequest }
      * 
      */
-    public testEndSessionRequest createtestEndSessionRequest() {
-        return new testEndSessionRequest();
+    public testCheckLicenseRequest createtestCheckLicenseRequest() {
+        return new testCheckLicenseRequest();
     }
 
     /**
-     * Create an instance of {@link testModifyZimletPrefsRequest }
+     * Create an instance of {@link testGetAccountInfoRequest }
      * 
      */
-    public testModifyZimletPrefsRequest createtestModifyZimletPrefsRequest() {
-        return new testModifyZimletPrefsRequest();
+    public testGetAccountInfoRequest createtestGetAccountInfoRequest() {
+        return new testGetAccountInfoRequest();
     }
 
     /**
-     * Create an instance of {@link testGetAccountMembershipResponse }
+     * Create an instance of {@link testModifyZimletPrefsSpec }
      * 
      */
-    public testGetAccountMembershipResponse createtestGetAccountMembershipResponse() {
-        return new testGetAccountMembershipResponse();
+    public testModifyZimletPrefsSpec createtestModifyZimletPrefsSpec() {
+        return new testModifyZimletPrefsSpec();
+    }
+
+    /**
+     * Create an instance of {@link testCreateDistributionListResponse }
+     * 
+     */
+    public testCreateDistributionListResponse createtestCreateDistributionListResponse() {
+        return new testCreateDistributionListResponse();
+    }
+
+    /**
+     * Create an instance of {@link testModifyPrefsRequest }
+     * 
+     */
+    public testModifyPrefsRequest createtestModifyPrefsRequest() {
+        return new testModifyPrefsRequest();
+    }
+
+    /**
+     * Create an instance of {@link testDistributionListActionResponse }
+     * 
+     */
+    public testDistributionListActionResponse createtestDistributionListActionResponse() {
+        return new testDistributionListActionResponse();
+    }
+
+    /**
+     * Create an instance of {@link testCheckRightsTargetInfo }
+     * 
+     */
+    public testCheckRightsTargetInfo createtestCheckRightsTargetInfo() {
+        return new testCheckRightsTargetInfo();
+    }
+
+    /**
+     * Create an instance of {@link testGetShareInfoRequest }
+     * 
+     */
+    public testGetShareInfoRequest createtestGetShareInfoRequest() {
+        return new testGetShareInfoRequest();
+    }
+
+    /**
+     * Create an instance of {@link testSearchGalResponse }
+     * 
+     */
+    public testSearchGalResponse createtestSearchGalResponse() {
+        return new testSearchGalResponse();
+    }
+
+    /**
+     * Create an instance of {@link testModifyZimletPrefsResponse }
+     * 
+     */
+    public testModifyZimletPrefsResponse createtestModifyZimletPrefsResponse() {
+        return new testModifyZimletPrefsResponse();
+    }
+
+    /**
+     * Create an instance of {@link testModifyWhiteBlackListRequest }
+     * 
+     */
+    public testModifyWhiteBlackListRequest createtestModifyWhiteBlackListRequest() {
+        return new testModifyWhiteBlackListRequest();
+    }
+
+    /**
+     * Create an instance of {@link testAccountRssDataSource }
+     * 
+     */
+    public testAccountRssDataSource createtestAccountRssDataSource() {
+        return new testAccountRssDataSource();
+    }
+
+    /**
+     * Create an instance of {@link testIdentity }
+     * 
+     */
+    public testIdentity createtestIdentity() {
+        return new testIdentity();
+    }
+
+    /**
+     * Create an instance of {@link testDeleteSignatureResponse }
+     * 
+     */
+    public testDeleteSignatureResponse createtestDeleteSignatureResponse() {
+        return new testDeleteSignatureResponse();
+    }
+
+    /**
+     * Create an instance of {@link testGetInfoResponse.Identities }
+     * 
+     */
+    public testGetInfoResponse.Identities createtestGetInfoResponseIdentities() {
+        return new testGetInfoResponse.Identities();
+    }
+
+    /**
+     * Create an instance of {@link testAuthResponse }
+     * 
+     */
+    public testAuthResponse createtestAuthResponse() {
+        return new testAuthResponse();
+    }
+
+    /**
+     * Create an instance of {@link testSearchCalendarResourcesRequest }
+     * 
+     */
+    public testSearchCalendarResourcesRequest createtestSearchCalendarResourcesRequest() {
+        return new testSearchCalendarResourcesRequest();
+    }
+
+    /**
+     * Create an instance of {@link testSyncGalResponse }
+     * 
+     */
+    public testSyncGalResponse createtestSyncGalResponse() {
+        return new testSyncGalResponse();
+    }
+
+    /**
+     * Create an instance of {@link testGetInfoResponse.Zimlets }
+     * 
+     */
+    public testGetInfoResponse.Zimlets createtestGetInfoResponseZimlets() {
+        return new testGetInfoResponse.Zimlets();
+    }
+
+    /**
+     * Create an instance of {@link testModifyWhiteBlackListRequest.WhiteList }
+     * 
+     */
+    public testModifyWhiteBlackListRequest.WhiteList createtestModifyWhiteBlackListRequestWhiteList() {
+        return new testModifyWhiteBlackListRequest.WhiteList();
+    }
+
+    /**
+     * Create an instance of {@link testAttr }
+     * 
+     */
+    public testAttr createtestAttr() {
+        return new testAttr();
+    }
+
+    /**
+     * Create an instance of {@link testDistributionListAction }
+     * 
+     */
+    public testDistributionListAction createtestDistributionListAction() {
+        return new testDistributionListAction();
     }
 
     /**
@@ -1192,115 +412,43 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link testGetInfoResponse.Zimlets }
+     * Create an instance of {@link testModifySignatureResponse }
      * 
      */
-    public testGetInfoResponse.Zimlets createtestGetInfoResponseZimlets() {
-        return new testGetInfoResponse.Zimlets();
+    public testModifySignatureResponse createtestModifySignatureResponse() {
+        return new testModifySignatureResponse();
     }
 
     /**
-     * Create an instance of {@link testSmimePublicCertsStoreSpec }
+     * Create an instance of {@link testContactGroupMember }
      * 
      */
-    public testSmimePublicCertsStoreSpec createtestSmimePublicCertsStoreSpec() {
-        return new testSmimePublicCertsStoreSpec();
+    public testContactGroupMember createtestContactGroupMember() {
+        return new testContactGroupMember();
     }
 
     /**
-     * Create an instance of {@link testUpdateProfileRequest }
+     * Create an instance of {@link testDistributionListSubscribeReq }
      * 
      */
-    public testUpdateProfileRequest createtestUpdateProfileRequest() {
-        return new testUpdateProfileRequest();
+    public testDistributionListSubscribeReq createtestDistributionListSubscribeReq() {
+        return new testDistributionListSubscribeReq();
     }
 
     /**
-     * Create an instance of {@link testGetInfoResponse.ChildAccounts }
+     * Create an instance of {@link testDistributionListActionRequest }
      * 
      */
-    public testGetInfoResponse.ChildAccounts createtestGetInfoResponseChildAccounts() {
-        return new testGetInfoResponse.ChildAccounts();
+    public testDistributionListActionRequest createtestDistributionListActionRequest() {
+        return new testDistributionListActionRequest();
     }
 
     /**
-     * Create an instance of {@link testDlInfo }
+     * Create an instance of {@link testLicenseInfo }
      * 
      */
-    public testDlInfo createtestDlInfo() {
-        return new testDlInfo();
-    }
-
-    /**
-     * Create an instance of {@link testProp }
-     * 
-     */
-    public testProp createtestProp() {
-        return new testProp();
-    }
-
-    /**
-     * Create an instance of {@link testAttr }
-     * 
-     */
-    public testAttr createtestAttr() {
-        return new testAttr();
-    }
-
-    /**
-     * Create an instance of {@link testSmimePublicCertsInfo }
-     * 
-     */
-    public testSmimePublicCertsInfo createtestSmimePublicCertsInfo() {
-        return new testSmimePublicCertsInfo();
-    }
-
-    /**
-     * Create an instance of {@link testAccountZimletGlobalConfigInfo }
-     * 
-     */
-    public testAccountZimletGlobalConfigInfo createtestAccountZimletGlobalConfigInfo() {
-        return new testAccountZimletGlobalConfigInfo();
-    }
-
-    /**
-     * Create an instance of {@link testAccountCaldavDataSource }
-     * 
-     */
-    public testAccountCaldavDataSource createtestAccountCaldavDataSource() {
-        return new testAccountCaldavDataSource();
-    }
-
-    /**
-     * Create an instance of {@link testGetInfoResponse.DataSources }
-     * 
-     */
-    public testGetInfoResponse.DataSources createtestGetInfoResponseDataSources() {
-        return new testGetInfoResponse.DataSources();
-    }
-
-    /**
-     * Create an instance of {@link testDistributionListAction }
-     * 
-     */
-    public testDistributionListAction createtestDistributionListAction() {
-        return new testDistributionListAction();
-    }
-
-    /**
-     * Create an instance of {@link testCalendarResourceInfo }
-     * 
-     */
-    public testCalendarResourceInfo createtestCalendarResourceInfo() {
-        return new testCalendarResourceInfo();
-    }
-
-    /**
-     * Create an instance of {@link testSearchGalResponse }
-     * 
-     */
-    public testSearchGalResponse createtestSearchGalResponse() {
-        return new testSearchGalResponse();
+    public testLicenseInfo createtestLicenseInfo() {
+        return new testLicenseInfo();
     }
 
     /**
@@ -1312,11 +460,947 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link testGetWhiteBlackListResponse }
+     * 
+     */
+    public testGetWhiteBlackListResponse createtestGetWhiteBlackListResponse() {
+        return new testGetWhiteBlackListResponse();
+    }
+
+    /**
+     * Create an instance of {@link testChildAccount.Attrs }
+     * 
+     */
+    public testChildAccount.Attrs createtestChildAccountAttrs() {
+        return new testChildAccount.Attrs();
+    }
+
+    /**
+     * Create an instance of {@link testGetSignaturesResponse }
+     * 
+     */
+    public testGetSignaturesResponse createtestGetSignaturesResponse() {
+        return new testGetSignaturesResponse();
+    }
+
+    /**
+     * Create an instance of {@link testCreateSignatureResponse }
+     * 
+     */
+    public testCreateSignatureResponse createtestCreateSignatureResponse() {
+        return new testCreateSignatureResponse();
+    }
+
+    /**
+     * Create an instance of {@link testCreateDistributionListRequest }
+     * 
+     */
+    public testCreateDistributionListRequest createtestCreateDistributionListRequest() {
+        return new testCreateDistributionListRequest();
+    }
+
+    /**
+     * Create an instance of {@link testGetInfoResponse.DataSources }
+     * 
+     */
+    public testGetInfoResponse.DataSources createtestGetInfoResponseDataSources() {
+        return new testGetInfoResponse.DataSources();
+    }
+
+    /**
+     * Create an instance of {@link testNameId }
+     * 
+     */
+    public testNameId createtestNameId() {
+        return new testNameId();
+    }
+
+    /**
+     * Create an instance of {@link testGetInfoResponse.Prefs }
+     * 
+     */
+    public testGetInfoResponse.Prefs createtestGetInfoResponsePrefs() {
+        return new testGetInfoResponse.Prefs();
+    }
+
+    /**
+     * Create an instance of {@link testModifyIdentityRequest }
+     * 
+     */
+    public testModifyIdentityRequest createtestModifyIdentityRequest() {
+        return new testModifyIdentityRequest();
+    }
+
+    /**
+     * Create an instance of {@link testModifyIdentityResponse }
+     * 
+     */
+    public testModifyIdentityResponse createtestModifyIdentityResponse() {
+        return new testModifyIdentityResponse();
+    }
+
+    /**
+     * Create an instance of {@link testAccountCustomMetadata }
+     * 
+     */
+    public testAccountCustomMetadata createtestAccountCustomMetadata() {
+        return new testAccountCustomMetadata();
+    }
+
+    /**
+     * Create an instance of {@link testAutoCompleteGalRequest }
+     * 
+     */
+    public testAutoCompleteGalRequest createtestAutoCompleteGalRequest() {
+        return new testAutoCompleteGalRequest();
+    }
+
+    /**
+     * Create an instance of {@link testPref }
+     * 
+     */
+    public testPref createtestPref() {
+        return new testPref();
+    }
+
+    /**
+     * Create an instance of {@link testCos }
+     * 
+     */
+    public testCos createtestCos() {
+        return new testCos();
+    }
+
+    /**
+     * Create an instance of {@link testLocaleInfo }
+     * 
+     */
+    public testLocaleInfo createtestLocaleInfo() {
+        return new testLocaleInfo();
+    }
+
+    /**
+     * Create an instance of {@link testCheckRightsTargetSpec }
+     * 
+     */
+    public testCheckRightsTargetSpec createtestCheckRightsTargetSpec() {
+        return new testCheckRightsTargetSpec();
+    }
+
+    /**
+     * Create an instance of {@link testAccountZimletContext }
+     * 
+     */
+    public testAccountZimletContext createtestAccountZimletContext() {
+        return new testAccountZimletContext();
+    }
+
+    /**
+     * Create an instance of {@link testAccountZimletGlobalConfigInfo }
+     * 
+     */
+    public testAccountZimletGlobalConfigInfo createtestAccountZimletGlobalConfigInfo() {
+        return new testAccountZimletGlobalConfigInfo();
+    }
+
+    /**
+     * Create an instance of {@link testAuthResponse.Prefs }
+     * 
+     */
+    public testAuthResponse.Prefs createtestAuthResponsePrefs() {
+        return new testAuthResponse.Prefs();
+    }
+
+    /**
+     * Create an instance of {@link testGetInfoResponse.Props }
+     * 
+     */
+    public testGetInfoResponse.Props createtestGetInfoResponseProps() {
+        return new testGetInfoResponse.Props();
+    }
+
+    /**
+     * Create an instance of {@link testAuthRequest.Attrs }
+     * 
+     */
+    public testAuthRequest.Attrs createtestAuthRequestAttrs() {
+        return new testAuthRequest.Attrs();
+    }
+
+    /**
+     * Create an instance of {@link testDlInfo }
+     * 
+     */
+    public testDlInfo createtestDlInfo() {
+        return new testDlInfo();
+    }
+
+    /**
+     * Create an instance of {@link testCheckLicenseResponse }
+     * 
+     */
+    public testCheckLicenseResponse createtestCheckLicenseResponse() {
+        return new testCheckLicenseResponse();
+    }
+
+    /**
+     * Create an instance of {@link testCreateIdentityRequest }
+     * 
+     */
+    public testCreateIdentityRequest createtestCreateIdentityRequest() {
+        return new testCreateIdentityRequest();
+    }
+
+    /**
      * Create an instance of {@link testModifyPropertiesResponse }
      * 
      */
     public testModifyPropertiesResponse createtestModifyPropertiesResponse() {
         return new testModifyPropertiesResponse();
+    }
+
+    /**
+     * Create an instance of {@link testGetAllLocalesRequest }
+     * 
+     */
+    public testGetAllLocalesRequest createtestGetAllLocalesRequest() {
+        return new testGetAllLocalesRequest();
+    }
+
+    /**
+     * Create an instance of {@link testGetVersionInfoRequest }
+     * 
+     */
+    public testGetVersionInfoRequest createtestGetVersionInfoRequest() {
+        return new testGetVersionInfoRequest();
+    }
+
+    /**
+     * Create an instance of {@link testModifyWhiteBlackListRequest.BlackList }
+     * 
+     */
+    public testModifyWhiteBlackListRequest.BlackList createtestModifyWhiteBlackListRequestBlackList() {
+        return new testModifyWhiteBlackListRequest.BlackList();
+    }
+
+    /**
+     * Create an instance of {@link testLicenseAttr }
+     * 
+     */
+    public testLicenseAttr createtestLicenseAttr() {
+        return new testLicenseAttr();
+    }
+
+    /**
+     * Create an instance of {@link testAccountZimletProperty }
+     * 
+     */
+    public testAccountZimletProperty createtestAccountZimletProperty() {
+        return new testAccountZimletProperty();
+    }
+
+    /**
+     * Create an instance of {@link testAccountZimletDesc }
+     * 
+     */
+    public testAccountZimletDesc createtestAccountZimletDesc() {
+        return new testAccountZimletDesc();
+    }
+
+    /**
+     * Create an instance of {@link testDeleteSignatureRequest }
+     * 
+     */
+    public testDeleteSignatureRequest createtestDeleteSignatureRequest() {
+        return new testDeleteSignatureRequest();
+    }
+
+    /**
+     * Create an instance of {@link testAuthRequest.Prefs }
+     * 
+     */
+    public testAuthRequest.Prefs createtestAuthRequestPrefs() {
+        return new testAuthRequest.Prefs();
+    }
+
+    /**
+     * Create an instance of {@link testDiscoverRightsInfo }
+     * 
+     */
+    public testDiscoverRightsInfo createtestDiscoverRightsInfo() {
+        return new testDiscoverRightsInfo();
+    }
+
+    /**
+     * Create an instance of {@link testAccountCalDataSource }
+     * 
+     */
+    public testAccountCalDataSource createtestAccountCalDataSource() {
+        return new testAccountCalDataSource();
+    }
+
+    /**
+     * Create an instance of {@link testSubscribeDistributionListResponse }
+     * 
+     */
+    public testSubscribeDistributionListResponse createtestSubscribeDistributionListResponse() {
+        return new testSubscribeDistributionListResponse();
+    }
+
+    /**
+     * Create an instance of {@link testChangePasswordRequest }
+     * 
+     */
+    public testChangePasswordRequest createtestChangePasswordRequest() {
+        return new testChangePasswordRequest();
+    }
+
+    /**
+     * Create an instance of {@link testAccountKeyValuePairs }
+     * 
+     */
+    public testAccountKeyValuePairs createtestAccountKeyValuePairs() {
+        return new testAccountKeyValuePairs();
+    }
+
+    /**
+     * Create an instance of {@link testSmimePublicCertsInfo }
+     * 
+     */
+    public testSmimePublicCertsInfo createtestSmimePublicCertsInfo() {
+        return new testSmimePublicCertsInfo();
+    }
+
+    /**
+     * Create an instance of {@link testAuthRequest }
+     * 
+     */
+    public testAuthRequest createtestAuthRequest() {
+        return new testAuthRequest();
+    }
+
+    /**
+     * Create an instance of {@link testDistributionListInfo.Owners }
+     * 
+     */
+    public testDistributionListInfo.Owners createtestDistributionListInfoOwners() {
+        return new testDistributionListInfo.Owners();
+    }
+
+    /**
+     * Create an instance of {@link testGetAvailableSkinsRequest }
+     * 
+     */
+    public testGetAvailableSkinsRequest createtestGetAvailableSkinsRequest() {
+        return new testGetAvailableSkinsRequest();
+    }
+
+    /**
+     * Create an instance of {@link testGetAvailableCsvFormatsResponse }
+     * 
+     */
+    public testGetAvailableCsvFormatsResponse createtestGetAvailableCsvFormatsResponse() {
+        return new testGetAvailableCsvFormatsResponse();
+    }
+
+    /**
+     * Create an instance of {@link testCalendarResourceInfo }
+     * 
+     */
+    public testCalendarResourceInfo createtestCalendarResourceInfo() {
+        return new testCalendarResourceInfo();
+    }
+
+    /**
+     * Create an instance of {@link testDiscoverRightsRequest }
+     * 
+     */
+    public testDiscoverRightsRequest createtestDiscoverRightsRequest() {
+        return new testDiscoverRightsRequest();
+    }
+
+    /**
+     * Create an instance of {@link testAccountImapDataSource }
+     * 
+     */
+    public testAccountImapDataSource createtestAccountImapDataSource() {
+        return new testAccountImapDataSource();
+    }
+
+    /**
+     * Create an instance of {@link testAccountYabDataSource }
+     * 
+     */
+    public testAccountYabDataSource createtestAccountYabDataSource() {
+        return new testAccountYabDataSource();
+    }
+
+    /**
+     * Create an instance of {@link testGetInfoResponse.Signatures }
+     * 
+     */
+    public testGetInfoResponse.Signatures createtestGetInfoResponseSignatures() {
+        return new testGetInfoResponse.Signatures();
+    }
+
+    /**
+     * Create an instance of {@link testModifyZimletPrefsRequest }
+     * 
+     */
+    public testModifyZimletPrefsRequest createtestModifyZimletPrefsRequest() {
+        return new testModifyZimletPrefsRequest();
+    }
+
+    /**
+     * Create an instance of {@link testAuthResponse.Attrs }
+     * 
+     */
+    public testAuthResponse.Attrs createtestAuthResponseAttrs() {
+        return new testAuthResponse.Attrs();
+    }
+
+    /**
+     * Create an instance of {@link testGetDistributionListResponse }
+     * 
+     */
+    public testGetDistributionListResponse createtestGetDistributionListResponse() {
+        return new testGetDistributionListResponse();
+    }
+
+    /**
+     * Create an instance of {@link testDistributionListOwnerInfo }
+     * 
+     */
+    public testDistributionListOwnerInfo createtestDistributionListOwnerInfo() {
+        return new testDistributionListOwnerInfo();
+    }
+
+    /**
+     * Create an instance of {@link testChangePasswordResponse }
+     * 
+     */
+    public testChangePasswordResponse createtestChangePasswordResponse() {
+        return new testChangePasswordResponse();
+    }
+
+    /**
+     * Create an instance of {@link testDeleteIdentityRequest }
+     * 
+     */
+    public testDeleteIdentityRequest createtestDeleteIdentityRequest() {
+        return new testDeleteIdentityRequest();
+    }
+
+    /**
+     * Create an instance of {@link testCreateSignatureRequest }
+     * 
+     */
+    public testCreateSignatureRequest createtestCreateSignatureRequest() {
+        return new testCreateSignatureRequest();
+    }
+
+    /**
+     * Create an instance of {@link testDistributionListInfo }
+     * 
+     */
+    public testDistributionListInfo createtestDistributionListInfo() {
+        return new testDistributionListInfo();
+    }
+
+    /**
+     * Create an instance of {@link testModifyPrefsResponse }
+     * 
+     */
+    public testModifyPrefsResponse createtestModifyPrefsResponse() {
+        return new testModifyPrefsResponse();
+    }
+
+    /**
+     * Create an instance of {@link testCalTZInfo }
+     * 
+     */
+    public testCalTZInfo createtestCalTZInfo() {
+        return new testCalTZInfo();
+    }
+
+    /**
+     * Create an instance of {@link testModifySignatureRequest }
+     * 
+     */
+    public testModifySignatureRequest createtestModifySignatureRequest() {
+        return new testModifySignatureRequest();
+    }
+
+    /**
+     * Create an instance of {@link testUpdateProfileResponse }
+     * 
+     */
+    public testUpdateProfileResponse createtestUpdateProfileResponse() {
+        return new testUpdateProfileResponse();
+    }
+
+    /**
+     * Create an instance of {@link testAccountZimletConfigInfo }
+     * 
+     */
+    public testAccountZimletConfigInfo createtestAccountZimletConfigInfo() {
+        return new testAccountZimletConfigInfo();
+    }
+
+    /**
+     * Create an instance of {@link testUpdateProfileRequest }
+     * 
+     */
+    public testUpdateProfileRequest createtestUpdateProfileRequest() {
+        return new testUpdateProfileRequest();
+    }
+
+    /**
+     * Create an instance of {@link testCheckRightsRightInfo }
+     * 
+     */
+    public testCheckRightsRightInfo createtestCheckRightsRightInfo() {
+        return new testCheckRightsRightInfo();
+    }
+
+    /**
+     * Create an instance of {@link testAccountContactsDataSource }
+     * 
+     */
+    public testAccountContactsDataSource createtestAccountContactsDataSource() {
+        return new testAccountContactsDataSource();
+    }
+
+    /**
+     * Create an instance of {@link testGetWhiteBlackListResponse.BlackList }
+     * 
+     */
+    public testGetWhiteBlackListResponse.BlackList createtestGetWhiteBlackListResponseBlackList() {
+        return new testGetWhiteBlackListResponse.BlackList();
+    }
+
+    /**
+     * Create an instance of {@link testAccountZimletHostConfigInfo }
+     * 
+     */
+    public testAccountZimletHostConfigInfo createtestAccountZimletHostConfigInfo() {
+        return new testAccountZimletHostConfigInfo();
+    }
+
+    /**
+     * Create an instance of {@link testGetIdentitiesResponse }
+     * 
+     */
+    public testGetIdentitiesResponse createtestGetIdentitiesResponse() {
+        return new testGetIdentitiesResponse();
+    }
+
+    /**
+     * Create an instance of {@link testAccountZimletInfo }
+     * 
+     */
+    public testAccountZimletInfo createtestAccountZimletInfo() {
+        return new testAccountZimletInfo();
+    }
+
+    /**
+     * Create an instance of {@link testSmimePublicCertsStoreSpec }
+     * 
+     */
+    public testSmimePublicCertsStoreSpec createtestSmimePublicCertsStoreSpec() {
+        return new testSmimePublicCertsStoreSpec();
+    }
+
+    /**
+     * Create an instance of {@link testVersionInfo }
+     * 
+     */
+    public testVersionInfo createtestVersionInfo() {
+        return new testVersionInfo();
+    }
+
+    /**
+     * Create an instance of {@link testCheckRightsResponse }
+     * 
+     */
+    public testCheckRightsResponse createtestCheckRightsResponse() {
+        return new testCheckRightsResponse();
+    }
+
+    /**
+     * Create an instance of {@link testSmimePublicCertInfo }
+     * 
+     */
+    public testSmimePublicCertInfo createtestSmimePublicCertInfo() {
+        return new testSmimePublicCertInfo();
+    }
+
+    /**
+     * Create an instance of {@link testProfileInfo }
+     * 
+     */
+    public testProfileInfo createtestProfileInfo() {
+        return new testProfileInfo();
+    }
+
+    /**
+     * Create an instance of {@link testProp }
+     * 
+     */
+    public testProp createtestProp() {
+        return new testProp();
+    }
+
+    /**
+     * Create an instance of {@link testGetIdentitiesRequest }
+     * 
+     */
+    public testGetIdentitiesRequest createtestGetIdentitiesRequest() {
+        return new testGetIdentitiesRequest();
+    }
+
+    /**
+     * Create an instance of {@link testGetPrefsRequest }
+     * 
+     */
+    public testGetPrefsRequest createtestGetPrefsRequest() {
+        return new testGetPrefsRequest();
+    }
+
+    /**
+     * Create an instance of {@link testAuthToken }
+     * 
+     */
+    public testAuthToken createtestAuthToken() {
+        return new testAuthToken();
+    }
+
+    /**
+     * Create an instance of {@link testModifyPropertiesRequest }
+     * 
+     */
+    public testModifyPropertiesRequest createtestModifyPropertiesRequest() {
+        return new testModifyPropertiesRequest();
+    }
+
+    /**
+     * Create an instance of {@link testAccountUnknownDataSource }
+     * 
+     */
+    public testAccountUnknownDataSource createtestAccountUnknownDataSource() {
+        return new testAccountUnknownDataSource();
+    }
+
+    /**
+     * Create an instance of {@link testZimletServerExtension }
+     * 
+     */
+    public testZimletServerExtension createtestZimletServerExtension() {
+        return new testZimletServerExtension();
+    }
+
+    /**
+     * Create an instance of {@link testGetAccountMembershipRequest }
+     * 
+     */
+    public testGetAccountMembershipRequest createtestGetAccountMembershipRequest() {
+        return new testGetAccountMembershipRequest();
+    }
+
+    /**
+     * Create an instance of {@link testSession }
+     * 
+     */
+    public testSession createtestSession() {
+        return new testSession();
+    }
+
+    /**
+     * Create an instance of {@link testAccountDataSource }
+     * 
+     */
+    public testAccountDataSource createtestAccountDataSource() {
+        return new testAccountDataSource();
+    }
+
+    /**
+     * Create an instance of {@link testGetWhiteBlackListResponse.WhiteList }
+     * 
+     */
+    public testGetWhiteBlackListResponse.WhiteList createtestGetWhiteBlackListResponseWhiteList() {
+        return new testGetWhiteBlackListResponse.WhiteList();
+    }
+
+    /**
+     * Create an instance of {@link testGetInfoResponse }
+     * 
+     */
+    public testGetInfoResponse createtestGetInfoResponse() {
+        return new testGetInfoResponse();
+    }
+
+    /**
+     * Create an instance of {@link testEntrySearchFilterMultiCond }
+     * 
+     */
+    public testEntrySearchFilterMultiCond createtestEntrySearchFilterMultiCond() {
+        return new testEntrySearchFilterMultiCond();
+    }
+
+    /**
+     * Create an instance of {@link testGetAllLocalesResponse }
+     * 
+     */
+    public testGetAllLocalesResponse createtestGetAllLocalesResponse() {
+        return new testGetAllLocalesResponse();
+    }
+
+    /**
+     * Create an instance of {@link testSearchGalRequest }
+     * 
+     */
+    public testSearchGalRequest createtestSearchGalRequest() {
+        return new testSearchGalRequest();
+    }
+
+    /**
+     * Create an instance of {@link testChildAccount }
+     * 
+     */
+    public testChildAccount createtestChildAccount() {
+        return new testChildAccount();
+    }
+
+    /**
+     * Create an instance of {@link testGetAvailableSkinsResponse }
+     * 
+     */
+    public testGetAvailableSkinsResponse createtestGetAvailableSkinsResponse() {
+        return new testGetAvailableSkinsResponse();
+    }
+
+    /**
+     * Create an instance of {@link testGetWhiteBlackListRequest }
+     * 
+     */
+    public testGetWhiteBlackListRequest createtestGetWhiteBlackListRequest() {
+        return new testGetWhiteBlackListRequest();
+    }
+
+    /**
+     * Create an instance of {@link testGetAvailableLocalesResponse }
+     * 
+     */
+    public testGetAvailableLocalesResponse createtestGetAvailableLocalesResponse() {
+        return new testGetAvailableLocalesResponse();
+    }
+
+    /**
+     * Create an instance of {@link testCheckRightsRequest }
+     * 
+     */
+    public testCheckRightsRequest createtestCheckRightsRequest() {
+        return new testCheckRightsRequest();
+    }
+
+    /**
+     * Create an instance of {@link testGetAccountMembershipResponse }
+     * 
+     */
+    public testGetAccountMembershipResponse createtestGetAccountMembershipResponse() {
+        return new testGetAccountMembershipResponse();
+    }
+
+    /**
+     * Create an instance of {@link testGetInfoResponse.ChildAccounts }
+     * 
+     */
+    public testGetInfoResponse.ChildAccounts createtestGetInfoResponseChildAccounts() {
+        return new testGetInfoResponse.ChildAccounts();
+    }
+
+    /**
+     * Create an instance of {@link testGetAccountInfoResponse }
+     * 
+     */
+    public testGetAccountInfoResponse createtestGetAccountInfoResponse() {
+        return new testGetAccountInfoResponse();
+    }
+
+    /**
+     * Create an instance of {@link testEntrySearchFilterSingleCond }
+     * 
+     */
+    public testEntrySearchFilterSingleCond createtestEntrySearchFilterSingleCond() {
+        return new testEntrySearchFilterSingleCond();
+    }
+
+    /**
+     * Create an instance of {@link testGetAvailableCsvFormatsRequest }
+     * 
+     */
+    public testGetAvailableCsvFormatsRequest createtestGetAvailableCsvFormatsRequest() {
+        return new testGetAvailableCsvFormatsRequest();
+    }
+
+    /**
+     * Create an instance of {@link testEndSessionResponse }
+     * 
+     */
+    public testEndSessionResponse createtestEndSessionResponse() {
+        return new testEndSessionResponse();
+    }
+
+    /**
+     * Create an instance of {@link testContactInfo }
+     * 
+     */
+    public testContactInfo createtestContactInfo() {
+        return new testContactInfo();
+    }
+
+    /**
+     * Create an instance of {@link testGetSignaturesRequest }
+     * 
+     */
+    public testGetSignaturesRequest createtestGetSignaturesRequest() {
+        return new testGetSignaturesRequest();
+    }
+
+    /**
+     * Create an instance of {@link testObjectInfo }
+     * 
+     */
+    public testObjectInfo createtestObjectInfo() {
+        return new testObjectInfo();
+    }
+
+    /**
+     * Create an instance of {@link testDiscoverRightsResponse }
+     * 
+     */
+    public testDiscoverRightsResponse createtestDiscoverRightsResponse() {
+        return new testDiscoverRightsResponse();
+    }
+
+    /**
+     * Create an instance of {@link testSubscribeDistributionListRequest }
+     * 
+     */
+    public testSubscribeDistributionListRequest createtestSubscribeDistributionListRequest() {
+        return new testSubscribeDistributionListRequest();
+    }
+
+    /**
+     * Create an instance of {@link testSignature }
+     * 
+     */
+    public testSignature createtestSignature() {
+        return new testSignature();
+    }
+
+    /**
+     * Create an instance of {@link testGetShareInfoResponse }
+     * 
+     */
+    public testGetShareInfoResponse createtestGetShareInfoResponse() {
+        return new testGetShareInfoResponse();
+    }
+
+    /**
+     * Create an instance of {@link testGetDistributionListMembersResponse }
+     * 
+     */
+    public testGetDistributionListMembersResponse createtestGetDistributionListMembersResponse() {
+        return new testGetDistributionListMembersResponse();
+    }
+
+    /**
+     * Create an instance of {@link testEntrySearchFilterInfo }
+     * 
+     */
+    public testEntrySearchFilterInfo createtestEntrySearchFilterInfo() {
+        return new testEntrySearchFilterInfo();
+    }
+
+    /**
+     * Create an instance of {@link testSearchCalendarResourcesResponse }
+     * 
+     */
+    public testSearchCalendarResourcesResponse createtestSearchCalendarResourcesResponse() {
+        return new testSearchCalendarResourcesResponse();
+    }
+
+    /**
+     * Create an instance of {@link testAccountGalDataSource }
+     * 
+     */
+    public testAccountGalDataSource createtestAccountGalDataSource() {
+        return new testAccountGalDataSource();
+    }
+
+    /**
+     * Create an instance of {@link testEndSessionRequest }
+     * 
+     */
+    public testEndSessionRequest createtestEndSessionRequest() {
+        return new testEndSessionRequest();
+    }
+
+    /**
+     * Create an instance of {@link testAccountPop3DataSource }
+     * 
+     */
+    public testAccountPop3DataSource createtestAccountPop3DataSource() {
+        return new testAccountPop3DataSource();
+    }
+
+    /**
+     * Create an instance of {@link testDiscoverRightsEmail }
+     * 
+     */
+    public testDiscoverRightsEmail createtestDiscoverRightsEmail() {
+        return new testDiscoverRightsEmail();
+    }
+
+    /**
+     * Create an instance of {@link testGetPrefsResponse }
+     * 
+     */
+    public testGetPrefsResponse createtestGetPrefsResponse() {
+        return new testGetPrefsResponse();
+    }
+
+    /**
+     * Create an instance of {@link testGetInfoRequest }
+     * 
+     */
+    public testGetInfoRequest createtestGetInfoRequest() {
+        return new testGetInfoRequest();
+    }
+
+    /**
+     * Create an instance of {@link testGetDistributionListRequest }
+     * 
+     */
+    public testGetDistributionListRequest createtestGetDistributionListRequest() {
+        return new testGetDistributionListRequest();
+    }
+
+    /**
+     * Create an instance of {@link testAccount }
+     * 
+     */
+    public testAccount createtestAccount() {
+        return new testAccount();
+    }
+
+    /**
+     * Create an instance of {@link testGetDistributionListMembersRequest }
+     * 
+     */
+    public testGetDistributionListMembersRequest createtestGetDistributionListMembersRequest() {
+        return new testGetDistributionListMembersRequest();
     }
 
     /**
@@ -1437,6 +1521,15 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link testDiscoverRightsResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "urn:zimbraAccount", name = "DiscoverRightsResponse")
+    public JAXBElement<testDiscoverRightsResponse> createDiscoverRightsResponse(testDiscoverRightsResponse value) {
+        return new JAXBElement<testDiscoverRightsResponse>(_DiscoverRightsResponse_QNAME, testDiscoverRightsResponse.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link testSearchGalResponse }{@code >}}
      * 
      */
@@ -1515,6 +1608,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "urn:zimbraAccount", name = "GetIdentitiesRequest")
     public JAXBElement<testGetIdentitiesRequest> createGetIdentitiesRequest(testGetIdentitiesRequest value) {
         return new JAXBElement<testGetIdentitiesRequest>(_GetIdentitiesRequest_QNAME, testGetIdentitiesRequest.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link testCheckRightsResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "urn:zimbraAccount", name = "CheckRightsResponse")
+    public JAXBElement<testCheckRightsResponse> createCheckRightsResponse(testCheckRightsResponse value) {
+        return new JAXBElement<testCheckRightsResponse>(_CheckRightsResponse_QNAME, testCheckRightsResponse.class, null, value);
     }
 
     /**
@@ -1668,6 +1770,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "urn:zimbraAccount", name = "ModifyPrefsRequest")
     public JAXBElement<testModifyPrefsRequest> createModifyPrefsRequest(testModifyPrefsRequest value) {
         return new JAXBElement<testModifyPrefsRequest>(_ModifyPrefsRequest_QNAME, testModifyPrefsRequest.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link testCheckRightsRequest }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "urn:zimbraAccount", name = "CheckRightsRequest")
+    public JAXBElement<testCheckRightsRequest> createCheckRightsRequest(testCheckRightsRequest value) {
+        return new JAXBElement<testCheckRightsRequest>(_CheckRightsRequest_QNAME, testCheckRightsRequest.class, null, value);
     }
 
     /**
@@ -1920,6 +2031,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "urn:zimbraAccount", name = "SubscribeDistributionListRequest")
     public JAXBElement<testSubscribeDistributionListRequest> createSubscribeDistributionListRequest(testSubscribeDistributionListRequest value) {
         return new JAXBElement<testSubscribeDistributionListRequest>(_SubscribeDistributionListRequest_QNAME, testSubscribeDistributionListRequest.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link testDiscoverRightsRequest }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "urn:zimbraAccount", name = "DiscoverRightsRequest")
+    public JAXBElement<testDiscoverRightsRequest> createDiscoverRightsRequest(testDiscoverRightsRequest value) {
+        return new JAXBElement<testDiscoverRightsRequest>(_DiscoverRightsRequest_QNAME, testDiscoverRightsRequest.class, null, value);
     }
 
     /**

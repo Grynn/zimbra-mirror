@@ -45,7 +45,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;/element>
  *       &lt;/sequence>
  *       &lt;attribute name="name" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="active" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="active" use="required" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -66,7 +66,7 @@ public class testFilterRule {
     @XmlAttribute(name = "name", required = true)
     protected String name;
     @XmlAttribute(name = "active", required = true)
-    protected String active;
+    protected boolean active;
 
     /**
      * Gets the value of the filterTests property.
@@ -143,24 +143,16 @@ public class testFilterRule {
     /**
      * Gets the value of the active property.
      * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
      */
-    public String getActive() {
+    public boolean isActive() {
         return active;
     }
 
     /**
      * Sets the value of the active property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
      */
-    public void setActive(String value) {
+    public void setActive(boolean value) {
         this.active = value;
     }
 
@@ -201,15 +193,15 @@ public class testFilterRule {
     public static class FilterActions {
 
         @XmlElements({
-            @XmlElement(name = "actionKeep", type = testKeepAction.class),
-            @XmlElement(name = "actionStop", type = testStopAction.class),
-            @XmlElement(name = "actionReply", type = testReplyAction.class),
-            @XmlElement(name = "actionFileInto", type = testFileIntoAction.class),
             @XmlElement(name = "actionTag", type = testTagAction.class),
             @XmlElement(name = "actionFlag", type = testFlagAction.class),
             @XmlElement(name = "actionDiscard", type = testDiscardAction.class),
+            @XmlElement(name = "actionReply", type = testReplyAction.class),
+            @XmlElement(name = "actionStop", type = testStopAction.class),
+            @XmlElement(name = "actionRedirect", type = testRedirectAction.class),
             @XmlElement(name = "actionNotify", type = testNotifyAction.class),
-            @XmlElement(name = "actionRedirect", type = testRedirectAction.class)
+            @XmlElement(name = "actionFileInto", type = testFileIntoAction.class),
+            @XmlElement(name = "actionKeep", type = testKeepAction.class)
         })
         protected List<testFilterAction> actionKeepOrActionDiscardOrActionFileInto;
 
@@ -231,15 +223,15 @@ public class testFilterRule {
          * 
          * <p>
          * Objects of the following type(s) are allowed in the list
-         * {@link testKeepAction }
-         * {@link testStopAction }
-         * {@link testReplyAction }
-         * {@link testFileIntoAction }
          * {@link testTagAction }
          * {@link testFlagAction }
          * {@link testDiscardAction }
-         * {@link testNotifyAction }
+         * {@link testReplyAction }
+         * {@link testStopAction }
          * {@link testRedirectAction }
+         * {@link testNotifyAction }
+         * {@link testFileIntoAction }
+         * {@link testKeepAction }
          * 
          * 
          */
