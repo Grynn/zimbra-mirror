@@ -66,7 +66,8 @@ public class MyExportPrivKey {
             fw.write(encoded);
             fw.write("\n");
             fw.write("-----END PRIVATE KEY-----");
-            fw.close(); /*XXX*/input.close();
+            fw.close();
+            input.close();
         }
 
         /**
@@ -79,13 +80,13 @@ public class MyExportPrivKey {
          * @throws Exception
          * 
          */
-        /*public static void main(String args[]) throws Exception{
+        public static void main(String args[]) throws Exception{
                MyExportPrivKey export=new MyExportPrivKey();
-                export.keystoreFile=new File(args[0]);
-                export.keyStoreType=args[1];
-                export.password=args[2].toCharArray();
-                export.alias=args[3];
-                export.exportedFile=new File(args[4]);
-                export.export();
-        }*/
+               export.keystoreFile=new File(args[0]);
+               export.keyStoreType=args[1];
+               export.password=args[2].toCharArray();
+               export.alias=args[3];
+               export.exportedFile=new File(args[4]);
+               export.export();
+        }
 }
