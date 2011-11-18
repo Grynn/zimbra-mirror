@@ -335,17 +335,6 @@ body {
 #ZSplashBodyContainer   {   @SplashInnerBorder@     }
 
 .LoginScreen .decor1, .SplashScreen .decor1 {
-    background-image:url("@SkinImgDir@/vmwarePeel.png");
-    background-repeat:no-repeat;
-    border-top-right-radius: 15px;
-    height:102px;
-    overflow:hidden;
-    position:absolute;
-    right:0;
-    top:0;
-    width:103px;
-    -moz-border-radius-topright:15px;
-    -webkit-border-top-right-radius:15px;
 }
 
 .ZLoadingMessage {
@@ -453,15 +442,7 @@ body {
 }
 
 .LoginScreen {
-    background-color: @LoginColor@;
-    background-image: -moz-linear-gradient(top, @LoginColor@, @darken(LoginColor,50)@); /* FF3.6 */
-    background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, @LoginColor@),color-stop(1, @darken(LoginColor,50)@)); /* Saf4+, Chrome */
-    filter:  progid:DXImageTransform.Microsoft.gradient(startColorStr='@LoginColor@', EndColorStr='@darken(LoginColor,50)@'); /* IE6,IE7 */
-    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='@LoginColor@', EndColorStr='@darken(LoginColor,50)@')"; /* IE8 */
-}
-
-.LoginScreen .h1 {
-    margin: 22px 20px 32px;
+    background-color: #eaeced;
 }
 
 .LoginScreen .center {
@@ -470,13 +451,13 @@ body {
     z-index: 11;
     position: absolute;
     overflow: visible;
-    width: 500px;
-    min-height: 300px;
-    margin-left: -250px;
-    margin-top: -150px;
+    width: 430px;
+    height: 410px;
+    margin-left: -215px;
+    margin-top: -205px;
 }
 
-.LoginScreen h1 {margin:22px 20px 32px 20px;}
+.LoginScreen h1 {margin:22px 20px 32px 65px;}
 
 .LoginScreen form {text-align:center;}  /* fixes IE centering of form */
 .form {
@@ -572,26 +553,9 @@ body {
 .LoginScreen .center, .LoginScreen .center-small {
     
     /*Linear gradient backgrounds*/
-    background-color: #1D3B61;
-    background-image: -moz-linear-gradient(top, #4D96C8, #1D3B61); /* FF3.6 */
-    background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, #4D96C8),color-stop(1, #1D3B61)); /* Saf4+, Chrome */
-    filter:  progid:DXImageTransform.Microsoft.gradient(startColorStr='#4D96C8', EndColorStr='#1D3B61'); /* IE6,IE7 */
-    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#4D96C8', EndColorStr='#1D3B61')"; /* IE8 */
-
-    /*Radial gradient backgrounds*/
-    background-image: -moz-radial-gradient(50% 0, circle farthest-corner, #4D96C8 0%, #1D3B61 100%); /* FF3.6 */
-    background-image: -webkit-gradient( radial, 50% 0%, 0, 50% 0%, 390, from(#4D96C8), to(#1D3B61) ); /* Saf4+, Chrome */
-
-    -moz-border-radius: 15px; /* FF1+ */
-    -webkit-border-radius: 15px; /* Saf3-4 */
-    border-radius: 15px; /* Opera 10.5, IE 9, Saf5, Chrome */
-    
-    -moz-box-shadow: 0px 0px 10px #000000; /* FF3.5+ */
-    -webkit-box-shadow: 0px 0px 10px #000000; /* Saf3.0+, Chrome */
-    box-shadow: 0px 0px 10px #000000; /* Opera 10.5, IE 9.0 */
-    #IFDEF MSIE
-    border: 1px solid #000; /* Plain border for IE */
-    #ENDIF
+    background-color: #eaeced;
+    background-image:url("@SkinImgDir@/login-bg.png");
+    background-repeat:no-repeat;
 }
 
 
@@ -619,7 +583,7 @@ body {
 }
 
 .LoginScreen label {
-    color:@lighten(LoginColor,36)@; 
+    color:@lighten(LoginColor,255)@;
 }
 
 /** Logo Images **/
@@ -693,4 +657,7 @@ body {
     border-width: 0px;
     padding: 0px;
     @VertSeparator@;
+}
+#ZLoginButton{
+  background-color: #ffffff;
 }

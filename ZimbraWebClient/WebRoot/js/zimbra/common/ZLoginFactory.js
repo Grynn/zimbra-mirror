@@ -201,7 +201,7 @@ ZLoginFactory.getLoginDialogHTML = function (params) {
                 "<tr>",
 	                "<td>&nbsp;</td>",
 	                "<td style='text-align:right'>",
-	               	    "<input id='", ZLoginFactory.LOGIN_BUTTON_ID, "' type='button' onclick='", params.loginAction, ";return false' class='DwtButton' value='",params.buttonName,(params.showButton ?"' style='float:left;'/>" :"' style='display:none'/>"),
+	               	    "<input id='", ZLoginFactory.LOGIN_BUTTON_ID, "' type='button' onclick='", params.loginAction, ";return false' class='DwtButton' value='",params.buttonName,(params.showButton ?"' style='float:right;'/>" :"' style='display:none'/>"),
 	                    "<input id='", ZLoginFactory.REMEMBER_ME_ID, "' value='1' type='checkbox' name='", ZLoginFactory.REMEMBER_ME_ID, "'  ", (params.showRememberMeCheckbox ? "" : "style='display:none'"), "/>",
 	                    "<label ", (params.showRememberMeCheckbox ? "" : "style='display:none'"), " for='", ZLoginFactory.REMEMBER_ME_ID, "'>", params.rememberMeMsg, "</label>",
 	                "</td>",
