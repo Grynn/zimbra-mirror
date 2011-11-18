@@ -297,22 +297,23 @@ if(ZaTabView.XFormModifiers["ZaHomeXFormView"]) {
     }
 
     ZaVersionCheck.HomeXFormModifier = function(xFormObject) {
-        var infoItem = ZaHomeXFormView.getWarningPanelItem(xFormObject);
-        infoItem.items.push(
-            {type:_GROUP_, numCols:3,  width:"100%", colSizes:["80px", "*", "100px"],
-                visibilityChecks:[[XForm.checkInstanceValue,ZaHome.A2_versionUpdateAvailable,true]],
-                items:[
-                {type:_OUTPUT_, ref: ZaHome.A2_versionUpdateAvailable,
-                    getDisplayValue: function (value){
-                        if (value) {
-                            return AjxImg.getImageHtml ("Information");
+        if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.SOFTWARE_UPDATES_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+            var infoItem = ZaHomeXFormView.getWarningPanelItem(xFormObject);
+            infoItem.items.push(
+                {type:_GROUP_, numCols:3,  width:"100%", colSizes:ZaHomeXFormView.getWarningPanelCol(),
+                    visibilityChecks:[[XForm.checkInstanceValue,ZaHome.A2_versionUpdateAvailable,true]],
+                    items:[
+                    {type:_OUTPUT_, ref: ZaHome.A2_versionUpdateAvailable,
+                        getDisplayValue: function (value){
+                            if (value) {
+                                return AjxImg.getImageHtml ("Information");
+                            }
                         }
-                    }
-                },
-                {type:_OUTPUT_, ref: ZaHome.A2_updateMessage},
-                {type:_OUTPUT_, value:com_zimbra_adminversioncheck.LBL_ViewUpdate, containerCssStyle:"cursor:pointer;color:white",onClick: ZaHomeXFormView.onViewVersionUpdate}
-            ]});
-
+                    },
+                    {type:_OUTPUT_, ref: ZaHome.A2_updateMessage},
+                    {type:_OUTPUT_, value:com_zimbra_adminversioncheck.LBL_ViewUpdate, containerCssStyle:"cursor:pointer;color:white",onClick: ZaHomeXFormView.onViewVersionUpdate}
+                ]});
+        }
     }
 
     ZaTabView.XFormModifiers["ZaHomeXFormView"].push(ZaVersionCheck.HomeXFormModifier);

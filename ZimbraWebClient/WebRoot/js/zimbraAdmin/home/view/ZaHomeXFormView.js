@@ -184,6 +184,10 @@ ZaHomeXFormView.getHomeSetupItem = function (xFormObject) {
     return xFormObject.items[0].items[0].items[2].items[0].items[1];
 }
 
+ZaHomeXFormView.getWarningPanelCol = function () {
+    return ["20px", "*", "120px"];
+}
+
 ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
     var cases = [];
 
@@ -236,7 +240,7 @@ ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
         items:[
             {type:_GROUP_, colSpan: "*", numCols:1, containerCssClass:"ZaHomeWarningPanel", width:"100%", items:[
 
-                {type:_GROUP_, numCols:3,  width:"100%", colSizes:["20px", "*", "100px"], containerCssClass:"ZaHomeWarnginItem",
+                {type:_GROUP_, numCols:3,  width:"100%", colSizes:ZaHomeXFormView.getWarningPanelCol(), containerCssClass:"ZaHomeWarnginItem",
                     visibilityChecks:[[XForm.checkInstanceValueNot,ZaHome.A2_serviceStatus,true]],
                     items:[
                         {type:_OUTPUT_, ref: ZaHome.A2_serviceStatus,
@@ -254,7 +258,7 @@ ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
                         {type:_OUTPUT_, value:ZaMsg.LBL_HomeLinkServerStatus, containerCssClass:"ZaLinkedItem",onClick: ZaHomeXFormView.onViewService}
                 ]}
             ]},
-            {type:_GROUP_, colSpan: "*", numCols: 3,  colSizes:["37%", "34%", "29%"],
+            {type:_GROUP_, colSpan: "*", numCols: 3,  colSizes:["33%", "34%", "33%"], width: "100%",
                 containerCssClass:"ZaHomeInfoPanel",items:[
                 {type:_GROUP_, numCols: 2, valign: _TOP_, items:[
                     {type:_OUTPUT_, colSpan:"2", value:ZaMsg.LBL_HomeSummary, cssClass:"ZaHomeInfoTitle"},
@@ -267,9 +271,9 @@ ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
                 {type:_GROUP_, numCols: 2, valign: _TOP_, width:"100%", items:[
                     {type:_OUTPUT_, colSpan:"*", value:ZaMsg.LBL_HomeMaintenance, cssClass:"ZaHomeInfoTitle"},
                     // Resever for Backup Extension
-                    {type:_GROUP_, colSpan:"*", numCols:3, width: "100%", colSizes:["*", "30px", "120px"],items:[
+                    {type:_GROUP_, colSpan:"*", numCols:3, width: "100%", colSizes:["*", "20px", "120px"],items:[
                     ]},
-                    {type:_GROUP_, colSpan:"*", numCols:3, width: "100%", colSizes:["*", "30px", "120px"],items:[
+                    {type:_GROUP_, colSpan:"*", numCols:3, width: "100%", colSizes:["*", "20px", "120px"],items:[
                         {type:_OUTPUT_, value:ZaMsg.LBL_HomeLastCleanup},
                         {type:_OUTPUT_, ref: ZaHome.A2_lastCleanup,
                             getDisplayValue: function (value){
@@ -282,7 +286,7 @@ ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
                         },
                         {type:_OUTPUT_, ref: ZaHome.A2_lastCleanupTime}
                     ]},
-                    {type:_GROUP_, colSpan:"*", numCols:3, width: "100%", colSizes:["*", "30px", "120px"],items:[
+                    {type:_GROUP_, colSpan:"*", numCols:3, width: "100%", colSizes:["*", "20px", "120px"],items:[
                         {type:_OUTPUT_, value:ZaMsg.LBL_HomeLastLogPurge},
                         {type:_OUTPUT_, ref: ZaHome.A2_lastLogPurge,
                             getDisplayValue: function (value){
@@ -296,9 +300,9 @@ ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
                         {type:_OUTPUT_, ref: ZaHome.A2_lastLogPurgeTime}
                     ]},
                     // Reserver for Cert admin extension
-                    {type:_GROUP_, colSpan:"*", numCols:3, width: "100%", colSizes:["*", "30px", "120px"],items:[
+                    {type:_GROUP_, colSpan:"*", numCols:3, width: "100%", colSizes:["*", "20px", "120px"],items:[
                     ]},
-                    {type:_GROUP_, colSpan:"*", numCols:3, width: "100%", colSizes:["*", "30px", "120px"],items:[
+                    {type:_GROUP_, colSpan:"*", numCols:3, width: "100%", colSizes:["*", "20px", "120px"],items:[
                         {type:_OUTPUT_, value: ZaMsg.LBL_HomeDBCheck},
                         {type:_OUTPUT_, ref: ZaHome.A2_DBCheckType,
                             getDisplayValue: function (value){
@@ -314,7 +318,7 @@ ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
                 ]},
                 {type:_GROUP_, numCols: 2, colSizes:["*", "90px"], valign: _TOP_, width: "100%", items:[
                     {type:_OUTPUT_, colSpan:"2", value:ZaMsg.LBL_HomeRuntime, cssClass:"ZaHomeInfoTitle"},
-                    {type:_GROUP_, colSpan:"*", numCols:3, width: "100%", colSizes:["*", "30px", "60px"],items:[
+                    {type:_GROUP_, colSpan:"*", numCols:3, width: "100%", colSizes:["*", "16px", "78px"],items:[
                         {type:_OUTPUT_, value:ZaMsg.LBL_HomeService},
                         {type:_OUTPUT_, ref: ZaHome.A2_serviceStatus,
                             getDisplayValue: function (value){

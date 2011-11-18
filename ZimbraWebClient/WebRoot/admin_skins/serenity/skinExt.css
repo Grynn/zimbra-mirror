@@ -114,7 +114,7 @@ div.ZmSelectedHeaderBg {
 }
 
 .ZaTaskTabView .XFormCase {
-    @AppBg@
+    background-color: #DDDDDD;
 }
 /* -- Search panel -- */
 
@@ -266,7 +266,7 @@ div.ZmSelectedHeaderBg {
 }
 
 .ZaHomeWarnginItem {
-    padding: 2px 0px 3px;
+    padding: 1px 0px 2px;
 }
 
 .ZaLinkedItem {
@@ -306,6 +306,7 @@ div.ZmSelectedHeaderBg {
     color: #86a1b6;
     font-size: 16pt;
     font-weight: bold;
+    padding-bottom: 8px;
 }
 
 .ZaHomeLinkItemLabel {
