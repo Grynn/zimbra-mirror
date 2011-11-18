@@ -699,7 +699,7 @@ public class BeanUtils {
         ZFolder f = mbox.getFolderById(id);
         if (f == null) return null;
         String lname = I18nUtil.getLocalizedMessage(pc, "FOLDER_LABEL_"+f.getId());
-        return (lname == null || lname.startsWith("???")) ? f.getName() : lname;
+        return (lname == null || lname.startsWith("???")) ? BeanUtils.cook(f.getName()) : lname;
     }
 
 	private static void getFolderPath(PageContext pc, ZFolder folder, StringBuilder builder) throws JspException, ServiceException {
