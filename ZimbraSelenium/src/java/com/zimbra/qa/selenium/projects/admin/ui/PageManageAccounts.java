@@ -25,34 +25,11 @@ public class PageManageAccounts extends AbsTab {
 
 	public static class Locators {
 
-		// ** OverviewTreePanel -> Addresses -> Accounts
-		public static final String zti__ACCOUNTS = "zti__AppAdmin__ADDRESS__ACCOUNT_textCell";
-
-		// ** "Manage Accounts" Tab Title
-		public static final String ztab__MANAGE_ACCOUNT_ICON = "css=tr#ztab__MAIN_TAB_row div.ImgAccount";
-
-		// ** Menus
-		public static final String zb__ACLV__NEW_MENU_title = "xpath=//*[@id='zb__ACLV__NEW_MENU_title']";// New Button
-		//public static final String zdd_NEW_MENU="css=td#zb__ACLV__NEW_MENU_dropdown div.ImgSelectPullDownArrow";
-		public static final String zdd_NEW_MENU="css=td#zb__ACLV__NEW_MENU_dropdown.ZDropDown";	
-		public static final String zb__ACLV__EDIT_title = "xpath=//*[@id='zb__ACLV__EDIT_title']";
-		public static final String zb__ACLV__DELETE_title = "xpath=//*[@id='zb__ACLV__DELETE_title']";
-		public static final String zb__ACLV__CHNG_PWD_title = "xpath=//*[@id='zb__ACLV__CHNG_PWD_title']";
-		public static final String zb__ACLV__EXPIRE_SESSION_title = "xpath=//*[@id='zb__ACLV__EXPIRE_SESSION_title']";
-		public static final String zb__ACLV__VIEW_MAIL_title = "xpath=//*[@id='zb__ACLV__VIEW_MAIL_title']";
-		public static final String zb__ACLV__UNKNOWN_66_title = "xpath=//*[@id='zb__ACLV__UNKNOWN_66_title']"; // Search Mail
-		public static final String zb__ACLV__UNKNOWN_72_title = "xpath=//*[@id='zb__ACLV__UNKNOWN_72_title']"; // Move Mailbox
-		public static final String zb__ACLV__MORE_ACTIONS_title = "xpath=//*[@id='zb__ACLV__MORE_ACTIONS_title']";
-		public static final String zb__ACLV__PAGE_BACK_title = "xpath=//*[@id='zb__ACLV__PAGE_BACK_title']";
-		public static final String zb__ACLV__PAGE_FORWARD_title = "xpath=//*[@id='zb__ACLV__PAGE_FORWARD_title']";
-		public static final String zb__ACLV__HELP_title = "xpath=//*[@id='zb__ACLV__HELP_title']";
-
-
-		// NEW Menu
-		// TODO: define these locators
-		public static final String zmi__ACLV__NEW_WIZARD_title = "zmi__ACLV__NEW_ACCT";	// New -> Account 
-
-
+		// ** OverviewTreePanel -> Manage Accounts
+		public static final String MANAGE_ACCOUNTS_ICON="css=div.ImgMangeAccounts";
+		public static final String ACCOUNTS="css=td[id^='zti__AppAdmin__Home__actLstHV']";
+		public static final String CONFIGURE_ICON="css=div.ImgConfigure";
+		public static final String NEW_ACCOUNT="zmi__zb_currentApp__NEW_MENU";
 	}
 
 
@@ -85,12 +62,12 @@ public class PageManageAccounts extends AbsTab {
 			throw new HarnessException("Admin Console application is not active!");
 
 
-		boolean present = sIsElementPresent(Locators.ztab__MANAGE_ACCOUNT_ICON);
+		boolean present = sIsElementPresent(Locators.CONFIGURE_ICON);
 		if ( !present ) {
 			return (false);
 		}
 
-		boolean visible = zIsVisiblePerPosition(Locators.ztab__MANAGE_ACCOUNT_ICON, 0, 0);
+		boolean visible = zIsVisiblePerPosition(Locators.CONFIGURE_ICON, 0, 0);
 		if ( !visible ) {
 			logger.debug("isActive() visible = "+ visible);
 			return (false);
@@ -112,7 +89,9 @@ public class PageManageAccounts extends AbsTab {
 		}
 
 		// Click on Addresses -> Accounts
-		zClickAt(Locators.zti__ACCOUNTS,"");
+		zClickAt(Locators.MANAGE_ACCOUNTS_ICON,"");
+		sIsElementPresent(Locators.ACCOUNTS);
+		zClickAt(Locators.ACCOUNTS, "");
 
 		zWaitForActive();
 
@@ -160,8 +139,9 @@ public class PageManageAccounts extends AbsTab {
 		if ( button == Button.B_NEW ) {
 
 			// New button
-			locator = Locators.zb__ACLV__NEW_MENU_title;
-
+//			locator = Locators.zb__ACLV__NEW_MENU_title;
+			locator ="";
+			
 			// Create the page
 			page = new WizardCreateAccount(this);
 
@@ -214,8 +194,8 @@ public class PageManageAccounts extends AbsTab {
 
 			if (option == Button.O_ACCOUNTS_ACCOUNT) {
 
-				pulldownLocator = Locators.zdd_NEW_MENU;
-				optionLocator = PageManageAccounts.Locators.zmi__ACLV__NEW_WIZARD_title;
+				pulldownLocator = Locators.CONFIGURE_ICON;
+				optionLocator = Locators.NEW_ACCOUNT;
 
 				page = new WizardCreateAccount(this);
 

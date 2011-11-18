@@ -29,7 +29,7 @@ public class CreateAccount extends AdminCommonTest {
 	 * @throws HarnessException
 	 */
 	@Test(	description = "Create a basic account",
-			groups = { "sanity" })
+			groups = { "obsolete" })
 			public void CreateAccount_01() throws HarnessException {
 
 		// Create a new account in the Admin Console
