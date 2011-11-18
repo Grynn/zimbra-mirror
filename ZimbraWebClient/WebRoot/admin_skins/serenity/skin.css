@@ -68,16 +68,14 @@ body {
 
 /* top row:  logo, search box, quota */
 #skin_tr_top	{}
-#skin_td_logo	{	
-	text-align:center; 
-	vertical-align:middle;
+#skin_td_logo	{
 }
 /** Logo displayed in the app **/
 #skin_td_logo						{}
 #skin_container_logo	{	
 	width:@TreeStartWidth@;
 	@SkinBorderLogo@
-	height:35px;
+	height: @TopHeight@;
 #IFDEF MSIE
     height:100%;
 #ENDIF
@@ -97,26 +95,32 @@ body {
 
 #skin_td_search	{	
 	vertical-align:top;
-	padding:0px 15px 0px 0px;
+	padding:0px;
 }
 
-#skin_container_search	{	
-	@SkinBorderSearch@
-	height: @TopHeight@;
+#skin_container_search	{
+	height: 21px;
     width:400px;
-	padding:3px 4px 3px 4px;
 }
 
 /* Vertical Seperator Section*/
-#skin_container_refresh_vertsep, #skin_container_pre_next_vertsep, #skin_container_username_vertsep {
-    width:      7px;
+#skin_container_pre_next_vertsep{
+    width:      1px;
+    padding:0px 9px;
+	height: @TopHeight@;
+}
+
+#skin_container_refresh_vertsep, #skin_container_search_vertsep, #skin_container_username_vertsep {
+    width:      1px;
+    padding:0px 9px;
+    top: 4px;
+	height: @TopHeight@;
 }
 
 /** User Name section **/
 #skin_container_username {
 	height: @TopHeight@;
     width:  100px;
-    padding-top:2px;
 }
 
 #skin_container_username *	{
@@ -135,18 +139,17 @@ body {
 }
 
 #skin_container_previous {
-    width:      30px;
+    width:      16px;
     height:     @TopHeight@
 }
 
 
 #skin_container_next {
-    width:      30px;
+    width:      16px;
     height:     @TopHeight@
 }
 
 #skin_container_help {
-    width:      80px;
     height:     @TopHeight@
 }
 
@@ -673,4 +676,21 @@ body {
     padding: 3px 15px 2px 15px;
     min-height:18px;
     background-color:@HeaderColor@;
+}
+
+.nextVertSep {
+    height: 17px;
+    @VertSeparator@;
+}
+
+.SearchFieldVert {
+    background-color: black;
+    @opacity(50)@
+}
+.vertSep {
+    height: 9px;
+    margin: 0px;
+    border-width: 0px;
+    padding: 0px;
+    @VertSeparator@;
 }

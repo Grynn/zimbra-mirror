@@ -652,8 +652,8 @@ ZaSearchField.prototype._getMyXForm = function() {
 
     var xFormObject;
     if (appNewUI) {
-        numCols = 3;
-        colSizes = ["59", "*", "28"];
+        numCols = 4;
+        colSizes = ["46","3", "*", "28"];
         xFormObject = {
             tableCssStyle:"width:100%;padding:2px;",numCols:numCols,width:"100%",
             colSizes:colSizes,
@@ -663,24 +663,9 @@ ZaSearchField.prototype._getMyXForm = function() {
                     toolTipContent:ZaMsg.searchToolTip,
                     icon:"SearchAll", cssClass:"ZaSearchFieldButton DwtToolbarButton"
                 },
-
+                {type:_SPACER_, colSpan:1, cssStyle:"", cssClass:"SearchFieldVert", height: 14},
                 {type: _GROUP_,  numCols: 2, width: "100%", cssClass: "oselect",
-                    //cssStyle:"margin-left: 5px; height: 22px; border: 1px solid; ",
-                    items: [/*
-                    {type:_TEXTFIELD_, ref:ZaSearch.A_query, containerCssClass:"search_field_container", label:null,
-                        elementChanged: function(elementValue,instanceValue, event) {
-                            var charCode = event.charCode;
-                            if (charCode == 13 || charCode == 3) {
-                               this.getForm().parent.invokeCallback();
-                            } else {
-                                this.getForm().itemChanged(this, elementValue, event);
-                            }
-                        },
-                        visibilityChecks:[],
-                        enableDisableChecks:[],
-                        //cssClass:"search_input",
-                        cssStyle:"overflow: hidden;", width:"100%"
-                    },  */
+                    items: [
                     {type:_DYNSELECT_, ref:ZaSearch.A_query, dataFetcherClass:ZaSearch,
                         dataFetcherMethod:ZaSearch.prototype.dynSelectSearch,
                         labelLocation:_NONE_,
@@ -697,8 +682,7 @@ ZaSearchField.prototype._getMyXForm = function() {
                     }
 
                 ]},
-
-                {type:_DWT_BUTTON_, toolTipContent:ZaMsg.searchForAll, icon:"Search2", name: "searchButton",
+                {type:_DWT_BUTTON_, toolTipContent:ZaMsg.searchForAll, icon:"Search", name: "searchButton",
                     onActivate:ZaSearchField.srchButtonHndlr, autoPadding: false,
                     cssStyle:"background-color:white;",
                     cssClass:"ZaSearchFieldButton   DwtToolbarButton"
@@ -752,7 +736,7 @@ ZaSearchField.prototype._getMyXForm = function() {
         //Help search button
         if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.HELP_SEARCH] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
             xFormObject.items.push(
-                {type:_DWT_BUTTON_, label: ZaMsg.help_search , toolTipContent:ZaMsg.tt_help_search, icon:"NodeExpandedWhite", name: "helpSearchButton",
+                {type:_DWT_BUTTON_, label: ZaMsg.help_search , toolTipContent:ZaMsg.tt_help_search, icon:"Help", name: "helpSearchButton",
                                     cssStyle:"overflow: hidden" ,onActivate:ZaSearchField.helpSrchButtonHndlr, cssClass:"DwtToolbarButton"}
             );
         }

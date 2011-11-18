@@ -126,6 +126,16 @@ div.ZmSelectedHeaderBg {
     @brRadius@:5px;
 }
 
+.SearchToolBar {
+    top: 0px;
+    border: white solid 1px;
+    background-color:@viewC@;
+    @tlRadius@:5px;
+    @trRadius@:5px;
+    @blRadius@:5px;
+    @brRadius@:5px;
+}
+
 .SearchTBSearchField .oselect, .oselect_check {
     border:none;
     background-color:white;
@@ -295,6 +305,7 @@ div.ZmSelectedHeaderBg {
 .ZaHomeSetupTitle {
     color: #86a1b6;
     font-size: 16pt;
+    font-weight: bold;
 }
 
 .ZaHomeLinkItemLabel {

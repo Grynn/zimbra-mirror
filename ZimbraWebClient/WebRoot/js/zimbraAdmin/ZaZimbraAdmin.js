@@ -543,7 +543,7 @@ function() {
     var previousEl = previousLabel.getHtmlElement();
     previousLabel.setCursor ("pointer");
     previousEl.onclick = function () { ZaZimbraAdmin.prototype._goPrevListener.call(ZaZimbraAdmin.getInstance());};
-    previousEl.innerHTML = this._getAppLink(null, "LeftArrowNormal");
+    previousEl.innerHTML =  AjxImg.getImageSpanHtml("LeftArrowNormal");
     previousLabel.reparentHtmlElement (ZaSettings.SKIN_PREVIOUS_DOM_ID) ;
 }
 
@@ -557,7 +557,7 @@ function() {
     var nextEl = nextLabel.getHtmlElement();
     nextLabel.setCursor ("pointer");
     nextEl.onclick = function () { ZaZimbraAdmin.prototype._goNextListener.call(ZaZimbraAdmin.getInstance());};
-    nextEl.innerHTML = this._getAppLink(null, "RightArrowNormal");
+    nextEl.innerHTML = AjxImg.getImageSpanHtml("RightArrowNormal");
     nextLabel.reparentHtmlElement (ZaSettings.SKIN_NEXT_DOM_ID) ;
 }
 
@@ -605,7 +605,7 @@ function() {
     var helpEl = helpLabel.getHtmlElement();
     helpLabel.setCursor ("pointer") ;
 
-    var iconName = (appNewUI)?"NodeExpandedWhite":"Help";
+    var iconName = (appNewUI)?"":"Help";
     if (ZaSettings.isYahooSmbPADomainAdmin)   {
         helpLabel.getHtmlElement().innerHTML =
             this._getAppLink("SMBAccount.openHelpDesk();", iconName,  ZaMsg.helpDesk, skin.skin_container_help_max_str_length);
@@ -873,8 +873,11 @@ function(staticFunc, icon, lbl, max_lbl_length) {
 	html[i++] = AjxImg.getImageHtml(icon, null, "border=0");
 	//html[i++] = "</a></td>";
 	html[i++] = "</span></td>";
-	
-	html[i++] = "<td width=1% align=right style='white-space:nowrap; font-weight:bold'><span " ;
+
+    if (appNewUI)
+        html[i++] = "<td width=1% align=right style='white-space:nowrap;'><span " ;
+    else
+	    html[i++] = "<td width=1% align=right style='white-space:nowrap; font-weight:bold'><span " ;
 	if (staticFunc) {
 		html[i++] = " onclick='" + staticFunc + "' " ;
 	}

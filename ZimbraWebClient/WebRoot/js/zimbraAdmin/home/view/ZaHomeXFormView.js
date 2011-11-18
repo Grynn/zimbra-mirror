@@ -242,7 +242,7 @@ ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
                         {type:_OUTPUT_, ref: ZaHome.A2_serviceStatus,
                             getDisplayValue: function (value){
                                 if (value === undefined) {
-                                    return AjxImg.getImageHtml ("Help");
+                                    return AjxImg.getImageHtml ("UnKnownStatus");
                                 }else if (value === false) {
                                     return AjxImg.getImageHtml ("Cancel");
                                 } else {
@@ -319,11 +319,11 @@ ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
                         {type:_OUTPUT_, ref: ZaHome.A2_serviceStatus,
                             getDisplayValue: function (value){
                                 if (value === undefined) {
-                                    return AjxImg.getImageHtml ("Help");
+                                    return AjxImg.getImageHtml ("UnKnownStatus");
                                 }else if (value === false) {
                                     return AjxImg.getImageHtml ("Critical");
                                 } else {
-                                    return AjxImg.getImageHtml ("Information");
+                                    return AjxImg.getImageHtml ("Check");
                                 }
                             }
                         },
@@ -340,7 +340,7 @@ ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
                     containerCssClass:"ZaHomeSetupPanelContent", items:[
                     {type:_GROUP_, colSpan: "*", width:"100%", numCols:2, colSizes:["100%", "20px"], items:[
                         {type:_CELL_SPACER_},
-                        {type:_DWT_IMAGE_, value: "ImgClose", containerCssStyle:"cursor: pointer;", onClick:ZaHomeXFormView.onCloseSetup}
+                        {type:_DWT_IMAGE_, value: "ImgRemoveLineUp", containerCssStyle:"cursor: pointer;", onClick:ZaHomeXFormView.onCloseSetup}
                     ]},
                     {type:_SETUPGROUP_, colSpan: "*", headerLabels: labelChoices, contentItems: contentChoices},
                     {type:_OUTPUT_, value: ZaMsg.LBL_HomeHelpCenter, colSpan: "*", align:_RIGHT_, onClick: ZaHomeXFormView.onHelpLink,
