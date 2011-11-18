@@ -241,7 +241,7 @@ public class ZimbraSeleniumProperties {
 		Map<String, String> queryMap = new HashMap<String, String>();
 		String fragment = null;
 		
-		if ( CodeCoverage.getInstance().Enabled ) {
+		if ( CodeCoverage.getInstance().isEnabled() ) {
 			queryMap.putAll(CodeCoverage.getInstance().getQueryMap());
 		}
 		

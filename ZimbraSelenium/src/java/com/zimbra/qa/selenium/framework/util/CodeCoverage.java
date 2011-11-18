@@ -49,7 +49,7 @@ public class CodeCoverage {
 	public void writeXml() {
 		logger.info("writeXml()");
 		
-		if ( !Enabled ) {
+		if ( !isEnabled() ) {
 			logger.info("writeXml(): Code Coverage reporting is disabled");
 			return;
 		}
@@ -168,7 +168,7 @@ public class CodeCoverage {
 	public void writeCoverage() {
 		logger.info("writeCoverage()");
 
-		if ( !Enabled ) {
+		if ( !isEnabled() ) {
 			logger.info("writeCoverage(): Code Coverage reporting is disabled");
 			return;
 		}
@@ -230,7 +230,7 @@ public class CodeCoverage {
 	public void calculateCoverage() throws HarnessException {
 		logger.info("calculateCoverage()");
 
-		if ( !Enabled ) {
+		if ( !isEnabled() ) {
 			logger.info("calculateCoverage(): Code Coverage is disabled");
 			return;
 		}
@@ -275,7 +275,7 @@ public class CodeCoverage {
 				
 				logger.error("Unable to calculate code coverage.  Disabling code coverage", e);
 				logger.error(ClientSessionFactory.session().selenium().getEval(COVERAGE_SCRIPT));
-				Enabled = false;
+				isDisabled = true;
 				throw e;
 
 			}
@@ -567,7 +567,7 @@ public class CodeCoverage {
 	public void instrumentServerCheck() throws HarnessException {
 		logger.info("instrumentServerCheck()");
 
-		if ( !Enabled ) {
+		if ( !isEnabled() ) {
 			logger.info("instrumentServerCheck(): Code Coverage is disabled");
 			return;
 
@@ -576,7 +576,7 @@ public class CodeCoverage {
 		StafServiceFS staf = new StafServiceFS();
 		staf.execute("QUERY ENTRY "+ Tool);
 		if ( staf.getSTAFResult().rc == STAFResult.DoesNotExist ) {
-			Enabled = false;
+			isDisabled = true;
 			throw new HarnessException(Tool +" does not exist!");
 		}	
 
@@ -592,7 +592,7 @@ public class CodeCoverage {
 	public void instrumentServer() throws HarnessException {
 		logger.info("instrumentServer()");
 
-		if ( !Enabled ) {
+		if ( !isEnabled() ) {
 			logger.info("instrumentServer(): Code Coverage is disabled");
 			return;
 		}
@@ -668,7 +668,7 @@ public class CodeCoverage {
 	public void instrumentServerUndo() throws HarnessException {
 		logger.info("instrumentServerUndo()");
 
-		if ( !Enabled ) {
+		if ( !isEnabled() ) {
 			logger.info("instrumentServerUndo(): Code Coverage is disabled");
 			return;
 		}
@@ -732,7 +732,6 @@ public class CodeCoverage {
 		durationTotal += ((finish.getTime()/1000) - (start.getTime()/1000));
 	}
 
-	protected boolean Enabled = false;
 	protected String Tool = "/usr/local/bin/jscoverage";
 	protected boolean EnableSourceCodeReport = false;
 	protected boolean InstrumentServer = true;
@@ -775,16 +774,9 @@ public class CodeCoverage {
 	private CodeCoverage() {
 		logger.info("new "+ CodeCoverage.class.getCanonicalName());
 		
-		Enabled = ZimbraSeleniumProperties.getStringProperty("coverage.enabled", "false").equalsIgnoreCase("true");
-		
-		if ( !Enabled ) {
-			logger.info("CodeCoverage(): Code Coverage is disabled");
-			return;
-		}
-		
 		if ( !supportedAppTypes.contains(ZimbraSeleniumProperties.getAppType())) {
 			logger.info("CodeCoverage(): code coverage does not support type "+ ZimbraSeleniumProperties.getAppType() +".  Disabling.");
-			Enabled = false;
+			isDisabled = true;
 			return;
 		}
 		
@@ -800,7 +792,7 @@ public class CodeCoverage {
 				}
 				if ( stream == null ) {
 					logger.error("CodeCoverage(): unable to find resource: /coverageScript.js");
-					Enabled = false;
+					isDisabled = true;
 					return;
 				}
 				
@@ -818,7 +810,7 @@ public class CodeCoverage {
 			}
 		} catch (IOException e) {
 			logger.error("unable to read resource: /coverageScript.js", e);
-			Enabled = false;
+			isDisabled = true;
 			return;
 		}
 
@@ -835,6 +827,21 @@ public class CodeCoverage {
 		InstrumentServer = ZimbraSeleniumProperties.getStringProperty("coverage.instrument", "true").equalsIgnoreCase("true");
 
 
+	}
+	
+	// Sometimes, there may be an exception that should disable
+	// code coverage metrics for the remainder of the run.
+	// In those cases, isDisabled will be flipped to true
+	private boolean isDisabled = false;
+		
+	protected boolean isEnabled() {
+		String v = ZimbraSeleniumProperties.getStringProperty("coverage.enabled", "false");
+		logger.info("coverage.enabled="+v);
+		if ( isDisabled ) {
+			logger.info("isDiabled is true, therefore Code Coverage is disabled");
+			return (false);
+		}
+		return (v.equalsIgnoreCase("true"));
 	}
 
 	/**
