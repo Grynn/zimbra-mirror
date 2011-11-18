@@ -528,7 +528,7 @@ public class ScheduleViewModel: BaseViewModel
 
         MyAcct.migrationFolder = MyFolder;
 
-        CSMigrationwrapper mw = new CSMigrationwrapper();
+        CSMigrationwrapper mw = ((IntroViewModel)ViewModelPtrs[(int)ViewType.INTRO]).mw;
         MigrationOptions importOpts = SetOptions();
 
         mw.StartMigration(MyAcct, importOpts, isServer, m_isPreview);

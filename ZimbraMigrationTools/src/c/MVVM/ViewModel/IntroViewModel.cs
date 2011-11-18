@@ -100,6 +100,7 @@ public class IntroViewModel: BaseViewModel
     public void Next()
     {
         mw = new CssLib.CSMigrationwrapper();
+        Application.Current.Properties["mw"] = mw;
 
         // Get data to initialize the profile combo boxes
         mw.MailClient = "MAPI";

@@ -16,7 +16,7 @@ public partial class App: Application
     private void Application_Exit(object sender, ExitEventArgs e)
     {
         string mode = Properties["migrationmode"].ToString();
-        CSMigrationwrapper mw = new CSMigrationwrapper();
+        CSMigrationwrapper mw = (CSMigrationwrapper)Properties["mw"];
 
         mw.MailClient = "MAPI";
         if (mode == "server")
