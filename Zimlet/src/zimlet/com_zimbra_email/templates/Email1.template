@@ -16,13 +16,13 @@
 		<label  id='UnknownPersonSlide_EmailAnchorId' style='text-decoration:underline;color:darkBlue;cursor:pointer'><$= AjxStringUtil.htmlEncode(data.email) $></label><br/>
 	<$ } $>
 	<$ if (data.mobilePhone) { $>
-		<label ><$= AjxStringUtil.htmlEncode(data.mobilePhone) $> (cell)</label><br/>
+		<label ><$= AjxStringUtil.htmlEncode(data.mobilePhone) $> (<$= ZmMsg.cell $>)</label><br/>
 	<$ } $>
 	<$ if (data.workPhone) { $>
-		<label ><$= AjxStringUtil.htmlEncode(data.workPhone) $> (work)</label><br/>
+		<label ><$= AjxStringUtil.htmlEncode(data.workPhone) $> (<$= ZmMsg.work $>)</label><br/>
 	<$ } $>
 	<$ if (data.address) { $>
-		<label ><$= AjxStringUtil.htmlEncode(data.address) $> (work)</label><br/>
+		<label ><$= AjxStringUtil.htmlEncode(data.address) $> (<$= ZmMsg.work $>)</label><br/>
 	<$ } $>
 	<br/>
 	<$ if (data.rightClickForMoreOptions) { $>
