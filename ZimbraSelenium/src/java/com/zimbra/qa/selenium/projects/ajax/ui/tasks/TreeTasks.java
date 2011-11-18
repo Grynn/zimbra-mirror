@@ -34,6 +34,7 @@ public class TreeTasks extends AbsTree {
 		public static final String zEditTreeMenuItem ="css=tr#POPUP_EDIT_PROPS";
 		public static final String zRenameTagTreeMenuItem ="css=div[id='RENAME_TAG'] tr[id='POPUP_RENAME_TAG']";
 		public static final String zNewTagTreeMenuItem="css=div[id='NEW_TAG'] tr[id='POPUP_NEW_TAG']";
+		public static final String zShareTreeMenuItem ="css=div[id='SHARE_TASKFOLDER'] tr[id='POPUP_SHARE_TASKFOLDER']";
 	}
 	
 		
@@ -425,9 +426,10 @@ public class TreeTasks extends AbsTree {
 
 			 optionLocator = Locators.zDeleteTreeMenuItem;
 			//optionLocator = "css=tr#POPUP_DELETE";
-			page = new DialogConfirm(DialogConfirm.Confirmation.DELETE,
-					MyApplication, ((AppAjaxClient) MyApplication).zPageTasks);
+			//page = new DialogConfirm(DialogConfirm.Confirmation.DELETE,
+					//MyApplication, ((AppAjaxClient) MyApplication).zPageTasks);
 
+			 page=null;
 		} else if (option == Button.B_RENAME) {
 
 			optionLocator = Locators.zRenameTreeMenuItem;
@@ -439,6 +441,13 @@ public class TreeTasks extends AbsTree {
 
 			optionLocator = Locators.zEditTreeMenuItem;
 			page = new DialogEditFolder(MyApplication,((AppAjaxClient) MyApplication).zPageMail);
+
+		}else if (option == Button.B_SHARE) {
+			
+			optionLocator =Locators.zShareTreeMenuItem;
+			page = new DialogShare(MyApplication,((AppAjaxClient) MyApplication).zPageTasks);
+
+			// FALL THROUGH
 
 		}  else {
 			throw new HarnessException("button " + option
