@@ -126,7 +126,6 @@ public class GenerateCSR extends AdminDocumentHandler {
     }
     
     public static String  getSubjectAltNames (Element request) {
-        Element e = null ;
         String subjectAltNames = "" ;
       
         for (Element a : request.listElements(CertMgrConstants.E_SUBJECT_ALT_NAME)) {

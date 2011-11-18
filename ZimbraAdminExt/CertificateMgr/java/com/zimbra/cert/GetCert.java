@@ -15,6 +15,7 @@
 package com.zimbra.cert;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -90,7 +91,7 @@ public class GetCert extends AdminDocumentHandler {
                     ZimbraLog.security.debug("***** Executing the cmd = " + cmd) ;
                     addCertInfo(response, rmgr.execute(cmd), CERT_TYPES[i], server.getName()) ;
                 }
-            }else if (CERT_TYPES.toString().contains(certType)){
+            }else if (Arrays.asList(CERT_TYPES).contains(certType)){
                     //individual types
                 cmd = ZimbraCertMgrExt.GET_DEPLOYED_CERT_CMD + " " + certType;
                 ZimbraLog.security.debug("***** Executing the cmd = " + cmd) ;

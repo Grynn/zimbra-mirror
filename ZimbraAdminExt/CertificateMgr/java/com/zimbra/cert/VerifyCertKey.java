@@ -76,12 +76,18 @@ public class VerifyCertKey extends AdminDocumentHandler {
 
 			byte [] certByte = certBuffer_t.getBytes();
 
-                        File comm_path = new File(storedPath);
-                        if(!comm_path.exists()) {
-				comm_path.mkdirs();
-			} else if(!comm_path.isDirectory()) {
-                                throw ServiceException.FAILURE("IOException occurred: Now exist directory '" + ZimbraCertMgrExt.COMM_CRT_KEY_DIR + "'", null);
-                        }
+            File comm_path = new File(storedPath);
+            if (!comm_path.exists()) {
+                if (!comm_path.mkdirs()) {
+                    throw ServiceException.FAILURE("IOException, can't " +
+                            "create dir " + comm_path.getAbsolutePath().toString()
+                            , null);
+                }
+            } else if (!comm_path.isDirectory()) {
+                throw ServiceException
+                        .FAILURE("IOException occurred: Now exist directory '"
+                                + ZimbraCertMgrExt.COMM_CRT_KEY_DIR + "'", null);
+            }
 			ByteUtil.putContent(certFile, certByte);
 			ByteUtil.putContent(caFile, certByte);
 			

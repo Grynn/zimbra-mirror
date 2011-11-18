@@ -341,15 +341,10 @@ public class InstallCert extends AdminDocumentHandler {
                 }
             }
 
-            //delete the key file
-
-            try {
-                File comm_priv = new File (ZimbraCertMgrExt.SAVED_COMM_KEY_FROM_LDAP)  ;
-                if (!comm_priv.delete()) {
-                     throw new SecurityException ("Deleting temporary private key file failed.")  ;
-                }
-            }catch (SecurityException se) {
-                ZimbraLog.security.error ("File " + ZimbraCertMgrExt.SAVED_COMM_KEY_FROM_LDAP + " was not deleted", se ) ;
+            //delete the key file      
+            File comm_priv = new File (ZimbraCertMgrExt.SAVED_COMM_KEY_FROM_LDAP)  ;
+            if (!comm_priv.delete()) {
+                ZimbraLog.security.error ("File " + ZimbraCertMgrExt.SAVED_COMM_KEY_FROM_LDAP + " was not deleted");
             }
         }
 
