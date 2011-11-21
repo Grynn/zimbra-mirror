@@ -1,7 +1,7 @@
 /*
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Web Client
- * Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010 Zimbra, Inc.
+ * Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011 VMware, Inc.
  * 
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
@@ -21,6 +21,8 @@
 * @author Greg Solovyev
 **/
 ZaServerSpamActivityPage = function(parent) {
+	this.serverId = parent.serverId; //should pass this server id firstly
+
 	DwtTabViewPage.call(this, parent);
 	this._fieldIds = new Object(); //stores the ids of all the form elements
 
@@ -44,22 +46,29 @@ ZaServerSpamActivityPage.prototype.showMe =  function(refresh) {
 	}
 	if (this._currentObject) {
 	    var item = this._currentObject;
-	    
-        var charts = document.getElementById('loggerchartserverasav');
+        var serverId = this.serverId;
+
+        var charts = document.getElementById('loggerchartserverasav-' + serverId);
         charts.style.display = "block";
-	    ZaGlobalAdvancedStatsPage.hideDIVs([ 'serverasav-no-mta',
-	     'server-message-asav-48hours', 'server-message-asav-30days',
-         'server-message-asav-60days', 'server-message-asav-year' ]);
+        var divIds = [ 'serverasav-no-mta-' + serverId,
+            'server-message-asav-48hours-' + serverId,
+            'server-message-asav-30days-' + serverId,
+            'server-message-asav-60days-' + serverId,
+            'server-message-asav-year-' + serverId
+        ];
+
+	    ZaGlobalAdvancedStatsPage.hideDIVs(divIds);
 	    
 	    var hosts = ZaGlobalAdvancedStatsPage.getMTAHosts();
 	    if (ZaGlobalAdvancedStatsPage.indexOf(hosts, item.name) != -1) {
-	        ZaGlobalAdvancedStatsPage.detectFlash(document.getElementById("loggerchartserverasav-flashdetect"));
-            ZaGlobalAdvancedStatsPage.plotQuickChart('server-message-asav-48hours', item.name, 'zmmtastats', [ 'filter_virus', 'filter_spam' ], [ 'filtered' ], 'now-48h', 'now', { convertToCount: 1 });
-            ZaGlobalAdvancedStatsPage.plotQuickChart('server-message-asav-30days',  item.name, 'zmmtastats', [ 'filter_virus', 'filter_spam' ], [ 'filtered' ], 'now-30d', 'now', { convertToCount: 1 });
-            ZaGlobalAdvancedStatsPage.plotQuickChart('server-message-asav-60days',  item.name, 'zmmtastats', [ 'filter_virus', 'filter_spam' ], [ 'filtered' ], 'now-60d', 'now', { convertToCount: 1 });
-            ZaGlobalAdvancedStatsPage.plotQuickChart('server-message-asav-year',    item.name, 'zmmtastats', [ 'filter_virus', 'filter_spam' ], [ 'filtered' ], 'now-1y',  'now', { convertToCount: 1 });
+	        ZaGlobalAdvancedStatsPage.detectFlash(document.getElementById("loggerchartserverasav-flashdetect-" + serverId));
+            var startTimes = [null, 'now-48h', 'now-30d', 'now-60d', 'now-1y'];
+            for (var i=1; i < divIds.length; i++){ //skip divId[0] -- servermv-no-mta
+                ZaGlobalAdvancedStatsPage.plotQuickChart(divIds[i], item.name, 'zmmtastats', ['filter_virus', 'filter_spam'], ['filtered'], startTimes[i], 'now', { convertToCount: 1 });
+            }
+
         } else {
-            var nomta = document.getElementById('loggerchartserverasav-no-mta');
+            var nomta = document.getElementById('loggerchartserverasav-no-mta-' + serverId);
             nomta.style.display = "block";
             charts.style.display = "none";
             ZaGlobalAdvancedStatsPage.setText(nomta, ZaMsg.Stats_NO_MTA);
@@ -77,32 +86,29 @@ function () {
 	DwtTabViewPage.prototype._createHtml.call(this);
 	var idx = 0;
 	var html = new Array(50);
-	this._hourImgID = Dwt.getNextId();
-	this._dayImgID = Dwt.getNextId();
-	this._monthImgID = Dwt.getNextId();		
-	this._yearImgID = Dwt.getNextId();	
-	html[idx++] = "<h1 style='display: none' id='loggerchartserverasav-flashdetect'></h1>";	
-	html[idx++] = "<h1 style='display: none' id='loggerchartserverasav-no-mta'></h1>";	
+    var serverId = this.serverId;
+	html[idx++] = "<h1 style='display: none' id='loggerchartserverasav-flashdetect-" + serverId + "'></h1>";	
+	html[idx++] = "<h1 style='display: none' id='loggerchartserverasav-no-mta-" + serverId + "'></h1>";	
 	html[idx++] = "<h3 style='padding-left: 10px'>" + ZaMsg.Stats_AV_Header + "</h3>" ;	
-	html[idx++] = "<div id='loggerchartserverasav'>";	
+	html[idx++] = "<div id='loggerchartserverasav-" + serverId + "'>";	
 	html[idx++] = "<table cellpadding='5' cellspacing='4' border='0' align='left' style='width: 90%'>";	
 	html[idx++] = "<tr valign='top'><td align='left' class='StatsImageTitle'>" + AjxStringUtil.htmlEncode(ZaMsg.NAD_StatsHour) + "</td></tr>";	
 	html[idx++] = "<tr valign='top'><td align='left'>";
-	html[idx++] = "<div id='loggerchartserver-message-asav-48hours'></div>";	
+	html[idx++] = "<div id='loggerchartserver-message-asav-48hours-" + serverId + "'></div>";	
 	html[idx++] = "</td></tr>";
 	html[idx++] = "<tr valign='top'><td align='left' class='StatsImageTitle'>" + AjxStringUtil.htmlEncode(ZaMsg.NAD_StatsDay) + "</td></tr>";	
 	html[idx++] = "<tr valign='top'><td align='left'>";
-	html[idx++] = "<div id='loggerchartserver-message-asav-30days'></div>";	
+	html[idx++] = "<div id='loggerchartserver-message-asav-30days-" + serverId + "'></div>";	
 	html[idx++] = "</td></tr>";
 	html[idx++] = "<tr valign='top'><td align='left'>&nbsp;&nbsp;</td></tr>";	
 	html[idx++] = "<tr valign='top'><td align='left' class='StatsImageTitle'>" + AjxStringUtil.htmlEncode(ZaMsg.NAD_StatsMonth) + "</td></tr>";	
 	html[idx++] = "<tr valign='top'><td align='left'>";
-	html[idx++] = "<div id='loggerchartserver-message-asav-60days'></div>";	
+	html[idx++] = "<div id='loggerchartserver-message-asav-60days-" + serverId + "'></div>";	
 	html[idx++] = "</td></tr>";
 	html[idx++] = "<tr valign='top'><td align='left'>&nbsp;&nbsp;</td></tr>";		
 	html[idx++] = "<tr valign='top'><td align='left' class='StatsImageTitle'>" + AjxStringUtil.htmlEncode(ZaMsg.NAD_StatsYear) + "</td></tr>";	
 	html[idx++] = "<tr valign='top'><td align='left'>";
-	html[idx++] = "<div id='loggerchartserver-message-asav-year'></div>";	
+	html[idx++] = "<div id='loggerchartserver-message-asav-year-" + serverId + "'></div>";	
 	html[idx++] = "</td></tr>";
 	html[idx++] = "</table>";
 	html[idx++] = "</div>";

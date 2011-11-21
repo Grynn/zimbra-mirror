@@ -1,7 +1,7 @@
 /*
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Web Client
- * Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010 Zimbra, Inc.
+ * Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011 VMware, Inc.
  * 
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
@@ -21,6 +21,8 @@
 * @author Greg Solovyev
 **/
 ZaServerDiskStatsPage = function(parent) {
+	this.serverId = parent.serverId; //should save this server id firstly
+
 	DwtTabViewPage.call(this, parent);
 	this._fieldIds = new Object(); //stores the ids of all the form elements
 
@@ -39,12 +41,14 @@ function() {
 
 ZaServerDiskStatsPage.prototype.showMe =  function(refresh) {
 	DwtTabViewPage.prototype.showMe.call(this);	
-	ZaGlobalAdvancedStatsPage.detectFlash(document.getElementById("loggerchart-flashdetect"));
 	if(refresh && this._currentObject) {
 		this.setObject(this._currentObject);
 	}
 	if (this._currentObject) {
 	    var item = this._currentObject;
+        var serverId = this.serverId;
+
+        ZaGlobalAdvancedStatsPage.detectFlash(document.getElementById("loggerchart-flashdetect-" + serverId));
         if (!this._disks) {
             var counters = ZaGlobalAdvancedStatsPage.getCounters(item.name, 'df.csv');
             var diskKeys = {};
@@ -62,10 +66,17 @@ ZaServerDiskStatsPage.prototype.showMe =  function(refresh) {
         for (var i = 0; i < this._disks.length; i++) {
             columns.push(this._disks[i] + "::disk_pct_used");
         }
-        ZaGlobalAdvancedStatsPage.plotQuickChart('server-disk-stat-48hours', item.name, 'df.csv', columns, null, 'now-48h', 'now');
-        ZaGlobalAdvancedStatsPage.plotQuickChart('server-disk-stat-30days',  item.name, 'df.csv', columns, null, 'now-30d', 'now');
-        ZaGlobalAdvancedStatsPage.plotQuickChart('server-disk-stat-60days',  item.name, 'df.csv', columns, null, 'now-60d', 'now');
-        ZaGlobalAdvancedStatsPage.plotQuickChart('server-disk-stat-year',    item.name, 'df.csv', columns, null, 'now-1y',  'now');
+
+        var divIds = [ 'server-disk-stat-48hours-' + serverId,
+                       'server-disk-stat-30days-' + serverId,
+                       'server-disk-stat-60days-' + serverId,
+                       'server-disk-stat-year-' + serverId
+                     ];
+
+        var startTimes = ['now-48h', 'now-30d', 'now-60d', 'now-1y'];
+        for (var i=0; i < divIds.length; i++){
+            ZaGlobalAdvancedStatsPage.plotQuickChart(divIds[i],  item.name, 'df.csv', columns, null, startTimes[i], 'now');
+        }
 	}
 }
 
@@ -79,27 +90,28 @@ function () {
     var idx = 0;
     var html = new Array(50);
 	DwtTabViewPage.prototype._createHtml.call(this);
-	html[idx++] = "<h1 style='display: none' id='loggerchart-flashdetect'></h1>";	
+	var serverId = this.serverId;
+	html[idx++] = "<h1 style='display: none' id='loggerchart-flashdetect-" + serverId + "'></h1>";	
 	//html[idx++] = "<h3 style='padding-left: 10px'>" + ZaMsg.Stats_MC_Header + "</h3>" ;
 	html[idx++] = "<div>";	
 	html[idx++] = "<table cellpadding='5' cellspacing='4' border='0' align='left' style='width: 90%'>";	
 	html[idx++] = "<tr valign='top'><td align='left' class='StatsImageTitle'>" + AjxStringUtil.htmlEncode(ZaMsg.NAD_StatsHour) + "</td></tr>";	
 	html[idx++] = "<tr valign='top'><td align='left'>";
-	html[idx++] = "<div id='loggerchartserver-disk-stat-48hours'></div>";	
+	html[idx++] = "<div id='loggerchartserver-disk-stat-48hours-" + serverId + "'></div>";	
 	html[idx++] = "</td></tr>";
 	html[idx++] = "<tr valign='top'><td align='left' class='StatsImageTitle'>" + AjxStringUtil.htmlEncode(ZaMsg.NAD_StatsDay) + "</td></tr>";	
 	html[idx++] = "<tr valign='top'><td align='left'>";
-	html[idx++] = "<div id='loggerchartserver-disk-stat-30days'></div>";	
+	html[idx++] = "<div id='loggerchartserver-disk-stat-30days-" + serverId + "'></div>";	
 	html[idx++] = "</td></tr>";
 	html[idx++] = "<tr valign='top'><td align='left'>&nbsp;&nbsp;</td></tr>";	
 	html[idx++] = "<tr valign='top'><td align='left' class='StatsImageTitle'>" + AjxStringUtil.htmlEncode(ZaMsg.NAD_StatsMonth) + "</td></tr>";	
 	html[idx++] = "<tr valign='top'><td align='left'>";
-	html[idx++] = "<div id='loggerchartserver-disk-stat-60days'></div>";	
+	html[idx++] = "<div id='loggerchartserver-disk-stat-60days-" + serverId + "'></div>";	
 	html[idx++] = "</td></tr>";
 	html[idx++] = "<tr valign='top'><td align='left'>&nbsp;&nbsp;</td></tr>";		
 	html[idx++] = "<tr valign='top'><td align='left' class='StatsImageTitle'>" + AjxStringUtil.htmlEncode(ZaMsg.NAD_StatsYear) + "</td></tr>";	
 	html[idx++] = "<tr valign='top'><td align='left'>";
-	html[idx++] = "<div id='loggerchartserver-disk-stat-year'></div>";
+	html[idx++] = "<div id='loggerchartserver-disk-stat-year-" + serverId + "'></div>";
 	html[idx++] = "</td></tr>";
 	html[idx++] = "</table>";
 	html[idx++] = "</div>";
