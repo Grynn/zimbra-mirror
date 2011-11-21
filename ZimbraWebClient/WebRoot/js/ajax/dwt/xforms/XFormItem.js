@@ -3244,9 +3244,21 @@ CollapsedGroup_XFormItem.prototype.initializeItems = function () {
                 oldItems[i].displayGrid = false;
                 if(oldItems[i].type == "radio")
                     continue;  // don't deal with _RADIO_
-                if(oldItems[i].label || oldItems[i].txtBoxLabel)
-                    oldItems[i].labelCssStyle = "text-align:left; background-color:#DEE5F1 !important;padding-left:10px;";
-                    //oldItems[i].labelCssClass = gridLabelCss;
+                if(oldItems[i].label || oldItems[i].txtBoxLabel) {
+                    if (oldItems[i].type) {
+                        var form = this.getForm();
+                        var constructor =   XFormItemFactory.getItemTypeConstructor(oldItems[i].type, form);
+                        //oldItems[i].labelCssStyle = "text-align:left; background-color:#DEE5F1 !important;padding-left:10px;";
+                        if (constructor.prototype.labelCssClass) {
+                           oldItems[i].labelCssClass =  constructor.prototype.labelCssClass + " " + gridLabelCss;
+                        } else {
+                            oldItems[i].labelCssClass = gridLabelCss;
+                        }
+                    }
+                    else {
+                        oldItems[i].labelCssClass = gridLabelCss;
+                    }
+                }
             }
             this.items[1].items =  oldItems;
         }

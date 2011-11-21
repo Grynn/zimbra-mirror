@@ -631,17 +631,6 @@ body {
     vertical-align: middle;
 }
 
-.AdminOutputTab {
-    padding: 3px 15px 2px 15px;
-    min-height:18px;
-}
-
-.AdminOutputTabSelect {
-    padding: 3px 15px 2px 15px;
-    min-height:18px;
-    background-color:@HeaderColor@;
-}
-
 .nextVertSep {
     height: 17px;
     @VertSeparator@;
@@ -660,4 +649,42 @@ body {
 }
 #ZLoginButton{
   background-color: #ffffff;
+}
+
+.redAsteric {
+	color: #cb2027;
+}
+
+textarea {
+    border: #000000 solid 1px;
+    @opacity(25)@
+}
+
+.GroupLabel {
+    font-size: 12px;
+}
+
+.ZmSelectedHeaderBg .xform_repeat_label,
+.ZmSelectedHeaderBg .xform_label_left,
+.ZmSelectedHeaderBg .xform_label {
+    text-align: left;
+}
+
+td .gridGroupBodyLabel {
+    text-align:left;
+    background-color:#DEE5F1 !important;
+    padding-left:10px;
+}
+
+.ZaXWizardDialogPageDiv .step_body_container {
+    padding: 15px;
+}
+
+.DwtListView-Rows .Row-selected {
+    background-color: #b3e0ff !important;
+    color: #000000;
+}
+
+.DwtListView-Rows .Row {
+    color: #333333;
 }

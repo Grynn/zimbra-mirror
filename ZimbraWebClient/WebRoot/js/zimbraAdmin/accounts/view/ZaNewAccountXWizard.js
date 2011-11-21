@@ -14,7 +14,7 @@
  */
 
 ZaNewAccountXWizard = function(parent, entry) {
-	ZaXWizardDialog.call(this, parent, null, ZaMsg.NCD_NewAccTitle, "700px", "300px","ZaNewAccountXWizard",null,ZaId.DLG_NEW_ACCT);
+	ZaXWizardDialog.call(this, parent, null, ZaMsg.NCD_NewAccTitle, "720px", "300px","ZaNewAccountXWizard",null,ZaId.DLG_NEW_ACCT);
 	this.accountStatusChoices = [
 		{value:ZaAccount.ACCOUNT_STATUS_ACTIVE, label:ZaAccount.getAccountStatusMsg (ZaAccount.ACCOUNT_STATUS_ACTIVE)},
 		{value:ZaAccount.ACCOUNT_STATUS_CLOSED, label:ZaAccount.getAccountStatusMsg (ZaAccount.ACCOUNT_STATUS_CLOSED)},
@@ -2233,7 +2233,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 			{type:_OUTPUT_, colSpan:2, align:_CENTER_, valign:_TOP_, ref:ZaModel.currentStep, choices:this.stepChoices, valueChangeEventSources:[ZaModel.currentStep]},
 			{type:_SEPARATOR_, align:_CENTER_, valign:_TOP_},
 			{type:_SPACER_,  align:_CENTER_, valign:_TOP_},
-			{type:_SWITCH_, width:680, align:_LEFT_, valign:_TOP_, containerCssClass:"ZaNewAccountSwitch",items:cases}
+			{type:_SWITCH_, width:680, align:_LEFT_, valign:_TOP_, items:cases}
 		];
 };
 ZaXDialog.XFormModifiers["ZaNewAccountXWizard"].push(ZaNewAccountXWizard.myXFormModifier);

@@ -162,17 +162,21 @@ div.ZmSelectedHeaderBg {
 /* -- Dialog -- */
 
 /* new account dialog */
+
+.AdminOutputTab {
+    padding: 3px 15px 2px 15px;
+    min-height:18px;
+}
+
 .AdminOutputTabSelect {
+    padding: 3px 15px 2px 15px;
+    min-height:18px;
     background-color:#4682b4;
     color: white;
     @tlRadius@:4px;
     @trRadius@:4px;
     @blRadius@:4px;
     @brRadius@:4px;
-}
-
-.ZaNewAccountSwitch {
-    padding-left:5px;
 }
 
 .WindowOuterContainer {
