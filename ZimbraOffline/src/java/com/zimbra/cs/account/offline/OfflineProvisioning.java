@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.mail.AuthenticationFailedException;
 import javax.mail.MessagingException;
@@ -35,6 +36,8 @@ import javax.mail.Transport;
 import javax.security.auth.login.LoginException;
 
 import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Joiner;
+import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.sun.mail.smtp.SMTPTransport;
 import com.zimbra.common.account.Key;
@@ -47,7 +50,6 @@ import com.zimbra.common.net.TrustManagers;
 import com.zimbra.common.service.RemoteServiceException;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.AccountConstants;
-import com.zimbra.common.soap.MailConstants;
 import com.zimbra.common.util.Constants;
 import com.zimbra.common.util.Pair;
 import com.zimbra.common.util.StringUtil;
@@ -73,7 +75,6 @@ import com.zimbra.cs.mailbox.Metadata;
 import com.zimbra.cs.mailbox.OfflineMailboxManager;
 import com.zimbra.cs.mailbox.OfflineServiceException;
 import com.zimbra.cs.mailbox.OperationContext;
-import com.zimbra.cs.mailbox.SyncMailbox;
 import com.zimbra.cs.mailbox.YContactSync;
 import com.zimbra.cs.mailbox.ZcsMailbox;
 import com.zimbra.cs.mailclient.smtp.SmtpTransport;
@@ -84,8 +85,6 @@ import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineSyncManager;
 import com.zimbra.cs.offline.ab.gab.GDataServiceException;
 import com.zimbra.cs.offline.common.OfflineConstants;
-import com.zimbra.cs.offline.common.OfflineConstants.SyncMsgOptions;
-import com.zimbra.cs.offline.util.OfflineUtil;
 import com.zimbra.cs.offline.util.OfflineYAuth;
 import com.zimbra.cs.offline.util.yc.oauth.OAuthManager;
 import com.zimbra.cs.util.yauth.AuthenticationException;
@@ -167,8 +166,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         }
     }
 
-    public synchronized static OfflineProvisioning getOfflineInstance() {
-        return (OfflineProvisioning)getInstance();
+    public static OfflineProvisioning getOfflineInstance() {
+        return (OfflineProvisioning) getInstance();
     }
 
     private static String appId = OfflineLC.zdesktop_app_id.value();
@@ -185,7 +184,6 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         return DataSource.decryptData(appId, crypt);
     }
 
-
     private final OfflineConfig mLocalConfig;
     private final Server mLocalServer;
     private final Cos mDefaultCos;
@@ -196,8 +194,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     private final Map<String, Server> mSyncServerCache;
     private final Map<String, OfflineDomainGal> domainGals;
     private Account zimbraAdminAccount;
-
-    private boolean mHasDirtyAccounts = true;
+    private List<String> cachedAccountIds;
+    private volatile boolean mHasDirtyAccounts = true;
 
     public OfflineProvisioning() {
         mLocalConfig  = OfflineConfig.instantiate(this);
@@ -209,6 +207,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         mSyncServerCache = new HashMap<String, Server>();
         mAccountCache = new NamedEntryCache<Account>(64, LC.ldap_cache_account_maxage.intValue() * Constants.MILLIS_PER_MINUTE);
         mGranterCache = new NamedEntryCache<Account>(64, LC.ldap_cache_account_maxage.intValue() * Constants.MILLIS_PER_MINUTE);
+        loadAccountIdsInOrder();
         DbPool.disableUsageWarning();
     }
 
@@ -225,6 +224,24 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         mGranterCache = null;
     }
 
+    //load cachedAccountIds from directory following orders in offlineAccountsOrder
+    private void loadAccountIdsInOrder() {
+        Account localAccount;
+        try {
+            localAccount = getLocalAccount();
+            Iterable<String> idsInOrder = Splitter.on(",").split(localAccount.getAttr(A_offlineAccountsOrder, ""));
+            List<String> directoryIds = DbOfflineDirectory.listAllDirectoryEntries(EntryType.ACCOUNT);
+            List<String> ids = new ArrayList<String>();
+            for (String id : idsInOrder) {
+                if (directoryIds.contains(id)) {
+                    ids.add(id);
+                }
+            }
+            this.cachedAccountIds = new CopyOnWriteArrayList<String>(ids);
+        } catch (ServiceException e) {
+            OfflineLog.offline.warn("load account Ids to cache failed.", e);
+        }
+    }
 
     public ZMailbox newZMailbox(OfflineAccount account, String serviceUri) throws ServiceException {
         ZMailbox.Options options;
@@ -598,7 +615,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         } else {
             account = createSyncAccount(emailAddress, password, attrs);
         }
-        fixAccountsOrder(true);
+        persistAccountsOrder();
         return account;
     }
 
@@ -1173,7 +1190,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
                 throw e;
             }
         }
-        cachedaccountIds = null;
+
+        this.cachedAccountIds.add(accountId);
 
         return acct;
     }
@@ -1337,19 +1355,17 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 
         try {
             Folder fldr;
-            Mailbox mbox = OfflineMailboxManager.getInstance().getMailboxByAccount(
-                localAccount);
-
-            fldr = mbox.getFolderByName(null, DesktopMailbox.ID_FOLDER_NOTIFICATIONS,
-                zimbraId);
+            Mailbox mbox = OfflineMailboxManager.getInstance().getMailboxByAccount(localAccount);
+            fldr = mbox.getFolderByName(null, DesktopMailbox.ID_FOLDER_NOTIFICATIONS, zimbraId);
             mbox.delete(null, fldr.getId(), MailItem.Type.MOUNTPOINT);
         } catch (Exception e) {
         }
+
         DbOfflineDirectory.deleteGranterByGrantee(zimbraId);
         deleteOfflineAccount(zimbraId);
-        synchronized (this) {
-            cachedaccountIds = null;
-        }
+        this.cachedAccountIds.remove(zimbraId);
+        //persists new order after updating cache.
+        persistAccountsOrder();
         if (localAccount.isFeatureNotebookEnabled() && getAllZcsAccounts().size() == 0)
             localAccount.setFeatureNotebookEnabled(false);
     }
@@ -1358,9 +1374,9 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         DbOfflineDirectory.deleteDirectoryEntry(EntryType.ACCOUNT, zimbraId);
         Account acct = mAccountCache.getById(zimbraId);
 
-        if (acct != null)
+        if (acct != null) {
             mAccountCache.remove(acct);
-        fixAccountsOrder(true);
+        }
     }
 
     @Override
@@ -1466,12 +1482,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         return acct;
     }
 
-    private List<String> cachedaccountIds;
-
-    public synchronized List<String> getAllAccountIds() throws ServiceException {
-        if (cachedaccountIds == null)
-            cachedaccountIds = DbOfflineDirectory.listAllDirectoryEntries(EntryType.ACCOUNT);
-        return cachedaccountIds;
+    public List<String> getAllAccountIds() throws ServiceException {
+        return Collections.unmodifiableList(this.cachedAccountIds);
     }
 
     public List<Account> getAllAccounts() throws ServiceException {
@@ -1499,7 +1511,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         return admins;
     }
 
-    synchronized boolean hasDirtyAccounts() {
+    boolean hasDirtyAccounts() {
         return mHasDirtyAccounts;
     }
 
@@ -2485,39 +2497,16 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
 
     private String promoteAccount(String accountId) throws ServiceException {
-        String[] order = fixAccountsOrder(false);
-        for (int i = 0; i < order.length; ++i) {
-            if (order[i].equals(accountId) && i > 0) {
-            while (i > 0)
-                    order[i] = order[i-- - 1];
-                order[0] = accountId;
-                break;
-            }
-        }
-        return StringUtil.join(",", order);
+        this.cachedAccountIds.remove(accountId);
+        this.cachedAccountIds.add(0, accountId);
+        return Joiner.on(",").join(this.cachedAccountIds);
     }
 
-    //append unknown and remove missing
-    private String[] fixAccountsOrder(boolean commit) throws ServiceException {
+    private void persistAccountsOrder() throws ServiceException {
         Account localAccount = getLocalAccount();
-        String oldOrderStr = localAccount.getAttr(A_offlineAccountsOrder, "");
-        String[] oldOrder = oldOrderStr.length() > 0 ? oldOrderStr.split(",") : new String[0];
-
-        List<Account> accounts = getAllAccounts();
-        String[] newOrder = new String[accounts.size()];
-        for (int i = 0; i < newOrder.length; ++i) {
-            newOrder[i] = accounts.get(i).getId();
-        }
-
-        OfflineUtil.fixItemOrder(oldOrder, newOrder);
-        String newOrderStr = newOrder.length > 0 ? StringUtil.join(",", newOrder) : "";
-
-        if (commit && !newOrderStr.equals(oldOrderStr)) {
-            Map<String, Object> attrs = new HashMap<String, Object>(1);
-            attrs.put(A_offlineAccountsOrder, newOrderStr);
-            modifyAttrs(localAccount, attrs, false, false, false);
-        }
-        return newOrder;
+        Map<String, Object> attrs = new HashMap<String, Object>(1);
+        attrs.put(A_offlineAccountsOrder, Joiner.on(",").join(this.cachedAccountIds));
+        modifyAttrs(localAccount, attrs, false, false, false);
     }
 
     protected void loadRemoteSyncServer(OfflineAccount granter, String granteeId) throws ServiceException {

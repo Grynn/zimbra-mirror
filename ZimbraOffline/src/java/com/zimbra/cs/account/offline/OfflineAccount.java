@@ -16,7 +16,6 @@ package com.zimbra.cs.account.offline;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -29,7 +28,6 @@ import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.offline.jsp.JspConstants;
-import com.zimbra.cs.offline.util.OfflineUtil;
 
 public class OfflineAccount extends Account {
 
@@ -185,29 +183,6 @@ public class OfflineAccount extends Account {
 
     @Override
     public String[] getMultiAttr(String name) {
-        if (isLocalAccount()
-                && (name.equals(Provisioning.A_zimbraChildAccount) || name
-                        .equals(Provisioning.A_zimbraPrefChildVisibleAccount))) {
-            try {
-                OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
-                List<Account> accounts = prov.getAllAccounts();
-                String[] accountIds = null;
-                if (accounts != null) {
-                    accountIds = new String[accounts.size()];
-                    for (int i = 0; i < accounts.size(); ++i)
-                        accountIds[i] = accounts.get(i).getId();
-                    String[] order = prov.getLocalAccount().getAttr(OfflineConstants.A_offlineAccountsOrder, "")
-                            .split(",");
-                    OfflineUtil.fixItemOrder(order, accountIds);
-                } else {
-                    accountIds = new String[0];
-                }
-                return accountIds;
-            } catch (ServiceException x) {
-                OfflineLog.offline.error(x);
-            }
-        }
-
         // no need to return this multi-attr for any child accounts
         if (!isLocalAccount() && name.equals(Provisioning.A_zimbraZimletAvailableZimlets))
             return new String[0];
