@@ -6,5 +6,6 @@ AjxPackage.require("ajax.3rdparty.tinymce.plugins.table.editor_plugin_src");
 AjxPackage.require("ajax.3rdparty.tinymce.plugins.inlinepopups.editor_plugin_src");
 AjxPackage.require("ajax.3rdparty.tinymce.plugins.fullscreen.editor_plugin_src");
 AjxPackage.require("ajax.3rdparty.tinymce.plugins.emotions.editor_plugin_src");
+AjxPackage.require("ajax.3rdparty.tinymce.plugins.autolink.editor_plugin_src");
 AjxPackage.require("ajax.3rdparty.tinymce.plugins.ztable.editor_plugin");
 AjxPackage.require("ajax.3rdparty.tinymce.plugins.zbreakquote.editor_plugin");
