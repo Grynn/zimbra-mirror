@@ -1102,16 +1102,16 @@
   <target name="offline-jre" if="bundle-jre">
     <if><isset property="is-windows" /><then>
       <mkdir dir="${dist.app.dir}/win32/jre"/>
-      <gunzip src="../ThirdPartyBuilds/windows/java/jre/windows-x86-1.6.0_16.tar.gz" dest="${dist.app.dir}/win32/jre"/>
-      <untar src="${dist.app.dir}/win32/jre/windows-x86-1.6.0_16.tar" dest="${dist.app.dir}/win32/jre" overwrite="true"/>
-      <delete file="${dist.app.dir}/win32/jre/windows-x86-1.6.0_16.tar"/>
+      <gunzip src="../ThirdPartyBuilds/windows/java/jre/windows-x86-1.6.0_29.tar.gz" dest="${dist.app.dir}/win32/jre"/>
+      <untar src="${dist.app.dir}/win32/jre/windows-x86-1.6.0_29.tar" dest="${dist.app.dir}/win32/jre" overwrite="true"/>
+      <delete file="${dist.app.dir}/win32/jre/windows-x86-1.6.0_29.tar"/>
     </then></if>
 
     <if><isset property="is-unix" /><then>
       <mkdir dir="${dist.app.dir}/linux/jre"/>
-      <gunzip src="../ThirdPartyBuilds/i386/java/jre/linux-x86-1.6.0_16.tar.gz" dest="${dist.app.dir}/linux/jre"/>
-      <untar src="${dist.app.dir}/linux/jre/linux-x86-1.6.0_16.tar" dest="${dist.app.dir}/linux/jre" overwrite="true"/>
-      <delete file="${dist.app.dir}/linux/jre/linux-x86-1.6.0_16.tar"/>
+      <gunzip src="../ThirdPartyBuilds/i386/java/jre/linux-x86-1.6.0_29.tar.gz" dest="${dist.app.dir}/linux/jre"/>
+      <untar src="${dist.app.dir}/linux/jre/linux-x86-1.6.0_29.tar" dest="${dist.app.dir}/linux/jre" overwrite="true"/>
+      <delete file="${dist.app.dir}/linux/jre/linux-x86-1.6.0_29.tar"/>
       <chmod dir="${dist.app.dir}/linux/jre/bin" perm="ugo+rx" includes="*" />
     </then></if>
   </target>
