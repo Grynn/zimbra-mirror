@@ -39,6 +39,8 @@ ZaController.initToolbarMethods["ZaDomainController"] = new Array();
 ZaController.initPopupMenuMethods["ZaDomainController"] = new Array();
 ZaController.setViewMethods["ZaDomainController"] = new Array();
 ZaController.saveChangeCheckMethods["ZaDomainController"] = new Array();
+ZaController.postChangeMethods["ZaDomainController"] = new Array();
+
 /**
 *	@method show
 *	@param entry - isntance of ZaDomain class
@@ -246,6 +248,8 @@ function () {
     var catchAllChanged = false ;
 	var skinChanged = false;
 	
+	this._currentObject["mods"] = mods;
+
     if (!(AjxUtil.isEmpty(tmpObj[ZaAccount.A_zimbraMailCatchAllAddress]) && AjxUtil.isEmpty(this._currentObject[ZaAccount.A_zimbraMailCatchAllAddress])) 
     	&& (tmpObj[ZaAccount.A_zimbraMailCatchAllAddress] != this._currentObject[ZaAccount.A_zimbraMailCatchAllAddress])) {
          catchAllChanged = true ;
@@ -825,4 +829,15 @@ zimbraAdminTitle);
                         return false;
 	}
 	return true;
+}
+
+ZaDomainController.prototype.handleDomainChange =
+function (ev) {
+	var methods = ZaController.postChangeMethods["ZaDomainController"];
+	for (var i in methods) {
+		var method = methods[i];
+		if (typeof(method) == "function") {
+			method.call(this, ev);
+		}
+	}
 }

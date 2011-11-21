@@ -184,6 +184,7 @@ function (status, uploadResults) {
                     form.parent.setDirty(true);
                     form.refresh () ;
                 }
+
         }catch (ex) {
                 ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaDomainCertUpload._uploadCallback", null, false);
         }
@@ -197,3 +198,15 @@ ZaDomainCertUpload.getFiletypeFromUploadInputs = function (filename) {
             }
 	}
 }
+
+ZaDomainCertUpload.postDomainChange =
+function (ev) {
+	if (ev) {
+		var mods = ev.getDetails()["mods"];
+		if(mods["zimbraSSLCertificate"] || mods["zimbraSSLPrivateKey"]) {
+			ZaApp.getInstance().getCurrentController().popupMsgDialog(com_zimbra_cert_manager.Cert_Uploaded_Info);
+		}
+	}
+}
+
+ZaController.postChangeMethods["ZaDomainController"]["ZaDomainCertUploadPostChange"] = ZaDomainCertUpload.postDomainChange;

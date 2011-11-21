@@ -404,10 +404,11 @@ function(viewId) {
 		var c = this._controllers[viewId] = new ZaDomainController(this._appCtxt, this._container, this);
 		//since we are creating the account controller now - register all the interested listeners with it
 		c.addChangeListener(new AjxListener(this.getDomainListController(), ZaDomainListController.prototype.handleDomainChange));
-		c.addCreationListener(new AjxListener(this, ZaApp.prototype.handleDomainCreation));					
-		c.addCreationListener(new AjxListener(this.getDomainListController(), ZaDomainListController.prototype.handleCreation));	
-		c.addRemovalListener(new AjxListener(this.getDomainListController(), this.getDomainListController().handleRemoval));			
-		c.addRemovalListener(new AjxListener(this, ZaApp.prototype.handleDomainRemoval));							
+		c.addChangeListener(new AjxListener(c, ZaDomainController.prototype.handleDomainChange));
+		c.addCreationListener(new AjxListener(this, ZaApp.prototype.handleDomainCreation));
+		c.addCreationListener(new AjxListener(this.getDomainListController(), ZaDomainListController.prototype.handleCreation));
+		c.addRemovalListener(new AjxListener(this.getDomainListController(), this.getDomainListController().handleRemoval));
+		c.addRemovalListener(new AjxListener(this, ZaApp.prototype.handleDomainRemoval));
 
 		return c ;
 	}

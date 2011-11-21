@@ -90,9 +90,11 @@ ZaController.changeActionsStateMethods = new Object();
 
 ZaController.saveChangeCheckMethods = new Object();
 
+ZaController.postChangeMethods = new Object();
+
 ZaController.helpURL = location.pathname + ZaUtil.HELP_URL + "administration_console_help.htm?locid="+AjxEnv.DEFAULT_LOCALE;
 // Public methods
-ZaController.prototype.toString = 
+ZaController.prototype.toString =
 function() {
 	return "ZaController";
 }
