@@ -209,4 +209,4 @@ function (ev) {
 	}
 }
 
-ZaController.postChangeMethods["ZaDomainController"]["ZaDomainCertUploadPostChange"] = ZaDomainCertUpload.postDomainChange;
+ZaController.postChangeMethods["ZaDomainController"].push(ZaDomainCertUpload.postDomainChange);
