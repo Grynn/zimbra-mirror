@@ -162,6 +162,8 @@ public class RemoveMountpoint extends OctopusCommonTest {
 						+ folderMountpointItem.getName() + ")", "3000"),
 				"Verify item appears in the Shared Items List View");
 
+		SleepUtil.sleepSmall();
+		
 		// Open My Files page
 		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_MY_FILES);
 
@@ -174,7 +176,7 @@ public class RemoveMountpoint extends OctopusCommonTest {
 		// Verify the mountpoint folder disappears from My Files tab
 		ZAssert.assertTrue(app.zPageMyFiles.zWaitForElementDeleted(
 				PageMyFiles.Locators.zMyFilesListView.locator + ":contains("
-						+ folderMountpointItem.getName() + ")", "3000"),
+						+ folderMountpointName + ")", "4000"),
 				"Verify mountpoint folder disappears from My Files tab");
 
 		// click on Sharing tab

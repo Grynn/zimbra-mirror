@@ -138,7 +138,7 @@ public class PageMyFiles extends AbsTab {
 					+ ":contains(" + itemName
 					+ ") span[class^=my-files-list-item-action-button]";
 
-			if (!this.zWaitForElementPresent(pulldownLocator, "2000"))
+			if (!this.zWaitForElementPresent(pulldownLocator, "3000"))
 				throw new HarnessException("Button is not present locator="
 						+ pulldownLocator);
 

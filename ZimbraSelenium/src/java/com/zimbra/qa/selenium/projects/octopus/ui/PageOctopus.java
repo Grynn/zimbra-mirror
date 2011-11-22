@@ -20,7 +20,7 @@ public class PageOctopus extends AbsTab {
 
 	public static class Locators {
 		public static final Locators zSignOutButton = new Locators(
-				"css=div.header-links>a.(headerLink signOutLink):contains(sign out)");
+				"css=a.(headerLink signOutLink):contains(sign out)");
 		public static final Locators zTabMyFiles = new Locators(
 				"css=div.octopus-tab-label:contains(My Files)");
 		public static final Locators zTabSharing = new Locators(
