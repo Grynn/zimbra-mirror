@@ -172,7 +172,7 @@ function(imageName, styleStr, attrStr, wrapInTable, _disabled) {
                 var filter = 'filter:mask(color='+color+');';
                 html = [
                     // NOTE: Keep in sync with output of ImageMerger.java.
-                    "<div class='IEImage' style='display:inline-block;position:relative;overflow:hidden;",size,styleStr,"' ",attrStr,">",
+                    "<div class='IEImage' style='*display:inline;zoom:1;position:relative;overflow:hidden;",size,styleStr,"' ",attrStr,">",
                         "<div class='IEImageMask' style='overflow:hidden;position:relative;",size,"'>",
                             "<img src='",mask.f,"?v=",window.cacheKillerVersion,"' border=0 style='position:absolute;",location,clip,filter,"'>",
                         "</div>",
