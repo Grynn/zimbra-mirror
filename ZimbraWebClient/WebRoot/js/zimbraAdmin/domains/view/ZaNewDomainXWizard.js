@@ -1447,13 +1447,12 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 					
 					]
 				},
-				{type:_CASE_, caseKey:ZaNewDomainXWizard.VHOST_STEP, numCols:2,colSizes:["220px","450px"],
+				{type:_CASE_, caseKey:ZaNewDomainXWizard.VHOST_STEP,
 					items:[
 						{type:_DWT_ALERT_,content:null,ref:ZaDomain.A_domainName,
 							getDisplayValue: function (itemVal) {
 								return AjxMessageFormat.format(ZaMsg.Domain_VH_Explanation,itemVal);
 							},
-							colSpan:"*",
 							iconVisible: false,
 							align:_CENTER_,				
 							style: DwtAlert.INFORMATION
@@ -1462,6 +1461,8 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 								addButtonLabel:ZaMsg.NAD_AddVirtualHost, 
 								showAddOnNextRow:true,
 								removeButtonLabel:ZaMsg.NAD_RemoveVirtualHost,
+                                cssStyle:"text-align:center",
+                                tableCssStyle:"margin-left:auto;margin-right:auto",
 								items: [
 									{ref:".", type:_TEXTFIELD_, label:null,width:220}
 								]
@@ -1585,9 +1586,9 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 						}					
 					]
 				},							
-				{type:_CASE_, caseKey:ZaNewDomainXWizard.CONFIG_COMPLETE_STEP,colSizes:["250px","450px"],
+				{type:_CASE_, caseKey:ZaNewDomainXWizard.CONFIG_COMPLETE_STEP,
 					items: [
-						{type:_OUTPUT_, value:ZaMsg.Domain_Config_Complete}
+						{type:_OUTPUT_, value:ZaMsg.Domain_Config_Complete,cssStyle:"text-align:center"}
 					]
 				}										
 			]	
