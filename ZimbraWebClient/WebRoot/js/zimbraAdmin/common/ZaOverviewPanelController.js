@@ -1030,7 +1030,7 @@ function() {
                             for(var ix=0; ix< cnt; ix++) {
                                 var ti1 = new ZaTreeItemData({
                                             parent:ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_configure, ZaMsg.OVP_servers]),
-                                            id:DwtId._makeId(postTi.id, ix + 1),
+                                            id:DwtId._makeId(serverTi.id, ix + 1),
                                             text: serverList[ix].name,
                                             image: "Server",
                                             mappingId: ZaZimbraAdmin._SERVER_VIEW});;
