@@ -617,15 +617,19 @@ XForm.prototype.outputItemList = function (items, parentItem, html,  numCols, cu
 			parentItem.outputElementDivStart(html);
 		}
 	}
-    var displayGrid = parentItem.getDisplayGrid();
+
 	if (drawTable) {
 		var colSizes = parentItem.getColSizes();
-        if(displayGrid != _UNDEFINED_) XForm._displayBorder = displayGrid;
+
 		//XXX MOW: appending an elementDiv around the container if we need to style it
 		var cellspacing = parentItem.getInheritedProperty("cellspacing");
-		var cellpadding = parentItem.getInheritedProperty("cellpadding");		
-		html.append("<table cellspacing=",cellspacing," cellpadding=",cellpadding," ", 
-				((XForm._showBorder || XForm._displayBorder) ? "border=1" : "border=0"),
+		var cellpadding = parentItem.getInheritedProperty("cellpadding");
+        var border = parentItem.getInheritedProperty("border");
+        if (border == 0 && XForm._showBorder) {
+            border = 1;
+        }
+		html.append("<table cellspacing=",cellspacing," cellpadding=",cellpadding,
+				 "  border=" , border,
 				" id=\"", parentItem.getId(),"_table\" ", parentItem.getTableCssString(),">");
 		if (colSizes != null) {
 			html.append( " <colgroup>");
@@ -737,15 +741,13 @@ XForm.prototype.outputItemList = function (items, parentItem, html,  numCols, cu
 			parentItem.registerActiveChild(item);
 			
 		item.signUpForEvents();
-        if(displayGrid != _UNDEFINED_) XForm._displayBorder = displayGrid;
+
 	}
 	
 	
 	if (drawTable) {
 		html.append("</tbody></table>");
 	}
-
-    if(displayGrid != _UNDEFINED_) XForm._displayBorder = _UNDEFINED_;
 
 	if (outerStyle != null && outerStyle != "") {
 		parentItem.outputElementDivEnd(html);

@@ -1539,21 +1539,19 @@ ZAPlainGrouper_XFormItem.isGroupVisible = ZATopGrouper_XFormItem.isGroupVisible;
 ZAPlainGrouper_XFormItem.prototype.colSizes = "100%";
 ZAPlainGrouper_XFormItem.prototype.numCols = 1;
 ZAPlainGrouper_XFormItem.prototype.width = "100%";
-ZAPlainGrouper_XFormItem.prototype.displayGrid = true;
 ZAPlainGrouper_XFormItem.prototype.gridLabelCss = "gridGroupBodyLabel";
 ZAPlainGrouper_XFormItem.prototype.initializeItems = function () {
     var gridLabelCss = this.getInheritedProperty("gridLabelCss");
     var oldItems = this.getItems();
     var subitems;
     if(oldItems.length == 1 && oldItems[0].type == "group")  {
-        oldItems[0].displayGrid = this.getInheritedProperty("displayGrid");
+        oldItems[0].border = 1;
         if(oldItems[0].colSizes.length > 1)
            oldItems[0].colSizes[oldItems[0].colSizes.length -1] = "100%";
         //oldItems[0].colSizes = ["275px","100%"];
         subitems = oldItems[0].items;
     } else  subitems = oldItems;
     for(var i = 0; i < subitems.length; i++) {
-        subitems[i].displayGrid = false;
         if(subitems[i].label || subitems[i].txtBoxLabel)
             //subitems[i].labelCssStyle = "text-align:left;background-color:#BBB;";
             subitems[i].labelCssClass = gridLabelCss;
@@ -1602,6 +1600,11 @@ ZAGroup_XFormItem = function() {}
 XFormItemFactory.createItemType("_ZAGROUP_", "zagroup", ZAGroup_XFormItem, Group_XFormItem);
 ZAGroup_XFormItem.prototype.numCols = 2;
 ZAGroup_XFormItem.prototype.colSizes = ["275px","275px"];
+if (appNewUI) {
+ZAGroup_XFormItem.prototype.border = 1;
+ZAGroup_XFormItem.prototype.width = "100%";
+
+}
 ZAGroup_XFormItem.prototype.cssStyle = "margin-top:20px;margin-bottom:0px;padding-bottom:0px;";
 ZAGroup_XFormItem.isGroupVisible = function(entry, attrsArray, rightsArray) {
 	if(!entry)
@@ -1637,12 +1640,9 @@ ZAGroup_XFormItem.isGroupVisible = function(entry, attrsArray, rightsArray) {
 ZAGroup_XFormItem.prototype.initializeItems = function () {
     if(appNewUI) {
         var gridLabelCss = this.getInheritedProperty("gridLabelCss") || "gridGroupBodyLabel";
-        this.displayGrid = this.getInheritedProperty("displayGrid") || true;
-        this.width = this.width || "100%";
         var oldItems = this.getItems();
         if(oldItems) {
             for(var i = 0; i < oldItems.length; i++) {
-                oldItems[i].displayGrid = oldItems[i].displayGrid || false;
                 if(oldItems[i].type == "radio")
                     continue;  // don't deal with _RADIO_
                 if(oldItems[i].label || oldItems[i].txtBoxLabel)

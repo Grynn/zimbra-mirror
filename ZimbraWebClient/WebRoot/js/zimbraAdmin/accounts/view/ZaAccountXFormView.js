@@ -1741,7 +1741,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
             paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),  align:_CENTER_,
 					items: [
 						{type:_ZA_TOP_GROUPER_, label:ZaMsg.LBL_phone, id:"contact_form_phone_group",
-							displayGrid:appNewUI, width:"100%", numCols:2,colSizes: ["275px","100%"],
+							width:"100%", numCols:2,colSizes: ["275px","100%"],
 							items:[
 								{ref:ZaAccount.A_telephoneNumber, type:_TEXTFIELD_, msgName:ZaMsg.NAD_telephoneNumber,label:ZaMsg.NAD_telephoneNumber,
                                  labelLocation:_LEFT_, width:250} ,
@@ -1756,7 +1756,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 							]
 						},
 						{type:_ZA_TOP_GROUPER_, label:ZaMsg.LBL_company, id:"contact_form_company_group",
-							displayGrid:appNewUI,width:"100%", numCols:2,colSizes: ["275px","100%"],
+							width:"100%", numCols:2,colSizes: ["275px","100%"],
 							items:[	
 								{ref:ZaAccount.A_zimbraPhoneticCompany, type:_TEXTFIELD_, msgName:ZaMsg.NAD_zimbraPhoneticCompany,
                                  label:ZaMsg.NAD_zimbraPhoneticCompany, labelLocation:_LEFT_, width:250, visibilityChecks:[[ZaZimbraAdmin.isLanguage, "ja"]]},
@@ -1770,7 +1770,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 							]
 						},
 						{type:_ZA_TOP_GROUPER_, label:ZaMsg.LBL_address, id:"contact_form_address_group",
-							displayGrid:appNewUI,width:"100%", numCols:2,colSizes: ["275px","100%"],
+							width:"100%", numCols:2,colSizes: ["275px","100%"],
 							items: ZaAccountXFormView.getAddressFormItem() 
 						}							
 					]
@@ -1783,8 +1783,8 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 	
 	if(_tab3) {
 		//MemberOf Tab
-		var case3={type:_ZATABCASE_, numCols:2, caseKey:_tab3, colSizes: ["50%","50%"],
-            paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),
+		var case3={type:_ZATABCASE_, numCols:2, caseKey:_tab3, colSizes: ["400px","400px"],
+            paddingStyle:(appNewUI? "padding-left:15px;":null), cellpadding:(appNewUI?2:0),
 					items: [
 						{type:_SPACER_, height:"10"},
 						//layout rapper around the direct/indrect list						
@@ -2801,7 +2801,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 					caseKey:_tab6, 
 					items: [
 						{type:_ZA_TOP_GROUPER_, id:"account_form_aliases_group",borderCssClass:"LowPadedTopGrouperBorder",
-							width:"100%", numCols:1,colSizes:["auto"], displayGrid:false,
+							width:"100%", numCols:1,colSizes:["auto"],
 							label:ZaMsg.NAD_EditAliasesGroup,
 							items :[
 								{ref:ZaAccount.A_zimbraMailAlias, type:_DWT_LIST_, height:"200", width:"350px", 
@@ -2952,7 +2952,7 @@ nowrap:false, labelWrap:true,
 					caseKey:_tab8, 
 					items: [
 						{type:_ZA_TOP_GROUPER_, id:"account_form_interop_group",
-                            borderCssClass:"LowPadedTopGrouperBorder", displayGrid:false,
+                            borderCssClass:"LowPadedTopGrouperBorder",
 							 width:"100%", numCols:1,colSizes:["auto"],
 							label:ZaMsg.NAD_EditFpGroup,
 							items :[
@@ -3032,7 +3032,7 @@ nowrap:false, labelWrap:true,
 		cases.push({type:_ZATABCASE_, id:"account_form_zimlets_tab", numCols:1,
             caseKey:_tab10, 
 			items:[
-				{type:_ZAGROUP_, numCols:1,colSizes:["auto"], displayGrid:false,
+				{type:_ZAGROUP_, numCols:1,colSizes:["auto"],
 					items: [
 						{type:_SUPER_ZIMLET_SELECT_,
 							selectRef:ZaAccount.A_zimbraZimletAvailableZimlets, 

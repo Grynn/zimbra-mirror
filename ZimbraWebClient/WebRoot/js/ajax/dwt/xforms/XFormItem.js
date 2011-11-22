@@ -1556,15 +1556,6 @@ XFormItem.prototype.getRowSpan = function () {
 	return this.getInheritedProperty("rowSpan");
 }
 
-/* displayGrid:
-*    1) true: display grid border
-*    2) false: don't display grid border
-*    3) _UNDEFINED_: inherid the parent's setting
-* */
-XFormItem.prototype.displayGrid = _UNDEFINED_;
-XFormItem.prototype.getDisplayGrid = function () {
-	return this.getInheritedProperty("displayGrid");
-}
 // END NEW TABLE LAYOUT STUFF
 
 // error handling
@@ -2999,6 +2990,7 @@ Group_XFormItem.prototype.numCols = 2;
 Group_XFormItem.prototype.useParentTable = false;
 Group_XFormItem.prototype.focusable = false;
 Group_XFormItem.prototype.cellspacing = 0;
+Group_XFormItem.prototype.border = 0;
 Group_XFormItem.prototype.cellpadding = 0;
 Group_XFormItem.prototype.initFormItem = function () {
 	XFormItem.prototype.initFormItem.call(this);	
@@ -3218,13 +3210,14 @@ XFormItemFactory.createItemType("_COLLAPSED_GROUP_", "collapsedgroup", Collapsed
 
 //	type defaults
 CollapsedGroup_XFormItem.prototype.headCss = "gridGroupHeader";
+CollapsedGroup_XFormItem.prototype.contentCss = "gridGroupContent";
 CollapsedGroup_XFormItem.prototype.gridLabelCss = "gridGroupBodyLabel";
 CollapsedGroup_XFormItem.prototype.colSizes = "100%";
 CollapsedGroup_XFormItem.prototype.numCols = 1;
 CollapsedGroup_XFormItem.prototype.width = "100%";
 CollapsedGroup_XFormItem.prototype.defaultDisplay = true;
-CollapsedGroup_XFormItem.prototype.displayGrid = true;
 CollapsedGroup_XFormItem.prototype.displayLabelItem = false;
+CollapsedGroup_XFormItem.prototype.cssClass = "grid_group_container";
 CollapsedGroup_XFormItem.prototype.cssStyle = "margin-top: 10px;";
 CollapsedGroup_XFormItem.prototype.headerLabel = "Collapsed Group";
 CollapsedGroup_XFormItem.prototype.expandedImg =  "ImgNodeExpanded";
@@ -3241,7 +3234,6 @@ CollapsedGroup_XFormItem.prototype.initializeItems = function () {
     if(!this.items[1] || this.items[1].items.length == 0) {
         if(oldItems) {
             for(var i = 0; i < oldItems.length; i++) {
-                oldItems[i].displayGrid = false;
                 if(oldItems[i].type == "radio")
                     continue;  // don't deal with _RADIO_
                 if(oldItems[i].label || oldItems[i].txtBoxLabel) {
@@ -3294,7 +3286,7 @@ function () {
     var headerCss = this.getInheritedProperty("headCss");
     var headItems = this.getInheritedProperty("headerItems") || [];
     var headerItems = { type:_COMPOSITE_, numCols:3, width:"100%",
-            colSizes:["20px", headerLabelWidth || "100%", "100%"], colSpan:"*", displayGrid:false,
+            colSizes:["20px", headerLabelWidth || "100%", "100%"], colSpan:"*",
             items:[
                 {type:_DWT_IMAGE_, value: this.expandedImg, onClick:this.onClick},
                 {type:_OUTPUT_, value: headerLabel},
@@ -3309,7 +3301,10 @@ CollapsedGroup_XFormItem.prototype.getContentItems =
 function () {
     var colsize = this.getInheritedProperty("colSizes");
     var numcols = this.getInheritedProperty("numCols");
-    var contentItems = { type:_GROUP_, items:[], colSpan:"*", colSizes:colsize,numCols:numcols, width:"100%"
+    var contentCss = this.getInheritedProperty("contentCss");
+    var contentItems = { type:_GROUP_, items:[], colSpan:"*", border: 1,
+                         colSizes:colsize,numCols:numcols, width:"100%",
+                         cssClass:contentCss
     };
     var content =  this.getInheritedProperty("contentItems");
     if(content)

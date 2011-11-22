@@ -670,12 +670,6 @@ textarea {
     text-align: left;
 }
 
-td .gridGroupBodyLabel {
-    text-align:left;
-    background-color:#DEE5F1 !important;
-    padding-left:10px;
-}
-
 .ZaXWizardDialogPageDiv .step_body_container {
     padding: 15px;
 }
@@ -688,3 +682,10 @@ td .gridGroupBodyLabel {
 .DwtListView-Rows .Row {
     color: #333333;
 }
+
+.grid_group_container{
+    border: 1px solid #D3D3D3;
+    @borderRadius@:5px;
+}
+
+

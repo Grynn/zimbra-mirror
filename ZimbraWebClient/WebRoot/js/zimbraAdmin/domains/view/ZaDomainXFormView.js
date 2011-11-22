@@ -742,7 +742,7 @@ if(appNewUI) {
     var case1 = {type:_ZATABCASE_, caseKey:tabIx,numCols:1,paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0) 
             };
     var case1Items = [
-		{type:_ZAGROUP_,  displayGrid:appNewUI,width:"100%", numCols:2,colSizes: ["275px","100%"],
+		{type:_ZAGROUP_, width:"100%", numCols:2,colSizes: ["275px","100%"],
 			items:[
                 { type: _DWT_ALERT_,
                     visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A_zimbraDomainStatus,ZaDomain.DOMAIN_STATUS_SHUTDOWN]],
@@ -1541,7 +1541,7 @@ if(appNewUI) {
         	caseKey:tabIx,
 			
 items:[
-            	{type:_ZAGROUP_, numCols:1,colSizes:["auto"], displayGrid:false,
+            	{type:_ZAGROUP_, numCols:1,colSizes:["auto"],
 					items: [
                     	{type: _OUTPUT_, value: ZaMsg.NAD_LimitZimletsToDomain, cssStyle:"margin-left:275px " },
                     	{type:_ZA_ZIMLET_SELECT_COMBO_,cssStyle:"margin-left: 275px",

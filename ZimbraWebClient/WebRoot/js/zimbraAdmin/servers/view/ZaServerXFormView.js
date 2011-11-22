@@ -704,7 +704,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
             paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),
             items:[
                 //{type:_ZAGROUP_, cssStyle:"padding-left:0px; padding-right:0px", width:"100%", items:[
-                {type:_ZAGROUP_, displayGrid:appNewUI,width:"100%", numCols:2,colSizes: ["275px","100%"], items:[
+                {type:_ZAGROUP_, width:"100%", numCols:2,colSizes: ["275px","100%"], items:[
                     {ref:ZaServer.A_name, type:_OUTPUT_, label:ZaMsg.NAD_DisplayName, labelLocation:_LEFT_},
                     ZaItem.descriptionXFormItem,
                     { ref: ZaServer.A_ServiceHostname, type:_OUTPUT_,
