@@ -8,7 +8,7 @@
 	<classpathentry kind="lib" path="jars/jsp-2.1/jsp-2.1.jar"/>
 	<classpathentry kind="lib" path="jars/jsp-2.1/jsp-api-2.1.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/gifencoder.jar"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/servlet-api.jar"/>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/servlet-api-2.5.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/yuicompressor-2.4.2-zimbra.jar"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraCommon"/>

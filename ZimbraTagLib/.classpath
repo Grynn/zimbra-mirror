@@ -25,7 +25,7 @@
       <attribute name="javadoc_location" value="http://www.dom4j.org/dom4j-1.5.2/apidocs/"/>
     </attributes>
   </classpathentry>
-  <classpathentry kind="lib" path="/ZimbraCommon/jars/servlet-api.jar"/>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/servlet-api-2.5.jar"/>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/yuicompressor-2.4.2-zimbra.jar"/>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/guava-10.0.1.jar" sourcepath="/ZimbraCommon/jars-src/guava-10.0.1-sources.jar">
     <attributes>

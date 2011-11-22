@@ -1176,7 +1176,7 @@
     <fileset file="${client.jarfile}" />
     <fileset file="${server.jarfile}" />
     <fileset file="${taglib.jarfile}" />
-    <fileset dir="${webclient.jars.dir}" includes="servlet-api.jar"/>
+    <fileset dir="${webclient.jars.dir}" includes="servlet-api-2.5.jar"/>
     <fileset dir="${webclient.jars.dir}/jsp-2.1" includes="*.jar"/>
     <fileset dir="${jspc.src.dir}/WEB-INF/lib" includes="*.jar"/>
   </path>

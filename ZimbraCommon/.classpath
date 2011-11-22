@@ -61,9 +61,9 @@
   </classpathentry>
   <classpathentry kind="lib" path="jars/mysql-connector-java-5.1.13-bin.jar" sourcepath="/ThirdParty/connector-j/mysql-connector-java-5.1.13/src"/>
   <classpathentry kind="lib" path="jars/nekohtml.jar"/>
-  <classpathentry kind="lib" path="jars/servlet-api.jar">
+  <classpathentry kind="lib" path="jars/servlet-api-2.5.jar">
     <attributes>
-      <attribute name="javadoc_location" value="http://jakarta.apache.org/tomcat/tomcat-5.5-doc/servletapi/"/>
+      <attribute name="javadoc_location" value="http://download.oracle.com/docs/cd/E17802_01/products/products/servlet/2.5/docs/servlet-2_5-mr2/"/>
     </attributes>
   </classpathentry>
   <classpathentry kind="lib" path="jars/tnef-1.6.0.jar" sourcepath="jars-src/tnef-1.6.0-src.zip">
