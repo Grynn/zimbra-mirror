@@ -336,7 +336,7 @@ ZaMTA.prototype.getMailQStatus = function (qName,query,offset,limit,force) {
 	serverEl.appendChild(qEl);
 	
 	var queryEl = soapDoc.getDoc().createElement("query");
-	if(query != null) {
+	if( !AjxUtil.isEmpty(query) ) {
 		for (var key in query) {
 			var arr = query[key];
 			if(arr) {
