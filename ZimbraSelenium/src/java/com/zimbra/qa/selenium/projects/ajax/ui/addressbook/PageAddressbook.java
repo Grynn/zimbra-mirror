@@ -174,18 +174,18 @@ public class PageAddressbook extends AbsTab {
         
 		//ensure it is in Addressbook main page
 		zNavigateTo();
-		if ( !sIsElementPresent("id=ZV__CNS-main") )			
+		if ( !sIsElementPresent("id=zv__CNS-main") )			
 		//maybe return empty list?????
-			throw new HarnessException("Contact List is not present "+ "id='ZV__CNS-main'");
+			throw new HarnessException("Contact List is not present "+ "id='zv__CNS-main'");
 
 		//Get the number of contacts (String) 
-		int count = this.sGetCssCount("css=div[id='ZV__CNS-main']>div[id^=zli__CNS__]");
+		int count = this.sGetCssCount("css=div[id='zv__CNS-main']>div[id^=zli__CNS__]");
 		
 		logger.info(myPageName() + " zIsContactDisplayed: number of contacts: "+ count);
 
 		// Get each contact's data from the table list
 		for (int i = 1; i <= count && !isContactFound; i++) {
-			String commonLocator = "css=div[id='ZV__CNS-main'] div:nth-child("+ i +")";
+			String commonLocator = "css=div[id='zv__CNS-main'] div:nth-child("+ i +")";
 
 			String contactType = getContactType(commonLocator);
 		    
@@ -211,18 +211,18 @@ public class PageAddressbook extends AbsTab {
 
 		//ensure it is in Addressbook main page
 		zNavigateTo();
-		if ( !this.sIsElementPresent("id=ZV__CNS-main") )			
+		if ( !this.sIsElementPresent("id=zv__CNS-main") )			
 		//maybe return empty list?????
-			throw new HarnessException("Contact List is not present "+ "id='ZV__CNS-main'");
+			throw new HarnessException("Contact List is not present "+ "id='zv__CNS-main'");
 
 		//Get the number of contacts (String) 
-		int count = this.sGetCssCount("css=div[id='ZV__CNS-main']>div[id^=zli__CNS__]");
+		int count = this.sGetCssCount("css=div[id='zv__CNS-main']>div[id^=zli__CNS__]");
 		
 		logger.info(myPageName() + " zListGetContacts: number of contacts: "+ count);
 
 		// Get each contact's data from the table list
 		for (int i = 1; i <= count; i++) {
-			String commonLocator = "css=div[id='ZV__CNS-main'] div:nth-child("+ i +")";
+			String commonLocator = "css=div[id='zv__CNS-main'] div:nth-child("+ i +")";
 
 		    
 			if (sIsElementPresent(commonLocator + " div[class*=" + contactType + "]")) {
@@ -259,12 +259,12 @@ public class PageAddressbook extends AbsTab {
 
 		//ensure it is in Addressbook main page
 		zNavigateTo();
-		if ( !this.sIsElementPresent("id=ZV__CNS-main") )			
+		if ( !this.sIsElementPresent("id=zv__CNS-main") )			
 		//maybe return empty list?????
-			throw new HarnessException("Contact List is not present "+ "id='ZV__CNS-main'");
+			throw new HarnessException("Contact List is not present "+ "id='zv__CNS-main'");
 
 		//Get the number of contacts (String) 
-		int count = this.sGetCssCount("css=div[id='ZV__CNS-main']>div[id^=zli__CNS__]");
+		int count = this.sGetCssCount("css=div[id='zv__CNS-main']>div[id^=zli__CNS__]");
 		
 		logger.info(myPageName() + " zListGetContacts: number of contacts: "+ count);
 
@@ -832,7 +832,7 @@ public class PageAddressbook extends AbsTab {
 	
     // return the xpath locator of a contact
 	private String getContactLocator(String contact) throws HarnessException {
-		String listLocator = "div[id='zv__CNS']";
+		String listLocator = "div[id='zv__CNS-main']";
 		
 		String rowLocator = "div[id^='zli__CNS__']";
 	    
@@ -885,7 +885,7 @@ public class PageAddressbook extends AbsTab {
 	
     //get selected contacts locators
 	private ArrayList<String> getSelectedContactLocator() throws HarnessException {
-		String listLocator = "div#zv__CNS";				
+		String listLocator = "div#zv__CNS-main";				
 		String rowLocator = "div[id^='zli__CNS__']";
 		
 		
