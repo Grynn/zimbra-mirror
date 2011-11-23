@@ -344,7 +344,7 @@ ZaSearchXFormView.myXFormModifier = function(xFormObject) {
 
 	var headerList = ZaSearchListView.prototype._getHeaderList();
 	xFormObject.items = [
-		{type:_GROUP_, visibilityChecks:[], colSizes:["*","70px","90px"], colSpan:2, numCols:3, width:"100%", id:"xform_header",
+		{type:_GROUP_, visibilityChecks:[], colSizes:["*","70px","100px"], colSpan:2, numCols:3, width:"100%", id:"xform_header",
 			items:[
 				{type:_TEXTFIELD_, width:"100%", ref:ZaSearchEdit.A2_currentQuery,
 					containerCssClass:"search_field_container", bmolsnr: true,

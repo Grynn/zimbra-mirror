@@ -84,7 +84,7 @@ ZaTaskController.prototype.setExpanded = function(isExpanded) {
     // TODO  remove this to view manager
     var width;
     if (isExpanded) {
-        width = 170;
+        width = 220;
     } else {
         width = 20;
     }

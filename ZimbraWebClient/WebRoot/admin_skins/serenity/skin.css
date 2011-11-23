@@ -184,11 +184,12 @@ body {
 
 #skin_td_tree {
     height:100%;
-    padding: 2px 0px;
+    padding:  0px;
 }
 
 #skin_container_tree {
     @SkinBorderTree@;
+    border-bottom-width: 0px;
     height:100%;
 }
 
@@ -232,11 +233,12 @@ body {
 }
 
 #skin_td_app_main {
-    padding:2px 0px;
+    padding: 0px;
 }
 
 #skin_container_app_main {
     @SkinBorderApp@;
+    border-bottom-width: 0px;
     height:100%;
 }
 
@@ -278,7 +280,7 @@ body {
 }
 
 #skin_td_tool {
-    padding:2px 0px;
+    padding:0px;
 }
 
 #skin_container_tool {

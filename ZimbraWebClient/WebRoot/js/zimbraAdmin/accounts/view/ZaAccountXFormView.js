@@ -1400,7 +1400,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
     }
 
     if (ZaItem.hasReadPermission(ZaAccount.A_name, entry)) {
-    	headerItems.push({type:_OUTPUT_,ref:ZaAccount.A_name, label:ZaMsg.NAD_Email, labelLocation:_LEFT_, required:false});
+    	headerItems.push({type:_OUTPUT_,ref:ZaAccount.A_name, label:ZaMsg.NAD_Email, labelLocation:_LEFT_, required:false, cssStyle:"word-wrap:break-word;overflow:hidden"});
     }
 
     if (ZaItem.hasReadPermission(ZaItem.A_zimbraId, entry)) {
@@ -3477,7 +3477,7 @@ nowrap:false, labelWrap:true,
         xFormObject.items = [
                 {type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan: "*", id:"xform_header",
                     items: [
-                        {type:_GROUP_,	numCols:4,colSizes:["90px","350px","100px","*"],items:headerItems}
+                        {type:_GROUP_,	numCols:4, width: "100%", colSizes:["90px","300px","100px","*"],items:headerItems}
                     ],
                     cssStyle:"padding-top:5px; padding-bottom:5px"
                 },

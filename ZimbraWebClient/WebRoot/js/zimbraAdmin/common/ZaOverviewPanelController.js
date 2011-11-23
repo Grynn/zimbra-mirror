@@ -819,6 +819,7 @@ function() {
                                         parent:ZaMsg.OVP_home,
                                         id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_HOME,null, "monHV"),
                                         text: ZaMsg.OVP_monitor,
+                                        className: "AdminHomeTreeItem",
                                         mappingId: ZaZimbraAdmin._MONITOR_HOME_VIEW,
                                         image:"Monitor"
                                     });
@@ -899,6 +900,7 @@ function() {
                                         parent:ZaMsg.OVP_home,
                                         id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_HOME,null, "manActHV"),
                                         text: ZaMsg.OVP_manageAccounts,
+                                        className: "AdminHomeTreeItem",
                                         mappingId: ZaZimbraAdmin._MANAGE_ACCOUNT_HOME_VIEW,
                                         image: "MangeAccounts"
                                         });
@@ -970,6 +972,7 @@ function() {
                                         parent:ZaMsg.OVP_home,
                                         id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_HOME,null, "adminHV"),
                                         text: ZaMsg.OVP_configure,
+                                        className: "AdminHomeTreeItem",
                                         mappingId: ZaZimbraAdmin._ADMINISTRATION_HOME_VIEW,
                                         image: "Administration"
                                         });
@@ -1096,6 +1099,7 @@ function() {
                                         parent:ZaMsg.OVP_home,
                                         id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_HOME,null, "magHV"),
                                         text: ZaMsg.OVP_toolMig,
+                                        className: "AdminHomeTreeItem",
                                         mappingId: ZaZimbraAdmin._MIGRATION_HOME_VIEW,
                                         image: "ToolsAndMigration"
                                         });
@@ -1117,6 +1121,7 @@ function() {
                                     parent:ZaMsg.OVP_home,
                                     id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_HOME,null, "searchHV"),
                                     text: ZaMsg.OVP_search,
+                                    className: "AdminHomeTreeItem",
                                     mappingId: ZaZimbraAdmin._SEARCH_HOME_VIEW,
                                     image: "SearchAll"
                                     });

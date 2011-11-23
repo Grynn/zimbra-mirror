@@ -52,6 +52,17 @@
     background-color:#87cefa !important;
 }
 
+.AdminTreeItem-selected .AdminTreeItem-Text,
+.AdminTreeItem-selected-focused .AdminTreeItem-Text{
+    color: white;
+}
+
+.AdminTreeItem-actioned {
+    @TreeItem@
+	@RightClickBg@
+	padding-left:18px;
+}
+
 .rootOverviewHeader {
     padding-left:5px;
     padding-top:5px;
@@ -78,6 +89,11 @@
     padding-left:5px;
 }
 
+.AdminHomeTreeItem {
+    padding-left: 5px;
+    cursor: pointer;
+    height: 18px;
+}
 /* -- view xform -- */
 
 /*  view xform - header */

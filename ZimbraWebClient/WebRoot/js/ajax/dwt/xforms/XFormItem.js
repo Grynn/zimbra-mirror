@@ -2780,7 +2780,7 @@ Dwt_Image_XFormItem.prototype.updateElement = function (src) {
  		if (path != null) src = path + src;
  		var style = this.getCssStyle();
 		style = style || "";
-		styleStr = "style='position:relative;'";
+		var styleStr = "style='position:relative;"+ style + "'";
 
 		if (src) {
 			output = ["<div class='", src, "' ", styleStr, this.getClickHandlerHTML(), " ></div>"].join("");
@@ -3185,7 +3185,7 @@ function () {
     var headerItems = { type:_COMPOSITE_, numCols:3, width:"100%",
             colSizes:["20px", "100%", "20px"],
             items:[
-                {type:_DWT_IMAGE_, value: this.expandedImg, onClick:this.onClick},
+                {type:_DWT_IMAGE_, value: this.expandedImg, cssStyle:"position:static;", onClick:this.onClick},
                 {type:_OUTPUT_, value: headerLabel},
                 {type:_AJX_IMAGE_, value: "BorderNone"}
             ],
@@ -3288,7 +3288,7 @@ function () {
     var headerItems = { type:_COMPOSITE_, numCols:3, width:"100%",
             colSizes:["20px", headerLabelWidth || "100%", "100%"], colSpan:"*",
             items:[
-                {type:_DWT_IMAGE_, value: this.expandedImg, onClick:this.onClick},
+                {type:_DWT_IMAGE_, value: this.expandedImg, cssStyle:"position:static;", onClick:this.onClick},
                 {type:_OUTPUT_, value: headerLabel},
                 {type:_GROUP_, items: headItems}
             ],

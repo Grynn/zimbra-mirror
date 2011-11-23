@@ -400,7 +400,7 @@ function(showRootNode, isRoot) {
             forceNode = currentAddNode.forceNode;
         else
             forceNode = currentAddNode.childrenData.size() > 0 ? true: false;
-        ti = new ZaTreeItem({parent: currentRoot,className:"AdminTreeItem",id:currentAddNode.id, forceNode: forceNode});
+        ti = new ZaTreeItem({parent: currentRoot,className:currentAddNode.className,id:currentAddNode.id, forceNode: forceNode});
         ti.setCount(currentAddNode.count);
         ti.setText(currentAddNode.text);
         ti.setImage(currentAddNode.image);
