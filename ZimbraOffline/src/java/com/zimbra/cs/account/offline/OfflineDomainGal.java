@@ -63,7 +63,7 @@ public class OfflineDomainGal extends NamedEntry {
             return map;
         } catch (ServiceException e) {
             // throw RuntimeException because we're being called at startup...
-            throw new RuntimeException("failure instantiating zimlets", e);
+            throw new RuntimeException("failure instantiating offlineDomainGal", e);
         }
     }
 
