@@ -11,6 +11,7 @@ import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
+import com.zimbra.qa.selenium.framework.util.ZimbraAccount.SOAP_DESTINATION_HOST_TYPE;
 import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
 import com.zimbra.qa.selenium.projects.ajax.ui.addressbook.FormContactNew;
 
@@ -31,6 +32,24 @@ public class ContactItem implements IItem {
 	public String middleName = null;
 	public String lastName = null;
 	public String email = null;
+	public String homePostalCode = null;
+	public String nameSuffix = null;
+	public String birthday = null;
+	public String homeStreet = null;
+	public String nickname = null;
+	public String department = null;
+	public String homeCountry = null;
+	public String homeCity = null;
+	public String company = null;
+	public String homeState = null;
+	public String notes = null;
+	public String jobTitle = null;
+	public String maidenName = null;
+	public String imAddress1 = null;
+	public String mobilePhone = null;
+	public String namePrefix = null;
+	public String homeURL = null;
+
 	public String company = null;
 	public HashMap<String, String> ContactAttributes = new HashMap<String, String>();
 	
@@ -101,8 +120,40 @@ public class ContactItem implements IItem {
 			middleName = value;
 		else if ( key.equals("lastName"))
 			lastName = value;
+		else if ( key.equals("homePostalCode"))
+		   homePostalCode = value;
+		else if ( key.equals("nameSuffix"))
+		   nameSuffix = value;
+		else if ( key.equals("birthday"))
+		   birthday = value;
+		else if ( key.equals("homeStreet"))
+		   homeStreet = value;
+		else if ( key.equals("nickname"))
+		   nickname = value;
+		else if ( key.equals("department"))
+		   department = value;
+		else if ( key.equals("homeCountry"))
+		   homeCountry = value;
+		else if ( key.equals("homeCity"))
+		   homeCity = value;
 		else if ( key.equals("company"))
-			company = value;		
+		   company = value;
+		else if ( key.equals("homeState"))
+		   homeState = value;
+		else if ( key.equals("notes"))
+		   notes = value;
+		else if ( key.equals("jobTitle"))
+		   jobTitle = value;
+		else if ( key.equals("imAddress1"))
+		   imAddress1 = value;
+		else if ( key.equals("namePrefix"))
+		   namePrefix = value;
+		else if ( key.equals("mobilePhone"))
+		   mobilePhone = value;
+		else if ( key.equals("maidenName"))
+		   maidenName = value;
+		else if ( key.equals("homeURL"))
+		   homeURL = value;		
 		else {
 		    // add to the map
 		    ContactAttributes.put(key, value);
@@ -195,23 +246,41 @@ public class ContactItem implements IItem {
 		}
 		else if ( type.equals(GenerateItemType.AllAttributes) ) {
 			c.middleName = "middle" + ZimbraSeleniumProperties.getUniqueString();
-			c.ContactAttributes.put(FormContactNew.Locators.zPrefixEditField, "p");
-			c.ContactAttributes.put(FormContactNew.Locators.zMaidenEditField, "M" );
-			c.ContactAttributes.put(FormContactNew.Locators.zSuffixEditField, "Su");
-			c.ContactAttributes.put(FormContactNew.Locators.zNicknameEditField, "Nick" );
-			c.ContactAttributes.put(FormContactNew.Locators.zDepartmentEditField, "dep" + ZimbraSeleniumProperties.getUniqueString());
-			c.ContactAttributes.put(FormContactNew.Locators.zJobTitleEditField, "jobTitle" + ZimbraSeleniumProperties.getUniqueString());
-			//c.ContactAttributes.put(FormContactNew.Locators.zCompanyEditField, "company" + ZimbraSeleniumProperties.getUniqueString());
-			c.ContactAttributes.put(FormContactNew.Locators.zPhone1EditField,  ZimbraSeleniumProperties.getUniqueString());
-			c.ContactAttributes.put(FormContactNew.Locators.zIM1EditField,  ZimbraSeleniumProperties.getUniqueString());
-			c.ContactAttributes.put(FormContactNew.Locators.zStreet1TextArea, "street " + ZimbraSeleniumProperties.getUniqueString());
-			c.ContactAttributes.put(FormContactNew.Locators.zCity1EditField, "city " + ZimbraSeleniumProperties.getUniqueString());
-			c.ContactAttributes.put(FormContactNew.Locators.zState1EditField, "CA");
-			c.ContactAttributes.put(FormContactNew.Locators.zPostalCode1EditField, "95123");
-			c.ContactAttributes.put(FormContactNew.Locators.zCountry1EditField, "USA");
-			c.ContactAttributes.put(FormContactNew.Locators.zURL1EditField, "http://www.zimbra.com");
-			c.ContactAttributes.put(FormContactNew.Locators.zOther1EditField, "1985-05-24");
-			c.ContactAttributes.put(FormContactNew.Locators.zNotesEditField,  "notes " + ZimbraSeleniumProperties.getUniqueString());
+			c.homePostalCode = "95123";
+			c.nameSuffix = "Su";
+			c.nickname = "Nick";
+			c.department = "dep" + ZimbraSeleniumProperties.getUniqueString();
+			c.jobTitle = "jobTitle" + ZimbraSeleniumProperties.getUniqueString();
+			c.company = "company" + ZimbraSeleniumProperties.getUniqueString();
+			c.homeStreet = "street " + ZimbraSeleniumProperties.getUniqueString();
+			c.homeCity = "city " + ZimbraSeleniumProperties.getUniqueString();
+			c.homeState = "CA";
+			c.homeCountry = "USA";
+			c.birthday = "1985-05-24";
+			c.notes = "notes " + ZimbraSeleniumProperties.getUniqueString();
+			c.maidenName = "M";
+			c.namePrefix = "p";
+			c.mobilePhone = ZimbraSeleniumProperties.getUniqueString();
+			c.imAddress1 = ZimbraSeleniumProperties.getUniqueString();
+			c.homeURL = "http://www.zimbra.com";
+
+			c.ContactAttributes.put(FormContactNew.Locators.zPrefixEditField, c.namePrefix);
+			c.ContactAttributes.put(FormContactNew.Locators.zMaidenEditField, c.maidenName);
+			c.ContactAttributes.put(FormContactNew.Locators.zSuffixEditField, c.nameSuffix);
+			c.ContactAttributes.put(FormContactNew.Locators.zNicknameEditField, c.nickname);
+			c.ContactAttributes.put(FormContactNew.Locators.zDepartmentEditField, c.department);
+			c.ContactAttributes.put(FormContactNew.Locators.zJobTitleEditField, c.jobTitle);
+			c.ContactAttributes.put(FormContactNew.Locators.zCompanyEditField, c.company);
+			c.ContactAttributes.put(FormContactNew.Locators.zPhone1EditField, c.mobilePhone);
+			c.ContactAttributes.put(FormContactNew.Locators.zIM1EditField,  c.imAddress1);
+			c.ContactAttributes.put(FormContactNew.Locators.zStreet1TextArea, c.homeStreet);
+			c.ContactAttributes.put(FormContactNew.Locators.zCity1EditField, c.homeCity);
+			c.ContactAttributes.put(FormContactNew.Locators.zState1EditField, c.homeState);
+			c.ContactAttributes.put(FormContactNew.Locators.zPostalCode1EditField, c.homePostalCode);
+			c.ContactAttributes.put(FormContactNew.Locators.zCountry1EditField, c.homeCountry);
+			c.ContactAttributes.put(FormContactNew.Locators.zURL1EditField, c.homeURL);
+			c.ContactAttributes.put(FormContactNew.Locators.zOther1EditField, c.birthday);
+			c.ContactAttributes.put(FormContactNew.Locators.zNotesEditField,  c.notes);
 			
 			return c;
 		}
@@ -243,7 +312,7 @@ public class ContactItem implements IItem {
 
 			// Set the ID
 			contact.setId(cn.getAttribute("id", null));
-            contact.fileAs=cn.getAttribute("fileAsStr",null);      
+         contact.fileAs=cn.getAttribute("fileAsStr",null);      
 
             // Iterate the attributes
 			Element[] attributes = ZimbraAccount.SoapClient.selectNodes(cn, "//mail:a");
@@ -265,7 +334,17 @@ public class ContactItem implements IItem {
 		throw new HarnessException("implement me");
 	}
 
-	public static ContactItem importFromSOAP(ZimbraAccount account, String query) throws HarnessException {
+	public static ContactItem importFromSOAP(ZimbraAccount account, String query)
+	throws HarnessException {
+	   return importFromSOAP(
+	         account,
+	         query,
+	         SOAP_DESTINATION_HOST_TYPE.SERVER,
+	         null);
+	}
+
+	public static ContactItem importFromSOAP(ZimbraAccount account,
+	      String query, SOAP_DESTINATION_HOST_TYPE destType, String accountName) throws HarnessException {
 
 		try
 		{
@@ -273,8 +352,10 @@ public class ContactItem implements IItem {
 			account.soapSend(
 					"<SearchRequest xmlns='urn:zimbraMail' types='contact'>" +
 						"<query>"+ query +"</query>" +
-					"</SearchRequest>");
-			
+					"</SearchRequest>",
+					destType,
+					accountName);
+
 			Element[] results = account.soapSelectNodes("//mail:SearchResponse/mail:cn");
 			if (results.length != 1)
 				throw new HarnessException("Query should return 1 result, not "+ results.length);
@@ -284,7 +365,9 @@ public class ContactItem implements IItem {
 			account.soapSend(
 					"<GetContactsRequest xmlns='urn:zimbraMail' >" +
 						"<cn id='"+ id +"'/>" +
-					"</GetContactsRequest>");
+					"</GetContactsRequest>",
+					destType,
+					accountName);
 			Element getContactsResponse = account.soapSelectNode("//mail:GetContactsResponse", 1);
 			
 			// Using the response, create this item

@@ -158,20 +158,15 @@ public class FormContactNew extends AbsForm {
            sTypeKeys(locator,value);         
       }
       else {
-         //The following code to simulate paste action from user (Ctrl-V) bug #
-         //Use "Notes" to store text which will be entered into clipboard (Ctrl-X)
-         //sType(Locators.zNotesEditField ,value); //
-
          //highlight text
          String id= "editcontactform_NOTES_input";
          ClientSessionFactory.session().selenium().getEval(
                "this.browserbot.getUserWindow().document.getElementById('"
                + id + "')" + ".select()");
 
-         // Enter text
          this.sFocus(locator);
          this.zClick(locator);
-         zTypeKeys(locator, value);
+         this.zKeyboard.zTypeCharacters(value);
 
       }
         
@@ -201,7 +196,7 @@ public class FormContactNew extends AbsForm {
       }
       
       if ( contact.middleName != null ) {       
-         zFillField(Locators.zMiddleEditField, contact.lastName);
+         zFillField(Locators.zMiddleEditField, contact.middleName);
       }
       
       if ( contact.email != null ) {         

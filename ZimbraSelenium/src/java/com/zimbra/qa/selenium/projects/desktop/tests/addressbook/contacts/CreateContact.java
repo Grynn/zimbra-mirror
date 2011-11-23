@@ -93,7 +93,21 @@ public class CreateContact extends AjaxCommonTest  {
 	public void createContactByClickingNewFromToolBar() throws HarnessException {				
 		FormContactNew formContactNew = (FormContactNew)app.zPageAddressbook.zToolbarPressButton(Button.B_NEW);
 
-		createBasicContact(app, formContactNew);
+		ContactItem contactItem = createBasicContact(app, formContactNew);
+
+      GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageAddressbook.zWaitForDesktopLoadingSpinner(5000);
+		
+		ContactItem contact = ContactItem.importFromSOAP(
+            app.zGetActiveAccount(),
+            contactItem.fileAs);
+
+      ZAssert.assertEquals(contactItem.firstName, contact.firstName,
+            "Verifying first name");
+      ZAssert.assertEquals(contactItem.lastName, contact.lastName,
+            "Verifying last name");
+      ZAssert.assertEquals(contactItem.email, contact.email,
+            "Verifying email address");
 	}
 	
 	@Test(	description = "Create a basic contact item by use PullDown Menu->Contacts",
@@ -101,7 +115,21 @@ public class CreateContact extends AjaxCommonTest  {
 	public void CreateContactFromPulldownMenu() throws HarnessException {				
 		FormContactNew formContactNew = (FormContactNew)app.zPageAddressbook.zToolbarPressPulldown(Button.B_NEW, Button.O_NEW_CONTACT);
 		
-		createBasicContact(app, formContactNew);		
+		ContactItem contactItem = createBasicContact(app, formContactNew);
+
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		app.zPageAddressbook.zWaitForDesktopLoadingSpinner(5000);
+
+		ContactItem contact = ContactItem.importFromSOAP(
+            app.zGetActiveAccount(),
+            contactItem.fileAs);
+
+      ZAssert.assertEquals(contactItem.firstName, contact.firstName,
+            "Verifying first name");
+      ZAssert.assertEquals(contactItem.lastName, contact.lastName,
+            "Verifying last name");
+      ZAssert.assertEquals(contactItem.email, contact.email,
+            "Verifying email address");
 	}
 
 	  @Test(   description = "Cancel creating a contact item - Click Yes",
@@ -221,6 +249,56 @@ public class CreateContact extends AjaxCommonTest  {
 	      }
 
          ZAssert.assertTrue(isFileAsEqual, "Verify contact fileAs (" + contactItem.fileAs + ") existed ");
+
+         GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+         app.zPageAddressbook.zWaitForDesktopLoadingSpinner(5000);
+
+         ContactItem contact = ContactItem.importFromSOAP(
+               app.zGetActiveAccount(),
+               contactItem.fileAs);
+
+         ZAssert.assertEquals(contactItem.firstName, contact.firstName,
+               "Verifying first name");
+         ZAssert.assertEquals(contactItem.lastName, contact.lastName,
+               "Verifying last name");
+         ZAssert.assertEquals(contactItem.middleName, contact.middleName,
+               "Verifying middle name");
+         ZAssert.assertEquals(contactItem.homePostalCode, contact.homePostalCode,
+               "Verifying home postal code");
+         ZAssert.assertEquals(contactItem.email, contact.email,
+               "Verifying email address");
+         ZAssert.assertEquals(contactItem.birthday, contact.birthday,
+               "Verifying birthday");
+         ZAssert.assertEquals(contactItem.nickname, contact.nickname,
+               "Verifying nickname");
+         ZAssert.assertEquals(contactItem.department, contact.department,
+               "Verifying department");
+         ZAssert.assertEquals(contactItem.homeCountry, contact.homeCountry,
+               "Verifying home country");
+         ZAssert.assertEquals(contactItem.homeStreet, contact.homeStreet,
+               "Verifying home street");
+         ZAssert.assertEquals(contactItem.homeCity, contact.homeCity,
+               "Verifying home city");
+         ZAssert.assertEquals(contactItem.company, contact.company,
+               "Verifying company");
+         ZAssert.assertEquals(contactItem.homeState, contact.homeState,
+               "Verifying home state");
+         ZAssert.assertEquals(contactItem.notes, contact.notes,
+               "Verifying notes");
+         ZAssert.assertEquals(contactItem.jobTitle, contact.jobTitle,
+               "Verifying job title");
+         ZAssert.assertEquals(contactItem.homeURL, contact.homeURL,
+               "Verifying home URL");
+         ZAssert.assertEquals(contactItem.maidenName, contact.maidenName,
+               "Verifying maiden name");
+         ZAssert.assertEquals(contactItem.namePrefix, contact.namePrefix,
+               "Verifying prefix name");
+         ZAssert.assertEquals(contactItem.mobilePhone, contact.mobilePhone,
+               "Verifying mobile phone");
+         ZAssert.assertEquals(contactItem.imAddress1, contact.imAddress1.split("//")[1],
+               "Verifying IM Address");
+         ZAssert.assertEquals(contactItem.nameSuffix, contact.nameSuffix,
+               "Verifying suffix name");
 	   }
 
 	   @Test(description = "Creat a contact on Local Folders by clicking new from toolbar",
@@ -233,7 +311,20 @@ public class CreateContact extends AjaxCommonTest  {
 	            ZimbraAccount.clientAccountName);
 	      app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, localAddressBook);
 	      FormContactNew formContactNew = (FormContactNew)app.zPageAddressbook.zToolbarPressButton(Button.B_NEW);
-	      createBasicContact(app, formContactNew);
+	      ContactItem contactItem = createBasicContact(app, formContactNew);
+
+	      ContactItem contact = ContactItem.importFromSOAP(
+               app.zGetActiveAccount(),
+               contactItem.fileAs,
+               SOAP_DESTINATION_HOST_TYPE.CLIENT,
+               ZimbraAccount.clientAccountName);
+
+         ZAssert.assertEquals(contactItem.firstName, contact.firstName,
+               "Verifying first name");
+         ZAssert.assertEquals(contactItem.lastName, contact.lastName,
+               "Verifying last name");
+         ZAssert.assertEquals(contactItem.email, contact.email,
+               "Verifying email address");
 	   }
 
 	   @Test(description = "Creat a contact on Local Folders by clicking new from pull down menu",
@@ -246,7 +337,20 @@ public class CreateContact extends AjaxCommonTest  {
                ZimbraAccount.clientAccountName);
          app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, localAddressBook);
          FormContactNew formContactNew = (FormContactNew)app.zPageAddressbook.zToolbarPressPulldown(Button.B_NEW, Button.O_NEW_CONTACT);
-         createBasicContact(app, formContactNew);
+         ContactItem contactItem = createBasicContact(app, formContactNew);
+
+         ContactItem contact = ContactItem.importFromSOAP(
+               app.zGetActiveAccount(),
+               contactItem.fileAs,
+               SOAP_DESTINATION_HOST_TYPE.CLIENT,
+               ZimbraAccount.clientAccountName);
+
+         ZAssert.assertEquals(contactItem.firstName, contact.firstName,
+               "Verifying first name");
+         ZAssert.assertEquals(contactItem.lastName, contact.lastName,
+               "Verifying last name");
+         ZAssert.assertEquals(contactItem.email, contact.email,
+               "Verifying email address");
       }
 
 	   @Test(description = "Creat a contact on Local Folders with full attribute",
@@ -289,6 +393,55 @@ public class CreateContact extends AjaxCommonTest  {
          }
 
          ZAssert.assertTrue(isFileAsEqual, "Verify contact fileAs (" + contactItem.fileAs + ") existed ");
+         ContactItem contact = ContactItem.importFromSOAP(
+               app.zGetActiveAccount(),
+               contactItem.fileAs,
+               SOAP_DESTINATION_HOST_TYPE.CLIENT,
+               ZimbraAccount.clientAccountName);
+
+         ZAssert.assertEquals(contactItem.firstName, contact.firstName,
+               "Verifying first name");
+         ZAssert.assertEquals(contactItem.lastName, contact.lastName,
+               "Verifying last name");
+         ZAssert.assertEquals(contactItem.middleName, contact.middleName,
+               "Verifying middle name");
+         ZAssert.assertEquals(contactItem.homePostalCode, contact.homePostalCode,
+               "Verifying home postal code");
+         ZAssert.assertEquals(contactItem.email, contact.email,
+               "Verifying email address");
+         ZAssert.assertEquals(contactItem.birthday, contact.birthday,
+               "Verifying birthday");
+         ZAssert.assertEquals(contactItem.nickname, contact.nickname,
+               "Verifying nickname");
+         ZAssert.assertEquals(contactItem.department, contact.department,
+               "Verifying department");
+         ZAssert.assertEquals(contactItem.homeCountry, contact.homeCountry,
+               "Verifying home country");
+         ZAssert.assertEquals(contactItem.homeStreet, contact.homeStreet,
+               "Verifying home street");
+         ZAssert.assertEquals(contactItem.homeCity, contact.homeCity,
+               "Verifying home city");
+         ZAssert.assertEquals(contactItem.company, contact.company,
+               "Verifying company");
+         ZAssert.assertEquals(contactItem.homeState, contact.homeState,
+               "Verifying home state");
+         ZAssert.assertEquals(contactItem.notes, contact.notes,
+               "Verifying notes");
+         ZAssert.assertEquals(contactItem.jobTitle, contact.jobTitle,
+               "Verifying job title");
+         ZAssert.assertEquals(contactItem.homeURL, contact.homeURL,
+               "Verifying home URL");
+         ZAssert.assertEquals(contactItem.maidenName, contact.maidenName,
+               "Verifying maiden name");
+         ZAssert.assertEquals(contactItem.namePrefix, contact.namePrefix,
+               "Verifying prefix name");
+         ZAssert.assertEquals(contactItem.mobilePhone, contact.mobilePhone,
+               "Verifying mobile phone");
+         ZAssert.assertEquals(contactItem.imAddress1, contact.imAddress1.split("//")[1],
+               "Verifying IM Address");
+         ZAssert.assertEquals(contactItem.nameSuffix, contact.nameSuffix,
+               "Verifying suffix name");
+         
       }
 
 }
