@@ -17,7 +17,7 @@ import com.zimbra.qa.selenium.projects.ajax.ui.addressbook.FormContactNew;
 
 /**
  * Used to define a Zimbra Contact
- * 
+ *
  * @author Matt Rhoades
  *
  */
@@ -26,7 +26,7 @@ public class ContactItem implements IItem {
 	public static final String IMAGE_CLASS       = "ImgContact";
 	public static final String GAL_IMAGE_CLASS   = "ImgGALContact";
 
-	public String fileAs = null;	
+	public String fileAs = null;
 	public String type = null;
 	public String firstName = null;
 	public String middleName = null;
@@ -50,36 +50,35 @@ public class ContactItem implements IItem {
 	public String namePrefix = null;
 	public String homeURL = null;
 
-	public String company = null;
 	public HashMap<String, String> ContactAttributes = new HashMap<String, String>();
-	
+
 	public FolderItem AddressBook = null;
-	
+
 	/**
 	 * The GUI displayed email
 	 */
 	public String gEmail;
-	
+
 	/**
 	 * Whether the contact is checked or not in the contact list view
 	 */
 	public boolean gListIsChecked;
-	
+
 	/**
 	 * The List contact icon
 	 */
 	public String gListContactIcon;
-	
+
 	/**
 	 *  The List display name
 	 */
 	public String gListFileAsDisplay;
-	
+
 
 	public ContactItem() {
 	}
 
-	
+
 	public ContactItem(String fileAs) {
 		this.fileAs=fileAs;
 	}
@@ -88,7 +87,7 @@ public class ContactItem implements IItem {
 	public String getName() {
 		return (fileAs);
 	}
-	
+
 
 	// TODO: eventually, replace this with the com.zimbra.soap.types.Contact method
 	private String myId;
@@ -98,19 +97,19 @@ public class ContactItem implements IItem {
 	public void setId(String id) {
 		myId=id;
 	}
-	
+
 	public String getAttribute(String key, String defaultValue) {
 		if ( !ContactAttributes.containsKey(key) )
 			return (defaultValue);
 		return (ContactAttributes.get(key));
 	}
-	
+
 	public String getAttribute(String key) {
 		return (getAttribute(key, null));
 	}
-	
+
 	public String setAttribute(String key, String value) {
-		
+
 		// Process any special attributes here
 		if ( key.equals("email") )
 			email = value;
@@ -153,14 +152,14 @@ public class ContactItem implements IItem {
 		else if ( key.equals("maidenName"))
 		   maidenName = value;
 		else if ( key.equals("homeURL"))
-		   homeURL = value;		
+		   homeURL = value;
 		else {
 		    // add to the map
 		    ContactAttributes.put(key, value);
 		}
 		return value;
 	}
-	
+
 	/**
 	 * Get the CN for this contact (cn@domain.com)
 	 * @return the CN, or null if email is not set
@@ -179,19 +178,19 @@ public class ContactItem implements IItem {
 		} else {
 			return (null); // No email set
 		}
-		
+
 		// If the email contains an '@', use the first part
 		//
 		if ( address.contains("@")) {
 			return (address.split("@")[0]);
 		}
-		
+
 		// If the email does not contain the '@', return the entire part
 		return (address);
 	}
-	
+
 	public static ContactItem createUsingSOAP(AbsApplication app, String ... tagIdArray ) throws HarnessException {
-		
+
 		String tagParam ="";
 		if (tagIdArray.length == 1) {
 			tagParam = " t='" + tagIdArray[0] + "'";
@@ -199,48 +198,48 @@ public class ContactItem implements IItem {
 
         // Create a contact item
 		ContactItem contactItem = ContactItem.generateContactItem(GenerateItemType.Basic);
-	
+
 		app.zGetActiveAccount().soapSend(
 	                "<CreateContactRequest xmlns='urn:zimbraMail'>" +
 	                "<cn " + tagParam + " >" +
 	                "<a n='firstName'>" + contactItem.firstName +"</a>" +
-	                "<a n='lastName'>" + contactItem.lastName +"</a>" +             
+	                "<a n='lastName'>" + contactItem.lastName +"</a>" +
 	                "<a n='email'>" + contactItem.email + "</a>" +
 	                "<a n='company'>" + contactItem.company + "</a>" +
 	                "</cn>" +
-	                "</CreateContactRequest>");	  
-		
+	                "</CreateContactRequest>");
+
 		contactItem.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
-	
+
 		// Refresh addressbook
     	((AppAjaxClient)app).zPageMain.zToolbarPressButton(Button.B_REFRESH);
-	
+
         return contactItem;
     }
-	
+
 	public enum GenerateItemType {
 		Default, Basic, AllAttributes
 	}
-	
+
 	/**
 	 * Create a ContactItem with basic properties
-	 * 
+	 *
 	 * For type = Default or Basic, create a contact with first, middle, last and email set
 	 * For type = AllAttributes, create a contact with all attributes set
-	 * 
+	 *
 	 * @param type The type of ContactItem to create
 	 * @return the new ContactItem
-	 * @throws HarnessException 
+	 * @throws HarnessException
 	 */
 	public static ContactItem generateContactItem(GenerateItemType type) throws HarnessException {
 		ContactItem c = new ContactItem();
-		c.firstName = "first" + ZimbraSeleniumProperties.getUniqueString();	
+		c.firstName = "first" + ZimbraSeleniumProperties.getUniqueString();
 		c.lastName = "last" + ZimbraSeleniumProperties.getUniqueString();
 	    c.email = "email" +  ZimbraSeleniumProperties.getUniqueString() + "@zimbra.com";
 		//default value for file as is  last , first
 		c.fileAs = c.lastName + ", " + c.firstName;
 		c.company = "company" + ZimbraSeleniumProperties.getUniqueString();
-		
+
 		if ( type.equals(GenerateItemType.Default) || type.equals(GenerateItemType.Basic) ) {
 			return (c);
 		}
@@ -281,10 +280,10 @@ public class ContactItem implements IItem {
 			c.ContactAttributes.put(FormContactNew.Locators.zURL1EditField, c.homeURL);
 			c.ContactAttributes.put(FormContactNew.Locators.zOther1EditField, c.birthday);
 			c.ContactAttributes.put(FormContactNew.Locators.zNotesEditField,  c.notes);
-			
+
 			return c;
 		}
-		
+
 		// Default:
 		// Return empty Item
 		return (new ContactItem());
@@ -293,11 +292,11 @@ public class ContactItem implements IItem {
 	public static ContactItem importFromSOAP(Element GetContactsResponse) throws HarnessException {
 		if ( GetContactsResponse == null )
 			throw new HarnessException("Element cannot be null");
-		
+
 		ContactItem contact = null;
 
 		try {
-			
+
 			// Make sure we only have the GetMsgResponse part
 			Element getContactsResponse = ZimbraAccount.SoapClient.selectNode(GetContactsResponse, "//mail:GetContactsResponse");
 			if ( getContactsResponse == null )
@@ -312,7 +311,7 @@ public class ContactItem implements IItem {
 
 			// Set the ID
 			contact.setId(cn.getAttribute("id", null));
-         contact.fileAs=cn.getAttribute("fileAsStr",null);      
+         contact.fileAs=cn.getAttribute("fileAsStr",null);
 
             // Iterate the attributes
 			Element[] attributes = ZimbraAccount.SoapClient.selectNodes(cn, "//mail:a");
@@ -359,9 +358,9 @@ public class ContactItem implements IItem {
 			Element[] results = account.soapSelectNodes("//mail:SearchResponse/mail:cn");
 			if (results.length != 1)
 				throw new HarnessException("Query should return 1 result, not "+ results.length);
-	
+
 			String id = account.soapSelectValue("//mail:SearchResponse/mail:cn", "id");
-			
+
 			account.soapSend(
 					"<GetContactsRequest xmlns='urn:zimbraMail' >" +
 						"<cn id='"+ id +"'/>" +
@@ -369,14 +368,14 @@ public class ContactItem implements IItem {
 					destType,
 					accountName);
 			Element getContactsResponse = account.soapSelectNode("//mail:GetContactsResponse", 1);
-			
+
 			// Using the response, create this item
 			return (importFromSOAP(getContactsResponse));
-			
+
 		} catch (Exception e) {
 			throw new HarnessException("Unable to import using SOAP query("+ query +") and account("+ account.EmailAddress +")", e);
 		}
-			
+
 	}
 
 	@Override
