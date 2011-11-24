@@ -29,7 +29,7 @@ public class CreateAppointment extends AjaxCommonTest {
 	)
 	public void CreateAppointment_01() throws HarnessException {
 		
-		// Create the message data to be sent
+		// Create appointment
 		AppointmentItem appt = new AppointmentItem();
 		Calendar now = Calendar.getInstance();
 		appt.setSubject("appointment" + ZimbraSeleniumProperties.getUniqueString());

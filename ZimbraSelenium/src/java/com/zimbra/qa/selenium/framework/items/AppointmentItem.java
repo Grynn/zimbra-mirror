@@ -14,7 +14,7 @@ public class AppointmentItem implements IItem {
 	protected String dSubject = null;
 	protected String dFragment = null;
 	protected String dAttendees = null;
-	protected String dOptional = null;
+	protected String dOptionals = null;
 	protected String dLocation = null;
 	protected String dEquipment = null;
 	protected ZDate dStartTime = null;
@@ -37,7 +37,7 @@ public class AppointmentItem implements IItem {
 	protected String gSubject = null;
 	protected String gFragment = null;
 	protected String gAttendees = null;
-	protected String gOptional = null;	
+	protected String gOptionals = null;	
 	protected String gLocation = null;
 	protected String gEquipment = null;
 	protected String gStartDate = null;
@@ -75,6 +75,10 @@ public class AppointmentItem implements IItem {
 	}
 	
 public static AppointmentItem importFromSOAP(Element GetAppointmentResponse) throws HarnessException {
+	
+		Element multiElement = null ;
+		String attendees = "", optionals = "";			
+		int i = 1, j=1, lenAttendees = 0, lenOptionals=0;
 		
 		if ( GetAppointmentResponse == null )
 			throw new HarnessException("Element cannot be null");
@@ -124,23 +128,37 @@ public static AppointmentItem importFromSOAP(Element GetAppointmentResponse) thr
 				// Display
 				appt.dDisplay = compElement.getAttribute("fb");
 			}
-			
+				
 			Element reqElement = ZimbraAccount.SoapClient.selectNode(m, "//mail:at[@role='REQ']");
 			if ( reqElement != null ) {
-				
-				// Attendees
-				appt.dAttendees = reqElement.getAttribute("a");
-				
+				do {
+					multiElement = ZimbraAccount.SoapClient.selectNode(m, "//mail:at[@role='REQ'][" + i + "]");
+					if (multiElement == null) {
+						break;
+					}
+					attendees = attendees + "," + multiElement.getAttribute("a");
+					lenAttendees = attendees.length();
+					i++;
+				} while (multiElement != null);
+				appt.dAttendees = attendees.substring(1, lenAttendees);
 			}
-			
+						
 			Element optElement = ZimbraAccount.SoapClient.selectNode(m, "//mail:at[@role='OPT']");
+			
 			if ( optElement != null ) {
-				
-				// Optional
-				appt.dOptional = optElement.getAttribute("a");
-				
+				do {
+					multiElement = ZimbraAccount.SoapClient.selectNode(m, "//mail:at[@role='OPT'][" + i + "]");
+					if (multiElement == null) {
+						break;
+					}
+					optionals = optionals + "," + multiElement.getAttribute("a");
+					lenOptionals = optionals.length();
+					j++;
+				} while (multiElement != null);
+				appt.dOptionals = optionals.substring(1, lenOptionals);
 			}
 			
+		
 			if (appt.dLocation != null) {
 				
 				Element equipElement = ZimbraAccount.SoapClient.selectNode(m, "//mail:at[@cutype='RES'][2]");
@@ -243,7 +261,7 @@ public static AppointmentItem importFromSOAP(Element GetAppointmentResponse) thr
 		sb.append("Subject: ").append(dSubject).append('\n');
 		sb.append("Fragment: ").append(dFragment).append('\n');
 		sb.append("Attendees: ").append(dAttendees).append('\n');
-		sb.append("Optional: ").append(dOptional).append('\n');
+		sb.append("Optional: ").append(dOptionals).append('\n');
 		sb.append("Location: ").append(dLocation).append('\n');
 		sb.append("Equipment: ").append(dEquipment).append('\n');
 		sb.append("Start Time: ").append(dStartTime).append('\n');	
@@ -267,7 +285,7 @@ public static AppointmentItem importFromSOAP(Element GetAppointmentResponse) thr
 		sb.append("Subject: ").append(gSubject).append('\n');
 		sb.append("Fragment: ").append(gFragment).append('\n');
 		sb.append("Attendees: ").append(gAttendees).append('\n');
-		sb.append("Optional: ").append(gOptional).append('\n');
+		sb.append("Optional: ").append(gOptionals).append('\n');
 		sb.append("Location: ").append(gLocation).append('\n');
 		sb.append("Equipment: ").append(gEquipment).append('\n');		
 		sb.append("Start Time: ").append(gStartTime).append('\n');
@@ -311,11 +329,11 @@ public static AppointmentItem importFromSOAP(Element GetAppointmentResponse) thr
 	}
 	
 	public String getOptional() {
-		return (dOptional);
+		return (dOptionals);
 	}
 	
 	public void setOptional(String optional) {
-		dOptional = optional;
+		dOptionals = optional;
 	}
 	
 	public String getLocation() {
@@ -452,11 +470,11 @@ public static AppointmentItem importFromSOAP(Element GetAppointmentResponse) thr
 	}
 	
 	public String getGOptional() {
-		return (gOptional);
+		return (gOptionals);
 	}
 	
 	public void setGOptional(String optional) {
-		gOptional = optional;
+		gOptionals = optional;
 	}
 	
 	public String getGLocation() {

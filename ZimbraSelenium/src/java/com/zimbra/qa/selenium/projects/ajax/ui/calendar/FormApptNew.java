@@ -1,5 +1,6 @@
 package com.zimbra.qa.selenium.projects.ajax.ui.calendar;
 
+import java.awt.event.KeyEvent;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
@@ -511,23 +512,27 @@ public class FormApptNew extends AbsForm {
 		// Attendees
 		if (appt.getAttendees() != null) {
 			zFillField(Field.Attendees, appt.getAttendees());
+			this.zKeyboard.zTypeKeyEvent(KeyEvent.VK_ENTER);
 		}
 		
 		// Optional
 		if (appt.getOptional() != null) {
 			this.sClickAt(Locators.ShowOptionalLink, "");
 			zFillField(Field.Optional, appt.getOptional());
+			this.zKeyboard.zTypeKeyEvent(KeyEvent.VK_ENTER);
 		}
 		
 		// Location
 		if (appt.getLocation() != null) {
 			zFillField(Field.Location, appt.getLocation());
+			this.zKeyboard.zTypeKeyEvent(KeyEvent.VK_ENTER);
 		}
 		
 		// Equipment
 		if (appt.getEquipment() != null) {
 			this.sClickAt(Locators.ShowEquipmentLink, "");
 			zFillField(Field.Equipment, appt.getEquipment());
+			this.zKeyboard.zTypeKeyEvent(KeyEvent.VK_ENTER);
 		}
 		
 		// Start date-time
@@ -569,6 +574,7 @@ public class FormApptNew extends AbsForm {
 
 	}
 
+	
 	@Override
 	public boolean zIsActive() throws HarnessException {
 		logger.info(myPageName() + " zIsActive()");

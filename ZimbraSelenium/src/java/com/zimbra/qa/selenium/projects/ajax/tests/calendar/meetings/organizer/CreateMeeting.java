@@ -2,9 +2,11 @@ package com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.organizer;
 
 import java.util.Calendar;
 import org.testng.annotations.Test;
+import com.zimbra.qa.selenium.framework.items.AppointmentItem;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew;
 
 public class CreateMeeting extends AjaxCommonTest {
 
@@ -15,47 +17,39 @@ public class CreateMeeting extends AjaxCommonTest {
 		super.startingPage = app.zPageCalendar;
 	}
 	
-	@Test(	description = "View a basic appointment in the week view",
-			groups = { "implement" })
+	@Test(description = "Create simple meeting with attendee and optional",
+			groups = { "smoke" })
 	public void CreateMeeting_01() throws HarnessException {
 		
-		// Create the appointment on the server
-		// Create the message data to be sent
-		String subject = "appointment" + ZimbraSeleniumProperties.getUniqueString();
+		// Create appointment data
+		AppointmentItem appt = new AppointmentItem();
 		
-		
-		// Absolute dates in UTC zone
+		String apptSubject, apptAttendee1, apptOptional1, apptContent;
 		Calendar now = Calendar.getInstance();
-		ZDate startUTC = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 12, 0, 0);
-		ZDate endUTC   = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 14, 0, 0);
+		apptSubject = ZimbraSeleniumProperties.getUniqueString();
+		apptAttendee1 = ZimbraAccount.AccountA().EmailAddress;
+		apptOptional1 = ZimbraAccount.AccountB().EmailAddress;
+		apptContent = ZimbraSeleniumProperties.getUniqueString();
 		
-		// EST timezone string
-		String tz = ZTimeZone.TimeZoneEST.getID();
-
-		// Create an appointment
-		app.zGetActiveAccount().soapSend(
-					"<CreateAppointmentRequest xmlns='urn:zimbraMail'>"
-				+		"<m>"
-				+			"<inv>"
-				+				"<comp status='CONF' fb='B' class='PUB' transp='O' allDay='0' name='"+ subject +"' >"
-				+					"<s d='"+ startUTC.toTimeZone(tz).toYYYYMMDDTHHMMSS() +"' tz='"+ tz +"'/>"
-				+					"<e d='"+ endUTC.toTimeZone(tz).toYYYYMMDDTHHMMSS() +"' tz='"+ tz +"'/>"
-				+					"<or a='"+ app.zGetActiveAccount().EmailAddress + "'/>"
-				+				"</comp>"
-				+			"</inv>"
-				+			"<su>"+ subject + "</su>"
-				+			"<mp ct='text/plain'>"
-				+				"<content>content</content>"
-				+			"</mp>"
-				+		"</m>"
-				+	"</CreateAppointmentRequest>");
-		
-		app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
-		
-		SleepUtil.sleep(5000);
-		
-		throw new HarnessException("add verification that the appointment appears");
-	    
+		appt.setSubject(apptSubject);
+		appt.setAttendees(apptAttendee1);
+		appt.setOptional(apptOptional1);
+		appt.setStartTime(new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 12, 0, 0));
+		appt.setEndTime(new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 14, 0, 0));
+		appt.setContent(apptContent);
+	
+		// Compose appointment and send it to invitee
+		FormApptNew apptForm = (FormApptNew) app.zPageCalendar.zToolbarPressButton(Button.B_NEW);
+		apptForm.zFill(appt);
+		apptForm.zSubmit();
+			
+		// Verify appointment exists on the server
+		AppointmentItem actual = AppointmentItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ appt.getSubject() +")", appt.getStartTime().addDays(-7), appt.getEndTime().addDays(7));
+		ZAssert.assertNotNull(actual, "Verify the new appointment is created");
+		ZAssert.assertEquals(actual.getSubject(), appt.getSubject(), "Subject: Verify the appointment data");
+		ZAssert.assertEquals(actual.getAttendees(), appt.getAttendees(), "Attendees: Verify the appointment data");
+		ZAssert.assertEquals(actual.getOptional(), appt.getOptional(), "Optional: Verify the appointment data");
+		ZAssert.assertEquals(actual.getContent(), appt.getContent(), "Content: Verify the appointment data");
 	}
 
 
