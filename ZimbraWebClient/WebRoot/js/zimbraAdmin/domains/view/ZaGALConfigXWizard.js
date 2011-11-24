@@ -440,7 +440,7 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 		{type:_OUTPUT_, colSpan:2, align:_CENTER_, valign:_TOP_, ref:ZaModel.currentStep, choices:this.stepChoices,valueChangeEventSources:[ZaModel.currentStep]},
 		{type:_SEPARATOR_, align:_CENTER_, valign:_TOP_},
 		{type:_SPACER_,  align:_CENTER_, valign:_TOP_},				
-		{type: _SWITCH_,width:650,
+		{type: _SWITCH_,width:650, valign:_TOP_,
 			items: [
 				{type:_CASE_, caseKey:ZaGALConfigXWizard.GALMODE_STEP,numCols:2,colSizes:["220px","430px"],
 					items: [
@@ -885,7 +885,7 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 						{type:_GROUP_,
 							visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A_GALSyncTestResultCode,ZaDomain.Check_OK]],
 							visibilityChangeEventSources:[ZaDomain.A_GALSyncTestResultCode],							 
-							numCols:2,
+							numCols:2, width:"100%",
 							items: [
 								{type:_DWT_ALERT_,content:ZaMsg.Domain_GALSyncTestSuccessful,
 									ref:null,
@@ -899,7 +899,7 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 						{type:_GROUP_,
 							visibilityChecks:[[XForm.checkInstanceValueNot,ZaDomain.A_GALSyncTestResultCode,ZaDomain.Check_OK]],
 							visibilityChangeEventSources:[ZaDomain.A_GALSyncTestResultCode],								
-							numCols:2,						
+							numCols:2,  width:"100%",
 							items: [
 								{type:_DWT_ALERT_,content:ZaMsg.Domain_GALSyncTestFailed,
 									ref:null,
