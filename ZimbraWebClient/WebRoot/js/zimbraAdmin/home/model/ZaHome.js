@@ -49,10 +49,30 @@ function () {
     var currentTime = formatter.format(now);
     this.attrs[ZaHome.A2_account] = ZaZimbraAdmin.currentAdminAccount.attrs.mail;
     this.attrs[ZaHome.A2_version] = ZaServerVersionInfo.version;
-    this.attrs[ZaHome.A2_accountNum] = ZaApp.getInstance().getAccountStats()[ZaItem.ACCOUNT];
-    this.attrs[ZaHome.A2_cosNum] = ZaApp.getInstance().getCosList().size();
-    this.attrs[ZaHome.A2_domainNum] = ZaApp.getInstance().getDomainList().size();
-    this.attrs[ZaHome.A2_serverNum] = ZaApp.getInstance().getServerList().size();
+
+    try {
+        this.attrs[ZaHome.A2_accountNum] = ZaApp.getInstance().getAccountStats(true)[ZaItem.ACCOUNT];
+    } catch (ex) {
+         this.attrs[ZaHome.A2_accountNum] = 1;
+    }
+
+    try {
+        this.attrs[ZaHome.A2_cosNum] = ZaApp.getInstance().getCosList(true).size();
+    } catch (ex) {
+         this.attrs[ZaHome.A2_accountNum] = 1;
+    }
+
+    try {
+        this.attrs[ZaHome.A2_domainNum] = ZaApp.getInstance().getDomainList(true).size();
+    } catch (ex) {
+        this.attrs[ZaHome.A2_domainNum] = 1;
+    }
+
+    try {
+        this.attrs[ZaHome.A2_serverNum] = ZaApp.getInstance().getServerList(true).size();
+    } catch (ex) {
+        this.attrs[ZaHome.A2_serverNum]  = 1;
+    }
     this.attrs[ZaHome.A2_lastCleanup] = true;
     this.attrs[ZaHome.A2_lastCleanupTime] = currentTime;
     this.attrs[ZaHome.A2_lastLogPurge] = true;
@@ -66,23 +86,28 @@ function () {
 ZaItem.loadMethods["ZaHome"].push(ZaHome.loadMethod);
 
 ZaHome.loadStatusfo = function () {
-    var status = new ZaStatus();
-    status.load();
-    var statusVector = status.getStatusVector();
-    var serverStatus;
-    if (statusVector.size() > 0) {
-        this.attrs[ZaHome.A2_serviceStatus] = true;
-        this.attrs[ZaHome.A2_serviceStatusMessage] = ZaMsg.LBL_HomeStatusRunning ;
-        for(var i = 0; i < statusVector.size(); i++) {
-            serverStatus = statusVector.get(i);
-            if (serverStatus.status != 1) {
-                this.attrs[ZaHome.A2_serviceStatus] = false;
-                this.attrs[ZaHome.A2_serviceStatusMessage] = ZaMsg.LBL_HomeStatusFailed;
-                this.attrs[ZaHome.A2_serviceDetailedMessage] = ZaMsg.LBL_HomeDetailedServiceNotRunning;
-                break;
+    try {
+        var status = new ZaStatus();
+        status.load();
+        var statusVector = status.getStatusVector();
+        var serverStatus;
+        if (statusVector.size() > 0) {
+            this.attrs[ZaHome.A2_serviceStatus] = true;
+            this.attrs[ZaHome.A2_serviceStatusMessage] = ZaMsg.LBL_HomeStatusRunning ;
+            for(var i = 0; i < statusVector.size(); i++) {
+                serverStatus = statusVector.get(i);
+                if (serverStatus.status != 1) {
+                    this.attrs[ZaHome.A2_serviceStatus] = false;
+                    this.attrs[ZaHome.A2_serviceStatusMessage] = ZaMsg.LBL_HomeStatusFailed;
+                    this.attrs[ZaHome.A2_serviceDetailedMessage] = ZaMsg.LBL_HomeDetailedServiceNotRunning;
+                    break;
+                }
             }
+        } else {
+            this.attrs[ZaHome.A2_serviceStatusMessage] = ZaMsg.LBL_HOmeStatusUnknown ;
+            this.attrs[ZaHome.A2_serviceDetailedMessage] = ZaMsg.LBL_HomeDetailedServiceUnknown;
         }
-    } else {
+    } catch (ex) {
         this.attrs[ZaHome.A2_serviceStatusMessage] = ZaMsg.LBL_HOmeStatusUnknown ;
         this.attrs[ZaHome.A2_serviceDetailedMessage] = ZaMsg.LBL_HomeDetailedServiceUnknown;
     }
@@ -98,33 +123,37 @@ ZaHome.loadActiveSesson = function () {
         for(var i=0; i< cnt; i++) {
             var serverInfo = serverList[i];
             for (var j = 0; j < sessionType.length; j++) {
-                var soapDoc = AjxSoapDoc.create("GetSessionsRequest", ZaZimbraAdmin.URN, null);
-                var params = {};
-                params.type = sessionType[j];
+                try {
+                    var soapDoc = AjxSoapDoc.create("GetSessionsRequest", ZaZimbraAdmin.URN, null);
+                    var params = {};
+                    params.type = sessionType[j];
 
-                soapDoc.getMethod().setAttribute("type", params.type);
+                    soapDoc.getMethod().setAttribute("type", params.type);
 
-                params.fresh = 1;
-                soapDoc.getMethod().setAttribute("refresh", params.fresh);
+                    params.fresh = 1;
+                    soapDoc.getMethod().setAttribute("refresh", params.fresh);
 
-                soapDoc.getMethod().setAttribute("limit", ZaServerSessionStatsPage.PAGE_LIMIT);
+                    soapDoc.getMethod().setAttribute("limit", ZaServerSessionStatsPage.PAGE_LIMIT);
 
-                params.offset = 0 ;
+                    params.offset = 0 ;
 
-                soapDoc.getMethod().setAttribute("offset", params.offset);
+                    soapDoc.getMethod().setAttribute("offset", params.offset);
 
-                params.sortBy = "nameAsc";
+                    params.sortBy = "nameAsc";
 
-                soapDoc.getMethod().setAttribute("sortBy", params.sortBy);
+                    soapDoc.getMethod().setAttribute("sortBy", params.sortBy);
 
-                var getSessCmd = new ZmCsfeCommand ();
-                params.soapDoc = soapDoc ;
-                params.targetServer = serverInfo.id ;
+                    var getSessCmd = new ZmCsfeCommand ();
+                    params.soapDoc = soapDoc ;
+                    params.targetServer = serverInfo.id ;
 
-                var resp = getSessCmd.invoke(params);
-                if (resp && resp.Body && resp.Body.GetSessionsResponse) {
-                    var sessionStats = resp.Body.GetSessionsResponse;
-                    totalSession += sessionStats.total;
+                    var resp = getSessCmd.invoke(params);
+                    if (resp && resp.Body && resp.Body.GetSessionsResponse) {
+                        var sessionStats = resp.Body.GetSessionsResponse;
+                        totalSession += sessionStats.total;
+                    }
+                } catch (ex) {
+                    // Won't do anything here to avoid disturbe the loading process.
                 }
             }
         }

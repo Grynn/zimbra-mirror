@@ -188,6 +188,14 @@ ZaHomeXFormView.getWarningPanelCol = function () {
     return ["20px", "*", "120px"];
 }
 
+ZaHomeXFormView.showStatusInfo = function () {
+    return (ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.GLOBAL_STATUS_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]);
+}
+
+ZaHomeXFormView.showStaticsInfo = function () {
+    return (ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.SERVER_STATS_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]);
+}
+
 ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
     var cases = [];
 
@@ -240,14 +248,14 @@ ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
             {type:_GROUP_, colSpan: "*", numCols:1, containerCssClass:"ZaHomeWarningPanel", width:"100%", items:[
 
                 {type:_GROUP_, numCols:3,  width:"100%", colSizes:ZaHomeXFormView.getWarningPanelCol(), containerCssClass:"ZaHomeWarnginItem",
-                    visibilityChecks:[[XForm.checkInstanceValueNot,ZaHome.A2_serviceStatus,true]],
+                    visibilityChecks:[[XForm.checkInstanceValueNot,ZaHome.A2_serviceStatus,true],[ZaHomeXFormView.showStatusInfo]],
                     items:[
                         {type:_OUTPUT_, ref: ZaHome.A2_serviceStatus,
                             getDisplayValue: function (value){
                                 if (value === undefined) {
                                     return AjxImg.getImageHtml ("UnKnownStatus");
                                 }else if (value === false) {
-                                    return AjxImg.getImageHtml ("Cancel");
+                                    return AjxImg.getImageHtml ("Critical");
                                 } else {
                                     return AjxImg.getImageHtml ("Check");
                                 }
@@ -320,6 +328,7 @@ ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
                     {type:_GROUP_, colSpan:"*", numCols:3, width: "100%", colSizes:["*", "16px", "78px"],items:[
                         {type:_OUTPUT_, value:ZaMsg.LBL_HomeService},
                         {type:_OUTPUT_, ref: ZaHome.A2_serviceStatus,
+                            visibilityChecks:[[ZaHomeXFormView.showStatusInfo]],
                             getDisplayValue: function (value){
                                 if (value === undefined) {
                                     return AjxImg.getImageHtml ("UnKnownStatus");
@@ -332,8 +341,10 @@ ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
                         },
                         {type:_OUTPUT_, ref: ZaHome.A2_serviceStatusMessage}
                     ]},
-                    {type:_OUTPUT_, label:ZaMsg.LBL_HomeActiveSession, align:_LEFT_, ref: ZaHome.A2_activeSession},
-                    {type:_OUTPUT_, label:ZaMsg.LBL_HomeQueueLength, ref: ZaHome.A2_queueLength},
+                    {type:_OUTPUT_, label:ZaMsg.LBL_HomeActiveSession, align:_LEFT_, ref: ZaHome.A2_activeSession,
+                        visibilityChecks:[[ZaHomeXFormView.showStaticsInfo]]},
+                    {type:_OUTPUT_, label:ZaMsg.LBL_HomeQueueLength, ref: ZaHome.A2_queueLength,
+                        visibilityChecks:[[ZaHomeXFormView.showStaticsInfo]]},
                     {type:_OUTPUT_, label:ZaMsg.LBL_HomeMsgCount, ref: ZaHome.A2_messageCount},
                     {type:_OUTPUT_, label:ZaMsg.LBL_HomeMsgVolume, ref: ZaHome.A2_messageVolume}
                 ]}

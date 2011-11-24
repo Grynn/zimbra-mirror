@@ -63,14 +63,14 @@ function(entry) {
 
         ZaApp.getInstance().getAppViewMgr().createView(this.getContentViewId(), elements) ;
         ZaApp.getInstance()._controllers[this.getContentViewId()] = this ;
-        entry = new ZaHome();
-        entry.load("", "", true);
-        entry[ZaModel.currentTab] = "1";
-        entry[ZaModel.currentStep] = 1;
-        this._currentObject = entry;
-        //this._view.setDirty(false);
-        this._view.setObject(entry);
         this._UICreated = true;
     }
+
+    entry = new ZaHome();
+    entry.load("", "", true);
+    entry[ZaModel.currentTab] = "1";
+    entry[ZaModel.currentStep] = 1;
+    this._currentObject = entry;
+    this._view.setObject(entry);
     ZaApp.getInstance().pushView(this.getContentViewId()) ;
 }
