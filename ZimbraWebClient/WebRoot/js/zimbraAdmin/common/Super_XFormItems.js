@@ -1771,7 +1771,11 @@ ZATabCase_XFormItem.prototype.getCustomWidth = function () {
 			return "100%";
 		else {
             var res = totalWidth - this.getHMargin();
-            if(appNewUI) res = res - 15;       // 15px is pandding width
+            if(this.cacheInheritedMethod("getCustomPaddingStyle", "$getCustomPaddingStyle")) {
+                var paddingStyle = this.cacheInheritedMethod("getCustomPaddingStyle", "$getCustomPaddingStyle").call(this);
+                if(paddingStyle)
+                    res = res - 15;
+            }
 			return res;
 		}
 	} catch (ex) {

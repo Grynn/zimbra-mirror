@@ -236,7 +236,6 @@ ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
 
     var case1 = {type:_ZATABCASE_, numCols: 3,  colSizes:["37%", "34%", "29%"], caseKey:1,
 //        height:"400px",  align:_LEFT_, valign:_TOP_,
-        getCustomWidth: ZaHomeXFormView.prototype.getCustomWidth,
         items:[
             {type:_GROUP_, colSpan: "*", numCols:1, containerCssClass:"ZaHomeWarningPanel", width:"100%", items:[
 
@@ -362,10 +361,6 @@ ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
 	];
 };
 ZaTabView.XFormModifiers["ZaHomeXFormView"].push(ZaHomeXFormView.myXFormModifier);
-
-ZaHomeXFormView.prototype.getCustomWidth = function () {
-    return "100%";
-}
 
 ZaHomeXFormView.prototype.getBarImage = function () {
     return "Home";
