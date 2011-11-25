@@ -136,7 +136,12 @@ public final class SetHeaderFilter extends com.zimbra.cs.servlet.SetHeaderFilter
         String [] tempList = value.split(",");
         StringBuffer noCachePatternSb = new StringBuffer(".*(");
         for (int i = 0; i < tempList.length; ++i){
-            noCachePatternSb.append(tempList[i].trim());
+            /**
+             * If the value of zimbraMailURL is set to "/", the noCachePatternList
+             * will have "//". Replace the "//", if any, by "/" before the
+             * pattern match.
+             */
+            noCachePatternSb.append(tempList[i].trim().replaceAll("//", "/"));
             if (i < tempList.length - 1){
                 noCachePatternSb.append('|');
             }
