@@ -1,4 +1,4 @@
-!{explode vhn_vip_ssl}
+!{explode domain(vhn)}
 # IMAPS proxy configuration
 # 
 server
