@@ -399,16 +399,23 @@ Super_Textfield_XFormItem.prototype.colSizes = ["275px","275px","150px"];
 Super_Textfield_XFormItem.prototype.colSpan = 3;
 Super_Textfield_XFormItem.prototype.nowrap = false;
 Super_Textfield_XFormItem.prototype.labelWrap = true;
+if(appNewUI){
+Super_Textfield_XFormItem.prototype.labelCssStyle = "border-right: 1px solid ";
+}
 
 SuperWiz_Textfield_XFormItem = function () {}
 XFormItemFactory.createItemType("_SUPERWIZ_TEXTFIELD_", "superwiz_textfield", SuperWiz_Textfield_XFormItem, Super_Textfield_XFormItem);
 SuperWiz_Textfield_XFormItem.prototype.colSizes=["200px", "250px","150px"];
 SuperWiz_Textfield_XFormItem.prototype.visibilityChecks = [ZaItem.hasWritePermission];
 SuperWiz_Textfield_XFormItem.prototype.enableDisableChecks = [ZaItem.hasWritePermission];
+if(appNewUI){
+SuperWiz_Textfield_XFormItem.prototype.labelCssStyle = "";
+}
 
 Super_Textfield_XFormItem.prototype.initializeItems = function() {
 	var txtBoxLabel = this.getInheritedProperty("txtBoxLabel");
     var labelCssStyle = this.getInheritedProperty("labelCssStyle");
+    var labelCssClass = this.getInheritedProperty("labelCssClass");
 	var textFieldCssClass = this.getInheritedProperty("textFieldCssClass");
 	var textFieldCssStyle = this.getInheritedProperty("textFieldCssStyle");
 	var textFieldWidth = this.getInheritedProperty("textFieldWidth");
@@ -429,6 +436,7 @@ Super_Textfield_XFormItem.prototype.initializeItems = function() {
 		},
 		label:txtBoxLabel,
         labelCssStyle:labelCssStyle,
+        labelCssClass: labelCssClass,
 		labelLocation:(txtBoxLabel ? _LEFT_ : _NONE_),
 		cssClass:textFieldCssClass,
 		cssStyle:textFieldCssStyle,
@@ -537,6 +545,9 @@ XFormItemFactory.createItemType("_SUPER_WIZ_CHECKBOX_", "super_wiz_checkbox", Su
 SuperWiz_Checkbox_XFormItem.prototype.colSizes = ["200px","300px","150px"];
 SuperWiz_Checkbox_XFormItem.prototype.visibilityChecks = [ZaItem.hasWritePermission];
 SuperWiz_Checkbox_XFormItem.prototype.enableDisableChecks = [ZaItem.hasWritePermission];
+if(appNewUI){
+SuperWiz_Checkbox_XFormItem.prototype.labelCssStyle = "";
+}
 
 Super_Checkbox_XFormItem.prototype.useParentTable = false;
 Super_Checkbox_XFormItem.prototype.numCols = 3;
@@ -544,6 +555,9 @@ Super_Checkbox_XFormItem.prototype.colSizes = ["275px","275px","*"];
 Super_Checkbox_XFormItem.prototype.nowrap = false;
 Super_Checkbox_XFormItem.prototype.labelWrap = true;
 Super_Checkbox_XFormItem.prototype.checkboxSubLabel = null;
+if(appNewUI){
+Super_Checkbox_XFormItem.prototype.labelCssStyle = "border-right: 1px solid";
+}
 
 Super_Checkbox_XFormItem.prototype.initializeItems = function() {
 	var anchorCssStyle = this.getInheritedProperty("anchorCssStyle");
@@ -585,6 +599,7 @@ Super_Checkbox_XFormItem.prototype.initializeItems = function() {
 	if(checkBoxLabel) {
 		chkBox.label = checkBoxLabel;
 		chkBox.labelWrap = this.getInheritedProperty("labelWrap");
+        chkBox.labelCssStyle = this.getInheritedProperty("labelCssStyle");
 		this.numCols = 3;
 		this.colSpan= this.getInheritedProperty("conSpan") || 3;
 	}
@@ -1190,9 +1205,12 @@ Super_Lifetime_XFormItem.prototype.colSizes =["275px","80px","120px","*"];
 Super_Lifetime_XFormItem.prototype.useParenttable = false;
 Super_Lifetime_XFormItem.prototype.visibilityChecks = [ZaItem.hasReadPermission];
 Super_Lifetime_XFormItem.prototype.enableDisableChecks = [ZaItem.hasWritePermission];
-
+if(appNewUI){
+Super_Lifetime_XFormItem.prototype.labelCssStyle = "border-right: 1px solid";
+}
 Super_Lifetime_XFormItem.prototype.initializeItems = function() {
 	var txtBoxLabel = this.getInheritedProperty("txtBoxLabel");
+    var labelCssClass = this.getInheritedProperty("labelCssClass");
 	var toolTip = this.getInheritedProperty("toolTipContent");
 	
 	var txtField =	{
@@ -1204,6 +1222,7 @@ Super_Lifetime_XFormItem.prototype.initializeItems = function() {
 		nowrap:this.getInheritedProperty("nowrap"),
 		labelWrap:this.getInheritedProperty("labelWrap"),		
 		labelCssStyle:this.getLabelCssStyle(),
+        labelCssClass: labelCssClass,
 		labelLocation:(txtBoxLabel ? _LEFT_ : _NONE_),
 		cssClass:"admin_xform_number_input", 
 		getDisplayValue:function (itemVal) {
@@ -1287,7 +1306,9 @@ XFormItemFactory.createItemType("_SUPERWIZ_LIFETIME_", "superwiz_lifetime", Supe
 SuperWiz_Lifetime_XFormItem.prototype.colSizes =["200px","80px","120px","150px"];
 SuperWiz_Lifetime_XFormItem.prototype.visibilityChecks = [ZaItem.hasWritePermission];
 SuperWiz_Lifetime_XFormItem.prototype.enableDisableChecks = [ZaItem.hasWritePermission];
-
+if(appNewUI){
+SuperWiz_Lifetime_XFormItem.prototype.labelCssStyle = "";
+}
 /**
 * _SUPER_LIFETIME1_ XForm item type for displaying trash message retention and spam message retention settings
 **/
@@ -1690,6 +1711,7 @@ ZATabCase_XFormItem.prototype.caseVarRef = ZaModel.currentTab;
 ZATabCase_XFormItem.prototype.visibilityChangeEventSources = [ZaModel.currentTab];
 ZATabCase_XFormItem.prototype.align = _LEFT_;
 ZATabCase_XFormItem.prototype.valign = _TOP_;
+
 ZATabCase_XFormItem.prototype.getTabLevel = function () {
 	return this.getInheritedProperty("tabLevel") || 1;
 }

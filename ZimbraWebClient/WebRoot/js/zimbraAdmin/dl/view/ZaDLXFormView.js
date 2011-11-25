@@ -1113,6 +1113,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
 	if(_tab2) {				
 		var case2 = 
 		{type:_ZATABCASE_, caseKey:_tab2, colSizes:[10, "auto"], colSpan:"*",
+         paddingStyle:(appNewUI? "padding-left:15px;":null), cellpadding:(appNewUI?2:0),
 			items:[
 			    {type:_SPACER_, height:5},
 			    {type:_SPACER_, height:5},
@@ -1352,11 +1353,9 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
 	if(_tab5) {
 		var case5 =
 		{type:_ZATABCASE_, caseKey:_tab5, colSpan:"*",
+            paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),
 			items:[
-			    {type:_SPACER_, height:5},
-			    {type:_SPACER_, height:5},
-			    {type:_CELLSPACER_, width:10 },
-                {type:_GROUPER_, label:ZaMsg.NAD_MailOptionsReceiving, id:"dl_pref_replyto_group",
+                {type:_ZA_TOP_GROUPER_, label:ZaMsg.NAD_MailOptionsReceiving, id:"dl_pref_replyto_group",
                     colSpan: "*", numCols: 2, colSizes:[275, "*"],
                     visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,[
                             ZaDistributionList.A_zimbraPrefReplyToEnabled,
