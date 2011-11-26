@@ -48,6 +48,7 @@ ZaZimbraAdmin.currentUserId = "";
 ZaZimbraAdmin.URN = "urn:zimbraAdmin";
 ZaZimbraAdmin.VIEW_INDEX = 0;
 ZaZimbraAdmin.FIRST_DAY_OF_WEEK = 0;
+ZaZimbraAdmin.isFirstRequest = false;
 
 ZaZimbraAdmin._ADDRESSES = ZaZimbraAdmin.VIEW_INDEX++;
 ZaZimbraAdmin._SEARCHES = ZaZimbraAdmin.VIEW_INDEX++;
@@ -353,7 +354,9 @@ function() {
 		var params = new Object();
 		params.soapDoc = soapDoc;	
 		params.noSession = true;
+		ZaZimbraAdmin.isFirstRequest = true;
 		var resp = command.invoke(params);
+		ZaZimbraAdmin.isFirstRequest = false;
 		//initialize my rights
 		ZaZimbraAdmin.initInfo (resp);
 
