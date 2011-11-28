@@ -21,13 +21,13 @@ import com.zimbra.common.util.ZimbraCookie;
 import com.zimbra.cs.taglib.ZJspSession;
 import com.zimbra.client.ZMailbox;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.PageContext;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Map;
@@ -110,12 +110,14 @@ public class LoginTag extends ZimbraSimpleTag {
 
             options.setNoSession(true);
             
-            if (mPrefs != null && mPrefs.length() >0)
+            if (mPrefs != null && mPrefs.length() > 0) {
                 options.setPrefs(Arrays.asList(mPrefs.split(",")));
-
-            if (mAttrs != null && mAttrs.length() > 0)
+            }
+            
+            if (mAttrs != null && mAttrs.length() > 0) {
                 options.setAttrs(Arrays.asList(mAttrs.split(",")));
-
+            }
+            
             if (mAuthToken != null) {
                 options.setAuthToken(mAuthToken);
                 options.setAuthAuthToken(true);
@@ -146,13 +148,16 @@ public class LoginTag extends ZimbraSimpleTag {
             //if (!needRefer)
             //    ZJspSession.setSession((PageContext)jctxt, mbox);
 
-            if (mVarRedirectUrl != null)
+            if (mVarRedirectUrl != null) {
                 jctxt.setAttribute(mVarRedirectUrl,
-                        ZJspSession.getPostLoginRedirectUrl(pageContext, mPath, mbox.getAuthResult(), mRememberMe, needRefer),  PageContext.REQUEST_SCOPE);
-
-            if (mVarAuthResult != null)
+                        ZJspSession.getPostLoginRedirectUrl(pageContext, mPath, mbox.getAuthResult(), mRememberMe, needRefer), 
+                        PageContext.REQUEST_SCOPE);
+            }
+            
+            if (mVarAuthResult != null) {
                 jctxt.setAttribute(mVarAuthResult, mbox.getAuthResult(), PageContext.REQUEST_SCOPE);
-
+            }
+            
             if (mImportData && !mAdminPreAuth) {
                 mbox.importData(mbox.getAllDataSources());
             }
@@ -162,23 +167,22 @@ public class LoginTag extends ZimbraSimpleTag {
         }
     }
 
-    public static void setCookie(HttpServletResponse response, ZAuthToken zat, boolean secure, boolean rememberMe, long expires) {
+    public static void setCookie(HttpServletResponse response, ZAuthToken zat, 
+            boolean secure, boolean rememberMe, long expires) {
         Map<String, String> cookieMap = zat.cookieMap(false);
         Integer maxAge = null;
         if (rememberMe) {
             long timeLeft = expires - System.currentTimeMillis();
-            if (timeLeft > 0) maxAge = new Integer((int)(timeLeft/1000));
+            if (timeLeft > 0) {
+                maxAge = new Integer((int)(timeLeft/1000));
+            }
         } else {
             maxAge = new Integer(-1);
         }
+        
         for (Map.Entry<String, String> ck : cookieMap.entrySet()) {
-            Cookie authTokenCookie = new Cookie(ck.getKey(), ck.getValue());
-            if (maxAge != null)
-                authTokenCookie.setMaxAge(maxAge.intValue());
-            ZimbraCookie.setAuthTokenCookieDomainPath(authTokenCookie, ZimbraCookie.PATH_ROOT);
-
-            authTokenCookie.setSecure(secure);
-            response.addCookie(authTokenCookie);
+            ZimbraCookie.addHttpOnlyCookie(response, ck.getKey(), ck.getValue(),
+                    ZimbraCookie.PATH_ROOT, maxAge, secure);
         }
     }
 }

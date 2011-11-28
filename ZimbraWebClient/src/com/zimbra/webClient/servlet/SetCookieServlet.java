@@ -21,6 +21,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Cookie;
 import java.io.IOException;
+import java.net.URL;
+
 import javax.naming.*;
 
 import com.zimbra.common.util.ZimbraLog;
@@ -70,30 +72,23 @@ public class SetCookieServlet extends ZCServlet
             if (authToken == null) {
                 resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                 return;
-            } else {
-                String atl = getReqParameter(req, PARAM_AUTH_TOKEN_LIFETIME);
-                String rememberMe = getReqParameter(req, PARAM_REMEMBER_ME);
-                boolean doRemember = false;
-                if (rememberMe != null) {
-                    doRemember = new Boolean(rememberMe).booleanValue();
-                }
+            }
+            
+            
+            String atl = getReqParameter(req, PARAM_AUTH_TOKEN_LIFETIME);
+            String rememberMe = getReqParameter(req, PARAM_REMEMBER_ME);
+            boolean doRemember = false;
+            if (rememberMe != null) {
+                doRemember = new Boolean(rememberMe).booleanValue();
+            }
 
-                int lifetime = -1;
-                if (doRemember){
-                    try {
-                        int lifetimeMs = Integer.parseInt(atl);
-                        lifetime = lifetimeMs / 1000;
-                    } catch (NumberFormatException ne){
-                        lifetime = -1;
-                    }
-                }
-
-                String authCookieVal = getCookieValue(req, "ZM_AUTH_TOKEN");
-                if (!(authToken.equals(authCookieVal))) {
-                    Cookie c = new Cookie("ZM_AUTH_TOKEN", authToken);
-                    ZimbraCookie.setAuthTokenCookieDomainPath(c, ZimbraCookie.PATH_ROOT);
-                    c.setMaxAge(lifetime);                
-                    resp.addCookie(c);
+            int lifetime = -1;
+            if (doRemember){
+                try {
+                    int lifetimeMs = Integer.parseInt(atl);
+                    lifetime = lifetimeMs / 1000;
+                } catch (NumberFormatException ne){
+                    lifetime = -1;
                 }
             }
             
@@ -109,6 +104,26 @@ public class SetCookieServlet extends ZCServlet
             String redirectTo = getRedirectUrl(req, redirectLocation, null, 
                                                abs, true);
             //System.out.println("RedirectTo = " + redirectTo);
+            
+            boolean secureCookie;
+            if (abs) {
+                URL url = new URL(redirectTo);
+                secureCookie = "https".equalsIgnoreCase(url.getProtocol());
+            } else {
+                secureCookie = req.isSecure();
+            }
+
+            String authCookieVal = getCookieValue(req, ZimbraCookie.COOKIE_ZM_AUTH_TOKEN);
+            if (!(authToken.equals(authCookieVal))) {
+                Integer maxAge = null;
+                if (lifetime != -1) {
+                    maxAge = Integer.valueOf(lifetime);
+                }
+                
+                ZimbraCookie.addHttpOnlyCookie(resp, 
+                        ZimbraCookie.COOKIE_ZM_AUTH_TOKEN, authToken, 
+                        ZimbraCookie.PATH_ROOT, maxAge, secureCookie);
+            }
             
             resp.sendRedirect(redirectTo);
         } catch (IOException ie) {
