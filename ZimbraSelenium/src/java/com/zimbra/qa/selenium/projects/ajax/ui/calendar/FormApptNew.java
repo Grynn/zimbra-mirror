@@ -595,4 +595,24 @@ public class FormApptNew extends AbsForm {
 		return (true);
 	}
 
+	public String zGetApptSubject(String subject) throws HarnessException {
+		return this.sGetText("css=td[id*='_subject']:contains('" + subject + "')");		
+	}
+	
+	public String zGetApptAttendees(String attendee) throws HarnessException {
+		return this.sGetText("css=td[id*='_person']:contains('" + attendee + "')");		
+	}
+	
+	public String zGetApptOptional(String optional) throws HarnessException {
+		return this.sGetText("css=td[id*='_optional']:contains('" + optional + "')");		
+	}
+	
+	public String zGetApptLocation(String location) throws HarnessException {
+		return this.sGetText("css=td[id*='_location']:contains('" + location + "')");
+	}
+	
+	public String zGetApptEquipment(String equipment) throws HarnessException {
+		return this.sGetText("css=td[id*='_resourcesData']:contains('" + equipment + "')");		
+	}
+		
 }
