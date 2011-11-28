@@ -54,7 +54,7 @@ public class BackupTimer extends Thread {
         }
     }
     
-    private long interval = Constants.MILLIS_PER_DAY;
+    private volatile long interval = Constants.MILLIS_PER_DAY;
     private long lastBackupSuccess = -1;
     private boolean halted = false;
     private boolean sleeping = false;
@@ -81,10 +81,12 @@ public class BackupTimer extends Thread {
         }
     }
 
-    public synchronized void intervalChanged() throws ServiceException {
+    public void intervalChanged() throws ServiceException {
         interval = BackupPropertyManager.getInstance().getInterval();
-        if (sleeping) {
-            notify();
+        synchronized (this) {
+            if (sleeping) {
+                notify();
+            }
         }
     }
     
