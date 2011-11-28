@@ -1223,7 +1223,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
 								   items:[
 										{ref:"query", type:_TEXTFIELD_, width:"100%", cssClass:"admin_xform_name_input",  
 											nowrap:false,labelWrap:true,
-											label:ZaMsg.DLXV_LabelFind,
+											label:ZaMsg.DLXV_LabelFind,labelCssStyle:"white-space: nowrap;",
 											visibilityChecks:[],enableDisableChecks:[],
 											elementChanged: function(elementValue,instanceValue, event) {
 											  var charCode = event.charCode;
