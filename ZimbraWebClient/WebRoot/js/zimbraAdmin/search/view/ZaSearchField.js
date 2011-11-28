@@ -234,6 +234,11 @@ function(evt) {
 
 }
 
+ZaSearchField.entryKeyHandler =
+function(xformItem, value) {
+    ZaSearchField.srchButtonHndlr.call(xformItem);
+}
+
 ZaSearchField.helpSrchButtonHndlr =
 function (evt) {
 	var helpQuery = this.getForm().getItemsById(ZaSearch.A_query)[0].getElement().value ;
@@ -654,6 +659,7 @@ ZaSearchField.prototype._getMyXForm = function() {
     if (appNewUI) {
         numCols = 4;
         colSizes = ["46","3", "*", "28"];
+        var entryKeyCallback= new AjxCallback(this, ZaSearchField.entryKeyHandler);
         xFormObject = {
             tableCssStyle:"width:100%;padding:2px;",numCols:numCols,width:"100%",
             colSizes:colSizes,
@@ -672,6 +678,7 @@ ZaSearchField.prototype._getMyXForm = function() {
                         width:"100%", inputWidth:"100%", editable:true, forceUpdate:true,
                         choices:new XFormChoices([], XFormChoices.OBJECT_REFERENCE_LIST, "name", "name"),
                         visibilityChecks:[],enableDisableChecks:[],
+                        entryKeyMethod: entryKeyCallback,
                         onChange: function(value, event, form){
                             if (value instanceof ZaItem ) {
                                 this.setInstanceValue(value.name);

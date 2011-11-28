@@ -33,6 +33,7 @@ DynSelect_XFormItem.prototype.dataFetcherObject = null;
 DynSelect_XFormItem.prototype.dataFetcherTypes = null;
 DynSelect_XFormItem.prototype.dataFetcherAttrs = null;
 DynSelect_XFormItem.prototype.dataFetcherDomain = null;
+DynSelect_XFormItem.prototype.entryKeyMethod = null;
 DynSelect_XFormItem.prototype.bmolsnr = true;
 DynSelect_XFormItem.prototype.emptyText = "";
 DynSelect_XFormItem.prototype.cssClass = "dynselect";
@@ -128,10 +129,12 @@ DynSelect_XFormItem.prototype.onKeyUp = function(value, event) {
 		if(value != null && value != undefined) {
 			this.setValue(value, true, event);
 			this.hideMenu();
+            this.processEntryKey();
 			return;
 		}
 	} else if (this.menuUp && event.keyCode==DwtKeyEvent.KEY_ENTER) {
 		this.hideMenu();
+        this.processEntryKey();
 		return;
 	}
 	this.isSelecting = false;	
@@ -208,7 +211,13 @@ DynSelect_XFormItem.prototype.handleKeyPressDelay = function (event,value,lastTy
 	} else {
 		if (window.console && window.console.log) window.console.log("typing faster than retreiving data");
 		return;
-	}		
+	}
+
+    if (event.keyCode == DwtKeyEvent.KEY_ENTER) {
+        this.processEntryKey();
+        return;
+    }
+
 	if(!this.dataFetcherObject && this.dataFetcherClass !=null && this.dataFetcherMethod !=null) {
 		this.dataFetcherObject = new this.dataFetcherClass(this.getForm().getController());
 	} else if(this.getInheritedProperty("dataFetcherInstance")) {
@@ -375,4 +384,12 @@ DynSelect_XFormItem.prototype.setElementEnabled = function(enabled) {
 		table.className = this.getTableCssClass()+"_disabled";
 		this.getDisplayElement().disabled=true;
 	}
+}
+
+DynSelect_XFormItem.prototype.processEntryKey = function () {
+    var value = this.getInstanceValue();
+	var processEntryKey = this.getInheritedProperty("entryKeyMethod");
+	if (processEntryKey instanceof AjxCallback) {
+        processEntryKey.run(this, value);
+    }
 }
