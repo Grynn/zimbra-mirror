@@ -194,7 +194,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     private final Map<String, Server> mSyncServerCache;
     private final Map<String, OfflineDomainGal> domainGals;
     private Account zimbraAdminAccount;
-    private List<String> cachedAccountIds;
+    private List<String> cachedAccountIds = new CopyOnWriteArrayList<String>();
     private volatile boolean mHasDirtyAccounts = true;
 
     public OfflineProvisioning() {
@@ -207,7 +207,6 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         mSyncServerCache = new HashMap<String, Server>();
         mAccountCache = new NamedEntryCache<Account>(64, LC.ldap_cache_account_maxage.intValue() * Constants.MILLIS_PER_MINUTE);
         mGranterCache = new NamedEntryCache<Account>(64, LC.ldap_cache_account_maxage.intValue() * Constants.MILLIS_PER_MINUTE);
-        loadAccountIdsInOrder();
         DbPool.disableUsageWarning();
     }
 
@@ -237,7 +236,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
                     ids.add(id);
                 }
             }
-            this.cachedAccountIds = new CopyOnWriteArrayList<String>(ids);
+            this.cachedAccountIds.addAll(ids);
         } catch (ServiceException e) {
             OfflineLog.offline.warn("load account Ids to cache failed.", e);
         }
@@ -1483,6 +1482,13 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
 
     public List<String> getAllAccountIds() throws ServiceException {
+        if (this.cachedAccountIds.isEmpty()) {
+            synchronized (this) {
+                if (this.cachedAccountIds.isEmpty()) {
+                    this.loadAccountIdsInOrder();        
+                }
+            }
+        }
         return Collections.unmodifiableList(this.cachedAccountIds);
     }
 
@@ -2505,7 +2511,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     private void persistAccountsOrder() throws ServiceException {
         Account localAccount = getLocalAccount();
         Map<String, Object> attrs = new HashMap<String, Object>(1);
-        attrs.put(A_offlineAccountsOrder, Joiner.on(",").join(this.cachedAccountIds));
+        attrs.put(A_offlineAccountsOrder, Joiner.on(",").join(this.getAllAccountIds()));
         modifyAttrs(localAccount, attrs, false, false, false);
     }
 
