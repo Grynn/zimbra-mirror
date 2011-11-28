@@ -14,9 +14,14 @@
  */
 
 /**
- * folder choosing widget to be used in a drop-down.
- * @constructor
  * @class
+ * This is a folder choosing widget designed to be displayed as a dropdown hanging off a menu. Other than
+ * that, it works mostly like ZmChooseFolderDialog. Instead of a New button, it has a "New Folder" menu item
+ * at the bottom. Items are moved when a menu item is clicked, instead of the OK button in the dialog.
+ * 
+ * The implementation mostly relies on calling ZmChooseFolderDialog and ZmDialog methods, since those were
+ * already written. A cleaner implementation would probably include a base widget that this and the dialog
+ * would use.
  *
  * @author Eran Yarkon
  *
@@ -27,9 +32,9 @@
  *
  * @extends		DwtComposite
  */
-DwtFolderChooser = function(params) {
+ZmFolderChooser = function(params) {
 	if (arguments.length == 0) { return; }
-	params.className = params.className || "DwtFolderChooser";
+	params.className = params.className || "ZmFolderChooser";
 	DwtComposite.call(this, params);
 
 	this._overview = {};
@@ -39,58 +44,65 @@ DwtFolderChooser = function(params) {
 
 	this._uuid = Dwt.getNextId();
 
+	this._changeListener = ZmChooseFolderDialog.prototype._folderTreeChangeListener.bind(this);
 	this._treeViewListener = this._treeViewSelectionListener.bind(this);
 
 	var moveMenu = params.parent;
 	moveMenu._addItem(this, params.index); //this is what DwtMenuItem does. Allows this item to be in the menu items table - better for layout purposes such as consistent widths
-
-	if (!params.noNewItem) {
+	this._moveOnFolderCreate = true;
+	
+	if (!params.hideNewButton) {
 		//add separator menu item on the move menu (the parent)
 		new DwtMenuItem({parent:moveMenu, style:DwtMenuItem.SEPARATOR_STYLE});
 	
-		// add static "New Folder" menu item
+		// add New button
 		var newFolderItem = this._newButton = new DwtMenuItem({parent:moveMenu, id: moveMenu.getHTMLElId() + "|NEWFOLDER"});
-		var newText = ZmMsg.newFolder;
-		var newImage = "NewFolder";
-		var newShortcut = ZmKeyMap.NEW_FOLDER;
-		var appName = appCtxt.getCurrentAppName();
-		if (appName == ZmApp.CALENDAR) {
-			newText = ZmMsg.newCalendar;
-			newImage = "NewAppointment";
-			newShortcut = ZmKeyMap.NEW_CALENDAR;
-		}
-		if (appName == ZmApp.TASKS) {
-			newText = ZmMsg.newTaskFolder;
-			newImage = "NewTaskList";
-		}
-		if (appName == ZmApp.CONTACTS) {
-			newText = ZmMsg.newAddrBook;
-			newImage = "NewContactsFolder";
-		}
-	
-		newFolderItem.setText(newText);
+		var appName = appCtxt.getCurrentAppName();	
+		var defaultApp = ZmApp.MAIL;
+		var newTextKey = ZmFolderChooser.NEW_ORG_KEY[appName] || ZmFolderChooser.NEW_ORG_KEY[defaultApp];
+		var newImage = ZmFolderChooser.NEW_ORG_ICON[appName] || ZmFolderChooser.NEW_ORG_ICON[defaultApp];
+		var newShortcut = ZmFolderChooser.NEW_ORG_SHORTCUT[appName];
+		newFolderItem.setText(ZmMsg[newTextKey]);
 		newFolderItem.setImage(newImage);
-		newFolderItem.setShortcut(appCtxt.getShortcutHint(this._keyMap, newShortcut));
-	
+		if (newShortcut) {
+			newFolderItem.setShortcut(appCtxt.getShortcutHint(this._keyMap, newShortcut));
+		}
 		newFolderItem.addSelectionListener(this._showNewDialog.bind(this));
 	}
 
 	this._init();
-
+	AjxDispatcher.require("Extras");	// ZmChooseFolderDialog
 };
 
-DwtFolderChooser.prototype = new DwtComposite;
-DwtFolderChooser.prototype.constructor = DwtFolderChooser;
+ZmFolderChooser.prototype = new DwtComposite;
+ZmFolderChooser.prototype.constructor = ZmFolderChooser;
 
-DwtFolderChooser.prototype.isDwtFolderChooser = true;
-DwtFolderChooser.prototype.toString = function() { return "DwtFolderChooser"; };
+ZmFolderChooser.prototype.isZmFolderChooser = true;
+ZmFolderChooser.prototype.toString = function() { return "ZmFolderChooser"; };
 
+
+// Properties for New button at bottom
+ZmFolderChooser.NEW_ORG_KEY = {};
+ZmFolderChooser.NEW_ORG_KEY[ZmApp.MAIL]				= "newFolder";
+ZmFolderChooser.NEW_ORG_KEY[ZmApp.CONTACTS]			= "newAddrBook";
+ZmFolderChooser.NEW_ORG_KEY[ZmApp.CALENDAR]			= "newCalendar";
+ZmFolderChooser.NEW_ORG_KEY[ZmApp.TASKS]			= "newTaskFolder";
+
+ZmFolderChooser.NEW_ORG_ICON = {};
+ZmFolderChooser.NEW_ORG_ICON[ZmApp.MAIL]			= "NewFolder";
+ZmFolderChooser.NEW_ORG_ICON[ZmApp.CONTACTS]		= "NewContactsFolder";
+ZmFolderChooser.NEW_ORG_ICON[ZmApp.CALENDAR]		= "NewAppointment";
+ZmFolderChooser.NEW_ORG_ICON[ZmApp.TASKS]			= "NewTaskList";
+
+ZmFolderChooser.NEW_ORG_SHORTCUT = {};
+ZmFolderChooser.NEW_ORG_SHORTCUT[ZmApp.MAIL]		= ZmKeyMap.NEW_FOLDER;
+ZmFolderChooser.NEW_ORG_SHORTCUT[ZmApp.CALENDAR]	= ZmKeyMap.NEW_CALENDAR;
 
 /**
  *
  * see ZmChooseFolderDialog.prototype.popup
  */
-DwtFolderChooser.prototype.setupFolderChooser =
+ZmFolderChooser.prototype.setupFolderChooser =
 function(params, selectionCallback) {
 
 	this._selectionCallback = selectionCallback;
@@ -99,19 +111,17 @@ function(params, selectionCallback) {
 	ZmChooseFolderDialog.prototype.popup.call(this, params, true);
 };
 
-DwtFolderChooser.prototype._getNewButton =
+ZmFolderChooser.prototype._getNewButton =
 function () {
 	return this._newButton;
 };
 
-
-DwtFolderChooser.prototype.updateData =
+ZmFolderChooser.prototype.updateData =
 function(data) {
 	this._data = data;
 };
 
-
-DwtFolderChooser.prototype._focus =
+ZmFolderChooser.prototype._focus =
 function() {
 	var overview = this._overview[this._overviewId];
 	if (overview) {
@@ -125,7 +135,7 @@ function() {
  *
  * @param params
  */
-DwtFolderChooser.prototype._doPopup =
+ZmFolderChooser.prototype._doPopup =
 function(params) {
 	ZmChooseFolderDialog.prototype._doPopup.call(this, params, true);
 };
@@ -138,7 +148,7 @@ function(params) {
  * @param params
  * @param forceSingle
  */
-DwtFolderChooser.prototype._setOverview =
+ZmFolderChooser.prototype._setOverview =
 function(params, forceSingle) {
 	params.overviewClass = "menuOverview";
 
@@ -154,40 +164,39 @@ function(params, forceSingle) {
 	return overview;
 };
 
-
 /**
- * delegate to ZmDialog. called from ZmDialog.prototype._setOverview (which we delegate to from DwtFolderChooser.prototype._setOverview)
+ * delegate to ZmDialog. called from ZmDialog.prototype._setOverview (which we delegate to from ZmFolderChooser.prototype._setOverview)
  */
-DwtFolderChooser.prototype._renderOverview =
+ZmFolderChooser.prototype._renderOverview =
 function() {
 	ZmDialog.prototype._renderOverview.apply(this, arguments); //reuse code from ZmDialog
 };
 
 /**
- * delegate to ZmDialog. called from ZmDialog.prototype._setOverview (which we delegate to from DwtFolderChooser.prototype._setOverview)
+ * delegate to ZmDialog. called from ZmDialog.prototype._setOverview (which we delegate to from ZmFolderChooser.prototype._setOverview)
  */
-DwtFolderChooser.prototype._makeOverviewVisible =
+ZmFolderChooser.prototype._makeOverviewVisible =
 function() {
 	ZmDialog.prototype._makeOverviewVisible.apply(this, arguments); //reuse code from ZmDialog
 };
 
-DwtFolderChooser.prototype._resetTree =
+ZmFolderChooser.prototype._resetTree =
 function(treeIds, overview) {
 	ZmChooseFolderDialog.prototype._resetTree.call(this, treeIds, overview);
 };
 
-DwtFolderChooser.prototype._getOverview =
+ZmFolderChooser.prototype._getOverview =
 function() {
 	return ZmChooseFolderDialog.prototype._getOverview.call(this)
 };
 
-
-DwtFolderChooser.prototype._treeViewSelectionListener =
+ZmFolderChooser.prototype._treeViewSelectionListener =
 function(ev) {
 	if (ev.detail != DwtTree.ITEM_SELECTED) {
 		return;
 	}
-	if (!ev.clicked && !ev.enter) { //set in DwtTree.prototype._itemClicked and DwtTree.prototype.setSelection (which is called by DwtTreeItem.prototype.handleKeyAction)
+	//set in DwtTree.prototype._itemClicked and DwtTree.prototype.setSelection (which is called by DwtTreeItem.prototype.handleKeyAction)
+	if (!ev.clicked && !ev.enter) {
 		return;
 	}
 
@@ -212,7 +221,7 @@ function(ev) {
  * copied mostly from ZmChooseFolderDialog.prototype._okButtonListener  
  * @param tgtFolder
  */
-DwtFolderChooser.prototype._doSelection =
+ZmFolderChooser.prototype._doSelection =
 function(tgtFolder) {
     tgtFolder = tgtFolder || this._getOverview().getSelected();
     if  (!tgtFolder) {
@@ -270,29 +279,25 @@ function(tgtFolder) {
 	}
 };
 
-
-
-DwtFolderChooser.prototype._resetTreeView =
+ZmFolderChooser.prototype._resetTreeView =
 function(visible) {
 	ZmChooseFolderDialog.prototype._resetTreeView.call(this, visible);
 };
 
-DwtFolderChooser.prototype.getOverviewId =
+ZmFolderChooser.prototype.getOverviewId =
 function(part) {
 	return appCtxt.getOverviewId([this.toString(), part], null);
 };
 
-
-DwtFolderChooser.prototype._loadFolders =
+ZmFolderChooser.prototype._loadFolders =
 function() {
 	ZmChooseFolderDialog.prototype._loadFolders.call(this);
 };
 
-
-DwtFolderChooser.prototype._init =
+ZmFolderChooser.prototype._init =
 function() {
-	var html = new Array(100);
-	var idx = 0;
+
+	var html = [], idx = 0;
 
 	html[idx++] =	"<table cellspacing='0' cellpadding='0' style='border-collapse:collapse;'>";
 	html[idx++] =		"<tr><td><div id='" + this._folderTreeDivId + "'>";
@@ -300,36 +305,16 @@ function() {
 	html[idx++] =	"</table>";
 
 	this.getHtmlElement().innerHTML = html.join("");
-
 };
 
-DwtFolderChooser.prototype._showNewDialog =
+ZmFolderChooser.prototype._showNewDialog =
 function() {
 	var item = this._getOverview().getSelected(true);
 	var newType = (item && item.type) || this._treeIds[0];
 	var ftc = this._opc.getTreeController(newType);
 	var dialog = ftc._getNewDialog();
 	dialog.reset();
-	dialog.registerCallback(DwtDialog.OK_BUTTON, this._newCallback, this, [ftc, dialog]);
+	dialog.registerCallback(DwtDialog.OK_BUTTON, ZmChooseFolderDialog.prototype._newCallback, this, [ftc, dialog]);
 	this.parent.popdown(); //pop it down so it doenst pop down when user clicks on the "new" dialog, confusing them. this is also consistent with the tag menu "new".
 	dialog.popup();
 };
-
-DwtFolderChooser.prototype._newCallback =
-function(ftc, dialog, params) {
-	//I created the callbackAfterNotifications param to allow for a callback to be called after the notifications at
-	//ZmRequestMgr.prototype._handleResponseSendRequest. I need it here since I want the folder to exist (client side) when
-	//the callback is called, and with the regular callback it does not since the notifications create it.
-	// first I tried to make this synchronous (the creation step) and it works on Chrome but not on FF (which was stuck and no response was received on the subsequent move. no idea why)
-	params.callbackAfterNotifications = this._postCreationCallback.bind(this);
-	ftc._doCreate(params);
-	dialog.popdown();
-};
-
-DwtFolderChooser.prototype._postCreationCallback =
-function(result) {
-	var folderId = result._data.CreateFolderResponse.folder[0].id;
-	var folder = appCtxt.getFolderTree().getById(folderId);
-	this._doSelection(folder);
-};
-

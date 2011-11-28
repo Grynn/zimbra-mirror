@@ -877,7 +877,7 @@ function(which) {
 	}
 	// While the current item is not enabled or is a separator, try another
 	while (currItem) {
-		if (!currItem.isStyle) { //this is not a DwtMenuItem. e.g. it's DwtFolderChooser
+		if (!currItem.isStyle) { // this is not a DwtMenuItem
 			currItem.focus();
 			break;
 		}
