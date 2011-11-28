@@ -541,11 +541,8 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 						  	},
 						  	{ ref: ZaGlobalConfig.A_zimbraMtaRejectUnknownSenderDomain, type: _CHECKBOX_,
 						  	  label: ZaMsg.NAD_MTA_reject_unknown_sender_domain
-						  	}
-						]},
-						{ type: _ZA_PLAIN_GROUPER_,
-						  items: [
-						  	{ ref: ZaGlobalConfig.A_zimbraMtaRejectRblClient, type: _REPEAT_,
+						  	},
+                            { ref: ZaGlobalConfig.A_zimbraMtaRejectRblClient, type: _REPEAT_,
 						  	  label: ZaMsg.NAD_MTA_reject_rbl_client,
 							  labelLocation:_LEFT_,
 							  align:_LEFT_,
@@ -559,7 +556,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 							  onRemove:GlobalConfigXFormView.onRepeatRemove*/
 						  	}
 						]},
-                        { type:_ZA_TOP_GROUPER_, label:ZaMsg.NAD_AutoProvision_Setting,
+                        { type:_ZA_TOP_GROUPER_, label:ZaMsg.NAD_AutoProvision_Setting, colSizes:["275px","100%"],
                         items :[
                             {ref:ZaGlobalConfig.A_zimbraAutoProvBatchSize, type:_TEXTFIELD_, label:ZaMsg.LBL_zimbraAutoProvBatchSize,
                                 autoSaveValue:true, labelLocation:_LEFT_,
@@ -782,7 +779,6 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
                             { ref: ZaGlobalConfig.A_zimbraFreebusyExchangeUserOrg, type: _TEXTFIELD_,
 						  	  label: ZaMsg.LBL_zimbraFreebusyExchangeUserOrg, width: "20em"
 						  	},
-                              {type: _SPACER_, height: 10 },
                               {type: _GROUP_, colSpan:2, numCols:5, colSizes: ["120px", "10px", "170px", "20px", "160px" ], items :[
                                   {   type:_CELLSPACER_ },
                                   {

@@ -742,7 +742,7 @@ if(appNewUI) {
     var case1 = {type:_ZATABCASE_, caseKey:tabIx,numCols:1,paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0) 
             };
     var case1Items = [
-		{type:_ZAGROUP_, width:"100%", numCols:2,colSizes: ["275px","100%"],
+		{type:_ZA_TOP_GROUPER_, width:"100%", numCols:2,colSizes: ["275px","auto"],
 			items:[
                 { type: _DWT_ALERT_,
                     visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A_zimbraDomainStatus,ZaDomain.DOMAIN_STATUS_SHUTDOWN]],
@@ -1032,7 +1032,7 @@ if(appNewUI) {
     var case2 = {type:_ZATABCASE_, caseKey:tabIx,numCols:1, paddingStyle:(appNewUI? "padding-left:15px;":null),
             width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0)};
     var case2Items = [
-		{type:_ZAGROUP_, numCols:2,colSizes: ["275px","auto"],
+		{type:_ZA_TOP_GROUPER_, numCols:2,colSizes: ["275px","auto"],
 			items:[
 				{ type: _DWT_ALERT_,
 					visibilityChangeEventSources:[ZaDomain.A_zimbraDomainStatus],
@@ -1243,7 +1243,6 @@ if(appNewUI) {
                             }
                         ]
                     },
-						{type: _SPACER_, height: 10 },
 						{ref:ZaDomain.A_zimbraPasswordChangeListener, type:_TEXTFIELD_, 
 							label:ZaMsg.Domain_zimbraPasswordChangeListener, labelLocation:_LEFT_, 
                                                         visibilityChecks:[function() {
@@ -1291,10 +1290,11 @@ if(appNewUI) {
                             style: DwtAlert.WARNING, iconVisible: false, content: ZaMsg.Alert_Ngnix,
                             id:"xform_header_ngnix"
                           },
-                          {type: _SPACER_, height: 10 },
                           {ref:ZaDomain.A_zimbraReverseProxyClientCertMode, type:_SUPER_SELECT1_,
                             colSizes:["275px","*"],
                             label:ZaMsg.NAD_zimbraReverseProxyClientCertMode,
+                            labelCssClass:(appNewUI?"gridGroupBodyLabel":"xform_label"),
+                            labelCssStyle:(appNewUI?"text-align:left;border-right: 1px solid":_UNDEFINED_),
                             labelLocation:_LEFT_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS
                           },
                           {ref: ZaDomain.A_zimbraReverseProxyClientCertCA, type:_TEXTAREA_,
@@ -1512,7 +1512,6 @@ if(appNewUI) {
 					  	  txtBoxLabel: ZaMsg.LBL_zimbraFreebusyExchangeUserOrg, width: "30em",
 						  onChange: ZaDomainXFormView.onFormFieldChanged
 					  	},
-                        {type: _SPACER_, height: 10 },
                         {type: _GROUP_, colSpan:2, numCols:5, colSizes: ["120px", "10px", "100px", "20px", "120px" ], 
                         	items :[
                             	{type:_CELLSPACER_ },
@@ -1541,7 +1540,7 @@ if(appNewUI) {
         	caseKey:tabIx,
 			
 items:[
-            	{type:_ZAGROUP_, numCols:1,colSizes:["auto"],
+            	{type:_ZAGROUP_, numCols:1,colSizes:["auto"],border:0,
 					items: [
                     	{type: _OUTPUT_, value: ZaMsg.NAD_LimitZimletsToDomain, cssStyle:"margin-left:275px " },
                     	{type:_ZA_ZIMLET_SELECT_COMBO_,cssStyle:"margin-left: 275px",

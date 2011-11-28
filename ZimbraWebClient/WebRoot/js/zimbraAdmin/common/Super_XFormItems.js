@@ -496,6 +496,7 @@ Super_Textarea_XFormItem.prototype.initializeItems = function() {
 	var textAreaWidth = this.getInheritedProperty("textAreaWidth");
 	var toolTip = this.getInheritedProperty("toolTipContent");
 	var labelCssStyle = this.getInheritedProperty("labelCssStyle");
+    var labelCssClass = this.getInheritedProperty("labelCssClass");
 	
 	var txtArea =	{	
 		type:_TEXTAREA_, ref:".",align:_LEFT_,
@@ -511,6 +512,7 @@ Super_Textarea_XFormItem.prototype.initializeItems = function() {
 		label:txtBoxLabel,
 		labelLocation:(txtBoxLabel ? _LEFT_ : _NONE_),
 		labelCssStyle: labelCssStyle,
+        labelCssClass: labelCssClass,
 		cssClass:textAreaCssClass,
 		cssStyle:textAreaCssStyle,
 		width:textAreaWidth,
@@ -1711,6 +1713,15 @@ ZATabCase_XFormItem.prototype.caseVarRef = ZaModel.currentTab;
 ZATabCase_XFormItem.prototype.visibilityChangeEventSources = [ZaModel.currentTab];
 ZATabCase_XFormItem.prototype.align = _LEFT_;
 ZATabCase_XFormItem.prototype.valign = _TOP_;
+if(appNewUI){
+   ZATabCase_XFormItem.prototype.paddingStyle = "padding-left:15px;";
+   ZATabCase_XFormItem.prototype.width = "98%";
+   ZATabCase_XFormItem.prototype.cellpadding = "2";
+}
+else{
+   ZATabCase_XFormItem.prototype.width = "100%";
+   ZATabCase_XFormItem.prototype.cellpadding = "0";
+}
 
 ZATabCase_XFormItem.prototype.getTabLevel = function () {
 	return this.getInheritedProperty("tabLevel") || 1;

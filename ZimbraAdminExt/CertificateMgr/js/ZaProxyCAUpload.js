@@ -3,10 +3,12 @@ ZaProxyCAUpload = function() {}
 
 ZaProxyCAUpload.myXFormModifier = function(xFormObject) {
     var uploadCertUI =
-        {type:_GROUP_,  numCols: 3, colSizes: ["120px","250px","100px"], colSpan: "*",
-            cssStyle: "margin-bottom: 10px;margin-left: 150px",
+        {type:_GROUP_,  numCols: 3, colSizes: ["275px","250px","100px"], colSpan: "*",
             items: [
-{type:_OUTPUT_, value: com_zimbra_cert_manager.certFile,cssStyle:"margin-left:10px"},
+            {type:_OUTPUT_, value: com_zimbra_cert_manager.certFile,
+                containerCssClass:(appNewUI?"gridGroupBodyLabel":"xform_label"),
+                containerCssStyle:(appNewUI?"text-align:left;border-right: 1px solid":_UNDEFINED_)
+            },
             {type:_OUTPUT_, value: ZaProxyCAUpload.getUploadFormHtml(this) },
             {type: _DWT_BUTTON_ , label: com_zimbra_cert_manager.CERT_UploadButton, width: "9em",
                onActivate: ZaProxyCAUpload.uploadCertKeyFile

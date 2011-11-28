@@ -726,7 +726,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
                       onChange:ZaServerXFormView.onFormFieldChanged
                     },
                     {ref:ZaServer.A_zimbraMailPurgeSleepInterval, type:_SUPER_LIFETIME_,
-                            labelCssStyle:(appNewUI?"text-align:left;background-color:#DEE5F1 !important;padding-left:10px;":null),
+                            labelCssStyle:(appNewUI?"text-align:left;background-color:#DEE5F1 !important;padding-left:10px;border-right: 1px solid;":null),
                             resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
                             msgName:ZaMsg.MSG_zimbraMailPurgeSleepInterval,
                             txtBoxLabel:ZaMsg.LBL_zimbraMailPurgeSleepInterval,
@@ -858,7 +858,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 					      	    }
 				      	    ]
 						},
-				      {type:_ZA_TOP_GROUPER_, colSizes:["275", "*"], numCols:2,label:ZaMsg.Global_MTA_NetworkGrp,
+				      {type:_ZA_TOP_GROUPER_, colSizes:["275", "100%"], numCols:2,label:ZaMsg.Global_MTA_NetworkGrp,
 					      items: [
 					      	{type:_SUPER_REPEAT_, ref:ZaServer.A_zimbraSmtpHostname, 
 					      		label:ZaMsg.LBL_zimbraSmtpHostname,
@@ -911,6 +911,8 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
                                 txtBoxLabel:ZaMsg.NAD_MTA_MyNetworks,
                                 msgName:ZaMsg.NAD_MTA_MyNetworks,
                                 type:_SUPER_TEXTAREA_,
+                                labelCssClass:(appNewUI?"gridGroupBodyLabel":"xform_label"),
+                                labelCssStyle:(appNewUI?"text-align:left;border-right: 1px solid":_UNDEFINED_),
                                 colSpan: 2,
                                 resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
                                 onChange: ZaServerXFormView.onFormFieldChanged,
@@ -928,7 +930,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 						]
 				      },
 				  
-				     	{type:_ZA_TOP_GROUPER_, colSizes:["275px","*"], numCols:2, label:ZaMsg.Global_MTA_MilterServer,
+				     	{type:_ZA_TOP_GROUPER_, colSizes:["275px","100%"], numCols:2, label:ZaMsg.Global_MTA_MilterServer,
                            items: [
                             { ref:ZaServer.A_zimbraMilterServerEnabled, type: _SUPER_CHECKBOX_,
                               trueValue: "TRUE", falseValue: "FALSE",
@@ -1031,7 +1033,6 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
                                   style: DwtAlert.WARNING, iconVisible: false, content: ZaMsg.Alert_Ngnix,
                                   id:"xform_header_ngnix"
                                 },
-                                {type: _SPACER_, height: 10 },
                                 {ref:ZaServer.A_zimbraReverseProxyClientCertMode, type:_SUPER_SELECT1_,
                                   colSizes:["275px","*"],
                                   label:ZaMsg.NAD_zimbraReverseProxyClientCertMode,
@@ -1196,9 +1197,10 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 						  		items:[
 									{ ref: ZaServer.A_Pop3AdvertisedName, type:_TEXTFIELD_,
 									  labelLocation:_LEFT_, label: ZaMsg.NAD_POP_AdvertisedName,
-									  onChange: ZaServerXFormView.onFormFieldChanged
-									},
-								  	{type:_SPACER_}
+									  onChange: ZaServerXFormView.onFormFieldChanged,
+                                      labelCssClass:(appNewUI?"gridGroupBodyLabel":"xform_label"),
+                                        labelCssStyle:(appNewUI?"text-align:left;border-right: 1px solid":_UNDEFINED_)
+									}
 								]
 						  	},
 							{type:_GROUP_,numCols:2,colSpan:2,colSizes:["275px","*"],
@@ -1206,11 +1208,15 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 						      	enableDisableChecks:[ZaServerXFormView.getPOP3Enabled],
 						  		items:[
 									{ ref: ZaServer.A_Pop3BindAddress, type:_TEXTFIELD_,
-
+                                      labelCssClass:(appNewUI?"gridGroupBodyLabel":"xform_label"),
+                                      labelCssStyle:(appNewUI?"text-align:left;border-right: 1px solid":_UNDEFINED_),
 									 	label:ZaMsg.NAD_POP_Address,
 									  	onChange:ZaServerXFormView.onFormFieldChanged
 								  	},
-									{type:_OUTPUT_,ref:".",label:"", labelLocation:_LEFT_, value: ZaMsg.NAD_POP_Address_NOTE}
+									{type:_OUTPUT_,ref:".",label:"",
+                                         labelCssClass:(appNewUI?"gridGroupBodyLabel":"xform_label"),
+                                        labelCssStyle:(appNewUI?"text-align:left;border-right: 1px solid":_UNDEFINED_),
+                                        labelLocation:_LEFT_, value: ZaMsg.NAD_POP_Address_NOTE}
 							  ]
 						  	},
 							{ ref: ZaServer.A_zimbraPop3BindPort, type:_TEXTFIELD_,
