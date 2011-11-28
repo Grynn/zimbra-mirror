@@ -919,12 +919,19 @@ public class SkinResources
 		boolean isFirefox = false;
 		boolean isFirefox1up = false;
 		boolean isFirefox1_5up = false;
+		boolean isFirefox4up = false;
 		boolean isMozilla = false;
 		boolean isMozilla1_4up = false;
 		boolean isSafari = false;
+		boolean isSafari2 = false;
+		boolean isSafari2up = false;
+		boolean isSafari3 = false;
+		boolean isSafari5up = false;
 		boolean isChrome = false;
+		boolean isChrome4up = false;
 		boolean isGeckoBased = false;
 		boolean isGecko1_8up = false;
+		boolean isGecko2up = false;
 		boolean isWebKitBased = false;
 		boolean isOpera = false;
 		boolean isIPhone = false;
@@ -1042,8 +1049,17 @@ public class SkinResources
 			isFirefox = ((isMozilla && isFirefox));
 			isFirefox1up = (isFirefox && browserVersion >= 1.0);
 			isFirefox1_5up = (isFirefox && browserVersion >= 1.5);
+			isFirefox4up = (isFirefox && browserVersion >= 4);
 			isGecko1_8up = (isGeckoBased && browserVersion >= 1.8);
-
+			isGecko2up = (isGeckoBased && browserVersion >= 2);
+			
+			isSafari2 = (isSafari && browserVersion == 2.0);
+			isSafari2up = (isSafari && browserVersion >= 2);
+			isSafari3 = (isSafari && browserVersion == 3.0);
+			isSafari5up = (isSafari && browserVersion >= 5);
+			
+			isChrome4up = (isChrome && browserVersion >= 4);
+			
 			// operating systems
 			define(macros, "LINUX", isLinux);
 			define(macros, "MACINTOSH", isMac);
@@ -1051,11 +1067,14 @@ public class SkinResources
 
 			// browser variants
 			define(macros, "CHROME", isChrome);
+			define(macros, "CHROME_4_OR_HIGHER", isChrome4up);
 			define(macros, "FIREFOX", isFirefox);
 			define(macros, "FIREFOX_1_OR_HIGHER", isFirefox1up);
 			define(macros, "FIREFOX_1_5_OR_HIGHER", isFirefox1_5up);
+			define(macros, "FIREFOX_4_OR_HIGHER", isFirefox4up);
 			define(macros, "GECKO", isGeckoBased);
 			define(macros, "GECKO_1_8_OR_HIGHER", isGecko1_8up);
+			define(macros, "GECKO_2_OR_HIGHER", isGecko2up);
 			define(macros, "HOTJAVA", isHotJava);
 			define(macros, "IPHONE", isIPhone);
 			define(macros, "MOZILLA", isMozilla);
@@ -1087,9 +1106,10 @@ public class SkinResources
 			define(macros, "NAVIGATOR_COMPATIBLE", isCompatible);
 			define(macros, "OPERA", isOpera);
 			define(macros, "SAFARI", isSafari);
-			define(macros, "SAFARI_2", isSafari && browserVersion == 2.0);
-			define(macros, "SAFARI_2_OR_HIGHER", isSafari && browserVersion >= 2.0);
-			define(macros, "SAFARI_3", isSafari && browserVersion >= 3.0);
+			define(macros, "SAFARI_2", isSafari2);
+			define(macros, "SAFARI_2_OR_HIGHER", isSafari2up);
+			define(macros, "SAFARI_3", isSafari3);
+			define(macros, "SAFARI_5_OR_HIGHER", isSafari5up);
 			define(macros, "WEBKIT", isWebKitBased);
 			define(macros, "WEBTV", isWebTv);
 		}
@@ -1770,17 +1790,35 @@ public class SkinResources
 		// replace occurances of @roundCorners(size[ size[ size[ size]]])@ with CSS to round corners, specific to the platform
 		//
 		private String outputRoundCorners(Stack<String> stack, String[] params) throws IOException {
-			boolean isSafari3 = isBrowser("SAFARI_3");
-			boolean isGecko1_8 = isBrowser("GECKO_1_8_OR_HIGHER");
+			boolean isFirefox1_5up = isBrowser("FIREFOX_1_5_OR_HIGHER");
+			boolean isFirefox4up = isBrowser("FIREFOX_4_OR_HIGHER");
+			boolean isWebKitBased = isBrowser("WEBKIT");
+			boolean isSafari5up = isBrowser("SAFARI_5_OR_HIGHER");
+			boolean isChrome4up = isBrowser("CHROME_4_OR_HIGHER");
+			boolean isIE9up = isBrowser("MSIE_9_OR_HIGHER");
 			
-			if (isSafari3 || isGecko1_8) {
-				String propName = (isSafari3 ? "-webkit-border-radius:" : "-moz-border-radius:");
+			// Pick out browsers that support rounding in some fashion
+			if (isFirefox1_5up || isWebKitBased || isIE9up) {
+				String propName;
+				
+				if (isFirefox4up || isSafari5up || isChrome4up || isIE9up) { 
+					// browsers that support the w3c syntax should use it
+					propName = "border-radius:";
+				} else { 
+					// otherwise use the browser-proprietary syntax where available
+					if (isWebKitBased) {
+						propName = "-webkit-border-radius:";
+					} else {
+						propName = "-moz-border-radius:";
+					}
+				}
+				
 				String size = (params.length > 0 ? params[0] : "3px").toLowerCase();
-
+				
 				if (size.equals("") || size.equals("small")){	size = "3px";	}
 				else if (size.equals("medium")) 			{	size = "5px";	}
 				else if (size.equals("big"))				{	size = "10px";	}
-				else if (size.equals("huge"))				{	size = "10px";	}
+				else if (size.equals("huge"))				{	size = "15px";	}
 				return (propName + size + ";");
 			}
 			return "";
