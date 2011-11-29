@@ -26,14 +26,14 @@ public class ContactGroupItem extends ContactItem implements IItem {
 	 * The name of the contact group
 	 */
 	public String groupName = null;
-	
+
 	/**
 	 * The list of contacts within this group
 	 */
 	public ArrayList<ContactItem> dlist = null;
-	
+
 	/**
-	 * Create a new contact group item+ 
+	 * Create a new contact group item+
 	 */
 	public ContactGroupItem(String groupName) {
 		this.groupName=groupName;
@@ -41,29 +41,29 @@ public class ContactGroupItem extends ContactItem implements IItem {
 		type = "group";
 		dlist = new ArrayList<ContactItem>();
 	}
-	
+
 	public static ContactGroupItem generateContactItem(GenerateItemType type) throws HarnessException {
-	
+
 		ContactGroupItem group =  null;
 		if ( type.equals(GenerateItemType.Default) || type.equals(GenerateItemType.Basic) ) {
 
 			String groupName =  "group_" + ZimbraSeleniumProperties.getUniqueString();
 			//group name with length > 20 is automatically shorten
 			groupName = groupName.substring(0,20);
-			
-	        // Create a contact group 
+
+	        // Create a contact group
 			group = new ContactGroupItem(groupName);
-		    
+
 			group.addDListMember(ContactItem.generateContactItem(GenerateItemType.Basic));
 			group.addDListMember(ContactItem.generateContactItem(GenerateItemType.Basic));
 			group.addDListMember(ContactItem.generateContactItem(GenerateItemType.Basic));
-		
+
 		}
-		
+
 		if ( type.equals(GenerateItemType.AllAttributes) ) {
 			throw new HarnessException("Implement me!");
 		}
-		
+
 		return group;
 	}
 
@@ -83,7 +83,7 @@ public class ContactGroupItem extends ContactItem implements IItem {
 		}
 		return (sb.toString());
 	}
-	
+
 	/**
 	 * Add a contact item to the dlist
 	 * @param ContactItem
@@ -94,16 +94,16 @@ public class ContactGroupItem extends ContactItem implements IItem {
 			// Nothing to add
 			return (dlist);
 		}
-		
+
 		dlist.add(contactItem);
-		
+
 		return (dlist);
 	}
 
-	 
-	// no longer used 
+
+	// no longer used
 	@Deprecated()
-	public ArrayList<ContactItem> addDListMember(String contactStr) {	     		
+	public ArrayList<ContactItem> addDListMember(String contactStr) {
 		 return null;
 	}
 
@@ -113,35 +113,35 @@ public class ContactGroupItem extends ContactItem implements IItem {
 	 * @return the current dlist members
 	 */
 	public ArrayList<ContactItem> removeDListMember(String emailaddress) {
-	    for (ContactItem contactItem : dlist) {	    	
+	    for (ContactItem contactItem : dlist) {
 		    if (contactItem.email.contains(emailaddress)) {
 			    dlist.remove(contactItem);
 		  }
 	    }
 		return (dlist);
 	}
-	
-	
+
+
     // key=dlist; value="email1, email2,..."
 	public String setAttribute(String key, String value) {
-		
+
 		// Process any special attributes here
 		// FIXME:
-		//if ( key.equals("dlist") ) {			
+		//if ( key.equals("dlist") ) {
 		//	dlist = new ArrayList<String>(Arrays.asList(value.split(",")));
 		//}
 		if (!key.equals("dlist")) {
-			super.setAttribute(key, value);				
+			super.setAttribute(key, value);
 		}
 		return (ContactAttributes.get(key));
 	}
-	
-	
-	
+
+
+
 	public static ContactGroupItem importFromSOAP(Element GetContactsResponse) throws HarnessException {
 		if ( GetContactsResponse == null )
 			throw new HarnessException("GetContactsResponse cannot be null");
-		
+
 		throw new HarnessException("implement me!");
 	}
 
@@ -159,7 +159,7 @@ public class ContactGroupItem extends ContactItem implements IItem {
 	      tagParam = " t='" + tagIdArray[0] + "'";
 	   }
 
-       // Create a contact group 
+       // Create a contact group
  	   ContactGroupItem group = ContactGroupItem.generateContactItem(GenerateItemType.Basic);
 
        StringBuilder sb= new StringBuilder("");
@@ -167,9 +167,6 @@ public class ContactGroupItem extends ContactItem implements IItem {
           String e= contactItem.email;
           sb.append("<m type='I' value='" + e + "' />");
        }
-
-	   // Create a contact group 
-	   ContactGroupItem group = ContactGroupItem.generateContactItem(GenerateItemType.Basic);
 
 	   app.zGetActiveAccount().soapSend(
 	         "<CreateContactRequest xmlns='urn:zimbraMail'>" +
@@ -186,7 +183,7 @@ public class ContactGroupItem extends ContactItem implements IItem {
 
 	   // Refresh addressbook
        ((AppAjaxClient)app).zPageMain.zToolbarPressButton(Button.B_REFRESH);
-		
+
 	   return group;
 	}
 
@@ -205,7 +202,7 @@ public class ContactGroupItem extends ContactItem implements IItem {
          tagParam = " t='" + tagIdArray[0] + "'";
       }
 
-      // Create a contact group 
+      // Create a contact group
       ContactGroupItem group = ContactGroupItem.generateContactItem(GenerateItemType.Basic);
 
       app.zGetActiveAccount().soapSend(
@@ -227,16 +224,16 @@ public class ContactGroupItem extends ContactItem implements IItem {
 		throw new HarnessException("implement me!");
 	}
 
-	
+
 	public static String getId(ZimbraAccount account) {
 		return account.soapSelectValue("//mail:CreateContactResponse/mail:cn", "id");
 	}
-	
+
 	public static String[] getDList(ZimbraAccount account) {
-		String[] dlist = null; //account.so .soapSelectNodes("//mail:CreateContactResponse/mail:cn/mail:m");    
+		String[] dlist = null; //account.so .soapSelectNodes("//mail:CreateContactResponse/mail:cn/mail:m");
 		return dlist;
 	}
-	
+
 	@Override
 	public String prettyPrint() {
 		StringBuilder sb = new StringBuilder();
@@ -248,7 +245,7 @@ public class ContactGroupItem extends ContactItem implements IItem {
 			sb.append(String.format("Attribute: key(%s) value(%s)", key, ContactAttributes.get(key))).append('\n');
 		return (sb.toString());
 	}
-	
+
 
 }
 
