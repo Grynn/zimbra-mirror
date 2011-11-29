@@ -93,7 +93,7 @@ namespace GroupWise
 
                string sessioninfo = resp.session;
                 //bLogin = false;
-                getFolders(sessioninfo);
+                //getFolders(sessioninfo);
 
 
                 
@@ -148,6 +148,155 @@ namespace GroupWise
 
         }
 
+       
+        protected void getContactFolders(string uid, string key)
+        {
+            String str;
+            UserInfo User = new UserInfo();
+            User.userid = "knuthi";
+
+            ws = new GroupWiseBinding();
+            str = "http://";
+            str += "10.20.136.206";
+            str += ":";
+            str += "7191";
+            str += "/soap";
+            ws.Url = str;
+
+
+
+            TrustedApplication trusted = new TrustedApplication();
+
+            trusted.name = "ZimbraGWMigration";
+            trusted.key = key;//outkey.ToString();
+
+
+            trusted.username = "knuthi";
+
+
+
+            loginRequest reql = new loginRequest();
+            reql.auth = trusted;
+
+            loginResponse respl;
+            respl = ws.loginRequest(reql);
+            ws.session = new @string();
+            ws.session.Text = new String[1];
+            ws.session.Text[0] = respl.session;
+
+
+            getFolderRequest req = new getFolderRequest();
+            getFolderResponse resp;
+
+
+
+
+            req.folderType = FolderType.Contacts;
+            req.view = "";
+            req.folderTypeSpecified = true;
+            req.source = "folders";/*
+            req.view = "";
+            req.imap = false;
+            req.nntp = false;*/
+
+
+            resp = ws.getFolderRequest(req);
+            if (0 == resp.status.code)
+            {
+
+                ws.session = new @string();
+                ws.session.Text = new String[1];
+                ws.session.Text[0] = respl.session;
+
+                str = "Folders: ";
+                if (null != resp.folder)
+                {
+                    // str += resp.folders.Length;
+
+                    Folder f1 = (Folder)resp.folder;
+
+                    string type = f1.name.ToString();
+
+                    str += type;
+                   System.Console.WriteLine(str);
+                   string id = f1.id;
+                    getContactItems(id);
+                    ws.session = new @string();
+                    ws.session.Text = new String[1];
+                    ws.session.Text[0] = respl.session;
+
+
+
+                }
+
+
+
+            }
+            else
+            {
+                System.Console.WriteLine(resp.status.description);
+                
+            }
+
+
+
+
+
+
+        }
+
+        protected void getContactItems(string uid)
+        {
+            String str;
+            getItemsRequest req = new getItemsRequest();
+            getItemsResponse resp;
+
+            Filter Flt = new Filter();
+            FilterEntry FEN = new FilterEntry();
+            FEN.op = FilterOp.eq;
+            FEN.field = "@type";
+            FEN.value = "Contact";
+            Flt.element = FEN;
+            req.filter = Flt;
+
+            req.container = uid;
+
+            resp = ws.getItemsRequest(req);
+            //  resp = ws.getItemRequest(req);
+            if (0 == resp.status.code)
+            {
+                str = "Items: for Contact folder ";
+                if (null != resp.items)
+                {
+                    str += resp.items.Length;
+
+                    int cnt = resp.items.Length;
+                    cnt = cnt - 1;
+
+
+                    while (cnt >= 0)
+                    {
+
+                        Contact mt = (Contact)resp.items[cnt];
+
+                        str += mt.officeInfo;
+                        str += "\n";
+                        str += mt.name;
+                        cnt--;
+                    }
+
+                    str += resp.status.code.ToString();
+                }
+                System.Console.WriteLine(str);
+            }
+            else
+            {
+
+                System.Console.WriteLine(resp.status.description);
+
+            }
+        }
+
         public void UserLogin(string username)
         {
 
@@ -178,9 +327,27 @@ namespace GroupWise
 
                 respl = ws.loginRequest(reql);
 
-                ws.session = new @string();
-                ws.session.Text = new String[1];
-                ws.session.Text[0] = respl.session;
+                
+                if (0 == respl.status.code)
+                {
+                    System.Console.WriteLine(" Login success ful");
+
+                    ws.session = new @string();
+                    ws.session.Text = new String[1];
+                    ws.session.Text[0] = respl.session;
+
+
+                    ws.Timeout = 300000;
+                    string uid = respl.userinfo.uuid;
+
+                    string sessioninfo = respl.session;
+
+                    getContactFolders(uid,admin.Key);
+                    //bLogin = false;
+                   // getFolders(sessioninfo);
+
+
+                }
 
             }
             catch (Exception e)
@@ -188,6 +355,8 @@ namespace GroupWise
                 System.Console.WriteLine("Exception in Getuserlist : " + e.Message);
 
             }
+
+            
 
 
         }
@@ -357,7 +526,7 @@ namespace GroupWise
         }
 
 
-        protected void getContactItems(string uid)
+       /* protected void getContactItems(string uid)
         {
             String str;
             getItemsRequest req = new getItemsRequest();
@@ -400,7 +569,7 @@ namespace GroupWise
 
                 System.Console.WriteLine(resp.status.description);
             }
-        }
+        }*/
 
     }
 }
