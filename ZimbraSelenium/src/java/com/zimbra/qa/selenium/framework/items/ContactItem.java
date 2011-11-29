@@ -189,14 +189,21 @@ public class ContactItem implements IItem {
 		return (address);
 	}
 
+	/**
+	 * Create contact item through SOAP
+	 * @param app
+	 * @param tagIdArray
+	 * @return
+	 * @throws HarnessException
+	 */
 	public static ContactItem createUsingSOAP(AbsApplication app, String ... tagIdArray ) throws HarnessException {
 
-		String tagParam ="";
+	   String tagParam ="";
 		if (tagIdArray.length == 1) {
 			tagParam = " t='" + tagIdArray[0] + "'";
 		}
 
-        // Create a contact item
+		// Create a contact item
 		ContactItem contactItem = ContactItem.generateContactItem(GenerateItemType.Basic);
 
 		app.zGetActiveAccount().soapSend(
@@ -214,8 +221,40 @@ public class ContactItem implements IItem {
 		// Refresh addressbook
     	((AppAjaxClient)app).zPageMain.zToolbarPressButton(Button.B_REFRESH);
 
-        return contactItem;
-    }
+		return contactItem;
+	}
+
+	/**
+	 * Create local contact item through SOAP - ZD only
+	 * @param app
+	 * @param accountName
+	 * @param tagIdArray
+	 * @return
+	 * @throws HarnessException
+	 */
+	public static ContactItem createLocalUsingSOAP(AbsApplication app, String accountName, String ... tagIdArray ) throws HarnessException {
+	   String tagParam ="";
+	   if (tagIdArray.length == 1) {
+	      tagParam = " t='" + tagIdArray[0] + "'";
+	   }
+	   
+	   // Create a contact item
+	   ContactItem contactItem = ContactItem.generateContactItem(GenerateItemType.Basic);
+	   
+	   app.zGetActiveAccount().soapSend(
+	         "<CreateContactRequest xmlns='urn:zimbraMail'>" +
+	         "<cn " + tagParam + " >" +
+	         "<a n='firstName'>" + contactItem.firstName +"</a>" +
+	         "<a n='lastName'>" + contactItem.lastName +"</a>" +             
+	         "<a n='email'>" + contactItem.email + "</a>" +
+             "<a n='company'>" + contactItem.company + "</a>" +
+	         "</cn>" +
+	         "</CreateContactRequest>",
+	         SOAP_DESTINATION_HOST_TYPE.CLIENT,
+	         accountName);    
+	   
+	   return contactItem;
+	}
 
 	public enum GenerateItemType {
 		Default, Basic, AllAttributes

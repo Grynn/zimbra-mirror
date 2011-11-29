@@ -11,6 +11,7 @@ import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
+import com.zimbra.qa.selenium.framework.util.ZimbraAccount.SOAP_DESTINATION_HOST_TYPE;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.projects.desktop.ui.DialogWarning;
 import com.zimbra.qa.selenium.projects.desktop.core.AjaxCommonTest;
@@ -358,7 +359,71 @@ public class PageAddressbook extends AbsTab {
           
       return contactItem;
    }
-		
+
+   public ContactGroupItem createUsingSOAPSelectLocalContactGroup(AppAjaxClient app,
+         Action action,
+         String ... tagIDArray)  throws HarnessException { 
+      return  createUsingSOAPSelectLocalContactGroup(app, action, ZimbraAccount.clientAccountName, tagIDArray);
+   }
+
+   public ContactGroupItem createUsingSOAPSelectLocalContactGroup(AppAjaxClient app,
+         Action action,
+         String accountName,
+         String ... tagIDArray)  throws HarnessException {   
+      // Create a contact group via Soap
+      ContactGroupItem group = ContactGroupItem.createLocalUsingSOAP(app, accountName, tagIDArray);
+
+      group.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
+      String[] dlist = app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn/mail:a[@n='dlist']", null).split(","); //a[2]   
+      for (int i=0; i<dlist.length; i++) {
+         group.addDListMember(dlist[i]);
+      }
+
+      // Refresh the view, to pick up the new contact
+      FolderItem contactFolder = FolderItem.importFromSOAP(
+            app.zGetActiveAccount(),
+            "Contacts",
+            SOAP_DESTINATION_HOST_TYPE.CLIENT,
+            accountName);
+      GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      zWaitForDesktopLoadingSpinner(5000);
+      app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, contactFolder);
+
+      // Select the item
+      zListItem(action, group.fileAs);
+
+      return group;
+   }
+
+   public ContactItem createUsingSOAPSelectLocalContact(AppAjaxClient app,
+         Action action,
+         String ... tagIDArray)  throws HarnessException {
+      return createUsingSOAPSelectLocalContact(app, action, ZimbraAccount.clientAccountName, tagIDArray);
+   }
+ 
+   public ContactItem createUsingSOAPSelectLocalContact(AppAjaxClient app,
+         Action action,
+         String accountName,
+         String ... tagIDArray)  throws HarnessException { 
+      // Create a contact via Soap
+      ContactItem contactItem = ContactItem.createLocalUsingSOAP(app, accountName, tagIDArray);                     
+      contactItem.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
+
+      // Refresh the view, to pick up the new contact
+      FolderItem contactFolder = FolderItem.importFromSOAP(
+            app.zGetActiveAccount(),
+            "Contacts",
+            SOAP_DESTINATION_HOST_TYPE.CLIENT,
+            ZimbraAccount.clientAccountName);
+      GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      zWaitForDesktopLoadingSpinner(5000);
+      app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, contactFolder);
+
+      // Select the item
+      zListItem(action, contactItem.fileAs);
+
+      return contactItem;
+   }
 
 	@Override
 	public AbsPage zToolbarPressPulldown(Button pulldown, Button option) throws HarnessException {

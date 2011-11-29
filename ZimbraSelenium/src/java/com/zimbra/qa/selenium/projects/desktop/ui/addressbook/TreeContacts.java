@@ -55,9 +55,11 @@ public class TreeContacts extends AbsTree {
 			   String emailAddress = folder.isDesktopClientLocalFolder() ? 
 	               ZimbraAccount.clientAccountName :
 	                  MyApplication.zGetActiveAccount().EmailAddress;
-
+			   String folderIdSuffix = folder.isDesktopClientLocalFolder() ? 
+			         "_" + folder.getId() :
+			            ":" + folder.getId();
 			   locator = "css=td[id^='zti__" + emailAddress +
-			         ":main_Contacts__'][id$='" + folder.getId() +"_textCell']";
+			         ":main_Contacts__'][id$='" + folderIdSuffix +"_textCell']";
 			} else {
 			   locator = "id=zti__main_Contacts__"+ folder.getId() +"_textCell";
 			}
