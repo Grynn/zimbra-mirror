@@ -16,11 +16,13 @@ package com.zimbra.cs.account.offline;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import com.google.common.base.Objects;
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.util.StringUtil;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.Provisioning;
@@ -183,6 +185,28 @@ public class OfflineAccount extends Account {
 
     @Override
     public String[] getMultiAttr(String name) {
+        if (isLocalAccount()
+                && (name.equals(Provisioning.A_zimbraChildAccount) || name
+                        .equals(Provisioning.A_zimbraPrefChildVisibleAccount))) {
+            try {
+                OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
+                List<String> accountIds = prov.getAllAccountIds();
+                if (!accountIds.isEmpty()) {
+                    String[] array = new String[accountIds.size()-1];//local account is included in accountIds
+                    int i = 0;
+                    for (String account : accountIds) {
+                        if (!StringUtil.equal(OfflineConstants.LOCAL_ACCOUNT_ID, account)) {
+                            array[i++] = account;    
+                        }
+                    }
+                    return array;
+                } else {
+                    return new String[0];
+                }
+            } catch (ServiceException x) {
+                OfflineLog.offline.error(x);
+            }
+        }
         // no need to return this multi-attr for any child accounts
         if (!isLocalAccount() && name.equals(Provisioning.A_zimbraZimletAvailableZimlets))
             return new String[0];
