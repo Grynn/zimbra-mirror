@@ -125,7 +125,8 @@ public class PageOctopus extends AbsTab {
 
 		map.put("loginOp", "logout");
 
-		this.openUrl("", map);
+		//this.openUrl("", map);
+		zClick(PageOctopus.Locators.zSignOutButton.locator);
 
 		sWaitForPageToLoad();
 		((AppOctopusClient) MyApplication).zPageLogin.zWaitForActive();
