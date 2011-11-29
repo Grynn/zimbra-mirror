@@ -26,12 +26,15 @@ import com.zimbra.qa.selenium.projects.desktop.ui.briefcase.PageBriefcase;
 
 public class CreateDocument extends AjaxCommonTest {
 
-	public CreateDocument() {
+	@SuppressWarnings("serial")
+   public CreateDocument() {
 		logger.info("New " + CreateDocument.class.getCanonicalName());
 
 		super.startingPage = app.zPageBriefcase;
 
-		super.startingAccountPreferences = null;
+		super.startingAccountPreferences = new HashMap<String , String>() {{
+         put("zimbraPrefBriefcaseReadingPaneLocation", "bottom");
+		}};
 	}
 
 	@Test(description = "Create document through GUI - verify through GUI", groups = { "sanity" })
