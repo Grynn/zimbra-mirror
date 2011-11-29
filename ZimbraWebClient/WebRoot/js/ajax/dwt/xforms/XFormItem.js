@@ -2309,6 +2309,9 @@ Checkbox_XFormItem.prototype.visibilityChecks = [XFormItem.prototype.hasReadPerm
 Checkbox_XFormItem.prototype.enableDisableChecks = [XFormItem.prototype.hasWritePermission];
 Checkbox_XFormItem.prototype.nowrap = false;
 Checkbox_XFormItem.prototype.labelWrap = true;
+if (appNewUI) {
+    Checkbox_XFormItem.prototype.subLabel = ZaMsg.CaptionEnabled;
+}
 //	methods
 Checkbox_XFormItem.prototype.outputHTML = function (html, currentCol) {
 	// figure out how to show the checkbox as checked or not
@@ -2362,18 +2365,18 @@ Checkbox_XFormItem.prototype.getElementValueGetterHTML = function () {
 }
 
 
-Checkbox_XFormItem.prototype.outputContainerTDEndHTML = function (html) {
-    var tdLabel = this.getInheritedProperty("subLabel");
-    // for compatible with old UI
-    if(appNewUI && tdLabel && tdLabel != "") {
-        tdLabel = " " + tdLabel;
-    } else if (appNewUI && tdLabel == null)
-        tdLabel = " Enabled";
-    else tdLabel = "";
+if (appNewUI) {
+    Checkbox_XFormItem.prototype.outputContainerTDEndHTML = function (html) {
+        var tdLabel = this.getInheritedProperty("subLabel");
+        if (AjxUtil.isEmpty(tdLabel)) {
+            tdLabel = "";
+        } else {
+            tdLabel = " " + tdLabel;
+        }
 
-    html.append(tdLabel + "</td id=\"",  this.getId(), "___container\">");
+        html.append(tdLabel + "</td id=\"",  this.getId(), "___container\">");
+    }
 }
-
 // set up how disabling works for this item type
 //	XXXX eventually we want to disable our label as well...
 Checkbox_XFormItem.prototype.setElementEnabled = XFormItem.prototype.setElementDisabledProperty;
