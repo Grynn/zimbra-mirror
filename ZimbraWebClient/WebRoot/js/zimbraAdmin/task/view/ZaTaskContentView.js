@@ -78,6 +78,7 @@ ZaTaskContentView.myXFormModifier = function(xFormObject, entry) {
     serverStatusHeader[0] = new ZaListHeaderItem(ZaTask.A_serverStatus, ZaMsg.MSG_ServerStatus, null, "auto", null, ZaTask.A_serverStatus, false, true);
 
     var case1 = {type:_ZATABCASE_, numCols: 1, caseKey:1,
+                paddingStyle: "", width: "100%", cellpadding: 0,
                 getCustomWidth: ZaTaskContentView.prototype.getCustomWidth,
                 getCustomHeight: ZaTaskContentView.prototype.getCustomHeight,
                 items:[
