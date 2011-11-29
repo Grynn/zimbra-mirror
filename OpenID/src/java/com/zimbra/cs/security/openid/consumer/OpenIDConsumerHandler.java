@@ -15,6 +15,7 @@
 package com.zimbra.cs.security.openid.consumer;
 
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.util.ZimbraCookie;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.AuthToken;
@@ -262,7 +263,7 @@ public class OpenIDConsumerHandler extends ExtensionHttpHandler {
      * @return
      */
     private static AuthToken getZimbraAuthToken(HttpServletRequest req) {
-        String encodedToken = getCookieValue(req, ZimbraServlet.COOKIE_ZM_AUTH_TOKEN);
+        String encodedToken = getCookieValue(req, ZimbraCookie.COOKIE_ZM_AUTH_TOKEN);
         if (encodedToken == null)
             return null;
         AuthToken authToken;
