@@ -14,6 +14,7 @@
  */
 package com.zimbra.cs.account.offline;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -22,10 +23,10 @@ import java.util.Set;
 
 import com.google.common.base.Objects;
 import com.zimbra.common.service.ServiceException;
-import com.zimbra.common.util.StringUtil;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.Provisioning;
+import com.zimbra.cs.account.Provisioning.AccountBy;
 import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.common.OfflineConstants;
@@ -192,12 +193,18 @@ public class OfflineAccount extends Account {
                 OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
                 List<String> accountIds = prov.getAllAccountIds();
                 if (!accountIds.isEmpty()) {
-                    String[] array = new String[accountIds.size()-1];//local account is included in accountIds
-                    int i = 0;
-                    for (String account : accountIds) {
-                        if (!StringUtil.equal(OfflineConstants.LOCAL_ACCOUNT_ID, account)) {
-                            array[i++] = account;    
+                    List<String> idsInOrder = new ArrayList<String>();
+                    for (String id : accountIds) {
+                        Account acct = prov.get(AccountBy.id, id);
+                        if (acct == null || prov.isGalAccount(acct) || prov.isMountpointAccount(acct) || prov.isLocalAccount(acct)) {
+                            continue;
                         }
+                        idsInOrder.add(id);
+                    }
+                    String[] array = new String[idsInOrder.size()];
+                    int i = 0;
+                    for (String id : idsInOrder) {
+                        array[i++] = id;
                     }
                     return array;
                 } else {
