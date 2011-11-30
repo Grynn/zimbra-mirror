@@ -224,6 +224,7 @@ function() {
 
     //HTML5
     AjxEnv.supportsHTML5File = false;
+	AjxEnv.supportsPlaceholder = false;
 
 	// screen resolution - ADD MORE RESOLUTION CHECKS AS NEEDED HERE:
 	AjxEnv.is800x600orLower = screen && (screen.width <= 800 && screen.height <= 600);
@@ -406,6 +407,7 @@ function() {
 
     //HTML5
     AjxEnv.supportsHTML5File = ( window.FileReader/*Firefox*/ || AjxEnv.isChrome || AjxEnv.isSafari4up );
+	AjxEnv.supportsPlaceholder 	= !(AjxEnv.isIE || (AjxEnv.isFirefox && !AjxEnv.isFirefox4up));
 };
 
 // code provided by webkit authors to determine if nightly browser
