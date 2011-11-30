@@ -1192,20 +1192,21 @@ ZaAccountXFormView.ADVANCED_TAB_ATTRS = [ZaAccount.A_zimbraAttachmentsBlocked,
 ZaAccountXFormView.ADVANCED_TAB_RIGHTS = [];
 
 ZaAccountXFormView.addressItemsPool = null;
+ZaAccountXFormView.addressItemsPoolForDialog = null;
 ZaAccountXFormView.getAddressFormItem = function(){
 	// the subItems of Address Items only init once;
 	if(AjxUtil.isEmpty(ZaAccountXFormView.addressItemsPool)){
 		ZaAccountXFormView.addressItemsPool = new Object();
 		ZaAccountXFormView.addressItemsPool[ZaAccount.A_zip] =  {ref:ZaAccount.A_zip, type:_TEXTFIELD_, msgName:ZaMsg.NAD_zip,label:ZaMsg.NAD_zip,
-            labelCssClass:"gridGroupBodyLabel",labelLocation:_LEFT_, width:100};
+            labelLocation:_LEFT_, width:100};
 		ZaAccountXFormView.addressItemsPool[ZaAccount.A_state] = {ref:ZaAccount.A_state, type:_TEXTFIELD_, msgName:ZaMsg.NAD_state,label:ZaMsg.NAD_state,
-            labelCssClass:"gridGroupBodyLabel",labelLocation:_LEFT_, width:250};
+            labelLocation:_LEFT_, width:250};
 		ZaAccountXFormView.addressItemsPool[ZaAccount.A_street] = {ref:ZaAccount.A_street, type:_TEXTAREA_, msgName:ZaMsg.NAD_street,label:ZaMsg.NAD_street,
-            labelCssClass:"gridGroupBodyLabel",labelLocation:_LEFT_, width:250};
+            labelLocation:_LEFT_, width:250};
 		ZaAccountXFormView.addressItemsPool[ZaAccount.A_city] = {ref:ZaAccount.A_city, type:_TEXTFIELD_, msgName:ZaMsg.NAD_city,label:ZaMsg.NAD_city,
-            labelCssClass:"gridGroupBodyLabel",labelLocation:_LEFT_, width:250};
+            labelLocation:_LEFT_, width:250};
 		ZaAccountXFormView.addressItemsPool[ZaAccount.A_country] = {ref:ZaAccount.A_country, type:_TEXTFIELD_, msgName:ZaMsg.NAD_country,label:ZaMsg.NAD_country,
-            labelCssClass:"gridGroupBodyLabel",labelLocation:_LEFT_, width:250};
+            labelLocation:_LEFT_, width:250};
 		
 	}
 	var addressFormItems = new Array();
@@ -1224,17 +1225,17 @@ ZaAccountXFormView.getAddressFormItem = function(){
 }
 ZaAccountXFormView.getAddressFormItemForDialog = function(){
 	// the subItems of Address Items only init once;
-	if(AjxUtil.isEmpty(ZaAccountXFormView.addressItemsPool)){
-		ZaAccountXFormView.addressItemsPool = new Object();
-		ZaAccountXFormView.addressItemsPool[ZaAccount.A_zip] =  {ref:ZaAccount.A_zip, type:_TEXTFIELD_, msgName:ZaMsg.NAD_zip,label:ZaMsg.NAD_zip,
+	if(AjxUtil.isEmpty(ZaAccountXFormView.addressItemsPoolForDialog)){
+		ZaAccountXFormView.addressItemsPoolForDialog = new Object();
+		ZaAccountXFormView.addressItemsPoolForDialog[ZaAccount.A_zip] =  {ref:ZaAccount.A_zip, type:_TEXTFIELD_, msgName:ZaMsg.NAD_zip,label:ZaMsg.NAD_zip,
             labelLocation:_LEFT_, width:100};
-		ZaAccountXFormView.addressItemsPool[ZaAccount.A_state] = {ref:ZaAccount.A_state, type:_TEXTFIELD_, msgName:ZaMsg.NAD_state,label:ZaMsg.NAD_state,
+		ZaAccountXFormView.addressItemsPoolForDialog[ZaAccount.A_state] = {ref:ZaAccount.A_state, type:_TEXTFIELD_, msgName:ZaMsg.NAD_state,label:ZaMsg.NAD_state,
             labelLocation:_LEFT_, width:250};
-		ZaAccountXFormView.addressItemsPool[ZaAccount.A_street] = {ref:ZaAccount.A_street, type:_TEXTAREA_, msgName:ZaMsg.NAD_street,label:ZaMsg.NAD_street,
+		ZaAccountXFormView.addressItemsPoolForDialog[ZaAccount.A_street] = {ref:ZaAccount.A_street, type:_TEXTAREA_, msgName:ZaMsg.NAD_street,label:ZaMsg.NAD_street,
             labelLocation:_LEFT_, width:250};
-		ZaAccountXFormView.addressItemsPool[ZaAccount.A_city] = {ref:ZaAccount.A_city, type:_TEXTFIELD_, msgName:ZaMsg.NAD_city,label:ZaMsg.NAD_city,
+		ZaAccountXFormView.addressItemsPoolForDialog[ZaAccount.A_city] = {ref:ZaAccount.A_city, type:_TEXTFIELD_, msgName:ZaMsg.NAD_city,label:ZaMsg.NAD_city,
             labelLocation:_LEFT_, width:250};
-		ZaAccountXFormView.addressItemsPool[ZaAccount.A_country] = {ref:ZaAccount.A_country, type:_TEXTFIELD_, msgName:ZaMsg.NAD_country,label:ZaMsg.NAD_country,
+		ZaAccountXFormView.addressItemsPoolForDialog[ZaAccount.A_country] = {ref:ZaAccount.A_country, type:_TEXTFIELD_, msgName:ZaMsg.NAD_country,label:ZaMsg.NAD_country,
             labelLocation:_LEFT_, width:250};
 
 	}
@@ -1248,7 +1249,7 @@ ZaAccountXFormView.getAddressFormItemForDialog = function(){
 	}
 
 	for(var i = 0; i < addressFormItemsOrders.length; i++){
-		addressFormItems.push(ZaAccountXFormView.addressItemsPool[addressFormItemsOrders[i]]);
+		addressFormItems.push(ZaAccountXFormView.addressItemsPoolForDialog[addressFormItemsOrders[i]]);
 	}
 	return addressFormItems;
 }
@@ -1592,16 +1593,8 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 				colSizes:["275px","*"],numCols:2,
 				visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,
                         			ZaAccountXFormView.ACCOUNT_NAME_GROUP_ATTRS]],				
-				items:ZaAccountXFormView.getAccountNameInfoItem(),
-                displayLabelItem: true, headerLabelWidth:"100px",
-                headerItems:[
-                    {ref:ZaAccount.A_name, type:_EMAILADDR_,
-					 msgName:ZaMsg.NAD_AccountName,
-                                        labelLocation:_LEFT_,onChange:ZaAccount.setDomainChanged,forceUpdate:true,
-                                        enableDisableChecks:[[ZaItem.hasRight,ZaAccount.RENAME_ACCOUNT_RIGHT]],
-                                        visibilityChecks:[],bmolsnr:false
-                     }
-                ]
+				items:ZaAccountXFormView.getAccountNameInfoItem()
+
 			}
 		];
 	
@@ -1613,12 +1606,6 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 					labelLocation:_LEFT_, choices:this.accountStatusChoices
 				}
 			],
-            headerItems: [
-                    {ref:ZaAccount.A_accountStatus, type:_OSELECT1_, //msgName:ZaMsg.NAD_AccountStatus,
-                        bmolsnr:true,
-                        labelLocation:_LEFT_, choices:this.accountStatusChoices
-                    }
-            ], displayLabelItem: true, headerLabelWidth:"100px",
 			visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,
                         			[ZaAccount.A_accountStatus,
                         			ZaAccount.A_COSId,
@@ -1728,9 +1715,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 			{ref:ZaAccount.A_notes, type:_TEXTAREA_, msgName:ZaMsg.NAD_Notes,
 				label:ZaMsg.NAD_Notes, labelLocation:_LEFT_, labelCssStyle:"vertical-align:top", width:"30em"
 			}
-		],
-        displayLabelItem: true, headerLabelWidth:"100px",
-        headerItems:ZaItem.descriptionXFormItem
+		]
 	};
 
 	case1Items.push(notesGroup);
