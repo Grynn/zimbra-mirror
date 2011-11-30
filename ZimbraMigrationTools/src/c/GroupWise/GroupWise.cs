@@ -220,7 +220,8 @@ namespace GroupWise
                     str += type;
                    System.Console.WriteLine(str);
                    string id = f1.id;
-                    getContactItems(id);
+                   Dictionary<string, string> map = new Dictionary<string, string>();
+                    getContactItems(id,map);
                     ws.session = new @string();
                     ws.session.Text = new String[1];
                     ws.session.Text[0] = respl.session;
@@ -245,7 +246,7 @@ namespace GroupWise
 
         }
 
-        protected void getContactItems(string uid)
+        protected void getContactItems(string uid, Dictionary <string,string> mapObj)
         {
             String str;
             getItemsRequest req = new getItemsRequest();
@@ -278,11 +279,50 @@ namespace GroupWise
                     {
 
                         Contact mt = (Contact)resp.items[cnt];
+                      
 
                         str += mt.officeInfo;
                         str += "\n";
                         str += mt.name;
                         cnt--;
+                        if (mt.officeInfo != null)
+                        mapObj.Add("Location", mt.officeInfo.location.ToString());
+                        if (mt.officeInfo != null)
+                            mapObj.Add("Organization", mt.officeInfo.organization.ToString());
+                        if (mt.officeInfo != null)
+                            mapObj.Add("Title", mt.officeInfo.title.ToString());
+                        if (mt.name != null)
+                        mapObj.Add("Name", mt.name.ToString());
+                        if (mt.personalInfo != null)
+                        mapObj.Add("birthday", mt.personalInfo.birthday.ToString());
+                        if (mt.phoneList != null)
+                        {
+                            int count = mt.phoneList.phone.Length;
+                            while (count > 0)
+                            {
+                                mapObj.Add("Phone" + mt.phoneList.phone[count-1].type.ToString(), mt.phoneList.phone[count-1].Value.ToString());
+                                count--;
+                            }
+                        }
+                        if (mt.imList != null)
+                        mapObj.Add("imList", mt.imList.ToString());
+                        if (mt.fullName.lastName != null)
+                        mapObj.Add("LastName", mt.fullName.lastName.ToString());
+                        if (mt.fullName.firstName != null)
+                            mapObj.Add("FirstName", mt.fullName.firstName.ToString());
+                        if (mt.fullName.middleName != null)
+                            mapObj.Add("MiddleName", mt.fullName.middleName.ToString());
+                        if (mt.addressList != null)
+                        mapObj.Add("address", mt.addressList.address.ToString());
+                        if (mt.addressList != null)
+                            mapObj.Add("mailingaddress", mt.addressList.mailingAddress.ToString());
+                        if (mt.contacts != null)
+                        mapObj.Add("Contacts", mt.contacts.ToString());
+                        
+
+                                               
+                        
+
                     }
 
                     str += resp.status.code.ToString();
@@ -401,7 +441,7 @@ namespace GroupWise
                     }
                     if (f.name.ToString() == "Contacts")
                     {
-                        getContactItems(f.id);
+                       // getContactItems(f.id);
                         ws.session = new @string();
                         ws.session.Text = new String[1];
                         ws.session.Text[0] =sessioninfo;
