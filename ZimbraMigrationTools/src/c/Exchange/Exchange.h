@@ -26,6 +26,7 @@
 #include <IADS.h>
 #include <sddl.h>
 
+using namespace Zimbra::Util;
 using namespace Zimbra::MAPI;
 
 class CExchangeModule: public CAtlDllModuleT<CExchangeModule>

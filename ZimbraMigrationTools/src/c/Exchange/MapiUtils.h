@@ -39,42 +39,18 @@ inline void WtoA(LPWSTR pStrW, LPSTR &pStrA)
     int nAChars = WideCharToMultiByte(CP_ACP, 0, pStrW, nWChars, NULL, 0, NULL, NULL);
 
     pStrA = new CHAR[nAChars + 1];
-    ZeroMemory((void *)pStrA, nAChars + 1);
     WideCharToMultiByte(CP_ACP, 0, pStrW, nWChars, pStrA, nAChars, NULL, NULL);
+    pStrA[nAChars] = '\0';
 }
 
 inline void AtoW(LPSTR pStrA, LPWSTR &pStrW)
 {
-    int AChars = (int)strlen(pStrA);
-    int WChars = MultiByteToWideChar(CP_ACP, 0, pStrA, AChars, NULL, 0);
+    int nAChars = (int)strlen(pStrA);
+    int nWChars = MultiByteToWideChar(CP_ACP, 0, pStrA, nAChars, NULL, 0);
 
-    pStrW = new WCHAR[WChars + 1];
-    ZeroMemory((void *)pStrW, (WChars + 1) * sizeof (WCHAR));
-    MultiByteToWideChar(CP_ACP, 0, pStrA, AChars, pStrW, WChars);
-}
-
-inline void SafeDelete(LPWSTR &pStr)
-{
-    if (pStr != NULL)
-    {
-        delete[] pStr;
-        pStr = NULL;
-    }
-}
-
-inline void SafeDelete(LPCWSTR pStr)
-{
-    if (pStr != NULL)
-        delete[] pStr;
-}
-
-inline void SafeDelete(LPSTR &pStr)
-{
-    if (pStr != NULL)
-    {
-        delete[] pStr;
-        pStr = NULL;
-    }
+    pStrW = new WCHAR[nWChars + 1];
+    MultiByteToWideChar(CP_ACP, 0, pStrA, nAChars, pStrW, nWChars);
+    pStrW[nWChars] = 0;
 }
 
 inline LPTSTR LongToHexString(LONG l)
@@ -99,21 +75,6 @@ inline ULONG SetPropType(ULONG propTag, ULONG propType)
     if (PROP_TYPE(propTag) == PT_ERROR)
         return PR_NULL;
     return PROP_TAG(propType, PROP_ID(propTag));
-}
-
-inline int CopyString(LPWSTR &pDest, LPWSTR pSrc)
-{
-    if (pSrc == NULL)
-    {
-        pDest = NULL;
-        return 0;
-    }
-
-    int nLength = (int)wcslen(pSrc);
-
-    pDest = new WCHAR[nLength + 1];
-    wcscpy(pDest, pSrc);
-    return nLength;
 }
 
 inline void CopyEntryID(SBinary &src, SBinary &dest)
@@ -141,8 +102,8 @@ inline LPTSTR FromatExceptionInfo(HRESULT errCode, LPWSTR errDescription, LPSTR 
 
     AtoW(srcFile, lpstrSrcFile);
 
-    size_t totalLen = wcslen(lpstrErrCode) + wcslen(errDescription) + wcslen(lpstrSrcFile) +
-        wcslen(lpstrSrecline) + (sizeof (WCHAR) * 2);
+    size_t totalLen = wcslen(UNICODE_EXCEPTION_STRING) + wcslen(lpstrErrCode) +
+        wcslen(errDescription) + wcslen(lpstrSrcFile) + wcslen(lpstrSrecline);
 
     lpBuffer = new TCHAR[totalLen * sizeof (WCHAR)];
     wsprintf(lpBuffer, UNICODE_EXCEPTION_STRING, lpstrErrCode, errDescription, lpstrSrcFile,
@@ -190,29 +151,6 @@ typedef struct
 typedef HRESULT (STDMETHODCALLTYPE * WRAPCOMPRESSEDRTFSTREAMEX)(LPSTREAM lpCompressedRTFStream,
     CONST RTF_WCSINFO *pWCSInfo, LPSTREAM *lppUncompressedRTFStream,
     RTF_WCSRETINFO *pRetInfo);
-
-class CriticalSection
-{
-public:
-    CriticalSection() { InitializeCriticalSection(&cs); }
-    ~CriticalSection() { DeleteCriticalSection(&cs); }
-    void Enter() { EnterCriticalSection(&cs); }
-    void Leave() { LeaveCriticalSection(&cs); }
-
-private:
-    CRITICAL_SECTION cs;
-};
-
-#pragma warning( disable : 4512 )
-class AutoCriticalSection
-{
-public:
-    AutoCriticalSection(CriticalSection &scs): cs(scs) { cs.Enter(); }
-    ~AutoCriticalSection() { cs.Leave(); }
-
-private:
-    CriticalSection &cs;
-};
 
 class MapiUtilsException: public GenericException
 {
