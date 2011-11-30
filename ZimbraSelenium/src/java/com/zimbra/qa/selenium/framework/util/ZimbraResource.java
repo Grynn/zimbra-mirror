@@ -26,19 +26,10 @@ public class ZimbraResource extends ZimbraAccount {
 	}
 	
 	public ZimbraResource(Type type, String email, String password) {
+		super(email, password);
+		
 		ResourceType = type;
-		
-		if ( email == null ) {
-			email = ZimbraSeleniumProperties.getStringProperty("locale") + "_" + ResourceType +"_" + System.currentTimeMillis();
-		}
-		EmailAddress = email;
-		
-		if ( password == null ) {
-			password = ZimbraSeleniumProperties.getStringProperty("adminPwd", "test123");
-		}
-		Password = password;
 		        
-        
         provision();
         authenticate();
  
@@ -107,7 +98,7 @@ public class ZimbraResource extends ZimbraAccount {
 				
 			} else {
 				ZimbraId = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:calresource", "id");
-				ZimbraMailHost = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:account/admin:a[@n='zimbraMailHost']", null);
+				ZimbraMailHost = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:calresource/admin:a[@n='zimbraMailHost']", null);
 			}
 			
 			// Start: Dev environment hack
