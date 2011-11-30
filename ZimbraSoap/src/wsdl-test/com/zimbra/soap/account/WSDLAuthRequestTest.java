@@ -57,7 +57,7 @@ public class WSDLAuthRequestTest {
         long lifetime = authResponse.getLifetime();
         Assert.assertTrue(lifetime > 0);
         Assert.assertNull(authResponse.getRefer());
-        Assert.assertEquals(authResponse.getSkin(), "carbon");  // If the default changes, this might change too?
+        Assert.assertEquals(authResponse.getSkin(), "serenity");  // If the default changes, this might change too?
     }
 
     /**
