@@ -84,7 +84,7 @@ case "$1" in
       exit 0
     fi
 
-    nohup sh -c "exec ${runcmd} 2>&1" > ${zimbra_home}/log/milter.out &
+    nohup sh -c "exec ${runcmd} 2>&1" > ${zimbra_home}/log/milter.out 2>&1 &
 
     pid=$!
     if [ "x$pid" != 'x' ]; then
