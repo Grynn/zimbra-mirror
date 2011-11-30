@@ -29,8 +29,13 @@ if(XFormItem) {
         var content = this.getInheritedProperty("helpTooltipContent");
         if (!content) {
             var attributeName = this.getRefPath();
-            if(!attributeName)
+            if(!attributeName) {
+                attributeName = this.getInheritedProperty("attributeName");
+            }
+
+            if(!attributeName) {
                 return;
+            }
 
             var findSlash = attributeName.lastIndexOf("/");
             if(findSlash != -1) {

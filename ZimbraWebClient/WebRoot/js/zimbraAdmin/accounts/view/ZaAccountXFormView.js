@@ -1295,6 +1295,7 @@ ZaAccountXFormView.getAccountNameInfoItem = function(){
 					}
 				};
 		ZaAccountXFormView.accountNameInfoPool["ZaAccountDisplayInfoGroup"] = {type:_GROUP_, numCols:3, nowrap:true,
+                    attributeName: ZaAccount.A_displayname,
 					width:200, msgName:ZaMsg.NAD_DisplayName,label:ZaMsg.NAD_DisplayName, labelLocation:_LEFT_,
                                         visibilityChecks:[[ZaItem.hasReadPermission,ZaAccount.A_displayname]],
                                         items: [
@@ -1303,7 +1304,7 @@ ZaAccountXFormView.getAccountNameInfoItem = function(){
                                                         enableDisableChangeEventSources:[ZaAccount.A2_autodisplayname],bmolsnr:true,
                                                         visibilityChecks:[]
                                                 },
-                                                {ref:ZaAccount.A2_autodisplayname, type:_CHECKBOX_, msgName:ZaMsg.NAD_Auto,label:ZaMsg.NAD_Auto,labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE", subLabel:"",
+                                                {ref:ZaAccount.A2_autodisplayname, type:_CHECKBOX_, msgName:ZaMsg.NAD_Auto,label:ZaMsg.NAD_Auto,labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE", subLabel:"", helpTooltip: false,
                                                         elementChanged: function(elementValue,instanceValue, event) {
                                                                 if(elementValue=="TRUE") {
                                                                         if(ZaAccount.generateDisplayName.call(this, this.getInstance(), this.getInstanceValue(ZaAccount.A_firstName), this.getInstanceValue(ZaAccount.A_lastName),this.getInstanceValue(ZaAccount.A_initials))) {
@@ -1627,7 +1628,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 
 		setupGroup.items.push(
 			{type:_GROUP_, numCols:3,colSizes:["156px","22px","100px"], nowrap:true, label:ZaMsg.NAD_ClassOfService, labelLocation:_LEFT_,
-				visibilityChecks:[[ZaItem.hasReadPermission,ZaAccount.A_COSId]],
+				visibilityChecks:[[ZaItem.hasReadPermission,ZaAccount.A_COSId]], attributeName: ZaAccount.A_COSId,
 				id: ZaAccountXFormView.cosGroupItemId,
 				items: [
 					{ref:ZaAccount.A_COSId, type:_DYNSELECT_,label: null, choices:this.cosChoices,
@@ -1660,7 +1661,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 						visibilityChecks:[], subLabel:"",
                         enableDisableChecks:[ [ZaItem.hasWritePermission,ZaAccount.A_COSId]],
 						msgName:ZaMsg.NAD_Auto,label:ZaMsg.NAD_Auto,labelLocation:_RIGHT_,
-						trueValue:"TRUE", falseValue:"FALSE" ,
+						trueValue:"TRUE", falseValue:"FALSE" , helpTooltip: false,
 						elementChanged: function(elementValue,instanceValue, event) {
 							this.getForm().parent.setDirty(true);
 							if(elementValue=="TRUE") {
