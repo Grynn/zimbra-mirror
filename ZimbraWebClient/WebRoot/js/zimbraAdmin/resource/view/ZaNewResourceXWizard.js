@@ -381,7 +381,7 @@ ZaNewResourceXWizard.myXFormModifier = function(xFormObject) {
 							return newValue;
 						}
 				},
-				{ref:ZaResource.A2_autoCos, type:_CHECKBOX_, 
+				{ref:ZaResource.A2_autoCos, type:_WIZ_CHECKBOX_,
 					msgName:ZaMsg.NAD_Auto,label:ZaMsg.NAD_Auto,labelLocation:_RIGHT_,
 					trueValue:"TRUE", falseValue:"FALSE" ,
 					elementChanged: function(elementValue,instanceValue, event) {
@@ -403,7 +403,7 @@ ZaNewResourceXWizard.myXFormModifier = function(xFormObject) {
 					  enableDisableChecks:[]
 					  });
 		
-	setupGroup.items.push({ref:ZaResource.A_zimbraCalResAutoDeclineRecurring, type:_CHECKBOX_, 
+	setupGroup.items.push({ref:ZaResource.A_zimbraCalResAutoDeclineRecurring, type:_WIZ_CHECKBOX_,
 						msgName:ZaMsg.NAD_DeclineRecurring,label:ZaMsg.NAD_DeclineRecurring, 
 						labelCssClass:"xform_label", align:_LEFT_,labelLocation:_LEFT_,trueValue:"TRUE", falseValue:"FALSE"});
 
@@ -434,7 +434,7 @@ ZaNewResourceXWizard.myXFormModifier = function(xFormObject) {
 								enableDisableChecks:[ZaAccount.isAutoMailServer],
 								enableDisableChangeEventSources:[ZaResource.A2_autoMailServer]									
 						  	},
-							{ref:ZaResource.A2_autoMailServer, type:_CHECKBOX_, msgName:ZaMsg.NAD_Auto,
+							{ref:ZaResource.A2_autoMailServer, type:_WIZ_CHECKBOX_, msgName:ZaMsg.NAD_Auto,
 								visibilityChecks:[],enableDisableChecks:[],
 								label:ZaMsg.NAD_Auto,labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE"}
 						]
@@ -506,7 +506,7 @@ ZaNewResourceXWizard.myXFormModifier = function(xFormObject) {
 											enableDisableChecks:[ZaNewResourceXWizard.isAutoDisplayname],
                                                                                         enableDisableChangeEventSources:[ZaResource.A2_autoLocationName],bmolsnr:true
 										},
-										{ref:ZaResource.A2_autoLocationName, type:_CHECKBOX_, msgName:ZaMsg.NAD_Auto,label:ZaMsg.NAD_Auto,labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE",
+										{ref:ZaResource.A2_autoLocationName, type:_WIZ_CHECKBOX_, msgName:ZaMsg.NAD_Auto,label:ZaMsg.NAD_Auto,labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE",
 											elementChanged: ZaResource.setAutoLocationName
 										}
 									]

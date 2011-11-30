@@ -549,6 +549,10 @@ SuperWiz_Checkbox_XFormItem.prototype.visibilityChecks = [ZaItem.hasWritePermiss
 SuperWiz_Checkbox_XFormItem.prototype.enableDisableChecks = [ZaItem.hasWritePermission];
 if(appNewUI){
 SuperWiz_Checkbox_XFormItem.prototype.labelCssStyle = "";
+SuperWiz_Checkbox_XFormItem.prototype.labelCssClass = "";
+SuperWiz_Checkbox_XFormItem.prototype.checkBoxLabelLocation = _RIGHT_;
+SuperWiz_Checkbox_XFormItem.prototype.checkboxSubLabel = "";
+SuperWiz_Checkbox_XFormItem.prototype.checkboxAlign = _RIGHT_;
 }
 
 Super_Checkbox_XFormItem.prototype.useParentTable = false;
@@ -559,13 +563,18 @@ Super_Checkbox_XFormItem.prototype.labelWrap = true;
 Super_Checkbox_XFormItem.prototype.checkboxSubLabel = null;
 if(appNewUI){
 Super_Checkbox_XFormItem.prototype.labelCssStyle = "border-right: 1px solid";
+Super_Checkbox_XFormItem.prototype.labelCssClass = "gridGroupBodyLabel";
+}else{
+Super_Checkbox_XFormItem.prototype.labelCssClass = "xform_checkbox";
 }
 
 Super_Checkbox_XFormItem.prototype.initializeItems = function() {
 	var anchorCssStyle = this.getInheritedProperty("anchorCssStyle");
 	var checkboxSubLabel = this.getInheritedProperty("checkboxSubLabel");
+    var checkLabelCssClass = this.getInheritedProperty("labelCssClass");
+
 	var chkBox = {
-		type:_CHECKBOX_, ref:".",  labelCssClass:"gridGroupBodyLabel", subLabel:checkboxSubLabel,
+		type:_CHECKBOX_, ref:".",  labelCssClass:checkLabelCssClass, subLabel:checkboxSubLabel,
 		onChange:Composite_XFormItem.onFieldChange,
 		updateElement:function(value) {
 			Super_XFormItem.updateCss.call(this,5);
@@ -609,6 +618,11 @@ Super_Checkbox_XFormItem.prototype.initializeItems = function() {
 	var checkBoxLabelLocation = this.getInheritedProperty("checkBoxLabelLocation");
 	if(checkBoxLabelLocation) {
 		chkBox.labelLocation = checkBoxLabelLocation;
+	}
+
+    var checkBoxAlign = this.getInheritedProperty("checkboxAlign");
+	if(checkBoxLabelLocation) {
+		chkBox.align = checkBoxAlign;
 	}
 	
 	this.items = [chkBox,anchorHlpr];

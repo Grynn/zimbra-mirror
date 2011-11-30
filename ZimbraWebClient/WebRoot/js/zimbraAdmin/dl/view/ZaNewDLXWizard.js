@@ -900,12 +900,12 @@ ZaNewDLXWizard.myXFormModifier = function(xFormObject, entry) {
                                                         visibilityChecks:[ZaItem.hasReadPermission],
                                                         width:"100%"
                                                      },
-                                                        {ref: "zimbraMailStatus", type:_CHECKBOX_, trueValue:"enabled", falseValue:"disabled", align:_LEFT_,
+                                                        {ref: "zimbraMailStatus", type:_WIZ_CHECKBOX_, trueValue:"enabled", falseValue:"disabled", align:_LEFT_,
                                                                 nowrap:false,labelWrap:true,
                                 label:ZaMsg.DLXV_LabelEnabled, msgName:ZaMsg.DLXV_LabelEnabled, labelLocation:_LEFT_,
                                                                 labelCssClass:"xform_label", cssStyle:"padding-left:0px"
                                                         },
-                                                        {ref:ZaAccount.A_zimbraHideInGal, type:_CHECKBOX_, trueValue:"TRUE", falseValue:"FALSE", align:_LEFT_,
+                                                        {ref:ZaAccount.A_zimbraHideInGal, type:_WIZ_CHECKBOX_, trueValue:"TRUE", falseValue:"FALSE", align:_LEFT_,
                                                                 nowrap:false,labelWrap:true,
                                 label:ZaMsg.LBL_zimbraHideInGal, msgName:ZaMsg.LBL_zimbraHideInGal, labelLocation:_LEFT_,labelCssClass:"xform_label", cssStyle:"padding-left:0px"
                                                         }
@@ -1074,12 +1074,12 @@ ZaNewDLXWizard.myXFormModifier = function(xFormObject, entry) {
                                                         width:"100%"
                                                      },
 
-							{ref: "zimbraMailStatus", type:_CHECKBOX_, trueValue:"enabled", falseValue:"disabled", align:_LEFT_,
+							{ref: "zimbraMailStatus", type:_WIZ_CHECKBOX_, trueValue:"enabled", falseValue:"disabled", align:_LEFT_,
 								nowrap:false,labelWrap:true,
                                 label:ZaMsg.DLXV_LabelEnabled, msgName:ZaMsg.DLXV_LabelEnabled, labelLocation:_LEFT_,
 								labelCssClass:"xform_label", cssStyle:"padding-left:0px"
 							},
-   							{ref:ZaAccount.A_zimbraHideInGal, type:_CHECKBOX_, trueValue:"TRUE", falseValue:"FALSE", align:_LEFT_,
+   							{ref:ZaAccount.A_zimbraHideInGal, type:_WIZ_CHECKBOX_, trueValue:"TRUE", falseValue:"FALSE", align:_LEFT_,
 								nowrap:false,labelWrap:true,
                                 label:ZaMsg.LBL_zimbraHideInGal, msgName:ZaMsg.LBL_zimbraHideInGal, labelLocation:_LEFT_,labelCssClass:"xform_label", cssStyle:"padding-left:0px"
 							}
@@ -1344,7 +1344,7 @@ ZaNewDLXWizard.myXFormModifier = function(xFormObject, entry) {
 										{type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonSearch, width:80,
 										   onActivate:ZaAccountMemberOfListView.prototype.srchButtonHndlr
 										},
-										{ref: ZaAccount.A2_showSameDomain, type: _CHECKBOX_, align:_RIGHT_,
+										{ref: ZaAccount.A2_showSameDomain, type: _WIZ_CHECKBOX_, align:_RIGHT_,
 												label:null,labelLocation:_NONE_, trueValue:"TRUE", falseValue:"FALSE",
 												visibilityChecks:[]
 										},
@@ -1473,7 +1473,7 @@ ZaNewDLXWizard.myXFormModifier = function(xFormObject, entry) {
                     ]]],
                     visibilityChangeEventSources:[],
                     items: [
-                        {ref:ZaDistributionList.A_zimbraPrefReplyToEnabled, type:_CHECKBOX_,
+                        {ref:ZaDistributionList.A_zimbraPrefReplyToEnabled, type:_WIZ_CHECKBOX_,
                             visibilityChecks:[[ZaItem.hasReadPermission, ZaDistributionList.A_zimbraPrefReplyToEnabled]],
                             label:ZaMsg.DLXV_ReplayToEnabled, trueValue:"TRUE", falseValue:"FALSE"
                         },

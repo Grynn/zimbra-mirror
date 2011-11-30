@@ -2294,6 +2294,15 @@ Textarea_XFormItem.prototype.getKeyPressHandlerHTML = function () {
  */
 Checkbox_XFormItem = function() {}
 XFormItemFactory.createItemType("_CHECKBOX_", "checkbox", Checkbox_XFormItem, XFormItem)
+ // Wiz_checkbox for appNewUI dialog
+ Wiz_Checkbox_XFormItem = function() {}
+XFormItemFactory.createItemType("_WIZ_CHECKBOX_", "wiz_checkbox", Wiz_Checkbox_XFormItem, Checkbox_XFormItem)
+if(appNewUI){
+   Wiz_Checkbox_XFormItem.prototype.labelLocation = _RIGHT_;
+   Wiz_Checkbox_XFormItem.prototype.align = _RIGHT_;
+   Wiz_Checkbox_XFormItem.prototype.subLabel = "";
+}
+
 
 //	type defaults
 Checkbox_XFormItem.prototype._inputType = "checkbox";

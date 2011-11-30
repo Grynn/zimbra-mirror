@@ -1471,10 +1471,10 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 				},
 				{type:_CASE_, caseKey:ZaNewDomainXWizard.FEATURE_STEP,
 					items: [
-						{ type:_ZA_TOP_GROUPER_, label:ZaMsg.NAD_zimbraCalendarFeature,
+						{ type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_zimbraCalendarFeature,
                                   		  items :[
                                                   {ref:ZaDomain.A_zimbraFeatureCalendarReminderDeviceEmailEnabled,
-                                                      type:_SUPER_CHECKBOX_,
+                                                      type:_SUPER_WIZ_CHECKBOX_,
                                                       msgName:ZaMsg.LBL_zimbraFeatureCalendarReminderDeviceEmailEnabled,
                                                       checkBoxLabel:ZaMsg.LBL_zimbraFeatureCalendarReminderDeviceEmailEnabled,
                                                       resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
@@ -1487,8 +1487,7 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 				},
 				{type:_CASE_, caseKey:ZaNewDomainXWizard.ADVANCED_STEP, numCols:1, 
 					items: [
-						{ type:_ZA_TOP_GROUPER_, label:ZaMsg.Domain_BC_ShareConf, colSpan:2, colSizes:["100%"],
-							numCols:1,
+						{ type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.Domain_BC_ShareConf,
                                   		  items :[
                                           		{ ref: ZaDomain.A_zimbraBasicAuthRealm,
                                             		  type: _SUPERWIZ_TEXTFIELD_, width: 250 ,
@@ -1497,7 +1496,7 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject, entry) {
                                           		}
                                          	 ]
                                 		},
-                                                { type:_ZA_TOP_GROUPER_, label:ZaMsg.Domain_AD_EmailValidate,
+                                                { type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.Domain_AD_EmailValidate,
 							colSizes:["200px","*"], 
                                                   items :[
 

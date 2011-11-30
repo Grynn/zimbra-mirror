@@ -2198,7 +2198,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 								{ref:ZaAccount.A_zimbraPrefMailInitialSearch, type:_SUPER_TEXTFIELD_,
 									msgName:ZaMsg.LBL_zimbraPrefMailInitialSearch,
 									txtBoxLabel:ZaMsg.LBL_zimbraPrefMailInitialSearch,
-                                    labelCssClass:"gridGroupBodyLabel",
+                                     labelCssClass:(appNewUI?"gridGroupBodyLabel":"xform_label"),
                                     labelCssStyle:"border-right: 1px solid",
 									labelLocation:_LEFT_,
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS
@@ -2338,7 +2338,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 							],							
 							items :[
 								{ref:ZaAccount.A_zimbraPrefMailPollingInterval, type:_SUPER_LIFETIME_,
-                                    labelCssClass:"gridGroupBodyLabel",
+                                     labelCssClass:(appNewUI?"gridGroupBodyLabel":"xform_label"),
 									colSizes:["275px","70px","205px","*"],
 									msgName:ZaMsg.MSG_zimbraPrefMailPollingInterval,
 									txtBoxLabel:ZaMsg.LBL_zimbraPrefMailPollingInterval, 
@@ -2346,7 +2346,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 									nowrap:false,labelWrap:true									
 								},							
 								{ref:ZaAccount.A_zimbraMailMinPollingInterval,
-                                    labelCssClass:"gridGroupBodyLabel",
+                                    labelCssClass:(appNewUI?"gridGroupBodyLabel":"xform_label"),
 									type:_SUPER_LIFETIME_,
 									colSizes:["275px","70px","205px","*"],
 									msgName:ZaMsg.MSG_zimbraMailMinPollingInterval,
@@ -3386,20 +3386,20 @@ nowrap:false, labelWrap:true,
                                             resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
                                             msgName:ZaMsg.MSG_zimbraMailMessageLifetime,
                                             txtBoxLabel:ZaMsg.LBL_zimbraMailMessageLifetime,
-                                            labelCssClass:"gridGroupBodyLabel"
+                                            labelCssClass:(appNewUI?"gridGroupBodyLabel":"xform_label")
                                         },
                                         {ref:ZaAccount.A_zimbraMailTrashLifetime, type:_SUPER_LIFETIME1_,
 									        colSizes:["275px", "65px'", "210px", "*"],
                                             resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.MSG_zimbraMailTrashLifetime,
                                             txtBoxLabel:ZaMsg.LBL_zimbraMailTrashLifetime,
-                                            labelCssClass:"gridGroupBodyLabel"
+                                            labelCssClass:(appNewUI?"gridGroupBodyLabel":"xform_label")
                                         },
                                         {ref:ZaAccount.A_zimbraMailSpamLifetime, type:_SUPER_LIFETIME1_,
 									        colSizes:["275px", "65px'", "210px", "*"],
                                             resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
                                             msgName:ZaMsg.MSG_zimbraMailSpamLifetime,
                                             txtBoxLabel:ZaMsg.LBL_zimbraMailSpamLifetime,
-                                            labelCssClass:"gridGroupBodyLabel"
+                                            labelCssClass:(appNewUI?"gridGroupBodyLabel":"xform_label")
                                         }
                                     ]
                                 }
