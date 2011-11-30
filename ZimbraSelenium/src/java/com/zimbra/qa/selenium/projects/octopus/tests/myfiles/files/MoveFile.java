@@ -180,7 +180,9 @@ public class MoveFile extends OctopusCommonTest {
 		app.zPageMyFiles.zListItem(Action.A_LEFTCLICK, subFolderName);
 
 		// Verify the file is now in the destination folder
-		ZAssert.assertTrue(app.zPageOctopus.zIsItemInCurentListView(fileName),
+		ZAssert.assertTrue(app.zPageMyFiles.zWaitForElementPresent(
+				PageMyFiles.Locators.zMyFilesListView.locator + ":contains("
+						+ fileName + ")", "3000"),
 				"Verify the file was moved to the destination folder");
 	}
 
