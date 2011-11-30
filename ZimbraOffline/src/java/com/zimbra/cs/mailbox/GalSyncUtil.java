@@ -37,6 +37,7 @@ import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.Element.XMLElement;
 import com.zimbra.common.soap.MailConstants;
 import com.zimbra.common.soap.SoapProtocol;
+import com.zimbra.common.util.StringUtil;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.offline.OfflineAccount;
@@ -242,6 +243,10 @@ public final class GalSyncUtil {
     static ZcsMailbox getGalEnabledZcsMailbox(String domain) throws ServiceException {
         Set<String> existingAccounts = OfflineProvisioning.getOfflineInstance().getAllAccountsByDomain(domain);
         for (String accountId : existingAccounts) {
+            //in case local dev domain is @host.local
+            if (StringUtil.equal(OfflineConstants.LOCAL_ACCOUNT_ID, accountId)) {
+                continue;
+            }
             Account account = OfflineProvisioning.getOfflineInstance().getAccountById(accountId);
             // account might have been deleted here
             if (account != null && account.isFeatureGalEnabled() && account.isFeatureGalSyncEnabled()) {
