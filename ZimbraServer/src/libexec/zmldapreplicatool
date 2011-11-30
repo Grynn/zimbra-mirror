@@ -142,17 +142,25 @@ if(lc($ldap_is_master) ne "true") {
     $replEntry =~ s/rid=$entryRID/rid=$rid/;
   }
 
+  my $err;
+
   $mesg = $ldap->modify(
     $bdn,
     replace=>{olcSyncrepl=>"$replEntry"},
   );
+  $err=$mesg->code;
 
   if ($masterURI) {
     $mesg = $ldap->modify(
       $bdn,
       replace=>{olcUpdateRef=>"$masterURI"},
     );
+    if ($err == 0) {
+      $err=$mesg->code;
+    }
   }
+  $ldap->unbind;
+  exit($err);
 }
 
 sub usage {
