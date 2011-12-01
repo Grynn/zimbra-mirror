@@ -652,3 +652,40 @@ function () {
 }
 
 
+//ZaListView's subclasses can use it to override orginally DwtListView.prototype._handleColHeaderResize(),
+//due to in the latter, the header sash will not work well in some cases
+ZaListView._handleColHeaderResize =
+function(ev) {
+	if (!this._headerSash) {
+		this._headerSash = document.createElement("div");
+
+		var headerHeight = Dwt.getSize(this._listColDiv).y;
+		var thislistViewHeight = this.getSize().y;
+		var sashHeight = thislistViewHeight - 4; //make its height shorten a little
+
+		Dwt.setSize(this._headerSash, Dwt.DEFAULT, sashHeight);
+		Dwt.setPosition(this._headerSash, Dwt.ABSOLUTE_STYLE);
+		Dwt.setZIndex(this._headerSash, Dwt.Z_DND);
+
+		//as this._listDiv's sub node, headerSash will use 'absolute position',
+		//setting this._listDiv's position style to relative
+		//will make headerSash's position based on it.
+		Dwt.setPosition(this._listDiv, Dwt.RELATIVE_STYLE);
+		Dwt.setLocation(this._listDiv, 0, 0);
+		this._headerSash.className = "DwtListView-ColumnSash";
+		this._listDiv.appendChild(this._headerSash);
+
+		//always set the y-position to -headerHeight(based on _listDiv) to align to the header(_listColDiv) not _listColDiv
+		var sashY = -headerHeight;
+		Dwt.setLocation(this._headerSash, Dwt.DEFAULT, sashY);
+
+		//always remember initial mouse x-position
+		this._headerSashX = ev.docX;
+	}
+
+	//always update the sash's x-position
+	var thislistViewX = Dwt.getLocation(this._listDiv).x;
+	var sashX = ev.docX - thislistViewX;
+
+	Dwt.setLocation(this._headerSash, sashX);
+};
