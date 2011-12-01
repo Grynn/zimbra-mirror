@@ -690,4 +690,24 @@ textarea {
     @borderRadius@:5px;
 }
 
-
+.grid_table{
+    border-top: 1px solid black;
+    border-left: 1px solid black;
+    border-spacing: 0;
+    padding: 0;
+}
+.grid_table td{
+    border-right: 1px solid black;
+    border-bottom: 1px solid black;
+}
+.grid_table td td{
+    border: 0;
+}
+.grid_composite_table{
+   border-spacing: 0;
+   padding: 0;
+}
+.grid_xform_table{
+   border-spacing: 0;
+   padding: 0;
+}

@@ -710,7 +710,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject,entry) {
 	
 	xFormObject.items.push({type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan: "*", id:"xform_header", 
 			items: [
-				{type:_GROUP_,	numCols:4,colSizes:["32px","350px","100px","250px"],
+				{type:_GROUP_,	numCols:4,colSizes:["32px","350px","100px","*"],
 					items: [
 						{type:_AJX_IMAGE_, src:"Domain_32", label:null,rowSpan:3},
 						{type:_OUTPUT_, ref:"name", label:null,cssClass:"AdminTitle",

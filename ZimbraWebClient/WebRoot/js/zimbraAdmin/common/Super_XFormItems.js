@@ -395,12 +395,13 @@ XFormItemFactory.createItemType("_SUPER_TEXTFIELD_", "super_textfield", Super_Te
 Super_Textfield_XFormItem.prototype.useParentTable = false;
 Super_Textfield_XFormItem.prototype.txtBoxLabel = null;
 Super_Textfield_XFormItem.prototype.numCols = 3;
-Super_Textfield_XFormItem.prototype.colSizes = ["275px","275px","150px"];
+Super_Textfield_XFormItem.prototype.colSizes = ["275px","*","150px"];
 Super_Textfield_XFormItem.prototype.colSpan = 3;
 Super_Textfield_XFormItem.prototype.nowrap = false;
 Super_Textfield_XFormItem.prototype.labelWrap = true;
 if(appNewUI){
-Super_Textfield_XFormItem.prototype.labelCssStyle = "border-right: 1px solid ";
+Super_Textfield_XFormItem.prototype.labelCssStyle = "border-right: 1px solid black;";
+Super_Textfield_XFormItem.prototype.tableCssClass = "grid_composite_table";
 }
 
 SuperWiz_Textfield_XFormItem = function () {}
@@ -562,8 +563,9 @@ Super_Checkbox_XFormItem.prototype.nowrap = false;
 Super_Checkbox_XFormItem.prototype.labelWrap = true;
 Super_Checkbox_XFormItem.prototype.checkboxSubLabel = null;
 if(appNewUI){
-Super_Checkbox_XFormItem.prototype.labelCssStyle = "border-right: 1px solid";
+Super_Checkbox_XFormItem.prototype.labelCssStyle = "border-right: 1px solid black;";
 Super_Checkbox_XFormItem.prototype.labelCssClass = "gridGroupBodyLabel";
+Super_Checkbox_XFormItem.prototype.tableCssClass = "grid_composite_table";
 }else{
 Super_Checkbox_XFormItem.prototype.labelCssClass = "xform_checkbox";
 }
@@ -1222,7 +1224,8 @@ Super_Lifetime_XFormItem.prototype.useParenttable = false;
 Super_Lifetime_XFormItem.prototype.visibilityChecks = [ZaItem.hasReadPermission];
 Super_Lifetime_XFormItem.prototype.enableDisableChecks = [ZaItem.hasWritePermission];
 if(appNewUI){
-Super_Lifetime_XFormItem.prototype.labelCssStyle = "border-right: 1px solid";
+Super_Lifetime_XFormItem.prototype.labelCssStyle = "border-right: 1px solid black;";
+Super_Lifetime_XFormItem.prototype.tableCssClass = "grid_composite_table";
 }
 Super_Lifetime_XFormItem.prototype.initializeItems = function() {
 	var txtBoxLabel = this.getInheritedProperty("txtBoxLabel");
@@ -1820,7 +1823,7 @@ ZATabCase_XFormItem.prototype.getCustomWidth = function () {
             var res = totalWidth - this.getHMargin();
             if(this.cacheInheritedMethod("getCustomPaddingStyle", "$getCustomPaddingStyle")) {
                 var paddingStyle = this.cacheInheritedMethod("getCustomPaddingStyle", "$getCustomPaddingStyle").call(this);
-                if(paddingStyle)
+                if(paddingStyle&&!AjxEnv.isIE)
                     res = res - 15;
             }
 			return res;

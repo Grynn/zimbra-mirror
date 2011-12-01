@@ -1327,7 +1327,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
 	xFormObject.items = [
 			{type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan: "*", id:"xform_header",
 				items: [
-					{type:_GROUP_,	numCols:4,colSizes:["32px","350px","100px","250px"],items:headerItems}
+					{type:_GROUP_,	numCols:4,colSizes:["32px","350px","100px","*"],items:headerItems}
 				],
 				cssStyle:"padding-top:5px; padding-bottom:5px"
 			},

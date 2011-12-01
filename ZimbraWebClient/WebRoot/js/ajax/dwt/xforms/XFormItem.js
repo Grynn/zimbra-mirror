@@ -3004,6 +3004,9 @@ Group_XFormItem.prototype.focusable = false;
 Group_XFormItem.prototype.cellspacing = 0;
 Group_XFormItem.prototype.border = 0;
 Group_XFormItem.prototype.cellpadding = 0;
+if(appNewUI){
+Group_XFormItem.prototype.tableCssClass = "grid_xform_table";
+}
 Group_XFormItem.prototype.initFormItem = function () {
 	XFormItem.prototype.initFormItem.call(this);	
 	if(this.getInheritedProperty("isTabGroup")) {
@@ -3234,6 +3237,7 @@ CollapsedGroup_XFormItem.prototype.cssStyle = "margin-top: 10px;";
 CollapsedGroup_XFormItem.prototype.headerLabel = "Collapsed Group";
 CollapsedGroup_XFormItem.prototype.expandedImg =  "ImgNodeExpanded";
 CollapsedGroup_XFormItem.prototype.collapsedImg =  "ImgNodeCollapsed";
+CollapsedGroup_XFormItem.prototype.contentTableCssClass = "grid_table";
 CollapsedGroup_XFormItem.prototype.initializeItems = function () {
     var gridLabelCss = this.getInheritedProperty("gridLabelCss");
     var oldItems = this.getItems();
@@ -3314,9 +3318,10 @@ function () {
     var colsize = this.getInheritedProperty("colSizes");
     var numcols = this.getInheritedProperty("numCols");
     var contentCss = this.getInheritedProperty("contentCss");
-    var contentItems = { type:_GROUP_, items:[], colSpan:"*", border: 1,
+    var tableCssClass = this.getInheritedProperty("contentTableCssClass");
+    var contentItems = { type:_GROUP_, items:[], colSpan:"*",
                          colSizes:colsize,numCols:numcols, width:"100%",
-                         cssClass:contentCss
+                         cssClass:contentCss, tableCssClass:tableCssClass
     };
     var content =  this.getInheritedProperty("contentItems");
     if(content)
@@ -3481,7 +3486,7 @@ Case_XFormItem.prototype._outputHTML = function () {
     if(this.cacheInheritedMethod("getCustomPaddingStyle", "$getCustomPaddingStyle")) {
         var paddingStyle = this.cacheInheritedMethod("getCustomPaddingStyle", "$getCustomPaddingStyle").call(this);
         if(paddingStyle)
-            element.style.cssText += paddingStyle;
+            element.style.cssText += ";"+paddingStyle;  //";"for IE
     }
 
 	if (AjxEnv.isIE) {

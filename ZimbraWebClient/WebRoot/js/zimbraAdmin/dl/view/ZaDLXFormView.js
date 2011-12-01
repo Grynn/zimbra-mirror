@@ -1382,7 +1382,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
                             dataFetcherAttrs:[ZaItem.A_zimbraId, ZaItem.A_cn, ZaAccount.A_name, ZaAccount.A_displayname, ZaAccount.A_mail],
                             label:ZaMsg.DLXV_ReplayToAddr,labelLocation:_LEFT_,
                             emptyText: ZaMsg.DLXV_ReplayToAddrEmptyText,
-                            width:"35em", inputWidth:"35em", editable:true, forceUpdate:true,
+                            width:"24em", inputWidth:"32em", editable:true, forceUpdate:true,
                             choices:new XFormChoices([], XFormChoices.OBJECT_LIST, "name", "name"),
                             visibilityChecks:[[ZaItem.hasReadPermission, ZaDistributionList.A_zimbraPrefReplyToAddress]],
                             enableDisableChangeEventSources:[ZaDistributionList.A_zimbraPrefReplyToEnabled],
