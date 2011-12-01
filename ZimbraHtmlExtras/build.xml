@@ -77,7 +77,7 @@
     </target>
 
     <property name="war.exclude"
-              value="servlet-api.jar,jsp-api.jar,mail.jar,zimbra-native.jar,KeyView.jar"/>
+              value="jsp-api.jar,mail.jar,zimbra-native.jar,KeyView.jar"/>
     
     <target name="war" depends="build-init">
         <war warfile="${warfile}" webxml="WEB-INF/web.xml">
