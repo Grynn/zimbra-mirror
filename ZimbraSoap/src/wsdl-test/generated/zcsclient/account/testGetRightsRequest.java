@@ -5,22 +5,20 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
-import generated.zcsclient.zm.testKeyValuePair;
 
 
 /**
- * <p>Java class for accountKeyValuePairs complex type.
+ * <p>Java class for getRightsRequest complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="accountKeyValuePairs">
+ * &lt;complexType name="getRightsRequest">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="a" type="{urn:zimbra}keyValuePair" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="ace" type="{urn:zimbraAccount}right" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -30,46 +28,40 @@ import generated.zcsclient.zm.testKeyValuePair;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "accountKeyValuePairs", propOrder = {
-    "a"
+@XmlType(name = "getRightsRequest", propOrder = {
+    "ace"
 })
-@XmlSeeAlso({
-    testAccountCustomMetadata.class,
-    testCreateDistributionListRequest.class,
-    testCalendarResourceInfo.class,
-    testDistributionListAction.class
-})
-public class testAccountKeyValuePairs {
+public class testGetRightsRequest {
 
-    protected List<testKeyValuePair> a;
+    protected List<testRight> ace;
 
     /**
-     * Gets the value of the a property.
+     * Gets the value of the ace property.
      * 
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the a property.
+     * This is why there is not a <CODE>set</CODE> method for the ace property.
      * 
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
-     *    getA().add(newItem);
+     *    getAce().add(newItem);
      * </pre>
      * 
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link testKeyValuePair }
+     * {@link testRight }
      * 
      * 
      */
-    public List<testKeyValuePair> getA() {
-        if (a == null) {
-            a = new ArrayList<testKeyValuePair>();
+    public List<testRight> getAce() {
+        if (ace == null) {
+            ace = new ArrayList<testRight>();
         }
-        return this.a;
+        return this.ace;
     }
 
 }

@@ -6,6 +6,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlValue;
+import generated.zcsclient.zm.testGranteeType;
 
 
 /**
@@ -17,7 +18,7 @@ import javax.xml.bind.annotation.XmlValue;
  * &lt;complexType name="granteeSelector">
  *   &lt;simpleContent>
  *     &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema>string">
- *       &lt;attribute name="type" type="{urn:zimbraAdmin}granteeType" />
+ *       &lt;attribute name="type" type="{urn:zimbra}granteeType" />
  *       &lt;attribute name="by" type="{urn:zimbraAdmin}granteeBy" />
  *       &lt;attribute name="secret" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="all" type="{http://www.w3.org/2001/XMLSchema}boolean" />

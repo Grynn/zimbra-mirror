@@ -47,11 +47,11 @@ public class testSearchAccountsResponse {
 
     @XmlElements({
         @XmlElement(name = "account", type = testAccountInfo.class),
-        @XmlElement(name = "alias", type = testAliasInfo.class),
         @XmlElement(name = "calresource", type = testCalendarResourceInfo.class),
+        @XmlElement(name = "alias", type = testAliasInfo.class),
         @XmlElement(name = "dl", type = testDistributionListInfo.class),
-        @XmlElement(name = "cos", type = testCosInfo.class),
-        @XmlElement(name = "domain", type = testDomainInfo.class)
+        @XmlElement(name = "domain", type = testDomainInfo.class),
+        @XmlElement(name = "cos", type = testCosInfo.class)
     })
     protected List<testAdminObjectInfo> calresourceOrDlOrAlias;
     @XmlAttribute(name = "more", required = true)
@@ -78,11 +78,11 @@ public class testSearchAccountsResponse {
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link testAccountInfo }
-     * {@link testAliasInfo }
      * {@link testCalendarResourceInfo }
+     * {@link testAliasInfo }
      * {@link testDistributionListInfo }
-     * {@link testCosInfo }
      * {@link testDomainInfo }
+     * {@link testCosInfo }
      * 
      * 
      */

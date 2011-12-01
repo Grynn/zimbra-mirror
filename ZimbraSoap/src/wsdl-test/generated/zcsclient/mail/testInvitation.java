@@ -53,8 +53,8 @@ public class testInvitation {
     protected testInviteComponent comp;
     @XmlElements({
         @XmlElement(name = "mp", type = testPartInfo.class),
-        @XmlElement(name = "dlSubs", type = testDlSubscriptionNotification.class),
-        @XmlElement(name = "shr", type = testShareNotification.class)
+        @XmlElement(name = "shr", type = testShareNotification.class),
+        @XmlElement(name = "dlSubs", type = testDlSubscriptionNotification.class)
     })
     protected List<Object> mpOrShrOrDlSubs;
     @XmlAttribute(name = "type", required = true)
@@ -140,8 +140,8 @@ public class testInvitation {
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link testPartInfo }
-     * {@link testDlSubscriptionNotification }
      * {@link testShareNotification }
+     * {@link testDlSubscriptionNotification }
      * 
      * 
      */

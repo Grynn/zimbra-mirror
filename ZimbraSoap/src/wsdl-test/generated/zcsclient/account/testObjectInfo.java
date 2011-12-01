@@ -37,8 +37,8 @@ import generated.zcsclient.zm.testKeyValuePair;
     "a"
 })
 @XmlSeeAlso({
-    testDlInfo.class,
-    testDistributionListInfo.class
+    testDistributionListInfo.class,
+    testDlInfo.class
 })
 public class testObjectInfo {
 

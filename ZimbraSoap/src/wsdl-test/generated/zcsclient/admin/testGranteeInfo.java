@@ -5,6 +5,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
+import generated.zcsclient.zm.testGranteeType;
 
 
 /**
@@ -18,7 +19,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *       &lt;/sequence>
- *       &lt;attribute name="type" type="{urn:zimbraAdmin}granteeType" />
+ *       &lt;attribute name="type" type="{urn:zimbra}granteeType" />
  *       &lt;attribute name="id" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="name" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>

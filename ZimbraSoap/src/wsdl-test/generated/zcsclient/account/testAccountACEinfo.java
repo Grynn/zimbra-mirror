@@ -1,5 +1,5 @@
 
-package generated.zcsclient.mail;
+package generated.zcsclient.account;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -9,22 +9,23 @@ import generated.zcsclient.zm.testGranteeType;
 
 
 /**
- * <p>Java class for grant complex type.
+ * <p>Java class for accountACEinfo complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="grant">
+ * &lt;complexType name="accountACEinfo">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;all>
- *       &lt;/all>
- *       &lt;attribute name="perm" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;sequence>
+ *       &lt;/sequence>
+ *       &lt;attribute name="zid" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="gt" use="required" type="{urn:zimbra}granteeType" />
- *       &lt;attribute name="zid" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="right" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="d" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="pw" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="key" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="pw" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="deny" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -33,46 +34,46 @@ import generated.zcsclient.zm.testGranteeType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "grant", propOrder = {
+@XmlType(name = "accountACEinfo")
+public class testAccountACEinfo {
 
-})
-public class testGrant {
-
-    @XmlAttribute(name = "perm", required = true)
-    protected String perm;
+    @XmlAttribute(name = "zid")
+    protected String zid;
     @XmlAttribute(name = "gt", required = true)
     protected testGranteeType gt;
-    @XmlAttribute(name = "zid", required = true)
-    protected String zid;
+    @XmlAttribute(name = "right", required = true)
+    protected String right;
     @XmlAttribute(name = "d")
     protected String d;
-    @XmlAttribute(name = "pw")
-    protected String pw;
     @XmlAttribute(name = "key")
     protected String key;
+    @XmlAttribute(name = "pw")
+    protected String pw;
+    @XmlAttribute(name = "deny")
+    protected Boolean deny;
 
     /**
-     * Gets the value of the perm property.
+     * Gets the value of the zid property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getPerm() {
-        return perm;
+    public String getZid() {
+        return zid;
     }
 
     /**
-     * Sets the value of the perm property.
+     * Sets the value of the zid property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setPerm(String value) {
-        this.perm = value;
+    public void setZid(String value) {
+        this.zid = value;
     }
 
     /**
@@ -100,27 +101,27 @@ public class testGrant {
     }
 
     /**
-     * Gets the value of the zid property.
+     * Gets the value of the right property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getZid() {
-        return zid;
+    public String getRight() {
+        return right;
     }
 
     /**
-     * Sets the value of the zid property.
+     * Sets the value of the right property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setZid(String value) {
-        this.zid = value;
+    public void setRight(String value) {
+        this.right = value;
     }
 
     /**
@@ -148,6 +149,30 @@ public class testGrant {
     }
 
     /**
+     * Gets the value of the key property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getKey() {
+        return key;
+    }
+
+    /**
+     * Sets the value of the key property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setKey(String value) {
+        this.key = value;
+    }
+
+    /**
      * Gets the value of the pw property.
      * 
      * @return
@@ -172,27 +197,27 @@ public class testGrant {
     }
 
     /**
-     * Gets the value of the key property.
+     * Gets the value of the deny property.
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link Boolean }
      *     
      */
-    public String getKey() {
-        return key;
+    public Boolean isDeny() {
+        return deny;
     }
 
     /**
-     * Sets the value of the key property.
+     * Sets the value of the deny property.
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link Boolean }
      *     
      */
-    public void setKey(String value) {
-        this.key = value;
+    public void setDeny(Boolean value) {
+        this.deny = value;
     }
 
 }

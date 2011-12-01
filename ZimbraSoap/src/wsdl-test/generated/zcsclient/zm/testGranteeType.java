@@ -1,5 +1,5 @@
 
-package generated.zcsclient.mail;
+package generated.zcsclient.zm;
 
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
@@ -16,9 +16,10 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
  *     &lt;enumeration value="usr"/>
  *     &lt;enumeration value="grp"/>
+ *     &lt;enumeration value="egp"/>
  *     &lt;enumeration value="all"/>
  *     &lt;enumeration value="dom"/>
- *     &lt;enumeration value="guest"/>
+ *     &lt;enumeration value="gst"/>
  *     &lt;enumeration value="key"/>
  *     &lt;enumeration value="pub"/>
  *   &lt;/restriction>
@@ -34,12 +35,14 @@ public enum testGranteeType {
     USR("usr"),
     @XmlEnumValue("grp")
     GRP("grp"),
+    @XmlEnumValue("egp")
+    EGP("egp"),
     @XmlEnumValue("all")
     ALL("all"),
     @XmlEnumValue("dom")
     DOM("dom"),
-    @XmlEnumValue("guest")
-    GUEST("guest"),
+    @XmlEnumValue("gst")
+    GST("gst"),
     @XmlEnumValue("key")
     KEY("key"),
     @XmlEnumValue("pub")

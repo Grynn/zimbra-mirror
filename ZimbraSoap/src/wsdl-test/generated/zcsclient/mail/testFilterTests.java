@@ -64,29 +64,29 @@ public class testFilterTests {
 
     @XmlElements({
         @XmlElement(name = "addressBookTest", type = testAddressBookTest.class),
-        @XmlElement(name = "trueTest", type = testTrueTest.class),
-        @XmlElement(name = "dateTest", type = testDateTest.class),
-        @XmlElement(name = "bulkTest", type = testBulkTest.class),
-        @XmlElement(name = "currentTimeTest", type = testCurrentTimeTest.class),
-        @XmlElement(name = "attachmentTest", type = testAttachmentTest.class),
-        @XmlElement(name = "inviteTest", type = testInviteTest.class),
-        @XmlElement(name = "currentDayOfWeekTest", type = testCurrentDayOfWeekTest.class),
-        @XmlElement(name = "sizeTest", type = testSizeTest.class),
-        @XmlElement(name = "twitterTest", type = testTwitterTest.class),
         @XmlElement(name = "linkedinTest", type = testLinkedInTest.class),
-        @XmlElement(name = "importanceTest", type = testImportanceTest.class),
-        @XmlElement(name = "bodyTest", type = testBodyTest.class),
-        @XmlElement(name = "flaggedTest", type = testFlaggedTest.class),
-        @XmlElement(name = "facebookTest", type = testFacebookTest.class),
+        @XmlElement(name = "bulkTest", type = testBulkTest.class),
+        @XmlElement(name = "twitterTest", type = testTwitterTest.class),
         @XmlElement(name = "socialcastTest", type = testSocialcastTest.class),
-        @XmlElement(name = "contactRankingTest", type = testContactRankingTest.class),
-        @XmlElement(name = "listTest", type = testListTest.class),
-        @XmlElement(name = "conversationTest", type = testConversationTest.class),
-        @XmlElement(name = "headerTest", type = testHeaderTest.class),
+        @XmlElement(name = "sizeTest", type = testSizeTest.class),
+        @XmlElement(name = "trueTest", type = testTrueTest.class),
         @XmlElement(name = "meTest", type = testMeTest.class),
-        @XmlElement(name = "mimeHeaderTest", type = testMimeHeaderTest.class),
+        @XmlElement(name = "inviteTest", type = testInviteTest.class),
+        @XmlElement(name = "bodyTest", type = testBodyTest.class),
+        @XmlElement(name = "currentDayOfWeekTest", type = testCurrentDayOfWeekTest.class),
+        @XmlElement(name = "dateTest", type = testDateTest.class),
+        @XmlElement(name = "contactRankingTest", type = testContactRankingTest.class),
+        @XmlElement(name = "flaggedTest", type = testFlaggedTest.class),
+        @XmlElement(name = "headerTest", type = testHeaderTest.class),
+        @XmlElement(name = "listTest", type = testListTest.class),
         @XmlElement(name = "headerExistsTest", type = testHeaderExistsTest.class),
-        @XmlElement(name = "addressTest", type = testAddressTest.class)
+        @XmlElement(name = "addressTest", type = testAddressTest.class),
+        @XmlElement(name = "attachmentTest", type = testAttachmentTest.class),
+        @XmlElement(name = "currentTimeTest", type = testCurrentTimeTest.class),
+        @XmlElement(name = "facebookTest", type = testFacebookTest.class),
+        @XmlElement(name = "importanceTest", type = testImportanceTest.class),
+        @XmlElement(name = "mimeHeaderTest", type = testMimeHeaderTest.class),
+        @XmlElement(name = "conversationTest", type = testConversationTest.class)
     })
     protected List<testFilterTest> addressBookTestOrAddressTestOrAttachmentTest;
     @XmlAttribute(name = "condition", required = true)
@@ -111,29 +111,29 @@ public class testFilterTests {
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link testAddressBookTest }
-     * {@link testTrueTest }
-     * {@link testDateTest }
-     * {@link testBulkTest }
-     * {@link testCurrentTimeTest }
-     * {@link testAttachmentTest }
-     * {@link testInviteTest }
-     * {@link testCurrentDayOfWeekTest }
-     * {@link testSizeTest }
-     * {@link testTwitterTest }
      * {@link testLinkedInTest }
-     * {@link testImportanceTest }
-     * {@link testBodyTest }
-     * {@link testFlaggedTest }
-     * {@link testFacebookTest }
+     * {@link testBulkTest }
+     * {@link testTwitterTest }
      * {@link testSocialcastTest }
-     * {@link testContactRankingTest }
-     * {@link testListTest }
-     * {@link testConversationTest }
-     * {@link testHeaderTest }
+     * {@link testSizeTest }
+     * {@link testTrueTest }
      * {@link testMeTest }
-     * {@link testMimeHeaderTest }
+     * {@link testInviteTest }
+     * {@link testBodyTest }
+     * {@link testCurrentDayOfWeekTest }
+     * {@link testDateTest }
+     * {@link testContactRankingTest }
+     * {@link testFlaggedTest }
+     * {@link testHeaderTest }
+     * {@link testListTest }
      * {@link testHeaderExistsTest }
      * {@link testAddressTest }
+     * {@link testAttachmentTest }
+     * {@link testCurrentTimeTest }
+     * {@link testFacebookTest }
+     * {@link testImportanceTest }
+     * {@link testMimeHeaderTest }
+     * {@link testConversationTest }
      * 
      * 
      */

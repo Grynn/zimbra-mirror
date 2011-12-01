@@ -1,5 +1,5 @@
 
-package generated.zcsclient.mail;
+package generated.zcsclient.account;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -19,7 +19,7 @@ import generated.zcsclient.zm.testGranteeType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;all>
  *       &lt;/all>
- *       &lt;attribute name="perm" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="rights" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="gt" use="required" type="{urn:zimbra}granteeType" />
  *       &lt;attribute name="zid" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="d" type="{http://www.w3.org/2001/XMLSchema}string" />
@@ -38,8 +38,8 @@ import generated.zcsclient.zm.testGranteeType;
 })
 public class testGrant {
 
-    @XmlAttribute(name = "perm", required = true)
-    protected String perm;
+    @XmlAttribute(name = "rights", required = true)
+    protected String rights;
     @XmlAttribute(name = "gt", required = true)
     protected testGranteeType gt;
     @XmlAttribute(name = "zid", required = true)
@@ -52,27 +52,27 @@ public class testGrant {
     protected String key;
 
     /**
-     * Gets the value of the perm property.
+     * Gets the value of the rights property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getPerm() {
-        return perm;
+    public String getRights() {
+        return rights;
     }
 
     /**
-     * Sets the value of the perm property.
+     * Sets the value of the rights property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setPerm(String value) {
-        this.perm = value;
+    public void setRights(String value) {
+        this.rights = value;
     }
 
     /**

@@ -299,8 +299,6 @@ import generated.zcsclient.admin.testGetVolumeRequest;
 import generated.zcsclient.admin.testGetVolumeResponse;
 import generated.zcsclient.admin.testGetXMPPComponentRequest;
 import generated.zcsclient.admin.testGetXMPPComponentResponse;
-import generated.zcsclient.admin.testGetXMbxSearchRequest;
-import generated.zcsclient.admin.testGetXMbxSearchResponse;
 import generated.zcsclient.admin.testGetXMbxSearchesListRequest;
 import generated.zcsclient.admin.testGetXMbxSearchesListResponse;
 import generated.zcsclient.admin.testGetZimletRequest;
@@ -472,14 +470,14 @@ import generated.zcsclient.adminext.testPurgeBulkIMAPImportTasksResponse;
 @WebService(name = "zcsAdminPortType", targetNamespace = "http://www.zimbra.com/wsdl/ZimbraService.wsdl")
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
 @XmlSeeAlso({
-    generated.zcsclient.zm.ObjectFactory.class,
-    generated.zcsclient.admin.ObjectFactory.class,
-    generated.zcsclient.replication.ObjectFactory.class,
-    generated.zcsclient.account.ObjectFactory.class,
     generated.zcsclient.mail.ObjectFactory.class,
     generated.zcsclient.sync.ObjectFactory.class,
+    generated.zcsclient.account.ObjectFactory.class,
+    generated.zcsclient.appblast.ObjectFactory.class,
     generated.zcsclient.adminext.ObjectFactory.class,
-    generated.zcsclient.appblast.ObjectFactory.class
+    generated.zcsclient.zm.ObjectFactory.class,
+    generated.zcsclient.replication.ObjectFactory.class,
+    generated.zcsclient.admin.ObjectFactory.class
 })
 public interface ZcsAdminPortType {
 
@@ -2235,18 +2233,6 @@ public interface ZcsAdminPortType {
     public testGetXMPPComponentResponse getXMPPComponentRequest(
         @WebParam(name = "GetXMPPComponentRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
         testGetXMPPComponentRequest parameters);
-
-    /**
-     * 
-     * @param parameters
-     * @return
-     *     returns generated.zcsclient.admin.testGetXMbxSearchResponse
-     */
-    @WebMethod(action = "urn:zimbraAdmin/GetXMbxSearch")
-    @WebResult(name = "GetXMbxSearchResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
-    public testGetXMbxSearchResponse getXMbxSearchRequest(
-        @WebParam(name = "GetXMbxSearchRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
-        testGetXMbxSearchRequest parameters);
 
     /**
      * 

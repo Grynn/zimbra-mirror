@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;extension base="&lt;urn:zimbra>keyValuePair">
  *       &lt;attribute name="part" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="ct" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="s" use="required" type="{http://www.w3.org/2001/XMLSchema}int" />
+ *       &lt;attribute name="s" type="{http://www.w3.org/2001/XMLSchema}int" />
  *       &lt;attribute name="filename" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/extension>
  *   &lt;/simpleContent>
@@ -37,8 +37,8 @@ public class testContactAttr
     protected String part;
     @XmlAttribute(name = "ct")
     protected String ct;
-    @XmlAttribute(name = "s", required = true)
-    protected int s;
+    @XmlAttribute(name = "s")
+    protected Integer s;
     @XmlAttribute(name = "filename")
     protected String filename;
 
@@ -93,16 +93,24 @@ public class testContactAttr
     /**
      * Gets the value of the s property.
      * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
      */
-    public int getS() {
+    public Integer getS() {
         return s;
     }
 
     /**
      * Sets the value of the s property.
      * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
      */
-    public void setS(int value) {
+    public void setS(Integer value) {
         this.s = value;
     }
 

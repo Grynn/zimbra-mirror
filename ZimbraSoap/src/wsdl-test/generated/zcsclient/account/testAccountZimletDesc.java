@@ -52,8 +52,8 @@ import org.w3c.dom.Element;
 public class testAccountZimletDesc {
 
     @XmlElementRefs({
-        @XmlElementRef(name = "includeCSS", namespace = "urn:zimbraAccount", type = JAXBElement.class),
         @XmlElementRef(name = "serverExtension", namespace = "urn:zimbraAccount", type = JAXBElement.class),
+        @XmlElementRef(name = "includeCSS", namespace = "urn:zimbraAccount", type = JAXBElement.class),
         @XmlElementRef(name = "target", namespace = "urn:zimbraAccount", type = JAXBElement.class),
         @XmlElementRef(name = "include", namespace = "urn:zimbraAccount", type = JAXBElement.class)
     })
@@ -90,11 +90,11 @@ public class testAccountZimletDesc {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link JAXBElement }{@code <}{@link String }{@code >}
-     * {@link JAXBElement }{@code <}{@link String }{@code >}
      * {@link Element }
-     * {@link JAXBElement }{@code <}{@link String }{@code >}
      * {@link JAXBElement }{@code <}{@link testZimletServerExtension }{@code >}
+     * {@link JAXBElement }{@code <}{@link String }{@code >}
+     * {@link JAXBElement }{@code <}{@link String }{@code >}
+     * {@link JAXBElement }{@code <}{@link String }{@code >}
      * 
      * 
      */

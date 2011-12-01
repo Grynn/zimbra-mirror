@@ -193,14 +193,14 @@ public class testFilterRule {
     public static class FilterActions {
 
         @XmlElements({
-            @XmlElement(name = "actionTag", type = testTagAction.class),
-            @XmlElement(name = "actionFlag", type = testFlagAction.class),
             @XmlElement(name = "actionDiscard", type = testDiscardAction.class),
-            @XmlElement(name = "actionReply", type = testReplyAction.class),
-            @XmlElement(name = "actionStop", type = testStopAction.class),
-            @XmlElement(name = "actionRedirect", type = testRedirectAction.class),
-            @XmlElement(name = "actionNotify", type = testNotifyAction.class),
+            @XmlElement(name = "actionTag", type = testTagAction.class),
             @XmlElement(name = "actionFileInto", type = testFileIntoAction.class),
+            @XmlElement(name = "actionNotify", type = testNotifyAction.class),
+            @XmlElement(name = "actionRedirect", type = testRedirectAction.class),
+            @XmlElement(name = "actionFlag", type = testFlagAction.class),
+            @XmlElement(name = "actionStop", type = testStopAction.class),
+            @XmlElement(name = "actionReply", type = testReplyAction.class),
             @XmlElement(name = "actionKeep", type = testKeepAction.class)
         })
         protected List<testFilterAction> actionKeepOrActionDiscardOrActionFileInto;
@@ -223,14 +223,14 @@ public class testFilterRule {
          * 
          * <p>
          * Objects of the following type(s) are allowed in the list
-         * {@link testTagAction }
-         * {@link testFlagAction }
          * {@link testDiscardAction }
-         * {@link testReplyAction }
-         * {@link testStopAction }
-         * {@link testRedirectAction }
-         * {@link testNotifyAction }
+         * {@link testTagAction }
          * {@link testFileIntoAction }
+         * {@link testNotifyAction }
+         * {@link testRedirectAction }
+         * {@link testFlagAction }
+         * {@link testStopAction }
+         * {@link testReplyAction }
          * {@link testKeepAction }
          * 
          * 

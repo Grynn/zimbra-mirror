@@ -55,6 +55,8 @@ import generated.zcsclient.account.testGetInfoRequest;
 import generated.zcsclient.account.testGetInfoResponse;
 import generated.zcsclient.account.testGetPrefsRequest;
 import generated.zcsclient.account.testGetPrefsResponse;
+import generated.zcsclient.account.testGetRightsRequest;
+import generated.zcsclient.account.testGetRightsResponse;
 import generated.zcsclient.account.testGetSMIMEPublicCertsRequest;
 import generated.zcsclient.account.testGetSMIMEPublicCertsResponse;
 import generated.zcsclient.account.testGetShareInfoRequest;
@@ -65,6 +67,8 @@ import generated.zcsclient.account.testGetVersionInfoRequest;
 import generated.zcsclient.account.testGetVersionInfoResponse;
 import generated.zcsclient.account.testGetWhiteBlackListRequest;
 import generated.zcsclient.account.testGetWhiteBlackListResponse;
+import generated.zcsclient.account.testGrantRightsRequest;
+import generated.zcsclient.account.testGrantRightsResponse;
 import generated.zcsclient.account.testModifyIdentityRequest;
 import generated.zcsclient.account.testModifyIdentityResponse;
 import generated.zcsclient.account.testModifyPrefsRequest;
@@ -77,6 +81,8 @@ import generated.zcsclient.account.testModifyWhiteBlackListRequest;
 import generated.zcsclient.account.testModifyWhiteBlackListResponse;
 import generated.zcsclient.account.testModifyZimletPrefsRequest;
 import generated.zcsclient.account.testModifyZimletPrefsResponse;
+import generated.zcsclient.account.testRevokeRightsRequest;
+import generated.zcsclient.account.testRevokeRightsResponse;
 import generated.zcsclient.account.testSearchCalendarResourcesRequest;
 import generated.zcsclient.account.testSearchCalendarResourcesResponse;
 import generated.zcsclient.account.testSearchGalRequest;
@@ -391,14 +397,14 @@ import generated.zcsclient.sync.testSuspendDeviceResponse;
 @WebService(name = "zcsPortType", targetNamespace = "http://www.zimbra.com/wsdl/ZimbraService.wsdl")
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
 @XmlSeeAlso({
-    generated.zcsclient.zm.ObjectFactory.class,
-    generated.zcsclient.admin.ObjectFactory.class,
-    generated.zcsclient.replication.ObjectFactory.class,
-    generated.zcsclient.account.ObjectFactory.class,
     generated.zcsclient.mail.ObjectFactory.class,
     generated.zcsclient.sync.ObjectFactory.class,
+    generated.zcsclient.account.ObjectFactory.class,
+    generated.zcsclient.appblast.ObjectFactory.class,
     generated.zcsclient.adminext.ObjectFactory.class,
-    generated.zcsclient.appblast.ObjectFactory.class
+    generated.zcsclient.zm.ObjectFactory.class,
+    generated.zcsclient.replication.ObjectFactory.class,
+    generated.zcsclient.admin.ObjectFactory.class
 })
 public interface ZcsPortType {
 
@@ -695,6 +701,18 @@ public interface ZcsPortType {
      * 
      * @param parameters
      * @return
+     *     returns generated.zcsclient.account.testGetRightsResponse
+     */
+    @WebMethod(action = "urn:zimbraAccount/GetRights")
+    @WebResult(name = "GetRightsResponse", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+    public testGetRightsResponse getRightsRequest(
+        @WebParam(name = "GetRightsRequest", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+        testGetRightsRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
      *     returns generated.zcsclient.account.testGetSMIMEPublicCertsResponse
      */
     @WebMethod(action = "urn:zimbraAccount/GetSMIMEPublicCerts")
@@ -750,6 +768,18 @@ public interface ZcsPortType {
     public testGetWhiteBlackListResponse getWhiteBlackListRequest(
         @WebParam(name = "GetWhiteBlackListRequest", targetNamespace = "urn:zimbraAccount", partName = "parameters")
         testGetWhiteBlackListRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns generated.zcsclient.account.testGrantRightsResponse
+     */
+    @WebMethod(action = "urn:zimbraAccount/GrantRights")
+    @WebResult(name = "GrantRightsResponse", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+    public testGrantRightsResponse grantRightsRequest(
+        @WebParam(name = "GrantRightsRequest", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+        testGrantRightsRequest parameters);
 
     /**
      * 
@@ -822,6 +852,18 @@ public interface ZcsPortType {
     public testModifyZimletPrefsResponse modifyZimletPrefsRequest(
         @WebParam(name = "ModifyZimletPrefsRequest", targetNamespace = "urn:zimbraAccount", partName = "parameters")
         testModifyZimletPrefsRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns generated.zcsclient.account.testRevokeRightsResponse
+     */
+    @WebMethod(action = "urn:zimbraAccount/RevokeRights")
+    @WebResult(name = "RevokeRightsResponse", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+    public testRevokeRightsResponse revokeRightsRequest(
+        @WebParam(name = "RevokeRightsRequest", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+        testRevokeRightsRequest parameters);
 
     /**
      * 
