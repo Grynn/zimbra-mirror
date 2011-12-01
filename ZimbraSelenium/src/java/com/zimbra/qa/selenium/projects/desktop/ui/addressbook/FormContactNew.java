@@ -166,6 +166,8 @@ public class FormContactNew extends AbsForm {
 
          this.sFocus(locator);
          this.zClick(locator);
+         // Set the text property to empty before typing
+         this.sType(locator, "");
          this.zKeyboard.zTypeCharacters(value);
 
       }
