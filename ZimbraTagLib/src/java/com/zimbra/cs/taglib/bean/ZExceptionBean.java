@@ -14,17 +14,18 @@
  */
 package com.zimbra.cs.taglib.bean;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.jsp.JspException;
+
 import com.zimbra.common.service.ServiceException;
-import com.zimbra.common.util.ExceptionToString;
-import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.SoapFaultException;
 import com.zimbra.common.soap.ZimbraNamespace;
+import com.zimbra.common.util.ExceptionToString;
+import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.AccountServiceException;
-
-import javax.servlet.jsp.JspException;
-import java.util.List;
-import java.util.ArrayList;
 
 public class ZExceptionBean {
 
@@ -104,11 +105,9 @@ public class ZExceptionBean {
                 if (d != null) {
                     List<Element> list = d.getPathElementList(
                             new String[] {ZimbraNamespace.E_ERROR.getName(), ZimbraNamespace.E_ARGUMENT.getName()});
-                    if (list != null) {
-                        for (Element el : list) {
-                            args.add(new Argument(el.getAttribute(ZimbraNamespace.A_ARG_NAME,""),
-                                    el.getAttribute(ZimbraNamespace.A_ARG_TYPE, ""), el.getText()));
-                        }
+                    for (Element el : list) {
+                        args.add(new Argument(el.getAttribute(ZimbraNamespace.A_ARG_NAME,""),
+                            el.getAttribute(ZimbraNamespace.A_ARG_TYPE, ""), el.getText()));
                     }
                 }
             }
