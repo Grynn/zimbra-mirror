@@ -459,7 +459,7 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
             beginTransaction("syncChangeIds", octxt);
 
             MailItem item = getItemById(itemId, type);
-            markItemModified(item, Change.INTERNAL_ONLY, item.snapshotItem());
+            markItemModified(item, Change.INTERNAL_ONLY);
 
             // update the database
             DbOfflineMailbox.setDate(item, date);
