@@ -104,5 +104,5 @@ public class CreateMountpoint extends OctopusCommonTest {
 						+ ":contains(" + folderMountpointName
 						+ ")", "3000"),
 				"Verify the mountpoint folder is displayed in the My Files list view");
-	}
+	}	
 }

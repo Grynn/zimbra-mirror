@@ -160,6 +160,23 @@ public class PageMyFiles extends AbsTab {
 				zWaitForBusyOverlay();
 
 				return page;
+			} else if (option == Button.O_SHARE) {
+				optionLocator = Locators.zShareItem.locator;
+
+				if (!this.zWaitForElementPresent(optionLocator, "2000"))
+					throw new HarnessException("Button is not present locator="
+							+ optionLocator);
+
+				this.sClickAt(optionLocator, "0,0");
+
+				// If the app is busy, wait for it to become active
+				zWaitForBusyOverlay();
+
+				page = new DialogShare(MyApplication, this);
+				
+				page.zWaitForActive();
+				
+				return page;
 			} else if (option == Button.O_FAVORITE) {
 				optionLocator = Locators.zFavoriteItem.locator;
 
