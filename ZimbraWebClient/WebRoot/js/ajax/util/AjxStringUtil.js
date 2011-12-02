@@ -1525,12 +1525,18 @@ function(obj, recurse, showFuncs, omit) {
 					text += ",";
 				}
 				text += "\n" + indent;
+                var keyString;
+                if (isArray) {
+                    keyString = "// [" + key + "]:\n" + indent;
+                } else {
+                    keyString = key + ": ";
+                }
 				if (omit && omit[key]) {
-					text += key + ": [" + key + "]";
+					text += keyString + "[" + key + "]";
 				} else if (value != null) {
-					text += key + ": " + value;
+					text += keyString + value;
 				} else {
-					text += key + ": " + this._prettyPrint(nextObj, recurse, showFuncs, omit, indentLevel + 2, true, stopRecursion);
+					text += keyString + this._prettyPrint(nextObj, recurse, showFuncs, omit, indentLevel + 2, true, stopRecursion);
 				}
 			}
 			if (i > 0) {
