@@ -10,6 +10,7 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.desktop.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.desktop.ui.Toaster;
 
 public class DragAndDropFolder extends AjaxCommonTest{
 
@@ -61,7 +62,12 @@ public class DragAndDropFolder extends AjaxCommonTest{
 				"//td[contains(@id, 'zti__" + app.zGetActiveAccount().EmailAddress + ":main_Mail__') and contains(@id, ':" + subfolder1.getId() + "_textCell') and contains(text(), '"+ name1 + "')]",
 				"//td[contains(@id, 'zti__" + app.zGetActiveAccount().EmailAddress + ":main_Mail__') and contains(@id, ':" + subfolder2.getId() + "_textCell') and contains(text(), '"+ name2 + "')]");
 
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		Toaster toast = app.zPageMain.zGetToaster();
+      String toastMsg = toast.zGetToastMessage();
+      ZAssert.assertStringContains(toastMsg, "1 Folder moved to \"" + name2 + "\"",
+            "Verify toast message" );
+
+      GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 		app.zPageMail.zWaitForDesktopLoadingSpinner(5000);
 
 		// Verify the folder is now in the other subfolder
