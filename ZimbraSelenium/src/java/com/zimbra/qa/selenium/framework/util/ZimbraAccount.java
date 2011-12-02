@@ -238,6 +238,7 @@ public class ZimbraAccount {
 		put("zimbraPrefCalendarAlwaysShowMiniCal", "FALSE");
 		put("zimbraPrefComposeFormat", "html");
 		put("zimbraPrefWarnOnExit","FALSE");
+		put("zimbraPrefSkin","carbon");
 	}};
 
 	/**
