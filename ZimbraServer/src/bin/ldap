@@ -51,7 +51,7 @@ start()
 		#if [ -x /opt/zimbra/sleepycat/bin/db_recover ]; then
 		#	/opt/zimbra/sleepycat/bin/db_recover -h /opt/zimbra/openldap/var/openldap-data -v
 		#fi
-		sudo /opt/zimbra/libexec/zmslapd -l LOCAL0 -u `whoami` -h "ldap://:389/ ldaps://:636/" \
+		sudo /opt/zimbra/libexec/zmslapd -l LOCAL0 -u `whoami` -h "ldap://:389/" \
 			-f /opt/zimbra/conf/slapd.conf
 		sleep 2
 		getpid
