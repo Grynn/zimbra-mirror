@@ -23,7 +23,7 @@ public class PageMain extends AbsTab {
 		public static final String zAppbarContact		= "id=zb__App__Contacts_title";
 		public static final String zAppbarCal			= "id=zb__App__Calendar_title";
 		public static final String zAppbarTasks			= "id=zb__App__Tasks_title";
-		public static final String zAppbarBriefcase		= "css=td[id='zb__App__Briefcase_left_icon']";
+		public static final String zAppbarBriefcase		= "css=td[id=zb__App__Briefcase_title]";
 		public static final String zAppbarPreferences	= "id=zb__App__Options_title";
 
 		public static final String zAppbarSocialLocator	= 		"css=div[id^='zb__App__com_zimbra_social_'] td[id$='_title']";
