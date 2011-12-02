@@ -1,3 +1,19 @@
+/*
+ * ***** BEGIN LICENSE BLOCK *****
+ * 
+ * Zimbra Collaboration Suite Server
+ * Copyright (C) 2011 VMware, Inc.
+ * 
+ * The contents of this file are subject to the Zimbra Public License
+ * Version 1.3 ("License"); you may not use this file except in
+ * compliance with the License.  You may obtain a copy of the License at
+ * http://www.zimbra.com/license.
+ * 
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
+ * 
+ * ***** END LICENSE BLOCK *****
+ */
 /**
  * 
  */
@@ -889,17 +905,19 @@ public class PageTasks extends AbsTab {
 	 */
 	public TaskItem findTask(String subject) throws HarnessException {
 	   Object[] params = {subject};
-	   return (TaskItem)GeneralUtility.waitFor(null, this, false, "browseTask", params,
-	         WAIT_FOR_OPERAND.NEQ, null, 30000, 1000);
+	   return (TaskItem)GeneralUtility.waitFor(null, this, false, "browseTask", params, WAIT_FOR_OPERAND.NEQ, null, 30000, 1000);
 	}
 	
 	public String  GetShowOrigBodyText(String EmailAddress, String calItemId) throws HarnessException{
 
 		try{
-			sOpenWindow(ZimbraSeleniumProperties.getBaseURL() + "/home/" + EmailAddress + "/Tasks/?id=" + calItemId + "&mime=text/plain&noAttach=1","ShowOrignal");
+		    String port = ZimbraDesktopProperties.getInstance().getConnectionPort();
+		    String host = ZimbraSeleniumProperties.getStringProperty("desktop.server.host", "localhost");
+			String ShowOriURL = "http://" + host + ":" + port + "/home/" + EmailAddress + "/Tasks/?id=" + calItemId + "&mime=text/plain&noAttach=1";
+			sOpenWindow(ShowOriURL, "ShowOrignal");
 			sWaitForPopUp("ShowOrignal", "3000");
 			sSelectWindow("ShowOrignal");
-			String showOrigBody=sGetBodyText().replaceAll("\\n", "").trim().replaceAll(" ", "");
+			String showOrigBody = sGetBodyText().replaceAll("\\n", "").trim().replaceAll(" ", "");
 			sClose();
 			return showOrigBody;
 
