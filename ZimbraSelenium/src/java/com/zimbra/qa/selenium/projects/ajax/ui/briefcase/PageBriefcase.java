@@ -5,23 +5,32 @@ package com.zimbra.qa.selenium.projects.ajax.ui.briefcase;
 
 import java.util.EnumMap;
 import java.util.Map;
+
+import org.apache.commons.httpclient.HttpStatus;
+
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.DocumentItem;
 import com.zimbra.qa.selenium.framework.items.FileItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.IItem;
-import com.zimbra.qa.selenium.framework.ui.*;
-import com.zimbra.qa.selenium.framework.util.GeneralUtility;
+import com.zimbra.qa.selenium.framework.ui.AbsApplication;
+import com.zimbra.qa.selenium.framework.ui.AbsPage;
+import com.zimbra.qa.selenium.framework.ui.AbsTab;
+import com.zimbra.qa.selenium.framework.ui.Action;
+import com.zimbra.qa.selenium.framework.ui.Button;
+import com.zimbra.qa.selenium.framework.ui.Shortcut;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.RestUtil;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
-import com.zimbra.qa.selenium.projects.ajax.ui.*;
+import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
+import com.zimbra.qa.selenium.projects.ajax.ui.DialogMove;
+import com.zimbra.qa.selenium.projects.ajax.ui.DialogTag;
+import com.zimbra.qa.selenium.projects.ajax.ui.PageMain;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.DialogCreateFolder;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
-import com.zimbra.qa.selenium.framework.util.RestUtil;
-import org.apache.commons.httpclient.HttpStatus;
 
 /**
  * @author
@@ -184,34 +193,20 @@ public class PageBriefcase extends AbsTab {
 
 		tracer.trace("Navigate to " + this.myPageName());
 
-		String locator = "css=[id='zov__main_Mail']";
 		// Make sure we are logged into the Ajax app
-		// if (!((AppAjaxClient) MyApplication).zPageMain.zIsActive())
-		// ((AppAjaxClient) MyApplication).zPageMain.zNavigateTo();
-
-		// make sure mail page is loaded
-		if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
-			((AppAjaxClient) MyApplication).zPageMail.zNavigateTo();
-			GeneralUtility.waitForElementPresent(this,
-					PageMain.Locators.zAppbarBriefcase, 20000);
-		} else {
-			if (!zWaitForElementPresent(locator, "10000")) {
-				((AppAjaxClient) MyApplication).zPageMain.zNavigateTo();
-			}
-		}
+		if (!((AppAjaxClient) MyApplication).zPageMain.zIsActive())
+			((AppAjaxClient) MyApplication).zPageMain.zNavigateTo();
 
 		// Click on Briefcase icon
 		zClickAt(PageMain.Locators.zAppbarBriefcase, "0,0");
 
 		zWaitForBusyOverlay();
 
-		if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
-			zWaitForActive();
-		} else {
-			zWaitForElementPresent(Locators.zBriefcaseFolderIcon.locator);
-		}
-	}
+		zWaitForElementPresent(Locators.zBriefcaseFolderIcon.locator);
 
+	}
+	
+	
 	public AbsPage zToolbarPressButton(Button button, IItem item)
 			throws HarnessException {
 		logger.info(myPageName() + " zToolbarPressButton(" + button + ")");
