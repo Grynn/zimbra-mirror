@@ -9,9 +9,10 @@ import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.octopus.core.OctopusCommonTest;
 import com.zimbra.qa.selenium.projects.octopus.ui.FilePreview;
+import com.zimbra.qa.selenium.projects.octopus.ui.PageMyFiles;
 import com.zimbra.qa.selenium.projects.octopus.ui.PageTrash;
 
-public class FavoriteFile extends OctopusCommonTest {
+public class MarkAsFavorite extends OctopusCommonTest {
 
 	private boolean _folderIsCreated = false;
 	private String _folderName = null;
@@ -26,8 +27,8 @@ public class FavoriteFile extends OctopusCommonTest {
 		_fileAttached = false;
 	}
 
-	public FavoriteFile() {
-		logger.info("New " + FavoriteFile.class.getCanonicalName());
+	public MarkAsFavorite() {
+		logger.info("New " + MarkAsFavorite.class.getCanonicalName());
 
 		// test starts at the My Files tab
 		super.startingPage = app.zPageMyFiles;
@@ -35,7 +36,7 @@ public class FavoriteFile extends OctopusCommonTest {
 	}
 
 	@Test(description = "Mark file as Favorite using Context menu - verify favorite icon becomes enabled in the preview panel", groups = { "smoke" })
-	public void FavoriteFile_01() throws HarnessException {
+	public void MarkAsFavorite_01() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 
 		FolderItem briefcaseRootFolder = FolderItem.importFromSOAP(account,
@@ -83,7 +84,7 @@ public class FavoriteFile extends OctopusCommonTest {
 	}
 
 	@Test(description = "Mark file as Favorite / Not Favorite using Context menu - verify watch icon becomes enabled / disabled in the preview panel", groups = { "functional" })
-	public void FavoriteFile_02() throws HarnessException {
+	public void MarkAsFavorite_02() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 
 		FolderItem briefcaseRootFolder = FolderItem.importFromSOAP(account,
@@ -141,7 +142,7 @@ public class FavoriteFile extends OctopusCommonTest {
 	}
 
 	@Test(description = "Mark file as Favorite / Not Favorite clicking on watch icon - verify watch icon becomes enabled / disabled in the preview panel", groups = { "functional" })
-	public void FavoriteFile_03() throws HarnessException {
+	public void MarkAsFavorite_03() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 
 		FolderItem briefcaseRootFolder = FolderItem.importFromSOAP(account,
@@ -157,7 +158,7 @@ public class FavoriteFile extends OctopusCommonTest {
 		// Upload file to server through RestUtil
 		String attachmentId = account.uploadFile(filePath);
 
-		// Save uploaded file to briefcase through SOAP
+		// Save uploaded file to My Files through SOAP
 		account.soapSend("<SaveDocumentRequest xmlns='urn:zimbraMail'>"
 				+ "<doc l='" + briefcaseRootFolder.getId() + "'><upload id='"
 				+ attachmentId + "'/></doc></SaveDocumentRequest>");
@@ -169,7 +170,13 @@ public class FavoriteFile extends OctopusCommonTest {
 		// click on the My Files tab
 		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_MY_FILES);
 
-		//Select file
+		// Verify file exists in My Files view
+		ZAssert.assertTrue(app.zPageMyFiles.zWaitForElementPresent(
+				PageMyFiles.Locators.zMyFilesListViewItems.locator
+				+ ":contains(" + fileName + ")", "3000"),
+				"Verify file appears in My Files view");
+		
+		// Select file in the list view
 		FilePreview filePreview = (FilePreview) app.zPageMyFiles.zListItem(Action.A_LEFTCLICK, fileName);
 		
 		// mark file as favorite clicking on watch icon
