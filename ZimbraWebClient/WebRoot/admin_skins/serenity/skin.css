@@ -331,12 +331,100 @@ body {
 /** LoginPanel and Splash screen **/
 #skin_container_splash_screen           {   @SkinOuter@ @FullWindow@ z-index:90000000;      }
 
-#ZLoginBodyContainer    {   @LoginPanelInnerBorder@ }
+.LoginScreen,
+.SplashScreen {
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:100%;
+    height:100%;
+    background-color:@LoginBkgdTop@;
+    font-family:@FontFamily-default@;
+    @FontSize-normal@
+    @grad(LoginBkgdTop,LoginBkgdBottom,linear-vertical)@
+}
+.LoginScreen .center,
+.SplashScreen .center {
+    margin-top:-160px;
+    margin-left:-250px;
+    min-height:320px;
+    width:500px;
+#IFDEF MSIE
+	height:330px;
+#ENDIF
+}
+.LoginScreen .center-small,
+.SplashScreen .center-small {
+    height:270px;
+    margin-top:-135px;
+    margin-left:-175px;
+    width:350px;
+}
+.LoginScreen .center, .LoginScreen .center-small,
+.SplashScreen .center, .SplashScreen .center-small {
+    left:50%;
+    overflow:visible;
+    position:absolute;
+    top:40%;
+    z-index:11;
+    background-color:@LoginCenterBottom@;
+    @grad(LoginCenterTop,LoginCenterBottom,linear-vertical)@
+}
+.LoginScreen H1,
+.SplashScreen H1 	{	@LoginH1@ 		}
+#ZLoginAppName 		{	@LoginAppName@ 	}
+.LoginScreen .ImgLoginBanner,
+.LoginScreen .ImgAppBanner,
+.SplashScreen .ImgLoginBanner {
+    cursor:pointer;
+	display:block;
+}
+.LoginScreen .ImgAltBanner,
+.SplashScreen .ImgAltBanner {
+    @ImgAltBanner@
+}
+.LoginScreen .decor1,
+.SplashScreen .decor1 {
+    @Decor1@
+}
+.LoginScreen .Footer,
+.SplashScreen .Footer {
+    bottom:0;
+    position:absolute;
+    text-align:center;
+    width:100%;
+    z-index:10;
+}
+.LoginScreen .copyright,
+.LoginScreen #ZLoginNotice,
+.SplashScreen .copyright {
+    color:@darken(AppC,55)@;
+    cursor:default;
+    @FontSize-normal@
+    margin-bottom:5px;
+}
+.LoginScreen #ZLoginNotice A {
+    color:@darken(AppC,55)@;
+}
 
-#ZSplashPanel           {   @SplashOuterBorder@     }
-#ZSplashBodyContainer   {   @SplashInnerBorder@     }
-
-.LoginScreen .decor1, .SplashScreen .decor1 {
+/*Splash Screen Only Items*/
+.SplashScreen .content {
+    color:@LoginLabelColor@;
+    text-align:center;
+}
+.SplashScreen .message {
+    color:@LoginLabelColor@;
+    cursor:default;
+    padding-top:40px;
+    @FontSize-bigger@
+}
+.SplashScreen .switch{
+    margin:100px 100px 0;
+}
+.SplashScreen .switch A {
+    color:@LoginLabelColor@;
+    text-decoration:underline;
+    @FontSize-normal@
 }
 
 .ZLoadingMessage {
@@ -344,248 +432,6 @@ body {
     font-size:14px;
     font-weight:bold;
     padding-top:50px;
-}
-
-.SplashScreen { 
-    position:absolute;
-    left:0px;
-    top:0px;
-    width:100%;
-    height:100%;
-    font-family:@font-default@;
-    font-size:11px;
-    
-    background-color: @SplashColor@;
-    background-image: -moz-linear-gradient(top, @SplashColor@, @darken(LoginColor,50)@); /* FF3.6 */
-    background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, @SplashColor@),color-stop(1, @darken(LoginColor,50)@)); /* Saf4+, Chrome */
-    filter:  progid:DXImageTransform.Microsoft.gradient(startColorStr='@SplashColor@', EndColorStr='@darken(LoginColor,50)@'); /* IE6,IE7 */
-    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='@SplashColor@', EndColorStr='@darken(LoginColor,50)@')"; /* IE8 */
-}
-.SplashScreen .center { 
-    width:500px;
-    min-height:300px;
-    margin-top:-150px;
-    margin-left:-250px;
-}   
-.SplashScreen .center-small {
-    width:350px;
-    height:270px;
-    margin-top:-135px;
-    margin-left:-175px;
-}
-.SplashScreen .center, .SplashScreen .center-small {
-    position:absolute;
-    top:50%;
-    left:50%;
-    overflow:visible;
-    
-    /*Linear gradient backgrounds*/
-    background-color: @darken(LoginColor,30)@;
-    background-image: -moz-linear-gradient(top, @LoginColor@, @darken(LoginColor,50)@); /* FF3.6 */
-    background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, @LoginColor@),color-stop(1, @darken(LoginColor,50)@)); /* Saf4+, Chrome */
-    filter:  progid:DXImageTransform.Microsoft.gradient(startColorStr='@LoginColor@', EndColorStr='@darken(LoginColor,50)@'); /* IE6,IE7 */
-    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='@LoginColor@', EndColorStr='@darken(LoginColor,50)@')"; /* IE8 */
-
-    /*Radial gradient backgrounds*/
-    background-image: -moz-radial-gradient(50% 0, circle farthest-corner, @LoginColor@ 0%, @darken(LoginColor,50)@ 100%); /* FF3.6 */
-    background-image: -webkit-gradient( radial, 50% 0%, 0, 50% 0%, 390, from(@LoginColor@), to(@darken(LoginColor,50)@) ); /* Saf4+, Chrome */
-
-    -moz-border-radius: 15px; /* FF1+ */
-    -webkit-border-radius: 15px; /* Saf3-4 */
-    border-radius: 15px; /* Opera 10.5, IE 9, Saf5, Chrome */
-    
-    -moz-box-shadow: 0px 0px 10px #000000; /* FF3.5+ */
-    -webkit-box-shadow: 0px 0px 10px #000000; /* Saf3.0+, Chrome */
-    box-shadow: 0px 0px 10px #000000; /* Opera 10.5, IE 9.0 */
-    #IFDEF MSIE
-    border: 1px solid @darken(AltC,50)@; /* Plain border for IE */
-    #ENDIF
-}
-.SplashScreen h1 {
-    margin:22px 100px 32px 20px;
-}
-.SplashScreen .ImgLoginBanner {
-    cursor:pointer;
-}
-.SplashScreen .ImgAltBanner {
-    background-image:url("@LogoImgDir@/AltBanner.png");
-    background-repeat:repeat-x;
-    height:11px;
-    margin:20px 0px 0px 20px;
-    width:71px;
-}
-.SplashScreen .content {
-    color:@lighten(LoginColor,36)@; 
-    font-size:10px;
-    text-align:center;
-}
-.SplashScreen .message {
-    color:#FFFFFF;
-    font-size:14px;
-    font-weight:bold;
-    padding-top:20px;
-}
-.SplashScreen .switch{
-    margin:30px 0px 60px;
-}
-.SplashScreen .switch a{
-    color: #FFFFFF;
-    border-bottom: 1px dotted #FFFFFF;
-}
-.SplashScreen .switch a:hover{
-    border-bottom: 1px solid #FFFFFF;
-    background-color:transparent;
-}
-.SplashScreen .copyright {
-    color:@lighten(LoginColor,36)@; 
-    font-size:11px;
-    margin:13px 0px 3px;
-    text-align:center;
-}
-
-.LoginScreen {
-    background-color: #eaeced;
-}
-
-.LoginScreen .center {
-    left: 50%;
-    top: 50%;
-    z-index: 11;
-    position: absolute;
-    overflow: visible;
-    width: 430px;
-    height: 410px;
-    margin-left: -215px;
-    margin-top: -205px;
-}
-
-.LoginScreen h1 {margin:22px 20px 32px 65px;}
-
-.LoginScreen form {text-align:center;}  /* fixes IE centering of form */
-.form {
-	color: @darken(AppC,50)@;
-	margin: 0px auto;
-	border-collapse:collapse;
-	text-align:left;
-}
-
-.LoginScreen #ZLoginErrorPanel {
-	margin:10px 10%;
-	padding:5px;
-	background-color:#FF9;
-	border-width:0px;
-	border-radius:10px;
-#IFDEF GECKO
-	-moz-border-radius:10px;
-	-moz-box-shadow:0px 0px 10px #FF9;
-#ENDIF
-#IFDEF SAFARI	
-	-webkit-border-radius:10px;
-	-webkit-box-shadow:0px 0px 10px #FF9;
-#ENDIF	
-	box-shadow:0px 0px 10px #FF9;
-	position:relative;
-	left:auto;
-}
-
-.LoginScreen #ZLoginWhatsThisAnchor {
-	color: @darken(AppC,50)@;
-	font-size:10px;
-	margin-left:5px;
-#IFDEF GECKO	
-	-moz-border-radius: 10px;
-#ENDIF
-#IFDEF SAFARI	
-	-webkit-border-radius: 10px;
-#ENDIF	
-	border-radius: 10px;
-}
-
-.LoginScreen #ZLoginWhatsThis {
-	margin-left:-10em;
-	position:absolute;
-	width:40em;
-	top: 25px;
-	left: 0;
-	z-index: 30; 
-}
-
-.LoginScreen .ZLoginInfoMessage {
-	background-color: @lighten(AltC,53)@;	
-	border:1px solid @lighten(AltC,25)@;
-	padding:3px;
-	text-align:left;
-}
-
-.LoginScreen .Footer{
-	position: absolute;
-	bottom: 0;
-	z-index: 10;
-	width: 100%;
-	text-align: center;
-}
-
-.LoginScreen #ZLoginNotice {
-	color:@darken(AppC,50)@;
-	font-size:11px;
-    margin-bottom: 10px;
-}
-
-.LoginScreen #ZLoginNotice A {
-	color:@darken(AppC,50)@;
-}
-
-.LoginScreen #login {  /*Is this used?*/
-	float:right;
-}
-
-.LoginScreen .copyright {
-    color: @darken(AppC,50)@;
- 	font-size:11px;
- 	margin-bottom:5px;
-	text-align:center;
-}
-
-.LoginScreen .ImgLoginBanner, .LoginScreen .ImgAppBanner {
-    background-repeat: no-repeat;
-    cursor: pointer;
-    display: block;
-}
-
-.LoginScreen .center, .LoginScreen .center-small {
-    
-    /*Linear gradient backgrounds*/
-    background-color: #eaeced;
-    background-image:url("@SkinImgDir@/login-bg.png");
-    background-repeat:no-repeat;
-}
-
-
-.form input[type='text'], 
-.form input[type='password'] {
-    border:1px solid @LoginColor@;
-}
-
-.LoginScreen a:hover {
-	background-color:transparent;
-}
-
-.LoginScreen .ZLoginInfoMessage {
-    background-color: @LoginColor@; 
-    border:1px solid @lighten(LoginColor,65)@;
-}
-.LoginScreen #ZLoginNotice a {
-    border-bottom: 1px dotted #FFF;
-    text-decoration:none;
-}
-
-.LoginScreen .copyright {
-    color:@lighten(LoginColor,36)@;
-    position: static; 
-}
-
-.LoginScreen label {
-    color:@lighten(LoginColor,255)@;
 }
 
 /** Logo Images **/
