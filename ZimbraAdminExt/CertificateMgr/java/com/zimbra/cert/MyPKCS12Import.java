@@ -96,10 +96,10 @@ public class MyPKCS12Import
        FileInputStream input = new FileInputStream(fileIn);
        kspkcs12.load(input, inphrase);
 
-       FileInputStream input2 = null;
+       FileInputStream output = null;
        if (fileOut.exists()) {
-           input2 = new FileInputStream(fileOut); 
-           ksjks.load(input, outphrase);
+    	   output = new FileInputStream(fileOut); 
+           ksjks.load(output, outphrase);
        } else {
            ksjks.load(null, outphrase);
        }
@@ -124,8 +124,8 @@ public class MyPKCS12Import
        ksjks.store(out, outphrase);
        out.close(); 
        input.close();
-       if (input2 != null) {
-           input2.close();
+       if (output != null) {
+    	   output.close();
        }
     } 
     
