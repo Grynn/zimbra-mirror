@@ -195,8 +195,11 @@ public class PageBriefcase extends AbsTab {
 			GeneralUtility.waitForElementPresent(this,
 					PageMain.Locators.zAppbarBriefcase, 20000);
 		} else {
-			zWaitForElementPresent(locator);
+			if (!zWaitForElementPresent(locator, "10000")) {
+				((AppAjaxClient) MyApplication).zPageMain.zNavigateTo();
+			}
 		}
+
 		// Click on Briefcase icon
 		zClickAt(PageMain.Locators.zAppbarBriefcase, "0,0");
 
@@ -1285,9 +1288,13 @@ public class PageBriefcase extends AbsTab {
 			throws HarnessException {
 		logger.info("firing Event: " + eventName + " on " + locator);
 		// ClientSessionFactory.session().selenium().fireEvent(locator,eventName);
-		ClientSessionFactory.session().selenium().getEval(
-				"selenium.browserbot.triggerMouseEvent(selenium.browserbot.findElement('"
-						+ locator + "'),'" + eventName + "', null, 0, 0, 0)");
+		ClientSessionFactory
+				.session()
+				.selenium()
+				.getEval(
+						"selenium.browserbot.triggerMouseEvent(selenium.browserbot.findElement('"
+								+ locator + "'),'" + eventName
+								+ "', null, 0, 0, 0)");
 	}
 
 	public void isOpenDocLoaded(DocumentItem docItem) throws HarnessException {
@@ -1393,17 +1400,16 @@ public class PageBriefcase extends AbsTab {
 
 		zWaitForElementPresent("css=iframe[id*='DWT'][class='ZDEditor']");
 
-		zWaitForIframeText("css=iframe[id*='DWT'][class='ZDEditor']", docItem
-				.getDocText());
+		zWaitForIframeText("css=iframe[id*='DWT'][class='ZDEditor']",
+				docItem.getDocText());
 
 		return true;
 	}
 
 	public void deleteFileByName(String docName) throws HarnessException {
 		ZimbraAccount account = MyApplication.zGetActiveAccount();
-		account
-				.soapSend("<SearchRequest xmlns='urn:zimbraMail' types='document'>"
-						+ "<query>" + docName + "</query>" + "</SearchRequest>");
+		account.soapSend("<SearchRequest xmlns='urn:zimbraMail' types='document'>"
+				+ "<query>" + docName + "</query>" + "</SearchRequest>");
 		String id = account.soapSelectValue("//mail:doc", "id");
 		deleteFileById(id);
 	}
