@@ -358,7 +358,7 @@ LPWSTR MAPIAppointment::WriteContentsToFile(LPTSTR pBody, bool isAscii)
     int nBytesToBeWritten;
 
     pTemp = (isAscii) ? (LPSTR)pBody : Zimbra::Util::UnicodeToAnsii(pBody);
-    nBytesToBeWritten = strlen(pTemp);
+    nBytesToBeWritten = (int)strlen(pTemp);
    
     wstring wstrTempAppDirPath;
     if (!Zimbra::MAPI::Util::GetAppTemporaryDirectory(wstrTempAppDirPath))

@@ -129,7 +129,7 @@ void Log::endlog(Tlsdata &tlsd, Level clvl)
         last_fmt = wcsdup(tbuf);
         last_sec = now_sec;
         p = wcsstr(last_fmt, USubst);
-        upos = p ? p - last_fmt : -1;
+        upos = p ? (int)(p - last_fmt) : -1;
     }
     strbuf = last_fmt;
     if (upos != -1)
@@ -173,7 +173,7 @@ void Log::endlog(Tlsdata &tlsd, Level clvl)
         }
     }
     strbuf += '\n';
-    ffd.write(strbuf.c_str(), strbuf.size());
+    ffd.write(strbuf.c_str(), (unsigned)strbuf.size());
     lck.Leave();
     tlsd.clvl = None;
     tlsd.space = false;
