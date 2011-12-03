@@ -341,14 +341,13 @@ public final class SetHeaderFilter extends com.zimbra.cs.servlet.SetHeaderFilter
 
     private void secureCookieIfNecessary(HttpServletRequest req) {
 
-        boolean currentHttps = req.getScheme().equals("https");
-        if (!currentHttps) {
-            return;
-        }
         HttpSession httpSession = req.getSession(false);
         if (httpSession != null) {
             return;
         }
+        
+        boolean secureCookie = req.getScheme().equals("https");
+        
         /*
          * This is a https req, and we don't have a session yet.
          * This is probably the first req of the session, which means user
@@ -365,18 +364,22 @@ public final class SetHeaderFilter extends com.zimbra.cs.servlet.SetHeaderFilter
          */
         ServletContext servletContext = config.getServletContext();
         if (servletContext instanceof org.eclipse.jetty.servlet.ServletContextHandler.Context) {
-        	org.eclipse.jetty.servlet.ServletContextHandler.Context sContext = (org.eclipse.jetty.servlet.ServletContextHandler.Context)servletContext;
+        	org.eclipse.jetty.servlet.ServletContextHandler.Context sContext = 
+        	    (org.eclipse.jetty.servlet.ServletContextHandler.Context)servletContext;
 
             // get the WebAppContext
             org.eclipse.jetty.server.handler.ContextHandler contextHandler = sContext.getContextHandler();
             if (contextHandler instanceof org.eclipse.jetty.servlet.ServletContextHandler) {
-            	org.eclipse.jetty.servlet.ServletContextHandler context= (org.eclipse.jetty.servlet.ServletContextHandler)contextHandler;
+            	org.eclipse.jetty.servlet.ServletContextHandler context = 
+            	    (org.eclipse.jetty.servlet.ServletContextHandler)contextHandler;
 
                 // get SessionManager
                 org.eclipse.jetty.server.SessionManager sessionManager = context.getSessionHandler().getSessionManager();
                 if (sessionManager instanceof org.eclipse.jetty.server.session.AbstractSessionManager) {
-                    org.eclipse.jetty.server.session.AbstractSessionManager asm = (org.eclipse.jetty.server.session.AbstractSessionManager)sessionManager;
-                    asm.setSecureCookies(true);
+                    org.eclipse.jetty.server.session.AbstractSessionManager asm = 
+                        (org.eclipse.jetty.server.session.AbstractSessionManager)sessionManager;
+                    asm.setSecureCookies(secureCookie);
+                    asm.setHttpOnly(true);
                 }
             }
         }
