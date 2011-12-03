@@ -1672,48 +1672,6 @@ function(html1, html2) {
 	return AjxStringUtil.htmlPlatformIndependent(html1) == AjxStringUtil.htmlPlatformIndependent(html2);
 };
 
-/**
- * A helper method that wraps the string in quotes.
- * @param str [String] The string value that needs to be wrapped in quotes.
- * @param useDoubleQuotes [String] A flag indicating whether to use double quotes. Default is single quote.
- * @return Returns the string value wrapped in quotes. If the string value is undefined/null, the function treats it as empty string and returns '' or "".
- */
-AjxStringUtil.quoteString =
-function(str, useDoubleQuotes) {
-    str = str || "";
-    var quote = useDoubleQuotes ? '"' : "'";
-    return quote + str + quote;
-}
-
-/**
- * A helper method that builds an attribute e.g. someAttrName='someValue'.
- * @param name [String] The name of the attribute. In the above e.g., name would be someAttrName.
- * @param value [String] The value of the attribute. In the above e.g., value would be someValue.
- * @param prependSpace [boolean] A flag indicating whether the return value should be prefixed with a space. Default is true.
- * @param useDoubleQuotes [String] A flag indicating whether to use double quotes. Default is single quote.
- * @param jsEscape [boolean] A flag indicating whether the value should be javascript escaped. Default is false;
- * @param htmlEscape [boolean] A flag indicating whether the value should be html escaped. Default is false. Note: You cannot apply both js and html escape. If both are true, js escape will be applied.
- */
-AjxStringUtil.buildAttribute =
-function(name, value, prependSpace, useDoubleQuotes, jsEscape, htmlEscape) {
-    if (!name) {return ""};
-
-    var retVal = (prependSpace === false) ? "" : " ";
-    retVal += (name + "=");
-
-    if (jsEscape) {
-        value = escape(value);
-    } else {
-        if (htmlEscape) {
-            value = AjxStringUtil.htmlEncode(value);
-        }
-    }
-
-    retVal += AjxStringUtil.quoteString(value, useDoubleQuotes);
-
-    return retVal;
-};
-
 // regexes for parsing msg body content so we can figure out what was quoted and what's new
 AjxStringUtil.MSG_REGEXES = [
 	{
