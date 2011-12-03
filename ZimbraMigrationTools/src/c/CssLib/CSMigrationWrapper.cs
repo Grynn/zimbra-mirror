@@ -123,6 +123,7 @@ public class CSMigrationwrapper
     {
         string path = System.AppDomain.CurrentDomain.BaseDirectory + "interop.Exchange.dll";
 
+        Log.init(Path.GetTempPath() + "migration.log", Log.Level.Info);
         Log.info("initialize");
         sourceProvider = Assembly.LoadFile(path);
         if (sourceProvider == null)
@@ -210,6 +211,9 @@ public class CSMigrationwrapper
     {
         // CreateConfig(ConfigXMLFile);
         int status = 0;
+
+        Log.open(Path.GetTempPath() + UserID + ".log");
+
         Type calcType = sourceProvider.GetType("Exchange.MapiWrapperClass");
         object calcInstance = Activator.CreateInstance(calcType);
         ParameterModifier pm = new ParameterModifier(1);

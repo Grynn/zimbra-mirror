@@ -53,11 +53,13 @@ bool Log::LogFile::open(const wchar_t *f)
     file = wcsdup(f);
     if (!wcscmp(file, L"stdout") || !wcscmp(file, L"cout"))
     {
-        fd = GetStdHandle(STD_OUTPUT_HANDLE);
+        DuplicateHandle(GetCurrentProcess(), GetStdHandle(STD_OUTPUT_HANDLE),
+            GetCurrentProcess(), &fd, 0L, TRUE, DUPLICATE_SAME_ACCESS);
     }
     else if (!wcscmp(file, L"stderr") || !wcscmp(file, L"cerr"))
     {
-        fd = GetStdHandle(STD_ERROR_HANDLE);
+        DuplicateHandle(GetCurrentProcess(), GetStdHandle(STD_ERROR_HANDLE),
+            GetCurrentProcess(), &fd, 0L, TRUE, DUPLICATE_SAME_ACCESS);
     }
     else
     {
