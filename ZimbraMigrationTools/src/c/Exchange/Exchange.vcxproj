@@ -425,6 +425,7 @@
     <ClCompile Include="folderObject.cpp" />
     <ClCompile Include="ItemObject.cpp" />
     <ClCompile Include="MAPIAccessAPI.cpp" />
+    <ClCompile Include="MAPIAppointment.cpp" />
     <ClCompile Include="MAPIContacts.cpp" />
     <ClCompile Include="MAPIFolder.cpp" />
     <ClCompile Include="MAPIMessage.cpp" />
@@ -445,6 +446,7 @@
     <ClInclude Include="GenericException.h" />
     <ClInclude Include="ItemObject.h" />
     <ClInclude Include="MAPIAccessAPI.h" />
+    <ClInclude Include="MAPIAppointment.h" />
     <ClInclude Include="MAPIContacts.h" />
     <ClInclude Include="MAPIFolder.h" />
     <ClInclude Include="MAPIMessage.h" />

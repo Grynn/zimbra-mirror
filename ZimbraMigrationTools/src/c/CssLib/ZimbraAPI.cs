@@ -5,12 +5,14 @@ using System.Reflection;
 using System.Text;
 using System.Xml.Linq;
 using System.Xml;
+using System;
 
 namespace CssLib
 {
 public class ZimbraAPI
 {
     // Errors
+    internal const int APPT_CREATE_FAILED_FLDR = 94;
     internal const int CONTACT_CREATE_FAILED_FLDR = 95;
     internal const int FOLDER_CREATE_FAILED_SYN = 96;
     internal const int FOLDER_CREATE_FAILED_SEM = 97;
@@ -1089,6 +1091,118 @@ public class ZimbraAPI
         client.InvokeService(sb.ToString(), out rsp);
         retval = client.status;
 
+        return retval;
+    }
+
+    public void SetAppointmentRequest(XmlWriter writer, Dictionary<string, string> appt,
+        string folderId, int requestId)
+    {
+        writer.WriteStartElement("SetAppointmentRequest", "urn:zimbraMail");
+        writer.WriteAttributeString("l", folderId);
+        writer.WriteStartElement("default");
+        writer.WriteAttributeString("ptst", appt["ptst"]);
+        writer.WriteStartElement("m");
+
+        writer.WriteStartElement("inv");
+        writer.WriteAttributeString("method", "REQUEST");
+        writer.WriteAttributeString("fb", appt["fb"]);
+        writer.WriteAttributeString("transp", appt["transp"]);
+        writer.WriteAttributeString("allDay", appt["allDay"]);
+        writer.WriteAttributeString("name", appt["name"]);
+        writer.WriteAttributeString("loc", appt["loc"]);
+        writer.WriteAttributeString("uid", appt["uid"]);
+
+        writer.WriteStartElement("s");
+        writer.WriteAttributeString("d", appt["s"]);
+        writer.WriteEndElement();
+
+        writer.WriteStartElement("e");
+        writer.WriteAttributeString("d", appt["e"]);
+        writer.WriteEndElement();
+
+        writer.WriteStartElement("or");
+        writer.WriteAttributeString("d", appt["orName"]);
+        writer.WriteAttributeString("a", appt["orAddr"]);
+        writer.WriteEndElement();
+
+        writer.WriteStartElement("alarm");
+        writer.WriteAttributeString("action", "DISPLAY");
+        writer.WriteStartElement("trigger");
+        writer.WriteStartElement("rel");
+        writer.WriteAttributeString("related", "START");
+        writer.WriteAttributeString("neg", "1");
+        writer.WriteAttributeString("m", appt["m"]);
+        writer.WriteEndElement();   // rel
+        writer.WriteEndElement();   // trigger
+        writer.WriteEndElement();   // alarm
+
+        writer.WriteEndElement();   // inv
+
+        WriteNVPair(writer, "su", appt["su"]);
+
+        writer.WriteStartElement("mp");
+        writer.WriteAttributeString("ct", "multipart/alternative");
+        writer.WriteStartElement("mp");
+        writer.WriteAttributeString("ct", appt["contentType0"]);
+        WriteNVPair(writer, "content", System.Text.Encoding.Default.GetString(File.ReadAllBytes(appt["content0"])));
+        File.Delete(appt["content0"]);
+        writer.WriteEndElement();   // mp
+        writer.WriteStartElement("mp");
+        writer.WriteAttributeString("ct", appt["contentType1"]);
+        WriteNVPair(writer, "content", System.Text.Encoding.Default.GetString(File.ReadAllBytes(appt["content1"])));
+        File.Delete(appt["content1"]);
+    
+        writer.WriteEndElement();   // mp
+        writer.WriteEndElement();   // mp
+
+        writer.WriteEndElement();   // m
+        writer.WriteEndElement();   // default
+        writer.WriteEndElement();   // SetAppointmentRequest
+    }
+
+    public int AddAppointment(Dictionary<string, string> appt, string folderPath = "")
+    {
+        lastError = "";
+
+        // Create in Contacts unless another folder was desired
+        string folderId = "10";
+
+        if (folderPath.Length > 0)
+        {
+            folderId = FindFolder(folderPath);
+            if (folderId.Length == 0)
+                return APPT_CREATE_FAILED_FLDR;
+        }
+
+        // //////
+        WebServiceClient client = new WebServiceClient {
+            Url = ZimbraValues.GetZimbraValues().Url, WSServiceType =
+                WebServiceClient.ServiceType.Traditional
+        };
+        int retval = 0;
+        StringBuilder sb = new StringBuilder();
+        XmlWriterSettings settings = new XmlWriterSettings();
+
+        settings.OmitXmlDeclaration = true;
+        using (XmlWriter writer = XmlWriter.Create(sb, settings))
+        {
+            writer.WriteStartDocument();
+            writer.WriteStartElement("soap", "Envelope",
+                "http://www.w3.org/2003/05/soap-envelope");
+
+            WriteHeader(writer, true, true, true);
+
+            writer.WriteStartElement("Body", "http://www.w3.org/2003/05/soap-envelope");
+            SetAppointmentRequest(writer, appt, folderId, -1);
+
+            writer.WriteEndElement();           // soap body
+            writer.WriteEndElement();           // soap envelope
+            writer.WriteEndDocument();
+        }
+        string rsp = "";
+
+        client.InvokeService(sb.ToString(), out rsp);
+        retval = client.status;
         return retval;
     }
 

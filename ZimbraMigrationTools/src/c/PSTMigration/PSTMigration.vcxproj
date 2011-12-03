@@ -417,6 +417,7 @@
   <ItemGroup>
     <ClCompile Include="..\Exchange\ExchangeAdmin.cpp" />
     <ClCompile Include="..\Exchange\MAPIAccessAPI.cpp" />
+    <ClCompile Include="..\Exchange\MAPIAppointment.cpp" />
     <ClCompile Include="..\Exchange\MAPIContacts.cpp" />
     <ClCompile Include="..\Exchange\MAPIMessage.cpp" />
     <ClCompile Include="..\Exchange\MAPIFolder.cpp" />
@@ -438,6 +439,7 @@
     <ClInclude Include="..\Exchange\ExchangeAdmin.h" />
     <ClInclude Include="..\Exchange\GenericException.h" />
     <ClInclude Include="..\Exchange\MAPIAccessAPI.h" />
+    <ClInclude Include="..\Exchange\MAPIAppointment.h" />
     <ClInclude Include="..\Exchange\MAPIContacts.h" />
     <ClInclude Include="..\Exchange\MAPIMessage.h" />
     <ClInclude Include="..\Exchange\MAPIFolder.h" />

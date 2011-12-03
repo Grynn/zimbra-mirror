@@ -23,6 +23,26 @@ typedef struct _Item_Data
     // parent folder
 } Item_Data;
 
+typedef struct _Organizer
+{
+    wstring nam;
+    wstring addr;
+} Organizer;
+
+typedef struct _Attendee
+{
+    wstring nam;
+    wstring addr;
+    wstring role;
+    wstring partstat;
+} Attendee;
+
+typedef struct _MessagePart
+{
+    wstring contentType;
+    wstring content;
+} MessagePart;
+
 // base item data
 typedef struct _BaseItemData
 {
@@ -121,6 +141,26 @@ typedef struct _MessageItemData: BaseItemData
     data_buffer htmlbody;
     wstring MimeFile;
 } MessageItemData;
+
+typedef struct _ApptItemData: BaseItemData
+{
+    wstring Subject;
+    wstring Name;
+    wstring Location;
+    wstring Uid;
+    wstring PartStat;
+    wstring FreeBusy;
+    wstring Transparency;
+    wstring AllDay;
+    wstring StartDate;
+    wstring EndDate;
+    wstring AlarmTrigger;
+    Organizer organizer;
+    vector<Attendee> vAttendees;
+    vector<MessagePart> vMessageParts;
+    //data_buffer textbody;
+    //data_buffer htmlbody;
+} ApptItemData;
 
 class MAPIAccessAPI
 {

@@ -45,6 +45,9 @@
     <ClCompile Include="..\Exchange\MAPIFolder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\Exchange\MAPIAppointment.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Exchange\MapiUtils.h">
@@ -78,6 +81,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\Exchange\MAPIFolder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Exchange\MAPIAppointment.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

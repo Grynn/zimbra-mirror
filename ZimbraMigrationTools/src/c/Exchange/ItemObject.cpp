@@ -297,6 +297,30 @@ STDMETHODIMP CItemObject::GetDataForItemID(BSTR UserId, VARIANT ItemId, FolderTy
                  *
                  * printf("MIME FILE PATH: %S\n\n\n\n", msgdata.MimeFile.c_str());*/
             }
+	    else if (ft == 3)
+	    {
+		ApptItemData apptData;
+
+		maapi->GetItem(ItemID, apptData);
+		pIt[L"ptst"] = SysAllocString((apptData.PartStat).c_str());
+		pIt[L"fb"] = SysAllocString((apptData.FreeBusy).c_str());
+		pIt[L"allDay"] = SysAllocString((apptData.AllDay).c_str());
+		pIt[L"transp"] = SysAllocString((apptData.Transparency).c_str());
+		pIt[L"name"] = SysAllocString((apptData.Name).c_str());
+		pIt[L"su"] = SysAllocString((apptData.Subject).c_str());
+		pIt[L"loc"] = SysAllocString((apptData.Location).c_str());
+		pIt[L"uid"] = SysAllocString((apptData.Uid).c_str());
+		pIt[L"m"] = SysAllocString((apptData.AlarmTrigger).c_str());
+		pIt[L"s"] = SysAllocString((apptData.StartDate).c_str());
+		pIt[L"e"] = SysAllocString((apptData.EndDate).c_str());
+		pIt[L"orAddr"] = SysAllocString((apptData.organizer.addr).c_str());
+		pIt[L"orName"] = SysAllocString((apptData.organizer.nam).c_str());
+		pIt[L"contentType0"] = SysAllocString((apptData.vMessageParts[0].contentType).c_str());
+		pIt[L"content0"] = SysAllocString((apptData.vMessageParts[0].content).c_str());
+		pIt[L"contentType1"] = SysAllocString((apptData.vMessageParts[1].contentType).c_str());
+		pIt[L"content1"] = SysAllocString((apptData.vMessageParts[1].content).c_str());
+		//TODO: attendees, recurrence
+	    }
 	    delete maapi;	// temporary
         }
 	delete ItemID.lpb;

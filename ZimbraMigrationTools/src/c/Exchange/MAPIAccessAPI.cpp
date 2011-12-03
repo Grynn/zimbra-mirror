@@ -650,7 +650,27 @@ LPCWSTR MAPIAccessAPI::GetItem(SBinary sbItemEID, BaseItemData &itemData)
         }
         else if (msg.ItemType() == ZT_APPOINTMENTS)
         {
-            printf("ITEM TYPE: ZT_APPOINTMENTS \n");
+            MAPIAppointment mapiappointment(*m_zmmapisession, msg);
+            ApptItemData *ad = (ApptItemData *)&itemData;
+            ad->Subject = mapiappointment.GetSubject();
+            ad->Name = mapiappointment.GetSubject();
+            ad->StartDate = mapiappointment.GetStartDate();
+            ad->EndDate = mapiappointment.GetEndDate();
+            ad->Location = mapiappointment.GetLocation();
+            ad->PartStat = mapiappointment.GetResponseStatus();
+            ad->FreeBusy = mapiappointment.GetBusyStatus();
+            ad->AllDay = mapiappointment.GetAllday();
+            ad->Transparency = mapiappointment.GetTransparency();
+            ad->AlarmTrigger = mapiappointment.GetReminderMinutes();
+
+            MessagePart mp;
+            mp.contentType = L"text/plain";
+            mp.content = mapiappointment.GetPlainTextFileAndContent();
+            ad->vMessageParts.push_back(mp);
+            mp.contentType = L"text/html";
+            mp.content = mapiappointment.GetHtmlFileAndContent();
+            ad->vMessageParts.push_back(mp);
+            // TODO: ad->Organizer, ad->UID
         }
         else if (msg.ItemType() == ZT_TASKS)
         {

@@ -11,6 +11,7 @@
 #include "MAPIFolder.h"
 #include "MapiUtils.h"
 #include "MAPIContacts.h"
+#include "MAPIAppointment.h"
 
 #include "resource.h"
 #include "Zimbra/Zimbra.h"

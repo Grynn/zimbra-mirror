@@ -347,9 +347,6 @@ public class CSMigrationwrapper
             if (bSkipIt)
                 continue;
              // //
-            // ANOTHER TEMP -- REMOVE WHEN WE DO APPOINTMENTS
-            if (folderobject.ContainerClass == "IPF.Appointment")
-                continue;
              // ANOTHER TEMP -- REMOVE WHEN WE DO TASKS
             if (folderobject.ContainerClass == "IPF.Task")
                 continue;
@@ -484,6 +481,10 @@ public class CSMigrationwrapper
                             else if (ftype == foldertype.Contacts)
                             {
                                 stat = api.CreateContact(dict, path);
+                            }
+                            else if (ftype == foldertype.Calendar)
+                            {
+                                stat = api.AddAppointment(dict, path);
                             }
                         }
 
@@ -643,9 +644,6 @@ public class CSMigrationwrapper
                 if (bSkipIt)
                     continue;
                  // //
-                // ANOTHER TEMP -- REMOVE WHEN WE DO APPOINTMENTS
-                if (folderobject.ContainerClass == "IPF.Appointment")
-                    continue;
                  // ANOTHER TEMP -- REMOVE WHEN WE DO TASKS
                 if (folderobject.ContainerClass == "IPF.Task")
                     continue;
@@ -674,6 +672,10 @@ public class CSMigrationwrapper
                 if (importopts.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Mail))
                 {
                     ProcessItems(Acct, isServer, userobject, userinstance, folderobject, foldertype.Mail, api, path, importopts);
+                }
+                if (importopts.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Calendar))
+                {
+                    ProcessItems(Acct, isServer, userobject, userinstance, folderobject, foldertype.Calendar, api, path, importopts);
                 }
             }
         }
