@@ -1,12 +1,67 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
-using System;
 
 namespace CssLib
 {
+public class Log {
+    public enum Level { None, Err, Warn, Info, Debug };
+
+    public static void init(string file, Level level) {
+        log_init(file, level);
+    }
+
+    public static void log(Level level, object obj) {
+        log_print(level, obj.ToString());
+    }
+
+    public static void log(Level level, params object[] objs) {
+        string s = "";
+
+        foreach (object obj in objs) {
+            if (s.Length > 0)
+                s += ' ';
+            s += obj.ToString();
+        }
+        log_print(level, s);
+    }
+
+    public static void err(string str) { log_print(Level.Err, str); }
+    public static void err(params object[] objs) { log(Level.Err, objs); }
+    public static void warn(string str) { log_print(Level.Warn, str); }
+    public static void warn(params object[] objs) { log(Level.Warn, objs); }
+    public static void info(string str) { log_print(Level.Info, str); }
+    public static void info(params object[] objs) { log(Level.Info, objs); }
+    public static void debug(string str) { log_print(Level.Debug, str); }
+    public static void debug(params object[] objs) { log(Level.Debug, objs); }
+
+    public static void open(string file) { log_open(file); }
+
+    public static void prefix(string prefix) {
+        log_prefix(prefix);
+    }
+
+    #region PInvokes
+
+    [DllImport("CppLib.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Unicode)]
+    static private extern void log_init(string file, Level level);
+
+    [DllImport("CppLib.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Unicode)]
+    static private extern void log_open(string file);
+
+    [DllImport("CppLib.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Unicode)]
+    static private extern void log_prefix(string prefix);
+
+    [DllImport("CppLib.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Unicode)]
+    static private extern void log_print(Level level, string str);
+
+    #endregion PInvokes
+}
+
 [Flags] public enum ItemsAndFoldersOptions
 {
     Junk = 0x0080, DeletedItems = 0x0040, Sent = 0x0020, Rules = 0x0010, Tasks = 0x0008,
@@ -68,6 +123,7 @@ public class CSMigrationwrapper
     {
         string path = System.AppDomain.CurrentDomain.BaseDirectory + "interop.Exchange.dll";
 
+        Log.info("initialize");
         sourceProvider = Assembly.LoadFile(path);
         if (sourceProvider == null)
         {

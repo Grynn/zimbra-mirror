@@ -1,6 +1,7 @@
 // UserObject.cpp : Implementation of CUserObject
 
 #include "common.h"
+#include "Logger.h"
 #include "UserObject.h"
 
 // CUserObject
@@ -23,7 +24,6 @@ long CUserObject::Initialize(BSTR Id)
 {
     UserID = Id;
     MailType = L"MAPI";
-    m_pLogger = CSingleton::getInstance();
     return 0;
 }
 
@@ -49,10 +49,6 @@ STDMETHODIMP CUserObject::InitializeUser(BSTR host, BSTR admin, BSTR UserID, BST
 {
     HRESULT hr = S_OK;
     long retval = 0;
-
-    // if we don't need these, we should get rid of them in the signature
-    UserID = UserID;
-
     BSTR temp;
 
     temp = host;
@@ -65,7 +61,8 @@ STDMETHODIMP CUserObject::InitializeUser(BSTR host, BSTR admin, BSTR UserID, BST
     {
         // Initialize the Mapi API..
 
-        m_pLogger->doSomething(DBG, "In Initalize User");
+        dlog << Log::Debug << "initalize user";
+        dlogd("initialize user");
         // Create Session and Open admin store.
         // Its a static function and store/session will be used commonly by all mailboxes.
         // MAPIAccessAPI::InitGlobalSessionAndStore(host,admin);
@@ -91,12 +88,11 @@ STDMETHODIMP CUserObject::UMInitializeUser(BSTR ProfileName, BSTR MailType, BSTR
     long retval = 0;
 
     retval = Initialize(L"");
-    // Logger = CSingleton::getInstance();
     if (wcscmp(MailType, L"MAPI") == 0)
     {
         // Initialize the Mapi API..
 
-        m_pLogger->doSomething(DBG, "In UMInitializeUser");
+        dlogd("In UMInitializeUser");
 
         LPCWSTR lpwstrStatus = MAPIAccessAPI::InitGlobalSessionAndStore(ProfileName);
 
@@ -134,12 +130,9 @@ STDMETHODIMP CUserObject::GetFolderObjects( /*[out, retval]*/ VARIANT *vObjects)
 
     USES_CONVERSION;
     vector<Folder_Data> vfolderlist;
-    m_pLogger->doSomething(DBG, "In GetFolderObjects User");
-    // Get all folders
-    maapi->GetRootFolderHierarchy(vfolderlist);
 
-    // Amitabh: This test function has been removed from MAPIAccessAPI
-    // maapi->IterateVectorList(vfolderlist, m_pLogger );
+    dlogi("GetFolderList");
+    maapi->GetRootFolderHierarchy(vfolderlist);
 
     std::vector<Folder_Data>::iterator it;
     size_t size = vfolderlist.size();
@@ -156,15 +149,11 @@ STDMETHODIMP CUserObject::GetFolderObjects( /*[out, retval]*/ VARIANT *vObjects)
     for (size_t i = 0; i < size; i++, it++)
     {
         CComPtr<IfolderObject> pIFolderObject;
-        // Isampleobj* pIStatistics;
+
         hr = CoCreateInstance(CLSID_folderObject, NULL, CLSCTX_ALL, IID_IfolderObject,
             reinterpret_cast<void **>(&pIFolderObject));
         if (SUCCEEDED(hr))
         {
-            /*pIFolderObject->put_Name(L"testoing"); // so far so good
-             * pIFolderObject->put_Id(12222);
-             * pIFolderObject->put_ParentPath(L"\\Inbox\\personal\\mine");*/
-
             CComBSTR temp((*it).name.c_str());
 
             pIFolderObject->put_Name(SysAllocString(temp));

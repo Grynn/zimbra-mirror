@@ -1,10 +1,16 @@
 // dllmain.cpp : Defines the entry point for the DLL application.
 #include "common.h"
+#include "Logger.h"
 
-BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserved)
+extern "C" {
+
+BOOL APIENTRY DllMain(HMODULE module, DWORD reason, LPVOID reserved)
 {
-    (void)hModule;
-    (void)ul_reason_for_call;
-    (void)lpReserved;
+    (void)module;
+    (void)reserved;
+    if (reason == DLL_PROCESS_ATTACH || reason == DLL_THREAD_ATTACH || reason == DLL_THREAD_DETACH)
+        log_open(NULL);
     return TRUE;
+}
+
 }

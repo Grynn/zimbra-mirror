@@ -8,7 +8,6 @@ class BaseUser
 protected:
     BSTR UserID;
     BSTR MailType;
-    CSingleton *m_pLogger;
 
 public:
     BaseUser(void) {}

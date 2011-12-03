@@ -343,7 +343,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='tst|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Logger.cpp" />
-    <ClCompile Include="Testunmanaged.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseFolder.h" />
@@ -351,7 +350,6 @@
     <ClInclude Include="BaseUser.h" />
     <ClInclude Include="CMigration.h" />
     <ClInclude Include="Logger.h" />
-    <ClInclude Include="Testunmanaged.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
