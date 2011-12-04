@@ -57,7 +57,7 @@ MAPIAppointment::MAPIAppointment(Zimbra::MAPI::MAPISession &session,
     m_pOrganizerAddr = L"";
     m_pPrivate = L"";
 
-    GetApptValues();
+    SetMAPIAppointmentValues();
 }
 
 MAPIAppointment::~MAPIAppointment()
@@ -144,7 +144,7 @@ HRESULT MAPIAppointment::InitNamedPropsForAppt()
     return S_OK;
 }
 
-HRESULT MAPIAppointment::GetApptValues()
+HRESULT MAPIAppointment::SetMAPIAppointmentValues()
 {
     SizedSPropTagArray(C_NUMALLAPPTPROPS, appointmentProps) = {
 	C_NUMALLAPPTPROPS, {
@@ -159,7 +159,7 @@ HRESULT MAPIAppointment::GetApptValues()
 
     if (FAILED(hr = m_pMessage->GetProps((LPSPropTagArray) & appointmentProps, fMapiUnicode, &cVals,
             &m_pPropVals)))
-        throw MAPIAppointmentException(hr, L"GetApptValues(): GetProps Failed.", __LINE__, __FILE__);
+        throw MAPIAppointmentException(hr, L"SetMAPIAppointmentValues(): GetProps Failed.", __LINE__, __FILE__);
 
     if (m_pPropVals[C_SUBJECT].ulPropTag == appointmentProps.aulPropTag[C_SUBJECT])
     {
@@ -204,6 +204,274 @@ HRESULT MAPIAppointment::GetApptValues()
     SetTransparency(L"O");
     SetPlainTextFileAndContent();
     SetHtmlFileAndContent();
+
+    SetOrganizerInfo();
+    return hr;
+}
+
+void MAPIAppointment::SetSubject(LPTSTR pStr)
+{
+    m_pSubject = pStr;
+}
+
+void MAPIAppointment::SetStartDate(FILETIME ft)
+{
+    SYSTEMTIME st;
+
+    FileTimeToSystemTime(&ft, &st);
+    m_pStartDate = Zimbra::Util::FormatSystemTime(st, TRUE, TRUE);
+}
+
+void MAPIAppointment::SetEndDate(FILETIME ft)
+{
+    SYSTEMTIME st;
+
+    FileTimeToSystemTime(&ft, &st);
+    m_pEndDate = Zimbra::Util::FormatSystemTime(st, TRUE, TRUE);
+}
+
+void MAPIAppointment::SetInstanceUID(LPTSTR pStr)
+{
+    m_pInstanceUID = pStr;
+}
+
+void MAPIAppointment::SetLocation(LPTSTR pStr)
+{
+    m_pLocation = pStr;
+}
+
+void MAPIAppointment::SetBusyStatus(long busystatus)
+{
+    switch (busystatus)
+    {
+	case oFree:		m_pBusyStatus = L"F";	break;
+	case oTentative:	m_pBusyStatus = L"T";	break;
+	case oBusy:		m_pBusyStatus = L"B";	break;
+	case oOutOfOffice:	m_pBusyStatus = L"O";	break;
+	default:		m_pBusyStatus = L"T";
+    }
+}
+
+void MAPIAppointment::SetAllday(unsigned short usAllday)
+{
+    m_pAllday = (usAllday == 1) ? L"1" : L"0";
+}
+
+void MAPIAppointment::SetTransparency(LPTSTR pStr)
+{
+    m_pTransparency = pStr;
+}
+
+void MAPIAppointment::SetResponseStatus(long responsestatus)
+{
+    switch (responsestatus)
+    {
+	case oResponseNone:		m_pResponseStatus = L"NE";	break;
+	case oResponseOrganized:	m_pResponseStatus = L"OR";	break;	    // OR????  -- temporary
+	case oResponseTentative:	m_pResponseStatus = L"TE";	break;
+	case oResponseAccepted:		m_pResponseStatus = L"AC";	break;
+	case oResponseDeclined:		m_pResponseStatus = L"DE";	break;
+	case oResponseNotResponded:	m_pResponseStatus = L"NE";	break;
+	default:			m_pResponseStatus = L"NE";
+    }
+}
+
+void MAPIAppointment::SetReminderMinutes(long reminderminutes)
+{
+    WCHAR pwszTemp[10];
+    _ltow(reminderminutes, pwszTemp, 10);
+    m_pReminderMinutes = pwszTemp;
+}
+
+void MAPIAppointment::SetPrivate(unsigned short usPrivate)
+{
+    m_pPrivate = (usPrivate == 1) ? L"1" : L"0";
+}
+
+void MAPIAppointment::SetPlainTextFileAndContent()
+{
+    LPTSTR pBody = NULL;
+    UINT nText = 0;
+    m_pPlainTextFile = L"";
+
+    bool bRet = TextBody(&pBody, nText);
+    if (bRet)
+    {
+	LPWSTR lpwszTempFile = WriteContentsToFile(pBody, false);
+	m_pPlainTextFile = lpwszTempFile;
+	SafeDelete(lpwszTempFile);
+    }
+}
+
+void MAPIAppointment::SetHtmlFileAndContent()
+{
+    LPVOID pBody = NULL;
+    UINT nText = 0;
+    m_pHtmlFile = L"";
+
+    bool bRet = HtmlBody(&pBody, nText);
+    if (bRet)
+    {
+	LPWSTR lpwszTempFile = WriteContentsToFile((LPTSTR)pBody, true);
+	m_pHtmlFile = lpwszTempFile;
+	SafeDelete(lpwszTempFile);
+    }
+}
+
+HRESULT MAPIAppointment::SetOrganizerInfo()
+{
+    Zimbra::Util::ScopedInterface<IMAPITable> pRecipTable;
+    HRESULT hr = 0;
+
+    hr = m_pMessage->GetRecipientTable(fMapiUnicode, pRecipTable.getptr());
+    if (FAILED(hr))
+    {
+        return hr;
+    }
+
+    typedef enum _AttendeePropTagIdx
+    {
+        AT_DISPLAY_NAME, AT_SMTP_ADDR, AT_RECIPIENT_FLAGS, AT_NPROPS
+    } AttendeePropTagIdx;
+
+    SizedSPropTagArray(3, reciptags) = {
+        3, { PR_DISPLAY_NAME_W, PR_SMTP_ADDRESS_W, PR_RECIPIENT_FLAGS }
+    };
+
+    ULONG ulRows = 0;
+    Zimbra::Util::ScopedRowSet pRecipRows;
+
+    hr = pRecipTable->SetColumns((LPSPropTagArray) & reciptags, 0);
+    if (FAILED(hr))
+    {
+	//LOG_ERROR(_T("could not get the recipient table, hr: %x"), hr);
+        return hr;
+    }
+    hr = pRecipTable->GetRowCount(0, &ulRows);
+    if (FAILED(hr))
+    {
+	//LOG_ERROR(_T("could not get the recipient table row count, hr: %x"), hr);
+        return hr;
+    }
+    hr = pRecipTable->QueryRows(ulRows, 0, pRecipRows.getptr());
+    if (FAILED(hr))
+    {
+        //LOG_ERROR(_T("Failed to query table rows. hr: %x"), hr);
+        return hr;
+    }
+    if (pRecipRows != NULL)
+    {
+	for (ULONG iRow = 0; iRow < pRecipRows->cRows; iRow++)
+        {
+	    if (pRecipRows->aRow[iRow].lpProps[AT_RECIPIENT_FLAGS].ulPropTag ==
+                reciptags.aulPropTag[AT_RECIPIENT_FLAGS])
+            {
+                if (pRecipRows->aRow[iRow].lpProps[AT_RECIPIENT_FLAGS].Value.l == 3)
+		{
+		    m_pOrganizerName = pRecipRows->aRow[iRow].lpProps[AT_DISPLAY_NAME].Value.lpszW;
+		    m_pOrganizerAddr = pRecipRows->aRow[iRow].lpProps[AT_SMTP_ADDR].Value.lpszW;
+		}
+	    }
+        }
+    }
+    return hr;
+}
+
+HRESULT MAPIAppointment::SetAppointmentAttachment(wstring &wstrAttachmentPath)
+{
+    HRESULT hr = S_OK;
+    /*
+    Zimbra::Util::ScopedInterface<IStream> pSrcStream;
+    {
+        Zimbra::Util::ScopedRowSet pAttachRows;
+        Zimbra::Util::ScopedInterface<IMAPITable> pAttachTable;
+
+        SizedSPropTagArray(3, attachProps) = {
+            3, { PR_ATTACH_NUM, PR_ATTACH_SIZE, PR_ATTACH_LONG_FILENAME }
+        };
+
+        hr = m_pMessage->GetAttachmentTable(MAPI_UNICODE, pAttachTable.getptr());
+        if (SUCCEEDED(hr))
+        {
+            if (FAILED(hr = pAttachTable->SetColumns((LPSPropTagArray) & attachProps, 0)))
+                return hr;
+            ULONG ulRowCount = 0;
+            if (FAILED(hr = pAttachTable->GetRowCount(0, &ulRowCount)))
+                return hr;
+            if (FAILED(hr = pAttachTable->QueryRows(ulRowCount, 0, pAttachRows.getptr())))
+                return hr;
+            if (SUCCEEDED(hr))
+            {
+                hr = MAPI_E_NOT_FOUND;
+                for (unsigned int i = 0; i < pAttachRows->cRows; i++)
+                {
+                    // if property couldn't be found or returns error, skip it
+                    if ((pAttachRows->aRow[i].lpProps[2].ulPropTag == PT_ERROR) ||
+                        (pAttachRows->aRow[i].lpProps[2].Value.err == MAPI_E_NOT_FOUND))
+                        continue;
+                    // Discard the attachmetnt if its not contact picture
+                    if (_tcscmp(pAttachRows->aRow[i].lpProps[2].Value.LPSZ, _T(
+                        "ContactPicture.jpg")))
+                        continue;
+                    Zimbra::Util::ScopedInterface<IAttach> pAttach;
+
+                    if (FAILED(hr = m_pMessage->OpenAttach(
+                            pAttachRows->aRow[i].lpProps[0].Value.l, NULL, 0,
+                            pAttach.getptr())))
+                        continue;
+                    if (FAILED(hr = pAttach->OpenProperty(PR_ATTACH_DATA_BIN, &IID_IStream,
+                            STGM_READ, 0, (LPUNKNOWN FAR *)pSrcStream.getptr())))
+                        return hr;
+                    break;
+                }
+            }
+        }
+    }
+
+    if (hr != S_OK)
+        return hr;
+
+    // copy image to file
+    wstring wstrTempAppDirPath;
+    char *lpszDirName = NULL;
+    char *lpszUniqueName = NULL;
+    Zimbra::Util::ScopedInterface<IStream> pDestStream;
+
+    if (!Zimbra::MAPI::Util::GetAppTemporaryDirectory(wstrTempAppDirPath))
+        return MAPI_E_ACCESS_DENIED;
+    WtoA((LPWSTR)wstrTempAppDirPath.c_str(), lpszDirName);
+
+    string strFQFileName = lpszDirName;
+
+    WtoA((LPWSTR)Zimbra::MAPI::Util::GetUniqueName().c_str(), lpszUniqueName);
+    strFQFileName += "\\ZmContact_";
+    strFQFileName += lpszUniqueName;
+    strFQFileName += ".jpg";
+    SafeDelete(lpszDirName);
+    SafeDelete(lpszUniqueName);
+    // Open stream on file
+    if (FAILED(hr = OpenStreamOnFile(MAPIAllocateBuffer, MAPIFreeBuffer, STGM_CREATE |
+            STGM_READWRITE, (LPTSTR)strFQFileName.c_str(), NULL, pDestStream.getptr())))
+        return hr;
+    ULARGE_INTEGER liAll = { 0 };
+    liAll.QuadPart = (ULONGLONG)-1;
+    if (FAILED(hr = pSrcStream->CopyTo(pDestStream.get(), liAll, NULL, NULL)))
+        return hr;
+    if (FAILED(hr = pDestStream->Commit(0)))
+    {
+        return hr;
+        ;
+    }
+
+    // mime file path
+    LPWSTR lpwstrFQFileName = NULL;
+
+    AtoW((LPSTR)strFQFileName.c_str(), lpwstrFQFileName);
+    wstrImagePath = lpwstrFQFileName;
+    SafeDelete(lpwstrFQFileName);
+    */
+
+    wstrAttachmentPath = L"";	// GET RID OF THIS
     return hr;
 }
 
@@ -407,130 +675,18 @@ LPWSTR MAPIAppointment::WriteContentsToFile(LPTSTR pBody, bool isAscii)
     return lpwstrFQFileName;
 }
 
-void MAPIAppointment::SetPlainTextFileAndContent()
-{
-    LPTSTR pBody = NULL;
-    UINT nText = 0;
-    m_pPlainTextFile = L"";
-
-    bool bRet = TextBody(&pBody, nText);
-    if (bRet)
-    {
-	LPWSTR lpwszTempFile = WriteContentsToFile(pBody, false);
-	m_pPlainTextFile = lpwszTempFile;
-	SafeDelete(lpwszTempFile);
-    }
-}
-
-void MAPIAppointment::SetHtmlFileAndContent()
-{
-    LPVOID pBody = NULL;
-    UINT nText = 0;
-    m_pHtmlFile = L"";
-
-    bool bRet = HtmlBody(&pBody, nText);
-    if (bRet)
-    {
-	LPWSTR lpwszTempFile = WriteContentsToFile((LPTSTR)pBody, true);
-	m_pHtmlFile = lpwszTempFile;
-	SafeDelete(lpwszTempFile);
-    }
-}
-
-HRESULT MAPIAppointment::GetAppointmentAttachment(wstring &wstrAttachmentPath)
-{
-    HRESULT hr = S_OK;
-    /*
-    Zimbra::Util::ScopedInterface<IStream> pSrcStream;
-    {
-        Zimbra::Util::ScopedRowSet pAttachRows;
-        Zimbra::Util::ScopedInterface<IMAPITable> pAttachTable;
-
-        SizedSPropTagArray(3, attachProps) = {
-            3, { PR_ATTACH_NUM, PR_ATTACH_SIZE, PR_ATTACH_LONG_FILENAME }
-        };
-
-        hr = m_pMessage->GetAttachmentTable(MAPI_UNICODE, pAttachTable.getptr());
-        if (SUCCEEDED(hr))
-        {
-            if (FAILED(hr = pAttachTable->SetColumns((LPSPropTagArray) & attachProps, 0)))
-                return hr;
-            ULONG ulRowCount = 0;
-            if (FAILED(hr = pAttachTable->GetRowCount(0, &ulRowCount)))
-                return hr;
-            if (FAILED(hr = pAttachTable->QueryRows(ulRowCount, 0, pAttachRows.getptr())))
-                return hr;
-            if (SUCCEEDED(hr))
-            {
-                hr = MAPI_E_NOT_FOUND;
-                for (unsigned int i = 0; i < pAttachRows->cRows; i++)
-                {
-                    // if property couldn't be found or returns error, skip it
-                    if ((pAttachRows->aRow[i].lpProps[2].ulPropTag == PT_ERROR) ||
-                        (pAttachRows->aRow[i].lpProps[2].Value.err == MAPI_E_NOT_FOUND))
-                        continue;
-                    // Discard the attachmetnt if its not contact picture
-                    if (_tcscmp(pAttachRows->aRow[i].lpProps[2].Value.LPSZ, _T(
-                        "ContactPicture.jpg")))
-                        continue;
-                    Zimbra::Util::ScopedInterface<IAttach> pAttach;
-
-                    if (FAILED(hr = m_pMessage->OpenAttach(
-                            pAttachRows->aRow[i].lpProps[0].Value.l, NULL, 0,
-                            pAttach.getptr())))
-                        continue;
-                    if (FAILED(hr = pAttach->OpenProperty(PR_ATTACH_DATA_BIN, &IID_IStream,
-                            STGM_READ, 0, (LPUNKNOWN FAR *)pSrcStream.getptr())))
-                        return hr;
-                    break;
-                }
-            }
-        }
-    }
-
-    if (hr != S_OK)
-        return hr;
-
-    // copy image to file
-    wstring wstrTempAppDirPath;
-    char *lpszDirName = NULL;
-    char *lpszUniqueName = NULL;
-    Zimbra::Util::ScopedInterface<IStream> pDestStream;
-
-    if (!Zimbra::MAPI::Util::GetAppTemporaryDirectory(wstrTempAppDirPath))
-        return MAPI_E_ACCESS_DENIED;
-    WtoA((LPWSTR)wstrTempAppDirPath.c_str(), lpszDirName);
-
-    string strFQFileName = lpszDirName;
-
-    WtoA((LPWSTR)Zimbra::MAPI::Util::GetUniqueName().c_str(), lpszUniqueName);
-    strFQFileName += "\\ZmContact_";
-    strFQFileName += lpszUniqueName;
-    strFQFileName += ".jpg";
-    SafeDelete(lpszDirName);
-    SafeDelete(lpszUniqueName);
-    // Open stream on file
-    if (FAILED(hr = OpenStreamOnFile(MAPIAllocateBuffer, MAPIFreeBuffer, STGM_CREATE |
-            STGM_READWRITE, (LPTSTR)strFQFileName.c_str(), NULL, pDestStream.getptr())))
-        return hr;
-    ULARGE_INTEGER liAll = { 0 };
-    liAll.QuadPart = (ULONGLONG)-1;
-    if (FAILED(hr = pSrcStream->CopyTo(pDestStream.get(), liAll, NULL, NULL)))
-        return hr;
-    if (FAILED(hr = pDestStream->Commit(0)))
-    {
-        return hr;
-        ;
-    }
-
-    // mime file path
-    LPWSTR lpwstrFQFileName = NULL;
-
-    AtoW((LPSTR)strFQFileName.c_str(), lpwstrFQFileName);
-    wstrImagePath = lpwstrFQFileName;
-    SafeDelete(lpwstrFQFileName);
-    */
-
-    wstrAttachmentPath = L"";	// GET RID OF THIS
-    return hr;
-}
+wstring MAPIAppointment::GetSubject() { return m_pSubject; }
+wstring MAPIAppointment::GetStartDate() { return m_pStartDate; }
+wstring MAPIAppointment::GetEndDate() { return m_pEndDate; }
+wstring MAPIAppointment::GetInstanceUID() { return m_pInstanceUID; }
+wstring MAPIAppointment::GetLocation() { return m_pLocation; }
+wstring MAPIAppointment::GetBusyStatus() { return m_pBusyStatus; }
+wstring MAPIAppointment::GetAllday() { return m_pAllday; }
+wstring MAPIAppointment::GetTransparency() { return m_pTransparency; }
+wstring MAPIAppointment::GetReminderMinutes() { return m_pReminderMinutes; }
+wstring MAPIAppointment::GetResponseStatus() { return m_pResponseStatus; }
+wstring MAPIAppointment::GetOrganizerName() { return m_pOrganizerName; }
+wstring MAPIAppointment::GetOrganizerAddr() { return m_pOrganizerAddr; }
+wstring MAPIAppointment::GetPrivate() { return m_pPrivate; }
+wstring MAPIAppointment::GetPlainTextFileAndContent() { return m_pPlainTextFile; }
+wstring MAPIAppointment::GetHtmlFileAndContent() { return m_pHtmlFile; }
