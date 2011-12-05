@@ -23,13 +23,13 @@ public class PageMail extends AbsTab {
 
 	public static class Locators {
 
-		public static final String IsConViewActiveCSS 			= "css=div[id='zv__CLV2-main']";
+		public static final String IsConViewActiveCSS 			= "css=div[id='zv__CLV-main']";
 		public static final String IsMsgViewActiveCSS 			= "css=div[id='zv__TV-main']";
 
-		public static final String zPrintIconBtnID 		= "zb__CLV2-main__PRINT_left_icon";
-		public static final String zTagMenuDropdownBtnID	= "zb__CLV2-main__TAG_MENU_dropdown";
+		public static final String zPrintIconBtnID 		= "zb__CLV-main__PRINT_left_icon";
+		public static final String zTagMenuDropdownBtnID	= "zb__CLV-main__TAG_MENU_dropdown";
 		public static final String zDetachIconBtnID		= "zb__TV-main__DETACH_left_icon";
-		public static final String zViewMenuDropdownBtnID	= "zb__CLV2-main__VIEW_MENU_dropdown";
+		public static final String zViewMenuDropdownBtnID	= "zb__CLV-main__VIEW_MENU_dropdown";
 
 		public static final String zCloseIconBtn_messageWindow 	= "css=td[id=zb__MSG__CLOSE_left_icon]";
 		public static final String cssTVRowsLocator	= "css=div#zl__TV-main__rows";
@@ -99,7 +99,7 @@ public class PageMail extends AbsTab {
 		 * MLV:
 		 * <div id="zb__TV-main__NEW_MENU" style="position: absolute; overflow: visible; z-index: 300; left: 5px; top: 78px; width: 159px; height: 24px;" class="ZToolbarButton ZWidget   ZHasDropDown       ZHasLeftIcon ZHasText" parentid="z_shell">
 		 * CLV:
-		 * <div id="zb__CLV2-main__NEW_MENU" style="position: absolute; overflow: visible; z-index: 300; left: 5px; top: 78px; width: 159px; height: 24px;" class="ZToolbarButton ZWidget   ZHasDropDown       ZHasLeftIcon ZHasText" parentid="z_shell">
+		 * <div id="zb__CLV-main__NEW_MENU" style="position: absolute; overflow: visible; z-index: 300; left: 5px; top: 78px; width: 159px; height: 24px;" class="ZToolbarButton ZWidget   ZHasDropDown       ZHasLeftIcon ZHasText" parentid="z_shell">
 		 * 
 		 */
 
@@ -114,7 +114,7 @@ public class PageMail extends AbsTab {
 			return (true);
 
 		// Check CLV next
-		locator = "css=div#zb__CLV2-main__NEW_MENU";
+		locator = "css=div#zb__CLV-main__NEW_MENU";
 		loaded = this.sIsElementPresent(locator);
 		visible = this.zIsVisiblePerPosition(locator, 4, 74);
 		if ( loaded && visible )
@@ -212,7 +212,7 @@ public class PageMail extends AbsTab {
 			if ( zGetPropMailView() == PageMailView.BY_MESSAGE ) {
 				id = "zb__TV-main__DELETE_left_icon";
 			} else {
-				id = "zb__CLV2-main__DELETE_left_icon";
+				id = "zb__CLV-main__DELETE_left_icon";
 			}
 
 			// Check if the button is enabled
@@ -436,7 +436,7 @@ public class PageMail extends AbsTab {
 		AbsPage page = null; // If set, this page will be returned
 		
 		// CLV vs. MLV
-		boolean isCLV = this.zIsVisiblePerPosition("css=div#ztb__CLV2-main", 0, 0);
+		boolean isCLV = this.zIsVisiblePerPosition("css=div#ztb__CLV-main", 0, 0);
 
 		if (pulldown == Button.B_TAG) {
 			if (option == Button.O_TAG_NEWTAG) {
@@ -481,8 +481,8 @@ public class PageMail extends AbsTab {
 		} else if ( pulldown == Button.B_ACTIONS ) {
 			
 			if (isCLV) {
-				pulldownLocator = "css=td[id='zb__CLV2-main__ACTIONS_MENU_dropdown']>div[class='ImgSelectPullDownArrow']";
-				optionLocator = "css=div[id='zm__CLV2-main']";
+				pulldownLocator = "css=td[id='zb__CLV-main__ACTIONS_MENU_dropdown']>div[class='ImgSelectPullDownArrow']";
+				optionLocator = "css=div[id='zm__CLV-main']";
 			} else {
 				pulldownLocator = "css=td[id='zb__TV-main__ACTIONS_MENU_dropdown']>div[class='ImgSelectPullDownArrow']";
 				optionLocator = "css=div[id='zm__TV-main']";
@@ -607,8 +607,8 @@ public class PageMail extends AbsTab {
 			if ( option == Button.O_NEW_FOLDER ) {
 
 				// Check if we are CLV or MV
-				if ( this.zIsVisiblePerPosition("css=div#ztb__CLV2-main", 0, 0) ) {
-					pulldownLocator = "css=td#zb__CLV2-main__MOVE_MENU_dropdown>div";
+				if ( this.zIsVisiblePerPosition("css=div#ztb__CLV-main", 0, 0) ) {
+					pulldownLocator = "css=td#zb__CLV-main__MOVE_MENU_dropdown>div";
 				} else {
 					pulldownLocator = "css=td#zb__TV-main__MOVE_MENU_dropdown>div";
 				}
@@ -839,8 +839,8 @@ public class PageMail extends AbsTab {
 			listLocator = "css=div[id='zl__TV-main__rows']";
 			rowLocator = "div[id^='zli__TV-main__']";
 		} else {
-			listLocator = "css=div[id='zl__CLV2-main__rows']";
-			rowLocator = "div[id^='zli__CLV2-main__']";
+			listLocator = "css=div[id='zl__CLV-main__rows']";
+			rowLocator = "div[id^='zli__CLV-main__']";
 		}
 
 		// Make sure the button exists
@@ -892,8 +892,8 @@ public class PageMail extends AbsTab {
 			listLocator = "css=div[id='zl__TV-main__rows']";
 			rowLocator = "div[id^='zli__TV-main__']";
 		} else {
-			listLocator = "css=div[id='zl__CLV2-main__rows']";
-			rowLocator = "div[id^='zli__CLV2-main__']";
+			listLocator = "css=div[id='zl__CLV-main__rows']";
+			rowLocator = "div[id^='zli__CLV-main__']";
 		}
 
 		// TODO: how to handle both messages and conversations, maybe check the view first?
@@ -1103,8 +1103,8 @@ public class PageMail extends AbsTab {
 			listLocator = "css=div[id='zl__TV-main__rows']";
 			rowLocator = "div[id^='zli__TV-main__']";
 		} else {
-			listLocator = "css=div[id='zl__CLV2-main__rows']";
-			rowLocator = "div[id^='zli__CLV2-main__']";
+			listLocator = "css=div[id='zl__CLV-main__rows']";
+			rowLocator = "div[id^='zli__CLV-main__']";
 		}
 
 		// TODO: how to handle both messages and conversations, maybe check the view first?
@@ -1143,7 +1143,7 @@ public class PageMail extends AbsTab {
 			// Now the ContextMenu is opened
 			// Click on the specified option
 
-			String optionLocator = "css=div[id^='zm__CLV2-main__']";
+			String optionLocator = "css=div[id^='zm__CLV-main__']";
 			if (zGetPropMailView() == PageMailView.BY_MESSAGE) {
 				optionLocator = "div[id^='zm__TV-main__']";
 			}
@@ -1369,11 +1369,11 @@ public class PageMail extends AbsTab {
 
 		} else if ( pulldown == Button.B_ACTIONS ) {
 			
-			boolean isCLV = this.zIsVisiblePerPosition("css=div#ztb__CLV2-main", 0, 0);
+			boolean isCLV = this.zIsVisiblePerPosition("css=div#ztb__CLV-main", 0, 0);
 
 			if (isCLV) {
-				pulldownLocator = "css=td[id='zb__CLV2-main__ACTIONS_MENU_dropdown']>div[class='ImgSelectPullDownArrow']";
-				optionLocator = "css=div[id='zm__CLV2-main']";
+				pulldownLocator = "css=td[id='zb__CLV-main__ACTIONS_MENU_dropdown']>div[class='ImgSelectPullDownArrow']";
+				optionLocator = "css=div[id='zm__CLV-main']";
 			} else {
 				pulldownLocator = "css=td[id='zb__TV-main__ACTIONS_MENU_dropdown']>div[class='ImgSelectPullDownArrow']";
 				optionLocator = "css=div[id='zm__TV-main']";
@@ -1515,9 +1515,9 @@ public class PageMail extends AbsTab {
 			FolderItem folder = (FolderItem)dynamic;
 
 			// Check if we are CLV or MV
-			if ( this.zIsVisiblePerPosition("css=div#ztb__CLV2-main", 0, 0) ) {
-				pulldownLocator = "css=td#zb__CLV2-main__MOVE_MENU_dropdown>div";
-				optionLocator = "css=td#zti__DwtFolderChooser_MailCLV2-main__"+ folder.getId() + "_textCell";
+			if ( this.zIsVisiblePerPosition("css=div#ztb__CLV-main", 0, 0) ) {
+				pulldownLocator = "css=td#zb__CLV-main__MOVE_MENU_dropdown>div";
+				optionLocator = "css=td#zti__DwtFolderChooser_MailCLV-main__"+ folder.getId() + "_textCell";
 			} else {
 				pulldownLocator = "css=td#zb__TV-main__MOVE_MENU_dropdown>div";
 				optionLocator = "css=td#zti__DwtFolderChooser_MailTV-main__"+ folder.getId() + "_textCell";
@@ -1607,7 +1607,7 @@ public class PageMail extends AbsTab {
 			if ( zGetPropMailView() == PageMailView.BY_MESSAGE ) {
 				locator = "css=td[id='zb__TV-main__DELETE_title']";
 			} else {
-				locator = "css=td[id='zb__CLV2-main__DELETE_title']";
+				locator = "css=td[id='zb__CLV-main__DELETE_title']";
 			}
 			
 		} else if ( button == Button.B_REPLY ) {
@@ -1615,7 +1615,7 @@ public class PageMail extends AbsTab {
 			if ( zGetPropMailView() == PageMailView.BY_MESSAGE ) {
 				locator = "css=td[id='zb__TV-main__REPLY_title']";
 			} else {
-				locator = "css=td[id='zb__CLV2-main__REPLY_title']";
+				locator = "css=td[id='zb__CLV-main__REPLY_title']";
 			}
 
 		} else {

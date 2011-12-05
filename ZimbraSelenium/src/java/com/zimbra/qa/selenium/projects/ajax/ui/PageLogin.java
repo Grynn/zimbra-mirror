@@ -3,6 +3,7 @@ package com.zimbra.qa.selenium.projects.ajax.ui;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
+import com.zimbra.qa.selenium.projects.ajax.ui.DialogError.DialogErrorID;
 
 
 public class PageLogin extends AbsTab {
@@ -112,33 +113,6 @@ public class PageLogin extends AbsTab {
 
 		zNavigateTo();
 
-		zSetLoginName(account.EmailAddress);
-		zSetLoginPassword(account.Password);
-
-		// Click the Login button
-		sClick(Locators.zBtnLogin);
-
-		// Wait for the app to load
-		sWaitForPageToLoad();
-		((AppAjaxClient)MyApplication).zPageMain.zWaitForActive();
-
-		((AppAjaxClient)MyApplication).zSetActiveAcount(account);
-
-	}
-	
-	public void zLogout(ZimbraAccount account) throws HarnessException {
-		logger.debug("Logout (ZimbraAccount account)" + account.EmailAddress);
-		sClickAt(Locators.zLogoutLink, "");
-	}
-	
-	public void zLoginTo(ZimbraAccount account) throws HarnessException {
-		zLogout(account);
-		SleepUtil.sleepMedium();
-		
-		logger.debug("login(ZimbraAccount account)" + account.EmailAddress);
-
-		tracer.trace("Login to the "+ MyApplication.myApplicationName() +" using user/password "+ account.EmailAddress +"/"+ account.Password);
-		
 		zSetLoginName(account.EmailAddress);
 		zSetLoginPassword(account.Password);
 

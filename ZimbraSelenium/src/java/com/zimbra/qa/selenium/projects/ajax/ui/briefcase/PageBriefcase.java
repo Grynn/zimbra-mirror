@@ -479,8 +479,8 @@ public class PageBriefcase extends AbsTab {
 			if (option == Button.O_NEW_FOLDER) {
 
 				// Check if we are CLV or MV
-				if (this.zIsVisiblePerPosition("css=div#ztb__CLV2-main", 0, 0)) {
-					pulldownLocator = "css=td#zb__CLV2-main__MOVE_MENU_dropdown>div";
+				if (this.zIsVisiblePerPosition("css=div#ztb__CLV-main", 0, 0)) {
+					pulldownLocator = "css=td#zb__CLV-main__MOVE_MENU_dropdown>div";
 				} else {
 					pulldownLocator = "css=td#zb__TV-main__MOVE_MENU_dropdown>div";
 				}

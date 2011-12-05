@@ -33,11 +33,11 @@ public class DisplayMail extends AbsDisplay {
 		public static final String MessageViewPreviewAtRightCSS			= "css=div[id='zv__TV-main__MSG']";
 		public static final String MessageViewOpenMessageCSS			= "css=div[id='zv__MSG-1__MSG']";
 		
-		public static final String ConversationViewPreviewAtBottomCSS	= "css=div[id='zv__CLV2-main__CV']";
-		public static final String ConversationViewPreviewAtRightCSS	= "css=div[id='zv__CLV2-main__CV']";
+		public static final String ConversationViewPreviewAtBottomCSS	= "css=div[id='zv__CLV-main__CV']";
+		public static final String ConversationViewPreviewAtRightCSS	= "css=div[id='zv__CLV-main__CV']";
 		public static final String ConversationViewOpenMessageCSS		= "css=TODO#TODO";
-		//public static final String ConversationViewPreviewAtBottomCSS	= "css=div[id='zv__CLV2__MSG']";
-		//public static final String ConversationViewPreviewAtRightCSS	= "css=div[id='zv__CLV2__MSG']";
+		//public static final String ConversationViewPreviewAtBottomCSS	= "css=div[id='zv__CLV__MSG']";
+		//public static final String ConversationViewPreviewAtRightCSS	= "css=div[id='zv__CLV__MSG']";
 	
 		// Accept, Decline & Tentative button, menus and dropdown locators
 		public static final String AcceptButton = "css=td[id$='__Inv__REPLY_ACCEPT_title']";
