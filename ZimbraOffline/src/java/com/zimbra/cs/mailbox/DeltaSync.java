@@ -28,6 +28,8 @@ import com.zimbra.common.mailbox.Color;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.MailConstants;
+import com.zimbra.common.soap.SoapFaultException;
+import com.zimbra.common.util.Pair;
 import com.zimbra.common.util.StringUtil;
 import com.zimbra.cs.mailbox.ChangeTrackingMailbox.TracelessContext;
 import com.zimbra.cs.mailbox.util.TagUtil;
@@ -38,6 +40,7 @@ import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineSyncManager;
 import com.zimbra.cs.service.UserServlet;
 import com.zimbra.cs.service.mail.Sync;
+import com.zimbra.cs.service.offline.OfflineDialogAction;
 import com.zimbra.cs.session.PendingModifications.Change;
 
 public class DeltaSync {
@@ -80,34 +83,49 @@ public class DeltaSync {
         return ombx.getTagSync();
     }
 
-    public static String sync(ZcsMailbox ombx) throws ServiceException {
-        return new DeltaSync(ombx).sync();
+    public static void sync(ZcsMailbox ombx) throws ServiceException {
+        new DeltaSync(ombx).sync();
     }
 
-    String sync() throws ServiceException {
+    void sync() throws ServiceException {
         String oldToken = mMailboxSync.getSyncToken();
         assert (oldToken != null);
 
-        Element response;
+        Element response = null;
         String newToken;
         // keep delta sync'ing until the server tells us the delta sync is complete ("more=0")
         do {
             Element request = new Element.XMLElement(MailConstants.SYNC_REQUEST).addAttribute(MailConstants.A_TOKEN,
                     oldToken).addAttribute(MailConstants.A_TYPED_DELETES, true);
-            response = ombx.sendRequestWithNotification(request);
+            try {
+                response = ombx.sendRequestWithNotification(request);
+            } catch (SoapFaultException e) {
+                if (MailServiceException.MUST_RESYNC.equals(e.getCode())) {
+                    OfflineLog.offline.warn("sync token is too old, must resync");
+                    this.ombx.cancelCurrentTask();
+                    OfflineSyncManager.getInstance().registerDialog(this.ombx.getAccountId(),
+                            new Pair<String, String>(OfflineDialogAction.DIALOG_TYPE_RESYNC,
+                                    OfflineDialogAction.DIALOG_RESYNC_MSG));
+                    throw OfflineServiceException.MUST_RESYNC();
+                } else {
+                    throw e;
+                }
+            }
+
             newToken = response.getAttribute(MailConstants.A_TOKEN);
 
-            OfflineLog.offline.debug("starting delta sync [token " + oldToken + ']');
-            deltaSync(response);
-            SyncExceptionHandler.checkIOExceptionRate(ombx);
-            // update the stored sync progress and loop again with new token if sync was incomplete
-            if (!newToken.equals(oldToken))
+            if (StringUtil.equal(newToken, oldToken) && !response.getAttributeBool(MailConstants.A_QUERY_MORE, false)) {
+                OfflineLog.offline.debug("skipping delta sync [token " + oldToken + "] unchanged");
+            } else {
+                OfflineLog.offline.debug("starting delta sync [token " + oldToken + ']');
+                deltaSync(response);
+                SyncExceptionHandler.checkIOExceptionRate(ombx);
+                // update the stored sync progress and loop again with new token if sync was incomplete
                 mMailboxSync.recordSyncComplete(newToken);
-            oldToken = newToken;
-            OfflineLog.offline.debug("ending delta sync [token " + newToken + ']');
+                oldToken = newToken;
+                OfflineLog.offline.debug("ending delta sync [token " + newToken + ']');
+            }
         } while (response.getAttributeBool(MailConstants.A_QUERY_MORE, false));
-
-        return newToken;
     }
 
     private void deltaSync(Element response) throws ServiceException {

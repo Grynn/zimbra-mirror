@@ -27,13 +27,13 @@ public interface OfflineConstants {
 
     public static final QName SYNC_REQUEST = QName.get("SyncRequest", NAMESPACE);
     public static final QName SYNC_RESPONSE = QName.get("SyncResponse", NAMESPACE);
-    
+
     public static final QName CLIENT_EVENT_NOTIFY_REQUEST = QName.get("ClientEventNotifyRequest", NAMESPACE);
     public static final QName CLIENT_EVENT_NOTIFY_RESPONSE = QName.get("ClientEventNotifyResponse", NAMESPACE);
-    
+
     public static final QName GET_EXTENSIONS_REQUEST = QName.get("GetExtensionsRequest", NAMESPACE);
     public static final QName GET_EXTENSIONS_RESPONSE = QName.get("GetExtensionsResponse", NAMESPACE);
-    
+
     public static final QName ACCOUNT_BACKUP_REQUEST = QName.get("AccountBackupRequest", NAMESPACE);
     public static final QName ACCOUNT_BACKUP_RESPONSE = QName.get("AccountBackupResponse", NAMESPACE);
 
@@ -48,6 +48,9 @@ public interface OfflineConstants {
 
     public static final QName RESET_GAL_ACCOUNT_REQUEST = QName.get("ResetGalAccountRequest", NAMESPACE);
     public static final QName RESET_GAL_ACCOUNT_RESPONSE = QName.get("ResetGalAccountResponse", NAMESPACE);
+
+    public static final QName DIALOG_ACTION_REQUEST = QName.get("DialogActionResponse", NAMESPACE);
+    public static final QName DIALOG_ACTION_RESPONSE = QName.get("DialogActionResponse", NAMESPACE);
 
     public static final String A_Event = "e";
     public static final String EVENT_UI_LOAD_BEGIN = "ui_load_begin";
@@ -84,22 +87,22 @@ public interface OfflineConstants {
                 }
             }
             return SYNCEVERYTHING;
-          }
+        }
     }
 
     public static final String A_offlineAccountsOrder = "offlineAccountsOrder";
-    
+
     public static final String A_offlineRemoteServerVersion = "offlineRemoteServerVersion";
     public static final String A_offlineRemotePassword = "offlineRemotePassword";
     public static final String A_offlineRemoteServerUri = "offlineRemoteServerUri";
     public static final String A_offlineWebappUri = "offlineWebappUri";
-    
+
     public static final String A_offlineAccountName = "offlineAccountName";
-    public static final String A_offlineAccountFlavor = "offlineAccountFlavor"; 
+    public static final String A_offlineAccountFlavor = "offlineAccountFlavor";
 
     public static final String A_offlineDataSourceType = "offlineDataSourceType";
     public static final String A_offlineDataSourceName = "offlineDataSourceName";
-    
+
     public static final String A_offlineFeatureSmtpEnabled = "offlineFeatureSmtpEnabled";
 
     public static final String A_offlineGalAccountId = "offlineGalAccountId";
@@ -108,20 +111,20 @@ public interface OfflineConstants {
     public static final String A_offlineGalAccountLastRefresh = "offlineGalAccountLastRefresh";
     public static final String A_offlineGalAccountDataSourceId = "offlineGalAccountDataSourceId";
     public static final String A_offlineGalGroupMembersPopulated = "offlineGalGroupMembersPopulated";
-    
+
     public static final String A_offlineSyncFreq = "offlineSyncFreq";
     public static final String A_offlineSyncStatus = "offlineSyncStatus";
     public static final String A_offlineSyncStatusErrorCode = "offlineSyncStatusErrorCode";
     public static final String A_offlineSyncStatusErrorMsg = "offlineSyncStatusErrorMsg";
     public static final String A_offlineSyncStatusException = "offlineSyncStatusException";
-    
+
     public static final String A_offlineLastSync = "offlineLastSync";
     public static final String A_offlineEnableTrace = "offlineEnableTrace";
     public static final String A_offlineEnableExpireOldEmails = "offlineEnableExpireOldEmails";
-    
+
     public static final String A_offlineSslCertAlias = "offlineSslCertAlias";
     public static final String A_offlineAccountSetup = "offlineAccountSetup";
-    
+
     public static final String A_offlineYContactTokenReady = "offlineYContactTokenReady";
     public static final String A_offlinesyncFieldName = "offlinesyncFieldName";
     public static final String A_offlinesyncFixedDate = "offlinesyncFixedDate";
@@ -134,11 +137,11 @@ public interface OfflineConstants {
     public static final String A_zimbraDataSourceSmtpAuthRequired = "zimbraDataSourceSmtpAuthRequired";
     public static final String A_zimbraDataSourceSmtpAuthUsername = "zimbraDataSourceSmtpAuthUsername";
     public static final String A_zimbraDataSourceSmtpAuthPassword = "zimbraDataSourceSmtpAuthPassword";
-    
+
     public static final String A_zimbraDataSourceUseProxy = "zimbraDataSourceUseProxy";
     public static final String A_zimbraDataSourceProxyHost = "zimbraDataSourceProxyHost";
     public static final String A_zimbraDataSourceProxyPort = "zimbraDataSourceProxyPort";
-    
+
     public static final String A_zimbraDataSourceSyncFreq = "zimbraDataSourceSyncFreq";
     public static final String A_zimbraDataSourceSyncStatus = "zimbraDataSourceSyncStatus";
     public static final String A_zimbraDataSourceSyncStatusErrorCode = "A_zimbraDataSourceSyncStatusErrorCode";
@@ -147,18 +150,18 @@ public interface OfflineConstants {
     public static final String A_zimbraDataSourceContactSyncEnabled = "zimbraDataSourceContactSyncEnabled";
     public static final String A_zimbraDataSourceCalendarSyncEnabled = "zimbraDataSourceCalendarSyncEnabled";
     public static final String A_zimbraDataSourceTaskSyncEnabled = "zimbraDataSourceTaskSyncEnabled";
-    
+
     public static final String A_zimbraDataSourceCalendarFolderId = "zimbraDataSourceCalendarFolderId";
-    
+
     public static final String A_zimbraDataSourceSyncAllServerFolders = "zimbraDataSourceSyncAllServerFolders";
-    
+
     public static final String A_zimbraDataSourceSslCertAlias = "zimbraDataSourceSslCertAlias";
     public static final String A_zimbraDataSourceAccountSetup = "zimbraDataSourceAccountSetup";
-    
+
     public static final long DEFAULT_SYNC_FREQ = 15 * Constants.MILLIS_PER_MINUTE;
     public static final long MIN_SYNC_FREQ = Constants.MILLIS_PER_MINUTE;
-    
-    public static final String LOCAL_ACCOUNT_ID = "ffffffff-ffff-ffff-ffff-ffffffffffff";    
+
+    public static final String LOCAL_ACCOUNT_ID = "ffffffff-ffff-ffff-ffff-ffffffffffff";
     public static final String GAL_ACCOUNT_SUFFIX = "__OFFLINE_GAL__";
     public static final String GAL_LDAP_DN = "GAL_LDAP_DN";
     public static final String YMAIL_PARTNER_NAME = "Zimbra";

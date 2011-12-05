@@ -185,17 +185,23 @@ public class MailboxSync {
                     if (mStage == SyncStage.BLANK || ombx.isRunInitSync()) {
                         InitialSync.sync(ombx);
                         ombx.setRunInitSync(false);
-                    } else if (mStage == SyncStage.INITIAL)
+                    } else if (mStage == SyncStage.INITIAL) {
                         InitialSync.resume(ombx);
+                    }
                     DeltaSync.sync(ombx);
-                    if (PushChanges.sync(ombx, isOnRequest))
+                    if (PushChanges.sync(ombx, isOnRequest)) {
                         DeltaSync.sync(ombx);
+                    }
                     syncMan.syncComplete(ombx.getAccount());
                     OfflineProvisioning.getOfflineInstance().setAccountAttribute(
                         ombx.getAccount(), OfflineConstants.A_offlineLastSync,
                         Long.toString(System.currentTimeMillis()));
                 } catch (Exception e) {
                     if (!syncMan.isServiceActive(isOnRequest)) {
+                        return;
+                    } else if (e instanceof OfflineServiceException 
+                            && (OfflineServiceException.MUST_RESYNC.equals(((OfflineServiceException)e).getCode()))) {
+                        syncMan.syncComplete(ombx.getAccount());
                         return;
                     } else if (ombx.isDeleting()) {
                         OfflineLog.offline.info("Mailbox \"%s\" is being deleted", ombx.getAccountName());

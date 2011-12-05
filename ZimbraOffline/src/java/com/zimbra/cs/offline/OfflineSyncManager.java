@@ -19,6 +19,7 @@ import java.net.ConnectException;
 import java.net.NoRouteToHostException;
 import java.net.PortUnreachableException;
 import java.net.SocketTimeoutException;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -37,6 +38,9 @@ import javax.security.auth.login.LoginException;
 import org.apache.commons.httpclient.ConnectTimeoutException;
 import org.dom4j.QName;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.Multimaps;
 import com.zimbra.common.auth.ZAuthToken;
 import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.service.RemoteServiceException;
@@ -49,6 +53,8 @@ import com.zimbra.common.soap.SoapHttpTransport;
 import com.zimbra.common.soap.SoapProtocol;
 import com.zimbra.common.util.Constants;
 import com.zimbra.common.util.ExceptionToString;
+import com.zimbra.common.util.Pair;
+import com.zimbra.common.util.StringUtil;
 import com.zimbra.common.util.SystemUtil;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.AccountServiceException;
@@ -83,6 +89,7 @@ public class OfflineSyncManager implements FormatListener {
     private static final QName ZDSYNC_ACCOUNT = QName.get("account", OfflineConstants.NAMESPACE);
     private static final QName ZDSYNC_ERROR = QName.get("error", OfflineConstants.NAMESPACE);
     private static final QName ZDSYNC_EXCEPTION = QName.get("exception", OfflineConstants.NAMESPACE);
+    private static final QName ZDSYNC_DIALOG = QName.get("dialog", OfflineConstants.NAMESPACE);
 
     private static final String A_ZDSYNC_NAME = "name";
     private static final String A_ZDSYNC_ID = "id";
@@ -91,8 +98,10 @@ public class OfflineSyncManager implements FormatListener {
     private static final String A_ZDSYNC_ERRORCODE = "code";
     private static final String A_ZDSYNC_MESSAGE = "message";
     private static final String A_ZDSYNC_UNREAD = "unread";
+    private static final String A_ZDSYNC_TYPE = "type";
 
     private boolean pendingStatusChanges = false;
+    private Multimap<String, Pair<String, String>> dialogMap = Multimaps.synchronizedMultimap(HashMultimap.<String, Pair<String, String>>create());
 
     private OfflineSyncManager() {}
 
@@ -251,8 +260,9 @@ public class OfflineSyncManager implements FormatListener {
         void encode(Element e) {
             e.addAttribute(A_ZDSYNC_STATUS, mStatus.toString());
             e.addAttribute(A_ZDSYNC_LASTSYNC, Long.toString(mLastSyncTime));
-            if (mCode != null)
+            if (mCode != null) {
                 e.addAttribute(A_ZDSYNC_ERRORCODE, mCode);
+            }
             if (mError != null) {
                 mError.encode(e);
             }
@@ -337,7 +347,7 @@ public class OfflineSyncManager implements FormatListener {
             getStatus(entry).mStage = stage;
         }
     }
-    
+
     public void ensureRunning(NamedEntry entry) {
         synchronized (syncStatusTable) {
             OfflineSyncStatus status = getStatus(entry);
@@ -346,6 +356,33 @@ public class OfflineSyncManager implements FormatListener {
                 syncStart(entry);
             }
         }
+    }
+
+    /**
+     * register the flag that will be encoded into zdsync header.
+     * @param accountId zimbraId of account
+     * @param flag (dialogType, displayMsg) pair
+     */
+    public void registerDialog(String accountId, Pair<String, String> flag) {
+        this.dialogMap.put(accountId, flag);
+    }
+
+    /**
+     * unregister so the zdsync header will no longer has this flag.
+     * @param accountId zimbraId of account
+     * @param type dialog type of the flag, should be something defined in OfflineDialogAction.DialogType
+     */
+    public void unregisterDialog(String accountId, String type) {
+        for (Pair<String, String> dialog : this.getDialogs(accountId)) {
+            if (StringUtil.equal(dialog.getFirst(), type)) {
+                this.dialogMap.remove(accountId, type);
+                break;
+            }
+        }
+    }
+
+    private Collection<Pair<String,String>> getDialogs(String acctId) {
+        return this.dialogMap.get(acctId);
     }
 
     public void syncStart(NamedEntry entry) {
@@ -612,6 +649,7 @@ public class OfflineSyncManager implements FormatListener {
         synchronized (syncStatusTable) {
             syncStatusTable.remove(entry.getId());
         }
+        this.dialogMap.removeAll(entry.getId());
     }
 
     public void clearErrorCode(NamedEntry entry) {
@@ -855,6 +893,7 @@ public class OfflineSyncManager implements FormatListener {
               [<error [message="{MESSAGE}"]>
                 [<exception>{EXCEPTION}</exception>]
               </error>]
+              [(<dialog type="resync">default msg for display</dialog>)*]
           </account>
           [(<account>...</account>)*]
         </zdsync>
@@ -880,6 +919,7 @@ public class OfflineSyncManager implements FormatListener {
 
             Element e = zdsync.addElement(ZDSYNC_ACCOUNT).addAttribute(A_ZDSYNC_NAME, account.getName()).addAttribute(A_ZDSYNC_ID, account.getId());
             if (prov.isZcsAccount(account)) {
+                encodeDialog(account.getId(), e);
                 getStatus(account).encode(e);
             } else if (OfflineProvisioning.isDataSourceAccount(account)) {
                 getStatus(prov.getDataSource(account)).encode(e);
@@ -917,6 +957,14 @@ public class OfflineSyncManager implements FormatListener {
                     inboxFolderCache.remove(mbox);
                 }
             }
+        }
+    }
+
+    private void encodeDialog(String acctId, Element e) {
+        for (Pair<String, String> dialog : this.getDialogs(acctId)) {
+            Element dialogElement = e.addElement(ZDSYNC_DIALOG).addAttribute(A_ZDSYNC_TYPE, dialog.getFirst());
+            dialogElement.setText(dialog.getSecond());
+            this.dialogMap.remove(acctId, dialog);
         }
     }
 

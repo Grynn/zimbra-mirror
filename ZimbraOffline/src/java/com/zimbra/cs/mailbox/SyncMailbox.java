@@ -15,9 +15,6 @@
 package com.zimbra.cs.mailbox;
 
 import java.io.IOException;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -40,12 +37,9 @@ import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
 import com.zimbra.cs.mailbox.util.TypedIdList;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineSyncManager;
-import com.zimbra.cs.offline.common.OfflineConstants;
-import com.zimbra.cs.offline.common.OfflineConstants.SyncMsgOptions;
 import com.zimbra.cs.offline.util.OfflineYAuth;
 import com.zimbra.cs.redolog.op.DeleteItem;
 import com.zimbra.cs.redolog.op.DeleteMailbox;
-import com.zimbra.cs.service.util.ItemId;
 import com.zimbra.cs.session.PendingModifications;
 import com.zimbra.cs.session.PendingModifications.Change;
 import com.zimbra.cs.session.PendingModifications.ModificationKey;
@@ -63,7 +57,6 @@ public abstract class SyncMailbox extends DesktopMailbox {
     private TimerTask currentTask;
 
     final Object syncLock = new Object();
-    private boolean deleteAsync;
     private boolean mSyncRunning;
     private boolean isGalAcct;
     private boolean isMPAcct;
@@ -95,7 +88,6 @@ public abstract class SyncMailbox extends DesktopMailbox {
             accountName = account.getName();
         isGalAcct = provisioning.isGalAccount(account);
         isMPAcct = provisioning.isMountpointAccount(account);
-        deleteAsync = !isGalAcct && !isMPAcct;
     }
 
     @Override
