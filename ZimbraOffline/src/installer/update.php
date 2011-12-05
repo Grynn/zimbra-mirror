@@ -39,6 +39,7 @@ foreach($channels as &$chn) {
 
 
 $download_url = $currentBuild["download_url_prefix"] . "/" . $currentBuild["shortversion"] . "/b" . $buildid . "/" . $currentBuild["file_media"];
+$build_text = $currentBuild["shortversion"] . " build " . $buildid;
 
 header('Content-Type: text/xml');
 header('Cache-Control: no-cache');
@@ -47,7 +48,7 @@ echo "<?xml version=\"1.0\"?>\n";
 ?>
 <updates>
 <?php if ($buildid > $oldbid) { ?>
-  <update type="minor" version="<?php echo $currentBuild["shortversion"]?>" extensionVersion="<?php echo $currentBuild["extension_version"]?>" detailsURL="<?php echo $currentBuild["details_url"]?>" licenseURL="<?php echo $currentBuild["license_url"]?>">
+  <update type="minor" version="<?php echo $build_text?>" extensionVersion="<?php echo $currentBuild["extension_version"]?>" detailsURL="<?php echo $currentBuild["details_url"]?>" licenseURL="<?php echo $currentBuild["license_url"]?>">
     <patch type="complete" URL="<?php echo $download_url?>" hashFunction="md5" hashValue="<?php echo $currentBuild["hash"]?>" size="<?php echo $currentBuild["size"]?>"/>
   </update>
 <?php } ?>

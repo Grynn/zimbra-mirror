@@ -1,1 +1,47 @@
- array ()
+ array (
+        "macos"=>array (//platform
+          "shortversion"=>"7.1.3",
+          "version"=>"7.1.3_beta",
+          "buildnum"=>11167,
+          "description"=>" ",
+          "platform"=>"MACOSXx86",
+          "buildtype"=>"BETA",
+          "download_url_prefix"=> "http://files2.zimbra.com/downloads/zdesktop",
+          "details_url"=>"http://www.zimbra.com/support/documentation/zd-documentation.html",
+          "license_url"=>"http://www.zimbra.com/license/zimbra-public-eula-2-3.html",
+		  "size"=> 76152593,
+		  "hash"=> "786a2697793517237f2470125848442f",
+          "file_media" => "zdesktop_7_1_3_beta_b11167_macos_intel.dmg",
+          "extension_version" => "2.0.1"
+        ),
+        "win32"=>array (//platform
+          "shortversion"=>"7.1.3",
+          "version"=>"7.1.3_beta",
+          "buildnum"=>11167,
+          "description"=>" ",
+          "platform"=>"WIN32",
+          "buildtype"=>"BETA",
+          "download_url_prefix"=> "http://files2.zimbra.com/downloads/zdesktop",
+          "details_url"=>"http://www.zimbra.com/support/documentation/zd-documentation.html",
+          "license_url"=>"http://www.zimbra.com/license/zimbra-public-eula-2-3.html",
+          "size"=> 96487424,
+          "hash"=> "a04350148e68c6617319c7d6c5e2fb8a",
+          "file_media" => "zdesktop_7_1_3_beta_b11167_win32.msi",
+          "extension_version" => "2.0.1"
+        ),
+        "linux"=>array (//platform
+          "shortversion"=>"7.1.3",
+          "version"=>"7.1.3_beta",
+          "buildnum"=>11167,
+          "description"=>" ",
+          "platform"=>"LINUX",
+          "buildtype"=>"BETA",
+          "download_url_prefix"=> "http://files2.zimbra.com/downloads/zdesktop",
+          "details_url"=>"http://www.zimbra.com/support/documentation/zd-documentation.html",
+          "license_url"=>"http://www.zimbra.com/license/zimbra-public-eula-2-3.html",
+          "size"=> 113463501,
+          "hash"=> "d25f744ccca6f5f6e6a5f4e417ebb844",
+          "file_media" => "zdesktop_7_1_3_beta_b11167_linux_i686.tgz",
+          "extension_version" => "2.0.1"
+        )
+      )
