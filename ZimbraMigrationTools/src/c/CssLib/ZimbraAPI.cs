@@ -1110,7 +1110,10 @@ public class ZimbraAPI
         writer.WriteAttributeString("allDay", appt["allDay"]);
         writer.WriteAttributeString("name", appt["name"]);
         writer.WriteAttributeString("loc", appt["loc"]);
-        writer.WriteAttributeString("uid", appt["uid"]);
+        if (appt["uid"].Length > 0)
+        {
+            writer.WriteAttributeString("uid", appt["uid"]);
+        }
 
         writer.WriteStartElement("s");
         writer.WriteAttributeString("d", appt["s"]);

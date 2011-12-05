@@ -2,7 +2,8 @@
 
 DEFINE_GUID(PS_OUTLOOK_APPT, 0x00062002, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x46);
-#define PR_CLEAN_GLOBAL_OBJID	PROP_TAG( PT_BINARY,	0x0023)
+DEFINE_GUID(PS_OUTLOOK_MTG, 0x6ED8DA90, 0x450B, 0x101B, 0x98, 0xDA, 0x00, 0xAA, 0x00, 0x3F,
+    0x13, 0x05);
 
 enum OutlookBusyStatus
 {
@@ -39,13 +40,13 @@ private:
     //static bool m_bNamedPropsInitialized;
 
     // prop tags for named properties
-    ULONG pr_appt_start, pr_appt_end, pr_location, pr_busystatus, pr_allday, pr_responsestatus,
-	  pr_reminderminutes, pr_private;
+    ULONG pr_clean_global_objid, pr_appt_start, pr_appt_end, pr_location, pr_busystatus, pr_allday,
+	  pr_responsestatus, pr_reminderminutes, pr_private;
 
     // index of props
     typedef enum _AppointmentPropIdx
     {
-        N_APPTSTART, N_APPTEND, N_LOCATION, N_BUSYSTATUS, N_ALLDAY, N_RESPONSESTATUS, N_NUMAPPTPROPS
+        N_UID, N_APPTSTART, N_APPTEND, N_LOCATION, N_BUSYSTATUS, N_ALLDAY, N_RESPONSESTATUS, N_NUMAPPTPROPS
     } AppointmentPropIdx;
 
     typedef enum _CommonPropIdx
@@ -94,7 +95,7 @@ public:
     void SetSubject(LPTSTR pStr);
     void SetStartDate(FILETIME ft);
     void SetEndDate(FILETIME ft);
-    void SetInstanceUID(LPTSTR pStr);
+    void SetInstanceUID(LPSBinary bin);
     void SetLocation(LPTSTR pStr);
     void SetBusyStatus(long busystatus);
     void SetAllday(unsigned short usAllday);

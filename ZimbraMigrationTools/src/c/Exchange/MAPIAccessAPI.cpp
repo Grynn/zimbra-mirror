@@ -664,6 +664,10 @@ LPCWSTR MAPIAccessAPI::GetItem(SBinary sbItemEID, BaseItemData &itemData)
             ad->AlarmTrigger = mapiappointment.GetReminderMinutes();
             ad->organizer.nam = mapiappointment.GetOrganizerName();
             ad->organizer.addr = mapiappointment.GetOrganizerAddr();
+            if (mapiappointment.GetInstanceUID().length() > 0)
+            {
+                ad->Uid = mapiappointment.GetInstanceUID();
+            }
 
             MessagePart mp;
             mp.contentType = L"text/plain";
@@ -672,7 +676,6 @@ LPCWSTR MAPIAccessAPI::GetItem(SBinary sbItemEID, BaseItemData &itemData)
             mp.contentType = L"text/html";
             mp.content = mapiappointment.GetHtmlFileAndContent();
             ad->vMessageParts.push_back(mp);
-            // TODO: ad->UID
         }
         else if (msg.ItemType() == ZT_TASKS)
         {

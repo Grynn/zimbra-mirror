@@ -33,6 +33,7 @@ MAPIAppointment::MAPIAppointment(Zimbra::MAPI::MAPISession &session,
 
     //if (MAPIAppointment::m_bNamedPropsInitialized == false)
     //{
+	pr_clean_global_objid = 0;
 	pr_appt_start = 0;
 	pr_appt_end = 0;
 	pr_location = 0;
@@ -70,12 +71,13 @@ MAPIAppointment::~MAPIAppointment()
 HRESULT MAPIAppointment::InitNamedPropsForAppt()
 {
     // init named props
-    nameIds[0] = 0x820D;
-    nameIds[1] = 0x820E;
-    nameIds[2] = 0x8208;
-    nameIds[3] = 0x8205;
-    nameIds[4] = 0x8215;
-    nameIds[5] = 0x8218;
+    nameIds[0] = 0x0023;
+    nameIds[1] = 0x820D;
+    nameIds[2] = 0x820E;
+    nameIds[3] = 0x8208;
+    nameIds[4] = 0x8205;
+    nameIds[5] = 0x8215;
+    nameIds[6] = 0x8218;
 
     nameIdsC[0] = 0x8501;
     nameIdsC[1] = 0x8506;
@@ -92,7 +94,7 @@ HRESULT MAPIAppointment::InitNamedPropsForAppt()
     {
         MAPIAllocateBuffer(sizeof (MAPINAMEID), (LPVOID *)&(ppNames[i]));
         ppNames[i]->ulKind = MNID_ID;
-        ppNames[i]->lpguid = (LPGUID)(&PS_OUTLOOK_APPT);
+        ppNames[i]->lpguid = (i == N_UID) ? (LPGUID)(&PS_OUTLOOK_MTG) : (LPGUID)(&PS_OUTLOOK_APPT);
         ppNames[i]->Kind.lID = nameIds[i];
     }
 
@@ -118,6 +120,7 @@ HRESULT MAPIAppointment::InitNamedPropsForAppt()
         throw MAPIAppointmentException(hr, L"Init(): GetIDsFromNames on pAppointmentTagsC Failed.", __LINE__, __FILE__);
 
     // give the prop tag ID's a type
+    pr_clean_global_objid = SetPropType(pAppointmentTags->aulPropTag[N_UID], PT_BINARY);
     pr_appt_start = SetPropType(pAppointmentTags->aulPropTag[N_APPTSTART], PT_SYSTIME);
     pr_appt_end = SetPropType(pAppointmentTags->aulPropTag[N_APPTEND], PT_SYSTIME);
     pr_location = SetPropType(pAppointmentTags->aulPropTag[N_LOCATION], PT_TSTRING);
@@ -148,7 +151,7 @@ HRESULT MAPIAppointment::SetMAPIAppointmentValues()
 {
     SizedSPropTagArray(C_NUMALLAPPTPROPS, appointmentProps) = {
 	C_NUMALLAPPTPROPS, {
-	    PR_SUBJECT, PR_BODY, PR_HTML, PR_CLEAN_GLOBAL_OBJID,
+	    PR_SUBJECT, PR_BODY, PR_HTML, pr_clean_global_objid,
 	    pr_appt_start, pr_appt_end, pr_location, pr_busystatus,
 	    pr_allday, pr_responsestatus, pr_reminderminutes, pr_private
 	}
@@ -167,7 +170,7 @@ HRESULT MAPIAppointment::SetMAPIAppointmentValues()
     }
     if (m_pPropVals[C_UID].ulPropTag == appointmentProps.aulPropTag[C_UID])
     {
-	//SetInstanceUID(m_pPropVals[C_UID].Value.bin);
+	SetInstanceUID(&m_pPropVals[C_UID].Value.bin);
     }
     if (m_pPropVals[C_START].ulPropTag == appointmentProps.aulPropTag[C_START])
     {
@@ -230,9 +233,14 @@ void MAPIAppointment::SetEndDate(FILETIME ft)
     m_pEndDate = Zimbra::Util::FormatSystemTime(st, TRUE, TRUE);
 }
 
-void MAPIAppointment::SetInstanceUID(LPTSTR pStr)
+void MAPIAppointment::SetInstanceUID(LPSBinary bin)
 {
-    m_pInstanceUID = pStr;
+    Zimbra::Util::ScopedArray<CHAR> spUid(new CHAR[(bin->cb * 2) + 1]);
+    if (spUid.get() != NULL)
+    {
+	Zimbra::Util::HexFromBin(bin->lpb, bin->cb, spUid.get());
+    }
+    m_pInstanceUID = Zimbra::Util::AnsiiToUnicode(spUid.get());
 }
 
 void MAPIAppointment::SetLocation(LPTSTR pStr)
