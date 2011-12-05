@@ -1432,7 +1432,7 @@ Super_Lifetime1_XFormItem.prototype.initializeItems = function() {
 Super_Lifetime1_XFormItem.prototype.items = [ ];
 
 /**
-* _SUPER_LIFETIME1_ XForm item type for displaying Email message retention time
+* _SUPER_LIFETIME2_ XForm item type allows time interval to be expressed only in days
 **/
 
 Super_Lifetime2_XFormItem = function() {}
@@ -1516,6 +1516,94 @@ Super_Lifetime2_XFormItem.prototype.initializeItems = function() {
 }
 
 Super_Lifetime2_XFormItem.prototype.items = [ ];
+
+/**
+* _SUPER_LIFETIME_MINUTES_ XForm item type allows time interval to be expressed only in minutes
+**/
+Super_LifetimeMinutes_XFormItem = function() {}
+XFormItemFactory.createItemType("_SUPER_LIFETIME_MINUTES_", "super_lifetime_minutes", Super_LifetimeMinutes_XFormItem, Super_Lifetime1_XFormItem);
+Super_LifetimeMinutes_XFormItem.prototype.nowrap = false;
+Super_LifetimeMinutes_XFormItem.prototype.labelWrap = true;
+Super_LifetimeMinutes_XFormItem.prototype.numCols = 4;
+Super_LifetimeMinutes_XFormItem.prototype.colSpan = 4;
+Super_LifetimeMinutes_XFormItem.prototype.colSizes =["275px","80px","120px","150px"];
+Super_LifetimeMinutes_XFormItem.prototype.useParenttable = false;
+Super_LifetimeMinutes_XFormItem.prototype._stringPart = "d";
+Super_LifetimeMinutes_XFormItem.prototype.visibilityChecks = [ZaItem.hasReadPermission];
+Super_LifetimeMinutes_XFormItem.prototype.enableDisableChecks = [ZaItem.hasWritePermission];
+
+/**
+* _SUPERWIZ_LIFETIME_MINUTES_ customization or _SUPER_LIFETIME_MINUTES_ for wizard dialogs
+**/
+SuperWiz_LifetimeMinutes_XFormItem = function() {}
+XFormItemFactory.createItemType("_SUPERWIZ_LIFETIME_MINUTES_", "superwiz_lifetime2", SuperWiz_LifetimeMinutes_XFormItem, Super_LifetimeMinutes_XFormItem);
+SuperWiz_LifetimeMinutes_XFormItem.prototype.colSizes =["200px","80px","120px","150px"];
+SuperWiz_LifetimeMinutes_XFormItem.prototype.visibilityChecks = [ZaItem.hasWritePermission];
+SuperWiz_LifetimeMinutes_XFormItem.prototype.enableDisableChecks = [ZaItem.hasWritePermission];
+
+Super_LifetimeMinutes_XFormItem.prototype.initializeItems = function() {
+	var txtBoxLabel = this.getInheritedProperty("txtBoxLabel");
+    var labelCssStyle = this.getInheritedProperty("labelCssStyle");
+	var toolTip = this.getInheritedProperty("toolTipContent");
+	
+	var txtField =	{
+		type:_TEXTFIELD_, ref:".", 
+		label:txtBoxLabel,	
+		toolTipContent: toolTip,
+		nowrap:this.getInheritedProperty("nowrap"),
+		labelWrap:this.getInheritedProperty("labelWrap"),		
+		labelCssStyle:labelCssStyle || this.getLabelCssStyle(),
+		labelLocation:(txtBoxLabel ? _LEFT_ : _NONE_),
+		cssClass:"admin_xform_number_input", 
+		getDisplayValue:function (itemVal) {
+			var val = "1";
+			if(itemVal != null && itemVal.length >0) {
+				if(itemVal.length > 1) {
+					val = itemVal.substr(0, itemVal.length-1);				
+				} else {
+					if(itemVal == "0") {
+						val = "0";
+					} else {
+						val = "1";
+					}
+				}
+			}
+			this.getParentItem()._numericPart = val;
+			this.getParentItem()._stringPart="m";
+			return val;	
+		},
+		elementChanged:function(numericPart, instanceValue, event) {
+			var val = numericPart + "m";
+			this.getForm().itemChanged(this, val, event);
+		},onChange:Composite_XFormItem.onFieldChange,
+		updateElement:function(value) {
+			Super_XFormItem.updateCss.call(this,5);
+			Textfield_XFormItem.prototype.updateElement.call(this, value);
+		}
+	};
+	
+	var selectField = 	{
+		type:_OUTPUT_,
+		ref:null,
+		label:null,
+		labelLocation:_NONE_,
+		value:"m",
+		getDisplayValue:function (itemVal){ return AjxMsg.minutes; }	
+	};
+	var anchorCssStyle = this.getInheritedProperty("anchorCssStyle");
+	
+	var anchorHlpr = {	
+		type:_SUPER_ANCHOR_HELPER_, ref:".",
+		visibilityChecks:[Super_XFormItem.checkIfOverWriten],
+		visibilityChangeEventSources:[this.getRefPath()],
+		onChange:Composite_XFormItem.onFieldChange,
+		cssStyle: (anchorCssStyle ? anchorCssStyle : "width:150px")
+	};
+	this.items = [txtField,selectField,anchorHlpr];
+	Composite_XFormItem.prototype.initializeItems.call(this);	
+}
+
+Super_LifetimeMinutes_XFormItem.prototype.items = [ ];
 
 /**
  * Groupers

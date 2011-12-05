@@ -203,3 +203,44 @@ Lifetime2_XFormItem.prototype.initializeItems = function () {
 	Composite_XFormItem.prototype.initializeItems.call(this);
 };
 Lifetime2_XFormItem.prototype.items = [];
+
+/**
+* _LIFETIME_MINUTES_ XForm item type allows time interval to be expressed only in minutes
+**/
+LifetimeMinutes_XFormItem = function() {}
+LifetimeMinutes_XFormItem.prototype.nowrap = false;
+LifetimeMinutes_XFormItem.prototype.labelWrap = true;
+XFormItemFactory.createItemType("_LIFETIME_MINUTES_", "lifetime_minutes", LifetimeMinutes_XFormItem, Lifetime1_XFormItem);
+
+LifetimeMinutes_XFormItem.prototype.initializeItems = function () {
+	this.items = [
+		{type:_TEXTFIELD_, ref:".", labelLocation:_NONE_,cssClass:"admin_xform_number_input", 
+			visibilityChecks:[],
+		 	enableDisableChecks:[],		
+			getDisplayValue:function (itemVal) {
+				var val = "";
+				if(itemVal != null && itemVal.length >0) {
+					if(itemVal.length > 1) {
+						val = itemVal.substr(0, itemVal.length-1);				
+					} else {
+						if(itemVal == "0") {
+							val = "0";
+						} else {
+							val = "";
+						}
+					}
+				}
+				this.getParentItem()._numericPart = val;
+				this.getParentItem()._stringPart="m";
+				return val;	
+			},
+			elementChanged:function(numericPart, instanceValue, event) {
+				var val = numericPart + "m";
+				this.getForm().itemChanged(this.getParentItem(), val, event);
+			}
+		},
+		{type:_OUTPUT_, ref:null, labelLocation:_NONE_, value:"m",getDisplayValue:function (itemVal){ return AjxMsg.minutes;}}
+	];
+	Composite_XFormItem.prototype.initializeItems.call(this);
+};
+LifetimeMinutes_XFormItem.prototype.items = [];
