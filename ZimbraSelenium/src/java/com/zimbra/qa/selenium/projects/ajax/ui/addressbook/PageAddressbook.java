@@ -179,7 +179,7 @@ public class PageAddressbook extends AbsTab {
 			throw new HarnessException("Contact List is not present "+ "id='zv__CNS-main'");
 
 		//Get the number of contacts (String) 
-		int count = this.sGetCssCount("css=div[id='zv__CNS-main']>div[id^=zli__CNS__]");
+		int count = this.sGetCssCount("css=div[id='zv__CNS-main']>div[id^=zli__CNS-main__]");
 		
 		logger.info(myPageName() + " zIsContactDisplayed: number of contacts: "+ count);
 
@@ -216,7 +216,7 @@ public class PageAddressbook extends AbsTab {
 			throw new HarnessException("Contact List is not present "+ "id='zv__CNS-main'");
 
 		//Get the number of contacts (String) 
-		int count = this.sGetCssCount("css=div[id='zv__CNS-main']>div[id^=zli__CNS__]");
+		int count = this.sGetCssCount("css=div[id='zv__CNS-main']>div[id^=zli__CNS-main__]");
 		
 		logger.info(myPageName() + " zListGetContacts: number of contacts: "+ count);
 
@@ -264,7 +264,7 @@ public class PageAddressbook extends AbsTab {
 			throw new HarnessException("Contact List is not present "+ "id='zv__CNS-main'");
 
 		//Get the number of contacts (String) 
-		int count = this.sGetCssCount("css=div[id='zv__CNS-main']>div[id^=zli__CNS__]");
+		int count = this.sGetCssCount("css=div[id='zv__CNS-main']>div[id^=zli__CNS-main__]");
 		
 		logger.info(myPageName() + " zListGetContacts: number of contacts: "+ count);
 
@@ -834,7 +834,7 @@ public class PageAddressbook extends AbsTab {
 	private String getContactLocator(String contact) throws HarnessException {
 		String listLocator = "div[id='zv__CNS-main']";
 		
-		String rowLocator = "div[id^='zli__CNS__']";
+		String rowLocator = "div[id^='zli__CNS-main__']";
 	    
 		
 
@@ -886,7 +886,7 @@ public class PageAddressbook extends AbsTab {
     //get selected contacts locators
 	private ArrayList<String> getSelectedContactLocator() throws HarnessException {
 		String listLocator = "div#zv__CNS-main";				
-		String rowLocator = "div[id^='zli__CNS__']";
+		String rowLocator = "div[id^='zli__CNS-main__']";
 		
 		
 	    ArrayList<String> arrayList = new ArrayList<String>();
