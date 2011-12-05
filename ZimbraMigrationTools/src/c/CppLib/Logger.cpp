@@ -12,8 +12,8 @@ const wchar_t *const Log::LevelStr[] = {
 const wchar_t *const Log::LevelStr2[] = {
     L"nothing", L"error", L"warning", L"information", L"debug"
 };
-Log glog(L"stdout", Log::Info);
-CPPLIB_DLLAPI TLSClass<Log> tlog;
+Log Log::glog(L"stdout", Log::Info);
+TLSClass<Log> Log::tlog;
 
 #define EPOCH_BIAS 116444736000000000i64
 
@@ -229,37 +229,23 @@ Log::Level Log::str2enum(const wchar_t *l)
 extern "C" {
 CPPLIB_DLLAPI void log_init(const wchar_t *file, Log::Level level)
 {
-    glog.file(file);
-    glog.level(level);
+    Log::init(file, level);
 }
 
 CPPLIB_DLLAPI void log_open(const wchar_t *file)
 {
-    if (file)
-    {
-        if (wcscmp(tlog->file(), file))
-        {
-            if (&tlog.get() != &glog)
-                tlog.erase();
-            tlog.set(new Log(file, glog.level()));
-        }
-    }
-    else
-    {
-        if (&tlog.get() != &glog)
-            tlog.erase();
-        tlog.set(&glog);
-    }
+    if (!file || wcscmp(dlog.file(), file))
+        Log::open(file);
 }
 
 CPPLIB_DLLAPI void log_prefix(const wchar_t *prefix)
 {
-    tlog->prefix(prefix);
+    dlog.prefix(prefix);
 }
 
 CPPLIB_DLLAPI void log_print(Log::Level level, const wchar_t *str)
 {
-    tlog->log(level, str);
+    dlog.log(level, str);
 }
 
 }

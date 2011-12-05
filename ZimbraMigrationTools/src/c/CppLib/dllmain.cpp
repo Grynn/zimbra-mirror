@@ -9,7 +9,7 @@ BOOL APIENTRY DllMain(HMODULE module, DWORD reason, LPVOID reserved)
     (void)module;
     (void)reserved;
     if (reason == DLL_PROCESS_ATTACH || reason == DLL_THREAD_ATTACH || reason == DLL_THREAD_DETACH)
-        log_open(NULL);
+        dlog.open(NULL);
     return TRUE;
 }
 

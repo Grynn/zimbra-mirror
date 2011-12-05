@@ -157,7 +157,7 @@ public:
 
         void value(wostream &os) const
         {
-            bufferstream<wchar_t> buf;
+            bufferstream buf;
 
             buf << val << '\0';
             quote(os, buf.str());
@@ -227,6 +227,9 @@ public:
     Log(const wchar_t *file = L"stdout", Level level = Info);
     ~Log() { close(); }
 
+    static Log glog;
+    static TLSClass<Log> tlog;
+
     bool file(const wchar_t *file) { return ffd.open(file); }
 
     const wchar_t *file(void) const { return ffd.filename(); }
@@ -249,8 +252,6 @@ public:
             endlog(tlsd, tlsd.clvl);
         return *this;
     }
-
-    void logv(Level l, ...);
 
     template<class C> Log &operator <<(const C &c)
     {
@@ -350,6 +351,21 @@ public:
         return KV<C>(key, val);
     }
 
+    void logv(Level l, ...);
+
+    static void init(const wchar_t *file, Log::Level level)
+    {
+        glog.file(file);
+        glog.level(level);
+    }
+
+    static void open(const wchar_t *file)
+    {
+        if (&tlog.get() != &glog)
+            tlog.erase();
+        tlog.set(file ? new Log(file, glog.level()) : &glog);
+    }
+
     static Level str2enum(const wchar_t *lvl);
 
 private:
@@ -392,6 +408,7 @@ private:
     time_t last_sec;
     Level lvl;
     int upos;
+
     static const wchar_t *const LevelStr[];
     static const wchar_t *const LevelStr2[];
 
@@ -426,22 +443,7 @@ template<class C> inline wostream &operator <<(wostream &os, const Log::KV<C> &k
 inline Log &operator <<(Log &l, Log & (*manip)(Log &)) { return manip(l); }
 inline Log &endlog(Log &l) { return l.endlog(); }
 
-extern Log glog;
-extern CPPLIB_DLLAPI TLSClass<Log> tlog;
-
-extern "C" CPPLIB_DLLAPI void log_open(const wchar_t *file);
-
-#define dlog                    tlog.get()
-
-#define DLOGL(lvl, args)        { \
-                                    if (lvl <= dlog.level()) \
-                                        dlog << lvl << args << endlog; \
-                                }
-
-#define DLOGE(args)             DLOGL(Log::Err, args);
-#define DLOGW(args)             DLOGL(Log::Warn, args);
-#define DLOGI(args)             DLOGL(Log::Info, args);
-#define DLOGD(args)             DLOGL(Log::Debug, args);
+#define dlog                    Log::tlog.get()
 
 #define dlogl(lvl, ...)         { \
                                     if (lvl <= dlog.level()) \
@@ -451,3 +453,12 @@ extern "C" CPPLIB_DLLAPI void log_open(const wchar_t *file);
 #define dlogw(...)              dlogl(Log::Warn, __VA_ARGS__);
 #define dlogi(...)              dlogl(Log::Info, __VA_ARGS__);
 #define dlogd(...)              dlogl(Log::Debug, __VA_ARGS__);
+
+#define dlogvl(lvl, ...)        { \
+                                    if (lvl <= dlog.level()) \
+                                        dlog.logv(lvl, __VA_ARGS__, NULL); \
+                                }
+#define dlogve(...)             dlogvl(Log::Err, __VA_ARGS__);
+#define dlogvw(...)             dlogvl(Log::Warn, __VA_ARGS__);
+#define dlogvi(...)             dlogvl(Log::Info, __VA_ARGS__);
+#define dlogvd(...)             dlogvl(Log::Debug, __VA_ARGS__);
