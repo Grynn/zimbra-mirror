@@ -1455,7 +1455,7 @@ SuperWiz_Lifetime2_XFormItem.prototype.enableDisableChecks = [ZaItem.hasWritePer
 
 Super_Lifetime2_XFormItem.prototype.initializeItems = function() {
 	var txtBoxLabel = this.getInheritedProperty("txtBoxLabel");
-    var labelCssStyle = this.getInheritedProperty("labelCssStyle");
+    var labelCssClass = this.getInheritedProperty("labelCssClass");
 	var toolTip = this.getInheritedProperty("toolTipContent");
 	
 	var txtField =	{
@@ -1464,7 +1464,8 @@ Super_Lifetime2_XFormItem.prototype.initializeItems = function() {
 		toolTipContent: toolTip,
 		nowrap:this.getInheritedProperty("nowrap"),
 		labelWrap:this.getInheritedProperty("labelWrap"),		
-		labelCssStyle:labelCssStyle || this.getLabelCssStyle(),
+		labelCssStyle:this.getLabelCssStyle(),
+        labelCssClass:labelCssClass,
 		labelLocation:(txtBoxLabel ? _LEFT_ : _NONE_),
 		cssClass:"admin_xform_number_input", 
 		getDisplayValue:function (itemVal) {
@@ -1543,7 +1544,7 @@ SuperWiz_LifetimeMinutes_XFormItem.prototype.enableDisableChecks = [ZaItem.hasWr
 
 Super_LifetimeMinutes_XFormItem.prototype.initializeItems = function() {
 	var txtBoxLabel = this.getInheritedProperty("txtBoxLabel");
-    var labelCssStyle = this.getInheritedProperty("labelCssStyle");
+    var labelCssClass = this.getInheritedProperty("labelCssClass");
 	var toolTip = this.getInheritedProperty("toolTipContent");
 	
 	var txtField =	{
@@ -1552,7 +1553,8 @@ Super_LifetimeMinutes_XFormItem.prototype.initializeItems = function() {
 		toolTipContent: toolTip,
 		nowrap:this.getInheritedProperty("nowrap"),
 		labelWrap:this.getInheritedProperty("labelWrap"),		
-		labelCssStyle:labelCssStyle || this.getLabelCssStyle(),
+		labelCssStyle:this.getLabelCssStyle(),
+        labelCssClass:labelCssClass,
 		labelLocation:(txtBoxLabel ? _LEFT_ : _NONE_),
 		cssClass:"admin_xform_number_input", 
 		getDisplayValue:function (itemVal) {
