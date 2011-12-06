@@ -159,11 +159,17 @@ HRESULT MAPIAppointment::SetMAPIAppointmentValues()
 
     HRESULT hr = S_OK;
     ULONG cVals = 0;
+    bool bAllday = false;
 
     if (FAILED(hr = m_pMessage->GetProps((LPSPropTagArray) & appointmentProps, fMapiUnicode, &cVals,
             &m_pPropVals)))
         throw MAPIAppointmentException(hr, L"SetMAPIAppointmentValues(): GetProps Failed.", __LINE__, __FILE__);
 
+    if (m_pPropVals[C_ALLDAY].ulPropTag == appointmentProps.aulPropTag[C_ALLDAY])
+    {
+        SetAllday(m_pPropVals[C_ALLDAY].Value.b);
+        bAllday = (m_pPropVals[C_ALLDAY].Value.b == 1);
+    }
     if (m_pPropVals[C_SUBJECT].ulPropTag == appointmentProps.aulPropTag[C_SUBJECT])
     {
 	SetSubject(m_pPropVals[C_SUBJECT].Value.lpszW);
@@ -178,7 +184,7 @@ HRESULT MAPIAppointment::SetMAPIAppointmentValues()
     }
     if (m_pPropVals[C_END].ulPropTag == appointmentProps.aulPropTag[C_END])
     {
-	SetEndDate(m_pPropVals[C_END].Value.ft);
+        SetEndDate(m_pPropVals[C_END].Value.ft, bAllday);
     }
     if (m_pPropVals[C_LOCATION].ulPropTag == appointmentProps.aulPropTag[C_LOCATION])
     {
@@ -187,10 +193,6 @@ HRESULT MAPIAppointment::SetMAPIAppointmentValues()
     if (m_pPropVals[C_BUSYSTATUS].ulPropTag == appointmentProps.aulPropTag[C_BUSYSTATUS])
     {
 	SetBusyStatus(m_pPropVals[C_BUSYSTATUS].Value.l);
-    }
-    if (m_pPropVals[C_ALLDAY].ulPropTag == appointmentProps.aulPropTag[C_ALLDAY])
-    {
-	SetAllday(m_pPropVals[C_ALLDAY].Value.b);
     }
     if (m_pPropVals[C_RESPONSESTATUS].ulPropTag == appointmentProps.aulPropTag[C_RESPONSESTATUS])
     {
@@ -225,11 +227,24 @@ void MAPIAppointment::SetStartDate(FILETIME ft)
     m_pStartDate = Zimbra::Util::FormatSystemTime(st, TRUE, TRUE);
 }
 
-void MAPIAppointment::SetEndDate(FILETIME ft)
+void MAPIAppointment::SetEndDate(FILETIME ft, bool bAllday)
 {
     SYSTEMTIME st;
 
     FileTimeToSystemTime(&ft, &st);
+
+    // if AllDay appt, subtract one from the end date for Zimbra friendliness
+    if (bAllday)
+    {
+	double dat = -1;
+	if (SystemTimeToVariantTime(&st, &dat))
+	{
+	    dat -= 1;
+	    VariantTimeToSystemTime(dat, &st);
+	}
+    }
+    /////
+
     m_pEndDate = Zimbra::Util::FormatSystemTime(st, TRUE, TRUE);
 }
 

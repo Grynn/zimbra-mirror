@@ -94,7 +94,7 @@ public:
     HRESULT SetMAPIAppointmentValues();
     void SetSubject(LPTSTR pStr);
     void SetStartDate(FILETIME ft);
-    void SetEndDate(FILETIME ft);
+    void SetEndDate(FILETIME ft, bool bAllday);
     void SetInstanceUID(LPSBinary bin);
     void SetLocation(LPTSTR pStr);
     void SetBusyStatus(long busystatus);
