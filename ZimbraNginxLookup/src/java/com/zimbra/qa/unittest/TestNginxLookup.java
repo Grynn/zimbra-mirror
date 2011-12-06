@@ -14,8 +14,6 @@
  */
 package com.zimbra.qa.unittest;
 
-import junit.framework.TestCase;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -27,6 +25,9 @@ import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
 
+import org.junit.*;
+import static org.junit.Assert.*;
+
 import com.zimbra.common.soap.AdminConstants;
 import com.zimbra.common.util.CliUtil;
 import com.zimbra.cs.account.Account;
@@ -35,16 +36,17 @@ import com.zimbra.cs.account.Domain;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.common.account.Key;
 import com.zimbra.common.account.Key.AccountBy;
-import com.zimbra.common.account.Key.DomainBy;
 import com.zimbra.cs.account.soap.SoapProvisioning;
 import com.zimbra.cs.nginx.NginxLookupExtension;
 
-public class TestNginxLookup extends TestCase {
+public class TestNginxLookup {
     
     private static SoapProvisioning mSoapProv = null;
     
     private static final String URL = "http://localhost:7072/service/extension/nginx-lookup";
-    private static final String ACCT_LOCALPART = "user1";
+    
+    // use special chars for testing bug 67370
+    private static final String ACCT_LOCALPART = "!%a|{e-q}$.x&j.^i_l#l~3+*=z?1321332668"; // "user1";
     private static final String ACCT2_LOCALPART = "user2";
     
     private static final String PASSWORD = "test123";
@@ -109,7 +111,7 @@ public class TestNginxLookup extends TestCase {
      *        with foreign principal that has the same "FOREIGN_ID" as that for ACCT,
      *        the foreign principal is FOREIGN_ID+"@"SYSTEM_DEFAULT_DOMAIN
      */
-    // to be initialized in testInit
+    // to be initialized in init
     private static String ACCT_EMAIL;
     private static String ACCT1_EMAIL;
     private static String ACCT2_EMAIL;
@@ -144,8 +146,9 @@ public class TestNginxLookup extends TestCase {
              * and the Auth-User is always returned.  Not sure if this is intended, leave it since 
              * it doesn't seem to break anything.
              */
-            if (user != null)
+            if (user != null) {
                 assertEquals(user, mUser);
+            }
             assertEquals(wait, mWait);
             
             if (hasAuthToken) {
@@ -161,12 +164,13 @@ public class TestNginxLookup extends TestCase {
         String mAuthToken;
     }
     
-    private void modifyConfig(Map<String, Object> attrs) throws Exception {
+    private static void modifyConfig(Map<String, Object> attrs) throws Exception {
         Config config = mSoapProv.getConfig();
         mSoapProv.modifyAttrs(config, attrs);
     }
     
-    public void testInit() throws Exception {
+    @BeforeClass
+    public static void init() throws Exception {
         
         CliUtil.toolSetup();
         mSoapProv = new SoapProvisioning();
@@ -202,7 +206,18 @@ public class TestNginxLookup extends TestCase {
         Account acct = mSoapProv.createAccount(ACCT_EMAIL, PASSWORD, acctAttrs);
         assertNotNull(acct);
         
-        // setup external route fort he acccout
+        /*
+         * ACCT1: account in the default domain with the same local part as ACCT, no foreign principal
+         * 
+         * create ACCT1 if it does not exist yet
+         */
+        Account acct1 = mSoapProv.get(AccountBy.name, ACCT1_EMAIL);
+        if (acct1 == null) {
+            acct1 = mSoapProv.createAccount(ACCT1_EMAIL, PASSWORD, null);
+            assertNotNull(acct1);
+        }
+        
+        // setup external route for the accout
         setupAccountExternalRoute(acct);
         
         // set foreign id for an account in the system default domain
@@ -215,7 +230,7 @@ public class TestNginxLookup extends TestCase {
     }
     
     // revert reverse proxy config to defaults
-    private void unsetLookupByForeignPrincipal() throws Exception {
+    private static void unsetLookupByForeignPrincipal() throws Exception {
         Map<String, Object> attrs = new HashMap<String, Object>();
         attrs.put(Provisioning.A_zimbraReverseProxyUserNameAttribute, "");
         attrs.put(Provisioning.A_zimbraReverseProxyMailHostQuery, "(|(zimbraMailDeliveryAddress=${USER})(zimbraMailAlias=${USER})(zimbraId=${USER}))");
@@ -245,7 +260,7 @@ public class TestNginxLookup extends TestCase {
         mSoapProv.modifyAttrs(acct, attrs);
     }
     
-    private void setupAccountExternalRoute(Account acct) throws Exception {
+    private static void setupAccountExternalRoute(Account acct) throws Exception {
         assertNotNull(acct);
         
         Map<String, Object> attrs = new HashMap<String, Object>();
@@ -261,6 +276,7 @@ public class TestNginxLookup extends TestCase {
         mSoapProv.modifyAttrs(acct, attrs);
     }
     
+    @Test
     public void testFullEmail() throws Exception {
         // unset the external route flag
         unsetAccountExternalRouteFlag(ACCT_EMAIL);
@@ -276,6 +292,7 @@ public class TestNginxLookup extends TestCase {
     /*
      * should find the account by domain virtual IP
      */
+    @Test
     public void testVirtualDomainByProxyIP() throws Exception {
         unsetAccountExternalRouteFlag(ACCT_EMAIL);
         doTest(ACCT_LOCALPART, PASSWORD, DOMAIN_VIRTUAL_IP, "imap").verify(STATUS_OK, IMAP_HOST_IP, IMAP_PORT, ACCT_EMAIL, null);
@@ -289,6 +306,7 @@ public class TestNginxLookup extends TestCase {
     /*
      * should find the account in the default domain
      */
+    @Test
     public void testVirtualDomainWrongProxyIP() throws Exception {
         doTest(ACCT_LOCALPART, PASSWORD, "127.0.0.2", "imap").verify(STATUS_OK, IMAP_HOST_IP, IMAP_PORT, ACCT1_EMAIL, null);
         doTest(ACCT_LOCALPART, PASSWORD, "127.0.0.2", "pop3").verify(STATUS_OK, POP3_HOST_IP, POP3_PORT, ACCT1_EMAIL, null);
@@ -297,6 +315,7 @@ public class TestNginxLookup extends TestCase {
     /*
      * should find the account in the default domain
      */
+    @Test
     public void testVirtualDomainNoProxyIP() throws Exception {
         doTest(ACCT_LOCALPART, PASSWORD, null, "imap").verify(STATUS_OK, IMAP_HOST_IP, IMAP_PORT, ACCT1_EMAIL, null);
         doTest(ACCT_LOCALPART, PASSWORD, null, "pop3").verify(STATUS_OK, POP3_HOST_IP, POP3_PORT, ACCT1_EMAIL, null);
@@ -323,6 +342,7 @@ public class TestNginxLookup extends TestCase {
         return domain;
     }
     
+    @Test
     public void testExternalRouteOnAccount() throws Exception {
         String domainName = "external-route." + DOMAIN;
         setupExternalRouteDomain(domainName);
@@ -343,6 +363,7 @@ public class TestNginxLookup extends TestCase {
 
     }
     
+    @Test
     public void testExternalRouteOnDomain() throws Exception {
         String domainName = "external-route." + DOMAIN;
         setupExternalRouteDomain(domainName);
@@ -375,6 +396,7 @@ public class TestNginxLookup extends TestCase {
         doTest(acctEmail, PASSWORD, null, "pop3ssl").verify(STATUS_OK, POP3_SSL_EXTERNAL_HOST_IP_ON_DOMAIN, POP3_SSL_EXTERNAL_PORT_ON_DOMAIN, null, null);
     }
     
+    @Test
     public void testExternalRouteMissingExternalRouteInfo() throws Exception {
         String domainName = "external-route-missing-info." + DOMAIN;
         Domain domain = mSoapProv.createDomain(domainName, null);  // create the domain with no external route info
@@ -396,21 +418,28 @@ public class TestNginxLookup extends TestCase {
         
         Skip all the Extension tests.  orig bug: 20542
     */
-    public void skip_testSupportedExtensionFullEmail() throws Exception {
+    @Test
+    @Ignore
+    public void testSupportedExtensionFullEmail() throws Exception {
         doTest(ACCT_EMAIL+"/tb", PASSWORD, DOMAIN_VIRTUAL_IP, "imap").verify(STATUS_OK, IMAP_HOST_IP, IMAP_PORT, null, null);
         doTest(ACCT_EMAIL+"/tb", PASSWORD, DOMAIN_VIRTUAL_IP, "pop3").verify(STATUS_OK, POP3_HOST_IP, POP3_PORT, null, null);
     }
     
-    public void skip_testSupportedExtensionVirtualDomain() throws Exception {
+    @Test
+    @Ignore
+    public void testSupportedExtensionVirtualDomain() throws Exception {
         doTest(ACCT_LOCALPART+"/tb", PASSWORD, DOMAIN_VIRTUAL_IP, "imap").verify(STATUS_OK, IMAP_HOST_IP, IMAP_PORT, ACCT_EMAIL+"/tb", null);
         doTest(ACCT_LOCALPART+"/tb", PASSWORD, DOMAIN_VIRTUAL_IP, "pop3").verify(STATUS_OK, POP3_HOST_IP, POP3_PORT, ACCT_EMAIL+"/tb", null);
     }
     
-    public void skip_testUnsupportedExtension() throws Exception {
+    @Test
+    @Ignore
+    public void testUnsupportedExtension() throws Exception {
         doTest(ACCT_LOCALPART + "/zz", PASSWORD, DOMAIN_VIRTUAL_IP, "imap").verify(STATUS_LOGIN_FAILED, null, null, null, AUTH_WAIT);
         doTest(ACCT_LOCALPART + "/zz", PASSWORD, DOMAIN_VIRTUAL_IP, "pop3").verify(STATUS_LOGIN_FAILED, null, null, null, AUTH_WAIT);
     }
     
+    @Test
     public void testLookupByForeignPrincipalFullEmail()  throws Exception {
         setupLookupByForeignPrincipal();
         unsetAccountExternalRouteFlag(ACCT_EMAIL);
@@ -436,6 +465,7 @@ public class TestNginxLookup extends TestCase {
         unsetLookupByForeignPrincipal();
     }
     
+    @Test
     public void testLookupByForeignPrincipalVirtualDomain() throws Exception {
         setupLookupByForeignPrincipal();
         
@@ -454,8 +484,13 @@ public class TestNginxLookup extends TestCase {
         doTest(FOREIGN_ID, PASSWORD, "127.0.0.2", "pop3").verify(STATUS_OK, POP3_HOST_IP, POP3_PORT, ACCT2_EMAIL, null);
 
         // virtual domain wrong proxy IP, the foreign id + default domain does not exist
-        doTest(FOREIGN_ID+"wrong", PASSWORD, "127.0.0.2", "imap").verify(STATUS_LOGIN_FAILED, null, null, null, AUTH_WAIT);
-        doTest(FOREIGN_ID+"wrong", PASSWORD, "127.0.0.2", "pop3").verify(STATUS_LOGIN_FAILED, null, null, null, AUTH_WAIT);
+        /*
+         * behavior changed after p4 change 334496, it is correct?
+         * prior to p4 change 334496, expected status was STATUS_LOGIN_FAILED
+         */
+        String expectedStatus = "user not found:" + FOREIGN_ID+"wrong" + "@" + SYSTEM_DEFAULT_DOMAIN;
+        doTest(FOREIGN_ID+"wrong", PASSWORD, "127.0.0.2", "imap").verify(expectedStatus, null, null, null, AUTH_WAIT);
+        doTest(FOREIGN_ID+"wrong", PASSWORD, "127.0.0.2", "pop3").verify(expectedStatus, null, null, null, AUTH_WAIT);
 
         // virtual domain no proxy IP
         doTest(FOREIGN_ID, PASSWORD, null, "imap").verify(STATUS_OK, IMAP_HOST_IP, IMAP_PORT, ACCT2_EMAIL, null);
@@ -474,6 +509,7 @@ public class TestNginxLookup extends TestCase {
         unsetLookupByForeignPrincipal();
     }
     
+    @Test
     public void testGssApi() throws Exception {
         
         /*
@@ -536,12 +572,34 @@ public class TestNginxLookup extends TestCase {
         Account parent = mSoapProv.createAccount(parentEmail, PASSWORD, attrs);
         
         
-        doTest("gssapi",  acctLocalPart,      null,  "imap",  "1",  clientIp,  nginxServerIp,  null,  acctKrb5Principal,  adminAcct,  adminPassword).verify(STATUS_OK, IMAP_HOST_IP, IMAP_PORT, acctEmail, null);
-        doTest("gssapi",  acctEmail,          null,  "imap",  "1",  clientIp,  nginxServerIp,  null,  acctKrb5Principal,  adminAcct,  adminPassword).verify(STATUS_OK, IMAP_HOST_IP, IMAP_PORT, acctEmail, null);
-        doTest("gssapi",  acctKrb5Principal,  null,  "imap",  "1",  clientIp,  nginxServerIp,  null,  acctKrb5Principal,  adminAcct,  adminPassword).verify(STATUS_OK, IMAP_HOST_IP, IMAP_PORT, acctEmail, null);
-        doTest("gssapi",  otherAcctLocalPart, null,  "imap",  "1",  clientIp,  nginxServerIp,  null,  acctKrb5Principal,  adminAcct,  adminPassword).verify(STATUS_LOGIN_FAILED, null, null, null, AUTH_WAIT);
-        doTest("gssapi",  acctLocalPart,      null,  "imap",  "1",  clientIp,  nginxServerIp,  null,  acctKrb5Principal,  "zmnginxbogus",  adminPassword).verify(STATUS_LOGIN_FAILED, null, null, null, AUTH_WAIT);
-        doTest("gssapi",  childLocalPart,     null,  "imap",  "1",  clientIp,  nginxServerIp,  null,  parentKrb5Principal,  adminAcct,  adminPassword).verify(STATUS_OK, IMAP_HOST_IP, IMAP_PORT, childEmail, null);
+        doTest("gssapi",  acctLocalPart,      null,  "imap",  "1",  clientIp,  nginxServerIp,  null,  acctKrb5Principal,  adminAcct,  adminPassword).
+                verify(STATUS_OK, IMAP_HOST_IP, IMAP_PORT, acctEmail, null);
+        doTest("gssapi",  acctEmail,          null,  "imap",  "1",  clientIp,  nginxServerIp,  null,  acctKrb5Principal,  adminAcct,  adminPassword).
+                verify(STATUS_OK, IMAP_HOST_IP, IMAP_PORT, acctEmail, null);
+        doTest("gssapi",  acctKrb5Principal,  null,  "imap",  "1",  clientIp,  nginxServerIp,  null,  acctKrb5Principal,  adminAcct,  adminPassword).
+                verify(STATUS_OK, IMAP_HOST_IP, IMAP_PORT, acctEmail, null);
+        
+        /*
+         * behavior changed after p4 change 334496, it is correct?
+         * prior to p4 change 334496, expected status was STATUS_LOGIN_FAILED
+         */
+        String expectedStatus = String.format(
+                "authorization failed for %s (authenticated user %s has insufficient rights)",
+                otherAcctLocalPart + "@" + DOMAIN,
+                acctLocalPart + "@" + DOMAIN);
+        doTest("gssapi",  otherAcctLocalPart, null,  "imap",  "1",  clientIp,  nginxServerIp,  null,  acctKrb5Principal,  adminAcct,  adminPassword).
+                verify(expectedStatus, null, null, null, AUTH_WAIT);
+        
+        /*
+         * behavior changed after p4 change 334496, it is correct?
+         * prior to p4 change 334496, expected status was STATUS_LOGIN_FAILED
+         */
+        expectedStatus = "admin account zmnginxbogus not found";
+        doTest("gssapi",  acctLocalPart,      null,  "imap",  "1",  clientIp,  nginxServerIp,  null,  acctKrb5Principal,  "zmnginxbogus",  adminPassword).
+                verify(expectedStatus, null, null, null, AUTH_WAIT);
+        
+        doTest("gssapi",  childLocalPart,     null,  "imap",  "1",  clientIp,  nginxServerIp,  null,  parentKrb5Principal,  adminAcct,  adminPassword).
+                verify(STATUS_OK, IMAP_HOST_IP, IMAP_PORT, childEmail, null);
     
         // cleanup setting on global config
         attrs.clear();
@@ -549,6 +607,7 @@ public class TestNginxLookup extends TestCase {
         mSoapProv.modifyAttrs(config, attrs);
     }
     
+    @Test
     public void testCertAuth() throws Exception {
         // admin account
         String adminAcct = "zmnginx";
@@ -570,7 +629,8 @@ public class TestNginxLookup extends TestCase {
         String acctEmail = "user1@phoebe.mbp";
         String x509SubjectDN = "EMAILADDRESS=user1@phoebe.mbp,CN=user one,OU=Engineering,O=Example Company,L=Saratoga,ST=California,C=US";  // TODO, do not hardcode
         
-        doTest("certauth", x509SubjectDN, null,  "http",  "1",  clientIp,  nginxServerIp,  null,  null,  adminAcct,  adminPassword).verify(STATUS_OK, HTTP_HOST_IP, HTTP_PORT, acctEmail, null, true);
+        doTest("certauth", x509SubjectDN, null,  "http",  "1",  clientIp,  nginxServerIp,  null,  null,  adminAcct,  adminPassword).
+                verify(STATUS_OK, HTTP_HOST_IP, HTTP_PORT, acctEmail, null, true);
 
         // cleanup setting on global config
         attrs.clear();
@@ -592,7 +652,7 @@ public class TestNginxLookup extends TestCase {
             return new Result(authStatus==null?null:authStatus.getValue(),
                               authServer==null?null:authServer.getValue(),
                               authPort==null?null:authPort.getValue(),
-                              authUser==null?null:authUser.getValue(),
+                              authUser==null?null:simulateNginxDecodeUser(authUser.getValue()),
                               authWait==null?null:authWait.getValue(),
                               authPassword==null?null:authPassword.getValue());
             
@@ -625,10 +685,18 @@ public class TestNginxLookup extends TestCase {
         method.setRequestHeader("Host", "localhost");
         if (h_AUTH_METHOD != null)
             method.setRequestHeader(NginxLookupExtension.NginxLookupHandler.AUTH_METHOD, h_AUTH_METHOD);
-        if (h_AUTH_USER != null) 
-            method.setRequestHeader(NginxLookupExtension.NginxLookupHandler.AUTH_USER, h_AUTH_USER);
-        if (h_AUTH_PASS != null) 
-            method.setRequestHeader(NginxLookupExtension.NginxLookupHandler.AUTH_PASS, h_AUTH_PASS);
+        
+
+        if (h_AUTH_USER != null) {
+            String nginxEncoded = similateNginxEncodeUserAndPass(h_AUTH_USER);
+            method.setRequestHeader(NginxLookupExtension.NginxLookupHandler.AUTH_USER, nginxEncoded);
+        }
+        
+        if (h_AUTH_PASS != null) {
+            String nginxEncoded = similateNginxEncodeUserAndPass(h_AUTH_PASS);
+            method.setRequestHeader(NginxLookupExtension.NginxLookupHandler.AUTH_PASS, nginxEncoded);
+        }
+        
         if (h_AUTH_PROTOCOL != null) 
             method.setRequestHeader(NginxLookupExtension.NginxLookupHandler.AUTH_PROTOCOL, h_AUTH_PROTOCOL);
         if (h_AUTH_LOGIN_ATTEMPT != null) 
@@ -648,8 +716,31 @@ public class TestNginxLookup extends TestCase {
         
         return doLookupReq(client, method);
     }
+    
+    /*
+     * bug 51672
+     * Simulate nginx behavior described in http://bugzilla.zimbra.com/show_bug.cgi?id=51672#c4
+     * According to that, nginx encode '%' to '%25', and ' ' to '%20'.
+     * 
+     * '%25' will be un-escaped to '%' and '%20' will be un-escaped to ' ' in the lookup servlet.
+     * (by p4 change 253790)
+     */
+    private static String similateNginxEncodeUserAndPass(String in) {
+        return in.replaceAll("%", "%25").replaceAll(" ", "%20");
+    }
+    
+    /*
+     * By p4 change 253790
+     * lookup servlet replaces '%' to '%25' and ' ' to '%20' when it returns AUTH_USER
+     */
+    private static String simulateNginxDecodeUser(String in) {
+        return in.replaceAll("%25", "%").replaceAll("%20", " ");
+    }
 
+
+    /*
     public static void main(String args[]) {
         TestUtil.runTest(TestNginxLookup.class);
     }
+    */
 }

@@ -106,7 +106,8 @@ public class NginxLookupLdapHelper extends AbstractNginxLookupLdapHelper {
         ZLdapContext zlc = LdapClient.toZLdapContext(prov, ldapContext);
         
         HashMap<String, String> kv = new HashMap<String,String>();
-        kv.put(templateKey, LdapUtil.escapeSearchFilterArg(templateVal));
+        kv.put(templateKey, ZLdapFilterFactory.getInstance().encodeValue(templateVal));
+        
         String query = config.getAttr(queryTemplate);
         String base  = config.getAttr(searchBase);
         if (query == null)
