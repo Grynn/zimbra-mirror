@@ -107,13 +107,14 @@ function(ev, useRelatedTarget)  {
  * @param ev				[Event]		DHTML event
  * @param prop				[string]	the name of a property
  * @param useRelatedTarget	[boolean]*	if true, return element that was related to this event;
+ * @param value				[string]*	expected value of given property
  */
 DwtUiEvent.getTargetWithProp =
-function(ev, prop, useRelatedTarget)  {
+function(ev, prop, useRelatedTarget, value)  {
 	var htmlEl = DwtUiEvent.getTarget(ev, useRelatedTarget);
 	while (htmlEl) {
-		var value = Dwt.getAttr(htmlEl, prop);
-		if (value != null && value !== "") {
+		var elValue = Dwt.getAttr(htmlEl, prop);
+		if (elValue != null && elValue !== "" && (!value || (elValue == value))) {
 			return htmlEl;
 		}
 		htmlEl = htmlEl.parentNode;
