@@ -34,7 +34,7 @@ public class PromptToTurnOffAutoreply extends AjaxCommonTest {
 	}
 
 	@Bugs(ids = "51990")
-	@Test(description = "Enable auto-reply message - Verify after login  alert dialog promts to turn off auto-reply", groups = { "unctional" })
+	@Test(description = "Enable auto-reply message - Verify after login  alert dialog promts to turn off auto-reply", groups = { "functional" })
 	public void PromptToTurnOffAutoreply_01() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 
