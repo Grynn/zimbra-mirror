@@ -839,8 +839,8 @@ public class PageMail extends AbsTab {
 			listLocator = "css=div[id='zl__TV-main__rows']";
 			rowLocator = "div[id^='zli__TV-main__']";
 		} else {
-			listLocator = "css=div[id='zl__CLV-main__rows']";
-			rowLocator = "div[id^='zli__CLV-main__']";
+			listLocator = "css=div[id='zl__CLV__rows']";
+			rowLocator = "div[id^='zli__CLV__']";
 		}
 
 		// Make sure the button exists
@@ -892,8 +892,8 @@ public class PageMail extends AbsTab {
 			listLocator = "css=div[id='zl__TV-main__rows']";
 			rowLocator = "div[id^='zli__TV-main__']";
 		} else {
-			listLocator = "css=div[id='zl__CLV-main__rows']";
-			rowLocator = "div[id^='zli__CLV-main__']";
+			listLocator = "css=div[id='zl__CLV__rows']";
+			rowLocator = "div[id^='zli__CLV__']";
 		}
 
 		// TODO: how to handle both messages and conversations, maybe check the view first?
@@ -1103,8 +1103,8 @@ public class PageMail extends AbsTab {
 			listLocator = "css=div[id='zl__TV-main__rows']";
 			rowLocator = "div[id^='zli__TV-main__']";
 		} else {
-			listLocator = "css=div[id='zl__CLV-main__rows']";
-			rowLocator = "div[id^='zli__CLV-main__']";
+			listLocator = "css=div[id='zl__CLV__rows']";
+			rowLocator = "div[id^='zli__CLV__']";
 		}
 
 		// TODO: how to handle both messages and conversations, maybe check the view first?
