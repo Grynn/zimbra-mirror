@@ -1125,7 +1125,12 @@ public class ZimbraAPI
 
         writer.WriteStartElement("or");
         writer.WriteAttributeString("d", appt["orName"]);
-        writer.WriteAttributeString("a", appt["orAddr"]);
+
+        // always convert -- not like old tool that gives you a choice
+        string theOrganizer = (IAmTheOrganizer(appt["orAddr"])) ? AccountName : appt["orAddr"];
+        writer.WriteAttributeString("a", theOrganizer);
+        //
+
         writer.WriteEndElement();
 
         writer.WriteStartElement("alarm");
@@ -1336,6 +1341,19 @@ public class ZimbraAPI
         if (dcfReturnVal == 0)
             dFolderMap.Add(FolderPath, folderID);
         return dcfReturnVal;
+    }
+
+    private bool IAmTheOrganizer(string theOrganizer)
+    {
+        int idxAcc = AccountName.IndexOf("@");
+        int idxOrg = theOrganizer.IndexOf("@");
+        if ((idxAcc == -1) || (idxOrg == -1))   // better not ever happen
+        {
+            return false;
+        }
+        string nameAcc = AccountName.Substring(0, idxAcc);
+        string nameOrg = theOrganizer.Substring(0, idxOrg);
+        return (nameAcc == nameOrg);
     }
 
     // ///////////////////////
