@@ -119,7 +119,7 @@ public class DisplayContact extends  AbsDisplay {
 
 	@Override
 	public boolean zIsActive() throws HarnessException {
-		return sIsElementPresent("css=div#zv__CNS");
+		return sIsElementPresent("css=div#zv__CNS-main");
 	}
 
 
