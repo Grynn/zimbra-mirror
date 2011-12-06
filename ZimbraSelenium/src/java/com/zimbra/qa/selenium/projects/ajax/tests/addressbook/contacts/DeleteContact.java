@@ -194,7 +194,7 @@ public class DeleteContact extends AjaxCommonTest  {
    	}
 	
 	@Test(	description = "Move a contact item to trash folder by drag and drop",
-			groups = { "functionaly" })
+			groups = { "functional" })
 	public void DnDToTrash() throws HarnessException {
 		
 		 // Create a contact via Soap then select
