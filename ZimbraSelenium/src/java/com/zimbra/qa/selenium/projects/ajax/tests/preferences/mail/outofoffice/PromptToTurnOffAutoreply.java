@@ -1,4 +1,4 @@
-package com.zimbra.qa.selenium.projects.ajax.tests.briefcase.bugs;
+package com.zimbra.qa.selenium.projects.ajax.tests.preferences.mail.outofoffice;
 
 import java.util.HashMap;
 import org.testng.annotations.Test;
@@ -12,7 +12,7 @@ import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
-import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.DialogOOOAlert;
+import com.zimbra.qa.selenium.projects.ajax.ui.preferences.DialogOOOAlert;
 
 public class PromptToTurnOffAutoreply extends AjaxCommonTest {
 	final String autoreplyMessage = "OOO";
@@ -34,7 +34,7 @@ public class PromptToTurnOffAutoreply extends AjaxCommonTest {
 	}
 
 	@Bugs(ids = "51990")
-	@Test(description = "Enable auto-reply message - Verify after login  alert dialog promts to turn off auto-reply", groups = { "functional" })
+	@Test(description = "Enable auto-reply message - Verify after login  alert dialog promts to turn off auto-reply", groups = { "unctional" })
 	public void PromptToTurnOffAutoreply_01() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 

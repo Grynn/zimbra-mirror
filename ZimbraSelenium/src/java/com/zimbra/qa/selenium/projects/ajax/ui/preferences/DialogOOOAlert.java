@@ -1,4 +1,4 @@
-package com.zimbra.qa.selenium.projects.ajax.ui.briefcase;
+package com.zimbra.qa.selenium.projects.ajax.ui.preferences;
 
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
