@@ -363,7 +363,7 @@ public:
     {
         if (&tlog.get() != &glog)
             tlog.erase();
-        tlog.set(file ? new Log(file, glog.level()) : &glog);
+        tlog.set(file && *file ? new Log(file, glog.level()) : &glog);
     }
 
     static Level str2enum(const wchar_t *lvl);
