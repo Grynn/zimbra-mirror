@@ -215,7 +215,7 @@ public static AppointmentItem importFromSOAP(Element GetAppointmentResponse) thr
 		
 		try {
 			account.soapSend(
-					"<SearchRequest xmlns='urn:zimbraMail' types='appointment' calExpandInstStart='"+ start.addDays(-7).toMillis() +"' calExpandInstEnd='"+ start.addDays(7).toMillis() +"'>" +
+					"<SearchRequest xmlns='urn:zimbraMail' types='appointment' calExpandInstStart='"+ start.toMillis() +"' calExpandInstEnd='"+ end.toMillis() +"'>" +
 						"<query>"+ query +"</query>" +
 					"</SearchRequest>");
 			
