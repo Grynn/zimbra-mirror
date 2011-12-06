@@ -269,7 +269,7 @@ public class DeleteContactGroup extends AjaxCommonTest  {
 		
 	    
 		app.zPageAddressbook.zDragAndDrop(
-				"css=td#zlif__CNS__" + group.getId() + "__fileas:contains("+ group.fileAs + ")",
+				"css=td#zlif__CNS-main__" + group.getId() + "__fileas:contains("+ group.fileAs + ")",
 				"css=td#zti__main_Contacts__" + folder.getId() + "_textCell:contains("+ folder.getName() + ")");
 			
 		 //verify contact group deleted
