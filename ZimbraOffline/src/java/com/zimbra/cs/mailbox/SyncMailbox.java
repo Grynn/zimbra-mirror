@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
 import com.google.common.primitives.Ints;
@@ -51,13 +52,13 @@ public abstract class SyncMailbox extends DesktopMailbox {
     static final String DELETING_MID_SUFFIX = ":delete";
     static final long OPTIMIZE_INTERVAL = 48 * Constants.MILLIS_PER_HOUR;
     private String accountName;
-    private volatile boolean isDeleting;
+    private AtomicBoolean isDeleting = new AtomicBoolean(false);
 
     private Timer timer;
     private TimerTask currentTask;
 
     final Object syncLock = new Object();
-    private boolean mSyncRunning;
+    private AtomicBoolean isSyncRunning = new AtomicBoolean(false);
     private boolean isGalAcct;
     private boolean isMPAcct;
     private long lastOptimizeTime = 0;
@@ -122,27 +123,16 @@ public abstract class SyncMailbox extends DesktopMailbox {
         if (isDeleting() || !OfflineSyncManager.getInstance().isServiceActive(false)) {
             return false;
         }
-        if (!mSyncRunning) {
-            lock.lock();
-            try {
-                if (!mSyncRunning) {
-                    mSyncRunning = true;
-                    return true;
-                }
-            } finally {
-                lock.release();
-            }
-        }
-        return false;
+        return isSyncRunning.compareAndSet(false, true);
     }
 
     void unlockMailbox() {
-        assert mSyncRunning == true;
-        mSyncRunning = false;
+        assert isSyncRunning.get() == true;
+        isSyncRunning.set(false);
     }
 
     public boolean isDeleting() {
-        return isDeleting;
+        return isDeleting.get();
     }
 
     public String getAccountName() {
@@ -151,12 +141,11 @@ public abstract class SyncMailbox extends DesktopMailbox {
 
     @Override
     public void deleteMailbox() throws ServiceException {
+        if (!isDeleting.compareAndSet(false, true)) {
+            return;
+        }
         lock.lock();
         try {
-            if (isDeleting) {
-                return;
-            }
-            isDeleting = true;
             cancelCurrentTask();
             beginMaintenance(); // mailbox maintenance will cause sync to stop when writing
         } finally {
