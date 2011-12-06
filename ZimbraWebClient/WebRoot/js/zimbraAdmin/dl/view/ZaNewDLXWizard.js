@@ -597,15 +597,15 @@ function (entry) {
     }
 
     //Utility members
-	this._containedObject[ZaDistributionList.A2_addList] = new Array(); //members to add
+	this._containedObject[ZaDistributionList.A2_addList] = entry[ZaDistributionList.A2_addList]||new Array(); //members to add
 	this._containedObject[ZaDistributionList.A2_addList]._version = 1;
-	this._containedObject[ZaDistributionList.A2_removeList] = new Array(); //members to remove
+	this._containedObject[ZaDistributionList.A2_removeList] = entry[ZaDistributionList.A2_removeList]||new Array(); //members to remove
 	this._containedObject[ZaDistributionList.A2_removeList]._version = 1;
-	this._containedObject[ZaDistributionList.A2_poolPagenum] = 1;
+	this._containedObject[ZaDistributionList.A2_poolPagenum] = entry[ZaDistributionList.A2_poolPagenum]||1;
 	this._containedObject[ZaDistributionList.A2_poolNumPages] = entry [ZaDistributionList.A2_poolNumPages];
-	this._containedObject[ZaDistributionList.A2_memPagenum] = 1;
+	this._containedObject[ZaDistributionList.A2_memPagenum] =entry[ZaDistributionList.A2_memPagenum]|| 1;
 	this._containedObject[ZaDistributionList.A2_memNumPages] = entry [ZaDistributionList.A2_memNumPages];
-	this._containedObject[ZaDistributionList.A2_query] = "";
+	this._containedObject[ZaDistributionList.A2_query] =entry[ZaDistributionList.A2_query]|| "";
 	//membership related instance variables
 	this._containedObject[ZaAccount.A2_memberOf] = ZaAccountMemberOfListView.cloneMemberOf(entry);
 	// the origList is inited when we load the object, it won't be modified unless the first time
@@ -617,7 +617,7 @@ function (entry) {
 	this._containedObject[ZaAccount.A2_indirectMemberList + "_offset"] = entry[ZaAccount.A2_indirectMemberList + "_offset"];
 	this._containedObject[ZaAccount.A2_nonMemberList + "_more"] = entry[ZaAccount.A2_nonMemberList + "_more"];
 	this._containedObject[ZaAccount.A2_nonMemberList + "_offset"] = entry[ZaAccount.A2_nonMemberList + "_offset"];
-    this._containedObject[ZaModel.currentStep] = 1;
+    this._containedObject[ZaModel.currentStep] = entry[ZaModel.currentStep] || 1;
 	//dl.isgroup = this.isgroup ;
 
 	if(entry.rights)
@@ -637,10 +637,6 @@ function (entry) {
 	this._containedObject.type = entry.type;
 	this._containedObject.id = entry.id;
 
-	if(!entry[ZaModel.currentTab])
-		this._containedObject[ZaModel.currentTab] = "1";
-	else
-		this._containedObject[ZaModel.currentTab] = entry[ZaModel.currentTab];
 
 	if(!entry.id) {
 		if(ZaItem.hasWritePermission(ZaAccount.A_zimbraIsDelegatedAdminAccount,entry)) {

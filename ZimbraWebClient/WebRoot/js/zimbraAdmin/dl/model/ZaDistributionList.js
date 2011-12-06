@@ -30,7 +30,9 @@ ZaDistributionList = function(id, name, memberList, description, notes) {
 	this[ZaDistributionList.A2_numMembers] = 0;
 	this[ZaDistributionList.A2_memberList] = (memberList != null) ? memberList: new Array();
 	this[ZaDistributionList.A2_memberPool] = new Array();
-
+    this[ZaAccount.A2_memberOf] = {directMemberList: [],indirectMemberList: [],nonMemberList: []};
+    this[ZaAccount.A2_directMemberList + "_more"] = 0;
+    this[ZaAccount.A2_indirectMemberList + "_more"] = 0;
 }
 
 ZaDistributionList.prototype = new ZaItem;

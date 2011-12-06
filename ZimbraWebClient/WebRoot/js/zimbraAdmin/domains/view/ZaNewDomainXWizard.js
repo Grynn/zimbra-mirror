@@ -147,6 +147,7 @@ function(stepNum) {
 			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);
 			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
 		} else if(stepNum == ZaNewDomainXWizard.CONFIG_COMPLETE_STEP) {
+            this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
 			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
 		} else {
 			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
@@ -186,17 +187,17 @@ function(entry) {
 	}
 	this._containedObject.attrs[ZaDomain.A_zimbraDomainStatus] = ZaDomain.DOMAIN_STATUS_ACTIVE;
 	
-	this._containedObject[ZaDomain.A2_isTestingGAL] = 0;
-	this._containedObject[ZaDomain.A2_isTestingSync] = 0;
-	this._containedObject[ZaDomain.A2_isTestingAuth] = 0;
+	this._containedObject[ZaDomain.A2_isTestingGAL] = entry[ZaDomain.A2_isTestingGAL] || 0;
+	this._containedObject[ZaDomain.A2_isTestingSync] = entry[ZaDomain.A2_isTestingSync] || 0;
+	this._containedObject[ZaDomain.A2_isTestingAuth] = entry[ZaDomain.A2_isTestingAuth] || 0;
 	this._containedObject[ZaDomain.A_NotebookTemplateFolder]=entry[ZaDomain.A_NotebookTemplateFolder];
 	this._containedObject[ZaDomain.A_NotebookTemplateDir]=entry[ZaDomain.A_NotebookTemplateDir];	
 	this._containedObject[ZaDomain.A2_new_gal_sync_account_name]=entry[ZaDomain.A2_new_gal_sync_account_name];
 	this._containedObject[ZaDomain.A2_new_internal_gal_ds_name]=entry[ZaDomain.A2_new_internal_gal_ds_name];
 	this._containedObject[ZaDomain.A2_new_external_gal_ds_name]=entry[ZaDomain.A2_new_external_gal_ds_name];
-	this._containedObject[ZaDomain.A2_new_internal_gal_polling_interval] = "1d";
-	this._containedObject[ZaDomain.A2_new_external_gal_polling_interval] = "1d";
-	this._containedObject[ZaDomain.A2_create_gal_acc] = "TRUE";
+	this._containedObject[ZaDomain.A2_new_internal_gal_polling_interval] = entry[ZaDomain.A2_new_internal_gal_polling_interval] || "1d";
+	this._containedObject[ZaDomain.A2_new_external_gal_polling_interval] = entry[ZaDomain.A2_new_external_gal_polling_interval] || "1d";
+	this._containedObject[ZaDomain.A2_create_gal_acc] = entry[ZaDomain.A2_create_gal_acc] ||"TRUE";
 	this._containedObject.notebookAcls = {};
 
 	if(entry.rights)
@@ -246,7 +247,7 @@ function(entry) {
 	for (var a in entry.notebookAcls[ZaDomain.A_NotebookDomainACLs]) {
 		this._containedObject.notebookAcls[ZaDomain.A_NotebookDomainACLs][a] = entry.notebookAcls[ZaDomain.A_NotebookDomainACLs][a];
 	}*/
-	this._containedObject[ZaModel.currentStep] = 1;
+	this._containedObject[ZaModel.currentStep] = entry[ZaModel.currentStep] || 1;
 	this._localXForm.setInstance(this._containedObject);	
 }
 
