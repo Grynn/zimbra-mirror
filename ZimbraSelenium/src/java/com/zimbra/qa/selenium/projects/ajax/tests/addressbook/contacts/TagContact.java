@@ -153,7 +153,7 @@ public class TagContact extends AjaxCommonTest  {
 		
 	    // Dnd on the new tag
 		app.zPageAddressbook.zDragAndDrop(
-				"css=td#zlif__CNS__" + contactItem.getId() + "__fileas:contains("+ contactItem.fileAs + ")",
+				"css=td#zlif__CNS-main__" + contactItem.getId() + "__fileas:contains("+ contactItem.fileAs + ")",
 				"css=td#zti__main_Contacts__" + tagItem.getId() + "_textCell:contains("+ tagItem.getName() + ")");
 			
 		Verify(contactItem, tagItem.getName());
