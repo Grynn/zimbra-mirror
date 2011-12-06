@@ -150,7 +150,7 @@ public class TagContactGroup extends AjaxCommonTest  {
 		
 	    // Dnd on the new tag
 		app.zPageAddressbook.zDragAndDrop(
-				"css=td#zlif__CNS__" + group.getId() + "__fileas:contains("+ group.fileAs + ")",
+				"css=td#zlif__CNS-main__" + group.getId() + "__fileas:contains("+ group.fileAs + ")",
 				"css=div#zov__main_Contacts td#zti__main_Contacts__" + tagItem.getId() + "_textCell:contains("+ tagItem.getName() + ")");
 			
 		// Make sure the tag was applied to the contact

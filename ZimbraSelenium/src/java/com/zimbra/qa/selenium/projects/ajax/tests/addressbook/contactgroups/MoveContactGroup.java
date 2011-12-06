@@ -120,7 +120,7 @@ public class MoveContactGroup extends AjaxCommonTest  {
 		
     
 		app.zPageAddressbook.zDragAndDrop(
-				"css=td#zlif__CNS__" + group.getId() + "__fileas:contains("+ group.fileAs + ")",
+				"css=td#zlif__CNS-main__" + group.getId() + "__fileas:contains("+ group.fileAs + ")",
 				"css=td#zti__main_Contacts__" + emailedContacts.getId() + "_textCell:contains("+ emailedContacts.getName() + ")");
 			
 	  
