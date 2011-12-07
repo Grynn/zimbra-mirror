@@ -23,20 +23,6 @@ typedef struct _Item_Data
     // parent folder
 } Item_Data;
 
-typedef struct _Organizer
-{
-    wstring nam;
-    wstring addr;
-} Organizer;
-
-typedef struct _Attendee
-{
-    wstring nam;
-    wstring addr;
-    wstring role;
-    wstring partstat;
-} Attendee;
-
 typedef struct _MessagePart
 {
     wstring contentType;
@@ -156,7 +142,7 @@ typedef struct _ApptItemData: BaseItemData
     wstring EndDate;
     wstring AlarmTrigger;
     Organizer organizer;
-    vector<Attendee> vAttendees;
+    vector<Attendee*> vAttendees;
     vector<MessagePart> vMessageParts;
     //data_buffer textbody;
     //data_buffer htmlbody;

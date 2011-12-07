@@ -319,7 +319,36 @@ STDMETHODIMP CItemObject::GetDataForItemID(BSTR UserId, VARIANT ItemId, FolderTy
 		pIt[L"content0"] = SysAllocString((apptData.vMessageParts[0].content).c_str());
 		pIt[L"contentType1"] = SysAllocString((apptData.vMessageParts[1].contentType).c_str());
 		pIt[L"content1"] = SysAllocString((apptData.vMessageParts[1].content).c_str());
-		//TODO: attendees, recurrence
+		
+		// attendees	
+		wstring attendeeData;
+		int numAttendees = (int)apptData.vAttendees.size(); // cast it because in delete loop, we'll go negative
+		for (int i = 0; i < numAttendees; i++)
+		{
+		    attendeeData += apptData.vAttendees[0]->nam;
+		    attendeeData += L",";
+		    attendeeData += apptData.vAttendees[0]->addr;
+		    attendeeData += L",";
+		    attendeeData += apptData.vAttendees[0]->role;
+		    attendeeData += L",";
+		    attendeeData += apptData.vAttendees[0]->partstat;
+		    if (i < (numAttendees - 1))	// don't write comma after last attendee
+		    {
+			attendeeData += L",";
+		    }
+		    pIt[L"attendees"] = SysAllocString(attendeeData.c_str());
+		}
+
+		// now clean up
+		if (numAttendees > 0)
+		{
+		    for (int i = (numAttendees - 1); i >= 0; i--)
+		    {
+			delete (apptData.vAttendees[i]);
+		    }
+		}
+
+		//TODO: recurrence
 	    }
 	    delete maapi;	// temporary
         }

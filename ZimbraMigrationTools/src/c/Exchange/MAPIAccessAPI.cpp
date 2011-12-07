@@ -668,6 +668,13 @@ LPCWSTR MAPIAccessAPI::GetItem(SBinary sbItemEID, BaseItemData &itemData)
             {
                 ad->Uid = mapiappointment.GetInstanceUID();
             }
+	    
+            // fill in attendees
+            vector<Attendee*> v = mapiappointment.GetAttendees();
+            for (size_t i = 0; i < v.size(); i++)
+            {
+                ad->vAttendees.push_back((Attendee*)v[i]);
+            }
 
             MessagePart mp;
             mp.contentType = L"text/plain";

@@ -13,6 +13,14 @@ enum OutlookBusyStatus
     oOutOfOffice = 3
 };
 
+enum OutlookMeetingRecipientType
+{
+    oOrganizer = 0,
+    oRequired = 1,
+    oOptional = 2,
+    oResource = 3
+};
+
 enum OutlookResponseStatus
 {
     oResponseNone = 0,
@@ -22,6 +30,20 @@ enum OutlookResponseStatus
     oResponseDeclined = 4,
     oResponseNotResponded = 5
 };
+
+typedef struct _Organizer
+{
+    wstring nam;
+    wstring addr;
+} Organizer;
+
+typedef struct _Attendee
+{
+    wstring nam;
+    wstring addr;
+    wstring role;
+    wstring partstat;
+} Attendee;
 
 
 // MAPIAppointmentException class
@@ -82,6 +104,7 @@ private:
     wstring m_pResponseStatus;
     wstring m_pOrganizerName;
     wstring m_pOrganizerAddr;
+    vector<Attendee*> m_vAttendees;
     wstring m_pReminderMinutes;
     wstring m_pPrivate;
     wstring m_pPlainTextFile;
@@ -101,7 +124,9 @@ public:
     void SetAllday(unsigned short usAllday);
     void SetTransparency(LPTSTR pStr);
     void SetResponseStatus(long responsestatus);
-    HRESULT SetOrganizerInfo();
+    wstring ConvertValueToRole(long role);
+    wstring ConvertValueToPartStat(long ps);
+    HRESULT SetOrganizerAndAttendees();
     void SetReminderMinutes(long reminderminutes);
     void SetPrivate(unsigned short usPrivate);
     void SetPlainTextFileAndContent();
@@ -126,5 +151,6 @@ public:
     wstring GetPrivate();
     wstring GetPlainTextFileAndContent();
     wstring GetHtmlFileAndContent();
+    vector<Attendee*> GetAttendees();
 
 };

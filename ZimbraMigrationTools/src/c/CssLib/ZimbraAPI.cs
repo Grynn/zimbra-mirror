@@ -1129,9 +1129,21 @@ public class ZimbraAPI
         // always convert -- not like old tool that gives you a choice
         string theOrganizer = (IAmTheOrganizer(appt["orAddr"])) ? AccountName : appt["orAddr"];
         writer.WriteAttributeString("a", theOrganizer);
+        writer.WriteEndElement();
         //
 
-        writer.WriteEndElement();
+        if (appt.ContainsKey("attendees"))
+        {
+            string[] tokens = appt["attendees"].Split(',');
+            for (int i = 0; i < tokens.Length; i += 4)
+            {
+                writer.WriteStartElement("at");
+                writer.WriteAttributeString("d",    tokens.GetValue(i).ToString());
+                writer.WriteAttributeString("a",    tokens.GetValue(i + 1).ToString());
+                writer.WriteAttributeString("role", tokens.GetValue(i + 2).ToString());
+                writer.WriteAttributeString("ptst", tokens.GetValue(i + 3).ToString());
+            }
+        }
 
         writer.WriteStartElement("alarm");
         writer.WriteAttributeString("action", "DISPLAY");

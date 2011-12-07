@@ -210,7 +210,7 @@ HRESULT MAPIAppointment::SetMAPIAppointmentValues()
     SetPlainTextFileAndContent();
     SetHtmlFileAndContent();
 
-    SetOrganizerInfo();
+    SetOrganizerAndAttendees();
     return hr;
 }
 
@@ -273,6 +273,36 @@ void MAPIAppointment::SetBusyStatus(long busystatus)
 	case oOutOfOffice:	m_pBusyStatus = L"O";	break;
 	default:		m_pBusyStatus = L"T";
     }
+}
+
+wstring MAPIAppointment::ConvertValueToRole(long role)
+{
+    wstring retval = L"REQ";
+    switch (role)
+    {
+	case oOrganizer:    retval = L"CHAIR";	break;
+	case oRequired:	    retval = L"REQ";	break;
+	case oOptional:	    retval = L"OPT";	break;
+	case oResource:	    retval = L"NON";	break;
+	default:	    ;
+    }
+    return retval;
+}
+
+wstring MAPIAppointment::ConvertValueToPartStat(long ps)
+{
+    wstring retval = L"NE";
+    switch (ps)
+    {
+	case oResponseNone:	    retval = L"NE";	break;
+	case oResponseOrganized:    retval = L"OR";	break;
+	case oResponseTentative:    retval = L"TE";	break;
+	case oResponseAccepted:	    retval = L"AC";	break;
+	case oResponseDeclined:	    retval = L"DE";	break;
+	case oResponseNotResponded: retval = L"NE";	break;
+	default:		    ;
+    }
+    return retval;
 }
 
 void MAPIAppointment::SetAllday(unsigned short usAllday)
@@ -341,7 +371,7 @@ void MAPIAppointment::SetHtmlFileAndContent()
     }
 }
 
-HRESULT MAPIAppointment::SetOrganizerInfo()
+HRESULT MAPIAppointment::SetOrganizerAndAttendees()
 {
     Zimbra::Util::ScopedInterface<IMAPITable> pRecipTable;
     HRESULT hr = 0;
@@ -354,11 +384,11 @@ HRESULT MAPIAppointment::SetOrganizerInfo()
 
     typedef enum _AttendeePropTagIdx
     {
-        AT_DISPLAY_NAME, AT_SMTP_ADDR, AT_RECIPIENT_FLAGS, AT_NPROPS
+        AT_DISPLAY_NAME, AT_SMTP_ADDR, AT_RECIPIENT_FLAGS, AT_RECIPIENT_TYPE, AT_RECIPIENT_TRACKSTATUS, AT_NPROPS
     } AttendeePropTagIdx;
 
-    SizedSPropTagArray(3, reciptags) = {
-        3, { PR_DISPLAY_NAME_W, PR_SMTP_ADDRESS_W, PR_RECIPIENT_FLAGS }
+    SizedSPropTagArray(5, reciptags) = {
+        5, { PR_DISPLAY_NAME_W, PR_SMTP_ADDRESS_W, PR_RECIPIENT_FLAGS, PR_RECIPIENT_TYPE, PR_RECIPIENT_TRACKSTATUS }
     };
 
     ULONG ulRows = 0;
@@ -393,6 +423,15 @@ HRESULT MAPIAppointment::SetOrganizerInfo()
 		{
 		    m_pOrganizerName = pRecipRows->aRow[iRow].lpProps[AT_DISPLAY_NAME].Value.lpszW;
 		    m_pOrganizerAddr = pRecipRows->aRow[iRow].lpProps[AT_SMTP_ADDR].Value.lpszW;
+		}
+		else
+		{
+		    Attendee* pAttendee = new Attendee();   // delete done in GetDataForItemID after we allocate dict string for ZimbraAPI
+		    pAttendee->nam = pRecipRows->aRow[iRow].lpProps[AT_DISPLAY_NAME].Value.lpszW;
+		    pAttendee->addr = pRecipRows->aRow[iRow].lpProps[AT_SMTP_ADDR].Value.lpszW;
+		    pAttendee->role = ConvertValueToRole(pRecipRows->aRow[iRow].lpProps[AT_RECIPIENT_TYPE].Value.l);
+		    pAttendee->partstat = ConvertValueToPartStat(pRecipRows->aRow[iRow].lpProps[AT_RECIPIENT_TRACKSTATUS].Value.l);
+		    m_vAttendees.push_back(pAttendee);
 		}
 	    }
         }
@@ -713,3 +752,4 @@ wstring MAPIAppointment::GetOrganizerAddr() { return m_pOrganizerAddr; }
 wstring MAPIAppointment::GetPrivate() { return m_pPrivate; }
 wstring MAPIAppointment::GetPlainTextFileAndContent() { return m_pPlainTextFile; }
 wstring MAPIAppointment::GetHtmlFileAndContent() { return m_pHtmlFile; }
+vector<Attendee*> MAPIAppointment::GetAttendees() { return m_vAttendees; }
