@@ -955,7 +955,9 @@ public class PageAddressbook extends AbsTab {
 				
 				else if (subOption == Button.O_TAG_REMOVETAG) {
 					sub_cmi = CONTEXT_SUB_MENU.CONTACT_SUB_REMOVE_TAG;					
-					parentLocator= "div[id^=TAG_MENU__DWT][id$=|MENU]";
+					//parentLocator= "div[id^=TAG_MENU__DWT][id$=|MENU]";
+					parentLocator= "div[id=TAG_MENU|MENU]";
+					
 					page = null;	
 				}
 				
@@ -1109,9 +1111,8 @@ public class PageAddressbook extends AbsTab {
 						
 				if (subOption == Button.O_TAG_REMOVETAG) {
 					sub_cmi = CONTEXT_SUB_MENU.CONTACT_SUB_REMOVE_TAG;					
-					parentLocator= "div[id^=TAG_MENU__DWT][id$=|MENU]";
-				
-					//id = cmi.locator;
+					//parentLocator= "div[id^=TAG_MENU__DWT][id$=|MENU]";
+					parentLocator= "div[id=TAG_MENU|MENU]";					//id = cmi.locator;
 					locator = "css=div#zm__Contacts tr#"+ cmi.locator;
 									
 					//  Make sure the context menu exists
@@ -1150,13 +1151,16 @@ public class PageAddressbook extends AbsTab {
 						 id= sGetEval("window.document.getElementById('z_shell').children[" + i + "].id");
 				     
 						 if (id.startsWith("DWT") 					
-							 && sGetEval("window.document.getElementById('" + id + "').getAttribute('class')").contains("ActionMenu ZHasIcon")
+							 && sGetEval("window.document.getElementById('" + id + "').getAttribute('class')").contains("ActionMenu ZHasIcon")							 		
 							 && sIsVisible(id)){
-							 locator="css=div#" + id + " td[id^=DWT][id$=_title]:contains('" + tagName + "')";							 
+							 //locator="css=div#" + id + " td[id^=DWT][id$=_title]:contains('" + tagName + "')";	
+							 locator="css=div#" + id + " td.ZWidgetTitle:contains('" + tagName + "')";	
+							 
 							 break;
 						 }
 					}		
-			          				     
+			        
+						
 				    if (locator != null) {
 				    
 				    	//  Make sure the sub context menu exists			
