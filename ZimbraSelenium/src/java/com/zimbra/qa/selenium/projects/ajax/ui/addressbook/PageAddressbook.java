@@ -564,8 +564,9 @@ public class PageAddressbook extends AbsTab {
 		        page = new DialogTag(this.MyApplication, this);
 		   }    
 		   else if ( option == Button.O_NEW_ADDRESSBOOK ) {					   
-			    optionLocator = "css=td#ztih__main_Contacts__ADDRBOOK_headerCell td[id^=DWT][id$=title]";
-				page = new DialogCreateFolder(MyApplication, ((AppAjaxClient)MyApplication).zPageAddressbook);			    
+			    //optionLocator = "css=td#ztih__main_Contacts__ADDRBOOK_headerCell td[id^=DWT][id$=title]";
+			   optionLocator = "css=div#zb__CNS-main__NEW_MENU_NEW_ADDRBOOK td#zb__CNS-main__NEW_MENU_NEW_ADDRBOOK_title";
+			    page = new DialogCreateFolder(MyApplication, ((AppAjaxClient)MyApplication).zPageAddressbook);			    
 							    
 
 		   } else {
