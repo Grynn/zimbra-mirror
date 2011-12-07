@@ -60,7 +60,7 @@ sub parseOnset($) {
     my $systemTime = shift;
     my $mon = signedNum(substr($systemTime, 2, 2));
     if ($mon == 0) {
-	return (undef, '19710101T000000');
+	return (undef, '16010101T000000');
     }
     my $year = signedNum(substr($systemTime, 0, 2));
     my $dayOfWeek = signedNum(substr($systemTime, 4, 2));
@@ -70,7 +70,7 @@ sub parseOnset($) {
     my $sec = signedNum(substr($systemTime, 12, 2));
     my $msec = signedNum(substr($systemTime, 14, 2));
 
-    my $dtStart = sprintf("19710101T%02d%02d%02d", $hour, $min, $sec);
+    my $dtStart = sprintf("16010101T%02d%02d%02d", $hour, $min, $sec);
     my $rule = sprintf("FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=%d;BYDAY=%s",
 		       $mon, getByDay($day, $dayOfWeek));
 
