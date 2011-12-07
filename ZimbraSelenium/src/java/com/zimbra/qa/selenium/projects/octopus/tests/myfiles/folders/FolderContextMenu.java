@@ -1,6 +1,6 @@
 package com.zimbra.qa.selenium.projects.octopus.tests.myfiles.folders;
 
-import org.testng.annotations.AfterMethod;
+import org.testng.annotations.*;
 import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;

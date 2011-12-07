@@ -1,6 +1,6 @@
 package com.zimbra.qa.selenium.projects.octopus.tests.sharing;
 
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderMountpointItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
@@ -17,6 +17,19 @@ import com.zimbra.qa.selenium.projects.octopus.ui.PageMyFiles;
 public class RemoveMountpoint extends OctopusCommonTest {
 
 	private ZimbraAccount ownerAccount = null;
+
+	private boolean _folderIsCreated = false;
+	private String _folderName = null;
+	private boolean _fileAttached = false;
+	private String _fileId = null;
+
+	@BeforeMethod(groups = { "always" })
+	public void testReset() {
+		_folderName = null;
+		_folderIsCreated = false;
+		_fileId = null;
+		_fileAttached = false;
+	}
 
 	public RemoveMountpoint() {
 		logger.info("New " + RemoveMountpoint.class.getCanonicalName());
@@ -202,5 +215,53 @@ public class RemoveMountpoint extends OctopusCommonTest {
 		 * folderMountpointItem.getName() + ")", "5000"),
 		 * "Verify removed mount point appears in the Ignored Items List View");
 		 */
+	}
+	
+	@AfterMethod(groups = { "always" })
+	public void testCleanup() {
+		if (_fileAttached && _fileId != null) {
+			try {
+				// Delete it from Server
+				app.zPageOctopus.deleteItemUsingSOAP(_fileId,
+						app.zGetActiveAccount());
+			} catch (Exception e) {
+				logger.info("Failed while deleting the file");
+				e.printStackTrace();
+			} finally {
+				_fileId = null;
+				_fileAttached = false;
+			}
+		}
+		if (_folderIsCreated) {
+			try {
+				// Delete it from Server
+				FolderItem
+						.deleteUsingSOAP(app.zGetActiveAccount(), _folderName);
+			} catch (Exception e) {
+				logger.info("Failed while removing the folder.");
+				e.printStackTrace();
+			} finally {
+				_folderName = null;
+				_folderIsCreated = false;
+			}
+		}
+		try {
+			// Refresh view 
+			//ZimbraAccount account = app.zGetActiveAccount();
+			//FolderItem item = FolderItem.importFromSOAP(account,SystemFolder.Briefcase);
+			//account.soapSend("<GetFolderRequest xmlns='urn:zimbraMail'><folder l='1' recursive='0'/>" + "</GetFolderRequest>");
+			//account.soapSend("<GetFolderRequest xmlns='urn:zimbraMail' requestId='folders' depth='1' tr='true' view='document'><folder l='" + item.getId() + "'/></GetFolderRequest>");
+			//account.soapSend("<GetActivityStreamRequest xmlns='urn:zimbraMail' id='16'/>");
+			//app.zGetActiveAccount().accountIsDirty = true;
+			//app.zPageOctopus.sRefresh();
+												
+			// Empty trash
+			app.zPageTrash.emptyTrashUsingSOAP(app.zGetActiveAccount());
+			
+			app.zPageOctopus.zLogout();
+		} catch (Exception e) {
+			logger.info("Failed while emptying Trash");
+			e.printStackTrace();
+		}
 	}
 }

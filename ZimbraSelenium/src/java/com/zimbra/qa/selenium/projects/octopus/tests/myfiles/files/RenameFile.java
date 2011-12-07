@@ -1,7 +1,6 @@
 package com.zimbra.qa.selenium.projects.octopus.tests.myfiles.files;
 
 import org.testng.annotations.*;
-
 import com.zimbra.qa.selenium.framework.items.FileItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
@@ -9,7 +8,6 @@ import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.octopus.core.OctopusCommonTest;
 import com.zimbra.qa.selenium.projects.octopus.ui.PageMyFiles;
-import com.zimbra.qa.selenium.projects.octopus.ui.PageTrash;
 
 public class RenameFile extends OctopusCommonTest {
 
@@ -126,13 +124,19 @@ public class RenameFile extends OctopusCommonTest {
 			}
 		}
 		try {
-			// click on Trash tab to move out from the current view
-			PageTrash pageTrash = (PageTrash) app.zPageOctopus.zToolbarPressButton(Button.B_TAB_TRASH);
-			
-			//Empty trash
-			pageTrash.emptyTrashUsingSOAP(app.zGetActiveAccount());
+			// Refresh view 
+			//ZimbraAccount account = app.zGetActiveAccount();
+			//FolderItem item = FolderItem.importFromSOAP(account,SystemFolder.Briefcase);
+			//account.soapSend("<GetFolderRequest xmlns='urn:zimbraMail'><folder l='1' recursive='0'/>" + "</GetFolderRequest>");
+			//account.soapSend("<GetFolderRequest xmlns='urn:zimbraMail' requestId='folders' depth='1' tr='true' view='document'><folder l='" + item.getId() + "'/></GetFolderRequest>");
+			//account.soapSend("<GetActivityStreamRequest xmlns='urn:zimbraMail' id='16'/>");
+			//app.zGetActiveAccount().accountIsDirty = true;
+			//app.zPageOctopus.sRefresh();
+												
+			// Empty trash
+			app.zPageTrash.emptyTrashUsingSOAP(app.zGetActiveAccount());
 		} catch (Exception e) {
-			logger.info("Failed while opening Trash tab");
+			logger.info("Failed while emptying Trash");
 			e.printStackTrace();
 		}
 	}
