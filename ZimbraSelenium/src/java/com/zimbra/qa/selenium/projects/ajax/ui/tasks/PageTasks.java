@@ -60,6 +60,7 @@ public class PageTasks extends AbsTab {
 		public static final String zEditTaskMenuItem ="css=div[id='zm__Tasks'] tr[id='POPUP_EDIT']";
 		public static final String zFilterByTaskDropDown="css=tr[id='ztb__TKL_items'] div[id='zb__TKL__SORTBY_MENU'] td[id='zb__TKL__SORTBY_MENU_dropdown']>div";
 		public static final String zToDoListTaskMenuItem ="css=div[id^='POPUP_DWT'] div[id^='DWT'] tr[id='POPUP_TKVT']";
+		public static final String zShowOrigTaskMenuItem ="css=div[id='zm__Tasks'] tr[id='POPUP_SHOW_ORIG']";
 	}
 
 	public PageTasks(AbsApplication application) {
@@ -399,6 +400,10 @@ public class PageTasks extends AbsTab {
 			}else if(option == Button.O_EDIT){
 				optionLocator= Locators.zEditTaskMenuItem;
 				page = new FormTaskNew(this.MyApplication);
+			
+			}else if(option == Button.O_SHOW_ORIGINAL){
+				optionLocator= Locators.zShowOrigTaskMenuItem;
+				page =null;
 			
 			}else {
 				throw new HarnessException("implement action:" + action
@@ -1001,7 +1006,7 @@ public class PageTasks extends AbsTab {
 //				WAIT_FOR_OPERAND.NEQ, null, 30000, 1000);
 //	}
 
-	public String  GetShowOrigBodyText(String EmailAddress, String calItemId) throws HarnessException{
+	/*public String  GetShowOrigBodyText(String EmailAddress, String calItemId) throws HarnessException{
 
 		try{
 			sOpenWindow(ZimbraSeleniumProperties.getBaseURL() + "/home/" + EmailAddress + "/Tasks/?id=" + calItemId + "&mime=text/plain&noAttach=1","ShowOrignal");
@@ -1014,7 +1019,7 @@ public class PageTasks extends AbsTab {
 		}finally{
 			ClientSessionFactory.session().selenium().selectWindow("null");	
 		}
-	}
+	}*/
 	
 	public String zGetHtmlBodyText() throws HarnessException {
 		try {
@@ -1026,6 +1031,20 @@ public class PageTasks extends AbsTab {
 			this.sSelectFrame("relative=top");
 		}
 
+	}
+
+	public String zVerifyShowOriginal() throws HarnessException {
+		try{
+		sSelectWindow("name=TaskSource");
+		String ShowOrigBody=sGetBodyText();
+		return ShowOrigBody;
+		}finally{
+			sSelectWindow(null);
+		}
+		
+		
+		// TODO Auto-generated method stub
+		
 	}
 
 }
