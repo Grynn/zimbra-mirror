@@ -3,10 +3,12 @@
 server
 {
     ${core.ipboth.enabled}listen              [::]:${mail.pop3s.port};
-	${core.ipv4only.enabled}listen            ${mail.pop3s.port};
+    ${core.ipv4only.enabled}listen            ${mail.pop3s.port};
     ${core.ipv6only.enabled}listen            [::]:${mail.pop3s.port} ipv6only=on;
     protocol            pop3;
     proxy               on;
+    timeout             ${mail.pop3.timeout};
+    proxy_timeout       ${mail.pop3.proxytimeout};
     ssl                 on;
     ssl_certificate     ${ssl.crt.default};
     ssl_certificate_key ${ssl.key.default};

@@ -1,9 +1,7 @@
 mail
 {
-    # POP/IMAP timeout
-    timeout                     ${mail.timeout};
+    # mail proxy connection timeout
     proxy_ctimeout              ${mail.ctimeout};
-    proxy_timeout               ${mail.timeout};
 
     # pass error messages from the backend server to the client
     # if true, the error messages are passed to the client verbatim, else

@@ -9,6 +9,8 @@ server
     ${core.ipv6only.enabled}listen            ${vip}:${mail.imaps.port} ipv6only=on;
     protocol            imap;
     proxy               on;
+    timeout             ${mail.imap.timeout};
+    proxy_timeout       ${mail.imap.proxytimeout};
     ssl                 on;
     ssl_certificate     ${ssl.crt};
     ssl_certificate_key ${ssl.key};
