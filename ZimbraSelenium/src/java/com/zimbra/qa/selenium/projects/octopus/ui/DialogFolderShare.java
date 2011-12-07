@@ -2,14 +2,15 @@ package com.zimbra.qa.selenium.projects.octopus.ui;
 
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.projects.octopus.ui.PageOctopus.Locators;
 
-public class DialogShare extends AbsDialog {
+public class DialogFolderShare extends AbsDialog {
 	public static class Locators {
 		public static final Locators zShareBtn = new Locators(
 						"css=div[class=share-buttons]>button:contains(Share)");
 		public static final Locators zCancelBtn = new Locators(
 				"css=div[class=share-buttons]>button:contains(Cancel)");
+		public static final Locators zLeaveThisSharedFolderBtn = new Locators(
+				"css=div[class=share-buttons]>button:contains(Leave this shared folder)");
 		public static final Locators zViewInput = new Locators(
 				"css=div[class=octopus-share-item-view]>div[class=permission-input] input[id=DWT1]");
 		public static final Locators zViewAndEditInput = new Locators(
@@ -30,7 +31,7 @@ public class DialogShare extends AbsDialog {
 		}
 	}
 
-	public DialogShare(AbsApplication application, AbsTab page) {
+	public DialogFolderShare(AbsApplication application, AbsTab page) {
 		super(application, page);
 
 		logger.info("new " + DialogMove.class.getCanonicalName());
@@ -58,6 +59,9 @@ public class DialogShare extends AbsDialog {
 		}  else if (button == Button.B_SHOW_MESSAGE) {
 
 			locator = Locators.zShowMessageLink.locator;
+		}  else if (button == Button.B_LEAVE_THIS_SHARED_FOLDER) {
+
+			locator = Locators.zLeaveThisSharedFolderBtn.locator;
 		} else {
 			throw new HarnessException("Button " + button + " not implemented");
 		}

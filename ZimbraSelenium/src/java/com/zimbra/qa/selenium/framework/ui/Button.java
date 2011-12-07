@@ -184,8 +184,10 @@ public class Button {
 	public static final Button B_TAB_MY_FILES = new Button("B_TAB_MY_FILES");
 	public static final Button B_MY_FILES = new Button("B_MY_FILES");
 	public static final Button B_MY_FILES_LIST_ITEM = new Button("B_MY_FILES_LIST_ITEM");
-	public static final Button O_SHARE =  new Button("O_SHARE");
-	public static final Button O_LEAVE_THIS_SHARED_FOLDER =  new Button("O_LEAVE_THIS_SHARED_FOLDER");
+	public static final Button O_FOLDER_SHARE =  new Button("O_FOLDER_SHARE");
+	public static final Button O_FILE_SHARE =  new Button("O_FILE_SHARE");
+	public static final Button B_STOP_SHARING =  new Button("B_STOP_SHARING");
+	public static final Button B_LEAVE_THIS_SHARED_FOLDER =  new Button("O_LEAVE_THIS_SHARED_FOLDER");
 	public static final Button B_SHOW_MESSAGE = new Button("B_SHOW_MESSAGE");
 	
 	public static final Button B_TAB_SHARING = new Button("B_TAB_SHARING");

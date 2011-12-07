@@ -147,7 +147,7 @@ public class PageMyFiles extends AbsTab {
 			// If the app is busy, wait for it to become active
 			zWaitForBusyOverlay();
 
-			if (option == Button.O_LEAVE_THIS_SHARED_FOLDER) {
+			if (option == Button.B_LEAVE_THIS_SHARED_FOLDER) {
 				optionLocator = Locators.zLeaveThisSharedFolder.locator;
 
 				if (!this.zWaitForElementPresent(optionLocator, "2000"))
@@ -160,7 +160,7 @@ public class PageMyFiles extends AbsTab {
 				zWaitForBusyOverlay();
 
 				return page;
-			} else if (option == Button.O_SHARE) {
+			} else if (option == Button.O_FOLDER_SHARE) {
 				optionLocator = Locators.zShareItem.locator;
 
 				if (!this.zWaitForElementPresent(optionLocator, "2000"))
@@ -172,7 +172,24 @@ public class PageMyFiles extends AbsTab {
 				// If the app is busy, wait for it to become active
 				zWaitForBusyOverlay();
 
-				page = new DialogShare(MyApplication, this);
+				page = new DialogFolderShare(MyApplication, this);
+				
+				page.zWaitForActive();
+				
+				return page;
+			} else if (option == Button.O_FILE_SHARE) {
+				optionLocator = Locators.zShareItem.locator;
+
+				if (!this.zWaitForElementPresent(optionLocator, "2000"))
+					throw new HarnessException("Button is not present locator="
+							+ optionLocator);
+
+				this.sClickAt(optionLocator, "0,0");
+
+				// If the app is busy, wait for it to become active
+				zWaitForBusyOverlay();
+
+				page = new DialogFileShare(MyApplication, this);
 				
 				page.zWaitForActive();
 				

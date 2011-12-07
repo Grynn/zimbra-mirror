@@ -11,7 +11,7 @@ import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
-import com.zimbra.qa.selenium.projects.octopus.ui.DialogShare;
+import com.zimbra.qa.selenium.projects.octopus.ui.DialogFolderShare;
 import com.zimbra.qa.selenium.projects.octopus.core.OctopusCommonTest;
 
 public class CreateShare extends OctopusCommonTest {
@@ -133,22 +133,22 @@ public class CreateShare extends OctopusCommonTest {
 		// app.zPageOctopus.zToolbarPressButton(Button.B_TAB_MY_FILES);
 
 		// Owner selects Share option from the Context menu
-		DialogShare dialogShare = (DialogShare) app.zPageMyFiles
+		DialogFolderShare dialogShare = (DialogFolderShare) app.zPageMyFiles
 				.zToolbarPressPulldown(Button.B_MY_FILES_LIST_ITEM,
-						Button.O_SHARE, ownerFoldername);
+						Button.O_FOLDER_SHARE, ownerFoldername);
 
 		// Click on Permissions input field
-		dialogShare.zClick(DialogShare.Locators.zViewAndEditInput);
+		dialogShare.zClick(DialogFolderShare.Locators.zViewAndEditInput);
 
 		// Provide input into Permissions field
-		dialogShare.zTypeInput(DialogShare.Locators.zViewEditAndShareInput,
+		dialogShare.zTypeInput(DialogFolderShare.Locators.zViewEditAndShareInput,
 				granteeAccount.EmailAddress);
 
 		// Click on Show Message link
 		dialogShare.zClickButton(Button.B_SHOW_MESSAGE);
 
 		// Provide input into Message field
-		dialogShare.zTypeInput(DialogShare.Locators.zMessageInput,
+		dialogShare.zTypeInput(DialogFolderShare.Locators.zMessageInput,
 				ownerFoldername);
 
 		// Click on Share button
@@ -157,12 +157,12 @@ public class CreateShare extends OctopusCommonTest {
 		SleepUtil.sleepSmall();
 
 		// Select Share option from the Context menu
-		dialogShare = (DialogShare) app.zPageMyFiles.zToolbarPressPulldown(
-				Button.B_MY_FILES_LIST_ITEM, Button.O_SHARE, ownerFoldername);
+		dialogShare = (DialogFolderShare) app.zPageMyFiles.zToolbarPressPulldown(
+				Button.B_MY_FILES_LIST_ITEM, Button.O_FOLDER_SHARE, ownerFoldername);
 
 		// Verify the Share Info appears in the Dialog
 		ZAssert.assertTrue(app.zPageSharing.zWaitForElementPresent(
-				DialogShare.Locators.zShareInfoField.locator + ":contains("
+				DialogFolderShare.Locators.zShareInfoField.locator + ":contains("
 						+ granteeAccount.EmailAddress + ")", "5000"),
 				"Verify Share Info appears in the Dialog");
 

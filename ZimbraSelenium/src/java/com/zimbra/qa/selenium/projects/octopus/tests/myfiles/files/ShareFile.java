@@ -7,15 +7,25 @@ import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
-import com.zimbra.qa.selenium.projects.octopus.core.OctopusCommonTest;
+import com.zimbra.qa.selenium.projects.octopus.ui.DialogFileShare;
 import com.zimbra.qa.selenium.projects.octopus.ui.PageTrash;
+import com.zimbra.qa.selenium.projects.octopus.core.OctopusCommonTest;
+import com.zimbra.qa.selenium.projects.octopus.ui.PageMyFiles;
 
-public class UploadFile extends OctopusCommonTest {
+public class ShareFile extends OctopusCommonTest {
 
 	private boolean _folderIsCreated = false;
 	private String _folderName = null;
 	private boolean _fileAttached = false;
 	private String _fileId = null;
+
+	public ShareFile() {
+		logger.info("New " + ShareFile.class.getCanonicalName());
+
+		// test starts at the My Files tab
+		super.startingPage = app.zPageMyFiles;
+		super.startingAccountPreferences = null;
+	}
 
 	@BeforeMethod(groups = { "always" })
 	public void testReset() {
@@ -25,16 +35,8 @@ public class UploadFile extends OctopusCommonTest {
 		_fileAttached = false;
 	}
 
-	public UploadFile() {
-		logger.info("New " + UploadFile.class.getCanonicalName());
-
-		// test starts at the My Files tab
-		super.startingPage = app.zPageMyFiles;
-		super.startingAccountPreferences = null;
-	}
-
-	@Test(description = "Upload file through RestUtil - verify file through SOAP", groups = { "sanity" })
-	public void UploadFile_01() throws HarnessException {
+	@Test(description = "Share file using soap - verify file is shared", groups = { "sanity" })
+	public void ShareFile_01() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 
 		FolderItem briefcaseRootFolder = FolderItem.importFromSOAP(account,
@@ -42,16 +44,12 @@ public class UploadFile extends OctopusCommonTest {
 
 		// Create file item
 		String filePath = ZimbraSeleniumProperties.getBaseDirectory()
-				+ "/data/public/other/testpptfile.ppt";
-
-		FileItem fileItem = new FileItem(filePath);
-		
-		String fileName = fileItem.getName();
+				+ "/data/public/other/putty.log";
 
 		// Upload file to server through RestUtil
 		String attachmentId = account.uploadFile(filePath);
 
-		// Save uploaded file to briefcase through SOAP
+		// Save uploaded file to the root folder through SOAP
 		account.soapSend("<SaveDocumentRequest xmlns='urn:zimbraMail'>"
 				+ "<doc l='" + briefcaseRootFolder.getId() + "'><upload id='"
 				+ attachmentId + "'/></doc></SaveDocumentRequest>");
@@ -59,15 +57,28 @@ public class UploadFile extends OctopusCommonTest {
 		_fileAttached = true;
 		_fileId = account.soapSelectValue(
 				"//mail:SaveDocumentResponse//mail:doc", "id");
-		String name = account.soapSelectValue(
-				"//mail:SaveDocumentResponse//mail:doc", "name");
 
 		// verify the file is uploaded
-		ZAssert.assertEquals(fileName, name, "Verify file is uploaded");
+		ZAssert.assertNotNull(_fileId, "Verify file is uploaded");
+
+		// Share file through SOAP
+		account.soapSend("<DocumentActionRequest xmlns='urn:zimbraMail'>"
+				+ "<action id='" + _fileId + "' op='grant' zid='"
+				+ account.ZimbraId + "'>" + "<grant gt='pub' perm='r'/>"
+				+ "</action>" + "</DocumentActionRequest>");
+
+		account.soapSend("<GetShareNotificationsRequest xmlns='urn:zimbraMail'>"
+				+ "</GetShareNotificationsRequest>");
+
+		// Verify the file share icon is displayed
+		ZAssert.assertTrue(app.zPageMyFiles.zWaitForElementPresent(
+				PageMyFiles.Locators.zMyFilesListViewItems.locator
+						+ " img[src*=shared_badge.png]", "3000"),
+				"Verify the file share icon is displayed");
 	}
 
-	@Test(description = "Upload file through RestUtil - verify file in My Files List view", groups = { "smoke" })
-	public void UploadFile_02() throws HarnessException {
+	@Test(description = "Share file using context menu - verify file is shared", groups = { "smoke" })
+	public void ShareFile_02() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 
 		FolderItem briefcaseRootFolder = FolderItem.importFromSOAP(account,
@@ -75,7 +86,7 @@ public class UploadFile extends OctopusCommonTest {
 
 		// Create file item
 		String filePath = ZimbraSeleniumProperties.getBaseDirectory()
-				+ "/data/public/other/samplejpg.jpg";
+				+ "/data/public/other/testsoundfile.wav";
 
 		FileItem file = new FileItem(filePath);
 
@@ -85,24 +96,32 @@ public class UploadFile extends OctopusCommonTest {
 		String attachmentId = account.uploadFile(filePath);
 
 		// Save uploaded file to the root folder through SOAP
-		account.soapSend(
-
-		"<SaveDocumentRequest xmlns='urn:zimbraMail'>" + "<doc l='"
+		account.soapSend("<SaveDocumentRequest xmlns='urn:zimbraMail'><doc l='"
 				+ briefcaseRootFolder.getId() + "'>" + "<upload id='"
-				+ attachmentId + "'/>" + "</doc></SaveDocumentRequest>");
-
-		// account.soapSelectNode("//mail:SaveDocumentResponse", 1);
+				+ attachmentId + "'/></doc></SaveDocumentRequest>");
 
 		_fileAttached = true;
 		_fileId = account.soapSelectValue(
 				"//mail:SaveDocumentResponse//mail:doc", "id");
 
-		// Click on My Files tab
-		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_MY_FILES);
+		// verify the file is uploaded
+		ZAssert.assertNotNull(_fileId, "Verify file is uploaded");
 
-		// Verify file appears in My Files list view
-		ZAssert.assertTrue(app.zPageOctopus.zIsItemInCurentListView(fileName),
-				"Verify file appears in the list view");
+		// Click on Share option in the file Context menu
+		DialogFileShare dialogFileShare = (DialogFileShare) app.zPageMyFiles
+				.zToolbarPressPulldown(Button.B_MY_FILES_LIST_ITEM,
+						Button.O_FILE_SHARE, fileName);
+
+		// Click on Close button
+		dialogFileShare.zClickButton(Button.B_CLOSE);
+
+		// Verify the file share icon is displayed
+		ZAssert.assertTrue(app.zPageMyFiles.zWaitForElementPresent(
+				PageMyFiles.Locators.zMyFilesListViewItems.locator
+						+ " img[src*=shared_badge.png]", "3000"),
+				"Verify the file share icon is displayed");
+
+
 	}
 
 	@AfterMethod(groups = { "always" })
@@ -135,9 +154,10 @@ public class UploadFile extends OctopusCommonTest {
 		}
 		try {
 			// click on Trash tab to move out from the current view
-			PageTrash pageTrash = (PageTrash) app.zPageOctopus.zToolbarPressButton(Button.B_TAB_TRASH);
-			
-			//Empty trash
+			PageTrash pageTrash = (PageTrash) app.zPageOctopus
+					.zToolbarPressButton(Button.B_TAB_TRASH);
+
+			// Empty trash
 			pageTrash.emptyTrashUsingSOAP(app.zGetActiveAccount());
 		} catch (Exception e) {
 			logger.info("Failed while opening Trash tab");

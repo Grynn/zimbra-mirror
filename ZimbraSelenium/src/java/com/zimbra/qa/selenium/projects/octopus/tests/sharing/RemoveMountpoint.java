@@ -11,8 +11,8 @@ import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.octopus.core.OctopusCommonTest;
+import com.zimbra.qa.selenium.projects.octopus.ui.DialogFolderShare;
 import com.zimbra.qa.selenium.projects.octopus.ui.PageMyFiles;
-import com.zimbra.qa.selenium.projects.octopus.ui.PageSharing;
 
 public class RemoveMountpoint extends OctopusCommonTest {
 
@@ -88,9 +88,13 @@ public class RemoveMountpoint extends OctopusCommonTest {
 
 		SleepUtil.sleepVerySmall();
 
-		// Remove the mountpoint folder using drop down list option
-		app.zPageMyFiles.zToolbarPressPulldown(Button.B_MY_FILES_LIST_ITEM,
-				Button.O_LEAVE_THIS_SHARED_FOLDER, folderMountpointName);
+		// Select Share option from the Context menu
+		DialogFolderShare dialogShare = (DialogFolderShare) app.zPageMyFiles
+				.zToolbarPressPulldown(Button.B_MY_FILES_LIST_ITEM,
+						Button.O_FOLDER_SHARE, folderMountpointName);
+
+		// Click on Leave This shared folder button
+		dialogShare.zClickButton(Button.B_LEAVE_THIS_SHARED_FOLDER);
 
 		// Verify the mountpoint folder disappears from My Files tab
 		ZAssert.assertTrue(app.zPageMyFiles.zWaitForElementDeleted(
@@ -131,6 +135,19 @@ public class RemoveMountpoint extends OctopusCommonTest {
 				+ "' gt='usr' perm='r'/>" + "</action>"
 				+ "</FolderActionRequest>");
 
+		ownerAccount
+		.soapSend("<SendShareNotificationRequest xmlns='urn:zimbraMail'>"
+				+ "<share l='"
+				+ ownerFolder.getId()
+				+ "' gt='usr'"
+				+ " zid='"
+				+ currentAccount.ZimbraId
+				+ "'"
+				+ " name='"
+				+ currentAccount.EmailAddress
+				+ "'/>"
+				+ "</SendShareNotificationRequest>");
+
 		// Current user creates the mountpoint that points to the share
 		FolderItem currentAccountRootFolder = FolderItem.importFromSOAP(
 				currentAccount, SystemFolder.Briefcase);
@@ -153,25 +170,20 @@ public class RemoveMountpoint extends OctopusCommonTest {
 				"Verify the mountpoint is available");
 
 		// click on Sharing tab
-		 app.zPageOctopus
-				.zToolbarPressButton(Button.B_TAB_SHARING);
+		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_SHARING);
 
-		// Verify the mount-point appears in the Sharing List View
-		ZAssert.assertTrue(app.zPageSharing.zWaitForElementPresent(
-				PageSharing.Locators.zSharedItemsView.locator + ":contains("
-						+ folderMountpointItem.getName() + ")", "3000"),
-				"Verify item appears in the Shared Items List View");
-
-		SleepUtil.sleepSmall();
-		
 		// Open My Files page
 		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_MY_FILES);
 
 		SleepUtil.sleepVerySmall();
 
-		// Remove the mountpoint folder using drop down list option
-		app.zPageMyFiles.zToolbarPressPulldown(Button.B_MY_FILES_LIST_ITEM,
-				Button.O_LEAVE_THIS_SHARED_FOLDER, folderMountpointName);
+		// Select Share option from the Context menu
+		DialogFolderShare dialogShare = (DialogFolderShare) app.zPageMyFiles
+				.zToolbarPressPulldown(Button.B_MY_FILES_LIST_ITEM,
+						Button.O_FOLDER_SHARE, folderMountpointName);
+
+		// Click on Leave This shared folder button
+		dialogShare.zClickButton(Button.B_LEAVE_THIS_SHARED_FOLDER);
 
 		// Verify the mountpoint folder disappears from My Files tab
 		ZAssert.assertTrue(app.zPageMyFiles.zWaitForElementDeleted(
@@ -180,16 +192,15 @@ public class RemoveMountpoint extends OctopusCommonTest {
 				"Verify mountpoint folder disappears from My Files tab");
 
 		// click on Sharing tab
-		app.zPageOctopus
-				.zToolbarPressButton(Button.B_TAB_SHARING);
+		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_SHARING);
 
 		// Verify the removed mount point appears in the Ignored Items List View
 		// temporary disable assertion until feature is implemented
-		/*		
-		ZAssert.assertTrue(app.zPageSharing.zWaitForElementPresent(
-				PageSharing.Locators.zIgnoredItemsView.locator + ":contains("
-						+ folderMountpointItem.getName() + ")", "5000"),
-				"Verify removed mount point appears in the Ignored Items List View");
-		*/
+		/*
+		 * ZAssert.assertTrue(app.zPageSharing.zWaitForElementPresent(
+		 * PageSharing.Locators.zIgnoredItemsView.locator + ":contains(" +
+		 * folderMountpointItem.getName() + ")", "5000"),
+		 * "Verify removed mount point appears in the Ignored Items List View");
+		 */
 	}
 }

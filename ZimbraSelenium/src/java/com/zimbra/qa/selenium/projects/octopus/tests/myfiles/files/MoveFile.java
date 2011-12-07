@@ -173,7 +173,7 @@ public class MoveFile extends OctopusCommonTest {
 		// Verify the moved file disappears from My Files tab
 		ZAssert.assertTrue(app.zPageMyFiles.zWaitForElementDeleted(
 				PageMyFiles.Locators.zMyFilesListView.locator + ":contains("
-						+ fileName + ")", "3000"),
+						+ fileName + ")", "5000"),
 				"Verify the moved file disappears from My Files tab");
 
 		// click on sub-folder
