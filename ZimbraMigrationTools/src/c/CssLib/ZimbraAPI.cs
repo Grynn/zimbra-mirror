@@ -1142,6 +1142,7 @@ public class ZimbraAPI
                 writer.WriteAttributeString("a",    tokens.GetValue(i + 1).ToString());
                 writer.WriteAttributeString("role", tokens.GetValue(i + 2).ToString());
                 writer.WriteAttributeString("ptst", tokens.GetValue(i + 3).ToString());
+                writer.WriteEndElement();
             }
         }
 
