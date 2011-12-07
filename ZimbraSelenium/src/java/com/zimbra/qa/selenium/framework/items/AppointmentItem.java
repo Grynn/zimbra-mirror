@@ -625,6 +625,14 @@ public static AppointmentItem importFromSOAP(Element GetAppointmentResponse) thr
 		gIsAllDay = allDay;
 	}
 
+	public void setGStatus(String status) {
+		gStatus = status;
+	}
+
+	public String getGStatus() {
+		return (gStatus);
+	}
+
 
 	/**
 	 * Create a single-day appointment on the server

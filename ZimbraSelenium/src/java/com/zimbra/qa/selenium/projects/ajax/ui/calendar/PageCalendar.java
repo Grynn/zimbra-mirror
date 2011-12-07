@@ -1097,10 +1097,19 @@ public class PageCalendar extends AbsTab {
 
 
 		// What is the location
-		// TODO: see http://bugzilla.zimbra.com/show_bug.cgi?id=63883
+		locator = rowLocator + " td[id$='__lo']";
+		if ( this.sIsElementPresent(locator) ) {
+			String location = this.sGetText(locator).trim();
+			item.setGLocation(location);
+		}
+		
 
 		// What is the status
-		// TODO: see http://bugzilla.zimbra.com/show_bug.cgi?id=63883
+		locator = rowLocator + " span[id$='__st']";
+		if ( this.sIsElementPresent(locator) ) {
+			String status = this.sGetText(locator).trim();
+			item.setGStatus(status);
+		}
 
 		// What calendar is it in
 		// TODO

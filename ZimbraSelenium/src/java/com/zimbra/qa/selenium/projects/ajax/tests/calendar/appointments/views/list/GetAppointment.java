@@ -137,7 +137,7 @@ public class GetAppointment extends AjaxCommonTest {
 		
 	    ZAssert.assertEquals(found.getGSubject(), subject, "Verify the appointment subject");
 	    ZAssert.assertStringContains(found.getGFragment(), content, "Verify the appointment fragment");
-	    ZAssert.assertEquals(found.getLocation(), location, "Verify the appointment location");
+	    ZAssert.assertEquals(found.getGLocation(), location, "Verify the appointment location");
 	    // TODO: need to determine how to convert the date to locale
 	    // ZAssert.assertEquals(found.getGStartDate(), subject, "Verify the appointment subject");
 
