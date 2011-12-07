@@ -1392,22 +1392,24 @@ public class InitialSync {
                     redo2 = new SaveDraft(ombx.getId(), id, digest, size);
                 }
                 redo2.start(received * 1000L);
-                ombx.lock.lock();
-                try  {
-                    int change_mask = ombx.getChangeMask(sContext, id, type);
-                    if ((change_mask & Change.CONTENT) == 0) {
-                        if (type == MailItem.Type.CHAT) {
-                            ombx.updateChat(new TracelessContext(redo2), pm, id);
+                synchronized (ombx.getOfflineSaveDraftGuard()) {
+                    ombx.lock.lock();
+                    try  {
+                        int change_mask = ombx.getChangeMask(sContext, id, type);
+                        if ((change_mask & Change.CONTENT) == 0) {
+                            if (type == MailItem.Type.CHAT) {
+                                ombx.updateChat(new TracelessContext(redo2), pm, id);
+                            } else {
+                                ombx.saveDraft(new TracelessContext(redo2), pm, id, null, null, null, null, draftInfo != null ? draftInfo.autoSendTime : 0);
+                            }
+                            OfflineLog.offline.debug("initial: updated " + type + " content (" + id + "): " + msg.getSubject());
                         } else {
-                            ombx.saveDraft(new TracelessContext(redo2), pm, id, null, null, null, null, draftInfo != null ? draftInfo.autoSendTime : 0);
+                            OfflineLog.offline.debug("initial: %s %d (%s) content updated locally, will overwrite remote change",
+                                    type, id, msg.getSubject());
                         }
-                        OfflineLog.offline.debug("initial: updated " + type + " content (" + id + "): " + msg.getSubject());
-                    } else {
-                        OfflineLog.offline.debug("initial: %s %d (%s) content updated locally, will overwrite remote change",
-                                type, id, msg.getSubject());
-                    }
-                } finally {
-                    ombx.lock.release();
+                    } finally {
+                        ombx.lock.release();
+                    }    
                 }
             }
         } catch (MailServiceException.NoSuchItemException nsie) {

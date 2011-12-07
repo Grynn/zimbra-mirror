@@ -53,6 +53,7 @@ import com.zimbra.cs.mailbox.MailItem.TargetConstraint;
 import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
 import com.zimbra.cs.mailbox.calendar.Invite;
 import com.zimbra.cs.mailbox.util.TypedIdList;
+import com.zimbra.cs.mime.ParsedMessage;
 import com.zimbra.cs.offline.Offline;
 import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
@@ -849,5 +850,31 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
 
     public boolean isRunInitSync() {
         return runInitSync;
+    }
+
+    /**
+     * Ensure whoever calls saveDraft, it grabs this lock first, to avoid the deadlock situation such like OfflineSendMail 
+     * and InitialSync using opposite order to acquire Mailbox lock and the saveDraft lock introduced for bug 59287.
+     * remove this synchronization after bug 59287 is fixed.
+     */
+    private final Object offlineSaveDraftGuard = new Object();
+
+    Object getOfflineSaveDraftGuard() {
+        return this.offlineSaveDraftGuard;
+    }
+
+    @Override
+    public Message saveDraft(OperationContext octxt, ParsedMessage pm, int id) throws IOException, ServiceException {
+        synchronized (offlineSaveDraftGuard) {
+            return super.saveDraft(octxt, pm, id);
+        }
+    }
+
+    @Override
+    public Message saveDraft(OperationContext octxt, ParsedMessage pm, int id, String origId, String replyType,
+            String identityId, String accountId, long autoSendTime) throws IOException, ServiceException {
+        synchronized (offlineSaveDraftGuard) {
+            return super.saveDraft(octxt, pm, id, origId, replyType, identityId, accountId, autoSendTime);
+        }
     }
 }
