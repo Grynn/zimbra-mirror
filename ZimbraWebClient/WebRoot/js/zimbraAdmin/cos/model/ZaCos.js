@@ -65,6 +65,7 @@ ZaCos.A_zimbraAvailableSkin = "zimbraAvailableSkin";
 ZaCos.A_zimbraZimletAvailableZimlets = "zimbraZimletAvailableZimlets";
 ZaCos.A_zimbraMailForwardingAddressMaxLength = "zimbraMailForwardingAddressMaxLength";
 ZaCos.A_zimbraMailForwardingAddressMaxNumAddrs = "zimbraMailForwardingAddressMaxNumAddrs";
+ZaCos.A_zimbraPrefItemsPerVirtualPage="zimbraPrefItemsPerVirtualPage",
 
 ZaCos.A_zimbraDataSourceMinPollingInterval = "zimbraDataSourceMinPollingInterval";
 ZaCos.A_zimbraDataSourcePop3PollingInterval = "zimbraDataSourcePop3PollingInterval";
@@ -596,6 +597,7 @@ ZaCos.myXModel = {
         {id:ZaCos.A_zimbraMailMinPollingInterval, type:_MLIFETIME_, ref:"attrs/"+ZaCos.A_zimbraMailMinPollingInterval},
         {id:ZaCos.A_zimbraMailMessageLifetime, type:_MLIFETIME_, ref:"attrs/"+ZaCos.A_zimbraMailMessageLifetime},
         {id:ZaCos.A_zimbraMailTrashLifetime, type:_MLIFETIME_, ref:"attrs/"+ZaCos.A_zimbraMailTrashLifetime},
+        {id:ZaCos.A_zimbraPrefItemsPerVirtualPage, type:__NUMBER__, ref:"attrs/"+ZaCos.A_zimbraPrefItemsPerVirtualPage},
         {id:ZaCos.A_zimbraMailSpamLifetime, type:_MLIFETIME_, ref:"attrs/"+ZaCos.A_zimbraMailSpamLifetime},
 
         {id:ZaCos.A_zimbraQuotaWarnPercent, type:_NUMBER_, ref:"attrs/" + ZaCos.A_zimbraQuotaWarnPercent},

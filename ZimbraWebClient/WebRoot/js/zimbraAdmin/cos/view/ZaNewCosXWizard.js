@@ -770,7 +770,8 @@ ZaNewCosXWizard.myXFormModifier = function(xFormObject, entry) {
 						ZaCos.A_zimbraPrefDisplayExternalImages,
 						ZaCos.A_zimbraPrefGroupMailBy,
 						ZaCos.A_zimbraPrefMailDefaultCharset,
-						ZaCos.A_zimbraPrefCalendarToasterEnabled
+						ZaCos.A_zimbraPrefCalendarToasterEnabled,
+                                                ZaCos.A_zimbraPrefItemsPerVirtualPage
 					]]
 				],
                 items :[
@@ -801,6 +802,12 @@ ZaNewCosXWizard.myXFormModifier = function(xFormObject, entry) {
                     msgName:ZaMsg.LBL_zimbraPrefMessageIdDedupingEnabled,
                     label:ZaMsg.LBL_zimbraPrefMessageIdDedupingEnabled,
                     trueValue:"TRUE", falseValue:"FALSE"
+                },
+                {ref:ZaCos.A_zimbraPrefItemsPerVirtualPage,
+                type:_TEXTFIELD_, colSizes:["200px","*"],colSpan:2,
+                msgName:ZaMsg.LBL_zimbraPrefItemsPerVirtualPage,
+                txtBoxLabel:ZaMsg.LBL_zimbraPrefItemsPerVirtualPage,
+                labelLocation:_LEFT_
                 }
 
             ]},

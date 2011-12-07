@@ -1389,7 +1389,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 		}			
 		if(ZAWizTopGrouper_XFormItem.isGroupVisible(entry,[ZaAccount.A_zimbraPrefMessageViewHtmlPreferred,ZaAccount.A_zimbraPrefDisplayExternalImages,ZaAccount.A_zimbraPrefMailToasterEnabled,
             ZaAccount.A_zimbraPrefMessageIdDedupingEnabled,
-			ZaAccount.A_zimbraPrefGroupMailBy,ZaAccount.A_zimbraPrefMailDefaultCharset],[])) {				
+			ZaAccount.A_zimbraPrefGroupMailBy,ZaAccount.A_zimbraPrefMailDefaultCharset,ZaAccount.A_zimbraPrefItemsPerVirtualPage],[])) {				
 
 			prefItems.push({type:_ZAWIZ_TOP_GROUPER_, id:"account_prefs_mail_general",
                             label:ZaMsg.NAD_MailOptions,
@@ -1430,7 +1430,16 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
                                         resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
                                         msgName:ZaMsg.MSG_zimbraPrefMessageIdDedupingEnabled,
                                         checkBoxLabel:ZaMsg.LBL_zimbraPrefMessageIdDedupingEnabled,
-                                        trueValue:"TRUE", falseValue:"FALSE"}
+                                        trueValue:"TRUE", falseValue:"FALSE"},
+{ref:ZaAccount.A_zimbraPrefItemsPerVirtualPage,
+         type:_SUPERWIZ_TEXTFIELD_,
+         colSizes:["200px", "*"],	colSpan:2,nowrap:false,labelWrap:true,
+         resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
+         msgName:ZaMsg.LBL_zimbraPrefItemsPerVirtualPage,
+         txtBoxLabel:ZaMsg.LBL_zimbraPrefItemsPerVirtualPage      
+ 
+}
+
                                 ]
 						});
 		}

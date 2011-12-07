@@ -2260,7 +2260,8 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 									ZaAccount.A_zimbraPrefGroupMailBy,
 									ZaAccount.A_zimbraPrefMailDefaultCharset,
 									ZaAccount.A_zimbraPrefMailToasterEnabled,
-                                    ZaAccount.A_zimbraPrefMessageIdDedupingEnabled
+                                    ZaAccount.A_zimbraPrefMessageIdDedupingEnabled,
+                                    ZaAccount.A_zimbraPrefItemsPerVirtualPage,
 								]]
 							],
 							items :[
@@ -2303,7 +2304,14 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
                                     resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
                                     msgName:ZaMsg.MSG_zimbraPrefMessageIdDedupingEnabled,
                                     checkBoxLabel:ZaMsg.LBL_zimbraPrefMessageIdDedupingEnabled,
-                                    trueValue:"TRUE", falseValue:"FALSE"}
+                                    trueValue:"TRUE", falseValue:"FALSE"},
+                                {ref:ZaAccount.A_zimbraPrefItemsPerVirtualPage, type:_SUPER_TEXTFIELD_,
+                                     colSizes:["275px", "275px", "*"], 
+				     msgName:ZaMsg.LBL_zimbraPrefItemsPerVirtualPage,
+                                     txtBoxLabel:ZaMsg.LBL_zimbraPrefItemsPerVirtualPage, 
+				     labelLocation:_LEFT_,
+resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
+textFieldCssClass:"admin_xform_number_input"}
 							]
 						},
 						{type:_ZA_TOP_GROUPER_,colSizes:["275px","100%"], id:"account_prefs_mail_receiving", numCols: 2,
