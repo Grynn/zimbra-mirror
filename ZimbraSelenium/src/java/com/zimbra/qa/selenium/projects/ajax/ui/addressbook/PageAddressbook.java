@@ -362,13 +362,12 @@ public class PageAddressbook extends AbsTab {
 		    
 		   locator = "id="+ id;
 		   page = new DialogMove(MyApplication, this);
-	    } else if ( button == Button.B_FORWARD) {
-		    String id = "zb__CNS-main__SEND_CONTACTS_IN_EMAIL";
-	
-		    if (zIsElementDisabled("css=div#" + id)) {
+	    } else if ( button == Button.B_FORWARD) {		 
+			locator = "css=div[id^=zb__CN-][id$=__SEND_CONTACTS_IN_EMAIL]";
+
+		    if (zIsElementDisabled(locator)) {
 				throw new HarnessException("Tried clicking on "+ button +" but it was disabled ");
 			}
-		   locator = "id="+ id;
 		   page = new FormMailNew(MyApplication);	
 		   
 	    } else if ( button == Button.B_CANCEL) {
@@ -531,7 +530,7 @@ public class PageAddressbook extends AbsTab {
 	      } else if ( option == Button.O_TAG_REMOVETAG ) {
 						
 	    	 pulldownLocator = "css=td#zb__CNS-main__TAG_MENU_dropdown div.ImgSelectPullDownArrow";
-		     optionLocator = "css=div[id='zb__CNS-main__TAG_MENU|MENU'] div[id='contacts_removetag'] td[id='contacts_removetag_title']"; 
+		     optionLocator = "css=div[id='zb__CNS-main__TAG_MENU|MENU'] div[id^=contacts_removetag] td.ZWidgetTitle"; 
 			 page = null;
 			
 			
