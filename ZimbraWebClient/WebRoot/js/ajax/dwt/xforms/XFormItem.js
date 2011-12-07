@@ -2318,9 +2318,9 @@ Checkbox_XFormItem.prototype.visibilityChecks = [XFormItem.prototype.hasReadPerm
 Checkbox_XFormItem.prototype.enableDisableChecks = [XFormItem.prototype.hasWritePermission];
 Checkbox_XFormItem.prototype.nowrap = false;
 Checkbox_XFormItem.prototype.labelWrap = true;
-if (appNewUI) {
-    Checkbox_XFormItem.prototype.subLabel = ZaMsg.CaptionEnabled;
-}
+//if (appNewUI) {
+   // Checkbox_XFormItem.prototype.subLabel = ZaMsg.CaptionEnabled;
+//}
 //	methods
 Checkbox_XFormItem.prototype.outputHTML = function (html, currentCol) {
 	// figure out how to show the checkbox as checked or not
@@ -2374,7 +2374,7 @@ Checkbox_XFormItem.prototype.getElementValueGetterHTML = function () {
 }
 
 
-if (appNewUI) {
+if (appNewUI) {  //   bug66133,for some particular places, subLabel need
     Checkbox_XFormItem.prototype.outputContainerTDEndHTML = function (html) {
         var tdLabel = this.getInheritedProperty("subLabel");
         if (AjxUtil.isEmpty(tdLabel)) {
