@@ -33,6 +33,9 @@ var GTranslatorZimlet = com_zimbra_gtranslator_HandlerObject;
 
 GTranslatorZimlet.prototype.init =
 function() {
+	this.isZimbra8 = appCtxt.getSettings().getInfoResponse.version.indexOf("8") == 0;
+	this.googleTranslateApiKey = this.getConfig("GOOGLE_TRANSLATE_API_KEY");
+
 	if(this._zimletContext._isToolbarClosed == undefined) {
 		this._zimletContext._isToolbarClosed = true;
 		this._zimletContext._alreadyUsed = false;
@@ -45,7 +48,14 @@ function() {
  */
 GTranslatorZimlet.prototype.initializeToolbar =
 function(app, toolbar, controller, view) {
-	if (view == ZmId.VIEW_CONVLIST || view == ZmId.VIEW_CONV || view == ZmId.VIEW_TRAD) {
+	var addToolbarButton = false;
+	if (!this.isZimbra8 && !toolbar.getOp("GOOGLE_TRANSLATOR") && (view == ZmId.VIEW_CONVLIST || view == ZmId.VIEW_CONV || view == ZmId.VIEW_TRAD)) {
+		addToolbarButton = true;
+	} else if(this.isZimbra8 && !toolbar.getOp("GOOGLE_TRANSLATOR") && (view.indexOf(ZmId.VIEW_CONV) == 0 || view.indexOf(ZmId.VIEW_MSG) == 0)) {
+	    //in zcs 8, we only support conv-view and msg-view i.e. no support for gmail-like view
+		addToolbarButton = true;
+	}
+	if(addToolbarButton) {
 		var buttonIndex = -1;
 		for (var i = 0, count = toolbar.opList.length; i < count; i++) {
 			if (toolbar.opList[i] == ZmOperation.PRINT) {
@@ -128,7 +138,7 @@ function(controller) {
 			this.srcMsgObj = this.srcMsgObj.getFirstHotMsg();
 		}
 		this._toLanguage = this._getUserToLanguage();
-		if (google && google.language) {
+		if (this._languagesList) {
 			this._translateMsg();
 		} else {
 			var callback = new AjxCallback(this, this._translateMsg);
@@ -136,6 +146,8 @@ function(controller) {
 		}
 	}
 };
+
+
 /**
  * Returns user's locale
  * @return {String} User's locale
@@ -168,12 +180,19 @@ function() {
 	this._dataChunksToTranslate = [];
 	this._dataChunksTranslated = [];
 	this._dataChunkIndex = 0;
-	if (!this._fromLanguage) {
-		this._langPair = "|" + this._toLanguage;
-	} else {
-		this._langPair = this._fromLanguage + "|" + this._toLanguage;
+	//replace zh_cn to zh-cn(google's format)
+	var toLanguage = AjxStringUtil.urlComponentEncode(this._toLanguage.replace(/_/, "-"));
+	var fromLanguage;
+	if(this._fromLanguage) {
+		 fromLanguage = AjxStringUtil.urlComponentEncode(this._fromLanguage.replace(/_/, "-"));
 	}
-	this._langPair = this._langPair.replace(/_/, "-");//replace zh_cn to zh-cn(google's format)
+
+	if (!this._fromLanguage) {
+		this._langPair = "&target=" + toLanguage;
+	} else {
+		this._langPair = "&source=" + fromLanguage + "&target=" + toLanguage;
+	}
+
 	this._splitTo4900Chunks(bodyContent);
 	this._makeRequest();
 };
@@ -238,16 +257,16 @@ GTranslatorZimlet.prototype._makeRequest =
 function() {
 	var reqParams = [];
 	var i = 0;
-
 	var text = this._dataChunksToTranslate[this._dataChunkIndex];
 	// params for google translator
 	reqParams[i++] = "q=";
-	reqParams[i++] = AjxStringUtil.urlEncode(text);
-	reqParams[i++] = "&langpair=";
-	reqParams[i++] = AjxStringUtil.urlEncode(this._langPair || "en|de");
-	reqParams[i++] = "&hl=en&v=1.0&format=text";
-	var reqHeader = { "User-Agent": navigator.userAgent, "Content-Type": "application/x-www-form-urlencoded", "Referrer": "http://translate.google.com/translate_t" };
-	var url = ZmZimletBase.PROXY + AjxStringUtil.urlEncode("http://ajax.googleapis.com/ajax/services/language/translate");
+	reqParams[i++] = AjxStringUtil.urlComponentEncode(text);
+	reqParams[i++] =  this._langPair;
+	reqParams[i++] =  "&key=";
+	reqParams[i++] = AjxStringUtil.urlComponentEncode(this.googleTranslateApiKey);
+	reqParams[i++] =  "&format=text&prettyprint=true";
+	var reqHeader = { "X-HTTP-Method-Override" : "GET", "Content-Type": "application/x-www-form-urlencoded", "Referrer": "http://www.zimbra.com" };
+	var url = ZmZimletBase.PROXY + AjxStringUtil.urlEncode("https://www.googleapis.com/language/translate/v2");
 
 	AjxRpc.invoke(reqParams.join(""), url, reqHeader, new AjxCallback(this, this._translationHandler));
 };
@@ -264,13 +283,14 @@ function(result) {
 	}
 
 	var jsonObj = eval("(" + result.text + ")");
-	if (jsonObj.responseStatus == 400) {
+
+	var translateDataObj = jsonObj.data && jsonObj.data.translations && (jsonObj.data.translations instanceof Array) ? jsonObj.data.translations[0] : null;
+	if(translateDataObj) {
+		this._dataChunksTranslated.push(translateDataObj.translatedText);
+	} else {
 		this._errMsg = [this.getMessage("GTranslatorZimlet_manuallyTranslate"), "<br/>",  jsonObj.responseDetails].join("");
 		this.displayErrorMessage(this._errMsg, null, this.getMessage("GTranslatorZimlet_zimletError"));
-		this._manualTranslationRequired = true;
-	}
-	if(jsonObj.responseData && jsonObj.responseData.translatedText) {
-		this._dataChunksTranslated.push(jsonObj.responseData.translatedText);
+		return;
 	}
 
 	if (!this._manualTranslationRequired && this._dataChunksTranslated.length < this._dataChunksToTranslate.length) {
@@ -278,11 +298,10 @@ function(result) {
 		this._makeRequest();
 		return;
 	}
-	if (jsonObj.responseData && jsonObj.responseData.detectedSourceLanguage) {
-		this._fromLanguage = jsonObj.responseData.detectedSourceLanguage;
+	if (translateDataObj && translateDataObj.detectedSourceLanguage) {
+		this._fromLanguage = translateDataObj.detectedSourceLanguage;
 	}
 	var allTranslatedData = this._dataChunksTranslated.join(" ");
-
 	if (!this._oldMsgId || this._oldMsgId != this.srcMsgObj.id ||
 	!document.getElementById(this._frame.id)) {
 		this._initializeGTranslatorToolbar();
@@ -340,7 +359,13 @@ function(data) {
 GTranslatorZimlet.prototype._initializeGTranslatorToolbar =
 function() {
 	var viewId = appCtxt.getCurrentViewId();
-	var id = "zv__" + viewId + "__MSG_body";
+	var id;
+	if(this.isZimbra8) {
+		id = "zv__" + viewId + "__MSG__body";
+	} else {
+		id = "zv__" + viewId + "__MSG_body";
+	}
+
 	this._currentMsgBody = document.getElementById(id);
 	if (!this._currentMsgBody) {
 		this.displayErrorMessage(this.getMessage("GTranslatorZimlet_couldNotGrabBody"), null, this.getMessage("GTranslatorZimlet_zimletError"));
@@ -525,13 +550,10 @@ function(action) {
  */
 GTranslatorZimlet.prototype._getLanguageFromAndToNames =
 function() {
-	if (!this._languageslist) {
-		this._languageslist = google.language.Languages;
-	}
 	var fromName = "";
 	var toName = "";
-	for (var item in this._languageslist) {
-		var id = this._languageslist[item];
+	for (var item in this._languagesList) {
+		var id = this._languagesList[item];
 		if (id == this._fromLanguage) {
 			fromName = this.getMessage(item);
 		} else if (id == this._toLanguage) {
@@ -585,8 +607,15 @@ function(opacity, styleObj) {
  */
 GTranslatorZimlet.prototype._loadGoogleTranslator =
 function(postCallback) {
-	if (!google || !google.language) {
-		google.load("language", "1", {callback: AjxCallback.simpleClosure(this._loadGTranslatorCallback, this, postCallback)});
+	if (!this._languagesList) {
+		var i = 0;
+		var params = [];
+		params[i++] = "key=" + AjxStringUtil.urlComponentEncode(this.googleTranslateApiKey);
+		params[i++] = "&target=en";
+		var url = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode("https://www.googleapis.com/language/translate/v2/languages?" + params.join(""));
+		AjxRpc.invoke(null, url, null, AjxCallback.simpleClosure(this._loadGTranslatorCallback, this, postCallback), true);
+
+		//google.load("language", "1", {callback: AjxCallback.simpleClosure(this._loadGTranslatorCallback, this, postCallback)});
 	} else {
 		if (postCallback) {
 			postCallback.run();
@@ -598,7 +627,19 @@ function(postCallback) {
  * @param {AjxCallback} postCallback    A callback to be called after translator is loaded
  */
 GTranslatorZimlet.prototype._loadGTranslatorCallback =
-function(postCallback) {
+function(postCallback, response) {
+	if (!response.success) {
+		this.displayErrorMessage(this.getMessage("GTranslatorZimlet_couldNotTranslate"), null, this.getMessage("GTranslatorZimlet_zimletError"));
+		return;
+	} else if (!this._languagesList) {
+		var jsonObj = eval("(" + response.text + ")");
+		if(jsonObj.data && jsonObj.data.languages) {
+			this._languagesList = jsonObj.data.languages;
+		} else {
+			this.displayErrorMessage(this.getMessage("GTranslatorZimlet_couldNotTranslate"), null, this.getMessage("GTranslatorZimlet_zimletError"));
+			return;
+		}
+	}
 	if (postCallback) {
 		postCallback.run();
 	}
@@ -611,19 +652,19 @@ function(postCallback) {
  */
 GTranslatorZimlet.prototype._getLanguagesList =
 function(listId, languageId) {
-	if (!this._languageslist) {
-		this._languageslist = google.language.Languages;
-	}
 	var html = [];
 	html.push("<SELECT id='", listId, "'>");
-	for (var item in this._languageslist) {
-		var id = this._languageslist[item];
-		if (google.language.isTranslatable(id)) {
-			if (languageId == id) {
-				html.push("<option value='", id, "' id='GTranslatorZimlet_", id, "' selected>", this.getMessage(item), "</option>");
-			} else {
-				html.push("<option value='", id, "' id='GTranslatorZimlet_", id, "'>", this.getMessage(item), "</option>");
-			}
+	for (var i = 0; i < this._languagesList.length; i++) {
+		var item = this._languagesList[i];
+		var currLanguageId = item.language;
+		var name = this.getMessage(item.name.toUpperCase());
+		if(!name) {
+			name = item.name;
+		}
+		if (languageId == currLanguageId) {
+			html.push("<option value='", currLanguageId, "' id='GTranslatorZimlet_", currLanguageId, "' selected>", name, "</option>");
+		} else {
+			html.push("<option value='", currLanguageId, "' id='GTranslatorZimlet_", currLanguageId, "'>", name, "</option>");
 		}
 	}
 	html.push("</SELECT>");

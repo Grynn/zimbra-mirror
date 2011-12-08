@@ -1,6 +1,5 @@
-<zimlet name="com_zimbra_gtranslator" version="3.4" label="${msg.label}" description="${msg.description}" target="main compose-window">
+<zimlet name="com_zimbra_gtranslator" version="4.0" label="${msg.label}" description="${msg.description}" target="main compose-window">
 	<include>gtranslator.js</include>
-	<include>http://www.google.com/jsapi</include>
 	<includeCSS>gtranslator.css</includeCSS>
 	<resource>google-icon.gif</resource>
 	<handlerObject>com_zimbra_gtranslator_HandlerObject</handlerObject>
