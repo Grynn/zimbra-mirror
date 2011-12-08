@@ -52,7 +52,7 @@ public class CreateTag extends AjaxCommonTest {
 	public void ClickShortcutnt() throws HarnessException {
 				
 		//move cursor off the search field
-		app.zPageAddressbook.zClick("css=div#zv__CNS");
+		app.zPageAddressbook.zClick("css=div#zv__CNS-main");
 		
 		DialogTag dialog = (DialogTag)app.zPageAddressbook.zKeyboardShortcut(Shortcut.S_NEWTAG);
 		ZAssert.assertNotNull(dialog, "Verify the new dialog opened");
