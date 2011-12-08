@@ -202,22 +202,29 @@ public class FormAddPopAccount extends AbsForm {
 
    public void zSubmit(boolean ssl) throws HarnessException {
       zPressButton(Button.B_VALIDATE_AND_SAVE);
+
+      // Waiting for the login button or validate SSL button
       if (ssl) {
-         Object[] params = {"Invalid or untrusted server SSL certificate"};
-         boolean messageAppears = (Boolean)GeneralUtility.waitFor(null, ((AppAjaxClient)MyApplication).zPageAddNewAccount, false, "zMessageContains",
-               params, WAIT_FOR_OPERAND.EQ, true, 30000, 1000);
-
-         if (messageAppears) {
-            // Accept Untrusted Certificate
-            zPressButton(Button.B_VALIDATE_AND_SAVE);
-         } else {
-            // Fall through
-            logger.debug("This may be not the first time adding a SSL account to the ZCS server");
+         int maxRetry = 30;
+         int i = 0;
+         while (i < maxRetry) {
+            if (sIsElementPresent(PageLogin.Locators.zBtnLoginDesktop)) {
+               logger.debug("This may be not the first time adding a SSL account to the ZCS server");
+               break;
+            } else if (((AppAjaxClient)MyApplication).zPageAddNewAccount.zMessageContains("Invalid or untrusted server SSL certificate")) {
+               zPressButton(Button.B_VALIDATE_AND_SAVE);
+               GeneralUtility.waitForElementPresent(this, PageLogin.Locators.zBtnLoginDesktop);
+               break;
+            } else {
+               i++;
+            }
          }
-      }
 
-      GeneralUtility.waitForElementPresent(this, PageLogin.Locators.zBtnLoginDesktop);
+      } else {
+         GeneralUtility.waitForElementPresent(this, PageLogin.Locators.zBtnLoginDesktop);
+      }
    }
+
 
    public void zPressButton(Button button) throws HarnessException {
       String locator = null;
