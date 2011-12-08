@@ -20,7 +20,7 @@ public class FormContactGroupNew extends AbsForm {
 		public static final String zNewContactGroupMenuIconBtn = "css=id=^_left_icon div[class=ImgNewGroup]";
 		public static String       zActiveEditForm = "";
 			
-		public static String zGroupnameField               = " input[id$='_groupName']";		
+		public static String zGroupnameField               = " div.companyName>input[id$='_groupName']";		
 	    public static String zGroupAddNewTextArea          = " textarea[id$='_addNewField']";
 	    public static String zAddNewButton                 = " td[id$='_addNewButton'] td[id$='_title']";        
 	    public static String zAddButton                    = " td[id$='_addButton'] td[id$='_title']";        
