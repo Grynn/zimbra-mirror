@@ -1138,16 +1138,15 @@ function (listViewHeight) {
 
 // Private methods
 
-// normalClass is always present on a list row
+// returns a regex that matches modified styles such as "Row-selected-actioned"
 DwtListView.prototype._getStyleRegex =
 function() {
-	return new RegExp("\\b(" + [this._disabledSelectedClass,
-								this._selectedClass,
-								this._kbFocusClass,
-								this._dndClass,
-								this._rightClickClass
-							   ].join("|") +
-					  ")\\b", "g");
+	return new RegExp("\\bRow(-(" + [DwtCssStyle.SELECTED,
+									 DwtCssStyle.ACTIONED,
+									 DwtCssStyle.FOCUSED,
+									 DwtCssStyle.DISABLED,
+									 DwtCssStyle.DRAG_PROXY].join("|") +
+					  "))+\\b", "g");
 };
 
 DwtListView.prototype._addRow =
@@ -2045,7 +2044,8 @@ function(clickedEl, ev) {
 				Dwt.addClass(clickedEl, this._kbFocusClass);
 			}
 		}
-	} else {
+	}
+	else if (ev.button == DwtMouseEvent.LEFT) {
 		if (ev.ctrlKey) {
 			this.setMultiSelection(clickedEl, bContained, ev);
 		} else { // SHIFT KEY
@@ -2110,7 +2110,7 @@ function(clickedEl, ev) {
 		if (this._setListEvent(ev, this._selEv, clickedEl)) {
 			this._evtMgr.notifyListeners(DwtEvent.SELECTION, this._selEv);
 		}
-	} else if (ev.button == DwtMouseEvent.RIGHT && this._evtMgr.isListenerRegistered(DwtEvent.ACTION)) {
+	} else if (ev.button == DwtMouseEvent.RIGHT && !ev.shiftKey && !ev.ctrlKey && this._evtMgr.isListenerRegistered(DwtEvent.ACTION)) {
 		if (this._setListEvent(ev, this._actionEv, clickedEl)) {
 			this._evtMgr.notifyListeners(DwtEvent.ACTION, this._actionEv);
 		}
