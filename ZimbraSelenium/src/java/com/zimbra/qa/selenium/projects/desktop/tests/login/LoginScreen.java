@@ -42,7 +42,7 @@ public class LoginScreen extends AjaxCommonTest {
 
 		ZAssert.assertEquals(accountName, defaultAccountName,
 		      "Verify the displayed label 'Account Name'");
-      ZAssert.assertEquals(emailAddress, ZimbraAccount.AccountZWC().EmailAddress,
+      ZAssert.assertEquals(emailAddress, ZimbraAccount.AccountZDC().EmailAddress,
             "Verify the displayed label 'Email Address'");
 
 	}

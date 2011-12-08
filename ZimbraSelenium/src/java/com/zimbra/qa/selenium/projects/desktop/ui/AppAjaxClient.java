@@ -229,7 +229,7 @@ public class AppAjaxClient extends AbsApplication {
       GeneralUtility.waitForElementPresent(zPageLogin,
             PageLogin.Locators.zAddNewAccountButton);
       if (lastAccount || !zPageLogin.sIsElementPresent(PageLogin.Locators.zDeleteButton)) {
-         ZimbraAccount.ResetAccountZWC();
+         ZimbraAccount.ResetAccountZDC();
       }
    }
 }

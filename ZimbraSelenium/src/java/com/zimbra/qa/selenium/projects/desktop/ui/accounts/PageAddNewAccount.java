@@ -387,8 +387,8 @@ public class PageAddNewAccount extends AbsTab{
     * @throws HarnessException
     */
    public DesktopAccountItem zAddZimbraAccountThruUI() throws HarnessException {
-      return zAddZimbraAccountThruUI(ZimbraAccount.AccountZWC().EmailAddress,
-            ZimbraAccount.AccountZWC().Password, false,
+      return zAddZimbraAccountThruUI(ZimbraAccount.AccountZDC().EmailAddress,
+            ZimbraAccount.AccountZDC().Password, false,
             ZimbraSeleniumProperties.getStringProperty("server.port", "80"));
    }
 

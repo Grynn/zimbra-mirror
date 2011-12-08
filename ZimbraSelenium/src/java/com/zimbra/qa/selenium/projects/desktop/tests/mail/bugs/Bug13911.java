@@ -42,7 +42,7 @@ public class Bug13911 extends AjaxCommonTest {
 		String bodyAfterImage = "Problemet best\u00E5r"; // Problemet består
 
 		String MimeFolder = ZimbraSeleniumProperties.getBaseDirectory() + "/data/private/mime/Bugs/Bug13911";
-		LmtpInject.injectFile(ZimbraAccount.AccountZWC().EmailAddress, new File(MimeFolder));
+		LmtpInject.injectFile(ZimbraAccount.AccountZDC().EmailAddress, new File(MimeFolder));
 
 		
 		// Click Get Mail button

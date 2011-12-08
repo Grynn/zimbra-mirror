@@ -64,13 +64,13 @@ public class ShowContextMenu extends AjaxCommonTest{
          groups = { "smoke" })
    public void showZcsInboxContextMenu() throws HarnessException {
       // Brand new account, so erase and add brand new account
-      ZimbraAccount.ResetAccountZWC();
+      ZimbraAccount.ResetAccountZDC();
       app.zPageLogin.zNavigateTo();
       app.zPageLogin.zRemoveAccount();
 
       addDefaultAccount();
-      ZimbraAccount.AccountZWC().authenticate();
-      ZimbraAccount.AccountZWC().authenticateToMailClientHost();
+      ZimbraAccount.AccountZDC().authenticate();
+      ZimbraAccount.AccountZDC().authenticateToMailClientHost();
       super.startingPage.zNavigateTo();
 
       FolderItem folderItem = FolderItem.importFromSOAP(app

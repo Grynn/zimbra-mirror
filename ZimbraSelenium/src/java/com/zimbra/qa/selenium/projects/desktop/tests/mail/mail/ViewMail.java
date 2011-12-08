@@ -103,7 +103,7 @@ public class ViewMail extends AjaxCommonTest {
 	public void resetAccountAfterTest() {
 	   // This is necessary to reset the account in case the next test is trying to
 	   // inject the same emails, the next tests will fail.
-	   ZimbraAccount.ResetAccountZWC();
+	   ZimbraAccount.ResetAccountZDC();
 	}
 
 }

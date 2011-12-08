@@ -292,7 +292,7 @@ public class DesktopInstallUtil {
          ie.printStackTrace();
          throw new HarnessException("Getting Interrupted Exception");
       } finally {
-         ZimbraAccount.AccountZWC().resetClientAuthentication();
+         ZimbraAccount.AccountZDC().resetClientAuthentication();
       }
    }
 
@@ -481,7 +481,7 @@ public class DesktopInstallUtil {
 
                GeneralUtility.waitFor("com.zimbra.qa.selenium.projects.desktop.core.DesktopInstallUtil", null,
                      true, "isDesktopAppRunning", null, WAIT_FOR_OPERAND.EQ, true, 60000, 1000);
-               GeneralUtility.waitFor(null, ZimbraAccount.AccountZWC(), false,
+               GeneralUtility.waitFor(null, ZimbraAccount.AccountZDC(), false,
                      "authenticateToMailClientHost", null, WAIT_FOR_OPERAND.NEQ, null, 60000, 3000);
                // The reason for killing the current process because desktop app is started by
                // the installer script and this will block selenium test browser window

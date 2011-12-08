@@ -38,7 +38,7 @@ public class Bug21013 extends AjaxCommonTest {
 		String subject = "all-hands";
 
 		String MimeFolder = ZimbraSeleniumProperties.getBaseDirectory() + "/data/private/mime/Bugs/Bug21013";
-		LmtpInject.injectFile(ZimbraAccount.AccountZWC().EmailAddress, new File(MimeFolder));
+		LmtpInject.injectFile(ZimbraAccount.AccountZDC().EmailAddress, new File(MimeFolder));
 
 		
 		// Click Get Mail button

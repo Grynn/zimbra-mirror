@@ -521,7 +521,7 @@ public class CreateMailText extends AjaxCommonTest {
 
       DesktopAccountItem destDesktopAccountItem = app.zPageAddNewAccount.zAddGmailAccountThruUI();
 
-      ZimbraAccount account = ZimbraAccount.AccountZWC();
+      ZimbraAccount account = ZimbraAccount.AccountZDC();
       ZimbraAccount destAccount = new ZimbraAccount(destDesktopAccountItem.emailAddress,
             destDesktopAccountItem.password);
       account.authenticateToMailClientHost();
@@ -577,7 +577,7 @@ public class CreateMailText extends AjaxCommonTest {
 
       DesktopAccountItem destDesktopAccountItem = app.zPageAddNewAccount.zAddYahooAccountThruUI();
 
-      ZimbraAccount account = ZimbraAccount.AccountZWC();
+      ZimbraAccount account = ZimbraAccount.AccountZDC();
       ZimbraAccount destAccount = new ZimbraAccount(destDesktopAccountItem.emailAddress,
             destDesktopAccountItem.password);
       account.authenticateToMailClientHost();
@@ -652,7 +652,7 @@ public class CreateMailText extends AjaxCommonTest {
 
          _externalAccountTest = false;
          _emailSubjectCreated = null;
-         ZimbraAccount.ResetAccountZWC();
+         ZimbraAccount.ResetAccountZDC();
       }
    }
 

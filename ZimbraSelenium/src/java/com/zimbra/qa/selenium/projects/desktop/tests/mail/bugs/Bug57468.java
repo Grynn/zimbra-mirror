@@ -28,7 +28,7 @@ public class Bug57468 extends AjaxCommonTest {
 		
 		// Since we collapsed the folder tree, it may cause problems for other tests
 		// Rest the ZWC user
-		ZimbraAccount.ResetAccountZWC();
+		ZimbraAccount.ResetAccountZDC();
 		
 		logger.info("bug57468AfterClass: finish");
 	}

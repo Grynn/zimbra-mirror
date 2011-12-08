@@ -131,7 +131,7 @@ public class DeleteAccount extends AjaxCommonTest {
    public void deleteZimbraAccountThruHttpPost() throws HarnessException {
       app.zPageAddNewAccount.zAddZimbraAccountThruUI();
 
-      app.zPageLogin.zLogin(ZimbraAccount.AccountZWC());
+      app.zPageLogin.zLogin(ZimbraAccount.AccountZDC());
       app.zPageLogin.zNavigateTo();
 
       app.zPageLogin.zRemoveAccount();

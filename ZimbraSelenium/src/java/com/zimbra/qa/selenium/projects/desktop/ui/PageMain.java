@@ -104,7 +104,7 @@ public class PageMain extends AbsTab {
 		if ( !((AppAjaxClient)MyApplication).zPageLogin.zIsActive() ) {
 			((AppAjaxClient)MyApplication).zPageLogin.zNavigateTo();
 		}
-		((AppAjaxClient)MyApplication).zPageLogin.zLogin(ZimbraAccount.AccountZWC());
+		((AppAjaxClient)MyApplication).zPageLogin.zLogin(ZimbraAccount.AccountZDC());
 		zWaitForActive();
 
 	}

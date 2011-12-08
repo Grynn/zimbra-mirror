@@ -108,6 +108,6 @@ public class TrustedEmailAddrMsgView extends AjaxCommonTest {
 
    @AfterMethod(alwaysRun=true)
    public void cleanUp() {
-      ZimbraAccount.ResetAccountZWC();
+      ZimbraAccount.ResetAccountZDC();
    }
 }
