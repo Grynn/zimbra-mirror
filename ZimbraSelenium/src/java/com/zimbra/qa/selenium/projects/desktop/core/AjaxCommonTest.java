@@ -21,6 +21,7 @@ import com.zimbra.qa.selenium.framework.util.GeneralUtility.WAIT_FOR_OPERAND;
 import com.zimbra.qa.selenium.framework.util.OperatingSystem.OsType;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount.SOAP_DESTINATION_HOST_TYPE;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
+import com.zimbra.qa.selenium.framework.util.staf.StafServicePROCESS;
 import com.zimbra.qa.selenium.framework.util.staf.Stafzmtlsctl;
 import com.zimbra.qa.selenium.framework.util.staf.Stafzmtlsctl.SERVER_ACCESS;
 import com.zimbra.qa.selenium.projects.desktop.ui.*;
@@ -163,6 +164,21 @@ public class AjaxCommonTest {
       // which is usually down for 1 - 2 minutes after restart.
       Stafzmtlsctl stafzmtlsctl = new Stafzmtlsctl();
       stafzmtlsctl.setServerAccess(SERVER_ACCESS.BOTH);
+      StafServicePROCESS stafServiceProcess = new StafServicePROCESS();
+
+      // Disable the zimbraMtaTlsAuthOnly if it is true
+      stafServiceProcess.execute("zmprov gs `zmhostname` zimbraMtaTlsAuthOnly");
+      String mode = stafServiceProcess.getStafResponse().split("zimbraMtaTlsAuthOnly:")[1].trim();
+
+      logger.debug("==================> Current zimbraMtaTlsAuthOnly: " + mode);
+
+      if (mode.contains("TRUE")) {
+         logger.debug("Setting zimbraMtaTlsAuthOnly to false");
+         String serverName = ZimbraSeleniumProperties.getStringProperty("server.host", "localhost");
+         stafServiceProcess.execute("zmprov ms " + serverName + " zimbraMtaTlsAuthOnly FALSE");
+         logger.debug("Restarting zmmtactl...");
+         stafServiceProcess.execute("zmmtactl restart");
+      }
 
       //Racetrack
       String DbHostURL = ZimbraSeleniumProperties.getStringProperty("racetrack.dbUrl",

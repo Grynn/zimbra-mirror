@@ -16,9 +16,10 @@ public class Stafzmtlsctl extends StafServicePROCESS {
    throws HarnessException {
       String setting = null;
 
-      execute("zmprov gs `zmhostname` ZimbraMailMode");
+      StafServicePROCESS stafServicePROCESS = new StafServicePROCESS();
+      stafServicePROCESS.execute("zmprov gs `zmhostname` ZimbraMailMode");
       String serverName = ZimbraSeleniumProperties.getStringProperty("server.host", "localhost");
-      String mode = StafResponse.split(serverName)[1].split("}")[0].split("zimbraMailMode:")[1].trim();
+      String mode = stafServicePROCESS.getStafResponse().split(serverName)[1].split("}")[0].split("zimbraMailMode:")[1].trim();
 
       logger.info("Current server access mode: " + mode);
 
@@ -41,7 +42,7 @@ public class Stafzmtlsctl extends StafServicePROCESS {
          execute("zmtlsctl " + setting);
          //execute("zmconfigdctl reload");
          SleepUtil.sleep(60000);
-         execute("zmmailboxdctl restart");
+         stafServicePROCESS.execute("zmmailboxdctl restart");
          
          // Hardcoded 20 seconds sleep is required here, if this still doesn't work, then
          // we have to do the most robust way, wait for HTTP GET to return status 200 
@@ -64,7 +65,7 @@ public class Stafzmtlsctl extends StafServicePROCESS {
    protected String setCommand(String command) {
 
       // Make sure the full path is specified
-      if ( command.trim().startsWith("zmprov") ) {
+      if ( command.trim().startsWith("zmtlsctl") ) {
          command = "/opt/zimbra/bin/" + command;
       }
       // Running a command as 'zimbra' user.
