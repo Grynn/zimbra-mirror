@@ -806,7 +806,7 @@ ZaNewCosXWizard.myXFormModifier = function(xFormObject, entry) {
                 {ref:ZaCos.A_zimbraPrefItemsPerVirtualPage,
                 type:_TEXTFIELD_, colSizes:["200px","*"],colSpan:2,
                 msgName:ZaMsg.LBL_zimbraPrefItemsPerVirtualPage,
-                txtBoxLabel:ZaMsg.LBL_zimbraPrefItemsPerVirtualPage,
+                label:ZaMsg.LBL_zimbraPrefItemsPerVirtualPage,
                 labelLocation:_LEFT_
                 }
 

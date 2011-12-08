@@ -694,7 +694,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
                 {ref:ZaCos.A_zimbraPrefItemsPerVirtualPage, 
 	       	type:_TEXTFIELD_, 
 		msgName:ZaMsg.LBL_zimbraPrefItemsPerVirtualPage,
-		txtBoxLabel:ZaMsg.LBL_zimbraPrefItemsPerVirtualPage, 
+		label:ZaMsg.LBL_zimbraPrefItemsPerVirtualPage, 
 		labelLocation:_LEFT_
 		}
 
