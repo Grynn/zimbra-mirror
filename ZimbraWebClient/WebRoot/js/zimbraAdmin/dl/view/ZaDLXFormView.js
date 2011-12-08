@@ -939,7 +939,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
 
         } else { 
 	var case1 = 
-	{type:_ZATABCASE_,  caseKey:_tab1,  numCols:2,  colSizes: ["50%","50%"], id: "dl_form_members",
+	{type:_ZATABCASE_,  caseKey:_tab1,  numCols:2,  colSizes: ["450px","420px"], id: "dl_form_members",
 		  items:[
 			 {type:_GROUP_, width: "98%", numCols: 1, 
 				items:[	
@@ -1131,7 +1131,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
                        spaceHeight = "3";
                 }
 
-		var case3 = {type:_ZATABCASE_, numCols:2, colSpan:"*", caseKey:_tab3, colSizes: ["50%", "50%"],
+		var case3 = {type:_ZATABCASE_, numCols:2, colSpan:"*", caseKey:_tab3, colSizes: ["420px","420px"],
 			items: [
 				//layout rapper around the direct/indrect list	
 				{type: _GROUP_, width: "98%", numCols: 1, //colSizes: ["auto", 20],

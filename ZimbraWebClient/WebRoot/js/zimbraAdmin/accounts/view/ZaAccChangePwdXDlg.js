@@ -63,7 +63,7 @@ function() {
 				label:ZaMsg.NAD_ConfirmPassword, labelLocation:_LEFT_, 
 				cssClass:"admin_xform_name_input",visibilityChecks:[],enableDisableChecks:[]
 			},
-			{ref:ZaAccount.A_zimbraPasswordMustChange,  type:_CHECKBOX_,  
+			{ref:ZaAccount.A_zimbraPasswordMustChange,  type:_WIZ_CHECKBOX_,
 				msgName:ZaMsg.NAD_MustChangePwd,label:ZaMsg.NAD_MustChangePwd,trueValue:"TRUE", falseValue:"FALSE"}
 			]
 		} ]

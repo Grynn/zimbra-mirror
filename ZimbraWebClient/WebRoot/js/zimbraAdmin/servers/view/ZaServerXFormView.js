@@ -704,7 +704,9 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
             paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),
             items:[
                 //{type:_ZAGROUP_, cssStyle:"padding-left:0px; padding-right:0px", width:"100%", items:[
-                {type:_ZAGROUP_, width:"100%", numCols:2,colSizes: ["275px","100%"], items:[
+                {type:_ZA_TOP_GROUPER_, width:"100%", numCols:2,colSizes: ["275px","100%"],
+                    label:ZaMsg.TABT_GeneralPage,
+                    items:[
                     {ref:ZaServer.A_name, type:_OUTPUT_, label:ZaMsg.NAD_DisplayName, labelLocation:_LEFT_},
                     ZaItem.descriptionXFormItem,
                     { ref: ZaServer.A_ServiceHostname, type:_OUTPUT_,
@@ -730,7 +732,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
                             resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
                             msgName:ZaMsg.MSG_zimbraMailPurgeSleepInterval,
                             txtBoxLabel:ZaMsg.LBL_zimbraMailPurgeSleepInterval,
-			    colSpan: 2, colSizes: ["275px","80px","195px","*"],
+			    colSpan: 2, colSizes: ["275px","*","90px","150px"],
                             onChange:ZaServerXFormView.onFormFieldChanged
                     },
                     {ref:ZaServer.A_zimbraReverseProxyLookupTarget,
@@ -916,7 +918,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
                                 colSpan: 2,
                                 resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
                                 onChange: ZaServerXFormView.onFormFieldChanged,
-                                textAreaWidth:"250px"
+                                textAreaWidth:"220px"
                             },
 
 					        { ref: ZaServer.A_zimbraMtaDnsLookupsEnabled,
@@ -969,7 +971,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
                         {type:_ZA_TOP_GROUPER_, colSizes:["275px","*"], numCols:2, label:ZaMsg.NAD_AutoProvision_Setting,
                             items:[
                                 {ref:ZaServer.A_zimbraAutoProvPollingInterval, type:_SUPER_LIFETIME_,
-                                    colSizes:["275px","70px","240px","150px","*"],
+                                   // colSizes:["275px","*","200px","150px"],
                                     txtBoxLabel:ZaMsg.LBL_zimbraAutoProvPollingInterval,
                                     resetToSuperLabel:ZaMsg.NAD_ResetToCOS,colSpan:2,
                                     useParentTable: false,
@@ -1050,7 +1052,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
                                   onChange:ZaServerXFormView.onFormFieldChanged
                                 },
                                 {ref: ZaServer.A_zimbraReverseProxyClientCertCA, type:_TEXTAREA_,
-                                    label:ZaMsg.NAD_zimbraReverseProxyClientCertCA, width: 400,
+                                    label:ZaMsg.NAD_zimbraReverseProxyClientCertCA, width: 370,
                                     onChange:ZaServerXFormView.onFormFieldChanged
                                 }
                             ]

@@ -1540,10 +1540,11 @@ if(appNewUI) {
         	caseKey:tabIx,
 			
 items:[
-            	{type:_ZAGROUP_, numCols:1,colSizes:["auto"],border:0,
+            	{type:_ZAGROUP_, numCols:1,colSizes:["auto"],border:0, tableCssStyle:"text-align:center",
+
 					items: [
-                    	{type: _OUTPUT_, value: ZaMsg.NAD_LimitZimletsToDomain, cssStyle:"margin-left:275px " },
-                    	{type:_ZA_ZIMLET_SELECT_COMBO_,cssStyle:"margin-left: 275px",
+                    	{type: _OUTPUT_, value: ZaMsg.NAD_LimitZimletsToDomain },
+                    	{type:_ZA_ZIMLET_SELECT_COMBO_, tableCssStyle: "margin-left:auto;margin-right:auto;",
                             selectRef:ZaDomain.A_zimbraZimletDomainAvailableZimlets,
 							ref:ZaDomain.A_zimbraZimletDomainAvailableZimlets,
 							choices:ZaDomainXFormView.zimletChoices

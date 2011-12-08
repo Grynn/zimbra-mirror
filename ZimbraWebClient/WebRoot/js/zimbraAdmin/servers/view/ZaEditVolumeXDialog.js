@@ -44,7 +44,7 @@ function() {
 					{ref:ZaServer.A_VolumeRootPath, type:_TEXTFIELD_, label:ZaMsg.LBL_VM_VolumeRootPath, labelLocation:_LEFT_, width:250, visibilityChecks:[],enableDisableChecks:[]},
 					{ref:ZaServer.A_VolumeType, type:_OSELECT1_, choices:ZaServer.volumeTypeChoices,width:250, label:ZaMsg.LBL_VM_VolumeType, visibilityChecks:[],enableDisableChecks:[]},
 					{ref:ZaServer.A_VolumeCompressBlobs,
-						type:_ZA_CHECKBOX_, label:ZaMsg.VM_VolumeCompressBlobs,
+						type:_WIZ_CHECKBOX_, label:ZaMsg.VM_VolumeCompressBlobs,
 						trueValue:true, falseValue:false, visibilityChecks:[],enableDisableChecks:[]
 					},
 					{type:_GROUP_,numCols:3,colSpan:2,colSizes:["200px","150px","125px"],

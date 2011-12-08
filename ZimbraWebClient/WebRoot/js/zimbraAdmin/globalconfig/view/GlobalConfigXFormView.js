@@ -224,7 +224,8 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
     	var case1 = {type:_ZATABCASE_, caseKey:_tab1,
 				colSizes:["auto"],numCols:1,paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),
 				items:[
-					{type:_ZAGROUP_,numCols:2,colSizes: ["275px","auto"],
+					{type:_ZA_TOP_GROUPER_,numCols:2,colSizes: ["275px","auto"],
+                        label:ZaMsg.TABT_GeneralPage ,
 						items:[
 							{ref: ZaGlobalConfig.A_zimbraGalMaxResults, type:_TEXTFIELD_,
 							  label: ZaMsg.LBL_zimbraGalMaxResults, msgName:ZaMsg.MSG_zimbraGalMaxResults, 

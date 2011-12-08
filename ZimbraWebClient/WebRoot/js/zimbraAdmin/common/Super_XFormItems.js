@@ -395,11 +395,12 @@ XFormItemFactory.createItemType("_SUPER_TEXTFIELD_", "super_textfield", Super_Te
 Super_Textfield_XFormItem.prototype.useParentTable = false;
 Super_Textfield_XFormItem.prototype.txtBoxLabel = null;
 Super_Textfield_XFormItem.prototype.numCols = 3;
-Super_Textfield_XFormItem.prototype.colSizes = ["275px","*","150px"];
+Super_Textfield_XFormItem.prototype.colSizes = ["275px","275px","150px"];
 Super_Textfield_XFormItem.prototype.colSpan = 3;
 Super_Textfield_XFormItem.prototype.nowrap = false;
 Super_Textfield_XFormItem.prototype.labelWrap = true;
 if(appNewUI){
+Super_Textfield_XFormItem.prototype.colSizes = ["275px","*","150px"];
 Super_Textfield_XFormItem.prototype.labelCssStyle = "border-right: 1px solid black;";
 Super_Textfield_XFormItem.prototype.tableCssClass = "grid_composite_table";
 }
@@ -481,6 +482,10 @@ Super_Textarea_XFormItem.prototype.colSizes = ["275px","275px","150px"];
 Super_Textarea_XFormItem.prototype.colSpan = 3;
 Super_Textarea_XFormItem.prototype.nowrap = false;
 Super_Textarea_XFormItem.prototype.labelWrap = true;
+if(appNewUI){
+Super_Textarea_XFormItem.prototype.colSizes = ["275px","*","150px"];
+Super_Textarea_XFormItem.prototype.tableCssClass = "grid_composite_table";
+}
 
 SuperWiz_Textarea_XFormItem = function () {}
 XFormItemFactory.createItemType("_SUPERWIZ_TEXTAREA_", "superwiz_textarea", SuperWiz_Textarea_XFormItem, Super_Textarea_XFormItem);
@@ -554,6 +559,7 @@ SuperWiz_Checkbox_XFormItem.prototype.labelCssClass = "";
 SuperWiz_Checkbox_XFormItem.prototype.checkBoxLabelLocation = _RIGHT_;
 SuperWiz_Checkbox_XFormItem.prototype.checkboxSubLabel = "";
 SuperWiz_Checkbox_XFormItem.prototype.checkboxAlign = _RIGHT_;
+SuperWiz_Checkbox_XFormItem.prototype.colSizes = ["200px","*","150px"];
 }
 
 Super_Checkbox_XFormItem.prototype.useParentTable = false;
@@ -566,6 +572,7 @@ if(appNewUI){
 Super_Checkbox_XFormItem.prototype.labelCssStyle = "border-right: 1px solid black;";
 Super_Checkbox_XFormItem.prototype.labelCssClass = "gridGroupBodyLabel";
 Super_Checkbox_XFormItem.prototype.tableCssClass = "grid_composite_table";
+Super_Checkbox_XFormItem.prototype.colSizes = ["275px","*","150px"];
 }else{
 Super_Checkbox_XFormItem.prototype.labelCssClass = "xform_checkbox";
 }
@@ -981,6 +988,10 @@ SuperZimlet_Select_XFormItem.prototype.nowrap = false;
 SuperZimlet_Select_XFormItem.prototype.labelWrap = true;
 SuperZimlet_Select_XFormItem.prototype.items = [];
 SuperZimlet_Select_XFormItem.prototype.labelWidth = "275px";
+if(appNewUI){
+SuperZimlet_Select_XFormItem.prototype.colSizes=["100px","*"];
+SuperZimlet_Select_XFormItem.prototype.labelWidth = "100px";
+}
 
 SuperZimlet_Select_XFormItem.prototype.initializeItems = function() {
 	var selectRef = this.getInheritedProperty("selectRef");

@@ -166,15 +166,15 @@ function() {
 						visibilityChecks:[],enableDisableChecks:[],widgetClass:ZaServerMiniListView,valueChangeEventSources:["serverList"]
 					},
 					{ref:"flushZimlet",
-						type:_ZA_CHECKBOX_, label:ZaMsg.Flush_zimlet_cache,
+						type:_WIZ_CHECKBOX_, label:ZaMsg.Flush_zimlet_cache,
 						trueValue:true, falseValue:false, visibilityChecks:[],enableDisableChecks:[]
 					},
 					{ref:"flushSkin",
-						type:_ZA_CHECKBOX_, label:ZaMsg.Flush_theme_cache,
+						type:_WIZ_CHECKBOX_, label:ZaMsg.Flush_theme_cache,
 						trueValue:true, falseValue:false, visibilityChecks:[],enableDisableChecks:[]
 					},
 					{ref:"flushLocale",
-						type:_ZA_CHECKBOX_, label:ZaMsg.Flush_locale_cache,
+						type:_WIZ_CHECKBOX_, label:ZaMsg.Flush_locale_cache,
 						trueValue:true, falseValue:false, visibilityChecks:[],enableDisableChecks:[]
 					},					
 					{type:_CELLSPACER_},
