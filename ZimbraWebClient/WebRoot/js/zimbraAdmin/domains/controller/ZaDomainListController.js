@@ -393,6 +393,10 @@ function(item) {
     ZaApp.getInstance().dialogs["ZaGALConfigXWizard"] = new ZaGALConfigXWizard(this._container,item)
     this._galWizard = ZaApp.getInstance().dialogs["ZaGALConfigXWizard"];
     this._galWizard.registerCallback(DwtWizardDialog.FINISH_BUTTON, ZaDomainListController.prototype._finishGalButtonListener, this, null);
+    if(appNewUI){
+        item._extid=ZaUtil.getItemUUid();
+        this._galWizard.setEditObject(item);
+    }
     this._galWizard.setObject(item);
     this._galWizard.popup();
 }
@@ -418,6 +422,11 @@ function (item) {
     else
         this._authWizard = ZaApp.getInstance().dialogs["ZaAuthConfigXWizard"] = new ZaAuthConfigXWizard(this._container);
     this._authWizard.registerCallback(DwtWizardDialog.FINISH_BUTTON, ZaDomainListController.prototype._finishAuthButtonListener, this, null);
+    if(appNewUI){
+        item._extid=ZaUtil.getItemUUid();
+        this._authWizard.setEditObject(item);
+    }
+
     this._authWizard.setObject(item);
     this._authWizard.popup();
 }
@@ -898,6 +907,12 @@ function() {
 ZaDomainListController.prototype._finishAuthButtonListener =
 function(ev) {
 	try {
+        if(ev&&ev.currentObject)
+            this._currentObject = ev.currentObject;
+
+        if(ev&&ev.currentWizard)
+            this._authWizard = ev.currentWizard;
+
 		ZaDomain.modifyAuthSettings.call(this._currentObject,this._authWizard.getObject());
 		//var changeDetails = new Object();
 		//if a modification took place - fire an DomainChangeEvent
@@ -914,6 +929,8 @@ function(ev) {
 ZaDomainListController.prototype._finishAutoProvButtonListener =
 function(ev) {
 	try {
+
+
         if(!this._autoProvWizard._checkGeneralConfig() || !this._autoProvWizard._checkEagerConfig()
                 || !this._autoProvWizard._checkLazyConfig()) {
             return;
@@ -934,6 +951,12 @@ ZaDomainListController.prototype._finishGalButtonListener =
 function(ev) {
 	try {
 		//var changeDetails = new Object();
+        if(ev&&ev.currentObject)
+            this._currentObject = ev.currentObject;
+
+        if(ev&&ev.currentWizard)
+            this._galWizard = ev.currentWizard;
+
 		ZaDomain.modifyGalSettings.call(this._currentObject,this._galWizard.getObject()); 
 		//if a modification took place - fire an DomainChangeEvent
 		//changeDetails["obj"] = this._currentObject;

@@ -73,6 +73,8 @@ ZaGALConfigXWizard = function(parent, entry) {
 ZaGALConfigXWizard.prototype = new ZaXWizardDialog;
 ZaGALConfigXWizard.prototype.constructor = ZaGALConfigXWizard;
 ZaGALConfigXWizard.prototype.registerFinishMethod = true;
+ZaGALConfigXWizard.prototype.dialogType = 2;
+ZaGALConfigXWizard.prototype.cacheDialog = false;
 ZaXDialog.XFormModifiers["ZaGALConfigXWizard"] = new Array();
 
 
@@ -130,6 +132,7 @@ function(stepNum) {
 		}
 	}
 }
+
 /**
 * @method setObject sets the object contained in the view
 * @param entry - ZaDomain object to display
@@ -147,9 +150,9 @@ function(entry) {
 	this._containedObject.type = entry.type ;
 	this._containedObject.id = entry.id;
 	this._containedObject[ZaDomain.A2_gal_sync_accounts] = entry[ZaDomain.A2_gal_sync_accounts];*/
-	this._containedObject[ZaDomain.A2_create_gal_acc] = "TRUE";
-	this._containedObject[ZaDomain.A2_isTestingGAL] = 0;
-	this._containedObject[ZaDomain.A2_isTestingSync] = 0;
+	this._containedObject[ZaDomain.A2_create_gal_acc] = entry[ZaDomain.A2_create_gal_acc] || "TRUE";
+	this._containedObject[ZaDomain.A2_isTestingGAL] = entry[ZaDomain.A2_isTestingGAL] || 0;
+	this._containedObject[ZaDomain.A2_isTestingSync] = entry[ZaDomain.A2_isTestingSync] || 0;
 	
 	/*if(entry.rights)
 		this._containedObject.rights = entry.rights;
@@ -165,7 +168,8 @@ function(entry) {
 	*/
 	
 	this.setTitle(ZaMsg.NCD_GALConfigTitle + " (" + entry.name + ")");
-	this._containedObject[ZaModel.currentStep] = 1;
+	this._containedObject[ZaModel.currentStep] = entry[ZaModel.currentStep] || 1;
+    this._containedObject._uuid = entry._extid || entry._uuid;
 	this._localXForm.setInstance(this._containedObject);	
 }
 

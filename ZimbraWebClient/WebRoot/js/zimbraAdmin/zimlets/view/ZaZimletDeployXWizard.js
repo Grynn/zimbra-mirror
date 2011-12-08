@@ -37,6 +37,7 @@ ZaZimletDeployXWizard = function(parent) {
 ZaZimletDeployXWizard.helpURL = location.pathname + ZaUtil.HELP_URL + "zimlets/setting_up_zimlets_in_zcs.htm?locid="+AjxEnv.DEFAULT_LOCALE;
 ZaZimletDeployXWizard.prototype = new ZaXWizardDialog;
 ZaZimletDeployXWizard.prototype.constructor = ZaZimletDeployXWizard;
+ZaZimletDeployXWizard.prototype.miniType = 2;
 ZaXDialog.XFormModifiers["ZaZimletDeployXWizard"] = new Array();
 ZaZimletDeployXWizard.ZimletUploadFormId = null;
 ZaZimletDeployXWizard.ZimletUploadAttachmentInputId = null;	
@@ -73,6 +74,14 @@ ZaZimletDeployXWizard.changeDeployBtnState = function (obj, ev, DwtObjId) {
 	}
 }
 
+ZaZimletDeployXWizard.prototype.handleXFormChange =
+function () {
+    if(this._containedObject[ZaModel.currentStep]==2){
+        this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
+		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
+		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
+    }
+}
 /**
 * @method setObject sets the object contained in the view
 * @param entry - ZaRestore object to display
@@ -80,10 +89,10 @@ ZaZimletDeployXWizard.changeDeployBtnState = function (obj, ev, DwtObjId) {
 ZaZimletDeployXWizard.prototype.setObject =
 function(entry) {
 	this._containedObject = entry;
-	this._containedObject[ZaModel.currentStep] = 1;
-	this._containedObject[ZaZimlet.A_attachmentId] = null;
-	this._containedObject[ZaZimlet.A_deployStatus] = null;
-	this._containedObject[ZaZimlet.A_statusMsg] = null;	
+	this._containedObject[ZaModel.currentStep] = entry[ZaModel.currentStep] || 1;
+	this._containedObject[ZaZimlet.A_attachmentId] = entry[ZaZimlet.A_attachmentId] || null;
+	this._containedObject[ZaZimlet.A_deployStatus] = entry[ZaZimlet.A_deployStatus] || null;
+	this._containedObject[ZaZimlet.A_statusMsg] = entry[ZaZimlet.A_statusMsg] || null;
 	this._localXForm.setInstance(this._containedObject);		
 }
 /**

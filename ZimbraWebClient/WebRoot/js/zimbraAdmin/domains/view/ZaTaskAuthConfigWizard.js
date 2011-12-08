@@ -65,6 +65,8 @@ ZaTaskAuthConfigWizard = function(parent) {
 ZaTaskAuthConfigWizard.prototype = new ZaXWizardDialog;
 ZaTaskAuthConfigWizard.prototype.constructor = ZaTaskAuthConfigWizard;
 ZaTaskAuthConfigWizard.prototype.registerFinishMethod = true;
+ZaTaskAuthConfigWizard.prototype.dialogType = 2;
+ZaTaskAuthConfigWizard.prototype.cacheDialog = false;
 ZaXDialog.XFormModifiers["ZaTaskAuthConfigWizard"] = new Array();
 
 if(ZaDomain) {
@@ -426,11 +428,12 @@ function(entry) {
     this._containedObject[ZaDomain.A2_zimbraSpnegoAuthRealm] = globalConfig.attrs[ZaGlobalConfig.A_zimbraSpnegoAuthRealm];
     this._containedObject[ZaDomain.A2_zimbraSpnegoGlobalSettingStatus] = ZaTaskAuthConfigWizard.getGlobalSettingMsg(this._containedObject);
 
-    this._containedObject[ZaModel.currentStep] = ZaTaskAuthConfigWizard.AUTH_CONFIG_STEP_0;
-    this._containedObject[ZaDomain.A2_zimbraSpnegoUAAllBrowsers] = "FALSE";
-    this._containedObject[ZaDomain.A2_zimbraSpnegoUASupportedBrowsers] = "FALSE";
-    this._containedObject[ZaDomain.A2_zimbraSpnegoUACustomBrowsers] = "FALSE";
+    this._containedObject[ZaModel.currentStep] = entry[ZaModel.currentStep] || ZaTaskAuthConfigWizard.AUTH_CONFIG_STEP_0;
+    this._containedObject[ZaDomain.A2_zimbraSpnegoUAAllBrowsers] = entry[ZaDomain.A2_zimbraSpnegoUAAllBrowsers] || "FALSE";
+    this._containedObject[ZaDomain.A2_zimbraSpnegoUASupportedBrowsers] = entry[ZaDomain.A2_zimbraSpnegoUASupportedBrowsers] || "FALSE";
+    this._containedObject[ZaDomain.A2_zimbraSpnegoUACustomBrowsers] = entry[ZaDomain.A2_zimbraSpnegoUACustomBrowsers] || "FALSE";
 
+    this._containedObject._uuid = entry._extid || entry._uuid;
 	this._localXForm.setInstance(this._containedObject);
 }
 

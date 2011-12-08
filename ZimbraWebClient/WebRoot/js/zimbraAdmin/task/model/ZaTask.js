@@ -48,7 +48,7 @@ ZaTask.myXModel = {
 };
 
 // type 1: for working in process, 2 for running task
-ZaTaskItem = function(constructor, cacheName, title, data, position, type, displayName, finishCallback) {
+ZaTaskItem = function(constructor, cacheName, title, data, position, type, displayName, finishCallback, cacheDialog, dialogType, editData) {
     this.constructor = constructor;
     this.cacheName = cacheName;
     this._title = title;
@@ -57,6 +57,9 @@ ZaTaskItem = function(constructor, cacheName, title, data, position, type, displ
     this.type = type || 1;
     this.displayName = displayName;
     this.finishCallback = finishCallback;
+    this.cacheDialog = cacheDialog;
+    this.dialogType = dialogType;
+    this.editData = editData;
 }
 
 ZaTaskItem.minDisplayName = new Object();
