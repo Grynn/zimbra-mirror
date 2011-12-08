@@ -59,8 +59,8 @@ function() {
  * 
  */
 XMailerZimlet.prototype._applyRequestHeaders =
-function() {	
-	ZmMailMsg.requestHeaders["X-Mailer"] = "";
+function() {
+	ZmMailMsg.requestHeaders["X-Mailer"] = "X-Mailer";
 	ZmMailMsgView.displayAdditionalHdrsInMsgView["X-Mailer"] = this.getMessage("XMailerZimlet_label_sent");
 };
 
