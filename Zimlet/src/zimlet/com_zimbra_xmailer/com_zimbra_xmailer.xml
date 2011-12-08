@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_xmailer" version="1.3" label="${msg.label}" description="${msg.description}">
+<zimlet name="com_zimbra_xmailer" version="1.4" label="${msg.label}" description="${msg.description}">
 	<include>xmailer.js</include>
 	<includeCSS>xmailer.css</includeCSS>
 	<resource>xmailer-icon.gif</resource>

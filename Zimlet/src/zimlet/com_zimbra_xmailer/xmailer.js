@@ -60,8 +60,8 @@ function() {
  */
 XMailerZimlet.prototype._applyRequestHeaders =
 function() {	
-	ZmMailMsg.requestHeaders["X-Mailer"] = null;
-	 ZmMailMsgView.displayAdditionalHdrsInMsgView["X-Mailer"] = this.getMessage("XMailerZimlet_label_sent");
+	ZmMailMsg.requestHeaders["X-Mailer"] = "";
+	ZmMailMsgView.displayAdditionalHdrsInMsgView["X-Mailer"] = this.getMessage("XMailerZimlet_label_sent");
 };
 
 /**
