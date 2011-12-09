@@ -24,6 +24,7 @@ MAPIAppointmentException::MAPIAppointmentException(HRESULT hrErrCode, LPCWSTR lp
 //bool MAPIAppointment::m_bNamedPropsInitialized = false;
 
 MAPIAppointment::MAPIAppointment(Zimbra::MAPI::MAPISession &session,
+   
     Zimbra::MAPI::MAPIMessage &mMessage)
 {
     m_session = &session;
@@ -39,6 +40,8 @@ MAPIAppointment::MAPIAppointment(Zimbra::MAPI::MAPISession &session,
 	pr_location = 0;
 	pr_busystatus = 0;
 	pr_allday = 0;
+	pr_isrecurring = 0;
+	pr_recurstream = 0;
 	pr_reminderminutes = 0;
 	pr_responsestatus = 0;
 	InitNamedPropsForAppt();
@@ -57,6 +60,12 @@ MAPIAppointment::MAPIAppointment(Zimbra::MAPI::MAPISession &session,
     m_pOrganizerName = L"";
     m_pOrganizerAddr = L"";
     m_pPrivate = L"";
+    m_pRecurPattern = L"";
+    m_pRecurInterval = L"";
+    m_pRecurWkday = L"";
+    m_pRecurEndType = L"";
+    m_pRecurCount = L"";
+    m_pRecurEndDate = L"";
 
     SetMAPIAppointmentValues();
 }
@@ -77,7 +86,9 @@ HRESULT MAPIAppointment::InitNamedPropsForAppt()
     nameIds[3] = 0x8208;
     nameIds[4] = 0x8205;
     nameIds[5] = 0x8215;
-    nameIds[6] = 0x8218;
+    nameIds[6] = 0x8223;
+    nameIds[7] = 0x8216;
+    nameIds[8] = 0x8218;
 
     nameIdsC[0] = 0x8501;
     nameIdsC[1] = 0x8506;
@@ -126,6 +137,8 @@ HRESULT MAPIAppointment::InitNamedPropsForAppt()
     pr_location = SetPropType(pAppointmentTags->aulPropTag[N_LOCATION], PT_TSTRING);
     pr_busystatus = SetPropType(pAppointmentTags->aulPropTag[N_BUSYSTATUS], PT_LONG);
     pr_allday = SetPropType(pAppointmentTags->aulPropTag[N_ALLDAY], PT_BOOLEAN);
+    pr_isrecurring = SetPropType(pAppointmentTags->aulPropTag[N_ISRECUR], PT_BOOLEAN);
+    pr_recurstream = SetPropType(pAppointmentTags->aulPropTag[N_RECURSTREAM], PT_BINARY);
     pr_responsestatus = SetPropType(pAppointmentTags->aulPropTag[N_RESPONSESTATUS], PT_LONG);
     pr_reminderminutes = SetPropType(pAppointmentTagsC->aulPropTag[N_REMINDERMINUTES], PT_LONG);
     pr_private = SetPropType(pAppointmentTagsC->aulPropTag[N_PRIVATE], PT_BOOLEAN);
@@ -153,13 +166,15 @@ HRESULT MAPIAppointment::SetMAPIAppointmentValues()
 	C_NUMALLAPPTPROPS, {
 	    PR_SUBJECT, PR_BODY, PR_HTML, pr_clean_global_objid,
 	    pr_appt_start, pr_appt_end, pr_location, pr_busystatus,
-	    pr_allday, pr_responsestatus, pr_reminderminutes, pr_private
+	    pr_allday, pr_isrecurring, pr_recurstream, pr_responsestatus,
+	    pr_reminderminutes, pr_private
 	}
     };
 
     HRESULT hr = S_OK;
     ULONG cVals = 0;
     bool bAllday = false;
+    m_bIsRecurring = false;
 
     if (FAILED(hr = m_pMessage->GetProps((LPSPropTagArray) & appointmentProps, fMapiUnicode, &cVals,
             &m_pPropVals)))
@@ -206,12 +221,102 @@ HRESULT MAPIAppointment::SetMAPIAppointmentValues()
     {
 	SetPrivate(m_pPropVals[C_PRIVATE].Value.b);
     }
+    if (m_pPropVals[C_ISRECUR].ulPropTag == appointmentProps.aulPropTag[C_ISRECUR])
+    {
+	m_bIsRecurring = (m_pPropVals[C_ISRECUR].Value.b == 1);
+    }
     SetTransparency(L"O");
     SetPlainTextFileAndContent();
     SetHtmlFileAndContent();
 
     SetOrganizerAndAttendees();
+
+    if (m_bIsRecurring)
+    {
+	if (m_pPropVals[C_RECURSTREAM].ulPropTag == appointmentProps.aulPropTag[C_RECURSTREAM])
+	{
+	    SetRecurValues();
+	}
+    }
     return hr;
+}
+
+void MAPIAppointment::SetRecurValues()
+{
+    Zimbra::Util::ScopedInterface<IStream> pRecurrenceStream;
+    HRESULT hResult = m_pMessage->OpenProperty(pr_recurstream, &IID_IStream, 0, 0,
+						(LPUNKNOWN *)pRecurrenceStream.getptr());
+    if (FAILED(hResult))
+    {
+	return;
+    }
+    WCHAR pwszTemp[10];
+    LPSTREAM pStream = pRecurrenceStream.get();
+    Zimbra::Mapi::Appt OlkAppt(m_pMessage, NULL);
+    Zimbra::Mapi::COutlookRecurrencePattern &recur = OlkAppt.GetRecurrencePattern();
+    hResult = recur.ReadRecurrenceStream(pStream);
+    if (FAILED(hResult))
+    {
+	return;
+    }
+
+    ULONG ulType = recur.GetRecurrenceType();
+    switch (ulType)
+    {
+	case oRecursDaily:
+	    m_pRecurPattern = L"DAI";
+	    break;
+	case oRecursWeekly:
+	    m_pRecurPattern = L"WEE";
+	    break;
+	case oRecursMonthly:
+	case oRecursMonthNth:
+	    m_pRecurPattern = L"MON";
+	    break;
+	case oRecursYearly:
+	case oRecursYearNth:
+	    m_pRecurPattern = L"YEA";
+	    break;
+	default: ;
+    }
+    ULONG ulInterval = recur.GetInterval();
+    _ltow(ulInterval, pwszTemp, 10);
+    m_pRecurInterval = pwszTemp;
+
+    ULONG ulDayOfWeekMask = recur.GetDayOfWeekMask();
+    switch (ulDayOfWeekMask)
+    {
+	case wdmSunday: 
+	    m_pRecurWkday = L"SU";
+	    break;
+	case wdmMonday: 
+	    m_pRecurWkday = L"MO";
+	    break;
+	case wdmTuesday: 
+	    m_pRecurWkday = L"TU";
+	    break;
+	case wdmWednesday: 
+	    m_pRecurWkday = L"WE";
+	    break;
+	case wdmThursday: 
+	    m_pRecurWkday = L"TH";
+	    break;
+	case wdmFriday: 
+	    m_pRecurWkday = L"FR";
+	    break;
+	case wdmSaturday: 
+	    m_pRecurWkday = L"SA";
+	    break;
+	default: ;
+    }
+
+    ULONG ulRecurrenceEndType = recur.GetEndType();
+    if (ulRecurrenceEndType == oetEndAfterN)
+    {
+	ULONG ulOccurrenceCount = recur.GetOccurrences();
+	_ltow(ulOccurrenceCount, pwszTemp, 10);
+	m_pRecurCount = pwszTemp;
+    }
 }
 
 void MAPIAppointment::SetSubject(LPTSTR pStr)
@@ -737,6 +842,8 @@ LPWSTR MAPIAppointment::WriteContentsToFile(LPTSTR pBody, bool isAscii)
     return lpwstrFQFileName;
 }
 
+bool MAPIAppointment::IsRecurring() {return m_bIsRecurring; }
+
 wstring MAPIAppointment::GetSubject() { return m_pSubject; }
 wstring MAPIAppointment::GetStartDate() { return m_pStartDate; }
 wstring MAPIAppointment::GetEndDate() { return m_pEndDate; }
@@ -753,3 +860,8 @@ wstring MAPIAppointment::GetPrivate() { return m_pPrivate; }
 wstring MAPIAppointment::GetPlainTextFileAndContent() { return m_pPlainTextFile; }
 wstring MAPIAppointment::GetHtmlFileAndContent() { return m_pHtmlFile; }
 vector<Attendee*> MAPIAppointment::GetAttendees() { return m_vAttendees; }
+wstring MAPIAppointment::GetRecurPattern() { return m_pRecurPattern; }
+wstring MAPIAppointment::GetRecurInterval() { return m_pRecurInterval; }
+wstring MAPIAppointment::GetRecurCount() { return m_pRecurCount; }
+wstring MAPIAppointment::GetRecurWkday() { return m_pRecurWkday; }
+wstring MAPIAppointment::GetRecurEndType() { return m_pRecurEndType; };

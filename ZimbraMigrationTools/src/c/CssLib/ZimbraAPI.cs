@@ -1146,6 +1146,34 @@ public class ZimbraAPI
             }
         }
 
+        if (appt.ContainsKey("freq"))   // it's a recurring appt
+        {
+            writer.WriteStartElement("recur");
+            writer.WriteStartElement("add");
+            writer.WriteStartElement("rule");
+            writer.WriteAttributeString("freq", appt["freq"]);
+            writer.WriteStartElement("interval");
+            writer.WriteAttributeString("ival", appt["ival"]);
+            writer.WriteEndElement();   // interval
+            if (appt.ContainsKey("wkday"))
+            {
+                writer.WriteStartElement("byday");
+                writer.WriteStartElement("wkday");
+                writer.WriteAttributeString("day", appt["wkday"]);
+                writer.WriteEndElement();   // wkday
+                writer.WriteEndElement();   // byday
+            }
+            if (appt["count"].Length > 0)
+            {
+                writer.WriteStartElement("count");
+                writer.WriteAttributeString("num", appt["count"]);
+                writer.WriteEndElement();   // count
+            }
+            writer.WriteEndElement();   // rule
+            writer.WriteEndElement();   // add
+            writer.WriteEndElement();   // recur
+        }
+
         writer.WriteStartElement("alarm");
         writer.WriteAttributeString("action", "DISPLAY");
         writer.WriteStartElement("trigger");

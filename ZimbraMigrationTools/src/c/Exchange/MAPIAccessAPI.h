@@ -144,6 +144,16 @@ typedef struct _ApptItemData: BaseItemData
     Organizer organizer;
     vector<Attendee*> vAttendees;
     vector<MessagePart> vMessageParts;
+
+    // recurrence stuff
+    wstring recurPattern;
+    wstring recurInterval;
+    wstring recurWkday;
+    wstring recurEndType;
+    wstring recurCount;
+    wstring recurEndDate;
+    //
+
     //data_buffer textbody;
     //data_buffer htmlbody;
 } ApptItemData;

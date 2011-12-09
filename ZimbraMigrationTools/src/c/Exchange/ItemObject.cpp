@@ -348,7 +348,17 @@ STDMETHODIMP CItemObject::GetDataForItemID(BSTR UserId, VARIANT ItemId, FolderTy
 		    }
 		}
 
-		//TODO: recurrence
+		// recurrence
+		if (apptData.recurPattern.length() > 0)
+		{
+		    pIt[L"freq"] = SysAllocString((apptData.recurPattern).c_str());
+		    pIt[L"ival"] = SysAllocString((apptData.recurInterval).c_str());
+		    pIt[L"count"] = SysAllocString((apptData.recurCount).c_str());
+		    if (apptData.recurPattern == L"WEE")
+		    {
+			pIt[L"wkday"] = SysAllocString((apptData.recurWkday).c_str());
+		    }
+		}
 	    }
 	    delete maapi;	// temporary
         }

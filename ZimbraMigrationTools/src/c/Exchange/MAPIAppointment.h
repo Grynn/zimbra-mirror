@@ -31,6 +31,43 @@ enum OutlookResponseStatus
     oResponseNotResponded = 5
 };
 
+enum OutlookRecurrenceType
+{
+    oRecursDaily = 0,
+    oRecursWeekly = 1,
+    oRecursMonthly = 2,
+    oRecursMonthNth = 3,
+    oRecursYearly = 5,
+    oRecursYearNth = 6
+};
+
+enum OutlookRecurrenceEndType
+{
+    oetNotDefined = 0x00000000,
+    oetEndDate	  = 0x00002021,
+    oetEndAfterN  = 0x00002022,
+    oetNoEnd      = 0x00002023,
+    oetNoEnd2     = 0xFFFFFFFF
+};
+
+typedef enum
+{
+    etNotDefined = 0x00000000, etEndDate = 0x00002021, etEndAfterN = 0x00002022, etNoEnd =
+        0x00002023, etNoEnd2 = 0xFFFFFFFF
+} RecurrenceEndType;
+
+enum OutlookMaskWeekday
+{
+    wdmUndefined    = 0x00000000,
+    wdmSunday       = 0x00000001,
+    wdmMonday       = 0x00000002,
+    wdmTuesday      = 0x00000004,
+    wdmWednesday    = 0x00000008,
+    wdmThursday     = 0x00000010,
+    wdmFriday       = 0x00000020,
+    wdmSaturday     = 0x00000040
+};
+
 typedef struct _Organizer
 {
     wstring nam;
@@ -62,13 +99,13 @@ private:
     //static bool m_bNamedPropsInitialized;
 
     // prop tags for named properties
-    ULONG pr_clean_global_objid, pr_appt_start, pr_appt_end, pr_location, pr_busystatus, pr_allday,
-	  pr_responsestatus, pr_reminderminutes, pr_private;
+    ULONG pr_clean_global_objid, pr_appt_start, pr_appt_end, pr_location, pr_busystatus, pr_allday, pr_isrecurring,
+	  pr_recurstream, pr_responsestatus, pr_reminderminutes, pr_private;
 
     // index of props
     typedef enum _AppointmentPropIdx
     {
-        N_UID, N_APPTSTART, N_APPTEND, N_LOCATION, N_BUSYSTATUS, N_ALLDAY, N_RESPONSESTATUS, N_NUMAPPTPROPS
+        N_UID, N_APPTSTART, N_APPTEND, N_LOCATION, N_BUSYSTATUS, N_ALLDAY, N_ISRECUR, N_RECURSTREAM, N_RESPONSESTATUS, N_NUMAPPTPROPS
     } AppointmentPropIdx;
 
     typedef enum _CommonPropIdx
@@ -79,7 +116,7 @@ private:
     // this enum lists all the props
     enum
     {
-        C_SUBJECT, C_BODY, C_HTMLBODY, C_UID, C_START, C_END, C_LOCATION, C_BUSYSTATUS, C_ALLDAY,  
+        C_SUBJECT, C_BODY, C_HTMLBODY, C_UID, C_START, C_END, C_LOCATION, C_BUSYSTATUS, C_ALLDAY, C_ISRECUR, C_RECURSTREAM,
 	C_RESPONSESTATUS, C_REMINDERMINUTES, C_PRIVATE, C_NUMALLAPPTPROPS
 	//org stuff later
     };
@@ -91,6 +128,8 @@ private:
     Zimbra::MAPI::MAPISession *m_session;
     LPMESSAGE m_pMessage;
     LPSPropValue m_pPropVals;
+
+    bool m_bIsRecurring;
 
     // appointment data members (represented both by regular and named props
     wstring m_pSubject;
@@ -109,6 +148,15 @@ private:
     wstring m_pPrivate;
     wstring m_pPlainTextFile;
     wstring m_pHtmlFile;
+
+    // recurrence stuff
+    wstring m_pRecurPattern;
+    wstring m_pRecurInterval;
+    wstring m_pRecurWkday;
+    wstring m_pRecurEndType;
+    wstring m_pRecurCount;
+    wstring m_pRecurEndDate;
+    //
 
 public:
     MAPIAppointment(Zimbra::MAPI::MAPISession &session, Zimbra::MAPI::MAPIMessage &mMessage);
@@ -131,10 +179,13 @@ public:
     void SetPrivate(unsigned short usPrivate);
     void SetPlainTextFileAndContent();
     void SetHtmlFileAndContent();
+    void SetRecurValues();
     HRESULT SetAppointmentAttachment(wstring &wstrAttachmentPath);
     bool TextBody(LPTSTR *ppBody, unsigned int &nTextChars);
     bool HtmlBody(LPVOID *ppBody, unsigned int &nHtmlBodyLen);
     LPWSTR WriteContentsToFile(LPTSTR pBody, bool isAscii);
+
+    bool IsRecurring();
 
     wstring GetSubject();
     wstring GetStartDate();
@@ -151,6 +202,12 @@ public:
     wstring GetPrivate();
     wstring GetPlainTextFileAndContent();
     wstring GetHtmlFileAndContent();
+    wstring GetRecurPattern();
+    wstring GetRecurInterval();
+    wstring GetRecurWkday();
+    wstring GetRecurEndType();
+    wstring GetRecurCount();
+    wstring GetRecurEndDate();
     vector<Attendee*> GetAttendees();
 
 };

@@ -664,10 +664,7 @@ LPCWSTR MAPIAccessAPI::GetItem(SBinary sbItemEID, BaseItemData &itemData)
             ad->AlarmTrigger = mapiappointment.GetReminderMinutes();
             ad->organizer.nam = mapiappointment.GetOrganizerName();
             ad->organizer.addr = mapiappointment.GetOrganizerAddr();
-            if (mapiappointment.GetInstanceUID().length() > 0)
-            {
-                ad->Uid = mapiappointment.GetInstanceUID();
-            }
+            ad->Uid = mapiappointment.GetInstanceUID();
 	    
             // fill in attendees
             vector<Attendee*> v = mapiappointment.GetAttendees();
@@ -675,6 +672,17 @@ LPCWSTR MAPIAccessAPI::GetItem(SBinary sbItemEID, BaseItemData &itemData)
             {
                 ad->vAttendees.push_back((Attendee*)v[i]);
             }
+
+	    if (mapiappointment.IsRecurring())
+	    {
+		ad->recurPattern = mapiappointment.GetRecurPattern();
+		if (ad->recurPattern == L"WEE")
+		{
+		    ad->recurWkday = mapiappointment.GetRecurWkday();
+		}
+		ad->recurInterval = mapiappointment.GetRecurInterval();
+		ad->recurCount = mapiappointment.GetRecurCount();
+	    }
 
             MessagePart mp;
             mp.contentType = L"text/plain";
