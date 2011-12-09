@@ -113,7 +113,7 @@
     <value>50</value>
   </key>
   <key name="zimbra_admin_service_port">
-    <value>7733</value>
+    <value>@port@</value>
   </key>
   <key name="zimbra_admin_service_scheme">
     <value>http://</value>
@@ -204,9 +204,6 @@
   </key>
   <key name="zimbra_mailbox_inactive_cache">
     <value>10</value>
-  </key>
-  <key name="zimbra_mailbox_manager_hardref_cache">
-    <value>250</value>
   </key>
   <key name="zimbra_minimize_resources">
     <value>true</value>

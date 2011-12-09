@@ -129,7 +129,8 @@ public class OfflineLC {
     public static final KnownKey zdesktop_heapdump_enabled;
     public static final KnownKey zdesktop_heapdump_ftp_user;
     public static final KnownKey zdesktop_heapdump_ftp_psw;
-    
+    public static final KnownKey zdesktop_mailbox_cache;
+
     static void init() {
         // This method is there to guarantee static initializer of this
         // class is run.
@@ -421,8 +422,10 @@ public class OfflineLC {
         zdesktop_heapdump_ftp = new KnownKey("zdesktop_heapdump_ftp", "ftp.zimbra.com");
         zdesktop_heapdump_ftp_user = new KnownKey("zdesktop_heapdump_ftp_user", "zdthrdump");
         zdesktop_heapdump_ftp_psw = new KnownKey("zdesktop_heapdump_ftp_psw", "kvlprG");
+        //mailbox cache size for LRU used in OfflineMailboxMananer
+        zdesktop_mailbox_cache = new KnownKey("zdesktop_mailbox_cache", "50");
     }
-    
+
     public static String getFullVersion() {
     	return zdesktop_version.value() + "_" + zdesktop_buildid.value() + "_" + getOSShortName();
     }
