@@ -1158,9 +1158,14 @@ public class ZimbraAPI
             if (appt.ContainsKey("wkday"))
             {
                 writer.WriteStartElement("byday");
-                writer.WriteStartElement("wkday");
-                writer.WriteAttributeString("day", appt["wkday"]);
-                writer.WriteEndElement();   // wkday
+                string wkday = appt["wkday"];
+                int len = wkday.Length;
+                for (int i = 0; i < len; i += 2)
+                {
+                    writer.WriteStartElement("wkday");
+                    writer.WriteAttributeString("day", wkday.Substring(i, 2));
+                    writer.WriteEndElement();   //wkday
+                }
                 writer.WriteEndElement();   // byday
             }
             if (appt["count"].Length > 0)

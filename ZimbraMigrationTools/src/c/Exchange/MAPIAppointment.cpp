@@ -284,31 +284,13 @@ void MAPIAppointment::SetRecurValues()
     m_pRecurInterval = pwszTemp;
 
     ULONG ulDayOfWeekMask = recur.GetDayOfWeekMask();
-    switch (ulDayOfWeekMask)
-    {
-	case wdmSunday: 
-	    m_pRecurWkday = L"SU";
-	    break;
-	case wdmMonday: 
-	    m_pRecurWkday = L"MO";
-	    break;
-	case wdmTuesday: 
-	    m_pRecurWkday = L"TU";
-	    break;
-	case wdmWednesday: 
-	    m_pRecurWkday = L"WE";
-	    break;
-	case wdmThursday: 
-	    m_pRecurWkday = L"TH";
-	    break;
-	case wdmFriday: 
-	    m_pRecurWkday = L"FR";
-	    break;
-	case wdmSaturday: 
-	    m_pRecurWkday = L"SA";
-	    break;
-	default: ;
-    }
+    if (ulDayOfWeekMask & wdmSunday)    m_pRecurWkday += L"SU";
+    if (ulDayOfWeekMask & wdmMonday)    m_pRecurWkday += L"MO";
+    if (ulDayOfWeekMask & wdmTuesday)   m_pRecurWkday += L"TU";
+    if (ulDayOfWeekMask & wdmWednesday) m_pRecurWkday += L"WE";
+    if (ulDayOfWeekMask & wdmThursday)  m_pRecurWkday += L"TH";
+    if (ulDayOfWeekMask & wdmFriday)    m_pRecurWkday += L"FR";
+    if (ulDayOfWeekMask & wdmSaturday)  m_pRecurWkday += L"SA";
 
     ULONG ulRecurrenceEndType = recur.GetEndType();
     if (ulRecurrenceEndType == oetEndAfterN)
