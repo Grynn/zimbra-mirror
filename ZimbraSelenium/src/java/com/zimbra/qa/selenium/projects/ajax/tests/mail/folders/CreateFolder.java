@@ -1,13 +1,14 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.mail.folders;
 
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 
-import com.zimbra.qa.selenium.framework.items.FolderItem;
-import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
+import com.zimbra.qa.selenium.framework.items.*;
+import com.zimbra.qa.selenium.framework.items.FolderItem.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
-import com.zimbra.qa.selenium.projects.ajax.core.PrefGroupMailByMessageTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.mail.DialogCreateFolder;
+import com.zimbra.qa.selenium.framework.util.ZimbraCharsets.*;
+import com.zimbra.qa.selenium.projects.ajax.core.*;
+import com.zimbra.qa.selenium.projects.ajax.ui.mail.*;
 
 public class CreateFolder extends PrefGroupMailByMessageTest {
 
@@ -124,6 +125,35 @@ public class CreateFolder extends PrefGroupMailByMessageTest {
 		ZAssert.assertEquals(folder.getName(), name,
 				"Verify the server and client folder names match");
 
+	}
+
+	@DataProvider(name = "DataProviderFilenames")
+	public Object[][] DataProviderDeleteKeys() throws HarnessException {
+		return (ZimbraCharsets.getInstance().getSampleTable());
+	}
+
+	@Test(
+			description = "Create a folder with non-ASCII special characters", 
+			groups = { "functional" },
+			dataProvider = "DataProviderFilenames")
+	public void CreateFolder_05(ZCharset charset, String foldername) 
+	throws HarnessException 
+	{
+
+
+		DialogCreateFolder dialog = (DialogCreateFolder) app.zPageMail.zKeyboardShortcut(Shortcut.S_NEWFOLDER);
+		ZAssert.assertNotNull(dialog, "Verify the new dialog opened");
+
+		// Fill out the form with the basic details
+		// TODO: does a folder in the tree need to be selected?
+		dialog.zEnterFolderName(foldername);
+		dialog.zClickButton(Button.B_OK);
+
+		// Make sure the folder was created on the server
+		FolderItem folder = FolderItem.importFromSOAP(app.zGetActiveAccount(),foldername);
+		ZAssert.assertNotNull(folder, "Verify the new folder was created");
+		ZAssert.assertEquals(folder.getName(), foldername, "Verify the server and client folder names match for charset "+ charset);
+		
 	}
 
 
