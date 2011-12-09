@@ -732,7 +732,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
                             resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
                             msgName:ZaMsg.MSG_zimbraMailPurgeSleepInterval,
                             txtBoxLabel:ZaMsg.LBL_zimbraMailPurgeSleepInterval,
-			    colSpan: 2, colSizes: ["275px","*","90px","150px"],
+			                colSpan: 2,
                             onChange:ZaServerXFormView.onFormFieldChanged
                     },
                     {ref:ZaServer.A_zimbraReverseProxyLookupTarget,
@@ -1021,7 +1021,6 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
                         {type:_ZA_TOP_GROUPER_, colSizes:["275px","*"], numCols:2, label:ZaMsg.NAD_AUTH_ClientConfigure,
                             items:[
                                 {ref:ZaServer.A_zimbraMailSSLClientCertMode, type:_SUPER_SELECT1_,
-                                  colSizes:["275px","*"],
                                   label:ZaMsg.NAD_zimbraMailSSLClientCertMode,
                                   labelLocation:_LEFT_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS
                                 },
@@ -1036,12 +1035,10 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
                                   id:"xform_header_ngnix"
                                 },
                                 {ref:ZaServer.A_zimbraReverseProxyClientCertMode, type:_SUPER_SELECT1_,
-                                  colSizes:["275px","*"],
                                   label:ZaMsg.NAD_zimbraReverseProxyClientCertMode,
                                   labelLocation:_LEFT_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS
                                 },
                                 {ref:ZaServer.A_zimbraReverseProxyMailMode, type:_SUPER_SELECT1_,
-                                  colSizes:["275px","*"],
                                   label:ZaMsg.NAD_zimbraReverseProxyMailMode,
                                   labelLocation:_LEFT_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS
                                 },
@@ -1365,7 +1362,6 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 									  checkBoxLabel:ZaMsg.NAD_Proxy_Admin_Enabled
 									},
 									{ ref: ZaServer.A_zimbraAdminProxyPort, type:_SUPER_TEXTFIELD_,
-									  colSizes:["275px","275px","*"],
 									  enableDisableChangeEventSources:[ZaServer.A_zimbraMailProxyServiceInstalled,
 									                                   ZaServer.A_zimbraMailProxyServiceEnabled,
 									                                   ZaServer.A_zimbraReverseProxyAdminEnabled],

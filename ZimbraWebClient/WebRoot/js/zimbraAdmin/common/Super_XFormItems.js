@@ -400,7 +400,7 @@ Super_Textfield_XFormItem.prototype.colSpan = 3;
 Super_Textfield_XFormItem.prototype.nowrap = false;
 Super_Textfield_XFormItem.prototype.labelWrap = true;
 if(appNewUI){
-Super_Textfield_XFormItem.prototype.colSizes = ["275px","*","150px"];
+Super_Textfield_XFormItem.prototype.colSizes = ["275px","225px","150px"];
 Super_Textfield_XFormItem.prototype.labelCssStyle = "border-right: 1px solid black;";
 Super_Textfield_XFormItem.prototype.tableCssClass = "grid_composite_table";
 }
@@ -483,7 +483,7 @@ Super_Textarea_XFormItem.prototype.colSpan = 3;
 Super_Textarea_XFormItem.prototype.nowrap = false;
 Super_Textarea_XFormItem.prototype.labelWrap = true;
 if(appNewUI){
-Super_Textarea_XFormItem.prototype.colSizes = ["275px","*","150px"];
+Super_Textarea_XFormItem.prototype.colSizes = ["275px","225px","150px"];
 Super_Textarea_XFormItem.prototype.tableCssClass = "grid_composite_table";
 }
 
@@ -559,7 +559,6 @@ SuperWiz_Checkbox_XFormItem.prototype.labelCssClass = "";
 SuperWiz_Checkbox_XFormItem.prototype.checkBoxLabelLocation = _RIGHT_;
 SuperWiz_Checkbox_XFormItem.prototype.checkboxSubLabel = "";
 SuperWiz_Checkbox_XFormItem.prototype.checkboxAlign = _RIGHT_;
-SuperWiz_Checkbox_XFormItem.prototype.colSizes = ["200px","*","150px"];
 }
 
 Super_Checkbox_XFormItem.prototype.useParentTable = false;
@@ -572,7 +571,7 @@ if(appNewUI){
 Super_Checkbox_XFormItem.prototype.labelCssStyle = "border-right: 1px solid black;";
 Super_Checkbox_XFormItem.prototype.labelCssClass = "gridGroupBodyLabel";
 Super_Checkbox_XFormItem.prototype.tableCssClass = "grid_composite_table";
-Super_Checkbox_XFormItem.prototype.colSizes = ["275px","*","150px"];
+Super_Checkbox_XFormItem.prototype.colSizes = ["275px","225px","*"];
 }else{
 Super_Checkbox_XFormItem.prototype.labelCssClass = "xform_checkbox";
 }
@@ -1094,6 +1093,9 @@ Super_Select1_XFormItem.prototype.nowrap = false;
 Super_Select1_XFormItem.prototype.labelWrap = true;
 Super_Select1_XFormItem.prototype.trueValue = "TRUE";
 Super_Select1_XFormItem.prototype.falseValue = "FALSE";
+if(appNewUI){
+Super_Select1_XFormItem.prototype.colSizes=["225px","150px"];
+}
 Super_Select1_XFormItem.prototype.initializeItems = function() {
 	var slct = {	type:_OSELECT1_, ref:".",
 		onChange:Composite_XFormItem.onFieldChange,
@@ -1171,6 +1173,9 @@ Super_Dwt_ColorPicker_XFormItem.prototype.nowrap = false;
 Super_Dwt_ColorPicker_XFormItem.prototype.labelWrap = true;
 Super_Dwt_ColorPicker_XFormItem.prototype.useParentTable = false;
 Super_Dwt_ColorPicker_XFormItem.prototype.numCols = 2;
+if(appNewUI){
+  Super_Dwt_ColorPicker_XFormItem.prototype.colSizes=["225px","150px"];
+}
 Super_Dwt_ColorPicker_XFormItem.prototype.initializeItems = function() {
     var buttonImage = this.getInheritedProperty("buttonImage") ;
     var width = this.getInheritedProperty("width") ;
@@ -1230,11 +1235,12 @@ Super_Lifetime_XFormItem.prototype.nowrap = false;
 Super_Lifetime_XFormItem.prototype.labelWrap = true;
 Super_Lifetime_XFormItem.prototype.numCols = 4;
 Super_Lifetime_XFormItem.prototype.colSpan = 4;
-Super_Lifetime_XFormItem.prototype.colSizes =["275px","80px","120px","*"];
+Super_Lifetime_XFormItem.prototype.colSizes =["275px","70px","205px","*"];
 Super_Lifetime_XFormItem.prototype.useParenttable = false;
 Super_Lifetime_XFormItem.prototype.visibilityChecks = [ZaItem.hasReadPermission];
 Super_Lifetime_XFormItem.prototype.enableDisableChecks = [ZaItem.hasWritePermission];
 if(appNewUI){
+Super_Lifetime_XFormItem.prototype.colSizes =["275px","70px","155px","*"];
 Super_Lifetime_XFormItem.prototype.labelCssStyle = "border-right: 1px solid black;";
 Super_Lifetime_XFormItem.prototype.tableCssClass = "grid_composite_table";
 }
@@ -1348,10 +1354,13 @@ Super_Lifetime1_XFormItem.prototype.nowrap = false;
 Super_Lifetime1_XFormItem.prototype.labelWrap = true;
 Super_Lifetime1_XFormItem.prototype.numCols = 4;
 Super_Lifetime1_XFormItem.prototype.colSpan = 4;
-Super_Lifetime1_XFormItem.prototype.colSizes =["275px","80px","120px","150px"];
+Super_Lifetime1_XFormItem.prototype.colSizes = ["275px", "65px'", "210px", "*"];
 Super_Lifetime1_XFormItem.prototype.useParenttable = false;
 Super_Lifetime1_XFormItem.prototype.visibilityChecks = [ZaItem.hasReadPermission];
 Super_Lifetime1_XFormItem.prototype.enableDisableChecks = [ZaItem.hasWritePermission];
+if(appNewUI){
+ Super_Lifetime1_XFormItem.prototype.colSizes = ["275px", "65px'", "160px", "*"];
+}
 
 SuperWiz_Lifetime1_XFormItem = function() {}
 SuperWiz_Lifetime1_XFormItem.prototype.visibilityChecks = [ZaItem.hasReadPermission];
@@ -1452,11 +1461,14 @@ Super_Lifetime2_XFormItem.prototype.nowrap = false;
 Super_Lifetime2_XFormItem.prototype.labelWrap = true;
 Super_Lifetime2_XFormItem.prototype.numCols = 4;
 Super_Lifetime2_XFormItem.prototype.colSpan = 4;
-Super_Lifetime2_XFormItem.prototype.colSizes =["275px","80px","120px","150px"];
+Super_Lifetime2_XFormItem.prototype.colSizes =["275px", "65px'", "210px", "*"];
 Super_Lifetime2_XFormItem.prototype.useParenttable = false;
 Super_Lifetime2_XFormItem.prototype._stringPart = "d";
 Super_Lifetime2_XFormItem.prototype.visibilityChecks = [ZaItem.hasReadPermission];
 Super_Lifetime2_XFormItem.prototype.enableDisableChecks = [ZaItem.hasWritePermission];
+if(appNewUI){
+Super_Lifetime2_XFormItem.prototype.colSizes =["275px", "65px'", "160px", "*"];
+}
 
 SuperWiz_Lifetime2_XFormItem = function() {}
 XFormItemFactory.createItemType("_SUPERWIZ_LIFETIME2_", "superwiz_lifetime2", SuperWiz_Lifetime2_XFormItem, Super_Lifetime2_XFormItem);

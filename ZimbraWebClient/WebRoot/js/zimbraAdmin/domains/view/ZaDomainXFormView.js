@@ -1291,7 +1291,6 @@ if(appNewUI) {
                             id:"xform_header_ngnix"
                           },
                           {ref:ZaDomain.A_zimbraReverseProxyClientCertMode, type:_SUPER_SELECT1_,
-                            colSizes:["275px","*"],
                             label:ZaMsg.NAD_zimbraReverseProxyClientCertMode,
                             labelCssClass:(appNewUI?"gridGroupBodyLabel":"xform_label"),
                             labelCssStyle:(appNewUI?"text-align:left;border-right: 1px solid":_UNDEFINED_),
@@ -1306,16 +1305,16 @@ if(appNewUI) {
                 { type:_ZA_TOP_GROUPER_, label: ZaMsg.NAD_WEBCLIENT_Configure, colSpan:"*",
                       items:[
                           { ref: ZaDomain.A_zimbraWebClientLoginURL,useParentTable: false,
-                            colSizes:["275px","275px","*"], colSpan: 2,
-                            type:_SUPER_TEXTFIELD_, textFieldWidth: "250px",
+                            colSpan: 2,
+                            type:_SUPER_TEXTFIELD_, textFieldWidth: "220px",
                             resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
                             msgName: ZaMsg.LBL_zimbraWebClientLoginURL,
                             txtBoxLabel: ZaMsg.LBL_zimbraWebClientLoginURL,
                             onChange:ZaDomainXFormView.onFormFieldChanged
                           },
                           { ref: ZaDomain.A_zimbraWebClientLogoutURL,useParentTable: false,
-                            colSizes:["275px","275px","*"], colSpan: 2,
-                            type:_SUPER_TEXTFIELD_, textFieldWidth: "250px",
+                            colSpan: 2,
+                            type:_SUPER_TEXTFIELD_, textFieldWidth: "220px",
                             resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
                             msgName: ZaMsg.LBL_zimbraWebClientLogoutURL,
                             txtBoxLabel: ZaMsg.LBL_zimbraWebClientLogoutURL,
