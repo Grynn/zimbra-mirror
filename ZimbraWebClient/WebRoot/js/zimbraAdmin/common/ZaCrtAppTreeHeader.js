@@ -55,6 +55,32 @@ function(ev) {
     // Nothing doing here
 }
 
+ZaCrtAppTreeHeader.prototype._getPreviousObject = function(path) {
+    var pathItems = ZaTree.getPathItems(path);
+    pathItems.pop();
+
+    var result;
+    if (pathItems.length == 2) {
+        result = [pathItems[0]]
+    } else if (pathItems.length > 2 && pathItems[1] == ZaMsg.OVP_search) {
+        result = [pathItems[0]]; // Special case for Search Items.
+
+    } else {
+        result = pathItems;
+        if (pathItems.length > 2) {
+            var originatePath = ZaTree.getPathByArray(pathItems);
+            var tree = ZaZimbraAdmin.getInstance().getOverviewPanelController().getOverviewPanel().getFolderTree();
+            var dataItem = tree.getTreeItemDataByPath(originatePath);
+            if (dataItem.defaultSelectedItem == 1) {
+                pathItems.pop();
+            }
+        }
+    }
+    var displayName = pathItems[pathItems.length - 1];
+    var resultPath = ZaTree.getPathByArray(result);
+    return new ZaHistory(resultPath, displayName);
+}
+
 ZaCrtAppTreeHeader.prototype._isDropDownEvent =
 function(ev) {
 	if (this._dropDownEventsEnabled && this._dropDownEl) {
@@ -96,12 +122,7 @@ ZaCrtAppTreeHeader.prototype.setText = function (historyObject) {
     if (historyObject.path == "Home") {
        this.preObj = historyObject;
     } else {
-       var tree = ZaZimbraAdmin.getInstance().getOverviewPanelController().getOverviewPanel().getFolderTree();
-       var pathItems = tree.getPathItems(historyObject.path);
-       pathItems.pop();
-       var displayName = pathItems[pathItems.length - 1];
-       var path = tree.getPathByArray(pathItems);
-       this.preObj = new ZaHistory(path, displayName);
+       this.preObj = this._getPreviousObject(historyObject.path);
     }
 
     var displayText = this.getDisplayContent(this.preObj.displayName);

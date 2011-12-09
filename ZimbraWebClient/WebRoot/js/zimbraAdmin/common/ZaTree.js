@@ -110,6 +110,7 @@ function(path) {
     }
     return ret;
 }
+ZaTree.getPathItems = ZaTree.prototype.getPathItems;
 
 ZaTree.prototype.setSelection =
 function(treeItem, skipNotify, kbNavEvent, noFocus) {
@@ -182,13 +183,21 @@ function (path, isAddHistory, skipNotify, kbNavEvent, noFocus, refresh) {
 
     var treeItem = this.getTreeItemByPath(path);
 
-    this._selectedItems.add(treeItem);
+    var selectedItem = this._getSelectedItem (treeItem);
 
-    if (treeItem._setSelected(true, noFocus) && !skipNotify) {
-    	this._notifyListeners(DwtEvent.SELECTION, [treeItem], DwtTree.ITEM_SELECTED, null, this._selEv, kbNavEvent, refresh);
+    this._selectedItems.add(selectedItem);
+
+    if (selectedItem._setSelected(true, noFocus) && !skipNotify) {
+    	this._notifyListeners(DwtEvent.SELECTION, [selectedItem], DwtTree.ITEM_SELECTED, null, this._selEv, kbNavEvent, refresh);
 	}
 
     this._updateHistory(treeItem, isAddHistory);
+
+    var buildDataItem = result.isNeed ? result.resultItem: dataItem;
+    if (buildDataItem.callback && buildDataItem.callback instanceof AjxCallback) {
+        buildDataItem.callback.run();
+    }
+
 }
 
 
@@ -220,6 +229,21 @@ ZaTree.prototype._getBuildNode = function (currentDataItem) {
     }
 
     return result;
+}
+
+ZaTree.prototype._getSelectedItem = function (currentRootNode) {
+    var defaultSelectedItem = currentRootNode.getData("dataItem").defaultSelectedItem;
+    if (!defaultSelectedItem) {
+        return currentRootNode;
+    }
+
+    var childRen = currentRootNode.getItems();
+    if (childRen.length > 0) {
+        return childRen[defaultSelectedItem - 1];
+    }
+
+    return currentRootNode;
+
 }
 
 //TODO make it recursive
@@ -400,7 +424,8 @@ function(showRootNode, isRoot) {
             forceNode = currentAddNode.forceNode;
         else
             forceNode = currentAddNode.childrenData.size() > 0 ? true: false;
-        ti = new ZaTreeItem({parent: currentRoot,className:currentAddNode.className,id:currentAddNode.id, forceNode: forceNode});
+
+        ti = new ZaTreeItem({parent: currentRoot,className: currentAddNode.className,id:currentAddNode.id, forceNode: forceNode});
         ti.setCount(currentAddNode.count);
         ti.setText(currentAddNode.text);
         ti.setImage(currentAddNode.image);
@@ -437,7 +462,9 @@ function(item, ev) {
 			this._notifyListeners(DwtEvent.SELECTION, this._selectedItems.getArray(), DwtTree.ITEM_DESELECTED, ev, this._selEv);
 			this._selectedItems.removeAll();
 		}
-		this._selectedItems.add(item);
+
+        this._selectedItems.add(item);
+
 		if (item._setSelected(true)) {
             this._updateHistory(item, true, isShowInHistory);
 			this._notifyListeners(DwtEvent.SELECTION, [item], DwtTree.ITEM_SELECTED, ev, this._selEv);
@@ -455,17 +482,25 @@ function(item, ev) {
         var selectedItem;
         if (currentDataItem.isLeaf())
             selectedItem = this.getTreeItemByPath(this.getABPath(currentDataItem));
-        else
-            selectedItem = this.getCurrentRootItem();
+        else {
+            selectedItem = this._getSelectedItem(this.getCurrentRootItem());
+        }
 
         this._selectedItems.add(selectedItem);
 		if (selectedItem._setSelected(true)) {
-            if (!isAlias)
-                this._updateHistory(selectedItem, true, isShowInHistory);
-            else
+            if (!isAlias) {
+                if (currentDataItem.isLeaf())
+                    this._updateHistory(selectedItem, true, isShowInHistory);
+                else
+                    this._updateHistory(this.getCurrentRootItem(), true, isShowInHistory);
+            } else
                 this._updateHistory(item, true, isShowInHistory);
 			this._notifyListeners(DwtEvent.SELECTION, [selectedItem], DwtTree.ITEM_SELECTED, ev, this._selEv);
 		}
+
+        if (buildDataItem.callback && buildDataItem.callback instanceof AjxCallback) {
+            buildDataItem.callback.run();
+        }
     }
 };
 

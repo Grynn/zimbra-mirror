@@ -819,6 +819,7 @@ function() {
                                         parent:ZaMsg.OVP_home,
                                         id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_HOME,null, "monHV"),
                                         text: ZaMsg.OVP_monitor,
+                                        defaultSelectedItem: 1,
                                         className: "AdminHomeTreeItem",
                                         mappingId: ZaZimbraAdmin._MONITOR_HOME_VIEW,
                                         image:"Monitor"
@@ -896,15 +897,18 @@ function() {
     }
     // Section Manager Account Start
     if (showManageAccount) {
+        var accountMrgCallback = new AjxCallback(this, ZaOverviewPanelController.manageAccountTreeListener);
         var accountMgr = new ZaTreeItemData({
                                         parent:ZaMsg.OVP_home,
                                         id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_HOME,null, "manActHV"),
                                         text: ZaMsg.OVP_manageAccounts,
                                         className: "AdminHomeTreeItem",
-                                        mappingId: ZaZimbraAdmin._MANAGE_ACCOUNT_HOME_VIEW,
+                                        callback: accountMrgCallback,
+                                        defaultSelectedItem: 1,
+                                        //mappingId: ZaZimbraAdmin._MANAGE_ACCOUNT_HOME_VIEW,
                                         image: "MangeAccounts"
                                         });
-        ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._MANAGE_ACCOUNT_HOME_VIEW] = ZaOverviewPanelController.manageAccountTreeListener;
+        //ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._MANAGE_ACCOUNT_HOME_VIEW] = ZaOverviewPanelController.manageAccountTreeListener;
         tree.addTreeItemData(accountMgr);
         if(accountMgr) {
             var refpath = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_manageAccounts]);
@@ -972,6 +976,7 @@ function() {
                                         parent:ZaMsg.OVP_home,
                                         id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_HOME,null, "adminHV"),
                                         text: ZaMsg.OVP_configure,
+                                        defaultSelectedItem: 1,
                                         className: "AdminHomeTreeItem",
                                         mappingId: ZaZimbraAdmin._ADMINISTRATION_HOME_VIEW,
                                         image: "Administration"
@@ -1100,6 +1105,7 @@ function() {
                                         id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_HOME,null, "magHV"),
                                         text: ZaMsg.OVP_toolMig,
                                         className: "AdminHomeTreeItem",
+                                        defaultSelectedItem: 1,
                                         mappingId: ZaZimbraAdmin._MIGRATION_HOME_VIEW,
                                         image: "ToolsAndMigration"
                                         });
@@ -1134,6 +1140,7 @@ function() {
                                     parent:parentPath,
                                     id:ZaId.getTreeItemId(ZaId.PANEL_APP,"searchHV",null, "currentSearch"),
                                     text: ZaMsg.OVP_search,
+                                    defaultSelectedItem: 1,
                                     image: "SearchAll",
                                     mappingId: ZaZimbraAdmin._SEARCH_HOME_VIEW});
     ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._SEARCH_HOME_VIEW] = ZaOverviewPanelController.newSearchListTreeListener;
@@ -1663,10 +1670,8 @@ ZaOverviewPanelController.postqByServerTreeListener = function (ev) {
 ZaOverviewPanelController.manageAccountTreeListener = function (ev) {
     var accountStat =  ZaApp.getInstance().getAccountStats(true);
     var tree = this._overviewPanel.getFolderTree();
-    var childitems = ev.item.getChildren();
-//    var absPath = tree.getABPath(ev.item.getData("dataItem")) ;//+ "/" +;
-//    var childitem = tree.getTreeItemDataByPath(absPath + "/Accounts");
-//    childitem.setCount();
+    var rootItem = tree.getCurrentRootItem();
+    var childitems = rootItem.getItems();
 
     for(var i = 0; i < childitems.length; i++) {
         var child = childitems[i];
@@ -1685,8 +1690,9 @@ ZaOverviewPanelController.prototype.refreshAccountTree = function() {
     var tree = this.getOverviewPanel().getFolderTree();
     var rootItem = tree.getCurrentRootItem();
     var rootPath = tree.getABPath(rootItem.getData("dataItem"));
-    if(targetPath == rootPath)
-        tree.setSelectionByPath(targetPath);
+    if(targetPath == rootPath) {
+        ZaOverviewPanelController.manageAccountTreeListener.call(this);
+    }
 }
 
 ZaOverviewPanelController.prototype._modifySearchMenuButton = 
@@ -1787,6 +1793,7 @@ function (parentPath, name, currentView, skipHistory, skipNotify, relatedZaItem,
                             mappingId: mappingId,
                             id:DwtId._makeId(parentId, index + 1),
                             image: (relatedZaItem?this.getIconByType(relatedZaItem.type):null),
+                            defaultSelectedItem: 1,
                             text: name});
         tree.addTreeItemData(nameDataItem);
         nameDataItem.addRelatedObject(this.getRelatedList(parentPath,relatedZaItem));
