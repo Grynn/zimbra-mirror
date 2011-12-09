@@ -613,7 +613,7 @@ public class CreateAccount extends AjaxCommonTest {
       ZAssert.assertGreaterThan(folders.size(), 0, "Folder with the active account's email address is greater than 0.");
    }
 
-   @Test(description="Add Zimbra IMAP (SSL) account to ZD client with Sending Mail set to non SSL", groups = { "smoke" })
+   @Test(description="Add Zimbra IMAP (SSL) account to ZD client with Sending Mail set to non SSL", groups = { "smoke-skip" })
    public void addZimbraImapSslSendingNonSslAccount() throws HarnessException {
       Stafzmtlsctl stafzmtlsctl = new Stafzmtlsctl();
       stafzmtlsctl.setServerAccess(SERVER_ACCESS.BOTH);
@@ -1237,7 +1237,7 @@ public class CreateAccount extends AjaxCommonTest {
       ZAssert.assertGreaterThan(folders.size(), 0, "Folder with the active account's email address is greater than 0.");
    }
 
-   @Test(description="Add Zimbra POP (SSL) account to ZD client with Sending Mail set to non SSL", groups = { "smoke" })
+   @Test(description="Add Zimbra POP (SSL) account to ZD client with Sending Mail set to non SSL", groups = { "smoke-skip" })
    public void addZimbraPopSslSendingNonSslAccount() throws HarnessException {
       Stafzmtlsctl stafzmtlsctl = new Stafzmtlsctl();
       stafzmtlsctl.setServerAccess(SERVER_ACCESS.BOTH);
