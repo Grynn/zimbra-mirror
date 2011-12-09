@@ -812,7 +812,7 @@ ZaDomain.createGalAccounts = function (tmpObj,newDomain) {
 			createExternalDSDoc.setAttribute("domain", tmpObj.attrs[ZaDomain.A_domainName]);
 			createInternalDSDoc.setAttribute("server",tmpObj.attrs[ZaDomain.A_mailHost]);
             soapDoc.set("account", tmpObj[ZaDomain.A2_new_gal_sync_account_name],createExternalDSDoc).setAttribute("by","name");
-			soapDoc.set("a", tmpObj[ZaDomain.A2_new_external_gal_polling_interval],createExternalDSDoc).setAttribute("n","zimbraDataSourcePollingInterval");
+			soapDoc.set("a", tmpObj[ZaDomain.A2_new_external_gal_polling_interval],createExternalDSDoc).setAttribute("n","ZaDataSource.A_zimbraDataSourcePollingInterval");
 		}	
 		
 		try {
