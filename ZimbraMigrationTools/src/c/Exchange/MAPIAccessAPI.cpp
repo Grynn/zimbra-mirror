@@ -682,6 +682,7 @@ LPCWSTR MAPIAccessAPI::GetItem(SBinary sbItemEID, BaseItemData &itemData)
 		}
 		ad->recurInterval = mapiappointment.GetRecurInterval();
 		ad->recurCount = mapiappointment.GetRecurCount();
+		ad->recurEndDate = mapiappointment.GetRecurEndDate();
 	    }
 
             MessagePart mp;

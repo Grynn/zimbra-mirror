@@ -299,6 +299,16 @@ void MAPIAppointment::SetRecurValues()
 	_ltow(ulOccurrenceCount, pwszTemp, 10);
 	m_pRecurCount = pwszTemp;
     }
+    else
+    if (ulRecurrenceEndType == oetEndDate)
+    {
+	SYSTEMTIME st;
+	Zimbra::Mapi::CRecurrenceTime rtEndDate = recur.GetEndDate();
+	Zimbra::Mapi::CFileTime ft = (FILETIME)rtEndDate;
+	FileTimeToSystemTime(&ft, &st);
+	wstring temp = Zimbra::Util::FormatSystemTime(st, TRUE, TRUE);
+	m_pRecurEndDate = temp.substr(0, 8);
+    }
 }
 
 void MAPIAppointment::SetSubject(LPTSTR pStr)
@@ -847,3 +857,4 @@ wstring MAPIAppointment::GetRecurInterval() { return m_pRecurInterval; }
 wstring MAPIAppointment::GetRecurCount() { return m_pRecurCount; }
 wstring MAPIAppointment::GetRecurWkday() { return m_pRecurWkday; }
 wstring MAPIAppointment::GetRecurEndType() { return m_pRecurEndType; };
+wstring MAPIAppointment::GetRecurEndDate() { return m_pRecurEndDate; };

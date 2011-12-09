@@ -1174,6 +1174,12 @@ public class ZimbraAPI
                 writer.WriteAttributeString("num", appt["count"]);
                 writer.WriteEndElement();   // count
             }
+            if (appt.ContainsKey("until"))
+            {
+                writer.WriteStartElement("until");
+                writer.WriteAttributeString("d", appt["until"]);
+                writer.WriteEndElement();   // until
+            }
             writer.WriteEndElement();   // rule
             writer.WriteEndElement();   // add
             writer.WriteEndElement();   // recur
