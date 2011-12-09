@@ -644,7 +644,9 @@ function(n, types,excludeClosed) {
 	
 	if (!AjxUtil.isEmpty(n)) {
 		query.push("(|");
-		n = String(n).replace(/([\\\\\\*\\(\\)])/g, "\\$1");
+		n = String(n).replace(/([\\\\\\*\\.])/g, "\\$1");
+		n = String(n).replace(/\(/g, "\\28");
+		n = String(n).replace(/\)/g, "\\29");
         if (!types) types = [ZaSearch.ALIASES, ZaSearch.ACCOUNTS, ZaSearch.DLS, ZaSearch.RESOURCES, ZaSearch.DOMAINS, ZaSearch.COSES] ;
         var addedAddrFields = false;
         var addedAccResFields = false;
