@@ -88,7 +88,6 @@ ZaXDialog.TEMPLATE = "admin.Widgets#ZaBaseDialog";
 ZaXDialog.prototype.supportMinimize = false;
 ZaXDialog.prototype.registerFinishMethod = false;
 ZaXDialog.prototype.miniType = 1; // default is working in process
-ZaXDialog.prototype.dialogType = 1;// 1: create, 2:edit
 ZaXDialog.prototype.cacheDialog = true;
 ZaXDialog.prototype._createHtmlFromTemplate =
 function(templateId, data) {
@@ -117,7 +116,7 @@ ZaXDialog.prototype.getTaskItem = function() {
     if (!title) {
         title = this.toString();
     }
-    var taskItem = new ZaTaskItem(this.constructor, cacheName, title, this.getObject(), this.getBounds(), this.miniType, undefined, this.getFinishBtnCallback(),this.cacheDialog, this.dialogType, this.getEditObject());
+    var taskItem = new ZaTaskItem(this.constructor, cacheName, title, this.getObject(), this.getBounds(), this.miniType, undefined, this.getFinishBtnCallback(),this.cacheDialog);
     return taskItem;
 }
 
@@ -165,15 +164,6 @@ function () {
     return this._title;
 }
 
-ZaXDialog.prototype.setEditObject =
-function (entry) {
-    this._editObject = entry;
-}
-
-ZaXDialog.prototype.getEditObject =
-function () {
-    return this._editObject;
-}
 
 }
 /**

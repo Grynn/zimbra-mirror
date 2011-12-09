@@ -392,10 +392,11 @@ function(item) {
 
     ZaApp.getInstance().dialogs["ZaGALConfigXWizard"] = new ZaGALConfigXWizard(this._container,item)
     this._galWizard = ZaApp.getInstance().dialogs["ZaGALConfigXWizard"];
-    this._galWizard.registerCallback(DwtWizardDialog.FINISH_BUTTON, ZaDomainListController.prototype._finishGalButtonListener, this, null);
     if(appNewUI){
         item._extid=ZaUtil.getItemUUid();
-        this._galWizard.setEditObject(item);
+        item._editObject = item;
+    }else{
+        this._galWizard.registerCallback(DwtWizardDialog.FINISH_BUTTON, ZaDomainListController.prototype._finishGalButtonListener, this, null);
     }
     this._galWizard.setObject(item);
     this._galWizard.popup();
@@ -417,14 +418,13 @@ ZaDomainListController.prototype._openAuthWiz =
 function (item) {
     this._currentObject = item;
     item.load("name", item.attrs[ZaDomain.A_domainName],false,true);
-    if(appNewUI)
-        this._authWizard = ZaApp.getInstance().dialogs["ZaTaskAuthConfigWizard"] = new ZaTaskAuthConfigWizard(this._container);
-    else
-        this._authWizard = ZaApp.getInstance().dialogs["ZaAuthConfigXWizard"] = new ZaAuthConfigXWizard(this._container);
-    this._authWizard.registerCallback(DwtWizardDialog.FINISH_BUTTON, ZaDomainListController.prototype._finishAuthButtonListener, this, null);
     if(appNewUI){
+        this._authWizard = ZaApp.getInstance().dialogs["ZaTaskAuthConfigWizard"] = new ZaTaskAuthConfigWizard(this._container);
         item._extid=ZaUtil.getItemUUid();
-        this._authWizard.setEditObject(item);
+        item._editObject = item;
+    }else{
+        this._authWizard = ZaApp.getInstance().dialogs["ZaAuthConfigXWizard"] = new ZaAuthConfigXWizard(this._container);
+        this._authWizard.registerCallback(DwtWizardDialog.FINISH_BUTTON, ZaDomainListController.prototype._finishAuthButtonListener, this, null);
     }
 
     this._authWizard.setObject(item);
@@ -878,6 +878,12 @@ function(ev) {
 	return;
 }
 
+ZaDomainListController.prototype.notifyAllOpenTabs =
+function(editObject) {
+    this._currentObject = editObject;
+    this._notifyAllOpenTabs();
+}
+
 ZaDomainListController.prototype._notifyAllOpenTabs =
 function() {
         var warningMsg = "<br><ul>";
@@ -907,12 +913,6 @@ function() {
 ZaDomainListController.prototype._finishAuthButtonListener =
 function(ev) {
 	try {
-        if(ev&&ev.currentObject)
-            this._currentObject = ev.currentObject;
-
-        if(ev&&ev.currentWizard)
-            this._authWizard = ev.currentWizard;
-
 		ZaDomain.modifyAuthSettings.call(this._currentObject,this._authWizard.getObject());
 		//var changeDetails = new Object();
 		//if a modification took place - fire an DomainChangeEvent
@@ -951,12 +951,6 @@ ZaDomainListController.prototype._finishGalButtonListener =
 function(ev) {
 	try {
 		//var changeDetails = new Object();
-        if(ev&&ev.currentObject)
-            this._currentObject = ev.currentObject;
-
-        if(ev&&ev.currentWizard)
-            this._galWizard = ev.currentWizard;
-
 		ZaDomain.modifyGalSettings.call(this._currentObject,this._galWizard.getObject()); 
 		//if a modification took place - fire an DomainChangeEvent
 		//changeDetails["obj"] = this._currentObject;

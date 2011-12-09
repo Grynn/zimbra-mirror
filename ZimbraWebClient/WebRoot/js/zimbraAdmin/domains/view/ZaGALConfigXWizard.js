@@ -72,12 +72,8 @@ ZaGALConfigXWizard = function(parent, entry) {
 
 ZaGALConfigXWizard.prototype = new ZaXWizardDialog;
 ZaGALConfigXWizard.prototype.constructor = ZaGALConfigXWizard;
-ZaGALConfigXWizard.prototype.registerFinishMethod = true;
-ZaGALConfigXWizard.prototype.dialogType = 2;
 ZaGALConfigXWizard.prototype.cacheDialog = false;
 ZaXDialog.XFormModifiers["ZaGALConfigXWizard"] = new Array();
-
-
 
 
 ZaGALConfigXWizard.prototype.handleXFormChange = 
@@ -170,9 +166,21 @@ function(entry) {
 	this.setTitle(ZaMsg.NCD_GALConfigTitle + " (" + entry.name + ")");
 	this._containedObject[ZaModel.currentStep] = entry[ZaModel.currentStep] || 1;
     this._containedObject._uuid = entry._extid || entry._uuid;
+    this._containedObject._editObject = entry._editObject;
 	this._localXForm.setInstance(this._containedObject);	
 }
 
+
+ZaGALConfigXWizard.prototype.finishWizard =
+function() {
+	try {
+		ZaDomain.modifyGalSettings.call(this._containedObject._editObject,this._containedObject);
+		ZaApp.getInstance().getDomainListController()._fireDomainChangeEvent(this._containedObject._editObject);
+		this.popdown();
+	} catch (ex) {
+		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaGALConfigXWizard.prototype.finishWizard", null, false);
+	}
+}
 
 /**
 * static change handlers for the form

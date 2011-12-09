@@ -58,8 +58,6 @@ ZaTaskItem = function(constructor, cacheName, title, data, position, type, displ
     this.displayName = displayName;
     this.finishCallback = finishCallback;
     this.cacheDialog = cacheDialog;
-    this.dialogType = dialogType;
-    this.editData = editData;
 }
 
 ZaTaskItem.minDisplayName = new Object();

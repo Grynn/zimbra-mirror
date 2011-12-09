@@ -64,8 +64,6 @@ ZaTaskAuthConfigWizard = function(parent) {
 
 ZaTaskAuthConfigWizard.prototype = new ZaXWizardDialog;
 ZaTaskAuthConfigWizard.prototype.constructor = ZaTaskAuthConfigWizard;
-ZaTaskAuthConfigWizard.prototype.registerFinishMethod = true;
-ZaTaskAuthConfigWizard.prototype.dialogType = 2;
 ZaTaskAuthConfigWizard.prototype.cacheDialog = false;
 ZaXDialog.XFormModifiers["ZaTaskAuthConfigWizard"] = new Array();
 
@@ -434,7 +432,22 @@ function(entry) {
     this._containedObject[ZaDomain.A2_zimbraSpnegoUACustomBrowsers] = entry[ZaDomain.A2_zimbraSpnegoUACustomBrowsers] || "FALSE";
 
     this._containedObject._uuid = entry._extid || entry._uuid;
+    this._containedObject._editObject = entry._editObject;
 	this._localXForm.setInstance(this._containedObject);
+}
+
+
+
+ZaTaskAuthConfigWizard.prototype.finishWizard =
+function() {
+	try {
+		ZaDomain.modifyAuthSettings.call(this._containedObject._editObject,this._containedObject);
+		ZaApp.getInstance().getDomainListController()._fireDomainChangeEvent(this._containedObject._editObject);
+		this.popdown();
+        ZaApp.getInstance().getDomainListController().notifyAllOpenTabs(this._containedObject._editObject);
+	} catch (ex) {
+		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaTaskAuthConfigWizard.prototype.finishWizard", null, false);
+	}
 }
 
 /**
