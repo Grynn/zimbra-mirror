@@ -179,6 +179,12 @@ sub runCommand {
         ($command ne "clusvcadm") && ($command ne "zmclustat")) {
       logMsg("ENDCMD: $host $cmdstr");
     }
+
+    # Stop if command exited with error.
+    my $status = $? >> 8;
+    if ($status != 0) {
+        exit $status;
+    }
   } else {
     logError("Can't run $cmdstr: $!");
     exit 1;
