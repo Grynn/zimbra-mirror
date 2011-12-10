@@ -189,6 +189,8 @@ public class Button {
 	public static final Button B_STOP_SHARING =  new Button("B_STOP_SHARING");
 	public static final Button B_LEAVE_THIS_SHARED_FOLDER =  new Button("O_LEAVE_THIS_SHARED_FOLDER");
 	public static final Button B_SHOW_MESSAGE = new Button("B_SHOW_MESSAGE");
+	public static final Button B_EXPAND = new Button("B_EXPAND");
+	public static final Button B_COLLAPSE = new Button("B_COLLAPSE");
 	
 	public static final Button B_TAB_SHARING = new Button("B_TAB_SHARING");
 	public static final Button B_IGNORE =  new Button("B_IGNORE");

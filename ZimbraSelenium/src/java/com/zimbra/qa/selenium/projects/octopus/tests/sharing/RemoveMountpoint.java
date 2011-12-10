@@ -148,17 +148,16 @@ public class RemoveMountpoint extends OctopusCommonTest {
 				+ "</FolderActionRequest>");
 
 		ownerAccount
-		.soapSend("<SendShareNotificationRequest xmlns='urn:zimbraMail'>"
-				+ "<share l='"
-				+ ownerFolder.getId()
-				+ "' gt='usr'"
-				+ " zid='"
-				+ currentGranteeAccount.ZimbraId
-				+ "'"
-				+ " name='"
-				+ currentGranteeAccount.EmailAddress
-				+ "'/>"
-				+ "</SendShareNotificationRequest>");
+				.soapSend("<SendShareNotificationRequest xmlns='urn:zimbraMail'>"
+						+ "<share l='"
+						+ ownerFolder.getId()
+						+ "' gt='usr'"
+						+ " zid='"
+						+ currentGranteeAccount.ZimbraId
+						+ "'"
+						+ " name='"
+						+ currentGranteeAccount.EmailAddress
+						+ "'/>" + "</SendShareNotificationRequest>");
 
 		// Current user creates the mountpoint that points to the share
 		FolderItem currentAccountRootFolder = FolderItem.importFromSOAP(
@@ -215,7 +214,7 @@ public class RemoveMountpoint extends OctopusCommonTest {
 		 * "Verify removed mount point appears in the Ignored Items List View");
 		 */
 	}
-	
+
 	@AfterMethod(groups = { "always" })
 	public void testCleanup() {
 		if (_fileAttached && _fileId != null) {
@@ -245,18 +244,21 @@ public class RemoveMountpoint extends OctopusCommonTest {
 			}
 		}
 		try {
-			// Refresh view 
-			//ZimbraAccount account = app.zGetActiveAccount();
-			//FolderItem item = FolderItem.importFromSOAP(account,SystemFolder.Briefcase);
-			//account.soapSend("<GetFolderRequest xmlns='urn:zimbraMail'><folder l='1' recursive='0'/>" + "</GetFolderRequest>");
-			//account.soapSend("<GetFolderRequest xmlns='urn:zimbraMail' requestId='folders' depth='1' tr='true' view='document'><folder l='" + item.getId() + "'/></GetFolderRequest>");
-			//account.soapSend("<GetActivityStreamRequest xmlns='urn:zimbraMail' id='16'/>");
-			//app.zGetActiveAccount().accountIsDirty = true;
-			//app.zPageOctopus.sRefresh();
-												
+			// Refresh view
+			// ZimbraAccount account = app.zGetActiveAccount();
+			// FolderItem item =
+			// FolderItem.importFromSOAP(account,SystemFolder.Briefcase);
+			// account.soapSend("<GetFolderRequest xmlns='urn:zimbraMail'><folder l='1' recursive='0'/>"
+			// + "</GetFolderRequest>");
+			// account.soapSend("<GetFolderRequest xmlns='urn:zimbraMail' requestId='folders' depth='1' tr='true' view='document'><folder l='"
+			// + item.getId() + "'/></GetFolderRequest>");
+			// account.soapSend("<GetActivityStreamRequest xmlns='urn:zimbraMail' id='16'/>");
+			// app.zGetActiveAccount().accountIsDirty = true;
+			// app.zPageOctopus.sRefresh();
+
 			// Empty trash
 			app.zPageTrash.emptyTrashUsingSOAP(app.zGetActiveAccount());
-			
+
 			app.zPageOctopus.zLogout();
 		} catch (Exception e) {
 			logger.info("Failed while emptying Trash");
