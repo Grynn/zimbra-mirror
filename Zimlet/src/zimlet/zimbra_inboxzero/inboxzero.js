@@ -122,7 +122,11 @@ InboxZero.prototype.onMsgView = function(msg, oldMsg, msgView) {
 
                 var button = toolbar.getButton(zmop);
                 this._initControl(button, category);
-                button.setMenu(this._createMenu(category, button));
+				var menu = this._createMenu(category, button);
+				if(menu) {
+					button.setMenu(menu);
+				}
+
                 button.addSelectionListener(listener);
 
                 // set button to last used state
