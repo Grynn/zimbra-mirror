@@ -9,6 +9,7 @@ import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
+import com.zimbra.qa.selenium.framework.util.ZimbraAccount.SOAP_DESTINATION_HOST_TYPE;
 import com.zimbra.qa.selenium.projects.desktop.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.desktop.ui.*;
 
@@ -142,6 +143,106 @@ public class MoveContact extends AjaxCommonTest  {
        MoveAndVerify(folder,contactItem,dialogContactMove);
        
      }
+
+   @Test(   description = "Move a contact item to folder Emailed Contacts by click shortcut m",
+         groups = { "functional" })
+   public void LocalMoveToEmailedContactsClickShortcutm() throws HarnessException {
+     
+      // Create a contact via Soap then select
+      ContactItem contactItem = app.zPageAddressbook.createUsingSOAPSelectLocalContact(
+            app,
+            Action.A_LEFTCLICK);
+
+      FolderItem emailedContacts = FolderItem.importFromSOAP(
+            app.zGetActiveAccount(),
+            SystemFolder.EmailedContacts,
+            SOAP_DESTINATION_HOST_TYPE.CLIENT,
+            ZimbraAccount.clientAccountName);
+
+      //click shortcut m
+      DialogMove dialogContactMove = (DialogMove) app.zPageAddressbook.zKeyboardShortcut(
+            Shortcut.S_MOVE);
+
+      //Move contact and verify
+      MoveAndVerify(emailedContacts, contactItem, dialogContactMove);
+
+   }
+
+   @Test(   description = "Move a contact item to folder Emailed Contacts  by click Move on context menu",
+         groups = { "functional" })
+   public void LocalMoveToEmailedContactsClickMoveOnContextmenu() throws HarnessException {
+     
+      // Create a contact via Soap then select
+      ContactItem contactItem = app.zPageAddressbook.createUsingSOAPSelectLocalContact(
+            app,
+            Action.A_LEFTCLICK);
+
+      FolderItem emailedContacts = FolderItem.importFromSOAP(
+            app.zGetActiveAccount(),
+            SystemFolder.EmailedContacts,
+            SOAP_DESTINATION_HOST_TYPE.CLIENT,
+            ZimbraAccount.clientAccountName);
+
+      //click Move icon on context menu
+      DialogMove dialogContactMove = (DialogMove) app.zPageAddressbook.zListItem(
+            Action.A_RIGHTCLICK,
+            Button.B_MOVE,
+            contactItem.fileAs);
+
+      //Move contact and verify
+      MoveAndVerify(emailedContacts,
+            contactItem,
+            dialogContactMove);
+
+   }
+
+   @Test(   description = "Move a contact item to folder Emailed Contacts by click tool bar Move",
+         groups = { "smoke" })
+   public void LocalMoveToEmailedContactsClickMoveOnToolbar() throws HarnessException {
+
+      // Create a contact via Soap then select
+      ContactItem contactItem = app.zPageAddressbook.createUsingSOAPSelectLocalContact(
+            app,
+            Action.A_LEFTCLICK);
+
+      FolderItem emailedContacts = FolderItem.importFromSOAP(
+            app.zGetActiveAccount(),
+            SystemFolder.EmailedContacts,
+            SOAP_DESTINATION_HOST_TYPE.CLIENT,
+            ZimbraAccount.clientAccountName);
+
+      //click Move icon on toolbar
+      DialogMove dialogContactMove = (DialogMove) app.zPageAddressbook.zToolbarPressButton(
+            Button.B_MOVE);
+
+      //Move contact and verify
+      MoveAndVerify(emailedContacts,contactItem, dialogContactMove);
+
+   }
+
+   @Test(   description = "Move a contact item to trash folder by click tool bar Move",
+         groups = { "functional" })
+   public void LocalMoveToTrashClickMoveOnToolbar() throws HarnessException {
+
+      // Create a contact via Soap then select
+      ContactItem contactItem = app.zPageAddressbook.createUsingSOAPSelectLocalContact(
+            app,
+            Action.A_LEFTCLICK);
+
+      FolderItem folder = FolderItem.importFromSOAP(
+            app.zGetActiveAccount(),
+            SystemFolder.Trash,
+            SOAP_DESTINATION_HOST_TYPE.CLIENT,
+            ZimbraAccount.clientAccountName);
+
+      //click Move icon on toolbar
+      DialogMove dialogContactMove = (DialogMove) app.zPageAddressbook.zToolbarPressButton(
+            Button.B_MOVE);
+
+      //Move contact and verify
+      MoveAndVerify(folder, contactItem, dialogContactMove);
+
+   }
 
 }
 

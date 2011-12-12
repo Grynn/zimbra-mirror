@@ -3,6 +3,7 @@ package com.zimbra.qa.selenium.projects.desktop.ui;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.projects.desktop.ui.addressbook.PageAddressbook;
@@ -153,16 +154,17 @@ public class DialogMove extends AbsDialog {
 
 		} else if (MyTab instanceof PageAddressbook) {
 
-		   if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
-		      locator = "css=div[id='" + Locators.zDialogId
-            + "'] td[id^='zti__" + MyApplication.zGetActiveAccount().EmailAddress +
-            ":ZmChooseFolderDialog_Contacts__'][id$=':"
-            + folder.getId() + "_textCell']";
-		   } else {
-   			locator = "css=div[id='" + Locators.zDialogId
-   			+ "'] td[id='zti__ZmChooseFolderDialog_Contacts__"
-   			+ folder.getId() + "_textCell']";
-		   }
+		   String emailAddress = folder.isDesktopClientLocalFolder() ? 
+		         ZimbraAccount.clientAccountName :
+		         MyApplication.zGetActiveAccount().EmailAddress;
+		   String folderIdSuffix = folder.isDesktopClientLocalFolder() ? 
+		         "_" + folder.getId() :
+		         ":" + folder.getId();
+
+		    locator = "css=div[id='" + Locators.zDialogId
+		         + "'] td[id^='zti__" + emailAddress +
+		         ":ZmChooseFolderDialog_Contacts__'][id$='" +
+		         folderIdSuffix + "_textCell']";
 
 		}else if (MyTab instanceof PageTasks){
 			if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
