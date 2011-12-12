@@ -41,6 +41,7 @@ import com.zimbra.common.soap.MailConstants;
 import com.zimbra.common.soap.SoapProtocol;
 import com.zimbra.common.util.Constants;
 import com.zimbra.common.util.Pair;
+import com.zimbra.common.util.StringUtil;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.offline.OfflineAccount;
@@ -264,7 +265,10 @@ public class GalSync {
             GalSyncCheckpointUtil.removeCheckpoint(MailboxManager.getInstance().getMailboxByAccount(galAccount));
         } catch (Exception e) {
             syncMan.processSyncException(galAccount, "", e, galAccount.isDebugTraceEnabled());
-            OfflineLog.offline.info("Offline GAL sync failed for " + domainGal.getDomain() + ": " + e.getMessage());
+            if (e instanceof ServiceException) {
+                OfflineLog.offline.info("gal sync req timeout is set to %d ms.", OfflineLC.zdesktop_gal_sync_request_timeout.intValue());
+            }
+            OfflineLog.offline.info("Offline GAL sync failed for " + domainGal.getDomain(), e);
         }
     }
 
@@ -327,7 +331,7 @@ public class GalSync {
                 else
                     throw (IOException) e;
             } else if ((token = handler.getToken()) == null) {
-                throw ServiceException.FAILURE("unable to search GAL", null);
+                throw ServiceException.FAILURE("gal sync token is null", null);
             }
             GalSyncCheckpointUtil.persistItemIds(galMbox, handler.getItemIds());
         }
@@ -337,6 +341,10 @@ public class GalSync {
         mbox = GalSyncUtil.getGalEnabledZcsMailbox(domain);
         if (mbox == null) {
             OfflineLog.offline.debug("No gal enabled account for domain %s, but full sync finished", domain);
+        }
+        if (StringUtil.isNullOrEmpty(token)) {
+            OfflineLog.offline.warn("gal sync token is null");
+            return;
         }
         if (fullSync) { // after a full sync, reset maintenance timer
             prov.setAccountAttribute(galAccount, OfflineConstants.A_offlineGalAccountLastRefresh,
