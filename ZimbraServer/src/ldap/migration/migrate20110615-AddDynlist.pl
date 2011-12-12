@@ -108,9 +108,6 @@ close(ZMPROV);
 
 foreach my $domain (@DOMAINS) {
   chomp($domain);
-  if ($domain =~ /\.archive$/) {
-    next;
-  }
   print "Creating group entry for domain $domain\n";
   $domain =~ s/\./,dc=/g;
   $domain = "dc=$domain";
