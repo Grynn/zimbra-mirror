@@ -156,6 +156,8 @@ private:
     wstring m_pRecurEndType;
     wstring m_pRecurCount;
     wstring m_pRecurEndDate;
+    wstring m_pRecurDayOfMonth;
+    wstring m_pRecurMonthOccurrence;
     //
 
 public:
@@ -208,6 +210,8 @@ public:
     wstring GetRecurEndType();
     wstring GetRecurCount();
     wstring GetRecurEndDate();
+    wstring GetRecurDayOfMonth();
+    wstring GetRecurMonthOccurrence();
     vector<Attendee*> GetAttendees();
 
 };

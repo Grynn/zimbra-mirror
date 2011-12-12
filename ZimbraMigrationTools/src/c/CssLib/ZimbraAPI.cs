@@ -1168,6 +1168,18 @@ public class ZimbraAPI
                 }
                 writer.WriteEndElement();   // byday
             }
+            if (appt.ContainsKey("modaylist"))
+            {
+                writer.WriteStartElement("bymonthday");
+                writer.WriteAttributeString("modaylist", appt["modaylist"]);
+                writer.WriteEndElement();   // bymonthday
+            }
+            if (appt.ContainsKey("poslist"))
+            {
+                writer.WriteStartElement("bysetpos");
+                writer.WriteAttributeString("poslist", appt["poslist"]);
+                writer.WriteEndElement();   // bymonthday
+            }
             if (appt["count"].Length > 0)
             {
                 writer.WriteStartElement("count");

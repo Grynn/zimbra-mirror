@@ -66,6 +66,8 @@ MAPIAppointment::MAPIAppointment(Zimbra::MAPI::MAPISession &session,
     m_pRecurEndType = L"";
     m_pRecurCount = L"";
     m_pRecurEndDate = L"";
+    m_pRecurDayOfMonth = L"";
+    m_pRecurMonthOccurrence = L"";
 
     SetMAPIAppointmentValues();
 }
@@ -295,6 +297,23 @@ void MAPIAppointment::SetRecurValues()
     if ((m_pRecurPattern == L"DAI") && (m_pRecurWkday.length() > 0))	// every weekday
     {
 	m_pRecurPattern = L"WEE";
+    }
+
+    if (m_pRecurPattern == L"MON")
+    {
+	if (ulType == oRecursMonthly)
+	{
+	    ULONG ulDayOfMonth = recur.GetDayOfMonth();
+	    _ltow(ulDayOfMonth, pwszTemp, 10);
+	    m_pRecurDayOfMonth = pwszTemp;
+	}
+	else
+	if (ulType == oRecursMonthNth)
+	{
+	    ULONG ulMonthOccurrence = recur.GetInstance();
+	    _ltow(ulMonthOccurrence, pwszTemp, 10);
+	    m_pRecurMonthOccurrence = pwszTemp;
+	}
     }
 
     ULONG ulRecurrenceEndType = recur.GetEndType();
@@ -863,3 +882,5 @@ wstring MAPIAppointment::GetRecurCount() { return m_pRecurCount; }
 wstring MAPIAppointment::GetRecurWkday() { return m_pRecurWkday; }
 wstring MAPIAppointment::GetRecurEndType() { return m_pRecurEndType; };
 wstring MAPIAppointment::GetRecurEndDate() { return m_pRecurEndDate; };
+wstring MAPIAppointment::GetRecurDayOfMonth() { return m_pRecurDayOfMonth; };
+wstring MAPIAppointment::GetRecurMonthOccurrence() { return m_pRecurMonthOccurrence; };

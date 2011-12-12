@@ -676,13 +676,15 @@ LPCWSTR MAPIAccessAPI::GetItem(SBinary sbItemEID, BaseItemData &itemData)
 	    if (mapiappointment.IsRecurring())
 	    {
 		ad->recurPattern = mapiappointment.GetRecurPattern();
-		if (ad->recurPattern == L"WEE")
+		if (mapiappointment.GetRecurWkday().length() > 0)
 		{
 		    ad->recurWkday = mapiappointment.GetRecurWkday();
 		}
 		ad->recurInterval = mapiappointment.GetRecurInterval();
 		ad->recurCount = mapiappointment.GetRecurCount();
 		ad->recurEndDate = mapiappointment.GetRecurEndDate();
+		ad->recurDayOfMonth = mapiappointment.GetRecurDayOfMonth();
+		ad->recurMonthOccurrence = mapiappointment.GetRecurMonthOccurrence();
 	    }
 
             MessagePart mp;

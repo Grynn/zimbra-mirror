@@ -358,9 +358,17 @@ STDMETHODIMP CItemObject::GetDataForItemID(BSTR UserId, VARIANT ItemId, FolderTy
 		    {
 			pIt[L"until"] = SysAllocString((apptData.recurEndDate).c_str());
 		    }
-		    if (apptData.recurPattern == L"WEE")
+		    if (apptData.recurWkday.length() > 0)
 		    {
 			pIt[L"wkday"] = SysAllocString((apptData.recurWkday).c_str());
+		    }
+		    if (apptData.recurDayOfMonth.length() > 0)
+		    {
+			pIt[L"modaylist"] = SysAllocString((apptData.recurDayOfMonth).c_str());
+		    }
+		    if (apptData.recurMonthOccurrence.length() > 0)
+		    {
+			pIt[L"poslist"] = SysAllocString((apptData.recurMonthOccurrence).c_str());
 		    }
 		}
 	    }
