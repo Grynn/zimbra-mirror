@@ -2298,7 +2298,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
                                     checkBoxLabel:ZaMsg.LBL_zimbraPrefMessageIdDedupingEnabled,
                                     trueValue:"TRUE", falseValue:"FALSE"},
                                 {ref:ZaAccount.A_zimbraPrefItemsPerVirtualPage, type:_SUPER_TEXTFIELD_,
-                                     colSizes:["275px", "275px", "*"], 
+                                     colSizes:["275px", "275px", "*"],colSpan:2,
 				     msgName:ZaMsg.LBL_zimbraPrefItemsPerVirtualPage,
                                      txtBoxLabel:ZaMsg.LBL_zimbraPrefItemsPerVirtualPage, 
 				     labelLocation:_LEFT_,
