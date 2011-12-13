@@ -151,6 +151,26 @@ function() {
     return this._popupOperations;
 }
 
+ZaDLController.prototype.getAppBarAction =
+function () {
+    if (AjxUtil.isEmpty(this._appbarOperation)) {
+        this._appbarOperation[ZaOperation.SAVE]= new ZaOperation(ZaOperation.SAVE, ZaMsg.TBB_Save, ZaMsg.ALTBB_Save_tt, "", "", new AjxListener(this, this.saveButtonListener));
+        this._appbarOperation[ZaOperation.CLOSE] = new ZaOperation(ZaOperation.CLOSE, ZaMsg.TBB_Close, ZaMsg.ALTBB_Close_tt, "", "", new AjxListener(this, this.closeButtonListener));
+    }
+
+    return this._appbarOperation;
+}
+
+ZaDLController.prototype.getAppBarOrder =
+function () {
+    if (AjxUtil.isEmpty(this._appbarOrder)) {
+        this._appbarOrder.push(ZaOperation.SAVE);
+        this._appbarOrder.push(ZaOperation.CLOSE);
+    }
+
+    return this._appbarOrder;
+}
+
 ZaDLController.prototype.newDl = function () {
 	var newDL = new ZaDistributionList();
 	this.show(newDL);

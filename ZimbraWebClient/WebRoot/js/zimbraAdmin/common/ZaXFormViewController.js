@@ -55,6 +55,8 @@ function(entry) {
 ZaXFormViewController.prototype.handleXFormChange = function (ev) {
 	if(ev && ev.form.hasErrors() && this._toolbar && this._toolbar.getButton(ZaOperation.SAVE)) { 
 		this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);
+        if (appNewUI)
+            ZaZimbraAdmin.getInstance().getCurrentAppBar().enableButton(ZaOperation.SAVE, false);
 	}
 }
 /**
@@ -284,7 +286,10 @@ function (params) {
 		if(this._saveChanges()) {
 			this._view.setDirty(false);
 			if(this._toolbar)
-				this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);		
+				this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);
+
+            if (appNewUI)
+                ZaZimbraAdmin.getInstance().getCurrentAppBar().enableButton(ZaOperation.SAVE, false);
 		
 			this.closeCnfrmDlg();
 
@@ -345,6 +350,13 @@ function (isD) {
             saveItem.setEnabled(true);
         else
             saveItem.setEnabled(false);
+
+        if (appNewUI) {
+            if(isD)
+                ZaZimbraAdmin.getInstance().getCurrentAppBar().enableButton(ZaOperation.SAVE, true);
+            else
+                ZaZimbraAdmin.getInstance().getCurrentAppBar().enableButton(ZaOperation.SAVE, false);
+        }
     }
 }
 

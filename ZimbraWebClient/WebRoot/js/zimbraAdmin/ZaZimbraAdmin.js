@@ -1077,6 +1077,11 @@ function(popupOperation, popupOrder) {
     return this._currentAppBar.getMenu();
 }
 
+ZaZimbraAdmin.prototype.getCurrentAppBar =
+function () {
+    return this._currentAppBar;
+}
+
 ZaZimbraAdmin.prototype._lauchNewApp =
 function() {
 	ZaSettings.TREE_ENABLED = (document.getElementById(ZaSettings.SKIN_TREE_DOM_ID)!=null);

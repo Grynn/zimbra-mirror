@@ -570,6 +570,7 @@ function(viewId) {
     var view = this.getViewContentById(viewId);
     var viewController = ZaApp.getInstance().getControllerById(viewId);
 	var popUpOperations = "" ;
+
     var typeImg = "";
 	if (viewController && viewController.getPopUpOperation) {
         popUpOperations = viewController.getPopUpOperation();
@@ -583,6 +584,19 @@ function(viewId) {
 		    this._components[ZaAppViewMgr.C_APP_HEADER].updateMenu (popUpOperations, viewController._popupOrder);
         if (this._components[ZaAppViewMgr.C_APP_HEADER].setTypeImg && typeImg)
             this._components[ZaAppViewMgr.C_APP_HEADER].setTypeImg(typeImg);
+
+        var appBarOperations = [];
+        if (viewController && viewController.getAppBarAction) {
+           appBarOperations = viewController.getAppBarAction();
+        }
+
+        var appBarOrder = [];
+
+        if (viewController && viewController.getAppBarOrder)
+            appBarOrder = viewController.getAppBarOrder();
+
+        if (this._components[ZaAppViewMgr.C_APP_HEADER].setActionButton)
+            this._components[ZaAppViewMgr.C_APP_HEADER].setActionButton(appBarOperations, appBarOrder);
 	}
 }
 

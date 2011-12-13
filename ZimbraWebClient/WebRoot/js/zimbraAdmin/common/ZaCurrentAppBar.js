@@ -8,9 +8,12 @@
 ZaCurrentAppBar = function(parent, className, buttons) {
 
 	DwtButton.call(this, parent, "", className, Dwt.ABSOLUTE_STYLE);
+    this._removeUnwantedEvent();
     this._currentPathItems = new Array();
     this.menu = new ZaPopupMenu(this);
     this.menu.setWidth(Dwt.__checkPxVal(150,true));
+    this.actionButtons = {};
+    this.itemElArray = [];
     this.setMenu(this.menu);
     this.setSettingImg();
     this.clearTypeImg();
@@ -27,11 +30,14 @@ function() {
 
 
 ZaCurrentAppBar.prototype.TEMPLATE = "admin.Widgets#ZaCurrentAppBar";
+ZaCurrentAppBar.prototype.ACTION_ITEM_TEMPLATE = "dwt.Widgets#ZToolbarItem";
 
 ZaCurrentAppBar.prototype._createHtmlFromTemplate = function(templateId, data) {
     DwtButton.prototype._createHtmlFromTemplate.call(this, templateId, data);
     this._typeImgEl = document.getElementById(data.id+"_typeimg");
     this._settingImgEl = document.getElementById(data.id+"_settingimg");
+    this._actionEl = document.getElementById(data.id+"_action");
+    this._actionItemsEl = document.getElementById(data.id+"_actionitems");
 };
 
 ZaCurrentAppBar.prototype.setSettingImg = function (imgName) {
@@ -79,6 +85,114 @@ function(path) {
             text += "-";
     }
     DwtButton.prototype.setText.call(this, text);
+}
+
+ZaCurrentAppBar.prototype.setActionButton =
+function (opList, appBarOrder) {
+    if (AjxUtil.isEmpty(opList)) {
+        this._clearActionButton();
+    } else {
+        this._addActionButton(opList, appBarOrder);
+    }
+}
+
+ZaCurrentAppBar.prototype._addActionButton =
+function (opList, appBarOrder) {
+
+    this._clearActionButton();
+    var b;
+
+    if (AjxUtil.isEmpty(appBarOrder)) {
+        for(var ix in opList) {
+            b = this._createActionButton(opList[ix].id, opList[ix].imageId, opList[ix].caption, opList[ix].disImageId, opList[ix].tt, true, opList[ix].className, opList[ix].type, opList[ix].menuOpList);
+
+            b.addSelectionListener(opList[ix].listener);
+        }
+    } else {
+        var ix;
+        for(var i in appBarOrder) {
+            ix = appBarOrder[i];
+            b = this._createActionButton(opList[ix].id, opList[ix].imageId, opList[ix].caption, opList[ix].disImageId, opList[ix].tt, true, opList[ix].className, opList[ix].type, opList[ix].menuOpList);
+
+            b.addSelectionListener(opList[ix].listener);
+        }
+    }
+
+    var width = Dwt.getBounds(this._actionItemsEl).width;
+    this.setActionItemWidth(width);
+}
+
+ZaCurrentAppBar.prototype._createActionButton =
+function(buttonId, imageId, text, disImageId, toolTip, enabled, className, type, menuOpList) {
+	if (!className)
+		className = "DwtToolbarButton"
+	var b = this.actionButtons[buttonId] = new ZaToolBarButton({
+			parent:this,
+			className:className,
+			id:ZaId.getButtonId("ZaCurrentAppBar",ZaOperation.getStringName(buttonId))
+	});
+	if (imageId)
+		b.setImage(imageId);
+	if (text)
+		b.setText(text);
+	if (toolTip)
+		b.setToolTipContent(toolTip);
+	b.setEnabled((enabled) ? true : false);
+	b.setData("_buttonId", buttonId);
+
+    var elContainer = this._createActionItemContainer();
+    elContainer.appendChild(b.getHtmlElement());
+    this._addActionItem(elContainer);
+
+	return b;
+}
+
+ZaCurrentAppBar.prototype._createActionItemContainer =
+function () {
+    var itemCount = this.itemElArray.length + 1;
+    var itemId = [this._htmlElId, "item", itemCount].join("_");
+
+    var data = { id: this._htmlElId, itemId: itemId};
+    var html = AjxTemplate.expand(this.ACTION_ITEM_TEMPLATE, data);
+
+    var cont = AjxStringUtil.calcDIV();
+    cont.innerHTML = html;
+    return cont.firstChild.rows[0].cells[0];
+}
+
+ZaCurrentAppBar.prototype._addActionItem =
+function(element) {
+    // Always add the current action item to the last one
+	var spliceIndex = this.itemElArray.length;
+	this.itemElArray.splice(spliceIndex, 0, element);
+    this._actionItemsEl.appendChild(element);
+}
+
+ZaCurrentAppBar.prototype._clearActionButton =
+function() {
+    for(var ix = 0; ix < this.itemElArray.length; ix++) {
+        this.itemElArray[ix] = undefined;
+    }
+    this.itemElArray = [];
+    this._actionItemsEl.innerHTML = "";
+    for (var actionIx in this.actionButtons) {
+        this.actionButtons[actionIx] = undefined;
+    }
+    this.actionButtons = {};
+    this.setActionItemWidth(0);
+}
+
+ZaCurrentAppBar.prototype.setActionItemWidth =
+function(w) {
+    this._actionEl.style.width = Dwt.__checkPxVal(w);
+}
+
+ZaCurrentAppBar.prototype.enableButton =
+function (buttonId, enabled) {
+    if (!this.actionButtons[buttonId])
+        return;
+
+    this.actionButtons[buttonId].setEnabled(enabled);
 }
 
 ZaCurrentAppBar.spanItemClass = "overviewHeader";
@@ -129,6 +243,19 @@ function(menu) {
 	menu.popup(0, x, y);
 };
 
+ZaCurrentAppBar.prototype.setDisplayState =
+function(state, force) {
+    if (state == DwtControl.HOVER ||
+        state == DwtControl.ACTIVE||
+        state == DwtControl.FOCUSED)
+        state = DwtControl.NORMAL;
+
+    if (this._selected && state != DwtControl.SELECTED && !force) {
+        state = [ DwtControl.SELECTED, state ].join(" ");
+    }
+    DwtLabel.prototype.setDisplayState.call(this, state);
+};
+
 ZaCurrentAppBar.prototype._isDropDownEvent =
 function(ev) {
 	if (this._dropDownEventsEnabled && this._dropDownEl) {
@@ -144,7 +271,23 @@ function(ev) {
 
 ZaCurrentAppBar.prototype._handleClick =
 function(ev) {
-    // Nothing doing here
+    //
+    var mouseEv = DwtShell.mouseEvent;
+	mouseEv.setFromDhtmlEvent(ev);
+
+    mouseEv._stopPropagation = true;
+	mouseEv._returnValue = true;
+	mouseEv.setToDhtmlEvent(ev);
+	return false;
+}
+
+ZaCurrentAppBar.prototype._removeUnwantedEvent =
+function () {
+    var events = [].concat(AjxEnv.isIE ? [DwtEvent.ONMOUSEENTER, DwtEvent.ONMOUSELEAVE] :
+										 [DwtEvent.ONMOUSEOVER, DwtEvent.ONMOUSEOUT]);
+	for (var i = 0; i < events.length; i++) {
+		this.removeListener(events[i], this._listeners[events[i]]);
+	}
 }
 
 ZaCurrentAppBar.prototype.updateMenu =

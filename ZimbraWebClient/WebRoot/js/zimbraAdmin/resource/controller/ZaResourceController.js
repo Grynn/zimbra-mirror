@@ -40,12 +40,16 @@ ZaResourceController.prototype.toString = function () {
 };
 
 ZaResourceController.prototype.setDirty = function (isDirty) {
-	this._toolbar.getButton(ZaOperation.SAVE).setEnabled(isDirty) ;	
+	this._toolbar.getButton(ZaOperation.SAVE).setEnabled(isDirty) ;
+    if (appNewUI)
+        ZaZimbraAdmin.getInstance().getCurrentAppBar().enableButton(ZaOperation.SAVE, isDirty);
 }
 
 ZaResourceController.prototype.handleXFormChange = function (ev) {
 	if(ev && ev.form.hasErrors()) { 
 		this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);
+        if (appNewUI)
+            ZaZimbraAdmin.getInstance().getCurrentAppBar().enableButton(ZaOperation.SAVE, false);
 	}	/*
 	else if(ev && ev.formItem instanceof Dwt_TabBar_XFormItem) {	
 		//do nothing - only switch the tab and it won't change the dirty status of the xform
@@ -89,6 +93,8 @@ function (entry)	{
 		this._view.setObject(entry);
 		//disable the save button at the beginning of showing the form
 		this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);
+        if (appNewUI)
+            ZaZimbraAdmin.getInstance().getCurrentAppBar().enableButton(ZaOperation.SAVE, false);
 		this._currentObject = entry;
 	} catch (ex) {
 		this._handleException(ex, "ZaResourceController.prototype.show", null, false);
@@ -157,6 +163,26 @@ function () {
     this._popupOrder.push(ZaOperation.DELETE);
 }
 ZaController.initPopupMenuMethods["ZaResourceController"].push(ZaResourceController.initPopupMenuMethod);
+
+ZaResourceController.prototype.getAppBarAction =
+function () {
+    if (AjxUtil.isEmpty(this._appbarOperation)) {
+        this._appbarOperation[ZaOperation.SAVE]= new ZaOperation(ZaOperation.SAVE, ZaMsg.TBB_Save, ZaMsg.ALTBB_Save_tt, "", "", new AjxListener(this, this.saveButtonListener));
+        this._appbarOperation[ZaOperation.CLOSE] = new ZaOperation(ZaOperation.CLOSE, ZaMsg.TBB_Close, ZaMsg.ALTBB_Close_tt, "", "", new AjxListener(this, this.closeButtonListener));
+    }
+
+    return this._appbarOperation;
+}
+
+ZaResourceController.prototype.getAppBarOrder =
+function () {
+    if (AjxUtil.isEmpty(this._appbarOrder)) {
+        this._appbarOrder.push(ZaOperation.SAVE);
+        this._appbarOrder.push(ZaOperation.CLOSE);
+    }
+
+    return this._appbarOrder;
+}
 
 ZaResourceController.prototype.getPopUpOperation =
 function() {

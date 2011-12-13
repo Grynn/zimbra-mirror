@@ -131,6 +131,25 @@ function () {
 }
 ZaController.initPopupMenuMethods["ZaAccountViewController"].push(ZaAccountViewController.initPopupMenuMethod);
 
+ZaAccountViewController.prototype.getAppBarAction =
+function () {
+    if (AjxUtil.isEmpty(this._appbarOperation)) {
+        this._appbarOperation[ZaOperation.SAVE]= new ZaOperation(ZaOperation.SAVE, ZaMsg.TBB_Save, ZaMsg.ALTBB_Save_tt, "", "", new AjxListener(this, this.saveButtonListener));
+        this._appbarOperation[ZaOperation.CLOSE] = new ZaOperation(ZaOperation.CLOSE, ZaMsg.TBB_Close, ZaMsg.ALTBB_Close_tt, "", "", new AjxListener(this, this.closeButtonListener));
+    }
+
+    return this._appbarOperation;
+}
+
+ZaAccountViewController.prototype.getAppBarOrder =
+function () {
+    if (AjxUtil.isEmpty(this._appbarOrder)) {
+        this._appbarOrder.push(ZaOperation.SAVE);
+        this._appbarOrder.push(ZaOperation.CLOSE);
+    }
+
+    return this._appbarOrder;
+}
 /**
 * This listener is called when the Delete button is clicked. 
 * member of ZaXFormViewController
@@ -212,6 +231,9 @@ function(entry) {
 		}
 
 		this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);
+        if (appNewUI)
+            ZaZimbraAdmin.getInstance().getCurrentAppBar().enableButton(ZaOperation.SAVE, false);
+
 		if(!entry.id) {
 			this._toolbar.getButton(ZaOperation.DELETE).setEnabled(false);  			
 		} else {
@@ -276,6 +298,9 @@ ZaAccountViewController.changeActionsStateMethod = function () {
 	}
 	if(this._toolbarOperations[ZaOperation.SAVE])	
 		this._toolbarOperations[ZaOperation.SAVE].enabled = false;
+
+    if (appNewUI)
+        ZaZimbraAdmin.getInstance().getCurrentAppBar().enableButton(ZaOperation.SAVE, false);
 }
 ZaController.changeActionsStateMethods["ZaAccountViewController"].push(ZaAccountViewController.changeActionsStateMethod);
 
