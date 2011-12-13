@@ -579,68 +579,70 @@ ZaSearchOption.getNewObjectTypeXForm =
 function (optionId, height){
 
     var xform = {
-			numCols:2, width: 160, cssClass: "ZaSearchOptionOverview",
+			numCols:2, cssClass: "ZaSearchOptionOverview", //"width" attribute not work here
 			items: []
 	}
 
     var basicFilterItem =  [
-		 { type: _TEXTFIELD_, ref:  ZaSearchOption.A_basic_uid,
-			label: ZaMsg.search_option_uid, align: _LEFT_, width: 100,
-		  	toolTipContent: ZaMsg.tt_search_option_uid,
-		  	enableDisableChecks:[],visibilityChecks:[]
-		 },
-		 { type: _TEXTFIELD_, ref:  ZaSearchOption.A_basic_sn,
-			label: ZaMsg.search_option_sn, align: _LEFT_, width: 100,
-			enableDisableChecks:[],visibilityChecks:[]
-		 },
-		 { type: _TEXTFIELD_, ref:  ZaSearchOption.A_basic_displayName,
-			label: ZaMsg.search_option_displayName, align: _LEFT_, width: 100,
-			enableDisableChecks:[],visibilityChecks:[]
-		 },
-		 { type: _TEXTFIELD_, ref:  ZaSearchOption.A_basic_zimbraId,
-			label: ZaMsg.search_option_zimbraId, align: _LEFT_, width: 100,
-			enableDisableChecks:[],visibilityChecks:[]
-		 },
-		 {	type: _GROUP_, name:"special search cases",
-		 	 colSpan: "2", numCols:2, width: 150, items: []
-		 }
+        {type: _GROUP_, colSizes:["90px","120px"],
+            items:[
+                { type: _TEXTFIELD_, ref:  ZaSearchOption.A_basic_uid,
+			    label: ZaMsg.search_option_uid, align: _LEFT_, width: 100,
+		  	    toolTipContent: ZaMsg.tt_search_option_uid,
+		  	    enableDisableChecks:[],visibilityChecks:[]
+		        },
+		        { type: _TEXTFIELD_, ref:  ZaSearchOption.A_basic_sn,
+			    label: ZaMsg.search_option_sn, align: _LEFT_, width: 100,
+			    enableDisableChecks:[],visibilityChecks:[]
+		        },
+		        { type: _TEXTFIELD_, ref:  ZaSearchOption.A_basic_displayName,
+			    label: ZaMsg.search_option_displayName, align: _LEFT_, width: 100,
+			    enableDisableChecks:[],visibilityChecks:[]
+		        },
+		        { type: _TEXTFIELD_, ref:  ZaSearchOption.A_basic_zimbraId,
+			    label: ZaMsg.search_option_zimbraId, align: _LEFT_, width: 100,
+			    enableDisableChecks:[],visibilityChecks:[]
+		        },
+		        {type: _GROUP_, name:"special search cases",
+		 	    colSpan: "2", numCols:2, colSizes:["90px","120px"], items: []
+		        }
+            ]
+        }
+
 	];
 
-	var i = basicFilterItem.length ;
+	var i = basicFilterItem[0].items.length ;
 
     var adminOnlyItem = {
-            type: _CHECKBOX_, ref:  ZaSearchOption.A_objTypeAccountAdmin,
+            type: _WIZ_CHECKBOX_, ref:  ZaSearchOption.A_objTypeAccountAdmin,
             trueValue:"TRUE", falseValue:"FALSE",
             label: ZaMsg.SearchFilter_Accounts_admin,
             onChange: ZaSearchBuilderController.newHandleOptions,
-            align: _LEFT_, labelLocation:_RIGHT_, subLabel: "",
             bmolsnr:true, enableDisableChecks:[],visibilityChecks:[]
         };
 
-    basicFilterItem[i-1].items.push (adminOnlyItem) ;
+    basicFilterItem[0].items[i-1].items.push (adminOnlyItem) ;
 
 	if (ZaSearchOption.A_objTypeAccountDomainAdmin) {
         var domainAdminObjTypeItem = {
-                type: _CHECKBOX_, ref:  ZaSearchOption.A_objTypeAccountDomainAdmin,
+                type: _WIZ_CHECKBOX_, ref:  ZaSearchOption.A_objTypeAccountDomainAdmin,
                 trueValue:"TRUE", falseValue:"FALSE",
                 onChange: ZaSearchBuilderController.newHandleOptions,
                 label: ZaMsg.SearchFilter_Accounts_domainadmin,
-                align: _LEFT_, labelLocation:_RIGHT_, subLabel: "",
                 bmolsnr:true,enableDisableChecks:[],visibilityChecks:[], labelWrap:true
              } ;
-        basicFilterItem[i-1].items.push( domainAdminObjTypeItem ) ;
+        basicFilterItem[0].items[i-1].items.push( domainAdminObjTypeItem ) ;
 	}
 
 	var systemAccountOnlyItem = {
-        type: _CHECKBOX_, ref:  ZaSearchOption.A_objTypeSystemAccount,
+        type: _WIZ_CHECKBOX_, ref:  ZaSearchOption.A_objTypeSystemAccount,
         trueValue:"TRUE", falseValue:"FALSE",
         onChange: ZaSearchBuilderController.newHandleOptions,
         label: ZaMsg.SearchFilter_System_Accounts,
-        align: _LEFT_, labelLocation:_RIGHT_,  subLabel: "",
         bmolsnr:true, enableDisableChecks:[],visibilityChecks:[]
     };
 
-    basicFilterItem[i-1].items.push (systemAccountOnlyItem) ;
+    basicFilterItem[0].items[i-1].items.push (systemAccountOnlyItem) ;
 
 	var domainFilterLabelWidth = 50;
 

@@ -1216,7 +1216,7 @@ function (filterType) {
             h = 150;
         } else if (filterType == ZaSearchOption.EXT_EMAIL_ADDRESS_FILTER_ID) {
             w = 230;
-            h= 30;
+            h= 40;
         }
         ZaSearchBuilderController.filterDialogSet[filterType] = new ZaSearchOptionDialog(ZaApp.getInstance().getAppCtxt().getShell(), filterType, w, h);
         ZaSearchBuilderController.filterDialogSet[filterType].registerCallback(DwtDialog.OK_BUTTON, this.filterOKListener, this, filterType);
