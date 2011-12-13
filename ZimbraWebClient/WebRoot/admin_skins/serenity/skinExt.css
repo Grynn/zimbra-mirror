@@ -1,7 +1,16 @@
+
+.overviewheader, .overviewheader-actioned{
+	border-bottom: none !important;
+}
+
+.dwtlistview, .OverviewPanel{
+	background-color: white !important;
+}
+
 .XFormCase, .SmallRadioGrouperLabel, .GrouperLabel, .RadioGrouperLabel {
     background: @viewC@;
 }
-
+ 
 .homeGroupHeader {
     background-color:@AppC@;
 }
@@ -11,7 +20,12 @@
 }
 
 .DwtTreeItemLevel1ChildDiv {
-    background-color:@PanelColor@;
+    background-color:white;
+}
+
+.DwtTreeItemLevel1ChildDiv > div{
+	margin-top: 8px;
+
 }
 
 /*  -- Navigator -- */
@@ -66,7 +80,7 @@
 .rootOverviewHeader {
     padding-left:5px;
     padding-top:5px;
-    background-color: #265480;
+    background-color: #ccc;
 }
 
 .AdminTreeItem-Count {
@@ -130,7 +144,7 @@ div.ZmSelectedHeaderBg {
 }
 
 .ZaTaskTabView .XFormCase {
-    background-color: #DDDDDD;
+    background-color: white;
 }
 /* -- Search panel -- */
 
@@ -158,7 +172,7 @@ div.ZmSelectedHeaderBg {
 }
 
 .SearchTBSearchField .dynselect_display {
-    border-color:white;
+    border:1px solid #ccc;
 }
 
 
@@ -298,6 +312,7 @@ div.ZmSelectedHeaderBg {
     color: #86a1b6;
     font-size: 16pt;
     font-weight: bold;
+    margin-bottom: 5px;
 }
 
 .ZaHomeInfoPanel {

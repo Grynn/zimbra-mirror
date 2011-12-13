@@ -16,42 +16,21 @@
 
 html {
 	margin: 0;
-	padding: 0;
-
 	height: auto;
 	min-height: 900px;
 	padding: 0;
+	background-color: #0095D3;
+	background-image: -webkit-linear-gradient(top, #0095d3, #0075a6);	
+	background: #0095D3  -moz-linear-gradient(top, #0095d3, #0075a6) no-repeat;
+	filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#0095d3', endColorstr='#0075a6');"
+	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#0095d3', endColorstr='#0075a6')";
 
-
-	/*background: #1d3a62 url(@SkinImgDir@/body-gradient-bg.png ) repeat-x;*/
-	/* This default setting defined for all */
-
-	/* For opera */
-	/* background-image: -o-linear-gradient(#079bdc, #153451);    <== only works in ver 11.1+   */
-
-
-	/* For WebKit (Safari, Google Chrome etc)	*/
-	background: #1d3a62 -webkit-gradient(linear, left top, left bottom, from(#57a3d5), to(#1d3a62)) no-repeat;
-
-	/* For Mozilla/Gecko (Firefox etc)	*/
-	background: #1d3a62  -moz-linear-gradient(top, #57a3d5, #1d3a62) no-repeat;
-
-	/* For Internet Explorer 5.5 - 7	*/
-	filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#57a3d5', endColorstr='#1d3a62');"
-
-	/* For Internet Explorer 8	*/
-	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#079bdc', endColorstr='#153451')";
-
-	background-image: url(@SkinImgDir@/gradient-bg.png);
-	background-repeat:  repeat-x;
-	background-color: #1d3a62;
 }
 
 body {
 	margin: 0;
 	padding: 0;
     @FontFamily-default@
-	background:transparent url(@SkinImgDir@/marge-mosaic-bg.png) no-repeat;
 }
 
 /* classes for the skin around the various pieces of the app */
@@ -202,7 +181,7 @@ body {
 }
 
 #skin_container_tree_footer {
-    @SkinBorderCurrentApp@;
+    background-color: white;
     @blRadius@ : 5px;
     @brRadius@ : 5px;
     height:@AppFooterHeight@;
@@ -251,7 +230,7 @@ body {
 }
 
 #skin_container_main_footer {
-    @SkinBorderCurrentApp@;
+    background-color: white;
     height:@AppFooterHeight@;
     @blRadius@ : 5px;
     @brRadius@ : 5px;
@@ -287,7 +266,7 @@ body {
     @SkinBorderApp@;
     height:100%;
 }
-
+ 
 #skin_tr_tool_footer   {
     display:table-row;
 }
@@ -297,10 +276,11 @@ body {
 }
 
 #skin_container_tool_footer {
-    @SkinBorderCurrentApp@;
+    background-color: white;
     height:@AppFooterHeight@;
     @blRadius@ : 5px;
     @brRadius@ : 5px;
+    margin-top: -2px;
 }
 
 /*Used by Admin Console start*/
@@ -314,11 +294,11 @@ body {
 
 .overviewHeader,
 .ZaToolbar                         {
-  background-color: @lighten(AppC,27)@;
-  background-image: -moz-linear-gradient(top, @lighten(AppC,27)@, @darken(AppC,3)@); /* FF3.6 */
-  background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, @lighten(AppC,27)@),color-stop(1, @darken(AppC,3)@)); /* Saf4+, Chrome */
-  filter:  progid:DXImageTransform.Microsoft.gradient(startColorStr='@lighten(AppC,27)@', EndColorStr='@darken(AppC,3)@'); /* IE6,IE7 */
-  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='@lighten(AppC,27)@', EndColorStr='@darken(AppC,3)@')"; /* IE8 */
+  /*background-color: @lighten(AppC,27)@;
+  background-image: -moz-linear-gradient(top, @lighten(AppC,27)@, @darken(AppC,3)@); 
+  background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, @lighten(AppC,27)@),color-stop(1, @darken(AppC,3)@)); 
+  filter:  progid:DXImageTransform.Microsoft.gradient(startColorStr='@lighten(AppC,27)@', EndColorStr='@darken(AppC,3)@'); 
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='@lighten(AppC,27)@', EndColorStr='@darken(AppC,3)@')"; */
 }
 
 .DwtListView-Column {
@@ -487,7 +467,7 @@ body {
 }
 
 .SearchFieldVert {
-    background-color: black;
+    background-color: white;
     @opacity(50)@
 }
 .vertSep {
