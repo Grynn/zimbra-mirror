@@ -311,8 +311,15 @@ void MAPIAppointment::SetRecurValues()
 	if (ulType == oRecursMonthNth)
 	{
 	    ULONG ulMonthOccurrence = recur.GetInstance();
-	    _ltow(ulMonthOccurrence, pwszTemp, 10);
-	    m_pRecurMonthOccurrence = pwszTemp;
+	    if (ulMonthOccurrence == 5)	    // last
+	    {
+		m_pRecurMonthOccurrence = L"-1";
+	    }
+	    else
+	    {
+		_ltow(ulMonthOccurrence, pwszTemp, 10);
+		m_pRecurMonthOccurrence = pwszTemp;
+	    }
 	}
     }
 
