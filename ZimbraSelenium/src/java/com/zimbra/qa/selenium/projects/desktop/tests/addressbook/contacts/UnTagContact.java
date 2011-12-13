@@ -1,6 +1,5 @@
 package com.zimbra.qa.selenium.projects.desktop.tests.addressbook.contacts;
 
-
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.ContactItem;
@@ -10,7 +9,9 @@ import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
+import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
+import com.zimbra.qa.selenium.framework.util.ZimbraAccount.SOAP_DESTINATION_HOST_TYPE;
 import com.zimbra.qa.selenium.projects.desktop.core.AjaxCommonTest;
 
 public class UnTagContact extends AjaxCommonTest  {
@@ -24,19 +25,29 @@ public class UnTagContact extends AjaxCommonTest  {
 		
 	}
 
-	private ContactItem createContactWithTag(String tagName) throws HarnessException{
+	private ContactItem createContactWithTag(String tagName) throws HarnessException {
+	   return createContactWithTag(tagName, SOAP_DESTINATION_HOST_TYPE.SERVER, null);
+	}
+
+	private ContactItem createContactWithTag(String tagName,
+	      SOAP_DESTINATION_HOST_TYPE destType,
+	      String accountName) throws HarnessException{
       
       // Create a tag via soap
        app.zGetActiveAccount().soapSend(
          "<CreateTagRequest xmlns='urn:zimbraMail'>" +
                "<tag name='"+ tagName +"' color='1' />" +
-            "</CreateTagRequest>");
-       String tagid = app.zGetActiveAccount().soapSelectValue("//mail:CreateTagResponse/mail:tag", "id");
+            "</CreateTagRequest>",
+            destType,
+            accountName);
+       String tagid = app.zGetActiveAccount().soapSelectValue(
+             "//mail:CreateTagResponse/mail:tag", "id");
 
        String tagParam = " t='" + tagid + "'";;
        String firstName = "first" + ZimbraSeleniumProperties.getUniqueString();     
        String lastName = "last" + ZimbraSeleniumProperties.getUniqueString();
-        String email = "email" +  ZimbraSeleniumProperties.getUniqueString() + "@zimbra.com";
+       String email = "email" +  ZimbraSeleniumProperties.getUniqueString() +
+             "@zimbra.com";
    
         //default value for file as is last, first
        String fileAs = lastName + ", " + firstName;
@@ -48,16 +59,29 @@ public class UnTagContact extends AjaxCommonTest  {
             "<a n='lastName'>" + lastName +"</a>" +
             "<a n='email'>" + email + "</a>" +               
             "</cn>" +            
-            "</CreateContactRequest>");
+            "</CreateContactRequest>",
+            destType,
+            accountName);
 
                  
-        ContactItem contactItem = ContactItem.importFromSOAP(app.zGetActiveAccount(), "FIELD[lastname]:" + lastName + "");
+        ContactItem contactItem = ContactItem.importFromSOAP(
+              app.zGetActiveAccount(),
+              "FIELD[lastname]:" + lastName,
+              destType,
+              accountName);
     
         // Refresh the view, to pick up the new contact
-        FolderItem contactFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), "Contacts");
-        
-        GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-        app.zPageAddressbook.zWaitForDesktopLoadingSpinner(5000);
+        FolderItem contactFolder = FolderItem.importFromSOAP(
+              app.zGetActiveAccount(),
+              "Contacts",
+              destType,
+              accountName);
+
+        if (accountName == null ||
+              !accountName.equals(ZimbraAccount.clientAccountName)) {
+           GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+           app.zPageAddressbook.zWaitForDesktopLoadingSpinner(5000);
+        }
 
         app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, contactFolder);
            
@@ -68,20 +92,27 @@ public class UnTagContact extends AjaxCommonTest  {
    }
 
 	private void VerifyTagRemove(String tagName, ContactItem contactItem) throws HarnessException{
+	   VerifyTagRemove(tagName, contactItem, SOAP_DESTINATION_HOST_TYPE.SERVER, null);
+	}
+
+	private void VerifyTagRemove(String tagName, ContactItem contactItem,
+	      SOAP_DESTINATION_HOST_TYPE destType, String accountName) throws HarnessException{
       
-      //verify toasted message Tag xxxxxx removed from 1 contact
-        String expectedMsg = "Tag \"" + tagName + "\" removed from 1 contact";      
-       ZAssert.assertStringContains(app.zPageMain.zGetToaster().zGetToastMessage(),
-           expectedMsg , "Verify toast message '" + expectedMsg + "'");
+	   //verify toasted message Tag xxxxxx removed from 1 contact
+	   String expectedMsg = "Tag \"" + tagName + "\" removed from 1 contact";      
+	   ZAssert.assertStringContains(app.zPageMain.zGetToaster().zGetToastMessage(),
+	         expectedMsg , "Verify toast message '" + expectedMsg + "'");
 
 
-       GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-       app.zPageAddressbook.zWaitForDesktopLoadingSpinner(5000);
+	   GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+	   app.zPageAddressbook.zWaitForDesktopLoadingSpinner(5000);
 
-       app.zGetActiveAccount().soapSend(
-            "<GetContactsRequest xmlns='urn:zimbraMail'>" +
-               "<cn id='"+ contactItem.getId() +"'/>" +
-            "</GetContactsRequest>");
+	   app.zGetActiveAccount().soapSend(
+	         "<GetContactsRequest xmlns='urn:zimbraMail'>" +
+	         "<cn id='"+ contactItem.getId() +"'/>" +
+	         "</GetContactsRequest>",
+            destType,
+            accountName);
        String contactTag = app.zGetActiveAccount().soapSelectValue("//mail:GetContactsResponse//mail:cn", "t");
 
        ZAssert.assertNull(contactTag, "Verify that the tag is removed from the contact");
@@ -111,6 +142,44 @@ public class UnTagContact extends AjaxCommonTest  {
         app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_TAG, Button.O_TAG_REMOVETAG , contactItem.fileAs);
       
         VerifyTagRemove(tagName, contactItem);   
-}
+	}
+
+   @Test(   description = "Untag a Local Folders' contact by click Toolbar Tag, then select Remove Tag",
+         groups = { "smoke" })
+   public void LocalClickToolbarTagRemoveTag() throws HarnessException {
+      String tagName = "tag"+ ZimbraSeleniumProperties.getUniqueString();
+      
+      ContactItem contactItem = createContactWithTag(
+            tagName,
+            SOAP_DESTINATION_HOST_TYPE.CLIENT,
+            ZimbraAccount.clientAccountName);
+
+      // Untag it
+      app.zPageAddressbook.zToolbarPressPulldown(Button.B_TAG, Button.O_TAG_REMOVETAG);
+
+      VerifyTagRemove(tagName,
+            contactItem,
+            SOAP_DESTINATION_HOST_TYPE.CLIENT,
+            ZimbraAccount.clientAccountName);
+   }
+
+   @Test(  description = "Untag a Local Folders' contact by click Tag->Remove Tag on context menu",
+         groups = { "smoke" })
+   public void LocalClickContextMenuTagRemoveTag() throws HarnessException {
+       String tagName = "tag"+ ZimbraSeleniumProperties.getUniqueString();
+      
+        ContactItem contactItem = createContactWithTag(
+              tagName,
+              SOAP_DESTINATION_HOST_TYPE.CLIENT,
+              ZimbraAccount.clientAccountName);
+
+        // Untag it
+        app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_TAG, Button.O_TAG_REMOVETAG , contactItem.fileAs);
+      
+        VerifyTagRemove(tagName,
+              contactItem,
+              SOAP_DESTINATION_HOST_TYPE.CLIENT,
+              ZimbraAccount.clientAccountName);   
+   }
 }
 
