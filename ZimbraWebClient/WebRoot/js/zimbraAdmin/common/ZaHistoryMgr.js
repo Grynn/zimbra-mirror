@@ -36,6 +36,8 @@ function (historyObject) {
 
 ZaHistoryMgr.prototype.addHistoryObj =
 function (historyObject) {
+    if (AjxUtil.isEmpty(historyObject.type))
+        return;
     var lastObj = this._historyObj.get(this._historyObj.size() - 1);
     if(lastObj && lastObj.path == historyObject.path)
         return;

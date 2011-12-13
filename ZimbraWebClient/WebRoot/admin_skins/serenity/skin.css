@@ -16,21 +16,42 @@
 
 html {
 	margin: 0;
+	padding: 0;
+
 	height: auto;
 	min-height: 900px;
 	padding: 0;
-	background-color: #0095D3;
-	background-image: -webkit-linear-gradient(top, #0095d3, #0075a6);	
-	background: #0095D3  -moz-linear-gradient(top, #0095d3, #0075a6) no-repeat;
-	filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#0095d3', endColorstr='#0075a6');"
-	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#0095d3', endColorstr='#0075a6')";
 
+
+	/*background: #1d3a62 url(@SkinImgDir@/body-gradient-bg.png ) repeat-x;*/
+	/* This default setting defined for all */
+
+	/* For opera */
+	/* background-image: -o-linear-gradient(#079bdc, #153451);    <== only works in ver 11.1+   */
+
+
+	/* For WebKit (Safari, Google Chrome etc)	*/
+	background: #1d3a62 -webkit-gradient(linear, left top, left bottom, from(#57a3d5), to(#1d3a62)) no-repeat;
+
+	/* For Mozilla/Gecko (Firefox etc)	*/
+	background: #1d3a62  -moz-linear-gradient(top, #57a3d5, #1d3a62) no-repeat;
+
+	/* For Internet Explorer 5.5 - 7	*/
+	filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#57a3d5', endColorstr='#1d3a62');"
+
+	/* For Internet Explorer 8	*/
+	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#079bdc', endColorstr='#153451')";
+
+	background-image: url(@SkinImgDir@/gradient-bg.png);
+	background-repeat:  repeat-x;
+	background-color: #1d3a62;
 }
 
 body {
 	margin: 0;
 	padding: 0;
     @FontFamily-default@
+	background:transparent url(@SkinImgDir@/marge-mosaic-bg.png) no-repeat;
 }
 
 /* classes for the skin around the various pieces of the app */
@@ -142,8 +163,8 @@ body {
 }
 
 #skin_td_bottom {
-    border: 5px solid gray;
-    background-color: gray;
+    border: 5px solid rgb(150, 197, 217);
+    background-color: rgb(150, 197, 217);
     @borderRadius@:5px;
 }
 
@@ -187,7 +208,7 @@ body {
 }
 
 #skin_container_tree_footer {
-    background-color: white;
+    @SkinBorderCurrentApp@;
     @blRadius@ : 5px;
     @brRadius@ : 5px;
     height:@AppFooterHeight@;
@@ -236,7 +257,7 @@ body {
 }
 
 #skin_container_main_footer {
-    background-color: white;
+    @SkinBorderCurrentApp@;
     height:@AppFooterHeight@;
     @blRadius@ : 5px;
     @brRadius@ : 5px;
@@ -282,7 +303,7 @@ body {
 }
 
 #skin_container_tool_footer {
-    background-color: white;
+    @SkinBorderCurrentApp@;
     height:@AppFooterHeight@;
     @blRadius@ : 5px;
     @brRadius@ : 5px;
@@ -473,7 +494,7 @@ body {
 }
 
 .SearchFieldVert {
-    background-color: white;
+    background-color: black;
     @opacity(50)@
 }
 .vertSep {

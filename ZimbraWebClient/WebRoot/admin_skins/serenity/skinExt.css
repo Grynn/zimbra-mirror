@@ -1,11 +1,5 @@
 
-.overviewheader, .overviewheader-actioned{
-	border-bottom: none !important;
-}
 
-.dwtlistview, .OverviewPanel{
-	background-color: white !important;
-}
 
 .XFormCase, .SmallRadioGrouperLabel, .GrouperLabel, .RadioGrouperLabel {
     background: @viewC@;
@@ -20,7 +14,7 @@
 }
 
 .DwtTreeItemLevel1ChildDiv {
-    background-color:white;
+    background-color:@PanelColor@;
 }
 
 .DwtTreeItemLevel1ChildDiv > div{
@@ -177,7 +171,7 @@ div.ZmSelectedHeaderBg {
 }
 
 .SearchTBSearchField .dynselect_display {
-    border:1px solid #ccc;
+    border-color:white;
 }
 
 
@@ -356,4 +350,8 @@ div.ZmSelectedHeaderBg {
 
 .NoResults {
     @FontFamily-default@
+}
+
+.ZaCurrentAppBar .ZDisabled .ZToolbarButtonTable .ZWidgetTitle {
+    color: white;
 }
