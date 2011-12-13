@@ -46,6 +46,7 @@ import com.zimbra.cs.mailbox.MailServiceException;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.MailboxManager;
 import com.zimbra.cs.mailbox.OfflineGalContactAutoComplete;
+import com.zimbra.cs.mailbox.OfflineServiceException;
 import com.zimbra.cs.mailbox.OperationContext;
 import com.zimbra.cs.mailbox.ContactAutoComplete.AutoCompleteResult;
 import com.zimbra.cs.offline.OfflineLog;
@@ -75,7 +76,7 @@ public class OfflineGal {
     private OperationContext mOpContext = null;
     private SearchParams searchParams = null;
 
-    public OfflineGal(OfflineAccount account) {
+    public OfflineGal(OfflineAccount account) throws OfflineServiceException {
         if (account.isGalAccount()) {
             mAccount = account;
         } else if (account.isZcsAccount() && account.isFeatureGalEnabled() && account.isFeatureGalSyncEnabled()) {
@@ -84,8 +85,9 @@ public class OfflineGal {
             } catch (ServiceException e) {
                 OfflineLog.offline.debug("failed to get GAL account for account %s", account.getName());
             }
-        } else {
-            mAccount = account;
+        }
+        if (mAccount == null) {
+            throw OfflineServiceException.GAL_NOT_READY();
         }
     }
 
