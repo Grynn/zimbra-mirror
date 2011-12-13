@@ -60,6 +60,7 @@ public class Button {
 	public static final Button O_NEW_BRIEFCASE = new Button("O_NEW_BRIEFCASE");
 	public static final Button O_TAG_NEWTAG = new Button("O_TAG_NEWTAG");
 	public static final Button O_TAG_REMOVETAG = new Button("O_TAG_REMOVETAG");
+	public static final Button O_PRINT_TASKFOLDER = new Button("O_PRINT_TASKFOLDER");
 
 	// Accept decline options
 	public static final Button O_ACCEPT_NOTIFY_ORGANIZER = new Button("O_ACCEPT_NOTIFY_ORGANIZER");

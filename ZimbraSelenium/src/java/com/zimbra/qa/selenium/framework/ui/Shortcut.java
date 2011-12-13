@@ -81,6 +81,7 @@ public class Shortcut {
 	//Task shortcut
 	public static final Shortcut S_NEWTASK = new Shortcut("S_NEWTASK", "nk");
 	public static final Shortcut S_TASK_HARDELETE = new Shortcut("S_MAIL_MOVETOTRASH",	"<SHIFT><DEL>");
+	public static final Shortcut S_PRINTTASK = new Shortcut("S_PRINTTASK", "p");
 
 	// Shortcut properties
 	private final String ID;

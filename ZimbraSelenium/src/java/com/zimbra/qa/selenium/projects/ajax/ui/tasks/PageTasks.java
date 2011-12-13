@@ -3,6 +3,7 @@
  */
 package com.zimbra.qa.selenium.projects.ajax.ui.tasks;
 
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,6 +62,9 @@ public class PageTasks extends AbsTab {
 		public static final String zFilterByTaskDropDown="css=tr[id='ztb__TKL_items'] div[id='zb__TKL__SORTBY_MENU'] td[id='zb__TKL__SORTBY_MENU_dropdown']>div";
 		public static final String zToDoListTaskMenuItem ="css=div[id^='POPUP_DWT'] div[id^='DWT'] tr[id='POPUP_TKVT']";
 		public static final String zShowOrigTaskMenuItem ="css=div[id='zm__Tasks'] tr[id='POPUP_SHOW_ORIG']";
+		public static final String zPrintTaskMenuItem ="css=div[id='zm__Tasks'] tr[id='POPUP_PRINT_TASK']";
+		public static final String zPrintTaskDropDown="css=td#zb__TKL__PRINT_dropdown>div";
+		public static final String zPrintTaskFolder ="css=div[id^='DWT'] tr[id='POPUP_PRINT_TASKFOLDER']";
 	}
 
 	public PageTasks(AbsApplication application) {
@@ -405,6 +409,10 @@ public class PageTasks extends AbsTab {
 				optionLocator= Locators.zShowOrigTaskMenuItem;
 				page =null;
 			
+			}else if(option == Button.O_PRINT_MENU){
+				optionLocator= Locators.zPrintTaskMenuItem;
+				page =null;
+			
 			}else {
 				throw new HarnessException("implement action:" + action
 						+ " option:" + option);
@@ -630,6 +638,15 @@ public class PageTasks extends AbsTab {
 			optionLocator = Locators.zNewTaskListMenuItem;
 
 			page = new DialogCreateTaskFolder(this.MyApplication, this);
+
+		}else if (pulldown == Button.B_PRINT) {
+		
+			pulldownLocator = Locators.zPrintTaskDropDown;
+			if(option== Button.O_PRINT_TASKFOLDER){
+			optionLocator = Locators.zPrintTaskFolder;
+			
+			}
+			page = null;
 
 		}else if (pulldown == Button.B_TASK_FILTERBY) {
 			
@@ -951,6 +968,11 @@ public class PageTasks extends AbsTab {
 			zKeyboard.zTypeCharacters(shortcut.getKeys());
 			page= null;
 			return page;
+		}else if (shortcut== Shortcut.S_PRINTTASK){
+			
+			keyCode= "80";
+			page= null;
+			
 		}
 		
 		else{
@@ -1045,6 +1067,24 @@ public class PageTasks extends AbsTab {
 		
 		// TODO Auto-generated method stub
 		
+	}
+	
+	public String zGetPrintWindowContent() throws HarnessException {
+		try{
+			//wait for Print Dialog displayed
+			SleepUtil.sleepMedium();			
+			// close Print dialog 
+			zKeyboard.zTypeKeyEvent(KeyEvent.VK_ESCAPE);		
+			sSelectWindow("_blank");
+			String Printcontent=sGetBodyText();
+			return Printcontent;
+		}finally{
+			sSelectWindow(null);
+		}
+
+
+		// TODO Auto-generated method stub
+
 	}
 
 }
