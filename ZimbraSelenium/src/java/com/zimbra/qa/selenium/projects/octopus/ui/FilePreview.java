@@ -8,6 +8,11 @@ public class FilePreview extends AbsDisplay {
 	public static class Locators {
 		public static final Locators zFileWatchIcon = new Locators(
 				"css=div[id=my-files-preview-toolbar] span[class=file-info-view-watch-icon]");
+		public static final Locators zHistory = new Locators(
+				"css=div[id=my-files-preview] div[id=my-files-preview-toolbar] button[id=show-activitystream-button]");
+		public static final Locators zComments = new Locators(
+				"css=div[id=my-files-preview] div[id=my-files-preview-toolbar] button[id=my-files-preview-show-comments-button]");
+
 		public final String locator;
 
 		private Locators(String locator) {
@@ -49,27 +54,33 @@ public class FilePreview extends AbsDisplay {
 		if (button == Button.B_WATCH) {
 			buttonLocator = Locators.zFileWatchIcon.locator
 					+ " span[class^=unwatched-icon]";
-
-			zClick(buttonLocator);
-
-			zWaitForBusyOverlay();
-
 		} else if (button == Button.B_UNWATCH) {
 			buttonLocator = Locators.zFileWatchIcon.locator
 					+ " span[class^=watched-icon]";
-
-			zClick(buttonLocator);
-
-			zWaitForBusyOverlay();
-
+		} else if (button == Button.B_HISTORY) {
+			buttonLocator = Locators.zHistory.locator;
+			
+			page = new DialogHistory(MyApplication);
+		} else if (button == Button.B_COMMENTS) {
+			buttonLocator = Locators.zComments.locator;
 		} else {
 			logger.info("no logic defined for " + button);
 		}
 
+		if (!this.sIsElementPresent(buttonLocator))
+			throw new HarnessException("Button is not present: "
+					+ buttonLocator);
+
+		zClick(buttonLocator);
+
+		zWaitForBusyOverlay();
+
+		if(page!=null)
+		page.zWaitForActive();
+		
 		return page;
 	}
 
-	
 	/**
 	 * Get the string value of the specified field
 	 * 
@@ -112,7 +123,7 @@ public class FilePreview extends AbsDisplay {
 			locator = "css=";
 			this.sGetText(locator);
 			throw new HarnessException("implement me!");
-		}else{
+		} else {
 			throw new HarnessException(" no such field " + field);
 		}
 	}

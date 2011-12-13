@@ -41,6 +41,10 @@ public class PageMyFiles extends AbsTab {
 				"css=div[class^=sc-view sc-menu-item] a[class=menu-item]>span:contains(Delete)");
 		public static final Locators zLeaveThisSharedFolder = new Locators(
 				"css=div[class^=sc-view sc-menu-item] a[class=menu-item]>span:contains('Leave this Shared Folder')");
+		public static final Locators zHistory = new Locators(
+				"css=div[id=my-files-preview] div[id=my-files-preview-toolbar]>button[id=show-activitystream-button])");
+		public static final Locators zComments = new Locators(
+				"css=div[id=my-files-preview] div[id=my-files-preview-toolbar]>button[id=my-files-preview-show-comments-button])");
 	
 
 		public final String locator;
@@ -382,6 +386,13 @@ public class PageMyFiles extends AbsTab {
 		// Based on the button specified, take the appropriate action(s)
 		if (button == Button.B_MY_FILES) {
 			pulldownLocator = Locators.zMyFilesArrowButton.locator;
+
+			zClick(pulldownLocator);
+
+			zWaitForBusyOverlay();
+
+		} else if (button == Button.B_HISTORY) {
+			pulldownLocator = Locators.zHistory.locator;
 
 			zClick(pulldownLocator);
 

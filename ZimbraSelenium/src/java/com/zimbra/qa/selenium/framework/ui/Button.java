@@ -191,6 +191,8 @@ public class Button {
 	public static final Button B_SHOW_MESSAGE = new Button("B_SHOW_MESSAGE");
 	public static final Button B_EXPAND = new Button("B_EXPAND");
 	public static final Button B_COLLAPSE = new Button("B_COLLAPSE");
+	public static final Button B_HISTORY =  new Button("B_HISTORY");
+	public static final Button B_COMMENTS =  new Button("B_COMMENTS");
 	
 	public static final Button B_TAB_SHARING = new Button("B_TAB_SHARING");
 	public static final Button B_IGNORE =  new Button("B_IGNORE");
@@ -203,6 +205,11 @@ public class Button {
 	public static final Button B_UNWATCH =  new Button("B_UNWATCH");
 
 	public static final Button B_TAB_HISTORY = new Button("B_TAB_HISTORY");
+	public static final Button O_ALL_TYPES =  new Button("O_ALL_TYPES");
+	public static final Button O_FAVORITES =  new Button("O_FAVORITES");
+	public static final Button O_COMMENT =  new Button("O_COMMENT");
+	public static final Button O_SHARING =  new Button("O_SHARING");
+	public static final Button O_NEW_VERSION =  new Button("O_NEW_VERSION");
 
 	public static final Button B_TAB_TRASH = new Button("B_TAB_TRASH");
 	

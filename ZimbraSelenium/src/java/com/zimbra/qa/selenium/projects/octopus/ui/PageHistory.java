@@ -16,24 +16,29 @@ public class PageHistory extends AbsTab {
 				"css=div.octopus-tab-label:contains(History)");
 		public static final Locators zTabHistorySelected = new Locators(
 				"css=div[class^=octopus-tab sc-collection-item sel]>div.octopus-tab-label:contains(History)");
-		public static final Locators zHistoryHeader = new Locators(
-		"css=div[id=history-header-view]");
 		public static final Locators zHistoryView = new Locators(
-				"css=div[id=octopus-history-view]");
-		public static final Locators zHistoryNotificationListView = new Locators(
-		"css=ul[id=history-notification-pending-page-list-view]");
-		public static final Locators zHistoryNotificationListItem =  new Locators(
-				"css=div[class=history-notification-list-item]");
-		public static final Locators zHistoryItemsView =  new Locators(
-		"css=div[id=shared-items-view]");
-		public static final Locators zHistoryItemRow =  new Locators(
-		"css=div[class=history-item-row]");
-		public static final Locators zIgnoredItemsView =  new Locators(
-		"css=div[id=ignored-items-view]");
-		public static final Locators zIgnoredItemRow =  new Locators(
-		"css=div[class=history-item-row]");
-		
-		
+				"css=div[id=octopus-updates-view]");
+		public static final Locators zHistoryHeader = new Locators(
+				"css=div[id=my-updates-header-view]");
+		public static final Locators zHistoryItemsView = new Locators(
+				"css=div[id=my-updates-view]");
+		public static final Locators zHistoryItemRow = new Locators(
+				"css=div[class=activity-stream-pane-list-item]");
+		public static final Locators zHistoryFilterView = new Locators(
+				"css=div[class=my-updates-filter-view]");
+		public static final Locators zHistoryFilterAllTypes = new Locators(
+				"css=input[id=filter_alltypes]");
+		public static final Locators zHistoryFilterFavorites = new Locators(
+				"css=input[id=filter_watched]");
+		public static final Locators zHistoryFilterComment = new Locators(
+				"css=input[id=filter_comment]");
+		public static final Locators zHistoryFilterSharing = new Locators(
+				"css=input[id=filter_sharing]");
+		public static final Locators zHistoryFilterNewVersion = new Locators(
+				"css=input[id=filter_new]");
+		public static final Locators zHistoryFilterRename = new Locators(
+				"css=input[id=filter_rename]");
+
 		public final String locator;
 
 		private Locators(String locator) {
@@ -62,8 +67,7 @@ public class PageHistory extends AbsTab {
 		boolean selected = sIsElementPresent(Locators.zTabHistorySelected.locator);
 
 		if (!selected) {
-			logger.debug("zIsActive(): "
-					+ selected);
+			logger.debug("zIsActive(): " + selected);
 			return (false);
 		}
 
@@ -91,7 +95,7 @@ public class PageHistory extends AbsTab {
 
 		String locator = Locators.zTabHistory.locator;
 
-		if(!zWaitForElementPresent(locator,"5000")){
+		if (!zWaitForElementPresent(locator, "5000")) {
 			throw new HarnessException(locator + " Not Present!");
 		}
 
@@ -103,59 +107,89 @@ public class PageHistory extends AbsTab {
 		zWaitForActive();
 	}
 
-	
-	public AbsPage zToolbarPressButton(Button button, IItem item) throws HarnessException {
+	public AbsPage zToolbarPressButton(Button button, IItem item)
+			throws HarnessException {
 		logger.info(myPageName() + " zToolbarPressButton(" + button + ")");
 
 		tracer.trace("Press the " + button + " button");
 
-		if (button == null)
-			throw new HarnessException("Button cannot be null!");
+		throw new HarnessException("No logic defined for: " + button + " :"
+				+ item);
+
+	}
+
+	public AbsPage zToolbarCheckMark(Button option) throws HarnessException {
+		logger.info(myPageName() + " zToolbarCheckOption(" + option + ")");
+
+		tracer.trace("Check the " + option + " option");
+
+		if (option == null)
+			throw new HarnessException("Check box cannot be null!");
 
 		// Default behavior variables
 		//
 		String locator = null; // If set, this will be clicked
 		AbsPage page = null; // If set, this page will be returned
 
-		// Based on the button specified, take the appropriate action(s)
-		//
-
-		if (button == Button.B_ADD_TO_MY_FILES) {
-			// Check if the button is disabled
-			locator = Locators.zHistoryNotificationListItem.locator + ":contains(" + item.getName() + ") button:contains(Add to My Files)";
-			
-		} else if (button == Button.B_IGNORE) {
-			// Check if the button is disabled
-			locator = Locators.zHistoryNotificationListItem.locator + ":contains(" + item.getName() + ") button:contains(Ignore)";
-
+		if (option == Button.O_ALL_TYPES) {
+			locator = Locators.zHistoryFilterAllTypes.locator;
+		} else if (option == Button.O_FAVORITES) {
+			locator = Locators.zHistoryFilterFavorites.locator;
+		} else if (option == Button.O_COMMENT) {
+			locator = Locators.zHistoryFilterComment.locator;
+		} else if (option == Button.O_SHARING) {
+			locator = Locators.zHistoryFilterSharing.locator;
+		} else if (option == Button.O_NEW_VERSION) {
+			locator = Locators.zHistoryFilterNewVersion.locator;
+		} else if (option == Button.O_RENAME) {
+			locator = Locators.zHistoryFilterRename.locator;
 		} else {
-			throw new HarnessException("no logic defined for button " + button);
+			throw new HarnessException("no logic defined for check box " + option);
 		}
 
-		/*
-		 * if (locator == null) { throw new
-		 * HarnessException("locator was null for button " + button); }
-		 */
-		// Default behavior, process the locator by clicking on it
-
-		// Make sure the button exists
 		if (!this.sIsElementPresent(locator))
-			throw new HarnessException("Button is not present locator="
-					+ locator + " button=" + button);
+			throw new HarnessException("Check box is not present: " + locator);
 
-		// Click it
-		this.zClick(locator);
+		// Check box
+		this.sCheck(locator);
 
 		// If the app is busy, wait for it to become active
 		zWaitForBusyOverlay();
 
 		return (page);
 	}
-	
+
 	
 	@Override
 	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
-		throw new HarnessException("Implement me");
+		logger.info(myPageName() + " zToolbarPressButton(" + button + ")");
+
+		tracer.trace("Press the " + button + " button");
+
+		if (button == null)
+			throw new HarnessException("Check box cannot be null!");
+
+		// Default behavior variables
+		//
+		String locator = null; // If set, this will be clicked
+		AbsPage page = null; // If set, this page will be returned
+
+		if (button == Button.O_ALL_TYPES) {
+			locator = Locators.zHistoryFilterAllTypes.locator;
+		} else {
+			throw new HarnessException("no logic defined for button " + button);
+		}
+
+		if (!this.sIsElementPresent(locator))
+			throw new HarnessException("button is not present: " + locator);
+
+		// Check box
+		this.zClick(locator);
+
+		// If the app is busy, wait for it to become active
+		zWaitForBusyOverlay();
+
+		return (page);
 	}
 
 	@Override

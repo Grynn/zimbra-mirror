@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.httpclient.HttpStatus;
+import com.zimbra.common.soap.Element;
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.ui.*;
@@ -125,7 +126,7 @@ public class PageOctopus extends AbsTab {
 
 		map.put("loginOp", "logout");
 
-		//this.openUrl("", map);
+		// this.openUrl("", map);
 		zClick(PageOctopus.Locators.zSignOutButton.locator);
 
 		sWaitForPageToLoad();
@@ -361,15 +362,13 @@ public class PageOctopus extends AbsTab {
 				+ "</ItemActionRequest>");
 	}
 
-	
-	public void moveItemUsingSOAP(String itemId, String targetId, ZimbraAccount account)
-			throws HarnessException {
+	public void moveItemUsingSOAP(String itemId, String targetId,
+			ZimbraAccount account) throws HarnessException {
 		account.soapSend("<ItemActionRequest xmlns='urn:zimbraMail'>"
-				+ "<action id='" + itemId + "' l='" + targetId + "' op='move'/>"
-				+ "</ItemActionRequest>");
+				+ "<action id='" + itemId + "' l='" + targetId
+				+ "' op='move'/>" + "</ItemActionRequest>");
 	}
 
-	
 	public void rename(String text) throws HarnessException {
 		// ClientSessionFactory.session().selenium().getEval("var x = selenium.browserbot.findElementOrNull(\""+Locators.zFrame.locator+"\");if(x!=null)x=x.contentWindow.document.body;if(browserVersion.isChrome){x.textContent='"+text+"';}else if(browserVersion.isIE){x.innerText='"+text+"';}");
 		logger.info("renaming to: " + text);
@@ -382,6 +381,26 @@ public class PageOctopus extends AbsTab {
 					+ " not present");
 
 		zKeyEvent(Locators.zRenameInput.locator, "13", "keydown");
+	}
+
+	public boolean zVerifyElementText(ZimbraAccount account, String xPath,
+			String text) throws HarnessException {
+
+		try {
+			Element[] nodes = account.soapSelectNodes(xPath);
+
+			for (Element element : nodes) {
+				if (element.getText().equals(text)) {
+					return true;
+				}
+			}
+			return false;
+
+		} catch (Exception ex) {
+			throw new HarnessException(
+					"Getting exception while getting Node text: "
+							+ ex.getStackTrace());
+		}
 	}
 
 	@Override
