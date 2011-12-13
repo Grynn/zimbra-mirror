@@ -129,8 +129,16 @@ public class TagContact extends AjaxCommonTest  {
 	   dialogTag.zSetTagName(tagName);
 	   dialogTag.zClickButton(Button.B_OK);      
 
-	   // Make sure the tag was created on the server (get the tag ID)
-	   app.zGetActiveAccount().soapSend("<GetTagRequest xmlns='urn:zimbraMail'/>");;
+	   //verify toasted message '1 contact tagged ...'
+      Toaster toast = app.zPageMain.zGetToaster();
+      String toastMsg = toast.zGetToastMessage();
+      ZAssert.assertStringContains(toastMsg,
+            "1 contact tagged \"" + tagName + "\"",
+            "Verify toast message '" + "1 contact tagged \"" + tagName + "\"'" );
+
+      // Make sure the tag was created on the server (get the tag ID)
+	   app.zGetActiveAccount().soapSend("<GetTagRequest xmlns='urn:zimbraMail'/>",
+	         SOAP_DESTINATION_HOST_TYPE.CLIENT, ZimbraAccount.clientAccountName);
 	   String tagID = app.zGetActiveAccount().soapSelectValue("//mail:GetTagResponse//mail:tag[@name='"+ tagName +"']", "id");
 
 	   // Make sure the tag was applied to the contact
@@ -147,13 +155,6 @@ public class TagContact extends AjaxCommonTest  {
 
 	   ZAssert.assertEquals(contactTags, tagID,
 	         "Verify the tag appears on the contact id=" +  contactItem.getId());
-
-	   //verify toasted message '1 contact tagged ...'
-	   Toaster toast = app.zPageMain.zGetToaster();
-	   String toastMsg = toast.zGetToastMessage();
-	   ZAssert.assertStringContains(toastMsg,
-	         "1 contact tagged \"" + tagName + "\"",
-	         "Verify toast message '" + "1 contact tagged \"" + tagName + "\"'" );
 
 	}
   	
