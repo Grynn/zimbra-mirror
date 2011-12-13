@@ -355,7 +355,7 @@ ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
                     containerCssClass:"ZaHomeSetupPanelContent", items:[
                     {type:_GROUP_, colSpan: "*", width:"100%", numCols:2, colSizes:["100%", "20px"], items:[
                         {type:_CELL_SPACER_},
-                        {type:_DWT_IMAGE_, value: "ImgRemoveLineUp", containerCssStyle:"cursor: pointer;", cssStyle:"position:static;",  onClick:ZaHomeXFormView.onCloseSetup}
+                        {type:_DWT_IMAGE_, value: "ImgRemoveLineUp", containerCssStyle:"cursor: pointer;", cssStyle:"position:static;display:none;",  onClick:ZaHomeXFormView.onCloseSetup}
                     ]},
                     {type:_SETUPGROUP_, colSpan: "*", headerLabels: labelChoices, contentItems: contentChoices},
                     {type:_OUTPUT_, value: ZaMsg.LBL_HomeHelpCenter, colSpan: "*", align:_RIGHT_, onClick: ZaHomeXFormView.onHelpLink,

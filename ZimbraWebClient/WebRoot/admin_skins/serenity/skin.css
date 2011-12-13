@@ -141,6 +141,12 @@ body {
     -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#FFFFFF', EndColorStr='@AppC@')"; /* IE8 */
 }
 
+#skin_td_bottom {
+    border: 5px solid gray;
+    background-color: gray;
+    @borderRadius@:5px;
+}
+
 /***Left panel start here
  *  tree
  **/

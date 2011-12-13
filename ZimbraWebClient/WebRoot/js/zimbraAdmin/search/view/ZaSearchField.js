@@ -661,7 +661,7 @@ ZaSearchField.prototype._getMyXForm = function() {
         colSizes = ["46","3", "*", "28"];
         var entryKeyCallback= new AjxCallback(this, ZaSearchField.entryKeyHandler);
         xFormObject = {
-            tableCssStyle:"width:100%;padding:2px;",numCols:numCols,width:"100%",
+            tableCssStyle:"width:100%;",numCols:numCols,width:"100%",
             colSizes:colSizes,
             items: [
                 {type:_MENU_BUTTON_, label:null, choices:ZaSearchField.searchChoices,

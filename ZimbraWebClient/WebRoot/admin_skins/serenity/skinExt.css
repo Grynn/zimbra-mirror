@@ -97,6 +97,7 @@
 
 .rootOverviewHeader-Text {
     padding-left:5px;
+    font-weight:bold;
 }
 
 .AdminTreeItem-Text {
@@ -107,6 +108,10 @@
     padding-left: 5px;
     cursor: pointer;
     height: 18px;
+}
+
+.AdminHomeTreeItem-Text {
+    padding-left:5px;
 }
 /* -- view xform -- */
 
@@ -297,6 +302,7 @@ div.ZmSelectedHeaderBg {
 .ZaHomeWarningPanel {
     padding: 12px;
     background-color: #ffffcc;
+    border-bottom: 1px solid #efe69b;
 }
 
 .ZaHomeWarnginItem {

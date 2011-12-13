@@ -195,7 +195,7 @@ function (buttonId, enabled) {
     this.actionButtons[buttonId].setEnabled(enabled);
 }
 
-ZaCurrentAppBar.spanItemClass = "overviewHeader";
+ZaCurrentAppBar.spanItemClass = "";//"overviewHeader";
 ZaCurrentAppBar.prototype._getSinglePathItem =
 function(path) {
     var text = new Array(10);
