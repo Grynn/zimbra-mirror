@@ -48,7 +48,7 @@
  */
 
 .ZaCtrAppTreeHeader {
-    padding: 5px 0px 0px 5px;
+    padding: 1px 0px 0px 5px;
 }
 
 .AdminTreeItem {
@@ -57,7 +57,7 @@
 
 .AdminTreeItem-selected, .AdminTreeItem-selected-focused  {
     padding-left:18px;
-    background-color:#87cefa !important;
+    background-color:#2b5480 !important;
 }
 
 .AdminTreeItem-selected .AdminTreeItem-Text,
@@ -135,7 +135,7 @@ div.ZmSelectedHeaderBg {
 .TaskHeaderPanel {
     direction: rtl;
     padding-right:5px;
-    padding-top:10px;
+    padding-top:5px;
 }
 
 .ZaTaskTabView .DwtListView-ColHeader td{
@@ -354,4 +354,11 @@ div.ZmSelectedHeaderBg {
 
 .ZaCurrentAppBar .ZDisabled .ZToolbarButtonTable .ZWidgetTitle {
     color: #747474;
+}
+
+.ZaSearchOptionDialog .ZaSearchOptionOverview {
+    padding: 4px;
+}
+.ZaSearchOptionDialog {
+    border: 1px solid black;
 }

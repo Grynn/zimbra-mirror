@@ -197,9 +197,23 @@ ZaCrtAppTreeHeader.prototype.createMenu = function
         }
         i = j;
     }
+    // Always add home here.
+    var currentHistory;
+    if (i > 0) {
+        currentHistory = allHistory.get(0);
+        mi = new DwtMenuItem({
+		                parent: this.menu,
+		                style:		DwtMenuItem.NO_STYLE,
+		                id:     ZaId.getMenuItemId(this._contextId, i + currentHistory.path)
+	    });
+        mi.setText(currentHistory.displayName);
+        mi.setData("history", currentHistory);
+        mi.addSelectionListener(listener);
+        i = i + 1;
+    }
 
     for (; i < allHistory.size();i ++) {
-        var currentHistory = allHistory.get(i);
+        currentHistory = allHistory.get(i);
         if (!currentHistory.isShowInHistory)
             continue;
         mi = new DwtMenuItem({

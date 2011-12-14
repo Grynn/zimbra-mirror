@@ -60,7 +60,7 @@ body {
 .skin_table	{	@FullSize@ }	
 .full_height {height:100%; } 	
 
-#skin_outer							{	background-color:transparent;	@FullSize@		}
+#skin_outer							{padding-top:6px; background-color:transparent;	@FullSize@		}
 #skin_top_td					{	height:40px;	}
 #skin_outer *	{ 	@FixBoxModel@
 }

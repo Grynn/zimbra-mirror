@@ -8,7 +8,7 @@
 
 ZaSearchOptionDialog = function(parent, optionId, w, h, contextId) {
 	if (arguments.length == 0) return;
-	var clsName = "DwtDialog";
+	var clsName = "ZaSearchOptionDialog";
 	if(!this._standardButtons)
 		this._standardButtons = [DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON];
 	if(!this._extraButtons) {

@@ -591,20 +591,24 @@ function (optionId, height){
 		  	    toolTipContent: ZaMsg.tt_search_option_uid,
 		  	    enableDisableChecks:[],visibilityChecks:[]
 		        },
+                {type: _CELL_SPACER_, height: 10, colSpan: "*" },
 		        { type: _TEXTFIELD_, ref:  ZaSearchOption.A_basic_sn,
 			    label: ZaMsg.search_option_sn, align: _LEFT_, width: 100,
 			    enableDisableChecks:[],visibilityChecks:[]
 		        },
+                {type: _CELL_SPACER_, height: 10, colSpan: "*" },
 		        { type: _TEXTFIELD_, ref:  ZaSearchOption.A_basic_displayName,
 			    label: ZaMsg.search_option_displayName, align: _LEFT_, width: 100,
 			    enableDisableChecks:[],visibilityChecks:[]
 		        },
+                {type: _CELL_SPACER_, height: 10, colSpan: "*" },
 		        { type: _TEXTFIELD_, ref:  ZaSearchOption.A_basic_zimbraId,
 			    label: ZaMsg.search_option_zimbraId, align: _LEFT_, width: 100,
 			    enableDisableChecks:[],visibilityChecks:[]
 		        },
+                {type: _CELL_SPACER_, height: 10, colSpan: "*" },
 		        {type: _GROUP_, name:"special search cases",
-		 	    colSpan: "2", numCols:2, colSizes:["90px","120px"], items: []
+		 	    colSpan: "2", numCols:2, colSizes:["30px","180px"], items: []
 		        }
             ]
         }
@@ -718,8 +722,6 @@ function (optionId, height){
 
     var loginFilterItems = 	[
         { type: _GROUP_,  numCols: 2, items:[
-		 		{type:_OUTPUT_, colSpan: "*", cssClass: "ZaSearchOptionViewSubHeader",
-		 			value: ZaMsg.search_option_lastAccessTime, width: 280  },
 		 		{type: _GROUP_, numCols: 5, colSpan: "*",
 		 			items: [
 		 				{type: _CELL_SPACER_, width: 40 },
