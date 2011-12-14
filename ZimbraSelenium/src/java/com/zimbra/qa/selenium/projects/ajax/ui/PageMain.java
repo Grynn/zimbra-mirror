@@ -144,7 +144,7 @@ public class PageMain extends AbsTab {
 		}
 
 		// Click on logout pulldown
-		zClick(Locators.zLogoffPulldown);
+		zClickAt(Locators.zLogoffPulldown, "0,0");
 		this.zWaitForBusyOverlay();
 		
 		if ( !sIsElementPresent(Locators.zLogoffOption) ) {
