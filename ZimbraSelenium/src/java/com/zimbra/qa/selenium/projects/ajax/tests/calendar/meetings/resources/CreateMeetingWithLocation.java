@@ -20,7 +20,7 @@ public class CreateMeetingWithLocation extends AjaxCommonTest {
 	
 	@Test(description = "Create simple meeting with location resource",
 			groups = { "smoke" })
-	public void CreateMeetingWithLocation_01() throws HarnessException {
+	public void CreateMeetingWithSingleLocation_01() throws HarnessException {
 		
 		// Create appointment data
 		AppointmentItem appt = new AppointmentItem();
@@ -63,8 +63,8 @@ public class CreateMeetingWithLocation extends AjaxCommonTest {
 	}
 	
 	@Test(description = "Create simple meeting with two location resource",
-			groups = { "sanity" })
-	public void CreateMeetingWithLocation_02() throws HarnessException {
+			groups = { "functional" })
+	public void CreateMeetingWithMultiLocation_02() throws HarnessException {
 		
 		// Create appointment data
 		AppointmentItem appt = new AppointmentItem();
@@ -108,7 +108,7 @@ public class CreateMeetingWithLocation extends AjaxCommonTest {
 	
 	@Test(description = "Create simple meeting with floating location resource",
 			groups = { "smoke" })
-	public void CreateMeetingWithLocation_03() throws HarnessException {
+	public void CreateMeetingWithFloatingLocation_03() throws HarnessException {
 		
 		// Create appointment data
 		AppointmentItem appt = new AppointmentItem();
