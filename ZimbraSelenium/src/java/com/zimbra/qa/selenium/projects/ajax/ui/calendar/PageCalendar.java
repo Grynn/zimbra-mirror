@@ -104,8 +104,16 @@ public class PageCalendar extends AbsTab {
 		return "css=td.appt_name:contains('" + apptSubject + "')";
 	}
 	
+	public String zGetReadOnlyApptLocator(String apptSubject) throws HarnessException {
+		return "css=td.appt_new_name:contains('" + apptSubject + "')";
+	}
+	
 	public String zGetAllDayApptLocator(String apptSubject) throws HarnessException {
-		return "css=td.appt_name:contains('" + apptSubject + "')";
+		return "css=td.appt_allday_name:contains('" + apptSubject + "')";
+	}
+	
+	public String zGetReadOnlyAllDayApptLocator(String apptSubject) throws HarnessException {
+		return "css=td.appt_allday_new_name:contains('" + apptSubject + "')";
 	}
 	
 	private AbsPage zListItemListView(Action action, String subject) throws HarnessException {
@@ -205,6 +213,26 @@ public class PageCalendar extends AbsTab {
 
 	}
 	
+	public AbsPage zListItemAllDay(Action action, String subject) throws HarnessException {
+
+		if ( this.zIsVisiblePerPosition(Locators.CalendarViewListCSS, 0, 0) ) {
+			return (zListItemListView(action, subject));
+		} else if ( this.zIsVisiblePerPosition(Locators.CalendarViewDayCSS, 0, 0) ) {
+			return (zListItemWorkWeekViewAllDay(action, subject));
+		} else if ( this.zIsVisiblePerPosition(Locators.CalendarViewWorkWeekCSS, 0, 0) ) {
+			return (zListItemWorkWeekViewAllDay(action, subject));
+		} else if ( this.zIsVisiblePerPosition(Locators.CalendarViewWeekCSS, 0, 0) ) {
+			return (zListItemWorkWeekViewAllDay(action, subject));
+		} else if ( this.zIsVisiblePerPosition(Locators.CalendarViewMonthCSS, 0, 0) ) {
+			return (zListItemMonthView(action, subject));
+		} else if ( this.zIsVisiblePerPosition(Locators.CalendarViewScheduleCSS, 0, 0) ) {
+			return (zListItemWorkWeekViewAllDay(action, subject));
+		} else {
+			throw new HarnessException("Unknown calendar view");
+		}
+
+	}
+	
 	public AbsPage zListItemWorkWeekView(Action action, String subject) throws HarnessException {
 
 		logger.info(myPageName() + " zListItem("+ action +", "+ subject +")");
@@ -246,6 +274,47 @@ public class PageCalendar extends AbsTab {
 		return (page);
 	}
 
+	public AbsPage zListItemWorkWeekViewAllDay(Action action, String subject) throws HarnessException {
+
+		logger.info(myPageName() + " zListItem("+ action +", "+ subject +")");
+		tracer.trace(action +" on subject = "+ subject);
+
+		if ( action == null )
+			throw new HarnessException("action cannot be null");
+
+		if ( subject == null )
+			throw new HarnessException("subject cannot be null");
+
+		// Default behavior variables
+		String locator = null;
+		AbsPage page = null;
+
+		locator = "css=td.appt_allday_name:contains('" + subject + "')";
+		SleepUtil.sleepMedium();
+
+		if ( action == Action.A_LEFTCLICK ) {
+			this.zClickAt(locator, "");
+			page=PageCalendar.this;
+			
+		} else if ( action == Action.A_RIGHTCLICK ) {
+			this.zRightClickAt(locator, "");
+
+		} else if ( action == Action.A_DOUBLECLICK) {
+			this.sDoubleClick(locator);
+			
+		} else {
+			throw new HarnessException("implement me!  action = "+ action);
+		}
+
+		this.zWaitForBusyOverlay();
+
+		if ( page != null ) {
+			page.zWaitForActive();
+		}
+
+		return (page);
+	}
+	
 	private AbsPage zListItemMonthView(Action action, String subject) throws HarnessException {
 		logger.info(myPageName() + " zListItemMonthView("+ action +", "+ subject +")");
 
@@ -261,7 +330,7 @@ public class PageCalendar extends AbsTab {
 		String locator = null;
 		AbsPage page = null;
 
-		locator = "css=td.appt_allday_name:contains('" + subject + "')";
+		locator = "css=td.appt_name:contains('" + subject + "')";
 
 		if ( action == Action.A_LEFTCLICK ) {
 			
@@ -665,6 +734,190 @@ public class PageCalendar extends AbsTab {
 		return (page);
 	}
 
+	public AbsPage zListItemAllDay(Action action, Button option, String subject)
+	throws HarnessException {
+
+		logger.info(myPageName() + " zListItem("+ action +", "+ option +", "+ subject +")");
+		tracer.trace(action +" then "+ option +" on subject = "+ subject);
+
+		if ( action == null )
+			throw new HarnessException("action cannot be null");
+		if ( option == null )
+			throw new HarnessException("button cannot be null");
+		if ( subject == null || subject.trim().length() == 0)
+			throw new HarnessException("subject cannot be null or blank");
+
+		// If we are in list view, route to that method
+		if ( this.zIsVisiblePerPosition(Locators.CalendarViewListCSS, 0, 0) ) {
+			return (zListItemListView(action, option, subject));
+		}
+
+		// Default behavior variables
+		String locator = null;
+		AbsPage page = null;
+		String optionLocator;
+
+		locator = "css=td.appt_allday_name:contains('" + subject + "')";
+		SleepUtil.sleepMedium();
+
+		if (action == Action.A_RIGHTCLICK) {
+			if (option == Button.O_VIEW_DAY_MENU) {
+				optionLocator = Locators.ViewDayMenu;
+
+			} else if (option == Button.O_VIEW_WORK_WEEK_MENU) {
+				optionLocator = Locators.ViewWorkWeekMenu;
+
+			}else if (option == Button.O_VIEW_WEEK_MENU) {
+				optionLocator = Locators.ViewWeekMenu;
+
+			} else if (option == Button.O_VIEW_MONTH_MENU) {
+				optionLocator = Locators.ViewMonthMenu;
+
+			} else if (option == Button.O_VIEW_LIST_MENU) {
+				optionLocator = Locators.ViewListMenu;
+
+			} else if (option == Button.O_VIEW_SCHEDULE_MENU) {
+				optionLocator = Locators.ViewScheduleMenu;
+
+			} else if (option == Button.O_OPEN_MENU) {
+				optionLocator = Locators.OpenMenu;
+
+			} else if (option == Button.O_PRINT_MENU) {
+				optionLocator = Locators.PrintMenu;
+
+			} else if (option == Button.O_ACCEPT_MENU) {
+				optionLocator = Locators.AcceptMenu;
+
+			} else if (option == Button.O_TENTATIVE_MENU) {
+				optionLocator = Locators.TentativeMenu;
+
+			} else if (option == Button.O_DECLINE_MENU) {
+				optionLocator = Locators.DeclineMenu;
+
+			} else if (option == Button.O_EDIT_REPLY_MENU) {
+				optionLocator = Locators.EditReplyMenu;
+
+			} else if (option == Button.O_EDIT_REPLY_ACCEPT_SUB_MENU) {
+				optionLocator = Locators.EditReplyAcceptSubMenu;
+
+			} else if (option == Button.O_EDIT_REPLY_TENTATIVE_SUB_MENU) {
+				optionLocator = Locators.EditReplyTentativeSubMenu;
+
+			} else if (option == Button.O_EDIT_REPLY_DECLINE_SUB_MENU) {
+				optionLocator = Locators.EditReplyDeclineSubMenu;
+
+			} else if (option == Button.O_PROPOSE_NEW_TIME_MENU) {
+				optionLocator = Locators.ProposeNewTimeMenu;
+
+			} else if (option == Button.O_CREATE_A_COPY_MENU) {
+				optionLocator = Locators.CreateACopyMenu;
+
+			} else if (option == Button.O_REPLY_MENU) {
+				optionLocator = Locators.ReplyMenu;
+
+			} else if (option == Button.O_REPLY_TO_ALL_MENU) {
+				optionLocator = Locators.ReplyToAllMenu;
+
+			} else if (option == Button.O_FORWARD_MENU) {
+				optionLocator = Locators.ForwardMenu;
+
+			} else if (option == Button.O_DELETE_MENU) {
+				optionLocator = Locators.DeleteMenu;
+
+			} else if (option == Button.O_CANCEL_MENU) {
+				optionLocator = Locators.CancelMenu;
+
+			} else if (option == Button.O_MOVE_MENU) {
+				optionLocator = Locators.MoveMenu;
+
+			} else if (option == Button.O_TAG_APPOINTMENT_MENU) {
+				optionLocator = Locators.TagAppointmentMenu;
+
+			} else if (option == Button.O_TAG_APPOINTMENT_NEW_TAG_SUB_MENU) {
+				optionLocator = Locators.TagAppointmentNewTagSubMenu;
+
+			} else if (option == Button.O_TAG_APPOINTMENT_REMOVE_TAG_SUB_MENU) {
+				optionLocator = Locators.TagAppointmentRemoveTagSubMenu;
+
+			} else if (option == Button.O_SHOW_ORIGINAL_MENU) {
+				optionLocator = Locators.ShowOriginalMenu;
+
+			} else if (option == Button.O_QUICK_COMMANDS_MENU) {
+				optionLocator = Locators.QuickCommandsMenu;
+
+			} else if (option == Button.O_INSTANCE_MENU) {
+				optionLocator = Locators.InstanceMenu;
+
+			} else if (option == Button.O_SERIES_MENU) {
+				optionLocator = Locators.SeriesMenu;
+
+			} else if (option == Button.O_OPEN_INSTANCE_MENU) {
+				optionLocator = Locators.OpenInstanceMenu;
+
+			} else if (option == Button.O_FORWARD_INSTANCE_MENU) {
+				optionLocator = Locators.ForwardInstanceMenu;
+
+			} else if (option == Button.O_DELETE_INSTANCE_MENU) {
+				optionLocator = Locators.DeleteInstanceMenu;
+
+			} else if (option == Button.O_OPEN_SERIES_MENU) {
+				optionLocator = Locators.OpenSeriesMenu;
+
+			} else if (option == Button.O_FORWARD_SERIES_MENU) {
+				optionLocator = Locators.ForwardSeriesMenu;
+
+			} else if (option == Button.O_NEW_APPOINTMENT_MENU) {
+				optionLocator = Locators.NewAppointmentMenu;
+
+			} else if (option == Button.O_NEW_ALL_DAY_APPOINTMENT_MENU) {
+				optionLocator = Locators.NewAllDayAppointmentMenu;
+
+			} else if (option == Button.O_GO_TO_TODAY_MENU) {
+				optionLocator = Locators.GoToTodayMenu;
+
+			} else if (option == Button.O_VIEW_MENU) {
+				optionLocator = Locators.ViewMenu;
+
+			} else if (option == Button.O_VIEW_DAY_SUB_MENU) {
+				optionLocator = Locators.ViewDaySubMenu;
+
+			} else if (option == Button.O_VIEW_WORK_WEEK_SUB_MENU) {
+				optionLocator = Locators.ViewWorkWeekSubMenu;
+
+			} else if (option == Button.O_VIEW_WEEK_SUB_MENU) {
+				optionLocator = Locators.ViewWeekSubMenu;
+
+			} else if (option == Button.O_VIEW_MONTH_SUB_MENU) {
+				optionLocator = Locators.ViewMonthSubMenu;
+
+			} else if (option == Button.O_VIEW_LIST_SUB_MENU) {
+				optionLocator = Locators.ViewListSubMenu;
+
+			} else if (option == Button.O_VIEW_SCHEDULE_SUB_MENU) {
+				optionLocator = Locators.ViewScheduleSubMenu;
+
+			}
+			else {
+				throw new HarnessException("implement action:"+ action +" option:"+ option);
+			}
+
+		} else {
+			throw new HarnessException("implement me!  action = "+ action);
+		}
+
+		this.zRightClickAt(locator, "");
+		SleepUtil.sleepSmall();
+		this.zClickAt(optionLocator, "");
+		SleepUtil.sleepSmall();
+		this.zWaitForBusyOverlay();
+
+		if ( page != null ) {
+			page.zWaitForActive();
+		}
+
+		return (page);
+	}
+	
 	@Override
 	public AbsPage zListItem(Action action, Button option, Button subOption,
 			String subject) throws HarnessException {
@@ -757,6 +1010,97 @@ public class PageCalendar extends AbsTab {
 
 	}
 
+	public AbsPage zListItemAllDay(Action action, Button option, Button subOption,
+			String subject) throws HarnessException {
+
+		logger.info(myPageName() + " zListItem("+ action +", "+ option +", "+ subOption +", "+ subject +")");
+		tracer.trace(action +" then "+ option + "," + subOption + " on item = "+ subject);
+
+		if ( action == null )
+			throw new HarnessException("action cannot be null");
+		if ( option == null || subOption == null )
+			throw new HarnessException("button cannot be null");
+		if ( subject == null || subject.trim().length() == 0)
+			throw new HarnessException("subject cannot be null or blank");
+
+		// Default behavior variables
+		String locator = null;
+		AbsPage page = null;
+		String optionLocator = null;
+		String subOptionLocator = null;
+
+		locator = "css=td.appt_allday_name:contains('" + subject + "')";
+		SleepUtil.sleepMedium();
+
+		if (action == Action.A_RIGHTCLICK) {
+			if (option == Button.O_VIEW_MENU) {
+				optionLocator = Locators.ViewMenu;
+
+				if (subOption == Button.O_VIEW_DAY_SUB_MENU) {
+					subOptionLocator = Locators.ViewDaySubMenu;
+
+				} else if (subOption == Button.O_VIEW_WORK_WEEK_SUB_MENU) {
+					subOptionLocator = Locators.ViewWorkWeekSubMenu;
+
+				} else if (subOption == Button.O_VIEW_WEEK_SUB_MENU) {
+					subOptionLocator = Locators.ViewWeekSubMenu;
+
+				} else if (subOption == Button.O_VIEW_MONTH_SUB_MENU) {
+					subOptionLocator = Locators.ViewMonthSubMenu;
+
+				} else if (subOption == Button.O_VIEW_LIST_SUB_MENU) {
+					subOptionLocator = Locators.ViewListSubMenu;
+
+				} else if (option == Button.O_VIEW_SCHEDULE_SUB_MENU) {
+					subOptionLocator = Locators.ViewScheduleSubMenu;
+				}
+
+			} else if (option == Button.O_EDIT_REPLY_MENU) {
+				optionLocator = Locators.EditReplyMenu;
+
+				if (subOption == Button.O_EDIT_REPLY_ACCEPT_SUB_MENU) {
+					subOptionLocator = Locators.EditReplyAcceptSubMenu;
+
+				} else if (subOption == Button.O_EDIT_REPLY_TENTATIVE_SUB_MENU) {
+					subOptionLocator = Locators.EditReplyTentativeSubMenu;
+
+				} else if (subOption == Button.O_EDIT_REPLY_DECLINE_SUB_MENU) {
+					subOptionLocator = Locators.EditReplyDeclineSubMenu;
+				}
+
+			} else if (option == Button.O_TAG_APPOINTMENT_MENU) {
+				optionLocator = Locators.TagAppointmentMenu;
+
+				if (subOption == Button.O_TAG_APPOINTMENT_NEW_TAG_SUB_MENU) {
+					subOptionLocator = Locators.TagAppointmentNewTagSubMenu;
+
+				} else if (subOption == Button.O_TAG_APPOINTMENT_REMOVE_TAG_SUB_MENU) {
+					subOptionLocator = Locators.TagAppointmentRemoveTagSubMenu;
+				}
+			}
+			else {
+				throw new HarnessException("implement action:"+ action +" option:"+ option);
+			}
+
+		} else {
+			throw new HarnessException("implement me!  action = "+ action);
+		}
+
+		this.zRightClickAt(locator, "");
+		this.sMouseMoveAt(optionLocator, "");
+		SleepUtil.sleepMedium();
+		this.zClickAt(subOptionLocator, "");
+
+		this.zWaitForBusyOverlay();
+
+		if ( page != null ) {
+			page.zWaitForActive();
+		}
+
+		return (new ContextMenu(MyApplication));
+
+	}
+	
 	@Override
 	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
 		logger.info(myPageName() + " zToolbarPressButton(" + button + ")");

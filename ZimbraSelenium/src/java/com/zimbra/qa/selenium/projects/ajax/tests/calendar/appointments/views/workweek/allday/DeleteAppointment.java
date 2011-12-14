@@ -40,9 +40,9 @@ public class DeleteAppointment extends AjaxCommonTest {
 
 	}
 	
-	@Test(description = "Delete an appointment using Delete toolbar button",
-			groups = { "implement" })
-	public void DeleteAppointment_01() throws HarnessException {
+	@Test(description = "Delete all-day appointment using Delete toolbar button",
+			groups = { "smoke" })
+	public void DeleteAllDayAppointment_01() throws HarnessException {
 		
 		// Creating objects for appointment data
 		String tz, apptSubject, apptBody;
@@ -58,7 +58,7 @@ public class DeleteAppointment extends AjaxCommonTest {
         app.zGetActiveAccount().soapSend(
                           "<CreateAppointmentRequest xmlns='urn:zimbraMail'>" +
                                "<m>"+
-                               "<inv method='REQUEST' type='event' fb='B' transp='O' allDay='0' name='"+ apptSubject +"'>"+
+                               "<inv method='REQUEST' type='event' fb='B' transp='O' allDay='1' name='"+ apptSubject +"'>"+
                                "<s d='"+ startUTC.toTimeZone(tz).toYYYYMMDDTHHMMSS() +"' tz='"+ tz +"'/>" +
                                "<e d='"+ endUTC.toTimeZone(tz).toYYYYMMDDTHHMMSS() +"' tz='"+ tz +"'/>" +
                                "<or a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
@@ -73,11 +73,105 @@ public class DeleteAppointment extends AjaxCommonTest {
         
         // Right click to appointment and delete it
         app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
-        app.zPageCalendar.zListItem(Action.A_LEFTCLICK, apptSubject);
+        app.zPageCalendar.zListItemAllDay(Action.A_LEFTCLICK, apptSubject);
         app.zPageCalendar.zToolbarPressButton(Button.B_DELETE);
         DialogConfirm dlgConfirm = new DialogConfirm(DialogConfirm.Confirmation.DELETE, app, ((AppAjaxClient) app).zPageCalendar);
 		dlgConfirm.zClickButton(Button.B_YES);
 		dlgConfirm.zWaitForClose();
-		ZAssert.assertEquals(app.zPageCalendar.sIsElementPresent(app.zPageCalendar.zGetApptLocator(apptSubject)), false, "Verify appointment is deleted");
+		ZAssert.assertEquals(app.zPageCalendar.sIsElementPresent(app.zPageCalendar.zGetAllDayApptLocator(apptSubject)), false, "Verify all-day appointment is deleted");
+	}
+	
+	@Test(description = "Delete all-day appointment using context menu",
+			groups = { "smoke" })
+	public void DeleteAllDayAppointment_02() throws HarnessException {
+		
+		// Creating objects for appointment data
+		String tz, apptSubject, apptBody;
+		tz = ZTimeZone.TimeZoneEST.getID();
+		apptSubject = ZimbraSeleniumProperties.getUniqueString();
+		apptBody = ZimbraSeleniumProperties.getUniqueString();
+		
+		// Absolute dates in UTC zone
+		Calendar now = Calendar.getInstance();
+		ZDate startUTC = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 12, 0, 0);
+		ZDate endUTC   = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 14, 0, 0);
+		
+        app.zGetActiveAccount().soapSend(
+                          "<CreateAppointmentRequest xmlns='urn:zimbraMail'>" +
+                               "<m>"+
+                               "<inv method='REQUEST' type='event' fb='B' transp='O' allDay='1' name='"+ apptSubject +"'>"+
+                               "<s d='"+ startUTC.toTimeZone(tz).toYYYYMMDDTHHMMSS() +"' tz='"+ tz +"'/>" +
+                               "<e d='"+ endUTC.toTimeZone(tz).toYYYYMMDDTHHMMSS() +"' tz='"+ tz +"'/>" +
+                               "<or a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
+                               "</inv>" +
+                               "<mp content-type='text/plain'>" +
+                               "<content>"+ apptBody +"</content>" +
+                               "</mp>" +
+                               "<su>"+ apptSubject +"</su>" +
+                               "</m>" +
+                         "</CreateAppointmentRequest>");
+        String apptId = app.zGetActiveAccount().soapSelectValue("//mail:CreateAppointmentResponse//mail:appt", "id");
+        
+        // Right click to appointment and delete it
+        app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
+        app.zPageCalendar.zListItemAllDay(Action.A_RIGHTCLICK, Button.O_DELETE_MENU, apptSubject);
+        DialogConfirm dlgConfirm = new DialogConfirm(DialogConfirm.Confirmation.DELETE, app, ((AppAjaxClient) app).zPageCalendar);
+		dlgConfirm.zClickButton(Button.B_YES);
+		dlgConfirm.zWaitForClose();
+		ZAssert.assertEquals(app.zPageCalendar.sIsElementPresent(app.zPageCalendar.zGetAllDayApptLocator(apptSubject)), false, "Verify all-day appointment is deleted");
+	}
+	
+	@DataProvider(name = "DataProviderShortcutKeys")
+	public Object[][] DataProviderShortcutKeys() {
+		return new Object[][] {
+				new Object[] { "VK_DELETE", KeyEvent.VK_DELETE },
+				new Object[] { "VK_BACK_SPACE", KeyEvent.VK_BACK_SPACE },
+		};
+	}
+
+	@Test(description = "Delete all-day appointment using keyboard shortcuts (Del & Backspace)",
+			groups = { "functional" },
+			dataProvider = "DataProviderShortcutKeys")
+	public void DeleteAllDayAppointment_03(String name, int keyEvent) throws HarnessException {
+		
+		// Creating objects for appointment data
+		String tz, apptSubject, apptBody;
+		tz = ZTimeZone.TimeZoneEST.getID();
+		apptSubject = ZimbraSeleniumProperties.getUniqueString();
+		apptBody = ZimbraSeleniumProperties.getUniqueString();
+		
+		// Absolute dates in UTC zone
+		Calendar now = Calendar.getInstance();
+		ZDate startUTC = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 12, 0, 0);
+		ZDate endUTC   = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 14, 0, 0);
+		
+        app.zGetActiveAccount().soapSend(
+                          "<CreateAppointmentRequest xmlns='urn:zimbraMail'>" +
+                               "<m>"+
+                               "<inv method='REQUEST' type='event' fb='B' transp='O' allDay='1' name='"+ apptSubject +"'>"+
+                               "<s d='"+ startUTC.toTimeZone(tz).toYYYYMMDDTHHMMSS() +"' tz='"+ tz +"'/>" +
+                               "<e d='"+ endUTC.toTimeZone(tz).toYYYYMMDDTHHMMSS() +"' tz='"+ tz +"'/>" +
+                               "<or a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
+                               "</inv>" +
+                               "<mp content-type='text/plain'>" +
+                               "<content>"+ apptBody +"</content>" +
+                               "</mp>" +
+                               "<su>"+ apptSubject +"</su>" +
+                               "</m>" +
+                         "</CreateAppointmentRequest>");
+        String apptId = app.zGetActiveAccount().soapSelectValue("//mail:CreateAppointmentResponse//mail:appt", "id");
+        
+        // Delete appointment using keyboard Del and Backspace key
+        app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
+        app.zPageCalendar.zListItemAllDay(Action.A_LEFTCLICK, apptSubject);
+        DialogConfirm dlgConfirm = (DialogConfirm)app.zPageCalendar.zKeyboardKeyEvent(keyEvent);
+		dlgConfirm.zClickButton(Button.B_YES);
+		app.zGetActiveAccount().soapSend(
+					"<SearchRequest xmlns='urn:zimbraMail' types='appointment' calExpandInstStart='"+ startUTC.addDays(-7).toMillis() +"' calExpandInstEnd='"+ startUTC.addDays(7).toMillis() +"'>"
+				+	"<query>subject:("+ apptSubject +")</query>"
+				+	"</SearchRequest>");
+
+		Element[] nodes = app.zGetActiveAccount().soapSelectNodes("//mail:appt");
+		ZAssert.assertEquals(nodes.length, 0, "Verify appointment is deleted");
 	}
 }

@@ -274,6 +274,41 @@ public class FormApptNew extends AbsForm {
 
 		zFillField(field, stringFormat);
 	}
+	
+	public void zFillField(Field field) throws HarnessException {
+	
+		tracer.trace("Set " + field);
+
+		String locator = null;
+
+		// all day
+		if (field == Field.AllDay) {
+
+			locator = "css=input[id$='_allDayCheckbox']";
+		
+		// repeat
+		} else if (field == Field.Private) {
+
+			locator = "css=input[id$='_privateCheckbox']";
+
+		} else {
+			throw new HarnessException("not implemented for field " + field);
+		}
+
+		if (locator == null) {
+			throw new HarnessException("locator was null for field " + field);
+		}
+
+		// Make sure the element exists
+		if (!this.sIsElementPresent(locator))
+			throw new HarnessException("Field is not present field=" + field
+					+ " locator=" + locator);
+
+		this.sClick(locator);
+
+		this.zWaitForBusyOverlay();	
+		
+	}
 
 	/**
 	 * Fill in the form field with the specified text
@@ -340,11 +375,6 @@ public class FormApptNew extends AbsForm {
 
 			locator = "css=td[id$='_endTimeSelect'] td[id$='_timeSelectInput'] input";
 
-		// all day
-		} else if (field == Field.AllDay) {
-
-			locator = "css=td[id$='_allDayCheckbox'] input";
-			
 			
 		// display
 		} else if (field == Field.Display) {
@@ -357,12 +387,6 @@ public class FormApptNew extends AbsForm {
 
 			locator = "css=td[id$='_folderSelect'] input";
 
-			
-		// is private?
-		} else if (field == Field.Private) {
-
-			locator = "css=td[id$='_privateCheckbox'] input";
-			
 			
 		// repeat
 		} else if (field == Field.Repeat) {
@@ -381,7 +405,7 @@ public class FormApptNew extends AbsForm {
 				// Text compose
 				// //
 
-				locator = "css=textarea[id*='textarea_']";
+				locator = "css=textarea[id*='_content']";
 
 				if (!this.sIsElementPresent(locator))
 					throw new HarnessException("Unable to locate compose body");
@@ -559,12 +583,12 @@ public class FormApptNew extends AbsForm {
 		
 		// Is all day
 		if (appt.getIsAllDay() == true) {
-			
+			zFillField(Field.AllDay);
 		}
 		
 		// Is private
 		if (appt.getIsPrivate() == true) {
-			
+			zFillField(Field.Private);
 		}
 		
 		// Body

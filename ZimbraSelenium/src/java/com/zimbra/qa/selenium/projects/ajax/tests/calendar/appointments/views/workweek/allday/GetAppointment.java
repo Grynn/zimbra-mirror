@@ -1,19 +1,14 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.calendar.appointments.views.workweek.allday;
 
 import java.util.*;
-
 import org.testng.annotations.Test;
-
 import com.zimbra.qa.selenium.framework.items.AppointmentItem;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.calendar.ApptWorkWeekView;
-
 
 public class GetAppointment extends AjaxCommonTest {
 
-	
 	public GetAppointment() {
 		logger.info("New "+ GetAppointment.class.getCanonicalName());
 		
@@ -23,19 +18,16 @@ public class GetAppointment extends AjaxCommonTest {
 		// Make sure we are using an account with message view
 		super.startingAccountPreferences = null;
 
-
 	}
 	
-	@Test(	description = "View a basic appointment in the work week view",
-			groups = { "implement" })
-	public void GetAppointment_01() throws HarnessException {
+	@Test(	description = "View a basic all-day appointment in the work week view",
+			groups = { "smoke" })
+	public void GetAllDayAppointment_01() throws HarnessException {
 		
 		// Create the appointment on the server
-		// Create the message data to be sent
-		String subject = "appointment" + ZimbraSeleniumProperties.getUniqueString();
-		String location = "location" + ZimbraSeleniumProperties.getUniqueString();
-		String content = "content" + ZimbraSeleniumProperties.getUniqueString();
-		
+		String apptSubject = "appointment" + ZimbraSeleniumProperties.getUniqueString();
+		String apptLocation = "location" + ZimbraSeleniumProperties.getUniqueString();
+		String apptBody = "content" + ZimbraSeleniumProperties.getUniqueString();
 		
 		// Absolute dates in UTC zone
 		Calendar now = Calendar.getInstance();
@@ -50,7 +42,7 @@ public class GetAppointment extends AjaxCommonTest {
 					"<CreateAppointmentRequest xmlns='urn:zimbraMail'>" +
 						"<m>" +
 							"<inv>" +
-								"<comp status='CONF' fb='B' class='PUB' transp='O' allDay='0' name='"+ subject +"' loc='"+ location +"'>" +
+								"<comp status='CONF' fb='B' class='PUB' transp='O' allDay='1' name='"+ apptSubject +"' loc='"+ apptLocation +"'>" +
 									"<s d='"+ startUTC.toTimeZone(tz).toYYYYMMDDTHHMMSS() +"' tz='"+ tz +"'/>" +
 									"<e d='"+ endUTC.toTimeZone(tz).toYYYYMMDDTHHMMSS() +"' tz='"+ tz +"'/>" +
 									"<at role='REQ' ptst='NE' rsvp='1' a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
@@ -58,25 +50,20 @@ public class GetAppointment extends AjaxCommonTest {
 								"</comp>" +
 							"</inv>" +
 							"<e a='"+ app.zGetActiveAccount().EmailAddress +"' t='t'/>" +
-							"<su>"+ subject + "</su>" +
+							"<su>"+ apptSubject + "</su>" +
 							"<mp ct='text/plain'>" +
-							"<content>"+ content +"</content>" +
+							"<content>"+ apptBody +"</content>" +
 							"</mp>" +
 						"</m>" +
 					"</CreateAppointmentRequest>");
 		
-		AppointmentItem appt = AppointmentItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject +")", startUTC.addDays(-7), endUTC.addDays(7));
+		AppointmentItem appt = AppointmentItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ apptSubject +")", startUTC.addDays(-7), endUTC.addDays(7));
 		ZAssert.assertNotNull(appt, "Verify the new appointment is created");
 
 		app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
 		
-	    //verify appt displayed in workweek view
-		ApptWorkWeekView view = (ApptWorkWeekView) app.zPageCalendar.zToolbarPressPulldown(Button.B_LISTVIEW, Button.O_LISTVIEW_WORKWEEK);
-		
 		//wait for the appointment displayed in the view
-		app.zPageCalendar.zWaitForElementPresent("css=div[id*=__zli__CLWW__]");
-		
-		ZAssert.assertTrue(view.isApptExist(appt), "Verify appt gets displayed in work week view");
+		ZAssert.assertEquals(app.zPageCalendar.sIsElementPresent(app.zPageCalendar.zGetReadOnlyAllDayApptLocator(apptSubject)), true, "Verify all-day appointment is deleted");
 	    
 	}
 }

@@ -400,7 +400,8 @@ public static AppointmentItem importFromSOAP(Element GetAppointmentResponse) thr
 		return (dIsAllDay);
 	}
 	
-	public boolean setIsAllDay() {
+	public boolean setIsAllDay(boolean isAllDay) {
+		dIsAllDay = true;
 		return (dIsAllDay);
 	}
 	
@@ -416,7 +417,8 @@ public static AppointmentItem importFromSOAP(Element GetAppointmentResponse) thr
 		return (dIsPrivate);
 	}
 	
-	public boolean setIsPrivate() {
+	public boolean setIsPrivate(boolean isPrivate) {
+		dIsPrivate = true;
 		return (dIsPrivate);
 	}
 	

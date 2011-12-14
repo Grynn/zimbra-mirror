@@ -9,6 +9,7 @@ import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
+import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZDate;
 import com.zimbra.qa.selenium.framework.util.ZTimeZone;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
@@ -28,8 +29,8 @@ public class ModifyAppointment extends AjaxCommonTest {
 
 	}
 
-	@Test(description = "Modify appointment with subject & body and verify it", groups = { "implement" })
-	public void ModifyAppointment_01() throws HarnessException {
+	@Test(description = "Modify all-day appointment with subject & body and verify it", groups = { "smoke" })
+	public void ModifyAllDayAppointment_01() throws HarnessException {
 
 		// Creating object for appointment data
 		AppointmentItem appt = new AppointmentItem();
@@ -48,7 +49,7 @@ public class ModifyAppointment extends AjaxCommonTest {
         app.zGetActiveAccount().soapSend(
                           "<CreateAppointmentRequest xmlns='urn:zimbraMail'>" +
                                "<m>"+
-                               "<inv method='REQUEST' type='event' fb='B' transp='O' allDay='0' name='"+ apptSubject +"'>"+
+                               "<inv method='REQUEST' type='event' fb='B' transp='O' allDay='1' name='"+ apptSubject +"'>"+
                                "<s d='"+ startUTC.toTimeZone(tz).toYYYYMMDDTHHMMSS() +"' tz='"+ tz +"'/>" +
                                "<e d='"+ endUTC.toTimeZone(tz).toYYYYMMDDTHHMMSS() +"' tz='"+ tz +"'/>" +
                                "<or a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
@@ -60,14 +61,14 @@ public class ModifyAppointment extends AjaxCommonTest {
                                "</m>" +
                          "</CreateAppointmentRequest>");
 
-        String apptId = app.zGetActiveAccount().soapSelectValue("//mail:CreateAppointmentResponse//mail:appt", "id");
+        String apptId = app.zGetActiveAccount().soapSelectValue("//mail:CreateAppointmentResponse", "apptId");
     
         // Switch to work week view
         app.zPageCalendar.zToolbarPressPulldown(Button.B_LISTVIEW, Button.O_LISTVIEW_WORKWEEK);
         app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
 
         // Open appointment & modify subject, body and save it
-        app.zPageCalendar.zListItem(Action.A_DOUBLECLICK, apptSubject);
+        app.zPageCalendar.zListItemAllDay(Action.A_DOUBLECLICK, apptSubject);
         SleepUtil.sleepMedium();
         FormApptNew apptForm = new FormApptNew(app);
         appt.setSubject(editApptSubject);
@@ -77,9 +78,8 @@ public class ModifyAppointment extends AjaxCommonTest {
         
         // Use GetAppointmentRequest to verify the changes are saved
         app.zGetActiveAccount().soapSend("<GetAppointmentRequest  xmlns='urn:zimbraMail' id='"+ apptId +"'/>");
-        app.zGetActiveAccount().soapMatch("//mail:GetAppointmentResponse//mail:comp", "name", editApptSubject);
-        app.zGetActiveAccount().soapMatch(
-				"//mail:GetAppointmentResponse//mail:content", null,
-				editApptBody);
+        ZAssert.assertEquals(app.zGetActiveAccount().soapMatch("//mail:GetAppointmentResponse//mail:comp", "name", editApptSubject), true, "");
+        ZAssert.assertEquals(app.zGetActiveAccount().soapMatch("//mail:GetAppointmentResponse//mail:desc", null, editApptBody), true, "");
+        ZAssert.assertEquals(app.zGetActiveAccount().soapMatch("//mail:GetAppointmentResponse//mail:comp", "allDay", "1"), true, "");
 	}
 }
