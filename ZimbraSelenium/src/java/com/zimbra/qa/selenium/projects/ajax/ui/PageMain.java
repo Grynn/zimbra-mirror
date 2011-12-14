@@ -17,7 +17,8 @@ public class PageMain extends AbsTab {
 
 	public static class Locators {
 				
-		public static final String zLogoffButton		= "css=td[id=skin_container_logoff] a";
+		public static final String zLogoffPulldown		= "css=td[id='skin_dropMenu'] td[id$='_dropdown']";
+		public static final String zLogoffOption		= "css=tr[id='POPUP_logOff'] td[id$='_title']";
 		
 		public static final String zAppbarMail			= "id=zb__App__Mail_title";
 		public static final String zAppbarContact		= "id=zb__App__Contacts_title";
@@ -74,16 +75,23 @@ public class PageMain extends AbsTab {
 
 		// Look for the Logout button 
 		// check if zimlet + minical loaded
-		boolean present = sIsElementPresent(Locators.zLogoffButton) 
-		               && zIsZimletLoaded()
-		           //    && zIsMinicalLoaded()
-		               ;
-			
-		
+		boolean present = sIsElementPresent(Locators.zLogoffPulldown);
 		if ( !present ) {
-			logger.debug("isActive() present = "+ present);
+			logger.debug("Logoff button present = "+ present);
 			return (false);
 		}
+
+		boolean loaded = zIsZimletLoaded();
+		if ( !loaded) {
+			logger.debug("zIsZimletLoaded() = "+ loaded);
+			return (false);
+		}
+		
+//		boolean minical = zIsMinicalLoaded();
+//		if ( !minical ) {
+//			logger.debug("zIsMinicalLoaded() = "+ minical);
+//			return (false);
+//		}
 		
 		logger.debug("isActive() = "+ true);
 		return (true);
@@ -131,12 +139,22 @@ public class PageMain extends AbsTab {
 
 		zNavigateTo();
 
-		if ( !sIsElementPresent(Locators.zLogoffButton) ) {
-			throw new HarnessException("The logoff button is not present " + Locators.zLogoffButton);
+		if ( !sIsElementPresent(Locators.zLogoffPulldown) ) {
+			throw new HarnessException("The logoff button is not present " + Locators.zLogoffPulldown);
 		}
 
-		// Click on logout
-		sClick(Locators.zLogoffButton);
+		// Click on logout pulldown
+		zClick(Locators.zLogoffPulldown);
+		this.zWaitForBusyOverlay();
+		
+		if ( !sIsElementPresent(Locators.zLogoffOption) ) {
+			throw new HarnessException("The logoff button is not present " + Locators.zLogoffOption);
+		}
+
+		// Click on logout pulldown
+		zClick(Locators.zLogoffOption);
+		this.zWaitForBusyOverlay();
+
 
 		sWaitForPageToLoad();
 		((AppAjaxClient)MyApplication).zPageLogin.zWaitForActive();

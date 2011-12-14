@@ -2,8 +2,7 @@ package com.zimbra.qa.selenium.projects.ajax.ui;
 
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
-import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
-import com.zimbra.qa.selenium.projects.ajax.ui.DialogError.DialogErrorID;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.*;
 
 
 public class PageLogin extends AbsTab {
@@ -11,7 +10,7 @@ public class PageLogin extends AbsTab {
 	public static class Locators {
 
 		// Buttons
-		public static final String zBtnLogin = "css=input[class='zLoginButton']";
+		public static final String zBtnLogin = "css=input.zLoginButton";
 
 
 		// Desktop-specific
