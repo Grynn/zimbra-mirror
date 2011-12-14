@@ -1,5 +1,6 @@
 package com.zimbra.qa.selenium.projects.desktop.tests.briefcase.file;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.FileItem;
@@ -187,6 +188,13 @@ public class CheckInFile extends AjaxCommonTest {
       app.zPageBriefcase.deleteFileById(id);
       GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
       app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
+   }
+
+   @AfterMethod(alwaysRun=true)
+   public void cleanup() {
+      // This is needed because the next test might upload the same file as these tests do
+      // and it will fail if there is a duplicate file in briefcase
+      ZimbraAccount.ResetAccountZDC();
    }
 }
 
