@@ -7,7 +7,6 @@ import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.octopus.core.OctopusCommonTest;
 import com.zimbra.qa.selenium.projects.octopus.ui.DialogSettings;
-import com.zimbra.qa.selenium.projects.octopus.ui.DialogSettings.Locators;
 
 public class AccountSettings extends OctopusCommonTest {
 
@@ -44,12 +43,12 @@ public class AccountSettings extends OctopusCommonTest {
 				+ "<device name='" + deviceName + "'/>"
 				+ "</RegisterDeviceRequest>");
 
+		// Get all devices through SOAP
+		account.soapSend("<GetAllDevicesRequest xmlns='urn:zimbraMail'/>");
+
 		// Open Settings dialog
 		DialogSettings dlg = (DialogSettings) app.zPageOctopus
 				.zToolbarPressButton(Button.B_SETTINGS);
-
-		// Get all devices through SOAP
-		account.soapSend("<GetAllDevicesRequest xmlns='urn:zimbraMail'/>");
 
 		// Verify Device name through SOAP
 		ZAssert.assertTrue(
@@ -121,6 +120,9 @@ public class AccountSettings extends OctopusCommonTest {
 				+ "<device name='" + deviceName + "'/>"
 				+ "</RegisterDeviceRequest>");
 
+		// Get all devices through SOAP
+		account.soapSend("<GetAllDevicesRequest xmlns='urn:zimbraMail'/>");
+
 		DialogSettings dlg = (DialogSettings) app.zPageOctopus
 				.zToolbarPressButton(Button.B_SETTINGS);
 
@@ -146,6 +148,9 @@ public class AccountSettings extends OctopusCommonTest {
 				+ "<device name='" + deviceName + "'/>"
 				+ "</RegisterDeviceRequest>");
 
+		// Get all devices through SOAP
+		account.soapSend("<GetAllDevicesRequest xmlns='urn:zimbraMail'/>");
+
 		DialogSettings dlg = (DialogSettings) app.zPageOctopus
 				.zToolbarPressButton(Button.B_SETTINGS);
 
@@ -159,7 +164,8 @@ public class AccountSettings extends OctopusCommonTest {
 		dlg.zListItem(Action.A_LEFTCLICK, Button.B_UNLINK_AND_WIPE, deviceName);
 
 		// Verify Device is disabled
-		ZAssert.assertTrue(dlg.zIsDeviceDisabled(deviceName),"Verify Device is disabled");
+		ZAssert.assertTrue(dlg.zIsDeviceDisabled(deviceName),
+				"Verify Device is disabled");
 
 		dlg.zClickButton(Button.B_DONE);
 	}
@@ -191,6 +197,27 @@ public class AccountSettings extends OctopusCommonTest {
 				_fileId = null;
 				_fileAttached = false;
 			}
+		}
+		try {
+			// Refresh view
+			// ZimbraAccount account = app.zGetActiveAccount();
+			// FolderItem item =
+			// FolderItem.importFromSOAP(account,SystemFolder.Briefcase);
+			// account.soapSend("<GetFolderRequest xmlns='urn:zimbraMail'><folder l='1' recursive='0'/>"
+			// + "</GetFolderRequest>");
+			// account.soapSend("<GetFolderRequest xmlns='urn:zimbraMail' requestId='folders' depth='1' tr='true' view='document'><folder l='"
+			// + item.getId() + "'/></GetFolderRequest>");
+			// account.soapSend("<GetActivityStreamRequest xmlns='urn:zimbraMail' id='16'/>");
+			// app.zGetActiveAccount().accountIsDirty = true;
+			// app.zPageOctopus.sRefresh();
+
+			// Empty trash
+			app.zPageTrash.emptyTrashUsingSOAP(app.zGetActiveAccount());
+
+			app.zPageOctopus.zLogout();
+		} catch (Exception e) {
+			logger.info("Failed while emptying Trash");
+			e.printStackTrace();
 		}
 	}
 }
