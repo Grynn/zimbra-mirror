@@ -1916,6 +1916,11 @@ function(text, isHtml) {
 	if (original) {
 		effectiveLength = isHtml ? AjxStringUtil.convertHtml2Text(original).length : original.length;
 	}
-	return (effectiveLength > 0) ? original : text;
+    var finalAnswer = (effectiveLength > 0) ? original : text;
+
+    // Print out a piece of javascript that's formatted to fit into the test data.
+    DBG.printRaw("content", ( JSON.stringify({ input: text, isHtml: isHtml, output: finalAnswer }, null, '\t')));
+
+    return finalAnswer;
 };
 
