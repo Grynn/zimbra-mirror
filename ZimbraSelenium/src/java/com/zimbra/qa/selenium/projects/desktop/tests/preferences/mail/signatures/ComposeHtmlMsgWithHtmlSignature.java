@@ -5,7 +5,6 @@ import java.util.HashMap;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 
-import com.thoughtworks.selenium.Selenium;
 import com.zimbra.common.soap.Element;
 import com.zimbra.qa.selenium.framework.items.MailItem;
 import com.zimbra.qa.selenium.framework.items.RecipientItem;
@@ -26,7 +25,8 @@ import com.zimbra.qa.selenium.projects.desktop.ui.mail.FormMailNew;
 
 public class ComposeHtmlMsgWithHtmlSignature extends AjaxCommonTest {
    String sigName = "signame" + ZimbraSeleniumProperties.getUniqueString();
-   String sigBody = "Signature<strong>bold"+ ZimbraSeleniumProperties.getUniqueString() + "</strong>Signature";
+   String sigCore = "bold" + ZimbraSeleniumProperties.getUniqueString();
+   String sigBody = "Signature<strong>"+ sigCore + "</strong>Signature";
    String contentHTML = XmlStringUtil.escapeXml("<html>" + "<head></head>"
          + "<body>" + sigBody + "</body>" + "</html>");
 
@@ -77,14 +77,14 @@ public class ComposeHtmlMsgWithHtmlSignature extends AjaxCommonTest {
       MailItem mail = new MailItem();
       mail.dToRecipients.add(new RecipientItem(app.zGetActiveAccount()));
       mail.dSubject = "subject" + ZimbraSeleniumProperties.getUniqueString();
-      mail.dBodyHtml = "body<strong>bold"+ ZimbraSeleniumProperties.getUniqueString()+"</strong>body";
+      mail.dBodyHtml = "body <strong>bold"+ ZimbraSeleniumProperties.getUniqueString()+"</strong>body";
 
       // Open the new mail form
       FormMailNew mailform = (FormMailNew) app.zPageMail.zToolbarPressButton(Button.B_NEW);
       ZAssert.assertNotNull(mailform, "Verify the new form opened");
 
       // Fill out the form with the data
-      mailform.zFill(mail);
+      mailform.zFill(mail, sigCore);
 
       //click Signature drop down and add signature
       app.zPageMail.zToolbarPressPulldown(Button.B_SIGNATURE,Button.O_ADD_SIGNATURE,this.sigName);

@@ -21,7 +21,8 @@ import com.zimbra.qa.selenium.projects.desktop.ui.mail.FormMailNew.Field;
 
 public class ForwardMsgWithHtmlSignature extends AjaxCommonTest {
    String sigName = "signame" + ZimbraSeleniumProperties.getUniqueString();
-   String sigBody = "Signature<strong>bold"+ ZimbraSeleniumProperties.getUniqueString() + "</strong>Signature";
+   String sigCore = "bold" + ZimbraSeleniumProperties.getUniqueString();
+   String sigBody = "Signature<strong>" + sigCore + "</strong>Signature";
    String contentHTMLSig = XmlStringUtil.escapeXml("<html>" + "<head></head>"
          + "<body>" + sigBody + "</body>" + "</html>");
 
@@ -112,7 +113,7 @@ public class ForwardMsgWithHtmlSignature extends AjaxCommonTest {
       ZAssert.assertNotNull(mailform, "Verify the new form opened");
 
       // Fill out the form with the data
-      mailform.zFillField(Field.To, ZimbraAccount.AccountB().EmailAddress);
+      mailform.zFillField(Field.To, ZimbraAccount.AccountB().EmailAddress, sigCore);
 
       // Send the message
       mailform.zSubmit();

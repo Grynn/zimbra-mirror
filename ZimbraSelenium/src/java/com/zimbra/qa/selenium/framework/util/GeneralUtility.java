@@ -37,7 +37,7 @@ public class GeneralUtility {
     *
     */
    public enum WAIT_FOR_OPERAND {
-      EQ, NEQ
+      EQ, NEQ, CONTAINS
    }
 
    /**
@@ -212,6 +212,12 @@ public class GeneralUtility {
          } else {
             return !mainObject.equals(compObject);
          }
+      case CONTAINS:
+         if (mainObject == null || compObject == null) {
+            return true;
+         } else {
+            return mainObject.toString().contains(compObject.toString());
+         }
       default:
          throw new HarnessException("Unsupported WaitFor operand: " + operand);
       }
@@ -293,11 +299,23 @@ public class GeneralUtility {
    }
 
    /**
-    * Synchronizing ZD client to ZCS through SOAP
+    * Synchronizing ZD client to ZCS through SOAP for the same email address in provided account
     * @param account Account
     * @throws HarnessException
     */
    public static void syncDesktopToZcsWithSoap(ZimbraAccount account)
+   throws HarnessException {
+      syncDesktopToZcsWithSoap(account, account.EmailAddress);
+   }
+
+   /**
+    * Synchronizing ZD client to ZCS through SOAP for the specified email address
+    * @param account Account
+    * @param emailAddressToBeSynced Email address to be synced
+    * @throws HarnessException
+    */
+   public static void syncDesktopToZcsWithSoap(ZimbraAccount account,
+         String emailAddressToBeSynced)
    throws HarnessException {
       if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
          Stafpostqueue sp = new Stafpostqueue();
@@ -308,7 +326,7 @@ public class GeneralUtility {
 
          account.soapSend(request,
                SOAP_DESTINATION_HOST_TYPE.CLIENT,
-               account.EmailAddress);
+               emailAddressToBeSynced);
 
          sp.waitForPostqueue();
 

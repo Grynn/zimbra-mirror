@@ -330,18 +330,58 @@ public class FormMailNew extends AbsForm {
 		// Return the specified page, or null if not set
 		return (page);
 	}
-	
-	/**
+
+   /**
 	 * Fill in the form field with the specified text
 	 * @param field
 	 * @param value
 	 * @throws HarnessException
 	 */
-	public void zFillField(Field field, String value) throws HarnessException {
+	public void zFillField(Field field, String value, String... textToWait) throws HarnessException {
 	
 		tracer.trace("Set "+ field +" to "+ value);
 
 		String locator = null;
+
+		if (textToWait != null) {
+		   int frames = this.sGetXpathCount("//iframe");
+         logger.debug("Body: # of frames: "+ frames);
+
+         String tempLocator = null;
+         boolean html = false;
+         try {
+
+            if ( frames == 0 ) {
+               ////
+               // Text compose
+               ////
+
+               tempLocator = "//textarea[contains(@id,'textarea_')]";
+
+            } else if ( frames >= 1 ) {
+               ////
+               // HTML
+               ////
+               html = true;
+               this.sSelectFrame("index=0");
+               tempLocator = "//html//body";
+            }
+
+            GeneralUtility.waitForElementPresent(this, tempLocator);
+
+            for (int i = 0; i < textToWait.length; i++) {
+               // Wait for text
+               Object [] params = new Object [] {tempLocator};
+               logger.info("message: " + this.sGetText(tempLocator));
+               GeneralUtility.waitFor(null, this, false, "sGetText", params, WAIT_FOR_OPERAND.CONTAINS, textToWait[i], 30000, 1000);
+            }
+
+         } finally {
+            if (html) {
+               this.sSelectFrame("relative=top");
+            }
+         }
+		}
 		
 		if ( field == Field.To ) {
 			
@@ -470,7 +510,11 @@ public class FormMailNew extends AbsForm {
 	}
 
 	@Override
-	public void zFill(IItem item) throws HarnessException {
+   public void zFill(IItem item) throws HarnessException {
+	   zFill(item, null);
+	}
+
+	public void zFill(IItem item, String... textToWait) throws HarnessException {
 		logger.info(myPageName() + ".zFill(ZimbraItem)");
 		logger.info(item.prettyPrint());
 
@@ -488,19 +532,19 @@ public class FormMailNew extends AbsForm {
 		// Handle the subject
 		if ( mail.dSubject != null ) {
 
-			zFillField(Field.Subject, mail.dSubject);
+			zFillField(Field.Subject, mail.dSubject, textToWait);
 
 		}
 
 		if ( mail.dBodyText != null ) {
 
-			zFillField(Field.Body, mail.dBodyText);
+			zFillField(Field.Body, mail.dBodyText, textToWait);
 
 		}
 
 		if ( mail.dBodyHtml != null ) {
 
-         zFillField(Field.Body, mail.dBodyHtml);
+         zFillField(Field.Body, mail.dBodyHtml, textToWait);
 
       }
 		// TODO: how to handle HTML body?
