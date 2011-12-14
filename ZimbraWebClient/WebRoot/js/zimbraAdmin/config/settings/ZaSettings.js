@@ -287,6 +287,8 @@ ZaSettings.CSFE_MSG_FETCHER_URI = (location.port == "80") ? "/service/content/ge
 ZaSettings.CONFIG_PATH = location.pathname + "js/zimbraAdmin/config";
 //ZaSettings.ADMIN_NAME_COOKIE = "ZA_ADMIN_NAME_COOKIE";
 ZaSettings.myDomainName = null;
+ZaSettings.ZIMBRA_SUPPORT_URL = "http://support.zimbra.com/help/index.php";
+ZaSettings.ZIMBRA_SUPPORT_URL_QUERY = ZaSettings.ZIMBRA_SUPPORT_URL + "?query=";
 
 //CONSTANTS FOR ROLE-BASED ACCESS
 /**

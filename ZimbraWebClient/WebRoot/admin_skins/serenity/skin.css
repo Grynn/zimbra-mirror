@@ -567,3 +567,28 @@ textarea {
    border-spacing: 0;
    padding: 0;
 }
+
+.ZaHelpDropdown {
+    background-color: #FFFFFF !important;
+    border-width: 2px !important;
+    padding: 0px !important;
+}
+
+.ZaHelpDropdownSearch {
+    background-color: #DDDDDD;
+    padding: 4 8 4 8;
+}
+
+#ZaHelpSearchInput {
+    border: #FFFFFF;
+    font-size: 12px;
+    margin-left: 3px;
+    padding-left: 0px;
+    width:85%;
+}
+
+.ZaHelpSearchIcon {
+   float: right;
+   margin: 2px 5px 0pt 0pt;
+   cursor: pointer;
+}

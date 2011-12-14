@@ -600,6 +600,69 @@ function(ev) {
 
 ZaZimbraAdmin.prototype._createHelpLink =
 function() {
+    var helpSkinContainer = document.getElementById(ZaSettings.SKIN_HELP_DOM_ID);
+    if(!helpSkinContainer) {
+        return;
+    }
+
+    var dwButton = new DwtBorderlessButton(this._shell, "", "", Dwt.RELATIVE_STYLE);
+    dwButton.setText(ZaMsg.help);
+    if (appNewUI)
+        dwButton.setDropDownImages("NodeExpandedWhite");
+
+	helpSkinContainer.innerHTML = "";
+	dwButton.reparentHtmlElement (ZaSettings.SKIN_HELP_DOM_ID);
+
+    var adminObj = this;
+    // Add Zimbra Help Desk Menu
+    var helpMenuOpList = new Array();
+    helpMenuOpList.push(new ZaOperation("zaHomepage", ZaMsg.zimbraHomePage
+        + "<span style='visibility:hidden'>spacholder</span>", // Add this part is to increase the width of the dropdown menu.
+        ZaMsg.zimbraHomePage,  "", "", new AjxListener(window, this._contextHelpListener, adminObj)));
+
+    helpMenuOpList.push(new ZaOperation("zaHelpCenter", ZaMsg.zimbraHelpCenter, ZaMsg.zimbraHelpCenter,  "", "", new AjxListener(window, this._helpListener, adminObj)));
+	helpMenuOpList.push(new ZaOperation("aboutZimbra", ZaMsg.zimbraAbout, ZaMsg.zimbraAbout,  "", "", new AjxListener(window, this._aboutZimbraListener, adminObj)));
+    var menu = new ZaPopupMenu(dwButton, "ActionMenu ZaHelpDropdown",null, helpMenuOpList, "ZA_HELP");
+    menu.addChild(this._createHelpSearch(), 0);
+    dwButton.setMenu(menu,true);
+}
+
+ZaZimbraAdmin.prototype._createHelpSearch =
+function() {
+    var helpSearch = new DwtComposite (this._shell, "ZaHelpDropdownSearch", Dwt.RELATIVE_STYLE);
+    var helpSearchBox = new DwtComposite (helpSearch, "SearchPanel", Dwt.RELATIVE_STYLE);
+    var searchInputField = new DwtInputField({parent:helpSearchBox, validationStyle:DwtInputField.ONEXIT_VALIDATION, inputId:"ZaHelpSearchInput"});
+    searchInputField.setValidatorFunction(searchInputField.getInputElement(), this._openSupportSite);
+    searchInputField.getInputElement().onblur = null;
+
+    var searchIcon = new DwtComposite({parent:searchInputField, className:"ImgSearch ZaHelpSearchIcon"});
+    //searchIcon.addListener(DwtEvent.ONCLICK, new AjxListener(window, this._helpSearchListener));
+    searchIcon.getHtmlElement().onclick = this._openSupportSite;
+    return helpSearch;
+}
+
+ZaZimbraAdmin.prototype._openSupportSite =
+function() {
+    window.open(ZaSettings.ZIMBRA_SUPPORT_URL_QUERY + document.getElementById("ZaHelpSearchInput").value);
+}
+
+// TODO: MUST change to provide context-sensitive help for all modules
+ZaZimbraAdmin.prototype._contextHelpListener =
+function(ev) {
+    //window.open(location.pathname + ZaUtil.HELP_URL + "administration_console_help.htm%23managing_accounts/setting_the_devault_zwc_login_version.htm?locid=" + AjxEnv.DEFAULT_LOCALE);
+    window.open(ZaApp.getInstance().getCurrentController()._helpURL);
+}
+
+ZaZimbraAdmin.prototype._aboutZimbraListener =
+function(ev) {
+    if (!ev.aboutZimbraDialog) {
+        ev.aboutZimbraDialog = new ZaAboutDialog(ev._shell);
+    }
+    ev.aboutZimbraDialog.popup();
+}
+
+/*ZaZimbraAdmin.prototype._createHelpLink =
+function() {
 	var helpSkinContainer = document.getElementById(ZaSettings.SKIN_HELP_DOM_ID);
 	if(!helpSkinContainer) {
 		return;
@@ -620,7 +683,7 @@ function() {
              this._getAppLink(null, iconName,  ZaMsg.helpDesk, skin.skin_container_help_max_str_length);
     }
     helpLabel.reparentHtmlElement (ZaSettings.SKIN_HELP_DOM_ID) ;
-}
+}*/
 
 ZaZimbraAdmin.prototype._createDownloadLink =
 function() {
@@ -761,8 +824,8 @@ function(ev) {
 	}
 
     if (appNewUI) {
-        var historyObject = new ZaHistory("HelpView", undefined, undefined, false, new AjxCallback(this, this._helpListener));
-        this._historyMgr.addHistory(historyObject);
+        var historyObject = new ZaHistory("HelpView", undefined, undefined, false, new AjxCallback(ev, ev._helpListener)); //this or ev?
+        ev._historyMgr.addHistory(historyObject);
     }
 }
 
@@ -1270,4 +1333,3 @@ function() {
  	DwtBaseDialog.prototype.popdown.call(this);
     this.setContent("");
 };
-
