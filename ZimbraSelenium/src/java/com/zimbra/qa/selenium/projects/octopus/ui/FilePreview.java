@@ -60,7 +60,7 @@ public class FilePreview extends AbsDisplay {
 		} else if (button == Button.B_HISTORY) {
 			buttonLocator = Locators.zHistory.locator;
 			
-			page = new DialogHistory(MyApplication);
+			page = new DialogHistory(MyApplication, ((AppOctopusClient)MyApplication).zPageOctopus);
 		} else if (button == Button.B_COMMENTS) {
 			buttonLocator = Locators.zComments.locator;
 		} else {

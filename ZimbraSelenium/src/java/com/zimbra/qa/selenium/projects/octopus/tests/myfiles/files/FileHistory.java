@@ -137,7 +137,7 @@ public class FileHistory extends OctopusCommonTest {
 				"Verify Close button in the history dialog");
 		
 		// dismiss the history dialog
-		dlg.zPressButton(Button.B_CLOSE);
+		dlg.zClickButton(Button.B_CLOSE);
 	}
 
 	@AfterMethod(groups = { "always" })

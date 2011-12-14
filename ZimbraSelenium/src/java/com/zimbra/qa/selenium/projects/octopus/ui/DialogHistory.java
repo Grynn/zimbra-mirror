@@ -1,12 +1,13 @@
 package com.zimbra.qa.selenium.projects.octopus.ui;
 
 import com.zimbra.qa.selenium.framework.ui.AbsApplication;
-import com.zimbra.qa.selenium.framework.ui.AbsDisplay;
+import com.zimbra.qa.selenium.framework.ui.AbsDialog;
 import com.zimbra.qa.selenium.framework.ui.AbsPage;
+import com.zimbra.qa.selenium.framework.ui.AbsTab;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 
-public class DialogHistory extends AbsDisplay {
+public class DialogHistory extends AbsDialog {
 
 	public static class Locators {
 		public static final Locators zFileHistoryMenuBar = new Locators(
@@ -21,8 +22,8 @@ public class DialogHistory extends AbsDisplay {
 		}
 	}
 
-	public DialogHistory(AbsApplication application) {
-		super(application);
+	public DialogHistory(AbsApplication application, AbsTab page) {
+		super(application, page);
 
 		logger.info("new " + DialogHistory.class.getCanonicalName());
 
@@ -34,7 +35,8 @@ public class DialogHistory extends AbsDisplay {
 	}
 
 	@Override
-	public AbsPage zPressButton(Button button) throws HarnessException {
+	public AbsPage zClickButton(Button button) throws HarnessException {
+
 		if (button == null)
 			throw new HarnessException("button cannot be null");
 
@@ -67,10 +69,16 @@ public class DialogHistory extends AbsDisplay {
 		if (!this.sIsElementPresent(Locators.zFileHistoryMenuBar.locator))
 			return (false);
 
-		if (!this.zIsVisiblePerPosition(Locators.zFileHistoryMenuBar.locator, 0, 0))
+		if (!this.zIsVisiblePerPosition(Locators.zFileHistoryMenuBar.locator,
+				0, 0))
 			return (false);
 
 		return (true);
 	}
 
+	@Override
+	public String zGetDisplayedText(String locator) throws HarnessException {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

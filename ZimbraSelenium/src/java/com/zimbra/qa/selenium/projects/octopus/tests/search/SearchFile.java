@@ -31,7 +31,7 @@ public class SearchFile extends OctopusCommonTest {
 		_fileAttached = false;
 	}
 
-	@Test(description = "Upload file through RestUtil - verify by searching file through the SOAP", groups = { "smoke" })
+	@Test(description = "Upload file through RestUtil - verify by searching file through the SOAP", groups = { "sanity" })
 	public void SearchFile_01() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 
@@ -63,7 +63,7 @@ public class SearchFile extends OctopusCommonTest {
 	}
 
 	@Test(description = "" +
-			"Delete file - Search file in the Trash through the SOAP", groups = { "functional" })
+			"Delete file - Search file in the Trash through the SOAP", groups = { "smoke" })
 	public void SearchFile_02() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 

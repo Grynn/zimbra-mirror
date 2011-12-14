@@ -22,6 +22,8 @@ public class PageOctopus extends AbsTab {
 	public static class Locators {
 		public static final Locators zSignOutButton = new Locators(
 				"css=a.(headerLink signOutLink):contains(sign out)");
+		public static final Locators zSettingsButton = new Locators(
+				"css=a.(headerLink settingsLink):contains(settings)");
 		public static final Locators zTabMyFiles = new Locators(
 				"css=div.octopus-tab-label:contains(My Files)");
 		public static final Locators zTabSharing = new Locators(
@@ -217,6 +219,9 @@ public class PageOctopus extends AbsTab {
 		} else if (button == Button.B_TAB_SEARCH) {
 			locator = Locators.zTabSearch.locator;
 			page = new PageSearch(MyApplication);
+		} else if (button == Button.B_SETTINGS) {
+			locator = Locators.zSettingsButton.locator;
+			page = new DialogSettings(MyApplication, this);
 		} else {
 			throw new HarnessException("no logic defined for button " + button);
 		}
@@ -239,6 +244,9 @@ public class PageOctopus extends AbsTab {
 		// If the app is busy, wait for it to become active
 		zWaitForBusyOverlay();
 
+		if(page!=null)
+			page.zWaitForActive();
+		
 		return (page);
 	}
 

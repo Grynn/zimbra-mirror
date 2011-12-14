@@ -215,7 +215,13 @@ public class Button {
 	public static final Button B_TAB_TRASH = new Button("B_TAB_TRASH");
 	
 	public static final Button B_TAB_SEARCH = new Button("B_TAB_SEARCH");
+	
+	public static final Button B_SETTINGS = new Button("B_SETTINGS");
 
+	public static final Button B_DONE = new Button("B_DONE");
+	
+	public static final Button B_UNLINK_AND_WIPE = new Button("B_UNLINK_AND_WIPE");
+	
 	//Briefcase buttons
 	public static final Button B_UPLOAD_FILE = new Button("B_UPLOAD_FILE");
 	public static final Button B_EDIT_FILE = new Button("B_EDIT_FILE");
