@@ -23,19 +23,21 @@ public class CreateMeetingWithEquipment extends AjaxCommonTest {
 	public void CreateMeetingWithEquipment_01() throws HarnessException {
 		
 		// Create appointment data
-		String apptSubject, apptAttendee1, apptContent;
 		AppointmentItem appt = new AppointmentItem();
 		Calendar now = Calendar.getInstance();
+		ZimbraResource equipment1 = new ZimbraResource(ZimbraResource.Type.EQUIPMENT);
 		
+		String apptSubject, apptAttendee1, apptEquipment1, apptContent;
 		apptSubject = ZimbraSeleniumProperties.getUniqueString();
 		apptAttendee1 = ZimbraAccount.AccountA().EmailAddress;
-		ZimbraResource equipment1 = new ZimbraResource(ZimbraResource.Type.LOCATION);
+		apptEquipment1 = equipment1.EmailAddress;
 		apptContent = ZimbraSeleniumProperties.getUniqueString();
 		
 		appt.setSubject(apptSubject);
 		appt.setAttendees(apptAttendee1);
-		appt.setStartTime(new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 12, 0, 0));
-		appt.setEndTime(new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 14, 0, 0));
+		appt.setEquipment(apptEquipment1);
+		appt.setStartTime(new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 15, 0, 0));
+		appt.setEndTime(new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 16, 0, 0));
 		appt.setContent(apptContent);
 	
 		// Compose appointment and send it to invitee
@@ -52,10 +54,12 @@ public class CreateMeetingWithEquipment extends AjaxCommonTest {
 		ZAssert.assertNotNull(actual, "Verify the new appointment is created");
 		ZAssert.assertEquals(actual.getSubject(), appt.getSubject(), "Subject: Verify the appointment data");
 		ZAssert.assertEquals(actual.getAttendees(), appt.getAttendees(), "Attendees: Verify the appointment data");
-		ZAssert.assertEquals(apptForm.zGetApptEquipment(equipment1.toString()), equipment1.toString(), "Equipment: Verify the appointment data");
+		ZAssert.assertEquals(actual.getEquipment(), appt.getEquipment(), "Equipment: Verify the appointment data");
 		ZAssert.assertEquals(actual.getContent(), appt.getContent(), "Content: Verify the appointment data");
 		
-		// Verify equipment free/busy status
+		// Verify equipment free/busy status shows as psts=AC	
+		String equipmentStatus = app.zGetActiveAccount().soapSelectValue("//mail:at[@a='"+ apptEquipment1 +"']", "ptst");
+		ZAssert.assertEquals(equipmentStatus, "AC", "Verify that the equipment status shows as 'ACCEPTED'");
 		
 	}
 

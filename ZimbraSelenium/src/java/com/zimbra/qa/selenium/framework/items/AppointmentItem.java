@@ -147,7 +147,7 @@ public static AppointmentItem importFromSOAP(Element GetAppointmentResponse) thr
 			
 			if ( optElement != null ) {
 				do {
-					multiElement = ZimbraAccount.SoapClient.selectNode(m, "//mail:at[@role='OPT'][" + i + "]");
+					multiElement = ZimbraAccount.SoapClient.selectNode(m, "//mail:at[@role='OPT'][" + j + "]");
 					if (multiElement == null) {
 						break;
 					}
@@ -158,8 +158,17 @@ public static AppointmentItem importFromSOAP(Element GetAppointmentResponse) thr
 				appt.dOptionals = optionals.substring(1, lenOptionals);
 			}
 			
-		
-			if (appt.dLocation != null) {
+			if (appt.dLocation == "") {
+				
+				Element equipElement = ZimbraAccount.SoapClient.selectNode(m, "//mail:at[@cutype='RES']");
+				if ( equipElement != null ) {
+				
+					// Equipment
+					appt.dEquipment = equipElement.getAttribute("a");
+			
+				}
+				
+			} else if (appt.dLocation != null) {
 				
 				Element equipElement = ZimbraAccount.SoapClient.selectNode(m, "//mail:at[@cutype='RES'][2]");
 				if ( equipElement != null ) {
