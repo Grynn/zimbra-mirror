@@ -328,7 +328,8 @@ body {
   -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='@lighten(AppC,27)@', EndColorStr='@darken(AppC,3)@')"; */
 }
 
-.DwtListView-Column {
+.DwtListView-Column,
+.ZaCurrentAppBar{
   background-color: #c5c6cb;
   background-image: -moz-linear-gradient(top, #dfe1ef, #b9bbbf); /* FF3.6 */
   background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, #dfe1ef),color-stop(1, #b9bbbf)); /* Saf4+, Chrome */

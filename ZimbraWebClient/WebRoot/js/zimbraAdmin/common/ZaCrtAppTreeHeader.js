@@ -184,7 +184,21 @@ ZaCrtAppTreeHeader.prototype.createMenu = function
     var mi;
     var listener = new AjxListener(this, this.goToTreeItemListener);
     var allHistory = this._historyMgr.getAllHistory();
-    for (i = 0; i < allHistory.size();i ++) {
+
+    if(allHistory.size() > 20) {
+        var j = allHistory.size()-1;
+        var findNum = 0;
+        for (j = allHistory.size() - 1; j >= 0; j--) {
+            if(!allHistory.get(j).isShowInHistory)
+                continue;
+            findNum++;
+            if (findNum == 20)
+                break;
+        }
+        i = j;
+    }
+
+    for (; i < allHistory.size();i ++) {
         var currentHistory = allHistory.get(i);
         if (!currentHistory.isShowInHistory)
             continue;

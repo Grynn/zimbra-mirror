@@ -143,7 +143,7 @@ div.ZmSelectedHeaderBg {
 }
 
 .ZaTaskTabView .XFormCase {
-    background-color: white;
+    background-color: #DDDDDD;
 }
 /* -- Search panel -- */
 
@@ -353,5 +353,5 @@ div.ZmSelectedHeaderBg {
 }
 
 .ZaCurrentAppBar .ZDisabled .ZToolbarButtonTable .ZWidgetTitle {
-    color: white;
+    color: #747474;
 }
