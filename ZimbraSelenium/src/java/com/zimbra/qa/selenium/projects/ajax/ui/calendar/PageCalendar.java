@@ -1384,7 +1384,7 @@ public class PageCalendar extends AbsTab {
 		if (!loaded)
 			return (false);
 
-		boolean active = this.zIsVisiblePerPosition(locator, 178, 74);
+		boolean active = this.zIsVisiblePerPosition(locator, 0, 0);
 		if (!active)
 			return (false);
 
