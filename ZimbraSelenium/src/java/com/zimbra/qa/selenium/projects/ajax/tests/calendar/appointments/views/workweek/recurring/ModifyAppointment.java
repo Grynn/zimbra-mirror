@@ -60,7 +60,7 @@ public class ModifyAppointment extends AjaxCommonTest {
                                "</m>" +
                          "</CreateAppointmentRequest>");
 
-        String apptId = app.zGetActiveAccount().soapSelectValue("//mail:CreateAppointmentResponse//mail:appt", "id");
+        String apptId = app.zGetActiveAccount().soapSelectValue("//mail:CreateAppointmentResponse", "apptId");
     
         // Switch to work week view
         app.zPageCalendar.zToolbarPressPulldown(Button.B_LISTVIEW, Button.O_LISTVIEW_WORKWEEK);

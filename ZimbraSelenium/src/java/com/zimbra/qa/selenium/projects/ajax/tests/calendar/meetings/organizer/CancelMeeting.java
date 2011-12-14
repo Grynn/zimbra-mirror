@@ -72,7 +72,7 @@ public class CancelMeeting extends AjaxCommonTest {
                      "<su>"+ apptSubject +"</su>" +
                      "</m>" +
                "</CreateAppointmentRequest>");
-        String apptId = app.zGetActiveAccount().soapSelectValue("//mail:CreateAppointmentResponse//mail:appt", "id");
+		String apptId = app.zGetActiveAccount().soapSelectValue("//mail:CreateAppointmentResponse", "apptId");
         
         // Right click to meeting and cancel it
         app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
@@ -121,7 +121,7 @@ public class CancelMeeting extends AjaxCommonTest {
                      "<su>"+ apptSubject +"</su>" +
                      "</m>" +
                "</CreateAppointmentRequest>");
-        String apptId = app.zGetActiveAccount().soapSelectValue("//mail:CreateAppointmentResponse//mail:appt", "id");
+		String apptId = app.zGetActiveAccount().soapSelectValue("//mail:CreateAppointmentResponse", "apptId");
         
         // Right click to meeting and cancel it
         app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
@@ -178,7 +178,7 @@ public class CancelMeeting extends AjaxCommonTest {
                      "<su>"+ apptSubject +"</su>" +
                      "</m>" +
                "</CreateAppointmentRequest>");
-		String apptId = app.zGetActiveAccount().soapSelectValue("//mail:CreateAppointmentResponse//mail:appt", "id");
+		String apptId = app.zGetActiveAccount().soapSelectValue("//mail:CreateAppointmentResponse", "apptId");
         
         // Cancel meeting using keyboard Del and Backspace key
 		app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
@@ -230,7 +230,7 @@ public class CancelMeeting extends AjaxCommonTest {
                      "<su>"+ apptSubject +"</su>" +
                      "</m>" +
                "</CreateAppointmentRequest>");
-        String apptId = app.zGetActiveAccount().soapSelectValue("//mail:CreateAppointmentResponse//mail:appt", "id");
+		String apptId = app.zGetActiveAccount().soapSelectValue("//mail:CreateAppointmentResponse", "apptId");
         
         // Right click to meeting and cancel it
         app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
@@ -279,7 +279,7 @@ public class CancelMeeting extends AjaxCommonTest {
                      "<su>"+ apptSubject +"</su>" +
                      "</m>" +
                "</CreateAppointmentRequest>");
-        String apptId = app.zGetActiveAccount().soapSelectValue("//mail:CreateAppointmentResponse//mail:appt", "id");
+		String apptId = app.zGetActiveAccount().soapSelectValue("//mail:CreateAppointmentResponse", "apptId");
         
         // Right click to meeting and cancel it
         app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
@@ -333,7 +333,7 @@ public class CancelMeeting extends AjaxCommonTest {
                      "<su>"+ apptSubject +"</su>" +
                      "</m>" +
                "</CreateAppointmentRequest>");
-        String apptId = app.zGetActiveAccount().soapSelectValue("//mail:CreateAppointmentResponse//mail:appt", "id");
+		String apptId = app.zGetActiveAccount().soapSelectValue("//mail:CreateAppointmentResponse", "apptId");
         
         // Right click to meeting and cancel it
         app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);

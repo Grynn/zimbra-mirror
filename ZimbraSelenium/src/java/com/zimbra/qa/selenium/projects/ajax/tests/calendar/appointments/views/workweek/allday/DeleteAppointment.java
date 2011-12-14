@@ -69,7 +69,7 @@ public class DeleteAppointment extends AjaxCommonTest {
                                "<su>"+ apptSubject +"</su>" +
                                "</m>" +
                          "</CreateAppointmentRequest>");
-        String apptId = app.zGetActiveAccount().soapSelectValue("//mail:CreateAppointmentResponse//mail:appt", "id");
+        String apptId = app.zGetActiveAccount().soapSelectValue("//mail:CreateAppointmentResponse", "apptId");
         
         // Right click to appointment and delete it
         app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);

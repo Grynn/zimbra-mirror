@@ -59,7 +59,7 @@ public class ModifyMeeting extends AjaxCommonTest {
                      "</m>" +
                "</CreateAppointmentRequest>");
 
-		String apptId = app.zGetActiveAccount().soapSelectValue("//mail:CreateAppointmentResponse//mail:appt", "id");
+		String apptId = app.zGetActiveAccount().soapSelectValue("//mail:CreateAppointmentResponse", "apptId");
         
         // Open appointment and modify subject, attendee and content
         app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
