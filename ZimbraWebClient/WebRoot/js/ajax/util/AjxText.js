@@ -2016,9 +2016,10 @@ AjxListFormat.prototype._lastSeparator;
 AjxListFormat.prototype.format = function(array) {
 	array = array instanceof Array ? array : [ array ];
 	var list = [];
-	for (var i = 0; i < array.length; i++) {
+	var num = array.length;
+	for (var i = 0; i < num; i++) {
 		if (i > 0) {
-			list.push((i < array.length - 1) ? this._separator : (list.length == 2) ?
+			list.push((i < num - 1) ? this._separator : (num == 2) ?
 					this._twoSeparator : this._lastSeparator);
 		}
 		var item = array[i];
