@@ -370,6 +370,24 @@ STDMETHODIMP CItemObject::GetDataForItemID(BSTR UserId, VARIANT ItemId, FolderTy
 		    {
 			pIt[L"poslist"] = SysAllocString((apptData.recurMonthOccurrence).c_str());
 		    }
+
+		    // timezone
+		    pIt[L"tid"] = SysAllocString((apptData.tz.id).c_str());
+		    pIt[L"stdoff"] = SysAllocString((apptData.tz.standardOffset).c_str());
+		    pIt[L"dayoff"] = SysAllocString((apptData.tz.daylightOffset).c_str());
+		    pIt[L"sweek"] = SysAllocString((apptData.tz.standardStartWeek).c_str());
+		    pIt[L"swkday"] = SysAllocString((apptData.tz.standardStartWeekday).c_str());
+		    pIt[L"smon"] = SysAllocString((apptData.tz.standardStartMonth).c_str());
+		    pIt[L"shour"] = SysAllocString((apptData.tz.standardStartHour).c_str());
+		    pIt[L"smin"] = SysAllocString((apptData.tz.standardStartMinute).c_str());
+		    pIt[L"ssec"] = SysAllocString((apptData.tz.standardStartSecond).c_str());
+		    pIt[L"dweek"] = SysAllocString((apptData.tz.daylightStartWeek).c_str());
+		    pIt[L"dwkday"] = SysAllocString((apptData.tz.daylightStartWeekday).c_str());
+		    pIt[L"dmon"] = SysAllocString((apptData.tz.daylightStartMonth).c_str());
+		    pIt[L"dhour"] = SysAllocString((apptData.tz.daylightStartHour).c_str());
+		    pIt[L"dmin"] = SysAllocString((apptData.tz.daylightStartMinute).c_str());
+		    pIt[L"dsec"] = SysAllocString((apptData.tz.daylightStartSecond).c_str());
+		    //
 		}
 	    }
 	    delete maapi;	// temporary

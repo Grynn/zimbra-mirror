@@ -142,6 +142,7 @@ typedef struct _ApptItemData: BaseItemData
     wstring EndDate;
     wstring AlarmTrigger;
     Organizer organizer;
+    Tz tz;
     vector<Attendee*> vAttendees;
     vector<MessagePart> vMessageParts;
 

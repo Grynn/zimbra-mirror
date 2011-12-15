@@ -42,6 +42,7 @@ MAPIAppointment::MAPIAppointment(Zimbra::MAPI::MAPISession &session,
 	pr_allday = 0;
 	pr_isrecurring = 0;
 	pr_recurstream = 0;
+	pr_timezoneid = 0;
 	pr_reminderminutes = 0;
 	pr_responsestatus = 0;
 	InitNamedPropsForAppt();
@@ -68,6 +69,7 @@ MAPIAppointment::MAPIAppointment(Zimbra::MAPI::MAPISession &session,
     m_pRecurEndDate = L"";
     m_pRecurDayOfMonth = L"";
     m_pRecurMonthOccurrence = L"";
+    m_pTimezoneId = L"";
 
     SetMAPIAppointmentValues();
 }
@@ -77,6 +79,13 @@ MAPIAppointment::~MAPIAppointment()
     if (m_pPropVals)
         MAPIFreeBuffer(m_pPropVals);
     m_pPropVals = NULL;
+}
+
+void MAPIAppointment::IntToWstring(int src, wstring& dest)
+{
+    WCHAR pwszTemp[10];
+    _ltow(src, pwszTemp, 10);
+    dest = pwszTemp;
 }
 
 HRESULT MAPIAppointment::InitNamedPropsForAppt()
@@ -90,7 +99,8 @@ HRESULT MAPIAppointment::InitNamedPropsForAppt()
     nameIds[5] = 0x8215;
     nameIds[6] = 0x8223;
     nameIds[7] = 0x8216;
-    nameIds[8] = 0x8218;
+    nameIds[8] = 0x8234;
+    nameIds[9] = 0x8218;
 
     nameIdsC[0] = 0x8501;
     nameIdsC[1] = 0x8506;
@@ -141,6 +151,7 @@ HRESULT MAPIAppointment::InitNamedPropsForAppt()
     pr_allday = SetPropType(pAppointmentTags->aulPropTag[N_ALLDAY], PT_BOOLEAN);
     pr_isrecurring = SetPropType(pAppointmentTags->aulPropTag[N_ISRECUR], PT_BOOLEAN);
     pr_recurstream = SetPropType(pAppointmentTags->aulPropTag[N_RECURSTREAM], PT_BINARY);
+    pr_timezoneid = SetPropType(pAppointmentTags->aulPropTag[N_TIMEZONEID], PT_TSTRING);
     pr_responsestatus = SetPropType(pAppointmentTags->aulPropTag[N_RESPONSESTATUS], PT_LONG);
     pr_reminderminutes = SetPropType(pAppointmentTagsC->aulPropTag[N_REMINDERMINUTES], PT_LONG);
     pr_private = SetPropType(pAppointmentTagsC->aulPropTag[N_PRIVATE], PT_BOOLEAN);
@@ -167,8 +178,8 @@ HRESULT MAPIAppointment::SetMAPIAppointmentValues()
     SizedSPropTagArray(C_NUMALLAPPTPROPS, appointmentProps) = {
 	C_NUMALLAPPTPROPS, {
 	    PR_SUBJECT, PR_BODY, PR_HTML, pr_clean_global_objid,
-	    pr_appt_start, pr_appt_end, pr_location, pr_busystatus,
-	    pr_allday, pr_isrecurring, pr_recurstream, pr_responsestatus,
+	    pr_appt_start, pr_appt_end, pr_location, pr_busystatus, pr_allday,
+	    pr_isrecurring, pr_recurstream, pr_timezoneid, pr_responsestatus,
 	    pr_reminderminutes, pr_private
 	}
     };
@@ -182,6 +193,10 @@ HRESULT MAPIAppointment::SetMAPIAppointmentValues()
             &m_pPropVals)))
         throw MAPIAppointmentException(hr, L"SetMAPIAppointmentValues(): GetProps Failed.", __LINE__, __FILE__);
 
+    if (m_pPropVals[C_ISRECUR].ulPropTag == appointmentProps.aulPropTag[C_ISRECUR]) // do this first to set dates correctly
+    {
+	m_bIsRecurring = (m_pPropVals[C_ISRECUR].Value.b == 1);
+    }
     if (m_pPropVals[C_ALLDAY].ulPropTag == appointmentProps.aulPropTag[C_ALLDAY])
     {
         SetAllday(m_pPropVals[C_ALLDAY].Value.b);
@@ -223,10 +238,7 @@ HRESULT MAPIAppointment::SetMAPIAppointmentValues()
     {
 	SetPrivate(m_pPropVals[C_PRIVATE].Value.b);
     }
-    if (m_pPropVals[C_ISRECUR].ulPropTag == appointmentProps.aulPropTag[C_ISRECUR])
-    {
-	m_bIsRecurring = (m_pPropVals[C_ISRECUR].Value.b == 1);
-    }
+
     SetTransparency(L"O");
     SetPlainTextFileAndContent();
     SetHtmlFileAndContent();
@@ -237,10 +249,27 @@ HRESULT MAPIAppointment::SetMAPIAppointmentValues()
     {
 	if (m_pPropVals[C_RECURSTREAM].ulPropTag == appointmentProps.aulPropTag[C_RECURSTREAM])
 	{
+	    // special case for timezone id
+	    if (m_pPropVals[C_TIMEZONEID].ulPropTag == appointmentProps.aulPropTag[C_TIMEZONEID])
+	    {
+		SetTimezoneId(m_pPropVals[C_TIMEZONEID].Value.lpszW);
+	    }
+	    //
+
 	    SetRecurValues();
 	}
     }
     return hr;
+}
+
+void MAPIAppointment::SetTimezoneId(LPTSTR pStr)
+{
+    m_pTimezoneId = pStr;
+    size_t nPos = m_pTimezoneId.find(_T(":"), 0);
+    if (nPos != std::string::npos)
+    {
+	m_pTimezoneId.replace(nPos, 1, L".");
+    }
 }
 
 void MAPIAppointment::SetRecurValues()
@@ -252,7 +281,6 @@ void MAPIAppointment::SetRecurValues()
     {
 	return;
     }
-    WCHAR pwszTemp[10];
     LPSTREAM pStream = pRecurrenceStream.get();
     Zimbra::Mapi::Appt OlkAppt(m_pMessage, NULL);
     Zimbra::Mapi::COutlookRecurrencePattern &recur = OlkAppt.GetRecurrencePattern();
@@ -261,6 +289,29 @@ void MAPIAppointment::SetRecurValues()
     {
 	return;
     }
+
+    // Set Timezone info
+    SYSTEMTIME stdTime;
+    SYSTEMTIME dsTime;
+    const Zimbra::Mail::TimeZone &tzone = recur.GetTimeZone();
+    m_timezone.id = m_pTimezoneId;  // don't use m_timezone.id = tzone.GetId()
+    IntToWstring(tzone.GetStandardOffset(), m_timezone.standardOffset);
+    IntToWstring(tzone.GetDaylightOffset(), m_timezone.daylightOffset);
+    tzone.GetStandardStart(stdTime);
+    tzone.GetDaylightStart(dsTime);
+    IntToWstring(stdTime.wDay, m_timezone.standardStartWeek);
+    IntToWstring(stdTime.wDayOfWeek + 1, m_timezone.standardStartWeekday);  // note the + 1 -- bumping weekday
+    IntToWstring(stdTime.wMonth, m_timezone.standardStartMonth);
+    IntToWstring(stdTime.wHour, m_timezone.standardStartHour);
+    IntToWstring(stdTime.wMinute, m_timezone.standardStartMinute);
+    IntToWstring(stdTime.wSecond, m_timezone.standardStartSecond);
+    IntToWstring(dsTime.wDay, m_timezone.daylightStartWeek);
+    IntToWstring(dsTime.wDayOfWeek + 1, m_timezone.daylightStartWeekday);   // note the + 1 -- bumping weekday
+    IntToWstring(dsTime.wMonth, m_timezone.daylightStartMonth);
+    IntToWstring(dsTime.wHour, m_timezone.daylightStartHour);
+    IntToWstring(dsTime.wMinute, m_timezone.daylightStartMinute);
+    IntToWstring(dsTime.wSecond, m_timezone.daylightStartSecond);
+    //
 
     ULONG ulType = recur.GetRecurrenceType();
     switch (ulType)
@@ -281,9 +332,7 @@ void MAPIAppointment::SetRecurValues()
 	    break;
 	default: ;
     }
-    ULONG ulInterval = recur.GetInterval();
-    _ltow(ulInterval, pwszTemp, 10);
-    m_pRecurInterval = pwszTemp;
+    IntToWstring(recur.GetInterval(), m_pRecurInterval);
 
     ULONG ulDayOfWeekMask = recur.GetDayOfWeekMask();
     if (ulDayOfWeekMask & wdmSunday)    m_pRecurWkday += L"SU";
@@ -303,9 +352,7 @@ void MAPIAppointment::SetRecurValues()
     {
 	if (ulType == oRecursMonthly)
 	{
-	    ULONG ulDayOfMonth = recur.GetDayOfMonth();
-	    _ltow(ulDayOfMonth, pwszTemp, 10);
-	    m_pRecurDayOfMonth = pwszTemp;
+	    IntToWstring(recur.GetDayOfMonth(), m_pRecurDayOfMonth);
 	}
 	else
 	if (ulType == oRecursMonthNth)
@@ -317,8 +364,7 @@ void MAPIAppointment::SetRecurValues()
 	    }
 	    else
 	    {
-		_ltow(ulMonthOccurrence, pwszTemp, 10);
-		m_pRecurMonthOccurrence = pwszTemp;
+		IntToWstring(ulMonthOccurrence, m_pRecurMonthOccurrence);
 	    }
 	}
     }
@@ -326,9 +372,7 @@ void MAPIAppointment::SetRecurValues()
     ULONG ulRecurrenceEndType = recur.GetEndType();
     if (ulRecurrenceEndType == oetEndAfterN)
     {
-	ULONG ulOccurrenceCount = recur.GetOccurrences();
-	_ltow(ulOccurrenceCount, pwszTemp, 10);
-	m_pRecurCount = pwszTemp;
+	IntToWstring(recur.GetOccurrences(), m_pRecurCount);
     }
     else
     if (ulRecurrenceEndType == oetEndDate)
@@ -349,20 +393,28 @@ void MAPIAppointment::SetSubject(LPTSTR pStr)
 
 void MAPIAppointment::SetStartDate(FILETIME ft)
 {
-    SYSTEMTIME st;
+    SYSTEMTIME st, localst;
+    BOOL bUseLocal = false;
 
     FileTimeToSystemTime(&ft, &st);
-    m_pStartDate = Zimbra::Util::FormatSystemTime(st, TRUE, TRUE);
+    if (m_bIsRecurring)
+    {
+	TIME_ZONE_INFORMATION localTimeZone = {0};
+	GetTimeZoneInformation(&localTimeZone);	
+	bUseLocal = SystemTimeToTzSpecificLocalTime(&localTimeZone, &st, &localst);
+    }
+    m_pStartDate = (bUseLocal) ? Zimbra::Util::FormatSystemTime(localst, FALSE, TRUE)
+			       : Zimbra::Util::FormatSystemTime(st, TRUE, TRUE);
 }
 
 void MAPIAppointment::SetEndDate(FILETIME ft, bool bAllday)
 {
-    SYSTEMTIME st;
+    SYSTEMTIME st, localst;
+    BOOL bUseLocal = false;
 
     FileTimeToSystemTime(&ft, &st);
 
-    // if AllDay appt, subtract one from the end date for Zimbra friendliness
-    if (bAllday)
+    if (bAllday)    // if AllDay appt, subtract one from the end date for Zimbra friendliness
     {
 	double dat = -1;
 	if (SystemTimeToVariantTime(&st, &dat))
@@ -371,9 +423,17 @@ void MAPIAppointment::SetEndDate(FILETIME ft, bool bAllday)
 	    VariantTimeToSystemTime(dat, &st);
 	}
     }
-    /////
-
-    m_pEndDate = Zimbra::Util::FormatSystemTime(st, TRUE, TRUE);
+    else
+    {
+	if (m_bIsRecurring)
+	{
+	    TIME_ZONE_INFORMATION localTimeZone = {0};
+	    GetTimeZoneInformation(&localTimeZone);	
+	    bUseLocal = SystemTimeToTzSpecificLocalTime(&localTimeZone, &st, &localst);
+	}
+    }
+    m_pEndDate = (bUseLocal) ? Zimbra::Util::FormatSystemTime(localst, FALSE, TRUE)
+			       : Zimbra::Util::FormatSystemTime(st, TRUE, TRUE);
 }
 
 void MAPIAppointment::SetInstanceUID(LPSBinary bin)
@@ -891,3 +951,4 @@ wstring MAPIAppointment::GetRecurEndType() { return m_pRecurEndType; };
 wstring MAPIAppointment::GetRecurEndDate() { return m_pRecurEndDate; };
 wstring MAPIAppointment::GetRecurDayOfMonth() { return m_pRecurDayOfMonth; };
 wstring MAPIAppointment::GetRecurMonthOccurrence() { return m_pRecurMonthOccurrence; };
+Tz MAPIAppointment::GetRecurTimezone() { return m_timezone; };

@@ -1097,11 +1097,38 @@ public class ZimbraAPI
     public void SetAppointmentRequest(XmlWriter writer, Dictionary<string, string> appt,
         string folderId, int requestId)
     {
+        bool isRecurring = appt.ContainsKey("freq");
         writer.WriteStartElement("SetAppointmentRequest", "urn:zimbraMail");
         writer.WriteAttributeString("l", folderId);
         writer.WriteStartElement("default");
         writer.WriteAttributeString("ptst", appt["ptst"]);
         writer.WriteStartElement("m");
+
+        // Timezone nodes if recurring appt
+        if (isRecurring)
+        {
+            writer.WriteStartElement("tz");
+            writer.WriteAttributeString("id", appt["tid"]);
+            writer.WriteAttributeString("stdoff", appt["stdoff"]);
+            writer.WriteAttributeString("dayoff", appt["dayoff"]);
+            writer.WriteStartElement("standard");
+            writer.WriteAttributeString("week", appt["sweek"]);
+            writer.WriteAttributeString("wkday", appt["swkday"]);
+            writer.WriteAttributeString("mon", appt["smon"]);
+            writer.WriteAttributeString("hour", appt["shour"]);
+            writer.WriteAttributeString("min", appt["smin"]);
+            writer.WriteAttributeString("sec", appt["ssec"]);
+            writer.WriteEndElement();   // standard
+            writer.WriteStartElement("daylight");
+            writer.WriteAttributeString("week", appt["dweek"]);
+            writer.WriteAttributeString("wkday", appt["dwkday"]);
+            writer.WriteAttributeString("mon", appt["dmon"]);
+            writer.WriteAttributeString("hour", appt["dhour"]);
+            writer.WriteAttributeString("min", appt["dmin"]);
+            writer.WriteAttributeString("sec", appt["dsec"]);
+            writer.WriteEndElement();   // daylight
+            writer.WriteEndElement();   // tz
+        }
 
         writer.WriteStartElement("inv");
         writer.WriteAttributeString("method", "REQUEST");
@@ -1117,10 +1144,18 @@ public class ZimbraAPI
 
         writer.WriteStartElement("s");
         writer.WriteAttributeString("d", appt["s"]);
+        if (isRecurring)
+        {
+            writer.WriteAttributeString("tz", appt["tid"]);
+        }
         writer.WriteEndElement();
 
         writer.WriteStartElement("e");
         writer.WriteAttributeString("d", appt["e"]);
+        if (isRecurring)
+        {
+            writer.WriteAttributeString("tz", appt["tid"]);
+        }
         writer.WriteEndElement();
 
         writer.WriteStartElement("or");
@@ -1146,7 +1181,7 @@ public class ZimbraAPI
             }
         }
 
-        if (appt.ContainsKey("freq"))   // it's a recurring appt
+        if (isRecurring)
         {
             writer.WriteStartElement("recur");
             writer.WriteStartElement("add");

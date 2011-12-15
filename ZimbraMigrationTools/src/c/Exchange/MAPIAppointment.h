@@ -81,6 +81,24 @@ typedef struct _Attendee
     wstring role;
     wstring partstat;
 } Attendee;
+typedef struct _Tz
+{
+    wstring id;
+    wstring standardOffset;
+    wstring daylightOffset;
+    wstring standardStartWeek;
+    wstring standardStartWeekday;
+    wstring standardStartMonth;
+    wstring standardStartHour;
+    wstring standardStartMinute;
+    wstring standardStartSecond;
+    wstring daylightStartWeek;
+    wstring daylightStartWeekday;
+    wstring daylightStartMonth;
+    wstring daylightStartHour;
+    wstring daylightStartMinute;
+    wstring daylightStartSecond;
+} Tz;
 
 
 // MAPIAppointmentException class
@@ -100,12 +118,13 @@ private:
 
     // prop tags for named properties
     ULONG pr_clean_global_objid, pr_appt_start, pr_appt_end, pr_location, pr_busystatus, pr_allday, pr_isrecurring,
-	  pr_recurstream, pr_responsestatus, pr_reminderminutes, pr_private;
+	  pr_recurstream, pr_timezoneid, pr_responsestatus, pr_reminderminutes, pr_private;
 
     // index of props
     typedef enum _AppointmentPropIdx
     {
-        N_UID, N_APPTSTART, N_APPTEND, N_LOCATION, N_BUSYSTATUS, N_ALLDAY, N_ISRECUR, N_RECURSTREAM, N_RESPONSESTATUS, N_NUMAPPTPROPS
+        N_UID, N_APPTSTART, N_APPTEND, N_LOCATION, N_BUSYSTATUS, N_ALLDAY, N_ISRECUR, N_RECURSTREAM, N_TIMEZONEID,
+	N_RESPONSESTATUS, N_NUMAPPTPROPS
     } AppointmentPropIdx;
 
     typedef enum _CommonPropIdx
@@ -117,7 +136,7 @@ private:
     enum
     {
         C_SUBJECT, C_BODY, C_HTMLBODY, C_UID, C_START, C_END, C_LOCATION, C_BUSYSTATUS, C_ALLDAY, C_ISRECUR, C_RECURSTREAM,
-	C_RESPONSESTATUS, C_REMINDERMINUTES, C_PRIVATE, C_NUMALLAPPTPROPS
+	C_TIMEZONEID, C_RESPONSESTATUS, C_REMINDERMINUTES, C_PRIVATE, C_NUMALLAPPTPROPS
 	//org stuff later
     };
 
@@ -158,11 +177,14 @@ private:
     wstring m_pRecurEndDate;
     wstring m_pRecurDayOfMonth;
     wstring m_pRecurMonthOccurrence;
+    wstring m_pTimezoneId;
+    Tz m_timezone;
     //
 
 public:
     MAPIAppointment(Zimbra::MAPI::MAPISession &session, Zimbra::MAPI::MAPIMessage &mMessage);
     ~MAPIAppointment();
+    void IntToWstring(int src, wstring& dest);
     HRESULT InitNamedPropsForAppt();
     HRESULT SetMAPIAppointmentValues();
     void SetSubject(LPTSTR pStr);
@@ -181,6 +203,7 @@ public:
     void SetPrivate(unsigned short usPrivate);
     void SetPlainTextFileAndContent();
     void SetHtmlFileAndContent();
+    void SetTimezoneId(LPTSTR pStr);
     void SetRecurValues();
     HRESULT SetAppointmentAttachment(wstring &wstrAttachmentPath);
     bool TextBody(LPTSTR *ppBody, unsigned int &nTextChars);
@@ -212,6 +235,8 @@ public:
     wstring GetRecurEndDate();
     wstring GetRecurDayOfMonth();
     wstring GetRecurMonthOccurrence();
+    wstring GetTimezoneId();
+    Tz GetRecurTimezone();
     vector<Attendee*> GetAttendees();
 
 };

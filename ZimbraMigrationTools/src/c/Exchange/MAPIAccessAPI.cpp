@@ -675,6 +675,7 @@ LPCWSTR MAPIAccessAPI::GetItem(SBinary sbItemEID, BaseItemData &itemData)
 
 	    if (mapiappointment.IsRecurring())
 	    {
+		ad->tz = mapiappointment.GetRecurTimezone();
 		ad->recurPattern = mapiappointment.GetRecurPattern();
 		if (mapiappointment.GetRecurWkday().length() > 0)
 		{
