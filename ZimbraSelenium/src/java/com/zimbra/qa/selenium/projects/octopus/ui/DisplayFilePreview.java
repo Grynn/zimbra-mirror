@@ -3,7 +3,7 @@ package com.zimbra.qa.selenium.projects.octopus.ui;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 
-public class FilePreview extends AbsDisplay {
+public class DisplayFilePreview extends AbsDisplay {
 
 	public static class Locators {
 		public static final Locators zFileWatchIcon = new Locators(
@@ -27,9 +27,9 @@ public class FilePreview extends AbsDisplay {
 		Name, Version, Size, Body
 	}
 
-	public FilePreview(AbsApplication application) {
+	public DisplayFilePreview(AbsApplication application) {
 		super(application);
-		logger.info("new " + FilePreview.class.getCanonicalName());
+		logger.info("new " + DisplayFilePreview.class.getCanonicalName());
 	}
 
 	@Override
@@ -59,25 +59,32 @@ public class FilePreview extends AbsDisplay {
 					+ " span[class^=watched-icon]";
 		} else if (button == Button.B_HISTORY) {
 			buttonLocator = Locators.zHistory.locator;
-			
-			page = new DialogHistory(MyApplication, ((AppOctopusClient)MyApplication).zPageOctopus);
+
+			page = new DialogFileHistory(MyApplication,
+					((AppOctopusClient) MyApplication).zPageOctopus);
 		} else if (button == Button.B_COMMENTS) {
 			buttonLocator = Locators.zComments.locator;
+			
+			page = new DisplayFileComments(MyApplication);
 		} else {
-			logger.info("no logic defined for " + button);
+			throw new HarnessException("no logic defined for button " + button);
 		}
 
 		if (!this.sIsElementPresent(buttonLocator))
 			throw new HarnessException("Button is not present: "
 					+ buttonLocator);
 
+		// Default behavior, process the locator by clicking on it
+
+		// Click it
 		zClick(buttonLocator);
 
+		// If the app is busy, wait for it to become active
 		zWaitForBusyOverlay();
 
-		if(page!=null)
-		page.zWaitForActive();
-		
+		if (page != null)
+			page.zWaitForActive();
+
 		return page;
 	}
 

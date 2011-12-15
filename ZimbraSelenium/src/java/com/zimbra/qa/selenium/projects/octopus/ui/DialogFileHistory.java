@@ -7,7 +7,7 @@ import com.zimbra.qa.selenium.framework.ui.AbsTab;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 
-public class DialogHistory extends AbsDialog {
+public class DialogFileHistory extends AbsDialog {
 
 	public static class Locators {
 		public static final Locators zFileHistoryMenuBar = new Locators(
@@ -22,10 +22,10 @@ public class DialogHistory extends AbsDialog {
 		}
 	}
 
-	public DialogHistory(AbsApplication application, AbsTab page) {
+	public DialogFileHistory(AbsApplication application, AbsTab page) {
 		super(application, page);
 
-		logger.info("new " + DialogHistory.class.getCanonicalName());
+		logger.info("new " + DialogFileHistory.class.getCanonicalName());
 
 	}
 

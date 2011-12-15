@@ -8,7 +8,7 @@ import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.octopus.core.OctopusCommonTest;
-import com.zimbra.qa.selenium.projects.octopus.ui.FilePreview;
+import com.zimbra.qa.selenium.projects.octopus.ui.DisplayFilePreview;
 import com.zimbra.qa.selenium.projects.octopus.ui.PageMyFiles;
 
 
@@ -70,7 +70,7 @@ public class MarkAsFavorite extends OctopusCommonTest {
 
 		// Verify Watch icon becomes enabled
 		ZAssert.assertTrue(app.zPageMyFiles.zWaitForElementPresent(
-				FilePreview.Locators.zFileWatchIcon.locator
+				DisplayFilePreview.Locators.zFileWatchIcon.locator
 						+ " span[class^=watched-icon]", "3000"),
 				"Verify the favorite icon becomes enabled in the preview panel");
 
@@ -118,7 +118,7 @@ public class MarkAsFavorite extends OctopusCommonTest {
 
 		// Verify Watch icon becomes enabled
 		ZAssert.assertTrue(app.zPageMyFiles.zWaitForElementPresent(
-				FilePreview.Locators.zFileWatchIcon.locator
+				DisplayFilePreview.Locators.zFileWatchIcon.locator
 						+ " span[class^=watched-icon]", "3000"),
 				"Verify the favorite icon becomes enabled in the preview panel");
 
@@ -136,7 +136,7 @@ public class MarkAsFavorite extends OctopusCommonTest {
 
 		// Verify Watch icon becomes disabled
 		ZAssert.assertTrue(app.zPageMyFiles.zWaitForElementPresent(
-				FilePreview.Locators.zFileWatchIcon.locator
+				DisplayFilePreview.Locators.zFileWatchIcon.locator
 						+ " span[class^=unwatched-icon]", "3000"),
 				"Verify the favorite icon becomes disabled in the preview panel");
 	}
@@ -177,14 +177,14 @@ public class MarkAsFavorite extends OctopusCommonTest {
 				"Verify file appears in My Files view");
 		
 		// Select file in the list view
-		FilePreview filePreview = (FilePreview) app.zPageMyFiles.zListItem(Action.A_LEFTCLICK, fileName);
+		DisplayFilePreview filePreview = (DisplayFilePreview) app.zPageMyFiles.zListItem(Action.A_LEFTCLICK, fileName);
 		
 		// mark file as favorite clicking on watch icon
 		filePreview.zPressButton(Button.B_WATCH);		
 
 		// Verify Watch icon becomes enabled
 		ZAssert.assertTrue(app.zPageMyFiles.zWaitForElementPresent(
-				FilePreview.Locators.zFileWatchIcon.locator
+				DisplayFilePreview.Locators.zFileWatchIcon.locator
 						+ " span[class^=watched-icon]", "3000"),
 				"Verify the favorite icon becomes enabled in the preview panel");
 
@@ -197,14 +197,14 @@ public class MarkAsFavorite extends OctopusCommonTest {
 				"Verify file is added to Favorites");
 
 		//Select file
-		filePreview = (FilePreview) app.zPageMyFiles.zListItem(Action.A_LEFTCLICK, fileName);
+		filePreview = (DisplayFilePreview) app.zPageMyFiles.zListItem(Action.A_LEFTCLICK, fileName);
 		
 		// unmark file as favorite clicking on unwatch icon
 		filePreview.zPressButton(Button.B_UNWATCH);	
 
 		// Verify Watch icon becomes disabled
 		ZAssert.assertTrue(app.zPageMyFiles.zWaitForElementPresent(
-				FilePreview.Locators.zFileWatchIcon.locator
+				DisplayFilePreview.Locators.zFileWatchIcon.locator
 						+ " span[class^=unwatched-icon]", "3000"),
 				"Verify the favorite icon becomes disabled in the preview panel");
 	}

@@ -438,7 +438,7 @@ public class PageMyFiles extends AbsTab {
 
 			zClick(listItemLocator);
 
-			page = new FilePreview(MyApplication);
+			page = new DisplayFilePreview(MyApplication);
 			
 			// If the app is busy, wait for it to become active
 			zWaitForBusyOverlay();

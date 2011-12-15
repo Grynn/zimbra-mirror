@@ -9,11 +9,11 @@ import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.octopus.core.OctopusCommonTest;
-import com.zimbra.qa.selenium.projects.octopus.ui.DialogFileHistory;
+import com.zimbra.qa.selenium.projects.octopus.ui.DisplayFileComments;
 import com.zimbra.qa.selenium.projects.octopus.ui.DisplayFilePreview;
 import com.zimbra.qa.selenium.projects.octopus.ui.PageMyFiles;
 
-public class FileHistory extends OctopusCommonTest {
+public class FileComment extends OctopusCommonTest {
 
 	private boolean _folderIsCreated = false;
 	private String _folderName = null;
@@ -28,16 +28,16 @@ public class FileHistory extends OctopusCommonTest {
 		_fileAttached = false;
 	}
 
-	public FileHistory() {
-		logger.info("New " + FileHistory.class.getCanonicalName());
+	public FileComment() {
+		logger.info("New " + FileComment.class.getCanonicalName());
 
 		// test starts at the My Files tab
 		super.startingPage = app.zPageMyFiles;
 		super.startingAccountPreferences = null;
 	}
 
-	@Test(description = "Upload file through RestUtil - verify file name in the history through SOAP", groups = { "sanity" })
-	public void FileHistory_01() throws HarnessException {
+	@Test(description = "Add file comments - verify comments text in the file Comments through SOAP", groups = { "sanity" })
+	public void FileComment_01() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 
 		FolderItem rootFolder = FolderItem.importFromSOAP(account,
@@ -62,24 +62,31 @@ public class FileHistory extends OctopusCommonTest {
 		_fileAttached = true;
 		_fileId = account.soapSelectValue(
 				"//mail:SaveDocumentResponse//mail:doc", "id");
+
 		String name = account.soapSelectValue(
 				"//mail:SaveDocumentResponse//mail:doc", "name");
 
 		// verify the file is uploaded
 		ZAssert.assertEquals(fileName, name, "Verify file is uploaded");
 
-		// Verify file activity appears in the History
-		account.soapSend("<GetActivityStreamRequest xmlns='urn:zimbraMail' offset='0' limit='250' id='"
-				+ rootFolder.getId() + "'/>");
+		String comment = "Comment" + ZimbraSeleniumProperties.getUniqueString();
 
-		// Verify file name appears in the activity history
+		// Add comments to the file using SOAP
+		account.soapSend("<AddCommentRequest xmlns='urn:zimbraMail'> <comment parentId='"
+				+ _fileId + "' text='" + comment + "'/></AddCommentRequest>");
+
+		// Get file comments through SOAP
+		account.soapSend("<GetCommentsRequest  xmlns='urn:zimbraMail'> <comment parentId='"
+				+ _fileId + "'/></GetCommentsRequest>");
+
+		// Verify file comments through SOAP
 		ZAssert.assertTrue(app.zPageOctopus.zVerifyElementText(account,
-				"//mail:GetActivityStreamResponse//mail:arg", fileName),
-				"Verify file name appears in the activity history");
+				"//mail:GetCommentsResponse//mail:comment", comment),
+				"Verify comments text appears in the file Comments");
 	}
 
-	@Test(description = "Upload file through RestUtil - verify file history in the History dialog", groups = { "smoke" })
-	public void FileHistory_02() throws HarnessException {
+	@Test(description = "Add file comments - verify account user name in the file Comments window", groups = { "smoke" })
+	public void FileComment_02() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 
 		FolderItem briefcaseRootFolder = FolderItem.importFromSOAP(account,
@@ -109,6 +116,12 @@ public class FileHistory extends OctopusCommonTest {
 		_fileId = account.soapSelectValue(
 				"//mail:SaveDocumentResponse//mail:doc", "id");
 
+		String comment = "Comment" + ZimbraSeleniumProperties.getUniqueString();
+
+		// Add comments to the file using SOAP
+		account.soapSend("<AddCommentRequest xmlns='urn:zimbraMail'> <comment parentId='"
+				+ _fileId + "' text='" + comment + "'/></AddCommentRequest>");
+
 		// Click on My Files tab
 		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_MY_FILES);
 
@@ -119,25 +132,32 @@ public class FileHistory extends OctopusCommonTest {
 				"Verify file appears in My Files view");
 
 		// Select file in the list view
-		DisplayFilePreview filePreview = (DisplayFilePreview) app.zPageMyFiles.zListItem(
-				Action.A_LEFTCLICK, fileName);
+		DisplayFilePreview filePreview = (DisplayFilePreview) app.zPageMyFiles
+				.zListItem(Action.A_LEFTCLICK, fileName);
 
-		DialogFileHistory fileHistory = (DialogFileHistory) filePreview
-				.zPressButton(Button.B_HISTORY);
+		// Click on Comments button
+		DisplayFileComments fileComments = (DisplayFileComments) filePreview
+				.zPressButton(Button.B_COMMENTS);
 
-		// Verify file name appears in the history dialog
+		// Verify comments text appears in the file Comments view
 		ZAssert.assertTrue(app.zPageOctopus.zWaitForElementPresent(
-				DialogFileHistory.Locators.zFileHistoryMenuBar.locator
-						+ ":contains(" + fileName + ")", "3000"),
-				"Verify file name appears in the history dialog");
-
-		// Verify Close button in the history dialog
-		ZAssert.assertTrue(app.zPageOctopus.zWaitForElementPresent(
-				DialogFileHistory.Locators.zFileHistoryCloseBtn.locator, "3000"),
-				"Verify Close button in the history dialog");
+				DisplayFileComments.Locators.zFileCommentsView.locator
+						+ ":contains(" + comment + ")", "3000"),
+				"Verify comments text appears in the file Comments view");
 		
-		// dismiss the history dialog
-		fileHistory.zClickButton(Button.B_CLOSE);
+		// Verify account user name appears in the file Comments view
+		ZAssert.assertTrue(app.zPageOctopus.zWaitForElementPresent(
+				DisplayFileComments.Locators.zFileCommentsView.locator
+						+ ":contains(" + account.EmailAddress.split("@")[0] + ")", "3000"),
+				"Verify account user name appears in the file Comments view");
+
+		// Verify Close button in the comments view
+		ZAssert.assertTrue(app.zPageOctopus.zWaitForElementPresent(
+				DisplayFileComments.Locators.zFileCommentsViewCloseBtn.locator,
+				"3000"), "Verify Close button in the Comments view");
+
+		// close Comments view
+		fileComments.zPressButton(Button.B_CLOSE);
 	}
 
 	@AfterMethod(groups = { "always" })
@@ -183,6 +203,8 @@ public class FileHistory extends OctopusCommonTest {
 
 			// Empty trash
 			app.zPageTrash.emptyTrashUsingSOAP(app.zGetActiveAccount());
+
+			app.zPageOctopus.zLogout();
 		} catch (Exception e) {
 			logger.info("Failed while emptying Trash");
 			e.printStackTrace();

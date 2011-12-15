@@ -9,7 +9,7 @@ import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.octopus.core.OctopusCommonTest;
-import com.zimbra.qa.selenium.projects.octopus.ui.FilePreview;
+import com.zimbra.qa.selenium.projects.octopus.ui.DisplayFilePreview;
 import com.zimbra.qa.selenium.projects.octopus.ui.PageFavorites;
 import com.zimbra.qa.selenium.projects.octopus.ui.PageMyFiles;
 
@@ -130,7 +130,7 @@ public class AddRemoveFavorites extends OctopusCommonTest {
 
 		// Wait for Watch icon become enabled
 		app.zPageMyFiles.zWaitForElementPresent(
-				FilePreview.Locators.zFileWatchIcon.locator
+				DisplayFilePreview.Locators.zFileWatchIcon.locator
 						+ " span[class^=watched-icon]", "3000");
 
 		// click on the Favorites tab
@@ -186,7 +186,7 @@ public class AddRemoveFavorites extends OctopusCommonTest {
 
 		// Wait for Watch icon become enabled
 		app.zPageMyFiles.zWaitForElementPresent(
-				FilePreview.Locators.zFileWatchIcon.locator
+				DisplayFilePreview.Locators.zFileWatchIcon.locator
 						+ " span[class^=watched-icon]", "3000");
 
 		// click on the Favorites tab
@@ -205,7 +205,7 @@ public class AddRemoveFavorites extends OctopusCommonTest {
 
 		// Wait for Watch icon become disabled
 		app.zPageMyFiles.zWaitForElementPresent(
-				FilePreview.Locators.zFileWatchIcon.locator
+				DisplayFilePreview.Locators.zFileWatchIcon.locator
 						+ " span[class^=unwatched-icon]", "3000");
 
 		// click on the Favorites tab
