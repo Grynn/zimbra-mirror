@@ -1209,6 +1209,12 @@ public class ZimbraAPI
                 writer.WriteAttributeString("modaylist", appt["modaylist"]);
                 writer.WriteEndElement();   // bymonthday
             }
+            if (appt.ContainsKey("molist"))
+            {
+                writer.WriteStartElement("bymonth");
+                writer.WriteAttributeString("molist", appt["molist"]);
+                writer.WriteEndElement();   // bymonthday
+            }
             if (appt.ContainsKey("poslist"))
             {
                 writer.WriteStartElement("bysetpos");

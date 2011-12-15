@@ -366,6 +366,10 @@ STDMETHODIMP CItemObject::GetDataForItemID(BSTR UserId, VARIANT ItemId, FolderTy
 		    {
 			pIt[L"modaylist"] = SysAllocString((apptData.recurDayOfMonth).c_str());
 		    }
+		    if (apptData.recurMonthOfYear.length() > 0)
+		    {
+			pIt[L"molist"] = SysAllocString((apptData.recurMonthOfYear).c_str());
+		    }
 		    if (apptData.recurMonthOccurrence.length() > 0)
 		    {
 			pIt[L"poslist"] = SysAllocString((apptData.recurMonthOccurrence).c_str());

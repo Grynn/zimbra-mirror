@@ -69,6 +69,7 @@ MAPIAppointment::MAPIAppointment(Zimbra::MAPI::MAPISession &session,
     m_pRecurEndDate = L"";
     m_pRecurDayOfMonth = L"";
     m_pRecurMonthOccurrence = L"";
+    m_pRecurMonthOfYear = L"";
     m_pTimezoneId = L"";
 
     SetMAPIAppointmentValues();
@@ -356,6 +357,29 @@ void MAPIAppointment::SetRecurValues()
 	}
 	else
 	if (ulType == oRecursMonthNth)
+	{
+	    ULONG ulMonthOccurrence = recur.GetInstance();
+	    if (ulMonthOccurrence == 5)	    // last
+	    {
+		m_pRecurMonthOccurrence = L"-1";
+	    }
+	    else
+	    {
+		IntToWstring(ulMonthOccurrence, m_pRecurMonthOccurrence);
+	    }
+	}
+    }
+
+    if (m_pRecurPattern == L"YEA")
+    {
+	ULONG ulMonthOfYear = recur.GetMonthOfYear();
+	IntToWstring(ulMonthOfYear, m_pRecurMonthOfYear);
+	if (ulType == oRecursYearly)
+	{
+	    IntToWstring(recur.GetDayOfMonth(), m_pRecurDayOfMonth);
+	}
+	else
+	if (ulType == oRecursYearNth)
 	{
 	    ULONG ulMonthOccurrence = recur.GetInstance();
 	    if (ulMonthOccurrence == 5)	    // last
@@ -951,4 +975,5 @@ wstring MAPIAppointment::GetRecurEndType() { return m_pRecurEndType; };
 wstring MAPIAppointment::GetRecurEndDate() { return m_pRecurEndDate; };
 wstring MAPIAppointment::GetRecurDayOfMonth() { return m_pRecurDayOfMonth; };
 wstring MAPIAppointment::GetRecurMonthOccurrence() { return m_pRecurMonthOccurrence; };
+wstring MAPIAppointment::GetRecurMonthOfYear() { return m_pRecurMonthOfYear; };
 Tz MAPIAppointment::GetRecurTimezone() { return m_timezone; };

@@ -155,6 +155,7 @@ typedef struct _ApptItemData: BaseItemData
     wstring recurEndDate;
     wstring recurDayOfMonth;
     wstring recurMonthOccurrence;
+    wstring recurMonthOfYear;
     //
 
     //data_buffer textbody;

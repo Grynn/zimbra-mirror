@@ -686,6 +686,7 @@ LPCWSTR MAPIAccessAPI::GetItem(SBinary sbItemEID, BaseItemData &itemData)
 		ad->recurEndDate = mapiappointment.GetRecurEndDate();
 		ad->recurDayOfMonth = mapiappointment.GetRecurDayOfMonth();
 		ad->recurMonthOccurrence = mapiappointment.GetRecurMonthOccurrence();
+		ad->recurMonthOfYear = mapiappointment.GetRecurMonthOfYear();
 	    }
 
             MessagePart mp;

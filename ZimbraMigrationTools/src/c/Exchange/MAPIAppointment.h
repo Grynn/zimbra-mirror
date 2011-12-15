@@ -177,6 +177,7 @@ private:
     wstring m_pRecurEndDate;
     wstring m_pRecurDayOfMonth;
     wstring m_pRecurMonthOccurrence;
+    wstring m_pRecurMonthOfYear;
     wstring m_pTimezoneId;
     Tz m_timezone;
     //
@@ -235,6 +236,7 @@ public:
     wstring GetRecurEndDate();
     wstring GetRecurDayOfMonth();
     wstring GetRecurMonthOccurrence();
+    wstring GetRecurMonthOfYear();
     wstring GetTimezoneId();
     Tz GetRecurTimezone();
     vector<Attendee*> GetAttendees();
