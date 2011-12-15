@@ -31,6 +31,7 @@ import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.mailbox.Mailbox.MailboxData;
 import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
+import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.session.Session;
 import com.zimbra.cs.session.SoapSession;
 
@@ -92,6 +93,10 @@ public class OfflineMailboxManager extends MailboxManager {
     @Override
     protected MailboxMap createCache() {
         return new OfflineMailboxMap(OfflineLC.zdesktop_mailbox_cache.intValue());
+    }
+
+    public Mailbox getLocalAccountMailbox() throws ServiceException {
+        return getMailboxByAccountId(OfflineConstants.LOCAL_ACCOUNT_ID);
     }
 
     private static class OfflineMailboxMap extends MailboxMap {

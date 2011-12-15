@@ -806,6 +806,7 @@
     <mkdir dir="${dist.data.dir}/jetty/etc"/>
 
     <mkdir dir="${dist.data.dir}/heapdump" />
+    <mkdir dir="${dist.data.dir}/data/tmp/archive" />
 
     <copy file="${config.dir}/jetty.xml" todir="${dist.data.dir}/jetty/etc" overwrite="true"/>
     <copy tofile="${dist.data.dir}/bin/zdesktop" file="src/bin/zdesktop" overwrite="true"/>

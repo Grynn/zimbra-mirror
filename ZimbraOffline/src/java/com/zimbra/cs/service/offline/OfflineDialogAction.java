@@ -34,6 +34,12 @@ import com.zimbra.soap.ZimbraSoapContext;
 public class OfflineDialogAction extends DocumentHandler {
     public static final String DIALOG_TYPE_RESYNC = "resync";
     public static final String DIALOG_RESYNC_MSG = "Client hasn't been synced for too long. Needs to reset mailbox and resync.";
+    public static final String DIALOG_TYPE_FOLDER_MOVE_START = "foldermove_start";
+    public static final String DIALOG_TYPE_FOLDER_MOVE_START_MSG = "Folder move started";
+    public static final String DIALOG_TYPE_FOLDER_MOVE_COMPLETE = "foldermove_complete";
+    public static final String DIALOG_TYPE_FOLDER_MOVE_COMPLETE_MSG = "Folder move completed";
+    public static final String DIALOG_TYPE_FOLDER_MOVE_FAIL = "foldermove_failed";
+    public static final String DIALOG_TYPE_FOLDER_MOVE_FAIL_MSG = "Folder move failed";
 
     private static enum DialogType {
         resync, uploadconsent

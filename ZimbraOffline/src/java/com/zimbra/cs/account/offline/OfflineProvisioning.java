@@ -1070,19 +1070,28 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         }
     }
 
-    public synchronized Account getLocalAccount() throws ServiceException {
-        Account account = get(AccountBy.id, LOCAL_ACCOUNT_ID);
-        if (account == null)
-            account = createLocalAccount();
+    private Account localAccount = null;
 
-        String uri = "http://127.0.0.1:" + LC.zimbra_admin_service_port.value() + "/desktop/login.jsp?at=" + OfflineLC.zdesktop_installation_key.value();
-        String webappUri = account.getAttr(A_offlineWebappUri, null);
-        if (webappUri == null || !webappUri.equals(uri))
-            setAccountAttribute(account, A_offlineWebappUri, uri);
-        if (OfflineLC.zdesktop_relabel.value().equalsIgnoreCase(CHN_BETA) && !CHN_BETA.equalsIgnoreCase(account.getAttr(A_zimbraPrefOfflineUpdateChannel, null))) {
-            setAccountAttribute(account, A_zimbraPrefOfflineUpdateChannel, CHN_BETA);
+    public Account getLocalAccount() throws ServiceException {
+        if (localAccount == null) {
+            synchronized (this) {
+                if (localAccount == null) {
+                    Account account = get(AccountBy.id, LOCAL_ACCOUNT_ID);
+                    if (account == null) {
+                        account = createLocalAccount();
+                        String uri = "http://127.0.0.1:" + LC.zimbra_admin_service_port.value() + "/desktop/login.jsp?at=" + OfflineLC.zdesktop_installation_key.value();
+                        String webappUri = account.getAttr(A_offlineWebappUri, null);
+                        if (webappUri == null || !webappUri.equals(uri))
+                            setAccountAttribute(account, A_offlineWebappUri, uri);
+                        if (OfflineLC.zdesktop_relabel.value().equalsIgnoreCase(CHN_BETA) && !CHN_BETA.equalsIgnoreCase(account.getAttr(A_zimbraPrefOfflineUpdateChannel, null))) {
+                            setAccountAttribute(account, A_zimbraPrefOfflineUpdateChannel, CHN_BETA);
+                        }
+                    }
+                    localAccount = account;
+                }
+            }
         }
-        return account;
+        return localAccount;
     }
 
     public synchronized String getClientId() throws ServiceException {
@@ -1475,8 +1484,10 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         }
 
         String granteeId = (String)attrs.get(A_offlineMountpointProxyAccountId);
-        if (granteeId != null) // is offline mountpoint account..
+        if (granteeId != null) { // is offline mountpoint account..
+            OfflineLog.offline.debug("granter: %s, grantee: %s", acct.getId(), granteeId);
             loadRemoteSyncServer((OfflineAccount)acct, granteeId);
+        }
 
         return acct;
     }
