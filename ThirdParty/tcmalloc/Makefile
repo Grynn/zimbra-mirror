@@ -34,7 +34,6 @@ checksrc:
 build:
 	(tar xzf src/google-perftools-$(TCMALLOC_VERSION).tar.gz; \
 	cd google-perftools-$(TCMALLOC_VERSION); \
-	patch -p1 -g0 < ../patches/tcmalloc-build-fix.patch; \
 	CFLAGS="-g -O2" \
 	CPPFLAGS="-I/usr/include" \
 	CXXFLAGS="-g -O2 -I/usr/include" \
