@@ -261,6 +261,8 @@ public class AddRemoveFavorites extends OctopusCommonTest {
 												
 			// Empty trash
 			app.zPageTrash.emptyTrashUsingSOAP(app.zGetActiveAccount());
+			
+			app.zPageOctopus.zLogout();
 		} catch (Exception e) {
 			logger.info("Failed while emptying Trash");
 			e.printStackTrace();
