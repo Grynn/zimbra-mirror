@@ -79,8 +79,9 @@
   <key name="zdesktop_gal_refresh_interval_days">
     <value>30</value>
   </key>
+  <!-- 5 min -->
   <key name="zdesktop_gal_sync_request_timeout">
-    <value>60000</value>
+    <value>300000</value>
   </key>
   <key name="zdesktop_installation_key">
     <value>@install.key@</value>

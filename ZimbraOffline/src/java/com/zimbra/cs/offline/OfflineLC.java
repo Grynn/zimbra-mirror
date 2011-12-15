@@ -213,9 +213,9 @@ public class OfflineLC {
         zdesktop_gal_sync_timer_frequency = new KnownKey("zdesktop_gal_sync_timer_frequency");
         zdesktop_gal_sync_timer_frequency.setDefault("300000");
 
-        // HTTP GAL sync request timeout in milliseconds while waiting for response. A value of zero means no timeout. Default 60 seconds.
+        // HTTP GAL sync request timeout in milliseconds while waiting for response. A value of zero means no timeout. Default 5 minutes.
         zdesktop_gal_sync_request_timeout = new KnownKey("zdesktop_galsync_request_timeout");
-        zdesktop_gal_sync_request_timeout.setDefault("60000");
+        zdesktop_gal_sync_request_timeout.setDefault("300000");
 
         // Whether to enable GAL sync trace logging. Default false
         zdesktop_gal_sync_trace_enabled = new KnownKey("zdesktop_gal_sync_trace_enabled");
