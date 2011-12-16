@@ -41,6 +41,8 @@ import generated.zcsclient.admin.testBackupQueryRequest;
 import generated.zcsclient.admin.testBackupQueryResponse;
 import generated.zcsclient.admin.testBackupRequest;
 import generated.zcsclient.admin.testBackupResponse;
+import generated.zcsclient.admin.testCancelPendingRemoteWipeRequest;
+import generated.zcsclient.admin.testCancelPendingRemoteWipeResponse;
 import generated.zcsclient.admin.testCheckAuthConfigRequest;
 import generated.zcsclient.admin.testCheckAuthConfigResponse;
 import generated.zcsclient.admin.testCheckBlobConsistencyRequest;
@@ -225,6 +227,8 @@ import generated.zcsclient.admin.testGetDataSourcesRequest;
 import generated.zcsclient.admin.testGetDataSourcesResponse;
 import generated.zcsclient.admin.testGetDelegatedAdminConstraintsRequest;
 import generated.zcsclient.admin.testGetDelegatedAdminConstraintsResponse;
+import generated.zcsclient.admin.testGetDeviceStatusRequest;
+import generated.zcsclient.admin.testGetDeviceStatusResponse;
 import generated.zcsclient.admin.testGetDevicesCountRequest;
 import generated.zcsclient.admin.testGetDevicesCountResponse;
 import generated.zcsclient.admin.testGetDevicesCountSinceLastUsedRequest;
@@ -472,14 +476,14 @@ import generated.zcsclient.adminext.testPurgeBulkIMAPImportTasksResponse;
 @WebService(name = "zcsAdminPortType", targetNamespace = "http://www.zimbra.com/wsdl/ZimbraService.wsdl")
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
 @XmlSeeAlso({
-    generated.zcsclient.admin.ObjectFactory.class,
     generated.zcsclient.replication.ObjectFactory.class,
+    generated.zcsclient.appblast.ObjectFactory.class,
     generated.zcsclient.adminext.ObjectFactory.class,
-    generated.zcsclient.account.ObjectFactory.class,
+    generated.zcsclient.zm.ObjectFactory.class,
     generated.zcsclient.sync.ObjectFactory.class,
     generated.zcsclient.mail.ObjectFactory.class,
-    generated.zcsclient.appblast.ObjectFactory.class,
-    generated.zcsclient.zm.ObjectFactory.class
+    generated.zcsclient.admin.ObjectFactory.class,
+    generated.zcsclient.account.ObjectFactory.class
 })
 public interface ZcsAdminPortType {
 
@@ -687,6 +691,18 @@ public interface ZcsAdminPortType {
     public testBackupResponse backupRequest(
         @WebParam(name = "BackupRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
         testBackupRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns generated.zcsclient.admin.testCancelPendingRemoteWipeResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/CancelPendingRemoteWipe")
+    @WebResult(name = "CancelPendingRemoteWipeResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public testCancelPendingRemoteWipeResponse cancelPendingRemoteWipeRequest(
+        @WebParam(name = "CancelPendingRemoteWipeRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        testCancelPendingRemoteWipeRequest parameters);
 
     /**
      * 
@@ -1791,6 +1807,18 @@ public interface ZcsAdminPortType {
     public testGetDelegatedAdminConstraintsResponse getDelegatedAdminConstraintsRequest(
         @WebParam(name = "GetDelegatedAdminConstraintsRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
         testGetDelegatedAdminConstraintsRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns generated.zcsclient.admin.testGetDeviceStatusResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/GetDeviceStatus")
+    @WebResult(name = "GetDeviceStatusResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public testGetDeviceStatusResponse getDeviceStatusRequest(
+        @WebParam(name = "GetDeviceStatusRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        testGetDeviceStatusRequest parameters);
 
     /**
      * 

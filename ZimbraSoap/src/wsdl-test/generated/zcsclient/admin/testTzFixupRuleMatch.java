@@ -43,11 +43,11 @@ import generated.zcsclient.zm.testId;
 public class testTzFixupRuleMatch {
 
     @XmlElements({
+        @XmlElement(name = "tzid", type = testId.class),
         @XmlElement(name = "dates", type = testTzFixupRuleMatchDates.class),
         @XmlElement(name = "any", type = testSimpleElement.class),
-        @XmlElement(name = "rules", type = testTzFixupRuleMatchRules.class),
         @XmlElement(name = "nonDst", type = testOffset.class),
-        @XmlElement(name = "tzid", type = testId.class)
+        @XmlElement(name = "rules", type = testTzFixupRuleMatchRules.class)
     })
     protected List<Object> anyOrTzidOrNonDst;
 
@@ -69,11 +69,11 @@ public class testTzFixupRuleMatch {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
+     * {@link testId }
      * {@link testTzFixupRuleMatchDates }
      * {@link testSimpleElement }
-     * {@link testTzFixupRuleMatchRules }
      * {@link testOffset }
-     * {@link testId }
+     * {@link testTzFixupRuleMatchRules }
      * 
      * 
      */

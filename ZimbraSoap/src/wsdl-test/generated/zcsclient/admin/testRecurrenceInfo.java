@@ -48,12 +48,12 @@ import javax.xml.bind.annotation.XmlType;
 public class testRecurrenceInfo {
 
     @XmlElements({
+        @XmlElement(name = "exclude", type = testExcludeRecurrenceInfo.class),
+        @XmlElement(name = "rule", type = testSimpleRepeatingRule.class),
         @XmlElement(name = "except", type = testExceptionRuleInfo.class),
         @XmlElement(name = "add", type = testAddRecurrenceInfo.class),
-        @XmlElement(name = "dates", type = testSingleDates.class),
         @XmlElement(name = "cancel", type = testCancelRuleInfo.class),
-        @XmlElement(name = "rule", type = testSimpleRepeatingRule.class),
-        @XmlElement(name = "exclude", type = testExcludeRecurrenceInfo.class)
+        @XmlElement(name = "dates", type = testSingleDates.class)
     })
     protected List<Object> addOrExcludeOrExcept;
 
@@ -75,12 +75,12 @@ public class testRecurrenceInfo {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
+     * {@link testExcludeRecurrenceInfo }
+     * {@link testSimpleRepeatingRule }
      * {@link testExceptionRuleInfo }
      * {@link testAddRecurrenceInfo }
-     * {@link testSingleDates }
      * {@link testCancelRuleInfo }
-     * {@link testSimpleRepeatingRule }
-     * {@link testExcludeRecurrenceInfo }
+     * {@link testSingleDates }
      * 
      * 
      */
