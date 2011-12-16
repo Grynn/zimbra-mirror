@@ -30,7 +30,7 @@ function(selectedItem) {
             ZaTaskContentView._dialogCache[cacheName] = ZaApp.getInstance().dialogs[cacheName];
 
     if(!selectedItem.cacheDialog ||!ZaTaskContentView._dialogCache[cacheName]){
-          ZaTaskContentView._dialogCache[cacheName] =  new myConstructor(ZaApp.getInstance().getAppCtxt().getShell(), entry);
+          ZaTaskContentView._dialogCache[cacheName] = ZaApp.getInstance().dialogs[cacheName] = new myConstructor(ZaApp.getInstance().getAppCtxt().getShell(), entry);
           if (selectedItem.finishCallback)
                ZaTaskContentView._dialogCache[cacheName].registerCallback(selectedItem.finishCallback.id, selectedItem.finishCallback.callback);
     }

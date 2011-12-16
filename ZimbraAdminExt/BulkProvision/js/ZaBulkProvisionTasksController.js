@@ -153,14 +153,18 @@ ZaBulkProvisionTasksController.prototype.openBulkProvisionDialog = function (par
 		ZaApp.getInstance().dialogs["importAccountsWizard"] = new ZaBulkImportXWizard(DwtShell.getShell(window),obj);
 		if(params && params.prevCallback) {
 			ZaApp.getInstance().dialogs["importAccountsWizard"].prevCallback = params.prevCallback;
+            obj.prevCallback = params.prevCallback;
 		} else {
 			ZaApp.getInstance().dialogs["importAccountsWizard"].prevCallback = null;
+            obj.prevCallback = null
 		}
 
 		if(params && params.finishCallback) {
 			ZaApp.getInstance().dialogs["importAccountsWizard"].finishCallback = params.finishCallback;
+            obj.finishCallback = params.finishCallback;
 		} else {
-			ZaApp.getInstance().dialogs["importAccountsWizard"].finishCallback = null;	
+			ZaApp.getInstance().dialogs["importAccountsWizard"].finishCallback = null;
+            obj.finishCallback = null;
 		}
 
 		ZaApp.getInstance().dialogs["importAccountsWizard"].setObject(obj);
@@ -204,8 +208,10 @@ ZaBulkProvisionTasksController.prototype.openMigrationWizard = function (params,
 		
 		if(params && params.prevCallback) {
 			ZaApp.getInstance().dialogs["migrationWizard"].prevCallback = params.prevCallback;
+            obj.prevCallback = params.prevCallback;
 		} else {
 			ZaApp.getInstance().dialogs["migrationWizard"].prevCallback = null;
+            obj.prevCallback = null;
 		}
 		ZaApp.getInstance().dialogs["migrationWizard"].setObject(obj);
 		ZaApp.getInstance().dialogs["migrationWizard"].popup();

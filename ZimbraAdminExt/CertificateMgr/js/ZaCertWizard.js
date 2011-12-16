@@ -55,6 +55,7 @@ ZaCertWizard.STEP_CSR_CONFIRM = ZaCertWizard.STEP_INDEX ++ ;
 
 ZaCertWizard.prototype = new ZaXWizardDialog;
 ZaCertWizard.prototype.constructor = ZaCertWizard;
+ZaCertWizard.prototype.miniType = 2;
 ZaXDialog.XFormModifiers["ZaCertWizard"] = new Array();
 ZaCertWizard.helpURL = location.pathname + "help/admin/html/tools/installing_certificates.htm?locid=" + AjxEnv.DEFAULT_LOCALE;
 ZaCertWizard.prototype.handleXFormChange = 
@@ -63,18 +64,23 @@ function () {
 	if(this._localXForm.hasErrors()) {
 		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
 	} else {
+        this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
+
 		if (cStep == ZaCertWizard.STEP_SELECT_SERVER) {
 			if (this._containedObject[ZaCert.A_target_server]) {
 				this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled (true) ;
 			}
+            this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false)
 		}
 		
 		if (cStep == ZaCertWizard.STEP_INSTALL_CERT ) {
 			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
+            this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
 		}
 		
 		if (cStep == ZaCertWizard.STEP_DOWNLOAD_CSR ) {
 			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
+            this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
 			this._button[DwtWizardDialog.FINISH_BUTTON].setText(AjxMsg._finish);
 		}
 		
@@ -537,7 +543,7 @@ function(entry) {
 	this._containedObject = new Object();	
 	this._containedObject = entry ;
 	
-	this._containedObject[ZaModel.currentStep] = ZaCertWizard.STEP_SELECT_SERVER;
+	this._containedObject[ZaModel.currentStep] = entry[ZaModel.currentStep]||ZaCertWizard.STEP_SELECT_SERVER;
     if (this._containedObject [ZaCert.A_keysize] == null) {
         this._containedObject [ZaCert.A_keysize] = "2048" ;    
     }
@@ -791,7 +797,7 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
                     enableDisableChecks:[ZaCertWizard.isCSRFieldsEnabled],
 				    enableDisableChangeEventSources:[ZaCert.A_csr_exists, ZaCert.A_force_new_csr],
                     label: com_zimbra_cert_manager.CERT_INFO_CN},
-				{ ref: ZaCert.A_use_wildcard_server_name, type:_CHECKBOX_, 
+				{ ref: ZaCert.A_use_wildcard_server_name, type:_WIZ_CHECKBOX_,
 						visibilityChecks:[],
                         enableDisableChecks:[ZaCertWizard.isCSRFieldsEnabled],
 				        enableDisableChangeEventSources:[ZaCert.A_csr_exists, ZaCert.A_force_new_csr],
@@ -1041,9 +1047,9 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 	
 		cases.push (case_csr_confirm) ;
 
-    var w = "480px" ;
+    var w = "470px" ;  //500px-padding-left:15-padding-right:15
     if (AjxEnv.isIE) {
-        w = "530px" ;
+        w = "520px" ;
     }
 
     xFormObject.items = [

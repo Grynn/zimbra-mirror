@@ -52,10 +52,12 @@ ZaBulkDataImportXWizard.STEP_FINISH = ZaBulkDataImportXWizard.STEP_INDEX++;
 
 ZaBulkDataImportXWizard.prototype = new ZaXWizardDialog;
 ZaBulkDataImportXWizard.prototype.constructor = ZaBulkDataImportXWizard;
-
+ZaBulkDataImportXWizard.prototype.miniType = 2;
 ZaXDialog.XFormModifiers["ZaBulkDataImportXWizard"] = new Array();
 ZaBulkDataImportXWizard.helpURL = "account_migration/migrating_accounts.htm";
-
+ZaBulkDataImportXWizard.prototype.getCacheName =  function () {
+     return "bulkDataImportWizard";
+}
 /**
 * @method setObject sets the object contained in the view
 * @param entry -  object to display
@@ -63,17 +65,17 @@ ZaBulkDataImportXWizard.helpURL = "account_migration/migrating_accounts.htm";
 ZaBulkDataImportXWizard.prototype.setObject =
 function(entry) {
 	this._containedObject = entry ;
-	this._containedObject[ZaBulkProvision.A2_src_acct_selection_pool] = [];
-	this._containedObject[ZaBulkProvision.A2_account] = [];
-	this._containedObject[ZaBulkProvision.A2_accountPool] = [];
+	this._containedObject[ZaBulkProvision.A2_src_acct_selection_pool] = entry[ZaBulkProvision.A2_src_acct_selection_pool]||[];
+	this._containedObject[ZaBulkProvision.A2_account] = entry[ZaBulkProvision.A2_account]||[];
+	this._containedObject[ZaBulkProvision.A2_accountPool] = entry[ZaBulkProvision.A2_accountPool]||[];
 	/*if(this._containedObject[ZaBulkProvision.A2_sourceServerType] == ZaBulkProvision.MAIL_SOURCE_TYPE_EXCHANGE_IMAP &&
 			!this._containedObject[ZaBulkProvision.A_aid]) {
 		this._containedObject[ZaBulkProvision.A2_sourceType] = ZaBulkProvision.SOURCE_TYPE_XML;
 		this.goPage(ZaBulkDataImportXWizard.STEP_FILE_UPLOAD);
 	}	*/
-    if(entry._uuid) {
-        this._containedObject._uuid = entry._uuid;
-    }
+
+    this._containedObject._uuid = entry._uuid||ZaUtil.getItemUUid();
+
 	this._localXForm.setInstance(this._containedObject);
 	if(this._containedObject[ZaModel.currentStep] > 0)
 		this.goPage(this._containedObject[ZaModel.currentStep]);
@@ -230,6 +232,26 @@ ZaBulkDataImportXWizard.prototype.popup = function (loc) {
     this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
 }
 
+ZaBulkDataImportXWizard.prototype.handleXFormChange =
+function () {
+    var cStep = this._containedObject[ZaModel.currentStep];
+
+    if(cStep !=ZaBulkDataImportXWizard.STEP_INTRODUCTION){
+        this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
+		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
+		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
+		this._button[DwtDialog.CANCEL_BUTTON].setEnabled(true);
+    }
+
+    if(cStep == ZaBulkDataImportXWizard.STEP_FINISH){
+        this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
+	    this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
+		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);
+		this._button[DwtDialog.CANCEL_BUTTON].setEnabled(false);
+    }
+
+}
+
 ZaBulkDataImportXWizard.prototype.goNext = function() {
 	var cStep = this._containedObject[ZaModel.currentStep];
 	if(cStep == ZaBulkDataImportXWizard.STEP_OPTIONS && 
@@ -361,7 +383,7 @@ ZaBulkDataImportXWizard.prototype.goNext = function() {
 		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
 		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
 		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
-		this._button[DwtDialog.CANCEL_BUTTON].setEnabled(true);			
+		this._button[DwtDialog.CANCEL_BUTTON].setEnabled(true);
 	} else if(cStep == ZaBulkDataImportXWizard.STEP_INTRODUCTION &&  this._containedObject[ZaBulkProvision.A2_provisionUsers] == "FALSE" &&
 			this._containedObject[ZaBulkProvision.A2_importEmail] == "FALSE") {
 		ZaApp.getInstance().getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.ERROR_PLEASE_SELECT_YES);

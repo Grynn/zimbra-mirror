@@ -65,10 +65,13 @@ ZaBulkImportXWizard.STEP_PROVISION = ZaBulkImportXWizard.STEP_INDEX++;
 
 ZaBulkImportXWizard.prototype = new ZaXWizardDialog;
 ZaBulkImportXWizard.prototype.constructor = ZaBulkImportXWizard;
-
+ZaBulkImportXWizard.prototype.cacheDialog = false;
+ZaBulkImportXWizard.prototype.miniType = 2;
 ZaXDialog.XFormModifiers["ZaBulkImportXWizard"] = new Array();
 ZaBulkImportXWizard.helpURL = "account_migration/migrating_accounts.htm";
-
+ZaBulkImportXWizard.prototype.getCacheName =  function () {
+     return "importAccountsWizard";
+}
 /**
 * Overwritten methods that control wizard's flow (open, go next,go previous, finish)
 **/
@@ -112,6 +115,28 @@ function (loc) {
     	this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
     } else {
     	this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);	
+    }
+}
+
+
+ZaBulkImportXWizard.prototype.handleXFormChange =
+function () {
+    var cStep = this._containedObject[ZaModel.currentStep] ;
+    if(cStep != ZaBulkImportXWizard.STEP_CHOOSE_ACTION ){
+        this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
+		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
+		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
+		this._button[DwtDialog.CANCEL_BUTTON].setEnabled(true);
+    }
+
+    if (cStep == ZaBulkImportXWizard.STEP_PROVISION  ) {
+        if(this._containedObject[ZaBulkProvision.A2_importEmail]== "FALSE") {
+            this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
+			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
+		} else {
+			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
+            this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
+		}
     }
 }
 
@@ -532,7 +557,7 @@ ZaBulkImportXWizard.prototype.processBulkImportResponse = function(response) {
 	
 	if(status == ZaBulkProvision.iSTATUS_STARTING || status == ZaBulkProvision.iSTATUS_CREATING_ACCOUNTS) {
 		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
-		this._button[DwtDialog.CANCEL_BUTTON].setEnabled(false);		
+		this._button[DwtDialog.CANCEL_BUTTON].setEnabled(false);
 	}
 	if(status == ZaBulkProvision.iSTATUS_FINISHED || status == ZaBulkProvision.iSTATUS_ABORTED || status == ZaBulkProvision.iSTATUS_ERROR) {
 		this._button[DwtDialog.CANCEL_BUTTON].setEnabled(true);	
@@ -561,7 +586,7 @@ ZaBulkImportXWizard.prototype.processBulkImportResponse = function(response) {
 		/**
 		 * schedule next poll
 		 */
-		this._pollHandler = AjxTimedAction.scheduleAction(this.pollAction, ZaBulkImportXWizard.POLL_INTERVAL);		
+		this._pollHandler = AjxTimedAction.scheduleAction(this.pollAction, ZaBulkImportXWizard.POLL_INTERVAL);
 	} else {
 		if(this._pollHandler) {
 			AjxTimedAction.cancelAction(this._pollHandler);
@@ -650,11 +675,13 @@ function(entry) {
 	this._containedObject = new ZaBulkProvision();
 	this._containedObject = entry ;
 
-	this._containedObject[ZaModel.currentStep] = ZaBulkImportXWizard.STEP_CHOOSE_ACTION;
-	this._containedObject[ZaBulkProvision.A_mustChangePassword] = "TRUE";
-    if(entry._uuid) {
-        this._containedObject._uuid = entry._uuid;
-    }
+	this._containedObject[ZaModel.currentStep] = entry[ZaModel.currentStep]||ZaBulkImportXWizard.STEP_CHOOSE_ACTION;
+	this._containedObject[ZaBulkProvision.A_mustChangePassword] = entry[ZaBulkProvision.A_mustChangePassword]||"TRUE";
+
+    this._containedObject._uuid = entry._uuid||ZaUtil.getItemUUid();
+
+    this.prevCallback = entry.prevCallback;
+    this.finishCallback = entry.finishCallback;
     this._localXForm.setInstance(this._containedObject);
 }
 
