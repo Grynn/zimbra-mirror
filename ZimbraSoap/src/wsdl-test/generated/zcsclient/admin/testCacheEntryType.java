@@ -21,6 +21,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="license"/>
  *     &lt;enumeration value="account"/>
  *     &lt;enumeration value="config"/>
+ *     &lt;enumeration value="globalgrant"/>
  *     &lt;enumeration value="cos"/>
  *     &lt;enumeration value="domain"/>
  *     &lt;enumeration value="galgroup"/>
@@ -51,6 +52,8 @@ public enum testCacheEntryType {
     ACCOUNT("account"),
     @XmlEnumValue("config")
     CONFIG("config"),
+    @XmlEnumValue("globalgrant")
+    GLOBALGRANT("globalgrant"),
     @XmlEnumValue("cos")
     COS("cos"),
     @XmlEnumValue("domain")

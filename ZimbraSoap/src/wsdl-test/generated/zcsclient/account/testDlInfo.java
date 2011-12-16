@@ -18,6 +18,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;extension base="{urn:zimbraAccount}objectInfo">
  *       &lt;all>
  *       &lt;/all>
+ *       &lt;attribute name="d" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="dynamic" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *       &lt;attribute name="via" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/extension>
@@ -33,10 +34,36 @@ public class testDlInfo
     extends testObjectInfo
 {
 
+    @XmlAttribute(name = "d")
+    protected String d;
     @XmlAttribute(name = "dynamic")
     protected Boolean dynamic;
     @XmlAttribute(name = "via")
     protected String via;
+
+    /**
+     * Gets the value of the d property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getD() {
+        return d;
+    }
+
+    /**
+     * Sets the value of the d property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setD(String value) {
+        this.d = value;
+    }
 
     /**
      * Gets the value of the dynamic property.

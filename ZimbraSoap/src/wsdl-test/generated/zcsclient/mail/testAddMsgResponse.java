@@ -1,12 +1,8 @@
 
 package generated.zcsclient.mail;
 
-import java.util.ArrayList;
-import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -20,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;choice maxOccurs="unbounded" minOccurs="0">
+ *         &lt;choice minOccurs="0">
  *           &lt;element name="chat" type="{urn:zimbraMail}chatSummary"/>
  *           &lt;element name="m" type="{urn:zimbraMail}messageSummary"/>
  *         &lt;/choice>
@@ -34,44 +30,60 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "addMsgResponse", propOrder = {
-    "chatOrM"
+    "chat",
+    "m"
 })
 public class testAddMsgResponse {
 
-    @XmlElements({
-        @XmlElement(name = "m"),
-        @XmlElement(name = "chat", type = testChatSummary.class)
-    })
-    protected List<testMessageSummary> chatOrM;
+    protected testChatSummary chat;
+    protected testMessageSummary m;
 
     /**
-     * Gets the value of the chatOrM property.
+     * Gets the value of the chat property.
      * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the chatOrM property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getChatOrM().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link testMessageSummary }
-     * {@link testChatSummary }
-     * 
-     * 
+     * @return
+     *     possible object is
+     *     {@link testChatSummary }
+     *     
      */
-    public List<testMessageSummary> getChatOrM() {
-        if (chatOrM == null) {
-            chatOrM = new ArrayList<testMessageSummary>();
-        }
-        return this.chatOrM;
+    public testChatSummary getChat() {
+        return chat;
+    }
+
+    /**
+     * Sets the value of the chat property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link testChatSummary }
+     *     
+     */
+    public void setChat(testChatSummary value) {
+        this.chat = value;
+    }
+
+    /**
+     * Gets the value of the m property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link testMessageSummary }
+     *     
+     */
+    public testMessageSummary getM() {
+        return m;
+    }
+
+    /**
+     * Sets the value of the m property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link testMessageSummary }
+     *     
+     */
+    public void setM(testMessageSummary value) {
+        this.m = value;
     }
 
 }

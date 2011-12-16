@@ -43,6 +43,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link testNameId }
+     * 
+     */
+    public testNameId createtestNameId() {
+        return new testNameId();
+    }
+
+    /**
      * Create an instance of {@link testPurgeBulkIMAPImportTasksRequest }
      * 
      */
@@ -51,59 +59,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link testBulkIMAPDataImportRequest }
+     * Create an instance of {@link testName }
      * 
      */
-    public testBulkIMAPDataImportRequest createtestBulkIMAPDataImportRequest() {
-        return new testBulkIMAPDataImportRequest();
-    }
-
-    /**
-     * Create an instance of {@link testBulkIMAPDataImportResponse }
-     * 
-     */
-    public testBulkIMAPDataImportResponse createtestBulkIMAPDataImportResponse() {
-        return new testBulkIMAPDataImportResponse();
-    }
-
-    /**
-     * Create an instance of {@link testGetBulkIMAPImportTaskListRequest }
-     * 
-     */
-    public testGetBulkIMAPImportTaskListRequest createtestGetBulkIMAPImportTaskListRequest() {
-        return new testGetBulkIMAPImportTaskListRequest();
-    }
-
-    /**
-     * Create an instance of {@link testBulkImportAccountsResponse }
-     * 
-     */
-    public testBulkImportAccountsResponse createtestBulkImportAccountsResponse() {
-        return new testBulkImportAccountsResponse();
-    }
-
-    /**
-     * Create an instance of {@link testBulkImportAccountsRequest }
-     * 
-     */
-    public testBulkImportAccountsRequest createtestBulkImportAccountsRequest() {
-        return new testBulkImportAccountsRequest();
-    }
-
-    /**
-     * Create an instance of {@link testAttr }
-     * 
-     */
-    public testAttr createtestAttr() {
-        return new testAttr();
-    }
-
-    /**
-     * Create an instance of {@link testPurgeBulkIMAPImportTasksResponse }
-     * 
-     */
-    public testPurgeBulkIMAPImportTasksResponse createtestPurgeBulkIMAPImportTasksResponse() {
-        return new testPurgeBulkIMAPImportTasksResponse();
+    public testName createtestName() {
+        return new testName();
     }
 
     /**
@@ -123,11 +83,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link testGenerateBulkProvisionFileFromLDAPResponse }
+     * Create an instance of {@link testBulkIMAPDataImportResponse }
      * 
      */
-    public testGenerateBulkProvisionFileFromLDAPResponse createtestGenerateBulkProvisionFileFromLDAPResponse() {
-        return new testGenerateBulkProvisionFileFromLDAPResponse();
+    public testBulkIMAPDataImportResponse createtestBulkIMAPDataImportResponse() {
+        return new testBulkIMAPDataImportResponse();
+    }
+
+    /**
+     * Create an instance of {@link testBulkIMAPImportTaskInfo }
+     * 
+     */
+    public testBulkIMAPImportTaskInfo createtestBulkIMAPImportTaskInfo() {
+        return new testBulkIMAPImportTaskInfo();
     }
 
     /**
@@ -139,27 +107,59 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link testName }
+     * Create an instance of {@link testBulkIMAPDataImportRequest }
      * 
      */
-    public testName createtestName() {
-        return new testName();
+    public testBulkIMAPDataImportRequest createtestBulkIMAPDataImportRequest() {
+        return new testBulkIMAPDataImportRequest();
     }
 
     /**
-     * Create an instance of {@link testNameId }
+     * Create an instance of {@link testAttr }
      * 
      */
-    public testNameId createtestNameId() {
-        return new testNameId();
+    public testAttr createtestAttr() {
+        return new testAttr();
     }
 
     /**
-     * Create an instance of {@link testBulkIMAPImportTaskInfo }
+     * Create an instance of {@link testGenerateBulkProvisionFileFromLDAPResponse }
      * 
      */
-    public testBulkIMAPImportTaskInfo createtestBulkIMAPImportTaskInfo() {
-        return new testBulkIMAPImportTaskInfo();
+    public testGenerateBulkProvisionFileFromLDAPResponse createtestGenerateBulkProvisionFileFromLDAPResponse() {
+        return new testGenerateBulkProvisionFileFromLDAPResponse();
+    }
+
+    /**
+     * Create an instance of {@link testBulkImportAccountsResponse }
+     * 
+     */
+    public testBulkImportAccountsResponse createtestBulkImportAccountsResponse() {
+        return new testBulkImportAccountsResponse();
+    }
+
+    /**
+     * Create an instance of {@link testPurgeBulkIMAPImportTasksResponse }
+     * 
+     */
+    public testPurgeBulkIMAPImportTasksResponse createtestPurgeBulkIMAPImportTasksResponse() {
+        return new testPurgeBulkIMAPImportTasksResponse();
+    }
+
+    /**
+     * Create an instance of {@link testGetBulkIMAPImportTaskListRequest }
+     * 
+     */
+    public testGetBulkIMAPImportTaskListRequest createtestGetBulkIMAPImportTaskListRequest() {
+        return new testGetBulkIMAPImportTaskListRequest();
+    }
+
+    /**
+     * Create an instance of {@link testBulkImportAccountsRequest }
+     * 
+     */
+    public testBulkImportAccountsRequest createtestBulkImportAccountsRequest() {
+        return new testBulkImportAccountsRequest();
     }
 
     /**

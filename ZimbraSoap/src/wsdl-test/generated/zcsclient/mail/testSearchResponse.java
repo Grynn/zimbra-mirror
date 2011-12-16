@@ -70,17 +70,17 @@ import generated.zcsclient.zm.testWildcardExpansionQueryInfo;
 public class testSearchResponse {
 
     @XmlElements({
-        @XmlElement(name = "task", type = testTaskHitInfo.class),
-        @XmlElement(name = "cn", type = testContactInfo.class),
-        @XmlElement(name = "chat", type = testChatHitInfo.class),
-        @XmlElement(name = "c", type = testConversationHitInfo.class),
-        @XmlElement(name = "doc", type = testDocumentHitInfo.class),
-        @XmlElement(name = "note", type = testNoteHitInfo.class),
         @XmlElement(name = "appt", type = testAppointmentHitInfo.class),
-        @XmlElement(name = "mp", type = testMessagePartHitInfo.class),
-        @XmlElement(name = "m", type = testMessageHitInfo.class),
+        @XmlElement(name = "note", type = testNoteHitInfo.class),
         @XmlElement(name = "hit", type = testSimpleSearchHit.class),
-        @XmlElement(name = "w", type = testWikiHitInfo.class)
+        @XmlElement(name = "doc", type = testDocumentHitInfo.class),
+        @XmlElement(name = "chat", type = testChatHitInfo.class),
+        @XmlElement(name = "w", type = testWikiHitInfo.class),
+        @XmlElement(name = "c", type = testConversationHitInfo.class),
+        @XmlElement(name = "task", type = testTaskHitInfo.class),
+        @XmlElement(name = "mp", type = testMessagePartHitInfo.class),
+        @XmlElement(name = "cn", type = testContactInfo.class),
+        @XmlElement(name = "m", type = testMessageHitInfo.class)
     })
     protected List<Object> hitOrCOrM;
     protected testSearchResponse.Info info;
@@ -111,17 +111,17 @@ public class testSearchResponse {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link testTaskHitInfo }
-     * {@link testContactInfo }
-     * {@link testChatHitInfo }
-     * {@link testConversationHitInfo }
-     * {@link testDocumentHitInfo }
-     * {@link testNoteHitInfo }
      * {@link testAppointmentHitInfo }
-     * {@link testMessagePartHitInfo }
-     * {@link testMessageHitInfo }
+     * {@link testNoteHitInfo }
      * {@link testSimpleSearchHit }
+     * {@link testDocumentHitInfo }
+     * {@link testChatHitInfo }
      * {@link testWikiHitInfo }
+     * {@link testConversationHitInfo }
+     * {@link testTaskHitInfo }
+     * {@link testMessagePartHitInfo }
+     * {@link testContactInfo }
+     * {@link testMessageHitInfo }
      * 
      * 
      */
@@ -282,8 +282,8 @@ public class testSearchResponse {
     public static class Info {
 
         @XmlElements({
-            @XmlElement(name = "suggest", type = String.class),
-            @XmlElement(name = "wildcard", type = testWildcardExpansionQueryInfo.class)
+            @XmlElement(name = "wildcard", type = testWildcardExpansionQueryInfo.class),
+            @XmlElement(name = "suggest", type = String.class)
         })
         protected List<Object> suggestOrWildcard;
 
@@ -305,8 +305,8 @@ public class testSearchResponse {
          * 
          * <p>
          * Objects of the following type(s) are allowed in the list
-         * {@link String }
          * {@link testWildcardExpansionQueryInfo }
+         * {@link String }
          * 
          * 
          */

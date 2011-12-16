@@ -383,6 +383,8 @@ import generated.zcsclient.admin.testReloadLocalConfigRequest;
 import generated.zcsclient.admin.testReloadLocalConfigResponse;
 import generated.zcsclient.admin.testReloadMemcachedClientConfigRequest;
 import generated.zcsclient.admin.testReloadMemcachedClientConfigResponse;
+import generated.zcsclient.admin.testRemoteWipeRequest;
+import generated.zcsclient.admin.testRemoteWipeResponse;
 import generated.zcsclient.admin.testRemoveAccountAliasRequest;
 import generated.zcsclient.admin.testRemoveAccountAliasResponse;
 import generated.zcsclient.admin.testRemoveAccountLoggerRequest;
@@ -470,14 +472,14 @@ import generated.zcsclient.adminext.testPurgeBulkIMAPImportTasksResponse;
 @WebService(name = "zcsAdminPortType", targetNamespace = "http://www.zimbra.com/wsdl/ZimbraService.wsdl")
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
 @XmlSeeAlso({
-    generated.zcsclient.mail.ObjectFactory.class,
-    generated.zcsclient.sync.ObjectFactory.class,
-    generated.zcsclient.account.ObjectFactory.class,
-    generated.zcsclient.appblast.ObjectFactory.class,
-    generated.zcsclient.adminext.ObjectFactory.class,
-    generated.zcsclient.zm.ObjectFactory.class,
+    generated.zcsclient.admin.ObjectFactory.class,
     generated.zcsclient.replication.ObjectFactory.class,
-    generated.zcsclient.admin.ObjectFactory.class
+    generated.zcsclient.adminext.ObjectFactory.class,
+    generated.zcsclient.account.ObjectFactory.class,
+    generated.zcsclient.sync.ObjectFactory.class,
+    generated.zcsclient.mail.ObjectFactory.class,
+    generated.zcsclient.appblast.ObjectFactory.class,
+    generated.zcsclient.zm.ObjectFactory.class
 })
 public interface ZcsAdminPortType {
 
@@ -2737,6 +2739,18 @@ public interface ZcsAdminPortType {
     public testReloadMemcachedClientConfigResponse reloadMemcachedClientConfigRequest(
         @WebParam(name = "ReloadMemcachedClientConfigRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
         testReloadMemcachedClientConfigRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns generated.zcsclient.admin.testRemoteWipeResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/RemoteWipe")
+    @WebResult(name = "RemoteWipeResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public testRemoteWipeResponse remoteWipeRequest(
+        @WebParam(name = "RemoteWipeRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        testRemoteWipeRequest parameters);
 
     /**
      * 

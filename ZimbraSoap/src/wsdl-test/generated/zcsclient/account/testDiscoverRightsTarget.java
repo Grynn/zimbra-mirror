@@ -24,6 +24,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;attribute name="type" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="name" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="d" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -44,6 +45,8 @@ public class testDiscoverRightsTarget {
     protected String id;
     @XmlAttribute(name = "name")
     protected String name;
+    @XmlAttribute(name = "d")
+    protected String d;
 
     /**
      * Gets the value of the email property.
@@ -144,6 +147,30 @@ public class testDiscoverRightsTarget {
      */
     public void setName(String value) {
         this.name = value;
+    }
+
+    /**
+     * Gets the value of the d property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getD() {
+        return d;
+    }
+
+    /**
+     * Sets the value of the d property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setD(String value) {
+        this.d = value;
     }
 
 }

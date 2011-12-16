@@ -6,7 +6,6 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
-import generated.zcsclient.admin.testDlInfo;
 
 
 /**
@@ -19,7 +18,7 @@ import generated.zcsclient.admin.testDlInfo;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="dl" type="{urn:zimbraAdmin}dlInfo" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="dl" type="{urn:zimbraAccount}dlInfo" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
