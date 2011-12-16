@@ -3,9 +3,11 @@
   <classpathentry kind="src" path="src/java"/>
   <classpathentry kind="src" output="build/test-classes" path="src/java-test"/>
   <classpathentry kind="src" output="build/wsdl-test-classes" path="src/wsdl-test"/>
+  <classpathentry kind="src" output="build/soapdoc-classes" path="soapdocs/src/java"/>
   <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
   <classpathentry combineaccessrules="false" kind="src" path="/ZimbraCommon"/>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/junit-4.8.2.jar"/>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/commons-lang-2.6.jar"/>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/jackson-all-1.8.0.jar" sourcepath="/ZimbraCommon/jars-src/jackson-1.8.0-src.jar"/>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/commons-httpclient-3.1.jar" sourcepath="/ZimbraCommon/jars-src/commons-httpclient-3.1-src.jar">
     <attributes>
@@ -34,4 +36,5 @@
   </classpathentry>
   <classpathentry kind="lib" path="/ZimbraSoap/jars/metro/webservices-rt.jar"/>
   <classpathentry kind="output" path="build/classes"/>
+  <classpathentry kind="lib" path="/ZimbraServer/soapdocs/jars/freemarker-2.2.8.jar"/>
 </classpath>
