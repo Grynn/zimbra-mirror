@@ -16,6 +16,7 @@ package com.zimbra.cs.service.offline;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -165,7 +166,7 @@ public class OfflineFolderAction extends FolderAction {
             @Override
             public void run() {
                 try {
-                    Folder srcFolder = (Folder) mbox.getItemById(octxt, sourceFolderId, MailItem.TYPE_FOLDER);
+                    Folder srcFolder = (Folder) mbox.getItemById(octxt, sourceFolderId, MailItem.Type.FOLDER);
 
                     String url = UserServlet.getRestUrl(srcFolder);
                     NameValuePair[] params = new NameValuePair[] { new NameValuePair(UserServlet.QP_FMT, "tgz"),
@@ -191,7 +192,7 @@ public class OfflineFolderAction extends FolderAction {
                         if (e instanceof ServiceException
                                 && ServiceException.RESOURCE_UNREACHABLE.equals(((ServiceException) e).getCode())) {
                             // might be empty folder
-                            Argument arg = ((ServiceException) e).getArgs()[0];
+                            Argument arg = ((ServiceException) e).getArgs().get(0);
                             if (String.valueOf(HttpStatus.SC_NO_CONTENT).equals(arg.getName())) {
                                 isSrcFolderEmpty = true;
                             } else {
@@ -225,8 +226,8 @@ public class OfflineFolderAction extends FolderAction {
                         // import backup file to target folder
                         Account destAcct = OfflineProvisioning.getOfflineInstance().getLocalAccount();
                         try {
-                            OfflineArchiveUtil.importArchive(destAcct, destMbox.getFolderById(targetParentFolderId),
-                                    backupFile);
+                            OfflineArchiveUtil.importArchive(destAcct,
+                                    destMbox.getFolderById(octxt, targetParentFolderId), backupFile);
                         } catch (Exception e) {
                             OfflineLog.offline.debug("[Folder Move] import tgz file failed", e);
                             if (backupFile != null) {
@@ -242,7 +243,7 @@ public class OfflineFolderAction extends FolderAction {
 
                     // delete src folder
                     if (srcFolder instanceof SearchFolder) {
-                        mbox.delete(octxt, sourceFolderId, MailItem.TYPE_SEARCHFOLDER);
+                        mbox.delete(octxt, sourceFolderId, MailItem.Type.SEARCHFOLDER);
                     } else {
                         // force move items arriving after exporting begins
                         List<Folder> folders = srcFolder.getSubfolderHierarchy();
@@ -253,21 +254,22 @@ public class OfflineFolderAction extends FolderAction {
                         ItemId targetFolder = new ItemId(target, zsc);
                         QueryParams dbParams = new QueryParams();
                         dbParams.setFolderIds(folderIds);
-                        dbParams.setIncludedTypes(MailItem.TYPE_MESSAGE, MailItem.TYPE_CONVERSATION);
-                        dbParams.setChangeDateAfter(exportStart / 1000);
+                        dbParams.setIncludedTypes(Arrays.asList(new MailItem.Type[] { MailItem.Type.MESSAGE,
+                                MailItem.Type.CONVERSATION }));
+                        dbParams.setChangeDateAfter((int) (exportStart / 1000));
                         try {
                             synchronized (mbox) {
                                 Set<Integer> newlyChangedItemIds = DbMailItem.getIds(mbox, DbPool.getConnection(),
                                         dbParams, false);
                                 // need to use message type even for conversation
                                 ItemActionHelper.MOVE(octxt, mbox, zsc.getResponseProtocol(), new ArrayList<Integer>(
-                                        newlyChangedItemIds), MailItem.TYPE_MESSAGE, null, targetFolder);
+                                        newlyChangedItemIds), MailItem.Type.MESSAGE, null, targetFolder);
                                 // now, can delete source folder
-                                mbox.delete(octxt, sourceFolderId, MailItem.TYPE_FOLDER);
+                                mbox.delete(octxt, sourceFolderId, MailItem.Type.FOLDER);
                             }
                         } catch (Exception e) {
                             OfflineLog.offline.debug("[Folder Move] force move delta items failed", e);
-                            destMbox.delete(octxt, targetFolder.getId(), MailItem.TYPE_FOLDER);
+                            destMbox.delete(octxt, targetFolder.getId(), MailItem.Type.FOLDER);
                             throw e;
                         }
                     }

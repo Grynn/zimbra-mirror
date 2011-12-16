@@ -31,6 +31,7 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 
 import com.google.common.base.Strings;
+import com.zimbra.common.account.ZAttrProvisioning;
 import com.zimbra.common.httpclient.HttpClientUtil;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.service.ServiceException.Argument;
@@ -39,7 +40,6 @@ import com.zimbra.common.util.FileUtil;
 import com.zimbra.common.util.ZimbraHttpConnectionManager;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.AuthToken;
-import com.zimbra.cs.account.ZAttrProvisioning;
 import com.zimbra.cs.mailbox.Folder;
 import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
