@@ -842,9 +842,15 @@ public class PageAddressbook extends AbsTab {
 		if ( !this.sIsElementPresent("css=" + listLocator) )
 			throw new HarnessException("List View Rows is not present "+ listLocator);
 
-		if ( !this.sIsElementPresent("css=" + rowLocator) )
-			throw new HarnessException("List does not contain any items "+ rowLocator);
-
+		if ( !this.sIsElementPresent("css=" + rowLocator) ) {		    
+			//in search view, locators are different
+			listLocator= "div[id=zv__CNS-SR-Contacts-1]";	
+		   	rowLocator= "div[id^=zli__CNS-SR-Contacts-1__]";
+		   	
+		    if ( !this.sIsElementPresent("css=" + rowLocator) ) {
+				throw new HarnessException("List does not contain any item "+ rowLocator);
+		    }	
+		}
 		//Get the number of contacts (String) 
 	    int count = this.sGetCssCount("css=" + listLocator + ">" + rowLocator);
 		//int count = this.sGetXpathCount("xpath=//div[@id=zv__CNS]/div[contains(@id,zli__CNS__)]");
@@ -929,8 +935,7 @@ public class PageAddressbook extends AbsTab {
 	
 	public AbsPage zListItem(Action action, Button option ,Button subOption, String contact) throws HarnessException {
 		String locator = null;			// If set, this will be clicked
-		AbsPage page = null;	// If set, this page will be returned
-		String id = null;
+		AbsPage page = null;	// If set, this page will be returned		
 		String parentLocator = null;
 		String extraLocator="";
 		
@@ -941,7 +946,7 @@ public class PageAddressbook extends AbsTab {
 		    ContextMenuItem sub_cmi = null;
 		
 		    zRightClickAt(getContactLocator(contact),"0,0");
-		      
+		          
 		    
 			if (option == Button.B_TAG) {
 		        
