@@ -87,7 +87,7 @@ public class BulkIMAPDataImport extends AdminDocumentHandler {
                 }
                 Iterator sourceServerTypeIter = root.elementIterator(AdminExtConstants.E_sourceServerType);
                 if (sourceServerTypeIter.hasNext()) {
-                    org.dom4j.Element elSourceServerType = (org.dom4j.Element) connectionTypeIter.next();
+                    org.dom4j.Element elSourceServerType = (org.dom4j.Element) sourceServerTypeIter.next();
                     sourceServerType = elSourceServerType.getTextTrim();
                 }
                 Iterator IMAPHostIter = root.elementIterator(AdminExtConstants.E_IMAPHost);
