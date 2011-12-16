@@ -97,5 +97,35 @@ public class CreateAppointment extends AjaxCommonTest {
 		ZAssert.assertEquals(actual.getEquipment(), appt.getEquipment(), "Equipment: Verify the appointment data");
 		ZAssert.assertEquals(actual.getContent(), appt.getContent(), "Content: Verify the appointment data");
 	}
+	
+	@Test(	description = "Create private appointment",
+			groups = { "sanity" }
+	)
+	public void CreatePrivateAppointment_03() throws HarnessException {
+		
+		// Create appointment
+		String apptSubject;
+		apptSubject = "appointment" + ZimbraSeleniumProperties.getUniqueString();
+		AppointmentItem appt = new AppointmentItem();
+		
+		appt.setSubject(apptSubject);
+		appt.setContent("content" + ZimbraSeleniumProperties.getUniqueString());
+		appt.setAttendees(ZimbraAccount.AccountA().EmailAddress);
+		appt.setIsPrivate(true);
+	
+		// Open the new mail form
+		FormApptNew apptForm = (FormApptNew) app.zPageCalendar.zToolbarPressButton(Button.B_NEW);
+		ZAssert.assertNotNull(apptForm, "Verify the new form opened");
+
+		// Fill the data and submit it
+		apptForm.zFill(appt);
+		apptForm.zSubmit();
+			
+		// Verify private appointment exists on the server
+		AppointmentItem actual = AppointmentItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ appt.getSubject() +")");
+		ZAssert.assertNotNull(actual, "Verify the new appointment is created");
+		ZAssert.assertEquals(actual.getSubject(), appt.getSubject(), "Subject: Verify the appointment data");
+		ZAssert.assertEquals(app.zGetActiveAccount().soapMatch("//mail:GetAppointmentResponse//mail:comp", "class", "PRI"), true, "");
+	}
 
 }
