@@ -10,9 +10,6 @@ endif
 ZIMBRA_HOME ?= /opt/zimbra
 
 PATCH	:=
-ifeq (MACOSXx86,$(findstring MACOSXx86,$(BUILD_PLATFORM)))
-	PATCH	:= patch -g0 -N -p1 < ../patches/issue222.patch;
-endif
 
 ifdef BETA
 	include $(MEMCACHED_ROOT)/../beta_versions.def
