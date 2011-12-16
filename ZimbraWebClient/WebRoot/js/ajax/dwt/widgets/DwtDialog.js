@@ -465,7 +465,7 @@ function(templateId, data) {
  */
 DwtDialog.prototype._getButtonsContainerStartTemplate =
 function () {
-	return "<table cellspacing='0' cellpadding='0' border='0' width='100%'><tr>";
+	return "<table width='100%'><tr>";
 };
 
 /**
@@ -473,7 +473,7 @@ function () {
  */
 DwtDialog.prototype._getButtonsAlignStartTemplate =
 function () {
-	return "<td align=\"{0}\"><table cellspacing='5' cellpadding='0' border='0'><tr>";
+	return "<td align=\"{0}\"><table><tr>";
 };
 
 /**

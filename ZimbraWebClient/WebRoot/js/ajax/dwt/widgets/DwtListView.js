@@ -47,7 +47,7 @@ DwtListView = function(params) {
         var idx = 0;
         var headId = Dwt.getNextId();
         var colId = Dwt.getNextId();
-        html[idx++] = "<table width='100%' cellspacing='0' cellpadding='0'><tr><td ";
+        html[idx++] = "<table width='100%'><tr><td ";
         html[idx++] = "id=" + headId;
         html[idx++] = "></td></tr><tr><td ";
         html[idx++] = "id=" + colId;
@@ -218,7 +218,7 @@ function(defaultColumnSort) {
 
 	htmlArr[idx++] = "<table id='";
 	htmlArr[idx++] = DwtId.getListViewHdrId(DwtId.WIDGET_HDR_TABLE, this._view);
-	htmlArr[idx++] = "' cellpadding=0 cellspacing=0 border=0 height=100%";
+	htmlArr[idx++] = "' height=100%";
 	htmlArr[idx++] = this._noMaximize ? ">" : " width=100%>";
 	htmlArr[idx++] = "<tr>";
 
@@ -318,7 +318,7 @@ function(htmlArr, idx, headerCol, i, numCols, id, defaultColumnSort) {
 	}
 
 	// add new table for icon/label/sorting arrow
-	htmlArr[idx++] = "<table border=0 cellpadding=0 cellspacing=0 width=100%><tr>";
+	htmlArr[idx++] = "<table width=100%><tr>";
 	if (headerCol._iconInfo) {
 		var idText = ["id='", DwtId.getListViewHdrId(DwtId.WIDGET_HDR_ICON, this._view, field), "'"].join("");
 		htmlArr[idx++] = "<td><center>";
@@ -351,7 +351,7 @@ function(htmlArr, idx, headerCol, i, numCols, id, defaultColumnSort) {
 	// ALWAYS add "sash" separators
 	if (i < (numCols - 1)) {
 		htmlArr[idx++] = "<td width=6>";
-		htmlArr[idx++] = "<table align=right border=0 cellpadding=0 cellspacing=0 width=6 height=100% id='";
+		htmlArr[idx++] = "<table align=right width=6 height=100% id='";
 		htmlArr[idx++] = DwtId.getListViewHdrId(DwtId.WIDGET_HDR_SASH, this._view, field);
 		htmlArr[idx++] = "'><tr>";
 		htmlArr[idx++] = "<td class='DwtListView-Sash'><div style='width: 1px; height: ";
@@ -1361,7 +1361,7 @@ function(base, item, params) {
  */
 DwtListView.prototype._getTable =
 function(htmlArr, idx, params) {
-	htmlArr[idx++] = "<table cellpadding=0 cellspacing=0 border=0 width=";
+	htmlArr[idx++] = "<table width=";
 	htmlArr[idx++] = !params.isDragProxy ? "100%>" : (this.getSize().x + ">");
 	return idx;
 };
