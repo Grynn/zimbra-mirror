@@ -3954,6 +3954,7 @@ sub upgrade714GA {
 sub upgrade715GA {
   my ($startBuild, $targetVersion, $targetBuild) = (@_);
   main::progress("Updating from 7.1.5_GA\n");
+  if (main::isInstalled("zimbra-store")) {
   return 0;
 }
 
