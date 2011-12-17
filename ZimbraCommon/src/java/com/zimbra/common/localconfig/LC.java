@@ -735,6 +735,7 @@ public final class LC {
 
     @Supported
     public static final KnownKey imap_inactive_session_cache_size = KnownKey.newKey(10000);
+    public static final KnownKey imap_use_ehcache = KnownKey.newKey(true);
     public static final KnownKey imap_write_timeout = KnownKey.newKey(10);
     public static final KnownKey imap_write_chunk_size = KnownKey.newKey(8 * 1024);
     public static final KnownKey imap_thread_keep_alive_time = KnownKey.newKey(60);
