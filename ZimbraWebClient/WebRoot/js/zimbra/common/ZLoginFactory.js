@@ -212,12 +212,12 @@ ZLoginFactory.getLoginDialogHTML = function (params) {
 				"<div id='ZLoginAboutPanel' ", (params.showAbout ? "" : "style='display:none'"), ">", params.aboutMsg,
 				"</div>",	
     			"<div id='ZLoginLongVersion' class='version' ", (params.showLongVersion ? "" : "style='display:none'"), ">", params.longVersion, "</div>",
-                "<div class='decor1'></div>",
     	"</div>",
 	"<div class='Footer'>",
 		"<div id='ZLoginNotice'>",params.clientLevelNotice,"</div>",
 		"<div class='copyright'>",params.copyrightText,"</div>",
 	"</div>",
+    "<div class='decor1Outer'><div class='decor1'></div></div>",   //css class 'center' have 'filter' attribute which make 'overflow:visible' not work in ie. so put this out of 'center'
 	"<div class='decor2'></div>"
 	].join("");
 	return html;

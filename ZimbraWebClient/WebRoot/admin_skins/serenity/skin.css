@@ -391,9 +391,25 @@ body {
 .SplashScreen .ImgAltBanner {
     @ImgAltBanner@
 }
+.decor1Outer{
+   margin-left:-250px;
+   margin-top:160px;
+   left:50%;
+   top:40%;
+   z-index:10;
+   width:500px;
+   height:100px;
+   position: absolute;
+   @DecorOpacity@
+}
 .LoginScreen .decor1,
 .SplashScreen .decor1 {
-    @Decor1@
+   /* @Decor1@ @img(, DecorImg, 500px, 100px)@*/
+   width:500px;
+   height:100px;
+   background: url(@DecorImg@);
+   #background:none;/* '#'only ie work*/
+   filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='@DecorImg@');
 }
 .LoginScreen .Footer,
 .SplashScreen .Footer {
