@@ -2175,7 +2175,13 @@ ZaDomain.myXModel = {
 		{id:ZaItem.A_zimbraId, type:_STRING_, ref:"attrs/" + ZaItem.A_zimbraId},
         {id:ZaItem.A_zimbraDomainAliasTargetId, type:_STRING_, ref:"attrs/" + ZaItem.A_zimbraDomainAliasTargetId},                
 		{id:ZaItem.A_zimbraCreateTimestamp, ref:"attrs/" + ZaItem.A_zimbraCreateTimestamp},
-		{id:ZaDomain.A_domainName, type:_STRING_, ref:"attrs/" + ZaDomain.A_domainName, maxLength:255},
+		{id:ZaDomain.A_domainName, type:_STRING_, ref:"attrs/" + ZaDomain.A_domainName, maxLength:255,constraints: {type:"method", value:
+                   function (value) {
+                         value = value.replace(/(^\s*)/g, "");
+                                                 return value;
+                                           }
+
+                           } },
 		{id:ZaDomain.A_zimbraPublicServiceHostname, type:_STRING_, ref:"attrs/" + ZaDomain.A_zimbraPublicServiceHostname, maxLength:255},
 		{id:ZaDomain.A_zimbraDNSCheckHostname, type:_COS_STRING_, ref:"attrs/" + ZaDomain.A_zimbraDNSCheckHostname, maxLength:255},
 		{id:ZaDomain.A_zimbraBasicAuthRealm, type:_COS_STRING_, ref:"attrs/" + ZaDomain.A_zimbraBasicAuthRealm, maxLength:255},		

@@ -1689,7 +1689,8 @@ ZaAccount.myXModel = {
 			   function (value, form, formItem, instance) {				   
 				   if (value){
                                                 var index = value.indexOf("@");
-                                                var namePart = value.substring(0, index);
+                                                var name = value.substring(0, index);
+                                                var namePart = name.replace(/(\s*$)/g, "");
                                                 var domainPart = value.substring(index+1);
                                                 domainPart = AjxStringUtil.trim(domainPart);
                                                 value = namePart + "@" + domainPart;
