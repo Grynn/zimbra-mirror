@@ -174,7 +174,11 @@ function() {
         this.itemElArray[ix] = undefined;
     }
     this.itemElArray = [];
-    this._actionItemsEl.innerHTML = "";
+    //this._actionItemsEl.innerHTML = ""; //throw unkown runtime exception in ie
+    while(this._actionItemsEl.firstChild){
+        var tempNode = this._actionItemsEl.removeChild(this._actionItemsEl.firstChild);
+            tempNode = null;
+    }
     for (var actionIx in this.actionButtons) {
         this.actionButtons[actionIx] = undefined;
     }
