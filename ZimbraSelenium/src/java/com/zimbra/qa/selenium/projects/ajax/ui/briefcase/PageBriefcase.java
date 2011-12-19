@@ -193,9 +193,9 @@ public class PageBriefcase extends AbsTab {
 
 		tracer.trace("Navigate to " + this.myPageName());
 
-		// Make sure we are logged into the Ajax app		
+		// Make sure we are logged into the Ajax app
 		if (!((AppAjaxClient) MyApplication).zPageMain.zIsActive())
-			((AppAjaxClient) MyApplication).zPageMain.zNavigateTo();		
+			((AppAjaxClient) MyApplication).zPageMain.zNavigateTo();
 
 		// Click on Briefcase icon
 		zClickAt(PageMain.Locators.zAppbarBriefcase, "0,0");
@@ -205,8 +205,7 @@ public class PageBriefcase extends AbsTab {
 		zWaitForElementPresent(Locators.zBriefcaseFolderIcon.locator);
 
 	}
-	
-	
+
 	public AbsPage zToolbarPressButton(Button button, IItem item)
 			throws HarnessException {
 		logger.info(myPageName() + " zToolbarPressButton(" + button + ")");
@@ -821,22 +820,23 @@ public class PageBriefcase extends AbsTab {
 				+ ")";
 
 		/*
-		 * listLocator = "div[id='zl__BDLV-main__rows'][class='DwtListView-Rows']";
-		 * String rowLocator = rowLocator = "div[id^='zli__BDLV-main__']"; rowLocator
-		 * = "css=div:contains[id^='zli__BDLV-main__']"; rowLocator =
+		 * listLocator =
+		 * "div[id='zl__BDLV-main__rows'][class='DwtListView-Rows']"; String
+		 * rowLocator = rowLocator = "div[id^='zli__BDLV-main__']"; rowLocator =
+		 * "css=div:contains[id^='zli__BDLV-main__']"; rowLocator =
 		 * "css=div:contains[id:contains('zli__BDLV-main__')]";
 		 * 
 		 * // How many items are in the table? int count =this.sGetXpathCount(
-		 * "//div[@id='zl__BDLV-main__rows']//div[contains(@id, 'zli__BDLV-main__')]");
-		 * logger.debug(myPageName() +
+		 * "//div[@id='zl__BDLV-main__rows']//div[contains(@id, 'zli__BDLV-main__')]"
+		 * ); logger.debug(myPageName() +
 		 * " zListSelectItem: number of list items: "+ count);
 		 * 
 		 * for (int i = 1; i <= count; i++) { itemlocator = "css=" + listLocator
 		 * + ">div:nth-child(" + i + ")"; String namelocator; namelocator =
 		 * itemlocator + ">table>tbody>tr>td>div[id*='__na']"; String s =
 		 * this.sGetText(namelocator).trim(); s =
-		 * this.sGetText("css=div[id='zl__BDLV-main__rows']>div:nth-child(" + i +
-		 * ")").trim();
+		 * this.sGetText("css=div[id='zl__BDLV-main__rows']>div:nth-child(" + i
+		 * + ")").trim();
 		 * 
 		 * if ( s.contains(name) ) { break; // found it } itemlocator = null; }
 		 * if ( itemlocator == null ) { throw new
@@ -1351,19 +1351,19 @@ public class PageBriefcase extends AbsTab {
 			if (sIsElementPresent(itemLocator + ":nth-child(" + i
 					+ "):contains(" + itemName + ")")) {
 				lockIconLocator = itemLocator + ":nth-child(" + i
-						+ ") div[id^=zlif__BDLV-main__][id$=__loid][class^=Img]";
+						+ ") div[id^=zlif__BDLV__][id$=__loid][class^=Img]";
 				break;
 			}
 		}
 
-		if (!this.sIsElementPresent(lockIconLocator))
-			logger.info("Lock icon locator is not present "
-					+ lockIconLocator);
+		if (!this.sIsElementPresent(lockIconLocator)) {
+			logger.info("Lock icon locator is not present " + lockIconLocator);
+		} else {
+			String image = this.sGetAttribute(lockIconLocator + "@class");
 
-		String image = this.sGetAttribute(lockIconLocator + "@class");
-
-		if (image.equals("ImgPadLock"))
-			present = true;
+			if (image.equals("ImgPadLock"))
+				present = true;
+		}
 
 		return present;
 	}
