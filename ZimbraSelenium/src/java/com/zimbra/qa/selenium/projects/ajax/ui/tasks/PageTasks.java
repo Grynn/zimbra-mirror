@@ -48,22 +48,22 @@ public class PageTasks extends AbsTab {
 		public static final String zb__TKE1__SAVE_left_icon = "zb__TKE1__SAVE_left_icon";
 		public static final String taskListView = "css=div[id='zl__TKL__rows'][class='DwtListView-Rows']";
 		public static final String zTasksTab = "zb__App__Tasks";
-		public static final String zNewTask = "zb__TKL__NEW_MENU_left_icon";
-		public static final String zNewTaskDropDown = "css=td[id='zb__TKL__NEW_MENU_dropdown']>div";
-		public static final String zNewTagMenuItem= "css=td[id$='__TKL__NEW_MENU_NEW_TAG_title']";
-		public static final String zMarkAsCompleted = "css=div#zb__TKL__MARK_AS_COMPLETED";
-		public static final String zNewTaskMenuItem ="css=div#zb__TKL__NEW_MENU_NEW_TASK";
-		public static final String zNewTaskFolderMenuItem ="css=div#zb__TKL__NEW_MENU_NEW_TASK_FOLDER";
+		public static final String zNewTask = "zb__TKL-main__NEW_MENU_left_icon";
+		public static final String zNewTaskDropDown = "css=td[id='zb__TKL-main__NEW_MENU_dropdown']>div";
+		public static final String zNewTagMenuItem= "css=td[id$='__TKL-main__NEW_MENU_NEW_TAG_title']";
+		public static final String zMarkAsCompleted = "css=div#zb__TKL-main__MARK_AS_COMPLETED";
+		public static final String zNewTaskMenuItem ="css=div#zb__TKL-main__NEW_MENU_NEW_TASK";
+		public static final String zNewTaskFolderMenuItem ="css=div#zb__TKL-main__NEW_MENU_NEW_TASK_FOLDER";
 		public static final String zDeleteTaskMenuItem ="css=div[id='zm__Tasks'] tr[id='POPUP_DELETE']";
 		public static final String zMoveTaskMenuItem ="css=div[id='zm__Tasks'] tr[id='POPUP_MOVE']";
 		public static final String zNewTaskListMenuItem="css=div[id$='NEWFOLDER']";
-		public static final String zMoveTaskDropDown="css=td#zb__TKL__MOVE_MENU_dropdown>div";
+		public static final String zMoveTaskDropDown="css=td#zb__TKL-main__MOVE_MENU_dropdown>div";
 		public static final String zEditTaskMenuItem ="css=div[id='zm__Tasks'] tr[id='POPUP_EDIT']";
-		public static final String zFilterByTaskDropDown="css=tr[id='ztb__TKL_items'] div[id='zb__TKL__SORTBY_MENU'] td[id='zb__TKL__SORTBY_MENU_dropdown']>div";
+		public static final String zFilterByTaskDropDown="css=tr[id='ztb__TKL-main_items'] div[id='zb__TKL-main__SORTBY_MENU'] td[id='zb__TKL-main__SORTBY_MENU_dropdown']>div";
 		public static final String zToDoListTaskMenuItem ="css=div[id^='POPUP_DWT'] div[id^='DWT'] tr[id='POPUP_TKVT']";
 		public static final String zShowOrigTaskMenuItem ="css=div[id='zm__Tasks'] tr[id='POPUP_SHOW_ORIG']";
 		public static final String zPrintTaskMenuItem ="css=div[id='zm__Tasks'] tr[id='POPUP_PRINT_TASK']";
-		public static final String zPrintTaskDropDown="css=td#zb__TKL__PRINT_dropdown>div";
+		public static final String zPrintTaskDropDown="css=td#zb__TKL-main__PRINT_dropdown>div";
 		public static final String zPrintTaskFolder ="css=div[id^='DWT'] tr[id='POPUP_PRINT_TASKFOLDER']";
 	}
 
@@ -466,7 +466,7 @@ public class PageTasks extends AbsTab {
 
 		} else if (button == Button.B_EDIT) {
 
-			locator = "zb__TKL__EDIT_left_icon";
+			locator = "zb__TKL-main__EDIT_left_icon";
 
 			// Check if the button is enabled
 			if (this.sIsElementPresent("css=td#" + locator + " div[class*=ZDisabledImage]")){ 
@@ -477,7 +477,7 @@ public class PageTasks extends AbsTab {
 
 		} else if (button == Button.B_DELETE) {
 
-			locator = "zb__TKL__DELETE_left_icon";
+			locator = "zb__TKL-main__DELETE_left_icon";
 
 			// Check if the button is enabled
 			if (this.sIsElementPresent("css=td#" + locator + " div[class*=ZDisabledImage]")){ 
@@ -487,7 +487,7 @@ public class PageTasks extends AbsTab {
 
 		} else if (button == Button.B_MOVE) {
 
-			locator = "zb__TKL__MOVE_left_icon";
+			locator = "zb__TKL-main__MOVE_left_icon";
 
 			// Check if the button is enabled
 			if (this.sIsElementPresent("css=td#" + locator + " div[class*=ZDisabledImage]")){ 
@@ -500,7 +500,7 @@ public class PageTasks extends AbsTab {
 
 		} else if (button == Button.B_PRINT) {
 
-			locator = "zb__TKL__PRINT_left_icon";
+			locator = "zb__TKL-main__PRINT_left_icon";
 
 			// Check if the button is enabled
 			if (this.sIsElementPresent("css=td#" + locator + " div[class*=ZDisabledImage]")){ 
@@ -524,7 +524,7 @@ public class PageTasks extends AbsTab {
 			// zToolbarPressPulldown(Button, Button)
 			//
 
-			locator = "zb__TKL__TAG_MENU_dropdown";
+			locator = "zb__TKL-main__TAG_MENU_dropdown";
 
 			// Check if the button is enabled
 			if (this.sIsElementPresent("css=td#" + locator + " div[class*=ZDisabledImage]")){ 
@@ -586,7 +586,7 @@ public class PageTasks extends AbsTab {
 				pulldownLocator = "css=td[id$='__TAG_MENU_dropdown']>div[class='ImgSelectPullDownArrow']";
 
 				//optionLocator = "css=td[id$='__TAG_MENU|MENU|NEWTAG_title']";
-				optionLocator="css=div[id='zb__TKL__TAG_MENU|MENU'] div[id='tasks_newtag']";
+				optionLocator="css=div[id='zb__TKL-main__TAG_MENU|MENU'] div[id='tasks_newtag']";
 
 				page = new DialogTag(this.MyApplication, this);
 
@@ -596,7 +596,7 @@ public class PageTasks extends AbsTab {
 				pulldownLocator = "css=td[id$='__TAG_MENU_dropdown']>div[class='ImgSelectPullDownArrow']";
 
 				//optionLocator = "css=td[id$='__TAG_MENU|MENU|REMOVETAG_title']";
-				optionLocator="css=div[id='zb__TKL__TAG_MENU|MENU'] div[id='tasks_removetag']";
+				optionLocator="css=div[id='zb__TKL-main__TAG_MENU|MENU'] div[id='tasks_removetag']";
 				
 
 				page = null;
@@ -1046,7 +1046,7 @@ public class PageTasks extends AbsTab {
 	public String zGetHtmlBodyText() throws HarnessException {
 		try {
 			//sSelectFrame("css=iframe[id='zv__TKL_body__iframe']");
-			sSelectFrame("css=div[id='zv__TKL'] iframe[id$='__body__iframe']");
+			sSelectFrame("css=div[id='zv__TKL-main'] iframe[id$='__body__iframe']");
 			String bodyhtml = this.sGetHtmlSource();
 			return bodyhtml;
 		} finally {

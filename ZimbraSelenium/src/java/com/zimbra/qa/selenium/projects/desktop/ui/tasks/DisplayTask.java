@@ -26,7 +26,7 @@ public class DisplayTask extends AbsDisplay {
 	 */
 	public static class Locators {
 		
-		public static final String IsActive 			= "css=[parentid='zv__TKL']";
+		public static final String IsActive 			= "css=[parentid='zv__TKL-main']";
 
 	}
 

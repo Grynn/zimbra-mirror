@@ -99,9 +99,9 @@ public class DeleteEditMove extends AjaxCommonTest {
 		app.zPageTasks.zListItem(Action.A_LEFTCLICK, subject);
 		
 		// Verify delete,edit,move buttons are disabled
-		ZAssert.assertTrue(app.zPageTasks.sIsElementPresent("css=div[id='zb__TKL__DELETE'].ZDisabled"), "Verify Delete button is disabled");
-		ZAssert.assertTrue(app.zPageTasks.sIsElementPresent("css=div[id='zb__TKL__EDIT'].ZDisabled"), "Verify Edit button is disabled");
-		ZAssert.assertTrue(app.zPageTasks.sIsElementPresent("css=div[id='zb__TKL__MOVE_MENU'].ZDisabled"), "Verify Move button is disabled");
+		ZAssert.assertTrue(app.zPageTasks.sIsElementPresent("css=div[id='zb__TKL-main__DELETE'].ZDisabled"), "Verify Delete button is disabled");
+		ZAssert.assertTrue(app.zPageTasks.sIsElementPresent("css=div[id='zb__TKL-main__EDIT'].ZDisabled"), "Verify Edit button is disabled");
+		ZAssert.assertTrue(app.zPageTasks.sIsElementPresent("css=div[id='zb__TKL-main__MOVE_MENU'].ZDisabled"), "Verify Move button is disabled");
 		
 	}
 	

@@ -38,7 +38,7 @@ public class PageTasks extends AbsTab {
 
 	public static class Locators {
 
-		public static final String zv__TKL = "zv__TKL";
+		public static final String zv__TKL = "zv__TKL-main";
 		public static final String zl__TKL__rows = "zl__TKL__rows";
 		public static final String zl__TKL__headers = "zl__TKL__headers";
 		public static final String _newTaskBannerId = "_newTaskBannerId";

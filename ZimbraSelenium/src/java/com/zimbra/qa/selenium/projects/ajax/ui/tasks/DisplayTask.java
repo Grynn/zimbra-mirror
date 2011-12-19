@@ -26,7 +26,7 @@ public class DisplayTask extends AbsDisplay {
 	 */
 	public static class Locators {
 		
-		public static final String IsActive 			= "css=[parentid='zv__TKL']";
+		public static final String IsActive 			= "css=[parentid='zv__TKL-main']";
 
 	}
 
@@ -88,7 +88,7 @@ public class DisplayTask extends AbsDisplay {
 		// See https://bugzilla.zimbra.com/show_bug.cgi?id=56657 - "Need unique id for "view task" pane"
 		//**
 		
-		String locator = "css=div[id='zv__TKL'] div[class='ZmMailMsgView']";
+		String locator = "css=div[id='zv__TKL-main'] div[class='ZmMailMsgView']";
 		
 		if ( field == Field.Subject ) {
 			
@@ -132,7 +132,7 @@ public class DisplayTask extends AbsDisplay {
 				
 				//this.sSelectFrame("css=iframe[id='zv__MSG_body__iframe']");
 				//this.sSelectFrame("css=iframe[id='zv__TKL_body__iframe']");
-				this.sSelectFrame("css=div[id='zv__TKL'] iframe[id$='__body__iframe']");
+				this.sSelectFrame("css=div[id='zv__TKL-main'] iframe[id$='__body__iframe']");
 				
 				String bodyLocator = "css=body";
 				
