@@ -58,27 +58,27 @@ public class PageBriefcase extends AbsTab {
 		public static final Locators zNewMenuIconBtn = new Locators(
 				"id=zb__BCD__NEW_FILE_left_icon");
 		public static final Locators zNewMenuLeftIconBtn = new Locators(
-				"css=td[id=zb__BDLV__NEW_MENU_left_icon]");
+				"css=td[id=zb__BDLV-main__NEW_MENU_left_icon]");
 		public static final Locators zNewMenuArrowBtn = new Locators(
-				"css=div[id=zb__BDLV__NEW_MENU] div[class^=ImgSelectPullDownArrow]");
+				"css=div[id=zb__BDLV-main__NEW_MENU] div[class^=ImgSelectPullDownArrow]");
 		public static final Locators zUploadFileIconBtn = new Locators(
-				"id=zb__BDLV__NEW_FILE_left_icon");
+				"id=zb__BDLV-main__NEW_FILE_left_icon");
 		public static final Locators zEditFileIconBtn = new Locators(
-				"id=zb__BDLV__EDIT_FILE_left_icon");
+				"id=zb__BDLV-main__EDIT_FILE_left_icon");
 		public static final Locators zEditFileBtn = new Locators(
-				"css=div[id=zb__BDLV__EDIT_FILE]");
+				"css=div[id=zb__BDLV-main__EDIT_FILE]");
 		public static final Locators zEditFileMenuItem = new Locators(
 				"css=div[id=EDIT_FILE]");
 		public static final Locators zOpenFileInSeparateWindowIconBtn = new Locators(
-				"id=zb__BDLV__NEW_BRIEFCASE_WIN_left_icon");
+				"id=zb__BDLV-main__NEW_BRIEFCASE_WIN_left_icon");
 		public static final Locators zDeleteIconBtn = new Locators(
-				"id=zb__BDLV__DELETE_left_icon");
+				"id=zb__BDLV-main__DELETE_left_icon");
 		public static final Locators zDeleteBtn = new Locators(
-				"css=div[id=zb__BDLV__DELETE]");
+				"css=div[id=zb__BDLV-main__DELETE]");
 		public static final Locators zMoveIconBtn = new Locators(
-				"id=zb__BDLV__MOVE_left_icon");
+				"id=zb__BDLV-main__MOVE_left_icon");
 		public static final Locators zMoveBtn = new Locators(
-				"id=zb__BDLV__MOVE");
+				"id=zb__BDLV-main__MOVE");
 		public static final Locators zTagItemIconBtn = new Locators(
 				"id=zb__BCD__TAG_MENU_left_icon");
 		public static final Locators zViewIconBtn = new Locators(
@@ -96,9 +96,9 @@ public class PageBriefcase extends AbsTab {
 		public static final Locators zFileBodyField = new Locators(
 				"css=html>body");
 		public static final Locators zHeaderCheckBox = new Locators(
-				"css=div[id=zlhi__BDLV__se]");
+				"css=div[id=zlhi__BDLV-main__se]");
 		public static final Locators zListItemLockIcon = new Locators(
-				"css=div[id^=zlif__BDLV__][id$=__loid][class=ImgPadLock]");
+				"css=div[id^=zlif__BDLV-main__][id$=__loid][class=ImgPadLock]");
 
 		private final String locator;
 
@@ -193,9 +193,15 @@ public class PageBriefcase extends AbsTab {
 
 		tracer.trace("Navigate to " + this.myPageName());
 
-		// Make sure we are logged into the Ajax app
-		if (!((AppAjaxClient) MyApplication).zPageMain.zIsActive())
+		// Make sure we are logged into the Ajax app		
+		//******TEMPORARY WORK AROUND******
+		//if (!((AppAjaxClient) MyApplication).zPageMain.zIsActive())
+		//	((AppAjaxClient) MyApplication).zPageMain.zNavigateTo();
+		String locator = "css=[id='zov__main_Mail']";
+		if (!zWaitForElementPresent(locator, "1000")) {
 			((AppAjaxClient) MyApplication).zPageMain.zNavigateTo();
+		}
+
 
 		// Click on Briefcase icon
 		zClickAt(PageMain.Locators.zAppbarBriefcase, "0,0");
@@ -361,7 +367,7 @@ public class PageBriefcase extends AbsTab {
 						"7.1."))
 					optionLocator = "css=tr[id=POPUP_NEW_BRIEFCASE]";
 				else
-					optionLocator = "css=div#zb__BDLV__NEW_MENU_NEW_BRIEFCASE";
+					optionLocator = "css=div#zb__BDLV-main__NEW_MENU_NEW_BRIEFCASE";
 
 				page = new DialogCreateBriefcaseFolder(this.MyApplication,
 						((AppAjaxClient) MyApplication).zPageBriefcase);
@@ -372,7 +378,7 @@ public class PageBriefcase extends AbsTab {
 						"7.1."))
 					optionLocator = "css=tr[id=POPUP_NEW_DOC]";
 				else
-					optionLocator = "css=div#zb__BDLV__NEW_MENU_NEW_DOC";
+					optionLocator = "css=div#zb__BDLV-main__NEW_MENU_NEW_DOC";
 
 				page = new DocumentBriefcaseNew(this.MyApplication);
 
@@ -384,7 +390,7 @@ public class PageBriefcase extends AbsTab {
 						"7.1."))
 					optionLocator = "css=tr[id=POPUP_NEW_TAG]>td[id$=_title]:contains(Tag)";
 				else
-					optionLocator = "css=div#zb__BDLV__NEW_MENU_NEW_TAG";
+					optionLocator = "css=div#zb__BDLV-main__NEW_MENU_NEW_TAG";
 
 				page = new DialogTag(this.MyApplication, this);
 
@@ -397,7 +403,7 @@ public class PageBriefcase extends AbsTab {
 		} else if (pulldown == Button.B_TAG) {
 			if (option == Button.O_TAG_NEWTAG) {
 
-				pulldownLocator = "css=td[id=zb__BDLV__TAG_MENU_dropdown]>div[class='ImgSelectPullDownArrow']";
+				pulldownLocator = "css=td[id=zb__BDLV-main__TAG_MENU_dropdown]>div[class='ImgSelectPullDownArrow']";
 				optionLocator = "css=td[id^=briefcase_newtag]";
 
 				page = new DialogTag(this.MyApplication, this);
@@ -446,7 +452,7 @@ public class PageBriefcase extends AbsTab {
 			}
 		} else if (pulldown == Button.B_ACTIONS) {
 
-			pulldownLocator = "css=td[id=zb__BDLV__ACTIONS_MENU_dropdown]>div[class='ImgSelectPullDownArrow']";
+			pulldownLocator = "css=td[id=zb__BDLV-main__ACTIONS_MENU_dropdown]>div[class='ImgSelectPullDownArrow']";
 
 			if (option == Button.B_LAUNCH_IN_SEPARATE_WINDOW) {
 
@@ -724,8 +730,8 @@ public class PageBriefcase extends AbsTab {
 
 			FolderItem folder = (FolderItem) dynamic;
 
-			pulldownLocator = "css=td#zb__BDLV__MOVE_MENU_dropdown>div";
-			optionLocator = "css=td#zti__DwtFolderChooser_BriefcaseBDLV__"
+			pulldownLocator = "css=td#zb__BDLV-main__MOVE_MENU_dropdown>div";
+			optionLocator = "css=td#zti__DwtFolderChooser_BriefcaseBDLV-main__"
 					+ folder.getId() + "_textCell";
 
 			page = null;
@@ -821,13 +827,13 @@ public class PageBriefcase extends AbsTab {
 				+ ")";
 
 		/*
-		 * listLocator = "div[id='zl__BDLV__rows'][class='DwtListView-Rows']";
-		 * String rowLocator = rowLocator = "div[id^='zli__BDLV__']"; rowLocator
-		 * = "css=div:contains[id^='zli__BDLV__']"; rowLocator =
-		 * "css=div:contains[id:contains('zli__BDLV__')]";
+		 * listLocator = "div[id='zl__BDLV-main__rows'][class='DwtListView-Rows']";
+		 * String rowLocator = rowLocator = "div[id^='zli__BDLV-main__']"; rowLocator
+		 * = "css=div:contains[id^='zli__BDLV-main__']"; rowLocator =
+		 * "css=div:contains[id:contains('zli__BDLV-main__')]";
 		 * 
 		 * // How many items are in the table? int count =this.sGetXpathCount(
-		 * "//div[@id='zl__BDLV__rows']//div[contains(@id, 'zli__BDLV__')]");
+		 * "//div[@id='zl__BDLV-main__rows']//div[contains(@id, 'zli__BDLV-main__')]");
 		 * logger.debug(myPageName() +
 		 * " zListSelectItem: number of list items: "+ count);
 		 * 
@@ -835,7 +841,7 @@ public class PageBriefcase extends AbsTab {
 		 * + ">div:nth-child(" + i + ")"; String namelocator; namelocator =
 		 * itemlocator + ">table>tbody>tr>td>div[id*='__na']"; String s =
 		 * this.sGetText(namelocator).trim(); s =
-		 * this.sGetText("css=div[id='zl__BDLV__rows']>div:nth-child(" + i +
+		 * this.sGetText("css=div[id='zl__BDLV-main__rows']>div:nth-child(" + i +
 		 * ")").trim();
 		 * 
 		 * if ( s.contains(name) ) { break; // found it } itemlocator = null; }
@@ -1351,13 +1357,13 @@ public class PageBriefcase extends AbsTab {
 			if (sIsElementPresent(itemLocator + ":nth-child(" + i
 					+ "):contains(" + itemName + ")")) {
 				lockIconLocator = itemLocator + ":nth-child(" + i
-						+ ") div[id^=zlif__BDLV__][id$=__loid][class^=Img]";
+						+ ") div[id^=zlif__BDLV-main__][id$=__loid][class^=Img]";
 				break;
 			}
 		}
 
 		if (!this.sIsElementPresent(lockIconLocator))
-			throw new HarnessException("Lock icon locator is not present "
+			logger.info("Lock icon locator is not present "
 					+ lockIconLocator);
 
 		String image = this.sGetAttribute(lockIconLocator + "@class");
