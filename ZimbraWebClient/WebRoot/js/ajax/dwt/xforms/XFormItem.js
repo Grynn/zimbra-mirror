@@ -3238,6 +3238,7 @@ CollapsedGroup_XFormItem.prototype.headerLabel = "Collapsed Group";
 CollapsedGroup_XFormItem.prototype.expandedImg =  "ImgNodeExpanded";
 CollapsedGroup_XFormItem.prototype.collapsedImg =  "ImgNodeCollapsed";
 CollapsedGroup_XFormItem.prototype.contentTableCssClass = "grid_table";
+CollapsedGroup_XFormItem.prototype.containerCssClass = "grid_table_cell_sheet";
 CollapsedGroup_XFormItem.prototype.initializeItems = function () {
     var gridLabelCss = this.getInheritedProperty("gridLabelCss");
     var oldItems = this.getItems();
@@ -3568,6 +3569,7 @@ TopGrouper_XFormItem.prototype.borderCssClass = "TopGrouperBorder";
 TopGrouper_XFormItem.prototype.labelCssClass = "GrouperLabel";
 TopGrouper_XFormItem.prototype.labelLocation = _INLINE_;		// managed manually by this class
 TopGrouper_XFormItem.prototype.insetCssClass = "GrouperInset";
+
 
 // output the label
 TopGrouper_XFormItem.prototype.outputHTMLStart = function (html,   currentCol) {

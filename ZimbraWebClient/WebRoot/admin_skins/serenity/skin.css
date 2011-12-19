@@ -568,6 +568,11 @@ textarea {
    padding: 0;
 }
 
+.grid_table_cell_sheet {
+    padding: 2px;
+    overflow:auto;
+}
+
 .ZaHelpDropdown {
     background-color: #FFFFFF !important;
     border-width: 2px !important;
@@ -592,3 +597,5 @@ textarea {
    margin: 2px 5px 0pt 0pt;
    cursor: pointer;
 }
+
+

@@ -1846,7 +1846,6 @@ ZATabCase_XFormItem.prototype.valign = _TOP_;
 if(appNewUI){
    ZATabCase_XFormItem.prototype.paddingStyle = "padding-left:15px;";
    ZATabCase_XFormItem.prototype.width = "98%";
-   ZATabCase_XFormItem.prototype.cellpadding = "2";
 }
 else{
    ZATabCase_XFormItem.prototype.width = "100%";
