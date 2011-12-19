@@ -61,7 +61,6 @@ STDMETHODIMP CUserObject::InitializeUser(BSTR host, BSTR admin, BSTR UserID, BST
     {
         // Initialize the Mapi API..
 
-        dlog << Log::Debug << "initalize user";
         dlogd("initialize user");
         // Create Session and Open admin store.
         // Its a static function and store/session will be used commonly by all mailboxes.
@@ -92,7 +91,7 @@ STDMETHODIMP CUserObject::UMInitializeUser(BSTR ProfileName, BSTR MailType, BSTR
     {
         // Initialize the Mapi API..
 
-        dlogd("In UMInitializeUser");
+        dlogd("UMInitializeUser -- ProfileName: ", ProfileName);
 
         LPCWSTR lpwstrStatus = MAPIAccessAPI::InitGlobalSessionAndStore(ProfileName);
 
@@ -121,6 +120,8 @@ STDMETHODIMP CUserObject::UMUnInitializeUser(BSTR MailType)
 
 STDMETHODIMP CUserObject::GetFolderObjects( /*[out, retval]*/ VARIANT *vObjects)
 {
+    dlogi("Begin GetFolderObjects");
+
     HRESULT hr = S_OK;
 
     VariantInit(vObjects);
@@ -131,7 +132,6 @@ STDMETHODIMP CUserObject::GetFolderObjects( /*[out, retval]*/ VARIANT *vObjects)
     USES_CONVERSION;
     vector<Folder_Data> vfolderlist;
 
-    dlogi("GetFolderList");
     maapi->GetRootFolderHierarchy(vfolderlist);
 
     std::vector<Folder_Data>::iterator it;
@@ -205,12 +205,16 @@ STDMETHODIMP CUserObject::GetFolderObjects( /*[out, retval]*/ VARIANT *vObjects)
     SafeArrayUnaccessData(psa);
     vObjects->parray = psa;
 
+    dlogi("End GetFolderObjects");
+
     return hr;
 }
 
 STDMETHODIMP CUserObject::GetItemsForFolderObjects(IfolderObject *FolderObj, FolderType type,
     VARIANT creattiondate, VARIANT *vItems)
 {
+    dlogi("Begin GetItemsForFolderObjects -- FolderType: ", type);
+
     HRESULT hr = S_OK;
 
     VariantInit(vItems);
@@ -333,6 +337,8 @@ STDMETHODIMP CUserObject::GetItemsForFolderObjects(IfolderObject *FolderObj, Fol
     {
         delete folderEntryid.lpb;
     }
+
+    dlogi("End GetItemsForFolderObjects");
 
     return S_OK;
 }

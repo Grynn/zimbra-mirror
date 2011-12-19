@@ -123,7 +123,7 @@ public class CSMigrationwrapper
     {
         string path = System.AppDomain.CurrentDomain.BaseDirectory + "interop.Exchange.dll";
 
-        Log.init(Path.GetTempPath() + "migration.log", Log.Level.Info);
+        Log.init(Path.GetTempPath() + "migration.log", Log.Level.Debug);
         Log.info("initialize");
         sourceProvider = Assembly.LoadFile(path);
         if (sourceProvider == null)
@@ -410,6 +410,7 @@ public class CSMigrationwrapper
         {
             while (iProcessedItems < Acct.migrationFolder.TotalCountOFItems)
             {
+                Log.debug("Processing folder", folderobject.Name, "-- Total items:", folderobject.ItemCount);
                 foreach (dynamic itemobject in itemobjectarray)
                 {
                     if (itemobject != null)
@@ -548,6 +549,8 @@ public class CSMigrationwrapper
 
             if (isServer)
             {
+                Log.open(Path.GetTempPath() + Acct.AccountID + ".log");
+
                 object[] MyArgs = new object[4];
                 MyArgs[0] = "";
                 MyArgs[1] = "";
@@ -560,6 +563,13 @@ public class CSMigrationwrapper
             }
             else
             {
+                int idx = Acct.Accountname.IndexOf("@");
+                if (idx != -1)
+                {
+                    string filenamepref = Acct.Accountname.Substring(0, idx);
+                    Log.open(Path.GetTempPath() + filenamepref + ".log");
+                }
+                 
                 object[] MyArgs = new object[2];
                 MyArgs[0] = Acct.AccountID;
                 MyArgs[1] = "MAPI";
@@ -580,6 +590,8 @@ public class CSMigrationwrapper
             Acct.migrationFolder.CurrentCountOFItems = folderobjectarray.Count();
 
             Acct.TotalNoItems = ComputeTotalMigrationCount(importopts, folderobjectarray);
+
+            Log.debug("Acct.TotalNoItems:", Acct.TotalNoItems.ToString());
 
             ZimbraAPI api = new ZimbraAPI();
 
@@ -613,26 +625,46 @@ public class CSMigrationwrapper
                 // FBS NOTE THAT THESE ARE EXCHANGE SPECIFIC.  WE'LL HAVE TO CHANGE THIS FOR GROUPWISE !!!
                 if ((folderobject.Id == (int)ZimbraFolders.Sent) && !(importopts.ItemsAndFolders.HasFlag(
                     ItemsAndFoldersOptions.Sent)))
+                {
+                    Log.debug("Skipping folder", folderobject.Name);
                     continue;
+                }
                 if ((folderobject.Id == (int)ZimbraFolders.Trash) &&
                     !(importopts.ItemsAndFolders.HasFlag(
                     ItemsAndFoldersOptions.DeletedItems)))
+                {
+                    Log.debug("Skipping folder", folderobject.Name);
                     continue;
+                }
                 if ((folderobject.Id == (int)ZimbraFolders.Junk) &&
                     !(importopts.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Junk)))
+                {
+                    Log.debug("Skipping folder", folderobject.Name);
                     continue;
+                }
                 if ((folderobject.ContainerClass == "IPF.Contact") &&
                     !(importopts.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Contacts)))
+                {
+                    Log.debug("Skipping folder", folderobject.Name);
                     continue;
+                }
                 if ((folderobject.ContainerClass == "IPF.Appointment") &&
                     !(importopts.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Calendar)))
+                {
                     continue;
+                }
                 if ((folderobject.ContainerClass == "IPF.Note") &&
                     !(importopts.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Mail)))
+                {
+                    Log.debug("Skipping folder", folderobject.Name);
                     continue;
+                }
                  // //
                 if (folderobject.ItemCount == 0)
+                {
+                    Log.debug("Skipping empty folder", folderobject.Name);
                     continue;
+                }
                  // check if we want to skip any folders
 
                 bool bSkipIt = false;
@@ -646,7 +678,10 @@ public class CSMigrationwrapper
                     }
                 }
                 if (bSkipIt)
+                {
+                    Log.debug("Skipping folder", folderobject.Name, "via filter option");
                     continue;
+                }
                  // //
                  // ANOTHER TEMP -- REMOVE WHEN WE DO TASKS
                 if (folderobject.ContainerClass == "IPF.Task")
