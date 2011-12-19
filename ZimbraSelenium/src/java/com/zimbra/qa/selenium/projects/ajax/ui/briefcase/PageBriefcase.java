@@ -194,14 +194,8 @@ public class PageBriefcase extends AbsTab {
 		tracer.trace("Navigate to " + this.myPageName());
 
 		// Make sure we are logged into the Ajax app		
-		//******TEMPORARY WORK AROUND******
-		//if (!((AppAjaxClient) MyApplication).zPageMain.zIsActive())
-		//	((AppAjaxClient) MyApplication).zPageMain.zNavigateTo();
-		String locator = "css=[id='zov__main_Mail']";
-		if (!zWaitForElementPresent(locator, "1000")) {
-			((AppAjaxClient) MyApplication).zPageMain.zNavigateTo();
-		}
-
+		if (!((AppAjaxClient) MyApplication).zPageMain.zIsActive())
+			((AppAjaxClient) MyApplication).zPageMain.zNavigateTo();		
 
 		// Click on Briefcase icon
 		zClickAt(PageMain.Locators.zAppbarBriefcase, "0,0");
