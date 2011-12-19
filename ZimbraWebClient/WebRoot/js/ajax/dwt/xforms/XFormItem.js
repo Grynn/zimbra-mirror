@@ -3323,6 +3323,10 @@ function () {
                          colSizes:colsize,numCols:numcols, width:"100%",
                          cssClass:contentCss, tableCssClass:tableCssClass
     };
+    var ref = this.getInheritedProperty("ref");
+    if(ref) {
+        contentItems.ref = ref;
+    }
     var content =  this.getInheritedProperty("contentItems");
     if(content)
         contentItems.items = content;
