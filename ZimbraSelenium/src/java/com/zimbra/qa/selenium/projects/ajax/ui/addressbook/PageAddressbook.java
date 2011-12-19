@@ -831,31 +831,25 @@ public class PageAddressbook extends AbsTab {
 	
     // return the xpath locator of a contact
 	private String getContactLocator(String contact) throws HarnessException {
-		String listLocator = "div[id='zv__CNS-main']";
-		
-		String rowLocator = "div[id^='zli__CNS-main__']";
-	    
-		
-
+		//assume that this is a list view
+		String listLocator = "div[id='zv__CNS-main']";		
+		String rowLocator  = "div[id^='zli__CNS-main__']";
+	    		
 		String contactLocator = null;
 		
-		if ( !this.sIsElementPresent("css=" + listLocator) )
-			throw new HarnessException("List View Rows is not present "+ listLocator);
-
-		if ( !this.sIsElementPresent("css=" + rowLocator) ) {		    
-			//in search view, locators are different
+		//actually this is a search view
+		if (zIsInSearchView()) {
 			listLocator= "div[id=zv__CNS-SR-Contacts-1]";	
 		   	rowLocator= "div[id^=zli__CNS-SR-Contacts-1__]";
-		   	
-		    if ( !this.sIsElementPresent("css=" + rowLocator) ) {
-				throw new HarnessException("List does not contain any item "+ rowLocator);
-		    }	
 		}
+		
+		if (!this.sIsElementPresent("css=" + listLocator + ">" + rowLocator)) {
+			throw new HarnessException("css=" + listLocator + ">" + rowLocator + " not present");
+		}
+		
 		//Get the number of contacts (String) 
 	    int count = this.sGetCssCount("css=" + listLocator + ">" + rowLocator);
-		//int count = this.sGetXpathCount("xpath=//div[@id=zv__CNS]/div[contains(@id,zli__CNS__)]");
-		//int count = this.sGetXpathCount("//div[@id='zv__CNS']//div[contains(@id, 'zli__CNS__')]");
-	    logger.debug(myPageName() + " zListItem: number of contacts: "+ count);
+		logger.debug(myPageName() + " zListItem: number of contacts: "+ count);
 
 		if ( count == 0 )
 			throw new HarnessException("List count was zero");
@@ -877,10 +871,10 @@ public class PageAddressbook extends AbsTab {
 			if ( contact.equals(displayAs) ) {
 			   contactLocator = itemLocator;
 			   break;
-			}
-     		
+			}     		
 		} 
 	
+		
 		if (contactLocator == null) {
 			throw new HarnessException("Never found the contact "+ contact);
 		}
@@ -989,9 +983,14 @@ public class PageAddressbook extends AbsTab {
 				}
 					
 			}
-			//id = cmi.locator;
-			locator = "css=div#zm__Contacts tr#"+ cmi.locator;
+			
+			if (zIsInSearchView()) {
+				locator = "css=div[id^=zm__Contacts__DWT]";
+			} else {
+				locator = "css=div#zm__Contacts";
+			}	
 						
+			locator = locator + " tr#"+ cmi.locator;
 			//locator = "id="+ id;
 			
 			//  Make sure the context menu exists
@@ -1080,7 +1079,8 @@ public class PageAddressbook extends AbsTab {
     		sFocus(locator);
             sMouseOver(locator);
             //jClick(locator);
-            zClickAt(locator, "0,0");
+            //zClickAt(locator, "0,0");
+            sClickAt(locator, "0,0");
      	//}
        zWaitForBusyOverlay();
 		
@@ -1435,5 +1435,9 @@ public class PageAddressbook extends AbsTab {
 	    || (button == Button.B_AB_Q) || (button == Button.B_AB_R) || (button == Button.B_AB_S) || (button == Button.B_AB_T)
 	    || (button == Button.B_AB_U) || (button == Button.B_AB_V) || (button == Button.B_AB_W) || (button == Button.B_AB_X)
 	    || (button == Button.B_AB_Y) || (button == Button.B_AB_Z);
+	}
+	
+	private boolean zIsInSearchView() throws HarnessException {
+		return zIsVisiblePerPosition("css=div#z_filterPanel__SR-Contacts-1",0,0);
 	}
 }
