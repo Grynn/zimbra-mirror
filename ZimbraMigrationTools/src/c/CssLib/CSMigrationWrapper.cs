@@ -546,10 +546,12 @@ public class CSMigrationwrapper
             ParameterModifier[] mods = { pm };
 
             string value = "";
+            string acctname = "";
 
             if (isServer)
             {
-                Log.open(Path.GetTempPath() + Acct.AccountID + ".log");
+                acctname = Acct.AccountID;
+                Log.open(Path.GetTempPath() + acctname + ".log");
 
                 object[] MyArgs = new object[4];
                 MyArgs[0] = "";
@@ -566,8 +568,15 @@ public class CSMigrationwrapper
                 int idx = Acct.Accountname.IndexOf("@");
                 if (idx != -1)
                 {
-                    string filenamepref = Acct.Accountname.Substring(0, idx);
-                    Log.open(Path.GetTempPath() + filenamepref + ".log");
+                    acctname = Acct.Accountname.Substring(0, idx);
+                    Log.open(Path.GetTempPath() + acctname + ".log");
+                }
+                else
+                {
+                    Log.err("Illegal account name");
+                    Acct.LastProblemInfo = new ProblemInfo("Illegal account name", "Error", ProblemInfo.TYPE_ERR);
+                    Acct.TotalNoErrors++;
+                    return;
                 }
                  
                 object[] MyArgs = new object[2];
@@ -580,10 +589,14 @@ public class CSMigrationwrapper
             }
             if (value.Length > 0)
             {
-                Log.err("Unable to initialize", Acct.AccountID, value);
+                Log.err("Unable to initialize", acctname, value);
                 Acct.LastProblemInfo = new ProblemInfo(value, "Error", ProblemInfo.TYPE_ERR);
                 Acct.TotalNoErrors++;
                 return;
+            }
+            else
+            {
+                Log.info(acctname, "initialized");
             }
             folderobjectarray = (object[])userobject.InvokeMember("GetFolderObjects",
                 BindingFlags.InvokeMethod | BindingFlags.Instance | BindingFlags.Public,
