@@ -22,7 +22,7 @@
             <TabControl Name="ResultsTC" MinHeight="360"  Margin="5" ItemContainerStyle="{StaticResource itemstyleFocus}">
                 <TabItem Name="AccountsTabItem" Header="Accounts" >
                     <Grid Name="AccountResultsGrid">
-                        <ListView Margin="5" FontSize="11" Name="lstAccountResults" ItemsSource="{Binding AccountResultsList}" SelectedIndex="{Binding Path=CurrentAccountSelection, Mode=TwoWay}" ItemContainerStyle="{StaticResource itemstyleDouble}">
+                        <ListView Margin="5" FontSize="11" Name="lstAccountResults" SelectionMode="Single" ItemsSource="{Binding AccountResultsList}" SelectedIndex="{Binding Path=CurrentAccountSelection, Mode=TwoWay}" ItemContainerStyle="{StaticResource itemstyleDouble}">
                             <ListView.View>
                                 <GridView>
                                     <GridView.Columns>

@@ -63,8 +63,8 @@ public class AccountResultsViewModel: BaseViewModel
     {
         string AcctName = ((SelectedTab == "Accounts") || (SelectedTab == "")) ?
             AccountResultsList[CurrentAccountSelection].AccountName : SelectedTab;
-
-        MessageBox.Show(string.Format("Opening log file for {0}", AcctName));
+        string Logfile = Path.GetTempPath() + AcctName + ".log";
+        Process.Start(Logfile);
     }
     public ICommand StopCommand {
         get;

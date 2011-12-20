@@ -580,6 +580,7 @@ public class CSMigrationwrapper
             }
             if (value.Length > 0)
             {
+                Log.err("Unable to initialize", Acct.AccountID, value);
                 Acct.LastProblemInfo = new ProblemInfo(value, "Error", ProblemInfo.TYPE_ERR);
                 Acct.TotalNoErrors++;
                 return;
