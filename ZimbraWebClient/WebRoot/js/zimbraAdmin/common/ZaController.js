@@ -1056,3 +1056,11 @@ function() {
     else
         return "";
 }
+
+ZaController.prototype.getPopUpMenu = 
+function () {
+	if (this._actionMenu != null)
+		return this._actionMenu;
+	else
+		return null;
+}
