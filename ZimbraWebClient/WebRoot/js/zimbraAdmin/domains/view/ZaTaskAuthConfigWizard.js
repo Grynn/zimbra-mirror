@@ -43,10 +43,10 @@ ZaTaskAuthConfigWizard = function(parent) {
 	ZaTaskAuthConfigWizard.CONFIG_COMPLETE_STEP = ++this.TAB_INDEX;
 
 	this.stepChoices = [
-        {label:ZaMsg.AuthSettings, value:ZaTaskAuthConfigWizard.AUTH_CONFIG_STEP_0},
-		{label:ZaMsg.AuthSettings, value:ZaTaskAuthConfigWizard.AUTH_CONFIG_STEP_1},
-		{label:ZaMsg.AuthSettings, value:ZaTaskAuthConfigWizard.AUTH_CONFIG_BIND_PWD_STEP},
-		{label:ZaMsg.AuthSettings, value:ZaTaskAuthConfigWizard.AUTH_CONFIG_SUMMARY_STEP},
+        {label:ZaMsg.stepAuthModeForDomain, value:ZaTaskAuthConfigWizard.AUTH_CONFIG_STEP_0},
+		{label:ZaMsg.stepAuthSetting, value:ZaTaskAuthConfigWizard.AUTH_CONFIG_STEP_1},
+		{label:ZaMsg.stepAuthBindPasswoard, value:ZaTaskAuthConfigWizard.AUTH_CONFIG_BIND_PWD_STEP},
+		{label:ZaMsg.stepAuthSummary, value:ZaTaskAuthConfigWizard.AUTH_CONFIG_SUMMARY_STEP},
 		{label:ZaMsg.TestAuthSettings, value:ZaTaskAuthConfigWizard.AUTH_TEST_STEP},
 		{label:ZaMsg.AuthTestResult, value:ZaTaskAuthConfigWizard.AUTH_TEST_RESULT_STEP},
         {label:ZaMsg.AuthSetting_Spnego, value:ZaTaskAuthConfigWizard.SPNEGO_CONFIG_STEP},
@@ -344,6 +344,7 @@ function() {
 			ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_PASSWORD_MISMATCH);
 			return false;
 		}
+
 		this.goPage(ZaTaskAuthConfigWizard.AUTH_CONFIG_SUMMARY_STEP);
 	} else if(this._containedObject[ZaModel.currentStep]==ZaTaskAuthConfigWizard.AUTH_CONFIG_STEP_0 && this._containedObject.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_zimbra) {
 		this.goPage(ZaTaskAuthConfigWizard.CONFIG_COMPLETE_STEP);
@@ -537,7 +538,7 @@ ZaTaskAuthConfigWizard.myXFormModifier = function(xFormObject) {
 								visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A_AuthMech,ZaDomain.AuthMech_ad]],
 								visibilityChangeEventSources:[ZaDomain.A_AuthMech],
 								items:[
-                                    {type:_OUTPUT_, value:"<b>Active Diectory Setting</b>",  colSpan:"*"
+                                    {type:_OUTPUT_, value:ZaMsg.authForADMsg,  colSpan:"*"
                                         //colSpan:"*", cssStyle:"padding-left:10px;padding-top:10px;"
                                     },
 								    {type:_SPACER_, height:20,colSpan:2},
@@ -572,7 +573,7 @@ ZaTaskAuthConfigWizard.myXFormModifier = function(xFormObject) {
 								visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A_AuthMech,ZaDomain.AuthMech_ldap]],
 								visibilityChangeEventSources:[ZaDomain.A_AuthMech],
 								items:[
-                                    {type:_OUTPUT_, value:"<b>External LDAP Setting</b>",  colSpan:"*"
+                                    {type:_OUTPUT_, value:ZaMsg.authForLDAPMsg,  colSpan:"*"
                                     },
                                     {type:_SPACER_, height:20,colSpan:2},
                                     {type:_OUTPUT_, value:"LDAP Setting",  colSpan:"*"
@@ -638,7 +639,7 @@ ZaTaskAuthConfigWizard.myXFormModifier = function(xFormObject) {
 					{type:_CASE_, numCols:2,colSizes:["150px","430px"],	caseKey:ZaTaskAuthConfigWizard.AUTH_CONFIG_SUMMARY_STEP,
 						visibilityChecks:[Case_XFormItem.prototype.isCurrentTab,ZaNewDomainXWizard.isAuthMechNotZimbra],
 						items: [
-                            {type:_OUTPUT_, value:ZaMsg.authForADMsg,  colSpan:"*"
+                            {type:_OUTPUT_, value:ZaMsg.authSummaryMsg,  colSpan:"*"
                             },
 							{type:_SPACER_, height:10},
 							{ref:ZaDomain.A_AuthMech, type:_OUTPUT_, label:ZaMsg.Domain_AuthMech, choices:this.AuthMechs, alignment:_LEFT_,
