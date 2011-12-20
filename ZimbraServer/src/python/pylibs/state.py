@@ -61,6 +61,7 @@ class State:
 		self.hostname		  = None
 		self.firstRun         = True
 		self.forced           = False
+		self.ldapRunning      = True
 		self.localconfig      = localconfig.LocalConfig()
 		self.globalconfig     = globalconfig.GlobalConfig()
 		self.miscconfig       = miscconfig.MiscConfig()
@@ -415,60 +416,65 @@ class State:
 		return None
 
 	def compareKeys(self):
-		for sn in self.mtaconfig.getSections():
-			section = self.mtaconfig.getSection(sn)
-			Log.logMsg(5, "Checking keys for %s" % (section.name,))
-			if len(self.forcedconfig):
-				Log.logMsg(4, "Checking for forced keys %s" % (section.name,))
-				if not section.name in self.forcedconfig:
-					continue
-			
-			section.changed = False
-			self.resetChangedKeys(section.name)
-
-			for key in section.requiredvars():
-				type = section.requiredvars(key)
-				prev = self.lastVal(section.name,type,key)
-				val = self.lookUpConfig(type, key)
-				Log.logMsg(5, "Checking %s=%s" % (key,val))
-				if val is not None:
-					if prev != val:
-						if not self.firstRun:
-							Log.logMsg(3, "Var %s changed from \'%s\' -> \'%s\'" % (key, prev, val))
-						self.lastVal(section.name, type, key, val)
-						self.changedKeys(section.name,key)
-						section.changed = True
-				else:
-					Log.logMsg(5, "Required key is not defined %s=\'%s\'" % (key, val))
-					if prev is not None:
-						if not self.firstRun:
-							Log.logMsg(3, "Var %s changed from \'%s\' to no longer defined." % (key, prev))
-						self.delVal(section.name, type, key)
-						section.changed = True
-		
-		stoppedservices = 0
-		totalservices = 0
-		for service in self.curServices():
-			totalservices += 1
-			if not self.lookUpConfig("SERVICE", service):
-				stoppedservices += 1
-				Log.logMsg(2, "service %s was disabled need to stop" % (service,))
-				self.curRestarts(service,0)
-
-
-  		if (stoppedservices == totalservices) and (totalservices > 1):
-			raise Exception, "All services detected disabled."
-
-  		for service in self.serverconfig.getServices():
-			if self.curServices(service) is None:
-				if self.firstRun:
-					if (self.serverconfig.getServices(service)):
-						self.curServices(service,"running")
+		if self.ldapRunning == False:
+			Log.logMsg(1, "LDAP not running, skipping key updates.")
+		else:
+			for sn in self.mtaconfig.getSections():
+				section = self.mtaconfig.getSection(sn)
+				Log.logMsg(5, "Checking keys for %s" % (section.name,))
+				if len(self.forcedconfig):
+					Log.logMsg(4, "Checking for forced keys %s" % (section.name,))
+					if not section.name in self.forcedconfig:
+						continue
+				
+				section.changed = False
+				self.resetChangedKeys(section.name)
+	
+				for key in section.requiredvars():
+					type = section.requiredvars(key)
+					prev = self.lastVal(section.name,type,key)
+					val = self.lookUpConfig(type, key)
+					Log.logMsg(5, "Checking %s=%s" % (key,val))
+					if val is not None:
+						if prev != val:
+							if not self.firstRun:
+								Log.logMsg(3, "Var %s changed from \'%s\' -> \'%s\'" % (key, prev, val))
+							self.lastVal(section.name, type, key, val)
+							self.changedKeys(section.name,key)
+							section.changed = True
 					else:
-						self.curServices(service,"stopped")
-				else:
-					Log.logMsg(2, "service %s was enabled need to start" % (service,))
-					self.curRestarts(service, 1)
+						Log.logMsg(5, "Required key is not defined %s=\'%s\'" % (key, val))
+						if prev is not None:
+							if not self.firstRun:
+								Log.logMsg(3, "Var %s changed from \'%s\' to no longer defined." % (key, prev))
+							self.delVal(section.name, type, key)
+							section.changed = True
+			
+			stoppedservices = 0
+			totalservices = 0
+			for service in self.curServices():
+				totalservices += 1
+				if not self.lookUpConfig("SERVICE", service):
+					stoppedservices += 1
+	
+	  		if (stoppedservices == totalservices) and (totalservices > 1):
+				raise Exception, "All services detected disabled."
+
+			for service in self.curServices():
+				if not self.lookUpConfig("SERVICE", service):
+					Log.logMsg(2, "service %s was disabled need to stop" % (service,))
+					self.curRestarts(service,0)
+	
+	  		for service in self.serverconfig.getServices():
+				if self.curServices(service) is None:
+					if self.firstRun:
+						if (self.serverconfig.getServices(service)):
+							self.curServices(service,"running")
+						else:
+							self.curServices(service,"stopped")
+					else:
+						Log.logMsg(2, "service %s was enabled need to start" % (service,))
+						self.curRestarts(service, 1)
 
 
 	def compileActions(self):
@@ -641,10 +647,14 @@ class State:
 			Log.logMsg(1, "%s %s initiated from zmconfigd" % (process, action))
 
 		pargs = ' '.join([action,rewrite])
-		try:
-			rc = commands.commands[process].execute((pargs,))
-		except Exception, e:
-			Log.logMsg(1,"Exception in %s: (%s)" % (commands.exe[process.upper()], e) )
+		if process != "ldap" and self.ldapRunning == False:
+			Log.logMsg(1, "Error: LDAP not running, skipping %s command for %s" % (action, process))
+			return 0
+		else:
+			try:
+				rc = commands.commands[process].execute((pargs,))
+			except Exception, e:
+				Log.logMsg(1,"Exception in %s: (%s)" % (commands.exe[process.upper()], e) )
 
 		if rc == 0:
 			if action == "stop":
@@ -656,8 +666,15 @@ class State:
 				Log.logMsg(2, "%s was started adding to current state" % (process,));
 				self.compileDependencyRestarts(process)
 				self.curServices(process, "started")
+				if process == "ldap":
+					self.ldapRunning = True
+			elif action == "status" and process == "ldap":
+				self.ldapRunning = True
 		elif action != "status":
 			Log.logMsg(2, "Failed to %s %s rc=%d" % (action, process, rc))
+		elif action == "status" and process == "ldap":
+			Log.logMsg(1, "LDAP is currently down, sleeping")
+			self.ldapRunning = False
 
 		return rc
 
