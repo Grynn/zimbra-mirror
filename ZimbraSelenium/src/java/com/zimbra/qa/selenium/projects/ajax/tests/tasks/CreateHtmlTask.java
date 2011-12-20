@@ -39,7 +39,8 @@ public class CreateHtmlTask extends AjaxCommonTest {
 			public void CreateHtmlTask_01() throws HarnessException {
 
 		String subject = "task" + ZimbraSeleniumProperties.getUniqueString();
-		String taskHtmlbody = "task<b>bold"+ ZimbraSeleniumProperties.getUniqueString() + "</b>task";
+		//String taskHtmlbody = "task<b>bold"+ ZimbraSeleniumProperties.getUniqueString() + "</b>task";
+		String taskHtmlbody = "body" + ZimbraSeleniumProperties.getUniqueString();
 
 		// Click NEW button
 		FormTaskNew taskNew = (FormTaskNew) app.zPageTasks.zToolbarPressButton(Button.B_NEW);
@@ -73,7 +74,8 @@ public class CreateHtmlTask extends AjaxCommonTest {
 
 		Shortcut shortcut = Shortcut.S_ESCAPE;
 		String subject = "task" + ZimbraSeleniumProperties.getUniqueString();
-		String taskHtmlbody = "task<b>bold"+ ZimbraSeleniumProperties.getUniqueString() + "</b>task";
+		//String taskHtmlbody = "task<b>bold"+ ZimbraSeleniumProperties.getUniqueString() + "</b>task";
+		String taskHtmlbody = "body" + ZimbraSeleniumProperties.getUniqueString();
 
 		//Click NEW button
 		FormTaskNew taskNew = (FormTaskNew) app.zPageTasks.zToolbarPressButton(Button.B_NEW);
@@ -103,7 +105,8 @@ public class CreateHtmlTask extends AjaxCommonTest {
 	public void CreateHtmlTask_03() throws HarnessException {
 
 		String subject = "task" + ZimbraSeleniumProperties.getUniqueString();
-		String taskHtmlbody = "task<b>bold"+ ZimbraSeleniumProperties.getUniqueString() + "</b>task";
+		//String taskHtmlbody = "task<b>bold"+ ZimbraSeleniumProperties.getUniqueString() + "</b>task";
+		String taskHtmlbody = "body" + ZimbraSeleniumProperties.getUniqueString();
 
 		// Click NEW drop down and click Task
 		FormTaskNew taskNew = (FormTaskNew) app.zPageTasks
@@ -138,7 +141,8 @@ public class CreateHtmlTask extends AjaxCommonTest {
 
 		Shortcut shortcut = Shortcut.S_NEWTASK;
 		String subject = "task" + ZimbraSeleniumProperties.getUniqueString();
-		String taskHtmlbody = "task<b>bold"+ ZimbraSeleniumProperties.getUniqueString() + "</b>task";
+		//String taskHtmlbody = "task<b>bold"+ ZimbraSeleniumProperties.getUniqueString() + "</b>task";
+		String taskHtmlbody = "body" + ZimbraSeleniumProperties.getUniqueString();
 
 		//Click NEW Task shortcut "NK"
 		FormTaskNew taskNew = (FormTaskNew) app.zPageTasks.zKeyboardShortcut(shortcut);
@@ -169,7 +173,8 @@ public class CreateHtmlTask extends AjaxCommonTest {
 		FolderItem inboxFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(),SystemFolder.Inbox);
 		String subject = "task" + ZimbraSeleniumProperties.getUniqueString();
 		String bodyText = "bodyText" + ZimbraSeleniumProperties.getUniqueString();
-		String taskHtmlbody = "task<b>bold"+ ZimbraSeleniumProperties.getUniqueString()+"</b>task";
+		//String taskHtmlbody = "task<b>bold"+ ZimbraSeleniumProperties.getUniqueString() + "</b>task";
+		String taskHtmlbody = "body" + ZimbraSeleniumProperties.getUniqueString();
 		String contentHTML = XmlStringUtil.escapeXml("<html>"+"<body>"+"<div>"+"<div>"+taskHtmlbody+"</div>"+"</div>"+"</body>"+"</html>");
 
 

@@ -305,7 +305,8 @@ public class FormTaskNew extends AbsForm {
 		   }
 
 		} else if (field == Field.Body) {
-			locator = "css=textarea[id*='textarea_']";
+			
+			locator = "css=div[id^='zv__TKE-'] textarea[id$='_content']";
 			this.sFocus(locator);
 			this.zClick(locator);
 			zKeyboard.zTypeCharacters(value);
@@ -318,29 +319,44 @@ public class FormTaskNew extends AbsForm {
 			return;
 
 		}else if (field == Field.HtmlBody) {
-			locator = Locators.zBodyField;
 			String browser = SeleniumService.getInstance().getSeleniumBrowser();			
 			try {
 
 				if (browser.equalsIgnoreCase("iexplore")) {
-					this.sFocus(Locators.zFrame);
-					this.zClickAt(Locators.zFrame, "");
-					zTypeFormattedText(Locators.zFrame, value);
-					this.zWaitForBusyOverlay();
-
 					
-					return;
-				} else {
-					sSelectFrame(Locators.zFrame);
+					locator = Locators.zFrame;
+
 					this.sFocus(locator);
 					this.zClickAt(locator, "");
-					sType(locator, value);
+					zTypeFormattedText(locator, value);
+					this.zWaitForBusyOverlay();
+
+					return;
+					
+				} else {
+					
+					
+					sSelectFrame("css=div[id^='zv__TKE-'] iframe[id$='_content_ifr']");
+
+					locator = "css=body[id='tinymce']";
+					this.sFocus(locator);
+					this.zClickAt(locator, "");
+					
+					/*
+					 * Oct 25, 2011: The new TinyMCE editor broke sType().  Use zKeyboard instead,
+					 * however, it is preferred to use sType() if possible, but I can't find a
+					 * solution right now. 
+					 */
+					// this.sType(locator, value);
+					this.zKeyboard.zTypeCharacters(value);
+					
+					return;
 				}
 			} finally {
 				//sSelectWindow("Zimbra: Tasks");
-				sSelectWindow(null);
+				// sSelectWindow(null);
+				this.sSelectFrame("relative=top");
 			}
-			return;
 
 		}else if (field == Field.DueDate) {
 			locator = "css=input[id$='_endDateField']";
