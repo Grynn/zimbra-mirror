@@ -67,6 +67,7 @@ public class ReplyMailText extends AjaxCommonTest {
 		mailform.zSubmit();
 
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		app.zPageMail.zWaitForDesktopLoadingSpinner(5000);
 
 		// From the receiving end, verify the message details
 		// Need 'in:inbox' to seprate the message from the sent message
