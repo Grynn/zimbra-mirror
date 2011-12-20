@@ -3006,7 +3006,7 @@ nowrap:false, labelWrap:true,
                         			ZaAccount.A_zimbraQuotaWarnPercent,
                         			ZaAccount.A_zimbraQuotaWarnInterval,
                         			ZaAccount.A_zimbraQuotaWarnMessage]],
-                        			[XForm.checkInstanceValue,ZaAccount.A_zimbraIsExternalVirtualAccount,"FALSE"]],
+                        			[XForm.checkInstanceValueNot,ZaAccount.A_zimbraIsExternalVirtualAccount,"TRUE"]],
 							items: [
 								{ref:ZaAccount.A_zimbraMailForwardingAddressMaxLength, type:_SUPER_TEXTFIELD_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 									msgName:ZaMsg.MSG_zimbraMailForwardingAddressMaxLength,
