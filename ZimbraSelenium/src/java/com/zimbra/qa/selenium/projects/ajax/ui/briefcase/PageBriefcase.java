@@ -724,8 +724,8 @@ public class PageBriefcase extends AbsTab {
 			FolderItem folder = (FolderItem) dynamic;
 
 			pulldownLocator = "css=td#zb__BDLV-main__MOVE_MENU_dropdown>div";
-			optionLocator = "css=td#zti__DwtFolderChooser_BriefcaseBDLV-main__"
-					+ folder.getId() + "_textCell";
+			optionLocator = "css=td[id=zti__ZmFolderChooser_BriefcaseBDLV-main__"
+					+ folder.getId() + "_textCell]";
 
 			page = null;
 		} else {
