@@ -3,31 +3,14 @@
  */
 package com.zimbra.qa.selenium.projects.ajax.ui.tasks;
 
-import java.awt.event.KeyEvent;
-import java.util.ArrayList;
-import java.util.List;
+import java.awt.event.*;
+import java.util.*;
 
-import com.thoughtworks.selenium.SeleniumException;
-import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
-import com.zimbra.qa.selenium.framework.items.FolderItem;
-import com.zimbra.qa.selenium.framework.items.TaskItem;
-import com.zimbra.qa.selenium.framework.ui.AbsApplication;
-import com.zimbra.qa.selenium.framework.ui.AbsPage;
-import com.zimbra.qa.selenium.framework.ui.AbsTab;
-import com.zimbra.qa.selenium.framework.ui.Action;
-import com.zimbra.qa.selenium.framework.ui.Button;
-import com.zimbra.qa.selenium.framework.ui.Shortcut;
-import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.SleepUtil;
-import com.zimbra.qa.selenium.framework.util.ZAssert;
-import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
-import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
-import com.zimbra.qa.selenium.projects.ajax.ui.ContextMenu;
-import com.zimbra.qa.selenium.projects.ajax.ui.DialogAssistant;
-import com.zimbra.qa.selenium.projects.ajax.ui.DialogMove;
-import com.zimbra.qa.selenium.projects.ajax.ui.DialogTag;
-import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
-import com.zimbra.qa.selenium.projects.ajax.ui.PageMain;
+import com.thoughtworks.selenium.*;
+import com.zimbra.qa.selenium.framework.items.*;
+import com.zimbra.qa.selenium.framework.ui.*;
+import com.zimbra.qa.selenium.framework.util.*;
+import com.zimbra.qa.selenium.projects.ajax.ui.*;
 
 
 /**
@@ -407,8 +390,14 @@ public class PageTasks extends AbsTab {
 			
 			}else if(option == Button.O_SHOW_ORIGINAL){
 				optionLocator= Locators.zShowOrigTaskMenuItem;
-				page =null;
-			
+				
+				page = new SeparateWindowShowOriginal(this.MyApplication);
+				((SeparateWindowShowOriginal)page).zInitializeWindowNames();
+				this.zClickAt(optionLocator,"");
+				this.zWaitForBusyOverlay();
+				
+				return (page);
+
 			}else if(option == Button.O_PRINT_MENU){
 				optionLocator= Locators.zPrintTaskMenuItem;
 				page =null;
@@ -1055,20 +1044,6 @@ public class PageTasks extends AbsTab {
 
 	}
 
-	public String zVerifyShowOriginal() throws HarnessException {
-		try{
-		sSelectWindow("name=TaskSource");
-		String ShowOrigBody=sGetBodyText();
-		return ShowOrigBody;
-		}finally{
-			sSelectWindow(null);
-		}
-		
-		
-		// TODO Auto-generated method stub
-		
-	}
-	
 	public String zGetPrintWindowContent() throws HarnessException {
 		try{
 			//wait for Print Dialog displayed

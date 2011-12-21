@@ -1,21 +1,16 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.tasks.bugs;
 
-import java.util.HashMap;
-import org.testng.annotations.Test;
+import java.util.*;
+
+import org.testng.annotations.*;
 
 import com.zimbra.qa.selenium.framework.core.*;
-import com.zimbra.qa.selenium.framework.items.FolderItem;
-import com.zimbra.qa.selenium.framework.items.TaskItem;
-import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
-import com.zimbra.qa.selenium.framework.ui.Action;
-import com.zimbra.qa.selenium.framework.ui.Button;
-
-import com.zimbra.qa.selenium.framework.util.GeneralUtility;
-import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.SleepUtil;
-import com.zimbra.qa.selenium.framework.util.ZAssert;
-import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.framework.items.*;
+import com.zimbra.qa.selenium.framework.items.FolderItem.*;
+import com.zimbra.qa.selenium.framework.ui.*;
+import com.zimbra.qa.selenium.framework.util.*;
+import com.zimbra.qa.selenium.projects.ajax.core.*;
+import com.zimbra.qa.selenium.projects.ajax.ui.*;
 
 
 public class Bug_51017 extends AjaxCommonTest {
@@ -36,7 +31,7 @@ public class Bug_51017 extends AjaxCommonTest {
 
 	@Bugs(	ids = "51017")
 	@Test(	description = "Show Original Pop Up should Get Open With Proper Content",
-			groups = { "inprogress" }
+			groups = { "functional" }
 	)
 	public void Bug__51017() throws HarnessException {
 
@@ -60,10 +55,7 @@ public class Bug_51017 extends AjaxCommonTest {
 					"</m>" +
 				"</CreateTaskRequest>");
 
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 
-		TaskItem task = TaskItem.importFromSOAP(app.zGetActiveAccount(), subject);
-		ZAssert.assertNotNull(task, "Verify the task is created");
 
 		// Refresh the tasks view
 		app.zPageTasks.zToolbarPressButton(Button.B_REFRESH);
@@ -73,13 +65,33 @@ public class Bug_51017 extends AjaxCommonTest {
 		app.zPageTasks.zListItem(Action.A_MAIL_CHECKBOX, subject);
 
 
-		// Right click the item, select Show Original
-		app.zPageTasks.zListItem(Action.A_RIGHTCLICK, Button.O_SHOW_ORIGINAL, subject);
-		SleepUtil.sleepMedium();
+		SeparateWindowShowOriginal window = null;
+		
+		try {
+			
+			// Right click the item, select Show Original
+			window = (SeparateWindowShowOriginal)app.zPageTasks.zListItem(Action.A_RIGHTCLICK, Button.O_SHOW_ORIGINAL, subject);
+			window.zWaitForActive();		// Make sure the window is there
+			
+			ZAssert.assertTrue(window.zIsActive(), "Verify the window is active");
+			
+			//Verify show original window with proper content.
+			String ShowOrigBody = window.sGetBodyText();
+			ZAssert.assertStringContains(ShowOrigBody, subject, "Verify subject in showorig window");
+			
+			window.zCloseWindow();
+			window = null;
 
-		//Verify show original window with proper content.
-		String ShowOrigBody=app.zPageTasks.zVerifyShowOriginal();
-		ZAssert.assertStringContains(ShowOrigBody, subject, "Verify subject in showorig window");
+		} finally {
+			
+			// Make sure to close the window
+			if ( window != null ) {
+				window.zCloseWindow();
+				window = null;
+			}
+			
+		}
+		
 
 	}
 }

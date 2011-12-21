@@ -130,6 +130,28 @@ public abstract class AbsSeparateWindow extends AbsPage {
 		return (text);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.zimbra.qa.selenium.framework.ui.AbsSeleniumObject#sGetBodyText()
+	 */
+	public String sGetBodyText() throws HarnessException {
+		logger.info(myPageName() + " sGetBodyText()");
+
+		String text = "";
+		
+		try {
+			super.sSelectWindow(this.DialogWindowID);
+			changeFocus();
+			
+			text = super.sGetBodyText();
+
+		} finally {
+			super.sSelectWindow(MainWindowID);
+			super.sWindowFocus();
+		}
+
+		return (text);
+	}
+
 	public void sSelectFrame(String locator) throws HarnessException {
 		logger.info(myPageName() + " sSelectFrame("+ locator +")");
 	
