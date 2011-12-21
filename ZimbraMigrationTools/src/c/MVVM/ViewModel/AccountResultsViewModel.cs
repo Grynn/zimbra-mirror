@@ -64,7 +64,14 @@ public class AccountResultsViewModel: BaseViewModel
         string AcctName = ((SelectedTab == "Accounts") || (SelectedTab == "")) ?
             AccountResultsList[CurrentAccountSelection].AccountName : SelectedTab;
         string Logfile = Path.GetTempPath() + AcctName + ".log";
-        Process.Start(Logfile);
+        try
+        {
+            Process.Start(Logfile);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(ex.Message);
+        }
     }
     public ICommand StopCommand {
         get;
