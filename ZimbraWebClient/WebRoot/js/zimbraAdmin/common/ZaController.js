@@ -337,7 +337,7 @@ function() {
 	this._authenticating = true;
 	this._loginDialog.setVisible(true, false);
 	try {
-		var uname = "";
+		var uname = null; // don't change current display username
 		this._loginDialog.setFocus(uname);
 	} catch (ex) {
 		// something is out of whack... just make the user relogin
