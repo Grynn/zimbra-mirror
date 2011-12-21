@@ -36,7 +36,10 @@ public class PrintTask extends AjaxCommonTest {
 
 
 
-	@Test(	description = "Print Task using RightClick -> Print and Verify Contents in Print view",groups = { "functional" })
+	@Test(	
+			description = "Print Task using RightClick -> Print and Verify Contents in Print view",
+			groups = { "inprogress" }
+			)
 	public void PrintTask_01() throws HarnessException {
 
 		FolderItem taskFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Tasks);
@@ -84,7 +87,10 @@ public class PrintTask extends AjaxCommonTest {
 
 	}
 
-	@Test(	description = "Print Task using shortcut 'p' and verify its content from GUI",groups = { "functional" })
+	@Test(	
+			description = "Print Task using shortcut 'p' and verify its content from GUI",
+			groups = { "inprogress" }
+			)
 	public void PrintTask_02() throws HarnessException {
 
 		FolderItem taskFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Tasks);
@@ -131,7 +137,10 @@ public class PrintTask extends AjaxCommonTest {
 		ZAssert.assertStringContains(Printcontent, bodyText, "Verify content in Print view");
 
 	}
-	@Test(	description = "Print multiple tasks using Print-> Print TaskFolder and  and verify its content from GUI",groups = { "functional" })
+	@Test(	
+			description = "Print multiple tasks using Print-> Print TaskFolder and  and verify its content from GUI",
+			groups = { "inprogress" }
+			)
 	public void PrintTask_03() throws HarnessException {
 
 		FolderItem taskFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Tasks);		

@@ -2,6 +2,8 @@ package com.zimbra.qa.selenium.projects.ajax.tests.tasks.bugs;
 
 import java.util.HashMap;
 import org.testng.annotations.Test;
+
+import com.zimbra.qa.selenium.framework.core.*;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.TaskItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
@@ -32,9 +34,11 @@ public class Bug_51017 extends AjaxCommonTest {
 	}
 
 
+	@Bugs(	ids = "51017")
 	@Test(	description = "Show Original Pop Up should Get Open With Proper Content",
-			groups = { "functional" })
-			public void Bug__51017() throws HarnessException {
+			groups = { "inprogress" }
+	)
+	public void Bug__51017() throws HarnessException {
 
 		FolderItem taskFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Tasks);
 
@@ -43,18 +47,18 @@ public class Bug_51017 extends AjaxCommonTest {
 
 		app.zGetActiveAccount().soapSend(
 				"<CreateTaskRequest xmlns='urn:zimbraMail'>" +
-				"<m >" +
-				"<inv>" +
-				"<comp name='"+ subject +"'>" +
-				"<or a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
-				"</comp>" +
-				"</inv>" +
-				"<su>"+ subject +"</su>" +
-				"<mp ct='text/plain'>" +
-				"<content>content"+ ZimbraSeleniumProperties.getUniqueString() +"</content>" +
-				"</mp>" +
-				"</m>" +
-		"</CreateTaskRequest>");
+					"<m >" +
+						"<inv>" +
+							"<comp name='"+ subject +"'>" +
+								"<or a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
+							"</comp>" +
+						"</inv>" +
+						"<su>"+ subject +"</su>" +
+						"<mp ct='text/plain'>" +
+							"<content>content"+ ZimbraSeleniumProperties.getUniqueString() +"</content>" +
+						"</mp>" +
+					"</m>" +
+				"</CreateTaskRequest>");
 
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 
