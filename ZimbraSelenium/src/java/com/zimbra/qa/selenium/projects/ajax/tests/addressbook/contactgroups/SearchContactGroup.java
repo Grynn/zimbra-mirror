@@ -27,7 +27,7 @@ public class SearchContactGroup extends AjaxCommonTest {
 	
 	
 	@Test(	description = "select contact option, search an existed contact group ",
-			groups = { "smoke" })
+			groups = { "deprecated" })
 	public void searchGroupName() throws HarnessException {
 		// Create a contact group via Soap 
 		ContactGroupItem group = ContactGroupItem.createUsingSOAP(app);
@@ -45,7 +45,7 @@ public class SearchContactGroup extends AjaxCommonTest {
 	}
 
 	@Test(	description = "select contact option, search  contact groups with same prefix ",
-			groups = { "functional" })
+			groups = { "deprecated" })
 	public void searchGroupsWithSameNamePrefix() throws HarnessException {
 		// Create a contact group via Soap
 		ContactGroupItem group1 = ContactGroupItem.createUsingSOAP(app);
@@ -65,22 +65,22 @@ public class SearchContactGroup extends AjaxCommonTest {
 
 
 	@Test(	description = "select contact option, search a non-existed contact group ",
-			groups = { "functional" })
+			groups = { "deprecated" })
 	public void searchNonExistedGroupName() throws HarnessException {
 		// Create a contact group via Soap 
 		ContactGroupItem group = ContactGroupItem.createUsingSOAP(app);
 		  
 		// search for group name
 		app.zPageSearch.zToolbarPressPulldown(Button.B_SEARCHTYPE, Button.O_SEARCHTYPE_CONTACTS);	 		
-		app.zPageSearch.zAddSearchQuery(group.groupName + ZimbraSeleniumProperties.getUniqueString());
-		app.zPageSearch.zToolbarPressButton(Button.B_SEARCH);
+		app.zPageSearch.zAddSearchQuery(group.groupName + ZimbraSeleniumProperties.getUniqueString());	
+		app.zPageSearch.zToolbarPressButton(Button.B_SEARCH);		
 		ZAssert.assertFalse(app.zPageAddressbook.zIsContactDisplayed(group), "Verify contact " + group.fileAs + " not displayed");
 				
 	}
 
 
 	@Test(	description = "select contact option, search for a contact group with group member as keyword search ",
-			groups = { "smoke" })
+			groups = { "deprecated" })
 	public void searchGroupMember() throws HarnessException {
 		// Create a contact group via Soap 
 		ContactGroupItem group = ContactGroupItem.createUsingSOAP(app);
@@ -91,7 +91,21 @@ public class SearchContactGroup extends AjaxCommonTest {
 		for (int i=0; i < group.dlist.size(); i++) {
 			app.zPageSearch.zAddSearchQuery(group.dlist.get(i).firstName);
 			app.zPageSearch.zToolbarPressButton(Button.B_SEARCH);
-			ZAssert.assertFalse(app.zPageAddressbook.zIsContactDisplayed(group), "Verify contact " + group.fileAs + " not displayed");
+			ZAssert.assertFalse(app.zPageAddressbook.zIsContactDisplayed(group), "Verify contact " + group.fileAs + " displayed");
+
+			app.zPageSearch.zAddSearchQuery(group.dlist.get(i).lastName);
+			app.zPageSearch.zToolbarPressButton(Button.B_SEARCH);
+			ZAssert.assertFalse(app.zPageAddressbook.zIsContactDisplayed(group), "Verify contact " + group.fileAs + " displayed");
+
+			app.zPageSearch.zAddSearchQuery(group.dlist.get(i).company);
+			app.zPageSearch.zToolbarPressButton(Button.B_SEARCH);
+			ZAssert.assertFalse(app.zPageAddressbook.zIsContactDisplayed(group), "Verify contact " + group.fileAs + " displayed");
+
+			app.zPageSearch.zAddSearchQuery(group.dlist.get(i).email.substring(0,group.dlist.get(i).email.indexOf('@')));
+			app.zPageSearch.zToolbarPressButton(Button.B_SEARCH);
+			ZAssert.assertFalse(app.zPageAddressbook.zIsContactDisplayed(group), "Verify contact " + group.fileAs + " displayed");
+
+		
 		}
 				
 	}
