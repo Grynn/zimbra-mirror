@@ -1,0 +1,11 @@
+--- openldap-2.4.28/libraries/libmdb/mdb.c.orig	2011-12-21 11:47:45.321599439 -0800
++++ openldap-2.4.28/libraries/libmdb/mdb.c	2011-12-21 11:48:08.141597785 -0800
+@@ -4342,7 +4342,7 @@
+ 	size_t		 sz;
+ 
+ 	sz = LEAFSIZE(key, data);
+-	if (data->mv_size >= env->me_psize / MDB_MINKEYS) {
++	if (sz >= env->me_psize / MDB_MINKEYS) {
+ 		/* put on overflow page */
+ 		sz -= data->mv_size - sizeof(pgno_t);
+ 	}
