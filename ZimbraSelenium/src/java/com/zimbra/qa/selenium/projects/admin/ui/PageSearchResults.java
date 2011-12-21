@@ -16,9 +16,10 @@ import com.zimbra.qa.selenium.projects.admin.items.AccountItem;
 
 public class PageSearchResults extends AbsTab {
 	public static class Locators {
-		public static final String SEARCH_INPUT_TEXT_BOX="_XForm_2_query";
-		public static final String SEARCH_BUTTON="css=div.ImgSearch";
-		public static final String DELETE_BUTTON="zb__SCHLV__DELETE_title";
+		public static final String SEARCH_INPUT_TEXT_BOX="_XForm_query_display";
+		public static final String SEARCH_BUTTON="css=td.xform_container div.ImgSearch";
+		public static final String DELETE_BUTTON="zmi__zb_currentApp__DELETE";
+		public static final String CONFIGURE_ICON="css=div.ImgConfigure";
 	}
 
 	public PageSearchResults(AbsApplication application) {
@@ -176,8 +177,72 @@ public class PageSearchResults extends AbsTab {
 	@Override
 	public AbsPage zToolbarPressPulldown(Button pulldown, Button option)
 	throws HarnessException {
-		// TODO Auto-generated method stub
-		return null;
+		logger.info(myPageName() + " zToolbarPressButtonWithPulldown("+ pulldown +", "+ option +")");
+
+		tracer.trace("Click pulldown "+ pulldown +" then "+ option);
+
+		if (pulldown == null)
+			throw new HarnessException("Pulldown cannot be null!");
+
+		if (option == null)
+			throw new HarnessException("Option cannot be null!");
+
+
+		// Default behavior variables
+		String pulldownLocator = null; // If set, this will be expanded
+		String optionLocator = null; // If set, this will be clicked
+		AbsPage page = null; // If set, this page will be returned
+
+		if (pulldown == Button.B_GEAR_BOX) {
+
+			if (option == Button.O_DELETE) {
+
+				pulldownLocator = Locators.CONFIGURE_ICON;
+				optionLocator = Locators.DELETE_BUTTON;
+
+				page = new WizardCreateAccount(this);
+
+				// FALL THROUGH
+
+			} else {
+				throw new HarnessException("no logic defined for pulldown/option " + pulldown + "/" + option);
+			}
+
+		} else {
+			throw new HarnessException("no logic defined for pulldown/option "
+					+ pulldown + "/" + option);
+		}
+
+		// Default behavior
+		if (pulldownLocator != null) {
+
+			// Make sure the locator exists
+			if (!this.sIsElementPresent(pulldownLocator)) {
+				throw new HarnessException("Button " + pulldown + " option " + option + " pulldownLocator " + pulldownLocator + " not present!");
+			}
+
+			this.zClickAt(pulldownLocator,"");
+
+			// If the app is busy, wait for it to become active
+			//zWaitForBusyOverlay();
+
+			if (optionLocator != null) {
+
+				// Make sure the locator exists
+				if (!this.sIsElementPresent(optionLocator)) {
+					throw new HarnessException("Button " + pulldown + " option " + option + " optionLocator " + optionLocator + " not present!");
+				}
+
+				this.zClickAt(optionLocator,"");
+
+				// If the app is busy, wait for it to become active
+				//zWaitForBusyOverlay();
+			}
+
+		}
+
+		// Return the specified page, or null if not set
+		return (page);
 	}
 
 	/**

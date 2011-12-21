@@ -31,6 +31,7 @@ public class Button {
 
 	// General buttons and pulldown options
 	public static final Button B_NEW = new Button("B_NEW");
+	public static final Button B_GEAR_BOX=new Button("B_GEAR_BOX");
 	public static final Button B_NEW_IN_NEW_WINDOW = new Button("B_NEW_IN_NEW_WINDOW");
 	public static final Button B_DELETE = new Button("B_DELETE");
 	public static final Button B_MOVE = new Button("B_MOVE");
@@ -46,6 +47,7 @@ public class Button {
 	public static final Button B_HELP = new Button("B_HELP");
 
 
+	public static final Button O_NEW = new Button("O_NEW");
 	public static final Button O_NEW_MESSAGE = new Button("O_NEW_MESSAGE");
 	public static final Button O_NEW_CONTACT = new Button("O_NEW_CONTACT");
 	public static final Button O_NEW_CONTACTGROUP = new Button("O_NEW_CONTACTGROUP");

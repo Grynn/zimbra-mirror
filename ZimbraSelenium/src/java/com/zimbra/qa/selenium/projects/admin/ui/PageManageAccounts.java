@@ -32,8 +32,8 @@ public class PageManageAccounts extends AbsTab {
 		public static final String NEW_ACCOUNT="zmi__zb_currentApp__NEW_MENU";
 	}
 
-
-
+	
+	 	
 
 
 	public PageManageAccounts(AbsApplication application) {
@@ -190,9 +190,9 @@ public class PageManageAccounts extends AbsTab {
 		String optionLocator = null; // If set, this will be clicked
 		AbsPage page = null; // If set, this page will be returned
 
-		if (pulldown == Button.B_NEW) {
+		if (pulldown == Button.B_GEAR_BOX) {
 
-			if (option == Button.O_ACCOUNTS_ACCOUNT) {
+			if (option == Button.O_NEW) {
 
 				pulldownLocator = Locators.CONFIGURE_ICON;
 				optionLocator = Locators.NEW_ACCOUNT;

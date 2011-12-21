@@ -63,7 +63,7 @@ public class CreateAccount extends AdminCommonTest {
 	/**
 	 * Testcase : Create a basic account
 	 * Steps :
-	 * 1. Create an account from GUI i.e. New -> Account.
+	 * 1. Create an account from GUI i.e. Gear Box -> New.
 	 * 2. Verify account is created using SOAP.
 	 * @throws HarnessException
 	 */
@@ -78,7 +78,7 @@ public class CreateAccount extends AdminCommonTest {
 
 		// Click "New" -> "Account"
 		WizardCreateAccount wizard = 
-			(WizardCreateAccount)app.zPageManageAccounts.zToolbarPressPulldown(Button.B_NEW, Button.O_ACCOUNTS_ACCOUNT);
+			(WizardCreateAccount)app.zPageManageAccounts.zToolbarPressPulldown(Button.B_GEAR_BOX, Button.O_NEW);
 
 		// Fill out the wizard and click Finish
 		wizard.zCompleteWizard(account);
