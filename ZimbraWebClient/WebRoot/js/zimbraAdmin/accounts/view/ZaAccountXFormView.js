@@ -41,6 +41,7 @@ ZaAccountXFormView = function(parent, entry) {
 	//console.time("ZaAccountXFormView.initForm");
 	//DBG.timePt(AjxDebug.PERF, "started initForm");
 	this.initForm(ZaAccount.myXModel,this.getMyXForm(entry), null);
+    this._localXForm._setAllowSelection();//bug13705,allow account copyable
 	//console.timeEnd("ZaAccountXFormView.initForm");
 	//DBG.timePt(AjxDebug.PERF, "finished initForm");
 }
