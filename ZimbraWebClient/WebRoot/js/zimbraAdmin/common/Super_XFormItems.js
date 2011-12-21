@@ -1689,7 +1689,7 @@ ZAPlainGrouper_XFormItem.prototype.colSizes = ["275px","auto"];
 ZAPlainGrouper_XFormItem.prototype.cssClass = "PlainGrouperBorder";
 ZAPlainGrouper_XFormItem.isGroupVisible = ZATopGrouper_XFormItem.isGroupVisible;
 } else {
-ZAPlainGrouper_XFormItem.prototype.colSizes = "100%";
+ZAPlainGrouper_XFormItem.prototype.colSizes = ["100%"];
 ZAPlainGrouper_XFormItem.prototype.numCols = 1;
 ZAPlainGrouper_XFormItem.prototype.width = "100%";
 ZAPlainGrouper_XFormItem.prototype.gridLabelCss = "gridGroupBodyLabel";
