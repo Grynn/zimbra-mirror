@@ -25,7 +25,6 @@ import generated.zcsclient.admin.testDomainAdminRight.Rights;
 import generated.zcsclient.admin.testEffectiveAttrInfo.Default;
 import generated.zcsclient.admin.testGetRightsDocResponse.DomainAdminCopypasteToZimbraRightsDomainadminXmlTemplate;
 import generated.zcsclient.ws.service.ZcsAdminPortType;
-import generated.zcsclient.zm.testGranteeType;
 import generated.zcsclient.zm.testNamedElement;
 import generated.zcsclient.zm.testTargetBy;
 import generated.zcsclient.zm.testTargetType;
