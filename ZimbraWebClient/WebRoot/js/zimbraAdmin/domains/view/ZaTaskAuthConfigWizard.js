@@ -259,22 +259,15 @@ ZaTaskAuthConfigWizard.prototype.goPrev =
 function () {
 	if(this._containedObject[ZaModel.currentStep] == ZaTaskAuthConfigWizard.AUTH_TEST_RESULT_STEP) {
 		//skip ZaTaskAuthConfigWizard.AUTH_TEST_STEP step
-        if (this._containedObject.attrs[ZaDomain.A2_zimbraExternalGroupLdapEnabled]=="TRUE"
-            && this._containedObject.attrs[ZaDomain.A_AuthMech]!=ZaDomain.AuthMech_zimbra)
+        if (this._containedObject.attrs[ZaDomain.A_AuthMech] == ZaDomain.AuthMech_ad)
             this.goPage(ZaTaskAuthConfigWizard.EXTERNAL_LDAP_GROUP_STEP);
         else
 		    this.goPage(ZaTaskAuthConfigWizard.AUTH_CONFIG_SUMMARY_STEP);
-	} else if (this._containedObject[ZaModel.currentStep] == ZaTaskAuthConfigWizard.AUTH_CONFIG_SUMMARY_STEP && this._containedObject.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_ad) {
-		this.goPage(ZaTaskAuthConfigWizard.AUTH_CONFIG_STEP_1);//skip ZaTaskAuthConfigWizard.AUTH_CONFIG_BIND_PWD_STEP step for Active Directory
     } else if (this._containedObject[ZaModel.currentStep] == ZaTaskAuthConfigWizard.CONFIG_COMPLETE_STEP) {
         if (this._containedObject.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_zimbra) {
             this.goPage(ZaTaskAuthConfigWizard.AUTH_CONFIG_STEP_0);
         } else if (this._containedObject.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_ldap) {
-            if (this._containedObject[ZaDomain.A2_zimbraExternalGroupLdapEnabled]=="TRUE") {
-                this.goPage(ZaTaskAuthConfigWizard.EXTERNAL_LDAP_GROUP_STEP);
-            } else {
-                this.goPage(ZaTaskAuthConfigWizard.AUTH_CONFIG_SUMMARY_STEP);
-            }
+            this.goPage(ZaTaskAuthConfigWizard.AUTH_CONFIG_SUMMARY_STEP);
         } else if (this._containedObject.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_ad) {
             if (this._containedObject[ZaDomain.A2_zimbraSpnegoAuthEnabled]!="TRUE") {
                 if (this._containedObject[ZaDomain.A2_zimbraExternalGroupLdapEnabled]=="TRUE") {
@@ -312,8 +305,7 @@ function() {
         if(this._containedObject[ZaDomain.A2_zimbraSpnegoAuthEnabled]=="TRUE"
             && this._containedObject.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_ad)
             this.goPage(ZaTaskAuthConfigWizard.SPNEGO_CONFIG_STEP);
-        else if(this._containedObject[ZaDomain.A2_zimbraExternalGroupLdapEnabled]=="TRUE"
-            && this._containedObject.attrs[ZaDomain.A_AuthMech]!=ZaDomain.AuthMech_zimbra)
+        else if(this._containedObject.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_ad)
             this.goPage(ZaTaskAuthConfigWizard.EXTERNAL_LDAP_GROUP_STEP);
         else
             this.goPage(ZaTaskAuthConfigWizard.CONFIG_COMPLETE_STEP);
@@ -322,7 +314,7 @@ function() {
 			ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_LDAP_URL_REQUIRED);
 			return false;
 		}
-		this.goPage(ZaTaskAuthConfigWizard.AUTH_CONFIG_SUMMARY_STEP);//skip ZaTaskAuthConfigWizard.AUTH_CONFIG_BIND_PWD_STEP step for Active Directory
+		this.goPage(ZaTaskAuthConfigWizard.AUTH_CONFIG_BIND_PWD_STEP);
 	} else if(this._containedObject[ZaModel.currentStep]==ZaTaskAuthConfigWizard.AUTH_CONFIG_STEP_1 && this._containedObject.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_ldap) {
 		var temp = this._containedObject.attrs[ZaDomain.A_AuthLdapURL].join(" ");
 		if(this._containedObject.attrs[ZaDomain.A_zimbraAuthLdapStartTlsEnabled] == "TRUE") {
@@ -351,7 +343,10 @@ function() {
 	} else if(this._containedObject[ZaModel.currentStep]==ZaTaskAuthConfigWizard.AUTH_TEST_RESULT_STEP
             && (this._containedObject[ZaDomain.A2_zimbraSpnegoAuthEnabled]!="TRUE"
             || this._containedObject.attrs[ZaDomain.A_AuthMech]!=ZaDomain.AuthMech_ad)) {
-		this.goPage(ZaTaskAuthConfigWizard.CONFIG_COMPLETE_STEP);
+        if (this._containedObject.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_ad)
+		    this.goPage(ZaTaskAuthConfigWizard.EXTERNAL_LDAP_GROUP_STEP);
+        else
+		    this.goPage(ZaTaskAuthConfigWizard.CONFIG_COMPLETE_STEP);
 	} else {
 		this.goPage(this._containedObject[ZaModel.currentStep]+1);
 	}
@@ -615,7 +610,7 @@ ZaTaskAuthConfigWizard.myXFormModifier = function(xFormObject) {
 						]
 					},
 					{type:_CASE_, numCols:2, colSizes:["150px","430px"], caseKey:ZaTaskAuthConfigWizard.AUTH_CONFIG_BIND_PWD_STEP,
-						visibilityChecks:[Case_XFormItem.prototype.isCurrentTab,[XForm.checkInstanceValue,ZaDomain.A_AuthMech,ZaDomain.AuthMech_ldap]],
+						visibilityChecks:[[Case_XFormItem.prototype.isCurrentTab]],
 						items: [
 							{ref:ZaDomain.A_AuthUseBindPassword, type:_CHECKBOX_, label:ZaMsg.Domain_AuthUseBindPassword, labelLocation:_LEFT_,trueValue:"TRUE", falseValue:"FALSE",labelCssClass:"xform_label", align:_LEFT_,
 							visibilityChecks:[],enableDisableChecks:[]},

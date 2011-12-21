@@ -1356,6 +1356,13 @@ function(tmpObj) {
 		attr = soapDoc.set("a", "%u@"+tmpObj.attrs[ZaDomain.A_AuthADDomainName]);
 		attr.setAttribute("n", ZaDomain.A_AuthLdapUserDn);
 
+		if(tmpObj[ZaDomain.A_AuthUseBindPassword] && tmpObj[ZaDomain.A_AuthUseBindPassword] == "TRUE") {
+			attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_AuthLdapSearchBindDn]);
+			attr.setAttribute("n", ZaDomain.A_AuthLdapSearchBindDn);
+
+			attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_AuthLdapSearchBindPassword]);
+			attr.setAttribute("n", ZaDomain.A_AuthLdapSearchBindPassword);
+		}
         // SPNEGO configuration
 	    if(tmpObj[ZaDomain.A2_zimbraSpnegoAuthEnabled] == "TRUE") {
             // virtual hosts
