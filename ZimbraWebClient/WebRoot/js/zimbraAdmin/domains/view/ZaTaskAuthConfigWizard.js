@@ -45,7 +45,7 @@ ZaTaskAuthConfigWizard = function(parent) {
 	this.stepChoices = [
         {label:ZaMsg.stepAuthModeForDomain, value:ZaTaskAuthConfigWizard.AUTH_CONFIG_STEP_0},
 		{label:ZaMsg.stepAuthSetting, value:ZaTaskAuthConfigWizard.AUTH_CONFIG_STEP_1},
-		{label:ZaMsg.stepAuthBindPasswoard, value:ZaTaskAuthConfigWizard.AUTH_CONFIG_BIND_PWD_STEP},
+		{label:ZaMsg.stepAuthBindLDAP, value:ZaTaskAuthConfigWizard.AUTH_CONFIG_BIND_PWD_STEP},
 		{label:ZaMsg.stepAuthSummary, value:ZaTaskAuthConfigWizard.AUTH_CONFIG_SUMMARY_STEP},
 		{label:ZaMsg.TestAuthSettings, value:ZaTaskAuthConfigWizard.AUTH_TEST_STEP},
 		{label:ZaMsg.AuthTestResult, value:ZaTaskAuthConfigWizard.AUTH_TEST_RESULT_STEP},
