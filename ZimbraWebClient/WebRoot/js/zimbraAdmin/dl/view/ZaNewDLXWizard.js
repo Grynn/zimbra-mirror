@@ -1474,7 +1474,7 @@ ZaNewDLXWizard.myXFormModifier = function(xFormObject, entry) {
                             label:ZaMsg.DLXV_ReplayToEnabled, trueValue:"TRUE", falseValue:"FALSE"
                         },
                         {ref:ZaDistributionList.A_zimbraPrefReplyToDisplay, type:_TEXTFIELD_,
-                            label:ZaMsg.DLXV_ReplayToAddrDisplay, labelLocation:_LEFT_, containerCssStyle:"padding-left:3px;",
+                            label:ZaMsg.DLXV_ReplayToAddrDisplay, labelLocation:_LEFT_, containerCssStyle:"padding-left:1px;",
                             emptyText: ZaMsg.DLXV_ReplayToAddrEmptyText,
                             visibilityChecks:[[ZaItem.hasReadPermission, ZaDistributionList.A_zimbraPrefReplyToDisplay]],
                             enableDisableChecks:[[XForm.checkInstanceValue,ZaDistributionList.A_zimbraPrefReplyToEnabled,"TRUE"],
