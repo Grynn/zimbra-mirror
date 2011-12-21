@@ -547,12 +547,22 @@ public class CSMigrationwrapper
 
             string value = "";
             string acctname = "";
+            int idx = Acct.Accountname.IndexOf("@");
+            if (idx != -1)
+            {
+                acctname = Acct.Accountname.Substring(0, idx);
+            }
+            else
+            {
+                Log.err("Illegal account name");
+                Acct.LastProblemInfo = new ProblemInfo("Illegal account name", "Error", ProblemInfo.TYPE_ERR);
+                Acct.TotalNoErrors++;
+                return;
+            }
 
+            Log.open(Path.GetTempPath() + acctname + ".log");
             if (isServer)
             {
-                acctname = Acct.AccountID;
-                Log.open(Path.GetTempPath() + acctname + ".log");
-
                 object[] MyArgs = new object[4];
                 MyArgs[0] = "";
                 MyArgs[1] = "";
@@ -564,21 +574,7 @@ public class CSMigrationwrapper
                     null, userinstance, MyArgs, mods, null, null);
             }
             else
-            {
-                int idx = Acct.Accountname.IndexOf("@");
-                if (idx != -1)
-                {
-                    acctname = Acct.Accountname.Substring(0, idx);
-                    Log.open(Path.GetTempPath() + acctname + ".log");
-                }
-                else
-                {
-                    Log.err("Illegal account name");
-                    Acct.LastProblemInfo = new ProblemInfo("Illegal account name", "Error", ProblemInfo.TYPE_ERR);
-                    Acct.TotalNoErrors++;
-                    return;
-                }
-                 
+            {               
                 object[] MyArgs = new object[2];
                 MyArgs[0] = Acct.AccountID;
                 MyArgs[1] = "MAPI";
