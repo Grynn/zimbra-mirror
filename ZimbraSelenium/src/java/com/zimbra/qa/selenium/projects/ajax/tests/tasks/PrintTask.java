@@ -2,21 +2,16 @@ package com.zimbra.qa.selenium.projects.ajax.tests.tasks;
 
 
 
-import java.util.HashMap;
-import org.testng.annotations.Test;
-import com.zimbra.qa.selenium.framework.items.FolderItem;
-import com.zimbra.qa.selenium.framework.items.TaskItem;
-import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
-import com.zimbra.qa.selenium.framework.ui.Action;
-import com.zimbra.qa.selenium.framework.ui.Button;
-import com.zimbra.qa.selenium.framework.ui.Shortcut;
+import java.util.*;
 
-import com.zimbra.qa.selenium.framework.util.GeneralUtility;
-import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.SleepUtil;
-import com.zimbra.qa.selenium.framework.util.ZAssert;
-import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import org.testng.annotations.*;
+
+import com.zimbra.qa.selenium.framework.items.*;
+import com.zimbra.qa.selenium.framework.items.FolderItem.*;
+import com.zimbra.qa.selenium.framework.ui.*;
+import com.zimbra.qa.selenium.framework.util.*;
+import com.zimbra.qa.selenium.projects.ajax.core.*;
+import com.zimbra.qa.selenium.projects.ajax.ui.*;
 
 
 public class PrintTask extends AjaxCommonTest {
@@ -38,7 +33,7 @@ public class PrintTask extends AjaxCommonTest {
 
 	@Test(	
 			description = "Print Task using RightClick -> Print and Verify Contents in Print view",
-			groups = { "inprogress" }
+			groups = { "functional" }
 			)
 	public void PrintTask_01() throws HarnessException {
 
@@ -49,24 +44,21 @@ public class PrintTask extends AjaxCommonTest {
 		String bodyText = "text" + ZimbraSeleniumProperties.getUniqueString();
 
 		app.zGetActiveAccount().soapSend(
-				"<CreateTaskRequest xmlns='urn:zimbraMail'>" +
-				"<m >" +
-				"<inv>" +
-				"<comp name='"+ subject +"'>" +
-				"<or a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
-				"</comp>" +
-				"</inv>" +
-				"<su>"+ subject +"</su>" +
-				"<mp ct='text/plain'>" +
-				"<content>"+ bodyText +"</content>" +
-				"</mp>" +
-				"</m>" +
-		"</CreateTaskRequest>");
+				"<CreateTaskRequest xmlns='urn:zimbraMail'>"
+			+		"<m >"
+			+			"<inv>"
+			+				"<comp name='"+ subject +"'>" 
+			+					"<or a='"+ app.zGetActiveAccount().EmailAddress +"'/>" 
+			+				"</comp>" 
+			+			"</inv>" 
+			+			"<su>"+ subject +"</su>" 
+			+			"<mp ct='text/plain'>" 
+			+				"<content>"+ bodyText +"</content>" 
+			+			"</mp>"
+			+		"</m>" 
+			+	"</CreateTaskRequest>");
 
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 
-		TaskItem task = TaskItem.importFromSOAP(app.zGetActiveAccount(), subject);
-		ZAssert.assertNotNull(task, "Verify the task is created");
 
 		// Refresh the tasks view
 		app.zPageTasks.zToolbarPressButton(Button.B_REFRESH);
@@ -76,20 +68,31 @@ public class PrintTask extends AjaxCommonTest {
 		app.zPageTasks.zListItem(Action.A_MAIL_CHECKBOX, subject);
 
 
-		// Right click the item, select Show Original
-		app.zPageTasks.zListItem(Action.A_RIGHTCLICK, Button.O_PRINT_MENU, subject);
-		SleepUtil.sleepMedium();
+		SeparateWindowPrintPreview window = null;
+		
+		try {
+				
+			// Right click the item, select Show Original
+			window = (SeparateWindowPrintPreview)app.zPageTasks.zListItem(Action.A_RIGHTCLICK, Button.O_PRINT_MENU, subject);
+			window.zWaitForActive();		// Make sure the window is there			
+			ZAssert.assertTrue(window.zIsActive(), "Verify the window is active");
 
-		//Verify content in Print view.
-		String Printcontent=app.zPageTasks.zGetPrintWindowContent();
-		ZAssert.assertStringContains(Printcontent, subject, "Verify subject in Print view");
-		ZAssert.assertStringContains(Printcontent, bodyText, "Verify content in Print view");
-
+			//Verify content in Print view.
+			String Printcontent = window.sGetBodyText();
+			ZAssert.assertStringContains(Printcontent, subject, "Verify subject in Print view");
+			ZAssert.assertStringContains(Printcontent, bodyText, "Verify content in Print view");
+		
+		} finally {
+			if ( window != null ) {
+				window.zCloseWindow();
+				window = null;
+			}
+		}
 	}
 
 	@Test(	
 			description = "Print Task using shortcut 'p' and verify its content from GUI",
-			groups = { "inprogress" }
+			groups = { "functional" }
 			)
 	public void PrintTask_02() throws HarnessException {
 
@@ -126,20 +129,34 @@ public class PrintTask extends AjaxCommonTest {
 		// Select the item
 		app.zPageTasks.zListItem(Action.A_MAIL_CHECKBOX, subject);
 
-		//Press keyboard shortcut p
-		app.zPageTasks.zKeyboardShortcut(Shortcut.S_PRINTTASK);
+		
+		SeparateWindowPrintPreview window = null;
+		
+		try {
+			
+			//Press keyboard shortcut p
+			window = (SeparateWindowPrintPreview)app.zPageTasks.zKeyboardShortcut(Shortcut.S_PRINTTASK);
+			window.zWaitForActive();		// Make sure the window is there			
+			ZAssert.assertTrue(window.zIsActive(), "Verify the window is active");
 
-		SleepUtil.sleepMedium();
+	
+			//Verify content in Print view.
+			String Printcontent = window.sGetBodyText();
+			ZAssert.assertStringContains(Printcontent, subject, "Verify subject in Print view");
+			ZAssert.assertStringContains(Printcontent, bodyText, "Verify content in Print view");
 
-		//Verify content in Print view.
-		String Printcontent=app.zPageTasks.zGetPrintWindowContent();
-		ZAssert.assertStringContains(Printcontent, subject, "Verify subject in Print view");
-		ZAssert.assertStringContains(Printcontent, bodyText, "Verify content in Print view");
-
+		} finally {
+			if ( window != null ) {
+				window.zCloseWindow();
+				window = null;
+			}
+		}
 	}
+	
+	
 	@Test(	
 			description = "Print multiple tasks using Print-> Print TaskFolder and  and verify its content from GUI",
-			groups = { "inprogress" }
+			groups = { "functional" }
 			)
 	public void PrintTask_03() throws HarnessException {
 
@@ -208,17 +225,28 @@ public class PrintTask extends AjaxCommonTest {
 		app.zPageTasks.zToolbarPressButton(Button.B_REFRESH);
 		app.zTreeTasks.zTreeItem(Action.A_LEFTCLICK, taskFolder);
 		
-		//Pull down Print button and select Print Task folder.
-		app.zPageTasks.zToolbarPressPulldown(Button.B_PRINT, Button.O_PRINT_TASKFOLDER);
 		
-		SleepUtil.sleepMedium();
+		SeparateWindowPrintPreview window = null;
 
-		//Verify subjects in Print view.
-		String Printcontent=app.zPageTasks.zGetPrintWindowContent();
-		ZAssert.assertStringContains(Printcontent, subject1, "Verify subject in Print view");
-		ZAssert.assertStringContains(Printcontent, subject2, "Verify subject2 in Print view");
-		ZAssert.assertStringContains(Printcontent, subject3, "Verify subject2 in Print view");
+		try {
+			
+			//Pull down Print button and select Print Task folder.
+			window = (SeparateWindowPrintPreview)app.zPageTasks.zToolbarPressPulldown(Button.B_PRINT, Button.O_PRINT_TASKFOLDER);
+			window.zWaitForActive();		// Make sure the window is there			
+			ZAssert.assertTrue(window.zIsActive(), "Verify the window is active");
+
+			//Verify subjects in Print view.
+			String Printcontent = window.sGetBodyText();
+			ZAssert.assertStringContains(Printcontent, subject1, "Verify subject in Print view");
+			ZAssert.assertStringContains(Printcontent, subject2, "Verify subject2 in Print view");
+			ZAssert.assertStringContains(Printcontent, subject3, "Verify subject2 in Print view");
 		
+		} finally {
+			if ( window != null ) {
+				window.zCloseWindow();
+				window = null;
+			}
+		}
 
 	}
 }

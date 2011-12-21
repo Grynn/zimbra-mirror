@@ -3,7 +3,6 @@
  */
 package com.zimbra.qa.selenium.projects.ajax.ui.tasks;
 
-import java.awt.event.*;
 import java.util.*;
 
 import com.thoughtworks.selenium.*;
@@ -400,7 +399,13 @@ public class PageTasks extends AbsTab {
 
 			}else if(option == Button.O_PRINT_MENU){
 				optionLocator= Locators.zPrintTaskMenuItem;
-				page =null;
+				
+				page = new SeparateWindowPrintPreview(this.MyApplication);
+				((SeparateWindowPrintPreview)page).zInitializeWindowNames();
+				this.zClickAt(optionLocator,"");
+				this.zWaitForBusyOverlay();
+				
+				return (page);
 			
 			}else {
 				throw new HarnessException("implement action:" + action
@@ -630,12 +635,22 @@ public class PageTasks extends AbsTab {
 
 		}else if (pulldown == Button.B_PRINT) {
 		
+			page = new SeparateWindowPrintPreview(this.MyApplication);
+			((SeparateWindowPrintPreview)page).zInitializeWindowNames();
+
+			// Click the pulldown
 			pulldownLocator = Locators.zPrintTaskDropDown;
+			this.zClickAt(pulldownLocator,"");
+			zWaitForBusyOverlay();
+
 			if(option== Button.O_PRINT_TASKFOLDER){
-			optionLocator = Locators.zPrintTaskFolder;
-			
+				// Click the pulldown option, if specified
+				optionLocator = Locators.zPrintTaskFolder;
+				this.zClickAt(optionLocator,"");
+				zWaitForBusyOverlay();
 			}
-			page = null;
+			
+			return (page);
 
 		}else if (pulldown == Button.B_TASK_FILTERBY) {
 			
@@ -959,9 +974,15 @@ public class PageTasks extends AbsTab {
 			return page;
 		}else if (shortcut== Shortcut.S_PRINTTASK){
 			
+			page = new SeparateWindowPrintPreview(this.MyApplication);
+			((SeparateWindowPrintPreview)page).zInitializeWindowNames();
+
 			keyCode= "80";
-			page= null;
-			
+			zKeyDown(keyCode);
+			this.zWaitForBusyOverlay();
+
+			return (page);
+
 		}
 		
 		else{
@@ -1044,22 +1065,5 @@ public class PageTasks extends AbsTab {
 
 	}
 
-	public String zGetPrintWindowContent() throws HarnessException {
-		try{
-			//wait for Print Dialog displayed
-			SleepUtil.sleepMedium();			
-			// close Print dialog 
-			zKeyboard.zTypeKeyEvent(KeyEvent.VK_ESCAPE);		
-			sSelectWindow("_blank");
-			String Printcontent=sGetBodyText();
-			return Printcontent;
-		}finally{
-			sSelectWindow(null);
-		}
-
-
-		// TODO Auto-generated method stub
-
-	}
 
 }
