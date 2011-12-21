@@ -737,7 +737,7 @@ public class PageTasks extends AbsTab {
 
 			FolderItem folder = (FolderItem) dynamic;
 			pulldownLocator = Locators.zMoveTaskDropDown;
-			optionLocator = "css=td#zti__DwtFolderChooser_TasksTKL__"+ folder.getId() + "_textCell";
+			optionLocator = "css=td#zti__ZmFolderChooser_TasksTKL-main__"+ folder.getId() + "_textCell";
 
 			page = null;
 
