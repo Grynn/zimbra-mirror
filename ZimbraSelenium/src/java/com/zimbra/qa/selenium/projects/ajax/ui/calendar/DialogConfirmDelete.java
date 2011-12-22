@@ -16,8 +16,8 @@ import com.zimbra.qa.selenium.projects.ajax.ui.DialogConfirm;
 public class DialogConfirmDelete extends DialogConfirm {
 
 	public static class Locators {
-		public static final String DialogDivID = "252";
-		public static final String DialogDivCss = "css=div[id='252']";
+		public static final String DialogDivID = "CNF_DEL_YESNO";
+		public static final String DialogDivCss = "css=div[id='CNF_DEL_YESNO']";
 	}
 
 	public DialogConfirmDelete(AbsApplication application, AbsTab page) {

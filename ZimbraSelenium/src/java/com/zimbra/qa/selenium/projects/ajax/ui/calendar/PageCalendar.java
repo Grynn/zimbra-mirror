@@ -330,7 +330,14 @@ public class PageCalendar extends AbsTab {
 		String locator = null;
 		AbsPage page = null;
 
-		locator = "css=td.appt_name:contains('" + subject + "')";
+		// TODO: need some way to get a locator to all-day and non-all-day appts
+		// For now, give pref to non-all-day.  If not present, try all-day
+		
+		locator = "css=td.appt_name:contains('" + subject + "')"; // non-all-day
+		if ( !this.sIsElementPresent(locator) ) {
+			locator = "css=td.appt_allday_name:contains('" + subject + "')"; // all-day
+
+		}
 
 		if ( action == Action.A_LEFTCLICK ) {
 			
