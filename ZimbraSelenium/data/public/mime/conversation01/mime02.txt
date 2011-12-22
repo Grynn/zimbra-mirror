@@ -1,0 +1,59 @@
+Return-Path: bar@example.com
+Date: Thu, 22 Dec 2011 11:38:24 -0800 (PST)
+From: Bar User <bar@example.com>
+To: foo@example.com
+Subject: Re: Conversation13155016716713
+Content-Type: multipart/alternative;
+ boundary="=_bda03244-e099-431b-be06-87b9c31b0414"
+MIME-Version: 1.0
+X-Mailer: Zimbra 8.0.0_BETA3_4528 (ZimbraWebClient - FF8 (Win)/8.0.0_BETA3_4528)
+
+--=_bda03244-e099-431b-be06-87b9c31b0414
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+
+
+more 
+bold 
+more 
+123 
+
+
+
+From: "Matthew Rhoades " <matt@ zimbra .com> 
+To: matt@ zimbra .com 
+Sent: Thursday, 22 December, 2011 11:38:03 AM 
+Subject: conversation01 
+
+
+
+foo 
+bold 
+foo 
+123 
+
+
+
+
+
+
+--=_bda03244-e099-431b-be06-87b9c31b0414
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<html><head><style type=3D'text/css'>p { margin: 0; }</style></head><body><=
+div style=3D'font-family: Verdana; font-size: 10pt; color: #000099' ><div>m=
+ore</div><div><strong>bold</strong></div><div>more</div><div>123</div><div>=
+<br></div><hr id=3D"zwchr"><div style=3D"color:#000;font-weight:normal;font=
+-style:normal;text-decoration:none;font-family:Helvetica,Arial,sans-serif;f=
+ont-size:12pt;"><b>From: </b>"Matthew <span word=3D"Rhoades" id=3D"DWT5782"=
+ class=3D"ZM-SPELLCHECK-MISSPELLED">Rhoades</span>" &lt;matt@<span word=3D"=
+zimbra" id=3D"DWT5783" class=3D"ZM-SPELLCHECK-MISSPELLED">zimbra</span>.com=
+&gt;<br><b>To: </b>matt@<span word=3D"zimbra" id=3D"DWT5784" class=3D"ZM-SP=
+ELLCHECK-MISSPELLED">zimbra</span>.com<br><b>Sent: </b>Thursday, 22 Decembe=
+r, 2011 11:38:03 AM<br><b>Subject: </b>conversation01<br><br><style>p { mar=
+gin: 0; }</style><div style=3D"font-family: Verdana; font-size: 10pt; color=
+: #000099"><div>foo</div><div><strong>bold</strong></div><div>foo</div><div=
+>123</div><div><br></div><div><br></div></div></div><div><br></div></div></=
+body></html>
+--=_bda03244-e099-431b-be06-87b9c31b0414--

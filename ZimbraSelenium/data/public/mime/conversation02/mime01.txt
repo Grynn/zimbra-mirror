@@ -1,0 +1,29 @@
+Return-Path: foo@example.com
+Date: Thu, 22 Dec 2011 11:38:03 -0800 (PST)
+From: Foo User <foo@example.com>
+To: bar@example.com
+Subject: Conversation13155016716714
+Content-Type: multipart/alternative;
+ boundary="=_8b4ca532-ca02-4f09-9eaf-a977ac68af6c"
+MIME-Version: 1.0
+X-Mailer: Zimbra 8.0.0_BETA3_4528 (ZimbraWebClient - FF8 (Win)/8.0.0_BETA3_4528)
+
+--=_8b4ca532-ca02-4f09-9eaf-a977ac68af6c
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+
+
+foo 
+bold 
+foo 
+123 
+
+
+
+
+--=_8b4ca532-ca02-4f09-9eaf-a977ac68af6c
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: 7bit
+
+<html><head><style type='text/css'>p { margin: 0; }</style></head><body><div style='font-family: Verdana; font-size: 10pt; color: #000099' ><div>foo</div><div><strong>bold</strong></div><div>foo</div><div>123</div><div><br></div><div><br></div></div></body></html>
+--=_8b4ca532-ca02-4f09-9eaf-a977ac68af6c--
