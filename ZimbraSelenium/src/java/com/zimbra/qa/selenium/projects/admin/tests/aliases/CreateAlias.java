@@ -27,7 +27,7 @@ public class CreateAlias extends AdminCommonTest {
 	 * @throws HarnessException
 	 */
 	@Test(	description = "Create a basic alias",
-			groups = { "sanity" })
+			groups = { "obsolete" })
 	public void CreateAlias_01() throws HarnessException {
 
 		AccountItem target = new AccountItem();
@@ -76,7 +76,7 @@ public class CreateAlias extends AdminCommonTest {
 
 		// Click "New"
 		WizardCreateAlias wizard = 
-			(WizardCreateAlias)app.zPageManageAliases.zToolbarPressPulldown(Button.B_NEW,Button.O_ALIASES_ALIAS);
+			(WizardCreateAlias)app.zPageManageAliases.zToolbarPressPulldown(Button.B_GEAR_BOX,Button.O_NEW);
 		
 		// Fill out the wizard	
 		wizard.zCompleteWizard(alias);

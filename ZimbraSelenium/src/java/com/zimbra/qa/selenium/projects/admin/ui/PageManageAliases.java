@@ -20,19 +20,11 @@ public class PageManageAliases extends AbsTab {
 
 	public static class Locators {
 
-		// ** OverviewTreePanel -> Addresses -> Aliases
-		public static final String zti_ALIASES = "zti__AppAdmin__ADDRESS__ALIASES_textCell";
-
-		// ** "Manage Aliases" Tab Title
-		public static final String ztab__MANAGE_ALIAS_ICON = "css=tr#ztab__MAIN_TAB_row div.ImgAccountAlias";
-		public static final String zb_NEW = "xpath=//*[@id='zb__ACLV__NEW_MENU_title']";		// New Button
-		public static final String zdd_NEW_MENU="css=td#zb__ACLV__NEW_MENU_dropdown div.ImgSelectPullDownArrow";
-		
-		// NEW Menu
-		// TODO: define these locators
-		public static final String zmi_ALAIS = "zmi__ACLV__NEW_ALIAS"; // New --> Alias
-
-
+		// ** OverviewTreePanel -> Manage Accounts -> Aliases
+		public static final String MANAGE_ACCOUNTS_ICON="css=div.ImgMangeAccounts";
+		public static final String ALIASES="css=td[id^='zti__AppAdmin__Home__aliaLstHV']";
+		public static final String CONFIGURE_ICON="css=div.ImgConfigure";
+		public static final String NEW_MENU="css=td[id^='zmi__zb_currentApp__NEW_MENU__']";
 	}
 
 	public PageManageAliases(AbsApplication application) {
@@ -50,12 +42,12 @@ public class PageManageAliases extends AbsTab {
 			throw new HarnessException("Admin Console application is not active!");
 
 
-		boolean present = sIsElementPresent(Locators.ztab__MANAGE_ALIAS_ICON);
+		boolean present = sIsElementPresent(Locators.CONFIGURE_ICON);
 		if ( !present ) {
 			return (false);
 		}
 
-		boolean visible = zIsVisiblePerPosition(Locators.ztab__MANAGE_ALIAS_ICON, 0, 0);
+		boolean visible = zIsVisiblePerPosition(Locators.CONFIGURE_ICON, 0, 0);
 		if ( !visible ) {
 			logger.debug("isActive() visible = "+ visible);
 			return (false);
@@ -79,16 +71,18 @@ public class PageManageAliases extends AbsTab {
 	@Override
 	public void zNavigateTo() throws HarnessException {
 
+
 		if ( zIsActive() ) {
 			// This page is already active.
 			return;
 		}
 
-		// Click on Addresses -> Aliases
-		zClickAt(Locators.zti_ALIASES,"");
+		// Click on Addresses -> Accounts
+		zClickAt(Locators.MANAGE_ACCOUNTS_ICON,"");
+		sIsElementPresent(Locators.ALIASES);
+		zClickAt(Locators.ALIASES, "");
 
 		zWaitForActive();
-
 	}
 
 	@Override
@@ -133,7 +127,7 @@ public class PageManageAliases extends AbsTab {
 		if ( button == Button.B_NEW ) {
 
 			// New button
-			locator = Locators.zmi_ALAIS;
+			locator = Locators.ALIASES;
 
 			// Create the page
 			page = new WizardCreateAlias(this);
@@ -179,12 +173,12 @@ public class PageManageAliases extends AbsTab {
 		String optionLocator = null; // If set, this will be clicked
 		AbsPage page = null; // If set, this page will be returned
 
-		if (pulldown == Button.B_NEW) {
+		if (pulldown == Button.B_GEAR_BOX) {
 
-			if (option == Button.O_ALIASES_ALIAS) {
+			if (option == Button.O_NEW) {
 
-				pulldownLocator = Locators.zdd_NEW_MENU; 
-				optionLocator = PageManageAliases.Locators.zmi_ALAIS;
+				pulldownLocator = Locators.CONFIGURE_ICON; 
+				optionLocator = Locators.NEW_MENU;
 
 				page = new WizardCreateAlias(this);
 

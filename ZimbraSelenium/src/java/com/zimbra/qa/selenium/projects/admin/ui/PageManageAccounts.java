@@ -17,19 +17,17 @@ import com.zimbra.qa.selenium.projects.admin.items.AccountItem;
 
 
 /**
- * Admin Console -> Addresses -> Accounts
+ * Admin Console -> Manage Accounts -> Accounts
  * @author Matt Rhoades
  *
  */
 public class PageManageAccounts extends AbsTab {
 
 	public static class Locators {
-
-		// ** OverviewTreePanel -> Manage Accounts
 		public static final String MANAGE_ACCOUNTS_ICON="css=div.ImgMangeAccounts";
 		public static final String ACCOUNTS="css=td[id^='zti__AppAdmin__Home__actLstHV']";
 		public static final String CONFIGURE_ICON="css=div.ImgConfigure";
-		public static final String NEW_ACCOUNT="zmi__zb_currentApp__NEW_MENU";
+		public static final String NEW_MENU="zmi__zb_currentApp__NEW_MENU";
 	}
 
 	
@@ -88,7 +86,7 @@ public class PageManageAccounts extends AbsTab {
 			return;
 		}
 
-		// Click on Addresses -> Accounts
+		// Click on Manage Accounts -> Accounts
 		zClickAt(Locators.MANAGE_ACCOUNTS_ICON,"");
 		sIsElementPresent(Locators.ACCOUNTS);
 		zClickAt(Locators.ACCOUNTS, "");
@@ -195,7 +193,7 @@ public class PageManageAccounts extends AbsTab {
 			if (option == Button.O_NEW) {
 
 				pulldownLocator = Locators.CONFIGURE_ICON;
-				optionLocator = Locators.NEW_ACCOUNT;
+				optionLocator = Locators.NEW_MENU;
 
 				page = new WizardCreateAccount(this);
 
