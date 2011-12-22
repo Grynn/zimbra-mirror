@@ -31,7 +31,7 @@ public class OfflineAttributeInfo extends AttributeInfo {
             List<String> defaultCOSValuesUpgrade, String description, List<AttributeServerType> requiresRestart,
             Version since, Version deprecatedSince) {
         super(attrName, id, parentId, groupId, callback, type, order, value, immutable, min, max, cardinality,
-              requiredIn, optionalIn, flags, globalConfigValues, defaultCOSValues, null, globalConfigValuesUpgrade,
+              requiredIn, optionalIn, flags, globalConfigValues, defaultCOSValues, null, null, globalConfigValuesUpgrade,
               defaultCOSValuesUpgrade, description, requiresRestart, since, deprecatedSince);
     }
 
