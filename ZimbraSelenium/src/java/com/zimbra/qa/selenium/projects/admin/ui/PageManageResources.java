@@ -19,20 +19,11 @@ import com.zimbra.qa.selenium.framework.util.SleepUtil;
 public class PageManageResources extends AbsTab {
 	
 	public static class Locators {
-
-		// ** OverviewTreePanel -> Addresses -> Resources
-		public static final String zti_RESOURCES = "zti__AppAdmin__ADDRESS__RESOURCES_textCell";
-
-		// ** "Manage Resources" Tab Title
-		public static final String ztab_MANAGE_RESOURCE_ICON = "css=tr#ztab__MAIN_TAB_row div.ImgResource";
-		public static final String zb_NEW = "zb__ACLV__NEW_MENU_title";		// New Button
-		public static final String zdd_NEW_MENU="css=td.ZDropDown div.ImgSelectPullDownArrow";
-
-		// NEW Menu
-		// TODO: define these locators
-		public static final String zmi_RESOURCE = "zmi__ACLV__NEW_RESOURCE";
-
-
+		// ** OverviewTreePanel -> Manage Accounts -> Resources
+		public static final String MANAGE_ACCOUNTS_ICON="css=div.ImgMangeAccounts";
+		public static final String RESOURCES="css=td[id^='zti__AppAdmin__Home__resLstHV']";
+		public static final String CONFIGURE_ICON="css=div.ImgConfigure";
+		public static final String NEW_MENU="css=td[id^='zmi__zb_currentApp__NEW_MENU__']";
 	}
 
 
@@ -51,12 +42,12 @@ public class PageManageResources extends AbsTab {
 			throw new HarnessException("Admin Console application is not active!");
 
 
-		boolean present = sIsElementPresent(Locators.ztab_MANAGE_RESOURCE_ICON);
+		boolean present = sIsElementPresent(Locators.CONFIGURE_ICON);
 		if ( !present ) {
 			return (false);
 		}
 
-		boolean visible = zIsVisiblePerPosition(Locators.ztab_MANAGE_RESOURCE_ICON, 0, 0);
+		boolean visible = zIsVisiblePerPosition(Locators.CONFIGURE_ICON, 0, 0);
 		if ( !visible ) {
 			logger.debug("isActive() visible = "+ visible);
 			return (false);
@@ -85,8 +76,10 @@ public class PageManageResources extends AbsTab {
 			return;
 		}
 
-		// Click on Addresses -> Resources
-		zClickAt(Locators.zti_RESOURCES,"");
+		// Click on Addresses -> Accounts
+		zClickAt(Locators.MANAGE_ACCOUNTS_ICON,"");
+		sIsElementPresent(Locators.RESOURCES);
+		zClickAt(Locators.RESOURCES, "");
 
 		zWaitForActive();
 
@@ -134,7 +127,7 @@ public class PageManageResources extends AbsTab {
 		if ( button == Button.B_NEW ) {
 
 			// New button
-			locator = Locators.zb_NEW;
+			locator = Locators.RESOURCES;
 
 			 
 			// Create the page
@@ -182,12 +175,12 @@ public class PageManageResources extends AbsTab {
 		String optionLocator = null; // If set, this will be clicked
 		AbsPage page = null; // If set, this page will be returned
 
-		if (pulldown == Button.B_NEW) {
+		if (pulldown == Button.B_GEAR_BOX) {
 
-			if (option == Button.O_RESOURCES_RESOURCE) {
+			if (option == Button.O_NEW) {
 
-				pulldownLocator = Locators.zdd_NEW_MENU;
-				optionLocator = PageManageResources.Locators.zmi_RESOURCE;
+				pulldownLocator = Locators.CONFIGURE_ICON;
+				optionLocator = Locators.NEW_MENU;
 				
 
 				page = new WizardCreateResource(this);

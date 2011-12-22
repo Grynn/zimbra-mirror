@@ -30,7 +30,7 @@ public class CreateResource extends AdminCommonTest {
 	 * @throws HarnessException
 	 */
 	@Test(	description = "Create a basic resource",
-			groups = { "sanity" })
+			groups = { "obsolete" })
 			public void CreateResource_01() throws HarnessException {
 
 		// Create a new resource in the Admin Console
@@ -73,7 +73,7 @@ public class CreateResource extends AdminCommonTest {
 
 		// Click "New --> Resources"
 		WizardCreateResource wizard = 
-			(WizardCreateResource)app.zPageManageResources.zToolbarPressPulldown(Button.B_NEW, Button.O_RESOURCES_RESOURCE);
+			(WizardCreateResource)app.zPageManageResources.zToolbarPressPulldown(Button.B_GEAR_BOX, Button.O_NEW);
 
 		// Fill out the wizard and click Finish
 		wizard.zCompleteWizard(resource);
@@ -107,7 +107,7 @@ public class CreateResource extends AdminCommonTest {
 
 		// Click "New"
 		WizardCreateResource wizard = 
-			(WizardCreateResource)app.zPageManageResources.zToolbarPressButton(Button.B_NEW);
+			(WizardCreateResource)app.zPageManageResources.zToolbarPressPulldown(Button.B_GEAR_BOX, Button.O_NEW);
 
 		// Fill out the wizard and click Finish
 		wizard.setResourceType(WizardCreateResource.Locators.LOCATION);
@@ -142,7 +142,7 @@ public class CreateResource extends AdminCommonTest {
 
 		// Click "New"
 		WizardCreateResource wizard = 
-			(WizardCreateResource)app.zPageManageResources.zToolbarPressButton(Button.B_NEW);
+			(WizardCreateResource)app.zPageManageResources.zToolbarPressPulldown(Button.B_GEAR_BOX, Button.O_NEW);
 
 		// Fill out the wizard and click Finish
 		wizard.setResourceType(WizardCreateResource.Locators.EQUIPMENT);
