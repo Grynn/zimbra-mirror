@@ -26,14 +26,12 @@
  * @param {constant}      params.posStyle			the positioning style (see {@link DwtControl})
  * @param  {string}     params.content		the content (this can be HTML)
  * @param  {DwtHtmlEditor.HTML|DwtHtmlEditor.TEXT}     params.mode			the mode
- * @param  {string}     params.blankIframeSrc	the blank iframe source
- *        
+ *
  * @extends		DwtComposite
  */
 DwtHtmlEditor = function(params) {
 	if (arguments.length == 0) { return; }
 	params = Dwt.getParams(arguments, DwtHtmlEditor.PARAMS);
-	this.setBlankIframeSrc(params.blankIframeSrc);
 	params.className = params.className || "DwtHtmlEditor";
 	DwtComposite.call(this, params);
 
@@ -283,16 +281,6 @@ function(enable) {
 	if (this._iFrameId != null)
 		document.getElementById(this._iFrameId).disabled = !enable;
 }
-
-/**
- * Sets the blank iframe source.
- * 
- * @param	{string}	src		the source
- */
-DwtHtmlEditor.prototype.setBlankIframeSrc =
-function(src) {
-	this._blankIframeSrc = src;
-};
 
 DwtHtmlEditor.prototype.isHtmlEditingSupported =
 function() {
@@ -918,7 +906,7 @@ function(content) {
         var pastecont = AjxCallback.simpleClosure(this._registerPasteEvent, this);
         iFrame.onload = pastecont;
     }
-	iFrame.src = this._blankIframeSrc || "";
+    iFrame.src = 'javascript:(function(d){d.open();d.write("<html><body></body></html>");d.close();})(document)';
 	htmlEl.appendChild(iFrame);
 
 	return iFrame;
