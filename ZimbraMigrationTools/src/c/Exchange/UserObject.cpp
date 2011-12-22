@@ -210,10 +210,10 @@ STDMETHODIMP CUserObject::GetFolderObjects( /*[out, retval]*/ VARIANT *vObjects)
     return hr;
 }
 
-STDMETHODIMP CUserObject::GetItemsForFolderObjects(IfolderObject *FolderObj, FolderType type,
+STDMETHODIMP CUserObject::GetItemsForFolderObjects(IfolderObject *FolderObj,
     VARIANT creattiondate, VARIANT *vItems)
 {
-    dlogi("Begin GetItemsForFolderObjects -- FolderType: ", type);
+    dlogi("Begin GetItemsForFolderObjects");
 
     HRESULT hr = S_OK;
 
@@ -272,62 +272,57 @@ STDMETHODIMP CUserObject::GetItemsForFolderObjects(IfolderObject *FolderObj, Fol
     SafeArrayAccessData(psa, (void **)&pItems);
     for (size_t i = 0; i < size; i++, it++)
     {
-        FolderType T1 = (FolderType)(*it).lItemType;
-
-        if (type == T1)
+        CComPtr<IItemObject> pIItemObject;
+        // Isampleobj* pIStatistics;
+        hr = CoCreateInstance(CLSID_ItemObject, NULL, CLSCTX_ALL, IID_IItemObject,
+            reinterpret_cast<void **>(&pIItemObject));
+        if (SUCCEEDED(hr))
         {
-            CComPtr<IItemObject> pIItemObject;
-            // Isampleobj* pIStatistics;
-            hr = CoCreateInstance(CLSID_ItemObject, NULL, CLSCTX_ALL, IID_IItemObject,
-                reinterpret_cast<void **>(&pIItemObject));
-            if (SUCCEEDED(hr))
-            {
-                /*pIFolderObject->put_Name(L"testoing"); // so far so good
-                 * pIFolderObject->put_Id(12222);
-                 * pIFolderObject->put_ParentPath(L"\\Inbox\\personal\\mine");*/
+            /*pIFolderObject->put_Name(L"testoing"); // so far so good
+                * pIFolderObject->put_Id(12222);
+                * pIFolderObject->put_ParentPath(L"\\Inbox\\personal\\mine");*/
 
-                pIItemObject->put_Type((FolderType)((*it).lItemType));
-                // pIItemObject->put_ID((*it).sbMessageID))
-                pIItemObject->put_Parentfolder(FolderObj);
-                creattiondate.vt = VT_DATE;
-                creattiondate.date = (long)(*it).MessageDate;
+            pIItemObject->put_Type((FolderType)((*it).lItemType));
+            // pIItemObject->put_ID((*it).sbMessageID))
+            pIItemObject->put_Parentfolder(FolderObj);
+            creattiondate.vt = VT_DATE;
+            creattiondate.date = (long)(*it).MessageDate;
 
 // /////////////////////////////////////////////
 
-                VARIANT var;
-                SBinary Itemid = (*it).sbMessageID;
+            VARIANT var;
+            SBinary Itemid = (*it).sbMessageID;
 
-                VariantInit(&var);              // Initialize our variant
-                // Set the type to an array of unsigned chars (OLE SAFEARRAY)
-                var.vt = VT_ARRAY | VT_UI1;
+            VariantInit(&var);              // Initialize our variant
+            // Set the type to an array of unsigned chars (OLE SAFEARRAY)
+            var.vt = VT_ARRAY | VT_UI1;
 
-                // Set up the bounds structure
-                SAFEARRAYBOUND rgsabound[1];
+            // Set up the bounds structure
+            SAFEARRAYBOUND rgsabound[1];
 
-                rgsabound[0].cElements = Itemid.cb;
-                rgsabound[0].lLbound = 0;
-                // Create an OLE SAFEARRAY
-                var.parray = SafeArrayCreate(VT_UI1, 1, rgsabound);
-                if (var.parray != NULL)
-                {
-                    void *pArrayData = NULL;
-
-                    // Get a safe pointer to the array
-                    SafeArrayAccessData(var.parray, &pArrayData);
-                    // Copy data to it
-                    memcpy(pArrayData, Itemid.lpb, Itemid.cb);
-                    // Unlock the variant data
-                    SafeArrayUnaccessData(var.parray);
-                }
-                pIItemObject->put_ItemID(var);
-            }
-            if (FAILED(hr))
-                return S_FALSE;
-            // if
-
+            rgsabound[0].cElements = Itemid.cb;
+            rgsabound[0].lLbound = 0;
+            // Create an OLE SAFEARRAY
+            var.parray = SafeArrayCreate(VT_UI1, 1, rgsabound);
+            if (var.parray != NULL)
             {
-                pIItemObject.CopyTo(&pItems[i]);
+                void *pArrayData = NULL;
+
+                // Get a safe pointer to the array
+                SafeArrayAccessData(var.parray, &pArrayData);
+                // Copy data to it
+                memcpy(pArrayData, Itemid.lpb, Itemid.cb);
+                // Unlock the variant data
+                SafeArrayUnaccessData(var.parray);
             }
+            pIItemObject->put_ItemID(var);
+        }
+        if (FAILED(hr))
+            return S_FALSE;
+        // if
+
+        {
+            pIItemObject.CopyTo(&pItems[i]);
         }
     }
     SafeArrayUnaccessData(psa);

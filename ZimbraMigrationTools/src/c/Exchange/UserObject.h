@@ -49,8 +49,8 @@ public:
     STDMETHOD(InitializeUser) (BSTR host, BSTR admin, BSTR UserID, BSTR MailType,
         BSTR *pErrorText);
     STDMETHOD(GetFolderObjects) ( /*[out, retval]*/ VARIANT * vObjects);
-    STDMETHOD(GetItemsForFolderObjects) (IfolderObject * FolderObj, FolderType type, VARIANT
-        creattiondate, VARIANT * vItems);
+    STDMETHOD(GetItemsForFolderObjects) (IfolderObject * FolderObj, VARIANT creattiondate,
+        VARIANT * vItems);
     STDMETHOD(GetDataForItem) (VARIANT ItemId, VARIANT * pVal);
     STDMETHOD(UMInitializeUser) (BSTR ProfileName, BSTR MailType, BSTR *pErrorText);
     STDMETHOD(UMUnInitializeUser) (BSTR MailType);

@@ -99,7 +99,7 @@ interface IUserObject : IDispatch{
 	[id(2), helpstring("method to retreive folder objects")]
 	HRESULT  GetFolderObjects([out, retval] VARIANT* vObjects);
 	[id(3), helpstring("method to retreive Itsm for folder objects")]
-	HRESULT  GetItemsForFolderObjects([in] IfolderObject* FolderObj ,[in] FolderType type, [in] VARIANT creattiondate,[out, retval] VARIANT* vItems);
+	HRESULT  GetItemsForFolderObjects([in] IfolderObject* FolderObj, [in] VARIANT creattiondate, [out, retval] VARIANT* vItems);
 	[id(4)] HRESULT GetDataForItem([in] VARIANT ItemId,[out, retval] VARIANT* pVal);
 	[id(5)] HRESULT UMInitializeUser([in]BSTR ProfileName,[in] BSTR MailType, [out,retval] BSTR* pErrorText);
 	[id(6)] HRESULT UMUnInitializeUser(BSTR MailType);
