@@ -30,6 +30,7 @@ ZaDistributionList = function(id, name, memberList, description, notes) {
 	this[ZaDistributionList.A2_numMembers] = 0;
 	this[ZaDistributionList.A2_memberList] = (memberList != null) ? memberList: new Array();
 	this[ZaDistributionList.A2_memberPool] = new Array();
+    this[ZaAccount.A2_autoMailServer] = "TRUE";
     this[ZaAccount.A2_memberOf] = {directMemberList: [],indirectMemberList: [],nonMemberList: []};
     this[ZaAccount.A2_directMemberList + "_more"] = 0;
     this[ZaAccount.A2_indirectMemberList + "_more"] = 0;
@@ -926,6 +927,8 @@ ZaDistributionList.myXModel = {
 		{id:ZaItem.A_zimbraCreateTimestamp, ref:"attrs/" + ZaItem.A_zimbraCreateTimestamp},
         {id:ZaAccount.A_zimbraHideInGal, type:_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraHideInGal, choices:ZaModel.BOOLEAN_CHOICES},
 		{id:ZaAccount.A_notes, ref:"attrs/"+ZaAccount.A_notes, type:_STRING_},
+        {id:ZaAccount.A_mailHost, type:_STRING_, ref:"attrs/"+ZaAccount.A_mailHost},
+        {id:ZaAccount.A2_autoMailServer, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
 		{id:ZaAccount.A_displayname, type:_STRING_, ref:"attrs/"+ZaAccount.A_displayname},
 		{id:ZaAccount.A_zimbraMailAlias, type:_LIST_, ref:"attrs/"+ZaAccount.A_zimbraMailAlias, listItem:{type:_STRING_}},
 		{id:ZaDistributionList.A_mailStatus, ref:"attrs/"+ZaDistributionList.A_mailStatus, type:_STRING_},

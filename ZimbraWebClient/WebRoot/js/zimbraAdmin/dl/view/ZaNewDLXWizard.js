@@ -636,6 +636,7 @@ function (entry) {
         if(entry.name == ""){this._containedObject.name = ZaMsg.TBB_New;}
 	this._containedObject.type = entry.type;
 	this._containedObject.id = entry.id;
+    this._containedObject[ZaAccount.A2_autoMailServer] = entry[ZaAccount.A2_autoMailServer];
 
 
 	if(!entry.id) {
@@ -904,6 +905,21 @@ ZaNewDLXWizard.myXFormModifier = function(xFormObject, entry) {
                                                         {ref:ZaAccount.A_zimbraHideInGal, type:_WIZ_CHECKBOX_, trueValue:"TRUE", falseValue:"FALSE", align:_LEFT_,
                                                                 nowrap:false,labelWrap:true,
                                 label:ZaMsg.LBL_zimbraHideInGal, msgName:ZaMsg.LBL_zimbraHideInGal, labelLocation:_LEFT_,labelCssClass:"xform_label", cssStyle:"padding-left:0px"
+                                                        },
+                                                        {type:_GROUP_, numCols:3, nowrap:true, label:ZaMsg.NAD_MailServer, labelLocation:_LEFT_,
+                                                            visibilityChecks:[[ZaItem.hasWritePermission,ZaAccount.A_mailHost]],
+                                                            items: [
+                                                                { ref: ZaAccount.A_mailHost, type: _OSELECT1_, label: null, editable:false, choices: ZaApp.getInstance().getServerListChoices(),
+                                                                    enableDisableChecks:[ZaAccount.isAutoMailServer],
+                                                                    enableDisableChangeEventSources:[ZaAccount.A2_autoMailServer],
+                                                                    visibilityChecks:[],
+                                                                    tableCssStyle: "height: 15px"
+                                                                },
+                                                                {ref:ZaAccount.A2_autoMailServer, type:_WIZ_CHECKBOX_, msgName:ZaMsg.NAD_Auto,label:ZaMsg.NAD_Auto,labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE",
+                                                                    visibilityChecks:[], labelLocation:_RIGHT_,align:_RIGHT_, subLabel:"",
+                                                                    enableDisableChecks:[]
+                                                                }
+                                                            ]
                                                         }
                                                 ]
                                         },
