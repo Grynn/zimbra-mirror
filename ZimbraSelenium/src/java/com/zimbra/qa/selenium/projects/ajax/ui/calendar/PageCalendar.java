@@ -1138,6 +1138,40 @@ public class PageCalendar extends AbsTab {
 			locator = "css=td[id='zb__CLD__DELETE_title']";
 			page = new DialogConfirmDelete(MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
 
+		} else if (button == Button.O_LISTVIEW_DAY) {
+
+			locator = "css=div[id='ztb__CLD'] div[id='zb__CLD__DAY_VIEW'] td[id$='_title']";
+			page = null;
+
+		} else if (button == Button.O_LISTVIEW_WEEK) {
+
+			locator = "css=div[id='ztb__CLD'] div[id='zb__CLD__WEEK_VIEW'] td[id$='_title']";
+			page = null;
+
+		} else if (button == Button.O_LISTVIEW_WORKWEEK) {
+
+			locator = "css=div[id='ztb__CLD'] div[id='zb__CLD__WORK_WEEK_VIEW'] td[id$='_title']";
+			page = null;
+
+		} else if (button == Button.O_LISTVIEW_SCHEDULE) {
+
+			locator = "css=div[id='ztb__CLD'] div[id='zb__CLD__FB_VIEW'] td[id$='_title']";
+			page = null;
+
+		} else if (button == Button.O_LISTVIEW_LIST) {
+
+			locator = "css=div[id='ztb__CLD'] div[id='zb__CLD__CAL_LIST_VIEW'] td[id$='_title']";
+			page = null;
+
+		} else if (button == Button.O_LISTVIEW_MONTH) {
+
+			locator = "css=div[id='ztb__CLD'] div[id='zb__CLD__MONTH_VIEW'] td[id$='_title']";
+			page = null;
+
+		} else if (button == Button.O_LISTVIEW_FREEBUSY) {
+
+			locator = "css=div[id='ztb__CLD'] div[id='zb__CLD__FB_VIEW'] td[id$='_title']";
+			page = null;
 
 		} else {
 			throw new HarnessException("no logic defined for button " + button);
@@ -1257,45 +1291,12 @@ public class PageCalendar extends AbsTab {
 
 		} else if (pulldown == Button.B_LISTVIEW) {
 
-			pulldownLocator = "id=zb__CLD__VIEW_MENU_left_icon";
-
-			if (option == Button.O_LISTVIEW_DAY) {
-
-				optionLocator = "id=POPUP_DAY_VIEW";
-				page = new ApptDayView(this.MyApplication);
-
-			} else if (option == Button.O_LISTVIEW_WEEK) {
-
-				optionLocator = "id=POPUP_WEEK_VIEW";
-				page = new ApptWeekView(this.MyApplication);
-
-			} else if (option == Button.O_LISTVIEW_WORKWEEK) {
-
-				optionLocator = "id=POPUP_WORK_WEEK_VIEW";
-				page = new ApptWorkWeekView(this.MyApplication);
-
-			} else if (option == Button.O_LISTVIEW_SCHEDULE) {
-
-				optionLocator = "id=POPUP_SCHEDULE_VIEW";
-				page = new ApptScheduleView(this.MyApplication);
-
-			} else if (option == Button.O_LISTVIEW_LIST) {
-
-				optionLocator = "id=POPUP_CAL_LIST_VIEW";
-				page = new ApptListView(this.MyApplication);
-
-			} else if (option == Button.O_LISTVIEW_MONTH) {
-
-				optionLocator = "id=POPUP_MONTH_VIEW";
-				page = new ApptMonthView(this.MyApplication);
-
-			} else if (option == Button.O_LISTVIEW_FREEBUSY) {
-
-				optionLocator = "id=POPUP_FB_VIEW";
-				page = null;
-
-			}
-
+			// In 8.0 D3, there is no pulldown for the view anymore.  There are just buttons.
+			//
+			// Redirect to the press button method
+			//
+			return (this.zToolbarPressButton(option));
+			
 		} else {
 
 			throw new HarnessException("No logic defined for pulldown " + pulldown + " and option " + option);
