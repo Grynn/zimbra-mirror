@@ -199,6 +199,7 @@ function(list) {
 
 ZaServerStatsListController.initPopupMenuMethod =
 function () {
+        this._popupOperations[ZaOperation.VIEW] = new ZaOperation(ZaOperation.VIEW,ZaMsg.TBB_View, ZaMsg.PQTBB_View_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaServerStatsListController.prototype._viewButtonListener));
 }
 ZaController.initPopupMenuMethods["ZaServerStatsListController"].push(ZaServerStatsListController.initPopupMenuMethod);
 
@@ -288,21 +289,8 @@ function (){
 ZaServerStatsListController.prototype._listSelectionListener =
 function(ev) {
     if (ev.detail == DwtListView.ITEM_DBL_CLICKED) {
-        if (ev.item) {
-            this._selectedItem = ev.item;
-            ZaApp.getInstance().getServerStatsController().show(ev.item);
-            //must switch to the individual server stats view firstly,
-            //then the ZaApp.getInstance().getAppViewMgr().getCurrentView() == server stats view,
-            //let the  addObjectItemForAll get the right view id
-            if (appNewUI) {
-                var overviewPanelController = ZaZimbraAdmin.getInstance().getOverviewPanelController();
-                var parentPath = ZaServerStatsListController._getparentPathInTree();
-                var map = ZaServerStatsListController._getMapForMappingId2handler();
-
-                overviewPanelController.addObjectItem(parentPath, ev.item.name, null,
-                                                            false, false, ev.item, map);
-            }
-        }
+        var item = ev.item;
+        this._switchToSubItem(item);
     } else {
         this.changeActionsState();
     }
@@ -314,6 +302,33 @@ function (ev) {
     this._actionMenu.popup(0, ev.docX, ev.docY);
 }
 
+ZaServerStatsListController.prototype._viewButtonListener =
+function(ev) {
+    if(this._contentView.getSelectionCount() == 1) {
+        var item = this._contentView.getSelection()[0];
+        this._switchToSubItem(item);
+    }
+}
+
+ZaServerStatsListController.prototype._switchToSubItem = function (item)
+{
+    if (item) {
+        this._selectedItem = item;
+        ZaApp.getInstance().getServerStatsController().show(item);
+
+        if (appNewUI) {
+            //must switch to the individual server stats view firstly,
+            //then the ZaApp.getInstance().getAppViewMgr().getCurrentView() == server stats view,
+            //let the  addObjectItemForAll get the right view id
+            var overviewPanelController = ZaZimbraAdmin.getInstance().getOverviewPanelController();
+            var parentPath = ZaServerStatsListController._getparentPathInTree();
+            var map = ZaServerStatsListController._getMapForMappingId2handler();
+
+            overviewPanelController.addObjectItem(parentPath, item.name, null,
+                                                        false, false, item, map);
+        }
+    }
+}
 
 ZaServerStatsListController.changeActionsStateMethod =
 function () {
