@@ -265,7 +265,7 @@ DWORD WINAPI AccountMigrationThread(LPVOID lpParameter)
 
             if ((*idItr).lItemType == ZT_MAIL)
             {
-                MessageItemData msgdata;
+				MessageItemData msgdata;
 
                 printf("Got message item:");
                 maapi->GetItem((*idItr).sbMessageID, msgdata);
@@ -293,7 +293,7 @@ DWORD WINAPI AccountMigrationThread(LPVOID lpParameter)
                 printf(
                     "%S %S %S %S %S %S %S %S %S %S %S %S %S %S %S %S %S			\
 					%S %S %S %S %S %S %S %S %S %S %S %S %S %S %S %S %S %S %S		\
-					%S %S %S %S %S %S %S %S %S %S %S %S %S %S %S %S\n "                                                                                                            ,
+					%S %S %S %S %S %S %S %S %S %S %S %S %S %S %S %S %S\n "                                                                                                            ,
                     cd.Birthday.c_str(), cd.CallbackPhone.c_str(), cd.CarPhone.c_str(),
                     cd.Company.c_str(), cd.Email1.c_str(), cd.Email2.c_str(), cd.Email3.c_str(),
                     cd.FileAs.c_str(), cd.FirstName.c_str(), cd.HomeCity.c_str(),
@@ -310,7 +310,17 @@ DWORD WINAPI AccountMigrationThread(LPVOID lpParameter)
                     cd.UserField2.c_str(), cd.UserField3.c_str(), cd.UserField4.c_str(),
                     cd.WorkCity.c_str(), cd.WorkCountry.c_str(), cd.WorkFax.c_str(),
                     cd.WorkPhone.c_str(), cd.WorkPostalCode.c_str(), cd.WorkState.c_str(),
-                    cd.WorkStreet.c_str(), cd.WorkURL.c_str(), cd.Anniversary.c_str());
+					cd.WorkStreet.c_str(), cd.WorkURL.c_str(), cd.Anniversary.c_str(), cd.pDList.c_str());
+				if(cd.UserDefinedFields.size())
+				{
+					printf("User Defined Field:\n");
+					vector<ContactUDFields>::iterator it;
+					for (it= cd.UserDefinedFields.begin();it != cd.UserDefinedFields.end();it++)
+					{
+						printf("%S : %S \n", it->Name.c_str(), it->value.c_str());
+					}
+				}
+				
                 printf("Contact Image Path: %S \n", cd.ContactImagePath.c_str());
             }
             else
@@ -347,7 +357,7 @@ void MAPIAccessAPITestV()
         HANDLE hThreadArray[MAX_THREADS] = { 0 };
         migrationThreadParams mtparams[MAX_THREADS];
 
-        mtparams[0].mailboxname = L"user1";
+        mtparams[0].mailboxname = L"av1";
 
         /*	mtparams[1].mailboxname = L"av9 av9";
          *      mtparams[2].mailboxname = L"av1";

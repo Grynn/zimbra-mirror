@@ -29,7 +29,7 @@ MAPIContact::MAPIContact(Zimbra::MAPI::MAPISession &session,
     m_mapiMessage = &mMessage;
     m_pMessage = m_mapiMessage->InternalMessageObject();
     m_pPropVals = NULL;
-
+	
     pr_mail1address = 0, pr_mail1entryid = 0, pr_mail1type = 0, pr_mail1dispname = 0,
     pr_mail2address = 0, pr_mail2entryid = 0, pr_mail2type = 0, pr_mail2dispname = 0,
     pr_mail3address = 0, pr_mail3entryid = 0, pr_mail3type = 0, pr_mail3dispname = 0,
@@ -120,6 +120,7 @@ MAPIContact::MAPIContact(Zimbra::MAPI::MAPISession &session,
     m_size = 0;
     m_pIMAddress1 = L"";
     m_anniversary = L"";
+	m_vud_Fields.clear();
     Init();
 }
 
@@ -579,6 +580,193 @@ HRESULT MAPIContact::Init()
             MAPIFreeBuffer(pBody);
         }
     }
+
+	// if its a distribution list, add the dist list members to the property
+	wstring strInvalidGroupContacts;
+    if (m_bPersonalDL)
+    {
+        std::wstring dlist = L"";
+
+        if (m_pPropVals[C_ONEOFFMEMEBRS_IDX].ulPropTag ==
+            contactProps.aulPropTag[C_ONEOFFMEMEBRS_IDX])
+        {
+            bool bFirst = true;
+
+            for (ULONG i = 0; i < m_pPropVals[C_ONEOFFMEMEBRS_IDX].Value.MVbin.cValues; i++)
+            {
+                DWORD dwObjType;
+                SBinary &bin = m_pPropVals[C_ONEOFFMEMEBRS_IDX].Value.MVbin.lpbin[i];
+                IMailUser *pUser = NULL;
+
+                hr = m_session->OpenEntry(bin.cb, (LPENTRYID)bin.lpb, NULL, 0, &dwObjType,
+                    (LPUNKNOWN *)&pUser);
+                if (FAILED(hr) || !pUser)
+                    continue;
+
+                LPSPropValue pDNProp = NULL;
+                LPSPropValue pAddrProp = NULL;
+                std::wstring user = L"";
+                BOOL bIsInvalidContact = TRUE;
+
+                HrGetOneProp(pUser, PR_DISPLAY_NAME_W, &pDNProp);
+                HrGetOneProp(pUser, PR_EMAIL_ADDRESS_W, &pAddrProp);
+                if (pDNProp && (pDNProp->ulPropTag == PR_DISPLAY_NAME_W) && wcslen(
+                    pDNProp->Value.lpszW))
+                    user += pDNProp->Value.lpszW;
+                if (pAddrProp && (pAddrProp->ulPropTag == PR_EMAIL_ADDRESS_W) && wcslen(
+                    pAddrProp->Value.lpszW))
+                {
+                    std::wstring temp = pAddrProp->Value.lpszW;
+
+                    if (temp.find(L'@') != std::wstring::npos)
+                        bIsInvalidContact = FALSE;
+                    if (!user.empty())
+                        user += L" ";
+                    user += L"<";
+                    user += temp;
+                    user += L">";
+                }
+                if (bIsInvalidContact)
+                {
+                    if (!user.empty())
+                    {
+						if (!strInvalidGroupContacts.empty())
+                            strInvalidGroupContacts += _T(", ");
+                        strInvalidGroupContacts += user.c_str();
+                    }
+                }
+                else
+                {
+                    if (bFirst)
+                        bFirst = false;
+                    else
+                        dlist += L",";
+                    dlist += user;
+                }
+                pUser->Release();
+                MAPIFreeBuffer(pDNProp);
+                MAPIFreeBuffer(pAddrProp);
+            }
+        }
+		//set DL values
+		DList((LPTSTR)dlist.c_str());
+	}
+
+	//user define props
+	if (!m_bPersonalDL)
+	{
+		LPMAPINAMEID FAR *lppPropNames = NULL;
+		LPSPropTagArray tagArray;
+		ULONG lCount = 0;
+
+		hr = m_pMessage->GetPropList(MAPI_UNICODE, &tagArray);
+		if (hr == S_OK)
+		{
+			hr = m_pMessage->GetNamesFromIDs(&tagArray, (LPGUID)&PS_PUBLIC_STRINGS, 0, &lCount,
+				&lppPropNames);
+			if (SUCCEEDED(hr))
+			{
+				WCHAR wszProps2GUID[40] = { 0 };
+				Zimbra::Util::Guid nameProps2Guid(OUTLOOK_NAME_PROPS_GUID_2);
+
+				nameProps2Guid.toString(wszProps2GUID);
+
+				WCHAR wszContactPropGUID[40] = { 0 };
+				WCHAR wszVal[1024]={0};                 
+
+				for (ULONG i = 0; i < lCount; i++)
+				{
+					Zimbra::Util::ScopedBuffer<SPropValue> pPropVal;
+
+					hr = HrGetOneProp(m_pMessage, tagArray->aulPropTag[i], pPropVal.getptr());
+					if (lppPropNames[i]->ulKind == MNID_STRING)
+					{
+						Zimbra::Util::Guid propGuid(*lppPropNames[i]->lpguid);
+
+						propGuid.toString(wszContactPropGUID);
+						if (lstrcmpiW(wszContactPropGUID, wszProps2GUID) == 0)
+						{
+							LPWSTR szPropName = lppPropNames[i]->Kind.lpwstrName;
+
+							// now format a string depending on the type
+							ULONG ulPropType = PROP_TYPE(pPropVal->ulPropTag);
+							BOOL bSetAttribute = TRUE;
+
+							switch (ulPropType)
+							{
+							case PT_UNICODE:
+								wcscpy(wszVal, pPropVal->Value.lpszW);
+								break;
+
+							case PT_SYSTIME:
+							{
+								SYSTEMTIME sysTime = { 0 };
+
+								if (FileTimeToSystemTime(&(pPropVal->Value.ft), &sysTime))
+								{
+									TIME_ZONE_INFORMATION tzInfo = { 0 };
+
+									GetTimeZoneInformation(&tzInfo);
+									SystemTimeToTzSpecificLocalTime(&tzInfo, &sysTime, &sysTime);
+									wsprintf(wszVal, L"%4d-%02d-%02d", sysTime.wYear,
+										sysTime.wMonth, sysTime.wDay);
+								}
+								break;
+							}
+
+							case PT_LONG:
+								wsprintf(wszVal, L"%d", pPropVal->Value.l);
+								break;
+
+							case PT_DOUBLE:
+							{
+								CHAR tmp[36];
+
+								_gcvt(pPropVal->Value.dbl, 6, tmp);
+
+								LPWSTR wszTmp = Zimbra::Util::AnsiiToUnicode(tmp);
+
+								wcscpy(wszVal, wszTmp);
+								break;
+							}
+
+							case PT_BOOLEAN:
+								if (pPropVal->Value.b)
+									wcscpy(wszVal, L"TRUE");
+								else
+									wcscpy(wszVal, L"FALSE");
+								break;
+
+							case PT_CURRENCY:
+							{
+								LONGLONG lCurrency;
+								CURRENCY currency;
+
+								currency = pPropVal->Value.cur;
+								lCurrency = currency.int64;
+								lCurrency = lCurrency / 10000;
+								wsprintf(wszVal, L"$%I64d", lCurrency);
+								break;
+							}
+
+							default:                // can't deal with these other types 
+								bSetAttribute = FALSE;
+								//LOG("%hs: MAPI type %0x not supported: user defined field %s will not be synced"),
+								//		__FUNCTION__, ulPropType, szPropName);
+							}
+
+							ContactUDFields cudf;
+							cudf.Name = szPropName;
+							cudf.value = wszVal;
+							AddUserDefinedField(cudf);
+						}
+					}
+				}
+				MAPIFreeBuffer(lppPropNames);
+			}
+			MAPIFreeBuffer(tagArray);
+		}
+	}
 
     // Save image path
     wstring wstrImagePath;

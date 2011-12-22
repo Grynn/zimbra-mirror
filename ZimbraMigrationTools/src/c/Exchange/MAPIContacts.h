@@ -9,6 +9,12 @@ public:
     virtual ~MAPIContactException() {}
 };
 
+typedef struct _ContactUDFields
+{
+	wstring Name;
+	wstring value;
+}ContactUDFields;
+
 // MAPIContact class
 class MAPIContact
 {
@@ -127,7 +133,7 @@ private:
     wstring m_pIMAddress1;
     wstring m_anniversary;
     wstring m_contact_image_path;
-
+	vector<ContactUDFields> m_vud_Fields;
     HRESULT Init();
 
 public:
@@ -135,6 +141,11 @@ public:
     ~MAPIContact();
     bool IsPersonalDL() { return m_bPersonalDL; }
     HRESULT GetContactImage(wstring &wstrImagePath);
+
+	void AddUserDefinedField(ContactUDFields &cudf)
+	{
+		m_vud_Fields.push_back(cudf);
+	}
 
     void CallbackPhone(LPTSTR pStr)
     {
@@ -502,6 +513,7 @@ public:
     wstring ContactImagePath() { return m_contact_image_path; }
     wstring Picture() { return m_pPictureID; }
     wstring Anniverssary() { return m_anniversary; }
+	vector<ContactUDFields>* UserDefinedFields() {return &m_vud_Fields;}
     void Picture(LPTSTR pStr, UINT ulFileSize)
     {
         m_pPictureID = pStr;

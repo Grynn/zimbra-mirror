@@ -630,7 +630,7 @@ LPCWSTR MAPIAccessAPI::GetItem(SBinary sbItemEID, BaseItemData &itemData)
             cd->OtherStreet = mapicontact.OtherStreet();
             cd->OtherURL = mapicontact.OtherURL();
             cd->Pager = mapicontact.Pager();
-            cd->pDList = L"";                   // mapicontact.P
+			cd->pDList = mapicontact.DList();   
             cd->PictureID = mapicontact.Picture();
             cd->Type = mapicontact.Type();
             cd->UserField1 = mapicontact.UserField1();
@@ -647,6 +647,9 @@ LPCWSTR MAPIAccessAPI::GetItem(SBinary sbItemEID, BaseItemData &itemData)
             cd->WorkURL = mapicontact.WorkURL();
             cd->ContactImagePath = mapicontact.ContactImagePath();
             cd->Anniversary = mapicontact.Anniversary();
+			vector<ContactUDFields>::iterator it;
+			for (it= mapicontact.UserDefinedFields()->begin();it != mapicontact.UserDefinedFields()->end();it++)
+				cd->UserDefinedFields.push_back(*it);
         }
         else if (msg.ItemType() == ZT_APPOINTMENTS)
         {

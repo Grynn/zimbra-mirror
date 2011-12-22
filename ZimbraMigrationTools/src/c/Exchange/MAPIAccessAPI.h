@@ -42,6 +42,7 @@ enum
     TS_SYNC_SERVER_FAILURES, TS_JUNK_MAIL, TS_FOLDERS_MAX
 };
 
+
 // contact item data
 typedef struct _ContactItemData: BaseItemData
 {
@@ -98,12 +99,15 @@ typedef struct _ContactItemData: BaseItemData
     wstring IMAddress1;
     wstring Anniversary;
     wstring ContactImagePath;
+	vector<ContactUDFields> UserDefinedFields;
 } ContactItemData;
+
 typedef struct
 {
     LPTSTR buffer;
     unsigned long size;
 } data_buffer;
+
 typedef struct _MessageItemData: BaseItemData
 {
     wstring Subject;
