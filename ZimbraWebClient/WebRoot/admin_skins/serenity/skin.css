@@ -562,14 +562,14 @@ textarea {
 }
 
 .grid_table{
-    border-top: 1px solid black;
-    border-left: 1px solid black;
+    border-top: 1px solid #e4e4e4;
+    border-left: 1px solid #aaaaaa;
     border-spacing: 0;
     padding: 0;
 }
 .grid_table td{
-    border-right: 1px solid black;
-    border-bottom: 1px solid black;
+    border-right: 1px solid #e4e4e4;
+    border-bottom: 1px solid #e4e4e4;
 }
 .grid_table td td{
     border: 0;

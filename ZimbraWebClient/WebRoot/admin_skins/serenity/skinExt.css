@@ -118,7 +118,9 @@ div.ZmSelectedHeaderBg {
 
 
 .gridGroupHeader {
-    background-color:#d3d3d3;
+    background-color:#e7e9ea;
+    border: #aaaaaa solid;
+    border-width: 1px 1px 0px 1px;
     height:24px;
     display: table-cell;
     vertical-align: middle;
@@ -126,7 +128,7 @@ div.ZmSelectedHeaderBg {
 
 .gridGroupBodyLabel {
     text-align:left;
-    background-color:#DEE5F1 !important;     /* transprant color*/
+    background-color:#e4eff5 !important;     /* transprant color*/
     padding-left:10px;
 }
 
