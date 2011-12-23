@@ -1232,4 +1232,9 @@ function (filterType) {
     var omem = DwtOutsideMouseEventMgr.INSTANCE;
     omem.stopListening({id:"ZaOptionView", obj:dialog});
     ZaSearchBuilderController.currentPopupDialog = undefined;
+
+    var currentQueryValue = ZaApp.getInstance().getSearchListController()._uiContainer.getQueryField();
+    currentQueryValue = currentQueryValue ? currentQueryValue: "";
+    var searchField = ZaApp.getInstance().getSearchListController()._searchField;
+    searchField.startSearch(currentQueryValue);
 }
