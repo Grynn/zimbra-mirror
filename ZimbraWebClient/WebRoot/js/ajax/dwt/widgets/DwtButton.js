@@ -364,8 +364,8 @@ function (hoverImageInfo) {
  * @param {DwtMenu|AjxCallback}	menu				the dropdown menu or a callback
  * @param {boolean}				shouldToggle		if <code>true</code>, toggle
  * @param {string}				menuPopupStyle		one of DwtButton.MENU_POPUP_STYLE_* (default is BELOW)
- * @param {boolean}				popupAbove         if <code>true</code>, pop up the menu above the button
- * @param {boolean}				popupRight         if <code>true</code>, align the right edge of the menu to the right edge of the button
+ * @param {boolean}				popupAbove			if <code>true</code>, pop up the menu above the button
+ * @param {boolean}				popupRight			if <code>true</code>, align the right edge of the menu to the right edge of the button
  */
 DwtButton.prototype.setMenu =
 function(params) {
@@ -373,22 +373,24 @@ function(params) {
 	params = Dwt.getParams(arguments, DwtButton.setMenuParams, (arguments.length == 1 && !arguments[0].menu));
 	
 	this._menu = params.menu;
-	this._shouldToggleMenu = (params.shouldToggle === true);
-	if (params.popupAbove) {
-		this._menuPopupStyle = DwtButton.MENU_POPUP_STYLE_ABOVE;
-	}
-	else if (params.popupRight) {
-		this._menuPopupStyle = DwtButton.MENU_POPUP_STYLE_RIGHT;
-	}
-	else {
-		this._menuPopupStyle = params.menuPopupStyle || DwtButton.MENU_POPUP_STYLE_BELOW;
-	}
 	if (this._menu) {
+		// if menu is a callback, wait until it's created to set menu-related properties
+		if (this._menu.isDwtMenu) {
+			this._shouldToggleMenu = (params.shouldToggle === true);
+			if (params.popupAbove) {
+				this._menuPopupStyle = DwtButton.MENU_POPUP_STYLE_ABOVE;
+			}
+			else if (params.popupRight) {
+				this._menuPopupStyle = DwtButton.MENU_POPUP_STYLE_RIGHT;
+			}
+			else {
+				this._menuPopupStyle = params.menuPopupStyle || DwtButton.MENU_POPUP_STYLE_BELOW;
+			}
+		}
+		else {
+			this._savedMenuParams = params;
+		}
         if (this._dropDownEl) {
-			var idx = (this._imageCell) ? 1 : 0;
-			if (this._textCell)
-				idx++;
-
 			Dwt.addClass(this.getHtmlElement(), "ZHasDropDown");
 			if (this._dropDownImg) {
             	AjxImg.setImage(this._dropDownEl, this._dropDownImg);
@@ -399,7 +401,7 @@ function(params) {
 				this._setDropDownCellMouseHandlers(true);
 			}
 
-            if (!this._menu.isAjxCallback) {
+            if (this._menu.isDwtMenu) {
                 this._menu.setAssociatedElementId(this._dropDownEl.id);
             }
 		}
@@ -407,6 +409,7 @@ function(params) {
 			this._menu.dontStealFocus(this.__preventMenuFocus);
 		}
     }
+	// removing menu
     else if (this._dropDownEl) {
 		Dwt.delClass(this.getHtmlElement(), "ZHasDropDown");
         this._dropDownEl.innerHTML = "";
@@ -435,7 +438,9 @@ function(dontCreate) {
 			return null;
 		}
 		var callback = this._menu;
-		this.setMenu({menu: callback.run(this)});
+		var params = this._savedMenuParams || {};
+		params.menu = callback.run(this);
+		this.setMenu(params);
 		if ((this.__preventMenuFocus != null) && (this._menu.isDwtMenu)) {
 			this._menu.dontStealFocus(this.__preventMenuFocus);
 		}
