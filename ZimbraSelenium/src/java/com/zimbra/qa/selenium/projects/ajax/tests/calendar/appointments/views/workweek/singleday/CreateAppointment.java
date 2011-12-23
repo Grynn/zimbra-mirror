@@ -99,7 +99,7 @@ public class CreateAppointment extends AjaxCommonTest {
 	}
 	
 	@Test(	description = "Create private appointment",
-			groups = { "sanity" }
+			groups = { "functional" }
 	)
 	public void CreatePrivateAppointment_03() throws HarnessException {
 		
