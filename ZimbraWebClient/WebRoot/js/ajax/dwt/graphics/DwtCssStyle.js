@@ -161,3 +161,41 @@ DwtCssStyle.removeProperty = function(el, prop) {
 		}
 	}
 };
+
+/**
+ * Adds a rule to a stylesheet.
+ * 
+ * @param {StyleSheet}	stylesheet		a CSS stylesheet
+ * @param {string}		selector		rule selector
+ * @param {string}		declaration		styles
+ * @param {string}		index			insertion index (optional)
+ * 
+ * @return	index at which rule was inserted (for later removal)
+ */
+DwtCssStyle.addRule =
+function(stylesheet, selector, declaration, index) {
+	if (stylesheet.addRule) {	// IE
+		stylesheet.addRule(selector, declaration, index);
+		return (index == null) ? (stylesheet.rules.length - 1) : index;
+	}
+	else {
+		stylesheet.insertRule(selector + "{" + declaration + "}", index);
+		return (index == null) ? (stylesheet.cssRules.length - 1) : index;
+	}
+};
+
+/**
+ * Removes the rule at the given index.
+ * 
+ * @param {StyleSheet}	stylesheet		a CSS stylesheet
+ * @param {string}		index			insertion index (optional)
+ */
+DwtCssStyle.removeRule =
+function(stylesheet, index) {
+	if (stylesheet.removeRule) {	// IE
+		stylesheet.removeRule(index);
+	}
+	else {
+		stylesheet.deleteRule(index);
+	}
+};

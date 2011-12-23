@@ -866,7 +866,7 @@ function(ev, addr) {
 		params.toOverride = addr + AjxEmailAddress.SEPARATOR;
 	}
 	if (obj && obj.isAjxEmailAddress && obj.address == addr) {
-		params.toOverrideObj = obj;
+		params.toOverride = obj;
 	}
 
 	AjxDispatcher.run("Compose", params );
