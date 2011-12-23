@@ -592,7 +592,7 @@ public class ExecuteHarnessMain {
 			if ( method.isTestMethod() ) {
 				
 				try {
-					CodeCoverage.getInstance().calculateCoverage();
+					CodeCoverage.getInstance().calculateCoverage(getTestCaseID(method.getTestMethod().getMethod()));
 				} catch (HarnessException e) {
 					logger.error("Skip logging calculation", e);
 				}

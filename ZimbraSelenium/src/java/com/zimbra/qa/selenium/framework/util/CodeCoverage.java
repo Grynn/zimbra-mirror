@@ -227,7 +227,7 @@ public class CodeCoverage {
 	 * Update the coverage data
 	 * @throws HarnessException 
 	 */
-	public void calculateCoverage() throws HarnessException {
+	public void calculateCoverage(String method) throws HarnessException {
 		logger.info("calculateCoverage()");
 
 		if ( !isEnabled() ) {
@@ -237,6 +237,10 @@ public class CodeCoverage {
 
 		Date start = new Date();
 		try {
+
+			// Log the name of the method
+			logger.info("METHOD: "+ method);
+
 
 			// COVERAGE_SCRIPT returns a JSON object
 			// The key is the file name
