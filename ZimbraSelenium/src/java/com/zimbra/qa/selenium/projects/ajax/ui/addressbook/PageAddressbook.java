@@ -200,7 +200,7 @@ public class PageAddressbook extends AbsTab {
 
 			String contactType = getContactType(commonLocator);
 		    
-			String contactDisplayedLocator = commonLocator + " table tbody tr td:nth-child(3)";
+			String contactDisplayedLocator = commonLocator + " td[id^=zlif__CNS-main__][id$=__fileas]";
 			String fileAs = sGetText(contactDisplayedLocator);
 			logger.info("...found "+ contactType + " - " + fileAs );
 			isContactFound = ((contactType.equals(ContactGroupItem.IMAGE_CLASS) &&  contactItem instanceof ContactGroupItem) ||
@@ -250,7 +250,7 @@ public class PageAddressbook extends AbsTab {
 		    if (sIsElementPresent(commonLocator + " div[class*=" + contactType + "]")) {
 				
 			    ContactItem ci=null;
-			    String contactDisplayedLocator = commonLocator + " table tbody tr td:nth-child(3)";
+			    String contactDisplayedLocator = commonLocator + " td[id^=zlif__CNS-main__][id$=__fileas]";
 			    String fileAs = sGetText(contactDisplayedLocator);
 		        logger.info(" found " + fileAs);
 		    
@@ -297,7 +297,7 @@ public class PageAddressbook extends AbsTab {
 			String contactType = getContactType(commonLocator);
 		    
 			ContactItem ci=null;
-			String contactDisplayedLocator = commonLocator + " table tbody tr td:nth-child(3)";
+			String contactDisplayedLocator = commonLocator + " td[id^=zlif__CNS-main__][id$=__fileas]";
 			String fileAs = sGetText(contactDisplayedLocator);
 		    logger.info(" found " + fileAs);
 		    
