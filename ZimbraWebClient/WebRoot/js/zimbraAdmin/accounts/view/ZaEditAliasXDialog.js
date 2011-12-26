@@ -71,9 +71,18 @@ ZaNewAliasXDialog = function(parent,   w, h, title) {
 
 ZaNewAliasXDialog.prototype = new ZaXDialog;
 ZaNewAliasXDialog.prototype.constructor = ZaNewAliasXDialog;
+ZaNewAliasXDialog.prototype.supportMinimize = true;
 ZaNewAliasXDialog.helpURL = location.pathname + ZaUtil.HELP_URL + "managing_accounts/creating_a_mail_aliases.htm?locid="+AjxEnv.DEFAULT_LOCALE;
+ZaNewAliasXDialog.prototype.getCacheName = function(){
+      return "newAliasDialog";
+}
 
-
+ZaNewAliasXDialog.prototype.setObject =
+function(entry) {
+      this._containedObject = entry;
+      this._containedObject._uuid = this._containedObject._uuid || ZaUtil.getItemUUid();
+      this._localXForm.setInstance(this._containedObject);
+}
 
 ZaNewAliasXDialog.prototype.getMyXForm = 
 function() {	
