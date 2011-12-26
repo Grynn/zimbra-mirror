@@ -600,11 +600,6 @@ function(ev) {
 
 ZaZimbraAdmin.prototype._createHelpLink =
 function() {
-    if (!appNewUI) {
-        this._createOldHelpLink();
-        return;
-    }
-
     var helpSkinContainer = document.getElementById(ZaSettings.SKIN_HELP_DOM_ID);
     if(!helpSkinContainer) {
         return;
@@ -626,8 +621,8 @@ function() {
 
     helpMenuOpList.push(new ZaOperation("zaHelpCenter", ZaMsg.zimbraHelpCenter, ZaMsg.zimbraHelpCenter,  "", "", new AjxListener(this, this._helpListener)));
 	helpMenuOpList.push(new ZaOperation("aboutZimbra", ZaMsg.zimbraAbout, ZaMsg.zimbraAbout,  "", "", new AjxListener(this, this._aboutZimbraListener)));
-    var menu = new ZaPopupMenu(dwButton, "ActionMenu",null, helpMenuOpList, "ZA_HELP");
-    //menu.addChild(this._createHelpSearch(), 0);
+    var menu = new ZaPopupMenu(dwButton, "ActionMenu ZaHelpDropdown",null, helpMenuOpList, "ZA_HELP");
+    menu.addChild(this._createHelpSearch(), 0);
     dwButton.setMenu(menu,true);
 }
 
@@ -665,7 +660,7 @@ function() {
     this.aboutZimbraDialog.popup();
 }
 
-ZaZimbraAdmin.prototype._createOldHelpLink =
+/*ZaZimbraAdmin.prototype._createHelpLink =
 function() {
 	var helpSkinContainer = document.getElementById(ZaSettings.SKIN_HELP_DOM_ID);
 	if(!helpSkinContainer) {
@@ -687,7 +682,7 @@ function() {
              this._getAppLink(null, iconName,  ZaMsg.helpDesk, skin.skin_container_help_max_str_length);
     }
     helpLabel.reparentHtmlElement (ZaSettings.SKIN_HELP_DOM_ID) ;
-}
+}*/
 
 ZaZimbraAdmin.prototype._createDownloadLink =
 function() {
