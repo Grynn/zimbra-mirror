@@ -863,6 +863,9 @@ function (ev) {
         //update the domain list. We separate two search domains because domain list view only need the first page
         // result, but the overpanel will show more results. It could potentially be combined into one search.
         this.getDomainListController().show ();
+
+        if(appNewUI)
+            ZaZimbraAdmin.getInstance().getOverviewPanelController().refreshRelatedTree (ev.getDetails());
 	}
 }
 
@@ -925,6 +928,8 @@ function (ev) {
 	if(ev) {
 		this.searchDomains();
 	}
+    if(appNewUI)
+            ZaZimbraAdmin.getInstance().getOverviewPanelController().refreshRelatedTree (ev.getDetails());
 }
 
 /**
@@ -936,6 +941,8 @@ function (ev) {
 	if(ev) {
 		this.searchDomains();
 	}
+    if(appNewUI)
+            ZaZimbraAdmin.getInstance().getOverviewPanelController().refreshRelatedTreeByEdit(ev.getDetails().oldItem,ev.getDetails());
 }
 
 ZaApp.prototype.handleSettingsChange = 

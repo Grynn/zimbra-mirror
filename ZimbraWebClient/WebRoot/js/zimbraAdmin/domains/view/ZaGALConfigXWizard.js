@@ -174,6 +174,10 @@ function(entry) {
 ZaGALConfigXWizard.prototype.finishWizard =
 function() {
 	try {
+        var oldItem = {};
+        this._containedObject._editObject.copyTo(oldItem, true);
+        this._containedObject._editObject.oldItem = oldItem;
+        this._containedObject._editObject.createGalAccount = true;
 		ZaDomain.modifyGalSettings.call(this._containedObject._editObject,this._containedObject);
 		ZaApp.getInstance().getDomainListController()._fireDomainChangeEvent(this._containedObject._editObject);
 		this.popdown();

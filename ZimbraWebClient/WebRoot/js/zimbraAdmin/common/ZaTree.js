@@ -133,11 +133,12 @@ function(treeItem, skipNotify, kbNavEvent, noFocus) {
 			if (da == null) {
 				da = new Array();
 			}
-			da[j++] = a[i];
+            if(!AjxUtil.isEmpty(a[i]))
+			    da[j++] = a[i];
 		}
 	}
 
-	if (da && !skipNotify) {
+	if (da && !skipNotify) { //da is a array
 		this._notifyListeners(DwtEvent.SELECTION, da, DwtTree.ITEM_DESELECTED, null, this._selEv, kbNavEvent);
 	}
 
@@ -244,6 +245,10 @@ ZaTree.prototype._getSelectedItem = function (currentRootNode) {
 
     return currentRootNode;
 
+}
+
+ZaTree.prototype.getSelectedItem = function (currentRootNode) {
+      return this._getSelectedItem(currentRootNode);
 }
 
 //TODO make it recursive
@@ -617,6 +622,19 @@ function (arr) {
 ZaTree.prototype.getCurrentRootItem = function() {
     return this.currentRoot;
 }
+ZaTree.prototype.getCurrentSelectedItems = function() {
+    return this._selectedItems;
+}
+
+ZaTree.prototype.clearItems = function() {
+    var items = this.getItems();
+    var len= items.length;
+    for (var i = 0; i < len; i++) {
+        this.removeChild(items[0]);
+    }
+    this._getContainerElement().innerHTML = "";
+};
+
 ZaTree.getPathByArray = ZaTree.prototype.getPathByArray;
 
 

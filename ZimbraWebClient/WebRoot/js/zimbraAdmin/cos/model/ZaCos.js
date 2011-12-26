@@ -845,6 +845,7 @@ ZaCos.prototype.countAllAccounts = function() {
     if(this.name == "default") {
         query = "(|(!(" + ZaAccount.A_COSId + "=*))" + query + ")";
     }
+    query = "(&" + query + "(!("+ ZaAccount.A_zimbraIsSystemAccount +"=TRUE)))" ;
 	soapDoc.set("query", query);
     soapDoc.set("types", ZaSearch.ACCOUNTS);
 	var command = new ZmCsfeCommand();

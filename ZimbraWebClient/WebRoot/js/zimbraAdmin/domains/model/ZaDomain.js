@@ -1185,7 +1185,7 @@ ZaDomain.modifyGalSettings =
 function(tmpObj) {
 	var soapDoc = AjxSoapDoc.create("BatchRequest", "urn:zimbra");
 	soapDoc.setMethodAttribute("onerror", "stop");
-	
+
 	if(tmpObj[ZaDomain.A2_create_gal_acc] && tmpObj[ZaDomain.A2_create_gal_acc]=="TRUE" && tmpObj[ZaDomain.A2_new_internal_gal_ds_name] || tmpObj[ZaDomain.A2_new_external_gal_ds_name]) {
 		if(tmpObj[ZaDomain.A2_new_gal_sync_account_name]) {
 			if(tmpObj[ZaDomain.A2_new_gal_sync_account_name].indexOf("@") < 0) {
@@ -1232,7 +1232,7 @@ function(tmpObj) {
 			}/* else if(tmpObj[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_ldap_ds] && tmpObj[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_ldap_ds].attrs) {
 				soapDoc.set("a", tmpObj[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_ldap_ds].attrs[ZaDataSource.A_zimbraDataSourcePollingInterval],createExternalDSDoc).setAttribute("n",ZaDataSource.A_zimbraDataSourcePollingInterval);
 			}*/
-			
+
 		}	
 	}
 	if(tmpObj[ZaDomain.A2_gal_sync_accounts] && tmpObj[ZaDomain.A2_gal_sync_accounts][0]) {
@@ -1965,6 +1965,15 @@ function() {
 
 ZaDomain.prototype.remove = 
 function(callback) {
+     if(appNewUI){
+          if(this.attrs[ZaDomain.A_domainType] == ZaDomain.domainTypes.local &&
+             AjxUtil.isEmpty(this.attrs[ZaDomain.A_domainDefaultCOSId])){
+                  this.load("id", this.id,false,true) ;
+           } else if(this.attrs[ZaDomain.A_domainType] == ZaDomain.domainTypes.alias &&
+                        AjxUtil.isEmpty(this.attrs[ZaDomain.A_zimbraMailCatchAllForwardingAddress])){
+                        this.load ("id", this.id) ;
+                    }
+     }
 	var soapDoc = AjxSoapDoc.create("DeleteDomainRequest", ZaZimbraAdmin.URN, null);
 	soapDoc.set("id", this.id);
 	//var command = new ZmCsfeCommand();
@@ -2791,6 +2800,7 @@ ZaDomain.prototype.modifyDomainAlias = function (form) {
             busyMsg : ZaMsg.BUSY_MODIFY_DOMAIN
         }
         var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.ModifyDomainResponse;
+        this.oldItem = instance;
         ZaApp.getInstance().getDomainListController().fireChangeEvent(this);
     }
 

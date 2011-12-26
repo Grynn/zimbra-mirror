@@ -95,6 +95,9 @@ ZaDomainAliasEditWizard.prototype.editDomainAlias = function (domain, reload) {
     if (!instance.attrs) instance.attrs = {} ;
     instance.attrs [ZaDomain.A_domainName] = domainAlias ;
     instance [ZaDomain.A2_zimbraDomainAliasTarget] = domainTarget ;
+    instance.type = ZaItem.DOMAIN;
+    instance.attrs[ZaDomain.A_domainType] =  ZaDomain.domainTypes.alias;
+    instance.attrs[ZaDomain.A_zimbraMailCatchAllForwardingAddress] =  "@" + domainTarget ;
     this.setObject (domain) ;
     form.setInstance (instance);
     this.registerCallback(DwtDialog.OK_BUTTON,
