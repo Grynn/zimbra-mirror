@@ -600,6 +600,11 @@ function(ev) {
 
 ZaZimbraAdmin.prototype._createHelpLink =
 function() {
+    if (!appNewUI) {
+        this._createOldHelpLink();
+        return;
+    }
+
     var helpSkinContainer = document.getElementById(ZaSettings.SKIN_HELP_DOM_ID);
     if(!helpSkinContainer) {
         return;
@@ -613,17 +618,16 @@ function() {
 	helpSkinContainer.innerHTML = "";
 	dwButton.reparentHtmlElement (ZaSettings.SKIN_HELP_DOM_ID);
 
-    var adminObj = this;
     // Add Zimbra Help Desk Menu
     var helpMenuOpList = new Array();
     helpMenuOpList.push(new ZaOperation("zaHomepage", ZaMsg.zimbraHomePage
         + "<span style='visibility:hidden'>spacholder</span>", // Add this part is to increase the width of the dropdown menu.
-        ZaMsg.zimbraHomePage,  "", "", new AjxListener(window, this._contextHelpListener, adminObj)));
+        ZaMsg.zimbraHomePage,  "", "", new AjxListener(this, this._contextHelpListener)));
 
-    helpMenuOpList.push(new ZaOperation("zaHelpCenter", ZaMsg.zimbraHelpCenter, ZaMsg.zimbraHelpCenter,  "", "", new AjxListener(window, this._helpListener, adminObj)));
-	helpMenuOpList.push(new ZaOperation("aboutZimbra", ZaMsg.zimbraAbout, ZaMsg.zimbraAbout,  "", "", new AjxListener(window, this._aboutZimbraListener, adminObj)));
-    var menu = new ZaPopupMenu(dwButton, "ActionMenu ZaHelpDropdown",null, helpMenuOpList, "ZA_HELP");
-    menu.addChild(this._createHelpSearch(), 0);
+    helpMenuOpList.push(new ZaOperation("zaHelpCenter", ZaMsg.zimbraHelpCenter, ZaMsg.zimbraHelpCenter,  "", "", new AjxListener(this, this._helpListener)));
+	helpMenuOpList.push(new ZaOperation("aboutZimbra", ZaMsg.zimbraAbout, ZaMsg.zimbraAbout,  "", "", new AjxListener(this, this._aboutZimbraListener)));
+    var menu = new ZaPopupMenu(dwButton, "ActionMenu",null, helpMenuOpList, "ZA_HELP");
+    //menu.addChild(this._createHelpSearch(), 0);
     dwButton.setMenu(menu,true);
 }
 
@@ -648,20 +652,20 @@ function() {
 
 // TODO: MUST change to provide context-sensitive help for all modules
 ZaZimbraAdmin.prototype._contextHelpListener =
-function(ev) {
+function() {
     //window.open(location.pathname + ZaUtil.HELP_URL + "administration_console_help.htm%23managing_accounts/setting_the_devault_zwc_login_version.htm?locid=" + AjxEnv.DEFAULT_LOCALE);
     window.open(ZaApp.getInstance().getCurrentController()._helpURL);
 }
 
 ZaZimbraAdmin.prototype._aboutZimbraListener =
-function(ev) {
-    if (!ev.aboutZimbraDialog) {
-        ev.aboutZimbraDialog = new ZaAboutDialog(ev._shell);
+function() {
+    if (!this.aboutZimbraDialog) {
+        this.aboutZimbraDialog = new ZaAboutDialog(this._shell);
     }
-    ev.aboutZimbraDialog.popup();
+    this.aboutZimbraDialog.popup();
 }
 
-/*ZaZimbraAdmin.prototype._createHelpLink =
+ZaZimbraAdmin.prototype._createOldHelpLink =
 function() {
 	var helpSkinContainer = document.getElementById(ZaSettings.SKIN_HELP_DOM_ID);
 	if(!helpSkinContainer) {
@@ -683,7 +687,7 @@ function() {
              this._getAppLink(null, iconName,  ZaMsg.helpDesk, skin.skin_container_help_max_str_length);
     }
     helpLabel.reparentHtmlElement (ZaSettings.SKIN_HELP_DOM_ID) ;
-}*/
+}
 
 ZaZimbraAdmin.prototype._createDownloadLink =
 function() {
@@ -824,8 +828,8 @@ function(ev) {
 	}
 
     if (appNewUI) {
-        var historyObject = new ZaHistory("HelpView", undefined, undefined, false, new AjxCallback(ev, ev._helpListener)); //this or ev?
-        ev._historyMgr.addHistory(historyObject);
+        var historyObject = new ZaHistory("HelpView", undefined, undefined, false, new AjxCallback(this, this._helpListener));
+        this._historyMgr.addHistory(historyObject);
     }
 }
 
