@@ -1594,17 +1594,28 @@ ZaOverviewPanelController.searchResultTreeListener = function (ev) {
         var slController = ZaApp.getInstance().getSearchListController();
         slController.reset();
         var searchField = slController._searchField;
-        if (itemType == ZaItem.ACCOUNT) {
-            searchField.accFilterSelected();
-        } else if (itemType == ZaItem.DOMAIN) {
-            searchField.domainFilterSelected();
-        } else if (itemType == ZaItem.DL) {
-            searchField.dlFilterSelected();
-        } else {
-            searchField.allFilterSelected();
+        var contentView = slController._contentView;
+       if (itemType == ZaItem.ACCOUNT ) {
+            if(searchField._containedObject[ZaSearch.A_fAccounts] == "FALSE")
+                return contentView.set();
+            else
+               searchField.accFilterSelectedFromResults();
+        } else if (itemType == ZaItem.DOMAIN  ) {
+            if(searchField._containedObject[ZaSearch.A_fDomains]== "FALSE" )
+                return contentView.set();
+            else
+                searchField.domainFilterSelectedFromResults();
+        } else if (itemType == ZaItem.DL ) {
+            if(searchField._containedObject[ZaSearch.A_fdistributionlists]== "FALSE")
+                return contentView.set();
+            else
+                searchField.dlFilterSelectedFromResults();
+        } else {  //all results
+            //searchField.allFilterSelected();
         }
         searchField.setCurrentSavedSearch ({});
         searchField.invokeCallback(); // Use the value in the current search fields;
+        searchField.restoreSearchFilter(); //restore containedObject
 	}
 }
 

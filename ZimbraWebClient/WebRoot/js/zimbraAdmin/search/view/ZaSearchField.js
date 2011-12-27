@@ -533,6 +533,23 @@ ZaSearchField.prototype.resetSearchFilter = function () {
 	this._containedObject[ZaSearch.A_fCoses] = "FALSE";	
 }
 
+ZaSearchField.prototype.restoreSearchFilter = function(){
+    if(this.searchSelectedType == ZaSearch.ACCOUNTS)
+        this.accFilterSelected();
+    else if(this.searchSelectedType == ZaSearch.ALIASES)
+        this.aliasFilterSelected();
+    else if(this.searchSelectedType == ZaSearch.DLS)
+        this.dlFilterSelected();
+    else if(this.searchSelectedType == ZaSearch.RESOURCES)
+        this.resFilterSelected();
+    else if(this.searchSelectedType == ZaSearch.DOMAINS)
+        this.domainFilterSelected()
+    else if(this.searchSelectedType == ZaSearch.COSES)
+        this.cosFilterSelected()
+    else
+        this.allFilterSelected();
+}
+
 ZaSearchField.prototype.allFilterSelected = function (ev) {
     if (ev)
 	    ev.item.parent.parent.setImage(ev.item.getImage());
@@ -546,15 +563,24 @@ ZaSearchField.prototype.allFilterSelected = function (ev) {
 	this._containedObject[ZaSearch.A_fDomains] = "TRUE";	
 	//}
 	this._containedObject[ZaSearch.A_fCoses] = "TRUE";
-	this.setTooltipForSearchButton (ZaMsg.searchForAll);	
+	this.setTooltipForSearchButton (ZaMsg.searchForAll);
+    this.searchSelectedType = "";
 }
+
+
 
 ZaSearchField.prototype.accFilterSelected = function (ev) {
 	this.resetSearchFilter();
 	//ev.item.parent.parent.setImage(ev.item.getImage());	
 	this.setIconForSearchMenuButton ("Account");
 	this._containedObject[ZaSearch.A_fAccounts] = "TRUE";
-	this.setTooltipForSearchButton (ZaMsg.searchForAccounts);	
+	this.setTooltipForSearchButton (ZaMsg.searchForAccounts);
+    this.searchSelectedType = ZaSearch.ACCOUNTS;
+}
+
+ZaSearchField.prototype.accFilterSelectedFromResults = function (ev) {
+	this.resetSearchFilter();
+	this._containedObject[ZaSearch.A_fAccounts] = "TRUE";
 }
 
 ZaSearchField.prototype.aliasFilterSelected = function (ev) {
@@ -563,6 +589,7 @@ ZaSearchField.prototype.aliasFilterSelected = function (ev) {
 	this.setIconForSearchMenuButton ("AccountAlias");
 	this._containedObject[ZaSearch.A_fAliases] = "TRUE";	
 	this.setTooltipForSearchButton (ZaMsg.searchForAliases);
+    this.searchSelectedType = ZaSearch.ALIASES;
 }
 
 ZaSearchField.prototype.dlFilterSelected = function (ev) {
@@ -570,7 +597,13 @@ ZaSearchField.prototype.dlFilterSelected = function (ev) {
 	//ev.item.parent.parent.setImage(ev.item.getImage());
 	this.setIconForSearchMenuButton ("DistributionList");
 	this._containedObject[ZaSearch.A_fdistributionlists] = "TRUE";	
-	this.setTooltipForSearchButton (ZaMsg.searchForDLs);	
+	this.setTooltipForSearchButton (ZaMsg.searchForDLs);
+    this.searchSelectedType = ZaSearch.DLS;
+}
+
+ZaSearchField.prototype.dlFilterSelectedFromResults = function (ev) {
+	this.resetSearchFilter();
+	this._containedObject[ZaSearch.A_fdistributionlists] = "TRUE";
 }
 
 ZaSearchField.prototype.resFilterSelected = function (ev) {
@@ -578,7 +611,8 @@ ZaSearchField.prototype.resFilterSelected = function (ev) {
 	//ev.item.parent.parent.setImage(ev.item.getImage());
 	this.setIconForSearchMenuButton ("Resource");
 	this._containedObject[ZaSearch.A_fResources] = "TRUE";
-	this.setTooltipForSearchButton (ZaMsg.searchForResources);	
+	this.setTooltipForSearchButton (ZaMsg.searchForResources);
+    this.searchSelectedType = ZaSearch.RESOURCES;
 }
 
 ZaSearchField.prototype.domainFilterSelected = function (ev) {
@@ -587,16 +621,24 @@ ZaSearchField.prototype.domainFilterSelected = function (ev) {
 		//ev.item.parent.parent.setImage(ev.item.getImage());
 		this.setIconForSearchMenuButton ("Domain");
 		this._containedObject[ZaSearch.A_fDomains] = "TRUE";
-		this.setTooltipForSearchButton (ZaMsg.searchForDomains);	
+		this.setTooltipForSearchButton (ZaMsg.searchForDomains);
+        this.searchSelectedType = ZaSearch.DOMAINS;
 	//}
 }
 
+
+ZaSearchField.prototype.domainFilterSelectedFromResults = function (ev) {
+		this.resetSearchFilter();
+		this._containedObject[ZaSearch.A_fDomains] = "TRUE";
+
+}
 
 ZaSearchField.prototype.cosFilterSelected = function (ev) {
                 this.resetSearchFilter();
                 this.setIconForSearchMenuButton ("COS");
                 this._containedObject[ZaSearch.A_fCoses] = "TRUE";
                 this.setTooltipForSearchButton (ZaMsg.searchForCOSES);
+                this.searchSelectedType = ZaSearch.COSES;
 }
 
 
