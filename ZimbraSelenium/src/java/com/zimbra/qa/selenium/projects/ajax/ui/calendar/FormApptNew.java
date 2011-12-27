@@ -605,7 +605,8 @@ public class FormApptNew extends AbsForm {
 
 		// Look for the div
 		// See https://bugzilla.zimbra.com/show_bug.cgi?id=58477
-		String locator = "css=div[id^='ztb__APPT']";
+		// String locator = "css=div[id^='ztb__APPT']";			// 8.0 D2
+		String locator = "css=div[id^='zb__App__tab_APPT-']";	// 8.0 D3
 
 		if (!this.sIsElementPresent(locator)) {
 			return (false);
