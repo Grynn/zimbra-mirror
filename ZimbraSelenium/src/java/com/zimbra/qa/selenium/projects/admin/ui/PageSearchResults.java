@@ -18,8 +18,8 @@ public class PageSearchResults extends AbsTab {
 	public static class Locators {
 		public static final String SEARCH_INPUT_TEXT_BOX="_XForm_query_display";
 		public static final String SEARCH_BUTTON="css=td.xform_container div.ImgSearch";
-		public static final String DELETE_BUTTON="zmi__zb_currentApp__DELETE";
-		public static final String CONFIGURE_ICON="css=div.ImgConfigure";
+		public static final String DELETE_BUTTON="css=div[id^='zmi__zb_currentApp__DELETE__']";
+		public static final String GEAR_ICON="css=div.ImgConfigure";
 	}
 
 	public PageSearchResults(AbsApplication application) {
@@ -197,10 +197,10 @@ public class PageSearchResults extends AbsTab {
 
 			if (option == Button.O_DELETE) {
 
-				pulldownLocator = Locators.CONFIGURE_ICON;
+				pulldownLocator = Locators.GEAR_ICON;
 				optionLocator = Locators.DELETE_BUTTON;
 
-				page = new WizardCreateAccount(this);
+				page = new DialogForDeleteOperation(this.MyApplication, null);
 
 				// FALL THROUGH
 

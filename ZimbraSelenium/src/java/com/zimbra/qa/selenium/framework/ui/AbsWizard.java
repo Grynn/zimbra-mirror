@@ -31,14 +31,15 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
 public abstract class AbsWizard extends AbsPage {
 	protected static Logger logger = LogManager.getLogger(AbsWizard.class);
 	public static class Locators {
-	public static String CANCEL_BUTTON = "zdlg__NEW_ACCT_button1_title";
-	public static String HELP_BUTTON = "zdlg__NEW_ACCT_button10_title";
-	public static String PREVIOUS_BUTTON = "zdlg__NEW_ACCT_button11_title";
-	public static String NEXT_BUTTON = "_button12_title";
-	public static String FINISH_BUTTON = "_button13_title";
-	public static String ACCOUNT_DIALOG="ACCT";
-	public static String DOMAIN_DIALOG="DOMAIN";
-	public static String RESOURCE_DIALOG="RES";
+	public static final String CANCEL_BUTTON = "zdlg__NEW_ACCT_button1_title";
+	public static final String HELP_BUTTON = "zdlg__NEW_ACCT_button10_title";
+	public static final String PREVIOUS_BUTTON = "zdlg__NEW_ACCT_button11_title";
+	public static final String NEXT_BUTTON = "_button12_title";
+	public static final String FINISH_BUTTON = "_button13_title";
+	public static final String ACCOUNT_DIALOG="ACCT";
+	public static final String DOMAIN_DIALOG="DOMAIN";
+	public static final String COS_DIALOG="COS";
+	public static final String RESOURCE_DIALOG="RES";
 	}
 	public static String buttonPath="";
 	

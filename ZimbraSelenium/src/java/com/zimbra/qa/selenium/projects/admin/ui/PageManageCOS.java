@@ -18,15 +18,12 @@ import com.zimbra.qa.selenium.framework.util.SleepUtil;
 public class PageManageCOS extends AbsTab {
 
 	public static class Locators {
-
-		// ** OverviewTreePanel -> Addresses -> Cos
-		public static final String zti_COS = "zti__AppAdmin__CONFIGURATION__COS_textCell";
-
-		// ** "Manage Cos" Tab Title
-		public static final String ztab_MANAGE_COS_ICON = "css=tr#ztab__MAIN_TAB_row div.ImgCOS";
-		public static final String zb_NEW = "zb__COSLV__NEW_title";		// New Button
+		public static final String CONFIGURE_ICON="css=div.ImgAdministration";
+		public static final String COS="zti__AppAdmin__CONFIGURATION__COS_textCell";
+		public static final String GEAR_ICON="css=div.ImgConfigure";
+		public static final String NEW_MENU="zmi__zb_currentApp__NEW";
 	}
-	
+
 	public PageManageCOS(AbsApplication application) {
 		super(application);
 	}
@@ -42,12 +39,12 @@ public class PageManageCOS extends AbsTab {
 			throw new HarnessException("Admin Console application is not active!");
 
 
-		boolean present = sIsElementPresent(Locators.ztab_MANAGE_COS_ICON);
+		boolean present = sIsElementPresent(Locators.GEAR_ICON);
 		if ( !present ) {
 			return (false);
 		}
 
-		boolean visible = zIsVisiblePerPosition(Locators.ztab_MANAGE_COS_ICON, 0, 0);
+		boolean visible = zIsVisiblePerPosition(Locators.GEAR_ICON, 0, 0);
 		if ( !visible ) {
 			logger.debug("isActive() visible = "+ visible);
 			return (false);
@@ -71,13 +68,16 @@ public class PageManageCOS extends AbsTab {
 	@Override
 	public void zNavigateTo() throws HarnessException {
 
+
 		if ( zIsActive() ) {
 			// This page is already active.
 			return;
 		}
 
-		// Click on Addresses -> COS
-		zClickAt(Locators.zti_COS,"");
+		// Click on Addresses -> Accounts
+		zClickAt(Locators.CONFIGURE_ICON,"");
+		sIsElementPresent(Locators.COS);
+		zClickAt(Locators.COS, "");
 
 		zWaitForActive();
 
@@ -103,7 +103,7 @@ public class PageManageCOS extends AbsTab {
 		return null;	
 	}
 
-	
+
 	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
 
 		logger.info(myPageName() + " zToolbarPressButton("+ button +")");
@@ -125,9 +125,9 @@ public class PageManageCOS extends AbsTab {
 		if ( button == Button.B_NEW ) {
 
 			// New button
-			locator = Locators.zb_NEW;
+			locator = Locators.COS;
 
-			 
+
 			// Create the page
 			page = new FormNewCos(MyApplication);
 
@@ -156,8 +156,75 @@ public class PageManageCOS extends AbsTab {
 
 	@Override
 	public AbsPage zToolbarPressPulldown(Button pulldown, Button option) throws HarnessException {
-		return null;
+		logger.info(myPageName() + " zToolbarPressButtonWithPulldown("+ pulldown +", "+ option +")");
+
+		tracer.trace("Click pulldown "+ pulldown +" then "+ option);
+
+		if (pulldown == null)
+			throw new HarnessException("Pulldown cannot be null!");
+
+		if (option == null)
+			throw new HarnessException("Option cannot be null!");
+
+
+		// Default behavior variables
+		String pulldownLocator = null; // If set, this will be expanded
+		String optionLocator = null; // If set, this will be clicked
+		AbsPage page = null; // If set, this page will be returned
+
+		if (pulldown == Button.B_GEAR_BOX) {
+
+			if (option == Button.O_NEW) {
+
+				pulldownLocator = Locators.GEAR_ICON; 
+				optionLocator = Locators.NEW_MENU;
+
+				page = new WizardCreateCos(this);
+
+				// FALL THROUGH
+
+			} else {
+				throw new HarnessException("no logic defined for pulldown/option " + pulldown + "/" + option);
+			}
+
+		} else {
+			throw new HarnessException("no logic defined for pulldown/option "
+					+ pulldown + "/" + option);
+		}
+
+		// Default behavior
+		if (pulldownLocator != null) {
+
+			// Make sure the locator exists
+			if (!this.sIsElementPresent(pulldownLocator)) {
+				throw new HarnessException("Button " + pulldown + " option " + option + " pulldownLocator " + pulldownLocator + " not present!");
+			}
+
+			this.zClickAt(pulldownLocator,"");
+
+			// If the app is busy, wait for it to become active
+			//zWaitForBusyOverlay();
+
+			if (optionLocator != null) {
+
+				// Make sure the locator exists
+				if (!this.sIsElementPresent(optionLocator)) {
+					throw new HarnessException("Button " + pulldown + " option " + option + " optionLocator " + optionLocator + " not present!");
+				}
+
+				this.zClickAt(optionLocator,"");
+
+				// If the app is busy, wait for it to become active
+				//zWaitForBusyOverlay();
+			}
+
+		}
+
+		// Return the specified page, or null if not set
+		return (page);
 
 	}
 
 }
+
+
