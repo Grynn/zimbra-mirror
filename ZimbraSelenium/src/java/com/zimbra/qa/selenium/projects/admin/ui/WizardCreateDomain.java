@@ -7,6 +7,7 @@ import com.zimbra.qa.selenium.framework.items.IItem;
 import com.zimbra.qa.selenium.framework.ui.AbsTab;
 import com.zimbra.qa.selenium.framework.ui.AbsWizard;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.admin.items.DomainItem;
 
 
@@ -17,7 +18,10 @@ import com.zimbra.qa.selenium.projects.admin.items.DomainItem;
 public class WizardCreateDomain extends AbsWizard {
 
 	public static class Locators {
-		public static String zdlg_DOMAIN_NAME="zdlgv__NEW_DOMAIN_zimbraDomainName";
+		public static final String zdlg_DOMAIN_NAME="zdlgv__NEW_DOMAIN_zimbraDomainName";
+		public static final String MAIL_SERVER_DROPDOWN="zdlgv__NEW_DOMAIN_zimbraMailHost";
+		public static final String MAIL_SERVER_DROPDOWN_TABLE="css=div#___OSELECT_MENU___";
+		
 	}
 
 	public WizardCreateDomain(AbsTab page) {
@@ -43,7 +47,14 @@ public class WizardCreateDomain extends AbsWizard {
 		zType(Locators.zdlg_DOMAIN_NAME,"");
 		this.zKeyboard.zTypeCharacters(domainName);
 
-
+		clickNext(AbsWizard.Locators.DOMAIN_DIALOG);
+		
+		zClickAt(Locators.MAIL_SERVER_DROPDOWN, "");
+		zClickAt(Locators.MAIL_SERVER_DROPDOWN_TABLE+" div:contains('"+
+					ZimbraSeleniumProperties.getStringProperty("server.host")+
+					"')", "");
+		
+		
 		clickFinish(AbsWizard.Locators.DOMAIN_DIALOG);
 
 		return (domain);

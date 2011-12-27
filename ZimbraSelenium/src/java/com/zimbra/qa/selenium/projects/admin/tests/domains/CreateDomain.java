@@ -38,7 +38,7 @@ public class CreateDomain extends AdminCommonTest {
 
 		// Click "New" -> "Domain"
 		WizardCreateDomain wizard = 
-			(WizardCreateDomain)app.zPageManageDomains.zToolbarPressButton(Button.B_NEW);
+			(WizardCreateDomain)app.zPageManageDomains.zToolbarPressPulldown(Button.B_GEAR_BOX, Button.O_NEW);
 
 		// Fill out the wizard and click Finish
 		wizard.zCompleteWizard(domain);

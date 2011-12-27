@@ -34,7 +34,7 @@ public abstract class AbsWizard extends AbsPage {
 	public static String CANCEL_BUTTON = "zdlg__NEW_ACCT_button1_title";
 	public static String HELP_BUTTON = "zdlg__NEW_ACCT_button10_title";
 	public static String PREVIOUS_BUTTON = "zdlg__NEW_ACCT_button11_title";
-	public static String NEXT_BUTTON = "zdlg__NEW_ACCT_button12_title";
+	public static String NEXT_BUTTON = "_button12_title";
 	public static String FINISH_BUTTON = "_button13_title";
 	public static String ACCOUNT_DIALOG="ACCT";
 	public static String DOMAIN_DIALOG="DOMAIN";
@@ -103,13 +103,29 @@ public abstract class AbsWizard extends AbsPage {
 		switch(button) {
 		case Finish : 
 				buttonPath="css=td[id$='_" +  dialogName + Locators.FINISH_BUTTON + "']";
-				if(sIsElementPresent(buttonPath)) zClick(buttonPath); 
+				if(sIsElementPresent(buttonPath)) 
+					zClickAt(buttonPath,""); 
 				break;
-		case Next:if(sIsElementPresent(Locators.NEXT_BUTTON)) zClick(Locators.NEXT_BUTTON);break;
-		case Previous:if(sIsElementPresent(Locators.PREVIOUS_BUTTON))zClick(Locators.PREVIOUS_BUTTON);break;
-		case Cancel:if(sIsElementPresent(Locators.CANCEL_BUTTON))zClick(Locators.CANCEL_BUTTON);break;
-		case Help:if(sIsElementPresent(Locators.HELP_BUTTON)) zClick(Locators.HELP_BUTTON);break;
-		}
+		case Next:
+				buttonPath="css=td[id$='_" +  dialogName + Locators.NEXT_BUTTON + "']";
+				if(sIsElementPresent(buttonPath)) 
+					zClickAt(buttonPath,"");
+				break;				
+		case Previous:
+				buttonPath="css=td[id$='_" +  dialogName + Locators.PREVIOUS_BUTTON + "']";
+				if(sIsElementPresent(buttonPath))
+					zClickAt(buttonPath,"");
+				break;
+		case Cancel:
+				buttonPath="css=td[id$='_" +  dialogName + Locators.CANCEL_BUTTON + "']";
+				if(sIsElementPresent(buttonPath))
+					zClickAt(buttonPath,"");	
+				break;
+		case Help:
+				buttonPath="css=td[id$='_" +  dialogName + Locators.HELP_BUTTON + "']";
+				if(sIsElementPresent(buttonPath))
+					zClickAt(buttonPath,"");
+			}
 	}
 
 }

@@ -22,7 +22,7 @@ public class PageManageResources extends AbsTab {
 		// ** OverviewTreePanel -> Manage Accounts -> Resources
 		public static final String MANAGE_ACCOUNTS_ICON="css=div.ImgMangeAccounts";
 		public static final String RESOURCES="css=td[id^='zti__AppAdmin__Home__resLstHV']";
-		public static final String CONFIGURE_ICON="css=div.ImgConfigure";
+		public static final String GEAR_ICON="css=div.ImgConfigure";
 		public static final String NEW_MENU="css=td[id^='zmi__zb_currentApp__NEW_MENU__']";
 	}
 
@@ -42,12 +42,12 @@ public class PageManageResources extends AbsTab {
 			throw new HarnessException("Admin Console application is not active!");
 
 
-		boolean present = sIsElementPresent(Locators.CONFIGURE_ICON);
+		boolean present = sIsElementPresent(Locators.GEAR_ICON);
 		if ( !present ) {
 			return (false);
 		}
 
-		boolean visible = zIsVisiblePerPosition(Locators.CONFIGURE_ICON, 0, 0);
+		boolean visible = zIsVisiblePerPosition(Locators.GEAR_ICON, 0, 0);
 		if ( !visible ) {
 			logger.debug("isActive() visible = "+ visible);
 			return (false);
@@ -179,7 +179,7 @@ public class PageManageResources extends AbsTab {
 
 			if (option == Button.O_NEW) {
 
-				pulldownLocator = Locators.CONFIGURE_ICON;
+				pulldownLocator = Locators.GEAR_ICON;
 				optionLocator = Locators.NEW_MENU;
 				
 
