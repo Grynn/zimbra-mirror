@@ -24,12 +24,12 @@
 AttachContactsTabView =
 function(parent, zimlet, className) {
 	this.zimlet = zimlet;
-	DwtTabViewPage.call(this, parent, className, Dwt.STATIC_STYLE);
-	this.setScrollStyle(Dwt.SCROLL);
+    DwtComposite.call(this,parent,className,Dwt.STATIC_STYLE);
+    this._createHtml1();
 	this.closed = true;
 };
 
-AttachContactsTabView.prototype = new DwtTabViewPage;
+AttachContactsTabView.prototype = new DwtComposite;
 AttachContactsTabView.prototype.constructor = AttachContactsTabView;
 
 /**
@@ -77,7 +77,7 @@ function() {
 	}
 	if (this.prevAccount && (acct.id == this.prevAccount.id)) {
 		this.reset();
-		this.setSize(Dwt.DEFAULT, "255");
+		this.setSize(Dwt.DEFAULT, "295");
 		return;
 	}
 	this.prevAccount = acct;
@@ -129,7 +129,6 @@ function() {
  */
 AttachContactsTabView.prototype._createHtml1 =
 function() {
-	this._contentEl = this.getContentHtmlElement();
 	this._tableID = Dwt.getNextId();
 	this._folderTreeCellId = Dwt.getNextId();
 	this._folderListId = Dwt.getNextId();
@@ -142,7 +141,7 @@ function() {
 	"<td  valign='top'><div  id='", this._folderListId, "' ></div>",
 	"</td></tr></table>");
 
-	Dwt.setInnerHtml(this._contentEl, html.join(""));
+    this.setContent(html.join(""));
 
 	var searchButton = new DwtButton({parent:this});
 	var searchButtonLabel = this.zimlet.getMessage("ACZ_tab_button_search");
@@ -491,7 +490,7 @@ function() {
 	};
 	this._setOverview(params);
 
-	this.setSize(Dwt.DEFAULT, "255");
+	this.setSize(Dwt.DEFAULT, "295");
 	this.reset();
 };
 /**

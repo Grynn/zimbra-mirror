@@ -1,6 +1,7 @@
 
 .AttachContactsTabBox {
 	background-color:#FDFCFA;
+    border-right:1px solid #E0E0E0;
 }
 
 table.AttachContacts_table input[type="text"]{

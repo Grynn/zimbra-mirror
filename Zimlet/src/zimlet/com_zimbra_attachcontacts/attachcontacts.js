@@ -42,19 +42,40 @@ AttachContactsZimlet.prototype.init = function() {
 };
 
 /**
- * Called by framework when compose toolbar is being initialized
+ * Called by framework when attach is clicked
  */
-AttachContactsZimlet.prototype.initializeToolbar =
-function(app, toolbar, controller, viewId) {
-	var viewType = appCtxt.getViewTypeFromId(viewId);
-	if (viewType == ZmId.VIEW_COMPOSE && !this._addedToMainWindow) {
-		var btn = toolbar.getOp(ZmId.OP_ATTACHMENT);
-		btn.addSelectionListener(new AjxListener(this, this._addTab));	
-	} else if (viewType == ZmId.VIEW_CONTACT_SIMPLE){ 
-		this._initContactsReminderToolbar(toolbar, controller);
-	} else if (viewType == ZmId.VIEW_CONTACT && this._isOkayToAttach()) {
-		this._initContactsReminderToolbar(toolbar, controller);
-	}
+
+AttachContactsZimlet.prototype.initializeAttachPopup =
+function(menu, controller) {
+    var mi = controller._createAttachMenuItem(menu, ZmMsg.contacts,
+                    new AjxListener(this, this.showAttachmentDialog ));
+};
+
+AttachContactsZimlet.prototype.removePrevAttDialogContent =
+function(contentDiv) {
+    var elementNode =  contentDiv && contentDiv.firstChild;
+    if (elementNode && elementNode.className == "DwtComposite" ){
+        contentDiv.removeChild(elementNode);
+    }
+};
+
+AttachContactsZimlet.prototype.showAttachmentDialog =
+function() {
+
+	var attachDialog = this._attachDialog = appCtxt.getAttachDialog();
+    // To be changed
+    this.removePrevAttDialogContent(attachDialog._getContentDiv().firstChild);
+
+    if (!this.AttachContactsView || !this.AttachContactsView.attachDialog){
+	    this.AttachContactsView = new AttachContactsTabView(this._attachDialog, this);
+
+    }
+    this.AttachContactsView.reparentHtmlElement(attachDialog._getContentDiv().childNodes[0], 0);
+    this.AttachContactsView.attachDialog = attachDialog;
+	attachDialog.setOkListener(new AjxCallback(this, this._okListener));
+    this.AttachContactsView.attachDialog.popup();
+    this.AttachContactsView.attachDialog.enableInlineOption(this._composeMode == DwtHtmlEditor.HTML);
+    this._addedToMainWindow = true;
 };
 
 AttachContactsZimlet.prototype.onShowView =
@@ -65,34 +86,11 @@ function(viewId)  {
 	}
 };
 
-AttachContactsZimlet.prototype._addTab =
-function() {
-	if(this._addedToMainWindow) {
-		return;
-	}
-	var tabLabel = this.getMessage("ACZ_tab_label");
-	var attachDialog = this._attachDialog = appCtxt.getAttachDialog();
-
-	var tabview = attachDialog ? attachDialog.getTabView() : null;
-	var tabs = attachDialog.getTabView()._tabs;
-	for (var index in tabs) {
-		if (tabs[index].title == tabLabel) {
-			return;
-		}
-	}
-	this.AttachContactsView = new AttachContactsTabView(tabview, this);
-
-	this._tabkey = attachDialog.addTab("AttachContacts", tabLabel, this.AttachContactsView);
-	this.AttachContactsView.attachDialog = attachDialog;
-
-	attachDialog.addOkListener(this._tabkey, new AjxCallback(this, this._okListener));
-	this._addedToMainWindow = true;
-};
-
 AttachContactsZimlet.prototype._okListener =
 function() {
 	this.AttachContactsView.uploadFiles();
 	this.AttachContactsView.setClosed(true);
+    this.AttachContactsView.attachDialog.popdown();
 }
 
 /**

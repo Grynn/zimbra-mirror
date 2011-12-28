@@ -33,34 +33,42 @@ var AttachMailZimlet = com_zimbra_attachmail_HandlerObject;
 
 
 /**
- * Called by framework when compose toolbar is being initialized
+ * Called by framework when attach popup called
  */
-AttachMailZimlet.prototype.initializeToolbar =
-function(app, toolbar, controller, viewId) {
-	var viewType = appCtxt.getViewTypeFromId(viewId);
-	if (viewType == ZmId.VIEW_COMPOSE && !this._addedToMainWindow) {
-		var btn = toolbar.getOp(ZmId.OP_ATTACHMENT);
-		btn.addSelectionListener(new AjxListener(this, this._addTab));	
-	} 
+
+AttachMailZimlet.prototype.initializeAttachPopup =
+function(menu, controller) {
+    var mi = controller._createAttachMenuItem(menu, ZmMsg.mail,
+        new AjxListener(this, this.showAttachmentDialog ));
 };
 
-AttachMailZimlet.prototype._addTab =
+AttachMailZimlet.prototype.removePrevAttDialogContent =
+function(contentDiv) {
+    var elementNode =  contentDiv && contentDiv.firstChild;
+    if (elementNode && elementNode.className == "DwtComposite" ){
+        contentDiv.removeChild(elementNode);
+    }
+};
+
+AttachMailZimlet.prototype.showAttachmentDialog =
 function() {
-	if(this._addedToMainWindow){
-		return;
-	}
+
 	var attachDialog = this._attachDialog = appCtxt.getAttachDialog();
-	var tabview = attachDialog ? attachDialog.getTabView() : null;
-	
-	this.AMV = new AttachMailTabView(tabview, this);
-	
-	var tabLabel = this.getMessage("AttachMailZimlet_tab_label");
-	var tabkey = attachDialog.addTab("attachmail", tabLabel, this.AMV);
-	this.AMV.attachDialog = attachDialog;
-	
-	var callback = new AjxCallback(this.AMV, this.AMV.uploadFiles);
-	attachDialog.addOkListener(tabkey, callback);
-	this._addedToMainWindow = true;
+    this.removePrevAttDialogContent(attachDialog._getContentDiv().firstChild);
+    if (!this.AttachContactsView || !this.AttachContactsView.attachDialog){
+	    this.AMV = new AttachMailTabView(this._attachDialog, this);
+    }
+
+    this.AMV.reparentHtmlElement(attachDialog._getContentDiv().childNodes[0], 0);
+    this.AMV.attachDialog = attachDialog;
+	attachDialog.setOkListener(new AjxCallback(this.AMV, this.AMV.uploadFiles));
+
+    var view = appCtxt.getCurrentView();
+    var callback = new AjxCallback(view, view._attsDoneCallback, [true]);
+    attachDialog.setUploadCallback(callback);
+
+    this.AMV.attachDialog.popup();
+    this._addedToMainWindow = true;
 };
 
 /**
@@ -92,11 +100,18 @@ AttachMailZimlet.prototype.singleClicked = function() {
 AttachMailTabView =
 function(parent, zimlet, className) {
 	this.zimlet = zimlet;
-	DwtTabViewPage.call(this, parent, className, Dwt.STATIC_STYLE);
-	this.setScrollStyle(Dwt.SCROLL);
+	DwtComposite.call(this,parent,className,Dwt.STATIC_STYLE);
+	var acct = appCtxt.multiAccounts ? appCtxt.getAppViewMgr().getCurrentView().getFromAccount() : appCtxt.getActiveAccount();
+	if (this.prevAccount && (acct.id == this.prevAccount.id)) {
+			this.setSize(Dwt.DEFAULT, "275");
+			return;
+	}
+	this.prevAccount = acct;
+	this._createHtml1();
+	document.getElementById(this._folderTreeCellId).onclick = AjxCallback.simpleClosure(this._treeListener, this);
 };
 
-AttachMailTabView.prototype = new DwtTabViewPage;
+AttachMailTabView.prototype = new DwtComposite;
 AttachMailTabView.prototype.constructor = AttachMailTabView;
 
 /**
@@ -133,7 +148,7 @@ function() {
 	DwtTabViewPage.prototype.showMe.call(this);
 	var acct = appCtxt.multiAccounts ? appCtxt.getAppViewMgr().getCurrentView().getFromAccount() : appCtxt.getActiveAccount();
 	if (this.prevAccount && (acct.id == this.prevAccount.id)) {
-			this.setSize(Dwt.DEFAULT, "255");
+			this.setSize(Dwt.DEFAULT, "275");
 			return;
 	}
 	this.prevAccount = acct;
@@ -186,7 +201,7 @@ function() {
  */
 AttachMailTabView.prototype._createHtml1 =
 function() {
-	this._contentEl = this.getContentHtmlElement();
+
 	this._tableID = Dwt.getNextId();
 	this._folderTreeCellId = Dwt.getNextId();
 	this._folderListId = Dwt.getNextId();
@@ -215,7 +230,7 @@ function() {
 	html[idx++] = '</tr>';
 	html[idx++] = '</table>';
 
-	this._contentEl.innerHTML = html.join("");
+    this.setContent(html.join(""));
 
 	var searchButton = new DwtButton({parent:this});
 	var searchButtonLabel = this.zimlet.getMessage("AttachMailZimlet_tab_button_search");
@@ -434,6 +449,7 @@ function(attachmentDlg, docIds) {
 		attachmentDlg._uploadCallback.run(AjxPost.SC_OK, null, null);
 	}
 	this._hiddenView.getHtmlElement().innerHTML = "";//reset
+    attachmentDlg.popdown();
 };
 
 /**
@@ -492,7 +508,7 @@ function() {
 		account: this.prevAccount
 	};
 	this._setOverview(params);
-	this.setSize(Dwt.DEFAULT, "255");
+	this.setSize(Dwt.DEFAULT, "275");
 	this._currentQuery = this._getQueryFromFolder("2");
 	//this.treeView.setSelected("2");
 	setTimeout(AjxCallback.simpleClosure(this.treeView.setSelected, this.treeView, 2), 100);
