@@ -37,6 +37,7 @@ public abstract class AbsWizard extends AbsPage {
 	public static final String NEXT_BUTTON = "_button12_title";
 	public static final String FINISH_BUTTON = "_button13_title";
 	public static final String ACCOUNT_DIALOG="ACCT";
+	public static final String DL_DIALOG="DL";
 	public static final String DOMAIN_DIALOG="DOMAIN";
 	public static final String COS_DIALOG="COS";
 	public static final String RESOURCE_DIALOG="RES";

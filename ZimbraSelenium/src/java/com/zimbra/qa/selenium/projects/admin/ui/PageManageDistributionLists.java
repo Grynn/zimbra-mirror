@@ -20,21 +20,10 @@ import com.zimbra.qa.selenium.framework.util.SleepUtil;
 public class PageManageDistributionLists extends AbsTab {
 
 	public static class Locators {
-
-		// ** OverviewTreePanel -> Addresses -> Distribution Lists
-		public static final String zti_DISTRIBUTION_LIST = "zti__AppAdmin__ADDRESS__DL_textCell";
-
-		// ** "Manage Distribution Lists" Tab Title
-		public static final String ztab_MANAGE_DISTRIBUTION_LIST_ICON = "css=tr#ztab__MAIN_TAB_row div.ImgDistributionList";
-		public static final String zb_NEW = "xpath=//*[@id='zb__ACLV__NEW_MENU_title']";		// New Button
-		public static final String zdd_NEW_MENU="css=td.ZDropDown div.ImgSelectPullDownArrow";
-		//public static final String zdd_NEW_MENU= "//td[contains(@id,'zb__ACLV__NEW_MENU_dropdown')]/div";	
-
-		// NEW Menu
-		// TODO: define these locators
-		public static final String zmi_DL = "zmi__ACLV__NEW_DL";
-
-
+		public static final String MANAGE_ACCOUNTS_ICON="css=div.ImgMangeAccounts";
+		public static final String DISTRIBUTION_LISTS="css=td[id^='zti__AppAdmin__Home__dlLstHV']";
+		public static final String GEAR_ICON="css=div.ImgConfigure";
+		public static final String NEW_MENU="css=td[id^='zmi__zb_currentApp__NEW_MENU__'][id$='_title']";
 	}
 
 	public PageManageDistributionLists(AbsApplication application) {
@@ -52,12 +41,12 @@ public class PageManageDistributionLists extends AbsTab {
 			throw new HarnessException("Admin Console application is not active!");
 
 
-		boolean present = sIsElementPresent(Locators.ztab_MANAGE_DISTRIBUTION_LIST_ICON);
+		boolean present = sIsElementPresent(Locators.GEAR_ICON);
 		if ( !present ) {
 			return (false);
 		}
 
-		boolean visible = zIsVisiblePerPosition(Locators.ztab_MANAGE_DISTRIBUTION_LIST_ICON, 0, 0);
+		boolean visible = zIsVisiblePerPosition(Locators.GEAR_ICON, 0, 0);
 		if ( !visible ) {
 			logger.debug("isActive() visible = "+ visible);
 			return (false);
@@ -86,11 +75,12 @@ public class PageManageDistributionLists extends AbsTab {
 			return;
 		}
 
-		// Click on Addresses -> DL
-		zClickAt(Locators.zti_DISTRIBUTION_LIST,"");
+		// Click on Manage Accounts -> Accounts
+		zClickAt(Locators.MANAGE_ACCOUNTS_ICON,"");
+		sIsElementPresent(Locators.DISTRIBUTION_LISTS);
+		zClickAt(Locators.DISTRIBUTION_LISTS, "");
 
 		zWaitForActive();
-
 	}
 
 	@Override
@@ -135,7 +125,7 @@ public class PageManageDistributionLists extends AbsTab {
 		if ( button == Button.B_NEW ) {
 
 			// New button
-			locator = Locators.zb_NEW;
+			locator = Locators.DISTRIBUTION_LISTS;
 
 			 
 			// Create the page
@@ -165,8 +155,8 @@ public class PageManageDistributionLists extends AbsTab {
 
 	}
 
-	@Override
-	public AbsForm zToolbarPressPulldown(Button pulldown, Button option) throws HarnessException {
+	
+	public AbsPage zToolbarPressPulldown(Button pulldown, Button option) throws HarnessException {
 		logger.info(myPageName() + " zToolbarPressButtonWithPulldown("+ pulldown +", "+ option +")");
 
 		tracer.trace("Click pulldown "+ pulldown +" then "+ option);
@@ -181,16 +171,16 @@ public class PageManageDistributionLists extends AbsTab {
 		// Default behavior variables
 		String pulldownLocator = null; // If set, this will be expanded
 		String optionLocator = null; // If set, this will be clicked
-		AbsForm form = null; // If set, this page will be returned
+		AbsPage page = null; // If set, this page will be returned
 
-		if (pulldown == Button.B_NEW) {
+		if (pulldown == Button.B_GEAR_BOX) {
 
-			if (option == Button.O_DISTRIBUTIUONLISTS_DISTRIBUTIONLIST) {
+			if (option == Button.O_NEW) {
 
-				pulldownLocator = Locators.zdd_NEW_MENU;
-				optionLocator = PageManageDistributionLists.Locators.zmi_DL;
+				pulldownLocator = Locators.GEAR_ICON;
+				optionLocator = Locators.NEW_MENU;
 
-				form = new FormNewDistributionList(MyApplication);
+				page = new WizardCreateDL(this);
 
 				// FALL THROUGH
 
@@ -233,7 +223,7 @@ public class PageManageDistributionLists extends AbsTab {
 		}
 
 		// Return the specified page, or null if not set
-		return (form);
+		return (page);
 	}
 
 }

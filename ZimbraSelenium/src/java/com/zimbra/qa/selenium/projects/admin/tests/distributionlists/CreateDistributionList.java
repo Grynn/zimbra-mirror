@@ -9,7 +9,7 @@ import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAdminAccount;
 import com.zimbra.qa.selenium.projects.admin.core.AdminCommonTest;
 import com.zimbra.qa.selenium.projects.admin.items.DistributionListItem;
-import com.zimbra.qa.selenium.projects.admin.ui.FormNewDistributionList;
+import com.zimbra.qa.selenium.projects.admin.ui.WizardCreateDL;
 
 public class CreateDistributionList extends AdminCommonTest {
 	public CreateDistributionList() {
@@ -27,17 +27,18 @@ public class CreateDistributionList extends AdminCommonTest {
 	 * @throws HarnessException
 	 */
 	@Test(	description = "Create a basic DL",
-			groups = { "sanity" })
+			groups = { "obsolete" })
 			public void CreateDistributionList_01() throws HarnessException {
 
 		// Create a new dl in the Admin Console
 		DistributionListItem dl = new DistributionListItem();
 
 		// Click "New"
-		FormNewDistributionList form =(FormNewDistributionList) app.zPageManageDistributionList.zToolbarPressButton(Button.B_NEW);
+		
+		WizardCreateDL wizard =(WizardCreateDL) app.zPageManageDistributionList.zToolbarPressPulldown(Button.B_GEAR_BOX, Button.O_NEW);
 	
 		// Fill out the necessary input fields and submit
-		form.zComplete(dl);
+		wizard.zCompleteWizard(dl);
 		
 		// Verify the dl exists in the ZCS
 		ZimbraAdminAccount.AdminConsoleAdmin().soapSend(
@@ -61,11 +62,10 @@ public class CreateDistributionList extends AdminCommonTest {
 		// Create a new dl in the Admin Console
 		DistributionListItem dl = new DistributionListItem();
 
-		// Click "New"
-		FormNewDistributionList form =(FormNewDistributionList) app.zPageManageDistributionList.zToolbarPressPulldown(Button.B_NEW, Button.O_DISTRIBUTIUONLISTS_DISTRIBUTIONLIST);
-	
+		WizardCreateDL wizard =(WizardCreateDL) app.zPageManageDistributionList.zToolbarPressPulldown(Button.B_GEAR_BOX, Button.O_NEW);
+		
 		// Fill out the necessary input fields and submit
-		form.zComplete(dl);
+		wizard.zCompleteWizard(dl);
 		
 		// Verify the dl exists in the ZCS
 		ZimbraAdminAccount.AdminConsoleAdmin().soapSend(
