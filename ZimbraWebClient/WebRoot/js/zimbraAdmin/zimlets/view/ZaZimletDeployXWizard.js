@@ -24,8 +24,8 @@ ZaZimletDeployXWizard = function(parent) {
 	ZaXWizardDialog.call(this, parent,null, ZaMsg.ZMLT_DeployZimletWizardTitle, "550px", "300px","ZaZimletDeployXWizard", null, ZaId.DLG_ZIM_DEPLOY);
 	this._app = ZaApp.getInstance();
 	this.stepChoices = [
-		{label:ZaMsg.ZMLT_UploadFileStep_Title, value:1},
-		{label:ZaMsg.ZMLT_Deploying_Title, value:2}
+		{label:ZaMsg.ZMLT_SelectZimletStepTitle, value:1},
+		{label:ZaMsg.ZMLT_DeployZimletStepTitle, value:2}
 	];	
 	this.currentPageNum = 0;
 	this.initForm(ZaZimlet.myXModel,this.getMyXForm());	
@@ -91,9 +91,7 @@ function(entry) {
 	this._containedObject = entry;
 	this._containedObject[ZaModel.currentStep] = entry[ZaModel.currentStep] || 1;
 	this._containedObject[ZaZimlet.A_attachmentId] = entry[ZaZimlet.A_attachmentId] || null;
-	this._containedObject[ZaZimlet.A_deployStatus] = entry[ZaZimlet.A_deployStatus] || null;
-	this._containedObject[ZaZimlet.A_statusMsg] = entry[ZaZimlet.A_statusMsg] || null;
-	this._localXForm.setInstance(this._containedObject);		
+	this._localXForm.setInstance(this._containedObject);
 }
 /**
 * Overwritten methods that control wizard's flow (open, go next,go previous, finish)
@@ -101,10 +99,16 @@ function(entry) {
 ZaZimletDeployXWizard.prototype.popup = 
 function (loc) {
 	ZaXWizardDialog.prototype.popup.call(this, loc);
+
+	this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);
+	this._button[DwtWizardDialog.PREV_BUTTON].setText(ZaMsg.ZMLT_ReselectZimlet);
+
 	this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
+	this._button[DwtWizardDialog.NEXT_BUTTON].setText(ZaMsg.ZMLT_DeployZimlet);
+
 	this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
-	this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);	
-	this._button[DwtWizardDialog.NEXT_BUTTON].setText(ZaMsg.ZMLT_DeployZimlet);		
+
+	
 }
 
 ZaZimletDeployXWizard.prototype.getUploadFrameId =
@@ -149,7 +153,7 @@ function() {
 			ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ZMLT_zimletFileNameError) ;
 		}
 		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
-		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);	
+		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
 		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
 		ZaXWizardDialog.prototype.goNext.call(this);
 	} else {
@@ -164,8 +168,13 @@ function() {
 	this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);	
 	var instance = this._localXForm.getInstance();
 	instance[ZaZimlet.A_attachmentId] = null;
+
+	instance[ZaZimlet.A_uploadStatus] = null;
 	instance[ZaZimlet.A_deployStatus] = null;
-	instance[ZaZimlet.A_statusMsg] = null;	
+
+	instance[ZaZimlet.A_uploadStatusMsg] = null;
+	instance[ZaZimlet.A_deployStatusMsg] = null;
+
 	this._localXForm.setInstance(instance);
 	ZaXWizardDialog.prototype.goPrev.call(this);
 }
@@ -177,36 +186,42 @@ function() {
 ZaZimletDeployXWizard.prototype.popdown = 
 function () {
 	if(this._pollHandler)
-		AjxTimedAction.cancelAction(this._pollHandler);		
-		
+		AjxTimedAction.cancelAction(this._pollHandler);
+
 	ZaXWizardDialog.prototype.popdown.call(this);
 }
 
 ZaZimletDeployXWizard.prototype.uploadCallback = function (status, attId) {
+	//we use explorer's 'submit form' mechanism to upload the file, so we cannot upload multi files in the same time,
+	//but only one after one. thus this function will be called back in sequence.
 	try {
 		var instance = this._localXForm.getInstance();
+		var msgLine = null;
 		if ((status == AjxPost.SC_OK) && (attId != null)) {
 			instance[ZaZimlet.A_attachmentId] = attId;
-			instance[ZaZimlet.A_statusMsg] = ZaMsg.ZMLT_UploadZimletSuccessMsg;
-			ZaZimlet.deploy( {action:ZaZimlet.ACTION_DEPLOY_ALL,attId:attId,flushCache:instance[ZaZimlet.A_flushCache]},new AjxCallback(this, this.deployZimletClbck));			
+			instance[ZaZimlet.A_uploadStatus] = ZaZimlet.STATUS_SUCCEEDED;
+			msgLine = AjxMessageFormat.format(ZaMsg.ZMLT_UploadZimletSuccessMsg);
+			ZaZimlet.deploy( {action:ZaZimlet.ACTION_DEPLOY_ALL,attId:attId,flushCache:instance[ZaZimlet.A_flushCache]},new AjxCallback(this, this.deployZimletClbck));
 		} else {
 			// handle errors during attachment upload.
-			instance[ZaZimlet.A_deployStatus] = ZaZimlet.STATUS_FAILED;
-			instance[ZaZimlet.A_statusMsg] = AjxMessageFormat.format(ZaMsg.ZMLT_UploadZimletErrorMsg, status);
+			instance[ZaZimlet.A_uploadStatus] = ZaZimlet.STATUS_FAILED;
+			msgLine = AjxMessageFormat.format(ZaMsg.ZMLT_UploadZimletErrorMsg, [status]);
 		}
+		instance[ZaZimlet.A_uploadStatusMsg] = msgLine + ("<br/>");
 	} catch (ex) {
-		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaZimletDeployXWizard.uploadCallback");	
-	}	
-	this._localXForm.setInstance(instance);	
+		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaZimletDeployXWizard.uploadCallback");
+	}
+
+	this._localXForm.setInstance(instance);
 }
 
 ZaZimletDeployXWizard.prototype.getDeploymentStatus = function () {
 	try {
 		var instance = this._localXForm.getInstance();
-		ZaZimlet.deploy({action:ZaZimlet.ACTION_DEPLOY_STATUS,attId:instance[ZaZimlet.A_attachmentId]},new AjxCallback(this, this.deployZimletClbck));					
+		ZaZimlet.deploy({action:ZaZimlet.ACTION_DEPLOY_STATUS,attId:instance[ZaZimlet.A_attachmentId]},new AjxCallback(this, this.deployZimletClbck));
 	} catch (ex) {
-		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaZimletDeployXWizard.getDeploymentStatus");	
-	}	
+		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaZimletDeployXWizard.getDeploymentStatus");
+	}
 
 }
 
@@ -222,38 +237,45 @@ ZaZimletDeployXWizard.prototype.deployZimletClbck = function (resp) {
 			var done = true;
 			var hasErrors = false;
 			var response = resp.getResponse().Body.DeployZimletResponse;
-			var list = new Array();	
 			var msgLines = [];
 			var progress = response[ZaZimlet.A_progress];
+
 			if(progress) {
-				if(!(progress instanceof Array))
+				if(!(progress instanceof Array)){
 					progress = [progress];
-				
-				var cnt = progress.length;
-				for(var i = 0; i < cnt; i++) {
-					if(progress[i].status == ZaZimlet.STATUS_PENDING) {
-						done = false;
-						msgLines.push(AjxMessageFormat.format(ZaMsg.ZMLT_DeployProgres,[progress[i].server,ZaMsg.ZMLT_StatusPending]))						
-					} else if (progress[i].status == ZaZimlet.STATUS_FAILED) {
-						hasErrors = true;
-						msgLines.push(AjxMessageFormat.format(ZaMsg.ZMLT_DeployProgresFail, [progress[i].server,progress[i].error]))						
-					} else if (progress[i].status == ZaZimlet.STATUS_SUCCEEDED) {
-						msgLines.push(AjxMessageFormat.format(ZaMsg.ZMLT_DeployProgres, [progress[i].server,ZaMsg.ZMLT_StatusSuccess]))						
-					}
 				}
 
-				instance[ZaZimlet.A_progress] = msgLines.join("<br/>");
+				var cnt = progress.length;
+				// cnt may be > 1, if there are multi mailbox servers. so here get the progress in every server
+				for(var i = 0; i < cnt; i++) {
+					var serverName = progress[i].server;
+					var status = progress[i].status;
+					if(status == ZaZimlet.STATUS_PENDING) {
+						done = false;
+						msgLines.push(AjxMessageFormat.format(ZaMsg.ZMLT_DeployProgres,[serverName,ZaMsg.ZMLT_StatusPending]));
+					} else if (status == ZaZimlet.STATUS_FAILED) {
+						hasErrors = true;
+						msgLines.push(AjxMessageFormat.format(ZaMsg.ZMLT_DeployProgresFail, [serverName, progress[i].error]));
+					} else if (status == ZaZimlet.STATUS_SUCCEEDED) {
+						msgLines.push(AjxMessageFormat.format(ZaMsg.ZMLT_DeployProgres, [serverName, ZaMsg.ZMLT_StatusSuccess]));
+					}
+					msgLines.push("<br/>");
+				}
 
 				if(hasErrors) {
 					instance[ZaZimlet.A_deployStatus]=ZaZimlet.STATUS_FAILED;
-					instance[ZaZimlet.A_statusMsg] = ZaMsg.ZMLT_failedDeployZimlet;
-				} else if(done && !hasErrors) {
+					//msgLines.push(ZaMsg.ZMLT_failedDeployZimlet); //keep previous msg, let the user be able to track the error.
+				} else if(done) {
 					instance[ZaZimlet.A_deployStatus]=ZaZimlet.STATUS_SUCCEEDED;
-					instance[ZaZimlet.A_statusMsg] = ZaMsg.ZMLT_DeployZimletComplete;	
-				} 
+					msgLines = [ZaMsg.ZMLT_DeployZimletComplete]; //clear up previous msg, only show the final succeeded status;
+				} else {
+					instance[ZaZimlet.A_deployStatus] = ZaZimlet.STATUS_PENDING;
+				}
+				instance[ZaZimlet.A_deployStatusMsg] = msgLines.join("<br/>") + ("<br/>");
+
 				if(!done) {
 					//schedule another request
-					this._pollHandler = AjxTimedAction.scheduleAction(this.pollAction, this.pollInterval);		
+					this._pollHandler = AjxTimedAction.scheduleAction(this.pollAction, this.pollInterval);
 				} else {
 					AjxTimedAction.cancelAction(this._pollHandler);
 					ZaApp.getInstance().getCurrentController().fireCreationEvent(new ZaZimlet());
@@ -262,12 +284,23 @@ ZaZimletDeployXWizard.prototype.deployZimletClbck = function (resp) {
 		}
 	} catch (ex) {
 		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaZimletDeployXWizard.deployZimletClbck");	
-	}	
-	this._localXForm.setInstance(instance);	
+	}
+	this._localXForm.setInstance(instance);
 }
 
-ZaZimletDeployXWizard.progressIsNotFailed = function () {
-	return (this.getInstanceValue(ZaZimlet.A_deployStatus) != ZaZimlet.STATUS_FAILED);	
+ZaZimletDeployXWizard.canShowDeployStatusMsg = function (showItWhenSucceededOrFailed) {
+	var uploadStatus = this.getInstanceValue(ZaZimlet.A_uploadStatus);
+	if (uploadStatus != ZaZimlet.STATUS_SUCCEEDED){
+		return false; //don't show deploying msg until uploading is succeeded
+	}
+
+	var deployStatus = this.getInstanceValue(ZaZimlet.A_deployStatus);
+	if (showItWhenSucceededOrFailed){
+		return (deployStatus != ZaZimlet.STATUS_FAILED);
+	}
+	else {
+		return (deployStatus == ZaZimlet.STATUS_FAILED);
+	}
 }
 
 ZaZimletDeployXWizard.myXFormModifier = function(xFormObject) {
@@ -282,43 +315,51 @@ ZaZimletDeployXWizard.myXFormModifier = function(xFormObject) {
 		]
 	};
 	var case2 = {
-		type:_CASE_, numCols:1,caseKey:2, width:"400px",		
+		type:_CASE_, numCols:1,caseKey:2, width:"400px",
 		items:[
 			{type:_GROUP_, numCols:1,  
 				items: [
-					{ type: _DWT_ALERT_,style: DwtAlert.CRITICAL,
-					  iconVisible: true, 
-					  content: null,width:"400px",
-					  ref:ZaZimlet.A_statusMsg,
-					  visibilityChecks:[[XForm.checkInstanceValue,ZaZimlet.A_deployStatus,ZaZimlet.STATUS_FAILED]],
-					  visibilityChangeEventSources:[ZaZimlet.A_deployStatus],
-					  align:_CENTER_
-					},						
+					{type: _DWT_ALERT_,style: DwtAlert.CRITICAL,
+						iconVisible: true, 
+						content: null,width:"400px",
+						ref:ZaZimlet.A_uploadStatusMsg,
+						visibilityChecks:[[XForm.checkInstanceValue, ZaZimlet.A_uploadStatus, ZaZimlet.STATUS_FAILED]],
+						visibilityChangeEventSources:[ZaZimlet.A_uploadStatus],
+						align:_CENTER_
+					},
 					{type:_DWT_ALERT_,style: DwtAlert.INFORMATION, 
 		 				iconVisible: true,
 						content: null,width:"400px",
-						ref:ZaZimlet.A_statusMsg,
-						visibilityChecks:[ZaZimletDeployXWizard.progressIsNotFailed],
-						visibilityChangeEventSources:[ZaZimlet.A_deployStatus],					
+						ref:ZaZimlet.A_uploadStatusMsg,
+						visibilityChecks:[[XForm.checkInstanceValueNot, ZaZimlet.A_uploadStatus, ZaZimlet.STATUS_FAILED]],
+						visibilityChangeEventSources:[ZaZimlet.A_uploadStatus],
 						align:_CENTER_
-					},						
+					},
+					{type: _DWT_ALERT_,style: DwtAlert.CRITICAL,
+						iconVisible: true, 
+						content: null,width:"400px",
+						ref:ZaZimlet.A_deployStatusMsg,
+						visibilityChecks:[[ZaZimletDeployXWizard.canShowDeployStatusMsg, false]],
+						visibilityChangeEventSources:[ZaZimlet.A_deployStatus],
+						align:_CENTER_
+					},
 					{type:_DWT_ALERT_,style: DwtAlert.INFORMATION, 
 		 				iconVisible: true,
 						content: null,width:"400px",
-						ref:ZaZimlet.A_progress,
-						visibilityChecks:[[XForm.checkInstanceValueNotEmty,ZaZimlet.A_progress]],
-						visibilityChangeEventSources:[ZaZimlet.A_progress],
+						ref:ZaZimlet.A_deployStatusMsg,
+						visibilityChecks:[[ZaZimletDeployXWizard.canShowDeployStatusMsg, true]],
+						visibilityChangeEventSources:[ZaZimlet.A_deployStatus],
 						align:_CENTER_
-					}					
+					}
 				]
 			}
-		]		
+		]
 	};
 	xFormObject.items = [
 			{type:_OUTPUT_, colSpan:2, align:_CENTER_, valign:_TOP_, ref:ZaModel.currentStep, choices:this.stepChoices},
 			{type:_SEPARATOR_, align:_CENTER_, valign:_TOP_},
 			{type:_SPACER_,  align:_CENTER_, valign:_TOP_},
 			{type:_SWITCH_, width:450, align:_LEFT_, valign:_TOP_, items:[case1,case2]}
-		];	
+		];
 }
 ZaXDialog.XFormModifiers["ZaZimletDeployXWizard"].push(ZaZimletDeployXWizard.myXFormModifier);
