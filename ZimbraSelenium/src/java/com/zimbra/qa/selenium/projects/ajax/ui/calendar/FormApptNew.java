@@ -26,10 +26,10 @@ public class FormApptNew extends AbsForm {
 		public static final String ShowOptionalLink = "css=td[id$='_show_optional']";
 		public static final String ShowEquipmentLink = "css=td[id$='_show_resources']";
 		
-		public static final String Button_Send = "css=div[id^='ztb__APPT'] td[id$='_SEND_INVITE_title']";
-		public static final String Button_Save = "css=div[id^='ztb__APPT'] td[id$='_SAVE_title']";
-		public static final String Button_SaveAndClose = "css=div[id^='ztb__APPT'] td[id$='_SAVE_title']";
-		public static final String Button_Close = "css=div[id^='ztb__APPT'] td[id$='_CANCEL_title']";
+		public static final String Button_Send = "css=div[id^='zb__App__tab_APPT-'] td[id$='_SEND_INVITE_title']";
+		public static final String Button_Save = "css=div[id^='zb__App__tab_APPT-'] td[id$='_SAVE_title']";
+		public static final String Button_SaveAndClose = "css=div[id^='zb__App__tab_APPT-'] td[id$='_SAVE_title']";
+		public static final String Button_Close = "css=div[id^='zb__App__tab_APPT-'] td[id$='_CANCEL_title']";
 
 	}
 
