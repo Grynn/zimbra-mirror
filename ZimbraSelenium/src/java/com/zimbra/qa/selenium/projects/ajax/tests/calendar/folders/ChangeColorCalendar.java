@@ -22,7 +22,7 @@ public class ChangeColorCalendar extends AjaxCommonTest {
 	}
 
 	@Test(	description = "Edit a Calendar, change the color (Context menu -> Edit)", 
-			groups = { "functional" })
+			groups = { "smoke" })
 	public void ChangeColorCalendar_01() throws HarnessException {
 
 		FolderItem root = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.UserRoot);

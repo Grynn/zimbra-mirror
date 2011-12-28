@@ -41,7 +41,7 @@ public class DeleteAppointment extends AjaxCommonTest {
 	}
 	
 	@Test(description = "Delete an appointment using Delete toolbar button",
-			groups = { "implement" })
+			groups = { "implement" }) // smoke
 	public void DeleteAppointment_01() throws HarnessException {
 		
 		// Creating objects for appointment data

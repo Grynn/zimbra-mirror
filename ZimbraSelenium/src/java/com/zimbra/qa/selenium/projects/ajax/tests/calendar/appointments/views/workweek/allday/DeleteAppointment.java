@@ -82,7 +82,7 @@ public class DeleteAppointment extends AjaxCommonTest {
 	}
 	
 	@Test(description = "Delete all-day appointment using context menu",
-			groups = { "smoke" })
+			groups = { "functional" })
 	public void DeleteAllDayAppointment_02() throws HarnessException {
 		
 		// Creating objects for appointment data

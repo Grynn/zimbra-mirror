@@ -78,7 +78,7 @@ public class GetAppointment extends AjaxCommonTest {
 	}
 
 	@Test(	description = "View a meeting request (TZ=America/New_York) in work week view",
-			groups = { "smoke" })
+			groups = { "functional" })
 	public void GetAppointment_02() throws HarnessException {
 		
 		// Create the message data to be sent

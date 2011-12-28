@@ -27,7 +27,7 @@ public class GetAppointment extends AjaxCommonTest {
 	}
 	
 	@Test(	description = "View a basic appointment in the work week view",
-			groups = { "implement" })
+			groups = { "implement" }) // smoke
 	public void GetAppointment_01() throws HarnessException {
 		
 		// Create the appointment on the server

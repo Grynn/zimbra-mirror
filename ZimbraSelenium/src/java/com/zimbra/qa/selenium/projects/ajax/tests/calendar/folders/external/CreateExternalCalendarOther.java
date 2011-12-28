@@ -21,7 +21,7 @@ public class CreateExternalCalendarOther extends AjaxCommonTest {
 
 
 	@Test(	description = "Create a new external calendar (type=other) by clicking 'Gear' -> 'new folder' on folder tree", 
-			groups = { "smoke" })
+			groups = { "functional" })
 	public void CreateExternalCalendarOther_01() throws HarnessException {
 
 		

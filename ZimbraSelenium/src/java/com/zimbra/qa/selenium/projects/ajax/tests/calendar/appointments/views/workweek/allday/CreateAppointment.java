@@ -22,7 +22,7 @@ public class CreateAppointment extends AjaxCommonTest {
 
 	
 	@Test(	description = "Create simple all day appointment",
-			groups = { "smoke" }
+			groups = { "sanity" }
 	)
 	public void CreateAllDayAppointment_01() throws HarnessException {
 		

@@ -19,7 +19,7 @@ public class CreateMeetingWithEquipment extends AjaxCommonTest {
 	}
 	
 	@Test(description = "Create simple meeting with equipment",
-			groups = { "smoke" })
+			groups = { "functional" })
 	public void CreateMeetingWithEquipment_01() throws HarnessException {
 		
 		// Create appointment data

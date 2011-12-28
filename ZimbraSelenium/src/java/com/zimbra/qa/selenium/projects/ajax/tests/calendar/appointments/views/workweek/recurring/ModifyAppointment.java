@@ -28,7 +28,9 @@ public class ModifyAppointment extends AjaxCommonTest {
 
 	}
 
-	@Test(description = "Modify appointment with subject & body and verify it", groups = { "implement" })
+	@Test(
+			description = "Modify appointment with subject & body and verify it", 
+			groups = { "implement" }) // smoke
 	public void ModifyAppointment_01() throws HarnessException {
 
 		// Creating object for appointment data

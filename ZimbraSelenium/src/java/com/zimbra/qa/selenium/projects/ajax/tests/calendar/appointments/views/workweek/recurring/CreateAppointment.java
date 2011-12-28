@@ -25,8 +25,7 @@ public class CreateAppointment extends AjaxCommonTest {
 
 	
 	@Test(	description = "Create a basic appointment without an attendee",
-			groups = { "implement" }
-	)
+			groups = { "implement" })  // sanity
 	public void CreateAppointment_01() throws HarnessException {
 		
 		// Create the message data to be sent

@@ -16,7 +16,7 @@ public class DeleteMeeting extends AjaxCommonTest {
 	}
 	
 	@Test(	description = "View a basic appointment in the week view",
-			groups = { "implement" })
+			groups = { "implement" }) //smoke
 	public void DeleteMeeting_01() throws HarnessException {
 		
 		// Create the appointment on the server
