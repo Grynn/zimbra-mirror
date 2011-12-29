@@ -1082,6 +1082,7 @@ function() {
                                         id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_CONFIGURATION,null, ZaId.TREEITEM_ZIMLETS),
                                         text: ZaMsg.OVP_zimlets,
                                         canShowOnRoot: false,
+                                        forceNode: false,
                                         mappingId: ZaZimbraAdmin._ZIMLET_LIST_VIEW});
                 tree.addTreeItemData(ti);
                 ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._ZIMLET_LIST_VIEW] = ZaOverviewPanelController.zimletListTreeListener;
@@ -1093,6 +1094,8 @@ function() {
                                         parent:parentPath,
                                         id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_CONFIGURATION,null, ZaId.TREEITEM_ADMINEXT),
                                         text: ZaMsg.OVP_adminZimlets,
+                                        canShowOnRoot: false,
+                                        forceNode: false,
                                         mappingId: ZaZimbraAdmin._ADMIN_ZIMLET_LIST_VIEW});
                 tree.addTreeItemData(ti);
                 ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._ADMIN_ZIMLET_LIST_VIEW] = ZaOverviewPanelController.adminExtListTreeListener;
@@ -2144,8 +2147,11 @@ ZaOverviewPanelController.xformTabTreeListener = function(ev) {
             currentView.setObject(currentObject);
         }
     }
-    currentView._localXForm.setInstanceValue(stepValue, ZaModel.currentTab);
-    currentView._localXForm.refresh() ;
+    if(currentView._localXForm){ //some views of zimlets are created by dwt
+        currentView._localXForm.setInstanceValue(stepValue, ZaModel.currentTab);
+        currentView._localXForm.refresh() ;
+    }
+
 }
 
 ZaOverviewPanelController.xformTreeListener = function(ev) {

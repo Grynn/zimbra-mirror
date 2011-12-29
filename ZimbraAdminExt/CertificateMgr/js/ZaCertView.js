@@ -133,3 +133,11 @@ ZaCertView.prototype.getTargetServerName = function() {
 	
 	return this.getTargetServerId() ;
 }
+
+ZaCertView.prototype.getTabChoices =
+function() {
+    this.tabChoices = new Array();
+    this.tabChoices.push({value:1, label:ZaMsg.TABT_GeneralPage});
+    return this.tabChoices;
+}
+

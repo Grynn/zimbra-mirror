@@ -174,6 +174,7 @@ ZaCert.certOvTreeModifier = function (tree) {
                                 parent:subParentPath,
                                 id:DwtId._makeId(certTi.id, ix + 1),
                                 text: serverList[ix].name,
+                                defaultSelectedItem: 1,
                                 mappingId: ZaZimbraAdmin._CERTS});
                         ti1.setData(ZaOverviewPanelController._OBJ_ID, serverList[ix].id);
                         tree.addTreeItemData(ti1);

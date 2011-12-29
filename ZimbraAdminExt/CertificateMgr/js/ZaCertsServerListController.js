@@ -129,6 +129,10 @@ ZaCertsServerListController.prototype.viewCertListener = function (ev) {
 	ZaApp.getInstance().getCertViewController().show(
 		ZaCert.getCerts(ZaApp.getInstance(), this._selectedItem.id),
 		this._selectedItem.id) ;
+    if (appNewUI) {
+                var parentPath = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_configure, com_zimbra_cert_manager.OVP_certs]);
+                ZaZimbraAdmin.getInstance().getOverviewPanelController().addObjectItem(parentPath, this._selectedItem.name, null, false, false, this._selectedItem);
+            }
 }
 
 /**
@@ -144,6 +148,10 @@ function(ev) {
 			ZaApp.getInstance().getCertViewController().show(
 				ZaCert.getCerts(ZaApp.getInstance(), this._selectedItem.id),
 				this._selectedItem.id);
+            if (appNewUI) {
+                var parentPath = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_configure, com_zimbra_cert_manager.OVP_certs]);
+                ZaZimbraAdmin.getInstance().getOverviewPanelController().addObjectItem(parentPath, ev.item.name, null, false, false, ev.item);
+            }
 	} else {
 		this.changeActionsState();	
 	}
