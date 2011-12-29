@@ -38,6 +38,8 @@ ZaZimletViewController.helpURL = location.pathname + ZaUtil.HELP_URL + "managing
 
 ZaController.initToolbarMethods["ZaZimletViewController"] = new Array();
 ZaController.setViewMethods["ZaZimletViewController"] = new Array();
+ZaController.initPopupMenuMethods["ZaZimletViewController"] = new Array();
+
 
 ZaZimletViewController.prototype.show = 
 function(entry, skipRefresh) {
@@ -74,6 +76,8 @@ function () {
 	this._contentView = this._view = new this.tabConstructor(this._container);
 
     this._initToolbar();
+    if(appNewUI)
+        this._initPopupMenu();
     this._toolbarOrder.push(ZaOperation.CLOSE);
     this._toolbarOrder.push(ZaOperation.NONE);
     this._toolbarOrder.push(ZaOperation.HELP);
@@ -101,3 +105,29 @@ function () {
 	this._UICreated = true;
 	ZaApp.getInstance()._controllers[this.getContentViewId ()] = this ;
 }
+
+ZaZimletViewController.prototype.getAppBarAction =
+function () {
+    if (AjxUtil.isEmpty(this._appbarOperation)) {
+        this._appbarOperation[ZaOperation.CLOSE] = new ZaOperation(ZaOperation.CLOSE, ZaMsg.TBB_Close, ZaMsg.ALTBB_Close_tt, "", "", new AjxListener(this, this.closeButtonListener));
+    }
+
+    return this._appbarOperation;
+}
+
+ZaZimletViewController.prototype.getAppBarOrder =
+function () {
+    if (AjxUtil.isEmpty(this._appbarOrder)) {
+        this._appbarOrder.push(ZaOperation.CLOSE);
+    }
+
+    return this._appbarOrder;
+}
+
+
+ZaZimletViewController.initPopupMenuMethod =
+function () {
+      this._popupOperations[ZaOperation.CLOSE] = new ZaOperation(ZaOperation.CLOSE,ZaMsg.TBB_Close, ZaMsg.DTBB_Close_tt, "Close", "CloseDis", new AjxListener(this, this.closeButtonListener));
+      this._popupOrder.push(ZaOperation.CLOSE);
+}
+ZaController.initPopupMenuMethods["ZaZimletViewController"].push(ZaZimletViewController.initPopupMenuMethod);
