@@ -4,7 +4,6 @@
 package com.zimbra.qa.selenium.projects.admin.ui;
 
 import com.zimbra.qa.selenium.framework.ui.AbsApplication;
-import com.zimbra.qa.selenium.framework.ui.AbsForm;
 import com.zimbra.qa.selenium.framework.ui.AbsPage;
 import com.zimbra.qa.selenium.framework.ui.AbsTab;
 import com.zimbra.qa.selenium.framework.ui.Action;
@@ -104,7 +103,7 @@ public class PageManageDistributionLists extends AbsTab {
 	}
 
 	
-	public AbsForm zToolbarPressButton(Button button) throws HarnessException {
+	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
 
 		logger.info(myPageName() + " zToolbarPressButton("+ button +")");
 
@@ -117,7 +116,7 @@ public class PageManageDistributionLists extends AbsTab {
 		// Default behavior variables
 		//
 		String locator = null;			// If set, this will be clicked
-		AbsForm form = null;	// If set, this page will be returned
+		AbsPage page = null;	// If set, this page will be returned
 
 		// Based on the button specified, take the appropriate action(s)
 		//
@@ -129,7 +128,7 @@ public class PageManageDistributionLists extends AbsTab {
 
 			 
 			// Create the page
-			form = new FormNewDistributionList(MyApplication);
+			page = new WizardCreateDL(this);
 
 			// FALL THROUGH
 
@@ -146,12 +145,12 @@ public class PageManageDistributionLists extends AbsTab {
 		this.zClickAt(locator,"");
 
 		// If page was specified, make sure it is active
-		if ( form != null ) {
+		if ( page != null ) {
 			SleepUtil.sleepMedium();
 		}
 
 		sMouseOut(locator);
-		return (form);
+		return (page);
 
 	}
 
