@@ -378,8 +378,8 @@ function() {
     if(this._confirmPasswordSettingDialog)
         this._confirmPasswordSettingDialog.popdown();
     var obj = this.getObject();
-    if(obj[ZaDomain.A2_zimbraAutoProvAccountPassword + "_dlg"])
-        obj[ZaDomain.A2_zimbraAutoProvAccountPassword] = obj[ZaDomain.A2_zimbraAutoProvAccountPassword + "_dlg"]
+    if(obj[ZaDomain.A2_zimbraAutoProvAccountPasswordInDlg])
+        obj[ZaDomain.A2_zimbraAutoProvAccountPassword] = obj[ZaDomain.A2_zimbraAutoProvAccountPasswordInDlg]
 }
 
 ZaTaskAutoProvDialog.getCustomWidth = function() {
@@ -504,7 +504,11 @@ function() {
         return true;
     else if(!isGiven) {
         if(!this._confirmPasswordSettingDialog) {
-			this._confirmPasswordSettingDialog = new ZaConfirmPasswordDialog(ZaApp.getInstance().getAppCtxt().getShell(), "450px", "90px",ZaMsg.DLG_TITILE_MANUAL_PROV);
+            var height = "220px"
+            if (AjxEnv.isIE) {
+                height = "245px";
+            }
+            this._confirmPasswordSettingDialog = new ZaConfirmPasswordDialog(ZaApp.getInstance().getAppCtxt().getShell(), "450px", height, ZaMsg.DLG_TITILE_MANUAL_PROV);
         }
         this._confirmPasswordSettingDialog.registerCallback(DwtDialog.OK_BUTTON, ZaTaskAutoProvDialog.prototype._confirmPasswordSettingCallback, this, null);
 		this._confirmPasswordSettingDialog.setObject(this._containedObject);
@@ -1004,30 +1008,88 @@ ZaConfirmPasswordDialog = function(parent,   w, h, title) {
 	this._containedObject = {};
 	this.initForm(ZaAlias.myXModel,this.getMyXForm());
 	this._helpURL = ZaConfirmPasswordDialog.helpURL;
+	this._localXForm.addListener(DwtEvent.XFORMS_FORM_DIRTY_CHANGE, new AjxListener(this, ZaConfirmPasswordDialog.prototype.handleXFormChange));
 }
 
 ZaConfirmPasswordDialog.prototype = new ZaXDialog;
 ZaConfirmPasswordDialog.prototype.constructor = ZaConfirmPasswordDialog;
 ZaConfirmPasswordDialog.helpURL = location.pathname + ZaUtil.HELP_URL + "managing_domain/autoprov_manual_config.htm?locid="+AjxEnv.DEFAULT_LOCALE;
 
+
+ZaConfirmPasswordDialog.prototype.popup = function(loc){
+    ZaXDialog.prototype.popup.call(this, loc);
+    //this._button[DwtDialog.OK_BUTTON].setEnabled(false); //if we don't allow empty password, should switch to this
+    this._button[DwtDialog.OK_BUTTON].setEnabled(true);
+    this._localXForm.setInstanceValue(false, ZaDomain.A2_zimbraAutoProvAccountPasswordUnmatchedWarning);
+}
+
+ZaConfirmPasswordDialog.prototype.handleXFormChange =
+function ( ) {
+    var xformObj = this._localXForm;
+    if(!xformObj || xformObj.hasErrors() || !xformObj.getInstance()){
+        return;
+    }
+
+    var pw = xformObj.getInstanceValue(ZaDomain.A2_zimbraAutoProvAccountPasswordInDlg);
+    var pwAgain = xformObj.getInstanceValue(ZaDomain.A2_zimbraAutoProvAccountPasswordAgainInDlg);
+
+    if (pw == pwAgain){
+        xformObj.setInstanceValue(false, ZaDomain.A2_zimbraAutoProvAccountPasswordUnmatchedWarning);
+        this._button[DwtDialog.OK_BUTTON].setEnabled(true);
+    } else {
+        var is1stTime = AjxUtil.isEmpty(pwAgain);
+        //we show the warning msg until user start to input pwAgain
+        xformObj.setInstanceValue(!is1stTime, ZaDomain.A2_zimbraAutoProvAccountPasswordUnmatchedWarning);
+
+        this._button[DwtDialog.OK_BUTTON].setEnabled(false);
+    }
+}
+
+
 ZaConfirmPasswordDialog.prototype.getMyXForm =
 function() {
-	var xFormObject = {
-		numCols:1,
-		items:[
+    var xFormObject = {
+        items:[
             {type:_GROUP_, numCols:2, colSizes:["200px","*"], colSpan:"*",
-            	items: [
-                    {type:_OUTPUT_, value:ZaMsg.MSG_AUTOPROV_MANUAL_PASSSET, colSpan:"*"},
+                items: [
+                    {type:_DWT_ALERT_, style:DwtAlert.WARNING, iconVisible:true,
+                        content:ZaMsg.MSG_AUTOPROV_MANUAL_PASSSET,
+                        width:"100%", colSpan:"*"
+                    },
                     {type:_SPACER_, height:10, colSpan:"*"},
-                	{ref:ZaDomain.A2_zimbraAutoProvAccountPassword + "_dlg",
-                        type:_TEXTFIELD_, label:ZaMsg.LBL_provisionedAccountPassword
+                    {
+                        ref:ZaDomain.A2_zimbraAutoProvAccountPasswordInDlg,
+                        type:_SECRET_, msgName:ZaMsg.LBL_provisionedAccountPassword,
+                        label:ZaMsg.LBL_provisionedAccountPassword, labelLocation:_LEFT_,
+                        width:"190px",
+                        cssClass:"admin_xform_name_input"
+                    },
+                    {type:_SPACER_, height:10, colSpan:"*"},
+                    {
+                        ref:ZaDomain.A2_zimbraAutoProvAccountPasswordAgainInDlg,
+                        type:_SECRET_, msgName:ZaMsg.NAD_ConfirmPassword,
+                        label:ZaMsg.NAD_ConfirmPassword, labelLocation:_LEFT_,
+                        width:"190px",
+                        cssClass:"admin_xform_name_input"
+                    },
+                    {
+                        ref:ZaDomain.A2_zimbraAutoProvAccountPasswordUnmatchedWarning,
+                        type:_DWT_ALERT_, style: DwtAlert.CRITICAL, iconVisible: false,
+                        label:"", labelLocation:_LEFT_,
+                        width:"180px", colSpan:"1",
+                        content: ZaMsg.ERROR_PASSWORD_MISMATCH,
+                        visibilityChecks:[[XForm.checkInstanceValue, ZaDomain.A2_zimbraAutoProvAccountPasswordUnmatchedWarning, true]],
+                        visibilityChangeEventSources:[ZaDomain.A2_zimbraAutoProvAccountPasswordUnmatchedWarning]
                     }
                 ]
             }
         ]
-	};
-	return xFormObject;
+    };
+    return xFormObject;
 }
+
+
+/////////////////////////////
 ZaServerOptionList.prototype.setEnabled =
 function(enabled) {
 	 DwtListView.prototype.setEnabled.call(this, enabled);

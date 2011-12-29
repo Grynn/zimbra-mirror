@@ -290,6 +290,9 @@ ZaDomain.A2_zimbraAutoProvAccountTargetPool = "zimbraAutoProvAccountTargetPool";
 ZaDomain.A2_zimbraAutoProvAccountTgtSelectedPool = "zimbraAutoProvAccountTgtSelectedPool";
 ZaDomain.A2_zimbraAutoProvAccountPoolPageTotal = "zimbraAutoProvAccountPoolPageTotal";
 ZaDomain.A2_zimbraAutoProvAccountPassword = "zimbraAutoProvAccountPassword";
+ZaDomain.A2_zimbraAutoProvAccountPasswordInDlg = ZaDomain.A2_zimbraAutoProvAccountPassword + "InDlg";
+ZaDomain.A2_zimbraAutoProvAccountPasswordAgainInDlg = ZaDomain.A2_zimbraAutoProvAccountPassword + "AgainInDlg";
+ZaDomain.A2_zimbraAutoProvAccountPasswordUnmatchedWarning = ZaDomain.A2_zimbraAutoProvAccountPassword + "UnmatchedWarning";
 
 //skin properties
 ZaDomain.A_zimbraSkinForegroundColor = "zimbraSkinForegroundColor" ;
