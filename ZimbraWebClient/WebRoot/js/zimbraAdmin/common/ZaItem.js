@@ -470,9 +470,6 @@ ZaItem.prototype.modify = function (mods, tmpObj) {
 	if(ZaItem.modifyMethods[this._iKeyName]) {
 		var methods = ZaItem.modifyMethods[this._iKeyName];
 		var cnt = methods.length;
-        var oldItem = {};
-        this.copyTo(oldItem, true);
-        this.oldItem = oldItem;
 		for(var i = 0; i < cnt; i++) {
 			if(typeof(methods[i]) == "function") {
 				methods[i].call(this, mods, tmpObj);

@@ -1708,9 +1708,7 @@ ZaOverviewPanelController.memberListInDLTreeListener = function(ev) {
     var query ="";
     if(members.length > 0){
        for(var i=0;i<members.length;i++){
-              var index = members[i][ZaAccount.A_name].indexOf("@");
-              var name = members[i][ZaAccount.A_name].substring(0, index);
-              query+= "(uid="+name+")";
+            query+= "("+ZaAccount.A_mail+"="+members[i][ZaAccount.A_name]+")";
        }
        if(members.length>1)
            query = "(|" + query + ")";
@@ -1750,27 +1748,29 @@ ZaOverviewPanelController.prototype.refreshAccountTree = function() {
     }
 }
 
-ZaOverviewPanelController.manageRelatedTreeListener = function (type,typeName,relatedZaItem) {
+ZaOverviewPanelController.manageRelatedTreeListener = function (patharr,relatedZaItem) {
     var tree = this.getOverviewPanel().getFolderTree();
-    var targetParentPath = ZaMsg.OVP_home + ZaTree.SEPERATOR + ZaMsg.OVP_configure +
-                             ZaTree.SEPERATOR  + type + ZaTree.SEPERATOR  + typeName;
-
-    var parentItemData = tree.getTreeItemDataByPath(targetParentPath);
-    if(parentItemData) {
-        parentItemData.addRelatedObject(this.getRelatedList(targetParentPath,relatedZaItem));
-    }
-
+    if (patharr.length == 0)
+        return "";
+    var targetParentPath =  patharr.join(ZaTree.SEPERATOR);
     var rootItem = tree.getCurrentRootItem();
     var rootPath = tree.getABPath(rootItem.getData("dataItem"));
-    if (rootPath == targetParentPath)
-        ZaOverviewPanelController.updateRelatedTreeListener.call(this,type,typeName);
-
+    if (rootPath == targetParentPath){
+            var parentItemData = tree.getTreeItemDataByPath(targetParentPath);
+            if(parentItemData) {
+                parentItemData.addRelatedObject(this.getRelatedList(targetParentPath,relatedZaItem));
+            }
+            ZaOverviewPanelController.updateRelatedTreeListener.call(this,patharr);
+    }
 }
 
-ZaOverviewPanelController.updateRelatedTreeListener = function(type,typeName){
+
+
+ZaOverviewPanelController.updateRelatedTreeListener = function(patharr){
     var tree = this.getOverviewPanel().getFolderTree();
-    var targetParentPath = ZaMsg.OVP_home + ZaTree.SEPERATOR + ZaMsg.OVP_configure +
-                             ZaTree.SEPERATOR  + type + ZaTree.SEPERATOR  + typeName;
+    if (patharr.length == 0)
+        return "";
+    var targetParentPath =  patharr.join(ZaTree.SEPERATOR);
     var relatePath = ZaTree.SEPERATOR  + ZaMsg.OVP_related;
     var showRootNode = tree.getTreeItemDataByPath(targetParentPath);
     tree.buildTree(showRootNode);   //update menuitem
@@ -1785,12 +1785,15 @@ ZaOverviewPanelController.updateRelatedTreeListener = function(type,typeName){
     tree.setSelection(newselectedItem,skipNotify);
 }
 
-ZaOverviewPanelController.prototype.refreshRelatedTree = function(items,skipCos,skipDomain) {
+ZaOverviewPanelController.prototype.refreshRelatedTree = function(items,skipCos,skipDomain,skipDL) {
   try{
         var itemArray = AjxUtil.toArray(items);
         var tempHashDomain = {};
         var tempHashCos = {};
-        var cosId, cosName, cos, domainName, domain, defaultCos,defaultCosName;
+        var tempHashDL = {};
+        var tempHashAccount = {};
+        var cosId, cosName, cos, domainName, domain, defaultCos,defaultCosName,
+            dl,dlName,dlId;
 
 
         for(var i=0;i<itemArray.length;i++){
@@ -1799,28 +1802,67 @@ ZaOverviewPanelController.prototype.refreshRelatedTree = function(items,skipCos,
             if(AjxUtil.isEmpty(item))
                 continue;
 
-            if(!skipCos && item.type == ZaItem.ACCOUNT){ //cos
-                cos = ZaAccount.prototype.getCurrentCos.call(item);
-                cosName = cos[ZaAccount.A_name];
-                if(typeof(tempHashCos[cosName]) == "undefined"){
-                    tempHashCos[cosName]=1;
-                    ZaOverviewPanelController.manageRelatedTreeListener.call(this,ZaMsg.OVP_cos,cosName,cos) ;
-                }
+            if( item.type == ZaItem.ACCOUNT){
+                if(!skipCos){
+                    cos = ZaAccount.prototype.getCurrentCos.call(item);
+                    cosName = cos[ZaAccount.A_name];
+                    if(typeof(tempHashCos[cosName]) == "undefined"){
+                        tempHashCos[cosName]=1;
+                        ZaOverviewPanelController.manageRelatedTreeListener.call(this,[ZaMsg.OVP_home,ZaMsg.OVP_configure,ZaMsg.OVP_cos,cosName],cos) ;
+                    }
 
-                if(typeof(tempHashCos["default"]) == "undefined"){//because defaultCos search all accounts
-                    tempHashCos["default"]=1;
-                    defaultCos = ZaCos.getCosByName("default");
-                    ZaOverviewPanelController.manageRelatedTreeListener.call(this,ZaMsg.OVP_cos,"default",defaultCos) ;
+                    if(typeof(tempHashCos["default"]) == "undefined"){//because defaultCos search all accounts
+                        tempHashCos["default"]=1;
+                        defaultCos = ZaCos.getCosByName("default");
+                        ZaOverviewPanelController.manageRelatedTreeListener.call(this,[ZaMsg.OVP_home,ZaMsg.OVP_configure,ZaMsg.OVP_cos,"default"],defaultCos) ;
+                    }
+                }//cos
+
+
+            }
+
+            if(item.type == ZaItem.ALIAS){
+                if(!skipDL){
+                    var targetObj = item.targetObj;
+                    var targetName = targetObj[ZaAccount.A_name];
+                    if(targetObj.type == ZaItem.ACCOUNT){
+                        if(typeof(tempHashAccount[targetName]) == "undefined"){
+                            tempHashAccount[targetName] = 1;
+                            targetObj.load();
+                            ZaOverviewPanelController.manageRelatedTreeListener.call(this,[ZaMsg.OVP_home,ZaMsg.OVP_manageAccounts,ZaMsg.OVP_accounts,targetName],targetObj) ;
+                        }
+                    }
+                    if(targetObj.type == ZaItem.DL){
+                        if(typeof(tempHashDL[targetName]) == "undefined"){
+                             tempHashDL[targetName] = 1;
+                             targetObj.load();
+                             ZaOverviewPanelController.manageRelatedTreeListener.call(this,[ZaMsg.OVP_home,ZaMsg.OVP_manageAccounts,ZaMsg.OVP_distributionLists,targetName],targetObj) ;
+                        }
+                    }
                 }
             }
 
+            if( item.type == ZaItem.ACCOUNT || item.type == ZaItem.DL){
+                if(!skipDL){
+                    var member = item[ZaAccount.A2_memberOf][ZaAccount.A2_directMemberList];
+                    for(var i=0; i<member.length; i++){
+                        dlName = member[i][ZaAccount.A_name]
+                        if(typeof(tempHashDL[dlName]) == "undefined"){
+                            tempHashDL[dlName] = 1;
+                            dl = new ZaDistributionList(member[i]["id"],dlName);
+                            dl.load();
+                            ZaOverviewPanelController.manageRelatedTreeListener.call(this,[ZaMsg.OVP_home,ZaMsg.OVP_manageAccounts,ZaMsg.OVP_distributionLists,dlName],dl) ;
+                        }
+                    }
+                }
+            }
 
-            if(!skipDomain && (item.type == ZaItem.ACCOUNT || item.type == ZaItem.ALIAS || item.type == ZaItem.RESOURCE || item.type == ZaItem.DL)){   //domain
+            if(!skipDomain && ( item.type == ZaItem.ACCOUNT || item.type == ZaItem.ALIAS || item.type == ZaItem.DL || item.type == ZaItem.RESOURCE)){   //domain
                 domainName=ZaAccount.getDomain(item[ZaAccount.A_name]);
                 if(typeof(tempHashDomain[domainName]) == "undefined"){
                     domain =  ZaDomain.getDomainByName(domainName);
                     tempHashDomain[domainName] = 1;
-                    ZaOverviewPanelController.manageRelatedTreeListener.call(this,ZaMsg.OVP_domains,domainName,domain) ;
+                    ZaOverviewPanelController.manageRelatedTreeListener.call(this,[ZaMsg.OVP_home,ZaMsg.OVP_configure,ZaMsg.OVP_domains,domainName],domain) ;
                 }
             }
 
@@ -1835,25 +1877,20 @@ ZaOverviewPanelController.prototype.refreshRelatedTree = function(items,skipCos,
 
                         if(typeof(tempHashCos[cosName]) == "undefined"){
                             tempHashCos[cosName]=1;
-                            ZaOverviewPanelController.manageRelatedTreeListener.call(this,ZaMsg.OVP_cos,cosName,cos) ;
+                            ZaOverviewPanelController.manageRelatedTreeListener.call(this,[ZaMsg.OVP_home,ZaMsg.OVP_configure,ZaMsg.OVP_cos,cosName],cos) ;
                         }
 
                         if(typeof(tempHashCos["default"]) == "undefined"){//because defaultCos search all domains
                             tempHashCos["default"]=1;
                             defaultCos = ZaCos.getCosByName("default");
-                            ZaOverviewPanelController.manageRelatedTreeListener.call(this,ZaMsg.OVP_cos,"default",defaultCos) ;
+                            ZaOverviewPanelController.manageRelatedTreeListener.call(this,[ZaMsg.OVP_home,ZaMsg.OVP_configure,ZaMsg.OVP_cos,"default"],defaultCos) ;
                         }
-                      //gal account
-                       if(typeof(tempHashDomain[item[ZaAccount.A_name]]) == "undefined" && item.createGalAccount){
-                            ZaOverviewPanelController.manageRelatedTreeListener.call(this,ZaMsg.OVP_domains,item[ZaAccount.A_name],item) ;
-                       }
-
                   }else  if (!skipDomain && item.attrs [ZaDomain.A_domainType] == ZaDomain.domainTypes.alias) {
                         domainName = item.attrs[ZaDomain.A_zimbraMailCatchAllForwardingAddress] ;
                         domainName = domainName.replace("@", "") ;
                         if(typeof(tempHashDomain[domainName]) == "undefined"){
                               domain = ZaDomain.getDomainByName(domainName);
-                              ZaOverviewPanelController.manageRelatedTreeListener.call(this,ZaMsg.OVP_domains,domainName,domain) ;
+                              ZaOverviewPanelController.manageRelatedTreeListener.call(this,[ZaMsg.OVP_home,ZaMsg.OVP_configure,ZaMsg.OVP_domains,domainName],domain) ;
                         }
 
 
@@ -1866,55 +1903,22 @@ ZaOverviewPanelController.prototype.refreshRelatedTree = function(items,skipCos,
 
 }
 
-ZaOverviewPanelController.prototype.refreshRelatedTreeByEdit = function(oldItem,newItem){
+ZaOverviewPanelController.prototype.refreshRelatedTreeByEdit = function(newItem){
     try{
-            var skipDomain = false;
-            var skipCos = false;
-            var update = false;
 
-            if( AjxUtil.isEmpty(oldItem)|| AjxUtil.isEmpty(newItem))
+            if( AjxUtil.isEmpty(newItem))
                 return ;
 
-            if( newItem.type == ZaItem.ACCOUNT){ //cos
-                var oldcos = ZaAccount.prototype.getCurrentCos.call(oldItem);
-                var newcos = ZaAccount.prototype.getCurrentCos.call(newItem);
-                if(oldcos != newcos)
-                    update = true;
-                else
-                    skipCos = true;
+            if(newItem.type == ZaItem.DL){
+                ZaOverviewPanelController.manageRelatedTreeListener.call(this,[ZaMsg.OVP_home,ZaMsg.OVP_manageAccounts,ZaMsg.OVP_distributionLists,newItem[ZaAccount.A_name]],newItem) ;
             }
 
-            if((newItem.type == ZaItem.ACCOUNT || newItem.type == ZaItem.ALIAS || newItem.type == ZaItem.RESOURCE || newItem.type == ZaItem.DL)){   //domain
-                 var olddomainName = ZaAccount.getDomain(oldItem[ZaAccount.A_name]);
-                 var newdomainName = ZaAccount.getDomain(newItem[ZaAccount.A_name]);
-                 if( olddomainName != newdomainName )
-                    update = true;
-                 else
-                    skipDomain = true;
+            if(newItem.type == ZaItem.DOMAIN && newItem.attrs[ZaDomain.A_domainType] == ZaDomain.domainTypes.local
+                && newItem.createGalAccount){
+                 ZaOverviewPanelController.manageRelatedTreeListener.call(this,[ZaMsg.OVP_home,ZaMsg.OVP_configure,ZaMsg.OVP_domains,newItem[ZaAccount.A_name]],newItem) ;
             }
 
-            if(newItem.type == ZaItem.DOMAIN){
-                  if(newItem.attrs[ZaDomain.A_domainType] == ZaDomain.domainTypes.local) {
 
-                        if(newItem.createGalAccount){
-                             update = true;
-                        }
-
-                        var oldcosId =  oldItem.attrs[ZaDomain.A_domainDefaultCOSId];
-                        var newcosId =  newItem.attrs[ZaDomain.A_domainDefaultCOSId];
-                        if( oldcosId != newcosId)
-                              update = true;
-
-                  }else  if ( newItem.attrs [ZaDomain.A_domainType] == ZaDomain.domainTypes.alias) {
-                        var olddomainName = oldItem.attrs[ZaDomain.A_zimbraMailCatchAllForwardingAddress] ;
-                        var newdomainName = newItem.attrs[ZaDomain.A_zimbraMailCatchAllForwardingAddress] ;
-                        if( olddomainName != newdomainName )
-                            update = true;
-                  }
-            }
-
-            if(update)
-                ZaOverviewPanelController.prototype.refreshRelatedTree.call(this,[oldItem,newItem],skipCos,skipDomain);
        }catch(ex){
             ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaOverviewPanelController.prototype.refreshRelatedTreeByEdit");
         }
@@ -2026,6 +2030,8 @@ function (parentPath, name, currentView, skipHistory, skipNotify, relatedZaItem,
         nameDataItem.addRecentObject(this.getRecentList());
 
         ZaOverviewPanelController.overviewTreeListeners[mappingId] = handler;
+    }else{ //updaet relatedObject count
+        nameDataItem.addRelatedObject(this.getRelatedList(parentPath,relatedZaItem));
     }
 
 
@@ -2094,6 +2100,8 @@ ZaOverviewPanelController.prototype.addObjectItemOri = function (parentPath, nam
         tree.addTreeItemData(nameDataItem);
         nameDataItem.addRelatedObject(this.getRelatedList(parentPath,item));
         nameDataItem.addRecentObject(this.getRecentList())
+    }else{ //update related object count
+        nameDataItem.addRelatedObject(this.getRelatedList(parentPath,item));
     }
 
     if (!nameDataItem.getData("viewId")) {

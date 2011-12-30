@@ -139,8 +139,8 @@ function (ev) {
                 this.show(false);
             }
 			this.changeActionsState();
-             if(appNewUI)
-                 ZaZimbraAdmin.getInstance().getOverviewPanelController().refreshRelatedTreeByEdit (ev.getDetails().oldItem, ev.getDetails());
+            if(appNewUI)
+                 ZaZimbraAdmin.getInstance().getOverviewPanelController().refreshRelatedTreeByEdit (ev.getDetails());
 		}
 	}
 }

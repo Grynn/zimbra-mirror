@@ -107,7 +107,7 @@ function() {
 		}
 		var dl = ZaItem.create(this._containedObject, ZaDistributionList, "ZaDistributionList");
 		if(dl != null) {
-			ZaApp.getInstance().getDistributionListController().fireCreationEvent(dl);
+			ZaApp.getInstance().getDistributionListController().fireCreationEvent(this._containedObject);
 			this.popdown();
             ZaApp.getInstance().getAppCtxt().getAppController().setActionStatusMsg(AjxMessageFormat.format(ZaMsg.DLCreated,[dl.name]));
 		}

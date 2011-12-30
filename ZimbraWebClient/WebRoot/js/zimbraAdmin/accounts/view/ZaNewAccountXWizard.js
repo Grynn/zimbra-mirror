@@ -155,7 +155,7 @@ function() {
 		var account = ZaItem.create(this._containedObject,ZaAccount,"ZaAccount");
 		if(account != null) {
 			//if creation took place - fire an change event
-			ZaApp.getInstance().getAccountListController().fireCreationEvent(account);
+			ZaApp.getInstance().getAccountListController().fireCreationEvent(this._containedObject);
 			this.popdown();
             ZaApp.getInstance().getAppCtxt().getAppController().setActionStatusMsg(AjxMessageFormat.format(ZaMsg.AccountCreated,[account.name]));
 			//ZaApp.getInstance().getCurrentController().popupMsgDialog(AjxMessageFormat.format(ZaMsg.AccountCreated,[account.name]));

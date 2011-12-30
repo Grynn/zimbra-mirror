@@ -1968,15 +1968,6 @@ function() {
 
 ZaDomain.prototype.remove = 
 function(callback) {
-     if(appNewUI){
-          if(this.attrs[ZaDomain.A_domainType] == ZaDomain.domainTypes.local &&
-             AjxUtil.isEmpty(this.attrs[ZaDomain.A_domainDefaultCOSId])){
-                  this.load("id", this.id,false,true) ;
-           } else if(this.attrs[ZaDomain.A_domainType] == ZaDomain.domainTypes.alias &&
-                        AjxUtil.isEmpty(this.attrs[ZaDomain.A_zimbraMailCatchAllForwardingAddress])){
-                        this.load ("id", this.id) ;
-                    }
-     }
 	var soapDoc = AjxSoapDoc.create("DeleteDomainRequest", ZaZimbraAdmin.URN, null);
 	soapDoc.set("id", this.id);
 	//var command = new ZmCsfeCommand();

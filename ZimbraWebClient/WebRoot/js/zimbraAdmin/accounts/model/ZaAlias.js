@@ -173,7 +173,8 @@ function (form) {
 			}
 		}
 		
-		targetObj.addAlias ( newAlias ) ;  
+		targetObj.addAlias ( newAlias ) ;
+        this.targetObj = targetObj;
 		//TODO Need to refresh the alias list view.
 		ZaApp.getInstance().getAccountViewController(true).fireCreationEvent(this);
 		form.parent.popdown();

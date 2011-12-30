@@ -355,7 +355,7 @@ function (ev) {
 		}
 	}
      if(appNewUI)
-          ZaZimbraAdmin.getInstance().getOverviewPanelController().refreshRelatedTreeByEdit (ev.getDetails().oldItem, ev.getDetails())
+          ZaZimbraAdmin.getInstance().getOverviewPanelController().refreshRelatedTreeByEdit (ev.getDetails())
 }
 
 /**
@@ -385,8 +385,6 @@ function (ev) {
 			this.show(false);			
 		}
 	}
-    if(appNewUI)
-            ZaZimbraAdmin.getInstance().getOverviewPanelController().refreshRelatedTree (ev.getDetails());
 }
 
 ZaListViewController.prototype.setPageNum = 
