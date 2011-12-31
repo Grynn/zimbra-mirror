@@ -501,7 +501,16 @@ ZaBulkImportXWizard.prototype.importCallback = function(params,resp) {
 		if(resp && resp.isException()) {
 			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
 			this._button[DwtDialog.CANCEL_BUTTON].setEnabled(true);
-			ZaApp.getInstance().getCurrentController()._handleException(resp.getException(), "ZaBulkImportXWizard.prototype.importCallback");
+            if(resp.getException().code == ZaBulkProvision.BP_NO_ACCOUNTS_TO_IMPORT) {
+            	ZaApp.getInstance().getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.ERROR_NO_ACCOUNTS_TO_IMPORT, resp.getException());
+        	    if(this._containedObject[ZaBulkProvision.A2_importEmail]== "FALSE") {
+			        this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
+		        } else {
+			        this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
+		        }
+            }else{
+                ZaApp.getInstance().getCurrentController()._handleException(resp.getException(), "ZaBulkImportXWizard.prototype.importCallback");
+            }
 		} else {
 			var response = resp.getResponse().Body.BulkImportAccountsResponse;
 			this.processBulkImportResponse(response);
