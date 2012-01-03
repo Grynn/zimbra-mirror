@@ -1682,7 +1682,7 @@ AjxStringUtil.MSG_REGEXES = [
 	{
 		// marker for Original or Forwarded message, used by ZCS and others
 		type:	"ORIG_SEP_STRONG",
-		regex:	new RegExp("^\\s*--+\\s*(" + AjxMsg.origMsg + "|" + AjxMsg.forwardedMessage + ")\\s*--+\\s*$", "i")
+		regex:	new RegExp("^\\s*--+\\s*(" + AjxMsg.origMsg + "|" + AjxMsg.forwardedMessage + "|" + AjxMsg.origAppt + ")\\s*--+\\s*$", "i")
 	},
 	{
 		// in case a client doesn't use the exact words above
@@ -1774,7 +1774,7 @@ function(text, isHtml) {
 	if (!text) { return ""; }
 	var results = [];
 	
-	isHtml = isHtml || /<br|<div|<html/i.test(text);
+	isHtml = isHtml || /^<div |<html/i.test(text);
 	
 	var lines = isHtml ? text.replace("<", "\n<", "g").split("\n") :
 						 text.split(AjxStringUtil.SPLIT_RE);
@@ -1923,4 +1923,3 @@ function(text, isHtml) {
 
     return finalAnswer;
 };
-
