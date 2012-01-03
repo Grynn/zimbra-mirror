@@ -24,6 +24,9 @@ public class PageManageResources extends AbsTab {
 		public static final String RESOURCES="css=td[id^='zti__AppAdmin__Home__resLstHV']";
 		public static final String GEAR_ICON="css=div.ImgConfigure";
 		public static final String NEW_MENU="css=td[id^='zmi__zb_currentApp__NEW_MENU__']";
+		public static final String HOME="Home";
+		public static final String MANAGE_ACCOUNTS="Manage Accounts";
+		public static final String RESOURCE="Resources";
 	}
 
 
@@ -229,6 +232,12 @@ public class PageManageResources extends AbsTab {
 
 
 
+	}
+
+	public boolean zVerifyHeader (String header) throws HarnessException {
+		if(this.sIsElementPresent("css=span:contains('" + header + "')"))
+			return true;
+		return false;
 	}
 
 }

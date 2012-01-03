@@ -23,6 +23,9 @@ public class PageManageDistributionLists extends AbsTab {
 		public static final String DISTRIBUTION_LISTS="css=td[id^='zti__AppAdmin__Home__dlLstHV']";
 		public static final String GEAR_ICON="css=div.ImgConfigure";
 		public static final String NEW_MENU="css=td[id^='zmi__zb_currentApp__NEW_MENU__'][id$='_title']";
+		public static final String HOME="Home";
+		public static final String MANAGE_ACCOUNTS="Manage Accounts";
+		public static final String DISTRIBUTION_LIST="Distribution Lists";
 	}
 
 	public PageManageDistributionLists(AbsApplication application) {
@@ -224,5 +227,12 @@ public class PageManageDistributionLists extends AbsTab {
 		// Return the specified page, or null if not set
 		return (page);
 	}
+	
+	public boolean zVerifyHeader (String header) throws HarnessException {
+		if(this.sIsElementPresent("css=span:contains('" + header + "')"))
+			return true;
+		return false;
+	}
+
 
 }

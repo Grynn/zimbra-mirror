@@ -25,6 +25,10 @@ public class PageManageAliases extends AbsTab {
 		public static final String ALIASES="css=td[id^='zti__AppAdmin__Home__aliaLstHV']";
 		public static final String GEAR_ICON="css=div.ImgConfigure";
 		public static final String NEW_MENU="css=td[id^='zmi__zb_currentApp__NEW_MENU__']";
+		public static final String HOME="Home";
+		public static final String MANAGE_ACCOUNTS="Manage Accounts";
+		public static final String ALIAS="Aliases";
+
 	}
 
 	public PageManageAliases(AbsApplication application) {
@@ -225,5 +229,12 @@ public class PageManageAliases extends AbsTab {
 		return (page);
 
 	}
+	
+	public boolean zVerifyHeader (String header) throws HarnessException {
+		if(this.sIsElementPresent("css=span:contains('" + header + "')"))
+			return true;
+		return false;
+	}
+
 
 }

@@ -28,10 +28,13 @@ public class PageManageAccounts extends AbsTab {
 		public static final String ACCOUNTS="css=td[id^='zti__AppAdmin__Home__actLstHV']";
 		public static final String GEAR_ICON="css=div.ImgConfigure";
 		public static final String NEW_MENU="zmi__zb_currentApp__NEW_MENU";
+		public static final String HOME="Home";
+		public static final String MANAGE_ACCOUNTS="Manage Accounts";
+		public static final String ACCOUNT=" Accounts";
 	}
 
-	
-	 	
+
+
 
 
 	public PageManageAccounts(AbsApplication application) {
@@ -95,6 +98,11 @@ public class PageManageAccounts extends AbsTab {
 
 	}
 
+	public void zNavigateTo(String treeItem) {
+
+
+	}
+
 	@Override
 	public AbsPage zListItem(Action action, String item)
 	throws HarnessException {
@@ -137,9 +145,9 @@ public class PageManageAccounts extends AbsTab {
 		if ( button == Button.B_NEW ) {
 
 			// New button
-//			locator = Locators.zb__ACLV__NEW_MENU_title;
+			//			locator = Locators.zb__ACLV__NEW_MENU_title;
 			locator ="";
-			
+
 			// Create the page
 			page = new WizardCreateAccount(this);
 
@@ -156,8 +164,8 @@ public class PageManageAccounts extends AbsTab {
 		// Default behavior, process the locator by clicking on it
 		//
 		this.zClickAt(locator,"");
-		
-		
+
+
 
 		// If page was specified, make sure it is active
 		if ( page != null ) {
@@ -248,7 +256,7 @@ public class PageManageAccounts extends AbsTab {
 	 * @throws HarnessException 
 	 */
 	public List<AccountItem> zListGetAccounts() throws HarnessException {
-		
+
 		List<AccountItem> items = new ArrayList<AccountItem>();
 
 		// Make sure the button exists
@@ -280,12 +288,12 @@ public class PageManageAccounts extends AbsTab {
 			if ( this.sIsElementPresent(locator) ) {
 				item.setGEmailAddress(this.sGetText(locator).trim());
 			}
-			
+
 			// Display Name
 			// Status
 			// Lost Login Time
 			// Description
-			
+
 
 			// Add the new item to the list
 			items.add(item);
@@ -296,5 +304,9 @@ public class PageManageAccounts extends AbsTab {
 		return (items);
 	}
 
-
+	public boolean zVerifyHeader (String header) throws HarnessException {
+		if(this.sIsElementPresent("css=span:contains('" + header + "')"))
+			return true;
+		return false;
+	}
 }

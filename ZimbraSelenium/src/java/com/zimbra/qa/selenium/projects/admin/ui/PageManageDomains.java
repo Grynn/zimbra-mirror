@@ -23,6 +23,9 @@ public class PageManageDomains extends AbsTab {
 		public static final String DOMAINS="zti__AppAdmin__CONFIGURATION__DOMAINS_textCell";
 		public static final String GEAR_ICON="css=div.ImgConfigure";
 		public static final String NEW_MENU="css=td[id^='zmi__zb_currentApp__NEW__'][id$='title']";
+		public static final String HOME="Home";
+		public static final String CONFIGURE="Configure";
+		public static final String DOMAIN="Domains";
 	}
 
 	public PageManageDomains(AbsApplication application) {
@@ -228,5 +231,12 @@ public class PageManageDomains extends AbsTab {
 		return (page);
 
 	}
+	
+	public boolean zVerifyHeader (String header) throws HarnessException {
+		if(this.sIsElementPresent("css=span:contains('" + header + "')"))
+			return true;
+		return false;
+	}
+
 
 }
