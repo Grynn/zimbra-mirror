@@ -126,6 +126,17 @@
     <Compile Include="ZimbraObjects.cs" />
     <Compile Include="ZimbraValues.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="Exchange">
+      <Guid>{33449EAA-8056-4D28-8D42-552B7C6C8954}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>True</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy  "$(ProjectDir)Native.CssLib.manifest" "$(TargetDir)"</PostBuildEvent>

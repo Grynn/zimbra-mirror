@@ -152,8 +152,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>comsupp.lib;ActiveDS.lib;adsiid.lib;mapi32.lib;Rpcrt4.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>Exchange.def</ModuleDefinitionFile>
-      <RegisterOutput>false</RegisterOutput>
-    </Link>
+      <RegisterOutput>true</RegisterOutput>
+     </Link>
     <PostBuildEvent>
       <Command>
       </Command>
@@ -192,7 +192,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>comsupp.lib;ActiveDS.lib;adsiid.lib;mapi32.lib;Rpcrt4.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>Exchange.def</ModuleDefinitionFile>
-      <RegisterOutput>false</RegisterOutput>
+      <RegisterOutput>true</RegisterOutput>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -238,7 +238,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>comsupp.lib;ActiveDS.lib;adsiid.lib;mapi32.lib;Rpcrt4.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>Exchange.def</ModuleDefinitionFile>
-      <RegisterOutput>false</RegisterOutput>
+      <RegisterOutput>true</RegisterOutput>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -284,7 +284,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>comsupp.lib;ActiveDS.lib;adsiid.lib;mapi32.lib;Rpcrt4.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>Exchange.def</ModuleDefinitionFile>
-      <RegisterOutput>false</RegisterOutput>
+      <RegisterOutput>true</RegisterOutput>
       <LinkTimeCodeGeneration>
       </LinkTimeCodeGeneration>
     </Link>
@@ -330,7 +330,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>comsupp.lib;ActiveDS.lib;adsiid.lib;mapi32.lib;Rpcrt4.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>Exchange.def</ModuleDefinitionFile>
-      <RegisterOutput>false</RegisterOutput>
+      <RegisterOutput>true</RegisterOutput>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -377,7 +377,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>comsupp.lib;ActiveDS.lib;adsiid.lib;mapi32.lib;Rpcrt4.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>Exchange.def</ModuleDefinitionFile>
-      <RegisterOutput>false</RegisterOutput>
+      <RegisterOutput>true</RegisterOutput>
       <LinkTimeCodeGeneration>
       </LinkTimeCodeGeneration>
     </Link>
