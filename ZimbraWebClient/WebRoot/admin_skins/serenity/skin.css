@@ -589,27 +589,52 @@ textarea {
 }
 
 .ZaHelpDropdown {
-    background-color: #FFFFFF !important;
-    border-width: 2px !important;
-    padding: 0px !important;
+    padding: 0 15px 0 15px;
+}
+
+.ZaHelpDropdownFirstItem, .ZaHelpDropdownItem, .ZaHelpDropdownLastItem {
+    background-color: #FFFFFF;
+    border-color: #848484;
+    border-style: solid;
+    width: 160px;
+}
+
+.ZaHelpDropdownFirstItem {
+    border-width: 0 1px 0px 0;
+    padding: 6px 6px 0 6px;
+}
+
+.ZaHelpDropdownItem {
+    border-width: 0 1px 0px 0;
+    padding: 0 6px 0 6px;
+}
+
+.ZaHelpDropdownLastItem {
+    -moz-border-radius: 0 0 3px 3px;
+    border-width: 0 1px 1px 0px;
+    padding: 0px 6px 6px 6px;
 }
 
 .ZaHelpDropdownSearch {
+    -moz-border-radius: 3px 3px 0 0;
     background-color: #DDDDDD;
-    padding: 4 8 4 8;
+    border-color: #848484;
+    border-style: solid;
+    border-width: 0 1px 1px 0;
+    padding: 4px 8px 4px 8px;
 }
 
 #ZaHelpSearchInput {
     border: #FFFFFF;
     font-size: 12px;
     margin-left: 3px;
-    padding-left: 0px;
-    width:85%;
+    padding: 0px;
+    width:116px;
 }
 
 .ZaHelpSearchIcon {
    float: right;
-   margin: 2px 5px 0pt 0pt;
+   margin: 2px 4px 0pt 0pt;
    cursor: pointer;
 }
 

@@ -44,6 +44,7 @@ ZaController = function(appCtxt, container,iKeyName) {
     
     this.objType = ZaEvent.S_ACCOUNT;
     this._helpURL = ZaController.helpURL;
+    this._helpButtonText = ZaController.helpButtonText;
    	this._toolbarOperations = new Array();
    	this._toolbarOrder = new Array();
    	this._popupOperations = new Array();
@@ -97,6 +98,8 @@ ZaController.saveChangeCheckMethods = new Object();
 ZaController.postChangeMethods = new Object();
 
 ZaController.helpURL = location.pathname + ZaUtil.HELP_URL + "administration_console_help.htm?locid="+AjxEnv.DEFAULT_LOCALE;
+
+ZaController.helpButtonText = ZaMsg.zimbraHomePage;
 // Public methods
 ZaController.prototype.toString =
 function() {

@@ -20,6 +20,7 @@ ZaCosListController = function(appCtxt, container) {
 	this._currentPageNum = 1;
 	this._currentSortOrder = "1";
 	this._helpURL = location.pathname + ZaUtil.HELP_URL + "cos/class_of_service.htm?locid="+AjxEnv.DEFAULT_LOCALE;
+	this._helpButtonText = ZaCosListController.helpButtonText;
 	this._currentQuery = "";
 	this.fetchAttrs = [ZaCos.A_name,ZaCos.A_description].join();
 	this.RESULTSPERPAGE = ZaDomain.RESULTSPERPAGE; 
@@ -28,6 +29,7 @@ ZaCosListController = function(appCtxt, container) {
 
 ZaCosListController.prototype = new ZaListViewController();
 ZaCosListController.prototype.constructor = ZaCosListController;
+ZaCosListController.helpButtonText = ZaMsg.helpManageCOS;
 ZaController.initToolbarMethods["ZaCosListController"] = new Array();
 ZaController.initPopupMenuMethods["ZaCosListController"] = new Array();
 ZaController.changeActionsStateMethods["ZaCosListController"] = new Array(); 

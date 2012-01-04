@@ -602,11 +602,15 @@ function(ev) {
 
 ZaZimbraAdmin.prototype._createHelpLink =
 function() {
+    if (!appNewUI) {
+        this._createOldHelpLink();
+        return;
+    }
+
     var helpSkinContainer = document.getElementById(ZaSettings.SKIN_HELP_DOM_ID);
     if(!helpSkinContainer) {
         return;
     }
-
     var dwButton = new DwtBorderlessButton(this._shell, "", "", Dwt.RELATIVE_STYLE);
     dwButton.setText(ZaMsg.help);
     if (appNewUI)
@@ -617,14 +621,23 @@ function() {
 
     // Add Zimbra Help Desk Menu
     var helpMenuOpList = new Array();
-    helpMenuOpList.push(new ZaOperation("zaHomepage", ZaMsg.zimbraHomePage
-        + "<span style='visibility:hidden'>spacholder</span>", // Add this part is to increase the width of the dropdown menu.
-        ZaMsg.zimbraHomePage,  "", "", new AjxListener(this, this._contextHelpListener)));
+    var menu = new ZaPopupMenu(dwButton, "ZaHelpDropdown",null, helpMenuOpList, "ZA_HELP");
 
-    helpMenuOpList.push(new ZaOperation("zaHelpCenter", ZaMsg.zimbraHelpCenter, ZaMsg.zimbraHelpCenter,  "", "", new AjxListener(this, this._helpListener)));
-	helpMenuOpList.push(new ZaOperation("aboutZimbra", ZaMsg.zimbraAbout, ZaMsg.zimbraAbout,  "", "", new AjxListener(this, this._aboutZimbraListener)));
-    var menu = new ZaPopupMenu(dwButton, "ActionMenu ZaHelpDropdown",null, helpMenuOpList, "ZA_HELP");
+    var mItem =  new DwtMenuItem ({parent:menu, id: "zaHelpHomepage", className:"ZaHelpDropdownFirstItem"});
+    mItem.setText(ZaMsg.zimbraHomePage);
+    mItem.addSelectionListener(new AjxListener(this, this._contextHelpListener));
+
+    mItem =  new DwtMenuItem ({parent:menu, id: "zaHelpCenter", className:"ZaHelpDropdownItem"});
+    mItem.setText(ZaMsg.zimbraHelpCenter);
+    mItem.addSelectionListener(new AjxListener(this, this._helpListener));
+
+    mItem =  new DwtMenuItem ({parent:menu, id: "aboutZimbra", className:"ZaHelpDropdownLastItem"});
+    mItem.setText(ZaMsg.zimbraAbout);
+    mItem.addSelectionListener(new AjxListener(this, this._aboutZimbraListener));
+
     menu.addChild(this._createHelpSearch(), 0);
+    menu.addPopupListener(new AjxListener(this, this._helpMenuPopupListener, menu));
+
     dwButton.setMenu(menu,true);
 }
 
@@ -632,14 +645,32 @@ ZaZimbraAdmin.prototype._createHelpSearch =
 function() {
     var helpSearch = new DwtComposite (this._shell, "ZaHelpDropdownSearch", Dwt.RELATIVE_STYLE);
     var helpSearchBox = new DwtComposite (helpSearch, "SearchPanel", Dwt.RELATIVE_STYLE);
+    var searchIcon = new DwtComposite({parent:helpSearchBox, className:"ImgSearch ZaHelpSearchIcon"});
+    searchIcon.getHtmlElement().onclick = this._openSupportSite;
+
     var searchInputField = new DwtInputField({parent:helpSearchBox, validationStyle:DwtInputField.ONEXIT_VALIDATION, inputId:"ZaHelpSearchInput"});
     searchInputField.setValidatorFunction(searchInputField.getInputElement(), this._openSupportSite);
     searchInputField.getInputElement().onblur = null;
-
-    var searchIcon = new DwtComposite({parent:searchInputField, className:"ImgSearch ZaHelpSearchIcon"});
-    //searchIcon.addListener(DwtEvent.ONCLICK, new AjxListener(window, this._helpSearchListener));
-    searchIcon.getHtmlElement().onclick = this._openSupportSite;
     return helpSearch;
+}
+
+ZaZimbraAdmin.prototype._helpMenuPopupListener =
+function(menu) {
+    var helpHomePageItem = menu.getItem(1);
+    if (!helpHomePageItem) {
+        return null;
+    }
+
+    var itemW = helpHomePageItem.getW() - 20;
+
+    //assume 5.5px per letter
+    var maxNumberOfLetters = Math.floor((itemW - 30)/5.5);
+    var text = ZaApp.getInstance().getCurrentController()._helpButtonText;
+    if (maxNumberOfLetters < text.length){ //set the new text
+        text = text.substring(0, (maxNumberOfLetters - 3)) + "...";
+    }
+
+    helpHomePageItem.setText(text);
 }
 
 ZaZimbraAdmin.prototype._openSupportSite =
@@ -647,10 +678,8 @@ function() {
     window.open(ZaSettings.ZIMBRA_SUPPORT_URL_QUERY + document.getElementById("ZaHelpSearchInput").value);
 }
 
-// TODO: MUST change to provide context-sensitive help for all modules
 ZaZimbraAdmin.prototype._contextHelpListener =
 function() {
-    //window.open(location.pathname + ZaUtil.HELP_URL + "administration_console_help.htm%23managing_accounts/setting_the_devault_zwc_login_version.htm?locid=" + AjxEnv.DEFAULT_LOCALE);
     window.open(ZaApp.getInstance().getCurrentController()._helpURL);
 }
 
@@ -662,7 +691,7 @@ function() {
     this.aboutZimbraDialog.popup();
 }
 
-/*ZaZimbraAdmin.prototype._createHelpLink =
+ZaZimbraAdmin.prototype._createOldHelpLink =
 function() {
 	var helpSkinContainer = document.getElementById(ZaSettings.SKIN_HELP_DOM_ID);
 	if(!helpSkinContainer) {
@@ -684,7 +713,7 @@ function() {
              this._getAppLink(null, iconName,  ZaMsg.helpDesk, skin.skin_container_help_max_str_length);
     }
     helpLabel.reparentHtmlElement (ZaSettings.SKIN_HELP_DOM_ID) ;
-}*/
+}
 
 ZaZimbraAdmin.prototype._createDownloadLink =
 function() {

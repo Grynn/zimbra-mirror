@@ -23,6 +23,7 @@ ZaDLController = function(appCtxt, container) {
 	this._UICreated = false;
 	this._toolbarOperations = new Array();
 	this._helpURL = location.pathname + ZaUtil.HELP_URL + "managing_accounts/distribution_lists.htm?locid="+AjxEnv.DEFAULT_LOCALE;
+	this._helpButtonText = ZaDLController.helpButtonText;
 	this.deleteMsg = ZaMsg.Q_DELETE_DL;
 	this.objType = ZaEvent.S_ACCOUNT;
 	this.tabConstructor = ZaDLXFormView;
@@ -32,6 +33,8 @@ ZaDLController = function(appCtxt, container) {
 
 ZaDLController.prototype = new ZaXFormViewController();
 ZaDLController.prototype.constructor = ZaDLController;
+ZaDLController.helpButtonText = ZaMsg.helpEditDL;
+
 
 ZaController.initToolbarMethods["ZaDLController"] = new Array();
 ZaController.initPopupMenuMethods["ZaDLController"] = new Array();

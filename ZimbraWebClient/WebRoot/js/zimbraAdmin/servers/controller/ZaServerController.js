@@ -26,6 +26,7 @@ ZaServerController = function(appCtxt, container) {
 	ZaXFormViewController.call(this, appCtxt, container,"ZaServerController");
 	this._UICreated = false;
 	this._helpURL = location.pathname + ZaUtil.HELP_URL + "managing_servers/managing_servers.htm?locid="+AjxEnv.DEFAULT_LOCALE;
+	this._helpButtonText = ZaServerController.helpButtonText;
 	this._toolbarOperations = new Array();
     this._popupOperations = new Array();
 	this.deleteMsg = ZaMsg.Q_DELETE_SERVER;	
@@ -35,6 +36,7 @@ ZaServerController = function(appCtxt, container) {
 
 ZaServerController.prototype = new ZaXFormViewController();
 ZaServerController.prototype.constructor = ZaServerController;
+ZaServerController.helpButtonText = ZaMsg.helpManageServers;
 
 ZaController.initToolbarMethods["ZaServerController"] = new Array();
 ZaController.initPopupMenuMethods["ZaServerController"] = new Array();

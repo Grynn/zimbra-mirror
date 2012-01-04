@@ -26,11 +26,13 @@ ZaGlobalStatsController = function(appCtxt, container) {
     this._toolbarOrder = new Array();
     ZaController.call(this, appCtxt, container, "ZaGlobalStatsController");
     this._helpURL = location.pathname + ZaUtil.HELP_URL + "monitoring/checking_usage_statistics.htm?locid="+AjxEnv.DEFAULT_LOCALE;
+    this._helpButtonText = ZaGlobalStatsController.helpButtonText;
     this.tabConstructor = ZaGlobalStatsView;
 }
 
 ZaGlobalStatsController.prototype = new ZaController();
 ZaGlobalStatsController.prototype.constructor = ZaGlobalStatsController;
+ZaGlobalStatsController.helpButtonText = ZaMsg.helpCheckStatistics;
 
 /**
  * This array contains function references. The functions referenced in this array will be called by ZaController.prototype._setView method

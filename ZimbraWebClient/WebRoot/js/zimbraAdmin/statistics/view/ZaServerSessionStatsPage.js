@@ -190,11 +190,13 @@ function (tabId, hide ){
 					
 					//TODO update the help link for the Session Stats
 					controller._helpURL = location.pathname + ZaUtil.HELP_URL + "managing_servers/viewing_mailbox_quotas.htm?locid="+AjxEnv.DEFAULT_LOCALE;
+					controller._helpButtonText = ZaMsg.helpViewMailboxQuotas;
 				}else if (hide){
 					toolBar.enable([ZaOperation.PAGE_FORWARD, ZaOperation.PAGE_BACK, ZaOperation.LABEL], false);
 					toolBar.getButton("PageInfo").setText(AjxMessageFormat.format (ZaMsg.MBXStats_PAGEINFO, [1,1]));
 					//change the help link back
 					controller._helpURL = location.pathname + ZaUtil.HELP_URL + "monitoring/checking_usage_statistics.htm?locid="+AjxEnv.DEFAULT_LOCALE;
+					controller._helpButtonText = ZaMsg.helpCheckStatistics;
 				}
 			}
 		}

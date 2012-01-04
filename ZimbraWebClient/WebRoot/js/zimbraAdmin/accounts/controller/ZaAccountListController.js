@@ -39,12 +39,14 @@ ZaAccountListController = function(appCtxt, container) {
 	this._searchField = null;                                          
 	this._defaultType = ZaItem.ACCOUNT;
 	this._helpURL = ZaAccountListController.helpURL;
+	this._helpButtonText = ZaAccountListController.helpButtonText;
 	this.objType = ZaEvent.S_ACCOUNT;	
 	this.fetchAttrs = ZaSearch.standardAttributes;
 }
 
 ZaAccountListController.prototype = new ZaListViewController();
 ZaAccountListController.helpURL = location.pathname + ZaUtil.HELP_URL + "managing_accounts/provisioning_accounts.htm?locid="+AjxEnv.DEFAULT_LOCALE;
+ZaAccountListController.helpButtonText = ZaMsg.helpManageAccounts;
 ZaController.initToolbarMethods["ZaAccountListController"] = new Array();
 ZaController.initPopupMenuMethods["ZaAccountListController"] = new Array();
 ZaController.changeActionsStateMethods["ZaAccountListController"] = new Array(); 

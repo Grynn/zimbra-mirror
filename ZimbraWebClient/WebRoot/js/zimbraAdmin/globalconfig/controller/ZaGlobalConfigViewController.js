@@ -25,12 +25,14 @@ ZaGlobalConfigViewController = function(appCtxt, container) {
 	ZaXFormViewController.call(this, appCtxt, container, "ZaGlobalConfigViewController");
 	this._UICreated = false;
 	this._helpURL = location.pathname + ZaUtil.HELP_URL + "managing_global_settings/global_settings.htm?locid="+AjxEnv.DEFAULT_LOCALE;
+	this._helpButtonText = ZaGlobalConfigViewController.helpButtonText;
 	this.objType = ZaEvent.S_GLOBALCONFIG;
 	this.tabConstructor = GlobalConfigXFormView;					
 }
 
 ZaGlobalConfigViewController.prototype = new ZaXFormViewController();
 ZaGlobalConfigViewController.prototype.constructor = ZaGlobalConfigViewController;
+ZaGlobalConfigViewController.helpButtonText = ZaMsg.helpManageGlobalSettings;
 
 //ZaGlobalConfigViewController.STATUS_VIEW = "ZaGlobalConfigViewController.STATUS_VIEW";
 ZaController.initToolbarMethods["ZaGlobalConfigViewController"] = new Array();

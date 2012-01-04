@@ -22,6 +22,7 @@ ZaResourceController = function(appCtxt, container) {
 	ZaXFormViewController.call(this, appCtxt, container,"ZaResourceController");
 	this._UICreated = false;
 	this._helpURL = location.pathname + ZaUtil.HELP_URL + "managing_accounts/managing_resource.htm?locid="+AjxEnv.DEFAULT_LOCALE;
+	this._helpButtonText = ZaResourceController.helpButtonText;
 	this.deleteMsg = ZaMsg.Q_DELETE_RES;
 	this.objType = ZaEvent.S_ACCOUNT;	
 	this.tabConstructor = ZaResourceXFormView;	
@@ -29,6 +30,7 @@ ZaResourceController = function(appCtxt, container) {
 
 ZaResourceController.prototype = new ZaXFormViewController();
 ZaResourceController.prototype.constructor = ZaResourceController;
+ZaResourceController.helpButtonText = ZaMsg.helpManageResourceAccount;
 
 ZaController.initToolbarMethods["ZaResourceController"] = new Array();
 ZaController.initPopupMenuMethods["ZaResourceController"] = new Array();

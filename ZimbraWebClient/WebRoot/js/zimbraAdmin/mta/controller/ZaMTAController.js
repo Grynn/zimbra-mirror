@@ -26,6 +26,7 @@ ZaMTAController = function(appCtxt, container) {
 	ZaXFormViewController.call(this, appCtxt, container,"ZaMTAController");
 	this._UICreated = false;
 	this._helpURL = location.pathname + ZaUtil.HELP_URL + "monitoring/monitoring_zimbra_mta_mail_queues.htm?locid="+AjxEnv.DEFAULT_LOCALE;
+	this._helpButtonText = ZaMTAController.helpButtonText;
 	this._toolbarOperations = new Array();
     this._popupOperations = new Array();
 	this.objType = ZaEvent.S_MTA;	
@@ -34,6 +35,7 @@ ZaMTAController = function(appCtxt, container) {
 
 ZaMTAController.prototype = new ZaXFormViewController();
 ZaMTAController.prototype.constructor = ZaMTAController;
+ZaMTAController.helpButtonText = ZaMsg.helpManageMailQueue;
 
 ZaController.initToolbarMethods["ZaMTAController"] = new Array();
 ZaController.initPopupMenuMethods["ZaMTAController"] = new Array();

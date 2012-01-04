@@ -48,7 +48,8 @@ ZaGlobalAdvancedStatsPage.prototype.showMe =  function(refresh) {
 	}
 
     var controller = ZaApp.getInstance().getCurrentController();
-    controller._helpURL = location.pathname + ZaUtil.HELP_URL + "Monitoring/Creating_Advanced_Server_Statistics.htm?locid="+AjxEnv.DEFAULT_LOCALE;
+    controller._helpURL = location.pathname + ZaUtil.HELP_URL + "monitoring/creating_advanced_server_statistics.htm?locid="+AjxEnv.DEFAULT_LOCALE;
+    controller._helpButtonText = ZaMsg.helpCreateAdvServerStat;
 }
 
 ZaGlobalAdvancedStatsPage.prototype.hideMe =
@@ -56,6 +57,7 @@ function (){
 	DwtTabViewPage.prototype.hideMe.call(this);
 	var controller = ZaApp.getInstance().getCurrentController();
     controller._helpURL = location.pathname + ZaUtil.HELP_URL + "monitoring/checking_usage_statistics.htm?locid="+AjxEnv.DEFAULT_LOCALE;
+    controller._helpButtonText = ZaMsg.helpCheckStatistics;
 };
 
 
