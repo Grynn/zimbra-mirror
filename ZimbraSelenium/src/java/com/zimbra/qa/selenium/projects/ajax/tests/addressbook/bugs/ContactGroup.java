@@ -89,10 +89,11 @@ public class ContactGroup extends AjaxCommonTest  {
 		ZAssert.assertTrue(found, "Verify contact " + contact.fileAs + " populated");
 
 		//add all to the email list
-		formGroup.zClick(FormContactGroupNew.Locators.zAddAllButton);
+		formGroup.zClick(FormContactGroupNew.Locators.zAddButton);
+		
 		
 		//TODO: verify email add to the email area		
-	   
+	    SleepUtil.sleepLong();SleepUtil.sleepLong();SleepUtil.sleepLong();SleepUtil.sleepLong();SleepUtil.sleepLong();
 		//click Save
 		formGroup.zSubmit(); 
 		
@@ -167,7 +168,7 @@ public class ContactGroup extends AjaxCommonTest  {
 		app.zPageSearch.zAddSearchQuery(email);	
 		app.zPageSearch.zToolbarPressButton(Button.B_SEARCH);		
 					
-	
+	 
 		//Right click and select New Contact Group
 	 	 SimpleFormContactGroupNew simpleFormGroup = (SimpleFormContactGroupNew) app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_CONTACTGROUP, Button.O_NEW_CONTACTGROUP , email);     
 	
