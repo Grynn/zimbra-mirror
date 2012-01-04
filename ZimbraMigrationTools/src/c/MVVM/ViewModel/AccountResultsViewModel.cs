@@ -61,9 +61,8 @@ public class AccountResultsViewModel: BaseViewModel
     }
     private void OpenLogFile()
     {
-        string AcctName = ((SelectedTab == "Accounts") || (SelectedTab == "")) ?
-            AccountResultsList[CurrentAccountSelection].AccountName : SelectedTab;
-        string Logfile = Path.GetTempPath() + AcctName + ".log";
+        string nam = ((SelectedTab == "Accounts") || (SelectedTab == "")) ? "Migration" : SelectedTab;
+        string Logfile = Path.GetTempPath() + nam + ".log";
         try
         {
             Process.Start(Logfile);
@@ -228,7 +227,6 @@ public class AccountResultsViewModel: BaseViewModel
             if (value == m_accountResults.CurrentAccountSelection)
                 return;
             m_accountResults.CurrentAccountSelection = value;
-            OpenLogFileEnabled = (value != -1);
             OnPropertyChanged(new PropertyChangedEventArgs("CurrentAccountSelection"));
         }
     }

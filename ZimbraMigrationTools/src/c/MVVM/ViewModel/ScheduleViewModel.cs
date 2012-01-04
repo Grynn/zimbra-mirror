@@ -228,6 +228,7 @@ public class ScheduleViewModel: BaseViewModel
                 num++, 0, "", "", su.username, 0, "", 0, 0,
                 accountResultsViewModel.EnableStop));
         }
+        accountResultsViewModel.OpenLogFileEnabled = true;
         num = 0;
         foreach (SchedUser su in SchedList)
         {

@@ -272,6 +272,7 @@ public class IntroViewModel: BaseViewModel
         m_resultsViewModel.ViewTitle = "Results";
         m_resultsViewModel.isBrowser = isBrowser;
         m_resultsViewModel.CurrentAccountSelection = -1;
+        m_resultsViewModel.OpenLogFileEnabled = false;
 
         SetupViewModelPtrs();
 
