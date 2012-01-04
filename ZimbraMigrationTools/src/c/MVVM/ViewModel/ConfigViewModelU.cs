@@ -89,7 +89,18 @@ public class ConfigViewModelU: BaseViewModel
 
                 Config config = new Config();
 
-                config = (Config)reader.Deserialize(fileRead);
+                try
+                {
+                    config = (Config)reader.Deserialize(fileRead);
+                }
+                catch (Exception e)
+                {
+                    string temp = string.Format("Incorrect configuration file format.\n{0}", e.Message);
+                    MessageBox.Show(temp, "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
+                    fileRead.Close();
+                    return;
+                }
+
                 fileRead.Close();
                 LoadConfig(config);
                 ((ConfigViewModelUDest)ViewModelPtrs[(int)ViewType.USRDEST]).LoadConfig(config);
