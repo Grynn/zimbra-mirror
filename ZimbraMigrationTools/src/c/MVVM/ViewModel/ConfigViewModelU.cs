@@ -182,6 +182,22 @@ public class ConfigViewModelU: BaseViewModel
     }
     private void Next()
     {
+        if (IsPST)
+        {
+            if (PSTFile.Length == 0)
+            {
+                MessageBox.Show("Please enter a PST file", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            else
+            if (!File.Exists(PSTFile))
+            {
+                string temp = string.Format("{0} does not exist", PSTFile);
+                MessageBox.Show(temp, "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+        }
+
         lb.SelectedIndex = 2;
     }
     public string OutlookProfile {
