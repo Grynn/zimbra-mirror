@@ -329,6 +329,7 @@ body {
 }
 
 .DwtListView-Column,
+.ZaTaskTitleNameHeader,
 .ZaCurrentAppBar{
   background-color: #c5c6cb;
   background-image: -moz-linear-gradient(top, #dfe1ef, #b9bbbf); /* FF3.6 */

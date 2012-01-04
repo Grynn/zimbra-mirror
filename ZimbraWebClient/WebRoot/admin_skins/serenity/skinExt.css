@@ -144,6 +144,18 @@ div.ZmSelectedHeaderBg {
     font-weight: bold;
 }
 
+.ZaTaskTitleNameHeader {
+    padding: 5px 0px;
+}
+
+.ZaTaskTitleNameHeader td {
+    font-weight: bold;
+}
+
+.ZaTaskListContent {
+    height: 126px;
+}
+
 .ZaTaskTabView .XFormCase {
     background-color: #DDDDDD;
 }

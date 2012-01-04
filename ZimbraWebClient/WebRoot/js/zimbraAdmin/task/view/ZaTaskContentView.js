@@ -68,14 +68,6 @@ function (ev) {
 
 ZaTaskContentView.myXFormModifier = function(xFormObject, entry) {
     var cases = [];
-    var workingInProcessHeader = new Array();
-    workingInProcessHeader[0] = new ZaListHeaderItem(ZaTask.A_workingInProcess, ZaMsg.MSG_WorkingTask, null, "auto", null, ZaTask.A_workingInProcess, false, true);
-
-    var runningTaskHeader = new Array();
-    runningTaskHeader[0] = new ZaListHeaderItem(ZaTask.A_runningTask, ZaMsg.MSG_RunningTask, null, "auto", null, ZaTask.A_runningTask, false, true);
-
-    var serverStatusHeader = new Array();
-    serverStatusHeader[0] = new ZaListHeaderItem(ZaTask.A_serverStatus, ZaMsg.MSG_ServerStatus, null, "auto", null, ZaTask.A_serverStatus, false, true);
 
     var case1 = {type:_ZATABCASE_, numCols: 1, caseKey:1,
                 paddingStyle: "", width: "100%", cellpadding: 0,
@@ -85,20 +77,57 @@ ZaTaskContentView.myXFormModifier = function(xFormObject, entry) {
                     {type:_AJX_IMAGE_, src: "WorkInProgress", label:null, containerCssStyle:"text-align:center;",
                         visibilityChecks:[[XForm.checkInstanceValue, ZaTask.A2_isExpanded, false]],
                         visibilityChangeEventSources:[ZaTask.A2_isExpanded]},
+
                     {ref:ZaTask.A_workingInProcess, type:_OUTPUT_,  bmolsnr: true, value:0,
                         visibilityChecks:[[XForm.checkInstanceValue, ZaTask.A2_isExpanded, false]],
-                        visibilityChangeEventSources:[ZaTask.A2_isExpanded], containerCssStyle:"text-align:center;",
+                        visibilityChangeEventSources:[ZaTask.A2_isExpanded],
+                        containerCssStyle:"text-align:center;",
                         getDisplayValue: function(newValue) {
                            return newValue.length;
                         }
                     },
-                    {ref:ZaTask.A_workingInProcess, type:_DWT_LIST_, height:160,
-                       forceUpdate: true, preserveSelection:false, multiselect:false,
-                       headerList:workingInProcessHeader,
-                       visibilityChecks:[[XForm.checkInstanceValue, ZaTask.A2_isExpanded, true]],
-                       visibilityChangeEventSources:[ZaTask.A2_isExpanded],
-                       onSelection:ZaTaskContentView.taskItemSelectionListener
+
+                    {type: _GROUP_, numCols: 1,width: "100%",
+                        visibilityChecks:[[XForm.checkInstanceValue, ZaTask.A2_isExpanded, true]],
+                        visibilityChangeEventSources:[ZaTask.A2_isExpanded],
+                        items: [
+                            { type:_COMPOSITE_, numCols:2, width:"100%",
+                               visibilityChecks:[[XForm.checkInstanceValue, ZaTask.A2_isWIPExpanded, true]],
+                               visibilityChangeEventSources:[ZaTask.A2_isWIPExpanded],
+                                colSizes:["20px", "100%"],
+                                items:[
+                                    {type:_DWT_IMAGE_, value: "ImgNodeExpanded", cssStyle:"position:static;",
+                                        onClick:function() {
+                                            this.setInstanceValue(false, ZaTask.A2_isWIPExpanded);
+                                        }
+                                    },
+                                    {type:_OUTPUT_, value: ZaMsg.MSG_WorkingTask}
+                                ],
+                                cssClass:"ZaTaskTitleNameHeader"
+                            },
+                            { type:_COMPOSITE_, numCols:2, width:"100%",
+                               visibilityChecks:[[XForm.checkInstanceValue, ZaTask.A2_isWIPExpanded, false]],
+                               visibilityChangeEventSources:[ZaTask.A2_isWIPExpanded],
+                                colSizes:["20px", "100%"],
+                                items:[
+                                    {type:_DWT_IMAGE_, value: "ImgNodeCollapsed", cssStyle:"position:static;",
+                                        onClick:function() {
+                                            this.setInstanceValue(true, ZaTask.A2_isWIPExpanded);
+                                        }
+                                    },
+                                    {type:_OUTPUT_, value: ZaMsg.MSG_WorkingTask}
+                                ],
+                                cssClass:"ZaTaskTitleNameHeader"
+                            },
+                            {ref:ZaTask.A_workingInProcess, type:_DWT_LIST_, cssClass: "ZaTaskListContent",
+                               forceUpdate: true, preserveSelection:false, multiselect:false,
+                               visibilityChecks:[[XForm.checkInstanceValue, ZaTask.A2_isWIPExpanded, true]],
+                               visibilityChangeEventSources:[ZaTask.A2_isWIPExpanded],
+                               onSelection:ZaTaskContentView.taskItemSelectionListener
+                            }
+                        ]
                     },
+
                     {type:_AJX_IMAGE_, src: "TaskViewWaiting", label:null,containerCssStyle:"text-align:center;",
                         visibilityChecks:[[XForm.checkInstanceValue, ZaTask.A2_isExpanded, false]],
                         visibilityChangeEventSources:[ZaTask.A2_isExpanded]},
@@ -109,13 +138,48 @@ ZaTaskContentView.myXFormModifier = function(xFormObject, entry) {
                             return newValue.length;
                         }
                     },
-                    {ref:ZaTask.A_runningTask, type:_DWT_LIST_, height:160,
-                       forceUpdate: true, preserveSelection:false, multiselect:false,
-                       headerList:runningTaskHeader,
-                       visibilityChecks:[[XForm.checkInstanceValue, ZaTask.A2_isExpanded, true]],
-                       visibilityChangeEventSources:[ZaTask.A2_isExpanded],
-                       onSelection:ZaTaskContentView.taskItemSelectionListener
+
+                    {type: _GROUP_, numCols: 1,width: "100%",
+                        visibilityChecks:[[XForm.checkInstanceValue, ZaTask.A2_isExpanded, true]],
+                        visibilityChangeEventSources:[ZaTask.A2_isExpanded],
+                        items: [
+                            { type:_COMPOSITE_, numCols:2, width:"100%",
+                               visibilityChecks:[[XForm.checkInstanceValue, ZaTask.A2_isRTExpanded, true]],
+                               visibilityChangeEventSources:[ZaTask.A2_isRTExpanded],
+                                colSizes:["20px", "100%"],
+                                items:[
+                                    {type:_DWT_IMAGE_, value: "ImgNodeExpanded", cssStyle:"position:static;",
+                                        onClick:function() {
+                                            this.setInstanceValue(false, ZaTask.A2_isRTExpanded);
+                                        }
+                                    },
+                                    {type:_OUTPUT_, value: ZaMsg.MSG_RunningTask}
+                                ],
+                                cssClass:"ZaTaskTitleNameHeader"
+                            },
+                            { type:_COMPOSITE_, numCols:2, width:"100%",
+                               visibilityChecks:[[XForm.checkInstanceValue, ZaTask.A2_isRTExpanded, false]],
+                               visibilityChangeEventSources:[ZaTask.A2_isRTExpanded],
+                                colSizes:["20px", "100%"],
+                                items:[
+                                    {type:_DWT_IMAGE_, value: "ImgNodeCollapsed", cssStyle:"position:static;",
+                                        onClick:function() {
+                                            this.setInstanceValue(true, ZaTask.A2_isRTExpanded);
+                                        }
+                                    },
+                                    {type:_OUTPUT_, value: ZaMsg.MSG_RunningTask}
+                                ],
+                                cssClass:"ZaTaskTitleNameHeader"
+                            },
+                            {ref:ZaTask.A_runningTask, type:_DWT_LIST_, cssClass: "ZaTaskListContent",
+                               forceUpdate: true, preserveSelection:false, multiselect:false,
+                               visibilityChecks:[[XForm.checkInstanceValue, ZaTask.A2_isRTExpanded, true]],
+                               visibilityChangeEventSources:[ZaTask.A2_isRTExpanded],
+                               onSelection:ZaTaskContentView.taskItemSelectionListener
+                            }
+                        ]
                     },
+
                     {type:_AJX_IMAGE_, src: "Status", label:null, containerCssStyle:"text-align:center;",
                         visibilityChecks:[[XForm.checkInstanceValue, ZaTask.A2_isExpanded, false]],
                         visibilityChangeEventSources:[ZaTask.A2_isExpanded]},
@@ -126,12 +190,48 @@ ZaTaskContentView.myXFormModifier = function(xFormObject, entry) {
                             return newValue.length;
                         }
                     },
-                    {ref:ZaTask.A_serverStatus, type:_DWT_LIST_, height:160,
-                       forceUpdate: true, preserveSelection:false, multiselect:false,
-                       headerList:serverStatusHeader,
-                       visibilityChecks:[[XForm.checkInstanceValue, ZaTask.A2_isExpanded, true]],
-                       visibilityChangeEventSources:[ZaTask.A2_isExpanded]
+
+                    {type: _GROUP_, numCols: 1,width: "100%",
+                        visibilityChecks:[[XForm.checkInstanceValue, ZaTask.A2_isExpanded, true]],
+                        visibilityChangeEventSources:[ZaTask.A2_isExpanded],
+                        items: [
+                            { type:_COMPOSITE_, numCols:2, width:"100%",
+                               visibilityChecks:[[XForm.checkInstanceValue, ZaTask.A2_isServerExpaned, true]],
+                               visibilityChangeEventSources:[ZaTask.A2_isServerExpaned],
+                                colSizes:["20px", "100%"],
+                                items:[
+                                    {type:_DWT_IMAGE_, value: "ImgNodeExpanded", cssStyle:"position:static;",
+                                        onClick:function() {
+                                            this.setInstanceValue(false, ZaTask.A2_isServerExpaned);
+                                        }
+                                    },
+                                    {type:_OUTPUT_, value: ZaMsg.MSG_ServerStatus}
+                                ],
+                                cssClass:"ZaTaskTitleNameHeader"
+                            },
+                            { type:_COMPOSITE_, numCols:2, width:"100%",
+                               visibilityChecks:[[XForm.checkInstanceValue, ZaTask.A2_isServerExpaned, false]],
+                               visibilityChangeEventSources:[ZaTask.A2_isServerExpaned],
+                                colSizes:["20px", "100%"],
+                                items:[
+                                    {type:_DWT_IMAGE_, value: "ImgNodeCollapsed", cssStyle:"position:static;",
+                                        onClick:function() {
+                                            this.setInstanceValue(true, ZaTask.A2_isServerExpaned);
+                                        }
+                                    },
+                                    {type:_OUTPUT_, value: ZaMsg.MSG_ServerStatus}
+                                ],
+                                cssClass:"ZaTaskTitleNameHeader"
+                            },
+                            {ref:ZaTask.A_serverStatus, type:_DWT_LIST_, cssClass: "ZaTaskListContent",
+                               forceUpdate: true, preserveSelection:false, multiselect:false,
+                               visibilityChecks:[[XForm.checkInstanceValue, ZaTask.A2_isServerExpaned, true]],
+                               visibilityChangeEventSources:[ZaTask.A2_isServerExpaned],
+                               onSelection:ZaTaskContentView.taskItemSelectionListener
+                            }
+                        ]
                     },
+
                     {type:_SPACER_, height:"100%"}
         ]
     }
