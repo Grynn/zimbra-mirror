@@ -314,6 +314,15 @@ ZaSearch.prototype.dynSelectSearch = function (callArgs) {
 	}
 }
 
+ZaSearch.prototype.dynSearchField = function (callArgs) {
+    var newCallArgs = {};
+	newCallArgs.value = callArgs["value"];
+    newCallArgs.event = callArgs["event"];
+    newCallArgs.callback = callArgs["callback"];
+    newCallArgs.types = ZaApp.getInstance().getSearchListController()._searchField.getSearchTypes();
+    ZaSearch.prototype.dynSelectSearch.call(this, newCallArgs);
+
+}
 /**
  * @argument callArgs {value, event, callback, extraLdapQuery}
  */

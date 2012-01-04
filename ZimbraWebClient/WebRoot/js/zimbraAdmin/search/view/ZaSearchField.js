@@ -715,7 +715,7 @@ ZaSearchField.prototype._getMyXForm = function() {
                 {type: _GROUP_,  numCols: 2, width: "100%", cssClass: "oselect",
                     items: [
                     {type:_DYNSELECT_, ref:ZaSearch.A_query, dataFetcherClass:ZaSearch,
-                        dataFetcherMethod:ZaSearch.prototype.dynSelectSearch,
+                        dataFetcherMethod:ZaSearch.prototype.dynSearchField,
                         labelLocation:_NONE_,
                         width:"100%", inputWidth:"100%", editable:true, forceUpdate:true,
                         choices:new XFormChoices([], XFormChoices.OBJECT_REFERENCE_LIST, "name", "name"),
