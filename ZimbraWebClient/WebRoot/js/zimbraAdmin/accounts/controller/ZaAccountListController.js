@@ -495,9 +495,11 @@ function(ev) {
 				this._container, "550px", "100px",ZaMsg.New_Alias_Title );	
 			ZaApp.getInstance().dialogs["newAliasDialog"].registerCallback(
 					DwtDialog.OK_BUTTON, ZaAlias.prototype.addAlias, 
-					newAlias, ZaApp.getInstance().dialogs["newAliasDialog"]._localXForm );								
+					newAlias, ZaApp.getInstance().dialogs["newAliasDialog"]._localXForm );
 		}
 
+        var enterListener = new AjxListener (newAlias, ZaAlias.prototype.addAlias, ZaApp.getInstance().dialogs["newAliasDialog"]._localXForm);
+        ZaApp.getInstance().dialogs["newAliasDialog"].setEnterListener(enterListener);
 		ZaApp.getInstance().dialogs["newAliasDialog"].setObject(newAlias);
 		ZaApp.getInstance().dialogs["newAliasDialog"].popup();
 	} catch (ex) {
