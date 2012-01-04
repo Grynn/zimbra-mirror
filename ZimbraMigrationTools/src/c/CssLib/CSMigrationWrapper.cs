@@ -183,9 +183,16 @@ public class CSMigrationwrapper
             MyArgs[1] = AdminUser;
             MyArgs[2] = AdminPassword;
 
-            s = (string)calcType.InvokeMember("GlobalInit", BindingFlags.InvokeMethod |
-                BindingFlags.Instance | BindingFlags.Public, null, calcInstance, MyArgs,
-                null, null, null);
+            try
+            {
+                s = (string)calcType.InvokeMember("GlobalInit", BindingFlags.InvokeMethod |
+                    BindingFlags.Instance | BindingFlags.Public, null, calcInstance, MyArgs,
+                    null, null, null);
+            }
+            catch (Exception e)
+            {
+                s = string.Format("Initialization Exception.  Make sure to enter the proper credentials.\n{0}", e.Message);
+            }
         }
         return s;
     }
