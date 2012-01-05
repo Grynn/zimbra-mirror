@@ -442,7 +442,7 @@ public class CSMigrationwrapper
             }
             else
             {               
-                value = userobject.UMInitializeUser("", "", Acct.AccountID, "MAPI");
+                value = userobject.UMInitializeUser(Acct.AccountID, "MAPI");
             }
             if (value.Length > 0)
             {
