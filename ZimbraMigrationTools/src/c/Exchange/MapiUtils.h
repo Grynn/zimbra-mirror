@@ -239,7 +239,7 @@ BOOL GetAppName(wstring &wstrAppName);
 BOOL CreateAppTemporaryDirectory();
 BOOL GetAppTemporaryDirectory(wstring &wstrTempAppDirPath);
 wstring GetUniqueName();
-wstring GetDomainName();
+bool GetDomainName(wstring &wstrDomain);
 LONG GetOutlookVersion(int &iVersion);
 BOOL CreatePSTProfile(LPSTR lpstrProfileName, LPSTR lpstrPSTFQPathName, bool bNoUI = true);
 BOOL DeleteAlikeProfiles(LPCSTR lpstrProfileName);

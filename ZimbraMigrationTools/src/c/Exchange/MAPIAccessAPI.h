@@ -174,7 +174,8 @@ private:
     static Zimbra::MAPI::MAPISession *m_zmmapisession;
     static Zimbra::MAPI::MAPIStore *m_defaultStore;
     static bool m_bSingleMailBoxMigration;
-    std::wstring m_strUserName;
+	static bool m_bHasJoinedDomain;
+	std::wstring m_strUserName;
     Zimbra::MAPI::MAPIStore *m_userStore;
     Zimbra::MAPI::MAPIFolder *m_rootFolder;
     ExchangeSpecialFolderId FolderToSkip[TS_FOLDERS_MAX];
@@ -187,7 +188,7 @@ private:
     HRESULT GetInternalFolder(SBinary sbFolderEID, MAPIFolder &folder);
 
 public:
-    // static methods to be used by all mailboxes/profile/PST
+	// static methods to be used by all mailboxes/profile/PST
     // lpcwstrMigTarget -> Exchange Admin Profile for Exchange mailboxes migration
     // lpcwstrMigTarget -> Local Exchange profile migration
     // lpcwstrMigTarget -> PST file path for PST migration

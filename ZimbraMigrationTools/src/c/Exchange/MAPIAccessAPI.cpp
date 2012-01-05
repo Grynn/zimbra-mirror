@@ -7,6 +7,7 @@ Zimbra::MAPI::MAPIStore *MAPIAccessAPI::m_defaultStore = NULL;
 std::wstring MAPIAccessAPI::m_strTargetProfileName = L"";
 std::wstring MAPIAccessAPI::m_strExchangeHostName = L"";
 bool MAPIAccessAPI::m_bSingleMailBoxMigration = false;
+bool MAPIAccessAPI::m_bHasJoinedDomain = false;
 
 // Initialize with Exchange Sever hostname, Outlook Admin profile name, Exchange mailbox name to be migrated
 MAPIAccessAPI::MAPIAccessAPI(wstring strUserName): m_userStore(NULL), m_rootFolder(NULL)
@@ -57,6 +58,9 @@ bool MAPIAccessAPI::SkipFolder(ExchangeSpecialFolderId exfid)
 LPCWSTR MAPIAccessAPI::InitGlobalSessionAndStore(LPCWSTR lpcwstrMigTarget)
 {
     LPCWSTR lpwstrStatus = NULL;
+	// If part of domain, get domain name
+    m_bHasJoinedDomain = Zimbra::MAPI::Util::GetDomainName(m_strExchangeHostName);
+	
     try
     {
         // Logon into target profile
@@ -164,6 +168,24 @@ void MAPIAccessAPI::UnInitGlobalSessionAndStore()
     m_zmmapisession = NULL;
 }
 
+wstring GetCNName(LPWSTR pstrUserDN)
+{
+	wstring strUserDN = pstrUserDN;
+	size_t npos=strUserDN.find_last_of(L"/");
+	if(npos != string::npos)
+	{
+		strUserDN=strUserDN.substr(npos+1);
+		npos=strUserDN.find_first_of(L"cn=");
+		if(npos != string::npos)
+		{
+			strUserDN=strUserDN.substr(3);
+		}
+	}
+	else
+		strUserDN=L"";
+	return strUserDN;
+}
+
 // Open MAPI sessiona and Open Stores
 LPCWSTR MAPIAccessAPI::OpenUserStore()
 {
@@ -176,6 +198,7 @@ LPCWSTR MAPIAccessAPI::OpenUserStore()
 	LPSTR ExchangeHostName = NULL;
     LPWSTR pwstrExchangeServerDN = NULL;
 	LPWSTR pwstrExchangeHostName = NULL;
+	LPWSTR pwstrExchangeUserDN = NULL;
 	
     try
     {
@@ -188,16 +211,38 @@ LPCWSTR MAPIAccessAPI::OpenUserStore()
             goto CLEAN_UP;
         AtoW(ExchangeServerDN, pwstrExchangeServerDN);
 		AtoW(ExchangeHostName, pwstrExchangeHostName);
+		AtoW(ExchangeUserDN, pwstrExchangeUserDN);
 		
-		m_strExchangeHostName = pwstrExchangeHostName;
+		//Get CN name from user DN
+		wstring wstrCNName=GetCNName(pwstrExchangeUserDN);
+
+		//if logged in user and user to migrate are same. Assume that its a profile migration.
+		//No need to get user DN again from LDAP. Most probably, machine is not part of any domain.
+		if(wstrCNName == m_strUserName)
+		{
+			m_userStore = m_defaultStore;
+			m_bSingleMailBoxMigration = true;
+		}
+		else
+		{
+			//if part of domain, use domain to query LDAP
+			//else use Exchange server host name from profile
+			//NOTE:If not part of domain and AD is on different host than Exchange Server
+			//It will not work. m_strExchangeHostName MUST point to AD.
+			//TODO: Find a way to get AD from profile or some other means.
+			if(!m_bHasJoinedDomain)
+			{
+				m_strExchangeHostName = pwstrExchangeHostName;
+			}
 				
-		// Get DN of user to be migrated
-		Zimbra::MAPI::Util::GetUserDNAndLegacyName(m_strExchangeHostName.c_str(),
-			m_strUserName.c_str(), NULL, wstruserdn, legacyName);
-		hr = m_zmmapisession->OpenOtherStore(m_defaultStore->GetInternalMAPIStore(),
-			pwstrExchangeServerDN, (LPWSTR)legacyName.c_str(), *m_userStore);
-		if (hr != S_OK)
-			goto CLEAN_UP;
+			// Get DN of user to be migrated
+			Zimbra::MAPI::Util::GetUserDNAndLegacyName(m_strExchangeHostName.c_str(),
+				m_strUserName.c_str(), NULL, wstruserdn, legacyName);
+			hr = m_zmmapisession->OpenOtherStore(m_defaultStore->GetInternalMAPIStore(),
+				pwstrExchangeServerDN, (LPWSTR)legacyName.c_str(), *m_userStore);
+			if (hr != S_OK)
+				goto CLEAN_UP;
+		}
 		
     }
     catch (MAPISessionException &msse)
@@ -219,6 +264,7 @@ CLEAN_UP: SafeDelete(ExchangeServerDN);
     SafeDelete(ExchangeUserDN);
     SafeDelete(pwstrExchangeServerDN);
 	SafeDelete(pwstrExchangeHostName);
+	SafeDelete(pwstrExchangeUserDN);
 	if (hr != S_OK)
         lpwstrStatus = FromatExceptionInfo(hr, L"MAPIAccessAPI::OpenSessionAndStore() Failed",
             __FILE__, __LINE__);

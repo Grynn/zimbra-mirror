@@ -4,6 +4,7 @@
 #pragma comment(lib, "netapi32.lib")
 #include <lm.h>
 #include <mspst.h>
+#include <ntsecapi.h>
 
 enum AttachPropIdx
 {
@@ -2289,9 +2290,11 @@ wstring Zimbra::MAPI::Util::GetUniqueName()
     return unique;
 }
 
-wstring Zimbra::MAPI::Util::GetDomainName()
+bool Zimbra::MAPI::Util::GetDomainName(wstring &wstrDomain)
 {
-    wstring wDomain = L"";
+	wstrDomain=L"";
+ /*
+	wstring wDomain = L"";
     DWORD dwLevel = 102;
     LPWKSTA_INFO_102 pBuf = NULL;
     NET_API_STATUS nStatus;
@@ -2305,13 +2308,39 @@ wstring Zimbra::MAPI::Util::GetDomainName()
         // wprintf(L"\tName:     %s\n", pBuf->wki102_computername);
         // printf("\tVersion:  %d.%d\n", pBuf->wki102_ver_major,
         // pBuf->wki102_ver_minor);
-        // wprintf(L"\tLan Root: %s\n", pBuf->wki102_lanroot);
+        //wprintf(L"\tLan Root: %s\n", pBuf->wki102_lanroot);
         // wprintf(L"\t# Logged On Users: %d\n", pBuf->wki102_logged_on_users);
     }
     // Free the allocated memory.
     if (pBuf != NULL)
         NetApiBufferFree(pBuf);
-    return wDomain;
+	wstrDomain = wDomain;
+*/
+	bool ret = false;
+	LSA_OBJECT_ATTRIBUTES objectAttributes;
+    LSA_HANDLE policyHandle;
+    NTSTATUS status;
+    PPOLICY_PRIMARY_DOMAIN_INFO info;
+
+    // Object attributes are reserved, so initialize to zeros.
+    ZeroMemory(&objectAttributes, sizeof(objectAttributes));
+
+    status = LsaOpenPolicy(NULL, &objectAttributes, GENERIC_READ | POLICY_VIEW_LOCAL_INFORMATION, &policyHandle);
+    if (!status)
+    {
+        status = LsaQueryInformationPolicy(policyHandle, PolicyPrimaryDomainInformation, (LPVOID*)&info);
+        if (!status)
+        {
+			wstrDomain = info->Name.Buffer; //Domain
+            if (info->Sid)
+                    ret = true;
+            LsaFreeMemory(info);
+        }
+
+        LsaClose(policyHandle);
+    }
+
+    return ret;
 }
 
 BOOL Zimbra::MAPI::Util::CreatePSTProfile(LPSTR lpstrProfileName, LPSTR lpstrPSTFQPathName, bool
