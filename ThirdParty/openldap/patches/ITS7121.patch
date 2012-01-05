@@ -1,5 +1,5 @@
 --- openldap-2.4.28/libraries/libmdb/mdb.c.orig	2011-12-21 11:47:45.321599439 -0800
-+++ openldap-2.4.28/libraries/libmdb/mdb.c	2012-01-04 17:16:20.091601042 -0800
++++ openldap-2.4.28/libraries/libmdb/mdb.c	2012-01-04 17:20:49.173284042 -0800
 @@ -4342,7 +4342,7 @@
  	size_t		 sz;
  
@@ -14,7 +14,7 @@
  		/* Reset insert index for right sibling. */
  			j = (i == newindx && ins_new);
 -			mc->mc_pg[mc->mc_top] = rp;
-+			if (i != newindx)
++			if (i != newindx || ins_new)
 +				mc->mc_pg[mc->mc_top] = rp;
  		}
  
