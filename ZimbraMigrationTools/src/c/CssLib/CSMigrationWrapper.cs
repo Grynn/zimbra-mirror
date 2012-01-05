@@ -619,7 +619,7 @@ public class CSMigrationwrapper
                     BindingFlags.InvokeMethod | BindingFlags.Instance | BindingFlags.Public,
                     null, userinstance, MyArgs, mods, null, null);*/
 
-                string s = userobject.InitializeUser("", "", Acct.AccountID, "MAPI");
+                value = userobject.InitializeUser("", "", Acct.AccountID, "MAPI");
             }
             else
             {               
@@ -630,7 +630,7 @@ public class CSMigrationwrapper
                 value = (string)userobject.InvokeMember("UMInitializeUser",
                     BindingFlags.InvokeMethod | BindingFlags.Instance | BindingFlags.Public,
                     null, userinstance, MyArgs, mods, null, null);*/
-                string s = userobject.UMInitializeUser("", "", Acct.AccountID, "MAPI");
+                value = userobject.UMInitializeUser("", "", Acct.AccountID, "MAPI");
             }
             if (value.Length > 0)
             {
