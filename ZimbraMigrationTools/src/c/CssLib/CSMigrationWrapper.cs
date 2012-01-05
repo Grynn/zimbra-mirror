@@ -121,10 +121,11 @@ public class CSMigrationwrapper
     
     public CSMigrationwrapper()
     {
-        /*string path = System.AppDomain.CurrentDomain.BaseDirectory + "interop.Exchange.dll";
-
         Log.init(Path.GetTempPath() + "migration.log", Log.Level.Debug);
         Log.info("initialize");
+
+        /*
+        string path = System.AppDomain.CurrentDomain.BaseDirectory + "interop.Exchange.dll";
         sourceProvider = Assembly.LoadFile(path);
         if (sourceProvider == null)
         {
@@ -134,7 +135,9 @@ public class CSMigrationwrapper
 
         Type[] types = sourceProvider.GetTypes();
 
-        MailWrapper = sourceProvider.GetType("Exchange.MapiWrapperClass");*/
+        MailWrapper = sourceProvider.GetType("Exchange.MapiWrapperClass");
+        */
+
         api = new ZimbraAPI();
     }
 
