@@ -89,9 +89,10 @@ LDAPURL_XFormItem.prototype.items = [
 			if(itemVal) {
 				var URLChunks = itemVal.split(/[:\/]/);
 				if(AjxEnv.isIE) {
-					if(URLChunks.length >= 3) {
-						val = URLChunks[1];
-					} 
+				    // bug 68747, IE's split's result length is not fixed, don't use it
+				    var urlPortPair = itemVal.substring(7); //trim the prefix "ldap://"
+				    var chunks = urlPortPair.split(":");
+				    val = chunks[0];
 				} else {
 					if(URLChunks.length >= 4) {
 						val = URLChunks[3];
@@ -118,9 +119,10 @@ LDAPURL_XFormItem.prototype.items = [
 				var URLChunks = itemVal.split(/[:\/]/);
 				
 				if(AjxEnv.isIE) {
-					var tmp = parseInt(URLChunks[URLChunks.length-1]);
-					if(tmp != NaN)
-						val = tmp;
+				    // bug 68747, IE's split's result length is not fixed, don't use it
+				    var urlPortPair = itemVal.substring(7); //trim the prefix "ldap://"
+				    var chunks = urlPortPair.split(":");
+				    val = chunks[1];
 				} else {
 					if(URLChunks.length >= 5) {
 						val = URLChunks[4];
