@@ -14,6 +14,12 @@
  */
 package com.zimbra.soap.admin;
 
+import java.util.List;
+
+import javax.xml.ws.soap.SOAPFaultException;
+
+import com.sun.xml.ws.developer.WSBindingProvider;
+
 import generated.zcsclient.admin.*;
 import generated.zcsclient.admin.testDomainAdminRight.Rights;
 import generated.zcsclient.admin.testEffectiveAttrInfo.Default;
@@ -24,20 +30,15 @@ import generated.zcsclient.zm.testNamedElement;
 import generated.zcsclient.zm.testTargetBy;
 import generated.zcsclient.zm.testTargetType;
 
-import java.util.List;
+import com.zimbra.soap.Utility;
 
-import javax.xml.ws.soap.SOAPFaultException;
-
+import org.junit.Assert;
 import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.w3c.dom.Element;
-
-import com.sun.xml.ws.developer.WSBindingProvider;
-import com.zimbra.soap.Utility;
 
 public class WSDLAdminTest {
 
@@ -70,7 +71,7 @@ public class WSDLAdminTest {
             Utility.deleteCosIfExists(testCosCopy);
             Utility.deleteCosIfExists("foobar" + testCos);
         } catch (Exception ex) {
-            System.err.println("Exception " + ex.toString() +
+            System.err.println("Exception " + ex.toString() + 
             " thrown inside oneTimeTearDown");
         }
     }
@@ -180,11 +181,11 @@ public class WSDLAdminTest {
 
     // TODO Work out how to test this.  @Test
     public void checkGalConfig() throws Exception {
-        /*
+        /* 
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
         CheckGalConfigRequest req = new CheckGalConfigRequest();
         req.setAction("search");
-        LimitedQuery query = new LimitedQuery();
+        LimitedQuery query = new LimitedQuery(); 
         query.setLimit(12L);
         query.setValue("cn=*");
         Attr attr;
@@ -247,7 +248,7 @@ public class WSDLAdminTest {
     // at com.sun.xml.ws.client.sei.SEIStub.invoke(SEIStub.java:118)
     // at $Proxy112.getAllConfigRequest(Unknown Source)
     //
-    // Believe this is a bug in Metro 1.5 documented at
+    // Believe this is a bug in Metro 1.5 documented at 
     //     http://java.net/jira/browse/JAX_WS-807
     // Can't upgrade to newer versions of Metro because they require JAX-WS 2.2
     // and JDK6 only comes with JAX-WS 2.1.  It is possible to work around that
@@ -410,7 +411,7 @@ public class WSDLAdminTest {
             int eNum = 0;
             for (Element elem : rAttrs.getAny()) {
                 eNum++;
-                String eTag = riTag + " element " + aNum;
+                String eTag = riTag + " element " + eNum;
                 Assert.assertNotNull(eTag + " name", elem.getNodeName());
             }
         }
@@ -538,7 +539,7 @@ public class WSDLAdminTest {
             Assert.assertNotNull(attrTag + " n", anAttr.getN());
             testConstraintInfo constraint = anAttr.getConstraint();
             if (constraint != null) {
-                Assert.assertNotNull(attrTag + " constraint",
+                Assert.assertNotNull(attrTag + " constraint", 
                         constraint.getValues());
             }
             Default def = anAttr.getDefault();
@@ -588,7 +589,7 @@ public class WSDLAdminTest {
             Assert.assertNotNull(targTag, target);
             Assert.assertNotNull(targTag + " type", target.getType());
             checkAllEffectiveRights(target.getAll(), targTag + " all");
-
+            
             List <testInDomainInfo> inDomsList = target.getInDomains();
             Assert.assertNotNull("InDomains list", inDomsList);
             int inDomNum = 0;
@@ -601,7 +602,7 @@ public class WSDLAdminTest {
                     String domTag = inDomTag + " domain " + domNum;
                     Assert.assertNotNull(domTag + " name", dom.getName());
                 }
-                checkAllEffectiveRights(anInDom.getRights(),
+                checkAllEffectiveRights(anInDom.getRights(), 
                         inDomTag + " rights");
             }
             List <testRightsEntriesInfo> entries = target.getEntries();
@@ -613,7 +614,7 @@ public class WSDLAdminTest {
                 int entryNum = 0;
                 for (testNamedElement namedEntry : entriesInfo.getEntry()) {
                     entryNum++;
-                    String entryTag = entTag + " entry " + entNum;
+                    String entryTag = entTag + " entry " + entryNum;
                     Assert.assertNotNull(entryTag + " name", namedEntry.getName());
                 }
                 testEffectiveRightsInfo entriesInfoRights = entriesInfo.getRights();
@@ -624,7 +625,7 @@ public class WSDLAdminTest {
 
     // TODO: Figure out how to test GrantRight/GetGrants
     //       Looks like can only assign a user right to a regular user
-    //       The GetAllRightsResponse I've seen only talks about
+    //       The GetAllRightsResponse I've seen only talks about 
     //       various rights with rightClass="ADMIN"
     // Currently fails as regards grantee as invalid.
     //     RightBearer.isValidGranteeForAdminRights(mGranteeType, grantee))
@@ -760,7 +761,7 @@ public class WSDLAdminTest {
                 "length of CreateDomainResponse <domain> 'id' attribute length is " +
                 len + " - should be longer than 10", len > 10);
         len = domainInfo.getA().size();
-        Assert.assertTrue("CreateDomainResponse <domain> has " +
+        Assert.assertTrue("CreateDomainResponse <domain> has " + 
                 len + " <a> children - should have at least 12", len >= 12);
     }
 
@@ -1002,14 +1003,14 @@ public class WSDLAdminTest {
     }
 
     // Getting system failure: server coco.local
-    //     zimbraRemoteManagementPrivateKeyPath
+    //     zimbraRemoteManagementPrivateKeyPath 
     //     (/opt/zimbra/.ssh/zimbra_identity) does not exist
     //     Got further with :
     //         zmlocalconfig -e zimbra_user=$USER
     //         /opt/zimbra/bin/zmsshkeygen
     //         cat /opt/zimbra/.ssh/zimbra_identity.pub>>$HOME/.ssh/authorized_keys
     //     However, still get :
-    //     Caused by: java.io.IOException: There was a problem while
+    //     Caused by: java.io.IOException: There was a problem while 
     //                connecting to wsdl.server.example.test:22
     // TODO: Re-enable when/if know how to resolve this.
     // @Test
@@ -1258,31 +1259,31 @@ public class WSDLAdminTest {
         for (testDirPathInfo pathInfo : dirPaths) {
             String path = pathInfo.getPath();
             if (path.equals("/opt/zimbra/log")) {
-                Assert.assertEquals("isExists" + " for path=" + path,
+                Assert.assertEquals("isExists" + " for path=" + path, 
                         true, pathInfo.isExists());
-                Assert.assertEquals("isDirectory" + " for path=" + path,
+                Assert.assertEquals("isDirectory" + " for path=" + path, 
                         true, pathInfo.isIsDirectory());
-                Assert.assertEquals("isReadable" + " for path=" + path,
+                Assert.assertEquals("isReadable" + " for path=" + path, 
                         true, pathInfo.isReadable());
-                Assert.assertEquals("isWritable" + " for path=" + path,
+                Assert.assertEquals("isWritable" + " for path=" + path, 
                         true, pathInfo.isWritable());
             } else if (path.equals("/opt/zimbra/wsdlNonExistent")) {
-                Assert.assertEquals("isExists" + " for path=" + path,
+                Assert.assertEquals("isExists" + " for path=" + path, 
                         false, pathInfo.isExists());
-                Assert.assertEquals("isDirectory" + " for path=" + path,
+                Assert.assertEquals("isDirectory" + " for path=" + path, 
                         false, pathInfo.isIsDirectory());
-                Assert.assertEquals("isReadable" + " for path=" + path,
+                Assert.assertEquals("isReadable" + " for path=" + path, 
                         false, pathInfo.isReadable());
-                Assert.assertEquals("isWritable" + " for path=" + path,
+                Assert.assertEquals("isWritable" + " for path=" + path, 
                         false, pathInfo.isWritable());
             } else if (path.equals("/opt/zimbra/wsdlToBeCreated")) {
-                Assert.assertEquals("isExists" + " for path=" + path,
+                Assert.assertEquals("isExists" + " for path=" + path, 
                         true, pathInfo.isExists());
-                Assert.assertEquals("isDirectory" + " for path=" + path,
+                Assert.assertEquals("isDirectory" + " for path=" + path, 
                         true, pathInfo.isIsDirectory());
-                Assert.assertEquals("isReadable" + " for path=" + path,
+                Assert.assertEquals("isReadable" + " for path=" + path, 
                         true, pathInfo.isReadable());
-                Assert.assertEquals("isWritable" + " for path=" + path,
+                Assert.assertEquals("isWritable" + " for path=" + path, 
                         true, pathInfo.isWritable());
             } else
                 Assert.fail("Unexpected path=" + path);
