@@ -86,22 +86,7 @@ public class MigrationOptions
 
 public class CSMigrationwrapper
 {
-    /* string m_ConfigXMLFile;
-     *
-     * public string ConfigXMLFile
-     * {
-     *   get { return m_ConfigXMLFile; }
-     *   set { m_ConfigXMLFile = value; }
-     * }
-     * string m_UserMapFile;
-     *
-     * public string UserMapFile
-     * {
-     *   get { return m_UserMapFile; }
-     *   set { m_UserMapFile = value; }
-     * }*/
-
-   // Assembly sourceProvider;
+   
     string m_MailClient;
 
     ZimbraAPI api;
@@ -113,10 +98,7 @@ public class CSMigrationwrapper
         get { return m_MailClient; }
         set { m_MailClient = value; }
     }
-    /*   MVVM.Model.Config ConfigObj = new MVVM.Model.Config();
-     * MVVM.Model.ImportOptions ImportOptions = new MVVM.Model.ImportOptions();
-     * MVVM.Model.Users  users = new MVVM.Model.Users();*/
-
+    
     dynamic MailWrapper;
     
     public CSMigrationwrapper()
@@ -124,40 +106,10 @@ public class CSMigrationwrapper
         Log.init(Path.GetTempPath() + "migration.log", Log.Level.Debug);
         Log.info("initialize");
 
-        /*
-        string path = System.AppDomain.CurrentDomain.BaseDirectory + "interop.Exchange.dll";
-        sourceProvider = Assembly.LoadFile(path);
-        if (sourceProvider == null)
-        {
-            Console.WriteLine("Assembly dll file cannot be found");
-            return;
-        }
-
-        Type[] types = sourceProvider.GetTypes();
-
-        MailWrapper = sourceProvider.GetType("Exchange.MapiWrapperClass");
-        */
-
         api = new ZimbraAPI();
     }
 
-    /*private void CreateConfig(string Xmlfilename)
-     * {
-     *
-     *
-     *  System.Xml.Serialization.XmlSerializer reader =
-     *  new System.Xml.Serialization.XmlSerializer(typeof(MVVM.Model.Config));
-     *  if (File.Exists(Xmlfilename))
-     *  {
-     *
-     *      System.IO.StreamReader fileRead = new System.IO.StreamReader(
-     *             Xmlfilename);
-     *
-     *      ConfigObj = (MVVM.Model.Config)reader.Deserialize(fileRead);
-     *
-     *  }
-     * }
-     */
+    
     public void InitializeInterop()
     {
         if (MailClient == "MAPI")
@@ -172,23 +124,7 @@ public class CSMigrationwrapper
 
         if (MailClient == "MAPI")
         {
-           /* Type calcType = sourceProvider.GetType("Exchange.MapiWrapperClass");
-            object calcInstance = Activator.CreateInstance(calcType);
-            ParameterModifier pm = new ParameterModifier(1);
-
-            pm[0] = true;
-            ParameterModifier[] mods = { pm };
-
-            object[] MyArgs = new object[3];
-            MyArgs[0] = Target;
-            MyArgs[1] = AdminUser;
-            MyArgs[2] = AdminPassword;
-
-            s = (string)calcType.InvokeMember("GlobalInit", BindingFlags.InvokeMethod |
-                BindingFlags.Instance | BindingFlags.Public, null, calcInstance, MyArgs,
-                null, null, null);*/
            
-
             try
             {
                 MailWrapper = new Exchange.MapiWrapper();
@@ -208,13 +144,6 @@ public class CSMigrationwrapper
 
         if (MailClient == "MAPI")
         {
-           /* Type calcType = sourceProvider.GetType("Exchange.MapiWrapperClass");
-            object calcInstance = Activator.CreateInstance(calcType);
-
-            s = (string)calcType.InvokeMember("GlobalUninit", BindingFlags.InvokeMethod |
-                BindingFlags.Instance | BindingFlags.Public, null, calcInstance, null, null,
-                null, null);*/
-
             MailWrapper = new Exchange.MapiWrapper();
             s = MailWrapper.GlobalUninit();
         }
@@ -224,26 +153,10 @@ public class CSMigrationwrapper
     public void Initalize(string HostName, string Port, string AdminAccount, string UserID,
         string Mailserver, string AdminID)
     {
-        // CreateConfig(ConfigXMLFile);
+        
         int status = 0;
 
         Log.open(Path.GetTempPath() + UserID + ".log");
-
-        /*Type calcType = sourceProvider.GetType("Exchange.MapiWrapperClass");
-        object calcInstance = Activator.CreateInstance(calcType);
-        ParameterModifier pm = new ParameterModifier(1);
-
-        pm[0] = true;
-        ParameterModifier[] mods = { pm };
-
-        object[] MyArgs = new object[3];
-        MyArgs[0] = Mailserver;
-        MyArgs[1] = Port;
-        MyArgs[2] = AdminID;
-
-        string value = (string)calcType.InvokeMember("ConnectToServer",
-            BindingFlags.InvokeMethod | BindingFlags.Instance | BindingFlags.Public, null,
-            calcInstance, MyArgs, mods, null, null);*/
 
         MailWrapper = new Exchange.MapiWrapper();
         MailWrapper.ConnectToServer(Mailserver, Port, AdminID);
@@ -263,28 +176,12 @@ public class CSMigrationwrapper
     public string[] GetListofMapiProfiles()
     {
         object var = new object();
-        /*Type calcType = sourceProvider.GetType("Exchange.MapiWrapperClass");
-        object calcInstance = Activator.CreateInstance(calcType);
-
-        // object o = null;
-        ParameterModifier pm = new ParameterModifier(1);
-
-        pm[0] = true;
-        ParameterModifier[] mods = { pm };
-
-        object[] MyArgs = new object[1];
-
-        var = calcType.InvokeMember("GetProfilelist", BindingFlags.InvokeMethod |
-            BindingFlags.Instance | BindingFlags.Public, null, calcInstance, MyArgs, mods,
-            null, null);*/
-
+       
         MailWrapper.GetProfilelist(out var);
 
         string[] s = (string[])var;
 
-        // MailWrapper.GetProfilelist(out var);
-
-        
+              
         return s;
     }
 
@@ -292,21 +189,6 @@ public class CSMigrationwrapper
     {
         // Change this to above signature when I start getting the real ObjectPicker object back
         object var = new object();
-        /*Type calcType = sourceProvider.GetType("Exchange.MapiWrapperClass");
-        object calcInstance = Activator.CreateInstance(calcType);
-        ParameterModifier pm = new ParameterModifier(1);
-
-        pm[0] = true;
-        ParameterModifier[] mods = { pm };
-
-        object[] MyArgs = new object[1];
-
-        var = calcType.InvokeMember("SelectExchangeUsers", BindingFlags.InvokeMethod |
-            BindingFlags.Instance | BindingFlags.Public, null, calcInstance, MyArgs, mods,
-            null, null);
-
-        // MailWrapper.SelectExchangeUsers(out var);
-        string[] s = (string[])MyArgs[0];*/
         MailWrapper.SelectExchangeUsers(out var);
         string[] s = (string[])var;
         return s;
@@ -426,24 +308,6 @@ public class CSMigrationwrapper
 
         dynamic[] itemobjectarray;
 
-       /* ParameterModifier pm = new ParameterModifier(1);
-
-        pm[0] = true;
-        ParameterModifier[] mods = { pm };
-
-        object[] MyArgs = new object[2];
-        MyArgs[0] = folderobject;
-        MyArgs[1] = dt.ToOADate();
-
-        itemobjectarray = (object[])userobject.InvokeMember("GetItemsForFolderObjects",
-            BindingFlags.InvokeMethod | BindingFlags.Instance | BindingFlags.Public, null,
-            userinstance, MyArgs, mods, null, null);
-
-        Type itemObject;
-        object iteminstance;
-
-        itemObject = sourceProvider.GetType("Exchange.ItemObjectClass");
-        iteminstance = Activator.CreateInstance(itemObject);*/
         itemobjectarray = userobject.GetItemsForFolderObjects(
               folderobject, dt.ToOADate());
 
@@ -462,19 +326,8 @@ public class CSMigrationwrapper
                         bool bSkipMessage = false;
                         Dictionary<string, string> dict = new Dictionary<string, string>();
 
-                        object[] MyArgas = new object[3];
-                        MyArgas[0] = isServer ? Acct.AccountID : "";
-                        MyArgas[1] = itemobject.ItemID;
-                        MyArgas[2] = itemobject.Type;
-
-                        // MyArgs[3] = "MAPI";
-
-                       /* string[,] data = (string[,])itemObject.InvokeMember(
-                                "GetDataForItemID", BindingFlags.InvokeMethod |
-                                BindingFlags.Instance | BindingFlags.Public, null, iteminstance,
-                                MyArgas, null, null, null);*/
-
-                            string[,] data = itemobject.GetDataForItemID(( isServer ? Acct.AccountID : ""),
+                       
+                       string[,] data = itemobject.GetDataForItemID(( isServer ? Acct.AccountID : ""),
                                        itemobject.ItemID, itemobject.Type);
 
                         int bound0 = data.GetUpperBound(0);
@@ -547,23 +400,6 @@ public class CSMigrationwrapper
 
     public void EndUserMigration()
     {
-       /* Type userobject;
-        object userinstance;
-
-       userobject = sourceProvider.GetType("Exchange.UserObjectClass");
-        userinstance = Activator.CreateInstance(userobject);
-
-        ParameterModifier pm = new ParameterModifier(1);
-
-        pm[0] = true;
-        ParameterModifier[] mods = { pm };
-
-        object[] MyArgs = new object[1];
-        MyArgs[0] = "MAPI";
-        userobject.InvokeMember("UMUnInitializeUser", BindingFlags.InvokeMethod |
-            BindingFlags.Instance | BindingFlags.Public, null, userinstance, MyArgs, mods,
-            null, null);*/
-
        dynamic  userobject = new Exchange.UserObject();
        userobject.UMUnInitializeUser("MAPI");
     }
@@ -576,14 +412,7 @@ public class CSMigrationwrapper
         dynamic[] folderobjectarray;
         dynamic userobject;
         userobject = new Exchange.UserObject(); 
-        //dynamic itemobject;
         
-        /*object userinstance;
-
-       userobject = sourceProvider.GetType("Exchange.UserObjectClass");
-        userinstance = Activator.CreateInstance(userobject);
-        itemobject = sourceProvider.GetType("Exchange.ItemObjectClass");*/
-
         if (!isPreview)
         {
             /*ParameterModifier pm = new ParameterModifier(1);
@@ -609,27 +438,10 @@ public class CSMigrationwrapper
             Log.open(Path.GetTempPath() + acctname + ".log");
             if (isServer)
             {
-                /*object[] MyArgs = new object[4];
-                MyArgs[0] = "";
-                MyArgs[1] = "";
-                MyArgs[2] = Acct.AccountID;
-                MyArgs[3] = "MAPI";
-
-                value = (string)userobject.InvokeMember("InitializeUser",
-                    BindingFlags.InvokeMethod | BindingFlags.Instance | BindingFlags.Public,
-                    null, userinstance, MyArgs, mods, null, null);*/
-
                 value = userobject.InitializeUser("", "", Acct.AccountID, "MAPI");
             }
             else
             {               
-                /*object[] MyArgs = new object[2];
-                MyArgs[0] = Acct.AccountID;
-                MyArgs[1] = "MAPI";
-
-                value = (string)userobject.InvokeMember("UMInitializeUser",
-                    BindingFlags.InvokeMethod | BindingFlags.Instance | BindingFlags.Public,
-                    null, userinstance, MyArgs, mods, null, null);*/
                 value = userobject.UMInitializeUser("", "", Acct.AccountID, "MAPI");
             }
             if (value.Length > 0)
@@ -643,10 +455,7 @@ public class CSMigrationwrapper
             {
                 Log.info(acctname, "initialized");
             }
-           /* folderobjectarray = (object[])userobject.InvokeMember("GetFolderObjects",
-                BindingFlags.InvokeMethod | BindingFlags.Instance | BindingFlags.Public,
-                null, userinstance, null, null, null, null);*/
-
+           
             folderobjectarray = userobject.GetFolderObjects();
             Acct.migrationFolder.CurrentCountOFItems = folderobjectarray.Count();
 
@@ -936,78 +745,6 @@ public class CSMigrationwrapper
         }
     }
 
-    // This code is for loading the exchange.dll at runtime instead of adding it as a reference.
-    // We will use this code after the Com itnerfaces get finalised and no more changes are required for the COM and MAPI libraires.
-
-    // Type userobject;
-    // object userinstance ;
-
-    public void testCSMigrationwrapper()
-    {
-        // The following commented code tries to build the Assembly out of com dlls @ runtime instead of referencing to it at compile time.
-
-        /*           private enum RegKind
-         * {
-         * RegKind_Default = 0,
-         * RegKind_Register = 1,
-         * RegKind_None = 2
-         * }
-         *
-         * [DllImport("oleaut32.dll", CharSet = CharSet.Unicode, PreserveSig = false)]
-         * private static extern void LoadTypeLibEx(String strTypeLibName, RegKind regKind,
-         * [MarshalAs(UnmanagedType.Interface)] out Object typeLib);
-         *
-         *
-         * Object typeLib;
-         * LoadTypeLibEx(@"C:\Users\knuthi\Documents\Visual Studio 2010\Projects\TestRegFree\Debug\TestRegFree.dll", RegKind.RegKind_None, out typeLib);
-         *
-         * if (typeLib == null)
-         * {
-         *    Console.WriteLine("LoadTypeLibEx failed.");
-         *    return;
-         * }
-         *
-         * TypeLibConverter converter = new TypeLibConverter();
-         * ConversionEventHandler eventHandler = new ConversionEventHandler();
-         *
-         *
-         * System.Reflection.Emit.AssemblyBuilder ab = conv.ConvertTypeLibToAssembly(typeLib, "exploretest.dll",
-         * 0, eventHandler, null, null, false);
-         * // Save out the Assembly into the cache
-         * // Filename should identical
-         * ab.Save("exploretest.dll");
-         */
-        /*Type userobject;
-        object userinstance;
-
-        // Assembly testAssembly = Assembly.LoadFile(@"C:\Users\knuthi\Documents\Visual Studio 2010\Projects\TestRegClint\TestRegClint\bin\Debug\exploretest.dll");
-       Type[] types = sourceProvider.GetTypes();
-
-        Type calcType = sourceProvider.GetType("Exchange.MapiWrapperClass");
-        object calcInstance = Activator.CreateInstance(calcType);
-
-        // object o = null;
-        ParameterModifier pm = new ParameterModifier(1);
-
-        pm[0] = true;
-        ParameterModifier[] mods = { pm };
-
-        object[] MyArgs = new object[3];
-        MyArgs[0] = "10.20.136.140";
-        MyArgs[1] = "7071";
-        MyArgs[2] = "MyAdmin";
-
-        string value = (string)calcType.InvokeMember("ConnectToServer",
-            BindingFlags.InvokeMethod | BindingFlags.Instance | BindingFlags.Public, null,
-            calcInstance, MyArgs, mods, null, null);
-
-        Console.WriteLine(MyArgs[0]);
-        Console.ReadLine();
-
-        userobject = sourceProvider.GetType("Exchange.UserObjectClass");
-        userinstance = Activator.CreateInstance(userobject);*/
-
-        api = new ZimbraAPI();
-    }
+    
 }
 }
