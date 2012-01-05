@@ -160,6 +160,22 @@ AjxEnv.is1024x768orLower;
 AjxEnv.supportsHTML5File;
 
 
+/** Supports indirect global eval() **/
+AjxEnv.indirectEvalIsGlobal;
+(function(){
+	// Feature detection to see if eval referenced by alias runs in global scope
+	// See davidflanagan.com/2010/12/global-eval-in.html 
+	AjxEnv.indirectEvalIsGlobal=false;
+	var evl=window.eval;
+	try{
+		evl('__indirectEval=true');
+		if('__indirectEval' in window){
+			AjxEnv.indirectEvalIsGlobal=true;
+			delete window.__indirectEval;
+		}
+	}catch(e){}
+})();
+
 //
 // Public functions
 //

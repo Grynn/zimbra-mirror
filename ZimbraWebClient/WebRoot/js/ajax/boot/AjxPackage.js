@@ -269,11 +269,13 @@ AjxPackage.eval = function(text) {
         // NOTE: for IE
         window.execScript(text);
     }
-    // eval in global scope (FF)
-    else if (AjxEnv.isGeckoBased) {
-        window.eval(text);
+    // eval in global scope (FF, Opera, WebKit)
+    else if (AjxEnv.indirectEvalIsGlobal) {
+        var evl=window.eval;
+        evl(text);
     }
     // insert script tag into head
+    // Note: if any scripts are still loading, this will not run immediately!
     else {
         var e = document.createElement("SCRIPT");
         var t = document.createTextNode(text);
