@@ -118,12 +118,7 @@ public class CSMigrationwrapper
      * MVVM.Model.Users  users = new MVVM.Model.Users();*/
 
     dynamic MailWrapper;
-    dynamic userobject;
-    dynamic folderobject;
-    dynamic[] folderobjectarray;
-    dynamic itemobject;
-    dynamic[] itemobjectarray;
-
+    
     public CSMigrationwrapper()
     {
         /*string path = System.AppDomain.CurrentDomain.BaseDirectory + "interop.Exchange.dll";
@@ -140,13 +135,6 @@ public class CSMigrationwrapper
         Type[] types = sourceProvider.GetTypes();
 
         MailWrapper = sourceProvider.GetType("Exchange.MapiWrapperClass");*/
-        userobject = new Exchange.UserObject();
-        folderobject = new Exchange.folderObject();
-        folderobjectarray = new Exchange.folderObject[20];
-        itemobject = new Exchange.ItemObject();
-        itemobjectarray = new Exchange.ItemObject[20];
-
-
         api = new ZimbraAPI();
     }
 
@@ -196,8 +184,17 @@ public class CSMigrationwrapper
             s = (string)calcType.InvokeMember("GlobalInit", BindingFlags.InvokeMethod |
                 BindingFlags.Instance | BindingFlags.Public, null, calcInstance, MyArgs,
                 null, null, null);*/
-            MailWrapper = new Exchange.MapiWrapper();
-            s = MailWrapper.GlobalInit(Target, AdminUser, AdminPassword);
+           
+
+            try
+            {
+                MailWrapper = new Exchange.MapiWrapper();
+                s = MailWrapper.GlobalInit(Target, AdminUser, AdminPassword);
+            }
+            catch (Exception e)
+            {
+                s = string.Format("Initialization Exception.  Make sure to enter the proper credentials.\n{0}", e.Message);
+            }
         }
         return s;
     }
@@ -563,6 +560,9 @@ public class CSMigrationwrapper
         userobject.InvokeMember("UMUnInitializeUser", BindingFlags.InvokeMethod |
             BindingFlags.Instance | BindingFlags.Public, null, userinstance, MyArgs, mods,
             null, null);*/
+
+       dynamic  userobject = new Exchange.UserObject();
+       userobject.UMUnInitializeUser("MAPI");
     }
 
     public void StartMigration(MigrationAccount Acct, MigrationOptions importopts, bool
@@ -571,6 +571,9 @@ public class CSMigrationwrapper
 
        
         dynamic[] folderobjectarray;
+        dynamic userobject;
+        userobject = new Exchange.UserObject(); 
+        //dynamic itemobject;
         
         /*object userinstance;
 
