@@ -1,5 +1,5 @@
 --- openldap-2.4.28/libraries/libmdb/mdb.c.orig	2011-12-21 11:47:45.321599439 -0800
-+++ openldap-2.4.28/libraries/libmdb/mdb.c	2012-01-04 17:20:49.173284042 -0800
++++ openldap-2.4.28/libraries/libmdb/mdb.c	2012-01-05 10:46:38.902434172 -0800
 @@ -4342,7 +4342,7 @@
  	size_t		 sz;
  
@@ -9,13 +9,12 @@
  		/* put on overflow page */
  		sz -= data->mv_size - sizeof(pgno_t);
  	}
-@@ -5564,7 +5564,8 @@
- 		/* Insert in right sibling. */
- 		/* Reset insert index for right sibling. */
- 			j = (i == newindx && ins_new);
--			mc->mc_pg[mc->mc_top] = rp;
-+			if (i != newindx || ins_new)
-+				mc->mc_pg[mc->mc_top] = rp;
- 		}
+@@ -5580,6 +5580,8 @@
+ 			ins_new = 1;
  
- 		if (i == newindx && !ins_new) {
+ 			/* Update page and index for the new key. */
++			if (!newindx)
++				mc->mc_pg[mc->mc_top] = copy;
+ 			mc->mc_ki[mc->mc_top] = j;
+ 		} else if (i == nkeys) {
+ 			break;
