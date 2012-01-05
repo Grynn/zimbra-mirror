@@ -54,6 +54,7 @@ AttachMailZimlet.prototype.showAttachmentDialog =
 function() {
 
 	var attachDialog = this._attachDialog = appCtxt.getAttachDialog();
+	attachDialog.setTitle(ZmMsg.attachMail);
     this.removePrevAttDialogContent(attachDialog._getContentDiv().firstChild);
     if (!this.AttachContactsView || !this.AttachContactsView.attachDialog){
 	    this.AMV = new AttachMailTabView(this._attachDialog, this);

@@ -63,7 +63,7 @@ AttachContactsZimlet.prototype.showAttachmentDialog =
 function() {
 
 	var attachDialog = this._attachDialog = appCtxt.getAttachDialog();
-    // To be changed
+	attachDialog.setTitle(ZmMsg.attachContact);
     this.removePrevAttDialogContent(attachDialog._getContentDiv().firstChild);
 
     if (!this.AttachContactsView || !this.AttachContactsView.attachDialog){
