@@ -290,6 +290,7 @@ ZaCosXFormView.ADVANCED_TAB_ATTRS = [ZaCos.A_zimbraAttachmentsBlocked,
 	ZaCos.A_zimbraPasswordMinLowerCaseChars,
 	ZaCos.A_zimbraPasswordMinPunctuationChars,
 	ZaCos.A_zimbraPasswordMinNumericChars,
+	ZaCos.A_zimbraPasswordMinPunctuationChars,
 	ZaCos.A_zimbraMinPwdAge,
 	ZaCos.A_zimbraMaxPwdAge,
 	ZaCos.A_zimbraEnforcePwdHistory,
@@ -1231,6 +1232,11 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
                     {ref:ZaCos.A_zimbraPasswordMinNumericChars, 
 			type:_TEXTFIELD_, msgName:ZaMsg.MSG_zimbraPasswordMinNumericChars,
 			label:ZaMsg.LBL_zimbraPasswordMinNumericChars, labelLocation:_LEFT_, cssClass:"admin_xform_number_input",
+			visibilityChecks:[ZaItem.hasWritePermission],enableDisableChecks:[[ZaCosXFormView.isAllAuthfromInternal]]
+		    },
+                    {ref:ZaCos.A_zimbraPasswordMinDigitsOrPuncs, 
+			type:_TEXTFIELD_, msgName:ZaMsg.MSG_zimbraPasswordMinDigitsOrPuncs,
+			label:ZaMsg.LBL_zimbraPasswordMinDigitsOrPuncs, labelLocation:_LEFT_, cssClass:"admin_xform_number_input",
 			visibilityChecks:[ZaItem.hasWritePermission],enableDisableChecks:[[ZaCosXFormView.isAllAuthfromInternal]]
 		    },
 

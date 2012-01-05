@@ -90,6 +90,7 @@ ZaAccount.A_zimbraPasswordMinUpperCaseChars = "zimbraPasswordMinUpperCaseChars";
 ZaAccount.A_zimbraPasswordMinLowerCaseChars = "zimbraPasswordMinLowerCaseChars";
 ZaAccount.A_zimbraPasswordMinPunctuationChars = "zimbraPasswordMinPunctuationChars";
 ZaAccount.A_zimbraPasswordMinNumericChars = "zimbraPasswordMinNumericChars";
+ZaAccount.A_zimbraPasswordMinDigitsOrPuncs = "zimbraPasswordMinDigitsOrPuncs";
 ZaAccount.A_zimbraMinPwdAge="zimbraPasswordMinAge";
 ZaAccount.A_zimbraMaxPwdAge="zimbraPasswordMaxAge";
 ZaAccount.A_zimbraEnforcePwdHistory="zimbraPasswordEnforceHistory";
@@ -676,6 +677,18 @@ function(tmpObj) {
 	if(ZaItem.hasWritePermission(ZaAccount.A_zimbraPasswordMinNumericChars,tmpObj)) {
 		if(tmpObj.attrs[ZaAccount.A_zimbraPasswordMinNumericChars])
 			tmpObj.attrs[ZaAccount.A_zimbraPasswordMinNumericChars] = parseInt	(tmpObj.attrs[ZaAccount.A_zimbraPasswordMinNumericChars]);
+	}
+
+	if(ZaItem.hasWritePermission(ZaAccount.A_zimbraPasswordMinDigitsOrPuncs,tmpObj)) {
+		if(tmpObj.attrs[ZaAccount.A_zimbraPasswordMinDigitsOrPuncs] != "" && tmpObj.attrs[ZaAccount.A_zimbraPasswordMinDigitsOrPuncs] !=null && !AjxUtil.isNonNegativeLong(tmpObj.attrs[ZaAccount.A_zimbraPasswordMinDigitsOrPuncs])) {
+			//show error msg
+			ZaApp.getInstance().getCurrentController().popupErrorDialog(AjxMessageFormat.format(ZaMsg.ERROR_INVALID_VALUE_FOR, [ZaMsg.MSG_zimbraPasswordMinDigitsOrPuncs])) ;
+			return false;
+		}
+	}	
+	if(ZaItem.hasWritePermission(ZaAccount.A_zimbraPasswordMinDigitsOrPuncs,tmpObj)) {
+		if(tmpObj.attrs[ZaAccount.A_zimbraPasswordMinDigitsOrPuncs])
+			tmpObj.attrs[ZaAccount.A_zimbraPasswordMinDigitsOrPuncs] = parseInt	(tmpObj.attrs[ZaAccount.A_zimbraPasswordMinDigitsOrPuncs]);
 	}
 	
 	if(ZaItem.hasWritePermission(ZaAccount.A_zimbraAuthTokenLifetime,tmpObj)) {			
@@ -1755,6 +1768,7 @@ ZaAccount.myXModel = {
         {id:ZaAccount.A_zimbraPasswordMinLowerCaseChars, type:_COS_NUMBER_, ref:"attrs/"+ZaAccount.A_zimbraPasswordMinLowerCaseChars, maxInclusive:2147483647, minInclusive:0},
         {id:ZaAccount.A_zimbraPasswordMinPunctuationChars, type:_COS_NUMBER_, ref:"attrs/"+ZaAccount.A_zimbraPasswordMinPunctuationChars, maxInclusive:2147483647, minInclusive:0},
         {id:ZaAccount.A_zimbraPasswordMinNumericChars, type:_COS_NUMBER_, ref:"attrs/"+ZaAccount.A_zimbraPasswordMinNumericChars, maxInclusive:2147483647, minInclusive:0},
+        {id:ZaAccount.A_zimbraPasswordMinDigitsOrPuncs, type:_COS_NUMBER_, ref:"attrs/"+ZaAccount.A_zimbraPasswordMinDigitsOrPuncs, maxInclusive:2147483647, minInclusive:0},
  	{id:ZaAccount.A_zimbraAuthLdapExternalDn, type:_STRING_, ref:"attrs/"+ZaAccount.A_zimbraAuthLdapExternalDn},
 
         {id:ZaAccount.A_zimbraMinPwdAge, type:_COS_NUMBER_, ref:"attrs/"+ZaAccount.A_zimbraMinPwdAge, maxInclusive:2147483647, minInclusive:0},

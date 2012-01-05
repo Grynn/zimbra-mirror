@@ -2018,7 +2018,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 		}
 		if(ZAWizTopGrouper_XFormItem.isGroupVisible(entry,[ZaAccount.A_zimbraPasswordLocked,ZaAccount.A_zimbraMinPwdLength,
 			ZaAccount.A_zimbraMaxPwdLength,ZaAccount.A_zimbraPasswordMinUpperCaseChars,ZaAccount.A_zimbraPasswordMinLowerCaseChars,
-			ZaAccount.A_zimbraPasswordMinPunctuationChars,ZaAccount.A_zimbraPasswordMinNumericChars,
+			ZaAccount.A_zimbraPasswordMinPunctuationChars,ZaAccount.A_zimbraPasswordMinNumericChars,ZaAccount.A_zimbraPasswordMinDigitsOrPuncs,
 			ZaAccount.A_zimbraMinPwdAge,ZaAccount.A_zimbraMaxPwdAge,ZaAccount.A_zimbraEnforcePwdHistory],[])) {						
 			advancedCaseItems.push({type:_ZAWIZ_TOP_GROUPER_,id:"account_password_settings",colSizes:["auto"],numCols:1,
 							label:ZaMsg.NAD_PasswordGrouper,				
@@ -2088,7 +2088,16 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
                                     colSizes:["200px", "300px", "*"],
 									visibilityChecks:[],enableDisableChecks:[[ZaNewAccountXWizard.isAuthfromInternal, domainName,ZaAccount.A_name]]
 								},
-																
+								{ref:ZaAccount.A_zimbraPasswordMinDigitsOrPuncs, 
+									type:_SUPERWIZ_TEXTFIELD_, 
+									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
+									msgName:ZaMsg.MSG_zimbraPasswordMinDigitsOrPuncs,
+									txtBoxLabel:ZaMsg.LBL_zimbraPasswordMinDigitsOrPuncs, labelLocation:_LEFT_, 
+									textFieldCssClass:"admin_xform_number_input",
+                                    colSizes:["200px", "300px", "*"],
+									visibilityChecks:[],enableDisableChecks:[[ZaNewAccountXWizard.isAuthfromInternal, domainName,ZaAccount.A_name]]
+								},
+																							
 								{ref:ZaAccount.A_zimbraMinPwdAge, 
 									type:_SUPERWIZ_TEXTFIELD_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 									msgName:ZaMsg.MSG_passMinAge,txtBoxLabel:ZaMsg.LBL_passMinAge, labelLocation:_LEFT_, 

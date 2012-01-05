@@ -41,6 +41,7 @@ ZaCos.A_zimbraPasswordMinUpperCaseChars = "zimbraPasswordMinUpperCaseChars";
 ZaCos.A_zimbraPasswordMinLowerCaseChars = "zimbraPasswordMinLowerCaseChars";
 ZaCos.A_zimbraPasswordMinPunctuationChars = "zimbraPasswordMinPunctuationChars";
 ZaCos.A_zimbraPasswordMinNumericChars = "zimbraPasswordMinNumericChars";
+ZaCos.A_zimbraPasswordMinDigitsOrPuncs = "zimbraPasswordMinDigitsOrPuncs";
 ZaCos.A_zimbraMinPwdAge = "zimbraPasswordMinAge";
 ZaCos.A_zimbraMaxPwdAge = "zimbraPasswordMaxAge";
 ZaCos.A_zimbraEnforcePwdHistory ="zimbraPasswordEnforceHistory";
@@ -580,6 +581,7 @@ ZaCos.myXModel = {
         {id:ZaCos.A_zimbraPasswordMinLowerCaseChars, type:_NUMBER_, ref:"attrs/"+ZaCos.A_zimbraPasswordMinLowerCaseChars, maxInclusive:2147483647, minInclusive:0},
         {id:ZaCos.A_zimbraPasswordMinPunctuationChars, type:_NUMBER_, ref:"attrs/"+ZaCos.A_zimbraPasswordMinPunctuationChars, maxInclusive:2147483647, minInclusive:0},
         {id:ZaCos.A_zimbraPasswordMinNumericChars, type:_NUMBER_, ref:"attrs/"+ZaCos.A_zimbraPasswordMinNumericChars, maxInclusive:2147483647, minInclusive:0},
+        {id:ZaCos.A_zimbraPasswordMinDigitsOrPuncs, type:_NUMBER_, ref:"attrs/"+ZaCos.A_zimbraPasswordMinDigitsOrPuncs, maxInclusive:2147483647, minInclusive:0},        
         {id:ZaCos.A_zimbraMinPwdAge, type:_NUMBER_, ref:"attrs/"+ZaCos.A_zimbraMinPwdAge, maxInclusive:2147483647, minInclusive:0},
         {id:ZaCos.A_zimbraMaxPwdAge, type:_NUMBER_, ref:"attrs/"+ZaCos.A_zimbraMaxPwdAge, maxInclusive:2147483647, minInclusive:0},
         {id:ZaCos.A_zimbraEnforcePwdHistory, type:_NUMBER_, ref:"attrs/"+ZaCos.A_zimbraEnforcePwdHistory, maxInclusive:2147483647, minInclusive:0},
@@ -942,6 +944,14 @@ ZaCos.checkValues = function(tmpObj){
 		if(tmpObj.attrs[ZaCos.A_zimbraPasswordMinNumericChars] != null && tmpObj.attrs[ZaCos.A_zimbraPasswordMinNumericChars] && !AjxUtil.isNonNegativeLong(tmpObj.attrs[ZaCos.A_zimbraPasswordMinNumericChars])) {
 			//show error msg
             ZaApp.getInstance().getCurrentController().popupErrorDialog(AjxMessageFormat.format(ZaMsg.ERROR_INVALID_VALUE_FOR, [ZaMsg.MSG_zimbraPasswordMinNumericChars]));
+			return false;
+		}
+	}
+
+	if(ZaItem.hasWritePermission(ZaCos.A_zimbraPasswordMinDigitsOrPuncs,tmpObj)) {
+		if(tmpObj.attrs[ZaCos.A_zimbraPasswordMinDigitsOrPuncs] != null && tmpObj.attrs[ZaCos.A_zimbraPasswordMinDigitsOrPuncs] && !AjxUtil.isNonNegativeLong(tmpObj.attrs[ZaCos.A_zimbraPasswordMinDigitsOrPuncs])) {
+			//show error msg
+            ZaApp.getInstance().getCurrentController().popupErrorDialog(AjxMessageFormat.format(ZaMsg.ERROR_INVALID_VALUE_FOR, [ZaMsg.MSG_zimbraPasswordMinDigitsOrPuncs]));
 			return false;
 		}
 	}
