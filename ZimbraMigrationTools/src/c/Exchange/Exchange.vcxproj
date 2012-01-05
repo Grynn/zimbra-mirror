@@ -153,7 +153,7 @@
       <AdditionalDependencies>comsupp.lib;ActiveDS.lib;adsiid.lib;mapi32.lib;Rpcrt4.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>Exchange.def</ModuleDefinitionFile>
       <RegisterOutput>true</RegisterOutput>
-     </Link>
+    </Link>
     <PostBuildEvent>
       <Command>
       </Command>
@@ -171,6 +171,9 @@
     <Manifest>
       <VerboseOutput>false</VerboseOutput>
     </Manifest>
+    <PreLinkEvent>
+      <Command>pre-link.bat dbg Win32 32</Command>
+    </PreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='dbg|x64'">
     <ClCompile>
@@ -212,6 +215,9 @@
     <Manifest>
       <VerboseOutput>false</VerboseOutput>
     </Manifest>
+    <PreLinkEvent>
+      <Command>pre-link.bat dbg x64 64</Command>
+    </PreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='rtl|Win32'">
     <ClCompile>
@@ -256,6 +262,9 @@
     <Manifest>
       <VerboseOutput>false</VerboseOutput>
     </Manifest>
+    <PreLinkEvent>
+      <Command>pre-link.bat rtl Win32 32</Command>
+    </PreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='tst|Win32'">
     <ClCompile>
@@ -304,6 +313,9 @@
     <Manifest>
       <VerboseOutput>false</VerboseOutput>
     </Manifest>
+    <PreLinkEvent>
+      <Command>pre-link.bat tst Win32 32</Command>
+    </PreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='rtl|x64'">
     <ClCompile>
@@ -349,6 +361,9 @@
     <Manifest>
       <VerboseOutput>false</VerboseOutput>
     </Manifest>
+    <PreLinkEvent>
+      <Command>pre-link.bat rtl x64 64</Command>
+    </PreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='tst|x64'">
     <ClCompile>
@@ -398,6 +413,9 @@
     <Manifest>
       <VerboseOutput>false</VerboseOutput>
     </Manifest>
+    <PreLinkEvent>
+      <Command>pre-link.bat tst x64 64</Command>
+    </PreLinkEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ContactObj.cpp" />
