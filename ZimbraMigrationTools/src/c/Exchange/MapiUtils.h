@@ -168,7 +168,7 @@ HRESULT MailboxLogon(LPMAPISESSION pSession, LPMDB pMdb, LPWSTR pStoreDn, LPWSTR
 HRESULT GetUserDNAndLegacyName(LPCWSTR lpszServer, LPCWSTR lpszUser, LPCWSTR lpszPwd,
     wstring &wstruserdn, wstring &wstrlegacyname);
 HRESULT GetUserDnAndServerDnFromProfile(LPMAPISESSION pSession, LPSTR &pExchangeServerDn,
-    LPSTR &pExchangeUserDn);
+    LPSTR &pExchangeUserDn, LPSTR &pExchangeServerHostName);
 HRESULT HrMAPIFindIPMSubtree(LPMDB lpMdb, SBinary &bin);
 HRESULT GetMdbSpecialFolders(IN LPMDB lpMdb, IN OUT SBinaryArray *pEntryIds);
 HRESULT GetInboxSpecialFolders(LPMAPIFOLDER pInbox, SBinaryArray *pEntryIds);

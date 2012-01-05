@@ -292,7 +292,7 @@ HRESULT Zimbra::MAPI::Util::GetUserDNAndLegacyName(LPCWSTR lpszServer, LPCWSTR l
 }
 
 HRESULT Zimbra::MAPI::Util::GetUserDnAndServerDnFromProfile(LPMAPISESSION pSession,
-    LPSTR &pExchangeServerDn, LPSTR &pExchangeUserDn)
+    LPSTR &pExchangeServerDn, LPSTR &pExchangeUserDn, LPSTR &pExchangeServerHostName)
 {
     HRESULT hr = S_OK;
     ULONG nVals = 0;
@@ -300,8 +300,8 @@ HRESULT Zimbra::MAPI::Util::GetUserDnAndServerDnFromProfile(LPMAPISESSION pSessi
     Zimbra::Util::ScopedInterface<IProfSect> pProfileSection;
     Zimbra::Util::ScopedBuffer<SPropValue> pPropValues;
 
-    SizedSPropTagArray(2, profileProps) = {
-        2, { PR_PROFILE_HOME_SERVER_DN, PR_PROFILE_USER }
+    SizedSPropTagArray(3, profileProps) = {
+        3, { PR_PROFILE_HOME_SERVER_DN, PR_PROFILE_USER, PR_PROFILE_HOME_SERVER_ADDRS }
     };
     if (FAILED(hr = pSession->AdminServices(0, pServiceAdmin.getptr())))
     {
@@ -321,9 +321,9 @@ HRESULT Zimbra::MAPI::Util::GetUserDnAndServerDnFromProfile(LPMAPISESSION pSessi
         throw MapiUtilsException(hr, L"Util::GetUserDnAndServerDnFromProfile(): GetProps.",
             __LINE__, __FILE__);
     }
-    if (nVals != 2)
+    if (nVals != 3)
     {
-        throw MapiUtilsException(hr, L"Util::GetUserDnAndServerDnFromProfile(): nVals not 2.",
+        throw MapiUtilsException(hr, L"Util::GetUserDnAndServerDnFromProfile(): nVals not 3.",
             __LINE__, __FILE__);
     }
     if ((pPropValues[0].ulPropTag != PR_PROFILE_HOME_SERVER_DN) && (pPropValues[1].ulPropTag !=
@@ -342,6 +342,20 @@ HRESULT Zimbra::MAPI::Util::GetUserDnAndServerDnFromProfile(LPMAPISESSION pSessi
     pExchangeUserDn = new CHAR[len + 1];
     strcpy_s(pExchangeUserDn, len + 1, pPropValues[1].Value.lpszA);
 
+	//len = strlen(pPropValues[2].Value.lpszA);
+	len = pPropValues[2].Value.MVszA.cValues;
+    string strExchangeHomeServer;
+	for (ULONG i = 0; i < len; ++i) 
+	{
+		strExchangeHomeServer =pPropValues[2].Value.MVszA.lppszA[i];
+		long npos=strExchangeHomeServer.find("ncacn_ip_tcp:");
+		if(string::npos != npos)
+		{
+			strExchangeHomeServer=strExchangeHomeServer.substr(13);
+			pExchangeServerHostName = new CHAR[sizeof(CHAR)*(strExchangeHomeServer.length()+1)];
+			strcpy_s(pExchangeServerHostName, sizeof(CHAR)*(strExchangeHomeServer.length()+1), strExchangeHomeServer.c_str());
+		}
+	}
     return S_OK;
 }
 

@@ -290,6 +290,7 @@ DWORD WINAPI AccountMigrationThread(LPVOID lpParameter)
             {
                 printf("Got contact item:");
                 maapi->GetItem((*idItr).sbMessageID, cd);
+				printf("CONTACT_TYPE: %S\n\n", cd.Type.c_str());
                 printf(
                     "%S %S %S %S %S %S %S %S %S %S %S %S %S %S %S %S %S			\
 					%S %S %S %S %S %S %S %S %S %S %S %S %S %S %S %S %S %S %S		\
@@ -368,7 +369,8 @@ void MAPIAccessAPITestV()
          *      mtparams[7].mailboxname = L"av7 av7";
          *      mtparams[8].mailboxname = L"appt1";
          */
-        // One thread per mailbox.
+
+		// One thread per mailbox.
         for (int i = 0; i < MAX_THREADS; i++)
         {
             hThreadArray[i] = ::CreateThread(NULL, 0, AccountMigrationThread, &mtparams[i], 0L,

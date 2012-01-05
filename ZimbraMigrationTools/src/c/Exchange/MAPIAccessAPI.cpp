@@ -57,15 +57,6 @@ bool MAPIAccessAPI::SkipFolder(ExchangeSpecialFolderId exfid)
 LPCWSTR MAPIAccessAPI::InitGlobalSessionAndStore(LPCWSTR lpcwstrMigTarget)
 {
     LPCWSTR lpwstrStatus = NULL;
-
-    // Get Domain
-    m_strExchangeHostName = Zimbra::MAPI::Util::GetDomainName();
-    if (m_strExchangeHostName.empty())
-    {
-        lpwstrStatus = FromatExceptionInfo(E_FAIL, L"GetDomainName Failed.", __FILE__,
-            __LINE__);
-        goto CLEAN_UP;
-    }
     try
     {
         // Logon into target profile
@@ -182,27 +173,32 @@ LPCWSTR MAPIAccessAPI::OpenUserStore()
     wstring legacyName;
     LPSTR ExchangeServerDN = NULL;
     LPSTR ExchangeUserDN = NULL;
+	LPSTR ExchangeHostName = NULL;
     LPWSTR pwstrExchangeServerDN = NULL;
-
+	LPWSTR pwstrExchangeHostName = NULL;
+	
     try
     {
         // user store
         m_userStore = new Zimbra::MAPI::MAPIStore();
         // Get Exchange Server DN
         hr = Zimbra::MAPI::Util::GetUserDnAndServerDnFromProfile(
-            m_zmmapisession->GetMAPISessionObject(), ExchangeServerDN, ExchangeUserDN);
+            m_zmmapisession->GetMAPISessionObject(), ExchangeServerDN, ExchangeUserDN, ExchangeHostName);
         if (hr != S_OK)
             goto CLEAN_UP;
         AtoW(ExchangeServerDN, pwstrExchangeServerDN);
-
-        // Get DN of user to be migrated
-        Zimbra::MAPI::Util::GetUserDNAndLegacyName(m_strExchangeHostName.c_str(),
-            m_strUserName.c_str(), NULL, wstruserdn, legacyName);
-
-        hr = m_zmmapisession->OpenOtherStore(m_defaultStore->GetInternalMAPIStore(),
-            pwstrExchangeServerDN, (LPWSTR)legacyName.c_str(), *m_userStore);
-        if (hr != S_OK)
-            goto CLEAN_UP;
+		AtoW(ExchangeHostName, pwstrExchangeHostName);
+		
+		m_strExchangeHostName = pwstrExchangeHostName;
+				
+		// Get DN of user to be migrated
+		Zimbra::MAPI::Util::GetUserDNAndLegacyName(m_strExchangeHostName.c_str(),
+			m_strUserName.c_str(), NULL, wstruserdn, legacyName);
+		hr = m_zmmapisession->OpenOtherStore(m_defaultStore->GetInternalMAPIStore(),
+			pwstrExchangeServerDN, (LPWSTR)legacyName.c_str(), *m_userStore);
+		if (hr != S_OK)
+			goto CLEAN_UP;
+		
     }
     catch (MAPISessionException &msse)
     {
@@ -222,7 +218,8 @@ LPCWSTR MAPIAccessAPI::OpenUserStore()
 CLEAN_UP: SafeDelete(ExchangeServerDN);
     SafeDelete(ExchangeUserDN);
     SafeDelete(pwstrExchangeServerDN);
-    if (hr != S_OK)
+	SafeDelete(pwstrExchangeHostName);
+	if (hr != S_OK)
         lpwstrStatus = FromatExceptionInfo(hr, L"MAPIAccessAPI::OpenSessionAndStore() Failed",
             __FILE__, __LINE__);
     return lpwstrStatus;
