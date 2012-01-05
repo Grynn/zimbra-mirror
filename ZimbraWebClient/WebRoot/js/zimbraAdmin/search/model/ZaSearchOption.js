@@ -234,6 +234,7 @@ function (optionId){
 
     var cosFilterItems = [
                     {id: ZaSearchOption.A_cosFilter, ref: "options/" + ZaSearchOption.A_cosFilter, type: _STRING_},
+                    {id: ZaSearchOption.A_cosListChecked, ref: "options/" + ZaSearchOption.A_cosListChecked, type:_LIST_},
                     {id: ZaSearchOption.A2_cosNotSet, ref: ZaSearchOption.A2_cosNotSet, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
                     {id: ZaSearchOption.A_cosList, ref: "options/" + ZaSearchOption.A_cosList, type:_LIST_}
     ];
@@ -703,6 +704,15 @@ function (optionId, height){
                     onChange: ZaSearchBuilderController.filterCOSES,
                     enableDisableChecks:[],visibilityChecks:[]
              },
+             {type: _GROUP_, colSpan: "2", numCols:2, items: [
+                    {ref:ZaSearchOption.A2_cosNotSet, type:_CHECKBOX_, msgName:ZaMsg.search_includeObjectWithoutCosId,
+			            label:ZaMsg.search_includeObjectWithoutCosId,
+                        labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE", align: _LEFT_,
+                        onChange: ZaSearchBuilderController.handleOptions,
+                        enableDisableChecks:[],
+                        visibilityChecks:[]
+                    }
+             ]},
              {type: _OUTPUT_, value: ZaMsg.no_cos_found_msg, colSpan: "*",
                     visibilityChecks:[[XForm.checkInstanceValueEmty,ZaSearchOption.A_cosList]]
              },

@@ -132,7 +132,7 @@ ZaSearchField.prototype.startSearch= function (ldapQuery, type) {
 
 	params.types = type;
     if (!ZaSearchField.isLDAPQuery(ldapQuery)){
-        ldapQuery = ZaSearch.getSearchByNameQuery(query, type);
+        ldapQuery = ZaSearch.getSearchByNameQuery(ldapQuery, type);
     }
     params.query = ldapQuery;
 
