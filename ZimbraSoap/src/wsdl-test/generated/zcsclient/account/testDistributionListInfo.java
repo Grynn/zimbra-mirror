@@ -25,7 +25,18 @@ import javax.xml.bind.annotation.XmlType;
  *             &lt;complexContent>
  *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *                 &lt;sequence>
- *                   &lt;element name="owner" type="{urn:zimbraAccount}distributionListOwnerInfo" maxOccurs="unbounded" minOccurs="0"/>
+ *                   &lt;element name="owner" type="{urn:zimbraAccount}distributionListGranteeInfo" maxOccurs="unbounded" minOccurs="0"/>
+ *                 &lt;/sequence>
+ *               &lt;/restriction>
+ *             &lt;/complexContent>
+ *           &lt;/complexType>
+ *         &lt;/element>
+ *         &lt;element name="rights" minOccurs="0">
+ *           &lt;complexType>
+ *             &lt;complexContent>
+ *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+ *                 &lt;sequence>
+ *                   &lt;element name="right" type="{urn:zimbraAccount}distributionListRightInfo" maxOccurs="unbounded" minOccurs="0"/>
  *                 &lt;/sequence>
  *               &lt;/restriction>
  *             &lt;/complexContent>
@@ -43,7 +54,8 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "distributionListInfo", propOrder = {
     "dlm",
-    "owners"
+    "owners",
+    "rights"
 })
 public class testDistributionListInfo
     extends testObjectInfo
@@ -51,6 +63,7 @@ public class testDistributionListInfo
 
     protected List<String> dlm;
     protected testDistributionListInfo.Owners owners;
+    protected testDistributionListInfo.Rights rights;
     @XmlAttribute(name = "dynamic")
     protected Boolean dynamic;
 
@@ -108,6 +121,30 @@ public class testDistributionListInfo
     }
 
     /**
+     * Gets the value of the rights property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link testDistributionListInfo.Rights }
+     *     
+     */
+    public testDistributionListInfo.Rights getRights() {
+        return rights;
+    }
+
+    /**
+     * Sets the value of the rights property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link testDistributionListInfo.Rights }
+     *     
+     */
+    public void setRights(testDistributionListInfo.Rights value) {
+        this.rights = value;
+    }
+
+    /**
      * Gets the value of the dynamic property.
      * 
      * @return
@@ -142,7 +179,7 @@ public class testDistributionListInfo
      *   &lt;complexContent>
      *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
      *       &lt;sequence>
-     *         &lt;element name="owner" type="{urn:zimbraAccount}distributionListOwnerInfo" maxOccurs="unbounded" minOccurs="0"/>
+     *         &lt;element name="owner" type="{urn:zimbraAccount}distributionListGranteeInfo" maxOccurs="unbounded" minOccurs="0"/>
      *       &lt;/sequence>
      *     &lt;/restriction>
      *   &lt;/complexContent>
@@ -157,7 +194,7 @@ public class testDistributionListInfo
     })
     public static class Owners {
 
-        protected List<testDistributionListOwnerInfo> owner;
+        protected List<testDistributionListGranteeInfo> owner;
 
         /**
          * Gets the value of the owner property.
@@ -177,15 +214,74 @@ public class testDistributionListInfo
          * 
          * <p>
          * Objects of the following type(s) are allowed in the list
-         * {@link testDistributionListOwnerInfo }
+         * {@link testDistributionListGranteeInfo }
          * 
          * 
          */
-        public List<testDistributionListOwnerInfo> getOwner() {
+        public List<testDistributionListGranteeInfo> getOwner() {
             if (owner == null) {
-                owner = new ArrayList<testDistributionListOwnerInfo>();
+                owner = new ArrayList<testDistributionListGranteeInfo>();
             }
             return this.owner;
+        }
+
+    }
+
+
+    /**
+     * <p>Java class for anonymous complex type.
+     * 
+     * <p>The following schema fragment specifies the expected content contained within this class.
+     * 
+     * <pre>
+     * &lt;complexType>
+     *   &lt;complexContent>
+     *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+     *       &lt;sequence>
+     *         &lt;element name="right" type="{urn:zimbraAccount}distributionListRightInfo" maxOccurs="unbounded" minOccurs="0"/>
+     *       &lt;/sequence>
+     *     &lt;/restriction>
+     *   &lt;/complexContent>
+     * &lt;/complexType>
+     * </pre>
+     * 
+     * 
+     */
+    @XmlAccessorType(XmlAccessType.FIELD)
+    @XmlType(name = "", propOrder = {
+        "right"
+    })
+    public static class Rights {
+
+        protected List<testDistributionListRightInfo> right;
+
+        /**
+         * Gets the value of the right property.
+         * 
+         * <p>
+         * This accessor method returns a reference to the live list,
+         * not a snapshot. Therefore any modification you make to the
+         * returned list will be present inside the JAXB object.
+         * This is why there is not a <CODE>set</CODE> method for the right property.
+         * 
+         * <p>
+         * For example, to add a new item, do as follows:
+         * <pre>
+         *    getRight().add(newItem);
+         * </pre>
+         * 
+         * 
+         * <p>
+         * Objects of the following type(s) are allowed in the list
+         * {@link testDistributionListRightInfo }
+         * 
+         * 
+         */
+        public List<testDistributionListRightInfo> getRight() {
+            if (right == null) {
+                right = new ArrayList<testDistributionListRightInfo>();
+            }
+            return this.right;
         }
 
     }

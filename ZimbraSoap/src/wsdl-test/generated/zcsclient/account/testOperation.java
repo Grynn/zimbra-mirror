@@ -19,8 +19,12 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="rename"/>
  *     &lt;enumeration value="addAlias"/>
  *     &lt;enumeration value="removeAlias"/>
- *     &lt;enumeration value="addOwner"/>
- *     &lt;enumeration value="removeOwner"/>
+ *     &lt;enumeration value="addOwners"/>
+ *     &lt;enumeration value="removeOwners"/>
+ *     &lt;enumeration value="setOwners"/>
+ *     &lt;enumeration value="grantRights"/>
+ *     &lt;enumeration value="revokeRights"/>
+ *     &lt;enumeration value="setRights"/>
  *     &lt;enumeration value="addMembers"/>
  *     &lt;enumeration value="removeMembers"/>
  *     &lt;enumeration value="acceptSubsReq"/>
@@ -44,10 +48,18 @@ public enum testOperation {
     ADD_ALIAS("addAlias"),
     @XmlEnumValue("removeAlias")
     REMOVE_ALIAS("removeAlias"),
-    @XmlEnumValue("addOwner")
-    ADD_OWNER("addOwner"),
-    @XmlEnumValue("removeOwner")
-    REMOVE_OWNER("removeOwner"),
+    @XmlEnumValue("addOwners")
+    ADD_OWNERS("addOwners"),
+    @XmlEnumValue("removeOwners")
+    REMOVE_OWNERS("removeOwners"),
+    @XmlEnumValue("setOwners")
+    SET_OWNERS("setOwners"),
+    @XmlEnumValue("grantRights")
+    GRANT_RIGHTS("grantRights"),
+    @XmlEnumValue("revokeRights")
+    REVOKE_RIGHTS("revokeRights"),
+    @XmlEnumValue("setRights")
+    SET_RIGHTS("setRights"),
     @XmlEnumValue("addMembers")
     ADD_MEMBERS("addMembers"),
     @XmlEnumValue("removeMembers")

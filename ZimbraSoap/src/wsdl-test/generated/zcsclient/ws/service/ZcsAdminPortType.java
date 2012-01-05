@@ -476,14 +476,14 @@ import generated.zcsclient.adminext.testPurgeBulkIMAPImportTasksResponse;
 @WebService(name = "zcsAdminPortType", targetNamespace = "http://www.zimbra.com/wsdl/ZimbraService.wsdl")
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
 @XmlSeeAlso({
-    generated.zcsclient.replication.ObjectFactory.class,
-    generated.zcsclient.appblast.ObjectFactory.class,
-    generated.zcsclient.adminext.ObjectFactory.class,
     generated.zcsclient.zm.ObjectFactory.class,
-    generated.zcsclient.sync.ObjectFactory.class,
-    generated.zcsclient.mail.ObjectFactory.class,
     generated.zcsclient.admin.ObjectFactory.class,
-    generated.zcsclient.account.ObjectFactory.class
+    generated.zcsclient.sync.ObjectFactory.class,
+    generated.zcsclient.replication.ObjectFactory.class,
+    generated.zcsclient.mail.ObjectFactory.class,
+    generated.zcsclient.appblast.ObjectFactory.class,
+    generated.zcsclient.account.ObjectFactory.class,
+    generated.zcsclient.adminext.ObjectFactory.class
 })
 public interface ZcsAdminPortType {
 

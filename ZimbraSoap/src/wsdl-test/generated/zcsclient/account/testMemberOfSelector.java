@@ -1,5 +1,5 @@
 
-package generated.zcsclient.zm;
+package generated.zcsclient.account;
 
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
@@ -7,31 +7,34 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for distributionListOwnerBy.
+ * <p>Java class for memberOfSelector.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
- * &lt;simpleType name="distributionListOwnerBy">
+ * &lt;simpleType name="memberOfSelector">
  *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
- *     &lt;enumeration value="id"/>
- *     &lt;enumeration value="name"/>
+ *     &lt;enumeration value="all"/>
+ *     &lt;enumeration value="none"/>
+ *     &lt;enumeration value="directOnly"/>
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
  * 
  */
-@XmlType(name = "distributionListOwnerBy")
+@XmlType(name = "memberOfSelector")
 @XmlEnum
-public enum testDistributionListOwnerBy {
+public enum testMemberOfSelector {
 
-    @XmlEnumValue("id")
-    ID("id"),
-    @XmlEnumValue("name")
-    NAME("name");
+    @XmlEnumValue("all")
+    ALL("all"),
+    @XmlEnumValue("none")
+    NONE("none"),
+    @XmlEnumValue("directOnly")
+    DIRECT_ONLY("directOnly");
     private final String value;
 
-    testDistributionListOwnerBy(String v) {
+    testMemberOfSelector(String v) {
         value = v;
     }
 
@@ -39,8 +42,8 @@ public enum testDistributionListOwnerBy {
         return value;
     }
 
-    public static testDistributionListOwnerBy fromValue(String v) {
-        for (testDistributionListOwnerBy c: testDistributionListOwnerBy.values()) {
+    public static testMemberOfSelector fromValue(String v) {
+        for (testMemberOfSelector c: testMemberOfSelector.values()) {
             if (c.value.equals(v)) {
                 return c;
             }

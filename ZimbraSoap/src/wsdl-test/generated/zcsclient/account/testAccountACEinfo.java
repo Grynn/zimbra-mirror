@@ -9,12 +9,12 @@ import generated.zcsclient.zm.testGranteeType;
 
 
 /**
- * <p>Java class for accountACEinfo complex type.
+ * <p>Java class for accountACEInfo complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="accountACEinfo">
+ * &lt;complexType name="accountACEInfo">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -34,8 +34,8 @@ import generated.zcsclient.zm.testGranteeType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "accountACEinfo")
-public class testAccountACEinfo {
+@XmlType(name = "accountACEInfo")
+public class testAccountACEInfo {
 
     @XmlAttribute(name = "zid")
     protected String zid;

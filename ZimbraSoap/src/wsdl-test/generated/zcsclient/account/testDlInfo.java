@@ -21,6 +21,8 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;attribute name="d" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="dynamic" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *       &lt;attribute name="via" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="isOwner" type="{http://www.w3.org/2001/XMLSchema}boolean" />
+ *       &lt;attribute name="isMember" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *     &lt;/extension>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -40,6 +42,10 @@ public class testDlInfo
     protected Boolean dynamic;
     @XmlAttribute(name = "via")
     protected String via;
+    @XmlAttribute(name = "isOwner")
+    protected Boolean isOwner;
+    @XmlAttribute(name = "isMember")
+    protected Boolean isMember;
 
     /**
      * Gets the value of the d property.
@@ -111,6 +117,54 @@ public class testDlInfo
      */
     public void setVia(String value) {
         this.via = value;
+    }
+
+    /**
+     * Gets the value of the isOwner property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isIsOwner() {
+        return isOwner;
+    }
+
+    /**
+     * Sets the value of the isOwner property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setIsOwner(Boolean value) {
+        this.isOwner = value;
+    }
+
+    /**
+     * Gets the value of the isMember property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isIsMember() {
+        return isMember;
+    }
+
+    /**
+     * Sets the value of the isMember property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setIsMember(Boolean value) {
+        this.isMember = value;
     }
 
 }

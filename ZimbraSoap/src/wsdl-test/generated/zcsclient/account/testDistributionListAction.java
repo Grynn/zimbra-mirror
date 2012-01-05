@@ -22,7 +22,8 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="dlm" type="{http://www.w3.org/2001/XMLSchema}string" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="alias" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="newName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="owner" type="{urn:zimbraAccount}distributionListOwnerSelector" minOccurs="0"/>
+ *         &lt;element name="owner" type="{urn:zimbraAccount}distributionListGranteeSelector" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="right" type="{urn:zimbraAccount}distributionListRightSpec" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element ref="{urn:zimbraAccount}subsReq" minOccurs="0"/>
  *       &lt;/sequence>
  *       &lt;attribute name="op" use="required" type="{urn:zimbraAccount}operation" />
@@ -39,6 +40,7 @@ import javax.xml.bind.annotation.XmlType;
     "alias",
     "newName",
     "owner",
+    "right",
     "subsReq"
 })
 public class testDistributionListAction
@@ -48,7 +50,8 @@ public class testDistributionListAction
     protected List<String> dlm;
     protected String alias;
     protected String newName;
-    protected testDistributionListOwnerSelector owner;
+    protected List<testDistributionListGranteeSelector> owner;
+    protected List<testDistributionListRightSpec> right;
     protected testDistributionListSubscribeReq subsReq;
     @XmlAttribute(name = "op", required = true)
     protected testOperation op;
@@ -133,25 +136,59 @@ public class testDistributionListAction
     /**
      * Gets the value of the owner property.
      * 
-     * @return
-     *     possible object is
-     *     {@link testDistributionListOwnerSelector }
-     *     
+     * <p>
+     * This accessor method returns a reference to the live list,
+     * not a snapshot. Therefore any modification you make to the
+     * returned list will be present inside the JAXB object.
+     * This is why there is not a <CODE>set</CODE> method for the owner property.
+     * 
+     * <p>
+     * For example, to add a new item, do as follows:
+     * <pre>
+     *    getOwner().add(newItem);
+     * </pre>
+     * 
+     * 
+     * <p>
+     * Objects of the following type(s) are allowed in the list
+     * {@link testDistributionListGranteeSelector }
+     * 
+     * 
      */
-    public testDistributionListOwnerSelector getOwner() {
-        return owner;
+    public List<testDistributionListGranteeSelector> getOwner() {
+        if (owner == null) {
+            owner = new ArrayList<testDistributionListGranteeSelector>();
+        }
+        return this.owner;
     }
 
     /**
-     * Sets the value of the owner property.
+     * Gets the value of the right property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link testDistributionListOwnerSelector }
-     *     
+     * <p>
+     * This accessor method returns a reference to the live list,
+     * not a snapshot. Therefore any modification you make to the
+     * returned list will be present inside the JAXB object.
+     * This is why there is not a <CODE>set</CODE> method for the right property.
+     * 
+     * <p>
+     * For example, to add a new item, do as follows:
+     * <pre>
+     *    getRight().add(newItem);
+     * </pre>
+     * 
+     * 
+     * <p>
+     * Objects of the following type(s) are allowed in the list
+     * {@link testDistributionListRightSpec }
+     * 
+     * 
      */
-    public void setOwner(testDistributionListOwnerSelector value) {
-        this.owner = value;
+    public List<testDistributionListRightSpec> getRight() {
+        if (right == null) {
+            right = new ArrayList<testDistributionListRightSpec>();
+        }
+        return this.right;
     }
 
     /**

@@ -33,10 +33,10 @@ import generated.zcsclient.account.testDistributionListActionRequest;
 import generated.zcsclient.account.testDistributionListActionResponse;
 import generated.zcsclient.account.testEndSessionRequest;
 import generated.zcsclient.account.testEndSessionResponse;
+import generated.zcsclient.account.testGetAccountDistributionListsRequest;
+import generated.zcsclient.account.testGetAccountDistributionListsResponse;
 import generated.zcsclient.account.testGetAccountInfoRequest;
 import generated.zcsclient.account.testGetAccountInfoResponse;
-import generated.zcsclient.account.testGetAccountMembershipRequest;
-import generated.zcsclient.account.testGetAccountMembershipResponse;
 import generated.zcsclient.account.testGetAllLocalesRequest;
 import generated.zcsclient.account.testGetAllLocalesResponse;
 import generated.zcsclient.account.testGetAvailableCsvFormatsRequest;
@@ -397,14 +397,14 @@ import generated.zcsclient.sync.testSuspendDeviceResponse;
 @WebService(name = "zcsPortType", targetNamespace = "http://www.zimbra.com/wsdl/ZimbraService.wsdl")
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
 @XmlSeeAlso({
-    generated.zcsclient.replication.ObjectFactory.class,
-    generated.zcsclient.appblast.ObjectFactory.class,
-    generated.zcsclient.adminext.ObjectFactory.class,
     generated.zcsclient.zm.ObjectFactory.class,
-    generated.zcsclient.sync.ObjectFactory.class,
-    generated.zcsclient.mail.ObjectFactory.class,
     generated.zcsclient.admin.ObjectFactory.class,
-    generated.zcsclient.account.ObjectFactory.class
+    generated.zcsclient.sync.ObjectFactory.class,
+    generated.zcsclient.replication.ObjectFactory.class,
+    generated.zcsclient.mail.ObjectFactory.class,
+    generated.zcsclient.appblast.ObjectFactory.class,
+    generated.zcsclient.account.ObjectFactory.class,
+    generated.zcsclient.adminext.ObjectFactory.class
 })
 public interface ZcsPortType {
 
@@ -569,6 +569,18 @@ public interface ZcsPortType {
      * 
      * @param parameters
      * @return
+     *     returns generated.zcsclient.account.testGetAccountDistributionListsResponse
+     */
+    @WebMethod(action = "urn:zimbraAccount/GetAccountDistributionLists")
+    @WebResult(name = "GetAccountDistributionListsResponse", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+    public testGetAccountDistributionListsResponse getAccountDistributionListsRequest(
+        @WebParam(name = "GetAccountDistributionListsRequest", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+        testGetAccountDistributionListsRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
      *     returns generated.zcsclient.account.testGetAccountInfoResponse
      */
     @WebMethod(action = "urn:zimbraAccount/GetAccountInfo")
@@ -576,18 +588,6 @@ public interface ZcsPortType {
     public testGetAccountInfoResponse getAccountInfoRequest(
         @WebParam(name = "GetAccountInfoRequest", targetNamespace = "urn:zimbraAccount", partName = "parameters")
         testGetAccountInfoRequest parameters);
-
-    /**
-     * 
-     * @param parameters
-     * @return
-     *     returns generated.zcsclient.account.testGetAccountMembershipResponse
-     */
-    @WebMethod(action = "urn:zimbraAccount/GetAccountMembership")
-    @WebResult(name = "GetAccountMembershipResponse", targetNamespace = "urn:zimbraAccount", partName = "parameters")
-    public testGetAccountMembershipResponse getAccountMembershipRequest(
-        @WebParam(name = "GetAccountMembershipRequest", targetNamespace = "urn:zimbraAccount", partName = "parameters")
-        testGetAccountMembershipRequest parameters);
 
     /**
      * 

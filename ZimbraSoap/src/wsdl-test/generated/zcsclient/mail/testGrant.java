@@ -5,7 +5,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
-import generated.zcsclient.zm.testGranteeType;
+import generated.zcsclient.zm.testGrantGranteeType;
 
 
 /**
@@ -20,7 +20,7 @@ import generated.zcsclient.zm.testGranteeType;
  *       &lt;all>
  *       &lt;/all>
  *       &lt;attribute name="perm" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="gt" use="required" type="{urn:zimbra}granteeType" />
+ *       &lt;attribute name="gt" use="required" type="{urn:zimbra}grantGranteeType" />
  *       &lt;attribute name="zid" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="d" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="pw" type="{http://www.w3.org/2001/XMLSchema}string" />
@@ -41,7 +41,7 @@ public class testGrant {
     @XmlAttribute(name = "perm", required = true)
     protected String perm;
     @XmlAttribute(name = "gt", required = true)
-    protected testGranteeType gt;
+    protected testGrantGranteeType gt;
     @XmlAttribute(name = "zid", required = true)
     protected String zid;
     @XmlAttribute(name = "d")
@@ -80,10 +80,10 @@ public class testGrant {
      * 
      * @return
      *     possible object is
-     *     {@link testGranteeType }
+     *     {@link testGrantGranteeType }
      *     
      */
-    public testGranteeType getGt() {
+    public testGrantGranteeType getGt() {
         return gt;
     }
 
@@ -92,10 +92,10 @@ public class testGrant {
      * 
      * @param value
      *     allowed object is
-     *     {@link testGranteeType }
+     *     {@link testGrantGranteeType }
      *     
      */
-    public void setGt(testGranteeType value) {
+    public void setGt(testGrantGranteeType value) {
         this.gt = value;
     }
 

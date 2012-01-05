@@ -7,7 +7,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
-import generated.zcsclient.account.testDistributionListOwnerInfo;
+import generated.zcsclient.account.testDistributionListGranteeInfo;
 
 
 /**
@@ -26,7 +26,7 @@ import generated.zcsclient.account.testDistributionListOwnerInfo;
  *             &lt;complexContent>
  *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *                 &lt;sequence>
- *                   &lt;element name="owner" type="{urn:zimbraAccount}distributionListOwnerInfo" maxOccurs="unbounded" minOccurs="0"/>
+ *                   &lt;element name="owner" type="{urn:zimbraAccount}distributionListGranteeInfo" maxOccurs="unbounded" minOccurs="0"/>
  *                 &lt;/sequence>
  *               &lt;/restriction>
  *             &lt;/complexContent>
@@ -143,7 +143,7 @@ public class testDistributionListInfo
      *   &lt;complexContent>
      *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
      *       &lt;sequence>
-     *         &lt;element name="owner" type="{urn:zimbraAccount}distributionListOwnerInfo" maxOccurs="unbounded" minOccurs="0"/>
+     *         &lt;element name="owner" type="{urn:zimbraAccount}distributionListGranteeInfo" maxOccurs="unbounded" minOccurs="0"/>
      *       &lt;/sequence>
      *     &lt;/restriction>
      *   &lt;/complexContent>
@@ -158,7 +158,7 @@ public class testDistributionListInfo
     })
     public static class Owners {
 
-        protected List<testDistributionListOwnerInfo> owner;
+        protected List<testDistributionListGranteeInfo> owner;
 
         /**
          * Gets the value of the owner property.
@@ -178,13 +178,13 @@ public class testDistributionListInfo
          * 
          * <p>
          * Objects of the following type(s) are allowed in the list
-         * {@link testDistributionListOwnerInfo }
+         * {@link testDistributionListGranteeInfo }
          * 
          * 
          */
-        public List<testDistributionListOwnerInfo> getOwner() {
+        public List<testDistributionListGranteeInfo> getOwner() {
             if (owner == null) {
-                owner = new ArrayList<testDistributionListOwnerInfo>();
+                owner = new ArrayList<testDistributionListGranteeInfo>();
             }
             return this.owner;
         }

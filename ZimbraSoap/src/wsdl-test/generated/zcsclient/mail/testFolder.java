@@ -86,8 +86,8 @@ public class testFolder {
     protected testFolder.Acl acl;
     protected testRetentionPolicy retentionPolicy;
     @XmlElements({
-        @XmlElement(name = "search", type = testSearchFolder.class),
         @XmlElement(name = "folder"),
+        @XmlElement(name = "search", type = testSearchFolder.class),
         @XmlElement(name = "link", type = testMountpoint.class)
     })
     protected List<testFolder> folderOrLinkOrSearch;
@@ -229,8 +229,8 @@ public class testFolder {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link testSearchFolder }
      * {@link testFolder }
+     * {@link testSearchFolder }
      * {@link testMountpoint }
      * 
      * 

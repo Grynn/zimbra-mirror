@@ -5,21 +5,21 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
-import generated.zcsclient.zm.testDistributionListOwnerType;
+import generated.zcsclient.zm.testDistributionListGranteeType;
 
 
 /**
- * <p>Java class for distributionListOwnerInfo complex type.
+ * <p>Java class for distributionListGranteeInfo complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="distributionListOwnerInfo">
+ * &lt;complexType name="distributionListGranteeInfo">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *       &lt;/sequence>
- *       &lt;attribute name="type" use="required" type="{urn:zimbra}distributionListOwnerType" />
+ *       &lt;attribute name="type" use="required" type="{urn:zimbra}distributionListGranteeType" />
  *       &lt;attribute name="id" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="name" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
@@ -30,11 +30,11 @@ import generated.zcsclient.zm.testDistributionListOwnerType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "distributionListOwnerInfo")
-public class testDistributionListOwnerInfo {
+@XmlType(name = "distributionListGranteeInfo")
+public class testDistributionListGranteeInfo {
 
     @XmlAttribute(name = "type", required = true)
-    protected testDistributionListOwnerType type;
+    protected testDistributionListGranteeType type;
     @XmlAttribute(name = "id", required = true)
     protected String id;
     @XmlAttribute(name = "name", required = true)
@@ -45,10 +45,10 @@ public class testDistributionListOwnerInfo {
      * 
      * @return
      *     possible object is
-     *     {@link testDistributionListOwnerType }
+     *     {@link testDistributionListGranteeType }
      *     
      */
-    public testDistributionListOwnerType getType() {
+    public testDistributionListGranteeType getType() {
         return type;
     }
 
@@ -57,10 +57,10 @@ public class testDistributionListOwnerInfo {
      * 
      * @param value
      *     allowed object is
-     *     {@link testDistributionListOwnerType }
+     *     {@link testDistributionListGranteeType }
      *     
      */
-    public void setType(testDistributionListOwnerType value) {
+    public void setType(testDistributionListGranteeType value) {
         this.type = value;
     }
 

@@ -9,12 +9,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for getAccountMembershipResponse complex type.
+ * <p>Java class for getAccountDistributionListsResponse complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="getAccountMembershipResponse">
+ * &lt;complexType name="getAccountDistributionListsResponse">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -28,10 +28,10 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "getAccountMembershipResponse", propOrder = {
+@XmlType(name = "getAccountDistributionListsResponse", propOrder = {
     "dl"
 })
-public class testGetAccountMembershipResponse {
+public class testGetAccountDistributionListsResponse {
 
     protected List<testDlInfo> dl;
 

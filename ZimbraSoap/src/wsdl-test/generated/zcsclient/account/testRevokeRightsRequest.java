@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="ace" type="{urn:zimbraAccount}accountACEinfo" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="ace" type="{urn:zimbraAccount}accountACEInfo" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class testRevokeRightsRequest {
 
-    protected List<testAccountACEinfo> ace;
+    protected List<testAccountACEInfo> ace;
 
     /**
      * Gets the value of the ace property.
@@ -53,13 +53,13 @@ public class testRevokeRightsRequest {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link testAccountACEinfo }
+     * {@link testAccountACEInfo }
      * 
      * 
      */
-    public List<testAccountACEinfo> getAce() {
+    public List<testAccountACEInfo> getAce() {
         if (ace == null) {
-            ace = new ArrayList<testAccountACEinfo>();
+            ace = new ArrayList<testAccountACEInfo>();
         }
         return this.ace;
     }

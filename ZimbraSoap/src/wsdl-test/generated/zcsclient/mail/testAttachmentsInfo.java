@@ -47,9 +47,9 @@ import org.w3c.dom.Element;
 public class testAttachmentsInfo {
 
     @XmlElements({
+        @XmlElement(name = "mp", type = testMimePartAttachSpec.class),
         @XmlElement(name = "m", type = testMsgAttachSpec.class),
         @XmlElement(name = "doc", type = testDocAttachSpec.class),
-        @XmlElement(name = "mp", type = testMimePartAttachSpec.class),
         @XmlElement(name = "cn", type = testContactAttachSpec.class)
     })
     protected List<testAttachSpec> mpOrMOrCn;
@@ -76,9 +76,9 @@ public class testAttachmentsInfo {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
+     * {@link testMimePartAttachSpec }
      * {@link testMsgAttachSpec }
      * {@link testDocAttachSpec }
-     * {@link testMimePartAttachSpec }
      * {@link testContactAttachSpec }
      * 
      * 

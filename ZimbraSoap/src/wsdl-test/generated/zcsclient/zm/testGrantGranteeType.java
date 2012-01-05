@@ -7,46 +7,49 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for distributionListOwnerType.
+ * <p>Java class for grantGranteeType.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
- * &lt;simpleType name="distributionListOwnerType">
+ * &lt;simpleType name="grantGranteeType">
  *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
  *     &lt;enumeration value="usr"/>
  *     &lt;enumeration value="grp"/>
+ *     &lt;enumeration value="cos"/>
+ *     &lt;enumeration value="pub"/>
  *     &lt;enumeration value="all"/>
  *     &lt;enumeration value="dom"/>
- *     &lt;enumeration value="gst"/>
+ *     &lt;enumeration value="guest"/>
  *     &lt;enumeration value="key"/>
- *     &lt;enumeration value="pub"/>
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
  * 
  */
-@XmlType(name = "distributionListOwnerType")
+@XmlType(name = "grantGranteeType")
 @XmlEnum
-public enum testDistributionListOwnerType {
+public enum testGrantGranteeType {
 
     @XmlEnumValue("usr")
     USR("usr"),
     @XmlEnumValue("grp")
     GRP("grp"),
+    @XmlEnumValue("cos")
+    COS("cos"),
+    @XmlEnumValue("pub")
+    PUB("pub"),
     @XmlEnumValue("all")
     ALL("all"),
     @XmlEnumValue("dom")
     DOM("dom"),
-    @XmlEnumValue("gst")
-    GST("gst"),
+    @XmlEnumValue("guest")
+    GUEST("guest"),
     @XmlEnumValue("key")
-    KEY("key"),
-    @XmlEnumValue("pub")
-    PUB("pub");
+    KEY("key");
     private final String value;
 
-    testDistributionListOwnerType(String v) {
+    testGrantGranteeType(String v) {
         value = v;
     }
 
@@ -54,8 +57,8 @@ public enum testDistributionListOwnerType {
         return value;
     }
 
-    public static testDistributionListOwnerType fromValue(String v) {
-        for (testDistributionListOwnerType c: testDistributionListOwnerType.values()) {
+    public static testGrantGranteeType fromValue(String v) {
+        for (testGrantGranteeType c: testGrantGranteeType.values()) {
             if (c.value.equals(v)) {
                 return c;
             }

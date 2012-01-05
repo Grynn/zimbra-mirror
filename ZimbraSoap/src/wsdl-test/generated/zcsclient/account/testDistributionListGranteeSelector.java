@@ -6,21 +6,21 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlValue;
-import generated.zcsclient.zm.testDistributionListOwnerBy;
-import generated.zcsclient.zm.testDistributionListOwnerType;
+import generated.zcsclient.zm.testDistributionListGranteeBy;
+import generated.zcsclient.zm.testDistributionListGranteeType;
 
 
 /**
- * <p>Java class for distributionListOwnerSelector complex type.
+ * <p>Java class for distributionListGranteeSelector complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="distributionListOwnerSelector">
+ * &lt;complexType name="distributionListGranteeSelector">
  *   &lt;simpleContent>
  *     &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema>string">
- *       &lt;attribute name="type" use="required" type="{urn:zimbra}distributionListOwnerType" />
- *       &lt;attribute name="by" use="required" type="{urn:zimbra}distributionListOwnerBy" />
+ *       &lt;attribute name="type" use="required" type="{urn:zimbra}distributionListGranteeType" />
+ *       &lt;attribute name="by" use="required" type="{urn:zimbra}distributionListGranteeBy" />
  *     &lt;/extension>
  *   &lt;/simpleContent>
  * &lt;/complexType>
@@ -29,17 +29,17 @@ import generated.zcsclient.zm.testDistributionListOwnerType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "distributionListOwnerSelector", propOrder = {
+@XmlType(name = "distributionListGranteeSelector", propOrder = {
     "value"
 })
-public class testDistributionListOwnerSelector {
+public class testDistributionListGranteeSelector {
 
     @XmlValue
     protected String value;
     @XmlAttribute(name = "type", required = true)
-    protected testDistributionListOwnerType type;
+    protected testDistributionListGranteeType type;
     @XmlAttribute(name = "by", required = true)
-    protected testDistributionListOwnerBy by;
+    protected testDistributionListGranteeBy by;
 
     /**
      * Gets the value of the value property.
@@ -70,10 +70,10 @@ public class testDistributionListOwnerSelector {
      * 
      * @return
      *     possible object is
-     *     {@link testDistributionListOwnerType }
+     *     {@link testDistributionListGranteeType }
      *     
      */
-    public testDistributionListOwnerType getType() {
+    public testDistributionListGranteeType getType() {
         return type;
     }
 
@@ -82,10 +82,10 @@ public class testDistributionListOwnerSelector {
      * 
      * @param value
      *     allowed object is
-     *     {@link testDistributionListOwnerType }
+     *     {@link testDistributionListGranteeType }
      *     
      */
-    public void setType(testDistributionListOwnerType value) {
+    public void setType(testDistributionListGranteeType value) {
         this.type = value;
     }
 
@@ -94,10 +94,10 @@ public class testDistributionListOwnerSelector {
      * 
      * @return
      *     possible object is
-     *     {@link testDistributionListOwnerBy }
+     *     {@link testDistributionListGranteeBy }
      *     
      */
-    public testDistributionListOwnerBy getBy() {
+    public testDistributionListGranteeBy getBy() {
         return by;
     }
 
@@ -106,10 +106,10 @@ public class testDistributionListOwnerSelector {
      * 
      * @param value
      *     allowed object is
-     *     {@link testDistributionListOwnerBy }
+     *     {@link testDistributionListGranteeBy }
      *     
      */
-    public void setBy(testDistributionListOwnerBy value) {
+    public void setBy(testDistributionListGranteeBy value) {
         this.by = value;
     }
 

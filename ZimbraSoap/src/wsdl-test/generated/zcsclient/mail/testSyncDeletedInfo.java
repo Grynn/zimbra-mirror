@@ -53,19 +53,19 @@ import javax.xml.bind.annotation.XmlType;
 public class testSyncDeletedInfo {
 
     @XmlElementRefs({
-        @XmlElementRef(name = "chat", namespace = "urn:zimbraMail", type = JAXBElement.class),
-        @XmlElementRef(name = "tag", namespace = "urn:zimbraMail", type = JAXBElement.class),
-        @XmlElementRef(name = "link", namespace = "urn:zimbraMail", type = JAXBElement.class),
-        @XmlElementRef(name = "m", namespace = "urn:zimbraMail", type = JAXBElement.class),
         @XmlElementRef(name = "search", namespace = "urn:zimbraMail", type = JAXBElement.class),
         @XmlElementRef(name = "notes", namespace = "urn:zimbraMail", type = JAXBElement.class),
-        @XmlElementRef(name = "c", namespace = "urn:zimbraMail", type = JAXBElement.class),
-        @XmlElementRef(name = "folder", namespace = "urn:zimbraMail", type = JAXBElement.class),
-        @XmlElementRef(name = "doc", namespace = "urn:zimbraMail", type = JAXBElement.class),
+        @XmlElementRef(name = "cn", namespace = "urn:zimbraMail", type = JAXBElement.class),
         @XmlElementRef(name = "appt", namespace = "urn:zimbraMail", type = JAXBElement.class),
+        @XmlElementRef(name = "m", namespace = "urn:zimbraMail", type = JAXBElement.class),
+        @XmlElementRef(name = "tag", namespace = "urn:zimbraMail", type = JAXBElement.class),
+        @XmlElementRef(name = "link", namespace = "urn:zimbraMail", type = JAXBElement.class),
+        @XmlElementRef(name = "folder", namespace = "urn:zimbraMail", type = JAXBElement.class),
+        @XmlElementRef(name = "c", namespace = "urn:zimbraMail", type = JAXBElement.class),
+        @XmlElementRef(name = "doc", namespace = "urn:zimbraMail", type = JAXBElement.class),
         @XmlElementRef(name = "task", namespace = "urn:zimbraMail", type = JAXBElement.class),
         @XmlElementRef(name = "w", namespace = "urn:zimbraMail", type = JAXBElement.class),
-        @XmlElementRef(name = "cn", namespace = "urn:zimbraMail", type = JAXBElement.class)
+        @XmlElementRef(name = "chat", namespace = "urn:zimbraMail", type = JAXBElement.class)
     })
     protected List<JAXBElement<testIdsAttr>> folderOrSearchOrLink;
     @XmlAttribute(name = "ids", required = true)
