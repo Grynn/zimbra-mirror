@@ -128,6 +128,7 @@ Cos_List_XModelItem.prototype.getInputDelimiter = List_XModelItem.prototype.getI
 Cos_List_XModelItem.prototype.getListItem  = List_XModelItem.prototype.getListItem;
 Cos_List_XModelItem.prototype.initializeItems = List_XModelItem.prototype.initializeItems;
 Cos_List_XModelItem.prototype.validateType = List_XModelItem.prototype.validateType;
+Cos_List_XModelItem.prototype.getDefaultValue = List_XModelItem.prototype.getDefaultValue;
 
 
 Cos_List_XModelItem.prototype.getSuperValue = function(ins) {
