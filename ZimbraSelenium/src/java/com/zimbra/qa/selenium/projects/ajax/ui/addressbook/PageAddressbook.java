@@ -177,12 +177,17 @@ public class PageAddressbook extends AbsTab {
         //assume that this is a list view
 		String listLocator = "div[id='zv__CNS-main']";		
 		String rowLocator  = "div[id^='zli__CNS-main__']";
-	    		
+	    String noResultLocator = "td.NoResults";		
 		
 		//actually this is a search view
 		if (zIsInSearchView()) {
 			listLocator= "div[id=zv__CNS-SR-Contacts-1]";	
 		   	rowLocator= "div[id^=zli__CNS-SR-Contacts-1__]";
+		}
+
+		// if there is no result
+		if (sIsElementPresent("css=" + listLocator + " " + noResultLocator)) {
+           return false;
 		}
 		
 		if (!this.sIsElementPresent("css=" + listLocator + ">" + rowLocator)) {
