@@ -143,8 +143,13 @@ function(enable) {
 
 ZaGlobalConfigViewController.changeActionsStateMethod =
 function () {
+    var isToEnable = (this._view && this._view.isDirty());
     if(this._toolbarOperations[ZaOperation.SAVE]) {
-        this._toolbarOperations[ZaOperation.SAVE].enabled = false;
+        this._toolbarOperations[ZaOperation.SAVE].enabled = isToEnable;
+    }
+
+    if(this._popupOperations[ZaOperation.SAVE]) {
+        this._popupOperations[ZaOperation.SAVE].enabled = isToEnable;
     }
 }
 ZaController.changeActionsStateMethods["ZaGlobalConfigViewController"].push(ZaGlobalConfigViewController.changeActionsStateMethod);
