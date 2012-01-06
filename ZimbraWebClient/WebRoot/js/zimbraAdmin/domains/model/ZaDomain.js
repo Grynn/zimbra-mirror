@@ -437,7 +437,6 @@ function(target) {
 		attrs:[ZaDomain.A_domainName,ZaDomain.A_zimbraDomainStatus,ZaItem.A_zimbraId, ZaDomain.A_domainType, ZaDomain.A_AuthMech],
 		sortAscending:"1",
 		limit:ZaDomain.MAXSEARCHRESULTS,
-		maxResults:5000,
 		ignoreTooManyResultsException: true,
 		exceptionFrom: "ZaDomain.getAll",
 		controller: ZaApp.getInstance().getCurrentController()
