@@ -238,20 +238,28 @@ public class FormContactGroupNew extends AbsForm {
 	public boolean zIsActive() throws HarnessException {
 		logger.info(myPageName() + " zIsActive()");
 			
-	  	if (zIsVisiblePerPosition(Locators.zActiveEditForm, 0, 0)) {
-    		logger.info("active id = " + Locators.zActiveEditForm);
+	  	if ((zIsVisiblePerPosition(Locators.zActiveEditForm, 0, 0)) && 
+	  	    (sGetEval("window.document.getElementById('" + Locators.zActiveEditForm + "').getAttribute('class')")).equals("ZmContactView"))
+	  	{
+    		logger.info("id = " + Locators.zActiveEditForm + " already active");
     		return true;
     	}	
 	  	
 		//set parameter zActiveEditForm		
+		
 		try {		
-		    for (int i=0;; i++) {
-		    	String id = sGetEval("window.document.getElementsByClassName('ZmContactView')[" + i + "].id" );
-		    	if (zIsVisiblePerPosition(id, 0, 0)) {
-		    		Locators.zActiveEditForm = id;
-		    		logger.info("active id = " + id);
-		    		replaceLocators();
-		    		return true;
+		    int length = Integer.parseInt(sGetEval("window.document.getElementById('z_shell').children.length"))-1;
+			for (int i=length;i>=0; i--) {
+		    	String className=sGetEval("window.document.getElementById('z_shell').children[" + i + "].getAttribute('class')" );		    	
+		    	
+		    	if (className.equals("ZmContactView")) {
+		    		String id = sGetEval("window.document.getElementById('z_shell').children[" + i + "].id" );			    	
+		    		if (zIsVisiblePerPosition(id, 0, 0)) {		    	
+		    			Locators.zActiveEditForm = id;
+		    			logger.info("found active id = " + id);
+		    			replaceLocators();
+		    			return true;
+		    		}
 		    	}		    					    	
 	        }	
 		}
