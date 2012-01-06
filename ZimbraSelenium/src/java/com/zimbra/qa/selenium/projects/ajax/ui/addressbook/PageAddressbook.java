@@ -668,7 +668,7 @@ public class PageAddressbook extends AbsTab {
 	      if ( item instanceof FolderItem) {
              FolderItem folder = (FolderItem) item;
 	         pulldownLocator = "css=td#zb__CNS-main__MOVE_MENU_dropdown.ZDropDown";
-	         optionLocator   = "css=td#zti__DwtFolderChooser_ContactsCNS-main__" + folder.getId() + "_textCell.DwtTreeItem-Text";
+	         optionLocator   = "css=td#zti__ZmFolderChooser_ContactsCNS-main__" + folder.getId() + "_textCell.DwtTreeItem-Text";
 	         //TODO page=?	         
 	      }
 	   }
