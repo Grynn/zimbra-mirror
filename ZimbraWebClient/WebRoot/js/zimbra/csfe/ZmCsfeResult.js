@@ -36,15 +36,8 @@ ZmCsfeResult = function(data, isException, header) {
 	this.set(data, isException, header);
 };
 
-/**
- * Returns a string representation of the object.
- * 
- * @return		{String}		a string representation of the object
- */
-ZmCsfeResult.prototype.toString =
-function() {
-	return "ZmCsfeResult";
-};
+ZmCsfeResult.prototype.isZmCsfeResult = true;
+ZmCsfeResult.prototype.toString = function() { return "ZmCsfeResult"; };
 
 /**
  * Sets the content of the result.
