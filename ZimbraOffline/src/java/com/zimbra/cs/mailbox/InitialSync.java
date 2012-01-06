@@ -600,7 +600,9 @@ public class InitialSync {
     ACL parseACL(Element eAcl) throws ServiceException {
         if (eAcl == null)
             return null;
-        ACL acl = new ACL();
+        long internalGrantExpiry = eAcl.getAttributeLong(MailConstants.A_INTERNAL_GRANT_EXPIRY, 0);
+        long guestGrantExpiry = eAcl.getAttributeLong(MailConstants.A_GUEST_GRANT_EXPIRY, 0);
+        ACL acl = new ACL(internalGrantExpiry, guestGrantExpiry);
         for (Element eGrant : eAcl.listElements(MailConstants.E_GRANT)) {
             short rights = ACL.stringToRights(eGrant.getAttribute(MailConstants.A_RIGHTS));
             byte gtype = ACL.stringToType(eGrant.getAttribute(MailConstants.A_GRANT_TYPE));
@@ -611,8 +613,9 @@ public class InitialSync {
                 secret = eGrant.getAttribute(MailConstants.A_PASSWORD, null);
             else if (gtype == ACL.GRANTEE_KEY)
                 secret = eGrant.getAttribute(MailConstants.A_ACCESSKEY, null);
+            long expiry  = eAcl.getAttributeLong(MailConstants.A_EXPIRY, 0);
 
-            ACL.Grant grant =  acl.grantAccess(zid, gtype, rights, secret);
+            ACL.Grant grant =  acl.grantAccess(zid, gtype, rights, secret, expiry);
             grant.setGranteeName(name);
         }
         return acl;
