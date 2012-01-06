@@ -446,6 +446,8 @@ public class ScheduleViewModel: BaseViewModel
 
         if (ovm.ImportCalendarOptions)
             itemFolderFlags = itemFolderFlags | ItemsAndFoldersOptions.Calendar;
+        if (ovm.ImportTaskOptions)
+            itemFolderFlags = itemFolderFlags | ItemsAndFoldersOptions.Tasks;
         if (ovm.ImportContactOptions)
             itemFolderFlags = itemFolderFlags | ItemsAndFoldersOptions.Contacts;
         if (ovm.ImportMailOptions)

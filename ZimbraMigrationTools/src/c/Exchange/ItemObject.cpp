@@ -394,6 +394,28 @@ STDMETHODIMP CItemObject::GetDataForItemID(BSTR UserId, VARIANT ItemId, FolderTy
 		    //
 		}
 	    }
+	    else if (ft == 4)
+	    {
+		TaskItemData taskData;
+
+		maapi->GetItem(ItemID, taskData);
+		pIt[L"name"] = SysAllocString((taskData.Subject).c_str());
+                pIt[L"su"] = SysAllocString((taskData.Subject).c_str());
+		pIt[L"priority"] = SysAllocString((taskData.Importance).c_str());
+                pIt[L"s"] = SysAllocString((taskData.TaskStart).c_str());
+                pIt[L"e"] = SysAllocString((taskData.TaskDue).c_str());
+                pIt[L"status"] = SysAllocString((taskData.Status).c_str());
+                pIt[L"percentComplete"] = SysAllocString((taskData.PercentComplete).c_str());
+                pIt[L"xp-TOTAL_WORK"] = SysAllocString((taskData.TotalWork).c_str());
+                pIt[L"xp-ACTUAL_WORK"] = SysAllocString((taskData.ActualWork).c_str());
+                pIt[L"xp-COMPANIES"] = SysAllocString((taskData.Companies).c_str());
+                pIt[L"xp-MILEAGE"] = SysAllocString((taskData.Mileage).c_str());
+                pIt[L"xp-BILLING"] = SysAllocString((taskData.BillingInfo).c_str());
+		pIt[L"contentType0"] = SysAllocString((taskData.vMessageParts[0].contentType).c_str());
+		pIt[L"content0"] = SysAllocString((taskData.vMessageParts[0].content).c_str());
+		pIt[L"contentType1"] = SysAllocString((taskData.vMessageParts[1].contentType).c_str());
+		pIt[L"content1"] = SysAllocString((taskData.vMessageParts[1].content).c_str());
+            }
 	    delete maapi;	// temporary
         }
 	delete ItemID.lpb;

@@ -745,7 +745,29 @@ LPCWSTR MAPIAccessAPI::GetItem(SBinary sbItemEID, BaseItemData &itemData)
         }
         else if (msg.ItemType() == ZT_TASKS)
         {
-            printf("ITEM TYPE: ZT_TASKS \n");
+            MAPITask mapitask(*m_zmmapisession, msg);
+            TaskItemData *td = (TaskItemData *)&itemData;
+            td->Subject = mapitask.GetSubject();
+            td->Importance = mapitask.GetImportance();
+            td->TaskStart = mapitask.GetTaskStart();
+            td->TaskDue = mapitask.GetTaskDue();
+            td->Status = mapitask.GetTaskStatus();
+            td->PercentComplete = mapitask.GetPercentComplete();
+            td->TotalWork = mapitask.GetTotalWork();
+            td->ActualWork = mapitask.GetActualWork();
+            td->Companies = mapitask.GetCompanies();
+            td->Mileage = mapitask.GetMileage();
+            td->BillingInfo = mapitask.GetBillingInfo();
+
+            MessagePart mp;
+            mp.contentType = L"text/plain";
+            //mp.content = mapitask.GetPlainTextFileAndContent();
+            mp.content = L"some content";   // for now
+            td->vMessageParts.push_back(mp);
+            mp.contentType = L"text/html";
+            //mp.content = mapitask.GetHtmlFileAndContent();
+            mp.content = L"some content";   // for now
+            td->vMessageParts.push_back(mp);
         }
         else if (msg.ItemType() == ZT_MEETREQ_RESP)
         {

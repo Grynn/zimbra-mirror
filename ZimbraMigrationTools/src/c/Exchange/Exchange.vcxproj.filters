@@ -75,6 +75,9 @@
     <ClCompile Include="MAPIAppointment.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MAPITask.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MapiMigration.h">
@@ -138,6 +141,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MAPIAppointment.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MAPITask.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -424,6 +424,7 @@
     <ClCompile Include="..\Exchange\MAPISession.cpp" />
     <ClCompile Include="..\Exchange\MAPIStore.cpp" />
     <ClCompile Include="..\Exchange\MAPITableIterator.cpp" />
+    <ClCompile Include="..\Exchange\MAPITask.cpp" />
     <ClCompile Include="..\Exchange\MapiUtils.cpp" />
     <ClCompile Include="PSTMigration.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='rtl|Win32'">Create</PrecompiledHeader>
@@ -446,6 +447,7 @@
     <ClInclude Include="..\Exchange\MAPISession.h" />
     <ClInclude Include="..\Exchange\MAPIStore.h" />
     <ClInclude Include="..\Exchange\MAPITableIterator.h" />
+    <ClInclude Include="..\Exchange\MAPITask.h" />
     <ClInclude Include="..\Exchange\MapiUtils.h" />
   </ItemGroup>
   <ItemGroup>

@@ -166,6 +166,22 @@ typedef struct _ApptItemData: BaseItemData
     //data_buffer htmlbody;
 } ApptItemData;
 
+typedef struct _TaskItemData: BaseItemData
+{
+    wstring Subject;
+    wstring Importance;
+    wstring TaskStart;
+    wstring TaskDue;
+    wstring Status;
+    wstring PercentComplete;
+    wstring TotalWork;
+    wstring ActualWork;
+    wstring Companies;
+    wstring Mileage;
+    wstring BillingInfo;
+    vector<MessagePart> vMessageParts;
+} TaskItemData;
+
 class MAPIAccessAPI
 {
 private:

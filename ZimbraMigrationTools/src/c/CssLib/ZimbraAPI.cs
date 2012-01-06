@@ -12,6 +12,7 @@ namespace CssLib
 public class ZimbraAPI
 {
     // Errors
+    internal const int TASK_CREATE_FAILED_FLDR = 93;
     internal const int APPT_CREATE_FAILED_FLDR = 94;
     internal const int CONTACT_CREATE_FAILED_FLDR = 95;
     internal const int FOLDER_CREATE_FAILED_SYN = 96;
@@ -1277,7 +1278,7 @@ public class ZimbraAPI
     {
         lastError = "";
 
-        // Create in Contacts unless another folder was desired
+        // Create in Calendar unless another folder was desired
         string folderId = "10";
 
         if (folderPath.Length > 0)
@@ -1307,6 +1308,253 @@ public class ZimbraAPI
 
             writer.WriteStartElement("Body", "http://www.w3.org/2003/05/soap-envelope");
             SetAppointmentRequest(writer, appt, folderId, -1);
+
+            writer.WriteEndElement();           // soap body
+            writer.WriteEndElement();           // soap envelope
+            writer.WriteEndDocument();
+        }
+        string rsp = "";
+
+        client.InvokeService(sb.ToString(), out rsp);
+        retval = client.status;
+        return retval;
+    }
+
+    public void SetTaskRequest(XmlWriter writer, Dictionary<string, string> task,
+        string folderId, int requestId)
+    {
+        bool isRecurring = task.ContainsKey("freq");
+        writer.WriteStartElement("SetTaskRequest", "urn:zimbraMail");
+        writer.WriteAttributeString("l", folderId);
+        writer.WriteStartElement("default");
+        writer.WriteAttributeString("ptst", "NE");  // we don't support Task Requests
+        writer.WriteStartElement("m");
+
+        /*
+        // Timezone nodes if recurring appt
+        if (isRecurring)
+        {
+            writer.WriteStartElement("tz");
+            writer.WriteAttributeString("id", appt["tid"]);
+            writer.WriteAttributeString("stdoff", appt["stdoff"]);
+            writer.WriteAttributeString("dayoff", appt["dayoff"]);
+            writer.WriteStartElement("standard");
+            writer.WriteAttributeString("week", appt["sweek"]);
+            writer.WriteAttributeString("wkday", appt["swkday"]);
+            writer.WriteAttributeString("mon", appt["smon"]);
+            writer.WriteAttributeString("hour", appt["shour"]);
+            writer.WriteAttributeString("min", appt["smin"]);
+            writer.WriteAttributeString("sec", appt["ssec"]);
+            writer.WriteEndElement();   // standard
+            writer.WriteStartElement("daylight");
+            writer.WriteAttributeString("week", appt["dweek"]);
+            writer.WriteAttributeString("wkday", appt["dwkday"]);
+            writer.WriteAttributeString("mon", appt["dmon"]);
+            writer.WriteAttributeString("hour", appt["dhour"]);
+            writer.WriteAttributeString("min", appt["dmin"]);
+            writer.WriteAttributeString("sec", appt["dsec"]);
+            writer.WriteEndElement();   // daylight
+            writer.WriteEndElement();   // tz
+        }
+        */
+
+        writer.WriteStartElement("inv");
+        writer.WriteAttributeString("status", task["status"]);
+        writer.WriteAttributeString("method", "REQUEST");
+        writer.WriteAttributeString("priority", task["priority"]);
+        writer.WriteAttributeString("percentComplete", task["percentComplete"]);
+        writer.WriteAttributeString("name", task["name"]);
+
+        // hard code these -- probably fine
+        writer.WriteAttributeString("allDay", "1");
+        writer.WriteAttributeString("transp", "O");
+        writer.WriteAttributeString("fb", "B");
+        //
+
+        if (task.ContainsKey("uid"))     // for now
+        {
+            writer.WriteAttributeString("uid", task["uid"]);
+        }
+
+        writer.WriteStartElement("s");
+        writer.WriteAttributeString("d", task["s"]);
+        //if (isRecurring)
+        //{
+        //    writer.WriteAttributeString("tz", task["tid"]);
+        //}
+        writer.WriteEndElement();
+
+        writer.WriteStartElement("e");
+        writer.WriteAttributeString("d", task["e"]);
+        //if (isRecurring)
+        //{
+        //    writer.WriteAttributeString("tz", task["tid"]);
+        //}
+        writer.WriteEndElement();
+
+        // hard code the organizer -- we don't support task requests
+        writer.WriteStartElement("or");
+        writer.WriteAttributeString("a", AccountName);
+        writer.WriteEndElement();
+        //
+
+        /*
+        if (isRecurring)
+        {
+            writer.WriteStartElement("recur");
+            writer.WriteStartElement("add");
+            writer.WriteStartElement("rule");
+            writer.WriteAttributeString("freq", task["freq"]);
+            writer.WriteStartElement("interval");
+            writer.WriteAttributeString("ival", task["ival"]);
+            writer.WriteEndElement();   // interval
+            if (task.ContainsKey("wkday"))
+            {
+                writer.WriteStartElement("byday");
+                string wkday = appt["wkday"];
+                int len = wkday.Length;
+                for (int i = 0; i < len; i += 2)
+                {
+                    writer.WriteStartElement("wkday");
+                    writer.WriteAttributeString("day", wkday.Substring(i, 2));
+                    writer.WriteEndElement();   //wkday
+                }
+                writer.WriteEndElement();   // byday
+            }
+            if (task.ContainsKey("modaylist"))
+            {
+                writer.WriteStartElement("bymonthday");
+                writer.WriteAttributeString("modaylist", task["modaylist"]);
+                writer.WriteEndElement();   // bymonthday
+            }
+            if (task.ContainsKey("molist"))
+            {
+                writer.WriteStartElement("bymonth");
+                writer.WriteAttributeString("molist", task["molist"]);
+                writer.WriteEndElement();   // bymonthday
+            }
+            if (task.ContainsKey("poslist"))
+            {
+                writer.WriteStartElement("bysetpos");
+                writer.WriteAttributeString("poslist", task["poslist"]);
+                writer.WriteEndElement();   // bymonthday
+            }
+            if (task["count"].Length > 0)
+            {
+                writer.WriteStartElement("count");
+                writer.WriteAttributeString("num", task["count"]);
+                writer.WriteEndElement();   // count
+            }
+            if (task.ContainsKey("until"))
+            {
+                writer.WriteStartElement("until");
+                writer.WriteAttributeString("d", task["until"]);
+                writer.WriteEndElement();   // until
+            }
+            writer.WriteEndElement();   // rule
+            writer.WriteEndElement();   // add
+            writer.WriteEndElement();   // recur
+        }
+        */
+
+        if (task["xp-TOTAL_WORK"].Length > 0)
+        {
+            writer.WriteStartElement("xprop");
+            writer.WriteAttributeString("name", "X-ZIMBRA-TASK-TOTAL-WORK");
+            writer.WriteAttributeString("value", task["xp-TOTAL_WORK"]);
+            writer.WriteEndElement();   // xprop
+        }
+        if (task["xp-ACTUAL_WORK"].Length > 0)
+        {
+            writer.WriteStartElement("xprop");
+            writer.WriteAttributeString("name", "X-ZIMBRA-TASK-ACTUAL-WORK");
+            writer.WriteAttributeString("value", task["xp-ACTUAL_WORK"]);
+            writer.WriteEndElement();   // xprop
+        }
+        if (task["xp-COMPANIES"].Length > 0)
+        {
+            writer.WriteStartElement("xprop");
+            writer.WriteAttributeString("name", "X-ZIMBRA-TASK-COMPANIES");
+            writer.WriteAttributeString("value", task["xp-COMPANIES"]);
+            writer.WriteEndElement();   // xprop
+        }
+        if (task["xp-MILEAGE"].Length > 0)
+        {
+            writer.WriteStartElement("xprop");
+            writer.WriteAttributeString("name", "X-ZIMBRA-TASK-MILEAGE");
+            writer.WriteAttributeString("value", task["xp-MILEAGE"]);
+            writer.WriteEndElement();   // xprop
+        }
+        if (task["xp-BILLING"].Length > 0)
+        {
+            writer.WriteStartElement("xprop");
+            writer.WriteAttributeString("name", "X-ZIMBRA-TASK-BILLING");
+            writer.WriteAttributeString("value", task["xp-BILLING"]);
+            writer.WriteEndElement();   // xprop
+        }
+
+        writer.WriteEndElement();   // inv
+
+        WriteNVPair(writer, "su", task["su"]);
+
+        writer.WriteStartElement("mp");
+        writer.WriteAttributeString("ct", "multipart/alternative");
+        writer.WriteStartElement("mp");
+        writer.WriteAttributeString("ct", task["contentType0"]);
+        //WriteNVPair(writer, "content", System.Text.Encoding.Default.GetString(File.ReadAllBytes(task["content0"])));
+        WriteNVPair(writer, "content", task["content0"]);   // temporary
+        //File.Delete(task["content0"]);
+        writer.WriteEndElement();   // mp
+        writer.WriteStartElement("mp");
+        writer.WriteAttributeString("ct", task["contentType1"]);
+        //WriteNVPair(writer, "content", System.Text.Encoding.Default.GetString(File.ReadAllBytes(task["content1"])));
+        WriteNVPair(writer, "content", task["content1"]);   // temporary
+        //File.Delete(task["content1"]);
+
+        writer.WriteEndElement();   // mp
+        writer.WriteEndElement();   // mp
+
+        writer.WriteEndElement();   // m
+        writer.WriteEndElement();   // default
+        writer.WriteEndElement();   // SetTaskRequest
+    }
+
+    public int AddTask(Dictionary<string, string> appt, string folderPath = "")
+    {
+        lastError = "";
+
+        // Create in Tasks unless another folder was desired
+        string folderId = "15";
+
+        if (folderPath.Length > 0)
+        {
+            folderId = FindFolder(folderPath);
+            if (folderId.Length == 0)
+                return TASK_CREATE_FAILED_FLDR;
+        }
+
+        // //////
+        WebServiceClient client = new WebServiceClient
+        {
+            Url = ZimbraValues.GetZimbraValues().Url,
+            WSServiceType =
+                WebServiceClient.ServiceType.Traditional
+        };
+        int retval = 0;
+        StringBuilder sb = new StringBuilder();
+        XmlWriterSettings settings = new XmlWriterSettings();
+
+        settings.OmitXmlDeclaration = true;
+        using (XmlWriter writer = XmlWriter.Create(sb, settings))
+        {
+            writer.WriteStartDocument();
+            writer.WriteStartElement("soap", "Envelope",
+                "http://www.w3.org/2003/05/soap-envelope");
+
+            WriteHeader(writer, true, true, true);
+
+            writer.WriteStartElement("Body", "http://www.w3.org/2003/05/soap-envelope");
+            SetTaskRequest(writer, appt, folderId, -1);
 
             writer.WriteEndElement();           // soap body
             writer.WriteEndElement();           // soap envelope

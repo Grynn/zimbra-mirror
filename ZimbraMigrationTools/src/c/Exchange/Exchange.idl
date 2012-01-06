@@ -13,6 +13,7 @@ typedef enum FolderType{
     Mail = 1,
     Contacts = 2,
     Calendar = 3,
+    Task = 4,
 }FolderType;
 
 [

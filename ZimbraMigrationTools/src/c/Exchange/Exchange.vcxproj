@@ -451,6 +451,7 @@
     <ClCompile Include="MAPISession.cpp" />
     <ClCompile Include="MAPIStore.cpp" />
     <ClCompile Include="MAPITableIterator.cpp" />
+    <ClCompile Include="MAPITask.cpp" />
     <ClCompile Include="MapiUtils.cpp" />
     <ClCompile Include="MapiWrapper.cpp" />
     <ClCompile Include="UserObject.cpp" />
@@ -472,6 +473,7 @@
     <ClInclude Include="MAPISession.h" />
     <ClInclude Include="MAPIStore.h" />
     <ClInclude Include="MAPITableIterator.h" />
+    <ClInclude Include="MAPITask.h" />
     <ClInclude Include="MapiUtils.h" />
     <ClInclude Include="MapiWrapper.h" />
     <ClInclude Include="resource.h" />

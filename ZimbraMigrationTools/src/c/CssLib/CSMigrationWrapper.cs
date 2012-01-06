@@ -92,7 +92,7 @@ public class CSMigrationwrapper
     ZimbraAPI api;
     enum foldertype
     {
-        Mail = 1, Contacts = 2, Calendar = 3
+        Mail = 1, Contacts = 2, Calendar = 3, Task = 4
     };
     public string MailClient {
         get { return m_MailClient; }
@@ -255,10 +255,6 @@ public class CSMigrationwrapper
             }
             if (bSkipIt)
                 continue;
-             // //
-             // ANOTHER TEMP -- REMOVE WHEN WE DO TASKS
-            if (folderobject.ContainerClass == "IPF.Task")
-                continue;
             count += folderobject.ItemCount;
         }
         return count;
@@ -292,6 +288,9 @@ public class CSMigrationwrapper
                 break;
             case foldertype.Contacts:
                 retval = importopts.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Contacts);
+                break;
+            case foldertype.Task:
+                retval = importopts.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Tasks);
                 break;
             default:
                 break;
@@ -383,6 +382,10 @@ public class CSMigrationwrapper
                             else if (type == foldertype.Calendar)
                             {
                                 stat = api.AddAppointment(dict, path);
+                            }
+                            else if (type == foldertype.Task)
+                            {
+                                stat = api.AddTask(dict, path);
                             }
                         }
 
@@ -523,6 +526,11 @@ public class CSMigrationwrapper
                 {
                     continue;
                 }
+                if ((folderobject.ContainerClass == "IPF.Task") &&
+                    !(importopts.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Tasks)))
+                {
+                    continue;
+                }
                 if ((folderobject.ContainerClass == "IPF.Note") &&
                     !(importopts.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Mail)))
                 {
@@ -552,10 +560,6 @@ public class CSMigrationwrapper
                     Log.debug("Skipping folder", folderobject.Name, "via filter option");
                     continue;
                 }
-                 // //
-                 // ANOTHER TEMP -- REMOVE WHEN WE DO TASKS
-                if (folderobject.ContainerClass == "IPF.Task")
-                    continue;
                 if (folderobject.Id == 0)
                 {
                     api.AccountName = Acct.Accountname;
