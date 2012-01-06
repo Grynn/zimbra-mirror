@@ -195,7 +195,9 @@ ZaCrtAppTreeHeader.prototype.createMenu = function
             if (findNum == 20)
                 break;
         }
-        i = j;
+
+        if (j > 0)
+            i = j;
     }
     // Always add home here.
     var currentHistory;
