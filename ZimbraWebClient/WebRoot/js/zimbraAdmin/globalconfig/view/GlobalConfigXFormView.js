@@ -178,7 +178,8 @@ GlobalConfigXFormView.INTEROP_TAB_RIGHTS = [ZaGlobalConfig.CHECK_EXCHANGE_AUTH_C
 GlobalConfigXFormView.AUTH_TAB_ATTRS = [ZaGlobalConfig.A_zimbraSpnegoAuthEnabled, ZaGlobalConfig.A_zimbraSpnegoAuthRealm,
     ZaGlobalConfig.A_zimbraSpnegoAuthErrorURL, ZaGlobalConfig.A_zimbraWebClientLoginURL,
     ZaGlobalConfig.A_zimbraWebClientLogoutURL, ZaGlobalConfig.A_zimbraWebClientLoginURLAllowedUA,
-    ZaGlobalConfig.A_zimbraWebClientLogoutURLAllowedUA];
+    ZaGlobalConfig.A_zimbraWebClientLogoutURLAllowedUA, ZaGlobalConfig.A_zimbraWebClientLoginURLAllowedIP,
+    ZaGlobalConfig.A_zimbraWebClientLogoutURLAllowedIP];
 GlobalConfigXFormView.AUTH_TAB_RIGHTS = [];
 
 GlobalConfigXFormView.SKIN_TAB_ATTRS = [ZaGlobalConfig.A_zimbraSkinForegroundColor, ZaGlobalConfig.A_zimbraSkinBackgroundColor,ZaGlobalConfig.A_zimbraSkinSecondaryColor,
@@ -1023,9 +1024,44 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
                                                     ref:".", type:_TEXTFIELD_, label:null,width:"200px"
                                                 }
                                             ]
-                                          }
+                                          },
+                                          { ref: ZaGlobalConfig.A_zimbraWebClientLoginURLAllowedIP,
+                                              type:_REPEAT_,
+                                              nowrap:false,labelWrap:true,
+                                              label:ZaMsg.LBL_zimbraWebClientLoginURLAllowedIP,
+                                              msgName:ZaMsg.MSG_zimbraWebClientLoginURLAllowedIP,
+                                              labelLocation:_LEFT_,
+                                              addButtonLabel:ZaMsg.NAD_Add,
+                                              align:_LEFT_,
+                                              showAddButton:true,
+                                              showRemoveButton:true,
+                                              showAddOnNextRow:true,
+                                              removeButtonLabel:ZaMsg.NAD_Remove,
+                                              items: [
+                                                  {
+                                                      ref:".", type:_TEXTFIELD_, label:null,width:"200px"
+                                                  }
+                                              ]
+                                            },
+                                            { ref: ZaGlobalConfig.A_zimbraWebClientLogoutURLAllowedIP,
+                                              type:_REPEAT_,
+                                              nowrap:false,labelWrap:true,
+                                              label:ZaMsg.LBL_zimbraWebClientLogoutURLAllowedIP,
+                                              msgName:ZaMsg.MSG_zimbraWebClientLogoutURLAllowedIP,
+                                              labelLocation:_LEFT_,
+                                              addButtonLabel:ZaMsg.NAD_Add,
+                                              align:_LEFT_,
+                                              showAddButton:true,
+                                              showRemoveButton:true,
+                                              showAddOnNextRow:true,
+                                              removeButtonLabel:ZaMsg.NAD_Remove,
+                                              items: [
+                                                  {
+                                                      ref:".", type:_TEXTFIELD_, label:null,width:"200px"
+                                                  }
+                                              ]
+                                            }
                                   ]
-
                             }
                     ]
                 };

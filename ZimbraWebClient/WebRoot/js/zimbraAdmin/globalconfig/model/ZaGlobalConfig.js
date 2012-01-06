@@ -176,6 +176,8 @@ ZaGlobalConfig.A_zimbraWebClientLoginURL = "zimbraWebClientLoginURL";
 ZaGlobalConfig.A_zimbraWebClientLogoutURL = "zimbraWebClientLogoutURL";
 ZaGlobalConfig.A_zimbraWebClientLoginURLAllowedUA = "zimbraWebClientLoginURLAllowedUA";
 ZaGlobalConfig.A_zimbraWebClientLogoutURLAllowedUA = "zimbraWebClientLogoutURLAllowedUA";
+ZaGlobalConfig.A_zimbraWebClientLoginURLAllowedIP = "zimbraWebClientLoginURLAllowedIP";
+ZaGlobalConfig.A_zimbraWebClientLogoutURLAllowedIP = "zimbraWebClientLogoutURLAllowedIP";
 
 // Auto provision
 ZaGlobalConfig.A_zimbraAutoProvBatchSize = "zimbraAutoProvBatchSize";
@@ -265,6 +267,14 @@ ZaGlobalConfig.prototype.initFromJS = function(obj) {
     if(AjxUtil.isString(this.attrs[ZaGlobalConfig.A_zimbraWebClientLogoutURLAllowedUA])) {
 		this.attrs[ZaGlobalConfig.A_zimbraWebClientLogoutURLAllowedUA] = [this.attrs[ZaGlobalConfig.A_zimbraWebClientLogoutURLAllowedUA]];
 	}
+
+    if(AjxUtil.isString(this.attrs[ZaGlobalConfig.A_zimbraWebClientLoginURLAllowedIP])) {
+        this.attrs[ZaGlobalConfig.A_zimbraWebClientLoginURLAllowedIP] = [this.attrs[ZaGlobalConfig.A_zimbraWebClientLoginURLAllowedIP]];
+    }
+
+    if(AjxUtil.isString(this.attrs[ZaGlobalConfig.A_zimbraWebClientLogoutURLAllowedIP])) {
+        this.attrs[ZaGlobalConfig.A_zimbraWebClientLogoutURLAllowedIP] = [this.attrs[ZaGlobalConfig.A_zimbraWebClientLogoutURLAllowedIP]];
+    }
 	// convert available components to hidden fields for xform binding
 	var components = this.attrs[ZaGlobalConfig.A_zimbraComponentAvailable];
 	if (components) {
@@ -472,6 +482,8 @@ ZaGlobalConfig.myXModel = {
         { id:ZaGlobalConfig.A_zimbraWebClientLogoutURL, ref:"attrs/" + ZaGlobalConfig.A_zimbraWebClientLogoutURL, type:_STRING_, maxLength:255 },
 		{ id:ZaGlobalConfig.A_zimbraWebClientLoginURLAllowedUA, ref:"attrs/" + ZaGlobalConfig.A_zimbraWebClientLoginURLAllowedUA, type:_LIST_, listItem:{type:_STRING_}},
 		{ id:ZaGlobalConfig.A_zimbraWebClientLogoutURLAllowedUA, ref:"attrs/" + ZaGlobalConfig.A_zimbraWebClientLogoutURLAllowedUA, type:_LIST_, listItem:{type:_STRING_}},
+		{ id:ZaGlobalConfig.A_zimbraWebClientLoginURLAllowedIP, ref:"attrs/" + ZaGlobalConfig.A_zimbraWebClientLoginURLAllowedIP, type:_LIST_, listItem:{type:_STRING_}},
+        { id:ZaGlobalConfig.A_zimbraWebClientLogoutURLAllowedIP, ref:"attrs/" + ZaGlobalConfig.A_zimbraWebClientLogoutURLAllowedIP, type:_LIST_, listItem:{type:_STRING_}},
         // web client authentication
         { id:ZaGlobalConfig.A_zimbraMailSSLClientCertMode, ref:"attrs/" +  ZaGlobalConfig.A_zimbraMailSSLClientCertMode, type:_STRING_, choices:["Disabled","NeedClientAuth","WantClientAuth"]},
         { id:ZaGlobalConfig.A_zimbraMailSSLClientCertPort, ref:"attrs/" +  ZaGlobalConfig.A_zimbraMailSSLClientCertPort, type:_PORT_},

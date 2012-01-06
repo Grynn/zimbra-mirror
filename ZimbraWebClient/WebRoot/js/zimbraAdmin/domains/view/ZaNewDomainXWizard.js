@@ -1257,6 +1257,38 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject, entry) {
                                             {ref:".", type:_TEXTFIELD_,
                                             width: "150px"}
                                         ]
+                                      },
+                                      { ref: ZaDomain.A_zimbraWebClientLoginURLAllowedIP,
+                                        label:ZaMsg.LBL_zimbraWebClientLoginURLAllowedIP,
+                                        type:_SUPER_REPEAT_,
+                                        resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
+                                        repeatInstance:"",
+                                        colSizes:["250px", "150px"],
+                                        addButtonLabel:ZaMsg.NAD_Add ,
+                                        removeButtonLabel: ZaMsg.NAD_Remove,
+                                        showAddButton:true,
+                                        showRemoveButton:true,
+                                        showAddOnNextRow:true,
+                                        repeatItems: [
+                                           {ref:".", type:_TEXTFIELD_,
+                                            width: "150px"}
+                                        ]
+                                      },
+                                      { ref: ZaDomain.A_zimbraWebClientLogoutURLAllowedIP,
+                                        label:ZaMsg.LBL_zimbraWebClientLogoutURLAllowedIP,
+                                        type:_SUPER_REPEAT_,
+                                        resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
+                                        repeatInstance:"",
+                                        colSizes:["250px", "150px"],
+                                        addButtonLabel:ZaMsg.NAD_Add ,
+                                        removeButtonLabel: ZaMsg.NAD_Remove,
+                                        showAddButton:true,
+                                        showRemoveButton:true,
+                                        showAddOnNextRow:true,
+                                        repeatItems: [
+                                           {ref:".", type:_TEXTFIELD_,
+                                            width: "150px"}
+                                        ]
                                       }
                                   ]
                             }
