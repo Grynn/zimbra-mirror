@@ -343,20 +343,26 @@ HRESULT Zimbra::MAPI::Util::GetUserDnAndServerDnFromProfile(LPMAPISESSION pSessi
     pExchangeUserDn = new CHAR[len + 1];
     strcpy_s(pExchangeUserDn, len + 1, pPropValues[1].Value.lpszA);
 
-	//len = strlen(pPropValues[2].Value.lpszA);
-	len = pPropValues[2].Value.MVszA.cValues;
+    // len = strlen(pPropValues[2].Value.lpszA);
+    len = pPropValues[2].Value.MVszA.cValues;
+
     string strExchangeHomeServer;
-	for (ULONG i = 0; i < len; ++i) 
-	{
-		strExchangeHomeServer =pPropValues[2].Value.MVszA.lppszA[i];
-		long npos=strExchangeHomeServer.find("ncacn_ip_tcp:");
-		if(string::npos != npos)
-		{
-			strExchangeHomeServer=strExchangeHomeServer.substr(13);
-			pExchangeServerHostName = new CHAR[sizeof(CHAR)*(strExchangeHomeServer.length()+1)];
-			strcpy_s(pExchangeServerHostName, sizeof(CHAR)*(strExchangeHomeServer.length()+1), strExchangeHomeServer.c_str());
-		}
-	}
+
+    for (ULONG i = 0; i < len; ++i)
+    {
+        strExchangeHomeServer = pPropValues[2].Value.MVszA.lppszA[i];
+
+        string::size_type npos = strExchangeHomeServer.find("ncacn_ip_tcp:");
+
+        if (string::npos != npos)
+        {
+            strExchangeHomeServer = strExchangeHomeServer.substr(13);
+            pExchangeServerHostName = new CHAR[sizeof (CHAR) * (strExchangeHomeServer.length() +
+                1)];
+            strcpy_s(pExchangeServerHostName, sizeof (CHAR) * (strExchangeHomeServer.length() +
+                1), strExchangeHomeServer.c_str());
+        }
+    }
     return S_OK;
 }
 
@@ -2081,9 +2087,7 @@ void Zimbra::MAPI::Util::StoreUtils::GetMAPIDLLPath(LPSTR szMAPIDir, ULONG cchMA
             // address of FGetComponentPath, then
             // just default to the system directory
             if (!bRet || (szMAPIDir[0] == '\0'))
-            {
                 hRes = StringCchPrintfA(szMAPIDir, cchMAPIDir, "%s", szSystemDir);
-            }
             if (szMAPIDir[0] != _T('\0'))
             {
                 hRes = StringCchPrintfA(szMAPIDir, cchMAPIDir, "%s\\%s", szMAPIDir,
@@ -2279,11 +2283,15 @@ wstring Zimbra::MAPI::Util::GetUniqueName()
 
     if (hr != S_OK)
         return L"";
+
     BYTE *str;
+
     hr = UuidToString((UUID *)&guid, (RPC_WSTR *)&str);
     if (hr != RPC_S_OK)
         return L"";
+
     wstring unique = (LPTSTR)str;
+
     RpcStringFree((RPC_WSTR *)&str);
     replace(unique.begin(), unique.end(), '-', '_');
     unique += L"_migwiz";
@@ -2292,54 +2300,55 @@ wstring Zimbra::MAPI::Util::GetUniqueName()
 
 bool Zimbra::MAPI::Util::GetDomainName(wstring &wstrDomain)
 {
-	wstrDomain=L"";
- /*
-	wstring wDomain = L"";
-    DWORD dwLevel = 102;
-    LPWKSTA_INFO_102 pBuf = NULL;
-    NET_API_STATUS nStatus;
-    LPWSTR pszServerName = NULL;
+    wstrDomain = L"";
 
-    nStatus = NetWkstaGetInfo(pszServerName, dwLevel, (LPBYTE *)&pBuf);
-    if (nStatus == NERR_Success)
-    {
-        wDomain = pBuf->wki102_langroup;
-        // printf("\n\tPlatform: %d\n", pBuf->wki102_platform_id);
-        // wprintf(L"\tName:     %s\n", pBuf->wki102_computername);
-        // printf("\tVersion:  %d.%d\n", pBuf->wki102_ver_major,
-        // pBuf->wki102_ver_minor);
-        //wprintf(L"\tLan Root: %s\n", pBuf->wki102_lanroot);
-        // wprintf(L"\t# Logged On Users: %d\n", pBuf->wki102_logged_on_users);
-    }
-    // Free the allocated memory.
-    if (pBuf != NULL)
-        NetApiBufferFree(pBuf);
-	wstrDomain = wDomain;
-*/
-	bool ret = false;
-	LSA_OBJECT_ATTRIBUTES objectAttributes;
+    /*
+     *     wstring wDomain = L"";
+     * DWORD dwLevel = 102;
+     * LPWKSTA_INFO_102 pBuf = NULL;
+     * NET_API_STATUS nStatus;
+     * LPWSTR pszServerName = NULL;
+     *
+     * nStatus = NetWkstaGetInfo(pszServerName, dwLevel, (LPBYTE *)&pBuf);
+     * if (nStatus == NERR_Success)
+     * {
+     *     wDomain = pBuf->wki102_langroup;
+     *     // printf("\n\tPlatform: %d\n", pBuf->wki102_platform_id);
+     *     // wprintf(L"\tName:     %s\n", pBuf->wki102_computername);
+     *     // printf("\tVersion:  %d.%d\n", pBuf->wki102_ver_major,
+     *     // pBuf->wki102_ver_minor);
+     *     //wprintf(L"\tLan Root: %s\n", pBuf->wki102_lanroot);
+     *     // wprintf(L"\t# Logged On Users: %d\n", pBuf->wki102_logged_on_users);
+     * }
+     * // Free the allocated memory.
+     * if (pBuf != NULL)
+     *     NetApiBufferFree(pBuf);
+     *     wstrDomain = wDomain;
+     */
+    bool ret = false;
+    LSA_OBJECT_ATTRIBUTES objectAttributes;
     LSA_HANDLE policyHandle;
     NTSTATUS status;
     PPOLICY_PRIMARY_DOMAIN_INFO info;
 
     // Object attributes are reserved, so initialize to zeros.
-    ZeroMemory(&objectAttributes, sizeof(objectAttributes));
+    ZeroMemory(&objectAttributes, sizeof (objectAttributes));
 
-    status = LsaOpenPolicy(NULL, &objectAttributes, GENERIC_READ | POLICY_VIEW_LOCAL_INFORMATION, &policyHandle);
+    status = LsaOpenPolicy(NULL, &objectAttributes, GENERIC_READ |
+        POLICY_VIEW_LOCAL_INFORMATION, &policyHandle);
     if (!status)
     {
-        status = LsaQueryInformationPolicy(policyHandle, PolicyPrimaryDomainInformation, (LPVOID*)&info);
+        status = LsaQueryInformationPolicy(policyHandle, PolicyPrimaryDomainInformation,
+            (LPVOID *)&info);
         if (!status)
         {
-			wstrDomain = info->Name.Buffer; //Domain
+            wstrDomain = info->Name.Buffer;     // Domain
             if (info->Sid)
-                    ret = true;
+                ret = true;
             LsaFreeMemory(info);
         }
-
         LsaClose(policyHandle);
     }
-
     return ret;
 }
 
