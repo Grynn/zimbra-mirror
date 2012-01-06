@@ -111,9 +111,7 @@ ZaProxyCAUpload.getUploadFormHtml = function(caller) {
 	html[idx++] = "' enctype='multipart/form-data'>" ;
 	html[idx++] = "<div><table border=0 cellspacing=0 cellpadding=2 style='table-layout: fixed;'> " ;
 	html[idx++] = "<colgroup><col width='250' /><col width=50 /></colgroup>";
-
-	html[idx++] = "<tbody><td><input type=file  name='certFile' size='30'></input></td><td></td></tr>";
-
+	html[idx++] = "<tbody><td><input type='file'  name='certFile' width='200'></input></td><td></td></tr>";
 	html[idx++] = "</tbody></table></div>";
 	html[idx++] = "</form></div>";
 
