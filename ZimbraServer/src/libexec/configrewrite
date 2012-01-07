@@ -12,6 +12,7 @@ rc=$?
 if [ $rc -ne 0 ]; then
 	/opt/zimbra/libexec/zmconfigd $@
 	rc=$?
+	stty echo
 else
 	sleep 5
 fi
