@@ -7,6 +7,7 @@ import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogMove;
+import com.zimbra.qa.selenium.projects.ajax.ui.addressbook.FormContactGroupNew.Locators;
 
 
 
@@ -410,21 +411,27 @@ public class FormContactNew extends AbsForm {
 	public boolean zIsActive() throws HarnessException {
 		logger.info(myPageName() + " zIsActive()");
 
-		if (zIsVisiblePerPosition(Locators.zActiveEditForm, 0, 0)) {
-    		logger.info("active id = " + Locators.zActiveEditForm);
+		if (zIsVisiblePerPosition(Locators.zActiveEditForm, 0, 0) && 
+		   (sGetEval("window.document.getElementById('" + Locators.zActiveEditForm + "').getAttribute('class')")).equals("ZmEditContactView"))		
+		{
+    		logger.info("id = " + Locators.zActiveEditForm + " already active");
     		return true;
     	}		    
 		
-		//set parameter zActiveEditForm		
-		//TODO: implement code for IE
+		//set parameter zActiveEditForm				
 		try {		
-		    for (int i=0; ; i++) {	  		   
-		    	String id = sGetEval("window.document.getElementsByClassName('zmEditContactView')[" + i + "].id" );
-		    	if (zIsVisiblePerPosition(id, 0, 0)) {
-		    		Locators.zActiveEditForm = id;
-		    		logger.info("active id = " + id);
-		    		return true;
-		    	}		    					    	
+		    int length = Integer.parseInt(sGetEval("window.document.getElementById('z_shell').children.length"))-1;
+			for (int i=length;i>=0; i--) {
+		    	String className=sGetEval("window.document.getElementById('z_shell').children[" + i + "].getAttribute('class')" );		    	
+		    	
+		    	if (className.equals("ZmEditContactView")) {				    		 
+		    		String id = sGetEval("window.document.getElementById('z_shell').children[" + i + "].id" );
+		    		if (zIsVisiblePerPosition(id, 0, 0)) {
+		    			Locators.zActiveEditForm = id;
+		    			logger.info("active id = " + id);
+		    			return true;
+		    		}
+		    	}
 	        }	
 		}
 		catch (Exception e) {
