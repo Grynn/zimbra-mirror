@@ -86,46 +86,72 @@ function(details) {
 **/ 
 ZaXFormViewController.prototype.closeButtonListener =
 function(ev, noPopView, func, obj, params) {
-	//prompt if the user wants to save the changes
-	if(this._view.isDirty()) {
-		//parameters for the confirmation dialog's callback 
-		var args = new Object();
-		if (noPopView) {
-			args["obj"] = obj ;
-			args["func"] = func ;
-			args["params"] = params ;
-		}else{
-			args["obj"] = ZaApp.getInstance();		
-			args["params"] = null;
-			args["func"] = ZaApp.prototype.popView;
-		}
-		//ask if the user wants to save changes		
-		ZaApp.getInstance().dialogs["confirmMessageDialog"].setMessage(ZaMsg.Q_SAVE_CHANGES, DwtMessageDialog.INFO_STYLE);
-		ZaApp.getInstance().dialogs["confirmMessageDialog"].registerCallback(DwtDialog.YES_BUTTON, this.saveAndGoAway, this, args);		
-		ZaApp.getInstance().dialogs["confirmMessageDialog"].registerCallback(DwtDialog.NO_BUTTON, this.discardAndGoAway, this, args);		
-		ZaApp.getInstance().dialogs["confirmMessageDialog"].popup();
-	} else if (noPopView){
-		func.call(obj, params) ;
-	}else{
-		if(this._view._localXForm && this._view.formDirtyLsnr) {
-			this._view._localXForm.removeListener(DwtEvent.XFORMS_FORM_DIRTY_CHANGE,this._view.formDirtyLsnr);
-			this._view._localXForm.removeListener(DwtEvent.XFORMS_VALUE_ERROR,this._view.formDirtyLsnr);
-		}
-		//this._app.getTabGroup().removeCurrentTab(true) ;
-		ZaApp.getInstance().popView();
-		//ZaApp.getInstance().getTabGroup().removeCurrentTab(true) ;
-        if(appNewUI) {
-            var tree = ZaZimbraAdmin.getInstance().getOverviewPanelController().getOverviewPanel().getFolderTree();
-            var rootItem = tree.getCurrentRootItem();
-            var rootPath = tree.getABPath(rootItem.getData("dataItem"));
-            var topPath = "";
-            var lastLoc = rootPath.lastIndexOf(ZaTree.SEPERATOR);
-            if(lastLoc > 0) {
-                topPath = rootPath.substring(0,lastLoc);
-            }
-            tree.setSelectionByPath(topPath);
-        }
+    //prompt if the user wants to save the changes
+    if(this._view.isDirty()) {
+        //parameters for the confirmation dialog's callback 
+        var args = new Object();
+        if (noPopView) {
+            args["obj"] = obj ;
+            args["params"] = [params, this];
+            args["func"] = function(paramList){
+                var realParams = paramList[0];
+                func.call(this, realParams);
+                //use closure to pass 'func', and this == obj, when being called in saveAndGoAway() or discardAndGoAway()
+                var xFormViewController = paramList[1];
+                //paramList[1] is ZaXFormViewController or its sub class
+                xFormViewController._emptyUI();
+            };
 
+        }else{
+            args["obj"] = ZaApp.getInstance();
+            args["params"] = [null, this];
+            args["func"] = function(paramList){
+                var realParams = paramList[0];
+                ZaApp.prototype.popView.call(this, realParams);
+                //this == ZaApp.getInstance(), when being called in saveAndGoAway() or discardAndGoAway()
+                var xFormViewController = paramList[1];
+                //paramList[1] is ZaXFormViewController or its sub class
+                xFormViewController._emptyUI();
+                xFormViewController._setSelectionAfterCloseView();
+            };
+
+        }
+        //ask if the user wants to save changes
+        ZaApp.getInstance().dialogs["confirmMessageDialog"].setMessage(ZaMsg.Q_SAVE_CHANGES, DwtMessageDialog.INFO_STYLE);
+        ZaApp.getInstance().dialogs["confirmMessageDialog"].registerCallback(DwtDialog.YES_BUTTON, this.saveAndGoAway, this, args);        
+        ZaApp.getInstance().dialogs["confirmMessageDialog"].registerCallback(DwtDialog.NO_BUTTON, this.discardAndGoAway, this, args);        
+        ZaApp.getInstance().dialogs["confirmMessageDialog"].popup();
+
+    } else if (noPopView){
+        func.call(obj, params) ;
+        this._emptyUI();
+
+    }else{
+        if(this._view._localXForm && this._view.formDirtyLsnr) {
+            this._view._localXForm.removeListener(DwtEvent.XFORMS_FORM_DIRTY_CHANGE,this._view.formDirtyLsnr);
+            this._view._localXForm.removeListener(DwtEvent.XFORMS_VALUE_ERROR,this._view.formDirtyLsnr);
+        }
+        //this._app.getTabGroup().removeCurrentTab(true) ;
+        ZaApp.getInstance().popView();
+        //ZaApp.getInstance().getTabGroup().removeCurrentTab(true) ;
+
+        this._emptyUI();
+        this._setSelectionAfterCloseView();
+    }
+}
+
+ZaXFormViewController.prototype._setSelectionAfterCloseView =
+function() {
+	if(appNewUI) { //only work in new UI
+		var tree = ZaZimbraAdmin.getInstance().getOverviewPanelController().getOverviewPanel().getFolderTree();
+		var rootItem = tree.getCurrentRootItem();
+		var rootPath = tree.getABPath(rootItem.getData("dataItem"));
+		var topPath = "";
+		var lastLoc = rootPath.lastIndexOf(ZaTree.SEPERATOR);
+		if(lastLoc > 0) {
+			topPath = rootPath.substring(0,lastLoc);
+		}
+		tree.setSelectionByPath(topPath);
 	}
 }
 
@@ -411,6 +437,15 @@ function () {
 	this._UICreated = true;
 	ZaApp.getInstance()._controllers[this.getContentViewId ()] = this ;
 }
+
+
+ZaXFormViewController.prototype._emptyUI =
+function () {
+    this._view = null;
+    this._contentView = null;
+    this._UICreated = false;
+}
+
 
 ZaXFormViewController.prototype._findAlias = function (alias) {
     var types = [ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.ACCOUNTS, ZaSearch.RESOURCES] ; 
