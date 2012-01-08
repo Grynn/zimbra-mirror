@@ -154,7 +154,7 @@ HRESULT MAPITask::SetMAPITaskValues()
 {
     SizedSPropTagArray(T_NUMALLTASKPROPS, taskProps) = {
 	T_NUMALLTASKPROPS, {
-	    PR_SUBJECT, PR_IMPORTANCE, pr_isrecurringt, pr_status,
+	    PR_SUBJECT, PR_BODY, PR_HTML, PR_IMPORTANCE, pr_isrecurringt, pr_status,
 	    pr_percentcomplete, pr_taskstart, pr_taskdue, pr_totalwork,
 	    pr_actualwork, pr_companies, pr_mileage, pr_billinginfo
 	}
@@ -215,6 +215,9 @@ HRESULT MAPITask::SetMAPITaskValues()
     {
 	SetBillingInfo(m_pPropVals[T_BILLING].Value.lpszW);
     }
+
+    SetPlainTextFileAndContent();
+    SetHtmlFileAndContent();
 
     //if (m_bIsRecurring)
     //{
@@ -306,6 +309,16 @@ void MAPITask::SetBillingInfo(LPTSTR pStr)
     m_pBillingInfo = pStr;
 }
 
+void MAPITask::SetPlainTextFileAndContent()
+{
+    m_pPlainTextFile = Zimbra::MAPI::Util::SetPlainText(m_pMessage, &m_pPropVals[T_BODY]);
+}
+
+void MAPITask::SetHtmlFileAndContent()
+{
+    m_pHtmlFile = Zimbra::MAPI::Util::SetHtml(m_pMessage, &m_pPropVals[T_HTMLBODY]);
+}
+
 wstring MAPITask::GetSubject() { return m_pSubject; }
 wstring MAPITask::GetImportance() { return m_pImportance; }
 wstring MAPITask::GetTaskStatus() { return m_pStatus; }
@@ -317,3 +330,6 @@ wstring MAPITask::GetActualWork() { return m_pActualWork; }
 wstring MAPITask::GetMileage() { return m_pMileage; }
 wstring MAPITask::GetCompanies() { return m_pCompanies; }
 wstring MAPITask::GetBillingInfo() { return m_pBillingInfo; }
+wstring MAPITask::GetPlainTextFileAndContent() { return m_pPlainTextFile; }
+wstring MAPITask::GetHtmlFileAndContent() { return m_pHtmlFile; }
+

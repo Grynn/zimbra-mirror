@@ -761,12 +761,10 @@ LPCWSTR MAPIAccessAPI::GetItem(SBinary sbItemEID, BaseItemData &itemData)
 
             MessagePart mp;
             mp.contentType = L"text/plain";
-            //mp.content = mapitask.GetPlainTextFileAndContent();
-            mp.content = L"some content";   // for now
+            mp.content = mapitask.GetPlainTextFileAndContent();
             td->vMessageParts.push_back(mp);
             mp.contentType = L"text/html";
-            //mp.content = mapitask.GetHtmlFileAndContent();
-            mp.content = L"some content";   // for now
+            mp.content = mapitask.GetHtmlFileAndContent();
             td->vMessageParts.push_back(mp);
         }
         else if (msg.ItemType() == ZT_MEETREQ_RESP)

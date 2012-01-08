@@ -52,7 +52,7 @@ private:
     // this enum lists all the props
     enum
     {
-        T_SUBJECT, T_IMPORTANCE, T_ISRECURT, T_STATUS, T_PERCENTCOMPLETE, T_TASKSTART, T_TASKDUE, T_TOTALWORK, T_ACTUALWORK, T_COMPANIES, T_MILEAGE, T_BILLING, T_NUMALLTASKPROPS
+        T_SUBJECT, T_BODY, T_HTMLBODY, T_IMPORTANCE, T_ISRECURT, T_STATUS, T_PERCENTCOMPLETE, T_TASKSTART, T_TASKDUE, T_TOTALWORK, T_ACTUALWORK, T_COMPANIES, T_MILEAGE, T_BILLING, T_NUMALLTASKPROPS
     };
 
     // these are the named property id's
@@ -77,6 +77,8 @@ private:
     wstring m_pCompanies;
     wstring m_pMileage;
     wstring m_pBillingInfo;
+    wstring m_pPlainTextFile;
+    wstring m_pHtmlFile;
     //
 
 public:
@@ -95,6 +97,8 @@ public:
     void SetCompanies(LPTSTR pStr);
     void SetMileage(LPTSTR pStr);
     void SetBillingInfo(LPTSTR pStr);
+    void SetPlainTextFileAndContent();
+    void SetHtmlFileAndContent();
 
     bool IsRecurring();
 
@@ -109,4 +113,6 @@ public:
     wstring GetMileage();
     wstring GetCompanies();
     wstring GetBillingInfo();
+    wstring GetPlainTextFileAndContent();
+    wstring GetHtmlFileAndContent();
 };
