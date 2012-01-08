@@ -207,9 +207,6 @@ public:
     void SetTimezoneId(LPTSTR pStr);
     void SetRecurValues();
     HRESULT SetAppointmentAttachment(wstring &wstrAttachmentPath);
-    bool TextBody(LPTSTR *ppBody, unsigned int &nTextChars);
-    bool HtmlBody(LPVOID *ppBody, unsigned int &nHtmlBodyLen);
-    LPWSTR WriteContentsToFile(LPTSTR pBody, bool isAscii);
 
     bool IsRecurring();
 

@@ -189,6 +189,8 @@ void AddBodyToPart(mimepp::BodyPart *pPart, LPSTR pStr, size_t length, BOOL bCon
 mimepp::BodyPart *AttachTooLargeAttachPart(ULONG attachSize, LPATTACH pAttach, LPSTR pCharset);
 mimepp::BodyPart *AttachPartFromIAttach(MAPISession &session, LPATTACH pAttach, LPSTR pCharset,
     LONG codepage);
+wstring SetPlainText(LPMESSAGE pMessage, LPSPropValue lpv);
+wstring SetHtml(LPMESSAGE pMessage, LPSPropValue lpv);
 
 namespace CharsetUtil
 {

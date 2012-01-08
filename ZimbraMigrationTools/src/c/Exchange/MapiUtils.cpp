@@ -2541,3 +2541,238 @@ LONG Zimbra::MAPI::Util::GetOutlookVersion(int &iVersion)
     }
     return lRetCode;
 }
+
+bool TextBody(LPMESSAGE pMessage, LPSPropValue lpv, LPTSTR *ppBody, unsigned int &nTextChars)
+{
+    if (lpv->ulPropTag == PR_BODY)
+    {
+#pragma warning(push)
+#pragma warning(disable: 4995)
+        LPTSTR pBody = lpv->Value.LPSZ;
+        int nLen = (int)_tcslen(pBody);
+
+        MAPIAllocateBuffer((nLen + 1) * sizeof (TCHAR), (LPVOID FAR *)ppBody);
+        _tcscpy(*ppBody, pBody);
+        nTextChars = nLen;
+        return true;
+#pragma warning(pop)
+    }
+    else if ((PROP_TYPE(lpv->ulPropTag) == PT_ERROR) &&
+        (lpv->Value.l == E_OUTOFMEMORY))
+    {
+        HRESULT hr = S_OK;
+
+        // must use the stream property
+        IStream *pIStream = NULL;
+
+        hr = pMessage->OpenProperty(PR_BODY, &IID_IStream, STGM_READ, 0, (LPUNKNOWN
+            FAR *)&pIStream);
+        if (FAILED(hr))
+            return false;
+
+        // discover the size of the incoming body
+        STATSTG statstg;
+
+        hr = pIStream->Stat(&statstg, STATFLAG_NONAME);
+        if (FAILED(hr))
+        {
+            pIStream->Release();
+            pIStream = NULL;
+            return false;
+        }
+
+        unsigned bodySize = statstg.cbSize.LowPart;
+
+        // allocate buffer for incoming body data
+        hr = MAPIAllocateBuffer(bodySize + 10, (LPVOID FAR *)ppBody);
+        ZeroMemory(*ppBody, bodySize + 10);
+        if (FAILED(hr))
+        {
+            pIStream->Release();
+            pIStream = NULL;
+            return false;
+        }
+
+        // download the text
+        ULONG cb;
+
+        hr = pIStream->Read(*ppBody, statstg.cbSize.LowPart, &cb);
+        if (FAILED(hr))
+        {
+            pIStream->Release();
+            pIStream = NULL;
+            return false;
+        }
+        if (cb != statstg.cbSize.LowPart)
+        {
+            pIStream->Release();
+            pIStream = NULL;
+            return false;
+        }
+        // close the stream
+        pIStream->Release();
+        pIStream = NULL;
+        nTextChars = (unsigned int)_tcslen(*ppBody);
+        return true;
+    }
+    // some other error occurred?
+    // i.e., some messages do not have a body
+    *ppBody = NULL;
+    return false;
+}
+
+bool HtmlBody(LPMESSAGE pMessage, LPSPropValue lpv, LPVOID *ppBody, unsigned int &nHtmlBodyLen)
+{
+    if (lpv->ulPropTag == PR_HTML)
+    {
+        LPVOID pBody = lpv->Value.bin.lpb;
+
+        if (pBody)
+        {
+            size_t nLen = lpv->Value.bin.cb;
+
+            MAPIAllocateBuffer((ULONG)(nLen + 10), (LPVOID FAR *)ppBody);
+            ZeroMemory(*ppBody, (nLen + 10));
+            memcpy(*ppBody, pBody, nLen);
+            nHtmlBodyLen = (UINT)nLen;
+            return true;
+        }
+    }
+
+    // Try to extract HTML BODY using the stream property.
+    HRESULT hr;
+    IStream *pIStream;
+
+    hr = pMessage->OpenProperty(PR_HTML, &IID_IStream, STGM_READ, 0, (LPUNKNOWN
+        FAR *)&pIStream);
+    if (SUCCEEDED(hr))
+    {
+        // discover the size of the incoming body
+        STATSTG statstg;
+
+        hr = pIStream->Stat(&statstg, STATFLAG_NONAME);
+        if (FAILED(hr))
+            throw MAPIMessageException(E_FAIL, L"HtmlBody(): pIStream->Stat Failed.", __LINE__,
+                __FILE__);
+
+        unsigned bodySize = statstg.cbSize.LowPart;
+
+        nHtmlBodyLen = bodySize;
+
+        // allocate buffer for incoming body data
+        hr = MAPIAllocateBuffer(bodySize + 10, ppBody);
+        ZeroMemory(*ppBody, bodySize + 10);
+        if (FAILED(hr))
+            throw MAPIMessageException(E_FAIL, L"HtmlBody(): ZeroMemory Failed.", __LINE__,
+                __FILE__);
+
+        // download the text
+        ULONG cb;
+
+        hr = pIStream->Read(*ppBody, statstg.cbSize.LowPart, &cb);
+        if (FAILED(hr))
+            throw MAPIMessageException(E_FAIL, L"HtmlBody(): pIStream->Read Failed.", __LINE__,
+                __FILE__);
+        if (cb != statstg.cbSize.LowPart)
+        {
+            throw MAPIMessageException(E_FAIL, L"HtmlBody(): statstg.cbSize.LowPart Failed.",
+                __LINE__, __FILE__);
+        }
+        // close the stream
+        pIStream->Release();
+        return true;
+    }
+
+    // some other error occurred?
+    // i.e., some messages do not have a body
+    *ppBody = NULL;
+    nHtmlBodyLen = 0;
+    return false;
+}
+
+LPWSTR WriteContentsToFile(LPTSTR pBody, bool isAscii)
+{
+    LPSTR pTemp = NULL;
+    int nBytesToBeWritten;
+
+    pTemp = (isAscii) ? (LPSTR)pBody : Zimbra::Util::UnicodeToAnsii(pBody);
+    nBytesToBeWritten = (int)strlen(pTemp);
+   
+    wstring wstrTempAppDirPath;
+    if (!Zimbra::MAPI::Util::GetAppTemporaryDirectory(wstrTempAppDirPath))
+    {
+	return L"";
+    }
+
+    char *lpszDirName = NULL;
+    char *lpszUniqueName = NULL;
+    Zimbra::Util::ScopedInterface<IStream> pStream;
+    ULONG nBytesWritten = 0;
+    ULONG nTotalBytesWritten = 0;
+    HRESULT hr = S_OK;
+
+    WtoA((LPWSTR)wstrTempAppDirPath.c_str(), lpszDirName);
+
+    string strFQFileName = lpszDirName;
+
+    WtoA((LPWSTR)Zimbra::MAPI::Util::GetUniqueName().c_str(), lpszUniqueName);
+    strFQFileName += "\\";
+    strFQFileName += lpszUniqueName;
+    SafeDelete(lpszDirName);
+    SafeDelete(lpszUniqueName);
+    // Open stream on file
+    if (FAILED(hr = OpenStreamOnFile(MAPIAllocateBuffer, MAPIFreeBuffer, STGM_CREATE |
+            STGM_READWRITE, (LPTSTR)strFQFileName.c_str(), NULL, pStream.getptr())))
+    {
+	return L"";
+    }
+    // write to file
+    while (!FAILED(hr) && nBytesToBeWritten > 0)
+    {
+
+	hr = pStream->Write(pTemp, nBytesToBeWritten, &nBytesWritten);
+	pTemp += nBytesWritten;
+        nBytesToBeWritten -= nBytesWritten;
+        nTotalBytesWritten += nBytesWritten;
+        nBytesWritten = 0;
+    }
+    if (FAILED(hr = pStream->Commit(0)))
+        return L"";
+
+    LPWSTR lpwstrFQFileName = NULL;
+
+    AtoW((LPSTR)strFQFileName.c_str(), lpwstrFQFileName);
+    return lpwstrFQFileName;
+}
+
+wstring Zimbra::MAPI::Util::SetPlainText(LPMESSAGE pMessage, LPSPropValue lpv)
+{
+    wstring retval = L"";
+    LPTSTR pBody = NULL;
+    UINT nText = 0;
+
+    bool bRet = TextBody(pMessage, lpv, &pBody, nText);
+    if (bRet)
+    {
+	LPWSTR lpwszTempFile = WriteContentsToFile(pBody, false);
+	retval = lpwszTempFile;
+	SafeDelete(lpwszTempFile);
+    }
+    return retval;
+}
+
+wstring Zimbra::MAPI::Util::SetHtml(LPMESSAGE pMessage, LPSPropValue lpv)
+{
+    wstring retval = L"";
+    LPVOID pBody = NULL;
+    UINT nText = 0;
+
+    bool bRet = HtmlBody(pMessage, lpv, &pBody, nText);
+    if (bRet)
+    {
+	LPWSTR lpwszTempFile = WriteContentsToFile((LPTSTR)pBody, true);
+	retval = lpwszTempFile;
+	SafeDelete(lpwszTempFile);
+    }
+    return retval;
+}
