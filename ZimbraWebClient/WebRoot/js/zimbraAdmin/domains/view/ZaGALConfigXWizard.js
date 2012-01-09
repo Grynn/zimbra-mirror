@@ -149,7 +149,18 @@ function(entry) {
 	this._containedObject[ZaDomain.A2_create_gal_acc] = entry[ZaDomain.A2_create_gal_acc] || "TRUE";
 	this._containedObject[ZaDomain.A2_isTestingGAL] = entry[ZaDomain.A2_isTestingGAL] || 0;
 	this._containedObject[ZaDomain.A2_isTestingSync] = entry[ZaDomain.A2_isTestingSync] || 0;
-	
+
+    this._containedObject[ZaDomain.A2_gal_sync_accounts_set] = [];
+    for(var i in entry[ZaDomain.A2_gal_sync_accounts_set]){
+        if (entry[ZaDomain.A2_gal_sync_accounts_set][i]) {
+            this._containedObject[ZaDomain.A2_gal_sync_accounts_set][i] = {};
+	        this._containedObject[ZaDomain.A2_gal_sync_accounts_set][i][ZaDomain.A2_new_gal_sync_account_name]=entry[ZaDomain.A2_gal_sync_accounts_set][i][ZaDomain.A2_new_gal_sync_account_name];
+	        this._containedObject[ZaDomain.A2_gal_sync_accounts_set][i][ZaDomain.A2_new_internal_gal_ds_name]=entry[ZaDomain.A2_gal_sync_accounts_set][i][ZaDomain.A2_new_internal_gal_ds_name];
+	        this._containedObject[ZaDomain.A2_gal_sync_accounts_set][i][ZaDomain.A2_new_external_gal_ds_name]=entry[ZaDomain.A2_gal_sync_accounts_set][i][ZaDomain.A2_new_external_gal_ds_name];
+	        this._containedObject[ZaDomain.A2_gal_sync_accounts_set][i][ZaDomain.A2_new_internal_gal_polling_interval] = entry[ZaDomain.A2_gal_sync_accounts_set][i][ZaDomain.A2_new_internal_gal_polling_interval] || "1d";
+	        this._containedObject[ZaDomain.A2_gal_sync_accounts_set][i][ZaDomain.A2_new_external_gal_polling_interval] = entry[ZaDomain.A2_gal_sync_accounts_set][i][ZaDomain.A2_new_external_gal_polling_interval] || "1d";
+        }
+    }
 	/*if(entry.rights)
 		this._containedObject.rights = entry.rights;
 
@@ -444,6 +455,8 @@ ZaGALConfigXWizard.getGalSyncConfigSeparate = function () {
 	return (val1 == 'FALSE');	
 }
 
+ZaGALConfigXWizard.checkGALAccountAttribute = ZaDomainXFormView.checkGALAccountAttribute;
+
 ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 	var resultHeaderList = new Array();
 	resultHeaderList[0] = new ZaListHeaderItem("email", ZaMsg.ALV_Name_col, null, "116px", null, "email", true, true);
@@ -468,104 +481,157 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 							labelCssClass:"xform_label", align:_LEFT_,labelWrap:true,
 							visibilityChecks:[[XForm.checkInstanceValueEmty,ZaDomain.A2_gal_sync_accounts],[ZaItem.hasReadPermission,ZaDomain.A_zimbraGalAccountId]],
 							enableDisableChecks:[[ZaItem.hasRight,ZaDomain.RIGHT_CREATE_ACCOUNT]]							
-						},						
-						{type:_DYNSELECT_, label:ZaMsg.Domain_GalSyncAccount,
-							width:250,
-						 	ref:ZaDomain.A2_new_gal_sync_account_name,
-							dataFetcherClass:ZaSearch,
-							dataFetcherTypes:[ZaSearch.ACCOUNTS],
-							dataFetcherAttrs:[ZaItem.A_zimbraId, ZaItem.A_cn, ZaAccount.A_name, ZaAccount.A_displayname, ZaAccount.A_mail,ZaItem.A_objectClass],
-							dataFetcherMethod:ZaSearch.prototype.dynSelectSearch,
-							dataFetcherDomain:entry.name,
-							visibilityChecks:[[XForm.checkInstanceValueEmty,ZaDomain.A2_gal_sync_accounts],[ZaItem.hasReadPermission,ZaDomain.A_zimbraGalAccountId]],
+						},
+                        {type:_REPEAT_, ref:ZaDomain.A2_gal_sync_accounts, colSpan: "*",
+                            showAddButton:false,
+                            showRemoveButton: false,
+                            visibilityChecks:[[XForm.checkInstanceValueNotEmty,ZaDomain.A2_gal_sync_accounts],[ZaItem.hasReadPermission,ZaDomain.A_zimbraGalAccountId]],
+                            items:[
+                                {type:_GROUP_, ref:".", numCols:2, width:"100%", colSizes:["220px","430px"], items:[
+                                    {ref:"name", type:_OUTPUT_,label:ZaMsg.Domain_GalSyncAccount,
+                                        visibilityChecks:[[XForm.checkInstanceValueNotEmty,ZaDomain.A2_gal_sync_accounts],[ZaItem.hasReadPermission,ZaDomain.A_zimbraGalAccountId]]
+                                    },
+                                    {ref:(ZaAccount.A2_zimbra_ds + ".name"), label:ZaMsg.Domain_InternalGALDSName, type:_OUTPUT_,
+                                        visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode],
+                                        visibilityChecks:[
+                                            [ZaItem.hasReadPermission,ZaDomain.A_zimbraGalAccountId],
+                                            ZaNewDomainXWizard.isDomainModeNotExternal,
+                                            [ZaGALConfigXWizard.checkGALAccountAttribute,ZaAccount.A2_zimbra_ds, false]
+                                        ]
+                                    },
+                                    {ref:ZaDomain.A2_new_internal_gal_ds_name, label:ZaMsg.Domain_InternalGALDSName, type:_TEXTFIELD_,
+                                        visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode],
+                                        visibilityChecks:[
+                                            [ZaItem.hasReadPermission,ZaDomain.A_zimbraGalAccountId],
+                                            ZaNewDomainXWizard.isDomainModeNotExternal,
+                                            [ZaGALConfigXWizard.checkGALAccountAttribute,ZaAccount.A2_zimbra_ds, true]
+                                        ],
+                                        enableDisableChangeEventSources:[ZaDomain.A2_create_gal_acc],
+                                        enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A2_create_gal_acc,"TRUE"],[ZaItem.hasRight,ZaDomain.RIGHT_CREATE_ACCOUNT]]
+                                    },
+                                    {ref:(ZaAccount.A2_zimbra_ds + ".attrs." + ZaDataSource.A_zimbraDataSourcePollingInterval),
+                                        type:_LIFETIME_, label:ZaMsg.LBL_zimbraDataSourcePollingInterval_internal, labelLocation:_LEFT_,
+                                        msgName:ZaMsg.MSG_zimbraDataSourcePollingInterval_internal,
+                                        visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode],
+                                        visibilityChecks:[
+                                            [ZaItem.hasReadPermission,ZaDomain.A_zimbraGalAccountId],
+                                            ZaNewDomainXWizard.isDomainModeNotExternal,
+                                            [ZaGALConfigXWizard.checkGALAccountAttribute,ZaAccount.A2_zimbra_ds, false]
+                                        ]
+                                    },
+                                    {ref:ZaDomain.A2_new_internal_gal_polling_interval,
+                                        type:_LIFETIME_, label:ZaMsg.LBL_zimbraDataSourcePollingInterval_internal, labelLocation:_LEFT_,
+                                        msgName:ZaMsg.MSG_zimbraDataSourcePollingInterval_internal,
+                                        visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode],
+                                        visibilityChecks:[
+                                            [ZaItem.hasReadPermission,ZaDomain.A_zimbraGalAccountId],
+                                            ZaNewDomainXWizard.isDomainModeNotExternal,
+                                            [ZaGALConfigXWizard.checkGALAccountAttribute,ZaAccount.A2_zimbra_ds, true]
+                                        ],
+                                        enableDisableChangeEventSources:[ZaDomain.A2_create_gal_acc],
+                                        enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A2_create_gal_acc,"TRUE"]]
+                                    },
+                                    {ref:(ZaAccount.A2_ldap_ds + ".name"), label:ZaMsg.Domain_ExternalGALDSName, type:_OUTPUT_,
+                                        visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode],
+                                        visibilityChecks:[
+                                            [ZaItem.hasReadPermission,ZaDomain.A_zimbraGalAccountId],
+                                            ZaNewDomainXWizard.isDomainModeNotInternal,
+                                            [ZaGALConfigXWizard.checkGALAccountAttribute,ZaAccount.A2_ldap_ds, false]
+                                        ]
+                                    },
+                                    {ref:ZaDomain.A2_new_external_gal_ds_name, label:ZaMsg.Domain_ExternalGALDSName, type:_TEXTFIELD_,
+                                        visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode],
+                                        visibilityChecks:[
+                                            [ZaItem.hasReadPermission,ZaDomain.A_zimbraGalAccountId],
+                                            ZaNewDomainXWizard.isDomainModeNotInternal,
+                                            [ZaGALConfigXWizard.checkGALAccountAttribute,ZaAccount.A2_ldap_ds, true]
+                                        ],
+                                        enableDisableChangeEventSources:[ZaDomain.A2_create_gal_acc],
+                                        enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A2_create_gal_acc,"TRUE"]]
+                                    },
+                                    {ref:(ZaAccount.A2_ldap_ds + ".attrs." + ZaDataSource.A_zimbraDataSourcePollingInterval),
+                                        type:_LIFETIME_, label:ZaMsg.LBL_zimbraDataSourcePollingInterval_external, labelLocation:_LEFT_,
+                                        msgName:ZaMsg.MSG_zimbraDataSourcePollingInterval_external,
+                                        enableDisableChecks:[],
+                                        visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode],
+                                        visibilityChecks:[
+                                            [ZaItem.hasReadPermission,ZaDomain.A_zimbraGalAccountId],
+                                            ZaNewDomainXWizard.isDomainModeNotInternal,
+                                            [ZaGALConfigXWizard.checkGALAccountAttribute,ZaAccount.A2_ldap_ds, false]
+                                        ]
+                                    },
+                                    {ref:ZaDomain.A2_new_external_gal_polling_interval,
+                                        type:_LIFETIME_, label:ZaMsg.LBL_zimbraDataSourcePollingInterval_external, labelLocation:_LEFT_,
+                                        msgName:ZaMsg.MSG_zimbraDataSourcePollingInterval_external,
+                                        enableDisableChecks:[],
+                                        visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode],
+                                        visibilityChecks:[
+                                            [ZaItem.hasReadPermission,ZaDomain.A_zimbraGalAccountId],
+                                            ZaNewDomainXWizard.isDomainModeNotInternal,
+                                            [ZaGALConfigXWizard.checkGALAccountAttribute,ZaAccount.A2_ldap_ds, true]
+                                        ],
+                                        enableDisableChangeEventSources:[ZaDomain.A2_create_gal_acc],
+                                        enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A2_create_gal_acc,"TRUE"]]
+                                    }
+                                ]}
+                        ]},
+                        {ref:ZaDomain.A2_gal_sync_accounts_set, type:_REPEAT_, label:ZaMsg.LBL_GALAccount, repeatInstance:"", showAddButton:true, showRemoveButton:true,
+							addButtonLabel:ZaMsg.Domain_GAL_Add,
+                            number:0,
+							removeButtonLabel:ZaMsg.Domain_GAL_Remove,
+							visibilityChecks:[[ZaItem.hasReadPermission,ZaDomain.A_zimbraGalAccountId]],
 							enableDisableChangeEventSources:[ZaDomain.A2_create_gal_acc],
-							enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A2_create_gal_acc,"TRUE"],[ZaItem.hasRight,ZaDomain.RIGHT_CREATE_ACCOUNT]]
-						},
-						{ref:(ZaDomain.A2_gal_sync_accounts + "[0].name"), type:_OUTPUT_,label:ZaMsg.Domain_GalSyncAccount,
-							visibilityChecks:[[XForm.checkInstanceValueNotEmty,ZaDomain.A2_gal_sync_accounts],[ZaItem.hasReadPermission,ZaDomain.A_zimbraGalAccountId]]
-						},
-						{ref:(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_zimbra_ds + ".name"), label:ZaMsg.Domain_InternalGALDSName, type:_OUTPUT_,
-							visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode],
-							visibilityChecks:[
-								[ZaItem.hasReadPermission,ZaDomain.A_zimbraGalAccountId],
-								ZaNewDomainXWizard.isDomainModeNotExternal,
-								[XForm.checkInstanceValueNotEmty,(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_zimbra_ds)]
-							]							
-						},
-						{ref:ZaDomain.A2_new_internal_gal_ds_name, label:ZaMsg.Domain_InternalGALDSName, type:_TEXTFIELD_,
-							visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode],
-							visibilityChecks:[
-								[ZaItem.hasReadPermission,ZaDomain.A_zimbraGalAccountId],
-								ZaNewDomainXWizard.isDomainModeNotExternal,
-								[XForm.checkInstanceValueEmty,(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_zimbra_ds)]
-							],
-							enableDisableChangeEventSources:[ZaDomain.A2_create_gal_acc],
-							enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A2_create_gal_acc,"TRUE"],[ZaItem.hasRight,ZaDomain.RIGHT_CREATE_ACCOUNT]]							
-						},
-						{ref:(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_zimbra_ds + ".attrs." + ZaDataSource.A_zimbraDataSourcePollingInterval),
-							type:_LIFETIME_, label:ZaMsg.LBL_zimbraDataSourcePollingInterval_internal, labelLocation:_LEFT_,
-							msgName:ZaMsg.MSG_zimbraDataSourcePollingInterval_internal,
-							visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode],
-							visibilityChecks:[
-								[ZaItem.hasReadPermission,ZaDomain.A_zimbraGalAccountId],
-								ZaNewDomainXWizard.isDomainModeNotExternal,
-								[XForm.checkInstanceValueNotEmty,(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_zimbra_ds)]
-							]
-						},
-						{ref:ZaDomain.A2_new_internal_gal_polling_interval, 
-							type:_LIFETIME_, label:ZaMsg.LBL_zimbraDataSourcePollingInterval_internal, labelLocation:_LEFT_,
-							msgName:ZaMsg.MSG_zimbraDataSourcePollingInterval_internal,
-							visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode],
-							visibilityChecks:[
-								[ZaItem.hasReadPermission,ZaDomain.A_zimbraGalAccountId],
-								ZaNewDomainXWizard.isDomainModeNotExternal,
-								[XForm.checkInstanceValueEmty,(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_zimbra_ds)]
-							],
-							enableDisableChangeEventSources:[ZaDomain.A2_create_gal_acc],
-							enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A2_create_gal_acc,"TRUE"]]													
-						},
-						{ref:(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_ldap_ds + ".name"), label:ZaMsg.Domain_ExternalGALDSName, type:_OUTPUT_,
-							visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode],
-							visibilityChecks:[
-								[ZaItem.hasReadPermission,ZaDomain.A_zimbraGalAccountId],
-								ZaNewDomainXWizard.isDomainModeNotInternal,
-								[XForm.checkInstanceValueNotEmty,(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_ldap_ds)]
-							]							
-						},
-						{ref:ZaDomain.A2_new_external_gal_ds_name, label:ZaMsg.Domain_ExternalGALDSName, type:_TEXTFIELD_,
-							visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode],
-							visibilityChecks:[
-								[ZaItem.hasReadPermission,ZaDomain.A_zimbraGalAccountId],
-								ZaNewDomainXWizard.isDomainModeNotInternal,
-								[XForm.checkInstanceValueEmty,(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_ldap_ds)]
-							], 
-							enableDisableChangeEventSources:[ZaDomain.A2_create_gal_acc],
-							enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A2_create_gal_acc,"TRUE"]]							
-						},
-						{ref:(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_ldap_ds + ".attrs." + ZaDataSource.A_zimbraDataSourcePollingInterval), 
-							type:_LIFETIME_, label:ZaMsg.LBL_zimbraDataSourcePollingInterval_external, labelLocation:_LEFT_,
-							msgName:ZaMsg.MSG_zimbraDataSourcePollingInterval_external,
-							enableDisableChecks:[],
-							visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode],
-							visibilityChecks:[
-								[ZaItem.hasReadPermission,ZaDomain.A_zimbraGalAccountId],
-								ZaNewDomainXWizard.isDomainModeNotInternal,
-								[XForm.checkInstanceValueNotEmty,(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_ldap_ds)]
-							]													
-						},
-						{ref:ZaDomain.A2_new_external_gal_polling_interval, 
-							type:_LIFETIME_, label:ZaMsg.LBL_zimbraDataSourcePollingInterval_external, labelLocation:_LEFT_,
-							msgName:ZaMsg.MSG_zimbraDataSourcePollingInterval_external,
-							enableDisableChecks:[],
-							visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode],
-							visibilityChecks:[
-								[ZaItem.hasReadPermission,ZaDomain.A_zimbraGalAccountId],
-								ZaNewDomainXWizard.isDomainModeNotInternal,
-								[XForm.checkInstanceValueEmty,(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_ldap_ds)]
-							],
-							enableDisableChangeEventSources:[ZaDomain.A2_create_gal_acc],
-							enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A2_create_gal_acc,"TRUE"]]
-						},						
+							enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A2_create_gal_acc,"TRUE"],[ZaItem.hasRight,ZaDomain.RIGHT_CREATE_ACCOUNT]],
+							showAddOnNextRow:true,
+                            showRemoveNextRow: true,
+                            items:[
+                                {type:_GROUP_, ref:".", numCols:1, width:"100%",
+                                    visibilityChangeEventSources:[ZaDomain.A2_gal_sync_accounts_set],
+                                    visibilityChecks:[function() {
+                                        return (this.instanceNum==0 || (this.instanceNum < this.getNumberToShow()) || (this.instanceNum < this.getInstanceCount()));
+                                    }],
+                                    items:[
+                                    {type:_GROUP_, ref:".", numCols:2, colSizes:["200px", "*"], width:"100%",
+                                        visibilityChangeEventSources:[ZaDomain.A2_gal_sync_accounts_set],
+                                        visibilityChecks:[function() {
+                                            var instanceNum = this.getParentItem().instanceNum;
+                                            return ((instanceNum < this.getNumberToShow()) || (instanceNum < this.getInstanceCount()));
+                                        }],
+                                        items:[
+                                        {type:_GROUP_, label:ZaMsg.Domain_GalSyncAccount, numCols:3,colSizes:["130px", "25px","auto"], colSpan:"1", ref: ".",
+                                            items:[
+                                                {ref:ZaDomain.A2_new_gal_sync_account_name, width:130, label:null, type:_TEXTFIELD_},
+                                                {type:_OUTPUT_, value:"@"},
+                                                {type:_OUTPUT_,refPath:ZaDomain.A_domainName,label:null,align:_LEFT_}
+                                            ],
+                                            required:true
+                                        },
+                                        {ref:ZaDomain.A_mailHost, type: _OSELECT1_, label:ZaMsg.NAD_MailServer,  choices: ZaApp.getInstance().getServerListChoices(),
+                                            required:true
+                                        },
+                                        {ref:ZaDomain.A2_new_internal_gal_ds_name, label:ZaMsg.Domain_InternalGALDSName, type:_TEXTFIELD_,
+                                            visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode],
+                                            visibilityChecks:[ZaNewDomainXWizard.isDomainModeNotExternal]
+                                        },
+                                        {ref:ZaDomain.A2_new_internal_gal_polling_interval,
+                                            type:_LIFETIME_, label:ZaMsg.LBL_zimbraDataSourcePollingInterval_internal, labelLocation:_LEFT_,
+                                            msgName:ZaMsg.MSG_zimbraDataSourcePollingInterval_internal,
+                                            visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode],
+                                            visibilityChecks:[ZaNewDomainXWizard.isDomainModeNotExternal]
+                                        },
+                                        {ref:ZaDomain.A2_new_external_gal_ds_name, label:ZaMsg.Domain_ExternalGALDSName, type:_TEXTFIELD_,
+                                            visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode],
+                                            visibilityChecks:[ZaNewDomainXWizard.isDomainModeNotInternal]
+                                        },
+                                        {ref:ZaDomain.A2_new_external_gal_polling_interval,
+                                            type:_LIFETIME_, label:ZaMsg.LBL_zimbraDataSourcePollingInterval_external, labelLocation:_LEFT_,
+                                            msgName:ZaMsg.MSG_zimbraDataSourcePollingInterval_external,
+                                            visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode],
+                                            visibilityChecks:[ZaNewDomainXWizard.isDomainModeNotInternal]
+                                        }
+                                    ]}
+                            ]}
+                        ]},
 						{type:_GROUP_, colSpan:2,numCols:2,colSizes:["220px","430px"],
 							visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode],
 							visibilityChecks:[ZaNewDomainXWizard.isDomainModeNotInternal],
