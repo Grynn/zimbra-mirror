@@ -404,7 +404,7 @@ public class CSMigrationwrapper
     public void EndUserMigration()
     {
        dynamic  userobject = new Exchange.UserObject();
-       userobject.UMUnInitializeUser("MAPI");
+       userobject.UMUnInitializeUser();
     }
 
     public void StartMigration(MigrationAccount Acct, MigrationOptions importopts, bool
@@ -441,11 +441,11 @@ public class CSMigrationwrapper
             Log.open(Path.GetTempPath() + accountName + ".log");
             if (isServer)
             {
-                value = userobject.InitializeUser("MAPI", "", "", Acct.AccountID, accountName);
+                value = userobject.InitializeUser("", "", Acct.AccountID, accountName);
             }
             else
             {
-                value = userobject.UMInitializeUser("MAPI", Acct.AccountID, accountName);
+                value = userobject.UMInitializeUser(Acct.AccountID, accountName);
             }
             if (value.Length > 0)
             {
