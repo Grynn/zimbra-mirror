@@ -432,25 +432,35 @@ public class CSMigrationwrapper
             }
             else
             {
-                Log.err("Illegal account name");
-                Acct.LastProblemInfo = new ProblemInfo("Illegal account name", "Error", ProblemInfo.TYPE_ERR);
+                Acct.LastProblemInfo = new ProblemInfo(Acct.AccountName, "Illegal account name", ProblemInfo.TYPE_ERR);
                 Acct.TotalErrors++;
                 return;
             }
 
             Log.open(Path.GetTempPath() + accountName + ".log");
-            if (isServer)
+            try
             {
-                value = userobject.InitializeUser("", "", Acct.AccountID, accountName);
+                if (isServer)
+                {
+                    value = userobject.InitializeUser("", "", Acct.AccountID, accountName);
+                }
+                else
+                {
+                    value = userobject.UMInitializeUser(Acct.AccountID, accountName);
+                }
             }
-            else
+            catch (Exception e)
             {
-                value = userobject.UMInitializeUser(Acct.AccountID, accountName);
+                string s = string.Format("Initialization Exception.  {0}", e.Message);
+                Acct.LastProblemInfo = new ProblemInfo(accountName, s, ProblemInfo.TYPE_ERR);
+                Acct.TotalErrors++;
+                return;
             }
+
             if (value.Length > 0)
             {
                 Log.err("Unable to initialize", accountName, value);
-                Acct.LastProblemInfo = new ProblemInfo(value, "Error", ProblemInfo.TYPE_ERR);
+                Acct.LastProblemInfo = new ProblemInfo(accountName, value, ProblemInfo.TYPE_ERR);
                 Acct.TotalErrors++;
                 return;
             }
