@@ -34,6 +34,34 @@ function (historyObject) {
     this._evtMgr.notifyListeners(ZaEvent.L_MODIFY, this._history);
 }
 
+ZaHistoryMgr.prototype.findHistoryByName=
+function(displayName){
+    var obj = new AjxVector();
+    var num = 0;
+    for(var i = this._history.size()-1; i >= 0 && num < 20; i--) {
+        if(!this._history.get(i).isShowInHistory)
+                continue;
+
+        if(this._history.get(i).displayName == displayName )
+            obj.add(this._history.get(i));
+        num++;
+    }
+    return obj;
+}
+
+ZaHistoryMgr.prototype.deleteHistoryObjByName =
+function(displayName){
+    for(var i = 0; i < this._historyObj.size(); i++) {
+        if(this._historyObj.get(i).displayName == displayName )
+            return this._historyObj.removeAt(i);
+    }
+}
+
+ZaHistoryMgr.prototype.refreshHistory =
+function () {
+    this._evtMgr.notifyListeners(ZaEvent.L_MODIFY, this._history);
+}
+
 ZaHistoryMgr.prototype.addHistoryObj =
 function (historyObject) {
     if (AjxUtil.isEmpty(historyObject.type))
@@ -145,6 +173,7 @@ ZaHistory = function (path, displayName, type, isShowInHistory, viewMethod) {
     this.type = type;
     this.isShowInHistory = (isShowInHistory === undefined) ? true: isShowInHistory;
     this.viewMethod = (viewMethod instanceof AjxCallback) ? viewMethod : new AjxCallback(this, this.defaultGoToView);
+    this.enabled = true;
 }
 
 ZaHistory.prototype.goToView =
@@ -161,4 +190,14 @@ ZaHistory.prototype.defaultGoToView = function(refresh) {
 
 ZaHistory.prototype.equal = function (newObj) {
     return this.path == newObj.path;
+}
+
+ZaHistory.prototype.setEnabled =
+function(enabled){
+    this.enabled = enabled;
+}
+
+ZaHistory.prototype.getEnabled =
+function(){
+    return this.enabled;
 }

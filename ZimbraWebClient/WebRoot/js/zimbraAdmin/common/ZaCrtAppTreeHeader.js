@@ -224,6 +224,7 @@ ZaCrtAppTreeHeader.prototype.createMenu = function
 		                id:     ZaId.getMenuItemId(this._contextId, i + currentHistory.path)
 	    });
         mi.setText(currentHistory.displayName);
+        mi.setEnabled(currentHistory.enabled);
         mi.setData("history", currentHistory);
         mi.addSelectionListener(listener);
     }

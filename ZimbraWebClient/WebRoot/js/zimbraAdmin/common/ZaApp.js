@@ -888,6 +888,9 @@ function (ev) {
 			} else if(detls && (detls instanceof ZaCos)) {
 				this._cosList.remove(ev.getDetails());
 			}
+
+            if(appNewUI)
+                ZaZimbraAdmin.getInstance().refreshHistoryTreeByDelete(ev.getDetails());
 		}
 		if(this._cosListChoices == null) {
 			this._cosListChoices = new XFormChoices(this._cosList.getArray(), XFormChoices.OBJECT_LIST, "id", "name");	

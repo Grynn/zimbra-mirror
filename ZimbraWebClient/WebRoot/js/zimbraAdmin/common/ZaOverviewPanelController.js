@@ -2032,6 +2032,7 @@ function (parentPath, name, currentView, skipHistory, skipNotify, relatedZaItem,
         ZaOverviewPanelController.overviewTreeListeners[mappingId] = handler;
     }else{ //updaet relatedObject count
         nameDataItem.addRelatedObject(this.getRelatedList(parentPath,relatedZaItem));
+        nameDataItem.addRecentObject(this.getRecentList());
     }
 
 
@@ -2102,6 +2103,7 @@ ZaOverviewPanelController.prototype.addObjectItemOri = function (parentPath, nam
         nameDataItem.addRecentObject(this.getRecentList())
     }else{ //update related object count
         nameDataItem.addRelatedObject(this.getRelatedList(parentPath,item));
+        nameDataItem.addRecentObject(this.getRecentList());
     }
 
     if (!nameDataItem.getData("viewId")) {

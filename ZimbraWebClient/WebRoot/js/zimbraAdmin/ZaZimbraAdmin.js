@@ -1162,6 +1162,23 @@ function(historyObject, isAddHistory) {
 
 }
 
+ZaZimbraAdmin.prototype.refreshHistoryTreeByDelete = function(items) {
+    var itemArray = AjxUtil.toArray(items);
+    var refresh = false;
+    for(var i = 0 ; i <  itemArray.length; i++){
+        var itemName = itemArray[i].name;
+
+        var historys = this._historyMgr.findHistoryByName(itemName);
+        for(var j = 0; j< historys.size(); j++){
+            historys.get(j).setEnabled(false);
+            refresh = true;
+        }
+        this._historyMgr.deleteHistoryObjByName(itemName);
+    }
+    if(refresh)
+        this._historyMgr.refreshHistory();
+}
+
 ZaZimbraAdmin.prototype.getSettingMenu =
 function(popupOperation, popupOrder) {
     if (!this._currentAppBar)

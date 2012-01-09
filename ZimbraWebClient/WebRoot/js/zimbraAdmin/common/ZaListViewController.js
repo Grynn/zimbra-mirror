@@ -384,6 +384,8 @@ function (ev) {
 			this._currentPageNum = 1 ; //due to bug 12091, always go back to the first page after the deleting of items.
 			this.show(false);			
 		}
+        if(appNewUI)
+             ZaZimbraAdmin.getInstance().refreshHistoryTreeByDelete(ev.getDetails());
 	}
 }
 
