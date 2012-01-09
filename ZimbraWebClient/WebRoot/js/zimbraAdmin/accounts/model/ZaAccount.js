@@ -1684,6 +1684,24 @@ function (newPassword) {
 }
 ZaAccount.changePasswordMethods.push(ZaAccount.changePasswordMethod);
 
+
+ZaAccount.isValidName =
+function(value) {
+	if (AjxUtil.isEmpty(value))
+		return false;
+
+	var index = value.indexOf("@");
+	var name = value.substring(0, index);
+
+	var namePart = name.replace(/(\s*$)/g, "");
+	namePart = AjxStringUtil.trim(namePart);
+	var domainPart = value.substring(index+1);
+	domainPart = AjxStringUtil.trim(domainPart);
+
+	value = namePart + "@" + domainPart;
+	return (AjxEmailAddress.isValid(value));
+}
+
 /**
 * ZaAccount.myXModel - XModel for XForms
 **/
@@ -1698,21 +1716,15 @@ ZaAccount.myXModel = {
         {id:ZaAccount.A2_domainLeftAccounts, ref:ZaAccount.A2_domainLeftAccounts, type:_STRING_},
         {id:ZaAccount.A2_showAccountTypeMsg, ref:ZaAccount.A2_showAccountTypeMsg, type:_STRING_},
         {id:ZaAccount.A_name, type:_STRING_, ref:"name", required:true, 
-        	constraints: {type:"method", value:
-			   function (value, form, formItem, instance) {				   
-				   if (value){
-                                                var index = value.indexOf("@");
-                                                var name = value.substring(0, index);
-                                                var namePart = name.replace(/(\s*$)/g, "");
-                                                var domainPart = value.substring(index+1);
-                                                domainPart = AjxStringUtil.trim(domainPart);
-                                                value = namePart + "@" + domainPart;
-					  	if(AjxEmailAddress.isValid(value)) {
-						   return value;
-					   } else {
-						   throw ZaMsg.ErrorInvalidEmailAddress;
-					   }
-				   }
+			constraints: {type:"method", value:
+				function (value, form, formItem, instance) {
+					if (value){
+						if(ZaAccount.isValidName(value)) {
+							return value;
+						} else {
+							throw ZaMsg.ErrorInvalidEmailAddress;
+						}
+					}
 			   }
 			}
         },
