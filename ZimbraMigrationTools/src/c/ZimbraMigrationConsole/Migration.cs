@@ -12,7 +12,7 @@ class Migration
     {
         MigrationAccount MyAcct = new MigrationAccount();
 
-        MyAcct.Accountname = accountname;
+        MyAcct.AccountName = accountname;
         MyAcct.AccountID = accountid;
         MyAcct.OnChanged += new MigrationObjectEventHandler(i_OnChanged1);
 
@@ -97,8 +97,8 @@ class Migration
         string Message =
             " Migration started for user : {0} with TotalContacts  {1} ,TotalMails {2}, TotalRules {3}";
 
-        Console.WriteLine(String.Format(Message, i.Accountname, i.TotalNoContacts,
-            i.TotalNoMails, i.TotalNoRules));
+        Console.WriteLine(String.Format(Message, i.AccountName, i.TotalContacts,
+            i.TotalMails, i.TotalRules));
     }
 
     public void i_OnChanged12(object sender, MigrationObjectEventArgs e)
@@ -107,8 +107,8 @@ class Migration
         string Message = "Migrating {0} folder \n " +
             "Migrating........................... {1} of {2} {0}";
 
-        Console.WriteLine(String.Format(Message, i.FolderName, i.CurrentCountOFItems,
-            i.TotalCountOFItems));
+        Console.WriteLine(String.Format(Message, i.FolderName, i.CurrentCountOfItems,
+            i.TotalCountOfItems));
     }
 }
 }

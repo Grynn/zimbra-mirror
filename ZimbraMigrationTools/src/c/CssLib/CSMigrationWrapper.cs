@@ -314,7 +314,7 @@ public class CSMigrationwrapper
 
         if (itemobjectarray.GetLength(0) > 0)
         {
-            while (iProcessedItems < Acct.migrationFolder.TotalCountOFItems)
+            while (iProcessedItems < Acct.migrationFolder.TotalCountOfItems)
             {
                 Log.debug("Processing folder", folderobject.Name, "-- Total items:", folderobject.ItemCount);
                 foreach (dynamic itemobject in itemobjectarray)
@@ -340,7 +340,7 @@ public class CSMigrationwrapper
                             // Console.WriteLine("{0}, {1}", so1, so2);
                         }
  
-                        api.AccountName = Acct.Accountname;
+                        api.AccountName = Acct.AccountName;
                         if (dict.Count > 0)
                         {
                             int stat = 0;
@@ -391,9 +391,9 @@ public class CSMigrationwrapper
 
                         // Note the : statement.  It seems weird to set Acct.migrationFolder.CurrentCountOFItems
                         // to itself, but this is done so the method will be called to increment the progress bar
-                        Acct.migrationFolder.CurrentCountOFItems = (!bSkipMessage)
-                                                                    ? Acct.migrationFolder.CurrentCountOFItems + 1
-                                                                    : Acct.migrationFolder.CurrentCountOFItems;
+                        Acct.migrationFolder.CurrentCountOfItems = (!bSkipMessage)
+                                                                    ? Acct.migrationFolder.CurrentCountOfItems + 1
+                                                                    : Acct.migrationFolder.CurrentCountOfItems;
                     }
                     iProcessedItems++;
                 }
@@ -424,47 +424,47 @@ public class CSMigrationwrapper
             ParameterModifier[] mods = { pm };*/
 
             string value = "";
-            string acctname = "";
-            int idx = Acct.Accountname.IndexOf("@");
+            string accountName = "";
+            int idx = Acct.AccountName.IndexOf("@");
             if (idx != -1)
             {
-                acctname = Acct.Accountname.Substring(0, idx);
+                accountName = Acct.AccountName.Substring(0, idx);
             }
             else
             {
                 Log.err("Illegal account name");
                 Acct.LastProblemInfo = new ProblemInfo("Illegal account name", "Error", ProblemInfo.TYPE_ERR);
-                Acct.TotalNoErrors++;
+                Acct.TotalErrors++;
                 return;
             }
 
-            Log.open(Path.GetTempPath() + acctname + ".log");
+            Log.open(Path.GetTempPath() + accountName + ".log");
             if (isServer)
             {
-                value = userobject.InitializeUser("", "", Acct.AccountID, "MAPI");
+                value = userobject.InitializeUser("MAPI", "", "", Acct.AccountID, accountName);
             }
             else
-            {               
-                value = userobject.UMInitializeUser(Acct.AccountID, "MAPI");
+            {
+                value = userobject.UMInitializeUser("MAPI", Acct.AccountID, accountName);
             }
             if (value.Length > 0)
             {
-                Log.err("Unable to initialize", acctname, value);
+                Log.err("Unable to initialize", accountName, value);
                 Acct.LastProblemInfo = new ProblemInfo(value, "Error", ProblemInfo.TYPE_ERR);
-                Acct.TotalNoErrors++;
+                Acct.TotalErrors++;
                 return;
             }
             else
             {
-                Log.info(acctname, "initialized");
+                Log.info(accountName, "initialized");
             }
            
             folderobjectarray = userobject.GetFolderObjects();
-            Acct.migrationFolder.CurrentCountOFItems = folderobjectarray.Count();
+            Acct.migrationFolder.CurrentCountOfItems = folderobjectarray.Count();
 
-            Acct.TotalNoItems = ComputeTotalMigrationCount(importopts, folderobjectarray);
+            Acct.TotalItems = ComputeTotalMigrationCount(importopts, folderobjectarray);
 
-            Log.debug("Acct.TotalNoItems:", Acct.TotalNoItems.ToString());
+            Log.debug("Acct.TotalItems:", Acct.TotalItems.ToString());
 
             ZimbraAPI api = new ZimbraAPI();
 
@@ -562,7 +562,7 @@ public class CSMigrationwrapper
                 }
                 if (folderobject.Id == 0)
                 {
-                    api.AccountName = Acct.Accountname;
+                    api.AccountName = Acct.AccountName;
 
                     string ViewType = GetFolderViewType(folderobject.ContainerClass);
                     int stat = api.CreateFolder(folderobject.FolderPath, ViewType);
@@ -570,8 +570,8 @@ public class CSMigrationwrapper
                     path = folderobject.FolderPath;
                 }
                 // Set FolderName at the end, since we trigger results on that, so we need all the values set
-                Acct.migrationFolder.TotalCountOFItems = folderobject.ItemCount; // itemobjectarray.Count();
-                Acct.migrationFolder.CurrentCountOFItems = 0;
+                Acct.migrationFolder.TotalCountOfItems = folderobject.ItemCount; // itemobjectarray.Count();
+                Acct.migrationFolder.CurrentCountOfItems = 0;
                 Acct.migrationFolder.FolderView = folderobject.ContainerClass;
                 Acct.migrationFolder.FolderName = folderobject.Name;
                 if (folderobject.Id == (int)ZimbraFolders.Trash)
@@ -583,17 +583,17 @@ public class CSMigrationwrapper
         }
         else
         {
-            Acct.TotalNoContacts = 100;
-            Acct.TotalNoMails = 1000;
-            Acct.TotalNoRules = 10;
-            Acct.TotalNoItems = 1110;
+            Acct.TotalContacts = 100;
+            Acct.TotalMails = 1000;
+            Acct.TotalRules = 10;
+            Acct.TotalItems = 1110;
 
-            // Acct.TotalNoErrors = 0;   don't set these -- adds 1 when it shouldn't
-            // Acct.TotalNoWarnings = 0;
+            // Acct.TotalErrors = 0;   don't set these -- adds 1 when it shouldn't
+            // Acct.TotalWarnings = 0;
             long count = 0;
             long totalCount = 0;
 
-            switch (Acct.Accountnum)
+            switch (Acct.AccountNum)
             {
             case 0:
                 totalCount = 100;
@@ -612,27 +612,27 @@ public class CSMigrationwrapper
                 break;
             }
             Acct.migrationFolder.FolderName = "Contacts";
-            Acct.migrationFolder.TotalCountOFItems = totalCount;
-            Acct.migrationFolder.CurrentCountOFItems = 0;
+            Acct.migrationFolder.TotalCountOfItems = totalCount;
+            Acct.migrationFolder.CurrentCountOfItems = 0;
             while (count < totalCount)
             {
                 System.Threading.Thread.Sleep(2000);
-                Acct.migrationFolder.CurrentCountOFItems =
-                    Acct.migrationFolder.CurrentCountOFItems + 20;
-                if (Acct.Accountnum == 0)
+                Acct.migrationFolder.CurrentCountOfItems =
+                    Acct.migrationFolder.CurrentCountOfItems + 20;
+                if (Acct.AccountNum == 0)
                 {
                     if (count == 60)
                     {
                         Acct.LastProblemInfo = new ProblemInfo("John Doe", "Invalid character",
                             ProblemInfo.TYPE_ERR);
-                        Acct.TotalNoErrors++;
+                        Acct.TotalErrors++;
                     }
                 }
                 count = count + 20;
             }
             Acct.migrationFolder.LastFolderInfo = new FolderInfo("Contacts", "Contact",
                 string.Format("{0} of {1}", totalCount.ToString(), totalCount.ToString()));
-            switch (Acct.Accountnum)
+            switch (Acct.AccountNum)
             {
             case 0:
                 totalCount = 700;
@@ -651,60 +651,60 @@ public class CSMigrationwrapper
                 break;
             }
             Acct.migrationFolder.FolderName = "Inbox";
-            Acct.migrationFolder.TotalCountOFItems = totalCount;
-            Acct.migrationFolder.CurrentCountOFItems = 0;
+            Acct.migrationFolder.TotalCountOfItems = totalCount;
+            Acct.migrationFolder.CurrentCountOfItems = 0;
             while ((count >= 100) & (count < totalCount))
             {
-                if (Acct.Accountnum == 0)
+                if (Acct.AccountNum == 0)
                 {
                     if (count == 200)
                     {
                         Acct.LastProblemInfo = new ProblemInfo("Message4", "Invalid UID",
                             ProblemInfo.TYPE_ERR);
-                        Acct.TotalNoErrors++;
+                        Acct.TotalErrors++;
                     }
                     if (count == 400)
                     {
                         Acct.LastProblemInfo = new ProblemInfo("TestMessage",
                             "Invalid Attachment", ProblemInfo.TYPE_ERR);
-                        Acct.TotalNoErrors++;
+                        Acct.TotalErrors++;
                     }
                     if (count == 500)
                     {
                         Acct.LastProblemInfo = new ProblemInfo("AnotherTest",
                             "Address has an unsupported format", ProblemInfo.TYPE_ERR);
-                        Acct.TotalNoErrors++;
+                        Acct.TotalErrors++;
                     }
                 }
-                if (Acct.Accountnum == 1)
+                if (Acct.AccountNum == 1)
                 {
                     if (count == 300)
                     {
                         Acct.LastProblemInfo = new ProblemInfo("Status Report",
                             "Illegal recipient", ProblemInfo.TYPE_ERR);
-                        Acct.TotalNoErrors++;
+                        Acct.TotalErrors++;
                     }
                     if (count == 400)
                     {
                         Acct.LastProblemInfo = new ProblemInfo("Company picnic",
                             "Unsupported encoding", ProblemInfo.TYPE_WARN);
-                        Acct.TotalNoWarnings++;
+                        Acct.TotalWarnings++;
                     }
                     if (count == 600)
                     {
                         Acct.LastProblemInfo = new ProblemInfo("Last call", "Duplicate UID",
                             ProblemInfo.TYPE_WARN);
-                        Acct.TotalNoWarnings++;
+                        Acct.TotalWarnings++;
                     }
                 }
                 System.Threading.Thread.Sleep(2000);
-                Acct.migrationFolder.CurrentCountOFItems =
-                    Acct.migrationFolder.CurrentCountOFItems + 100;
+                Acct.migrationFolder.CurrentCountOfItems =
+                    Acct.migrationFolder.CurrentCountOfItems + 100;
                 count = count + 100;
             }
             Acct.migrationFolder.LastFolderInfo = new FolderInfo("Inbox", "Message",
                 string.Format("{0} of {1}", totalCount.ToString(), totalCount.ToString()));
-            switch (Acct.Accountnum)
+            switch (Acct.AccountNum)
             {
             case 0:
                 totalCount = 11;
@@ -723,23 +723,23 @@ public class CSMigrationwrapper
                 break;
             }
             Acct.migrationFolder.FolderName = "Rules";
-            Acct.migrationFolder.TotalCountOFItems = totalCount;
-            Acct.migrationFolder.CurrentCountOFItems = 0;
+            Acct.migrationFolder.TotalCountOfItems = totalCount;
+            Acct.migrationFolder.CurrentCountOfItems = 0;
 
             long tempCount = count;
 
             while ((count >= tempCount) & (count <= (tempCount + 10)))
             {
                 System.Threading.Thread.Sleep(2000);
-                Acct.migrationFolder.CurrentCountOFItems =
-                    Acct.migrationFolder.CurrentCountOFItems + 10;
-                if (Acct.Accountnum == 0)
+                Acct.migrationFolder.CurrentCountOfItems =
+                    Acct.migrationFolder.CurrentCountOfItems + 10;
+                if (Acct.AccountNum == 0)
                 {
                     if (count == 710)
                     {
                         Acct.LastProblemInfo = new ProblemInfo("BugzillaRule",
                             "Unsupported condition", ProblemInfo.TYPE_ERR);
-                        Acct.TotalNoErrors++;
+                        Acct.TotalErrors++;
                     }
                 }
                 count = count + 10;

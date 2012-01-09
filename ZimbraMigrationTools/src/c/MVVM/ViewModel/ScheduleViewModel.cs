@@ -519,14 +519,14 @@ public class ScheduleViewModel: BaseViewModel
             accountid = (sourceModel.IspST) ? sourceModel.PSTFile :
                 sourceModel.ProfileList[sourceModel.CurrentProfileSelection];
         }
-        MyAcct.Accountname = accountname;
+        MyAcct.AccountName = accountname;
         MyAcct.AccountID = accountid;
-        MyAcct.Accountnum = num;
+        MyAcct.AccountNum = num;
         MyAcct.OnChanged += new MigrationObjectEventHandler(Acct_OnAcctChanged);
 
         MigrationFolder MyFolder = new MigrationFolder();
 
-        MyFolder.Accountnum = num;
+        MyFolder.AccountNum = num;
         MyFolder.OnChanged += new MigrationObjectEventHandler(Folder_OnChanged);
 
         MyAcct.migrationFolder = MyFolder;
@@ -594,27 +594,27 @@ public class ScheduleViewModel: BaseViewModel
         MigrationAccount a = (MigrationAccount)sender;
         AccountResultsViewModel accountResultsViewModel =
             ((AccountResultsViewModel)ViewModelPtrs[(int)ViewType.RESULTS]);    // main one
-        AccountResultsViewModel ar = accountResultsViewModel.AccountResultsList[a.Accountnum];
+        AccountResultsViewModel ar = accountResultsViewModel.AccountResultsList[a.AccountNum];
 
-        if (e.PropertyName == "TotalNoItems")
+        if (e.PropertyName == "TotalItems")
         {
             ar.TotalItemsToMigrate = Int32.Parse(e.NewValue.ToString());
         }
-        if (e.PropertyName == "TotalNoErrors")
+        if (e.PropertyName == "TotalErrors")
         {
-            ar.NumErrs = (int)a.TotalNoErrors + 1;      // this happens first
+            ar.NumErrs = (int)a.TotalErrors + 1;      // this happens first
             ar.AccountProblemsList.Add(a.LastProblemInfo);
         }
-        else if (e.PropertyName == "TotalNoWarnings")
+        else if (e.PropertyName == "TotalWarnings")
         {
-            ar.NumWarns = (int)a.TotalNoWarnings + 1;   // this happens first
+            ar.NumWarns = (int)a.TotalWarnings + 1;   // this happens first
             ar.AccountProblemsList.Add(a.LastProblemInfo);
         }
         else
         {
             msg = "Begin {0} Migration";
-            ar.PBMsgValue = String.Format(msg, a.Accountname);
-            accountResultsViewModel.PBMsgValue = String.Format(msg, a.Accountname);     // for the user results window
+            ar.PBMsgValue = String.Format(msg, a.AccountName);
+            accountResultsViewModel.PBMsgValue = String.Format(msg, a.AccountName);     // for the user results window
         }
     }
 
@@ -623,27 +623,27 @@ public class ScheduleViewModel: BaseViewModel
         MigrationFolder f = (MigrationFolder)sender;
         AccountResultsViewModel accountResultsViewModel =
             ((AccountResultsViewModel)ViewModelPtrs[(int)ViewType.RESULTS]);    // main one
-        AccountResultsViewModel ar = accountResultsViewModel.AccountResultsList[f.Accountnum];
+        AccountResultsViewModel ar = accountResultsViewModel.AccountResultsList[f.AccountNum];
 
-        if (bgwlist[f.Accountnum].CancellationPending)
+        if (bgwlist[f.AccountNum].CancellationPending)
         {
-            eventArglist[f.Accountnum].Cancel = true;
+            eventArglist[f.AccountNum].Cancel = true;
             return;
         }
-        if (e.PropertyName == "CurrentCountofItems")
+        if (e.PropertyName == "CurrentCountOfItems")
         {
             if (f.FolderName != null)
             {
                 if (e.NewValue.ToString() != "0")
                 {
                     string msg1 = "{0} of {1}";
-                    string msgF = String.Format(msg1, f.CurrentCountOFItems, f.TotalCountOFItems);
+                    string msgF = String.Format(msg1, f.CurrentCountOfItems, f.TotalCountOfItems);
                     ar.AcctProgressMsg = msgF;
 
                     int count = ar.UserResultsList.Count;
                     ar.UserResultsList[count - 1].UserProgressMsg = msgF;
-                    accountResultsViewModel.PBValue = accountResultsViewModel.AccountResultsList[f.Accountnum].PBValue;
-                    accountResultsViewModel.UserPBMsgValue = accountResultsViewModel.AccountResultsList[f.Accountnum].PBMsgValue;
+                    accountResultsViewModel.PBValue = accountResultsViewModel.AccountResultsList[f.AccountNum].PBValue;
+                    accountResultsViewModel.UserPBMsgValue = accountResultsViewModel.AccountResultsList[f.AccountNum].PBMsgValue;
 
                     // TEMPORARY !!! WHEN I GET RID OF FAKE PREVIEW, TAKE THIS OUT AND REPLACE WITH ar.CurrentItemNum++
                     if (m_isPreview)
@@ -662,22 +662,22 @@ public class ScheduleViewModel: BaseViewModel
                             (Decimal)ar.TotalItemsToMigrate) * 100);
                          // /////////////////////
 
-                    bgwlist[f.Accountnum].ReportProgress(ar.PBValue, f.Accountnum);
+                    bgwlist[f.AccountNum].ReportProgress(ar.PBValue, f.AccountNum);
                 }
             }
         }
-        if (e.PropertyName == "TotalCountOFItems")      // finish up with the last folder
+        if (e.PropertyName == "TotalCountOfItems")      // finish up with the last folder
         {
             if (f.FolderName != null)
             {
                 string msg2 = "{0} of {1}";
-                string msgF = String.Format(msg2, f.CurrentCountOFItems, f.TotalCountOFItems);
+                string msgF = String.Format(msg2, f.CurrentCountOfItems, f.TotalCountOfItems);
                 ar.AcctProgressMsg = msgF;
 
                 int count = ar.UserResultsList.Count;
                 ar.UserResultsList[count - 1].UserProgressMsg = msgF;
-                accountResultsViewModel.PBValue = accountResultsViewModel.AccountResultsList[f.Accountnum].PBValue;
-                accountResultsViewModel.UserPBMsgValue = accountResultsViewModel.AccountResultsList[f.Accountnum].PBMsgValue;
+                accountResultsViewModel.PBValue = accountResultsViewModel.AccountResultsList[f.AccountNum].PBValue;
+                accountResultsViewModel.UserPBMsgValue = accountResultsViewModel.AccountResultsList[f.AccountNum].PBMsgValue;
             }
         }
         if (e.PropertyName == "FolderName")
@@ -691,8 +691,8 @@ public class ScheduleViewModel: BaseViewModel
                 ar.PBMsgValue = String.Format(msg3, folderName);
                 accountResultsViewModel.PBMsgValue = String.Format(msg3, folderName);   // for the user results window
                 f.LastFolderInfo = new FolderInfo(e.NewValue.ToString(), folderType,
-                    string.Format("{0} of {1}", f.CurrentCountOFItems,
-                    f.TotalCountOFItems));
+                    string.Format("{0} of {1}", f.CurrentCountOfItems,
+                    f.TotalCountOfItems));
 
                 ar.UserResultsList.Add(new UserResultsViewModel(folderName, folderType, ar.AcctProgressMsg));
             }

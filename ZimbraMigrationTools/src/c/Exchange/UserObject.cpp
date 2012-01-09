@@ -4,8 +4,6 @@
 #include "Logger.h"
 #include "UserObject.h"
 
-// CUserObject
-
 STDMETHODIMP CUserObject::InterfaceSupportsErrorInfo(REFIID riid)
 {
     static const IID *const arr[] = {
@@ -22,6 +20,13 @@ STDMETHODIMP CUserObject::InterfaceSupportsErrorInfo(REFIID riid)
 
 long CUserObject::Initialize(BSTR Id)
 {
+    wstring path(dlog.file());
+    wstring::size_type pos = path.rfind('\\');
+
+    path.erase(pos + 1);
+    path += Id;
+    path += L".log";
+    dlog.open(path.c_str());
     UserID = Id;
     MailType = L"MAPI";
     return 0;
@@ -44,8 +49,8 @@ long CUserObject::UnInitialize()
     return 0;
 }
 
-STDMETHODIMP CUserObject::InitializeUser(BSTR host, BSTR admin, BSTR UserID, BSTR MailType,
-    BSTR *pErrorText)
+STDMETHODIMP CUserObject::InitializeUser(BSTR host, BSTR admin, BSTR AccountID,
+    BSTR AccountName, BSTR *pErrorText)
 {
     HRESULT hr = S_OK;
     long retval = 0;
@@ -55,67 +60,51 @@ STDMETHODIMP CUserObject::InitializeUser(BSTR host, BSTR admin, BSTR UserID, BST
     temp = admin;
     // ////////////
 
-    retval = Initialize(UserID);
+    retval = Initialize(AccountName);
     // Logger = CSingleton::getInstance();
-    if (wcscmp(MailType, L"MAPI") == 0)
-    {
-        // Initialize the Mapi API..
 
-        dlogd("initialize user");
-        // Create Session and Open admin store.
-        // Its a static function and store/session will be used commonly by all mailboxes.
-        // MAPIAccessAPI::InitGlobalSessionAndStore(host,admin);
-        // TODO for Karuna: Call MAPIAccessAPI::UnInitGlobalSessionAndStore() to realse global session and store.
-        // Specify user.
-        maapi = new Zimbra::MAPI::MAPIAccessAPI(UserID);
+    dlogd("initialize", AccountID, L" ", AccountName);
+    // Create Session and Open admin store.
+    // Its a static function and store/session will be used commonly by all mailboxes.
+    // MAPIAccessAPI::InitGlobalSessionAndStore(host,admin);
+    // TODO for Karuna: Call MAPIAccessAPI::UnInitGlobalSessionAndStore() to realse global session and store.
+    // Specify user.
+    maapi = new Zimbra::MAPI::MAPIAccessAPI(AccountID);
 
-        // Init session and stores
-        LPCWSTR lpStatus = maapi->InitializeUser();
+    // Init session and stores
+    LPCWSTR lpStatus = maapi->InitializeUser();
 
-        *pErrorText = (lpStatus) ? CComBSTR(lpStatus) : SysAllocString(L"");
-    }
-    else
-    {
-        *pErrorText = SysAllocString(L"");
-    }
+    *pErrorText = (lpStatus) ? CComBSTR(lpStatus) : SysAllocString(L"");
     return hr;
 }
 
-STDMETHODIMP CUserObject::UMInitializeUser(BSTR ProfileName, BSTR MailType, BSTR *pErrorText)
+STDMETHODIMP CUserObject::UMInitializeUser(BSTR ProfileName, BSTR AccountName,
+    BSTR *pErrorText)
 {
     HRESULT hr = S_OK;
     long retval = 0;
 
-    retval = Initialize(L"");
-    if (wcscmp(MailType, L"MAPI") == 0)
+    retval = Initialize(AccountName);
+    // Initialize the Mapi API..
+
+    dlogd("UMInitializeUser ", ProfileName, L" ", AccountName);
+
+    LPCWSTR lpwstrStatus = MAPIAccessAPI::InitGlobalSessionAndStore(ProfileName);
+
+    if (!lpwstrStatus)
     {
-        // Initialize the Mapi API..
-
-        dlogd("UMInitializeUser -- ProfileName: ", ProfileName);
-
-        LPCWSTR lpwstrStatus = MAPIAccessAPI::InitGlobalSessionAndStore(ProfileName);
-
-        if (!lpwstrStatus)
-        {
-            maapi = new Zimbra::MAPI::MAPIAccessAPI(L"");
-            lpwstrStatus = maapi->InitializeUser();
-        }
-        *pErrorText = (lpwstrStatus) ? CComBSTR(lpwstrStatus) : SysAllocString(L"");
+        maapi = new Zimbra::MAPI::MAPIAccessAPI(L"");
+        lpwstrStatus = maapi->InitializeUser();
     }
-    else
-    {
-        *pErrorText = SysAllocString(L"");
-    }
+    *pErrorText = (lpwstrStatus) ? CComBSTR(lpwstrStatus) : SysAllocString(L"");
     return hr;
 }
 
-STDMETHODIMP CUserObject::UMUnInitializeUser(BSTR MailType)
+STDMETHODIMP CUserObject::UMUnInitializeUser()
 {
-    HRESULT hr = S_OK;
-
-    if (wcscmp(MailType, L"MAPI") == 0)
-        MAPIAccessAPI::UnInitGlobalSessionAndStore();
-    return hr;
+    dlogd("UnInitializeUser");
+    MAPIAccessAPI::UnInitGlobalSessionAndStore();
+    return S_OK;
 }
 
 STDMETHODIMP CUserObject::GetFolderObjects( /*[out, retval]*/ VARIANT *vObjects)

@@ -172,6 +172,7 @@ void Log::endlog(Tlsdata &tlsd, Level clvl)
             strbuf += *p;
         }
     }
+    strbuf += '\r';
     strbuf += '\n';
     ffd.write(strbuf.c_str(), (unsigned)strbuf.size());
     lck.Leave();
