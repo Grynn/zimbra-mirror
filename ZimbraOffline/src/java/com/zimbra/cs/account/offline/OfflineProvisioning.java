@@ -510,7 +510,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 
     @Override
     public synchronized Set<String> getDistributionLists(Account acct) throws ServiceException {
-        throw OfflineServiceException.UNSUPPORTED("getDistributionLists");
+        return null;
     }
 
     @Override
