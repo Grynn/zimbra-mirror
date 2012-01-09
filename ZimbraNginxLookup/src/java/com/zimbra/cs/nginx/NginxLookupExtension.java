@@ -253,6 +253,9 @@ public class NginxLookupExtension implements ZimbraExtension {
             attr = config.getAttr(Provisioning.A_zimbraReverseProxyHttpPortAttribute);
             if (attr != null)
                 attrs.add(attr);
+            attr = config.getAttr(Provisioning.A_zimbraReverseProxyHttpSSLPortAttribute);
+            if (attr != null)
+                attrs.add(attr);
             
             return attrs.toArray(new String[attrs.size()]);
         }
@@ -436,29 +439,29 @@ public class NginxLookupExtension implements ZimbraExtension {
 
             return sb.toString();
         }
-        
-        private String getPortAttribute(NginxLookupRequest req) throws NginxLookupException
-        {
-            String proto = req.proto;
-
-            if (IMAP.equalsIgnoreCase(proto))
-                return Provisioning.A_zimbraReverseProxyImapPortAttribute;
-            else if (IMAP_SSL.equalsIgnoreCase(proto))
-                return Provisioning.A_zimbraReverseProxyImapSSLPortAttribute;
-            else if (POP3.equalsIgnoreCase(proto))
-                return Provisioning.A_zimbraReverseProxyPop3PortAttribute;
-            else if (POP3_SSL.equalsIgnoreCase(proto))
-                return Provisioning.A_zimbraReverseProxyPop3SSLPortAttribute;
-            else if (HTTP.equalsIgnoreCase(proto)) {
-                if (req.isZimbraAdmin) {
-                    return Provisioning.A_zimbraReverseProxyAdminPortAttribute;
-                } else {
-                    return Provisioning.A_zimbraReverseProxyHttpPortAttribute;
-                }
-            }
-            else
-                throw new NginxLookupException("unsupported protocol: "+proto);
-        }
+//        comment out unused method       
+//        private String getPortAttribute(NginxLookupRequest req) throws NginxLookupException
+//        {
+//            String proto = req.proto;
+//
+//            if (IMAP.equalsIgnoreCase(proto))
+//                return Provisioning.A_zimbraReverseProxyImapPortAttribute;
+//            else if (IMAP_SSL.equalsIgnoreCase(proto))
+//                return Provisioning.A_zimbraReverseProxyImapSSLPortAttribute;
+//            else if (POP3.equalsIgnoreCase(proto))
+//                return Provisioning.A_zimbraReverseProxyPop3PortAttribute;
+//            else if (POP3_SSL.equalsIgnoreCase(proto))
+//                return Provisioning.A_zimbraReverseProxyPop3SSLPortAttribute;
+//            else if (HTTP.equalsIgnoreCase(proto)) {
+//                if (req.isZimbraAdmin) {
+//                    return Provisioning.A_zimbraReverseProxyAdminPortAttribute;
+//                } else {
+//                    return Provisioning.A_zimbraReverseProxyHttpPortAttribute;
+//                }
+//            }
+//            else
+//                throw new NginxLookupException("unsupported protocol: "+proto);
+//        }
         
         /**
          * verify that the request is from the legitimate nginx admin 
@@ -626,6 +629,7 @@ public class NginxLookupExtension implements ZimbraExtension {
                 // get all the ports and cache them
                 Map<String, Boolean> attrs = new HashMap<String, Boolean>();
                 attrs.put(Provisioning.A_zimbraReverseProxyHttpPortAttribute, false);
+                attrs.put(Provisioning.A_zimbraReverseProxyHttpSSLPortAttribute, false);
                 attrs.put(Provisioning.A_zimbraReverseProxyAdminPortAttribute, false);
                 attrs.put(Provisioning.A_zimbraReverseProxyPop3PortAttribute, false);
                 attrs.put(Provisioning.A_zimbraReverseProxyPop3SSLPortAttribute, false);
@@ -647,6 +651,7 @@ public class NginxLookupExtension implements ZimbraExtension {
                 Map<String, String> vals = sdr.configuredAttrs;
                 serverInfo = new ServerInfo(mailhost); 
                 serverInfo.setHttpPort(getPort(vals, Provisioning.A_zimbraReverseProxyHttpPortAttribute, config));
+                serverInfo.setHttpSSLPort(getPort(vals, Provisioning.A_zimbraReverseProxyHttpSSLPortAttribute, config));
                 serverInfo.setHttpAdminPort(getPort(vals, Provisioning.A_zimbraReverseProxyAdminPortAttribute, config));
                 serverInfo.setPop3Port(getPort(vals, Provisioning.A_zimbraReverseProxyPop3PortAttribute, config));
                 serverInfo.setPop3SSLPort(getPort(vals, Provisioning.A_zimbraReverseProxyPop3SSLPortAttribute, config));

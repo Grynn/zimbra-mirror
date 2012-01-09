@@ -12,7 +12,15 @@ http
         zmauth;
     }
 
-    #  Define the coolection of upstream admin console servers to which we will
+    #  Define the collection of upstream HTTPS servers to which we will proxy
+    #  Define each server:port against a server directive
+    upstream ${web.ssl.upstream.name}
+    {
+        ${web.ssl.upstream.:servers}
+        zmauth;
+    }
+
+    #  Define the collection of upstream admin console servers to which we will
     #  proxy. Define each server:port against a server directive
     #
     upstream ${web.admin.upstream.name}

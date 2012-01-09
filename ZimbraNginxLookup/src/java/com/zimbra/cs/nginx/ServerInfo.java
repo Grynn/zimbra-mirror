@@ -17,6 +17,7 @@ package com.zimbra.cs.nginx;
 public class ServerInfo extends LookupEntry {
     
     private String mHttpPort;
+    private String mHttpSSLPort;
     private String mHttpAdminPort;
     private String mHttpPop3Port;
     private String mHttpPop3SSLPort;
@@ -29,6 +30,10 @@ public class ServerInfo extends LookupEntry {
     
     void setHttpPort(String port) {
         mHttpPort = port;
+    }
+    
+    void setHttpSSLPort(String port) {
+        mHttpSSLPort = port;
     }
     
     void setHttpAdminPort(String port) {
@@ -66,7 +71,7 @@ public class ServerInfo extends LookupEntry {
             if (isZimbraAdmin) {
                 return mHttpAdminPort;
             } else {
-                return "0"; //TODO; return HTTP SSL Port
+                return mHttpSSLPort;
             }
         }
         
