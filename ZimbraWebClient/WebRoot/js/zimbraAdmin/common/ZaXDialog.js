@@ -49,6 +49,8 @@ ZaXDialog = function(parent,className, title, w, h,iKeyName, contextId) {
     if (this._supportMinimize) {
         this.addMiniIcon();
         this.addPopdownListener(new AjxListener(this, this.popdownHookListner));
+        if(AjxEnv.isIE)
+            this.setTitleWidth(ZaId.getDialogId(this._contextId),w ? w:"500px");  //for ie
     }
 	this._app = ZaApp.getInstance();
 	this._localXForm = null;
@@ -104,6 +106,12 @@ function () {
         this._minEl.innerHTML = AjxImg.getImageHtml("CollapseRight");
 	    this._minEl.onclick = AjxCallback.simpleClosure(ZaXDialog.prototype.__handleMinClick, this);
     }
+}
+ZaXDialog.prototype.setTitleWidth =
+function (id, width) {
+    width = width.replace("px","");
+    var titleWidth = Dwt.__checkPxVal(width-24-10);//24 is width for mini icon,5 for padding,
+    document.getElementById(id+"_title").style.width = titleWidth;
 }
 
 ZaXDialog.prototype.getTaskItem = function() {

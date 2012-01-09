@@ -376,3 +376,7 @@ div.ZmSelectedHeaderBg {
 .ZaSearchOptionDialog {
     border: 1px solid black;
 }
+
+.DwtDialog .WindowOuterContainer table{
+    #border-collapse: collapse;  /*only IE read the attribute after '#'*/
+}
