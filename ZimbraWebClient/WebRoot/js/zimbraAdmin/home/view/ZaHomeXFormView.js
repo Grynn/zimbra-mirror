@@ -250,8 +250,9 @@ ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
 
                 {type:_GROUP_, numCols:3,  width:"100%", colSizes:ZaHomeXFormView.getWarningPanelCol(), containerCssClass:"ZaHomeWarnginItem",
                     visibilityChecks:[[XForm.checkInstanceValueNot,ZaHome.A2_serviceStatus,true],[ZaHomeXFormView.showStatusInfo]],
+                    visibilityChangeEventSources: [ZaHome.A2_serviceStatus],
                     items:[
-                        {type:_OUTPUT_, ref: ZaHome.A2_serviceStatus,
+                        {type:_OUTPUT_, ref: ZaHome.A2_serviceStatus, bmolsnr: true,
                             getDisplayValue: function (value){
                                 if (value === undefined) {
                                     return AjxImg.getImageHtml ("UnKnownStatus");
@@ -262,7 +263,7 @@ ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
                                 }
                             }
                         },
-                        {type:_OUTPUT_, ref: ZaHome.A2_serviceDetailedMessage},
+                        {type:_OUTPUT_, ref: ZaHome.A2_serviceDetailedMessage, bmolsnr: true},
                         {type:_OUTPUT_, value:ZaMsg.LBL_HomeLinkServerStatus, containerCssClass:"ZaLinkedItem",onClick: ZaHomeXFormView.onViewService}
                 ]}
             ]},
@@ -271,10 +272,10 @@ ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
                 {type:_GROUP_, numCols: 2, valign: _TOP_, items:[
                     {type:_OUTPUT_, colSpan:"2", value:ZaMsg.LBL_HomeSummary, cssClass:"ZaHomeInfoTitle"},
                     {type:_OUTPUT_, label:ZaMsg.LBL_HomeZimbraVersion, ref: ZaHome.A2_version},
-                    {type:_OUTPUT_, label:ZaMsg.LBL_HomeServerNum, ref: ZaHome.A2_serverNum},
-                    {type:_OUTPUT_, label:ZaMsg.LBL_HomeAccountNum, ref: ZaHome.A2_accountNum},
-                    {type:_OUTPUT_, label:ZaMsg.LBL_HomeDomainNum, ref: ZaHome.A2_domainNum},
-                    {type:_OUTPUT_, label:ZaMsg.LBL_HomeCosNum, ref: ZaHome.A2_cosNum}
+                    {type:_OUTPUT_, label:ZaMsg.LBL_HomeServerNum, ref: ZaHome.A2_serverNum, bmolsnr: true},
+                    {type:_OUTPUT_, label:ZaMsg.LBL_HomeAccountNum, ref: ZaHome.A2_accountNum, bmolsnr: true},
+                    {type:_OUTPUT_, label:ZaMsg.LBL_HomeDomainNum, ref: ZaHome.A2_domainNum, bmolsnr: true},
+                    {type:_OUTPUT_, label:ZaMsg.LBL_HomeCosNum, ref: ZaHome.A2_cosNum, bmolsnr: true}
                 ]},
                 {type:_GROUP_, numCols: 2, valign: _TOP_, width:"100%", items:[
                     {type:_OUTPUT_, colSpan:"*", value:ZaMsg.LBL_HomeMaintenance, cssClass:"ZaHomeInfoTitle"},
@@ -328,7 +329,7 @@ ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
                     {type:_OUTPUT_, colSpan:"2", value:ZaMsg.LBL_HomeRuntime, cssClass:"ZaHomeInfoTitle"},
                     {type:_GROUP_, colSpan:"*", numCols:3, width: "100%", colSizes:["*", "16px", "78px"],items:[
                         {type:_OUTPUT_, value:ZaMsg.LBL_HomeService},
-                        {type:_OUTPUT_, ref: ZaHome.A2_serviceStatus,
+                        {type:_OUTPUT_, ref: ZaHome.A2_serviceStatus, bmolsnr: true,
                             visibilityChecks:[[ZaHomeXFormView.showStatusInfo]],
                             getDisplayValue: function (value){
                                 if (value === undefined) {
@@ -340,11 +341,12 @@ ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
                                 }
                             }
                         },
-                        {type:_OUTPUT_, ref: ZaHome.A2_serviceStatusMessage}
+                        {type:_OUTPUT_, ref: ZaHome.A2_serviceStatusMessage, bmolsnr: true}
                     ]},
                     {type:_OUTPUT_, label:ZaMsg.LBL_HomeActiveSession, align:_LEFT_, ref: ZaHome.A2_activeSession,
+                         bmolsnr: true,
                         visibilityChecks:[[ZaHomeXFormView.showStaticsInfo]]},
-                    {type:_OUTPUT_, label:ZaMsg.LBL_HomeQueueLength, ref: ZaHome.A2_queueLength,
+                    {type:_OUTPUT_, label:ZaMsg.LBL_HomeQueueLength, ref: ZaHome.A2_queueLength, bmolsnr: true,
                         visibilityChecks:[[ZaHomeXFormView.showStaticsInfo]]},
                     {type:_OUTPUT_, label:ZaMsg.LBL_HomeMsgCount, ref: ZaHome.A2_messageCount},
                     {type:_OUTPUT_, label:ZaMsg.LBL_HomeMsgVolume, ref: ZaHome.A2_messageVolume}

@@ -73,4 +73,11 @@ function(entry) {
     this._currentObject = entry;
     this._view.setObject(entry);
     ZaApp.getInstance().pushView(this.getContentViewId()) ;
+    entry.schedulePostLoading();
+}
+
+ZaHomeController.prototype.setInstanceValue =
+function (value, ref) {
+    var xformView = this._view._localXForm;
+    xformView.setInstanceValue (value, ref);
 }

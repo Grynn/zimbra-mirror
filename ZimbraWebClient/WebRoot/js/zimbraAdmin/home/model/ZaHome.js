@@ -11,6 +11,7 @@ ZaHome = function() {
 }
 ZaItem.loadMethods["ZaHome"] = new Array();
 ZaItem.initMethods["ZaHome"] = new Array();
+ZaHome.postLoadDataFunction = new Array();
 
 ZaHome.prototype = new ZaItem;
 ZaHome.prototype.constructor = ZaHome;
@@ -50,83 +51,209 @@ function () {
     this.attrs[ZaHome.A2_account] = ZaZimbraAdmin.currentAdminAccount.attrs.mail;
     this.attrs[ZaHome.A2_version] = ZaServerVersionInfo.version;
 
-    try {
-        this.attrs[ZaHome.A2_accountNum] = ZaApp.getInstance().getAccountStats(true)[ZaItem.ACCOUNT];
-    } catch (ex) {
-         this.attrs[ZaHome.A2_accountNum] = 1;
-    }
+    this.attrs[ZaHome.A2_accountNum] = ZaMsg.MSG_HomeLoading;
+    this.attrs[ZaHome.A2_cosNum] = ZaMsg.MSG_HomeLoading;
+    this.attrs[ZaHome.A2_domainNum] = ZaMsg.MSG_HomeLoading;
+    this.attrs[ZaHome.A2_serverNum] = ZaMsg.MSG_HomeLoading;
+    this.attrs[ZaHome.A2_activeSession] = ZaMsg.MSG_HomeLoading;
 
-    try {
-        this.attrs[ZaHome.A2_cosNum] = ZaApp.getInstance().getCosList(true).size();
-    } catch (ex) {
-         this.attrs[ZaHome.A2_accountNum] = 1;
-    }
-
-    try {
-        this.attrs[ZaHome.A2_domainNum] = ZaApp.getInstance().getDomainList(true).size();
-    } catch (ex) {
-        this.attrs[ZaHome.A2_domainNum] = 1;
-    }
-
-    try {
-        this.attrs[ZaHome.A2_serverNum] = ZaApp.getInstance().getServerList(true).size();
-    } catch (ex) {
-        this.attrs[ZaHome.A2_serverNum]  = 1;
-    }
     this.attrs[ZaHome.A2_lastCleanup] = true;
     this.attrs[ZaHome.A2_lastCleanupTime] = currentTime;
     this.attrs[ZaHome.A2_lastLogPurge] = true;
     this.attrs[ZaHome.A2_lastLogPurgeTime] = currentTime;
     this.attrs[ZaHome.A2_DBCheckType] = true;
     this.attrs[ZaHome.A2_DBCheckMessage] = ZaMsg.LBL_HomeStatusOK;
-    this.attrs[ZaHome.A2_serviceStatusMessage] = ZaMsg.LBL_HomeStatusRunning ;
+    this.attrs[ZaHome.A2_serviceStatusMessage] = ZaMsg.MSG_HomeLoading;
+    this.attrs[ZaHome.A2_serviceDetailedMessage] = ZaMsg.MSG_HomeLoading;
+    this.attrs[ZaHome.A2_queueLength] = ZaMsg.MSG_HomeLoading;
     this.attrs[ZaHome.A2_messageCount] = "120/h";
     this.attrs[ZaHome.A2_messageVolume] = "34MB/h";
 }
 ZaItem.loadMethods["ZaHome"].push(ZaHome.loadMethod);
 
+ZaHome.loadAccountNum = function() {
+    var num = 1;
+    try {
+        num = ZaApp.getInstance().getAccountStats(true)[ZaItem.ACCOUNT];
+    } catch (ex) {
+
+    }
+    ZaApp.getInstance().getHomeViewController().setInstanceValue(num, ZaHome.A2_accountNum);
+}
+
+ZaHome.postLoadDataFunction.push(ZaHome.loadAccountNum);
+
+ZaHome.prototype.updateAccountNum = function(resp) {
+    ZaApp.getInstance().getHomeViewController().setInstanceValue(num, ZaHome.A2_accountNum);
+}
+
+ZaHome.loadServerServerNum = function() {
+    var soapDoc = AjxSoapDoc.create("GetAllServersRequest", ZaZimbraAdmin.URN, null);
+	soapDoc.getMethod().setAttribute("applyConfig", "false");
+//	var command = new ZmCsfeCommand();
+    var updateServerNum = new AjxCallback(this, this.updateServerNum);
+	var params = new Object();
+	params.soapDoc = soapDoc;
+	params.asyncMode = true;
+    params.callback = updateServerNum;
+	var reqMgrParams = {
+		controller : ZaApp.getInstance().getCurrentController(),
+		busyMsg : ZaMsg.BUSY_GET_ALL_SERVER
+	}
+	var resp = ZaRequestMgr.invoke(params, reqMgrParams);
+	return resp;
+}
+
+ZaHome.postLoadDataFunction.push(ZaHome.loadServerServerNum);
+
+ZaHome.prototype.updateServerNum = function(resp) {
+    var num = 1;
+    try {
+        var resp = resp.getResponse().Body.GetAllServersResponse;
+        var list = new ZaItemList(ZaServer);
+        list.loadFromJS(resp);
+        num = list.size();
+    } catch (ex) {
+
+    }
+    ZaApp.getInstance().getHomeViewController().setInstanceValue(num, ZaHome.A2_serverNum);
+}
+
+ZaHome.loadDomainNum = function() {
+    var num = 1;
+    try {
+        num = ZaApp.getInstance().getDomainList(true).size();
+    } catch (ex) {
+
+    }
+    ZaApp.getInstance().getHomeViewController().setInstanceValue(num, ZaHome.A2_domainNum);
+}
+
+ZaHome.postLoadDataFunction.push(ZaHome.loadDomainNum);
+
+ZaHome.prototype.updateDomainNum = function(resp) {
+    var num = 1;
+    try {
+        var resp = resp.getResponse().Body.GetAllServersResponse;
+        var list = new ZaItemList(ZaDomain);
+        list.loadFromJS(resp);
+        num = list.size();
+    } catch (ex) {
+
+    }
+    ZaApp.getInstance().getHomeViewController().setInstanceValue(num, ZaHome.A2_domainNum);
+}
+
+ZaHome.loadCosNum = function() {
+    var num = 1
+    try {
+        num = ZaApp.getInstance().getCosList(true).size();
+    } catch (ex) {
+
+    }
+    ZaApp.getInstance().getHomeViewController().setInstanceValue(num, ZaHome.A2_cosNum);
+}
+
+ZaHome.postLoadDataFunction.push(ZaHome.loadCosNum);
+
+ZaHome.prototype.updateCosNum = function(resp) {
+    var num = 1;
+    ZaApp.getInstance().getHomeViewController().setInstanceValue(num, ZaHome.A2_cosNum);
+}
+
 ZaHome.loadStatusfo = function () {
     try {
-        var status = new ZaStatus();
-        status.load();
-        var statusVector = status.getStatusVector();
-        var serverStatus;
-        if (statusVector.size() > 0) {
-            this.attrs[ZaHome.A2_serviceStatus] = true;
-            this.attrs[ZaHome.A2_serviceStatusMessage] = ZaMsg.LBL_HomeStatusRunning ;
-            for(var i = 0; i < statusVector.size(); i++) {
-                serverStatus = statusVector.get(i);
-                if (serverStatus.status != 1) {
-                    this.attrs[ZaHome.A2_serviceStatus] = false;
-                    this.attrs[ZaHome.A2_serviceStatusMessage] = ZaMsg.LBL_HomeStatusFailed;
-                    this.attrs[ZaHome.A2_serviceDetailedMessage] = ZaMsg.LBL_HomeDetailedServiceNotRunning;
-                    break;
-                }
-            }
-        } else {
-            this.attrs[ZaHome.A2_serviceStatusMessage] = ZaMsg.LBL_HOmeStatusUnknown ;
-            this.attrs[ZaHome.A2_serviceDetailedMessage] = ZaMsg.LBL_HomeDetailedServiceUnknown;
+		var logHost = ZaApp.getInstance().getGlobalConfig().attrs[ZaServer.A_zimbraLogHostname];
+		//if zimbraLogHostname is set
+		if (logHost) {
+			var soapDoc = AjxSoapDoc.create("GetServiceStatusRequest", ZaZimbraAdmin.URN, null);
+            var updateServiceStatus = new AjxCallback(this, this.updateServiceStatus);
+			var command = new ZmCsfeCommand();
+			var params = new Object();
+			params.soapDoc = soapDoc;
+            params.asyncMode = true;
+            params.callback = updateServiceStatus;
+			command.invoke(params);
+		} else {
+            this.updateServiceStatus();
         }
     } catch (ex) {
         this.attrs[ZaHome.A2_serviceStatusMessage] = ZaMsg.LBL_HOmeStatusUnknown ;
         this.attrs[ZaHome.A2_serviceDetailedMessage] = ZaMsg.LBL_HomeDetailedServiceUnknown;
     }
 }
-ZaItem.loadMethods["ZaHome"].push(ZaHome.loadStatusfo);
+ZaHome.postLoadDataFunction.push(ZaHome.loadStatusfo);
+
+ZaHome.prototype.updateServiceStatus = function (resp) {
+    var status = new ZaStatus();
+    if (resp) {
+        resp = resp.getResponse().Body.GetServiceStatusResponse;
+        status.initFromJS(resp);
+    }
+    var serviceStatus;
+    var serviceStatusMessage = ZaMsg.LBL_HOmeStatusUnknown;
+    var serviceDetailedMessage = ZaMsg.LBL_HomeDetailedServiceUnknown;
+    try {
+        var statusVector = status.getStatusVector();
+        var serverStatus;
+        if (statusVector.size() > 0) {
+            serviceStatus = true;
+            serviceStatusMessage = ZaMsg.LBL_HomeStatusRunning ;
+            for(var i = 0; i < statusVector.size(); i++) {
+                serverStatus = statusVector.get(i);
+                if (serverStatus.status != 1) {
+                    serviceStatus = false;
+                    serviceStatusMessage= ZaMsg.LBL_HomeStatusFailed;
+                    serviceDetailedMessage = ZaMsg.LBL_HomeDetailedServiceNotRunning;
+                    break;
+                }
+            }
+        }
+    } catch (ex) {
+    }
+    ZaApp.getInstance().getHomeViewController().setInstanceValue(serviceStatus, ZaHome.A2_serviceStatus);
+    ZaApp.getInstance().getHomeViewController().setInstanceValue(serviceStatusMessage, ZaHome.A2_serviceStatusMessage);
+    ZaApp.getInstance().getHomeViewController().setInstanceValue(serviceDetailedMessage, ZaHome.A2_serviceDetailedMessage);
+}
 
 ZaHome.loadActiveSesson = function () {
     var serverList = ZaApp.getInstance().getServerList().getArray();
     var totalSession = 0;
     if(serverList && serverList.length) {
         var sessionType = ["soap", "admin", "imap"];
+        var parameterList = []
         var cnt = serverList.length;
-        for(var i=0; i< cnt; i++) {
-            var serverInfo = serverList[i];
-            for (var j = 0; j < sessionType.length; j++) {
+        for (var i = 0; i < cnt; i++) {
+            for (var j = 0 ; j < sessionType.length; j ++) {
+               parameterList.push (
+                   {
+                       targetServer: serverList[i].id,
+                       type: sessionType[j]
+                   }
+               )
+            }
+        }
+
+        var loadOneSessionNumer = function (resp) {
+            if (!resp) {
+                totalSession =  0;
+            } else {
+                if(resp && resp.getException && !resp.getException()) {
+                    resp = resp.getResponse();
+                    if (resp && resp.Body && resp.Body.GetSessionsResponse) {
+                        var sessionStats = resp.Body.GetSessionsResponse;
+                            totalSession += sessionStats.total;
+                    }
+                }
+            }
+
+            if (parameterList.length > 0) {
+                var currentSession = parameterList.shift();
                 try {
                     var soapDoc = AjxSoapDoc.create("GetSessionsRequest", ZaZimbraAdmin.URN, null);
+                    var sessionCallback = new  AjxCallback (this, loadOneSessionNumer);
                     var params = {};
-                    params.type = sessionType[j];
+                    params.type = currentSession.type;
 
                     soapDoc.getMethod().setAttribute("type", params.type);
 
@@ -145,57 +272,108 @@ ZaHome.loadActiveSesson = function () {
 
                     var getSessCmd = new ZmCsfeCommand ();
                     params.soapDoc = soapDoc ;
-                    params.targetServer = serverInfo.id ;
+                    params.asyncMode = true;
+                    params.callback = sessionCallback;
+                    params.targetServer = currentSession.targetServer ;
 
                     var resp = getSessCmd.invoke(params);
-                    if (resp && resp.Body && resp.Body.GetSessionsResponse) {
-                        var sessionStats = resp.Body.GetSessionsResponse;
-                        totalSession += sessionStats.total;
-                    }
+
                 } catch (ex) {
                     // Won't do anything here to avoid disturbe the loading process.
                 }
+            } else {
+                this.updateSessionNum(totalSession);
             }
         }
+
+        loadOneSessionNumer.call(this);
+    } else {
+        this.updateSessionNum(totalSession);
     }
-    this.attrs[ZaHome.A2_activeSession] = totalSession;
 }
-ZaItem.loadMethods["ZaHome"].push(ZaHome.loadActiveSesson);
+
+ZaHome.prototype.updateSessionNum = function(num) {
+    ZaApp.getInstance().getHomeViewController().setInstanceValue(num, ZaHome.A2_activeSession);
+}
+ZaHome.postLoadDataFunction.push(ZaHome.loadActiveSesson);
 
 ZaHome.loadQueueLength = function () {
     var mtaList = ZaApp.getInstance().getPostQList().getArray();
     var totalQueueLength = 0;
     if(mtaList && mtaList.length) {
+        var parameterList = [];
         var cnt = mtaList.length;
-        try {
-            for (var i = 0; i < cnt; i++) {
-                var currentMta = mtaList[i];
-                var soapDoc = AjxSoapDoc.create("GetMailQueueInfoRequest", ZaZimbraAdmin.URN, null);
-                var attr = soapDoc.set("server", "");
-                attr.setAttribute("name", currentMta.name);
-                var command = new ZmCsfeCommand();
-                var params = new Object();
-                params.soapDoc = soapDoc;
-                var resp = command.invoke(params);
-                var body = resp.Body;
-                if(body && body.GetMailQueueInfoResponse.server && body.GetMailQueueInfoResponse.server[0]) {
-                    var queue =  body.GetMailQueueInfoResponse.server[0].queue;
-                    for ( var j in queue) {
-                        if (queue[j].n) {
-                            totalQueueLength += parseInt(queue[j].n);
+        for (var i = 0; i < cnt; i++) {
+            parameterList.push(mtaList[i].name);
+        }
+
+        var loadOneQueueLength = function (resp, isReset) {
+            if (!resp && isReset) {
+                totalQueueLength =  0;
+            } else {
+                if (resp && resp.getException) {
+                    if (!resp.getException()) {
+                        resp = resp.getResponse();
+                        var body = resp.Body;
+                        if(body && body.GetMailQueueInfoResponse.server && body.GetMailQueueInfoResponse.server[0]) {
+                            var queue =  body.GetMailQueueInfoResponse.server[0].queue;
+                            for ( var j in queue) {
+                                if (queue[j].n) {
+                                    totalQueueLength += parseInt(queue[j].n);
+                                }
+                            }
                         }
                     }
                 }
             }
-        } catch (ex) {
-            // Won't do anything here to avoid disturbe the loading process.
+
+            if (parameterList.length > 0) {
+                var currentName = parameterList.shift();
+                var isEx = false;
+                var queueLengthCallback = new AjxCallback(this, loadOneQueueLength);
+                try {
+                    var soapDoc = AjxSoapDoc.create("GetMailQueueInfoRequest", ZaZimbraAdmin.URN, null);
+                    var attr = soapDoc.set("server", "");
+                    attr.setAttribute("name", currentName);
+                    var command = new ZmCsfeCommand();
+                    var params = new Object();
+                    params.soapDoc = soapDoc ;
+                    params.asyncMode = true;
+                    params.callback = queueLengthCallback;
+
+                    command.invoke(params);
+
+                } catch (ex) {
+                    queueLengthCallback.run();
+                }
+            } else {
+                this.updateQueueLength(totalQueueLength);
+            }
         }
 
+        loadOneQueueLength.call(this, "", true);
     }
-    this.attrs[ZaHome.A2_queueLength] = totalQueueLength;
+    else {
+        this.updateQueueLength(totalQueueLength);
+    }
 }
 
-ZaItem.loadMethods["ZaHome"].push(ZaHome.loadQueueLength);
+ZaHome.postLoadDataFunction.push(ZaHome.loadQueueLength);
+ZaHome.prototype.updateQueueLength = function(queueLength) {
+    ZaApp.getInstance().getHomeViewController().setInstanceValue(queueLength, ZaHome.A2_queueLength);
+}
+
+ZaHome.prototype.schedulePostLoading = function () {
+    // Don't disturbe the home view rendering process, when view is realy, start to update data.
+    var act = new AjxTimedAction(this, ZaHome.prototype.startPostLoading);
+	AjxTimedAction.scheduleAction(act, 100);
+}
+
+ZaHome.prototype.startPostLoading = function () {
+    for (var i = 0; i < ZaHome.postLoadDataFunction.length; i++) {
+        ZaHome.postLoadDataFunction[i].call(this);
+    }
+}
 
 ZaHome.myXModel = {
     items: [
@@ -214,8 +392,8 @@ ZaHome.myXModel = {
         {id:ZaHome.A2_serviceStatusMessage, type:_STRING_, ref: "attrs/" + ZaHome.A2_serviceStatusMessage},
         {id:ZaHome.A2_serviceDetailedMessage, type:_STRING_, ref: "attrs/" + ZaHome.A2_serviceDetailedMessage},
         {id:ZaHome.A2_serviceStatus, type:_ENUM_, ref: "attrs/" + ZaHome.A2_serviceStatus, choices: ZaModel.BOOLEAN_CHOICES},
-        {id:ZaHome.A2_activeSession, type:_NUMBER_, ref:"attrs/" + ZaHome.A2_activeSession},
-        {id:ZaHome.A2_queueLength, type:_NUMBER_, ref:"attrs/" + ZaHome.A2_queueLength},
+        {id:ZaHome.A2_activeSession, type:_STRING_, ref:"attrs/" + ZaHome.A2_activeSession},
+        {id:ZaHome.A2_queueLength, type:_STRING_, ref:"attrs/" + ZaHome.A2_queueLength},
         {id:ZaHome.A2_messageCount, type:_NUMBER_, ref:"attrs/" + ZaHome.A2_messageCount},
         {id:ZaHome.A2_messageVolume, type:_NUMBER_, ref:"attrs/" + ZaHome.A2_messageVolume}
     ]
