@@ -1568,15 +1568,15 @@ if(appNewUI) {
 					  	  txtBoxLabel: ZaMsg.LBL_zimbraFreebusyExchangeUserOrg, width: "30em",
 						  onChange: ZaDomainXFormView.onFormFieldChanged
 					  	},
-                        {type: _GROUP_, colSpan:2, numCols:5, colSizes: ["120px", "10px", "100px", "20px", "120px" ], 
+                        {type: _GROUP_, colSpan:2, numCols:5, colSizes: ["20%", "22%", "6%", "22%", "20%" ], width:"100%",
                         	items :[
                             	{type:_CELLSPACER_ },
                               	{
-                                  type: _DWT_BUTTON_ , colSpan: 2, label: ZaMsg.Check_Settings, width: "15em",
+                                  type: _DWT_BUTTON_ , label: ZaMsg.Check_Settings, autoPadding: false,
                                   onActivate: ZaItem.checkInteropSettings
                               	},
                               	{type:_CELLSPACER_},
-                                {type: _DWT_BUTTON_ , colSpan: 2, label: ZaMsg.Clear_Settings, width: "15em",
+                                {type: _DWT_BUTTON_ , label: ZaMsg.Clear_Settings, autoPadding: false,
                                     onActivate: ZaItem.clearInteropSettings
                               	},
                               	{type:_CELLSPACER_}    

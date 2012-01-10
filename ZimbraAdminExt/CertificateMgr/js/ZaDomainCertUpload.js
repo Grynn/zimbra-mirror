@@ -11,7 +11,7 @@ ZaDomainCertUpload = function() {}
 
 ZaDomainCertUpload.myXFormModifier = function(xFormObject) {
     var uploadCertUI =
-    {type:_GROUP_,  colSpan: "*", numCols: 2, colSizes: ["500px","*"],
+    {type:_GROUP_,  colSpan: "*", numCols: 2, colSizes: ["75%","25%"],
         cssStyle: "margin-top: 10px; margin-left: 12px", items: [
         {type:_OUTPUT_, value: ZaDomainCertUpload.getUploadFormHtml() },
         {type: _DWT_BUTTON_ , colSpan: "*", label: com_zimbra_cert_manager.CERT_UploadButton, width: "10em",
@@ -40,21 +40,21 @@ ZaDomainCertUpload.getUploadFormHtml = function() {
 	var uri = appContextPath + "/../service/upload?fmt=extended";
 	var html = [];
 	var idx = 0;
-    var width = '210';
-    if(AjxEnv.isIE) width = '150';
+    var width = "210";
+    if(AjxEnv.isIE) width = "'10%'";
 	html[idx++] = "<div><form method='POST' action='";
 	html[idx++] = uri;
 	html[idx++] = "' id='";
 	html[idx++] = ZaDomainCertUpload.uploadCertFormId;
 	html[idx++] = "' enctype='multipart/form-data'>" ;
 	html[idx++] = "<div><table border=0 cellspacing=0 cellpadding=2 style='table-layout: fixed;'> " ;
-	html[idx++] = "<colgroup><col width=" + width + "/><col width='*' /><col width=50 /></colgroup>";
+	html[idx++] = "<colgroup><col width=" + width + "/><col width='*' /><col width=20 /></colgroup>";
 
 	html[idx++] = "<tbody><tr><td>" + ZaMsg.NAD_DomainSSLCertificate + ":</td>";
-	html[idx++] = "<td><input type=file  name='certFile' size='40'></input></td><td></td></tr>";
+	html[idx++] = "<td><input type=file  name='certFile' size='40' /></td><td>&nbsp</td></tr>";
 
 	html[idx++] = "<tr><td>" + ZaMsg.NAD_DomainSSLPrivateKey + ":</td>";
-	html[idx++] = "<td><input type=file  name='keyFile' size='40'></input></td><td></td></tr>";
+	html[idx++] = "<td><input type=file  name='keyFile' size='40' /></td><td>&nbsp</td></tr>";
 
 	html[idx++] = "</tbody></table></div>";
 	html[idx++] = "</form></div>";
