@@ -2,7 +2,7 @@
 
 #/*
 # * ***** BEGIN LICENSE BLOCK *****
-# * Zimbra Collaboration Suite Server
+# * Zimbra Collaboration Server
 # * Copyright (C) 2009, 2010 Zimbra, Inc.
 # * 
 # * The contents of this file are subject to the Zimbra Public License
@@ -21,7 +21,7 @@
 use strict;
 use warnings;
 
-my $license = "PLEASE READ THIS AGREEMENT CAREFULLY BEFORE USING THE SOFTWARE. VMWARE INC. WILL ONLY LICENSE THIS SOFTWARE TO YOU IF YOU FIRST ACCEPT THE TERMS OF THIS AGREEMENT. BY DOWNLOADING OR INSTALLING THE SOFTWARE, OR USING THE PRODUCT, YOU ARE CONSENTING TO BE BOUND BY THIS AGREEMENT. IF YOU DO NOT AGREE TO ALL OF THE TERMS OF THIS AGREEMENT, THEN DO NOT DOWNLOAD, INSTALL OR USE THE PRODUCT.\n\nLicense Terms for this Zimbra Collaboration Suite Software: http://www.zimbra.com/license/zimbra_public_eula_2.1.html";
+my $license = "PLEASE READ THIS AGREEMENT CAREFULLY BEFORE USING THE SOFTWARE. VMWARE INC. WILL ONLY LICENSE THIS SOFTWARE TO YOU IF YOU FIRST ACCEPT THE TERMS OF THIS AGREEMENT. BY DOWNLOADING OR INSTALLING THE SOFTWARE, OR USING THE PRODUCT, YOU ARE CONSENTING TO BE BOUND BY THIS AGREEMENT. IF YOU DO NOT AGREE TO ALL OF THE TERMS OF THIS AGREEMENT, THEN DO NOT DOWNLOAD, INSTALL OR USE THE PRODUCT.\n\nLicense Terms for this Zimbra Collaboration Server Software: http://www.zimbra.com/license/zimbra_public_eula_2.1.html";
 my $locale = "en_US";
 my $app_root;
 my $default_app_root = "/opt/zimbra/zdesktop";
