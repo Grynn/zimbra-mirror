@@ -653,9 +653,9 @@ function(n, types,excludeClosed) {
 	
 	if (!AjxUtil.isEmpty(n)) {
 		query.push("(|");
-		//n = String(n).replace(/([\\\\\\*\\.])/g, "\\$1"); '*','\','(',')' sepcial characters in rfc 2254
-        n = String(n).replace(/\*/g, "\\2a");
-        n = String(n).replace(/\\/g, "\\5c");
+		// although all special symbols are escaped by server side, the "(" and ")" will bring server side parse error
+		// which will bypass the server side escape, so escape them here. Other symbols like "*", "\", ... are no need
+		// to escape
 		n = String(n).replace(/\(/g, "\\28");
 		n = String(n).replace(/\)/g, "\\29");
         if (!types) types = [ZaSearch.ALIASES, ZaSearch.ACCOUNTS, ZaSearch.DLS, ZaSearch.RESOURCES, ZaSearch.DOMAINS, ZaSearch.COSES] ;
