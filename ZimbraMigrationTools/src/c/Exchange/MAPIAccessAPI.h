@@ -143,6 +143,7 @@ typedef struct _ApptItemData: BaseItemData
     wstring Transparency;
     wstring AllDay;
     wstring StartDate;
+    wstring StartDateCommon;
     wstring EndDate;
     wstring AlarmTrigger;
     Organizer organizer;
@@ -171,6 +172,7 @@ typedef struct _TaskItemData: BaseItemData
     wstring Subject;
     wstring Importance;
     wstring TaskStart;
+    wstring TaskStartCommon;
     wstring TaskDue;
     wstring Status;
     wstring PercentComplete;

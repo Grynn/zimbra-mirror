@@ -192,6 +192,8 @@ mimepp::BodyPart *AttachPartFromIAttach(MAPISession &session, LPATTACH pAttach, 
 wstring SetPlainText(LPMESSAGE pMessage, LPSPropValue lpv);
 wstring SetHtml(LPMESSAGE pMessage, LPSPropValue lpv);
 
+wstring CommonDateString(FILETIME ft);
+
 namespace CharsetUtil
 {
 void CharsetStringFromCodePageId(UINT codePageId, LPSTR *pCharset);

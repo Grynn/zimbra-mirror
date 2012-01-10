@@ -2776,3 +2776,34 @@ wstring Zimbra::MAPI::Util::SetHtml(LPMESSAGE pMessage, LPSPropValue lpv)
     }
     return retval;
 }
+
+wstring Zimbra::MAPI::Util::CommonDateString(FILETIME ft)
+{
+    wstring retval = L"";
+    SYSTEMTIME st;      // convert the filetime to a system time.
+
+    FileTimeToSystemTime(&ft, &st);
+
+    // build the GMT date/time string
+    //int nWritten = GetDateFormatW(MAKELCID(MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US),
+    //    SORT_DEFAULT), LOCALE_USE_CP_ACP, &st, L"ddd, d MMM yyyy", retval, 32);
+
+    //GetTimeFormatW(MAKELCID(MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), SORT_DEFAULT),
+    //    LOCALE_USE_CP_ACP, &st, L" HH:mm:ss -0000", (retval + nWritten - 1), 32 -
+    //    nWritten + 1);
+
+    WCHAR szLocalDate[254 + 1] = { 0 };
+
+    GetDateFormat(LOCALE_USER_DEFAULT, DATE_LONGDATE, &st, NULL,
+        szLocalDate, 254);
+
+    WCHAR szLocalTime[254 + 1] = { 0 };
+
+    GetTimeFormat(LOCALE_USER_DEFAULT, 0, &st, NULL, szLocalTime, 254);
+
+    retval = szLocalDate;
+    retval += L" ";
+    retval += szLocalTime;
+
+    return retval;
+}

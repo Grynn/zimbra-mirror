@@ -459,7 +459,7 @@ public class ScheduleViewModel: BaseViewModel
         if (ovm.ImportJunkOptions)
             itemFolderFlags = itemFolderFlags | ItemsAndFoldersOptions.Junk;
         importOpts.ItemsAndFolders = itemFolderFlags;
-        importOpts.DateFilter = ovm.MigrateONRAfter;
+        importOpts.DateFilter = (ovm.Migratedateflag) ? ovm.MigrateONRAfter : null;
         importOpts.MessageSizeFilter = ovm.MaxMessageSize;
         importOpts.SkipFolders = ovm.FoldersToSkip;
         return importOpts;
@@ -477,6 +477,26 @@ public class ScheduleViewModel: BaseViewModel
 
         else if (containerClass == "IPF.Task")
             retval = "Task";
+        return retval;
+    }
+
+    private string FormatTheLastMsg(string existingMsg)
+    // A bit of the hack -- take the existing msg, add 1 to the first part
+    // i.e. if it's 13 of 14, make it 14 of 14
+    {
+        string retval = "";
+        int len = existingMsg.Length;
+        int idx = existingMsg.IndexOf(" of");
+        if (idx == -1)  // never happen
+        {
+            return retval;
+        }
+        string strNum = existingMsg.Substring(0, idx);
+        int num = Int32.Parse(strNum);
+        num++;
+        strNum = num.ToString();
+        string endOfMsg = existingMsg.Substring(idx, (len - idx));
+        retval = strNum + endOfMsg;
         return retval;
     }
 
@@ -541,10 +561,8 @@ public class ScheduleViewModel: BaseViewModel
         string lastmsg = accountResultsViewModel.AccountResultsList[num].UserResultsList[count - 1].UserProgressMsg;
         int len = lastmsg.Length;
         int idxof = lastmsg.IndexOf("of");
-        string theNum = lastmsg.Substring(idxof + 3, (len - (idxof + 3)));
-        lastmsg = "{0} of {1}";
-        accountResultsViewModel.AccountResultsList[num].UserResultsList[count - 1].UserProgressMsg = String.Format(lastmsg, theNum, theNum);
-        accountResultsViewModel.PBValue = 100;  // just to make sure
+        accountResultsViewModel.AccountResultsList[num].UserResultsList[count - 1].UserProgressMsg = FormatTheLastMsg(accountResultsViewModel.AccountResultsList[num].AcctProgressMsg);
+        accountResultsViewModel.AccountResultsList[num].PBValue = 100;  // to make sure
         /////
 
         accountResultsViewModel.AccountResultsList[num].PBMsgValue = "Migration complete";

@@ -247,7 +247,10 @@ public class IntroViewModel: BaseViewModel
         m_optionsViewModel.ImportJunkOptions = false;
         m_optionsViewModel.ImportDeletedItemOptions = false;
         m_optionsViewModel.ImportSentOptions = false;
-        m_optionsViewModel.MigrateONRAfter = DateTime.Now.ToShortDateString();
+
+        DateTime dtNow = DateTime.Now;
+        DateTime dtThreeMonhtsBack = dtNow.AddMonths(-3);
+        m_optionsViewModel.MigrateONRAfter = dtThreeMonhtsBack.ToShortDateString();
 
         m_scheduleViewModel = new ScheduleViewModel();
         m_scheduleViewModel.Name = "Schedule";

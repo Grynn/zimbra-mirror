@@ -69,6 +69,7 @@ private:
     wstring m_pSubject;
     wstring m_pImportance;
     wstring m_pTaskStart;
+    wstring m_pTaskStartCommon;
     wstring m_pTaskDue;
     wstring m_pStatus;
     wstring m_pPercentComplete;
@@ -107,6 +108,7 @@ public:
     wstring GetTaskStatus();
     wstring GetPercentComplete();
     wstring GetTaskStart();
+    wstring GetTaskStartCommon();
     wstring GetTaskDue();
     wstring GetTotalWork();
     wstring GetActualWork();

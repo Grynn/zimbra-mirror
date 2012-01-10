@@ -312,6 +312,7 @@ STDMETHODIMP CItemObject::GetDataForItemID(BSTR UserId, VARIANT ItemId, FolderTy
 		pIt[L"uid"] = SysAllocString((apptData.Uid).c_str());
 		pIt[L"m"] = SysAllocString((apptData.AlarmTrigger).c_str());
 		pIt[L"s"] = SysAllocString((apptData.StartDate).c_str());
+		pIt[L"sCommon"] = SysAllocString((apptData.StartDateCommon).c_str());   // for C# date filter checking
 		pIt[L"e"] = SysAllocString((apptData.EndDate).c_str());
 		pIt[L"orAddr"] = SysAllocString((apptData.organizer.addr).c_str());
 		pIt[L"orName"] = SysAllocString((apptData.organizer.nam).c_str());
@@ -403,6 +404,7 @@ STDMETHODIMP CItemObject::GetDataForItemID(BSTR UserId, VARIANT ItemId, FolderTy
                 pIt[L"su"] = SysAllocString((taskData.Subject).c_str());
 		pIt[L"priority"] = SysAllocString((taskData.Importance).c_str());
                 pIt[L"s"] = SysAllocString((taskData.TaskStart).c_str());
+                pIt[L"sCommon"] = SysAllocString((taskData.TaskStartCommon).c_str());   // for C# date filter checking
                 pIt[L"e"] = SysAllocString((taskData.TaskDue).c_str());
                 pIt[L"status"] = SysAllocString((taskData.Status).c_str());
                 pIt[L"percentComplete"] = SysAllocString((taskData.PercentComplete).c_str());

@@ -270,6 +270,7 @@ void MAPITask::SetTaskStart(FILETIME ft)
 
     FileTimeToSystemTime(&ft, &st);
     m_pTaskStart = Zimbra::Util::FormatSystemTime(st, FALSE, FALSE);
+    m_pTaskStartCommon = Zimbra::MAPI::Util::CommonDateString(m_pPropVals[T_TASKSTART].Value.ft);
 }
 
 void MAPITask::SetTaskDue(FILETIME ft)
@@ -324,6 +325,7 @@ wstring MAPITask::GetImportance() { return m_pImportance; }
 wstring MAPITask::GetTaskStatus() { return m_pStatus; }
 wstring MAPITask::GetPercentComplete() { return m_pPercentComplete; }
 wstring MAPITask::GetTaskStart() { return m_pTaskStart; }
+wstring MAPITask::GetTaskStartCommon() { return m_pTaskStartCommon; }
 wstring MAPITask::GetTaskDue() { return m_pTaskDue; }
 wstring MAPITask::GetTotalWork() { return m_pTotalWork; }
 wstring MAPITask::GetActualWork() { return m_pActualWork; }

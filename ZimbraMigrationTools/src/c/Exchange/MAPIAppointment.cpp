@@ -429,6 +429,7 @@ void MAPIAppointment::SetStartDate(FILETIME ft)
     }
     m_pStartDate = (bUseLocal) ? Zimbra::Util::FormatSystemTime(localst, FALSE, TRUE)
 			       : Zimbra::Util::FormatSystemTime(st, TRUE, TRUE);
+    m_pStartDateCommon = Zimbra::MAPI::Util::CommonDateString(m_pPropVals[C_START].Value.ft);   // may have issue with recur/local
 }
 
 void MAPIAppointment::SetEndDate(FILETIME ft, bool bAllday)
@@ -733,6 +734,7 @@ bool MAPIAppointment::IsRecurring() {return m_bIsRecurring; }
 
 wstring MAPIAppointment::GetSubject() { return m_pSubject; }
 wstring MAPIAppointment::GetStartDate() { return m_pStartDate; }
+wstring MAPIAppointment::GetStartDateCommon() { return m_pStartDateCommon; }
 wstring MAPIAppointment::GetEndDate() { return m_pEndDate; }
 wstring MAPIAppointment::GetInstanceUID() { return m_pInstanceUID; }
 wstring MAPIAppointment::GetLocation() { return m_pLocation; }

@@ -347,6 +347,7 @@ public class CSMigrationwrapper
 
                             if (type == foldertype.Mail)
                             {
+                                //Log.debug("Msg Subject: ", dict["Subject"]);
                                 int msf = 0;
                                 if (importopts.MessageSizeFilter != null)
                                 {
@@ -365,9 +366,25 @@ public class CSMigrationwrapper
                                     }
                                     catch (Exception)
                                     {
+                                        Log.info("File exception on ", dict["filePath"]);
                                     }
                                 }
-
+                                if (importopts.DateFilter != null)
+                                {
+                                    try
+                                    {
+                                        DateTime dtm = DateTime.Parse(dict["Date"]);
+                                        DateTime filterDtm = Convert.ToDateTime(importopts.DateFilter);
+                                        if (DateTime.Compare(dtm, filterDtm) < 0)
+                                        {
+                                            bSkipMessage = true;
+                                        }
+                                    }
+                                    catch (Exception)
+                                    {
+                                        Log.info(dict["Subject"], ": unable to parse date");
+                                    }
+                                }
                                 if (!bSkipMessage)
                                 {
                                     dict.Add("folderId", folderobject.FolderPath);
@@ -381,11 +398,49 @@ public class CSMigrationwrapper
                             }
                             else if (type == foldertype.Calendar)
                             {
-                                stat = api.AddAppointment(dict, path);
+                                if (importopts.DateFilter != null)
+                                {
+                                    try
+                                    {
+                                        DateTime dtm = DateTime.Parse(dict["sCommon"]);
+                                        DateTime filterDtm = Convert.ToDateTime(importopts.DateFilter);
+                                        if (DateTime.Compare(dtm, filterDtm) < 0)
+                                        {
+                                            bSkipMessage = true;
+                                        }
+                                    }
+                                    catch (Exception)
+                                    {
+                                        Log.info(dict["su"], ": unable to parse date");
+                                    }
+                                }
+                                if (!bSkipMessage)
+                                {
+                                    stat = api.AddAppointment(dict, path);
+                                }
                             }
                             else if (type == foldertype.Task)
                             {
-                                stat = api.AddTask(dict, path);
+                                if (importopts.DateFilter != null)
+                                {
+                                    try
+                                    {
+                                        DateTime dtm = DateTime.Parse(dict["sCommon"]);
+                                        DateTime filterDtm = Convert.ToDateTime(importopts.DateFilter);
+                                        if (DateTime.Compare(dtm, filterDtm) < 0)
+                                        {
+                                            bSkipMessage = true;
+                                        }
+                                    }
+                                    catch (Exception)
+                                    {
+                                        Log.info(dict["su"], ": unable to parse date");
+                                    }
+                                }
+                                if (!bSkipMessage)
+                                {
+                                    stat = api.AddTask(dict, path);
+                                }
                             }
                         }
 
@@ -393,7 +448,7 @@ public class CSMigrationwrapper
                         // to itself, but this is done so the method will be called to increment the progress bar
                         Acct.migrationFolder.CurrentCountOfItems = (!bSkipMessage)
                                                                     ? Acct.migrationFolder.CurrentCountOfItems + 1
-                                                                    : Acct.migrationFolder.CurrentCountOfItems;
+                                                                    : Acct.migrationFolder.CurrentCountOfItems; 
                     }
                     iProcessedItems++;
                 }
