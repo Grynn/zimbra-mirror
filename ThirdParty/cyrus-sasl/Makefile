@@ -49,8 +49,7 @@ build:
 	patch -g0 -p1 < ../patches/sasl-link-order.patch; \
 	patch -g0 -p1 < ../patches/sasl-darwin.patch; \
 	patch -g0 -p1 < ../patches/sasl-auth-zimbra.patch; \
-	patch -g0 -p1 < ../patches/heimdal-build.patch; \
-	patch -g0 -p1 < ../patches/gssapi.patch; \
+	patch -g0 -p1 < ../patches/gcc-fix.patch; \
 	patch -g0 -p1 < ../patches/saslauthd-conf.patch; \
 	$(PATCH))
 	_S_='~' ./zimbra-cyrus-sasl-build.sh ${BSTR}
