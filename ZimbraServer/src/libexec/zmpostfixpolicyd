@@ -89,7 +89,8 @@ sub smtpd_access_policy {
                 "",
                 LDAP_SCOPE_SUBTREE,
                 "(&(|(zimbraMailDeliveryAddress=$user"."$robject)(zimbraMailDeliveryAddress=$daddr)(zimbraMailAlias=$user".
-                "$robject)(zimbraMailAlias=$daddr)(zimbraMailCatchAllAddress=$user"."$robject)(zimbraMailCatchAllAddress=$daddr))(zimbraMailStatus=enabled))",
+                "$robject)(zimbraMailAlias=$daddr)(zimbraMailCatchAllAddress=$user"."$robject)(zimbraMailCatchAllAddress=$robject)".
+		"(zimbraMailCatchAllAddress=$daddr))(zimbraMailStatus=enabled))",
                 \@attrs,
                 0,
                 $result
