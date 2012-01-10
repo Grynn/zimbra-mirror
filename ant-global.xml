@@ -73,6 +73,9 @@
     <property name="taglib.jarfile" location="${taglib.dir}/build/zimbrataglib.jar"/>
     <property name="taglib.jars.dir" location="${taglib.dir}/jars"/>
 
+    <!-- customizations -->
+    <property name="aux.jars.dir" location="${server.dir}/build/auxjars"/>
+    
     <!-- Platform -->
     <condition property="native.os" value="MacOSX">
         <os name="Mac OS X"/>
