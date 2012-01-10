@@ -530,6 +530,12 @@ if [ -L ${zimbra_home}/jetty ]; then
     find ${zimbra_home}/jetty/common -type d -exec chown ${root_user}:${root_group} {} \; -exec chmod 755 {} \;
   fi  
 
+  if [ ! -d ${zimbra_home}/data/mailboxd ]; then
+    mkdir -p ${zimbra_home}/data/mailboxd
+  fi
+  chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/data/mailboxd
+  chmod 755 ${zimbra_home}/data/mailboxd
+
   if [ ! -d ${zimbra_home}/data/mailboxd/spnego ]; then
     mkdir -p ${zimbra_home}/data/mailboxd/spnego
   fi
