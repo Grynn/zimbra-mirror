@@ -1,0 +1,73 @@
+.VendorVoicePrefsTabView {
+	width: 100%;
+}
+
+.ZmVoicePrefsPage .VendorVoiceBufferList a:link,
+.ZmVoicePrefsPage .VendorVoiceBufferList a:visited,
+.ZmVoicePrefsPage .VendorVoiceBufferList .FakeAnchor,
+.ZmVoicePrefsPage .VendorVoicePhoneBufferList a:link,
+.ZmVoicePrefsPage .VendorVoicePhoneBufferList a:visited,
+.ZmVoicePrefsPage .VendorVoicePhoneBufferList .FakeAnchor {
+	color: #3459F5;
+	cursor: pointer;
+	text-decoration: none;
+}
+
+.ZmVoicePrefsPage .VendorVoiceBufferList .FakeAnchor,
+.ZmVoicePrefsPage .VendorVoicePhoneBufferList .FakeAnchor {
+#IFDEF MSIE
+    m: expression(this.onmouseover = new Function("this.className = 'FakeAnchor-hover';")); /* IE will not accept the :hover pseudo-selector, so we work around it */
+#ENDIF
+}
+
+
+.ZmVoicePrefsPage .VendorVoiceBufferList a:hover,
+.ZmVoicePrefsPage .VendorVoiceBufferList a:active,
+.ZmVoicePrefsPage .VendorVoiceBufferList .FakeAnchor:hover,
+.ZmVoicePrefsPage .VendorVoiceBufferList .FakeAnchor-hover,
+.ZmVoicePrefsPage .VendorVoicePhoneBufferList a:hover,
+.ZmVoicePrefsPage .VendorVoicePhoneBufferList a:active,
+.ZmVoicePrefsPage .VendorVoicePhoneBufferList .FakeAnchor:hover,
+.ZmVoicePrefsPage .VendorVoicePhoneBufferList .FakeAnchor-hover {
+	color: #3459F5;
+	cursor: pointer;
+	text-decoration: underline;
+}
+
+.ZmVoicePrefsPage .VendorVoiceBufferList .FakeAnchor:hover,
+.ZmVoicePrefsPage .VendorVoiceBufferList .FakeAnchor-hover,
+.ZmVoicePrefsPage .VendorVoicePhoneBufferList .FakeAnchor:hover,
+.ZmVoicePrefsPage .VendorVoicePhoneBufferList .FakeAnchor-hover {
+#IFDEF MSIE
+    m: expression(this.onmouseout = new Function("this.className = 'FakeAnchor';"));
+#ENDIF
+}
+
+
+.ZmVoicePrefsPage .DwtLabel.AlignRight .ZWidgetTitle {
+	text-align: right;
+}
+
+.ZmVoicePrefsPage .DwtComboBox.ValidatorFix .ZButton {
+	left: 0px;
+}
+
+
+.ZmVoicePrefsPage .SectionHeader {
+	color: #808080;
+	font-size: 12px;
+	font-weight: bold;
+	padding-bottom: 10px;
+	padding-left: 20px;
+	text-align: left;
+}
+
+.ZmVoicePrefsPage .VendorVoiceBufferList .DwtListView-Sash div,
+.ZmVoicePrefsPage .VendorVoicePhoneBufferList .DwtListView-Sash div {
+	background: transparent none !important;
+}
+
+.ZmVoicePrefsPage .DwtListView-Rows {
+	overflow: visible;
+}
+

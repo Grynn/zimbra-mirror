@@ -1,0 +1,134 @@
+<template id="voicemail.Voicemail#VoicePrefsGeneralView">
+	<table border='0' cellspacing='0' cellpadding='0' width='100%'>
+		<tr class='ZOptionsHeaderRow'>
+			<td class='ZOptionsHeaderL'>
+				<div class='ImgPrefsHeader_L'></div>
+			</td>
+			<td class='ZOptionsHeader ImgPrefsHeader'>
+				<$= com_zimbra_voiceprefs.generalHeader $>
+			</td>
+			<td class='ZOptionsHeaderR'>
+				<div class='ImgPrefsHeader_R'></div>
+			</td>
+		</tr>
+	</table>
+	<table class='ZOptionsSectionTable' border='0' cellspacing='0' cellpadding='0' width='100%'>
+		<tr>
+			<td class='ZOptionsSectionMain' colspan='3'>
+				<table cellspacing='4' cellpadding='4' width='100%'>
+					<tr>
+						<td class='ZOptionsField' colspan='2'>
+							<div>
+								<div>
+									<$= com_zimbra_voiceprefs.voicePrefsInstruction $>
+								</div>
+								<div class='ZSmallSpacer'></div>
+								<div id='${id}_list'></div>
+							</div>
+						</td>
+					</tr>
+					
+					<tr><td colspan='2' style='align:right;'>
+							<table cellspacing='4' cellpadding='4' width='100%'>
+								<tr>
+									<td  style='width:95%'>
+									</td>
+									<td>
+										<button id='${id}_DELETE'><$= ZmMsg.del $></button>
+									</td>
+									<td>
+										<div style='padding-left:5px'>
+											<button id="${id}_EDIT"><$= ZmMsg.edit $></button>
+										</div>
+									</td>
+								
+								</tr>
+							</table>	
+						</td>
+					</tr>
+
+				</table>
+			</td>
+		</tr>
+	</table>
+     	<table border='0' cellspacing='0' cellpadding='0' width='100%'>
+		<tr class='ZOptionsHeaderRow'>
+			<td class='ZOptionsHeaderL'>
+				<div class='ImgPrefsHeader_L'></div>
+			</td>
+			<td class='ZOptionsHeader ImgPrefsHeader'>
+				<$= com_zimbra_voiceprefs.updatePinHeader $>
+			</td>
+			<td class='ZOptionsHeaderR'>
+				<div class='ImgPrefsHeader_R'></div>
+			</td>
+		</tr>
+	</table>
+      <div class='ZOptionsSectionMain'>
+		   <$= com_zimbra_voiceprefs.pleaseSelectVoiceMailAccountAbove $>
+	   </div>
+ 	<table class='ZOptionsSectionTable' border='0' cellspacing='0' cellpadding='0' width='100%'>
+		<tr>
+			<td class='ZOptionsSectionMain' colspan='3'>
+				<table cellspacing='4' cellpadding='4' align=center>
+
+					<tr>
+						<td class='ZOptionsField' style='text-align: right;'>
+							<$= com_zimbra_voiceprefs.oldPinLabel $>
+						</td>
+                        <td class='ZOptionsField' style='text-align: right;'>
+							<input id='${id}_OLD_PIN' type='password' style='width:200px'></input>
+						</td>
+					</tr>
+                    <tr>
+						<td class='ZOptionsField' style='text-align: right;'>
+							<$= com_zimbra_voiceprefs.newPinLabel $>
+						</td>
+                        <td class='ZOptionsField' style='text-align: right;'>
+							<input id='${id}_NEW_PIN' type='password' style='width:200px'></input>
+						</td>
+					</tr>
+                    <tr>
+						<td class='ZOptionsField' style='text-align: right;'>
+							<$= com_zimbra_voiceprefs.confirmNewPinLabel $>
+						</td>
+                        <td class='ZOptionsField' style='text-align: right;'>
+							<input id='${id}_CONFIRM_NEW_PIN' type='password' style='width:200px'></input>
+						</td>
+					</tr>
+                      <tr>
+						<td class='ZOptionsField' colspan=2 align=center>
+							<button id="${id}_UPDATE_PIN"><$= com_zimbra_voiceprefs.update $></button>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+
+</template>
+
+<template id='voicemail.Voicemail#voiceEditPhoneDlg'>
+  <div style='padding:5px;' >
+    <table align=center style='border-collapse: separate;border-spacing:7px;'>
+        <tr>
+            <td style='text-align:right;'>
+                <label style='font-size:12px;font-weight:bold;'><$= ZmMsg.nameLabel $></label>
+            </td>
+            <td>
+                <input style='width:200px' id='${nameFieldId}'></text>
+            </td>
+        </tr>
+       <tr>
+            <td style='text-align:right'>
+                <label style='font-size:12px;font-weight:bold;'><$= ZmMsg.phoneLabel $></label>
+            </td>
+            <td>
+                <input style='width:200px' id='${phoneFieldId}'></text>
+            </td>
+        </tr>
+    </table>
+
+
+  </div>
+</template>
