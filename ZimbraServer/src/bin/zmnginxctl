@@ -78,6 +78,16 @@ case "$1" in
       exit 1
     fi
 
+    # read the last line of nginx.conf which indicates the conf gen result
+    res=`tail -n 1 ${configfile}`
+    if ! [[ $res =~ __SUCCESS__ ]]; then
+        echo "failed."
+        msg=`echo $res | awk -F ':' '{print $2}'`
+        if [ x"$msg" = "x" ]; then msg="unknown"; fi
+        echo "nginx start failed. reason: $msg"
+        exit 1
+    fi
+
     sudo ${zimbra_home}/${servicename}/sbin/${servicename} -c ${configfile}
     for ((i=0; i < 30; i++)); do
       checkrunning
