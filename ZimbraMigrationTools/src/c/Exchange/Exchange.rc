@@ -101,6 +101,7 @@ IDR_MAPIWRAPPER         REGISTRY                "MapiWrapper.rgs"
 IDR_FOLDEROBJECT        REGISTRY                "folderObject.rgs"
 IDR_ITEMOBJECT          REGISTRY                "ItemObject.rgs"
 IDR_USEROBJECT          REGISTRY                "UserObject.rgs"
+IDR_MAPIACCESSWRAP      REGISTRY                "MapiAccessWrap.rgs"
 
 /////////////////////////////////////////////////////////////////////////////
 //

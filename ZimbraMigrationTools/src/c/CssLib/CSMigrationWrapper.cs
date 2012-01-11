@@ -326,7 +326,7 @@ public class CSMigrationwrapper
                         Dictionary<string, string> dict = new Dictionary<string, string>();
 
                        
-                       string[,] data = itemobject.GetDataForItemID(( isServer ? Acct.AccountID : ""),
+                       string[,] data = itemobject.GetDataForItemID(userobject,
                                        itemobject.ItemID, itemobject.Type);
 
                         int bound0 = data.GetUpperBound(0);

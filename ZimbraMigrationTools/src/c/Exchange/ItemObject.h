@@ -64,11 +64,11 @@ public:
     STDMETHOD(put_Parentfolder) (IfolderObject * newVal);
     STDMETHOD(get_CreationDate) (VARIANT * pVal);
     STDMETHOD(put_CreationDate) (VARIANT newVal);
-    STDMETHOD(GetDataForItem) (VARIANT * pVal);
+    
 
     STDMETHOD(put_ItemID) (VARIANT id);
     STDMETHOD(get_ItemID) (VARIANT * id);
-    STDMETHOD(GetDataForItemID) (BSTR UserId, VARIANT ItemId, FolderType type, VARIANT * pVal);
+    STDMETHOD(GetDataForItemID) (IUserObject *Userobj,VARIANT ItemId, FolderType type, VARIANT * pVal);
 };
 
 OBJECT_ENTRY_AUTO(__uuidof(ItemObject), CItemObject)

@@ -4,8 +4,9 @@
 #include "resource.h"
 #include "Exchange_i.h"
 #include "Logger.h"
-#include "Exchange.h"
-#include "ExchangeAdmin.h"
+#include "MapiAccessWrap.h"
+/*#include "Exchange.h"
+#include "ExchangeAdmin.h"*/
 #include "..\Exchange\MAPIAccessAPI.h"
 #include "BaseUser.h"
 
@@ -24,6 +25,11 @@ public:
 
     DECLARE_PROTECT_FINAL_CONSTRUCT() HRESULT FinalConstruct()
     {
+		CComObject<CMapiAccessWrap> *obj = NULL;
+        CComObject<CMapiAccessWrap>::CreateInstance(&obj);
+        // BSTR str1;
+        
+        MapiObj = obj;      
         return S_OK;
     }
     void FinalRelease() {}
@@ -34,16 +40,17 @@ public:
     STDMETHOD(GetFolderObjects) ( /*[out, retval]*/ VARIANT * vObjects);
     STDMETHOD(GetItemsForFolderObjects) (IfolderObject * FolderObj, VARIANT creattiondate,
         VARIANT * vItems);
-    STDMETHOD(GetDataForItem) (VARIANT ItemId, VARIANT * pVal);
     STDMETHOD(UMInitializeUser) (BSTR ProfileName, BSTR AccountName, BSTR *pErrorText);
     STDMETHOD(UMUnInitializeUser) ();
+	STDMETHOD(GetMapiAccessObject)(BSTR UserID,IMapiAccessWrap** pVal);
 
     virtual long Initialize(BSTR Id);
     virtual long GetFolders(VARIANT *folders);
     virtual long GetItems(VARIANT *Items);
     virtual long UnInitialize();
 
-    Zimbra::MAPI::MAPIAccessAPI *maapi;
+    //Zimbra::MAPI::MAPIAccessAPI *maapi;
+	CComQIPtr<IMapiAccessWrap, &IID_IMapiAccessWrap> MapiObj;
 };
 
 OBJECT_ENTRY_AUTO(__uuidof(UserObject), CUserObject)

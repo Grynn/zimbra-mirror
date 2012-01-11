@@ -443,6 +443,7 @@
     <ClCompile Include="folderObject.cpp" />
     <ClCompile Include="ItemObject.cpp" />
     <ClCompile Include="MAPIAccessAPI.cpp" />
+    <ClCompile Include="MapiAccessWrap.cpp" />
     <ClCompile Include="MAPIAppointment.cpp" />
     <ClCompile Include="MAPIContacts.cpp" />
     <ClCompile Include="MAPIFolder.cpp" />
@@ -465,6 +466,7 @@
     <ClInclude Include="GenericException.h" />
     <ClInclude Include="ItemObject.h" />
     <ClInclude Include="MAPIAccessAPI.h" />
+    <ClInclude Include="MapiAccessWrap.h" />
     <ClInclude Include="MAPIAppointment.h" />
     <ClInclude Include="MAPIContacts.h" />
     <ClInclude Include="MAPIFolder.h" />
@@ -507,6 +509,7 @@
     <None Include="Exchange.rgs" />
     <None Include="folderObject.rgs" />
     <None Include="ItemObject.rgs" />
+    <None Include="MapiAccessWrap.rgs" />
     <None Include="MapiWrapper.rgs" />
     <None Include="UserObject.rgs" />
   </ItemGroup>

@@ -78,6 +78,9 @@
     <ClCompile Include="MAPITask.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MapiAccessWrap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MapiMigration.h">
@@ -146,6 +149,9 @@
     <ClInclude Include="MAPITask.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MapiAccessWrap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Midl Include="Exchange.idl">
@@ -169,6 +175,9 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="UserObject.rgs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="MapiAccessWrap.rgs">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
