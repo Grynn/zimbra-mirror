@@ -430,55 +430,26 @@ function() {
  * 
  */
 AttachMailTabView.prototype.uploadFiles =
-function(attachmentDlg, docIds) {
-	if (!docIds) {
-		docIds = [];
+function(attachmentDlg, msgIds) {
+	if (!msgIds) {
+		msgIds = [];
 		var items = this.getSelectedMsgs();
 		if (!items || (items.length == 0)) {
 			return;
 		}
 		for (var i in items) {
-			docIds.push(items[i].id);
+			msgIds.push(items[i].id);
 		}
 	}
-
-	this._createHiddenAttachments(docIds);
 	if(attachmentDlg == undefined)//in 5.x this is undefined, so use the local one
 		attachmentDlg = this.attachDialog;
 
 	if (attachmentDlg._uploadCallback) {
-		attachmentDlg._uploadCallback.run(AjxPost.SC_OK, null, null);
+		attachmentDlg._uploadCallback.run(AjxPost.SC_OK, null, null,msgIds);
 	}
-	this._hiddenView.getHtmlElement().innerHTML = "";//reset
     attachmentDlg.popdown();
 };
 
-/**
- * Creates the hidden attachments.
- * 
- */
-AttachMailTabView.prototype._createHiddenAttachments =
-function(items) {
-	var composeView = appCtxt.getAppViewMgr().getCurrentView();
-	this._hiddenView = new DwtComposite(appCtxt.getShell());
-	var html = new Array();
-	var j = 0;
-	var name = "";
-	if(composeView._sessionId == undefined)
-		name = ZmComposeView.FORWARD_MSG_NAME;//5.x
-	else
-		name = ZmComposeView.FORWARD_MSG_NAME +  composeView._sessionId;
-
-	for (var i = 0; i < items.length; i++) {
-		html[j++] = "<input type=checkbox name='";
-		html[j++] = name;
-		html[j++] = "' checked=true value='";
-		html[j++] = items[i];
-		html[j++] = "'/>";
-	}
-	this._hiddenView.getHtmlElement().innerHTML = html.join("");
-
-};
 
 /**
  * Shows the attach mail tree view.
