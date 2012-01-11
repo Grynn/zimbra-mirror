@@ -6,6 +6,10 @@
         FontFamily="Arial"
         Title="Zimbra Migration" Height="510" Width="650">
 
+    <Window.InputBindings>
+        <KeyBinding Key="F1" Command="{Binding ProcessHelpCommand}" />
+    </Window.InputBindings>
+    
     <Window.Resources>
         <DataTemplate DataType="{x:Type ViewModel:IntroViewModel}">
             <View:IntroView />
