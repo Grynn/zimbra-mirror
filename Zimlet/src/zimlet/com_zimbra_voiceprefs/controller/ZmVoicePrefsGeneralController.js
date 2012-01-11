@@ -60,13 +60,15 @@ ZmVoicePrefsGeneralController.prototype._getNewPhoneInfo = function(params) {
 
 ZmVoicePrefsGeneralController.prototype.updatePIN = function(params) {
 	var phone = params.phone;
-	var soapDoc = AjxSoapDoc.create("ModifyVoiceMailPINRequest", "urn:zimbraVoice");
+	var soapDoc = AjxSoapDoc.create("ModifyVoiceMailPinRequest", "urn:zimbraVoice");
 	appCtxt.getApp(ZmApp.VOICE).setStorePrincipal(soapDoc);
 	var node = soapDoc.set("phone");
 	node.setAttribute("name", phone.name);
  	soapDoc.set("oldPin", params.oldPin, node);
 	soapDoc.set("pin", params.newPin, node);
-	appCtxt.getAppController().sendRequest({soapDoc:soapDoc, noBusyOverlay:false, asyncMode:true, callback: (new AjxCallback(this, this._handleUpdatePinResponse, params))});
+	var callback = new AjxCallback(this, this._handleUpdatePinResponse, params);
+
+	appCtxt.getAppController().sendRequest({soapDoc:soapDoc, noBusyOverlay:false, asyncMode:true, callback: callback, errorCallback: callback});
 };
 
 ZmVoicePrefsGeneralController.prototype._updatePhone  = function(params) {
@@ -95,8 +97,8 @@ function(params, result) {
 ZmVoicePrefsGeneralController.prototype._handleUpdatePinResponse =
 function(params, result) {
 	var response = result.getResponse();
-	if(!response.ModifyVoiceMailPINResponse || !response.ModifyVoiceMailPINResponse.phone) {
-		this.displayErrorMessage(com_zimbra_voiceprefs.couldNotUpdatePIN, com_zimbra_voiceprefs.couldNotUpdatePIN, com_zimbra_voiceprefs.voiceError);
+	if(!response || !response.ModifyVoiceMailPinResponse || !response.ModifyVoiceMailPinResponse.phone) {
+		appCtxt.setStatusMsg(com_zimbra_voiceprefs.invalidOldPIN, ZmStatusView.LEVEL_WARNING);
 	} else {
 		appCtxt.setStatusMsg(com_zimbra_voiceprefs.voicePINUpdated);
 	}
