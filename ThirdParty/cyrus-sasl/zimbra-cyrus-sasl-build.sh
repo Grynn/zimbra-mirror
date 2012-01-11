@@ -51,8 +51,8 @@ autoconf -f
 
 cd ..
 # fix linking against OpenSSL
-sed -i.obak -e 's|${with_openssl}/$CMU_LIB_SUBDIR|${with_openssl}/lib|' -e 's|${with_openssl}/lib $andrew_runpath_switch${with_openssl}/$CMU_LIB_SUBDIR|${with_openssl}/lib|' configure
-sed -i.obak -e 's|${with_openssl}/$CMU_LIB_SUBDIR|${with_openssl}/lib|' -e 's|${with_openssl}/lib $andrew_runpath_switch${with_openssl}/$CMU_LIB_SUBDIR|${with_openssl}/lib|' saslauthd/configure
+#sed -i.obak -e 's|${with_openssl}/$CMU_LIB_SUBDIR|${with_openssl}/lib|' -e 's|${with_openssl}/lib $andrew_runpath_switch${with_openssl}/$CMU_LIB_SUBDIR|${with_openssl}/lib|' configure
+#sed -i.obak -e 's|${with_openssl}/$CMU_LIB_SUBDIR|${with_openssl}/lib|' -e 's|${with_openssl}/lib $andrew_runpath_switch${with_openssl}/$CMU_LIB_SUBDIR|${with_openssl}/lib|' saslauthd/configure
 
 sed -i.bak 's/-lRSAglue //' configure
 if [ $platform = "Darwin" ]; then
@@ -64,7 +64,7 @@ LIBS="/opt/zimbra/libxml2/lib/libxml2.a" CFLAGS="-D_REENTRANT -g -O2 -I/opt/zimb
             --with-dblib=no \
             --with-devrandom=/dev/urandom \
             --with-openssl=/opt/zimbra/openssl-${openssl_version} \
-            --with-libcurl=/opt/zimbra/curl-${curl_version}/bin/curl-config \
+            --with-libcurl=/opt/zimbra/curl-${curl_version} \
             --with-gss_impl=heimdal \
             --enable-gssapi=/opt/zimbra/heimdal-${heimdal_version} \
             --with-libxml2=/opt/zimbra/libxml2-${xml2_version}/bin/xml2-config \
@@ -77,7 +77,7 @@ LIBS="/opt/zimbra/libxml2/lib/libxml2.a" CFLAGS="-D_REENTRANT -g -O2 -I/opt/zimb
             --with-dblib=no \
             --with-devrandom=/dev/urandom \
             --with-openssl=/opt/zimbra/openssl-${openssl_version} \
-            --with-libcurl=/opt/zimbra/curl-${curl_version}/bin/curl-config \
+            --with-libcurl=/opt/zimbra/curl-${curl_version} \
             --with-gss_impl=heimdal \
             --enable-gssapi=/opt/zimbra/heimdal-${heimdal_version} \
             --with-libxml2=/opt/zimbra/libxml2-${xml2_version}/bin/xml2-config \

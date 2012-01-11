@@ -1,0 +1,13 @@
+--- cyrus-sasl-2.1.25/lib/auxprop.c.orig	2012-01-11 13:27:04.068478076 -0800
++++ cyrus-sasl-2.1.25/lib/auxprop.c	2012-01-11 13:27:50.228469517 -0800
+@@ -970,6 +970,10 @@
+     }
+ 
+     if(!found) {
++	/* compatibility with <= 2.1.23, ignore the lack of auxrop plugin */
++	if (!plist)
++		result = SASL_OK;
++	else
+ 	_sasl_log(sparams->utils->conn, SASL_LOG_DEBUG,
+ 		  "could not find auxprop plugin, was searching for '%s'",
+ 		  plist ? plist : "[all]");
