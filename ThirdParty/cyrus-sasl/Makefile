@@ -23,7 +23,7 @@ else
 endif
 
 ifneq	(,$(findstring MACOSX,$(BUILD_PLATFORM)))
-	FIXOSX	:= (./fix-sasl.pl $(CYRUS_PATCH))
+	FIXOSX	:= (./fix-sasl.pl $(CYRUS_PATCH) $(CYRUS_PATCHLEVEL))
 endif
 
 CYRUS_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/cyrus-sasl/cyrus-sasl-$(CYRUS_VERSION).tgz
