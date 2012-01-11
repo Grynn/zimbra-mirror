@@ -510,7 +510,7 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
                                         enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A2_create_gal_acc,"TRUE"],[ZaItem.hasRight,ZaDomain.RIGHT_CREATE_ACCOUNT]]
                                     },
                                     {ref:(ZaAccount.A2_zimbra_ds + ".attrs." + ZaDataSource.A_zimbraDataSourcePollingInterval),
-                                        type:_LIFETIME_, label:ZaMsg.LBL_zimbraDataSourcePollingInterval_internal, labelLocation:_LEFT_,
+                                        type:_LIFETIME1_, label:ZaMsg.LBL_zimbraDataSourcePollingInterval_internal, labelLocation:_LEFT_,
                                         msgName:ZaMsg.MSG_zimbraDataSourcePollingInterval_internal,
                                         visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode],
                                         visibilityChecks:[
@@ -520,7 +520,7 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
                                         ]
                                     },
                                     {ref:ZaDomain.A2_new_internal_gal_polling_interval,
-                                        type:_LIFETIME_, label:ZaMsg.LBL_zimbraDataSourcePollingInterval_internal, labelLocation:_LEFT_,
+                                        type:_LIFETIME1_, label:ZaMsg.LBL_zimbraDataSourcePollingInterval_internal, labelLocation:_LEFT_,
                                         msgName:ZaMsg.MSG_zimbraDataSourcePollingInterval_internal,
                                         visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode],
                                         visibilityChecks:[
@@ -550,7 +550,7 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
                                         enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A2_create_gal_acc,"TRUE"]]
                                     },
                                     {ref:(ZaAccount.A2_ldap_ds + ".attrs." + ZaDataSource.A_zimbraDataSourcePollingInterval),
-                                        type:_LIFETIME_, label:ZaMsg.LBL_zimbraDataSourcePollingInterval_external, labelLocation:_LEFT_,
+                                        type:_LIFETIME1_, label:ZaMsg.LBL_zimbraDataSourcePollingInterval_external, labelLocation:_LEFT_,
                                         msgName:ZaMsg.MSG_zimbraDataSourcePollingInterval_external,
                                         enableDisableChecks:[],
                                         visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode],
@@ -561,7 +561,7 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
                                         ]
                                     },
                                     {ref:ZaDomain.A2_new_external_gal_polling_interval,
-                                        type:_LIFETIME_, label:ZaMsg.LBL_zimbraDataSourcePollingInterval_external, labelLocation:_LEFT_,
+                                        type:_LIFETIME1_, label:ZaMsg.LBL_zimbraDataSourcePollingInterval_external, labelLocation:_LEFT_,
                                         msgName:ZaMsg.MSG_zimbraDataSourcePollingInterval_external,
                                         enableDisableChecks:[],
                                         visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode],
@@ -614,7 +614,7 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
                                             visibilityChecks:[ZaNewDomainXWizard.isDomainModeNotExternal]
                                         },
                                         {ref:ZaDomain.A2_new_internal_gal_polling_interval,
-                                            type:_LIFETIME_, label:ZaMsg.LBL_zimbraDataSourcePollingInterval_internal, labelLocation:_LEFT_,
+                                            type:_LIFETIME1_, label:ZaMsg.LBL_zimbraDataSourcePollingInterval_internal, labelLocation:_LEFT_,
                                             msgName:ZaMsg.MSG_zimbraDataSourcePollingInterval_internal,
                                             visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode],
                                             visibilityChecks:[ZaNewDomainXWizard.isDomainModeNotExternal]
@@ -624,7 +624,7 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
                                             visibilityChecks:[ZaNewDomainXWizard.isDomainModeNotInternal]
                                         },
                                         {ref:ZaDomain.A2_new_external_gal_polling_interval,
-                                            type:_LIFETIME_, label:ZaMsg.LBL_zimbraDataSourcePollingInterval_external, labelLocation:_LEFT_,
+                                            type:_LIFETIME1_, label:ZaMsg.LBL_zimbraDataSourcePollingInterval_external, labelLocation:_LEFT_,
                                             msgName:ZaMsg.MSG_zimbraDataSourcePollingInterval_external,
                                             visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode],
                                             visibilityChecks:[ZaNewDomainXWizard.isDomainModeNotInternal]
