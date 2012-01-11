@@ -57,7 +57,7 @@ sed -i.obak -e 's|${with_openssl}/$CMU_LIB_SUBDIR|${with_openssl}/lib|' -e 's|${
 sed -i.bak 's/-lRSAglue //' configure
 if [ $platform = "Darwin" ]; then
 LIBS="/opt/zimbra/libxml2/lib/libxml2.a" CFLAGS="-D_REENTRANT -g -O2 -I/opt/zimbra/libxml2/include/libxml2" ./configure --enable-zimbra --prefix=/opt/zimbra/${cyrus_src} \
-            --with-saslauthd=/opt/zimbra/${cyrus_src}/state \
+            --with-saslauthd=/opt/zimbra/data/sasl2/state \
             --with-plugindir=/opt/zimbra/${cyrus_src}/lib/sasl2 \
             --enable-static=no \
             --enable-shared \
@@ -72,7 +72,7 @@ LIBS="/opt/zimbra/libxml2/lib/libxml2.a" CFLAGS="-D_REENTRANT -g -O2 -I/opt/zimb
             --enable-login
 else 
 LIBS="/opt/zimbra/libxml2/lib/libxml2.a" CFLAGS="-D_REENTRANT -g -O2 -I/opt/zimbra/libxml2/include/libxml2" ./configure --enable-zimbra --prefix=/opt/zimbra/${cyrus_src} \
-            --with-saslauthd=/opt/zimbra/${cyrus_src}/state \
+            --with-saslauthd=/opt/zimbra/data/sasl2/state \
             --with-plugindir=/opt/zimbra/${cyrus_src}/lib/sasl2 \
             --with-dblib=no \
             --with-devrandom=/dev/urandom \

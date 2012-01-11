@@ -412,13 +412,12 @@ if [ -d ${zimbra_home}/mta ]; then
 fi
 
 if [ -L ${zimbra_home}/cyrus-sasl ]; then
-  printMsg "Fixing ownership and permissions on ${zimbra_home}/cyrus-sasl"
-  if [ ! -d ${zimbra_home}/cyrus-sasl/state ]; then  
-    mkdir -p ${zimbra_home}/cyrus-sasl/state
+  printMsg "Fixing ownership and permissions on ${zimbra_home}/data/sasl2/state"
+  if [ ! -d ${zimbra_home}/data/sasl2/state ]; then  
+    mkdir -p ${zimbra_home}/data/sasl2/state
   fi
-  chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/cyrus-sasl/lib/sasl2
-  chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/cyrus-sasl/state
-  chmod 755 ${zimbra_home}/cyrus-sasl/state 
+  chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/data/sasl2/state
+  chmod 755 ${zimbra_home}/data/sasl2/state 
 fi
 
 if [ -L ${zimbra_home}/dspam ]; then
