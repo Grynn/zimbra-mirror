@@ -25,25 +25,23 @@ import java.util.Set;
 import java.util.UUID;
 
 import javax.activation.DataHandler;
+import javax.mail.Message.RecipientType;
 import javax.mail.MessagingException;
 import javax.mail.Session;
-import javax.mail.Message.RecipientType;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
 import com.zimbra.common.account.Key;
-import com.zimbra.soap.admin.type.DataSourceType;
-import com.zimbra.common.localconfig.DebugConfig;
 import com.zimbra.common.mailbox.Color;
 import com.zimbra.common.mime.MimeConstants;
 import com.zimbra.common.mime.shim.JavaMailInternetAddress;
-import com.zimbra.common.mime.shim.JavaMailMimeBodyPart;
-import com.zimbra.common.mime.shim.JavaMailMimeMultipart;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Constants;
 import com.zimbra.common.util.Pair;
 import com.zimbra.common.util.StringUtil;
+import com.zimbra.common.zmime.ZMimeBodyPart;
+import com.zimbra.common.zmime.ZMimeMultipart;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.AccountServiceException;
 import com.zimbra.cs.account.DataSource;
@@ -59,8 +57,8 @@ import com.zimbra.cs.mailbox.MailSender.SafeSendFailedException;
 import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
 import com.zimbra.cs.mime.MailboxBlobDataSource;
 import com.zimbra.cs.mime.Mime;
-import com.zimbra.cs.mime.ParsedMessage;
 import com.zimbra.cs.mime.Mime.FixedMimeMessage;
+import com.zimbra.cs.mime.ParsedMessage;
 import com.zimbra.cs.offline.LMailSender;
 import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
@@ -70,6 +68,7 @@ import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.offline.util.ymail.YMailException;
 import com.zimbra.cs.service.util.ItemId;
 import com.zimbra.cs.util.JMSession;
+import com.zimbra.soap.admin.type.DataSourceType;
 
 public class DataSourceMailbox extends SyncMailbox {
     private boolean hasFolders;
@@ -373,14 +372,14 @@ public class DataSourceMailbox extends SyncMailbox {
             mm.setSubject("Delivery failed: " + error);
             mm.saveChanges(); //must call this to update the headers
 
-            MimeMultipart mmp = new JavaMailMimeMultipart();
+            MimeMultipart mmp = new ZMimeMultipart();
 
-            MimeBodyPart mbp = new JavaMailMimeBodyPart();
+            MimeBodyPart mbp = new ZMimeBodyPart();
             mbp.setText(error == null ?
                 "SEND FAILED. PLEASE CHECK RECIPIENT ADDRESSES AND SMTP SETTINGS" : error);
             mmp.addBodyPart(mbp);
 
-            mbp = new JavaMailMimeBodyPart();
+            mbp = new ZMimeBodyPart();
             mbp.setDataHandler(new DataHandler(new MailboxBlobDataSource(msg.getBlob())));
             mbp.setHeader("Content-Type", MimeConstants.CT_MESSAGE_RFC822);
             mbp.setHeader("Content-Disposition", "attachment");

@@ -14,52 +14,58 @@
  */
 package com.zimbra.cs.offline.util.ymail;
 
-import org.junit.Test;
-import org.junit.BeforeClass;
-import org.junit.AfterClass;
-import static org.junit.Assert.*;
-import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Logger;
-import org.apache.log4j.Level;
-import com.zimbra.cs.util.yauth.RawAuthManager;
-import com.zimbra.cs.util.yauth.FileTokenStore;
-import com.zimbra.cs.util.yauth.Auth;
-import com.zimbra.cs.util.yauth.XYMEAuthenticator;
-import com.zimbra.cs.offline.OfflineLC;
-import com.zimbra.cs.offline.OfflineLog;
-import com.zimbra.cs.mailclient.imap.ImapConnection;
-import com.zimbra.cs.mailclient.imap.ImapConfig;
-import com.zimbra.cs.mailclient.imap.IDInfo;
-import com.zimbra.cs.mailclient.imap.MailboxInfo;
-import com.zimbra.cs.mailclient.imap.MessageData;
-import com.zimbra.cs.mailclient.imap.Body;
-import com.zimbra.cs.util.ZimbraApplication;
-import com.zimbra.common.mime.shim.JavaMailInternetAddress;
-import com.zimbra.common.mime.shim.JavaMailMimeMessage;
-import com.zimbra.common.util.Log;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimePart;
-import javax.mail.internet.ContentType;
-import javax.mail.internet.MimeUtility;
-import javax.mail.Session;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import javax.mail.Address;
 import javax.mail.Message;
-import javax.mail.Multipart;
 import javax.mail.MessagingException;
-import java.io.File;
-import java.io.InputStream;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
-import java.util.Properties;
-import java.util.Map;
-import java.util.Arrays;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
+import javax.mail.Multipart;
+import javax.mail.Session;
+import javax.mail.internet.ContentType;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
+import javax.mail.internet.MimePart;
+import javax.mail.internet.MimeUtility;
+import javax.mail.util.SharedFileInputStream;
+
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import com.zimbra.common.mime.shim.JavaMailInternetAddress;
+import com.zimbra.common.util.Log;
+import com.zimbra.common.zmime.ZMimeMessage;
+import com.zimbra.cs.mailclient.imap.Body;
+import com.zimbra.cs.mailclient.imap.IDInfo;
+import com.zimbra.cs.mailclient.imap.ImapConfig;
+import com.zimbra.cs.mailclient.imap.ImapConnection;
+import com.zimbra.cs.mailclient.imap.MailboxInfo;
+import com.zimbra.cs.mailclient.imap.MessageData;
+import com.zimbra.cs.offline.OfflineLC;
+import com.zimbra.cs.offline.OfflineLog;
+import com.zimbra.cs.util.ZimbraApplication;
+import com.zimbra.cs.util.yauth.Auth;
+import com.zimbra.cs.util.yauth.FileTokenStore;
+import com.zimbra.cs.util.yauth.RawAuthManager;
+import com.zimbra.cs.util.yauth.XYMEAuthenticator;
 
 public class TestYMailClient {
     private static RawAuthManager ram;
@@ -292,7 +298,7 @@ public class TestYMailClient {
 
     private MimeMessage getMessage(long uid) throws IOException, MessagingException {
         Body body = getMessageData(uid, "BODY.PEEK[]").getBodySections()[0];
-        return new JavaMailMimeMessage(null, body.getImapData().getInputStream());
+        return new ZMimeMessage(null, body.getImapData().getInputStream());
     }
 
     private MessageData getMessageData(long uid, String param)
@@ -336,7 +342,7 @@ public class TestYMailClient {
 
     private static MimeMessage simpleMessage(String text) throws Exception {
         Session session = Session.getInstance(new Properties());
-        MimeMessage mm = new JavaMailMimeMessage(session);
+        MimeMessage mm = new ZMimeMessage(session);
         mm.setFrom(new JavaMailInternetAddress(FROM));
         mm.setRecipient(Message.RecipientType.TO, new JavaMailInternetAddress(TO));
         mm.setContent(text, "plain/text");
@@ -345,9 +351,9 @@ public class TestYMailClient {
 
     private static MimeMessage readMessage(File file) throws Exception {
         Session session = Session.getInstance(new Properties());
-        InputStream is = new FileInputStream(file);
+        InputStream is = new SharedFileInputStream(file);
         try {
-            MimeMessage mm = new JavaMailMimeMessage(session, is);
+            MimeMessage mm = new ZMimeMessage(session, is);
             mm.setFrom(new JavaMailInternetAddress(FROM));
             mm.setRecipient(Message.RecipientType.TO, new JavaMailInternetAddress(TO));
             mm.setRecipients(Message.RecipientType.CC, (Address[]) null);
