@@ -111,11 +111,16 @@ function(request, isDraft) {
 			request.m.attach.cn = [];
 		}
 		var attmnts = this.contactIdsToAttach;
-		if (attmnts) {
-			for (var i = 0; i < attmnts.length; i++) {
-				request.m.attach.cn.push({id:attmnts[i]});
-			}
-		}
+            if (attmnts) {
+                for (var i = 0; i < attmnts.length; i++) {
+                    var attmntsId = attmnts[i];
+                    if( appCtxt.multiAccounts && attmnts[i].indexOf(":") == -1) {
+                        //Use fully qualified Ids for multi-accounts
+                        attmntsId = [appCtxt.getActiveAccount().id, ":", attmnts[i]].join("");
+                    }
+                request.m.attach.cn.push({id:attmntsId});
+            }
+        }
 	}
 	this._isDraftInitiatedByThisZimlet = false;
 };
