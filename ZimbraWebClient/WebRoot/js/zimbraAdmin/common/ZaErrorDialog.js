@@ -32,6 +32,7 @@ ZaErrorDialog = function(parent, contextId) {
 	var detailBtn = this._button[ZaErrorDialog.DETAIL_BUTTON];
 	detailBtn.setImage("SelectPullDownArrow");
 	this.registerCallback(ZaErrorDialog.DETAIL_BUTTON, this._showDetail, this);
+    this._setAllowSelection();
 }
 
 ZaErrorDialog.prototype = new DwtMessageDialog;
