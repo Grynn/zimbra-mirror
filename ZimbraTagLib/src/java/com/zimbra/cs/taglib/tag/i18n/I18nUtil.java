@@ -14,11 +14,18 @@
  */
 package com.zimbra.cs.taglib.tag.i18n;
 
+import com.zimbra.client.ZMailbox;
+import com.zimbra.common.util.ZimbraLog;
+import com.zimbra.cs.taglib.ZJspSession;
+
+import java.io.*;
 import java.util.*;
 import java.text.*;
+import javax.servlet.*;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.el.*;
 import javax.servlet.jsp.tagext.*;
+import javax.servlet.http.*;
 
 public class I18nUtil {
 
@@ -291,14 +298,44 @@ public class I18nUtil {
 			// bundle has never been loaded, so load it now
 			if (bundle == null) {
 				Locale locale = findLocale(pageContext);
-				ClassLoader loader = Thread.currentThread().getContextClassLoader();
+                /**
+                 * bug 66698, 66765: The context ClassLoader is overridden so that we can
+                 * transparently merge skin message files into the default ones allowing
+                 * skins to independently override messages. Moved overriding of ClassLoader
+                 * from JspServlet to here since the override needs to happen only in case
+                 * of <fmt:setBundle> to load the correct bundle resource specific to the
+                 * skin. There is no need to override class loader for all jsp pages.
+                 */
+                Thread thread = Thread.currentThread();
+				ClassLoader oLoader = thread.getContextClassLoader();
+                ClassLoader nLoader = oLoader;
+
+                //override context class loader
+                try {
+                    nLoader = new ResourceLoader(oLoader, pageContext);
+                    thread.setContextClassLoader(nLoader);
+                }catch(Exception e) {
+                    ZimbraLog.webclient.debug("FindBundle:error in overriding the class loader" + e);
+                    e.printStackTrace();
+                }
 				try {
-					bundle = ResourceBundle.getBundle(basename, locale, loader);
+					bundle = ResourceBundle.getBundle(basename, locale, nLoader);
 					pageContext.setAttribute(bundleKey, bundle, PageContext.APPLICATION_SCOPE);
 				}
 				catch (MissingResourceException e) {
 					// ignore -- nothing we can do
+                    ZimbraLog.webclient.debug("MissingResourceException:" + e);
+                    e.printStackTrace();
 				}
+				catch (Exception e) {
+					// ignore -- nothing we can do
+                    ZimbraLog.webclient.debug("FindBundle:error in fetching the bundle resource" + e);
+                    e.printStackTrace();
+				}
+                finally {
+                    //restore old class loader
+                    thread.setContextClassLoader(oLoader);
+                }
 			}
 		}
 
@@ -340,5 +377,176 @@ public class I18nUtil {
 	//
 	
 	private I18nUtil() {}
+
+    static class ResourceLoader extends ClassLoader {
+
+    //
+    // Data
+    //
+
+    private PageContext pageContext;
+
+    //
+    // Constants
+    //
+
+    public static final String P_SKIN = "skin";
+    public static final String P_DEFAULT_SKIN = "zimbraDefaultSkin";
+
+    public static final String A_SKIN = "skin";
+    protected static final String MANIFEST = "manifest.xml";
+
+
+    //
+    // Constructors
+    //
+
+    public ResourceLoader(ClassLoader parent, PageContext pageContext) {
+        super(parent);
+        this.pageContext = pageContext;
+    }
+
+    //
+    //  Private Methods
+    //
+
+    String setSkin(ServletRequest request, ServletResponse response) {
+        // start with if skin is already set as an attribute
+        String skin = (String)request.getAttribute(A_SKIN);
+//		ZimbraLog.webclient.debug("### request: "+skin);
+
+        // is skin specified in request parameter?
+        if (skin == null) {
+            skin = request.getParameter(P_SKIN);
+//		ZimbraLog.webclient.debug("### param: "+skin);
+        }
+
+        // is it available in session?
+        if (skin == null) {
+            HttpSession hsession = ((HttpServletRequest)request).getSession(false);
+            if (hsession != null) {
+                skin = (String)hsession.getAttribute(A_SKIN);
+//				ZimbraLog.webclient.debug("### http session: "+skin);
+            }
+        }
+
+        // user preference
+        ZMailbox mailbox = null;
+        if (skin == null) {
+            PageContext context = this.pageContext;
+            if (ZJspSession.hasSession(context)) {
+                try {
+                    ZJspSession zsession = ZJspSession.getSession(context);
+                    if (zsession != null) {
+                        mailbox = ZJspSession.getZMailbox(context);
+                        skin = mailbox.getPrefs().getSkin();
+//						ZimbraLog.webclient.debug("### zimbra session: "+skin);
+                    }
+                }
+                catch (Exception e) {
+                    if (ZimbraLog.webclient.isDebugEnabled()) {
+                        ZimbraLog.webclient.debug("no zimbra session");
+                    }
+                }
+            }
+        }
+
+        /*** NOTE: This causes an additional SOAP request ***
+        // is this skin allowed?
+        if (skin != null && mailbox != null) {
+            try {
+                boolean found = false;
+                for (String name : mailbox.getAvailableSkins()) {
+                    if (name.equals(skin)) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    skin = null;
+                }
+            }
+            catch (Exception e) {
+                ZimbraLog.webclient.error("unable to get available skins");
+                skin = null;
+            }
+        }
+        /***/
+
+        // is the skin even present?
+        if (skin != null) {
+            File manifest = new File(((HttpServletRequest)request).getSession(false).getServletContext().getRealPath("/skins/"+skin+"/"+MANIFEST));
+            if (!manifest.exists()) {
+                ZimbraLog.webclient.debug("selected skin ("+skin+") doesn't exist");
+                skin = null;
+            }
+        }
+
+        // fall back to default skin
+        if (skin == null) {
+            skin = ((HttpServletRequest)request).getSession().getServletContext().getInitParameter(P_DEFAULT_SKIN);
+//			ZimbraLog.webclient.debug("### default: "+skin);
+        }
+
+        // store in the request
+        pageContext.setAttribute(A_SKIN, skin) ;
+
+        return skin;
+    }
+
+    //
+    // ClassLoader methods
+    //
+    public InputStream getResourceAsStream(String filename) {
+        if (ZimbraLog.webclient.isDebugEnabled()) {
+            ZimbraLog.webclient.debug("getResourceAsStream: filename="+filename);
+        }
+
+        // default resource
+        String basename = filename.replaceAll("^/skins/[^/]+", "");
+        boolean isMsgOrKey = basename.startsWith("/messages/") || basename.startsWith("/keys/");
+        if (!isMsgOrKey) {
+            return super.getResourceAsStream(filename);
+        }
+
+        // aggregated resources
+        InputStream stream = super.getResourceAsStream(basename);
+
+        String skin = (String)pageContext.getAttribute("skin");
+        if (skin == null) {
+            skin = this.setSkin(this.pageContext.getRequest(), this.pageContext.getResponse());
+        }
+
+        ZimbraLog.webclient.debug("omega:" + (this.pageContext.getServletContext().getRealPath("/skins/"+skin+basename)));
+
+        File file = new File(this.pageContext.getServletContext().getRealPath("/skins/"+skin+basename));
+        if (file.exists()) {
+            if (ZimbraLog.webclient.isDebugEnabled()) {
+                ZimbraLog.webclient.debug("  found message overrides for skin="+skin);
+            }
+            try {
+                InputStream skinStream = new FileInputStream(file);
+
+                // NOTE: We have to add a newline in case the original
+                //       stream doesn't end with one. Otherwise, the
+                //       first line from the skin stream will appear
+                //       as part of the value of the last line in the
+                //       original stream.
+                InputStream newlineStream = new ByteArrayInputStream("\n".getBytes());
+
+                stream = stream != null
+                       ? new SequenceInputStream(stream, new SequenceInputStream(newlineStream, skinStream))
+                       : skinStream;
+            }
+            catch (FileNotFoundException e) {
+                // ignore
+                ZimbraLog.webclient.debug("FileNotFoundException:" + e);
+            }
+        }
+
+        return stream;
+    }
+
+} // class ResourceLoader
 
 } // class I18nUtil
