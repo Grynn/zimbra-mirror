@@ -1080,7 +1080,6 @@ public class SkinResources
 			define(macros, "MOZILLA", isMozilla);
 			define(macros, "MOZILLA_1_4_OR_HIGHER", isMozilla1_4up);
 			define(macros, "MSIE", isIE);
-			define(macros, "MSIE_LOWER_THAN_7", isIE && !isIE7up);
 			define(macros, "MSIE_3", isIE3);
 			define(macros, "MSIE_4", isIE4);
 			define(macros, "MSIE_4_OR_HIGHER", isIE4up);
@@ -1090,10 +1089,12 @@ public class SkinResources
 			define(macros, "MSIE_5_5_OR_HIGHER", isIE5_5up);
 			define(macros, "MSIE_6", isIE6);
 			define(macros, "MSIE_6_OR_HIGHER", isIE6up);
+			define(macros, "MSIE_LOWER_THAN_7", isIE && !isIE7up);
 			define(macros, "MSIE_7", isIE7);
 			define(macros, "MSIE_7_OR_HIGHER", isIE7up);
 			define(macros, "MSIE_8", isIE8);
 			define(macros, "MSIE_8_OR_HIGHER", isIE8up);
+			define(macros, "MSIE_LOWER_THAN_9", isIE && !isIE9up);
 			define(macros, "MSIE_9", isIE9);
 			define(macros, "MSIE_9_OR_HIGHER", isIE9up);
 			define(macros, "MSIE_10", isIE10);
