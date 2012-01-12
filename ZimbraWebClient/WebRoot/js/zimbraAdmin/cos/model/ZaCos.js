@@ -493,7 +493,13 @@ function (accountName){
 	
 	var domainName = ZaAccount.getDomain(accountName);
 	var domainCosId ;
-	var domain = ZaDomain.getDomainByName(domainName);
+	var domain;
+    try {
+        domain= ZaDomain.getDomainByName(domainName);
+    } catch (ex) {
+        domain = undefined;
+    }
+
 	if(domain) {
 		domainCosId = domain.attrs[ZaDomain.A_domainDefaultCOSId] ;
 		//when domainCosId doesn't exist, we always set default cos
