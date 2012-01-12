@@ -81,7 +81,6 @@ ZaDistributionList.A_isAdminGroup = "zimbraIsAdminGroup" ;
 ZaDistributionList.A_zimbraPrefReplyToAddress = "zimbraPrefReplyToAddress";
 ZaDistributionList.A_zimbraPrefReplyToDisplay = "zimbraPrefReplyToDisplay";
 ZaDistributionList.A_zimbraPrefReplyToEnabled = "zimbraPrefReplyToEnabled";
-ZaDistributionList.A2_dlOwner = "dlOwner";
 
 ZaDistributionList.getDLStatus = function (status) {
     if (status == "enabled") {
@@ -909,12 +908,6 @@ ZaDistributionList.myXModel = {
 		{id:ZaDistributionList.A2_addList, type:_LIST_},
 		{id:ZaDistributionList.A2_removeList, type:_LIST_},
 		{id:ZaDistributionList.A2_optionalAdd, type:_STRING_},
-        {id:ZaDistributionList.A2_dlOwner, type:_LIST_,
-            listItem:{ type:_OBJECT_, items:[
-                {type:_STRING_, }
-
-            ]}
-        },
 		{id:ZaAccount.A_name, type:_STRING_,  required:true,
 			constraints: {type:"method", value:
 			   function (value, form, formItem, instance) {				   
