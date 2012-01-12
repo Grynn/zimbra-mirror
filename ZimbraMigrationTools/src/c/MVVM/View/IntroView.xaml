@@ -33,7 +33,7 @@
         <Grid Name="BottomGrid" Grid.Row="4" Grid.ColumnSpan="2" Margin="10,0,0,10" VerticalAlignment="Bottom">
             <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,-33,0,0" Name="tbAppBuildnum" Text="{Binding Path=BuildNum}" FontSize="12" FontWeight="Normal" FontFamily="Arial" FontStyle="Normal" />
             <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,4,0,0" Name="textBlockCopyright" Text="Copyright © 2006-2011 VMware, Inc.  All rights reserved." />
-            <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,10,0" Content="Next &gt;" Name="buttonWelcomeNext" Command="{Binding NextCommand}" />
+            <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,10,0" Content="Next &gt;" Name="buttonWelcomeNext" Command="{Binding NextCommand}" IsDefault="True" />
         </Grid>
     </Grid>
 </UserControl>

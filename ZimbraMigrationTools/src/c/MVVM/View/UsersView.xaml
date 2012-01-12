@@ -50,7 +50,7 @@
         <Grid Name="BottomGrid" Grid.Row="6" Margin="10,0,0,10" VerticalAlignment="Bottom">
             <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,0,0" Content="Save CSV" Name="saveCSVButton" Command="{Binding SaveCSVCommand}"  />
             <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,91,0" Content="&lt; Back" Name="buttonUsersBack" Command="{Binding BackCommand}" IsEnabled="True"  />
-            <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,10,0" Content="Next &gt;" Name="buttonUsersNext" Command="{Binding NextCommand}" IsEnabled="{Binding Path=EnableNext}"  />
+            <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,10,0" Content="Next &gt;" Name="buttonUsersNext" Command="{Binding NextCommand}" IsEnabled="{Binding Path=EnableNext}" IsDefault="True"  />
         </Grid>
     </Grid>
 </UserControl>

@@ -110,7 +110,7 @@
         <Grid Name="BottomGrid" Grid.Row="4" Grid.ColumnSpan="2" Margin="10,0,0,10" VerticalAlignment="Bottom">
             <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,0,0" Content="Preview" Name="buttonMigratePrev" Command="{Binding PreviewCommand}"  />
             <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,91,0" Content="&lt; Back" Name="buttonMigrateBack" Command="{Binding BackCommand}" IsEnabled="True" />
-            <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,10,0" Content="Migrate" Name="buttonMigrateMigrate" IsEnabled="{Binding Path=EnableMigrate}" Command="{Binding MigrateCommand}"  />
+            <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,10,0" Content="Migrate" Name="buttonMigrateMigrate" IsDefault="True" IsEnabled="{Binding Path=EnableMigrate}" Command="{Binding MigrateCommand}"  />
         </Grid>
     </Grid>
 </UserControl>

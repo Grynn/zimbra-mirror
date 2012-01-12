@@ -39,7 +39,7 @@
             <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,0,0" Content="Load" Name="buttonConfigLoad" Command="{Binding LoadCommand}"  />
             <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="81,0,0,0" Content="Save" Name="buttonConfigSav" Command="{Binding SaveCommand}"  />
             <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,91,0" Content="&lt; Back" Name="buttonConfigBack" Command="{Binding BackCommand}" IsEnabled="True"  />
-            <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,10,0" Content="Next &gt;" Name="buttonConfigNext" Command="{Binding NextCommand}"  />
+            <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,10,0" Content="Next &gt;" Name="buttonConfigNext" Command="{Binding NextCommand}" IsDefault="True"  />
         </Grid>
     </Grid>
 </UserControl>
