@@ -340,6 +340,11 @@ public class OptionsViewModel: BaseViewModel
         {
             placeholderstring = value;
             string[] nameTokens = value.Split(',');
+            if (nameTokens.Length > 15)
+            {
+                MessageBox.Show("Only 15 folders will be saved", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
 
             int i;
 

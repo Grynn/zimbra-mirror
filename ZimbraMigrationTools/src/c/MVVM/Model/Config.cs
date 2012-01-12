@@ -16,7 +16,7 @@ public class Config
         this.importOptions = new ImportOptions();
         this.UserProvision = new UserProvision();
         this.AdvancedImportOptions = new AdvancedImportOptions();
-        this.AdvancedImportOptions.FoldersToSkip = new Folder[5];
+        this.AdvancedImportOptions.FoldersToSkip = new Folder[15];
 
         this.zimbraServer.ZimbraHostname = zimbraserverhostname;
         this.zimbraServer.Port = zimbraport;
