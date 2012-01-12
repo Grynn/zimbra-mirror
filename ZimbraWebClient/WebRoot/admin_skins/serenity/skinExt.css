@@ -42,8 +42,7 @@
     border: 1px solid;
     background-color:white;
     height:12px;
-    @trRadius@:5px;
-    @brRadius@:5px;
+	@roundCorners(0 5px 5px 0)@
 }
  */
 
@@ -83,10 +82,7 @@
     text-align:right;
     color:white;
     padding-right:3px;
-    @tlRadius@:4px;
-    @trRadius@:4px;
-    @blRadius@:4px;
-    @brRadius@:4px;
+	@roundCorners(4px)@
 }
 
 .rootOverviewHeader-Text {
@@ -163,20 +159,14 @@ div.ZmSelectedHeaderBg {
 
 .SearchPanel {
     background-color:@viewC@;
-    @tlRadius@:5px;
-    @trRadius@:5px;
-    @blRadius@:5px;
-    @brRadius@:5px;
+	@roundCorners(5px)@
 }
 
 .SearchToolBar {
     top: 0px;
     border: white solid 1px;
     background-color:@viewC@;
-    @tlRadius@:5px;
-    @trRadius@:5px;
-    @blRadius@:5px;
-    @brRadius@:5px;
+	@roundCorners(5px)@
 }
 
 .SearchTBSearchField .oselect, .oselect_check {
@@ -216,20 +206,14 @@ div.ZmSelectedHeaderBg {
     min-height:18px;
     background-color:#4682b4;
     color: white;
-    @tlRadius@:4px;
-    @trRadius@:4px;
-    @blRadius@:4px;
-    @brRadius@:4px;
+	@roundCorners(4px)@
 }
 
 .WindowOuterContainer {
     background-color: #EAEAEA;
-    @tlRadius@:5px;
-    @trRadius@:5px;
-    @blRadius@:5px;
-    @brRadius@:5px;
     border: 1px solid;
     padding: 1px;
+	@roundCorners(5px)@
 }
 
 .WindowInnerContainer {
@@ -274,23 +258,23 @@ div.ZmSelectedHeaderBg {
 }
 
 .DwtDialogButtonBar .ZButtonBorder {
-    border: 1px solid #949494;
-    @borderRadius@:3px;
-    background-color: #fefefe;
+    border:1px solid #949494;
+    background-color:#FEFEFE;
+    @roundCorners(3px)@
 }
 
 .DwtDialogButtonBar .ZDisabled .ZButtonTable .ZWidgetTitle{
     border: 1px solid #949494;
-    @borderRadius@:3px;
     font: Arial 12px normal;
     color: #999999;
+	@roundCorners(3px)@
 }
 
 .DwtDialogButtonBar .ZHover .ZButtonBorder{
     border: 1px solid #949494;
-    @borderRadius@:3px;
     font: Arial 12px normal;
     background-color: #C7E9FF;
+	@roundCorners(3px)@
 }
 
 .horizSep {
@@ -342,9 +326,9 @@ div.ZmSelectedHeaderBg {
 }
 
 .ZaHomeSetupPanel{
-    @borderRadius@:10px;
     background-color: #f3f7fb;
     border: 1px solid #e7ecf2;
+	@roundCorners(10px)@
 }
 
 .ZaHomeSetupPanelContent {
