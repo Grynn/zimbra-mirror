@@ -100,7 +100,9 @@ public class CSMigrationwrapper
     }
     
     dynamic MailWrapper;
-    
+
+    dynamic useruserobject = new Exchange.UserObject(); // for PST migration -- can be here since there's only one
+  
     public CSMigrationwrapper()
     {
         Log.init(Path.GetTempPath() + "migration.log", Log.Level.Debug);
@@ -458,8 +460,7 @@ public class CSMigrationwrapper
 
     public void EndUserMigration()
     {
-       dynamic  userobject = new Exchange.UserObject();
-       userobject.UMUnInitializeUser();
+       useruserobject.UMUnInitializeUser();
     }
 
     public void StartMigration(MigrationAccount Acct, MigrationOptions importopts, bool
@@ -501,7 +502,7 @@ public class CSMigrationwrapper
                 }
                 else
                 {
-                    value = userobject.UMInitializeUser(Acct.AccountID, accountName);
+                    value = useruserobject.UMInitializeUser(Acct.AccountID, accountName);
                 }
             }
             catch (Exception e)
@@ -523,8 +524,8 @@ public class CSMigrationwrapper
             {
                 Log.info(accountName, "initialized");
             }
-           
-            folderobjectarray = userobject.GetFolderObjects();
+
+            folderobjectarray = (isServer) ? userobject.GetFolderObjects() : useruserobject.GetFolderObjects();
             Acct.migrationFolder.CurrentCountOfItems = folderobjectarray.Count();
 
             Acct.TotalItems = ComputeTotalMigrationCount(importopts, folderobjectarray);
@@ -643,7 +644,14 @@ public class CSMigrationwrapper
                 {
                     path = "/MAPIRoot/Deleted Items";   // FBS EXCHANGE SPECIFIC HACK !!!
                 }
-                ProcessItems(Acct, isServer, userobject,folderobject, api, path, importopts);
+                if (isServer)
+                {
+                    ProcessItems(Acct, isServer, userobject, folderobject, api, path, importopts);
+                }
+                else
+                {
+                    ProcessItems(Acct, isServer, useruserobject, folderobject, api, path, importopts);
+                }
             }
         }
         else
