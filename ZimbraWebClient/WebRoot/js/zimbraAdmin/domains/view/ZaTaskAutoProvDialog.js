@@ -31,25 +31,56 @@ ZaTaskAutoProvDialog = function(parent, title, width, height) {
 
 ZaTaskAutoProvDialog.prototype = new ZaXDialog;
 ZaTaskAutoProvDialog.prototype.constructor = ZaTaskAutoProvDialog;
+ZaTaskAutoProvDialog.prototype.supportMinimize = true;
 ZaTaskAutoProvDialog.helpURL = location.pathname + ZaUtil.HELP_URL + "managing_domain/autoprov_manual_config.htm?locid="+AjxEnv.DEFAULT_LOCALE;
 
 ZaTaskAutoProvDialog.APPLY_BUTTON = ++DwtDialog.LAST_BUTTON;
 
+ZaTaskAutoProvDialog.prototype.getCacheName = function(){
+    return "ZaTaskAutoProvDialog";
+}
+
 ZaTaskAutoProvDialog.prototype.setObject = function(entry) {
-    entry[ZaDomain.A2_zimbraAutoProvSearchActivated] = "TRUE";
+    this._containedObject = new ZaDomain();
+    ZaItem.prototype.copyTo.call(entry,this._containedObject,true,4);
+
+    this._containedObject[ZaDomain.A2_zimbraAutoProvSearchActivated] = entry[ZaDomain.A2_zimbraAutoProvSearchActivated] || "TRUE";
     if(entry.attrs[ZaDomain.A_zimbraAutoProvAttrMap] && (typeof entry.attrs[ZaDomain.A_zimbraAutoProvAttrMap] == "string"))
-         entry.attrs[ZaDomain.A_zimbraAutoProvAttrMap] = [entry.attrs[ZaDomain.A_zimbraAutoProvAttrMap]];
+         this._containedObject.attrs[ZaDomain.A_zimbraAutoProvAttrMap] = [entry.attrs[ZaDomain.A_zimbraAutoProvAttrMap]];
 
     // auto provisioning object backup
-    this._backupLdapObj(entry);
-    entry[ZaDomain.A2_zimbraAutoProvAccountPool] = [];
-    entry[ZaDomain.A2_zimbraAutoProvAccountTargetPool] = [];
+    this._backupLdapObj(this._containedObject);
+    this._containedObject[ZaDomain.A2_zimbraAutoProvAccountPool] = entry[ZaDomain.A2_zimbraAutoProvAccountPool] || [];
+    this._containedObject[ZaDomain.A2_zimbraAutoProvAccountTargetPool] = entry[ZaDomain.A2_zimbraAutoProvAccountTargetPool] || [];
 
-    this._separateConfigureValues(entry);
-    ZaXDialog.prototype.setObject.call(this,entry);
+    this._separateConfigureValues(this._containedObject);
+    //ZaXDialog.prototype.setObject.call(this,entry);
+    this._containedObject._uuid = entry._extid || entry._uuid;
+    this._containedObject._editObject = entry._editObject;
+
+    this._localXForm.setInstance(this._containedObject);
+
 
     this._button[DwtDialog.OK_BUTTON].setEnabled(false);
     this._button[ZaTaskAutoProvDialog.APPLY_BUTTON].setEnabled(false);
+}
+
+ZaTaskAutoProvDialog.prototype.finishWizard =
+function(ev) {
+	try {
+        if(!this._checkGeneralConfig() || !this._checkEagerConfig()
+                || !this._checkLazyConfig()) {
+            return;
+        }
+        this._combineConfigureValues(this._containedObject);
+		ZaDomain.modifyAutoPovSettings.call(this._containedObject._editObject,this._containedObject);
+		ZaApp.getInstance().getDomainListController()._fireDomainChangeEvent(this._containedObject._editObject);
+		this.popdown();
+		ZaApp.getInstance().getDomainListController()._notifyAllOpenTabs();
+	} catch (ex) {
+		this._handleException(ex, "ZaDomainListController.prototype._finishAutoProvButtonListener", null, false);
+	}
+	return;
 }
 
 ZaTaskAutoProvDialog.prototype.handleXFormChange =

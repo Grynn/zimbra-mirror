@@ -584,7 +584,14 @@ function(ev) {
             else
                 this._autoProvWizard = ZaApp.getInstance().dialogs["autoProvWizard"] = new ZaTaskAutoProvDialog(this._container, ZaMsg.NAD_AutoProvConfigTitle);//ZaAutoProvConfigXWizard(this._container);
         }
-        this._autoProvWizard.registerCallback(DwtDialog.OK_BUTTON, ZaDomainController.prototype._finishAutoProvButtonListener, this, null);
+        if(appNewUI){
+                this._currentObject._extid=ZaUtil.getItemUUid();
+                this._currentObject._editObject = this._currentObject;
+                this._autoProvWizard.registerCallback(DwtDialog.OK_BUTTON, ZaTaskAutoProvDialog.prototype.finishWizard, this._autoProvWizard, null);
+        }else {
+                this._autoProvWizard.registerCallback(DwtDialog.OK_BUTTON, ZaDomainListController.prototype._finishAutoProvButtonListener, this, null);
+        }
+
         this._currentObject.currentTab = "1";
 		this._autoProvWizard.setObject(this._currentObject);
 		this._autoProvWizard.popup();
