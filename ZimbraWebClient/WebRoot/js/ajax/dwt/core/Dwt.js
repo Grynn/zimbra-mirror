@@ -341,11 +341,12 @@ function(el) {
 };
 
 /**
- * Finds an ancestor element with a value for the given attr.
+ * Finds an ancestor element with a non-empty value for the given attr.
  * 
- * @param {DOMElement} domElement the DOM element (typically an HTML element)
- * @param {string}	attrName	the attribute name
- * @param {DOMElement} the DOM element
+ * @param	{DOMElement}	domElement	the starting DOM element
+ * @param	{string}		attrName	the attribute name
+ * 
+ * @return	{DOMElement}	the DOM element
  */
 Dwt.findAncestor =
 function(domElement, attrName) {
@@ -353,6 +354,24 @@ function(domElement, attrName) {
 	while (domElement && (attr == null || attr == "")) {
 		domElement = domElement.parentNode;
 		attr = Dwt.getAttr(domElement, attrName);
+	}
+	return domElement;
+};
+
+/**
+ * Finds an ancestor element with the given node name, eg "find the nearest
+ * ancestor DIV or SPAN".
+ * 
+ * @param	{DOMElement}	domElement		the starting DOM element
+ * @param	{string|array}	nodeName(s)		the node name(s) (in lower case)
+ * 
+ * @return	{DOMElement}	the DOM element
+ */
+Dwt.findAncestorByNodeName =
+function(domElement, nodeNames) {
+	nodeNames = AjxUtil.arrayAsHash(AjxUtil.toArray(nodeNames));
+	while (domElement && (!nodeNames[domElement.nodeName.toLowerCase()])) {
+		domElement = domElement.parentNode;
 	}
 	return domElement;
 };
