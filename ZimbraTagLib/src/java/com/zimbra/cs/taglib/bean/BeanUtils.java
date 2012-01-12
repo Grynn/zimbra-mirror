@@ -693,6 +693,10 @@ public class BeanUtils {
         return f == null ? null : new ZFolderBean(f);
     }
 
+    /**
+     * Folder name can contain some special characters which can be used for XSS attack.
+     * "Cook" (HTML encode) the folder name before returning.
+     */
     public static String getFolderName(PageContext pc, String id) throws JspException, ServiceException {
         ZMailbox mbox = ZJspSession.getZMailbox(pc);
         if (id == null) return null;
@@ -702,15 +706,47 @@ public class BeanUtils {
         return (lname == null || lname.startsWith("???")) ? BeanUtils.cook(f.getName()) : lname;
     }
 
+    /**
+     * Method to return the folder name as is, i.e; without cooking.
+     */
+    public static String getUncookedFolderName(PageContext pc, String id) throws JspException, ServiceException {
+        ZMailbox mbox = ZJspSession.getZMailbox(pc);
+        if (id == null) return null;
+        ZFolder f = mbox.getFolderById(id);
+        if (f == null) return null;
+        String lname = I18nUtil.getLocalizedMessage(pc, "FOLDER_LABEL_"+f.getId());
+        return (lname == null || lname.startsWith("???")) ? f.getName() : lname;
+    }
+
+    /**
+     * Truncates the folder name to the max length provided, cooks it before returning
+     * @return Truncated folder name
+     */
+    public static String getTruncatedFolderName(PageContext pc, String id, int length, boolean ellipses) throws JspException, ServiceException {
+        ZMailbox mbox = ZJspSession.getZMailbox(pc);
+        if (id == null) return null;
+        ZFolder f = mbox.getFolderById(id);
+        if (f == null) return null;
+        String lname = I18nUtil.getLocalizedMessage(pc, "FOLDER_LABEL_"+f.getId());
+        String folderName = (lname == null || lname.startsWith("???")) ? f.getName() : lname;
+        String truncatedFolderName = BeanUtils.truncate(folderName, length, ellipses);
+        return BeanUtils.cook(truncatedFolderName);
+    }
+
 	private static void getFolderPath(PageContext pc, ZFolder folder, StringBuilder builder) throws JspException, ServiceException {
 		ZFolder parent = folder.getParent();
 		if (parent != null && !ZFolder.ID_USER_ROOT.equals(parent.getId())) {
 			getFolderPath(pc, parent, builder);
 			builder.append(ZMailbox.PATH_SEPARATOR);
 		}
-		builder.append(getFolderName(pc, folder.getId()));
+		builder.append(getUncookedFolderName(pc, folder.getId()));
 	}
-	
+
+    /**
+     * Returns the absolute folder path, cooks it before returning since it can contain some special characters which
+     * can cause XSS attack.
+     * @return Absolute folder path
+     */
 	public static String getFolderPath(PageContext pc, String id) throws JspException, ServiceException {
         ZMailbox mbox = ZJspSession.getZMailbox(pc);
         if (id == null) return null;
@@ -719,6 +755,21 @@ public class BeanUtils {
 		StringBuilder builder = new StringBuilder(256);
 		getFolderPath(pc, f, builder);
 		return BeanUtils.cook(builder.toString());
+    }
+
+    /**
+     * Truncated the folder path as per the length provided, cooks it before returning
+     * @return Truncated folder path
+     */
+  	public static String getTruncatedFolderPath(PageContext pc, String id, int length, boolean ellipses) throws JspException, ServiceException {
+        ZMailbox mbox = ZJspSession.getZMailbox(pc);
+        if (id == null) return null;
+        ZFolder f = mbox.getFolderById(id);
+        if (f == null) return null;
+		StringBuilder builder = new StringBuilder(256);
+		getFolderPath(pc, f, builder);
+        String folderPath = BeanUtils.truncate(builder.toString(), length, ellipses);
+		return BeanUtils.cook(folderPath);
     }
 
     private static long sUrlRandSalt = 0;

@@ -6957,6 +6957,13 @@
     </function>
 
     <function>
+        <name>getTruncatedFolderName</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>java.lang.String
+            getTruncatedFolderName(javax.servlet.jsp.PageContext,java.lang.String,int,boolean)</function-signature>
+    </function>
+
+    <function>
         <name>getFolderName</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>java.lang.String
@@ -6964,10 +6971,24 @@
     </function>
 
     <function>
+        <name>getUncookedFolderName</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>java.lang.String
+            getUncookedFolderName(javax.servlet.jsp.PageContext,java.lang.String)</function-signature>
+    </function>
+
+    <function>
         <name>getFolderPath</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>java.lang.String
             getFolderPath(javax.servlet.jsp.PageContext,java.lang.String)</function-signature>
+    </function>
+
+    <function>
+        <name>getTruncatedFolderPath</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>java.lang.String
+            getTruncatedFolderPath(javax.servlet.jsp.PageContext,java.lang.String,int,boolean)</function-signature>
     </function>
 
     <function>
