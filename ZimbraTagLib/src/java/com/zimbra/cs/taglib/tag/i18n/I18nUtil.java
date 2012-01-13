@@ -475,7 +475,7 @@ public class I18nUtil {
 
         // is the skin even present?
         if (skin != null) {
-            File manifest = new File(((HttpServletRequest)request).getSession(false).getServletContext().getRealPath("/skins/"+skin+"/"+MANIFEST));
+            File manifest = new File(((HttpServletRequest)request).getSession().getServletContext().getRealPath("/skins/"+skin+"/"+MANIFEST));
             if (!manifest.exists()) {
                 ZimbraLog.webclient.debug("selected skin ("+skin+") doesn't exist");
                 skin = null;
