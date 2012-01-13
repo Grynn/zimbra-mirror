@@ -39,7 +39,7 @@ public class OfflineCreateFolder extends CreateFolder {
             if (MailItem.Type.of(viewStr) == MailItem.Type.CONTACT) {
                 OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
                 OfflineDataSource dataSource = (OfflineDataSource) prov.getDataSource(mbox.getAccount());
-                if (dataSource.isGmail() || dataSource.isYahoo() || dataSource.isLive()) {
+                if (dataSource != null && (dataSource.isGmail() || dataSource.isYahoo() || dataSource.isLive())) {
                     throw ServiceException.FAILURE("ZD does not allow creation of Address book for Gmail, Yahoo and Live", null);
                 }
             }
