@@ -305,7 +305,7 @@ sub updateSyslog {
     local @ARGV=("/etc/logrotate.d/zimbra");
     while (<>) {
       if ( $rsyslog == 1 ) {
-        s/syslogd.pid/rsyslogd.pid/g;
+        s/syslogd\*.pid/rsyslogd.pid/g;
       }
       s/USER/zimbra/;
       s/GROUP/zimbra/;
@@ -477,7 +477,7 @@ if ( $platform =~ /UBUNTU/ || $platform =~ /DEBIAN4/ ) {
     print "Unable to restart syslog.  Please do it manually.\n";
     exit 1;
   }
-} elsif ( $platform =~ /DEBIAN5/ || $platform =~ /DEBIAN6/ || $platform =~ /F10/ || $platform =~ /F11/ ) {
+} elsif ( $platform =~ /DEBIAN5/ || $platform =~ /DEBIAN6/ || $platform =~ /F10/ || $platform =~ /F11/ || $platform =~ /RHEL6/ ) {
   if ( -e "/etc/init.d/rsyslog" ) {
     `/etc/init.d/rsyslog restart> /dev/null 2>&1`;
     exit 0;
@@ -486,7 +486,7 @@ if ( $platform =~ /UBUNTU/ || $platform =~ /DEBIAN4/ ) {
     exit 1;
   }
 } else {
-  my $syslog_PID=`cat /var/run/syslog*.pid`;
+  my $syslog_PID=`cat /var/run/*syslog*.pid`;
   `kill -HUP $syslog_PID`;
 }
 
