@@ -32,7 +32,7 @@ public class OfflineAttributeManager extends AttributeManager {
             AttributeCardinality cardinality, Set<AttributeClass> requiredIn,
             Set<AttributeClass> optionalIn, Set<AttributeFlag> flags,
             List<String> globalConfigValues, List<String> defaultCOSValues,
-            List<String> defaultExternalCOSValues, List<String> octopusDefaultCOSValues, List<String> globalConfigValuesUpgrade,
+            List<String> defaultExternalCOSValues, List<String> globalConfigValuesUpgrade,
             List<String> defaultCOSValuesUpgrade, String description, List<AttributeServerType> requiresRestart,
             Version sinceVer, Version deprecatedSinceVer) {
         return new OfflineAttributeInfo(
