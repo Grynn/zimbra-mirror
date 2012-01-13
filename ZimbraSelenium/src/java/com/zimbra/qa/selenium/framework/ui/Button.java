@@ -87,6 +87,9 @@ public class Button {
 	public static final Button O_REVOKE_LINK = new Button("O_REVOKE_LINK");
 	public static final Button O_RESEND_LINK = new Button("O_RESEND_LINK");
 	public static final Button B_MORE_DETAILS = new Button("B_MORE_DETAILS");
+	public static final Button B_SENDCANCELLATION = new Button("B_SENDCANCELLATION");
+	public static final Button B_EDITMESSAGE = new Button("B_EDITMESSAGE");
+	public static final Button B_CANCEL_CONFIRMDELETE = new Button("B_CANCEL_CONFIRMDELETE");
 
 	// Zimbra Desktop's Accounts page
 	public static final Button B_VALIDATE_AND_SAVE = new Button("B_VALIDATE_AND_SAVE");
@@ -385,6 +388,9 @@ public class Button {
 	public static final Button O_VIEW_MONTH_SUB_MENU = new Button("O_VIEW_MONTH_SUB_MENU");
 	public static final Button O_VIEW_LIST_SUB_MENU = new Button("O_VIEW_LIST_SUB_MENU");
 	public static final Button O_VIEW_SCHEDULE_SUB_MENU = new Button("O_VIEW_SCHEDULE_SUB_MENU");
+	
+	public static final Button B_OPEN_THIS_INSTANCE = new Button("B_OPEN_THIS_INSTANCE");
+	public static final Button B_OPEN_THE_SERIES = new Button("B_OPEN_THE_SERIES");
 
 	// Calendar dialogs
 	public static final Button B_SEND_CANCELLATION = new Button("B_SEND_CANCELLATION");

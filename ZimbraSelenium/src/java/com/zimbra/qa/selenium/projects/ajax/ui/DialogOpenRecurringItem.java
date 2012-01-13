@@ -6,32 +6,23 @@ package com.zimbra.qa.selenium.projects.ajax.ui;
 
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 
-/**
- * Represents a "Confirmation" dialog box
- * <p>
- */
-public class DialogConfirm extends AbsDialog {
+public class DialogOpenRecurringItem extends AbsDialog {
 
 	public static enum Confirmation {
-		YES, NO, DELETE, SENDLINK, SAVEAPPOINTMENT
+		OPENRECURRINGITEM
 	}
 	
-	private Confirmation confirmation = null;
-	
 	public static class Locators {
-		public static final String zDialogClass = "DwtConfirmDialog";
+		public static final String zDialogClass = "DwtDialog";
 		public static final String zDialogButtonsClass = "DwtDialogButtonBar";
 		public static final String zDialogContentClassId = "DwtDialogBody";
 	}
 
-	public DialogConfirm(Confirmation confirmation, AbsApplication application, AbsTab tab) {
+	public DialogOpenRecurringItem(Confirmation confirmation, AbsApplication application, AbsTab tab) {
 		super(application, tab);
 		
-		this.confirmation = confirmation;
-		
-		logger.info("new " + DialogConfirm.class.getCanonicalName());
+		logger.info("new " + DialogOpenRecurringItem.class.getCanonicalName());
 	}
 
 	@Override
@@ -50,22 +41,7 @@ public class DialogConfirm extends AbsDialog {
 		String locator = null;
 		AbsPage page = null; 
 
-		if (button == Button.B_YES) {
-			locator = "css=div[class='" + Locators.zDialogClass + "'] "
-					+ "div[class='" + Locators.zDialogButtonsClass
-					+ "'] td[class=ZWidgetTitle]:contains(Yes)";
-			if(confirmation == DialogConfirm.Confirmation.SENDLINK){
-				page = 	new FormMailNew(this.MyApplication);
-			}else{
-				page=null;
-			}
-			
-		} else if (button == Button.B_NO) {
-			locator = "css=div[class='" + Locators.zDialogClass + "'] "
-					+ "div[class='" + Locators.zDialogButtonsClass
-					+ "'] td[class=ZWidgetTitle]:contains(No)";
-		
-		} else if (button == Button.B_OK) {
+		if (button == Button.B_OK) {
 			locator = "css=div[class='" + Locators.zDialogClass + "'] "
 					+ "div[class='" + Locators.zDialogButtonsClass
 					+ "'] td[class=ZWidgetTitle]:contains(OK)";

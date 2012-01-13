@@ -1,9 +1,7 @@
 package com.zimbra.qa.selenium.framework.items;
 
 import java.util.*;
-
 import org.apache.log4j.*;
-
 import com.zimbra.common.soap.Element;
 import com.zimbra.qa.selenium.framework.util.*;
 
@@ -28,7 +26,7 @@ public class AppointmentItem implements IItem {
 	protected String dContent = null;
 	protected boolean dIsChecked = false;
 	protected boolean dIsTagged = false;
-	protected String dIsRecurring = null;
+	protected String dRecurring = null;
 	protected boolean dIsAllDay = false;
 	protected boolean dIsPrivate = false;
 	protected boolean dHasAttachments = false;
@@ -283,7 +281,7 @@ public static AppointmentItem importFromSOAP(Element GetAppointmentResponse) thr
 		sb.append("Is Allday: ").append(dIsAllDay).append('\n');
 		sb.append("Is Private: ").append(dIsPrivate).append('\n');
 		sb.append("Is Tagged: ").append(dIsTagged).append('\n');
-		sb.append("Is Recurring: ").append(dIsRecurring).append('\n');		
+		sb.append("Is Recurring: ").append(dRecurring).append('\n');		
 		sb.append("Has Attachments: ").append(dHasAttachments).append('\n');
 		return (sb.toString());
 	}
@@ -414,12 +412,18 @@ public static AppointmentItem importFromSOAP(Element GetAppointmentResponse) thr
 		return (dIsAllDay);
 	}
 	
-	public String getIsRecurring() {
-		return (dIsRecurring);
+	public String getRecurring() {
+		return (dRecurring);
 	}
 	
-	public String setIsRecurring() {
-		return (dIsRecurring);
+	public String setRecurring(String recurringType, String endBy) {
+		dRecurring = recurringType + "," + endBy;
+		return dRecurring;
+	}
+	
+	public String setRecurring(String recurringType, int noOfOccurrences) {
+		dRecurring = recurringType + "," + noOfOccurrences;
+		return dRecurring;
 	}
 	
 	public boolean getIsPrivate() {

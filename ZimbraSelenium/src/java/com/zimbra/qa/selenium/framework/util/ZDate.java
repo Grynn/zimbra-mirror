@@ -227,7 +227,7 @@ public class ZDate {
 	public String toYYYYMMDDTHHMMSS() throws HarnessException {
 		return (format("yyyyMMdd'T'HHmmss"));
 	}
-
+	
 	/**
 	 * MM/DD/YYYY (i.e. 12/25/2011)
 	 * @return

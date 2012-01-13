@@ -6,32 +6,33 @@ package com.zimbra.qa.selenium.projects.ajax.ui;
 
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
-
+import com.zimbra.qa.selenium.projects.ajax.ui.calendar.PageCalendar;
 /**
  * Represents a "Confirmation" dialog box
  * <p>
  */
-public class DialogConfirm extends AbsDialog {
+
+@SuppressWarnings("unused")
+public class DialogConfirmDelete extends AbsDialog {
 
 	public static enum Confirmation {
-		YES, NO, DELETE, SENDLINK, SAVEAPPOINTMENT
+		SENDCANCELLATION, EDITMESSAGE, CANCEL
 	}
 	
 	private Confirmation confirmation = null;
 	
 	public static class Locators {
-		public static final String zDialogClass = "DwtConfirmDialog";
+		public static final String zDialogClass = "DwtDialog";
 		public static final String zDialogButtonsClass = "DwtDialogButtonBar";
 		public static final String zDialogContentClassId = "DwtDialogBody";
 	}
 
-	public DialogConfirm(Confirmation confirmation, AbsApplication application, AbsTab tab) {
+	public DialogConfirmDelete(Confirmation confirmation, AbsApplication application, AbsTab tab) {
 		super(application, tab);
 		
 		this.confirmation = confirmation;
 		
-		logger.info("new " + DialogConfirm.class.getCanonicalName());
+		logger.info("new " + DialogConfirmDelete.class.getCanonicalName());
 	}
 
 	@Override
@@ -54,26 +55,20 @@ public class DialogConfirm extends AbsDialog {
 			locator = "css=div[class='" + Locators.zDialogClass + "'] "
 					+ "div[class='" + Locators.zDialogButtonsClass
 					+ "'] td[class=ZWidgetTitle]:contains(Yes)";
-			if(confirmation == DialogConfirm.Confirmation.SENDLINK){
-				page = 	new FormMailNew(this.MyApplication);
-			}else{
-				page=null;
-			}
 			
 		} else if (button == Button.B_NO) {
 			locator = "css=div[class='" + Locators.zDialogClass + "'] "
 					+ "div[class='" + Locators.zDialogButtonsClass
 					+ "'] td[class=ZWidgetTitle]:contains(No)";
-		
-		} else if (button == Button.B_OK) {
-			locator = "css=div[class='" + Locators.zDialogClass + "'] "
-					+ "div[class='" + Locators.zDialogButtonsClass
-					+ "'] td[class=ZWidgetTitle]:contains(OK)";
 			
-		} else if (button == Button.B_CANCEL) {
-			locator = "css=div[class='" + Locators.zDialogClass + "'] "
-					+ "div[class='" + Locators.zDialogButtonsClass
-					+ "'] td[class=ZWidgetTitle]:contains(Cancel)";
+		} else if (button == Button.B_SENDCANCELLATION) {
+			locator = PageCalendar.Locators.SendCancellationButton;
+		
+		} else if (button == Button.B_EDITMESSAGE) {
+			locator = PageCalendar.Locators.EditMessageButton;
+			
+		} else if (button == Button.B_CANCEL_CONFIRMDELETE) {
+			locator = PageCalendar.Locators.CancelButton_ConfirmDelete;
 		} else {
 			throw new HarnessException("Button " + button + " not implemented");
 		}

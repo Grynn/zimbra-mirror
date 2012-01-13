@@ -28,6 +28,7 @@ public class PageCalendar extends AbsTab {
 		
 		// Buttons
 		public static final String NewButton = "css=td#zb__CLWW__NEW_MENU_title";
+		public static final String CloseButton = "css=td[id$='__CANCEL_title']:contains('Close')";
 		public static final String ViewButton = "id=zb__CLD__VIEW_MENU_dropdown";
 
 		// Menus
@@ -81,10 +82,14 @@ public class PageCalendar extends AbsTab {
 		public static final String ViewListSubMenu = "id=CAL_LIST_VIEW_title";
 		public static final String ViewScheduleSubMenu = "id=SCHEDULE_VIEW_title";
 
+		public static final String SendCancellationButton = "id=CNF_DEL_SENDEDIT_button4_title";
+		public static final String EditMessageButton = "id=CNF_DEL_SENDEDIT_button5_title";
+		public static final String CancelButton_ConfirmDelete = "id=CNF_DEL_SENDEDIT_button1_title";
+		
 		// Radio buttons
-		public static final String OpenThisInstanceRadioButton = "id=";
-		public static final String OpenThisSeriesRadioButton = "id=";
-
+		public static final String OpenThisInstanceRadioButton = "css=td input[id*='_defaultRadio']";
+		public static final String OpenTheSeriesRadioButton = "css=td input[id$='_openSeries']";
+		
 		public static final String CalendarViewListCSS		= "css=div[id='zv__CLL']";
 		public static final String CalendarViewDayCSS		= "css=div[id='zv__CLD']";
 		public static final String CalendarViewWorkWeekCSS	= "css=div[id='zv__CLWW']";
@@ -1139,6 +1144,10 @@ public class PageCalendar extends AbsTab {
 			// Create the page
 			page = new FormApptNew(this.MyApplication);
 			// FALL THROUGH
+		
+		} else if (button == Button.B_CLOSE) {
+			locator = Locators.CloseButton;
+			page = null;
 
 		} else if (button == Button.B_DELETE) {
 
@@ -1160,11 +1169,6 @@ public class PageCalendar extends AbsTab {
 			locator = "css=div[id='ztb__CLD'] div[id='zb__CLD__WORK_WEEK_VIEW'] td[id$='_title']";
 			page = null;
 
-		} else if (button == Button.O_LISTVIEW_SCHEDULE) {
-
-			locator = "css=div[id='ztb__CLD'] div[id='zb__CLD__FB_VIEW'] td[id$='_title']";
-			page = null;
-
 		} else if (button == Button.O_LISTVIEW_LIST) {
 
 			locator = "css=div[id='ztb__CLD'] div[id='zb__CLD__CAL_LIST_VIEW'] td[id$='_title']";
@@ -1180,6 +1184,11 @@ public class PageCalendar extends AbsTab {
 			locator = "css=div[id='ztb__CLD'] div[id='zb__CLD__FB_VIEW'] td[id$='_title']";
 			page = null;
 
+		} else if (button == Button.B_OPEN_THE_SERIES) {
+			
+			locator = Locators.OpenTheSeriesRadioButton;
+			page = null;
+			
 		} else {
 			throw new HarnessException("no logic defined for button " + button);
 		}
@@ -1190,7 +1199,7 @@ public class PageCalendar extends AbsTab {
 
 		// Default behavior, process the locator by clicking on it
 		//
-		this.zClick(locator);
+		this.zClickAt(locator, "");
 
 		// If the app is busy, wait for it to become active
 		this.zWaitForBusyOverlay();
@@ -1206,6 +1215,55 @@ public class PageCalendar extends AbsTab {
 		return (page);
 	}
 
+	public AbsPage zCheckRadioButton(Button button) throws HarnessException {
+		logger.info(myPageName() + " zToolbarPressButton(" + button + ")");
+
+		tracer.trace("Check the radio " + button + " button");
+
+		if (button == null)
+			throw new HarnessException("Radio button cannot be null!");
+
+		// Default behavior variables
+		String locator = null; // If set, this will be clicked
+		AbsPage page = null; // If set, this page will be returned
+
+		// Based on the button specified, take the appropriate action(s)
+
+		if (button == Button.B_OPEN_THIS_INSTANCE) {
+			
+			locator = Locators.OpenThisInstanceRadioButton;
+			page = null;
+			
+		} else if (button == Button.B_OPEN_THE_SERIES) {
+			
+			locator = Locators.OpenTheSeriesRadioButton;
+			page = null;
+			
+		} else {
+			throw new HarnessException("no logic defined for radio button " + button);
+		}
+
+		if (locator == null) {
+			throw new HarnessException("locator was null for radio button " + button);
+		}
+
+		// Default behavior, process the locator by clicking on it
+		sClick(locator);
+
+		// If the app is busy, wait for it to become active
+		this.zWaitForBusyOverlay();
+
+		// If page was specified, make sure it is active
+		if (page != null) {
+
+			// This function (default) throws an exception if never active
+			page.zWaitForActive();
+
+		}
+
+		return (page);
+	}
+	
 	public AbsPage zKeyboardKeyEvent(int keyEvent) throws HarnessException {
 		AbsPage page = null;
 

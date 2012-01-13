@@ -25,12 +25,33 @@ public class FormApptNew extends AbsForm {
 	public static class Locators {
 		public static final String ShowOptionalLink = "css=td[id$='_show_optional']";
 		public static final String ShowEquipmentLink = "css=td[id$='_show_resources']";
+		public static final String CustomizeLink = "css=div[id$='repeatDesc']:contains('Customize')";
+		public static final String ConfigureLink = "css=div[class='FakeAnchor']:contains('Configure')";
+		public static final String SuggestAtimeLink = "css=div[id$='_suggest_time']:contains('Suggest a time')";
+		public static final String SuggestALocationLink = "css=css=div[id$='_suggest_location']:contains('Suggest a location')";
+		public static final String ShowSchedulerLink = "css=div[id$='_scheduleButton']:contains('Show')";
+		public static final String HideSchedulerLink = "css=div[id$='_scheduleButton']:contains('Hide')";
 		
 		public static final String Button_Send = "css=div[id^='ztb__APPT-'] td[id$='_SEND_INVITE_title']";
 		public static final String Button_Save = "css=div[id^='ztb__APPT-'] td[id$='_SAVE_title']";
 		public static final String Button_SaveAndClose = "css=div[id^='ztb__APPT-'] td[id$='_SAVE_title']";
 		public static final String Button_Close = "css=div[id^='ztb__APPT-'] td[id$='_CANCEL_title']";
-
+		
+		public static final String NoneMenuItem = "css=div[id*='_Menu'] div[id^='NON'] td[id$='title']:contains('None')";
+		public static final String NoneButton = "css=td[id$='_title']:contains('None')";
+		public static final String EveryDayMenuItem = "css=div[id*='_Menu'] div[id^='DAI'] td[id$='title']:contains('Every Day')";
+		public static final String EveryDayButton = "css=td[id$='_title']:contains('Every Day')";
+		public static final String EveryWeekMenuItem = "css=div[id*='_Menu'] div[id^='WEE'] td[id$='title']:contains('Every Week')";
+		public static final String EveryWeekButton = "css=td[id$='_title']:contains('Every Week')";
+		public static final String EveryMonthMenuItem = "css=div[id*='_Menu'] div[id^='MON'] td[id$='title']:contains('Every Month')";
+		public static final String EveryMonthButton = "css=td[id$='_title']:contains('Every Month')";
+		public static final String EveryYearMenuItem = "css=div[id*='_Menu'] div[id^='YEA'] td[id$='title']:contains('Every Year')";
+		public static final String EveryYearButton = "css=td[id$='_title']:contains('Every Year')";
+		public static final String CustomMenuItem = "css=div[id*='_Menu'] div[id^='CUS'] td[id$='title']:contains('Custom')";
+		public static final String CustomButton = "css=td[id$='_title']:contains('Custom')";
+		public static final String RepeatEnabled = "css=div[id$='_repeatDesc']div[class='FakeAnchor']";
+		public static final String RepeatDisabled = "css=div[id$='_repeatDesc']div[class='DisabledText']";
+		
 	}
 
 	public static class Field {
@@ -318,10 +339,11 @@ public class FormApptNew extends AbsForm {
 	 * @throws HarnessException
 	 */
 	public void zFillField(Field field, String value) throws HarnessException {
-
+		
 		tracer.trace("Set " + field + " to " + value);
 
 		String locator = null;
+		String isRepeat = null;
 
 		// subject
 		if (field == Field.Subject) {
@@ -391,7 +413,8 @@ public class FormApptNew extends AbsForm {
 		// repeat
 		} else if (field == Field.Repeat) {
 
-			locator = "css=div[id$='_repeatSelect'] input";
+			isRepeat = value;
+			locator = "css=div[id$='_repeatSelect'] td[id$='_dropdown']";
 			
 		
 		// body 
@@ -507,10 +530,13 @@ public class FormApptNew extends AbsForm {
 		if (!this.sIsElementPresent(locator))
 			throw new HarnessException("Field is not present field=" + field
 					+ " locator=" + locator);
-
-		// Enter text
-		this.sType(locator, value);
-
+	
+		if (isRepeat != null) {
+			this.sClickAt(locator, "");
+			zRecurringOptions(locator, value, isRepeat);
+		} else {
+			this.sType(locator, value);
+		}
 		this.zWaitForBusyOverlay();
 
 	}
@@ -577,8 +603,8 @@ public class FormApptNew extends AbsForm {
 		}
 		
 		// Is recurring
-		if (appt.getIsRecurring() != null) {
-			zFillField(Field.Repeat, appt.getIsRecurring());
+		if (appt.getRecurring() != null) {
+			zFillField(Field.Repeat, appt.getRecurring());
 		}
 		
 		// Is all day
@@ -639,5 +665,29 @@ public class FormApptNew extends AbsForm {
 	public String zGetApptEquipment(String equipment) throws HarnessException {
 		return this.sGetText("css=td[id*='_resourcesData']:contains('" + equipment + "')");		
 	}
+	
+	public void zRecurringOptions(String locator, String recurringType, String endBy) throws HarnessException {
 		
+		if (recurringType.split(",")[0].toUpperCase().equals("NONE")) {
+			this.sClickAt(Locators.NoneMenuItem, "");
+			
+		} else if (recurringType.split(",")[0].toUpperCase().equals("EVERYDAY")) {
+			this.sClickAt(Locators.EveryDayMenuItem, "");
+			
+		} else if (recurringType.split(",")[0].toUpperCase().equals("EVERYWEEK")) {
+			this.sClickAt(Locators.EveryWeekMenuItem, "");
+			
+		} else if (recurringType.split(",")[0].toUpperCase().equals("EVERYMONTH")) {
+			this.sClickAt(Locators.EveryMonthMenuItem, "");
+			
+		} else if (recurringType.split(",")[0].toUpperCase().equals("EVERYYEAR")) {
+			this.sClickAt(Locators.EveryYearMenuItem, "");
+			
+		} else if (recurringType.split(",")[0].toUpperCase().equals("CUSTOM")) {
+			this.sClickAt(Locators.CustomMenuItem, "");
+		} else {
+			this.sType(locator, recurringType);
+		}
+	}
+	
 }
