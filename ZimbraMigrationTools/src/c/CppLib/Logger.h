@@ -232,7 +232,7 @@ public:
 
     bool file(const wchar_t *file) { return ffd.open(file); }
 
-    const wchar_t *file(void) const { return ffd.filename(); }
+    const wchar_t *file(void) const { return ffd.file(); }
     const wchar_t *format(void) const { return fmt; }
     void format(const wchar_t *s);
 
@@ -372,19 +372,18 @@ private:
     class CPPLIB_DLLAPI LogFile
     {
     public:
-        LogFile(const wchar_t *dfile): fd(INVALID_HANDLE_VALUE), file(NULL) { open(dfile); }
-        ~LogFile() { close(); free(file); }
+        LogFile(const wchar_t *file): fd(INVALID_HANDLE_VALUE), path(NULL) { open(file); }
+        ~LogFile() { close(); }
 
-        const wchar_t *filename(void) const { return file; }
+        const wchar_t *file(void) const { return path; }
 
         bool close(void);
-
         bool open(const wchar_t *file);
         bool write(const wchar_t *buf, unsigned sz);
 
     private:
         HANDLE fd;
-        wchar_t *file;
+        wchar_t *path;
     };
 
     struct Tlsdata

@@ -40,17 +40,16 @@ bool Log::LogFile::close(void)
         return false;
     CloseHandle(fd);
     fd = INVALID_HANDLE_VALUE;
+    free(path);
+    path = NULL;
     return true;
 }
 
-bool Log::LogFile::open(const wchar_t *f)
+bool Log::LogFile::open(const wchar_t *file)
 {
-    if (f && file && !wcscmp(file, f))
+    if (file && path && !wcscmp(path, file))
         return true;
     close();
-    if (file)
-        free(file);
-    file = wcsdup(f);
     if (!wcscmp(file, L"stdout") || !wcscmp(file, L"cout"))
     {
         DuplicateHandle(GetCurrentProcess(), GetStdHandle(STD_OUTPUT_HANDLE),
@@ -63,8 +62,9 @@ bool Log::LogFile::open(const wchar_t *f)
     }
     else
     {
-        fd = CreateFile(file, FILE_APPEND_DATA | GENERIC_WRITE, FILE_SHARE_READ, NULL,
-            OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL | FILE_FLAG_SEQUENTIAL_SCAN, 0);
+        fd = CreateFile(file, FILE_APPEND_DATA | GENERIC_WRITE, FILE_SHARE_READ |
+            FILE_SHARE_WRITE, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL |
+            FILE_FLAG_SEQUENTIAL_SCAN, 0);
         SetFilePointer(fd, 0, NULL, FILE_END);
     }
     if (fd == INVALID_HANDLE_VALUE)
@@ -72,6 +72,7 @@ bool Log::LogFile::open(const wchar_t *f)
         wcerr << L"unable to open log " << file << endl;
         return false;
     }
+    path = wcsdup(file);
     return true;
 }
 
