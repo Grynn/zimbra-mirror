@@ -76,6 +76,12 @@
     background-color: #ccc;
 }
 
+.homeRootOverviewHeader {
+    padding-left:5px;
+    padding-top:5px;
+    background-color: #2b5480;
+}
+
 .AdminTreeItem-Count {
     background-color:#708090;
     width:20px;
@@ -85,7 +91,7 @@
 	@roundCorners(4px)@
 }
 
-.rootOverviewHeader-Text {
+.rootOverviewHeader-Text, .homeRootOverviewHeader-Text {
     padding-left:5px;
     font-weight:bold;
 }

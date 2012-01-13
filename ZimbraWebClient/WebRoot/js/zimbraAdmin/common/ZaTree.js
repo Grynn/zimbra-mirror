@@ -399,7 +399,9 @@ ZaTree.prototype._buildNodeItem =
 function(showRootNode, isRoot) {
     var ti, nextTi, key, currentRoot;
     var clsName;
-    if (isRoot) {
+    if (showRootNode.text == ZaMsg.OVP_home) {
+        clsName = "homeRootOverviewHeader";
+    } else if (isRoot) {
         clsName = "rootOverviewHeader";
     } else {
         clsName = "overviewHeader";
