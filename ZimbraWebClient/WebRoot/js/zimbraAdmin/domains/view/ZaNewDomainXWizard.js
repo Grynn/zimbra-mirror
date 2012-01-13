@@ -274,6 +274,7 @@ function (value, event, form) {
 }
 
 
+
 ZaNewDomainXWizard.onGalModeChange = 
 function (value, event, form) {
 	this.setInstanceValue(value);
@@ -782,12 +783,16 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 							labelLocation:_LEFT_,trueValue:"TRUE", falseValue:"FALSE",
 							labelCssClass:"xform_label", align:_LEFT_,labelWrap:true
 						},
-                        {ref:ZaDomain.A2_gal_sync_accounts_set, type:_REPEAT_, label:ZaMsg.LBL_GALAccount, repeatInstance:"", showAddButton:true, showRemoveButton:true,
+                        {ref:ZaDomain.A2_gal_sync_accounts_set, type:_REPEAT_, label:null, repeatInstance:"", showAddButton:true, showRemoveButton:true,
+							visibilityChangeEventSources:[ZaDomain.A2_create_gal_acc],
+							visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A2_create_gal_acc,"TRUE"]],
+							colSpan:2,
 							addButtonLabel:ZaMsg.Domain_GAL_Add,
-                            number: 0,
+							addButtonWidth: 220,
+							number: 0,
 							removeButtonLabel:ZaMsg.Domain_GAL_Remove,
-							showAddOnNextRow:true,
-                            showRemoveNextRow: true,
+							showAddOnNextRow: true,
+                            showRemoveNextRow: false,
                             items:[
                                 {type:_GROUP_, ref:".", numCols:1, width:"100%",
                                     visibilityChangeEventSources:[ZaDomain.A2_gal_sync_accounts_set],
@@ -795,14 +800,16 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject, entry) {
                                         return ((this.instanceNum == 0) ||(this.instanceNum < this.getNumberToShow()) || (this.instanceNum < this.getInstanceCount()));
                                     }],
                                     items:[
-                                    {type:_GROUP_, ref:".", numCols:2, colSizes:["200px", "*"], width:"100%",
+                                    {type:_SPACER_, colSpan:"*"},
+                                    {type:_GROUP_, ref:".", numCols:2, colSizes:["220px", "100%"], //use 100% to full fill the blank on the right hand side in IE
+                                        width:"100%",
                                         visibilityChangeEventSources:[ZaDomain.A2_gal_sync_accounts_set],
                                         visibilityChecks:[function() {
                                             var instanceNum = this.getParentItem().instanceNum;
                                             return ((instanceNum < this.getNumberToShow()) || (instanceNum < this.getInstanceCount()));
                                         }],
                                         items:[
-                                        {type:_GROUP_, label:ZaMsg.Domain_GalSyncAccount, numCols:3,colSizes:["130px", "25px","auto"], colSpan:"1", ref: ".",
+                                        {type:_GROUP_, label:ZaMsg.Domain_GalSyncAccount, numCols:3, colSizes:["130px", "25px","auto"], colSpan:"1", ref: ".",
                                             items:[
                                                 {ref:ZaDomain.A2_new_gal_sync_account_name, width:130, label:null, type:_TEXTFIELD_},
                                                 {type:_OUTPUT_, value:"@"},

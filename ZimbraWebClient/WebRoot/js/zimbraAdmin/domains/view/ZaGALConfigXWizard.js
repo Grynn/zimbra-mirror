@@ -575,15 +575,18 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
                                     }
                                 ]}
                         ]},
-                        {ref:ZaDomain.A2_gal_sync_accounts_set, type:_REPEAT_, label:ZaMsg.LBL_GALAccount, repeatInstance:"", showAddButton:true, showRemoveButton:true,
+                        {ref:ZaDomain.A2_gal_sync_accounts_set, type:_REPEAT_, label:null, repeatInstance:"", showAddButton:true, showRemoveButton:true,
 							addButtonLabel:ZaMsg.Domain_GAL_Add,
+							addButtonWidth: 220,
                             number:0,
 							removeButtonLabel:ZaMsg.Domain_GAL_Remove,
-							visibilityChecks:[[ZaItem.hasReadPermission,ZaDomain.A_zimbraGalAccountId]],
+							visibilityChangeEventSources:[ZaDomain.A2_create_gal_acc],
+							visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A2_create_gal_acc,"TRUE"],[ZaItem.hasReadPermission,ZaDomain.A_zimbraGalAccountId]],
 							enableDisableChangeEventSources:[ZaDomain.A2_create_gal_acc],
 							enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A2_create_gal_acc,"TRUE"],[ZaItem.hasRight,ZaDomain.RIGHT_CREATE_ACCOUNT]],
-							showAddOnNextRow:true,
-                            showRemoveNextRow: true,
+							showAddOnNextRow: true,
+                            showRemoveNextRow: false,
+                            colSpan: 2,
                             items:[
                                 {type:_GROUP_, ref:".", numCols:1, width:"100%",
                                     visibilityChangeEventSources:[ZaDomain.A2_gal_sync_accounts_set],
@@ -591,7 +594,9 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
                                         return (this.instanceNum==0 || (this.instanceNum < this.getNumberToShow()) || (this.instanceNum < this.getInstanceCount()));
                                     }],
                                     items:[
-                                    {type:_GROUP_, ref:".", numCols:2, colSizes:["200px", "*"], width:"100%",
+                                    {type:_SPACER_, colSpan:"*"},
+                                    {type:_GROUP_, ref:".", numCols:2, colSizes:["220x", "100%"], //use 100% to full fill the blank on the right hand side in IE
+                                        width:"100%",
                                         visibilityChangeEventSources:[ZaDomain.A2_gal_sync_accounts_set],
                                         visibilityChecks:[function() {
                                             var instanceNum = this.getParentItem().instanceNum;
