@@ -139,12 +139,22 @@ OSelect1_XFormItem.prototype.getNoteElement = function () {
 }
 OSelect1_XFormItem.prototype.setError = function (message, childError) {
 	if(window.console && window.console.log) console.log("Showing error note");
+	var errLoc = this.getErrorLocation();
+	if (errLoc == _PARENT_ || errLoc == _INHERIT_){
+		this.getParentItem().setError(message, true);
+		return;
+	}
 	this.showNote(message, this.getErrorNoteCssClass());
 	this.__errorState = XFormItem.ERROR_STATE_ERROR;
 }
 
 OSelect1_XFormItem.prototype.clearError = function () {
 	if(window.console && window.console.log) console.log("Hiding error note");
+	var errLoc = this.getErrorLocation();
+	if (errLoc == _PARENT_ || errLoc == _INHERIT_){
+		this.getParentItem().clearError();
+		return;
+	}
 	this.hideNote();
 	this.__errorState = XFormItem.ERROR_STATE_VALID;
 }
