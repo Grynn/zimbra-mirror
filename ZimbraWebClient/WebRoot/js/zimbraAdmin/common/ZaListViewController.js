@@ -258,7 +258,7 @@ function(preParams, paramsArr) {
 		        this.numPages = Math.ceil(this._searchTotal/preParams.limit);
 
                         if(preParams.show)
-                                this._show(this._list, preParams.openInNewTab, preParams.openInSearchTab,hasmore);
+                                this._show(this._list, preParams.openInNewTab, preParams.openInSearchTab,hasmore,preParams.isShowBubble);
                         else
                                 this._updateUI(this._list, preParams.openInNewTab, preParams.openInSearchTab,hasmore);
 
@@ -327,7 +327,7 @@ function(params, resp) {
 				this.numPages = Math.ceil(this._searchTotal/params.limit);
 			}
 			if(params.show)
-				this._show(this._list, params.openInNewTab, params.openInSearchTab,response.more);
+				this._show(this._list, params.openInNewTab, params.openInSearchTab,response.more,params.isShowBubble);
 			else
 				this._updateUI(this._list, params.openInNewTab, params.openInSearchTab,response.more);
 		}

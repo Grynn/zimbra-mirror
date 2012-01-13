@@ -370,3 +370,15 @@ div.ZmSelectedHeaderBg {
 .DwtDialog .WindowOuterContainer table{
     #border-collapse: collapse;  /*only IE read the attribute after '#'*/
 }
+
+.addrBubble{
+	color:black;
+	border:1px solid #999999;
+	padding:1px 3px;
+	margin-bottom:2px;
+	margin-left:3px;
+	display:inline-block;
+    background-color:#EEEEEE;
+
+	@roundCorners(4px)@;
+}

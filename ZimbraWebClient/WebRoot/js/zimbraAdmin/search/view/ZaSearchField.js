@@ -50,6 +50,26 @@ function() {
 	return this._containedObject;
 }
 
+ZaSearchField.prototype.getCurrentSearchQuery =
+function (){
+   var query = this._containedObject[ZaSearch.A_query] = this.getSearchFieldElement().value;
+	if (query.indexOf("$set:") == 0) {
+		ZaApp.getInstance().getAppCtxt().getClientCmdHdlr().execute((query.substr(5)).split(" "));
+		return;
+	}
+
+	var params = {};
+	var isAdvanced = ZaApp.getInstance().getSearchBuilderController().isAdvancedSearch (query) ;
+	params.types = this.getSearchTypes();
+
+	if (isAdvanced) {
+		params.query = query;
+	}else {
+		params.query = ZaSearch.getSearchByNameQuery(query, params.types);
+	}
+
+    return params;
+}
 
 ZaSearchField.prototype.invokeCallback =
 function() {
@@ -114,7 +134,7 @@ function (query) {
 	return  false ;
 }
 
-ZaSearchField.prototype.startSearch= function (ldapQuery, type) {
+ZaSearchField.prototype.startSearch= function (ldapQuery, type, isShowBubble) {
 	var params = {};
 
     if (!ldapQuery) {
@@ -130,6 +150,7 @@ ZaSearchField.prototype.startSearch= function (ldapQuery, type) {
 	searchListController._currentPageNum = 1;
 	searchListController.fetchAttrs = ZaSearch.standardAttributes;
 
+    params.isShowBubble = isShowBubble;
 	params.types = type;
     if (!ZaSearchField.isLDAPQuery(ldapQuery)){
         ldapQuery = ZaSearch.getSearchByNameQuery(ldapQuery, type);
@@ -360,7 +381,18 @@ function (name, query, event){
         this.getSearchFieldElement().value = queryString;
         this.invokeCallback() ; //do the real search call (simulate the search button click)
     } else {
-        this.startSearch(queryString);
+        var slController = ZaApp.getInstance().getSearchListController();
+        if (slController._uiContainer){
+            var params = {
+                type:3,
+                unique:true,
+                query:queryString,
+                displayName: name
+            };
+            slController._uiContainer.removeAllBubbles(true);
+            slController._uiContainer.addBubble(params);
+        }
+        //this.startSearch(queryString);
     }
 }
 

@@ -246,12 +246,89 @@ function ZaSearchXFormView (parent) {
 //	this._localXForm.addListener(DwtEvent.XFORMS_FORM_DIRTY_CHANGE, new AjxListener(this, ZaBackupsXFormView.prototype.handleXFormChange));
 	this._localXForm.setController(ZaApp.getInstance());
     this._localXForm.setInstance({});
+    this._bubbleList = new ZaSearchBubbleList();
    // this.widget = this.getItemsById("searchReusltList").getWidget();
 }
 
 ZaSearchXFormView.prototype = new ZaTabView();
 ZaSearchXFormView.prototype.constructor = ZaSearchXFormView;
 ZaTabView.XFormModifiers["ZaSearchXFormView"] = new Array();
+
+ZaSearchXFormView.prototype.bubbleChangeCallback =
+function() {
+     var currentQueryValue = ZaApp.getInstance().getSearchListController()._uiContainer.getQueryFormBubbles();
+     currentQueryValue = currentQueryValue ? currentQueryValue: "";
+     ZaApp.getInstance().getSearchListController()._uiContainer.setQueryField(currentQueryValue);
+    if(ZaApp.getInstance().getSearchListController()._uiContainer.isEnableForSearch()){
+        var currentQueryType = ZaApp.getInstance().getSearchListController()._uiContainer.getSearchTypeFormBubbles();
+        var searchField = ZaApp.getInstance().getSearchListController()._searchField;
+        searchField.startSearch(currentQueryValue,currentQueryType,true);
+    }
+}
+
+ZaSearchXFormView.prototype.addBubble = function(params,skipNotify) {
+    try{
+        if(params.displayName){
+            params.parent = this;
+            params.parentId	= this._htmlElId;
+            params.queryCell = this._localXForm.getItemById(this._localXForm.getId()+"_"+ZaSearchEdit.A2_currentQuery).getContainer();
+            this._bubbleList.addBubble(params);
+        }
+        if(!skipNotify)
+            this.bubbleChangeCallback();
+    }catch(ex){
+        ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaSearchXFormView.prototype.addBubble");
+    }
+}
+
+ZaSearchXFormView.prototype._removeBubble = function(bubbleId, skipNotify) {
+    var bubble = DwtControl.fromElementId(bubbleId);
+	if (!bubble) {
+        return;
+    }
+	this._bubbleList.removeBubble(bubble);
+	bubble.dispose();
+
+    if(!skipNotify)
+        this.bubbleChangeCallback();
+}
+
+ZaSearchXFormView.removeBubble = function(bubbleId,parentId,skipNotify) {
+    try{
+        var searchXFormView =  DwtControl.ALL_BY_ID[parentId];
+        if(searchXFormView){
+            searchXFormView._removeBubble(bubbleId, skipNotify);
+        }
+    }catch(ex){
+        ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaSearchXFormView.removeBubble");
+    }
+}
+
+ZaSearchXFormView.prototype.removeAllBubbles =
+function (skipNotify) {
+    var len = this._bubbleList.size();
+    for(var i = len-1; i>=0; i--){
+        var bubble = this._bubbleList.getBubble(i);
+        if(bubble){
+            this._bubbleList.removeBubble(bubble);
+	        bubble.dispose();
+        }
+    }
+    if(!skipNotify)
+        this.bubbleChangeCallback();
+}
+
+ZaSearchXFormView.prototype.getQueryFormBubbles = function(){
+    return this._bubbleList.getQueryFormBubbles();
+}
+
+ZaSearchXFormView.prototype.getSearchTypeFormBubbles = function(){
+    return this._bubbleList.getSearchTypeFormBubbles();
+}
+
+ZaSearchXFormView.prototype.isEnableForSearch = function(){
+    return this._bubbleList.isEnableForSearch();
+}
 
 ZaSearchXFormView.labelSelectionListener = function (ev) {
 	if (ev.detail == DwtListView.ITEM_DBL_CLICKED) {
@@ -268,6 +345,10 @@ ZaSearchXFormView.prototype.getQueryField = function () {
 
 ZaSearchXFormView.prototype.setQueryField = function (query) {
     this._localXForm.setInstanceValue(query, ZaSearchEdit.A2_currentQuery);
+}
+
+ZaSearchXFormView.prototype.setQueryFieldVisible = function(visible){
+    this.queryVisible = visible ;
 }
 
 ZaSearchXFormView.createPopupMenu = function (listWidget) {
@@ -323,19 +404,24 @@ ZaSearchXFormView.getCustomWidth = function () {
 };
 
 ZaSearchXFormView.doQuickSearch = function () {
-    var form = this.getForm();
-    var currentQueryValue = form.parent.getQueryField();
-    currentQueryValue = currentQueryValue ? currentQueryValue: "";
-    var searchField = ZaApp.getInstance().getSearchListController()._searchField;
-    searchField.startSearch(currentQueryValue);
+    if(ZaApp.getInstance().getSearchListController()._uiContainer)
+        ZaApp.getInstance().getSearchListController()._uiContainer.bubbleChangeCallback();
 }
 
 ZaSearchXFormView.doSaveSearch = function () {
-    var form = this.getForm();
-    var currentQueryValue = form.parent.getQueryField();
+    var currentQueryValue = ZaApp.getInstance().getSearchListController()._uiContainer.getQueryFormBubbles();
     currentQueryValue = currentQueryValue ? currentQueryValue: "";
-    var searchField = ZaApp.getInstance().getSearchListController()._searchField;
-    searchField.doSaveSearch(currentQueryValue);
+    ZaApp.getInstance().getSearchListController()._searchField.doSaveSearch(currentQueryValue);
+}
+
+
+ZaSearchXFormView.isSearchFieldVisible = function(){
+   var searchContainer = ZaApp.getInstance().getSearchListController()._uiContainer;
+   if(searchContainer){
+       if(!searchContainer.queryVisible )
+         return false;
+   }
+   return true;
 }
 
 ZaSearchXFormView.myXFormModifier = function(xFormObject) {
@@ -344,12 +430,13 @@ ZaSearchXFormView.myXFormModifier = function(xFormObject) {
 
 	var headerList = ZaSearchListView.prototype._getHeaderList();
 	xFormObject.items = [
-		{type:_GROUP_, visibilityChecks:[], colSizes:["*","70px","100px"], colSpan:2, numCols:3, width:"100%", id:"xform_header",
+		{type:_GROUP_, visibilityChecks:[ZaSearchXFormView.isSearchFieldVisible],
+            visibilityChangeEventSources:[ZaSearchEdit.A2_currentQuery],
+            colSizes:["*","70px","100px"], colSpan:2, numCols:3, width:"100%", id:"xform_header",
 			items:[
-				{type:_TEXTFIELD_, width:"100%", ref:ZaSearchEdit.A2_currentQuery,
-					containerCssClass:"search_field_container", bmolsnr: true,
-					cssClass:"search_input", visibilityChecks:[],
-                    enableDisableChecks:false
+				{type:_OUTPUT_, ref:ZaSearchEdit.A2_currentQuery,
+					containerCssClass:"search_field_container",
+					cssStyle:"display:none;"
 				},
 				{type:_DWT_BUTTON_, label:ZaMsg.LBL_QuickSearch, name: "SearchButton", autoPadding: false,
 						onActivate:ZaSearchXFormView.doQuickSearch, visibilityChecks:[], enableDisableChecks:[]},

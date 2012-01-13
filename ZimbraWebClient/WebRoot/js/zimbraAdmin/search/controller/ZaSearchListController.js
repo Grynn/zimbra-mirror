@@ -99,36 +99,27 @@ ZaSearchListController.prototype.show = function (doPush) {
 
 ZaSearchListController.version = 1;
 ZaSearchListController.prototype._show = 
-function (list, openInNewTab, openInSearchTab,hasmore) {
+function (list, openInNewTab, openInSearchTab,hasmore,isShowBubble) {
 	this._updateUI(list, openInNewTab, openInSearchTab,hasmore);
 	//ZaApp.getInstance().pushView(ZaZimbraAdmin._SEARCH_LIST_VIEW);
-	ZaApp.getInstance().pushView(this.getContentViewId());
-
+    ZaApp.getInstance().pushView(this.getContentViewId());
     if (appNewUI) {
-        this._lastestResult = list;
-        this._lastestResult.getArray()._version = ZaSearchListController.version ++;
-        if (this._uiContainer) {
-            this._uiContainer.setQueryField(this._currentQuery);
+        if(isShowBubble) {
+            this._uiContainer.setQueryFieldVisible(true);
+        }else{
+           //this._uiContainer.removeAllBubbles(true);
+            this._uiContainer.setQueryFieldVisible(false);
         }
+
+        var currentQueryValue = this._uiContainer.getQueryFormBubbles();
+        currentQueryValue = currentQueryValue ? currentQueryValue: "";
+        this._uiContainer.setQueryField(currentQueryValue);
     }
+
+
 }
 
-ZaSearchListController.prototype.getSearchReuslt =
-function (type) {
-    if (!type)
-        return this._lastestResult;
 
-    var currentNode;
-    var vector = this._lastestResult.getVector();
-    var result = new ZaItemList();
-    for (var i = 0; i < vector.size(); i++) {
-        currentNode = vector.get(i);
-        if (currentNode.type == type) {
-            result.add(currentNode);
-        }
-    }
-    return result;
-}
 
 /**
 * searh panel
@@ -220,7 +211,7 @@ function () {
 }
 
 ZaSearchListController.prototype._batchSearchforDomain =
-function (domainArr, searchQueryList, childQueries) {
+function (domainArr, searchQueryList, childQueries, isShowBubble) {
 	var paramsArr;
     var searchTypes = ZaSearch.ALIASES;
     var searchQuery = "(uid=*";
@@ -235,7 +226,7 @@ function (domainArr, searchQueryList, childQueries) {
 		paramsArr = searchQueryList;
 	else paramsArr = new Array();
         var busyId = Dwt.getNextId();
-	var inParams = {limit:controller.RESULTSPERPAGE,show:true, openInSearchTab: true,busyId:busyId};
+	var inParams = {limit:controller.RESULTSPERPAGE,show:true, openInSearchTab: true,busyId:busyId, isShowBubble:isShowBubble};
         var callback = new AjxCallback(controller, controller.searchCallback, inParams);
 	for(var i =0; i < domainArr.length; i++) {
 	        var searchParams = {
@@ -279,7 +270,7 @@ function(params,resp) {
                                 }
 				
                         }
-			ZaSearchListController.prototype._batchSearchforDomain(domainArr,params.searchQueryList, params.childQueries);
+			ZaSearchListController.prototype._batchSearchforDomain(domainArr,params.searchQueryList, params.childQueries, params.isShowBubble);
                 }
         } catch (ex) {
 		this._handleException(ex, "ZaSearchListController.searchAliasDomainCallback", null, false); 
@@ -288,7 +279,7 @@ function(params,resp) {
 }
 
 ZaSearchListController.searchAliasDomain =
-function (value, searchCtl,searchQueryList) {
+function (value, searchCtl,searchQueryList,isShowBubble) {
         var busyId = Dwt.getNextId();
         var controller = searchCtl? searchCtl:this;
 
@@ -297,7 +288,7 @@ function (value, searchCtl,searchQueryList) {
         else query = "";
 
         var callback = new AjxCallback(controller, ZaSearchListController.searchAliasDomainCallback,
-            {busyId:busyId, searchQueryList:searchQueryList, childQueries:value});
+            {busyId:busyId, searchQueryList:searchQueryList, childQueries:value, isShowBubble:isShowBubble});
         var searchParams = {
 
                         query: query,
@@ -347,7 +338,7 @@ function(params) {
 	controller._currentQuery = params.query;
 	controller._currentSortField = params.sortBy;
 	var busyId = Dwt.getNextId();	
-	var callback = new AjxCallback(controller, controller.searchCallback, {limit:controller.RESULTSPERPAGE,show:true, openInSearchTab: true,busyId:busyId, resultFilter:controller._filterObj});
+	var callback = new AjxCallback(controller, controller.searchCallback, {limit:controller.RESULTSPERPAGE,show:true, openInSearchTab: true,busyId:busyId, resultFilter:controller._filterObj, isShowBubble:params.isShowBubble});
         var searchParams = {
                         query:controller._currentQuery,//params.query,
                         types:params.types,
@@ -386,7 +377,7 @@ function(params) {
          }
 		searchQueryList.push(searchParams);
 		var keyword = ZaSearchListController._getSearchKeyWord(params.query);
-		ZaSearchListController.searchAliasDomain(keyword,controller,searchQueryList);
+		ZaSearchListController.searchAliasDomain(keyword,controller,searchQueryList, params.isShowBubble);
 	}else {
         this.scrollSearchParams={
                         query:controller._currentQuery,//params.query,
@@ -448,7 +439,8 @@ function () {
 	this._currentSortField = ZaAccount.A_uid;
 	this._currentSortOrder = "1";
 	this.pages = new Object();
-	this._UICreated = false;
+    if(!appNewUI)
+	    this._UICreated = false;
 	this.objType = ZaEvent.S_ACCOUNT;	
 }
 

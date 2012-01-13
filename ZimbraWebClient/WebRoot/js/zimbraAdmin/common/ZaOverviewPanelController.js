@@ -1601,26 +1601,57 @@ ZaOverviewPanelController.searchResultTreeListener = function (ev) {
         slController.reset();
         var searchField = slController._searchField;
         var contentView = slController._contentView;
+        var skipNotify = false;
        if (itemType == ZaItem.ACCOUNT ) {
-            if(searchField._containedObject[ZaSearch.A_fAccounts] == "FALSE")
-                return contentView.set();
+            if(searchField._containedObject[ZaSearch.A_fAccounts] == "FALSE"){
+                contentView.set();
+                skipNotify = true;
+            }
             else
                searchField.accFilterSelectedFromResults();
         } else if (itemType == ZaItem.DOMAIN  ) {
-            if(searchField._containedObject[ZaSearch.A_fDomains]== "FALSE" )
-                return contentView.set();
+            if(searchField._containedObject[ZaSearch.A_fDomains]== "FALSE" ){
+                contentView.set();
+                skipNotify = true;
+            }
             else
                 searchField.domainFilterSelectedFromResults();
         } else if (itemType == ZaItem.DL ) {
-            if(searchField._containedObject[ZaSearch.A_fdistributionlists]== "FALSE")
-                return contentView.set();
+            if(searchField._containedObject[ZaSearch.A_fdistributionlists]== "FALSE"){
+                contentView.set();
+                skipNotify = true;
+            }
             else
                 searchField.dlFilterSelectedFromResults();
         } else {  //all results
             //searchField.allFilterSelected();
         }
         searchField.setCurrentSavedSearch ({});
-        searchField.invokeCallback(); // Use the value in the current search fields;
+        //searchField.invokeCallback(); // Use the value in the current search fields;
+        var searchParams = searchField.getCurrentSearchQuery();
+        var displayName = searchField.getSearchFieldElement().value;
+        if(searchField.searchSelectedType && searchField.searchSelectedType.length > 0){
+           displayName += " In "+searchField.searchSelectedType;
+           if(itemType && itemType.length > 0)
+                displayName += " & "+ itemType;
+        }
+        else if(itemType && itemType.length > 0)
+                displayName += " In "+ itemType;
+
+        var params = {
+              type:1,
+              unique:true,
+              disableForSearch: skipNotify,
+              query:searchParams.query,
+              searchType:searchParams.types,
+              displayName:displayName
+         };
+        if (!slController._uiContainer)
+            slController._show();
+
+        slController._uiContainer.removeAllBubbles(true);
+        slController._uiContainer.addBubble(params,skipNotify);
+
         searchField.restoreSearchFilter(); //restore containedObject
 	}
 }

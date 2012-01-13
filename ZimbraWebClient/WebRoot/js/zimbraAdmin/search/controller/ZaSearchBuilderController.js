@@ -883,77 +883,103 @@ function () {
  *
  */
 ZaSearchBuilderController.prototype.setNewQuery =
-function () {
+function (dialog) {
 	this.newHandleSpecialQueries () ;
 	var optionViews = this.getFilterDialogArray () ;
 
 	this._query = null ;
 	this._searchTypes = null ;
 	//_filterObj holds all the options objects
-	this._filterObj = {} ;
-	this._filterObj [ZaSearchOption.BASIC_FILTER_ID] = [] ;
-	this._filterObj [ZaSearchOption.STATUS_FILTER_ID] = [] ;
-	this._filterObj [ZaSearchOption.LASTER_LOGIN_TIME_FILTER_ID] = [] ;
-	this._filterObj [ZaSearchOption.EXT_EMAIL_ADDRESS_FILTER_ID] = [] ;
-	this._filterObj [ZaSearchOption.SERVER_FILTER_ID] = [] ;
-	this._filterObj [ZaSearchOption.COS_FILTER_ID] = [] ;
-    this._filterObj [ZaSearchOption.DOMAIN_FILTER_ID] = [];
+    this._filterObj = null ;
 
-	for (var i =0 ; i < optionViews.length; i++) {
-		var optionId = optionViews[i]._optionId ;
-		var instance = optionViews[i]._localXForm.getInstance () ;
 
-		var options = instance ["options"] ;
-		var filter = [];
+    var optionId = dialog._optionId;
+	var instance = dialog._localXForm.getInstance () ;
 
-        if(optionId == ZaSearchOption.COS_FILTER_ID && this._includeObjectWithoutCosId
+	var options = instance ["options"] ;
+	var filter = [];
+
+    if(optionId == ZaSearchOption.COS_FILTER_ID && this._includeObjectWithoutCosId
                 && (!options[ZaSearchOption.A_cosListChecked] || options[ZaSearchOption.A_cosListChecked].size() == 0))
-             filter.push("(!(" + ZaAccount.A_COSId + "=*))");
+        filter.push("(!(" + ZaAccount.A_COSId + "=*))");
 
-		for (var key in options) {
-			var value = options[key] ;
-			if (value != null){
-				var op = null ; //the operator of the filter
-				if (value instanceof Date) { //the date type options
-					value = ZaUtil.getAdminServerDateTime(value, true) ;
-				}
-				if (key == ZaSearchOption.A_accountLastLoginTime_From) {
-					if (instance[ZaSearchOption.A_enableAccountLastLoginTime_From] == "TRUE") {
-						key = ZaAccount.A_zimbraLastLogonTimestamp ;
-						op = ">=" ;
-					}else{
-						continue ;
-					}
-				}
-
-				if (key == ZaSearchOption.A_accountLastLoginTime_To) {
-					if (instance[ZaSearchOption.A_enableAccountLastLoginTime_To] == "TRUE") {
-						key = ZaAccount.A_zimbraLastLogonTimestamp ;
-						op = "<=" ;
-					}else{
-						continue ;
-					}
-				}
-
-				if ((value.length > 0)
+	for (var key in options) {
+		var value = options[key] ;
+		if (value != null){
+			var op = null ; //the operator of the filter
+		    if (value instanceof Date) { //the date type options
+		        value = ZaUtil.getAdminServerDateTime(value, true) ;
+		    }
+		    if (key == ZaSearchOption.A_accountLastLoginTime_From) {
+			    if (instance[ZaSearchOption.A_enableAccountLastLoginTime_From] == "TRUE") {
+				    key = ZaAccount.A_zimbraLastLogonTimestamp ;
+				    op = ">=" ;
+			    }else{
+				    continue ;
+			    }
+		    }
+            if (key == ZaSearchOption.A_accountLastLoginTime_To) {
+			    if (instance[ZaSearchOption.A_enableAccountLastLoginTime_To] == "TRUE") {
+				    key = ZaAccount.A_zimbraLastLogonTimestamp ;
+					    op = "<=" ;
+			    }else{
+				    continue ;
+			    }
+		    }
+            if ((value.length > 0)
 						|| ((value instanceof AjxVector) && (value.size() > 0)))  {
-					//TODO: handle the checkbox TRUE or FALSE value
-					this._newAddFilter (filter, key, value, op) ;
-				}
-			}
+			    //TODO: handle the checkbox TRUE or FALSE value
+			    this._newAddFilter (filter, key, value, op) ;
+		    }
 		}
-		this._filterObj[optionId].push(filter);
 	}
-	this._query = this.newGetQueryFromFilters () ;
-	this._searchTypes = this.getSearchTypesFromFilters ();
-	DBG.println(AjxDebug.DBG1, "Current Query String = " + this._query) ;
 
-	//update the search field textbox entry
 	var slController = ZaApp.getInstance().getSearchListController();
     if (slController._uiContainer) {
-        slController._uiContainer.setQueryField(this._query);
+        var query = this.newGetOrFilter4SameOptionType ([filter], optionId) ;
+        var unique = false;
+        if(optionId == ZaSearchOption.SERVER_FILTER_ID){
+            unique = true;
+        }
+        var params = {
+            type:2,
+            unique:unique,
+            query:query,
+            displayName: this.getFilterTypeName(dialog._optionId)
+        };
+        slController._uiContainer.addBubble(params);
     }
 }
+
+ZaSearchBuilderController.prototype.getFilterTypeName =
+function (filterType) {
+      var filterTypeName ;
+      switch (filterType) {
+        case ZaSearchOption.BASIC_FILTER_ID:
+            filterTypeName = ZaMsg.OVP_basicFilter;
+        break;
+        case ZaSearchOption.STATUS_FILTER_ID:
+            filterTypeName = ZaMsg.OVP_statutsFilter;
+        break;
+        case ZaSearchOption.LASTER_LOGIN_TIME_FILTER_ID:
+            filterTypeName = ZaMsg.OVP_lltFilter;
+        break;
+        case ZaSearchOption.EXT_EMAIL_ADDRESS_FILTER_ID:
+            filterTypeName = ZaMsg.OVP_eeaFilter;
+        break;
+        case ZaSearchOption.COS_FILTER_ID:
+            filterTypeName = ZaMsg.OVP_cosFilter;
+        break;
+        case ZaSearchOption.SERVER_FILTER_ID:
+            filterTypeName = ZaMsg.OVP_serverFilter;
+        break;
+        case ZaSearchOption.DOMAIN_FILTER_ID:
+            filterTypeName = ZaMsg.OVP_domainFilter;
+        break;
+      }
+    return filterTypeName;
+}
+
 
 //add the option value into the LDAP query filter
 ZaSearchBuilderController.prototype._newAddFilter =
@@ -1164,6 +1190,7 @@ function (ev) {
     }
     if (dialog) {
         ZaSearchBuilderController.currentPopupDialog  = dialog;
+        dialog._localXForm.setInstance(ZaSearchOption.getDefaultInstance(dialog._optionId));
         dialog.popup(loc);
 	    var omem = DwtOutsideMouseEventMgr.INSTANCE;
 	    var omemParams = {
@@ -1228,13 +1255,8 @@ ZaSearchBuilderController.prototype.filterOKListener =
 function (filterType) {
     var dialog = this.getFilterDialogByType(filterType);
     dialog.popdown();
-    dialog._controller.setNewQuery();
+    dialog._controller.setNewQuery(dialog);
     var omem = DwtOutsideMouseEventMgr.INSTANCE;
     omem.stopListening({id:"ZaOptionView", obj:dialog});
     ZaSearchBuilderController.currentPopupDialog = undefined;
-
-    var currentQueryValue = ZaApp.getInstance().getSearchListController()._uiContainer.getQueryField();
-    currentQueryValue = currentQueryValue ? currentQueryValue: "";
-    var searchField = ZaApp.getInstance().getSearchListController()._searchField;
-    searchField.startSearch(currentQueryValue);
 }
