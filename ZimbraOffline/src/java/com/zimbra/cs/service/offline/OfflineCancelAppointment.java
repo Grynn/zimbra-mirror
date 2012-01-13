@@ -1,7 +1,7 @@
 /*
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Server
- * Copyright (C) 2008, 2009, 2010 Zimbra, Inc.
+ * Copyright (C) 2006, 2007, 2008, 2009, 2010, 2011, 2012 VMware, Inc.
  * 
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
@@ -17,20 +17,14 @@ package com.zimbra.cs.service.offline;
 import java.util.Map;
 
 import com.zimbra.common.service.ServiceException;
-import com.zimbra.common.soap.Element;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
-import com.zimbra.cs.service.mail.ModifyAppointment;
+import com.zimbra.cs.service.mail.CancelAppointment;
 
-public class OfflineModifyAppointment extends ModifyAppointment {
-    
+
+public class OfflineCancelAppointment extends CancelAppointment {
     @Override
     protected String getProxyAuthToken(String requestedAccountId, Map<String, Object> context) throws ServiceException {
         OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
         return prov.getCalendarProxyAuthToken(requestedAccountId, context);
-    }
-
-    @Override
-    public void preProxy(Element request, Map<String, Object> context) throws ServiceException {        
-        OfflineProxyHelper.uploadAttachments(request, getZimbraSoapContext(context).getRequestedAccountId());
     }
 }

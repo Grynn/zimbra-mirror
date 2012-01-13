@@ -96,7 +96,7 @@ public class OfflineDocumentHandlers {
             throw ServiceException.FAILURE("not a zimbra account: " + account.getName(), null);
         url += "/service/upload";
         
-        String authToken = prov.getProxyAuthToken(acctId);
+        String authToken = prov.getProxyAuthToken(acctId, null);
         BufferStreamRequestEntity bsre = null;
         String newId;
         PostMethod post = new PostMethod(url);

@@ -40,11 +40,13 @@ import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.sun.mail.smtp.SMTPTransport;
+import com.zimbra.client.ZGetInfoResult;
+import com.zimbra.client.ZIdentity;
+import com.zimbra.client.ZMailbox;
 import com.zimbra.common.account.Key;
-import com.zimbra.common.account.Key.AccountBy;
 import com.zimbra.common.account.ProvisioningConstants;
+import com.zimbra.common.account.Key.AccountBy;
 import com.zimbra.common.auth.ZAuthToken;
-import com.zimbra.soap.admin.type.DataSourceType;
 import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.net.TrustManagers;
 import com.zimbra.common.service.RemoteServiceException;
@@ -55,7 +57,26 @@ import com.zimbra.common.util.Pair;
 import com.zimbra.common.util.StringUtil;
 import com.zimbra.common.util.SystemUtil;
 import com.zimbra.common.util.ZimbraLog;
-import com.zimbra.cs.account.*;
+import com.zimbra.cs.account.Account;
+import com.zimbra.cs.account.AccountServiceException;
+import com.zimbra.cs.account.AttributeManager;
+import com.zimbra.cs.account.CalendarResource;
+import com.zimbra.cs.account.Config;
+import com.zimbra.cs.account.Cos;
+import com.zimbra.cs.account.DataSource;
+import com.zimbra.cs.account.DistributionList;
+import com.zimbra.cs.account.Domain;
+import com.zimbra.cs.account.Entry;
+import com.zimbra.cs.account.GlobalGrant;
+import com.zimbra.cs.account.IDNUtil;
+import com.zimbra.cs.account.Identity;
+import com.zimbra.cs.account.NamedEntry;
+import com.zimbra.cs.account.NamedEntryCache;
+import com.zimbra.cs.account.Provisioning;
+import com.zimbra.cs.account.Server;
+import com.zimbra.cs.account.Signature;
+import com.zimbra.cs.account.XMPPComponent;
+import com.zimbra.cs.account.Zimlet;
 import com.zimbra.cs.account.NamedEntry.Visitor;
 import com.zimbra.cs.account.auth.AuthContext;
 import com.zimbra.cs.account.callback.CallbackContext;
@@ -64,6 +85,7 @@ import com.zimbra.cs.datasource.SyncErrorManager;
 import com.zimbra.cs.datasource.imap.ImapSync;
 import com.zimbra.cs.db.DbOfflineDirectory;
 import com.zimbra.cs.db.DbPool;
+import com.zimbra.cs.db.DbOfflineDirectory.GranterEntry;
 import com.zimbra.cs.mailbox.DesktopMailbox;
 import com.zimbra.cs.mailbox.Folder;
 import com.zimbra.cs.mailbox.InitialSync;
@@ -71,7 +93,7 @@ import com.zimbra.cs.mailbox.LocalJMSession;
 import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.MailboxManager;
-import com.zimbra.cs.mailbox.Metadata;
+import com.zimbra.cs.mailbox.Mountpoint;
 import com.zimbra.cs.mailbox.OfflineMailboxManager;
 import com.zimbra.cs.mailbox.OfflineServiceException;
 import com.zimbra.cs.mailbox.OperationContext;
@@ -90,10 +112,9 @@ import com.zimbra.cs.offline.util.yc.oauth.OAuthManager;
 import com.zimbra.cs.util.yauth.AuthenticationException;
 import com.zimbra.cs.util.yauth.MetadataTokenStore;
 import com.zimbra.cs.wiki.WikiUtil;
-import com.zimbra.client.ZGetInfoResult;
-import com.zimbra.client.ZIdentity;
-import com.zimbra.client.ZMailbox;
-import com.zimbra.soap.type.GalSearchType;
+import com.zimbra.soap.SoapEngine;
+import com.zimbra.soap.ZimbraSoapContext;
+import com.zimbra.soap.admin.type.DataSourceType;
 
 public class OfflineProvisioning extends Provisioning implements OfflineConstants {
 
@@ -104,6 +125,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     public static final String A_offlineDeletedDataSource = "offlineDeletedDataSource";
     public static final String A_offlineDeletedSignature = "offlineDeletedSignature";
     public static final String A_offlineMountpointProxyAccountId = "offlineMountpointProxyAccountId";
+    public static final String A_offlineAmbiguousGranter = "offlineAmbiguousGranter";
     public static final String A_zimbraPrefMailtoHandlerEnabled = "zimbraPrefMailtoHandlerEnabled";
     public static final String A_zimbraPrefMailtoAccountId = "zimbraPrefMailtoAccountId";
     public static final String A_zimbraPrefShareContactsInAutoComplete = "zimbraPrefShareContactsInAutoComplete";
@@ -970,24 +992,40 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             ge = null;
         }
         if (ge == null) {
+            GranterEntry existing = lookupGranter("id", id, null);
             DbOfflineDirectory.createGranterEntry(name, id, granteeId);
-            makeGranter(name, id, account);
+            makeGranter(name, id, account, existing != null);
         }
     }
 
-    private DbOfflineDirectory.GranterEntry lookupGranter(String by, String key) throws ServiceException {
+    private DbOfflineDirectory.GranterEntry lookupGranter(String by, String key, String granteeId) throws ServiceException {
         List<DbOfflineDirectory.GranterEntry> ents = DbOfflineDirectory.searchGranter(by, key);
-        return ents.isEmpty() ? null : ents.get(0);
+        if (ents.size() > 1) {
+            if (granteeId != null) {
+                for (DbOfflineDirectory.GranterEntry ge : ents) {
+                    if (granteeId.equals(ge.granteeId)) {
+                        return ge;
+                    }
+                }
+                OfflineLog.offline.warn("could not find matching grantee %s", granteeId);
+            }
+            GranterEntry ge = ents.get(0);
+            ge.setAmbiguousGranter(true);
+            return ge;
+        } else {
+            return ents.isEmpty() ? null : ents.get(0);
+        }
     }
 
-    private OfflineAccount makeGranter(String name, String id, String granteeId) throws ServiceException {
+    private OfflineAccount makeGranter(GranterEntry granter) throws ServiceException {
+        String granteeId = granter.granteeId;
         OfflineAccount grantee = (OfflineAccount)get(Key.AccountBy.id, granteeId);
         if (grantee == null)
             throw OfflineServiceException.MOUNT_INVALID_GRANTEE();
-        return makeGranter(name, id, grantee);
+        return makeGranter(granter.name, granter.id, grantee, granter.isAmbiguousGranter());
     }
 
-    private OfflineAccount makeGranter(String name, String id, OfflineAccount grantee) throws ServiceException {
+    private OfflineAccount makeGranter(String name, String id, OfflineAccount grantee, boolean ambiguous) throws ServiceException {
         Map<String, Object> attrs = new HashMap<String, Object>();
         attrs.put(A_objectClass, new String[] { "organizationalPerson", "zimbraAccount" } );
         attrs.put(A_zimbraMailHost, ""); // the right value is set in loadRemoteSyncServer()
@@ -999,6 +1037,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         attrs.put(A_zimbraAccountStatus, ACCOUNT_STATUS_ACTIVE);
         attrs.put(A_offlineMountpointProxyAccountId, grantee.getId());
         attrs.put(A_offlineAccountFlavor, "Granter");
+        attrs.put(A_offlineAmbiguousGranter, ambiguous ? ProvisioningConstants.TRUE : ProvisioningConstants.FALSE);
         setDefaultAccountAttributes(attrs);
 
         OfflineAccount acct = new OfflineAccount(name, id, attrs, mDefaultCos.getAccountDefaults(), getLocalAccount(), this);
@@ -1370,6 +1409,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         }
 
         DbOfflineDirectory.deleteGranterByGrantee(zimbraId);
+        mGranterCache.clear();
         deleteOfflineAccount(zimbraId);
         this.cachedAccountIds.remove(zimbraId);
         //persists new order after updating cache.
@@ -1409,7 +1449,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
                     attrs = DbOfflineDirectory.readDirectoryEntry(EntryType.ACCOUNT, A_zimbraId, key);
 
                     if (attrs == null && (acct = mGranterCache.getById(key)) == null)
-                        granter = lookupGranter("id", key);
+                        granter = lookupGranter("id", key, null);
                 }
             }
         } else if (keyType == AccountBy.name) {
@@ -1419,7 +1459,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
                 attrs = DbOfflineDirectory.readDirectoryEntry(EntryType.ACCOUNT, A_offlineDn, key);
 
                 if (attrs == null && (acct = mGranterCache.getByName(key)) == null)
-                    granter = lookupGranter("name", key);
+                    granter = lookupGranter("name", key, null);
             }
         } else if (keyType == AccountBy.adminName) {
             if ((acct = mAccountCache.getByName(key)) == null && key.equals(LC.zimbra_ldap_user.value()) && (acct = zimbraAdminAccount) == null) {
@@ -1435,7 +1475,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         }
 
         if (granter != null)
-            acct = makeGranter(granter.name, granter.id, granter.granteeId);
+            acct = makeGranter(granter);
 
         if (acct != null) {
             // don't copy over attrs from OfflineCos, so that account won't cache stale values of COS attrs.
@@ -1485,7 +1525,6 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 
         String granteeId = (String)attrs.get(A_offlineMountpointProxyAccountId);
         if (granteeId != null) { // is offline mountpoint account..
-            OfflineLog.offline.debug("granter: %s, grantee: %s", acct.getId(), granteeId);
             loadRemoteSyncServer((OfflineAccount)acct, granteeId);
         }
 
@@ -2580,17 +2619,68 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         }
     }
 
+    /**
+     * Get auth token for proxying. Only implemented in OfflineProvisioning
+     * @param targetAcctId - the account we are proxying to
+     * @param originalContext - the original request context. Used internally to ensure proxy token is obtained for correct mountpoint account
+     */
     @Override
-    public String getProxyAuthToken(String acctId) throws ServiceException {
+    public String getProxyAuthToken(String acctId, Map<String, Object> originalContext) throws ServiceException {
         Account account = get(AccountBy.id, acctId);
         if (account != null && (isZcsAccount(account) || isMountpointAccount(account))) {
             String id = isMountpointAccount(account) ? account.getAttr(A_offlineMountpointProxyAccountId) : acctId;
+            if (isMountpointAccount(account) && originalContext != null && account.getBooleanAttr(A_offlineAmbiguousGranter, false)) {
+                ZimbraSoapContext zsc = (ZimbraSoapContext) originalContext.get(SoapEngine.ZIMBRA_CONTEXT);
+                if (zsc != null) {
+                    String sourceAcctId = zsc.getRequestedAccountId();
+                    if (sourceAcctId != null && !sourceAcctId.equals(id)) {
+                        //edge case where more than one grantee for a given granter
+                        GranterEntry ge = lookupGranter("id", acctId, sourceAcctId);
+                        if (sourceAcctId.equals(ge.granteeId)) {
+                            id = sourceAcctId;
+                        } else {
+                            OfflineLog.offline.warn("grantee mismatch for mountpoint account; proxy will likely fail");
+                        }
+                    }
+                }
+            }
             ZcsMailbox ombx = (ZcsMailbox)MailboxManager.getInstance().getMailboxByAccountId(id, false);
             ZAuthToken at = ombx.getAuthToken();
             return at == null ? null : at.getValue();
         } else {
             return null;
         }
+    }
+    
+    public String getCalendarProxyAuthToken(String requestedAccountId, Map<String, Object> context) throws ServiceException {
+        Account acct = getAccountById(requestedAccountId);
+        if (acct != null && isMountpointAccount(acct) && acct.getBooleanAttr(OfflineProvisioning.A_offlineAmbiguousGranter, false)) {
+            //bug 67569. try to determine which account might have a calendar folder
+            //requested account is always the share granter
+            //this is a conflict between on-behalf-of and family mailbox, both use accountName SOAP header. should ideally be different
+            //have to decide which one of our accts has access to calendar
+            //still can have errors if multiple accts have different calendars from same granter; need separate on-behalf-of vs requested acct
+            ZimbraSoapContext origZsc = context == null ? null : (ZimbraSoapContext) context.get(SoapEngine.ZIMBRA_CONTEXT);
+            if (origZsc != null) {
+                if (requestedAccountId.equals(origZsc.getRequestedAccountId())) {
+                    List<Account> zcsAccts = getAllZcsAccounts();
+                    for (Account zcsAcct : zcsAccts) {
+                        ZcsMailbox ombx = (ZcsMailbox) MailboxManager.getInstance().getMailboxByAccount(zcsAcct);
+                        List<MailItem> mounts = ombx.getItemList(null, MailItem.Type.MOUNTPOINT);
+                        if (mounts != null) {
+                            for (MailItem mount : mounts) {
+                                if (((Mountpoint) mount).getDefaultView() == MailItem.Type.APPOINTMENT) {
+                                    //probably this one. 
+                                    return getProxyAuthToken(zcsAcct.getId(), null);
+                                }
+                            }
+                        }
+                    }
+                    
+                }
+            }
+        }
+        return getProxyAuthToken(requestedAccountId, context);
     }
 
     @Override

@@ -761,11 +761,20 @@ public class DbOfflineDirectory {
         public String name;
         public String id;
         public String granteeId;
-
+        private boolean ambiguousGranter = false;
+        
         public GranterEntry(String n, String i, String gi) {
             name = n;
             id = i;
             granteeId = gi;
+        }
+
+        public boolean isAmbiguousGranter() {
+            return ambiguousGranter;
+        }
+
+        public void setAmbiguousGranter(boolean ambiguousGranter) {
+            this.ambiguousGranter = ambiguousGranter;
         }
     }
 
