@@ -72,10 +72,17 @@ public class OfflineFolderAction extends FolderAction {
             String target = action.getAttribute(MailConstants.A_FOLDER);
             if (!StringUtil.isNullOrEmpty(target)) {
                 String targetAccountId = target.split(":")[0];
-                if (!StringUtil.isNullOrEmpty(targetAccountId)
+                String source = action.getAttribute(MailConstants.A_ID);
+                String sourceAccountId = source.split(":")[0];
+                if (!StringUtil.equal(sourceAccountId, targetAccountId)
+                        && !OfflineConstants.LOCAL_ACCOUNT_ID.equals(sourceAccountId)
+                        && !OfflineConstants.LOCAL_ACCOUNT_ID.equals(targetAccountId)
+                        && (sourceAccountId.length() == OfflineConstants.LOCAL_ACCOUNT_ID.length())) {
+                    throw ServiceException.INVALID_REQUEST("unsupported operation, expect local account id, action:("
+                            + action + ")", null);
+                }
+                if (!OfflineConstants.LOCAL_ACCOUNT_ID.equals(sourceAccountId)
                         && OfflineConstants.LOCAL_ACCOUNT_ID.equals(targetAccountId)) {
-                    String source = action.getAttribute(MailConstants.A_ID);
-                    String sourceAccountId = source.split(":")[0];
                     Mailbox mbox = OfflineMailboxManager.getOfflineInstance().getMailboxByAccountId(sourceAccountId);
                     ZimbraSoapContext zsc = getZimbraSoapContext(context);
                     OperationContext octxt = getOperationContext(zsc, context);
@@ -84,9 +91,6 @@ public class OfflineFolderAction extends FolderAction {
 
                     Element resp = getZimbraSoapContext(context).createElement(MailConstants.FOLDER_ACTION_RESPONSE);
                     return resp;
-                } else {
-                    throw ServiceException.INVALID_REQUEST("unsupported operation, expect local account id, action:("
-                            + action + ")", null);
                 }
             }
         }
