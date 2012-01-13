@@ -397,30 +397,54 @@ function changeDateFields(selectObj) {
                                         </c:choose>
                                     </td>
                                 </tr>
-                                <c:if test="${empty bean.accountId}">
-                                    <tr>
-                                        <td>
-                                            <div class="ZFieldLabel"><fmt:message key='AccountType'/>:</div>
-                                        </td>
-                                        <td width=90%>
-                                            <form name="newAccnt" action="" method="POST">
-                                                <select name="accountFlavor" id="accountFlavor" onchange="accntChange(this)" class="ZSelect">
-                                                    <option value=""><fmt:message key='AccountSelect'/></option>
-                                                    <option value="Zimbra" <c:if test="${accountFlavor eq 'Zimbra'}">selected</c:if> ><fmt:message key='Zimbra'/></option>
-                                                    <option value="Gmail" <c:if test="${accountFlavor eq 'Gmail'}">selected</c:if> ><fmt:message key='Gmail'/></option>
-                                                    <option value="YMP" <c:if test="${accountFlavor eq 'YMP'}">selected</c:if> ><fmt:message key='YMP'/></option>
-                                                    <c:if test="${extBean.xsyncEnabled}">
-                                                      <option value="Xsync" <c:if test="${accountFlavor eq 'Xsync'}">selected</c:if> ><fmt:message key='Xsync'/></option>
-                                                    </c:if>
-                                                    <option value="MSE" <c:if test="${accountFlavor eq 'MSE'}">selected</c:if> ><fmt:message key='MSE'/></option>
-                                                    <option value="Imap" <c:if test="${accountFlavor eq 'Imap'}">selected</c:if> ><fmt:message key='Imap'/></option>
-                                                    <option value="Pop" <c:if test="${accountFlavor eq 'Pop'}">selected</c:if> ><fmt:message key='POP'/></option>
-                                                </select>
-                                                <input type="hidden" name="verb" id="verb" value=""></input>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                </c:if>
+                                <tr>
+                                    <td>
+                                        <div class="ZFieldLabel"><fmt:message key='AccountType'/>:</div>
+                                    </td>
+                                    <td width=90%>
+                                        <form name="newAccnt" action="" method="POST">
+                                            <select name="accountFlavor" id="accountFlavor" onchange="accntChange(this)" class="ZSelect" <c:if test="${not empty bean.accountId}"> onclick="alert('<fmt:message key='CannotChangeAcctType'/>');"</c:if>>
+                                              <c:choose>
+                                                <c:when test="${empty bean.accountId}">
+	                                                <option value=""><fmt:message key='AccountSelect'/></option>
+	                                                <option value="Zimbra" <c:if test="${accountFlavor eq 'Zimbra'}">selected</c:if> ><fmt:message key='Zimbra'/></option>
+	                                                <option value="Gmail" <c:if test="${accountFlavor eq 'Gmail'}">selected</c:if> ><fmt:message key='Gmail'/></option>
+	                                                <option value="YMP" <c:if test="${accountFlavor eq 'YMP'}">selected</c:if> ><fmt:message key='YMP'/></option>
+	                                                <c:if test="${extBean.xsyncEnabled}">
+	                                                  <option value="Xsync" <c:if test="${accountFlavor eq 'Xsync'}">selected</c:if> ><fmt:message key='Xsync'/></option>
+	                                                </c:if>
+	                                                <option value="MSE" <c:if test="${accountFlavor eq 'MSE'}">selected</c:if> ><fmt:message key='MSE'/></option>
+	                                                <option value="Imap" <c:if test="${accountFlavor eq 'Imap'}">selected</c:if> ><fmt:message key='Imap'/></option>
+	                                                <option value="Pop" <c:if test="${accountFlavor eq 'Pop'}">selected</c:if> ><fmt:message key='POP'/></option>
+                                                </c:when>
+                                                <c:otherwise>
+                                                  <c:choose>
+                                                    <c:when test="${accountFlavor eq 'Zimbra'}">
+                                                        <option value="Zimbra" selected><fmt:message key='Zimbra'/></option>
+                                                    </c:when>
+                                                    <c:when test="${accountFlavor eq 'Gmail'}">
+                                                        <option value="Gmail" selected><fmt:message key='Gmail'/></option>
+                                                    </c:when>
+                                                    <c:when test="${accountFlavor eq 'YMP'}">
+                                                        <option value="YMP" selected><fmt:message key='YMP'/></option>
+                                                    </c:when>
+                                                    <c:when test="${accountFlavor eq 'MSE'}">
+                                                        <option value="MSE" selected><fmt:message key='MSE'/></option>
+                                                    </c:when>
+                                                    <c:when test="${accountFlavor eq 'Imap'}">
+                                                        <option value="Imap" selected><fmt:message key='Imap'/></option>
+                                                    </c:when>
+                                                    <c:when test="${accountFlavor eq 'Pop'}">
+                                                        <option value="Pop" selected><fmt:message key='POP'/></option>
+                                                    </c:when>
+                                                  </c:choose>
+                                                </c:otherwise>
+                                              </c:choose>
+                                            </select>
+                                            <input type="hidden" name="verb" id="verb" value=""></input>
+                                        </form>
+                                    </td>
+                                </tr>
                                 <c:if test="${not empty accountFlavor}">
                                     <form name="accountForm" action="${uri}" method="POST" onsubmit="OnSubmit();">
                                         <input type="hidden" name="accountId" value="${bean.accountId}">
@@ -433,6 +457,25 @@ function changeDateFields(selectObj) {
                                         <c:if test="${not empty bean.sslCertInfo and bean.sslCertInfo.acceptable}">
                                             <input type="hidden" name="sslCertAlias" value="${bean.sslCertInfo.alias}">
                                         </c:if>
+                                        <c:if test="${not empty help || not empty beta}">
+                                            <tr>
+                                                <td align=right>
+                                                    <nobr><img src="<c:url value='/img/imgAccount${accountFlavor}48.png'/>" align=absbottom>&nbsp;&nbsp;</nobr>
+                                                </td>
+                                                <td class="ZAccountHelp">
+                                                    <c:if test="${not empty help}">
+                                                        <div>${help}</div>
+                                                        <c:if test="${not empty helpInfo}">
+                                                            <div id="helpInfo" style="display:none">${helpInfo}</div>
+                                                        </c:if>
+                                                    </c:if>
+                                                    <c:if test="${not empty beta}">
+                                                        <div class="ZAccountWarning">${betaWarn}</div>
+                                                        <div id="beta" style="display:none">${beta}</div>
+                                                    </c:if>
+                                                </td>
+                                            </tr>
+                                        </c:if>
                                         <c:choose>
                                             <c:when test="${accountFlavor eq ''}">
                                             </c:when>
@@ -444,25 +487,6 @@ function changeDateFields(selectObj) {
                                                 </jsp:forward>
                                             </c:when>
                                             <c:when test="${bean.add || empty bean.accountId}">
-                                                <c:if test="${not empty help || not empty beta}">
-                                                    <tr>
-                                                        <td align=right>
-                                                            <nobr><img src="<c:url value='/img/imgAccount${accountFlavor}48.png'/>" align=absbottom>&nbsp;&nbsp;</nobr>
-                                                        </td>
-                                                        <td class="ZAccountHelp">
-                                                            <c:if test="${not empty help}">
-                                                                <div>${help}</div>
-                                                                <c:if test="${not empty helpInfo}">
-                                                                    <div id="helpInfo" style="display:none">${helpInfo}</div>
-                                                                </c:if>
-                                                            </c:if>
-                                                            <c:if test="${not empty beta}">
-                                                                <div class="ZAccountWarning">${betaWarn}</div>
-                                                                <div id="beta" style="display:none">${beta}</div>
-                                                            </c:if>
-                                                        </td>
-                                                    </tr>
-                                                </c:if>
                                             </c:when>
                                             <c:otherwise>
                                                 ${zdf:reload(bean)}
