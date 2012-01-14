@@ -67,7 +67,9 @@ build:
 	--enable-crypt; \
 	LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(BDB_LIB_DIR):$(CYRUS_LIB_DIR):$(LIBTOOL_LIB_DIR) $(MAKE) depend; \
 	LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(BDB_LIB_DIR):$(CYRUS_LIB_DIR):$(LIBTOOL_LIB_DIR) $(MAKE) $(MAKEARGS); \
-	LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(BDB_LIB_DIR):$(CYRUS_LIB_DIR):$(LIBTOOL_LIB_DIR) $(MAKE) install STRIP="")
+	LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(BDB_LIB_DIR):$(CYRUS_LIB_DIR):$(LIBTOOL_LIB_DIR) $(MAKE) install STRIP=""; \
+	cd contrib/slapd-modules/noopsrch; \
+	LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(BDB_LIB_DIR):$(CYRUS_LIB_DIR):$(LIBTOOL_LIB_DIR) $(MAKE) prefix=$(ZIMBRA_HOME)/openldap-$(LDAP_VERSION) libexecdir=$(ZIMBRA_HOME)/openldap-$(LDAP_VERSION)/sbin install STRIP="";)
 	(cd $(ZIMBRA_HOME); ln -s openldap-$(LDAP_VERSION) openldap)
 
 tar:
