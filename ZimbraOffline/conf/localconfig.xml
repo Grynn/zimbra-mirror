@@ -236,4 +236,7 @@
   <key name="zdesktop_heapdump_enabled">
     <value>false</value>
   </key>
+  <key name="check_dl_membership_enabled">
+    <value>false</value>
+  </key>
 </localconfig>
