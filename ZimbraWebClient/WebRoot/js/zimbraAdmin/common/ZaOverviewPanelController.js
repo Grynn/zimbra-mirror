@@ -1875,14 +1875,18 @@ ZaOverviewPanelController.prototype.refreshRelatedTree = function(items,skipCos,
 
             if( item.type == ZaItem.ACCOUNT || item.type == ZaItem.DL){
                 if(!skipDL){
-                    var member = item[ZaAccount.A2_memberOf][ZaAccount.A2_directMemberList];
-                    for(var i=0; i<member.length; i++){
-                        dlName = member[i][ZaAccount.A_name]
-                        if(typeof(tempHashDL[dlName]) == "undefined"){
-                            tempHashDL[dlName] = 1;
-                            dl = new ZaDistributionList(member[i]["id"],dlName);
-                            dl.load();
-                            ZaOverviewPanelController.manageRelatedTreeListener.call(this,[ZaMsg.OVP_home,ZaMsg.OVP_manageAccounts,ZaMsg.OVP_distributionLists,dlName],dl) ;
+                    if (!AjxUtil.isEmpty(item[ZaAccount.A2_memberOf]) &&
+                        !AjxUtil.isEmpty(item[ZaAccount.A2_memberOf][ZaAccount.A2_directMemberList])
+                        ) {
+                        var member = item[ZaAccount.A2_memberOf][ZaAccount.A2_directMemberList];
+                        for(var i=0; i<member.length; i++){
+                            dlName = member[i][ZaAccount.A_name]
+                            if(typeof(tempHashDL[dlName]) == "undefined"){
+                                tempHashDL[dlName] = 1;
+                                dl = new ZaDistributionList(member[i]["id"],dlName);
+                                dl.load();
+                                ZaOverviewPanelController.manageRelatedTreeListener.call(this,[ZaMsg.OVP_home,ZaMsg.OVP_manageAccounts,ZaMsg.OVP_distributionLists,dlName],dl) ;
+                            }
                         }
                     }
                 }
