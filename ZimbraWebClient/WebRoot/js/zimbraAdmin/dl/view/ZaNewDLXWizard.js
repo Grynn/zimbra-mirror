@@ -1509,6 +1509,7 @@ ZaNewDLXWizard.myXFormModifier = function(xFormObject, entry) {
                             enableDisableChangeEventSources:[ZaDistributionList.A_zimbraPrefReplyToEnabled],
                             enableDisableChecks:[[XForm.checkInstanceValue,ZaDistributionList.A_zimbraPrefReplyToEnabled,"TRUE"],
                             [ZaItem.hasWritePermission,ZaDistributionList.A_zimbraPrefReplyToAddress]],
+                            containerCssStyle:"padding-left:1px;",
                             onChange: function(value, event, form){
                                 if (value instanceof ZaItem ) {
                                     this.setInstanceValue(value.name);
