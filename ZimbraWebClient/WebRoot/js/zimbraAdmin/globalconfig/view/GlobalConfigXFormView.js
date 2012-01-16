@@ -190,6 +190,9 @@ GlobalConfigXFormView.SKIN_TAB_RIGHTS = [];
 GlobalConfigXFormView.BC_TAB_ATTRS = [ZaGlobalConfig.A_zimbraBasicAuthRealm];
 GlobalConfigXFormView.BC_TAB_RIGHTS = [];
 
+GlobalConfigXFormView.AUTO_PROV_TAB_ATTRS = [ZaGlobalConfig.A_zimbraAutoProvNotificationBody, ZaGlobalConfig.A_zimbraAutoProvNotificationSubject];
+GlobalConfigXFormView.AUTO_PROV_TAB_RIGHTS = [];
+
 
 GlobalConfigXFormView.prototype.setObject =
 function(entry) {
@@ -216,7 +219,7 @@ function(entry) {
 
 GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 	xFormObject.tableCssStyle = "width:100%;overflow:auto;";
-	var _tab1, _tab2, _tab3, _tab4, _tab5, _tab6, _tab7, _tab8, _tab9, _tab10;
+	var _tab1, _tab2, _tab3, _tab4, _tab5, _tab6, _tab7, _tab8, _tab9, _tab10, _tab11;
 	
     var tabBarChoices = [];
     var switchItems = [];
@@ -1067,6 +1070,32 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
                 };
         switchItems.push (case10) ;
     }
+
+    if(ZaTabView.isTAB_ENABLED(entry,GlobalConfigXFormView.AUTO_PROV_TAB_ATTRS, GlobalConfigXFormView.AUTO_PROV_TAB_RIGHTS)) {
+    	_tab11 = ++this.TAB_INDEX;
+
+        tabBarChoices.push ({value:_tab11, label:ZaMsg.TABT_Provision});
+        var case11 =
+                {type: _ZATABCASE_, caseKey:_tab11,         paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),
+		            colSizes:["auto"],numCols:1,id:"global_auto_prov_tab",
+		            items: 	[
+                        { type:_ZA_TOP_GROUPER_, label:ZaMsg.TTL_zimbraAutoProvEmailSetting,
+                        items :[
+                            { ref: ZaGlobalConfig.A_zimbraAutoProvNotificationSubject,
+                                type: _TEXTFIELD_,width: "400",
+                                label: ZaMsg.LBL_zimbraAutoProvEmailSubject
+                            },
+                            { ref: ZaGlobalConfig.A_zimbraAutoProvNotificationBody,
+                                type: _TEXTAREA_, width: 400,
+                                label: ZaMsg.LBL_zimbraAutoProvEmailBody
+                            }
+                        ]
+                        }
+                    ]
+                };
+        switchItems.push (case11) ;
+    }
+
     this.tabChoices = tabBarChoices;
    if (!appNewUI) {
     xFormObject.items = [

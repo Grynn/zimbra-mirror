@@ -689,7 +689,8 @@ ZaDomainXFormView.PROV_TAB_ATTRS = [ZaDomain.A_zimbraAutoProvMode, ZaDomain.A_zi
     ZaDomain.A_zimbraAutoProvLdapSearchFilter,ZaDomain.A_zimbraAutoProvLdapBindDn,
     ZaDomain.A_zimbraAutoProvAccountNameMap,ZaDomain.A_zimbraAutoProvAttrMap,
     ZaDomain.A_zimbraAutoProvNotificationFromAddress,ZaDomain.A_zimbraAutoProvBatchSize,
-    ZaDomain.A_zimbraAutoProvLastPolledTimestamp];
+    ZaDomain.A_zimbraAutoProvLastPolledTimestamp,ZaDomain.A_zimbraAutoProvNotificationSubject,
+    ZaDomain.A_zimbraAutoProvNotificationBody];
 ZaDomainXFormView.PROV_TAB_RIGHTS = [];
 
 ZaDomainXFormView.INTEROP_TAB_ATTRS = [ZaDomain.A_zimbraFreebusyExchangeURL, ZaDomain.A_zimbraFreebusyExchangeAuthScheme,
@@ -1843,6 +1844,15 @@ if(appNewUI) {
                         visibilityChecks: [[XForm.checkInstanceValue,ZaDomain.A2_zimbraAutoProvModeEAGEREnabled,"TRUE"]],
                         visibilityChangeEventSources:[ZaDomain.A2_zimbraAutoProvModeEAGEREnabled],
                         labelLocation:_LEFT_
+                    },
+                    {type:_OUTPUT_, label:ZaMsg.TTL_zimbraAutoProvEmailSettingBold,
+                        labelLocation:_LEFT_, width:"98%"
+                    },
+                    {ref:ZaDomain.A_zimbraAutoProvNotificationSubject, type:_OUTPUT_,  width:"98%",
+                        label:ZaMsg.LBL_zimbraAutoProvEmailSubject, labelLocation:_LEFT_
+                    },
+                    {ref:ZaDomain.A_zimbraAutoProvNotificationBody, type:_OUTPUT_,  width:"98%",
+                        label:ZaMsg.LBL_zimbraAutoProvEmailBody, labelLocation:_LEFT_
                     }
                 ]}
             ]
@@ -1986,19 +1996,16 @@ if(appNewUI) {
                         visibilityChecks: [[XForm.checkInstanceValue,ZaDomain.A2_zimbraAutoProvModeEAGEREnabled,"TRUE"]],
                         visibilityChangeEventSources:[ZaDomain.A2_zimbraAutoProvModeEAGEREnabled],
                         labelLocation:_LEFT_
-                    }/*,
-                    {type: _SPACER_, height: 15 },
-                    {type: _GROUP_, colSpan:2, numCols:3, colSizes: ["350px", "20px", "*" ],
-                        visibilityChecks: [[XForm.checkInstanceValue,ZaDomain.A2_zimbraAutoProvModeMANUALEnabled,"TRUE"]],
-                        visibilityChangeEventSources:[ZaDomain.A2_zimbraAutoProvModeMANUALEnabled],
-                        items :[
-                            {type:_CELLSPACER_ },
-                            {type: _DWT_BUTTON_ , colSpan: 2, label: ZaMsg.LBL_ManualProvision, width: "10em",
-                              onActivate: ZaDomainXFormView.manualAutoProvisionListener
-                            },
-                            {type:_CELLSPACER_}
-                         ]
-                    }*/
+                    },
+                    {type:_OUTPUT_, label:ZaMsg.TTL_zimbraAutoProvEmailSettingBold,
+                        labelLocation:_LEFT_
+                    },
+                    {ref:ZaDomain.A_zimbraAutoProvNotificationSubject, type:_OUTPUT_,
+                        label:ZaMsg.LBL_zimbraAutoProvEmailSubject, labelLocation:_LEFT_
+                    },
+                    {ref:ZaDomain.A_zimbraAutoProvNotificationBody, type:_OUTPUT_,
+                        label:ZaMsg.LBL_zimbraAutoProvEmailBody, labelLocation:_LEFT_
+                    }
                 ]}
             ]
         };

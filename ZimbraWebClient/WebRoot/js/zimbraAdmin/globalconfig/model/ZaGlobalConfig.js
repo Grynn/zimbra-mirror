@@ -192,6 +192,8 @@ ZaGlobalConfig.A_zimbraMailSSLProxyClientCertPort = "zimbraMailSSLProxyClientCer
 ZaGlobalConfig.A_zimbraReverseProxyMailMode = "zimbraReverseProxyMailMode";
 ZaGlobalConfig.A_zimbraReverseProxyAdminIPAddress = "zimbraReverseProxyAdminIPAddress";
 ZaGlobalConfig.A_zimbraReverseProxyClientCertCA = "zimbraReverseProxyClientCertCA";
+ZaGlobalConfig.A_zimbraAutoProvNotificationSubject = "zimbraAutoProvNotificationSubject";
+ZaGlobalConfig.A_zimbraAutoProvNotificationBody = "zimbraAutoProvNotificationBody";
 
 //Skin Properties
 ZaGlobalConfig.A_zimbraSkinForegroundColor = "zimbraSkinForegroundColor" ;
@@ -506,6 +508,9 @@ ZaGlobalConfig.myXModel = {
         // auto provision
         { id:ZaGlobalConfig.A_zimbraAutoProvBatchSize, type:_NUMBER_, ref:"attrs/" + ZaGlobalConfig.A_zimbraAutoProvBatchSize, maxInclusive:2147483647, minInclusive:0},
         { id:ZaGlobalConfig.A_zimbraAutoProvPollingInterval, ref:"attrs/" + ZaGlobalConfig.A_zimbraAutoProvPollingInterval, type: _LIFETIME_NUMBER_, minInclusive: 0, fractionDigits: 0 },
+        { id:ZaGlobalConfig.A_zimbraAutoProvNotificationSubject, ref:"attrs/" + ZaGlobalConfig.A_zimbraAutoProvNotificationSubject, type:_STRING_ },
+        { id:ZaGlobalConfig.A_zimbraAutoProvNotificationBody, ref:"attrs/" + ZaGlobalConfig.A_zimbraAutoProvNotificationBody, type:_STRING_ },
+
 	// help URL
         { id:ZaGlobalConfig.A_zimbraHelpAdminURL, ref:"attrs/" + ZaGlobalConfig.A_zimbraHelpAdminURL, type:_STRING_ },
         { id:ZaGlobalConfig.A_zimbraHelpDelegatedURL, ref:"attrs/" + ZaGlobalConfig.A_zimbraHelpDelegatedURL, type:_STRING_ },

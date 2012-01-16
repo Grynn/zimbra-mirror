@@ -309,6 +309,10 @@ ZaDomain.A_zimbraSkinLogoAppBanner = "zimbraSkinLogoAppBanner" ;
 // regex of domain name
 ZaDomain.A_zimbraMailAddressValidationRegex = "zimbraMailAddressValidationRegex";
 
+//email setting for auto provision
+ZaDomain.A_zimbraAutoProvNotificationSubject = "zimbraAutoProvNotificationSubject";
+ZaDomain.A_zimbraAutoProvNotificationBody = "zimbraAutoProvNotificationBody";
+
 ZaDomain.A_zimbraDomainAliasTargetId = "zimbraDomainAliasTargetId" ;
 ZaDomain.A2_zimbraDomainAliasTarget = "zimbraDomainAliasTargetName" ;
 ZaDomain.A_zimbraPrefTimeZoneId = "zimbraPrefTimeZoneId" ;
@@ -1641,6 +1645,11 @@ ZaDomain.modifyAutoPovSettings = function(tmpObj) {
         attr.setAttribute("n", ZaDomain.A_zimbraAutoProvLastPolledTimestamp);
     }
 
+    attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraAutoProvNotificationSubject],modifyDomainDoc);
+    attr.setAttribute("n", ZaDomain.A_zimbraAutoProvNotificationSubject);
+    attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraAutoProvNotificationBody],modifyDomainDoc);
+    attr.setAttribute("n", ZaDomain.A_zimbraAutoProvNotificationBody);
+
     // scheduled domain list in server config
     if(tmpObj[ZaDomain.A2_zimbraAutoProvSelectedServerList]
             && tmpObj[ZaDomain.A2_zimbraAutoProvSelectedServerList].getArray().length > 0) {
@@ -2544,7 +2553,10 @@ ZaDomain.myXModel = {
        {id:ZaDomain.A2_isTestingGAL, ref:ZaDomain.A2_isTestingGAL, type:_NUMBER_},
        {id:ZaDomain.A2_isTestingSync, ref:ZaDomain.A2_isTestingSync, type:_NUMBER_},
        {id:ZaDomain.A2_isTestingAuth, ref:ZaDomain.A2_isTestingAuth, type:_NUMBER_},
-       {id:ZaDomain.A_zimbraFeatureCalendarReminderDeviceEmailEnabled, type:_COS_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/" + ZaDomain.A_zimbraFeatureCalendarReminderDeviceEmailEnabled}
+       {id:ZaDomain.A_zimbraFeatureCalendarReminderDeviceEmailEnabled, type:_COS_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/" + ZaDomain.A_zimbraFeatureCalendarReminderDeviceEmailEnabled},
+
+       {id:ZaDomain.A_zimbraAutoProvNotificationSubject, type:_COS_STRING_, ref:"attrs/" + ZaDomain.A_zimbraAutoProvNotificationSubject},
+       {id:ZaDomain.A_zimbraAutoProvNotificationBody, type:_COS_STRING_, ref:"attrs/" + ZaDomain.A_zimbraAutoProvNotificationBody}
     ]
 };
 
