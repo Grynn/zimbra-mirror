@@ -10,7 +10,6 @@ import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew;
 
 public class CreateAppointment extends AjaxCommonTest {
 
-
 	public CreateAppointment() {
 		logger.info("New "+ CreateAppointment.class.getCanonicalName());
 
@@ -19,7 +18,6 @@ public class CreateAppointment extends AjaxCommonTest {
 
 		// Make sure we are using an account with message view
 		super.startingAccountPreferences = null;
-
 
 	}
 
@@ -127,5 +125,5 @@ public class CreateAppointment extends AjaxCommonTest {
 		ZAssert.assertEquals(actual.getSubject(), appt.getSubject(), "Subject: Verify the appointment data");
 		ZAssert.assertEquals(app.zGetActiveAccount().soapMatch("//mail:GetAppointmentResponse//mail:comp", "class", "PRI"), true, "");
 	}
-
+	
 }

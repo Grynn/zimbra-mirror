@@ -1,6 +1,8 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.calendar.appointments.views.workweek.allday;
 
 import org.testng.annotations.Test;
+
+import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.AppointmentItem;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
@@ -20,7 +22,7 @@ public class CreateAppointment extends AjaxCommonTest {
 
 	}
 
-	
+	@Bugs(ids = "69132")
 	@Test(	description = "Create simple all day appointment",
 			groups = { "smoke" }
 	)

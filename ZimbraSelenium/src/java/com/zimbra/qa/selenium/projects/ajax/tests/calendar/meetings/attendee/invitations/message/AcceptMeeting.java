@@ -3,6 +3,7 @@ package com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.attendee.in
 import java.util.*;
 import org.testng.annotations.Test;
 import com.zimbra.common.soap.Element;
+import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
@@ -55,6 +56,7 @@ public class AcceptMeeting extends AjaxCommonTest {
 
 	}
 	
+	@Bugs(ids = "69132")
 	@Test(
 			description = "Accept a meeting using Accept button from invitation message", 
 			groups = { "smoke" })
@@ -149,7 +151,7 @@ public class AcceptMeeting extends AjaxCommonTest {
 
 	}
 
-	
+	@Bugs(ids = "69132")
 	@Test(
 			description = "Accept meeting - Verify organizer gets notification message", 
 			groups = { "functional" })
@@ -202,7 +204,7 @@ public class AcceptMeeting extends AjaxCommonTest {
 
 	}
 
-	
+	@Bugs(ids = "69132")
 	@Test(
 			description = "Accept meeting using 'Accept -> Notify Organizer'", 
 			groups = { "functional" })
@@ -310,7 +312,7 @@ public class AcceptMeeting extends AjaxCommonTest {
 		
 	}
 	
-	
+	@Bugs(ids = "69132")
 	@Test(
 			description = "Accept meeting using 'Accept -> Edit Reply' and verify modified content", 
 			groups = { "functional" })
@@ -417,7 +419,7 @@ public class AcceptMeeting extends AjaxCommonTest {
 		
 	}
 	
-	
+	@Bugs(ids = "69132")
 	@Test(
 			description = "Accept meeting using 'Accept -> Don't Notify Organizer'", 
 			groups = { "functional" })

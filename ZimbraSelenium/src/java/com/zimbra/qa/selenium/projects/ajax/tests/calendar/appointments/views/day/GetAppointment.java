@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import org.testng.annotations.Test;
 
+import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
@@ -28,6 +29,7 @@ public class GetAppointment extends AjaxCommonTest {
 
 	}
 	
+	@Bugs(ids = "69132")
 	@Test(	description = "View a basic appointment in the day view",
 			groups = { "functional" })
 	public void GetAppointment_01() throws HarnessException {

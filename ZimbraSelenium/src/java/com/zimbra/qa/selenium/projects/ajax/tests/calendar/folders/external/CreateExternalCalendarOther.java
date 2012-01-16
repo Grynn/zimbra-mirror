@@ -2,6 +2,7 @@ package com.zimbra.qa.selenium.projects.ajax.tests.calendar.folders.external;
 
 import org.testng.annotations.Test;
 
+import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
@@ -19,7 +20,7 @@ public class CreateExternalCalendarOther extends AjaxCommonTest {
 		super.startingAccountPreferences = null;
 	}
 
-
+	@Bugs(ids = "66576")
 	@Test(	description = "Create a new external calendar (type=other) by clicking 'Gear' -> 'new folder' on folder tree", 
 			groups = { "functional" })
 	public void CreateExternalCalendarOther_01() throws HarnessException {

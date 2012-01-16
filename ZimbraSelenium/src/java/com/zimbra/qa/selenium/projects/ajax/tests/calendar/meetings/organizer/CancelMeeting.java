@@ -9,6 +9,7 @@ import org.testng.annotations.Test;
 
 import com.zimbra.common.soap.Element;
 import com.zimbra.cs.mailbox.CalendarItem;
+import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.AppointmentItem;
 import com.zimbra.qa.selenium.framework.items.MailItem;
 import com.zimbra.qa.selenium.framework.ui.AbsApplication;
@@ -40,6 +41,7 @@ public class CancelMeeting extends AjaxCommonTest {
 		super.startingAccountPreferences = null;
 	}
 	
+	@Bugs(ids = "69132")
 	@Test(description = "Cancel an meeting using Delete toolbar button",
 			groups = { "smoke" })
 	public void CancelMeeting_01() throws HarnessException {
@@ -89,6 +91,7 @@ public class CancelMeeting extends AjaxCommonTest {
 		ZAssert.assertNull(canceledAppt, "Verify meeting is deleted from attendee's calendar");
 	}
 	
+	@Bugs(ids = "69132")
 	@Test(description = "Cancel an meeting using context menu",
 			groups = { "functional" })
 	public void CancelMeeting_02() throws HarnessException {
@@ -145,6 +148,7 @@ public class CancelMeeting extends AjaxCommonTest {
 		};
 	}
 
+	@Bugs(ids = "69132")
 	@Test(description = "Cancel an meeting using keyboard shortcuts Del & Backspace",
 			groups = { "functional" },
 			dataProvider = "DataProviderShortcutKeys")
@@ -198,6 +202,7 @@ public class CancelMeeting extends AjaxCommonTest {
 		ZAssert.assertNull(canceledAppt, "Verify meeting is deleted from attendee's calendar");
 	}
 	
+	@Bugs(ids = "69132")
 	@Test(description = "Don't cancel an meeting (press Cancel button in meeting cancellation dialog)",
 			groups = { "functional" })
 	public void CancelMeeting_04() throws HarnessException {
@@ -247,6 +252,7 @@ public class CancelMeeting extends AjaxCommonTest {
 		ZAssert.assertNotNull(canceledAppt, "Verify meeting is not deleted from attendee's calendar");
 	}
 	
+	@Bugs(ids = "69132")
 	@Test(description = "Send meeting cancellation message to attendee while cancelling appointment",
 			groups = { "functional" })
 	public void CancelMeeting_05() throws HarnessException {
@@ -300,6 +306,7 @@ public class CancelMeeting extends AjaxCommonTest {
 		ZAssert.assertNull(canceledAppt, "Verify meeting is deleted from attendee's calendar");
 	}
 	
+	@Bugs(ids = "69132")
 	@Test(description = "Modify meeting cancellation message while cancelling appointment",
 			groups = { "functional" })
 	public void CancelMeeting_06() throws HarnessException {

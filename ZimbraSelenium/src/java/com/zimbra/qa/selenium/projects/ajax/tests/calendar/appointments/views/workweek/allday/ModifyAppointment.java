@@ -4,6 +4,7 @@ import java.util.Calendar;
 
 import org.testng.annotations.Test;
 
+import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.AppointmentItem;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
@@ -29,6 +30,7 @@ public class ModifyAppointment extends AjaxCommonTest {
 
 	}
 
+	@Bugs(ids = "69132")
 	@Test(
 			description = "Modify all-day appointment with subject & body and verify it", 
 			groups = { "functional" })

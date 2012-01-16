@@ -4,6 +4,7 @@ import java.util.*;
 
 import org.testng.annotations.Test;
 
+import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
@@ -29,6 +30,7 @@ public class DeleteAppointment extends AjaxCommonTest {
 
 	}
 	
+	@Bugs(ids = "69132")
 	@Test(	description = "View a basic appointment in the month view",
 			groups = { "functional" })
 	public void GetAppointment_01() throws HarnessException {

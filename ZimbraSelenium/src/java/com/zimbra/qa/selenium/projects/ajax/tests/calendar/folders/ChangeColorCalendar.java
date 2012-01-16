@@ -22,7 +22,7 @@ public class ChangeColorCalendar extends AjaxCommonTest {
 	}
 
 	@Test(	description = "Edit a Calendar, change the color (Context menu -> Edit)", 
-			groups = { "smoke" })
+			groups = { "functional" })
 	public void ChangeColorCalendar_01() throws HarnessException {
 
 		FolderItem root = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.UserRoot);
@@ -47,7 +47,7 @@ public class ChangeColorCalendar extends AjaxCommonTest {
 		ZAssert.assertNotNull(dialog, "Verify the dialog opened");
 
 		// Change the color, click OK
-		dialog.zSetNewColor(FolderColor.Gray);
+		dialog.zSetNewColor(FolderColor.Green);
 		dialog.zClickButton(Button.B_OK);
 
 		// Check the color
@@ -57,7 +57,7 @@ public class ChangeColorCalendar extends AjaxCommonTest {
 			+	"</GetFolderRequest>");
 
 		String color = app.zGetActiveAccount().soapSelectValue("//mail:folder[@name='" + calendar.getName() + "']", "color");
-		ZAssert.assertEquals(color, "8", "Verify the color of the folder is set to gray (8)");
+		ZAssert.assertEquals(color, "3", "Verify the color of the folder is set to gray (8)");
 	}
 
 }

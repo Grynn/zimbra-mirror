@@ -4,6 +4,7 @@ import java.util.Calendar;
 
 import org.testng.annotations.Test;
 
+import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZDate;
@@ -25,6 +26,7 @@ public class GetReminder extends AjaxCommonTest {
 
 	}
 	
+	@Bugs(ids = "69132")
 	@Test(	description = "Verify reminder popup when in the mail app",
 			groups = { "functional" })
 	public void GetReminder_01() throws HarnessException {

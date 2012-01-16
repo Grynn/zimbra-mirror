@@ -2,6 +2,8 @@ package com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.resources;
 
 import java.util.Calendar;
 import org.testng.annotations.Test;
+
+import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.AppointmentItem;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
@@ -18,6 +20,7 @@ public class CreateMeetingWithEquipment extends AjaxCommonTest {
 		super.startingPage = app.zPageCalendar;
 	}
 	
+	@Bugs(ids = "69132")
 	@Test(description = "Create simple meeting with equipment",
 			groups = { "functional" })
 	public void CreateMeetingWithEquipment_01() throws HarnessException {

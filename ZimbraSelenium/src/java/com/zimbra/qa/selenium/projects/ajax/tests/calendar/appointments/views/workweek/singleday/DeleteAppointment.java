@@ -7,6 +7,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import com.zimbra.common.soap.Element;
+import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.AppointmentItem;
 import com.zimbra.qa.selenium.framework.items.RecipientItem;
 import com.zimbra.qa.selenium.framework.ui.AbsApplication;
@@ -40,6 +41,7 @@ public class DeleteAppointment extends AjaxCommonTest {
 
 	}
 	
+	@Bugs(ids = "69132")
 	@Test(description = "Delete an appointment using Delete toolbar button",
 			groups = { "smoke" })
 	public void DeleteAppointment_01() throws HarnessException {
@@ -81,6 +83,7 @@ public class DeleteAppointment extends AjaxCommonTest {
 		ZAssert.assertEquals(app.zPageCalendar.sIsElementPresent(app.zPageCalendar.zGetApptLocator(apptSubject)), false, "Verify appointment is deleted");
 	}
 	
+	@Bugs(ids = "69132")
 	@Test(description = "Delete an appointment using context menu",
 			groups = { "functional" })
 	public void DeleteAppointment_02() throws HarnessException {
@@ -129,6 +132,7 @@ public class DeleteAppointment extends AjaxCommonTest {
 		};
 	}
 
+	@Bugs(ids = "69132")
 	@Test(description = "Delete an appointment using keyboard shortcuts (Del & Backspace)",
 			groups = { "functional" },
 			dataProvider = "DataProviderShortcutKeys")

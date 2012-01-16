@@ -3,6 +3,7 @@ package com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.organizer;
 import java.util.Calendar;
 import org.testng.annotations.Test;
 
+import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.AppointmentItem;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
@@ -22,6 +23,7 @@ public class ModifyMeeting extends AjaxCommonTest {
 		super.startingPage = app.zPageCalendar;
 	}
 	
+	@Bugs(ids = "69132")
 	@Test(	description = "Modify meeting by adding more attendees",
 			groups = { "smoke" })
 	public void ModifyMeeting_01() throws HarnessException {

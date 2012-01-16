@@ -1,6 +1,8 @@
 package com.zimbra.qa.selenium.projects.ajax.ui.calendar;
 
 import java.awt.event.KeyEvent;
+
+import com.zimbra.qa.selenium.framework.core.SeleniumService;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
@@ -422,97 +424,124 @@ public class FormApptNew extends AbsForm {
 
 			int frames = this.sGetCssCount("css=iframe");
 			logger.info("Body: # of frames: " + frames);
+			String browser = SeleniumService.getInstance().getSeleniumBrowser();
 
-			if (frames == 0) {
-				// //
-				// Text compose
-				// //
-
-				locator = "css=textarea[id*='_content']";
-
-				if (!this.sIsElementPresent(locator))
-					throw new HarnessException("Unable to locate compose body");
-
-				this.sFocus(locator);
-				this.zClick(locator);
-				this.zWaitForBusyOverlay();
-				this.sType(locator, value);
-
-				return;
-
-			} else if (frames == 1) {
-				// //
-				// HTML compose
-				// //
-
-				try {
-
-					//this.sSelectFrame("css=iframe[id^='iframe_DWT']"); // iframe
-																		// index
-																		// is 0
-																		// based
+			if (browser.equalsIgnoreCase("iexplore")) {
+				if (frames == 1) {
+					// //
+					// Text compose
+					// //
 
 					locator = "css=textarea[id*='textarea_']";
-					
-					//locator = "css=html body";
 
 					if (!this.sIsElementPresent(locator))
 						throw new HarnessException(
 								"Unable to locate compose body");
 
 					this.sFocus(locator);
-					this.zClickAt(locator, "");
+					this.zClick(locator);
+					this.zWaitForBusyOverlay();
 					this.sType(locator, value);
-					// this.zKeyboard.zTypeCharacters(value);
 
-				} finally {
-					// Make sure to go back to the original iframe
-					this.sSelectFrame("relative=top");
+					return;
 
-				}
+				} else if (frames == 2) {
 
-				// Is this requried?
-				this.zWaitForBusyOverlay();
-
-				return;
-
-			} else if (frames == 2) {
-				// //
-				// HTML compose
-				// //
-
-				try {
-
-					this.sSelectFrame("css=iframe[id^='iframe_DWT']"); // iframe
-																		// index
-																		// is 0
-																		// based
-
-					locator = "css=html body";
-
+					locator ="css=iframe[id$='_content_ifr']";
 					if (!this.sIsElementPresent(locator))
 						throw new HarnessException(
 								"Unable to locate compose body");
 
-					this.sFocus(locator);
-					this.zClickAt(locator, "");
-					// this.sType(locator, value);
-					this.zKeyboard.zTypeCharacters(value);
+					zTypeFormattedText(locator, value);
 
-				} finally {
-					// Make sure to go back to the original iframe
-					this.sSelectFrame("relative=top");
+					// Is this requried?
+					this.zWaitForBusyOverlay();
+
+					return;
 
 				}
-
-				// Is this requried?
-				this.zWaitForBusyOverlay();
-
-				return;
 
 			} else {
-				throw new HarnessException("Compose //iframe count was "
-						+ frames);
+				if (frames == 0) {
+					// Text compose
+
+					locator = "css=textarea[class='DwtHtmlEditorTextArea']";
+
+					if (!this.sIsElementPresent(locator))
+						throw new HarnessException("Unable to locate compose body");
+
+					this.sFocus(locator);
+					this.zClick(locator);
+					this.zWaitForBusyOverlay();
+					this.sType(locator, value);
+
+					return;
+
+				} else if (frames == 1) {
+					// HTML compose
+
+					try {
+
+						this.sSelectFrame("css=iframe[id$='_content_ifr']");
+
+						locator = "css=body[id='tinymce']";
+
+						if (!this.sIsElementPresent(locator))
+							throw new HarnessException("Unable to locate compose body");
+
+						this.sFocus(locator);
+						this.zClick(locator);
+						
+						/*
+						 * Oct 25, 2011: The new TinyMCE editor broke sType().  Use zKeyboard instead,
+						 * however, it is preferred to use sType() if possible, but I can't find a
+						 * solution right now. 
+						 */
+						// this.sType(locator, value);
+						this.zKeyboard.zTypeCharacters(value);
+
+					} finally {
+						// Make sure to go back to the original iframe
+						this.sSelectFrame("relative=top");
+
+					}
+
+					// Is this requried?
+					this.zWaitForBusyOverlay();
+
+					return;
+					
+				} else if (frames == 2) {
+					// HTML compose
+
+					try {
+
+						this.sSelectFrame("css=iframe[id$='_content_ifr']"); // iframe index is 0 based
+
+						locator = "css=html body";
+
+						if (!this.sIsElementPresent(locator))
+							throw new HarnessException(
+									"Unable to locate compose body");
+
+						this.sFocus(locator);
+						this.zClick(locator);
+						this.sType(locator, value);
+
+					} finally {
+						// Make sure to go back to the original iframe
+						this.sSelectFrame("relative=top");
+
+					}
+
+					// Is this requried?
+					this.zWaitForBusyOverlay();
+
+					return;
+					
+				} else {
+					throw new HarnessException("Compose //iframe count was " + frames);
+				}
 			}
 
 		} else {

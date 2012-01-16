@@ -2,6 +2,8 @@ package com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.resources;
 
 import java.util.Calendar;
 import org.testng.annotations.Test;
+
+import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.AppointmentItem;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
@@ -18,6 +20,7 @@ public class CreateMeetingWithLocation extends AjaxCommonTest {
 		super.startingPage = app.zPageCalendar;
 	}
 	
+	@Bugs(ids = "69132")
 	@Test(description = "Create simple meeting with location resource",
 			groups = { "functional" })
 	public void CreateMeetingWithSingleLocation_01() throws HarnessException {
@@ -62,6 +65,7 @@ public class CreateMeetingWithLocation extends AjaxCommonTest {
 		ZAssert.assertEquals(locationStatus, "AC", "Verify that the location status shows as 'ACCEPTED'");
 	}
 	
+	@Bugs(ids = "69132")
 	@Test(description = "Create simple meeting with two location resource",
 			groups = { "functional" })
 	public void CreateMeetingWithMultiLocation_02() throws HarnessException {
