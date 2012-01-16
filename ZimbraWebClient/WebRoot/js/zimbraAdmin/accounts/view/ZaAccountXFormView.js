@@ -238,18 +238,26 @@ function(entry) {
 		for(var i = 0; i< ZaItem.modelExtensions["ZaAccount"].length;i++) {
 			var ext = ZaItem.modelExtensions["ZaAccount"][i];
 			if(entry[ext]) {
-				this._containedObject[ext] = {};
-		        for (var a in entry[ext]) {
-		            var modelItem = this._localXForm.getModel().getItem(a) ;
-		            if ((modelItem != null && modelItem.type == _LIST_)
-		               || (entry[ext][a] != null && entry[ext][a] instanceof Array))
-		            {  //need deep clone
-		                this._containedObject[ext][a] =
-		                        ZaItem.deepCloneListItem (entry[ext][a]);
-		            } else {
-		                this._containedObject[ext][a] = entry[ext][a];
-		            }
-		        }
+                if (entry[ext] instanceof Array) {
+                    this._containedObject[ext] = ZaItem.deepCloneListItem (entry[ext]);
+                    if (entry[ext]._version) {
+                        this._containedObject[ext]._version = entry[ext]._version;
+                    }
+
+                } else {
+                    this._containedObject[ext] = {};
+                    for (var a in entry[ext]) {
+                        var modelItem = this._localXForm.getModel().getItem(a) ;
+                        if ((modelItem != null && modelItem.type == _LIST_)
+                           || (entry[ext][a] != null && entry[ext][a] instanceof Array))
+                        {  //need deep clone
+                            this._containedObject[ext][a] =
+                                    ZaItem.deepCloneListItem (entry[ext][a]);
+                        } else {
+                            this._containedObject[ext][a] = entry[ext][a];
+                        }
+                    }
+                }
 			}
 			
 		}
