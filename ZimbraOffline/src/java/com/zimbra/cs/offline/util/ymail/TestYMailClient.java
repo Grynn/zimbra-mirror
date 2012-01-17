@@ -21,6 +21,7 @@ import static org.junit.Assert.fail;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -41,7 +42,6 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.internet.MimePart;
 import javax.mail.internet.MimeUtility;
-import javax.mail.util.SharedFileInputStream;
 
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
@@ -351,7 +351,7 @@ public class TestYMailClient {
 
     private static MimeMessage readMessage(File file) throws Exception {
         Session session = Session.getInstance(new Properties());
-        InputStream is = new SharedFileInputStream(file);
+        InputStream is = new FileInputStream(file);
         try {
             MimeMessage mm = new ZMimeMessage(session, is);
             mm.setFrom(new JavaMailInternetAddress(FROM));
