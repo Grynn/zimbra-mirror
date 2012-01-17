@@ -15,6 +15,7 @@ import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
+import com.zimbra.qa.selenium.projects.ajax.ui.calendar.DialogConfirmDelete.Locators;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.DialogCreateFolder;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.DialogRedirect;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.DisplayMail;
@@ -89,6 +90,8 @@ public class PageCalendar extends AbsTab {
 		// Radio buttons
 		public static final String OpenThisInstanceRadioButton = "css=td input[id*='_defaultRadio']";
 		public static final String OpenTheSeriesRadioButton = "css=td input[id$='_openSeries']";
+		public static final String DeleteThisInstanceRadioButton = "css=td input[id*='_defaultRadio']";
+		public static final String DeleteTheSeriesRadioButton = "css=td input[id$='_openSeries']";
 		
 		public static final String CalendarViewListCSS		= "css=div[id='zv__CLL']";
 		public static final String CalendarViewDayCSS		= "css=div[id='zv__CLD']";
@@ -96,7 +99,11 @@ public class PageCalendar extends AbsTab {
 		public static final String CalendarViewWeekCSS		= "css=div[id='zv__CLW']";
 		public static final String CalendarViewMonthCSS		= "css=div[id='zv__CLM']";
 		public static final String CalendarViewScheduleCSS	= "css=div[id='zv__CLS']";
-
+		
+		// Dialog locators
+		public static final String DialogDivID = "CNF_DEL_YESNO";
+		public static final String DialogDivCss = "css=div[id='CNF_DEL_YESNO']";
+		
 	}
 
 	public PageCalendar(AbsApplication application) {
@@ -1152,7 +1159,16 @@ public class PageCalendar extends AbsTab {
 		} else if (button == Button.B_DELETE) {
 
 			locator = "css=td[id='zb__CLD__DELETE_title']";
-			page = new DialogConfirmDelete(MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
+			
+			if (this.sIsElementPresent(Locators.DialogDivCss)) {
+				
+				page = new DialogConfirmDelete(MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
+				
+			} else {
+				
+				page = null;
+				
+			}
 
 		} else if (button == Button.O_LISTVIEW_DAY) {
 
@@ -1238,7 +1254,17 @@ public class PageCalendar extends AbsTab {
 			
 			locator = Locators.OpenTheSeriesRadioButton;
 			page = null;
+		
+		} else if (button == Button.B_DELETE_THIS_INSTANCE) {
 			
+			locator = Locators.DeleteThisInstanceRadioButton;
+			page = null;
+			
+		} else if (button == Button.B_DELETE_THE_SERIES) {
+			
+			locator = Locators.DeleteTheSeriesRadioButton;
+			page = null;
+	
 		} else {
 			throw new HarnessException("no logic defined for radio button " + button);
 		}
@@ -1269,8 +1295,15 @@ public class PageCalendar extends AbsTab {
 
 		if ( keyEvent == KeyEvent.VK_DELETE || keyEvent == KeyEvent.VK_BACK_SPACE ) {
 
-			page = new DialogConfirmDelete(MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
-
+			if (this.sIsElementPresent(Locators.DialogDivCss)) {
+				
+				page = new DialogConfirmDelete(MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
+				
+			} else {
+				
+				page = new DialogDeleteRecurringItem(DialogDeleteRecurringItem.Confirmation.DELETERECURRINGITEM, MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
+				
+			}
 		}
 
 		this.zKeyboard.zTypeKeyEvent(keyEvent);

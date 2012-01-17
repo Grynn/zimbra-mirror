@@ -391,6 +391,8 @@ public class Button {
 	
 	public static final Button B_OPEN_THIS_INSTANCE = new Button("B_OPEN_THIS_INSTANCE");
 	public static final Button B_OPEN_THE_SERIES = new Button("B_OPEN_THE_SERIES");
+	public static final Button B_DELETE_THIS_INSTANCE = new Button("B_DELETE_THIS_INSTANCE");
+	public static final Button B_DELETE_THE_SERIES = new Button("B_DELETE_THE_SERIES");
 
 	// Calendar dialogs
 	public static final Button B_SEND_CANCELLATION = new Button("B_SEND_CANCELLATION");
