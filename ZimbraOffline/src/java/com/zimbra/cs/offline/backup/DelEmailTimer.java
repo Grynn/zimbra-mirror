@@ -22,6 +22,7 @@ import java.util.TimerTask;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Constants;
+import com.zimbra.common.util.DateUtil;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
@@ -84,7 +85,7 @@ public class DelEmailTimer extends TimerTask {
             switch (SyncMsgOptions.getOption(account.getAttr(OfflineConstants.A_offlinesyncEmailDate))) {
             case SYNCTORELATIVEDATE :
                 //task is performed only if the sync is set to a relative date
-                cutoffTime = Long.parseLong(InitialSync.convertRelativeDatetoLong(account.getAttr(OfflineConstants.A_offlinesyncRelativeDate) ,
+                cutoffTime = Long.parseLong(DateUtil.convertRelativeDatetoLong(account.getAttr(OfflineConstants.A_offlinesyncRelativeDate) ,
                         account.getAttr(OfflineConstants.A_offlinesyncFieldName)));
                 if (cutoffTime > 0) {
                     OfflineLog.offline.info("deleting messages from %s older than %d", account.getName(), cutoffTime);

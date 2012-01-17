@@ -53,6 +53,7 @@ import com.zimbra.common.service.RemoteServiceException;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.AccountConstants;
 import com.zimbra.common.util.Constants;
+import com.zimbra.common.util.DateUtil;
 import com.zimbra.common.util.Pair;
 import com.zimbra.common.util.StringUtil;
 import com.zimbra.common.util.SystemUtil;
@@ -388,14 +389,14 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
                 case SYNCTOFIXEDDATE:
                     if (!StringUtil.equalIgnoreCase((String)old.get(OfflineConstants.A_offlinesyncEmailDate), (String)attrs.get(OfflineConstants.A_offlinesyncEmailDate)) ||
                             !StringUtil.equalIgnoreCase((String)old.get(OfflineConstants.A_offlinesyncFixedDate), (String)attrs.get(OfflineConstants.A_offlinesyncFixedDate))) {
-                        newTime = Long.parseLong(InitialSync.convertDateToLong((String)attrs.get(OfflineConstants.A_offlinesyncFixedDate)));
+                        newTime = Long.parseLong(DateUtil.convertDateToLong((String)attrs.get(OfflineConstants.A_offlinesyncFixedDate)));
                     }
                     break;
                 case SYNCTORELATIVEDATE:
                     if (!StringUtil.equalIgnoreCase((String)old.get(OfflineConstants.A_offlinesyncEmailDate), (String)attrs.get(OfflineConstants.A_offlinesyncEmailDate)) ||
                             !StringUtil.equalIgnoreCase((String)old.get(OfflineConstants.A_offlinesyncRelativeDate), (String)attrs.get(OfflineConstants.A_offlinesyncRelativeDate)) ||
                             !StringUtil.equalIgnoreCase((String)old.get(OfflineConstants.A_offlinesyncFieldName), (String)attrs.get(OfflineConstants.A_offlinesyncFieldName))) {
-                        newTime = Long.parseLong(InitialSync.convertRelativeDatetoLong((String)attrs.get(OfflineConstants.A_offlinesyncRelativeDate) ,
+                        newTime = Long.parseLong(DateUtil.convertRelativeDatetoLong((String)attrs.get(OfflineConstants.A_offlinesyncRelativeDate) ,
                                     (String)attrs.get(OfflineConstants.A_offlinesyncFieldName)));
                     }
                     break;
@@ -405,10 +406,10 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
                     //syncmail date is updated, get the old date/time
                     switch (SyncMsgOptions.getOption((String) old.get(OfflineConstants.A_offlinesyncEmailDate))) {
                     case SYNCTOFIXEDDATE:
-                        oldTime = Long.parseLong(InitialSync.convertDateToLong((String)old.get(OfflineConstants.A_offlinesyncFixedDate)));
+                        oldTime = Long.parseLong(DateUtil.convertDateToLong((String)old.get(OfflineConstants.A_offlinesyncFixedDate)));
                         break;
                     case SYNCTORELATIVEDATE:
-                        oldTime = Long.parseLong(InitialSync.convertRelativeDatetoLong((String)old.get(OfflineConstants.A_offlinesyncRelativeDate) ,
+                        oldTime = Long.parseLong(DateUtil.convertRelativeDatetoLong((String)old.get(OfflineConstants.A_offlinesyncRelativeDate) ,
                                 (String)old.get(OfflineConstants.A_offlinesyncFieldName)));
                         break;
                     }

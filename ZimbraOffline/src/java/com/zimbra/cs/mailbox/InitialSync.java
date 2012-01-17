@@ -52,6 +52,7 @@ import com.zimbra.common.util.BufferStream;
 import com.zimbra.common.util.ByteUtil;
 import com.zimbra.common.util.Constants;
 import com.zimbra.common.util.CopyInputStream;
+import com.zimbra.common.util.DateUtil;
 import com.zimbra.common.util.Pair;
 import com.zimbra.common.util.StringUtil;
 import com.zimbra.common.util.tar.TarEntry;
@@ -175,31 +176,6 @@ public class InitialSync {
         return new InitialSync(ombx).sync();
     }
 
-    public static String convertDateToLong(String input) {
-        DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-        Date date;
-        try {
-            date = (Date)formatter.parse(input);
-            return Long.toString(date.getTime() / 1000L);
-        } catch (ParseException e) {
-            return "-1";
-        }
-    }
-
-    public static String convertRelativeDatetoLong(String input, String syncFieldName) {
-        Calendar now = GregorianCalendar.getInstance();
-        if(syncFieldName.equals("Year")) {
-            now.add(Calendar.YEAR, Integer.parseInt(input) * -1);
-        }
-        else if(syncFieldName.equals("Month")) {
-            now.add(Calendar.MONTH, Integer.parseInt(input) * -1);
-        }
-        else if(syncFieldName.equals("Week")) {
-            now.add(Calendar.WEEK_OF_YEAR, Integer.parseInt(input) * -1);
-        }
-        return Long.toString(now.getTime().getTime() / 1000L);
-    }
-
     private String sync() throws ServiceException {
         Element request = new Element.XMLElement(MailConstants.SYNC_REQUEST);
 
@@ -209,10 +185,10 @@ public class InitialSync {
                 request.addAttribute(MailConstants.A_MSG_CUTOFF, "0");
                 break;
             case SYNCTOFIXEDDATE:
-                request.addAttribute(MailConstants.A_MSG_CUTOFF, convertDateToLong(ombx.getOfflineAccount().getAttr(OfflineConstants.A_offlinesyncFixedDate)));
+                request.addAttribute(MailConstants.A_MSG_CUTOFF, DateUtil.convertDateToLong(ombx.getOfflineAccount().getAttr(OfflineConstants.A_offlinesyncFixedDate)));
                 break;
             case SYNCTORELATIVEDATE:
-                request.addAttribute(MailConstants.A_MSG_CUTOFF, convertRelativeDatetoLong(ombx.getOfflineAccount().getAttr(OfflineConstants.A_offlinesyncRelativeDate) ,
+                request.addAttribute(MailConstants.A_MSG_CUTOFF, DateUtil.convertRelativeDatetoLong(ombx.getOfflineAccount().getAttr(OfflineConstants.A_offlinesyncRelativeDate) ,
                         ombx.getOfflineAccount().getAttr(OfflineConstants.A_offlinesyncFieldName)));
                 break;
             }
@@ -221,13 +197,9 @@ public class InitialSync {
                 return null;
         }
         syncResponse = ombx.sendRequest(request);
-
         OfflineLog.offline.debug(syncResponse.prettyPrint());
-
         String token = syncResponse.getAttribute(MailConstants.A_TOKEN);
-
         lastPeek = System.currentTimeMillis();
-
         OfflineSyncManager.getInstance().continueOK();
 
         OfflineLog.offline.debug("starting initial sync");
@@ -1316,10 +1288,10 @@ public class InitialSync {
 
             switch (SyncMsgOptions.getOption(ombx.getOfflineAccount().getAttr(OfflineConstants.A_offlinesyncEmailDate))) {
             case SYNCTOFIXEDDATE:
-                cutOffTime = Long.parseLong(convertDateToLong(ombx.getOfflineAccount().getAttr(OfflineConstants.A_offlinesyncFixedDate)));
+                cutOffTime = Long.parseLong(DateUtil.convertDateToLong(ombx.getOfflineAccount().getAttr(OfflineConstants.A_offlinesyncFixedDate)));
                 break;
             case SYNCTORELATIVEDATE:
-                cutOffTime = Long.parseLong(convertRelativeDatetoLong(ombx.getOfflineAccount().getAttr(OfflineConstants.A_offlinesyncRelativeDate) ,
+                cutOffTime = Long.parseLong(DateUtil.convertRelativeDatetoLong(ombx.getOfflineAccount().getAttr(OfflineConstants.A_offlinesyncRelativeDate) ,
                         ombx.getOfflineAccount().getAttr(OfflineConstants.A_offlinesyncFieldName)));
                 break;
             }
