@@ -800,7 +800,7 @@ function() {
 	}
     //
     // There is no ACL for Download Page in the tool tree items. So tool will be shown here.
-    showTool = true;
+    //showTool = true;
     // Home is always added;
     var home = new ZaTreeItemData({parent:"",
                                    id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_HOME, true),
