@@ -884,7 +884,7 @@ function() {
 	var i = 0;
 	html[i++] = "<a href='";
 	html[i++] = ZaAppCtxt.getLogoURI ();
-	html[i++] = "' target='_blank'><div style='width:300px' class='"+AjxImg.getClassForImage("AppBanner")+"'></div></a>";
+	html[i++] = "' target='_blank'><div  class='"+AjxImg.getClassForImage("AppBanner")+"'></div></a>";
 	banner.getHtmlElement().innerHTML = html.join("");
 	return banner;
 }
