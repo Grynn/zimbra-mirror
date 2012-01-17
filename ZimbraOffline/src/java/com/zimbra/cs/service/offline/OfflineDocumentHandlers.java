@@ -159,8 +159,6 @@ public class OfflineDocumentHandlers {
                 String acctId = iidRequested.getAccountId();
                 attachment.addAttribute(MailConstants.A_ATTACHMENT_ID,
                         OfflineDocumentHandlers.uploadOfflineDocument(attachmentId, acctId));
-            } else {
-                throw OfflineServiceException.INVALID_REQUEST("there is no image attachment", null);
             }
         }
     }
