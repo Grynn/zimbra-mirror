@@ -30,6 +30,11 @@ MAPIAccessAPI::~MAPIAccessAPI()
     if ((m_userStore) && (!m_bSingleMailBoxMigration))
         delete m_userStore;
     m_userStore = NULL;
+    if (m_rootFolder != NULL)
+    {
+        delete m_rootFolder;
+        m_rootFolder = NULL;
+    }
     MAPIUninitialize();
     m_bSingleMailBoxMigration = false;
 }

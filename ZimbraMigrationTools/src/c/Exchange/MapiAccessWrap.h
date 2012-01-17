@@ -67,6 +67,7 @@ public:
 	STDMETHOD(GetFolderList)(VARIANT* folders);
 	STDMETHOD(GetItemsList)(IfolderObject* FolderObj, VARIANT creattiondate,VARIANT* vItems);
 	STDMETHOD(GetData) (BSTR UserId, VARIANT ItemId, FolderType type, VARIANT * pVal);
+        STDMETHOD(UnInitializeuser)();
 
 
 };

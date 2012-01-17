@@ -35,6 +35,16 @@ STDMETHODIMP CMapiAccessWrap::Initializeuser(BSTR UserName, BSTR* StatusMsg)
 	return S_OK;
 }
 
+STDMETHODIMP CMapiAccessWrap::UnInitializeuser()
+{
+	// TODO: Add your implementation code here
+
+        delete maapi;
+
+	//*StatusMsg = (lpStatus) ? CComBSTR(lpStatus) : SysAllocString(L"");
+	return S_OK;
+}
+
 
 STDMETHODIMP CMapiAccessWrap::GetFolderList(VARIANT* folders)
 {

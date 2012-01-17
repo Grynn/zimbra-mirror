@@ -82,7 +82,7 @@ interface IMapiAccessWrap : IDispatch{
 	[id(3), helpstring("method to retreive Items for folder objects")]
 	HRESULT  GetItemsList([in] IfolderObject* FolderObj, [in] VARIANT creattiondate, [out, retval] VARIANT* vItems);
 	[id(4)] HRESULT GetData([in]BSTR UserId ,[in] VARIANT ItemId,[in] FolderType type,[out, retval] VARIANT* pVal);
-
+        [id(5)] HRESULT UnInitializeuser();
 };
 
 [

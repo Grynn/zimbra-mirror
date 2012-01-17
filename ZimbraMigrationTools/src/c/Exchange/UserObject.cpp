@@ -101,7 +101,8 @@ STDMETHODIMP CUserObject::UMInitializeUser(BSTR ProfileName, BSTR AccountName,
 
 STDMETHODIMP CUserObject::UMUnInitializeUser()
 {
-    dlogd("UnInitializeUser");
+    dlogd("UMUnInitializeUser");
+    MapiObj->UnInitializeuser();
     MAPIAccessAPI::UnInitGlobalSessionAndStore();
     return S_OK;
 }
