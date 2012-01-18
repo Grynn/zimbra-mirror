@@ -123,10 +123,6 @@ function() {
 			case ZmCsfeException.NO_SUCH_COS:
 				ZaApp.getInstance().getCurrentController().popupErrorDialog(AjxMessageFormat.format(ZaMsg.ERROR_NO_SUCH_COS,[this._containedObject.attrs[ZaAccount.A_COSId]]), ex);
 		    break;
-            case ZmCsfeException.SIGNATURE_EXISTS:
-                this.popdown();
-                ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaNewResourceXWizard.prototype.finishWizard", null, false);
-            break;
 			case ZmCsfeException.NO_SUCH_DOMAIN:
 				ZaApp.getInstance().dialogs["confirmMessageDialog2"].setMessage(AjxMessageFormat.format(ZaMsg.CreateDomain_q,[ZaAccount.getDomain(this._containedObject.name)]), DwtMessageDialog.WARNING_STYLE);
 				ZaApp.getInstance().dialogs["confirmMessageDialog2"].registerCallback(DwtDialog.YES_BUTTON, this.createDomainAndAccount, this, [ZaAccount.getDomain(this._containedObject.name)]);
@@ -573,7 +569,8 @@ ZaNewDLXWizard.addFreeFormAddressToMembers = function (event) {
 
 ZaNewDLXWizard.prototype.setObject =
 function (entry) {
-    this._containedObject = {attrs:{}};
+	this._containedObject = new ZaDistributionList();
+	this._containedObject.attrs = new Object();
 	this._containedObject[ZaDistributionList.A2_memberList] = new Array();
 	this._containedObject[ZaDistributionList.A2_memberList]._version = 1;
 	if(entry[ZaDistributionList.A2_memberList]) {
@@ -631,6 +628,10 @@ function (entry) {
 
 	if(entry._defaultValues)
 		this._containedObject._defaultValues = entry._defaultValues;
+
+    this._containedObject[ZaDistributionList.A2_DLOwners] = new Array();
+    if (entry[ZaDistributionList.A2_DLOwners])
+        this._containedObject[ZaDistributionList.A2_DLOwners] = ZaItem.deepCloneListItem(entry[ZaDistributionList.A2_DLOwners]);
 
 	this._containedObject.name = entry.name;
         if(entry.name == ""){this._containedObject.name = ZaMsg.TBB_New;}
@@ -810,6 +811,9 @@ ZaNewDLXWizard.MEMBEROF_TAB_RIGHTS = [ZaDistributionList.GET_DL_MEMBERSHIP_RIGHT
 ZaNewDLXWizard.ALIASES_TAB_ATTRS = [ZaAccount.A_zimbraMailAlias];
 ZaNewDLXWizard.ALIASES_TAB_RIGHTS = [ZaDistributionList.ADD_DL_ALIAS_RIGHT,ZaDistributionList.REMOVE_DL_ALIAS_RIGHT];
 
+ZaNewDLXWizard.OWNER_TAB_ATTRS = [];
+ZaNewDLXWizard.OWNER_TAB_RIGHTS = [];
+
 ZaNewDLXWizard.PREF_TAB_ATTRS = [ZaDistributionList.A_zimbraPrefReplyToEnabled, ZaDistributionList.A_zimbraPrefReplyToDisplay,
     ZaDistributionList.A_zimbraPrefReplyToAddress];
 ZaNewDLXWizard.PREF_TAB_RIGHTS = [];
@@ -817,10 +821,10 @@ ZaNewDLXWizard.PREF_TAB_RIGHTS = [];
 ZaNewDLXWizard.myXFormModifier = function(xFormObject, entry) {
 	var sourceHeaderList = new Array();
 	var sortable=1;
-	sourceHeaderList[0] = new ZaListHeaderItem("type", ZaMsg.ALV_Type_col, null, "34px", sortable++, "objectClass", true, true);
+	sourceHeaderList[0] = new ZaListHeaderItem("type", ZaMsg.ALV_Type_col, null, "50px", sortable++, "objectClass", true, true);
 	sourceHeaderList[1] = new ZaListHeaderItem(ZaAccount.A_name, ZaMsg.ALV_Name_col, null, "200px", sortable++, ZaAccount.A_name, true, true);
 	//idPrefix, label, iconInfo, width, sortable, sortField, resizeable, visible
-	sourceHeaderList[2] = new ZaListHeaderItem(ZaAccount.A_displayname, ZaMsg.ALV_DspName_col, null, null, sortable++,ZaAccount.A_displayname, true, true);
+	sourceHeaderList[2] = new ZaListHeaderItem(ZaAccount.A_displayname, ZaMsg.ALV_DspName_col, null, "100%", sortable++,ZaAccount.A_displayname, true, true);
 	//sourceHeaderList[3] = new ZaListHeaderItem(null, null, null, "10px", null, null, false, true);
 	var membersHeaderList = new Array();
 	membersHeaderList[0] = new ZaListHeaderItem(ZaAccount.A_name, ZaMsg.ALV_Name_col, null, "100%", sortable++, ZaAccount.A_name, true, true);
@@ -832,7 +836,7 @@ ZaNewDLXWizard.myXFormModifier = function(xFormObject, entry) {
     this.TAB_INDEX = 0;
     this.stepChoices = [];
 
-	var _tab1, _tab2, _tab3, _tab4, _tab5;
+	var _tab1, _tab2, _tab3, _tab4, _tab5, _tab6;
 	_tab1 = ++this.TAB_INDEX;
 	this.stepChoices.push({value:_tab1, label:ZaMsg.DLXV_TabMembers});
 
@@ -851,9 +855,14 @@ ZaNewDLXWizard.myXFormModifier = function(xFormObject, entry) {
 		this.stepChoices.push({value:_tab4, label:ZaMsg.TABT_Aliases});
 	}
 
-	if(ZaTabView.isTAB_ENABLED(entry,ZaNewDLXWizard.PREF_TAB_ATTRS, ZaNewDLXWizard.PREF_TAB_RIGHTS)) {
+	if(ZaTabView.isTAB_ENABLED(entry,ZaNewDLXWizard.OWNER_TAB_ATTRS, ZaNewDLXWizard.OWNER_TAB_RIGHTS)) {
 		_tab5 = ++this.TAB_INDEX;
-		this.stepChoices.push({value:_tab5, label:ZaMsg.TABT_Preferences});
+		this.stepChoices.push({value:_tab5, label:ZaMsg.TABT_Owners});
+	}
+
+	if(ZaTabView.isTAB_ENABLED(entry,ZaNewDLXWizard.PREF_TAB_ATTRS, ZaNewDLXWizard.PREF_TAB_RIGHTS)) {
+		_tab6 = ++this.TAB_INDEX;
+		this.stepChoices.push({value:_tab6, label:ZaMsg.TABT_Preferences});
 	}
 
 	xFormObject.tableCssStyle = "width:100%;overflow:auto;";
@@ -1469,9 +1478,29 @@ ZaNewDLXWizard.myXFormModifier = function(xFormObject, entry) {
 		cases.push(case4);
 	}
 
-	if(_tab5) {
-		var case5 =
-		{type:_CASE_, caseKey:_tab5, colSpan:"*",
+    if (_tab5) {
+		var case5 ={type:_CASE_, caseKey:_tab5, numCols:1,
+					items: [
+						{ref:ZaDistributionList.A2_DLOwners, type:_REPEAT_, label:null, showAddButton:true,
+							showRemoveButton:true,
+							addButtonLabel:"Add Owner",
+							showAddOnNextRow:true,
+							removeButtonLabel:"Remove Owner",
+							removeButtonCSSStyle: "margin-left: 50px",
+							items: [
+								{ref:".", type:_EMAILADDR_, label:null, enableDisableChecks:[],
+									visibilityChecks:[]
+								}
+							]
+						}
+					]
+				};
+        cases.push(case5);
+    }
+
+	if(_tab6) {
+		var case6 =
+		{type:_CASE_, caseKey:_tab6, colSpan:"*",
 			items:[
 			    {type:_SPACER_, height:5},
 			    {type:_SPACER_, height:5},
@@ -1522,7 +1551,7 @@ ZaNewDLXWizard.myXFormModifier = function(xFormObject, entry) {
                 }
 			]
 		};
-		cases.push(case5);
+		cases.push(case6);
 	}
 
     var headerItems = [{type:_AJX_IMAGE_, src:"Group_32", label:null, rowSpan:3},

@@ -34,6 +34,7 @@ ZaDistributionList = function(id, name, memberList, description, notes) {
     this[ZaAccount.A2_memberOf] = {directMemberList: [],indirectMemberList: [],nonMemberList: []};
     this[ZaAccount.A2_directMemberList + "_more"] = 0;
     this[ZaAccount.A2_indirectMemberList + "_more"] = 0;
+    this[ZaDistributionList.A2_DLOwners] = new Array();
 }
 
 ZaDistributionList.prototype = new ZaItem;
@@ -82,6 +83,8 @@ ZaDistributionList.A_zimbraPrefReplyToAddress = "zimbraPrefReplyToAddress";
 ZaDistributionList.A_zimbraPrefReplyToDisplay = "zimbraPrefReplyToDisplay";
 ZaDistributionList.A_zimbraPrefReplyToEnabled = "zimbraPrefReplyToEnabled";
 
+ZaDistributionList.A2_DLOwners = "DLOwner";
+ZaDistributionList.A2_owners_selection_cache = "owners_selection_cache";
 ZaDistributionList.getDLStatus = function (status) {
     if (status == "enabled") {
         return ZaMsg.DL_Status_enabled ;
@@ -553,6 +556,156 @@ ZaDistributionList.addAliases = function (obj, dl) {
 ZaItem.createMethods["ZaDistributionList"].push(ZaDistributionList.addAliases);
 
 
+ZaDistributionList.addRemoveOwners = function (mods, obj) {
+	//add-remove Owners
+	var tmpObjCnt = -1;
+	var currentObjCnt = -1;
+    // Used for ACL in future
+    var hasAddandRemoveRight = true;
+	if(hasAddandRemoveRight) {
+		if(obj[ZaDistributionList.A2_DLOwners]) {
+			if(!(obj[ZaDistributionList.A2_DLOwners] instanceof Array)) {
+				var tmpStr = obj[ZaDistributionList.A2_DLOwners] ;
+				obj[ZaDistributionList.A2_DLOwners]  = new Array();
+				obj[ZaDistributionList.A2_DLOwners].push(tmpStr);
+			}
+			tmpObjCnt = obj[ZaDistributionList.A2_DLOwners].length - 1;
+		}
+
+		if(this[ZaDistributionList.A2_DLOwners]) {
+			if(!(this[ZaDistributionList.A2_DLOwners] instanceof Array)) {
+				var tmpStr = this[ZaDistributionList.A2_DLOwners] ;
+				this[ZaDistributionList.A2_DLOwners]  = new Array();
+				this[ZaDistributionList.A2_DLOwners].push(tmpStr);
+			}
+			currentObjCnt = this[ZaDistributionList.A2_DLOwners].length - 1;
+		}
+
+		//diff two arrays
+		for(var tmpIx=tmpObjCnt; tmpIx >= 0; tmpIx--) {
+			for(var currIx=currentObjCnt; currIx >=0; currIx--) {
+				if(obj[ZaDistributionList.A2_DLOwners][tmpIx] == this[ZaDistributionList.A2_DLOwners][currIx]) {
+					//this alias already exists
+					obj[ZaDistributionList.A2_DLOwners].splice(tmpIx,1);
+					this[ZaDistributionList.A2_DLOwners].splice(currIx,1);
+					break;
+				}
+			}
+		}
+		//remove owners
+		if(currentObjCnt != -1) {
+			currentObjCnt = this[ZaDistributionList.A2_DLOwners].length;
+		}
+        var hasRemoveRight =  true;
+		if(hasRemoveRight) {
+			try {
+				for(var ix=0; ix < currentObjCnt; ix++) {
+					this.addRemoveOwner(this[ZaDistributionList.A2_DLOwners][ix]);
+				}
+			} catch (ex) {
+				ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaDistributionList.addRemoveOwner", null, false);
+				return false;
+			}
+		}
+
+        // add owners
+		if(tmpObjCnt != -1) {
+			tmpObjCnt = obj[ZaDistributionList.A2_DLOwners].length;
+		}
+
+        var hasAddRight = true;
+		if(hasAddRight) {
+			try {
+				for(var ix=0; ix < tmpObjCnt; ix++) {
+					try {
+						if(obj[ZaDistributionList.A2_DLOwners][ix]) {
+							this.addRemoveOwner(obj[ZaDistributionList.A2_DLOwners][ix], true);
+						}
+					} catch (ex) {
+							//if failed for another reason - jump out
+							throw (ex);
+					}
+				}
+			} catch (ex) {
+				ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaDistributionList.addRemoveOwner", null, false);
+				return false;
+			}
+		}
+	}
+}
+ZaItem.modifyMethods["ZaDistributionList"].push(ZaDistributionList.addRemoveOwners);
+
+ZaDistributionList.addOwners = function (obj, dl) {
+	//add-remove Owners
+	var tmpObjCnt = -1;
+    // Used for ACL in future
+    var hasAddRight = true;
+	if(hasAddRight) {
+		if(obj[ZaDistributionList.A2_DLOwners]) {
+			if(!(obj[ZaDistributionList.A2_DLOwners] instanceof Array)) {
+				var tmpStr = obj[ZaDistributionList.A2_DLOwners] ;
+				obj[ZaDistributionList.A2_DLOwners]  = new Array();
+				obj[ZaDistributionList.A2_DLOwners].push(tmpStr);
+			}
+			tmpObjCnt = obj[ZaDistributionList.A2_DLOwners].length - 1;
+		}
+
+        // add owners
+		if(tmpObjCnt != -1) {
+			tmpObjCnt = obj[ZaDistributionList.A2_DLOwners].length;
+		}
+
+        var hasAddRight = true;
+		if(hasAddRight) {
+			try {
+				for(var ix=0; ix < tmpObjCnt; ix++) {
+					try {
+						if(obj[ZaDistributionList.A2_DLOwners][ix]) {
+							obj.addRemoveOwner(obj[ZaDistributionList.A2_DLOwners][ix], true);
+						}
+					} catch (ex) {
+							//if failed for another reason - jump out
+							throw (ex);
+					}
+				}
+			} catch (ex) {
+				ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaDistributionList.addOwner", null, false);
+				return false;
+			}
+		}
+	}
+}
+ZaItem.createMethods["ZaDistributionList"].push(ZaDistributionList.addOwners);
+
+ZaDistributionList.prototype.addRemoveOwner = function (ownerName, isAdd){
+	var soapDoc = AjxSoapDoc.create("DistributionListActionRequest", "urn:zimbraAccount", null);
+    var dlBy = soapDoc.set("dl", this.id);
+    dlBy.setAttribute("by", "id");
+
+    var opBy = soapDoc.set("action", null);
+    var busyMsg;
+    var actionName;
+    if (isAdd) {
+        actionName = "addOwners";
+        busyMsg = ZaMsg.BUSY_ADD_DL_OWNER;
+    }  else {
+        actionName = "removeOwners";
+        busyMsg = ZaMsg.BUSY_REMOVE_DL_OWNER;
+    }
+    opBy.setAttribute("op", actionName);
+
+    var ownerBy = soapDoc.set("owner", ownerName, opBy);
+    ownerBy.setAttribute("by", "name");
+    ownerBy.setAttribute("type", "usr");
+	var params = new Object();
+	params.soapDoc = soapDoc;
+	var reqMgrParams = {
+		controller : ZaApp.getInstance().getCurrentController(),
+		busyMsg : busyMsg
+	}
+	ZaRequestMgr.invoke(params, reqMgrParams);
+}
+
 ZaDistributionList.checkValues = function(tmpObj) {
 	if(ZaItem.hasWritePermission(ZaAccount.A_name,tmpObj)) {
 		if(tmpObj.name == null || tmpObj.name.length < 1) {
@@ -654,7 +807,17 @@ ZaDistributionList.prototype.getMembers = function () {
 				(this[ZaAccount.A2_memberOf][ZaAccount.A2_directMemberList].length > ZaAccountMemberOfListView.SEARCH_LIMIT) ? 1: 0;
 			this[ZaAccount.A2_indirectMemberList + "_more"] = 
 				(this[ZaAccount.A2_memberOf][ZaAccount.A2_indirectMemberList].length > ZaAccountMemberOfListView.SEARCH_LIMIT) ? 1: 0;
-			
+
+            var owners = resp.dl[0].owners;
+            var ownerLen = owners ? owners.length: 0;
+            this[ZaDistributionList.A2_DLOwners] = new Array();
+            if (ownerLen > 0) {
+                var ownerSet = owners[0].owner;
+                for (var i = 0; i < ownerSet.length; i++) {
+                    var owner = new ZaDistributionListOwner(ownerSet[i]);
+                    this[ZaDistributionList.A2_DLOwners].push(owner.name);
+                }
+            }
 		} catch (ex) {
 			ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaDistributionList.prototype.getMembers", null, false);
 			//DBG.dumpObj(ex);
@@ -890,7 +1053,15 @@ ZaDistributionListMember.prototype.toString = function () {
 	return this[ZaAccount.A_name];
 };
 
+ZaDistributionListOwner = function (entry) {
+    this[ZaAccount.A_name] = entry.name;
+    this.id = entry.id;
+    this.type = entry.type;
+}
 
+ZaDistributionListOwner.prototype.toString = function () {
+	return this[ZaAccount.A_name];
+};
 
 ZaDistributionList.myXModel = {
 
@@ -921,6 +1092,8 @@ ZaDistributionList.myXModel = {
 			   }
 			}
 		},
+        {id:ZaDistributionList.A2_DLOwners, type:_LIST_, ref:ZaDistributionList.A2_DLOwners, listItem:{type:_STRING_}},
+        {id:ZaDistributionList.A2_owners_selection_cache, type:_LIST_},
 		{id:ZaDistributionList.A2_members, type:_LIST_},
 		ZaItem.descriptionModelItem,
 		{id:ZaItem.A_zimbraId, type:_STRING_, ref:"attrs/" + ZaItem.A_zimbraId},

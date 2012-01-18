@@ -513,6 +513,10 @@ function (entry) {
 	this._containedObject[ZaAccount.A2_nonMemberList + "_more"] = entry[ZaAccount.A2_nonMemberList + "_more"];
 	this._containedObject[ZaAccount.A2_nonMemberList + "_offset"] = entry[ZaAccount.A2_nonMemberList + "_offset"];
 
+    this._containedObject[ZaDistributionList.A2_DLOwners] = new Array();
+    if (entry[ZaDistributionList.A2_DLOwners])
+        this._containedObject[ZaDistributionList.A2_DLOwners] = ZaItem.deepCloneListItem(entry[ZaDistributionList.A2_DLOwners]);
+
 	//dl.isgroup = this.isgroup ;
 	
 	if(entry.rights)
@@ -702,6 +706,120 @@ ZaDLXFormView.isDeleteAliasEnabled = function () {
 	return (!AjxUtil.isEmpty(this.getInstanceValue(ZaDistributionList.A2_alias_selection_cache)));
 }
 
+
+ZaDLXFormView.ownerSelectionListener =
+function (ev) {
+	var arr = this.widget.getSelection();
+	if(arr && arr.length) {
+		arr.sort();
+		this.getModel().setInstanceValue(this.getInstance(), ZaDistributionList.A2_owners_selection_cache, arr);
+	} else {
+		this.getModel().setInstanceValue(this.getInstance(), ZaDistributionList.A2_owners_selection_cache, null);
+	}
+	if (ev.detail == DwtListView.ITEM_DBL_CLICKED) {
+		ZaDLXFormView.editOwnerButtonListener.call(this);
+	}
+}
+
+ZaDLXFormView.deleteOwnerButtonListener = function () {
+	var instance = this.getInstance();
+	if(instance[ZaDistributionList.A2_owners_selection_cache] != null) {
+		var cnt = instance[ZaDistributionList.A2_owners_selection_cache].length;
+		if(cnt && instance[ZaDistributionList.A2_DLOwners]) {
+			var aliasArr = instance[ZaDistributionList.A2_DLOwners];
+			for(var i=0;i<cnt;i++) {
+				var cnt2 = aliasArr.length-1;
+				for(var k=cnt2;k>=0;k--) {
+					if(aliasArr[k]==instance[ZaDistributionList.A2_owners_selection_cache][i]) {
+						aliasArr.splice(k,1);
+						break;
+					}
+				}
+			}
+			this.getModel().setInstanceValue(instance, ZaDistributionList.A2_DLOwners, aliasArr);
+		}
+	}
+	this.getModel().setInstanceValue(instance, ZaDistributionList.A2_owners_selection_cache, []);
+	this.getForm().parent.setDirty(true);
+}
+
+ZaDLXFormView.editOwnerButtonListener =
+function () {
+	var instance = this.getInstance();
+	if(instance[ZaDistributionList.A2_owners_selection_cache] && instance[ZaDistributionList.A2_owners_selection_cache][0]) {
+		var formPage = this.getForm().parent;
+		if(!formPage.editOwnerDlg) {
+			formPage.editOwnerDlg = new ZaEditAliasXDialog(ZaApp.getInstance().getAppCtxt().getShell(), "450px", "150px", ZaMsg.Edit_Owner_Title);
+			formPage.editOwnerDlg.registerCallback(DwtDialog.OK_BUTTON, ZaDLXFormView.updateOwner, this.getForm(), null);
+		}
+		var obj = {};
+		obj[ZaAccount.A_name] = instance[ZaDistributionList.A2_owners_selection_cache][0];
+		var cnt = instance[ZaDistributionList.A2_DLOwners].length;
+		for(var i=0;i<cnt;i++) {
+			if(instance[ZaDistributionList.A2_owners_selection_cache][0]==instance[ZaDistributionList.A2_DLOwners][i]) {
+				obj[ZaAlias.A_index] = i;
+				break;
+			}
+		}
+
+		formPage.editOwnerDlg.setObject(obj);
+		formPage.editOwnerDlg.popup();
+	}
+}
+
+ZaDLXFormView.updateOwner = function () {
+	if(this.parent.editOwnerDlg) {
+		this.parent.editOwnerDlg.popdown();
+		var obj = this.parent.editOwnerDlg.getObject();
+		var instance = this.getInstance();
+		var arr = instance[ZaDistributionList.A2_DLOwners];
+		if(obj[ZaAlias.A_index] >=0 && arr[obj[ZaAlias.A_index]] != obj[ZaAccount.A_name] ) {
+			arr[obj[ZaAlias.A_index]] = obj[ZaAccount.A_name];
+			this.getModel().setInstanceValue(this.getInstance(),ZaDistributionList.A2_DLOwners, arr);
+			this.getModel().setInstanceValue(this.getInstance(),ZaDistributionList.A2_owners_selection_cache, new Array());
+			this.parent.setDirty(true);
+		}
+	}
+}
+
+ZaDLXFormView.addOwnerButtonListener =
+function () {
+	var formPage = this.getForm().parent;
+	if(!formPage.addOwnerDlg) {
+		formPage.addOwnerDlg = new ZaEditAliasXDialog(ZaApp.getInstance().getAppCtxt().getShell(), "450px", "150px", ZaMsg.Add_Owner_Title);
+		formPage.addOwnerDlg.registerCallback(DwtDialog.OK_BUTTON, ZaDLXFormView.addOwner, this.getForm(), null);
+	}
+
+	var obj = {};
+	obj[ZaAccount.A_name] = "";
+	obj[ZaAlias.A_index] = - 1;
+	formPage.addOwnerDlg.setObject(obj);
+	formPage.addOwnerDlg.popup();
+}
+
+ZaDLXFormView.addOwner  = function () {
+	if(this.parent.addOwnerDlg) {
+		this.parent.addOwnerDlg.popdown();
+		var obj = this.parent.addOwnerDlg.getObject();
+		if(obj[ZaAccount.A_name] && obj[ZaAccount.A_name].length>1) {
+			var instance = this.getInstance();
+			var arr = instance[ZaDistributionList.A2_DLOwners];
+			arr.push(obj[ZaAccount.A_name]);
+			this.getModel().setInstanceValue(this.getInstance(),ZaDistributionList.A2_DLOwners, arr);
+			this.getModel().setInstanceValue(this.getInstance(),ZaDistributionList.A2_owners_selection_cache, new Array());
+			this.parent.setDirty(true);
+		}
+	}
+}
+
+ZaDLXFormView.isEditOwnerEnabled = function () {
+	return (!AjxUtil.isEmpty(this.getInstanceValue(ZaDistributionList.A2_owners_selection_cache)) && this.getInstanceValue(ZaDistributionList.A2_owners_selection_cache).length==1);
+}
+
+ZaDLXFormView.isDeleteOwnerEnabled = function () {
+	return (!AjxUtil.isEmpty(this.getInstanceValue(ZaDistributionList.A2_owners_selection_cache)));
+}
+
 ZaDLXFormView.NOTES_TAB_ATTRS = [ZaAccount.A_notes];
 ZaDLXFormView.NOTES_TAB_RIGHTS = [];
 
@@ -710,6 +828,9 @@ ZaDLXFormView.MEMBEROF_TAB_RIGHTS = [ZaDistributionList.GET_DL_MEMBERSHIP_RIGHT]
 
 ZaDLXFormView.ALIASES_TAB_ATTRS = [ZaAccount.A_zimbraMailAlias];
 ZaDLXFormView.ALIASES_TAB_RIGHTS = [ZaDistributionList.ADD_DL_ALIAS_RIGHT,ZaDistributionList.REMOVE_DL_ALIAS_RIGHT];
+
+ZaDLXFormView.OWNER_TAB_ATTRS = [];
+ZaDLXFormView.OWNER_TAB_RIGHTS = [];
 
 ZaDLXFormView.PREF_TAB_ATTRS = [ZaDistributionList.A_zimbraPrefReplyToEnabled, ZaDistributionList.A_zimbraPrefReplyToDisplay,
     ZaDistributionList.A_zimbraPrefReplyToAddress];
@@ -732,7 +853,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
     
     this.tabChoices = new Array();
 	
-	var _tab1, _tab2, _tab3, _tab4, _tab5;
+	var _tab1, _tab2, _tab3, _tab4, _tab5, _tab6;
 	_tab1 = ++this.TAB_INDEX;
 	this.tabChoices.push({value:_tab1, label:ZaMsg.DLXV_TabMembers});
 
@@ -751,9 +872,14 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
 		this.tabChoices.push({value:_tab4, label:ZaMsg.TABT_Aliases});	
 	}
 
+    if(ZaTabView.isTAB_ENABLED(entry,ZaDLXFormView.OWNER_TAB_ATTRS, ZaDLXFormView.OWNER_TAB_RIGHTS)) {
+        _tab5 = ++this.TAB_INDEX;
+        this.tabChoices.push({value:_tab5, label:ZaMsg.TABT_Owners});
+    }
+
 	if(ZaTabView.isTAB_ENABLED(entry,ZaDLXFormView.PREF_TAB_ATTRS, ZaDLXFormView.PREF_TAB_RIGHTS)) {
-		_tab5 = ++this.TAB_INDEX;
-		this.tabChoices.push({value:_tab5, label:ZaMsg.TABT_Preferences});
+		_tab6 = ++this.TAB_INDEX;
+		this.tabChoices.push({value:_tab6, label:ZaMsg.TABT_Preferences});
 	}
 
 	xFormObject.tableCssStyle = "width:100%;overflow:auto;";
@@ -1356,8 +1482,53 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
 	}
 
 	if(_tab5) {
-		var case5 =
-		{type:_ZATABCASE_, caseKey:_tab5, colSpan:"*",
+		var addOwnerButton = {type:_DWT_BUTTON_, label:ZaMsg.NAD_Add,width:"100px",
+						onActivate:"ZaDLXFormView.addOwnerButtonListener.call(this);"
+					};
+
+		var editOwnerButton = {type:_DWT_BUTTON_, label:ZaMsg.TBB_Edit,width:"100px",
+				enableDisableChangeEventSources:[ZaDistributionList.A2_owners_selection_cache],
+                enableDisableChecks:[ZaDLXFormView.isEditOwnerEnabled],
+				onActivate:"ZaDLXFormView.editOwnerButtonListener.call(this);"
+			};
+
+		var deleteOwnerButton = {type:_DWT_BUTTON_, label:ZaMsg.TBB_Delete,width:"100px",
+				onActivate:"ZaDLXFormView.deleteOwnerButtonListener.call(this);",
+				enableDisableChangeEventSources:[ZaDistributionList.A2_owners_selection_cache],
+                enableDisableChecks:[ZaDLXFormView.isDeleteOwnerEnabled]
+			};
+
+		var case5 = {type:_ZATABCASE_, width:"100%", numCols:1, colSizes:["auto"],caseKey:_tab5,
+		items: [
+				{type:_SPACER_, height:"9"},
+				{type:_GROUPER_, borderCssClass:"LeftGrouperBorder",
+					width:"100%", numCols:1,colSizes:["auto"],
+					label: ZaMsg.DLXV_GroupLabelDLOwners,
+					items :[
+						{ref:ZaDistributionList.A2_DLOwners, type:_DWT_LIST_, height:"200", width:"350px",
+							forceUpdate: true, preserveSelection:false, multiselect:true,cssClass: "DLSource",
+							headerList:null,onSelection:ZaDLXFormView.ownerSelectionListener
+						},
+                        {type:_GROUP_, numCols:6, colSizes:["100px","10px","100px","10px","100px","auto"],
+                            cssStyle:"margin-bottom:10px;padding-bottom:0px;margin-top:10px;pxmargin-left:10px;margin-right:10px;",
+                            items: [
+                                deleteOwnerButton,
+                                {type:_CELLSPACER_},
+                                editOwnerButton,
+                                {type:_CELLSPACER_},
+                                addOwnerButton
+                            ]
+                        }
+                    ]
+                }
+			]
+		};
+		cases.push(case5);
+	}
+
+	if(_tab6) {
+		var case6 =
+		{type:_ZATABCASE_, caseKey:_tab6, colSpan:"*",
             paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),
 			items:[
                 {type:_ZA_TOP_GROUPER_, label:ZaMsg.NAD_MailOptionsReceiving, id:"dl_pref_replyto_group",
@@ -1405,7 +1576,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
                 }
 			]
 		};
-		cases.push(case5);
+		cases.push(case6);
 	}
 
     var headerItems = [{type:_AJX_IMAGE_, src:"Group_32", label:null, rowSpan:3},
