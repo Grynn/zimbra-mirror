@@ -27,12 +27,15 @@ ZaTask.A2_isWIPExpanded = "WIPExpanded";
 ZaTask.A2_isRTExpanded = "RTExpaneded";
 ZaTask.A2_isServerExpaned = "ServerExpaned";
 
+ZaTask.postLoadDataFunction = new Array();
+
 ZaTask.loadMethod =
 function(by, val) {
     this.attrs = new Object();
     this.attrs[ZaTask.A_workingInProcess] = [];
     this.attrs[ZaTask.A_runningTask] = [];
     this.attrs[ZaTask.A_serverStatus] = [];
+    this.schedulePostLoading();
 }
 ZaItem.loadMethods["ZaTask"].push(ZaTask.loadMethod);
 
@@ -91,4 +94,16 @@ ZaTaskItem.prototype.toString = function() {
 
 ZaTaskItem.prototype.getData = function() {
     return this.data._uuid;
+}
+
+ZaTask.prototype.schedulePostLoading = function () {
+    // Don't disturbe the task view rendering process, when view is realy, start to update data.
+    var act = new AjxTimedAction(this, ZaTask.prototype.startPostLoading);
+	AjxTimedAction.scheduleAction(act, 100);
+}
+
+ZaTask.prototype.startPostLoading = function () {
+    for (var i = 0; i < ZaTask.postLoadDataFunction.length; i++) {
+        ZaTask.postLoadDataFunction[i].call(this);
+    }
 }

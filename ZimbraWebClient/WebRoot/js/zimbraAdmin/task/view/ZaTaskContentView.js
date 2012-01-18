@@ -187,11 +187,11 @@ ZaTaskContentView.myXFormModifier = function(xFormObject, entry) {
                         visibilityChecks:[[XForm.checkInstanceValue, ZaTask.A2_isExpanded, false]],
                         visibilityChangeEventSources:[ZaTask.A2_isExpanded], containerCssStyle:"text-align:center;",
                         getDisplayValue: function(newValue) {
-                            return newValue.length;
+                            return 0; //TODO: should be overloaded and show the real number 
                         }
                     },
 
-                    {type: _GROUP_, numCols: 1,width: "100%",
+                    {type: _GROUP_, numCols: 1,width: "100%", height: "100%",
                         visibilityChecks:[[XForm.checkInstanceValue, ZaTask.A2_isExpanded, true]],
                         visibilityChangeEventSources:[ZaTask.A2_isExpanded],
                         items: [
@@ -223,16 +223,19 @@ ZaTaskContentView.myXFormModifier = function(xFormObject, entry) {
                                 ],
                                 cssClass:"ZaTaskTitleNameHeader"
                             },
-                            {ref:ZaTask.A_serverStatus, type:_DWT_LIST_, cssClass: "ZaTaskListContent",
-                               forceUpdate: true, preserveSelection:false, multiselect:false,
-                               visibilityChecks:[[XForm.checkInstanceValue, ZaTask.A2_isServerExpaned, true]],
-                               visibilityChangeEventSources:[ZaTask.A2_isServerExpaned],
-                               onSelection:ZaTaskContentView.taskItemSelectionListener
-                            }
+                            {ref:ZaTask.A_serverStatus, type:_GROUP_, numCols:1,
+								cssClass: "ZaTaskListContent", width:"96%",
+                                forceUpdate: true, preserveSelection:false, multiselect:false,
+                                visibilityChecks:[[XForm.checkInstanceValue, ZaTask.A2_isServerExpaned, true]],
+                                visibilityChangeEventSources:[ZaTask.A2_isServerExpaned],
+                                onSelection:ZaTaskContentView.taskItemSelectionListener,
+                                items:[ //will be appended by others as notification
+								]
+							}
                         ]
                     },
 
-                    {type:_SPACER_, height:"100%"}
+                    {type:_SPACER_, height:"10px"}
         ]
     }
     cases.push(case1);
@@ -258,3 +261,8 @@ ZaTaskContentView.getImgText = function(imageName, label) {
     return html;
 }
 ZaTabView.XFormModifiers["ZaTaskContentView"].push(ZaTaskContentView.myXFormModifier);
+
+
+ZaTaskContentView.getNotificationBoard = function (taskContentViewXFormObj) {
+    return taskContentViewXFormObj.items[0].items[0].items[8].items[2];
+}

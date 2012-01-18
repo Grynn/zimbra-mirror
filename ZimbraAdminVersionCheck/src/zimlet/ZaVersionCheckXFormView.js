@@ -107,7 +107,8 @@ ZaVersionCheckXFormView.myXFormModifier = function(xFormObject, entry) {
 						editable:false, choices: ZaApp.getInstance().getServerIdListChoices(), 
 						enableDisableChecks:[],
 						visibilityChecks:[],
-						tableCssStyle: "height: 15px"
+						tableCssStyle: "height: 15px",
+						required:true
 				  	},
 					{ type: _DWT_ALERT_,colSpan:"*",
 					  containerCssStyle: "padding-bottom:0px",
@@ -125,7 +126,7 @@ ZaVersionCheckXFormView.myXFormModifier = function(xFormObject, entry) {
 				  		label:com_zimbra_adminversioncheck.LBL_zimbraVersionCheckInterval,labelLocation:_LEFT_
 				  	},
 					{ref:ZaVersionCheck.A_zimbraVersionCheckURL, type:_TEXTFIELD_, 
-						label:com_zimbra_adminversioncheck.LBL_zimbraVersionCheckURL, width:250
+						label:com_zimbra_adminversioncheck.LBL_zimbraVersionCheckURL, width:250, required:true
   					},
   					{type:_CHECKBOX_, ref:ZaVersionCheck.A_zimbraVersionCheckSendNotifications,
   						label:com_zimbra_adminversioncheck.LBL_zimbraVersionCheckSendNotifications,

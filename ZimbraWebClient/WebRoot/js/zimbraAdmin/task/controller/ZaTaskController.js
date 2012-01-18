@@ -16,6 +16,7 @@ ZaTaskController = function(appCtxt, container) {
 ZaTaskController.prototype = new ZaController();
 ZaTaskController.prototype.constructor = ZaTaskController;
 
+
 ZaTaskController.prototype.getTaskHeaderPanel =
 function() {
     if (!this._taskHeadPanel) {
@@ -92,4 +93,10 @@ ZaTaskController.prototype.setExpanded = function(isExpanded) {
     window.skin._reflowApp();
 
     this._taskContentPanel._localXForm.setInstanceValue(isExpanded, ZaTask.A2_isExpanded);
+}
+
+ZaTaskController.prototype.setInstanceValue = function(value, ref){
+    if( this._taskContentPanel && this._taskContentPanel._localXForm){
+        this._taskContentPanel._localXForm.setInstanceValue(value, ref);
+    }
 }
