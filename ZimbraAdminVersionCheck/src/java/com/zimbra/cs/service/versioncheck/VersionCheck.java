@@ -69,6 +69,9 @@ public class VersionCheck extends AdminDocumentHandler {
         	//perform the version check
         	String lastAttempt = checkVersion();
         	String resp = config.getAttr(Provisioning.A_zimbraVersionCheckLastResponse);
+        	if(resp == null) {
+        		throw VersionCheckException.EMPTY_VC_RESPONSE(null);
+        	}
         	Element respDoc;
 			try {	
 				respDoc = Element.parseXML(resp);
@@ -268,6 +271,8 @@ public class VersionCheck extends AdminDocumentHandler {
 			resp = method.getResponseBodyAsString();
 			if(!StringUtil.isNullOrEmpty(resp)) {
 				checkSuccess = true;
+			} else {
+				throw VersionCheckException.FAILED_TO_GET_RESPONSE(url,null);
 			}
 
 /**
@@ -276,6 +281,7 @@ public class VersionCheck extends AdminDocumentHandler {
  * <updates>
  * <update type="minor" shortversion = "6.0.19" version = "6.0.19_GA_1841.RHEL4.NETWORK" release="20090921024654" critical="0|1" detailsURL="URL" description="text"/>
  * <update type="major" shortversion = "7.0.2" version = "7.0.2_GA_4045.RHEL4.NETWORK" release="20090921024654" critical="0|1" detailsURL="URL" description="text"/>
+ * <update type="patch" shortversion = "7.0.2" version = "7.0.2_GA_4045.RHEL4.NETWORK" release="20090921024654" critical="0|1" detailsURL="URL" description="text"/>
  * </updates>
  * </versionCheck>
  **/
