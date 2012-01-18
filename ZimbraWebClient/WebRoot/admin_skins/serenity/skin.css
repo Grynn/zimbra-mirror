@@ -336,6 +336,7 @@ body {
   background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, #dfe1ef),color-stop(1, #b9bbbf)); /* Saf4+, Chrome */
   filter:  progid:DXImageTransform.Microsoft.gradient(startColorStr='#dfe1ef', EndColorStr='#b9bbbf'); /* IE6,IE7 */
   -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#dfe1ef', EndColorStr='#b9bbbf')"; /* IE8 */
+  @tlRadius@:5px; @trRadius@:5px;
 }
 /** LoginPanel and Splash screen **/
 #skin_container_splash_screen           {   @SkinOuter@ @FullWindow@ z-index:90000000;      }
