@@ -824,7 +824,7 @@ ZaTaskAuthConfigWizard.myXFormModifier = function(xFormObject) {
                                     {ref:ZaDomain.A2_zimbraSpnegoUAAllBrowsers, type:_RADIO_, groupname:"user_agent_setting",
 										msgName:ZaMsg.SpnegoSettingAllBrowsers,label:ZaMsg.SpnegoSettingAllBrowsers, labelLocation:_RIGHT_,
                                         labelCssClass:"xform_label_right",
-										visibilityChecks:[ZaConvertD.isConvertDAvailable],
+										visibilityChecks:[],
 										updateElement:function () {
                                             if(ZaTaskAuthConfigWizard.checkRadioEnableDisable(this.getInstance(),ZaDomain.A2_zimbraSpnegoUAAllBrowsers))
 											    this.getElement().checked = "TRUE";
@@ -839,7 +839,7 @@ ZaTaskAuthConfigWizard.myXFormModifier = function(xFormObject) {
                                     {ref:ZaDomain.A2_zimbraSpnegoUASupportedBrowsers, type:_RADIO_, groupname:"user_agent_setting",
 										msgName:ZaMsg.SpnegoSettingSupportedBrowsers,label:ZaMsg.SpnegoSettingSupportedBrowsers, labelLocation:_RIGHT_,
                                         labelCssClass:"xform_label_right",
-										visibilityChecks:[ZaConvertD.isConvertDAvailable],
+										visibilityChecks:[],
 										updateElement:function () {
                                             if(ZaTaskAuthConfigWizard.checkRadioEnableDisable(this.getInstance(),ZaDomain.A2_zimbraSpnegoUASupportedBrowsers))
 											    this.getElement().checked = "TRUE";
@@ -857,7 +857,7 @@ ZaTaskAuthConfigWizard.myXFormModifier = function(xFormObject) {
                                             if(ZaTaskAuthConfigWizard.checkRadioEnableDisable(this.getInstance(),ZaDomain.A2_zimbraSpnegoUACustomBrowsers))
 											    this.getElement().checked = "TRUE";
 										},
-										visibilityChecks:[ZaConvertD.isConvertDAvailable],
+										visibilityChecks:[],
 										elementChanged: function(elementValue,instanceValue, event) {
 											this.setInstanceValue("FALSE",ZaDomain.A2_zimbraSpnegoUAAllBrowsers);
 											this.setInstanceValue("FALSE",ZaDomain.A2_zimbraSpnegoUASupportedBrowsers);
