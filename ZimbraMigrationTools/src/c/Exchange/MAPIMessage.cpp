@@ -188,7 +188,7 @@ ZM_ITEM_TYPE MAPIMessage::ItemType()
         else if (_tcsicmp(m_pMessagePropVals[MESSAGE_CLASS].Value.LPSZ, _TEXT("IPM.TASK")) == 0)
             return ZT_TASKS;
         else if (_tcsstr(m_pMessagePropVals[MESSAGE_CLASS].Value.LPSZ, _TEXT("IPM.Schedule")))
-            return ZT_MEETREQ_RESP;
+            return ZT_MEETREQ;
     }
     return ZT_NONE;
 }

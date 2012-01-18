@@ -358,7 +358,7 @@ STDMETHODIMP CMapiAccessWrap::GetData(BSTR UserId, VARIANT ItemId, FolderType ty
                 pIt[L"outlookUserField4"] = SysAllocString((cd.UserField4).c_str());
                 pIt[L"image"] = SysAllocString((cd.ContactImagePath).c_str());
             }
-            else if (ft == 1)
+            else if ((ft == 1) || (ft == 5))    // message or meeting request
             {
                 MessageItemData msgdata;
 

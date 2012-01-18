@@ -501,7 +501,7 @@ LPCWSTR MAPIAccessAPI::GetItem(SBinary sbItemEID, BaseItemData &itemData)
         MAPIMessage msg;
 
         msg.Initialize(pMessage, *m_zmmapisession);
-        if (msg.ItemType() == ZT_MAIL)
+        if ((msg.ItemType() == ZT_MAIL) || (msg.ItemType() == ZT_MEETREQ))
         {
             printf("ITEM TYPE: ZT_MAIL \n");
 
@@ -773,10 +773,6 @@ LPCWSTR MAPIAccessAPI::GetItem(SBinary sbItemEID, BaseItemData &itemData)
             mp.contentType = L"text/html";
             mp.content = mapitask.GetHtmlFileAndContent();
             td->vMessageParts.push_back(mp);
-        }
-        else if (msg.ItemType() == ZT_MEETREQ_RESP)
-        {
-            printf("ITEM TYPE: ZT_MEETREQ_RESP \n");
         }
     }
     catch (MAPIMessageException &mex)

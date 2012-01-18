@@ -92,7 +92,7 @@ public class CSMigrationwrapper
     ZimbraAPI api;
     enum foldertype
     {
-        Mail = 1, Contacts = 2, Calendar = 3, Task = 4
+        Mail = 1, Contacts = 2, Calendar = 3, Task = 4, MeetingReq = 5
     };
     public string MailClient {
         get { return m_MailClient; }
@@ -283,6 +283,7 @@ public class CSMigrationwrapper
         switch (type)
         {
             case foldertype.Mail:
+            case foldertype.MeetingReq:
                 retval = importopts.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Mail);
                 break;
             case foldertype.Calendar:
@@ -347,7 +348,7 @@ public class CSMigrationwrapper
                         {
                             int stat = 0;
 
-                            if (type == foldertype.Mail)
+                            if ((type == foldertype.Mail) || (type == foldertype.MeetingReq))
                             {
                                 //Log.debug("Msg Subject: ", dict["Subject"]);
                                 int msf = 0;

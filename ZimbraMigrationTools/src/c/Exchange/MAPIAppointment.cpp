@@ -614,8 +614,14 @@ HRESULT MAPIAppointment::SetOrganizerAndAttendees()
             {
                 if (pRecipRows->aRow[iRow].lpProps[AT_RECIPIENT_FLAGS].Value.l == 3)
 		{
-		    m_pOrganizerName = pRecipRows->aRow[iRow].lpProps[AT_DISPLAY_NAME].Value.lpszW;
-		    m_pOrganizerAddr = pRecipRows->aRow[iRow].lpProps[AT_SMTP_ADDR].Value.lpszW;
+                    if (PROP_TYPE(pRecipRows->aRow[iRow].lpProps[AT_DISPLAY_NAME].ulPropTag) != PT_ERROR)
+                    {
+		        m_pOrganizerName = pRecipRows->aRow[iRow].lpProps[AT_DISPLAY_NAME].Value.lpszW;
+                    }
+                    if (PROP_TYPE(pRecipRows->aRow[iRow].lpProps[AT_SMTP_ADDR].ulPropTag) != PT_ERROR)
+                    {
+		        m_pOrganizerAddr = pRecipRows->aRow[iRow].lpProps[AT_SMTP_ADDR].Value.lpszW;
+                    }
 		}
 		else
 		{
