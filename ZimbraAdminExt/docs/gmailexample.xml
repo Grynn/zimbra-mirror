@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ZCSImport>
+<IMAPHost>imap.gmail.com</IMAPHost> 
+<IMAPPort>993</IMAPPort>
+<ConnectionType>ssl</ConnectionType>
+<UseAdminLogin>0</UseAdminLogin>
+<ImportUsers>
+<User>
+<sn>Solovyev</sn>
+<givenName>Greg</givenName>
+<displayName>Greg Solovyev</displayName>
+<RemoteEmailAddress>greg@example.com</RemoteEmailAddress><RemoteIMAPLogin>greg@example.com</RemoteIMAPLogin><remoteIMAPPassword>test123</remoteIMAPPassword></User>
+</ImportUsers>
+</ZCSImport>

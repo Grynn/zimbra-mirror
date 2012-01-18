@@ -106,3 +106,14 @@ account attrs:
 
 Note: this soap command is used to push the account creation status to the server,
       So the status summary information can be downloaded.
+      
+-----------------------------------------------------------------------------------------------------
+Sample XML files
+-----------------------------------------------------------------------------------------------------
+gmailexample.xml - this file shows an example of an XML file that is used to import mail for one account via IMAP from GMAIL without provisioning the email account in ZCS. 
+In this example, it is assumed that the email account in ZCS has already been provisioned.
+
+bulkprovisionexample1.xml - this file shows an example of an XML file that is used to provision multiple email accounts without importing mail.  
+
+bulkprovisionexample2.xml - this file shows an example of an XML file that is used to provision multiple email accounts for externally hosted domain without importing mail.
+In this exampe, zimbraMailTransport attribute of newly provisioned account will be set to point to external SMTP server instead of ZCS server. 

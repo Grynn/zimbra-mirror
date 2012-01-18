@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ZCSImport>
+<SMTPHost>smtp.example.com</SMTPHost>
+<SMTPPort>25</SMTPPort>
+<ImportUsers>
+<User>
+<sn>Solovyev</sn>
+<givenName>Greg</givenName>
+<displayName>Greg Solovyev</displayName>
+<RemoteEmailAddress>greg@example.com</RemoteEmailAddress>
+</User>
+<User>
+<sn>Peterson</sn>
+<givenName>Brian</givenName>
+<displayName>Brian Peterson</displayName>
+<RemoteEmailAddress>brian@example.com</RemoteEmailAddress>
+</User>
+</ImportUsers>
+</ZCSImport>

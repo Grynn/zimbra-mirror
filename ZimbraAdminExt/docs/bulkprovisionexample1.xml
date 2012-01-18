@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ZCSImport>
+<ImportUsers>
+<User>
+<sn>Solovyev</sn>
+<givenName>Greg</givenName>
+<displayName>Greg Solovyev</displayName>
+<RemoteEmailAddress>greg@example.com</RemoteEmailAddress>
+<password>test123</password>
+<zimbraPasswordMustChange>TRUE</zimbraPasswordMustChange>
+</User>
+<User>
+<sn>Peterson</sn>
+<givenName>Brian</givenName>
+<displayName>Brian Peterson</displayName>
+<RemoteEmailAddress>brian@example.com</RemoteEmailAddress>
+<password>test123</password>
+<zimbraPasswordMustChange>TRUE</zimbraPasswordMustChange>
+</User>
+</ImportUsers>
+</ZCSImport>
