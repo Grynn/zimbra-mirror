@@ -126,7 +126,14 @@ sub delta_stat($$$$) {
     my $pid  = shift;
     my $stat = shift;
 
-    $curr_stats->{$pid}->{$stat} - $prev_stats->{$pid}->{$stat};
+    #  Handle the possibility that proc stats are not obtained due to a process dying before stat data is actually retrieved.
+    if (!defined($curr_stats->{$pid}->{$stat})) {
+        0;
+    } elsif (!defined($prev_stats->{$pid}->{$stat})) {
+        $curr_stats->{$pid}->{$stat};
+    } else {
+        $curr_stats->{$pid}->{$stat} - $prev_stats->{$pid}->{$stat};
+    }
 }
 
 sub get_pids_by_name($$) {
