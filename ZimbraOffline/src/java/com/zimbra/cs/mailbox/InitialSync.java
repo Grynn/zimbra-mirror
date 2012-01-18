@@ -185,10 +185,10 @@ public class InitialSync {
                 request.addAttribute(MailConstants.A_MSG_CUTOFF, "0");
                 break;
             case SYNCTOFIXEDDATE:
-                request.addAttribute(MailConstants.A_MSG_CUTOFF, DateUtil.convertDateToLong(ombx.getOfflineAccount().getAttr(OfflineConstants.A_offlinesyncFixedDate)));
+                request.addAttribute(MailConstants.A_MSG_CUTOFF, DateUtil.getFixedDateSecs(ombx.getOfflineAccount().getAttr(OfflineConstants.A_offlinesyncFixedDate)));
                 break;
             case SYNCTORELATIVEDATE:
-                request.addAttribute(MailConstants.A_MSG_CUTOFF, DateUtil.convertRelativeDatetoLong(ombx.getOfflineAccount().getAttr(OfflineConstants.A_offlinesyncRelativeDate) ,
+                request.addAttribute(MailConstants.A_MSG_CUTOFF, DateUtil.getRelativeDateSecs(ombx.getOfflineAccount().getAttr(OfflineConstants.A_offlinesyncRelativeDate) ,
                         ombx.getOfflineAccount().getAttr(OfflineConstants.A_offlinesyncFieldName)));
                 break;
             }
@@ -1288,11 +1288,11 @@ public class InitialSync {
 
             switch (SyncMsgOptions.getOption(ombx.getOfflineAccount().getAttr(OfflineConstants.A_offlinesyncEmailDate))) {
             case SYNCTOFIXEDDATE:
-                cutOffTime = Long.parseLong(DateUtil.convertDateToLong(ombx.getOfflineAccount().getAttr(OfflineConstants.A_offlinesyncFixedDate)));
+                cutOffTime = DateUtil.getFixedDateSecs(ombx.getOfflineAccount().getAttr(OfflineConstants.A_offlinesyncFixedDate));
                 break;
             case SYNCTORELATIVEDATE:
-                cutOffTime = Long.parseLong(DateUtil.convertRelativeDatetoLong(ombx.getOfflineAccount().getAttr(OfflineConstants.A_offlinesyncRelativeDate) ,
-                        ombx.getOfflineAccount().getAttr(OfflineConstants.A_offlinesyncFieldName)));
+                cutOffTime = DateUtil.getRelativeDateSecs(ombx.getOfflineAccount().getAttr(OfflineConstants.A_offlinesyncRelativeDate) ,
+                        ombx.getOfflineAccount().getAttr(OfflineConstants.A_offlinesyncFieldName));
                 break;
             }
 

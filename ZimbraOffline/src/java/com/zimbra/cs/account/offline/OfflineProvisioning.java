@@ -389,15 +389,15 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
                 case SYNCTOFIXEDDATE:
                     if (!StringUtil.equalIgnoreCase((String)old.get(OfflineConstants.A_offlinesyncEmailDate), (String)attrs.get(OfflineConstants.A_offlinesyncEmailDate)) ||
                             !StringUtil.equalIgnoreCase((String)old.get(OfflineConstants.A_offlinesyncFixedDate), (String)attrs.get(OfflineConstants.A_offlinesyncFixedDate))) {
-                        newTime = Long.parseLong(DateUtil.convertDateToLong((String)attrs.get(OfflineConstants.A_offlinesyncFixedDate)));
+                        newTime = DateUtil.getFixedDateSecs((String)attrs.get(OfflineConstants.A_offlinesyncFixedDate));
                     }
                     break;
                 case SYNCTORELATIVEDATE:
                     if (!StringUtil.equalIgnoreCase((String)old.get(OfflineConstants.A_offlinesyncEmailDate), (String)attrs.get(OfflineConstants.A_offlinesyncEmailDate)) ||
                             !StringUtil.equalIgnoreCase((String)old.get(OfflineConstants.A_offlinesyncRelativeDate), (String)attrs.get(OfflineConstants.A_offlinesyncRelativeDate)) ||
                             !StringUtil.equalIgnoreCase((String)old.get(OfflineConstants.A_offlinesyncFieldName), (String)attrs.get(OfflineConstants.A_offlinesyncFieldName))) {
-                        newTime = Long.parseLong(DateUtil.convertRelativeDatetoLong((String)attrs.get(OfflineConstants.A_offlinesyncRelativeDate) ,
-                                    (String)attrs.get(OfflineConstants.A_offlinesyncFieldName)));
+                        newTime = DateUtil.getRelativeDateSecs((String)attrs.get(OfflineConstants.A_offlinesyncRelativeDate) ,
+                                    (String)attrs.get(OfflineConstants.A_offlinesyncFieldName));
                     }
                     break;
                 }
@@ -406,11 +406,11 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
                     //syncmail date is updated, get the old date/time
                     switch (SyncMsgOptions.getOption((String) old.get(OfflineConstants.A_offlinesyncEmailDate))) {
                     case SYNCTOFIXEDDATE:
-                        oldTime = Long.parseLong(DateUtil.convertDateToLong((String)old.get(OfflineConstants.A_offlinesyncFixedDate)));
+                        oldTime = DateUtil.getFixedDateSecs((String)old.get(OfflineConstants.A_offlinesyncFixedDate));
                         break;
                     case SYNCTORELATIVEDATE:
-                        oldTime = Long.parseLong(DateUtil.convertRelativeDatetoLong((String)old.get(OfflineConstants.A_offlinesyncRelativeDate) ,
-                                (String)old.get(OfflineConstants.A_offlinesyncFieldName)));
+                        oldTime = DateUtil.getRelativeDateSecs((String)old.get(OfflineConstants.A_offlinesyncRelativeDate) ,
+                                (String)old.get(OfflineConstants.A_offlinesyncFieldName));
                         break;
                     }
                 }

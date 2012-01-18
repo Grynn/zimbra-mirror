@@ -320,7 +320,7 @@ public abstract class SyncMailbox extends DesktopMailbox {
                     synchronized (this) {
                         try {
                             beginTransaction("listMessageItemsforgivenDate", getOperationContext());
-                            idlist = DbMailItem.listMsgItems(folder, cutoffTime, MailItem.Type.MESSAGE, true, true);
+                            idlist = DbMailItem.listItems(folder, cutoffTime, MailItem.Type.MESSAGE, true, true);
                             success = true;
                         } finally {
                             endTransaction(success);

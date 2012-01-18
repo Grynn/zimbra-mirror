@@ -85,8 +85,8 @@ public class DelEmailTimer extends TimerTask {
             switch (SyncMsgOptions.getOption(account.getAttr(OfflineConstants.A_offlinesyncEmailDate))) {
             case SYNCTORELATIVEDATE :
                 //task is performed only if the sync is set to a relative date
-                cutoffTime = Long.parseLong(DateUtil.convertRelativeDatetoLong(account.getAttr(OfflineConstants.A_offlinesyncRelativeDate) ,
-                        account.getAttr(OfflineConstants.A_offlinesyncFieldName)));
+                cutoffTime = DateUtil.getRelativeDateSecs(account.getAttr(OfflineConstants.A_offlinesyncRelativeDate) ,
+                        account.getAttr(OfflineConstants.A_offlinesyncFieldName));
                 if (cutoffTime > 0) {
                     OfflineLog.offline.info("deleting messages from %s older than %d", account.getName(), cutoffTime);
                     Folder root = null;
