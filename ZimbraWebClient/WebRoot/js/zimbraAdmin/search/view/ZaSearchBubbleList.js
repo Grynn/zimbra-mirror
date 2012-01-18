@@ -25,15 +25,42 @@ ZaSearchBubbleList.prototype.getQueryFormBubbles =
 function() {
     var query = "";
     var num = 0;
+    this._filterQuery = {};
     for(var i=0 ; i< this._bubbleList.size();i++){
-        var filter = this._bubbleList.get(i).query;
+        var currentBubble = this._bubbleList.get(i);
+        var filter = currentBubble.query;
         if( filter != null && filter.length > 0){
-            query += filter;
+            if (currentBubble.type == 2) {
+                if (!this._filterQuery[currentBubble.optionalType]) {
+                    this._filterQuery[currentBubble.optionalType] = [];
+                }
+                this._filterQuery[currentBubble.optionalType].push(filter);
+            }  else {
+                query += filter;
+            }
             num++;
         }
 
     }
 
+    var filterQueryResult;
+    var filterNum;
+    for (var optionType in this._filterQuery) {
+        filterQueryResult = "";
+        filterNum = 0;
+        for(var i=0; i < this._filterQuery[optionType].length; i++) {
+            filterQueryResult += this._filterQuery[optionType][i];
+            filterNum ++;
+        }
+
+        if (filterNum > 1)
+            filterQueryResult =  "(|" + filterQueryResult + ")" ;
+
+        if (filterQueryResult != null && filterQueryResult.length > 0) {
+            num++;
+            query += filterQueryResult;
+        }
+    }
     if(num > 1)
         query = "(&" + query + ")" ;
 
@@ -137,6 +164,9 @@ ZaSearchBubble = function(params) {
 	DwtControl.call(this, params);
 
 	this.type = params.type; //1:search 2:searchoption 3:searchsave
+    if (params.type == 2) {
+        this.optionalType = params.optionalType || 1;
+    }
     this.query = params.query;
     this.searchType = params.searchType;
     this.parentCell = params.queryCell;

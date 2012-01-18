@@ -430,17 +430,17 @@ ZaController.initToolbarMethods["ZaSearchListController"].push(ZaSearchListContr
 
 ZaSearchListController.prototype.reset =
 function () {
-	this._toolbarOperations = new Array();
-   	this._popupOperations = new Array();
-    this._toolbarOrder = [] ;
-
     this._currentPageNum = 1;
 	this._currentQuery = null;
 	this._currentSortField = ZaAccount.A_uid;
 	this._currentSortOrder = "1";
 	this.pages = new Object();
-    if(!appNewUI)
+    if(!appNewUI) {
 	    this._UICreated = false;
+	    this._toolbarOperations = new Array();
+   	    this._popupOperations = new Array();
+        this._toolbarOrder = [] ;
+    }
 	this.objType = ZaEvent.S_ACCOUNT;	
 }
 

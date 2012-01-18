@@ -945,6 +945,7 @@ function (dialog) {
             type:2,
             unique:unique,
             query:query,
+            optionalType: optionId,
             displayName: this.getFilterTypeName(dialog._optionId)
         };
         slController._uiContainer.addBubble(params);
