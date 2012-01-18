@@ -1569,7 +1569,8 @@ ZaOverviewPanelController.newSearchListTreeListener = function (ev) {
         var  searchPath = this.getSearchItemPath();
         tree.setSelectionByPath(searchPath, true, true);
     }
-	var searchField = ZaApp.getInstance().getSearchListController()._searchField ;
+    var slController =  ZaApp.getInstance().getSearchListController();
+	var searchField =   slController._searchField ;
 	var name = ev.item.getData("name") ;
 	var query = ev.item.getData("query");
 	if (ev.detail == DwtTree.ITEM_SELECTED) {
@@ -1586,7 +1587,25 @@ ZaOverviewPanelController.newSearchListTreeListener = function (ev) {
 		    searchField.selectSavedSearch(name, query);
         } else {
             searchField.setCurrentSavedSearch ({});
-            searchField.invokeCallback(); // Use the value in the current search fields;
+            var searchParams = searchField.getCurrentSearchQuery();
+            var displayName = searchField.getSearchFieldElement().value;
+            if(searchField.searchSelectedType && searchField.searchSelectedType.length > 0){
+               displayName += " In "+searchField.searchSelectedType;
+            }
+
+            var params = {
+                  type:1,
+                  unique:true,
+                  disableForSearch: false,
+                  query:searchParams.query,
+                  searchType:searchParams.types,
+                  displayName:displayName
+            };
+            if (!slController._uiContainer)
+                slController._show();
+
+            slController._uiContainer.removeAllBubbles(true);
+            slController._uiContainer.addBubble(params);
         }
 	} if (ev.detail == DwtTree.ITEM_ACTIONED && query){
 		searchField._currentSavedSearch = {name: name, query: query};
