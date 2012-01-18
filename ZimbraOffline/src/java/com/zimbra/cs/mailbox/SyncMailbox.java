@@ -14,7 +14,6 @@
  */
 package com.zimbra.cs.mailbox;
 
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -26,6 +25,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import com.google.common.primitives.Ints;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Constants;
+import com.zimbra.common.util.SpoolingCache;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.AccountServiceException;
 import com.zimbra.cs.account.offline.OfflineAccount;
@@ -44,6 +44,7 @@ import com.zimbra.cs.redolog.op.DeleteMailbox;
 import com.zimbra.cs.session.PendingModifications;
 import com.zimbra.cs.session.PendingModifications.Change;
 import com.zimbra.cs.session.PendingModifications.ModificationKey;
+import com.zimbra.cs.store.MailboxBlob;
 import com.zimbra.cs.store.StoreManager;
 import com.zimbra.cs.util.Zimbra;
 import com.zimbra.cs.util.ZimbraApplication;
@@ -52,18 +53,18 @@ public abstract class SyncMailbox extends DesktopMailbox {
     static final String DELETING_MID_SUFFIX = ":delete";
     static final long OPTIMIZE_INTERVAL = 48 * Constants.MILLIS_PER_HOUR;
     private String accountName;
-    private AtomicBoolean isDeleting = new AtomicBoolean(false);
+    private final AtomicBoolean isDeleting = new AtomicBoolean(false);
 
     private Timer timer;
     private TimerTask currentTask;
 
     final Object syncLock = new Object();
-    private AtomicBoolean isSyncRunning = new AtomicBoolean(false);
-    private boolean isGalAcct;
-    private boolean isMPAcct;
+    private final AtomicBoolean isSyncRunning = new AtomicBoolean(false);
+    private final boolean isGalAcct;
+    private final boolean isMPAcct;
     private long lastOptimizeTime = 0;
     private static final AtomicLong lastGC = new AtomicLong();
-    private Set<Long> syncedIds = new HashSet<Long>();
+    private final Set<Long> syncedIds = new HashSet<Long>();
 
     public int getSyncCount() {
         return syncedIds.size();
@@ -192,17 +193,25 @@ public abstract class SyncMailbox extends DesktopMailbox {
     void deleteThisMailbox() throws ServiceException {
         OfflineLog.offline.info("deleting mailbox %s %s (%s)", getId(), getAccountId(), getAccountName());
         DeleteMailbox redoRecorder = new DeleteMailbox(getId());
+
         boolean success = false;
+        SpoolingCache<MailboxBlob> blobs = null;
 
         lock.lock();
         try {
+            StoreManager sm = StoreManager.getInstance();
+
             try {
                 beginTransaction("deleteMailbox", null, redoRecorder);
                 redoRecorder.log();
 
+                if (!sm.supports(StoreManager.StoreFeature.BULK_DELETE)) {
+                    blobs = DbMailItem.getAllBlobs(this);
+                }
+
                 DbConnection conn = getOperationConnection();
 
-                synchronized(MailboxManager.getInstance()) {
+                synchronized (MailboxManager.getInstance()) {
                     DbMailbox.deleteMailbox(conn, this);
                 }
                 DbMailbox.clearMailboxContent(conn, this);
@@ -213,19 +222,26 @@ public abstract class SyncMailbox extends DesktopMailbox {
             } finally {
                 endTransaction(success);
             }
+
             try {
                 index.deleteIndex();
             } catch (Exception e) {
                 ZimbraLog.store.warn("Unable to delete index data", e);
             }
+
             try {
-                StoreManager.getInstance().deleteStore(this);
-            } catch (IOException e) {
+                sm.deleteStore(this, blobs);
+            } catch (Exception e) {
                 ZimbraLog.store.warn("Unable to delete message data", e);
             }
         } finally {
             lock.release();
+
+            if (blobs != null) {
+                blobs.cleanup();
+            }
         }
+
         OfflineLog.offline.info("mailbox %s (%s) deleted", getAccountId(), getAccountName());
     }
 
