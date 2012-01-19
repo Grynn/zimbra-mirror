@@ -17,15 +17,10 @@ package com.zimbra.cs.mailbox;
 import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
+import java.util.Collection;
 import java.util.Collections;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -40,6 +35,7 @@ import java.util.zip.ZipInputStream;
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpStatus;
 
+import com.zimbra.client.ZMailbox;
 import com.zimbra.common.mailbox.Color;
 import com.zimbra.common.mime.MimeConstants;
 import com.zimbra.common.service.ServiceException;
@@ -105,7 +101,6 @@ import com.zimbra.cs.session.PendingModifications.Change;
 import com.zimbra.cs.store.Blob;
 import com.zimbra.cs.store.StoreManager;
 import com.zimbra.cs.util.AccountUtil.AccountAddressMatcher;
-import com.zimbra.client.ZMailbox;
 import com.zimbra.soap.ZimbraSoapContext;
 
 public class InitialSync {
@@ -292,16 +287,7 @@ public class InitialSync {
                 Element eContactIds = elt.getOptionalElement(MailConstants.E_CONTACT);
                 if (eContactIds != null) {
                     String ids = eContactIds.getAttribute(MailConstants.A_IDS);
-                    for (Element eContact : fetchContacts(ombx, ids)) {
-                        int contactId = (int)eContact.getAttributeLong(MailConstants.A_ID);
-                        if (OfflineSyncManager.getInstance().isInSkipList(contactId)) {
-                            OfflineLog.offline.warn("Skipped contact id=%d per zdesktop_sync_skip_idlist", contactId);
-                            continue;
-                        }
-                        if (!isAlreadySynced(contactId, MailItem.Type.CONTACT)) {
-                            syncContact(eContact, folderId);
-                        }
-                    }
+                    syncContacts(Arrays.asList(ids.split(",")), folderId);
                 }
             }
 
@@ -979,6 +965,26 @@ public class InitialSync {
                 throw e;
             }
             getDeltaSync().syncContact(elt, folderId);
+        }
+    }
+
+    void syncContacts(Collection<String> contactIds, int folderId) throws ServiceException {
+        StringBuilder sb = new StringBuilder();
+        int count = 0;
+        for (String contactId : contactIds) {
+            if (OfflineSyncManager.getInstance().isInSkipList(Integer.valueOf(contactId))) {
+                OfflineLog.offline.warn("Skipped contact id=%d per zdesktop_sync_skip_idlist", contactId);
+                continue;
+            }
+            sb.append(contactId).append(",");
+            count++;
+            if (count %  OfflineLC.zdesktop_sync_batch_size.intValue() == 0 || count == contactIds.size()) {
+                sb.setLength(sb.length() - 1);
+                for (Element eContact : fetchContacts(ombx, sb.toString())) {
+                    syncContact(eContact, folderId);
+                }
+                sb = new StringBuilder();
+            }
         }
     }
 

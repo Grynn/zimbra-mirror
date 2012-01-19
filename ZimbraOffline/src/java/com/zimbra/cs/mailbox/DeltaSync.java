@@ -24,6 +24,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
 import com.zimbra.common.mailbox.Color;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.Element;
@@ -147,7 +149,7 @@ public class DeltaSync {
         Map<Integer, List<Integer>> modchats = new HashMap<Integer, List<Integer>>();
         Map<Integer, Integer> deltamsgs = new HashMap<Integer, Integer>();
         Map<Integer, Integer> deltachats = new HashMap<Integer, Integer>();
-        Map<Integer, Integer> contacts = new HashMap<Integer, Integer>();
+        Multimap<Integer, String> contacts = ArrayListMultimap.create(); //<folderId, contactId>
         Map<Integer, Integer> appts = new HashMap<Integer, Integer>();
         Map<Integer, Integer> tasks = new HashMap<Integer, Integer>();
         List<Integer> documents = new ArrayList<Integer>();
@@ -209,7 +211,7 @@ public class DeltaSync {
     private void syncItems(boolean isInitSyncDone, Set<Integer> foldersToDelete, Map<Integer, List<Integer>> messages,
             Map<Integer, List<Integer>> modmsgs, Map<Integer, List<Integer>> chats,
             Map<Integer, List<Integer>> modchats, Map<Integer, Integer> deltamsgs, Map<Integer, Integer> deltachats,
-            Map<Integer, Integer> contacts, Map<Integer, Integer> appts, Map<Integer, Integer> tasks,
+            Multimap<Integer, String> contacts, Map<Integer, Integer> appts, Map<Integer, Integer> tasks,
             List<Integer> documents) throws ServiceException {
         // for messages, chats, and contacts that are created or had their content modified, fetch new content
         if (OfflineLC.zdesktop_sync_messages.booleanValue() && !deltamsgs.isEmpty()) {
@@ -260,8 +262,9 @@ public class DeltaSync {
         }
 
         if (OfflineLC.zdesktop_sync_contacts.booleanValue() && !contacts.isEmpty()) {
-            for (Element elt : InitialSync.fetchContacts(ombx, StringUtil.join(",", contacts.keySet())))
-                getInitialSync().syncContact(elt, contacts.get((int) elt.getAttributeLong(MailConstants.A_ID)));
+            for (Integer folderId: contacts.keySet()) {
+                getInitialSync().syncContacts(contacts.get(folderId), folderId);
+            }
         }
 
         if (isInitSyncDone && OfflineLC.zdesktop_sync_documents.booleanValue() && !documents.isEmpty())
@@ -289,7 +292,7 @@ public class DeltaSync {
 
     private void prepareSync(Map<Integer, List<Integer>> messages, Map<Integer, List<Integer>> modmsgs,
             Map<Integer, List<Integer>> chats, Map<Integer, List<Integer>> modchats, Map<Integer, Integer> deltamsgs,
-            Map<Integer, Integer> deltachats, Map<Integer, Integer> contacts, Map<Integer, Integer> appts,
+            Map<Integer, Integer> deltachats, Multimap<Integer, String> contacts, Map<Integer, Integer> appts,
             Map<Integer, Integer> tasks, List<Integer> documents, Element change, int folderId) throws ServiceException {
         int id = (int) change.getAttributeLong(MailConstants.A_ID);
         String type = change.getName();
@@ -338,7 +341,7 @@ public class DeltaSync {
                 return;
 
             if (create) {
-                contacts.put(id, folderId);
+                contacts.put(folderId, id+"");
             } else {
                 syncContact(change, folderId);
             }
