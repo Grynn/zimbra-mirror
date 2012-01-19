@@ -23,13 +23,12 @@ import com.zimbra.cs.account.offline.OfflineSoapProvisioning;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineSyncManager;
 import com.zimbra.cs.offline.common.OfflineConstants;
+import com.zimbra.cs.offline.util.HeapDumpScanner;
 import com.zimbra.soap.DocumentHandler;
 import com.zimbra.soap.ZimbraSoapContext;
 
 /**
- * 
  * <DialogActionRequest id="accountId" type="dialog-type" action="yes|no" />
- * 
  */
 public class OfflineDialogAction extends DocumentHandler {
     public static final String DIALOG_TYPE_RESYNC = "resync";
@@ -40,9 +39,11 @@ public class OfflineDialogAction extends DocumentHandler {
     public static final String DIALOG_TYPE_FOLDER_MOVE_COMPLETE_MSG = "Folder move completed";
     public static final String DIALOG_TYPE_FOLDER_MOVE_FAIL = "foldermove_failed";
     public static final String DIALOG_TYPE_FOLDER_MOVE_FAIL_MSG = "Folder move failed";
+    public static final String DIALOG_TYPE_HEAP_DUMP_UPLOAD_CONSENT = "heapdump_upload";
+    public static final String DIALOG_HEAP_DUMP_UPLOAD_CONSENT_MSG = "Do we have your consent to upload heap dump of ZD's previous crash ?";
 
     private static enum DialogType {
-        resync, uploadconsent
+        resync, heapdump_upload
     }
 
     private static enum DialogAction {
@@ -76,7 +77,8 @@ public class OfflineDialogAction extends DocumentHandler {
         case resync:
             handleResync(accountId, action);
             break;
-        case uploadconsent:
+        case heapdump_upload:
+            handleHeapdumpUpload(accountId, action);
             break;
         }
     }
@@ -89,6 +91,18 @@ public class OfflineDialogAction extends DocumentHandler {
             break;
         case no:
             OfflineLog.offline.debug("user refused to resync mailbox %s", accountId);
+            break;
+        }
+    }
+
+    private void handleHeapdumpUpload(String accountId, DialogAction action) {
+        switch (action) {
+        case yes:
+            OfflineLog.offline.info("user chose to upload heap dump.");
+            HeapDumpScanner.getInstance().upload();
+            break;
+        case no:
+            OfflineLog.offline.info("user chose NOT to upload heap dump.");
             break;
         }
     }

@@ -33,6 +33,7 @@ import javax.mail.internet.MimeMessage;
 
 import com.google.common.base.Strings;
 import com.zimbra.common.mime.shim.JavaMailInternetAddress;
+import com.zimbra.common.util.FileUtil;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
@@ -44,86 +45,105 @@ import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.util.JMSession;
 
-public class HeapDumpTimer extends Thread {
+public class HeapDumpScanner {
 
-    private static HeapDumpTimer instance = null;
+    private static HeapDumpScanner instance = new HeapDumpScanner();
 
-    public HeapDumpTimer() {
-        super("heapdump-timer");
+    private HeapDumpScanner() {
     }
 
-    public synchronized static void initialize() {
-        if (OfflineLC.zdesktop_heapdump_enabled.booleanValue()) {
-            OfflineLog.offline.debug("heapdump report enabled...");
-            if (instance == null) {
-                instance = new HeapDumpTimer();
-                instance.start();
-            }
-        } else {
-            OfflineLog.offline.debug("heapdump report disabled...");
+    public static HeapDumpScanner getInstance() {
+        return instance;
+    }
+
+    private volatile boolean isCheckingCalled = false;
+
+    public boolean hasHeapDump() {
+        if (!OfflineLC.zdesktop_heapdump_enabled.booleanValue()) {
+            return false;
         }
-    }
-
-    // try to upload the latest one, if success, send a mail to us. remove all heap dumps.
-    @Override
-    public void run() {
+        String dumpPath;
         try {
-            String dumpPath = new File(OfflineLC.zdesktop_heapdump_dir.value()).getCanonicalPath();
-            File dumpDir = new File(dumpPath);
-            if (dumpDir == null || !dumpDir.exists()) {
-                OfflineLog.offline.debug("heapdump path: %s doesn't exist", dumpPath);
-                return;
-            }
-            File[] dumps = dumpDir.listFiles(new FileFilter() {
-                @Override
-                public boolean accept(File file) {
-                    return file.isFile() && file.getName().endsWith(".hprof");
-                }
-            });
-            if (dumps == null || dumps.length == 0) {
-                return;
-            }
-            long lastModTime = Long.MIN_VALUE;
-            File latestDump = null;
-            for (File f : dumps) {
-                if (f.lastModified() > lastModTime) {
-                    latestDump = f;
-                    lastModTime = f.lastModified();
-                }
-            }
-            boolean success = false;
-            SimpleFTP client = new SimpleFTP();
-            String uploadedFileName = "";
-            try {
-                OfflineLog.offline.debug("transferring heap dump to FTP");
-                client.connect(OfflineLC.zdesktop_heapdump_ftp.value(), 21,
-                        OfflineLC.zdesktop_heapdump_ftp_user.value(), OfflineLC.zdesktop_heapdump_ftp_psw.value());
-                uploadedFileName = UUID.randomUUID().toString() + "_" + latestDump.getName();
-                client.upload(uploadedFileName, latestDump);
-                success = true;
-            } catch (Exception e) {
-                OfflineLog.offline.error("Transferring heap dump to FTP error", e);
-            } finally {
-                client.disconnect();
-            }
-            if (success) {
-                try {
-                    sendMsg(uploadedFileName);
-                } catch (Exception e) {
-                    OfflineLog.offline.error("sending heap dump report mail error", e);
-                }
-                for (File f : dumpDir.listFiles()) {
-                    if (f.canWrite()) {
-                        f.delete();
-                    }
-                }
-                OfflineLog.offline.debug("finished transferring heap dump to FTP");
-            } else {
-                OfflineLog.offline.debug("unsuccessful transferring heap dump to FTP");
-            }
-        } catch (Exception e) {
-            OfflineLog.offline.error("report heap dump error", e);
+            dumpPath = new File(OfflineLC.zdesktop_heapdump_dir.value()).getCanonicalPath();
+        } catch (IOException e) {
+            OfflineLog.offline.warn("[heapdump] IOException when getting heapdump path");
+            return false;
         }
+        File dumpDir = new File(dumpPath);
+        if (dumpDir == null || !dumpDir.exists()) {
+            OfflineLog.offline.warn("[heapdump] heapdump path: %s doesn't exist", dumpPath);
+            return false;
+        }
+        File[] dumps = dumpDir.listFiles(new FileFilter() {
+            @Override
+            public boolean accept(File file) {
+                return file.isFile() && file.getName().endsWith(".hprof");
+            }
+        });
+        if (dumps == null || dumps.length == 0) {
+            OfflineLog.offline.debug("[heapdump] no heapdump available");
+            return false;
+        }
+        isCheckingCalled = true;
+        return true;
+    }
+
+    public void upload() {
+        if (!isCheckingCalled) {
+            throw new IllegalArgumentException("need to check heap dump first");
+        }
+        new Thread() {
+            @Override
+            public void run() {
+                try {
+                    String dumpPath = new File(OfflineLC.zdesktop_heapdump_dir.value()).getCanonicalPath();
+                    File dumpDir = new File(dumpPath);
+                    File[] dumps = dumpDir.listFiles(new FileFilter() {
+                        @Override
+                        public boolean accept(File file) {
+                            return file.isFile() && file.getName().endsWith(".hprof");
+                        }
+                    });
+                    long lastModTime = Long.MIN_VALUE;
+                    File latestDump = null;
+                    for (File f : dumps) {
+                        if (f.lastModified() > lastModTime) {
+                            latestDump = f;
+                            lastModTime = f.lastModified();
+                        }
+                    }
+                    boolean success = false;
+                    SimpleFTP client = new SimpleFTP();
+                    String uploadedFileName = "";
+                    try {
+                        OfflineLog.offline.debug("transferring heap dump to FTP");
+                        client.connect(OfflineLC.zdesktop_heapdump_ftp.value(), 21,
+                                OfflineLC.zdesktop_heapdump_ftp_user.value(),
+                                OfflineLC.zdesktop_heapdump_ftp_psw.value());
+                        uploadedFileName = UUID.randomUUID().toString() + "_" + latestDump.getName();
+                        client.upload(uploadedFileName, latestDump);
+                        success = true;
+                    } catch (Exception e) {
+                        OfflineLog.offline.error("Transferring heap dump to FTP error", e);
+                    } finally {
+                        client.disconnect();
+                    }
+                    if (success) {
+                        try {
+                            sendMsg(uploadedFileName);
+                        } catch (Exception e) {
+                            OfflineLog.offline.error("sending heap dump report mail error", e);
+                        }
+                        FileUtil.deleteDir(dumpDir);
+                        OfflineLog.offline.debug("finished transferring heap dump to FTP");
+                    } else {
+                        OfflineLog.offline.debug("unsuccessful transferring heap dump to FTP");
+                    }
+                } catch (Exception e) {
+                    OfflineLog.offline.error("report heap dump error", e);
+                }
+            }
+        };
     }
 
     private void sendMsg(String uploadedFileName) throws Exception {

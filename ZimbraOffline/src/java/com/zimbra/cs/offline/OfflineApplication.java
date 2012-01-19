@@ -37,7 +37,6 @@ import com.zimbra.cs.db.OfflineDbPool;
 import com.zimbra.cs.db.OfflineVersions;
 import com.zimbra.cs.offline.backup.BackupTimer;
 import com.zimbra.cs.offline.backup.DelEmailTimer;
-import com.zimbra.cs.offline.util.HeapDumpTimer;
 import com.zimbra.cs.service.AuthProvider;
 import com.zimbra.cs.service.offline.OfflineZimbraAuthProvider;
 import com.zimbra.cs.util.ZimbraApplication;
@@ -109,7 +108,6 @@ public final class OfflineApplication extends ZimbraApplication {
             OfflineLog.offline.warn("Unable to update volume compression", e);
         }
         BackupTimer.initialize();
-        HeapDumpTimer.initialize();
         DelEmailTimer.initialize();
     }
 

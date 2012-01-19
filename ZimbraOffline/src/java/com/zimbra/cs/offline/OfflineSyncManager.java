@@ -73,12 +73,14 @@ import com.zimbra.cs.mailbox.OfflineServiceException;
 import com.zimbra.cs.offline.ab.gab.GDataServiceException;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.offline.common.OfflineConstants.SyncStatus;
+import com.zimbra.cs.offline.util.HeapDumpScanner;
 import com.zimbra.cs.service.UserServlet;
 import com.zimbra.cs.service.UserServletContext;
 import com.zimbra.cs.service.formatter.ArchiveFormatter;
 import com.zimbra.cs.service.formatter.ArchiveFormatter.Resolve;
 import com.zimbra.cs.service.formatter.FormatListener;
 import com.zimbra.cs.service.formatter.Formatter;
+import com.zimbra.cs.service.offline.OfflineDialogAction;
 import com.zimbra.cs.util.Zimbra;
 import com.zimbra.cs.util.ZimbraApplication;
 import com.zimbra.cs.util.yauth.AuthenticationException;
@@ -918,8 +920,8 @@ public class OfflineSyncManager implements FormatListener {
                 continue;
 
             Element e = zdsync.addElement(ZDSYNC_ACCOUNT).addAttribute(A_ZDSYNC_NAME, account.getName()).addAttribute(A_ZDSYNC_ID, account.getId());
+            encodeDialog(account.getId(), e);
             if (prov.isZcsAccount(account)) {
-                encodeDialog(account.getId(), e);
                 getStatus(account).encode(e);
             } else if (OfflineProvisioning.isDataSourceAccount(account)) {
                 getStatus(prov.getDataSource(account)).encode(e);
@@ -960,7 +962,22 @@ public class OfflineSyncManager implements FormatListener {
         }
     }
 
+    private volatile boolean hasCheckHeapdump = false;
+
+    //call it only once at the very beginning
+    private void checkHeapdumpAndEncode(String acctId, Element e) {
+        if (!hasCheckHeapdump) {
+            hasCheckHeapdump = true;
+            if (HeapDumpScanner.getInstance().hasHeapDump()) {
+                registerDialog(acctId,
+                        new Pair<String, String>(OfflineDialogAction.DIALOG_TYPE_HEAP_DUMP_UPLOAD_CONSENT,
+                                OfflineDialogAction.DIALOG_HEAP_DUMP_UPLOAD_CONSENT_MSG));
+            }
+        }
+    }
+
     private void encodeDialog(String acctId, Element e) {
+        checkHeapdumpAndEncode(acctId, e);
         for (Pair<String, String> dialog : this.getDialogs(acctId)) {
             Element dialogElement = e.addElement(ZDSYNC_DIALOG).addAttribute(A_ZDSYNC_TYPE, dialog.getFirst());
             dialogElement.setText(dialog.getSecond());

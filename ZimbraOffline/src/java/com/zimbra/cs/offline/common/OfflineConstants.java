@@ -49,7 +49,7 @@ public interface OfflineConstants {
     public static final QName RESET_GAL_ACCOUNT_REQUEST = QName.get("ResetGalAccountRequest", NAMESPACE);
     public static final QName RESET_GAL_ACCOUNT_RESPONSE = QName.get("ResetGalAccountResponse", NAMESPACE);
 
-    public static final QName DIALOG_ACTION_REQUEST = QName.get("DialogActionResponse", NAMESPACE);
+    public static final QName DIALOG_ACTION_REQUEST = QName.get("DialogActionRequest", NAMESPACE);
     public static final QName DIALOG_ACTION_RESPONSE = QName.get("DialogActionResponse", NAMESPACE);
 
     public static final String A_Event = "e";
