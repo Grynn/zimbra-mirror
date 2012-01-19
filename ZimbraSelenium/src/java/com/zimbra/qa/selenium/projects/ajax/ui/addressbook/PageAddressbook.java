@@ -4,6 +4,7 @@ package  com.zimbra.qa.selenium.projects.ajax.ui.addressbook;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.*;
 
 import org.apache.log4j.LogManager;
 
@@ -178,11 +179,13 @@ public class PageAddressbook extends AbsTab {
 		String listLocator = "div[id='zv__CNS-main']";		
 		String rowLocator  = "div[id^='zli__CNS-main__']";
 	    String noResultLocator = "td.NoResults";		
+		String fileAsLocator = " td[id^=zlif__CNS-main__][id$=__fileas]";
 		
 		//actually this is a search view
 		if (zIsInSearchView()) {
 			listLocator= "div[id=zv__CNS-SR-Contacts-1]";	
 		   	rowLocator= "div[id^=zli__CNS-SR-Contacts-1__]";
+		   	fileAsLocator=" td[id^=zlif__CNS-SR-Contacts-1__][id$=__fileas]";
 		}
 
 		// if there is no result
@@ -205,7 +208,7 @@ public class PageAddressbook extends AbsTab {
 
 			String contactType = getContactType(commonLocator);
 		    
-			String contactDisplayedLocator = commonLocator + " td[id^=zlif__CNS-main__][id$=__fileas]";
+			String contactDisplayedLocator = commonLocator + fileAsLocator;
 			String fileAs = sGetText(contactDisplayedLocator);
 			logger.info("...found "+ contactType + " - " + fileAs );
 			isContactFound = ((contactType.equals(ContactGroupItem.IMAGE_CLASS) &&  contactItem instanceof ContactGroupItem) ||
@@ -226,20 +229,26 @@ public class PageAddressbook extends AbsTab {
 		List <ContactItem> list= new ArrayList<ContactItem>();
 
 		//ensure it is in Addressbook main page
-		zNavigateTo();
+		//zNavigateTo();
 
 		//assume that this is a list view
 		String listLocator = "div[id='zv__CNS-main']";		
 		String rowLocator  = "div[id^='zli__CNS-main__']";
-		
-		String contactLocator = null;
-
+        String fileAsLocator = " td[id^=zlif__CNS-main__][id$=__fileas]";
+        String noResultLocator = " td.NoResults";
+        
 		//actually this is a search view
 		if (zIsInSearchView()) {
 			listLocator= "div[id=zv__CNS-SR-Contacts-1]";	
-			rowLocator= "div[id^=zli__CNS-SR-Contacts-1__]";
+		   	rowLocator= "div[id^=zli__CNS-SR-Contacts-1__]";
+		   	fileAsLocator=" td[id^=zlif__CNS-SR-Contacts-1__][id$=__fileas]";
 		}
 
+		// no result
+		if (sIsElementPresent("css=" + listLocator +  noResultLocator)) {
+			return list;
+		}
+		
 		if (!this.sIsElementPresent("css=" + listLocator + ">" + rowLocator)) {
 			throw new HarnessException("css=" + listLocator + ">" + rowLocator + " not present");
 		}
@@ -255,7 +264,7 @@ public class PageAddressbook extends AbsTab {
 		    if (sIsElementPresent(commonLocator + " div[class*=" + contactType + "]")) {
 				
 			    ContactItem ci=null;
-			    String contactDisplayedLocator = commonLocator + " td[id^=zlif__CNS-main__][id$=__fileas]";
+			    String contactDisplayedLocator = commonLocator + fileAsLocator;
 			    String fileAs = sGetText(contactDisplayedLocator);
 		        logger.info(" found " + fileAs);
 		    
@@ -1182,12 +1191,13 @@ public class PageAddressbook extends AbsTab {
 						 id= sGetEval("window.document.getElementById('z_shell').children[" + i + "].id");
 				     
 						 if (id.startsWith("DWT") 					
-							 && sGetEval("window.document.getElementById('" + id + "').getAttribute('class')").contains("ActionMenu ZHasIcon")							 		
-							 && sIsVisible(id)){
-							 //locator="css=div#" + id + " td[id^=DWT][id$=_title]:contains('" + tagName + "')";	
-							 locator="css=div#" + id + " td.ZWidgetTitle:contains('" + tagName + "')";	
+							 && sGetEval("window.document.getElementById('" + id + "').getAttribute('class')").contains("ActionMenu ZHasIcon")) {
+							 	if (sIsVisible(id)){
+							 		//locator="css=div#" + id + " td[id^=DWT][id$=_title]:contains('" + tagName + "')";	
+							 		locator="css=div#" + id + " td.ZWidgetTitle:contains('" + tagName + "')";	
 							 
-							 break;
+							 	break;
+							 }
 						 }
 					}		
 			        
@@ -1465,6 +1475,6 @@ public class PageAddressbook extends AbsTab {
 	}
 	
 	private boolean zIsInSearchView() throws HarnessException {
-		return zIsVisiblePerPosition("css=div#z_filterPanel__SR-Contacts-1",0,0);
+		return zIsVisiblePerPosition("css=div#z_filterPanel__SR-Contacts-1",0,0);		 
 	}
 }
