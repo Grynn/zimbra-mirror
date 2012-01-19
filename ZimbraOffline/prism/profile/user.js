@@ -23,7 +23,7 @@ user_pref("signed.applets.codebase_principal_support", true);
 user_pref("print.print_printer", "");
 
 // set it to true to enable about:config access. use shift-f7 to toggle it.
-user_pref("prism.shortcut.aboutConfig.enabled", false);
+user_pref("prism.shortcut.aboutConfig.enabled", true);
 
 // disable quick-find
 user_pref("accessibility.typeaheadfind", false);
