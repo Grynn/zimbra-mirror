@@ -105,8 +105,8 @@ public class CSMigrationwrapper
   
     public CSMigrationwrapper()
     {
-        Log.init(Path.GetTempPath() + "migration.log", Log.Level.Info);
-        Log.info("initialize");
+        InitLogFile("migration", Log.Level.Info);
+        Log.info("Initializing migration");
 
         api = new ZimbraAPI();
     }
@@ -195,6 +195,22 @@ public class CSMigrationwrapper
         string[] s = (string[])var;
         return s;
     }
+
+    private void InitLogFile(string fileprefix, Log.Level level)
+    {
+        string bakfile = Path.GetTempPath() + fileprefix + ".bak";
+        string logfile = Path.GetTempPath() + fileprefix + ".log";
+        if (File.Exists(bakfile))
+        {
+            File.Delete(bakfile);
+        }
+        if (File.Exists(logfile))
+        {
+            File.Move(logfile, bakfile);
+        }
+        Log.init(logfile, level);
+    }
+
 
     private int ComputeTotalMigrationCount(MigrationOptions importopts, dynamic[] folderobjectarray)
     {
@@ -495,8 +511,8 @@ public class CSMigrationwrapper
             }
 
             Log.Level level = isVerbose ? Log.Level.Debug : Log.Level.Info;
-            Log.init(Path.GetTempPath() + "migration.log", level);
-            Log.init(Path.GetTempPath() + accountName + ".log", level);
+            Log.init(Path.GetTempPath() + "migration.log", level);  // might have gotten a new level from options
+            InitLogFile(accountName, level);
             try
             {
                 if (isServer)
