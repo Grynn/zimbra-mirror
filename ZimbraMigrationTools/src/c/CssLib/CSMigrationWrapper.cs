@@ -105,7 +105,7 @@ public class CSMigrationwrapper
   
     public CSMigrationwrapper()
     {
-        Log.init(Path.GetTempPath() + "migration.log", Log.Level.Debug);
+        Log.init(Path.GetTempPath() + "migration.log", Log.Level.Info);
         Log.info("initialize");
 
         api = new ZimbraAPI();
@@ -465,7 +465,7 @@ public class CSMigrationwrapper
     }
 
     public void StartMigration(MigrationAccount Acct, MigrationOptions importopts, bool
-        isServer = true, bool isPreview = false)
+        isServer = true, bool isVerbose = false, bool isPreview = false)
     {
 
        
@@ -494,7 +494,9 @@ public class CSMigrationwrapper
                 return;
             }
 
-            Log.open(Path.GetTempPath() + accountName + ".log");
+            Log.Level level = isVerbose ? Log.Level.Debug : Log.Level.Info;
+            Log.init(Path.GetTempPath() + "migration.log", level);
+            Log.init(Path.GetTempPath() + accountName + ".log", level);
             try
             {
                 if (isServer)

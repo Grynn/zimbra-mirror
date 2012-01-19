@@ -18,18 +18,21 @@ public partial class App: Application
         string mode = Properties["migrationmode"].ToString();
         CSMigrationwrapper mw = (CSMigrationwrapper)Properties["mw"];
 
-        mw.MailClient = "MAPI";
-        if (mode == "server")
+        if (mw != null)
         {
-            string s = mw.UninitializeMailClient();
+            mw.MailClient = "MAPI";
+            if (mode == "server")
+            {
+                string s = mw.UninitializeMailClient();
 
-            if (s.Length > 0)
-                MessageBox.Show(s, "Shutdown error", MessageBoxButton.OK,
-                    MessageBoxImage.Error);
-        }
-        else
-        {
-            mw.EndUserMigration();
+                if (s.Length > 0)
+                    MessageBox.Show(s, "Shutdown error", MessageBoxButton.OK,
+                        MessageBoxImage.Error);
+            }
+            else
+            {
+                mw.EndUserMigration();
+            }
         }
     }
 }

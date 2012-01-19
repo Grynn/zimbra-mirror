@@ -69,6 +69,16 @@ public class AdvancedImportOptions
     public Folder[] FoldersToSkip;
 }
 
+public class LoggingOptions
+{
+    private bool m_Verbose;
+    public bool Verbose
+    {
+        get { return m_Verbose; }
+        set { m_Verbose = value; }
+    }
+}
+
 public class Folder
 {
     private string m_FolderName;

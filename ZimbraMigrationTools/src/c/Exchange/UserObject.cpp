@@ -65,7 +65,7 @@ STDMETHODIMP CUserObject::InitializeUser(BSTR host, BSTR admin, BSTR AccountID,
     retval = Initialize(AccountID);
     // Logger = CSingleton::getInstance();
 
-    dlogd("initialize", AccountID, L" ", AccountName);
+    dlogd("initialize", "AccountID:", AccountID, "AccountName:", AccountName);
     // Create Session and Open admin store.
     // Its a static function and store/session will be used commonly by all mailboxes.
     // MAPIAccessAPI::InitGlobalSessionAndStore(host,admin);

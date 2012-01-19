@@ -55,6 +55,11 @@ public class OptionsViewModel: BaseViewModel
         MigrateONRAfter = config.AdvancedImportOptions.MigrateONRAfter.ToLongDateString();
         MaxMessageSize = config.AdvancedImportOptions.MaxMessageSize;
 
+        if (config.LoggingOptions != null)  // so old config files will work
+        {
+            LoggingVerbose = config.LoggingOptions.Verbose;
+        }
+
         string returnval = "";
 
         returnval = ConvertToCSV(config.AdvancedImportOptions.FoldersToSkip, ",");
@@ -135,6 +140,7 @@ public class OptionsViewModel: BaseViewModel
     {
         UpdateXmlElement(XmlfileName, "importOptions");
         UpdateXmlElement(XmlfileName, "AdvancedImportOptions");
+        UpdateXmlElement(XmlfileName, "LoggingOptions");
     }
 
     private void Save()
@@ -388,6 +394,18 @@ public class OptionsViewModel: BaseViewModel
         {
             m_skipfolderflag = value;
             OnPropertyChanged(new PropertyChangedEventArgs("Skipfolderflag"));
+        }
+    }
+    public bool LoggingVerbose
+    {
+        get { return m_config.LoggingOptions.Verbose; }
+        set
+        {
+            if (value == m_config.LoggingOptions.Verbose)
+                return;
+            m_config.LoggingOptions.Verbose = value;
+
+            OnPropertyChanged(new PropertyChangedEventArgs("LoggingVerbose"));
         }
     }
     public string ConvertToCSV(Folder[] objectarray, string delimiter)

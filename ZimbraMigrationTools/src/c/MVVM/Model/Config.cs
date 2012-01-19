@@ -16,6 +16,7 @@ public class Config
         this.importOptions = new ImportOptions();
         this.UserProvision = new UserProvision();
         this.AdvancedImportOptions = new AdvancedImportOptions();
+        this.LoggingOptions = new LoggingOptions();
         this.AdvancedImportOptions.FoldersToSkip = new Folder[15];
 
         this.zimbraServer.ZimbraHostname = zimbraserverhostname;
@@ -55,6 +56,7 @@ public class Config
     public ImportOptions importOptions;
     public UserProvision UserProvision;
     public AdvancedImportOptions AdvancedImportOptions;
+    public LoggingOptions LoggingOptions;
     public GeneralOptions GeneralOptions;
 }
 

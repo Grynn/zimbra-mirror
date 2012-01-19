@@ -553,8 +553,9 @@ public class ScheduleViewModel: BaseViewModel
 
         CSMigrationwrapper mw = ((IntroViewModel)ViewModelPtrs[(int)ViewType.INTRO]).mw;
         MigrationOptions importOpts = SetOptions();
+        bool isVerbose = ((OptionsViewModel)ViewModelPtrs[(int)ViewType.OPTIONS]).LoggingVerbose;
 
-        mw.StartMigration(MyAcct, importOpts, isServer, m_isPreview);
+        mw.StartMigration(MyAcct, importOpts, isServer, isVerbose, m_isPreview);
 
         // special case to format last user progress message
         int count = accountResultsViewModel.AccountResultsList[num].UserResultsList.Count;
