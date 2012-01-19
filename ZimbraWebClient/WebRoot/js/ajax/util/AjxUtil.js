@@ -558,6 +558,23 @@ AjxUtil.byStringProp = function(prop, a, b) {
 };
 
 /**
+ * returns the size of the given array, i.e. the number of elements in it, regardless of whether the array is associative or not.
+ * so for example for array that is set simply by a = []; a[50] = "abc"; arraySize(a) == 1. For b = []; b["abc"] = "def"; arraySize(b) == 1 too.
+ * Incredibly JavasCript does not have a built in simple way to get that.
+ * @param arr
+ */
+AjxUtil.arraySize =
+function(a) {
+	var size = 0;
+	for(var e in a) {
+		if (a.hasOwnProperty(e)) {
+			size ++;
+		}
+	}
+	return size;
+};
+
+/**
  * mergesort+dedupe
 **/
 AjxUtil.mergeArrays =

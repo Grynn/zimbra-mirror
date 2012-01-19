@@ -91,7 +91,8 @@ public class GetInfoJSONTag extends ZimbraSimpleTag {
 
         try {
             Element batch = Element.create(SoapProtocol.SoapJS, ZimbraNamespace.E_BATCH_REQUEST);
-            batch.addElement(AccountConstants.GET_INFO_REQUEST);
+            Element getInfoRequest = batch.addElement(AccountConstants.GET_INFO_REQUEST);
+			getInfoRequest.addAttribute("rights", "createDistList");
             if (doSearch) {
                 Element search = batch.addElement(MailConstants.SEARCH_REQUEST);
                 if (itemsPerPage != null && itemsPerPage.length() > 0)
