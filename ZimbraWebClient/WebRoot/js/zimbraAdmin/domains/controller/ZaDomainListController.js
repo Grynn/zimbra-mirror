@@ -713,6 +713,12 @@ function () {
 				
 				if(this._popupOperations[ZaOperation.ADD_DOMAIN_ALIAS])
                                         this._popupOperations[ZaOperation.ADD_DOMAIN_ALIAS].enabled=false;
+
+				if(this._toolbarOperations[ZaOperation.AUTOPROV_WIZARD])
+                                        this._toolbarOperations[ZaOperation.AUTOPROV_WIZARD].enabled=false;
+
+				if(this._popupOperations[ZaOperation.AUTOPROV_WIZARD])
+                                        this._popupOperations[ZaOperation.AUTOPROV_WIZARD].enabled=false;
 			}
 			
 			if(item.attrs[ZaDomain.A_zimbraDomainStatus] == ZaDomain.DOMAIN_STATUS_SHUTDOWN) {
