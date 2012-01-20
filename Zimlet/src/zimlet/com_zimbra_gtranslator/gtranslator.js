@@ -88,8 +88,10 @@ function(viewId, isNewView) {
 	if(appCtxt.isChildWindow) {
 		this._zimletContext = parentAppCtxt.getZimletMgr().getZimletByName("com_zimbra_gtranslator");
 	}
-	var viewType = appCtxt.getViewTypeFromId(viewId);
-	if (viewType == ZmId.VIEW_COMPOSE &&  !this._zimletContext._isToolbarClosed && !this._zimletContext._alreadyUsed) {
+	var isComposeView = viewId.indexOf(ZmId.VIEW_COMPOSE) == 0
+					|| (appCtxt.getViewTypeFromId && appCtxt.getViewTypeFromId(viewId) == ZmId.VIEW_COMPOSE) ? true : false;
+
+	if (isComposeView &&  !this._zimletContext._isToolbarClosed && !this._zimletContext._alreadyUsed) {
 		var composeController = appCtxt.getCurrentController();
 		var currentMsg = composeController._msg;
 		if(!currentMsg || (currentMsg.id != this.srcMsgObj.id)) {
@@ -613,9 +615,8 @@ function(postCallback) {
 		params[i++] = "key=" + AjxStringUtil.urlComponentEncode(this.googleTranslateApiKey);
 		params[i++] = "&target=en";
 		var url = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode("https://www.googleapis.com/language/translate/v2/languages?" + params.join(""));
-		AjxRpc.invoke(null, url, null, AjxCallback.simpleClosure(this._loadGTranslatorCallback, this, postCallback), true);
-
-		//google.load("language", "1", {callback: AjxCallback.simpleClosure(this._loadGTranslatorCallback, this, postCallback)});
+		var callback = new AjxCallback(this, this._loadGTranslatorCallback, postCallback);
+		AjxRpc.invoke(null, url, null, callback, true);
 	} else {
 		if (postCallback) {
 			postCallback.run();

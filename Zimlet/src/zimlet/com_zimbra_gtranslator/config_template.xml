@@ -1,4 +1,4 @@
-<zimletConfig name="com_zimbra_gtranslator" version="4.0">
+<zimletConfig name="com_zimbra_gtranslator" version="4.1">
   <global>
     <property name="allowedDomains">*.googleapis.com,*.google.com</property>
       <!-- Google Tranlsate API is now paid service. You need to pay and get the API_KEY
