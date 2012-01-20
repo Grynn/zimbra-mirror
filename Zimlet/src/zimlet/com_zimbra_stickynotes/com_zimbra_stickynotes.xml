@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_stickynotes" version="1.7" label="${msg.label}" description="${msg.description}">
+<zimlet name="com_zimbra_stickynotes" version="1.8" label="${msg.label}" description="${msg.description}">
 	<include>stickynotes.js</include>
 	<includeCSS>stickynotes.css</includeCSS>
 	<handlerObject>com_zimbra_stickyNotes_HandlerObject</handlerObject>

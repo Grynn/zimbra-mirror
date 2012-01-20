@@ -49,6 +49,7 @@ function() {
 	this.stickyNotes_ToolbarBtn = this.getUserProperty("stickyNotes_ToolbarBtn") == "true";
 	this._createTagAndStoreId();
 	this._migrateOldData();
+	this._viewIdWithListenerAdded = [];
 };
 
 StickyNotesZimlet.prototype.onShowView =
@@ -59,10 +60,17 @@ function(viewId, isNewView) {
 		try{
 			if(viewId == ZmId.VIEW_CAL) {//in calendar, there are multiple views and viewId doesnt match internal views
 				for(var vid in controller._listView) {
-					controller._listView[vid].addSelectionListener(new AjxListener(this, this._onContactOrApptView, [controller]));
+					if(!this._viewIdWithListenerAdded[vid]) {//add listeners only once
+						controller._listView[vid].addSelectionListener(new AjxListener(this, this._onContactOrApptView, [controller]));
+						this._viewIdWithListenerAdded[vid] = true;
+					}
 				}
 			} else {
-				controller._listView[viewId].addSelectionListener(new AjxListener(this, this._onContactOrApptView, [controller]));
+				if(!this._viewIdWithListenerAdded[viewId]) {//add listeners only once
+					controller._listView[viewId].addSelectionListener(new AjxListener(this, this._onContactOrApptView, [controller]));
+					this._viewIdWithListenerAdded[viewId] = true;
+				}
+
 			}
 		} catch(e) {
 		}
