@@ -530,11 +530,6 @@ body {
 	color: #cb2027;
 }
 
-textarea {
-    border: #000000 solid 1px;
-    @opacity(25)@
-}
-
 .GroupLabel {
     font-size: 12px;
 }
