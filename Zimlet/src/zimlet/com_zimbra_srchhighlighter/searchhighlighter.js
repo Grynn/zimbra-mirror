@@ -230,7 +230,6 @@ SearchHighlighterZimlet.prototype.addMenuButton = function(controller, menu) {
  * @param {ZmMsgController} controller  A controller
  */
 SearchHighlighterZimlet.prototype._clearSearchWordHighlights = function(controller) {
-	var msgBody;
 	var currentView = appCtxt.getAppViewMgr().getCurrentView();
 	var view;
 	if(currentView.getItemView) {
@@ -241,10 +240,8 @@ SearchHighlighterZimlet.prototype._clearSearchWordHighlights = function(controll
 	if(!view) {
 		return;
 	}
-	var bodyEl = view.getHtmlBodyElement();
-	if (bodyEl) {
-		msgBody = bodyEl.ownerDocument;
-	} else {
+	var msgBody = view.getDocument();
+	if (!msgBody) {
 		var elId = view.getHTMLElId();
 		if (elId) {
 			var doc = document.getElementById(elId + "_body__iframe");
