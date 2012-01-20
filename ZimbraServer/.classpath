@@ -131,5 +131,6 @@
   <classpathentry kind="lib" path="/ZimbraCommon/jars/jetty-http-7.5.5-SNAPSHOT.jar"/>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/jetty-continuation-7.5.5-SNAPSHOT.jar"/>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/jetty-servlet-7.5.5-SNAPSHOT.jar"/>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/jetty-servlets-7.5.5-SNAPSHOT.jar"/>
   <classpathentry kind="output" path="build/classes"/>
 </classpath>
