@@ -43,6 +43,7 @@ public:
     STDMETHOD(UMInitializeUser) (BSTR ProfileName, BSTR AccountName, BSTR *pErrorText);
     STDMETHOD(UMUnInitializeUser) ();
 	STDMETHOD(GetMapiAccessObject)(BSTR UserID,IMapiAccessWrap** pVal);
+    STDMETHOD(SMUnInitializeUser) ();
 
     virtual long Initialize(BSTR Id);
     virtual long GetFolders(VARIANT *folders);

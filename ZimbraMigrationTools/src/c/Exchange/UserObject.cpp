@@ -107,6 +107,13 @@ STDMETHODIMP CUserObject::UMUnInitializeUser()
     return S_OK;
 }
 
+STDMETHODIMP CUserObject::SMUnInitializeUser()
+{
+    dlogd("SMUnInitializeUser");
+    MapiObj->UnInitializeuser();
+    return S_OK;
+}
+
 STDMETHODIMP CUserObject::GetFolderObjects( /*[out, retval]*/ VARIANT *vObjects)
 {
     dlogi("Begin GetFolderObjects");

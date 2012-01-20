@@ -666,6 +666,10 @@ public class CSMigrationwrapper
                 }
             }
         }
+        if (isServer)
+        {
+            userobject.SMUnInitializeUser();
+        }
     }    
 }
 }

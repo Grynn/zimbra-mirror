@@ -101,6 +101,7 @@ interface IUserObject : IDispatch{
 	[id(5)] HRESULT UMInitializeUser([in]BSTR ProfileName, [in] BSTR AccountName, [out,retval] BSTR* pErrorText);
 	[id(6)] HRESULT UMUnInitializeUser();
 	[id(7)] HRESULT GetMapiAccessObject(BSTR UserID,[out, retval] IMapiAccessWrap** pVal);
+        [id(8)] HRESULT SMUnInitializeUser();
 };
 [
 	object,
