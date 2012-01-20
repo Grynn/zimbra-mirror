@@ -83,11 +83,14 @@ public class ZimbraAPI
 
     private string GetSpecialFolderNum(string folderPath)
     {
+        string sFolderPath = folderPath.ToUpper();
         for (int i = 0; i < specialFolders.Length; i++)
         {
-            if (folderPath == specialFolders[i])
+            string sSpecialFolder = specialFolders[i].ToUpper();
+            if (sFolderPath == sSpecialFolder)
                 return i.ToString();
         }
+        Log.debug("Can't find special folder", folderPath, ". Message will be lost.");
         return "";
     }
 
