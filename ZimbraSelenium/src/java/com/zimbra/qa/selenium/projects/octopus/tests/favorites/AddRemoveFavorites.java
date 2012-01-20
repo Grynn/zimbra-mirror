@@ -141,7 +141,7 @@ public class AddRemoveFavorites extends OctopusCommonTest {
 				"Verify the file appears in the Favorites tab");
 	}
 
-	@Test(description = "Mark file as Favorite / Not Favorite using Context menu - verify file appears / dissapears in the Favorites tab", groups = { "functional" })
+	@Test(description = "Mark file as Not Favorite using Context menu - verify favorite file dissapears from the Favorites tab", groups = { "functional" })
 	public void AddRemoveFavorites_03() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 
@@ -170,11 +170,29 @@ public class AddRemoveFavorites extends OctopusCommonTest {
 		// add item to the list
 		fileIdList = new ArrayList<String>();
 		fileIdList.add(_fileId);
+		
+		// Add file to the Favorites
+		account.soapSend("<DocumentActionRequest xmlns='urn:zimbraMail'>"
+				+ "<action id='" + _fileId + "' op='watch'/>"
+				+ "</DocumentActionRequest>");
 
+		SleepUtil.sleepSmall();
+
+		// Verify the file was added to the Favorites using SOAP
+		account.soapSend("<GetWatchingItemsRequest xmlns='urn:zimbraMail'>"
+				+ "</GetWatchingItemsRequest>");
+
+		ZAssert.assertTrue(account.soapMatch(
+				"//mail:GetWatchingItemsResponse//mail:item", "id", _fileId),
+				"Verify file is added to Favorites");
+
+		/*
+		
 		// click on the My Files tab
 		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_MY_FILES);
 
 		// Verify file exists in My Files view
+		
 		ZAssert.assertTrue(app.zPageMyFiles.zWaitForElementPresent(
 				PageMyFiles.Locators.zMyFilesListViewItems.locator
 						+ ":contains(" + fileName + ")", "3000"),
@@ -183,7 +201,8 @@ public class AddRemoveFavorites extends OctopusCommonTest {
 		// mark file as favorite using drop down menu
 		app.zPageMyFiles.zToolbarPressPulldown(Button.B_MY_FILES_LIST_ITEM,
 				Button.O_FAVORITE, fileName);
-
+		
+		
 		// Wait for Watch icon become enabled
 		app.zPageMyFiles.zWaitForElementPresent(
 				DisplayFilePreview.Locators.zFileWatchIcon.locator
@@ -196,13 +215,17 @@ public class AddRemoveFavorites extends OctopusCommonTest {
 		ZAssert.assertTrue(app.zPageOctopus.zIsItemInCurentListView(fileName),
 				"Verify the file appears in the Favorites tab");
 
+		*/
+		
 		// click on the My Files tab
 		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_MY_FILES);
 
-		// mark first file as NOT favorite using drop down menu
+		// mark file as NOT favorite using drop down menu
 		app.zPageMyFiles.zToolbarPressPulldown(Button.B_MY_FILES_LIST_ITEM,
 				Button.O_NOT_FAVORITE, fileName);
 
+		/*
+		
 		// Wait for Watch icon become disabled
 		app.zPageMyFiles.zWaitForElementPresent(
 				DisplayFilePreview.Locators.zFileWatchIcon.locator
@@ -217,6 +240,17 @@ public class AddRemoveFavorites extends OctopusCommonTest {
 				PageFavorites.Locators.zFavoritesItemsView.locator
 						+ ":contains(" + fileName + ")", "3000"),
 				"Verify the file marked as Not Favorite disappears from the Favorites tab");
+		
+		*/
+		
+		// Verify the file was removed from the Favorites using SOAP
+		account.soapSend("<GetWatchingItemsRequest xmlns='urn:zimbraMail'>"
+				+ "</GetWatchingItemsRequest>");
+
+		ZAssert.assertFalse(account.soapMatch(
+				"//mail:GetWatchingItemsResponse//mail:item", "id", _fileId),
+				"Verify file is removed frrom the Favorites");
+		
 	}
 
 	@AfterMethod(groups = { "always" })
