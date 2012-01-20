@@ -15,15 +15,22 @@ import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.octopus.ui.DialogError;
 import com.zimbra.qa.selenium.projects.octopus.ui.DialogError.DialogErrorID;
+import com.zimbra.qa.selenium.projects.octopus.ui.PageMyFiles.Locators;
 import com.zimbra.soap.mail.type.Folder;
 
 public class PageOctopus extends AbsTab {
 
 	public static class Locators {
+		public static final Locators zUserNamePullDown = new Locators(
+				"css=div.user-display-name");
 		public static final Locators zSignOutButton = new Locators(
-				"css=a.(headerLink signOutLink):contains(sign out)");
+		        //"css=a.(headerLink signOutLink):contains(sign out)");
+				// temporary omitting first letter in the locator's name
+				"css=div.signOutLink:contains(ign out)");
 		public static final Locators zSettingsButton = new Locators(
-				"css=a.(headerLink settingsLink):contains(settings)");
+				//"css=a.(headerLink settingsLink):contains(settings)");
+				// temporary omitting first letter in the locator's name
+				"css=div.settingsLink:contains(ettings)");
 		public static final Locators zTabMyFiles = new Locators(
 				"css=div.octopus-tab-label:contains(My Files)");
 		public static final Locators zTabSharing = new Locators(
@@ -129,7 +136,8 @@ public class PageOctopus extends AbsTab {
 		map.put("loginOp", "logout");
 
 		// this.openUrl("", map);
-		zClick(PageOctopus.Locators.zSignOutButton.locator);
+		//zClick(PageOctopus.Locators.zSignOutButton.locator);
+		zToolbarPressPulldown(Button.B_USER_NAME, Button.O_SIGN_OUT);
 
 		sWaitForPageToLoad();
 		((AppOctopusClient) MyApplication).zPageLogin.zWaitForActive();
@@ -182,6 +190,59 @@ public class PageOctopus extends AbsTab {
 		this.sOpen(url);
 
 		return url;
+	}
+
+	@Override
+	public AbsPage zToolbarPressPulldown(Button pulldown, Button option)
+			throws HarnessException {
+		logger.info(myPageName() + " zToolbarPressPulldown(" + pulldown + ", "
+				+ option + ")");
+
+		tracer.trace("Click pulldown " + pulldown + " then " + option);
+
+		if (pulldown == null)
+			throw new HarnessException("Pulldown cannot be null!");
+
+		if (option == null)
+			throw new HarnessException("Option cannot be null!");
+
+		// Default behavior variables
+		String pulldownLocator = null; // If set, this will be expanded
+		String optionLocator = null; // If set, this will be clicked
+		AbsPage page = null; // If set, this page will be returned
+
+		// Based on the button specified, take the appropriate action(s)
+		if (pulldown == Button.B_USER_NAME) {
+			pulldownLocator = Locators.zUserNamePullDown.locator;
+
+			if (option == Button.O_SIGN_OUT) {
+				optionLocator = Locators.zSignOutButton.locator;
+
+				// sGetCssCount("css=div[class*=my-files-list-view]>div.my-files-list-item");
+				// this.zClick(Locators.zMyFilesListView.locator +
+				// ">div.my-files-list-item:last-child");
+				// this.zClick(Locators.zMyFilesListView.locator +
+				// ">div.my-files-list-item:nth-child(1)");
+
+			} else if(option == Button.O_SETTINGS){
+				optionLocator = Locators.zSettingsButton.locator;
+				page = new DialogSettings(MyApplication, this); 
+			}
+			else {
+				logger.info("no logic defined for " + option);
+			}
+		} else {
+			logger.info("no logic defined for " + pulldown + "/" + option);
+		}
+		
+		//default behavior
+		zClick(pulldownLocator);
+
+		zWaitForBusyOverlay();
+
+		zClick(optionLocator);
+
+		return page;
 	}
 
 	@Override
@@ -244,9 +305,9 @@ public class PageOctopus extends AbsTab {
 		// If the app is busy, wait for it to become active
 		zWaitForBusyOverlay();
 
-		if(page!=null)
+		if (page != null)
 			page.zWaitForActive();
-		
+
 		return (page);
 	}
 
@@ -409,12 +470,6 @@ public class PageOctopus extends AbsTab {
 					"Getting exception while getting Node text: "
 							+ ex.getStackTrace());
 		}
-	}
-
-	@Override
-	public AbsPage zToolbarPressPulldown(Button pulldown, Button option)
-			throws HarnessException {
-		throw new HarnessException("Implement me");
 	}
 
 	@Override

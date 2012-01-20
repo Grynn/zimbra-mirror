@@ -2,6 +2,7 @@ package com.zimbra.qa.selenium.projects.octopus.tests.login;
 
 import org.testng.annotations.Test;
 
+import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.projects.octopus.core.OctopusCommonTest;
@@ -24,8 +25,8 @@ public class BasicLogout extends OctopusCommonTest {
 				"Verify Sign Out Button is present on the page");
 		
 		// Click on Sign out button
-		app.zPageOctopus.zClick(PageOctopus.Locators.zSignOutButton.locator);
-
+		app.zPageOctopus.zToolbarPressPulldown(Button.B_USER_NAME, Button.O_SIGN_OUT);
+		
 		app.zPageLogin.zWaitForActive();
 		
 		// Verify login page becomes active

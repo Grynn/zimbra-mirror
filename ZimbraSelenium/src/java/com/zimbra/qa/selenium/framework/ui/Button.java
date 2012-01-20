@@ -45,7 +45,7 @@ public class Button {
 	public static final Button B_REDIRECT = new Button("B_REDIRECT");
 	public static final Button B_MUTE = new Button("B_MUTE");
 	public static final Button B_HELP = new Button("B_HELP");
-
+	public static final Button B_USER_NAME = new Button("B_USER_NAME");
 
 	public static final Button O_NEW = new Button("O_NEW");
 	public static final Button O_NEW_MESSAGE = new Button("O_NEW_MESSAGE");
@@ -199,6 +199,8 @@ public class Button {
 	public static final Button B_COLLAPSE = new Button("B_COLLAPSE");
 	public static final Button B_HISTORY =  new Button("B_HISTORY");
 	public static final Button B_COMMENTS =  new Button("B_COMMENTS");
+	public static final Button O_SIGN_OUT = new Button("O_SIGN_OUT");
+	public static final Button O_SETTINGS = new Button("O_SETTINGS");
 	
 	public static final Button B_TAB_SHARING = new Button("B_TAB_SHARING");
 	public static final Button B_IGNORE =  new Button("B_IGNORE");

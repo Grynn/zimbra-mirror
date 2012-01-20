@@ -48,7 +48,7 @@ public class AccountSettings extends OctopusCommonTest {
 
 		// Open Settings dialog
 		DialogSettings dlg = (DialogSettings) app.zPageOctopus
-				.zToolbarPressButton(Button.B_SETTINGS);
+				.zToolbarPressPulldown(Button.B_USER_NAME, Button.O_SETTINGS);
 
 		// Verify Device name through SOAP
 		ZAssert.assertTrue(
@@ -97,7 +97,7 @@ public class AccountSettings extends OctopusCommonTest {
 		ZimbraAccount account = app.zGetActiveAccount();
 
 		DialogSettings dlg = (DialogSettings) app.zPageOctopus
-				.zToolbarPressButton(Button.B_SETTINGS);
+				.zToolbarPressPulldown(Button.B_USER_NAME, Button.O_SETTINGS);
 
 		// Verify the account user name matches
 		ZAssert.assertTrue(app.zPageOctopus
@@ -124,13 +124,13 @@ public class AccountSettings extends OctopusCommonTest {
 		account.soapSend("<GetAllDevicesRequest xmlns='urn:zimbraMail'/>");
 
 		DialogSettings dlg = (DialogSettings) app.zPageOctopus
-				.zToolbarPressButton(Button.B_SETTINGS);
+				.zToolbarPressPulldown(Button.B_USER_NAME, Button.O_SETTINGS);
 
 		// Verify Device name in the list
 		ZAssert.assertTrue(
 				app.zPageOctopus
-						.sIsElementPresent(DialogSettings.Locators.zDevicesListView.locator
-								+ ":contains(" + deviceName + ")"),
+						.zWaitForElementPresent(DialogSettings.Locators.zDevicesListView.locator
+								+ ":contains(" + deviceName + ")", "3000"),
 				" Verify Device name in the list");
 
 		dlg.zClickButton(Button.B_CLOSE);
@@ -152,13 +152,13 @@ public class AccountSettings extends OctopusCommonTest {
 		account.soapSend("<GetAllDevicesRequest xmlns='urn:zimbraMail'/>");
 
 		DialogSettings dlg = (DialogSettings) app.zPageOctopus
-				.zToolbarPressButton(Button.B_SETTINGS);
+				.zToolbarPressPulldown(Button.B_USER_NAME, Button.O_SETTINGS);
 
 		// Verify Device name in the list
 		ZAssert.assertTrue(
 				app.zPageOctopus
-						.sIsElementPresent(DialogSettings.Locators.zDevicesListView.locator
-								+ ":contains(" + deviceName + ")"),
+						.zWaitForElementPresent(DialogSettings.Locators.zDevicesListView.locator
+								+ ":contains(" + deviceName + ")","3000"),
 				" Verify Device name in the list");
 
 		dlg.zListItem(Action.A_LEFTCLICK, Button.B_UNLINK_AND_WIPE, deviceName);

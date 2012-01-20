@@ -18,7 +18,8 @@ public class DialogSettings extends AbsDialog {
 		public static final Locators zChangePasswordBtn = new Locators(
 				"css=div[class=settings-pane] button:contains(Change Password)");
 		public static final Locators zCloseBtn = new Locators(
-				"css=div[class*=SettingsDialogContent] span[id=settings-close-button] span:contains(x)");
+				//"css=div[class*=SettingsDialogContent] span[id=settings-close-button] span:contains(" + (char)215 + ")");
+				"css=div[class*=SettingsDialogContent] span[id=settings-close-button] span:contains(\u00D7)");
 		public static final Locators zDoneBtn = new Locators(
 				"css=div[class*=SettingsDialogContent] div[class=settings-footer-buttons] button:contains(Done)");
 		public static final Locators zDevicesListView = new Locators(
@@ -68,7 +69,7 @@ public class DialogSettings extends AbsDialog {
 		// Default behavior, click the locator
 		// Make sure the locator exists
 		if (!this.sIsElementPresent(locator))
-			throw new HarnessException("locator is not present: " + locator
+		throw new HarnessException("locator is not present: " + locator
 					+ " button=" + button);
 
 		this.zClick(locator);
