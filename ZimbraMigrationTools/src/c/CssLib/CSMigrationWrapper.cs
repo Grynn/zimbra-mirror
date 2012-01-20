@@ -482,187 +482,180 @@ public class CSMigrationwrapper
 
     public void StartMigration(MigrationAccount Acct, MigrationOptions importopts, bool
         isServer = true, bool isVerbose = false, bool isPreview = false)
-    {
-
-       
+    {       
         dynamic[] folderobjectarray;
         dynamic userobject;
-        userobject = new Exchange.UserObject(); 
-        
-        if (!isPreview)
+        userobject = new Exchange.UserObject();       
+        string value = "";
+        string accountName = "";
+
+        int idx = Acct.AccountName.IndexOf("@");
+        if (idx != -1)
         {
-            /*ParameterModifier pm = new ParameterModifier(1);
+            accountName = Acct.AccountName.Substring(0, idx);
+        }
+        else
+        {
+            Acct.LastProblemInfo = new ProblemInfo(Acct.AccountName, "Illegal account name", ProblemInfo.TYPE_ERR);
+            Acct.TotalErrors++;
+            return;
+        }
 
-            pm[0] = true;
-            ParameterModifier[] mods = { pm };*/
-
-            string value = "";
-            string accountName = "";
-            int idx = Acct.AccountName.IndexOf("@");
-            if (idx != -1)
+        Log.Level level = isVerbose ? Log.Level.Debug : Log.Level.Info;
+        Log.init(Path.GetTempPath() + "migration.log", level);  // might have gotten a new level from options
+        InitLogFile(accountName, level);
+        try
+        {
+            if (isServer)
             {
-                accountName = Acct.AccountName.Substring(0, idx);
+                value = userobject.InitializeUser("", "", Acct.AccountID, accountName);
             }
             else
             {
-                Acct.LastProblemInfo = new ProblemInfo(Acct.AccountName, "Illegal account name", ProblemInfo.TYPE_ERR);
-                Acct.TotalErrors++;
-                return;
+                value = useruserobject.UMInitializeUser(Acct.AccountID, accountName);
             }
+        }
+        catch (Exception e)
+        {
+            string s = string.Format("Initialization Exception.  {0}", e.Message);
+            Acct.LastProblemInfo = new ProblemInfo(accountName, s, ProblemInfo.TYPE_ERR);
+            Acct.TotalErrors++;
+            return;
+        }
 
-            Log.Level level = isVerbose ? Log.Level.Debug : Log.Level.Info;
-            Log.init(Path.GetTempPath() + "migration.log", level);  // might have gotten a new level from options
-            InitLogFile(accountName, level);
-            try
+        if (value.Length > 0)
+        {
+            Log.err("Unable to initialize", accountName, value);
+            Acct.LastProblemInfo = new ProblemInfo(accountName, value, ProblemInfo.TYPE_ERR);
+            Acct.TotalErrors++;
+            return;
+        }
+        else
+        {
+            Log.info(accountName, "initialized");
+        }
+
+        folderobjectarray = (isServer) ? userobject.GetFolderObjects() : useruserobject.GetFolderObjects();
+        Acct.migrationFolder.CurrentCountOfItems = folderobjectarray.Count();
+
+        Acct.TotalItems = ComputeTotalMigrationCount(importopts, folderobjectarray);
+
+        Log.debug("Acct.TotalItems:", Acct.TotalItems.ToString());
+
+        ZimbraAPI api = new ZimbraAPI();
+
+        // see if we're migrating a .pst file. If we are, we need to know that so we can mess with folder names in ZimbraAPI
+        string u = Acct.AccountID.ToUpper();
+        /////
+
+        // set up check for skipping folders
+        List<string> skipList = new List<string>();
+
+        string skipfolders = importopts.SkipFolders;
+
+        if (skipfolders != null)
+        {
+            if (skipfolders.Length > 0)
             {
-                if (isServer)
+                string[] tokens = skipfolders.Split(',');
+                for (int i = 0; i < tokens.Length; i++)
                 {
-                    value = userobject.InitializeUser("", "", Acct.AccountID, accountName);
-                }
-                else
-                {
-                    value = useruserobject.UMInitializeUser(Acct.AccountID, accountName);
-                }
-            }
-            catch (Exception e)
-            {
-                string s = string.Format("Initialization Exception.  {0}", e.Message);
-                Acct.LastProblemInfo = new ProblemInfo(accountName, s, ProblemInfo.TYPE_ERR);
-                Acct.TotalErrors++;
-                return;
-            }
+                    string token = tokens.GetValue(i).ToString();
 
-            if (value.Length > 0)
-            {
-                Log.err("Unable to initialize", accountName, value);
-                Acct.LastProblemInfo = new ProblemInfo(accountName, value, ProblemInfo.TYPE_ERR);
-                Acct.TotalErrors++;
-                return;
-            }
-            else
-            {
-                Log.info(accountName, "initialized");
-            }
-
-            folderobjectarray = (isServer) ? userobject.GetFolderObjects() : useruserobject.GetFolderObjects();
-            Acct.migrationFolder.CurrentCountOfItems = folderobjectarray.Count();
-
-            Acct.TotalItems = ComputeTotalMigrationCount(importopts, folderobjectarray);
-
-            Log.debug("Acct.TotalItems:", Acct.TotalItems.ToString());
-
-            ZimbraAPI api = new ZimbraAPI();
-
-            // see if we're migrating a .pst file. If we are, we need to know that so we can mess with folder names in ZimbraAPI
-            string u = Acct.AccountID.ToUpper();
-            /////
-
-            // set up check for skipping folders
-            List<string> skipList = new List<string>();
-
-            string skipfolders = importopts.SkipFolders;
-
-            if (skipfolders != null)
-            {
-                if (skipfolders.Length > 0)
-                {
-                    string[] tokens = skipfolders.Split(',');
-                    for (int i = 0; i < tokens.Length; i++)
-                    {
-                        string token = tokens.GetValue(i).ToString();
-
-                        skipList.Add(token.Trim());
-                    }
+                    skipList.Add(token.Trim());
                 }
             }
-            // /
-            foreach (dynamic folderobject in folderobjectarray)
+        }
+        // /
+        foreach (dynamic folderobject in folderobjectarray)
+        {
+            string path = "";
+
+            // FBS NOTE THAT THESE ARE EXCHANGE SPECIFIC.  WE'LL HAVE TO CHANGE THIS FOR GROUPWISE !!!
+            if ((folderobject.Id == (int)ZimbraFolders.Sent) && !(importopts.ItemsAndFolders.HasFlag(
+                ItemsAndFoldersOptions.Sent)))
             {
-                string path = "";
+                Log.debug("Skipping folder", folderobject.Name);
+                continue;
+            }
+            if ((folderobject.Id == (int)ZimbraFolders.Trash) &&
+                !(importopts.ItemsAndFolders.HasFlag(
+                ItemsAndFoldersOptions.DeletedItems)))
+            {
+                Log.debug("Skipping folder", folderobject.Name);
+                continue;
+            }
+            if ((folderobject.Id == (int)ZimbraFolders.Junk) &&
+                !(importopts.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Junk)))
+            {
+                Log.debug("Skipping folder", folderobject.Name);
+                continue;
+            }
+            if ((folderobject.ContainerClass == "IPF.Contact") &&
+                !(importopts.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Contacts)))
+            {
+                Log.debug("Skipping folder", folderobject.Name);
+                continue;
+            }
+            if ((folderobject.ContainerClass == "IPF.Appointment") &&
+                !(importopts.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Calendar)))
+            {
+                continue;
+            }
+            if ((folderobject.ContainerClass == "IPF.Task") &&
+                !(importopts.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Tasks)))
+            {
+                continue;
+            }
+            if ((folderobject.ContainerClass == "IPF.Note") &&
+                !(importopts.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Mail)))
+            {
+                Log.debug("Skipping folder", folderobject.Name);
+                continue;
+            }
+                // //
+            if (folderobject.ItemCount == 0)
+            {
+                Log.debug("Skipping empty folder", folderobject.Name);
+                continue;
+            }
+                // check if we want to skip any folders
 
-                // FBS NOTE THAT THESE ARE EXCHANGE SPECIFIC.  WE'LL HAVE TO CHANGE THIS FOR GROUPWISE !!!
-                if ((folderobject.Id == (int)ZimbraFolders.Sent) && !(importopts.ItemsAndFolders.HasFlag(
-                    ItemsAndFoldersOptions.Sent)))
-                {
-                    Log.debug("Skipping folder", folderobject.Name);
-                    continue;
-                }
-                if ((folderobject.Id == (int)ZimbraFolders.Trash) &&
-                    !(importopts.ItemsAndFolders.HasFlag(
-                    ItemsAndFoldersOptions.DeletedItems)))
-                {
-                    Log.debug("Skipping folder", folderobject.Name);
-                    continue;
-                }
-                if ((folderobject.Id == (int)ZimbraFolders.Junk) &&
-                    !(importopts.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Junk)))
-                {
-                    Log.debug("Skipping folder", folderobject.Name);
-                    continue;
-                }
-                if ((folderobject.ContainerClass == "IPF.Contact") &&
-                    !(importopts.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Contacts)))
-                {
-                    Log.debug("Skipping folder", folderobject.Name);
-                    continue;
-                }
-                if ((folderobject.ContainerClass == "IPF.Appointment") &&
-                    !(importopts.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Calendar)))
-                {
-                    continue;
-                }
-                if ((folderobject.ContainerClass == "IPF.Task") &&
-                    !(importopts.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Tasks)))
-                {
-                    continue;
-                }
-                if ((folderobject.ContainerClass == "IPF.Note") &&
-                    !(importopts.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Mail)))
-                {
-                    Log.debug("Skipping folder", folderobject.Name);
-                    continue;
-                }
-                 // //
-                if (folderobject.ItemCount == 0)
-                {
-                    Log.debug("Skipping empty folder", folderobject.Name);
-                    continue;
-                }
-                 // check if we want to skip any folders
+            bool bSkipIt = false;
 
-                bool bSkipIt = false;
+            for (int i = 0; i < skipList.Count; i++)
+            {
+                if (folderobject.Name == skipList[i])
+                {
+                    bSkipIt = true;
+                    break;
+                }
+            }
+            if (bSkipIt)
+            {
+                Log.debug("Skipping folder", folderobject.Name, "via filter option");
+                continue;
+            }
+            if (folderobject.Id == 0)
+            {
+                api.AccountName = Acct.AccountName;
 
-                for (int i = 0; i < skipList.Count; i++)
-                {
-                    if (folderobject.Name == skipList[i])
-                    {
-                        bSkipIt = true;
-                        break;
-                    }
-                }
-                if (bSkipIt)
-                {
-                    Log.debug("Skipping folder", folderobject.Name, "via filter option");
-                    continue;
-                }
-                if (folderobject.Id == 0)
-                {
-                    api.AccountName = Acct.AccountName;
+                string ViewType = GetFolderViewType(folderobject.ContainerClass);
+                int stat = api.CreateFolder(folderobject.FolderPath, ViewType);
 
-                    string ViewType = GetFolderViewType(folderobject.ContainerClass);
-                    int stat = api.CreateFolder(folderobject.FolderPath, ViewType);
-
-                    path = folderobject.FolderPath;
-                }
-                // Set FolderName at the end, since we trigger results on that, so we need all the values set
-                Acct.migrationFolder.TotalCountOfItems = folderobject.ItemCount; // itemobjectarray.Count();
-                Acct.migrationFolder.CurrentCountOfItems = 0;
-                Acct.migrationFolder.FolderView = folderobject.ContainerClass;
-                Acct.migrationFolder.FolderName = folderobject.Name;
-                if (folderobject.Id == (int)ZimbraFolders.Trash)
-                {
-                    path = "/MAPIRoot/Deleted Items";   // FBS EXCHANGE SPECIFIC HACK !!!
-                }
+                path = folderobject.FolderPath;
+            }
+            // Set FolderName at the end, since we trigger results on that, so we need all the values set
+            Acct.migrationFolder.TotalCountOfItems = folderobject.ItemCount; // itemobjectarray.Count();
+            Acct.migrationFolder.CurrentCountOfItems = 0;
+            Acct.migrationFolder.FolderView = folderobject.ContainerClass;
+            Acct.migrationFolder.FolderName = folderobject.Name;
+            if (folderobject.Id == (int)ZimbraFolders.Trash)
+            {
+                path = "/MAPIRoot/Deleted Items";   // FBS EXCHANGE SPECIFIC HACK !!!
+            }
+            if (!isPreview)
+            {
                 if (isServer)
                 {
                     ProcessItems(Acct, isServer, userobject, folderobject, api, path, importopts);
@@ -673,174 +666,6 @@ public class CSMigrationwrapper
                 }
             }
         }
-        else
-        {
-            Acct.TotalContacts = 100;
-            Acct.TotalMails = 1000;
-            Acct.TotalRules = 10;
-            Acct.TotalItems = 1110;
-
-            // Acct.TotalErrors = 0;   don't set these -- adds 1 when it shouldn't
-            // Acct.TotalWarnings = 0;
-            long count = 0;
-            long totalCount = 0;
-
-            switch (Acct.AccountNum)
-            {
-            case 0:
-                totalCount = 100;
-                break;
-            case 1:
-                totalCount = 200;
-                break;
-            case 2:
-                totalCount = 300;
-                break;
-            case 3:
-                totalCount = 400;
-                break;
-            default:
-                totalCount = 100;
-                break;
-            }
-            Acct.migrationFolder.FolderName = "Contacts";
-            Acct.migrationFolder.TotalCountOfItems = totalCount;
-            Acct.migrationFolder.CurrentCountOfItems = 0;
-            while (count < totalCount)
-            {
-                System.Threading.Thread.Sleep(2000);
-                Acct.migrationFolder.CurrentCountOfItems =
-                    Acct.migrationFolder.CurrentCountOfItems + 20;
-                if (Acct.AccountNum == 0)
-                {
-                    if (count == 60)
-                    {
-                        Acct.LastProblemInfo = new ProblemInfo("John Doe", "Invalid character",
-                            ProblemInfo.TYPE_ERR);
-                        Acct.TotalErrors++;
-                    }
-                }
-                count = count + 20;
-            }
-            Acct.migrationFolder.LastFolderInfo = new FolderInfo("Contacts", "Contact",
-                string.Format("{0} of {1}", totalCount.ToString(), totalCount.ToString()));
-            switch (Acct.AccountNum)
-            {
-            case 0:
-                totalCount = 700;
-                break;
-            case 1:
-                totalCount = 800;
-                break;
-            case 2:
-                totalCount = 900;
-                break;
-            case 3:
-                totalCount = 1000;
-                break;
-            default:
-                totalCount = 1100;
-                break;
-            }
-            Acct.migrationFolder.FolderName = "Inbox";
-            Acct.migrationFolder.TotalCountOfItems = totalCount;
-            Acct.migrationFolder.CurrentCountOfItems = 0;
-            while ((count >= 100) & (count < totalCount))
-            {
-                if (Acct.AccountNum == 0)
-                {
-                    if (count == 200)
-                    {
-                        Acct.LastProblemInfo = new ProblemInfo("Message4", "Invalid UID",
-                            ProblemInfo.TYPE_ERR);
-                        Acct.TotalErrors++;
-                    }
-                    if (count == 400)
-                    {
-                        Acct.LastProblemInfo = new ProblemInfo("TestMessage",
-                            "Invalid Attachment", ProblemInfo.TYPE_ERR);
-                        Acct.TotalErrors++;
-                    }
-                    if (count == 500)
-                    {
-                        Acct.LastProblemInfo = new ProblemInfo("AnotherTest",
-                            "Address has an unsupported format", ProblemInfo.TYPE_ERR);
-                        Acct.TotalErrors++;
-                    }
-                }
-                if (Acct.AccountNum == 1)
-                {
-                    if (count == 300)
-                    {
-                        Acct.LastProblemInfo = new ProblemInfo("Status Report",
-                            "Illegal recipient", ProblemInfo.TYPE_ERR);
-                        Acct.TotalErrors++;
-                    }
-                    if (count == 400)
-                    {
-                        Acct.LastProblemInfo = new ProblemInfo("Company picnic",
-                            "Unsupported encoding", ProblemInfo.TYPE_WARN);
-                        Acct.TotalWarnings++;
-                    }
-                    if (count == 600)
-                    {
-                        Acct.LastProblemInfo = new ProblemInfo("Last call", "Duplicate UID",
-                            ProblemInfo.TYPE_WARN);
-                        Acct.TotalWarnings++;
-                    }
-                }
-                System.Threading.Thread.Sleep(2000);
-                Acct.migrationFolder.CurrentCountOfItems =
-                    Acct.migrationFolder.CurrentCountOfItems + 100;
-                count = count + 100;
-            }
-            Acct.migrationFolder.LastFolderInfo = new FolderInfo("Inbox", "Message",
-                string.Format("{0} of {1}", totalCount.ToString(), totalCount.ToString()));
-            switch (Acct.AccountNum)
-            {
-            case 0:
-                totalCount = 11;
-                break;
-            case 1:
-                totalCount = 12;
-                break;
-            case 2:
-                totalCount = 13;
-                break;
-            case 3:
-                totalCount = 14;
-                break;
-            default:
-                totalCount = 10;
-                break;
-            }
-            Acct.migrationFolder.FolderName = "Rules";
-            Acct.migrationFolder.TotalCountOfItems = totalCount;
-            Acct.migrationFolder.CurrentCountOfItems = 0;
-
-            long tempCount = count;
-
-            while ((count >= tempCount) & (count <= (tempCount + 10)))
-            {
-                System.Threading.Thread.Sleep(2000);
-                Acct.migrationFolder.CurrentCountOfItems =
-                    Acct.migrationFolder.CurrentCountOfItems + 10;
-                if (Acct.AccountNum == 0)
-                {
-                    if (count == 710)
-                    {
-                        Acct.LastProblemInfo = new ProblemInfo("BugzillaRule",
-                            "Unsupported condition", ProblemInfo.TYPE_ERR);
-                        Acct.TotalErrors++;
-                    }
-                }
-                count = count + 10;
-            }
-            Acct.migrationFolder.LastFolderInfo = new FolderInfo("Inbox", "Rule", string.Format(
-                "{0} of {1}", totalCount.ToString(), totalCount.ToString()));
-        }
-    }
-
-    
+    }    
 }
 }

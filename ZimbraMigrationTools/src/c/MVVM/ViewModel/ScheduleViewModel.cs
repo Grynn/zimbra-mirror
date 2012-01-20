@@ -559,15 +559,39 @@ public class ScheduleViewModel: BaseViewModel
 
         // special case to format last user progress message
         int count = accountResultsViewModel.AccountResultsList[num].UserResultsList.Count;
-        string lastmsg = accountResultsViewModel.AccountResultsList[num].UserResultsList[count - 1].UserProgressMsg;
-        int len = lastmsg.Length;
-        int idxof = lastmsg.IndexOf("of");
-        accountResultsViewModel.AccountResultsList[num].UserResultsList[count - 1].UserProgressMsg = FormatTheLastMsg(accountResultsViewModel.AccountResultsList[num].AcctProgressMsg);
-        accountResultsViewModel.AccountResultsList[num].PBValue = 100;  // to make sure
+        if (!m_isPreview)
+        {
+            string lastmsg = accountResultsViewModel.AccountResultsList[num].UserResultsList[count - 1].UserProgressMsg;
+            int len = lastmsg.Length;
+            accountResultsViewModel.AccountResultsList[num].UserResultsList[count - 1].UserProgressMsg = FormatTheLastMsg(accountResultsViewModel.AccountResultsList[num].AcctProgressMsg);
+            accountResultsViewModel.AccountResultsList[num].PBValue = 100;  // to make sure
+        }
+        else
+        {   // For preview, take the "foldername (n items)" message we constructed, extract the n, and make "Total n"
+            string msg = "";
+            string lastmsg = accountResultsViewModel.AccountResultsList[num].PBMsgValue;
+            int idxParen = lastmsg.IndexOf("(");
+            int idxItems = lastmsg.IndexOf("items");
+            if ((idxParen != -1) && (idxItems != -1))
+            {
+                int numLen = idxItems - idxParen - 2;   // for the paren and the space
+                string numStr = lastmsg.Substring(idxParen + 1, numLen);
+                msg = "Total: " + numStr;
+                accountResultsViewModel.AccountResultsList[num].UserResultsList[count - 1].UserProgressMsg = (msg.Length > 0) ? msg : "";
+            }
+        }
         /////
 
-        accountResultsViewModel.AccountResultsList[num].PBMsgValue = "Migration complete";
-        accountResultsViewModel.AccountResultsList[num].AcctProgressMsg = "Complete";
+        if (!m_isPreview)
+        {
+            accountResultsViewModel.AccountResultsList[num].PBMsgValue = "Migration complete";
+            accountResultsViewModel.AccountResultsList[num].AcctProgressMsg = "Complete";
+        }
+        else
+        {
+            string msg = "Total items: {0}";
+            accountResultsViewModel.AccountResultsList[num].PBMsgValue = String.Format(msg, accountResultsViewModel.AccountResultsList[num].TotalItemsToMigrate);
+        }
     }
 
     private void worker_ProgressChanged(object sender,
@@ -595,7 +619,10 @@ public class ScheduleViewModel: BaseViewModel
         }
         else
         {
-            accountResultsViewModel.PBMsgValue = "Migration complete";
+            if (!m_isPreview)
+            {
+                accountResultsViewModel.PBMsgValue = "Migration complete";
+            }
             EnableMigrate = false;
             accountResultsViewModel.EnableStop = false;
             SchedList.Clear();
@@ -663,24 +690,9 @@ public class ScheduleViewModel: BaseViewModel
                     ar.UserResultsList[count - 1].UserProgressMsg = msgF;
                     accountResultsViewModel.PBValue = accountResultsViewModel.AccountResultsList[f.AccountNum].PBValue;
                     accountResultsViewModel.UserPBMsgValue = accountResultsViewModel.AccountResultsList[f.AccountNum].PBMsgValue;
-
-                    // TEMPORARY !!! WHEN I GET RID OF FAKE PREVIEW, TAKE THIS OUT AND REPLACE WITH ar.CurrentItemNum++
-                    if (m_isPreview)
-                        ar.CurrentItemNum += Int32.Parse(e.NewValue.ToString()) - Int32.Parse(
-                            e.OldValue.ToString());
-
-                    else
-                        ar.CurrentItemNum++;
-                         // ///////////////
-                    // ANOTHER TEMPORARY RIDICULOUS HACK FOR PREVIEW.  TAKE THIS OUT AND REPLACE WITH ar.PBValue = (int)Math.Round, etc.
-                    if ((m_isPreview) && (f.FolderName == "Rules") && (ar.PBValue == 64))
-                        ar.PBValue = 100;
-
-                    else
-                        ar.PBValue = (int)Math.Round(((Decimal)ar.CurrentItemNum /
-                            (Decimal)ar.TotalItemsToMigrate) * 100);
-                         // /////////////////////
-
+                    ar.CurrentItemNum++;
+                    ar.PBValue = (int)Math.Round(((Decimal)ar.CurrentItemNum /
+                        (Decimal)ar.TotalItemsToMigrate) * 100);
                     bgwlist[f.AccountNum].ReportProgress(ar.PBValue, f.AccountNum);
                 }
             }
@@ -689,10 +701,19 @@ public class ScheduleViewModel: BaseViewModel
         {
             if (f.FolderName != null)
             {
-                string msg2 = "{0} of {1}";
-                string msgF = String.Format(msg2, f.CurrentCountOfItems, f.TotalCountOfItems);
-                ar.AcctProgressMsg = msgF;
-
+                string msg2 = "";
+                string msgF = "";
+                if (!m_isPreview)
+                {
+                    msg2 = "{0} of {1}";
+                    msgF = String.Format(msg2, f.CurrentCountOfItems, f.TotalCountOfItems);
+                    ar.AcctProgressMsg = msgF;
+                }
+                else
+                {
+                    msg2 = "Total: {0}";
+                    msgF = String.Format(msg2, f.TotalCountOfItems);
+                }
                 int count = ar.UserResultsList.Count;
                 ar.UserResultsList[count - 1].UserProgressMsg = msgF;
                 accountResultsViewModel.PBValue = accountResultsViewModel.AccountResultsList[f.AccountNum].PBValue;
@@ -705,10 +726,21 @@ public class ScheduleViewModel: BaseViewModel
             {
                 string folderName = e.NewValue.ToString();
                 string folderType = GetFolderTypeForUserResults(f.FolderView);
-                string msg3 = "Migrating {0}";
+                string msg3 = "";
+                if (!m_isPreview)
+                {
+                    msg3 = "Migrating {0}";
+                    ar.PBMsgValue = String.Format(msg3, folderName);
+                    accountResultsViewModel.PBMsgValue = String.Format(msg3, folderName);   // for the user results window
+                }
+                else
+                {
+                    msg3 = "{0} ({1} items)";
+                    ar.PBMsgValue = String.Format(msg3, folderName, f.TotalCountOfItems);
+                    accountResultsViewModel.PBMsgValue = String.Format(msg3, folderName, f.TotalCountOfItems);   // for the user results window
+                    System.Threading.Thread.Sleep(1000);    // to see the message
+                }
 
-                ar.PBMsgValue = String.Format(msg3, folderName);
-                accountResultsViewModel.PBMsgValue = String.Format(msg3, folderName);   // for the user results window
                 f.LastFolderInfo = new FolderInfo(e.NewValue.ToString(), folderType,
                     string.Format("{0} of {1}", f.CurrentCountOfItems,
                     f.TotalCountOfItems));
