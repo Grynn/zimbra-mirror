@@ -20,6 +20,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;/sequence>
  *       &lt;attribute name="ownerOf" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *       &lt;attribute name="memberOf" type="{urn:zimbraAccount}memberOfSelector" />
+ *       &lt;attribute name="attrs" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -35,6 +36,8 @@ public class testGetAccountDistributionListsRequest {
     protected Boolean ownerOf;
     @XmlAttribute(name = "memberOf")
     protected testMemberOfSelector memberOf;
+    @XmlAttribute(name = "attrs")
+    protected String attrs;
 
     /**
      * Gets the value of the ownerOf property.
@@ -82,6 +85,30 @@ public class testGetAccountDistributionListsRequest {
      */
     public void setMemberOf(testMemberOfSelector value) {
         this.memberOf = value;
+    }
+
+    /**
+     * Gets the value of the attrs property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getAttrs() {
+        return attrs;
+    }
+
+    /**
+     * Sets the value of the attrs property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setAttrs(String value) {
+        this.attrs = value;
     }
 
 }

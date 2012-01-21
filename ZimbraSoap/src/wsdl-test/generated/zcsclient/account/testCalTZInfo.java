@@ -22,8 +22,8 @@ import generated.zcsclient.zm.testTzOnsetInfo;
  *         &lt;element name="daylight" type="{urn:zimbra}tzOnsetInfo" minOccurs="0"/>
  *       &lt;/all>
  *       &lt;attribute name="id" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="stdoff" use="required" type="{http://www.w3.org/2001/XMLSchema}int" />
- *       &lt;attribute name="dayoff" use="required" type="{http://www.w3.org/2001/XMLSchema}int" />
+ *       &lt;attribute name="stdoff" type="{http://www.w3.org/2001/XMLSchema}int" />
+ *       &lt;attribute name="dayoff" type="{http://www.w3.org/2001/XMLSchema}int" />
  *       &lt;attribute name="stdname" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="dayname" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
@@ -43,10 +43,10 @@ public class testCalTZInfo {
     protected testTzOnsetInfo daylight;
     @XmlAttribute(name = "id", required = true)
     protected String id;
-    @XmlAttribute(name = "stdoff", required = true)
-    protected int stdoff;
-    @XmlAttribute(name = "dayoff", required = true)
-    protected int dayoff;
+    @XmlAttribute(name = "stdoff")
+    protected Integer stdoff;
+    @XmlAttribute(name = "dayoff")
+    protected Integer dayoff;
     @XmlAttribute(name = "stdname")
     protected String stdname;
     @XmlAttribute(name = "dayname")
@@ -127,32 +127,48 @@ public class testCalTZInfo {
     /**
      * Gets the value of the stdoff property.
      * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
      */
-    public int getStdoff() {
+    public Integer getStdoff() {
         return stdoff;
     }
 
     /**
      * Sets the value of the stdoff property.
      * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
      */
-    public void setStdoff(int value) {
+    public void setStdoff(Integer value) {
         this.stdoff = value;
     }
 
     /**
      * Gets the value of the dayoff property.
      * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
      */
-    public int getDayoff() {
+    public Integer getDayoff() {
         return dayoff;
     }
 
     /**
      * Sets the value of the dayoff property.
      * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
      */
-    public void setDayoff(int value) {
+    public void setDayoff(Integer value) {
         this.dayoff = value;
     }
 

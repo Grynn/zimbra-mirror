@@ -7,34 +7,34 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for memberOfSelector.
+ * <p>Java class for checkLicenseStatus.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
- * &lt;simpleType name="memberOfSelector">
+ * &lt;simpleType name="checkLicenseStatus">
  *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
- *     &lt;enumeration value="all"/>
- *     &lt;enumeration value="directOnly"/>
- *     &lt;enumeration value="none"/>
+ *     &lt;enumeration value="ok"/>
+ *     &lt;enumeration value="no"/>
+ *     &lt;enumeration value="inGracePeriod"/>
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
  * 
  */
-@XmlType(name = "memberOfSelector")
+@XmlType(name = "checkLicenseStatus")
 @XmlEnum
-public enum testMemberOfSelector {
+public enum testCheckLicenseStatus {
 
-    @XmlEnumValue("all")
-    ALL("all"),
-    @XmlEnumValue("directOnly")
-    DIRECT_ONLY("directOnly"),
-    @XmlEnumValue("none")
-    NONE("none");
+    @XmlEnumValue("ok")
+    OK("ok"),
+    @XmlEnumValue("no")
+    NO("no"),
+    @XmlEnumValue("inGracePeriod")
+    IN_GRACE_PERIOD("inGracePeriod");
     private final String value;
 
-    testMemberOfSelector(String v) {
+    testCheckLicenseStatus(String v) {
         value = v;
     }
 
@@ -42,8 +42,8 @@ public enum testMemberOfSelector {
         return value;
     }
 
-    public static testMemberOfSelector fromValue(String v) {
-        for (testMemberOfSelector c: testMemberOfSelector.values()) {
+    public static testCheckLicenseStatus fromValue(String v) {
+        for (testCheckLicenseStatus c: testCheckLicenseStatus.values()) {
             if (c.value.equals(v)) {
                 return c;
             }

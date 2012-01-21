@@ -43,6 +43,8 @@ import generated.zcsclient.zm.testContactAttr;
  *       &lt;attribute name="dlist" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="ref" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="tooManyMembers" type="{http://www.w3.org/2001/XMLSchema}boolean" />
+ *       &lt;attribute name="isOwner" type="{http://www.w3.org/2001/XMLSchema}boolean" />
+ *       &lt;attribute name="isMember" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -99,6 +101,10 @@ public class testContactInfo {
     protected String ref;
     @XmlAttribute(name = "tooManyMembers")
     protected Boolean tooManyMembers;
+    @XmlAttribute(name = "isOwner")
+    protected Boolean isOwner;
+    @XmlAttribute(name = "isMember")
+    protected Boolean isMember;
 
     /**
      * Gets the value of the meta property.
@@ -641,6 +647,54 @@ public class testContactInfo {
      */
     public void setTooManyMembers(Boolean value) {
         this.tooManyMembers = value;
+    }
+
+    /**
+     * Gets the value of the isOwner property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isIsOwner() {
+        return isOwner;
+    }
+
+    /**
+     * Sets the value of the isOwner property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setIsOwner(Boolean value) {
+        this.isOwner = value;
+    }
+
+    /**
+     * Gets the value of the isMember property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isIsMember() {
+        return isMember;
+    }
+
+    /**
+     * Sets the value of the isMember property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setIsMember(Boolean value) {
+        this.isMember = value;
     }
 
 }

@@ -7,6 +7,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
+import generated.zcsclient.zm.testTargetType;
 
 
 /**
@@ -21,7 +22,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;sequence>
  *         &lt;element name="email" type="{urn:zimbraAccount}discoverRightsEmail" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
- *       &lt;attribute name="type" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="type" use="required" type="{urn:zimbra}targetType" />
  *       &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="name" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="d" type="{http://www.w3.org/2001/XMLSchema}string" />
@@ -40,7 +41,7 @@ public class testDiscoverRightsTarget {
 
     protected List<testDiscoverRightsEmail> email;
     @XmlAttribute(name = "type", required = true)
-    protected String type;
+    protected testTargetType type;
     @XmlAttribute(name = "id")
     protected String id;
     @XmlAttribute(name = "name")
@@ -82,10 +83,10 @@ public class testDiscoverRightsTarget {
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link testTargetType }
      *     
      */
-    public String getType() {
+    public testTargetType getType() {
         return type;
     }
 
@@ -94,10 +95,10 @@ public class testDiscoverRightsTarget {
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link testTargetType }
      *     
      */
-    public void setType(String value) {
+    public void setType(testTargetType value) {
         this.type = value;
     }
 

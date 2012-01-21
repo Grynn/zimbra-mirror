@@ -18,7 +18,7 @@ import generated.zcsclient.zm.testStoreLookupOpt;
  * <pre>
  * &lt;complexType name="smimePublicCertsStoreSpec">
  *   &lt;simpleContent>
- *     &lt;extension base="&lt;urn:zimbra>sourceLookupOpt">
+ *     &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema>string">
  *       &lt;attribute name="storeLookupOpt" type="{urn:zimbra}storeLookupOpt" />
  *       &lt;attribute name="sourceLookupOpt" type="{urn:zimbra}sourceLookupOpt" />
  *     &lt;/extension>
@@ -35,7 +35,7 @@ import generated.zcsclient.zm.testStoreLookupOpt;
 public class testSmimePublicCertsStoreSpec {
 
     @XmlValue
-    protected testSourceLookupOpt value;
+    protected String value;
     @XmlAttribute(name = "storeLookupOpt")
     protected testStoreLookupOpt storeLookupOpt;
     @XmlAttribute(name = "sourceLookupOpt")
@@ -46,10 +46,10 @@ public class testSmimePublicCertsStoreSpec {
      * 
      * @return
      *     possible object is
-     *     {@link testSourceLookupOpt }
+     *     {@link String }
      *     
      */
-    public testSourceLookupOpt getValue() {
+    public String getValue() {
         return value;
     }
 
@@ -58,10 +58,10 @@ public class testSmimePublicCertsStoreSpec {
      * 
      * @param value
      *     allowed object is
-     *     {@link testSourceLookupOpt }
+     *     {@link String }
      *     
      */
-    public void setValue(testSourceLookupOpt value) {
+    public void setValue(String value) {
         this.value = value;
     }
 

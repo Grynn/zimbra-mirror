@@ -53,9 +53,9 @@ public class testAdminZimletDesc {
 
     @XmlElementRefs({
         @XmlElementRef(name = "include", namespace = "urn:zimbraAdmin", type = JAXBElement.class),
-        @XmlElementRef(name = "serverExtension", namespace = "urn:zimbraAdmin", type = JAXBElement.class),
+        @XmlElementRef(name = "includeCSS", namespace = "urn:zimbraAdmin", type = JAXBElement.class),
         @XmlElementRef(name = "target", namespace = "urn:zimbraAdmin", type = JAXBElement.class),
-        @XmlElementRef(name = "includeCSS", namespace = "urn:zimbraAdmin", type = JAXBElement.class)
+        @XmlElementRef(name = "serverExtension", namespace = "urn:zimbraAdmin", type = JAXBElement.class)
     })
     @XmlAnyElement
     protected List<Object> serverExtensionOrIncludeOrIncludeCSS;
@@ -90,10 +90,10 @@ public class testAdminZimletDesc {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
+     * {@link Element }
+     * {@link JAXBElement }{@code <}{@link String }{@code >}
      * {@link JAXBElement }{@code <}{@link String }{@code >}
      * {@link JAXBElement }{@code <}{@link testZimletServerExtension }{@code >}
-     * {@link JAXBElement }{@code <}{@link String }{@code >}
-     * {@link Element }
      * {@link JAXBElement }{@code <}{@link String }{@code >}
      * 
      * 

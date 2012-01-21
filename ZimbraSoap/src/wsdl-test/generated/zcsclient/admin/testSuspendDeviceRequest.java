@@ -9,12 +9,12 @@ import generated.zcsclient.zm.testAccountSelector;
 
 
 /**
- * <p>Java class for getDeviceStatusRequest complex type.
+ * <p>Java class for suspendDeviceRequest complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="getDeviceStatusRequest">
+ * &lt;complexType name="suspendDeviceRequest">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -29,11 +29,11 @@ import generated.zcsclient.zm.testAccountSelector;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "getDeviceStatusRequest", propOrder = {
+@XmlType(name = "suspendDeviceRequest", propOrder = {
     "account",
     "device"
 })
-public class testGetDeviceStatusRequest {
+public class testSuspendDeviceRequest {
 
     @XmlElement(required = true)
     protected testAccountSelector account;

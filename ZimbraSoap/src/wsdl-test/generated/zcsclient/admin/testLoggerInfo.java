@@ -5,6 +5,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
+import generated.zcsclient.zm.testLoggingLevel;
 
 
 /**
@@ -19,7 +20,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;sequence>
  *       &lt;/sequence>
  *       &lt;attribute name="category" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="level" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="level" type="{urn:zimbra}loggingLevel" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -34,7 +35,7 @@ public class testLoggerInfo {
     @XmlAttribute(name = "category", required = true)
     protected String category;
     @XmlAttribute(name = "level")
-    protected String level;
+    protected testLoggingLevel level;
 
     /**
      * Gets the value of the category property.
@@ -65,10 +66,10 @@ public class testLoggerInfo {
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link testLoggingLevel }
      *     
      */
-    public String getLevel() {
+    public testLoggingLevel getLevel() {
         return level;
     }
 
@@ -77,10 +78,10 @@ public class testLoggerInfo {
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link testLoggingLevel }
      *     
      */
-    public void setLevel(String value) {
+    public void setLevel(testLoggingLevel value) {
         this.level = value;
     }
 

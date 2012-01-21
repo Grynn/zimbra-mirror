@@ -7,7 +7,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlValue;
 import generated.zcsclient.zm.testDistributionListGranteeBy;
-import generated.zcsclient.zm.testDistributionListGranteeType;
+import generated.zcsclient.zm.testGranteeType;
 
 
 /**
@@ -19,7 +19,7 @@ import generated.zcsclient.zm.testDistributionListGranteeType;
  * &lt;complexType name="distributionListGranteeSelector">
  *   &lt;simpleContent>
  *     &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema>string">
- *       &lt;attribute name="type" use="required" type="{urn:zimbra}distributionListGranteeType" />
+ *       &lt;attribute name="type" use="required" type="{urn:zimbra}granteeType" />
  *       &lt;attribute name="by" use="required" type="{urn:zimbra}distributionListGranteeBy" />
  *     &lt;/extension>
  *   &lt;/simpleContent>
@@ -37,7 +37,7 @@ public class testDistributionListGranteeSelector {
     @XmlValue
     protected String value;
     @XmlAttribute(name = "type", required = true)
-    protected testDistributionListGranteeType type;
+    protected testGranteeType type;
     @XmlAttribute(name = "by", required = true)
     protected testDistributionListGranteeBy by;
 
@@ -70,10 +70,10 @@ public class testDistributionListGranteeSelector {
      * 
      * @return
      *     possible object is
-     *     {@link testDistributionListGranteeType }
+     *     {@link testGranteeType }
      *     
      */
-    public testDistributionListGranteeType getType() {
+    public testGranteeType getType() {
         return type;
     }
 
@@ -82,10 +82,10 @@ public class testDistributionListGranteeSelector {
      * 
      * @param value
      *     allowed object is
-     *     {@link testDistributionListGranteeType }
+     *     {@link testGranteeType }
      *     
      */
-    public void setType(testDistributionListGranteeType value) {
+    public void setType(testGranteeType value) {
         this.type = value;
     }
 

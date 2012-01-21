@@ -3,7 +3,6 @@ package generated.zcsclient.account;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -19,8 +18,6 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;sequence>
  *         &lt;element ref="{urn:zimbraAccount}dl" minOccurs="0"/>
  *       &lt;/sequence>
- *       &lt;attribute name="isMember" use="required" type="{http://www.w3.org/2001/XMLSchema}boolean" />
- *       &lt;attribute name="isOwner" use="required" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -35,10 +32,6 @@ import javax.xml.bind.annotation.XmlType;
 public class testGetDistributionListResponse {
 
     protected testDistributionListInfo dl;
-    @XmlAttribute(name = "isMember", required = true)
-    protected boolean isMember;
-    @XmlAttribute(name = "isOwner", required = true)
-    protected boolean isOwner;
 
     /**
      * Gets the value of the dl property.
@@ -62,38 +55,6 @@ public class testGetDistributionListResponse {
      */
     public void setDl(testDistributionListInfo value) {
         this.dl = value;
-    }
-
-    /**
-     * Gets the value of the isMember property.
-     * 
-     */
-    public boolean isIsMember() {
-        return isMember;
-    }
-
-    /**
-     * Sets the value of the isMember property.
-     * 
-     */
-    public void setIsMember(boolean value) {
-        this.isMember = value;
-    }
-
-    /**
-     * Gets the value of the isOwner property.
-     * 
-     */
-    public boolean isIsOwner() {
-        return isOwner;
-    }
-
-    /**
-     * Sets the value of the isOwner property.
-     * 
-     */
-    public void setIsOwner(boolean value) {
-        this.isOwner = value;
     }
 
 }

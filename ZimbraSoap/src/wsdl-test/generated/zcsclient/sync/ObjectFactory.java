@@ -45,43 +45,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link testSuspendDeviceRequest }
+     * Create an instance of {@link testGetDeviceStatusResponse }
      * 
      */
-    public testSuspendDeviceRequest createtestSuspendDeviceRequest() {
-        return new testSuspendDeviceRequest();
-    }
-
-    /**
-     * Create an instance of {@link testRemoveDeviceRequest }
-     * 
-     */
-    public testRemoveDeviceRequest createtestRemoveDeviceRequest() {
-        return new testRemoveDeviceRequest();
-    }
-
-    /**
-     * Create an instance of {@link testDeviceStatusInfo }
-     * 
-     */
-    public testDeviceStatusInfo createtestDeviceStatusInfo() {
-        return new testDeviceStatusInfo();
-    }
-
-    /**
-     * Create an instance of {@link testDeviceId }
-     * 
-     */
-    public testDeviceId createtestDeviceId() {
-        return new testDeviceId();
-    }
-
-    /**
-     * Create an instance of {@link testGetDeviceStatusRequest }
-     * 
-     */
-    public testGetDeviceStatusRequest createtestGetDeviceStatusRequest() {
-        return new testGetDeviceStatusRequest();
+    public testGetDeviceStatusResponse createtestGetDeviceStatusResponse() {
+        return new testGetDeviceStatusResponse();
     }
 
     /**
@@ -93,19 +61,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link testResumeDeviceResponse }
+     * Create an instance of {@link testResumeDeviceRequest }
      * 
      */
-    public testResumeDeviceResponse createtestResumeDeviceResponse() {
-        return new testResumeDeviceResponse();
+    public testResumeDeviceRequest createtestResumeDeviceRequest() {
+        return new testResumeDeviceRequest();
     }
 
     /**
-     * Create an instance of {@link testCancelPendingRemoteWipeResponse }
+     * Create an instance of {@link testDeviceId }
      * 
      */
-    public testCancelPendingRemoteWipeResponse createtestCancelPendingRemoteWipeResponse() {
-        return new testCancelPendingRemoteWipeResponse();
+    public testDeviceId createtestDeviceId() {
+        return new testDeviceId();
     }
 
     /**
@@ -117,19 +85,27 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link testSuspendDeviceRequest }
+     * 
+     */
+    public testSuspendDeviceRequest createtestSuspendDeviceRequest() {
+        return new testSuspendDeviceRequest();
+    }
+
+    /**
+     * Create an instance of {@link testDeviceStatusInfo }
+     * 
+     */
+    public testDeviceStatusInfo createtestDeviceStatusInfo() {
+        return new testDeviceStatusInfo();
+    }
+
+    /**
      * Create an instance of {@link testCancelPendingRemoteWipeRequest }
      * 
      */
     public testCancelPendingRemoteWipeRequest createtestCancelPendingRemoteWipeRequest() {
         return new testCancelPendingRemoteWipeRequest();
-    }
-
-    /**
-     * Create an instance of {@link testGetDeviceStatusResponse }
-     * 
-     */
-    public testGetDeviceStatusResponse createtestGetDeviceStatusResponse() {
-        return new testGetDeviceStatusResponse();
     }
 
     /**
@@ -141,11 +117,27 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link testResumeDeviceRequest }
+     * Create an instance of {@link testResumeDeviceResponse }
      * 
      */
-    public testResumeDeviceRequest createtestResumeDeviceRequest() {
-        return new testResumeDeviceRequest();
+    public testResumeDeviceResponse createtestResumeDeviceResponse() {
+        return new testResumeDeviceResponse();
+    }
+
+    /**
+     * Create an instance of {@link testGetDeviceStatusRequest }
+     * 
+     */
+    public testGetDeviceStatusRequest createtestGetDeviceStatusRequest() {
+        return new testGetDeviceStatusRequest();
+    }
+
+    /**
+     * Create an instance of {@link testRemoveDeviceRequest }
+     * 
+     */
+    public testRemoveDeviceRequest createtestRemoveDeviceRequest() {
+        return new testRemoveDeviceRequest();
     }
 
     /**
@@ -154,6 +146,14 @@ public class ObjectFactory {
      */
     public testSuspendDeviceResponse createtestSuspendDeviceResponse() {
         return new testSuspendDeviceResponse();
+    }
+
+    /**
+     * Create an instance of {@link testCancelPendingRemoteWipeResponse }
+     * 
+     */
+    public testCancelPendingRemoteWipeResponse createtestCancelPendingRemoteWipeResponse() {
+        return new testCancelPendingRemoteWipeResponse();
     }
 
     /**

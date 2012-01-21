@@ -37,19 +37,19 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link testEditDocumentResponse }
+     * 
+     */
+    public testEditDocumentResponse createtestEditDocumentResponse() {
+        return new testEditDocumentResponse();
+    }
+
+    /**
      * Create an instance of {@link testEditDocumentRequest }
      * 
      */
     public testEditDocumentRequest createtestEditDocumentRequest() {
         return new testEditDocumentRequest();
-    }
-
-    /**
-     * Create an instance of {@link testFinishEditDocumentResponse }
-     * 
-     */
-    public testFinishEditDocumentResponse createtestFinishEditDocumentResponse() {
-        return new testFinishEditDocumentResponse();
     }
 
     /**
@@ -61,11 +61,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link testEditDocumentResponse }
+     * Create an instance of {@link testFinishEditDocumentResponse }
      * 
      */
-    public testEditDocumentResponse createtestEditDocumentResponse() {
-        return new testEditDocumentResponse();
+    public testFinishEditDocumentResponse createtestFinishEditDocumentResponse() {
+        return new testFinishEditDocumentResponse();
     }
 
     /**

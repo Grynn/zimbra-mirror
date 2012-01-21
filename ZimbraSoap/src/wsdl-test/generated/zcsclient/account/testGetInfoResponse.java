@@ -130,6 +130,17 @@ import javax.xml.bind.annotation.XmlType;
  *             &lt;/complexContent>
  *           &lt;/complexType>
  *         &lt;/element>
+ *         &lt;element name="rights" minOccurs="0">
+ *           &lt;complexType>
+ *             &lt;complexContent>
+ *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+ *                 &lt;sequence>
+ *                   &lt;element name="targets" type="{urn:zimbraAccount}discoverRightsInfo" maxOccurs="unbounded" minOccurs="0"/>
+ *                 &lt;/sequence>
+ *               &lt;/restriction>
+ *             &lt;/complexContent>
+ *           &lt;/complexType>
+ *         &lt;/element>
  *         &lt;element name="soapURL" type="{http://www.w3.org/2001/XMLSchema}string" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="publicURL" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="changePasswordURL" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -166,6 +177,7 @@ import javax.xml.bind.annotation.XmlType;
     "signatures",
     "dataSources",
     "childAccounts",
+    "rights",
     "soapURL",
     "publicURL",
     "changePasswordURL",
@@ -196,6 +208,7 @@ public class testGetInfoResponse {
     protected testGetInfoResponse.Signatures signatures;
     protected testGetInfoResponse.DataSources dataSources;
     protected testGetInfoResponse.ChildAccounts childAccounts;
+    protected testGetInfoResponse.Rights rights;
     protected List<String> soapURL;
     protected String publicURL;
     protected String changePasswordURL;
@@ -678,6 +691,30 @@ public class testGetInfoResponse {
     }
 
     /**
+     * Gets the value of the rights property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link testGetInfoResponse.Rights }
+     *     
+     */
+    public testGetInfoResponse.Rights getRights() {
+        return rights;
+    }
+
+    /**
+     * Sets the value of the rights property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link testGetInfoResponse.Rights }
+     *     
+     */
+    public void setRights(testGetInfoResponse.Rights value) {
+        this.rights = value;
+    }
+
+    /**
      * Gets the value of the soapURL property.
      * 
      * <p>
@@ -981,13 +1018,13 @@ public class testGetInfoResponse {
 
         @XmlElements({
             @XmlElement(name = "gal", type = testAccountGalDataSource.class),
-            @XmlElement(name = "cal", type = testAccountCalDataSource.class),
-            @XmlElement(name = "rss", type = testAccountRssDataSource.class),
-            @XmlElement(name = "unknown", type = testAccountUnknownDataSource.class),
             @XmlElement(name = "caldav", type = testAccountCaldavDataSource.class),
-            @XmlElement(name = "imap", type = testAccountImapDataSource.class),
             @XmlElement(name = "yab", type = testAccountYabDataSource.class),
-            @XmlElement(name = "pop3", type = testAccountPop3DataSource.class)
+            @XmlElement(name = "pop3", type = testAccountPop3DataSource.class),
+            @XmlElement(name = "unknown", type = testAccountUnknownDataSource.class),
+            @XmlElement(name = "imap", type = testAccountImapDataSource.class),
+            @XmlElement(name = "cal", type = testAccountCalDataSource.class),
+            @XmlElement(name = "rss", type = testAccountRssDataSource.class)
         })
         protected List<testAccountDataSource> imapOrPop3OrCaldav;
 
@@ -1010,13 +1047,13 @@ public class testGetInfoResponse {
          * <p>
          * Objects of the following type(s) are allowed in the list
          * {@link testAccountGalDataSource }
-         * {@link testAccountCalDataSource }
-         * {@link testAccountRssDataSource }
-         * {@link testAccountUnknownDataSource }
          * {@link testAccountCaldavDataSource }
-         * {@link testAccountImapDataSource }
          * {@link testAccountYabDataSource }
          * {@link testAccountPop3DataSource }
+         * {@link testAccountUnknownDataSource }
+         * {@link testAccountImapDataSource }
+         * {@link testAccountCalDataSource }
+         * {@link testAccountRssDataSource }
          * 
          * 
          */
@@ -1202,6 +1239,65 @@ public class testGetInfoResponse {
                 prop = new ArrayList<testProp>();
             }
             return this.prop;
+        }
+
+    }
+
+
+    /**
+     * <p>Java class for anonymous complex type.
+     * 
+     * <p>The following schema fragment specifies the expected content contained within this class.
+     * 
+     * <pre>
+     * &lt;complexType>
+     *   &lt;complexContent>
+     *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+     *       &lt;sequence>
+     *         &lt;element name="targets" type="{urn:zimbraAccount}discoverRightsInfo" maxOccurs="unbounded" minOccurs="0"/>
+     *       &lt;/sequence>
+     *     &lt;/restriction>
+     *   &lt;/complexContent>
+     * &lt;/complexType>
+     * </pre>
+     * 
+     * 
+     */
+    @XmlAccessorType(XmlAccessType.FIELD)
+    @XmlType(name = "", propOrder = {
+        "targets"
+    })
+    public static class Rights {
+
+        protected List<testDiscoverRightsInfo> targets;
+
+        /**
+         * Gets the value of the targets property.
+         * 
+         * <p>
+         * This accessor method returns a reference to the live list,
+         * not a snapshot. Therefore any modification you make to the
+         * returned list will be present inside the JAXB object.
+         * This is why there is not a <CODE>set</CODE> method for the targets property.
+         * 
+         * <p>
+         * For example, to add a new item, do as follows:
+         * <pre>
+         *    getTargets().add(newItem);
+         * </pre>
+         * 
+         * 
+         * <p>
+         * Objects of the following type(s) are allowed in the list
+         * {@link testDiscoverRightsInfo }
+         * 
+         * 
+         */
+        public List<testDiscoverRightsInfo> getTargets() {
+            if (targets == null) {
+                targets = new ArrayList<testDiscoverRightsInfo>();
+            }
+            return this.targets;
         }
 
     }

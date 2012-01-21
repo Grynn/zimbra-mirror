@@ -1,6 +1,8 @@
 
 package generated.zcsclient.admin;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
@@ -16,7 +18,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="device" type="{urn:zimbraAdmin}deviceStatusInfo" minOccurs="0"/>
+ *         &lt;element name="device" type="{urn:zimbraAdmin}deviceStatusInfo" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,30 +33,35 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class testCancelPendingRemoteWipeResponse {
 
-    protected testDeviceStatusInfo device;
+    protected List<testDeviceStatusInfo> device;
 
     /**
      * Gets the value of the device property.
      * 
-     * @return
-     *     possible object is
-     *     {@link testDeviceStatusInfo }
-     *     
-     */
-    public testDeviceStatusInfo getDevice() {
-        return device;
-    }
-
-    /**
-     * Sets the value of the device property.
+     * <p>
+     * This accessor method returns a reference to the live list,
+     * not a snapshot. Therefore any modification you make to the
+     * returned list will be present inside the JAXB object.
+     * This is why there is not a <CODE>set</CODE> method for the device property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link testDeviceStatusInfo }
-     *     
+     * <p>
+     * For example, to add a new item, do as follows:
+     * <pre>
+     *    getDevice().add(newItem);
+     * </pre>
+     * 
+     * 
+     * <p>
+     * Objects of the following type(s) are allowed in the list
+     * {@link testDeviceStatusInfo }
+     * 
+     * 
      */
-    public void setDevice(testDeviceStatusInfo value) {
-        this.device = value;
+    public List<testDeviceStatusInfo> getDevice() {
+        if (device == null) {
+            device = new ArrayList<testDeviceStatusInfo>();
+        }
+        return this.device;
     }
 
 }

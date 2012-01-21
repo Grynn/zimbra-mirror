@@ -17,11 +17,9 @@ import generated.zcsclient.zm.testAccountSelector;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
+ *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="account" type="{urn:zimbra}accountSelector" minOccurs="0"/>
  *         &lt;element name="logger" type="{urn:zimbraAdmin}loggerInfo" minOccurs="0"/>
- *         &lt;choice minOccurs="0">
- *           &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *           &lt;element name="account" type="{urn:zimbra}accountSelector"/>
- *         &lt;/choice>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -32,39 +30,15 @@ import generated.zcsclient.zm.testAccountSelector;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "removeAccountLoggerRequest", propOrder = {
-    "logger",
     "id",
-    "account"
+    "account",
+    "logger"
 })
 public class testRemoveAccountLoggerRequest {
 
-    protected testLoggerInfo logger;
     protected String id;
     protected testAccountSelector account;
-
-    /**
-     * Gets the value of the logger property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link testLoggerInfo }
-     *     
-     */
-    public testLoggerInfo getLogger() {
-        return logger;
-    }
-
-    /**
-     * Sets the value of the logger property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link testLoggerInfo }
-     *     
-     */
-    public void setLogger(testLoggerInfo value) {
-        this.logger = value;
-    }
+    protected testLoggerInfo logger;
 
     /**
      * Gets the value of the id property.
@@ -112,6 +86,30 @@ public class testRemoveAccountLoggerRequest {
      */
     public void setAccount(testAccountSelector value) {
         this.account = value;
+    }
+
+    /**
+     * Gets the value of the logger property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link testLoggerInfo }
+     *     
+     */
+    public testLoggerInfo getLogger() {
+        return logger;
+    }
+
+    /**
+     * Sets the value of the logger property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link testLoggerInfo }
+     *     
+     */
+    public void setLogger(testLoggerInfo value) {
+        this.logger = value;
     }
 
 }

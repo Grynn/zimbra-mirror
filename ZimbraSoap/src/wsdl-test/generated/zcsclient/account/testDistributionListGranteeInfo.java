@@ -5,7 +5,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
-import generated.zcsclient.zm.testDistributionListGranteeType;
+import generated.zcsclient.zm.testGranteeType;
 
 
 /**
@@ -19,7 +19,7 @@ import generated.zcsclient.zm.testDistributionListGranteeType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *       &lt;/sequence>
- *       &lt;attribute name="type" use="required" type="{urn:zimbra}distributionListGranteeType" />
+ *       &lt;attribute name="type" use="required" type="{urn:zimbra}granteeType" />
  *       &lt;attribute name="id" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="name" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
@@ -34,7 +34,7 @@ import generated.zcsclient.zm.testDistributionListGranteeType;
 public class testDistributionListGranteeInfo {
 
     @XmlAttribute(name = "type", required = true)
-    protected testDistributionListGranteeType type;
+    protected testGranteeType type;
     @XmlAttribute(name = "id", required = true)
     protected String id;
     @XmlAttribute(name = "name", required = true)
@@ -45,10 +45,10 @@ public class testDistributionListGranteeInfo {
      * 
      * @return
      *     possible object is
-     *     {@link testDistributionListGranteeType }
+     *     {@link testGranteeType }
      *     
      */
-    public testDistributionListGranteeType getType() {
+    public testGranteeType getType() {
         return type;
     }
 
@@ -57,10 +57,10 @@ public class testDistributionListGranteeInfo {
      * 
      * @param value
      *     allowed object is
-     *     {@link testDistributionListGranteeType }
+     *     {@link testGranteeType }
      *     
      */
-    public void setType(testDistributionListGranteeType value) {
+    public void setType(testGranteeType value) {
         this.type = value;
     }
 

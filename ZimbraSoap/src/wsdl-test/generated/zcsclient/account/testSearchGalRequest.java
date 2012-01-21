@@ -32,6 +32,8 @@ import generated.zcsclient.zm.testGalSearchType;
  *       &lt;attribute name="name" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="type" type="{urn:zimbra}galSearchType" />
  *       &lt;attribute name="needExp" type="{http://www.w3.org/2001/XMLSchema}boolean" />
+ *       &lt;attribute name="needIsOwner" type="{http://www.w3.org/2001/XMLSchema}boolean" />
+ *       &lt;attribute name="needIsMember" type="{urn:zimbraAccount}memberOfSelector" />
  *       &lt;attribute name="needSMIMECerts" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *       &lt;attribute name="galAcctId" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="includeTagDeleted" type="{http://www.w3.org/2001/XMLSchema}boolean" />
@@ -85,6 +87,10 @@ public class testSearchGalRequest {
     protected testGalSearchType type;
     @XmlAttribute(name = "needExp")
     protected Boolean needExp;
+    @XmlAttribute(name = "needIsOwner")
+    protected Boolean needIsOwner;
+    @XmlAttribute(name = "needIsMember")
+    protected testMemberOfSelector needIsMember;
     @XmlAttribute(name = "needSMIMECerts")
     protected Boolean needSMIMECerts;
     @XmlAttribute(name = "galAcctId")
@@ -351,6 +357,54 @@ public class testSearchGalRequest {
      */
     public void setNeedExp(Boolean value) {
         this.needExp = value;
+    }
+
+    /**
+     * Gets the value of the needIsOwner property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isNeedIsOwner() {
+        return needIsOwner;
+    }
+
+    /**
+     * Sets the value of the needIsOwner property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setNeedIsOwner(Boolean value) {
+        this.needIsOwner = value;
+    }
+
+    /**
+     * Gets the value of the needIsMember property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link testMemberOfSelector }
+     *     
+     */
+    public testMemberOfSelector getNeedIsMember() {
+        return needIsMember;
+    }
+
+    /**
+     * Sets the value of the needIsMember property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link testMemberOfSelector }
+     *     
+     */
+    public void setNeedIsMember(testMemberOfSelector value) {
+        this.needIsMember = value;
     }
 
     /**

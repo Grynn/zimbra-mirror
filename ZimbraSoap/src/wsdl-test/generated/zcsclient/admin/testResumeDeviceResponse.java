@@ -1,5 +1,5 @@
 
-package generated.zcsclient.account;
+package generated.zcsclient.admin;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,16 +9,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for modifyZimletPrefsRequest complex type.
+ * <p>Java class for resumeDeviceResponse complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="modifyZimletPrefsRequest">
+ * &lt;complexType name="resumeDeviceResponse">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="zimlet" type="{urn:zimbraAccount}modifyZimletPrefsSpec" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="device" type="{urn:zimbraAdmin}deviceStatusInfo" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -28,40 +28,40 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "modifyZimletPrefsRequest", propOrder = {
-    "zimlet"
+@XmlType(name = "resumeDeviceResponse", propOrder = {
+    "device"
 })
-public class testModifyZimletPrefsRequest {
+public class testResumeDeviceResponse {
 
-    protected List<testModifyZimletPrefsSpec> zimlet;
+    protected List<testDeviceStatusInfo> device;
 
     /**
-     * Gets the value of the zimlet property.
+     * Gets the value of the device property.
      * 
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the zimlet property.
+     * This is why there is not a <CODE>set</CODE> method for the device property.
      * 
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
-     *    getZimlet().add(newItem);
+     *    getDevice().add(newItem);
      * </pre>
      * 
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link testModifyZimletPrefsSpec }
+     * {@link testDeviceStatusInfo }
      * 
      * 
      */
-    public List<testModifyZimletPrefsSpec> getZimlet() {
-        if (zimlet == null) {
-            zimlet = new ArrayList<testModifyZimletPrefsSpec>();
+    public List<testDeviceStatusInfo> getDevice() {
+        if (device == null) {
+            device = new ArrayList<testDeviceStatusInfo>();
         }
-        return this.zimlet;
+        return this.device;
     }
 
 }

@@ -47,10 +47,10 @@ public class testGetDataSourcesResponse {
     @XmlElements({
         @XmlElement(name = "unknown", type = testMailUnknownDataSource.class),
         @XmlElement(name = "cal", type = testMailCalDataSource.class),
+        @XmlElement(name = "gal", type = testMailGalDataSource.class),
+        @XmlElement(name = "pop3", type = testMailPop3DataSource.class),
         @XmlElement(name = "imap", type = testMailImapDataSource.class),
         @XmlElement(name = "yab", type = testMailYabDataSource.class),
-        @XmlElement(name = "pop3", type = testMailPop3DataSource.class),
-        @XmlElement(name = "gal", type = testMailGalDataSource.class),
         @XmlElement(name = "caldav", type = testMailCaldavDataSource.class),
         @XmlElement(name = "rss", type = testMailRssDataSource.class)
     })
@@ -76,10 +76,10 @@ public class testGetDataSourcesResponse {
      * Objects of the following type(s) are allowed in the list
      * {@link testMailUnknownDataSource }
      * {@link testMailCalDataSource }
+     * {@link testMailGalDataSource }
+     * {@link testMailPop3DataSource }
      * {@link testMailImapDataSource }
      * {@link testMailYabDataSource }
-     * {@link testMailPop3DataSource }
-     * {@link testMailGalDataSource }
      * {@link testMailCaldavDataSource }
      * {@link testMailRssDataSource }
      * 

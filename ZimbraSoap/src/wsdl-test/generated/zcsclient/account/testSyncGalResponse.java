@@ -27,8 +27,6 @@ import generated.zcsclient.zm.testId;
  *           &lt;element name="deleted" type="{urn:zimbra}id"/>
  *         &lt;/choice>
  *       &lt;/sequence>
- *       &lt;attribute name="sortBy" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="offset" type="{http://www.w3.org/2001/XMLSchema}int" />
  *       &lt;attribute name="more" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *       &lt;attribute name="token" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
@@ -49,10 +47,6 @@ public class testSyncGalResponse {
         @XmlElement(name = "deleted", type = testId.class)
     })
     protected List<Object> cnOrDeleted;
-    @XmlAttribute(name = "sortBy")
-    protected String sortBy;
-    @XmlAttribute(name = "offset")
-    protected Integer offset;
     @XmlAttribute(name = "more")
     protected Boolean more;
     @XmlAttribute(name = "token")
@@ -86,54 +80,6 @@ public class testSyncGalResponse {
             cnOrDeleted = new ArrayList<Object>();
         }
         return this.cnOrDeleted;
-    }
-
-    /**
-     * Gets the value of the sortBy property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getSortBy() {
-        return sortBy;
-    }
-
-    /**
-     * Sets the value of the sortBy property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setSortBy(String value) {
-        this.sortBy = value;
-    }
-
-    /**
-     * Gets the value of the offset property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Integer }
-     *     
-     */
-    public Integer getOffset() {
-        return offset;
-    }
-
-    /**
-     * Sets the value of the offset property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Integer }
-     *     
-     */
-    public void setOffset(Integer value) {
-        this.offset = value;
     }
 
     /**

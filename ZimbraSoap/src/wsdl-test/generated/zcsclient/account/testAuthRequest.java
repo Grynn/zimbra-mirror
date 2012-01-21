@@ -6,6 +6,7 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
+import generated.zcsclient.zm.testAccountSelector;
 
 
 /**
@@ -18,7 +19,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;all>
- *         &lt;element name="account" type="{urn:zimbraAccount}account" minOccurs="0"/>
+ *         &lt;element name="account" type="{urn:zimbra}accountSelector" minOccurs="0"/>
  *         &lt;element name="password" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="preauth" type="{urn:zimbraAccount}preAuth" minOccurs="0"/>
  *         &lt;element name="authToken" type="{urn:zimbraAccount}authToken" minOccurs="0"/>
@@ -60,7 +61,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class testAuthRequest {
 
-    protected testAccount account;
+    protected testAccountSelector account;
     protected String password;
     protected testPreAuth preauth;
     protected testAuthToken authToken;
@@ -74,10 +75,10 @@ public class testAuthRequest {
      * 
      * @return
      *     possible object is
-     *     {@link testAccount }
+     *     {@link testAccountSelector }
      *     
      */
-    public testAccount getAccount() {
+    public testAccountSelector getAccount() {
         return account;
     }
 
@@ -86,10 +87,10 @@ public class testAuthRequest {
      * 
      * @param value
      *     allowed object is
-     *     {@link testAccount }
+     *     {@link testAccountSelector }
      *     
      */
-    public void setAccount(testAccount value) {
+    public void setAccount(testAccountSelector value) {
         this.account = value;
     }
 
