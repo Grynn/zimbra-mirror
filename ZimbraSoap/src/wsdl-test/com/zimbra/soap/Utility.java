@@ -28,10 +28,8 @@ import com.sun.xml.ws.developer.SchemaValidationFeature;
 import com.sun.xml.ws.developer.WSBindingProvider;
 import com.sun.xml.bind.api.JAXBRIContext;
 
-import generated.zcsclient.account.testAccount;
 import generated.zcsclient.account.testAuthRequest;
 import generated.zcsclient.account.testAuthResponse;
-import generated.zcsclient.account.testBy;
 import generated.zcsclient.admin.testAccountInfo;
 import generated.zcsclient.admin.testAttr;
 import generated.zcsclient.admin.testCalendarResourceBy;
@@ -160,8 +158,8 @@ public class Utility {
     throws Exception {
         Utility.getZcsSvcEIF();
         testAuthRequest authReq = new testAuthRequest();
-        testAccount acct = new testAccount();
-        acct.setBy(testBy.NAME);
+        testAccountSelector acct = new testAccountSelector();
+        acct.setBy(testAccountBy.NAME);
         acct.setValue(acctName);
         authReq.setAccount(acct);
         authReq.setPassword(password);

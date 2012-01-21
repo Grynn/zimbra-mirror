@@ -442,7 +442,7 @@ public class WSDLAcctAdminTest {
                 " should be 0 or more", first.getLimit() >= 0);
     }
 
-    private void addAcctLogger(String acctId, String category, String level)
+    private void addAcctLogger(String acctId, String category, testLoggingLevel level)
     throws Exception {
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
         testAddAccountLoggerRequest req = new testAddAccountLoggerRequest();
@@ -488,14 +488,14 @@ public class WSDLAcctAdminTest {
     @Test
     public void addAccountLoggerTest() throws Exception {
         String testAccountId = Utility.ensureMailboxExistsForAccount(testAcct);
-        addAcctLogger(testAccountId, "zimbra.account", "info");
-        addAcctLogger(testAccountId, "zimbra.lmtp", "info");
+        addAcctLogger(testAccountId, "zimbra.account", testLoggingLevel.INFO);
+        addAcctLogger(testAccountId, "zimbra.lmtp", testLoggingLevel.INFO);
     }
 
     @Test
     public void getAllAccountLoggersTest() throws Exception {
         String testAccountId = Utility.ensureMailboxExistsForAccount(testAcct);
-        addAcctLogger(testAccountId, "zimbra.ldap", "error");
+        addAcctLogger(testAccountId, "zimbra.ldap", testLoggingLevel.ERROR);
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
         testGetAllAccountLoggersRequest req = new testGetAllAccountLoggersRequest();
         testGetAllAccountLoggersResponse resp = eif.getAllAccountLoggersRequest(req);
@@ -516,7 +516,7 @@ public class WSDLAcctAdminTest {
     @Test
     public void getAccountLoggersTest() throws Exception {
         String testAccountId = Utility.ensureMailboxExistsForAccount(testAcct);
-        addAcctLogger(testAccountId, "zimbra.xsync", "debug");
+        addAcctLogger(testAccountId, "zimbra.xsync", testLoggingLevel.DEBUG);
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
         testGetAccountLoggersRequest req = new testGetAccountLoggersRequest();
         testAccountSelector acct = new testAccountSelector();
@@ -538,8 +538,8 @@ public class WSDLAcctAdminTest {
     @Test
     public void removeAccountLoggerTest() throws Exception {
         String testAccountId = Utility.ensureMailboxExistsForAccount(testAcct);
-        addAcctLogger(testAccountId, "zimbra.misc", "info");
-        addAcctLogger(testAccountId, "zimbra.im", "info");
+        addAcctLogger(testAccountId, "zimbra.misc", testLoggingLevel.INFO);
+        addAcctLogger(testAccountId, "zimbra.im", testLoggingLevel.INFO);
         removeAcctLogger(testAccountId, "zimbra.im");
         removeAcctLogger(testAccountId, null);
         // Adding an AccountLogger with a null account is disallowed,
@@ -552,7 +552,7 @@ public class WSDLAcctAdminTest {
     public void getAccountLoggersByIdTest() throws Exception {
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
         String testAccountId = Utility.ensureMailboxExistsForAccount(testAcct);
-        addAcctLogger(testAccountId, "zimbra.misc", "debug");
+        addAcctLogger(testAccountId, "zimbra.misc", testLoggingLevel.DEBUG);
         testGetAccountLoggersRequest req = new testGetAccountLoggersRequest();
         req.setId(testAccountId);
         testGetAccountLoggersResponse resp = eif.getAccountLoggersRequest(req);

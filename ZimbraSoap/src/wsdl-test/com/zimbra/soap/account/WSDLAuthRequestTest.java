@@ -21,11 +21,11 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.zimbra.soap.Utility;
-import generated.zcsclient.account.testAccount;
 import generated.zcsclient.account.testAuthRequest;
 import generated.zcsclient.account.testAuthResponse;
-import generated.zcsclient.account.testBy;
 import generated.zcsclient.ws.service.ZcsPortType;
+import generated.zcsclient.zm.testAccountBy;
+import generated.zcsclient.zm.testAccountSelector;
 
 public class WSDLAuthRequestTest {
 
@@ -42,8 +42,8 @@ public class WSDLAuthRequestTest {
     @Test
     public void simple() throws Exception {
         testAuthRequest authReq = new testAuthRequest();
-        testAccount acct = new testAccount();
-        acct.setBy(testBy.NAME);
+        testAccountSelector acct = new testAccountSelector();
+        acct.setBy(testAccountBy.NAME);
         acct.setValue("user1");
         authReq.setAccount(acct);
         authReq.setPassword("test123");
