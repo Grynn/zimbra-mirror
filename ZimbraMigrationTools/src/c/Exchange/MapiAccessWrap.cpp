@@ -357,6 +357,15 @@ STDMETHODIMP CMapiAccessWrap::GetData(BSTR UserId, VARIANT ItemId, FolderType ty
                 pIt[L"outlookUserField3"] = SysAllocString((cd.UserField3).c_str());
                 pIt[L"outlookUserField4"] = SysAllocString((cd.UserField4).c_str());
                 pIt[L"image"] = SysAllocString((cd.ContactImagePath).c_str());
+                if (cd.UserDefinedFields.size() > 0)
+                {
+                    vector<ContactUDFields>::iterator it;
+                    for (it = cd.UserDefinedFields.begin(); it != cd.UserDefinedFields.end(); it++)
+                    {
+                        BSTR bstrNam = SysAllocString(it->Name.c_str());
+                        pIt[bstrNam] = SysAllocString(it->value.c_str());
+                    }
+                }
             }
             else if ((ft == 1) || (ft == 5))    // message or meeting request
             {
