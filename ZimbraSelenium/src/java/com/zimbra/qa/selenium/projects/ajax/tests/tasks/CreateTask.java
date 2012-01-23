@@ -25,7 +25,7 @@ public class CreateTask extends AjaxCommonTest {
 		logger.info("New " + CreateTask.class.getCanonicalName());
 		super.startingPage = app.zPageTasks;
 		super.startingAccountPreferences = new HashMap<String , String>() {{
-			put("zimbraPrefComposeFormat", "html");
+			put("zimbraPrefComposeFormat", "text");
 			put("zimbraPrefGroupMailBy", "message");
 			put("zimbraPrefTasksReadingPaneLocation", "bottom");
 		}};
