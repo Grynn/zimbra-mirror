@@ -1,12 +1,17 @@
 OPENLDAP_ROOT := $(shell pwd)
 P4_ROOT ?= $(shell cd $(OPENLDAP_ROOT)/../..; pwd)
 MAKE ?= make
-MAKEARGS ?= -j2 DEFINES="-DCHECK_CSN -DSLAP_SCHEMA_EXPOSE"
 
 BUILD_PLATFORM ?= $(shell sh $(P4_ROOT)/ZimbraBuild/rpmconf/Build/get_plat_tag.sh)
 
 ifeq ($(BUILD_PLATFORM), )
 	BUILD_PLATFORM := "UNKNOWN"
+endif
+
+ifeq (RHEL6_64,$(findstring RHEL6_64,$(BUILD_PLATFORM)))
+	MAKEARGS ?= -j2 DEFINES="-DCHECK_CSN -DSLAP_SCHEMA_EXPOSE -DUSE_VALGRIND"
+else
+	MAKEARGS ?= -j2 DEFINES="-DCHECK_CSN -DSLAP_SCHEMA_EXPOSE"
 endif
 
 ZIMBRA_HOME ?= /opt/zimbra
@@ -15,10 +20,10 @@ PATCH	:=
 
 ifdef BETA
 	include $(OPENLDAP_ROOT)/../beta_versions.def
-	PATCH	:= patch -g0 -N -p1 < ../patches/ITS7098.patch; patch -g0 -N -p1 < ../patches/ITS7099.patch; patch -g0 -N -p1 < ../patches/ITS7101.patch; patch -g0 -N -p1 < ../patches/ITS7107.patch; patch -g0 -N -p1 < ../patches/ITS7115.patch; patch -g0 -N -p1 < ../patches/ITS7115-2.patch; patch -g0 -N -p1 < ../patches/ITS7113-ITS7125.patch; patch -g0 -N -p1 < ../patches/ITS7121.patch; patch -g0 -N -p1 < ../patches/ITS7121-3.patch;
+	PATCH	:= patch -g0 -N -p1 < ../patches/ITS7098.patch; patch -g0 -N -p1 < ../patches/ITS7099.patch; patch -g0 -N -p1 < ../patches/ITS7101.patch; patch -g0 -N -p1 < ../patches/ITS7107.patch; patch -g0 -N -p1 < ../patches/ITS7115.patch; patch -g0 -N -p1 < ../patches/ITS7115-2.patch; patch -g0 -N -p1 < ../patches/ITS7113-ITS7125.patch; patch -g0 -N -p1 < ../patches/ITS7121-4.patch;
 else
 	include $(OPENLDAP_ROOT)/../versions.def
-	PATCH	:= patch -g0 -N -p1 < ../patches/ITS7098.patch; patch -g0 -N -p1 < ../patches/ITS7099.patch; patch -g0 -N -p1 < ../patches/ITS7101.patch; patch -g0 -N -p1 < ../patches/ITS7107.patch; patch -g0 -N -p1 < ../patches/ITS7115.patch; patch -g0 -N -p1 < ../patches/ITS7115-2.patch; patch -g0 -N -p1 < ../patches/ITS7113-ITS7125.patch; patch -g0 -N -p1 < ../patches/ITS7121.patch; patch -g0 -N -p1 < ../patches/ITS7121-3.patch;
+	PATCH	:= patch -g0 -N -p1 < ../patches/ITS7098.patch; patch -g0 -N -p1 < ../patches/ITS7099.patch; patch -g0 -N -p1 < ../patches/ITS7101.patch; patch -g0 -N -p1 < ../patches/ITS7107.patch; patch -g0 -N -p1 < ../patches/ITS7115.patch; patch -g0 -N -p1 < ../patches/ITS7115-2.patch; patch -g0 -N -p1 < ../patches/ITS7113-ITS7125.patch; patch -g0 -N -p1 < ../patches/ITS7121-4.patch;
 endif
 
 ifeq (MACOSX,$(findstring MACOSX,$(BUILD_PLATFORM)))
