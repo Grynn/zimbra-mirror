@@ -10,8 +10,6 @@ import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.octopus.core.OctopusCommonTest;
 import com.zimbra.qa.selenium.projects.octopus.ui.DisplayFilePreview;
-import com.zimbra.qa.selenium.projects.octopus.ui.PageFavorites;
-import com.zimbra.qa.selenium.projects.octopus.ui.PageMyFiles;
 
 public class AddRemoveFavorites extends OctopusCommonTest {
 
@@ -24,7 +22,7 @@ public class AddRemoveFavorites extends OctopusCommonTest {
 	public AddRemoveFavorites() {
 		logger.info("New " + AddRemoveFavorites.class.getCanonicalName());
 
-		// test starts at the My Files tab
+		// test starts at the Favorites tab
 		super.startingPage = app.zPageFavorites;
 		super.startingAccountPreferences = null;
 	}

@@ -15,7 +15,6 @@ import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.octopus.ui.DialogError;
 import com.zimbra.qa.selenium.projects.octopus.ui.DialogError.DialogErrorID;
-import com.zimbra.qa.selenium.projects.octopus.ui.PageMyFiles.Locators;
 import com.zimbra.soap.mail.type.Folder;
 
 public class PageOctopus extends AbsTab {
@@ -24,12 +23,12 @@ public class PageOctopus extends AbsTab {
 		public static final Locators zUserNamePullDown = new Locators(
 				"css=div.user-display-name");
 		public static final Locators zSignOutButton = new Locators(
-		        //"css=a.(headerLink signOutLink):contains(sign out)");
-				// temporary omitting first letter in the locator's name
+		// "css=a.(headerLink signOutLink):contains(sign out)");
+		// temporary omitting first letter in the locator's name
 				"css=div.signOutLink:contains(ign out)");
 		public static final Locators zSettingsButton = new Locators(
-				//"css=a.(headerLink settingsLink):contains(settings)");
-				// temporary omitting first letter in the locator's name
+		// "css=a.(headerLink settingsLink):contains(settings)");
+		// temporary omitting first letter in the locator's name
 				"css=div.settingsLink:contains(ettings)");
 		public static final Locators zTabMyFiles = new Locators(
 				"css=div.octopus-tab-label:contains(My Files)");
@@ -136,7 +135,7 @@ public class PageOctopus extends AbsTab {
 		map.put("loginOp", "logout");
 
 		// this.openUrl("", map);
-		//zClick(PageOctopus.Locators.zSignOutButton.locator);
+		// zClick(PageOctopus.Locators.zSignOutButton.locator);
 		zToolbarPressPulldown(Button.B_USER_NAME, Button.O_SIGN_OUT);
 
 		sWaitForPageToLoad();
@@ -224,18 +223,17 @@ public class PageOctopus extends AbsTab {
 				// this.zClick(Locators.zMyFilesListView.locator +
 				// ">div.my-files-list-item:nth-child(1)");
 
-			} else if(option == Button.O_SETTINGS){
+			} else if (option == Button.O_SETTINGS) {
 				optionLocator = Locators.zSettingsButton.locator;
-				page = new DialogSettings(MyApplication, this); 
-			}
-			else {
+				page = new DialogSettings(MyApplication, this);
+			} else {
 				logger.info("no logic defined for " + option);
 			}
 		} else {
 			logger.info("no logic defined for " + pulldown + "/" + option);
 		}
-		
-		//default behavior
+
+		// default behavior
 		zClick(pulldownLocator);
 
 		zWaitForBusyOverlay();
@@ -443,12 +441,21 @@ public class PageOctopus extends AbsTab {
 		logger.info("renaming to: " + text);
 
 		// sSelectFrame("relative=top");
-		if (zWaitForElementPresent(Locators.zRenameInput.locator, "3000"))
+		if (zWaitForElementPresent(Locators.zRenameInput.locator, "3000")) {
 			sType(Locators.zRenameInput.locator, text);
-		else
+			/*
+			 * ClientSessionFactory .session() .selenium() .getEval(
+			 * "var text=\"" + text + "\";" + "var locator=\"" +
+			 * Locators.zRenameInput.locator + "\";" +
+			 * "var input=selenium.browserbot.findElement(locator);" +
+			 * "input.value=text;");
+			 */
+		} else
 			throw new HarnessException(Locators.zRenameInput.locator
 					+ " not present");
 
+		zKeyEvent(Locators.zRenameInput.locator, "39", "keydown");
+		zKeyEvent(Locators.zRenameInput.locator, "39", "keydown");
 		zKeyEvent(Locators.zRenameInput.locator, "13", "keydown");
 	}
 

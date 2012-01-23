@@ -59,9 +59,11 @@ public class DialogSettings extends AbsDialog {
 		if (button == Button.B_CLOSE) {
 
 			locator = Locators.zCloseBtn.locator;
+			page = ((AppOctopusClient) MyApplication).zPageOctopus;
 		} else if (button == Button.B_DONE) {
 
 			locator = Locators.zDoneBtn.locator;
+			page = ((AppOctopusClient) MyApplication).zPageOctopus;
 		} else {
 			throw new HarnessException("Button " + button + " not implemented");
 		}
@@ -79,7 +81,7 @@ public class DialogSettings extends AbsDialog {
 		if (page != null)
 			page.zWaitForActive();
 
-		return (page);
+		return page;
 	}
 
 	public AbsPage zListItem(Action action, Button button, String itemName)
@@ -109,6 +111,7 @@ public class DialogSettings extends AbsDialog {
 			if (button == Button.B_UNLINK_AND_WIPE) {
 
 				locator = Locators.zDevicesListContainer.locator + ":contains(" + itemName + ") button:contains(Unlink & Wipe)";
+				page = ((AppOctopusClient) MyApplication).zPageOctopus;
 			} else {
 				logger.info("no logic defined for " + button);
 			}

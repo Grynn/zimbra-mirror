@@ -686,7 +686,7 @@ public abstract class AbsSeleniumObject {
 	 */
 	public void sWaitForPageToLoad() throws HarnessException {
 		String timeout = ZimbraSeleniumProperties.getStringProperty(
-				"selenium.maxpageload.msec", "10000");
+				"selenium.maxpageload.msec", "20000");
 
 		try {
 

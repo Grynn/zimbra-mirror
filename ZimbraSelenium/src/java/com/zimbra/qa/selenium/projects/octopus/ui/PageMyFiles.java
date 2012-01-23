@@ -13,14 +13,16 @@ public class PageMyFiles extends AbsTab {
 	public static class Locators {
 		public static final Locators zTabMyFiles = new Locators(
 				"css=div.octopus-tab-label:contains(My Files)");
+		public static final Locators zMyFilesCurrentMenuLabel = new Locators(
+				"css=span[class*=my-files-menu-bar-current-folder-label]:contains(My Files)");
 		public static final Locators zTabMyFilesSelected = new Locators(
 				"css=div[class^=octopus-tab sc-collection-item sel]>div.octopus-tab-label:contains(My Files)");
 		public static final Locators zMyFilesView = new Locators(
 				"css=div[id=octopus-myfiles-view]");
 		public static final Locators zMyFilesArrowButton = new Locators(
-				"css=span[class*=my-files-list-item-action-button myfiles-button button]");
+				"css=span[class*='my-files-list-item-action-button myfiles-button']");
 		public static final Locators zNewFolderOption = new Locators(
-				"css=div[class^=octopus-template-context-menu-item action-new-folder]:contains(New Folder)");
+				"css=div[class^='octopus-template-context-menu-item action-new-folder']:contains('New Folder')");
 		public static final Locators zMyFilesListView = new Locators(
 				"css=div[class*=my-files-list-view]");
 		public static final Locators zMyFilesListViewItems = new Locators(
@@ -45,7 +47,6 @@ public class PageMyFiles extends AbsTab {
 				"css=div[id=my-files-preview] div[id=my-files-preview-toolbar]>button[id=show-activitystream-button])");
 		public static final Locators zComments = new Locators(
 				"css=div[id=my-files-preview] div[id=my-files-preview-toolbar]>button[id=my-files-preview-show-comments-button])");
-	
 
 		public final String locator;
 
@@ -72,7 +73,7 @@ public class PageMyFiles extends AbsTab {
 	@Override
 	public boolean zIsActive() throws HarnessException {
 		// Look for the My Files tab
-		boolean selected = sIsElementPresent(Locators.zTabMyFilesSelected.locator);
+		boolean selected = sIsElementPresent(Locators.zMyFilesCurrentMenuLabel.locator);
 
 		if (!selected) {
 			logger.debug("zIsActive(): " + selected);
@@ -177,9 +178,9 @@ public class PageMyFiles extends AbsTab {
 				zWaitForBusyOverlay();
 
 				page = new DialogFolderShare(MyApplication, this);
-				
+
 				page.zWaitForActive();
-				
+
 				return page;
 			} else if (option == Button.O_FILE_SHARE) {
 				optionLocator = Locators.zShareItem.locator;
@@ -194,9 +195,9 @@ public class PageMyFiles extends AbsTab {
 				zWaitForBusyOverlay();
 
 				page = new DialogFileShare(MyApplication, this);
-				
+
 				page.zWaitForActive();
-				
+
 				return page;
 			} else if (option == Button.O_FAVORITE) {
 				optionLocator = Locators.zFavoriteItem.locator;
@@ -250,7 +251,7 @@ public class PageMyFiles extends AbsTab {
 				zWaitForBusyOverlay();
 
 				page = new DialogMove(MyApplication, this);
-				
+
 				return page;
 			} else if (option == Button.O_DELETE) {
 				optionLocator = Locators.zDeleteItem.locator;
@@ -331,34 +332,24 @@ public class PageMyFiles extends AbsTab {
 			if (option == Button.O_NEW_FOLDER) {
 				optionLocator = Locators.zNewFolderOption.locator;
 
-				zClick(pulldownLocator);
-
-				zWaitForBusyOverlay();
-
-				if (optionLocator.contains("NF")) {
-					for (int i = 0; i < 2; i++) {
-						zKeyEvent(optionLocator, "40", "keydown");
-					}
-					zKeyEvent(optionLocator, "13", "keydown");
-				} else
-					this.sClick(optionLocator);
-
-				// sGetCssCount("css=div[class*=my-files-list-view]>div.my-files-list-item");
-				// this.zClick(Locators.zMyFilesListView.locator +
-				// ">div.my-files-list-item:last-child");
-				// this.zClick(Locators.zMyFilesListView.locator +
-				// ">div.my-files-list-item:nth-child(1)");
-
-				if (this.zWaitForElementPresent(
-						"css=div[role=dialog]>label[class^=edit]", "3000")) {
-					// this.sClick("css=div[role=dialog]>label[class^=edit]");
-					zKeyEvent("css=div[role=dialog]>label[class^=edit]", "13",
-							"keydown");
-					// zKeyEvent("css=div[role=dialog]>label[class^=edit]",
-					// "13", "keyup");
-				}
-
-				return page;
+				/*
+				 * sGetCssCount(
+				 * "css=div[class*=my-files-list-view]>div.my-files-list-item");
+				 * this.zClick(Locators.zMyFilesListView.locator +
+				 * ">div.my-files-list-item:last-child");
+				 * this.zClick(Locators.zMyFilesListView.locator +
+				 * ">div.my-files-list-item:nth-child(1)");
+				 * 
+				 * if (this.zWaitForElementPresent(
+				 * "css=div[role=dialog]>label[class^=edit]", "3000")) { //
+				 * this.sClick("css=div[role=dialog]>label[class^=edit]");
+				 * zKeyEvent("css=div[role=dialog]>label[class^=edit]", "13",
+				 * "keydown"); //
+				 * zKeyEvent("css=div[role=dialog]>label[class^=edit]", // "13",
+				 * "keyup"); }
+				 * 
+				 * return page;
+				 */
 
 			} else {
 				logger.info("no logic defined for " + option);
@@ -366,6 +357,19 @@ public class PageMyFiles extends AbsTab {
 		} else {
 			logger.info("no logic defined for " + pulldown + "/" + option);
 		}
+
+		// default behavior
+		if (!this.zWaitForElementPresent(pulldownLocator, "2000"))
+			throw new HarnessException("Button is not present locator="
+					+ pulldownLocator);
+		zClick(pulldownLocator);
+
+		zWaitForBusyOverlay();
+
+		if (!this.zWaitForElementPresent(optionLocator, "2000"))
+			throw new HarnessException("Option is not present locator="
+					+ optionLocator);
+		sClick(optionLocator);
 
 		return page;
 	}
@@ -439,7 +443,7 @@ public class PageMyFiles extends AbsTab {
 			zClick(listItemLocator);
 
 			page = new DisplayFilePreview(MyApplication);
-			
+
 			// If the app is busy, wait for it to become active
 			zWaitForBusyOverlay();
 		} else {

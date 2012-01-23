@@ -145,7 +145,7 @@ public class CreateShare extends OctopusCommonTest {
 						Button.O_FOLDER_SHARE, ownerFoldername);
 
 		// Click on Permissions input field
-		dialogShare.zClick(DialogFolderShare.Locators.zViewAndEditInput);
+		dialogShare.zClick(DialogFolderShare.Locators.zViewAndEditInput.locator);
 
 		// Provide input into Permissions field
 		dialogShare.zTypeInput(
@@ -218,7 +218,7 @@ public class CreateShare extends OctopusCommonTest {
 						Button.O_FOLDER_SHARE, ownerFoldername);
 
 		// Click on Permissions input field
-		dialogShare.zClick(DialogFolderShare.Locators.zViewAndEditInput);
+		dialogShare.zClick(DialogFolderShare.Locators.zViewAndEditInput.locator);
 
 		// Provide input into Permissions field
 		dialogShare.zTypeInput(
@@ -238,7 +238,7 @@ public class CreateShare extends OctopusCommonTest {
 		String infoTitle = "already sharing this folder";
 		ZAssert.assertTrue(app.zPageSharing.zWaitForElementPresent(
 				DialogFolderShare.Locators.zShareInfoTitle.locator
-						+ ":contains(" + infoTitle + ")", "3000"), "");
+						+ ":contains(" + infoTitle + ")", "4000"), "");
 
 		dialogShare.zClickButton(Button.B_CANCEL);
 	}
@@ -279,11 +279,10 @@ public class CreateShare extends OctopusCommonTest {
 		DialogFolderShare dialogShare = (DialogFolderShare) app.zPageMyFiles
 				.zToolbarPressPulldown(Button.B_MY_FILES_LIST_ITEM,
 						Button.O_FOLDER_SHARE, ownerFoldername);
-
+		
 		// Click on Permissions input field
-		dialogShare.zClick(DialogFolderShare.Locators.zViewAndEditInput);
+		dialogShare.zClick(DialogFolderShare.Locators.zViewEditAndShareInput.locator);
 
-		// Provide input into Permissions field
 		dialogShare.zTypeInput(
 				DialogFolderShare.Locators.zViewEditAndShareInput,
 				granteeAccount.EmailAddress);
@@ -307,7 +306,7 @@ public class CreateShare extends OctopusCommonTest {
 				"3000")) {
 			dialogShare.zClickButton(Button.B_EXPAND);
 		}
-
+		
 		ZAssert.assertTrue(app.zPageSharing.zWaitForElementPresent(
 				DialogFolderShare.Locators.zShareInfoAddrBubble.locator
 						+ ":contains(" + granteeAccount.EmailAddress + ")",

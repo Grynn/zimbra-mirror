@@ -9,6 +9,7 @@ import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.octopus.core.OctopusCommonTest;
 import com.zimbra.qa.selenium.projects.octopus.ui.PageMyFiles;
+import com.zimbra.qa.selenium.projects.octopus.ui.PageTrash;
 
 public class DeleteFile extends OctopusCommonTest {
 
@@ -89,7 +90,7 @@ public class DeleteFile extends OctopusCommonTest {
 	@Test(description = "Delete file using drop down menu - - verify deleted file in the Trash tab", groups = { "smoke" })
 	public void DeleteFile_02() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
-
+	
 		FolderItem briefcaseRootFolder = FolderItem.importFromSOAP(account,
 				SystemFolder.Briefcase);
 
@@ -121,6 +122,8 @@ public class DeleteFile extends OctopusCommonTest {
 		// verify the file is uploaded
 		ZAssert.assertNotNull(_fileId, "Verify file is uploaded");
 
+		SleepUtil.sleepVerySmall();
+		
 		// delete file using right click context menu
 		app.zPageMyFiles.zToolbarPressPulldown(Button.B_MY_FILES_LIST_ITEM,
 				Button.O_DELETE, fileName);
@@ -135,8 +138,10 @@ public class DeleteFile extends OctopusCommonTest {
 		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_TRASH);
 
 		// Verify the file is now in the trash
-		ZAssert.assertTrue(app.zPageOctopus.zIsItemInCurentListView(fileName),
-				"Verify the file was moved to the trash folder");
+		ZAssert.assertTrue(app.zPageTrash.zWaitForElementPresent(
+						PageTrash.Locators.zMyFilesListViewItems.locator + ":contains("
+								+ fileName + ")", "3000"),
+						"Verify the file was moved to the trash folder");
 	}
 
 	@AfterMethod(groups = { "always" })

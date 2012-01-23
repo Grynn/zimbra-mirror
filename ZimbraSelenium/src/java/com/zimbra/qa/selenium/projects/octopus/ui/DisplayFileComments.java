@@ -12,7 +12,7 @@ public class DisplayFileComments extends AbsDisplay {
 		public static final Locators zFileCommentsView = new Locators(
 				"css=div[id=comments-stream-view]");
 		public static final Locators zFileCommentsViewCloseBtn = new Locators(
-				"css=div[id=comments-stream-view] img[class=icon Cancel]");
+				"css=div[id=comments-stream-view] img[class='icon Cancel']");
 
 		public final String locator;
 
@@ -47,6 +47,7 @@ public class DisplayFileComments extends AbsDisplay {
 		// Based on the button specified, take the appropriate action(s)
 		if (button == Button.B_CLOSE) {
 			locator = Locators.zFileCommentsViewCloseBtn.locator;
+			page = ((AppOctopusClient) MyApplication).zPageOctopus;
 		} else {
 			throw new HarnessException("no logic defined for button " + button);
 		}

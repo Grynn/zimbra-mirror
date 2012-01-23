@@ -24,7 +24,7 @@ public class DialogFolderShare extends AbsDialog {
 		public static final Locators zShareInfoTitle = new Locators(
 				"css=div[class=ShareInfo]>div[class=ShareInfoTitle]");
 		public static final Locators zShareInfoAddrBubble = new Locators(
-				"css=div[class=ShareInfo] div[class=GranteeName addrBubble]");
+				"css=div[class=ShareInfo] div[class='GranteeName addrBubble']");
 		public static final Locators zShareInfoExpandAddrBubble = new Locators(
 				"css=div[class=ShareInfo]>div[class=ShareInfoTitle]:contains(\u25BA)");
 		public static final Locators zShareInfoCollapseAddrBubble = new Locators(
@@ -167,6 +167,7 @@ public class DialogFolderShare extends AbsDialog {
 
 		sType(locator, name);
 
+		zKeyEvent(locator, "13", "keyup");
 		zKeyEvent(locator, "13", "keydown");
 	}
 }

@@ -71,7 +71,7 @@ public class ShareFile extends OctopusCommonTest {
 		// Verify the file share icon is displayed
 		ZAssert.assertTrue(app.zPageMyFiles.zWaitForElementPresent(
 				PageMyFiles.Locators.zMyFilesListViewItems.locator
-						+ " img[src*=shared_badge.png]", "3000"),
+						+ " img[src*='shared_badge.png']", "3000"),
 				"Verify the file share icon is displayed");
 	}
 
@@ -116,7 +116,7 @@ public class ShareFile extends OctopusCommonTest {
 		// Verify the file share icon is displayed
 		ZAssert.assertTrue(app.zPageMyFiles.zWaitForElementPresent(
 				PageMyFiles.Locators.zMyFilesListViewItems.locator
-						+ " img[src*=shared_badge.png]", "3000"),
+						+ " img[src*='shared_badge.png']", "3000"),
 				"Verify the file share icon is displayed");
 
 
