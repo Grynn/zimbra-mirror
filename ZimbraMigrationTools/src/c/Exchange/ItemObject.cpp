@@ -2,7 +2,6 @@
 
 #include "common.h"
 #include "ItemObject.h"
-#include "ContactObj.h"
 
 // CItemObject
 
