@@ -139,8 +139,8 @@ class Program
                             System.Console.WriteLine();
                             System.Console.WriteLine();
 
-                            // userAcct.StartMigration(user.UserName, myXmlConfig.ConfigObj.importOptions.Mail.ToString());
-                            Test.test(acctName, TestObj, user.UserName, importopts,true);
+                           // userAcct.StartMigration(myXmlConfig.UserListuser.UserName, importopts);
+                            //Test.test(acctName, TestObj, user.UserName, importopts,true);
 
                             // /////////////////
 
@@ -180,7 +180,8 @@ class Program
                                 System.Console.WriteLine();
                                 System.Console.WriteLine();
                                 // userAcct.StartMigration(user.UserName, myXmlConfig.ConfigObj.importOptions.Mail.ToString());
-                                Test.test(acctName, TestObj, user.UserName, importopts,true);
+                               // Test.test(acctName, TestObj, user.UserName, importopts,true);
+                               // userAcct.StartMigration(user.UserName, importopts);
                                 System.Console.WriteLine("......... \n");
                                 Thread.Sleep(9000);
                             }
@@ -198,6 +199,16 @@ class Program
 
                         string final = user.StatusMessage;
                     }
+
+                    var countdownEvent = new CountdownEvent(myXmlConfig.UserList.Count); 
+                    Account userAccts = new Account();
+                    
+                    userAccts.StartMigration(myXmlConfig.UserList, myXmlConfig.ConfigObj.UserProvision.Domain, importopts, countdownEvent);
+                   // Thread.Sleep(129000);
+
+                    countdownEvent.Wait();
+                    Console.WriteLine("Finished."); 
+
                 }
                 else
                 {
@@ -262,7 +273,16 @@ class Program
                         System.Console.WriteLine();
                         System.Console.WriteLine();
 
-                        Test.test(accountname, TestObj, accountid, importopts, false);
+                      //  Test.test(accountname, TestObj, accountid, importopts, false);
+                        var countdownEvent = new CountdownEvent(1);
+                        Account userAccts = new Account();
+
+                        userAccts.StartMigration(myXmlConfig.UserList, myXmlConfig.ConfigObj.UserProvision.Domain, importopts, countdownEvent, false, accountname, accountid);
+                        // Thread.Sleep(129000);
+
+                        countdownEvent.Wait();
+                        Console.WriteLine("Finished."); 
+
 
                     }
                     else
@@ -282,6 +302,8 @@ class Program
                 System.Console.WriteLine();
             }
             // Thread.Sleep(18000);
+
+            
         }
         else
         {
