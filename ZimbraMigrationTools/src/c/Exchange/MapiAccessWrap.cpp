@@ -357,6 +357,14 @@ STDMETHODIMP CMapiAccessWrap::GetData(BSTR UserId, VARIANT ItemId, FolderType ty
                 pIt[L"outlookUserField3"] = SysAllocString((cd.UserField3).c_str());
                 pIt[L"outlookUserField4"] = SysAllocString((cd.UserField4).c_str());
                 pIt[L"image"] = SysAllocString((cd.ContactImagePath).c_str());
+                if (cd.Type.length() > 0)
+                {
+                    if (wcsicmp(cd.Type.c_str(), L"group") == 0)
+                    {
+                        pIt[L"type"]  = SysAllocString(cd.Type.c_str());
+                        pIt[L"dlist"] = SysAllocString((cd.pDList).c_str());
+                    }
+                }
                 if (cd.UserDefinedFields.size() > 0)
                 {
                     vector<ContactUDFields>::iterator it;
