@@ -203,7 +203,7 @@ class Program
                     var countdownEvent = new CountdownEvent(myXmlConfig.UserList.Count); 
                     Account userAccts = new Account();
                     
-                    userAccts.StartMigration(myXmlConfig.UserList, myXmlConfig.ConfigObj.UserProvision.Domain, importopts, countdownEvent);
+                    userAccts.StartMigration(myXmlConfig.UserList, myXmlConfig.ConfigObj.UserProvision.Domain, importopts, countdownEvent,TestObj);
                    // Thread.Sleep(129000);
 
                     countdownEvent.Wait();
@@ -277,7 +277,7 @@ class Program
                         var countdownEvent = new CountdownEvent(1);
                         Account userAccts = new Account();
 
-                        userAccts.StartMigration(myXmlConfig.UserList, myXmlConfig.ConfigObj.UserProvision.Domain, importopts, countdownEvent, false, accountname, accountid);
+                        userAccts.StartMigration(myXmlConfig.UserList, myXmlConfig.ConfigObj.UserProvision.Domain, importopts, countdownEvent,TestObj, false, accountname, accountid);
                         // Thread.Sleep(129000);
 
                         countdownEvent.Wait();
