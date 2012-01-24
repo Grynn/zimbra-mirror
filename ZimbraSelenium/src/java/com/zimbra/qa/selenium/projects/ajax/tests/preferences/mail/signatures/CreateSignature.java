@@ -70,7 +70,8 @@ public class CreateSignature extends AjaxCommonTest {
 		
 		//Verify signature name and body contents
 		ZAssert.assertEquals(signature.getName(),sigName,"Verify signature Name");
-		ZAssert.assertEquals(signature.dBodyHtmlText,sigBody,"Verify Html signature body");
+		ZAssert.assertStringContains(signature.dBodyHtmlText, sigBody, "Verify Html signature body");
+		//ZAssert.assertEquals(signature.dBodyHtmlText,sigBody,"Verify Html signature body");
 
 
 	}
