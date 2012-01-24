@@ -688,8 +688,12 @@ public class FormApptNew extends AbsForm {
 	}
 	
 	public String zGetApptLocation(String location) throws HarnessException {
-		return this.sGetText("css=td[id*='_location']:contains('" + location + "')");
+		return this.sGetText("css=td[id*='_location']:contains('" + location + "')");		
 	}
+	
+	public String zGetApptLocationFloating(String location) throws HarnessException {
+		return this.sGetValue("css=input[id$='_location_input']");
+	}	
 	
 	public String zGetApptEquipment(String equipment) throws HarnessException {
 		return this.sGetText("css=td[id*='_resourcesData']:contains('" + equipment + "')");		

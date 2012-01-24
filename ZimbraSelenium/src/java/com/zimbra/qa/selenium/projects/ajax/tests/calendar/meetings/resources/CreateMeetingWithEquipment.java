@@ -22,7 +22,7 @@ public class CreateMeetingWithEquipment extends AjaxCommonTest {
 	
 	@Bugs(ids = "69132")
 	@Test(description = "Create simple meeting with equipment",
-			groups = { "functional" })
+			groups = { "sanity" })
 	public void CreateMeetingWithEquipment_01() throws HarnessException {
 		
 		// Create appointment data
@@ -48,10 +48,6 @@ public class CreateMeetingWithEquipment extends AjaxCommonTest {
 		apptForm.zFill(appt);
 		apptForm.zSubmit();
 		
-		// Open appointment and verify equipment value via UI
-        app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
-        app.zPageCalendar.zListItem(Action.A_DOUBLECLICK, apptSubject);
-        
 		// Verify appointment exists on the server
 		AppointmentItem actual = AppointmentItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ appt.getSubject() +")", appt.getStartTime().addDays(-7), appt.getEndTime().addDays(7));
 		ZAssert.assertNotNull(actual, "Verify the new appointment is created");
@@ -63,6 +59,13 @@ public class CreateMeetingWithEquipment extends AjaxCommonTest {
 		// Verify equipment free/busy status shows as psts=AC	
 		String equipmentStatus = app.zGetActiveAccount().soapSelectValue("//mail:at[@a='"+ apptEquipment1 +"']", "ptst");
 		ZAssert.assertEquals(equipmentStatus, "AC", "Verify that the equipment status shows as 'ACCEPTED'");
+		
+		// Open appointment and verify equipment value via UI
+        app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
+        app.zPageCalendar.zListItem(Action.A_DOUBLECLICK, apptSubject);
+        SleepUtil.sleepSmall();
+        ZAssert.assertEquals(apptForm.zGetApptEquipment(apptEquipment1), apptEquipment1, "Equipment: Verify the appointment data");
+        app.zPageCalendar.zToolbarPressButton(Button.B_CLOSE);
 		
 	}
 

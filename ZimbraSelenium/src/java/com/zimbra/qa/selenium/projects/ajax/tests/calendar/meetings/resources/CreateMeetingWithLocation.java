@@ -22,7 +22,7 @@ public class CreateMeetingWithLocation extends AjaxCommonTest {
 	
 	@Bugs(ids = "69132")
 	@Test(description = "Create simple meeting with location resource",
-			groups = { "functional" })
+			groups = { "smoke" })
 	public void CreateMeetingWithSingleLocation_01() throws HarnessException {
 		
 		// Create appointment data
@@ -48,10 +48,6 @@ public class CreateMeetingWithLocation extends AjaxCommonTest {
 		apptForm.zFill(appt);
 		apptForm.zSubmit();
 		
-		// Open appointment and verify location value via UI
-        app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
-        app.zPageCalendar.zListItem(Action.A_DOUBLECLICK, apptSubject);
-        
 		// Verify appointment exists on the server
 		AppointmentItem actual = AppointmentItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ appt.getSubject() +")", appt.getStartTime().addDays(-7), appt.getEndTime().addDays(7));
 		ZAssert.assertNotNull(actual, "Verify the new appointment is created");
@@ -63,6 +59,14 @@ public class CreateMeetingWithLocation extends AjaxCommonTest {
 		// Verify location free/busy status shows as psts=AC	
 		String locationStatus = app.zGetActiveAccount().soapSelectValue("//mail:at[@a='"+ apptLocation1 +"']", "ptst");
 		ZAssert.assertEquals(locationStatus, "AC", "Verify that the location status shows as 'ACCEPTED'");
+		
+		// Open appointment and verify location value via UI
+        app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
+        app.zPageCalendar.zListItem(Action.A_DOUBLECLICK, apptSubject);
+        SleepUtil.sleepSmall();
+        ZAssert.assertEquals(apptForm.zGetApptLocation(apptLocation1), apptLocation1, "Location: Verify the appointment data");
+        app.zPageCalendar.zToolbarPressButton(Button.B_CLOSE);
+        
 	}
 	
 	@Bugs(ids = "69132")
@@ -94,10 +98,6 @@ public class CreateMeetingWithLocation extends AjaxCommonTest {
 		apptForm.zFill(appt);
 		apptForm.zSubmit();
 		
-		// Open appointment and verify location value via UI
-        app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
-        app.zPageCalendar.zListItem(Action.A_DOUBLECLICK, apptSubject);
-        
 		// Verify appointment exists on the server
 		AppointmentItem actual = AppointmentItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ appt.getSubject() +")", appt.getStartTime().addDays(-7), appt.getEndTime().addDays(7));
 		ZAssert.assertNotNull(actual, "Verify the new appointment is created");
@@ -108,6 +108,15 @@ public class CreateMeetingWithLocation extends AjaxCommonTest {
 		String locationStatus2 = app.zGetActiveAccount().soapSelectValue("//mail:at[@a='"+ location2.EmailAddress +"']", "ptst");
 		ZAssert.assertEquals(locationStatus1, "AC", "Verify that the location1 status shows as 'ACCEPTED'");
 		ZAssert.assertEquals(locationStatus2, "AC", "Verify that the location2 status shows as 'ACCEPTED'");
+		
+		// Open appointment and verify location value via UI
+        app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
+        app.zPageCalendar.zListItem(Action.A_DOUBLECLICK, apptSubject);
+        SleepUtil.sleepSmall();
+        ZAssert.assertStringContains(apptForm.zGetApptLocation(apptLocation), location1.EmailAddress, "Location: Verify the appointment data");
+        ZAssert.assertStringContains(apptForm.zGetApptLocation(apptLocation), location2.EmailAddress, "Location: Verify the appointment data");
+        app.zPageCalendar.zToolbarPressButton(Button.B_CLOSE);
+		
 	}
 	
 	@Test(description = "Create simple meeting with floating location resource",
@@ -136,15 +145,17 @@ public class CreateMeetingWithLocation extends AjaxCommonTest {
 		apptForm.zFill(appt);
 		apptForm.zSubmit();
 		
+		// Verify appointment exists on the server
+		AppointmentItem actual = AppointmentItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ appt.getSubject() +")", appt.getStartTime().addDays(-7), appt.getEndTime().addDays(7));
+		ZAssert.assertNotNull(actual, "Verify the new appointment is created");
+		
 		// Open appointment and verify location via UI
         app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
         app.zPageCalendar.zListItem(Action.A_DOUBLECLICK, apptSubject);
+        SleepUtil.sleepSmall();
+        ZAssert.assertEquals(apptForm.zGetApptLocationFloating(apptLocation), apptLocation, "Location: Verify the appointment data");
+        app.zPageCalendar.zToolbarPressButton(Button.B_CLOSE);
         
-		// Verify appointment exists on the server with floating location
-		AppointmentItem actual = AppointmentItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ appt.getSubject() +")", appt.getStartTime().addDays(-7), appt.getEndTime().addDays(7));
-		ZAssert.assertNotNull(actual, "Verify the new appointment is created");
-		// currently below verification fails because of bug http://bugzilla.zimbra.com/show_bug.cgi?id=67736
-		//ZAssert.assertEquals(apptForm.zGetApptLocation(apptLocation), apptLocation, "Location: Verify the appointment data");
 	}
 
 }
