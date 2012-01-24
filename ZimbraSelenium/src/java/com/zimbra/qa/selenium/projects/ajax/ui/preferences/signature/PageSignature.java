@@ -57,7 +57,7 @@ public class PageSignature extends AbsTab{
 	}
 	public String zGetHtmlSignatureBody() throws HarnessException {
 		try {
-			sSelectFrame("css=iframe[id*='DWT']");
+			sSelectFrame("css=iframe[id='TEXTAREA_SIGNATURE_ifr']");
 			String sigbodyhtml = this.sGetHtmlSource();
 			return sigbodyhtml;
 		} finally {

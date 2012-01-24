@@ -26,7 +26,7 @@ public class FormSignatureNew extends AbsForm {
 		// TODO: Need to I18N these locators
 		public static final String formatAsText = "//td[contains(@id,'_title') and contains (text(),'"+I18N.FORMAT_AS_PLAIN_TEXT+"')]";
 		public static final String formatAsHtml = "//td[contains(@id,'_title') and contains (text(),'"+I18N.FORMAT_AS_HTML_TEXT+"')]";
-		public static final String zFrame = "css=iframe[id*='DWT']";
+		public static final String zFrame = "css=iframe[id='TEXTAREA_SIGNATURE_ifr']";
 		public static final String zHtmlBodyField = "css=body";
 	}
 
@@ -157,7 +157,9 @@ public class FormSignatureNew extends AbsForm {
 			sSelectFrame(Locators.zFrame);
 			this.sFocus(locator);
 			this.zClickAt(locator,"");
-			sType(locator, value);
+			//sType(locator, value);
+			//sTypeKeys(locator, value);
+			this.zKeyboard.zTypeCharacters(value);
 			}finally{
 				sSelectFrame("relative=top");
 			}
