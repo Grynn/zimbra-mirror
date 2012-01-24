@@ -1401,7 +1401,6 @@ public class ZimbraAPI
         writer.WriteEndElement();
         //
 
-        /*
         if (isRecurring)
         {
             writer.WriteStartElement("recur");
@@ -1414,7 +1413,7 @@ public class ZimbraAPI
             if (task.ContainsKey("wkday"))
             {
                 writer.WriteStartElement("byday");
-                string wkday = appt["wkday"];
+                string wkday = task["wkday"];
                 int len = wkday.Length;
                 for (int i = 0; i < len; i += 2)
                 {
@@ -1457,8 +1456,7 @@ public class ZimbraAPI
             writer.WriteEndElement();   // rule
             writer.WriteEndElement();   // add
             writer.WriteEndElement();   // recur
-        }
-        */
+        }       
 
         if (task["xp-TOTAL_WORK"].Length > 0)
         {

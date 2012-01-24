@@ -557,6 +557,54 @@ STDMETHODIMP CMapiAccessWrap::GetData(BSTR UserId, VARIANT ItemId, FolderType ty
 		pIt[L"content0"] = SysAllocString((taskData.vMessageParts[0].content).c_str());
 		pIt[L"contentType1"] = SysAllocString((taskData.vMessageParts[1].contentType).c_str());
 		pIt[L"content1"] = SysAllocString((taskData.vMessageParts[1].content).c_str());
+
+		// recurrence
+		if (taskData.recurPattern.length() > 0)
+		{
+		    pIt[L"freq"] = SysAllocString((taskData.recurPattern).c_str());
+		    pIt[L"ival"] = SysAllocString((taskData.recurInterval).c_str());
+		    pIt[L"count"] = SysAllocString((taskData.recurCount).c_str());  // can set this either way
+		    if (taskData.recurEndDate.length() > 0)
+		    {
+			pIt[L"until"] = SysAllocString((taskData.recurEndDate).c_str());
+		    }
+		    if (taskData.recurWkday.length() > 0)
+		    {
+			pIt[L"wkday"] = SysAllocString((taskData.recurWkday).c_str());
+		    }
+		    if (taskData.recurDayOfMonth.length() > 0)
+		    {
+			pIt[L"modaylist"] = SysAllocString((taskData.recurDayOfMonth).c_str());
+		    }
+		    if (taskData.recurMonthOfYear.length() > 0)
+		    {
+			pIt[L"molist"] = SysAllocString((taskData.recurMonthOfYear).c_str());
+		    }
+		    if (taskData.recurMonthOccurrence.length() > 0)
+		    {
+			pIt[L"poslist"] = SysAllocString((taskData.recurMonthOccurrence).c_str());
+		    }
+
+		    /*
+                    // timezone
+		    pIt[L"tid"] = SysAllocString((apptData.tz.id).c_str());
+		    pIt[L"stdoff"] = SysAllocString((apptData.tz.standardOffset).c_str());
+		    pIt[L"dayoff"] = SysAllocString((apptData.tz.daylightOffset).c_str());
+		    pIt[L"sweek"] = SysAllocString((apptData.tz.standardStartWeek).c_str());
+		    pIt[L"swkday"] = SysAllocString((apptData.tz.standardStartWeekday).c_str());
+		    pIt[L"smon"] = SysAllocString((apptData.tz.standardStartMonth).c_str());
+		    pIt[L"shour"] = SysAllocString((apptData.tz.standardStartHour).c_str());
+		    pIt[L"smin"] = SysAllocString((apptData.tz.standardStartMinute).c_str());
+		    pIt[L"ssec"] = SysAllocString((apptData.tz.standardStartSecond).c_str());
+		    pIt[L"dweek"] = SysAllocString((apptData.tz.daylightStartWeek).c_str());
+		    pIt[L"dwkday"] = SysAllocString((apptData.tz.daylightStartWeekday).c_str());
+		    pIt[L"dmon"] = SysAllocString((apptData.tz.daylightStartMonth).c_str());
+		    pIt[L"dhour"] = SysAllocString((apptData.tz.daylightStartHour).c_str());
+		    pIt[L"dmin"] = SysAllocString((apptData.tz.daylightStartMinute).c_str());
+		    pIt[L"dsec"] = SysAllocString((apptData.tz.daylightStartSecond).c_str());
+		    //
+                    */
+		}
             }
 	   
         }

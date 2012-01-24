@@ -16,13 +16,13 @@ private:
     //static bool m_bNamedPropsInitialized;
 
     // prop tags for named properties
-    ULONG pr_isrecurringt, pr_status, pr_percentcomplete, pr_taskstart, pr_taskdue, pr_totalwork, pr_actualwork, pr_companies,
+    ULONG pr_isrecurringt, pr_recurstreamt, pr_status, pr_percentcomplete, pr_taskstart, pr_taskdue, pr_totalwork, pr_actualwork, pr_companies,
 	  pr_mileage, pr_billinginfo;
 
     // index of props
     typedef enum _TaskPropIdx
     {
-        N_ISRECURT, N_STATUS, N_PERCENTCOMPLETE, N_TASKSTART, N_TASKDUE, N_TOTALWORK, N_ACTUALWORK, N_NUMTASKPROPS
+        N_ISRECURT, N_RECURSTREAMT, N_STATUS, N_PERCENTCOMPLETE, N_TASKSTART, N_TASKDUE, N_TOTALWORK, N_ACTUALWORK, N_NUMTASKPROPS
     } TaskPropIdx;
 
     typedef enum _CommonTPropIdx
@@ -33,7 +33,7 @@ private:
     // this enum lists all the props
     enum
     {
-        T_SUBJECT, T_BODY, T_HTMLBODY, T_IMPORTANCE, T_ISRECURT, T_STATUS, T_PERCENTCOMPLETE, T_TASKSTART, T_TASKDUE, T_TOTALWORK, T_ACTUALWORK, T_COMPANIES, T_MILEAGE, T_BILLING, T_NUMALLTASKPROPS
+        T_SUBJECT, T_BODY, T_HTMLBODY, T_IMPORTANCE, T_ISRECURT, T_RECURSTREAMT, T_STATUS, T_PERCENTCOMPLETE, T_TASKSTART, T_TASKDUE, T_TOTALWORK, T_ACTUALWORK, T_COMPANIES, T_MILEAGE, T_BILLING, T_NUMALLTASKPROPS
     };
 
     // these are the named property id's
@@ -75,6 +75,7 @@ public:
     void SetBillingInfo(LPTSTR pStr);
     void SetPlainTextFileAndContent();
     void SetHtmlFileAndContent();
+    void SetRecurValues();
 
     wstring GetSubject();
     wstring GetImportance();

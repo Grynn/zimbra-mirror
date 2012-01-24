@@ -766,6 +766,22 @@ LPCWSTR MAPIAccessAPI::GetItem(SBinary sbItemEID, BaseItemData &itemData)
             td->Mileage = mapitask.GetMileage();
             td->BillingInfo = mapitask.GetBillingInfo();
 
+	    if (mapitask.IsRecurring())
+	    {
+		//td->tz = mapitask.GetRecurTimezone();
+		td->recurPattern = mapitask.GetRecurPattern();
+		if (mapitask.GetRecurWkday().length() > 0)
+		{
+		    td->recurWkday = mapitask.GetRecurWkday();
+		}
+		td->recurInterval = mapitask.GetRecurInterval();
+		td->recurCount = mapitask.GetRecurCount();
+		td->recurEndDate = mapitask.GetRecurEndDate();
+		td->recurDayOfMonth = mapitask.GetRecurDayOfMonth();
+		td->recurMonthOccurrence = mapitask.GetRecurMonthOccurrence();
+		td->recurMonthOfYear = mapitask.GetRecurMonthOfYear();
+	    }
+
             MessagePart mp;
             mp.contentType = L"text/plain";
             mp.content = mapitask.GetPlainTextFileAndContent();

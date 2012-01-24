@@ -182,6 +182,17 @@ typedef struct _TaskItemData: BaseItemData
     wstring Mileage;
     wstring BillingInfo;
     vector<MessagePart> vMessageParts;
+
+    // recurrence stuff
+    wstring recurPattern;
+    wstring recurInterval;
+    wstring recurWkday;
+    wstring recurEndType;
+    wstring recurCount;
+    wstring recurEndDate;
+    wstring recurDayOfMonth;
+    wstring recurMonthOccurrence;
+    wstring recurMonthOfYear;
 } TaskItemData;
 
 class MAPIAccessAPI

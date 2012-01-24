@@ -30,6 +30,7 @@ MAPITask::MAPITask(Zimbra::MAPI::MAPISession &session, Zimbra::MAPI::MAPIMessage
     //if (MAPITask::m_bNamedPropsInitialized == false)
     //{
         pr_isrecurringt = 0;
+        pr_recurstreamt = 0;
 	pr_status = 0;
 	pr_percentcomplete = 0;
 	pr_taskstart = 0;
@@ -70,12 +71,13 @@ HRESULT MAPITask::InitNamedPropsForTask()
 {
     // init named props
     nameIds[0] = 0x8126;
-    nameIds[1] = 0x8101;
-    nameIds[2] = 0x8102;
-    nameIds[3] = 0x8104;
-    nameIds[4] = 0x8105;
-    nameIds[5] = 0x8111;
-    nameIds[6] = 0x8110;
+    nameIds[1] = 0x8116;
+    nameIds[2] = 0x8101;
+    nameIds[3] = 0x8102;
+    nameIds[4] = 0x8104;
+    nameIds[5] = 0x8105;
+    nameIds[6] = 0x8111;
+    nameIds[7] = 0x8110;
 
     nameIdsC[0] = 0x8539;
     nameIdsC[1] = 0x8534;
@@ -120,6 +122,7 @@ HRESULT MAPITask::InitNamedPropsForTask()
 
     // give the prop tag ID's a type
     pr_isrecurringt = SetPropType(pTaskTags->aulPropTag[N_ISRECURT], PT_BOOLEAN);
+    pr_recurstreamt = SetPropType(pTaskTags->aulPropTag[N_RECURSTREAMT], PT_BINARY);
     pr_status = SetPropType(pTaskTags->aulPropTag[N_STATUS], PT_LONG);
     pr_percentcomplete = SetPropType(pTaskTags->aulPropTag[N_PERCENTCOMPLETE], PT_DOUBLE);
     pr_taskstart = SetPropType(pTaskTags->aulPropTag[N_TASKSTART], PT_SYSTIME);
@@ -151,7 +154,7 @@ HRESULT MAPITask::SetMAPITaskValues()
 {
     SizedSPropTagArray(T_NUMALLTASKPROPS, taskProps) = {
 	T_NUMALLTASKPROPS, {
-	    PR_SUBJECT, PR_BODY, PR_HTML, PR_IMPORTANCE, pr_isrecurringt, pr_status,
+	    PR_SUBJECT, PR_BODY, PR_HTML, PR_IMPORTANCE, pr_isrecurringt, pr_recurstreamt, pr_status,
 	    pr_percentcomplete, pr_taskstart, pr_taskdue, pr_totalwork,
 	    pr_actualwork, pr_companies, pr_mileage, pr_billinginfo
 	}
@@ -159,6 +162,7 @@ HRESULT MAPITask::SetMAPITaskValues()
 
     HRESULT hr = S_OK;
     ULONG cVals = 0;
+    m_bIsRecurring = false;
 
     if (FAILED(hr = m_pMessage->GetProps((LPSPropTagArray) & taskProps, fMapiUnicode, &cVals,
             &m_pPropVals)))
@@ -216,12 +220,154 @@ HRESULT MAPITask::SetMAPITaskValues()
     SetPlainTextFileAndContent();
     SetHtmlFileAndContent();
 
-    //if (m_bIsRecurring)
-    //{
-    //    ...
-    //}
+    if (m_bIsRecurring)
+    {
+	if (m_pPropVals[T_RECURSTREAMT].ulPropTag == taskProps.aulPropTag[T_RECURSTREAMT])
+	{
+	    SetRecurValues();
+	}
+    }
 
     return hr;
+}
+
+void MAPITask::SetRecurValues()
+{
+    Zimbra::Util::ScopedInterface<IStream> pRecurrenceStream;
+    HRESULT hResult = m_pMessage->OpenProperty(pr_recurstreamt, &IID_IStream, 0, 0,
+						(LPUNKNOWN *)pRecurrenceStream.getptr());
+    if (FAILED(hResult))
+    {
+	return;
+    }
+    LPSTREAM pStream = pRecurrenceStream.get();
+    Zimbra::Mapi::Task OlkTask(m_pMessage, NULL);
+    Zimbra::Mapi::COutlookRecurrencePattern &recur = OlkTask.GetRecurrencePattern();
+    hResult = recur.ReadRecurrenceStream(pStream);
+    if (FAILED(hResult))
+    {
+	return;
+    }
+
+    /*
+    // Set Timezone info
+    SYSTEMTIME stdTime;
+    SYSTEMTIME dsTime;
+    const Zimbra::Mail::TimeZone &tzone = recur.GetTimeZone();
+    m_timezone.id = m_pTimezoneId;  // don't use m_timezone.id = tzone.GetId()
+    IntToWstring(tzone.GetStandardOffset(), m_timezone.standardOffset);
+    IntToWstring(tzone.GetDaylightOffset(), m_timezone.daylightOffset);
+    tzone.GetStandardStart(stdTime);
+    tzone.GetDaylightStart(dsTime);
+    IntToWstring(stdTime.wDay, m_timezone.standardStartWeek);
+    IntToWstring(stdTime.wDayOfWeek + 1, m_timezone.standardStartWeekday);  // note the + 1 -- bumping weekday
+    IntToWstring(stdTime.wMonth, m_timezone.standardStartMonth);
+    IntToWstring(stdTime.wHour, m_timezone.standardStartHour);
+    IntToWstring(stdTime.wMinute, m_timezone.standardStartMinute);
+    IntToWstring(stdTime.wSecond, m_timezone.standardStartSecond);
+    IntToWstring(dsTime.wDay, m_timezone.daylightStartWeek);
+    IntToWstring(dsTime.wDayOfWeek + 1, m_timezone.daylightStartWeekday);   // note the + 1 -- bumping weekday
+    IntToWstring(dsTime.wMonth, m_timezone.daylightStartMonth);
+    IntToWstring(dsTime.wHour, m_timezone.daylightStartHour);
+    IntToWstring(dsTime.wMinute, m_timezone.daylightStartMinute);
+    IntToWstring(dsTime.wSecond, m_timezone.daylightStartSecond);
+    //
+    */
+
+    ULONG ulType = recur.GetRecurrenceType();
+    switch (ulType)
+    {
+	case oRecursDaily:
+	    m_pRecurPattern = L"DAI";
+	    break;
+	case oRecursWeekly:
+	    m_pRecurPattern = L"WEE";
+	    break;
+	case oRecursMonthly:
+	case oRecursMonthNth:
+	    m_pRecurPattern = L"MON";
+	    break;
+	case oRecursYearly:
+	case oRecursYearNth:
+	    m_pRecurPattern = L"YEA";
+	    break;
+	default: ;
+    }
+    IntToWstring(recur.GetInterval(), m_pRecurInterval);
+
+    ULONG ulDayOfWeekMask = recur.GetDayOfWeekMask();
+    if (ulDayOfWeekMask & wdmSunday)    m_pRecurWkday += L"SU";
+    if (ulDayOfWeekMask & wdmMonday)    m_pRecurWkday += L"MO";
+    if (ulDayOfWeekMask & wdmTuesday)   m_pRecurWkday += L"TU";
+    if (ulDayOfWeekMask & wdmWednesday) m_pRecurWkday += L"WE";
+    if (ulDayOfWeekMask & wdmThursday)  m_pRecurWkday += L"TH";
+    if (ulDayOfWeekMask & wdmFriday)    m_pRecurWkday += L"FR";
+    if (ulDayOfWeekMask & wdmSaturday)  m_pRecurWkday += L"SA";
+
+    if ((m_pRecurPattern == L"DAI") && (m_pRecurWkday.length() > 0))	// every weekday
+    {
+	m_pRecurPattern = L"WEE";
+    }
+
+    if (m_pRecurPattern == L"MON")
+    {
+	if (ulType == oRecursMonthly)
+	{
+	    IntToWstring(recur.GetDayOfMonth(), m_pRecurDayOfMonth);
+	}
+	else
+	if (ulType == oRecursMonthNth)
+	{
+	    ULONG ulMonthOccurrence = recur.GetInstance();
+	    if (ulMonthOccurrence == 5)	    // last
+	    {
+		m_pRecurMonthOccurrence = L"-1";
+	    }
+	    else
+	    {
+		IntToWstring(ulMonthOccurrence, m_pRecurMonthOccurrence);
+	    }
+	}
+    }
+
+    if (m_pRecurPattern == L"YEA")
+    {
+	ULONG ulMonthOfYear = recur.GetMonthOfYear();
+	IntToWstring(ulMonthOfYear, m_pRecurMonthOfYear);
+	if (ulType == oRecursYearly)
+	{
+	    IntToWstring(recur.GetDayOfMonth(), m_pRecurDayOfMonth);
+	}
+	else
+	if (ulType == oRecursYearNth)
+	{
+	    ULONG ulMonthOccurrence = recur.GetInstance();
+	    if (ulMonthOccurrence == 5)	    // last
+	    {
+		m_pRecurMonthOccurrence = L"-1";
+	    }
+	    else
+	    {
+		IntToWstring(ulMonthOccurrence, m_pRecurMonthOccurrence);
+	    }
+	}
+    }
+
+    ULONG ulRecurrenceEndType = recur.GetEndType();
+    if (ulRecurrenceEndType == oetEndAfterN)
+    {
+	IntToWstring(recur.GetOccurrences(), m_pRecurCount);
+    }
+    else
+    if (ulRecurrenceEndType == oetEndDate)
+    {
+	SYSTEMTIME st;
+	Zimbra::Mapi::CRecurrenceTime rtEndDate = recur.GetEndDate();
+	Zimbra::Mapi::CFileTime ft = (FILETIME)rtEndDate;
+	FileTimeToSystemTime(&ft, &st);
+	wstring temp = Zimbra::Util::FormatSystemTime(st, TRUE, TRUE);
+	m_pRecurEndDate = temp.substr(0, 8);
+    }
 }
 
 void MAPITask::SetSubject(LPTSTR pStr)
