@@ -19,6 +19,7 @@ import java.net.ConnectException;
 import java.net.NoRouteToHostException;
 import java.net.PortUnreachableException;
 import java.net.SocketTimeoutException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -978,10 +979,14 @@ public class OfflineSyncManager implements FormatListener {
 
     private void encodeDialog(String acctId, Element e) {
         checkHeapdumpAndEncode(acctId, e);
+        List<Pair<String, String>> removeList = new ArrayList<Pair<String,String>>();
         for (Pair<String, String> dialog : this.getDialogs(acctId)) {
             Element dialogElement = e.addElement(ZDSYNC_DIALOG).addAttribute(A_ZDSYNC_TYPE, dialog.getFirst());
             dialogElement.setText(dialog.getSecond());
-            this.dialogMap.remove(acctId, dialog);
+            removeList.add(dialog);
+        }
+        for (Pair<String, String> removeItem : removeList) {
+            this.dialogMap.remove(acctId, removeItem);
         }
     }
 
