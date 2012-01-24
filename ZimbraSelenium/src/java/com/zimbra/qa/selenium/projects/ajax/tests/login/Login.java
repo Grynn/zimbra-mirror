@@ -61,27 +61,33 @@ public class Login extends AjaxCommonTest {
 				+		"</action>"
 				+	"</FolderActionRequest>");
 		
+		
 
 		
+		////
+		// For some reason, the message doesn't appear if we use AddMsgRequest, so
+		// instead use SendMsgRequest from AccountB() and move the message.
+		////
+		
 		// Add a message to it
-		ZimbraAccount.AccountA().soapSend(
-					"<AddMsgRequest xmlns='urn:zimbraMail'>"
-        		+		"<m l='"+ folder.getId() +"' >"
-            	+			"<content>From: foo@foo.com\n"
-            	+				"To: foo@foo.com \n"
-            	+				"Subject: "+ subject +"\n"
-            	+				"MIME-Version: 1.0 \n"
-            	+				"Content-Type: text/plain; charset=utf-8 \n"
-            	+				"Content-Transfer-Encoding: 7bit\n"
-            	+				"\n"
-            	+				"simple text string in the body\n"
-            	+			"</content>"
-            	+		"</m>"
-				+	"</AddMsgRequest>");
+		ZimbraAccount.AccountB().soapSend(
+					"<SendMsgRequest xmlns='urn:zimbraMail'>"
+				+		"<m>"
+				+			"<e t='t' a='"+ ZimbraAccount.AccountA().EmailAddress +"'/>"
+				+			"<su>"+ subject +"</su>"
+				+			"<mp ct='text/plain'>"
+				+				"<content>"+ "body" + ZimbraSeleniumProperties.getUniqueString() +"</content>"
+				+			"</mp>"
+				+		"</m>"
+				+	"</SendMsgRequest>");
 		
 		MailItem mail = MailItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ subject +")");
 		ZAssert.assertNotNull(mail, "Verify other account's mail is created");
 
+		ZimbraAccount.AccountA().soapSend(
+						"<MsgActionRequest xmlns='urn:zimbraMail'>" 
+					+		"<action id='"+ mail.getId() +"' op='move' l='"+ folder.getId() +"'/>"
+					+	"</MsgActionRequest>");
 		
 		// Mount it
 		ZimbraAccount.AccountZWC().soapSend(
