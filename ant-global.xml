@@ -61,12 +61,6 @@
     <property name="client.classes.dir" location="${client.dir}/build/classes"/>
     <property name="client.jarfile" location="${client.dir}/build/zimbraclient.jar"/>
 
-    <!-- ZimbraIM -->
-    <property name="im.dir" location="${zimbra.root.dir}/ZimbraIM"/>
-    <property name="im.classes.dir" location="${im.dir}/build/classes"/>
-    <property name="im.jarfile" location="${im.dir}/build/zimbraim.jar"/>
-    <property name="im.jars.dir" location="${im.dir}/jars"/>
-
     <!-- ZimbraTagLib -->
     <property name="taglib.dir" location="${zimbra.root.dir}/ZimbraTagLib"/>
     <property name="taglib.classes.dir" location="${taglib.dir}/build/classes"/>

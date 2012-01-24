@@ -34,7 +34,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="ZimbraCommon" />
-    <orderEntry type="module" module-name="ZimbraIM" />
     <orderEntry type="library" name="Jetty 6.1.5z5.0" level="application_server_libraries" />
     <orderEntry type="module-library">
       <library>

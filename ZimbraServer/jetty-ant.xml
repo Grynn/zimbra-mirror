@@ -3,7 +3,6 @@
   <property name="jetty_webapps" location="build/jetty/webapps" />
   <property name="config.dir" location="conf" />
   <property name="common.jars.dir" location="../ZimbraCommon/jars" />
-  <property name="im.jars.dir" location="../ZimbraIM/jars" />
   <property name="service.dir" location="${jetty_webapps}/service" />
   <property name="lib.dir" location="${service.dir}/WEB-INF/lib" />
   <property name="war.exclude" value="ical4j*.jar,servlet-api.jar,jsp-api.jar,zimbra-native.jar,mail.jar,ldap.jar,jetty-util-*.jar" />
@@ -20,7 +19,6 @@
     <mkdir dir="${lib.dir}" />
     <copy todir="${lib.dir}" preservelastmodified="true">
       <fileset dir="${common.jars.dir}" includes="*.jar" excludes="${war.exclude}" />
-      <fileset dir="${im.jars.dir}" includes="*.jar" excludes="${war.exclude}" />
     </copy>
   </target>
 
@@ -64,7 +62,6 @@
         <lib dir="${jetty_run_base}/lib/jars" includes="*.jar" excludes="not-needed.jar" />
         <classes dir="../ZimbraCommon/build/classes" />
         <classes dir="../ZimbraSoap/build/classes" />
-        <classes dir="../ZimbraIM/build/classes" />
         <classes dir="../ZimbraServer/build/classes" />
         <classes dir="../ZimbraClient/build/classes" />
         <attributes>
