@@ -1,6 +1,7 @@
 #include "common.h"
 #include "Exchange.h"
 #include "MAPIMessage.h"
+#include "MAPIRfc2445.h"
 #include "MAPITask.h"
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -23,15 +24,9 @@ MAPITaskException::MAPITaskException(HRESULT hrErrCode, LPCWSTR lpszDescription,
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 //bool MAPITask::m_bNamedPropsInitialized = false;
 
-MAPITask::MAPITask(Zimbra::MAPI::MAPISession &session,
-   
-    Zimbra::MAPI::MAPIMessage &mMessage)
+MAPITask::MAPITask(Zimbra::MAPI::MAPISession &session, Zimbra::MAPI::MAPIMessage &mMessage)
+                  : MAPIRfc2445 (session, mMessage)
 {
-    m_session = &session;
-    m_mapiMessage = &mMessage;
-    m_pMessage = m_mapiMessage->InternalMessageObject();
-    m_pPropVals = NULL;
-
     //if (MAPITask::m_bNamedPropsInitialized == false)
     //{
         pr_isrecurringt = 0;
@@ -65,7 +60,9 @@ MAPITask::MAPITask(Zimbra::MAPI::MAPISession &session,
 MAPITask::~MAPITask()
 {
     if (m_pPropVals)
+    {
         MAPIFreeBuffer(m_pPropVals);
+    }
     m_pPropVals = NULL;
 }
 

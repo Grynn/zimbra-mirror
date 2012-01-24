@@ -1,24 +1,5 @@
 #pragma once
 
-DEFINE_GUID(PS_OUTLOOK_TASK, 0x00062003, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46);
-
-enum OutlookTaskStatus
-{
-    oTaskNotStarted = 0,
-    oTaskInProgress = 1,
-    oTaskComplete = 2,
-    oTaskWaiting = 3,
-    oTaskDeferred = 4
-};
-
-enum OutlookImportance
-{
-    oImportanceLow = 0,
-    oImportanceNormal = 1,
-    oImportanceHigh = 2
-};
-
-
 // MAPITaskException class
 class MAPITaskException: public GenericException
 {
@@ -29,7 +10,7 @@ public:
 };
 
 // MAPITask class
-class MAPITask
+class MAPITask : public MAPIRfc2445
 {
 private:
     //static bool m_bNamedPropsInitialized;
@@ -58,12 +39,6 @@ private:
     // these are the named property id's
     LONG nameIds[N_NUMTASKPROPS];
     LONG nameIdsC[N_NUMCOMMONTPROPS];
-    Zimbra::MAPI::MAPIMessage *m_mapiMessage;
-    Zimbra::MAPI::MAPISession *m_session;
-    LPMESSAGE m_pMessage;
-    LPSPropValue m_pPropVals;
-
-    bool m_bIsRecurring;
 
     // task data members (represented both by regular and named props
     wstring m_pSubject;
@@ -100,8 +75,6 @@ public:
     void SetBillingInfo(LPTSTR pStr);
     void SetPlainTextFileAndContent();
     void SetHtmlFileAndContent();
-
-    bool IsRecurring();
 
     wstring GetSubject();
     wstring GetImportance();

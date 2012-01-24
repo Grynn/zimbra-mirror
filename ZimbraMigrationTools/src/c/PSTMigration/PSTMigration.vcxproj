@@ -421,6 +421,7 @@
     <ClCompile Include="..\Exchange\MAPIContacts.cpp" />
     <ClCompile Include="..\Exchange\MAPIMessage.cpp" />
     <ClCompile Include="..\Exchange\MAPIFolder.cpp" />
+    <ClCompile Include="..\Exchange\MAPIRfc2445.cpp" />
     <ClCompile Include="..\Exchange\MAPISession.cpp" />
     <ClCompile Include="..\Exchange\MAPIStore.cpp" />
     <ClCompile Include="..\Exchange\MAPITableIterator.cpp" />
@@ -444,6 +445,7 @@
     <ClInclude Include="..\Exchange\MAPIContacts.h" />
     <ClInclude Include="..\Exchange\MAPIMessage.h" />
     <ClInclude Include="..\Exchange\MAPIFolder.h" />
+    <ClInclude Include="..\Exchange\MAPIRfc2445.h" />
     <ClInclude Include="..\Exchange\MAPISession.h" />
     <ClInclude Include="..\Exchange\MAPIStore.h" />
     <ClInclude Include="..\Exchange\MAPITableIterator.h" />

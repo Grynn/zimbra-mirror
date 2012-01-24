@@ -448,6 +448,7 @@
     <ClCompile Include="MAPIFolder.cpp" />
     <ClCompile Include="MAPIMessage.cpp" />
     <ClCompile Include="MapiMigration.cpp" />
+    <ClCompile Include="MAPIRfc2445.cpp" />
     <ClCompile Include="MAPISession.cpp" />
     <ClCompile Include="MAPIStore.cpp" />
     <ClCompile Include="MAPITableIterator.cpp" />
@@ -470,6 +471,7 @@
     <ClInclude Include="MAPIFolder.h" />
     <ClInclude Include="MAPIMessage.h" />
     <ClInclude Include="MapiMigration.h" />
+    <ClInclude Include="MAPIRfc2445.h" />
     <ClInclude Include="MAPISession.h" />
     <ClInclude Include="MAPIStore.h" />
     <ClInclude Include="MAPITableIterator.h" />

@@ -11,6 +11,7 @@
 #include "MAPIFolder.h"
 #include "MapiUtils.h"
 #include "MAPIContacts.h"
+#include "MAPIRfc2445.h"
 #include "MAPIAppointment.h"
 #include "MAPITask.h"
 

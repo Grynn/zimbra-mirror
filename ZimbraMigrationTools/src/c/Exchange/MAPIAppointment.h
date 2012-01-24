@@ -1,106 +1,5 @@
 #pragma once
 
-DEFINE_GUID(PS_OUTLOOK_APPT, 0x00062002, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0x00, 0x46);
-DEFINE_GUID(PS_OUTLOOK_MTG, 0x6ED8DA90, 0x450B, 0x101B, 0x98, 0xDA, 0x00, 0xAA, 0x00, 0x3F,
-    0x13, 0x05);
-
-enum OutlookBusyStatus
-{
-    oFree = 0,
-    oTentative = 1,
-    oBusy = 2,
-    oOutOfOffice = 3
-};
-
-enum OutlookMeetingRecipientType
-{
-    oOrganizer = 0,
-    oRequired = 1,
-    oOptional = 2,
-    oResource = 3
-};
-
-enum OutlookResponseStatus
-{
-    oResponseNone = 0,
-    oResponseOrganized = 1,
-    oResponseTentative = 2,
-    oResponseAccepted = 3,
-    oResponseDeclined = 4,
-    oResponseNotResponded = 5
-};
-
-enum OutlookRecurrenceType
-{
-    oRecursDaily = 0,
-    oRecursWeekly = 1,
-    oRecursMonthly = 2,
-    oRecursMonthNth = 3,
-    oRecursYearly = 5,
-    oRecursYearNth = 6
-};
-
-enum OutlookRecurrenceEndType
-{
-    oetNotDefined = 0x00000000,
-    oetEndDate	  = 0x00002021,
-    oetEndAfterN  = 0x00002022,
-    oetNoEnd      = 0x00002023,
-    oetNoEnd2     = 0xFFFFFFFF
-};
-
-typedef enum
-{
-    etNotDefined = 0x00000000, etEndDate = 0x00002021, etEndAfterN = 0x00002022, etNoEnd =
-        0x00002023, etNoEnd2 = 0xFFFFFFFF
-} RecurrenceEndType;
-
-enum OutlookMaskWeekday
-{
-    wdmUndefined    = 0x00000000,
-    wdmSunday       = 0x00000001,
-    wdmMonday       = 0x00000002,
-    wdmTuesday      = 0x00000004,
-    wdmWednesday    = 0x00000008,
-    wdmThursday     = 0x00000010,
-    wdmFriday       = 0x00000020,
-    wdmSaturday     = 0x00000040
-};
-
-typedef struct _Organizer
-{
-    wstring nam;
-    wstring addr;
-} Organizer;
-
-typedef struct _Attendee
-{
-    wstring nam;
-    wstring addr;
-    wstring role;
-    wstring partstat;
-} Attendee;
-typedef struct _Tz
-{
-    wstring id;
-    wstring standardOffset;
-    wstring daylightOffset;
-    wstring standardStartWeek;
-    wstring standardStartWeekday;
-    wstring standardStartMonth;
-    wstring standardStartHour;
-    wstring standardStartMinute;
-    wstring standardStartSecond;
-    wstring daylightStartWeek;
-    wstring daylightStartWeekday;
-    wstring daylightStartMonth;
-    wstring daylightStartHour;
-    wstring daylightStartMinute;
-    wstring daylightStartSecond;
-} Tz;
-
-
 // MAPIAppointmentException class
 class MAPIAppointmentException: public GenericException
 {
@@ -111,7 +10,7 @@ public:
 };
 
 // MAPIAppointment class
-class MAPIAppointment
+class MAPIAppointment : public MAPIRfc2445
 {
 private:
     //static bool m_bNamedPropsInitialized;
@@ -143,12 +42,6 @@ private:
     // these are the named property id's
     LONG nameIds[N_NUMAPPTPROPS];
     LONG nameIdsC[N_NUMCOMMONPROPS];
-    Zimbra::MAPI::MAPIMessage *m_mapiMessage;
-    Zimbra::MAPI::MAPISession *m_session;
-    LPMESSAGE m_pMessage;
-    LPSPropValue m_pPropVals;
-
-    bool m_bIsRecurring;
 
     // appointment data members (represented both by regular and named props
     wstring m_pSubject;
@@ -169,24 +62,9 @@ private:
     wstring m_pPlainTextFile;
     wstring m_pHtmlFile;
 
-    // recurrence stuff
-    wstring m_pRecurPattern;
-    wstring m_pRecurInterval;
-    wstring m_pRecurWkday;
-    wstring m_pRecurEndType;
-    wstring m_pRecurCount;
-    wstring m_pRecurEndDate;
-    wstring m_pRecurDayOfMonth;
-    wstring m_pRecurMonthOccurrence;
-    wstring m_pRecurMonthOfYear;
-    wstring m_pTimezoneId;
-    Tz m_timezone;
-    //
-
 public:
     MAPIAppointment(Zimbra::MAPI::MAPISession &session, Zimbra::MAPI::MAPIMessage &mMessage);
     ~MAPIAppointment();
-    void IntToWstring(int src, wstring& dest);
     HRESULT InitNamedPropsForAppt();
     HRESULT SetMAPIAppointmentValues();
     void SetSubject(LPTSTR pStr);
@@ -209,8 +87,6 @@ public:
     void SetRecurValues();
     HRESULT SetAppointmentAttachment(wstring &wstrAttachmentPath);
 
-    bool IsRecurring();
-
     wstring GetSubject();
     wstring GetStartDate();
     wstring GetStartDateCommon();
@@ -227,17 +103,5 @@ public:
     wstring GetPrivate();
     wstring GetPlainTextFileAndContent();
     wstring GetHtmlFileAndContent();
-    wstring GetRecurPattern();
-    wstring GetRecurInterval();
-    wstring GetRecurWkday();
-    wstring GetRecurEndType();
-    wstring GetRecurCount();
-    wstring GetRecurEndDate();
-    wstring GetRecurDayOfMonth();
-    wstring GetRecurMonthOccurrence();
-    wstring GetRecurMonthOfYear();
-    wstring GetTimezoneId();
-    Tz GetRecurTimezone();
     vector<Attendee*> GetAttendees();
-
 };

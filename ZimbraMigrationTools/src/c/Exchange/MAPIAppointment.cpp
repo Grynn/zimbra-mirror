@@ -23,15 +23,9 @@ MAPIAppointmentException::MAPIAppointmentException(HRESULT hrErrCode, LPCWSTR lp
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 //bool MAPIAppointment::m_bNamedPropsInitialized = false;
 
-MAPIAppointment::MAPIAppointment(Zimbra::MAPI::MAPISession &session,
-   
-    Zimbra::MAPI::MAPIMessage &mMessage)
+MAPIAppointment::MAPIAppointment(Zimbra::MAPI::MAPISession &session,  Zimbra::MAPI::MAPIMessage &mMessage)
+                                : MAPIRfc2445 (session, mMessage)
 {
-    m_session = &session;
-    m_mapiMessage = &mMessage;
-    m_pMessage = m_mapiMessage->InternalMessageObject();
-    m_pPropVals = NULL;
-
     //if (MAPIAppointment::m_bNamedPropsInitialized == false)
     //{
 	pr_clean_global_objid = 0;
@@ -61,16 +55,6 @@ MAPIAppointment::MAPIAppointment(Zimbra::MAPI::MAPISession &session,
     m_pOrganizerName = L"";
     m_pOrganizerAddr = L"";
     m_pPrivate = L"";
-    m_pRecurPattern = L"";
-    m_pRecurInterval = L"";
-    m_pRecurWkday = L"";
-    m_pRecurEndType = L"";
-    m_pRecurCount = L"";
-    m_pRecurEndDate = L"";
-    m_pRecurDayOfMonth = L"";
-    m_pRecurMonthOccurrence = L"";
-    m_pRecurMonthOfYear = L"";
-    m_pTimezoneId = L"";
 
     SetMAPIAppointmentValues();
 }
@@ -78,15 +62,10 @@ MAPIAppointment::MAPIAppointment(Zimbra::MAPI::MAPISession &session,
 MAPIAppointment::~MAPIAppointment()
 {
     if (m_pPropVals)
+    {
         MAPIFreeBuffer(m_pPropVals);
+    }
     m_pPropVals = NULL;
-}
-
-void MAPIAppointment::IntToWstring(int src, wstring& dest)
-{
-    WCHAR pwszTemp[10];
-    _ltow(src, pwszTemp, 10);
-    dest = pwszTemp;
 }
 
 HRESULT MAPIAppointment::InitNamedPropsForAppt()
@@ -736,8 +715,6 @@ HRESULT MAPIAppointment::SetAppointmentAttachment(wstring &wstrAttachmentPath)
     return hr;
 }
 
-bool MAPIAppointment::IsRecurring() {return m_bIsRecurring; }
-
 wstring MAPIAppointment::GetSubject() { return m_pSubject; }
 wstring MAPIAppointment::GetStartDate() { return m_pStartDate; }
 wstring MAPIAppointment::GetStartDateCommon() { return m_pStartDateCommon; }
@@ -755,13 +732,3 @@ wstring MAPIAppointment::GetPrivate() { return m_pPrivate; }
 wstring MAPIAppointment::GetPlainTextFileAndContent() { return m_pPlainTextFile; }
 wstring MAPIAppointment::GetHtmlFileAndContent() { return m_pHtmlFile; }
 vector<Attendee*> MAPIAppointment::GetAttendees() { return m_vAttendees; }
-wstring MAPIAppointment::GetRecurPattern() { return m_pRecurPattern; }
-wstring MAPIAppointment::GetRecurInterval() { return m_pRecurInterval; }
-wstring MAPIAppointment::GetRecurCount() { return m_pRecurCount; }
-wstring MAPIAppointment::GetRecurWkday() { return m_pRecurWkday; }
-wstring MAPIAppointment::GetRecurEndType() { return m_pRecurEndType; };
-wstring MAPIAppointment::GetRecurEndDate() { return m_pRecurEndDate; };
-wstring MAPIAppointment::GetRecurDayOfMonth() { return m_pRecurDayOfMonth; };
-wstring MAPIAppointment::GetRecurMonthOccurrence() { return m_pRecurMonthOccurrence; };
-wstring MAPIAppointment::GetRecurMonthOfYear() { return m_pRecurMonthOfYear; };
-Tz MAPIAppointment::GetRecurTimezone() { return m_timezone; };
