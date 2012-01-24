@@ -359,24 +359,6 @@ function(domElement, attrName) {
 };
 
 /**
- * Finds an ancestor element with the given node name, eg "find the nearest
- * ancestor DIV or SPAN".
- * 
- * @param	{DOMElement}	domElement		the starting DOM element
- * @param	{string|array}	nodeName(s)		the node name(s) (in lower case)
- * 
- * @return	{DOMElement}	the DOM element
- */
-Dwt.findAncestorByNodeName =
-function(domElement, nodeNames) {
-	nodeNames = AjxUtil.arrayAsHash(AjxUtil.toArray(nodeNames));
-	while (domElement && (!nodeNames[domElement.nodeName.toLowerCase()])) {
-		domElement = domElement.parentNode;
-	}
-	return domElement;
-};
-
-/**
  * Returns true if el1 is an ancestor (in the parent chain) of el2, or if
  * el1 and el2 are the same element.
  *

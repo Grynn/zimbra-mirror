@@ -1486,7 +1486,7 @@ AjxStringUtil.ORIG_QUOTED		= "QUOTED";
 AjxStringUtil.ORIG_SEP_STRONG	= "SEP_STRONG";
 AjxStringUtil.ORIG_SEP_WEAK		= "SEP_WEAK";
 AjxStringUtil.ORIG_WROTE_STRONG	= "WROTE_STRONG";
-AjxStringUtil.ORIG_SROTE_WEAK	= "WROTE_WEAK";
+AjxStringUtil.ORIG_WROTE_WEAK	= "WROTE_WEAK";
 AjxStringUtil.ORIG_HEADER		= "HEADER";
 AjxStringUtil.ORIG_LINE			= "LINE";
 AjxStringUtil.ORIG_SIG_SEP		= "SIG_SEP";
@@ -1532,7 +1532,7 @@ AjxStringUtil.HTML_SEP_ID = "zwchr";
 // regexes for finding a delimiter such as "On DATE, NAME (EMAIL) wrote:"
 AjxStringUtil.ORIG_EMAIL_RE = /[^@\s]+@[A-Za-z0-9\-]{2,}(\.[A-Za-z0-9\-]{2,})+/;	// see AjxUtil.EMAIL_FULL_RE
 AjxStringUtil.ORIG_DATE_RE = /, 20\d\d/;
-AjxStringUtil.ORIG_INTRO_RE = new RegExp("^(--|" + AjxMsg.on + ")", "i")
+AjxStringUtil.ORIG_INTRO_RE = new RegExp("^(-----|" + AjxMsg.on + ")", "i")
 
 /**
  * Analyze the text and return what appears to be original (as opposed to quoted) content. We
@@ -1556,7 +1556,7 @@ function(text, isHtml) {
 	var lines = text.split(AjxStringUtil.SPLIT_RE);
 	
 	var curType, lastLine;
-	var curBlock = [], count = {};
+	var curBlock = [], count = {}, unknownBlock;
 	for (var i = 0; i < lines.length; i++) {
 		var line = lines[i];
 		var testLine = AjxStringUtil.trim(line);
@@ -1596,6 +1596,7 @@ function(text, isHtml) {
 		if (curType) {
 			if (curType != type) {
 				results.push({type:curType, block:curBlock});
+				unknownBlock = (curType == AjxStringUtil.ORIG_UNKNOWN) ? curBlock : unknownBlock;
 				count[curType] = count[curType] ? count[curType] + 1 : 1;
 				curBlock = [];
 				curType = type;
@@ -1621,32 +1622,14 @@ function(text, isHtml) {
 
 	if (curBlock.length) {
 		results.push({type:curType, block:curBlock});
+		unknownBlock = (curType == AjxStringUtil.ORIG_UNKNOWN) ? curBlock : unknownBlock;
 		count[curType] = count[curType] ? count[curType] + 1 : 1;
 	}
 	
-	// We've scanned the whole text. If we found quoted content and there's exactly one UNKNOWN block and it comes first
-	// or it follows a QUOTED block, return it.
+	// We've scanned the whole text. If we found quoted content and there's exactly one UNKNOWN block, return it.
 	if (count[AjxStringUtil.ORIG_UNKNOWN] == 1 && count[AjxStringUtil.ORIG_QUOTED] > 0) {
-		var block;
-		if (results[0].type == AjxStringUtil.ORIG_UNKNOWN) {
-			// first block is UNKNOWN; top-posting without a delimiter
-			block = results[0].block;
-		}
-		else {
-			for (var i = 0; i < results.length; i++) {
-				var result = results[i];
-				if (result.type == AjxStringUtil.ORIG_UNKNOWN) {
-					var prevResult = results[i - 1];
-					if (prevResult && prevResult.type == AjxStringUtil.ORIG_QUOTED) {
-						// QUOTED then UNKNOWN; bottom-posting
-						block = results[i].block;
-						break;
-					}
-				}
-			}
-		}
-		if (block && block.length) {
-			var originalText = block.join("\n") + "\n";
+		if (unknownBlock && unknownBlock.length) {
+			var originalText = unknownBlock.join("\n") + "\n";
 			originalText = originalText.replace(/\s+$/, "\n");
 			return originalText;
 		}
@@ -1655,6 +1638,7 @@ function(text, isHtml) {
 	return text;
 };
 
+// Matches a line of text against some regexes to see if has structural meaning within a mail msg.
 AjxStringUtil._getLineType =
 function(testLine, lastLine, block) {
 
@@ -1708,8 +1692,8 @@ function(testLine, lastLine, block) {
 
 /**
  * For HTML, we strip off the html, head, and body tags and stick the rest in a temporary DOM node so that
- * we can walk the tree. Instead of going line by line, we go element by element. That can be a little tricky
- * since there's not the direct correspondence to what the user's seeing that text has.
+ * we can walk the tree. Instead of going line by line, we go element by element. The easiest way is to figure
+ * out which nodes we can remove if the message appears to have quoted and original content.
  * 
  * @param {string}	text		message body content
  * 
@@ -1739,17 +1723,30 @@ function(text) {
 		AjxStringUtil._htmlContentNode = document.createElement("DIV");
 	}
 	var domNode = AjxStringUtil._htmlContentNode;
-	domNode.origContentType = null;
-	domNode.innerHTML = body;
+	domNode.innerHTML = text;
 	
-	var ctxt = {level: 0};
+	var ctxt = {
+		curType:	null,
+		count:		{},
+		level:		0,
+		toRemove:	[],
+		done:		false,
+		hasQuoted:	false,
+		sepNode:	null
+	};
 	AjxStringUtil._traverseOriginalHtmlContent(domNode, ctxt);
-	
+		
+	// if there's one UNKNOWN section and some QUOTED, preserve the UNKNOWN
 	if (!ctxt.done) {
-		// we didn't find a delimiter - make a second pass to check for quoted content mixed with original content
-		ctxt.results = [];
-		ctxt.level = 0;
-		AjxStringUtil._checkHtmlContentTypes(domNode, ctxt);
+		if (ctxt.count[AjxStringUtil.ORIG_UNKNOWN] == 1 && ctxt.hasQuoted) {
+			for (var i = 0; i < ctxt.toRemove.length; i++) {
+				var el = ctxt.toRemove[i];
+				if (el && el.parentNode) {
+					el.parentNode.removeChild(el);
+				}
+			}
+			ctxt.done = true;
+		}
 	}
 
 	// convert back to text, restoring html, head, and body nodes
@@ -1757,7 +1754,7 @@ function(text) {
 };
 
 // nodes to ignore; they won't have anything we're interested in
-AjxStringUtil.IGNORE_NODE_LIST = ["br", "#comment", "script", "select", "style"];
+AjxStringUtil.IGNORE_NODE_LIST = ["#comment", "script", "select", "style"];
 AjxStringUtil.IGNORE_NODE = AjxUtil.arrayAsHash(AjxStringUtil.IGNORE_NODE_LIST);
 
 // Walk the tree, looking for a definitive delimiter and determining content types for nodes. If we find a node
@@ -1768,36 +1765,34 @@ function(el, ctxt) {
 	if (ctxt.done) { return; }
 	
 	var nodeName = el.nodeName.toLowerCase();
-	DBG.println("html", AjxStringUtil.repeat("&nbsp;&nbsp;&nbsp;&nbsp;", ctxt.level) + nodeName);
+	DBG.println("html", AjxStringUtil.repeat("&nbsp;&nbsp;&nbsp;&nbsp;", ctxt.level) + nodeName + ((nodeName == "#text" && /\S+/.test(el.nodeValue) ? " - " + el.nodeValue.substr(0, 20) : "")));
 	var type;
+	var processChildren = true;
 	
+	// Text node: test against our regexes
 	if (nodeName == "#text") {
-		if (el.nodeValue.search(AjxStringUtil._NON_WHITESPACE) != -1) {
-			var testLine = AjxStringUtil.trim(el.nodeValue);
-			type = AjxStringUtil._getLineType(testLine);
-			if (type == AjxStringUtil.ORIG_SEP_STRONG || type == AjxStringUtil.ORIG_WROTE_STRONG) {
-				ctxt.sepNode = el;	// mark for removal
-			}
-			else {
-				var m = testLine.match(/(\w+):$/);
-				if (m && m[1] && el.parentNode) {
-					// what appears as a single "... wrote:" line may have multiple elements, so gather it all
-					// together into one line and test that
-					testLine = AjxStringUtil.trim(AjxStringUtil.convertHtml2Text(el.parentNode.innerHTML));
-					type = AjxStringUtil._getLineType(testLine);
-					if (type == AjxStringUtil.ORIG_WROTE_STRONG) {
-						ctxt.sepNode = el.parentNode;	// mark for removal
-					}
-				}
-			}
-			// if we have original content, mark the container as type UNKNOWN, rather than the text node
-			if (type == AjxStringUtil.ORIG_UNKNOWN) {
-				var container = Dwt.findAncestorByNodeName(el, ["div", "span", "pre", "blockquote"]);
-				if (container && !container.origContentType) {
-					container.origContentType = AjxStringUtil.ORIG_UNKNOWN;
+		if (!AjxStringUtil._NON_WHITESPACE.test(el.nodeValue)) {
+			return;
+		}
+		var testLine = AjxStringUtil.trim(el.nodeValue);
+		type = AjxStringUtil._getLineType(testLine);
+		if (type == AjxStringUtil.ORIG_SEP_STRONG || type == AjxStringUtil.ORIG_WROTE_STRONG) {
+			ctxt.sepNode = el;	// mark for removal
+		}
+		else {
+			var m = testLine.match(/(\w+):$/);
+			if (m && m[1] && el.parentNode) {
+				// what appears as a single "... wrote:" line may have multiple elements, so gather it all
+				// together into one line and test that
+				testLine = AjxStringUtil.trim(AjxStringUtil.htmlDecode(AjxStringUtil.stripTags(el.parentNode.innerHTML)));
+				type = AjxStringUtil._getLineType(testLine);
+				if (type == AjxStringUtil.ORIG_WROTE_STRONG) {
+					ctxt.sepNode = el.parentNode;	// mark for removal
 				}
 			}
 		}
+		
+	// HR: look for a couple different forms that are used to delimit quoted content
 	} else if (nodeName == "hr") {
 		// see if the HR is ours, or one commonly used by other mail clients such as Outlook
 		if (el.id == AjxStringUtil.HTML_SEP_ID ||
@@ -1806,30 +1801,73 @@ function(el, ctxt) {
 			type = AjxStringUtil.ORIG_SEP_STRONG;
 			ctxt.sepNode = el;	// mark for removal
 		}
-	} else if (nodeName == "div" || nodeName == "pre") {
-		// containers - just recurse into them
+		
+	// PRE: treat as one big line of text (should maybe go line by line)
+	} else if (nodeName == "pre") {
+		var text = AjxStringUtil.htmlDecode(AjxStringUtil.stripTags(el.innerHTML));
+		type = AjxStringUtil._getLineType(text);
+
+	// BR: ignore
+	} else if (nodeName == "br") {
+		return;
+
+	// DIV: check for Outlook class used as delimiter
+	} else if (nodeName == "div") {
+		if (el.className == "OutlookMessageHeader") {
+			type = AjxStringUtil.ORIG_SEP_STRONG;
+			ctxt.sepNode = el;	// mark for removal
+		}
+
+	// SPAN: check for Outlook ID used as delimiter
 	} else if (nodeName == "span") {
 		if (el.id == "OLK_SRC_BODY_SECTION") {
 			type = AjxStringUtil.ORIG_SEP_STRONG;
 			ctxt.sepNode = el;	// mark for removal
 		}
+
+	// IMG: treat as original content
 	} else if (nodeName == "img") {
-		type = AjxStringUtil.ORIG_UNKNOWN;	// IMG is always considered original content
+		type = AjxStringUtil.ORIG_UNKNOWN;
+
+	// BLOCKQUOTE: treat as quoted section
 	} else if (nodeName == "blockquote") {
 		type = AjxStringUtil.ORIG_QUOTED;
+		ctxt.toRemove.push(el);
+		ctxt.hasQuoted = true;
+		processChildren = false;
+
+	// node types to ignore
 	} else if (AjxStringUtil.IGNORE_NODE[nodeName]) {
 		return;
 	}
-	
-	if (type == AjxStringUtil.ORIG_SEP_STRONG || type == AjxStringUtil.ORIG_WROTE_STRONG) {
-		// short-circuit to clip this and subsequent nodes
-		ctxt.done = true;
-	}
-	else if (type) {
-		el.origContentType = type;	// remember for later checking
+
+	// see if we've found a new type
+	if (type) {
+		if (ctxt.curType) {
+			if (ctxt.curType != type) {
+				ctxt.count[ctxt.curType] = ctxt.count[ctxt.curType] ? ctxt.count[ctxt.curType] + 1 : 1;
+				ctxt.curType = type;
+			}
+		}
+		else {
+			ctxt.curType = type;
+		}
 	}
 
+	// if we found a recognized delimiter, set flag to clip it and subsequent nodes at its level
+	if (type == AjxStringUtil.ORIG_SEP_STRONG || type == AjxStringUtil.ORIG_WROTE_STRONG) {
+		if (ctxt.count[AjxStringUtil.ORIG_UNKNOWN] == 1) {
+			ctxt.done = true;
+		}
+	}
+	
+	if (!processChildren) {
+		return;	// don't visit node's children
+	}
+	
 	ctxt.level++;
+
+	// any element that gets here will get recursed into
 	for (var i = 0, len = el.childNodes.length; i < len; i++) {
 		var childNode = el.childNodes[i];
 		AjxStringUtil._traverseOriginalHtmlContent(childNode, ctxt);
@@ -1846,60 +1884,6 @@ function(el, ctxt) {
 			break;
 		}
 	}
-	ctxt.level--;
-};
 
-// Walk the tree to see if we get a sequence of quoted and original content at the same level. Apply the same
-// rule we did for text: if there is a single UNKNOWN block (element) and it comes first or is preceded by a
-// QUOTED block, then it has the original content, and we clip the other elements at its level.
-AjxStringUtil._checkHtmlContentTypes =
-function(el, ctxt) {
-
-	if (ctxt.done) { return; }
-	
-	// We only check the first level at which there is typed content.
-	if (el.origContentType) {
-		ctxt.results.push({type: el.origContentType, el: el});
-		ctxt.contentLevel = ctxt.contentLevel || ctxt.level;
-		return;
-	}
-	
-	ctxt.level++;
-	for (var i = 0, len = el.childNodes.length; i < len; i++) {
-		AjxStringUtil._checkHtmlContentTypes(el.childNodes[i], ctxt);
-	}
-	
-	// We found typed content, see if it satisfies our requirements for original content.
-	if (ctxt.results && ctxt.results.length && (ctxt.level == ctxt.contentLevel)) {
-		var count = {};
-		var unknownEl;
-		// tally counts for each content type
-		for (var i = 0, len = ctxt.results.length; i < len; i++) {
-			var type = ctxt.results[i].type;
-			if (type) {
-				count[type] = count[type] ? count[type] + 1 : 1;
-				// keep track if we see an UNKNOWN preceded by a QUOTED; bottom-posting
-				if (type == AjxStringUtil.ORIG_UNKNOWN && i > 0 && (ctxt.results[i - 1].type == AjxStringUtil.ORIG_QUOTED)) {
-					unknownEl = ctxt.results[i].el;
-				}
-			}
-		}
-		if (count[AjxStringUtil.ORIG_UNKNOWN] == 1 && count[AjxStringUtil.ORIG_QUOTED] > 0) {
-			if (ctxt.results[0].type == AjxStringUtil.ORIG_UNKNOWN) {
-				// the UNKNOWN block came first; top-posting
-				unknownEl = ctxt.results[0].el;
-			}
-			if (unknownEl) {
-				while (el.childElementCount > 1) {
-					var childNode = (el.firstChild == unknownEl) ? el.lastChild : el.firstChild;
-					if (childNode && childNode.parentNode && childNode != unknownEl) {
-						childNode.parentNode.removeChild(childNode);
-					}
-				}
-				ctxt.done = true;
-			}
-		}
-	}
-	
 	ctxt.level--;
 };
