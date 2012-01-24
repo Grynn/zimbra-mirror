@@ -472,7 +472,6 @@ EmailTooltipZimlet.prototype._preLoadImgs =
 function() {
 	this._busyImg = new Image();
 	this._busyImg.src = this.getResource("img/EmailZimlet_busy.gif");
-	this.getShell().getHtmlElement().appendChild(this._busyImg);
 	this._unknownPersonImg = new Image();
 	this._unknownPersonImg.src = this.getResource("img/UnknownPerson_dataNotFound.jpg");
 };
