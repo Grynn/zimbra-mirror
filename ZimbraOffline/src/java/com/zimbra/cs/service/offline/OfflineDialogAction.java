@@ -19,7 +19,8 @@ import java.util.Map;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.AdminConstants;
 import com.zimbra.common.soap.Element;
-import com.zimbra.cs.account.offline.OfflineSoapProvisioning;
+import com.zimbra.cs.mailbox.Mailbox;
+import com.zimbra.cs.mailbox.MailboxManager;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineSyncManager;
 import com.zimbra.cs.offline.common.OfflineConstants;
@@ -87,7 +88,8 @@ public class OfflineDialogAction extends DocumentHandler {
         switch (action) {
         case yes:
             OfflineLog.offline.debug("about to resync mailbox %s", accountId);
-            new OfflineSoapProvisioning().deleteMailbox(accountId);
+            Mailbox mbox = MailboxManager.getInstance().getMailboxByAccountId(accountId);
+            mbox.deleteMailbox();
             break;
         case no:
             OfflineLog.offline.debug("user refused to resync mailbox %s", accountId);
