@@ -2,13 +2,11 @@
 
 #pragma once
 #include "resource.h"
-#include "Exchange_i.h"
-#include "Logger.h"
-#include "MapiAccessWrap.h"
-/*#include "Exchange.h"
-#include "ExchangeAdmin.h"*/
-#include "..\Exchange\MAPIAccessAPI.h"
 #include "BaseUser.h"
+#include "Logger.h"
+#include "Exchange_i.h"
+#include "MapiAccessWrap.h"
+#include "MAPIAccessAPI.h"
 
 class ATL_NO_VTABLE CUserObject: public CComObjectRootEx<CComSingleThreadModel>, public
     CComCoClass<CUserObject, &CLSID_UserObject>, public BaseUser, public ISupportErrorInfo,
@@ -19,39 +17,35 @@ public:
     CUserObject() {}
     DECLARE_REGISTRY_RESOURCEID(IDR_USEROBJECT) BEGIN_COM_MAP(CUserObject) COM_INTERFACE_ENTRY(
         IUserObject) COM_INTERFACE_ENTRY(IDispatch) COM_INTERFACE_ENTRY(
-        ISupportErrorInfo) END_COM_MAP()
-    // ISupportsErrorInfo
-    STDMETHOD(InterfaceSupportsErrorInfo) (REFIID riid);
+        ISupportErrorInfo) END_COM_MAP() STDMETHOD(InterfaceSupportsErrorInfo) (REFIID riid);
 
     DECLARE_PROTECT_FINAL_CONSTRUCT() HRESULT FinalConstruct()
     {
-		CComObject<CMapiAccessWrap> *obj = NULL;
+        CComObject<CMapiAccessWrap> *obj = NULL;
+
         CComObject<CMapiAccessWrap>::CreateInstance(&obj);
-        // BSTR str1;
-        
-        MapiObj = obj;      
+        mapiObj = obj;
         return S_OK;
     }
+
     void FinalRelease() {}
 
 public:
-    STDMETHOD(InitializeUser) (BSTR host, BSTR admin, BSTR AccountID, BSTR AccountName,
-        BSTR *pErrorText);
-    STDMETHOD(GetFolderObjects) ( /*[out, retval]*/ VARIANT * vObjects);
-    STDMETHOD(GetItemsForFolderObjects) (IfolderObject * FolderObj, VARIANT creattiondate,
-        VARIANT * vItems);
-    STDMETHOD(UMInitializeUser) (BSTR ProfileName, BSTR AccountName, BSTR *pErrorText);
-    STDMETHOD(UMUnInitializeUser) ();
-	STDMETHOD(GetMapiAccessObject)(BSTR UserID,IMapiAccessWrap** pVal);
-    STDMETHOD(SMUnInitializeUser) ();
+    STDMETHOD(Init) (BSTR host, BSTR location, BSTR accountName, BSTR *pErrorText);
+    STDMETHOD(GetFolders) (VARIANT * vObjects);
+    STDMETHOD(GetItemsForFolder) (IfolderObject * folderObj, VARIANT creationDate, VARIANT *
+        vItems);
+    STDMETHOD(GetMapiAccessObject) (BSTR userID, IMapiAccessWrap * *pVal);
+    STDMETHOD(Uninit) (void);
 
-    virtual long Initialize(BSTR Id);
-    virtual long GetFolders(VARIANT *folders);
-    virtual long GetItems(VARIANT *Items);
-    virtual long UnInitialize();
+    /*
+     * virtual long Init(BSTR id);
+     * virtual long GetFolders(VARIANT *folders);
+     * virtual long GetItems(VARIANT *items);
+     * virtual void Uninit(void);
+     */
 
-    //Zimbra::MAPI::MAPIAccessAPI *maapi;
-	CComQIPtr<IMapiAccessWrap, &IID_IMapiAccessWrap> MapiObj;
+    CComQIPtr<IMapiAccessWrap, &IID_IMapiAccessWrap> mapiObj;
 };
 
 OBJECT_ENTRY_AUTO(__uuidof(UserObject), CUserObject)

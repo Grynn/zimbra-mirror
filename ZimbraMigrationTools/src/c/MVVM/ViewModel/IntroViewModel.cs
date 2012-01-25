@@ -30,7 +30,7 @@ public class IntroViewModel: BaseViewModel
     private UsersViewModel m_usersViewModel;
     private ScheduleViewModel m_scheduleViewModel;
     private AccountResultsViewModel m_resultsViewModel;
-    public CSMigrationwrapper mw;
+    public CSMigrationWrapper mw;
 
     public IntroViewModel(ListBox lbMode)
     {
@@ -99,24 +99,23 @@ public class IntroViewModel: BaseViewModel
     }
     public void Next()
     {
-        mw = new CssLib.CSMigrationwrapper();
-        Application.Current.Properties["mw"] = mw;
+        if (mw == null)
+        {
+            mw = new CssLib.CSMigrationWrapper("MAPI");
+            Application.Current.Properties["mw"] = mw;
+        }
 
         // Get data to initialize the profile combo boxes
-        mw.MailClient = "MAPI";
-        mw.InitializeInterop();
         string[] profiles = mw.GetListofMapiProfiles();
         foreach (string s in profiles)
         {
             if (isServer)
                 m_configViewModelS.ProfileList.Add(s);
-
             else
                 m_configViewModelU.ProfileList.Add(s);
         }
         if (isServer)
             m_configViewModelS.CSEnableNext = (m_configViewModelS.ProfileList.Count > 0);
-
         else
             m_configViewModelU.CSEnableNext = (m_configViewModelU.ProfileList.Count > 0);
         lb.SelectedIndex = 1;

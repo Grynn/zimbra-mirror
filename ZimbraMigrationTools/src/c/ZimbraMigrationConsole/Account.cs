@@ -26,7 +26,7 @@ class Account: BackgroundWorker
         get { return highestPercentageReached; }
         set { highestPercentageReached = value; }
     }
-    CssLib.CSMigrationwrapper TestObj;
+    CssLib.CSMigrationWrapper TestObj;
 
     MVVM.Model.Users Currentuser;
     CssLib.MigrationOptions Mailoptions;
@@ -67,7 +67,7 @@ class Account: BackgroundWorker
                 Currentuser = new MVVM.Model.Users();
                 Currentuser.UserName = user.UserName;
                 myAccount.Currentuser = Currentuser;
-                myAccount.TestObj = (CssLib.CSMigrationwrapper)wrapper;
+                myAccount.TestObj = (CssLib.CSMigrationWrapper)wrapper;
 
                 myAccount.serverMigration = ServerMigrationflag;
 
@@ -99,7 +99,7 @@ class Account: BackgroundWorker
             myAccount.Currentuser = Currentuser;
 
             myAccount.serverMigration = ServerMigrationflag;
-            myAccount.TestObj = (CssLib.CSMigrationwrapper)wrapper;
+            myAccount.TestObj = (CssLib.CSMigrationWrapper)wrapper;
             number = number + 1;
             myAccount.num = number;
 
@@ -146,11 +146,7 @@ class Account: BackgroundWorker
 
         MyAcct.migrationFolder = MyFolder;
 
-        CssLib.CSMigrationwrapper mw = argumentTest.TestObj;
-        //CssLib.CSMigrationwrapper mw = new CssLib.CSMigrationwrapper();
-
-
-        
+        CssLib.CSMigrationWrapper mw = argumentTest.TestObj;
 
         if (worker.CancellationPending)
         {

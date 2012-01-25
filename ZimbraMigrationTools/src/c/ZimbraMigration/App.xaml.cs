@@ -1,38 +1,22 @@
 ﻿using CssLib;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Windows;
 using System;
+using System.Windows;
 
 namespace ZimbraMigration
 {
-// / <summary>
-// / Interaction logic for App.xaml
-// / </summary>
 public partial class App: Application
 {
     private void Application_Exit(object sender, ExitEventArgs e)
     {
-        string mode = Properties["migrationmode"].ToString();
-        CSMigrationwrapper mw = (CSMigrationwrapper)Properties["mw"];
+        CSMigrationWrapper mw = (CSMigrationWrapper)Properties["mw"];
 
         if (mw != null)
         {
-            mw.MailClient = "MAPI";
-            if (mode == "server")
-            {
-                string s = mw.UninitializeMailClient();
+            string s = mw.GlobalUninit();
 
-                if (s.Length > 0)
-                    MessageBox.Show(s, "Shutdown error", MessageBoxButton.OK,
-                        MessageBoxImage.Error);
-            }
-            else
-            {
-                mw.EndUserMigration();
-            }
+            if (s.Length > 0)
+                MessageBox.Show(s, "Shutdown error", MessageBoxButton.OK,
+                    MessageBoxImage.Error);
         }
     }
 }

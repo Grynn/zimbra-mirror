@@ -234,6 +234,8 @@ HRESULT ExchangeAdmin::GetAllProfiles(vector<string> &vProfileList)
                     if (FAILED(hr))
                         throw ExchangeAdminException(hr,
                             L"GetAllProfiles(): GetRowCount Failed.", __LINE__, __FILE__);
+                    else if (!dwCount)
+                        return hr;
 
                     Zimbra::Util::ScopedRowSet pRows;
 
@@ -683,12 +685,12 @@ LPCWSTR ExchangeOps::GlobalInit(LPCWSTR lpMAPITarget, LPCWSTR lpAdminUsername, L
         }
         catch (Zimbra::MAPI::ExchangeAdminException &ex)
         {
-            lpwstrStatus = FromatExceptionInfo(ex.ErrCode(), (LPWSTR)ex.Description().c_str(),
+            lpwstrStatus = FormatExceptionInfo(ex.ErrCode(), (LPWSTR)ex.Description().c_str(),
                 (LPSTR)ex.SrcFile().c_str(), ex.SrcLine());
         }
         catch (Zimbra::MAPI::Util::MapiUtilsException &ex)
         {
-            lpwstrStatus = FromatExceptionInfo(ex.ErrCode(), (LPWSTR)ex.Description().c_str(),
+            lpwstrStatus = FormatExceptionInfo(ex.ErrCode(), (LPWSTR)ex.Description().c_str(),
                 (LPSTR)ex.SrcFile().c_str(), ex.SrcLine());
         }
     }
@@ -712,12 +714,12 @@ LPCWSTR ExchangeOps::GlobalUninit()
         }
         catch (Zimbra::MAPI::ExchangeAdminException &ex)
         {
-            lpwstrStatus = FromatExceptionInfo(ex.ErrCode(), (LPWSTR)ex.Description().c_str(),
+            lpwstrStatus = FormatExceptionInfo(ex.ErrCode(), (LPWSTR)ex.Description().c_str(),
                 (LPSTR)ex.SrcFile().c_str(), ex.SrcLine());
         }
         catch (Zimbra::MAPI::Util::MapiUtilsException &ex)
         {
-            lpwstrStatus = FromatExceptionInfo(ex.ErrCode(), (LPWSTR)ex.Description().c_str(),
+            lpwstrStatus = FormatExceptionInfo(ex.ErrCode(), (LPWSTR)ex.Description().c_str(),
                 (LPSTR)ex.SrcFile().c_str(), ex.SrcLine());
         }
     }
@@ -745,7 +747,7 @@ LPCWSTR ExchangeOps::SelectExchangeUsers(vector<ObjectPickerData> &vUserList)
     }
     catch (Zimbra::MAPI::Util::MapiUtilsException &ex)
     {
-        lpwstrStatus = FromatExceptionInfo(ex.ErrCode(), (LPWSTR)ex.Description().c_str(),
+        lpwstrStatus = FormatExceptionInfo(ex.ErrCode(), (LPWSTR)ex.Description().c_str(),
             (LPSTR)ex.SrcFile().c_str(), ex.SrcLine());
     }
     return lpwstrStatus;

@@ -25,7 +25,7 @@ class Migration
         /* CSMigrationwrapper test = new CSMigrationwrapper();
          * test.StartMigration(MyAcct);*/
 
-        CSMigrationwrapper test = (CSMigrationwrapper)Test;
+        CSMigrationWrapper test = (CSMigrationWrapper)Test;
 
         // test.StartMigration(MyAcct,opts);
         test.StartMigration(MyAcct, opts, ServerMigration);

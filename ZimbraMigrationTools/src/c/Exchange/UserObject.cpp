@@ -6,9 +6,7 @@
 
 STDMETHODIMP CUserObject::InterfaceSupportsErrorInfo(REFIID riid)
 {
-    static const IID *const arr[] = {
-        &IID_IUserObject
-    };
+    static const IID *const arr[] = { &IID_IUserObject };
 
     for (int i = 0; i < sizeof (arr) / sizeof (arr[0]); i++)
     {
@@ -18,137 +16,77 @@ STDMETHODIMP CUserObject::InterfaceSupportsErrorInfo(REFIID riid)
     return S_FALSE;
 }
 
-long CUserObject::Initialize(BSTR Id)
+/*
+ * long CUserObject::Init(BSTR Id)
+ * {
+ *  MailType = L"MAPI";
+ *  UserID = Id;
+ *  return 0;
+ * }
+ *
+ * long CUserObject::GetFolders(VARIANT *folders)
+ * {
+ *  VariantInit(folders);
+ *  return 0;
+ * }
+ *
+ * long CUserObject::GetItems(VARIANT *Items)
+ * {
+ *  VariantInit(Items);
+ *  return 0;
+ * }
+ *
+ * void CUserObject::Uninit(void)
+ * {
+ * }
+ */
+STDMETHODIMP CUserObject::Init(BSTR host, BSTR location, BSTR account, BSTR *pErrorText)
 {
-    wstring path(dlog.file());
-    wstring::size_type pos = path.rfind('\\');
+    HRESULT hr = S_OK;
 
-    path.erase(pos + 1);
-    path += Id;
-    path += L".log";
-    dlog.open(path.c_str());
-    UserID = Id;
+    dlogd(L"Initialize", Log::KV<BSTR>(L"host", host), Log::KV<BSTR>(L"location", location),
+        Log::KV<BSTR>(L"account", account));
     MailType = L"MAPI";
-    return 0;
-}
-
-long CUserObject::GetFolders(VARIANT *folders)
-{
-    VariantInit(folders);
-    return 0;
-}
-
-long CUserObject::GetItems(VARIANT *Items)
-{
-    VariantInit(Items);
-    return 0;
-}
-
-long CUserObject::UnInitialize()
-{
-    return 0;
-}
-
-STDMETHODIMP CUserObject::InitializeUser(BSTR host, BSTR admin, BSTR AccountID,
-    BSTR AccountName, BSTR *pErrorText)
-{
-    HRESULT hr = S_OK;
-    long retval = 0;
-    BSTR temp;
-
-    temp = host;
-    temp = admin;
-
-	
-    // ////////////
-
-    retval = Initialize(AccountID);
-    // Logger = CSingleton::getInstance();
-
-    dlogd("initialize", "AccountID:", AccountID, "AccountName:", AccountName);
-    // Create Session and Open admin store.
-    // Its a static function and store/session will be used commonly by all mailboxes.
-    // MAPIAccessAPI::InitGlobalSessionAndStore(host,admin);
-    // TODO for Karuna: Call MAPIAccessAPI::UnInitGlobalSessionAndStore() to realse global session and store.
-    // Specify user.
-  
-	hr = MapiObj->Initializeuser(AccountID,pErrorText);
-
-    
-    return hr;
-}
-
-STDMETHODIMP CUserObject::UMInitializeUser(BSTR ProfileName, BSTR AccountName,
-    BSTR *pErrorText)
-{
-    HRESULT hr = S_OK;
-    long retval = 0;
-
-    retval = Initialize(AccountName);
-    // Initialize the Mapi API..
-
-    dlogd("UMInitializeUser ", ProfileName, L" ", AccountName);
-
-    LPCWSTR lpwstrStatus = MAPIAccessAPI::InitGlobalSessionAndStore(ProfileName);
-
-    if (!lpwstrStatus)
+    UserID = location;
+    if (host && *host)
     {
-       		hr = MapiObj->Initializeuser(L"",pErrorText);
+        hr = mapiObj->UserInit(location, pErrorText);
     }
-    *pErrorText = (lpwstrStatus) ? CComBSTR(lpwstrStatus) : SysAllocString(L"");
+    else
+    {
+        LPCWSTR err = MAPIAccessAPI::InitGlobalSessionAndStore(location);
+
+        if (err)
+            *pErrorText = CComBSTR(err);
+        else
+            hr = mapiObj->UserInit(L"", pErrorText);
+    }
     return hr;
 }
 
-STDMETHODIMP CUserObject::UMUnInitializeUser()
+STDMETHODIMP CUserObject::Uninit()
 {
-    dlogd("UMUnInitializeUser");
-    MapiObj->UnInitializeuser();
-    MAPIAccessAPI::UnInitGlobalSessionAndStore();
+    mapiObj->UserUninit();
     return S_OK;
 }
 
-STDMETHODIMP CUserObject::SMUnInitializeUser()
+STDMETHODIMP CUserObject::GetFolders(VARIANT *vObjects)
 {
-    dlogd("SMUnInitializeUser");
-    MapiObj->UnInitializeuser();
-    return S_OK;
-}
-
-STDMETHODIMP CUserObject::GetFolderObjects( /*[out, retval]*/ VARIANT *vObjects)
-{
-    dlogi("Begin GetFolderObjects");
-
-    HRESULT hr = S_OK;
-
     VariantInit(vObjects);
-	hr = MapiObj->GetFolderList(vObjects);
-    dlogi("End GetFolderObjects");
-
-    return hr;
+    return mapiObj->GetFolderList(vObjects);
 }
 
-STDMETHODIMP CUserObject::GetItemsForFolderObjects(IfolderObject *FolderObj,
-    VARIANT creattiondate, VARIANT *vItems)
+STDMETHODIMP CUserObject::GetItemsForFolder(IfolderObject *folderObj, VARIANT creationDate,
+    VARIANT *vItems)
 {
-    dlogi("Begin GetItemsForFolderObjects");
-
-    HRESULT hr = S_OK;
-
     VariantInit(vItems);
-
-	hr = MapiObj->GetItemsList(FolderObj,creattiondate,vItems);
-
-    dlogi("End GetItemsForFolderObjects");
-
-    return S_OK;
+    return mapiObj->GetItemsList(folderObj, creationDate, vItems);
 }
 
-STDMETHODIMP CUserObject::GetMapiAccessObject(BSTR UserID,IMapiAccessWrap **pVal)
+STDMETHODIMP CUserObject::GetMapiAccessObject(BSTR userID, IMapiAccessWrap **pVal)
 {
-	HRESULT hr= S_OK;
-	CComBSTR userID = UserID;
-	(*pVal) = MapiObj;
-	(*pVal)->AddRef();
-
-	return hr;
+    (void)userID;
+    (*pVal) = mapiObj;
+    (*pVal)->AddRef();
+    return S_OK;
 }

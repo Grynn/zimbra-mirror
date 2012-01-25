@@ -92,7 +92,7 @@ inline void FreeEntryID(SBinary &bin)
 }
 
 #define UNICODE_EXCEPTION_STRING L"ErrCode:%s Description:%s SrcFile:%s SrcLine:%s"
-inline LPTSTR FromatExceptionInfo(HRESULT errCode, LPWSTR errDescription, LPSTR srcFile, int
+inline LPTSTR FormatExceptionInfo(HRESULT errCode, LPWSTR errDescription, LPSTR srcFile, int
     srcLine)
 {
     LPWSTR lpBuffer = NULL;

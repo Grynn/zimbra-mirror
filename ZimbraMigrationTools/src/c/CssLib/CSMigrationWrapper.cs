@@ -20,32 +20,35 @@ public class Log {
     }
 
     public static void log(Level level, params object[] objs) {
-        string s = "";
+        StringBuilder s = new StringBuilder();
+        String last = null;
 
         foreach (object obj in objs) {
-            if (s.Length > 0)
-                s += ' ';
-            s += obj.ToString();
+            if (s.Length > 0 && !last.EndsWith("="))
+                s.Append(' ');
+            last = obj.ToString();
+            s.Append(last);
         }
-        log_print(level, s);
+        log_print(level, s.ToString());
     }
 
-    public static void err(string str) { log_print(Level.Err, str); }
-    public static void err(params object[] objs) { log(Level.Err, objs); }
-    public static void warn(string str) { log_print(Level.Warn, str); }
-    public static void warn(params object[] objs) { log(Level.Warn, objs); }
-    public static void info(string str) { log_print(Level.Info, str); }
-    public static void info(params object[] objs) { log(Level.Info, objs); }
     public static void debug(string str) { log_print(Level.Debug, str); }
     public static void debug(params object[] objs) { log(Level.Debug, objs); }
+    public static void err(string str) { log_print(Level.Err, str); }
+    public static void err(params object[] objs) { log(Level.Err, objs); }
+    public static void info(string str) { log_print(Level.Info, str); }
+    public static void info(params object[] objs) { log(Level.Info, objs); }
+    public static void warn(string str) { log_print(Level.Warn, str); }
+    public static void warn(params object[] objs) { log(Level.Warn, objs); }
 
     public static void open(string file) { log_open(file); }
-
-    public static void prefix(string prefix) {
-        log_prefix(prefix);
-    }
+    public static string file() { return log_file(); }
+    public static void prefix(string prefix) { log_prefix(prefix); }
 
     #region PInvokes
+
+    [DllImport("CppLib.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Unicode)]
+    static private extern string log_file();
 
     [DllImport("CppLib.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Unicode)]
     static private extern void log_init(string file, Level level);
@@ -84,16 +87,14 @@ public class MigrationOptions
     public string SkipFolders;
 }
 
-public class CSMigrationwrapper
+public class CSMigrationWrapper
 {
-   
-    string m_MailClient;
-
-    
     enum foldertype
     {
         Mail = 1, Contacts = 2, Calendar = 3, Task = 4, MeetingReq = 5
     };
+
+    string m_MailClient;
     public string MailClient {
         get { return m_MailClient; }
         set { m_MailClient = value; }
@@ -101,116 +102,81 @@ public class CSMigrationwrapper
     
     dynamic MailWrapper;
 
-    dynamic useruserobject = new Exchange.UserObject(); // for PST migration -- can be here since there's only one
-  
-    public CSMigrationwrapper()
+    public CSMigrationWrapper(string mailClient)
     {
         InitLogFile("migration", Log.Level.Info);
         Log.info("Initializing migration");
-
-        
-    }
-
-    
-    public void InitializeInterop()
-    {
-        if (MailClient == "MAPI")
-        {
+        MailClient = mailClient;
+        if (MailClient == "MAPI") {
             MailWrapper = new Exchange.MapiWrapper();
         }
     }
 
-    public string InitializeMailClient(string Target, string AdminUser, string AdminPassword)
+    public string GlobalInit(string Target, string AdminUser, string AdminPassword)
     {
         string s = "";
 
-        if (MailClient == "MAPI")
+        try
         {
-           
-            try
-            {
-                MailWrapper = new Exchange.MapiWrapper();
-                s = MailWrapper.GlobalInit(Target, AdminUser, AdminPassword);
-                
-            }
-            catch (Exception e)
-            {
-                s = string.Format("Initialization Exception.  Make sure to enter the proper credentials.\n{0}", e.Message);
-            }
+            s = MailWrapper.GlobalInit(Target, AdminUser, AdminPassword);
+        }
+        catch (Exception e)
+        {
+            s = string.Format("Initialization Exception. Make sure to enter the proper credentials: {0}", e.Message);
         }
         return s;
     }
 
-    public string UninitializeMailClient()
+    public string GlobalUninit()
     {
-        string s = "";
-
-        if (MailClient == "MAPI")
-        {
-           
-            s = MailWrapper.GlobalUninit();
-        }
-        return s;
-    }
-
-   
-    public void Migrate(string MailOptions)
-    {
-        MailWrapper.ImportMailOptions(MailOptions);
+        return MailWrapper.GlobalUninit();
     }
 
     public string[] GetListofMapiProfiles()
     {
         object var = new object();
+        string msg = "";
+        string[] s = { "" };
 
-        string msg="";
-        string[] s ={""};
         try
         {
-
             msg = MailWrapper.GetProfilelist(out var);
-
             s = (string[])var;
-
-            
         }
-
         catch (Exception e)
         {
-            msg = string.Format("GetListofMapiProfiles Exception. \n{0}", e.Message);
+            msg = string.Format("GetListofMapiProfiles Exception: {0}", e.Message);
 
             s[0]= msg;
         }
-
         return s;
     }
 
     public string[] GetListFromObjectPicker()
     {
         // Change this to above signature when I start getting the real ObjectPicker object back
-        object var = new object();
+        string[] s = { "" };
         string status = "";
-        string[] s = {""};
+        object var = new object();
+
         try
         {
-
             status = MailWrapper.SelectExchangeUsers(out var);
             s = (string[])var;
         }
-
         catch (Exception e)
         {
-            status = string.Format("GetListFromObjectPicker Exception. \n{0}", e.Message);
+            status = string.Format("GetListFromObjectPicker Exception: {0}", e.Message);
             s[0]= status;
-
         }
         return s;
     }
 
-    private void InitLogFile(string fileprefix, Log.Level level)
+    private void InitLogFile(string prefix, Log.Level level)
     {
-        string bakfile = Path.GetTempPath() + fileprefix + ".bak";
-        string logfile = Path.GetTempPath() + fileprefix + ".log";
+        string bakfile = Path.GetTempPath() + prefix + ".bak";
+        string logfile = Path.GetTempPath() + prefix + ".log";
+
         if (File.Exists(bakfile))
         {
             File.Delete(bakfile);
@@ -222,141 +188,95 @@ public class CSMigrationwrapper
         Log.init(logfile, level);
     }
 
-
-    private int ComputeTotalMigrationCount(MigrationOptions importopts, dynamic[] folderobjectarray)
-    {
-        int count = 0;
-
-        // set up check for skipping folders
-        List<string> skipList = new List<string>();
-
-        string skipfolders = importopts.SkipFolders;
-
-        if (skipfolders != null)
-        {
-            if (skipfolders.Length > 0)
-            {
-                string[] tokens = skipfolders.Split(',');
-                for (int i = 0; i < tokens.Length; i++)
-                {
-                    string token = tokens.GetValue(i).ToString();
-
-                    skipList.Add(token.Trim());
-                }
-            }
+    private bool SkipFolder(MigrationOptions options, List<string> skipList, dynamic folder) {
+        if ((folder.Id == (int)ZimbraFolders.Calendar &&
+            !options.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Calendar)) ||
+            (folder.Id == (int)ZimbraFolders.Contacts &&
+            !options.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Contacts)) ||
+            (folder.Id == (int)ZimbraFolders.Junk &&
+            !options.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Junk)) ||
+            (folder.Id == (int)ZimbraFolders.Sent &&
+            !options.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Sent)) ||
+            (folder.Id == (int)ZimbraFolders.Tasks &&
+            !options.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Tasks)) ||
+            (folder.Id == (int)ZimbraFolders.Trash &&
+            !options.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.DeletedItems)) ||
+            // FBS NOTE THAT THESE ARE EXCHANGE SPECIFIC and need to be removed
+            (folder.ContainerClass == "IPF.Contact" &&
+            !options.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Contacts)) ||
+            (folder.ContainerClass == "IPF.Appointment" &&
+            !options.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Calendar)) ||
+            (folder.ContainerClass == "IPF.Task" &&
+            !options.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Tasks)) ||
+            (folder.ContainerClass == "IPF.Note" &&
+            !options.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Mail)))
+            return true;
+        for (int i = 0; i < skipList.Count; i++) {
+            if (folder.Name == skipList[i])
+                return true;
         }
-        // /
-        foreach (dynamic folderobject in folderobjectarray)
-        {
-            if ((folderobject.Id == (int)ZimbraFolders.Sent) && !(importopts.ItemsAndFolders.HasFlag(
-                    ItemsAndFoldersOptions.Sent)))
-                    continue;
-            if ((folderobject.Id == (int)ZimbraFolders.Trash) && !(importopts.ItemsAndFolders.HasFlag(
-                ItemsAndFoldersOptions.DeletedItems)))
-                continue;
-            if ((folderobject.Id == (int)ZimbraFolders.Junk) && !(importopts.ItemsAndFolders.HasFlag(
-                ItemsAndFoldersOptions.Junk)))
-                continue;
-            if ((folderobject.ContainerClass == "IPF.Contact") &&
-                !(importopts.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Contacts)))
-                continue;
-            if ((folderobject.ContainerClass == "IPF.Appointment") &&
-                !(importopts.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Calendar)))
-                continue;
-            if ((folderobject.ContainerClass == "IPF.Task") &&
-                !(importopts.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Tasks)))
-                continue;
-            if ((folderobject.ContainerClass == "IPF.Note") &&
-                !(importopts.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Mail)))
-                continue;
-             // //
-
-            // check if we want to skip any folders
-            bool bSkipIt = false;
-
-            for (int i = 0; i < skipList.Count; i++)
-            {
-                if (folderobject.Name == skipList[i])
-                {
-                    bSkipIt = true;
-                    break;
-                }
-            }
-            if (bSkipIt)
-                continue;
-            count += folderobject.ItemCount;
-        }
-        return count;
+        return false;
     }
 
+    // TODO - this is Exchange specific - should use folder ids
     private string GetFolderViewType(string containerClass)
     {
         string retval = "";                     // if it's a "message", blanks are cool
 
         if (containerClass == "IPF.Contact")
             retval = "contact";
-
         else if (containerClass == "IPF.Appointment")
             retval = "appointment";
-
         else if (containerClass == "IPF.Task")
             retval = "task";
         return retval;
     }
 
-    private bool ProcessIt(MigrationOptions importopts, foldertype type)
+    private bool ProcessIt(MigrationOptions options, foldertype type)
     {
         bool retval = false;
+
         switch (type)
         {
-            case foldertype.Mail:
-            case foldertype.MeetingReq:
-                retval = importopts.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Mail);
-                break;
-            case foldertype.Calendar:
-                retval = importopts.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Calendar);
-                break;
-            case foldertype.Contacts:
-                retval = importopts.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Contacts);
-                break;
-            case foldertype.Task:
-                retval = importopts.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Tasks);
-                break;
-            default:
-                break;
+        case foldertype.Mail:
+        case foldertype.MeetingReq:
+            retval = options.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Mail);
+            break;
+        case foldertype.Calendar:
+            retval = options.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Calendar);
+            break;
+        case foldertype.Contacts:
+            retval = options.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Contacts);
+            break;
+        case foldertype.Task:
+            retval = options.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Tasks);
+            break;
+        default:
+            break;
         }
         return retval;
     }
 
-    private void ProcessItems(MigrationAccount Acct, bool isServer, dynamic userobject, dynamic folderobject,
-        ZimbraAPI api, string path, MigrationOptions importopts)
+    private void ProcessItems(MigrationAccount Acct, bool isServer, dynamic user, dynamic folder,
+        ZimbraAPI api, string path, MigrationOptions options)
     {
-        DateTime dt;
-
-        dt = DateTime.UtcNow;
-
-        dynamic[] itemobjectarray;
-
-        itemobjectarray = userobject.GetItemsForFolderObjects(
-              folderobject, dt.ToOADate());
-
+        DateTime dt = DateTime.UtcNow;
+        dynamic[] itemobjectarray = user.GetItemsForFolder(folder, dt.ToOADate());
         int iProcessedItems = 0;
 
         if (itemobjectarray.GetLength(0) > 0)
         {
             while (iProcessedItems < Acct.migrationFolder.TotalCountOfItems)
             {
-                Log.debug("Processing folder", folderobject.Name, "-- Total items:", folderobject.ItemCount);
+                Log.debug("Processing folder", folder.Name, "-- Total items:", folder.ItemCount);
                 foreach (dynamic itemobject in itemobjectarray)
                 {
                     foldertype type = (foldertype)itemobject.Type;
-                    if (ProcessIt(importopts, type))
+                    if (ProcessIt(options, type))
                     {
                         bool bSkipMessage = false;
                         Dictionary<string, string> dict = new Dictionary<string, string>();
-
-                       
-                       string[,] data = itemobject.GetDataForItemID(userobject,
+                       string[,] data = itemobject.GetDataForItemID(user,
                                        itemobject.ItemID, itemobject.Type);
 
                         int bound0 = data.GetUpperBound(0);
@@ -379,9 +299,9 @@ public class CSMigrationwrapper
                             {
                                 //Log.debug("Msg Subject: ", dict["Subject"]);
                                 int msf = 0;
-                                if (importopts.MessageSizeFilter != null)
+                                if (options.MessageSizeFilter != null)
                                 {
-                                    msf = Int32.Parse(importopts.MessageSizeFilter);
+                                    msf = Int32.Parse(options.MessageSizeFilter);
                                     msf *= 1000000;
                                     try
                                     {
@@ -399,12 +319,12 @@ public class CSMigrationwrapper
                                         Log.info("File exception on ", dict["filePath"]);
                                     }
                                 }
-                                if (importopts.DateFilter != null)
+                                if (options.DateFilter != null)
                                 {
                                     try
                                     {
                                         DateTime dtm = DateTime.Parse(dict["Date"]);
-                                        DateTime filterDtm = Convert.ToDateTime(importopts.DateFilter);
+                                        DateTime filterDtm = Convert.ToDateTime(options.DateFilter);
                                         if (DateTime.Compare(dtm, filterDtm) < 0)
                                         {
                                             bSkipMessage = true;
@@ -417,7 +337,7 @@ public class CSMigrationwrapper
                                 }
                                 if (!bSkipMessage)
                                 {
-                                    dict.Add("folderId", folderobject.FolderPath);
+                                    dict.Add("folderId", folder.FolderPath);
                                     dict.Add("tags", "");
                                     stat = api.AddMessage(dict);
                                 }
@@ -428,12 +348,12 @@ public class CSMigrationwrapper
                             }
                             else if (type == foldertype.Calendar)
                             {
-                                if (importopts.DateFilter != null)
+                                if (options.DateFilter != null)
                                 {
                                     try
                                     {
                                         DateTime dtm = DateTime.Parse(dict["sCommon"]);
-                                        DateTime filterDtm = Convert.ToDateTime(importopts.DateFilter);
+                                        DateTime filterDtm = Convert.ToDateTime(options.DateFilter);
                                         if (DateTime.Compare(dtm, filterDtm) < 0)
                                         {
                                             bSkipMessage = true;
@@ -445,22 +365,19 @@ public class CSMigrationwrapper
                                     }
                                 }
                                 if (!bSkipMessage)
-                                {
                                     stat = api.AddAppointment(dict, path);
-                                }
                             }
                             else if (type == foldertype.Task)
                             {
-                                if (importopts.DateFilter != null)
+                                if (options.DateFilter != null)
                                 {
                                     try
                                     {
                                         DateTime dtm = DateTime.Parse(dict["sCommon"]);
-                                        DateTime filterDtm = Convert.ToDateTime(importopts.DateFilter);
+                                        DateTime filterDtm = Convert.ToDateTime(options.DateFilter);
+
                                         if (DateTime.Compare(dtm, filterDtm) < 0)
-                                        {
                                             bSkipMessage = true;
-                                        }
                                     }
                                     catch (Exception)
                                     {
@@ -468,17 +385,14 @@ public class CSMigrationwrapper
                                     }
                                 }
                                 if (!bSkipMessage)
-                                {
                                     stat = api.AddTask(dict, path);
-                                }
                             }
                         }
 
                         // Note the : statement.  It seems weird to set Acct.migrationFolder.CurrentCountOFItems
                         // to itself, but this is done so the method will be called to increment the progress bar
-                        Acct.migrationFolder.CurrentCountOfItems = (!bSkipMessage)
-                                                                    ? Acct.migrationFolder.CurrentCountOfItems + 1
-                                                                    : Acct.migrationFolder.CurrentCountOfItems; 
+                        Acct.migrationFolder.CurrentCountOfItems = bSkipMessage ?
+                            Acct.migrationFolder.CurrentCountOfItems : Acct.migrationFolder.CurrentCountOfItems + 1;
                     }
                     iProcessedItems++;
                 }
@@ -486,30 +400,25 @@ public class CSMigrationwrapper
         }
     }
 
-    public void EndUserMigration()
-    {
-       useruserobject.UMUnInitializeUser();
-    }
-
-    public void StartMigration(MigrationAccount Acct, MigrationOptions importopts, bool
+    public void StartMigration(MigrationAccount Acct, MigrationOptions options, bool
         isServer = true, bool isVerbose = false, bool isPreview = false)
-    {       
-        dynamic[] folderobjectarray;
-        dynamic userobject;
-        userobject = new Exchange.UserObject();       
-        string value = "";
+    {
         string accountName = "";
-
+        dynamic[] folders;
         int idx = Acct.AccountName.IndexOf("@");
-        if (idx != -1)
+        dynamic user = new Exchange.UserObject();       
+        string value = "";
+
+        if (idx == -1)
         {
-            accountName = Acct.AccountName.Substring(0, idx);
+            Acct.LastProblemInfo = new ProblemInfo(Acct.AccountName, "Illegal account name",
+                ProblemInfo.TYPE_ERR);
+            Acct.TotalErrors++;
+            return;
         }
         else
         {
-            Acct.LastProblemInfo = new ProblemInfo(Acct.AccountName, "Illegal account name", ProblemInfo.TYPE_ERR);
-            Acct.TotalErrors++;
-            return;
+            accountName = Acct.AccountName.Substring(0, idx);
         }
 
         Log.Level level = isVerbose ? Log.Level.Debug : Log.Level.Info;
@@ -517,18 +426,12 @@ public class CSMigrationwrapper
         InitLogFile(accountName, level);
         try
         {
-            if (isServer)
-            {
-                value = userobject.InitializeUser("", "", Acct.AccountID, accountName);
-            }
-            else
-            {
-                value = useruserobject.UMInitializeUser(Acct.AccountID, accountName);
-            }
+            value = user.Init(isServer ? "host" : "", Acct.AccountID, accountName);
         }
         catch (Exception e)
         {
-            string s = string.Format("Initialization Exception.  {0}", e.Message);
+            string s = string.Format("Initialization Exception. {0}", e.Message);
+
             Acct.LastProblemInfo = new ProblemInfo(accountName, s, ProblemInfo.TYPE_ERR);
             Acct.TotalErrors++;
             return;
@@ -546,141 +449,72 @@ public class CSMigrationwrapper
             Log.info(accountName, "initialized");
         }
 
-        folderobjectarray = (isServer) ? userobject.GetFolderObjects() : useruserobject.GetFolderObjects();
-        Acct.migrationFolder.CurrentCountOfItems = folderobjectarray.Count();
-
-        Acct.TotalItems = ComputeTotalMigrationCount(importopts, folderobjectarray);
-
-        Log.debug("Acct.TotalItems:", Acct.TotalItems.ToString());
-
-        ZimbraAPI api = new ZimbraAPI();
-
-        // see if we're migrating a .pst file. If we are, we need to know that so we can mess with folder names in ZimbraAPI
-        string u = Acct.AccountID.ToUpper();
-        /////
-
         // set up check for skipping folders
         List<string> skipList = new List<string>();
 
-        string skipfolders = importopts.SkipFolders;
-
-        if (skipfolders != null)
+        if (options.SkipFolders != null && options.SkipFolders.Length > 0)
         {
-            if (skipfolders.Length > 0)
-            {
-                string[] tokens = skipfolders.Split(',');
-                for (int i = 0; i < tokens.Length; i++)
-                {
-                    string token = tokens.GetValue(i).ToString();
+            string[] tokens = options.SkipFolders.Split(',');
 
-                    skipList.Add(token.Trim());
-                }
+            for (int i = 0; i < tokens.Length; i++)
+            {
+                string token = tokens.GetValue(i).ToString();
+
+                skipList.Add(token.Trim());
             }
         }
-        // /
-        foreach (dynamic folderobject in folderobjectarray)
+
+        folders = user.GetFolders();
+        Acct.migrationFolder.CurrentCountOfItems = folders.Count();
+
+        foreach (dynamic folder in folders) {
+            if (!SkipFolder(options, skipList, folder))
+                Acct.TotalItems += folder.ItemCount;
+        }
+        Log.info("Acct.TotalItems=", Acct.TotalItems.ToString());
+
+        ZimbraAPI api = new ZimbraAPI();
+
+        foreach (dynamic folder in folders)
         {
             string path = "";
 
-            // FBS NOTE THAT THESE ARE EXCHANGE SPECIFIC.  WE'LL HAVE TO CHANGE THIS FOR GROUPWISE !!!
-            if ((folderobject.Id == (int)ZimbraFolders.Sent) && !(importopts.ItemsAndFolders.HasFlag(
-                ItemsAndFoldersOptions.Sent)))
+            if (SkipFolder(options, skipList, folder))
             {
-                Log.debug("Skipping folder", folderobject.Name);
+                Log.info("Skipping folder", folder.Name);
                 continue;
             }
-            if ((folderobject.Id == (int)ZimbraFolders.Trash) &&
-                !(importopts.ItemsAndFolders.HasFlag(
-                ItemsAndFoldersOptions.DeletedItems)))
+            if (folder.ItemCount == 0)
             {
-                Log.debug("Skipping folder", folderobject.Name);
+                Log.info("Skipping empty folder", folder.Name);
                 continue;
             }
-            if ((folderobject.Id == (int)ZimbraFolders.Junk) &&
-                !(importopts.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Junk)))
-            {
-                Log.debug("Skipping folder", folderobject.Name);
-                continue;
-            }
-            if ((folderobject.ContainerClass == "IPF.Contact") &&
-                !(importopts.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Contacts)))
-            {
-                Log.debug("Skipping folder", folderobject.Name);
-                continue;
-            }
-            if ((folderobject.ContainerClass == "IPF.Appointment") &&
-                !(importopts.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Calendar)))
-            {
-                continue;
-            }
-            if ((folderobject.ContainerClass == "IPF.Task") &&
-                !(importopts.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Tasks)))
-            {
-                continue;
-            }
-            if ((folderobject.ContainerClass == "IPF.Note") &&
-                !(importopts.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Mail)))
-            {
-                Log.debug("Skipping folder", folderobject.Name);
-                continue;
-            }
-                // //
-            if (folderobject.ItemCount == 0)
-            {
-                Log.debug("Skipping empty folder", folderobject.Name);
-                continue;
-            }
-                // check if we want to skip any folders
 
-            bool bSkipIt = false;
-
-            for (int i = 0; i < skipList.Count; i++)
-            {
-                if (folderobject.Name == skipList[i])
-                {
-                    bSkipIt = true;
-                    break;
-                }
-            }
-            if (bSkipIt)
-            {
-                Log.debug("Skipping folder", folderobject.Name, "via filter option");
-                continue;
-            }
-            if (folderobject.Id == 0)
+            Log.info("Processing folder", folder.Name);
+            if (folder.Id == 0)
             {
                 api.AccountName = Acct.AccountName;
 
-                string ViewType = GetFolderViewType(folderobject.ContainerClass);
-                int stat = api.CreateFolder(folderobject.FolderPath, ViewType);
+                string ViewType = GetFolderViewType(folder.ContainerClass);
+                int stat = api.CreateFolder(folder.FolderPath, ViewType);
 
-                path = folderobject.FolderPath;
+                path = folder.FolderPath;
             }
             // Set FolderName at the end, since we trigger results on that, so we need all the values set
-            Acct.migrationFolder.TotalCountOfItems = folderobject.ItemCount; // itemobjectarray.Count();
+            Acct.migrationFolder.TotalCountOfItems = folder.ItemCount;
             Acct.migrationFolder.CurrentCountOfItems = 0;
-            Acct.migrationFolder.FolderView = folderobject.ContainerClass;
-            Acct.migrationFolder.FolderName = folderobject.Name;
-            if (folderobject.Id == (int)ZimbraFolders.Trash)
+            Acct.migrationFolder.FolderView = folder.ContainerClass;
+            Acct.migrationFolder.FolderName = folder.Name;
+            if (folder.Id == (int)ZimbraFolders.Trash)
             {
                 path = "/MAPIRoot/Deleted Items";   // FBS EXCHANGE SPECIFIC HACK !!!
             }
             if (!isPreview)
             {
-                if (isServer)
-                {
-                    ProcessItems(Acct, isServer, userobject, folderobject, api, path, importopts);
-                }
-                else
-                {
-                    ProcessItems(Acct, isServer, useruserobject, folderobject, api, path, importopts);
-                }
+                ProcessItems(Acct, isServer, user, folder, api, path, options);
             }
         }
-        if (isServer)
-        {
-            userobject.SMUnInitializeUser();
-        }
+        user.Uninit();
     }    
 }
 }

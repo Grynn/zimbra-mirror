@@ -23,9 +23,7 @@ static usec_t microtime(void)
     {
         usec_t u64;
         FILETIME ft;
-    }
-
-    ft;
+    } ft;
 
     usec_t usec;
 
@@ -45,6 +43,17 @@ bool Log::LogFile::close(void)
     return true;
 }
 
+bool Log::LogFile::lock(void)
+{
+    OVERLAPPED ov;
+    bool ret;
+
+    memset(&ov, 0, sizeof (ov));
+    ret = LockFileEx(fd, LOCKFILE_EXCLUSIVE_LOCK, 0, 1, 0, &ov) == TRUE;
+    SetFilePointer((HANDLE)fd, 0, 0, FILE_END);
+    return ret;
+}
+
 bool Log::LogFile::open(const wchar_t *file)
 {
     if (file && path && !wcscmp(path, file))
@@ -62,9 +71,8 @@ bool Log::LogFile::open(const wchar_t *file)
     }
     else
     {
-        fd = CreateFile(file, FILE_APPEND_DATA | GENERIC_WRITE, FILE_SHARE_READ |
-            FILE_SHARE_WRITE, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL |
-            FILE_FLAG_SEQUENTIAL_SCAN, 0);
+        fd = CreateFile(file, GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE,
+            NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL | FILE_FLAG_SEQUENTIAL_SCAN, 0);
         SetFilePointer(fd, 0, NULL, FILE_END);
     }
     if (fd == INVALID_HANDLE_VALUE)
@@ -74,6 +82,14 @@ bool Log::LogFile::open(const wchar_t *file)
     }
     path = wcsdup(file);
     return true;
+}
+
+bool Log::LogFile::unlock(void)
+{
+    OVERLAPPED ov;
+
+    memset(&ov, 0, sizeof (ov));
+    return UnlockFileEx(fd, 0, 1, 0, &ov) == TRUE;
 }
 
 bool Log::LogFile::write(const wchar_t *buf, unsigned chars)
@@ -115,6 +131,7 @@ void Log::endlog(Tlsdata &tlsd, Level clvl)
     wchar_t tmp[8];
 
     lck.Enter();
+    ffd.lock();
     now_usec = microtime();
     now_sec = (unsigned)(now_usec / 1000000);
     if (now_sec != last_sec)
@@ -176,6 +193,7 @@ void Log::endlog(Tlsdata &tlsd, Level clvl)
     strbuf += '\r';
     strbuf += '\n';
     ffd.write(strbuf.c_str(), (unsigned)strbuf.size());
+    ffd.unlock();
     lck.Leave();
     tlsd.clvl = None;
     tlsd.space = false;
@@ -229,9 +247,19 @@ Log::Level Log::str2enum(const wchar_t *l)
 }
 
 extern "C" {
+CPPLIB_DLLAPI const wchar_t *log_file(void)
+{
+    return dlog.file();
+}
+
 CPPLIB_DLLAPI void log_init(const wchar_t *file, Log::Level level)
 {
     Log::init(file, level);
+}
+
+CPPLIB_DLLAPI int log_level(void)
+{
+    return dlog.level();
 }
 
 CPPLIB_DLLAPI void log_open(const wchar_t *file)

@@ -7,36 +7,35 @@
 import "oaidl.idl";
 import "ocidl.idl";
 
-
-
-typedef enum FolderType{
+typedef enum FolderType {
     Mail = 1,
     Contacts = 2,
     Calendar = 3,
     Task = 4,
-}FolderType;
+} FolderType;
 
 [
-	object,
-	uuid(68895A46-5AEB-436A-B661-17FDFD7A0CE2),
-	dual,
-	nonextensible,
-	pointer_default(unique)
+    object,
+    uuid(68895A46-5AEB-436A-B661-17FDFD7A0CE2),
+    dual,
+    nonextensible,
+    pointer_default(unique)
 ]
-interface IfolderObject : IDispatch{
-	[propget, id(1)] HRESULT Name([out, retval] BSTR* pVal);
-	[propput, id(1)] HRESULT Name([in] BSTR newVal);
-	[propget, id(2)] HRESULT Id([out, retval] LONG* pVal);
-	[propput, id(2)] HRESULT Id([in] LONG newVal);
-	[propget, id(3)] HRESULT FolderPath([out, retval] BSTR* pVal);
-	[propput, id(3)] HRESULT FolderPath([in] BSTR newVal);
-	[propput,id(4)] HRESULT FolderID([in] VARIANT newVal);
-	[propget,id(4)] HRESULT FolderID([out,retval] VARIANT* newVal);
-	[propget, id(5)] HRESULT ItemCount([out, retval] LONG* pVal);
-	[propput, id(5)] HRESULT ItemCount([in] LONG newVal);
-	[propget, id(6)] HRESULT ContainerClass([out, retval] BSTR* pVal);
-	[propput, id(6)] HRESULT ContainerClass([in] BSTR newVal);
+interface IfolderObject: IDispatch{
+    [propget, id(1)] HRESULT Name([out, retval] BSTR *pVal);
+    [propput, id(1)] HRESULT Name([in] BSTR newVal);
+    [propget, id(2)] HRESULT Id([out, retval] LONG *pVal);
+    [propput, id(2)] HRESULT Id([in] LONG newVal);
+    [propget, id(3)] HRESULT FolderPath([out, retval] BSTR *pVal);
+    [propput, id(3)] HRESULT FolderPath([in] BSTR newVal);
+    [propput, id(4)] HRESULT FolderID([in] VARIANT newVal);
+    [propget, id(4)] HRESULT FolderID([out, retval] VARIANT *newVal);
+    [propget, id(5)] HRESULT ItemCount([out, retval] LONG *pVal);
+    [propput, id(5)] HRESULT ItemCount([in] LONG newVal);
+    [propget, id(6)] HRESULT ContainerClass([out, retval] BSTR *pVal);
+    [propput, id(6)] HRESULT ContainerClass([in] BSTR newVal);
 };
+
 [
     object,
     uuid(C5E4267C-AE6C-4E31-956A-06D8094D0CBE),
@@ -44,85 +43,75 @@ interface IfolderObject : IDispatch{
     nonextensible,
     pointer_default(unique)
 ]
-
-interface IMapiWrapper : IDispatch {
-    [id(1), helpstring("This method can be used to connect to ZCO server")] HRESULT ConnectToServer(BSTR ServerHostName, BSTR Port, BSTR AdminID);
-	[id(2), helpstring("Connect to the mail server")] HRESULT GlobalInit([in] BSTR pMAPITarget, [in] BSTR pAdminUser, [in] BSTR pAdminPassword, [out,retval] BSTR* pErrorText);
-    [id(3), helpstring("Method to import all the options, input is the tag name for options")] HRESULT ImportMailOptions([in] BSTR OptionsTag);
-    [id(4)] HRESULT GetProfilelist([out] VARIANT* Profiles,[out,retval]BSTR* status);
-
-    	/* [id(8), helpstring("Return successive folderobject values")] 
-            HRESULT GetFolderObjects([in] long start,
-                                [in] long length, 
-                                [out, retval] SAFEARRAY(IfolderObject) *Folders);*/
-
-	[id(9), helpstring("method to retreive folder objects")]
-			HRESULT  GetFolderObjects([out, retval] VARIANT* vObjects);
-
-	[id(10), helpstring("Disonnect from the mail server")] 
-	         HRESULT GlobalUninit([out,retval] BSTR* pErrorText);
-
-	[id(11), helpstring("Get Exchange users from the object picker")]  
-			 HRESULT SelectExchangeUsers([out] VARIANT* Users, [out,retval] BSTR* pErrorText);
-
-};
-
-
-[
-	object,
-	uuid(06A01E95-AE75-4010-9BF5-68EBF094F41C),
-	dual,
-	nonextensible,
-	pointer_default(unique)
-]
-interface IMapiAccessWrap : IDispatch{
-
-	[id(1)] HRESULT Initializeuser([in] BSTR UserName, [out] BSTR* StatusMsg);
-	[id(2)] HRESULT GetFolderList([out] VARIANT* folders);
-	[id(3), helpstring("method to retreive Items for folder objects")]
-	HRESULT  GetItemsList([in] IfolderObject* FolderObj, [in] VARIANT creattiondate, [out, retval] VARIANT* vItems);
-	[id(4)] HRESULT GetData([in]BSTR UserId ,[in] VARIANT ItemId,[in] FolderType type,[out, retval] VARIANT* pVal);
-        [id(5)] HRESULT UnInitializeuser();
+interface IMapiWrapper: IDispatch {
+    [id(1), helpstring("initialize source server")]
+    HRESULT GlobalInit([in] BSTR pMAPITarget, [in] BSTR pAdminUser, [in] BSTR pAdminPassword, [out, retval] BSTR *pErrorText);
+    [id(2), helpstring("connect to ZCS server")]
+    HRESULT ConnectToServer(BSTR ServerHostName, BSTR Port, BSTR AdminID);
+    [id(3), helpstring("import all options, input is the tag name for options")]
+    HRESULT ImportMailOptions([in] BSTR OptionsTag);
+    [id(4)] HRESULT GetProfilelist([out] VARIANT *Profiles, [out, retval]BSTR *status);
+    [id(5), helpstring("retreive folder objects")]
+    HRESULT GetFolderObjects([out, retval] VARIANT *vObjects);
+    [id(6), helpstring("get Exchange users from object picker")]  
+    HRESULT SelectExchangeUsers([out] VARIANT *Users, [out, retval] BSTR *pErrorText);
+    [id(7), helpstring("disconnect from the mail server")] 
+    HRESULT GlobalUninit([out, retval] BSTR *pErrorText);
 };
 
 [
-	object,
-	uuid(9DAB1C90-D4BD-4696-898C-DAB5B069BA93),
-	dual,
-	nonextensible,
-	pointer_default(unique)
+    object,
+    uuid(06A01E95-AE75-4010-9BF5-68EBF094F41C),
+    dual,
+    nonextensible,
+    pointer_default(unique)
 ]
-interface IUserObject : IDispatch{
-	[id(1)] HRESULT InitializeUser([in]BSTR mailserver, [in] BSTR adminid,[in] BSTR AccountID,[in] BSTR AccountName, [out,retval] BSTR* pErrorText);
-	[id(2), helpstring("method to retreive folder objects")]
-	HRESULT  GetFolderObjects([out, retval] VARIANT* vObjects);
-	[id(3), helpstring("method to retreive Itsm for folder objects")]
-	HRESULT  GetItemsForFolderObjects([in] IfolderObject* FolderObj, [in] VARIANT creattiondate, [out, retval] VARIANT* vItems);
-	[id(5)] HRESULT UMInitializeUser([in]BSTR ProfileName, [in] BSTR AccountName, [out,retval] BSTR* pErrorText);
-	[id(6)] HRESULT UMUnInitializeUser();
-	[id(7)] HRESULT GetMapiAccessObject(BSTR UserID,[out, retval] IMapiAccessWrap** pVal);
-        [id(8)] HRESULT SMUnInitializeUser();
+interface IMapiAccessWrap: IDispatch {
+    [id(1)] HRESULT UserInit([in] BSTR userName, [out] BSTR *statusMsg);
+    [id(2)] HRESULT GetFolderList([out] VARIANT *folders);
+    [id(3), helpstring("retreive items for folder objects")]
+    HRESULT GetItemsList([in] IfolderObject *folderObj, [in] VARIANT creationDate, [out, retval] VARIANT *vItems);
+    [id(4)] HRESULT GetData([in]BSTR userId, [in] VARIANT itemId, [in] FolderType type, [out, retval] VARIANT *pVal);
+    [id(5)] HRESULT UserUninit();
 };
+
 [
-	object,
-	uuid(0E3233A0-5359-44FF-B98F-BB0A69D4A948),
-	dual,
-	nonextensible,
-	pointer_default(unique)
+    object,
+    uuid(9DAB1C90-D4BD-4696-898C-DAB5B069BA93),
+    dual,
+    nonextensible,
+    pointer_default(unique)
 ]
-interface IItemObject : IDispatch{
-	[propget, id(1)] HRESULT ID([out, retval] BSTR* pVal);
-	[propput, id(1)] HRESULT ID([in] BSTR newVal);
-	[propget, id(2)] HRESULT Type([out, retval] FolderType* pVal);
-	[propput, id(2)] HRESULT Type([in] FolderType newVal);
-	[propget, id(3)] HRESULT CreationDate([out, retval] VARIANT* pVal);
-	[propput, id(3)] HRESULT CreationDate([in] VARIANT newVal);
-	[propget, id(4)] HRESULT Parentfolder([out, retval] IfolderObject** pVal);
-	[propput, id(4)] HRESULT Parentfolder([in] IfolderObject* newVal);
-	
-	[propput,id(6)] HRESULT ItemID([in] VARIANT newVal);
-	[propget,id(6)] HRESULT ItemID([out,retval] VARIANT* newVal);
-	[id(7)] HRESULT GetDataForItemID([in] IUserObject* Userobj,[in] VARIANT ItemId,[in] FolderType type,[out, retval] VARIANT* pVal);
+interface IUserObject: IDispatch {
+    [id(1)] HRESULT Init([in]BSTR host, [in] BSTR location, [in] BSTR accountName, [out, retval] BSTR *pErrorText);
+    [id(2), helpstring("method to retreive folder objects")]
+    HRESULT GetFolders([out, retval] VARIANT *vObjects);
+    [id(3), helpstring("method to retreive items in folders")]
+    HRESULT GetItemsForFolder([in] IfolderObject *folderObj, [in] VARIANT creationDate, [out, retval] VARIANT *vItems);
+    [id(4)] HRESULT GetMapiAccessObject(BSTR userID, [out, retval] IMapiAccessWrap **pVal);
+    [id(5)] HRESULT Uninit(void);
+};
+
+[
+    object,
+    uuid(0E3233A0-5359-44FF-B98F-BB0A69D4A948),
+    dual,
+    nonextensible,
+    pointer_default(unique)
+]
+interface IItemObject: IDispatch {
+    [propget, id(1)] HRESULT ID([out, retval] BSTR *pVal);
+    [propput, id(1)] HRESULT ID([in] BSTR newVal);
+    [propget, id(2)] HRESULT Type([out, retval] FolderType *pVal);
+    [propput, id(2)] HRESULT Type([in] FolderType newVal);
+    [propget, id(3)] HRESULT CreationDate([out, retval] VARIANT *pVal);
+    [propput, id(3)] HRESULT CreationDate([in] VARIANT newVal);
+    [propget, id(4)] HRESULT Parentfolder([out, retval] IfolderObject **pVal);
+    [propput, id(4)] HRESULT Parentfolder([in] IfolderObject *newVal);
+
+    [propput, id(6)] HRESULT ItemID([in] VARIANT newVal);
+    [propget, id(6)] HRESULT ItemID([out,retval] VARIANT *newVal);
+    [id(7)] HRESULT GetDataForItemID([in] IUserObject *Userobj, [in] VARIANT ItemId, [in] FolderType type, [out, retval] VARIANT *pVal);
 };
 
 [
@@ -135,36 +124,36 @@ library Exchange {
     [
 	uuid(A6A12B55-AE1E-449D-A646-19E0DB020EA2)		
     ]
-    coclass MapiWrapper {
+    coclass MapiWrapper
+    {
 	[default] interface IMapiWrapper;
     };
-	[
-		uuid(9D8CDCEC-28FE-4C15-8763-C174B17B815D)		
-	]
-	coclass folderObject
-	{
-		[default] interface IfolderObject;
-	};
-	[
-		uuid(1315040C-D7DA-4C7F-8500-BD9917546D15)		
-	]
-	coclass ItemObject
-	{
-		[default] interface IItemObject;
-	};
-	[
-		uuid(A798CB91-5A5A-4B37-BFA7-11F08CB4770F)		
-	]
-	coclass UserObject
-	{
-		[default] interface IUserObject;
-	};
-	[
-		uuid(BE5C4D5D-D940-4448-8BBE-B9BB34DA7CEC)		
-	]
-	coclass MapiAccessWrap
-	{
-		[default] interface IMapiAccessWrap;
-	};
+    [
+        uuid(9D8CDCEC-28FE-4C15-8763-C174B17B815D)		
+    ]
+    coclass folderObject
+    {
+        [default] interface IfolderObject;
+    };
+    [
+        uuid(1315040C-D7DA-4C7F-8500-BD9917546D15)		
+    ]
+    coclass ItemObject
+    {
+        [default] interface IItemObject;
+    };
+    [
+        uuid(A798CB91-5A5A-4B37-BFA7-11F08CB4770F)		
+    ]
+    coclass UserObject
+    {
+        [default] interface IUserObject;
+    };
+    [
+        uuid(BE5C4D5D-D940-4448-8BBE-B9BB34DA7CEC)		
+    ]
+    coclass MapiAccessWrap
+    {
+        [default] interface IMapiAccessWrap;
+    };
 };
-//import "shobjidl.idl";

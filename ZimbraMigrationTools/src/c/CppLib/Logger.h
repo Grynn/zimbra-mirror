@@ -378,7 +378,9 @@ private:
         const wchar_t *file(void) const { return path; }
 
         bool close(void);
+        bool lock(void);
         bool open(const wchar_t *file);
+        bool unlock(void);
         bool write(const wchar_t *buf, unsigned sz);
 
     private:

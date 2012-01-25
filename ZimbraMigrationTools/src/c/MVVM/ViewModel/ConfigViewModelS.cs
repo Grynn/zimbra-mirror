@@ -154,7 +154,7 @@ public class ConfigViewModelS: BaseViewModel
     private void Next()
     {
         string ret = "";
-        CSMigrationwrapper mw = ((IntroViewModel)ViewModelPtrs[(int)ViewType.INTRO]).mw;
+        CSMigrationWrapper mw = ((IntroViewModel)ViewModelPtrs[(int)ViewType.INTRO]).mw;
 
         if (IsProfile)
         {
@@ -165,7 +165,7 @@ public class ConfigViewModelS: BaseViewModel
                 return;
             }
             if (iMailSvrInitialized == -1)
-                ret = mw.InitializeMailClient(ProfileList[CurrentProfileSelection], "", "");
+                ret = mw.GlobalInit(ProfileList[CurrentProfileSelection], "", "");
         }
         else
         {
@@ -184,8 +184,7 @@ public class ConfigViewModelS: BaseViewModel
                         "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
-                ret = mw.InitializeMailClient(MailServerHostName, MailServerAdminID,
-                    MailServerAdminPwd);
+                ret = mw.GlobalInit(MailServerHostName, MailServerAdminID, MailServerAdminPwd);
             }
         }
         if (ret.Length > 0)

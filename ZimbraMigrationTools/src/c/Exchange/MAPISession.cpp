@@ -58,7 +58,6 @@ HRESULT MAPISession::_mapiLogon(LPWSTR strProfile, DWORD dwFlags, LPMAPISESSION 
 
 HRESULT MAPISession::Logon(LPWSTR strProfile)
 {
-    Zimbra::Util::AutoCriticalSection autocriticalsection(cs);
     DWORD dwFlags = MAPI_EXTENDED | MAPI_NEW_SESSION | MAPI_EXPLICIT_PROFILE | MAPI_NO_MAIL |
         MAPI_LOGON_UI | fMapiUnicode;
 
@@ -67,7 +66,6 @@ HRESULT MAPISession::Logon(LPWSTR strProfile)
 
 HRESULT MAPISession::Logon(bool bDefaultProfile)
 {
-    Zimbra::Util::AutoCriticalSection autocriticalsection(cs);
     DWORD dwFlags = MAPI_EXTENDED | MAPI_NEW_SESSION | fMapiUnicode;
 
     if (bDefaultProfile)

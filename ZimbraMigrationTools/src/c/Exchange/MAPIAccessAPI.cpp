@@ -102,7 +102,7 @@ LPCWSTR MAPIAccessAPI::InitGlobalSessionAndStore(LPCWSTR lpcwstrMigTarget)
                 lpstrMigTarget))
             {
                 SafeDelete(lpstrMigTarget);
-                lpwstrStatus = FromatExceptionInfo(E_FAIL, L"CreatePSTProfile Failed.",
+                lpwstrStatus = FormatExceptionInfo(E_FAIL, L"CreatePSTProfile Failed.",
                     __FILE__, __LINE__);
                 goto CLEAN_UP;
             }
@@ -132,17 +132,17 @@ LPCWSTR MAPIAccessAPI::InitGlobalSessionAndStore(LPCWSTR lpcwstrMigTarget)
     }
     catch (MAPISessionException &msse)
     {
-        lpwstrStatus = FromatExceptionInfo(msse.ErrCode(), (LPWSTR)msse.Description().c_str(),
+        lpwstrStatus = FormatExceptionInfo(msse.ErrCode(), (LPWSTR)msse.Description().c_str(),
             (LPSTR)msse.SrcFile().c_str(), msse.SrcLine());
     }
     catch (MAPIStoreException &mste)
     {
-        lpwstrStatus = FromatExceptionInfo(mste.ErrCode(), (LPWSTR)mste.Description().c_str(),
+        lpwstrStatus = FormatExceptionInfo(mste.ErrCode(), (LPWSTR)mste.Description().c_str(),
             (LPSTR)mste.SrcFile().c_str(), mste.SrcLine());
     }
     catch (Util::MapiUtilsException &muex)
     {
-        lpwstrStatus = FromatExceptionInfo(muex.ErrCode(), (LPWSTR)muex.Description().c_str(),
+        lpwstrStatus = FormatExceptionInfo(muex.ErrCode(), (LPWSTR)muex.Description().c_str(),
             (LPSTR)muex.SrcFile().c_str(), muex.SrcLine());
     }
     // Create Temporary dir for temp files
@@ -252,17 +252,17 @@ LPCWSTR MAPIAccessAPI::OpenUserStore()
     }
     catch (MAPISessionException &msse)
     {
-        lpwstrStatus = FromatExceptionInfo(msse.ErrCode(), (LPWSTR)msse.Description().c_str(),
+        lpwstrStatus = FormatExceptionInfo(msse.ErrCode(), (LPWSTR)msse.Description().c_str(),
             (LPSTR)msse.SrcFile().c_str(), msse.SrcLine());
     }
     catch (MAPIStoreException &mste)
     {
-        lpwstrStatus = FromatExceptionInfo(mste.ErrCode(), (LPWSTR)mste.Description().c_str(),
+        lpwstrStatus = FormatExceptionInfo(mste.ErrCode(), (LPWSTR)mste.Description().c_str(),
             (LPSTR)mste.SrcFile().c_str(), mste.SrcLine());
     }
     catch (Util::MapiUtilsException &muex)
     {
-        lpwstrStatus = FromatExceptionInfo(muex.ErrCode(), (LPWSTR)muex.Description().c_str(),
+        lpwstrStatus = FormatExceptionInfo(muex.ErrCode(), (LPWSTR)muex.Description().c_str(),
             (LPSTR)muex.SrcFile().c_str(), muex.SrcLine());
     }
 CLEAN_UP: SafeDelete(ExchangeServerDN);
@@ -271,7 +271,7 @@ CLEAN_UP: SafeDelete(ExchangeServerDN);
 	SafeDelete(pwstrExchangeHostName);
 	SafeDelete(pwstrExchangeUserDN);
 	if (hr != S_OK)
-        lpwstrStatus = FromatExceptionInfo(hr, L"MAPIAccessAPI::OpenSessionAndStore() Failed",
+        lpwstrStatus = FormatExceptionInfo(hr, L"MAPIAccessAPI::OpenSessionAndStore() Failed",
             __FILE__, __LINE__);
     return lpwstrStatus;
 }
@@ -298,12 +298,12 @@ LPCWSTR MAPIAccessAPI::InitializeUser()
         // Get root folder from user store
         m_rootFolder = new Zimbra::MAPI::MAPIFolder(*m_zmmapisession, *m_userStore);
         if (FAILED(hr = m_userStore->GetRootFolder(*m_rootFolder)))
-            lpwstrStatus = FromatExceptionInfo(hr, L"MAPIAccessAPI::Initialize() Failed",
+            lpwstrStatus = FormatExceptionInfo(hr, L"MAPIAccessAPI::Initialize() Failed",
                 __FILE__, __LINE__);
     }
     catch (GenericException &ge)
     {
-        lpwstrStatus = FromatExceptionInfo(ge.ErrCode(), (LPWSTR)ge.Description().c_str(),
+        lpwstrStatus = FormatExceptionInfo(ge.ErrCode(), (LPWSTR)ge.Description().c_str(),
             (LPSTR)ge.SrcFile().c_str(), ge.SrcLine());
     }
     return lpwstrStatus;
@@ -320,7 +320,7 @@ LPCWSTR MAPIAccessAPI::GetRootFolderHierarchy(vector<Folder_Data> &vfolderlist)
     }
     catch (GenericException &ge)
     {
-        lpwstrStatus = FromatExceptionInfo(ge.ErrCode(), (LPWSTR)ge.Description().c_str(),
+        lpwstrStatus = FormatExceptionInfo(ge.ErrCode(), (LPWSTR)ge.Description().c_str(),
             (LPSTR)ge.SrcFile().c_str(), ge.SrcLine());
     }
     return lpwstrStatus;
@@ -426,7 +426,7 @@ LPCWSTR MAPIAccessAPI::GetFolderItemsList(SBinary sbFolderEID, vector<Item_Data>
     {
         if (FAILED(hr = GetInternalFolder(sbFolderEID, folder) != S_OK))
         {
-            lpwstrStatus = FromatExceptionInfo(hr,
+            lpwstrStatus = FormatExceptionInfo(hr,
                 L"MAPIAccessAPI::GetFolderItemsList() Failed", __FILE__, __LINE__);
             goto ZM_EXIT;
         }
@@ -461,22 +461,22 @@ LPCWSTR MAPIAccessAPI::GetFolderItemsList(SBinary sbFolderEID, vector<Item_Data>
     }
     catch (MAPISessionException &mssex)
     {
-        lpwstrStatus = FromatExceptionInfo(mssex.ErrCode(), (LPWSTR)mssex.Description().c_str(),
+        lpwstrStatus = FormatExceptionInfo(mssex.ErrCode(), (LPWSTR)mssex.Description().c_str(),
             (LPSTR)mssex.SrcFile().c_str(), mssex.SrcLine());
     }
     catch (MAPIFolderException &mfex)
     {
-        lpwstrStatus = FromatExceptionInfo(mfex.ErrCode(), (LPWSTR)mfex.Description().c_str(),
+        lpwstrStatus = FormatExceptionInfo(mfex.ErrCode(), (LPWSTR)mfex.Description().c_str(),
             (LPSTR)mfex.SrcFile().c_str(), mfex.SrcLine());
     }
     catch (MAPIMessageException &msgex)
     {
-        lpwstrStatus = FromatExceptionInfo(msgex.ErrCode(), (LPWSTR)msgex.Description().c_str(),
+        lpwstrStatus = FormatExceptionInfo(msgex.ErrCode(), (LPWSTR)msgex.Description().c_str(),
             (LPSTR)msgex.SrcFile().c_str(), msgex.SrcLine());
     }
     catch (GenericException &genex)
     {
-        lpwstrStatus = FromatExceptionInfo(genex.ErrCode(), (LPWSTR)genex.Description().c_str(),
+        lpwstrStatus = FormatExceptionInfo(genex.ErrCode(), (LPWSTR)genex.Description().c_str(),
             (LPSTR)genex.SrcFile().c_str(), genex.SrcLine());
     }
 ZM_EXIT: return lpwstrStatus;
@@ -492,7 +492,7 @@ LPCWSTR MAPIAccessAPI::GetItem(SBinary sbItemEID, BaseItemData &itemData)
     if (FAILED(hr = m_userStore->OpenEntry(sbItemEID.cb, (LPENTRYID)sbItemEID.lpb, NULL,
             MAPI_BEST_ACCESS, &objtype, (LPUNKNOWN *)&pMessage)))
     {
-        lpwstrStatus = FromatExceptionInfo(hr, L"MAPIAccessAPI::GetItem() Failed", __FILE__,
+        lpwstrStatus = FormatExceptionInfo(hr, L"MAPIAccessAPI::GetItem() Failed", __FILE__,
             __LINE__);
         goto ZM_EXIT;
     }
@@ -595,7 +595,7 @@ LPCWSTR MAPIAccessAPI::GetItem(SBinary sbItemEID, BaseItemData &itemData)
 
             if (!Zimbra::MAPI::Util::GetAppTemporaryDirectory(wstrTempAppDirPath))
             {
-                lpwstrStatus = FromatExceptionInfo(hr, L"GetAppTemporaryDirectory Failed",
+                lpwstrStatus = FormatExceptionInfo(hr, L"GetAppTemporaryDirectory Failed",
                     __FILE__, __LINE__);
                 goto ZM_EXIT;
             }
@@ -612,7 +612,7 @@ LPCWSTR MAPIAccessAPI::GetItem(SBinary sbItemEID, BaseItemData &itemData)
             if (FAILED(hr = OpenStreamOnFile(MAPIAllocateBuffer, MAPIFreeBuffer, STGM_CREATE |
                     STGM_READWRITE, (LPTSTR)strFQFileName.c_str(), NULL, pStream.getptr())))
             {
-                lpwstrStatus = FromatExceptionInfo(hr,
+                lpwstrStatus = FormatExceptionInfo(hr,
                     L"Message Error: OpenStreamOnFile Failed.", __FILE__, __LINE__);
                 goto ZM_EXIT;
             }
@@ -793,12 +793,12 @@ LPCWSTR MAPIAccessAPI::GetItem(SBinary sbItemEID, BaseItemData &itemData)
     }
     catch (MAPIMessageException &mex)
     {
-        lpwstrStatus = FromatExceptionInfo(mex.ErrCode(), (LPWSTR)mex.Description().c_str(),
+        lpwstrStatus = FormatExceptionInfo(mex.ErrCode(), (LPWSTR)mex.Description().c_str(),
             (LPSTR)mex.SrcFile().c_str(), mex.SrcLine());
     }
     catch (MAPIContactException &cex)
     {
-        lpwstrStatus = FromatExceptionInfo(cex.ErrCode(), (LPWSTR)cex.Description().c_str(),
+        lpwstrStatus = FormatExceptionInfo(cex.ErrCode(), (LPWSTR)cex.Description().c_str(),
             (LPSTR)cex.SrcFile().c_str(), cex.SrcLine());
     }
 ZM_EXIT: return lpwstrStatus;

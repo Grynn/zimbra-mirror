@@ -16,11 +16,8 @@ class Program
     {
         Migration Test = new Migration();
 
-        CssLib.CSMigrationwrapper TestObj = new CSMigrationwrapper();
+        CssLib.CSMigrationWrapper TestObj = new CSMigrationWrapper("MAPI");
 
-        TestObj.MailClient = "MAPI";
-        // Test.test();
-        // Test.MigrationClient();
         if (args.Count() == 2)
         {
             string ConfigXmlFile = args[0];
@@ -76,7 +73,7 @@ class Program
                             myXmlConfig.ConfigObj.zimbraServer.Port,
                             myXmlConfig.ConfigObj.zimbraServer.ZimbraAdminID,
                             myXmlConfig.ConfigObj.OutlookProfile, "", "");*/
-                        retval = TestObj.InitializeMailClient(myXmlConfig.ConfigObj.OutlookProfile, "", "");
+                        retval = TestObj.GlobalInit(myXmlConfig.ConfigObj.OutlookProfile, "", "");
                     }
                     else
                     {
@@ -86,7 +83,7 @@ class Program
                             myXmlConfig.ConfigObj.mailServer.SourceHostname,
                             myXmlConfig.ConfigObj.mailServer.SourceAdminID);*/
 
-                       retval = TestObj.InitializeMailClient(myXmlConfig.ConfigObj.mailServer.SourceAdminID, "", "");
+                        retval = TestObj.GlobalInit(myXmlConfig.ConfigObj.mailServer.SourceAdminID, "", "");
                        /* TestObj.InitializeMailClient(myXmlConfig.ConfigObj.mailServer.SourceHostname, myXmlConfig.ConfigObj.mailServer.SourceAdminID,
                     "");*/
                     }
@@ -252,7 +249,7 @@ class Program
                                    myXmlConfig.ConfigObj.zimbraServer.UserAccount,
                                    myXmlConfig.ConfigObj.OutlookProfile, "",
                                    "");*/
-                            retval = TestObj.InitializeMailClient(myXmlConfig.ConfigObj.OutlookProfile, "", "");
+                            retval = TestObj.GlobalInit(myXmlConfig.ConfigObj.OutlookProfile, "", "");
                             if (retval.Length > 0)
                             {
                                 System.Console.WriteLine();

@@ -43,7 +43,7 @@ public class UsersViewModel: BaseViewModel
     {
         EnablePopButtons = false;
 
-        CSMigrationwrapper mw = ((IntroViewModel)ViewModelPtrs[(int)ViewType.INTRO]).mw;
+        CSMigrationWrapper mw = ((IntroViewModel)ViewModelPtrs[(int)ViewType.INTRO]).mw;
 
         string[] users = mw.GetListFromObjectPicker();
         for (int i = 0; i < users.Length; i++)
