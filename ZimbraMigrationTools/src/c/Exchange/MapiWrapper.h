@@ -33,7 +33,7 @@ public:
     STDMETHOD(GlobalInit) (BSTR pMAPITarget, BSTR pAdminUser, BSTR pAdminPassword,
         BSTR *pErrorText);
     STDMETHOD(ImportMailOptions) (BSTR OptionsTag);
-    STDMETHOD(GetProfilelist) (VARIANT * Profiles);
+    STDMETHOD(GetProfilelist) (VARIANT * Profiles,BSTR* status);
 
     std::vector<CComBSTR> m_vecColors;
     std::wstring str_to_wstr(const std::string &str);

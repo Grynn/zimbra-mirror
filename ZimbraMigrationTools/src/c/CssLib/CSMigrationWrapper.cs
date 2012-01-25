@@ -89,7 +89,7 @@ public class CSMigrationwrapper
    
     string m_MailClient;
 
-    ZimbraAPI api;
+    
     enum foldertype
     {
         Mail = 1, Contacts = 2, Calendar = 3, Task = 4, MeetingReq = 5
@@ -108,7 +108,7 @@ public class CSMigrationwrapper
         InitLogFile("migration", Log.Level.Info);
         Log.info("Initializing migration");
 
-        api = new ZimbraAPI();
+        
     }
 
     
@@ -131,6 +131,7 @@ public class CSMigrationwrapper
             {
                 MailWrapper = new Exchange.MapiWrapper();
                 s = MailWrapper.GlobalInit(Target, AdminUser, AdminPassword);
+                
             }
             catch (Exception e)
             {
@@ -146,30 +147,13 @@ public class CSMigrationwrapper
 
         if (MailClient == "MAPI")
         {
-            MailWrapper = new Exchange.MapiWrapper();
+           
             s = MailWrapper.GlobalUninit();
         }
         return s;
     }
 
-    public void Initalize(string HostName, string Port, string AdminAccount, string UserID,
-        string Mailserver, string AdminID)
-    {
-        
-        int status = 0;
-
-        Log.open(Path.GetTempPath() + UserID + ".log");
-
-        MailWrapper = new Exchange.MapiWrapper();
-        MailWrapper.ConnectToServer(Mailserver, Port, AdminID);
-
-        status = api.Logon(HostName, Port, AdminAccount, "test123", true);
-
-        // Initilaize user object
-
-        // O1.InitializeUser(Mailserver, AdminID, UserID, "MAPI");
-    }
-
+   
     public void Migrate(string MailOptions)
     {
         MailWrapper.ImportMailOptions(MailOptions);
@@ -178,12 +162,26 @@ public class CSMigrationwrapper
     public string[] GetListofMapiProfiles()
     {
         object var = new object();
-       
-        MailWrapper.GetProfilelist(out var);
 
-        string[] s = (string[])var;
+        string msg="";
+        string[] s ={""};
+        try
+        {
 
-              
+            msg = MailWrapper.GetProfilelist(out var);
+
+            s = (string[])var;
+
+            
+        }
+
+        catch (Exception e)
+        {
+            msg = string.Format("GetListofMapiProfiles Exception. \n{0}", e.Message);
+
+            s[0]= msg;
+        }
+
         return s;
     }
 
@@ -191,8 +189,21 @@ public class CSMigrationwrapper
     {
         // Change this to above signature when I start getting the real ObjectPicker object back
         object var = new object();
-        MailWrapper.SelectExchangeUsers(out var);
-        string[] s = (string[])var;
+        string status = "";
+        string[] s = {""};
+        try
+        {
+
+            status = MailWrapper.SelectExchangeUsers(out var);
+            s = (string[])var;
+        }
+
+        catch (Exception e)
+        {
+            status = string.Format("GetListFromObjectPicker Exception. \n{0}", e.Message);
+            s[0]= status;
+
+        }
         return s;
     }
 

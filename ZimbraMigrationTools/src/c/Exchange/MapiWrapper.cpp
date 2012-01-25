@@ -17,6 +17,13 @@ const IID UDTItem_IID = {
         0x95, 0x6A, 0x06, 0xD8, 0x09, 0x4D, 0x0C, 0xBE
     }
 };
+
+std::string format_error(unsigned __int32 hr)
+{
+  std::stringstream ss;
+  ss << "COM call Failed. Error code = 0x" << std::hex << hr << std::endl;
+  return ss.str();
+}
 STDMETHODIMP CMapiWrapper::InterfaceSupportsErrorInfo(REFIID riid)
 {
     static const IID *const arr[] = {
@@ -66,18 +73,44 @@ STDMETHODIMP CMapiWrapper::ImportMailOptions(BSTR OptionsTag)
     return S_OK;
 }
 
-STDMETHODIMP CMapiWrapper::GetProfilelist(VARIANT *Profiles)
+STDMETHODIMP CMapiWrapper::GetProfilelist(VARIANT *Profiles,BSTR *statusmessage)
 {
     // TODO: Add your implementation code here
     HRESULT hr = S_OK;
+	CComBSTR status = L"";
 
     hr = MAPIInitialize(NULL);
+	if( hr != S_OK)
+	{
+		
+		LPCSTR temp = format_error(hr).c_str();
+		
+		status.AppendBSTR(L" MapiInitialize error ");
+		status.AppendBSTR(A2BSTR(temp));
+		
+		*statusmessage =  status;
+
+    return hr;
+	}
 
     Zimbra::Mapi::Memory::SetMemAllocRoutines(NULL, MAPIAllocateBuffer, MAPIAllocateMore,
         MAPIFreeBuffer);
 
     vector<string> vProfileList;
-    exchadmin->GetAllProfiles(vProfileList);
+     hr = exchadmin->GetAllProfiles(vProfileList);
+
+	 if( hr != S_OK)
+	{
+		
+		LPCSTR temp = format_error(hr).c_str();
+		
+		status.AppendBSTR(L" GetAllProfiles error ");
+		status.AppendBSTR(A2BSTR(temp));
+		
+		*statusmessage =  status;
+
+     return hr;
+	}
 
     vector<CComBSTR> tempvectors;
 
@@ -109,6 +142,8 @@ STDMETHODIMP CMapiWrapper::GetProfilelist(VARIANT *Profiles)
         bstrArray[i] = SysAllocString((*it).m_str);
     SafeArrayUnaccessData(psa);
     Profiles->parray = psa;
+
+	*statusmessage =  status;
 
     return hr;
 }

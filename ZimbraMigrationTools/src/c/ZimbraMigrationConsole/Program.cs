@@ -17,6 +17,8 @@ class Program
         Migration Test = new Migration();
 
         CssLib.CSMigrationwrapper TestObj = new CSMigrationwrapper();
+
+        TestObj.MailClient = "MAPI";
         // Test.test();
         // Test.MigrationClient();
         if (args.Count() == 2)
@@ -63,25 +65,44 @@ class Program
                 }
 
                 importopts.ItemsAndFolders = itemFolderFlags;
-                   
-                    
+
+                string retval = "";   
                 if (myXmlConfig.UserList.Count > 0)
                 {
                     if (myXmlConfig.ConfigObj.OutlookProfile != "")
                     {
                         // profile migration
-                        TestObj.Initalize(myXmlConfig.ConfigObj.zimbraServer.ZimbraHostname,
+                       /* TestObj.Initalize(myXmlConfig.ConfigObj.zimbraServer.ZimbraHostname,
                             myXmlConfig.ConfigObj.zimbraServer.Port,
                             myXmlConfig.ConfigObj.zimbraServer.ZimbraAdminID,
-                            myXmlConfig.ConfigObj.OutlookProfile, "", "");
+                            myXmlConfig.ConfigObj.OutlookProfile, "", "");*/
+                        retval = TestObj.InitializeMailClient(myXmlConfig.ConfigObj.OutlookProfile, "", "");
                     }
                     else
                     {
-                        TestObj.Initalize(myXmlConfig.ConfigObj.zimbraServer.ZimbraHostname,
+                       /* TestObj.Initalize(myXmlConfig.ConfigObj.zimbraServer.ZimbraHostname,
                             myXmlConfig.ConfigObj.zimbraServer.Port,
                             myXmlConfig.ConfigObj.zimbraServer.ZimbraAdminID, "",
                             myXmlConfig.ConfigObj.mailServer.SourceHostname,
-                            myXmlConfig.ConfigObj.mailServer.SourceAdminID);
+                            myXmlConfig.ConfigObj.mailServer.SourceAdminID);*/
+
+                       retval = TestObj.InitializeMailClient(myXmlConfig.ConfigObj.mailServer.SourceAdminID, "", "");
+                       /* TestObj.InitializeMailClient(myXmlConfig.ConfigObj.mailServer.SourceHostname, myXmlConfig.ConfigObj.mailServer.SourceAdminID,
+                    "");*/
+                    }
+
+                    if (retval.Length > 0)
+                    {
+                        System.Console.WriteLine();
+                        ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
+                            " Error in Migration Initialization ");
+                        System.Console.WriteLine("......... \n");
+                        ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
+                             retval);
+                        System.Console.WriteLine("......... \n");
+                        System.Console.WriteLine();
+                        
+                        return;
                     }
 
                     foreach (MVVM.Model.Users user in myXmlConfig.UserList)
@@ -223,14 +244,27 @@ class Program
                         string accountname = myXmlConfig.ConfigObj.zimbraServer.UserAccount;
                         accountname = accountname + "@" + myXmlConfig.ConfigObj.zimbraServer.ZimbraHostname;
                         string accountid = (myXmlConfig.ConfigObj.PSTFile != "") ? myXmlConfig.ConfigObj.PSTFile : myXmlConfig.ConfigObj.OutlookProfile;
-
+                        
                         if (myXmlConfig.ConfigObj.OutlookProfile != "")
                         {
-                            TestObj.Initalize(myXmlConfig.ConfigObj.zimbraServer.ZimbraHostname,
+                           /* TestObj.Initalize(myXmlConfig.ConfigObj.zimbraServer.ZimbraHostname,
                                    myXmlConfig.ConfigObj.zimbraServer.Port,
                                    myXmlConfig.ConfigObj.zimbraServer.UserAccount,
                                    myXmlConfig.ConfigObj.OutlookProfile, "",
-                                   "");
+                                   "");*/
+                            retval = TestObj.InitializeMailClient(myXmlConfig.ConfigObj.OutlookProfile, "", "");
+                            if (retval.Length > 0)
+                            {
+                                System.Console.WriteLine();
+                                ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
+                                    " Error in Migration Initialization ");
+                                System.Console.WriteLine("......... \n");
+                                ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
+                                     retval);
+                                System.Console.WriteLine("......... \n");
+                                System.Console.WriteLine();
+                                return;
+                            }
                         }
                         else
                         {

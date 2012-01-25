@@ -49,7 +49,7 @@ interface IMapiWrapper : IDispatch {
     [id(1), helpstring("This method can be used to connect to ZCO server")] HRESULT ConnectToServer(BSTR ServerHostName, BSTR Port, BSTR AdminID);
 	[id(2), helpstring("Connect to the mail server")] HRESULT GlobalInit([in] BSTR pMAPITarget, [in] BSTR pAdminUser, [in] BSTR pAdminPassword, [out,retval] BSTR* pErrorText);
     [id(3), helpstring("Method to import all the options, input is the tag name for options")] HRESULT ImportMailOptions([in] BSTR OptionsTag);
-    [id(4)] HRESULT GetProfilelist([out] VARIANT* Profiles);
+    [id(4)] HRESULT GetProfilelist([out] VARIANT* Profiles,[out,retval]BSTR* status);
 
     	/* [id(8), helpstring("Return successive folderobject values")] 
             HRESULT GetFolderObjects([in] long start,
