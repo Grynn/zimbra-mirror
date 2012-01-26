@@ -21,7 +21,6 @@ import static org.junit.Assert.fail;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -53,6 +52,7 @@ import org.junit.Test;
 import com.zimbra.common.mime.shim.JavaMailInternetAddress;
 import com.zimbra.common.util.Log;
 import com.zimbra.common.zmime.ZMimeMessage;
+import com.zimbra.common.zmime.ZSharedFileInputStream;
 import com.zimbra.cs.mailclient.imap.Body;
 import com.zimbra.cs.mailclient.imap.IDInfo;
 import com.zimbra.cs.mailclient.imap.ImapConfig;
@@ -351,7 +351,7 @@ public class TestYMailClient {
 
     private static MimeMessage readMessage(File file) throws Exception {
         Session session = Session.getInstance(new Properties());
-        InputStream is = new FileInputStream(file);
+        InputStream is = new ZSharedFileInputStream(file);
         try {
             MimeMessage mm = new ZMimeMessage(session, is);
             mm.setFrom(new JavaMailInternetAddress(FROM));
