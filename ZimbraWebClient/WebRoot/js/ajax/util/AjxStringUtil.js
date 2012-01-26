@@ -1534,6 +1534,25 @@ AjxStringUtil.ORIG_EMAIL_RE = /[^@\s]+@[A-Za-z0-9\-]{2,}(\.[A-Za-z0-9\-]{2,})+/;
 AjxStringUtil.ORIG_DATE_RE = /, 20\d\d/;
 AjxStringUtil.ORIG_INTRO_RE = new RegExp("^(-----|" + AjxMsg.on + ")", "i")
 
+
+// Lazily creates a test hidden IFRAME and writes the given html to it, then returns the HTML element.
+AjxStringUtil._writeToTestIframeDoc =
+function(html) {
+
+	var idoc = AjxStringUtil._htmlContentIframeDoc;
+	if (!idoc) {
+		var iframe = document.createElement("IFRAME");
+		Dwt.setVisible(iframe, false);
+		appCtxt.getShell().getHtmlElement().appendChild(iframe);
+		idoc = AjxStringUtil._htmlContentIframeDoc = Dwt.getIframeDoc(iframe);
+	}
+	idoc.open();
+	idoc.write(html);
+	idoc.close();
+
+	return idoc.childNodes[0];
+};
+
 /**
  * Analyze the text and return what appears to be original (as opposed to quoted) content. We
  * look for separators commonly used by mail clients, as well as prefixes that indicate that
@@ -1703,28 +1722,7 @@ function(testLine, lastLine, block) {
 AjxStringUtil._getOriginalHtmlContent =
 function(text) {
 	
-	var prefix = "", body = "", suffix = "";
-	if (/^<html>/i.test(text)) {
-		var idx = text.indexOf("<body") || text.indexOf("<BODY");
-		if (idx) {
-			idx = text.indexOf(">", idx) + 1;
-		}
-		if (idx) {
-			var endIdx = text.indexOf("</body>") || text.indexOf("</BODY>");
-			if (idx && endIdx) {
-				prefix = text.substring(0, idx);
-				body = text.substring(idx, endIdx);
-				suffix = text.substring(endIdx);
-			}
-		}
-	}
-
-	if (!AjxStringUtil._htmlContentNode) {
-		AjxStringUtil._htmlContentNode = document.createElement("DIV");
-	}
-	var domNode = AjxStringUtil._htmlContentNode;
-	domNode.innerHTML = text;
-	
+	var htmlNode = AjxStringUtil._writeToTestIframeDoc(text);
 	var ctxt = {
 		curType:	null,
 		count:		{},
@@ -1734,7 +1732,7 @@ function(text) {
 		hasQuoted:	false,
 		sepNode:	null
 	};
-	AjxStringUtil._traverseOriginalHtmlContent(domNode, ctxt);
+	AjxStringUtil._traverseOriginalHtmlContent(htmlNode, ctxt);
 		
 	// if there's one UNKNOWN section and some QUOTED, preserve the UNKNOWN
 	if (!ctxt.done) {
@@ -1750,7 +1748,7 @@ function(text) {
 	}
 
 	// convert back to text, restoring html, head, and body nodes
-	return ctxt.done ? prefix + domNode.innerHTML + suffix : text;
+	return ctxt.done ? "<html>" + htmlNode.innerHTML + "</html>" : text;
 };
 
 // nodes to ignore; they won't have anything we're interested in
@@ -1886,4 +1884,87 @@ function(el, ctxt) {
 	}
 
 	ctxt.level--;
+};
+
+/**
+ * Checks the given HTML to see if it is "safe", and cleans it up if it is. It must have only
+ * the tags in the given list, otherwise false is returned. Attributes in the given list will
+ * be removed. It is not necessary to include "#text", "html", "head", and "body" in the list
+ * of allowed tags.
+ * 
+ * @param {string}			html			HTML text
+ * @param {array}			okTags			whitelist of allowed tags
+ * @param {array}			attrsToRemove	list of attributes to remove from each element
+ */
+AjxStringUtil.checkForCleanHtml =
+function(html, okTags, attrsToRemove) {
+
+	var htmlNode = AjxStringUtil._writeToTestIframeDoc(html);
+	var ctxt = {
+		tags:	AjxUtil.arrayAsHash(okTags),
+		attrs:	attrsToRemove || []
+	}
+	AjxStringUtil._traverseCleanHtml(htmlNode, ctxt);
+	
+	if (ctxt.fail) {
+		return false;
+	}
+	else {
+		return "<html>" + htmlNode.innerHTML + "</html>";
+	}
+};
+
+AjxStringUtil._traverseCleanHtml =
+function(el, ctxt) {
+		
+	var nodeName = el.nodeName.toLowerCase();
+	
+	// useless <style> that we used to add, remove it
+	if (nodeName == "style" && el.innerHTML == "p { margin: 0; }") {
+		el.doDelete = true;
+	}
+	
+	// IE likes to insert an empty <title> in the <head>, let it go
+	else if (nodeName == "title" && el.innerHTML == "") {
+	}
+	
+	// allowed tag - strip the forbidden attributes from it
+	else if (ctxt.tags[nodeName]) {
+		if (el.removeAttribute && el.attributes.length) {
+			// blacklisted attrs
+			for (var i = 0; i < ctxt.attrs.length; i++) {
+				el.removeAttribute(ctxt.attrs[i]);
+			}
+			// on* handlers (should have been removed by server, check again to be safe)
+			for (var i = 0, attrs = el.attributes, l = attrs.length; i < l; i++) {
+				var attrName = attrs.item(i).nodeName;
+				if (attrName && attrName.toLowerCase().indexOf("on") === 0) {
+					el.removeAttribute(attrName);
+				}
+			}
+
+		}
+	}
+	
+	// disallowed tag - bail
+	else {
+		ctxt.fail = true;
+	}
+
+	if (ctxt.fail) { return; }
+	
+	// process child nodes
+	for (var i = 0, len = el.childNodes.length; i < len; i++) {
+		var childNode = el.childNodes[i];
+		AjxStringUtil._traverseCleanHtml(childNode, ctxt);
+		if (ctxt.fail) { return; }
+	}
+	
+	// remove nodes marked for deletion
+	for (var i = el.childNodes.length - 1; i >= 0; i--) {
+		var childNode = el.childNodes[i];
+		if (childNode.doDelete) {
+			el.removeChild(childNode);
+		}
+	}
 };
