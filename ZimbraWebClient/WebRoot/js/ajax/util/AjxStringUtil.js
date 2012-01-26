@@ -1495,7 +1495,7 @@ AjxStringUtil.ORIG_SIG_SEP		= "SIG_SEP";
 // TODO: should these be moved to ZmMsg to be fully localizable?
 AjxStringUtil.MSG_REGEXES = [
 	{
-		// the two most popular quote characters, < and |
+		// the two most popular quote characters, > and |
 		type:	AjxStringUtil.ORIG_QUOTED,
 		regex:	/^\s*(>|\|)/
 	},
@@ -1668,6 +1668,10 @@ function(testLine, lastLine, block) {
 		var msgTest = AjxStringUtil.MSG_REGEXES[j];
 		var regex = msgTest.regex;
 		if (regex.test(testLine.toLowerCase())) {
+			// line that starts and ends with | is considered ASCII art (eg a table) rather than quoted
+			if (msgTest.type == AjxStringUtil.ORIG_QUOTED && /^\s*\|.*\|\s*$/.test(testLine)) {
+				continue;
+			}
 			type = msgTest.type;
 			break;	// first match wins
 		}
