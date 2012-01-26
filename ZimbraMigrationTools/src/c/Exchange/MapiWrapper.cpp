@@ -144,6 +144,7 @@ STDMETHODIMP CMapiWrapper::GetProfilelist(VARIANT *Profiles,BSTR *statusmessage)
     Profiles->parray = psa;
 
 	*statusmessage =  status;
+        status.Detach();
 
     return hr;
 }
