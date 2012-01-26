@@ -109,6 +109,11 @@ public class IntroViewModel: BaseViewModel
         string[] profiles = mw.GetListofMapiProfiles();
         foreach (string s in profiles)
         {
+            if (s.IndexOf("GetListofMapiProfiles Exception") != -1)
+            {
+                MessageBox.Show(s, "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);                               
+                return;
+            }
             if (isServer)
                 m_configViewModelS.ProfileList.Add(s);
             else
