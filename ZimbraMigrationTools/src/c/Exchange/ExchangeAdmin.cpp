@@ -723,7 +723,7 @@ LPCWSTR ExchangeOps::GlobalUninit()
                 (LPSTR)ex.SrcFile().c_str(), ex.SrcLine());
         }
     }
-    else if (Initialized == EXCH_INITIALIZED_PROFEXIST)
+    else
     {
         MAPIAccessAPI::UnInitGlobalSessionAndStore();
     }
