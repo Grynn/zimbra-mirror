@@ -1261,13 +1261,19 @@ public class ZimbraAPI
         writer.WriteAttributeString("ct", "multipart/alternative");
         writer.WriteStartElement("mp");
         writer.WriteAttributeString("ct", appt["contentType0"]);
-        WriteNVPair(writer, "content", System.Text.Encoding.Default.GetString(File.ReadAllBytes(appt["content0"])));
-        File.Delete(appt["content0"]);
+        if (appt["content0"].Length > 0)
+        {
+            WriteNVPair(writer, "content", System.Text.Encoding.Default.GetString(File.ReadAllBytes(appt["content0"])));
+            File.Delete(appt["content0"]);
+        }
         writer.WriteEndElement();   // mp
         writer.WriteStartElement("mp");
         writer.WriteAttributeString("ct", appt["contentType1"]);
-        WriteNVPair(writer, "content", System.Text.Encoding.Default.GetString(File.ReadAllBytes(appt["content1"])));
-        File.Delete(appt["content1"]);
+        if (appt["content1"].Length > 0)
+        {
+            WriteNVPair(writer, "content", System.Text.Encoding.Default.GetString(File.ReadAllBytes(appt["content1"])));
+            File.Delete(appt["content1"]);
+        }
     
         writer.WriteEndElement();   // mp
         writer.WriteEndElement();   // mp
