@@ -4,7 +4,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraServer"/>
 	<classpathentry kind="lib" path="/ZimbraServer/build/classes"/>
 	<classpathentry kind="lib" path="jars/standard.jar"/>
-	<classpathentry kind="lib" path="jars/servlet-api.jar"/>
 	<classpathentry kind="lib" path="jars/jstl.jar"/>
 	<classpathentry kind="lib" path="jars/jsp-api.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraCommon"/>
