@@ -138,7 +138,7 @@ public class DisplayFilePreview extends AbsDisplay {
 	@Override
 	public boolean zIsActive() throws HarnessException {
 
-		if(zWaitForElementPresent("css=div[id=preview-content-view]","3000"))
+		if(zWaitForElementPresent("css=div[id=preview-content-view] div[class=iframe-content-container]","3000"))
 			return true;
 		else
 			return false;
