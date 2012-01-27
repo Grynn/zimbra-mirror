@@ -8,6 +8,8 @@ public class DisplayFilePreview extends AbsDisplay {
 	public static class Locators {
 		public static final Locators zFileWatchIcon = new Locators(
 				"css=div[id=my-files-preview-toolbar] span[class=file-info-view-watch-icon]");
+		public static final Locators zFileImageIcon = new Locators(
+				"css=div[id=my-files-preview-toolbar] span[class=file-info-view-file-icon]>span[class^=Img]");
 		public static final Locators zHistory = new Locators(
 				"css=div[id=my-files-preview] div[id=my-files-preview-toolbar] button[id=show-activitystream-button]");
 		public static final Locators zComments = new Locators(
@@ -64,7 +66,7 @@ public class DisplayFilePreview extends AbsDisplay {
 					((AppOctopusClient) MyApplication).zPageOctopus);
 		} else if (button == Button.B_COMMENTS) {
 			buttonLocator = Locators.zComments.locator;
-			
+
 			page = new DisplayFileComments(MyApplication);
 		} else {
 			throw new HarnessException("no logic defined for button " + button);
@@ -137,8 +139,7 @@ public class DisplayFilePreview extends AbsDisplay {
 
 	@Override
 	public boolean zIsActive() throws HarnessException {
-
-		if(zWaitForElementPresent("css=div[id=preview-content-view] div[class=iframe-content-container]","3000"))
+		if (zWaitForElementPresent(Locators.zFileImageIcon.locator, "3000"))
 			return true;
 		else
 			return false;
