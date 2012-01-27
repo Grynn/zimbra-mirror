@@ -3,7 +3,6 @@ package com.zimbra.qa.selenium.projects.octopus.core;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.testng.annotations.AfterClass;
@@ -63,6 +62,10 @@ public class OctopusCommonTest {
 			ZimbraSeleniumProperties
 					.setAppType(ZimbraSeleniumProperties.AppType.OCTOPUS);
 			_selenium = ClientSessionFactory.session().selenium();
+			//BrowserConfigurationOptions bco = new BrowserConfigurationOptions();
+			//bco.setCommandLineFlags("--disable-web-security");
+			//bco.setCommandLineFlags("--trustAllSSLCertificates");
+			//_selenium.start(bco);
 			_selenium.start();
 			_selenium.windowMaximize();
 			_selenium.windowFocus();

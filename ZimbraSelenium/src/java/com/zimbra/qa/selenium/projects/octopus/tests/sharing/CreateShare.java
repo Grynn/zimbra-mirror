@@ -86,13 +86,11 @@ public class CreateShare extends OctopusCommonTest {
 						+ "<notes _content='I invite you to share the folder'/>"
 						+ "</SendShareNotificationRequest>");
 
-		SleepUtil.sleepSmall();
+		SleepUtil.sleepMedium();
 
 		// grantee verifies notification message
 		granteeAccount
 				.soapSend("<GetShareNotificationsRequest xmlns='urn:zimbraMail'/>");
-		
-		SleepUtil.sleepSmall();
 		
 		ZAssert.assertTrue(granteeAccount.soapMatch(
 				"//mail:GetShareNotificationsResponse//mail:link", "name",

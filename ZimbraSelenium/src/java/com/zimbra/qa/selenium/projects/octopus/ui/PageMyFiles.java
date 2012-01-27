@@ -449,7 +449,11 @@ public class PageMyFiles extends AbsTab {
 		} else {
 			logger.info("no logic defined for " + action);
 		}
-
+		
+		if (page != null) {
+			page.zWaitForActive(); 
+		}
+		
 		return page;
 	}
 
