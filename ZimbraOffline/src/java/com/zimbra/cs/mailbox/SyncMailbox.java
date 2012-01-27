@@ -46,6 +46,7 @@ import com.zimbra.cs.session.PendingModifications.Change;
 import com.zimbra.cs.session.PendingModifications.ModificationKey;
 import com.zimbra.cs.store.MailboxBlob;
 import com.zimbra.cs.store.StoreManager;
+import com.zimbra.cs.store.StoreManager.StoreFeature;
 import com.zimbra.cs.util.Zimbra;
 import com.zimbra.cs.util.ZimbraApplication;
 
@@ -141,7 +142,7 @@ public abstract class SyncMailbox extends DesktopMailbox {
     }
 
     @Override
-    public void deleteMailbox() throws ServiceException {
+    public void deleteMailbox(DeleteBlobs deleteBlobs) throws ServiceException {
         if (!isDeleting.compareAndSet(false, true)) {
             return;
         }
@@ -169,7 +170,7 @@ public abstract class SyncMailbox extends DesktopMailbox {
             unhookMailboxForDeletion();
             mm.markMailboxDeleted(this); // to remove from cache
         }
-        deleteThisMailbox();
+        deleteThisMailbox(deleteBlobs);
     }
 
     private String unhookMailboxForDeletion() throws ServiceException {
@@ -190,22 +191,24 @@ public abstract class SyncMailbox extends DesktopMailbox {
         }
     }
 
-    void deleteThisMailbox() throws ServiceException {
+    void deleteThisMailbox(DeleteBlobs deleteBlobs) throws ServiceException {
         OfflineLog.offline.info("deleting mailbox %s %s (%s)", getId(), getAccountId(), getAccountName());
         DeleteMailbox redoRecorder = new DeleteMailbox(getId());
 
-        boolean success = false;
+        StoreManager sm = StoreManager.getInstance();
+        boolean deleteStore = deleteBlobs == DeleteBlobs.ALWAYS || (deleteBlobs == DeleteBlobs.UNLESS_CENTRALIZED && !sm.supports(StoreFeature.CENTRALIZED));
         SpoolingCache<MailboxBlob> blobs = null;
+
+        boolean success = false;
 
         lock.lock();
         try {
-            StoreManager sm = StoreManager.getInstance();
 
             try {
                 beginTransaction("deleteMailbox", null, redoRecorder);
                 redoRecorder.log();
 
-                if (!sm.supports(StoreManager.StoreFeature.BULK_DELETE)) {
+                if (deleteStore && !sm.supports(StoreManager.StoreFeature.BULK_DELETE)) {
                     blobs = DbMailItem.getAllBlobs(this);
                 }
 
@@ -229,10 +232,12 @@ public abstract class SyncMailbox extends DesktopMailbox {
                 ZimbraLog.store.warn("Unable to delete index data", e);
             }
 
-            try {
-                sm.deleteStore(this, blobs);
-            } catch (Exception e) {
-                ZimbraLog.store.warn("Unable to delete message data", e);
+            if (deleteStore) {
+                try {
+                    sm.deleteStore(this, blobs);
+                } catch (Exception e) {
+                    ZimbraLog.store.warn("Unable to delete message data", e);
+                }
             }
         } finally {
             lock.release();
