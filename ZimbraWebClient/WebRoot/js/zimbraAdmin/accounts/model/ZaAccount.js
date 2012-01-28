@@ -339,6 +339,7 @@ ZaAccount.GET_ACCOUNT_MEMBERSHIP_RIGHT = "getAccountMembership";
 ZaAccount.GET_MAILBOX_INFO_RIGHT = "getMailboxInfo";
 ZaAccount.GET_ACCOUNT_INFO_RIGHT = "getAccountInfo";
 ZaAccount.RIGHT_VIEW_ADMINUI_COMPONENTS = "viewAccountAdminUI";
+ZaAccount.RIGHT_DELETE_DL = "deleteDistributionList";
 ZaAccount.checkValues = 
 function(tmpObj) {
 	/**

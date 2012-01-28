@@ -1145,6 +1145,14 @@ function () {
                 if(this._popupOperations[ZaOperation.MOVE_ALIAS])	{
                     this._popupOperations[ZaOperation.MOVE_ALIAS].enabled = false;
                 }
+
+                if(!ZaItem.hasRight(ZaAccount.RIGHT_DELETE_DL,item)) {
+                     if(this._popupOperations[ZaOperation.DELETE])
+                        this._popupOperations[ZaOperation.DELETE].enabled = false;
+
+                     if(this._toolbarOperations[ZaOperation.DELETE])
+                        this._toolbarOperations[ZaOperation.DELETE].enabled = false;
+                }
             }
 			if (item.type == ZaItem.ACCOUNT) {
 				var enable = false;
