@@ -19,6 +19,7 @@ import java.util.Set;
 
 import com.zimbra.common.mailbox.Color;
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.util.UUIDUtil;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.Account;
 import com.zimbra.common.account.Key.AccountBy;
@@ -47,7 +48,7 @@ public class LocalMailbox extends DesktopMailbox {
                     ID_FOLDER_USER_ROOT, Folder.FOLDER_IS_IMMUTABLE,
                     MailItem.Type.UNKNOWN, 0, MailItem.DEFAULT_COLOR_RGB, null);
 
-                redo.setFolderId(ID_FOLDER_NOTIFICATIONS);
+                redo.setFolderIdAndUuid(ID_FOLDER_NOTIFICATIONS, UUIDUtil.generateUUID());
                 redo.start(System.currentTimeMillis());
                 createFolder(new TracelessContext(redo), NOTIFICATIONS_PATH,
                     ID_FOLDER_USER_ROOT, Folder.FOLDER_IS_IMMUTABLE,
@@ -77,7 +78,7 @@ public class LocalMailbox extends DesktopMailbox {
         try {
             super.initialize();
             getCachedItem(ID_FOLDER_CALENDAR).setColor(new Color((byte)8));
-            Folder.create(ID_FOLDER_NOTIFICATIONS, this,
+            Folder.create(ID_FOLDER_NOTIFICATIONS, UUIDUtil.generateUUID(), this,
                 getFolderById(ID_FOLDER_USER_ROOT), NOTIFICATIONS_PATH,
                 Folder.FOLDER_IS_IMMUTABLE, MailItem.Type.UNKNOWN, 0,
                 MailItem.DEFAULT_COLOR_RGB, null, null);

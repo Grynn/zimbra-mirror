@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.mail_item (
    date          INTEGER UNSIGNED NOT NULL,  -- stored as a UNIX-style timestamp
    size          BIGINT UNSIGNED NOT NULL,
    volume_id     TINYINT UNSIGNED,
-   blob_digest   VARCHAR(28) BINARY,         -- reference to blob, meaningful for messages only (type == 5)
+   blob_digest   VARCHAR(44) BINARY,         -- reference to blob
    unread        INTEGER UNSIGNED,           -- stored separately from the other flags so we can index it
    flags         INTEGER NOT NULL DEFAULT 0,
    tags          BIGINT NOT NULL DEFAULT 0,
@@ -39,6 +39,7 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.mail_item (
    mod_metadata  INTEGER UNSIGNED NOT NULL,  -- change number for last row modification
    change_date   INTEGER UNSIGNED,           -- UNIX-style timestamp for last row modification
    mod_content   INTEGER UNSIGNED NOT NULL,  -- change number for last change to "content" (e.g. blob)
+   uuid          VARCHAR(127),               -- e.g. "d94e42c4-1636-11d9-b904-4dd689d02402"
 
    PRIMARY KEY (mailbox_id, id),
    INDEX i_type (mailbox_id, type),          -- for looking up folders and tags
@@ -48,6 +49,7 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.mail_item (
    INDEX i_date (mailbox_id, date),          -- fallback index in case other constraints are not specified
    INDEX i_mod_metadata (mailbox_id, mod_metadata),      -- used by the sync code
    INDEX i_volume_id (mailbox_id, volume_id),            -- for the foreign key into the volume table
+   INDEX i_uuid (mailbox_id, uuid),          -- for looking up by uuid 
 
    UNIQUE INDEX i_name_folder_id (mailbox_id, folder_id, name),   -- for namespace uniqueness
 
@@ -68,7 +70,7 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.mail_item_dumpster (
    date          INTEGER UNSIGNED NOT NULL,  -- stored as a UNIX-style timestamp
    size          BIGINT UNSIGNED NOT NULL,
    volume_id     TINYINT UNSIGNED,
-   blob_digest   VARCHAR(28) BINARY,         -- reference to blob, meaningful for messages only (type == 5)
+   blob_digest   VARCHAR(44) BINARY,         -- reference to blob
    unread        INTEGER UNSIGNED,           -- stored separately from the other flags so we can index it
    flags         INTEGER NOT NULL DEFAULT 0,
    tags          BIGINT NOT NULL DEFAULT 0,
@@ -81,6 +83,7 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.mail_item_dumpster (
    mod_metadata  INTEGER UNSIGNED NOT NULL,  -- change number for last row modification
    change_date   INTEGER UNSIGNED,           -- UNIX-style timestamp for last row modification
    mod_content   INTEGER UNSIGNED NOT NULL,  -- change number for last change to "content" (e.g. blob)
+   uuid          VARCHAR(127),               -- e.g. "d94e42c4-1636-11d9-b904-4dd689d02402"
 
    PRIMARY KEY (mailbox_id, id),
    INDEX i_type (mailbox_id, type),          -- for looking up folders and tags
@@ -90,6 +93,7 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.mail_item_dumpster (
    INDEX i_date (mailbox_id, date),          -- fallback index in case other constraints are not specified
    INDEX i_mod_metadata (mailbox_id, mod_metadata),      -- used by the sync code
    INDEX i_volume_id (mailbox_id, volume_id),            -- for the foreign key into the volume table
+   INDEX i_uuid (mailbox_id, uuid),          -- for looking up by uuid 
 
    -- Must not enforce unique index on (mailbox_id, folder_id, name) for the dumpster version!
 
@@ -104,7 +108,7 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.revision (
    date          INTEGER UNSIGNED NOT NULL,  -- stored as a UNIX-style timestamp
    size          BIGINT UNSIGNED NOT NULL,
    volume_id     TINYINT UNSIGNED,
-   blob_digest   VARCHAR(28) BINARY,         -- reference to blob, meaningful for messages only (type == 5)
+   blob_digest   VARCHAR(44) BINARY,         -- reference to blob
    name          VARCHAR(128),               -- namespace entry for item (e.g. tag name, folder name, document filename)
    metadata      MEDIUMTEXT,
    mod_metadata  INTEGER UNSIGNED NOT NULL,  -- change number for last row modification
@@ -124,7 +128,7 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.revision_dumpster (
    date          INTEGER UNSIGNED NOT NULL,  -- stored as a UNIX-style timestamp
    size          BIGINT UNSIGNED NOT NULL,
    volume_id     TINYINT UNSIGNED,
-   blob_digest   VARCHAR(28) BINARY,         -- reference to blob, meaningful for messages only (type == 5)
+   blob_digest   VARCHAR(44) BINARY,         -- reference to blob
    name          VARCHAR(128),               -- namespace entry for item (e.g. tag name, folder name, document filename)
    metadata      MEDIUMTEXT,
    mod_metadata  INTEGER UNSIGNED NOT NULL,  -- change number for last row modification

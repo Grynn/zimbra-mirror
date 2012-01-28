@@ -51,6 +51,7 @@ public class OfflineCreateMountpoint extends OfflineServiceProxy {
         Element eMount = response.getElement(MailConstants.E_MOUNT);
         int parentId = (int) eMount.getAttributeLong(MailConstants.A_FOLDER);
         int id = (int) eMount.getAttributeLong(MailConstants.A_ID);
+        String uuid = eMount.getAttribute(MailConstants.A_UUID);
         String name = (id == Mailbox.ID_FOLDER_ROOT) ? "ROOT" : MailItem.normalizeItemName(eMount.getAttribute(MailConstants.A_NAME));
         int flags = Flag.toBitmask(eMount.getAttribute(MailConstants.A_FLAGS, null));
         byte color = (byte) eMount.getAttributeLong(MailConstants.A_COLOR, MailItem.DEFAULT_COLOR);
@@ -64,7 +65,7 @@ public class OfflineCreateMountpoint extends OfflineServiceProxy {
         OfflineProvisioning.getOfflineInstance().createMountpointAccount(ownerName, ownerId, ((ZcsMailbox)mbox).getOfflineAccount());
         CreateMountpoint redo = new CreateMountpoint(mbox.getId(), parentId, name, ownerId, remoteId, view, flags,
                 new Color(color), reminderEnabled);
-        redo.setId(id);
+        redo.setIdAndUuid(id, uuid);
         redo.setChangeId(mod_content);
         try {
             mbox.createMountpoint(new TracelessContext(redo), parentId, name, ownerId, remoteId, view, flags, color, reminderEnabled);

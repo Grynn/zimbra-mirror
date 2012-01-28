@@ -255,11 +255,12 @@ public class InitialSync {
 
     private void initialFolderSync(Element elt) throws ServiceException {
         int folderId = (int) elt.getAttributeLong(MailConstants.A_ID);
+        String folderUuid = elt.getAttribute(MailConstants.A_UUID);
         if (mMailboxSync.isFolderDone(folderId)) {
             return;
         }
         // first, sync the container itself
-        syncContainer(elt, folderId);
+        syncContainer(elt, folderId, folderUuid);
 
         // next, sync the leaf-node contents
         if (elt.getName().equals(MailConstants.E_FOLDER) || elt.getName().equals(MailConstants.E_MOUNT)) {
@@ -440,15 +441,15 @@ public class InitialSync {
         }
     }
 
-    private void syncContainer(Element elt, int id) throws ServiceException {
+    private void syncContainer(Element elt, int id, String uuid) throws ServiceException {
         String type = elt.getName();
         if (type.equalsIgnoreCase(MailConstants.E_SEARCH))
-            syncSearchFolder(elt, id);
+            syncSearchFolder(elt, id, uuid);
         else if (type.equalsIgnoreCase(MailConstants.E_FOLDER) || type.equalsIgnoreCase(MailConstants.E_MOUNT))
-            syncFolder(elt, id, type);
+            syncFolder(elt, id, uuid, type);
     }
 
-    void syncSearchFolder(Element elt, int id) throws ServiceException {
+    void syncSearchFolder(Element elt, int id, String uuid) throws ServiceException {
         int parentId = (int) elt.getAttributeLong(MailConstants.A_FOLDER);
         String name = MailItem.normalizeItemName(elt.getAttribute(MailConstants.A_NAME));
         String rgb = elt.getAttribute(MailConstants.A_RGB, null);
@@ -465,7 +466,7 @@ public class InitialSync {
         boolean relocated = elt.getAttributeBool(A_RELOCATED, false) || !name.equals(elt.getAttribute(MailConstants.A_NAME));
 
         CreateSavedSearch redo = new CreateSavedSearch(ombx.getId(), parentId, name, query, searchTypes, sort, flags, itemColor);
-        redo.setSearchId(id);
+        redo.setSearchIdAndUuid(id, uuid);
         redo.start(timestamp > 0 ? timestamp : System.currentTimeMillis());
 
         try {
@@ -478,11 +479,11 @@ public class InitialSync {
             if (e.getCode() != MailServiceException.ALREADY_EXISTS) {
                 throw e;
             }
-            getDeltaSync().syncSearchFolder(elt, id);
+            getDeltaSync().syncSearchFolder(elt, id, uuid);
         }
     }
 
-    void syncFolder(Element elt, int id, String type) throws ServiceException {
+    void syncFolder(Element elt, int id, String uuid, String type) throws ServiceException {
         //system folders should be already created during mailbox initialization, but just in cases the server is of newer version
         //and there's a newly added system folder
         byte system = id < Mailbox.FIRST_USER_ID ? Folder.FOLDER_IS_IMMUTABLE : (byte)0;
@@ -510,7 +511,7 @@ public class InitialSync {
         int remoteId = 0;
         if (itemType == MailItem.Type.FOLDER) {
             redo = new CreateFolder(ombx.getId(), name, parentId, system, view, flags, itemColor, url);
-            ((CreateFolder)redo).setFolderId(id);
+            ((CreateFolder)redo).setFolderIdAndUuid(id, uuid);
         } else {
             if (!OfflineLC.zdesktop_sync_mountpoints.booleanValue()) {
                 OfflineLog.offline.debug("mountpoint sync is disabled in local config (zdesktop_sync_mountpoints=false). mountpoint skipped: " + name);
@@ -529,7 +530,7 @@ public class InitialSync {
             OfflineProvisioning.getOfflineInstance().createMountpointAccount(ownerName, ownerId, ombx.getOfflineAccount());
 
             redo = new CreateMountpoint(ombx.getId(), parentId, name, ownerId, remoteId, view, flags, itemColor, reminderEnabled);
-            ((CreateMountpoint)redo).setId(id);
+            ((CreateMountpoint)redo).setIdAndUuid(id, uuid);
         }
         redo.start(timestamp > 0 ? timestamp : System.currentTimeMillis());
 
@@ -551,7 +552,7 @@ public class InitialSync {
             if (e.getCode() != MailServiceException.ALREADY_EXISTS)
                 throw e;
             OfflineLog.offline.debug("initial: folder already exists (id=" + id + " type=" + type + "): " + name);
-            getDeltaSync().syncFolder(elt, id, type);
+            getDeltaSync().syncFolder(elt, id, uuid, type);
         }
     }
 
@@ -1439,6 +1440,7 @@ public class InitialSync {
         long modifiedDate = doc.getAttributeLong(MailConstants.A_DATE);
         String lastEditedBy = doc.getAttribute(MailConstants.A_LAST_EDITED_BY);
         String itemIdStr = doc.getAttribute(MailConstants.A_ID);
+        String uuid = doc.getAttribute(MailConstants.A_UUID);
         int idFromXml = Integer.parseInt(itemIdStr);
         ombx.recordItemSync(idFromXml);
         String name = doc.getAttribute(MailConstants.A_NAME);
@@ -1478,6 +1480,7 @@ public class InitialSync {
             player.setDocument(pd);
             player.setItemType(type);
             player.setMessageId(id);
+            player.setUuid(uuid);
 
             // XXX sync tags
 
@@ -1562,6 +1565,7 @@ public class InitialSync {
                 player.setDocument(pd);
                 player.setItemType(doc.getType());
                 player.setMessageId(doc.getId());
+                player.setUuid(doc.getUuid());
                 RevisionInfo lastRev = lastRevisions.get(doc.getId());
                 if (lastRev == null || lastRev.getVersion() < doc.getVersion()) {
                     RevisionInfo rev = new RevisionInfo(doc.getVersion(), doc.getDate(), doc.getFolderId());

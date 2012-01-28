@@ -295,6 +295,7 @@ public class DeltaSync {
             Map<Integer, Integer> deltachats, Multimap<Integer, String> contacts, Map<Integer, Integer> appts,
             Map<Integer, Integer> tasks, List<Integer> documents, Element change, int folderId) throws ServiceException {
         int id = (int) change.getAttributeLong(MailConstants.A_ID);
+        String uuid = change.getAttribute(MailConstants.A_UUID);
         String type = change.getName();
         boolean create = (change.getAttribute(MailConstants.A_FLAGS, null) == null);
         if (type.equals(MailConstants.E_MSG)) {
@@ -386,7 +387,7 @@ public class DeltaSync {
             return;
         } else if (InitialSync.KNOWN_FOLDER_TYPES.contains(type)) {
             // can't tell new folders from modified ones, so might as well go through the initial sync process
-            syncContainer(change, id);
+            syncContainer(change, id, uuid);
         }
     }
 
@@ -492,15 +493,15 @@ public class DeltaSync {
         OfflineLog.offline.debug("delta: queued folder for recreate: " + folder.getId());
     }
 
-    private void syncContainer(Element elt, int id) throws ServiceException {
+    private void syncContainer(Element elt, int id, String uuid) throws ServiceException {
         String type = elt.getName();
         if (type.equalsIgnoreCase(MailConstants.E_SEARCH))
-            syncSearchFolder(elt, id);
+            syncSearchFolder(elt, id, uuid);
         else if (type.equalsIgnoreCase(MailConstants.E_FOLDER) || type.equalsIgnoreCase(MailConstants.E_MOUNT))
-            syncFolder(elt, id, type);
+            syncFolder(elt, id, uuid, type);
     }
 
-    void syncSearchFolder(Element elt, int id) throws ServiceException {
+    void syncSearchFolder(Element elt, int id, String uuid) throws ServiceException {
         String rgb = elt.getAttribute(MailConstants.A_RGB, null);
         byte color = (byte) elt.getAttributeLong(MailConstants.A_COLOR, MailItem.DEFAULT_COLOR);
         Color itemColor = rgb != null ? new Color(rgb) : new Color(color);
@@ -523,7 +524,7 @@ public class DeltaSync {
                 }
                 // resolve any naming conflicts and actually create the folder
                 if (resolveFolderConflicts(elt, id, MailItem.Type.SEARCHFOLDER, folder)) {
-                    getInitialSync().syncSearchFolder(elt, id);
+                    getInitialSync().syncSearchFolder(elt, id, uuid);
                     return;
                 } else {
                     folder = getFolder(id);
@@ -553,7 +554,7 @@ public class DeltaSync {
         }
     }
 
-    void syncFolder(Element elt, int id, String type) throws ServiceException {
+    void syncFolder(Element elt, int id, String uuid, String type) throws ServiceException {
         int flags = Flag.toBitmask(elt.getAttribute(MailConstants.A_FLAGS, null)) & ~Flag.BITMASK_UNREAD;
         String rgb = elt.getAttribute(MailConstants.A_RGB, null);
         byte color = (byte) elt.getAttributeLong(MailConstants.A_COLOR, MailItem.DEFAULT_COLOR);
@@ -576,7 +577,7 @@ public class DeltaSync {
                     return;
                 // resolve any naming conflicts and actually create the folder
                 if (resolveFolderConflicts(elt, id, itemType, folder)) {
-                    getInitialSync().syncFolder(elt, id, type);
+                    getInitialSync().syncFolder(elt, id, uuid, type);
                     return;
                 } else {
                     folder = getFolder(id);

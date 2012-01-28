@@ -331,7 +331,7 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
                 }
                 msg.markItemModified(Change.PARENT);
                 msg.mData.parentId = convId;
-                msg.mData.metadataChanged(this);
+                msg.metadataChanged();
             } catch (MailServiceException.NoSuchItemException nsie) {
                 // real conversation didn't exist; create it!
                 createConversation(convId, msg);

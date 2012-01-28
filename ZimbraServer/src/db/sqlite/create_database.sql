@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.mail_item (
    date          INTEGER UNSIGNED NOT NULL,  -- stored as a UNIX-style timestamp
    size          BIGINT UNSIGNED NOT NULL,
    volume_id     TINYINT UNSIGNED,
-   blob_digest   VARCHAR(28),                -- reference to blob, meaningful only for certain item types
+   blob_digest   VARCHAR(44),                -- reference to blob, meaningful only for certain item types
    unread        INTEGER UNSIGNED,           -- stored separately from the other flags so we can index it
    flags         INTEGER NOT NULL DEFAULT 0,
    tags          BIGINT NOT NULL DEFAULT 0,
@@ -86,6 +86,7 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.mail_item (
    change_date   INTEGER UNSIGNED,           -- UNIX-style timestamp for last row modification
    mod_content   INTEGER UNSIGNED NOT NULL,  -- change number for last change to "content" (e.g. blob)
    change_mask   INTEGER UNSIGNED,           -- bitmask of changes since the last server push
+   uuid          VARCHAR(127),               -- e.g. "d94e42c4-1636-11d9-b904-4dd689d02402"
 
    -- UNIQUE (folder_id, name),  -- for namespace uniqueness
 
@@ -101,6 +102,7 @@ CREATE INDEX IF NOT EXISTS ${DATABASE_NAME}.i_mail_item_index_id ON mail_item(in
 CREATE INDEX IF NOT EXISTS ${DATABASE_NAME}.i_mail_item_date ON mail_item(date DESC);                 -- fallback index in case other constraints are not specified
 CREATE INDEX IF NOT EXISTS ${DATABASE_NAME}.i_mail_item_mod_metadata ON mail_item(mod_metadata);      -- used by the sync code
 CREATE INDEX IF NOT EXISTS ${DATABASE_NAME}.i_mail_item_change_mask ON mail_item(change_mask);  -- for figuring out which items to push during sync
+CREATE INDEX IF NOT EXISTS ${DATABASE_NAME}.i_mail_item_uuid ON mail_item(uuid);                      -- for looking up by uuid 
 
 -- -----------------------------------------------------------------------
 -- old versions of existing items
@@ -112,7 +114,7 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.revision (
    date          INTEGER UNSIGNED NOT NULL,  -- stored as a UNIX-style timestamp
    size          BIGINT UNSIGNED NOT NULL,
    volume_id     TINYINT UNSIGNED,
-   blob_digest   VARCHAR(28),                -- reference to blob, meaningful for messages only (type == 5)
+   blob_digest   VARCHAR(44),                -- reference to blob, meaningful for messages only (type == 5)
    name          VARCHAR(128),               -- namespace entry for item (e.g. tag name, folder name, document filename)
    metadata      MEDIUMTEXT,
    mod_metadata  INTEGER UNSIGNED NOT NULL,  -- change number for last row modification
