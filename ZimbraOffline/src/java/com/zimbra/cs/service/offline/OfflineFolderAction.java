@@ -71,19 +71,21 @@ public class OfflineFolderAction extends FolderAction {
         if (StringUtil.equal(Op.MOVE.toString(), operation)) {
             String target = action.getAttribute(MailConstants.A_FOLDER);
             if (!StringUtil.isNullOrEmpty(target)) {
-                String targetAccountId = target.split(":")[0];
+                ItemId targetItemId = new ItemId(target, getZimbraSoapContext(context).getRequestedAccountId());
                 String source = action.getAttribute(MailConstants.A_ID);
-                String sourceAccountId = source.split(":")[0];
-                if (!StringUtil.equal(sourceAccountId, targetAccountId)
-                        && !OfflineConstants.LOCAL_ACCOUNT_ID.equals(sourceAccountId)
-                        && !OfflineConstants.LOCAL_ACCOUNT_ID.equals(targetAccountId)
-                        && (sourceAccountId.length() == OfflineConstants.LOCAL_ACCOUNT_ID.length())) {
+                ItemId sourceItemId = new ItemId(source, getZimbraSoapContext(context).getRequestedAccountId());
+                // cross account move is not supported
+                if (!StringUtil.equal(targetItemId.getAccountId(), sourceItemId.getAccountId())
+                        && !OfflineConstants.LOCAL_ACCOUNT_ID.equals(sourceItemId.getAccountId())
+                        && !OfflineConstants.LOCAL_ACCOUNT_ID.equals(targetItemId.getAccountId())) {
                     throw ServiceException.INVALID_REQUEST("unsupported operation, expect local account id, action:("
                             + action + ")", null);
                 }
-                if (!OfflineConstants.LOCAL_ACCOUNT_ID.equals(sourceAccountId)
-                        && OfflineConstants.LOCAL_ACCOUNT_ID.equals(targetAccountId)) {
-                    Mailbox mbox = OfflineMailboxManager.getOfflineInstance().getMailboxByAccountId(sourceAccountId);
+                // only support account to local folder
+                if (!OfflineConstants.LOCAL_ACCOUNT_ID.equals(sourceItemId.getAccountId())
+                        && OfflineConstants.LOCAL_ACCOUNT_ID.equals(targetItemId.getAccountId())) {
+                    Mailbox mbox = OfflineMailboxManager.getOfflineInstance().getMailboxByAccountId(
+                            sourceItemId.getAccountId());
                     ZimbraSoapContext zsc = getZimbraSoapContext(context);
                     OperationContext octxt = getOperationContext(zsc, context);
 
