@@ -11,7 +11,6 @@ import com.zimbra.qa.selenium.projects.octopus.core.OctopusCommonTest;
 import com.zimbra.qa.selenium.projects.octopus.ui.DisplayFilePreview;
 import com.zimbra.qa.selenium.projects.octopus.ui.PageMyFiles;
 
-
 public class MarkAsFavorite extends OctopusCommonTest {
 
 	private boolean _folderIsCreated = false;
@@ -173,14 +172,20 @@ public class MarkAsFavorite extends OctopusCommonTest {
 		// Verify file exists in My Files view
 		ZAssert.assertTrue(app.zPageMyFiles.zWaitForElementPresent(
 				PageMyFiles.Locators.zMyFilesListViewItems.locator
-				+ ":contains(" + fileName + ")", "3000"),
+						+ ":contains(" + fileName + ")", "3000"),
 				"Verify file appears in My Files view");
-		
+
 		// Select file in the list view
-		DisplayFilePreview filePreview = (DisplayFilePreview) app.zPageMyFiles.zListItem(Action.A_LEFTCLICK, fileName);
-		
+		DisplayFilePreview filePreview = (DisplayFilePreview) app.zPageMyFiles
+				.zListItem(Action.A_LEFTCLICK, fileName);
+
+		// Verify File image icon becomes enabled
+		ZAssert.assertTrue(app.zPageMyFiles.zWaitForElementPresent(
+				DisplayFilePreview.Locators.zFileImageIcon.locator, "3000"),
+				"Verify the file image icon becomes enabled in the preview panel toolbar");
+
 		// mark file as favorite clicking on watch icon
-		filePreview.zPressButton(Button.B_WATCH);		
+		filePreview.zPressButton(Button.B_WATCH);
 
 		// Verify Watch icon becomes enabled
 		ZAssert.assertTrue(app.zPageMyFiles.zWaitForElementPresent(
@@ -196,11 +201,17 @@ public class MarkAsFavorite extends OctopusCommonTest {
 				"//mail:GetWatchingItemsResponse//mail:item", "id", _fileId),
 				"Verify file is added to Favorites");
 
-		//Select file
-		filePreview = (DisplayFilePreview) app.zPageMyFiles.zListItem(Action.A_LEFTCLICK, fileName);
-		
+		// Select file
+		filePreview = (DisplayFilePreview) app.zPageMyFiles.zListItem(
+				Action.A_LEFTCLICK, fileName);
+
+		// Verify File image icon becomes enabled
+		ZAssert.assertTrue(app.zPageMyFiles.zWaitForElementPresent(
+				DisplayFilePreview.Locators.zFileImageIcon.locator, "3000"),
+				"Verify the file image icon becomes enabled in the preview panel toolbar");
+
 		// unmark file as favorite clicking on unwatch icon
-		filePreview.zPressButton(Button.B_UNWATCH);	
+		filePreview.zPressButton(Button.B_UNWATCH);
 
 		// Verify Watch icon becomes disabled
 		ZAssert.assertTrue(app.zPageMyFiles.zWaitForElementPresent(
@@ -209,7 +220,6 @@ public class MarkAsFavorite extends OctopusCommonTest {
 				"Verify the favorite icon becomes disabled in the preview panel");
 	}
 
-	
 	@AfterMethod(groups = { "always" })
 	public void testCleanup() {
 		if (_fileAttached && _fileId != null) {
@@ -239,18 +249,21 @@ public class MarkAsFavorite extends OctopusCommonTest {
 			}
 		}
 		try {
-			// Refresh view 
-			//ZimbraAccount account = app.zGetActiveAccount();
-			//FolderItem item = FolderItem.importFromSOAP(account,SystemFolder.Briefcase);
-			//account.soapSend("<GetFolderRequest xmlns='urn:zimbraMail'><folder l='1' recursive='0'/>" + "</GetFolderRequest>");
-			//account.soapSend("<GetFolderRequest xmlns='urn:zimbraMail' requestId='folders' depth='1' tr='true' view='document'><folder l='" + item.getId() + "'/></GetFolderRequest>");
-			//account.soapSend("<GetActivityStreamRequest xmlns='urn:zimbraMail' id='16'/>");
-			//app.zGetActiveAccount().accountIsDirty = true;
-			//app.zPageOctopus.sRefresh();
-												
+			// Refresh view
+			// ZimbraAccount account = app.zGetActiveAccount();
+			// FolderItem item =
+			// FolderItem.importFromSOAP(account,SystemFolder.Briefcase);
+			// account.soapSend("<GetFolderRequest xmlns='urn:zimbraMail'><folder l='1' recursive='0'/>"
+			// + "</GetFolderRequest>");
+			// account.soapSend("<GetFolderRequest xmlns='urn:zimbraMail' requestId='folders' depth='1' tr='true' view='document'><folder l='"
+			// + item.getId() + "'/></GetFolderRequest>");
+			// account.soapSend("<GetActivityStreamRequest xmlns='urn:zimbraMail' id='16'/>");
+			// app.zGetActiveAccount().accountIsDirty = true;
+			// app.zPageOctopus.sRefresh();
+
 			// Empty trash
 			app.zPageTrash.emptyTrashUsingSOAP(app.zGetActiveAccount());
-			
+
 			app.zPageOctopus.zLogout();
 		} catch (Exception e) {
 			logger.info("Failed while emptying Trash");

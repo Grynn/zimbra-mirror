@@ -6,6 +6,8 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
 public class DisplayFilePreview extends AbsDisplay {
 
 	public static class Locators {
+		public static final Locators zFilePreview = new Locators(
+				"css=div[id=my-files-preview]");
 		public static final Locators zFileWatchIcon = new Locators(
 				"css=div[id=my-files-preview-toolbar] span[class=file-info-view-watch-icon]");
 		public static final Locators zFileImageIcon = new Locators(
@@ -139,7 +141,7 @@ public class DisplayFilePreview extends AbsDisplay {
 
 	@Override
 	public boolean zIsActive() throws HarnessException {
-		if (zWaitForElementPresent(Locators.zFileImageIcon.locator, "3000"))
+		if (zWaitForElementPresent(Locators.zFilePreview.locator, "3000"))
 			return true;
 		else
 			return false;
