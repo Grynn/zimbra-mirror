@@ -6,6 +6,7 @@ import java.util.HashMap;
 
 import org.testng.annotations.Test;
 
+import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.Action;
@@ -29,7 +30,7 @@ public class DragAndDropTaskFolder extends AjaxCommonTest {
 	}	
 
 	
-	
+	@Bugs(ids="69661")
 	@Test(description = "Drag one Task folder and Drop into other", groups = { "smoke" })
 	public void DragAndDropTaskFolder_01() throws HarnessException {
 		FolderItem taskFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Tasks);

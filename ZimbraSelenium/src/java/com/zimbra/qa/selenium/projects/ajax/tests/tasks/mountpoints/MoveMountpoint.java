@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import org.testng.annotations.Test;
 
+import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderMountpointItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
@@ -36,7 +37,7 @@ public class MoveMountpoint extends AjaxCommonTest {
 		Owner.authenticate();
 		
 	}
-	
+	@Bugs(ids="69661")
 	@Test(	description = "Move a mountpoint under a subfolder - Drag and Drop, Move",
 			groups = { "smoke" })
 	public void MoveMountpoint_01() throws HarnessException {
