@@ -63,6 +63,12 @@ public class MarkAsFavorite extends OctopusCommonTest {
 		// click on the My Files tab
 		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_MY_FILES);
 
+		// Verify file exists in My Files view
+		ZAssert.assertTrue(app.zPageMyFiles.zWaitForElementPresent(
+				PageMyFiles.Locators.zMyFilesListViewItems.locator
+						+ ":contains(" + fileName + ")", "3000"),
+				"Verify file appears in My Files view");
+
 		// mark file as favorite using drop down menu
 		app.zPageMyFiles.zToolbarPressPulldown(Button.B_MY_FILES_LIST_ITEM,
 				Button.O_FAVORITE, fileName);
