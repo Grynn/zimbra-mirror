@@ -24,6 +24,7 @@ import com.zimbra.common.soap.Element;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.offline.OfflineAccount;
+import com.zimbra.cs.index.LuceneFields;
 import com.zimbra.cs.service.account.SearchCalendarResources;
 import com.zimbra.soap.ZimbraSoapContext;
 
@@ -48,6 +49,30 @@ public class OfflineSearchCalendarResources extends SearchCalendarResources {
                     if (attrs.matches("(^|.*,)("+ContactConstants.A_email+")($|,.*)")) {
                         needEmail = true;
                     }
+                }
+                Element nameEl = request.getOptionalElement(AccountConstants.E_NAME);
+                if (nameEl != null) {
+                    String name = nameEl.getText();
+                    Element filterElem = request.getOptionalElement(AccountConstants.E_ENTRY_SEARCH_FILTER);
+                    if (filterElem != null) {
+                        Element termElem = filterElem.getOptionalElement(AccountConstants.E_ENTRY_SEARCH_FILTER_MULTICOND);
+                        if (termElem != null) {
+                            boolean nameExists = false;
+                            for (Iterator<Element> iter = termElem.elementIterator(); iter.hasNext();) {
+                                Element cond = iter.next();
+                                if (Provisioning.A_displayName.equals(cond.getAttribute(AccountConstants.A_ENTRY_SEARCH_FILTER_ATTR, null))) {
+                                    nameExists = true;
+                                    break;
+                                }
+                            }
+                            if (!nameExists) {
+                                Element nameCond = termElem.addElement(AccountConstants.E_ENTRY_SEARCH_FILTER_SINGLECOND);
+                                nameCond.addAttribute(AccountConstants.A_ENTRY_SEARCH_FILTER_ATTR, Provisioning.A_displayName);
+                                nameCond.addAttribute(AccountConstants.A_ENTRY_SEARCH_FILTER_OP, LuceneFields.L_OBJECTS);
+                                nameCond.addAttribute(AccountConstants.A_ENTRY_SEARCH_FILTER_VALUE, name);
+                            }
+                        }
+                    } 
                 }
             }
         }
