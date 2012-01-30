@@ -288,9 +288,9 @@ if (!JSON) {
             gap += indent;
             partial = [];
 
-// Is the value an array?
+// Is the value an array? Use check that doesn't rely on type info, which IE loses across windows
 
-            if (Object.prototype.toString.apply(value) === '[object Array]') {
+			if (AjxUtil.isArray1(value)) {
 
 // The value is an array. Stringify every element. Use null as a placeholder
 // for non-JSON values.
@@ -348,10 +348,10 @@ if (!JSON) {
         }
     }
 
-// If the JSON object does not yet have a stringify method, give it one.
 
-    if (typeof JSON.stringify !== 'function') {
-        JSON.stringify = function (value, replacer, space) {
+// Create a version of stringify that doesn't rely on type information, which IE can lose
+// for arrays when going across windows.
+         JSON.stringify1 = function (value, replacer, space) {
 
 // The stringify method takes a value and an optional replacer, and an optional
 // space parameter, and returns a JSON text. The replacer can be a function
@@ -392,8 +392,11 @@ if (!JSON) {
 
             return str('', {'': value});
         };
-    }
 
+// If the JSON object does not yet have a stringify method, add ours.
+    if (typeof JSON.stringify !== 'function') {
+		JSON.stringify = JSON.stringify1;
+	}
 
 // If the JSON object does not yet have a parse method, give it one.
 

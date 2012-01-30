@@ -1288,7 +1288,7 @@ function(obj, recurse, showFuncs, omit) {
 	} else if (AjxUtil.isNumber(obj)) {
 		text += obj;
 	} else if (AjxUtil.isObject(obj)) {
-		var isArray = AjxUtil.isArray(obj);
+		var isArray = AjxUtil.isArray(obj) || AjxUtil.isArray1(obj);
 		if (stopRecursion) {
 			text += isArray ? "[Array]" : obj.toString();
 		} else {

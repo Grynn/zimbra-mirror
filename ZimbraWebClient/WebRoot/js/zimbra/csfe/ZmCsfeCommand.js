@@ -254,24 +254,25 @@ function(request) {
  * Sends a SOAP request to the server and processes the response. The request can be in the form
  * of a SOAP document, or a JSON object.
  *
- * @param {Hash}	params			a hash of parameters
- * @param	{AjxSoapDoc}	params.soapDoc			the SOAP document that represents the request
- * @param	{Object}	params.jsonObj			the JSON object that represents the request (alternative to soapDoc)
- * @param	{Boolean}	params.noAuthToken		if <code>true</code>, the check for an auth token is skipped
- * @param	{Boolean}	params.authToken		authToken to use instead of the local one
- * @param	{String}	params.serverUri			the URI to send the request to
- * @param	{String}	params.targetServer		the host that services the request
- * @param	{Boolean}	params.useXml			if <code>true</code>, an XML response is requested
- * @param	{Boolean}	params.noSession			if <code>true</code>, no session info is included
- * @param	{String}	params.changeToken		the current change token
- * @param	{int}	params.highestNotifySeen 	the sequence # of the highest notification we have processed
- * @param	{Boolean}	params.asyncMode			if <code>true</code>, request sent asynchronously
- * @param	{AjxCallback}	params.callback		the callback to run when response is received (async mode)
- * @param	{Boolean}	params.logRequest		if <code>true</code>, SOAP command name is appended to server URL
- * @param	{String}	params.accountId			the ID of account to execute on behalf of
- * @param	{String}	params.accountName		the name of account to execute on behalf of
- * @param	{Boolean}	params.skipAuthCheck		if <code>true</code> to skip auth check (i.e. do not check if auth token has changed)
- * @param	{constant}	params.resend			the reason for resending request
+ * @param	{Hash}			params				a hash of parameters:
+ * @param	{AjxSoapDoc}	soapDoc				the SOAP document that represents the request
+ * @param	{Object}		jsonObj				the JSON object that represents the request (alternative to soapDoc)
+ * @param	{Boolean}		noAuthToken			if <code>true</code>, the check for an auth token is skipped
+ * @param	{Boolean}		authToken			authToken to use instead of the local one
+ * @param	{String}		serverUri			the URI to send the request to
+ * @param	{String}		targetServer		the host that services the request
+ * @param	{Boolean}		useXml				if <code>true</code>, an XML response is requested
+ * @param	{Boolean}		noSession			if <code>true</code>, no session info is included
+ * @param	{String}		changeToken			the current change token
+ * @param	{int}			highestNotifySeen 	the sequence # of the highest notification we have processed
+ * @param	{Boolean}		asyncMode			if <code>true</code>, request sent asynchronously
+ * @param	{AjxCallback}	callback			the callback to run when response is received (async mode)
+ * @param	{Boolean}		logRequest			if <code>true</code>, SOAP command name is appended to server URL
+ * @param	{String}		accountId			the ID of account to execute on behalf of
+ * @param	{String}		accountName			the name of account to execute on behalf of
+ * @param	{Boolean}		skipAuthCheck		if <code>true</code> to skip auth check (i.e. do not check if auth token has changed)
+ * @param	{constant}		resend				the reason for resending request
+ * @param	{boolean}		useStringify1		use JSON.stringify1 (gets around IE child win issue with Array)
  */
 ZmCsfeCommand.prototype.invoke =
 function(params) {
@@ -428,8 +429,8 @@ function(params) {
 	DBG.dumpObj(AjxDebug.DBG1, obj);
 
 	params.jsonRequestObj = obj;
-
-	return JSON.stringify(obj);
+	
+	return params.useStringify1 ? JSON.stringify1(obj) : JSON.stringify(obj);
 };
 
 /**
