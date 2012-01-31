@@ -366,6 +366,8 @@ public:
         tlog.set(file && *file ? new Log(file, glog.level()) : &glog);
     }
 
+    static void set(Log *log) { tlog.set(log ? log : &glog); }
+
     static Level str2enum(const wchar_t *lvl);
 
 private:
