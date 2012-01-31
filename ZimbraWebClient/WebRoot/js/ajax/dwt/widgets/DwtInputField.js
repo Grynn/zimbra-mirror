@@ -870,6 +870,7 @@ function(oel, nel, inheritClass, inheritStyle) {
 // Private methods
 //
 
+
 DwtInputField.prototype.__createInputEl =
 function(params) {
 	// clean up old input field if present
@@ -881,9 +882,17 @@ function(params) {
 	}
 
 	// create new input field
+	var ninput;
 	var type = this._type != DwtInputField.PASSWORD ? "text" : "password";
-	var ninput = document.createElement(AjxEnv.isIE ? ["<INPUT type='",type,"'>"].join("") : "INPUT");
-	if (!AjxEnv.isIE) {
+	if (AjxEnv.isIE) {
+		try {
+			var ninput = document.createElement(["<INPUT type='",type,"'>"].join(""));
+		} catch(e) {
+			ninput = document.createElement("INPUT");
+			ninput.type = type;
+		}
+	} else {
+		ninput = document.createElement("INPUT");
 		ninput.type = type;
 	}
 	this._inputField = ninput;
