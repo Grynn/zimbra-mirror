@@ -18,7 +18,7 @@ public class PageSearchResults extends AbsTab {
 	public static class Locators {
 		public static final String SEARCH_INPUT_TEXT_BOX="_XForm_query_display";
 		public static final String SEARCH_BUTTON="css=td.xform_container div.ImgSearch";
-		public static final String DELETE_BUTTON="css=div[id^='zmi__zb_currentApp__DELETE__']";
+		public static final String DELETE_BUTTON="css=div[id^='zmi__zb_currentApp__DELETE__'] div[class='ImgDelete']";
 		public static final String GEAR_ICON="css=div.ImgConfigure";
 	}
 

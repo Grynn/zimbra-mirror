@@ -19,8 +19,8 @@ public class PageMain extends AbsTab {
 		public static final String zSkinContainerLogo		= "xpath=//*[@id='skin_container_logo']";
 		public static final String zSkinContainerUsername	= "xpath=//*[@id='skin_container_username']";
 		//public static final String zSkinContainerLogoff		= "css=table[class='skin_table'] span[onclick='ZaZimbraAdmin.logOff();']";
-		public static final String zRefreshButton		="css=div.ImgSearchRefreshWhite";
-		public static final String zLogOff = "zmi__ZA_LOGOFF__LOGOFF";
+		public static final String zLogoffDropDownArrow		="css=div.ImgNodeExpandedWhite";
+		public static final String zLogOff = "css=div.ImgLogoff";
 		public static final String zSkinContainerHelp		= "xpath=//*[@id='skin_container_help']";
 		public static final String zSkinContainerDW			= "xpath=//*[@id='skin_container_dw']";
 	}
@@ -47,7 +47,7 @@ public class PageMain extends AbsTab {
 		
 
 		// Look for the Refresh Button
-		boolean present = sIsElementPresent(Locators.zRefreshButton);
+		boolean present = sIsElementPresent(Locators.zLogoffDropDownArrow);
 		if ( !present ) {
 			logger.debug("isActive() present = "+ present);
 			return (false);
@@ -55,7 +55,7 @@ public class PageMain extends AbsTab {
 		
 
 		// Look for the Refresh Button. 
-		boolean visible = zIsVisiblePerPosition(Locators.zRefreshButton, 0, 0);
+		boolean visible = zIsVisiblePerPosition(Locators.zLogoffDropDownArrow, 0, 0);
 		if ( !visible ) {
 			logger.debug("isActive() visible = "+ visible);
 			return (false);
@@ -93,16 +93,17 @@ public class PageMain extends AbsTab {
 		
 		zNavigateTo();
 
-		if ( !sIsElementPresent(Locators.zRefreshButton) ) {
-			throw new HarnessException("The refresh button is not present " + Locators.zRefreshButton);
+		if ( !sIsElementPresent(Locators.zLogoffDropDownArrow) ) {
+			throw new HarnessException("The refresh button is not present " + Locators.zLogoffDropDownArrow);
 		}
 		
-		if ( !zIsVisiblePerPosition(Locators.zRefreshButton, 10, 10) ) {
-			throw new HarnessException("The refresh button is not visible " + Locators.zRefreshButton);
+		if ( !zIsVisiblePerPosition(Locators.zLogoffDropDownArrow, 10, 10) ) {
+			throw new HarnessException("The refresh button is not visible " + Locators.zLogoffDropDownArrow);
 		}
 		
 		// Click on logout
-		sClick(Locators.zLogOff);
+		sClickAt(Locators.zLogoffDropDownArrow,"");
+		sClickAt(Locators.zLogOff,"");
 		
 		/**
 		 * Following WaitForPageToLoad() is needed to ensure successful log off operation.

@@ -52,7 +52,7 @@ public class DeleteDomain extends AdminCommonTest {
 		app.zPageSearchResults.zListItem(Action.A_LEFTCLICK, domain.getName());
 
 		// Click on Delete button
-		DialogForDeleteOperation dialog = (DialogForDeleteOperation) app.zPageSearchResults.zToolbarPressButton(Button.B_DELETE);
+		DialogForDeleteOperation dialog = (DialogForDeleteOperation) app.zPageSearchResults.zToolbarPressPulldown(Button.B_GEAR_BOX, Button.O_DELETE);
 
 		// Click Yes in Confirmation dialog.
 		dialog.zClickButton(Button.B_YES);
