@@ -20,7 +20,8 @@ public class CodeCoverage {
 	
 	protected static final List<AppType> supportedAppTypes = Arrays.asList(
 																	AppType.AJAX,
-																	AppType.ADMIN
+																	AppType.ADMIN,
+																	AppType.OCTOPUS
 																	);
 	/**
 	 * The cumulative code coverage object
@@ -561,6 +562,7 @@ public class CodeCoverage {
 
 	private static final String WebappsZimbra = "/opt/zimbra/jetty/webapps/zimbra";
 	private static final String WebappsZimbraAdmin = "/opt/zimbra/jetty/webapps/zimbraAdmin";
+	private static final String WebappsOctopus = "/opt/zimbra/jetty/webapps/zimbra";
 	private String WebappsOriginal = null;
 	private String WebappsInstrumented = null;
 	
@@ -615,6 +617,10 @@ public class CodeCoverage {
 				instrumentServer(WebappsZimbra);
 			} else if ( ZimbraSeleniumProperties.getAppType().equals(AppType.ADMIN) ) {
 				instrumentServer(WebappsZimbraAdmin);
+			} else if ( ZimbraSeleniumProperties.getAppType().equals(AppType.OCTOPUS) ) {
+				instrumentServer(WebappsOctopus);
+			} else {
+				throw new HarnessException("Unknown code coverage app type: "+ ZimbraSeleniumProperties.getAppType());
 			}
 		
 		} finally {
@@ -690,6 +696,10 @@ public class CodeCoverage {
 				instrumentServerUndo(WebappsZimbra);
 			} else if ( ZimbraSeleniumProperties.getAppType().equals(AppType.ADMIN) ) {
 				instrumentServerUndo(WebappsZimbraAdmin);
+			} else if ( ZimbraSeleniumProperties.getAppType().equals(AppType.OCTOPUS) ) {
+				instrumentServer(WebappsOctopus);
+			} else {
+				throw new HarnessException("Unknown code coverage app type: "+ ZimbraSeleniumProperties.getAppType());
 			}
 
 		} finally {
