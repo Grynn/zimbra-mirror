@@ -781,11 +781,13 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 						{ref:ZaDomain.A_zimbraGalMaxResults, type:_TEXTFIELD_, label:ZaMsg.LBL_zimbraGalMaxResults, msgName:ZaMsg.MSG_zimbraGalMaxResults, labelLocation:_LEFT_, width:100},
 						{ref:ZaDomain.A2_create_gal_acc, type:_CHECKBOX_, label:ZaMsg.Domain_CreateGALSyncAccts, subLabel:"",
 							labelLocation:_LEFT_,trueValue:"TRUE", falseValue:"FALSE",
-							labelCssClass:"xform_label", align:_LEFT_,labelWrap:true
+							labelCssClass:"xform_label", align:_LEFT_,labelWrap:true,
+							enableDisableChecks:[]
 						},
                         {ref:ZaDomain.A2_gal_sync_accounts_set, type:_REPEAT_, label:null, repeatInstance:"", showAddButton:true, showRemoveButton:true,
 							visibilityChangeEventSources:[ZaDomain.A2_create_gal_acc],
 							visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A2_create_gal_acc,"TRUE"]],
+							enableDisableChecks:[],
 							colSpan:2,
 							addButtonLabel:ZaMsg.Domain_GAL_Add,
 							addButtonWidth: 220,
@@ -803,6 +805,7 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject, entry) {
                                     {type:_SPACER_, colSpan:"*"},
                                     {type:_GROUP_, ref:".", numCols:2, colSizes:["220px", "100%"], //use 100% to full fill the blank on the right hand side in IE
                                         width:"100%",
+                                        enableDisableChecks:[],
                                         visibilityChangeEventSources:[ZaDomain.A2_gal_sync_accounts_set],
                                         visibilityChecks:[function() {
                                             var instanceNum = this.getParentItem().instanceNum;
@@ -811,9 +814,9 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject, entry) {
                                         items:[
                                         {type:_GROUP_, label:ZaMsg.Domain_GalSyncAccount, numCols:3, colSizes:["130px", "25px","auto"], colSpan:"1", ref: ".",
                                             items:[
-                                                {ref:ZaDomain.A2_new_gal_sync_account_name, width:130, label:null, type:_TEXTFIELD_},
-                                                {type:_OUTPUT_, value:"@"},
-                                                {type:_OUTPUT_,refPath:ZaDomain.A_domainName,label:null,align:_LEFT_}
+                                                {ref:ZaDomain.A2_new_gal_sync_account_name, width:130, label:null, type:_TEXTFIELD_, visibilityChecks:[],enableDisableChecks:[]},
+                                                {type:_OUTPUT_, value:"@", visibilityChecks:[],enableDisableChecks:[]},
+                                                {type:_OUTPUT_,refPath:ZaDomain.A_domainName,label:null,align:_LEFT_, visibilityChecks:[],enableDisableChecks:[]}
                                             ],
                                             enableDisableChangeEventSources:[ZaDomain.A2_create_gal_acc],
                                             enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A2_create_gal_acc,"TRUE"]],
@@ -821,14 +824,14 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject, entry) {
                                         },
                                         {ref:ZaDomain.A_mailHost, type: _OSELECT1_, label:ZaMsg.NAD_MailServer,  choices: ZaApp.getInstance().getServerListChoices(), required:true,
                                             enableDisableChangeEventSources:[ZaDomain.A2_create_gal_acc],
-                                            enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A2_create_gal_acc,"TRUE"]]
+                                            enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A2_create_gal_acc,"TRUE"]],
+                                            visibilityChecks:[]
                                         },
                                         {ref:ZaDomain.A2_new_internal_gal_ds_name, label:ZaMsg.Domain_InternalGALDSName, type:_TEXTFIELD_,
                                             visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode],
                                             visibilityChecks:[ZaNewDomainXWizard.isDomainModeNotExternal],
                                             enableDisableChangeEventSources:[ZaDomain.A2_create_gal_acc],
                                             enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A2_create_gal_acc,"TRUE"]]
-
                                         },
                                         {ref:ZaDomain.A2_new_internal_gal_polling_interval,
                                             type:_LIFETIME1_, label:ZaMsg.LBL_zimbraDataSourcePollingInterval_internal, labelLocation:_LEFT_,
