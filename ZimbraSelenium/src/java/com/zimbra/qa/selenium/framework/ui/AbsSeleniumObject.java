@@ -506,10 +506,13 @@ public abstract class AbsSeleniumObject {
 	 * @param script
 	 */
 	public String sGetEval(String script) throws HarnessException {
-		String value = ClientSessionFactory.session().selenium()
-				.getEval(script);
+		try {
+		String value = ClientSessionFactory.session().selenium().getEval(script);
 		logger.info("getEval(" + script + ") = " + value);
 		return (value);
+		} catch (SeleniumException e) {
+			throw new HarnessException("Script: "+ script, e);
+		}
 	}
 
 	/**

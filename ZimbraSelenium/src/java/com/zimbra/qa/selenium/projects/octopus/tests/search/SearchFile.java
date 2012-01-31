@@ -1,19 +1,17 @@
 package com.zimbra.qa.selenium.projects.octopus.tests.search;
 
-import org.testng.annotations.*;
+import java.util.List;
 
-import com.zimbra.qa.selenium.framework.items.FileItem;
+import org.testng.annotations.Test;
+
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
-import com.zimbra.qa.selenium.framework.util.*;
+import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.ZAssert;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.octopus.core.OctopusCommonTest;
 
 public class SearchFile extends OctopusCommonTest {
-
-	private boolean _folderIsCreated = false;
-	private String _folderName = null;
-	private boolean _fileAttached = false;
-	private String _fileId = null;
 
 	public SearchFile() {
 		logger.info("New " + SearchFile.class.getCanonicalName());
@@ -21,122 +19,76 @@ public class SearchFile extends OctopusCommonTest {
 		// test starts at the Search tab
 		super.startingPage = app.zPageSearch;
 		super.startingAccountPreferences = null;
+		
 	}
 
-	@BeforeMethod(groups = { "always" })
-	public void testReset() {
-		_folderName = null;
-		_folderIsCreated = false;
-		_fileId = null;
-		_fileAttached = false;
-	}
-
-	@Test(description = "Upload file through RestUtil - verify by searching file through the SOAP", groups = { "sanity" })
+	@Test(
+			description = "Search for a file by filename", 
+			groups = { "sanity" })
 	public void SearchFile_01() throws HarnessException {
-		ZimbraAccount account = app.zGetActiveAccount();
 
-		FolderItem briefcaseRootFolder = FolderItem.importFromSOAP(account,
-				SystemFolder.Briefcase);
-
-		// Create file item
+		String filename = "filename"+ ZimbraSeleniumProperties.getUniqueString() +".xls";
 		String filePath = ZimbraSeleniumProperties.getBaseDirectory()
 				+ "/data/public/other/testexcelfile.xls";
-
-		FileItem fileItem = new FileItem(filePath);
-		String fileName = fileItem.getName();
+		
+		
 
 		// Upload file to server through RestUtil
-		String attachmentId = account.uploadFile(filePath);
+		String attachmentId = app.zGetActiveAccount().uploadFile(filePath);
 
 		// Save uploaded file through SOAP
-		account.soapSend("<SaveDocumentRequest xmlns='urn:zimbraMail'>"
-				+ "<doc l='" + briefcaseRootFolder.getId() + "'><upload id='"
-				+ attachmentId + "'/></doc></SaveDocumentRequest>");
-
-		_fileAttached = true;
-		_fileId = account.soapSelectValue(
-				"//mail:SaveDocumentResponse//mail:doc", "id");
-
-		// Verify file by searching it through the SOAP
-		ZAssert.assertEquals(_fileId, app.zPageOctopus.searchFile(fileName),
-				"Verify file is returned by search");
-	}
-
-	@Test(description = "" +
-			"Delete file - Search file in the Trash through the SOAP", groups = { "smoke" })
-	public void SearchFile_02() throws HarnessException {
-		ZimbraAccount account = app.zGetActiveAccount();
-
-		FolderItem briefcaseRootFolder = FolderItem.importFromSOAP(account,
+		FolderItem briefcaseRootFolder = FolderItem.importFromSOAP(
+				app.zGetActiveAccount(), 
 				SystemFolder.Briefcase);
 
-		FolderItem trash = FolderItem.importFromSOAP(account,
-				SystemFolder.Trash);
+		app.zGetActiveAccount().soapSend(
+					"<SaveDocumentRequest xmlns='urn:zimbraMail'>"
+				+		"<doc name='"+ filename +"' l='" + briefcaseRootFolder.getId() + "'>"
+				+			"<upload id='" + attachmentId + "'/>"
+				+		"</doc>"
+				+	"</SaveDocumentRequest>");
 
-		ZAssert.assertNotNull(trash, "Verify the trash is available");
 
-		// Create file item
-		String filePath = ZimbraSeleniumProperties.getBaseDirectory()
-				+ "/data/public/other/putty.log";
+		
+		// Sync up
+//		app.zPageOctopus.zToolbarPressButton(Button.B_GETMAIL);
 
-		FileItem file = new FileItem(filePath);
-		String fileName = file.getName();
 
-		// Upload file to server through RestUtil
-		String attachmentId = account.uploadFile(filePath);
+		// Search for the message
+		app.zPageSearch.zExecuteSearchQuery(filename);
 
-		// Save uploaded file to the root folder through SOAP
-		account.soapSend(
-
-		"<SaveDocumentRequest xmlns='urn:zimbraMail'>" + "<doc l='"
-				+ briefcaseRootFolder.getId() + "'>" + "<upload id='"
-				+ attachmentId + "'/></doc>" + "</SaveDocumentRequest>");
-
-		_fileAttached = true;
-		_fileId = account.soapSelectValue(
-				"//mail:SaveDocumentResponse//mail:doc", "id");
-
-		// verify the file is uploaded
-		ZAssert.assertNotNull(_fileId, "Verify file is uploaded");
-
-		// trash file using SOAP
-		app.zPageOctopus.trashItemUsingSOAP(_fileId, account);
-
-		SleepUtil.sleepSmall();
-
-		// Verify by searching file in the Trash using SOAP
-		ZAssert.assertEquals(_fileId,
-				app.zPageOctopus.searchFileIn(fileName, trash.getName()),
-				"Verify file is returned by search");
-	}
-
-	@AfterMethod(groups = { "always" })
-	public void testCleanup() {
-		if (_folderIsCreated) {
-			try {
-				// Delete it from Server
-				FolderItem
-						.deleteUsingSOAP(app.zGetActiveAccount(), _folderName);
-			} catch (Exception e) {
-				logger.info("Failed while removing the folder.");
-				e.printStackTrace();
-			} finally {
-				_folderName = null;
-				_folderIsCreated = false;
+		
+		// Get all the messages in the view
+		// Verify the uploaded file exists
+		boolean found = false;
+		List<String> items = app.zPageSearch.zGetListViewItems();
+		for (String i : items) {
+			if ( i.equals(filename)) {
+				// found it
+				found = true;
+				break;
 			}
 		}
-		if (_fileAttached && _fileId != null) {
-			try {
-				// Delete it from Server
-				app.zPageOctopus.deleteItemUsingSOAP(_fileId,
-						app.zGetActiveAccount());
-			} catch (Exception e) {
-				logger.info("Failed while deleting the file");
-				e.printStackTrace();
-			} finally {
-				_fileId = null;
-				_fileAttached = false;
-			}
-		}
+		
+		ZAssert.assertTrue(found, "Verify the item is found after searching");
+
 	}
+
+	@Test(
+			description = "Search for a text file by content", 
+			groups = { "sanity" })
+	public void SearchFile_02() throws HarnessException {
+	}
+	
+	@Test(
+			description = "Search for a binary (spreadsheet) file by content", 
+			groups = { "sanity" })
+	public void SearchFile_03() throws HarnessException {
+	}
+	
+	@Test(description = "Search for a file in trash", 
+			groups = { "smoke" })
+	public void SearchFile_04() throws HarnessException {
+	}
+
 }

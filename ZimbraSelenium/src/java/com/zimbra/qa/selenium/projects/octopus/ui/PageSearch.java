@@ -5,11 +5,10 @@ package com.zimbra.qa.selenium.projects.octopus.ui;
 
 import com.zimbra.qa.selenium.framework.items.IItem;
 import com.zimbra.qa.selenium.framework.ui.*;
-import com.zimbra.qa.selenium.framework.util.*;
-import com.zimbra.qa.selenium.projects.octopus.ui.DialogError;
+import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.projects.octopus.ui.DialogError.DialogErrorID;
 
-public class PageSearch extends AbsTab {
+public class PageSearch extends PageOctopus {
 
 	public static class Locators {
 		public static final Locators zTabSearch = new Locators(
@@ -46,6 +45,43 @@ public class PageSearch extends AbsTab {
 		logger.info("new " + PageSearch.class.getCanonicalName());
 
 	}
+
+	/**
+	 * Enter text into the query string field
+	 * @param query
+	 * @throws HarnessException 
+	 */
+	public void zAddSearchQuery(String query) throws HarnessException {
+		logger.info(myPageName() + " zAddSearchQuery("+ query +")");
+		
+		tracer.trace("Search for the query "+ query);
+
+		String locator = "css=div[id='octopus-search-field'] input";
+		this.sType(locator, query);
+		
+	}
+
+	/**
+	 * Enter text into the query string field
+	 * @param query
+	 * @throws HarnessException 
+	 */
+	public void zExecuteSearchQuery(String query) throws HarnessException {
+		logger.info(myPageName() + " zExecuteSearchQuery("+ query +")");
+		
+		// Add the query
+		this.zAddSearchQuery(query);
+		
+		// Type "<Return>"
+		String locator = "css=div[id=octopus-search-field] input";
+
+		zKeyEvent(locator, "39", "keydown");
+		zKeyEvent(locator, "39", "keydown");
+		zKeyEvent(locator, "13", "keydown");
+
+
+	}
+	
 
 	public Toaster zGetToaster() throws HarnessException {
 		return (new Toaster(this.MyApplication));
