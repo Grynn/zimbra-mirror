@@ -170,9 +170,21 @@ function(html, idx, obj, spanId, context, options) {
 
 EmailTooltipZimlet.prototype.onMsgView =
 function() {
-	
+	this._createBubbles();
+};
+
+// Called from conversation view - used there instead of onMsgView because onMsgView is a
+// commonly implemented call whose use would invoke numerous Zimlets that are inappropriate
+// for a conversation view.
+EmailTooltipZimlet.prototype.onConvView =
+function() {
+	this._createBubbles();
+};
+
+EmailTooltipZimlet.prototype._createBubbles =
+function() {
 	for (var id in this._bubbleParams) {
-		// make sure SPAN was actually added to DOM (may have been ignored by template, for example) 
+		// make sure SPAN was actually added to DOM (may have been ignored by template, for example)
 		if (!document.getElementById(id)) {
 			continue;
 		}
@@ -183,7 +195,7 @@ function() {
 			this._bubbleList.add(bubble);
 		}
 	}
-};
+}
 
 EmailTooltipZimlet.prototype._bubbleSelectionListener =
 function(ev) {
