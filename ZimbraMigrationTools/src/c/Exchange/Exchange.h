@@ -4,6 +4,11 @@
 #include "commonMAPI.h"
 #include "edkmdb.h"
 #include "GenericException.h"
+
+#include "resource.h"
+#include "Zimbra/Zimbra.h"
+#include "Exchange_i.h"
+
 #include "MAPISession.h"
 #include "MAPIStore.h"
 #include "MAPITableIterator.h"
@@ -14,10 +19,6 @@
 #include "MAPIRfc2445.h"
 #include "MAPIAppointment.h"
 #include "MAPITask.h"
-
-#include "resource.h"
-#include "Zimbra/Zimbra.h"
-#include "Exchange_i.h"
 
 #include <objsel.h>
 #include <cmnquery.h>

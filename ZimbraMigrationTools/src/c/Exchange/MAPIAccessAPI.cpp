@@ -701,7 +701,7 @@ LPCWSTR MAPIAccessAPI::GetItem(SBinary sbItemEID, BaseItemData &itemData)
         }
         else if (msg.ItemType() == ZT_APPOINTMENTS)
         {
-            MAPIAppointment mapiappointment(*m_zmmapisession, msg);
+            MAPIAppointment mapiappointment(*m_zmmapisession, msg, FALSE);
             ApptItemData *ad = (ApptItemData *)&itemData;
             ad->Subject = mapiappointment.GetSubject();
             ad->Name = mapiappointment.GetSubject();
@@ -739,6 +739,13 @@ LPCWSTR MAPIAccessAPI::GetItem(SBinary sbItemEID, BaseItemData &itemData)
 		ad->recurDayOfMonth = mapiappointment.GetRecurDayOfMonth();
 		ad->recurMonthOccurrence = mapiappointment.GetRecurMonthOccurrence();
 		ad->recurMonthOfYear = mapiappointment.GetRecurMonthOfYear();
+
+                // if there are exceptions, deal with them
+                vector<MAPIAppointment*> ex = mapiappointment.GetExceptions();
+                for (size_t i = 0; i < ex.size(); i++)
+                {
+                    ad->vExceptions.push_back((MAPIAppointment*)ex[i]);
+                }
 	    }
 
             MessagePart mp;

@@ -23,9 +23,11 @@ MAPIAppointmentException::MAPIAppointmentException(HRESULT hrErrCode, LPCWSTR lp
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 //bool MAPIAppointment::m_bNamedPropsInitialized = false;
 
-MAPIAppointment::MAPIAppointment(Zimbra::MAPI::MAPISession &session,  Zimbra::MAPI::MAPIMessage &mMessage)
+MAPIAppointment::MAPIAppointment(Zimbra::MAPI::MAPISession &session,  Zimbra::MAPI::MAPIMessage &mMessage, bool isException)
                                 : MAPIRfc2445 (session, mMessage)
 {
+    m_bIsException = isException;
+
     //if (MAPIAppointment::m_bNamedPropsInitialized == false)
     //{
 	pr_clean_global_objid = 0;
@@ -39,6 +41,7 @@ MAPIAppointment::MAPIAppointment(Zimbra::MAPI::MAPISession &session,  Zimbra::MA
 	pr_timezoneid = 0;
 	pr_reminderminutes = 0;
 	pr_responsestatus = 0;
+        pr_exceptionreplacetime = 0;
 	InitNamedPropsForAppt();
     //}
 
@@ -81,6 +84,7 @@ HRESULT MAPIAppointment::InitNamedPropsForAppt()
     nameIds[7] = 0x8216;
     nameIds[8] = 0x8234;
     nameIds[9] = 0x8218;
+    nameIds[10] = 0x8228;
 
     nameIdsC[0] = 0x8501;
     nameIdsC[1] = 0x8506;
@@ -133,6 +137,7 @@ HRESULT MAPIAppointment::InitNamedPropsForAppt()
     pr_recurstream = SetPropType(pAppointmentTags->aulPropTag[N_RECURSTREAM], PT_BINARY);
     pr_timezoneid = SetPropType(pAppointmentTags->aulPropTag[N_TIMEZONEID], PT_TSTRING);
     pr_responsestatus = SetPropType(pAppointmentTags->aulPropTag[N_RESPONSESTATUS], PT_LONG);
+    pr_exceptionreplacetime = SetPropType(pAppointmentTags->aulPropTag[N_EXCEPTIONREPLACETIME], PT_SYSTIME);
     pr_reminderminutes = SetPropType(pAppointmentTagsC->aulPropTag[N_REMINDERMINUTES], PT_LONG);
     pr_private = SetPropType(pAppointmentTagsC->aulPropTag[N_PRIVATE], PT_BOOLEAN);
 
@@ -160,6 +165,7 @@ HRESULT MAPIAppointment::SetMAPIAppointmentValues()
 	    PR_SUBJECT, PR_BODY, PR_HTML, pr_clean_global_objid,
 	    pr_appt_start, pr_appt_end, pr_location, pr_busystatus, pr_allday,
 	    pr_isrecurring, pr_recurstream, pr_timezoneid, pr_responsestatus,
+            pr_exceptionreplacetime,
 	    pr_reminderminutes, pr_private
 	}
     };
@@ -236,7 +242,11 @@ HRESULT MAPIAppointment::SetMAPIAppointmentValues()
 	    }
 	    //
 
-	    SetRecurValues();
+	    int numExceptions = SetRecurValues(); // returns null if no exceptions
+            if (numExceptions > 0)
+            {
+                SetExceptions();
+            }
 	}
     }
     return hr;
@@ -252,14 +262,14 @@ void MAPIAppointment::SetTimezoneId(LPTSTR pStr)
     }
 }
 
-void MAPIAppointment::SetRecurValues()
+ int MAPIAppointment::SetRecurValues()
 {
     Zimbra::Util::ScopedInterface<IStream> pRecurrenceStream;
     HRESULT hResult = m_pMessage->OpenProperty(pr_recurstream, &IID_IStream, 0, 0,
 						(LPUNKNOWN *)pRecurrenceStream.getptr());
     if (FAILED(hResult))
     {
-	return;
+	return 0;
     }
     LPSTREAM pStream = pRecurrenceStream.get();
     Zimbra::Mapi::Appt OlkAppt(m_pMessage, NULL);
@@ -267,7 +277,7 @@ void MAPIAppointment::SetRecurValues()
     hResult = recur.ReadRecurrenceStream(pStream);
     if (FAILED(hResult))
     {
-	return;
+	return 0;
     }
 
     // Set Timezone info
@@ -387,7 +397,177 @@ void MAPIAppointment::SetRecurValues()
 	wstring temp = Zimbra::Util::FormatSystemTime(st, TRUE, TRUE);
 	m_pRecurEndDate = temp.substr(0, 8);
     }
+    return recur.GetExceptionCount();  
 }
+
+void MAPIAppointment::SetExceptions()
+{
+    Zimbra::Util::ScopedInterface<IStream> pRecurrenceStream;
+    HRESULT hResult = m_pMessage->OpenProperty(pr_recurstream, &IID_IStream, 0, 0,
+						(LPUNKNOWN *)pRecurrenceStream.getptr());
+    if (FAILED(hResult))
+    {
+	return;
+    }
+    LPSTREAM pStream = pRecurrenceStream.get();
+    Zimbra::Mapi::Appt OlkAppt(m_pMessage, NULL);
+    Zimbra::Mapi::COutlookRecurrencePattern &recur = OlkAppt.GetRecurrencePattern();
+    hResult = recur.ReadRecurrenceStream(pStream);
+    if (FAILED(hResult))
+    {
+	return;
+    }
+    LONG lExceptionCount = recur.GetExceptionCount();
+
+    for (LONG i = 0; i < lExceptionCount; i++)
+    {
+        Zimbra::Mapi::CRecurrenceTime rtDate = recur.GetExceptionOriginalDate(i);
+        Zimbra::Mapi::CFileTime ftOrigDate = (FILETIME)rtDate;
+        //Zimbra::Mapi::CFileTime ftStart;
+
+        Zimbra::Mapi::COutlookRecurrenceException *lpException = recur.GetException(i);
+        if (lpException != NULL)    
+        {
+            Zimbra::Util::ScopedInterface<IMessage> lpExceptionMessage;
+            Zimbra::Util::ScopedInterface<IAttach> lpExceptionAttach;
+            HRESULT hResult = lpException->OpenAppointment((LPMESSAGE)OlkAppt.MapiMsg(),
+                lpExceptionMessage.getptr(), lpExceptionAttach.getptr(), pr_exceptionreplacetime);
+
+            if (FAILED(hResult))
+            {
+                //LOG_ERROR(_T("could not open appointment message for this occurrence "));
+                return;
+            }
+
+            // We have everything for the object
+            Zimbra::Mapi::Appt pOccurrence(lpExceptionMessage.get(), OlkAppt.GetStore(),
+                                           lpException, lpExceptionAttach.get(),
+                                           OlkAppt.MapiMsg());
+
+            // we need to obtain exception TZ info that can be present
+            //Zimbra::Mail::TimeZone::_OlkTimeZone olkExceptTzi = { 0 };
+            //Zimbra::Util::ScopedBuffer<WCHAR> ptzExceptDesc;
+            //Zimbra::Mail::TimeZone tzExceptInfo(NULL);
+            //BOOL bFoundInfo = FALSE;
+
+            //if (SUCCEEDED(pOccurrence.GetTimezone(olkExceptTzi, ptzExceptDesc.getptr(),
+            //    &bFoundInfo)))
+            //    tzExceptInfo.Initialize(olkExceptTzi, ptzExceptDesc.get());
+
+            /*  We're not doing ProcessInv, so this code doesn't come into play
+                We may need to do something for recaculating orginal date
+            if (bFoundInfo)
+            {
+                // we have separate timezone for exception so we need to recalculate original date
+                // because this target time zone will be added to the RPC call
+                Zimbra::Mail::TimeZone::_OlkTimeZone olkMainTzi = { 0 };
+                Zimbra::Util::ScopedBuffer<WCHAR> ptzMainDesc;
+                Zimbra::Mail::TimeZone tzMainInfo(NULL);
+
+                Zimbra::Mapi::CRecurrenceTime rtOrigDate = lpException->GetOriginalDateTime();
+                Zimbra::Mapi::CFileTime ftOrigDate = (FILETIME)rtOrigDate;
+                double vOriginalDate = ftOrigDate;
+
+                if (ptzMainDesc.getptr())
+                {
+                    if (SUCCEEDED(OlkAppt.GetTimezone(olkMainTzi, ptzMainDesc.getptr())))
+                    {
+                        tzMainInfo.Initialize(olkMainTzi, ptzMainDesc.get());
+                        OlkAppt.GetStartTime(&ftStart);
+                        ftStart.MakeLocal(tzMainInfo);
+
+                        double startDate = ftStart;
+                        double origDate = ftOrigDate;
+                        double timeOnly = startDate - floor(startDate);
+
+                        origDate += timeOnly;
+
+                        ftOrigDate.MakeUTC(tzMainInfo);
+                        ftOrigDate.MakeLocal(tzExceptInfo);
+                        vOriginalDate = ftOrigDate;
+                    }
+                }
+            }
+            */
+
+            MAPIMessage exMAPIMsg;
+            exMAPIMsg.Initialize(lpExceptionMessage.get(), *m_session);
+            MAPIAppointment* pEx = new MAPIAppointment(*m_session, exMAPIMsg, TRUE);   // delete done in CMapiAccessWrap::GetData
+            FillInExceptionAppt(pEx, lpException);
+            m_vExceptions.push_back(pEx);
+        }
+        else
+        {
+            // worry about cancel exceptions later
+        }
+    }
+}
+
+void MAPIAppointment::FillInExceptionAppt(MAPIAppointment* pEx, Zimbra::Mapi::COutlookRecurrenceException* lpException)
+{
+    if (pEx->m_pStartDate.length() == 0)
+    {
+        Zimbra::Mapi::CRecurrenceTime rtStartDate = lpException->GetStartDateTime();
+        Zimbra::Mapi::CFileTime ftStartDate = (FILETIME)rtStartDate;
+        pEx->m_pStartDate = MakeDateFromExPtr(ftStartDate);
+        pEx->m_pStartDateCommon = Zimbra::MAPI::Util::CommonDateString(ftStartDate);
+
+    }
+    if (pEx->m_pEndDate.length() == 0)
+    {
+        Zimbra::Mapi::CRecurrenceTime rtEndDate = lpException->GetEndDateTime();
+        Zimbra::Mapi::CFileTime ftEndDate = (FILETIME)rtEndDate;
+        pEx->m_pEndDate = MakeDateFromExPtr(ftEndDate);
+    }
+    if (pEx->m_pSubject.length() == 0)
+    {
+        pEx->m_pSubject = m_pSubject;
+    }
+    if (pEx->m_pLocation.length() == 0)
+    {
+        pEx->m_pLocation = m_pLocation;
+    }
+    if (pEx->m_pBusyStatus.length() == 0)
+    {
+        pEx->m_pBusyStatus = m_pBusyStatus;
+    }
+    if (pEx->m_pAllday.length() == 0)
+    {
+        pEx->m_pAllday = m_pAllday;
+    }
+    if (pEx->m_pResponseStatus.length() == 0)
+    {
+        pEx->m_pResponseStatus = m_pResponseStatus;
+    }
+    if (pEx->m_pOrganizerName.length() == 0)
+    {
+        pEx->m_pOrganizerName = m_pOrganizerName;
+    }
+    if (pEx->m_pOrganizerAddr.length() == 0)
+    {
+        pEx->m_pOrganizerAddr = m_pOrganizerAddr;
+    }
+
+    // attendees?
+
+    if (pEx->m_pReminderMinutes.length() == 0)
+    {
+        pEx->m_pReminderMinutes = m_pReminderMinutes;
+    }
+    if (pEx->m_pPrivate.length() == 0)
+    {
+        pEx->m_pPrivate = m_pPrivate;
+    }
+    if (pEx->m_pPlainTextFile.length() == 0)
+    {
+        pEx->m_pPlainTextFile = m_pPlainTextFile;
+    }
+    if (pEx->m_pHtmlFile.length() == 0)
+    {
+        pEx->m_pHtmlFile = m_pHtmlFile;
+    }
+}
+
 
 void MAPIAppointment::SetSubject(LPTSTR pStr)
 {
@@ -400,7 +580,7 @@ void MAPIAppointment::SetStartDate(FILETIME ft)
     BOOL bUseLocal = false;
 
     FileTimeToSystemTime(&ft, &st);
-    if (m_bIsRecurring)
+    if ((m_bIsRecurring) || (m_bIsException))
     {
 	TIME_ZONE_INFORMATION localTimeZone = {0};
 	GetTimeZoneInformation(&localTimeZone);	
@@ -409,6 +589,14 @@ void MAPIAppointment::SetStartDate(FILETIME ft)
     m_pStartDate = (bUseLocal) ? Zimbra::Util::FormatSystemTime(localst, FALSE, TRUE)
 			       : Zimbra::Util::FormatSystemTime(st, TRUE, TRUE);
     m_pStartDateCommon = Zimbra::MAPI::Util::CommonDateString(m_pPropVals[C_START].Value.ft);   // may have issue with recur/local
+}
+
+LPWSTR MAPIAppointment::MakeDateFromExPtr(FILETIME ft)
+{
+    SYSTEMTIME st;
+
+    FileTimeToSystemTime(&ft, &st);
+    return Zimbra::Util::FormatSystemTime(st, FALSE, TRUE);			       
 }
 
 void MAPIAppointment::SetEndDate(FILETIME ft, bool bAllday)
@@ -429,7 +617,7 @@ void MAPIAppointment::SetEndDate(FILETIME ft, bool bAllday)
     }
     else
     {
-	if (m_bIsRecurring)
+	if ((m_bIsRecurring) || (m_bIsException))
 	{
 	    TIME_ZONE_INFORMATION localTimeZone = {0};
 	    GetTimeZoneInformation(&localTimeZone);	
@@ -437,7 +625,7 @@ void MAPIAppointment::SetEndDate(FILETIME ft, bool bAllday)
 	}
     }
     m_pEndDate = (bUseLocal) ? Zimbra::Util::FormatSystemTime(localst, FALSE, TRUE)
-			       : Zimbra::Util::FormatSystemTime(st, TRUE, TRUE);
+			     : Zimbra::Util::FormatSystemTime(st, TRUE, TRUE);
 }
 
 void MAPIAppointment::SetInstanceUID(LPSBinary bin)
@@ -604,7 +792,7 @@ HRESULT MAPIAppointment::SetOrganizerAndAttendees()
 		}
 		else
 		{
-		    Attendee* pAttendee = new Attendee();   // delete done in GetDataForItemID after we allocate dict string for ZimbraAPI
+		    Attendee* pAttendee = new Attendee();   // delete done in CMapiAccessWrap::GetData after we allocate dict string for ZimbraAPI
 		    pAttendee->nam = pRecipRows->aRow[iRow].lpProps[AT_DISPLAY_NAME].Value.lpszW;
 		    pAttendee->addr = pRecipRows->aRow[iRow].lpProps[AT_SMTP_ADDR].Value.lpszW;
 		    pAttendee->role = ConvertValueToRole(pRecipRows->aRow[iRow].lpProps[AT_RECIPIENT_TYPE].Value.l);
@@ -732,3 +920,4 @@ wstring MAPIAppointment::GetPrivate() { return m_pPrivate; }
 wstring MAPIAppointment::GetPlainTextFileAndContent() { return m_pPlainTextFile; }
 wstring MAPIAppointment::GetHtmlFileAndContent() { return m_pHtmlFile; }
 vector<Attendee*> MAPIAppointment::GetAttendees() { return m_vAttendees; }
+vector<MAPIAppointment*> MAPIAppointment::GetExceptions() { return m_vExceptions; }

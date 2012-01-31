@@ -10,6 +10,8 @@
 #include "ExchangeAdmin.h"
 #include "MAPIAccessAPI.h"
 
+#define NUM_EXCEPTION_ATTRS      15
+
 class ATL_NO_VTABLE CMapiAccessWrap: public CComObjectRootEx<CComSingleThreadModel>, public
     CComCoClass<CMapiAccessWrap, &CLSID_MapiAccessWrap>, public ISupportErrorInfo, public
     IDispatchImpl<IMapiAccessWrap, &IID_IMapiAccessWrap, &LIBID_Exchange,
@@ -34,6 +36,7 @@ public:
     STDMETHOD(GetItemsList) (IfolderObject * folderObj, VARIANT creationDate, VARIANT * vItems);
     STDMETHOD(GetData) (BSTR userId, VARIANT itemId, FolderType type, VARIANT * pVal);
     STDMETHOD(UserUninit) ();
+    void CreateExceptionAttrs(BSTR attrs[], int num);
 };
 
 OBJECT_ENTRY_AUTO(__uuidof(MapiAccessWrap), CMapiAccessWrap)

@@ -17,13 +17,13 @@ private:
 
     // prop tags for named properties
     ULONG pr_clean_global_objid, pr_appt_start, pr_appt_end, pr_location, pr_busystatus, pr_allday, pr_isrecurring,
-	  pr_recurstream, pr_timezoneid, pr_responsestatus, pr_reminderminutes, pr_private;
+	  pr_recurstream, pr_timezoneid, pr_responsestatus, pr_exceptionreplacetime, pr_reminderminutes, pr_private;
 
     // index of props
     typedef enum _AppointmentPropIdx
     {
         N_UID, N_APPTSTART, N_APPTEND, N_LOCATION, N_BUSYSTATUS, N_ALLDAY, N_ISRECUR, N_RECURSTREAM, N_TIMEZONEID,
-	N_RESPONSESTATUS, N_NUMAPPTPROPS
+	N_RESPONSESTATUS, N_EXCEPTIONREPLACETIME, N_NUMAPPTPROPS
     } AppointmentPropIdx;
 
     typedef enum _CommonPropIdx
@@ -35,13 +35,15 @@ private:
     enum
     {
         C_SUBJECT, C_BODY, C_HTMLBODY, C_UID, C_START, C_END, C_LOCATION, C_BUSYSTATUS, C_ALLDAY, C_ISRECUR, C_RECURSTREAM,
-	C_TIMEZONEID, C_RESPONSESTATUS, C_REMINDERMINUTES, C_PRIVATE, C_NUMALLAPPTPROPS
+	C_TIMEZONEID, C_RESPONSESTATUS, C_EXCEPTIONREPLACETIME, C_REMINDERMINUTES, C_PRIVATE, C_NUMALLAPPTPROPS
 	//org stuff later
     };
 
     // these are the named property id's
     LONG nameIds[N_NUMAPPTPROPS];
     LONG nameIdsC[N_NUMCOMMONPROPS];
+
+    bool m_bIsException;
 
     // appointment data members (represented both by regular and named props
     wstring m_pSubject;
@@ -61,14 +63,16 @@ private:
     wstring m_pPrivate;
     wstring m_pPlainTextFile;
     wstring m_pHtmlFile;
+    vector<MAPIAppointment*> m_vExceptions;
 
 public:
-    MAPIAppointment(Zimbra::MAPI::MAPISession &session, Zimbra::MAPI::MAPIMessage &mMessage);
+    MAPIAppointment(Zimbra::MAPI::MAPISession &session, Zimbra::MAPI::MAPIMessage &mMessage, bool isException);
     ~MAPIAppointment();
     HRESULT InitNamedPropsForAppt();
     HRESULT SetMAPIAppointmentValues();
     void SetSubject(LPTSTR pStr);
     void SetStartDate(FILETIME ft);
+    LPWSTR MakeDateFromExPtr(FILETIME ft);
     void SetEndDate(FILETIME ft, bool bAllday);
     void SetInstanceUID(LPSBinary bin);
     void SetLocation(LPTSTR pStr);
@@ -84,7 +88,9 @@ public:
     void SetPlainTextFileAndContent();
     void SetHtmlFileAndContent();
     void SetTimezoneId(LPTSTR pStr);
-    void SetRecurValues();
+    int SetRecurValues();
+    void SetExceptions();
+    void FillInExceptionAppt(MAPIAppointment* ex, Zimbra::Mapi::COutlookRecurrenceException* lpException);
     HRESULT SetAppointmentAttachment(wstring &wstrAttachmentPath);
 
     wstring GetSubject();
@@ -104,4 +110,5 @@ public:
     wstring GetPlainTextFileAndContent();
     wstring GetHtmlFileAndContent();
     vector<Attendee*> GetAttendees();
+    vector<MAPIAppointment*> GetExceptions();
 };

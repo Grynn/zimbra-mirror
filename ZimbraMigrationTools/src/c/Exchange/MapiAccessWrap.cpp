@@ -498,7 +498,42 @@ STDMETHODIMP CMapiAccessWrap::GetData(BSTR UserId, VARIANT ItemId, FolderType ty
                     pIt[L"dhour"] = SysAllocString((apptData.tz.daylightStartHour).c_str());
                     pIt[L"dmin"] = SysAllocString((apptData.tz.daylightStartMinute).c_str());
                     pIt[L"dsec"] = SysAllocString((apptData.tz.daylightStartSecond).c_str());
-                    //
+
+                    int numExceptions = (int)apptData.vExceptions.size();   
+                    if (numExceptions > 0)
+                    {
+                        WCHAR pwszNumExceptions[10];
+                        BSTR attrs[NUM_EXCEPTION_ATTRS];
+
+                        _ltow(numExceptions, pwszNumExceptions, 10);
+                        pIt[L"numExceptions"] = SysAllocString(pwszNumExceptions);
+                        for (int i = 0; i < numExceptions; i++)
+                        {
+                            CreateExceptionAttrs(attrs, i);
+                            pIt[attrs[0]]  = SysAllocString((apptData.vExceptions[i]->GetResponseStatus()).c_str());
+                            pIt[attrs[1]]  = SysAllocString((apptData.vExceptions[i]->GetBusyStatus()).c_str());
+                            pIt[attrs[2]]  = SysAllocString((apptData.vExceptions[i]->GetAllday()).c_str());
+                            pIt[attrs[3]]  = SysAllocString((apptData.vExceptions[i]->GetSubject()).c_str());
+                            pIt[attrs[4]]  = SysAllocString((apptData.vExceptions[i]->GetSubject()).c_str());
+                            pIt[attrs[5]]  = SysAllocString((apptData.vExceptions[i]->GetLocation()).c_str());
+                            pIt[attrs[6]]  = SysAllocString((apptData.vExceptions[i]->GetReminderMinutes()).c_str());
+                            pIt[attrs[7]]  = SysAllocString((apptData.vExceptions[i]->GetStartDate()).c_str());
+                            pIt[attrs[8]]  = SysAllocString((apptData.vExceptions[i]->GetEndDate()).c_str());
+                            pIt[attrs[9]]  = SysAllocString((apptData.vExceptions[i]->GetOrganizerAddr()).c_str());
+                            pIt[attrs[10]] = SysAllocString((apptData.vExceptions[i]->GetOrganizerName()).c_str());
+                            pIt[attrs[11]] = SysAllocString(L"text/plain");
+                            pIt[attrs[12]] = SysAllocString((apptData.vExceptions[i]->GetPlainTextFileAndContent()).c_str());
+                            pIt[attrs[13]] = SysAllocString(L"text/html");
+                            pIt[attrs[14]] = SysAllocString((apptData.vExceptions[i]->GetHtmlFileAndContent()).c_str());
+                        }
+
+                        // clean up any exceptions
+                        for (int i = (numExceptions - 1); i >= 0; i--)
+                        {
+                            delete (apptData.vExceptions[i]);
+                        }
+                        //
+                    }
                 }
             }
             else if (ft == 4)
@@ -606,4 +641,23 @@ STDMETHODIMP CMapiAccessWrap::GetData(BSTR UserId, VARIANT ItemId, FolderType ty
     pVal->parray = pSA;
 
     return hr;
+}
+
+void CMapiAccessWrap::CreateExceptionAttrs(BSTR attrs[], int num)
+{
+    WCHAR pwszNum[10];
+    LPWSTR names[] = {L"ptst", L"fb", L"allDay", L"name", L"su", L"loc", L"m", L"s", L"e",                      
+                      L"orAddr", L"orName", L"contentType0", L"content0",
+                      L"contentType1", L"content1"};
+                     
+    WCHAR pwszAttr[30];
+
+    _ltow(num, pwszNum, 10);
+    for (int i = 0; i < NUM_EXCEPTION_ATTRS; i++)
+    {
+	lstrcpy(pwszAttr, names[i]);
+        lstrcat(pwszAttr, L"_");
+	lstrcat(pwszAttr, pwszNum);
+	attrs[i] = SysAllocString(pwszAttr);
+    }
 }

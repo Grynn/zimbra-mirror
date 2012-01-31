@@ -161,6 +161,7 @@ typedef struct _ApptItemData: BaseItemData
     wstring recurDayOfMonth;
     wstring recurMonthOccurrence;
     wstring recurMonthOfYear;
+    vector<MAPIAppointment*> vExceptions;
     //
 
     //data_buffer textbody;

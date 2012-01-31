@@ -1102,36 +1102,16 @@ public class ZimbraAPI
         string folderId, int requestId)
     {
         bool isRecurring = appt.ContainsKey("freq");
+        int numExceptions = (appt.ContainsKey("numExceptions")) ? Int32.Parse(appt["numExceptions"]) : 0;
         writer.WriteStartElement("SetAppointmentRequest", "urn:zimbraMail");
         writer.WriteAttributeString("l", folderId);
         writer.WriteStartElement("default");
         writer.WriteAttributeString("ptst", appt["ptst"]);
         writer.WriteStartElement("m");
 
-        // Timezone nodes if recurring appt
-        if (isRecurring)
+        if (isRecurring)    // Timezone nodes if recurring appt
         {
-            writer.WriteStartElement("tz");
-            writer.WriteAttributeString("id", appt["tid"]);
-            writer.WriteAttributeString("stdoff", appt["stdoff"]);
-            writer.WriteAttributeString("dayoff", appt["dayoff"]);
-            writer.WriteStartElement("standard");
-            writer.WriteAttributeString("week", appt["sweek"]);
-            writer.WriteAttributeString("wkday", appt["swkday"]);
-            writer.WriteAttributeString("mon", appt["smon"]);
-            writer.WriteAttributeString("hour", appt["shour"]);
-            writer.WriteAttributeString("min", appt["smin"]);
-            writer.WriteAttributeString("sec", appt["ssec"]);
-            writer.WriteEndElement();   // standard
-            writer.WriteStartElement("daylight");
-            writer.WriteAttributeString("week", appt["dweek"]);
-            writer.WriteAttributeString("wkday", appt["dwkday"]);
-            writer.WriteAttributeString("mon", appt["dmon"]);
-            writer.WriteAttributeString("hour", appt["dhour"]);
-            writer.WriteAttributeString("min", appt["dmin"]);
-            writer.WriteAttributeString("sec", appt["dsec"]);
-            writer.WriteEndElement();   // daylight
-            writer.WriteEndElement();   // tz
+            WriteTimezone(writer, appt);
         }
 
         writer.WriteStartElement("inv");
@@ -1264,7 +1244,6 @@ public class ZimbraAPI
         if (appt["content0"].Length > 0)
         {
             WriteNVPair(writer, "content", System.Text.Encoding.Default.GetString(File.ReadAllBytes(appt["content0"])));
-            File.Delete(appt["content0"]);
         }
         writer.WriteEndElement();   // mp
         writer.WriteStartElement("mp");
@@ -1272,7 +1251,6 @@ public class ZimbraAPI
         if (appt["content1"].Length > 0)
         {
             WriteNVPair(writer, "content", System.Text.Encoding.Default.GetString(File.ReadAllBytes(appt["content1"])));
-            File.Delete(appt["content1"]);
         }
     
         writer.WriteEndElement();   // mp
@@ -1280,7 +1258,101 @@ public class ZimbraAPI
 
         writer.WriteEndElement();   // m
         writer.WriteEndElement();   // default
+        for (int i = 0; i < numExceptions; i++)
+        {
+            AddExceptionToRequest(writer, appt, i);
+        }
         writer.WriteEndElement();   // SetAppointmentRequest
+
+        DeleteApptTempFiles(appt, numExceptions);
+    }
+
+    private void AddExceptionToRequest(XmlWriter writer, Dictionary<string, string> appt, int num)
+    {
+        writer.WriteStartElement("except");
+        string attr = "ptst" + "_" + num.ToString();
+        writer.WriteAttributeString("ptst", appt[attr]);
+        writer.WriteStartElement("m");
+
+        WriteTimezone(writer, appt); // timezone stuff since it is a recurrence
+
+        writer.WriteStartElement("inv");
+        writer.WriteAttributeString("method", "REQUEST");
+        attr = "fb" + "_" + num.ToString();
+        writer.WriteAttributeString("fb", appt[attr]);
+        writer.WriteAttributeString("transp", "O");
+        attr = "allDay" + "_" + num.ToString();
+        writer.WriteAttributeString("allDay", appt[attr]);
+        attr = "name" + "_" + num.ToString();
+        writer.WriteAttributeString("name", appt[attr]);
+        attr = "loc" + "_" + num.ToString();
+        writer.WriteAttributeString("loc", appt[attr]);
+        writer.WriteStartElement("s");
+        attr = "s" + "_" + num.ToString();
+        writer.WriteAttributeString("d", appt[attr]);
+        writer.WriteAttributeString("tz", appt["tid"]);
+        writer.WriteEndElement();
+        writer.WriteStartElement("e");
+        attr = "e" + "_" + num.ToString();
+        writer.WriteAttributeString("d", appt[attr]);
+        writer.WriteAttributeString("tz", appt["tid"]);
+        writer.WriteEndElement();
+        attr = "s" + "_" + num.ToString();
+        if (appt[attr].Length > 0)
+        {
+            writer.WriteStartElement("exceptId");
+            string exceptId = ComputeExceptId(appt[attr], appt["s"]);
+            writer.WriteAttributeString("d", exceptId);
+            writer.WriteAttributeString("tz", appt["tid"]);
+            writer.WriteEndElement();   // exceptId
+        }
+        writer.WriteStartElement("or");
+        attr = "orName" + "_" + num.ToString();
+        writer.WriteAttributeString("d", appt[attr]);
+        attr = "orAddr" + "_" + num.ToString();
+        string theOrganizer = (IAmTheOrganizer(appt[attr])) ? AccountName : appt[attr];
+        writer.WriteAttributeString("a", theOrganizer);
+        writer.WriteEndElement();
+        attr = "m" + "_" + num.ToString();
+        writer.WriteStartElement("alarm");
+        writer.WriteAttributeString("action", "DISPLAY");
+        writer.WriteStartElement("trigger");
+        writer.WriteStartElement("rel");
+        writer.WriteAttributeString("related", "START");
+        writer.WriteAttributeString("neg", "1");
+        writer.WriteAttributeString("m", appt[attr]);
+        writer.WriteEndElement();   // rel
+        writer.WriteEndElement();   // trigger
+        writer.WriteEndElement();   // alarm
+        writer.WriteEndElement();   // inv
+        attr = "su" + "_" + num.ToString();
+        WriteNVPair(writer, "su", appt[attr]);
+
+        attr = "contentType0" + "_" + num.ToString();
+        writer.WriteStartElement("mp");
+        writer.WriteAttributeString("ct", "multipart/alternative");
+        writer.WriteStartElement("mp");
+        writer.WriteAttributeString("ct", appt[attr]);
+        attr = "content0" + "_" + num.ToString();
+        if (appt[attr].Length > 0)
+        {
+            WriteNVPair(writer, "content", System.Text.Encoding.Default.GetString(File.ReadAllBytes(appt[attr])));
+        }
+
+        attr = "contentType1" + "_" + num.ToString();
+        writer.WriteEndElement();   // mp
+        writer.WriteStartElement("mp");
+        writer.WriteAttributeString("ct", appt[attr]);
+        attr = "content1" + "_" + num.ToString();
+        if (appt[attr].Length > 0)
+        {
+            WriteNVPair(writer, "content", System.Text.Encoding.Default.GetString(File.ReadAllBytes(appt[attr])));
+        }        
+        writer.WriteEndElement();   // mp
+        writer.WriteEndElement();   // mp
+
+        writer.WriteEndElement();   // m
+        writer.WriteEndElement();   // except
     }
 
     public int AddAppointment(Dictionary<string, string> appt, string folderPath = "")
@@ -1326,6 +1398,38 @@ public class ZimbraAPI
 
         client.InvokeService(sb.ToString(), out rsp);
         retval = client.status;
+        return retval;
+    }
+
+    private void WriteTimezone(XmlWriter writer, Dictionary<string, string> appt)
+    {
+        writer.WriteStartElement("tz");
+        writer.WriteAttributeString("id", appt["tid"]);
+        writer.WriteAttributeString("stdoff", appt["stdoff"]);
+        writer.WriteAttributeString("dayoff", appt["dayoff"]);
+        writer.WriteStartElement("standard");
+        writer.WriteAttributeString("week", appt["sweek"]);
+        writer.WriteAttributeString("wkday", appt["swkday"]);
+        writer.WriteAttributeString("mon", appt["smon"]);
+        writer.WriteAttributeString("hour", appt["shour"]);
+        writer.WriteAttributeString("min", appt["smin"]);
+        writer.WriteAttributeString("sec", appt["ssec"]);
+        writer.WriteEndElement();   // standard
+        writer.WriteStartElement("daylight");
+        writer.WriteAttributeString("week", appt["dweek"]);
+        writer.WriteAttributeString("wkday", appt["dwkday"]);
+        writer.WriteAttributeString("mon", appt["dmon"]);
+        writer.WriteAttributeString("hour", appt["dhour"]);
+        writer.WriteAttributeString("min", appt["dmin"]);
+        writer.WriteAttributeString("sec", appt["dsec"]);
+        writer.WriteEndElement();   // daylight
+        writer.WriteEndElement();   // tz
+    }
+
+    private string ComputeExceptId(string exceptDate, string originalDate)
+    {
+        string retval = exceptDate.Substring(0, 9);
+        retval += originalDate.Substring(9, 6);
         return retval;
     }
 
@@ -1720,6 +1824,37 @@ public class ZimbraAPI
         return (nameAcc == nameOrg);
     }
 
+    private void DeleteApptTempFiles(Dictionary<string, string> appt, int numExceptions)
+    {
+        string attr = "";
+        if (appt["content0"].Length > 0)
+        {
+            File.Delete(appt["content0"]);
+        }
+        if (appt["content1"].Length > 0)
+        {
+            File.Delete(appt["content1"]);
+        }
+        for (int i = 0; i < numExceptions; i++)
+        {
+            attr = "content0" + "_" + i.ToString();
+            if (appt[attr].Length > 0)
+            {
+                if (File.Exists(appt[attr]))
+                {
+                    File.Delete(appt[attr]);
+                }
+            }
+            attr = "content1" + "_" + i.ToString();
+            if (appt[attr].Length > 0)
+            {
+                if (File.Exists(appt[attr]))
+                {
+                    File.Delete(appt[attr]);
+                }
+            }
+        }
+    }
     // ///////////////////////
 }
 }
