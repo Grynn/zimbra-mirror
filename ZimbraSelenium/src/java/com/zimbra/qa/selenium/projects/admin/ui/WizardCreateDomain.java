@@ -19,9 +19,9 @@ public class WizardCreateDomain extends AbsWizard {
 
 	public static class Locators {
 		public static final String zdlg_DOMAIN_NAME="zdlgv__NEW_DOMAIN_zimbraDomainName";
-		public static final String MAIL_SERVER_DROPDOWN="zdlgv__NEW_DOMAIN_zimbraMailHost";
+		public static final String MAIL_SERVER_DROPDOWN="css=div[id$='zimbraMailHost_arrow_button']/div";
 		public static final String MAIL_SERVER_DROPDOWN_TABLE="css=div#___OSELECT_MENU___";
-		
+		public static final String ADD_A_GAL_ACCOUNT_BUTTON="css=button.xform_button:contains('Add a GAL account')";
 	}
 
 	public WizardCreateDomain(AbsTab page) {
@@ -49,8 +49,9 @@ public class WizardCreateDomain extends AbsWizard {
 
 		clickNext(AbsWizard.Locators.DOMAIN_DIALOG);
 		
-		zClickAt(Locators.MAIL_SERVER_DROPDOWN, "");
-		zClickAt(Locators.MAIL_SERVER_DROPDOWN_TABLE+" div:contains('"+
+		sClickAt(Locators.ADD_A_GAL_ACCOUNT_BUTTON,"");
+		sClickAt(Locators.MAIL_SERVER_DROPDOWN, "");
+		sClickAt(Locators.MAIL_SERVER_DROPDOWN_TABLE+" div:contains('"+
 					ZimbraSeleniumProperties.getStringProperty("server.host")+
 					"')", "");
 		
