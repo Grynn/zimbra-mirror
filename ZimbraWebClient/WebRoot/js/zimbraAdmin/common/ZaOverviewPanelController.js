@@ -1524,7 +1524,25 @@ ZaOverviewPanelController.aliasListTreeListener = function (ev) {
 }
 
 ZaOverviewPanelController.dlListTreeListener = function (ev) {
-	this._showAccountsView(ZaItem.DL,ev);
+    var dls = ev.item.getData(ZaAccount.A2_memberOf);
+    if(appNewUI && dls) {
+        var direct_dls = dls[ZaAccount.A2_directMemberList];
+        var indirect_dls = dls[ZaAccount.A2_indirectMemberList];
+
+        var extquery = "";
+        var id = "";
+        for (var i = 0; i < (direct_dls.length + indirect_dls.length); i++) {
+            if (i < direct_dls.length) {
+                id = direct_dls[i].id;
+            } else {
+                id = indirect_dls[i - direct_dls.length].id;
+            }
+            extquery += "("+ ZaItem.A_zimbraId + "=" + id + ")";
+        }
+        extquery = "(|" + extquery + ")";
+        this._showAccountsView(ZaItem.DL,ev, extquery);
+    } else
+	    this._showAccountsView(ZaItem.DL,ev);
 	this._modifySearchMenuButton(ZaItem.DL) ;
 }
 
@@ -2314,6 +2332,26 @@ function(parentPath, item) {
         aliasTi.setData("aliasTargetId", item.id);
         ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._ACCOUNT_ALIAS_LIST_VIEW] = ZaOverviewPanelController.aliasListTreeListener;
         Tis.push(aliasTi);
+    }
+
+    var dls = item[ZaAccount.A2_memberOf];
+    if (dls != null) {
+        var direct_dls = dls[ZaAccount.A2_directMemberList];
+        var indirect_dls = dls[ZaAccount.A2_indirectMemberList];
+
+        if ((direct_dls.length + indirect_dls.length) > 0) {
+            var dlsTi = new ZaTreeItemData({
+                    text: ZaMsg.OVP_distributionLists,
+                    count:direct_dls.length + indirect_dls.length,
+                    image:"DistributionList",
+                    mappingId: ZaZimbraAdmin._DISTRIBUTION_LISTS_LIST_VIEW,
+                    path: parentPath + ZaTree.SEPERATOR + item.name + ZaTree.SEPERATOR + ZaMsg.OVP_distributionLists
+                }
+            );
+            dlsTi.setData(ZaAccount.A2_memberOf, dls);
+            ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._DISTRIBUTION_LISTS_LIST_VIEW] = ZaOverviewPanelController.dlListTreeListener;
+            Tis.push(dlsTi);
+        }
     }
 
     var cosTi = new ZaTreeItemData({
