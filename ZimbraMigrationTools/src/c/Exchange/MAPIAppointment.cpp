@@ -544,7 +544,7 @@ void MAPIAppointment::FillInExceptionAppt(MAPIAppointment* pEx, Zimbra::Mapi::CO
     {
         if (this->InterpretAllday() != lpException->GetAllDay())
         {
-            pEx->SetAllday(lpException->GetAllDay());
+            pEx->SetAllday((unsigned short)lpException->GetAllDay());
         }
         else
         {
@@ -671,7 +671,7 @@ void MAPIAppointment::SetBusyStatus(long busystatus)
     }
 }
 
-long MAPIAppointment::InterpretBusyStatus()
+ULONG MAPIAppointment::InterpretBusyStatus()
 {
     long retval;
     if (m_pBusyStatus == L"F") 
@@ -732,7 +732,7 @@ void MAPIAppointment::SetAllday(unsigned short usAllday)
     m_pAllday = (usAllday == 1) ? L"1" : L"0";
 }
 
-bool MAPIAppointment::InterpretAllday()
+BOOL MAPIAppointment::InterpretAllday()
 {
     return (m_pAllday == L"1");
 }
