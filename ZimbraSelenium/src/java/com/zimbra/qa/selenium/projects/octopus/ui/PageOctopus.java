@@ -308,7 +308,7 @@ public class PageOctopus extends AbsTab {
 				this.sClickAt(optionLocator, "0,0");
 
 				// If the app is busy, wait for it to become active
-				zWaitForBusyOverlay();
+				this.zWaitForBusyOverlayOctopus();
 
 				return page;
 			} else if (option == Button.O_NOT_FAVORITE) {
