@@ -965,6 +965,14 @@ public abstract class AbsSeleniumObject {
 		logger.info("zWaitForBusyOverlayHTML()");
 		SleepUtil.sleepLong();
 	}
+	
+	/**
+	 * zWaitForBusyOverlayOctopus
+	 */
+	public void zWaitForBusyOverlayOctopus() throws HarnessException {
+		logger.info("zWaitForBusyOverlayOctopus()");
+		SleepUtil.sleepLong();
+	}
 
 	/**
 	 * DefaultSelenium.waitForCondition() Runs the specified JavaScript snippet
