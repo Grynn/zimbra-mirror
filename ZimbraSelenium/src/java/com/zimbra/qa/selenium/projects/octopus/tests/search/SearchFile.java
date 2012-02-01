@@ -57,8 +57,6 @@ public class SearchFile extends OctopusCommonTest {
 		// Search for the message
 		app.zPageSearch.zExecuteSearchQuery(filename);
 		
-		app.zPageSearch.zWaitForBusyOverlayOctopus();
-		
 		// Get all the messages in the view
 		// Verify the uploaded file exists
 		boolean found = false;

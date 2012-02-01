@@ -79,7 +79,7 @@ public class PageSearch extends PageOctopus {
 		zKeyEvent(locator, "39", "keydown");
 		zKeyEvent(locator, "13", "keydown");
 
-
+		zWaitForBusyOverlayOctopus();
 	}
 	
 
