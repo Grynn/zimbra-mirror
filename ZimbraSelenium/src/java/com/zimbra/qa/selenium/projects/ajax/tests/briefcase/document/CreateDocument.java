@@ -23,6 +23,7 @@ import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.DocumentBriefcaseNew;
 import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.DocumentBriefcaseOpen;
 import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.PageBriefcase;
+import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.TreeBriefcase;
 
 public class CreateDocument extends AjaxCommonTest {
 
@@ -284,6 +285,97 @@ public class CreateDocument extends AjaxCommonTest {
 		app.zPageBriefcase.deleteFileByName(docName);
 	}
 
+	@Test(description = "Create document through GUI - verify through GUI", groups = { "webdriver" })
+	public void CreateDocument_04() throws HarnessException {
+		ZimbraAccount account = app.zGetActiveAccount();
+
+		FolderItem briefcaseFolder = FolderItem.importFromSOAP(account,
+				SystemFolder.Briefcase);
+
+		// Create document item
+		DocumentItem docItem = new DocumentItem();
+
+		String docName = docItem.getName();
+		String docText = docItem.getDocText();
+
+		app.zPageBriefcase
+		.zWaitForElementPresent(TreeBriefcase.Locators.briefcaseListView);
+
+		// Open new document page
+		DocumentBriefcaseNew documentBriefcaseNew = (DocumentBriefcaseNew) app.zPageBriefcase
+				.zToolbarPressButton(Button.B_NEW, docItem);
+
+		SleepUtil.sleepMedium();
+		
+		try {
+			app.zPageBriefcase.zSelectWindow(DocumentBriefcaseNew.pageTitle);
+
+			// Fill out the document with the data
+			documentBriefcaseNew.zFillField(DocumentBriefcaseNew.Field.Name,
+					docName);
+			documentBriefcaseNew.zFillField(DocumentBriefcaseNew.Field.Body,
+					docText);
+
+			// Save and close
+			app.zPageBriefcase.zSelectWindow(DocumentBriefcaseNew.pageTitle);
+
+			documentBriefcaseNew.zSubmit();
+		} finally {
+			app.zPageBriefcase.zSelectWindow(PageBriefcase.pageTitle);
+		}
+		
+		SleepUtil.sleepSmall();
+		
+		app.zPageBriefcase.zWaitForWindowClosed(DocumentBriefcaseNew.pageTitle);
+
+		// refresh briefcase page
+		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
+
+		// Click on created document
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docItem);
+
+		// Click on open in a separate window icon in toolbar
+		DocumentBriefcaseOpen documentBriefcaseOpen;
+
+		if (ZimbraSeleniumProperties.zimbraGetVersionString().contains("8."))
+			documentBriefcaseOpen = (DocumentBriefcaseOpen) app.zPageBriefcase
+					.zToolbarPressPulldown(Button.B_ACTIONS,
+							Button.B_LAUNCH_IN_SEPARATE_WINDOW, docItem);
+		else
+			documentBriefcaseOpen = (DocumentBriefcaseOpen) app.zPageBriefcase
+			.zToolbarPressButton(Button.B_OPEN_IN_SEPARATE_WINDOW,
+					docItem);
+
+		app.zPageBriefcase.isOpenDocLoaded(docItem);
+
+		String name = "";
+		String text = "";
+
+		// Select document opened in a separate window
+		try {
+			app.zPageBriefcase.zSelectWindow(docName);
+
+			name = documentBriefcaseOpen.retriveDocumentName();
+			text = documentBriefcaseOpen.retriveDocumentText();
+
+			SleepUtil.sleepSmall();
+			
+			// close
+			app.zPageBriefcase.zSelectWindow(docName);
+
+			app.zPageBriefcase.closeWindow();
+		} finally {
+			app.zPageBriefcase.zSelectWindow(PageBriefcase.pageTitle);
+		}
+
+		ZAssert.assertStringContains(name, docName,
+				"Verify document name through GUI");
+
+		ZAssert.assertStringContains(text, docText,
+				"Verify document text through GUI");
+	}
+	
 	@AfterMethod(groups = { "always" })
 	public void afterMethod() throws HarnessException {
 		logger.info("Checking for the opened window ...");
