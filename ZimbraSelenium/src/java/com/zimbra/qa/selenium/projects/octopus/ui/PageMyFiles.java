@@ -8,7 +8,7 @@ import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.octopus.ui.DialogError;
 import com.zimbra.qa.selenium.projects.octopus.ui.DialogError.DialogErrorID;
 
-public class PageMyFiles extends AbsTab {
+public class PageMyFiles extends PageOctopus {
 
 	public static class Locators {
 		public static final Locators zTabMyFiles = new Locators(
@@ -27,22 +27,8 @@ public class PageMyFiles extends AbsTab {
 				"css=div[class*=my-files-list-view]");
 		public static final Locators zMyFilesListViewItems = new Locators(
 				"css=div[class*=my-files-list-view]>div[class^=my-files-list-item]");
-		public static final Locators zShareItem = new Locators(
-				"css=div[class^=sc-view sc-menu-item] a[class=menu-item]>span:contains(Share)");
-		public static final Locators zFavoriteItem = new Locators(
-				"css=div[class^=sc-view sc-menu-item] a[class=menu-item]>span:contains(Favorite)");
-		public static final Locators zNotFavoriteItem = new Locators(
-				"css=div[class^=sc-view sc-menu-item] a[class=menu-item]>span:contains('Not Favorite')");
 		public static final Locators zDownloadItem = new Locators(
 				"css=div[class^=sc-view sc-menu-item] a[class=menu-item]>span:contains(Download)");
-		public static final Locators zRenameItem = new Locators(
-				"css=div[class^=sc-view sc-menu-item] a[class=menu-item]>span:contains(Rename)");
-		public static final Locators zMoveItem = new Locators(
-				"css=div[class^=sc-view sc-menu-item] a[class=menu-item]>span:contains(Move)");
-		public static final Locators zDeleteItem = new Locators(
-				"css=div[class^=sc-view sc-menu-item] a[class=menu-item]>span:contains(Delete)");
-		public static final Locators zLeaveThisSharedFolder = new Locators(
-				"css=div[class^=sc-view sc-menu-item] a[class=menu-item]>span:contains('Leave this Shared Folder')");
 		public static final Locators zHistory = new Locators(
 				"css=div[id=my-files-preview] div[id=my-files-preview-toolbar]>button[id=show-activitystream-button])");
 		public static final Locators zComments = new Locators(
@@ -114,196 +100,6 @@ public class PageMyFiles extends AbsTab {
 		zWaitForBusyOverlay();
 
 		zWaitForActive();
-	}
-
-	public AbsPage zToolbarPressPulldown(Button pulldown, Button option,
-			String itemName) throws HarnessException {
-		logger.info(myPageName() + " zToolbarPressPulldown(" + pulldown + ", "
-				+ option + ")");
-
-		tracer.trace("Click pulldown " + pulldown + " then " + option);
-
-		if (pulldown == null)
-			throw new HarnessException("Pulldown cannot be null!");
-
-		if (option == null)
-			throw new HarnessException("Option cannot be null!");
-
-		if (itemName == null)
-			throw new HarnessException("Item name cannot be null!");
-
-		// Default behavior variables
-		String pulldownLocator = null; // If set, this will be expanded
-		String optionLocator = null; // If set, this will be clicked
-		AbsPage page = null; // If set, this page will be returned
-
-		if (pulldown == Button.B_MY_FILES_LIST_ITEM) {
-
-			pulldownLocator = Locators.zMyFilesListViewItems.locator
-					+ ":contains(" + itemName
-					+ ") span[class^=my-files-list-item-action-button]";
-
-			if (!this.zWaitForElementPresent(pulldownLocator, "3000"))
-				throw new HarnessException("Button is not present locator="
-						+ pulldownLocator);
-
-			zClick(pulldownLocator);
-
-			// If the app is busy, wait for it to become active
-			zWaitForBusyOverlay();
-
-			if (option == Button.B_LEAVE_THIS_SHARED_FOLDER) {
-				optionLocator = Locators.zLeaveThisSharedFolder.locator;
-
-				if (!this.zWaitForElementPresent(optionLocator, "2000"))
-					throw new HarnessException("Button is not present locator="
-							+ optionLocator);
-
-				this.sClickAt(optionLocator, "0,0");
-
-				// If the app is busy, wait for it to become active
-				zWaitForBusyOverlay();
-
-				return page;
-			} else if (option == Button.O_FOLDER_SHARE) {
-				optionLocator = Locators.zShareItem.locator;
-
-				if (!this.zWaitForElementPresent(optionLocator, "2000"))
-					throw new HarnessException("Button is not present locator="
-							+ optionLocator);
-
-				this.sClickAt(optionLocator, "0,0");
-
-				// If the app is busy, wait for it to become active
-				zWaitForBusyOverlay();
-
-				page = new DialogFolderShare(MyApplication, this);
-
-				page.zWaitForActive();
-
-				return page;
-			} else if (option == Button.O_FILE_SHARE) {
-				optionLocator = Locators.zShareItem.locator;
-
-				if (!this.zWaitForElementPresent(optionLocator, "2000"))
-					throw new HarnessException("Button is not present locator="
-							+ optionLocator);
-
-				this.sClickAt(optionLocator, "0,0");
-
-				// If the app is busy, wait for it to become active
-				zWaitForBusyOverlay();
-
-				page = new DialogFileShare(MyApplication, this);
-
-				page.zWaitForActive();
-
-				return page;
-			} else if (option == Button.O_FAVORITE) {
-				optionLocator = Locators.zFavoriteItem.locator;
-
-				if (!this.zWaitForElementPresent(optionLocator, "2000"))
-					throw new HarnessException("Button is not present locator="
-							+ optionLocator);
-
-				this.sClickAt(optionLocator, "0,0");
-
-				// If the app is busy, wait for it to become active
-				zWaitForBusyOverlay();
-
-				return page;
-			} else if (option == Button.O_NOT_FAVORITE) {
-				optionLocator = Locators.zNotFavoriteItem.locator;
-
-				if (!this.zWaitForElementPresent(optionLocator, "2000"))
-					throw new HarnessException("Button is not present locator="
-							+ optionLocator);
-
-				this.sClickAt(optionLocator, "0,0");
-
-				// If the app is busy, wait for it to become active
-				zWaitForBusyOverlay();
-
-				return page;
-			} else if (option == Button.O_RENAME) {
-				optionLocator = Locators.zRenameItem.locator;
-
-				if (!this.zWaitForElementPresent(optionLocator, "2000"))
-					throw new HarnessException("Button is not present locator="
-							+ optionLocator);
-
-				this.sClickAt(optionLocator, "0,0");
-
-				// If the app is busy, wait for it to become active
-				zWaitForBusyOverlay();
-
-				return page;
-			} else if (option == Button.O_MOVE) {
-				optionLocator = Locators.zMoveItem.locator;
-
-				if (!this.zWaitForElementPresent(optionLocator, "2000"))
-					throw new HarnessException("Button is not present locator="
-							+ optionLocator);
-
-				this.sClickAt(optionLocator, "0,0");
-
-				// If the app is busy, wait for it to become active
-				zWaitForBusyOverlay();
-
-				page = new DialogMove(MyApplication, this);
-
-				return page;
-			} else if (option == Button.O_DELETE) {
-				optionLocator = Locators.zDeleteItem.locator;
-
-				if (!this.zWaitForElementPresent(optionLocator, "2000"))
-					throw new HarnessException("Button is not present locator="
-							+ optionLocator);
-
-				this.sClickAt(optionLocator, "0,0");
-
-				// If the app is busy, wait for it to become active
-				zWaitForBusyOverlay();
-
-				return page;
-			} else {
-				logger.info("no logic defined for " + option);
-			}
-		} else {
-			logger.info("no logic defined for " + pulldown + "/" + option);
-		}
-
-		/*
-		 * // Default behavior if (pulldownLocator != null) {
-		 * 
-		 * // Make sure the locator exists if
-		 * (!this.sIsElementPresent(pulldownLocator)) { throw new
-		 * HarnessException("Button " + pulldown + " option " + option +
-		 * " pulldownLocator " + pulldownLocator + " not present!"); }
-		 * 
-		 * zClick(pulldownLocator);
-		 * 
-		 * // If the app is busy, wait for it to become active
-		 * zWaitForBusyOverlay(); }
-		 * 
-		 * if (optionLocator != null) {
-		 * 
-		 * // Make sure the locator exists if
-		 * (!this.sIsElementPresent(optionLocator)) { throw new
-		 * HarnessException(optionLocator + " not present!"); }
-		 * 
-		 * this.sClick(optionLocator);
-		 * 
-		 * // If the app is busy, wait for it to become active
-		 * zWaitForBusyOverlay(); }
-		 * 
-		 * // If we click on pulldown/option and the page is specified, then //
-		 * wait for the page to go active if (page != null) {
-		 * page.zWaitForActive(); }
-		 * 
-		 * // Return the specified page, or null if not set
-		 */
-		return (page);
 	}
 
 	@Override

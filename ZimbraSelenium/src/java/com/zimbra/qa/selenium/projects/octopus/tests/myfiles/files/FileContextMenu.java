@@ -8,6 +8,7 @@ import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.octopus.core.OctopusCommonTest;
+import com.zimbra.qa.selenium.projects.octopus.ui.PageOctopus;
 import com.zimbra.qa.selenium.projects.octopus.ui.PageMyFiles.Locators;
 
 public class FileContextMenu extends OctopusCommonTest {
@@ -82,12 +83,12 @@ public class FileContextMenu extends OctopusCommonTest {
 
 		// Verify Share item is present
 		ZAssert.assertTrue(
-				app.zPageMyFiles.sIsElementPresent(Locators.zShareItem.locator),
+				app.zPageMyFiles.sIsElementPresent(PageOctopus.Locators.zShareItem.locator),
 				"Verify Share item is present");
 
 		// Verify Favorite item is present
 		ZAssert.assertTrue(app.zPageMyFiles
-				.sIsElementPresent(Locators.zFavoriteItem.locator),
+				.sIsElementPresent(PageOctopus.Locators.zFavoriteItem.locator),
 				"Verify Favorite item is present");
 
 		// Verify Download item is present
@@ -97,17 +98,17 @@ public class FileContextMenu extends OctopusCommonTest {
 
 		// Verify Rename item is present
 		ZAssert.assertTrue(app.zPageMyFiles
-				.sIsElementPresent(Locators.zRenameItem.locator),
+				.sIsElementPresent(PageOctopus.Locators.zRenameItem.locator),
 				"Verify Rename item is present");
 
 		// Verify Move item is present
 		ZAssert.assertTrue(
-				app.zPageMyFiles.sIsElementPresent(Locators.zMoveItem.locator),
+				app.zPageMyFiles.sIsElementPresent(PageOctopus.Locators.zMoveItem.locator),
 				"Verify Move item is present");
 
 		// Verify Delete item is present
 		ZAssert.assertTrue(app.zPageMyFiles
-				.sIsElementPresent(Locators.zDeleteItem.locator),
+				.sIsElementPresent(PageOctopus.Locators.zDeleteItem.locator),
 				"Verify Delete item is present");
 
 		// click on My Files tab

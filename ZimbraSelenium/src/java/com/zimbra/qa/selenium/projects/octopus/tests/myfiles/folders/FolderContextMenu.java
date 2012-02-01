@@ -1,14 +1,19 @@
 package com.zimbra.qa.selenium.projects.octopus.tests.myfiles.folders;
 
-import org.testng.annotations.*;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
+
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
-import com.zimbra.qa.selenium.framework.util.*;
+import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.SleepUtil;
+import com.zimbra.qa.selenium.framework.util.ZAssert;
+import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.octopus.core.OctopusCommonTest;
-import com.zimbra.qa.selenium.projects.octopus.ui.PageMyFiles.Locators;
+import com.zimbra.qa.selenium.projects.octopus.ui.PageOctopus;
 
 public class FolderContextMenu extends OctopusCommonTest {
 
@@ -66,22 +71,22 @@ public class FolderContextMenu extends OctopusCommonTest {
 
 		// Verify Share item is present
 		ZAssert.assertTrue(
-				app.zPageMyFiles.sIsElementPresent(Locators.zShareItem.locator),
+				app.zPageMyFiles.sIsElementPresent(PageOctopus.Locators.zShareItem.locator),
 				"Verify Share item is present");
 
 		// Verify Rename item is present
 		ZAssert.assertTrue(app.zPageMyFiles
-				.sIsElementPresent(Locators.zRenameItem.locator),
+				.sIsElementPresent(PageOctopus.Locators.zRenameItem.locator),
 				"Verify Rename item is present");
 
 		// Verify Move item is present
 		ZAssert.assertTrue(
-				app.zPageMyFiles.sIsElementPresent(Locators.zMoveItem.locator),
+				app.zPageMyFiles.sIsElementPresent(PageOctopus.Locators.zMoveItem.locator),
 				"Verify Move item is present");
 
 		// Verify Delete item is present
 		ZAssert.assertTrue(app.zPageMyFiles
-				.sIsElementPresent(Locators.zDeleteItem.locator),
+				.sIsElementPresent(PageOctopus.Locators.zDeleteItem.locator),
 				"Verify Delete item is present");
 
 		// click on My Files tab
