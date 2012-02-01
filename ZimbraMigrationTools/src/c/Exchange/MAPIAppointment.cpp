@@ -505,6 +505,8 @@ void MAPIAppointment::SetExceptions()
 
 void MAPIAppointment::FillInExceptionAppt(MAPIAppointment* pEx, Zimbra::Mapi::COutlookRecurrenceException* lpException)
 {
+    // PST seems to find the MAPI message, thereby eventually filling in the pEx.  Server does not, but the
+    // info is in the lpException
     if (pEx->m_pStartDate.length() == 0)
     {
         Zimbra::Mapi::CRecurrenceTime rtStartDate = lpException->GetStartDateTime();
@@ -521,19 +523,33 @@ void MAPIAppointment::FillInExceptionAppt(MAPIAppointment* pEx, Zimbra::Mapi::CO
     }
     if (pEx->m_pSubject.length() == 0)
     {
-        pEx->m_pSubject = m_pSubject;
+        pEx->m_pSubject = (wcslen(lpException->GetSubject()) > 0) ? lpException->GetSubject() : m_pSubject;
     }
     if (pEx->m_pLocation.length() == 0)
     {
-        pEx->m_pLocation = m_pLocation;
+        pEx->m_pLocation = (wcslen(lpException->GetLocation()) > 0) ? lpException->GetLocation() : m_pLocation;
     }
     if (pEx->m_pBusyStatus.length() == 0)
     {
-        pEx->m_pBusyStatus = m_pBusyStatus;
+        if (this->InterpretBusyStatus() !=  lpException->GetBusyStatus())
+        {
+            pEx->SetBusyStatus(lpException->GetBusyStatus());
+        }
+        else
+        {
+            pEx->m_pBusyStatus = m_pBusyStatus;
+        }
     }
     if (pEx->m_pAllday.length() == 0)
     {
-        pEx->m_pAllday = m_pAllday;
+        if (this->InterpretAllday() != lpException->GetAllDay())
+        {
+            pEx->SetAllday(lpException->GetAllDay());
+        }
+        else
+        {
+            pEx->m_pAllday = m_pAllday;
+        }
     }
     if (pEx->m_pResponseStatus.length() == 0)
     {
@@ -655,6 +671,32 @@ void MAPIAppointment::SetBusyStatus(long busystatus)
     }
 }
 
+long MAPIAppointment::InterpretBusyStatus()
+{
+    long retval;
+    if (m_pBusyStatus == L"F") 
+    {
+        retval = oFree;
+    }
+    if (m_pBusyStatus == L"T") 
+    {
+        retval = oTentative;
+    }
+    if (m_pBusyStatus == L"B") 
+    {
+        retval = oBusy;
+    }
+    if (m_pBusyStatus == L"O") 
+    {
+        retval = oOutOfOffice;
+    }
+    else
+    {
+        retval = oFree;
+    }
+    return retval;
+}
+
 wstring MAPIAppointment::ConvertValueToRole(long role)
 {
     wstring retval = L"REQ";
@@ -688,6 +730,11 @@ wstring MAPIAppointment::ConvertValueToPartStat(long ps)
 void MAPIAppointment::SetAllday(unsigned short usAllday)
 {
     m_pAllday = (usAllday == 1) ? L"1" : L"0";
+}
+
+bool MAPIAppointment::InterpretAllday()
+{
+    return (m_pAllday == L"1");
 }
 
 void MAPIAppointment::SetTransparency(LPTSTR pStr)

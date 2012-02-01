@@ -77,7 +77,9 @@ public:
     void SetInstanceUID(LPSBinary bin);
     void SetLocation(LPTSTR pStr);
     void SetBusyStatus(long busystatus);
+    long InterpretBusyStatus();
     void SetAllday(unsigned short usAllday);
+    bool InterpretAllday();
     void SetTransparency(LPTSTR pStr);
     void SetResponseStatus(long responsestatus);
     wstring ConvertValueToRole(long role);
