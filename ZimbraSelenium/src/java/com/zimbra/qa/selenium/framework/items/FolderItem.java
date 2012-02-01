@@ -21,7 +21,7 @@ import com.zimbra.soap.mail.type.Folder;
  * @author Matt Rhoades
  *
  */
-public class FolderItem extends com.zimbra.soap.mail.type.Folder implements IItem {
+public class FolderItem extends com.zimbra.soap.mail.type.Folder implements IItem, IOctListViewItem {
 	protected static Logger logger = LogManager.getLogger(IItem.class);
 	private boolean _isDesktopClientFolder = false;
 	private boolean _isDesktopLocalFolder = false;
@@ -367,6 +367,39 @@ public class FolderItem extends com.zimbra.soap.mail.type.Folder implements IIte
 		sb.append("Parent ID: ").append(super.getParentId()).append('\n');
 		return (sb.toString());
 	}
+
+	/////////
+	// IListViewItem: Start
+	/////////
+	
+	private String ListViewIcon = null;
+	private String ListViewName = null;
+
+	@Override
+	public String getListViewIcon() throws HarnessException {
+		return (ListViewIcon);
+	}
+
+	@Override
+	public String getListViewName() throws HarnessException {
+		return (ListViewName);
+	}
+
+	
+	@Override
+	public void setListViewIcon(String icon) throws HarnessException {
+		ListViewIcon = icon;
+	}
+
+	@Override
+	public void setListViewName(String name) throws HarnessException {
+		ListViewName = name;
+	}
+	
+	/////////
+	// IListViewItem: End
+	/////////
+	
 
 
 }

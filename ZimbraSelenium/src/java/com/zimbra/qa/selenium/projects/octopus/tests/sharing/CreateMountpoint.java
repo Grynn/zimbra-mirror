@@ -4,6 +4,7 @@ import java.util.List;
 import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderMountpointItem;
+import com.zimbra.qa.selenium.framework.items.IOctListViewItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
@@ -90,10 +91,9 @@ public class CreateMountpoint extends OctopusCommonTest {
 		PageMyFiles pageMyFiles = (PageMyFiles) app.zPageOctopus.zToolbarPressButton(Button.B_TAB_MY_FILES);
 				
 		// Verify the mountpoint exists in the list view
-		List<String> items = app.zPageOctopus.zGetListViewItems();
+		List<IOctListViewItem> items = app.zPageOctopus.zGetListViewItems();
 		
-		ZAssert.assertNotNull(items, 
-		"Verify list view is not empty");
+		ZAssert.assertNotNull(items,  "Verify list view is not empty");
 		
 		//ZAssert.assertContains(items, folderMountpointName,
 		//"Verify list view contains mountpoint folder");	

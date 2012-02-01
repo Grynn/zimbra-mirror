@@ -13,8 +13,14 @@ import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
  * 
  * 
  */
-public class FileItem implements IItem {
+public class FileItem implements IItem, IOctListViewItem {
 	protected static Logger logger = LogManager.getLogger(IItem.class);
+	
+	/**
+	 * Create a file item
+	 */
+	public FileItem() {	
+	}
 	
 	/**
 	 * Create a file item
@@ -80,5 +86,39 @@ public class FileItem implements IItem {
 	public void createUsingSOAP(ZimbraAccount account) throws HarnessException {
 		// TODO Auto-generated method stub
 		
-	}	
+	}
+
+	/////////
+	// IListViewItem: Start
+	/////////
+	
+	private String ListViewIcon = null;
+	private String ListViewName = null;
+
+	@Override
+	public String getListViewIcon() throws HarnessException {
+		return (ListViewIcon);
+	}
+
+	@Override
+	public String getListViewName() throws HarnessException {
+		return (ListViewName);
+	}
+
+	
+	@Override
+	public void setListViewIcon(String icon) throws HarnessException {
+		ListViewIcon = icon;
+	}
+
+	@Override
+	public void setListViewName(String name) throws HarnessException {
+		ListViewName = name;
+	}
+	
+	/////////
+	// IListViewItem: End
+	/////////
+	
+
 }

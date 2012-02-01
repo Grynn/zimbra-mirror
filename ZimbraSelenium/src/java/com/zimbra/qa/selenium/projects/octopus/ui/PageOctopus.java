@@ -10,7 +10,9 @@ import java.util.Map;
 import org.apache.commons.httpclient.HttpStatus;
 import com.zimbra.common.soap.Element;
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
+import com.zimbra.qa.selenium.framework.items.FileItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
+import com.zimbra.qa.selenium.framework.items.IOctListViewItem;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.octopus.ui.DialogError;
@@ -360,29 +362,39 @@ public class PageOctopus extends AbsTab {
 
 		boolean found = false;
 		for (int i = 0; i < 5; i++) {
-			List<String> itemNames = zGetListViewItems();
+			List<IOctListViewItem> items = zGetListViewItems();
 
-			for (String str : itemNames)
-				if (str.contains(itemName)) {
-					return true;
+			for (IOctListViewItem item : items)
+				if (item.getListViewName().contains(itemName)) {
+					return (true);
 				}
 			SleepUtil.sleepVerySmall();
 		}
 		return found;
 	}
 
-	public List<String> zGetListViewItems() throws HarnessException {
-		List<String> items = new ArrayList<String>();
+	public List<IOctListViewItem> zGetListViewItems() throws HarnessException {
 		String locator = Locators.zMyFilesListViewItems.locator;
 
 		int count = sGetCssCount(locator);
-		String str;
 
+		List<IOctListViewItem> items = new ArrayList<IOctListViewItem>();
 		for (int i = 1; i <= count; i++) {
-			str = this.sGetText(locator + ":nth-child(" + i
-					+ ") span.my-files-list-item-name");
-
-			items.add(str);
+			
+			IOctListViewItem item = null;
+			
+			String icon = this.sGetAttribute(locator + ":nth-child(" + i + ") span.my-files-list-item-icon>span@class");
+			if ( icon.equalsIgnoreCase("ImgFolder") || icon.equalsIgnoreCase("ImgSharedMailFolder") ) {
+				item = new FolderItem();
+			} else {
+				item = new FileItem();
+			}
+			item.setListViewIcon(icon);
+			
+			String name = this.sGetText(locator + ":nth-child(" + i + ") span.my-files-list-item-name");
+			item.setListViewName(name);
+			
+			items.add(item);
 		}
 		return items;
 	}

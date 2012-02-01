@@ -5,6 +5,7 @@ import java.util.List;
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.FolderItem;
+import com.zimbra.qa.selenium.framework.items.IOctListViewItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
@@ -60,16 +61,16 @@ public class SearchFile extends OctopusCommonTest {
 		// Get all the messages in the view
 		// Verify the uploaded file exists
 		boolean found = false;
-		List<String> items = app.zPageSearch.zGetListViewItems();
-		for (String i : items) {
-			if ( i.equals(filename)) {
+		List<IOctListViewItem> items = app.zPageSearch.zGetListViewItems();
+		for (IOctListViewItem item : items) {
+			if ( item.getListViewName().equalsIgnoreCase(filename) ) {
 				// found it
 				found = true;
 				break;
 			}
 		}
 				
-		ZAssert.assertTrue(found, "Verify the item is found after searching");
+		ZAssert.assertTrue(found, "Verify the item is found in the list after searching");
 
 	}
 
