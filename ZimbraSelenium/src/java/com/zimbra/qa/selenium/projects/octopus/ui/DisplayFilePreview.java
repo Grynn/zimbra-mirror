@@ -79,9 +79,9 @@ public class DisplayFilePreview extends AbsDisplay {
 					+ buttonLocator);
 
 		// Default behavior, process the locator by clicking on it
-
+		
 		// Click it
-		zClick(buttonLocator);
+		sClickAt(buttonLocator,"0,0");
 
 		// If the app is busy, wait for it to become active
 		zWaitForBusyOverlay();
