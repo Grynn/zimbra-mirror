@@ -1,4 +1,4 @@
-package com.zimbra.qa.selenium.projects.octopus.tests.myfiles.files;
+package com.zimbra.qa.selenium.projects.octopus.tests.myfiles.comments;
 
 import org.testng.annotations.*;
 
@@ -13,7 +13,7 @@ import com.zimbra.qa.selenium.projects.octopus.ui.DisplayFileComments;
 import com.zimbra.qa.selenium.projects.octopus.ui.DisplayFilePreview;
 import com.zimbra.qa.selenium.projects.octopus.ui.PageMyFiles;
 
-public class FileComment extends OctopusCommonTest {
+public class AddComment extends OctopusCommonTest {
 
 	private boolean _folderIsCreated = false;
 	private String _folderName = null;
@@ -28,8 +28,8 @@ public class FileComment extends OctopusCommonTest {
 		_fileAttached = false;
 	}
 
-	public FileComment() {
-		logger.info("New " + FileComment.class.getCanonicalName());
+	public AddComment() {
+		logger.info("New " + AddComment.class.getCanonicalName());
 
 		// test starts at the My Files tab
 		super.startingPage = app.zPageMyFiles;
@@ -37,7 +37,7 @@ public class FileComment extends OctopusCommonTest {
 	}
 
 	@Test(description = "Add file comments - verify comments text in the file Comments through SOAP", groups = { "sanity" })
-	public void FileComment_01() throws HarnessException {
+	public void AddComment_01() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 
 		FolderItem rootFolder = FolderItem.importFromSOAP(account,
@@ -86,7 +86,7 @@ public class FileComment extends OctopusCommonTest {
 	}
 
 	@Test(description = "Add file comments - verify account user name in the file Comments window", groups = { "smoke" })
-	public void FileComment_02() throws HarnessException {
+	public void AddComment_02() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 
 		FolderItem briefcaseRootFolder = FolderItem.importFromSOAP(account,
