@@ -12,12 +12,11 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.octopus.core.OctopusCommonTest;
-import com.zimbra.qa.selenium.projects.octopus.ui.DialogMove;
 
-public class MoveFile extends OctopusCommonTest {
+public class DeleteFile extends OctopusCommonTest {
 
-	public MoveFile() {
-		logger.info("New " + MoveFile.class.getCanonicalName());
+	public DeleteFile() {
+		logger.info("New " + DeleteFile.class.getCanonicalName());
 
 		// test starts at the Search tab
 		super.startingPage = app.zPageSearch;
@@ -26,31 +25,22 @@ public class MoveFile extends OctopusCommonTest {
 	}
 
 	@Test(
-			description = "Move a file from the search results", 
+			description = "Delete a file from the search results", 
 			groups = { "smoke" })
-	public void MoveFile_01() throws HarnessException {
+	public void DeleteFile_01() throws HarnessException {
 
 		String filename = "filename"+ ZimbraSeleniumProperties.getUniqueString() +".txt";
 		String filePath = ZimbraSeleniumProperties.getBaseDirectory()
 				+ "/data/public/documents/doc01/plaintext.txt";
-		String subFolderName = "subFolder" + ZimbraSeleniumProperties.getUniqueString();
-
+	
 		
-		// Save uploaded file through SOAP
-		FolderItem briefcaseRootFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Briefcase);
-
-		app.zGetActiveAccount().soapSend(
-					"<CreateFolderRequest xmlns='urn:zimbraMail'>"
-				+		"<folder name='" + subFolderName + "' l='" + briefcaseRootFolder.getId() + "' view='document'/>"
-				+	"</CreateFolderRequest>");
-
-		// Verify the sub-folder exists on the server
-		FolderItem subFolderItem = FolderItem.importFromSOAP(app.zGetActiveAccount(), subFolderName);
-		ZAssert.assertNotNull(subFolderItem, "Verify the subfolder is available");
 
 		// Upload file to server through RestUtil
 		String attachmentId = app.zGetActiveAccount().uploadFile(filePath);
 
+		// Save uploaded file through SOAP
+		FolderItem briefcaseRootFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Briefcase);
+		FolderItem trashFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Trash);
 
 		app.zGetActiveAccount().soapSend(
 					"<SaveDocumentRequest xmlns='urn:zimbraMail'>"
@@ -84,18 +74,12 @@ public class MoveFile extends OctopusCommonTest {
 		ZAssert.assertNotNull(found, "Verify the item is found in the list after searching");
 
 		
-		// Share the file
-		DialogMove chooseFolder = (DialogMove) app.zPageSearch.zToolbarPressPulldown(
-													Button.B_MY_FILES_LIST_ITEM,
-													Button.O_MOVE, 
-													found.getListViewName());
-
-
-		// Double click to choose folder
-		chooseFolder.zDoubleClickTreeFolder(subFolderName);
-		app.zPageSearch.zWaitForBusyOverlayOctopus();
+		// Delete the file
+		app.zPageMyFiles.zToolbarPressPulldown(
+									Button.B_MY_FILES_LIST_ITEM,
+									Button.O_DELETE, 
+									found.getListViewName());
 		
-
 		
 		// Verify the document is shared
 		app.zGetActiveAccount().soapSend(
@@ -106,7 +90,7 @@ public class MoveFile extends OctopusCommonTest {
 		String id = app.zGetActiveAccount().soapSelectValue("//mail:doc[@id='"+ documentId +"']", "l");
 				
 		
-		ZAssert.assertEquals(id, subFolderItem.getId(), "Verify the document is in the subfolder");
+		ZAssert.assertEquals(id, trashFolder.getId(), "Verify the folder is moved to trash");
 		
 
 	}

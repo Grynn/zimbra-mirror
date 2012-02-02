@@ -261,7 +261,7 @@ public class PageOctopus extends AbsTab {
 				this.sClickAt(optionLocator, "0,0");
 
 				// If the app is busy, wait for it to become active
-				zWaitForBusyOverlay();
+				this.zWaitForBusyOverlayOctopus();
 
 				return page;
 			} else if (option == Button.O_FOLDER_SHARE) {
@@ -274,7 +274,7 @@ public class PageOctopus extends AbsTab {
 				this.sClickAt(optionLocator, "0,0");
 
 				// If the app is busy, wait for it to become active
-				zWaitForBusyOverlay();
+				this.zWaitForBusyOverlayOctopus();
 
 				page = new DialogFolderShare(MyApplication, this);
 
@@ -291,7 +291,7 @@ public class PageOctopus extends AbsTab {
 				this.sClickAt(optionLocator, "0,0");
 
 				// If the app is busy, wait for it to become active
-				zWaitForBusyOverlay();
+				this.zWaitForBusyOverlayOctopus();
 
 				page = new DialogFileShare(MyApplication, this);
 
@@ -334,7 +334,7 @@ public class PageOctopus extends AbsTab {
 				this.sClickAt(optionLocator, "0,0");
 
 				// If the app is busy, wait for it to become active
-				zWaitForBusyOverlay();
+				this.zWaitForBusyOverlayOctopus();
 
 				return page;
 			} else if (option == Button.O_MOVE) {
@@ -347,7 +347,7 @@ public class PageOctopus extends AbsTab {
 				this.sClickAt(optionLocator, "0,0");
 
 				// If the app is busy, wait for it to become active
-				zWaitForBusyOverlay();
+				this.zWaitForBusyOverlayOctopus();
 
 				page = new DialogMove(MyApplication, this);
 
@@ -362,7 +362,7 @@ public class PageOctopus extends AbsTab {
 				this.sClickAt(optionLocator, "0,0");
 
 				// If the app is busy, wait for it to become active
-				zWaitForBusyOverlay();
+				this.zWaitForBusyOverlayOctopus();
 
 				return page;
 			} else {

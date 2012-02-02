@@ -29,7 +29,7 @@ public class SharePublicly extends OctopusCommonTest {
 	@Test(
 			description = "Share a file from the search results", 
 			groups = { "smoke" })
-	public void SearchFile_01() throws HarnessException {
+	public void SharePublicly_01() throws HarnessException {
 
 		String filename = "filename"+ ZimbraSeleniumProperties.getUniqueString() +".txt";
 		String filePath = ZimbraSeleniumProperties.getBaseDirectory()
