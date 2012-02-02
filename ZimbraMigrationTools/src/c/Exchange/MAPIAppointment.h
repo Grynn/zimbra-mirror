@@ -1,5 +1,9 @@
 #pragma once
 
+#define NO_EXCEPTION        0           
+#define NORMAL_EXCEPTION    1
+#define CANCEL_EXCEPTION    2
+
 // MAPIAppointmentException class
 class MAPIAppointmentException: public GenericException
 {
@@ -43,7 +47,7 @@ private:
     LONG nameIds[N_NUMAPPTPROPS];
     LONG nameIdsC[N_NUMCOMMONPROPS];
 
-    bool m_bIsException;
+    int m_iExceptionType;
 
     // appointment data members (represented both by regular and named props
     wstring m_pSubject;
@@ -64,9 +68,10 @@ private:
     wstring m_pPlainTextFile;
     wstring m_pHtmlFile;
     vector<MAPIAppointment*> m_vExceptions;
+    wstring m_pExceptionType;
 
 public:
-    MAPIAppointment(Zimbra::MAPI::MAPISession &session, Zimbra::MAPI::MAPIMessage &mMessage, bool isException);
+    MAPIAppointment(Zimbra::MAPI::MAPISession &session, Zimbra::MAPI::MAPIMessage &mMessage, int exceptionType);
     ~MAPIAppointment();
     HRESULT InitNamedPropsForAppt();
     HRESULT SetMAPIAppointmentValues();
@@ -92,7 +97,9 @@ public:
     void SetTimezoneId(LPTSTR pStr);
     int SetRecurValues();
     void SetExceptions();
+    void SetExceptionType(int type);
     void FillInExceptionAppt(MAPIAppointment* ex, Zimbra::Mapi::COutlookRecurrenceException* lpException);
+    void FillInCancelException(MAPIAppointment* pEx, Zimbra::Mapi::CFileTime cancelDate);
     HRESULT SetAppointmentAttachment(wstring &wstrAttachmentPath);
 
     wstring GetSubject();
@@ -113,4 +120,5 @@ public:
     wstring GetHtmlFileAndContent();
     vector<Attendee*> GetAttendees();
     vector<MAPIAppointment*> GetExceptions();
+    wstring GetExceptionType();
 };

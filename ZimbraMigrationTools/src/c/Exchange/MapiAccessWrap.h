@@ -10,7 +10,7 @@
 #include "ExchangeAdmin.h"
 #include "MAPIAccessAPI.h"
 
-#define NUM_EXCEPTION_ATTRS      15
+#define NUM_EXCEPTION_ATTRS      16
 
 class ATL_NO_VTABLE CMapiAccessWrap: public CComObjectRootEx<CComSingleThreadModel>, public
     CComCoClass<CMapiAccessWrap, &CLSID_MapiAccessWrap>, public ISupportErrorInfo, public

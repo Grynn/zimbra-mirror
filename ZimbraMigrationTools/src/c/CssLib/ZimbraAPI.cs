@@ -1146,7 +1146,14 @@ public class ZimbraAPI
         writer.WriteAttributeString("d", appt["orName"]);
 
         // always convert -- not like old tool that gives you a choice
-        string theOrganizer = (IAmTheOrganizer(appt["orAddr"])) ? AccountName : appt["orAddr"];
+        string theOrganizer = AccountName;
+        if (appt["orAddr"].Length > 0)
+        {
+            if (!IAmTheOrganizer(appt["orAddr"]))
+            {
+                theOrganizer = appt["orAddr"];
+            }
+        }
         writer.WriteAttributeString("a", theOrganizer);
         writer.WriteEndElement();
         //
@@ -1269,15 +1276,27 @@ public class ZimbraAPI
 
     private void AddExceptionToRequest(XmlWriter writer, Dictionary<string, string> appt, int num)
     {
-        writer.WriteStartElement("except");
-        string attr = "ptst" + "_" + num.ToString();
+        string attr = "exceptionType" + "_" + num.ToString();
+        bool isCancel = appt[attr] == "cancel";
+        if (isCancel)
+        {
+            writer.WriteStartElement("cancel");
+        }
+        else
+        {
+            writer.WriteStartElement("except");
+        }
+        attr = "ptst" + "_" + num.ToString();
         writer.WriteAttributeString("ptst", appt[attr]);
         writer.WriteStartElement("m");
 
         WriteTimezone(writer, appt); // timezone stuff since it is a recurrence
 
         writer.WriteStartElement("inv");
-        writer.WriteAttributeString("method", "REQUEST");
+        if (!isCancel)
+        {
+            writer.WriteAttributeString("method", "REQUEST");
+        }
         attr = "fb" + "_" + num.ToString();
         writer.WriteAttributeString("fb", appt[attr]);
         writer.WriteAttributeString("transp", "O");
@@ -1287,16 +1306,23 @@ public class ZimbraAPI
         writer.WriteAttributeString("name", appt[attr]);
         attr = "loc" + "_" + num.ToString();
         writer.WriteAttributeString("loc", appt[attr]);
+        if (appt["uid"].Length > 0)
+        {
+            writer.WriteAttributeString("uid", appt["uid"]);
+        }
         writer.WriteStartElement("s");
         attr = "s" + "_" + num.ToString();
         writer.WriteAttributeString("d", appt[attr]);
         writer.WriteAttributeString("tz", appt["tid"]);
         writer.WriteEndElement();
-        writer.WriteStartElement("e");
-        attr = "e" + "_" + num.ToString();
-        writer.WriteAttributeString("d", appt[attr]);
-        writer.WriteAttributeString("tz", appt["tid"]);
-        writer.WriteEndElement();
+        if (!isCancel)
+        {
+            writer.WriteStartElement("e");
+            attr = "e" + "_" + num.ToString();
+            writer.WriteAttributeString("d", appt[attr]);
+            writer.WriteAttributeString("tz", appt["tid"]);
+            writer.WriteEndElement();
+        }
         attr = "s" + "_" + num.ToString();
         if (appt[attr].Length > 0)
         {
@@ -1310,20 +1336,30 @@ public class ZimbraAPI
         attr = "orName" + "_" + num.ToString();
         writer.WriteAttributeString("d", appt[attr]);
         attr = "orAddr" + "_" + num.ToString();
-        string theOrganizer = (IAmTheOrganizer(appt[attr])) ? AccountName : appt[attr];
+        string theOrganizer = AccountName;
+        if (appt[attr].Length > 0)
+        {
+            if (!IAmTheOrganizer(appt[attr]))
+            {
+                theOrganizer = appt[attr];
+            }
+        }
         writer.WriteAttributeString("a", theOrganizer);
         writer.WriteEndElement();
-        attr = "m" + "_" + num.ToString();
-        writer.WriteStartElement("alarm");
-        writer.WriteAttributeString("action", "DISPLAY");
-        writer.WriteStartElement("trigger");
-        writer.WriteStartElement("rel");
-        writer.WriteAttributeString("related", "START");
-        writer.WriteAttributeString("neg", "1");
-        writer.WriteAttributeString("m", appt[attr]);
-        writer.WriteEndElement();   // rel
-        writer.WriteEndElement();   // trigger
-        writer.WriteEndElement();   // alarm
+        if (!isCancel)
+        {
+            attr = "m" + "_" + num.ToString();
+            writer.WriteStartElement("alarm");
+            writer.WriteAttributeString("action", "DISPLAY");
+            writer.WriteStartElement("trigger");
+            writer.WriteStartElement("rel");
+            writer.WriteAttributeString("related", "START");
+            writer.WriteAttributeString("neg", "1");
+            writer.WriteAttributeString("m", appt[attr]);
+            writer.WriteEndElement();   // rel
+            writer.WriteEndElement();   // trigger
+            writer.WriteEndElement();   // alarm
+        }
         writer.WriteEndElement();   // inv
         attr = "su" + "_" + num.ToString();
         WriteNVPair(writer, "su", appt[attr]);
@@ -1352,7 +1388,7 @@ public class ZimbraAPI
         writer.WriteEndElement();   // mp
 
         writer.WriteEndElement();   // m
-        writer.WriteEndElement();   // except
+        writer.WriteEndElement();   // except or cancel
     }
 
     public int AddAppointment(Dictionary<string, string> appt, string folderPath = "")
@@ -1815,7 +1851,7 @@ public class ZimbraAPI
     {
         int idxAcc = AccountName.IndexOf("@");
         int idxOrg = theOrganizer.IndexOf("@");
-        if ((idxAcc == -1) || (idxOrg == -1))   // better not ever happen
+        if ((idxAcc == -1) || (idxOrg == -1))   // can happen if no recip table
         {
             return false;
         }

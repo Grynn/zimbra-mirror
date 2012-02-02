@@ -510,21 +510,22 @@ STDMETHODIMP CMapiAccessWrap::GetData(BSTR UserId, VARIANT ItemId, FolderType ty
                         for (int i = 0; i < numExceptions; i++)
                         {
                             CreateExceptionAttrs(attrs, i);
-                            pIt[attrs[0]]  = SysAllocString((apptData.vExceptions[i]->GetResponseStatus()).c_str());
-                            pIt[attrs[1]]  = SysAllocString((apptData.vExceptions[i]->GetBusyStatus()).c_str());
-                            pIt[attrs[2]]  = SysAllocString((apptData.vExceptions[i]->GetAllday()).c_str());
-                            pIt[attrs[3]]  = SysAllocString((apptData.vExceptions[i]->GetSubject()).c_str());
+                            pIt[attrs[0]] =  SysAllocString((apptData.vExceptions[i]->GetExceptionType()).c_str());
+                            pIt[attrs[1]]  = SysAllocString((apptData.vExceptions[i]->GetResponseStatus()).c_str());
+                            pIt[attrs[2]]  = SysAllocString((apptData.vExceptions[i]->GetBusyStatus()).c_str());
+                            pIt[attrs[3]]  = SysAllocString((apptData.vExceptions[i]->GetAllday()).c_str());
                             pIt[attrs[4]]  = SysAllocString((apptData.vExceptions[i]->GetSubject()).c_str());
-                            pIt[attrs[5]]  = SysAllocString((apptData.vExceptions[i]->GetLocation()).c_str());
-                            pIt[attrs[6]]  = SysAllocString((apptData.vExceptions[i]->GetReminderMinutes()).c_str());
-                            pIt[attrs[7]]  = SysAllocString((apptData.vExceptions[i]->GetStartDate()).c_str());
-                            pIt[attrs[8]]  = SysAllocString((apptData.vExceptions[i]->GetEndDate()).c_str());
-                            pIt[attrs[9]]  = SysAllocString((apptData.vExceptions[i]->GetOrganizerAddr()).c_str());
-                            pIt[attrs[10]] = SysAllocString((apptData.vExceptions[i]->GetOrganizerName()).c_str());
-                            pIt[attrs[11]] = SysAllocString(L"text/plain");
-                            pIt[attrs[12]] = SysAllocString((apptData.vExceptions[i]->GetPlainTextFileAndContent()).c_str());
-                            pIt[attrs[13]] = SysAllocString(L"text/html");
-                            pIt[attrs[14]] = SysAllocString((apptData.vExceptions[i]->GetHtmlFileAndContent()).c_str());
+                            pIt[attrs[5]]  = SysAllocString((apptData.vExceptions[i]->GetSubject()).c_str());
+                            pIt[attrs[6]]  = SysAllocString((apptData.vExceptions[i]->GetLocation()).c_str());
+                            pIt[attrs[7]]  = SysAllocString((apptData.vExceptions[i]->GetReminderMinutes()).c_str());
+                            pIt[attrs[8]]  = SysAllocString((apptData.vExceptions[i]->GetStartDate()).c_str());
+                            pIt[attrs[9]]  = SysAllocString((apptData.vExceptions[i]->GetEndDate()).c_str());
+                            pIt[attrs[10]] = SysAllocString((apptData.vExceptions[i]->GetOrganizerAddr()).c_str());
+                            pIt[attrs[11]] = SysAllocString((apptData.vExceptions[i]->GetOrganizerName()).c_str());
+                            pIt[attrs[12]] = SysAllocString(L"text/plain");
+                            pIt[attrs[13]] = SysAllocString((apptData.vExceptions[i]->GetPlainTextFileAndContent()).c_str());
+                            pIt[attrs[14]] = SysAllocString(L"text/html");
+                            pIt[attrs[15]] = SysAllocString((apptData.vExceptions[i]->GetHtmlFileAndContent()).c_str());
                         }
 
                         // clean up any exceptions
@@ -646,7 +647,8 @@ STDMETHODIMP CMapiAccessWrap::GetData(BSTR UserId, VARIANT ItemId, FolderType ty
 void CMapiAccessWrap::CreateExceptionAttrs(BSTR attrs[], int num)
 {
     WCHAR pwszNum[10];
-    LPWSTR names[] = {L"ptst", L"fb", L"allDay", L"name", L"su", L"loc", L"m", L"s", L"e",                      
+    LPWSTR names[] = {L"exceptionType", L"ptst", L"fb", L"allDay",
+                      L"name", L"su", L"loc", L"m", L"s", L"e",                      
                       L"orAddr", L"orName", L"contentType0", L"content0",
                       L"contentType1", L"content1"};
                      

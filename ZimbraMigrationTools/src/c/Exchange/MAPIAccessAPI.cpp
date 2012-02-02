@@ -701,7 +701,7 @@ LPCWSTR MAPIAccessAPI::GetItem(SBinary sbItemEID, BaseItemData &itemData)
         }
         else if (msg.ItemType() == ZT_APPOINTMENTS)
         {
-            MAPIAppointment mapiappointment(*m_zmmapisession, msg, FALSE);
+            MAPIAppointment mapiappointment(*m_zmmapisession, msg, NO_EXCEPTION);
             ApptItemData *ad = (ApptItemData *)&itemData;
             ad->Subject = mapiappointment.GetSubject();
             ad->Name = mapiappointment.GetSubject();
@@ -747,6 +747,8 @@ LPCWSTR MAPIAccessAPI::GetItem(SBinary sbItemEID, BaseItemData &itemData)
                     ad->vExceptions.push_back((MAPIAppointment*)ex[i]);
                 }
 	    }
+
+            ad->ExceptionType = mapiappointment.GetExceptionType();
 
             MessagePart mp;
             mp.contentType = L"text/plain";

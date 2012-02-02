@@ -164,6 +164,9 @@ typedef struct _ApptItemData: BaseItemData
     vector<MAPIAppointment*> vExceptions;
     //
 
+    // exception
+    wstring ExceptionType;
+
     //data_buffer textbody;
     //data_buffer htmlbody;
 } ApptItemData;

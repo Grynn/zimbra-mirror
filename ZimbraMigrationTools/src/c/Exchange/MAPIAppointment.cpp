@@ -23,10 +23,11 @@ MAPIAppointmentException::MAPIAppointmentException(HRESULT hrErrCode, LPCWSTR lp
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 //bool MAPIAppointment::m_bNamedPropsInitialized = false;
 
-MAPIAppointment::MAPIAppointment(Zimbra::MAPI::MAPISession &session,  Zimbra::MAPI::MAPIMessage &mMessage, bool isException)
+MAPIAppointment::MAPIAppointment(Zimbra::MAPI::MAPISession &session,  Zimbra::MAPI::MAPIMessage &mMessage, int exceptionType)
                                 : MAPIRfc2445 (session, mMessage)
 {
-    m_bIsException = isException;
+    m_iExceptionType = exceptionType;
+    SetExceptionType(exceptionType);
 
     //if (MAPIAppointment::m_bNamedPropsInitialized == false)
     //{
@@ -231,7 +232,7 @@ HRESULT MAPIAppointment::SetMAPIAppointmentValues()
 
     SetOrganizerAndAttendees();
 
-    if (m_bIsRecurring)
+    if ((m_bIsRecurring) && (m_iExceptionType != CANCEL_EXCEPTION))
     {
 	if (m_pPropVals[C_RECURSTREAM].ulPropTag == appointmentProps.aulPropTag[C_RECURSTREAM])
 	{
@@ -423,7 +424,6 @@ void MAPIAppointment::SetExceptions()
     {
         Zimbra::Mapi::CRecurrenceTime rtDate = recur.GetExceptionOriginalDate(i);
         Zimbra::Mapi::CFileTime ftOrigDate = (FILETIME)rtDate;
-        //Zimbra::Mapi::CFileTime ftStart;
 
         Zimbra::Mapi::COutlookRecurrenceException *lpException = recur.GetException(i);
         if (lpException != NULL)    
@@ -435,7 +435,7 @@ void MAPIAppointment::SetExceptions()
 
             if (FAILED(hResult))
             {
-                //LOG_ERROR(_T("could not open appointment message for this occurrence "));
+                //dlogd(L"could not open appointment message for this occurrence"));
                 return;
             }
 
@@ -443,62 +443,17 @@ void MAPIAppointment::SetExceptions()
             Zimbra::Mapi::Appt pOccurrence(lpExceptionMessage.get(), OlkAppt.GetStore(),
                                            lpException, lpExceptionAttach.get(),
                                            OlkAppt.MapiMsg());
-
-            // we need to obtain exception TZ info that can be present
-            //Zimbra::Mail::TimeZone::_OlkTimeZone olkExceptTzi = { 0 };
-            //Zimbra::Util::ScopedBuffer<WCHAR> ptzExceptDesc;
-            //Zimbra::Mail::TimeZone tzExceptInfo(NULL);
-            //BOOL bFoundInfo = FALSE;
-
-            //if (SUCCEEDED(pOccurrence.GetTimezone(olkExceptTzi, ptzExceptDesc.getptr(),
-            //    &bFoundInfo)))
-            //    tzExceptInfo.Initialize(olkExceptTzi, ptzExceptDesc.get());
-
-            /*  We're not doing ProcessInv, so this code doesn't come into play
-                We may need to do something for recaculating orginal date
-            if (bFoundInfo)
-            {
-                // we have separate timezone for exception so we need to recalculate original date
-                // because this target time zone will be added to the RPC call
-                Zimbra::Mail::TimeZone::_OlkTimeZone olkMainTzi = { 0 };
-                Zimbra::Util::ScopedBuffer<WCHAR> ptzMainDesc;
-                Zimbra::Mail::TimeZone tzMainInfo(NULL);
-
-                Zimbra::Mapi::CRecurrenceTime rtOrigDate = lpException->GetOriginalDateTime();
-                Zimbra::Mapi::CFileTime ftOrigDate = (FILETIME)rtOrigDate;
-                double vOriginalDate = ftOrigDate;
-
-                if (ptzMainDesc.getptr())
-                {
-                    if (SUCCEEDED(OlkAppt.GetTimezone(olkMainTzi, ptzMainDesc.getptr())))
-                    {
-                        tzMainInfo.Initialize(olkMainTzi, ptzMainDesc.get());
-                        OlkAppt.GetStartTime(&ftStart);
-                        ftStart.MakeLocal(tzMainInfo);
-
-                        double startDate = ftStart;
-                        double origDate = ftOrigDate;
-                        double timeOnly = startDate - floor(startDate);
-
-                        origDate += timeOnly;
-
-                        ftOrigDate.MakeUTC(tzMainInfo);
-                        ftOrigDate.MakeLocal(tzExceptInfo);
-                        vOriginalDate = ftOrigDate;
-                    }
-                }
-            }
-            */
-
             MAPIMessage exMAPIMsg;
             exMAPIMsg.Initialize(lpExceptionMessage.get(), *m_session);
-            MAPIAppointment* pEx = new MAPIAppointment(*m_session, exMAPIMsg, TRUE);   // delete done in CMapiAccessWrap::GetData
+            MAPIAppointment* pEx = new MAPIAppointment(*m_session, exMAPIMsg, NORMAL_EXCEPTION);   // delete done in CMapiAccessWrap::GetData
             FillInExceptionAppt(pEx, lpException);
             m_vExceptions.push_back(pEx);
         }
         else
         {
-            // worry about cancel exceptions later
+            MAPIAppointment* pEx = new MAPIAppointment(*m_session, *m_mapiMessage, CANCEL_EXCEPTION);
+            FillInCancelException(pEx, ftOrigDate);
+            m_vExceptions.push_back(pEx);
         }
     }
 }
@@ -584,6 +539,22 @@ void MAPIAppointment::FillInExceptionAppt(MAPIAppointment* pEx, Zimbra::Mapi::CO
     }
 }
 
+void MAPIAppointment::FillInCancelException(MAPIAppointment* pEx, Zimbra::Mapi::CFileTime cancelDate)
+{
+    // should really use a copy constructor
+    pEx->m_pStartDate = MakeDateFromExPtr(cancelDate);
+    pEx->m_pSubject = m_pSubject;
+    pEx->m_pLocation = m_pLocation;
+    pEx->m_pBusyStatus = m_pBusyStatus;
+    pEx->m_pAllday = m_pAllday;
+    pEx->m_pResponseStatus = m_pResponseStatus;
+    pEx->m_pOrganizerName = m_pOrganizerName;
+    pEx->m_pOrganizerAddr = m_pOrganizerAddr;
+    pEx->m_pReminderMinutes = m_pReminderMinutes;
+    pEx->m_pPrivate = m_pPrivate;
+    pEx->m_pPlainTextFile = m_pPlainTextFile;
+    pEx->m_pHtmlFile = m_pHtmlFile;
+}
 
 void MAPIAppointment::SetSubject(LPTSTR pStr)
 {
@@ -596,7 +567,7 @@ void MAPIAppointment::SetStartDate(FILETIME ft)
     BOOL bUseLocal = false;
 
     FileTimeToSystemTime(&ft, &st);
-    if ((m_bIsRecurring) || (m_bIsException))
+    if ((m_bIsRecurring) || (m_iExceptionType == NORMAL_EXCEPTION))
     {
 	TIME_ZONE_INFORMATION localTimeZone = {0};
 	GetTimeZoneInformation(&localTimeZone);	
@@ -633,7 +604,7 @@ void MAPIAppointment::SetEndDate(FILETIME ft, bool bAllday)
     }
     else
     {
-	if ((m_bIsRecurring) || (m_bIsException))
+	if ((m_bIsRecurring) || (m_iExceptionType == NORMAL_EXCEPTION))
 	{
 	    TIME_ZONE_INFORMATION localTimeZone = {0};
 	    GetTimeZoneInformation(&localTimeZone);	
@@ -776,6 +747,23 @@ void MAPIAppointment::SetPlainTextFileAndContent()
 void MAPIAppointment::SetHtmlFileAndContent()
 {
     m_pHtmlFile = Zimbra::MAPI::Util::SetHtml(m_pMessage, &m_pPropVals[C_HTMLBODY]);
+}
+
+void MAPIAppointment::SetExceptionType(int type)
+{
+    if (type == NORMAL_EXCEPTION)
+    {
+        m_pExceptionType = L"except";
+    }
+    else
+    if (type == CANCEL_EXCEPTION)
+    {
+        m_pExceptionType = L"cancel";
+    }
+    else
+    {
+        m_pExceptionType = L"none";
+    }
 }
 
 HRESULT MAPIAppointment::SetOrganizerAndAttendees()
@@ -968,3 +956,4 @@ wstring MAPIAppointment::GetPlainTextFileAndContent() { return m_pPlainTextFile;
 wstring MAPIAppointment::GetHtmlFileAndContent() { return m_pHtmlFile; }
 vector<Attendee*> MAPIAppointment::GetAttendees() { return m_vAttendees; }
 vector<MAPIAppointment*> MAPIAppointment::GetExceptions() { return m_vExceptions; }
+wstring MAPIAppointment::GetExceptionType() { return m_pExceptionType; }
