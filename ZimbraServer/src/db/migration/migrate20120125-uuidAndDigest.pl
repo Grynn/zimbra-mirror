@@ -32,20 +32,30 @@ sub doIt() {
   Migrate::logSql("Adding uuid column and widening blob_digest column.");
   my @sqls;
   foreach my $group (Migrate::getMailboxGroups()) {
-    my $sql = <<_EOF_;
+    my $sql;
+    $sql = <<_EOF_;
 ALTER TABLE $group.mail_item
   MODIFY COLUMN blob_digest VARCHAR(44) BINARY,
   ADD COLUMN uuid VARCHAR(127) AFTER mod_content,
   ADD INDEX i_uuid (mailbox_id, uuid);
+_EOF_
+    push(@sqls,$sql);
 
+    $sql = <<_EOF_;
 ALTER TABLE $group.mail_item_dumpster
   MODIFY COLUMN blob_digest VARCHAR(44) BINARY,
   ADD COLUMN uuid VARCHAR(127) AFTER mod_content,
   ADD INDEX i_uuid (mailbox_id, uuid);
+_EOF_
+    push(@sqls,$sql);
 
+    $sql = <<_EOF_;
 ALTER TABLE $group.revision
   MODIFY COLUMN blob_digest VARCHAR(44) BINARY;
+_EOF_
+    push(@sqls,$sql);
 
+    $sql = <<_EOF_;
 ALTER TABLE $group.revision_dumpster
   MODIFY COLUMN blob_digest VARCHAR(44) BINARY;
 _EOF_
