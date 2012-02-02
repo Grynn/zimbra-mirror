@@ -47,7 +47,7 @@
     <value>false</value>
   </key>
   <key name="javamail_zsmtp">
-    <value>true</value>
+    <value>false</value>
   </key>
   <key name="mailboxd_output_filename">
     <value>zdesktop.out</value>
