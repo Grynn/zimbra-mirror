@@ -200,6 +200,30 @@ public class ZimbraSeleniumProperties {
 			return getClassContext()[1];
 		}
 	}
+	
+	/**
+	 * isWebDriver() 
+	 * method to check whether WebDriver mode is enabled
+	 * in the configuration settings
+	 */
+	public static boolean isWebDriver() {
+		if (ZimbraSeleniumProperties.getStringProperty("seleniumDriver") != null && ZimbraSeleniumProperties.getStringProperty("seleniumDriver").contentEquals("webDriver"))
+			return true;
+		else
+			return false;
+	}
+	
+	/**
+	 * isWebDriverBackedSelenium() 
+	 * method to check whether WebDriverBackedSelenium mode is enabled
+	 * in the configuration settings
+	 */
+	public static boolean isWebDriverBackedSelenium() {
+		if (ZimbraSeleniumProperties.getStringProperty("seleniumDriver") != null && ZimbraSeleniumProperties.getStringProperty("seleniumDriver").contentEquals("webDriverBackedSelenium"))
+			return true;
+		else
+			return false;
+	}
 
 	/**
 	 * App type
