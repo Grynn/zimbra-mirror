@@ -2,6 +2,7 @@ package com.zimbra.qa.selenium.framework.items;
 
 public class CommentItem extends AItem {
 
+	private String TheLocator = null;
 	private String CommentText = null;
 	private String CommentEmail = null;
 	private String CommentImage = null;
@@ -12,6 +13,20 @@ public class CommentItem extends AItem {
 		
 	}
 	
+	/**
+	 * @param theLocator the theLocator to set
+	 */
+	public void setLocator(String locator) {
+		TheLocator = locator;
+	}
+
+	/**
+	 * @return the theLocator
+	 */
+	public String getLocator() {
+		return TheLocator;
+	}
+
 	public void setParentId(String parentId) {
 		ParentId = parentId;
 	}

@@ -73,6 +73,23 @@ public class DisplayFileComments extends AbsDisplay {
 		return (page);
 	}
 
+	public void zDeleteComment(CommentItem comment) throws HarnessException {
+		
+		if ( comment == null ) 
+			throw new HarnessException("The comment cannot be null");
+		
+		if ( comment.getLocator() == null )
+			throw new HarnessException("The comment's locator is unset/null");
+		
+
+		String locator = comment.getLocator() + " span[class='comment-delete']";
+		this.zClickAt(locator, "0,0");
+		
+		this.zWaitForBusyOverlayOctopus();
+		
+		
+	}
+	
 	/**
 	 * <div tabindex="-1" id="sc2553" class="comments-list-item" style=""><div class="comment-container"><div class="comment-header"><div class="profile-img-container"><img src="/profile/vmwen1@zqa-394.eng.vmware.com/image?v=0" data-handlebars-id="2555" class="profile-image" width="32" height="32"></div><div class="comment-creator"><span tabindex="-1" id="sc2558" class="" style=""></span>
                 <span tabindex="-1" id="sc2561" class="" style="">
@@ -102,11 +119,14 @@ public class DisplayFileComments extends AbsDisplay {
 			
 			CommentItem item = new CommentItem();
 
+			// Set the locator to the item
+			item.setLocator(itemLocator);
+			
+			
 			// Get the Image
 			// TODO
 			
 			// Get the Email
-			// TODO
 			locator = itemLocator + " div[class='comment-creator'] span";
 			item.setCommentEmail(this.sGetText(locator));
 			
