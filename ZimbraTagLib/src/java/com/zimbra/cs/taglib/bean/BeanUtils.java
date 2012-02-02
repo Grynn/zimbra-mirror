@@ -1759,6 +1759,13 @@ public class BeanUtils {
 		return StringUtil.escapeHtml(in);
 	}
 
+    /**
+     * Uncooks the input string (Replaces the special characters with their equivalent HTML entities.)
+       */
+    public static String unCook(String in) {
+        return StringUtil.unEscapeHtml(in);
+    }
+
 	/**
 	 * "Cooks" an input string where an integer is expected.
 	 */
