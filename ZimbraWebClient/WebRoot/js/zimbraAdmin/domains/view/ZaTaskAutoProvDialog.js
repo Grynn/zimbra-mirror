@@ -15,8 +15,8 @@ ZaTaskAutoProvDialog = function(parent, title, width, height) {
         DwtDialog.ALIGN_LEFT, new AjxCallback(this, this._helpButtonListener));
     this._standardButtons = [DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON];
     this._extraButtons = [helpButton, applyButton];
-    this._width = width ||680;
-    this._height = height || 380;
+    this._width = width || "680px";
+    this._height = height || "390px";
     ZaXDialog.call(this, parent, null, title, this._width, this._height, null, ZaId.DLG_AUTPROV_MANUAL+"_ENHANCE");
     this._containedObject = {};
     this.initForm(ZaDomain.myXModel,this.getMyXForm());
