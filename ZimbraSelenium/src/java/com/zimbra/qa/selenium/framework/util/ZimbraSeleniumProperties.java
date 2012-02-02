@@ -207,7 +207,7 @@ public class ZimbraSeleniumProperties {
 	 * in the configuration settings
 	 */
 	public static boolean isWebDriver() {
-		if (ZimbraSeleniumProperties.getStringProperty("seleniumDriver") != null && ZimbraSeleniumProperties.getStringProperty("seleniumDriver").contentEquals("webDriver"))
+		if (ZimbraSeleniumProperties.getStringProperty("seleniumDriver") != null && ZimbraSeleniumProperties.getStringProperty("seleniumDriver").contentEquals("WebDriver"))
 			return true;
 		else
 			return false;
@@ -219,7 +219,7 @@ public class ZimbraSeleniumProperties {
 	 * in the configuration settings
 	 */
 	public static boolean isWebDriverBackedSelenium() {
-		if (ZimbraSeleniumProperties.getStringProperty("seleniumDriver") != null && ZimbraSeleniumProperties.getStringProperty("seleniumDriver").contentEquals("webDriverBackedSelenium"))
+		if (ZimbraSeleniumProperties.getStringProperty("seleniumDriver") != null && ZimbraSeleniumProperties.getStringProperty("seleniumDriver").contentEquals("WebDriverBackedSelenium"))
 			return true;
 		else
 			return false;
