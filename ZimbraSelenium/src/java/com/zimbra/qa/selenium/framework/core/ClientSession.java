@@ -2,7 +2,10 @@ package com.zimbra.qa.selenium.framework.core;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverBackedSelenium;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 
@@ -32,6 +35,9 @@ public class ClientSession {
 	private String name;	// A unique string identifying this session
 	
 	private ZimbraSelenium selenium = null;
+	private WebDriver webDriver = null;
+	private WebDriverBackedSelenium webDriverBackedSelenium = null;
+	
 	private String applicationURL = ZimbraSeleniumProperties.getStringProperty("server.scheme", "http") 
 	+ "://" + ZimbraSeleniumProperties.getStringProperty("server.host", "localhost"); 
 	private ZimbraAccount currentAccount = null;
@@ -57,6 +63,54 @@ public class ClientSession {
 							applicationURL);
 		}
 		return (selenium);
+	}
+	
+	/**
+	 * Get the current WebDriverBackedSelenium object
+	 * <p>
+	 * 
+	 * @return
+	 */
+	public WebDriverBackedSelenium webDriverBackedSelenium() {
+		if (webDriverBackedSelenium == null) {
+			if(ZimbraSeleniumProperties.getStringProperty("browser").contains("googlechrome"))
+				webDriverBackedSelenium = new WebDriverBackedSelenium(new ChromeDriver(), applicationURL);
+			else
+				webDriverBackedSelenium = new WebDriverBackedSelenium(new FirefoxDriver(), applicationURL);
+		}
+		return webDriverBackedSelenium;
+	}
+	
+	/**
+	 * Get the current WebDriver object
+	 * <p>
+	 * 
+	 * @return
+	 */
+	public WebDriver webDriver() {
+		if (webDriver == null) {
+			/*
+			try {
+				DesiredCapabilities capability = DesiredCapabilities.firefox();
+				capability.setJavascriptEnabled(true);
+				webDriver = new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"), capability);
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}									
+			*/
+			if(ZimbraSeleniumProperties.getStringProperty("browser").contains("googlechrome")){
+					webDriver = new ChromeDriver();
+			} else {
+				//FirefoxProfile profile = new FirefoxProfile();
+				//Proxy proxy = new Proxy();
+				//proxy.setHttpProxy("proxy.vmware.com:3128");
+				//profile.setProxyPreferences(proxy);
+				//profile.addExtension(....);
+				//webDriver = new FirefoxDriver(profile);
+				webDriver = new FirefoxDriver();					
+			}			
+		}
+		return webDriver;
 	}
 	
 	/**

@@ -5,6 +5,7 @@ import java.lang.reflect.Method;
 import java.util.*;
 
 import org.apache.log4j.*;
+import org.openqa.selenium.WebDriver;
 import org.testng.*;
 import org.testng.annotations.*;
 import org.xml.sax.SAXException;
@@ -73,7 +74,8 @@ public class AjaxCommonTest {
 			ZimbraSeleniumProperties.getLocalHost() + ".desktop.test", "false").toLowerCase().equals("true") ? true : false;
 
 	private static DefaultSelenium _selenium = null;
-
+	private static WebDriver _webDriver = null;
+	
 	/**
 	 * The AdminConsole application object
 	 */
@@ -172,14 +174,50 @@ public class AjaxCommonTest {
 			
 			ZimbraSeleniumProperties.setAppType(ZimbraSeleniumProperties.AppType.AJAX);
 
-
+			if (ZimbraSeleniumProperties.isWebDriver()) {
+				_webDriver = ClientSessionFactory.session().webDriver();
+				
+				/* 
+				  Set<String> handles = _webDriver.getWindowHandles(); 
+				  String script = "if (window.screen){var win = window.open(window.location); win.moveTo(0,0);win.resizeTo(window.screen.availWidth, window.screen.availHeight);};"; 
+				  ((JavascriptExecutor) _webDriver).executeScript(script); 
+				  Set<String> newHandles = _webDriver.getWindowHandles(); 
+				  newHandles.removeAll(handles); 
+				  _webDriver.switchTo().window(newHandles.iterator().next());
+				
+				 							 
+				_webDriver.manage().window().setSize(new Dimension(800,600));
+				 
+				 Selenium selenium = new WebDriverBackedSelenium(_webDriver, _webDriver.getCurrentUrl());
+				 //selenium.windowMaximize();
+				 int width = Integer.parseInt(selenium.getEval("screen.width;"));
+				 int height = Integer.parseInt(selenium.getEval("screen.height;"));
+				 _webDriver.manage().window().setPosition(new Point(0, 0));
+				 _webDriver.manage().window().setSize(new Dimension(width,height));
+				
+				*/
+								
+				//FF only
+				if(ZimbraSeleniumProperties.getStringProperty("browser").contains("firefox")){					
+					//2.17
+					//_webDriver.manage().window().setPosition(new Point(0, 0));
+					//2.17
+					//_webDriver.manage().window().setSize(new Dimension((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth(),(int)Toolkit.getDefaultToolkit().getScreenSize().getHeight()));
+				}								
+			} else if (ZimbraSeleniumProperties.isWebDriverBackedSelenium()) {
+				_selenium = ClientSessionFactory.session()
+						.webDriverBackedSelenium();
+				_selenium.windowMaximize();
+				_selenium.windowFocus();
+				_selenium.setTimeout("30000");// Use 30 second timeout for
+			} else {
 			_selenium = ClientSessionFactory.session().selenium();
 			_selenium.start();
 			_selenium.windowMaximize();
 			_selenium.windowFocus();
 			_selenium.allowNativeXpath("true");
 			_selenium.setTimeout("30000");// Use 30 second timeout for opening the browser
-
+			}
 			// Dynamic wait for App to be ready
 			int maxRetry = 10;
 			int retry = 0;
