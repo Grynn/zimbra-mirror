@@ -276,8 +276,10 @@ function() {
 ZaZimbraAdmin.prototype.getOverviewPanelController =
 function() {
 	if(ZaSettings.TREE_ENABLED) {
-		if (this._overviewPanelController == null)
-			this._overviewPanelController = new ZaOverviewPanelController(this._appCtxt, this._shell);
+		if (this._overviewPanelController == null) {
+            this._overviewPanelController = new ZaOverviewPanelController(this._appCtxt, this._shell);
+            this._overviewPanelController.addSearchListener(new AjxListener(this._overviewPanelController, ZaOverviewPanelController.prototype.handleSearchFinished));
+        }
 		return this._overviewPanelController;
 	} else {
 		return null;

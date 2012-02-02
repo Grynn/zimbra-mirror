@@ -922,4 +922,54 @@ function () {
 		}
 	}
 }
+
+/**
+ * Get the count statistics that will show in the search tree
+ * @param resp response
+ * @param orig Optional. The count statics will be added to <code>orig</code> if it is provided.
+ * It is used for batch request.
+ */
+ZaSearchListController.prototype.getSearchResultStats =
+function(resp, orig) {
+    var result = {};
+    if (orig) {
+        result = orig;
+    }
+
+    if (!resp || !resp.searchTotal) {
+        return result;
+    }
+
+    if (result.searchTotal) {
+        result.searchTotal += resp.searchTotal;
+    } else {
+        result.searchTotal = resp.searchTotal;
+    }
+
+    if (resp[ZaItem.ACCOUNT] instanceof Array) {
+        if (result[ZaItem.ACCOUNT])
+            result[ZaItem.ACCOUNT] += resp[ZaItem.ACCOUNT].length;
+        else {
+            result[ZaItem.ACCOUNT] = resp[ZaItem.ACCOUNT].length;
+        }
+    }
+
+    if (resp[ZaItem.DOMAIN] instanceof Array) {
+        if (result[ZaItem.DOMAIN])
+            result[ZaItem.DOMAIN] += resp[ZaItem.DOMAIN].length;
+        else {
+            result[ZaItem.DOMAIN] = resp[ZaItem.DOMAIN].length;
+        }
+    }
+
+    if (resp[ZaItem.DL] instanceof Array) {
+        if (result[ZaItem.DL])
+            result[ZaItem.DL] += resp[ZaItem.DL].length;
+        else {
+            result[ZaItem.DL] = resp[ZaItem.DL].length;
+        }
+    }
+    return result;
+}
+
 ZaController.changeActionsStateMethods["ZaSearchListController"].push(ZaSearchListController.changeActionsStateMethod);

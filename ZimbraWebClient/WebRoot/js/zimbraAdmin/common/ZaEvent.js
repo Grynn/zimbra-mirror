@@ -73,6 +73,7 @@ ZaEvent.E_MOVE			= ZaEvent.EVENT_TYPES_INDEX++;
 ZaEvent.E_FLAGS			= ZaEvent.EVENT_TYPES_INDEX++;
 ZaEvent.E_ADD_TAG		= ZaEvent.EVENT_TYPES_INDEX++;
 ZaEvent.E_REMOVE_TAG	= ZaEvent.EVENT_TYPES_INDEX++;
+ZaEvent.E_SEARCH  	    = ZaEvent.EVENT_TYPES_INDEX++;
 
 // Public methods
 

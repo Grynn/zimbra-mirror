@@ -106,6 +106,16 @@ function (ev) {
 	}
 }
 
+/**
+ * This listener is invoked by any controller that do a search.
+ * @param ev
+ */
+ZaOverviewPanelController.prototype.handleSearchFinished =
+function (ev) {
+    if (appNewUI) {
+        this.refreshSearchTree(ev);
+    }
+}
 
 ZaOverviewPanelController.prototype.removeCosTreeItems = 
 function(detls) {
@@ -1813,6 +1823,39 @@ ZaOverviewPanelController.prototype.refreshAccountTree = function() {
     var rootPath = tree.getABPath(rootItem.getData("dataItem"));
     if(targetPath == rootPath) {
         ZaOverviewPanelController.manageAccountTreeListener.call(this);
+    }
+}
+
+ZaOverviewPanelController.prototype.refreshSearchTree = function(ev) {
+    var details = ev.getDetails();
+    if (!details) {
+        return;
+    }
+
+    var targetPath = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_search, ZaMsg.OVP_search]);
+    var tree = this.getOverviewPanel().getFolderTree();
+    var rootItem = tree.getCurrentRootItem();
+    var rootPath = tree.getABPath(rootItem.getData("dataItem"));
+    if(targetPath != rootPath) {
+        return;
+    }
+
+    var childItems = rootItem.getItems();
+    for(var i = 0; i < childItems.length; i++) {
+        var child = childItems[i];
+        var attr = child.getData("TreeItemType");
+        var count;
+        if (attr) {
+            count = details[attr];
+        } else {
+            count = details.searchTotal;
+        }
+
+        if (count) {
+            child.setCount(count);
+        } else {
+            child.setCount(0);
+        }
     }
 }
 

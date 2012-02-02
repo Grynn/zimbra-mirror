@@ -800,6 +800,23 @@ function(listener) {
 	this._evtMgr.removeListener(ZaEvent.E_MODIFY, listener);    	
 }
 
+/**
+ * Adds listener for search finished event.
+ * @param listener
+ **/
+ZaController.prototype.addSearchListener =
+function(listener) {
+    this._evtMgr.addListener(ZaEvent.E_SEARCH, listener);
+}
+
+/**
+ * Removes listeners for search finished event.
+ * @param listener
+ **/
+ZaController.prototype.removeSearchListener =
+function(listener) {
+    this._evtMgr.removeListener(ZaEvent.E_SEARCH, listener);
+}
 
 /**
 * member of ZaXFormViewController
@@ -859,6 +876,25 @@ function(details) {
 		this._handleException(ex, "ZaXFormViewController.prototype.fireChangeEvent", null, false);	
 	}
 }
+
+/**
+ *	Method that notifies listeners that search is done
+ * 	@param details
+ */
+ZaController.prototype.fireSearchEvent =
+function(details) {
+    try {
+        if (this._evtMgr.isListenerRegistered(ZaEvent.E_SEARCH)) {
+            var evt = new ZaEvent(this.objType);
+            evt.set(ZaEvent.E_SEARCH, this);
+            evt.setDetails(details);
+            this._evtMgr.notifyListeners(ZaEvent.E_SEARCH, evt);
+        }
+    } catch (ex) {
+        this._handleException(ex, "ZaController.prototype.fireSearchEvent", details, false);
+    }
+}
+
 //item should be an xform item
 ZaController.showTooltip =
 function (event, item) {

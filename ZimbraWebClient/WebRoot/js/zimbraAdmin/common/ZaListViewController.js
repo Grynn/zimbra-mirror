@@ -210,6 +210,8 @@ function(preParams, paramsArr) {
 	}
 	
 	var respObj = ZaRequestMgr.invoke(params, reqMgrParams);
+    //Count statistics that will show in search tree
+    var resultStats;
 	if(respObj.isException && respObj.isException()) {
 		ZaApp.getInstance().getCurrentController()._handleException(respObj.getException(), "ZaListViewController.prototype.multipleSearchCallback", null, false);
 	} else if(respObj.Body.BatchResponse.Fault) {
@@ -248,6 +250,7 @@ function(preParams, paramsArr) {
 				}
 	            hasmore= resp.more|hasmore;
 				this._searchTotal += resp.searchTotal;
+                resultStats = this.getSearchResultStats(resp, resultStats);
 			}
 		        if(ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraIsAdminAccount] != 'TRUE') {
 		                var act = new AjxTimedAction(this._list, ZaItemList.prototype.loadEffectiveRights, null);
@@ -264,6 +267,8 @@ function(preParams, paramsArr) {
 
 		}
 	}
+    if(appNewUI)
+        ZaZimbraAdmin.getInstance().getOverviewPanelController().fireSearchEvent(resultStats);
 }
 
 
@@ -277,6 +282,8 @@ function(params, resp) {
 		if(!resp && !this._currentRequest.cancelled) {
 			throw(new AjxException(ZaMsg.ERROR_EMPTY_RESPONSE_ARG, AjxException.UNKNOWN, "ZaListViewController.prototype.searchCallback"));
 		}
+
+        var resultStats;
 		if(resp && resp.isException() && !this._currentRequest.cancelled) {
 			ZaSearch.handleTooManyResultsException(resp.getException(), "ZaListViewController.prototype.searchCallback");
             this._list = new ZaItemList(params.CONS);
@@ -325,12 +332,15 @@ function(params, resp) {
 				this._searchTotal = response.searchTotal;
 				var limit = params.limit ? params.limit : this.RESULTSPERPAGE; 
 				this.numPages = Math.ceil(this._searchTotal/params.limit);
+                resultStats = this.getSearchResultStats(response);
 			}
 			if(params.show)
 				this._show(this._list, params.openInNewTab, params.openInSearchTab,response.more,params.isShowBubble);
 			else
 				this._updateUI(this._list, params.openInNewTab, params.openInSearchTab,response.more);
 		}
+        if(appNewUI)
+            ZaZimbraAdmin.getInstance().getOverviewPanelController().fireSearchEvent(resultStats);
 	} catch (ex) {
 		if (ex.code != ZmCsfeException.MAIL_QUERY_PARSE_ERROR) {
 			this._handleException(ex, "ZaListViewController.prototype.searchCallback");	
@@ -342,6 +352,30 @@ function(params, resp) {
 	}
 }
 
+/**
+ * Get the count statistics of the search result.
+ * @param resp response
+ * @param orig Optional. The count statics will be added to <code>orig</code> if it is provided.
+ * It is used for batch request.
+ */
+ZaListViewController.prototype.getSearchResultStats =
+function(resp, orig) {
+    var result = {};
+    if (orig) {
+        result = orig;
+    }
+
+    if (!resp || !resp.searchTotal) {
+        return result;
+    }
+
+    if (result.searchTotal) {
+        result.searchTotal += resp.searchTotal;
+    } else {
+        result.searchTotal = resp.searchTotal;
+    }
+    return result;
+}
 
 /**
 * @param ev
