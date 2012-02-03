@@ -653,11 +653,11 @@ function(n, types,excludeClosed) {
 	
 	if (!AjxUtil.isEmpty(n)) {
 		query.push("(|");
-		// although all special symbols are escaped by server side, the "(" and ")" will bring server side parse error
-		// which will bypass the server side escape, so escape them here. Other symbols like "*", "\", ... are no need
-		// to escape
+		// bug 67477, escape special symbols "(", ")", "*", "\"
+		n = String(n).replace(/\\/g, "\\5C");
 		n = String(n).replace(/\(/g, "\\28");
 		n = String(n).replace(/\)/g, "\\29");
+		n = String(n).replace(/\*/g, "\\2A");		
         if (!types) types = [ZaSearch.ALIASES, ZaSearch.ACCOUNTS, ZaSearch.DLS, ZaSearch.RESOURCES, ZaSearch.DOMAINS, ZaSearch.COSES] ;
         var addedAddrFields = false;
         var addedAccResFields = false;
