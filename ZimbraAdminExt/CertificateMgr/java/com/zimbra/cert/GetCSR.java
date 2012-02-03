@@ -75,16 +75,18 @@ public class GetCSR extends AdminDocumentHandler {
             throw ServiceException.INVALID_REQUEST("Invalid CSR type: " + type +". Must be (self|comm).", null);    
         }
         
-        RemoteManager rmgr = RemoteManager.getRemoteManager(server);
-        ZimbraLog.security.debug("***** Executing the cmd = " + cmd) ;
-        RemoteResult rr = rmgr.execute(cmd);
         Element response = lc.createElement(CertMgrConstants.GET_CSR_RESPONSE);
         String csr_exists = "0" ;
         String isComm = "0" ;
         if (type.equals(CSR_TYPE_COMM)) {
             isComm = "1" ;
         }
+        
+        RemoteManager rmgr = RemoteManager.getRemoteManager(server);
+        ZimbraLog.security.debug("***** Executing the cmd = " + cmd) ;
+        RemoteResult rr = null;
         try {
+            rr = rmgr.execute(cmd);
             HashMap <String, String> output = OutputParser.parseOuput(rr.getMStdout()) ;
             HashMap <String, String> subjectDSN = null ;
             Vector <String> subjectAltNames = null ;
