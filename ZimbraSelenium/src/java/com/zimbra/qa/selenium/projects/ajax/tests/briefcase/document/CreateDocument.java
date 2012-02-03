@@ -337,7 +337,11 @@ public class CreateDocument extends AjaxCommonTest {
 
 		// Click on open in a separate window icon in toolbar
 		DocumentBriefcaseOpen documentBriefcaseOpen;
-
+		
+		//work around because of existing bug
+		docText = "";
+		docItem.setDocText(docText);
+		
 		if (ZimbraSeleniumProperties.zimbraGetVersionString().contains("8."))
 			documentBriefcaseOpen = (DocumentBriefcaseOpen) app.zPageBriefcase
 					.zToolbarPressPulldown(Button.B_ACTIONS,
@@ -347,7 +351,8 @@ public class CreateDocument extends AjaxCommonTest {
 			.zToolbarPressButton(Button.B_OPEN_IN_SEPARATE_WINDOW,
 					docItem);
 
-		app.zPageBriefcase.isOpenDocLoaded(docItem);
+		//app.zPageBriefcase.isOpenDocLoaded(docItem);
+		app.zPageBriefcase.zWaitForWindow(docItem.getName());
 
 		String name = "";
 		String text = "";

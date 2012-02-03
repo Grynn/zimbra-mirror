@@ -6,6 +6,7 @@ import java.util.*;
 
 import org.apache.log4j.*;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverBackedSelenium;
 import org.testng.*;
 import org.testng.annotations.*;
 import org.xml.sax.SAXException;
@@ -74,6 +75,7 @@ public class AjaxCommonTest {
 			ZimbraSeleniumProperties.getLocalHost() + ".desktop.test", "false").toLowerCase().equals("true") ? true : false;
 
 	private static DefaultSelenium _selenium = null;
+	private static WebDriverBackedSelenium _webDriverBackedSelenium = null;
 	private static WebDriver _webDriver = null;
 	
 	/**
@@ -205,11 +207,11 @@ public class AjaxCommonTest {
 					//_webDriver.manage().window().setSize(new Dimension((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth(),(int)Toolkit.getDefaultToolkit().getScreenSize().getHeight()));
 				}								
 			} else if (ZimbraSeleniumProperties.isWebDriverBackedSelenium()) {
-				_selenium = ClientSessionFactory.session()
+				_webDriverBackedSelenium = ClientSessionFactory.session()
 						.webDriverBackedSelenium();
-				_selenium.windowMaximize();
-				_selenium.windowFocus();
-				_selenium.setTimeout("30000");// Use 30 second timeout for
+				_webDriverBackedSelenium.windowMaximize();
+				_webDriverBackedSelenium.windowFocus();
+				_webDriverBackedSelenium.setTimeout("30000");// Use 30 second timeout for
 			} else {
 			_selenium = ClientSessionFactory.session().selenium();
 			_selenium.start();
@@ -227,7 +229,16 @@ public class AjaxCommonTest {
 				{
 					logger.info("Retry #" + retry);
 					retry ++;
-					_selenium.open(ZimbraSeleniumProperties.getBaseURL());
+					
+					if (ZimbraSeleniumProperties.isWebDriver()) {
+						//_webDriver.get(ZimbraSeleniumProperties.getBaseURL());
+						_webDriver.navigate().to(ZimbraSeleniumProperties.getBaseURL());
+					} 
+					else if (ZimbraSeleniumProperties.isWebDriverBackedSelenium()) 
+						_webDriverBackedSelenium.open(ZimbraSeleniumProperties.getBaseURL());
+					else
+						_selenium.open(ZimbraSeleniumProperties.getBaseURL());
+
 					appIsReady = true;
 				} catch (SeleniumException e) {
 					if (retry == maxRetry) {
@@ -413,8 +424,7 @@ public class AjaxCommonTest {
 			logger.debug("commonTestBeforeMethod: AccountZWC is not currently logged in");
 
 			if ( app.zPageMain.zIsActive() )
-				app.zPageMain.zLogout();
-			
+				app.zPageMain.zLogout();			
 		}
 
 		// If a startingPage is defined, then make sure we are on that page
@@ -454,14 +464,18 @@ public class AjaxCommonTest {
 	public void commonTestAfterSuite() throws HarnessException {	
 		logger.info("commonTestAfterSuite: start");
 
-
-		ClientSessionFactory.session().selenium().stop();
-
+		if (ZimbraSeleniumProperties.isWebDriver()) {
+			_webDriver.close();
+			_webDriver.quit();
+		} else if (ZimbraSeleniumProperties.isWebDriverBackedSelenium()) {
+			_webDriverBackedSelenium.stop();
+		} else {
+			ClientSessionFactory.session().selenium().stop();
+		}
+		
 		_repository.endRepository();
 
 		logger.info("commonTestAfterSuite: finish");
-
-
 
 	}
 

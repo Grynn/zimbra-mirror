@@ -48,7 +48,7 @@ public class PageBriefcase extends AbsTab {
 		public static final Locators briefcaseListView = new Locators(
 				"css=div[id='zl__BDLV__rows'][class='DwtListView-Rows']");
 		public static final Locators zBriefcaseFolderIcon = new Locators(
-				"id=zti__main_Briefcase__16");
+				"css=div[id='zti__main_Briefcase__16']");
 		public static final Locators zBriefcaseFolderIcon_Desktop = new Locators(
 				"css=div[id*='Briefcase'][id$='16_div']");
 		public static final Locators zTrashFolder = new Locators(
@@ -195,8 +195,8 @@ public class PageBriefcase extends AbsTab {
 
 		// Make sure we are logged into the Ajax app
 		if (!((AppAjaxClient) MyApplication).zPageMain.zIsActive())
-			((AppAjaxClient) MyApplication).zPageMain.zNavigateTo();
-
+			((AppAjaxClient) MyApplication).zPageMain.zNavigateTo();			
+				
 		// Click on Briefcase icon
 		zClickAt(PageMain.Locators.zAppbarBriefcase, "0,0");
 
@@ -1502,32 +1502,37 @@ public class PageBriefcase extends AbsTab {
 
 		boolean found = false;
 
-		String[] windowNames = ClientSessionFactory.session().selenium()
-				.getAllWindowNames();
+		if (ZimbraSeleniumProperties.isWebDriverBackedSelenium()
+				|| ZimbraSeleniumProperties.isWebDriver()) {
+			super.zSelectWindow(windowID);
+		} else {
+			String[] windowNames = ClientSessionFactory.session()
+					.selenium().getAllWindowNames();
 
-		for (int i = 0; i < windowNames.length; i++) {
-			if (windowNames[i].contains(windowID.split("\\.")[0])) {
-				this.sSelectWindow(windowNames[i]);
-				found = true;
-				break;
-			}
-		}
-
-		if (!found) {
-			String[] windowTitles = ClientSessionFactory.session().selenium()
-					.getAllWindowTitles();
-			for (int i = 0; i < windowTitles.length; i++) {
-				if (windowTitles[i].contains(windowID.split("\\.")[0])) {
-					this.sSelectWindow(windowTitles[i]);
+			for (int i = 0; i < windowNames.length; i++) {
+				if (windowNames[i].contains(windowID.split("\\.")[0])) {
+					this.sSelectWindow(windowNames[i]);
 					found = true;
 					break;
 				}
 			}
-		}
 
-		if (found) {
-			this.sWindowFocus();
-			this.sWindowMaximize();
+			if (!found) {
+				String[] windowTitles = ClientSessionFactory.session()
+						.selenium().getAllWindowTitles();
+				for (int i = 0; i < windowTitles.length; i++) {
+					if (windowTitles[i].contains(windowID.split("\\.")[0])) {
+						this.sSelectWindow(windowTitles[i]);
+						found = true;
+						break;
+					}
+				}
+			}
+
+			if (found) {
+				this.sWindowFocus();
+				this.sWindowMaximize();
+			}
 		}
 	}
 
