@@ -128,12 +128,18 @@ function(stepNum) {
 			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
 	} else {
 		if(stepNum == ZaNewDomainXWizard.GENERAL_STEP) {
-			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
+            if (this._containedObject.attrs[ZaDomain.A_domainName])
+			    this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
+            else
+			    this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
 			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);
 			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
 		} else if (stepNum == ZaNewDomainXWizard.GALMODE_STEP) {
 			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
-			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
+            if(this.checkGALAccount())
+			    this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
+            else
+			    this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
 			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
 		} else if(stepNum == ZaNewDomainXWizard.GAL_CONFIG_SUM_STEP) {
 			//change next button to "test"
@@ -480,7 +486,10 @@ ZaNewDomainXWizard.prototype.popup =
 function (loc) {
 	ZaXWizardDialog.prototype.popup.call(this, loc);
 	this._button[DwtWizardDialog.NEXT_BUTTON].setText(AjxMsg._next);
-	this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
+    if (this._containedObject.attrs[ZaDomain.A_domainName])
+	    this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
+    else
+	    this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
 	this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
 	this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);	
 }
