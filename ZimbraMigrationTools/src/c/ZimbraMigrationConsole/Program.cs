@@ -66,14 +66,14 @@ class Program
                 string retval = "";   
                 if (myXmlConfig.UserList.Count > 0)
                 {
-                    if (myXmlConfig.ConfigObj.OutlookProfile != "")
+                    if (myXmlConfig.ConfigObj.mailServer.OutlookProfile != "")
                     {
                         // profile migration
                        /* TestObj.Initalize(myXmlConfig.ConfigObj.zimbraServer.ZimbraHostname,
                             myXmlConfig.ConfigObj.zimbraServer.Port,
                             myXmlConfig.ConfigObj.zimbraServer.ZimbraAdminID,
                             myXmlConfig.ConfigObj.OutlookProfile, "", "");*/
-                        retval = TestObj.GlobalInit(myXmlConfig.ConfigObj.OutlookProfile, "", "");
+                        retval = TestObj.GlobalInit(myXmlConfig.ConfigObj.mailServer.OutlookProfile, "", "");
                     }
                     else
                     {
@@ -231,7 +231,7 @@ class Program
                 else
                 {
 
-                    if ((myXmlConfig.ConfigObj.OutlookProfile != "") || (myXmlConfig.ConfigObj.PSTFile != ""))
+                    if ((myXmlConfig.ConfigObj.mailServer.OutlookProfile != "") || (myXmlConfig.ConfigObj.mailServer.PSTFile != ""))
                     {
                         // ServerMigration = false;
 
@@ -240,16 +240,16 @@ class Program
 
                         string accountname = myXmlConfig.ConfigObj.zimbraServer.UserAccount;
                         accountname = accountname + "@" + myXmlConfig.ConfigObj.zimbraServer.ZimbraHostname;
-                        string accountid = (myXmlConfig.ConfigObj.PSTFile != "") ? myXmlConfig.ConfigObj.PSTFile : myXmlConfig.ConfigObj.OutlookProfile;
-                        
-                        if (myXmlConfig.ConfigObj.OutlookProfile != "")
+                        string accountid = (myXmlConfig.ConfigObj.mailServer.PSTFile != "") ? myXmlConfig.ConfigObj.mailServer.PSTFile : myXmlConfig.ConfigObj.mailServer.OutlookProfile;
+
+                        if (myXmlConfig.ConfigObj.mailServer.OutlookProfile != "")
                         {
                            /* TestObj.Initalize(myXmlConfig.ConfigObj.zimbraServer.ZimbraHostname,
                                    myXmlConfig.ConfigObj.zimbraServer.Port,
                                    myXmlConfig.ConfigObj.zimbraServer.UserAccount,
                                    myXmlConfig.ConfigObj.OutlookProfile, "",
                                    "");*/
-                            retval = TestObj.GlobalInit(myXmlConfig.ConfigObj.OutlookProfile, "", "");
+                            retval = TestObj.GlobalInit(myXmlConfig.ConfigObj.mailServer.OutlookProfile, "", "");
                             if (retval.Length > 0)
                             {
                                 System.Console.WriteLine();

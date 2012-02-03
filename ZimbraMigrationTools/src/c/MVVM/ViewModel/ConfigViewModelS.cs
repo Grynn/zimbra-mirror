@@ -37,11 +37,11 @@ public class ConfigViewModelS: BaseViewModel
     }
     public void LoadConfig(Config config)
     {
-        if (config.mailServer.SourceHostname.Length == 0)
+        if (config.mailServer.UseProfile)
         {
             Isprofile = true;
             IsmailServer = false;
-            OutlookProfile = config.OutlookProfile;
+            OutlookProfile = config.mailServer.OutlookProfile;
             if (ProfileList.Count > 0)
                 CurrentProfileSelection = (OutlookProfile == null) ? 0 : ProfileList.IndexOf(
                     OutlookProfile);
@@ -100,41 +100,21 @@ public class ConfigViewModelS: BaseViewModel
         get;
         private set;
     }
-    public void SaveConfig(string XmlfileName)
-    {
-        UpdateXmlElement(XmlfileName, "OutlookProfile");
-        UpdateXmlElement(XmlfileName, "PSTFile");
-        UpdateXmlElement(XmlfileName, "mailServer");
-    }
 
     private void Save()
     {
-        if (CurrentProfileSelection > -1)
-        {
-            if (ProfileList.Count > 0)
-                OutlookProfile = ProfileList[CurrentProfileSelection];
-        }
         Microsoft.Win32.SaveFileDialog fDialog = new Microsoft.Win32.SaveFileDialog();
         fDialog.Filter = "Config Files|*.xml";
         if (fDialog.ShowDialog() == true)
         {
-            if (File.Exists(fDialog.FileName))
-            {
-                SaveConfig(fDialog.FileName);
-                ((ConfigViewModelSDest)ViewModelPtrs[(int)ViewType.SVRDEST]).SaveConfig(
-                    fDialog.FileName);
-                ((OptionsViewModel)ViewModelPtrs[(int)ViewType.OPTIONS]).SaveConfig(
-                    fDialog.FileName);
-            }
-            else
-            {
-                System.Xml.Serialization.XmlSerializer writer =
-                    new System.Xml.Serialization.XmlSerializer(typeof (Config));
+            System.Xml.Serialization.XmlSerializer writer =
+                new System.Xml.Serialization.XmlSerializer(typeof(Config));
 
-                System.IO.StreamWriter file = new System.IO.StreamWriter(fDialog.FileName);
-                writer.Serialize(file, m_config);
-                file.Close();
-            }
+            System.IO.StreamWriter file = new System.IO.StreamWriter(fDialog.FileName);
+            PopulateConfig(isServer);
+            writer.Serialize(file, m_config);
+            file.Close();
+
             ((ScheduleViewModel)ViewModelPtrs[(int)ViewType.SCHED]).SetConfigFile(
                 fDialog.FileName);
         }
@@ -223,12 +203,12 @@ public class ConfigViewModelS: BaseViewModel
         }
     }
     public string OutlookProfile {
-        get { return m_config.OutlookProfile; }
+        get { return m_config.mailServer.OutlookProfile; }
         set
         {
-            if (value == m_config.OutlookProfile)
+            if (value == m_config.mailServer.OutlookProfile)
                 return;
-            m_config.OutlookProfile = value;
+            m_config.mailServer.OutlookProfile = value;
             OnPropertyChanged(new PropertyChangedEventArgs("OutlookProfile"));
         }
     }

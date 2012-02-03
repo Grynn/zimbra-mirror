@@ -77,10 +77,6 @@ public class ConfigViewModelSDest: BaseViewModel
         get;
         private set;
     }
-    public void SaveConfig(string XmlfileName)
-    {
-        UpdateXmlElement(XmlfileName, "zimbraServer");
-    }
 
     private void Save()
     {
@@ -88,23 +84,14 @@ public class ConfigViewModelSDest: BaseViewModel
         fDialog.Filter = "Config Files|*.xml";
         if (fDialog.ShowDialog() == true)
         {
-            if (File.Exists(fDialog.FileName))
-            {
-                SaveConfig(fDialog.FileName);
-                ((ConfigViewModelS)ViewModelPtrs[(int)ViewType.SVRSRC]).SaveConfig(
-                    fDialog.FileName);
-                ((OptionsViewModel)ViewModelPtrs[(int)ViewType.OPTIONS]).SaveConfig(
-                    fDialog.FileName);
-            }
-            else
-            {
-                System.Xml.Serialization.XmlSerializer writer =
-                    new System.Xml.Serialization.XmlSerializer(typeof (Config));
+            System.Xml.Serialization.XmlSerializer writer =
+                new System.Xml.Serialization.XmlSerializer(typeof(Config));
 
-                System.IO.StreamWriter file = new System.IO.StreamWriter(fDialog.FileName);
-                writer.Serialize(file, m_config);
-                file.Close();
-            }
+            System.IO.StreamWriter file = new System.IO.StreamWriter(fDialog.FileName);
+            PopulateConfig(isServer);
+            writer.Serialize(file, m_config);
+            file.Close();
+
             ((ScheduleViewModel)ViewModelPtrs[(int)ViewType.SCHED]).SetConfigFile(
                 fDialog.FileName);
         }

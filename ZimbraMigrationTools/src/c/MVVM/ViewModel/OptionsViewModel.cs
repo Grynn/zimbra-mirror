@@ -136,46 +136,20 @@ public class OptionsViewModel: BaseViewModel
         }
     }
 
-    public void SaveConfig(string XmlfileName)
-    {
-        UpdateXmlElement(XmlfileName, "importOptions");
-        UpdateXmlElement(XmlfileName, "AdvancedImportOptions");
-        UpdateXmlElement(XmlfileName, "LoggingOptions");
-    }
-
     private void Save()
     {
         Microsoft.Win32.SaveFileDialog fDialog = new Microsoft.Win32.SaveFileDialog();
         fDialog.Filter = "Config Files|*.xml";
         if (fDialog.ShowDialog() == true)
         {
-            if (File.Exists(fDialog.FileName))
-            {
-                SaveConfig(fDialog.FileName);
-                if (isServer)
-                {
-                    ((ConfigViewModelS)ViewModelPtrs[(int)ViewType.SVRSRC]).SaveConfig(
-                        fDialog.FileName);
-                    ((ConfigViewModelSDest)ViewModelPtrs[(int)ViewType.SVRDEST]).SaveConfig(
-                        fDialog.FileName);
-                }
-                else
-                {
-                    ((ConfigViewModelU)ViewModelPtrs[(int)ViewType.USRSRC]).SaveConfig(
-                        fDialog.FileName);
-                    ((ConfigViewModelUDest)ViewModelPtrs[(int)ViewType.USRDEST]).SaveConfig(
-                        fDialog.FileName);
-                }
-            }
-            else
-            {
-                System.Xml.Serialization.XmlSerializer writer =
-                    new System.Xml.Serialization.XmlSerializer(typeof (Config));
+            System.Xml.Serialization.XmlSerializer writer =
+                new System.Xml.Serialization.XmlSerializer(typeof(Config));
 
-                System.IO.StreamWriter file = new System.IO.StreamWriter(fDialog.FileName);
-                writer.Serialize(file, m_config);
-                file.Close();
-            }
+            System.IO.StreamWriter file = new System.IO.StreamWriter(fDialog.FileName);
+            PopulateConfig(isServer);
+            writer.Serialize(file, m_config);
+            file.Close();
+
             ((ScheduleViewModel)ViewModelPtrs[(int)ViewType.SCHED]).SetConfigFile(
                 fDialog.FileName);
         }

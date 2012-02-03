@@ -51,24 +51,26 @@ public class ConfigViewModelU: BaseViewModel
     }
     public void LoadConfig(Config config)
     {
-        if (config.OutlookProfile.Length == 0)
-        {
-            Isprofile = false;
-            IspST = true;
-
-            PSTFile = config.PSTFile;
-        }
-        else
+        if (config.mailServer.UseProfile)
         {
             Isprofile = true;
             IspST = false;
-            OutlookProfile = config.OutlookProfile;
+            OutlookProfile = config.mailServer.OutlookProfile;
             if (ProfileList.Count > 0)
+            {
                 CurrentProfileSelection = (OutlookProfile == null) ? 0 : ProfileList.IndexOf(
                     OutlookProfile);
-
+            }
             else
+            {
                 ProfileList.Add(OutlookProfile);
+            }
+        }
+        else
+        {
+            Isprofile = false;
+            IspST = true;
+            PSTFile = config.mailServer.PSTFile;
         }
     }
 
@@ -102,7 +104,17 @@ public class ConfigViewModelU: BaseViewModel
                 }
 
                 fileRead.Close();
-                LoadConfig(config);
+                try
+                {
+                    LoadConfig(config);
+                }
+                catch (Exception e)
+                {
+                    string temp = string.Format("Load error.\n{0}", e.Message);
+                    MessageBox.Show(temp, "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);;
+                    return;
+                }
+
                 ((ConfigViewModelUDest)ViewModelPtrs[(int)ViewType.USRDEST]).LoadConfig(config);
                 ((OptionsViewModel)ViewModelPtrs[(int)ViewType.OPTIONS]).LoadConfig(config);
             }
@@ -112,41 +124,23 @@ public class ConfigViewModelU: BaseViewModel
         get;
         private set;
     }
-    public void SaveConfig(string XmlfileName)
-    {
-        UpdateXmlElement(XmlfileName, "OutlookProfile");
-        UpdateXmlElement(XmlfileName, "PSTFile");
-        UpdateXmlElement(XmlfileName, "mailServer");
-    }
 
     private void Save()
     {
-        if (CurrentProfileSelection > -1)
-            OutlookProfile = ProfileList[CurrentProfileSelection];
         Microsoft.Win32.SaveFileDialog fDialog = new Microsoft.Win32.SaveFileDialog();
         fDialog.Filter = "Config Files|*.xml";
         if (fDialog.ShowDialog() == true)
         {
-            if (File.Exists(fDialog.FileName))
-            {
-                SaveConfig(fDialog.FileName);
-                ((ConfigViewModelUDest)ViewModelPtrs[(int)ViewType.USRDEST]).SaveConfig(
-                    fDialog.FileName);
-                ((OptionsViewModel)ViewModelPtrs[(int)ViewType.OPTIONS]).SaveConfig(
-                    fDialog.FileName);
-            }
-            else
-            {
-                System.Xml.Serialization.XmlSerializer writer =
-                    new System.Xml.Serialization.XmlSerializer(typeof (Config));
+            System.Xml.Serialization.XmlSerializer writer =
+                new System.Xml.Serialization.XmlSerializer(typeof(Config));
 
-                /*if (System.IO.Directory.Exists(@"C:\Temp\") == false)
-                 *  System.IO.Directory.CreateDirectory(@"C:\Temp\");*/
+            System.IO.StreamWriter file = new System.IO.StreamWriter(fDialog.FileName);
+            PopulateConfig(isServer);
+            writer.Serialize(file, m_config);
+            file.Close();
 
-                System.IO.StreamWriter file = new System.IO.StreamWriter(fDialog.FileName);
-                writer.Serialize(file, m_config);
-                file.Close();
-            }
+            ((ScheduleViewModel)ViewModelPtrs[(int)ViewType.SCHED]).SetConfigFile(
+                fDialog.FileName);
         }
     }
     public ICommand BackCommand {
@@ -201,12 +195,12 @@ public class ConfigViewModelU: BaseViewModel
         lb.SelectedIndex = 2;
     }
     public string OutlookProfile {
-        get { return m_config.OutlookProfile; }
+        get { return m_config.mailServer.OutlookProfile; }
         set
         {
-            if (value == m_config.OutlookProfile)
+            if (value == m_config.mailServer.OutlookProfile)
                 return;
-            m_config.OutlookProfile = value;
+            m_config.mailServer.OutlookProfile = value;
             // m_config.mailServer.ProfileName= value;
             CSEnableNext = true;
             OnPropertyChanged(new PropertyChangedEventArgs("OutlookProfile"));
@@ -231,13 +225,12 @@ public class ConfigViewModelU: BaseViewModel
     }
     private int profileselection;
     public string PSTFile {
-        get { return m_config.PSTFile; }
+        get { return m_config.mailServer.PSTFile; }
         set
         {
-            if (value == m_config.PSTFile)
+            if (value == m_config.mailServer.PSTFile)
                 return;
-            m_config.PSTFile = value;
-            // m_config.mailServer.PSTFile = value;
+            m_config.mailServer.PSTFile = value;
             OnPropertyChanged(new PropertyChangedEventArgs("PSTFile"));
         }
     }

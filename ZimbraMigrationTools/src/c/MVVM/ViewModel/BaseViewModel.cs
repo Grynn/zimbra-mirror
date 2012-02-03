@@ -119,6 +119,82 @@ public class BaseViewModel: INotifyPropertyChanged
         xmlDoc.Save(XmlfileName);
     }
 
+    public void PopulateConfig(bool isServer)
+    {
+	ConfigViewModelS     serverSourceModel = (ConfigViewModelS)ViewModelPtrs[(int)ViewType.SVRSRC];
+        ConfigViewModelSDest serverDestModel   = (ConfigViewModelSDest)ViewModelPtrs[(int)ViewType.SVRDEST];
+        ConfigViewModelU     userSourceModel   = (ConfigViewModelU)ViewModelPtrs[(int)ViewType.USRSRC];
+	ConfigViewModelUDest userDestModel     = (ConfigViewModelUDest)ViewModelPtrs[(int)ViewType.USRDEST];
+	OptionsViewModel     optionsModel      = (OptionsViewModel)ViewModelPtrs[(int)ViewType.OPTIONS];
+	UsersViewModel       usersModel        = (UsersViewModel)ViewModelPtrs[(int)ViewType.USERS];
+
+        m_config.mailServer.OutlookProfile = "";
+        if (isServer)
+	{
+            int sel = serverSourceModel.CurrentProfileSelection;
+            if (sel != -1)
+            {
+                if (serverSourceModel.ProfileList.Count > 0)
+                {
+                    m_config.mailServer.OutlookProfile = serverSourceModel.ProfileList[sel];
+                }
+            } 
+	    m_config.mailServer.SourceHostname   = serverSourceModel.MailServerHostName;
+	    m_config.mailServer.SourceAdminID    = serverSourceModel.MailServerAdminID;
+	    m_config.mailServer.SourceAdminPwd   = serverSourceModel.MailServerAdminPwd;
+	    m_config.mailServer.UseProfile       = serverSourceModel.Isprofile;
+	    m_config.zimbraServer.ZimbraHostname = serverDestModel.ZimbraServerHostName;
+	    m_config.zimbraServer.Port           = serverDestModel.ZimbraPort;
+	    m_config.zimbraServer.ZimbraAdminID  = serverDestModel.ZimbraAdmin;
+	    m_config.zimbraServer.ZimbraAdminPwd = serverDestModel.ZimbraAdminPasswd;
+            m_config.UserProvision.Domain        = usersModel.ZimbraDomain;
+	}
+	else
+	{
+            int sel = userSourceModel.CurrentProfileSelection;
+            if (sel != -1)
+            {
+                if (userSourceModel.ProfileList.Count > 0)
+                {
+                    m_config.mailServer.OutlookProfile = userSourceModel.ProfileList[sel];
+                }
+            } 
+	    m_config.mailServer.PSTFile          = userSourceModel.PSTFile;
+	    m_config.mailServer.UseProfile       = userSourceModel.Isprofile;
+	    m_config.zimbraServer.ZimbraHostname = userDestModel.ZimbraServerHostName;
+	    m_config.zimbraServer.Port           = userDestModel.ZimbraPort;
+	    m_config.zimbraServer.UserAccount    = userDestModel.ZimbraUser;
+	    m_config.zimbraServer.UserPassword   = userDestModel.ZimbraUserPasswd;
+	}
+
+        m_config.LoggingOptions.Verbose     = optionsModel.LoggingVerbose;
+        m_config.importOptions.Mail         = optionsModel.ImportMailOptions;
+        m_config.importOptions.Calendar     = optionsModel.ImportCalendarOptions;
+        m_config.importOptions.Contacts     = optionsModel.ImportContactOptions;
+        m_config.importOptions.DeletedItems = optionsModel.ImportDeletedItemOptions;
+        m_config.importOptions.Junk         = optionsModel.ImportJunkOptions;
+        m_config.importOptions.Tasks        = optionsModel.ImportTaskOptions;
+        m_config.importOptions.Sent         = optionsModel.ImportSentOptions;
+        m_config.importOptions.Rules        = optionsModel.ImportRuleOptions;
+        m_config.AdvancedImportOptions.MigrateONRAfter = DateTime.Parse(optionsModel.MigrateONRAfter);
+        m_config.AdvancedImportOptions.MaxMessageSize = optionsModel.MaxMessageSize;
+
+        // deal with skip folders
+        if (optionsModel.FoldersToSkip != null)
+        {
+            if (optionsModel.FoldersToSkip.Length > 0)
+            {
+                string[] nameTokens = optionsModel.FoldersToSkip.Split(',');
+                for (int i = 0; i < nameTokens.Length; i++)
+                {
+                    Folder folder = new Folder();
+                    folder.FolderName = nameTokens.GetValue(i).ToString();
+                    m_config.AdvancedImportOptions.FoldersToSkip[i] = folder;
+                }
+            }
+        }
+    }
+
     protected void DoHelp(string htmlFile)
     {
         string fileName;

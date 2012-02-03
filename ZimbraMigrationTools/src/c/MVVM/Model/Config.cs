@@ -9,8 +9,6 @@ public class Config
         outlookProfile, string pstFile, string zimbraserverhostname, string zimbraport,
         string zimbraAdmin, string zimbrapasswd, string zimbradomain, string pstfile)
     {
-        this.OutlookProfile = outlookProfile;
-        this.PSTFile = pstFile;
         this.zimbraServer = new ZimbraServer();
         this.mailServer = new MailServer();
         this.importOptions = new ImportOptions();
@@ -27,26 +25,15 @@ public class Config
         this.mailServer.SourceHostname = mailserver;
         this.mailServer.SourceAdminID = srcAdminId;
         this.mailServer.SourceAdminPwd = srcAdminPwd;
+        this.mailServer.OutlookProfile = outlookProfile;
+        this.mailServer.PSTFile = pstFile;
+        this.mailServer.UseProfile = true;
 
         this.GeneralOptions = new GeneralOptions();
         // this.mailServer.PSTFile = pstfile;
         // this.mailServer.ProfileName = outlookProfile;
     }
 
-    // we donot need a exchange profile..
-
-    /* public string ExchangeProfile
-     * {
-     *   get; set;
-     * }*/
-    public string OutlookProfile {
-        get;
-        set;
-    }
-    public string PSTFile {
-        get;
-        set;
-    }
     public bool CSEnableNext {
         get;
         set;
@@ -77,10 +64,22 @@ public class MailServer
         get { return m_SourceAdminPwd; }
         set { m_SourceAdminPwd = value; }
     }
+    private string m_OutlookProfile;
+    public string OutlookProfile
+    {
+        get { return m_OutlookProfile; }
+        set { m_OutlookProfile = value; }
+    }
     private string m_PSTFile;
     public string PSTFile {
         get { return m_PSTFile; }
         set { m_PSTFile = value; }
+    }
+    private bool m_UseProfile;
+    public bool UseProfile
+    {
+        get { return m_UseProfile; }
+        set { m_UseProfile = value; }
     }
 }
 
