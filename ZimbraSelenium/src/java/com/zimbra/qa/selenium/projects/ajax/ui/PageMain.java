@@ -71,7 +71,7 @@ public class PageMain extends AbsTab {
 			condition = (new WebDriverWait(ClientSessionFactory.session().webDriver(), 2000))
 					.until(new ExpectedCondition<Boolean>() {
 						public Boolean apply(WebDriver d) {
-							return (Boolean) ((JavascriptExecutor) webDriver())
+							return (Boolean) ((JavascriptExecutor) ClientSessionFactory.session().webDriver())
 									.executeScript("return top.appCtxt.getZimletMgr().loaded");
 						}
 					});
