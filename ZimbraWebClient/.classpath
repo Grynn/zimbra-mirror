@@ -17,8 +17,8 @@
 	<classpathentry kind="lib" path="jars/freemarker-2.2.8.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraClient"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraServer"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/jetty-servlet-7.5.5-SNAPSHOT.jar"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/jetty-server-7.5.5-SNAPSHOT.jar"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/jetty-util-7.5.5-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/jetty-servlet-7.6.0-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/jetty-server-7.6.0-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/jetty-util-7.6.0-SNAPSHOT.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
