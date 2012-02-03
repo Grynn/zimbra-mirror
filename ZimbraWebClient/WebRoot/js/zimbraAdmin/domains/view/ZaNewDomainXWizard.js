@@ -836,7 +836,7 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject, entry) {
                                             enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A2_create_gal_acc,"TRUE"]],
                                             visibilityChecks:[]
                                         },
-                                        {ref:ZaDomain.A2_new_internal_gal_ds_name, label:ZaMsg.Domain_InternalGALDSName, type:_TEXTFIELD_,
+                                        {ref:ZaDomain.A2_new_internal_gal_ds_name, label:ZaMsg.Domain_InternalGALDSName, type:_TEXTFIELD_, required:true,
                                             visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode],
                                             visibilityChecks:[ZaNewDomainXWizard.isDomainModeNotExternal],
                                             enableDisableChangeEventSources:[ZaDomain.A2_create_gal_acc],
