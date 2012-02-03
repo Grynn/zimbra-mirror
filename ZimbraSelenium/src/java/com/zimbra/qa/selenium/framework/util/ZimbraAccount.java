@@ -594,6 +594,14 @@ public class ZimbraAccount {
 		return (preferences.get(key));
 		
 	}
+	
+	public void clearPref(String key) throws HarnessException {
+		
+		if ( preferences.containsKey(key) ) {
+			preferences.remove(key);
+		}
+		
+	}
 
 	/**
 	 * Get this Account's Locale Preference (zimbraPrefLocale)

@@ -105,52 +105,197 @@ public class ViewSharedComment extends OctopusCommonTest {
 		// Click on My Files tab
 		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_MY_FILES);
 
-		// Go to the subfolder
-		app.zPageMyFiles.zListItem(Action.A_LEFTCLICK, subFolderName);
-
-		// Verify file exists in My Files view
-		ZAssert.assertTrue(app.zPageMyFiles.zWaitForElementPresent(
-				PageMyFiles.Locators.zMyFilesListViewItems.locator
-						+ ":contains(" + filename + ")", "3000"),
-				"Verify file appears in My Files view");
-
-		// Select file in the list view
-		DisplayFilePreview filePreview = (DisplayFilePreview) app.zPageMyFiles.zListItem(Action.A_LEFTCLICK, filename);
-
-		DisplayFileComments fileComments = null;
 		
+		// Since we are going to a subfolder, always back out to My Files at the end
 		try {
-
-			// Click on Comments button
-			fileComments = (DisplayFileComments) filePreview.zPressButton(Button.B_COMMENTS);
 			
-			CommentItem found = null;
-			List<CommentItem> comments = fileComments.zGetCommentsList();
-			for ( CommentItem comment : comments ) {
+			// Go to the subfolder
+			app.zPageMyFiles.zListItem(Action.A_LEFTCLICK, subFolderName);
+	
+			// Verify file exists in My Files view
+			ZAssert.assertTrue(app.zPageMyFiles.zWaitForElementPresent(
+					PageMyFiles.Locators.zMyFilesListViewItems.locator
+							+ ":contains(" + filename + ")", "3000"),
+					"Verify file appears in My Files view");
+	
+			// Select file in the list view
+			DisplayFilePreview filePreview = (DisplayFilePreview) app.zPageMyFiles.zListItem(Action.A_LEFTCLICK, filename);
+	
+			DisplayFileComments fileComments = null;
+			
+			try {
+	
+				// Click on Comments button
+				fileComments = (DisplayFileComments) filePreview.zPressButton(Button.B_COMMENTS);
 				
-				// Verify the comment is found
-				if (comment.getCommentText().equals(commentText)) {
-					found = comment;
-					break;
+				CommentItem found = null;
+				List<CommentItem> comments = fileComments.zGetCommentsList();
+				for ( CommentItem comment : comments ) {
+					
+					// Verify the comment is found
+					if (comment.getCommentText().equals(commentText)) {
+						found = comment;
+						break;
+					}
+					
 				}
 				
+				ZAssert.assertNotNull(found, "Verify the commment is found");
+				
+				ZAssert.assertEquals(found.getCommentText(), commentText, "Verify the comment text matches");
+				ZAssert.assertEquals(found.getCommentEmail(), destination.getPref("displayName"), "Verify the comment email matches");
+	
+			
+			} finally {
+				if ( fileComments != null ) {
+					
+					// close Comments view
+					fileComments.zPressButton(Button.B_CLOSE);
+					fileComments = null;
+	
+				}
 			}
-			
-			ZAssert.assertNotNull(found, "Verify the commment is found");
-			
-			ZAssert.assertEquals(found.getCommentText(), commentText, "Verify the comment text matches");
-			ZAssert.assertEquals(found.getCommentEmail(), destination.getPref("displayName"), "Verify the comment email matches");
+
+		} finally {
+			app.zPageOctopus.zToolbarPressButton(Button.B_TAB_FAVORITES);
+			app.zPageOctopus.zToolbarPressButton(Button.B_TAB_MY_FILES);
+		}
+
+	}
+
+	@Test(
+			description = "View comment from another user that does not contain a display name",
+			groups = { "smoke" })
+	public void ViewSharedComment_02() throws HarnessException {
 
 		
-		} finally {
-			if ( fileComments != null ) {
-				
-				// close Comments view
-				fileComments.zPressButton(Button.B_CLOSE);
-				fileComments = null;
+		ZimbraAccount otherUser = new ZimbraAccount();
+		otherUser.clearPref("displayName"); // By default, a displayName is always set.  Clear it.
+		otherUser.provision();
+		otherUser.authenticate();
+		
+		String filename = "filename"+ ZimbraSeleniumProperties.getUniqueString() +".txt";
+		String filePath = ZimbraSeleniumProperties.getBaseDirectory()
+				+ "/data/public/documents/doc01/plaintext.txt";
+		String subFolderName = "subFolder" + ZimbraSeleniumProperties.getUniqueString();
 
+		
+		String commentText = "Comment" + ZimbraSeleniumProperties.getUniqueString();
+
+
+
+		// Save uploaded file through SOAP
+		FolderItem briefcaseRootFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Briefcase);
+
+		// Create a shared folder
+		app.zGetActiveAccount().soapSend(
+				"<CreateFolderRequest xmlns='urn:zimbraMail'>"
+			+		"<folder name='" + subFolderName + "' l='" + briefcaseRootFolder.getId() + "' view='document'/>"
+			+	"</CreateFolderRequest>");
+		FolderItem subFolderItem = FolderItem.importFromSOAP(app.zGetActiveAccount(), subFolderName);
+		ZAssert.assertNotNull(subFolderItem, "Verify the subfolder is available");
+
+		app.zGetActiveAccount().soapSend(
+				"<FolderActionRequest xmlns='urn:zimbraMail'>"
+			+		"<action op='grant' id='" + subFolderItem.getId() + "'>"
+			+			"<grant gt='guest' perm='rwidxa' d='"+ otherUser.EmailAddress +"'/>"
+			+		"</action>"
+			+	"</FolderActionRequest>");
+
+		
+		// Upload file to server through RestUtil
+		String attachmentId = app.zGetActiveAccount().uploadFile(filePath);
+
+		app.zGetActiveAccount().soapSend(
+					"<SaveDocumentRequest xmlns='urn:zimbraMail'>"
+				+		"<doc name='"+ filename +"' l='" + subFolderItem.getId() + "'>"
+				+			"<upload id='" + attachmentId + "'/>"
+				+		"</doc>"
+				+	"</SaveDocumentRequest>");
+		String documentId = app.zGetActiveAccount().soapSelectValue("//mail:doc", "id");
+
+
+
+
+		// Add comments to the file using SOAP
+		otherUser.soapSend(
+					"<AddCommentRequest xmlns='urn:zimbraMail'>"
+				+		"<comment parentId='"+ app.zGetActiveAccount().ZimbraId + ":" + documentId + "' text='" + commentText + "'/>"
+				+	"</AddCommentRequest>");
+
+		// Get file comments through SOAP
+		otherUser.soapSend(
+					"<GetCommentsRequest  xmlns='urn:zimbraMail'>"
+				+		"<comment parentId='"+ app.zGetActiveAccount().ZimbraId + ":" + documentId + "'/>"
+				+	"</GetCommentsRequest>");
+
+
+		
+
+		// Sync up
+//		app.zPageOctopus.zToolbarPressButton(Button.B_GETMAIL);
+
+		// Click on My Files tab
+		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_MY_FILES);
+
+		// Since we are going to a subfolder, always back out to My Files at the end
+		try {
+			
+
+			// Go to the subfolder
+			app.zPageMyFiles.zListItem(Action.A_LEFTCLICK, subFolderName);
+	
+			// Verify file exists in My Files view
+			ZAssert.assertTrue(app.zPageMyFiles.zWaitForElementPresent(
+					PageMyFiles.Locators.zMyFilesListViewItems.locator
+							+ ":contains(" + filename + ")", "3000"),
+					"Verify file appears in My Files view");
+	
+			// Select file in the list view
+			DisplayFilePreview filePreview = (DisplayFilePreview) app.zPageMyFiles.zListItem(Action.A_LEFTCLICK, filename);
+	
+			DisplayFileComments fileComments = null;
+			
+			try {
+	
+				// Click on Comments button
+				fileComments = (DisplayFileComments) filePreview.zPressButton(Button.B_COMMENTS);
+				
+				CommentItem found = null;
+				List<CommentItem> comments = fileComments.zGetCommentsList();
+				for ( CommentItem comment : comments ) {
+					
+					// Verify the comment is found
+					if (comment.getCommentText().equals(commentText)) {
+						found = comment;
+						break;
+					}
+					
+				}
+				
+				ZAssert.assertNotNull(found, "Verify the commment is found");
+				
+				ZAssert.assertEquals(
+						found.getCommentEmail(), 
+						destination.EmailAddress, 
+						"Verify that in absense of a display name, the email is shown");
+	
+			
+			} finally {
+				if ( fileComments != null ) {
+					
+					// close Comments view
+					fileComments.zPressButton(Button.B_CLOSE);
+					fileComments = null;
+	
+				}
 			}
+		
+		} finally {
+			app.zPageOctopus.zToolbarPressButton(Button.B_TAB_FAVORITES);
+			app.zPageOctopus.zToolbarPressButton(Button.B_TAB_MY_FILES);			
 		}
+
 
 	}
 
