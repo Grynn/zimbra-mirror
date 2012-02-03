@@ -774,6 +774,8 @@ ZaDLXFormView.updateOwner = function () {
 		var instance = this.getInstance();
 		var arr = instance[ZaDistributionList.A2_DLOwners];
 		if(obj[ZaAlias.A_index] >=0 && arr[obj[ZaAlias.A_index]] != obj[ZaAccount.A_name] ) {
+            if(!ZaDLXFormView.checkOwner(obj[ZaAccount.A_name]))
+                return;
 			arr[obj[ZaAlias.A_index]] = obj[ZaAccount.A_name];
 			this.getModel().setInstanceValue(this.getInstance(),ZaDistributionList.A2_DLOwners, arr);
 			this.getModel().setInstanceValue(this.getInstance(),ZaDistributionList.A2_owners_selection_cache, new Array());
@@ -802,6 +804,8 @@ ZaDLXFormView.addOwner  = function () {
 		this.parent.addOwnerDlg.popdown();
 		var obj = this.parent.addOwnerDlg.getObject();
 		if(obj[ZaAccount.A_name] && obj[ZaAccount.A_name].length>1) {
+            if(!ZaDLXFormView.checkOwner(obj[ZaAccount.A_name]))
+                return;
 			var instance = this.getInstance();
 			var arr = instance[ZaDistributionList.A2_DLOwners];
 			arr.push(obj[ZaAccount.A_name]);
@@ -810,6 +814,20 @@ ZaDLXFormView.addOwner  = function () {
 			this.parent.setDirty(true);
 		}
 	}
+}
+
+ZaDLXFormView.checkOwner = function (accountName) {
+    var ret = false;
+    try {
+        ret = ZaSearch.isAccountExist({name: accountName, popupError: false});
+    } catch (ex) {
+
+    }
+    if (!ret)
+        ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_NO_SUCH_ACCOUNT);
+
+    return ret;
+
 }
 
 ZaDLXFormView.isEditOwnerEnabled = function () {
