@@ -332,29 +332,33 @@ if(ZaTabView.XFormModifiers["ZaHomeXFormView"]) {
 
 
 if (ZaTask && ZaTask.myXModel){
-    ZaTask.A2_versionCanBeShown = "versionCanBeShownForTask";
-    ZaTask.A2_versionUpdateAvailable = "versionUpdateAvailableForTask";
-    ZaTask.A2_versionHasError = "versionHasError";
-    ZaTask.A2_versionUpdateMessage = "updateMessageForTask";
-    ZaTask.myXModel.items.push(
-        {id:ZaTask.A2_versionUpdateAvailable, type:_ENUM_, ref: "attrs/" + ZaTask.A2_versionUpdateAvailable, choices: ZaModel.BOOLEAN_CHOICES}
-    );
-    ZaTask.myXModel.items.push(
-        {id:ZaTask.A2_versionUpdateMessage, type:_STRING_, ref: "attrs/" + ZaTask.A2_versionUpdateMessage}
-    );
-    ZaTask.myXModel.items.push({id: ZaTask.A2_versionCanBeShown, type:_ENUM_, choices: ZaModel.BOOLEAN_CHOICES, defaultValue: false});
-    ZaTask.myXModel.items.push({id: ZaTask.A2_versionHasError, type:_ENUM_, choices: ZaModel.BOOLEAN_CHOICES, defaultValue: false});
-
-    ZaTask.loadVersionMethod =
-    function () {
-        this.attrs[ZaTask.A2_versionUpdateAvailable] = false;
-        this.attrs[ZaTask.A2_versionUpdateMessage] = "";
-    }
-    ZaItem.loadMethods["ZaTask"].push(ZaTask.loadVersionMethod);
-
+	ZaTask.A2_versionCanBeShown = "versionCanBeShownForTask";
+	ZaTask.A2_versionUpdateAvailable = "versionUpdateAvailableForTask";
+	ZaTask.A2_versionHasError = "versionHasError";
+	ZaTask.A2_versionUpdateMessage = "updateMessageForTask";
+	ZaTask.myXModel.items.push(
+	    {id:ZaTask.A2_versionUpdateAvailable, type:_ENUM_, ref: "attrs/" + ZaTask.A2_versionUpdateAvailable, choices: ZaModel.BOOLEAN_CHOICES}
+	);
+	ZaTask.myXModel.items.push(
+	    {id:ZaTask.A2_versionUpdateMessage, type:_STRING_, ref: "attrs/" + ZaTask.A2_versionUpdateMessage}
+	);
+	ZaTask.myXModel.items.push({id: ZaTask.A2_versionCanBeShown, type:_ENUM_, choices: ZaModel.BOOLEAN_CHOICES, defaultValue: false});
+	ZaTask.myXModel.items.push({id: ZaTask.A2_versionHasError, type:_ENUM_, choices: ZaModel.BOOLEAN_CHOICES, defaultValue: false});
 
 	if (ZaTabView.XFormModifiers["ZaTaskContentView"] != null) {
+		ZaTask.loadVersionMethod =
+		function () {
+		    this.attrs[ZaTask.A2_versionUpdateAvailable] = false;
+		    this.attrs[ZaTask.A2_versionUpdateMessage] = "";
+		}
+		ZaItem.loadMethods["ZaTask"].push(ZaTask.loadVersionMethod);
+
 		ZaVersionCheck.taskContentViewXFormModifier = function(xFormObject) {
+			if( !ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.SOFTWARE_UPDATES_VIEW] &&
+				!ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+				return;
+			}
+
 			var board = ZaTaskContentView.getNotificationBoard(xFormObject);
 			board.items.push(
 				{type: _GROUP_, numCols:1, width: "98%", //100%
@@ -399,7 +403,13 @@ if (ZaTask && ZaTask.myXModel){
 		ZaVersionCheck.goToDownloadUrl = function(){
 			window.open(ZaVersionCheck.downloadUrl, "_blank");
 		}
+
 		ZaTaskContentView.postLoadVersionUpdateInfo = function() {
+			if( !ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.SOFTWARE_UPDATES_VIEW] &&
+				!ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+				return;
+			}
+
 			if (this._versionCheck == null) {
 				this._versionCheck = new ZaVersionCheck();
 			}
