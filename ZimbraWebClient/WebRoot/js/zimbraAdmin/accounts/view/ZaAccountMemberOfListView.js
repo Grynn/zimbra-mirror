@@ -618,10 +618,8 @@ function (item, offset){
 					domainName = emailChunks[1];
 				//	var domainName = xform.getItemById(xform.getId()+"_case").__xform.getItemById(xform.getId()+"_dl_name_field")._domainPart;
 				} catch (ex) {
-					domainName = ZaSettings.myDomainName;
+					//keep the domainName null
 				}
-			} else{
-				domainName = ZaSettings.myDomainName;
 			}
 			
 			var attrs = [ZaAccount.A_name, ZaItem.A_zimbraId];
