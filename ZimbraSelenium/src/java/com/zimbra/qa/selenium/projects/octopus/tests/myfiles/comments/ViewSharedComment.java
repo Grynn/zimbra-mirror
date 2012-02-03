@@ -21,7 +21,6 @@ import com.zimbra.qa.selenium.projects.octopus.ui.PageMyFiles;
 public class ViewSharedComment extends OctopusCommonTest {
 
 	private ZimbraAccount destination = null;
-	private String destinationDisplayName = null;
 	
 	public ViewSharedComment() throws HarnessException {
 		logger.info("New " + ViewSharedComment.class.getCanonicalName());
@@ -30,9 +29,8 @@ public class ViewSharedComment extends OctopusCommonTest {
 		super.startingPage = app.zPageMyFiles;
 		super.startingAccountPreferences = null;
 		
-		destination = new ZimbraAccount();
-		destinationDisplayName = "DisplayName"+ ZimbraSeleniumProperties.getUniqueString();
-		destination.setPref("displayName", destinationDisplayName);
+		destination = new ZimbraAccount();		
+		destination.setPref("displayName", "DisplayName"+ ZimbraSeleniumProperties.getUniqueString());
 		destination.provision();
 		destination.authenticate();
 		
@@ -141,7 +139,7 @@ public class ViewSharedComment extends OctopusCommonTest {
 			ZAssert.assertNotNull(found, "Verify the commment is found");
 			
 			ZAssert.assertEquals(found.getCommentText(), commentText, "Verify the comment text matches");
-			ZAssert.assertEquals(found.getCommentEmail(), destinationDisplayName, "Verify the comment email matches");
+			ZAssert.assertEquals(found.getCommentEmail(), destination.getPref("displayName"), "Verify the comment email matches");
 
 		
 		} finally {

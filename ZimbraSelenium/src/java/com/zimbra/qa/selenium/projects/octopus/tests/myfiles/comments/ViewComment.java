@@ -109,7 +109,7 @@ public class ViewComment extends OctopusCommonTest {
 			ZAssert.assertNotNull(found, "Verify the commment is found");
 			
 			ZAssert.assertEquals(found.getCommentText(), commentText, "Verify the comment text matches");
-			ZAssert.assertEquals(found.getCommentEmail(), app.zGetActiveAccount().EmailAddress, "Verify the comment email matches");
+			ZAssert.assertEquals(found.getCommentEmail(), app.zGetActiveAccount().getPref("displayName"), "Verify the comment email matches");
 
 		
 		} finally {
