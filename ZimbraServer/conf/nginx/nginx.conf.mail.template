@@ -15,6 +15,10 @@ mail
     # 
     zm_auth_http;
 
+    # Wether to use ssl to connect the upstream mail servers
+    #
+    proxy_ssl ${mail.proxy.ssl};
+
     # IMAP/POP3 greeting messages
     # 
     imap_greeting            "${mail.imap.greeting}";
