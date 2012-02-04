@@ -1,0 +1,12 @@
+--- postfix-2.9.0/src/cleanup/cleanup_milter.c.orig	2012-02-03 17:01:21.150831035 -0800
++++ postfix-2.9.0/src/cleanup/cleanup_milter.c	2012-02-03 17:02:22.670767931 -0800
+@@ -845,8 +845,7 @@
+ 	     /* Reset the saved PTR record and update last_type. */ ;
+ 	else if ((header_label == 0
+ 		  || (strncasecmp(header_label, STR(buf), len) == 0
+-		      && (IS_SPACE_TAB(STR(buf)[len])
+-			  || STR(buf)[len] == ':')))
++			&& (strlen(header_label) == len)))
+ 		 && --index == 0) {
+ 	    /* If we have a saved PTR record, it points to start of header. */
+ 	    break;
