@@ -4,10 +4,6 @@
 package com.zimbra.qa.selenium.projects.ajax.ui;
 
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.ExpectedCondition;
-import org.openqa.selenium.support.ui.WebDriverWait;
-
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
@@ -66,19 +62,12 @@ public class PageMain extends AbsTab {
 
 
 	public boolean zIsZimletLoaded() throws HarnessException {
-		if (ZimbraSeleniumProperties.isWebDriver()) {
-			boolean condition = false;
-			condition = (new WebDriverWait(ClientSessionFactory.session().webDriver(), 2000))
-					.until(new ExpectedCondition<Boolean>() {
-						public Boolean apply(WebDriver d) {
-							return (Boolean) ((JavascriptExecutor) ClientSessionFactory.session().webDriver())
-									.executeScript("return top.appCtxt.getZimletMgr().loaded");
-						}
-					});
-			return condition;
-		} else if (ZimbraSeleniumProperties.isWebDriverBackedSelenium()) {
+		if (ZimbraSeleniumProperties.isWebDriver())
+			return (Boolean) ((JavascriptExecutor) ClientSessionFactory.session().webDriver())
+					.executeScript("return top.appCtxt.getZimletMgr().loaded");
+		else if (ZimbraSeleniumProperties.isWebDriverBackedSelenium())
 			return ("true".equals(sGetEval("selenium.browserbot.getCurrentWindow().top.appCtxt.getZimletMgr().loaded")));
-		} else
+		else
 			return ("true".equals(sGetEval("this.browserbot.getUserWindow().top.appCtxt.getZimletMgr().loaded")));
 	}
 	
