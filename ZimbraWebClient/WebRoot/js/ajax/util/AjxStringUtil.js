@@ -1896,17 +1896,19 @@ function(el, ctxt) {
  * be removed. It is not necessary to include "#text", "html", "head", and "body" in the list
  * of allowed tags.
  * 
- * @param {string}			html			HTML text
- * @param {array}			okTags			whitelist of allowed tags
- * @param {array}			attrsToRemove	list of attributes to remove from each element
+ * @param {string}	html			HTML text
+ * @param {array}	okTags			whitelist of allowed tags
+ * @param {array}	attrsToRemove	list of attributes to remove from each element
+ * @param {array}	badStyles		list of forbidden styles (eg "position:absolute")
  */
 AjxStringUtil.checkForCleanHtml =
-function(html, okTags, attrsToRemove) {
+function(html, okTags, attrsToRemove, badStyles) {
 
 	var htmlNode = AjxStringUtil._writeToTestIframeDoc(html);
 	var ctxt = {
 		tags:	AjxUtil.arrayAsHash(okTags),
-		attrs:	attrsToRemove || []
+		attrs:	attrsToRemove || [],
+		styles:	badStyles
 	}
 	AjxStringUtil._traverseCleanHtml(htmlNode, ctxt);
 	
@@ -1941,12 +1943,24 @@ function(el, ctxt) {
 			}
 			// on* handlers (should have been removed by server, check again to be safe)
 			for (var i = 0, attrs = el.attributes, l = attrs.length; i < l; i++) {
-				var attrName = attrs.item(i).nodeName;
-				if (attrName && attrName.toLowerCase().indexOf("on") === 0) {
+				var attr = attrs.item(i);
+				var attrName = attr.nodeName && attr.nodeName.toLowerCase();
+				if (attrName && attrName.indexOf("on") === 0) {
 					el.removeAttribute(attrName);
 				}
+				if (ctxt.styles && (attrName == "style")) {
+					var value = attr.nodeValue && attr.nodeValue.toLowerCase().replace(/\s*/g, "");
+					if (value) {
+						for (var j = 0; j < ctxt.styles.length; j++) {
+							var style = ctxt.styles[j];
+							if (value.indexOf(style) != -1) {
+								ctxt.fail = true;
+								break;
+							}
+						}
+					}
+				}
 			}
-
 		}
 	}
 	
