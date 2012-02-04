@@ -16,28 +16,6 @@ typedef enum FolderType {
 
 [
     object,
-    uuid(68895A46-5AEB-436A-B661-17FDFD7A0CE2),
-    dual,
-    nonextensible,
-    pointer_default(unique)
-]
-interface IfolderObject: IDispatch{
-    [propget, id(1)] HRESULT Name([out, retval] BSTR *pVal);
-    [propput, id(1)] HRESULT Name([in] BSTR newVal);
-    [propget, id(2)] HRESULT Id([out, retval] LONG *pVal);
-    [propput, id(2)] HRESULT Id([in] LONG newVal);
-    [propget, id(3)] HRESULT FolderPath([out, retval] BSTR *pVal);
-    [propput, id(3)] HRESULT FolderPath([in] BSTR newVal);
-    [propput, id(4)] HRESULT FolderID([in] VARIANT newVal);
-    [propget, id(4)] HRESULT FolderID([out, retval] VARIANT *newVal);
-    [propget, id(5)] HRESULT ItemCount([out, retval] LONG *pVal);
-    [propput, id(5)] HRESULT ItemCount([in] LONG newVal);
-    [propget, id(6)] HRESULT ContainerClass([out, retval] BSTR *pVal);
-    [propput, id(6)] HRESULT ContainerClass([in] BSTR newVal);
-};
-
-[
-    object,
     uuid(C5E4267C-AE6C-4E31-956A-06D8094D0CBE),
     dual,
     nonextensible,
@@ -60,59 +38,81 @@ interface IMapiWrapper: IDispatch {
 };
 
 [
-    object,
-    uuid(06A01E95-AE75-4010-9BF5-68EBF094F41C),
-    dual,
-    nonextensible,
-    pointer_default(unique)
+	object,
+	uuid(11C777ED-E9D0-4C32-AB64-D3B71E069D0D),
+	dual,
+	nonextensible,
+	pointer_default(unique)
 ]
-interface IMapiAccessWrap: IDispatch {
+interface IFolderObject : IDispatch{
+    [propget, id(1)] HRESULT Name([out, retval] BSTR *pVal);
+    [propput, id(1)] HRESULT Name([in] BSTR newVal);
+    [propget, id(2)] HRESULT Id([out, retval] LONG *pVal);
+    [propput, id(2)] HRESULT Id([in] LONG newVal);
+    [propget, id(3)] HRESULT FolderPath([out, retval] BSTR *pVal);
+    [propput, id(3)] HRESULT FolderPath([in] BSTR newVal);
+    [propput, id(4)] HRESULT FolderID([in] VARIANT newVal);
+    [propget, id(4)] HRESULT FolderID([out, retval] VARIANT *newVal);
+    [propget, id(5)] HRESULT ItemCount([out, retval] LONG *pVal);
+    [propput, id(5)] HRESULT ItemCount([in] LONG newVal);
+    [propget, id(6)] HRESULT ContainerClass([out, retval] BSTR *pVal);
+    [propput, id(6)] HRESULT ContainerClass([in] BSTR newVal);
+};
+
+[
+	object,
+	uuid(8E14F34A-7CAC-4266-83F2-DC9AB08FBF8B),
+	dual,
+	nonextensible,
+	pointer_default(unique)
+]
+interface IMapiAccessWrap : IDispatch{
     [id(1)] HRESULT UserInit([in] BSTR userName, [out] BSTR *statusMsg);
     [id(2)] HRESULT GetFolderList([out] VARIANT *folders);
     [id(3), helpstring("retreive items for folder objects")]
-    HRESULT GetItemsList([in] IfolderObject *folderObj, [in] VARIANT creationDate, [out, retval] VARIANT *vItems);
+    HRESULT GetItemsList([in] IFolderObject *folderObj, [in] VARIANT creationDate, [out, retval] VARIANT *vItems);
     [id(4)] HRESULT GetData([in]BSTR userId, [in] VARIANT itemId, [in] FolderType type, [out, retval] VARIANT *pVal);
     [id(5)] HRESULT UserUninit();
 };
 
 [
-    object,
-    uuid(9DAB1C90-D4BD-4696-898C-DAB5B069BA93),
-    dual,
-    nonextensible,
-    pointer_default(unique)
+	object,
+	uuid(04AB72E8-BAA2-4BF7-8E91-DCE1A2601075),
+	dual,
+	nonextensible,
+	pointer_default(unique)
 ]
-interface IUserObject: IDispatch {
-    [id(1)] HRESULT Init([in]BSTR host, [in] BSTR location, [in] BSTR accountName, [out, retval] BSTR *pErrorText);
+interface IUserObject : IDispatch{
+     [id(1)] HRESULT Init([in]BSTR host, [in] BSTR location, [in] BSTR accountName, [out, retval] BSTR *pErrorText);
     [id(2), helpstring("method to retreive folder objects")]
     HRESULT GetFolders([out, retval] VARIANT *vObjects);
     [id(3), helpstring("method to retreive items in folders")]
-    HRESULT GetItemsForFolder([in] IfolderObject *folderObj, [in] VARIANT creationDate, [out, retval] VARIANT *vItems);
+    HRESULT GetItemsForFolder([in] IFolderObject *folderObj, [in] VARIANT creationDate, [out, retval] VARIANT *vItems);
     [id(4)] HRESULT GetMapiAccessObject(BSTR userID, [out, retval] IMapiAccessWrap **pVal);
     [id(5)] HRESULT Uninit(void);
 };
-
 [
-    object,
-    uuid(0E3233A0-5359-44FF-B98F-BB0A69D4A948),
-    dual,
-    nonextensible,
-    pointer_default(unique)
+	object,
+	uuid(473DAC45-B40B-4FBF-9AC0-4C584B2336AD),
+	dual,
+	nonextensible,
+	pointer_default(unique)
 ]
-interface IItemObject: IDispatch {
+interface IItemObject : IDispatch{
     [propget, id(1)] HRESULT ID([out, retval] BSTR *pVal);
     [propput, id(1)] HRESULT ID([in] BSTR newVal);
     [propget, id(2)] HRESULT Type([out, retval] FolderType *pVal);
     [propput, id(2)] HRESULT Type([in] FolderType newVal);
     [propget, id(3)] HRESULT CreationDate([out, retval] VARIANT *pVal);
     [propput, id(3)] HRESULT CreationDate([in] VARIANT newVal);
-    [propget, id(4)] HRESULT Parentfolder([out, retval] IfolderObject **pVal);
-    [propput, id(4)] HRESULT Parentfolder([in] IfolderObject *newVal);
+    [propget, id(4)] HRESULT Parentfolder([out, retval] IFolderObject **pVal);
+    [propput, id(4)] HRESULT Parentfolder([in] IFolderObject *newVal);
 
     [propput, id(6)] HRESULT ItemID([in] VARIANT newVal);
     [propget, id(6)] HRESULT ItemID([out,retval] VARIANT *newVal);
     [id(7)] HRESULT GetDataForItemID([in] IUserObject *Userobj, [in] VARIANT ItemId, [in] FolderType type, [out, retval] VARIANT *pVal);
 };
+
 
 [
     uuid(33449EAA-8056-4D28-8D42-552B7C6C8954),
@@ -128,32 +128,33 @@ library Exchange {
     {
 	[default] interface IMapiWrapper;
     };
-    [
-        uuid(9D8CDCEC-28FE-4C15-8763-C174B17B815D)		
-    ]
-    coclass folderObject
-    {
-        [default] interface IfolderObject;
-    };
-    [
-        uuid(1315040C-D7DA-4C7F-8500-BD9917546D15)		
-    ]
-    coclass ItemObject
-    {
-        [default] interface IItemObject;
-    };
-    [
-        uuid(A798CB91-5A5A-4B37-BFA7-11F08CB4770F)		
-    ]
-    coclass UserObject
-    {
-        [default] interface IUserObject;
-    };
-    [
-        uuid(BE5C4D5D-D940-4448-8BBE-B9BB34DA7CEC)		
-    ]
-    coclass MapiAccessWrap
-    {
-        [default] interface IMapiAccessWrap;
-    };
+    
+	[
+		uuid(54CC791E-CDC9-429E-B94A-FEE4C44C45BB)		
+	]
+	coclass FolderObject
+	{
+		[default] interface IFolderObject;
+	};
+	[
+		uuid(E85E06D6-1342-490B-9486-AFBF029143C1)		
+	]
+	coclass ItemObject
+	{
+		[default] interface IItemObject;
+	};
+	[
+		uuid(A020CB81-231E-4349-9B05-4D262E24242C)		
+	]
+	coclass MapiAccessWrap
+	{
+		[default] interface IMapiAccessWrap;
+	};
+	[
+		uuid(7B8D17C3-89BF-4F6C-A2EE-A3ABEA1525E6)		
+	]
+	coclass UserObject
+	{
+		[default] interface IUserObject;
+	};
 };

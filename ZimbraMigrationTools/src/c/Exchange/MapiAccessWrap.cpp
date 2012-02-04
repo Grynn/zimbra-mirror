@@ -1,26 +1,29 @@
-// MapiAccessWrap.cpp : Implementation of CMapiAccessWrapWrap
+// MapiAccessWrap.cpp : Implementation of CMapiAccessWrap
 
 #include "common.h"
 #include "MapiAccessWrap.h"
 
-// CMapiAccessWrapWrap
+Zimbra::Util::CriticalSection  cs;
+// CMapiAccessWrap
 
 STDMETHODIMP CMapiAccessWrap::InterfaceSupportsErrorInfo(REFIID riid)
 {
-    static const IID *const arr[] = {
-        &IID_IMapiAccessWrap
-    };
+	static const IID* const arr[] = 
+	{
+		&IID_IMapiAccessWrap
+	};
 
-    for (int i = 0; i < sizeof (arr) / sizeof (arr[0]); i++)
-    {
-        if (InlineIsEqualGUID(*arr[i], riid))
-            return S_OK;
-    }
-    return S_FALSE;
+	for (int i=0; i < sizeof(arr) / sizeof(arr[0]); i++)
+	{
+		if (InlineIsEqualGUID(*arr[i],riid))
+			return S_OK;
+	}
+	return S_FALSE;
 }
 
 STDMETHODIMP CMapiAccessWrap::UserInit(BSTR UserName, BSTR *StatusMsg)
 {
+    Zimbra::Util::AutoCriticalSection autocriticalsection(cs);
     // TODO: Add your implementation code here
 
     maapi = new Zimbra::MAPI::MAPIAccessAPI(UserName);
@@ -65,14 +68,14 @@ STDMETHODIMP CMapiAccessWrap::GetFolderList(VARIANT *folders)
 
     psa = SafeArrayCreate(VT_DISPATCH, 1, &bounds);
 
-    IfolderObject **pfolders;
+    IFolderObject **pfolders;
 
     SafeArrayAccessData(psa, (void **)&pfolders);
     for (size_t i = 0; i < size; i++, it++)
     {
-        CComPtr<IfolderObject> pIFolderObject;
+        CComPtr<IFolderObject> pIFolderObject;
 
-        hr = CoCreateInstance(CLSID_folderObject, NULL, CLSCTX_ALL, IID_IfolderObject,
+        hr = CoCreateInstance(CLSID_FolderObject, NULL, CLSCTX_ALL, IID_IFolderObject,
             reinterpret_cast<void **>(&pIFolderObject));
         if (SUCCEEDED(hr))
         {
@@ -130,7 +133,7 @@ STDMETHODIMP CMapiAccessWrap::GetFolderList(VARIANT *folders)
     return S_OK;
 }
 
-STDMETHODIMP CMapiAccessWrap::GetItemsList(IfolderObject *FolderObj, VARIANT creattiondate,
+STDMETHODIMP CMapiAccessWrap::GetItemsList(IFolderObject *FolderObj, VARIANT creattiondate,
     VARIANT *vItems)
 {
     HRESULT hr = S_OK;

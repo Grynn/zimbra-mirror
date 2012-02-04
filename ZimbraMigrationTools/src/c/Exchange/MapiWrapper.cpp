@@ -169,14 +169,14 @@ STDMETHODIMP CMapiWrapper::GetFolderObjects(VARIANT *vObjects)
 
     psa = SafeArrayCreate(VT_DISPATCH, 1, &bounds);
 
-    IfolderObject **pfolders;
+    IFolderObject **pfolders;
 
     SafeArrayAccessData(psa, (void **)&pfolders);
     for (int i = 0; i < 2; i++)
     {
-        CComPtr<IfolderObject> pIFolderObject;
+        CComPtr<IFolderObject> pIFolderObject;
         // Isampleobj* pIStatistics;
-        hr = CoCreateInstance(CLSID_folderObject, NULL, CLSCTX_ALL, IID_IfolderObject,
+        hr = CoCreateInstance(CLSID_FolderObject, NULL, CLSCTX_ALL, IID_IFolderObject,
             reinterpret_cast<void **>(&pIFolderObject));
         if (SUCCEEDED(hr))
         {

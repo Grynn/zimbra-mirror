@@ -2,12 +2,12 @@ HKCR
 {
 	NoRemove CLSID
 	{
-		ForceRemove {BE5C4D5D-D940-4448-8BBE-B9BB34DA7CEC} = s 'MapiAccessWrap Class'
+		ForceRemove {A020CB81-231E-4349-9B05-4D262E24242C} = s 'MapiAccessWrap Class'
 		{
 			ForceRemove Programmable
 			InprocServer32 = s '%MODULE%'
 			{
-				val ThreadingModel = s 'Apartment'
+				val ThreadingModel = s 'Free'
 			}
 			TypeLib = s '{33449EAA-8056-4D28-8D42-552B7C6C8954}'
 			Version = s '1.0'

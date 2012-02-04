@@ -3,21 +3,24 @@
 #include "common.h"
 #include "ItemObject.h"
 
+
 // CItemObject
 
 STDMETHODIMP CItemObject::InterfaceSupportsErrorInfo(REFIID riid)
 {
-    static const IID *const arr[] = {
-        &IID_IItemObject
-    };
+	static const IID* const arr[] = 
+	{
+		&IID_IItemObject
+	};
 
-    for (int i = 0; i < sizeof (arr) / sizeof (arr[0]); i++)
-    {
-        if (InlineIsEqualGUID(*arr[i], riid))
-            return S_OK;
-    }
-    return S_FALSE;
+	for (int i=0; i < sizeof(arr) / sizeof(arr[0]); i++)
+	{
+		if (InlineIsEqualGUID(*arr[i],riid))
+			return S_OK;
+	}
+	return S_FALSE;
 }
+
 
 STDMETHODIMP CItemObject::get_ID(BSTR *pVal)
 {
@@ -70,7 +73,7 @@ STDMETHODIMP CItemObject::put_CreationDate(VARIANT newVal)
     return S_OK;
 }
 
-STDMETHODIMP CItemObject::get_Parentfolder(IfolderObject **pVal)
+STDMETHODIMP CItemObject::get_Parentfolder(IFolderObject **pVal)
 {
     // TODO: Add your implementation code here
     *pVal = parentObj;
@@ -79,7 +82,7 @@ STDMETHODIMP CItemObject::get_Parentfolder(IfolderObject **pVal)
     return S_OK;
 }
 
-STDMETHODIMP CItemObject::put_Parentfolder(IfolderObject *newVal)
+STDMETHODIMP CItemObject::put_Parentfolder(IFolderObject *newVal)
 {
     // TODO: Add your implementation code here
     parentObj = newVal;

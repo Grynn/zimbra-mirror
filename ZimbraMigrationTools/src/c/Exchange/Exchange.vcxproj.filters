@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Source Files">
@@ -30,9 +30,6 @@
     <ClCompile Include="MapiWrapper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Exchange_i.c">
-      <Filter>Generated Files</Filter>
-    </ClCompile>
     <ClCompile Include="MapiUtils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -51,15 +48,6 @@
     <ClCompile Include="MAPIAccessAPI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="folderObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ItemObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="UserObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="MAPIContacts.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -75,11 +63,23 @@
     <ClCompile Include="MAPITask.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MAPIRfc2445.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="folderObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="MapiAccessWrap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MAPIRfc2445.cpp">
+    <ClCompile Include="UserObject.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Exchange_i.c">
+      <Filter>Generated Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -88,9 +88,6 @@
     </ClInclude>
     <ClInclude Include="MapiWrapper.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Exchange_i.h">
-      <Filter>Generated Files</Filter>
     </ClInclude>
     <ClInclude Include="GenericException.h">
       <Filter>Header Files</Filter>
@@ -122,15 +119,6 @@
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="folderObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ItemObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="UserObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="MAPIContacts.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -146,11 +134,23 @@
     <ClInclude Include="MAPITask.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MAPIRfc2445.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="folderObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="MapiAccessWrap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MAPIRfc2445.h">
+    <ClInclude Include="UserObject.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Exchange_i.h">
+      <Filter>Generated Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -174,10 +174,10 @@
     <None Include="ItemObject.rgs">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="UserObject.rgs">
+    <None Include="MapiAccessWrap.rgs">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="MapiAccessWrap.rgs">
+    <None Include="UserObject.rgs">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

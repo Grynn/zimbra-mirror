@@ -1,26 +1,27 @@
-// folderObject.cpp : Implementation of CfolderObject
+// FolderObject.cpp : Implementation of CFolderObject
 
 #include "common.h"
+#include "FolderObject.h"
 
-#include "folderObject.h"
 
-// CfolderObject
+// CFolderObject
 
-STDMETHODIMP CfolderObject::InterfaceSupportsErrorInfo(REFIID riid)
+STDMETHODIMP CFolderObject::InterfaceSupportsErrorInfo(REFIID riid)
 {
-    static const IID *const arr[] = {
-        &IID_IfolderObject
-    };
+	static const IID* const arr[] = 
+	{
+		&IID_IFolderObject
+	};
 
-    for (int i = 0; i < sizeof (arr) / sizeof (arr[0]); i++)
-    {
-        if (InlineIsEqualGUID(*arr[i], riid))
-            return S_OK;
-    }
-    return S_FALSE;
+	for (int i=0; i < sizeof(arr) / sizeof(arr[0]); i++)
+	{
+		if (InlineIsEqualGUID(*arr[i],riid))
+			return S_OK;
+	}
+	return S_FALSE;
 }
 
-STDMETHODIMP CfolderObject::get_Name(BSTR *pVal)
+STDMETHODIMP CFolderObject::get_Name(BSTR *pVal)
 {
     // TODO: Add your implementation code here
     CComBSTR str(Strname);
@@ -29,7 +30,7 @@ STDMETHODIMP CfolderObject::get_Name(BSTR *pVal)
     return S_OK;
 }
 
-STDMETHODIMP CfolderObject::put_Name(BSTR newVal)
+STDMETHODIMP CFolderObject::put_Name(BSTR newVal)
 {
     // TODO: Add your implementation code here
     Strname = newVal;
@@ -37,35 +38,35 @@ STDMETHODIMP CfolderObject::put_Name(BSTR newVal)
     return S_OK;
 }
 
-STDMETHODIMP CfolderObject::get_Id(LONG *pVal)
+STDMETHODIMP CFolderObject::get_Id(LONG *pVal)
 {
     // TODO: Add your implementation code here
     *pVal = LngID;
     return S_OK;
 }
 
-STDMETHODIMP CfolderObject::put_Id(LONG newVal)
+STDMETHODIMP CFolderObject::put_Id(LONG newVal)
 {
     // TODO: Add your implementation code here
     LngID = newVal;
     return S_OK;
 }
 
-STDMETHODIMP CfolderObject::get_ItemCount(LONG *pVal)
+STDMETHODIMP CFolderObject::get_ItemCount(LONG *pVal)
 {
     // TODO: Add your implementation code here
     *pVal = Itemcnt;
     return S_OK;
 }
 
-STDMETHODIMP CfolderObject::put_ItemCount(LONG newVal)
+STDMETHODIMP CFolderObject::put_ItemCount(LONG newVal)
 {
     // TODO: Add your implementation code here
     Itemcnt = newVal;
     return S_OK;
 }
 
-STDMETHODIMP CfolderObject::get_FolderPath(BSTR *pVal)
+STDMETHODIMP CFolderObject::get_FolderPath(BSTR *pVal)
 {
     // TODO: Add your implementation code here
     CComBSTR str(folderPath);
@@ -74,7 +75,7 @@ STDMETHODIMP CfolderObject::get_FolderPath(BSTR *pVal)
     return S_OK;
 }
 
-STDMETHODIMP CfolderObject::put_FolderPath(BSTR newVal)
+STDMETHODIMP CFolderObject::put_FolderPath(BSTR newVal)
 {
     // TODO: Add your implementation code here
     folderPath = newVal;
@@ -82,7 +83,7 @@ STDMETHODIMP CfolderObject::put_FolderPath(BSTR newVal)
     return S_OK;
 }
 
-STDMETHODIMP CfolderObject::get_ContainerClass(BSTR *pVal)
+STDMETHODIMP CFolderObject::get_ContainerClass(BSTR *pVal)
 {
     // TODO: Add your implementation code here
     CComBSTR str(containerClass);
@@ -91,7 +92,7 @@ STDMETHODIMP CfolderObject::get_ContainerClass(BSTR *pVal)
     return S_OK;
 }
 
-STDMETHODIMP CfolderObject::put_ContainerClass(BSTR newVal)
+STDMETHODIMP CFolderObject::put_ContainerClass(BSTR newVal)
 {
     // TODO: Add your implementation code here
     containerClass = newVal;
@@ -99,7 +100,7 @@ STDMETHODIMP CfolderObject::put_ContainerClass(BSTR newVal)
     return S_OK;
 }
 
-STDMETHODIMP CfolderObject::put_FolderID(VARIANT id)
+STDMETHODIMP CFolderObject::put_FolderID(VARIANT id)
 {
     // FolderId = id;
 // Binary data is stored in the variant as an array of unsigned char
@@ -122,7 +123,7 @@ STDMETHODIMP CfolderObject::put_FolderID(VARIANT id)
     return S_OK;
 }
 
-STDMETHODIMP CfolderObject::get_FolderID(VARIANT *id)
+STDMETHODIMP CFolderObject::get_FolderID(VARIANT *id)
 {
     // *id = FolderId;
 
