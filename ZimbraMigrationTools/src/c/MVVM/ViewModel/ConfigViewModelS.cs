@@ -93,6 +93,8 @@ public class ConfigViewModelS: BaseViewModel
                 ((ConfigViewModelSDest)ViewModelPtrs[(int)ViewType.SVRDEST]).LoadConfig(config);
                 ((OptionsViewModel)ViewModelPtrs[(int)ViewType.OPTIONS]).LoadConfig(config);
                 ((UsersViewModel)ViewModelPtrs[(int)ViewType.USERS]).LoadDomain(config);
+                ((ScheduleViewModel)ViewModelPtrs[(int)ViewType.SCHED]).SetConfigFile(
+                    fDialog.FileName);
             }
         }
     }

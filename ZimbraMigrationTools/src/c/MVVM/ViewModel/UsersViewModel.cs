@@ -439,19 +439,22 @@ public class UsersViewModel: BaseViewModel
             ZimbraDomain = DomainList[CurrentDomainSelection];
             if (scheduleViewModel.GetConfigFile().Length > 0)
             {
-                if (File.Exists(scheduleViewModel.GetConfigFile()))
+                if (CurrentDomainSelection > -1)
                 {
-                    UpdateXmlElement(scheduleViewModel.GetConfigFile(), "UserProvision");
-                }
-                else
-                {
-                    System.Xml.Serialization.XmlSerializer writer =
-                        new System.Xml.Serialization.XmlSerializer(typeof (Config));
+                    if (File.Exists(scheduleViewModel.GetConfigFile()))
+                    {
+                        UpdateXmlElement(scheduleViewModel.GetConfigFile(), "UserProvision");
+                    }
+                    else
+                    {
+                        System.Xml.Serialization.XmlSerializer writer =
+                            new System.Xml.Serialization.XmlSerializer(typeof(Config));
 
-                    System.IO.StreamWriter file = new System.IO.StreamWriter(
-                        scheduleViewModel.GetConfigFile());
-                    writer.Serialize(file, m_config);
-                    file.Close();
+                        System.IO.StreamWriter file = new System.IO.StreamWriter(
+                            scheduleViewModel.GetConfigFile());
+                        writer.Serialize(file, m_config);
+                        file.Close();
+                    }
                 }
             }
         }
