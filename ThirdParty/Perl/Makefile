@@ -200,7 +200,7 @@ PERL_LIBS 	:= \
 	S/SB/SBECK/Date-Manip-5.56.tar.gz \
 	Time::HiRes \
 	Convert::ASN1 \
-	Net::LDAP \
+	M/MA/MARSCHAP/perl-ldap-0.44.tar.gz \
 	Unix::Syslog \
 	Parallel::ForkManager \
 	Package::Constants \
