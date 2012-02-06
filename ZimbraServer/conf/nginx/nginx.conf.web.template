@@ -3,6 +3,8 @@ http
     # disable nginx version on error pages
     server_tokens off;
 
+    server_names_hash_max_size ${web.server_names.size};
+
     #  Define the collection of upstream HTTP servers to which we will proxy
     #  Define each server:port against a server directive
     # 
