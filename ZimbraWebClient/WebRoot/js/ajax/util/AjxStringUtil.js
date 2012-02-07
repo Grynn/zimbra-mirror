@@ -1654,6 +1654,21 @@ function(text, isHtml) {
 		}
 	}
 	
+	// If we have a STRONG separator, return the text that precedes it
+	if (count[AjxStringUtil.ORIG_SEP_STRONG] > 0 || count[AjxStringUtil.ORIG_WROTE_STRONG] > 0) {
+		var block = [];
+		for (var i = 0; i < results.length; i++) {
+			var result = results[i];
+			if (result.type == AjxStringUtil.ORIG_SEP_STRONG || result.type == AjxStringUtil.ORIG_WROTE_STRONG) {
+				break;
+			}
+			block = block.concat(results[i].block);
+		}
+		var originalText = block.join("\n") + "\n";
+		originalText = originalText.replace(/\s+$/, "\n");
+		return originalText;
+	}
+	
 	return text;
 };
 
