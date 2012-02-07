@@ -1064,7 +1064,7 @@ ZaAccountXFormView.FEATURE_TAB_ATTRS = [ZaAccount.A_zimbraFeatureManageZimlets,
 	ZaAccount.A_zimbraFeatureImapDataSourceEnabled,
 	ZaAccount.A_zimbraFeaturePop3DataSourceEnabled,
 	ZaAccount.A_zimbraFeatureMailSendLaterEnabled,
-	ZaAccount.A_zimbraFeatureFreeBusyViewEnabled,
+	//ZaAccount.A_zimbraFeatureFreeBusyViewEnabled,
 	ZaAccount.A_zimbraFeatureConversationsEnabled,
 	ZaAccount.A_zimbraFeatureFiltersEnabled,
 	ZaAccount.A_zimbraFeatureOutOfOfficeReplyEnabled,
@@ -2098,7 +2098,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 					{type:_ZA_TOP_GROUPER_, label: ZaMsg.NAD_zimbraCalendarFeature, id:"account_form_features_calendar",colSizes:["auto"],numCols:1,
 						visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible, 
 							[ZaAccount.A_zimbraFeatureGroupCalendarEnabled,
-							 ZaAccount.A_zimbraFeatureFreeBusyViewEnabled,
+							 //ZaAccount.A_zimbraFeatureFreeBusyViewEnabled,
                              ZaAccount.A_zimbraFeatureCalendarReminderDeviceEmailEnabled
 							 ]]
 						],						
@@ -2106,7 +2106,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 						enableDisableChangeEventSources:[ZaAccount.A_zimbraFeatureCalendarEnabled,ZaAccount.A_COSId],
 						items:[						
 							{ref:ZaAccount.A_zimbraFeatureGroupCalendarEnabled, type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraFeatureGroupCalendarEnabled,checkBoxLabel:ZaMsg.LBL_zimbraFeatureGroupCalendarEnabled, trueValue:"TRUE", falseValue:"FALSE"},
-							{ref:ZaAccount.A_zimbraFeatureFreeBusyViewEnabled, type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraFeatureFreeBusyViewEnabled,checkBoxLabel:ZaMsg.LBL_zimbraFeatureFreeBusyViewEnabled,  trueValue:"TRUE", falseValue:"FALSE"},
+							//{ref:ZaAccount.A_zimbraFeatureFreeBusyViewEnabled, type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraFeatureFreeBusyViewEnabled,checkBoxLabel:ZaMsg.LBL_zimbraFeatureFreeBusyViewEnabled,  trueValue:"TRUE", falseValue:"FALSE"},
                             {ref:ZaAccount.A_zimbraFeatureCalendarReminderDeviceEmailEnabled, type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraFeatureCalendarReminderDeviceEmailEnabled,checkBoxLabel:ZaMsg.LBL_zimbraFeatureCalendarReminderDeviceEmailEnabled,  trueValue:"TRUE", falseValue:"FALSE"}
 						]
 					},

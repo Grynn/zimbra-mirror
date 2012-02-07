@@ -309,7 +309,7 @@ ZaNewCosXWizard.FEATURE_TAB_ATTRS = [ZaCos.A_zimbraFeatureMailEnabled,
     ZaCos.A_zimbraFeatureExportFolderEnabled,
 	ZaCos.A_zimbraDumpsterEnabled,
 	ZaCos.A_zimbraFeatureMailSendLaterEnabled,
-	ZaCos.A_zimbraFeatureFreeBusyViewEnabled,
+	//ZaCos.A_zimbraFeatureFreeBusyViewEnabled,
     ZaCos.A_zimbraFeatureCalendarReminderDeviceEmailEnabled,
 	ZaCos.A_zimbraFeatureSMIMEEnabled,
 	ZaCos.A_zimbraFeatureManageSMIMECertificateEnabled
@@ -609,13 +609,13 @@ ZaNewCosXWizard.myXFormModifier = function(xFormObject, entry) {
 				visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,
 					[
 						ZaCos.A_zimbraFeatureGroupCalendarEnabled,
-						ZaCos.A_zimbraFeatureFreeBusyViewEnabled,
+						//ZaCos.A_zimbraFeatureFreeBusyViewEnabled,
                         ZaCos.A_zimbraFeatureCalendarReminderDeviceEmailEnabled
 					]]
 				],
                 items:[
                     {ref:ZaCos.A_zimbraFeatureGroupCalendarEnabled, type:_WIZ_CHECKBOX_, msgName:ZaMsg.LBL_zimbraFeatureGroupCalendarEnabled,label:ZaMsg.LBL_zimbraFeatureGroupCalendarEnabled, trueValue:"TRUE", falseValue:"FALSE"},
-		    {ref:ZaCos.A_zimbraFeatureFreeBusyViewEnabled, type:_WIZ_CHECKBOX_, msgName:ZaMsg.LBL_zimbraFeatureFreeBusyViewEnabled, label:ZaMsg.LBL_zimbraFeatureFreeBusyViewEnabled, trueValue:"TRUE", falseValue:"FALSE"},
+		            //{ref:ZaCos.A_zimbraFeatureFreeBusyViewEnabled, type:_WIZ_CHECKBOX_, msgName:ZaMsg.LBL_zimbraFeatureFreeBusyViewEnabled, label:ZaMsg.LBL_zimbraFeatureFreeBusyViewEnabled, trueValue:"TRUE", falseValue:"FALSE"},
                     {ref:ZaCos.A_zimbraFeatureCalendarReminderDeviceEmailEnabled, type:_WIZ_CHECKBOX_, msgName:ZaMsg.LBL_zimbraFeatureCalendarReminderDeviceEmailEnabled, label:ZaMsg.LBL_zimbraFeatureCalendarReminderDeviceEmailEnabled, trueValue:"TRUE", falseValue:"FALSE"}
                 ]
             },
