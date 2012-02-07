@@ -139,7 +139,10 @@ if(ZaOverviewPanelController.treeModifiers)
 
  //add download the accounts to searchListView
  if (ZaController.initToolbarMethods["ZaSearchListController"]) {
-    ZaOperation.DOWNLOAD_ACCOUNTS = ++ ZA_OP_INDEX ;
+    if (AjxUtil.isEmpty(ZaOperation.DOWNLOAD_ACCOUNTS)) {
+        ZaOperation.DOWNLOAD_ACCOUNTS = ++ ZA_OP_INDEX ;
+    }
+
     ZaSearchListController.initExtraToolbarMethod = function () {
         this._toolbarOperations [ZaOperation.DOWNLOAD_ACCOUNTS] =
                 new ZaOperation(ZaOperation.DOWNLOAD_ACCOUNTS, com_zimbra_bulkprovision.ACTBB_DownloadAccounts,
@@ -158,21 +161,41 @@ if(ZaOverviewPanelController.treeModifiers)
     ZaController.initToolbarMethods["ZaSearchListController"].push(ZaSearchListController.initExtraToolbarMethod);
 }
 
+ //add download the accounts to searchListView's appBar (at the PopUpmenu under the gear button on the top-right corner)
+ if (appNewUI && ZaController.initPopupMenuMethods["ZaSearchListController"]) {
+    if (AjxUtil.isEmpty(ZaOperation.DOWNLOAD_ACCOUNTS)) {
+        ZaOperation.DOWNLOAD_ACCOUNTS = ++ ZA_OP_INDEX ;
+    }
+
+    ZaSearchListController.initExtraAppBarMenuMethod = function () {
+
+        this._popupOperationsOnAppBar [ZaOperation.DOWNLOAD_ACCOUNTS] =
+                new ZaOperation(ZaOperation.DOWNLOAD_ACCOUNTS, com_zimbra_bulkprovision.ACTBB_DownloadAccounts,
+                        com_zimbra_bulkprovision.ACTBB_DownloadAccounts_tt, "DownloadGlobalConfig", "DownloadGlobalConfigDis",
+                        new AjxListener(this, ZaSearchListController.prototype._downloadAccountsListener)
+                        );
+
+    }
+
+    ZaController.initPopupMenuMethods["ZaSearchListController"].push(ZaSearchListController.initExtraAppBarMenuMethod);
+}
+
+
 ZaSearchListController.prototype._downloadAccountsListener =
  function (ev) {
      //TODO: need to filter out non account items, such as domain, etc.
      if (window.console && window.console.log) window.console.log("Download all the search result accounts ...") ;
      var queryString = "?action=getSR";
      if (this._currentQuery) {
-        queryString += "&q=" + AjxStringUtil.urlEncode(this._currentQuery) ;
+        queryString += "&q=" + AjxStringUtil.urlComponentEncode(this._currentQuery) ;
      }
 
      if (ZaSearch._domain && AjxUtil.isDomainName(ZaSearch._domain)) {
-        queryString += "&domain=" + AjxStringUtil.urlEncode(ZaSearch._domain) ;        
+        queryString += "&domain=" + AjxStringUtil.urlComponentEncode(ZaSearch._domain) ;        
      }
 
      if (this.searchTypes) {
-         queryString +="&types=" + AjxStringUtil.urlEncode(this.searchTypes.join(","));
+         queryString +="&types=" + AjxStringUtil.urlComponentEncode(this.searchTypes.join(","));
      }
 
      window.open("/service/afd/" + queryString);

@@ -25,9 +25,12 @@
 ZaSearchListController = function(appCtxt, container) {
 	ZaListViewController.call(this, appCtxt, container,"ZaSearchListController");
     //Account operations
-   	this._toolbarOperations = new Array();
-   	this._popupOperations = new Array();			
-   	
+	this._toolbarOperations = new Array();
+	this._popupOperations = new Array();
+	if(appNewUI){
+		this._popupOperationsOnAppBar = new Array();
+	}
+
 	this._currentPageNum = 1;
 	this._currentQuery = null;
 	this._currentDomain = null;
@@ -403,7 +406,8 @@ function () {
 	this._popupOperations[ZaOperation.CHNG_PWD]=new ZaOperation(ZaOperation.CHNG_PWD,ZaMsg.ACTBB_ChngPwd, ZaMsg.ACTBB_ChngPwd_tt, "Padlock", "PadlockDis", new AjxListener(this, ZaAccountListController.prototype._chngPwdListener));
 	this._popupOperations[ZaOperation.EXPIRE_SESSION] = new ZaOperation(ZaOperation.EXPIRE_SESSION, ZaMsg.ACTBB_ExpireSessions, ZaMsg.ACTBB_ExpireSessions_tt, "ExpireSession", "ExpireSessionDis", new AjxListener(this, ZaAccountListController.prototype._expireSessionListener));
 	this._popupOperations[ZaOperation.MOVE_ALIAS]=new ZaOperation(ZaOperation.MOVE_ALIAS,ZaMsg.ACTBB_MoveAlias, ZaMsg.ACTBB_MoveAlias_tt, "MoveAlias", "MoveAlias", new AjxListener(this, ZaAccountListController.prototype._moveAliasListener));
-	
+
+
 }
 ZaController.initPopupMenuMethods["ZaSearchListController"].push(ZaSearchListController.initPopupMenuMethod);
 
@@ -494,6 +498,9 @@ function () {
     }
     this._initPopupMenu();
     this._actionMenu =  new ZaPopupMenu(this._contentView, "ActionMenu", null, this._popupOperations, ZaId.VIEW_SCHLIST, ZaId.MENU_POP);
+    if (appNewUI) {
+        this._initPopupMenuAtAppBar();
+    }
 
     //set a selection listener on the account list view
     this._contentView.addSelectionListener(new AjxListener(this, this._listSelectionListener));
@@ -501,6 +508,7 @@ function () {
 
 	this._removeConfirmMessageDialog = ZaApp.getInstance().dialogs["ConfirmMessageDialog"] = new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON],null,ZaId.CTR_PREFIX + ZaId.VIEW_SCHLIST + "_ConfirmMessage");			
 	this._UICreated = true;
+
 }
 
 ZaSearchListController.prototype.closeButtonListener =
@@ -973,3 +981,32 @@ function(resp, orig) {
 }
 
 ZaController.changeActionsStateMethods["ZaSearchListController"].push(ZaSearchListController.changeActionsStateMethod);
+
+
+ZaSearchListController.prototype._initPopupMenuAtAppBar = function(){
+
+    if (AjxUtil.isEmpty(this._popupOrder)) {
+        // in new UI, this._popupOrder is used to arrange the order of the items of PopUpMenu under the gear button,
+        // instead of right-click menu
+
+        // make the original right-click menu items first
+        for(var ix in this._popupOperations) {
+            this._popupOrder.push(ix)
+        }
+        //then add extra menu items set by other amdin extensions or zimlets
+        for(var ix in this._popupOperationsOnAppBar) {
+            this._popupOrder.push(ix)
+        }
+    }
+
+    //merge the original right-click menu items and the extra menu items
+    for(var ix in this._popupOperations) {
+        this._popupOperationsOnAppBar[ix] = this._popupOperations[ix];
+    }
+}
+
+//used for showing the PopUpMenu under the gear button in the new UI
+ZaSearchListController.prototype.getPopUpOperation =
+function () {
+    return this._popupOperationsOnAppBar;
+}
