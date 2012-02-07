@@ -17,6 +17,12 @@
             if ($args ~* ^(.+)$) {
                 set $nargs "$args&$nargs";
             }
+            
+            # if it's logout, just redirect no matter whether ZM_AUTH_TOKEN is available
+            if ($arg_loginOp = "logout") {
+                set $args $nargs;
+                rewrite ^/(.*)$ https://$sslhost/$1 redirect;
+            }
 
             # redirect to http unless we have a ZM_AUTH_TOKEN
             # 
