@@ -62,9 +62,23 @@ public class PageMain extends AbsTab {
 
 
 	public boolean zIsZimletLoaded() throws HarnessException {
-		if (ZimbraSeleniumProperties.isWebDriver())
-			return (Boolean) ((JavascriptExecutor) ClientSessionFactory.session().webDriver())
-					.executeScript("return top.appCtxt.getZimletMgr().loaded");
+		if (ZimbraSeleniumProperties.isWebDriver()){
+			Object o = null;
+			boolean response = false;
+			String script = "return top.appCtxt.getZimletMgr().loaded";
+			try{
+				o = ((JavascriptExecutor) ClientSessionFactory.session().webDriver())
+					.executeScript(script);
+				logger.info(o + " ...executing... " + script);
+				if(o != null)
+					response = (Boolean)o;
+				else
+					return response;
+			}catch(Exception ex){
+				logger.info(ex + " ...while executing... " + script);
+			}
+			return response;
+		}
 		else if (ZimbraSeleniumProperties.isWebDriverBackedSelenium())
 			return ("true".equals(sGetEval("selenium.browserbot.getCurrentWindow().top.appCtxt.getZimletMgr().loaded")));
 		else
