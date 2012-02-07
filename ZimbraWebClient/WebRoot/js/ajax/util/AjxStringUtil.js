@@ -1945,11 +1945,18 @@ function(el, ctxt) {
 			for (var i = 0, attrs = el.attributes, l = attrs.length; i < l; i++) {
 				var attr = attrs.item(i);
 				var attrName = attr.nodeName && attr.nodeName.toLowerCase();
+				var attrValue = attr.nodeValue && attr.nodeValue.toLowerCase();
+				// we have global CSS rules for TD that trump table properties, so bail
+				if (nodeName == "table" && (attrName == "cellpadding" || attrName == "cellspacing" ||
+						attrName == "border") && attrValue == 0) {
+					ctxt.fail = true;
+					break;
+				}
 				if (attrName && attrName.indexOf("on") === 0) {
 					el.removeAttribute(attrName);
 				}
 				if (ctxt.styles && (attrName == "style")) {
-					var value = attr.nodeValue && attr.nodeValue.toLowerCase().replace(/\s*/g, "");
+					var value = attrValue.replace(/\s*/g, "");
 					if (value) {
 						for (var j = 0; j < ctxt.styles.length; j++) {
 							var style = ctxt.styles[j];
