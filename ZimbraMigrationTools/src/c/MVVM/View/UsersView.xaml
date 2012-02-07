@@ -67,9 +67,9 @@
             </Grid.RowDefinitions>
             <TreeView TreeViewItem.Selected ="HandleTreeViewItemSelected" Grid.Row="0" Grid.RowSpan="4" MaxHeight="300" MaxWidth="220" Background="Azure" BorderThickness="0" Margin="16,10,0,13" Name="QBTreeView" HorizontalAlignment="Left" VerticalAlignment="Top" >
             </TreeView>
-            <Label Grid.Row="4" Content="Filter" Margin="10,0,0,0" VerticalAlignment="Top" MaxHeight="26" HorizontalAlignment="Left" Name="labelFilter"  />
-            <TextBox Grid.Row="4" Margin="50,4,0,0" VerticalAlignment="Top" MaxHeight="18" MinWidth="180" MaxWidth="400" HorizontalAlignment="Left" Name="tbFilter" />
-            <CheckBox Grid.Row="5" Content="Search entire subtree" Margin="15,6,0,0" HorizontalAlignment="Left"  Name="cbEntireSubt" VerticalAlignment="Top" IsChecked="true"/>
+            <Label Grid.Row="4" Content="Filter" Margin="10,2,0,0" VerticalAlignment="Top" MaxHeight="26" HorizontalAlignment="Left" Name="labelFilter"  />
+            <TextBox Grid.Row="4" Margin="50,4,0,0" VerticalAlignment="Top" MaxHeight="24" MinWidth="180" MaxWidth="400" HorizontalAlignment="Left" Name="tbFilter" />
+            <CheckBox Grid.Row="5" Content="Search entire subtree" Margin="15,8,0,0" HorizontalAlignment="Left"  Name="cbEntireSubt" VerticalAlignment="Top" IsChecked="true"/>
             <ListBox Grid.Row="0" Grid.RowSpan="4" Margin="256,10,0,13" SelectionMode="Multiple" VerticalAlignment="Top" Name="lbQBUsers" MinHeight="300" MaxHeight="300" MinWidth="220" HorizontalAlignment="Left" >
             </ListBox>
             <Grid Name="BottomGrid1" Grid.Row="6" Margin="10,0,0,10" VerticalAlignment="Bottom">
