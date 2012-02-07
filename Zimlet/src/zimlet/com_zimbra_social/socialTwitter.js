@@ -80,7 +80,8 @@ function social_sortTimeObjs(a, b) {
 
 com_zimbra_socialTwitter.prototype.getTwitterTrends =
 function() {
-	var entireurl = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode("http://api.twitter.com/1/trends.json");
+	//23424977 is woeid for USA
+	var entireurl = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode("https://api.twitter.com/1/trends/23424977.json");
 	AjxRpc.invoke(null, entireurl, null, new AjxCallback(this, this._trendsCallback), true);
 };
 
@@ -88,8 +89,8 @@ com_zimbra_socialTwitter.prototype._trendsCallback =
 function(response) {
 	var jsonObj = this.zimlet._extractJSONResponse(null, this.zimlet.getMessage("twitterError"), response);
 	var trends = [];
-	if (jsonObj.trends) {
-		trends = jsonObj.trends;
+	if(jsonObj && jsonObj[0] && jsonObj[0].trends) {
+		trends =  jsonObj[0].trends;
 	}
 
 	this.allTrends = new Array();

@@ -27,7 +27,7 @@
 	</TABLE>
 	</DIV>
 	<DIV id='social_twitterCardsDiv' class='social_twitterCardsDiv DwtPropertyPage'>
-	<table id='social_twitterCardsParentTable' cellspacing=10px>
+	<table id='social_twitterCardsParentTable'>
 	</table>
 	</DIV>
 </template>
@@ -65,7 +65,7 @@
 
 <template id='CardHeader'>
 	<div  class='overviewHeader'>
-	<TABLE cellpadding='0' cellspacing='0'>
+	<TABLE cellpadding='0' cellspacing='0' style='width:100%'>
 	<TR>
 	<TD style='width:16px;height:16px' align='center'><div class='ImgNodeExpanded' id= '${expandIconId}'/></TD>
 	<td class='imageCell' />

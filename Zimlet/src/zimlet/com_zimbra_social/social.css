@@ -11,6 +11,11 @@
     overflow: hidden;
 }
 
+#social_twitterCardsDiv TABLE {
+    border-collapse: separate;
+    border-spacing: 2px;
+}
+
 .Imgsocial_twitterIcon {
     background: transparent url("social_twitter.png") no-repeat 0 0;
     width: 16px;
