@@ -490,8 +490,16 @@ public class ExecuteHarnessMain {
 		
 		// finish inProgress - overwrite inProgress/index.html		
 		TestStatusReporter.copyFile(testoutputfoldername + "\\inProgress\\result.txt" , testoutputfoldername + "\\inProgress\\index.html");
-		
-		
+
+		// Write the results to testsummary.txt so that TMS picks them up
+    	Logger summary = LogManager.getLogger("testsummary");
+    	summary.info("#" + (new Date()));
+		if ( listener != null ) {
+			summary.info("Passed=" + listener.testsPass);
+			summary.info("Failed=" + listener.testsFailed);
+			summary.info("Errors=" + listener.testsSkipped);
+		}
+
 		logger.info("Execute tests ... completed");
 		
 		return ( listener == null ? "Done" : listener.getResults() );
