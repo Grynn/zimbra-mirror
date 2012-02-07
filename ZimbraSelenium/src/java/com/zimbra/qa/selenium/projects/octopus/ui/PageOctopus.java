@@ -41,17 +41,17 @@ public class PageOctopus extends AbsTab {
 		// temporary omitting first letter in the locator's name
 				"css=div.settingsLink:contains(ettings)");
 		public static final Locators zTabMyFiles = new Locators(
-				"css=div.octopus-tab-label:contains(My Files)");
+				"css=div#octopus-tab-myfiles");
 		public static final Locators zTabSharing = new Locators(
-				"css=div.octopus-tab-label:contains(Sharing)");
+				"css=div#octopus-tab-share");
 		public static final Locators zTabFavorites = new Locators(
-				"css=div.octopus-tab-label:contains(Favorites)");
+				"css=div#octopus-tab-favorites");
 		public static final Locators zTabHistory = new Locators(
-				"css=div.octopus-tab-label:contains(History)");
+				"css=div#octopus-tab-history");
 		public static final Locators zTabTrash = new Locators(
-				"css=div.octopus-tab-label:contains(Trash)");
+				"css=div#octopus-tab-trash");
 		public static final Locators zTabSearch = new Locators(
-				"css=div.octopus-tab-label:contains(Search)");
+				"css=div#octopus-tab-search");
 		public static final Locators zMyFilesListViewItems = new Locators(
 				"css=div[class*=my-files-list-view]>div.my-files-list-item");
 		public static final Locators zRenameInput = new Locators(
