@@ -22,7 +22,7 @@ public class DeleteComment extends OctopusCommonTest {
 
 
 	public DeleteComment() {
-		logger.info("New " + ViewComment.class.getCanonicalName());
+		logger.info("New " + DeleteComment.class.getCanonicalName());
 
 		// test starts at the My Files tab
 		super.startingPage = app.zPageMyFiles;

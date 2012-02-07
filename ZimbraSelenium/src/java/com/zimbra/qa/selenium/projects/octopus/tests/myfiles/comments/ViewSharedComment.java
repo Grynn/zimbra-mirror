@@ -2,6 +2,7 @@ package com.zimbra.qa.selenium.projects.octopus.tests.myfiles.comments;
 
 import java.util.List;
 
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.CommentItem;
@@ -10,14 +11,21 @@ import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.XmlStringUtil;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
+import com.zimbra.qa.selenium.framework.util.ZimbraCharsets;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
+import com.zimbra.qa.selenium.framework.util.ZimbraCharsets.ZCharset;
 import com.zimbra.qa.selenium.projects.octopus.core.OctopusCommonTest;
 import com.zimbra.qa.selenium.projects.octopus.ui.DisplayFileComments;
 import com.zimbra.qa.selenium.projects.octopus.ui.DisplayFilePreview;
 import com.zimbra.qa.selenium.projects.octopus.ui.PageMyFiles;
 
+/**
+ * @author zimbra
+ *
+ */
 public class ViewSharedComment extends OctopusCommonTest {
 
 	private ZimbraAccount destination = null;
@@ -162,25 +170,28 @@ public class ViewSharedComment extends OctopusCommonTest {
 		}
 
 	}
-
-	@Test(
-			description = "View comment from another user that does not contain a display name",
-			groups = { "smoke" })
-	public void ViewSharedComment_02() throws HarnessException {
-
-		
-		ZimbraAccount otherUser = new ZimbraAccount();
-		otherUser.clearPref("displayName"); // By default, a displayName is always set.  Clear it.
-		otherUser.provision();
-		otherUser.authenticate();
-		
+	
+	/**
+	 * Since the following tests all have the same steps, just different
+	 * values being used, this method will run the test steps for:
+	 * 
+	 * 1. Given a different account and a comment
+	 * 2. The test account shares a file
+	 * 2. The different account comments on a file
+	 * 3. Test account verifies the displayed name (displayName) and comment text
+	 * 
+	 * @param commentor the other account that creates the comment
+	 * @param comment the comment text
+	 * @throws HarnessException
+	 */
+	private void verifyCommentDetails(ZimbraAccount commentor, String comment) throws HarnessException {
+			
 		String filename = "filename"+ ZimbraSeleniumProperties.getUniqueString() +".txt";
 		String filePath = ZimbraSeleniumProperties.getBaseDirectory()
 				+ "/data/public/documents/doc01/plaintext.txt";
 		String subFolderName = "subFolder" + ZimbraSeleniumProperties.getUniqueString();
 
 		
-		String commentText = "Comment" + ZimbraSeleniumProperties.getUniqueString();
 
 
 
@@ -198,7 +209,7 @@ public class ViewSharedComment extends OctopusCommonTest {
 		app.zGetActiveAccount().soapSend(
 				"<FolderActionRequest xmlns='urn:zimbraMail'>"
 			+		"<action op='grant' id='" + subFolderItem.getId() + "'>"
-			+			"<grant gt='guest' perm='rwidxa' d='"+ otherUser.EmailAddress +"'/>"
+			+			"<grant gt='guest' perm='rwidxa' d='"+ commentor.EmailAddress +"'/>"
 			+		"</action>"
 			+	"</FolderActionRequest>");
 
@@ -218,13 +229,13 @@ public class ViewSharedComment extends OctopusCommonTest {
 
 
 		// Add comments to the file using SOAP
-		otherUser.soapSend(
+		commentor.soapSend(
 					"<AddCommentRequest xmlns='urn:zimbraMail'>"
-				+		"<comment parentId='"+ app.zGetActiveAccount().ZimbraId + ":" + documentId + "' text='" + commentText + "'/>"
+				+		"<comment parentId='"+ app.zGetActiveAccount().ZimbraId + ":" + documentId + "' text='" + XmlStringUtil.escapeXml(comment) + "'/>"
 				+	"</AddCommentRequest>");
 
 		// Get file comments through SOAP
-		otherUser.soapSend(
+		commentor.soapSend(
 					"<GetCommentsRequest  xmlns='urn:zimbraMail'>"
 				+		"<comment parentId='"+ app.zGetActiveAccount().ZimbraId + ":" + documentId + "'/>"
 				+	"</GetCommentsRequest>");
@@ -263,11 +274,11 @@ public class ViewSharedComment extends OctopusCommonTest {
 				
 				CommentItem found = null;
 				List<CommentItem> comments = fileComments.zGetCommentsList();
-				for ( CommentItem comment : comments ) {
+				for ( CommentItem item : comments ) {
 					
 					// Verify the comment is found
-					if (comment.getCommentText().equals(commentText)) {
-						found = comment;
+					if (item.getCommentText().equals(comment)) {
+						found = item;
 						break;
 					}
 					
@@ -276,10 +287,16 @@ public class ViewSharedComment extends OctopusCommonTest {
 				ZAssert.assertNotNull(found, "Verify the commment is found");
 				
 				ZAssert.assertEquals(
-						found.getCommentEmail(), 
-						destination.EmailAddress, 
+						found.getCommentEmail(),
+						// If there is no displayName set, the app should fall back to the EmailAddress
+						commentor.getPref("displayName") == null ? commentor.EmailAddress : commentor.getPref("displayName"), 
 						"Verify that in absense of a display name, the email is shown");
-	
+
+				ZAssert.assertEquals(
+						found.getCommentText(), 
+						comment, 
+						"Verify that in absense of a display name, the email is shown");
+
 			
 			} finally {
 				if ( fileComments != null ) {
@@ -298,5 +315,56 @@ public class ViewSharedComment extends OctopusCommonTest {
 
 
 	}
+
+
+	@Test(
+			description = "View comment from another user that does not contain a display name",
+			groups = { "functional" })
+	public void ViewSharedComment_DisplayName_01() throws HarnessException {
+
+		ZimbraAccount commentor = new ZimbraAccount();
+		commentor.clearPref("displayName"); // unset the displayName
+		commentor.provision();
+		commentor.authenticate();
+		
+		String comment = "Comment"+ ZimbraSeleniumProperties.getUniqueString();
+		
+		verifyCommentDetails(commentor, comment);
+
+	}
+	
+	
+	@DataProvider(name = "DataProviderDisplayNames")
+	public Object[][] DataProviderDeleteKeys() throws HarnessException {
+		return (ZimbraCharsets.getInstance().getSampleTable());
+	}
+
+	@Test(
+			description = "View comment from another user where displayName contains special characters",
+			groups = { "functional" },
+			dataProvider = "DataProviderDisplayNames")
+	public void ViewSharedComment_DisplayName_02(ZCharset charset, String displayName) throws HarnessException {
+
+		ZimbraAccount commentor = new ZimbraAccount();
+		commentor.setPref("displayName", displayName);
+		commentor.provision();
+		commentor.authenticate();
+		
+		String comment = "Comment"+ ZimbraSeleniumProperties.getUniqueString();
+		
+		verifyCommentDetails(commentor, comment);
+	}
+
+	@Test(
+			description = "View comment from another user where comment contains special characters",
+			groups = { "functional" },
+			dataProvider = "DataProviderDisplayNames")
+	public void ViewSharedComment_Comment_01(ZCharset charset, String comment) throws HarnessException {
+		
+		verifyCommentDetails(destination, comment);
+	}
+
+
+
 
 }
