@@ -72,4 +72,56 @@ public class DeleteDistributionList extends AdminCommonTest {
 		ZAssert.assertNull(response, "Verify the distribution list is deleted successfully");
 
 	}
+	
+	/**
+	 * Testcase : Right Click Menu : Verify delete operation for DL.
+	 * Steps :
+	 * 1. Create an dl using SOAP.
+	 * 2. Delete dl present in the search result.
+	 * 3. Verify list is deleted using SOAP
+	 * @throws HarnessException
+	 */
+	@Test(	description = "Verify delete operation for distribution list",
+			groups = { "smoke" })
+			public void DeleteDistributionList_02() throws HarnessException {
+
+		// Create a new dl in the Admin Console using SOAP
+		DistributionListItem dl = new DistributionListItem();
+		String dlEmailAddress=dl.getEmailAddress();
+
+		ZimbraAdminAccount.AdminConsoleAdmin().soapSend(
+				"<CreateDistributionListRequest xmlns='urn:zimbraAdmin'>"
+				+			"<name>" + dlEmailAddress + "</name>"
+				+		"</CreateDistributionListRequest>");
+
+		// Enter the search string to find the dl
+		app.zPageSearchResults.zAddSearchQuery(dlEmailAddress);
+
+		// Click search
+		app.zPageSearchResults.zToolbarPressButton(Button.B_SEARCH);
+
+
+		// Right Click on distribution list to be deleted.
+		app.zPageSearchResults.zListItem(Action.A_RIGHTCLICK, dl.getEmailAddress());
+
+		// Click on Delete button
+		DialogForDeleteOperation dialog = (DialogForDeleteOperation) app.zPageSearchResults.zToolbarPressButton(Button.B_TREE_DELETE);
+
+		// Click Yes in Confirmation dialog
+		dialog.zClickButton(Button.B_YES);
+
+		// Click Ok on "Delete Items" dialog
+		dialog.zClickButton(Button.B_OK);
+
+
+		// Verify the dl does not exists in the ZCS
+		ZimbraAdminAccount.AdminConsoleAdmin().soapSend(
+				"<GetDistributionListRequest xmlns='urn:zimbraAdmin'>" +
+				"<dl by='name'>"+dlEmailAddress+"</dl>"+
+		"</GetDistributionListRequest>");
+
+		Element response = ZimbraAdminAccount.AdminConsoleAdmin().soapSelectNode("//admin:GetDistributionListResponse/admin:dl", 1);
+		ZAssert.assertNull(response, "Verify the distribution list is deleted successfully");
+
+	}
 }

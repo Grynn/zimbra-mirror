@@ -19,6 +19,7 @@ public class PageSearchResults extends AbsTab {
 		public static final String SEARCH_INPUT_TEXT_BOX="_XForm_query_display";
 		public static final String SEARCH_BUTTON="css=td.xform_container div.ImgSearch";
 		public static final String DELETE_BUTTON="css=div[id^='zmi__zb_currentApp__DELETE__'] div[class='ImgDelete']";
+		public static final String RIGHT_CLICK_MENU_DELETE_BUTTON="css=div[id='zm__SCHLV__MENU_POP'] div[class='ImgDelete']";
 		public static final String EDIT_BUTTON="css=div[id^='zmi__zb_currentApp__EDIT__'] div[class='ImgEdit']";
 		public static final String GEAR_ICON="css=div.ImgConfigure";
 	}
@@ -85,6 +86,9 @@ public class PageSearchResults extends AbsTab {
 					if(action == Action.A_LEFTCLICK) {
 						zClick(locator);
 						break;
+					} else if(action == Action.A_RIGHTCLICK) {
+						zRightClick(locator);
+						break;
 					}
 
 				}
@@ -136,8 +140,8 @@ public class PageSearchResults extends AbsTab {
 
 			// FALL THROUGH
 
-		} else if(button == Button.B_DELETE) {
-			locator = Locators.DELETE_BUTTON;
+		} else if(button == Button.B_TREE_DELETE) {
+			locator = Locators.RIGHT_CLICK_MENU_DELETE_BUTTON;
 			page = new DialogForDeleteOperation(this.MyApplication, null);
 
 			// Make sure the button exists
@@ -201,13 +205,11 @@ public class PageSearchResults extends AbsTab {
 				pulldownLocator = Locators.GEAR_ICON;
 				optionLocator = Locators.DELETE_BUTTON;
 
-				page = new DialogForDeleteOperation(this.MyApplication, null);
+				page = new DialogForDeleteOperation(this.MyApplication,null);
 
 				// FALL THROUGH
 
-			}
-			
-			if (option == Button.O_EDIT) {
+			} else if (option == Button.O_EDIT) {
 
 				pulldownLocator = Locators.GEAR_ICON;
 				optionLocator = Locators.EDIT_BUTTON;

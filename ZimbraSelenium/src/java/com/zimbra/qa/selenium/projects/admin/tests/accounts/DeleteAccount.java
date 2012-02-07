@@ -74,4 +74,56 @@ public class DeleteAccount extends AdminCommonTest {
 
 
 	}
+	
+	/**
+	 * Testcase : Right click menu : Delete a basic account
+	 * Steps :
+	 * 1. Create an account using SOAP.
+	 * 2. Right click on account to be deleted.
+	 * 3. Delete account.
+	 * @throws HarnessException
+	 */
+	@Test(	description = "Right click menu : Delete a basic account",
+			groups = { "smoke" })
+			public void DeleteAccount_02() throws HarnessException {
+
+		// Create a new account in the Admin Console using SOAP
+		AccountItem account = new AccountItem();
+		ZimbraAdminAccount.AdminConsoleAdmin().soapSend(
+				"<CreateAccountRequest xmlns='urn:zimbraAdmin'>"
+				+			"<name>" + account.getEmailAddress() + "</name>"
+				+			"<password>test123</password>"
+				+		"</CreateAccountRequest>");
+
+
+
+		// Enter the search string to find the account
+		app.zPageSearchResults.zAddSearchQuery(account.getEmailAddress());
+
+		// Click search
+		app.zPageSearchResults.zToolbarPressButton(Button.B_SEARCH);
+
+		// Right Click on account to be deleted.
+		app.zPageSearchResults.zListItem(Action.A_RIGHTCLICK, account.getEmailAddress());
+
+		// Click on Delete button
+		DialogForDeleteOperation dialog = (DialogForDeleteOperation) app.zPageSearchResults.zToolbarPressButton(Button.B_TREE_DELETE);
+
+		// Click Yes in Confirmation dialog
+		dialog.zClickButton(Button.B_YES);
+
+		// Click Ok on "Delete Items" dialog
+		dialog.zClickButton(Button.B_OK);
+
+
+		// Verify the account exists in the ZCS
+		ZimbraAdminAccount.AdminConsoleAdmin().soapSend(
+				"<GetAccountRequest xmlns='urn:zimbraAdmin'>"
+				+			"<account by='name'>"+ account.getEmailAddress() +"</account>"
+				+		"</GetAccountRequest>");
+		Element response = ZimbraAdminAccount.AdminConsoleAdmin().soapSelectNode("//admin:GetAccountResponse/admin:account", 1); 
+		ZAssert.assertNull(response, "Verify the account is deleted successfully");
+
+
+	}
 }
