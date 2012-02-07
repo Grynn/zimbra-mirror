@@ -177,15 +177,26 @@ public class CSMigrationWrapper
         string bakfile = Path.GetTempPath() + prefix + ".bak";
         string logfile = Path.GetTempPath() + prefix + ".log";
 
-        if (File.Exists(bakfile))
+        try
         {
-            File.Delete(bakfile);
+            if (File.Exists(bakfile))
+            {
+                File.Delete(bakfile);
+            }
+            if (File.Exists(logfile))
+            {
+                File.Move(logfile, bakfile);
+            }
+            Log.init(logfile, level);
         }
-        if (File.Exists(logfile))
+        catch (Exception e)
         {
-            File.Move(logfile, bakfile);
+            // need to do better than Console.WriteLine -- we'll only see this during debugging
+            // but at least we won't crash
+            string temp = string.Format("Initialization error on {0}: {1}", logfile, e.Message);
+            Console.WriteLine(temp);
+            return;
         }
-        Log.init(logfile, level);
     }
 
     private bool SkipFolder(MigrationOptions options, List<string> skipList, dynamic folder) {

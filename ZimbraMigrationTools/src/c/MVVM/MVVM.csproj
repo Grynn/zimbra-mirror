@@ -156,9 +156,6 @@
     <Compile Include="ViewModel\ConfigViewModelUDest.cs" />
     <Compile Include="ViewModel\IntroViewModel.cs" />
     <Compile Include="ViewModel\OptionsViewModel.cs" />
-    <Compile Include="ViewModel\QueryBuilderDlg.xaml.cs">
-      <DependentUpon>QueryBuilderDlg.xaml</DependentUpon>
-    </Compile>
     <Compile Include="ViewModel\ScheduleViewModel.cs" />
     <Compile Include="ViewModel\UserResultsViewModel.cs" />
     <Compile Include="ViewModel\UsersViewModel.cs" />
@@ -221,10 +218,6 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="themes\generic.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="ViewModel\QueryBuilderDlg.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

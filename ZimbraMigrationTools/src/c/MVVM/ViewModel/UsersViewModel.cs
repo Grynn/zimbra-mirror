@@ -21,7 +21,6 @@ public class UsersViewModel: BaseViewModel
     public UsersViewModel(string username, string mappedname)
     {
         this.ObjectPickerCommand = new ActionCommand(this.ObjectPicker, () => true);
-        this.LDAPBrowserCommand = new ActionCommand(this.LDAPBrowser, () => true);
         this.UserMapCommand = new ActionCommand(this.UserMap, () => true);
         this.AddCommand = new ActionCommand(this.Add, () => true);
         this.RemoveCommand = new ActionCommand(this.Remove, () => true);
@@ -33,6 +32,10 @@ public class UsersViewModel: BaseViewModel
         this.IsProvisioned = false;
         this.EnablePopButtons = true;
     }
+
+    // a bit of a hack, but with the LDAP Browser now being controlled by the UsersView,
+    // we need a way for the view to get to the SchedulViewModel to set EnableMigrate
+    public ScheduleViewModel svm;                  
 
     // Commands
     public ICommand ObjectPickerCommand {
@@ -62,27 +65,6 @@ public class UsersViewModel: BaseViewModel
             scheduleViewModel.EnableMigrate = (scheduleViewModel.SchedList.Count > 0);
             EnableNext = (UsersList.Count > 0);
         }
-        EnablePopButtons = true;
-    }
-    public ICommand LDAPBrowserCommand {
-        get;
-        private set;
-    }
-    private void LDAPBrowser()
-    {
-        EnablePopButtons = false;
-
-        QueryBuilderDlg qbDlg = new QueryBuilderDlg(this);
-
-        qbDlg.Owner = Application.Current.MainWindow;
-        qbDlg.ShowDialog();
-
-        ScheduleViewModel scheduleViewModel =
-            ((ScheduleViewModel)ViewModelPtrs[(int)ViewType.SCHED]);
-
-        scheduleViewModel.SchedList.Add(new SchedUser(Username, false));
-        scheduleViewModel.EnableMigrate = (scheduleViewModel.SchedList.Count > 0);
-        EnableNext = (UsersList.Count > 0);
         EnablePopButtons = true;
     }
     public ICommand UserMapCommand {

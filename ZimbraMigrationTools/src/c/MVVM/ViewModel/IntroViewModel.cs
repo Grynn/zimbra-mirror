@@ -273,6 +273,7 @@ public class IntroViewModel: BaseViewModel
         m_usersViewModel.ZimbraDomain = "";
         m_usersViewModel.isBrowser = isBrowser;
         m_usersViewModel.CurrentUserSelection = -1;
+        m_usersViewModel.svm = m_scheduleViewModel;  // LDAP Browser needs to get to ScheduleView to set EnableMigrate 
 
         m_resultsViewModel = new AccountResultsViewModel(m_scheduleViewModel, -1, 0, "", "", "",
             0, "", 0, 0, false);
