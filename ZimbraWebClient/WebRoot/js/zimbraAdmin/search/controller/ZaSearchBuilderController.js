@@ -1165,13 +1165,15 @@ function (ev) {
     loc.y = treeItemBound.y;
     var dialog;
     var sbController = ZaApp.getInstance().getSearchBuilderController();
+    var skipDefaultValue = false;
     switch (filterType) {
         case ZaSearchOption.BASIC_FILTER_ID:
             dialog = sbController.getFilterDialogByType (ZaSearchOption.BASIC_FILTER_ID);
         break;
         case ZaSearchOption.SERVER_FILTER_ID:
-            dialog = sbController.getFilterDialogByType (ZaSearchOption.SERVER_FILTER_ID);
+            dialog = sbController.getFilterDialogByType (ZaSearchOption.SERVER_FILTER_ID, true);
             sbController.updateServerFilter(dialog);
+            skipDefaultValue = true;
         break;
         case ZaSearchOption.COS_FILTER_ID:
             dialog = sbController.getFilterDialogByType (ZaSearchOption.COS_FILTER_ID);
@@ -1191,7 +1193,8 @@ function (ev) {
     }
     if (dialog) {
         ZaSearchBuilderController.currentPopupDialog  = dialog;
-        dialog._localXForm.setInstance(ZaSearchOption.getDefaultInstance(dialog._optionId));
+        if (!skipDefaultValue)
+            dialog._localXForm.setInstance(ZaSearchOption.getDefaultInstance(dialog._optionId));
         dialog.popup(loc);
 	    var omem = DwtOutsideMouseEventMgr.INSTANCE;
 	    var omemParams = {
@@ -1232,8 +1235,8 @@ ZaSearchBuilderController.outsideListener = function () {
 }
 
 ZaSearchBuilderController.prototype.getFilterDialogByType =
-function (filterType) {
-    if (!ZaSearchBuilderController.filterDialogSet[filterType]) {
+function (filterType, noCached) {
+    if (!ZaSearchBuilderController.filterDialogSet[filterType] || noCached) {
         var w, h;
         if (filterType == ZaSearchOption.SERVER_FILTER_ID) {
             w = ZaSearchOptionView.WIDTH;
