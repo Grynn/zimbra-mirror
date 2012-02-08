@@ -99,7 +99,7 @@ public class OfflineCalDavDataImport extends CalDavDataImport {
     }
     
     @Override
-    protected String getPrincipalUrl() {
+    protected String getDefaultPrincipalUrl() {
         DataSourceConfig.Service ks = ((OfflineDataSource)dataSource).getKnownService();
         if (ks != null) {
             String path = ks.getCalDavPrincipalPath();
