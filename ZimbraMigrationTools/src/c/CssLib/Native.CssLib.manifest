@@ -11,9 +11,11 @@
     </hash>
     <typelib tlbid="{33449eaa-8056-4d28-8d42-552b7c6c8954}" version="1.0" helpdir="" resourceid="0" flags="HASDISKIMAGE" />
     <comClass clsid="{a6a12b55-ae1e-449d-a646-19e0db020ea2}" threadingModel="Apartment" tlbid="{33449eaa-8056-4d28-8d42-552b7c6c8954}" />
-    <comClass clsid="{9d8cdcec-28fe-4c15-8763-c174b17b815d}" threadingModel="Apartment" tlbid="{33449eaa-8056-4d28-8d42-552b7c6c8954}" />
-    <comClass clsid="{1315040c-d7da-4c7f-8500-bd9917546d15}" threadingModel="Apartment" tlbid="{33449eaa-8056-4d28-8d42-552b7c6c8954}" />
-    <comClass clsid="{a798cb91-5a5a-4b37-bfa7-11f08cb4770f}" threadingModel="Apartment" tlbid="{33449eaa-8056-4d28-8d42-552b7c6c8954}" />
+    <comClass clsid="{54CC791E-CDC9-429E-B94A-FEE4C44C45BB}" threadingModel="Free" tlbid="{33449eaa-8056-4d28-8d42-552b7c6c8954}" />
+    <comClass clsid="{E85E06D6-1342-490B-9486-AFBF029143C1}" threadingModel="Free" tlbid="{33449eaa-8056-4d28-8d42-552b7c6c8954}" />
+    <comClass clsid="{A020CB81-231E-4349-9B05-4D262E24242C}" threadingModel="Free" tlbid="{33449eaa-8056-4d28-8d42-552b7c6c8954}" />
+<comClass clsid="{7B8D17C3-89BF-4F6C-A2EE-A3ABEA1525E6}" threadingModel="Free" tlbid="{33449eaa-8056-4d28-8d42-552b7c6c8954}" />
+
   </file>
 <comInterfaceExternalProxyStub 
     name="IMapiWrapper" 
@@ -24,21 +26,29 @@
 
 <comInterfaceExternalProxyStub 
     name="IfolderObject" 
-    iid="{68895A46-5AEB-436A-B661-17FDFD7A0CE2}"
+    iid="{11C777ED-E9D0-4C32-AB64-D3B71E069D0D}"
+    proxyStubClsid32="{00020424-0000-0000-C000-000000000046}"
+    baseInterface="{00000000-0000-0000-C000-000000000046}"
+    tlbid = "{33449EAA-8056-4D28-8D42-552B7C6C8954}" />
+
+<comInterfaceExternalProxyStub 
+    name="IMapiAccessWrap" 
+    iid="{473DAC45-B40B-4FBF-9AC0-4C584B2336AD}"
     proxyStubClsid32="{00020424-0000-0000-C000-000000000046}"
     baseInterface="{00000000-0000-0000-C000-000000000046}"
     tlbid = "{33449EAA-8056-4D28-8D42-552B7C6C8954}" />
 
 <comInterfaceExternalProxyStub 
     name="IItemObject" 
-    iid="{0E3233A0-5359-44FF-B98F-BB0A69D4A948}"
+    iid="{8E14F34A-7CAC-4266-83F2-DC9AB08FBF8B}"
     proxyStubClsid32="{00020424-0000-0000-C000-000000000046}"
     baseInterface="{00000000-0000-0000-C000-000000000046}"
     tlbid = "{33449EAA-8056-4D28-8D42-552B7C6C8954}" />
 
+
 <comInterfaceExternalProxyStub 
     name="IUserObject" 
-    iid="{9DAB1C90-D4BD-4696-898C-DAB5B069BA93}"
+    iid="{04AB72E8-BAA2-4BF7-8E91-DCE1A2601075}"
     proxyStubClsid32="{00020424-0000-0000-C000-000000000046}"
     baseInterface="{00000000-0000-0000-C000-000000000046}"
     tlbid = "{33449EAA-8056-4D28-8D42-552B7C6C8954}" />
