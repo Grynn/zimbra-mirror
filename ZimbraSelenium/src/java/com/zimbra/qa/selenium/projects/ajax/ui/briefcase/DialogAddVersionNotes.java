@@ -15,6 +15,7 @@ public class DialogAddVersionNotes extends AbsDialog {
 
 	public static class Locators {
 		public static final String zDialogClass = "DwtDialog";
+		public static final String zDialogTitleClass = "css=td[class=DwtDialogTitle]";
 		public static final String zDialogButtonsClass = "DwtDialogButtonBar";
 		public static final String zDialogContentClassId = "DwtDialogBody";
 	}
@@ -33,7 +34,7 @@ public class DialogAddVersionNotes extends AbsDialog {
 	public boolean zIsActive() throws HarnessException {
 		logger.info(myPageName() + " zIsActive()");
 
-		String locator = "class=" + Locators.zDialogClass;
+		String locator = Locators.zDialogTitleClass;
 
 		if (!this.sIsElementPresent(locator)) {
 			return (false); // Not even present

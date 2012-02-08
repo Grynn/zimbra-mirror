@@ -332,7 +332,6 @@ public class CreateDocument extends AjaxCommonTest {
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
 		// Click on created document
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docItem);
 
 		// Click on open in a separate window icon in toolbar
@@ -387,14 +386,16 @@ public class CreateDocument extends AjaxCommonTest {
 
 		// Check if the window is still open
 		List<String> windows = app.zPageBriefcase.sGetAllWindowNames();
-		for (String window : windows) {
-			if (!window.isEmpty() && !window.contains("null")
+		if (!(ZimbraSeleniumProperties.isWebDriver()||ZimbraSeleniumProperties.isWebDriverBackedSelenium())){
+			for (String window : windows) {
+				if (!window.isEmpty() && !window.contains("null")
 					&& !window.contains(PageBriefcase.pageTitle)
 					&& !window.contains("main_app_window")
-					&& !window.contains("undefined")) {
-				logger.warn(window + " window was still active. Closing ...");
-				app.zPageBriefcase.zSelectWindow(window);
-				app.zPageBriefcase.closeWindow();
+					&& !window.contains("undefined")) {				
+					logger.warn(window + " window was still active. Closing ...");
+					app.zPageBriefcase.zSelectWindow(window);
+					app.zPageBriefcase.closeWindow();
+				}
 			}
 		}
 		app.zPageBriefcase.zSelectWindow(PageBriefcase.pageTitle);

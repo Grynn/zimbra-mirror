@@ -1,6 +1,9 @@
 package com.zimbra.qa.selenium.projects.ajax.ui.briefcase;
 
 import java.util.List;
+
+import org.openqa.selenium.WebElement;
+
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.DocumentItem;
 import com.zimbra.qa.selenium.framework.items.IItem;
@@ -9,6 +12,7 @@ import com.zimbra.qa.selenium.framework.ui.AbsDisplay;
 import com.zimbra.qa.selenium.framework.ui.AbsPage;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 
 public class DocumentBriefcaseOpen extends AbsDisplay {
 
@@ -63,10 +67,18 @@ public class DocumentBriefcaseOpen extends AbsDisplay {
 	}
 
 	public String retriveDocumentName() throws HarnessException {
-		String name = ClientSessionFactory.session().selenium().getText(
-				Locators.zDocumentNameField);
+		String text = null;
+		if(ZimbraSeleniumProperties.isWebDriver()) {
+			WebElement we = getElement(Locators.zDocumentNameField);
+			if(we !=null)
+			text = we.getText();
+		}
+		else if(ZimbraSeleniumProperties.isWebDriverBackedSelenium())
+			text = webDriverBackedSelenium().getText(Locators.zDocumentNameField);
+		else
+			text = ClientSessionFactory.session().selenium().getText(Locators.zDocumentNameField);
 
-		return name;
+		return text;
 	}
 
 	public void typeDocumentName(String text) throws HarnessException {

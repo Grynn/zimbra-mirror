@@ -14,7 +14,7 @@ public class DocumentBriefcaseNew extends AbsForm {
 
 	public static class Locators {
 		public static final String zFrame = "css=iframe[class=ZDEditor]";
-		public static final String zSaveAndCloseIconBtn = "//*[@id='DWT9_left_icon']";
+		public static final String zSaveAndCloseIconBtn = "css=[id='DWT9_left_icon']";
 		public static final String zBodyField = "css=body";
 		public static final String zNameField = "css=[id^=DWT4]>input";
 		public static final String zEditNameField = "css=[class=DwtInputField] [input$=]";
@@ -95,12 +95,17 @@ public class DocumentBriefcaseNew extends AbsForm {
 			if (!this.sIsElementPresent(iframeLocator))
 				throw new HarnessException("Locator is not present: "
 						+ iframeLocator);
+			
+			if (ZimbraSeleniumProperties.isWebDriver()) {				
+				String locator = Locators.zBodyField;
+				sSelectFrame(Locators.zFrame);
+				this.sType(locator, value);
+			} else {
+				this.sMouseOver(iframeLocator);
+				this.sFocus(iframeLocator);
+				this.zClickAt(iframeLocator,"0,0");
 
-			this.sMouseOver(iframeLocator);
-			this.sFocus(iframeLocator);
-			this.zClickAt(iframeLocator,"0,0");
-
-			this
+				this
 					.sGetEval("var bodytext=\""
 							+ value
 							+ "\";"
@@ -111,6 +116,7 @@ public class DocumentBriefcaseNew extends AbsForm {
 							+ "if (browserVersion.isFirefox || browserVersion.isChrome){iframe_body.textContent=bodytext;}"
 							+ "else if(browserVersion.isIE){iframe_body.innerText=bodytext;}"
 							+ "else {iframe_body.innerText=bodytext;}");
+			}
 		} else {
 			throw new HarnessException("Not implemented field: " + field);
 		}
@@ -145,14 +151,14 @@ public class DocumentBriefcaseNew extends AbsForm {
 			// TODO: Add Version Notes dialog hasn't existed in ZD 7.0.1, thus
 			// ignoring below the Add Version Notes dialog for Desktop.
 			// Please remove this if condition block once it is available in ZD.
-			if (ZimbraSeleniumProperties.getAppType() != AppType.DESKTOP) {
+			
 				// add version notes
 				DialogAddVersionNotes dlgAddNotes = new DialogAddVersionNotes(
 						MyApplication,
 						((AppAjaxClient) MyApplication).zPageBriefcase);
 
 				dlgAddNotes.zDismissAddVersionNotesDlg(pageTitle);
-			}
+			
 		}
 	}
 
