@@ -635,4 +635,12 @@ body {
    cursor: pointer;
 }
 
+.ZaCategorizedSearchLabel {
+    font-weight: bold;
+}
+
+.ZaCategorizedSearchItem {
+    color:blue !important;
+}
+
 

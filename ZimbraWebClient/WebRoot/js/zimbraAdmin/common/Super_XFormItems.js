@@ -2122,3 +2122,202 @@ SuperWiz_DynSelect_XFormItem.prototype.nowrap = false;
 SuperWiz_DynSelect_XFormItem.prototype.labelWrap = true;
 SuperWiz_DynSelect_XFormItem.prototype.visibilityChecks = [ZaItem.hasWritePermission];
 SuperWiz_DynSelect_XFormItem.prototype.enableDisableChecks = [ZaItem.hasWritePermission];
+
+/**
+ *	_Categorized_DYNSELECT_ form item type
+ **/
+Categorized_DynSelect_XFormItem = function () {}
+XFormItemFactory.createItemType("_CATEGORIZED_DYNSELECT_", "categorized_dynselect", Categorized_DynSelect_XFormItem, DynSelect_XFormItem);
+// Extra css for clickable item
+Categorized_DynSelect_XFormItem.prototype.itemCSS = "ZaCategorizedSearchItem " + DynSelect_XFormItem.prototype.cssClass;
+Categorized_DynSelect_XFormItem.TYPE_LABEL = "label";
+Categorized_DynSelect_XFormItem.TYPE_SEARCH = "search";
+
+Categorized_DynSelect_XFormItem.prototype.changeChoicesCallback = function(data, more, total) {
+    DynSelect_XFormItem.prototype.changeChoicesCallback.call(this, this._enrichChoices(data), more, total);
+}
+
+Categorized_DynSelect_XFormItem.prototype.getChoicesHTML = function() {
+    var choices = this.choices.getChoiceObject();
+    if (!choices) return "";	//throw an error?
+
+    var html = new AjxBuffer();
+    this.outputChoicesHTMLStart(html);
+    var choiceCssClass = this.getChoiceCssClass();
+    for (var i = 0; i < choices.length; i++) {
+        html.append("", this.getChoiceHTML(i, choiceCssClass));
+    }
+
+    this.outputChoicesHTMLEnd(html);
+    return html.toString();
+}
+
+Categorized_DynSelect_XFormItem.prototype.getChoiceHTML = function (itemNum, cssClass) {
+    var item = this.choices.getChoiceObject()[itemNum];
+    if (item.type == Categorized_DynSelect_XFormItem.TYPE_LABEL) {
+        return this._getLabelHTML(item.name);
+    }
+
+    var hdlr = "onSearchClick";
+    var label = item.name;
+    if (item.type != Categorized_DynSelect_XFormItem.TYPE_SEARCH) {
+        hdlr = "onChoiceClick";
+        if (item.attrs["displayName"]) {
+            label = item.attrs["displayName"] + " " + label;
+        }
+    }
+
+    var ref = this.getFormGlobalRef() + ".getItemById('"+ this.getId()+ "')";
+    //try DIVs
+    return AjxBuffer.concat("<tr><td><div id=\"", this.getId(), "_choice_", itemNum, "\" ","class=\"", cssClass, "\"",
+        " onmouseover=\"",ref, ".onChoiceOver(", itemNum,", event||window.event)\"",
+        " onmouseout=\"",ref, ".onChoiceOut(", itemNum,", event||window.event)\"",
+        " onclick=\"",ref, ".", hdlr, "(", itemNum,")\"",
+        ">",this._tailorLabel(label),	"</div></td></tr>");
+}
+
+Categorized_DynSelect_XFormItem.prototype.onChoiceClick = function(num, event) {
+    var item = this.choices.getChoiceObject()[num];
+    if (!item) {
+        return;
+    }
+
+    if (item.type == ZaItem.ACCOUNT || item.type == ZaItem.DL
+        || item.type == ZaItem.RESOURCE || item.type == ZaItem.ALIAS) {
+        ZaApp.getInstance().getAccountListController()._editItem(item);
+        return;
+    }
+
+    if (item.type == ZaItem.DOMAIN) {
+        ZaApp.getInstance().getDomainListController()._editItem(item);
+        return;
+    }
+    if (item.type == ZaItem.COS) {
+        ZaApp.getInstance().getCosListController()._editItem(item);
+        return;
+    }
+
+}
+
+/**
+ * Handler for shortcut search menu clicked
+ * @param itemNum
+ * @param evt
+ */
+Categorized_DynSelect_XFormItem.prototype.onSearchClick = function(itemNum, evt) {
+    var item = this.choices.getChoiceObject()[itemNum];
+    if (item.target || item.target == "") {
+        var slController =  ZaApp.getInstance().getSearchListController();
+        var searchField =   slController._searchField;
+        searchField.searchSelectedType = item.target;
+        searchField.restoreSearchFilter();
+        ZaSearchField.srchButtonHndlr.call(this, item.target);
+        return;
+    }
+}
+
+Categorized_DynSelect_XFormItem.prototype.getChoiceCssClass = function () {
+    return this.itemCSS + "_choice";
+}
+
+Categorized_DynSelect_XFormItem.prototype.getChoiceSelectedCssClass = function () {
+    return this.itemCSS + "_choice_selected";
+}
+
+Categorized_DynSelect_XFormItem.prototype.processEntryKey = function () {
+    if (this.isSelecting || this.menuUp) {
+        if (this.__currentHiliteItem > 0) {
+            var item = this.choices.getChoiceObject()[this.__currentHiliteItem]
+            if (item.type == Categorized_DynSelect_XFormItem.TYPE_SEARCH) {
+                this.onSearchClick(this.__currentHiliteItem);
+                return;
+            } else if (item.type != Categorized_DynSelect_XFormItem.TYPE_LABEL) {
+                this.onChoiceClick(this.__currentHiliteItem);
+                this._searchFieldValue("");
+                return;
+            }
+
+        }
+
+    }
+    var value = this.getInstanceValue();
+    var processEntryKey = this.getInheritedProperty("entryKeyMethod");
+    if (processEntryKey instanceof AjxCallback) {
+        processEntryKey.run(this, value);
+    }
+}
+
+Categorized_DynSelect_XFormItem.prototype.hiliteNextChoice = function() {
+    do {
+        DynSelect_XFormItem.prototype.hiliteNextChoice.call(this);
+        var item = this.choices.getChoiceObject()[this.__currentHiliteItem];
+    } while (item.type == Categorized_DynSelect_XFormItem.TYPE_LABEL);
+}
+
+Categorized_DynSelect_XFormItem.prototype.hilitePreviousChoice = function() {
+    do {
+        DynSelect_XFormItem.prototype.hilitePreviousChoice.call(this);
+        var item = this.choices.getChoiceObject()[this.__currentHiliteItem];
+    } while (item.type == Categorized_DynSelect_XFormItem.TYPE_LABEL);
+}
+
+//Add data to categorize the dynamic drop down.
+Categorized_DynSelect_XFormItem.prototype._enrichChoices = function(data) {
+    if (data.length <= 0) {
+        return data;
+    }
+
+    var stats = {};
+    for (var i = 0; i < data.length; i++) {
+        stats[data[i].type] = 1;
+        data[i].value = "";
+    }
+
+    var realQuery = this._searchFieldValue();
+    var displayQuery = "\"" + realQuery + "\"";
+    data.splice(0, 0, {type : Categorized_DynSelect_XFormItem.TYPE_LABEL, name: ZaMsg.SearchBestMatches, value: realQuery});
+    data.push({type : Categorized_DynSelect_XFormItem.TYPE_LABEL, name: "&nbsp;", value: realQuery});
+    data.push({type : Categorized_DynSelect_XFormItem.TYPE_LABEL, name: ZaMsg.SearchFullResultsFor, value: realQuery});
+
+    data.push({type : Categorized_DynSelect_XFormItem.TYPE_SEARCH, name: displayQuery, value:realQuery, target:""});
+
+    for (var prop in stats) {
+        if (stats.hasOwnProperty(prop)) {
+            var searchAttr = ZaSearch.TYPES[prop];
+            data.push({type : Categorized_DynSelect_XFormItem.TYPE_SEARCH, name: AjxMessageFormat.format(ZaMsg["SearchAll_" + searchAttr],[displayQuery]), value: realQuery, target:searchAttr});
+
+        }
+    }
+
+    return data;
+}
+
+//Generate HTML for label
+Categorized_DynSelect_XFormItem.prototype._getLabelHTML = function (label) {
+    return AjxBuffer.concat("<tr><td><div class='ZaCategorizedSearchLabel'>", label, "</div></td></tr>");
+}
+
+//Tail the label if it is too long
+Categorized_DynSelect_XFormItem.prototype._tailorLabel = function (label) {
+    var itemW = Dwt.getBounds(this.getContainer()).width - 20;
+
+    //assume 5.5px per letter
+    var maxNumberOfLetters = Math.floor((itemW - 30)/5.5);
+    if (maxNumberOfLetters < label.length){
+        label = label.substring(0, (maxNumberOfLetters - 3)) + "...";
+    }
+    return label;
+}
+
+// Get query from search field
+Categorized_DynSelect_XFormItem.prototype._searchFieldValue = function (val) {
+    var slController =  ZaApp.getInstance().getSearchListController();
+    var searchField =   slController._searchField;
+    if (arguments.length == 0) {
+        return searchField.getSearchFieldElement().value;
+    }
+    searchField.getSearchFieldElement().value = val;
+
+}
+
+

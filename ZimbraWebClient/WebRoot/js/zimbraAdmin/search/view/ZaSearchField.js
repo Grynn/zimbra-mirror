@@ -746,11 +746,11 @@ ZaSearchField.prototype._getMyXForm = function() {
                 {type:_SPACER_, colSpan:1, cssStyle:"", cssClass:"SearchFieldVert", height: 14},
                 {type: _GROUP_,  numCols: 2, width: "100%", cssClass: "oselect",
                     items: [
-                    {type:_DYNSELECT_, ref:ZaSearch.A_query, dataFetcherClass:ZaSearch,
+                    {type:_CATEGORIZED_DYNSELECT_, ref:ZaSearch.A_query, dataFetcherClass:ZaSearch,
                         dataFetcherMethod:ZaSearch.prototype.dynSearchField,
                         labelLocation:_NONE_,
                         width:"100%", inputWidth:"100%", editable:true, forceUpdate:true,
-                        choices:new XFormChoices([], XFormChoices.OBJECT_REFERENCE_LIST, "name", "name"),
+                        choices:new XFormChoices([], XFormChoices.OBJECT_REFERENCE_LIST, "name", "value"),
                         visibilityChecks:[],enableDisableChecks:[],
                         entryKeyMethod: entryKeyCallback,
                         onChange: function(value, event, form){

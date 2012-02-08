@@ -36,6 +36,8 @@ ZaSearch.ACCOUNTS = "accounts";
 ZaSearch.RESOURCES = "resources";
 ZaSearch.DOMAINS = "domains";
 ZaSearch.COSES = "coses";
+//Limit of result returned for best match.
+ZaSearch.BEST_MATCH_LIMIT = 5;
 
 ZaSearch.TYPES = new Object();
 ZaSearch.TYPES[ZaItem.ALIAS] = ZaSearch.ALIASES;
@@ -246,9 +248,9 @@ ZaSearch.prototype.dynSelectDataCallback = function (params, resp) {
 			throw(resp.getException());
 		} else {
 			var response = resp.getResponse().Body.SearchDirectoryResponse;
-			var list = new ZaItemList(null);	
-			list.loadFromJS(response);	
-			callback.run(list.getArray(), response.more, response.searchTotal);
+            var list = new ZaItemList(null);
+            list.loadFromJS(response);
+            callback.run(list.getArray(), response.more, response.searchTotal);
 		}
 	} catch (ex) {
 		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaSearch.prototype.dynSelectDataCallback");	
@@ -299,7 +301,12 @@ ZaSearch.prototype.dynSelectSearch = function (callArgs) {
 		}
 		params.callback = dataCallback;
 		params.sortBy = ZaAccount.A_name;
-		params.query = ZaSearch.getSearchByNameQuery(value, params.types);
+        if (callArgs["needCategorized"]) {
+            params.limit = ZaSearch.BEST_MATCH_LIMIT;
+            params.query = ZaSearch.getBestMatchSearchByNameQuery(value, params.types);
+        } else {
+            params.query = ZaSearch.getSearchByNameQuery(value, params.types);
+        }
 		params.controller = ZaApp.getInstance().getCurrentController();
 		params.showBusy = true;
 		params.busyId = busyId;
@@ -319,6 +326,7 @@ ZaSearch.prototype.dynSearchField = function (callArgs) {
 	newCallArgs.value = callArgs["value"];
     newCallArgs.event = callArgs["event"];
     newCallArgs.callback = callArgs["callback"];
+    newCallArgs.needCategorized = true;
     newCallArgs.types = ZaApp.getInstance().getSearchListController()._searchField.getSearchTypes();
     ZaSearch.prototype.dynSelectSearch.call(this, newCallArgs);
 
@@ -657,7 +665,7 @@ function(n, types,excludeClosed) {
 		n = String(n).replace(/\\/g, "\\5C");
 		n = String(n).replace(/\(/g, "\\28");
 		n = String(n).replace(/\)/g, "\\29");
-		n = String(n).replace(/\*/g, "\\2A");		
+		n = String(n).replace(/\*/g, "\\2A");
         if (!types) types = [ZaSearch.ALIASES, ZaSearch.ACCOUNTS, ZaSearch.DLS, ZaSearch.RESOURCES, ZaSearch.DOMAINS, ZaSearch.COSES] ;
         var addedAddrFields = false;
         var addedAccResFields = false;
@@ -694,6 +702,26 @@ function(n, types,excludeClosed) {
 	//return "(|" + query.join("") + ")" ;
 	return query.join("");
 	
+}
+
+/**
+ * Get the query to search attributes that start or end with <code>n</code>.
+ * @param n
+ * @param types Array object that contains item types
+ */
+ZaSearch.getBestMatchSearchByNameQuery =
+function(n, types) {
+    var query = ZaSearch.getSearchByNameQuery(n, types);
+    var orig = new RegExp("\\*" + n + "\\*","g");
+    var lReg = new RegExp("^\\\s*\\(\\\s*\\|");
+    var rReg = new RegExp("\\)\\\s*$");
+    var beginWithQuery = query.replace(orig, n + "*");
+    beginWithQuery = beginWithQuery.replace(lReg, "");
+    beginWithQuery = beginWithQuery.replace(rReg,"");
+    var endWithQuery = query.replace(orig, "*" + n);
+    endWithQuery = endWithQuery.replace(lReg, "");
+    endWithQuery = endWithQuery.replace(rReg,"");
+    return "(|" + beginWithQuery + endWithQuery + ")";
 }
 
 ZaSearch.getSearchByDisplayNameQuery =

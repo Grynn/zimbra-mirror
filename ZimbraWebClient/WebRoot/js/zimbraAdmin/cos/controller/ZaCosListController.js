@@ -297,12 +297,17 @@ ZaCosListController.prototype._editButtonListener =
 function(ev) {
 	if(this._contentView.getSelectionCount() == 1) {
 		var item = this._contentView.getSelection()[0];
-		ZaApp.getInstance().getCosController().show(item);
-        if (appNewUI) {
-            var parentPath = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_configure, ZaMsg.OVP_cos]);
-            ZaZimbraAdmin.getInstance().getOverviewPanelController().addObjectItem(parentPath, item.name, null, false, false, item);
-        }
+        this._editItem(item);
 	}
+}
+
+ZaCosListController.prototype._editItem =
+function(item) {
+    ZaApp.getInstance().getCosController().show(item);
+    if (appNewUI) {
+        var parentPath = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_configure, ZaMsg.OVP_cos]);
+        ZaZimbraAdmin.getInstance().getOverviewPanelController().addObjectItem(parentPath, item.name, null, false, false, item);
+    }
 }
 
 /**

@@ -327,16 +327,21 @@ ZaDomainListController.prototype._editButtonListener =
 function(ev) {
 	if(this._contentView.getSelectionCount() == 1) {
 		var item = this._contentView.getSelection()[0];
-        if (item.attrs [ZaDomain.A_domainType] == ZaDomain.domainTypes.local) {
-		    ZaApp.getInstance().getDomainController().show(item);
-        } else if ( item.attrs [ZaDomain.A_domainType] == ZaDomain.domainTypes.alias) {
-            ZaApp.getInstance().getDomainAliasWizard(true).editDomainAlias (item, true) ;
-        }
-        if (appNewUI) {
-            var parentPath = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_configure, ZaMsg.OVP_domains]);
-            ZaZimbraAdmin.getInstance().getOverviewPanelController().addObjectItem(parentPath, item.name, null, false, false, item);
-        }
+        this._editItem(item);
 	}
+}
+
+ZaDomainListController.prototype._editItem =
+function(item) {
+    if (item.attrs [ZaDomain.A_domainType] == ZaDomain.domainTypes.local) {
+        ZaApp.getInstance().getDomainController().show(item);
+    } else if ( item.attrs [ZaDomain.A_domainType] == ZaDomain.domainTypes.alias) {
+        ZaApp.getInstance().getDomainAliasWizard(true).editDomainAlias (item, true) ;
+    }
+    if (appNewUI) {
+        var parentPath = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_configure, ZaMsg.OVP_domains]);
+        ZaZimbraAdmin.getInstance().getOverviewPanelController().addObjectItem(parentPath, item.name, null, false, false, item);
+    }
 }
 
 ZaDomainListController.prototype._addDomainAliasListener =
