@@ -72,3 +72,9 @@ STDMETHODIMP CUserObject::GetMapiAccessObject(BSTR userID, IMapiAccessWrap **pVa
     (*pVal)->AddRef();
     return S_OK;
 }
+
+STDMETHODIMP CUserObject::GetOOO(BSTR *pOOO)
+{
+    return mapiObj->GetOOOInfo(pOOO);
+}
+

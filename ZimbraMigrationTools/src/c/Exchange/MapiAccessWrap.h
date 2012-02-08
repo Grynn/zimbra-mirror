@@ -58,6 +58,7 @@ public:
     STDMETHOD(GetItemsList) (IFolderObject * folderObj, VARIANT creationDate, VARIANT * vItems);
     STDMETHOD(GetData) (BSTR userId, VARIANT itemId, FolderType type, VARIANT * pVal);
     STDMETHOD(UserUninit) ();
+    STDMETHODIMP GetOOOInfo(BSTR *OOOInfo);
     void CreateExceptionAttrs(BSTR attrs[], int num);
 
 

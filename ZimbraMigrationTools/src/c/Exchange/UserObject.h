@@ -55,6 +55,7 @@ public:
         vItems);
     STDMETHOD(GetMapiAccessObject) (BSTR userID, IMapiAccessWrap * *pVal);
     STDMETHOD(Uninit) (void);
+    STDMETHOD(GetOOO) (BSTR *pOOO);
 
     /*
      * virtual long Init(BSTR id);

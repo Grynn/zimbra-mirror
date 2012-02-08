@@ -73,6 +73,7 @@ interface IMapiAccessWrap : IDispatch{
     HRESULT GetItemsList([in] IFolderObject *folderObj, [in] VARIANT creationDate, [out, retval] VARIANT *vItems);
     [id(4)] HRESULT GetData([in]BSTR userId, [in] VARIANT itemId, [in] FolderType type, [out, retval] VARIANT *pVal);
     [id(5)] HRESULT UserUninit();
+    [id(6)] HRESULT GetOOOInfo([out] BSTR *OOOInfo);
 };
 
 [
@@ -90,6 +91,7 @@ interface IUserObject : IDispatch{
     HRESULT GetItemsForFolder([in] IFolderObject *folderObj, [in] VARIANT creationDate, [out, retval] VARIANT *vItems);
     [id(4)] HRESULT GetMapiAccessObject(BSTR userID, [out, retval] IMapiAccessWrap **pVal);
     [id(5)] HRESULT Uninit(void);
+    [id(6)] HRESULT GetOOO([out, retval] BSTR *pOOO);
 };
 [
 	object,

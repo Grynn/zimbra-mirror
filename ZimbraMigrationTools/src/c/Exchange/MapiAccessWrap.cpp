@@ -647,6 +647,13 @@ STDMETHODIMP CMapiAccessWrap::GetData(BSTR UserId, VARIANT ItemId, FolderType ty
     return hr;
 }
 
+STDMETHODIMP CMapiAccessWrap::GetOOOInfo(BSTR *OOOInfo)
+{
+    LPCWSTR lpInfo = maapi->GetOOOStateAndMsg();
+    *OOOInfo = (lpInfo) ? CComBSTR(lpInfo) : SysAllocString(L"");
+    return S_OK;
+}
+
 void CMapiAccessWrap::CreateExceptionAttrs(BSTR attrs[], int num)
 {
     WCHAR pwszNum[10];

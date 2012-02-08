@@ -67,8 +67,8 @@ public class Log {
 
 [Flags] public enum ItemsAndFoldersOptions
 {
-    Junk = 0x0080, DeletedItems = 0x0040, Sent = 0x0020, Rules = 0x0010, Tasks = 0x0008,
-    Calendar = 0x0004, Contacts = 0x0002, Mail = 0x0001, None = 0x0000
+    OOO = 0x100, Junk = 0x0080, DeletedItems = 0x0040, Sent = 0x0020, Rules = 0x0010,
+    Tasks = 0x0008, Calendar = 0x0004, Contacts = 0x0002, Mail = 0x0001, None = 0x0000
 }
 
 public enum ZimbraFolders
@@ -200,6 +200,7 @@ public class CSMigrationWrapper
     }
 
     private bool SkipFolder(MigrationOptions options, List<string> skipList, dynamic folder) {
+        // Note that Rules and OOO do not apply here
         if ((folder.Id == (int)ZimbraFolders.Calendar &&
             !options.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Calendar)) ||
             (folder.Id == (int)ZimbraFolders.Contacts &&
@@ -525,6 +526,32 @@ public class CSMigrationWrapper
                 ProcessItems(Acct, isServer, user, folder, api, path, options);
             }
         }
+
+        // now do OOO
+        if (options.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.OOO))
+        {
+            bool isOOO = false;
+            string ooo = user.GetOOO();
+            if (ooo.Length > 0)
+            {
+                isOOO = (ooo != "0:");
+            }
+            if (isOOO)
+            {
+                Log.info("Migrating Out of Office");
+                Acct.migrationFolder.TotalCountOfItems = 1;
+                Acct.migrationFolder.CurrentCountOfItems = 0;
+                Acct.migrationFolder.FolderView = "OOO";
+                Acct.migrationFolder.FolderName = "Out of Office";
+                api.AccountName = Acct.AccountName;
+                api.AddOOO(ooo, isServer);
+            }
+            else
+            {
+                Log.info("Out of Office state is off, and there is no message");
+            }
+        }
+
         user.Uninit();
     }    
 }

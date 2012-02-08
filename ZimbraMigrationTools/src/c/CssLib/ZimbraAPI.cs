@@ -12,6 +12,7 @@ namespace CssLib
 public class ZimbraAPI
 {
     // Errors
+    internal const int OOO_NO_TEXT = 92;
     internal const int TASK_CREATE_FAILED_FLDR = 93;
     internal const int APPT_CREATE_FAILED_FLDR = 94;
     internal const int CONTACT_CREATE_FAILED_FLDR = 95;
@@ -1469,7 +1470,7 @@ public class ZimbraAPI
         return retval;
     }
 
-    public void SetTaskRequest(XmlWriter writer, Dictionary<string, string> task,
+    private void SetTaskRequest(XmlWriter writer, Dictionary<string, string> task,
         string folderId, int requestId)
     {
         bool isRecurring = task.ContainsKey("freq");
@@ -1706,6 +1707,67 @@ public class ZimbraAPI
 
             writer.WriteStartElement("Body", "http://www.w3.org/2003/05/soap-envelope");
             SetTaskRequest(writer, appt, folderId, -1);
+
+            writer.WriteEndElement();           // soap body
+            writer.WriteEndElement();           // soap envelope
+            writer.WriteEndDocument();
+        }
+        string rsp = "";
+
+        client.InvokeService(sb.ToString(), out rsp);
+        retval = client.status;
+        return retval;
+    }
+
+    private void SetModifyPrefsRequest(XmlWriter writer, bool isOOOEnabled, string OOOInfo)
+    { 
+        string state = (isOOOEnabled) ? "TRUE" : "FALSE";
+        string OOOmsg = OOOInfo.Substring(2);   // provide for the :
+
+        writer.WriteStartElement("ModifyPrefsRequest", "urn:zimbraAccount");
+        WriteAttrNVPair(writer, "pref", "name", "zimbraPrefOutOfOfficeReplyEnabled", state);
+        WriteAttrNVPair(writer, "pref", "name", "zimbraPrefOutOfOfficeReply", OOOmsg);
+        WriteAttrNVPair(writer, "pref", "name", "zimbraPrefOutOfOfficeFromDate", "");
+        WriteAttrNVPair(writer, "pref", "name", "zimbraPrefOutOfOfficeUntilDate", "");
+        writer.WriteEndElement();   // ModifyPrefsRequest
+    }
+
+    public int AddOOO(string OOOInfo, bool isServer)
+    {
+        lastError = "";
+
+        if (OOOInfo.Length == 0)
+        {
+            return OOO_NO_TEXT;
+        }
+
+        bool isOOOEnabled = OOOInfo.Substring(0, 1) == "1";
+        if ((!isOOOEnabled) && (OOOInfo.Length == 2))   // 0:
+        {
+            return 0;   // it's ok -- just no need to do anything
+        }
+
+        WebServiceClient client = new WebServiceClient
+        {
+            Url = ZimbraValues.GetZimbraValues().Url,
+            WSServiceType =
+                WebServiceClient.ServiceType.Traditional
+        };
+        int retval = 0;
+        StringBuilder sb = new StringBuilder();
+        XmlWriterSettings settings = new XmlWriterSettings();
+
+        settings.OmitXmlDeclaration = true;
+        using (XmlWriter writer = XmlWriter.Create(sb, settings))
+        {
+            writer.WriteStartDocument();
+            writer.WriteStartElement("soap", "Envelope",
+                "http://www.w3.org/2003/05/soap-envelope");
+
+            WriteHeader(writer, true, true, isServer);
+
+            writer.WriteStartElement("Body", "http://www.w3.org/2003/05/soap-envelope");
+            SetModifyPrefsRequest(writer, isOOOEnabled, OOOInfo);
 
             writer.WriteEndElement();           // soap body
             writer.WriteEndElement();           // soap envelope

@@ -51,6 +51,7 @@ public class OptionsViewModel: BaseViewModel
         ImportTaskOptions = config.importOptions.Tasks;
         ImportSentOptions = config.importOptions.Sent;
         ImportRuleOptions = config.importOptions.Rules;
+        ImportOOOOptions = config.importOptions.OOO;
 
         MigrateONRAfter = config.AdvancedImportOptions.MigrateONRAfter.ToLongDateString();
         MaxMessageSize = config.AdvancedImportOptions.MaxMessageSize;
@@ -266,6 +267,18 @@ public class OptionsViewModel: BaseViewModel
             m_config.importOptions.Rules = value;
 
             OnPropertyChanged(new PropertyChangedEventArgs("ImportRuleOptions"));
+        }
+    }
+    public bool ImportOOOOptions
+    {
+        get { return m_config.importOptions.OOO; }
+        set
+        {
+            if (value == m_config.importOptions.OOO)
+                return;
+            m_config.importOptions.OOO = value;
+
+            OnPropertyChanged(new PropertyChangedEventArgs("ImportOOOOptions"));
         }
     }
     public string ImportNextButtonContent {

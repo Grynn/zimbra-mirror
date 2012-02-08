@@ -248,6 +248,7 @@ public class IntroViewModel: BaseViewModel
         m_optionsViewModel.ImportCalendarOptions = true;
         m_optionsViewModel.ImportContactOptions = true;
         m_optionsViewModel.ImportRuleOptions = true;
+        m_optionsViewModel.ImportOOOOptions = true;
         m_optionsViewModel.ImportJunkOptions = false;
         m_optionsViewModel.ImportDeletedItemOptions = false;
         m_optionsViewModel.ImportSentOptions = false;

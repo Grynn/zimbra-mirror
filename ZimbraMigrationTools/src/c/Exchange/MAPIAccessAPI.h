@@ -217,7 +217,7 @@ private:
     bool SkipFolder(ExchangeSpecialFolderId exfid);
     LPCWSTR OpenUserStore();
     HRESULT Iterate_folders(Zimbra::MAPI::MAPIFolder &folder, vector<Folder_Data> &fd);
-    void travrese_folder(Zimbra::MAPI::MAPIFolder &folder);
+    void traverse_folder(Zimbra::MAPI::MAPIFolder &folder);
     HRESULT GetInternalFolder(SBinary sbFolderEID, MAPIFolder &folder);
 
 public:
@@ -236,6 +236,7 @@ public:
     LPCWSTR GetRootFolderHierarchy(vector<Folder_Data> &vfolderlist);
     LPCWSTR GetFolderItemsList(SBinary sbFolderEID, vector<Item_Data> &ItemList);
     LPCWSTR GetItem(SBinary sbItemEID, BaseItemData &itemData);
+    LPWSTR GetOOOStateAndMsg();
 };
 }
 }

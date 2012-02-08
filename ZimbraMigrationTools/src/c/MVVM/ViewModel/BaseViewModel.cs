@@ -176,6 +176,7 @@ public class BaseViewModel: INotifyPropertyChanged
         m_config.importOptions.Tasks        = optionsModel.ImportTaskOptions;
         m_config.importOptions.Sent         = optionsModel.ImportSentOptions;
         m_config.importOptions.Rules        = optionsModel.ImportRuleOptions;
+        m_config.importOptions.OOO          = optionsModel.ImportOOOOptions;
         m_config.AdvancedImportOptions.MigrateONRAfter = DateTime.Parse(optionsModel.MigrateONRAfter);
         m_config.AdvancedImportOptions.MaxMessageSize = optionsModel.MaxMessageSize;
 

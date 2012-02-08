@@ -813,8 +813,98 @@ LPCWSTR MAPIAccessAPI::GetItem(SBinary sbItemEID, BaseItemData &itemData)
 ZM_EXIT: return lpwstrStatus;
 }
 
+LPWSTR MAPIAccessAPI::GetOOOStateAndMsg()
+{
+    HRESULT hr;
+    BOOL bIsOOO = FALSE;
+    Zimbra::Util::ScopedInterface<IMAPIFolder> spInbox;
+    ULONG objtype;
+    LPWSTR lpwstrOOOInfo = NULL;
+
+    // first get the OOO state -- if TRUE, put a 1: in the return val, else put 0:
+    Zimbra::Util::ScopedBuffer<SPropValue> pPropValues;
+    hr = HrGetOneProp(m_userStore->GetInternalMAPIStore(), PR_OOF_STATE, pPropValues.getptr());
+    if (SUCCEEDED(hr))
+    {
+        bIsOOO = pPropValues->Value.b;
+    }
+
+    Zimbra::Util::ScopedInterface<IMAPITable> pContents;
+    SBinaryArray specialFolderIds = m_userStore->GetSpecialFolderIds();
+    SBinary sbin = specialFolderIds.lpbin[INBOX];
+    hr = m_userStore->OpenEntry(sbin.cb, (LPENTRYID)sbin.lpb, NULL, MAPI_BEST_ACCESS,
+                                &objtype, (LPUNKNOWN *)spInbox.getptr());
+    if (FAILED(hr))
+    {
+        return L"0:";
+    }
+    
+    hr = spInbox->GetContentsTable(MAPI_ASSOCIATED | fMapiUnicode, pContents.getptr());
+    if (FAILED(hr))
+    {
+        //LOG_ERROR(_T("could not get the contents table %x"), hr);
+        return L"0:";
+    }
+    // set the columns because we are only interested in the body
+    SizedSPropTagArray(1, tags) = {1, { PR_BODY }};
+ 
+    pContents->SetColumns((LPSPropTagArray) &tags, 0);
+
+    // restrict the table only to IPM.Note.Rules.OofTemplate.Microsoft
+    SPropValue propVal;
+
+    propVal.dwAlignPad = 0;
+    propVal.ulPropTag = PR_MESSAGE_CLASS;
+    propVal.Value.lpszW = L"IPM.Note.Rules.OofTemplate.Microsoft";
+
+    SRestriction r;
+
+    r.rt = RES_PROPERTY;
+    r.res.resProperty.lpProp = &propVal;
+    r.res.resProperty.relop = RELOP_EQ;
+    r.res.resProperty.ulPropTag = propVal.ulPropTag;
+
+    // lets get the instance key for the store provider
+    pContents->Restrict(&r, 0);
+
+    // iterate over the rows looking for the folder in question
+    ULONG ulRows = 0;
+
+    pContents->GetRowCount(0, &ulRows);
+    if (ulRows == 0)
+    {
+        return L"0:";
+    }
+
+    Zimbra::Util::ScopedRowSet pRows;
+
+    BOOL bGotMessage = false;
+    pContents->QueryRows(ulRows, 0, pRows.getptr());
+    for (unsigned int i = 0; i < pRows->cRows; i++)
+    {
+        if (pRows->aRow[i].lpProps[0].ulPropTag == PR_BODY)
+        {
+            LPWSTR pwszOOOMsg = pRows->aRow[i].lpProps[0].Value.lpszW;
+            int iOOOLen = lstrlen(pwszOOOMsg);
+            lpwstrOOOInfo = new WCHAR[iOOOLen + 2];  // for the 0: or 1:
+            if (bIsOOO)
+            {
+                lstrcpy(lpwstrOOOInfo, L"1:");
+            }
+            else
+            {
+                lstrcpy(lpwstrOOOInfo, L"0:");
+            }           
+            lstrcat(lpwstrOOOInfo, pwszOOOMsg);
+            bGotMessage = true;
+            break;
+        }
+    }
+    return (bGotMessage) ? lpwstrOOOInfo : L"0:";
+}
+
 // Access MAPI folder items
-void MAPIAccessAPI::travrese_folder(Zimbra::MAPI::MAPIFolder &folder)
+void MAPIAccessAPI::traverse_folder(Zimbra::MAPI::MAPIFolder &folder)
 {
     Zimbra::MAPI::MessageIterator *msgIter = new Zimbra::MAPI::MessageIterator();
 

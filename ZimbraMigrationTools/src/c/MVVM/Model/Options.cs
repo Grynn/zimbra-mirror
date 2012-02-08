@@ -47,6 +47,12 @@ public class ImportOptions
         get { return m_Rules; }
         set { m_Rules = value; }
     }
+    private bool m_OOO;
+    public bool OOO
+    {
+        get { return m_OOO; }
+        set { m_OOO = value; }
+    }
     private string m_NextButtonContent;
     public string NextButtonContent {
         get { return m_NextButtonContent; }

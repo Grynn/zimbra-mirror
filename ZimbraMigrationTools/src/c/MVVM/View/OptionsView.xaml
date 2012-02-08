@@ -35,6 +35,7 @@
                 <CheckBox Content="Contacts" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" Name="cbContacts"  VerticalAlignment="Center" IsChecked="{Binding Path=ImportContactOptions}"/>
                 <CheckBox Content="Tasks" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Name="cbTasks" VerticalAlignment="Center"  IsChecked="{Binding Path=ImportTaskOptions}"/>
                 <CheckBox Content="Rules" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" Name="cbRules" VerticalAlignment="Center"  IsChecked="{Binding Path=ImportRuleOptions}"/>
+                <CheckBox Content="Out of Office" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" Name="cbOOO" VerticalAlignment="Center"  IsChecked="{Binding Path=ImportOOOOptions}"/>
             </Grid>
         </GroupBox>
         <GroupBox Name="GBAdditionalFolders" Grid.Row="2" Grid.Column="1" MinHeight="{Binding ElementName=GBItems, Path=ActualHeight}" Header="Additional Folders" HorizontalAlignment="Left" Margin="85,15,0,0" VerticalAlignment="Top" Padding="10,8,10,8">

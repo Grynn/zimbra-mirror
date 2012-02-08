@@ -60,6 +60,18 @@ class Program
                 {
                     itemFolderFlags = itemFolderFlags | ItemsAndFoldersOptions.Junk;
                 }
+                if (myXmlConfig.ConfigObj.importOptions.Tasks)
+                {
+                    itemFolderFlags = itemFolderFlags | ItemsAndFoldersOptions.Tasks;
+                }
+                if (myXmlConfig.ConfigObj.importOptions.Rules)
+                {
+                    itemFolderFlags = itemFolderFlags | ItemsAndFoldersOptions.Rules;
+                }
+                if (myXmlConfig.ConfigObj.importOptions.OOO)
+                {
+                    itemFolderFlags = itemFolderFlags | ItemsAndFoldersOptions.OOO;
+                }
 
                 importopts.ItemsAndFolders = itemFolderFlags;
 
