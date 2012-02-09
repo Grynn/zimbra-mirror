@@ -584,7 +584,27 @@ public class PageOctopus extends AbsTab {
 		}
 		return found;
 	}
-
+	
+	public List<FolderItem> zGetListViewFolderItems() throws HarnessException {
+		List<FolderItem> folderItems = new ArrayList<FolderItem>();
+		List<IOctListViewItem> items = zGetListViewItems();
+		for(IOctListViewItem f : items){
+			if(f instanceof FolderItem)
+				folderItems.add((FolderItem) f);
+		}
+		return folderItems;
+	}
+	
+	public List<FileItem> zGetListViewFileItems() throws HarnessException {
+		List<FileItem> fileItems = new ArrayList<FileItem>();
+		List<IOctListViewItem> items = zGetListViewItems();
+		for(IOctListViewItem f : items){
+			if(f instanceof FileItem)
+				fileItems.add((FileItem) f);
+		}
+		return fileItems;
+	}
+	
 	public List<IOctListViewItem> zGetListViewItems() throws HarnessException {
 		String locator = Locators.zMyFilesListViewItems.locator;
 
