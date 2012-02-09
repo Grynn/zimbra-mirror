@@ -297,10 +297,12 @@ public class CreateDocument extends AjaxCommonTest {
 
 		String docName = docItem.getName();
 		String docText = docItem.getDocText();
-
+		
 		app.zPageBriefcase
 		.zWaitForElementPresent(TreeBriefcase.Locators.briefcaseListView);
-
+		
+		app.zPageBriefcase.sMouseOver(TreeBriefcase.Locators.briefcaseListView);
+		
 		// Open new document page
 		DocumentBriefcaseNew documentBriefcaseNew = (DocumentBriefcaseNew) app.zPageBriefcase
 				.zToolbarPressButton(Button.B_NEW, docItem);

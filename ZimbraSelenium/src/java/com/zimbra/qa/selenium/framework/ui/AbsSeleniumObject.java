@@ -8,10 +8,13 @@ import java.util.Set;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
+import org.openqa.selenium.HasInputDevices;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Mouse;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverBackedSelenium;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.internal.Locatable;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import com.google.common.base.Function;
@@ -847,17 +850,19 @@ public abstract class AbsSeleniumObject {
 	 * DefaultSelenium.mouseOver()
 	 */
 	public void sMouseOver(String locator) throws HarnessException {
-		if (ZimbraSeleniumProperties.isWebDriver()){ 
+		if (ZimbraSeleniumProperties.isWebDriver()){
 			WebElement we = getElement(locator);
 			//2.17
 			//Actions action = new Actions(webDriver());    
-			//action.moveToElement(we).build().perform();
-			we.click();
+		    //action.moveToElement(we).build().perform();
+			Mouse mouse = ((HasInputDevices) webDriver()).getMouse(); 
+			mouse.mouseMove(((Locatable)we).getCoordinates());
 		}
 		else if (ZimbraSeleniumProperties.isWebDriverBackedSelenium())
 			webDriverBackedSelenium().mouseOver(locator);
 		else
 		ClientSessionFactory.session().selenium().mouseOver(locator);
+		
 		logger.info("mouseOver(" + locator + ")");
 	}
 
@@ -932,10 +937,9 @@ public abstract class AbsSeleniumObject {
 	public void sFocus(String locator) throws HarnessException {
 		if (ZimbraSeleniumProperties.isWebDriver()){ 
 			WebElement we = getElement(locator);
-			//2.17
-			//Actions action = new Actions(webDriver());    
-			//action.moveToElement(we).build().perform();	
-			we.click();
+			//Capabilities cp =  ((RemoteWebDriver)webDriver()).getCapabilities();
+            //if (cp.getBrowserName().equals("chrome")||cp.getBrowserName().equals("firefox"))
+            executeScript("arguments[0].focus();", we);                        		
 		}
 		else if (ZimbraSeleniumProperties.isWebDriverBackedSelenium())
 			webDriverBackedSelenium().focus(locator);
@@ -1792,10 +1796,10 @@ public abstract class AbsSeleniumObject {
 			logger.info(ob + " ...executing... " + script);
 			if(ob != null)
 				value = ob.toString();					
-			
+			logger.info("executeScript(" + script + ") = " + value);
 			return (value);
 		} catch (Exception e) {
-				logger.info(e + " executing " + script);			
+				logger.info(e + " Exception...executing " + script);			
 				return value;			
 		}
 	}
