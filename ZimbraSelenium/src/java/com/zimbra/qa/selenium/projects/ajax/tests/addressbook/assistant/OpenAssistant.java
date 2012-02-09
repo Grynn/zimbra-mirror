@@ -28,7 +28,7 @@ public class OpenAssistant extends AjaxCommonTest {
 	}
 	
 	@Test(	description = "Open the assistant",
-			groups = { "functional" })
+			groups = { "deprecated" })
 	public void OpenAssistant_01() throws HarnessException {
 		
 		DialogAssistant assistant = (DialogAssistant)app.zPageAddressbook.zKeyboardShortcut(Shortcut.S_ASSISTANT);

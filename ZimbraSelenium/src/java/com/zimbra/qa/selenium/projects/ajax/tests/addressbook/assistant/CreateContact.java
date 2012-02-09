@@ -32,7 +32,7 @@ public class CreateContact extends AjaxCommonTest {
 	}
 	
 	@Test(	description = "Create a new conntact using the Zimbra Assistant",
-			groups = { "functional" })
+			groups = { "deprecated" })
 	public void CreateContact_01() throws HarnessException {
 		
 		// Create a contact item
