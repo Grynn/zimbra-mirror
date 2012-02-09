@@ -100,7 +100,7 @@ public class DocumentBriefcaseNew extends AbsForm {
 				String locator = Locators.zBodyField;
 				sSelectFrame(Locators.zFrame);
 				this.sType(locator, value);
-			} else {
+			} else if (ZimbraSeleniumProperties.isWebDriverBackedSelenium()){
 				this.sMouseOver(iframeLocator);
 				this.sFocus(iframeLocator);
 				this.zClickAt(iframeLocator,"0,0");
@@ -112,10 +112,26 @@ public class DocumentBriefcaseNew extends AbsForm {
 							+ "var iframe_locator=\""
 							+ iframeLocator
 							+ "\";"
-							+ "var iframe_body=selenium.browserbot.findElement(iframe_locator).contentWindow.document.body;"
-							+ "if (browserVersion.isFirefox || browserVersion.isChrome){iframe_body.textContent=bodytext;}"
-							+ "else if(browserVersion.isIE){iframe_body.innerText=bodytext;}"
-							+ "else {iframe_body.innerText=bodytext;}");
+							+ "var iframe_body=document.getElementById('DWT11').contentWindow.document.body;"
+							+ "if (navigator.userAgent.indexOf('Firefox')!=-1 || navigator.userAgent.indexOf('Chrome')!=-1){iframe_body.innerHTML=bodytext;}"
+							+ "else if(navigator.userAgent.indexOf('MSIE')!=-1){iframe_body.innerHTML=bodytext;}"
+							+ "else {iframe_body.innerHTML=bodytext;}");
+			} else {
+				this.sMouseOver(iframeLocator);
+				this.sFocus(iframeLocator);
+				this.zClickAt(iframeLocator,"0,0");
+				
+				this
+				.sGetEval("var bodytext=\""
+						+ value
+						+ "\";"
+						+ "var iframe_locator=\""
+						+ iframeLocator
+						+ "\";"
+						+ "var iframe_body=selenium.browserbot.findElement(iframe_locator).contentWindow.document.body;"
+						+ "if (browserVersion.isFirefox || browserVersion.isChrome){iframe_body.textContent=bodytext;}"
+						+ "else if(browserVersion.isIE){iframe_body.innerText=bodytext;}"
+						+ "else {iframe_body.innerText=bodytext;}");
 			}
 		} else {
 			throw new HarnessException("Not implemented field: " + field);

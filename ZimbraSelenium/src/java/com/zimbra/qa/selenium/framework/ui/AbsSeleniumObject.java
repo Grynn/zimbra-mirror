@@ -348,11 +348,16 @@ public abstract class AbsSeleniumObject {
 			throw new HarnessException("zRightClick(" + locator
 					+ ") element is not present");
 		}
-
-		
-		this.sMouseDownRightAt(locator, coord);
-		this.sMouseUpRightAt(locator, coord);
-
+		if (ZimbraSeleniumProperties.isWebDriver()){
+			WebElement element = getElement(locator);
+			//2.17
+			//Actions builder = new Actions(webDriver());
+			//Action rClick = builder.contextClick(element).build();
+			//rClick.perform();
+		} else {				
+			this.sMouseDownRightAt(locator, coord);
+			this.sMouseUpRightAt(locator, coord);
+		}
 		logger.info("zRightClick(" + locator + "," + coord + ")");
 	}
 
@@ -550,8 +555,7 @@ public abstract class AbsSeleniumObject {
 		String value = null;
 		try {			
 			if (ZimbraSeleniumProperties.isWebDriver()){
-				Object o = ((JavascriptExecutor) ClientSessionFactory.session().webDriver())
-						.executeScript(script);
+				Object o = ((JavascriptExecutor) webDriver()).executeScript(script);
 				logger.info(o + " ...executing... " + script);
 				if(o != null)
 					value = o.toString();					
@@ -627,9 +631,10 @@ public abstract class AbsSeleniumObject {
 				n = we.getLocation().getX();
 				*/
 				n = 1;
-			} else if(ZimbraSeleniumProperties.isWebDriverBackedSelenium())
+			} 
+			else if(ZimbraSeleniumProperties.isWebDriverBackedSelenium())
 				n = webDriverBackedSelenium().getElementPositionLeft(locator).intValue();
-				else
+			else
 				n = ClientSessionFactory.session().selenium().getElementPositionLeft(locator).intValue();
 			
 			logger.info("getElementPositionLeft(" + locator + ") = " + n);
@@ -1682,16 +1687,16 @@ public abstract class AbsSeleniumObject {
 	 */
 	public void sSelectFrame(String locator) throws HarnessException {		
 		try {
-			if (ZimbraSeleniumProperties.isWebDriverBackedSelenium()) {
+			if (ZimbraSeleniumProperties.isWebDriver()) {
+				if (locator.startsWith("css="))
+					locator = locator.substring("css=".length());
+				webDriver().switchTo().frame(getElement(locator));
+			} else if (ZimbraSeleniumProperties.isWebDriverBackedSelenium()) {
 				if (locator.startsWith("css="))
 					locator = locator.substring("css=".length());
 				webDriverBackedSelenium().getWrappedDriver().switchTo()
 						.frame(getElement(locator));
 				// WebElement el = getElement("body");
-			} else if (ZimbraSeleniumProperties.isWebDriver()) {
-				if (locator.startsWith("css="))
-					locator = locator.substring("css=".length());
-				webDriver().switchTo().frame(getElement(locator));
 			} else {
 				ClientSessionFactory.session().selenium().selectFrame(locator);
 			}
