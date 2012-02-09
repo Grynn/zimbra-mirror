@@ -2173,7 +2173,7 @@ Categorized_DynSelect_XFormItem.prototype.getChoiceHTML = function (itemNum, css
         " onmouseover=\"",ref, ".onChoiceOver(", itemNum,", event||window.event)\"",
         " onmouseout=\"",ref, ".onChoiceOut(", itemNum,", event||window.event)\"",
         " onclick=\"",ref, ".", hdlr, "(", itemNum,")\"",
-        ">",this._tailorLabel(label),	"</div></td></tr>");
+        " itemnum = '", itemNum, "'",">",this._tailorLabel(label),	"</div></td></tr>");
 }
 
 Categorized_DynSelect_XFormItem.prototype.onChoiceClick = function(num, event) {
