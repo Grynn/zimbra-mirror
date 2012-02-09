@@ -2,12 +2,9 @@ package com.zimbra.qa.selenium.framework.ui;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
@@ -1786,6 +1783,23 @@ public abstract class AbsSeleniumObject {
 	// // ***
 	// Start: WebDriver methods
 	// // ***
+	
+	public String executeScript(String script, Object... arg) throws HarnessException {
+		String value = null;
+		try {			
+			Object ob = ((JavascriptExecutor) webDriver()).executeScript(script,arg);
+					
+			logger.info(ob + " ...executing... " + script);
+			if(ob != null)
+				value = ob.toString();					
+			
+			return (value);
+		} catch (Exception e) {
+				logger.info(e + " executing " + script);			
+				return value;			
+		}
+	}
+	
 	public class CssLocator {
 		private String Locator;
 		private String Text;
@@ -2015,6 +2029,6 @@ public abstract class AbsSeleniumObject {
 		}
 
 		// // ***
-		// End: We mebDriver methods
+		// End: WebDriver methods
 		// // ***
 }

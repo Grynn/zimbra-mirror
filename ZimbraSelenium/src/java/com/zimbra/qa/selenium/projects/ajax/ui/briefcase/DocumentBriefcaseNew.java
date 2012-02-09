@@ -1,5 +1,7 @@
 package com.zimbra.qa.selenium.projects.ajax.ui.briefcase;
 
+import org.openqa.selenium.WebElement;
+
 import com.zimbra.qa.selenium.framework.items.DocumentItem;
 import com.zimbra.qa.selenium.framework.items.IItem;
 import com.zimbra.qa.selenium.framework.ui.AbsApplication;
@@ -97,9 +99,27 @@ public class DocumentBriefcaseNew extends AbsForm {
 						+ iframeLocator);
 			
 			if (ZimbraSeleniumProperties.isWebDriver()) {				
-				String locator = Locators.zBodyField;
-				sSelectFrame(Locators.zFrame);
-				this.sType(locator, value);
+				//String locator = Locators.zBodyField;
+				//sSelectFrame(Locators.zFrame);
+				//this.sType(locator, value);
+				
+				WebElement we = getElement(iframeLocator);
+				this.sMouseOver(iframeLocator);
+				this.sFocus(iframeLocator);
+				this.zClickAt(iframeLocator,"0,0");
+
+				this
+					.executeScript("var bodytext=\""
+							+ value
+							+ "\";"
+							+ "var iframe_locator=\""
+							+ iframeLocator
+							+ "\";"
+							+ "var iframe_body=arguments[0].contentWindow.document.body;"
+							+ "if (navigator.userAgent.indexOf('Firefox')!=-1 || navigator.userAgent.indexOf('Chrome')!=-1){iframe_body.innerHTML=bodytext;}"
+							+ "else if(navigator.userAgent.indexOf('MSIE')!=-1){iframe_body.innerHTML=bodytext;}"
+							+ "else {iframe_body.innerHTML=bodytext;}", we);
+				
 			} else if (ZimbraSeleniumProperties.isWebDriverBackedSelenium()){
 				this.sMouseOver(iframeLocator);
 				this.sFocus(iframeLocator);
@@ -122,7 +142,7 @@ public class DocumentBriefcaseNew extends AbsForm {
 				this.zClickAt(iframeLocator,"0,0");
 				
 				this
-				.sGetEval("var bodytext=\""
+					.sGetEval("var bodytext=\""
 						+ value
 						+ "\";"
 						+ "var iframe_locator=\""
