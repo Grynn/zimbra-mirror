@@ -733,10 +733,14 @@ public class WSDLAdminTest {
         tSel.setBy(testTargetBy.ID);
         tSel.setValue(accountId);
         req.setTarget(tSel);
-        testCheckedRight checkedRight = new testCheckedRight();
+        // Note that there is a JAXB class called CheckedRight but it only has an XmlValue
+        // so that gets folded into a simple String field in the generated client code.  When it also
+        // had a "deny" attribute, the following code was needed:
+        //     testCheckedRight checkedRight = new testCheckedRight();
+        //     checkedRight.setValue("renameAccount");
+        //     req.setRight(checkedRight);
         // from /opt/zimbra/conf/rights/zimbra-rights.xml
-        checkedRight.setValue("renameAccount");
-        req.setRight(checkedRight);
+        req.setRight("renameAccount");
         testCheckRightResponse resp = eif.checkRightRequest(req);
         Assert.assertNotNull("CheckRightResponse object", resp);
         resp.isAllow();
