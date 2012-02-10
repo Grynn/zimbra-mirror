@@ -27,6 +27,9 @@ ZaDistributionList = function(id, name, memberList, description, notes) {
 	this._selfMember = new ZaDistributionListMember(this.name);
 	if (description != null) this.attrs.description = description;
 	if (notes != null) this.attrs.zimbraNotes = notes;
+
+    this.attrs[ZaDistributionList.A_zimbraIsACLGroup] = "TRUE";
+    this[ZaDistributionList.A2_dlType] = ZaDistributionList.STATIC_DL_TYPE;
 	this[ZaDistributionList.A2_numMembers] = 0;
 	this[ZaDistributionList.A2_memberList] = (memberList != null) ? memberList: new Array();
 	this[ZaDistributionList.A2_memberPool] = new Array();
@@ -54,6 +57,9 @@ ZaDistributionList.A_zimbraGroupId = "zimbraGroupId";
 ZaDistributionList.A_zimbraCreateTimestamp = "zimbraCreateTimestamp";
 
 ZaDistributionList.A_mailStatus = "zimbraMailStatus";
+ZaDistributionList.A2_dlType = "dlType";
+ZaDistributionList.A_memberOfURL = "memberURL";
+ZaDistributionList.A_zimbraIsACLGroup = "zimbraIsACLGroup";
 ZaDistributionList.A2_members = "members";
 ZaDistributionList.A2_memberList = "memberList";
 ZaDistributionList.A2_origList = "origList";
@@ -112,6 +118,8 @@ ZaDistributionList.searchAttributes = AjxBuffer.concat(ZaAccount.A_displayname,"
                                                        ZaDistributionList.A_isAdminGroup,",", 
 													   ZaDistributionList.A_mailStatus);
 
+ZaDistributionList.DYNAMIC_DL_TYPE = "1";
+ZaDistributionList.STATIC_DL_TYPE = "0";
 
 // ==============================================================
 // public methods
@@ -164,7 +172,11 @@ function(tmpObj, dl) {
 	//create SOAP request
 	var soapDoc = AjxSoapDoc.create("CreateDistributionListRequest", ZaZimbraAdmin.URN, null);
 	soapDoc.set(ZaAccount.A_name, tmpObj.name);
-		
+
+    if(tmpObj[ZaDistributionList.A2_dlType] == ZaDistributionList.DYNAMIC_DL_TYPE) {
+        soapDoc.setMethodAttribute("dynamic", ZaDistributionList.DYNAMIC_DL_TYPE);
+    }
+
 	if(tmpObj[ZaAccount.A2_autoMailServer] == "TRUE") {
 		tmpObj.attrs[ZaAccount.A_mailHost] = null;
 	}
@@ -178,7 +190,10 @@ function(tmpObj, dl) {
 		if( aname == ZaAccount.A_zimbraMailAlias || aname == ZaItem.A_objectClass || aname == ZaAccount.A2_mbxsize || aname == ZaAccount.A_mail) {
 			continue;
 		}	
-		
+
+        if (tmpObj[ZaDistributionList.A2_dlType] != ZaDistributionList.DYNAMIC_DL_TYPE && aname == ZaDistributionList.A_zimbraIsACLGroup) {
+            continue;
+        }
 		if(tmpObj.attrs[aname] instanceof Array) {
 			var cnt = tmpObj.attrs[aname].length;
 			if(cnt) {
@@ -783,6 +798,8 @@ ZaDistributionList.prototype.getMembers = function () {
 			}
 			var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetDistributionListResponse;	
 			//DBG.dumpObj(resp);
+            if (resp.dl[0].dynamic === true)
+                this[ZaDistributionList.A2_dlType] = ZaDistributionList.DYNAMIC_DL_TYPE;
 			var members = resp.dl[0].dlm;
 			this.numMembers = resp.total;
 			this.memNumPages = Math.ceil(this.numMembers/limit);
@@ -802,7 +819,13 @@ ZaDistributionList.prototype.getMembers = function () {
 			this.initFromJS(resp.dl[0]);
 			
 			//Make a GetAccountMembershipRequest
-			this[ZaAccount.A2_memberOf] = ZaAccountMemberOfListView.getDlMemberShip(this.id, "id" ) ;
+            if (this[ZaDistributionList.A2_dlType] !== ZaDistributionList.DYNAMIC_DL_TYPE)
+			    this[ZaAccount.A2_memberOf] = ZaAccountMemberOfListView.getDlMemberShip(this.id, "id" ) ;
+            else
+                this[ZaAccount.A2_memberOf] = {	directMemberList: [],
+						                        indirectMemberList: [],
+		                        				nonMemberList: []
+					                            };
 			this[ZaAccount.A2_directMemberList + "_more"] = 
 				(this[ZaAccount.A2_memberOf][ZaAccount.A2_directMemberList].length > ZaAccountMemberOfListView.SEARCH_LIMIT) ? 1: 0;
 			this[ZaAccount.A2_indirectMemberList + "_more"] = 
@@ -1068,6 +1091,7 @@ ZaDistributionList.myXModel = {
 	items: [
 		{id:"id", type:_STRING_},
 		{id:ZaDistributionList.A2_query, type:_STRING_},
+        {id:ZaDistributionList.A2_dlType, type:_STRING_},
 		{id:ZaDistributionList.A2_pagenum, type:_NUMBER_, defaultValue:1},
 		{id:ZaDistributionList.A2_poolPagenum, type:_NUMBER_, defaultValue:1},
 		{id:ZaDistributionList.A2_poolNumPages, type:_NUMBER_, defaultValue:1},		
@@ -1097,6 +1121,8 @@ ZaDistributionList.myXModel = {
 		{id:ZaDistributionList.A2_members, type:_LIST_},
 		ZaItem.descriptionModelItem,
 		{id:ZaItem.A_zimbraId, type:_STRING_, ref:"attrs/" + ZaItem.A_zimbraId},
+        {id:ZaDistributionList.A_memberOfURL, ref:"attrs/" + ZaDistributionList.A_memberOfURL, type:_STRING_},
+        {id:ZaDistributionList.A_zimbraIsACLGroup, ref:"attrs/"+ZaDistributionList.A_zimbraIsACLGroup, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
 		{id:ZaItem.A_zimbraCreateTimestamp, ref:"attrs/" + ZaItem.A_zimbraCreateTimestamp},
         {id:ZaAccount.A_zimbraHideInGal, type:_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraHideInGal, choices:ZaModel.BOOLEAN_CHOICES},
 		{id:ZaAccount.A_notes, ref:"attrs/"+ZaAccount.A_notes, type:_STRING_},

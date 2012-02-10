@@ -535,7 +535,10 @@ function (entry) {
         if(entry.name == ""){this._containedObject.name = ZaMsg.TBB_New;}
 	this._containedObject.type = entry.type;
 	this._containedObject.id = entry.id;
-	
+
+    if(entry[ZaDistributionList.A2_dlType])
+        this._containedObject[ZaDistributionList.A2_dlType] = entry[ZaDistributionList.A2_dlType];
+
 	if(!entry[ZaModel.currentTab])
 		this._containedObject[ZaModel.currentTab] = "1";
 	else
@@ -838,6 +841,18 @@ ZaDLXFormView.isDeleteOwnerEnabled = function () {
 	return (!AjxUtil.isEmpty(this.getInstanceValue(ZaDistributionList.A2_owners_selection_cache)));
 }
 
+ZaDLXFormView.isDynamicDL = function () {
+    return this.getInstanceValue(ZaDistributionList.A2_dlType) === ZaDistributionList.DYNAMIC_DL_TYPE;
+}
+
+ZaDLXFormView.isNotDynamicDL = function () {
+    return !ZaDLXFormView.isDynamicDL.call(this);
+}
+
+ZaDLXFormView.isNotACLGroup = function () {
+    return this.getInstanceValue(ZaDistributionList.A_zimbraIsACLGroup ) === "FALSE";
+}
+
 ZaDLXFormView.NOTES_TAB_ATTRS = [ZaAccount.A_notes];
 ZaDLXFormView.NOTES_TAB_RIGHTS = [];
 
@@ -952,6 +967,28 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
                                                         }
                                                 ]
                                         },
+                                    {type:_GROUP_, colSpan:"*", width:"98%", colSizes:["100px", "*"],items:[
+                                        {ref:ZaDistributionList.A2_dlType, type:_WIZ_CHECKBOX_,
+                                            label:ZaMsg.LBL_DL_Type,labelLocation:_LEFT_,trueValue:"1", falseValue:"0",
+                                            visibilityChecks:[], align:_LEFT_, subLabel:"",
+                                            enableDisableChecks: false
+                                        },
+                                        {ref:ZaDistributionList.A_zimbraIsACLGroup, type:_WIZ_CHECKBOX_,
+                                            label:ZaMsg.LBL_ACL_Group,trueValue:"TRUE", falseValue:"FALSE",
+                                            labelLocation:_LEFT_,align:_LEFT_, subLabel:"",
+                                            visibilityChangeEventSources:[ZaDistributionList.A2_dlType],
+                                            visibilityChecks:[ZaDLXFormView.isDynamicDL],
+                                            enableDisableChecks:[]
+                                        },
+                                        {type:_INPUT_, ref:ZaDistributionList.A_memberOfURL,
+                                            label:ZaMsg.LBL_Member_URL, labelLocation:_LEFT_, width:"100%",
+                                            visibilityChangeEventSources:[ZaDistributionList.A2_dlType],
+                                            visibilityChecks:[ZaNewDLXWizard.isDynamicDL],
+                                            enableDisableChangeEventSources:[ZaDistributionList.A_zimbraIsACLGroup],
+                                            enableDisableChecks:[ZaDLXFormView.isNotACLGroup]
+                                        }
+                                     ]
+                                    },
                                 {type:_SPACER_, height:spaceHeight},
                                   {type:_GROUPER_, borderCssClass:"LeftGrouperBorder",
                                          width:"100%", numCols:1,colSizes:["auto"],
@@ -1126,6 +1163,28 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
 							}
 						]
 					},
+                    {type:_GROUP_, colSpan:"*", width:"98%", colSizes:["100px", "*"],items:[
+                            {ref:ZaDistributionList.A2_dlType, type:_WIZ_CHECKBOX_,
+                                label:ZaMsg.LBL_DL_Type,labelLocation:_LEFT_,trueValue:"1", falseValue:"0",
+                                visibilityChecks:[], align:_LEFT_, subLabel:"",
+                                enableDisableChecks: false
+                            },
+                            {ref:ZaDistributionList.A_zimbraIsACLGroup, type:_WIZ_CHECKBOX_,
+                                label:ZaMsg.LBL_ACL_Group,trueValue:"TRUE", falseValue:"FALSE",
+                                labelLocation:_LEFT_,align:_LEFT_, subLabel:"",
+                                visibilityChangeEventSources:[ZaDistributionList.A2_dlType],
+                                visibilityChecks:[ZaDLXFormView.isDynamicDL],
+                                enableDisableChecks:[]
+                            },
+                            {type:_INPUT_, ref:ZaDistributionList.A_memberOfURL,
+                                label:ZaMsg.LBL_Member_URL, labelLocation:_LEFT_, width:"100%",
+                                visibilityChangeEventSources:[ZaDistributionList.A2_dlType],
+                                visibilityChecks:[ZaNewDLXWizard.isDynamicDL],
+                                enableDisableChangeEventSources:[ZaDistributionList.A_zimbraIsACLGroup],
+                                enableDisableChecks:[ZaDLXFormView.isNotACLGroup]
+                            }
+                     ]
+                    },
 			        {type:_SPACER_, height:"7"},
                             	  {type:_GROUPER_, borderCssClass:"LeftGrouperBorder",
                                          width:"100%", numCols:1,colSizes:["auto"],

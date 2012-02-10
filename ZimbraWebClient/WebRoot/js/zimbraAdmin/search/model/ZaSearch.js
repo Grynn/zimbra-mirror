@@ -32,6 +32,7 @@ ZaSearch = function() {
 }
 ZaSearch.ALIASES = "aliases";
 ZaSearch.DLS = "distributionlists";
+ZaSearch.DDLS = "dynamicgroups";
 ZaSearch.ACCOUNTS = "accounts";
 ZaSearch.RESOURCES = "resources";
 ZaSearch.DOMAINS = "domains";
@@ -130,7 +131,8 @@ ZaSearch.standardAttributes = [ZaAccount.A_displayname,
 * 	callback - an AjxCallback
 * }
 * */
-ZaSearch.searchDirectory = 
+
+ZaSearch.searchDirectory =
 function (params) {
 	var soapDoc = AjxSoapDoc.create("SearchDirectoryRequest", ZaZimbraAdmin.URN, null);
 	if(params.query) {
@@ -174,8 +176,7 @@ function (params) {
 		soapDoc.getMethod().setAttribute("attrs", params.attrs.toString());
 		
 	if(params.types && params.types.length>0)
-		soapDoc.getMethod().setAttribute("types", params.types.toString());
-	
+        soapDoc.getMethod().setAttribute("types", ZaSearch.checkDynamicGroupType(params.types).toString());
 	//set the maxResults to 2 for testing
 	//params.maxResults = 2;
 	if(params.maxResults) {
@@ -203,6 +204,16 @@ function (params) {
 			throw (ex) ;
 		}
 	}
+}
+
+ZaSearch.checkDynamicGroupType = function(type) {
+    for (var i = 0; i < type.length; i ++) {
+        if (type[i] == ZaSearch.DLS) {
+            type.push(ZaSearch.DDLS);
+            return type;
+        }
+    }
+    return type;
 }
 
 ZaSearch.TOO_MANY_RESULTS_FLAG = false ; //control the no result text of the list view
@@ -588,7 +599,7 @@ function() {
 	accDoc.setAttribute("limit", "1");
     elBy = soapDoc.set("query", "", accDoc);
     soapDoc.set("limit", 1, accDoc);
-    soapDoc.set("types", ZaSearch.DLS, accDoc);
+    soapDoc.set("types", [ZaSearch.DLS, ZaSearch.DDLS].toString(), accDoc);
 
     params = new Object();
     params.soapDoc = soapDoc;
