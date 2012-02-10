@@ -79,12 +79,8 @@ DwtTreeItem = function(params) {
 	this._forceNotifyAction = Boolean(params.forceNotifyAction);
 	this._dndScrollCallback = params.dndScrollCallback;
 	this._dndScrollId = params.dndScrollId;
+    this._contextEnabled = !(!(this.parent._optButton)) && this._selectionEnabled;
 
-	// disable selection if checkbox style
-	if (this._tree.isCheckedStyle) {
-		this.enableSelection(false);
-		this._selectedClassName = this._origClassName;
-	}
 	if (params.singleClickAction) {
 		this._singleClickAction = true;
 		this._selectedFocusedClassName = this._selectedClassName = this._textClassName;
@@ -356,6 +352,8 @@ function(enable) {
 	this._selectedClassName = enable
 		? this._origClassName + "-" + DwtCssStyle.SELECTED
 		: this._origClassName;
+    this._contextEnabled = !(!(this.parent._optButton)) && this._selectionEnabled;
+
 };
 
 DwtTreeItem.prototype.enableAction =
@@ -524,6 +522,10 @@ function(index, realizeDeferred, forceNode) {
 	this._textCell = document.getElementById(data.id + "_textCell");
 	this._extraCell = document.getElementById(data.id + "_extraCell");
 
+    if (!this._contextEnabled){
+        var tableNode = document.getElementById(data.id + "_table");
+        tableNode.style.tableLayout = "auto";
+    }
 	// If we have deferred children, then make sure we set up accordingly
 	if (this._nodeCell) {
 		this._nodeCell.style.width = this._nodeCell.style.height = DwtTreeItem._NODECELL_DIM;
@@ -839,13 +841,16 @@ function(selected, noFocus) {
 			this._initialize();
 		}
 		if (!this._itemDiv) { return; }
-		if (selected && (this._selectionEnabled || this._forceNotifySelection) /*&& this._origClassName == "DwtTreeItem"*/) {
+		if (selected && (this._selectionEnabled || this._forceNotifySelection || this._checkBoxVisible) /*&& this._origClassName == "DwtTreeItem"*/) {
 			this._itemDiv.className = this._selectedClassName;
+            if (this._contextEnabled)
+                AjxImg.setImage(this._extraCell, "DownArrowSmall");
 			if (!noFocus) {
 				this.focus();
 			}
 			return true;
 		} else {
+            AjxImg.setImage(this._extraCell, "Blank_16");
 			this._itemDiv.className = this._origClassName;
 			return false;
 		}
@@ -880,9 +885,9 @@ DwtTreeItem.prototype._focus =
 function() {
 	if (!this._itemDiv) { return; }
 	// focused tree item should always be selected as well
-	if (this._selectionEnabled) {
-		this._itemDiv.className = this._selectedFocusedClassName;
-	}
+	this._itemDiv.className = this._selectedFocusedClassName;
+    if (this._contextEnabled)
+        AjxImg.setImage(this._extraCell, "DownArrowSmall" );
 };
 
 DwtTreeItem.prototype._blur =
@@ -890,6 +895,8 @@ function() {
 	if (!this._itemDiv) { return; }
 	this._itemDiv.className = this._selected
 		? this._selectedClassName : this._origClassName;
+    if (this._contextEnabled)
+        AjxImg.setImage(this._extraCell, this._selected ? "DownArrowSmall" : "Blank_16" );
 };
 
 DwtTreeItem._mouseDownListener =
@@ -903,6 +910,7 @@ function(ev) {
 	} else if (ev.button == DwtMouseEvent.RIGHT && (treeItem._actionEnabled || treeItem._forceNotifyAction)) {
 		treeItem._gotMouseDownRight = true;
 	}
+
 };
 
 DwtTreeItem._mouseOutListener = 
@@ -916,6 +924,9 @@ function(ev) {
 	if (treeItem._singleClickAction && treeItem._textCell) {
 		treeItem._textCell.className = treeItem._textClassName;
 	}
+    if(!treeItem._selected && treeItem._extraCell){
+        AjxImg.setImage(treeItem._extraCell, "Blank_16");
+    }
 };
 
 DwtTreeItem._mouseOverListener =
@@ -927,6 +938,9 @@ function(ev) {
 	if (treeItem._singleClickAction && treeItem._textCell) {
 		treeItem._textCell.className = treeItem._hoverClassName;
 	}
+    if(!treeItem._selected && treeItem._extraCell && treeItem._contextEnabled){
+       AjxImg.setImage(treeItem._extraCell, "ColumnDownArrow");
+    }
 };
 
 DwtTreeItem._mouseUpListener =
