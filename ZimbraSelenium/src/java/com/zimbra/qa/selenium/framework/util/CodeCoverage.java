@@ -697,7 +697,7 @@ public class CodeCoverage {
 			} else if ( ZimbraSeleniumProperties.getAppType().equals(AppType.ADMIN) ) {
 				instrumentServerUndo(WebappsZimbraAdmin);
 			} else if ( ZimbraSeleniumProperties.getAppType().equals(AppType.OCTOPUS) ) {
-				instrumentServer(WebappsOctopus);
+				instrumentServerUndo(WebappsOctopus);
 			} else {
 				throw new HarnessException("Unknown code coverage app type: "+ ZimbraSeleniumProperties.getAppType());
 			}
