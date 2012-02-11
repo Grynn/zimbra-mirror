@@ -1,13 +1,13 @@
 package com.zimbra.qa.selenium.projects.octopus.tests.history;
 
 import org.testng.annotations.*;
-import com.zimbra.qa.selenium.framework.items.FileItem;
-import com.zimbra.qa.selenium.framework.items.FolderItem;
+import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.octopus.core.OctopusCommonTest;
 import com.zimbra.qa.selenium.projects.octopus.ui.PageHistory;
+import java.util.*;
 
 public class ActivityHistory extends OctopusCommonTest {
 
@@ -118,11 +118,33 @@ public class ActivityHistory extends OctopusCommonTest {
 		// Click on History tab
 		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_HISTORY);
 
-		// Verify file name appears in the activity history
-		ZAssert.assertTrue(app.zPageHistory.zWaitForElementPresent(
+		ArrayList<HistoryItem> historyItems= app.zPageHistory.zListItem();
+		
+		app.zPageHistory.zWaitForElementPresent(
 				PageHistory.Locators.zHistoryItemRow.locator + ":contains("
-						+ fileName + ")", "3000"),
-				"Verify file name appears in the activity history");
+						+ fileName + ")", "3000");
+		
+		String historyText= app.zGetActiveAccount().EmailAddress + " created version 1 of file " +  fileName +".";
+		                           
+		HistoryItem found = null;
+		
+		// Verify history item appears in the activity history
+		for ( HistoryItem item : historyItems ) {
+			
+			// Verify the history is found
+			if (item.getHistoryText().equals(historyText)) {
+				logger.debug(item.getHistoryText());
+				found = item;
+				break;
+			}
+			
+		}
+		ZAssert.assertNotNull(found, "Verify the history is found");
+		
+		ZAssert.assertEquals(found.getHistoryText(), historyText, "Verify the history text matches");
+		ZAssert.assertEquals(found.getHistoryUser(), app.zGetActiveAccount().EmailAddress , "Verify the user matches");
+	
+		
 	}
 
 	@Test(description = "Open History tab - verify Activity Type filter controls", groups = { "functional" })

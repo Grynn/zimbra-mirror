@@ -3,14 +3,29 @@
  */
 package com.zimbra.qa.selenium.projects.octopus.ui;
 
-import com.zimbra.qa.selenium.framework.items.IItem;
+import java.util.*;
+import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.octopus.ui.DialogError;
 import com.zimbra.qa.selenium.projects.octopus.ui.DialogError.DialogErrorID;
 
-public class PageHistory extends AbsTab {
 
+public class PageHistory extends AbsTab {
+    interface HISTORY_CONSTANTS {
+      String HISTORY_VIEW_LOCATOR = "css=div.octopus-updates-view";
+      String HISTORY_HEADER_VIEW_LOCATOR = HISTORY_VIEW_LOCATOR + " div#my-updates-header-view";
+      String HISTORY_FILTER_VIEW_LOCATOR = HISTORY_VIEW_LOCATOR + " div.my-updates-filter-view";
+    	 
+   	  String[] HISTORY_FILTER_VIEW_TEXT = {"Refine", 
+                                           "Activity Type",
+                                           "all types",
+                                           "favorites",
+                                           "comment",
+                                           "sharing",
+                                           "new version"};
+	
+    }
 	public static class Locators {
 		public static final Locators zTabHistory = new Locators(
 				"css=div.octopus-tab-label:contains(History)");
@@ -39,7 +54,7 @@ public class PageHistory extends AbsTab {
 		public static final Locators zHistoryFilterRename = new Locators(
 				"css=input[id=filter_rename]");
 
-		public final String locator;
+			public final String locator;
 
 		private Locators(String locator) {
 			this.locator = locator;
@@ -197,6 +212,49 @@ public class PageHistory extends AbsTab {
 			throws HarnessException {
 		throw new HarnessException("Implement me");
 	}
+	
+    // return a list of history items 
+	public ArrayList<HistoryItem> zListItem()
+	    throws HarnessException  
+	{
+        ArrayList<HistoryItem> historyItems = new ArrayList<HistoryItem>();
+        
+       // Is this necessary?
+		this.zWaitForBusyOverlayOctopus();
+		
+		String listLocator = "css=div[id='my-updates-view'] div[class='activity-stream-pane-list-item']";
+		int count = sGetCssCount(listLocator);
+		logger.debug("total items= " + count);
+		for (int i = 1; i <= count; i++) {
+			
+			String locator;
+			String itemLocator = listLocator + ":nth-of-type("+ i +")";
+			
+			HistoryItem item = new HistoryItem();
+
+			// Set the locator to the item
+			item.setLocator(itemLocator);
+						
+			// Get the user
+			locator = itemLocator + " span[class='activity-item-body'] span[class='user']";
+			item.setHistoryUser(sGetText(locator));
+			
+			// Get the Time
+			locator = itemLocator + " span[class='activity-item-time']";
+			item.setHistoryTime(sGetText(locator));
+			
+			// Get the Comment Text
+			locator = itemLocator + " span[class='activity-item-body']";
+			item.setHistoryText(sGetText(locator));
+			
+			logger.info(item.prettyPrint());
+			
+			historyItems.add(item);
+		}
+		
+		
+		return historyItems;
+    }
 
 	@Override
 	public AbsPage zListItem(Action action, String item)
