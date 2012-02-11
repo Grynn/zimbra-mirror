@@ -17,12 +17,12 @@ package com.zimbra.cs.mailbox;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.zimbra.common.account.Key.AccountBy;
 import com.zimbra.common.mailbox.Color;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.UUIDUtil;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.Account;
-import com.zimbra.common.account.Key.AccountBy;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.db.DbOfflineMailbox;
 import com.zimbra.cs.db.DbPool.DbConnection;
@@ -63,7 +63,7 @@ public class LocalMailbox extends DesktopMailbox {
                     getFolderByName(null, ID_FOLDER_NOTIFICATIONS, accountId);
                 } catch (NoSuchItemException e) {
                     createMountpoint(null, ID_FOLDER_NOTIFICATIONS, accountId,
-                        accountId, ID_FOLDER_USER_ROOT,
+                        accountId, ID_FOLDER_USER_ROOT, null,
                         MailItem.Type.UNKNOWN, 0, MailItem.DEFAULT_COLOR_RGB, false);
                 }
             }

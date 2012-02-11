@@ -26,8 +26,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -56,8 +56,8 @@ import com.zimbra.common.util.tar.TarInputStream;
 import com.zimbra.common.util.zip.ZipShort;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.offline.OfflineAccount;
-import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.account.offline.OfflineAccount.Version;
+import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.mailbox.ChangeTrackingMailbox.TracelessContext;
 import com.zimbra.cs.mailbox.MailItem.UnderlyingData;
 import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
@@ -93,8 +93,8 @@ import com.zimbra.cs.service.FileUploadServlet;
 import com.zimbra.cs.service.UserServlet;
 import com.zimbra.cs.service.formatter.SyncFormatter;
 import com.zimbra.cs.service.mail.SetCalendarItem;
-import com.zimbra.cs.service.mail.Sync;
 import com.zimbra.cs.service.mail.SetCalendarItem.SetCalendarItemParseResult;
+import com.zimbra.cs.service.mail.Sync;
 import com.zimbra.cs.service.util.ItemData;
 import com.zimbra.cs.service.util.ItemId;
 import com.zimbra.cs.session.PendingModifications.Change;
@@ -509,6 +509,7 @@ public class InitialSync {
         String ownerId = null;
         String ownerName = null;
         int remoteId = 0;
+        String remoteUuid = null;
         if (itemType == MailItem.Type.FOLDER) {
             redo = new CreateFolder(ombx.getId(), name, parentId, system, view, flags, itemColor, url);
             ((CreateFolder)redo).setFolderIdAndUuid(id, uuid);
@@ -527,9 +528,10 @@ public class InitialSync {
 
             ownerId = elt.getAttribute(MailConstants.A_ZIMBRA_ID);
             remoteId = (int)elt.getAttributeLong(MailConstants.A_REMOTE_ID);
+            remoteUuid = elt.getAttribute(MailConstants.A_REMOTE_UUID, null);
             OfflineProvisioning.getOfflineInstance().createMountpointAccount(ownerName, ownerId, ombx.getOfflineAccount());
 
-            redo = new CreateMountpoint(ombx.getId(), parentId, name, ownerId, remoteId, view, flags, itemColor, reminderEnabled);
+            redo = new CreateMountpoint(ombx.getId(), parentId, name, ownerId, remoteId, remoteUuid, view, flags, itemColor, reminderEnabled);
             ((CreateMountpoint)redo).setIdAndUuid(id, uuid);
         }
         redo.start(timestamp > 0 ? timestamp : System.currentTimeMillis());
@@ -539,7 +541,7 @@ public class InitialSync {
                 // don't care about current feed syncpoint; sync can't be done offline
                 ombx.createFolder(new TracelessContext(redo), name, parentId, system, view, flags, itemColor, url);
             } else {
-                ombx.createMountpoint(new TracelessContext(redo), parentId, name, ownerId, remoteId, view, flags, itemColor, reminderEnabled);
+                ombx.createMountpoint(new TracelessContext(redo), parentId, name, ownerId, remoteId, remoteUuid, view, flags, itemColor, reminderEnabled);
             }
             if (relocated) {
                 ombx.setChangeMask(sContext, id, itemType, Change.FOLDER | Change.NAME);
@@ -1391,7 +1393,7 @@ public class InitialSync {
                         }
                     } finally {
                         ombx.lock.release();
-                    }    
+                    }
                 }
             }
         } catch (MailServiceException.NoSuchItemException nsie) {

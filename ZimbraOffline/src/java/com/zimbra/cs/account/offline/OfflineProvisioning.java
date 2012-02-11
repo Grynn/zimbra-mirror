@@ -44,8 +44,9 @@ import com.zimbra.client.ZGetInfoResult;
 import com.zimbra.client.ZIdentity;
 import com.zimbra.client.ZMailbox;
 import com.zimbra.common.account.Key;
-import com.zimbra.common.account.ProvisioningConstants;
 import com.zimbra.common.account.Key.AccountBy;
+import com.zimbra.common.account.Key.ShareLocatorBy;
+import com.zimbra.common.account.ProvisioningConstants;
 import com.zimbra.common.auth.ZAuthToken;
 import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.net.TrustManagers;
@@ -72,24 +73,24 @@ import com.zimbra.cs.account.GlobalGrant;
 import com.zimbra.cs.account.IDNUtil;
 import com.zimbra.cs.account.Identity;
 import com.zimbra.cs.account.NamedEntry;
+import com.zimbra.cs.account.NamedEntry.Visitor;
 import com.zimbra.cs.account.NamedEntryCache;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.Server;
+import com.zimbra.cs.account.ShareLocator;
 import com.zimbra.cs.account.Signature;
 import com.zimbra.cs.account.XMPPComponent;
 import com.zimbra.cs.account.Zimlet;
-import com.zimbra.cs.account.NamedEntry.Visitor;
 import com.zimbra.cs.account.auth.AuthContext;
 import com.zimbra.cs.account.callback.CallbackContext;
 import com.zimbra.cs.datasource.DataSourceManager;
 import com.zimbra.cs.datasource.SyncErrorManager;
 import com.zimbra.cs.datasource.imap.ImapSync;
 import com.zimbra.cs.db.DbOfflineDirectory;
-import com.zimbra.cs.db.DbPool;
 import com.zimbra.cs.db.DbOfflineDirectory.GranterEntry;
+import com.zimbra.cs.db.DbPool;
 import com.zimbra.cs.mailbox.DesktopMailbox;
 import com.zimbra.cs.mailbox.Folder;
-import com.zimbra.cs.mailbox.InitialSync;
 import com.zimbra.cs.mailbox.LocalJMSession;
 import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.mailbox.Mailbox;
@@ -980,7 +981,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         setAccountAttribute(galAcct, OfflineConstants.A_offlineGalGroupMembersPopulated, ProvisioningConstants.FALSE);
         setAccountAttribute(galAcct, OfflineConstants.A_offlineGalAccountSyncToken, "");
         setAccountAttribute(galAcct, OfflineConstants.A_offlineGalAccountId, galAcct.getId());
-        
+
         return galAcct;
     }
 
@@ -1167,7 +1168,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     public boolean isGalAccount(Account account) {
         return "Gal".equals(account.getAttr(A_offlineAccountFlavor, null));
     }
-    
+
     public boolean isMountpointAccount(String accountId) throws ServiceException {
         Account acct = getAccountById(accountId);
         return (acct != null && isMountpointAccount(acct));
@@ -1251,7 +1252,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 
             mbox.createMountpoint(null,
                 DesktopMailbox.ID_FOLDER_NOTIFICATIONS, accountId,
-                accountId, Mailbox.ID_FOLDER_USER_ROOT,
+                accountId, Mailbox.ID_FOLDER_USER_ROOT, null,
                 MailItem.Type.UNKNOWN, 0, MailItem.DEFAULT_COLOR_RGB, false);
         }
     }
@@ -1536,7 +1537,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         if (this.cachedAccountIds.isEmpty()) {
             synchronized (this) {
                 if (this.cachedAccountIds.isEmpty()) {
-                    this.loadAccountIdsInOrder();        
+                    this.loadAccountIdsInOrder();
                 }
             }
         }
@@ -1639,7 +1640,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     public synchronized void preAuthAccount(Account acct, String accountName, String accountBy, long timestamp, long expires, String preAuth, Map<String, Object> authCtxt) throws ServiceException {
         throw OfflineServiceException.UNSUPPORTED("preAuthAccount");
     }
-    
+
     @Override
     public void ssoAuthAccount(Account acct, AuthContext.Protocol proto, Map<String, Object> authCtxt) throws ServiceException {
         throw OfflineServiceException.UNSUPPORTED("ssoAuthAccount");
@@ -1886,7 +1887,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         }
         return accts;
     }
-    
+
     public synchronized Set<String> getAllAccountsByDomain(String domain) throws ServiceException {
         List<Account> accounts = getAllAccounts(domain);
         Set<String> result = new HashSet<String>();
@@ -2652,7 +2653,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             return null;
         }
     }
-    
+
     public String getCalendarProxyAuthToken(String requestedAccountId, Map<String, Object> context) throws ServiceException {
         Account acct = getAccountById(requestedAccountId);
         if (acct != null && isMountpointAccount(acct) && acct.getBooleanAttr(OfflineProvisioning.A_offlineAmbiguousGranter, false)) {
@@ -2671,13 +2672,13 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
                         if (mounts != null) {
                             for (MailItem mount : mounts) {
                                 if (((Mountpoint) mount).getDefaultView() == MailItem.Type.APPOINTMENT) {
-                                    //probably this one. 
+                                    //probably this one.
                                     return getProxyAuthToken(zcsAcct.getId(), null);
                                 }
                             }
                         }
                     }
-                    
+
                 }
             }
         }
@@ -2693,7 +2694,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     public boolean allowsPingRemote() {
         return false; // in offline don't actively ping remote servers for pending sessions
     }
-    
+
     public boolean syncZimletProperties(String accountId) throws ServiceException {
         return accountId.equals(getZimletSyncAccountId());
     }
@@ -2776,8 +2777,23 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     public Account getGalAccountByAccount(OfflineAccount account) throws ServiceException {
         OfflineDomainGal gal = this.getDomainGal(account.getDomain());
         if (gal != null) {
-            return gal.getGalAccount();    
+            return gal.getGalAccount();
         }
         return null;
+    }
+
+    @Override
+    public ShareLocator get(ShareLocatorBy keyType, String key) throws ServiceException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public ShareLocator createShareLocator(String id, Map<String, Object> attrs) throws ServiceException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void deleteShareLocator(String id) throws ServiceException {
+        throw new UnsupportedOperationException();
     }
 }

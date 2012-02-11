@@ -21,13 +21,13 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.MailConstants;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
+import com.zimbra.cs.mailbox.ChangeTrackingMailbox.TracelessContext;
 import com.zimbra.cs.mailbox.Flag;
 import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.mailbox.MailServiceException;
 import com.zimbra.cs.mailbox.Mailbox;
-import com.zimbra.cs.mailbox.ZcsMailbox;
 import com.zimbra.cs.mailbox.OfflineServiceException;
-import com.zimbra.cs.mailbox.ChangeTrackingMailbox.TracelessContext;
+import com.zimbra.cs.mailbox.ZcsMailbox;
 import com.zimbra.cs.redolog.op.CreateMountpoint;
 import com.zimbra.soap.ZimbraSoapContext;
 
@@ -63,12 +63,12 @@ public class OfflineCreateMountpoint extends OfflineServiceProxy {
         boolean reminderEnabled = eMount.getAttributeBool(MailConstants.A_REMINDER, false);
 
         OfflineProvisioning.getOfflineInstance().createMountpointAccount(ownerName, ownerId, ((ZcsMailbox)mbox).getOfflineAccount());
-        CreateMountpoint redo = new CreateMountpoint(mbox.getId(), parentId, name, ownerId, remoteId, view, flags,
+        CreateMountpoint redo = new CreateMountpoint(mbox.getId(), parentId, name, ownerId, remoteId, null, view, flags,
                 new Color(color), reminderEnabled);
         redo.setIdAndUuid(id, uuid);
         redo.setChangeId(mod_content);
         try {
-            mbox.createMountpoint(new TracelessContext(redo), parentId, name, ownerId, remoteId, view, flags, color, reminderEnabled);
+            mbox.createMountpoint(new TracelessContext(redo), parentId, name, ownerId, remoteId, null, view, flags, color, reminderEnabled);
         } catch (ServiceException e) {
             if (e.getCode() != MailServiceException.ALREADY_EXISTS)
                 throw e;

@@ -132,5 +132,7 @@ objectclass: zimbraAclTarget
 description: acl target for global grants
 cn: globalgrant
 
-
-
+# for storing share locators
+dn: cn=sharelocators,cn=zimbra
+objectclass: organizationalRole
+cn: sharelocators
