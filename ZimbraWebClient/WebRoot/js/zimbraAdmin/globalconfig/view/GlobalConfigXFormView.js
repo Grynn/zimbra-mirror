@@ -187,7 +187,7 @@ GlobalConfigXFormView.SKIN_TAB_ATTRS = [ZaGlobalConfig.A_zimbraSkinForegroundCol
 
 GlobalConfigXFormView.SKIN_TAB_RIGHTS = [];
 
-GlobalConfigXFormView.BC_TAB_ATTRS = [ZaGlobalConfig.A_zimbraBasicAuthRealm];
+GlobalConfigXFormView.BC_TAB_ATTRS = [ZaGlobalConfig.A_zimbraBasicAuthRealm,ZaGlobalConfig.A_zimbraMailAddressValidationRegex];
 GlobalConfigXFormView.BC_TAB_RIGHTS = [];
 
 GlobalConfigXFormView.AUTO_PROV_TAB_ATTRS = [ZaGlobalConfig.A_zimbraAutoProvNotificationBody, ZaGlobalConfig.A_zimbraAutoProvNotificationSubject];
@@ -877,6 +877,8 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
                         ]
                         },
                         { type:_ZA_TOP_GROUPER_, label:ZaMsg.Domain_AD_EmailValidate,
+                        	visibilityChecks:[[ZaItem.hasReadPermission,ZaGlobalConfig.A_zimbraMailAddressValidationRegex]],
+                        	visibilityChangeEventSources:[ZaGlobalConfig.A_zimbraMailAddressValidationRegex],
                             items :[
 					        { ref: ZaGlobalConfig.A_zimbraMailAddressValidationRegex, type: _REPEAT_,
                                 nowrap:false,labelWrap:true,
