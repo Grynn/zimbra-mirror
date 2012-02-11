@@ -848,7 +848,7 @@ public class CodeCoverage {
 	// In those cases, isDisabled will be flipped to true
 	private boolean isDisabled = false;
 		
-	protected boolean isEnabled() {
+	public boolean isEnabled() {
 		String v = ZimbraSeleniumProperties.getStringProperty("coverage.enabled", "false");
 		logger.info("coverage.enabled="+v);
 		if ( isDisabled ) {

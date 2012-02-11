@@ -1,5 +1,6 @@
 package com.zimbra.qa.selenium.projects.octopus.ui;
 
+import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 
@@ -87,6 +88,19 @@ public class PageLogin extends AbsTab {
 		tracer.trace("Login to the "+ MyApplication.myApplicationName() +" using user/password "+ account.EmailAddress +"/"+ account.Password);
 
 		zNavigateTo();
+		
+		if (CodeCoverage.getInstance().isEnabled()) {
+							
+			////
+			// Workaround for
+			// https://bugzilla.zimbra.com/show_bug.cgi?id=70060
+			////
+			this.sOpen(ZimbraSeleniumProperties.getBaseURL());
+			this.sWaitForPageToLoad();
+				
+			
+		}
+			
 
 		zSetLoginName(account.EmailAddress);
 		zSetLoginPassword(account.Password);
