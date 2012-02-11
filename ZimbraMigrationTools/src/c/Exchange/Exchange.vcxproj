@@ -207,7 +207,7 @@
       <WarningLevel>2</WarningLevel>
       <WarnAsError>true</WarnAsError>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <TargetEnvironment>Win32</TargetEnvironment>
+      <TargetEnvironment>X64</TargetEnvironment>
     </Midl>
     <ResourceCompile>
       <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -353,7 +353,7 @@
       <WarningLevel>2</WarningLevel>
       <WarnAsError>true</WarnAsError>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <TargetEnvironment>Win32</TargetEnvironment>
+      <TargetEnvironment>X64</TargetEnvironment>
     </Midl>
     <ResourceCompile>
       <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
