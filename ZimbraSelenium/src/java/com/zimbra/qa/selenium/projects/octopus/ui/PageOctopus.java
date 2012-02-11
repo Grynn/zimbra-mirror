@@ -4,14 +4,9 @@
 package com.zimbra.qa.selenium.projects.octopus.ui;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.httpclient.HttpStatus;
 
 import com.zimbra.common.soap.Element;
-import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.FileItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.IOctListViewItem;
@@ -21,7 +16,6 @@ import com.zimbra.qa.selenium.framework.ui.AbsTab;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.RestUtil;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.projects.octopus.ui.DialogError.DialogErrorID;
@@ -140,26 +134,7 @@ public class PageOctopus extends AbsTab {
 
 		zNavigateTo();
 
-		// logout
-		String url = this.getLocation();
-
-		// Open url through RestUtil
-		Map<String, String> map = new HashMap<String, String>();
-
-		if (url.contains("?") && !url.endsWith("?")) {
-			String query = url.split("\\?")[1];
-
-			for (String p : query.split("&")) {
-				if (p.contains("=")) {
-					map.put(p.split("=")[0], p.split("=")[1].substring(0, 1));
-				}
-			}
-		}
-
-		map.put("loginOp", "logout");
-
-		// this.openUrl("", map);
-		// zClick(PageOctopus.Locators.zSignOutButton.locator);
+		// Click on the sign out button
 		zToolbarPressPulldown(Button.B_USER_NAME, Button.O_SIGN_OUT);
 
 		sWaitForPageToLoad();
@@ -167,52 +142,6 @@ public class PageOctopus extends AbsTab {
 
 		((AppOctopusClient) MyApplication).zSetActiveAcount(null);
 
-	}
-
-	public String getLocation() {
-		return ClientSessionFactory.session().selenium().getLocation();
-	}
-
-	public String openUrl(String url) throws HarnessException {
-
-		this.sOpen(url);
-
-		return url;
-	}
-
-	public String openUrl(String path, Map<String, String> params)
-			throws HarnessException {
-		ZimbraAccount account = ((AppOctopusClient) MyApplication)
-				.zGetActiveAccount();
-		if (null == account)
-			account = ZimbraAccount.AccountZWC();
-
-		RestUtil util = new RestUtil();
-
-		util.setAuthentication(account);
-
-		if (null != path && !path.isEmpty())
-			util.setPath("/" + path + "/");
-		else
-			util.setPath("/");
-
-		if (null != params && !params.isEmpty()) {
-			for (Map.Entry<String, String> query : params.entrySet()) {
-				util.setQueryParameter(query.getKey(), query.getValue());
-			}
-		}
-
-		if (util.doGet() != HttpStatus.SC_OK)
-			throw new HarnessException("Unable to open " + util.getLastURI());
-
-		String url = util.getLastURI().toString();
-
-		if (url.endsWith("?"))
-			url = url.substring(0, url.length() - 1);
-
-		this.sOpen(url);
-
-		return url;
 	}
 
 	public AbsPage zToolbarPressPulldown(Button pulldown, Button option,
