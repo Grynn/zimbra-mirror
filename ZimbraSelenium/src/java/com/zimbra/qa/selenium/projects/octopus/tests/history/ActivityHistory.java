@@ -82,7 +82,7 @@ public class ActivityHistory extends OctopusCommonTest {
 	}
 
 	@Test(description = "Upload file through RestUtil - verify file history in History List view", groups = { "smoke" })
-	public void ActivityHistory_02() throws HarnessException {
+	public void VerifyUploadFileHistoryDisplayed() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 
 		FolderItem briefcaseRootFolder = FolderItem.importFromSOAP(account,
