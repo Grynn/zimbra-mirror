@@ -8,6 +8,7 @@ olcModuleLoad: {2}syncprov.la
 olcModuleLoad: {3}accesslog.la
 olcModuleLoad: {4}dynlist.la
 olcModuleLoad: {5}unique.la
+olcModuleLoad: {6}noopsrch.la
 structuralObjectClass: olcModuleList
 entryUUID: 1525c980-333e-102d-86f6-d562901af228
 creatorsName: cn=config
