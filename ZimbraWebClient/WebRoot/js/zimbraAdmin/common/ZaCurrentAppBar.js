@@ -10,7 +10,7 @@ ZaCurrentAppBar = function(parent, className, buttons) {
 	DwtButton.call(this, parent, "", className, Dwt.ABSOLUTE_STYLE);
     this._removeUnwantedEvent();
     this._currentPathItems = new Array();
-    this.menu = new ZaPopupMenu(this);
+    this.menu = new ZaPopupMenu(this, "ActionMenu", null, [], ZaId.CURRENT_APP_BAR, ZaId.MENU_POP, []);
     this.menu.setWidth(Dwt.__checkPxVal(150,true));
     this.actionButtons = {};
     this.itemElArray = [];
@@ -303,6 +303,7 @@ function(popupOperations, popupOrder) {
         this.setMenu("");
         this.menu = "";
         try {
+            oldMenu.dispose();
             delete oldMenu;
         }catch(ex){
             //nothing doing here to avoid delete exception;
