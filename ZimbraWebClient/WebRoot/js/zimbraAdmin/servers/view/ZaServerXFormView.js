@@ -640,6 +640,9 @@ ZaServerXFormView.MTA_NETWORK_GROUP_ATTRS = [ZaServer.A_zimbraImapBindPort,
 ZaServerXFormView.MTA_SERVICE_GROUP_ATTRS = [ZaServer.A_ImapServerEnabled, ZaServer.A_ImapSSLServerEnabled,
 	ZaServer.A_ImapCleartextLoginEnabled,ZaServer.A_zimbraImapNumThreads];
 
+ZaServerXFormView.BIND_IP_TAB_ATTRS = [ZaServer.A_zimbraMailBindAddress, ZaServer.A_zimbraMailSSLBindAddress,
+									ZaServer.A_zimbraMailSSLClientCertBindAddress, ZaServer.A_zimbraAdminBindAddress];
+ZaServerXFormView.BIND_IP_TAB_RIGHTS = [];
 /**
 * This method is added to the map {@link ZaTabView#XFormModifiers}
 * @param xFormObject {Object} a definition of the form. This method adds/removes/modifies xFormObject to construct
@@ -654,7 +657,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 	headerList[4] = new ZaListHeaderItem(ZaServer.A_VolumeCompressionThreshold, ZaMsg.VM_VolumeCompressThreshold, null, "120px", null, null, false, true);									
 	headerList[5] = new ZaListHeaderItem(ZaServer.A_isCurrentVolume, ZaMsg.VM_CurrentVolume, null, "auto", null, null, false, true);										
 
-	var _tab1, _tab2, _tab3, _tab4, _tab5, _tab6, _tab7, _tab8;
+	var _tab1, _tab2, _tab3, _tab4, _tab5, _tab6, _tab7, _tab8, _tab9;
 
     var tabBarChoices = [] ;
     
@@ -695,6 +698,11 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
     if(ZaTabView.isTAB_ENABLED(entry,ZaServerXFormView.PROXY_TAB_ATTRS, ZaServerXFormView.PROXY_TAB_RIGHTS)) {
         _tab8 = ++this.TAB_INDEX;
         tabBarChoices.push ({value:_tab8, label:ZaMsg.NAD_Tab_Proxy});
+    }
+
+    if(ZaTabView.isTAB_ENABLED(entry,ZaServerXFormView.BIND_IP_TAB_ATTRS, ZaServerXFormView.BIND_IP_TAB_RIGHTS)) {
+        _tab9 = ++this.TAB_INDEX;
+        tabBarChoices.push ({value:_tab9, label:ZaMsg.NAD_Tab_Bind_IP});
     }
     var switchItems = [];
 
@@ -1378,6 +1386,54 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 					};
 			switchItems.push (case8) ;
 		}
+
+	if(_tab9) {
+		var case9 = {	type: _ZATABCASE_, id:"server_bind_ip_tab", caseKey:_tab9,
+						colSizes:["auto"],numCols:1,
+						items: [
+							{type: _DWT_ALERT_,
+									containerCssStyle: "padding-bottom:0px",
+									style: DwtAlert.WARNING,
+									iconVisible: false,
+									content: ZaMsg.MSG_ConfigIpAddressBindings
+							},
+							{type:_ZA_TOP_GROUPER_, colSizes:["275px","*"], numCols:2, label:ZaMsg.NAD_IpAddressBindingsForWebClient,
+								items:[
+									{ ref: ZaServer.A_zimbraMailBindAddress, type:_TEXTFIELD_,
+										containerCssStyle: "padding-top:6px; padding-bottom:6px;",
+										labelLocation:_LEFT_,
+										label: ZaMsg.NAD_zimbraMailBindAddress,
+										onChange: ZaServerXFormView.onFormFieldChanged
+									},
+									{ ref: ZaServer.A_zimbraMailSSLBindAddress, type:_TEXTFIELD_,
+										containerCssStyle: "padding-top:6px; padding-bottom:6px;",
+										labelLocation:_LEFT_,
+										label: ZaMsg.NAD_zimbraMailSSLBindAddress,
+										onChange: ZaServerXFormView.onFormFieldChanged
+									},
+									{ ref: ZaServer.A_zimbraMailSSLClientCertBindAddress, type:_TEXTFIELD_,
+										containerCssStyle: "padding-top:6px; padding-bottom:6px;",
+										labelLocation:_LEFT_,
+										label: ZaMsg.NAD_zimbraMailSSLClientCertBindAddress,
+										onChange: ZaServerXFormView.onFormFieldChanged
+									}
+								]
+							},
+							{type:_ZA_TOP_GROUPER_, colSizes:["275px","*"], numCols:2, label:ZaMsg.NAD_IpAddressBindingsForAdminConsole,
+								items:[
+									{ ref: ZaServer.A_zimbraAdminBindAddress, type:_TEXTFIELD_,
+										containerCssStyle: "padding-top:6px; padding-bottom:6px;",
+										labelLocation:_LEFT_,
+										label: ZaMsg.NAD_zimbraAdminBindAddress,
+										onChange: ZaServerXFormView.onFormFieldChanged
+									}
+								]
+							}
+						]
+					};
+			switchItems.push (case9) ;
+		}
+
 
     xFormObject.tableCssStyle="width:100%;position:static;overflow:auto;";
 

@@ -157,6 +157,12 @@ ZaServer.A_zimbraReverseProxyLookupTarget = "zimbraReverseProxyLookupTarget";
 ZaServer.A_zimbraReverseProxyAdminEnabled = "zimbraReverseProxyAdminEnabled";
 ZaServer.A_zimbraAdminProxyPort = "zimbraAdminProxyPort"
 
+//bind ip address
+ZaServer.A_zimbraMailBindAddress = "zimbraMailBindAddress";
+ZaServer.A_zimbraMailSSLBindAddress = "zimbraMailSSLBindAddress";
+ZaServer.A_zimbraMailSSLClientCertBindAddress = "zimbraMailSSLClientCertBindAddress";
+ZaServer.A_zimbraAdminBindAddress = "zimbraAdminBindAddress";
+
 //spnego
 ZaServer.A_zimbraSpnegoAuthPrincipal = "zimbraSpnegoAuthPrincipal";
 ZaServer.A_zimbraSpnegoAuthTargetName = "zimbraSpnegoAuthTargetName";
@@ -317,6 +323,7 @@ ZaServer.isValidPostfixSubnetString = function(mask) {
 	}
 	return 0;
 }
+
 /**
  * extract number of network bits from CIDR string
  * @return integer
@@ -564,6 +571,11 @@ ZaServer.myXModel = {
 		{id:ZaServer.A_zimbraPop3SSLProxyBindPort, ref:"attrs/" +  ZaServer.A_zimbraPop3SSLProxyBindPort, type:_COS_PORT_ },
 		{id:ZaServer.A_zimbraAdminProxyPort, ref:"attrs/" + ZaServer.A_zimbraAdminProxyPort, type:_COS_PORT_ },
 		{id:ZaServer.A_zimbraReverseProxyAdminEnabled, ref:"attrs/" + ZaServer.A_zimbraReverseProxyAdminEnabled, type:_COS_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
+		//ip address bindings
+		{id:ZaServer.A_zimbraMailBindAddress, ref:"attrs/" +  ZaServer.A_zimbraMailBindAddress, type:_IP_},
+		{id:ZaServer.A_zimbraMailSSLBindAddress, ref:"attrs/" +  ZaServer.A_zimbraMailSSLBindAddress, type:_IP_ },
+		{id:ZaServer.A_zimbraMailSSLClientCertBindAddress, ref:"attrs/" +  ZaServer.A_zimbraMailSSLClientCertBindAddress, type:_IP_ },
+		{id:ZaServer.A_zimbraAdminBindAddress, ref:"attrs/" +  ZaServer.A_zimbraAdminBindAddress, type:_IP_ },
 
         // auto provision
         {id:ZaServer.A_zimbraAutoProvPollingInterval, ref:"attrs/" + ZaServer.A_zimbraAutoProvPollingInterval, type: _COS_MLIFETIME_, minInclusive: 0 },

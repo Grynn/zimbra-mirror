@@ -281,6 +281,7 @@ Cos_HostNameOrIp_XModelItem.prototype.validateType = XModelItem.prototype.valida
 Cos_HostNameOrIp_XModelItem.prototype.maxLength = 256;
 //Cos_HostNameOrIp_XModelItem.prototype.pattern = [ AjxUtil.HOST_NAME_RE, AjxUtil.IP_ADDRESS_RE ];
 Cos_HostNameOrIp_XModelItem.prototype.pattern =  [AjxUtil.HOST_NAME_RE, AjxUtil.IP_ADDRESS_RE, AjxUtil.HOST_NAME_WITH_PORT_RE];
+
 /**
 * _COS_PORT_
 **/
@@ -2319,5 +2320,28 @@ Categorized_DynSelect_XFormItem.prototype._searchFieldValue = function (val) {
     searchField.getSearchFieldElement().value = val;
 
 }
+
+
+/**
+* _IP_
+**/
+// this is only for ip address
+Ip_XModelItem = function (){}
+XModelItemFactory.createItemType("_IP_", "ip", Ip_XModelItem, String_XModelItem);
+Ip_XModelItem.EXACT_IP_ADDRESS_RE = /^((25[0-5]|2[0-4]\d|(1\d|[1-9])?\d)\.){3}(25[0-5]|2[0-4]\d|(1\d|[1-9])\d|[1-9])$/;
+Ip_XModelItem.prototype.validateType = function (value) {
+	if (value){
+		if (!AjxUtil.isString(value)) {
+			throw this.getModel().getErrorMessage("notAString", value);
+		}
+
+		if(Ip_XModelItem.EXACT_IP_ADDRESS_RE.test(value)) {
+			return value;
+		} else {
+			throw ZaMsg.ERROR_INVALID_IP_ADDR;
+		}
+	}
+};
+Ip_XModelItem.prototype.maxLength = 64;
 
 
