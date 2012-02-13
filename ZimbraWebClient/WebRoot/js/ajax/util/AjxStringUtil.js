@@ -1590,6 +1590,7 @@ function(text, isHtml) {
 		if ((testLine.indexOf("| DO NOT REPLY") == 0) && (lines[i + 2].indexOf("bugzilla") != -1)) {
 			curBlock = curBlock.concat(lines.slice(i, i + 3));
 			i += 2;
+			curType = AjxStringUtil.ORIG_UNKNOWN;
 			continue;
 		}
 
@@ -1650,7 +1651,9 @@ function(text, isHtml) {
 		if (unknownBlock && unknownBlock.length) {
 			var originalText = unknownBlock.join("\n") + "\n";
 			originalText = originalText.replace(/\s+$/, "\n");
-			return originalText;
+			if (AjxStringUtil._NON_WHITESPACE.test(originalText)) {
+				return originalText;
+			}
 		}
 	}
 	
@@ -1666,7 +1669,9 @@ function(text, isHtml) {
 		}
 		var originalText = block.join("\n") + "\n";
 		originalText = originalText.replace(/\s+$/, "\n");
-		return originalText;
+		if (AjxStringUtil._NON_WHITESPACE.test(originalText)) {
+			return originalText;
+		}
 	}
 	
 	return text;
@@ -1696,7 +1701,8 @@ function(testLine, lastLine, block) {
 		// "so-and-so wrote:" takes a lot of different forms; look for various common parts and
 		// assign points to determine confidence
 		var m = testLine.match(/(\w+):$/);
-		if (m && m[1]) {
+		var verb = m && m[1] && m[1].toLowerCase();
+		if (verb) {
 			// it can stretch over two lines; if so, join them into one line
 			if (lastLine && AjxStringUtil.ORIG_INTRO_RE.test(lastLine)) {
 				testLine = [lastLine, testLine].join(" ");
@@ -1705,7 +1711,8 @@ function(testLine, lastLine, block) {
 				}
 			}
 			var points = 0;
-			points = points + (m[1].toLowerCase() == AjxMsg.wrote) ? 5 : 3;
+			// look for "wrote:" (and discount "changed:", which is used by Bugzilla)
+			points = points + (verb == AjxMsg.wrote) ? 5 : (verb == AjxMsg.changed) ? 0 : 3;
 			if (AjxStringUtil.ORIG_EMAIL_RE.test(testLine)) {
 				points += 4;
 			}
