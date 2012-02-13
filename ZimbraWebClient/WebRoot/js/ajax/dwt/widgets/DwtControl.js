@@ -1597,10 +1597,10 @@ function() {
  * @see #setLocation
  */
 DwtControl.prototype.getSize =
-function() {
+function(getFromStyle) {
 	if (!this._checkState()) { return; }
 
-	return Dwt.getSize(this.getHtmlElement());
+	return Dwt.getSize(this.getHtmlElement(), null, getFromStyle);
 };
 
 /**

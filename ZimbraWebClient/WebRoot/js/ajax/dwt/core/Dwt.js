@@ -625,7 +625,7 @@ function(htmlElement, scrollStyle) {
 // Note: in FireFox, offsetHeight includes border and clientHeight does not;
 // may want to look at clientHeight for FF
 Dwt.getSize =
-function(htmlElement, point) {
+function(htmlElement, point, getFromStyle) {
 	var p;
 	if (!point) {
 		p = new DwtPoint(0, 0);
@@ -635,6 +635,16 @@ function(htmlElement, point) {
 	}
 
 	if (!htmlElement) { return p; }
+
+	if (getFromStyle) {
+		if (htmlElement.style.width) { //assumption - the caller only cares about the dimension that is set via the style. So ok to keep 0 if it's not set. for simplicity.
+			p.x = parseInt(htmlElement.style.width);
+		}
+		if (htmlElement.style.height) {
+			p.y = parseInt(htmlElement.style.height);
+		}
+		return p;
+	}
 
 	p.x = htmlElement.offsetWidth;
 	if (p.x != null) {
