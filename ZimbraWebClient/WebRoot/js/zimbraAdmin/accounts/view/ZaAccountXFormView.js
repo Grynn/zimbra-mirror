@@ -2981,6 +2981,12 @@ nowrap:false, labelWrap:true,
 							visibilityChangeEventSources:[ZaModel.currentTab],
 							caseKey:_tab10, caseVarRef:ZaModel.currentTab,
 							limitLabel:ZaMsg.NAD_LimitZimletsTo
+						},
+						{type: _DWT_ALERT_,
+							containerCssStyle: "padding-bottom:0px",
+							style: DwtAlert.INFO,
+							iconVisible: false,
+							content: ZaMsg.Zimlet_Note
 						}
 					]
 				}

@@ -1597,14 +1597,20 @@ if(appNewUI) {
         	caseKey:tabIx,
 			
 items:[
-            	{type:_ZAGROUP_, numCols:1,colSizes:["auto"],border:0, tableCssStyle:"text-align:center",
+            	{type:_ZAGROUP_, numCols:1,colSizes:["auto"],border:0,
 
 					items: [
                     	{type: _OUTPUT_, value: ZaMsg.NAD_LimitZimletsToDomain },
-                    	{type:_ZA_ZIMLET_SELECT_COMBO_, tableCssStyle: "margin-left:auto;margin-right:auto;",
+                    	{type:_ZA_ZIMLET_SELECT_COMBO_,
                             selectRef:ZaDomain.A_zimbraZimletDomainAvailableZimlets,
 							ref:ZaDomain.A_zimbraZimletDomainAvailableZimlets,
 							choices:ZaDomainXFormView.zimletChoices
+						},
+						{type: _DWT_ALERT_,
+							containerCssStyle: "padding-bottom:0px",
+							style: DwtAlert.INFO,
+							iconVisible: false,
+							content: ZaMsg.Zimlet_Note
 						}
 					]
 				}

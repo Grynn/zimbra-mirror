@@ -173,11 +173,11 @@ ZaZimletSelect_XFormItem.prototype.getChoiceHTML = function (itemNum, value, lab
 	
 	var ref = this.getFormGlobalRef() + ".getItemById('"+ this.getId()+ "')";
 	var id = this.getId();
-	var retVal = ["<tr><td class=", cssClass, 
+	var retVal = ["<tr><td class=", cssClass,">", label, "</td><td class=", cssClass, 
 			" onclick=\"",ref, ".onChoiceClick(", itemNum,", event||window.event)\"",
 			" ondblclick=\"",ref, ".onChoiceDoubleClick(", itemNum,", event||window.event)\" id='",id,"_choice_",itemNum,"'>",
 				"<table cellspacing=0 cellpadding=0><tr><td><input type=checkbox id='",id,"_choiceitem_",itemNum,"'></td><td>",
-				label,
+				ZaMsg.Available,
 				"</td></tr></table></td>"];
 	for(var i=0; i<prefixes.length; i++) {
 		retVal.push("<td class=",cssClass,
@@ -194,7 +194,7 @@ ZaZimletSelect_XFormItem.prototype.getChoiceHTML = function (itemNum, value, lab
 ZaZimletSelect_XFormItem.prototype.hiliteChoice = function (itemNum) {
 	var chEl = this.getChoiceElements(itemNum);
 	if(chEl) {
-		var el = chEl[0];
+		var el = chEl[1]; // now the checkbox table is in the 2nd <td>
 		el.className = this.getChoiceSelectedCssClass();
 	
 		var checks = el.getElementsByTagName("input");
@@ -208,7 +208,7 @@ ZaZimletSelect_XFormItem.prototype.hiliteChoice = function (itemNum) {
 ZaZimletSelect_XFormItem.prototype.dehiliteChoice = function(itemNum) {
 	var chEl = this.getChoiceElements(itemNum);
 	if(chEl) {
-		var el = chEl[0];
+		var el = chEl[1]; // now the checkbox table is in the 2nd <td>
 		el.className = this.getChoiceCssClass();
 
 		var checks = el.getElementsByTagName("input");

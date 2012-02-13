@@ -1022,10 +1022,10 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
     if(_tab5) {
         var case5 = {type:_ZATABCASE_, caseKey:_tab5};
         var case5Items = [
-            {type:_ZAGROUP_, numCols:1,colSizes:["auto"], border:0, tableCssStyle:"text-align:center",
+            {type:_ZAGROUP_, numCols:1,colSizes:["auto"], border:0,
                 items: [
                     {type: _OUTPUT_, value: ZaMsg.COS_LimitZimletsTo},
-                    {type:_ZA_ZIMLET_SELECT_COMBO_, tableCssStyle: "margin-left:auto;margin-right:auto;",
+                    {type:_ZA_ZIMLET_SELECT_COMBO_,
                         selectRef:ZaCos.A_zimbraZimletAvailableZimlets,
                         ref:ZaCos.A_zimbraZimletAvailableZimlets,
                         choices:ZaCosXFormView.zimletChoices,
@@ -1033,7 +1033,13 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
                         visibilityChangeEventSources:[ZaModel.currentTab],
                         caseKey:_tab5, caseVarRef:ZaModel.currentTab,
                         selectLabel:"",selectLabelLocation:_NONE_
-                    }
+                    },
+					{type: _DWT_ALERT_,
+						containerCssStyle: "padding-bottom:0px",
+						style: DwtAlert.INFO,
+						iconVisible: false,
+						content: ZaMsg.Zimlet_Note
+					}
                 ]
             }
         ];
