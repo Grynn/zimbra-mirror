@@ -24,7 +24,7 @@ public class OpenAssistant extends AjaxCommonTest {
 	}
 	
 	@Test(	description = "Open the assistant",
-			groups = { "functional" })
+			groups = { "deprecated" })
 	public void OpenAssistant_01() throws HarnessException {
 		
 		// Click Get Mail button

@@ -30,7 +30,7 @@ public class CreateAppointment extends AjaxCommonTest {
 	}
 	
 	@Test(	description = "Create a basic appointment using the Zimbra Assistant",
-			groups = { "functional" })
+			groups = { "deprecated" })
 	public void CreateAppointment_01() throws HarnessException {
 
 		Calendar start = Calendar.getInstance();
@@ -70,7 +70,7 @@ public class CreateAppointment extends AjaxCommonTest {
 
 	@Bugs(ids = "53005")
 	@Test(	description = "Verify location is saved when using assistant",
-			groups = { "functional" })
+			groups = { "deprecated" })
 	public void CreateAppointment_02() throws HarnessException {
 
 		Calendar start = Calendar.getInstance();
