@@ -244,6 +244,10 @@ ZaNewCosXWizard.gotSkins = function () {
 	return ((ZaApp.getInstance().getInstalledSkins() != null) && (ZaApp.getInstance().getInstalledSkins().length > 0));
 }
 
+ZaNewCosXWizard.gotNoSkins = function () {
+    return !ZaNewCosXWizard.gotSkins.call(this);
+}
+
 ZaNewCosXWizard.isPasswordLockoutEnabled = function () {
 	return (this.getInstanceValue(ZaCos.A_zimbraPasswordLockoutEnabled) == 'TRUE');
 }
@@ -445,7 +449,7 @@ ZaNewCosXWizard.myXFormModifier = function(xFormObject, entry) {
         this.stepChoices.push({value:_tab3, label:ZaMsg.TABT_Preferences});
     }
 
-    if(ZaTabView.isTAB_ENABLED(entry,ZaNewCosXWizard.SKIN_TAB_ATTRS, ZaNewCosXWizard.SKIN_TAB_RIGHTS) && ZaNewCosXWizard.gotSkins()) {
+    if(ZaTabView.isTAB_ENABLED(entry,ZaNewCosXWizard.SKIN_TAB_ATTRS, ZaNewCosXWizard.SKIN_TAB_RIGHTS)) {
        	_tab4 = ++this.TAB_INDEX;
         this.stepChoices.push({value:_tab4, label:ZaMsg.TABT_Themes});
     }
@@ -1106,17 +1110,32 @@ ZaNewCosXWizard.myXFormModifier = function(xFormObject, entry) {
                 msgName:ZaMsg.LBL_zimbraPrefSkin,label:ZaMsg.LBL_zimbraPrefSkin, labelLocation:_LEFT_,choices:ZaApp.getInstance().getInstalledSkins(),
                 visibilityChecks:[ZaNewCosXWizard.gotSkins]
             }]},
+            {type:_GROUP_,
+                items:[
+                    {type:_OUTPUT_,ref:ZaCos.A_zimbraPrefSkin,label:ZaMsg.LBL_zimbraPrefSkin, labelLocation:_LEFT_,
+                        visibilityChecks:[ZaNewCosXWizard.gotNoSkins]
+                    }
+                ]
+            },
             {type:_GROUP_, numCols:1,colSizes:["auto"],
                 items: [
                     {type:_ZASELECT_RADIO_,
                         selectRef:ZaCos.A_zimbraAvailableSkin,
                         ref:ZaCos.A_zimbraAvailableSkin,
                         choices:ZaNewCosXWizard.themeChoices,
-                        visibilityChecks:[Case_XFormItem.prototype.isCurrentTab],
+                        visibilityChecks:[Case_XFormItem.prototype.isCurrentTab, ZaNewCosXWizard.gotSkins],
                         visibilityChangeEventSources:[ZaModel.currentStep],
                         caseKey:_tab4, caseVarRef:ZaModel.currentStep,
                         radioBoxLabel1:ZaMsg.COS_DontLimitThemes,
                         radioBoxLabel2:ZaMsg.COS_LimitThemesTo
+                    },
+                    {type:_DWT_ALERT_,style: DwtAlert.WARNING, iconVisible:true,
+                        visibilityChecks:[ZaNewCosXWizard.gotNoSkins],
+                        value:ZaMsg.ERROR_CANNOT_FIND_SKINS_FOR_COS
+                    },
+                    {type:_DWT_ALERT_,style: DwtAlert.WARNING, iconVisible:true,
+                        visibilityChecks:[ZaCosXFormView.gotNoSkins, [function(){return !ZaZimbraAdmin.isGlobalAdmin()}]],
+                        value:ZaMsg.ERROR_CANNOT_FIND_SKINS_FOR_COS_OR_NO_PERM
                     }
                 ]
             }
