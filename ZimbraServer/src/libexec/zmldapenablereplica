@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/perl
 # 
 # ***** BEGIN LICENSE BLOCK *****
 # Zimbra Collaboration Suite Server
@@ -14,308 +14,370 @@
 # ***** END LICENSE BLOCK *****
 # 
 
-source `dirname $0`/../bin/zmshutil || exit 1
+use strict;
+use lib '/opt/zimbra/zimbramon/lib';
+use Net::LDAP;
+use XML::Simple;
+use Getopt::Long;
+use File::Copy qw/ cp /;
+use File::Path;
 
-if [ "x$1" != "x" ]; then
-	echo "Usage: $0"
-	echo "	Use $0 to set up this server as an ldap replica"
-	echo "  or to enable the replication database on the master"
-	echo ""
-	echo "  $0 must have been run on the master prior to being"
-	echo "  run on any replicas.  It is only necessary to run"
-	echo "  $0 once on the master."
-	exit 1
-fi
-
-PID=""
-PIDFILE="/opt/zimbra/openldap/var/run/slapd.pid"
-
-zmsetvars -f\
-	zimbra_home \
-	zimbra_server_hostname \
-	ldap_master_url \
-	ldap_port \
-	ldap_root_password \
-	ldap_starttls_supported \
-	zimbra_ldap_password \
-	zimbra_ldap_userdn \
-	zimbra_require_interprocess_security \
-	zimbra_tmp_directory
-
-u=`id -un`
-if [ $u != ${zimbra_user} ]; then
-    echo "Error: must be run as ${zimbra_user} user"
-    exit 1
-fi
-
-lmr=${ldap_master_url}
-mmr=`expr index "$lmr" ' '`
-if [ $mmr -ne 0 ]; then
-  lmr=${ldap_master_url%% *}  
-fi
-ldap_master_host=`echo ${lmr} | sed -e 's|ldaps*://\([^:]*\):*.*|\1|'`
-
-# ldap commands
-LDA="${zimbra_home}/openldap/bin/ldapadd"
-LDM="${zimbra_home}/openldap/bin/ldapmodify"
-LDS="${zimbra_home}/openldap/bin/ldapsearch"
-
-if [ ${ldap_port} = 636 ]; then
-	proto="ldaps"
-else 
-	proto="ldap"
-fi
-
-toLower() { 
-  
-        echo $1 | tr "[:upper:]" "[:lower:]"
+if ( ! -d "/opt/zimbra/openldap/etc" ) {
+  print "ERROR: openldap does not appear to be installed - exiting\n";
+  exit(1);
 }
 
-getpid()
-{
-        if [ -f $PIDFILE ]; then
-                PID=`cat $PIDFILE`
-        fi
+my $id = getpwuid($<);
+chomp $id;
+if ($id ne "zimbra") {
+    print STDERR "Error: must be run as zimbra user\n";
+    exit (1);
 }
 
-checkrunning()
-{
-        getpid
-        if [ "x$PID" = "x" ]; then
-                RUNNING=0
-        else
-                kill -0 $PID
-                if [ $? != 0 ]; then
-                        PID=""
-                        RUNNING=0
-                else
-                        RUNNING=1
-                fi
-        fi
+my ($help);
+
+my $opts_good = GetOptions(
+  'h|help' => \$help,
+);
+
+if (!$opts_good) {
+  print STDERR "\n";
+  usage();
+}
+if ($help) {
+  usage(0);
 }
 
-verifyLdapInstalled() {
-	echo -n "Looking for LDAP installation..."
-	if [ ! -d ${zimbra_home}/openldap/etc ]; then
-		echo "FAILED"
-		echo "ERROR: openldap does not appear to be installed - exiting"
-		exit 1
-	fi
-	echo "succeeded"
+my $localxml = XMLin("/opt/zimbra/conf/localconfig.xml");
+
+my $ldap_root_password = $localxml->{key}->{ldap_root_password}->{value};
+chomp($ldap_root_password);
+my $zimbra_home = $localxml->{key}->{zimbra_home}->{value};
+my $ldap_replication_password = $localxml->{key}->{ldap_replication_password}->{value};
+my $ldap_starttls_supported = $localxml->{key}->{ldap_starttls_supported}->{value};
+my $zimbra_require_interprocess_security = $localxml->{key}->{zimbra_require_interprocess_security}->{value};
+my $zimbra_server_hostname = $localxml->{key}->{zimbra_server_hostname}->{value};
+my $ldap_master_url = $localxml->{key}->{ldap_master_url}->{value};
+my $ldap_port = $localxml->{key}->{ldap_port}->{value};
+my $zimbra_ldap_password = $localxml->{key}->{zimbra_ldap_password}->{value};
+my $zimbra_ldap_userdn = $localxml->{key}->{zimbra_ldap_userdn}->{value};
+
+if ($zimbra_home eq "") {
+   $zimbra_home = "/opt/zimbra";
 }
 
-verifyLdap() {
-	echo -n "Verifying ldap on ${lmr}..."
-        num=`expr match "$lmr" 'ldaps*'`
-        if [ "$num" -eq 5 ]; then
-		TLS=
-	else
-		TLS=-Z
-	fi
-	ARGS="-x ${TLS} -s base -b cn=zimbra -H ${lmr} -D ${zimbra_ldap_userdn} -w ${zimbra_ldap_password}"
-	OUTPUT=`$LDS $ARGS 2>&1`
-	if [ $? -ne 0 ]; then
-		echo "FAILED"
-		echo "ERROR: Unable to verify ldap connection on ${lmr} - exiting"
-		echo "$LDS $ARGS"
-		echo $OUTPUT
-		exit 1
-	fi
-	echo "succeeded"
+my $zmprov="${zimbra_home}/bin/zmprov";
+
+my ($lmr, $junk) = split ' ', $ldap_master_url, 2;
+my $ldap_master_host=$lmr;
+$ldap_master_host =~ s/ldaps*:\/\///;
+$ldap_master_host =~ s/:.*//;
+
+my $proto;
+
+if ( $ldap_port == 636 ) {
+	$proto = "ldaps";
+} else { 
+	$proto = "ldap";
 }
 
-verifyAccesslog() {
-	# Verify that accesslog DB doesn't already exist.
-	ARGS="-x -H ldapi:/// -LLL -D cn=config -w ${ldap_root_password} -s base -b cn=accesslog"
-	OUTPUT=`$LDS $ARGS 2>&1`
-	if [ $? -eq 0 ]; then
-		echo 'Accesslog is already enabled. Exiting...'
-		exit 1
-	fi
+sub verifyLdap {
+  # Ensure we can bind to the master server before doing anything else
+
+  print "Verifying ldap on $lmr...";
+  my $ldap = Net::LDAP->new("$lmr")  or  die "$@";
+
+  # startTLS Operation
+  my $mesg;
+  if ($lmr !~ /^ldaps/i) {
+    if ($ldap_starttls_supported) {
+      $mesg = $ldap->start_tls(
+        verify => 'none',
+        capath => "$zimbra_home/conf/ca",
+      ) or die "start_tls: $@";
+      $mesg->code && die "TLS: " . $mesg->error . "\n";
+    }
+  }
+  $mesg = $ldap->bind("$zimbra_ldap_userdn", password=>"$zimbra_ldap_password");
+  $mesg->code && die "ERROR: Unable to verify ldap connection on $lmr - exiting\n";
+  $ldap->unbind;
+  print "succeeded\n";
 }
 
-verifySyncProv() {
-	# Verify that the syncprov overlay doesn't already exist on master
-	ARGS="-x -H ldapi:/// -D cn=config -w ${ldap_root_password} -b olcOverlay={0}syncprov,olcDatabase={2}hdb,cn=config -s base"
-	OUTPUT=`$LDS $ARGS 2>&1`
-	if [ $? -eq 0 ]; then
-		echo 'Error: Syncprov already enabled. Exiting...'
-		exit 1
-	else
-		# Verify that the syncprov overlay doesn't already exist on replica
-		ARGS="-x -H ldapi:/// -D cn=config -w ${ldap_root_password} -b olcOverlay={2}syncprov,olcDatabase={2}hdb,cn=config -s base"
-		OUTPUT=`$LDS $ARGS 2>&1`
-		if [ $? -eq 0 ]; then
-			echo 'Error: Syncprov already enabled. Exiting...'
-			exit 1
-		fi
-	fi
+sub verifyAccesslog {
+  # Verify that accesslog DB doesn't already exist.
+
+  my $ldap = Net::LDAP->new('ldapi://%2fopt%2fzimbra%2fopenldap%2fvar%2frun%2fldapi/') or die "$@";
+  my $mesg;
+  $mesg = $ldap->bind("cn=config", password=>"$ldap_root_password");
+
+  my $base="cn=accesslog";
+  $mesg = $ldap ->search(
+                    base=>"$base",
+                    filter=>"(objectClass=*)",
+                    scope=>"base",
+                    attrs => ['1.1'],
+                );
+  my $size = $mesg->count;
+  $ldap->unbind;
+  if ($size > 0) {
+    print "Accesslog is already enabled. Exiting...\n";
+    exit(1);
+  }
 }
 
-enableSyncProv() {
-	echo -n "Enabling sync provider on master..."
-	mkdir -p ${zimbra_home}/data/ldap/accesslog/db
-	mkdir -p ${zimbra_home}/data/ldap/accesslog/logs
+sub verifySyncProv {
+  my $ldap = Net::LDAP->new('ldapi://%2fopt%2fzimbra%2fopenldap%2fvar%2frun%2fldapi/') or die "$@";
+  my $mesg;
 
-        # Install accesslog DB_CONFIG
-	if [ ! -f ${zimbra_home}/data/ldap/accesslog/db/DB_CONFIG -o ! -s ${zimbra_home}/data/ldap/accesslog/db/DB_CONFIG ]; then
-		if [ -f ${zimbra_home}/conf/custom/ldap/DB_CONFIG.accesslog ]; then
-			cp -f ${zimbra_home}/conf/custom/ldap/DB_CONFIG.accesslog ${zimbra_home}/data/ldap/accesslog/db/DB_CONFIG
-		else
-			cp -f ${zimbra_home}/openldap/var/openldap-data/DB_CONFIG.accesslog ${zimbra_home}/data/ldap/accesslog/db/DB_CONFIG
-		fi
-	fi
-	ARGS="-x -H ldapi:/// -D cn=config -w ${ldap_root_password} -f ${zimbra_home}/openldap/etc/openldap/syncprov-master.ldif"
-	OUTPUT=`$LDA $ARGS 2>&1`
-	if [ $? -eq 0 ]; then
-		echo "succeeded"
-	else
-		echo "FAILED"
-		echo "ERROR: Unable to add accesslog database to ${zimbra_server_hostname} - exiting"
-		echo $OUTPUT
-		exit 1
-	fi
+  $mesg = $ldap->bind("cn=config", password=>"$ldap_root_password");
+  my $base = "olcDatabase={2}hdb,cn=config";
+
+  $mesg = $ldap ->search(
+                    base=>"$base",
+                    filter=>"(olcOverlay=syncprov)",
+                    scope=>"sub",
+                    attrs => ['1.1'],
+                );
+  my $size = $mesg->count;
+  $ldap->unbind;
+  if ($size > 0) {
+    print "Error: Syncprov already enabled. Exiting...\n";
+    exit 1;
+  }
 }
 
-createLdapConfig() {
-	# Verify syncprov isn't already enabled on the db
-	echo -n "Enabling sync replication on replica..."
-        num=`expr match "$lmr" 'ldaps*'`
-        if [ "$num" -eq 5 ]; then
-	cat >> ${zimbra_tmp_directory}/syncprov-replica.mod.$$<<EOF
-dn: olcDatabase={2}hdb,cn=config
-changetype: modify
-add: olcSyncrepl
-olcSyncrepl: rid=100 provider=${lmr} bindmethod=si
- mple timeout=0 network-timeout=0 binddn=uid=zmreplica,cn=admins,cn=zimbra c
- redentials=${ldap_replication_password} filter="(objectclass=*)" searchbase=""
-  logfilter="(&(objectClass=auditWriteObject)(reqResult=0))" logbase=cn=access
- log scope=sub schemachecking=off type=refreshAndPersist retry="60 +" syncdat
- a=accesslog tls_cacertdir=/opt/zimbra/conf/ca keepalive=240:10:30
--
-add: olcUpdateRef
-olcUpdateRef: ${lmr}
--
-EOF
-	elif [ ${ldap_starttls_supported} -eq 1 -a ${zimbra_require_interprocess_security} -eq 1 ]; then
-	cat >> ${zimbra_tmp_directory}/syncprov-replica.mod.$$<<EOF
-dn: olcDatabase={2}hdb,cn=config
-changetype: modify
-add: olcSyncrepl
-olcSyncrepl: rid=100 provider=${lmr} bindmethod=si
- mple timeout=0 network-timeout=0 binddn=uid=zmreplica,cn=admins,cn=zimbra c
- redentials=${ldap_replication_password} starttls=critical filter="(objectclass=*)" searchbase=""
-  logfilter="(&(objectClass=auditWriteObject)(reqResult=0))" logbase=cn=access
- log scope=sub schemachecking=off type=refreshAndPersist retry="60 +" syncdat
- a=accesslog tls_cacertdir=/opt/zimbra/conf/ca keepalive=240:10:30
--
-add: olcUpdateRef
-olcUpdateRef: ${lmr}
--
-EOF
-	else
-	cat >> ${zimbra_tmp_directory}/syncprov-replica.mod.$$<<EOF
-dn: olcDatabase={2}hdb,cn=config
-changetype: modify
-add: olcSyncrepl
-olcSyncrepl: rid=100 provider=${lmr} bindmethod=si
- mple timeout=0 network-timeout=0 binddn=uid=zmreplica,cn=admins,cn=zimbra c
- redentials=${ldap_replication_password} filter="(objectclass=*)" searchbase=""
-  logfilter="(&(objectClass=auditWriteObject)(reqResult=0))" logbase=cn=access
- log scope=sub schemachecking=off type=refreshAndPersist retry="60 +" syncdat
- a=accesslog tls_cacertdir=/opt/zimbra/conf/ca keepalive=240:10:30
--
-add: olcUpdateRef
-olcUpdateRef: ${lmr}
--
-EOF
-	fi
-	ARGS="-x -H ldapi:/// -D cn=config -w ${ldap_root_password} -f ${zimbra_tmp_directory}/syncprov-replica.mod.$$"
-	OUTPUT=`$LDM $ARGS 2>&1`
-	if [ $? -ne 0 ]; then
-		echo "FAILED"
-		echo "ERROR: Unable to add syncrepl configuration to ${zimbra_server_hostname} - exiting"
-		echo $OUTPUT
-		resetLdapUrl
-		zmsetvars -f ldap_url
-		exit 1
-	fi
+sub enableSyncProv {
+  print "Enabling sync provider on master...";
+  File::Path::mkpath("${zimbra_home}/data/ldap/accesslog/db");
+  File::Path::mkpath("${zimbra_home}/data/ldap/accesslog/logs");
 
-	# ADD SYNCPROV overlay to DB
-	ARGS="-x -H ldapi:/// -D cn=config -w ${ldap_root_password} -f ${zimbra_home}/openldap/etc/openldap/syncprov-replica.ldif"
-	OUTPUT=`$LDA $ARGS 2>&1`
-	if [ $? -eq 0 ]; then
-		echo "succeeded"
-	else
-		echo "FAILED"
-		echo "ERROR: Unable to add syncprov overlay to ${zimbra_server_hostname} - exiting"
-		echo $OUTPUT
-		resetLdapUrl
-		zmsetvars -f ldap_url
-		exit 1
-	fi
+  if ( !-f "${zimbra_home}/data/ldap/accesslog/db/DB_CONFIG") {
+    if (-f "${zimbra_home}/conf/custom/ldap/DB_CONFIG.accesslog") {
+      cp("${zimbra_home}/conf/custom/ldap/DB_CONFIG.accesslog","${zimbra_home}/data/ldap/accesslog/db/DB_CONFIG");
+    } else {
+      cp("${zimbra_home}/openldap/var/openldap-data/DB_CONFIG.accesslog","${zimbra_home}/data/ldap/accesslog/db/DB_CONFIG");
+    }
+  }
+
+  my $ldap = Net::LDAP->new('ldapi://%2fopt%2fzimbra%2fopenldap%2fvar%2frun%2fldapi/') or die "$@";
+  my $mesg = $ldap->bind("cn=config", password=>"$ldap_root_password");
+  $mesg->code && die "Bind: ". $mesg->error . "\n";
+
+  my $bdn="olcDatabase={2}hdb,cn=config";
+  $mesg=$ldap->add(
+    $bdn,
+    attr => [
+      objectClass=>["olcDatabaseConfig","olcHdbConfig"],
+      olcDatabase=>"{2}hdb",
+      olcDbDirectory=>"${zimbra_home}/data/ldap/accesslog/db",
+      olcSuffix=>"cn=accesslog",
+      olcAccess=>'{0}to dn.subtree="cn=accesslog"  by dn.exact="uid=zimbra,cn=admins,cn=zimbra" read  by dn.exact="cn=config" read  by dn.exact="uid=zmreplica,cn=admins,cn=zimbra" read',
+      olcLastMod=>"TRUE",
+      olcMaxDerefDepth=>"15",
+      olcReadOnly=>"FALSE",
+      olcRootDN=>"cn=config",
+      olcSizeLimit=>"unlimited",
+      olcTimeLimit=>"unlimited",
+      olcMonitoring=>"TRUE",
+      olcDbCacheSize=>"10000",
+      olcDbCheckpoint=>"64 5",
+      olcDbNoSync=>"FALSE",
+      olcDbDirtyRead=>"FALSE",
+      olcDbIDLcacheSize=>"10000",
+      olcDbIndex=>["entryCSN eq", "objectClass eq", "reqEnd eq", "reqResult eq", "reqStart eq"],
+      olcDbLinearIndex=>"FALSE",
+      olcDbMode=>"0600",
+      olcDbSearchStack=>"16",
+      olcDbShmKey=>"0",
+      olcDbCacheFree=>"1",
+      olcDbDNcacheSize=>"0",
+    ],
+  );
+  $mesg->code && die "Add Failed: ". $mesg->error . "\n";
+  $mesg=$ldap->add(
+    'olcOverlay=syncprov,olcDatabase={2}hdb,cn=config',
+    attr => [
+      objectClass=>["olcOverlayConfig", "olcSyncProvConfig"],
+      olcOverlay=>"syncprov",
+      olcSpNoPresent=>"TRUE",
+      olcSpReloadHint=>"TRUE",
+    ],
+  );
+  $mesg->code && die "Add Failed: ". $mesg->error . "\n";
+  $mesg=>$ldap->add(
+    'olcOverlay=syncprov,olcDatabase={3}hdb,cn=config',
+    attr => [
+      objectClass=>['olcOverlayConfig','olcSyncProvConfig'],
+      olcOverlay=>'syncprov',
+      olcSpCheckpoint=>'20 10',
+      olcSpSessionLog=>'500',
+    ],
+  );
+  $mesg->code && die "Add Failed: ". $mesg->error . "\n";
+  $mesg=>$ldap->add(
+    'olcOverlay=accesslog,olcDatabase={3}hdb,cn=config',
+    attr => [
+      objectClass=>['olcOverlayConfig','olcAccessLogConfig'],
+      olcOverlay=>'accesslog',
+      olcAccessLogDB=>'cn=accesslog',
+      olcAccessLogOps=>'writes',
+      olcAccessLogSuccess=>'TRUE',
+      olcAccessLogPurge=>'01+00:00  00+04:00',
+    ],
+  );
+  $mesg->code && die "Add Failed: ". $mesg->error . "\n";
+  $ldap->unbind;
+  print "succeeded\n";
 }
 
-enableLdapService() {
-	echo -n "Enabling LDAP service on ${zimbra_server_hostname}..."
-	SERVICES=`${zimbra_home}/bin/zmprov -m -l gs ${zimbra_server_hostname} | sed -ne '/^zimbraServiceEnabled/ s/zimbraServiceEnabled: //p'`
-	echo $SERVICES | grep -q ldap
-	if [ $? -ne 0 ]; then
-		echo -n "..."
-		NEWSERVICES="zimbraServiceEnabled ldap"
-		for s in $SERVICES; do
-			NEWSERVICES="$NEWSERVICES zimbraServiceEnabled $s"
-		done
-		${zimbra_home}/bin/zmprov -m -l ms ${zimbra_server_hostname} $NEWSERVICES
-	fi
-	echo "succeeded"
+sub createLdapConfig {
+  # Verify syncprov isn't already enabled on the db
+  print "Enabling sync replication on replica...";
+
+  my $ldaps=0;
+  if ($lmr =~ /^ldaps/) {
+    $ldaps=1;
+  }
+
+  my $ldap = Net::LDAP->new('ldapi://%2fopt%2fzimbra%2fopenldap%2fvar%2frun%2fldapi/') or die "$@";
+  my $mesg = $ldap->bind("cn=config", password=>"$ldap_root_password");
+  $mesg->code && die "Bind: ". $mesg->error . "\n";
+
+  my $bdn = "olcDatabase={2}hdb,cn=config";
+  if ($ldaps) {
+    $mesg = $ldap->modify(
+      $bdn,
+      add=>[
+        olcSyncrepl=>"rid=100 provider=$lmr bindmethod=simple timeout=0 network-timeout=0 binddn=uid=zmreplica,cn=admins,cn=zimbra credentials=$ldap_replication_password filter=\"(objectclass=*)\" searchbase=\"\" logfilter=\"(&(objectClass=auditWriteObject)(reqResult=0))\" logbase=cn=accesslog scope=sub schemachecking=off type=refreshAndPersist retry=\"60 +\" syncdata=accesslog tls_cacertdir=/opt/zimbra/conf/ca keepalive=240:10:30",
+        olcUpdateRef=>"$lmr",
+      ],
+    );
+  } elsif ($ldap_starttls_supported && $zimbra_require_interprocess_security) {
+    $mesg = $ldap->modify(
+      $bdn,
+      add=>[
+        olcSyncrepl=>"rid=100 provider=$lmr bindmethod=simple timeout=0 network-timeout=0 binddn=uid=zmreplica,cn=admins,cn=zimbra credentials=$ldap_replication_password starttls=critical filter=\"(objectclass=*)\" searchbase=\"\" logfilter=\"(&(objectClass=auditWriteObject)(reqResult=0))\" logbase=cn=accesslog scope=sub schemachecking=off type=refreshAndPersist retry=\"60 +\" syncdata=accesslog tls_cacertdir=/opt/zimbra/conf/ca keepalive=240:10:30",
+        olcUpdateRef=>"$lmr",
+      ],
+    );
+  } else {
+    $mesg = $ldap->modify(
+      $bdn,
+      add=>[
+        olcSyncrepl=>"rid=100 provider=$lmr bindmethod=simple timeout=0 network-timeout=0 binddn=uid=zmreplica,cn=admins,cn=zimbra credentials=$ldap_replication_password filter=\"(objectclass=*)\" searchbase=\"\" logfilter=\"(&(objectClass=auditWriteObject)(reqResult=0))\" logbase=cn=accesslog scope=sub schemachecking=off type=refreshAndPersist retry=\"60 +\" syncdata=accesslog tls_cacertdir=/opt/zimbra/conf/ca keepalive=240:10:30",
+        olcUpdateRef=>"$lmr",
+      ],
+    );
+  }
+  if ($mesg->code) {
+    print "FAILED\n";
+    print "ERROR: Unable to add syncrepl configuration to $zimbra_server_hostname - exiting\n";
+    print "ERROR: ".$mesg->error."\n";
+    $ldap->unbind;
+    &resetLdapUrl;
+    exit 1;
+  }
+  # ADD SYNCPROV overlay to DB
+  $bdn="olcOverlay=syncprov,olcDatabase={2}hdb,cn=config";
+  $mesg = $ldap->add(
+    $bdn,
+    attr => [
+      objectClass=>['olcOverlayConfig','olcSyncProvConfig'],
+      olcOverlay=>"syncprov",
+    ],
+  );
+  $ldap->unbind;
+  if ($mesg->code) {
+    print "FAILED";
+    print "ERROR: Unable to add syncprov overlay to ${zimbra_server_hostname} - exiting\n";
+    print "ERROR: " . $mesg->error . "\n";
+    &resetLdapUrl;
+    exit 1;
+  } else {
+    print "succeeded\n";
+  }
 }
 
-updateLdapHost() {
-	echo -n "Setting ldap_url on ${zimbra_server_hostname}...";
-	${zimbra_home}/bin/zmlocalconfig -f -e ldap_url="${proto}://${zimbra_server_hostname}:${ldap_port} ${lmr}"
-	echo "done"
+sub enableLdapService {
+  print "Enabling LDAP service on ${zimbra_server_hostname}...";
+
+  open(ZMPROV, "${zmprov} -m -l gs ${zimbra_server_hostname} zimbraServiceEnabled=ldap 2> /dev/null|");
+  my @CONFIG=<ZMPROV>;
+  close(ZMPROV);
+  my $found=0;
+  foreach my $line (@CONFIG) {
+    if ($line =~ /^zimbraServiceEnabled: ldap$/) {
+      $found=1;
+    }
+  }
+
+  if (!$found) {
+    system("${zimbra_home}/bin/zmprov -m -l ms ${zimbra_server_hostname} +zimbraServiceEnabled ldap");
+  }
+
+  print "succeeded\n"; 
 }
 
-resetLdapUrl() {
-	echo -n "Resetting ldap_url on ${zimbra_server_hostname}...";
-	${zimbra_home}/bin/zmlocalconfig -f -e ldap_url="${lmr}"
-	echo "done"
+sub updateLdapHost {
+	print "Setting ldap_url on ${zimbra_server_hostname}...";
+	`${zimbra_home}/bin/zmlocalconfig -f -e ldap_url="${proto}://${zimbra_server_hostname}:${ldap_port} ${lmr}"`;
+	print "done\n";
 }
 
-startLdap() {
-	echo -n "Starting LDAP on ${zimbra_server_hostname}..."
-	checkrunning
-	if [ $RUNNING = 0 ]; then
-		${zimbra_home}/bin/ldap start > /dev/null 2>&1
-		if [ $? = 1 ]; then
-			echo "Error: Unable to start ldap, exiting."
-			resetLdapUrl
-			zmsetvars -f ldap_url
-			exit 1;
-		fi
-	fi
-	echo "done"
-}
-stopLdap() {
-	echo -n "Stopping LDAP on ${zimbra_server_hostname}..."
-	${zimbra_home}/bin/ldap stop > /dev/null 2>&1
-	echo "done"
+sub resetLdapUrl {
+	print "Resetting ldap_url on ${zimbra_server_hostname}...";
+	`${zimbra_home}/bin/zmlocalconfig -f -e ldap_url="${lmr}"`;
+	print "done\n";
 }
 
-if [ `toLower $ldap_master_host` = `toLower $zimbra_server_hostname` ]; then
-  verifyAccesslog
-  verifySyncProv
-  enableSyncProv
-  exit 0
-fi
+sub startLdap {
+  print "Starting LDAP on ${zimbra_server_hostname}...";
+  my $cmd = "$zimbra_home/bin/ldap status";
+  my $rc = system($cmd);
+  $rc >>= 8;
+  if ($rc != 0) {
+    $cmd = "$zimbra_home/bin/ldap start";
+    $rc = system($cmd);
+    $rc >>= 8;
+    if ($rc == 1) {
+      print "Error: Unable to start ldap, exiting.\n";
+      &resetLdapUrl;
+      exit 1;
+    }
+  }
+  print "done\n";
+}
 
-verifyLdapInstalled
-verifyLdap
-updateLdapHost
-zmsetvars -f ldap_url
-startLdap
-verifyAccesslog
-verifySyncProv
-createLdapConfig
-enableLdapService
+sub usage {
+  my ($msg) = (@_);
+  $msg && print STDERR "\nERROR: $msg\n";
+
+  print STDERR <<USAGE;
+  Usage: zmldapenablereplica
+
+  Use zmldapenablereplica to set up this server as an ldap replica
+  or to enable the replication database on the master
+
+  zmldapenablereplica must have been run on the master prior to being
+  run on any replicas.  It is only necessary to run zmldapenablereplica
+  once on the master.
+
+USAGE
+  exit(1);
+}
+
+if ( lc($ldap_master_host) eq lc($zimbra_server_hostname) ) {
+  &verifyAccesslog;
+  &verifySyncProv;
+  &enableSyncProv;
+  exit 0;
+}
+
+&verifyLdap;
+&updateLdapHost;
+&startLdap;
+&verifyAccesslog;
+&verifySyncProv;
+&createLdapConfig;
+&enableLdapService;
