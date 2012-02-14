@@ -37,9 +37,9 @@ ZaTaskAuthConfigWizard = function(parent) {
 	ZaTaskAuthConfigWizard.AUTH_CONFIG_SUMMARY_STEP = ++this.TAB_INDEX;
 	ZaTaskAuthConfigWizard.AUTH_TEST_STEP = ++this.TAB_INDEX;
 	ZaTaskAuthConfigWizard.AUTH_TEST_RESULT_STEP = ++this.TAB_INDEX;
+    ZaTaskAuthConfigWizard.EXTERNAL_LDAP_GROUP_STEP = ++this.TAB_INDEX;
     ZaTaskAuthConfigWizard.SPNEGO_CONFIG_STEP = ++this.TAB_INDEX;
     ZaTaskAuthConfigWizard.SPNEGO_CONFIG_STEP_2 = ++this.TAB_INDEX;
-    ZaTaskAuthConfigWizard.EXTERNAL_LDAP_GROUP_STEP = ++this.TAB_INDEX;
 	ZaTaskAuthConfigWizard.CONFIG_COMPLETE_STEP = ++this.TAB_INDEX;
 
 	this.stepChoices = [
@@ -49,9 +49,9 @@ ZaTaskAuthConfigWizard = function(parent) {
 		{label:ZaMsg.stepAuthSummary, value:ZaTaskAuthConfigWizard.AUTH_CONFIG_SUMMARY_STEP},
 		{label:ZaMsg.TestAuthSettings, value:ZaTaskAuthConfigWizard.AUTH_TEST_STEP},
 		{label:ZaMsg.AuthTestResult, value:ZaTaskAuthConfigWizard.AUTH_TEST_RESULT_STEP},
+		{label:ZaMsg.NAD_ExternalGroup_Setting, value:ZaTaskAuthConfigWizard.EXTERNAL_LDAP_GROUP_STEP},
         {label:ZaMsg.AuthSetting_Spnego, value:ZaTaskAuthConfigWizard.SPNEGO_CONFIG_STEP},
         {label:ZaMsg.AuthSetting_SpnegoDomain, value:ZaTaskAuthConfigWizard.SPNEGO_CONFIG_STEP_2},
-        {label:ZaMsg.NAD_ExternalGroup_Setting, value:ZaTaskAuthConfigWizard.EXTERNAL_LDAP_GROUP_STEP},
 		{label:ZaMsg.DomainConfigComplete, value:ZaTaskAuthConfigWizard.CONFIG_COMPLETE_STEP}
 	];
 
@@ -70,7 +70,6 @@ ZaXDialog.XFormModifiers["ZaTaskAuthConfigWizard"] = new Array();
 if(ZaDomain) {
     ZaDomain.A2_zimbraSpnegoAuthRealm = "zimbraSpnegoAuthRealm";
     ZaDomain.A2_zimbraSpnegoAuthErrorURL = "zimbraSpnegoAuthErrorURL";
-    ZaDomain.A2_zimbraSpnegoAuthEnabled = "zimbraSpnegoAuthEnabled";
     ZaDomain.A2_zimbraSpnegoGlobalAuthEnabled = "zimbraSpnegoGlobalAuthEnabled";
     ZaDomain.A2_zimbraSpnegoAuthSummary = "zimbraSpnegoAuthSummary";
     ZaDomain.A2_zimbraSpnegoApplyFor = "zimbraSpnegoApplyFor";
@@ -99,7 +98,6 @@ if(ZaDomain) {
             {id:ZaDomain.A2_zimbraSpnegoAuthTargetName, ref: ZaDomain.A2_zimbraSpnegoAuthTargetName, type: _STRING_ },
             {id:ZaDomain.A2_zimbraSpnegoAuthErrorURL, ref: ZaDomain.A2_zimbraSpnegoAuthErrorURL, type: _STRING_ },
             {id:ZaDomain.A2_zimbraSpnegoGlobalAuthEnabled, ref:ZaDomain.A2_zimbraSpnegoGlobalAuthEnabled, type: _ENUM_, choices: ZaModel.BOOLEAN_CHOICES},
-            {id:ZaDomain.A2_zimbraSpnegoAuthEnabled, ref:ZaDomain.A2_zimbraSpnegoAuthEnabled, type: _ENUM_, choices: ZaModel.BOOLEAN_CHOICES},
             {id:ZaDomain.A2_zimbraSpnegoAuthSummary, ref:ZaDomain.A2_zimbraSpnegoAuthSummary, type: _ENUM_, choices: ZaModel.BOOLEAN_CHOICES},
             {id:ZaDomain.A2_zimbraSpnegoUAAllBrowsers, ref:ZaDomain.A2_zimbraSpnegoUAAllBrowsers, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
             {id:ZaDomain.A2_zimbraSpnegoUASupportedBrowsers, ref:ZaDomain.A2_zimbraSpnegoUASupportedBrowsers, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
@@ -260,62 +258,44 @@ function () {
 	if(this._containedObject[ZaModel.currentStep] == ZaTaskAuthConfigWizard.AUTH_TEST_RESULT_STEP) {
 		//skip ZaTaskAuthConfigWizard.AUTH_TEST_STEP step
         if (this._containedObject.attrs[ZaDomain.A_AuthMech] == ZaDomain.AuthMech_ad)
-            this.goPage(ZaTaskAuthConfigWizard.EXTERNAL_LDAP_GROUP_STEP);
+           this.goPage(ZaTaskAuthConfigWizard.EXTERNAL_LDAP_GROUP_STEP);
         else
-		    this.goPage(ZaTaskAuthConfigWizard.AUTH_CONFIG_SUMMARY_STEP);
-    } else if (this._containedObject[ZaModel.currentStep] == ZaTaskAuthConfigWizard.CONFIG_COMPLETE_STEP) {
+           this.goPage(ZaTaskAuthConfigWizard.AUTH_CONFIG_SUMMARY_STEP);
+    } else if (this._containedObject[ZaModel.currentStep] == ZaTaskAuthConfigWizard.SPNEGO_CONFIG_STEP) {
         if (this._containedObject.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_zimbra) {
             this.goPage(ZaTaskAuthConfigWizard.AUTH_CONFIG_STEP_0);
         } else if (this._containedObject.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_ldap) {
             this.goPage(ZaTaskAuthConfigWizard.AUTH_CONFIG_SUMMARY_STEP);
         } else if (this._containedObject.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_ad) {
-            if (this._containedObject[ZaDomain.A2_zimbraSpnegoAuthEnabled]!="TRUE") {
-                if (this._containedObject[ZaDomain.A2_zimbraExternalGroupLdapEnabled]=="TRUE") {
-                    this.goPage(ZaTaskAuthConfigWizard.EXTERNAL_LDAP_GROUP_STEP);
-                } else {
-                    this.goPage(ZaTaskAuthConfigWizard.AUTH_CONFIG_SUMMARY_STEP);
-                }
+            if (this._containedObject[ZaDomain.A2_zimbraExternalGroupLdapEnabled]=="TRUE") {
+                this.goPage(ZaTaskAuthConfigWizard.EXTERNAL_LDAP_GROUP_STEP);
             } else {
-                if (this._containedObject[ZaDomain.A2_zimbraExternalGroupLdapEnabled]=="TRUE") {
-                    this.goPage(ZaTaskAuthConfigWizard.EXTERNAL_LDAP_GROUP_STEP);
-                } else {
-                    this.goPage(ZaTaskAuthConfigWizard.SPNEGO_CONFIG_STEP_2);
-                }
+                this.goPage(ZaTaskAuthConfigWizard.SPNEGO_CONFIG_STEP);
             }
         }
-    } else if(this._containedObject[ZaModel.currentStep] == ZaTaskAuthConfigWizard.SPNEGO_CONFIG_STEP_2) {
-        this.goPage(ZaTaskAuthConfigWizard.SPNEGO_CONFIG_STEP);
-	} else if(this._containedObject[ZaModel.currentStep] == ZaTaskAuthConfigWizard.SPNEGO_CONFIG_STEP) {
-		this.goPage(ZaTaskAuthConfigWizard.AUTH_CONFIG_SUMMARY_STEP);
 	} else if (this._containedObject[ZaModel.currentStep] == ZaTaskAuthConfigWizard.EXTERNAL_LDAP_GROUP_STEP) {
-        if (this._containedObject.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_ad && this._containedObject[ZaDomain.A2_zimbraSpnegoAuthEnabled]=="TRUE")
-            this.goPage(ZaTaskAuthConfigWizard.SPNEGO_CONFIG_STEP_2);
-        else
+        if (this._containedObject.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_ad)
  		    this.goPage(ZaTaskAuthConfigWizard.AUTH_CONFIG_SUMMARY_STEP);
     } else {
-		this.goPage(this._containedObject[ZaModel.currentStep]-1);
+		this.goPage(this._containedObject[ZaModel.currentStep] - 1);
 	}
 }
 
 ZaTaskAuthConfigWizard.prototype.goNext =
 function() {
 	if(this._containedObject[ZaModel.currentStep] == ZaTaskAuthConfigWizard.AUTH_CONFIG_SUMMARY_STEP) {
- 		//this.testSetings();
-		//this.goPage(ZaTaskAuthConfigWizard.AUTH_TEST_STEP);
-        if(this._containedObject[ZaDomain.A2_zimbraSpnegoAuthEnabled]=="TRUE"
-            && this._containedObject.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_ad)
-            this.goPage(ZaTaskAuthConfigWizard.SPNEGO_CONFIG_STEP);
-        else if(this._containedObject.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_ad)
+ 		// External LDAP doesn't support External LDAP Group Config
+        if(this._containedObject.attrs[ZaDomain.A_AuthMech] == ZaDomain.AuthMech_ad)
             this.goPage(ZaTaskAuthConfigWizard.EXTERNAL_LDAP_GROUP_STEP);
         else
-            this.goPage(ZaTaskAuthConfigWizard.CONFIG_COMPLETE_STEP);
-	} else if (this._containedObject[ZaModel.currentStep]==ZaTaskAuthConfigWizard.AUTH_CONFIG_STEP_1 && this._containedObject.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_ad) {
+            this.goPage(ZaTaskAuthConfigWizard.SPNEGO_CONFIG_STEP); //always SPNEGO
+	} else if (this._containedObject[ZaModel.currentStep] == ZaTaskAuthConfigWizard.AUTH_CONFIG_STEP_1 && this._containedObject.attrs[ZaDomain.A_AuthMech] == ZaDomain.AuthMech_ad) {
 		if(!this._containedObject.attrs[ZaDomain.A_AuthLdapURL]) {
 			ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_LDAP_URL_REQUIRED);
 			return false;
 		}
 		this.goPage(ZaTaskAuthConfigWizard.AUTH_CONFIG_BIND_PWD_STEP);
-	} else if(this._containedObject[ZaModel.currentStep]==ZaTaskAuthConfigWizard.AUTH_CONFIG_STEP_1 && this._containedObject.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_ldap) {
+	} else if(this._containedObject[ZaModel.currentStep] == ZaTaskAuthConfigWizard.AUTH_CONFIG_STEP_1 && this._containedObject.attrs[ZaDomain.A_AuthMech] == ZaDomain.AuthMech_ldap) {
 		var temp = this._containedObject.attrs[ZaDomain.A_AuthLdapURL].join(" ");
 		if(this._containedObject.attrs[ZaDomain.A_zimbraAuthLdapStartTlsEnabled] == "TRUE") {
 			//check that we don't have ldaps://
@@ -326,29 +306,28 @@ function() {
 		this.goPage(ZaTaskAuthConfigWizard.AUTH_CONFIG_BIND_PWD_STEP);
 	}  else if (this._containedObject[ZaModel.currentStep] == ZaTaskAuthConfigWizard.AUTH_CONFIG_BIND_PWD_STEP) {
 			//clear the password if the checkbox is unchecked
-		if(this._containedObject[ZaDomain.A_AuthUseBindPassword]=="FALSE") {
+		if(this._containedObject[ZaDomain.A_AuthUseBindPassword] == "FALSE") {
 			this._containedObject.attrs[ZaDomain.A_AuthLdapSearchBindDn] = null;
 			this._containedObject.attrs[ZaDomain.A_AuthLdapSearchBindPassword] = null;
 			this._containedObject[ZaDomain.A_AuthLdapSearchBindPasswordConfirm] = null;
 		}
 		//check that passwords match
-		if(this._containedObject.attrs[ZaDomain.A_AuthLdapSearchBindPassword]!=this._containedObject[ZaDomain.A_AuthLdapSearchBindPasswordConfirm]) {
+		if(this._containedObject.attrs[ZaDomain.A_AuthLdapSearchBindPassword] != this._containedObject[ZaDomain.A_AuthLdapSearchBindPasswordConfirm]) {
 			ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_PASSWORD_MISMATCH);
 			return false;
 		}
 
 		this.goPage(ZaTaskAuthConfigWizard.AUTH_CONFIG_SUMMARY_STEP);
-	} else if(this._containedObject[ZaModel.currentStep]==ZaTaskAuthConfigWizard.AUTH_CONFIG_STEP_0 && this._containedObject.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_zimbra) {
-		this.goPage(ZaTaskAuthConfigWizard.CONFIG_COMPLETE_STEP);
-	} else if(this._containedObject[ZaModel.currentStep]==ZaTaskAuthConfigWizard.AUTH_TEST_RESULT_STEP
-            && (this._containedObject[ZaDomain.A2_zimbraSpnegoAuthEnabled]!="TRUE"
-            || this._containedObject.attrs[ZaDomain.A_AuthMech]!=ZaDomain.AuthMech_ad)) {
-        if (this._containedObject.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_ad)
-		    this.goPage(ZaTaskAuthConfigWizard.EXTERNAL_LDAP_GROUP_STEP);
-        else
-		    this.goPage(ZaTaskAuthConfigWizard.CONFIG_COMPLETE_STEP);
+	} else if(this._containedObject[ZaModel.currentStep] == ZaTaskAuthConfigWizard.AUTH_CONFIG_STEP_0 && this._containedObject.attrs[ZaDomain.A_AuthMech] == ZaDomain.AuthMech_zimbra) {
+		this.goPage(ZaTaskAuthConfigWizard.SPNEGO_CONFIG_STEP); //Spnego should be always configured
+	} else if(this._containedObject[ZaModel.currentStep]==ZaTaskAuthConfigWizard.AUTH_TEST_RESULT_STEP) {
+		if(this._containedObject.attrs[ZaDomain.A_AuthMech] == ZaDomain.AuthMech_ad) { // now only External AD support this, External LDAP doesn't
+	        this.goPage(ZaTaskAuthConfigWizard.EXTERNAL_LDAP_GROUP_STEP);
+		} else {
+			this.goPage(ZaTaskAuthConfigWizard.SPNEGO_CONFIG_STEP); //Spnego should be always configured
+		}
 	} else {
-		this.goPage(this._containedObject[ZaModel.currentStep]+1);
+		this.goPage(this._containedObject[ZaModel.currentStep] + 1);
 	}
 }
 
@@ -493,14 +472,7 @@ ZaTaskAuthConfigWizard.myXFormModifier = function(xFormObject) {
 							},
                             {type: _GROUP_, colSpan:2, numCols:2, colSizes: ["80px", "*" ],
                                 items :[
-                                    {type:_OUTPUT_, label:"" , value:ZaMsg.domainAuthDlgADHelp},
-                                    {ref:ZaDomain.A2_zimbraSpnegoAuthEnabled, type:_CHECKBOX_, label:"<b>" + ZaMsg.NAD_Enable_spnego + "</b>",
-                                        //onChange: ZaTaskAuthConfigWizard.startTlsEnabledChanged,
-                                        subLabel:"",
-                                        trueValue:"TRUE", falseValue:"FALSE",labelLocation:_RIGHT_, align:_RIGHT_,
-                                        enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A_AuthMech,ZaDomain.AuthMech_ad]],
-                                        enableDisableChangeEventSources:[ZaDomain.A_AuthMech]
-                                    }
+                                    {type:_OUTPUT_, label:"" , value:ZaMsg.domainAuthDlgADHelp}
                                 ]
                             },
                             {type: _SPACER_, height: 15 },
