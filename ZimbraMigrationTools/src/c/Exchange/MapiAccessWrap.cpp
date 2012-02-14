@@ -651,6 +651,10 @@ STDMETHODIMP CMapiAccessWrap::GetOOOInfo(BSTR *OOOInfo)
 {
     LPCWSTR lpInfo = maapi->GetOOOStateAndMsg();
     *OOOInfo = (lpInfo) ? CComBSTR(lpInfo) : SysAllocString(L"");
+    if (lpInfo != NULL)
+    {
+        delete[] lpInfo;
+    }
     return S_OK;
 }
 

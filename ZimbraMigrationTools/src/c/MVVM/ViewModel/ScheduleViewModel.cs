@@ -579,26 +579,29 @@ public class ScheduleViewModel: BaseViewModel
 
         // special case to format last user progress message
         int count = accountResultsViewModel.AccountResultsList[num].UserResultsList.Count;
-        if (!m_isPreview)
+        if (count > 0)
         {
-            string lastmsg = accountResultsViewModel.AccountResultsList[num].UserResultsList[count - 1].UserProgressMsg;
-            int len = lastmsg.Length;
-            bool isOOOorRules = ((MyFolder.FolderView == "OOO") || (MyFolder.FolderView == "All Rules"));
-            accountResultsViewModel.AccountResultsList[num].UserResultsList[count - 1].UserProgressMsg = FormatTheLastMsg(accountResultsViewModel.AccountResultsList[num].AcctProgressMsg, isOOOorRules);
-            accountResultsViewModel.AccountResultsList[num].PBValue = 100;  // to make sure
-        }
-        else
-        {   // For preview, take the "foldername (n items)" message we constructed, extract the n, and make "Total n"
-            string msg = "";
-            string lastmsg = accountResultsViewModel.AccountResultsList[num].PBMsgValue;
-            int idxParen = lastmsg.IndexOf("(");
-            int idxItems = lastmsg.IndexOf("items");
-            if ((idxParen != -1) && (idxItems != -1))
+            if (!m_isPreview)
             {
-                int numLen = idxItems - idxParen - 2;   // for the paren and the space
-                string numStr = lastmsg.Substring(idxParen + 1, numLen);
-                msg = "Total: " + numStr;
-                accountResultsViewModel.AccountResultsList[num].UserResultsList[count - 1].UserProgressMsg = (msg.Length > 0) ? msg : "";
+                string lastmsg = accountResultsViewModel.AccountResultsList[num].UserResultsList[count - 1].UserProgressMsg;
+                int len = lastmsg.Length;
+                bool isOOOorRules = ((MyFolder.FolderView == "OOO") || (MyFolder.FolderView == "All Rules"));
+                accountResultsViewModel.AccountResultsList[num].UserResultsList[count - 1].UserProgressMsg = FormatTheLastMsg(accountResultsViewModel.AccountResultsList[num].AcctProgressMsg, isOOOorRules);
+                accountResultsViewModel.AccountResultsList[num].PBValue = 100;  // to make sure
+            }
+            else
+            {   // For preview, take the "foldername (n items)" message we constructed, extract the n, and make "Total n"
+                string msg = "";
+                string lastmsg = accountResultsViewModel.AccountResultsList[num].PBMsgValue;
+                int idxParen = lastmsg.IndexOf("(");
+                int idxItems = lastmsg.IndexOf("items");
+                if ((idxParen != -1) && (idxItems != -1))
+                {
+                    int numLen = idxItems - idxParen - 2;   // for the paren and the space
+                    string numStr = lastmsg.Substring(idxParen + 1, numLen);
+                    msg = "Total: " + numStr;
+                    accountResultsViewModel.AccountResultsList[num].UserResultsList[count - 1].UserProgressMsg = (msg.Length > 0) ? msg : "";
+                }
             }
         }
         /////

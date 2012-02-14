@@ -887,7 +887,7 @@ LPWSTR MAPIAccessAPI::GetOOOStateAndMsg()
         {
             LPWSTR pwszOOOMsg = pRows->aRow[i].lpProps[0].Value.lpszW;
             int iOOOLen = lstrlen(pwszOOOMsg);
-            lpwstrOOOInfo = new WCHAR[iOOOLen + 2];  // for the 0: or 1:
+            lpwstrOOOInfo = new WCHAR[iOOOLen + 3];  // for the 0: or 1: and null terminator
             if (bIsOOO)
             {
                 lstrcpy(lpwstrOOOInfo, L"1:");
