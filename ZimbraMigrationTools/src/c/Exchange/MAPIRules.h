@@ -198,12 +198,13 @@ typedef std::list<CComPtr<IXMLDOMNode> > CListNodes;
 class CRuleProcessor
 {
 public:
-    CRuleProcessor(Zimbra::MAPI::MAPISession* session, Zimbra::MAPI::MAPIStore* store);
+    CRuleProcessor(Zimbra::MAPI::MAPISession* session, Zimbra::MAPI::MAPIStore* store, std::wstring account);
     ~CRuleProcessor();
 
 private:
      Zimbra::MAPI::MAPISession* m_session;
      Zimbra::MAPI::MAPIStore* m_userStore;
+     std::wstring m_account;
 
 public:
     CString MakeFolderPath(LPMAPIFOLDER pFolder, std::vector<CString> &vFolders);

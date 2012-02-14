@@ -67,7 +67,7 @@ interface IFolderObject : IDispatch{
 	pointer_default(unique)
 ]
 interface IMapiAccessWrap : IDispatch{
-    [id(1)] HRESULT UserInit([in] BSTR userName, [out] BSTR *statusMsg);
+    [id(1)] HRESULT UserInit([in] BSTR userName, [in] BSTR userAccount, [out] BSTR *statusMsg);
     [id(2)] HRESULT GetFolderList([out] VARIANT *folders);
     [id(3), helpstring("retreive items for folder objects")]
     HRESULT GetItemsList([in] IFolderObject *folderObj, [in] VARIANT creationDate, [out, retval] VARIANT *vItems);

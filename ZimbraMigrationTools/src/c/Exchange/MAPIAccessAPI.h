@@ -210,6 +210,7 @@ private:
     static bool m_bSingleMailBoxMigration;
 	static bool m_bHasJoinedDomain;
 	std::wstring m_strUserName;
+        std::wstring m_strUserAccount;
     Zimbra::MAPI::MAPIStore *m_userStore;
     Zimbra::MAPI::MAPIFolder *m_rootFolder;
     ExchangeSpecialFolderId FolderToSkip[TS_FOLDERS_MAX];
@@ -230,7 +231,7 @@ public:
     static void UnInitGlobalSessionAndStore();
 
     // Per mailbox methods.
-    MAPIAccessAPI(wstring strUserName);
+    MAPIAccessAPI(wstring strUserName, wstring strUserAccount);
 
     ~MAPIAccessAPI();
     LPCWSTR InitializeUser();

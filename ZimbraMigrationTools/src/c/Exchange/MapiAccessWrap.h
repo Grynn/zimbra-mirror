@@ -53,7 +53,7 @@ END_COM_MAP()
 public:
     Zimbra::MAPI::MAPIAccessAPI *maapi;
 
-    STDMETHOD(UserInit) (BSTR userName, BSTR *statusMsg);
+    STDMETHOD(UserInit) (BSTR userName, BSTR userAccount, BSTR *statusMsg);
     STDMETHOD(GetFolderList) (VARIANT * folders);
     STDMETHOD(GetItemsList) (IFolderObject * folderObj, VARIANT creationDate, VARIANT * vItems);
     STDMETHOD(GetData) (BSTR userId, VARIANT itemId, FolderType type, VARIANT * pVal);

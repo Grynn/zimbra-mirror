@@ -10,13 +10,14 @@ bool MAPIAccessAPI::m_bSingleMailBoxMigration = false;
 bool MAPIAccessAPI::m_bHasJoinedDomain = false;
 
 // Initialize with Exchange Sever hostname, Outlook Admin profile name, Exchange mailbox name to be migrated
-MAPIAccessAPI::MAPIAccessAPI(wstring strUserName): m_userStore(NULL), m_rootFolder(NULL)
+MAPIAccessAPI::MAPIAccessAPI(wstring strUserName, wstring strUserAccount): m_userStore(NULL), m_rootFolder(NULL)
 {
     if (strUserName.empty())
         m_bSingleMailBoxMigration = true;
 
     else
         m_strUserName = strUserName;
+    m_strUserAccount = strUserAccount;
     MAPIInitialize(NULL);
 
     Zimbra::Mapi::Memory::SetMemAllocRoutines(NULL, MAPIAllocateBuffer, MAPIAllocateMore,
@@ -954,7 +955,7 @@ LPCWSTR MAPIAccessAPI::GetExchangeRules(vector<CRule> &vRuleList)
 
         //dlogd(L"Begin Rules Migration");
 
-        CRuleProcessor* pRuleProcessor = new CRuleProcessor(m_zmmapisession, m_userStore);
+        CRuleProcessor* pRuleProcessor = new CRuleProcessor(m_zmmapisession, m_userStore, m_strUserAccount);
 
         vRuleList.clear();
         while (lPos < lpulCount)

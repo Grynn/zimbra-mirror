@@ -21,12 +21,12 @@ STDMETHODIMP CMapiAccessWrap::InterfaceSupportsErrorInfo(REFIID riid)
 	return S_FALSE;
 }
 
-STDMETHODIMP CMapiAccessWrap::UserInit(BSTR UserName, BSTR *StatusMsg)
+STDMETHODIMP CMapiAccessWrap::UserInit(BSTR UserName, BSTR userAccount, BSTR *StatusMsg)
 {
     Zimbra::Util::AutoCriticalSection autocriticalsection(cs);
     // TODO: Add your implementation code here
 
-    maapi = new Zimbra::MAPI::MAPIAccessAPI(UserName);
+    maapi = new Zimbra::MAPI::MAPIAccessAPI(UserName, userAccount);
 
     // Init session and stores
     LPCWSTR lpStatus = maapi->InitializeUser();
@@ -656,6 +656,27 @@ STDMETHODIMP CMapiAccessWrap::GetOOOInfo(BSTR *OOOInfo)
 
 STDMETHODIMP CMapiAccessWrap::GetRuleList(VARIANT *rules)
 {
+    // This is the big method for Exchange rules processing.  It reads the PR_RULES_TABLE,
+    // gets the info back, and creates a map (pMap) that will be read by the Zimbra API
+    // layer (SetModifyFilterRulesRequest, which calls AddFilterRuleToRequest for each rule.)
+    // Assuming there are two rules, Foo and Bar, here is an example of pMap.  We'll only show
+    // the format of the first rule.  There are 3 entries for each rule, rule, tests and actions.
+    // So the first rule will have 0filterRule, 0filterTests, 0filterActions, the second will have
+    // 1filterRule, 1filterTests, 1filterActions, etc.  There is a numRules name/value pair that
+    // gives the number of rules.  In a given entry, there are certain token delimiters.  The rule
+    // entry uses ",", the test entry uses an initial ":" followed by "`~".  The action entries
+    // just delimit tokens by "`~".  The string "^^^" is the delimiter for multiple filterTests
+    // and multiple filterActions.
+    // Here is an example of a map for the rule:
+    // "with foo in the subject, forward it to user2 and move it to the Test folder"
+
+    // name            value
+    // ----            -----
+    // numRules        1
+    // 0filterRule     name,TestRule,active,1
+    // 0filterTests"   allof:headerTest`~index`~0`~stringComparison`~contains`~header`~Subject`~value`~foo
+    // 0filterActions  actionRedirect`~a`~user2^^^actionFileInto`~folderPath`~Test
+    
     HRESULT hr = S_OK;
     std::map<BSTR, BSTR> pMap;
     LPWSTR pwszLine = new WCHAR[1024];

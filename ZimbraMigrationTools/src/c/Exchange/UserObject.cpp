@@ -32,7 +32,7 @@ STDMETHODIMP CUserObject::Init(BSTR host, BSTR location, BSTR account, BSTR *pEr
     UserID = location;
     if (host && *host)
     {
-        hr = mapiObj->UserInit(location, pErrorText);
+        hr = mapiObj->UserInit(location, account, pErrorText);
     }
     else
     {
@@ -41,7 +41,7 @@ STDMETHODIMP CUserObject::Init(BSTR host, BSTR location, BSTR account, BSTR *pEr
         if (err)
             *pErrorText = CComBSTR(err);
         else
-            hr = mapiObj->UserInit(L"", pErrorText);
+            hr = mapiObj->UserInit(L"", account, pErrorText);
     }
     return hr;
 }

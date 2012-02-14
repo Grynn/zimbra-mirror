@@ -223,12 +223,12 @@ DWORD WINAPI AccountMigrationThread(LPVOID lpParameter)
 
     if (PROFILE_MIGARTION)
     {
-        maapi = new Zimbra::MAPI::MAPIAccessAPI(L"");
+        maapi = new Zimbra::MAPI::MAPIAccessAPI(L"", L"");
     }
     else
     {
         // Create class instance with Exchange mailbox to be migrated
-        maapi = new Zimbra::MAPI::MAPIAccessAPI(mtparams->mailboxname);
+        maapi = new Zimbra::MAPI::MAPIAccessAPI(mtparams->mailboxname, L"");
         printf("MAILBOXNAME: %S\n", mtparams->mailboxname.c_str());
     }
 

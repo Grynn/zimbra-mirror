@@ -1782,8 +1782,8 @@ public class ZimbraAPI
 
     private void AddFilterRuleToRequest(XmlWriter writer, Dictionary<string, string> rules, int idx)
     {
-        // ^^^ is the delimiter for multiple filterRules, filterTests, and filterActions
-        // `~  is the delimiter for individual filterRules, filterTests, and filterActions
+        // ^^^ is the delimiter for multiple filterTests, and filterActions
+        // `~  is the token delimiter for individual filterTests, and filterActions
         // see CRuleMap::WriteFilterRule, CRuleMap::WriteFilterTtests,CRuleMap::WriteFilterActions
 
         int i, j;

@@ -398,7 +398,7 @@ BOOL ConditionInfoToDetails(const RuleConditionInfo &ruleConditionInfo,
 }
 
 // CRuleProcessor class
-CRuleProcessor::CRuleProcessor(Zimbra::MAPI::MAPISession* session, Zimbra::MAPI::MAPIStore* store) : m_session(session), m_userStore(store) {}
+CRuleProcessor::CRuleProcessor(Zimbra::MAPI::MAPISession* session, Zimbra::MAPI::MAPIStore* store, std::wstring account) : m_session(session), m_userStore(store), m_account(account) {}
 
 CRuleProcessor::~CRuleProcessor() {}
 
@@ -686,7 +686,6 @@ bool CRuleProcessor::ProcessRestrictions(CRule &rule, LPSRestriction pRestrictio
             break;
         }
 
-        /*
         case PROP_ID(PR_MESSAGE_RECIP_ME):
         case PROP_ID(PR_MESSAGE_TO_ME):
         {
@@ -702,10 +701,7 @@ bool CRuleProcessor::ProcessRestrictions(CRule &rule, LPSRestriction pRestrictio
                 wcscpy(wTest, L"to");
             }
 
-            CString val = _pZimbraAccount;
-
-            val = val.Left(val.Find('@'));
-            wcscpy(wValue, val);
+            wcscpy(wValue, m_account.c_str());
             ConditionDetailsToInfo(wTestName, wName, wComparison, wTest, wValue, bNegative,
                 ruleConditionInfo);
             rule.AddCondition(ruleConditionInfo);
@@ -719,18 +715,13 @@ bool CRuleProcessor::ProcessRestrictions(CRule &rule, LPSRestriction pRestrictio
             if (ulCallingType == RES_AND)       // just in case
             {
                 wcscpy(wTest, L"cc");
-
-                CString val = _pZimbraAccount;
-
-                val = val.Left(val.Find('@'));
-                wcscpy(wValue, val);
+                wcscpy(wValue, m_account.c_str());
                 ConditionDetailsToInfo(wTestName, wName, wComparison, wTest, wValue, bNegative,
                     ruleConditionInfo);
                 rule.AddCondition(ruleConditionInfo);
             }
             break;
         }
-        */
 
         case PROP_ID(PR_IMPORTANCE):
         {
