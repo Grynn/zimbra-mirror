@@ -34,7 +34,7 @@ ZaZimbraAdmin = function(appCtxt) {
 	this._appFactory = new Object();
 	this._appFactory[ZaZimbraAdmin.ADMIN_APP] = ZaApp;
     this.startup();
-    //this.aboutDialog = new ZaAboutDialog(this._shell,null,ZaMsg.about_title);
+    //this.aboutDialog = new ZaAboutDialog(this._shell,null,ZabMsg.about_title);
 }
 
 ZaZimbraAdmin.prototype = new ZaController;
@@ -626,7 +626,7 @@ function() {
     var menu = new ZaPopupMenu(dwButton, "ZaHelpDropdown",null, helpMenuOpList, "ZA_HELP");
 
     var mItem =  new DwtMenuItem ({parent:menu, id: "zaHelpHomepage", className:"ZaHelpDropdownFirstItem"});
-    mItem.setText(ZaMsg.zimbraHomePage);
+    mItem.setText(ZabMsg.zimbraHomePage);
     mItem.addSelectionListener(new AjxListener(this, this._contextHelpListener));
 
     mItem =  new DwtMenuItem ({parent:menu, id: "zaHelpCenter", className:"ZaHelpDropdownItem"});
@@ -634,7 +634,7 @@ function() {
     mItem.addSelectionListener(new AjxListener(this, this._helpListener));
 
     mItem =  new DwtMenuItem ({parent:menu, id: "aboutZimbra", className:"ZaHelpDropdownLastItem"});
-    mItem.setText(ZaMsg.zimbraAbout);
+    mItem.setText(ZabMsg.zimbraAbout);
     mItem.addSelectionListener(new AjxListener(this, this._aboutZimbraListener));
 
     menu.addChild(this._createHelpSearch(), 0);
@@ -1358,7 +1358,7 @@ ZaZimbraAdmin.hasGlobalCOSSListAccess = function () {
 ZaAboutDialog = function(parent, className, title, w, h) {
 	if (arguments.length == 0) return;
  	var clsName = className || "DwtDialog AboutScreen";
- 	DwtDialog.call(this, parent, clsName,  ZaMsg.about_title, [DwtDialog.OK_BUTTON]);
+ 	DwtDialog.call(this, parent, clsName,  ZabMsg.about_title, [DwtDialog.OK_BUTTON]);
 }
 
 ZaAboutDialog.prototype = new DwtDialog;

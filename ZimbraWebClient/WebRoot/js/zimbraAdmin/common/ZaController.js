@@ -99,7 +99,7 @@ ZaController.postChangeMethods = new Object();
 
 ZaController.helpURL = location.pathname + ZaUtil.HELP_URL + "administration_console_help.htm?locid="+AjxEnv.DEFAULT_LOCALE;
 
-ZaController.helpButtonText = ZaMsg.zimbraHomePage;
+ZaController.helpButtonText = ZabMsg.zimbraHomePage;
 // Public methods
 ZaController.prototype.toString =
 function() {

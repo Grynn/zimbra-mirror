@@ -72,7 +72,7 @@ function (xModelMetaData, xFormMetaData) {
 ZaHelpView.prototype.showAboutDialog = function () {                  
     var appCtrl = this._appCtxt.getAppController() ;
     if (!appCtrl.aboutDialog) {
-        appCtrl.aboutDialog = new ZaAboutDialog(this.shell,null,ZaMsg.about_title);
+        appCtrl.aboutDialog = new ZaAboutDialog(this.shell,null,ZabMsg.about_title);
     }
     appCtrl.aboutDialog.popup();
 };
@@ -178,7 +178,7 @@ ZaHelpView.myXFormModifier = function(xFormObject) {
 			},
         {type: _SPACER_, height: 10 },    
         {type:_GROUP_, colSpan:"*", items: [
-                {type:_DWT_BUTTON_, id: "about_button", label:ZaMsg.About_Button_Label,
+                {type:_DWT_BUTTON_, id: "about_button", label:ZabMsg.About_Button_Label,
                     onActivate:"this.getFormController().showAboutDialog()", width:"125px"}
             ]
         }

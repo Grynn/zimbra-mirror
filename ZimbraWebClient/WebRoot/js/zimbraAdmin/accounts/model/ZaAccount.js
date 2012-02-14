@@ -2021,7 +2021,7 @@ ZaItem._ATTR[ZaAccount.A_description] = ZaMsg.attrDesc_description;
 ZaItem._ATTR[ZaAccount.A_firstName] = ZaMsg.attrDesc_firstName;
 ZaItem._ATTR[ZaAccount.A_lastName] = ZaMsg.attrDesc_lastName;
 ZaItem._ATTR[ZaAccount.A_accountStatus] = ZaMsg.attrDesc_accountStatus;
-ZaItem._ATTR[ZaAccount.A_mailHost] =  ZaMsg.attrDesc_mailHost;
+ZaItem._ATTR[ZaAccount.A_mailHost] =  ZabMsg.attrDesc_mailHost;
 ZaItem._ATTR[ZaAccount.A_zimbraMailQuota] = ZaMsg.attrDesc_zimbraMailQuota;
 ZaItem._ATTR[ZaAccount.A_notes] = ZaMsg.attrDesc_notes;
 

@@ -661,7 +661,7 @@ ZaResource.myXModel = {
 ZaItem._ATTR[ZaResource.A_displayname] = ZaMsg.attrDesc_accountName;
 ZaItem._ATTR[ZaResource.A_description] = ZaMsg.attrDesc_description;
 ZaItem._ATTR[ZaResource.A_accountStatus] = ZaMsg.attrDesc_accountStatus;
-ZaItem._ATTR[ZaResource.A_mailHost] =  ZaMsg.attrDesc_mailHost;
+ZaItem._ATTR[ZaResource.A_mailHost] =  ZabMsg.attrDesc_mailHost;
 ZaItem._ATTR[ZaResource.A_notes] = ZaMsg.attrDesc_notes;
 
 ZaResource.getAccountStatusLabel = ZaAccount.getAccountStatusMsg ;

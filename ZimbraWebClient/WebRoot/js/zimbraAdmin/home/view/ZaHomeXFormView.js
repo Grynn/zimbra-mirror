@@ -271,7 +271,7 @@ ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
                 containerCssClass:"ZaHomeInfoPanel",items:[
                 {type:_GROUP_, numCols: 2, valign: _TOP_, items:[
                     {type:_OUTPUT_, colSpan:"2", value:ZaMsg.LBL_HomeSummary, cssClass:"ZaHomeInfoTitle"},
-                    {type:_OUTPUT_, label:ZaMsg.LBL_HomeZimbraVersion, ref: ZaHome.A2_version},
+                    {type:_OUTPUT_, label:ZabMsg.LBL_HomeZimbraVersion, ref: ZaHome.A2_version},
                     {type:_OUTPUT_, label:ZaMsg.LBL_HomeServerNum, ref: ZaHome.A2_serverNum, bmolsnr: true},
                     {type:_OUTPUT_, label:ZaMsg.LBL_HomeAccountNum, ref: ZaHome.A2_accountNum, bmolsnr: true},
                     {type:_OUTPUT_, label:ZaMsg.LBL_HomeDomainNum, ref: ZaHome.A2_domainNum, bmolsnr: true},
@@ -348,8 +348,8 @@ ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
                         visibilityChecks:[[ZaHomeXFormView.showStaticsInfo]]},
                     {type:_OUTPUT_, label:ZaMsg.LBL_HomeQueueLength, ref: ZaHome.A2_queueLength, bmolsnr: true,
                         visibilityChecks:[[ZaHomeXFormView.showStaticsInfo]]},
-                    {type:_OUTPUT_, label:ZaMsg.LBL_HomeMsgCount, ref: ZaHome.A2_messageCount},
-                    {type:_OUTPUT_, label:ZaMsg.LBL_HomeMsgVolume, ref: ZaHome.A2_messageVolume}
+                    {type:_OUTPUT_, label:ZabMsg.LBL_HomeMsgCount, ref: ZaHome.A2_messageCount},
+                    {type:_OUTPUT_, label:ZabMsg.LBL_HomeMsgVolume, ref: ZaHome.A2_messageVolume}
                 ]}
             ]},
             {type:_GROUP_, colSpan: "*", id:"homeSetupGroup", containerCssClass:"ZaHomeSetupPanelContainer", cssClass:"ZaHomeSetupPanel", numCols:1, items:[
@@ -360,7 +360,7 @@ ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
                         {type:_DWT_IMAGE_, value: "ImgRemoveLineUp", containerCssStyle:"cursor: pointer;", cssStyle:"position:static;display:none;",  onClick:ZaHomeXFormView.onCloseSetup}
                     ]},
                     {type:_SETUPGROUP_, colSpan: "*", headerLabels: labelChoices, contentItems: contentChoices},
-                    {type:_OUTPUT_, value: ZaMsg.LBL_HomeHelpCenter, colSpan: "*", align:_RIGHT_, onClick: ZaHomeXFormView.onHelpLink,
+                    {type:_OUTPUT_, value: ZabMsg.LBL_HomeHelpCenter, colSpan: "*", align:_RIGHT_, onClick: ZaHomeXFormView.onHelpLink,
                         containerCssClass:"ZaLinkedItem"}
                 ]}
             ]}
