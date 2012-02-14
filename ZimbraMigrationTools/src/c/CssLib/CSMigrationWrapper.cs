@@ -288,7 +288,7 @@ public class CSMigrationWrapper
                     {
                         bool bSkipMessage = false;
                         Dictionary<string, string> dict = new Dictionary<string, string>();
-                       string[,] data = itemobject.GetDataForItemID(user,
+                        string[,] data = itemobject.GetDataForItemID(user,
                                        itemobject.ItemID, itemobject.Type);
 
                         int bound0 = data.GetUpperBound(0);
@@ -527,6 +527,41 @@ public class CSMigrationWrapper
             }
         }
 
+        // now do Rules
+        if (options.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Rules))
+        {
+            string[,] data = user.GetRules();
+            if (data != null)
+            {
+                Acct.TotalItems++;
+                Acct.migrationFolder.TotalCountOfItems = 1;
+                Acct.migrationFolder.CurrentCountOfItems = 0;
+                Acct.migrationFolder.FolderView = "All Rules";
+                Acct.migrationFolder.FolderName = "Rules Table";
+                api.AccountName = Acct.AccountName;
+                if (!isPreview)
+                {
+                    Dictionary<string, string> dict = new Dictionary<string, string>();
+                    int bound0 = data.GetUpperBound(0);
+                    for (int i = 0; i <= bound0; i++)
+                    {
+                        string Key = data[0, i];
+                        string Value = data[1, i];
+
+                        dict.Add(Key, Value);
+                    }
+                    api.AccountName = Acct.AccountName;
+                    Log.info("Migrating Rules");
+                    int stat = api.AddRules(dict);
+                    Acct.migrationFolder.CurrentCountOfItems = 1;
+                }
+            }
+            else
+            {
+                Log.info("There are no rules to migrate");
+            }
+        }
+
         // now do OOO
         if (options.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.OOO))
         {
@@ -538,13 +573,17 @@ public class CSMigrationWrapper
             }
             if (isOOO)
             {
-                Log.info("Migrating Out of Office");
+                Acct.TotalItems++;
                 Acct.migrationFolder.TotalCountOfItems = 1;
                 Acct.migrationFolder.CurrentCountOfItems = 0;
                 Acct.migrationFolder.FolderView = "OOO";
                 Acct.migrationFolder.FolderName = "Out of Office";
                 api.AccountName = Acct.AccountName;
-                api.AddOOO(ooo, isServer);
+                if (!isPreview)
+                {
+                    Log.info("Migrating Out of Office");
+                    api.AddOOO(ooo, isServer);
+                }
             }
             else
             {

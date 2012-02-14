@@ -1100,7 +1100,7 @@ public class ZimbraAPI
     }
 
     public void SetAppointmentRequest(XmlWriter writer, Dictionary<string, string> appt,
-        string folderId, int requestId)
+        string folderId)
     {
         bool isRecurring = appt.ContainsKey("freq");
         int numExceptions = (appt.ContainsKey("numExceptions")) ? Int32.Parse(appt["numExceptions"]) : 0;
@@ -1425,7 +1425,7 @@ public class ZimbraAPI
             WriteHeader(writer, true, true, true);
 
             writer.WriteStartElement("Body", "http://www.w3.org/2003/05/soap-envelope");
-            SetAppointmentRequest(writer, appt, folderId, -1);
+            SetAppointmentRequest(writer, appt, folderId);
 
             writer.WriteEndElement();           // soap body
             writer.WriteEndElement();           // soap envelope
@@ -1471,7 +1471,7 @@ public class ZimbraAPI
     }
 
     private void SetTaskRequest(XmlWriter writer, Dictionary<string, string> task,
-        string folderId, int requestId)
+        string folderId)
     {
         bool isRecurring = task.ContainsKey("freq");
         writer.WriteStartElement("SetTaskRequest", "urn:zimbraMail");
@@ -1706,7 +1706,7 @@ public class ZimbraAPI
             WriteHeader(writer, true, true, true);
 
             writer.WriteStartElement("Body", "http://www.w3.org/2003/05/soap-envelope");
-            SetTaskRequest(writer, appt, folderId, -1);
+            SetTaskRequest(writer, appt, folderId);
 
             writer.WriteEndElement();           // soap body
             writer.WriteEndElement();           // soap envelope
@@ -1768,6 +1768,125 @@ public class ZimbraAPI
 
             writer.WriteStartElement("Body", "http://www.w3.org/2003/05/soap-envelope");
             SetModifyPrefsRequest(writer, isOOOEnabled, OOOInfo);
+
+            writer.WriteEndElement();           // soap body
+            writer.WriteEndElement();           // soap envelope
+            writer.WriteEndDocument();
+        }
+        string rsp = "";
+
+        client.InvokeService(sb.ToString(), out rsp);
+        retval = client.status;
+        return retval;
+    }
+
+    private void AddFilterRuleToRequest(XmlWriter writer, Dictionary<string, string> rules, int idx)
+    {
+        // ^^^ is the delimiter for multiple filterRules, filterTests, and filterActions
+        // `~  is the delimiter for individual filterRules, filterTests, and filterActions
+        // see CRuleMap::WriteFilterRule, CRuleMap::WriteFilterTtests,CRuleMap::WriteFilterActions
+
+        int i, j;
+
+        // in the map, we'll have nfilterRule, nFilterTests, nFilterActions where n is idx
+        string filterRuleDictName = idx.ToString() + "filterRule";
+        string filterTestsDictName = idx.ToString() + "filterTests";
+        string filterActionsDictName = idx.ToString() + "filterActions";
+
+        writer.WriteStartElement("filterRule");
+        string[] tokens = rules[filterRuleDictName].Split(',');
+        writer.WriteAttributeString(tokens.GetValue(0).ToString(), tokens.GetValue(1).ToString());
+        writer.WriteAttributeString(tokens.GetValue(2).ToString(), tokens.GetValue(3).ToString());
+
+        writer.WriteStartElement("filterTests");
+
+        // first get anyof or allof.  String starts with "anyof:" or "allof:"
+        writer.WriteAttributeString("condition", rules[filterTestsDictName].Substring(0, 5));
+
+        // now process the actual tests
+        string[] allTests = rules[filterTestsDictName].Substring(6).Split(new string[] { "^^^" }, StringSplitOptions.None);
+        for (i = 0; i < allTests.Length; i++)
+        {
+            string eachTest = allTests.GetValue(i).ToString();
+            string[] testTokens = eachTest.Split(new string[] { "`~" }, StringSplitOptions.None);
+            string theTest = testTokens.GetValue(0).ToString();
+            writer.WriteStartElement(theTest);
+            if (theTest == "inviteTest")    // special case since we have to create a node
+            {
+                writer.WriteAttributeString(testTokens.GetValue(1).ToString(), testTokens.GetValue(2).ToString());  // index
+                WriteNVPair(writer, testTokens.GetValue(3).ToString(), testTokens.GetValue(4).ToString());
+            }
+            else
+            {
+                for (j = 1; j < testTokens.Length; j++)
+                {
+                    writer.WriteAttributeString(testTokens.GetValue(j++).ToString(), testTokens.GetValue(j).ToString());
+                }
+            }
+            writer.WriteEndElement();   // theTest
+        }
+        writer.WriteEndElement();   // filterTests
+
+        writer.WriteStartElement("filterActions");
+        string[] allActions = rules[filterActionsDictName].Split(new string[] { "^^^" }, StringSplitOptions.None);
+        for (i = 0; i < allActions.Length; i++)
+        {
+            string eachAction = allActions.GetValue(i).ToString();
+            string[] actionTokens = eachAction.Split(new string[] { "`~" }, StringSplitOptions.None);
+            writer.WriteStartElement(actionTokens.GetValue(0).ToString());
+            if ((actionTokens.GetValue(0).ToString() != "actionStop") &&
+                (actionTokens.GetValue(0).ToString() != "actionDiscard"))
+            {
+                for (j = 1; j < actionTokens.Length; j++)
+                {
+                    writer.WriteAttributeString(actionTokens.GetValue(j++).ToString(), actionTokens.GetValue(j).ToString());
+                }
+            }
+            writer.WriteEndElement();   // actionTokens.GetValue(i)
+        }
+        writer.WriteEndElement();   // filterActions
+
+        writer.WriteEndElement();   // filterRule
+    }
+
+    private void SetModifyFilterRulesRequest(XmlWriter writer, Dictionary<string, string> rules)
+    {       
+        writer.WriteStartElement("ModifyFilterRulesRequest", "urn:zimbraMail");
+        writer.WriteStartElement("filterRules");
+        int numRules = Int32.Parse(rules["numRules"]);
+        for (int i = 0; i < numRules; i++)
+        {
+            AddFilterRuleToRequest(writer, rules, i);
+        }
+        writer.WriteEndElement();   // filterRules
+        writer.WriteEndElement();   // ModifyFilterRulesRequest
+    }
+
+    public int AddRules(Dictionary<string, string> rules)
+    {
+        lastError = "";
+
+        WebServiceClient client = new WebServiceClient
+        {
+            Url = ZimbraValues.GetZimbraValues().Url,
+            WSServiceType =
+                WebServiceClient.ServiceType.Traditional
+        };
+        int retval = 0;
+        StringBuilder sb = new StringBuilder();
+        XmlWriterSettings settings = new XmlWriterSettings();
+
+        settings.OmitXmlDeclaration = true;
+        using (XmlWriter writer = XmlWriter.Create(sb, settings))
+        {
+            writer.WriteStartDocument();
+            writer.WriteStartElement("soap", "Envelope",
+                "http://www.w3.org/2003/05/soap-envelope");
+
+            WriteHeader(writer, true, true, true);
+
+            writer.WriteStartElement("Body", "http://www.w3.org/2003/05/soap-envelope");
+            SetModifyFilterRulesRequest(writer, rules);
 
             writer.WriteEndElement();           // soap body
             writer.WriteEndElement();           // soap envelope

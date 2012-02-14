@@ -59,6 +59,7 @@ public:
     STDMETHOD(GetData) (BSTR userId, VARIANT itemId, FolderType type, VARIANT * pVal);
     STDMETHOD(UserUninit) ();
     STDMETHODIMP GetOOOInfo(BSTR *OOOInfo);
+    STDMETHODIMP GetRuleList(VARIANT *rules);
     void CreateExceptionAttrs(BSTR attrs[], int num);
 
 

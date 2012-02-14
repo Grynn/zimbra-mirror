@@ -489,16 +489,20 @@ public class ScheduleViewModel: BaseViewModel
         {
             retval = "OOO";
         }
+        else if (containerClass == "All Rules")
+        {
+            retval = "All Rules";
+        }
         return retval;
     }
 
-    private string FormatTheLastMsg(string existingMsg, bool isOOO)
+    private string FormatTheLastMsg(string existingMsg, bool isOOOorRules)
     // A bit of the hack -- take the existing msg, add 1 to the first part
     // i.e. if it's 13 of 14, make it 14 of 14
     // if it's Out of Office, just say 1 of 1
     {
-        string retval = (isOOO) ? "1 of 1" : "";
-        if (!isOOO)
+        string retval = (isOOOorRules) ? "1 of 1" : "";
+        if (!isOOOorRules)
         {
             int len = existingMsg.Length;
             int idx = existingMsg.IndexOf(" of");
@@ -579,8 +583,8 @@ public class ScheduleViewModel: BaseViewModel
         {
             string lastmsg = accountResultsViewModel.AccountResultsList[num].UserResultsList[count - 1].UserProgressMsg;
             int len = lastmsg.Length;
-            bool isOOO = MyFolder.FolderView == "OOO";
-            accountResultsViewModel.AccountResultsList[num].UserResultsList[count - 1].UserProgressMsg = FormatTheLastMsg(accountResultsViewModel.AccountResultsList[num].AcctProgressMsg, isOOO);
+            bool isOOOorRules = ((MyFolder.FolderView == "OOO") || (MyFolder.FolderView == "All Rules"));
+            accountResultsViewModel.AccountResultsList[num].UserResultsList[count - 1].UserProgressMsg = FormatTheLastMsg(accountResultsViewModel.AccountResultsList[num].AcctProgressMsg, isOOOorRules);
             accountResultsViewModel.AccountResultsList[num].PBValue = 100;  // to make sure
         }
         else

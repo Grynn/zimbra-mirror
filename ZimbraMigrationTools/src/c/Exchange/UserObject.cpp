@@ -78,3 +78,8 @@ STDMETHODIMP CUserObject::GetOOO(BSTR *pOOO)
     return mapiObj->GetOOOInfo(pOOO);
 }
 
+STDMETHODIMP CUserObject::GetRules(VARIANT *vRules)
+{
+    VariantInit(vRules);
+    return mapiObj->GetRuleList(vRules);
+}

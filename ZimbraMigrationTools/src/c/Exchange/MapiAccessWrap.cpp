@@ -654,6 +654,124 @@ STDMETHODIMP CMapiAccessWrap::GetOOOInfo(BSTR *OOOInfo)
     return S_OK;
 }
 
+STDMETHODIMP CMapiAccessWrap::GetRuleList(VARIANT *rules)
+{
+    HRESULT hr = S_OK;
+    std::map<BSTR, BSTR> pMap;
+    LPWSTR pwszLine = new WCHAR[1024];
+
+    VariantInit(rules);
+    rules->vt = VT_ARRAY | VT_DISPATCH;
+
+    USES_CONVERSION;
+    vector<CRule> vRuleList;
+
+    maapi->GetExchangeRules(vRuleList);
+
+    std::vector<CRule>::iterator ruleIndex;
+    int numRules = vRuleList.size();
+    if (numRules == 0)
+    {
+        return S_OK;
+    }
+
+    WCHAR pwszTemp[5];
+    _ltow(numRules, pwszTemp, 10);
+    pMap[L"numRules"] = SysAllocString(pwszTemp);
+
+    CRuleMap* pRuleMap = new CRuleMap();
+
+    // Create the array of attrs (0filterRule, 0filterTests, 0filterActions, 1filterRule, etc.)
+    // std:map needs all names allocated separately
+    int numAttrs = numRules * 3;
+    WCHAR tmp[10];
+    LPWSTR* ruleMapNames = new LPWSTR[numAttrs];
+    for (int i = 0; i < numAttrs; i += 3)
+    {
+        _ltow(i/3, tmp, 10);
+        ruleMapNames[i] = new WCHAR[20];
+        lstrcpy(ruleMapNames[i], tmp);
+        lstrcat(ruleMapNames[i], L"filterRule");
+        ruleMapNames[i + 1] = new WCHAR[20];
+        lstrcpy(ruleMapNames[i + 1], tmp);
+        lstrcat(ruleMapNames[i + 1], L"filterTests");
+        ruleMapNames[i + 2] = new WCHAR[20];
+        lstrcpy(ruleMapNames[i + 2], tmp);
+        lstrcat(ruleMapNames[i + 2], L"filterActions");
+    }
+    /////////////////
+
+    int iIndex = 0;
+    int iMapIndex = 0;
+    for (ruleIndex = vRuleList.begin(); ruleIndex != vRuleList.end(); ruleIndex++)
+    {
+        std::wstring wstrRuleCondition;
+        CRule &rule = *ruleIndex;
+
+        iMapIndex = iIndex * 3;
+        pRuleMap->WriteFilterRule(rule, pwszLine);
+        pMap[ruleMapNames[iMapIndex]] = SysAllocString(pwszLine);
+        pRuleMap->WriteFilterTests(rule, pwszLine);
+        pMap[ruleMapNames[iMapIndex + 1]] = SysAllocString(pwszLine);
+        pRuleMap->WriteFilterActions(rule, pwszLine);
+        pMap[ruleMapNames[iMapIndex + 2]] = SysAllocString(pwszLine);
+        iIndex++;
+    }
+
+    delete pRuleMap;
+    delete pwszLine;
+
+    std::map<BSTR, BSTR>::iterator it;
+    VariantInit(rules);
+
+    // Create SafeArray of VARIANT BSTRs
+    SAFEARRAY *pSA = NULL;
+    SAFEARRAYBOUND aDim[2];                     // two dimensional array
+
+    aDim[0].lLbound = 0;
+    aDim[0].cElements = (ULONG)pMap.size();
+    aDim[1].lLbound = 0;
+    aDim[1].cElements = (ULONG)pMap.size();      // rectangular array
+    pSA = SafeArrayCreate(VT_BSTR, 2, aDim);    // again, 2 dimensions
+
+    long aLong[2];
+
+    if (pSA != NULL)
+    {
+        BSTR temp;
+
+        for (long x = aDim[0].lLbound; x < 2 /*(aDim[0].cElements + aDim[0].lLbound)*/; x++)
+        {
+            aLong[0] = x;                       // set x index
+            it = pMap.begin();
+            for (long y = aDim[1].lLbound; y < (long)(aDim[1].cElements + aDim[1].lLbound); y++)
+            {
+                aLong[1] = y;                   // set y index
+                if (aLong[0] > 0)
+                    temp = SysAllocString((*it).second);
+                else
+                    temp = SysAllocString((*it).first);
+                hr = SafeArrayPutElement(pSA, aLong, temp);
+
+                it++;
+            }
+        }
+    }
+    rules->vt = VT_ARRAY | VT_BSTR;
+    rules->parray = pSA;
+
+    // Now that the map is set, delete the rule map names.
+    // Don't need to go backwards, but it's a good convention
+    for (int i = (numAttrs - 1); i >= 0; i--)
+    {
+        delete ruleMapNames[i];
+    }
+    delete ruleMapNames;
+    ////
+
+    return hr;
+}
+
 void CMapiAccessWrap::CreateExceptionAttrs(BSTR attrs[], int num)
 {
     WCHAR pwszNum[10];

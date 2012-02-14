@@ -74,6 +74,7 @@ interface IMapiAccessWrap : IDispatch{
     [id(4)] HRESULT GetData([in]BSTR userId, [in] VARIANT itemId, [in] FolderType type, [out, retval] VARIANT *pVal);
     [id(5)] HRESULT UserUninit();
     [id(6)] HRESULT GetOOOInfo([out] BSTR *OOOInfo);
+    [id(7)] HRESULT GetRuleList([out] VARIANT *rules);
 };
 
 [
@@ -92,6 +93,7 @@ interface IUserObject : IDispatch{
     [id(4)] HRESULT GetMapiAccessObject(BSTR userID, [out, retval] IMapiAccessWrap **pVal);
     [id(5)] HRESULT Uninit(void);
     [id(6)] HRESULT GetOOO([out, retval] BSTR *pOOO);
+    [id(7)] HRESULT GetRules([out, retval] VARIANT *vRules);
 };
 [
 	object,

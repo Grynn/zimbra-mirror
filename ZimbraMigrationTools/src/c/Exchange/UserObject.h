@@ -56,6 +56,7 @@ public:
     STDMETHOD(GetMapiAccessObject) (BSTR userID, IMapiAccessWrap * *pVal);
     STDMETHOD(Uninit) (void);
     STDMETHOD(GetOOO) (BSTR *pOOO);
+    STDMETHOD(GetRules) (VARIANT * vRules);
 
     /*
      * virtual long Init(BSTR id);

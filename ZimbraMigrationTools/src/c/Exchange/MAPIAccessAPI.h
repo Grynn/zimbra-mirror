@@ -1,5 +1,6 @@
 #pragma once
 #include "logger.h"
+#include "MAPIRules.h"
 
 namespace Zimbra
 {
@@ -236,7 +237,8 @@ public:
     LPCWSTR GetRootFolderHierarchy(vector<Folder_Data> &vfolderlist);
     LPCWSTR GetFolderItemsList(SBinary sbFolderEID, vector<Item_Data> &ItemList);
     LPCWSTR GetItem(SBinary sbItemEID, BaseItemData &itemData);
-    LPWSTR GetOOOStateAndMsg();
+    LPWSTR  GetOOOStateAndMsg();
+    LPCWSTR GetExchangeRules(vector<CRule> &vRuleList);
 };
 }
 }

@@ -903,6 +903,143 @@ LPWSTR MAPIAccessAPI::GetOOOStateAndMsg()
     return (bGotMessage) ? lpwstrOOOInfo : L"0:";
 }
 
+LPCWSTR MAPIAccessAPI::GetExchangeRules(vector<CRule> &vRuleList)
+{
+    LPCWSTR lpwstrStatus = NULL;
+    HRESULT hr;
+    ULONG objtype;
+    Zimbra::Util::ScopedInterface<IMAPIFolder> spInbox;
+    LPEXCHANGEMODIFYTABLE lpExchangeTable;
+    Zimbra::Util::ScopedInterface<IMAPITable> spMAPIRulesTable;
+    ULONG lpulCount = NULL;
+    LPSRowSet lppRows = NULL;
+
+    SBinaryArray specialFolderIds = m_userStore->GetSpecialFolderIds();
+    SBinary sbin = specialFolderIds.lpbin[INBOX];
+    hr = m_userStore->OpenEntry(sbin.cb, (LPENTRYID)sbin.lpb, NULL, MAPI_BEST_ACCESS,
+                                &objtype, (LPUNKNOWN *)spInbox.getptr());
+    if (FAILED(hr))
+    {
+        lpwstrStatus = FormatExceptionInfo(hr, L"Unable to get Inbox.", __FILE__, __LINE__);
+        return lpwstrStatus;                                  
+    }
+    hr = spInbox->OpenProperty(PR_RULES_TABLE, (LPGUID)&IID_IExchangeModifyTable, 0,
+            MAPI_DEFERRED_ERRORS, (LPUNKNOWN FAR *)&lpExchangeTable);
+    if (FAILED(hr))
+    {
+        lpwstrStatus = FormatExceptionInfo(hr, L"Unable to get Rules table property.", __FILE__, __LINE__);
+        return lpwstrStatus;                                  
+    }
+    hr = lpExchangeTable->GetTable(0, spMAPIRulesTable.getptr());
+    if (FAILED(hr))
+    {
+        lpExchangeTable->Release();
+        lpwstrStatus = FormatExceptionInfo(hr, L"Unable to get Rules table.", __FILE__, __LINE__);
+        return lpwstrStatus;                                  
+    }
+    hr = spMAPIRulesTable->GetRowCount(0, &lpulCount);
+    if (FAILED(hr))
+    {
+        lpExchangeTable->Release();
+        lpwstrStatus = FormatExceptionInfo(hr, L"Unable to get Rules table row count.", __FILE__, __LINE__);
+        return lpwstrStatus;                                  
+    }
+    hr = HrQueryAllRows(spMAPIRulesTable.get(), NULL, NULL, NULL, lpulCount, &lppRows);
+    if (SUCCEEDED(hr))
+    {
+        ULONG lPos = 0;
+        LPSRestriction pRestriction = 0;
+        LPACTIONS pActions = 0;
+        ULONG ulWarnings = 0;
+
+        //dlogd(L"Begin Rules Migration");
+
+        CRuleProcessor* pRuleProcessor = new CRuleProcessor(m_zmmapisession, m_userStore);
+
+        vRuleList.clear();
+        while (lPos < lpulCount)
+        {
+            CRule rule;
+
+            pRestriction = 0;
+            pActions = 0;
+
+            bool bRes = true;
+            bool bAct = true;
+
+            rule.Clear();
+
+            std::wstring rulename = CA2W(lppRows->aRow[lPos].lpProps[8].Value.lpszA);
+
+            rule.SetName(rulename.c_str());
+            rule.SetActive(1);                      // if it was inactive in Exchange, we'd never see it
+            if (rulename.length() == 0)
+            {
+                //dlogd(L"Rule", lPos, L"has no name");
+                lPos++;
+                continue;
+            }
+ 
+            //dlogd(L"Processing rule", rulename.c_str());
+
+            pRestriction = (LPSRestriction)lppRows->aRow[lPos].lpProps[5].Value.x;
+
+            // conditions are restrictions - call a recursive method to process them
+            // 99 means this is not being called by another restriction
+            bRes = pRuleProcessor->ProcessRestrictions(rule, pRestriction, FALSE, 99);
+
+            // check if there were restrictions we couldn't support, possibly causing there to be no conditions
+            CListRuleConditions listRuleConditions;
+
+            rule.GetConditions(listRuleConditions);
+            if (listRuleConditions.size() == 0)
+            {
+                //dlogd(L"Rule", rulename.c_str(), L"has no conditions supported by Zimbra -- skipping");
+                bRes = false;
+            }
+
+            int ulRuleState = lppRows->aRow[lPos].lpProps[3].Value.l;
+
+            if (ulRuleState & ST_EXIT_LEVEL)        // weird looking code to get around compiler warning C4800
+                rule.ProcessAdditionalRules(false);
+            else
+                rule.ProcessAdditionalRules(true);
+            pActions = (LPACTIONS)lppRows->aRow[lPos].lpProps[6].Value.x;
+            bAct = pRuleProcessor->ProcessActions(rule, pActions);
+
+            // check if there were actions we couldn't support, possibly causing there to be none
+            CListRuleActions listRuleActions;
+
+            rule.GetActions(listRuleActions);
+            if (listRuleActions.size() == 0)
+            {
+                //dlogd(L"Rule", rulename.c_str(), L"has no actions supported by Zimbra -- skipping");
+                bAct = false;
+            }
+            if (bRes && bAct)
+            {
+                vRuleList.push_back(rule);
+                //dlogd(L"Processed rule", rulename.c_str());
+            }
+            else
+            {
+                //dlogd(L"Unable to import rule", rulename.c_str());
+                ulWarnings++;
+            }
+            lPos++;
+        }
+        delete pRuleProcessor;
+        MAPIFreeBuffer(pRestriction);
+        MAPIFreeBuffer(pActions);
+
+        // Fix up dict based on vRuleList
+
+        //dlogd(L"Begin Rules Migration");
+    }
+
+    return lpwstrStatus;
+}
+
 // Access MAPI folder items
 void MAPIAccessAPI::traverse_folder(Zimbra::MAPI::MAPIFolder &folder)
 {

@@ -54,6 +54,9 @@
     <ClCompile Include="..\Exchange\MAPIRfc2445.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\Exchange\MAPIRules.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Exchange\MapiUtils.h">
@@ -96,6 +99,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\Exchange\MAPIRfc2445.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Exchange\MAPIRules.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
