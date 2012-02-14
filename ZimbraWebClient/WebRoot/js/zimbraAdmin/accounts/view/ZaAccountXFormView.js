@@ -1679,7 +1679,9 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 	
 	setupGroup.items.push({ref:ZaAccount.A_zimbraIsAdminAccount, type:_CHECKBOX_,
             msgName:ZaMsg.NAD_IsSystemAdminAccount,label:ZaMsg.NAD_IsSystemAdminAccount,
-			bmolsnr:true, trueValue:"TRUE", falseValue:"FALSE"
+			bmolsnr:true, trueValue:"TRUE", falseValue:"FALSE",
+			visibilityChecks:[[XForm.checkInstanceValueNot,ZaAccount.A_zimbraIsExternalVirtualAccount,"TRUE"],[ZaItem.hasReadPermission,ZaAccount.A_zimbraIsAdminAccount]],
+			visibilityChangeEventSources:[ZaAccount.A_zimbraIsExternalVirtualAccount,ZaAccount.A_zimbraIsAdminAccount]
 	});
 	case1Items.push(setupGroup);
 	
