@@ -36,8 +36,8 @@ import com.zimbra.cs.offline.OfflineLog;
 
 public class AutoUpdateTest {
 
-    static final String BASE_UPDATE_URL = "http://localhost/update.php"; //for local testing
-//    static final String BASE_UPDATE_URL = "https://www.zimbra.com/aus/zdesktop2/update.php"; //real update site; only updated once build is RTM
+//    static final String BASE_UPDATE_URL = "http://localhost/update.php"; //for local testing
+    static final String BASE_UPDATE_URL = "https://www.zimbra.com/aus/zdesktop2/update.php"; //real update site; only updated once build is RTM
 
     static HttpClient httpClient = ZimbraHttpConnectionManager.getExternalHttpConnMgr().newHttpClient();
 
@@ -142,10 +142,10 @@ public class AutoUpdateTest {
         gaUpdateInfo.addPlatform(new PlatformInfo("win32", "d9943a891b194fdeea18ff1c7c908b50", 95958528));
         gaUpdateInfo.addPlatform(new PlatformInfo("linux", "2add86bf0469e9e0b3f1e66d2507e064", 110755660));
         updateInfo.put(CHN_RELEASE, gaUpdateInfo);
-        UpdateInfo betaUpdateInfo = new UpdateInfo(11167, "7_1_3_beta", "7.1.3", "minor");
-        betaUpdateInfo.addPlatform(new PlatformInfo("macos", "786a2697793517237f2470125848442f", 76152593));
-        betaUpdateInfo.addPlatform(new PlatformInfo("win32", "a04350148e68c6617319c7d6c5e2fb8a", 96487424));
-        betaUpdateInfo.addPlatform(new PlatformInfo("linux", "d25f744ccca6f5f6e6a5f4e417ebb844", 113463501));
+        UpdateInfo betaUpdateInfo = new UpdateInfo(11234, "7_1_4_beta", "7.1.4", "minor");
+        betaUpdateInfo.addPlatform(new PlatformInfo("macos", "7a208abfbc3c6209717109f7bca3231a", 76597264));
+        betaUpdateInfo.addPlatform(new PlatformInfo("win32", "5cb60f54164b09368c4b677c601bef0d", 96889344));
+        betaUpdateInfo.addPlatform(new PlatformInfo("linux", "787c2a468dbb777bdd2f58994bd65f56", 148836314));
         updateInfo.put(CHN_BETA, betaUpdateInfo);
     }
     
@@ -263,6 +263,13 @@ public class AutoUpdateTest {
     public void beta713() throws HttpException, IOException, DocumentException, ServiceException {
         for (String platform: platforms) {
             sendAndVerify(CHN_BETA, "7.1.3", 11139, platform);
+        }
+    }
+
+    @Test
+    public void beta714() throws HttpException, IOException, DocumentException, ServiceException {
+        for (String platform: platforms) {
+            sendAndVerify(CHN_BETA, "7.1.4", 11234, platform);
         }
     }
 
