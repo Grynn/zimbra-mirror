@@ -35,6 +35,7 @@ import javax.mail.internet.MimeMessage;
 import org.dom4j.QName;
 
 import com.google.common.collect.ImmutableSet;
+import com.zimbra.client.ZMailbox;
 import com.zimbra.common.mailbox.Color;
 import com.zimbra.common.mime.MimeConstants;
 import com.zimbra.common.mime.shim.JavaMailInternetAddress;
@@ -47,6 +48,7 @@ import com.zimbra.common.util.Constants;
 import com.zimbra.common.util.Pair;
 import com.zimbra.common.util.StringUtil;
 import com.zimbra.common.zclient.ZClientException;
+import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
@@ -70,7 +72,6 @@ import com.zimbra.cs.service.mail.ToXML;
 import com.zimbra.cs.service.util.ItemIdFormatter;
 import com.zimbra.cs.session.PendingModifications.Change;
 import com.zimbra.cs.util.JMSession;
-import com.zimbra.client.ZMailbox;
 import com.zimbra.soap.ZimbraSoapContext;
 
 public class PushChanges {
@@ -404,23 +405,24 @@ public class PushChanges {
 
                         ombx.move(sContext, id, MailItem.Type.MESSAGE, Mailbox.ID_FOLDER_DRAFTS); //move message back to drafts folder;
 
-                        //we need to tell user of the failure
+                        // we need to tell user of the failure
                         try {
-                            MimeMessage mm = new Mime.FixedMimeMessage(JMSession.getSession());
+                            Account account = ombx.getAccount();
+                            MimeMessage mm = new Mime.FixedMimeMessage(JMSession.getSmtpSession(account));
                             mm.setSentDate(new Date());
                             mm.setFrom(new InternetAddress("donotreply@host.local", "Desktop Notifier"));
-                            mm.setRecipient(RecipientType.TO, new JavaMailInternetAddress(ombx.getAccount().getName()));
+                            mm.setRecipient(RecipientType.TO, new JavaMailInternetAddress(account.getName()));
 
                             String sentDate = new SimpleDateFormat("MMMMM d, yyyy").format(msg.getDate());
                             String sentTime = new SimpleDateFormat("h:mm a").format(msg.getDate());
 
                             String text = "Your message \"" + msg.getSubject() + "\" sent on " + sentDate + " at " + sentTime + " to \"" + msg.getRecipients() + "\" can't be delivered.  None of the recipients will receive the message.  It has been returned to Drafts folder for your review.\n";
                             String subject = null;
-                            if (x.getCode().equals(ZClientException.UPLOAD_SIZE_LIMIT_EXCEEDED))
+                            if (x.getCode().equals(ZClientException.UPLOAD_SIZE_LIMIT_EXCEEDED)) {
                                 subject = "message size exceeds server limit";
-                            else if (x.getCode().equals(MailServiceException.SEND_ABORTED_ADDRESS_FAILURE))
+                            } else if (x.getCode().equals(MailServiceException.SEND_ABORTED_ADDRESS_FAILURE)) {
                                 subject = x.getMessage();
-                            else {
+                            } else {
                                 text += "\n----------------------------------------------------------------------------\n\n" +
                                 SyncExceptionHandler.sendMailFailed(ombx, id, x);
                                 subject = x.getCode();

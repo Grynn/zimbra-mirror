@@ -362,10 +362,9 @@ public class DataSourceMailbox extends SyncMailbox {
         return sentCount;
     }
 
-    private void bounceToInbox(OperationContext context, Account acct, int id,
-        Message msg, String error) {
+    private void bounceToInbox(OperationContext context, Account acct, int id, Message msg, String error) {
         try {
-            MimeMessage mm = new Mime.FixedMimeMessage(JMSession.getSession());
+            MimeMessage mm = new Mime.FixedMimeMessage(JMSession.getSmtpSession(acct));
 
             mm.setFrom(new JavaMailInternetAddress(acct.getName()));
             mm.setRecipient(RecipientType.TO, new JavaMailInternetAddress(acct.getName()));
@@ -400,7 +399,7 @@ public class DataSourceMailbox extends SyncMailbox {
             OfflineLog.offline.warn("SMTP: bounced failed send " + id + ": " +
                 error + ": " + msg.getSubject(), e);
         }
-}
+    }
 
     private boolean isAutoSyncDisabled(DataSource ds) {
         return ds.getSyncFrequency() <= 0;
