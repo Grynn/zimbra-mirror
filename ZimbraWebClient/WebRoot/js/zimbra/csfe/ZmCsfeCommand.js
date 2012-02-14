@@ -27,15 +27,8 @@
 ZmCsfeCommand = function() {
 };
 
-/**
- * Returns a string representation of the object.
- * 
- * @return		{String}		a string representation of the object
- */
-ZmCsfeCommand.prototype.toString =
-function() {
-	return "ZmCsfeCommand";
-};
+ZmCsfeCommand.prototype.isZmCsfeCommand = true;
+ZmCsfeCommand.prototype.toString = function() { return "ZmCsfeCommand"; };
 
 // Static properties
 
@@ -424,6 +417,9 @@ function(params) {
 		}
 		context.authToken = ZmCsfeCommand._curAuthToken = authToken;
 	}
+	else if (ZmCsfeCommand.noAuth) {
+		throw new ZmCsfeException("Auth required", ZmCsfeException.NO_AUTH_TOKEN, params.methodNameStr);
+	}
 
 	AjxDebug.logSoapMessage(params);
 	DBG.dumpObj(AjxDebug.DBG1, obj);
@@ -526,6 +522,9 @@ function(params) {
 		} else if (!params.resend){
 			soapDoc.set("authToken", authToken, context);
 		}
+	}
+	else if (ZmCsfeCommand.noAuth) {
+		throw new ZmCsfeException("Auth required", ZmCsfeException.NO_AUTH_TOKEN, params.methodNameStr);
 	}
 
 	AjxDebug.logSoapMessage(params);
