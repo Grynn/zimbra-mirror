@@ -588,6 +588,22 @@ public class PageOctopus extends AbsTab {
 		return id;
 	}
 
+	public boolean waitForResponse(ZimbraAccount account, String request, String pattern, int timeout) throws HarnessException {
+		String response;
+		boolean found = false;
+		for(int i = 0; i < timeout; i ++){
+			account.soapSend(request);		
+			response = account.soapLastResponse();
+			if(response != null && response.contains(pattern)){
+				found = true;
+				break;
+			}
+			logger.info(i + " soap response doesn't contain: " + pattern);
+			SleepUtil.sleepSmall();
+		}
+		return found;
+	}
+	
 	public void trashItemUsingSOAP(String itemId, ZimbraAccount account)
 			throws HarnessException {
 		account.soapSend("<ItemActionRequest xmlns='urn:zimbraMail'>"
