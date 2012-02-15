@@ -664,7 +664,7 @@ public class PageOctopus extends AbsTab {
 		} catch (Exception ex) {
 			throw new HarnessException(
 					"Getting exception while getting Node text: "
-							+ ex.getStackTrace());
+							+ ex);
 		}
 	}
 

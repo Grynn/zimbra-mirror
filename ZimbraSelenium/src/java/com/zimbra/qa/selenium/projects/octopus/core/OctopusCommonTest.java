@@ -31,8 +31,8 @@ import com.zimbra.qa.selenium.framework.util.*;
 public class OctopusCommonTest {
 	protected static Logger logger = LogManager
 			.getLogger(OctopusCommonTest.class);
-	private static DefaultSelenium _selenium = null;
-	protected static OsType osType = null;
+	private DefaultSelenium _selenium = null;
+	protected OsType osType = null;
 	protected AbsTab startingPage = null;
 	protected Map<String, String> startingAccountPreferences = null;
 	protected Map<String, String> startingAccountZimletPreferences = null;
