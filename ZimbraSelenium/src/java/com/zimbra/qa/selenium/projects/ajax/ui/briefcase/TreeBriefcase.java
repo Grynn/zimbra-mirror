@@ -35,17 +35,17 @@ public class TreeBriefcase extends AbsTree {
 	@Override
 	public AbsPage zTreeItem(Action action, Button option, IItem item)
 			throws HarnessException {
+		// Validate the arguments
+		if ((action == null) || (option == null) || (item == null)) {
+			throw new HarnessException(
+					"zTreeItem(Action, Button, IItem): Must define an action, option, and item");
+		}
+
 		logger.info(myPageName() + " zTreeItem(" + action + ", " + option
 				+ ", " + item.getName() + ")");
 
 		tracer.trace("Click " + action + " then " + option + " on item "
 				+ item.getName());
-
-		// Validate the arguments
-		if ((action == null) || (option == null) || (item == null)) {
-			throw new HarnessException(
-					"Must define an action, option, and item");
-		}
 
 		AbsPage page = null;
 		String actionLocator = null;
@@ -61,9 +61,6 @@ public class TreeBriefcase extends AbsTree {
 			throw new HarnessException("Must use IItem as argument, but was "
 					+ item.getClass());
 		}
-
-		if (actionLocator == null)
-			throw new HarnessException("locator is null for action " + action);
 
 		if (action == Action.A_RIGHTCLICK) {
 			this.zRightClickAt(actionLocator, "0,0");
@@ -114,9 +111,6 @@ public class TreeBriefcase extends AbsTree {
 					+ " not yet implemented");
 		}
 
-		if (optionLocator == null)
-			throw new HarnessException("locator is null for option " + option);
-
 		// Default behavior. Click the locator
 		zClickAt(optionLocator, "0,0");
 
@@ -153,15 +147,14 @@ public class TreeBriefcase extends AbsTree {
 
 	@Override
 	public AbsPage zTreeItem(Action action, IItem item) throws HarnessException {
+		// Validate the arguments
+		if ((action == null) || (item == null)) {
+			throw new HarnessException("zTreeItem(Action, IItem): Must define an action, and item");
+		}
 		logger.info(myPageName() + " zTreeItem(" + action + ", "
 				+ item.getName() + ")");
 
 		tracer.trace("Click " + action + " on item " + item.getName());
-
-		// Validate the arguments
-		if ((action == null) || (item == null)) {
-			throw new HarnessException("Must define an action, and item");
-		}
 
 		AbsPage page = null;
 		String locator = null;
@@ -224,11 +217,7 @@ public class TreeBriefcase extends AbsTree {
 
 		// If there is a busy overlay, wait for that to finish
 		zWaitForBusyOverlay();
-
-		if (page != null) {
-			// Wait for the page to become active, if it was specified
-			page.zWaitForActive();
-		}
+		
 		return (page);
 	}
 

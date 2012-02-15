@@ -151,15 +151,15 @@ public class PageOctopus extends AbsTab {
 
 		tracer.trace("Click pulldown " + pulldown + " then " + option);
 
-		if (pulldown == null)
+		if (pulldown == null){
 			throw new HarnessException("Pulldown cannot be null!");
-
-		if (option == null)
+		}
+		if (option == null){
 			throw new HarnessException("Option cannot be null!");
-
-		if (itemName == null)
+		}
+		if (itemName == null){
 			throw new HarnessException("Item name cannot be null!");
-
+		}
 		// Default behavior variables
 		String pulldownLocator = null; // If set, this will be expanded
 		String optionLocator = null; // If set, this will be clicked
@@ -171,9 +171,10 @@ public class PageOctopus extends AbsTab {
 					+ ":contains(" + itemName
 					+ ") span[class^=my-files-list-item-action-button]";
 
-			if (!this.zWaitForElementPresent(pulldownLocator, "3000"))
+			if (!this.zWaitForElementPresent(pulldownLocator, "3000")){
 				throw new HarnessException("Button is not present locator="
 						+ pulldownLocator);
+			}
 
 			zClick(pulldownLocator);
 
@@ -183,9 +184,10 @@ public class PageOctopus extends AbsTab {
 			if (option == Button.B_LEAVE_THIS_SHARED_FOLDER) {
 				optionLocator = Locators.zLeaveThisSharedFolder.locator;
 
-				if (!this.zWaitForElementPresent(optionLocator, "2000"))
+				if (!this.zWaitForElementPresent(optionLocator, "2000")){
 					throw new HarnessException("Button is not present locator="
 							+ optionLocator);
+				}
 
 				this.sClickAt(optionLocator, "0,0");
 
@@ -196,10 +198,11 @@ public class PageOctopus extends AbsTab {
 			} else if (option == Button.O_FOLDER_SHARE) {
 				optionLocator = Locators.zShareItem.locator;
 
-				if (!this.zWaitForElementPresent(optionLocator, "2000"))
+				if (!this.zWaitForElementPresent(optionLocator, "2000")){
 					throw new HarnessException("Button is not present locator="
 							+ optionLocator);
-
+				}
+				
 				this.sClickAt(optionLocator, "0,0");
 
 				// If the app is busy, wait for it to become active
@@ -213,10 +216,11 @@ public class PageOctopus extends AbsTab {
 			} else if (option == Button.O_FILE_SHARE) {
 				optionLocator = Locators.zShareItem.locator;
 
-				if (!this.zWaitForElementPresent(optionLocator, "2000"))
+				if (!this.zWaitForElementPresent(optionLocator, "2000")){
 					throw new HarnessException("Button is not present locator="
 							+ optionLocator);
-
+				}
+				
 				this.sClickAt(optionLocator, "0,0");
 
 				// If the app is busy, wait for it to become active
@@ -230,10 +234,11 @@ public class PageOctopus extends AbsTab {
 			} else if (option == Button.O_FAVORITE) {
 				optionLocator = Locators.zFavoriteItem.locator;
 
-				if (!this.zWaitForElementPresent(optionLocator, "2000"))
+				if (!this.zWaitForElementPresent(optionLocator, "2000")){
 					throw new HarnessException("Button is not present locator="
 							+ optionLocator);
-
+				}
+				
 				this.sClickAt(optionLocator, "0,0");
 
 				// If the app is busy, wait for it to become active
@@ -243,10 +248,11 @@ public class PageOctopus extends AbsTab {
 			} else if (option == Button.O_NOT_FAVORITE) {
 				optionLocator = Locators.zNotFavoriteItem.locator;
 
-				if (!this.zWaitForElementPresent(optionLocator, "2000"))
+				if (!this.zWaitForElementPresent(optionLocator, "2000")){
 					throw new HarnessException("Button is not present locator="
 							+ optionLocator);
-
+				}
+				
 				this.sClickAt(optionLocator, "0,0");
 
 				// If the app is busy, wait for it to become active
@@ -256,10 +262,11 @@ public class PageOctopus extends AbsTab {
 			} else if (option == Button.O_RENAME) {
 				optionLocator = Locators.zRenameItem.locator;
 
-				if (!this.zWaitForElementPresent(optionLocator, "2000"))
+				if (!this.zWaitForElementPresent(optionLocator, "2000")){
 					throw new HarnessException("Button is not present locator="
 							+ optionLocator);
-
+				}
+				
 				this.sClickAt(optionLocator, "0,0");
 
 				// If the app is busy, wait for it to become active
@@ -269,9 +276,10 @@ public class PageOctopus extends AbsTab {
 			} else if (option == Button.O_MOVE) {
 				optionLocator = Locators.zMoveItem.locator;
 
-				if (!this.zWaitForElementPresent(optionLocator, "2000"))
+				if (!this.zWaitForElementPresent(optionLocator, "2000")){
 					throw new HarnessException("Button is not present locator="
 							+ optionLocator);
+				}
 
 				this.sClickAt(optionLocator, "0,0");
 
@@ -284,10 +292,11 @@ public class PageOctopus extends AbsTab {
 			} else if (option == Button.O_DELETE) {
 				optionLocator = Locators.zDeleteItem.locator;
 
-				if (!this.zWaitForElementPresent(optionLocator, "2000"))
+				if (!this.zWaitForElementPresent(optionLocator, "2000")){
 					throw new HarnessException("Button is not present locator="
 							+ optionLocator);
-
+				}
+				
 				this.sClickAt(optionLocator, "0,0");
 
 				// If the app is busy, wait for it to become active
@@ -342,12 +351,14 @@ public class PageOctopus extends AbsTab {
 
 		tracer.trace("Click pulldown " + pulldown + " then " + option);
 
-		if (pulldown == null)
+		if (pulldown == null){
 			throw new HarnessException("Pulldown cannot be null!");
-
-		if (option == null)
+		}
+		
+		if (option == null){
 			throw new HarnessException("Option cannot be null!");
-
+		}
+		
 		// Default behavior variables
 		String pulldownLocator = null; // If set, this will be expanded
 		String optionLocator = null; // If set, this will be clicked
@@ -392,9 +403,10 @@ public class PageOctopus extends AbsTab {
 
 		tracer.trace("Press the " + button + " button");
 
-		if (button == null)
+		if (button == null){
 			throw new HarnessException("Button cannot be null!");
-
+		}
+		
 		// Default behavior variables
 		//
 		String locator = null; // If set, this will be clicked
@@ -436,19 +448,21 @@ public class PageOctopus extends AbsTab {
 		//
 
 		// Make sure the button exists
-		if (!this.sIsElementPresent(locator))
+		if (!this.sIsElementPresent(locator)){
 			throw new HarnessException("Button is not present locator="
 					+ locator + " button=" + button);
-
+		}
+		
 		// Click it
 		this.zClick(locator);
 
 		// If the app is busy, wait for it to become active
 		zWaitForBusyOverlay();
 
-		if (page != null)
+		if (page != null){
 			page.zWaitForActive();
-
+		}
+		
 		return (page);
 	}
 
@@ -465,8 +479,10 @@ public class PageOctopus extends AbsTab {
 					MyApplication.zGetActiveAccount(), childFolderName);
 			if (childFolderItem != null
 					&& folderItem.getId().contentEquals(
-							childFolderItem.getParentId()))
+							childFolderItem.getParentId())){
 				return true;
+			}
+			
 			SleepUtil.sleepVerySmall();
 		}
 		return found;
@@ -474,9 +490,10 @@ public class PageOctopus extends AbsTab {
 
 	public boolean zIsFolderChild(FolderItem folderItem, String parentFolderName)
 			throws HarnessException {
-		if (folderItem == null || parentFolderName == null)
+		if (folderItem == null || parentFolderName == null){
 			throw new HarnessException("folder or item cannot be null");
-
+		}
+		
 		boolean found = false;
 		FolderItem parentFolderItem;
 
@@ -486,10 +503,11 @@ public class PageOctopus extends AbsTab {
 			if (parentFolderItem != null) {
 				List<Folder> subfolders = parentFolderItem.getSubfolders();
 				String name = folderItem.getName();
-				for (Folder folder : subfolders)
+				for (Folder folder : subfolders){
 					if (folder.getName().contains(name)) {
 						return true;
 					}
+				}
 			}
 			SleepUtil.sleepVerySmall();
 		}
@@ -505,10 +523,12 @@ public class PageOctopus extends AbsTab {
 		for (int i = 0; i < 5; i++) {
 			List<IOctListViewItem> items = zGetListViewItems();
 
-			for (IOctListViewItem item : items)
+			for (IOctListViewItem item : items){
 				if (item.getListViewName().contains(itemName)) {
 					return (true);
 				}
+			}
+			
 			SleepUtil.sleepVerySmall();
 		}
 		return found;
@@ -518,8 +538,9 @@ public class PageOctopus extends AbsTab {
 		List<FolderItem> folderItems = new ArrayList<FolderItem>();
 		List<IOctListViewItem> items = zGetListViewItems();
 		for(IOctListViewItem f : items){
-			if(f instanceof FolderItem)
+			if(f instanceof FolderItem){
 				folderItems.add((FolderItem) f);
+			}
 		}
 		return folderItems;
 	}
@@ -528,8 +549,9 @@ public class PageOctopus extends AbsTab {
 		List<FileItem> fileItems = new ArrayList<FileItem>();
 		List<IOctListViewItem> items = zGetListViewItems();
 		for(IOctListViewItem f : items){
-			if(f instanceof FileItem)
+			if(f instanceof FileItem){
 				fileItems.add((FileItem) f);
+			}
 		}
 		return fileItems;
 	}
@@ -650,7 +672,6 @@ public class PageOctopus extends AbsTab {
 
 	public boolean zVerifyElementText(ZimbraAccount account, String xPath,
 			String text) throws HarnessException {
-
 		try {
 			Element[] nodes = account.soapSelectNodes(xPath);
 
@@ -659,13 +680,10 @@ public class PageOctopus extends AbsTab {
 					return true;
 				}
 			}
-			return false;
-
 		} catch (Exception ex) {
-			throw new HarnessException(
-					"Getting exception while getting Node text: "
-							+ ex);
+			logger.info(ex);
 		}
+		return false;
 	}
 
 	@Override

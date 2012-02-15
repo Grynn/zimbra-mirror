@@ -261,8 +261,11 @@ public class PageBriefcase extends AbsTab {
 			 * if (attrs.contains("ZDisabled")) { throw new
 			 * HarnessException(button + " is disabled " + attrs); }
 			 */
-
-			page = new DocumentBriefcaseEdit(MyApplication, (DocumentItem) item);
+			if (item instanceof DocumentItem) {
+				page = new DocumentBriefcaseEdit(MyApplication, (DocumentItem) item);
+			} else {
+				page = null;
+			}
 		} else if (button == Button.B_DELETE) {
 
 			locator = Locators.zDeleteBtn.locator;
@@ -678,10 +681,7 @@ public class PageBriefcase extends AbsTab {
 			}
 
 			// If we click on pulldown/option and the page is specified, then
-			// wait for the page to go active
-			if (page != null) {
-				page.zWaitForActive();
-			}
+			// wait for the page to go active			
 		}
 		// Return the specified page, or null if not set
 		return (page);
@@ -760,10 +760,7 @@ public class PageBriefcase extends AbsTab {
 				zWaitForBusyOverlay();
 			}
 			// If we click on pulldown/option and the page is specified, then
-			// wait for the page to go active
-			if (page != null) {
-				page.zWaitForActive();
-			}
+			// wait for the page to go active		
 		}
 		// Return the specified page, or null if not set
 		return (page);
@@ -984,8 +981,11 @@ public class PageBriefcase extends AbsTab {
 
 				optionLocator = "css=td#OPEN_FILE_title:contains(Open)";
 
-				page = new DocumentBriefcaseOpen(MyApplication,
-						(DocumentItem) item);
+				if (item instanceof DocumentItem) {
+					page = new DocumentBriefcaseOpen(MyApplication,
+							(DocumentItem) item);
+				} else
+					page = null;
 
 			} else if (option == Button.O_SEND_LINK) {
 
@@ -1134,10 +1134,9 @@ public class PageBriefcase extends AbsTab {
 			throw new HarnessException("implement me!  action = " + action);
 		}
 
-		if (page != null) {
-			page.zWaitForActive();
-		}
-
+		// If we click on pulldown/option and the page is specified, then
+		// wait for the page to go active
+		
 		// Default behavior
 		return (page);
 	}
