@@ -694,7 +694,7 @@ STDMETHODIMP CMapiAccessWrap::GetRuleList(VARIANT *rules)
     maapi->GetExchangeRules(vRuleList);
 
     std::vector<CRule>::iterator ruleIndex;
-    int numRules = vRuleList.size();
+    size_t numRules = vRuleList.size();
     if (numRules == 0)
     {
         return S_OK;

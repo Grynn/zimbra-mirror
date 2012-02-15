@@ -1283,8 +1283,8 @@ void CRuleMap::WriteFilterTests(CRule &rule, LPWSTR &filterTests)
     rule.GetConditions(listRuleConditions);
 
     CListRuleConditions::iterator conditionIndex;
-    int numConditions = listRuleConditions.size();
-    int iIndex = 0;
+    size_t numConditions = listRuleConditions.size();
+    size_t iIndex = 0;
     WCHAR pwszTemp[5];
 
     for (conditionIndex = listRuleConditions.begin();
@@ -1449,8 +1449,8 @@ void CRuleMap::WriteFilterActions(CRule &rule, LPWSTR &filterActions)
 
     CListRuleActions::iterator actionIndex;
 
-    int numActions = listRuleActions.size();
-    int iCount = 0;
+    size_t numActions = listRuleActions.size();
+    size_t iCount = 0;
     for (actionIndex = listRuleActions.begin(); actionIndex != listRuleActions.end();
         actionIndex++)
     {
