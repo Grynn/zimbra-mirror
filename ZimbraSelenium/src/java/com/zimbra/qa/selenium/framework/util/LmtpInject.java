@@ -129,7 +129,7 @@ public class LmtpInject {
 					ZimbraSeleniumProperties.getStringProperty("server.host"),
 					7025);
 
-			lmtp.sendMessage(new FileInputStream(mime), (String[])recipients.toArray(), sender, "Selenium", length);
+			lmtp.sendMessage(new FileInputStream(mime), recipients.toArray(new String[recipients.size()]), sender, "Selenium", length);
 
 		} finally {
 
