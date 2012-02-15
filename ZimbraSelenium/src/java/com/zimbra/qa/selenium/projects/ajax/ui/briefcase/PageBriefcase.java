@@ -974,8 +974,11 @@ public class PageBriefcase extends AbsTab {
 
 				optionLocator = "css=td[id$=EDIT_FILE_title]:contains(Edit)";
 
-				page = new DocumentBriefcaseEdit(MyApplication,
-						(DocumentItem) item);
+				if (item instanceof DocumentItem) {
+					page = new DocumentBriefcaseEdit(MyApplication,
+							(DocumentItem) item);
+				} else
+					page = null;
 
 			} else if (option == Button.O_OPEN) {
 
