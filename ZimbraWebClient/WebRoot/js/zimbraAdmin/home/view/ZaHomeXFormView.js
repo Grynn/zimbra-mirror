@@ -196,6 +196,11 @@ ZaHomeXFormView.showStaticsInfo = function () {
     return (ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.SERVER_STATS_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]);
 }
 
+ZaHomeXFormView.showMT = function() {
+    var value = this.getInstanceValue(ZaHome.A2_maintenanceItemNum);
+    return value > 1;
+}
+
 ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
     var cases = [];
 
@@ -277,11 +282,11 @@ ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
                     {type:_OUTPUT_, label:ZaMsg.LBL_HomeDomainNum, ref: ZaHome.A2_domainNum, bmolsnr: true},
                     {type:_OUTPUT_, label:ZaMsg.LBL_HomeCosNum, ref: ZaHome.A2_cosNum, bmolsnr: true}
                 ]},
-                {type:_GROUP_, numCols: 2, valign: _TOP_, width:"100%", items:[
-                    {type:_OUTPUT_, colSpan:"*", value:ZaMsg.LBL_HomeMaintenance, cssClass:"ZaHomeInfoTitle"},
-                    // Resever for Backup Extension
-                    {type:_GROUP_, colSpan:"*", numCols:3, width: "100%", colSizes:["*", "20px", "120px"],items:[
-                    ]},
+                {type:_GROUP_, id:"mainenance_grp", numCols: 2, valign: _TOP_, width:"100%", items:[
+                    {type:_OUTPUT_, colSpan:"*", value:ZaMsg.LBL_HomeMaintenance, cssClass:"ZaHomeInfoTitle",
+                        visibilityChangeEventSources:[ZaHome.A2_maintenanceItemNum],
+                        visibilityChecks:[[ZaHomeXFormView.showMT]]
+                    } /*
                     {type:_GROUP_, colSpan:"*", numCols:3, width: "100%", colSizes:["*", "20px", "120px"],items:[
                         {type:_OUTPUT_, value:ZaMsg.LBL_HomeLastCleanup},
                         {type:_OUTPUT_, ref: ZaHome.A2_lastCleanup,
@@ -308,9 +313,6 @@ ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
                         },
                         {type:_OUTPUT_, ref: ZaHome.A2_lastLogPurgeTime}
                     ]},
-                    // Reserver for Cert admin extension
-                    {type:_GROUP_, colSpan:"*", numCols:3, width: "100%", colSizes:["*", "20px", "120px"],items:[
-                    ]},
                     {type:_GROUP_, colSpan:"*", numCols:3, width: "100%", colSizes:["*", "20px", "120px"],items:[
                         {type:_OUTPUT_, value: ZaMsg.LBL_HomeDBCheck},
                         {type:_OUTPUT_, ref: ZaHome.A2_DBCheckType,
@@ -323,7 +325,7 @@ ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
                             }
                         },
                         {type:_OUTPUT_, ref: ZaHome.A2_DBCheckMessage}
-                    ]}
+                    ]} */
                 ]},
                 {type:_GROUP_, numCols: 2, colSizes:["*", "90px"], valign: _TOP_, width: "100%", items:[
                     {type:_OUTPUT_, colSpan:"2", value:ZaMsg.LBL_HomeRuntime, cssClass:"ZaHomeInfoTitle"},
@@ -347,9 +349,10 @@ ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
                          bmolsnr: true,
                         visibilityChecks:[[ZaHomeXFormView.showStaticsInfo]]},
                     {type:_OUTPUT_, label:ZaMsg.LBL_HomeQueueLength, ref: ZaHome.A2_queueLength, bmolsnr: true,
-                        visibilityChecks:[[ZaHomeXFormView.showStaticsInfo]]},
+                        visibilityChecks:[[ZaHomeXFormView.showStaticsInfo]]}
+                    /*
                     {type:_OUTPUT_, label:ZabMsg.LBL_HomeMsgCount, ref: ZaHome.A2_messageCount},
-                    {type:_OUTPUT_, label:ZabMsg.LBL_HomeMsgVolume, ref: ZaHome.A2_messageVolume}
+                    {type:_OUTPUT_, label:ZabMsg.LBL_HomeMsgVolume, ref: ZaHome.A2_messageVolume} */
                 ]}
             ]},
             {type:_GROUP_, colSpan: "*", id:"homeSetupGroup", containerCssClass:"ZaHomeSetupPanelContainer", cssClass:"ZaHomeSetupPanel", numCols:1, items:[

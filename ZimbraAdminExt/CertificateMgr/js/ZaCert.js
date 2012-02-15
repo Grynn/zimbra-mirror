@@ -296,7 +296,8 @@ if(ZaTabView.XFormModifiers["ZaHomeXFormView"]) {
         if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CERTS_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
             var maintainItem;
             maintainItem = ZaHomeXFormView.getHomeMaintenanceItem(xFormObject);
-            maintainItem.items[4].items = [
+            maintainItem.items.push(
+                {type:_GROUP_, colSpan:"*", numCols:3, width: "100%", colSizes:["*", "20px", "120px"],items:[
                     {type:_OUTPUT_, value: ZaMsg.LBL_HomeExpiredCerts},
                     {type:_OUTPUT_, ref: ZaHome.A2_expiredType,
                         getDisplayValue: function (value){
@@ -308,7 +309,8 @@ if(ZaTabView.XFormModifiers["ZaHomeXFormView"]) {
                         }
                     },
                     {type:_OUTPUT_, ref: ZaHome.A2_expiredMessage}
-            ];
+                ]}
+            );
 
             var setupItem = ZaHomeXFormView.getHomeSetupItem(xFormObject);
             var labelItem = setupItem.headerLabels;

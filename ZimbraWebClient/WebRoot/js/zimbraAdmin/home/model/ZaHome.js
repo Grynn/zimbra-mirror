@@ -36,6 +36,7 @@ ZaHome.A2_queueLength = "queueLength";
 ZaHome.A2_messageCount = "messageCount";
 ZaHome.A2_messageVolume = "messageVolume";
 
+ZaHome.A2_maintenanceItemNum = "maintenanceItemNum";
 ZaHome.initMethod = function () {
 	this.attrs = new Object();
 	this.type = ZaItem.HOME;
@@ -68,8 +69,24 @@ function () {
     this.attrs[ZaHome.A2_queueLength] = ZaMsg.MSG_HomeLoading;
     this.attrs[ZaHome.A2_messageCount] = "120/h";
     this.attrs[ZaHome.A2_messageVolume] = "34MB/h";
+
+    this.attrs[ZaHome.A2_maintenanceItemNum] = 2;
 }
 ZaItem.loadMethods["ZaHome"].push(ZaHome.loadMethod);
+
+ZaHome.updateMaintenanceNum = function() {
+    var num = 1;
+    try {
+        var homeCtl = ZaApp.getInstance().getHomeViewController();
+        var maintainenceGroup = homeCtl._view._localXForm.getItemsById("mainenance_grp");
+        num = maintainenceGroup[0].items.length;
+    } catch (ex) {
+
+    }
+    ZaApp.getInstance().getHomeViewController().setInstanceValue(num, ZaHome.A2_maintenanceItemNum);
+}
+
+ZaHome.postLoadDataFunction.push(ZaHome.updateMaintenanceNum);
 
 ZaHome.loadAccountNum = function() {
     var num = 1;
@@ -395,7 +412,8 @@ ZaHome.myXModel = {
         {id:ZaHome.A2_activeSession, type:_STRING_, ref:"attrs/" + ZaHome.A2_activeSession},
         {id:ZaHome.A2_queueLength, type:_STRING_, ref:"attrs/" + ZaHome.A2_queueLength},
         {id:ZaHome.A2_messageCount, type:_NUMBER_, ref:"attrs/" + ZaHome.A2_messageCount},
-        {id:ZaHome.A2_messageVolume, type:_NUMBER_, ref:"attrs/" + ZaHome.A2_messageVolume}
+        {id:ZaHome.A2_messageVolume, type:_NUMBER_, ref:"attrs/" + ZaHome.A2_messageVolume},
+        {id:ZaHome.A2_maintenanceItemNum, type:_NUMBER_, ref:"attrs/" + ZaHome.A2_maintenanceItemNum}
     ]
 }
 
