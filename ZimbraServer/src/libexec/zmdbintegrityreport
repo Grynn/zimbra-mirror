@@ -82,16 +82,16 @@ sub checkDbs() {
   $cmd .= " -S ${mysql_socket}";
   $cmd .= " -A -C";
   $cmd .= " -s" unless $debug;
-  $cmd .= " -u root --password=${mysql_root_passwd}";
+  $cmd .= " -u root";
   $cmd .= " --auto-repair" if $options{r};
-  unless (open(CMD, "$cmd|")) {
+  unless (open(CMD, "$cmd --password=${mysql_root_passwd} |")) {
     addToReport("can't run $cmd: $!\n"); 
     return undef;
   }
   my @output = <CMD>;
   if (scalar @output != 0) {
     addToReport("Database errors found.\n");
-    addToReport("$cmd\n");
+    addToReport("$cmd --password=XXXXXXXX\n");
     addToReport("@output");
   } else {
     addToReport("No errors found\n") if $verbose;
