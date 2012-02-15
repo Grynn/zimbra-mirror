@@ -701,14 +701,14 @@ STDMETHODIMP CMapiAccessWrap::GetRuleList(VARIANT *rules)
     }
 
     WCHAR pwszTemp[5];
-    _ltow(numRules, pwszTemp, 10);
+    _itow((int)numRules, pwszTemp, 10);
     pMap[L"numRules"] = SysAllocString(pwszTemp);
 
     CRuleMap* pRuleMap = new CRuleMap();
 
     // Create the array of attrs (0filterRule, 0filterTests, 0filterActions, 1filterRule, etc.)
     // std:map needs all names allocated separately
-    int numAttrs = numRules * 3;
+    int numAttrs = ((int)numRules) * 3;
     WCHAR tmp[10];
     LPWSTR* ruleMapNames = new LPWSTR[numAttrs];
     for (int i = 0; i < numAttrs; i += 3)

@@ -1309,7 +1309,7 @@ void CRuleMap::WriteFilterTests(CRule &rule, LPWSTR &filterTests)
             else if (ruleConditionInfo.m_ruleConditionOp == DoesNotExist)
                 wstrConditionName = L"not exists";
         }
-        _itow(iIndex, pwszTemp, 10);
+        _itow((int)iIndex, pwszTemp, 10);
         if (0 == lstrcmpiW((LPCWSTR)wstrTestName.c_str(), L"headerTest"))
         {
             lstrcat(filterTests, L"headerTest`~index`~");
