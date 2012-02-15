@@ -95,6 +95,12 @@ public class PageMail extends AbsTab {
 
 
 		/**
+		 * http://bugzilla.zimbra.com/show_bug.cgi?id=70068 ... new menu is same for all apps
+		 * Instead of the new menu, key off the conv/msg view pulldown
+		 * <div id="zb__CLV-main__VIEW_MENU" .../>
+		 * <div id="zb__TV-main__VIEW_MENU" .../>
+		 * 
+		 * Pre-Feb 2012 ...
 		 * 8.0
 		 * MLV:
 		 * <div id="zb__TV-main__NEW_MENU" style="position: absolute; overflow: visible; z-index: 300; left: 5px; top: 78px; width: 159px; height: 24px;" class="ZToolbarButton ZWidget   ZHasDropDown       ZHasLeftIcon ZHasText" parentid="z_shell">
@@ -106,7 +112,7 @@ public class PageMail extends AbsTab {
 		// If the "NEW" button is visible, then the app is visible
 
 		// Check MLV first
-		locator = "css=div#zb__TV-main__NEW_MENU";
+		locator = "css=div#zb__TV-main__VIEW_MENU";
 
 		loaded = this.sIsElementPresent(locator);
 		visible = this.zIsVisiblePerPosition(locator, 4, 74);
@@ -114,7 +120,7 @@ public class PageMail extends AbsTab {
 			return (true);
 
 		// Check CLV next
-		locator = "css=div#zb__CLV-main__NEW_MENU";
+		locator = "css=div#zb__CLV-main__VIEW_MENU";
 		loaded = this.sIsElementPresent(locator);
 		visible = this.zIsVisiblePerPosition(locator, 4, 74);
 		if ( loaded && visible )
