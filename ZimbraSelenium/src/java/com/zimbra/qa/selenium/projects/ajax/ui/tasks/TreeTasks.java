@@ -374,32 +374,27 @@ public class TreeTasks extends AbsTree {
 	public AbsPage zTreeItem(Action action, Button option, FolderItem folderItem)
 			throws HarnessException {
 
-		tracer.trace(action + " on folder = " + folderItem.getName());
 		if (action == null)
 			throw new HarnessException("action cannot be null");
 		if (option == null)
 			throw new HarnessException("button cannot be null");
 		if (folderItem == null)
 			throw new HarnessException("folder cannot be null");
+		
+		tracer.trace(action + " on folder = " + folderItem.getName());
 
 		AbsPage page = null;
 		String actionLocator = null;
 		String optionLocator = null;
 		// String locator = null;
 
-		if (!(folderItem instanceof FolderItem))
-			throw new HarnessException("folder must be of type FolderItem");
-
-		// TODO: should be TaskListItem?
-		FolderItem f = (FolderItem) folderItem;
-
 		if (action == Action.A_LEFTCLICK) {
 			if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
 				actionLocator = "css=[id^='zti__"
 						+ MyApplication.zGetActiveAccount().EmailAddress
-						+ ":main_Tasks__'][id$=':" + f.getId() + "_textCell']";
+						+ ":main_Tasks__'][id$=':" + folderItem.getId() + "_textCell']";
 			} else {
-				actionLocator = "zti__main_Tasks__" + f.getId() + "_textCell";
+				actionLocator = "zti__main_Tasks__" + folderItem.getId() + "_textCell";
 			}
 
 			// FALL THROUGH
@@ -409,9 +404,9 @@ public class TreeTasks extends AbsTree {
 			if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
 				actionLocator = "css=[id^='zti__"
 						+ MyApplication.zGetActiveAccount().EmailAddress
-						+ ":main_Tasks__'][id$=':" + f.getId() + "_textCell']";
+						+ ":main_Tasks__'][id$=':" + folderItem.getId() + "_textCell']";
 			} else {
-				actionLocator = "zti__main_Tasks__" + f.getId() + "_textCell";
+				actionLocator = "zti__main_Tasks__" + folderItem.getId() + "_textCell";
 			}
 
 			// Select the folder

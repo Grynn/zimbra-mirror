@@ -189,7 +189,7 @@ public class CommandLine {
 
       while ((Calendar.getInstance().getTimeInMillis() - startTime) < 30000 &&
             (errorGobbler.isAlive() || outputGobbler.isAlive())) {
-         //logger.debug("Execution thread is still alive, retry...");
+    	  continue;
       }
 
       logger.debug("Starting the reader thread");

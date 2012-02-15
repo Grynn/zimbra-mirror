@@ -68,8 +68,6 @@ public class LmtpUtil {
 
 		} catch (Exception e) {
 			throw new HarnessException(e);
-		} finally {
-			
 		}
 
 	}

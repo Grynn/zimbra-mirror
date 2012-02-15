@@ -52,18 +52,10 @@ public class SeparateWindowFormMailNew extends AbsSeparateWindow {
 		return (this.getClass().getName());
 	}
 
-	public void zFill(MailItem item) throws HarnessException {
-		logger.info(myPageName() + ".zFill(ZimbraItem)");
-		logger.info(item.prettyPrint());
+	public void zFill(MailItem mail) throws HarnessException {
+		logger.info(myPageName() + ".zFill(MailItem)");
+		logger.info(mail.prettyPrint());
 
-		// Make sure the item is a MailItem
-		if ( !(item instanceof MailItem) ) {
-			throw new HarnessException("Invalid item type - must be MailItem");
-		}
-		
-		// Convert object to MailItem
-		MailItem mail = (MailItem) item;
-		
 		// Fill out the form
 		//
 		

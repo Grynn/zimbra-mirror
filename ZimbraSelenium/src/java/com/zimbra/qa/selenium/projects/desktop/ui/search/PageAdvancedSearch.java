@@ -39,13 +39,30 @@ public class PageAdvancedSearch extends AbsTab {
 	 */
 	@Override
 	public boolean zIsActive() throws HarnessException {
+		
+		// Should it really wait?  Maybe the caller just
+		// wants to know that it is not visible?
+		
 		try {
 			zWaitForElementVisible(Locators.TOOLBAR);
 		}
 		catch (Exception e) {
 			return false;
 		} 
-		return sIsVisible(Locators.TOOLBAR) & sIsVisible(Locators.PANEL);		
+		
+		boolean toolbarVisible = sIsVisible(Locators.TOOLBAR);
+		if ( !toolbarVisible ) {
+			return false;
+		}
+
+		boolean panelVisible = sIsVisible(Locators.PANEL);
+		if ( !panelVisible ) {
+			return false;
+		}
+
+
+		return (true);
+		
 	}
 
 	
