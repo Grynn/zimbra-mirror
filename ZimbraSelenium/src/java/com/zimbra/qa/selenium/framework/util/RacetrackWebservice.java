@@ -404,7 +404,7 @@ public static synchronized RacetrackWebservice
       if(guestOs != null) {
           pairList.add(new NameValuePair("GOS", guestOs));
       }
-      NameValuePair[] postData = pairList.toArray(new NameValuePair[0]);
+      NameValuePair[] postData = pairList.toArray(new NameValuePair[pairList.size()]);
 
       return postRequest(getRacetrackUrl() + TEST_CASE_UPDATE, purgePostData(postData) );
    }
