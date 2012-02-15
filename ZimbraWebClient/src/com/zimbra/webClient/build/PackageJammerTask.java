@@ -32,6 +32,7 @@ extends Task {
     private static final Pattern RE_DEFINE = Pattern.compile("^AjxPackage\\.define\\(['\"]([^'\"]+)['\"]\\);?");
     private static final Pattern RE_UNDEFINE = Pattern.compile("^AjxPackage\\.undefine\\(['\"]([^'\"]+)['\"]\\);?");
     private static final Pattern RE_REQUIRE = Pattern.compile("^AjxPackage\\.require\\(['\"]([^'\"]+)['\"](.*?)\\);?");
+    private static final Pattern RE_REQUIRE_OBJ = Pattern.compile("^AjxPackage\\.require\\((\\s*\\{\\s*name\\s*:\")?([^'\"]+)['\"](.*?)\\);?");
 
     private static final String OUTPUT_JS = "js";
     private static final String OUTPUT_HTML = "html";
@@ -336,7 +337,17 @@ extends Task {
 
     private String matchRequire(String s) {
         Matcher m = RE_REQUIRE.matcher(s);
-        return m.matches() ? m.group(1) : null;
+        if (m.matches()){
+            return m.group(1);
+        }
+
+        m = RE_REQUIRE_OBJ.matcher(s);
+
+        if (m.matches()){
+            return m.group(2);
+        }
+        return null;
+
     }
 
     private void log(String... ss) {
