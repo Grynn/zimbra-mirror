@@ -574,17 +574,15 @@ DwtListView.prototype.redrawItem =
 function(item) {
     var odiv = this._getElFromItem(item);
     if (odiv) {
+		var className = odiv.className;
         var ndiv = this._createItemHtml(item);
+		ndiv.className = className;	// preserve classes
         odiv.parentNode.replaceChild(ndiv, odiv);
-
-        var selection = this.getSelectedItems().getArray();
-        for (var i = 0; i < selection.length; i++) {
-            var sitem = selection[i];
-            if (sitem === item) {
-                this.setSelectedItems([].concat(selection));
-                break;
-            }
-        }
+		// preserve selection
+		if (this._selectedItems.contains(odiv)) {
+			this._selectedItems.remove(odiv);
+			this.selectItem(item);
+		}
     }
 };
 
