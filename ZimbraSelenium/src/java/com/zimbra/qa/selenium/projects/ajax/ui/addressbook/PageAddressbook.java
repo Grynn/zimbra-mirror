@@ -1022,6 +1022,13 @@ public class PageAddressbook extends AbsTab {
 			else {
 				throw new HarnessException("option " + option + " not supported.");
 			}
+			
+			
+			if ((cmi == null) || (sub_cmi == null)) {
+				throw new HarnessException("option " + option + " not supported.");
+			}
+			
+			
 			if (zIsInSearchView()) {
 				locator = "css=div[id^=zm__Contacts__DWT]";
 			} else {
