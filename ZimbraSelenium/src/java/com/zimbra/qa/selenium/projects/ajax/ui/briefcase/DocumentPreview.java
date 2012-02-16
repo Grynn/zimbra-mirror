@@ -98,9 +98,7 @@ public class DocumentPreview extends AbsDisplay {
 		}
 
 		// Make sure something was set
-		if (locator == null)
-			throw new HarnessException("locator was null for field = " + field);
-
+	
 		return "";
 	}
 

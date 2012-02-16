@@ -124,10 +124,7 @@ public class DialogEditProperties extends AbsDialog {
 
 		
 		// Make sure the locator was set
-		if (locator == null) {
-			throw new HarnessException("Button " + button + " not implemented");
-		}
-		
+				
 		this.zClick(locator);
 
 		this.zWaitForBusyOverlay();
