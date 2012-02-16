@@ -796,14 +796,17 @@ public class CodeCoverage {
 		
 		// Read the Code Coverage JS function into a string
 		StringBuffer sb = new StringBuffer();
-		BufferedReader reader = null;
+		InputStream stream = null;
 		try {
 			try {
 				
-				InputStream stream = this.getClass().getResourceAsStream("/coverageScript.js");
-				if ( stream == null ) {
+				// Load coverageScript.js from its two possible locations
+				if ( this.getClass().getResource("/coverageScript.js") != null ) {
+					stream = this.getClass().getResourceAsStream("/coverageScript.js");
+				} else {
 					stream = this.getClass().getResourceAsStream("/com/zimbra/qa/selenium/framework/util/coverage/coverageScript.js");
 				}
+
 				if ( stream == null ) {
 					logger.error("CodeCoverage(): unable to find resource: /coverageScript.js");
 					isDisabled = true;
@@ -817,9 +820,9 @@ public class CodeCoverage {
 				}
 				
 			} finally {
-				if ( reader != null ) {
-					reader.close();
-					reader = null;
+				if ( stream != null ) {
+					stream.close();
+					stream = null;
 				}
 			}
 		} catch (IOException e) {
@@ -899,12 +902,13 @@ public class CodeCoverage {
 				// Contents never read.  Read them now.
 				
 				StringBuffer sb = new StringBuffer();
-				BufferedReader reader = null;
+				InputStream stream = null;
 				try {
 					try {
 						
-						InputStream stream = this.getClass().getResourceAsStream("/" +filename);
-						if ( stream == null ) {
+						if ( this.getClass().getResource("/" + filename) != null ) {
+							stream = this.getClass().getResourceAsStream("/" +filename);
+						} else {
 							stream = this.getClass().getResourceAsStream("/com/zimbra/qa/selenium/framework/util/coverage/" + filename);
 						}
 						if ( stream == null )
@@ -917,9 +921,9 @@ public class CodeCoverage {
 						}
 						
 					} finally {
-						if ( reader != null ) {
-							reader.close();
-							reader = null;
+						if ( stream != null ) {
+							stream.close();
+							stream = null;
 						}
 					}
 				} catch (IOException e) {

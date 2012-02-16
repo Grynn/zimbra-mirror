@@ -184,43 +184,55 @@ public class ExecuteHarnessMain {
 		
 		List<String> classes = new ArrayList<String>();
 		
-		JarInputStream jarFile = new JarInputStream(new FileInputStream(jarfile));
-		while (true) {
-			JarEntry jarEntry = jarFile.getNextJarEntry();
+		JarInputStream jarFile = null;
+		try {
 			
-			if ( jarEntry == null )
-				break; // All Done!
-
-
-			if ( !jarEntry.getName().endsWith(".class") )
-				continue; // Only process classes
+			jarFile = new JarInputStream(new FileInputStream(jarfile));
 			
-			if ( jarEntry.getName().contains("CommonTest.class") )
-				continue; // Skip CommonTest, since those aren't tests
-			
-			String name = jarEntry.getName().replace('/', '.').replaceAll(".class$", "");
-			logger.debug("Class: "+ name);
-
-			if ( pattern != null ) {
+			while (true) {
+				JarEntry jarEntry = jarFile.getNextJarEntry();
 				
-				Matcher matcher = pattern.matcher(name);
-				if (matcher.find()) {
+				if ( jarEntry == null )
+					break; // All Done!
+
+
+				if ( !jarEntry.getName().endsWith(".class") )
+					continue; // Only process classes
+				
+				if ( jarEntry.getName().contains("CommonTest.class") )
+					continue; // Skip CommonTest, since those aren't tests
+				
+				String name = jarEntry.getName().replace('/', '.').replaceAll(".class$", "");
+				logger.debug("Class: "+ name);
+
+				if ( pattern != null ) {
 					
-					// Class name matched the filter.  add it.
+					Matcher matcher = pattern.matcher(name);
+					if (matcher.find()) {
+						
+						// Class name matched the filter.  add it.
+						if (!isExcluded(name,excludeStr)) {
+						  classes.add(name);
+						}
+					}
+					
+				} else {
+					
+					// No filter.  add all.
 					if (!isExcluded(name,excludeStr)) {
 					  classes.add(name);
 					}
-				}
-				
-			} else {
-				
-				// No filter.  add all.
-				if (!isExcluded(name,excludeStr)) {
-				  classes.add(name);
+					
 				}
 				
 			}
+
 			
+		} finally {
+			if ( jarFile != null ) {
+				jarFile.close();
+				jarFile = null;
+			}
 		}
 
 		if (classes.size() < 1) {

@@ -33,7 +33,19 @@ public class StafProperties {
     	logger.info("New StafProperties from "+ filename);
     	
     	properties = new Properties();
-    	properties.load(new FileReader(filename));
+    	
+    	FileReader reader = null;
+    	try {
+    		
+    		reader = new FileReader(filename);
+        	properties.load(reader);
+
+    	} finally {
+    		if ( reader != null ) {
+    			reader.close();
+    			reader = null;
+    		}
+    	}
     	
     }
     
@@ -49,7 +61,19 @@ public class StafProperties {
     	File f = new File(propertiesFilename);
     	f.getParentFile().mkdirs();
     	
-    	properties.store(new FileWriter(propertiesFilename), ConfigPropertiesComments);
+    	FileWriter writer = null;
+    	try {
+    	
+    		writer = new FileWriter(propertiesFilename);
+        	properties.store(writer, ConfigPropertiesComments);
+
+    	} finally {
+    		if ( writer != null ) {
+    			writer.close();
+    			writer = null;
+    		}
+    	}
+
     	return (propertiesFilename);
     }
     
