@@ -69,9 +69,6 @@ public class DialogFindShares extends AbsDialog {
 		//
 		
 		// Make sure the locator was set
-		if ( locator == null ) {
-			throw new HarnessException("Button "+ button +" not implemented");
-		}
 		
 		// Make sure the locator exists
 		if ( !this.sIsElementPresent(locator) ) {
@@ -104,13 +101,14 @@ public class DialogFindShares extends AbsDialog {
 	 * @throws HarnessException
 	 */
 	public void zClickTreeFolder(FolderItem folder) throws HarnessException {
+		if ( folder == null ){ 
+			throw new HarnessException("zClickTreeFolder(FolderItem): folder must not be null");
+		}
+		
 		logger.info(myPageName() + " zClickTreeFolder("+ folder +")");
 		
 		tracer.trace("Click on tree folder with name "+ folder.getName());
 
-		if ( folder == null ) 
-			throw new HarnessException("folder must not be null");
-		
 		String locator = Locators.zDialogLocator + " td[id$=" + folder.getId() + "_textCell']";
 		
 		if ( !this.sIsElementPresent(locator) )
