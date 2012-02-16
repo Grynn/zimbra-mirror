@@ -59,7 +59,7 @@ public class MarkReadMail extends PrefGroupMailByMessageTest {
 			ZAssert.assertTrue(window.zIsActive(), "Verify the window is active");
 			
 			// Wait to read the message
-			SleepUtil.sleep((delaySeconds + 5) * 1000);
+			SleepUtil.sleep(1000L * (delaySeconds + 5));
 
 
 		} finally {

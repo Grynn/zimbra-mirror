@@ -51,7 +51,7 @@ public abstract class BugDataFile {
 			}
 		}
 		
-		throw new FileNotFoundException("Unable to locate "+ filename +" in "+ paths.toArray().toString());
+		throw new FileNotFoundException("Unable to locate "+ filename +" in "+ Arrays.toString(paths.toArray()));
 	}
 	
 }

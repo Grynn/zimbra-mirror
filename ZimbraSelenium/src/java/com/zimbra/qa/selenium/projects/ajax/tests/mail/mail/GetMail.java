@@ -232,7 +232,7 @@ public class GetMail extends PrefGroupMailByMessageTest {
 
 		// Wait for the timeout to expire
 		logger.info("waiting for the message to arrive");
-		SleepUtil.sleep((this.pollIntervalSeconds + 15) * 1000);
+		SleepUtil.sleep(1000L * (this.pollIntervalSeconds + 15));
 
 		// Get the message list
 		List<MailItem> messages = app.zPageMail.zListGetMessages();

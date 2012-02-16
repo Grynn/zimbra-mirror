@@ -145,11 +145,15 @@ public class TestCaseData {
 		zimbraElements.toArray(retVal);
 		return retVal;
     }
+    
 	private static Map<String, String> mURIs = null;
+    static {
+    	mURIs = new HashMap<String, String>();
+
+    	// Add any URI's for xpath processing here
+    	// mURIs.put("zimbra", "urn:zimbra");
+    }
 	private static Map<String, String> getURIs() {
-		if (mURIs == null) {
-			mURIs = new HashMap<String, String>();
-		}
 		return mURIs;
 	}
 

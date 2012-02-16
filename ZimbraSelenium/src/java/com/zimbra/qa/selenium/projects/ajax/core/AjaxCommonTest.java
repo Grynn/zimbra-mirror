@@ -68,7 +68,6 @@ import com.zimbra.qa.selenium.projects.ajax.ui.*;
  *
  */
 public class AjaxCommonTest {
-	public String DoubleQuoteChar = new Character((char) 34).toString();
 	
 	protected static Logger logger = LogManager.getLogger(AjaxCommonTest.class);
 	public final boolean isRunningDesktopTest = ZimbraSeleniumProperties.getStringProperty(

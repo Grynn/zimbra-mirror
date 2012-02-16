@@ -66,7 +66,7 @@ public class MarkReadMail extends AjaxCommonTest {
 		app.zPageMail.zListItem(Action.A_LEFTCLICK, mail.dSubject);
 		
 		// Wait to read the message
-		SleepUtil.sleep((delaySeconds) * 1000);
+		SleepUtil.sleep(1000L * (delaySeconds));
 
       GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 

@@ -1382,25 +1382,25 @@ public class ZimbraAccount {
 		  */    	
 
 		 private static Map<String, String> mURIs = null;
+		 static {
+			 mURIs = new HashMap<String, String>();
+			 mURIs.put("zimbra", "urn:zimbra");
+			 mURIs.put("acct", "urn:zimbraAccount");
+			 mURIs.put("mail", "urn:zimbraMail");
+			 mURIs.put("offline", "urn:zimbraOffline");
+			 mURIs.put("admin", "urn:zimbraAdmin");
+			 mURIs.put("voice", "urn:zimbraVoice");
+			 mURIs.put("im", "urn:zimbraIM");
+			 mURIs.put("mapi", "urn:zimbraMapi");
+			 mURIs.put("sync", "urn:zimbraSync");
+			 mURIs.put("cs", "urn:zimbraCS");
+			 mURIs.put("test", "urn:zimbraTestHarness");
+			 mURIs.put("soap", "http://www.w3.org/2003/05/soap-envelope");
+			 mURIs.put("soap12", "http://www.w3.org/2003/05/soap-envelope");
+			 mURIs.put("soap11", "http://schemas.xmlsoap.org/soap/envelope/");
+		 }
 		 @SuppressWarnings("unchecked")
-		 private static Map getURIs() {
-			 if (mURIs == null) {
-				 mURIs = new HashMap<String, String>();
-				 mURIs.put("zimbra", "urn:zimbra");
-				 mURIs.put("acct", "urn:zimbraAccount");
-				 mURIs.put("mail", "urn:zimbraMail");
-				 mURIs.put("offline", "urn:zimbraOffline");
-				 mURIs.put("admin", "urn:zimbraAdmin");
-				 mURIs.put("voice", "urn:zimbraVoice");
-				 mURIs.put("im", "urn:zimbraIM");
-				 mURIs.put("mapi", "urn:zimbraMapi");
-				 mURIs.put("sync", "urn:zimbraSync");
-				 mURIs.put("cs", "urn:zimbraCS");
-				 mURIs.put("test", "urn:zimbraTestHarness");
-				 mURIs.put("soap", "http://www.w3.org/2003/05/soap-envelope");
-				 mURIs.put("soap12", "http://www.w3.org/2003/05/soap-envelope");
-				 mURIs.put("soap11", "http://schemas.xmlsoap.org/soap/envelope/");
-			 }
+		private static Map getURIs() {
 			 return mURIs;
 		 }
 
