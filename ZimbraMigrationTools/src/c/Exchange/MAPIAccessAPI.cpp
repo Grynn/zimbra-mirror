@@ -820,7 +820,9 @@ LPWSTR MAPIAccessAPI::GetOOOStateAndMsg()
     BOOL bIsOOO = FALSE;
     Zimbra::Util::ScopedInterface<IMAPIFolder> spInbox;
     ULONG objtype;
-    LPWSTR lpwstrOOOInfo = NULL;
+
+    LPWSTR lpwstrOOOInfo = new WCHAR[3];
+    lstrcpy(lpwstrOOOInfo, L"0:");
 
     // first get the OOO state -- if TRUE, put a 1: in the return val, else put 0:
     Zimbra::Util::ScopedBuffer<SPropValue> pPropValues;
@@ -837,14 +839,14 @@ LPWSTR MAPIAccessAPI::GetOOOStateAndMsg()
                                 &objtype, (LPUNKNOWN *)spInbox.getptr());
     if (FAILED(hr))
     {
-        return L"0:";
+        return lpwstrOOOInfo;
     }
     
     hr = spInbox->GetContentsTable(MAPI_ASSOCIATED | fMapiUnicode, pContents.getptr());
     if (FAILED(hr))
     {
         //LOG_ERROR(_T("could not get the contents table %x"), hr);
-        return L"0:";
+        return lpwstrOOOInfo;
     }
     // set the columns because we are only interested in the body
     SizedSPropTagArray(1, tags) = {1, { PR_BODY }};
@@ -874,12 +876,11 @@ LPWSTR MAPIAccessAPI::GetOOOStateAndMsg()
     pContents->GetRowCount(0, &ulRows);
     if (ulRows == 0)
     {
-        return L"0:";
+        return lpwstrOOOInfo;
     }
 
     Zimbra::Util::ScopedRowSet pRows;
 
-    BOOL bGotMessage = false;
     pContents->QueryRows(ulRows, 0, pRows.getptr());
     for (unsigned int i = 0; i < pRows->cRows; i++)
     {
@@ -887,6 +888,7 @@ LPWSTR MAPIAccessAPI::GetOOOStateAndMsg()
         {
             LPWSTR pwszOOOMsg = pRows->aRow[i].lpProps[0].Value.lpszW;
             int iOOOLen = lstrlen(pwszOOOMsg);
+            delete lpwstrOOOInfo;
             lpwstrOOOInfo = new WCHAR[iOOOLen + 3];  // for the 0: or 1: and null terminator
             if (bIsOOO)
             {
@@ -897,11 +899,10 @@ LPWSTR MAPIAccessAPI::GetOOOStateAndMsg()
                 lstrcpy(lpwstrOOOInfo, L"0:");
             }           
             lstrcat(lpwstrOOOInfo, pwszOOOMsg);
-            bGotMessage = true;
             break;
         }
     }
-    return (bGotMessage) ? lpwstrOOOInfo : L"0:";
+    return lpwstrOOOInfo;
 }
 
 LPCWSTR MAPIAccessAPI::GetExchangeRules(vector<CRule> &vRuleList)

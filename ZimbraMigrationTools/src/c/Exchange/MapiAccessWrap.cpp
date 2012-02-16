@@ -650,11 +650,8 @@ STDMETHODIMP CMapiAccessWrap::GetData(BSTR UserId, VARIANT ItemId, FolderType ty
 STDMETHODIMP CMapiAccessWrap::GetOOOInfo(BSTR *OOOInfo)
 {
     LPCWSTR lpInfo = maapi->GetOOOStateAndMsg();
-    *OOOInfo = (lpInfo) ? CComBSTR(lpInfo) : SysAllocString(L"");
-    if (lpInfo != NULL)
-    {
-        delete[] lpInfo;
-    }
+    *OOOInfo = CComBSTR(lpInfo);
+    delete[] lpInfo;
     return S_OK;
 }
 
