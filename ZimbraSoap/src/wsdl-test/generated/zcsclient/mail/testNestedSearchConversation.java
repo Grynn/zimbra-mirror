@@ -29,7 +29,7 @@ import generated.zcsclient.zm.testWildcardExpansionQueryInfo;
  *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *                 &lt;sequence>
  *                   &lt;choice maxOccurs="unbounded" minOccurs="0">
- *                     &lt;element name="suggest" type="{urn:zimbraMail}spellingSuggestionsQueryInfo"/>
+ *                     &lt;element name="suggest" type="{urn:zimbraMail}suggestedQueryString"/>
  *                     &lt;element name="wildcard" type="{urn:zimbra}wildcardExpansionQueryInfo"/>
  *                   &lt;/choice>
  *                 &lt;/sequence>
@@ -282,7 +282,7 @@ public class testNestedSearchConversation {
      *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
      *       &lt;sequence>
      *         &lt;choice maxOccurs="unbounded" minOccurs="0">
-     *           &lt;element name="suggest" type="{urn:zimbraMail}spellingSuggestionsQueryInfo"/>
+     *           &lt;element name="suggest" type="{urn:zimbraMail}suggestedQueryString"/>
      *           &lt;element name="wildcard" type="{urn:zimbra}wildcardExpansionQueryInfo"/>
      *         &lt;/choice>
      *       &lt;/sequence>
@@ -300,8 +300,8 @@ public class testNestedSearchConversation {
     public static class Info {
 
         @XmlElements({
-            @XmlElement(name = "suggest", type = String.class),
-            @XmlElement(name = "wildcard", type = testWildcardExpansionQueryInfo.class)
+            @XmlElement(name = "wildcard", type = testWildcardExpansionQueryInfo.class),
+            @XmlElement(name = "suggest", type = String.class)
         })
         protected List<Object> suggestOrWildcard;
 
@@ -323,8 +323,8 @@ public class testNestedSearchConversation {
          * 
          * <p>
          * Objects of the following type(s) are allowed in the list
-         * {@link String }
          * {@link testWildcardExpansionQueryInfo }
+         * {@link String }
          * 
          * 
          */

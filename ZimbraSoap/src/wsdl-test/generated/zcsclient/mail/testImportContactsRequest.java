@@ -4,6 +4,7 @@ package generated.zcsclient.mail;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -17,13 +18,12 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element ref="{urn:zimbraMail}content" minOccurs="0"/>
+ *         &lt;element ref="{urn:zimbraMail}content"/>
  *       &lt;/sequence>
  *       &lt;attribute name="ct" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="l" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="csvfmt" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="csvlocale" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="csvsep" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -37,6 +37,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class testImportContactsRequest {
 
+    @XmlElement(required = true)
     protected testContent content;
     @XmlAttribute(name = "ct", required = true)
     protected String ct;
@@ -46,8 +47,6 @@ public class testImportContactsRequest {
     protected String csvfmt;
     @XmlAttribute(name = "csvlocale")
     protected String csvlocale;
-    @XmlAttribute(name = "csvsep")
-    protected String csvsep;
 
     /**
      * Gets the value of the content property.
@@ -167,30 +166,6 @@ public class testImportContactsRequest {
      */
     public void setCsvlocale(String value) {
         this.csvlocale = value;
-    }
-
-    /**
-     * Gets the value of the csvsep property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getCsvsep() {
-        return csvsep;
-    }
-
-    /**
-     * Sets the value of the csvsep property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setCsvsep(String value) {
-        this.csvsep = value;
     }
 
 }

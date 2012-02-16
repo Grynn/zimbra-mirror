@@ -42,7 +42,7 @@ import generated.zcsclient.zm.testWildcardExpansionQueryInfo;
  *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *                 &lt;sequence>
  *                   &lt;choice maxOccurs="unbounded" minOccurs="0">
- *                     &lt;element name="suggest" type="{urn:zimbraMail}spellingSuggestionsQueryInfo"/>
+ *                     &lt;element name="suggest" type="{urn:zimbraMail}suggestedQueryString"/>
  *                     &lt;element name="wildcard" type="{urn:zimbra}wildcardExpansionQueryInfo"/>
  *                   &lt;/choice>
  *                 &lt;/sequence>
@@ -70,17 +70,17 @@ import generated.zcsclient.zm.testWildcardExpansionQueryInfo;
 public class testSearchResponse {
 
     @XmlElements({
-        @XmlElement(name = "cn", type = testContactInfo.class),
-        @XmlElement(name = "mp", type = testMessagePartHitInfo.class),
-        @XmlElement(name = "task", type = testTaskHitInfo.class),
-        @XmlElement(name = "note", type = testNoteHitInfo.class),
         @XmlElement(name = "chat", type = testChatHitInfo.class),
+        @XmlElement(name = "task", type = testTaskHitInfo.class),
+        @XmlElement(name = "mp", type = testMessagePartHitInfo.class),
         @XmlElement(name = "w", type = testWikiHitInfo.class),
-        @XmlElement(name = "doc", type = testDocumentHitInfo.class),
+        @XmlElement(name = "m", type = testMessageHitInfo.class),
+        @XmlElement(name = "note", type = testNoteHitInfo.class),
         @XmlElement(name = "c", type = testConversationHitInfo.class),
         @XmlElement(name = "hit", type = testSimpleSearchHit.class),
+        @XmlElement(name = "cn", type = testContactInfo.class),
         @XmlElement(name = "appt", type = testAppointmentHitInfo.class),
-        @XmlElement(name = "m", type = testMessageHitInfo.class)
+        @XmlElement(name = "doc", type = testDocumentHitInfo.class)
     })
     protected List<Object> hitOrCOrM;
     protected testSearchResponse.Info info;
@@ -111,17 +111,17 @@ public class testSearchResponse {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link testContactInfo }
-     * {@link testMessagePartHitInfo }
-     * {@link testTaskHitInfo }
-     * {@link testNoteHitInfo }
      * {@link testChatHitInfo }
+     * {@link testTaskHitInfo }
+     * {@link testMessagePartHitInfo }
      * {@link testWikiHitInfo }
-     * {@link testDocumentHitInfo }
+     * {@link testMessageHitInfo }
+     * {@link testNoteHitInfo }
      * {@link testConversationHitInfo }
      * {@link testSimpleSearchHit }
+     * {@link testContactInfo }
      * {@link testAppointmentHitInfo }
-     * {@link testMessageHitInfo }
+     * {@link testDocumentHitInfo }
      * 
      * 
      */
@@ -264,7 +264,7 @@ public class testSearchResponse {
      *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
      *       &lt;sequence>
      *         &lt;choice maxOccurs="unbounded" minOccurs="0">
-     *           &lt;element name="suggest" type="{urn:zimbraMail}spellingSuggestionsQueryInfo"/>
+     *           &lt;element name="suggest" type="{urn:zimbraMail}suggestedQueryString"/>
      *           &lt;element name="wildcard" type="{urn:zimbra}wildcardExpansionQueryInfo"/>
      *         &lt;/choice>
      *       &lt;/sequence>

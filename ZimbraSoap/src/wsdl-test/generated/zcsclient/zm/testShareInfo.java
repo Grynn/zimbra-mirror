@@ -22,6 +22,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;attribute name="ownerEmail" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="ownerName" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="folderId" use="required" type="{http://www.w3.org/2001/XMLSchema}int" />
+ *       &lt;attribute name="folderUuid" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="folderPath" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="view" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="rights" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
@@ -49,6 +50,8 @@ public class testShareInfo {
     protected String ownerName;
     @XmlAttribute(name = "folderId", required = true)
     protected int folderId;
+    @XmlAttribute(name = "folderUuid", required = true)
+    protected String folderUuid;
     @XmlAttribute(name = "folderPath", required = true)
     protected String folderPath;
     @XmlAttribute(name = "view", required = true)
@@ -152,6 +155,30 @@ public class testShareInfo {
      */
     public void setFolderId(int value) {
         this.folderId = value;
+    }
+
+    /**
+     * Gets the value of the folderUuid property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getFolderUuid() {
+        return folderUuid;
+    }
+
+    /**
+     * Sets the value of the folderUuid property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setFolderUuid(String value) {
+        this.folderUuid = value;
     }
 
     /**

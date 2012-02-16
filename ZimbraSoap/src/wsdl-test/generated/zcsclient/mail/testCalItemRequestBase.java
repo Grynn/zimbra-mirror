@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="m" type="{urn:zimbraMail}calendarItemMsg" minOccurs="0"/>
+ *         &lt;element name="m" type="{urn:zimbraMail}msg" minOccurs="0"/>
  *       &lt;/sequence>
  *       &lt;attribute name="echo" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *       &lt;attribute name="max" type="{http://www.w3.org/2001/XMLSchema}int" />
@@ -43,7 +43,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class testCalItemRequestBase {
 
-    protected testCalendarItemMsg m;
+    protected testMsg m;
     @XmlAttribute(name = "echo")
     protected Boolean echo;
     @XmlAttribute(name = "max")
@@ -60,10 +60,10 @@ public class testCalItemRequestBase {
      * 
      * @return
      *     possible object is
-     *     {@link testCalendarItemMsg }
+     *     {@link testMsg }
      *     
      */
-    public testCalendarItemMsg getM() {
+    public testMsg getM() {
         return m;
     }
 
@@ -72,10 +72,10 @@ public class testCalItemRequestBase {
      * 
      * @param value
      *     allowed object is
-     *     {@link testCalendarItemMsg }
+     *     {@link testMsg }
      *     
      */
-    public void setM(testCalendarItemMsg value) {
+    public void setM(testMsg value) {
         this.m = value;
     }
 

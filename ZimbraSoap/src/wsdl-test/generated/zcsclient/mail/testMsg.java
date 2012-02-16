@@ -13,12 +13,12 @@ import org.w3c.dom.Element;
 
 
 /**
- * <p>Java class for calendarItemMsg complex type.
+ * <p>Java class for msg complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="calendarItemMsg">
+ * &lt;complexType name="msg">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -48,7 +48,7 @@ import org.w3c.dom.Element;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "calendarItemMsg", propOrder = {
+@XmlType(name = "msg", propOrder = {
     "content",
     "header",
     "mp",
@@ -63,7 +63,7 @@ import org.w3c.dom.Element;
     testMsgToSend.class,
     testSaveDraftMsg.class
 })
-public class testCalendarItemMsg {
+public class testMsg {
 
     protected String content;
     protected List<testHeader> header;

@@ -39,7 +39,7 @@ public class testRightViaInfo {
     @XmlElement(required = true)
     protected testGranteeWithType grantee;
     @XmlElement(required = true)
-    protected testCheckedRight right;
+    protected String right;
 
     /**
      * Gets the value of the target property.
@@ -94,10 +94,10 @@ public class testRightViaInfo {
      * 
      * @return
      *     possible object is
-     *     {@link testCheckedRight }
+     *     {@link String }
      *     
      */
-    public testCheckedRight getRight() {
+    public String getRight() {
         return right;
     }
 
@@ -106,10 +106,10 @@ public class testRightViaInfo {
      * 
      * @param value
      *     allowed object is
-     *     {@link testCheckedRight }
+     *     {@link String }
      *     
      */
-    public void setRight(testCheckedRight value) {
+    public void setRight(String value) {
         this.right = value;
     }
 

@@ -7,31 +7,34 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for authScheme.
+ * <p>Java class for action.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
- * &lt;simpleType name="authScheme">
+ * &lt;simpleType name="action">
  *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
- *     &lt;enumeration value="basic"/>
- *     &lt;enumeration value="form"/>
+ *     &lt;enumeration value="start"/>
+ *     &lt;enumeration value="status"/>
+ *     &lt;enumeration value="stop"/>
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
  * 
  */
-@XmlType(name = "authScheme")
+@XmlType(name = "action")
 @XmlEnum
-public enum testAuthScheme {
+public enum testAction {
 
-    @XmlEnumValue("basic")
-    BASIC("basic"),
-    @XmlEnumValue("form")
-    FORM("form");
+    @XmlEnumValue("start")
+    START("start"),
+    @XmlEnumValue("status")
+    STATUS("status"),
+    @XmlEnumValue("stop")
+    STOP("stop");
     private final String value;
 
-    testAuthScheme(String v) {
+    testAction(String v) {
         value = v;
     }
 
@@ -39,8 +42,8 @@ public enum testAuthScheme {
         return value;
     }
 
-    public static testAuthScheme fromValue(String v) {
-        for (testAuthScheme c: testAuthScheme.values()) {
+    public static testAction fromValue(String v) {
+        for (testAction c: testAction.values()) {
             if (c.value.equals(v)) {
                 return c;
             }

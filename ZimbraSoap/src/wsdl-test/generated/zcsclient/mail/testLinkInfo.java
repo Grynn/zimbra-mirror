@@ -19,6 +19,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;sequence>
  *       &lt;/sequence>
  *       &lt;attribute name="id" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="uuid" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="name" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="view" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="perm" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
@@ -35,6 +36,8 @@ public class testLinkInfo {
 
     @XmlAttribute(name = "id", required = true)
     protected String id;
+    @XmlAttribute(name = "uuid", required = true)
+    protected String uuid;
     @XmlAttribute(name = "name", required = true)
     protected String name;
     @XmlAttribute(name = "view", required = true)
@@ -64,6 +67,30 @@ public class testLinkInfo {
      */
     public void setId(String value) {
         this.id = value;
+    }
+
+    /**
+     * Gets the value of the uuid property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getUuid() {
+        return uuid;
+    }
+
+    /**
+     * Sets the value of the uuid property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setUuid(String value) {
+        this.uuid = value;
     }
 
     /**

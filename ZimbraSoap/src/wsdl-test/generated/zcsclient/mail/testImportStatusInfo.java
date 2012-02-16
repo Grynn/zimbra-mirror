@@ -42,7 +42,7 @@ import javax.xml.bind.annotation.XmlType;
     testCalImportStatusInfo.class,
     testYabImportStatusInfo.class
 })
-public class testImportStatusInfo {
+public abstract class testImportStatusInfo {
 
     @XmlAttribute(name = "id")
     protected String id;

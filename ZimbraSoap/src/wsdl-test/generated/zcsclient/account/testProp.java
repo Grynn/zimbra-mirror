@@ -17,8 +17,8 @@ import javax.xml.bind.annotation.XmlValue;
  * &lt;complexType name="prop">
  *   &lt;simpleContent>
  *     &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema>string">
- *       &lt;attribute name="zimlet" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="name" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="zimlet" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="name" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/extension>
  *   &lt;/simpleContent>
  * &lt;/complexType>
@@ -34,9 +34,9 @@ public class testProp {
 
     @XmlValue
     protected String value;
-    @XmlAttribute(name = "zimlet")
+    @XmlAttribute(name = "zimlet", required = true)
     protected String zimlet;
-    @XmlAttribute(name = "name")
+    @XmlAttribute(name = "name", required = true)
     protected String name;
 
     /**

@@ -23,6 +23,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;attribute name="needGranteeName" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *       &lt;attribute name="view" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="depth" type="{http://www.w3.org/2001/XMLSchema}int" />
+ *       &lt;attribute name="tr" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -45,6 +46,8 @@ public class testGetFolderRequest {
     protected String view;
     @XmlAttribute(name = "depth")
     protected Integer depth;
+    @XmlAttribute(name = "tr")
+    protected Boolean tr;
 
     /**
      * Gets the value of the folder property.
@@ -164,6 +167,30 @@ public class testGetFolderRequest {
      */
     public void setDepth(Integer value) {
         this.depth = value;
+    }
+
+    /**
+     * Gets the value of the tr property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isTr() {
+        return tr;
+    }
+
+    /**
+     * Sets the value of the tr property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setTr(Boolean value) {
+        this.tr = value;
     }
 
 }

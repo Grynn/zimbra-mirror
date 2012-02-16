@@ -16,11 +16,11 @@ import javax.xml.bind.annotation.XmlType;
  * &lt;complexType name="zimletAclStatusPri">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;all>
+ *       &lt;sequence>
  *         &lt;element name="acl" type="{urn:zimbraAdmin}zimletAcl" minOccurs="0"/>
  *         &lt;element name="status" type="{urn:zimbraAdmin}valueAttrib" minOccurs="0"/>
  *         &lt;element name="priority" type="{urn:zimbraAdmin}integerValueAttrib" minOccurs="0"/>
- *       &lt;/all>
+ *       &lt;/sequence>
  *       &lt;attribute name="name" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,9 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "zimletAclStatusPri", propOrder = {
-
+    "acl",
+    "status",
+    "priority"
 })
 public class testZimletAclStatusPri {
 

@@ -7,31 +7,37 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for authScheme.
+ * <p>Java class for status.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
- * &lt;simpleType name="authScheme">
+ * &lt;simpleType name="status">
  *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
- *     &lt;enumeration value="basic"/>
- *     &lt;enumeration value="form"/>
+ *     &lt;enumeration value="started"/>
+ *     &lt;enumeration value="running"/>
+ *     &lt;enumeration value="idle"/>
+ *     &lt;enumeration value="stopped"/>
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
  * 
  */
-@XmlType(name = "authScheme")
+@XmlType(name = "status")
 @XmlEnum
-public enum testAuthScheme {
+public enum testStatus {
 
-    @XmlEnumValue("basic")
-    BASIC("basic"),
-    @XmlEnumValue("form")
-    FORM("form");
+    @XmlEnumValue("started")
+    STARTED("started"),
+    @XmlEnumValue("running")
+    RUNNING("running"),
+    @XmlEnumValue("idle")
+    IDLE("idle"),
+    @XmlEnumValue("stopped")
+    STOPPED("stopped");
     private final String value;
 
-    testAuthScheme(String v) {
+    testStatus(String v) {
         value = v;
     }
 
@@ -39,8 +45,8 @@ public enum testAuthScheme {
         return value;
     }
 
-    public static testAuthScheme fromValue(String v) {
-        for (testAuthScheme c: testAuthScheme.values()) {
+    public static testStatus fromValue(String v) {
+        for (testStatus c: testStatus.values()) {
             if (c.value.equals(v)) {
                 return c;
             }

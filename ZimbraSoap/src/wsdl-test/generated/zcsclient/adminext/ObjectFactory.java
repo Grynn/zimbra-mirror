@@ -51,11 +51,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link testBulkIMAPDataImportResponse.RunningAccounts }
+     * Create an instance of {@link testBulkImportAccountsRequest }
      * 
      */
-    public testBulkIMAPDataImportResponse.RunningAccounts createtestBulkIMAPDataImportResponseRunningAccounts() {
-        return new testBulkIMAPDataImportResponse.RunningAccounts();
+    public testBulkImportAccountsRequest createtestBulkImportAccountsRequest() {
+        return new testBulkImportAccountsRequest();
     }
 
     /**
@@ -67,19 +67,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link testName }
+     * Create an instance of {@link testBulkIMAPDataImportResponse }
      * 
      */
-    public testName createtestName() {
-        return new testName();
-    }
-
-    /**
-     * Create an instance of {@link testBulkImportAccountsRequest }
-     * 
-     */
-    public testBulkImportAccountsRequest createtestBulkImportAccountsRequest() {
-        return new testBulkImportAccountsRequest();
+    public testBulkIMAPDataImportResponse createtestBulkIMAPDataImportResponse() {
+        return new testBulkIMAPDataImportResponse();
     }
 
     /**
@@ -91,19 +83,27 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link testBulkIMAPDataImportRequest }
-     * 
-     */
-    public testBulkIMAPDataImportRequest createtestBulkIMAPDataImportRequest() {
-        return new testBulkIMAPDataImportRequest();
-    }
-
-    /**
      * Create an instance of {@link testGenerateBulkProvisionFileFromLDAPResponse }
      * 
      */
     public testGenerateBulkProvisionFileFromLDAPResponse createtestGenerateBulkProvisionFileFromLDAPResponse() {
         return new testGenerateBulkProvisionFileFromLDAPResponse();
+    }
+
+    /**
+     * Create an instance of {@link testName }
+     * 
+     */
+    public testName createtestName() {
+        return new testName();
+    }
+
+    /**
+     * Create an instance of {@link testNameId }
+     * 
+     */
+    public testNameId createtestNameId() {
+        return new testNameId();
     }
 
     /**
@@ -115,19 +115,19 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link testBulkIMAPDataImportResponse.RunningAccounts }
+     * 
+     */
+    public testBulkIMAPDataImportResponse.RunningAccounts createtestBulkIMAPDataImportResponseRunningAccounts() {
+        return new testBulkIMAPDataImportResponse.RunningAccounts();
+    }
+
+    /**
      * Create an instance of {@link testGetBulkIMAPImportTaskListResponse }
      * 
      */
     public testGetBulkIMAPImportTaskListResponse createtestGetBulkIMAPImportTaskListResponse() {
         return new testGetBulkIMAPImportTaskListResponse();
-    }
-
-    /**
-     * Create an instance of {@link testGenerateBulkProvisionFileFromLDAPRequest }
-     * 
-     */
-    public testGenerateBulkProvisionFileFromLDAPRequest createtestGenerateBulkProvisionFileFromLDAPRequest() {
-        return new testGenerateBulkProvisionFileFromLDAPRequest();
     }
 
     /**
@@ -139,11 +139,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link testBulkIMAPDataImportResponse }
+     * Create an instance of {@link testGenerateBulkProvisionFileFromLDAPRequest }
      * 
      */
-    public testBulkIMAPDataImportResponse createtestBulkIMAPDataImportResponse() {
-        return new testBulkIMAPDataImportResponse();
+    public testGenerateBulkProvisionFileFromLDAPRequest createtestGenerateBulkProvisionFileFromLDAPRequest() {
+        return new testGenerateBulkProvisionFileFromLDAPRequest();
     }
 
     /**
@@ -155,11 +155,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link testNameId }
+     * Create an instance of {@link testBulkIMAPDataImportRequest }
      * 
      */
-    public testNameId createtestNameId() {
-        return new testNameId();
+    public testBulkIMAPDataImportRequest createtestBulkIMAPDataImportRequest() {
+        return new testBulkIMAPDataImportRequest();
     }
 
     /**

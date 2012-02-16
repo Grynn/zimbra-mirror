@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlValue;
  * &lt;complexType name="pref">
  *   &lt;simpleContent>
  *     &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema>string">
- *       &lt;attribute name="name" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="name" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="modified" type="{http://www.w3.org/2001/XMLSchema}long" />
  *     &lt;/extension>
  *   &lt;/simpleContent>
@@ -34,7 +34,7 @@ public class testPref {
 
     @XmlValue
     protected String value;
-    @XmlAttribute(name = "name")
+    @XmlAttribute(name = "name", required = true)
     protected String name;
     @XmlAttribute(name = "modified")
     protected Long modified;

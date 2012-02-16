@@ -18,8 +18,8 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;extension base="{urn:zimbraMail}recurIdInfo">
  *       &lt;sequence>
  *       &lt;/sequence>
- *       &lt;attribute name="seq" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="d" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="seq" use="required" type="{http://www.w3.org/2001/XMLSchema}int" />
+ *       &lt;attribute name="d" use="required" type="{http://www.w3.org/2001/XMLSchema}long" />
  *       &lt;attribute name="at" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="sentBy" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="ptst" type="{http://www.w3.org/2001/XMLSchema}string" />
@@ -37,9 +37,9 @@ public class testCalendarReply
 {
 
     @XmlAttribute(name = "seq", required = true)
-    protected String seq;
+    protected int seq;
     @XmlAttribute(name = "d", required = true)
-    protected String d;
+    protected long d;
     @XmlAttribute(name = "at", required = true)
     protected String at;
     @XmlAttribute(name = "sentBy")
@@ -50,48 +50,32 @@ public class testCalendarReply
     /**
      * Gets the value of the seq property.
      * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
      */
-    public String getSeq() {
+    public int getSeq() {
         return seq;
     }
 
     /**
      * Sets the value of the seq property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
      */
-    public void setSeq(String value) {
+    public void setSeq(int value) {
         this.seq = value;
     }
 
     /**
      * Gets the value of the d property.
      * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
      */
-    public String getD() {
+    public long getD() {
         return d;
     }
 
     /**
      * Sets the value of the d property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
      */
-    public void setD(String value) {
+    public void setD(long value) {
         this.d = value;
     }
 

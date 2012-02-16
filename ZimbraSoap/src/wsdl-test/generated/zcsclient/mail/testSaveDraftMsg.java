@@ -15,7 +15,7 @@ import javax.xml.bind.annotation.XmlType;
  * <pre>
  * &lt;complexType name="saveDraftMsg">
  *   &lt;complexContent>
- *     &lt;extension base="{urn:zimbraMail}calendarItemMsg">
+ *     &lt;extension base="{urn:zimbraMail}msg">
  *       &lt;sequence>
  *       &lt;/sequence>
  *       &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}int" />
@@ -35,7 +35,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "saveDraftMsg")
 public class testSaveDraftMsg
-    extends testCalendarItemMsg
+    extends testMsg
 {
 
     @XmlAttribute(name = "id")

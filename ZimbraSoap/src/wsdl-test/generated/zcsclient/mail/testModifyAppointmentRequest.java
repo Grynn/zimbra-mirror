@@ -22,6 +22,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="comp" type="{http://www.w3.org/2001/XMLSchema}int" />
  *       &lt;attribute name="ms" type="{http://www.w3.org/2001/XMLSchema}int" />
+ *       &lt;attribute name="rev" type="{http://www.w3.org/2001/XMLSchema}int" />
  *     &lt;/extension>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -44,6 +45,8 @@ public class testModifyAppointmentRequest
     protected Integer comp;
     @XmlAttribute(name = "ms")
     protected Integer ms;
+    @XmlAttribute(name = "rev")
+    protected Integer rev;
 
     /**
      * Gets the value of the id property.
@@ -115,6 +118,30 @@ public class testModifyAppointmentRequest
      */
     public void setMs(Integer value) {
         this.ms = value;
+    }
+
+    /**
+     * Gets the value of the rev property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
+     */
+    public Integer getRev() {
+        return rev;
+    }
+
+    /**
+     * Sets the value of the rev property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
+     */
+    public void setRev(Integer value) {
+        this.rev = value;
     }
 
 }

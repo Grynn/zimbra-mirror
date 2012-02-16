@@ -1,8 +1,12 @@
 
 package generated.zcsclient.mail;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -16,7 +20,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;choice minOccurs="0">
+ *         &lt;choice maxOccurs="unbounded" minOccurs="0">
  *           &lt;element name="imap" type="{urn:zimbraMail}imapDataSourceNameOrId"/>
  *           &lt;element name="pop3" type="{urn:zimbraMail}pop3DataSourceNameOrId"/>
  *           &lt;element name="caldav" type="{urn:zimbraMail}caldavDataSourceNameOrId"/>
@@ -36,216 +40,56 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "importDataRequest", propOrder = {
-    "imap",
-    "pop3",
-    "caldav",
-    "yab",
-    "rss",
-    "gal",
-    "cal",
-    "unknown"
+    "imapOrPop3OrCaldav"
 })
 public class testImportDataRequest {
 
-    protected testImapDataSourceNameOrId imap;
-    protected testPop3DataSourceNameOrId pop3;
-    protected testCaldavDataSourceNameOrId caldav;
-    protected testYabDataSourceNameOrId yab;
-    protected testRssDataSourceNameOrId rss;
-    protected testGalDataSourceNameOrId gal;
-    protected testCalDataSourceNameOrId cal;
-    protected testUnknownDataSourceNameOrId unknown;
+    @XmlElements({
+        @XmlElement(name = "unknown", type = testUnknownDataSourceNameOrId.class),
+        @XmlElement(name = "cal", type = testCalDataSourceNameOrId.class),
+        @XmlElement(name = "yab", type = testYabDataSourceNameOrId.class),
+        @XmlElement(name = "gal", type = testGalDataSourceNameOrId.class),
+        @XmlElement(name = "caldav", type = testCaldavDataSourceNameOrId.class),
+        @XmlElement(name = "rss", type = testRssDataSourceNameOrId.class),
+        @XmlElement(name = "imap", type = testImapDataSourceNameOrId.class),
+        @XmlElement(name = "pop3", type = testPop3DataSourceNameOrId.class)
+    })
+    protected List<testDataSourceNameOrId> imapOrPop3OrCaldav;
 
     /**
-     * Gets the value of the imap property.
+     * Gets the value of the imapOrPop3OrCaldav property.
      * 
-     * @return
-     *     possible object is
-     *     {@link testImapDataSourceNameOrId }
-     *     
-     */
-    public testImapDataSourceNameOrId getImap() {
-        return imap;
-    }
-
-    /**
-     * Sets the value of the imap property.
+     * <p>
+     * This accessor method returns a reference to the live list,
+     * not a snapshot. Therefore any modification you make to the
+     * returned list will be present inside the JAXB object.
+     * This is why there is not a <CODE>set</CODE> method for the imapOrPop3OrCaldav property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link testImapDataSourceNameOrId }
-     *     
-     */
-    public void setImap(testImapDataSourceNameOrId value) {
-        this.imap = value;
-    }
-
-    /**
-     * Gets the value of the pop3 property.
+     * <p>
+     * For example, to add a new item, do as follows:
+     * <pre>
+     *    getImapOrPop3OrCaldav().add(newItem);
+     * </pre>
      * 
-     * @return
-     *     possible object is
-     *     {@link testPop3DataSourceNameOrId }
-     *     
-     */
-    public testPop3DataSourceNameOrId getPop3() {
-        return pop3;
-    }
-
-    /**
-     * Sets the value of the pop3 property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link testPop3DataSourceNameOrId }
-     *     
-     */
-    public void setPop3(testPop3DataSourceNameOrId value) {
-        this.pop3 = value;
-    }
-
-    /**
-     * Gets the value of the caldav property.
+     * <p>
+     * Objects of the following type(s) are allowed in the list
+     * {@link testUnknownDataSourceNameOrId }
+     * {@link testCalDataSourceNameOrId }
+     * {@link testYabDataSourceNameOrId }
+     * {@link testGalDataSourceNameOrId }
+     * {@link testCaldavDataSourceNameOrId }
+     * {@link testRssDataSourceNameOrId }
+     * {@link testImapDataSourceNameOrId }
+     * {@link testPop3DataSourceNameOrId }
      * 
-     * @return
-     *     possible object is
-     *     {@link testCaldavDataSourceNameOrId }
-     *     
-     */
-    public testCaldavDataSourceNameOrId getCaldav() {
-        return caldav;
-    }
-
-    /**
-     * Sets the value of the caldav property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link testCaldavDataSourceNameOrId }
-     *     
      */
-    public void setCaldav(testCaldavDataSourceNameOrId value) {
-        this.caldav = value;
-    }
-
-    /**
-     * Gets the value of the yab property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link testYabDataSourceNameOrId }
-     *     
-     */
-    public testYabDataSourceNameOrId getYab() {
-        return yab;
-    }
-
-    /**
-     * Sets the value of the yab property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link testYabDataSourceNameOrId }
-     *     
-     */
-    public void setYab(testYabDataSourceNameOrId value) {
-        this.yab = value;
-    }
-
-    /**
-     * Gets the value of the rss property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link testRssDataSourceNameOrId }
-     *     
-     */
-    public testRssDataSourceNameOrId getRss() {
-        return rss;
-    }
-
-    /**
-     * Sets the value of the rss property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link testRssDataSourceNameOrId }
-     *     
-     */
-    public void setRss(testRssDataSourceNameOrId value) {
-        this.rss = value;
-    }
-
-    /**
-     * Gets the value of the gal property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link testGalDataSourceNameOrId }
-     *     
-     */
-    public testGalDataSourceNameOrId getGal() {
-        return gal;
-    }
-
-    /**
-     * Sets the value of the gal property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link testGalDataSourceNameOrId }
-     *     
-     */
-    public void setGal(testGalDataSourceNameOrId value) {
-        this.gal = value;
-    }
-
-    /**
-     * Gets the value of the cal property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link testCalDataSourceNameOrId }
-     *     
-     */
-    public testCalDataSourceNameOrId getCal() {
-        return cal;
-    }
-
-    /**
-     * Sets the value of the cal property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link testCalDataSourceNameOrId }
-     *     
-     */
-    public void setCal(testCalDataSourceNameOrId value) {
-        this.cal = value;
-    }
-
-    /**
-     * Gets the value of the unknown property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link testUnknownDataSourceNameOrId }
-     *     
-     */
-    public testUnknownDataSourceNameOrId getUnknown() {
-        return unknown;
-    }
-
-    /**
-     * Sets the value of the unknown property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link testUnknownDataSourceNameOrId }
-     *     
-     */
-    public void setUnknown(testUnknownDataSourceNameOrId value) {
-        this.unknown = value;
+    public List<testDataSourceNameOrId> getImapOrPop3OrCaldav() {
+        if (imapOrPop3OrCaldav == null) {
+            imapOrPop3OrCaldav = new ArrayList<testDataSourceNameOrId>();
+        }
+        return this.imapOrPop3OrCaldav;
     }
 
 }

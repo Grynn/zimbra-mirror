@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *       &lt;/sequence>
- *       &lt;attribute name="validFrom" use="required" type="{http://www.w3.org/2001/XMLSchema}long" />
+ *       &lt;attribute name="serverTime" use="required" type="{http://www.w3.org/2001/XMLSchema}long" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -30,23 +30,23 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "activateLicenseResponse")
 public class testActivateLicenseResponse {
 
-    @XmlAttribute(name = "validFrom", required = true)
-    protected long validFrom;
+    @XmlAttribute(name = "serverTime", required = true)
+    protected long serverTime;
 
     /**
-     * Gets the value of the validFrom property.
+     * Gets the value of the serverTime property.
      * 
      */
-    public long getValidFrom() {
-        return validFrom;
+    public long getServerTime() {
+        return serverTime;
     }
 
     /**
-     * Sets the value of the validFrom property.
+     * Sets the value of the serverTime property.
      * 
      */
-    public void setValidFrom(long value) {
-        this.validFrom = value;
+    public void setServerTime(long value) {
+        this.serverTime = value;
     }
 
 }

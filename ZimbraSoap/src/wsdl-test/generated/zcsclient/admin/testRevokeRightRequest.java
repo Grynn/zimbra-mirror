@@ -19,7 +19,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;sequence>
  *         &lt;element name="target" type="{urn:zimbraAdmin}effectiveRightsTargetSelector"/>
  *         &lt;element name="grantee" type="{urn:zimbraAdmin}granteeSelector"/>
- *         &lt;element name="right" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="right" type="{urn:zimbraAdmin}rightModifierInfo"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -41,7 +41,7 @@ public class testRevokeRightRequest {
     @XmlElement(required = true)
     protected testGranteeSelector grantee;
     @XmlElement(required = true)
-    protected String right;
+    protected testRightModifierInfo right;
 
     /**
      * Gets the value of the target property.
@@ -96,10 +96,10 @@ public class testRevokeRightRequest {
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link testRightModifierInfo }
      *     
      */
-    public String getRight() {
+    public testRightModifierInfo getRight() {
         return right;
     }
 
@@ -108,10 +108,10 @@ public class testRevokeRightRequest {
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link testRightModifierInfo }
      *     
      */
-    public void setRight(String value) {
+    public void setRight(testRightModifierInfo value) {
         this.right = value;
     }
 

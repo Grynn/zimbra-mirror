@@ -35,6 +35,8 @@ import generated.zcsclient.admin.testAutoCompleteGalRequest;
 import generated.zcsclient.admin.testAutoCompleteGalResponse;
 import generated.zcsclient.admin.testAutoProvAccountRequest;
 import generated.zcsclient.admin.testAutoProvAccountResponse;
+import generated.zcsclient.admin.testAutoProvTaskControlRequest;
+import generated.zcsclient.admin.testAutoProvTaskControlResponse;
 import generated.zcsclient.admin.testBackupAccountQueryRequest;
 import generated.zcsclient.admin.testBackupAccountQueryResponse;
 import generated.zcsclient.admin.testBackupQueryRequest;
@@ -477,13 +479,13 @@ import generated.zcsclient.adminext.testPurgeBulkIMAPImportTasksResponse;
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
 @XmlSeeAlso({
     generated.zcsclient.replication.ObjectFactory.class,
-    generated.zcsclient.appblast.ObjectFactory.class,
-    generated.zcsclient.adminext.ObjectFactory.class,
-    generated.zcsclient.sync.ObjectFactory.class,
     generated.zcsclient.account.ObjectFactory.class,
+    generated.zcsclient.admin.ObjectFactory.class,
+    generated.zcsclient.adminext.ObjectFactory.class,
     generated.zcsclient.mail.ObjectFactory.class,
+    generated.zcsclient.appblast.ObjectFactory.class,
     generated.zcsclient.zm.ObjectFactory.class,
-    generated.zcsclient.admin.ObjectFactory.class
+    generated.zcsclient.sync.ObjectFactory.class
 })
 public interface ZcsAdminPortType {
 
@@ -655,6 +657,18 @@ public interface ZcsAdminPortType {
     public testAutoProvAccountResponse autoProvAccountRequest(
         @WebParam(name = "AutoProvAccountRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
         testAutoProvAccountRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns generated.zcsclient.admin.testAutoProvTaskControlResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/AutoProvTaskControl")
+    @WebResult(name = "AutoProvTaskControlResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public testAutoProvTaskControlResponse autoProvTaskControlRequest(
+        @WebParam(name = "AutoProvTaskControlRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        testAutoProvTaskControlRequest parameters);
 
     /**
      * 

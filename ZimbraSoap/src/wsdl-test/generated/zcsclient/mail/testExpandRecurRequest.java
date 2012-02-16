@@ -23,9 +23,9 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;sequence>
  *         &lt;element name="tz" type="{urn:zimbraMail}calTZInfo" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;choice maxOccurs="unbounded" minOccurs="0">
- *           &lt;element name="cancel" type="{urn:zimbraMail}expandedRecurrenceCancel"/>
  *           &lt;element name="comp" type="{urn:zimbraMail}expandedRecurrenceInvite"/>
  *           &lt;element name="except" type="{urn:zimbraMail}expandedRecurrenceException"/>
+ *           &lt;element name="cancel" type="{urn:zimbraMail}expandedRecurrenceCancel"/>
  *         &lt;/choice>
  *       &lt;/sequence>
  *       &lt;attribute name="s" use="required" type="{http://www.w3.org/2001/XMLSchema}long" />
@@ -40,7 +40,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "expandRecurRequest", propOrder = {
     "tz",
-    "cancelOrCompOrExcept"
+    "compOrExceptOrCancel"
 })
 public class testExpandRecurRequest {
 
@@ -50,7 +50,7 @@ public class testExpandRecurRequest {
         @XmlElement(name = "comp", type = testExpandedRecurrenceInvite.class),
         @XmlElement(name = "except", type = testExpandedRecurrenceException.class)
     })
-    protected List<testExpandedRecurrenceComponent> cancelOrCompOrExcept;
+    protected List<testExpandedRecurrenceComponent> compOrExceptOrCancel;
     @XmlAttribute(name = "s", required = true)
     protected long s;
     @XmlAttribute(name = "e", required = true)
@@ -86,18 +86,18 @@ public class testExpandRecurRequest {
     }
 
     /**
-     * Gets the value of the cancelOrCompOrExcept property.
+     * Gets the value of the compOrExceptOrCancel property.
      * 
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the cancelOrCompOrExcept property.
+     * This is why there is not a <CODE>set</CODE> method for the compOrExceptOrCancel property.
      * 
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
-     *    getCancelOrCompOrExcept().add(newItem);
+     *    getCompOrExceptOrCancel().add(newItem);
      * </pre>
      * 
      * 
@@ -109,11 +109,11 @@ public class testExpandRecurRequest {
      * 
      * 
      */
-    public List<testExpandedRecurrenceComponent> getCancelOrCompOrExcept() {
-        if (cancelOrCompOrExcept == null) {
-            cancelOrCompOrExcept = new ArrayList<testExpandedRecurrenceComponent>();
+    public List<testExpandedRecurrenceComponent> getCompOrExceptOrCancel() {
+        if (compOrExceptOrCancel == null) {
+            compOrExceptOrCancel = new ArrayList<testExpandedRecurrenceComponent>();
         }
-        return this.cancelOrCompOrExcept;
+        return this.compOrExceptOrCancel;
     }
 
     /**

@@ -24,7 +24,6 @@ import generated.zcsclient.zm.testGalSearchType;
  *       &lt;attribute name="limit" type="{http://www.w3.org/2001/XMLSchema}int" />
  *       &lt;attribute name="type" type="{urn:zimbra}galSearchType" />
  *       &lt;attribute name="galAcctId" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="token" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -46,8 +45,6 @@ public class testSearchGalRequest {
     protected testGalSearchType type;
     @XmlAttribute(name = "galAcctId")
     protected String galAcctId;
-    @XmlAttribute(name = "token")
-    protected String token;
 
     /**
      * Gets the value of the domain property.
@@ -167,30 +164,6 @@ public class testSearchGalRequest {
      */
     public void setGalAcctId(String value) {
         this.galAcctId = value;
-    }
-
-    /**
-     * Gets the value of the token property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getToken() {
-        return token;
-    }
-
-    /**
-     * Sets the value of the token property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setToken(String value) {
-        this.token = value;
     }
 
 }

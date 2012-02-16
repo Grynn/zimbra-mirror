@@ -20,7 +20,6 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;extension base="{urn:zimbraAccount}accountKeyValuePairs">
  *       &lt;sequence>
  *         &lt;element name="dlm" type="{http://www.w3.org/2001/XMLSchema}string" maxOccurs="unbounded" minOccurs="0"/>
- *         &lt;element name="alias" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="newName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="owner" type="{urn:zimbraAccount}distributionListGranteeSelector" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="right" type="{urn:zimbraAccount}distributionListRightSpec" maxOccurs="unbounded" minOccurs="0"/>
@@ -37,7 +36,6 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "distributionListAction", propOrder = {
     "dlm",
-    "alias",
     "newName",
     "owner",
     "right",
@@ -48,7 +46,6 @@ public class testDistributionListAction
 {
 
     protected List<String> dlm;
-    protected String alias;
     protected String newName;
     protected List<testDistributionListGranteeSelector> owner;
     protected List<testDistributionListRightSpec> right;
@@ -83,30 +80,6 @@ public class testDistributionListAction
             dlm = new ArrayList<String>();
         }
         return this.dlm;
-    }
-
-    /**
-     * Gets the value of the alias property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getAlias() {
-        return alias;
-    }
-
-    /**
-     * Sets the value of the alias property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setAlias(String value) {
-        this.alias = value;
     }
 
     /**

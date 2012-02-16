@@ -1,6 +1,8 @@
 
 package generated.zcsclient.admin;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -17,9 +19,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="s" type="{urn:zimbraAdmin}dtTimeInfo" minOccurs="0"/>
- *         &lt;element name="e" type="{urn:zimbraAdmin}dtTimeInfo" minOccurs="0"/>
- *         &lt;element name="dur" type="{urn:zimbraAdmin}durationInfo" minOccurs="0"/>
+ *         &lt;element name="dtval" type="{urn:zimbraAdmin}dtVal" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *       &lt;attribute name="tz" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
@@ -31,88 +31,41 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "singleDates", propOrder = {
-    "s",
-    "e",
-    "dur"
+    "dtval"
 })
 public class testSingleDates {
 
-    protected testDtTimeInfo s;
-    protected testDtTimeInfo e;
-    protected testDurationInfo dur;
+    protected List<testDtVal> dtval;
     @XmlAttribute(name = "tz")
     protected String tz;
 
     /**
-     * Gets the value of the s property.
+     * Gets the value of the dtval property.
      * 
-     * @return
-     *     possible object is
-     *     {@link testDtTimeInfo }
-     *     
-     */
-    public testDtTimeInfo getS() {
-        return s;
-    }
-
-    /**
-     * Sets the value of the s property.
+     * <p>
+     * This accessor method returns a reference to the live list,
+     * not a snapshot. Therefore any modification you make to the
+     * returned list will be present inside the JAXB object.
+     * This is why there is not a <CODE>set</CODE> method for the dtval property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link testDtTimeInfo }
-     *     
-     */
-    public void setS(testDtTimeInfo value) {
-        this.s = value;
-    }
-
-    /**
-     * Gets the value of the e property.
+     * <p>
+     * For example, to add a new item, do as follows:
+     * <pre>
+     *    getDtval().add(newItem);
+     * </pre>
      * 
-     * @return
-     *     possible object is
-     *     {@link testDtTimeInfo }
-     *     
-     */
-    public testDtTimeInfo getE() {
-        return e;
-    }
-
-    /**
-     * Sets the value of the e property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link testDtTimeInfo }
-     *     
-     */
-    public void setE(testDtTimeInfo value) {
-        this.e = value;
-    }
-
-    /**
-     * Gets the value of the dur property.
+     * <p>
+     * Objects of the following type(s) are allowed in the list
+     * {@link testDtVal }
      * 
-     * @return
-     *     possible object is
-     *     {@link testDurationInfo }
-     *     
-     */
-    public testDurationInfo getDur() {
-        return dur;
-    }
-
-    /**
-     * Sets the value of the dur property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link testDurationInfo }
-     *     
      */
-    public void setDur(testDurationInfo value) {
-        this.dur = value;
+    public List<testDtVal> getDtval() {
+        if (dtval == null) {
+            dtval = new ArrayList<testDtVal>();
+        }
+        return this.dtval;
     }
 
     /**

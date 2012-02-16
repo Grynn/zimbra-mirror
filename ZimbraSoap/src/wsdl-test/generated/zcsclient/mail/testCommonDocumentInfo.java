@@ -35,6 +35,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;/element>
  *       &lt;/sequence>
  *       &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="uuid" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="name" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="s" type="{http://www.w3.org/2001/XMLSchema}long" />
  *       &lt;attribute name="d" type="{http://www.w3.org/2001/XMLSchema}long" />
@@ -76,6 +77,8 @@ public class testCommonDocumentInfo {
     protected testCommonDocumentInfo.Acl acl;
     @XmlAttribute(name = "id")
     protected String id;
+    @XmlAttribute(name = "uuid")
+    protected String uuid;
     @XmlAttribute(name = "name")
     protected String name;
     @XmlAttribute(name = "s")
@@ -210,6 +213,30 @@ public class testCommonDocumentInfo {
      */
     public void setId(String value) {
         this.id = value;
+    }
+
+    /**
+     * Gets the value of the uuid property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getUuid() {
+        return uuid;
+    }
+
+    /**
+     * Sets the value of the uuid property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setUuid(String value) {
+        this.uuid = value;
     }
 
     /**

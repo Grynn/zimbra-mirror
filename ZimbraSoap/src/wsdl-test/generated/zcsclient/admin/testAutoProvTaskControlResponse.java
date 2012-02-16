@@ -1,5 +1,5 @@
 
-package generated.zcsclient.mail;
+package generated.zcsclient.admin;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -8,17 +8,17 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for invalidateReminderDeviceRequest complex type.
+ * <p>Java class for autoProvTaskControlResponse complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="invalidateReminderDeviceRequest">
+ * &lt;complexType name="autoProvTaskControlResponse">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *       &lt;/sequence>
- *       &lt;attribute name="a" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="status" use="required" type="{urn:zimbraAdmin}status" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -27,34 +27,34 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "invalidateReminderDeviceRequest")
-public class testInvalidateReminderDeviceRequest {
+@XmlType(name = "autoProvTaskControlResponse")
+public class testAutoProvTaskControlResponse {
 
-    @XmlAttribute(name = "a", required = true)
-    protected String a;
+    @XmlAttribute(name = "status", required = true)
+    protected testStatus status;
 
     /**
-     * Gets the value of the a property.
+     * Gets the value of the status property.
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link testStatus }
      *     
      */
-    public String getA() {
-        return a;
+    public testStatus getStatus() {
+        return status;
     }
 
     /**
-     * Sets the value of the a property.
+     * Sets the value of the status property.
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link testStatus }
      *     
      */
-    public void setA(String value) {
-        this.a = value;
+    public void setStatus(testStatus value) {
+        this.status = value;
     }
 
 }

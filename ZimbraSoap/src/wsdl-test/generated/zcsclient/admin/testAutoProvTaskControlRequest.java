@@ -1,5 +1,5 @@
 
-package generated.zcsclient.mail;
+package generated.zcsclient.admin;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -8,17 +8,17 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for invalidateReminderDeviceRequest complex type.
+ * <p>Java class for autoProvTaskControlRequest complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="invalidateReminderDeviceRequest">
+ * &lt;complexType name="autoProvTaskControlRequest">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *       &lt;/sequence>
- *       &lt;attribute name="a" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="action" use="required" type="{urn:zimbraAdmin}action" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -27,34 +27,34 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "invalidateReminderDeviceRequest")
-public class testInvalidateReminderDeviceRequest {
+@XmlType(name = "autoProvTaskControlRequest")
+public class testAutoProvTaskControlRequest {
 
-    @XmlAttribute(name = "a", required = true)
-    protected String a;
+    @XmlAttribute(name = "action", required = true)
+    protected testAction action;
 
     /**
-     * Gets the value of the a property.
+     * Gets the value of the action property.
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link testAction }
      *     
      */
-    public String getA() {
-        return a;
+    public testAction getAction() {
+        return action;
     }
 
     /**
-     * Sets the value of the a property.
+     * Sets the value of the action property.
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link testAction }
      *     
      */
-    public void setA(String value) {
-        this.a = value;
+    public void setAction(testAction value) {
+        this.action = value;
     }
 
 }

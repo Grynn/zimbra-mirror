@@ -193,15 +193,15 @@ public class testFilterRule {
     public static class FilterActions {
 
         @XmlElements({
+            @XmlElement(name = "actionReply", type = testReplyAction.class),
             @XmlElement(name = "actionTag", type = testTagAction.class),
-            @XmlElement(name = "actionFileInto", type = testFileIntoAction.class),
-            @XmlElement(name = "actionRedirect", type = testRedirectAction.class),
-            @XmlElement(name = "actionDiscard", type = testDiscardAction.class),
-            @XmlElement(name = "actionFlag", type = testFlagAction.class),
             @XmlElement(name = "actionKeep", type = testKeepAction.class),
+            @XmlElement(name = "actionFlag", type = testFlagAction.class),
             @XmlElement(name = "actionStop", type = testStopAction.class),
-            @XmlElement(name = "actionNotify", type = testNotifyAction.class),
-            @XmlElement(name = "actionReply", type = testReplyAction.class)
+            @XmlElement(name = "actionRedirect", type = testRedirectAction.class),
+            @XmlElement(name = "actionFileInto", type = testFileIntoAction.class),
+            @XmlElement(name = "actionDiscard", type = testDiscardAction.class),
+            @XmlElement(name = "actionNotify", type = testNotifyAction.class)
         })
         protected List<testFilterAction> actionKeepOrActionDiscardOrActionFileInto;
 
@@ -223,15 +223,15 @@ public class testFilterRule {
          * 
          * <p>
          * Objects of the following type(s) are allowed in the list
-         * {@link testTagAction }
-         * {@link testFileIntoAction }
-         * {@link testRedirectAction }
-         * {@link testDiscardAction }
-         * {@link testFlagAction }
-         * {@link testKeepAction }
-         * {@link testStopAction }
-         * {@link testNotifyAction }
          * {@link testReplyAction }
+         * {@link testTagAction }
+         * {@link testKeepAction }
+         * {@link testFlagAction }
+         * {@link testStopAction }
+         * {@link testRedirectAction }
+         * {@link testFileIntoAction }
+         * {@link testDiscardAction }
+         * {@link testNotifyAction }
          * 
          * 
          */

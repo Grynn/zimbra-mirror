@@ -39,8 +39,8 @@ import javax.xml.bind.annotation.XmlType;
 public class testGetMsgMetadataResponse {
 
     @XmlElements({
-        @XmlElement(name = "m"),
-        @XmlElement(name = "chat", type = testChatSummary.class)
+        @XmlElement(name = "chat", type = testChatSummary.class),
+        @XmlElement(name = "m")
     })
     protected List<testMessageSummary> chatOrM;
 
@@ -62,8 +62,8 @@ public class testGetMsgMetadataResponse {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link testMessageSummary }
      * {@link testChatSummary }
+     * {@link testMessageSummary }
      * 
      * 
      */

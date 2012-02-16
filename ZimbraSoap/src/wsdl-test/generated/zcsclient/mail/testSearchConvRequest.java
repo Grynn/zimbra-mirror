@@ -18,8 +18,8 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;extension base="{urn:zimbraMail}mailSearchParams">
  *       &lt;sequence>
  *       &lt;/sequence>
- *       &lt;attribute name="nest" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *       &lt;attribute name="cid" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="nest" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *       &lt;attribute name="needExp" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *     &lt;/extension>
  *   &lt;/complexContent>
@@ -34,36 +34,12 @@ public class testSearchConvRequest
     extends testMailSearchParams
 {
 
-    @XmlAttribute(name = "nest")
-    protected Boolean nest;
     @XmlAttribute(name = "cid", required = true)
     protected String cid;
+    @XmlAttribute(name = "nest")
+    protected Boolean nest;
     @XmlAttribute(name = "needExp")
     protected Boolean needExp;
-
-    /**
-     * Gets the value of the nest property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isNest() {
-        return nest;
-    }
-
-    /**
-     * Sets the value of the nest property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setNest(Boolean value) {
-        this.nest = value;
-    }
 
     /**
      * Gets the value of the cid property.
@@ -87,6 +63,30 @@ public class testSearchConvRequest
      */
     public void setCid(String value) {
         this.cid = value;
+    }
+
+    /**
+     * Gets the value of the nest property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isNest() {
+        return nest;
+    }
+
+    /**
+     * Sets the value of the nest property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setNest(Boolean value) {
+        this.nest = value;
     }
 
     /**

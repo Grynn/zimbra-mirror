@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  * &lt;complexType name="deviceStatusInfo">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;all>
+ *       &lt;sequence>
  *         &lt;element name="provisionable" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
  *         &lt;element name="status" type="{http://www.w3.org/2001/XMLSchema}byte"/>
  *         &lt;element name="firstReqReceived" type="{http://www.w3.org/2001/XMLSchema}int"/>
@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="remoteWipeAckTime" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *         &lt;element name="recoveryPassword" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="lastUsedDate" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *       &lt;/all>
+ *       &lt;/sequence>
  *       &lt;attribute name="id" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="type" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="ua" type="{http://www.w3.org/2001/XMLSchema}string" />
@@ -45,7 +45,14 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "deviceStatusInfo", propOrder = {
-
+    "provisionable",
+    "status",
+    "firstReqReceived",
+    "lastPolicyUpdate",
+    "remoteWipeReqTime",
+    "remoteWipeAckTime",
+    "recoveryPassword",
+    "lastUsedDate"
 })
 public class testDeviceStatusInfo {
 

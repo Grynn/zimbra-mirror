@@ -20,7 +20,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;sequence>
  *         &lt;element name="inst" type="{urn:zimbraMail}instanceRecurIdInfo" minOccurs="0"/>
  *         &lt;element name="tz" type="{urn:zimbraMail}calTZInfo" minOccurs="0"/>
- *         &lt;element name="m" type="{urn:zimbraMail}calendarItemMsg" minOccurs="0"/>
+ *         &lt;element name="m" type="{urn:zimbraMail}msg" minOccurs="0"/>
  *       &lt;/sequence>
  *       &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="comp" type="{http://www.w3.org/2001/XMLSchema}int" />
@@ -46,7 +46,7 @@ public class testCancelAppointmentRequest {
 
     protected testInstanceRecurIdInfo inst;
     protected testCalTZInfo tz;
-    protected testCalendarItemMsg m;
+    protected testMsg m;
     @XmlAttribute(name = "id")
     protected String id;
     @XmlAttribute(name = "comp")
@@ -109,10 +109,10 @@ public class testCancelAppointmentRequest {
      * 
      * @return
      *     possible object is
-     *     {@link testCalendarItemMsg }
+     *     {@link testMsg }
      *     
      */
-    public testCalendarItemMsg getM() {
+    public testMsg getM() {
         return m;
     }
 
@@ -121,10 +121,10 @@ public class testCancelAppointmentRequest {
      * 
      * @param value
      *     allowed object is
-     *     {@link testCalendarItemMsg }
+     *     {@link testMsg }
      *     
      */
-    public void setM(testCalendarItemMsg value) {
+    public void setM(testMsg value) {
         this.m = value;
     }
 

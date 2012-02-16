@@ -15,7 +15,7 @@ import javax.xml.bind.annotation.XmlType;
  * <pre>
  * &lt;complexType name="msgToSend">
  *   &lt;complexContent>
- *     &lt;extension base="{urn:zimbraMail}calendarItemMsg">
+ *     &lt;extension base="{urn:zimbraMail}msg">
  *       &lt;sequence>
  *       &lt;/sequence>
  *       &lt;attribute name="did" type="{http://www.w3.org/2001/XMLSchema}string" />
@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "msgToSend")
 public class testMsgToSend
-    extends testCalendarItemMsg
+    extends testMsg
 {
 
     @XmlAttribute(name = "did")

@@ -42,6 +42,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;/choice>
  *       &lt;/sequence>
  *       &lt;attribute name="id" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="uuid" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="name" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="l" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="f" type="{http://www.w3.org/2001/XMLSchema}string" />
@@ -87,12 +88,14 @@ public class testFolder {
     protected testRetentionPolicy retentionPolicy;
     @XmlElements({
         @XmlElement(name = "folder"),
-        @XmlElement(name = "link", type = testMountpoint.class),
-        @XmlElement(name = "search", type = testSearchFolder.class)
+        @XmlElement(name = "search", type = testSearchFolder.class),
+        @XmlElement(name = "link", type = testMountpoint.class)
     })
     protected List<testFolder> folderOrLinkOrSearch;
     @XmlAttribute(name = "id", required = true)
     protected String id;
+    @XmlAttribute(name = "uuid", required = true)
+    protected String uuid;
     @XmlAttribute(name = "name")
     protected String name;
     @XmlAttribute(name = "l")
@@ -230,8 +233,8 @@ public class testFolder {
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link testFolder }
-     * {@link testMountpoint }
      * {@link testSearchFolder }
+     * {@link testMountpoint }
      * 
      * 
      */
@@ -264,6 +267,30 @@ public class testFolder {
      */
     public void setId(String value) {
         this.id = value;
+    }
+
+    /**
+     * Gets the value of the uuid property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getUuid() {
+        return uuid;
+    }
+
+    /**
+     * Sets the value of the uuid property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setUuid(String value) {
+        this.uuid = value;
     }
 
     /**

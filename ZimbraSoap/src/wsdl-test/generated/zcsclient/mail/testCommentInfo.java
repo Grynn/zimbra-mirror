@@ -27,6 +27,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;/sequence>
  *       &lt;attribute name="parentId" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="uuid" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="email" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="f" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="t" type="{http://www.w3.org/2001/XMLSchema}string" />
@@ -54,6 +55,8 @@ public class testCommentInfo {
     protected String parentId;
     @XmlAttribute(name = "id")
     protected String id;
+    @XmlAttribute(name = "uuid")
+    protected String uuid;
     @XmlAttribute(name = "email")
     protected String email;
     @XmlAttribute(name = "f")
@@ -87,8 +90,8 @@ public class testCommentInfo {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link String }
      * {@link JAXBElement }{@code <}{@link testMailCustomMetadata }{@code >}
+     * {@link String }
      * 
      * 
      */
@@ -145,6 +148,30 @@ public class testCommentInfo {
      */
     public void setId(String value) {
         this.id = value;
+    }
+
+    /**
+     * Gets the value of the uuid property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getUuid() {
+        return uuid;
+    }
+
+    /**
+     * Sets the value of the uuid property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setUuid(String value) {
+        this.uuid = value;
     }
 
     /**

@@ -5,11 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
-import org.w3c.dom.Element;
 
 
 /**
@@ -22,7 +20,12 @@ import org.w3c.dom.Element;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;any processContents='skip' namespace='##other' maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="C" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="ST" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="L" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="O" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="OU" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="CN" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="SubjectAltName" type="{http://www.w3.org/2001/XMLSchema}string" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *       &lt;attribute name="csr_exists" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
@@ -37,13 +40,28 @@ import org.w3c.dom.Element;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "getCSRResponse", propOrder = {
-    "any",
+    "c",
+    "st",
+    "l",
+    "o",
+    "ou",
+    "cn",
     "subjectAltName"
 })
 public class testGetCSRResponse {
 
-    @XmlAnyElement
-    protected List<Element> any;
+    @XmlElement(name = "C")
+    protected String c;
+    @XmlElement(name = "ST")
+    protected String st;
+    @XmlElement(name = "L")
+    protected String l;
+    @XmlElement(name = "O")
+    protected String o;
+    @XmlElement(name = "OU")
+    protected String ou;
+    @XmlElement(name = "CN")
+    protected String cn;
     @XmlElement(name = "SubjectAltName")
     protected List<String> subjectAltName;
     @XmlAttribute(name = "csr_exists", required = true)
@@ -54,32 +72,147 @@ public class testGetCSRResponse {
     protected String server;
 
     /**
-     * Gets the value of the any property.
+     * Gets the value of the c property.
      * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the any property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getAny().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link Element }
-     * 
-     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
-    public List<Element> getAny() {
-        if (any == null) {
-            any = new ArrayList<Element>();
-        }
-        return this.any;
+    public String getC() {
+        return c;
+    }
+
+    /**
+     * Sets the value of the c property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setC(String value) {
+        this.c = value;
+    }
+
+    /**
+     * Gets the value of the st property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getST() {
+        return st;
+    }
+
+    /**
+     * Sets the value of the st property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setST(String value) {
+        this.st = value;
+    }
+
+    /**
+     * Gets the value of the l property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getL() {
+        return l;
+    }
+
+    /**
+     * Sets the value of the l property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setL(String value) {
+        this.l = value;
+    }
+
+    /**
+     * Gets the value of the o property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getO() {
+        return o;
+    }
+
+    /**
+     * Sets the value of the o property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setO(String value) {
+        this.o = value;
+    }
+
+    /**
+     * Gets the value of the ou property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getOU() {
+        return ou;
+    }
+
+    /**
+     * Sets the value of the ou property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setOU(String value) {
+        this.ou = value;
+    }
+
+    /**
+     * Gets the value of the cn property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getCN() {
+        return cn;
+    }
+
+    /**
+     * Sets the value of the cn property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setCN(String value) {
+        this.cn = value;
     }
 
     /**

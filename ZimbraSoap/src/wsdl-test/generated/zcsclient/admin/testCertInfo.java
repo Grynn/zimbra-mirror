@@ -7,6 +7,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 import org.w3c.dom.Element;
 
@@ -21,6 +22,11 @@ import org.w3c.dom.Element;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
+ *         &lt;element name="subject" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="issuer" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="notBefore" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="notAfter" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="SubjectAltName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;any processContents='skip' namespace='##other' maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *       &lt;attribute name="server" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
@@ -34,16 +40,147 @@ import org.w3c.dom.Element;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "certInfo", propOrder = {
+    "subject",
+    "issuer",
+    "notBefore",
+    "notAfter",
+    "subjectAltName",
     "any"
 })
 public class testCertInfo {
 
+    protected String subject;
+    protected String issuer;
+    protected String notBefore;
+    protected String notAfter;
+    @XmlElement(name = "SubjectAltName")
+    protected String subjectAltName;
     @XmlAnyElement
     protected List<Element> any;
     @XmlAttribute(name = "server", required = true)
     protected String server;
     @XmlAttribute(name = "type", required = true)
     protected String type;
+
+    /**
+     * Gets the value of the subject property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getSubject() {
+        return subject;
+    }
+
+    /**
+     * Sets the value of the subject property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setSubject(String value) {
+        this.subject = value;
+    }
+
+    /**
+     * Gets the value of the issuer property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getIssuer() {
+        return issuer;
+    }
+
+    /**
+     * Sets the value of the issuer property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setIssuer(String value) {
+        this.issuer = value;
+    }
+
+    /**
+     * Gets the value of the notBefore property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getNotBefore() {
+        return notBefore;
+    }
+
+    /**
+     * Sets the value of the notBefore property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setNotBefore(String value) {
+        this.notBefore = value;
+    }
+
+    /**
+     * Gets the value of the notAfter property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getNotAfter() {
+        return notAfter;
+    }
+
+    /**
+     * Sets the value of the notAfter property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setNotAfter(String value) {
+        this.notAfter = value;
+    }
+
+    /**
+     * Gets the value of the subjectAltName property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getSubjectAltName() {
+        return subjectAltName;
+    }
+
+    /**
+     * Sets the value of the subjectAltName property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setSubjectAltName(String value) {
+        this.subjectAltName = value;
+    }
 
     /**
      * Gets the value of the any property.

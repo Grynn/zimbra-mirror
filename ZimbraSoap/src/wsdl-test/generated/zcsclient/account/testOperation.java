@@ -17,8 +17,6 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="delete"/>
  *     &lt;enumeration value="modify"/>
  *     &lt;enumeration value="rename"/>
- *     &lt;enumeration value="addAlias"/>
- *     &lt;enumeration value="removeAlias"/>
  *     &lt;enumeration value="addOwners"/>
  *     &lt;enumeration value="removeOwners"/>
  *     &lt;enumeration value="setOwners"/>
@@ -44,10 +42,6 @@ public enum testOperation {
     MODIFY("modify"),
     @XmlEnumValue("rename")
     RENAME("rename"),
-    @XmlEnumValue("addAlias")
-    ADD_ALIAS("addAlias"),
-    @XmlEnumValue("removeAlias")
-    REMOVE_ALIAS("removeAlias"),
     @XmlEnumValue("addOwners")
     ADD_OWNERS("addOwners"),
     @XmlEnumValue("removeOwners")

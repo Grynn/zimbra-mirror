@@ -52,9 +52,9 @@ import org.w3c.dom.Element;
 public class testAdminZimletDesc {
 
     @XmlElementRefs({
+        @XmlElementRef(name = "target", namespace = "urn:zimbraAdmin", type = JAXBElement.class),
         @XmlElementRef(name = "include", namespace = "urn:zimbraAdmin", type = JAXBElement.class),
         @XmlElementRef(name = "includeCSS", namespace = "urn:zimbraAdmin", type = JAXBElement.class),
-        @XmlElementRef(name = "target", namespace = "urn:zimbraAdmin", type = JAXBElement.class),
         @XmlElementRef(name = "serverExtension", namespace = "urn:zimbraAdmin", type = JAXBElement.class)
     })
     @XmlAnyElement
@@ -90,10 +90,10 @@ public class testAdminZimletDesc {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link Element }
      * {@link JAXBElement }{@code <}{@link String }{@code >}
      * {@link JAXBElement }{@code <}{@link String }{@code >}
      * {@link JAXBElement }{@code <}{@link testZimletServerExtension }{@code >}
+     * {@link Element }
      * {@link JAXBElement }{@code <}{@link String }{@code >}
      * 
      * 

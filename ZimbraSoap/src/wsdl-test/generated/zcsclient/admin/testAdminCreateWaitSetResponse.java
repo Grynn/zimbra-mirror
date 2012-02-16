@@ -22,7 +22,7 @@ import generated.zcsclient.zm.testIdAndType;
  *       &lt;sequence>
  *         &lt;element name="error" type="{urn:zimbra}idAndType" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
- *       &lt;attribute name="waitSet" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="waitSet" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="defTypes" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="seq" use="required" type="{http://www.w3.org/2001/XMLSchema}int" />
  *     &lt;/restriction>
@@ -39,7 +39,7 @@ import generated.zcsclient.zm.testIdAndType;
 public class testAdminCreateWaitSetResponse {
 
     protected List<testIdAndType> error;
-    @XmlAttribute(name = "waitSet")
+    @XmlAttribute(name = "waitSet", required = true)
     protected String waitSet;
     @XmlAttribute(name = "defTypes", required = true)
     protected String defTypes;

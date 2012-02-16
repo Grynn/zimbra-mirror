@@ -1,5 +1,5 @@
 
-package generated.zcsclient.admin;
+package generated.zcsclient.mail;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -9,15 +9,15 @@ import javax.xml.bind.annotation.XmlValue;
 
 
 /**
- * <p>Java class for checkedRight complex type.
+ * <p>Java class for rightPermission complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="checkedRight">
+ * &lt;complexType name="rightPermission">
  *   &lt;simpleContent>
  *     &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema>string">
- *       &lt;attribute name="deny" type="{http://www.w3.org/2001/XMLSchema}boolean" />
+ *       &lt;attribute name="allow" use="required" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *     &lt;/extension>
  *   &lt;/simpleContent>
  * &lt;/complexType>
@@ -26,15 +26,15 @@ import javax.xml.bind.annotation.XmlValue;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "checkedRight", propOrder = {
+@XmlType(name = "rightPermission", propOrder = {
     "value"
 })
-public class testCheckedRight {
+public class testRightPermission {
 
     @XmlValue
     protected String value;
-    @XmlAttribute(name = "deny")
-    protected Boolean deny;
+    @XmlAttribute(name = "allow", required = true)
+    protected boolean allow;
 
     /**
      * Gets the value of the value property.
@@ -61,27 +61,19 @@ public class testCheckedRight {
     }
 
     /**
-     * Gets the value of the deny property.
+     * Gets the value of the allow property.
      * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
      */
-    public Boolean isDeny() {
-        return deny;
+    public boolean isAllow() {
+        return allow;
     }
 
     /**
-     * Sets the value of the deny property.
+     * Sets the value of the allow property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
      */
-    public void setDeny(Boolean value) {
-        this.deny = value;
+    public void setAllow(boolean value) {
+        this.allow = value;
     }
 
 }

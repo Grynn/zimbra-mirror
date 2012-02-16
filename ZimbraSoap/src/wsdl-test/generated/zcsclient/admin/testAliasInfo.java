@@ -5,6 +5,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
+import generated.zcsclient.zm.testTargetType;
 
 
 /**
@@ -19,7 +20,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;sequence>
  *       &lt;/sequence>
  *       &lt;attribute name="targetName" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="type" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="type" type="{urn:zimbra}targetType" />
  *     &lt;/extension>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -36,7 +37,7 @@ public class testAliasInfo
     @XmlAttribute(name = "targetName", required = true)
     protected String targetName;
     @XmlAttribute(name = "type")
-    protected String type;
+    protected testTargetType type;
 
     /**
      * Gets the value of the targetName property.
@@ -67,10 +68,10 @@ public class testAliasInfo
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link testTargetType }
      *     
      */
-    public String getType() {
+    public testTargetType getType() {
         return type;
     }
 
@@ -79,10 +80,10 @@ public class testAliasInfo
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link testTargetType }
      *     
      */
-    public void setType(String value) {
+    public void setType(testTargetType value) {
         this.type = value;
     }
 

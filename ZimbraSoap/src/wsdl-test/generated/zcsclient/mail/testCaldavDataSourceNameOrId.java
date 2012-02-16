@@ -14,7 +14,7 @@ import javax.xml.bind.annotation.XmlType;
  * <pre>
  * &lt;complexType name="caldavDataSourceNameOrId">
  *   &lt;complexContent>
- *     &lt;extension base="{urn:zimbraMail}nameOrId">
+ *     &lt;extension base="{urn:zimbraMail}dataSourceNameOrId">
  *       &lt;sequence>
  *       &lt;/sequence>
  *     &lt;/extension>
@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "caldavDataSourceNameOrId")
 public class testCaldavDataSourceNameOrId
-    extends testNameOrId
+    extends testDataSourceNameOrId
 {
 
 

@@ -31,14 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "nameOrId")
 @XmlSeeAlso({
-    testPop3DataSourceNameOrId.class,
-    testCalDataSourceNameOrId.class,
-    testUnknownDataSourceNameOrId.class,
-    testRssDataSourceNameOrId.class,
-    testCaldavDataSourceNameOrId.class,
-    testYabDataSourceNameOrId.class,
-    testImapDataSourceNameOrId.class,
-    testGalDataSourceNameOrId.class
+    testDataSourceNameOrId.class
 })
 public class testNameOrId {
 

@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="m" type="{urn:zimbraMail}calendarItemMsg" minOccurs="0"/>
+ *         &lt;element name="m" type="{urn:zimbraMail}msg" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,17 +31,17 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class testCounterAppointmentRequest {
 
-    protected testCalendarItemMsg m;
+    protected testMsg m;
 
     /**
      * Gets the value of the m property.
      * 
      * @return
      *     possible object is
-     *     {@link testCalendarItemMsg }
+     *     {@link testMsg }
      *     
      */
-    public testCalendarItemMsg getM() {
+    public testMsg getM() {
         return m;
     }
 
@@ -50,10 +50,10 @@ public class testCounterAppointmentRequest {
      * 
      * @param value
      *     allowed object is
-     *     {@link testCalendarItemMsg }
+     *     {@link testMsg }
      *     
      */
-    public void setM(testCalendarItemMsg value) {
+    public void setM(testMsg value) {
         this.m = value;
     }
 

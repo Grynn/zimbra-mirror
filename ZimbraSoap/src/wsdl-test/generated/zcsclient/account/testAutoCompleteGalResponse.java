@@ -21,10 +21,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;sequence>
  *         &lt;element name="cn" type="{urn:zimbraAccount}contactInfo" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
- *       &lt;attribute name="sortBy" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="offset" type="{http://www.w3.org/2001/XMLSchema}int" />
  *       &lt;attribute name="more" type="{http://www.w3.org/2001/XMLSchema}boolean" />
- *       &lt;attribute name="token" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="tokenizeKey" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *       &lt;attribute name="paginationSupported" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *     &lt;/restriction>
@@ -41,14 +38,8 @@ import javax.xml.bind.annotation.XmlType;
 public class testAutoCompleteGalResponse {
 
     protected List<testContactInfo> cn;
-    @XmlAttribute(name = "sortBy")
-    protected String sortBy;
-    @XmlAttribute(name = "offset")
-    protected Integer offset;
     @XmlAttribute(name = "more")
     protected Boolean more;
-    @XmlAttribute(name = "token")
-    protected String token;
     @XmlAttribute(name = "tokenizeKey")
     protected Boolean tokenizeKey;
     @XmlAttribute(name = "paginationSupported")
@@ -84,54 +75,6 @@ public class testAutoCompleteGalResponse {
     }
 
     /**
-     * Gets the value of the sortBy property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getSortBy() {
-        return sortBy;
-    }
-
-    /**
-     * Sets the value of the sortBy property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setSortBy(String value) {
-        this.sortBy = value;
-    }
-
-    /**
-     * Gets the value of the offset property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Integer }
-     *     
-     */
-    public Integer getOffset() {
-        return offset;
-    }
-
-    /**
-     * Sets the value of the offset property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Integer }
-     *     
-     */
-    public void setOffset(Integer value) {
-        this.offset = value;
-    }
-
-    /**
      * Gets the value of the more property.
      * 
      * @return
@@ -153,30 +96,6 @@ public class testAutoCompleteGalResponse {
      */
     public void setMore(Boolean value) {
         this.more = value;
-    }
-
-    /**
-     * Gets the value of the token property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getToken() {
-        return token;
-    }
-
-    /**
-     * Sets the value of the token property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setToken(String value) {
-        this.token = value;
     }
 
     /**

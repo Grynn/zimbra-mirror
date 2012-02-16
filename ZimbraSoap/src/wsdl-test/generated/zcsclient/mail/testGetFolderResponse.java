@@ -3,6 +3,7 @@ package generated.zcsclient.mail;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -15,11 +16,9 @@ import javax.xml.bind.annotation.XmlType;
  * &lt;complexType name="getFolderResponse">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;choice>
+ *       &lt;sequence>
  *         &lt;element ref="{urn:zimbraMail}folder"/>
- *         &lt;element ref="{urn:zimbraMail}link"/>
- *         &lt;element ref="{urn:zimbraMail}search"/>
- *       &lt;/choice>
+ *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -29,15 +28,12 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "getFolderResponse", propOrder = {
-    "folder",
-    "link",
-    "search"
+    "folder"
 })
 public class testGetFolderResponse {
 
+    @XmlElement(required = true)
     protected testFolder folder;
-    protected testMountpoint link;
-    protected testSearchFolder search;
 
     /**
      * Gets the value of the folder property.
@@ -61,54 +57,6 @@ public class testGetFolderResponse {
      */
     public void setFolder(testFolder value) {
         this.folder = value;
-    }
-
-    /**
-     * Gets the value of the link property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link testMountpoint }
-     *     
-     */
-    public testMountpoint getLink() {
-        return link;
-    }
-
-    /**
-     * Sets the value of the link property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link testMountpoint }
-     *     
-     */
-    public void setLink(testMountpoint value) {
-        this.link = value;
-    }
-
-    /**
-     * Gets the value of the search property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link testSearchFolder }
-     *     
-     */
-    public testSearchFolder getSearch() {
-        return search;
-    }
-
-    /**
-     * Sets the value of the search property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link testSearchFolder }
-     *     
-     */
-    public void setSearch(testSearchFolder value) {
-        this.search = value;
     }
 
 }
