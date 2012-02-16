@@ -253,6 +253,7 @@ public class IntroViewModel: BaseViewModel
         m_optionsViewModel.ImportDeletedItemOptions = false;
         m_optionsViewModel.ImportSentOptions = false;
         m_optionsViewModel.LoggingVerbose = false;
+        m_optionsViewModel.OEnableNext = true;
 
         DateTime dtNow = DateTime.Now;
         DateTime dtThreeMonhtsBack = dtNow.AddMonths(-3);

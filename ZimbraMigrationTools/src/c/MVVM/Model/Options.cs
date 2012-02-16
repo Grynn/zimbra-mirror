@@ -58,6 +58,11 @@ public class ImportOptions
         get { return m_NextButtonContent; }
         set { m_NextButtonContent = value; }
     }
+    public bool OEnableNext
+    {
+        get;
+        set;
+    }
 }
 
 public class AdvancedImportOptions

@@ -52,6 +52,7 @@ public class OptionsViewModel: BaseViewModel
         ImportSentOptions = config.importOptions.Sent;
         ImportRuleOptions = config.importOptions.Rules;
         ImportOOOOptions = config.importOptions.OOO;
+        SetNextState();
 
         MigrateONRAfter = config.AdvancedImportOptions.MigrateONRAfter.ToLongDateString();
         MaxMessageSize = config.AdvancedImportOptions.MaxMessageSize;
@@ -190,6 +191,7 @@ public class OptionsViewModel: BaseViewModel
             m_config.importOptions.Mail = value;
 
             OnPropertyChanged(new PropertyChangedEventArgs("ImportMailOptions"));
+            SetNextState();
         }
     }
     public bool ImportTaskOptions {
@@ -201,6 +203,7 @@ public class OptionsViewModel: BaseViewModel
             m_config.importOptions.Tasks = value;
 
             OnPropertyChanged(new PropertyChangedEventArgs("ImportTaskOptions"));
+            SetNextState();
         }
     }
     public bool ImportCalendarOptions {
@@ -212,6 +215,7 @@ public class OptionsViewModel: BaseViewModel
             m_config.importOptions.Calendar = value;
 
             OnPropertyChanged(new PropertyChangedEventArgs("ImportCalendarOptions"));
+            SetNextState();
         }
     }
     public bool ImportContactOptions {
@@ -223,6 +227,7 @@ public class OptionsViewModel: BaseViewModel
             m_config.importOptions.Contacts = value;
 
             OnPropertyChanged(new PropertyChangedEventArgs("ImportContactOptions"));
+            SetNextState();
         }
     }
     public bool ImportDeletedItemOptions {
@@ -267,7 +272,8 @@ public class OptionsViewModel: BaseViewModel
             m_config.importOptions.Rules = value;
 
             OnPropertyChanged(new PropertyChangedEventArgs("ImportRuleOptions"));
-        }
+            SetNextState();
+        }       
     }
     public bool ImportOOOOptions
     {
@@ -279,6 +285,7 @@ public class OptionsViewModel: BaseViewModel
             m_config.importOptions.OOO = value;
 
             OnPropertyChanged(new PropertyChangedEventArgs("ImportOOOOptions"));
+            SetNextState();
         }
     }
     public string ImportNextButtonContent {
@@ -395,6 +402,16 @@ public class OptionsViewModel: BaseViewModel
             OnPropertyChanged(new PropertyChangedEventArgs("LoggingVerbose"));
         }
     }
+    private bool oenableNext;
+    public bool OEnableNext
+    {
+        get { return oenableNext; }
+        set
+        {
+            oenableNext = value;
+            OnPropertyChanged(new PropertyChangedEventArgs("OEnableNext"));
+        }
+    }
     public string ConvertToCSV(Folder[] objectarray, string delimiter)
     {
         string result;
@@ -412,6 +429,12 @@ public class OptionsViewModel: BaseViewModel
             return result.Substring(0, result.Length - delimiter.Length);
         else
             return "";
+    }
+    private void SetNextState()
+    {
+        OEnableNext = ImportMailOptions     || ImportCalendarOptions ||
+                      ImportContactOptions  || ImportTaskOptions     ||
+                      ImportRuleOptions     || ImportOOOOptions;
     }
 }
 }
