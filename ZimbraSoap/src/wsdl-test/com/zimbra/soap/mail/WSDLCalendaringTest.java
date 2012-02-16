@@ -21,7 +21,7 @@ import com.zimbra.soap.Utility;
 import generated.zcsclient.mail.testCalEcho;
 import generated.zcsclient.mail.testCalOrganizer;
 import generated.zcsclient.mail.testCalendarAttendee;
-import generated.zcsclient.mail.testCalendarItemMsg;
+import generated.zcsclient.mail.testMsg;
 import generated.zcsclient.mail.testCreateAppointmentRequest;
 import generated.zcsclient.mail.testCreateAppointmentResponse;
 import generated.zcsclient.mail.testCreateTaskRequest;
@@ -83,7 +83,7 @@ public class WSDLCalendaringTest {
         Utility.ensureAccountExists(testAcct);
         Utility.ensureAccountExists(testAcct2);
         testCreateAppointmentRequest req = new testCreateAppointmentRequest();
-        testCalendarItemMsg msg = new testCalendarItemMsg();
+        testMsg msg = new testMsg();
         msg.setL("15");
         msg.setSu("WSDL Appointment 1");
         testInvitationInfo invite = new testInvitationInfo();
@@ -148,7 +148,7 @@ public class WSDLCalendaringTest {
     public void createTask() throws Exception {
         Utility.ensureAccountExists(testAcct);
         testCreateTaskRequest req = new testCreateTaskRequest();
-        testCalendarItemMsg msg = new testCalendarItemMsg();
+        testMsg msg = new testMsg();
         msg.setL("15");
         msg.setSu("WSDL Task 1");
         testInvitationInfo invite = new testInvitationInfo();

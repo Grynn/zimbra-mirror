@@ -1,7 +1,7 @@
 /*
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Server
- * Copyright (C) 2010,2011 Zimbra, Inc.
+ * Copyright (C) 2010, 2011, 2012 Zimbra, Inc.
  *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
@@ -92,7 +92,6 @@ public class WSDLImportContactsTest {
         req.setCt("csv");
         req.setCsvfmt("windows-live-mail-csv");
         req.setCsvlocale("de");
-        req.setCsvsep(";");
         // req.setL(""); // TODO: Specify a valid item ID
         testContent theContent = new testContent();
         StringBuilder contentB = new StringBuilder();
