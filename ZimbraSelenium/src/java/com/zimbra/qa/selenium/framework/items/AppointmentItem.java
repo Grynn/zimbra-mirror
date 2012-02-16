@@ -74,9 +74,6 @@ public class AppointmentItem implements IItem {
 	
 public static AppointmentItem importFromSOAP(Element GetAppointmentResponse) throws HarnessException {
 	
-		Element multiElement = null ;
-		String attendees = "", optionals = "";			
-		int i = 1, j=1, lenAttendees = 0, lenOptionals=0;
 		
 		if ( GetAppointmentResponse == null )
 			throw new HarnessException("Element cannot be null");
@@ -127,33 +124,24 @@ public static AppointmentItem importFromSOAP(Element GetAppointmentResponse) thr
 				appt.dDisplay = compElement.getAttribute("fb");
 			}
 				
-			Element reqElement = ZimbraAccount.SoapClient.selectNode(m, "//mail:at[@role='REQ']");
-			if ( reqElement != null ) {
-				do {
-					multiElement = ZimbraAccount.SoapClient.selectNode(m, "//mail:at[@role='REQ'][" + i + "]");
-					if (multiElement == null) {
-						break;
-					}
-					attendees = attendees + "," + multiElement.getAttribute("a");
-					lenAttendees = attendees.length();
-					i++;
-				} while (multiElement != null);
-				appt.dAttendees = attendees.substring(1, lenAttendees);
+			// Parse the required attendees
+			ArrayList<String> attendees = new ArrayList<String>();
+			Element[] requiredElements = ZimbraAccount.SoapClient.selectNodes(m, "//mail:at[@role='REQ']");
+			for ( Element e : requiredElements ) {
+				attendees.add(e.getAttribute("a"));
 			}
-						
-			Element optElement = ZimbraAccount.SoapClient.selectNode(m, "//mail:at[@role='OPT']");
+			if ( attendees.size() > 0 ) {
+				appt.dAttendees = AppointmentItem.StringListToCommaSeparated(attendees);
+			}
 			
-			if ( optElement != null ) {
-				do {
-					multiElement = ZimbraAccount.SoapClient.selectNode(m, "//mail:at[@role='OPT'][" + j + "]");
-					if (multiElement == null) {
-						break;
-					}
-					optionals = optionals + "," + multiElement.getAttribute("a");
-					lenOptionals = optionals.length();
-					j++;
-				} while (multiElement != null);
-				appt.dOptionals = optionals.substring(1, lenOptionals);
+			// Parse the optional attendees
+			ArrayList<String> optionals = new ArrayList<String>();
+			Element[] optionalElements = ZimbraAccount.SoapClient.selectNodes(m, "//mail:at[@role='OPT']");
+			for ( Element e : optionalElements ) {
+				optionals.add(e.getAttribute("a"));
+			}
+			if ( optionals.size() > 0 ) {
+				appt.dOptionals = AppointmentItem.StringListToCommaSeparated(optionals);
 			}
 			
 			if (appt.dLocation == "") {
@@ -744,6 +732,17 @@ public static AppointmentItem importFromSOAP(Element GetAppointmentResponse) thr
 
 		return (result);
 
+	}
+
+	
+	private static String StringListToCommaSeparated(List<String> strings) {
+		StringBuilder sb = new StringBuilder("");
+		String delimiter = ""; // First entry does not get a comma
+		for ( String s : strings ) {
+			sb.append(delimiter).append(s);
+			delimiter = ","; // Next entry, if any, will get a comma
+		}
+		return (sb.toString());
 	}
 
 }
