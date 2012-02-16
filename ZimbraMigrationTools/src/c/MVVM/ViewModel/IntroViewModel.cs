@@ -254,10 +254,7 @@ public class IntroViewModel: BaseViewModel
         m_optionsViewModel.ImportSentOptions = false;
         m_optionsViewModel.LoggingVerbose = false;
         m_optionsViewModel.OEnableNext = true;
-
-        DateTime dtNow = DateTime.Now;
-        DateTime dtThreeMonhtsBack = dtNow.AddMonths(-3);
-        m_optionsViewModel.MigrateONRAfter = dtThreeMonhtsBack.ToShortDateString();
+        m_optionsViewModel.MigrateONRAfter = (DateTime.Now.AddMonths(-3)).ToShortDateString();
 
         m_scheduleViewModel = new ScheduleViewModel();
         m_scheduleViewModel.Name = "Schedule";

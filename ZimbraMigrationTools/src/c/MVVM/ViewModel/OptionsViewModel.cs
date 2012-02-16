@@ -21,7 +21,6 @@ public class OptionsViewModel: BaseViewModel
         this.SaveCommand = new ActionCommand(this.Save, () => true);
         this.BackCommand = new ActionCommand(this.Back, () => true);
         this.NextCommand = new ActionCommand(this.Next, () => true);
-        Migratedateflag = false;
         Maxmessageflag = false;
         Skipfolderflag = false;
     }
@@ -55,6 +54,7 @@ public class OptionsViewModel: BaseViewModel
         SetNextState();
 
         MigrateONRAfter = config.AdvancedImportOptions.MigrateONRAfter.ToLongDateString();
+        IsOnOrAfter = config.AdvancedImportOptions.IsOnOrAfter;
         MaxMessageSize = config.AdvancedImportOptions.MaxMessageSize;
 
         if (config.LoggingOptions != null)  // so old config files will work
@@ -68,10 +68,6 @@ public class OptionsViewModel: BaseViewModel
 
         // placeholderstring = returnval;
         FoldersToSkip = returnval;
-        if (MigrateONRAfter != null)
-            Migratedateflag = true;
-        else
-            Migratedateflag = false;
         if ((MaxMessageSize != "") && (MaxMessageSize != null))
             Maxmessageflag = true;
         else
@@ -310,6 +306,18 @@ public class OptionsViewModel: BaseViewModel
             OnPropertyChanged(new PropertyChangedEventArgs("MigrateONRAfter"));
         }
     }
+    public bool IsOnOrAfter
+    {
+        get { return m_config.AdvancedImportOptions.IsOnOrAfter; }
+        set
+        {
+            if (value == m_config.AdvancedImportOptions.IsOnOrAfter)
+                return;
+            m_config.AdvancedImportOptions.IsOnOrAfter = value;
+
+            OnPropertyChanged(new PropertyChangedEventArgs("IsOnOrAfter"));
+        }
+    }
     public string MaxMessageSize
     {
         get { return m_config.AdvancedImportOptions.MaxMessageSize; }
@@ -361,15 +369,6 @@ public class OptionsViewModel: BaseViewModel
                     m_config.AdvancedImportOptions.FoldersToSkip.SetValue(null, i);
             }
             OnPropertyChanged(new PropertyChangedEventArgs("FoldersToSkip"));
-        }
-    }
-    private bool m_migratedateflag;
-    public bool Migratedateflag {
-        get { return m_migratedateflag; }
-        set
-        {
-            m_migratedateflag = value;
-            OnPropertyChanged(new PropertyChangedEventArgs("Migratedateflag"));
         }
     }
     private bool m_maxmessageflag;

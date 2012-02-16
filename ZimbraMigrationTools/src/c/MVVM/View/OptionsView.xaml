@@ -58,7 +58,7 @@
                     <RowDefinition MinHeight= "24" Height="Auto"></RowDefinition>
                     <RowDefinition MinHeight= "24" Height="Auto"></RowDefinition>
                 </Grid.RowDefinitions>
-                <CheckBox Content="Migrate On or After" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Name="CBoaItems" VerticalAlignment="Center" IsChecked="{Binding Path=Migratedateflag}" />
+                <CheckBox Content="Migrate On or After" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Name="CBoaItems" VerticalAlignment="Center" IsChecked="{Binding Path=IsOnOrAfter}" />
                 <DatePicker Grid.Row="0" Grid.Column="1" MaxHeight="20" Margin="4,0,0,0" HorizontalAlignment="Center" Name="datePickerItems"  IsEnabled="{Binding ElementName=CBoaItems, Path=IsChecked}" VerticalAlignment="Center" SelectedDate="{Binding Path=MigrateONRAfter, Mode=TwoWay,  
                           ValidatesOnExceptions=true,  
                           NotifyOnValidationError=true,  

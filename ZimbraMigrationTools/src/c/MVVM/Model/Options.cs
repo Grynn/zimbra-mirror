@@ -72,6 +72,11 @@ public class AdvancedImportOptions
         get { return m_MigrateONRAfter; }
         set { m_MigrateONRAfter = value; }
     }
+    private bool m_IsOnOrAfter;
+    public bool IsOnOrAfter {
+        get { return m_IsOnOrAfter; }
+        set { m_IsOnOrAfter = value; }
+    }
     private string m_MaxMessageSize;
     public string MaxMessageSize {
         get { return m_MaxMessageSize; }
