@@ -25,13 +25,7 @@ zmsetvars \
   ldap_url \
   ldap_bind_url \
   ldap_master_url \
-  ldap_replica_rid  \
-  ldap_replication_password \
   ldap_common_require_tls
-
-if [ x"$ldap_replica_rid" = "x" ]; then
-  ldap_replica_rid=100
-fi
 
 if [ x$ldap_is_master = "xfalse" ]; then
   if [ "x$ldap_url" = "x$ldap_master_url" -a "x$1" != "xstop" ]; then
@@ -100,26 +94,6 @@ start()
 {
    checkrunning
    if [ $RUNNING = 0 ]; then
-     if [ ! -f /opt/zimbra/data/ldap/hdb/db/DB_CONFIG -o ! -s /opt/zimbra/data/ldap/hdb/db/DB_CONFIG ]; then
-       if [ -f /opt/zimbra/conf/custom/ldap/DB_CONFIG ]; then
-         mkdir -p /opt/zimbra/data/ldap/hdb/db
-         cp -f /opt/zimbra/conf/custom/ldap/DB_CONFIG /opt/zimbra/data/ldap/hdb/db/DB_CONFIG
-       else
-         mkdir -p /opt/zimbra/data/ldap/hdb/db
-         cp -f /opt/zimbra/openldap/var/openldap-data/DB_CONFIG /opt/zimbra/data/ldap/hdb/db/DB_CONFIG
-       fi
-     fi 
-     if [ x$ldap_is_master = "xtrue" ]; then
-       if [ -d /opt/zimbra/data/ldap/accesslog/db ]; then
-         if [ ! -f /opt/zimbra/data/ldap/accesslog/db/DB_CONFIG -o ! -s /opt/zimbra/data/ldap/accesslog/db/DB_CONFIG ]; then
-           if [ -f /opt/zimbra/conf/custom/ldap/DB_CONFIG.accesslog ]; then
-             cp -f /opt/zimbra/conf/custom/ldap/DB_CONFIG.accesslog /opt/zimbra/data/ldap/accesslog/db/DB_CONFIG
-           else
-             cp -f /opt/zimbra/openldap/var/openldap-data/DB_CONFIG.accesslog /opt/zimbra/data/ldap/accesslog/db/DB_CONFIG
-           fi
-         fi
-       fi
-     fi
     # Our ldap url should be the first in the list in localconfig
     bind_url=$ldap_bind_url
     if [ x"$bind_url" = "x" ]; then

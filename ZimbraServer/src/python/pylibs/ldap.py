@@ -35,24 +35,15 @@ keymap = {
 	"ldap_common_require_tls"	:	("olcSecurity",		"cn=config", False),
 	"ldap_common_writetimeout"	:	("olcWriteTimeout",	"cn=config", False),
 
-	"ldap_db_cachefree"			:	("olcDbCacheFree",		"olcDatabase={3}hdb,cn=config", False),
-	"ldap_db_cachesize"			:	("olcDbCacheSize",		"olcDatabase={3}hdb,cn=config", False),
-	"ldap_db_checkpoint"		:	("olcDbCheckpoint",		"olcDatabase={3}hdb,cn=config", False),
-	"ldap_db_dncachesize"		:	("olcDbDNcacheSize",	"olcDatabase={3}hdb,cn=config", False),
-	"ldap_db_idlcachesize"		:	("olcDbIDLcacheSize",	"olcDatabase={3}hdb,cn=config", False),
-	"ldap_db_shmkey"			:	("olcDbShmKey",			"olcDatabase={3}hdb,cn=config", False),
+	"ldap_db_checkpoint"		:	("olcDbCheckpoint",		"olcDatabase={3}mdb,cn=config", False),
+	"ldap_db_maxsize"			:	("olcDbMaxsize",			"olcDatabase={3}mdb,cn=config", False),
 
-	"ldap_accesslog_cachefree"		:	("olcDbCacheFree",		"olcDatabase={2}hdb,cn=config", True),
-	"ldap_accesslog_cachesize"		:	("olcDbCacheSize",		"olcDatabase={2}hdb,cn=config", True),
-	"ldap_accesslog_checkpoint"		:	("olcDbCheckpoint",		"olcDatabase={2}hdb,cn=config", True),
-	"ldap_accesslog_dncachesize"	:	("olcDbDNcacheSize",	"olcDatabase={2}hdb,cn=config", True),
-	"ldap_accesslog_idlcachesize"	:	("olcDbIDLcacheSize",	"olcDatabase={2}hdb,cn=config", True),
-	"ldap_accesslog_shmkey"			:	("olcDbShmKey",			"olcDatabase={2}hdb,cn=config", True),
+	"ldap_accesslog_checkpoint"		:	("olcDbCheckpoint",		"olcDatabase={2}mdb,cn=config", True),
+	"ldap_accesslog_maxsize"			:	("olcDbMaxsize",			"olcDatabase={2}mdb,cn=config", True),
 
-	"ldap_overlay_syncprov_checkpoint"	:	("olcSpCheckpoint",	"olcOverlay={0}syncprov,olcDatabase={3}hdb,cn=config", True),
-	"ldap_overlay_syncprov_sessionlog"	:	("olcSpSessionlog",	"olcOverlay={0}syncprov,olcDatabase={3}hdb,cn=config", True),
+	"ldap_overlay_syncprov_checkpoint"	:	("olcSpCheckpoint",	"olcOverlay={0}syncprov,olcDatabase={3}mdb,cn=config", True),
 
-	"ldap_overlay_accesslog_logpurge"	:	("olcAccessLogPurge", "olcOverlay={1}accesslog,olcDatabase={3}hdb,cn=config", True)
+	"ldap_overlay_accesslog_logpurge"	:	("olcAccessLogPurge", "olcOverlay={1}accesslog,olcDatabase={3}mdb,cn=config", True)
 }
 
 class Ldap:
@@ -101,35 +92,11 @@ class Ldap:
 			cls.createLdapContext()
 		return cls.mLdapContext
 
-	@classmethod 
-	def verify_shm_key(cls, key, attr, dn, value):
-		if attr == "olcDbShmKey" and value and cls.master:
-			alt_key = alt_value = alt_dn = ""
-			if key == "ldap_db_shmkey":
-				alt_key = "ldap_accesslog_shmkey"
-				alt_dn = "olcDatabase={2}hdb,cn=config"
-			else:
-				alt_key = "ldap_db_shmkey"
-				alt_dn = "olcDatabase={3}hdb,cn=config"
-
-			ats = BasicAttributes("objectClass", None)
-			atr = [attr]
-			results = cls.mLdapContext.search(alt_dn, ats, atr)
-			if results.hasMore():
-				alt_value = results.next()
-				cls.master = True
-				if alt_value == value:
-					Log.logMsg(2,"LDAP: Trying to set unique key value : %s:%s" % (key, value));
-					Log.logMsg(2,"LDAP: When alternate key has value   : %s:%s" % (alt_key, alt_value));
-					Log.logMsg(2,"LDAP: Values must differ if non-zero");
-					raise Exception ("Invalid value for %s:%s" % (key, value))
-
 	@classmethod
 	def modify_attribute(cls, key, value):
 		(attr, dn, xform) = Ldap.lookupKey(key, cls.master)
 		if attr is not None:
 			v = xform % (value,)
-			Ldap.verify_shm_key(key, attr, dn, v)
 			Log.logMsg(4, "Setting %s to %s" % (key, v))
 			myAttrs = BasicAttributes(attr, v, True)
 			cls.ctx.modifyAttributes(dn, DirContext.REPLACE_ATTRIBUTE, myAttrs)
@@ -139,7 +106,7 @@ class Ldap:
 		if key in keymap:
 			(attr, dn, requires_master) = keymap[key]
 			if re.match("ldap_db_", key) and not cls.master:
-				dn = "olcDatabase={2}hdb,cn=config"
+				dn = "olcDatabase={2}mdb,cn=config"
 				
 			xform = "%s"
 			if key == "ldap_common_require_tls":

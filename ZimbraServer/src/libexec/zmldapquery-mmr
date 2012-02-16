@@ -73,7 +73,7 @@ if(lc($ldap_is_master) eq "true") {
   my $attr=$entry->get_value("olcServerID");
   print "Server information\n";
   print "ServerID: $attr\n\n";
-  my $bdn="olcDatabase={3}hdb,cn=config";
+  my $bdn="olcDatabase={3}mdb,cn=config";
   $mesg = $ldap->search(
             base => "$bdn",
             filter => "(olcSyncrepl=*)",

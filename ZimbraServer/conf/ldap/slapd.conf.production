@@ -35,7 +35,7 @@ loglevel @@ldap_log_level@@
 
 # Load dynamic backend modules:
 modulepath	/opt/zimbra/openldap/sbin/openldap
-moduleload	back_hdb.la
+moduleload	back_mdb.la
 moduleload	back_monitor.la
 moduleload	syncprov.la
 moduleload	accesslog.la
@@ -101,7 +101,7 @@ access to dn.children="cn=monitor"
 # BDB database definitions
 #######################################################################
 
-database	hdb
+database	mdb
 suffix		""
 rootdn		"cn=config"
 # number of entries to keep in memory
@@ -116,7 +116,7 @@ checkpoint 64 5
 # The database directory MUST exist prior to running slapd AND 
 # should only be accessible by the slapd and slap tools.
 # Mode 700 recommended.
-directory	"/opt/zimbra/data/ldap/hdb/db"
+directory	"/opt/zimbra/data/ldap/mdb/db"
 # Indices to maintain
 index   objectClass                 eq
 index   zimbraForeignPrincipal      eq

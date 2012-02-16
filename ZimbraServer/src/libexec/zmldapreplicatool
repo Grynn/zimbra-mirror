@@ -87,7 +87,7 @@ if(lc($ldap_is_master) ne "true") {
   my $mesg = $ldap->bind("cn=config", password=>"$ldap_root_password");
   $mesg->code && die "Bind: ". $mesg->error . "\n"; 
 
-  my $bdn="olcDatabase={2}hdb,cn=config";
+  my $bdn="olcDatabase={2}mdb,cn=config";
   $mesg = $ldap->search(
             base => "$bdn",
             filter => "(olcSyncrepl=*)",

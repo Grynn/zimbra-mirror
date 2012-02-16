@@ -2,7 +2,7 @@ dn: cn=module{0}
 objectClass: olcModuleList
 cn: module{0}
 olcModulePath: /opt/zimbra/openldap/sbin/openldap
-olcModuleLoad: {0}back_hdb.la
+olcModuleLoad: {0}back_mdb.la
 olcModuleLoad: {1}back_monitor.la
 olcModuleLoad: {2}syncprov.la
 olcModuleLoad: {3}accesslog.la

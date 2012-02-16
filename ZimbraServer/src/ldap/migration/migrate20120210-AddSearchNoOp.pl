@@ -56,7 +56,7 @@ $mesg = $ldap->modify(
     add =>{olcModuleLoad => 'noopsrch.la'},
   );
 
-my $bdn="olcDatabase={2}hdb,cn=config";
+my $bdn="olcDatabase={2}mdb,cn=config";
 
 if(lc($ldap_is_master) eq "true") {
   $mesg = $ldap->search(
@@ -67,7 +67,7 @@ if(lc($ldap_is_master) eq "true") {
                  );
   my $size = $mesg->count;
   if ($size > 0 ) {
-    $bdn="olcDatabase={3}hdb,cn=config";
+    $bdn="olcDatabase={3}mdb,cn=config";
   }
 }
 

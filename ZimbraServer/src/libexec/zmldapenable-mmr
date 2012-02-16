@@ -105,7 +105,7 @@ if(lc($ldap_is_master) eq "true") {
     }
   }
 
-  my $bdn="olcDatabase={2}hdb,cn=config";
+  my $bdn="olcDatabase={2}mdb,cn=config";
 
 #Check if master is already enabled for replication.  If so, steps are simpler.  If not, more to do.
   $mesg = $ldap->search(
@@ -118,19 +118,11 @@ if(lc($ldap_is_master) eq "true") {
   if ($size == 0 ) {
     # Create accesslog db, add syncprov overlay, etc.
     File::Path::mkpath("${zimbra_home}/data/ldap/accesslog/db");
-    File::Path::mkpath("${zimbra_home}/data/ldap/accesslog/logs");
-    if ( !-f "${zimbra_home}/data/ldap/accesslog/db/DB_CONFIG") {
-      if (-f "${zimbra_home}/conf/custom/ldap/DB_CONFIG.accesslog") {
-        cp("${zimbra_home}/conf/custom/ldap/DB_CONFIG.accesslog","${zimbra_home}/data/ldap/accesslog/db/DB_CONFIG");
-      } else {
-        cp("${zimbra_home}/openldap/var/openldap-data/DB_CONFIG.accesslog","${zimbra_home}/data/ldap/accesslog/db/DB_CONFIG");
-      }
-    }
     $mesg=$ldap->add(
       $bdn,
       attr => [
-        objectClass=>["olcDatabaseConfig","olcHdbConfig"],
-        olcDatabase=>"{2}hdb",
+        objectClass=>["olcDatabaseConfig","olcMdbConfig"],
+        olcDatabase=>"{2}mdb",
         olcDbDirectory=>"${zimbra_home}/data/ldap/accesslog/db",
         olcSuffix=>"cn=accesslog",
         olcAccess=>'{0}to dn.subtree="cn=accesslog"  by dn.exact="uid=zimbra,cn=admins,cn=zimbra" read  by dn.exact="cn=config" read  by dn.exact="uid=zmreplica,cn=admins,cn=zimbra" read',
@@ -141,22 +133,16 @@ if(lc($ldap_is_master) eq "true") {
         olcSizeLimit=>"unlimited",
         olcTimeLimit=>"unlimited",
         olcMonitoring=>"TRUE",
-        olcDbCacheSize=>"10000",
         olcDbCheckpoint=>"64 5",
         olcDbNoSync=>"FALSE",
-        olcDbDirtyRead=>"FALSE",
-        olcDbIDLcacheSize=>"10000",
         olcDbIndex=>["entryCSN eq", "objectClass eq", "reqEnd eq", "reqResult eq", "reqStart eq"],
-        olcDbLinearIndex=>"FALSE",
         olcDbMode=>"0600",
         olcDbSearchStack=>"16",
-        olcDbShmKey=>"0",
-        olcDbCacheFree=>"1",
-        olcDbDNcacheSize=>"0",
+	olcDbMaxsize=>"85899345920",
       ],
     );
     $mesg=$ldap->add(
-      'olcOverlay=syncprov,olcDatabase={2}hdb,cn=config',
+      'olcOverlay=syncprov,olcDatabase={2}mdb,cn=config',
       attr => [
         objectClass=>["olcOverlayConfig", "olcSyncProvConfig"],
         olcOverlay=>"syncprov",
@@ -165,16 +151,15 @@ if(lc($ldap_is_master) eq "true") {
       ],
     );
     $mesg=>$ldap->add(
-      'olcOverlay=syncprov,olcDatabase={3}hdb,cn=config',
+      'olcOverlay=syncprov,olcDatabase={3}mdb,cn=config',
       attr => [
         objectClass=>['olcOverlayConfig','olcSyncProvConfig'],
         olcOverlay=>'syncprov',
         olcSpCheckpoint=>'20 10',
-        olcSpSessionLog=>'500',
       ],
     );
     $mesg=>$ldap->add(
-      'olcOverlay=accesslog,olcDatabase={3}hdb,cn=config',
+      'olcOverlay=accesslog,olcDatabase={3}mdb,cn=config',
       attr => [
         objectClass=>['olcOverlayConfig','olcAccessLogConfig'],
         olcOverlay=>'accesslog',
@@ -185,7 +170,7 @@ if(lc($ldap_is_master) eq "true") {
       ],
     );
   }
-  $bdn="olcDatabase={3}hdb,cn=config";
+  $bdn="olcDatabase={3}mdb,cn=config";
   if ($mmrURI =~ /^ldaps:/) {
     $mesg = $ldap->modify(
       $bdn,
@@ -204,7 +189,7 @@ if(lc($ldap_is_master) eq "true") {
   }
   $mesg = $ldap ->search(
                     base=>"$bdn",
-                    filter=>"(&(objectClass=olcHdbConfig)(olcMirrorMode:booleanMatch:=TRUE))",
+                    filter=>"(&(objectClass=olcMdbConfig)(olcMirrorMode:booleanMatch:=TRUE))",
                     scope=>"sub",
                     attrs => ['olcMirrorMode'],
                 );

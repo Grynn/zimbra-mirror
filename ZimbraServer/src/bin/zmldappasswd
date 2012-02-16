@@ -163,7 +163,7 @@ if ( $options{r}) {
         }
     } elsif (!$isLdapMaster)  {
         $mesg = $ldap->search(
-            base => "olcDatabase={2}hdb,cn=config",
+            base => "olcDatabase={2}mdb,cn=config",
             filter => "(olcSyncrepl=*)",
             attrs => ['olcSyncrepl']
         );
