@@ -357,17 +357,27 @@ public class OptionsViewModel: BaseViewModel
 
             int i;
 
-            for (i = 0; i < nameTokens.Length; i++)
+            if (value == "")
             {
-                Folder tempUser = new Folder();
-
-                tempUser.FolderName = nameTokens.GetValue(i).ToString();
-                m_config.AdvancedImportOptions.FoldersToSkip.SetValue(tempUser, i);
-            }
-            if (nameTokens.Length < 15)
-            {
-                for (int rest = i; rest < 15; rest++)
+                for (i = 0; i < 15; i++)
+                {
                     m_config.AdvancedImportOptions.FoldersToSkip.SetValue(null, i);
+                }
+            }
+            else
+            {
+                for (i = 0; i < nameTokens.Length; i++)
+                {
+                    Folder tempUser = new Folder();
+
+                    tempUser.FolderName = nameTokens.GetValue(i).ToString();
+                    m_config.AdvancedImportOptions.FoldersToSkip.SetValue(tempUser, i);
+                }
+                if (nameTokens.Length < 15)
+                {
+                    for (int rest = i; rest < 15; rest++)
+                        m_config.AdvancedImportOptions.FoldersToSkip.SetValue(null, i);
+                }
             }
             OnPropertyChanged(new PropertyChangedEventArgs("FoldersToSkip"));
         }
