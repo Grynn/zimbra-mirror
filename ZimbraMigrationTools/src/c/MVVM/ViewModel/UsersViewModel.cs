@@ -241,7 +241,7 @@ public class UsersViewModel: BaseViewModel
     }
     private void SaveCSV()
     {
-        if (!ValidateUsersList())
+        if (!ValidateUsersList(true))
             return;
         List<Users> ListofUsers = new List<Users>();
         for (int i = 0; i < UsersList.Count; i++)
@@ -297,7 +297,7 @@ public class UsersViewModel: BaseViewModel
     }
     private void Next()
     {
-        if (!ValidateUsersList())
+        if (!ValidateUsersList(true))
             return;
         ZimbraAPI zimbraAPI = new ZimbraAPI();
         if (ZimbraValues.zimbraValues.AuthToken.Length == 0)
@@ -362,7 +362,7 @@ public class UsersViewModel: BaseViewModel
         return bRetval;
     }
 
-    public bool ValidateUsersList()
+    public bool ValidateUsersList(bool bShowWarning)
     {
         // Make sure there are no blanks or duplicates in the list; remove them if there are.
         // If we get down to no items, disable the Next button.
@@ -384,8 +384,11 @@ public class UsersViewModel: BaseViewModel
         }
         if (UsersList.Count == 0)
         {
-            MessageBox.Show("Please specify a source name", "Zimbra Migration", MessageBoxButton.OK,
-                             MessageBoxImage.Warning);
+            if (bShowWarning)
+            {
+                MessageBox.Show("Please specify a source name", "Zimbra Migration", MessageBoxButton.OK,
+                                MessageBoxImage.Warning);
+            }
             EnableNext = false;
             return false;
         }

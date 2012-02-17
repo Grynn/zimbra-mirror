@@ -60,7 +60,7 @@ public partial class MainViewW
         {
             UsersViewModel usersViewModel = m_introViewModel.GetUsersViewModel();
 
-            usersViewModel.ValidateUsersList();
+            usersViewModel.ValidateUsersList(false);
         }
     }
 }
