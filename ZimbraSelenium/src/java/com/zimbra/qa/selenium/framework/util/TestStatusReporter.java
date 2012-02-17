@@ -589,14 +589,20 @@ public class TestStatusReporter extends TestListenerAdapter {
 
 
 
-		Writer output = null;
-
-		output = null;
-		File bodyfile = new File(path+ "/ebody.txt");
 		try {
-			output = new BufferedWriter(new FileWriter(bodyfile));
-			output.write(body.toString());
-			output.close();
+			
+			Writer output = null;
+			try {
+				
+				output = new BufferedWriter(new FileWriter(path+ "/ebody.txt"));
+				output.write(body.toString());
+				
+			} finally {
+				if ( output != null ) {
+					output.close();
+					output = null;
+				}
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

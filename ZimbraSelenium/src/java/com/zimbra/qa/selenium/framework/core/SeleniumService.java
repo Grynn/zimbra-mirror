@@ -209,16 +209,23 @@ public class SeleniumService {
 				
 				try {
 					URI stopUri = new URI("http", null, SeleniumServer, SeleniumPort, "/selenium-server/driver", "cmd=shutDownSeleniumServer", null);
-					BufferedReader in = new BufferedReader(new InputStreamReader(stopUri.toURL().openStream()));
-			
-					if (in.ready())
-						logger.info("A Selenium Server was not stopped. Attempting to kill");
+					BufferedReader in = null;
+					try {
 						
-					String line;
-					while ((line = in.readLine()) != null)
-						logger.info(line);
+						in = new BufferedReader(new InputStreamReader(stopUri.toURL().openStream()));
+						if (in.ready())
+							logger.info("A Selenium Server was not stopped. Attempting to kill");
+							
+						String line;
+						while ((line = in.readLine()) != null)
+							logger.info(line);
 
-					in.close();
+					} finally {
+						if ( in != null ) {
+							in.close();
+							in = null;
+						}
+					}
 					
 				} catch (IOException e) {
 					logger.warn("Selenium server is stopped");

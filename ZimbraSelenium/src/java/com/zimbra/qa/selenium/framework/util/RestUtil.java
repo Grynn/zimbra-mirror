@@ -330,16 +330,34 @@ public class RestUtil {
 					//
 					responseFile = File.createTempFile("rest", ".tmp");
 
-					InputStream is = method.getResponseBodyAsStream();
-					OutputStream os = new FileOutputStream(responseFile);
-					   
-					int b;
-					while ( (b = is.read()) != -1) {
-						os.write(b);
-					}
-					os.close();
-					is.close();
+					InputStream is = null;
+					OutputStream os = null;
+					try {
+						
+						is = method.getResponseBodyAsStream();
+						
+						try {
+							
+							os = new FileOutputStream(responseFile);
+							   
+							int b;
+							while ( (b = is.read()) != -1) {
+								os.write(b);
+							}
+							
+						} finally {
+							if ( os != null ) {
+								os.close();
+								os = null;
+							}
+						}
 
+					} finally {
+						if ( is != null ) {
+							is.close();
+							is = null;
+						}
+					}
 				
 					// For logging
 					responseBody = "binary data saved in file: "+ responseFile.getAbsolutePath();					
@@ -353,9 +371,16 @@ public class RestUtil {
 					responseBody = method.getResponseBodyAsString();
 
 					// Create a temporary file name
-					OutputStream os = new FileOutputStream(responseFile);
-					os.write(responseBody.getBytes());
-					os.close();
+					OutputStream os = null;
+					try {
+						os = new FileOutputStream(responseFile);
+						os.write(responseBody.getBytes());
+					} finally {
+						if ( os != null ) {
+							os.close();
+							os = null;
+						}
+					}
 					
 				}
 				
@@ -694,21 +719,27 @@ public class RestUtil {
 					result = File.createTempFile("temp" + ZimbraSeleniumProperties.getUniqueString(), ".dat");
 
 					reader = new BufferedReader(new FileReader(in));
-					writer = new PrintWriter(new FileWriter(result));
 					
-					String line = null;
-					while ( (line = reader.readLine()) != null ) {
-						writer.println(line.replaceAll(oldString, newString));
+					try {
+						
+						writer = new PrintWriter(new FileWriter(result));
+						
+						String line = null;
+						while ( (line = reader.readLine()) != null ) {
+							writer.println(line.replaceAll(oldString, newString));
+						}
+					
+					} finally {
+						if ( writer != null ) {
+							writer.close();
+							writer = null;
+						}
 					}
 					
 				} finally {
 					if ( reader != null ) {
 						reader.close();
 						reader = null;
-					}
-					if ( writer != null ) {
-						writer.close();
-						writer = null;
 					}
 				}
 				
