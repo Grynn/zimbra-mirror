@@ -244,7 +244,7 @@ public class PageManageResources extends AbsTab {
 
 				optionLocator = Locators.NEW_MENU;
 
-				page = new WizardCreateAccount(this);
+				page = new WizardCreateResource(this);
 
 				// FALL THROUGH
 
@@ -278,7 +278,7 @@ public class PageManageResources extends AbsTab {
 			}
 
 			this.zClickAt(pulldownLocator,"");
-			SleepUtil.sleepSmall();
+			SleepUtil.sleepMedium();
 			
 
 			// If the app is busy, wait for it to become active
