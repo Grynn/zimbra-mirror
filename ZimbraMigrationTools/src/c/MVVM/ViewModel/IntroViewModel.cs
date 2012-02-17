@@ -264,6 +264,7 @@ public class IntroViewModel: BaseViewModel
         m_scheduleViewModel.COS = "default";
         m_scheduleViewModel.DefaultPWD = "";
         m_scheduleViewModel.ScheduleDate = DateTime.Now.ToShortDateString();
+        m_scheduleViewModel.EnableProvGB = false;
 
         m_usersViewModel = new UsersViewModel("", "");
         m_usersViewModel.Name = "Users";

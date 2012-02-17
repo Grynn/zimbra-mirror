@@ -313,6 +313,17 @@ public class ScheduleViewModel: BaseViewModel
             OnPropertyChanged(new PropertyChangedEventArgs("EnableMigrate"));
         }
     }
+    public bool EnableProvGB
+    {
+        get { return m_schedule.EnableProvGB; }
+        set
+        {
+            if (value == m_schedule.EnableProvGB)
+                return;
+            m_schedule.EnableProvGB = value;
+            OnPropertyChanged(new PropertyChangedEventArgs("EnableProvGB"));
+        }
+    }
     private int cosSelection;
     public int CurrentCOSSelection {
         get { return cosSelection; }

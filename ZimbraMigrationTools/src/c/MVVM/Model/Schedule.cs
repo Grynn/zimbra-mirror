@@ -28,5 +28,10 @@ public class Schedule
         get;
         set;
     }
+    public bool EnableProvGB
+    {
+        get;
+        set;
+    }
 }
 }

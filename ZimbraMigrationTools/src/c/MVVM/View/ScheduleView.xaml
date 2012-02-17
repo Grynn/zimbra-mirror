@@ -90,7 +90,7 @@
                 </Grid>
             </GroupBox>
         </Grid>
-        <GroupBox Grid.Row="3" Margin="15,12,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Name="gbProv" Header="Provisioning" Padding="6">
+        <GroupBox Grid.Row="3" Margin="15,12,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Name="gbProv" Header="Provisioning" Padding="6" IsEnabled="{Binding Path=EnableProvGB}">
             <Grid Name="gbPGrid">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"></RowDefinition>

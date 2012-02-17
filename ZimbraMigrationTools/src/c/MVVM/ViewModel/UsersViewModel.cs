@@ -311,6 +311,7 @@ public class UsersViewModel: BaseViewModel
         ScheduleViewModel scheduleViewModel =
             ((ScheduleViewModel)ViewModelPtrs[(int)ViewType.SCHED]);
 
+        scheduleViewModel.EnableProvGB = false;
         for (int i = 0; i < UsersList.Count; i++)
         {
             string userName = (UsersList[i].MappedName.Length > 0) ? UsersList[i].MappedName :
@@ -326,6 +327,10 @@ public class UsersViewModel: BaseViewModel
             {
                 UsersList[i].IsProvisioned = false;     // get (SchedList) in schedule view model will set again
                 scheduleViewModel.SchedList[i].isProvisioned = false;
+                if (!scheduleViewModel.EnableProvGB)
+                {
+                    scheduleViewModel.EnableProvGB = true;
+                }
             }
             else
             {
