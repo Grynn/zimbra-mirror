@@ -69,7 +69,7 @@ build:
 	LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(BDB_LIB_DIR):$(CYRUS_LIB_DIR):$(LIBTOOL_LIB_DIR) $(MAKE) $(MAKEARGS); \
 	LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(BDB_LIB_DIR):$(CYRUS_LIB_DIR):$(LIBTOOL_LIB_DIR) $(MAKE) install STRIP=""; \
 	cd contrib/slapd-modules/noopsrch; \
-	LD_RUN_PATH=$(LDAP_LIB_DIR):$(OPENSSL_LIB_DIR):$(BDB_LIB_DIR):$(CYRUS_LIB_DIR):$(LIBTOOL_LIB_DIR) $(MAKE) DEFINES="-DSLAPD_OVER_NOOPSRCH=2" prefix=$(ZIMBRA_HOME)/openldap-$(LDAP_VERSION) libexecdir=$(ZIMBRA_HOME)/openldap-$(LDAP_VERSION)/sbin LIBS="-L$(LDAP_LIB_DIR) -lldap_r -llber" install STRIP=""; \
+	LD_RUN_PATH=$(LDAP_LIB_DIR):$(OPENSSL_LIB_DIR):$(BDB_LIB_DIR):$(CYRUS_LIB_DIR):$(LIBTOOL_LIB_DIR) $(MAKE) prefix=$(ZIMBRA_HOME)/openldap-$(LDAP_VERSION) libexecdir=$(ZIMBRA_HOME)/openldap-$(LDAP_VERSION)/sbin LIBS="-L$(LDAP_LIB_DIR) -lldap_r -llber" install STRIP=""; \
 	rm -f $(ZIMBRA_HOME)/openldap-$(LDAP_VERSION)/sbin/openldap/noopsrch.a; \
 	chmod 755 $(ZIMBRA_HOME)/openldap-$(LDAP_VERSION)/sbin/openldap/noopsrch.la;)
 	(cd $(ZIMBRA_HOME); ln -s openldap-$(LDAP_VERSION) openldap)
