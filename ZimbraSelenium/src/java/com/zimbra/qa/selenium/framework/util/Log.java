@@ -50,7 +50,13 @@ import java.util.logging.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import org.testng.ITestResult;
+import org.testng.Reporter;
 
 public class Log {
 
@@ -617,4 +623,95 @@ public class Log {
          racetrackWarningLogged = true;
       }
    }
+   
+   
+   public static class LogFormatter extends java.util.logging.Formatter {
+
+	   /**
+	    * Set the actual format using LOG_TIME_FORMAT from SviConstants.
+	    * @param record - a line of log.
+	    * @return the format.
+	    */
+	   @Override
+	   public synchronized String 
+	   format( LogRecord record ) 
+	   {      
+	      // get a 4 digit thread ID as StringBuilder
+	      StringBuilder sb = new StringBuilder();
+	      java.util.Formatter f = new java.util.Formatter(sb);
+	      f.format("[%4d]", Thread.currentThread().getId());
+	      
+	      return " " + record.getLevel() 
+	             + " : " 
+	             + sb.toString()                               
+	             + " [" 
+	             + record.getSourceClassName() 
+	             + ":" 
+	             + record.getSourceMethodName() 
+	             + "] " 
+	             + record.getMessage() 
+	             + "\n";
+	   }
+	}
+
+   public static class TestNGLogFileReporter {
+	    private static Map<ITestResult, File> fileMap = Collections.synchronizedMap(new HashMap<ITestResult, File>());
+	    private static Map<ITestResult, Writer> writerMap = Collections.synchronizedMap(new HashMap<ITestResult, Writer>());
+	    
+	    /**
+	     * Start logging to a file for the test
+	     * 
+	     * This method can be called multiple times for the same test. Subsequent calls
+	     * will be no-ops. This allows for multiple listeners to subscribe to the
+	     * log file.
+	     * 
+	     * @param result ITestResult corresponding to the test to log for
+	     * @throws IOException
+	     */
+	    public static void startLogging(ITestResult result) throws IOException {
+	        if(!fileMap.containsKey(result)) {
+	            File tempLogFile = File.createTempFile("vum-temp-log", ".log");
+	            tempLogFile.deleteOnExit();
+	            fileMap.put(result, tempLogFile);
+	            writerMap.put(result, new BufferedWriter(new FileWriter(tempLogFile)));
+	        }
+	    }
+	    
+	    /**
+	     * Log a message for the current thread
+	     * 
+	     * @param s Message to be logged
+	     * @throws IOException
+	     */
+	    public static void log(String s) throws IOException {
+	        ITestResult currentResult = Reporter.getCurrentTestResult();
+	        if(fileMap.containsKey(currentResult) && writerMap.containsKey(currentResult)) {
+	            writerMap.get(currentResult).write(s + "\n");
+	        }
+	    }
+	    
+	    /**
+	     * Close the log file at the end of the test
+	     * 
+	     * @param result ITestResult for the test that has finished
+	     * @throws IOException
+	     */
+	    public static void endLogging(ITestResult result) throws IOException {
+	        if(fileMap.containsKey(result) && writerMap.containsKey(result))  {
+	            writerMap.get(result).close();
+	            writerMap.remove(result);
+	        }
+	    }
+	    
+	    /**
+	     * Get the log file associated with the given test.
+	     * 
+	     * @param result ITestResult for the test to get the log file from
+	     * @return temporary log file
+	     */
+	    public static File getOutput(ITestResult result) {
+	        return fileMap.get(result);
+	    }
+	}
+
 }

@@ -111,7 +111,7 @@ public class ZimbraSeleniumProperties {
 				configProp = new PropertiesConfiguration();
 				configProp.load(PropertiesConfigurationFilename);
 			} catch (ConfigurationException e) {
-				ZimbraSeleniumLogger.mLog.error("Unable to open config file: " + PropertiesConfigurationFilename.getAbsolutePath(), e);
+				logger.error("Unable to open config file: " + PropertiesConfigurationFilename.getAbsolutePath(), e);
 				logger.info("config.properties is default");
 				configProp = createDefaultProperties();
 			}
@@ -195,12 +195,6 @@ public class ZimbraSeleniumProperties {
 		return defaultProp;
 	}
 
-	private static class CurClassGetter extends SecurityManager {
-		private Class<?> getCurrentClass() {
-			return getClassContext()[1];
-		}
-	}
-	
 	/**
 	 * isWebDriver() 
 	 * method to check whether WebDriver mode is enabled
@@ -371,7 +365,6 @@ public class ZimbraSeleniumProperties {
 
 	// for unit test need to change access to public
 	public static void main(String[] args) {
-		ZimbraSeleniumLogger.setmLog(new CurClassGetter().getCurrentClass());
 
 		System
 				.setProperty("log4j.configuration",
@@ -383,12 +376,12 @@ public class ZimbraSeleniumProperties {
 		String br = (String) ZimbraSeleniumProperties.getInstance()
 				.getConfigProp().getProperty("browser");
 		System.out.println(br);
-		ZimbraSeleniumLogger.mLog.debug(br);
+		logger.debug(br);
 
 		ResourceBundle zmMsg = (ResourceBundle) ZimbraSeleniumProperties
 				.getInstance().getConfigProp().getProperty("zmMsg");
 		System.out.println(zmMsg.getLocale());
-		ZimbraSeleniumLogger.mLog.debug(zmMsg.getLocale());
+		logger.debug(zmMsg.getLocale());
 	}
 
 }
