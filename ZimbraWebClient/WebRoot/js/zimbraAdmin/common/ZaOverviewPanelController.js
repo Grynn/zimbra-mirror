@@ -2064,9 +2064,6 @@ function (itemType) {
 	}
 }
 
-// Temporary hard code  here
-// It will be rmoved in futher
-ZaOverviewPanelController.accountBasePath = ZaMsg.OVP_home + ZaTree.SEPERATOR + ZaMsg.OVP_manageAccounts + ZaTree.SEPERATOR;
 ZaOverviewPanelController.prototype.addAccountItem =
 function(item, currentView) {
 	var type = item.type;
@@ -2087,7 +2084,7 @@ function(item, currentView) {
         }
 	}
 
-    var parentPath = ZaOverviewPanelController.accountBasePath + relativePath;
+    var parentPath =  ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_manageAccounts, relativePath]);
     var name = item.name;
     this.addObjectItem(parentPath, name, currentView, false, false, item);
 }
