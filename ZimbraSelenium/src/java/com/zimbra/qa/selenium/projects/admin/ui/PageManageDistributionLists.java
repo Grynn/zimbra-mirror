@@ -3,6 +3,9 @@
  */
 package com.zimbra.qa.selenium.projects.admin.ui;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.zimbra.qa.selenium.framework.ui.AbsApplication;
 import com.zimbra.qa.selenium.framework.ui.AbsPage;
 import com.zimbra.qa.selenium.framework.ui.AbsTab;
@@ -10,6 +13,7 @@ import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
+import com.zimbra.qa.selenium.projects.admin.items.AccountItem;
 
 
 /**
@@ -22,10 +26,14 @@ public class PageManageDistributionLists extends AbsTab {
 		public static final String MANAGE_ACCOUNTS_ICON="css=div.ImgMangeAccounts";
 		public static final String DISTRIBUTION_LISTS="css=td[id^='zti__AppAdmin__Home__dlLstHV']";
 		public static final String GEAR_ICON="css=div.ImgConfigure";
-		public static final String NEW_MENU="css=td[id^='zmi__zb_currentApp__NEW_MENU__'][id$='_title']";
+		public static final String NEW_MENU="css=div[id='zm__zb_currentApp__MENU_POP'] div[class='ImgDistributionList']";
 		public static final String HOME="Home";
 		public static final String MANAGE_ACCOUNTS="Manage Accounts";
 		public static final String DISTRIBUTION_LIST="Distribution Lists";
+		public static final String DELETE_BUTTON="css=div[id='zm__zb_currentApp__MENU_POP'] div[class='ImgDelete']";		
+		public static final String EDIT_BUTTON="css=div[id='zm__zb_currentApp__MENU_POP'] div[class='ImgEdit']";
+		public static final String RIGHT_CLICK_MENU_DELETE_BUTTON="css=div[id='zm__zb_currentApp__MENU_POP'] div[class='ImgDelete']";
+		public static final String RIGHT_CLICK_MENU_EDIT_BUTTON="css=div[id='zm__zb_currentApp__MENU_POP'] div[class='ImgEdit']";
 	}
 
 	public PageManageDistributionLists(AbsApplication application) {
@@ -88,8 +96,43 @@ public class PageManageDistributionLists extends AbsTab {
 	@Override
 	public AbsPage zListItem(Action action, String item)
 	throws HarnessException {
-		// TODO Auto-generated method stub
-		return null;
+		logger.info(myPageName() + " zListItem("+ action +", "+ item +")");
+
+		tracer.trace(action +" on subject = "+ item);
+
+		AbsPage page = null;
+
+		// How many items are in the table?
+		String rowsLocator = "css=div#zl__DL_MANAGE div[id$='__rows'] div[id^='zli__']";
+		int count = this.sGetCssCount(rowsLocator);
+		logger.debug(myPageName() + " zListGetAccounts: number of accounts: "+ count);
+
+		// Get each conversation's data from the table list
+		for (int i = 1; i <= count; i++) {
+			final String accountLocator = rowsLocator + ":nth-child("+i+")";
+			String locator;
+
+			// Email Address
+			locator = accountLocator + " td[id^='dl_data_emailaddress']";
+
+
+			if(this.sIsElementPresent(locator)) 
+			{
+				if(this.sGetText(locator).trim().equalsIgnoreCase(item)) 
+				{
+					if(action == Action.A_LEFTCLICK) {
+						zClick(locator);
+						break;
+					} else if(action == Action.A_RIGHTCLICK) {
+						zRightClick(locator);
+						break;
+					}
+
+				}
+				
+			}
+		}
+		return page;
 	}
 
 	@Override
@@ -105,7 +148,7 @@ public class PageManageDistributionLists extends AbsTab {
 		return null;	
 	}
 
-	
+
 	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
 
 		logger.info(myPageName() + " zToolbarPressButton("+ button +")");
@@ -129,11 +172,21 @@ public class PageManageDistributionLists extends AbsTab {
 			// New button
 			locator = Locators.DISTRIBUTION_LISTS;
 
-			 
+
 			// Create the page
 			page = new WizardCreateDL(this);
 
 			// FALL THROUGH
+
+		} else if(button == Button.B_TREE_DELETE) {
+			locator=Locators.RIGHT_CLICK_MENU_DELETE_BUTTON;
+
+			page = new DialogForDeleteOperation(this.MyApplication, null);
+
+		} else if(button == Button.B_TREE_EDIT) {
+			locator=Locators.RIGHT_CLICK_MENU_EDIT_BUTTON;
+
+			page = new FormEditDistributionList(this.MyApplication);
 
 		} else {
 			throw new HarnessException("no logic defined for button "+ button);
@@ -152,12 +205,12 @@ public class PageManageDistributionLists extends AbsTab {
 			SleepUtil.sleepMedium();
 		}
 
-		sMouseOut(locator);
+		
 		return (page);
 
 	}
 
-	
+
 	public AbsPage zToolbarPressPulldown(Button pulldown, Button option) throws HarnessException {
 		logger.info(myPageName() + " zToolbarPressButtonWithPulldown("+ pulldown +", "+ option +")");
 
@@ -176,17 +229,23 @@ public class PageManageDistributionLists extends AbsTab {
 		AbsPage page = null; // If set, this page will be returned
 
 		if (pulldown == Button.B_GEAR_BOX) {
+			pulldownLocator = Locators.GEAR_ICON;
 
 			if (option == Button.O_NEW) {
-
-				pulldownLocator = Locators.GEAR_ICON;
 				optionLocator = Locators.NEW_MENU;
-
 				page = new WizardCreateDL(this);
 
 				// FALL THROUGH
-
-			} else {
+			} else if(option == Button.O_EDIT) {
+				optionLocator = Locators.EDIT_BUTTON;
+				page = new FormEditDistributionList(this.MyApplication);
+				// FALL THROUGH
+			} else if(option == Button.O_DELETE) {
+				optionLocator = Locators.DELETE_BUTTON;
+				page = new DialogForDeleteOperation(this.MyApplication,null);
+				// FALL THROUGH
+			}
+			else {
 				throw new HarnessException("no logic defined for pulldown/option " + pulldown + "/" + option);
 			}
 
@@ -204,6 +263,7 @@ public class PageManageDistributionLists extends AbsTab {
 			}
 
 			this.zClickAt(pulldownLocator,"0,0");
+			SleepUtil.sleepMedium();
 
 			// If the app is busy, wait for it to become active
 			//zWaitForBusyOverlay();
@@ -228,6 +288,62 @@ public class PageManageDistributionLists extends AbsTab {
 		return (page);
 	}
 	
+	/**
+	 * Return a list of all accounts in the current view
+	 * @return
+	 * @throws HarnessException 
+	 * @throws HarnessException 
+	 */
+	public List<AccountItem> zListGetAccounts() throws HarnessException {
+
+		List<AccountItem> items = new ArrayList<AccountItem>();
+
+		// Make sure the button exists
+		if ( !this.sIsElementPresent("css=div[id='zl__DL_MANAGE'] div[id$='__rows']") )
+			throw new HarnessException("Account Rows is not present");
+
+		// How many items are in the table?
+		String rowsLocator = "//div[@id='zl__DL_MANAGE']//div[contains(@id, '__rows')]//div[contains(@id,'zli__')]";
+		int count = this.sGetXpathCount(rowsLocator);
+		logger.debug(myPageName() + " zListGetAccounts: number of accounts: "+ count);
+
+		// Get each conversation's data from the table list
+		for (int i = 1; i <= count; i++) {
+			final String accountLocator = rowsLocator + "["+ i +"]";
+			String locator;
+
+			AccountItem item = new AccountItem();
+
+			// Type (image)
+			// ImgAdminUser ImgAccount ImgSystemResource (others?)
+			locator = accountLocator + "//td[contains(@id, 'dl_data_type_')]//div";
+			if ( this.sIsElementPresent(locator) ) {
+				item.setGAccountType(this.sGetAttribute("xpath=("+ locator + ")@class"));
+			}
+
+
+			// Email Address
+			locator = accountLocator + "//td[contains(@id, 'dl_data_emailaddress_')]";
+			if ( this.sIsElementPresent(locator) ) {
+				item.setGEmailAddress(this.sGetText(locator).trim());
+			}
+
+			// Display Name
+			// Status
+			// Lost Login Time
+			// Description
+
+
+			// Add the new item to the list
+			items.add(item);
+			logger.info(item.prettyPrint());
+		}
+
+		// Return the list of items
+		return (items);
+	}
+
+
 	public boolean zVerifyHeader (String header) throws HarnessException {
 		if(this.sIsElementPresent("css=span:contains('" + header + "')"))
 			return true;

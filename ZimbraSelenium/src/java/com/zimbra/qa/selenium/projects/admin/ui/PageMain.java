@@ -23,6 +23,7 @@ public class PageMain extends AbsTab {
 		public static final String zLogOff = "css=div.ImgLogoff";
 		public static final String zSkinContainerHelp		= "xpath=//*[@id='skin_container_help']";
 		public static final String zSkinContainerDW			= "xpath=//*[@id='skin_container_dw']";
+		public static final String REFRESH_BUTTON = "css=div.ImgSearchRefreshWhite";
 	}
 	
 	public PageMain(AbsApplication application) {

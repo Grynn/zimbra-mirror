@@ -27,10 +27,14 @@ public class PageManageAccounts extends AbsTab {
 		public static final String MANAGE_ACCOUNTS_ICON="css=div.ImgMangeAccounts";
 		public static final String ACCOUNTS="css=td[id^='zti__AppAdmin__Home__actLstHV']";
 		public static final String GEAR_ICON="css=div.ImgConfigure";
-		public static final String NEW_MENU="zmi__zb_currentApp__NEW_MENU";
 		public static final String HOME="Home";
 		public static final String MANAGE_ACCOUNTS="Manage Accounts";
 		public static final String ACCOUNT=" Accounts";
+		public static final String NEW_MENU="css=div[id='zm__zb_currentApp__MENU_POP'] div[class='ImgNewAccount']";
+		public static final String DELETE_BUTTON="css=div[id='zm__zb_currentApp__MENU_POP'] div[class='ImgDelete']";
+		public static final String EDIT_BUTTON="css=div[id='zm__zb_currentApp__MENU_POP'] div[class='ImgEdit']";
+		public static final String RIGHT_CLICK_MENU_DELETE_BUTTON="css=div[id^='zm__ACLV__MENU_POP'] div[class='ImgDelete']";
+		public static final String RIGHT_CLICK_MENU_EDIT_BUTTON="css=div[id^='zm__ACLV__MENU_POP'] div[class='ImgEdit']";
 	}
 
 
@@ -106,8 +110,42 @@ public class PageManageAccounts extends AbsTab {
 	@Override
 	public AbsPage zListItem(Action action, String item)
 	throws HarnessException {
-		// TODO Auto-generated method stub
-		return null;
+		logger.info(myPageName() + " zListItem("+ action +", "+ item +")");
+
+		tracer.trace(action +" on subject = "+ item);
+
+		AbsPage page = null;
+
+		// How many items are in the table?
+		String rowsLocator = "css=div#zl__ACCT_MANAGE div[id$='__rows'] div[id^='zli__']";
+		int count = this.sGetCssCount(rowsLocator);
+		logger.debug(myPageName() + " zListGetAccounts: number of accounts: "+ count);
+
+		// Get each conversation's data from the table list
+		for (int i = 1; i <= count; i++) {
+			final String accountLocator = rowsLocator + ":nth-child("+i+")";
+			String locator;
+
+			// Email Address
+			locator = accountLocator + " td[id^='account_data_emailaddress']";
+
+
+			if(this.sIsElementPresent(locator)) 
+			{
+				if(this.sGetText(locator).trim().equalsIgnoreCase(item)) 
+				{
+					if(action == Action.A_LEFTCLICK) {
+						zClick(locator);
+						break;
+					} else if(action == Action.A_RIGHTCLICK) {
+						zRightClick(locator);
+						break;
+					}
+
+				}
+			}
+		}
+		return page;
 	}
 
 	@Override
@@ -147,13 +185,27 @@ public class PageManageAccounts extends AbsTab {
 			// New button
 			//			locator = Locators.zb__ACLV__NEW_MENU_title;
 			locator ="";
-
 			// Create the page
 			page = new WizardCreateAccount(this);
-
 			// FALL THROUGH
 
-		} else {
+		} else if(button == Button.B_TREE_DELETE) {
+
+			locator=Locators.RIGHT_CLICK_MENU_DELETE_BUTTON;
+
+			page = new DialogForDeleteOperation(this.MyApplication, null);
+		} else if(button == Button.B_EDIT) {
+
+			locator=Locators.EDIT_BUTTON;
+
+			page = new FormEditAccount(this.MyApplication);
+		} else if(button == Button.B_TREE_EDIT) {
+
+			locator=Locators.RIGHT_CLICK_MENU_EDIT_BUTTON;
+
+			page = new FormEditAccount(this.MyApplication);
+		} 
+		else {
 			throw new HarnessException("no logic defined for button "+ button);
 		}
 
@@ -197,17 +249,29 @@ public class PageManageAccounts extends AbsTab {
 		AbsPage page = null; // If set, this page will be returned
 
 		if (pulldown == Button.B_GEAR_BOX) {
+			pulldownLocator = Locators.GEAR_ICON;
 
 			if (option == Button.O_NEW) {
 
-				pulldownLocator = Locators.GEAR_ICON;
 				optionLocator = Locators.NEW_MENU;
 
 				page = new WizardCreateAccount(this);
 
 				// FALL THROUGH
 
-			} else {
+			} else if(option == Button.O_EDIT) {
+				optionLocator = Locators.EDIT_BUTTON;
+
+				page = new FormEditAccount(this.MyApplication);
+
+			} else if(option == Button.O_DELETE) {
+				optionLocator = Locators.DELETE_BUTTON;
+
+				page = new DialogForDeleteOperation(this.MyApplication,null);
+
+			}
+
+			else {
 				throw new HarnessException("no logic defined for pulldown/option " + pulldown + "/" + option);
 			}
 
@@ -225,6 +289,7 @@ public class PageManageAccounts extends AbsTab {
 			}
 
 			this.zClickAt(pulldownLocator,"");
+			SleepUtil.sleepMedium();
 
 			// If the app is busy, wait for it to become active
 			//zWaitForBusyOverlay();

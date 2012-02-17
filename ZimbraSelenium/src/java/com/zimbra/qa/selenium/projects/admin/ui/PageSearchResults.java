@@ -18,9 +18,9 @@ public class PageSearchResults extends AbsTab {
 	public static class Locators {
 		public static final String SEARCH_INPUT_TEXT_BOX="_XForm_query_display";
 		public static final String SEARCH_BUTTON="css=td.xform_container div.ImgSearch";
-		public static final String DELETE_BUTTON="css=div[id^='zmi__zb_currentApp__DELETE__'] div[class='ImgDelete']";
+		public static final String DELETE_BUTTON="css=div[id='zm__zb_currentApp__MENU_POP'] div[class='ImgDelete']";
 		public static final String RIGHT_CLICK_MENU_DELETE_BUTTON="css=div[id='zm__SCHLV__MENU_POP'] div[class='ImgDelete']";
-		public static final String EDIT_BUTTON="css=div[id^='zmi__zb_currentApp__EDIT__'] div[class='ImgEdit']";
+		public static final String EDIT_BUTTON="div[id='zm__zb_currentApp__MENU_POP']  div[class='ImgEdit']";
 		public static final String GEAR_ICON="css=div.ImgConfigure";
 	}
 
@@ -214,7 +214,8 @@ public class PageSearchResults extends AbsTab {
 				pulldownLocator = Locators.GEAR_ICON;
 				optionLocator = Locators.EDIT_BUTTON;
 
-				page = new FormEditAccount(this.MyApplication);
+				//page = new FormEditAccount(this.MyApplication);
+				page=new FormEditDistributionList(this.MyApplication);
 
 				// FALL THROUGH
 

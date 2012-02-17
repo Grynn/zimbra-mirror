@@ -21,10 +21,14 @@ public class PageManageCOS extends AbsTab {
 		public static final String CONFIGURE_ICON="css=div.ImgAdministration";
 		public static final String COS="zti__AppAdmin__CONFIGURATION__COS_textCell";
 		public static final String GEAR_ICON="css=div.ImgConfigure";
-		public static final String NEW_MENU="zmi__zb_currentApp__NEW";
+		public static final String NEW_MENU="css=div[id='zm__zb_currentApp__MENU_POP'] div[class='ImgNewCOS']";
 		public static final String HOME="Home";
 		public static final String CONFIGURE="Configure";
 		public static final String CLASS_OS_SERVICE="Class of Service";
+		public static final String DELETE_BUTTON="css=div[id='zm__zb_currentApp__MENU_POP'] div[class='ImgDelete']";		
+		public static final String EDIT_BUTTON="css=div[id='zm__zb_currentApp__MENU_POP'] div[class='ImgEdit']";
+		public static final String RIGHT_CLICK_MENU_DELETE_BUTTON="css=div[id='zm__zb_currentApp__MENU_POP'] div[class='ImgDelete']";
+		public static final String RIGHT_CLICK_MENU_EDIT_BUTTON="css=div[id='zm__zb_currentApp__MENU_POP'] div[class='ImgEdit']";
 	}
 
 	public PageManageCOS(AbsApplication application) {
@@ -89,8 +93,43 @@ public class PageManageCOS extends AbsTab {
 	@Override
 	public AbsPage zListItem(Action action, String item)
 	throws HarnessException {
-		// TODO Auto-generated method stub
-		return null;
+		logger.info(myPageName() + " zListItem("+ action +", "+ item +")");
+
+		tracer.trace(action +" on subject = "+ item);
+
+		AbsPage page = null;
+
+		// How many items are in the table?
+		String rowsLocator = "css=div#zl__COS_MANAGE div[id$='__rows'] div[id^='zli__']";
+		int count = this.sGetCssCount(rowsLocator);
+		logger.debug(myPageName() + " zListGetAccounts: number of accounts: "+ count);
+
+		// Get each conversation's data from the table list
+		for (int i = 1; i <= count; i++) {
+			final String accountLocator = rowsLocator + ":nth-child("+i+")";
+			String locator;
+
+			// Email Address
+			locator = accountLocator + " td[id^='dl_data_emailaddress']";
+
+
+			if(this.sIsElementPresent(locator)) 
+			{
+				if(this.sGetText(locator).trim().equalsIgnoreCase(item)) 
+				{
+					if(action == Action.A_LEFTCLICK) {
+						zClick(locator);
+						break;
+					} else if(action == Action.A_RIGHTCLICK) {
+						zRightClick(locator);
+						break;
+					}
+
+				}
+				
+			}
+		}
+		return page;
 	}
 
 	@Override

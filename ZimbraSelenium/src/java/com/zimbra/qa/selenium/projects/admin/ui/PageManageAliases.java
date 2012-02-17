@@ -24,7 +24,7 @@ public class PageManageAliases extends AbsTab {
 		public static final String MANAGE_ACCOUNTS_ICON="css=div.ImgMangeAccounts";
 		public static final String ALIASES="css=td[id^='zti__AppAdmin__Home__aliaLstHV']";
 		public static final String GEAR_ICON="css=div.ImgConfigure";
-		public static final String NEW_MENU="css=td[id^='zmi__zb_currentApp__NEW_MENU__']";
+		public static final String NEW_MENU="css=div[id='zm__zb_currentApp__MENU_POP'] div[class='ImgAccountAlias']";
 		public static final String HOME="Home";
 		public static final String MANAGE_ACCOUNTS="Manage Accounts";
 		public static final String ALIAS="Aliases";
