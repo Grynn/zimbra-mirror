@@ -284,13 +284,14 @@ public class OptionsViewModel: BaseViewModel
             SetNextState();
         }
     }
+    private string importnextbuttoncontent;
     public string ImportNextButtonContent {
-        get { return m_config.importOptions.NextButtonContent; }
+        get { return importnextbuttoncontent; }
         set
         {
-            if (value == m_config.importOptions.NextButtonContent)
+            if (value == importnextbuttoncontent)
                 return;
-            m_config.importOptions.NextButtonContent = value;
+            importnextbuttoncontent = value;
 
             OnPropertyChanged(new PropertyChangedEventArgs("ImportNextButtonContent"));
         }

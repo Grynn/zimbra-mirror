@@ -34,10 +34,6 @@ public class Config
         // this.mailServer.ProfileName = outlookProfile;
     }
 
-    public bool CSEnableNext {
-        get;
-        set;
-    }
     public MailServer mailServer;
     public ZimbraServer zimbraServer;
     public ImportOptions importOptions;

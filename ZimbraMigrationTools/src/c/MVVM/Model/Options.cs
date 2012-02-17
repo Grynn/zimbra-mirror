@@ -53,16 +53,6 @@ public class ImportOptions
         get { return m_OOO; }
         set { m_OOO = value; }
     }
-    private string m_NextButtonContent;
-    public string NextButtonContent {
-        get { return m_NextButtonContent; }
-        set { m_NextButtonContent = value; }
-    }
-    public bool OEnableNext
-    {
-        get;
-        set;
-    }
 }
 
 public class AdvancedImportOptions
