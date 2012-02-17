@@ -300,6 +300,15 @@ public class ZimbraAccount {
 
 			if ( (createAccountResponse == null) || (createAccountResponse.length == 0)) {
 
+				Element[] soapFault = ZimbraAdminAccount.GlobalAdmin().soapSelectNodes("//soap:Fault");
+				if ( soapFault != null && soapFault.length > 0 ) {
+				
+					String error = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//zimbra:Code", null);
+					throw new HarnessException("Unable to create account: "+ error);
+					
+				}
+				
+				
 				logger.error("Error occured during account provisioning, perhaps account already exists: "+ EmailAddress);
 				ZimbraAdminAccount.GlobalAdmin().soapSend(
 						"<GetAccountRequest xmlns='urn:zimbraAdmin'>"
