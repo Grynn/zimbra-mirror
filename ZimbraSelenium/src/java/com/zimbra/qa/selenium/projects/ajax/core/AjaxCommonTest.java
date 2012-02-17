@@ -198,7 +198,7 @@ public class AjaxCommonTest {
 				*/
 				//2.17
 				//FF only
-				//Capabilities cp =  ((RemoteWebDriver)webDriver()).getCapabilities();
+				//Capabilities cp =  ((RemoteWebDriver)_webDriver).getCapabilities();
 				//if(cp.getBrowserName().equals("firefox")){				
 				//_webDriver.manage().window().setPosition(new Point(0, 0));
 				//_webDriver.manage().window().setSize(new Dimension((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth(),(int)Toolkit.getDefaultToolkit().getScreenSize().getHeight()));

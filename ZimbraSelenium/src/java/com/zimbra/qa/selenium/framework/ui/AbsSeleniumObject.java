@@ -1947,9 +1947,9 @@ public abstract class AbsSeleniumObject {
 			WebDriver driver = null;
 			WebElement element = null;
 			
-			if (ZimbraSeleniumProperties.isWebDriverBackedSelenium())
+			if (ZimbraSeleniumProperties.isWebDriverBackedSelenium()){
 				driver = webDriverBackedSelenium().getWrappedDriver();
-			else{
+			}else{
 				driver = webDriver();
 			}
 			
