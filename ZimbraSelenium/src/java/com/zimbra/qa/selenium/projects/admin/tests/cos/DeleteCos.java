@@ -30,7 +30,7 @@ public class DeleteCos extends AdminCommonTest {
 	 * @throws HarnessException
 	 */
 	@Test(	description = "Right Click Menu : Verify delete cos operation",
-			groups = { "smoke" })
+			groups = { "functional" })
 			public void DeleteCos_02() throws HarnessException {
 
 		// Create a new cos in the Admin Console using SOAP

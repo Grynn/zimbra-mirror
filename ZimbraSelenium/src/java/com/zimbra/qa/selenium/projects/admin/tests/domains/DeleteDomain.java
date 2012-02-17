@@ -81,7 +81,7 @@ public class DeleteDomain extends AdminCommonTest {
 	 * @throws HarnessException
 	 */
 	@Test(	description = "Verify delete domain operation",
-			groups = { "smoke" })
+			groups = { "functional" })
 			public void DeleteDomain_02() throws HarnessException {
 
 		// Create a new domain in the Admin Console using SOAP

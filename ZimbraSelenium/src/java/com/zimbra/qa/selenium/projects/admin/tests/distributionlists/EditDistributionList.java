@@ -83,7 +83,7 @@ public class EditDistributionList extends AdminCommonTest {
 	 * @throws HarnessException
 	 */
 	@Test(	description = "Edit Distribution List name - Manage Distribution List view + Right Click Menu",
-			groups = { "smoke" })
+			groups = { "functional" })
 			public void EditDistributionList_02() throws HarnessException {
 
 		// Create a new dl in the Admin Console using SOAP

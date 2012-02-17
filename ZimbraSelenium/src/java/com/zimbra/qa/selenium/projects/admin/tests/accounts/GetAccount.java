@@ -75,7 +75,7 @@ public class GetAccount extends AdminCommonTest {
 	 * @throws HarnessException
 	 */
 	@Test(	description = "Verify created account is present in the account list view",
-			groups = { "smoke" })
+			groups = { "functional" })
 	public void GetAccount_02() throws HarnessException {
 
 		// Create a new account in the Admin Console using SOAP

@@ -133,7 +133,7 @@ public class DeleteAccount extends AdminCommonTest {
 	 * @throws HarnessException
 	 */
 	@Test(	description = "Delete a basic account",
-			groups = { "smoke" })
+			groups = { "functional" })
 			public void DeleteAccount_03() throws HarnessException {
 
 		// Create a new account in the Admin Console using SOAP
@@ -185,7 +185,7 @@ public class DeleteAccount extends AdminCommonTest {
 	 * @throws HarnessException
 	 */
 	@Test(	description = "Right click menu : Delete a basic account",
-			groups = { "smoke" })
+			groups = { "functional" })
 			public void DeleteAccount_04() throws HarnessException {
 
 		// Create a new account in the Admin Console using SOAP

@@ -80,7 +80,7 @@ public class EditAccount extends AdminCommonTest {
 	 * @throws HarnessException
 	 */
 	@Test(	description = "Edit account name -- right click",
-			groups = { "smoke" })
+			groups = { "functional" })
 			public void EditAccount_02() throws HarnessException {
 
 		// Create a new account in the Admin Console using SOAP

@@ -251,7 +251,7 @@ public class DeleteResource extends AdminCommonTest {
 	 * @throws HarnessException
 	 */
 	@Test(	description = "Verify delete resource operation in UI -- Location",
-			groups = { "smoke" })
+			groups = { "functional" })
 	public void DeleteResource_05() throws HarnessException {
 
 		// Create a new resource in the Admin Console using SOAP
@@ -308,7 +308,7 @@ public class DeleteResource extends AdminCommonTest {
 	 * @throws HarnessException
 	 */
 	@Test(	description = "Verify delete resource operation in UI -- Equipment",
-			groups = { "smoke" })
+			groups = { "functional" })
 	public void DeleteResource_06() throws HarnessException {
 
 		// Create a new resource in the Admin Console using SOAP
@@ -365,7 +365,7 @@ public class DeleteResource extends AdminCommonTest {
 	 * @throws HarnessException
 	 */
 	@Test(	description = "Right Click Menu : Verify delete resource operation. -- Location",
-			groups = { "smoke" })
+			groups = { "functional" })
 	public void DeleteResource_07() throws HarnessException {
 
 		// Create a new resource in the Admin Console using SOAP
@@ -422,7 +422,7 @@ public class DeleteResource extends AdminCommonTest {
 	 * @throws HarnessException
 	 */
 	@Test(	description = "Right Click Menu : Verify delete resource operation. -- Equipment",
-			groups = { "smoke" })
+			groups = { "functional" })
 	public void DeleteResource_08() throws HarnessException {
 
 		// Create a new resource in the Admin Console using SOAP

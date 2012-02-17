@@ -90,7 +90,7 @@ public class DeleteAlias extends AdminCommonTest {
 	 * @throws HarnessException
 	 */
 	@Test(	description = "Right Click Menu : Verify delete alias operation",
-			groups = { "smoke" })
+			groups = { "functional" })
 			public void DeleteAlias_02() throws HarnessException {
 
 		AccountItem target = new AccountItem();

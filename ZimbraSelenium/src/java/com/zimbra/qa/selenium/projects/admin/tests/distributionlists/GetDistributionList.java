@@ -69,7 +69,7 @@ public class GetDistributionList extends AdminCommonTest {
 	 * @throws HarnessException
 	 */
 	@Test(	description = "Verify created dl is present in the list view  - Search view",
-			groups = { "smoke" })
+			groups = { "functional" })
 			public void GetDistributionList_02() throws HarnessException {
 
 		// Create a new dl in the Admin Console using SOAP
