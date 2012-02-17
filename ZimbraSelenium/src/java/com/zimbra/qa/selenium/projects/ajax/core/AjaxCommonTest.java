@@ -3,14 +3,12 @@ package com.zimbra.qa.selenium.projects.ajax.core;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.*;
-
 import org.apache.log4j.*;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverBackedSelenium;
 import org.testng.*;
 import org.testng.annotations.*;
 import org.xml.sax.SAXException;
-
 import com.thoughtworks.selenium.*;
 import com.zimbra.qa.selenium.framework.core.*;
 import com.zimbra.qa.selenium.framework.ui.AbsTab;
@@ -178,7 +176,8 @@ public class AjaxCommonTest {
 			if (ZimbraSeleniumProperties.isWebDriver()) {
 				_webDriver = ClientSessionFactory.session().webDriver();
 				
-				/* 
+				/*
+				  //2.17 
 				  Set<String> handles = _webDriver.getWindowHandles(); 
 				  String script = "if (window.screen){var win = window.open(window.location); win.moveTo(0,0);win.resizeTo(window.screen.availWidth, window.screen.availHeight);};"; 
 				  ((JavascriptExecutor) _webDriver).executeScript(script); 
@@ -197,14 +196,13 @@ public class AjaxCommonTest {
 				 _webDriver.manage().window().setSize(new Dimension(width,height));
 				
 				*/
-								
+				//2.17
 				//FF only
-				if(ZimbraSeleniumProperties.getStringProperty("browser").contains("firefox")){					
-					//2.17
-					//_webDriver.manage().window().setPosition(new Point(0, 0));
-					//2.17
-					//_webDriver.manage().window().setSize(new Dimension((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth(),(int)Toolkit.getDefaultToolkit().getScreenSize().getHeight()));
-				}								
+				//Capabilities cp =  ((RemoteWebDriver)webDriver()).getCapabilities();
+				//if(cp.getBrowserName().equals("firefox")){				
+				//_webDriver.manage().window().setPosition(new Point(0, 0));
+				//_webDriver.manage().window().setSize(new Dimension((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth(),(int)Toolkit.getDefaultToolkit().getScreenSize().getHeight()));
+				//}								
 			} else if (ZimbraSeleniumProperties.isWebDriverBackedSelenium()) {
 				_webDriverBackedSelenium = ClientSessionFactory.session()
 						.webDriverBackedSelenium();
