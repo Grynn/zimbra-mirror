@@ -362,7 +362,7 @@ public class PageAddressbook extends AbsTab {
 			// To use "NEW" with a pulldown option, see  zToolbarPressPulldown(Button, Button)
 
 			
-			locator = "css=div#zb__CNS-main__NEW_MENU td#zb__CNS-main__NEW_MENU_title";			
+			locator = "css=div#zb__NEW_MENU td#zb__NEW_MENU_title";			
 			page = new FormContactNew(this.MyApplication);
 
 	
@@ -574,7 +574,7 @@ public class PageAddressbook extends AbsTab {
 
 	   } else if ( pulldown == Button.B_NEW ) {
 		   
-		   pulldownLocator = "css=div#zb__CNS-main__NEW_MENU td#zb__CNS-main__NEW_MENU_dropdown";
+		   pulldownLocator = "css=div#zb__NEW_MENU td#zb__NEW_MENU_dropdown";
 		   if ( option == Button.O_NEW_CONTACT ) {
 
 			    // TODO: Bug 58365 for Desktop
@@ -591,7 +591,7 @@ public class PageAddressbook extends AbsTab {
 			    if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
 			       optionLocator="css=div[class='ActionMenu ZHasIcon'] div[class*='ZMenuItem ZWidget ZHasLeftIcon ZHasText'] table[class*='ZWidgetTable ZMenuItemTable']:contains('Contact Group')";
 			    } else {
-			       optionLocator="css=div#zb__CNS-main__NEW_MENU_NEW_GROUP";
+			       optionLocator="css=div#zb__NEW_MENU_NEW_GROUP";
 			    }
 				page = new FormContactGroupNew(this.MyApplication);		   
 		   }
