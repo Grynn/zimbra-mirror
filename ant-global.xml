@@ -259,8 +259,9 @@
                 </fileset>
             </batchtest>
         </junit>
+	<delete dir="${build.coverage.dir}" quiet="true"/>
         <mkdir dir="${build.coverage.dir}" />
-       <cobertura-report format="html" destdir="${build.coverage.dir}" srcdir="${src.dir}" />
+       <cobertura-report format="xml" destdir="${build.coverage.dir}" srcdir="${src.dir}" />
     </target>
 
 
