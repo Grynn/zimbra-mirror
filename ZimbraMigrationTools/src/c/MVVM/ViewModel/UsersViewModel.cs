@@ -241,6 +241,8 @@ public class UsersViewModel: BaseViewModel
     }
     private void SaveCSV()
     {
+        if (!ValidateUsersList())
+            return;
         List<Users> ListofUsers = new List<Users>();
         for (int i = 0; i < UsersList.Count; i++)
         {
@@ -382,6 +384,8 @@ public class UsersViewModel: BaseViewModel
         }
         if (UsersList.Count == 0)
         {
+            MessageBox.Show("Please specify a source name", "Zimbra Migration", MessageBoxButton.OK,
+                             MessageBoxImage.Warning);
             EnableNext = false;
             return false;
         }
@@ -440,12 +444,10 @@ public class UsersViewModel: BaseViewModel
                 }
             }
         }
-        catch (ArgumentOutOfRangeException e)
+        catch (ArgumentOutOfRangeException)
         {
-            string message = "CurrentDomainSelection " + e.Message;
-
-            MessageBox.Show(message, "Zimbra Migration", MessageBoxButton.OK,
-                MessageBoxImage.Warning);
+             MessageBox.Show("Please specify a domain", "Zimbra Migration", MessageBoxButton.OK,
+                             MessageBoxImage.Warning);
         }
     }
 
