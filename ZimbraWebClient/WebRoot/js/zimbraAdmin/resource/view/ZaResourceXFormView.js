@@ -602,7 +602,7 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject, entry) {
             msgName:ZaMsg.NAD_ResType,label:ZaMsg.NAD_SchedulePolicy,
             visibilityChecks:[[ZaItem.hasWritePermission,ZaResource.A_zimbraCalResAutoAcceptDecline],[ZaItem.hasWritePermission,ZaResource.A_zimbraCalResAutoDeclineIfBusy]],
             enableDisableChecks:[[ZaItem.hasReadPermission,ZaResource.A_zimbraCalResAutoAcceptDecline],[ZaItem.hasReadPermission,ZaResource.A_zimbraCalResAutoDeclineIfBusy]],
-            labelLocation:_LEFT_, width: "500px", choices:ZaResource.schedulePolicyChoices});
+            labelLocation:_LEFT_, width: "*", choices:ZaResource.schedulePolicyChoices});
 
     setupGroup.items.push({ref:ZaResource.A_zimbraCalResMaxNumConflictsAllowed, type:_TEXTFIELD_,
         msgName:ZaMsg.zimbraCalResMaxNumConflictsAllowed, label:ZaMsg.zimbraCalResMaxNumConflictsAllowed,
@@ -665,7 +665,7 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject, entry) {
         }
     ]};
 
-    var signatureGroup = {type:_TOP_GROUPER_, label:ZaMsg.NAD_Signature, id:"resource_form_signature_group",
+    var signatureGroup = {type:_TOP_GROUPER_, label:ZaMsg.NAD_SignatureGrouper, id:"resource_form_signature_group",
         colSizes:["275px", "*"],numCols:2,items:[
         {type:_GROUP_, id:"resource_form_allsignature_group",
 		    numCols:2,label:null,colSizes:["275px","*"], colSpan: "*",
