@@ -291,7 +291,9 @@ public class RestUtil {
 		//		 Connect to the rest servlet
 		//
 		HttpMethod method = new GetMethod(requestURI.toString());
-		
+		InputStream is = null;
+		OutputStream os = null;
+
 		
 		try
 		{
@@ -329,34 +331,13 @@ public class RestUtil {
 					// Write the binary data to a file for later comparison
 					//
 					responseFile = File.createTempFile("rest", ".tmp");
-
-					InputStream is = null;
-					OutputStream os = null;
-					try {
 						
-						is = method.getResponseBodyAsStream();
-						
-						try {
-							
-							os = new FileOutputStream(responseFile);
-							   
-							int b;
-							while ( (b = is.read()) != -1) {
-								os.write(b);
-							}
-							
-						} finally {
-							if ( os != null ) {
-								os.close();
-								os = null;
-							}
-						}
-
-					} finally {
-						if ( is != null ) {
-							is.close();
-							is = null;
-						}
+					is = method.getResponseBodyAsStream();
+					os = new FileOutputStream(responseFile);
+					
+					int b;
+					while ( (b = is.read()) != -1) {
+						os.write(b);
 					}
 				
 					// For logging
@@ -371,16 +352,8 @@ public class RestUtil {
 					responseBody = method.getResponseBodyAsString();
 
 					// Create a temporary file name
-					OutputStream os = null;
-					try {
-						os = new FileOutputStream(responseFile);
-						os.write(responseBody.getBytes());
-					} finally {
-						if ( os != null ) {
-							os.close();
-							os = null;
-						}
-					}
+					os = new FileOutputStream(responseFile);
+					os.write(responseBody.getBytes());
 					
 				}
 				
@@ -392,8 +365,13 @@ public class RestUtil {
 	    } catch (IOException e) {
 	    	throw new HarnessException("RestUtil IOException", e);
 	    } finally {
-		      // Release the connection.
-		      method.releaseConnection();
+	    	
+	    	// If any streams were opened, close them
+	    	close(is);
+	    	close(os);
+	    	
+		    // Release the connection.
+		    method.releaseConnection();
 	    }
 		
 		// Until executeTestResponse is called, assume that 200 is expected for the test
@@ -657,37 +635,32 @@ public class RestUtil {
 			throw new HarnessException("Pattern cannot be null");
 		
 		Matcher matcher = pattern.matcher("");
-		
+		BufferedReader reader = null;
+	
 		try {
 			
-			BufferedReader reader = null;
 
-			try {
-				reader = new BufferedReader(new FileReader(responseFile));
-				String line = null;
-				while ( (line = reader.readLine()) != null ) {
-					
-					matcher.reset(line);
-					
-					if ( matcher.matches() ) {
-						logger.info("yes PATTERN: "+ pattern.toString() + " LINE: "+ line);
-						count++;
-					} else {
-						logger.info("no PATTERN: "+ pattern.toString() + " LINE: "+ line);
-					}
-					
+			reader = new BufferedReader(new FileReader(responseFile));
+			String line = null;
+			while ( (line = reader.readLine()) != null ) {
+				
+				matcher.reset(line);
+				
+				if ( matcher.matches() ) {
+					logger.info("yes PATTERN: "+ pattern.toString() + " LINE: "+ line);
+					count++;
+				} else {
+					logger.info("no PATTERN: "+ pattern.toString() + " LINE: "+ line);
 				}
-			} finally {
-				if ( reader != null ) {
-					reader.close();
-					reader = null;
-				}
+				
 			}
 				
 		} catch (FileNotFoundException e) {
 			throw new HarnessException(e);
 		} catch (IOException e) {
 			throw new HarnessException(e);
+		} finally {
+			close(reader);
 		}
 					
 		return (count);
@@ -712,44 +685,45 @@ public class RestUtil {
 			File result = null;
 			
 			try {
-				
-				try {
-					
-					// Create the output file
-					result = File.createTempFile("temp" + ZimbraSeleniumProperties.getUniqueString(), ".dat");
+									
+				// Create the output file
+				result = File.createTempFile("temp" + ZimbraSeleniumProperties.getUniqueString(), ".dat");
 
-					reader = new BufferedReader(new FileReader(in));
-					
-					try {
-						
-						writer = new PrintWriter(new FileWriter(result));
-						
-						String line = null;
-						while ( (line = reader.readLine()) != null ) {
-							writer.println(line.replaceAll(oldString, newString));
-						}
-					
-					} finally {
-						if ( writer != null ) {
-							writer.close();
-							writer = null;
-						}
-					}
-					
-				} finally {
-					if ( reader != null ) {
-						reader.close();
-						reader = null;
-					}
+				reader = new BufferedReader(new FileReader(in));
+				writer = new PrintWriter(new FileWriter(result));
+				
+				String line = null;
+				while ( (line = reader.readLine()) != null ) {
+					writer.println(line.replaceAll(oldString, newString));
 				}
 				
 			} catch (FileNotFoundException e) {
 				throw new HarnessException(e);
 			} catch (IOException e) {
 				throw new HarnessException(e);
+			} finally {
+				
+				close(reader);
+				close(writer);
+					
 			}
 		
 			return (result);
+		}
+	}
+	
+	/**
+	 * Close a stream.  If an exception is thrown, just log it.
+	 * @param c The stream to close
+	 */
+	private static void close(Closeable c) {
+		if ( c == null ) {
+			return;
+		}
+		try {
+			c.close();
+		} catch (IOException e) {
+			logger.error("Unable to close during finally", e);
 		}
 	}
 }
