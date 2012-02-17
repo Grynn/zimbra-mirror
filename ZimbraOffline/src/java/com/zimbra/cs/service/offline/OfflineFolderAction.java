@@ -2,12 +2,12 @@
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Server
  * Copyright (C) 2006, 2007, 2008, 2009, 2010 Zimbra, Inc.
- * 
+ *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
@@ -37,6 +37,7 @@ import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.db.DbMailItem;
 import com.zimbra.cs.db.DbMailItem.QueryParams;
 import com.zimbra.cs.db.DbPool;
+import com.zimbra.cs.db.DbPool.DbConnection;
 import com.zimbra.cs.mailbox.Folder;
 import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.mailbox.Mailbox;
@@ -260,18 +261,22 @@ public class OfflineFolderAction extends FolderAction {
                         ItemId targetFolder = new ItemId(target, zsc);
                         QueryParams dbParams = new QueryParams();
                         dbParams.setFolderIds(folderIds);
-                        dbParams.setIncludedTypes(Arrays.asList(new MailItem.Type[] { MailItem.Type.MESSAGE,
-                                MailItem.Type.CONVERSATION }));
+                        dbParams.setIncludedTypes(Arrays.asList(new MailItem.Type[] { MailItem.Type.MESSAGE, MailItem.Type.CONVERSATION }));
                         dbParams.setChangeDateAfter((int) (exportStart / 1000));
                         try {
                             synchronized (mbox) {
-                                Set<Integer> newlyChangedItemIds = DbMailItem.getIds(mbox, DbPool.getConnection(),
-                                        dbParams, false);
-                                // need to use message type even for conversation
-                                ItemActionHelper.MOVE(octxt, mbox, zsc.getResponseProtocol(), new ArrayList<Integer>(
-                                        newlyChangedItemIds), MailItem.Type.MESSAGE, null, targetFolder);
-                                // now, can delete source folder
-                                mbox.delete(octxt, sourceFolderId, MailItem.Type.FOLDER);
+                                DbConnection conn = null;
+                                try {
+                                    conn = DbPool.getConnection();
+                                    Set<Integer> newlyChangedItemIds = DbMailItem.getIds(mbox, conn, dbParams, false);
+                                    // need to use message type even for conversation
+                                    ItemActionHelper.MOVE(octxt, mbox, zsc.getResponseProtocol(), new ArrayList<Integer>(newlyChangedItemIds),
+                                            MailItem.Type.MESSAGE, null, targetFolder);
+                                    // now, can delete source folder
+                                    mbox.delete(octxt, sourceFolderId, MailItem.Type.FOLDER);
+                                } finally {
+                                    DbPool.quietClose(conn);
+                                }
                             }
                         } catch (Exception e) {
                             OfflineLog.offline.debug("[Folder Move] force move delta items failed", e);
