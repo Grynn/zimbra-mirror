@@ -19,6 +19,8 @@
     <property name="build.dir" location="build" />
     <property name="dist.dir" location="build/dist" />
     <property name="build.classes.dir" location="${build.dir}/classes" />
+    <property name="build.instrumented.dir" location="${build.dir}/classes-inst" />
+    <property name="build.coverage.dir" location="${build.dir}/coverage" />
     <property name="build.zimlet.dir" location="${build.dir}/zimlet" />
     <property name="test.dir" location="${build.dir}/test"/>
     <property name="itest.dir" location="${build.dir}/itest"/>
@@ -66,6 +68,15 @@
     <property name="taglib.classes.dir" location="${taglib.dir}/build/classes"/>
     <property name="taglib.jarfile" location="${taglib.dir}/build/zimbrataglib.jar"/>
     <property name="taglib.jars.dir" location="${taglib.dir}/jars"/>
+
+    <!-- Cobertura -->
+    <property name="cobertura.dir" value="/usr/share/java/" />
+    <path id="cobertura.classpath">
+      <fileset dir="${cobertura.dir}">
+	<include name="cobertura.jar" />
+	<include name="*.jar" />
+      </fileset>
+    </path>
 
     <!-- customizations -->
     <property name="aux.jars.dir" location="${server.dir}/build/auxjars"/>
@@ -211,6 +222,47 @@
         <echo>Test Report: ${test.dir}/report/index.html</echo>
         <fail if="junit.failure" message="Unit test failed"/>
     </target>
+
+    <target name="cobertuna" depends="compile" description="Cobertuna Instrutmentation">
+      <taskdef classpathref="cobertura.classpath" resource="tasks.properties" />
+      <delete file="cobertura.ser" />
+      <delete dir="${build.instrumented.dir}" quiet="true" />
+      <mkdir dir="${build.instrumented.dir}" />
+      <cobertura-instrument todir="${build.instrumented.dir}">
+	<ignore regex="org.apache.log4j.*" />
+	<fileset dir="${build.classes.dir}">
+	  <include name="**/*.class" />
+	  <exclude name="**/*Test.class" />
+	</fileset>
+      </cobertura-instrument>
+    </target>
+
+    <target name="test-coverage" depends="test-compile" description="Run unit tests">
+        <property name="test.path" refid="class.path"/>
+        <delete dir="${test.dir}" quiet="true"/>
+        <mkdir dir="${test.dir}/output"/>
+        <mkdir dir="${test.dir}/report"/>
+        <taskdef classpathref="cobertura.classpath" resource="tasks.properties" />
+        <junit fork="yes" printsummary="on" failureproperty="junit.failure" tempdir="${test.dir}">
+            <sysproperty key="net.sourceforge.cobertura.datafile"
+                file="${basedir}/cobertura.ser" />
+            <classpath location="${instrumented.dir}" />
+            <classpath refid="class.path"/>
+            <classpath path="${test.classes.dir}"/>
+            <classpath path="/uar/share/java/cobertura.jar" />
+            <assertions><enable/></assertions>
+            <formatter type="xml"/>
+            <batchtest todir="${test.dir}/output">
+                <fileset dir="${test.src.dir}">
+                    <include name="**/*Test.java"/>
+                    <exclude name="**/*ITest.java"/>
+                </fileset>
+            </batchtest>
+        </junit>
+        <mkdir dir="${build.coverage.dir}" />
+       <cobertura-report format="html" destdir="${build.coverage.dir}" srcdir="${src.dir}" />
+    </target>
+
 
     <target name="integration-test" depends="test-compile" description="Run integration tests">
         <property name="test.path" refid="class.path"/>
