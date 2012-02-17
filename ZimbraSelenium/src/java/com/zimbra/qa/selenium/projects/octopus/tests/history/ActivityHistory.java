@@ -81,45 +81,22 @@ public class ActivityHistory extends OctopusCommonTest {
 				"Verify account email appears in the activity history");	
 	}
 
-	@Test(description = "Upload file through RestUtil - verify file history in History List view", groups = { "smoke" })
-	public void VerifyUploadFileHistoryDisplayed() throws HarnessException {
-		ZimbraAccount account = app.zGetActiveAccount();
-
-		FolderItem briefcaseRootFolder = FolderItem.importFromSOAP(account,
-				SystemFolder.Briefcase);
-
-		// Create file item
-		String filePath = ZimbraSeleniumProperties.getBaseDirectory()
-				+ "/data/public/other/samplejpg.jpg";
-
-		FileItem file = new FileItem(filePath);
-
-		String fileName = file.getName();
-
-		// Upload file to server through RestUtil
-		String attachmentId = account.uploadFile(filePath);
-
-		// Save uploaded file to the root folder through SOAP
-		account.soapSend(
-
-		"<SaveDocumentRequest xmlns='urn:zimbraMail'>" + "<doc l='"
-				+ briefcaseRootFolder.getId() + "'>" + "<upload id='"
-				+ attachmentId + "'/>" + "</doc></SaveDocumentRequest>");
-
-		// account.soapSelectNode("//mail:SaveDocumentResponse", 1);
-
-		_fileAttached = true;
-		_fileId = account.soapSelectValue(
-				"//mail:SaveDocumentResponse//mail:doc", "id");
-
+	@Test(description = "Upload file through RestUtil - verify history text + user email appeared in History List view", groups = { "smoke" })
+	public void UploadFileVerifyTextUseremailInGlobalHistory() throws HarnessException {
+		String fileName=JPG_FILE;
+		
+		uploadFileViaSoap(app.zGetActiveAccount(),fileName);
+		
 		// Click on MyFiles tab
 		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_MY_FILES);
 
 		// Click on History tab
 		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_HISTORY);
 
+		// Get global history 
 		ArrayList<HistoryItem> historyItems= app.zPageHistory.zListItem();
 		
+		// Wait for the fileName get rendered
 		app.zPageHistory.zWaitForElementPresent(
 				PageHistory.Locators.zHistoryItemRow.locator + ":contains("
 						+ fileName + ")", "3000");
@@ -130,10 +107,10 @@ public class ActivityHistory extends OctopusCommonTest {
 		
 		// Verify history item appears in the activity history
 		for ( HistoryItem item : historyItems ) {
+			logger.debug(item.getHistoryText());
 			
 			// Verify the history is found
-			if (item.getHistoryText().equals(historyText)) {
-				logger.debug(item.getHistoryText());
+			if (item.getHistoryText().equals(historyText)) {				
 				found = item;
 				break;
 			}
@@ -143,36 +120,14 @@ public class ActivityHistory extends OctopusCommonTest {
 		
 		ZAssert.assertEquals(found.getHistoryText(), historyText, "Verify the history text matches");
 		ZAssert.assertEquals(found.getHistoryUser(), app.zGetActiveAccount().EmailAddress , "Verify the user matches");
-	
-		
+			
 	}
 
 	@Test(description = "Open History tab - verify Activity Type filter controls", groups = { "functional" })
-	public void ActivityHistory_03() throws HarnessException {
-		ZimbraAccount account = app.zGetActiveAccount();
-
-		FolderItem briefcaseRootFolder = FolderItem.importFromSOAP(account,
-				SystemFolder.Briefcase);
-
-		// Create file item
-		String filePath = ZimbraSeleniumProperties.getBaseDirectory()
-				+ "/data/public/other/samplejpg.jpg";
-
-		// Upload file to server through RestUtil
-		String attachmentId = account.uploadFile(filePath);
-
-		// Save uploaded file to the root folder through SOAP
-		account.soapSend(
-
-		"<SaveDocumentRequest xmlns='urn:zimbraMail'>" + "<doc l='"
-				+ briefcaseRootFolder.getId() + "'>" + "<upload id='"
-				+ attachmentId + "'/>" + "</doc></SaveDocumentRequest>");
-
-		// account.soapSelectNode("//mail:SaveDocumentResponse", 1);
-
-		_fileAttached = true;
-		_fileId = account.soapSelectValue(
-				"//mail:SaveDocumentResponse//mail:doc", "id");
+	public void VerifyActivityTypeFilterControls() throws HarnessException {
+	    String fileName=JPG_FILE;
+		
+		uploadFileViaSoap(app.zGetActiveAccount(),fileName);	
 
 		// Click on MyFiles tab
 		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_MY_FILES);

@@ -16,6 +16,8 @@ import com.thoughtworks.selenium.DefaultSelenium;
 import com.thoughtworks.selenium.SeleniumException;
 
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
+import com.zimbra.qa.selenium.framework.items.FolderItem;
+import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.AbsTab;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
@@ -28,7 +30,7 @@ import com.zimbra.qa.selenium.projects.octopus.ui.DialogError;
 import com.zimbra.qa.selenium.projects.octopus.ui.DialogError.DialogErrorID;
 import com.zimbra.qa.selenium.framework.util.*;
 
-public class OctopusCommonTest {
+public class OctopusCommonTest implements CommonConstants{
 	protected static Logger logger = LogManager
 			.getLogger(OctopusCommonTest.class);
 	private DefaultSelenium _selenium = null;
@@ -192,6 +194,31 @@ public class OctopusCommonTest {
 		logger.info("commonTestBeforeMethod: finish");
 	}
 
+	protected String uploadFileViaSoap(ZimbraAccount account, String fileName) 
+	          throws HarnessException {
+	
+		FolderItem briefcaseRootFolder = FolderItem.importFromSOAP(account,
+				SystemFolder.Briefcase);
+
+		// Create file item
+		String filePath = ZimbraSeleniumProperties.getBaseDirectory()
+				+ "/data/public/other/" + fileName;
+
+		// Upload file to server through RestUtil
+		String attachmentId = account.uploadFile(filePath);
+
+		// Save uploaded file to the root folder through SOAP
+		account.soapSend(
+
+		"<SaveDocumentRequest xmlns='urn:zimbraMail'>" + "<doc l='"
+				+ briefcaseRootFolder.getId() + "'>" + "<upload id='"
+				+ attachmentId + "'/>" + "</doc></SaveDocumentRequest>");
+
+		//return id
+		return account.soapSelectValue(
+				"//mail:SaveDocumentResponse//mail:doc", "id");
+	}
+	
 	/**
 	 * Global AfterSuite
 	 * <p>
