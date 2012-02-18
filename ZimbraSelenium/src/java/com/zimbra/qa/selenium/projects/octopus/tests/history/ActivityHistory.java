@@ -63,10 +63,7 @@ public class ActivityHistory extends OctopusCommonTest {
 
 		// verify the file is uploaded
 		ZAssert.assertEquals(fileName, name, "Verify file is uploaded");
-
-		// Click on MyFiles tab
-		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_MY_FILES);
-
+		
 		// Click on History tab
 		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_HISTORY);
 
@@ -87,9 +84,6 @@ public class ActivityHistory extends OctopusCommonTest {
 		
 		uploadFileViaSoap(app.zGetActiveAccount(),fileName);
 		
-		// Click on MyFiles tab
-		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_MY_FILES);
-
 		// Click on History tab
 		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_HISTORY);
 
@@ -116,7 +110,7 @@ public class ActivityHistory extends OctopusCommonTest {
 			}
 			
 		}
-		ZAssert.assertNotNull(found, "Verify the history is found");
+		ZAssert.assertNotNull(found, "Verify " +  historyText + " is found");
 		
 		ZAssert.assertEquals(found.getHistoryText(), historyText, "Verify the history text matches");
 		ZAssert.assertEquals(found.getHistoryUser(), app.zGetActiveAccount().EmailAddress , "Verify the user matches");
@@ -128,9 +122,6 @@ public class ActivityHistory extends OctopusCommonTest {
 	    String fileName=JPG_FILE;
 		
 		uploadFileViaSoap(app.zGetActiveAccount(),fileName);	
-
-		// Click on MyFiles tab
-		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_MY_FILES);
 
 		// Click on History tab
 		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_HISTORY);
