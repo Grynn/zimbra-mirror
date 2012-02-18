@@ -87,31 +87,14 @@ public class ActivityHistory extends OctopusCommonTest {
 		// Click on History tab
 		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_HISTORY);
 
-		// Get global history 
-		ArrayList<HistoryItem> historyItems= app.zPageHistory.zListItem();
-		
-		// Wait for the fileName get rendered
-		app.zPageHistory.zWaitForElementPresent(
-				PageHistory.Locators.zHistoryItemRow.locator + ":contains("
-						+ fileName + ")", "3000");
-		
+		// form the text
 		String historyText= app.zGetActiveAccount().EmailAddress + " created version 1 of file " +  fileName +".";
-		                           
-		HistoryItem found = null;
 		
-		// Verify history item appears in the activity history
-		for ( HistoryItem item : historyItems ) {
-			logger.debug(item.getHistoryText());
+		// check if the text present
+		HistoryItem found = app.zPageHistory.isTextPresentInGlobalHistory(historyText);
 			
-			// Verify the history is found
-			if (item.getHistoryText().equals(historyText)) {				
-				found = item;
-				break;
-			}
-			
-		}
-		ZAssert.assertNotNull(found, "Verify " +  historyText + " is found");
-		
+		// verification
+		ZAssert.assertNotNull(found, "Verify " +  historyText + " is found");		
 		ZAssert.assertEquals(found.getHistoryText(), historyText, "Verify the history text matches");
 		ZAssert.assertEquals(found.getHistoryUser(), app.zGetActiveAccount().EmailAddress , "Verify the user matches");
 			

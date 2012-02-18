@@ -4,6 +4,7 @@
 package com.zimbra.qa.selenium.projects.octopus.ui;
 
 import java.util.*;
+
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
@@ -256,6 +257,30 @@ public class PageHistory extends AbsTab {
 		return historyItems;
     }
 
+	// check if the history text present in global history
+	public HistoryItem isTextPresentInGlobalHistory(String historyText) 
+	       throws HarnessException
+	{		
+		// Get global history 
+		ArrayList<HistoryItem> historyItems= zListItem();
+				
+		                           
+		HistoryItem found = null;
+		
+		// Verify history item appears in the activity history
+		for ( HistoryItem item : historyItems ) {
+			logger.debug(item.getHistoryText());
+			
+			// Verify the history is found
+			if (item.getHistoryText().equals(historyText)) {				
+				found = item;
+				break;
+			}
+			
+		}
+		
+		return found;
+	}
 	@Override
 	public AbsPage zListItem(Action action, String item)
 			throws HarnessException {
