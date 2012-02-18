@@ -26,8 +26,6 @@ import com.zimbra.qa.selenium.framework.core.ExecuteHarnessMain;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
-import com.zimbra.qa.selenium.projects.ajax.ui.PageMain;
-import com.zimbra.qa.selenium.projects.ajax.ui.PageMain.Locators;
 
 /**
  * The <code>AbsSeleniumObject</code> class is a base class that all "GUI"
@@ -807,9 +805,9 @@ public abstract class AbsSeleniumObject {
 			// Cast to DefaultSelenium ... Workaround until ZimbraSelnium is
 			// removed
 			logger.info("waitForPageToLoad(" + timeout + ")");
-			
-			if (ZimbraSeleniumProperties.isWebDriver()) {
 			/*
+			if (ZimbraSeleniumProperties.isWebDriver()) {
+				
 				Wait<WebDriver> wait = new FluentWait<WebDriver>(webDriver()).withTimeout(30, TimeUnit.SECONDS).pollingEvery(5, TimeUnit.SECONDS).ignoring(NoSuchElementException.class);
 			     WebElement we = wait.until(new ExpectedCondition<WebElement>() {
 			    	 public WebElement apply(WebDriver driver) {
@@ -818,10 +816,12 @@ public abstract class AbsSeleniumObject {
 				 });
 				 
 				new WebDriverWait(webDriver(), 30).until(elementDisplayed(By.id("zov__main_Mail")));
-				*/
-				waitForElementPresent(PageMain.Locators.zLogoffPulldown,10);
-			}
-			else if(ZimbraSeleniumProperties.isWebDriverBackedSelenium()){
+				
+				waitForElementPresent(PageMain.Locators.zLogoffPulldown,10);				
+			 }
+			 */
+				
+			if(ZimbraSeleniumProperties.isWebDriverBackedSelenium()){
 				webDriverBackedSelenium().waitForPageToLoad(timeout);
 			}
 			else{
@@ -1192,12 +1192,12 @@ public abstract class AbsSeleniumObject {
 	 */
 	protected boolean sWaitForCondition(String condition) throws HarnessException {
 		logger.info("sWaitForCondition(" + condition + "), timeout="
-				+ LoadDelay);
+				+ LoadDelay); 
 		try {
 			boolean result = false;
 			if (ZimbraSeleniumProperties.isWebDriver()) {
 				final String script = condition;
-				result = (new WebDriverWait(webDriver(), LoadDelay/1000))
+				result = (new WebDriverWait(webDriver(), LoadDelay/SleepUtil.SleepGranularity))
 						.until(new ExpectedCondition<Boolean>() {
 							public Boolean apply(WebDriver d) {
 								return (Boolean) ((JavascriptExecutor) webDriver())
@@ -1236,7 +1236,7 @@ public abstract class AbsSeleniumObject {
 			boolean result = false;
 			if (ZimbraSeleniumProperties.isWebDriver()) {
 				final String script = condition;
-				result = (new WebDriverWait(webDriver(), Long.valueOf(timeout)/1000))
+				result = (new WebDriverWait(webDriver(), Long.valueOf(timeout)/SleepUtil.SleepGranularity))
 						.until(new ExpectedCondition<Boolean>() {
 							public Boolean apply(WebDriver d) {
 								return (Boolean) ((JavascriptExecutor) webDriver())
@@ -1295,7 +1295,7 @@ public abstract class AbsSeleniumObject {
 
 		if (ZimbraSeleniumProperties.isWebDriverBackedSelenium()
 				|| ZimbraSeleniumProperties.isWebDriver())	{	
-			return waitForElementPresent(locator, Long.valueOf(timeout)/1000);
+			return waitForElementPresent(locator, Long.valueOf(timeout)/SleepUtil.SleepGranularity);
 		}
 		else{
 			return sWaitForCondition("selenium.isElementPresent(\"" + locator
