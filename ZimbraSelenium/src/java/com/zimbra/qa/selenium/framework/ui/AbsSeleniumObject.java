@@ -26,6 +26,8 @@ import com.zimbra.qa.selenium.framework.core.ExecuteHarnessMain;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
+import com.zimbra.qa.selenium.projects.ajax.ui.PageMain;
+import com.zimbra.qa.selenium.projects.ajax.ui.PageMain.Locators;
 
 /**
  * The <code>AbsSeleniumObject</code> class is a base class that all "GUI"
@@ -814,8 +816,10 @@ public abstract class AbsSeleniumObject {
 			    		 return driver.findElement(By.id("zov__main_Mail"));
 			    	 }
 				 });
-				//new WebDriverWait(webDriver(), 30).until(elementDisplayed(By.id("zov__main_Mail")));
-			*/
+				 
+				new WebDriverWait(webDriver(), 30).until(elementDisplayed(By.id("zov__main_Mail")));
+				*/
+				waitForElementPresent(PageMain.Locators.zLogoffPulldown,10);
 			}
 			else if(ZimbraSeleniumProperties.isWebDriverBackedSelenium()){
 				webDriverBackedSelenium().waitForPageToLoad(timeout);
