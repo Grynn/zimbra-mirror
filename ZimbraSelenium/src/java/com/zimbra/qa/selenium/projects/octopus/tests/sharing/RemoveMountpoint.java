@@ -201,7 +201,7 @@ public class RemoveMountpoint extends OctopusCommonTest {
 		// Verify the mountpoint folder disappears from My Files tab
 		ZAssert.assertTrue(app.zPageMyFiles.zWaitForElementDeleted(
 				PageMyFiles.Locators.zMyFilesListView.locator + ":contains("
-						+ folderMountpointName + ")", "4000"),
+						+ folderMountpointName + ")", "5000"),
 				"Verify mountpoint folder disappears from My Files tab");
 	
 		// click on Sharing tab

@@ -444,8 +444,11 @@ public class CreateShare extends OctopusCommonTest {
 		SleepUtil.sleepSmall();
 
 		// grantee verifies view, edit and share permissions
-		granteeAccount
-				.soapSend("<GetShareNotificationsRequest xmlns='urn:zimbraMail'/>");
+		String getShareNotifcationRequest = "<GetShareNotificationsRequest xmlns='urn:zimbraMail'/>";
+		
+		app.zPageOctopus.waitForResponse(granteeAccount, getShareNotifcationRequest, ownerFoldername, 5);
+
+		granteeAccount.soapSend(getShareNotifcationRequest);
 
 		ZAssert.assertTrue(granteeAccount.soapMatch(
 				"//mail:GetShareNotificationsResponse//mail:link", "name",
