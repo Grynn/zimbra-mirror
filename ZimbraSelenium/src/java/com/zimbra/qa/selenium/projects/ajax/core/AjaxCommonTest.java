@@ -72,8 +72,8 @@ public class AjaxCommonTest {
 			ZimbraSeleniumProperties.getLocalHost() + ".desktop.test", "false").toLowerCase().equals("true") ? true : false;
 
 	private static DefaultSelenium _selenium = null;
-	private static WebDriverBackedSelenium _webDriverBackedSelenium = null;
-	private static WebDriver _webDriver = null;
+	private WebDriverBackedSelenium _webDriverBackedSelenium = null;
+	private WebDriver _webDriver = null;
 	
 	/**
 	 * The AdminConsole application object

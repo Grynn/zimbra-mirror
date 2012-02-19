@@ -560,10 +560,10 @@ public abstract class AbsSeleniumObject {
 		String value = null;
 		try {			
 			if (ZimbraSeleniumProperties.isWebDriver()){
-				Object o = ((JavascriptExecutor) webDriver()).executeScript(script);
-				logger.info(o + " ...executing... " + script);
-				if(o != null){
-					value = o.toString();
+				Object ob = ((JavascriptExecutor) webDriver()).executeScript(script);
+				logger.info(ob + " ...executing... " + script);
+				if(ob != null){
+					value = ob.toString();
 				}
 			}
 			else if (ZimbraSeleniumProperties.isWebDriverBackedSelenium()){
@@ -1055,21 +1055,25 @@ public abstract class AbsSeleniumObject {
 		return (Arrays.asList(ids));
 	}
 
-	protected boolean switchToWindowUsingTitle(WebDriver driver, String 
-			title) { 
-			                String currentWindow = driver.getWindowHandle(); 
-			                Set<String> availableWindows = driver.getWindowHandles(); 
-			                if (!availableWindows.isEmpty()) { 
-			                        for (String windowId : availableWindows) { 
-			                                if (driver.switchTo().window(windowId).getTitle().equals(title)) { 
-			                                        return true; 
-			                                } else { 
-			                                        driver.switchTo().window(currentWindow); 
-			                                } 
-			                        } 
-			                } 
-			                return false; 
-			        } 
+	protected boolean switchToWindowUsingTitle(WebDriver driver, String title) { 
+		logger.info("switchToWindowUsingTitle()");
+		boolean result = false;
+		String currentWindow = driver.getWindowHandle(); 
+		Set<String> availableWindows = driver.getWindowHandles(); 
+		if (!availableWindows.isEmpty()) { 
+			for (String windowId : availableWindows) { 
+				if (driver.switchTo().window(windowId).getTitle().equals(title)) { 
+					result = true; 
+					break;
+			    }
+			}
+			if(result == false) { 
+		    	driver.switchTo().window(currentWindow); 
+		    } 
+		} 
+		return result; 
+	}
+	
 	/**
 	 * DefaultSelenium.getAllWindowNames()
 	 */
@@ -1080,19 +1084,18 @@ public abstract class AbsSeleniumObject {
 		
 		if (ZimbraSeleniumProperties.isWebDriver()){
 			availableWindows =  webDriver().getWindowHandles(); 
-		    list = new ArrayList<String>(availableWindows);
-			return list;
+		    list = new ArrayList<String>(availableWindows);			
 		}
 		else if (ZimbraSeleniumProperties.isWebDriverBackedSelenium()){
 			availableWindows =  webDriverBackedSelenium().getWrappedDriver().getWindowHandles(); 
-	    	list = new ArrayList<String>(availableWindows);
-	    	return list;
+	    	list = new ArrayList<String>(availableWindows);	    	
 		}
 		else{
 			String[] windows = ClientSessionFactory.session().selenium()
 				.getAllWindowNames();
-			return (Arrays.asList(windows));
+			list = (Arrays.asList(windows));
 		}
+		return list;
 	}
 
 	/**
@@ -1174,7 +1177,7 @@ public abstract class AbsSeleniumObject {
 				sWaitForCondition("return top.appCtxt.getShell().getBusy()==false");
 			}
 			else if (ZimbraSeleniumProperties.isWebDriverBackedSelenium()){
-				sWaitForCondition("selenium.browserbot.getCurrentWindow().top.appCtxt.getShell().getBusy()==false", "" + LoadDelay);
+				sWaitForCondition("selenium.browserbot.getCurrentWindow().top.appCtxt.getShell().getBusy()==false");
 			}
 			else{
 				sWaitForCondition("selenium.browserbot.getUserWindow().top.appCtxt.getShell().getBusy()==false");
@@ -1227,7 +1230,7 @@ public abstract class AbsSeleniumObject {
 						});
 			}
 			else if (ZimbraSeleniumProperties.isWebDriverBackedSelenium()){
-				webDriverBackedSelenium().waitForCondition( condition, "" + LoadDelay);
+				webDriverBackedSelenium().waitForCondition( condition, String.valueOf(LoadDelay));
 				result = true;
 			}
 			else{				
