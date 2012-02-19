@@ -81,15 +81,16 @@ public class AcceptShare extends OctopusCommonTest {
 						+ "'/>"
 						+ "</SendShareNotificationRequest>");
 
-		SleepUtil.sleepMedium();
+		// Currrent user gets share notification
+		String getShareNotifcationRequest = "<GetShareNotificationsRequest xmlns='urn:zimbraMail'/>";
+		
+		app.zPageOctopus.waitForResponse(currentAccount, getShareNotifcationRequest, ownerFoldername, 5);
 
+		currentAccount.soapSend(getShareNotifcationRequest);
+		
 		// Open Sharing tab
 		app.zPageOctopus
 				.zToolbarPressButton(Button.B_TAB_SHARING);
-		
-		// Currrent user gets share notification
-		currentAccount
-				.soapSend("<GetShareNotificationsRequest xmlns='urn:zimbraMail'/>");
 
 		ZAssert
 				.assertTrue(app.zPageSharing.zWaitForElementPresent(
@@ -97,7 +98,7 @@ public class AcceptShare extends OctopusCommonTest {
 								+ ":contains(" + ownerFolderItem.getName()
 								+ ")", "9000"),
 						"Verify the owner share folder is displayed in the Share Invitation view");
-
+		
 		// click on Add To My Files button
 		app.zPageSharing.zToolbarPressButton(Button.B_ADD_TO_MY_FILES,
 				ownerFolderItem);

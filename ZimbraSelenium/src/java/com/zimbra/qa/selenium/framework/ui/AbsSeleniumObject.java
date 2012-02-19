@@ -11,6 +11,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.HasInputDevices;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Mouse;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverBackedSelenium;
 import org.openqa.selenium.WebElement;
@@ -107,12 +108,13 @@ public abstract class AbsSeleniumObject {
 	protected boolean zIsBrowserMatch(int mask) throws HarnessException {
 
 		if (BrowserUserAgent == null) {
-			if (ZimbraSeleniumProperties.isWebDriver())
+			if (ZimbraSeleniumProperties.isWebDriver()){
 				BrowserUserAgent = sGetEval("return navigator.userAgent;");
-			else
+			}else{
 				BrowserUserAgent = sGetEval("navigator.userAgent;");
+			}
 			logger.info("UserAgent: (navigator.userAgent;) >>>>>> "
-					+ BrowserUserAgent);
+					+ BrowserUserAgent);			
 		}
 
 		if (BrowserMask == 0) {
@@ -456,9 +458,10 @@ public abstract class AbsSeleniumObject {
 
 	public void zKeyDown(String keyCode) throws HarnessException {
 
-		if (keyCode == null || keyCode.isEmpty())
+		if (keyCode == null || keyCode.isEmpty()){
 			throw new HarnessException("keyCode needs to be provided");
-
+		}
+		
 		tracer.trace("keyboard shortcut " + keyCode);
 
 		for (String kc : keyCode.split(",")) {
@@ -558,8 +561,9 @@ public abstract class AbsSeleniumObject {
 			if (ZimbraSeleniumProperties.isWebDriver()){
 				Object o = ((JavascriptExecutor) webDriver()).executeScript(script);
 				logger.info(o + " ...executing... " + script);
-				if(o != null)
-					value = o.toString();					
+				if(o != null){
+					value = o.toString();
+				}
 			}
 			else if (ZimbraSeleniumProperties.isWebDriverBackedSelenium()){
 				value = webDriverBackedSelenium().getEval(script);
@@ -1539,10 +1543,11 @@ public abstract class AbsSeleniumObject {
 			checked = element.isSelected();
 		} else if (ZimbraSeleniumProperties.isWebDriverBackedSelenium()) {
 			checked = webDriverBackedSelenium().isChecked(locator);
-		} else
+		} else {
 			// Cast to DefaultSelenium ... Workaround until ZimbraSelnium is removed
 			checked = ((DefaultSelenium) ClientSessionFactory.session()
 				.selenium()).isChecked(locator);
+		}
 		
 		logger.info("isChecked(" + locator + ") = " + checked);
 		return (checked);
@@ -1590,8 +1595,8 @@ public abstract class AbsSeleniumObject {
 	 */
 	public String sGetBodyText() throws HarnessException {
 		String text = ClientSessionFactory.session().selenium().getBodyText();
+		logger.info("sGetBodyText() = " + text);
 		return text;
-
 	}
 
 	/**
@@ -1715,17 +1720,20 @@ public abstract class AbsSeleniumObject {
 	 * DefaultSeleniu.selectFrame()
 	 * @throws HarnessException 
 	 */
-	public void sSelectFrame(String locator) throws HarnessException {		
+	public void sSelectFrame(String locator) throws HarnessException {	
+		String modifiedLocator = locator;
 		try {
 			if (ZimbraSeleniumProperties.isWebDriver()) {
-				if (locator.startsWith("css="))
-					locator = locator.substring("css=".length());
-				webDriver().switchTo().frame(getElement(locator));
+				if (locator.startsWith("css=")){
+					modifiedLocator = locator.substring("css=".length());
+				}
+				webDriver().switchTo().frame(getElement(modifiedLocator));
 			} else if (ZimbraSeleniumProperties.isWebDriverBackedSelenium()) {
-				if (locator.startsWith("css="))
-					locator = locator.substring("css=".length());
+				if (locator.startsWith("css=")){
+					modifiedLocator = locator.substring("css=".length());
+				}
 				webDriverBackedSelenium().getWrappedDriver().switchTo()
-						.frame(getElement(locator));
+						.frame(getElement(modifiedLocator));
 				// WebElement el = getElement("body");
 			} else {
 				ClientSessionFactory.session().selenium().selectFrame(locator);
@@ -1749,8 +1757,9 @@ public abstract class AbsSeleniumObject {
 	 */
 	public void sDeleteAllVisibleCookies() {
 		logger.info("sDeleteAllVisibleCookies()");
-		if (ZimbraSeleniumProperties.isWebDriver())
+		if (ZimbraSeleniumProperties.isWebDriver()){
 			webDriver().manage().deleteAllCookies();
+		}
 		else if (ZimbraSeleniumProperties.isWebDriverBackedSelenium()){
 			webDriverBackedSelenium().getWrappedDriver().manage().deleteAllCookies();
 		}
@@ -1825,8 +1834,9 @@ public abstract class AbsSeleniumObject {
 			Object ob = ((JavascriptExecutor) webDriver()).executeScript(script,arg);
 					
 			logger.info(ob + " ...executing... " + script);
-			if(ob != null)
-				value = ob.toString();					
+			if(ob != null){
+				value = ob.toString();
+			}
 			logger.info("executeScript(" + script + ") = " + value);
 			return (value);
 		} catch (Exception e) {
@@ -1835,46 +1845,46 @@ public abstract class AbsSeleniumObject {
 		}
 	}
 	
-	public class CssLocator {
-		private String Locator;
-		private String Text;
+	private static final class CssLocator {
+		private String locator;
+		private String text;
 
 		public String getLocator() {
-			return Locator;
+			return locator;
 		}
 
-		public void setLocator(String locator) {
-			Locator = locator;
+		public void setLocator(String l) {
+			locator = l;
 		}
 
 		public String getText() {
-			return Text;
+			return text;
 		}
 
-		public void setText(String text) {
-			Text = text;
+		public void setText(String txt) {
+			text = txt;
 		}
 
 	}
 
 	private CssLocator stripCssLocator(String locator, String startSuffix,
 				String containSuffix) {
-
-			String text = null;
-
+			String modifiedLocator = locator;
+			String text = "";
 			CssLocator cssl = new CssLocator();
+			
 			if (locator.startsWith(startSuffix)) {
-				locator = locator.substring(startSuffix.length());
+				modifiedLocator = locator.substring(startSuffix.length());
 			}
 
 			if (locator.contains(containSuffix)) {
 				String[] tokens = locator.split(containSuffix);
-				locator = tokens[0];
+				modifiedLocator = tokens[0];
 				text = tokens[1].substring(tokens[1].indexOf('(') + 1,
 						tokens[1].lastIndexOf(')'));
 			}
 
-			cssl.setLocator(locator);
+			cssl.setLocator(modifiedLocator);
 			cssl.setText(text);
 
 			return cssl;
@@ -1899,10 +1909,11 @@ public abstract class AbsSeleniumObject {
 						Iterator<WebElement> it = elements.iterator();
 						while (it.hasNext()) {
 							element = it.next();
-							if (element.getText().contains(txt))
+							if (element.getText().contains(txt)){
 								break;
-							else
+							}else{
 								element = null;
+							}
 						}
 
 					} else {
@@ -1911,7 +1922,7 @@ public abstract class AbsSeleniumObject {
 					}
 
 				} catch (Exception ex) {
-					// ignore
+					logger.info("...getElement()..." + ex);
 				}
 			}
 			return element;
@@ -1923,27 +1934,20 @@ public abstract class AbsSeleniumObject {
 		
 		public WebElement getElement(String locator) throws HarnessException{
 			WebElement we = getElement(locator, "css=", ":contains");
-			if(we!=null)
-				return we;	
-			else
-				throw new HarnessException("WebElement is null: " + locator );				
+			if(we!=null){
+				return we;
+			}else{
+				throw new HarnessException("WebElement is null: " + locator );
+			}
 		}
 
 		public boolean elementPresent(String locator) {
 			WebElement el = getElementOrNull(locator);
-
-			if (el != null)
-				return true;
-			else
-				return false;
+			return el != null;
 		}
 
 		public boolean waitForElementPresent(final String locator, long timeout) {	
-			
-			if(waitForElement(locator, timeout)!=null)
-				return true;
-			else
-				return false;
+			return waitForElement(locator, timeout)!=null;
 		}
 		
 		public WebElement waitForElement(String locator, long timeout) {
@@ -1968,8 +1972,8 @@ public abstract class AbsSeleniumObject {
 						element = wait.until(forElement(By.cssSelector(cssl
 							.getLocator())));
 					}
-				}catch(Exception e){
-					logger.info("waitForElement: " + locator + " timed out after " + timeout + "s");
+				}catch(TimeoutException  e){
+					logger.info("...waitForElement()... " + locator + " timed out after " + timeout + "s");
 				}
 			}
 			return element;
@@ -1978,7 +1982,11 @@ public abstract class AbsSeleniumObject {
 		public Function<WebDriver, WebElement> forElement(final By locator) {
 			return new Function<WebDriver, WebElement>() {
 				public WebElement apply(WebDriver driver) {
-					return driver.findElement(locator);
+					WebElement element = null;
+					if(driver!=null){
+						element = driver.findElement(locator);
+					}					
+					return element;					
 				}
 			};
 		}
@@ -1988,14 +1996,17 @@ public abstract class AbsSeleniumObject {
 			return new Function<WebDriver, WebElement>() {
 				public WebElement apply(WebDriver driver) {
 					WebElement element = null;
-					List<WebElement> elements = driver.findElements(locator);
-					Iterator<WebElement> it = elements.iterator();
-					while (it.hasNext()) {
-						element = it.next();
-						if (element.getText().contains(txt))
-							break;
+					if(driver!=null){
+						List<WebElement> elements = driver.findElements(locator);
+						Iterator<WebElement> it = elements.iterator();
+						while (it.hasNext()) {
+							element = it.next();
+							if (element.getText().contains(txt)){
+								break;
+							}
+						}
 					}
-					return element;
+					return element;				
 				}
 			};
 		}
@@ -2036,8 +2047,9 @@ public abstract class AbsSeleniumObject {
 			boolean found = false;
 			for (int i = 0; i < 10; i++) {
 				found = switchTo(name);
-				if (found)
+				if (found){
 					break;
+				}
 				SleepUtil.sleepSmall();
 				//webDriver().manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
 			}
@@ -2048,8 +2060,9 @@ public abstract class AbsSeleniumObject {
 			boolean found = true;
 			for (int i = 0; i < 10; i++) {
 				found = switchTo(name);
-				if (!found)
+				if (!found){
 					break;
+				}
 				SleepUtil.sleepSmall();
 			}
 			return !found;
@@ -2059,13 +2072,16 @@ public abstract class AbsSeleniumObject {
 				final By locator) {
 			return new ExpectedCondition<WebElement>() {
 				public WebElement apply(WebDriver driver) {
-					WebElement we = driver.findElement(locator);
-					//2.17
-					//if (toReturn.isDisplayed()) {
-					if (we.isEnabled()) {
-						return we;
+					WebElement we = null;
+					if(driver!=null){
+						we = driver.findElement(locator);
+						//2.17
+						//if (toReturn.isDisplayed()) {
+						if (we !=null && we.isEnabled()) {
+							return we;
+						}
 					}
-					return null;
+					return we;
 				}
 			};
 		}
