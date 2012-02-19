@@ -58,9 +58,9 @@ public class PageBriefcase extends AbsTab {
 		public static final Locators zNewMenuIconBtn = new Locators(
 				"id=zb__BCD__NEW_FILE_left_icon");
 		public static final Locators zNewMenuLeftIconBtn = new Locators(
-				"css=td[id=zb__BDLV-main__NEW_MENU_left_icon]");
+				"css=td[id=zb__NEW_MENU_left_icon]");
 		public static final Locators zNewMenuArrowBtn = new Locators(
-				"css=div[id=zb__BDLV-main__NEW_MENU] div[class^=ImgSelectPullDownArrow]");
+				"css=div[id=zb__NEW_MENU] div[class^=ImgSelectPullDownArrow]");
 		public static final Locators zUploadFileIconBtn = new Locators(
 				"id=zb__BDLV-main__NEW_FILE_left_icon");
 		public static final Locators zEditFileIconBtn = new Locators(
@@ -363,7 +363,7 @@ public class PageBriefcase extends AbsTab {
 						"7.1."))
 					optionLocator = "css=tr[id=POPUP_NEW_BRIEFCASE]";
 				else
-					optionLocator = "css=div#zb__BDLV-main__NEW_MENU_NEW_BRIEFCASE";
+					optionLocator = "css=div#zb__NEW_MENU_NEW_BRIEFCASE";
 
 				page = new DialogCreateBriefcaseFolder(this.MyApplication,
 						((AppAjaxClient) MyApplication).zPageBriefcase);
@@ -374,7 +374,7 @@ public class PageBriefcase extends AbsTab {
 						"7.1."))
 					optionLocator = "css=tr[id=POPUP_NEW_DOC]";
 				else
-					optionLocator = "css=div#zb__BDLV-main__NEW_MENU_NEW_DOC";
+					optionLocator = "css=div#zb__NEW_MENU_NEW_DOC";
 
 				page = new DocumentBriefcaseNew(this.MyApplication);
 
@@ -386,7 +386,7 @@ public class PageBriefcase extends AbsTab {
 						"7.1."))
 					optionLocator = "css=tr[id=POPUP_NEW_TAG]>td[id$=_title]:contains(Tag)";
 				else
-					optionLocator = "css=div#zb__BDLV-main__NEW_MENU_NEW_TAG";
+					optionLocator = "css=div#zb__NEW_MENU_NEW_TAG";
 
 				page = new DialogTag(this.MyApplication, this);
 
