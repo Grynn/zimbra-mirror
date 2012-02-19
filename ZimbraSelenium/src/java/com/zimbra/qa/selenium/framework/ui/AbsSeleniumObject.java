@@ -1067,7 +1067,7 @@ public abstract class AbsSeleniumObject {
 					break;
 			    }
 			}
-			if(result == false) { 
+			if(!result) { 
 		    	driver.switchTo().window(currentWindow); 
 		    } 
 		} 
@@ -2049,7 +2049,7 @@ public abstract class AbsSeleniumObject {
 			}			
 			if(driver != null){
 				handles = driver.getWindowHandles();			
-				if (handles != null && handles.size() > 0) {
+				if (handles != null && !handles.isEmpty()) {
 					String url = "";
 					String title = "";
 					for (String h : handles) {
