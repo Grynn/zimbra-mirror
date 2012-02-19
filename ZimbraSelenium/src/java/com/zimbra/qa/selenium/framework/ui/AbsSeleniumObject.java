@@ -1217,8 +1217,12 @@ public abstract class AbsSeleniumObject {
 				result = (new WebDriverWait(webDriver(), LoadDelay/SleepUtil.SleepGranularity))
 						.until(new ExpectedCondition<Boolean>() {
 							public Boolean apply(WebDriver d) {
-								return (Boolean) ((JavascriptExecutor) d)
+								if(d!=null){
+									return (Boolean) ((JavascriptExecutor) d)
 										.executeScript(script);
+								}else{
+									return false;
+								}
 							}
 						});
 			}
@@ -1256,8 +1260,12 @@ public abstract class AbsSeleniumObject {
 				result = (new WebDriverWait(webDriver(), Long.valueOf(timeout)/SleepUtil.SleepGranularity))
 						.until(new ExpectedCondition<Boolean>() {
 							public Boolean apply(WebDriver d) {
-								return (Boolean) ((JavascriptExecutor) d)
+								if(d!=null){
+									return (Boolean) ((JavascriptExecutor) d)
 										.executeScript(script);
+								}else{
+									return false;
+								}
 							}
 						});
 			}
@@ -1885,27 +1893,26 @@ public abstract class AbsSeleniumObject {
 
 	private CssLocator stripCssLocator(String locator, String startSuffix,
 				String containSuffix) {
-			String modifiedLocator = locator;
-			String text = "";
-			CssLocator cssl = new CssLocator();
+		String modifiedLocator = locator;
+		String text = "";
+		CssLocator cssl = new CssLocator();
 			
-			if (locator.startsWith(startSuffix)) {
-				modifiedLocator = locator.substring(startSuffix.length());
-				locator = modifiedLocator;
-			}
-
-			if (locator.contains(containSuffix)) {
-				String[] tokens = locator.split(containSuffix);
-				locator = tokens[0];
-				text = tokens[1].substring(tokens[1].indexOf('(') + 1,
-						tokens[1].lastIndexOf(')'));
-			}
-
-			cssl.setLocator(locator);
-			cssl.setText(text);
-
-			return cssl;
+		if (modifiedLocator.startsWith(startSuffix)) {
+			modifiedLocator = modifiedLocator.substring(startSuffix.length());				
 		}
+
+		if (modifiedLocator.contains(containSuffix)) {
+			String[] tokens = modifiedLocator.split(containSuffix);
+			modifiedLocator = tokens[0];
+			text = tokens[1].substring(tokens[1].indexOf('(') + 1,
+					tokens[1].lastIndexOf(')'));
+		}
+
+		cssl.setLocator(modifiedLocator);
+		cssl.setText(text);
+
+		return cssl;
+	}
 
 		private WebElement getElement(String locator, String startSuffix,
 				String containSuffix) {
