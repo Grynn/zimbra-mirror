@@ -21,15 +21,16 @@ public class DeleteDomain extends AdminCommonTest {
 	}
 
 	/**
-	 * Testcase : Verify delete domain operation.
+	 * Testcase : Verify delete domain operation --  Search List View
 	 * Steps :
 	 * 1. Create a domain using SOAP.
-	 * 2. Remove galsync account created for domain using soap.
-	 * 3. Select the domain to delete.
-	 * 4. Verify domain is deleted using soap.
+	 * 2. Search domain.
+	 * 3. Select a domain.
+	 * 4. Delete a domain using delete button in Gear box menu.
+	 * 5. Verify domain is deleted using SOAP.
 	 * @throws HarnessException
 	 */
-	@Test(	description = "Verify delete domain operation",
+	@Test(	description = "Verify delete domain operation --  Search List View",
 			groups = { "smoke" })
 			public void DeleteDomain_01() throws HarnessException {
 
@@ -73,11 +74,13 @@ public class DeleteDomain extends AdminCommonTest {
 	}
 	
 	/**
-	 * Testcase : Right Click Menu : Verify delete domain operation.
+	 * Testcase : Verify delete domain operation  -- Search List View/Right Click Menu
 	 * Steps :
 	 * 1. Create a domain using SOAP.
-	 * 2. Right Click on the domain to delete.
-	 * 3. Verify domain is deleted using soap.
+	 * 2. Search domain.
+	 * 3. Right click on domain.
+	 * 4. Delete a domain using delete button in right click menu.
+	 * 5. Verify domain is deleted using SOAP..
 	 * @throws HarnessException
 	 */
 	@Test(	description = "Verify delete domain operation",

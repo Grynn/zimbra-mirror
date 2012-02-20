@@ -22,13 +22,14 @@ public class GetCos extends AdminCommonTest {
 		super.startingPage=app.zPageManageCOS;
 	}
 	/**
-	 * Testcase : Verify created cos is displayed in UI.
+	 * Testcase : Verify created cos is displayed in UI - Search list view.
 	 * Steps :
-	 * 1. Create an cos using SOAP.
-	 * 2. Verify cos is present in the list.
+	 * 1. Create a cos using SOAP.
+	 * 2. Search cos created in Step-1
+	 * 3. Verify cos is present in the list.
 	 * @throws HarnessException
 	 */
-	@Test(	description = "Verify created cos is present in the list view",
+	@Test(	description = "Verify created cos is displayed in UI - Search list view.",
 			groups = { "smoke" })
 			public void GetCos_01() throws HarnessException {
 

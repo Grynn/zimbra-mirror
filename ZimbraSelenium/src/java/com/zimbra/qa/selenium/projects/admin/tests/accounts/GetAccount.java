@@ -25,13 +25,13 @@ public class GetAccount extends AdminCommonTest {
 	
 
 	/**
-	 * Testcase : Verify created account is displayed in UI.
+	 * Testcase : Verify created account is displayed in UI -- Manage Account View.
 	 * Steps :
 	 * 1. Create an account using SOAP.
 	 * 2. Verify account is present in the list.
 	 * @throws HarnessException
 	 */
-	@Test(	description = "Verify created account is present in the account list view",
+	@Test(	description = "Verify created account is displayed in UI -- Manage Account View.",
 			groups = { "smoke" })
 	public void GetAccount_01() throws HarnessException {
 
@@ -67,14 +67,14 @@ public class GetAccount extends AdminCommonTest {
 
 
 	/**
-	 * Testcase : Verify created account is displayed in UI.
+	 * Testcase : Verify created account is displayed in UI -- Search list view.
 	 * Steps :
 	 * 1. Create an account using SOAP.
 	 * 2. Search account
 	 * 3. Verify account is present in the list.
 	 * @throws HarnessException
 	 */
-	@Test(	description = "Verify created account is present in the account list view",
+	@Test(	description = "Verify created account is displayed in UI -- Search list view",
 			groups = { "functional" })
 	public void GetAccount_02() throws HarnessException {
 

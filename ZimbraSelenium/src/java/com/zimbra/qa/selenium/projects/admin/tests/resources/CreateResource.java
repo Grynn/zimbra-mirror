@@ -59,11 +59,11 @@ public class CreateResource extends AdminCommonTest {
 	/**
 	 * Testcase : Create a basic resource.
 	 * Steps :
-	 * 1. Create a resource from GUI i.e. New --> Resource.
+	 * 1. Create a resource from GUI i.e. Manage Accounts --> Resources --> Gear box --> New
 	 * 2. Verify resource is created using SOAP.
 	 * @throws HarnessException
 	 */
-	@Test(	description = "Create a basic resource using New --> Resource",
+	@Test(	description = "Create a basic resource using Manage Accounts --> Resources --> Gear box --> New",
 			groups = { "sanity" })
 			public void CreateResource_02() throws HarnessException {
 
@@ -91,13 +91,13 @@ public class CreateResource extends AdminCommonTest {
 	}
 
 	/**
-	 * Testcase : Create a basic resource.
+	 * Testcase : Create a basic location resource.
 	 * Steps :
 	 * 1. Create a Location resource from GUI.
 	 * 2. Verify resource is created using SOAP.
 	 * @throws HarnessException
 	 */
-	@Test(	description = "Create a basic resource",
+	@Test(	description = "Create a basic Location resource",
 			groups = { "sanity" })
 			public void CreateResource_03() throws HarnessException {
 
@@ -126,13 +126,13 @@ public class CreateResource extends AdminCommonTest {
 	}
 	
 	/**
-	 * Testcase : Create a basic resource.
+	 * Testcase : Create a basic equipment resource.
 	 * Steps :
 	 * 1. Create a Equipment resource from GUI.
 	 * 2. Verify resource is created using SOAP.
 	 * @throws HarnessException
 	 */
-	@Test(	description = "Create a basic resource",
+	@Test(	description = "Create a basic Equipment resource",
 			groups = { "sanity" })
 			public void CreateResource_04() throws HarnessException {
 

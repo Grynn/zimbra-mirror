@@ -25,13 +25,17 @@ public class DeleteAccount extends AdminCommonTest {
 	}
 	
 	/**
-	 * Testcase : Delete a basic account
+	 * Testcase : Delete a basic account -- Manage Account View
 	 * Steps :
 	 * 1. Create an account using SOAP.
-	 * 2. Delete the account using GUI.
+	 * 2. Go to Manage Account View.
+	 * 3. Select an Account.
+	 * 4. Delete an account using delete button in Gear box menu.
+	 * 5. Verify account is deleted using SOAP.
+	 * 
 	 * @throws HarnessException
 	 */
-	@Test(	description = "Delete a basic account",
+	@Test(	description = "Delete a basic account -- Manage Account View",
 			groups = { "smoke" })
 			public void DeleteAccount_01() throws HarnessException {
 
@@ -74,14 +78,18 @@ public class DeleteAccount extends AdminCommonTest {
 	}
 	
 	/**
-	 * Testcase : Delete a basic account
+	 * Testcase : Delete a basic account - Manage Account View/Right Click Menu
 	 * Steps :
 	 * 1. Create an account using SOAP.
-	 * 2. Delete the account using right click in GUI.
+	 * 2. Go to Manage Account View.
+	 * 3. Right Click on an Account.
+	 * 4. Delete an account using delete button in right click menu.
+	 * 5. Verify account is deleted using SOAP.
+	 * 
 	 * @throws HarnessException
 	 */
-	@Test(	description = "Delete a basic account",
-			groups = { "smoke" })
+	@Test(	description = "Delete a basic account - Manage Account View/Right Click Menu",
+			groups = { "functional" })
 			public void DeleteAccount_02() throws HarnessException {
 
 		// Create a new account in the Admin Console using SOAP
@@ -126,14 +134,18 @@ public class DeleteAccount extends AdminCommonTest {
 
 
 	/**
-	 * Testcase : Delete a basic account
+	 * Testcase : Delete a basic account - Search List View
 	 * Steps :
 	 * 1. Create an account using SOAP.
-	 * 2. Delete the account using GUI.
+	 * 2. Search account.
+	 * 3. Select an Account.
+	 * 4. Delete an account using delete button in Gear box menu.
+	 * 5. Verify account is deleted using SOAP.
+	 * 
 	 * @throws HarnessException
 	 */
-	@Test(	description = "Delete a basic account",
-			groups = { "functional" })
+	@Test(	description = "Delete a basic account - Search List View",
+			groups = { "smoke" })
 			public void DeleteAccount_03() throws HarnessException {
 
 		// Create a new account in the Admin Console using SOAP
@@ -177,14 +189,16 @@ public class DeleteAccount extends AdminCommonTest {
 	}
 	
 	/**
-	 * Testcase : Right click menu : Delete a basic account
+	 * Testcase : Delete a basic account - Search List View/Right Click Menu
 	 * Steps :
 	 * 1. Create an account using SOAP.
-	 * 2. Right click on account to be deleted.
-	 * 3. Delete account.
+	 * 2. Search account.
+	 * 3. Right click on Account.
+	 * 4. Delete an account using delete button in right click menu.
+	 * 5. Verify account is deleted using SOAP.
 	 * @throws HarnessException
 	 */
-	@Test(	description = "Right click menu : Delete a basic account",
+	@Test(	description = "Delete a basic account - Search List View/Right Click Menu",
 			groups = { "functional" })
 			public void DeleteAccount_04() throws HarnessException {
 

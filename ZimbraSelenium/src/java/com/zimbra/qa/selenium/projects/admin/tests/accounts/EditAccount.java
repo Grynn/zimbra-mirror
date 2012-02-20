@@ -24,14 +24,16 @@ public class EditAccount extends AdminCommonTest {
 	}
 
 	/**
-	 * Testcase : Edit account name
+	 * Testcase : Edit account name  - Manage Account View
 	 * Steps :
 	 * 1. Create an account using SOAP.
-	 * 2. Edit the account name using UI.
-	 * 3. Verify account name is changed using SOAP.
+	 * 2. Go to Manage Account View
+	 * 3. Select an Account.
+	 * 4. Edit an account using edit button in Gear box menu.
+	 * 5. Verify account is edited using SOAP.
 	 * @throws HarnessException
 	 */
-	@Test(	description = "Edit Account name",
+	@Test(	description = "Edit Account name  - Manage Account View",
 			groups = { "smoke" })
 			public void EditAccount_01() throws HarnessException {
 

@@ -27,8 +27,10 @@ public class EditDistributionList extends AdminCommonTest {
 	 * Testcase : Edit Distribution List name - Manage Distribution List view
 	 * Steps :
 	 * 1. Create a dl using SOAP.
-	 * 2. Edit the dl name using UI.
-	 * 3. Verify dl name is changed using SOAP.
+	 * 2. Go to Manage dl View.
+	 * 3. Select a dl.
+	 * 4. Edit a dl using delete button in Gear box menu.
+	 * 5. Verify dl is edit using SOAP.
 	 * @throws HarnessException
 	 */
 	@Test(	description = "Edit Distribution List name - Manage Distribution List view",
@@ -78,8 +80,10 @@ public class EditDistributionList extends AdminCommonTest {
 	 * Testcase : Edit Distribution List name - Manage Distribution List view + Right Click Menu
 	 * Steps :
 	 * 1. Create a dl using SOAP.
-	 * 2. Right Click and Edit the dl name using UI.
-	 * 3. Verify dl name is changed using SOAP.
+	 * 2. Go to Manage dl View.
+	 * 3. Right Click on a dl.
+	 * 4. Edit a dl using delete button in right click menu.
+	 * 5. Verify dl is edited using SOAP.
 	 * @throws HarnessException
 	 */
 	@Test(	description = "Edit Distribution List name - Manage Distribution List view + Right Click Menu",

@@ -23,10 +23,11 @@ public class GetDistributionList extends AdminCommonTest {
 	}
 
 	/**
-	 * Testcase : Verify created dl is displayed in UI.
+	 * Testcase : Verify created dl is displayed in UI  -- Manage dl View
 	 * Steps :
-	 * 1. Create an dl using SOAP.
-	 * 2. Verify dl is present in the dl management list.
+	 * 1. Create a dl using SOAP.
+	 * 2. Go to Manage dl View.
+	 * 3. Verify dl is present in the list
 	 * @throws HarnessException
 	 */
 	@Test(	description = "Verify created dl is present in the list view",

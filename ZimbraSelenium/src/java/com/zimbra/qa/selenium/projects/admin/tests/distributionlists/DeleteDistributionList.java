@@ -25,10 +25,11 @@ public class DeleteDistributionList extends AdminCommonTest {
 	/**
 	 * Testcase : Verify delete operation for DL - Manage distribution list view.
 	 * Steps :
-	 * 1. Create an dl using SOAP.
-	 * 2. Select dl to be deleted in manage distribution list view.
-	 * 3. Click on Delete button.
-	 * 4. Verify list is deleted using SOAP
+	 * 1. Create a DL using SOAP.
+	 * 2. Go to Manage dl View.
+	 * 3. Select an dl.
+	 * 4. Delete an dl using delete button in Gear box menu.
+	 * 5. Verify dl is deleted using SOAP.
 	 * @throws HarnessException
 	 */
 	@Test(	description = "Verify delete operation for distribution list - Manage distribution list view",
@@ -74,14 +75,15 @@ public class DeleteDistributionList extends AdminCommonTest {
 	/**
 	 * Testcase : Verify delete operation for DL - Manage distribution list view/Right Click Menu.
 	 * Steps :
-	 * 1. Create an dl using SOAP.
-	 * 2. Right click on dl to be deleted in manage distribution list view.
-	 * 3. Click on Delete button.
-	 * 4. Verify list is deleted using SOAP
+	 * 1. Create a dl using SOAP.
+	 * 2. Go to Manage dl View.
+	 * 3. Right Click on a dl.
+	 * 4. Delete a dl using delete button in right click menu.
+	 * 5. Verify dl is deleted using SOAP.
 	 * @throws HarnessException
 	 */
 	@Test(	description = "Verify delete operation for distribution list -- Manage distribution list/Right Click Menu",
-			groups = { "smoke" })
+			groups = { "functional" })
 			public void DeleteDistributionList_02() throws HarnessException {
 
 		// Create a new dl in the Admin Console using SOAP
@@ -124,9 +126,11 @@ public class DeleteDistributionList extends AdminCommonTest {
 	/**
 	 * Testcase : Verify delete operation for DL - Search distribution list view.
 	 * Steps :
-	 * 1. Create an dl using SOAP.
-	 * 2. Delete dl present in the search result.
-	 * 3. Verify list is deleted using SOAP
+	 * 1. Create a dl using SOAP.
+	 * 2. Search dl.
+	 * 3. Select a dl.
+	 * 4. Delete a dl using delete button in Gear box menu.
+	 * 5. Verify dl is deleted using SOAP.
 	 * @throws HarnessException
 	 */
 	@Test(	description = "Verify delete operation for distribution list - Search distribution list view",
@@ -177,9 +181,11 @@ public class DeleteDistributionList extends AdminCommonTest {
 	/**
 	 * Testcase : Verify delete operation for DL - Search distribution list view/Right Click Menu.
 	 * Steps :
-	 * 1. Create an dl using SOAP.
-	 * 2. Right Click and Delete dl present in the search result.
-	 * 3. Verify list is deleted using SOAP
+	 * 1. Create a dl using SOAP.
+	 * 2. Search dl.
+	 * 3. Right click on dl.
+	 * 4. Delete a dl using delete button in right click menu.
+	 * 5. Verify dl is deleted using SOAP.
 	 * @throws HarnessException
 	 */
 	@Test(	description = "Verify delete operation for distribution list - Search distribution list view/Right Click Menu.",

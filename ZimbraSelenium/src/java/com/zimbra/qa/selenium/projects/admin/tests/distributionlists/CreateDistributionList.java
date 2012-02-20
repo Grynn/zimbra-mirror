@@ -51,11 +51,11 @@ public class CreateDistributionList extends AdminCommonTest {
 	
 	
 	/**
-	 * 1. Create DL from UI. i.e. using New --> DL
+	 * 1. Create DL from UI.
 	 * 2. Verify DL is created using soap.
 	 * @throws HarnessException
 	 */
-	@Test(	description = "Create a basic DL. New --> DL",
+	@Test(	description = "Create a basic DL.",
 			groups = { "sanity" })
 			public void CreateDistributionList_02() throws HarnessException {
 

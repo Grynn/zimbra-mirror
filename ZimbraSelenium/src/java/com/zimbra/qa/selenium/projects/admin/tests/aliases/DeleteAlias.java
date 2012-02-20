@@ -24,14 +24,15 @@ public class DeleteAlias extends AdminCommonTest {
 	}
 
 	/**
-	 * Testcase : Verify delete alias operation.
+	 * Testcase : Verify delete alias operation - Search list view.
 	 * Steps :
 	 * 1. Create an alias using SOAP.
-	 * 2. Delete the alias using UI.
-	 * 3. Verify alias is deleted using SOAP.
+	 * 2. Search created alias.
+	 * 3. Select the alias from gear box menu and select delete.
+	 * 4. Verify account is deleted using SOAP.
 	 * @throws HarnessException
 	 */
-	@Test(	description = "Verify delete alias operation",
+	@Test(	description = "Verify delete alias operation - Search list view",
 			groups = { "smoke" })
 			public void DeleteAlias_01() throws HarnessException {
 
@@ -82,14 +83,16 @@ public class DeleteAlias extends AdminCommonTest {
 	}
 	
 	/**
-	 * Testcase : Right Click Menu : Verify delete alias operation.
+	 *
+	 * Testcase : Verify delete alias operation - Search list view/Right Click menu.
 	 * Steps :
 	 * 1. Create an alias using SOAP.
-	 * 2. Delete the alias using UI.
-	 * 3. Verify alias is deleted using SOAP.
+	 * 2. Search created alias.
+	 * 3. Select the alias from gear box menu and select delete.
+	 * 4. Verify account is deleted using SOAP.
 	 * @throws HarnessException
 	 */
-	@Test(	description = "Right Click Menu : Verify delete alias operation",
+	@Test(	description = "Verify delete alias operation - Search list view/Right Click menu.",
 			groups = { "functional" })
 			public void DeleteAlias_02() throws HarnessException {
 
