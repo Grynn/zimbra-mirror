@@ -154,8 +154,23 @@ function(domain) {
 	var params = new Object();
 	params.soapDoc = soapDoc;	
 	params.noAuthToken = true;
-	var resp = command.invoke(params).Body.BatchResponse;		
-	
+	var resp;
+    var isResend = false;
+    try {
+    	resp = command.invoke(params).Body.BatchResponse;		
+	} catch (ex) {
+        if (ex.code == ZmCsfeException.SVC_AUTH_EXPIRED) {
+          isResend = true;
+        } else {
+			throw ex;
+        }
+	}
+    if (isResend) {
+    	ZmCsfeCommand.clearAuthToken();
+		params.resend = true;
+        resp = command.invoke(params).Body.BatchResponse;
+    }
+
 	if(resp.GetVersionInfoResponse && resp.GetVersionInfoResponse[0]) {
 		var versionResponse = resp.GetVersionInfoResponse[0];
 		ZaServerVersionInfo.buildDate = ZaServerVersionInfo._parseDateTime(versionResponse.info[0].buildDate);
