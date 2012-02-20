@@ -119,7 +119,7 @@ function(ev) {
 }
 
 ZaCrtAppTreeHeader.prototype.setText = function (historyObject) {
-    if (historyObject.path == "Home") {
+    if (historyObject.path == ZaMsg.OVP_home) {
        this.preObj = historyObject;
     } else {
        this.preObj = this._getPreviousObject(historyObject.path);
@@ -178,6 +178,15 @@ function(menu) {
 	menu.popup(0, x, y);
 };
 
+ZaCrtAppTreeHeader.searchHistoryCache = {};
+ZaCrtAppTreeHeader.isFound = function (path) {
+    if(!ZaCrtAppTreeHeader.searchHistoryCache[path]) {
+        ZaCrtAppTreeHeader.searchHistoryCache[path] = true;
+        return  false;
+    }
+    return true;
+}
+
 ZaCrtAppTreeHeader.prototype.createMenu = function
 () {
     var i = 0;
@@ -185,12 +194,18 @@ ZaCrtAppTreeHeader.prototype.createMenu = function
     var listener = new AjxListener(this, this.goToTreeItemListener);
     var allHistory = this._historyMgr.getAllHistory();
 
+    ZaCrtAppTreeHeader.searchHistoryCache = {};
     if(allHistory.size() > 20) {
         var j = allHistory.size()-1;
         var findNum = 0;
         for (j = allHistory.size() - 1; j >= 0; j--) {
-            if(!allHistory.get(j).isShowInHistory)
+            var currentHistory = allHistory.get(j);
+            if(!currentHistory.isShowInHistory)
                 continue;
+
+            if (ZaCrtAppTreeHeader.isFound(currentHistory.path))
+                continue;
+
             findNum++;
             if (findNum == 20)
                 break;
@@ -214,10 +229,16 @@ ZaCrtAppTreeHeader.prototype.createMenu = function
         i = i + 1;
     }
 
-    for (; i < allHistory.size();i ++) {
+    ZaCrtAppTreeHeader.searchHistoryCache = {};
+    var minIndex = i;
+    for (i =  allHistory.size() - 1; i >= minIndex; i--) {
         currentHistory = allHistory.get(i);
         if (!currentHistory.isShowInHistory)
             continue;
+
+        if (ZaCrtAppTreeHeader.isFound(currentHistory.path))
+            continue;
+
         mi = new DwtMenuItem({
 		                parent: this.menu,
 		                style:		DwtMenuItem.NO_STYLE,
