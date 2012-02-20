@@ -581,7 +581,29 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
                             number:0,
 							removeButtonLabel:ZaMsg.Domain_GAL_Remove,
 							visibilityChangeEventSources:[ZaDomain.A2_create_gal_acc],
-							visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A2_create_gal_acc,"TRUE"],[ZaItem.hasReadPermission,ZaDomain.A_zimbraGalAccountId]],
+							visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A2_create_gal_acc,"TRUE"],
+                                [ZaItem.hasReadPermission,ZaDomain.A_zimbraGalAccountId],
+                                [function() {
+                                    //A workaround to modify remove button visibility checking
+                                    //Keep at least 1 item. IZaf have only 1 item, hide the remove button
+                                    if (this.removeButton) {
+                                        this.removeButton.visibilityChecks = [];
+                                        this.removeButton.visibilityChecks.push(function() {
+                                            var existing = this.getParentItem().getInstanceValue(ZaDomain.A2_gal_sync_accounts);
+                                            var total = 0;
+                                            if (existing && existing instanceof Array) {
+                                                total = existing.length;
+                                            }
+                                            return (this.getParentItem().getInstanceCount() + total)> 1;
+                                        });
+                                    }
+
+                                    //If no item exist, add 1 for better UE.
+                                    if (this.getInstanceValue().length == 0) {
+                                        this.addRowButtonClicked(this.getParentItem().instanceNum);
+                                    }
+                                    return true;
+                                }]],
 							enableDisableChangeEventSources:[ZaDomain.A2_create_gal_acc],
 							enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A2_create_gal_acc,"TRUE"],[ZaItem.hasRight,ZaDomain.RIGHT_CREATE_ACCOUNT]],
 							showAddOnNextRow: true,

@@ -795,7 +795,22 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 						},
                         {ref:ZaDomain.A2_gal_sync_accounts_set, type:_REPEAT_, label:null, repeatInstance:"", showAddButton:true, showRemoveButton:true,
 							visibilityChangeEventSources:[ZaDomain.A2_create_gal_acc],
-							visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A2_create_gal_acc,"TRUE"]],
+							visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A2_create_gal_acc,"TRUE"], [function() {
+                                //A workaround to modify remove button visibility checking
+                                //Keep at least 1 item. IZaf have only 1 item, hide the remove button
+                                if (this.removeButton) {
+                                    this.removeButton.visibilityChecks = [];
+                                    this.removeButton.visibilityChecks.push(function() {
+                                        return (this.getParentItem().getInstanceCount() > 1);
+                                    });
+                                }
+
+                                //If no item exist, add 1 for better UE.
+                                if (this.getInstanceValue().length == 0) {
+                                    this.addRowButtonClicked(this.getParentItem().instanceNum);
+                                }
+                                return true;
+                            }]],
 							enableDisableChecks:[],
 							colSpan:2,
 							addButtonLabel:ZaMsg.Domain_GAL_Add,
