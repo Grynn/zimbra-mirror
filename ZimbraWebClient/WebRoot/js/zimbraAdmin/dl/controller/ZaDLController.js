@@ -80,6 +80,10 @@ ZaController.setViewMethods["ZaDLController"].push(ZaDLController.setViewMethod)
 ZaDLController.changeActionsStateMethod = function () {
 	if(this._toolbarOperations[ZaOperation.SAVE])
 		this._toolbarOperations[ZaOperation.SAVE].enabled = false;
+    if(!this._currentObject.id || !ZaItem.hasRight(ZaAccount.RIGHT_DELETE_DL,this._currentObject)) {
+        this._toolbarOperations[ZaOperation.DELETE].enabled = false;
+        this._popupOperations[ZaOperation.DELETE].enabled = false;
+    }
 }
 ZaController.changeActionsStateMethods["ZaDLController"].push(ZaDLController.changeActionsStateMethod);
 

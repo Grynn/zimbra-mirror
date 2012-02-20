@@ -571,6 +571,13 @@ function(ev) {
 		}
 	} else {
 		//console.log("single click");
+
+        //Cancel previous scheduled action
+        if(this.changeAcStateAcId) {
+            AjxTimedAction.cancelAction(this.changeAcStateAcId);
+            this.changeAcStateAcId = null;
+        }
+
 		var act = new AjxTimedAction(this,ZaController.prototype.changeActionsState,[ev]);
 		this.changeAcStateAcId = AjxTimedAction.scheduleAction(act,ZaController.CLICK_DELAY);
 		//this.changeActionsState();
@@ -1154,6 +1161,17 @@ function () {
                         this._toolbarOperations[ZaOperation.DELETE].enabled = false;
                 }
             }
+
+            if(item.type == ZaItem.ALIAS && item.attrs[ZaAlias.A_targetType] == ZaItem.DL) {
+                if(!ZaItem.hasRight(ZaDistributionList.REMOVE_DL_ALIAS_RIGHT,item.getAliasTargetObj())) {
+                    if(this._popupOperations[ZaOperation.DELETE])
+                        this._popupOperations[ZaOperation.DELETE].enabled = false;
+
+                    if(this._toolbarOperations[ZaOperation.DELETE])
+                        this._toolbarOperations[ZaOperation.DELETE].enabled = false;
+                }
+            }
+
 			if (item.type == ZaItem.ACCOUNT) {
 				var enable = false;
                                 var domainName = ZaAccount.getDomain(item.toString());
