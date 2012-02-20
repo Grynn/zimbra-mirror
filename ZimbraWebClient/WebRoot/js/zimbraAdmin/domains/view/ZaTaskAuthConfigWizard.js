@@ -1113,11 +1113,11 @@ function() {
                             },
                             {ref: ZaDomain.A2_zimbraSpnegoAuthRealm,
                                 type: _TEXTFIELD_, width: "200px",
-                                label: ZaMsg.LBL_zimbraSpnegoAuthRealm, labelCssStyle:"text-align:left;padding-left:20px;",
+                                label: ZaMsg.LBL_zimbraSpnegoAuthRealm, labelCssStyle:"text-align:left;padding-left:20px;"
                             },
                             {ref: ZaDomain.A2_zimbraSpnegoAuthErrorURL,
                                 type: _TEXTFIELD_, width: "200px",
-                                label: ZaMsg.LBL_zimbraSpnegoAuthErrorURL, labelCssStyle:"text-align:left;padding-left:20px;",
+                                label: ZaMsg.LBL_zimbraSpnegoAuthErrorURL, labelCssStyle:"text-align:left;padding-left:20px;"
                             }
                     ]
                 },
