@@ -1970,14 +1970,14 @@ function(el, ctxt) {
 				var attrValue = attr.nodeValue && attr.nodeValue.toLowerCase();
 				// we have global CSS rules for TD that trump table properties, so bail
 				if (nodeName == "table" && (attrName == "cellpadding" || attrName == "cellspacing" ||
-						attrName == "border") && attrValue == 0) {
+						attrName == "border") && attrValue != 0) {
 					ctxt.fail = true;
 					break;
 				}
 				if (attrName && attrName.indexOf("on") === 0) {
 					el.removeAttribute(attrName);
 				}
-				if (ctxt.styles && (attrName == "style")) {
+				if (ctxt.styles && (attrName == "style") && attrValue) {
 					var value = attrValue.replace(/\s*/g, "");
 					if (value) {
 						for (var j = 0; j < ctxt.styles.length; j++) {
