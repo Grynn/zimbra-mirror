@@ -7,7 +7,7 @@ import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.octopus.core.OctopusCommonTest;
 import com.zimbra.qa.selenium.projects.octopus.ui.PageHistory;
-import java.util.*;
+
 
 public class ActivityHistory extends OctopusCommonTest {
 
@@ -64,6 +64,7 @@ public class ActivityHistory extends OctopusCommonTest {
 		// verify the file is uploaded
 		ZAssert.assertEquals(fileName, name, "Verify file is uploaded");
 		
+	
 		// Click on History tab
 		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_HISTORY);
 
@@ -83,12 +84,17 @@ public class ActivityHistory extends OctopusCommonTest {
 		String fileName=JPG_FILE;
 		
 		uploadFileViaSoap(app.zGetActiveAccount(),fileName);
-		
+
+		// Click on MyFiles tab 
+		// this makes the history text displayed
+		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_MY_FILES);
+
 		// Click on History tab
 		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_HISTORY);
 
+		
 		// form the text
-		String historyText= app.zGetActiveAccount().EmailAddress + " created version 1 of file " +  fileName +".";
+		String historyText = "You created version 1 of file " +  fileName +".";
 		
 		// check if the text present
 		HistoryItem found = app.zPageHistory.isTextPresentInGlobalHistory(historyText);
@@ -96,7 +102,6 @@ public class ActivityHistory extends OctopusCommonTest {
 		// verification
 		ZAssert.assertNotNull(found, "Verify " +  historyText + " is found");		
 		ZAssert.assertEquals(found.getHistoryText(), historyText, "Verify the history text matches");
-		ZAssert.assertEquals(found.getHistoryUser(), app.zGetActiveAccount().EmailAddress , "Verify the user matches");
 			
 	}
 
@@ -106,6 +111,7 @@ public class ActivityHistory extends OctopusCommonTest {
 		
 		uploadFileViaSoap(app.zGetActiveAccount(),fileName);	
 
+	
 		// Click on History tab
 		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_HISTORY);
 

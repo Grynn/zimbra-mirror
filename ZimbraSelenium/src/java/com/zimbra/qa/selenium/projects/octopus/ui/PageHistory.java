@@ -269,8 +269,8 @@ public class PageHistory extends AbsTab {
 		
 		// Verify history item appears in the activity history
 		for ( HistoryItem item : historyItems ) {
-			logger.debug(item.getHistoryText());
-			
+			logger.debug("|" + item.getHistoryText() + "|");
+			logger.debug("|" + historyText + "|");
 			// Verify the history is found
 			if (item.getHistoryText().equals(historyText)) {				
 				found = item;
