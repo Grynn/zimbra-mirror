@@ -15,10 +15,10 @@ PATCH	:=
 
 ifdef BETA
 	include $(OPENLDAP_ROOT)/../beta_versions.def
-	PATCH	:= patch -g0 -N -p1 < ../patches/repllog.patch; patch -g0 -N -p1 < ../patches/ITS6024.patch; patch -g0 -N -p1 < ../patches/ITS7162.patch; patch -g0 -N -p1 < ../patches/ITS7174.patch;
+	PATCH	:= patch -g0 -N -p1 < ../patches/repllog.patch; patch -g0 -N -p1 < ../patches/ITS6024.patch; patch -g0 -N -p1 < ../patches/ITS7162.patch; patch -g0 -N -p1 < ../patches/ITS7174.patch; patch -g0 -N -p1 < ../patches/ITS7176.patch;
 else
 	include $(OPENLDAP_ROOT)/../versions.def
-	PATCH	:= patch -g0 -N -p1 < ../patches/repllog.patch; patch -g0 -N -p1 < ../patches/ITS6024.patch; patch -g0 -N -p1 < ../patches/ITS7162.patch; patch -g0 -N -p1 < ../patches/ITS7174.patch;
+	PATCH	:= patch -g0 -N -p1 < ../patches/repllog.patch; patch -g0 -N -p1 < ../patches/ITS6024.patch; patch -g0 -N -p1 < ../patches/ITS7162.patch; patch -g0 -N -p1 < ../patches/ITS7174.patch; patch -g0 -N -p1 < ../patches/ITS7176.patch;
 endif
 
 ifeq (MACOSX,$(findstring MACOSX,$(BUILD_PLATFORM)))
