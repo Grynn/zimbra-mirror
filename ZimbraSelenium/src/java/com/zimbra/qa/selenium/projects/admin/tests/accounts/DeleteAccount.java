@@ -78,7 +78,7 @@ public class DeleteAccount extends AdminCommonTest {
 	}
 	
 	/**
-	 * Testcase : Delete a basic account - Manage Account View/Right Click Menu
+	 * Testcase : Delete a basic account -- Manage Account View/Right Click Menu
 	 * Steps :
 	 * 1. Create an account using SOAP.
 	 * 2. Go to Manage Account View.
@@ -134,7 +134,7 @@ public class DeleteAccount extends AdminCommonTest {
 
 
 	/**
-	 * Testcase : Delete a basic account - Search List View
+	 * Testcase : Delete a basic account -- Search List View
 	 * Steps :
 	 * 1. Create an account using SOAP.
 	 * 2. Search account.
@@ -189,7 +189,7 @@ public class DeleteAccount extends AdminCommonTest {
 	}
 	
 	/**
-	 * Testcase : Delete a basic account - Search List View/Right Click Menu
+	 * Testcase : Delete a basic account -- Search List View/Right Click Menu
 	 * Steps :
 	 * 1. Create an account using SOAP.
 	 * 2. Search account.
