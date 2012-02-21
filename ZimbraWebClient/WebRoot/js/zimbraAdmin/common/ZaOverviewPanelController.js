@@ -2259,17 +2259,27 @@ ZaOverviewPanelController.prototype.addSubTabsToParentTreeItem = function(parent
 ZaOverviewPanelController.xformTabTreeListener = function(ev) {
     var viewId = ev.item.parent.getData("viewId");
     var stepValue = ev.item.getData("tabValue");
+    if (AjxUtil.isEmpty(viewId) || AjxUtil.isEmpty(stepValue)) {
+        return;
+    }
+
     ZaApp.getInstance().getAppViewMgr().pushView(viewId);
     var currentView = ZaApp.getInstance().getAppViewMgr().getViewContentById(viewId);
+    if (AjxUtil.isEmpty(currentView)) {
+        return;
+    }
+
     if (ev.refresh) {
-        var currentControll = ZaApp.getInstance().getControllerById(viewId);
-        var currentObject = currentControll._currentObject;
-        if (currentObject && currentObject.refresh) {
-            currentObject.refresh(false, true);
-            currentView.setObject(currentObject);
+        var currentController = ZaApp.getInstance().getControllerById(viewId);
+        if (!AjxUtil.isEmpty(currentController)) {
+            var currentObject = currentController._currentObject;
+            if (currentObject && currentObject.refresh) {
+                currentObject.refresh(false, true);
+                currentView.setObject(currentObject);
+            }
         }
     }
-    if(currentView._localXForm){ //some views of zimlets are created by dwt
+    if(!AjxUtil.isEmpty(currentView._localXForm)){ //some views of zimlets are created by dwt
         currentView._localXForm.setInstanceValue(stepValue, ZaModel.currentTab);
         currentView._localXForm.refresh() ;
     }
@@ -2279,18 +2289,31 @@ ZaOverviewPanelController.xformTabTreeListener = function(ev) {
 ZaOverviewPanelController.xformTreeListener = function(ev) {
     var viewId = ev.item.getData("viewId");
     var stepValue = ev.item.getData("firstTab");
+    if (AjxUtil.isEmpty(viewId) || AjxUtil.isEmpty(stepValue)) {
+        return;
+    }
+
     ZaApp.getInstance().getAppViewMgr().pushView(viewId);
     var currentView = ZaApp.getInstance().getAppViewMgr().getViewContentById(viewId);
+    if (AjxUtil.isEmpty(currentView)) {
+        return;
+    }
+
     if (ev.refresh) {
-        var currentControll = ZaApp.getInstance().getControllerById(viewId);
-        var currentObject = currentControll._currentObject;
-        if (currentObject && currentObject.refresh) {
-            currentObject.refresh(false, true);
-            currentView.setObject(currentObject);
+        var currentController = ZaApp.getInstance().getControllerById(viewId);
+        if (!AjxUtil.isEmpty(currentController)) {
+            var currentObject = currentController._currentObject;
+            if (currentObject && currentObject.refresh) {
+                currentObject.refresh(false, true);
+                currentView.setObject(currentObject);
+            }
         }
     }
-    currentView._localXForm.setInstanceValue(stepValue, ZaModel.currentTab);
-    currentView._localXForm.refresh() ;
+
+    if(!AjxUtil.isEmpty(currentView._localXForm)){ //some views of zimlets are created by dwt
+        currentView._localXForm.setInstanceValue(stepValue, ZaModel.currentTab);
+        currentView._localXForm.refresh() ;
+    }
 }
 
 ZaOverviewPanelController.prototype.getRelatedList =

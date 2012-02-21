@@ -594,9 +594,23 @@ function () {
 }
 ZaZimbraAdmin.prototype._refreshListener =
 function(ev) {
-    var currentObject = this._historyMgr.getCurrentyHistory();
-    if (currentObject)
-        currentObject.goToView(true);
+	var tree = ZaZimbraAdmin.getInstance().getOverviewPanelController().getOverviewPanel().getFolderTree();
+	if(AjxUtil.isEmpty(tree)){
+		return;
+	}
+
+	var curItems = tree.getCurrentSelectedItems().getArray();
+	if(AjxUtil.isEmpty(curItems) || AjxUtil.isEmpty(curItems[0])){
+		return;
+	}
+
+	var curItem = curItems[0];
+	var curPath = tree.getABPath(curItem.getData("dataItem"));
+	if(AjxUtil.isEmpty(curPath)){
+		return;
+	}
+
+	tree.setSelectionByPath(curPath);
 }
 
 ZaZimbraAdmin.prototype._goPrevListener =
