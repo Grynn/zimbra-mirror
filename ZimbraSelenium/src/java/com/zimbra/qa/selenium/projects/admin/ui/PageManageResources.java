@@ -190,12 +190,12 @@ public class PageManageResources extends AbsTab {
 
 			locator=Locators.EDIT_BUTTON;
 
-			page = new FormEditAccount(this.MyApplication);
+			page = new FormEditResource(this.MyApplication);
 		} else if(button == Button.B_TREE_EDIT) {
 
 			locator=Locators.RIGHT_CLICK_MENU_EDIT_BUTTON;
 
-			page = new FormEditAccount(this.MyApplication);
+			page = new FormEditResource(this.MyApplication);
 		} 
 		else {
 			throw new HarnessException("no logic defined for button "+ button);
@@ -251,7 +251,7 @@ public class PageManageResources extends AbsTab {
 			} else if(option == Button.O_EDIT) {
 				optionLocator = Locators.EDIT_BUTTON;
 
-				page = new FormEditAccount(this.MyApplication);
+				page = new FormEditResource(this.MyApplication);
 
 			} else if(option == Button.O_DELETE) {
 				optionLocator = Locators.DELETE_BUTTON;
