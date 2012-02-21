@@ -69,13 +69,16 @@
     <property name="taglib.jarfile" location="${taglib.dir}/build/zimbrataglib.jar"/>
     <property name="taglib.jars.dir" location="${taglib.dir}/jars"/>
 
-    <!-- Cobertura -->
-    <property name="cobertura.dir" value="/usr/share/java/" />
-    <path id="cobertura.classpath">
-      <fileset dir="${cobertura.dir}">
-	<include name="cobertura.jar" />
-	<include name="*.jar" />
-      </fileset>
+    <!-- Emma -->
+    <property name="emma.dir" value="/usr/share/java" />
+
+    <path id="emma.lib" >
+      <pathelement location="${emma.dir}/emma.jar" />
+      <pathelement location="${emma.dir}/emma_ant.jar" />
+    </path>
+
+    <path id="emma.run.classpath" >
+      <pathelement location="${build.classes.dir}" />
     </path>
 
     <!-- customizations -->
@@ -223,50 +226,57 @@
         <fail if="junit.failure" message="Unit test failed"/>
     </target>
 
-    <target name="cobertuna" depends="compile" description="Cobertuna Instrutmentation">
-      <taskdef classpathref="cobertura.classpath" resource="tasks.properties" />
-      <delete file="cobertura.ser" />
+    <target name="emma" depends="compile" description="Emma Instrutmentation">
+
+      <taskdef resource="emma_ant.properties" classpathref="emma.lib"/>
       <delete dir="${build.instrumented.dir}" quiet="true" />
       <mkdir dir="${build.instrumented.dir}" />
-      <cobertura-instrument todir="${build.instrumented.dir}">
-	<ignore regex="org.apache.log4j.*" />
-	<fileset dir="${build.classes.dir}">
-	  <include name="**/*.class" />
-	  <exclude name="**/*Test.class" />
-	</fileset>
-      </cobertura-instrument>
+      <delete dir="${build.coverage.dir}" quiet="true"/>
+      <mkdir dir="${build.coverage.dir}" />
+      <emma>
+        <instr instrpathref="emma.run.classpath"
+               destdir="${build.instrumented.dir}"
+               metadatafile="${build.coverage.dir}/metadata.emma"
+               merge="true"
+               />
+      </emma>
     </target>
 
-    <target name="test-coverage" depends="test-compile" description="Run unit tests">
-        <property name="test.path" refid="class.path"/>
-        <delete dir="${test.dir}" quiet="true"/>
-        <mkdir dir="${test.dir}/output"/>
-        <mkdir dir="${test.dir}/report"/>
-        <taskdef classpathref="cobertura.classpath" resource="tasks.properties" />
-        <junit fork="yes" printsummary="on" failureproperty="junit.failure" tempdir="${test.dir}">
-            <sysproperty key="net.sourceforge.cobertura.datafile"
-                file="${basedir}/cobertura.ser" />
-            <classpath location="${build.instrumented.dir}" />
-            <classpath refid="class.path"/>
-            <classpath path="${test.classes.dir}"/>
-            <classpath path="/usr/share/java/cobertura.jar" />
-            <assertions><enable/></assertions>
-            <formatter type="xml"/>
-            <batchtest todir="${test.dir}/output">
-                <fileset dir="${test.src.dir}">
-                    <include name="**/*Test.java"/>
-                    <exclude name="**/*ITest.java"/>
-                </fileset>
-            </batchtest>
-        </junit>
-	<junitreport todir="${test.dir}/report">
-            <fileset dir="${test.dir}/output"/>
-            <report todir="${test.dir}/report"/>
-        </junitreport>
-        <echo>Test Report: ${test.dir}/report/index.html</echo>
-	<delete dir="${build.coverage.dir}" quiet="true"/>
-        <mkdir dir="${build.coverage.dir}" />
-       <cobertura-report format="xml" destdir="${build.coverage.dir}" srcdir="${src.dir}" />
+    <target name="test-coverage" depends="test-compile,emma" description="Run unit tests">
+      <property name="test.path" refid="class.path"/>
+      <delete dir="${test.dir}" quiet="true"/>
+      <mkdir dir="${test.dir}/output"/>
+      <mkdir dir="${test.dir}/report"/>
+      <taskdef resource="emma_ant.properties" classpathref="emma.lib"/>
+      <junit fork="yes" printsummary="on" failureproperty="junit.failure" tempdir="${test.dir}">
+        <classpath refid="emma.lib" />
+        <classpath location="${build.instrumented.dir}" />
+        <classpath refid="class.path"/>
+        <classpath path="${test.classes.dir}"/>
+        <assertions><enable/></assertions>
+        <jvmarg value="-Demma.coverage.out.file=${build.coverage.dir}/coverage.emma" /> 
+        <jvmarg value="-Demma.coverage.out.merge=true" /> 
+        <formatter type="xml"/>
+        <batchtest todir="${test.dir}/output">
+          <fileset dir="${test.src.dir}">
+            <include name="**/*Test.java"/>
+            <exclude name="**/*ITest.java"/>
+          </fileset>
+        </batchtest>
+      </junit>
+      <junitreport todir="${test.dir}/report">
+        <fileset dir="${test.dir}/output"/>
+        <report todir="${test.dir}/report"/>
+      </junitreport>
+      <emma>
+        <report sourcepath="${src.java.dir}">
+          <fileset dir="${build.coverage.dir}">
+            <include name="*.emma" />
+          </fileset>
+          <xml outfile="${build.coverage.dir}/coverage.xml" />
+        </report>
+      </emma>
+      <echo>Test Report: ${test.dir}/report/index.html</echo> 
     </target>
 
 
