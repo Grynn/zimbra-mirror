@@ -255,6 +255,9 @@ public class IntroViewModel: BaseViewModel
         m_optionsViewModel.LoggingVerbose = false;
         m_optionsViewModel.OEnableNext = true;
         m_optionsViewModel.MigrateONRAfter = (DateTime.Now.AddMonths(-3)).ToShortDateString();
+        m_optionsViewModel.IsMaxMessageSize = false;
+        m_optionsViewModel.MaxMessageSize = "";
+        m_optionsViewModel.IsSkipFolders = false;
 
         m_scheduleViewModel = new ScheduleViewModel();
         m_scheduleViewModel.Name = "Schedule";

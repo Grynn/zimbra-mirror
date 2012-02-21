@@ -72,7 +72,19 @@ public class AdvancedImportOptions
         get { return m_MaxMessageSize; }
         set { m_MaxMessageSize = value; }
     }
+    private bool m_IsMaxMessageSize;
+    public bool IsMaxMessageSize
+    {
+        get { return m_IsMaxMessageSize; }
+        set { m_IsMaxMessageSize = value; }
+    }
     public Folder[] FoldersToSkip;
+    private bool m_IsSkipFolders;
+    public bool IsSkipFolders
+    {
+        get { return m_IsSkipFolders; }
+        set { m_IsSkipFolders = value; }
+    }
 }
 
 public class LoggingOptions

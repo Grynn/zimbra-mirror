@@ -313,22 +313,25 @@ public class CSMigrationWrapper
                                 int msf = 0;
                                 if (options.MessageSizeFilter != null)
                                 {
-                                    msf = Int32.Parse(options.MessageSizeFilter);
-                                    msf *= 1000000;
-                                    try
+                                    if (options.MessageSizeFilter.Length > 0)
                                     {
-                                        FileInfo f = new FileInfo(dict["filePath"]);
-                                        if (f.Length > msf)
+                                        msf = Int32.Parse(options.MessageSizeFilter);
+                                        msf *= 1000000;
+                                        try
                                         {
-                                            bSkipMessage = true;
-                                            File.Delete(dict["filePath"]);
-                                            // FBS -- When logging implemented, we should log this
-                                            // Should we put a message in the UI as well?
+                                            FileInfo f = new FileInfo(dict["filePath"]);
+                                            if (f.Length > msf)
+                                            {
+                                                bSkipMessage = true;
+                                                File.Delete(dict["filePath"]);
+                                                // FBS -- When logging implemented, we should log this
+                                                // Should we put a message in the UI as well?
+                                            }
                                         }
-                                    }
-                                    catch (Exception)
-                                    {
-                                        Log.info("File exception on ", dict["filePath"]);
+                                        catch (Exception)
+                                        {
+                                            Log.info("File exception on ", dict["filePath"]);
+                                        }
                                     }
                                 }
                                 if (options.DateFilter != null)

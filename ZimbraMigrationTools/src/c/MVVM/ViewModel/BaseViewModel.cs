@@ -181,20 +181,34 @@ public class BaseViewModel: INotifyPropertyChanged
         m_config.AdvancedImportOptions.MigrateONRAfter =
             (optionsModel.IsOnOrAfter) ? DateTime.Parse(optionsModel.MigrateONRAfter)
             : DateTime.Now.AddMonths(-3);
-        m_config.AdvancedImportOptions.MaxMessageSize = optionsModel.MaxMessageSize;
+        m_config.AdvancedImportOptions.IsMaxMessageSize = optionsModel.IsMaxMessageSize;
+        m_config.AdvancedImportOptions.MaxMessageSize =
+            (optionsModel.IsMaxMessageSize) ? optionsModel.MaxMessageSize
+            : "";
 
         // deal with skip folders
-        if (optionsModel.FoldersToSkip != null)
+        m_config.AdvancedImportOptions.IsSkipFolders = optionsModel.IsSkipFolders;
+        if (optionsModel.IsSkipFolders)
         {
-            if (optionsModel.FoldersToSkip.Length > 0)
+            if (optionsModel.FoldersToSkip != null)
             {
-                string[] nameTokens = optionsModel.FoldersToSkip.Split(',');
-                for (int i = 0; i < nameTokens.Length; i++)
+                if (optionsModel.FoldersToSkip.Length > 0)
                 {
-                    Folder folder = new Folder();
-                    folder.FolderName = nameTokens.GetValue(i).ToString();
-                    m_config.AdvancedImportOptions.FoldersToSkip[i] = folder;
+                    string[] nameTokens = optionsModel.FoldersToSkip.Split(',');
+                    for (int i = 0; i < nameTokens.Length; i++)
+                    {
+                        Folder folder = new Folder();
+                        folder.FolderName = nameTokens.GetValue(i).ToString();
+                        m_config.AdvancedImportOptions.FoldersToSkip[i] = folder;
+                    }
                 }
+            }
+        }
+        else
+        {
+            for (int i = 0; i < 15; i++)
+            {
+                m_config.AdvancedImportOptions.FoldersToSkip.SetValue(null, i);
             }
         }
     }

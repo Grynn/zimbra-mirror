@@ -63,9 +63,9 @@
                           ValidatesOnExceptions=true,  
                           NotifyOnValidationError=true,  
                           UpdateSourceTrigger=PropertyChanged}"/>
-                <CheckBox Content="Maximum message size (MB)" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" Name="cbMaxMessage" VerticalAlignment="Center" IsChecked="{Binding Path=Maxmessageflag}" />
+                <CheckBox Content="Maximum message size (MB)" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" Name="cbMaxMessage" VerticalAlignment="Center" IsChecked="{Binding Path=IsMaxMessageSize}" />
                 <TextBox HorizontalAlignment="Right" MinWidth="56" MaxHeight="18" Margin="0,0,130,0" Name="tbMaxMessage" VerticalAlignment="Center" Grid.Row="1" Grid.Column="1" IsEnabled="{Binding ElementName=cbMaxMessage, Path=IsChecked}" Text="{Binding Path=MaxMessageSize}"/>
-                <CheckBox Content="Skip these folders (separate with comma)" Grid.Row="2" HorizontalAlignment="Left" Name="cbSkip" VerticalAlignment="Center" IsChecked="{Binding Path=Skipfolderflag}" />
+                <CheckBox Content="Skip these folders (separate with comma)" Grid.Row="2" HorizontalAlignment="Left" Name="cbSkip" VerticalAlignment="Center" IsChecked="{Binding Path=IsSkipFolders}" />
                 <TextBox HorizontalAlignment="Stretch" Margin="16,5,0,0" Name="tbSkip" VerticalAlignment="Top" Grid.Row="3" Grid.Column="0" IsEnabled="{Binding ElementName=cbSkip, Path=IsChecked}" Text="{Binding Path=FoldersToSkip}"/>
             </Grid>
         </GroupBox>

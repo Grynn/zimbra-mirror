@@ -21,8 +21,6 @@ public class OptionsViewModel: BaseViewModel
         this.SaveCommand = new ActionCommand(this.Save, () => true);
         this.BackCommand = new ActionCommand(this.Back, () => true);
         this.NextCommand = new ActionCommand(this.Next, () => true);
-        Maxmessageflag = false;
-        Skipfolderflag = false;
     }
     public ICommand LoadCommand {
         get;
@@ -56,6 +54,8 @@ public class OptionsViewModel: BaseViewModel
         MigrateONRAfter = config.AdvancedImportOptions.MigrateONRAfter.ToLongDateString();
         IsOnOrAfter = config.AdvancedImportOptions.IsOnOrAfter;
         MaxMessageSize = config.AdvancedImportOptions.MaxMessageSize;
+        IsMaxMessageSize = config.AdvancedImportOptions.IsMaxMessageSize;
+        IsSkipFolders = config.AdvancedImportOptions.IsSkipFolders;
 
         if (config.LoggingOptions != null)  // so old config files will work
         {
@@ -65,17 +65,8 @@ public class OptionsViewModel: BaseViewModel
         string returnval = "";
 
         returnval = ConvertToCSV(config.AdvancedImportOptions.FoldersToSkip, ",");
-
-        // placeholderstring = returnval;
         FoldersToSkip = returnval;
-        if ((MaxMessageSize != "") && (MaxMessageSize != null))
-            Maxmessageflag = true;
-        else
-            Maxmessageflag = false;
-        if ((placeholderstring != "") && (placeholderstring != null))
-            Skipfolderflag = true;
-        else
-            Skipfolderflag = false;
+  
     }
 
     private void Load()
@@ -331,6 +322,18 @@ public class OptionsViewModel: BaseViewModel
             OnPropertyChanged(new PropertyChangedEventArgs("MaxMessageSize"));
         }
     }
+    public bool IsMaxMessageSize
+    {
+        get { return m_config.AdvancedImportOptions.IsMaxMessageSize; }
+        set
+        {
+            if (value == m_config.AdvancedImportOptions.IsMaxMessageSize)
+                return;
+            m_config.AdvancedImportOptions.IsMaxMessageSize = value;
+
+            OnPropertyChanged(new PropertyChangedEventArgs("IsMaxMessageSize"));
+        }
+    }
     private string placeholderstring;
     public string Placeholderstring {
         get { return placeholderstring; }
@@ -382,22 +385,16 @@ public class OptionsViewModel: BaseViewModel
             OnPropertyChanged(new PropertyChangedEventArgs("FoldersToSkip"));
         }
     }
-    private bool m_maxmessageflag;
-    public bool Maxmessageflag {
-        get { return m_maxmessageflag; }
+    public bool IsSkipFolders
+    {
+        get { return m_config.AdvancedImportOptions.IsSkipFolders; }
         set
         {
-            m_maxmessageflag = value;
-            OnPropertyChanged(new PropertyChangedEventArgs("Maxmessageflag"));
-        }
-    }
-    private bool m_skipfolderflag;
-    public bool Skipfolderflag {
-        get { return m_skipfolderflag; }
-        set
-        {
-            m_skipfolderflag = value;
-            OnPropertyChanged(new PropertyChangedEventArgs("Skipfolderflag"));
+            if (value == m_config.AdvancedImportOptions.IsSkipFolders)
+                return;
+            m_config.AdvancedImportOptions.IsSkipFolders = value;
+
+            OnPropertyChanged(new PropertyChangedEventArgs("IsSkipFolders"));
         }
     }
     public bool LoggingVerbose

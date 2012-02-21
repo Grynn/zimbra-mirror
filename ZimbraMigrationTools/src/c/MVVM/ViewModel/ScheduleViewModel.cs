@@ -476,7 +476,7 @@ public class ScheduleViewModel: BaseViewModel
         importOpts.ItemsAndFolders = itemFolderFlags;
         importOpts.DateFilter = (ovm.IsOnOrAfter) ? ovm.MigrateONRAfter : null;
         importOpts.MessageSizeFilter = ovm.MaxMessageSize;
-        importOpts.SkipFolders = ovm.FoldersToSkip;
+        importOpts.SkipFolders = (ovm.IsSkipFolders) ? ovm.FoldersToSkip : null;
         return importOpts;
     }
 
