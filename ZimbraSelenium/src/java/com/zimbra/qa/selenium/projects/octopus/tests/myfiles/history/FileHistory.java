@@ -1,4 +1,4 @@
-package com.zimbra.qa.selenium.projects.octopus.tests.myfiles.files;
+package com.zimbra.qa.selenium.projects.octopus.tests.myfiles.history;
 
 import org.testng.annotations.*;
 
