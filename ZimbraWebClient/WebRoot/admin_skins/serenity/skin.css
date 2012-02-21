@@ -431,6 +431,10 @@ body {
     color:@darken(AppC,55)@;
 }
 
+.form td {
+    text-align: right;
+}
+
 /*Splash Screen Only Items*/
 .SplashScreen .content {
     color:@LoginLabelColor@;
@@ -522,8 +526,9 @@ body {
     @VertSeparator@;
 }
 #ZLoginButton{
-  background-color: #ffffff;
-  float:right;
+    background-color: #ffffff;
+    float:right;
+    @roundCorners(4px)@;
 }
 
 .redAsteric {

@@ -32,8 +32,10 @@ ZaSplashScreen =function(parent) {
 	params.showRememberMeCheckbox = false;
 	params.showLogOff = false;
 	params.showButton = false;
-        params.showLoading = true ;
+    params.showLoading = true ;
     params.companyURL = ZaAppCtxt.getLogoURI () ;
+    params.copyrightText = ZabMsg.splashScreenCopyright;
+    params.clientLevelNotice = ZabMsg.clientLevelNotice ? ZabMsg.clientLevelNotice :"";
     var html = ZLoginFactory.getLoginDialogHTML(params);
 	this.setContent(html);
 }
