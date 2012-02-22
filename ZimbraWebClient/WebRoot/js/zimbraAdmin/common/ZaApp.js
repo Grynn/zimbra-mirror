@@ -758,9 +758,9 @@ ZaApp.prototype.getCosList =
 function(refresh) {
 	if (refresh || !this._cosList) {
 		var query = "";
-		if(!ZaZimbraAdmin.isGlobalAdmin()) {
+		if(!ZaZimbraAdmin.hasGlobalCOSSListAccess()) {
 			var cosNameList = ZaApp.getInstance()._cosNameList;
-			if(!cosNameList || !(cosNameList instanceof Array)) {
+			if(AjxUtil.isEmpty(cosNameList)) {
 				ZaApp.getInstance()._cosNameList = cosNameList = ZaCos.getEffectiveCosList(ZaZimbraAdmin.currentAdminAccount.id);
 			}
 			if(cosNameList.length == 0) {
