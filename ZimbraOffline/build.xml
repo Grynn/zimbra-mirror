@@ -117,6 +117,15 @@
     </fileset>
   </path>
 
+  <path id="class.path">
+    <path refid="offline.class.path"/>
+    <pathelement location="${server.test.classes.dir}"/>
+    <fileset dir="${common.dir}/jars-test">
+      <include name="**/easymock-3.0.jar"/>
+    </fileset>
+  </path>
+
+
   <path id="deploy.class.path">
     <fileset dir="${server.build.dir}/dist/lib/jars">
       <include name="**/*.jar" />
