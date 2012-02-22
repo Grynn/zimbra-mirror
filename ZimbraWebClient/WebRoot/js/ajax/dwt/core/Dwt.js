@@ -1095,7 +1095,9 @@ Dwt.hasClass = function(el, className) {
 Dwt.setSelectionRange =
 function(input, start, end) {
 	if (AjxEnv.isGeckoBased || AjxEnv.isSafari) {
-		input.setSelectionRange(start, end);
+        try {
+		    input.setSelectionRange(start, end);
+        } catch(ex) {}
 	} else if (AjxEnv.isIE) {
 		var range = input.createTextRange();
 		range.collapse(true);
