@@ -226,7 +226,7 @@
         <fail if="junit.failure" message="Unit test failed"/>
     </target>
 
-    <target name="emma" depends="compile" description="Emma Instrutmentation">
+    <target name="emma" description="Emma Instrutmentation">
 
       <taskdef resource="emma_ant.properties" classpathref="emma.lib"/>
       <delete dir="${build.instrumented.dir}" quiet="true" />
