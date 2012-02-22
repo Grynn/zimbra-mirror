@@ -1075,7 +1075,7 @@ if(appNewUI) {
                                 ]
                             },
                             {ref:(ZaAccount.A2_zimbra_ds + ".attrs." + ZaDataSource.A_zimbraDataSourcePollingInterval),
-                                type:_LIFETIME1_, label:ZaMsg.LBL_zimbraDataSourcePollingInterval_internal, labelLocation:_LEFT_,
+                                type:_LIFETIME_, label:ZaMsg.LBL_zimbraDataSourcePollingInterval_internal, labelLocation:_LEFT_,
                                 msgName:ZaMsg.MSG_zimbraDataSourcePollingInterval_internal,
                                 visibilityChecks:[
                                     ZaNewDomainXWizard.isDomainModeNotExternal,
@@ -1090,7 +1090,7 @@ if(appNewUI) {
                                 ]
                             },
                             {ref:(ZaAccount.A2_ldap_ds + ".attrs." + ZaDataSource.A_zimbraDataSourcePollingInterval),
-                                type:_LIFETIME1_, label:ZaMsg.LBL_zimbraDataSourcePollingInterval_external, labelLocation:_LEFT_,
+                                type:_LIFETIME_, label:ZaMsg.LBL_zimbraDataSourcePollingInterval_external, labelLocation:_LEFT_,
                                 msgName:ZaMsg.MSG_zimbraDataSourcePollingInterval_external,
                                 visibilityChecks:[
                                     ZaNewDomainXWizard.isDomainModeNotInternal,
@@ -1165,7 +1165,7 @@ if(appNewUI) {
                                 ]
                             },
                             {ref:(ZaAccount.A2_zimbra_ds + ".attrs." + ZaDataSource.A_zimbraDataSourcePollingInterval),
-                                type:_LIFETIME1_, label:ZaMsg.LBL_zimbraDataSourcePollingInterval_internal, labelLocation:_LEFT_,
+                                type:_LIFETIME_, label:ZaMsg.LBL_zimbraDataSourcePollingInterval_internal, labelLocation:_LEFT_,
                                 msgName:ZaMsg.MSG_zimbraDataSourcePollingInterval_internal,
                                 visibilityChecks:[
                                     ZaNewDomainXWizard.isDomainModeNotExternal,
@@ -1180,7 +1180,7 @@ if(appNewUI) {
                                 ]
                             },
                             {ref:(ZaAccount.A2_ldap_ds + ".attrs." + ZaDataSource.A_zimbraDataSourcePollingInterval),
-                                type:_LIFETIME1_, label:ZaMsg.LBL_zimbraDataSourcePollingInterval_external, labelLocation:_LEFT_,
+                                type:_LIFETIME_, label:ZaMsg.LBL_zimbraDataSourcePollingInterval_external, labelLocation:_LEFT_,
                                 msgName:ZaMsg.MSG_zimbraDataSourcePollingInterval_external,
                                 visibilityChecks:[
                                     ZaNewDomainXWizard.isDomainModeNotInternal,

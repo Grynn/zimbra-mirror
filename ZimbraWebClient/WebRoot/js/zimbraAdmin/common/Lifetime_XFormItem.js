@@ -72,7 +72,11 @@ Lifetime_XFormItem.prototype.initializeItems = function(){
 				}
 			}
 			this.getParentItem()._numericPart = val;
-			return ((!val || val=="0") ? ZaMsg.Unlimited : val);	
+            var defaultVal = ZaMsg.Unlimited;
+            if (this.getParentItem().getInheritedProperty("defaultValue")) {
+                defaultVal = parseInt(this.getParentItem().getInheritedProperty("defaultValue"));
+            }
+			return ((!val || val=="0") ? defaultVal : val);
 		},
 		elementChanged:function(numericPart, instanceValue, event) {
 			var val = numericPart + this.getParentItem()._stringPart;
@@ -85,6 +89,12 @@ Lifetime_XFormItem.prototype.initializeItems = function(){
 	 	enableDisableChecks:[],
 		getDisplayValue:function (itemVal){
 			var val = "d";
+            if (this.getParentItem().getInheritedProperty("defaultValue")) {
+                var defaultVal = this.getParentItem().getInheritedProperty("defaultValue");
+                if (defaultVal.length > 1) {
+                    val = defaultVal.substr(defaultVal.length-1, 1);
+                }
+            }
 			if(itemVal != null && itemVal.length >0) {
 				if(itemVal.length > 1) {
 					val = itemVal.substr(itemVal.length-1, 1);
