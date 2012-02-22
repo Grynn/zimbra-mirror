@@ -56,28 +56,23 @@ function(ev) {
 }
 
 ZaCrtAppTreeHeader.prototype._getPreviousObject = function(path) {
+
+    var tree = ZaZimbraAdmin.getInstance().getOverviewPanelController().getOverviewPanel().getFolderTree();
+    var currentRoot = tree.getCurrentRootItem();
+    var dataItem = currentRoot.getData("dataItem");
+    var path = tree.getABPath(dataItem);
     var pathItems = ZaTree.getPathItems(path);
-    pathItems.pop();
-
-    var result;
-    if (pathItems.length == 2) {
-        result = [pathItems[0]]
-    } else if (pathItems.length > 2 && pathItems[1] == ZaMsg.OVP_search) {
-        result = [pathItems[0]]; // Special case for Search Items.
-
-    } else {
-        result = pathItems;
-        if (pathItems.length > 2) {
-            var originatePath = ZaTree.getPathByArray(pathItems);
-            var tree = ZaZimbraAdmin.getInstance().getOverviewPanelController().getOverviewPanel().getFolderTree();
-            var dataItem = tree.getTreeItemDataByPath(originatePath);
-            if (dataItem.defaultSelectedItem == 1) {
-                pathItems.pop();
-            }
+    if (pathItems.length > 1) {
+        // Special case for search. We use a special path to specify a view
+        if (pathItems[1] == ZaMsg.OVP_search) {
+            pathItems = [pathItems[0]];
+        } else {
+            pathItems.pop();
         }
     }
+
     var displayName = pathItems[pathItems.length - 1];
-    var resultPath = ZaTree.getPathByArray(result);
+    var resultPath = ZaTree.getPathByArray(pathItems);
     return new ZaHistory(resultPath, displayName);
 }
 
@@ -119,12 +114,7 @@ function(ev) {
 }
 
 ZaCrtAppTreeHeader.prototype.setText = function (historyObject) {
-    if (historyObject.path == ZaMsg.OVP_home) {
-       this.preObj = historyObject;
-    } else {
-       this.preObj = this._getPreviousObject(historyObject.path);
-    }
-
+    this.preObj = this._getPreviousObject();
     var displayText = this.getDisplayContent(this.preObj.displayName);
 	DwtLabel.prototype.setText.call(this, displayText);
 }
