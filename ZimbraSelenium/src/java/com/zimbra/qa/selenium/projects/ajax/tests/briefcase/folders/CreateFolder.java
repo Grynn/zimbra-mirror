@@ -146,6 +146,9 @@ public class CreateFolder extends AjaxCommonTest {
 		// Set the new folder name
 		_folderName = "folder" + ZimbraSeleniumProperties.getUniqueString();
 
+		// refresh briefcase page
+		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseRootFolder,false);
+				
 		// Create a new briefcase folder using right click context menu + New Briefcase
 		DialogCreateBriefcaseFolder dialog = (DialogCreateBriefcaseFolder) app.zPageBriefcase
 				.zToolbarPressPulldown(Button.B_NEW, Button.O_NEW_BRIEFCASE, null);
