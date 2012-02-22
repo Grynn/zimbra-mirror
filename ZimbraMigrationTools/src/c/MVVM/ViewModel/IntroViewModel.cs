@@ -72,6 +72,14 @@ public class IntroViewModel: BaseViewModel
             IsServerMigration = false;
             Application.Current.Properties["migrationmode"] = "user";
             AddViews(m_isBrowser);
+            if (m_usersViewModel.UsersList.Count > 0)
+            {
+                m_usersViewModel.UsersList.Clear();
+            }
+            if (m_scheduleViewModel.SchedList.Count > 0)
+            {
+                m_scheduleViewModel.SchedList.Clear();
+            }
         }
     }
     public ICommand GetIntroServerMigCommand {
