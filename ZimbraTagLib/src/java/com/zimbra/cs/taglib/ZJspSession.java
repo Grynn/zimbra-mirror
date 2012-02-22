@@ -84,6 +84,9 @@ public class ZJspSession {
     private static final boolean MODE_HTTP = sProtocolMode.equals(PROTO_HTTP);
     private static final boolean MODE_MIXED = sProtocolMode.equals(PROTO_MIXED);
     private static final boolean MODE_HTTPS = sProtocolMode.equals(PROTO_HTTPS);
+    
+    private static final String sHttpLocalBind = BeanUtils.getEnvString("httpLocalBind", "false");
+    private static final boolean HTTP_LOCALBIND = sHttpLocalBind.equalsIgnoreCase("true");
 
     private static final String sHttpsPort = BeanUtils.getEnvString("httpsPort", DEFAULT_HTTPS_PORT);
     private static final String sHttpPort = BeanUtils.getEnvString("httpPort", DEFAULT_HTTP_PORT);
@@ -363,7 +366,7 @@ public class ZJspSession {
         if (sSoapUrl == null) {
             sSoapUrl = (String) Config.find(context, CONFIG_ZIMBRA_SOAP_URL);
             if (sSoapUrl == null) {
-                if (sProtocolMode.equalsIgnoreCase(PROTO_HTTPS)) {
+                if (sProtocolMode.equalsIgnoreCase(PROTO_HTTPS) && !HTTP_LOCALBIND) {
                     String httpsPort = (sHttpsPort != null && sHttpsPort.equals(DEFAULT_HTTPS_PORT)) ? "" : ":" + sHttpsPort;
                     sSoapUrl = "https://" + sLocalHost + httpsPort +"/service/soap";
                 } else {
