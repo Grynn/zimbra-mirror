@@ -1532,7 +1532,7 @@ AjxStringUtil.HTML_SEP_ID = "zwchr";
 // regexes for finding a delimiter such as "On DATE, NAME (EMAIL) wrote:"
 AjxStringUtil.ORIG_EMAIL_RE = /[^@\s]+@[A-Za-z0-9\-]{2,}(\.[A-Za-z0-9\-]{2,})+/;	// see AjxUtil.EMAIL_FULL_RE
 AjxStringUtil.ORIG_DATE_RE = /, 20\d\d/;
-AjxStringUtil.ORIG_INTRO_RE = new RegExp("^(-----|" + AjxMsg.on + ")", "i")
+AjxStringUtil.ORIG_INTRO_RE = new RegExp("^(-{2,}|" + AjxMsg.on + ")", "i")
 
 
 // Lazily creates a test hidden IFRAME and writes the given html to it, then returns the HTML element.
@@ -1574,8 +1574,7 @@ function(text, isHtml) {
 	var results = [];
 	var lines = text.split(AjxStringUtil.SPLIT_RE);
 	
-	var curType, lastLine;
-	var curBlock = [], count = {}, unknownBlock;
+	var curType, curBlock = [], count = {}, isMerged, unknownBlock;
 	for (var i = 0; i < lines.length; i++) {
 		var line = lines[i];
 		var testLine = AjxStringUtil.trim(line);
@@ -1594,12 +1593,19 @@ function(text, isHtml) {
 			continue;
 		}
 
-		var type = AjxStringUtil._getLineType(testLine, lastLine, curBlock);
+		// WROTE can stretch over two lines; if so, join them into one line
+		var nextLine = lines[i + 1];
+		if (AjxStringUtil.ORIG_INTRO_RE.test(testLine) && nextLine.match(/\w+:$/)) {
+			testLine = [testLine, nextLine].join(" ");
+			isMerged = true;
+		}
+		
+		var type = AjxStringUtil._getLineType(testLine);
 		
 		// LINE sometimes used as delimiter; if HEADER follows, lump it in with them
 		if (type == AjxStringUtil.ORIG_LINE) {
 			var j = i + 1;
-			var nextLine = lines[j];
+			nextLine = lines[j];
 			while (!AjxStringUtil._NON_WHITESPACE.test(nextLine) && j < lines.length) {
 				nextLine = lines[++j];
 			}
@@ -1623,21 +1629,27 @@ function(text, isHtml) {
 				
 				// If first block is UNKNOWN and it's followed by a recognized delimiter, return it. Done and done.
 				var hitBreak = (type == AjxStringUtil.ORIG_SEP_STRONG || type == AjxStringUtil.ORIG_WROTE_STRONG || type == AjxStringUtil.ORIG_HEADER);
-				if (hitBreak && results.length >= 1 && results[0].type == AjxStringUtil.ORIG_UNKNOWN && count[AjxStringUtil.ORIG_UNKNOWN] == 1) {
-					var block = results[0].block;
-					if (block && block.length) {
-						var originalText = block.join("\n") + "\n";
-						originalText = originalText.replace(/\s+$/, "\n");
-						return originalText;
-					}
+				var firstBlock = results[0] && results[0].block;
+				if (hitBreak && results[0].type == AjxStringUtil.ORIG_UNKNOWN && count[AjxStringUtil.ORIG_UNKNOWN] == 1 && firstBlock && firstBlock.length) {
+					var originalText = firstBlock.join("\n") + "\n";
+					originalText = originalText.replace(/\s+$/, "\n");
+					return originalText;
 				}
 			}
 		}
 		else {
 			curType = type;
 		}
-		curBlock.push(line);
-		lastLine = line;
+		
+		if (isMerged && (type == AjxStringUtil.ORIG_WROTE_WEAK || type == AjxStringUtil.ORIG_WROTE_STRONG)) {
+			curBlock.push(line);
+			curBlock.push(nextLine);
+			i++;
+			isMerged = false;
+		}
+		else {
+			curBlock.push(line);
+		}
 	}
 
 	if (curBlock.length) {
@@ -1658,11 +1670,11 @@ function(text, isHtml) {
 	}
 	
 	// If we have a STRONG separator, return the text that precedes it
-	if (count[AjxStringUtil.ORIG_SEP_STRONG] > 0 || count[AjxStringUtil.ORIG_WROTE_STRONG] > 0) {
+	if (count[AjxStringUtil.ORIG_SEP_STRONG] > 0) {
 		var block = [];
 		for (var i = 0; i < results.length; i++) {
 			var result = results[i];
-			if (result.type == AjxStringUtil.ORIG_SEP_STRONG || result.type == AjxStringUtil.ORIG_WROTE_STRONG) {
+			if (result.type == AjxStringUtil.ORIG_SEP_STRONG) {
 				break;
 			}
 			block = block.concat(results[i].block);
@@ -1679,7 +1691,7 @@ function(text, isHtml) {
 
 // Matches a line of text against some regexes to see if has structural meaning within a mail msg.
 AjxStringUtil._getLineType =
-function(testLine, lastLine, block) {
+function(testLine) {
 
 	var type = AjxStringUtil.ORIG_UNKNOWN;
 	
@@ -1703,13 +1715,6 @@ function(testLine, lastLine, block) {
 		var m = testLine.match(/(\w+):$/);
 		var verb = m && m[1] && m[1].toLowerCase();
 		if (verb) {
-			// it can stretch over two lines; if so, join them into one line
-			if (lastLine && AjxStringUtil.ORIG_INTRO_RE.test(lastLine)) {
-				testLine = [lastLine, testLine].join(" ");
-				if (block) {
-					block.pop();
-				}
-			}
 			var points = 0;
 			// look for "wrote:" (and discount "changed:", which is used by Bugzilla)
 			points = points + (verb == AjxMsg.wrote) ? 5 : (verb == AjxMsg.changed) ? 0 : 3;
