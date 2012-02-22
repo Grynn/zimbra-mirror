@@ -40,6 +40,8 @@ MAPITask::MAPITask(Zimbra::MAPI::MAPISession &session, Zimbra::MAPI::MAPIMessage
 	pr_companies = 0;
 	pr_mileage = 0;
 	pr_billinginfo = 0;
+        pr_taskreminderset = 0;
+        pr_taskflagdueby = 0;
 	InitNamedPropsForTask();
     //}
 
@@ -54,6 +56,7 @@ MAPITask::MAPITask(Zimbra::MAPI::MAPISession &session, Zimbra::MAPI::MAPIMessage
     m_pCompanies = L"";
     m_pMileage = L"";
     m_pBillingInfo = L"";
+    m_pTaskFlagDueBy = L"";
 
     SetMAPITaskValues();
 }
@@ -82,6 +85,8 @@ HRESULT MAPITask::InitNamedPropsForTask()
     nameIdsC[0] = 0x8539;
     nameIdsC[1] = 0x8534;
     nameIdsC[2] = 0x8535;
+    nameIdsC[3] = 0x8503;
+    nameIdsC[4] = 0x8560;
 
     HRESULT hr = S_OK;
     Zimbra::Util::ScopedBuffer<SPropValue> pPropValMsgClass;
@@ -132,6 +137,8 @@ HRESULT MAPITask::InitNamedPropsForTask()
     pr_companies = SetPropType(pTaskTagsC->aulPropTag[N_COMPANIES], PT_MV_TSTRING);
     pr_mileage = SetPropType(pTaskTagsC->aulPropTag[N_MILEAGE], PT_TSTRING);
     pr_billinginfo = SetPropType(pTaskTagsC->aulPropTag[N_BILLING], PT_TSTRING);
+    pr_taskreminderset = SetPropType(pTaskTagsC->aulPropTag[N_TASKREMINDERSET], PT_BOOLEAN);
+    pr_taskflagdueby = SetPropType(pTaskTagsC->aulPropTag[N_TASKFLAGDUEBY], PT_SYSTIME);
 
     // free the memory we allocated on the head
     for (int i = 0; i < N_NUMTASKPROPS; i++)
@@ -156,13 +163,14 @@ HRESULT MAPITask::SetMAPITaskValues()
 	T_NUMALLTASKPROPS, {
 	    PR_SUBJECT, PR_BODY, PR_HTML, PR_IMPORTANCE, pr_isrecurringt, pr_recurstreamt, pr_status,
 	    pr_percentcomplete, pr_taskstart, pr_taskdue, pr_totalwork,
-	    pr_actualwork, pr_companies, pr_mileage, pr_billinginfo
+	    pr_actualwork, pr_companies, pr_mileage, pr_billinginfo, pr_taskreminderset, pr_taskflagdueby
 	}
     };
 
     HRESULT hr = S_OK;
     ULONG cVals = 0;
     m_bIsRecurring = false;
+    m_bIsTaskReminderSet = false;
 
     if (FAILED(hr = m_pMessage->GetProps((LPSPropTagArray) & taskProps, fMapiUnicode, &cVals,
             &m_pPropVals)))
@@ -171,6 +179,10 @@ HRESULT MAPITask::SetMAPITaskValues()
     if (m_pPropVals[T_ISRECURT].ulPropTag == taskProps.aulPropTag[T_ISRECURT]) // do this first to set dates correctly
     {
 	m_bIsRecurring = (m_pPropVals[T_ISRECURT].Value.b == 1);
+    }
+    if (m_pPropVals[T_TASKREMINDERSET].ulPropTag == taskProps.aulPropTag[T_TASKREMINDERSET]) // do this first to set dates correctly
+    {
+	m_bIsTaskReminderSet = (m_pPropVals[T_TASKREMINDERSET].Value.b == 1);
     }
     if (m_pPropVals[T_SUBJECT].ulPropTag == taskProps.aulPropTag[T_SUBJECT])
     {
@@ -215,6 +227,10 @@ HRESULT MAPITask::SetMAPITaskValues()
     if (m_pPropVals[T_BILLING].ulPropTag == taskProps.aulPropTag[T_BILLING])
     {
 	SetBillingInfo(m_pPropVals[T_BILLING].Value.lpszW);
+    }
+    if (m_pPropVals[N_TASKFLAGDUEBY].ulPropTag == taskProps.aulPropTag[N_TASKFLAGDUEBY])
+    {
+        SetTaskFlagDueBy(m_pPropVals[T_TASKFLAGDUEBY].Value.ft);
     }
 
     SetPlainTextFileAndContent();
@@ -453,6 +469,14 @@ void MAPITask::SetBillingInfo(LPTSTR pStr)
     m_pBillingInfo = pStr;
 }
 
+void MAPITask::SetTaskFlagDueBy(FILETIME ft)
+{
+    SYSTEMTIME st;
+
+    FileTimeToSystemTime(&ft, &st);
+    m_pTaskFlagDueBy = (st.wYear == 1601) ? L"" : Zimbra::Util::FormatSystemTime(st, TRUE, TRUE);
+}
+
 void MAPITask::SetPlainTextFileAndContent()
 {
     m_pPlainTextFile = Zimbra::MAPI::Util::SetPlainText(m_pMessage, &m_pPropVals[T_BODY]);
@@ -463,6 +487,7 @@ void MAPITask::SetHtmlFileAndContent()
     m_pHtmlFile = Zimbra::MAPI::Util::SetHtml(m_pMessage, &m_pPropVals[T_HTMLBODY]);
 }
 
+bool    MAPITask::IsTaskReminderSet() {return m_bIsTaskReminderSet; }
 wstring MAPITask::GetSubject() { return m_pSubject; }
 wstring MAPITask::GetImportance() { return m_pImportance; }
 wstring MAPITask::GetTaskStatus() { return m_pStatus; }
@@ -475,6 +500,7 @@ wstring MAPITask::GetActualWork() { return m_pActualWork; }
 wstring MAPITask::GetMileage() { return m_pMileage; }
 wstring MAPITask::GetCompanies() { return m_pCompanies; }
 wstring MAPITask::GetBillingInfo() { return m_pBillingInfo; }
+wstring MAPITask::GetTaskFlagDueBy() { return m_pTaskFlagDueBy; }
 wstring MAPITask::GetPlainTextFileAndContent() { return m_pPlainTextFile; }
 wstring MAPITask::GetHtmlFileAndContent() { return m_pHtmlFile; }
 

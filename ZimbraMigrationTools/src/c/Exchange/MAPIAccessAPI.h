@@ -186,6 +186,7 @@ typedef struct _TaskItemData: BaseItemData
     wstring Companies;
     wstring Mileage;
     wstring BillingInfo;
+    wstring TaskFlagDueBy;
     vector<MessagePart> vMessageParts;
 
     // recurrence stuff

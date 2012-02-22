@@ -557,11 +557,13 @@ STDMETHODIMP CMapiAccessWrap::GetData(BSTR UserId, VARIANT ItemId, FolderType ty
                 pIt[L"xp-COMPANIES"] = SysAllocString((taskData.Companies).c_str());
                 pIt[L"xp-MILEAGE"] = SysAllocString((taskData.Mileage).c_str());
                 pIt[L"xp-BILLING"] = SysAllocString((taskData.BillingInfo).c_str());
-                pIt[L"contentType0"] = SysAllocString(
-                    (taskData.vMessageParts[0].contentType).c_str());
+                if (taskData.TaskFlagDueBy.length() > 0)
+                {
+                    pIt[L"taskflagdueby"] = SysAllocString((taskData.TaskFlagDueBy).c_str());
+                }
+                pIt[L"contentType0"] = SysAllocString((taskData.vMessageParts[0].contentType).c_str());
                 pIt[L"content0"] = SysAllocString((taskData.vMessageParts[0].content).c_str());
-                pIt[L"contentType1"] = SysAllocString(
-                    (taskData.vMessageParts[1].contentType).c_str());
+                pIt[L"contentType1"] = SysAllocString((taskData.vMessageParts[1].contentType).c_str());
                 pIt[L"content1"] = SysAllocString((taskData.vMessageParts[1].content).c_str());
                 // recurrence
                 if (taskData.recurPattern.length() > 0)

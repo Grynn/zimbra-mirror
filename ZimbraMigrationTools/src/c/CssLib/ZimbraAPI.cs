@@ -1548,6 +1548,19 @@ public class ZimbraAPI
         writer.WriteEndElement();
         //
 
+        // task reminder if applicable
+        if (task.ContainsKey("taskflagdueby"))
+        {
+            writer.WriteStartElement("alarm");
+            writer.WriteAttributeString("action", "DISPLAY");
+            writer.WriteStartElement("trigger");
+            writer.WriteStartElement("abs");
+            writer.WriteAttributeString("d", task["taskflagdueby"]);
+            writer.WriteEndElement();   // abs
+            writer.WriteEndElement();   // trigger
+            writer.WriteEndElement();   // alarm
+        }
+
         if (isRecurring)
         {
             writer.WriteStartElement("recur");

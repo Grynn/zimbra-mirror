@@ -14,10 +14,11 @@ class MAPITask : public MAPIRfc2445
 {
 private:
     //static bool m_bNamedPropsInitialized;
+    bool m_bIsTaskReminderSet;
 
     // prop tags for named properties
     ULONG pr_isrecurringt, pr_recurstreamt, pr_status, pr_percentcomplete, pr_taskstart, pr_taskdue, pr_totalwork, pr_actualwork, pr_companies,
-	  pr_mileage, pr_billinginfo;
+	  pr_mileage, pr_billinginfo, pr_taskreminderset, pr_taskflagdueby;
 
     // index of props
     typedef enum _TaskPropIdx
@@ -27,13 +28,15 @@ private:
 
     typedef enum _CommonTPropIdx
     {
-        N_COMPANIES, N_MILEAGE, N_BILLING, N_NUMCOMMONTPROPS
+        N_COMPANIES, N_MILEAGE, N_BILLING, N_TASKREMINDERSET, N_TASKFLAGDUEBY, N_NUMCOMMONTPROPS
     } CommonTPropIdx;
 
     // this enum lists all the props
     enum
     {
-        T_SUBJECT, T_BODY, T_HTMLBODY, T_IMPORTANCE, T_ISRECURT, T_RECURSTREAMT, T_STATUS, T_PERCENTCOMPLETE, T_TASKSTART, T_TASKDUE, T_TOTALWORK, T_ACTUALWORK, T_COMPANIES, T_MILEAGE, T_BILLING, T_NUMALLTASKPROPS
+        T_SUBJECT, T_BODY, T_HTMLBODY, T_IMPORTANCE, T_ISRECURT, T_RECURSTREAMT, T_STATUS, T_PERCENTCOMPLETE,
+        T_TASKSTART, T_TASKDUE, T_TOTALWORK, T_ACTUALWORK, T_COMPANIES, T_MILEAGE, T_BILLING, T_TASKREMINDERSET,
+        T_TASKFLAGDUEBY, T_NUMALLTASKPROPS
     };
 
     // these are the named property id's
@@ -53,6 +56,7 @@ private:
     wstring m_pCompanies;
     wstring m_pMileage;
     wstring m_pBillingInfo;
+    wstring m_pTaskFlagDueBy;
     wstring m_pPlainTextFile;
     wstring m_pHtmlFile;
     //
@@ -73,10 +77,12 @@ public:
     void SetCompanies(LPTSTR pStr);
     void SetMileage(LPTSTR pStr);
     void SetBillingInfo(LPTSTR pStr);
+    void SetTaskFlagDueBy(FILETIME ft);
     void SetPlainTextFileAndContent();
     void SetHtmlFileAndContent();
     void SetRecurValues();
 
+    bool IsTaskReminderSet();
     wstring GetSubject();
     wstring GetImportance();
     wstring GetTaskStatus();
@@ -89,6 +95,7 @@ public:
     wstring GetMileage();
     wstring GetCompanies();
     wstring GetBillingInfo();
+    wstring GetTaskFlagDueBy();
     wstring GetPlainTextFileAndContent();
     wstring GetHtmlFileAndContent();
 };
