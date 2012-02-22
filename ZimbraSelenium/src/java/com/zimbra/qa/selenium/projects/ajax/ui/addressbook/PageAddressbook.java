@@ -581,7 +581,7 @@ public class PageAddressbook extends AbsTab {
 			    if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
                    optionLocator="css=div[class='ActionMenu ZHasIcon'] div[class*='ZMenuItem ZWidget ZHasLeftIcon ZHasText'] table[class*='ZWidgetTable ZMenuItemTable']:contains('Contact')";                
 			    } else {
-                  optionLocator="css=div#zb__CNS-main__NEW_MENU_NEW_CONTACT";
+                  optionLocator="css=div#zb__NEW_MENU_NEW_CONTACT";
                 }
 			    page = new FormContactNew(this.MyApplication);
 		   }
@@ -596,11 +596,11 @@ public class PageAddressbook extends AbsTab {
 				page = new FormContactGroupNew(this.MyApplication);		   
 		   }
 		   else if ( option == Button.O_NEW_TAG ) {			   
-		        optionLocator = "css=div#zb__CNS-main__NEW_MENU_NEW_TAG td#zb__CNS-main__NEW_MENU_NEW_TAG_title";
+		        optionLocator = "css=div#zb__NEW_MENU_NEW_TAG td#zb__NEW_MENU_NEW_TAG_title";
 		        page = new DialogTag(this.MyApplication, this);
 		   }    
 		   else if ( option == Button.O_NEW_ADDRESSBOOK ) {					   
-			    optionLocator = "css=div#zb__CNS-main__NEW_MENU_NEW_ADDRBOOK td#zb__CNS-main__NEW_MENU_NEW_ADDRBOOK_title";
+			    optionLocator = "css=div#zb__NEW_MENU_NEW_ADDRBOOK td#zb__NEW_MENU_NEW_ADDRBOOK_title";
 			    page = new DialogCreateFolder(MyApplication, ((AppAjaxClient)MyApplication).zPageAddressbook);			    
 							    
 
