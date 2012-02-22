@@ -163,20 +163,20 @@ public class RemoveMountpoint extends OctopusCommonTest {
 		FolderItem currentAccountRootFolder = FolderItem.importFromSOAP(
 				currentGranteeAccount, SystemFolder.Briefcase);
 
-		String folderMountpointName = "mountpoint"
-				+ ZimbraSeleniumProperties.getUniqueString();
+		//String folderMountpointName = "mountpoint"
+		//		+ ZimbraSeleniumProperties.getUniqueString();
 
 		currentGranteeAccount
 				.soapSend("<CreateMountpointRequest xmlns='urn:zimbraMail'>"
 						+ "<link l='" + currentAccountRootFolder.getId()
-						+ "' name='" + folderMountpointName
+						+ "' name='" + ownerFoldername
 						+ "' view='document' rid='" + ownerFolder.getId()
 						+ "' zid='" + ownerAccount.ZimbraId + "'/>"
 						+ "</CreateMountpointRequest>");
 
 		// Verify the mountpoint exists on the server
 		FolderMountpointItem folderMountpointItem = FolderMountpointItem
-				.importFromSOAP(currentGranteeAccount, folderMountpointName);
+				.importFromSOAP(currentGranteeAccount, ownerFoldername);
 		ZAssert.assertNotNull(folderMountpointItem,
 				"Verify the mountpoint is available");
 
@@ -191,7 +191,7 @@ public class RemoveMountpoint extends OctopusCommonTest {
 		// Select Share option from the Context menu
 		DialogFolderShare dialogShare = (DialogFolderShare) app.zPageMyFiles
 				.zToolbarPressPulldown(Button.B_MY_FILES_LIST_ITEM,
-						Button.O_FOLDER_SHARE, folderMountpointName);
+						Button.O_FOLDER_SHARE, ownerFoldername);
 
 		SleepUtil.sleepSmall();
 		
@@ -201,7 +201,7 @@ public class RemoveMountpoint extends OctopusCommonTest {
 		// Verify the mountpoint folder disappears from My Files tab
 		ZAssert.assertTrue(app.zPageMyFiles.zWaitForElementDeleted(
 				PageMyFiles.Locators.zMyFilesListView.locator + ":contains("
-						+ folderMountpointName + ")", "5000"),
+						+ ownerFoldername + ")", "5000"),
 				"Verify mountpoint folder disappears from My Files tab");
 	
 		// click on Sharing tab

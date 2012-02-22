@@ -45,7 +45,7 @@ public class AddComment extends OctopusCommonTest {
 
 		// Create file item
 		String filePath = ZimbraSeleniumProperties.getBaseDirectory()
-				+ "/data/public/other/testpptfile.ppt";
+				+ "/data/public/other/testbitmapfile.bmp";
 
 		FileItem fileItem = new FileItem(filePath);
 
@@ -94,7 +94,7 @@ public class AddComment extends OctopusCommonTest {
 
 		// Create file item
 		String filePath = ZimbraSeleniumProperties.getBaseDirectory()
-				+ "/data/public/other/samplejpg.jpg";
+				+ "/data/public/other/putty.log";
 
 		FileItem file = new FileItem(filePath);
 
@@ -104,11 +104,10 @@ public class AddComment extends OctopusCommonTest {
 		String attachmentId = account.uploadFile(filePath);
 
 		// Save uploaded file to the root folder through SOAP
-		account.soapSend(
-
-		"<SaveDocumentRequest xmlns='urn:zimbraMail'>" + "<doc l='"
-				+ briefcaseRootFolder.getId() + "'>" + "<upload id='"
-				+ attachmentId + "'/>" + "</doc></SaveDocumentRequest>");
+		account.soapSend("<SaveDocumentRequest xmlns='urn:zimbraMail'>"
+				+ "<doc l='" + briefcaseRootFolder.getId() + "'>"
+				+ "<upload id='" + attachmentId + "'/>"
+				+ "</doc></SaveDocumentRequest>");
 
 		// account.soapSelectNode("//mail:SaveDocumentResponse", 1);
 
@@ -144,11 +143,12 @@ public class AddComment extends OctopusCommonTest {
 				DisplayFileComments.Locators.zFileCommentsView.locator
 						+ ":contains(" + comment + ")", "3000"),
 				"Verify comments text appears in the file Comments view");
-		
+
 		// Verify account user name appears in the file Comments view
 		ZAssert.assertTrue(app.zPageOctopus.zWaitForElementPresent(
 				DisplayFileComments.Locators.zFileCommentsView.locator
-						+ ":contains(" + account.EmailAddress.split("@")[0] + ")", "3000"),
+						+ ":contains(" + account.EmailAddress.split("@")[0]
+						+ ")", "3000"),
 				"Verify account user name appears in the file Comments view");
 
 		// Verify Close button in the comments view
