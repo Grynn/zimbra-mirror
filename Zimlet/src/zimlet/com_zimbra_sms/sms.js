@@ -61,9 +61,6 @@ Com_Zimbra_sms.prototype.init = function() {
 	if (!this.turnOnZimlet_SMS)
 		return;
 
-	if (ZmAssistant && ZmAssistant.register)
-		ZmAssistant.register(new Com_Zimbra_sms_Asst(this));
-
 	this.sms_smsUsername = this.getUserProperty("sms_smsUsername");
 	this.sms_smsPassword = this.getUserProperty("sms_smsPassword");
 	this.sms_showSendAndSMSButton = this.getUserProperty("sms_showSendAndSMSButton") == "true";
@@ -764,48 +761,4 @@ Com_Zimbra_sms.prototype._showWarningMsg = function(message) {
 	this.warningDialog = dialog;
 	dialog.setMessage(message, style);
 	dialog.popup();
-};
-
-
-//////////////////////////////////////////////////////////////////////////
-// Zimlet assistant class
-// - used by the Assistant dialog to run games via "command-line"
-//////////////////////////////////////////////////////////////////////////
-function Com_Zimbra_sms_Asst(zimlet) {
-	if (arguments.length == 0) return;
-	// XXX: localize later (does NOT belong in ZmMsg.properties)
-	ZmAssistant.call(this, "Send SMS", "sms");
-	this._zimlet = zimlet;
-};
-
-Com_Zimbra_sms_Asst.prototype = new ZmAssistant();
-Com_Zimbra_sms_Asst.prototype.constructor = Com_Zimbra_sms_Asst;
-
-Com_Zimbra_sms_Asst.prototype.okHandler =
-function(dialog) {
-	// get reference to the sms zimlet
-	var zm = appCtxt.getZimletMgr();
-	var zimlet = zm ? zm._ZIMLETS_BY_ID["com_zimbra_sms"] : null;
-	if (zimlet && this._body) {
-		var toValue = (this._to != null) ? this._to : zimlet.handlerObject.getUserProperty("cellNum");
-		//alert(toValue+":"+this._body);
-		zimlet.handlerObject._sendSMS(toValue, this._address);
-	}
-	return true;
-};
-
-Com_Zimbra_sms_Asst.prototype.handle =
-function(dialog, verb, args) {
-	var match = this._objectManager.findMatch(args, ZmObjectManager.PHONE);
-	if (match != null && match != "") {
-		this._to = match[0];
-		args = args.replace(match[0], " ");
-	} else {
-		this._to = this._zimlet.getUserProperty("cellNum");
-	}
-	this._body = args.replace(/^\s+/, '').replace(/\s+$/, '');
-
-	dialog._setOkButton("Send SMS", true, this._body != "");
-	this._setField("Cell", this._to == null ? "enter a phone number" : this._to, this._to == null, true, 0);
-	this._setField("Text", this._body == "" ? "just type to enter text message" : this._body, this._body == null, true, 1);
 };

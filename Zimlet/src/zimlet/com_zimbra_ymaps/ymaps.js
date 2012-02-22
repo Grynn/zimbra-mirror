@@ -60,15 +60,6 @@ YMapsZimlet.REGEX = "\\d+?-??\\d{0,5},??\\s(?=((\\w+\\W+){2,9}))\\1((\\d{5,7}(-\
 YMapsZimlet.CACHE = [];
 
 /**
- * Initializes the zimlet.
- * 
- */
-YMapsZimlet.prototype.init =
-function() {
-	if (ZmAssistant && ZmAssistant.register) ZmAssistant.register(new YMapsZimlet_Asst());
-};
-
-/**
  * Called by the Zimbra framework when the Ymaps panel item was double clicked.
  */
 YMapsZimlet.prototype.doubleClicked =
@@ -261,35 +252,4 @@ function(obj, result) {
 	var url = r.substring(r.indexOf("http://gws"),r.indexOf("</Result>"));
 	url = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(url);
 	YMapsZimlet._displayImage(url, obj);
-};
-
-
-//////////////////////////////////////////////////////////////////////////
-// Zimlet assistant class
-// - used by the Assistant dialog to run games via "command-line"
-//////////////////////////////////////////////////////////////////////////
-function YMapsZimlet_Asst() {
-	// XXX: localize later (does NOT belong in ZmMsg.properties)
-	ZmAssistant.call(this, "Yahoo Maps", "map", "Map an address using Yahoo Maps");
-};
-
-YMapsZimlet_Asst.prototype = new ZmAssistant();
-YMapsZimlet_Asst.prototype.constructor = YMapsZimlet_Asst;
-
-YMapsZimlet_Asst.prototype.okHandler =
-function(dialog) {
-	// get reference to the ymaps zimlet
-	var zm = appCtxt.getZimletMgr();
-	var zimlet = zm ? zm._ZIMLETS_BY_ID["YMapsZimlet"] : null;
-	if (zimlet && this._address) {
-		zimlet.handlerObject.toolTipPoppedUp(null, this._address, null, dialog.getAssistantDiv());
-	}
-	return false;
-};
-
-YMapsZimlet_Asst.prototype.handle =
-function(dialog, verb, args) {
-	this._address = args;
-	var valid = args.length > 0;
-	dialog._setOkButton("Map", true, valid);
 };
