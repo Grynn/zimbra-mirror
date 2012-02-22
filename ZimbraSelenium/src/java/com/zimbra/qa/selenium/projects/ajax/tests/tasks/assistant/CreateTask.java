@@ -39,7 +39,7 @@ public class CreateTask extends AjaxCommonTest {
  * 6.Task should get created
  * @throws HarnessException
  */
-	@Test(description = "Create Task using assistant", groups = { "functional" })
+	@Test(description = "Create Task using assistant", groups = { "deprecated" })
 	public void CreateTask_01() throws HarnessException {
 		String subject = "subject" + ZimbraSeleniumProperties.getUniqueString();
 		String command = "task \"" + subject + "\" Notes(hello)";

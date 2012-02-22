@@ -29,7 +29,7 @@ public class OpenAssistant extends AjaxCommonTest {
  * Result:- Zimbra Assistant dialog should get open
  * @throws HarnessException
  */
-	@Test(description = "Open the assistant", groups = { "functional" })
+	@Test(description = "Open the assistant", groups = { "deprecated" })
 	public void OpenAssistant_01() throws HarnessException {
 
 		// Click Get Mail button
