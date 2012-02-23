@@ -526,24 +526,10 @@ function(id, opened) {
  */
 DwtToolBar.prototype.__getButtonIndex =
 function(id) {
-    var i = 0;
-    // NOTE: _buttons seems to always be implemented as an Array.
-    // This code should not be needed because:
-    // * If we're working with Objects-as-associative-arrays, we don't want
-    //   numeric indexes.
-    // * If we're working with arrays, id will ALWAYS be i if found, or
-    //   undefined if not found. This function could be done via a simple
-    //   return this._buttons && this._buttons[id] && id;
-    //   or something close to that if falsey values might be valid.
-    for (var name in this._buttons) {
-        // NOTE: Protect from native Array.prototype extensions
-        if (this._buttons.hasOwnProperty(name)) {
-            if (name == id) {
-                return i;
-            }
-            i++;
-        }
-    }
+    var toolBarButtons = this.getChildren();
+    var button = this._buttons[id];
+    if (toolBarButtons && toolBarButtons.length && button)
+        return AjxUtil.indexOf(toolBarButtons, button);
     return -1;
 };
 
