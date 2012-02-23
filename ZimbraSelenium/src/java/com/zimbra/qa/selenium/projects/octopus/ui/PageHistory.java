@@ -13,20 +13,32 @@ import com.zimbra.qa.selenium.projects.octopus.ui.DialogError.DialogErrorID;
 
 
 public class PageHistory extends AbsTab {
-    interface HISTORY_CONSTANTS {
-      String HISTORY_VIEW_LOCATOR = "css=div.octopus-updates-view";
-      String HISTORY_HEADER_VIEW_LOCATOR = HISTORY_VIEW_LOCATOR + " div#my-updates-header-view";
-      String HISTORY_FILTER_VIEW_LOCATOR = HISTORY_VIEW_LOCATOR + " div.my-updates-filter-view";
+    public interface CONSTANTS {
+      String VIEW_LOCATOR = "css=div.octopus-updates-view";
+      String HEADER_VIEW_LOCATOR = VIEW_LOCATOR + " div#my-updates-header-view";
+      String FILTER_VIEW_LOCATOR = VIEW_LOCATOR + " div.my-updates-filter-view";
     	 
-   	  String[] HISTORY_FILTER_VIEW_TEXT = {"Refine", 
+   	  String[] FILTER_VIEW_TEXT = {"Refine", 
                                            "Activity Type",
                                            "all types",
                                            "favorites",
                                            "comment",
                                            "sharing",
                                            "new version"};
-	
+   	  
+   	  // text displayed in Global History
+   	  String YOU = "You";
+   	  
+	  String NEW_VERSION_PREFIX = " created version 1 of file ";
+	  String NEW_VERSION_POSTFIX= ".";
+	  
+	  String FAVORITE_PREFIX  = " marked file ";
+	  String FAVORITE_POSTFIX = " as fvaorite.";
+	  
+	  
+	  
     }
+    
 	public static class Locators {
 		public static final Locators zTabHistory = new Locators(
 				"css=div.octopus-tab-label:contains(History)");
@@ -134,6 +146,24 @@ public class PageHistory extends AbsTab {
 
 	}
 
+	public void zToolbarCheckMark(String locator,boolean check) throws HarnessException {
+		logger.info(myPageName() + " zToolbarCheckOption(" + locator + ")");
+
+		tracer.trace("Check the " + locator + " option");
+
+		if (!this.sIsElementPresent(locator))
+			throw new HarnessException("Check box is not present: " + locator);
+
+		if (check)
+			this.sCheck(locator);
+		else
+			this.sUncheck(locator);
+			
+		// If the app is busy, wait for it to become active
+		zWaitForBusyOverlay();
+	}
+	
+	
 	public AbsPage zToolbarCheckMark(Button option) throws HarnessException {
 		logger.info(myPageName() + " zToolbarCheckOption(" + option + ")");
 

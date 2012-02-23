@@ -1,8 +1,8 @@
 package com.zimbra.qa.selenium.projects.octopus.tests.history;
 
 import org.testng.annotations.*;
+
 import com.zimbra.qa.selenium.framework.items.*;
-import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.octopus.core.OctopusCommonTest;
@@ -10,20 +10,17 @@ import com.zimbra.qa.selenium.projects.octopus.ui.PageHistory;
 
 
 public class RefineHistory extends OctopusCommonTest {
-
-	private boolean _folderIsCreated = false;
-	private String _folderName = null;
-	private boolean _fileAttached = false;
-	private String _fileId = null;
-
-	@BeforeMethod(groups = { "always" })
-	public void testReset() {
-		_folderName = null;
-		_folderIsCreated = false;
-		_fileId = null;
-		_fileAttached = false;
-	}
-
+	String fileName=JPG_FILE;
+	String fileId  =null;
+    String[] checkboxes = {
+    		PageHistory.Locators.zHistoryFilterAllTypes.locator,
+    		PageHistory.Locators.zHistoryFilterFavorites.locator,
+    		PageHistory.Locators.zHistoryFilterComment.locator,
+    		PageHistory.Locators.zHistoryFilterSharing.locator,
+    		PageHistory.Locators.zHistoryFilterNewVersion.locator,
+    		PageHistory.Locators.zHistoryFilterRename.locator    		
+    }; 
+	
 	public RefineHistory() {
 		logger.info("New " + RefineHistory.class.getCanonicalName());
 
@@ -32,12 +29,40 @@ public class RefineHistory extends OctopusCommonTest {
 		super.startingAccountPreferences = null;
 	}
 
-	private void VerifyCheckboxAction(Button button, String historyText) 
+
+	@BeforeMethod(groups = { "always" })
+	public void setup() 
 	    throws HarnessException
 	{		
-		// Check new version check box
-		app.zPageHistory.zToolbarCheckMark(button);
+		 // upload file before running test
+		if (fileId == null) {		 
+	 	    fileId = uploadFileViaSoap(app.zGetActiveAccount(),fileName);    
 		
+	 		// Click on MyFiles tab 
+			// this extra click makes the history text displayed
+			app.zPageOctopus.zToolbarPressButton(Button.B_TAB_MY_FILES);
+
+			// Click on History tab
+			app.zPageOctopus.zToolbarPressButton(Button.B_TAB_HISTORY);
+		
+		}
+		
+		// reset - uncheck all check boxes
+		for (int i=0; i<checkboxes.length; i++) {
+			if (app.zPageHistory.sIsChecked(checkboxes[i])) {
+				app.zPageHistory.zToolbarCheckMark(checkboxes[i],false);
+			}
+		}
+
+	 }
+
+	private void VerifyCheckboxAction(String locator, String historyText) 
+	    throws HarnessException
+	{		
+		// Make a check
+		app.zPageHistory.zToolbarCheckMark(locator, true);
+		
+	
 		// check if the text present
 		HistoryItem found = app.zPageHistory.isTextPresentInGlobalHistory(historyText);
 			
@@ -46,8 +71,8 @@ public class RefineHistory extends OctopusCommonTest {
 		ZAssert.assertEquals(found.getHistoryText(), historyText, "Verify the history text matches");
 		
 		
-		// UnCheck new version check box
-		app.zPageHistory.zToolbarCheckMark(button);
+		// UnCheck the check box
+		app.zPageHistory.zToolbarCheckMark(locator, false);
 		
 		// check if the text present
 		found = app.zPageHistory.isTextPresentInGlobalHistory(historyText);
@@ -60,25 +85,24 @@ public class RefineHistory extends OctopusCommonTest {
 	
 	@Test(description = "Functional test for check/uncheck 'new version' checkbox", groups = { "smoke" })
 	public void RefineNewVersion() throws HarnessException {
-		String fileName=JPG_FILE;
-		
-		// new version
-		uploadFileViaSoap(app.zGetActiveAccount(),fileName);
-        
-		// Click on MyFiles tab 
-		// this makes the history text displayed
-		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_MY_FILES);
-
-		// Click on History tab
-		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_HISTORY);
+										
+		// verify check/uncheck action for 'new version' 
+		VerifyCheckboxAction(PageHistory.Locators.zHistoryFilterNewVersion.locator, 
+				PageHistory.CONSTANTS.YOU +  PageHistory.CONSTANTS.NEW_VERSION_PREFIX 
+			+   fileName + PageHistory.CONSTANTS.NEW_VERSION_POSTFIX);								
+	}
 	
-		// form the text
-		String historyText = "You created version 1 of file " +  fileName +".";
-						
-		// verify check/uncheck action 
-		VerifyCheckboxAction(Button.O_NEW_VERSION, historyText);
+	@Test(description = "Functional test for check/uncheck 'favorite' checkbox", groups = { "smoke" })
+	public void RefineFavorite() throws HarnessException {
 		
-						
+        // mark file as favorite via soap
+		MarkFileFavoriteViaSoap(app.zGetActiveAccount(), fileId);
+	
+
+		// verify check/uncheck action for 'favorite'
+		VerifyCheckboxAction(PageHistory.Locators.zHistoryFilterFavorites.locator, 
+				PageHistory.CONSTANTS.YOU + PageHistory.CONSTANTS.FAVORITE_PREFIX 
+			+   fileName + PageHistory.CONSTANTS.FAVORITE_POSTFIX);								
 	}
 	
 	/*
@@ -118,4 +142,12 @@ public class RefineHistory extends OctopusCommonTest {
 		
 	}
 */
+	
+	@AfterClass(groups = { "always" })
+	public void teardown() 
+	    throws HarnessException
+	{		
+		//TODO: delete fileName		    
+	}
+
 }
