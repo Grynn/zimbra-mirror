@@ -1,0 +1,24 @@
+From 9b9f4984f00d930e9c9dc4281eee802a3247191a Mon Sep 17 00:00:00 2001
+From: Howard Chu <hyc@openldap.org>
+Date: Thu, 23 Feb 2012 12:08:53 -0800
+Subject: [PATCH] More for ITS#7170
+
+---
+ servers/slapd/back-mdb/idl.c |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+diff --git a/servers/slapd/back-mdb/idl.c b/servers/slapd/back-mdb/idl.c
+index 29a3796..009667f 100644
+--- a/servers/slapd/back-mdb/idl.c
++++ b/servers/slapd/back-mdb/idl.c
+@@ -518,6 +518,7 @@ mdb_idl_insert_keys(
+ 			}
+ 		}
+ 	} else if ( rc == MDB_NOTFOUND ) {
++		flag &= ~MDB_APPEND;
+ put1:	data.mv_data = &id;
+ 		data.mv_size = sizeof(ID);
+ 		rc = mdb_cursor_put( cursor, &key, &data, flag );
+-- 
+1.7.4.2
+
