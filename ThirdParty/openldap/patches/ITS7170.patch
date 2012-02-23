@@ -1,0 +1,35 @@
+From c4d78a17c314a554bd1e0d29fa1bf19babb53d67 Mon Sep 17 00:00:00 2001
+From: Howard Chu <hyc@openldap.org>
+Date: Wed, 22 Feb 2012 16:01:59 -0800
+Subject: [PATCH] ITS#7170 fix Quick mode index generation
+
+---
+ servers/slapd/back-mdb/idl.c |    5 ++---
+ 1 files changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/servers/slapd/back-mdb/idl.c b/servers/slapd/back-mdb/idl.c
+index 79c2a81..29a3796 100644
+--- a/servers/slapd/back-mdb/idl.c
++++ b/servers/slapd/back-mdb/idl.c
+@@ -413,9 +413,6 @@ mdb_idl_insert_keys(
+ 
+ 	assert( id != NOID );
+ 
+-	if ( slapMode & SLAP_TOOL_QUICK )
+-		flag |= MDB_APPEND;
+-
+ #ifndef MISALIGNED_OK
+ 	if (keys[0].bv_len & 0x03)
+ 		kbuf[1] = 0;
+@@ -493,6 +490,8 @@ mdb_idl_insert_keys(
+ 				}
+ 			} else {
+ 			/* There's room, just store it */
++				if ( slapMode & SLAP_TOOL_QUICK )
++					flag |= MDB_APPEND;
+ 				goto put1;
+ 			}
+ 		} else {
+-- 
+1.7.4.2
+
