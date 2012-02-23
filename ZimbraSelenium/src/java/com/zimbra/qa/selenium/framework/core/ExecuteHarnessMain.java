@@ -651,7 +651,6 @@ public class ExecuteHarnessMain {
 	public static class ResultListener extends TestListenerAdapter {
 
 		private static final String ZimbraQABasePackage = "com.zimbra.qa.selenium";
-		private static ITestResult runningTestCase = null;
 		
 		private int testsTotal = 0;
 		private int testsPass = 0;
@@ -660,10 +659,9 @@ public class ExecuteHarnessMain {
 		private List<String> failedTests = new ArrayList<String>();
 		private List<String> skippedTests = new ArrayList<String>();
 		
-		public static String outputFolder = null;
 
 		protected ResultListener(String folder) {
-			outputFolder = (folder == null ? "logs" : folder);
+			ResultListener.setOutputfolder(folder);
 		}
 		
 		protected String getResults() {
@@ -685,6 +683,16 @@ public class ExecuteHarnessMain {
 				}
 			}
 			return (sb.toString());
+		}
+		
+		private static ITestResult runningTestCase = null;
+		private static void setRunningTestCase(ITestResult result) {
+			runningTestCase = result;
+		}
+		
+		private static String outputFolder = null;
+		private static void setOutputfolder(String folder) {
+			outputFolder = (folder == null ? "logs" : folder);
 		}
 		
 		private static int screenshotcount = 0; 
@@ -750,7 +758,7 @@ public class ExecuteHarnessMain {
 		 */
 		@Override
 		public void onTestStart(ITestResult result) {
-			runningTestCase = result;
+			setRunningTestCase(result);
 			testsTotal++;
 		}
 

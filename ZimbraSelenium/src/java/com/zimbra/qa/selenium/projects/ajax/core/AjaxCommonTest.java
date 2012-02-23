@@ -71,7 +71,6 @@ public class AjaxCommonTest {
 	public final boolean isRunningDesktopTest = ZimbraSeleniumProperties.getStringProperty(
 			ZimbraSeleniumProperties.getLocalHost() + ".desktop.test", "false").toLowerCase().equals("true") ? true : false;
 
-	private static DefaultSelenium _selenium = null;
 	private WebDriverBackedSelenium _webDriverBackedSelenium = null;
 	private WebDriver _webDriver = null;
 	
@@ -80,7 +79,7 @@ public class AjaxCommonTest {
 	 */
 	protected AppAjaxClient app = null;
 
-	protected static OsType osType = null;
+	protected OsType osType = null;
 	private final static String _accountFlavor = "Zimbra";
 	public final static String defaultAccountName = ZimbraSeleniumProperties.getUniqueString();
 	private Repository _repository = new Repository();
@@ -172,7 +171,8 @@ public class AjaxCommonTest {
 		{
 			
 			ZimbraSeleniumProperties.setAppType(ZimbraSeleniumProperties.AppType.AJAX);
-
+			DefaultSelenium _selenium = null;
+			
 			if (ZimbraSeleniumProperties.isWebDriver()) {
 				_webDriver = ClientSessionFactory.session().webDriver();
 				
@@ -210,12 +210,12 @@ public class AjaxCommonTest {
 				_webDriverBackedSelenium.windowFocus();
 				_webDriverBackedSelenium.setTimeout("30000");// Use 30 second timeout for
 			} else {
-			_selenium = ClientSessionFactory.session().selenium();
-			_selenium.start();
-			_selenium.windowMaximize();
-			_selenium.windowFocus();
-			_selenium.allowNativeXpath("true");
-			_selenium.setTimeout("30000");// Use 30 second timeout for opening the browser
+				_selenium = ClientSessionFactory.session().selenium();
+				_selenium.start();
+				_selenium.windowMaximize();
+				_selenium.windowFocus();
+				_selenium.allowNativeXpath("true");
+				_selenium.setTimeout("30000");// Use 30 second timeout for opening the browser
 			}
 			// Dynamic wait for App to be ready
 			int maxRetry = 10;
@@ -309,8 +309,7 @@ public class AjaxCommonTest {
 		.append("?at=")
 		.append(zdp.getSerialNumber()).toString();
 		logger.debug("Selenium is opening: " + accountUrl);
-		logger.debug("Selenium is: " + _selenium);
-		_selenium.open(accountUrl);
+		ClientSessionFactory.session().selenium().open(accountUrl);
 		GeneralUtility.waitForElementPresent(app.zPageLogin,
 				PageLogin.Locators.zBtnLoginDesktop);
 	}
@@ -342,7 +341,7 @@ public class AjaxCommonTest {
 		logger.info("accountDeleteUrl: " + accountDeleteUrl);
 		GeneralUtility.doHttpPost(accountDeleteUrl);
 
-		_selenium.refresh();
+		ClientSessionFactory.session().selenium().refresh();
 		GeneralUtility.waitForElementPresent(app.zPageLogin,
 				PageLogin.Locators.zAddNewAccountButton);
 	}

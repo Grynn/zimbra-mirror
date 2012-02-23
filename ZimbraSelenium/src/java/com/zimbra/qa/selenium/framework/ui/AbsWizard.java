@@ -42,7 +42,6 @@ public abstract class AbsWizard extends AbsPage {
 	public static final String COS_DIALOG="COS";
 	public static final String RESOURCE_DIALOG="RES";
 	}
-	public static String buttonPath="";
 	
 	
 	
@@ -98,36 +97,35 @@ public abstract class AbsWizard extends AbsPage {
 	protected void clickWizardButton(WizardButton button, String dialogName) throws HarnessException {
 
 		// TODO: If possible, define in the abstract class
-
+		String buttonPath = null;
+		
 		// Check if the button is enabled
 		// throw HarnessException if not enabled
 		// Click on the button
 		switch(button) {
 		case Finish : 
 				buttonPath="css=td[id$='_" +  dialogName + Locators.FINISH_BUTTON + "']";
-				if(sIsElementPresent(buttonPath)) 
-					zClickAt(buttonPath,""); 
 				break;
 		case Next:
 				buttonPath="css=td[id$='_" +  dialogName + Locators.NEXT_BUTTON + "']";
-				if(sIsElementPresent(buttonPath)) 
-					zClickAt(buttonPath,"");
 				break;				
 		case Previous:
 				buttonPath="css=td[id$='_" +  dialogName + Locators.PREVIOUS_BUTTON + "']";
-				if(sIsElementPresent(buttonPath))
-					zClickAt(buttonPath,"");
 				break;
 		case Cancel:
 				buttonPath="css=td[id$='_" +  dialogName + Locators.CANCEL_BUTTON + "']";
-				if(sIsElementPresent(buttonPath))
-					zClickAt(buttonPath,"");	
 				break;
 		case Help:
 				buttonPath="css=td[id$='_" +  dialogName + Locators.HELP_BUTTON + "']";
-				if(sIsElementPresent(buttonPath))
-					zClickAt(buttonPath,"");
 			}
+		
+		if ( buttonPath == null ) {
+			throw new HarnessException("buttonPath was null for "+ button);
+		}
+		
+		if(sIsElementPresent(buttonPath))
+			zClickAt(buttonPath,"");
+
 	}
 
 }

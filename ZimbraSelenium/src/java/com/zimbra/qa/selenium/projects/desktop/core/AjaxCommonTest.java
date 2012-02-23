@@ -79,13 +79,12 @@ public class AjaxCommonTest {
 	public final boolean isRunningDesktopTest = ZimbraSeleniumProperties.getStringProperty(
 			ZimbraSeleniumProperties.getLocalHost() + ".desktop.test", "false").toLowerCase().equals("true") ? true : false;
 
-	private static DefaultSelenium _selenium = null;
 
 	/**
 	 * The AdminConsole application object
 	 */
 	protected AppAjaxClient app = null;
-	protected static OsType osType = null;
+	protected OsType osType = null;
 	private String _downloadFilePath = null;
 	private String[] _executableFilePath = null;
 	private String [] _params = null;
@@ -224,7 +223,7 @@ public class AjaxCommonTest {
 
 		try
 		{
-			_selenium = ClientSessionFactory.session().selenium();
+			DefaultSelenium _selenium = ClientSessionFactory.session().selenium();
 			logger.debug("Starting selenium");
 
 			// This is needed only in Mac OS because when selenium invokes the test browser window,
@@ -470,8 +469,7 @@ public class AjaxCommonTest {
 		.append(zdp.getSerialNumber()).toString();
 		//append("&dev=1&scripterrors=1").toString();
 		logger.debug("Selenium is opening: " + accountUrl);
-		logger.debug("Selenium is: " + _selenium);
-		_selenium.open(accountUrl);
+		ClientSessionFactory.session().selenium().open(accountUrl);
 		GeneralUtility.waitForElementPresent(app.zPageLogin,
 				PageLogin.Locators.zBtnLoginDesktop);
 	}
