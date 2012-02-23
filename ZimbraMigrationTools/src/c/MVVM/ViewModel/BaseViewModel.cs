@@ -206,10 +206,7 @@ public class BaseViewModel: INotifyPropertyChanged
         }
         else
         {
-            for (int i = 0; i < 15; i++)
-            {
-                m_config.AdvancedImportOptions.FoldersToSkip.SetValue(null, i);
-            }
+            m_config.AdvancedImportOptions.FoldersToSkip = null;
         }
     }
 

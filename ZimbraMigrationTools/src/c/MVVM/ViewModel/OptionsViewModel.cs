@@ -351,35 +351,17 @@ public class OptionsViewModel: BaseViewModel
         set
         {
             placeholderstring = value;
-            string[] nameTokens = value.Split(',');
-            if (nameTokens.Length > 15)
+            if (value != null)
             {
-                MessageBox.Show("Only 15 folders will be saved", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-
-            int i;
-
-            if (value == "")
-            {
-                for (i = 0; i < 15; i++)
-                {
-                    m_config.AdvancedImportOptions.FoldersToSkip.SetValue(null, i);
-                }
-            }
-            else
-            {
-                for (i = 0; i < nameTokens.Length; i++)
+                string[] nameTokens = value.Split(',');
+                int numFolders = nameTokens.Length;
+                m_config.AdvancedImportOptions.FoldersToSkip = new Folder[numFolders];
+                int i;
+                for (i = 0; i < numFolders; i++)
                 {
                     Folder tempUser = new Folder();
-
                     tempUser.FolderName = nameTokens.GetValue(i).ToString();
                     m_config.AdvancedImportOptions.FoldersToSkip.SetValue(tempUser, i);
-                }
-                if (nameTokens.Length < 15)
-                {
-                    for (int rest = i; rest < 15; rest++)
-                        m_config.AdvancedImportOptions.FoldersToSkip.SetValue(null, i);
                 }
             }
             OnPropertyChanged(new PropertyChangedEventArgs("FoldersToSkip"));
@@ -421,6 +403,11 @@ public class OptionsViewModel: BaseViewModel
     }
     public string ConvertToCSV(Folder[] objectarray, string delimiter)
     {
+        if (objectarray == null)
+        {
+            return null;
+        }
+
         string result;
 
         System.Text.StringBuilder sb = new System.Text.StringBuilder();
