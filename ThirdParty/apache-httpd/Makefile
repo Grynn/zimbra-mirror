@@ -19,7 +19,7 @@ ifeq ($(BUILD_PLATFORM), RHEL5_64)
 	ENVMOD := env LIBS="-L/usr/lib64"
 endif
 
-files	:= $(wildcard src/httpd-$(HTTPD_VERSION).tar.gz)
+files	:= $(wildcard src/httpd-$(HTTPD_VERSION).tar.bz2)
 
 all: checksrc allclean build check
 
@@ -31,7 +31,7 @@ check:
 	$(HTTPD_ROOT)/../zmcheck.pl -b $(ZIMBRA_HOME)/httpd-$(HTTPD_VERSION)/bin/httpd $(ZIMBRA_HOME)/httpd-$(HTTPD_VERSION)/bin/apachectl
 
 build:
-	tar xzf src/httpd-$(HTTPD_VERSION).tar.gz
+	tar xfj src/httpd-$(HTTPD_VERSION).tar.bz2
 	(cd httpd-$(HTTPD_VERSION); $(ENVMOD) LDFLAGS="-L/opt/zimbra/convertd/lib -R/opt/zimbra/convertd/lib -L/opt/zimbra/openssl-$(OPENSSL_VERSION)/lib -R/opt/zimbra/openssl-$(OPENSSL_VERSION)/lib"  CFLAGS="-g -O2" ./configure --prefix=/opt/zimbra/httpd-$(HTTPD_VERSION) --enable-so --with-included-apr --enable-ssl --with-ssl=/opt/zimbra/openssl-$(OPENSSL_VERSION); $(MAKE) $(MAKEARGS); $(MAKE) install)
 
 tar:
