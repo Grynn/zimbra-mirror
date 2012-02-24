@@ -123,16 +123,13 @@ public class GeneralUtility {
                   logger.debug("Breaking...");
                   break;
                } catch (IllegalArgumentException e) {
-                  logger.debug("Continue to find other method");
-                  e.printStackTrace();
+                  logger.debug("Continue to find other method", e);
                } catch (InvocationTargetException ive) {
                   method = methodList[i];
-                  logger.debug("Hit InvocationTargetException");
-                  logger.debug("Method: " + method);
-                  ive.printStackTrace();
+                  logger.debug("Hit InvocationTargetException.  Method: "+ method, ive);
                   break;
                } catch (Exception e) {
-                  e.printStackTrace();
+            	   logger.warn(e);
                }
             }
 
@@ -142,8 +139,7 @@ public class GeneralUtility {
          }
 
       } catch (Exception e) {
-         e.printStackTrace();
-         logger.info("Class name that you enter: " + apiClassPath + " doesn't exist!");
+         logger.info("Class name that you enter: " + apiClassPath + " doesn't exist!", e);
       }
 
       if (method == null) {
@@ -163,21 +159,10 @@ public class GeneralUtility {
             } else {
                output = method.invoke(nonStaticObject, parameters);
             }
-         } catch (IllegalArgumentException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-         } catch (IllegalAccessException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-         } catch (InvocationTargetException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-         } catch (ClassNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
          } catch (Exception e) {
+        	 logger.warn(e);
             //TODO:
-            e.printStackTrace();
+        	 logger.warn(e);
          }
       }
       logger.info("Final Iteration is: " + i);

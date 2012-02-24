@@ -66,8 +66,7 @@ public class CreateFolder extends OctopusCommonTest {
 				FolderItem
 						.deleteUsingSOAP(app.zGetActiveAccount(), _folderName);
 			} catch (Exception e) {
-				logger.info("Failed while removing the folder.");
-				e.printStackTrace();
+				logger.info("Failed while removing the folder.", e);
 			} finally {
 				_folderName = null;
 				_folderIsCreated = false;

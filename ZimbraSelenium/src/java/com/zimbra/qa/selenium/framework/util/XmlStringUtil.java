@@ -81,9 +81,9 @@ public class XmlStringUtil {
             }
          }
       } catch(ParserConfigurationException pce) {
-         pce.printStackTrace();
+    	  logger.warn(pce);
       }catch(SAXException se) {
-         se.printStackTrace();
+    	  logger.warn(se);
       }
       return output;
    }

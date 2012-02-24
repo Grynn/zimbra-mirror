@@ -254,8 +254,7 @@ public class AjaxCommonTest {
 		} catch (SeleniumException e) {
 			throw new HarnessException("Unable to open app", e);
 		} catch (Exception e) {
-			logger.info(e.getMessage());
-			e.printStackTrace();
+			logger.warn(e);
 		}
 
 		logger.info("commonTestBeforeSuite: finish");		

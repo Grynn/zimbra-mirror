@@ -197,7 +197,7 @@ public class BuildUtility {
          build = _buildOutputFilter(productName, branch, arch)[0];
          logger.debug("Getting the builds from Build web successful");
       } catch (ParserConfigurationException pce) {
-         pce.printStackTrace();
+    	  logger.warn(pce);
       }
       return downloadBuild(downloadDest, build.buildUrl);
 

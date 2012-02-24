@@ -921,8 +921,7 @@ public class CreateFolder extends AjaxCommonTest {
 
 			} catch (Exception e) {
 
-			   logger.info("Failed while removing the folder.");
-				e.printStackTrace();
+			   logger.warn("Failed while removing the folder.", e);
 
 			} finally {
 

@@ -351,7 +351,7 @@ public abstract class AbsPage extends AbsSeleniumObject {
 		    	      try {
 		    		   type(c);
 		    	      }catch (Exception e) {
-						e.printStackTrace();
+		    	    	  logger.warn(e);
 					}
 		    	   }
 		    	}

@@ -173,7 +173,7 @@ public class Repository {
       try {
          RacetrackWebservice.getInstance().testSetEnd(Repository.resultId);
       } catch (HarnessException e) {
-         e.printStackTrace();
+          logger.warn(e);
       }
    }
 
@@ -196,7 +196,7 @@ public class Repository {
          return true;
       } catch (SQLException e){
          Log.info("Connection failed using connect string: " + connectString);
-         e.printStackTrace();
+         logger.warn(e);
          return false;
       }
    }
@@ -219,7 +219,7 @@ public class Repository {
          Log.info("Successfully loaded jdbc driver: " + DbDriver);
       } catch (ClassNotFoundException e) {
          Log.info("Failed to load jdbc driver: " + DbDriver);
-         e.printStackTrace();
+         logger.warn(e);
       }
    }
 
@@ -273,7 +273,7 @@ public class Repository {
          Repository.setTestCaseId(testCaseId);
          logger.info("testCaseId:" + testCaseId);
       } catch (HarnessException e) {
-         e.printStackTrace();
+          logger.warn(e);
       }
       return testCaseId;
    }
@@ -291,7 +291,7 @@ public class Repository {
         RacetrackWebservice.getInstance().testCaseEnd(Repository.getTestCaseId(),
               testCaseResult);
       } catch (HarnessException e) {
-         e.printStackTrace();
+          logger.warn(e);
       }
    }
 
@@ -329,7 +329,7 @@ public class Repository {
          Repository.getTestCaseId(), description, actualValue,
                expectedValue, verificationResult);
       } catch (HarnessException e) {
-         e.printStackTrace();
+          logger.warn(e);
       }
    }
 
@@ -346,7 +346,7 @@ public class Repository {
          RacetrackWebservice.getInstance().testCaseScreenshot(
                Repository.getTestCaseId(), " ", screenShot);
       } catch (HarnessException e) {
-         e.printStackTrace();
+          logger.warn(e);
       }
    }
 
@@ -364,7 +364,7 @@ public class Repository {
             testCaseId, sMessage);
          Log.info(testCaseId);
       } catch (Exception e) {
-         e.printStackTrace();
+          logger.warn(e);
       }
    }
    /**
@@ -390,7 +390,7 @@ public class Repository {
             }
          }
       } catch (Exception e){
-         e.printStackTrace();
+         logger.warn(e);
       }
    }
 }

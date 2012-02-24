@@ -148,8 +148,7 @@ public class FileHistory extends OctopusCommonTest {
 				app.zPageOctopus.deleteItemUsingSOAP(_fileId,
 						app.zGetActiveAccount());
 			} catch (Exception e) {
-				logger.info("Failed while deleting the file");
-				e.printStackTrace();
+				logger.info("Failed while deleting the file", e);
 			} finally {
 				_fileId = null;
 				_fileAttached = false;
@@ -161,8 +160,7 @@ public class FileHistory extends OctopusCommonTest {
 				FolderItem
 						.deleteUsingSOAP(app.zGetActiveAccount(), _folderName);
 			} catch (Exception e) {
-				logger.info("Failed while removing the folder.");
-				e.printStackTrace();
+				logger.info("Failed while removing the folder.", e);
 			} finally {
 				_folderName = null;
 				_folderIsCreated = false;
@@ -184,8 +182,7 @@ public class FileHistory extends OctopusCommonTest {
 			// Empty trash
 			app.zPageTrash.emptyTrashUsingSOAP(app.zGetActiveAccount());
 		} catch (Exception e) {
-			logger.info("Failed while emptying Trash");
-			e.printStackTrace();
+			logger.info("Failed while emptying Trash", e);
 		}
 	}
 }

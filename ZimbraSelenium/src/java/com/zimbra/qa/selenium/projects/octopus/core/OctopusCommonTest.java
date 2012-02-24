@@ -3,6 +3,7 @@ package com.zimbra.qa.selenium.projects.octopus.core;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.testng.annotations.AfterClass;
@@ -12,15 +13,15 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
 import org.xml.sax.SAXException;
+
 import com.thoughtworks.selenium.DefaultSelenium;
 import com.thoughtworks.selenium.SeleniumException;
-
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
-import com.zimbra.qa.selenium.framework.items.FolderItem;
-import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.AbsTab;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.OperatingSystem;
+import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraAdminAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
@@ -28,7 +29,6 @@ import com.zimbra.qa.selenium.framework.util.OperatingSystem.OsType;
 import com.zimbra.qa.selenium.projects.octopus.ui.AppOctopusClient;
 import com.zimbra.qa.selenium.projects.octopus.ui.DialogError;
 import com.zimbra.qa.selenium.projects.octopus.ui.DialogError.DialogErrorID;
-import com.zimbra.qa.selenium.framework.util.*;
 
 public class OctopusCommonTest extends CommonMethods implements CommonConstants{
 	protected static Logger logger = LogManager
@@ -99,8 +99,7 @@ public class OctopusCommonTest extends CommonMethods implements CommonConstants{
 		} catch (SeleniumException e) {
 			throw new HarnessException("Unable to open app", e);
 		} catch (Exception e) {
-			logger.info(e.getMessage());
-			e.printStackTrace();
+			logger.warn(e);
 		}
 		logger.info("commonTestBeforeSuite: finish");
 	}

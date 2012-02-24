@@ -19,6 +19,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
 import org.testng.TestListenerAdapter;
@@ -27,6 +28,8 @@ import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 
 
 public class TestStatusReporter extends TestListenerAdapter {  
+	private static final Logger logger = LogManager.getLogger(TestStatusReporter.class);
+	
 	private PrintWriter    output=null;
 
 	private ArrayList<String> failArray = new ArrayList<String>();
@@ -60,7 +63,8 @@ public class TestStatusReporter extends TestListenerAdapter {
 
 
 	private static class GetFromFile{
-
+		private static final Logger logger = LogManager.getLogger(GetFromFile.class);
+		
 		private static ArrayList<Long> longArray = new ArrayList<Long>();
 		private static String currentFileName="";
 		private static RandomAccessFile   raf= null;
@@ -76,7 +80,7 @@ public class TestStatusReporter extends TestListenerAdapter {
 					furthestReadLong=0;
 				}
 				catch (Exception e) {
-					e.printStackTrace();
+					logger.warn(e);
 				}
 			}
 		}
@@ -99,7 +103,7 @@ public class TestStatusReporter extends TestListenerAdapter {
 					furthestReadLong  = raf.getFilePointer();
 				}
 				catch (IOException e) {
-					e.printStackTrace();
+					logger.warn(e);
 				}
 			}
 			else {
@@ -118,7 +122,7 @@ public class TestStatusReporter extends TestListenerAdapter {
 
 				}
 				catch (Exception e) {
-					e.printStackTrace();	
+					logger.warn(e);	
 				}
 			}
 
@@ -139,7 +143,7 @@ public class TestStatusReporter extends TestListenerAdapter {
 					furthestReadLong  = raf.getFilePointer();
 				}
 				catch (IOException e) {
-					e.printStackTrace();
+					logger.warn(e);
 				}
 			}
 			else {
@@ -151,7 +155,7 @@ public class TestStatusReporter extends TestListenerAdapter {
 					result =raf.readLine();	    		  	    	      
 				}
 				catch (Exception e) {
-					e.printStackTrace();	
+					logger.warn(e);	
 				}
 			}
 			result = "\n  " + lineNumber  + " : " + result;	                 
@@ -239,7 +243,10 @@ public class TestStatusReporter extends TestListenerAdapter {
 
 
 
-			}catch (Exception e) { e.printStackTrace(); }
+			}catch (Exception e) {
+				logger.warn(e);
+			}
+
 			return result.toString();
 		}
 
@@ -325,7 +332,9 @@ public class TestStatusReporter extends TestListenerAdapter {
 			PrintWriter pw = new PrintWriter(new File(path+ "\\" + inProgressDir + "\\index.html"));
 			pw.println(sb.toString());
 			pw.close();
-		} catch (Exception e) { e.printStackTrace(); }
+		} catch (Exception e) {
+			logger.warn(e);
+		}
 
 		output.println("<!DOCTYPE suite SYSTEM \"http://testng.org/testng-1.0.dtd\">");
 		output.println("<suite name='SelNG'>");
@@ -414,7 +423,7 @@ public class TestStatusReporter extends TestListenerAdapter {
 			try {
 				f.createNewFile();
 			} catch (IOException e) {
-				e.printStackTrace();
+				logger.warn(e);
 			}
 			try {
 
@@ -469,7 +478,9 @@ public class TestStatusReporter extends TestListenerAdapter {
 			pw.println(new Date().toString() + "\n " + "Running testcase... " + fullTestName);
 			pw.close();
 		}
-		catch (Exception e) { e.printStackTrace(); }
+		catch (Exception e) {
+			logger.warn(e);
+		}
 
 		try {
 			PrintWriter pw = new PrintWriter(new File(path+ "\\" + inProgressDir + "\\result.txt"));
@@ -494,7 +505,10 @@ public class TestStatusReporter extends TestListenerAdapter {
 			pw.println(testdetails);
 			pw.close();
 		}
-		catch (Exception e) { e.printStackTrace(); }
+		catch (Exception e) {
+			logger.warn(e);
+		}
+
 	}
 
 	private void generateReport() {
@@ -604,7 +618,7 @@ public class TestStatusReporter extends TestListenerAdapter {
 				}
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.warn(e);
 		}
 
 
@@ -672,7 +686,10 @@ public class TestStatusReporter extends TestListenerAdapter {
 			baos.reset();      	
 		}
 
-		catch (Exception e) { e.printStackTrace();}
+		catch (Exception e) {
+			logger.warn(e);
+		}
+
 	}
 
 	private String getParameters(Object[] objs) {

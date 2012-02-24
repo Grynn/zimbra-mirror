@@ -92,8 +92,7 @@ public class CreateTaskFolder extends AjaxCommonTest {
 				FolderItem
 						.deleteUsingSOAP(app.zGetActiveAccount(), _folderName);
 			} catch (Exception e) {
-				logger.info("Failed while removing the folder.");
-				e.printStackTrace();
+				logger.warn("Failed while removing the folder.", e);
 			} finally {
 				_folderName = null;
 				_folderIsCreated = false;

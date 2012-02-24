@@ -152,8 +152,7 @@ public class MoveFolder extends OctopusCommonTest {
 				FolderItem
 						.deleteUsingSOAP(app.zGetActiveAccount(), _folderName);
 			} catch (Exception e) {
-				logger.info("Failed while removing the folder.");
-				e.printStackTrace();
+				logger.info("Failed while removing the folder.", e);
 			} finally {
 				_folderName = null;
 				_folderIsCreated = false;
@@ -173,8 +172,7 @@ public class MoveFolder extends OctopusCommonTest {
 				
 				app.zPageOctopus.zLogout();
 			} catch (Exception e) {
-				logger.info("Failed while emptying Trash");
-				e.printStackTrace();
+				logger.info("Failed while emptying Trash", e);
 			}
 		}
 	}

@@ -509,9 +509,7 @@ public class ZimbraAccount {
 			output = temp.toString().split(";");
 
 		} catch (ServiceException se) {
-			se.printStackTrace();
-			throw new HarnessException("Getting service exception while getting available zimlets: " +
-					se.getMessage());
+			throw new HarnessException("Getting service exception while getting available zimlets", se);
 		}
 
 		accountIsDirty = true;

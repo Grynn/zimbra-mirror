@@ -37,7 +37,7 @@ class StreamGobbler extends Thread
             this.output.append(line).append("\n");   
             logger.info(line);
        } catch (IOException ioe) {
-          ioe.printStackTrace();  
+    	   logger.warn(ioe);
        }
     }
 }

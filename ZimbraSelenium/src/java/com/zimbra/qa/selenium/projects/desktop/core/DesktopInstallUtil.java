@@ -286,11 +286,9 @@ public class DesktopInstallUtil {
          }
          
       } catch (IOException ioe) {
-         ioe.printStackTrace();
-         throw new HarnessException("Getting IO Exception");
+         throw new HarnessException("Getting IO Exception", ioe);
       } catch (InterruptedException ie) {
-         ie.printStackTrace();
-         throw new HarnessException("Getting Interrupted Exception");
+         throw new HarnessException("Getting Interrupted Exception", ie);
       } finally {
          ZimbraAccount.AccountZDC().resetClientAuthentication();
       }
