@@ -145,6 +145,7 @@ ZaManualProvConfigDialog.srchButtonHndlr = function() {
 	soapDoc.getMethod().setAttribute("offset", offset);
 	soapDoc.getMethod().setAttribute("limit", limit);
     soapDoc.getMethod().setAttribute("attrs", attrs);
+    soapDoc.getMethod().setAttribute("refresh", "1");
 
 	this.getModel().setInstanceValue(this.getInstance(),ZaDomain.A2_zimbraAutoProvSearchActivated,"FALSE");
 
