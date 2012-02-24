@@ -1784,7 +1784,7 @@ public class PageCalendar extends AbsTab {
 		} else if ( this.zIsVisiblePerPosition(Locators.CalendarViewMonthCSS, 0, 0) ) {
 			return (zListGetAppointmentsMonthView());
 		} else if ( this.zIsVisiblePerPosition(Locators.CalendarViewScheduleCSS, 0, 0) ) {
-			return (zListGetAppointmentsDayView());
+			return (zListGetAppointmentsScheduleView());
 		} else {
 			throw new HarnessException("Unknown calendar view");
 		}
