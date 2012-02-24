@@ -3,6 +3,7 @@ package com.zimbra.qa.selenium.framework.core;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -19,7 +20,6 @@ import com.zimbra.qa.selenium.framework.util.OperatingSystem;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 
-import sun.net.www.protocol.http.HttpURLConnection;
 
 /**
  * The <code>SeleniumService</code> class is used to start
