@@ -87,9 +87,8 @@ public class RefineHistory extends OctopusCommonTest {
 	public void RefineNewVersion() throws HarnessException {
 										
 		// verify check/uncheck action for 'new version' 
-		VerifyCheckboxAction(PageHistory.Locators.zHistoryFilterNewVersion.locator, 
-				PageHistory.CONSTANTS.YOU +  PageHistory.CONSTANTS.NEW_VERSION_PREFIX 
-			+   fileName + PageHistory.CONSTANTS.NEW_VERSION_POSTFIX);								
+		VerifyCheckboxAction(PageHistory.Locators.zHistoryFilterNewVersion.locator,
+				PageHistory.GetText.newVersion(fileName));								
 	}
 	
 	@Test(description = "Functional test for check/uncheck 'favorite' checkbox", groups = { "smoke" })
@@ -101,8 +100,7 @@ public class RefineHistory extends OctopusCommonTest {
 
 		// verify check/uncheck action for 'favorite'
 		VerifyCheckboxAction(PageHistory.Locators.zHistoryFilterFavorites.locator, 
-				PageHistory.CONSTANTS.YOU + PageHistory.CONSTANTS.FAVORITE_PREFIX 
-			+   fileName + PageHistory.CONSTANTS.FAVORITE_POSTFIX);								
+				PageHistory.GetText.favorite(fileName));											
 	}
 	
 	/*
@@ -147,7 +145,7 @@ public class RefineHistory extends OctopusCommonTest {
 	public void teardown() 
 	    throws HarnessException
 	{		
-		//TODO: delete fileName		    
+		//TODO: ?  
 	}
 
 }

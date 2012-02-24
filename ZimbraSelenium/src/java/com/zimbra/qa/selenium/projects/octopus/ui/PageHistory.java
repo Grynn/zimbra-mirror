@@ -74,6 +74,29 @@ public class PageHistory extends AbsTab {
 		}
 	}
 
+	public static class GetText {
+		public static String newVersion(String fileName) {
+			return CONSTANTS.YOU +  CONSTANTS.NEW_VERSION_PREFIX 
+			        +   fileName + CONSTANTS.NEW_VERSION_POSTFIX;
+		}
+
+		public static String newVersion(String fileName, String user) {
+			return          user +  CONSTANTS.NEW_VERSION_PREFIX 
+			        +   fileName + CONSTANTS.NEW_VERSION_POSTFIX;
+		}
+
+		public static String favorite(String fileName) {
+			return CONSTANTS.YOU + CONSTANTS.FAVORITE_PREFIX 
+			        +   fileName + CONSTANTS.FAVORITE_POSTFIX;
+		}
+		
+		public static String favorite(String fileName, String user) {
+			return          user + CONSTANTS.FAVORITE_PREFIX 
+			        +   fileName + CONSTANTS.FAVORITE_POSTFIX;
+		}
+		
+		
+	}
 	public PageHistory(AbsApplication application) {
 		super(application);
 
