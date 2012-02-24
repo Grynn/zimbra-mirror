@@ -79,7 +79,7 @@ DwtTreeItem = function(params) {
 	this._forceNotifyAction = Boolean(params.forceNotifyAction);
 	this._dndScrollCallback = params.dndScrollCallback;
 	this._dndScrollId = params.dndScrollId;
-    this._contextEnabled = !(!(this.parent._optButton)) && this._selectionEnabled;
+    this._contextEnabled = (!(!(parent._optButton)) || parent._contextEnabled) && this._selectionEnabled;
 
 	if (params.singleClickAction) {
 		this._singleClickAction = true;
