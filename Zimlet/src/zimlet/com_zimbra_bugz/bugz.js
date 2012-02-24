@@ -56,3 +56,42 @@ function(spanElement, contentObjText, matchContext, event) {
 	// Just let the browser handle the click.
 	event._stopPropagation = false;
 };
+
+/**
+ * Handle tooltip generation
+ *
+ */
+com_zimbra_bugz_HandlerObject.prototype.toolTipPoppedUp =
+function(spanElement, obj, context, canvas) {
+	canvas.innerHTML = ["<div id='",this._currentTooltipId,"'>",ZmMsg.loading,"</div>"].join("");
+	var url = [this.getConfig("url"), "?&ctype=xml&id=", context[1]].join("");
+	var completeUrl = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(url);
+	AjxRpc.invoke(null, completeUrl, null, new AjxCallback(this, this._handleBugzillaResponse, canvas), true);
+};
+
+com_zimbra_bugz_HandlerObject.prototype._handleBugzillaResponse =
+function(canvas, response) {
+	if(response && response.success) {
+		var jsonObj = AjxXmlDoc.createFromXml(response.text).toJSObject(true, false);
+		if(jsonObj.error || !jsonObj.bug) {
+			canvas.innerHTML = this.getMessage("bugMayNotBePublicOrValid");
+		} else {
+			var obj = jsonObj.bug;
+			var subs = {
+				bug_id: obj.bug_id ? obj.bug_id.toString() : "",
+				bug_status: obj.bug_status ? obj.bug_status.toString() : "",
+				priority: obj.priority ? obj.priority.toString() : "",
+				product: obj.product ? obj.product.toString() : "",
+				component: obj.component ? obj.component.toString() : "",
+				version: obj.version ? obj.version.toString() : "",
+				reporter: obj.reporter ? obj.reporter.toString() : "",
+				assigned_to: obj.assigned_to ? obj.assigned_to.toString() : "",
+				short_desc: obj.short_desc ? obj.short_desc.toString() : ""
+			};
+
+			canvas.innerHTML = AjxTemplate.expand("com_zimbra_bugz.templates.Bugz#bugDetails", subs);
+		}
+	} else {
+		canvas.innerHTML = this.getMessage("generalError");
+	}
+};

@@ -1,7 +1,6 @@
-<zimlet name="com_zimbra_bugz" version="1.4" label="Zimbra Bugzilla" target="main view-window" description="Highlights, previews and links Zimbra bugzilla entries to http://bugzilla.zimbra.com">
+<zimlet name="com_zimbra_bugz" version="1.5" label="Zimbra Bugzilla" target="main view-window" description="Highlights, previews and links Zimbra bugzilla entries to http://bugzilla.zimbra.com">
 	<include>bugz.js</include>
 	<include>templates/Bugz.template.js</include>	
-	<resource>bugz.xsl</resource>
 	<handlerObject>com_zimbra_bugz_HandlerObject</handlerObject>
 	<contentObject>
 		<matchOn>
@@ -14,10 +13,6 @@
 			</actionUrl>
 		</onClick>
 		<toolTip>
-			<actionUrl target="http://bugzilla.zimbra.com/show_bug.cgi" xslt="bugz.xsl">
-				<param name="ctype">xml</param>
-				<param name="id">${src.$1}</param>
-			</actionUrl>
 		</toolTip>
     </contentObject>
 </zimlet>

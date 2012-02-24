@@ -1,3 +1,16 @@
 <template id='Bugz_link'>
 	<a target="_blank" id='${id}' href='${href}' class='${className}'>${text}</a>
 </template>
+
+<template id='bugDetails'>
+	 	<div><b><$= com_zimbra_bugz.id $> </b> ${bug_id}</div>
+	 	<div><b><$= com_zimbra_bugz.status $> </b> ${bug_status}</div>
+	 	<div><b><$= com_zimbra_bugz.priority $> </b> ${priority}</div>
+	 	<div><b><$= com_zimbra_bugz.severity $> </b> ${bug_severity}</div>
+	 	<div><b><$= com_zimbra_bugz.product $> </b> ${product}</div>
+	 	<div><b><$= com_zimbra_bugz.component $> </b> ${component}</div>
+	 	<div><b><$= com_zimbra_bugz.version $> </b> ${version}</div>
+	 	<div><b><$= com_zimbra_bugz.reporter $> </b> ${reporter}</div>
+	 	<div><b><$= com_zimbra_bugz.owner $> </b> ${assigned_to}</div>
+	 	<div><b><$= com_zimbra_bugz.description $> </b> ${short_desc}</div>
+</template>
