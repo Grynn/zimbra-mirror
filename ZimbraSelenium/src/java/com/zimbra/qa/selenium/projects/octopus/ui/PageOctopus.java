@@ -90,7 +90,7 @@ public class PageOctopus extends AbsTab {
 	@Override
 	public boolean zIsActive() throws HarnessException {
 		// Look for the Sign Out button
-		boolean present = sIsElementPresent(Locators.zSignOutButton.locator);
+		boolean present = sIsElementPresent(Locators.zUserNamePullDown.locator);
 
 		if (!present) {
 			logger.debug("zIsActive(): " + present);
@@ -376,10 +376,25 @@ public class PageOctopus extends AbsTab {
 				// ">div.my-files-list-item:last-child");
 				// this.zClick(Locators.zMyFilesListView.locator +
 				// ">div.my-files-list-item:nth-child(1)");
+				
+				zClick(pulldownLocator);
+
+				zWaitForElementPresent(optionLocator,"3000");
+
+				sMouseUp(optionLocator);
+
+				return page;
 
 			} else if (option == Button.O_SETTINGS) {
 				optionLocator = Locators.zSettingsButton.locator;
 				page = new DialogSettings(MyApplication, this);
+				zClick(pulldownLocator);
+
+				zWaitForElementPresent(optionLocator,"3000");
+
+				sMouseUp(optionLocator);
+
+				return page;
 			} else {
 				logger.info("no logic defined for " + option);
 			}
