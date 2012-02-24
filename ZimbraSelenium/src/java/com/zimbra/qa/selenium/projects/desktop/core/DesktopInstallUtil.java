@@ -70,7 +70,7 @@ public class DesktopInstallUtil {
                   lines[i] = lines[i].replaceAll("\"", "");
                }
                if (lines[i].trim().equals("")) {
-                  // Skip it
+                  logger.debug("//Skip it");
                } else {
                   String displayName = CommandLine.cmdExecWithOutput("reg query " +
                          lines[i] + " /v DisplayName");
@@ -331,7 +331,7 @@ public class DesktopInstallUtil {
             //TODO: Do for Linux and Mac, right now it's only for Windows
             logger.info("uninstallCommand is: " + uninstallCommand);
       
-            if (uninstallCommand.trim().equals("")) {
+            if ( (uninstallCommand == null) || (uninstallCommand.trim().equals(""))) {
                logger.info("Zimbra Desktop App doesn't exist, thus exiting the method");
                return;
             } else {
@@ -558,7 +558,7 @@ public class DesktopInstallUtil {
          logger.info("Uninstalling the app");
          uninstallDesktopApp();
       } else {
-         // Nothing to do here
+    	  logger.info("nothing to do here");
       }
 
       logger.info("Downloading the build");

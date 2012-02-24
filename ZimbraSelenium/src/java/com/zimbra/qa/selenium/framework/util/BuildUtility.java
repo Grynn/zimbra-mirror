@@ -3,9 +3,11 @@ package com.zimbra.qa.selenium.framework.util;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.Closeable;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
+import java.io.Flushable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -271,57 +273,57 @@ public class BuildUtility {
     * @throws IOException
     */
    public static String downloadBuild(String downloadDest, String buildUrl) throws HarnessException, IOException {
-      BufferedOutputStream bout = null;
-      FileOutputStream fos = null;
-      BufferedInputStream in = null;
-      int bufferedSize = 1024;
-      String output = null;
 
-      try {
-         String url = _getDownloadableBuildUrl(buildUrl);
-         logger.info("Build URL is: " + url);
 
-         if (!downloadDest.trim().endsWith(Character.toString(File.separatorChar))) {
-            downloadDest = downloadDest.trim() + File.separatorChar;
-         }
+	   BufferedOutputStream bout = null;
+	   FileOutputStream fos = null;
+	   BufferedInputStream in = null;
+	   int bufferedSize = 1024;
+	   String output = null;
 
-         logger.info("downloadDest is: " + downloadDest);
+	   try {
+		   String url = _getDownloadableBuildUrl(buildUrl);
+		   logger.info("Build URL is: " + url);
 
-         File file = new File(downloadDest);
-         if (!file.exists()) {
-            logger.info("Creating directory " + downloadDest + "...");
-            file.mkdir();
-         } else {
-            deleteOldBuilds(new File(downloadDest));
-         }
+		   if (!downloadDest.trim().endsWith(Character.toString(File.separatorChar))) {
+			   downloadDest = downloadDest.trim() + File.separatorChar;
+		   }
 
-         logger.debug("Now downloading the file to location: " + downloadDest + " ...");
-         in = new BufferedInputStream(new java.net.URL(url).openStream());
+		   logger.info("downloadDest is: " + downloadDest);
 
-         String [] temp = url.split("/");
-         logger.debug("Downloaded file name is: " + temp[temp.length - 1]);
-         output = downloadDest + temp[temp.length - 1];
-         fos = new FileOutputStream(downloadDest + temp[temp.length - 1]);
-         bout = new BufferedOutputStream(fos, bufferedSize);
+		   File file = new File(downloadDest);
+		   if (!file.exists()) {
+			   logger.info("Creating directory " + downloadDest + "...");
+			   file.mkdir();
+		   } else {
+			   deleteOldBuilds(new File(downloadDest));
+		   }
 
-         logger.debug("Downloading...");
+		   logger.debug("Now downloading the file to location: " + downloadDest + " ...");
+		   in = new BufferedInputStream(new java.net.URL(url).openStream());
 
-         byte [] data = new byte[1024];
-         int byteRead = 0;
-         while ((byteRead = in.read(data, 0 , bufferedSize)) != -1) {
-            bout.write(data, 0, byteRead);
-         }
+		   String [] temp = url.split("/");
+		   logger.debug("Downloaded file name is: " + temp[temp.length - 1]);
+		   output = downloadDest + temp[temp.length - 1];
+		   fos = new FileOutputStream(downloadDest + temp[temp.length - 1]);
+		   bout = new BufferedOutputStream(fos, bufferedSize);
 
-      } catch (IOException ioe){
-         throw new HarnessException("Getting IO Exception: ", ioe);
-      } finally {
-         bout.flush();
-         bout.close();
-         fos.flush();
-         fos.close();
-         in.close();
-      }
-      return output;
+		   logger.debug("Downloading...");
+
+		   byte [] data = new byte[1024];
+		   int byteRead = 0;
+		   while ((byteRead = in.read(data, 0 , bufferedSize)) != -1) {
+			   bout.write(data, 0, byteRead);
+		   }
+
+	   } catch (IOException ioe){
+		   throw new HarnessException("Getting IO Exception: ", ioe);
+	   } finally {
+		   close(bout);
+		   close(fos);
+		   close(in);
+	   }
+	   return output;
    }
 
    /**
@@ -394,4 +396,43 @@ public class BuildUtility {
 
       return output;
    }
+   
+   /**
+    * Flush and close a stream, ignore null and exception
+    * @param c
+    */
+   private static void close(Closeable c) {
+	   if ( c == null ) {
+		   return;
+	   }
+	   
+	   if ( c instanceof Flushable ) {
+		   flush((Flushable)c);
+	   }
+	   
+	   try {
+		   c.close();
+	   } catch (IOException e) {
+		   logger.warn(e);
+	   }
+
+   }
+   
+   /**
+    * Flush a stream, ignore null and exception
+    * @param f
+    */
+   private static void flush(Flushable f) {
+	   if ( f == null ) {
+		   return;
+	   }
+
+	   try {
+		   f.flush();
+	   } catch (IOException e) {
+		   logger.warn(e);
+	   }
+
+   }
+
 }

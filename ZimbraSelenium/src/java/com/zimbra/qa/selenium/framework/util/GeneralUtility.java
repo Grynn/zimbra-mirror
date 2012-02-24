@@ -1,9 +1,11 @@
 package com.zimbra.qa.selenium.framework.util;
 
 import java.io.BufferedReader;
+import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.Flushable;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
@@ -257,30 +259,37 @@ public class GeneralUtility {
     * @throws HarnessException
     */
    public static void doHttpPost(String Url) throws HarnessException {
-      try {
 
-         // Replace all the white space with "%20"
-         Url = Url.replaceAll(" ", "%20");
 
-         URL url = new URL(Url);
-         URLConnection conn = url.openConnection();
-         
-         //Get the response
-         BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-         StringBuffer sb = new StringBuffer();
-         String line;
+	   BufferedReader rd = null;
 
-         while ((line = rd.readLine()) != null)
-         {
-            sb.append(line);
-         }
-         rd.close();
-         logger.info("HTTP POST information ==> " + sb.toString());
-         
+	   try {
 
-      } catch (IOException e) {
-         throw new HarnessException("HTTP Post failed!");
-      }
+		   // Replace all the white space with "%20"
+		   Url = Url.replaceAll(" ", "%20");
+
+		   URL url = new URL(Url);
+		   URLConnection conn = url.openConnection();
+
+		   //Get the response
+		   rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+		   StringBuffer sb = new StringBuffer();
+		   String line;
+
+		   while ((line = rd.readLine()) != null)
+		   {
+			   sb.append(line);
+		   }
+		   logger.info("HTTP POST information ==> " + sb.toString());
+
+
+	   } catch (IOException e) {
+		   throw new HarnessException("HTTP Post failed!", e);
+	   } finally {
+		   close(rd);
+	   }
+	   
+	   
    }
 
    /**
@@ -334,17 +343,15 @@ public class GeneralUtility {
          createDirectory(dest);
       }
 
+      
+      TarInputStream tin = null;
+      
       try {
          logger.info("tar file is: " + tarFile.getCanonicalPath());
          logger.info("dest path is: " + dest.getCanonicalPath());
-         logger.debug("Initializing tarFileInputStream");
-         FileInputStream tarFileInputStream = new FileInputStream(tarFile);
-         
-         logger.debug("Initializing gzipInputStream");
-         GZIPInputStream gzipInputStream = new GZIPInputStream(tarFileInputStream);
 
          logger.debug("Initializing tarInputStream");
-         TarInputStream tin = new TarInputStream(gzipInputStream);
+         tin = new TarInputStream(new GZIPInputStream(new FileInputStream(tarFile)));
 
          logger.debug("Getting the entries...");
          TarEntry tarEntry = tin.getNextEntry();  
@@ -358,9 +365,14 @@ public class GeneralUtility {
                createDirectory(destPath);
 
             } else {
-               FileOutputStream fout = new FileOutputStream(destPath);
-               tin.copyEntryContents(fout);  
-               fout.close();
+            	
+               FileOutputStream fout = null;
+               try {
+            	   fout = new FileOutputStream(destPath);
+                   tin.copyEntryContents(fout);  
+               } finally {
+            	   close(fout);
+               }
 
             }  
 
@@ -368,15 +380,14 @@ public class GeneralUtility {
 
          }
 
-         tin.close();
-         tin = null;
-
       } catch (IOException ie) {
          String message = "Getting IO Exception while untarring the file from: " +
                tarFile + " to: " + dest;
          logger.info(message);
          logger.info(ie.getMessage());
          throw new HarnessException(message);
+      } finally {
+    	  close(tin);
       }
    }
 
@@ -440,4 +451,43 @@ public class GeneralUtility {
        logger.debug("Now removing the top directory...");
        return( path.delete() );
    }
+   
+   /**
+    * Flush and close a stream, ignore null and exception
+    * @param c
+    */
+   private static void close(Closeable c) {
+	   if ( c == null ) {
+		   return;
+	   }
+	   
+	   if ( c instanceof Flushable ) {
+		   flush((Flushable)c);
+	   }
+	   
+	   try {
+		   c.close();
+	   } catch (IOException e) {
+		   logger.warn(e);
+	   }
+
+   }
+   
+   /**
+    * Flush a stream, ignore null and exception
+    * @param f
+    */
+   private static void flush(Flushable f) {
+	   if ( f == null ) {
+		   return;
+	   }
+
+	   try {
+		   f.flush();
+	   } catch (IOException e) {
+		   logger.warn(e);
+	   }
+
+   }
+
 }
