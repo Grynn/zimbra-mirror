@@ -9,6 +9,7 @@ import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAdminAccount;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.admin.core.AdminCommonTest;
 import com.zimbra.qa.selenium.projects.admin.items.AccountItem;
 import com.zimbra.qa.selenium.projects.admin.items.AliasItem;
@@ -38,7 +39,7 @@ public class DeleteAlias extends AdminCommonTest {
 			groups = { "smoke" })
 			public void DeleteAlias_01() throws HarnessException {
 
-		AccountItem target = new AccountItem();
+		AccountItem target = new AccountItem("email" + ZimbraSeleniumProperties.getUniqueString(),ZimbraSeleniumProperties.getStringProperty("testdomain"));
 		AccountItem.createUsingSOAP(target);
 
 
@@ -96,7 +97,7 @@ public class DeleteAlias extends AdminCommonTest {
 			groups = { "functional" })
 			public void DeleteAlias_02() throws HarnessException {
 
-		AccountItem target = new AccountItem();
+		AccountItem target = new AccountItem("email" + ZimbraSeleniumProperties.getUniqueString(),ZimbraSeleniumProperties.getStringProperty("testdomain"));
 		AccountItem.createUsingSOAP(target);
 
 
@@ -153,7 +154,7 @@ public class DeleteAlias extends AdminCommonTest {
 			groups = { "functional" })
 			public void DeleteAlias_03() throws HarnessException {
 
-		AccountItem target = new AccountItem();
+		AccountItem target = new AccountItem("email" + ZimbraSeleniumProperties.getUniqueString(),ZimbraSeleniumProperties.getStringProperty("testdomain"));
 		AccountItem.createUsingSOAP(target);
 
 
@@ -213,7 +214,7 @@ public class DeleteAlias extends AdminCommonTest {
 			groups = { "functional" })
 			public void DeleteAlias_04() throws HarnessException {
 
-		AccountItem target = new AccountItem();
+		AccountItem target = new AccountItem("email" + ZimbraSeleniumProperties.getUniqueString(),ZimbraSeleniumProperties.getStringProperty("testdomain"));
 		AccountItem.createUsingSOAP(target);
 
 

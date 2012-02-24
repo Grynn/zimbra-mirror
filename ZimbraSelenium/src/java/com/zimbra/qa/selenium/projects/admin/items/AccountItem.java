@@ -26,7 +26,7 @@ public class AccountItem implements IItem {
 	protected Map<String, String> accountAttrs;
 	
 	
-	public AccountItem() {
+/*	public AccountItem() {
 		super();
 		
 		accountAttrs = new HashMap<String, String>();
@@ -39,7 +39,7 @@ public class AccountItem implements IItem {
 		accountAttrs.put("sn", "Lastname"+ ZimbraSeleniumProperties.getUniqueString());
 
 	}
-	
+*/	
 	public AccountItem(String emailAddress, String lastName) {
 		
 		accountAttrs = new HashMap<String, String>();

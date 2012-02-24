@@ -33,7 +33,7 @@ public class CreateAccount extends AdminCommonTest {
 			public void CreateAccount_01() throws HarnessException {
 
 		// Create a new account in the Admin Console
-		AccountItem account = new AccountItem();
+		AccountItem account = new AccountItem("email" + ZimbraSeleniumProperties.getUniqueString(),ZimbraSeleniumProperties.getStringProperty("testdomain"));
 
 
 
@@ -72,7 +72,7 @@ public class CreateAccount extends AdminCommonTest {
 			public void CreateAccount_02() throws HarnessException {
 
 		// Create a new account in the Admin Console
-		AccountItem account = new AccountItem();
+		AccountItem account = new AccountItem("email" + ZimbraSeleniumProperties.getUniqueString(),ZimbraSeleniumProperties.getStringProperty("testdomain"));
 
 
 

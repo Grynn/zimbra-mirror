@@ -13,6 +13,7 @@ import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.admin.items.AccountItem;
 
 
@@ -115,6 +116,7 @@ public class PageManageAccounts extends AbsTab {
 		tracer.trace(action +" on subject = "+ item);
 
 		AbsPage page = null;
+		SleepUtil.sleepSmall();
 
 		// How many items are in the table?
 		String rowsLocator = "css=div#zl__ACCT_MANAGE div[id$='__rows'] div[id^='zli__']";
@@ -338,7 +340,7 @@ public class PageManageAccounts extends AbsTab {
 			final String accountLocator = rowsLocator + "["+ i +"]";
 			String locator;
 
-			AccountItem item = new AccountItem();
+			AccountItem item = new AccountItem("email" + ZimbraSeleniumProperties.getUniqueString(),ZimbraSeleniumProperties.getStringProperty("testdomain"));
 
 			// Type (image)
 			// ImgAdminUser ImgAccount ImgSystemResource (others?)

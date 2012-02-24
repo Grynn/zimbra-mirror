@@ -6,6 +6,7 @@ import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAdminAccount;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.admin.core.AdminCommonTest;
 import com.zimbra.qa.selenium.projects.admin.items.*;
 import com.zimbra.qa.selenium.projects.admin.ui.WizardCreateAlias;
@@ -30,7 +31,7 @@ public class CreateAlias extends AdminCommonTest {
 			groups = { "obsolete" })
 	public void CreateAlias_01() throws HarnessException {
 
-		AccountItem target = new AccountItem();
+		AccountItem target = new AccountItem("email" + ZimbraSeleniumProperties.getUniqueString(),ZimbraSeleniumProperties.getStringProperty("testdomain"));
 		AccountItem.createUsingSOAP(target);
 		
 		AliasItem alias = new AliasItem();		// Create a new account in the Admin Console using SOAP
@@ -64,7 +65,7 @@ public class CreateAlias extends AdminCommonTest {
 			groups = { "sanity" })
 			public void CreateAlias_02() throws HarnessException {
 
-		AccountItem target = new AccountItem();
+		AccountItem target = new AccountItem("email" + ZimbraSeleniumProperties.getUniqueString(),ZimbraSeleniumProperties.getStringProperty("testdomain"));
 		AccountItem.createUsingSOAP(target);
 		
 
