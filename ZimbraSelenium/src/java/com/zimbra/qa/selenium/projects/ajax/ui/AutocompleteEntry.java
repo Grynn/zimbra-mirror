@@ -48,7 +48,7 @@ public class AutocompleteEntry {
 	}
 	
 	public boolean isType(Icon icon) {
-		return ( MyIcon == icon );
+		return ( MyIcon.equals(icon) );
 	}
 	
 	public String getAddress() {

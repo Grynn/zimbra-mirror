@@ -117,9 +117,8 @@ public class ContextMenu extends AbsDisplay {
 		//get LOCATOR 
 		try {			
 		  typeLocator = (String) contextMenuItemObjects.getField("LOCATOR").get(null);
-		}
-		catch (Exception e) {
-			throw new HarnessException(e.getMessage() + " Context Menu LOCATOR not defined");
+		} catch (Exception e) {
+			throw new HarnessException("Context Menu LOCATOR not defined", e);
 		}
 		
 		//TODO: check for visible		

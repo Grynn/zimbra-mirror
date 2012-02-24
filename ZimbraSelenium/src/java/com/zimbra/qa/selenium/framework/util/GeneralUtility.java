@@ -381,11 +381,7 @@ public class GeneralUtility {
          }
 
       } catch (IOException ie) {
-         String message = "Getting IO Exception while untarring the file from: " +
-               tarFile + " to: " + dest;
-         logger.info(message);
-         logger.info(ie.getMessage());
-         throw new HarnessException(message);
+         throw new HarnessException("Getting IO Exception while untarring the file from: " + tarFile + " to: " + dest, ie);         
       } finally {
     	  close(tin);
       }

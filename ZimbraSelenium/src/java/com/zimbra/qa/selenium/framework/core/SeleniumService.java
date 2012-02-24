@@ -222,7 +222,7 @@ public class SeleniumService {
 	 * @return true: if the mode matches, false: otherwise
 	 */
 	public boolean isSeleniumMode(SeleniumMode m) {
-		return (mode == m);
+		return (mode.equals(m));
 	}
 	
 	public String getSeleniumServer() {
