@@ -13,7 +13,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -340,7 +340,7 @@ public class BuildUtility {
    private static Build[] _buildOutputFilter(PRODUCT_NAME productName, BRANCH branch, ARCH arch) throws SAXException, IOException, ParserConfigurationException, HarnessException {
       String[] outputLines = _getHtmlInfo(_buildUrl).split("\n");
       int numOfElements = 0;
-      Vector<Build> parsedOutput = new Vector<Build> ();
+      ArrayList<Build> parsedOutput = new ArrayList<Build> ();
       logger.debug("outputString length is: " + outputLines.length);
       BuildUtility buildUtil = new BuildUtility();
       for (int i = 0; i < outputLines.length; i++) {

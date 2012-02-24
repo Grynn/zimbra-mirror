@@ -848,6 +848,8 @@ public class ZimbraAccount {
 		protected Element requestContext;
 		protected Element requestBody;
 
+		private static final Element[] EMPTY_ELEMENT_ARRAY = new Element[0];
+
 		protected URI mURI = null;
 
 		protected SoapProtocol mSoapProto = null;
@@ -1089,8 +1091,6 @@ public class ZimbraAccount {
 			 // If the current SOAP request matches any of the "queue" requests, set matched=true
 			 for (String request : requests) {
 				 Element[] nodes = selectNodes(requestEnvelope, "//"+ request);
-				 if ( nodes == null )
-					 continue;
 				 if ( nodes.length > 0 ) {
 					 Stafpostqueue sp = new Stafpostqueue();
 					 sp.waitForPostqueue();
@@ -1118,8 +1118,6 @@ public class ZimbraAccount {
 		  */
 		 public static Element selectNode(Element context, String xpath) {
 			 Element[] nodes = selectNodes(context, xpath);
-			 if (nodes == null)
-				 return (null);
 			 if (nodes.length == 0)
 				 return (null);
 			 return (nodes[0]);        		
@@ -1129,38 +1127,29 @@ public class ZimbraAccount {
 		  * Return an array of elements from the context that match the xpath
 		  * @param context
 		  * @param xpath
-		  * @return
+		  * @return An Array of elements that match the xpath (empty array if none)
 		 * @throws HarnessException 
 		  * @throws HarnessException 
 		  */
-		 @SuppressWarnings("unchecked")
 		 public static Element[] selectNodes(Element context, String xpath) {
 			 if ( context == null )
-				 return (null);
+				 return (SoapClient.EMPTY_ELEMENT_ARRAY);
 
 			 try {
 				 org.dom4j.Element d4context = context.toXML();
 				 org.dom4j.XPath Xpath = d4context.createXPath(xpath);
 				 Xpath.setNamespaceURIs(getURIs());
-				 org.dom4j.Node node;
-				 List dom4jElements = Xpath.selectNodes(d4context);
-
+				 
 				 List<Element> zimbraElements = new ArrayList<Element>();
-				 Iterator iter = dom4jElements.iterator();
-				 while (iter.hasNext()) {
-					 node = (org.dom4j.Node)iter.next();
-					 if (node instanceof org.dom4j.Element) {
-						 Element zimbraElement = Element.convertDOM((org.dom4j.Element) node);
-						 zimbraElements.add(zimbraElement);
+
+				 for (Object o : Xpath.selectNodes(d4context)) {
+					 if ( o instanceof org.dom4j.Element ) {
+						 zimbraElements.add(Element.convertDOM((org.dom4j.Element) o));
 					 }
 				 }
+				 
+				 return (zimbraElements.toArray(new Element[zimbraElements.size()]));
 
-				 int size = zimbraElements.size();
-				 Element[] retVal = new Element[size];
-				 for (int i = 0; i < size; i++) {
-					 retVal[i] = zimbraElements.get(i);
-				 }
-				 return (retVal);
 			 } catch (InvalidXPathException e) {
 				 LogManager.getRootLogger().error("Unable to select nodes", e);
 				 throw e;
@@ -1186,8 +1175,6 @@ public class ZimbraAccount {
 		  */
 		 public Element selectNode(Element context, String xpath, int index) {
 			 Element[] nodes = selectNodes(context, xpath);
-			 if (nodes == null)
-				 return (null);
 			 if ( nodes.length < index )
 				 return (null);
 			 return (nodes[index - 1]);
@@ -1219,10 +1206,6 @@ public class ZimbraAccount {
 				 elements = selectNodes(context, xpath);
 
 			 }
-
-			 // Make sure we have elements
-			 if ( elements == null )
-				 return (null);
 
 			 // Make sure we have at least the specified index
 			 if ( elements.length < index )
@@ -1417,7 +1400,6 @@ public class ZimbraAccount {
 
 		private static final String X_ORIGINATING_IP = "X-Originating-IP";
 
-		private boolean mKeepAlive;
 		private int mRetryCount;
 		private int mTimeout;
 		private String mUri;
@@ -1513,7 +1495,6 @@ public class ZimbraAccount {
 
 		private void commonInit(String uri) {
 			mUri = uri;
-			mKeepAlive = false;
 			mRetryCount = 3;
 			setTimeout(0);
 		}
