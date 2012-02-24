@@ -361,9 +361,7 @@ public class ExecuteHarnessMain {
 				}
 			}
 		}
-				
-		LogManager.getLogger("xmlsuite").info(suite.toXml());
-		
+						
 		return (Arrays.asList(suite));
 	}
 	
