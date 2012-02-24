@@ -85,7 +85,7 @@ public class RefineHistory extends OctopusCommonTest {
 	}
 	
 	
-	@Test(description = "Functional test for check/uncheck 'new version' checkbox", groups = { "funtional" })
+	@Test(description = "Functional test for check/uncheck 'new version' checkbox", groups = { "functional" })
 	public void RefineNewVersion() throws HarnessException {
 										
 		// verify check action for 'new version' 
