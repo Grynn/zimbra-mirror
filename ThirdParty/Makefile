@@ -33,9 +33,9 @@ DIRS := openssl \
 	aspell \
 	sendmail \
 	clamav \
+	pcre \
 	apache-httpd \
 	php \
-	pcre \
 	expat \
 	popt \
 	postfix \
@@ -62,6 +62,7 @@ build:
 		if [ $$? -ne 0 ]; then  $(ECHO) "FAILED.";  else  $(ECHO) "SUCCEEDED.";  fi ; \
 	done)
 	@($(MAKE) -C apache-httpd tar >> $(LOGFILE) 2>&1)
+	@($(MAKE) -C pcre binrm >> $(LOGFILE) 2>&1)
 	@($(ECHO) -n "*** Building in Perl "; $(MAKE) -C Perl ) 
 
 clean:
