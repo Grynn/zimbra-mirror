@@ -3,6 +3,9 @@
  */
 package com.zimbra.qa.selenium.projects.admin.ui;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.zimbra.qa.selenium.framework.ui.AbsApplication;
 import com.zimbra.qa.selenium.framework.ui.AbsPage;
 import com.zimbra.qa.selenium.framework.ui.AbsTab;
@@ -10,6 +13,9 @@ import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
+import com.zimbra.qa.selenium.projects.admin.items.AccountItem;
+import com.zimbra.qa.selenium.projects.admin.items.CosItem;
+import com.zimbra.qa.selenium.projects.admin.ui.PageManageAliases.Locators;
 
 /**
  * @author Matt Rhoades
@@ -98,6 +104,7 @@ public class PageManageCOS extends AbsTab {
 		tracer.trace(action +" on subject = "+ item);
 
 		AbsPage page = null;
+		SleepUtil.sleepSmall();
 
 		// How many items are in the table?
 		String rowsLocator = "css=div#zl__COS_MANAGE div[id$='__rows'] div[id^='zli__']";
@@ -174,6 +181,11 @@ public class PageManageCOS extends AbsTab {
 			page = new WizardCreateCos(this);
 			// FALL THROUGH
 
+		} else if(button == Button.B_TREE_DELETE) {
+
+			locator=Locators.RIGHT_CLICK_MENU_DELETE_BUTTON;
+
+			page = new DialogForDeleteOperation(this.MyApplication, null);
 		} else {
 			throw new HarnessException("no logic defined for button "+ button);
 		}
@@ -214,17 +226,22 @@ public class PageManageCOS extends AbsTab {
 		AbsPage page = null; // If set, this page will be returned
 
 		if (pulldown == Button.B_GEAR_BOX) {
+			pulldownLocator = Locators.GEAR_ICON; 
 
 			if (option == Button.O_NEW) {
 
-				pulldownLocator = Locators.GEAR_ICON; 
 				optionLocator = Locators.NEW_MENU;
 
 				page = new WizardCreateCos(this);
 
 				// FALL THROUGH
 
-			} else {
+			}   else if(option == Button.O_DELETE) {
+				optionLocator = Locators.DELETE_BUTTON;
+
+				page = new DialogForDeleteOperation(this.MyApplication,null);
+
+			}  else {
 				throw new HarnessException("no logic defined for pulldown/option " + pulldown + "/" + option);
 			}
 
@@ -265,6 +282,62 @@ public class PageManageCOS extends AbsTab {
 		return (page);
 
 	}
+	
+	/**
+	 * Return a list of all cos entries in the current view
+	 * @return
+	 * @throws HarnessException 
+	 * @throws HarnessException 
+	 */
+	public List<CosItem> zListGetCos() throws HarnessException {
+
+		List<CosItem> items = new ArrayList<CosItem>();
+
+		// Make sure the button exists
+		if ( !this.sIsElementPresent("css=div[id='zl__COS_MANAGE'] div[id$='__rows']") )
+			throw new HarnessException("Account Rows is not present");
+
+		// How many items are in the table?
+		String rowsLocator = "//div[@id='zl__COS_MANAGE']//div[contains(@id, '__rows')]//div[contains(@id,'zli__')]";
+		int count = this.sGetXpathCount(rowsLocator);
+		logger.debug(myPageName() + " zListGetCOS: number of cos: "+ count);
+
+		// Get each conversation's data from the table list
+		for (int i = 1; i <= count; i++) {
+			final String cosLocator = rowsLocator + "["+ i +"]";
+			String locator;
+
+			CosItem item = new CosItem();
+
+			// Type (image)
+			// ImgAdminUser ImgAccount ImgSystemResource (others?)
+			locator = cosLocator + "//nobr";
+			if ( this.sIsElementPresent(locator) ) {
+				//item.setGAccountType(this.sGetAttribute("xpath=("+ locator + ")@class"));
+			}
+
+
+			// Email Address
+			locator = cosLocator + "//td[contains(@id, 'alias_data_emailaddress_')]";
+			if ( this.sIsElementPresent(locator) ) {
+//				item.setGEmailAddress(this.sGetText(locator).trim());
+			}
+
+			// Display Name
+			// Status
+			// Lost Login Time
+			// Description
+
+
+			// Add the new item to the list
+			items.add(item);
+			logger.info(item.prettyPrint());
+		}
+
+		// Return the list of items
+		return (items);
+	}
+
 	
 	public boolean zVerifyHeader (String header) throws HarnessException {
 		if(this.sIsElementPresent("css=span:contains('" + header + "')"))
