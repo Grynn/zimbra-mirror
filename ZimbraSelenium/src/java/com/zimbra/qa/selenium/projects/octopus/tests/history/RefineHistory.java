@@ -56,9 +56,9 @@ public class RefineHistory extends OctopusCommonTest {
 
 	 }
 
-	private void VerifyCheckboxAction(String locator, String historyText) 
+	private void VerifyCheckAction(String locator, String historyText) 
 	    throws HarnessException
-	{		
+	{			
 		// Make a check
 		app.zPageHistory.zToolbarCheckMark(locator, true);
 		
@@ -70,37 +70,71 @@ public class RefineHistory extends OctopusCommonTest {
 		ZAssert.assertNotNull(found, "Verify " +  historyText + " is found");		
 		ZAssert.assertEquals(found.getHistoryText(), historyText, "Verify the history text matches");
 		
-		
+	}
+	
+	private void VerifyUnCheckAction(String locator, String historyText) 
+	    throws HarnessException
+	{						
 		// UnCheck the check box
 		app.zPageHistory.zToolbarCheckMark(locator, false);
-		
-		// check if the text present
-		found = app.zPageHistory.isTextPresentInGlobalHistory(historyText);
-			
+					
 		// verification
-		ZAssert.assertNull(found, "Verify " +  historyText + " not found");		
+		ZAssert.assertNull(app.zPageHistory.isTextPresentInGlobalHistory(historyText)
+				, "Verify " +  historyText + " not found");		
 		
 	}
 	
 	
-	@Test(description = "Functional test for check/uncheck 'new version' checkbox", groups = { "smoke" })
+	@Test(description = "Functional test for check/uncheck 'new version' checkbox", groups = { "funtional" })
 	public void RefineNewVersion() throws HarnessException {
 										
-		// verify check/uncheck action for 'new version' 
-		VerifyCheckboxAction(PageHistory.Locators.zHistoryFilterNewVersion.locator,
-				PageHistory.GetText.newVersion(fileName));								
+		// verify check action for 'new version' 
+		VerifyCheckAction(PageHistory.Locators.zHistoryFilterNewVersion.locator,
+				PageHistory.GetText.newVersion(fileName));
+		
+		// verify uncheck action for 'new version' 
+		VerifyUnCheckAction(PageHistory.Locators.zHistoryFilterNewVersion.locator,
+				PageHistory.GetText.newVersion(fileName));
+		
 	}
 	
-	@Test(description = "Functional test for check/uncheck 'favorite' checkbox", groups = { "smoke" })
+	@Test(description = "Functional test for check/uncheck 'favorite' checkbox", groups = { "functional" })
 	public void RefineFavorite() throws HarnessException {
 		
         // mark file as favorite via soap
 		MarkFileFavoriteViaSoap(app.zGetActiveAccount(), fileId);
 	
-
-		// verify check/uncheck action for 'favorite'
-		VerifyCheckboxAction(PageHistory.Locators.zHistoryFilterFavorites.locator, 
+		// verify check action for 'favorite'
+		VerifyCheckAction(PageHistory.Locators.zHistoryFilterFavorites.locator, 
 				PageHistory.GetText.favorite(fileName));											
+	
+		// verify uncheck action for 'favorite'
+		VerifyUnCheckAction(PageHistory.Locators.zHistoryFilterFavorites.locator, 
+				PageHistory.GetText.favorite(fileName));											
+	
+	}
+	
+	@Test(description = "Functional test for simultaneously check/uncheck 'new version' & 'favorite' checkbox", groups = { "functional" })
+	public void RefineNewVersionFavorite() throws HarnessException {
+
+        // mark file as favorite via soap
+		MarkFileFavoriteViaSoap(app.zGetActiveAccount(), fileId);
+
+		// verify check action for 'new version' 
+		VerifyCheckAction(PageHistory.Locators.zHistoryFilterNewVersion.locator,
+				PageHistory.GetText.newVersion(fileName));
+
+		// verify check action for 'favorite'
+		VerifyCheckAction(PageHistory.Locators.zHistoryFilterFavorites.locator, 
+				PageHistory.GetText.favorite(fileName));											
+
+		// verify uncheck action for 'new version' 
+		VerifyUnCheckAction(PageHistory.Locators.zHistoryFilterNewVersion.locator,
+				PageHistory.GetText.newVersion(fileName));
+		
+		// verify uncheck action for 'favorite'
+		VerifyUnCheckAction(PageHistory.Locators.zHistoryFilterFavorites.locator, 
+				PageHistory.GetText.favorite(fileName));													
 	}
 	
 	/*
