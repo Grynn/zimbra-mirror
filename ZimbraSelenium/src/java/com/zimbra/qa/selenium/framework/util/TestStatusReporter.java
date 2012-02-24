@@ -13,6 +13,7 @@ import java.io.RandomAccessFile;
 import java.io.Writer;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.regex.Matcher;
@@ -693,34 +694,44 @@ public class TestStatusReporter extends TestListenerAdapter {
 	}
 
 	private String getParameters(Object[] objs) {
-		StringBuffer result=new StringBuffer("(");
+		
+		StringBuilder sb = new StringBuilder("(");
+		
+		String delim = "";
+		for (Object o : objs) {
+			
+			if ( o instanceof String[] ) {
+				
+				// Convert to "[ string1, string2, string3 ]" format
+				sb.append(delim).append(Arrays.toString((String[])o));
+				
+			} else if (o instanceof String[][]) {
+				
+				// Convert to "[ [v1, v2, v3][v4, v5] ]" format
+				sb.append(delim);
+				sb.append("[");
+				for (String[] s : (String[][])o) {
+					sb.append(Arrays.toString(s));
+				}
+				sb.append("]");
 
-		for (int i=0; i < objs.length; i++) {
-			if (i >0) {
-				result.append(",");
+			} else {
+				
+				// Use String.valueOf(o) for all other objects
+				sb.append(delim).append(o);
+				
 			}
-			if (objs[i] instanceof Integer) {
-				result.append( ((Integer)objs[i]).intValue() + "");
-			}
-			else if (objs[i] instanceof String) {
-				result.append(objs.toString());
-			}
-			else if ((objs[i] instanceof String[])) {
-				String[] temp= (String[])(objs[i]);
-				result.append(temp[0]);  		  
-			}
-			else if ((objs[i] instanceof String[][])) {
-				String[][] temp= (String[][])(objs[i]);
-				result.append(temp[0][0]);  		  
-			}
-			else {
-				result.append(objs.toString());					  
-			}
+			
+			// All subsequent args are separated by a comma
+			delim = ",";
 		}
-
-		result.append(")");
-		return result.toString();
-	}  
+		
+		sb.append(")");
+		
+		
+		return (sb.toString());
+	
+	}
 
 	@Override
 	public void onConfigurationFailure(ITestResult tr) {
