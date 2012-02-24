@@ -1,0 +1,41 @@
+From c4325af7e0a79bf2bd7675288307675ec032db7d Mon Sep 17 00:00:00 2001
+From: Howard Chu <hyc@openldap.org>
+Date: Fri, 24 Feb 2012 15:20:17 -0800
+Subject: [PATCH] ITS#7180 fix mdb_entry_get when mdb_entry_next was not called
+
+---
+ servers/slapd/back-mdb/tools.c |   17 +++++++++++++++++
+ 1 files changed, 17 insertions(+), 0 deletions(-)
+
+diff --git a/servers/slapd/back-mdb/tools.c b/servers/slapd/back-mdb/tools.c
+index 10622e0..7dbb136 100644
+--- a/servers/slapd/back-mdb/tools.c
++++ b/servers/slapd/back-mdb/tools.c
+@@ -369,7 +369,24 @@ Entry*
+ mdb_tool_entry_get( BackendDB *be, ID id )
+ {
+ 	Entry *e = NULL;
++	int rc;
+ 
++	if ( !txn ) {
++		struct mdb_info *mdb = (struct mdb_info *) be->be_private;
++		rc = mdb_txn_begin( mdb->mi_dbenv, NULL,
++			(slapMode & SLAP_TOOL_READONLY) ? MDB_RDONLY : 0, &txn );
++		if ( rc )
++			return NULL;
++	}
++	if ( !cursor ) {
++		struct mdb_info *mdb = (struct mdb_info *) be->be_private;
++		rc = mdb_cursor_open( txn, mdb->mi_id2entry, &cursor );
++		if ( rc ) {
++			mdb_txn_abort( txn );
++			txn = NULL;
++			return NULL;
++		}
++	}
+ 	(void)mdb_tool_entry_get_int( be, id, &e );
+ 	return e;
+ }
+-- 
+1.7.4.2
+
