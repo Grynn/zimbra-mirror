@@ -11,7 +11,8 @@ import com.zimbra.qa.selenium.framework.util.OperatingSystem.OsType;
 import com.zimbra.qa.selenium.projects.desktop.core.AjaxCommonTest;
 
 public class DesktopAccountItem implements IItem {
-   protected static Logger logger = LogManager.getLogger(IItem.class);
+   private static final Logger logger = LogManager.getLogger(DesktopAccountItem.class);
+   
    public String accountName = null;
    public String fullName = null;
    public String emailAddress = null;
@@ -35,6 +36,7 @@ public class DesktopAccountItem implements IItem {
 
    public DesktopAccountItem() {
       super();
+      logger.info("new " + this.getClass().getName());
    }
 
    /**
@@ -173,7 +175,6 @@ public class DesktopAccountItem implements IItem {
       desktopAccountItem.receivingSecurityType = receivingSecurityType;
       desktopAccountItem.receivingPort = receivingPort;
       desktopAccountItem.sendingSmtpServer = sendingSmtpServer;
-      desktopAccountItem.sendingSmtpServer = sendingSmtpServer;
       desktopAccountItem.sendingThroughSsl = sendingThroughSsl;
       desktopAccountItem.sendingPort = sendingPort;
       desktopAccountItem.sendingUserName = sendingUserName;
@@ -219,7 +220,6 @@ public class DesktopAccountItem implements IItem {
       desktopAccountItem.receivingIncomingServer = receivingIncomingServer;
       desktopAccountItem.receivingSecurityType = receivingSecurityType;
       desktopAccountItem.receivingPort = receivingPort;
-      desktopAccountItem.sendingSmtpServer = sendingSmtpServer;
       desktopAccountItem.sendingSmtpServer = sendingSmtpServer;
       desktopAccountItem.sendingThroughSsl = sendingThroughSsl;
       desktopAccountItem.sendingPort = sendingPort;

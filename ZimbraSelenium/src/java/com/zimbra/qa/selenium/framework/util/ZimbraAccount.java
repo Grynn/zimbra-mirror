@@ -1546,23 +1546,6 @@ public class ZimbraAccount {
 		 }
 
 		 /**
-		  * Whether or not to keep the connection alive in between
-		  * invoke calls.
-		  *
-		  * <p> Default value is <code>false</code>.
-		  */
-		 private void setKeepAlive(boolean keepAlive) {
-			 this.mKeepAlive = keepAlive;
-		 }
-
-		 /**
-		  * Get the mKeepAlive value.
-		  */
-		 private boolean getKeepAlive() {
-			 return mKeepAlive;
-		 }
-
-		 /**
 		  * The number of miliseconds to wait when connecting or reading
 		  * during a invoke call. 
 		  * <p>

@@ -20,10 +20,10 @@ import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
  *
  */
 public class TagItem implements IItem {
-	protected static Logger logger = LogManager.getLogger(IItem.class);
+	private static final Logger logger = LogManager.getLogger(TagItem.class);
 	
 	//just a pseudo object for the option Remove Tag-> All Tags with multi-tagged items 
-	public static TagItem Remove_All_Tags = new TagItem();
+	public static final TagItem Remove_All_Tags = new TagItem();
 
 	
 	////
@@ -110,6 +110,10 @@ public class TagItem implements IItem {
 		tagItem.setName(tagName);			
 
 		// Refresh addressbook
+		if ( !(app instanceof AppAjaxClient) ) {
+			throw new HarnessException("Unknown app type: "+ app.getClass().getCanonicalName());
+		}
+		
 		((AppAjaxClient)app).zPageMain.zToolbarPressButton(Button.B_REFRESH);
 
 		return tagItem;

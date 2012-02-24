@@ -1778,9 +1778,9 @@ public class PageCalendar extends AbsTab {
 		} else if ( this.zIsVisiblePerPosition(Locators.CalendarViewDayCSS, 0, 0) ) {
 			return (zListGetAppointmentsDayView());
 		} else if ( this.zIsVisiblePerPosition(Locators.CalendarViewWorkWeekCSS, 0, 0) ) {
-			return (zListGetAppointmentsDayView());
+			return (zListGetAppointmentsWorkWeekView());
 		} else if ( this.zIsVisiblePerPosition(Locators.CalendarViewWeekCSS, 0, 0) ) {
-			return (zListGetAppointmentsDayView());
+			return (zListGetAppointmentsWeekView());
 		} else if ( this.zIsVisiblePerPosition(Locators.CalendarViewMonthCSS, 0, 0) ) {
 			return (zListGetAppointmentsMonthView());
 		} else if ( this.zIsVisiblePerPosition(Locators.CalendarViewScheduleCSS, 0, 0) ) {
