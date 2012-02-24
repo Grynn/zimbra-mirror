@@ -612,12 +612,12 @@ public class TreeMail extends AbsTree {
 	 */
 	public AbsPage zTreeItem(Action action, IItem folder) throws HarnessException {
 
-		tracer.trace("Click "+ action +" on folder "+ folder.getName());
-
 		// Validate the arguments
 		if ( (action == null) || (folder == null) ) {
 			throw new HarnessException("Must define an action and addressbook");
 		}
+
+		tracer.trace("Click "+ action +" on folder "+ folder.getName());
 
 		if ( folder instanceof FolderItem ) {
 			return (zTreeItem(action, (FolderItem)folder));
@@ -633,12 +633,12 @@ public class TreeMail extends AbsTree {
 	@Override
 	public AbsPage zTreeItem(Action action, Button option, IItem folder) throws HarnessException {
 
-		tracer.trace("Click "+ action +" then "+ option +" on folder "+ folder.getName());
-
 		// Validate the arguments
 		if ( (action == null) || (option == null) || (folder == null) ) {
 			throw new HarnessException("Must define an action, option, and addressbook");
 		}
+
+		tracer.trace("Click "+ action +" then "+ option +" on folder "+ folder.getName());
 
 		if ( folder instanceof FolderItem ) {
 			return (zTreeItem(action, option, (FolderItem)folder));

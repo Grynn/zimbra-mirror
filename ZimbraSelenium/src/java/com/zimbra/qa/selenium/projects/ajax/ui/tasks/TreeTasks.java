@@ -283,15 +283,15 @@ public class TreeTasks extends AbsTree {
 		logger.info(myPageName() + " zListItem(" + action + ", " + option
 				+ ", " + tasklist + ")");
 
-		tracer.trace(action + " then " + option + " on task = "
-				+ tasklist.getName());
-
 		if (action == null)
 			throw new HarnessException("action cannot be null");
 		if (option == null)
 			throw new HarnessException("button cannot be null");
 		if (tasklist == null)
 			throw new HarnessException("folder cannot be null");
+
+		tracer.trace(action + " then " + option + " on task = "
+				+ tasklist.getName());
 
 		AbsPage page = null;
 		String actionLocator = null;

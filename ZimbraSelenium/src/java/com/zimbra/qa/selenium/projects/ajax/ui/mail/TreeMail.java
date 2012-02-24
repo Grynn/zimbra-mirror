@@ -229,9 +229,11 @@ public class TreeMail extends AbsTree {
 	}
 
 	protected AbsPage zTreeItem(Action action, Button option, SavedSearchFolderItem savedSearchFolder) throws HarnessException {
+		
 		if ( (action == null) || (option == null) || (savedSearchFolder == null) ) {
 			throw new HarnessException("Must define an action, option, and addressbook");
 		}
+		
 		AbsPage page = null;
 		String actionLocator = null;
 		String optionLocator = Locators.ContextMenuTVSearchesCSS; // css=div[id='ZmActionMenu_mail_SEARCH'];
@@ -762,14 +764,15 @@ public class TreeMail extends AbsTree {
 	 * @see framework.ui.AbsTree#zTreeItem(framework.ui.Action, framework.items.FolderItem)
 	 */
 	public AbsPage zTreeItem(Action action, IItem folder) throws HarnessException {
-		logger.info(myPageName() + " zTreeItem("+ action +", "+ folder.getName() +")");
-
-		tracer.trace("Click "+ action +" on folder "+ folder.getName());
-
+		
 		// Validate the arguments
 		if ( (action == null) || (folder == null) ) {
 			throw new HarnessException("Must define an action and addressbook");
 		}
+
+		logger.info(myPageName() + " zTreeItem("+ action +", "+ folder.getName() +")");
+
+		tracer.trace("Click "+ action +" on folder "+ folder.getName());
 
 		// Bug 65234
 		// Sometimes the folder refresh takes a while.  Sleep a bit here.
@@ -790,14 +793,15 @@ public class TreeMail extends AbsTree {
 
 	@Override
 	public AbsPage zTreeItem(Action action, Button option, IItem folder) throws HarnessException {
+		
+		// Validate the arguments
+		if ( (action == null) || (option == null) || (folder == null) ) {
+			throw new HarnessException("Must define an action, option, and folder");
+		}
+
 		logger.info(myPageName() + " zTreeItem("+ action +", "+ option +", "+ folder.getName() +")");
 
 		tracer.trace("Click "+ action +" then "+ option +" on folder "+ folder.getName());
-
-		// Validate the arguments
-		if ( (action == null) || (option == null) || (folder == null) ) {
-			throw new HarnessException("Must define an action, option, and addressbook");
-		}
 
 		if ( folder instanceof FolderItem ) {
 			return (zTreeItem(action, option, (FolderItem)folder));

@@ -3,13 +3,13 @@
  */
 package com.zimbra.qa.selenium.projects.ajax.ui.addressbook;
 
-import java.net.URL;
-
 import com.zimbra.qa.selenium.framework.items.FolderItem;
-import com.zimbra.qa.selenium.framework.ui.*;
+import com.zimbra.qa.selenium.framework.ui.AbsApplication;
+import com.zimbra.qa.selenium.framework.ui.AbsDialog;
+import com.zimbra.qa.selenium.framework.ui.AbsPage;
+import com.zimbra.qa.selenium.framework.ui.AbsTab;
+import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.staf.Stafpostqueue;
-import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
 
 /**
  * Represents a "Create New Folder" dialog box
@@ -123,11 +123,11 @@ public class DialogCreateFolder extends AbsDialog {
 	public void zClickTreeFolder(FolderItem folder) throws HarnessException {
 		logger.info(myPageName() + " zClickTreeFolder("+ folder +")");
 		
-		tracer.trace("Click on tree folder with name "+ folder.getName());
-
 		if ( folder == null ) 
 			throw new HarnessException("folder must not be null");
 		
+		tracer.trace("Click on tree folder with name "+ folder.getName());
+
 		String locator = Locators.zDialogId + " td[id='zti__main_Contacts__"+ folder.getId() +"_textCell']";
 		
 		if ( !this.sIsElementPresent(locator) )

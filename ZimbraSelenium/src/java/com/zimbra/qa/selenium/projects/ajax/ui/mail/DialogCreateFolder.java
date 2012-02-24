@@ -143,11 +143,11 @@ public class DialogCreateFolder extends AbsDialog {
 	public void zClickTreeFolder(FolderItem folder) throws HarnessException {
 		logger.info(myPageName() + " zClickTreeFolder("+ folder +")");
 		
-		tracer.trace("Click on tree folder with name "+ folder.getName());
-
 		if ( folder == null ) 
 			throw new HarnessException("folder must not be null");
 		
+		tracer.trace("Click on tree folder with name "+ folder.getName());
+
 		String locator = Locators.DialogDivLocatorCSS + " td[id='zti__ZmChooseFolderDialog_Mail__"+ folder.getId() +"_textCell']";
 		
 		if ( !this.sIsElementPresent(locator) )
