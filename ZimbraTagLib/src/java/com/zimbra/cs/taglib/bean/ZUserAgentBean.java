@@ -103,7 +103,8 @@ public class ZUserAgentBean {
                     }
                 } else if ((index = token.indexOf("gecko/")) != -1){
                     isGeckoBased = true;
-                    geckoDate = Float.parseFloat(token.substring(index + 6));
+                    //bug:70005#c4 suggest to stop build date based version parsing
+                    browserVersion = new Version(token.substring(index + 6));
                 } else if ((index = token.indexOf("rv:")) != -1){
                     mozVersion = new Version(token.substring(index + 3));
                 } else if ((index = token.indexOf("firefox/")) != -1){
@@ -145,7 +146,7 @@ public class ZUserAgentBean {
 
             isIE = (isIE && !isOpera);
 
-            isMozilla = ((isNav && mozVersion.getMajor() > -1 && isGeckoBased && (geckoDate != 0)));
+            isMozilla = ((isNav && mozVersion.getMajor() > -1 && isGeckoBased));
 
             isFirefox = ((isMozilla && isFirefox));
         }
