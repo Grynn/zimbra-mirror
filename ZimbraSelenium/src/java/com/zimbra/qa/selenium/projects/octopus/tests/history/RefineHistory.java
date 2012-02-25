@@ -67,8 +67,8 @@ public class RefineHistory extends OctopusCommonTest {
 		HistoryItem found = app.zPageHistory.isTextPresentInGlobalHistory(historyText);
 			
 		// verification
-		ZAssert.assertNotNull(found, "Verify " +  historyText + " is found");		
-		ZAssert.assertEquals(found.getHistoryText(), historyText, "Verify the history text matches");
+		ZAssert.assertNotNull(found, "Verify " +  historyText + " displayed");		
+		ZAssert.assertEquals(found.getHistoryText(), historyText, "Verify " +  historyText + " matched");
 		
 	}
 	
@@ -120,21 +120,22 @@ public class RefineHistory extends OctopusCommonTest {
         // mark file as favorite via soap
 		MarkFileFavoriteViaSoap(app.zGetActiveAccount(), fileId);
 
-		// verify check action for 'new version' 
-		VerifyCheckAction(PageHistory.Locators.zHistoryFilterNewVersion.locator,
-				PageHistory.GetText.newVersion(fileName));
-
-		// verify check action for 'favorite'
-		VerifyCheckAction(PageHistory.Locators.zHistoryFilterFavorites.locator, 
-				PageHistory.GetText.favorite(fileName));											
-
-		// verify uncheck action for 'new version' 
-		VerifyUnCheckAction(PageHistory.Locators.zHistoryFilterNewVersion.locator,
-				PageHistory.GetText.newVersion(fileName));
+		// Make checks for 'new version' & 'favorite'
+		app.zPageHistory.zToolbarCheckMark(PageHistory.Locators.zHistoryFilterNewVersion.locator, true);
+		app.zPageHistory.zToolbarCheckMark(PageHistory.Locators.zHistoryFilterFavorites.locator, true);
 		
-		// verify uncheck action for 'favorite'
-		VerifyUnCheckAction(PageHistory.Locators.zHistoryFilterFavorites.locator, 
-				PageHistory.GetText.favorite(fileName));													
+		// Get the text 
+		HistoryItem newversionItem = app.zPageHistory.isTextPresentInGlobalHistory(PageHistory.GetText.newVersion(fileName));
+		HistoryItem favoriteItem = app.zPageHistory.isTextPresentInGlobalHistory(PageHistory.GetText.favorite(fileName));
+					
+		// Verify the text present
+		ZAssert.assertNotNull(newversionItem, "Verify " +  PageHistory.GetText.newVersion(fileName) + " displayed");		
+		ZAssert.assertNotNull(favoriteItem, "Verify " +  PageHistory.GetText.favorite(fileName) + " displayed");		
+			
+		// Verify the text matched
+		ZAssert.assertEquals(newversionItem.getHistoryText(), PageHistory.GetText.newVersion(fileName), "Verify " + PageHistory.GetText.newVersion(fileName) + " matched");
+		ZAssert.assertEquals(favoriteItem.getHistoryText(), PageHistory.GetText.favorite(fileName), "Verify " + PageHistory.GetText.favorite(fileName) + " matched");
+
 	}
 	
 	/*
