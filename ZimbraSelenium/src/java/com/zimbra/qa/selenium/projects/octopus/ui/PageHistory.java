@@ -33,8 +33,10 @@ public class PageHistory extends AbsTab {
 	  String NEW_VERSION_POSTFIX= ".";
 	  
 	  String FAVORITE_PREFIX  = " marked file ";
-	  String FAVORITE_POSTFIX = " as fvaorite.";
+	  String FAVORITE_POSTFIX = " as favorite.";
 	  
+	  String UNFAVORITE_PREFIX  = " marked file ";
+	  String UNFAVORITE_POSTFIX = " as not favorite.";
 	  
 	  
     }
@@ -95,6 +97,15 @@ public class PageHistory extends AbsTab {
 			        +   fileName + CONSTANTS.FAVORITE_POSTFIX;
 		}
 		
+		public static String unfavorite(String fileName) {
+			return CONSTANTS.YOU + CONSTANTS.UNFAVORITE_PREFIX 
+			        +   fileName + CONSTANTS.UNFAVORITE_POSTFIX;
+		}
+		
+		public static String unfavorite(String fileName, String user) {
+			return          user + CONSTANTS.UNFAVORITE_PREFIX 
+			        +   fileName + CONSTANTS.UNFAVORITE_POSTFIX;
+		}
 		
 	}
 	public PageHistory(AbsApplication application) {
@@ -177,6 +188,15 @@ public class PageHistory extends AbsTab {
 		if (!this.sIsElementPresent(locator))
 			throw new HarnessException("Check box is not present: " + locator);
 
+		//already checked, just return
+		if (check && sIsChecked(locator))
+			return;
+		
+		//already unchecked, just return
+		if (!check && !sIsChecked(locator))
+			return;
+		
+		
 		if (check)
 			this.sCheck(locator);
 		else

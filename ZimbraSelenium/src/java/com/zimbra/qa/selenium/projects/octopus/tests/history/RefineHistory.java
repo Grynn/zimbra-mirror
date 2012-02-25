@@ -98,19 +98,30 @@ public class RefineHistory extends OctopusCommonTest {
 		
 	}
 	
-	@Test(description = "Functional test for check/uncheck 'favorite' checkbox", groups = { "functional" })
+	@Test(description = "Functional test for check/uncheck 'favorite' checkbox with favorite/unfavorite actions", groups = { "functional" })
 	public void RefineFavorite() throws HarnessException {
 		
         // mark file as favorite via soap
 		MarkFileFavoriteViaSoap(app.zGetActiveAccount(), fileId);
 	
-		// verify check action for 'favorite'
+		// mark file as unfavorite via soap
+		UnMarkFileFavoriteViaSoap(app.zGetActiveAccount(), fileId);
+	
+		// verify favorite text present
 		VerifyCheckAction(PageHistory.Locators.zHistoryFilterFavorites.locator, 
 				PageHistory.GetText.favorite(fileName));											
 	
-		// verify uncheck action for 'favorite'
+		// verify unfavorite text present
+		VerifyCheckAction(PageHistory.Locators.zHistoryFilterFavorites.locator, 
+				PageHistory.GetText.unfavorite(fileName));											
+			
+		// verify favorite text not present
 		VerifyUnCheckAction(PageHistory.Locators.zHistoryFilterFavorites.locator, 
 				PageHistory.GetText.favorite(fileName));											
+	
+		// verify unfavorite text not present
+		VerifyUnCheckAction(PageHistory.Locators.zHistoryFilterFavorites.locator, 
+				PageHistory.GetText.unfavorite(fileName));											
 	
 	}
 	
