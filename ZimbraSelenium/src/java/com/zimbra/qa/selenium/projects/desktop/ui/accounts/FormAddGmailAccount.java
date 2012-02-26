@@ -47,23 +47,19 @@ public class FormAddGmailAccount extends AbsForm {
       DesktopAccountItem desktopAccountItem  = (DesktopAccountItem) item;
 
       // Fill out the form
-      if (desktopAccountItem.accountName != null ||
-            !desktopAccountItem.accountName.equals("")) {
+      if (desktopAccountItem.accountName != null && !desktopAccountItem.accountName.equals("")) {
          sType(Locators.zAccountNameField, desktopAccountItem.accountName);
       }
 
-      if (desktopAccountItem.emailAddress != null ||
-            !desktopAccountItem.emailAddress.equals("")) {
+      if (desktopAccountItem.emailAddress != null && !desktopAccountItem.emailAddress.equals("")) {
          sType(Locators.zEmailAddressField, desktopAccountItem.emailAddress);
       }
 
-      if (desktopAccountItem.fullName != null ||
-            !desktopAccountItem.fullName.equals("")) {
+      if (desktopAccountItem.fullName != null && !desktopAccountItem.fullName.equals("")) {
          sType(Locators.zFullNameField, desktopAccountItem.fullName);
       }
 
-      if (desktopAccountItem.password != null ||
-            !desktopAccountItem.password.equals("")) {
+      if (desktopAccountItem.password != null && !desktopAccountItem.password.equals("")) {
          sType(Locators.zPasswordField, desktopAccountItem.password);
       }
 

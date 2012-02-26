@@ -7,7 +7,6 @@ import com.zimbra.qa.selenium.framework.ui.AbsForm;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.GeneralUtility.WAIT_FOR_OPERAND;
 import com.zimbra.qa.selenium.projects.desktop.ui.AppAjaxClient;
 import com.zimbra.qa.selenium.projects.desktop.ui.PageLogin;
 
@@ -94,23 +93,19 @@ public class FormAddZimbraAccount extends AbsForm {
       DesktopAccountItem desktopAccountItem  = (DesktopAccountItem) item;
 
       // Fill out the form
-      if (desktopAccountItem.accountName != null ||
-            !desktopAccountItem.accountName.equals("")) {
+      if (desktopAccountItem.accountName != null && !desktopAccountItem.accountName.equals("")) {
          sType(Locators.zAccountNameField, desktopAccountItem.accountName);
       }
 
-      if (desktopAccountItem.emailAddress != null ||
-            !desktopAccountItem.emailAddress.equals("")) {
+      if (desktopAccountItem.emailAddress != null && !desktopAccountItem.emailAddress.equals("")) {
          sType(Locators.zEmailAddressField, desktopAccountItem.emailAddress);
       }
 
-      if (desktopAccountItem.incomingServer != null ||
-            !desktopAccountItem.incomingServer.equals("")) {
+      if (desktopAccountItem.incomingServer != null && !desktopAccountItem.incomingServer.equals("")) {
          sType(Locators.zIncomingServerField, desktopAccountItem.incomingServer);
       }
 
-      if (desktopAccountItem.password != null ||
-            !desktopAccountItem.password.equals("")) {
+      if (desktopAccountItem.password != null && !desktopAccountItem.password.equals("")) {
          sType(Locators.zPasswordField, desktopAccountItem.password);
       }
 
@@ -120,8 +115,7 @@ public class FormAddZimbraAccount extends AbsForm {
          sClick(Locators.zSecurityNoneRadioButton);
       }
 
-      if (desktopAccountItem.port != null ||
-            !desktopAccountItem.port.equals("")) {
+      if (desktopAccountItem.port != null && !desktopAccountItem.port.equals("")) {
          if (!sGetText(Locators.zPortField).equals(desktopAccountItem.port)) {
             zClick(Locators.zEditPortLink);
             sType(Locators.zPortField, desktopAccountItem.port);
