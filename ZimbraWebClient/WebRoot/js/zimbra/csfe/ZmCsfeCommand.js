@@ -266,6 +266,7 @@ function(request) {
  * @param	{Boolean}		skipAuthCheck		if <code>true</code> to skip auth check (i.e. do not check if auth token has changed)
  * @param	{constant}		resend				the reason for resending request
  * @param	{boolean}		useStringify1		use JSON.stringify1 (gets around IE child win issue with Array)
+ * @param	{boolean}		emptyResponseOkay	if true, empty or no response from server is not an erro
  */
 ZmCsfeCommand.prototype.invoke =
 function(params) {
@@ -554,9 +555,9 @@ function(params, result) {
 	}
 	this._en = new Date();
 
-	if (params.callback) {
+	if (params.callback && response) {
 		params.callback.run(response);
-	} else {
+	} else if (!params.emptyResponseOkay) {
 		DBG.println(AjxDebug.DBG1, "ZmCsfeCommand.prototype._runCallback: Missing callback!");
 	}
 };
@@ -596,8 +597,13 @@ function(response, params) {
 		try {
 			xmlResponse = true;
 			if (!(response.text || (response.xml && (typeof response.xml) == "string"))) {
-				// If we can't reach the server, req returns immediately with an empty response rather than waiting and timing out
-				throw new ZmCsfeException(null, ZmCsfeException.EMPTY_RESPONSE, params.methodNameStr);
+				if (params.emptyResponseOkay) {
+					return null;
+				}
+				else {
+					// If we can't reach the server, req returns immediately with an empty response rather than waiting and timing out
+					throw new ZmCsfeException(null, ZmCsfeException.EMPTY_RESPONSE, params.methodNameStr);
+				}
 			}
 			// responseXML is empty under IE
 			respDoc = (AjxEnv.isIE || response.xml == null) ? AjxSoapDoc.createFromXml(response.text) :
