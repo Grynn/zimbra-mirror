@@ -234,6 +234,14 @@ function(entry) {
 		}
 	}
 
+    if (domainObj && domainObj.attrs &&
+        domainObj.attrs[ZaDomain.A_AuthMech] &&
+        (domainObj.attrs[ZaDomain.A_AuthMech] != ZaDomain.AuthMech_zimbra) ) {
+        this._containedObject[ZaAccount.A2_isExternalAuth] = true;
+    } else {
+        this._containedObject[ZaAccount.A2_isExternalAuth] = false;
+    }
+
 	if(ZaItem.modelExtensions["ZaAccount"]) {
 		for(var i = 0; i< ZaItem.modelExtensions["ZaAccount"].length;i++) {
 			var ext = ZaItem.modelExtensions["ZaAccount"][i];
@@ -1691,7 +1699,10 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 	case1Items.push(setupGroup);
 	
 	var passwordGroup = {type:_TOP_GROUPER_, label:ZaMsg.NAD_PasswordGrouper,id:"account_form_password_group",
-		visibilityChecks:[[ZaItem.hasRight,ZaAccount.SET_PASSWORD_RIGHT]],
+		visibilityChecks:[[ZaItem.hasRight,ZaAccount.SET_PASSWORD_RIGHT],
+                          [XForm.checkInstanceValueNot,ZaAccount.A2_isExternalAuth,true]
+            ],
+        visibilityChangeEventSources:[ZaAccount.A2_isExternalAuth],
 		colSizes:["275px","*"],numCols:2,
 		items:[ 
                 { type: _DWT_ALERT_, containerCssStyle: "padding-bottom:0px",

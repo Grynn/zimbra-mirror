@@ -325,6 +325,7 @@ ZaAccount.A2_fp_selection_cache = "fp_selection_cache";
 ZaAccount.A2_errorMessage = "errorMessage";
 ZaAccount.A2_warningMessage = "warningMessage";
 ZaAccount.A2_showAccountTypeMsg = "showAccountTypeMsg";
+ZaAccount.A2_isExternalAuth = "isExternalAuth";
 //constants for rights
 
 ZaAccount.SET_PASSWORD_RIGHT = "setAccountPassword";
@@ -2010,7 +2011,8 @@ ZaAccount.myXModel = {
         //datasources
         {id:ZaAccount.A2_ldap_ds, ref:ZaAccount.A2_ldap_ds, type:_OBJECT_, items:ZaDataSource.myXModel.items},
         {id:ZaAccount.A2_zimbra_ds, ref:ZaAccount.A2_zimbra_ds, type:_OBJECT_, items:ZaDataSource.myXModel.items},
-        {id:ZaAccount.A2_datasources, ref:ZaAccount.A2_datasources, type:_LIST_, listItem:{type:_OBJECT_, items:ZaDataSource.myXModel.items}}
+        {id:ZaAccount.A2_datasources, ref:ZaAccount.A2_datasources, type:_LIST_, listItem:{type:_OBJECT_, items:ZaDataSource.myXModel.items}} ,
+        {id:ZaAccount.A2_isExternalAuth, ref:ZaAccount.A2_isExternalAuth, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES1}
     ]
 };
 
@@ -2220,8 +2222,8 @@ function (value, event, form){
 			}
                 	ZaAccount.setDefaultCos(instance);
                 	instance [ZaAccount.A2_autoCos] = "TRUE";
-			
-			form.refresh();
+                    form.refresh();
+
 		}
                    
         //if domain name is not changed, we don't want to update the account type output
@@ -2261,6 +2263,14 @@ function (value, event, form){
                     form.getModel().setInstanceValue(form.getInstance(),ZaAccount.A2_domainLeftAccounts,null);
 		}
 	}
+
+        if (domainObj && domainObj.attrs &&
+            domainObj.attrs[ZaDomain.A_AuthMech] &&
+            (domainObj.attrs[ZaDomain.A_AuthMech] != ZaDomain.AuthMech_zimbra) ) {
+            form.getModel().setInstanceValue(form.getInstance(),ZaAccount.A2_isExternalAuth, true);
+        } else {
+            form.getModel().setInstanceValue(form.getInstance(),ZaAccount.A2_isExternalAuth, false);
+        }
 
         if(form.parent.setDirty)  { //edit account view
 			form.parent.setDirty(true);	
