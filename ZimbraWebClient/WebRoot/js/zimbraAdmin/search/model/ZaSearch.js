@@ -72,6 +72,7 @@ ZaSearch.getPredefinedSavedSearchesForAdminOnly = function () {
                   
 ZaSearch.getPredefinedSavedSearches =  function () {
     return [
+        {name: ZaMsg.ss_external_accounts, query: "(zimbraIsExternalVirtualAccount=TRUE)"},
         {name: ZaMsg.ss_locked_out_accounts, query: "(zimbraAccountStatus=*lockout*)"},
         {name: ZaMsg.ss_closed_accounts, query: "(zimbraAccountStatus=*closed*)"},
         {name: ZaMsg.ss_maintenance_accounts, query: "(zimbraAccountStatus=*maintenance*)"},
