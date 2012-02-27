@@ -128,8 +128,9 @@ ZaErrorDialog.prototype._showDetail = function() {
 
     var msg = this._msgStr;
     if (this._detailsVisible) {
-        msg += "<hr> " + this._detailStr.substr(0,300);
-        if (this._detailStr.length > 300) msg += "...";
+    	msg += "<div style='overflow:auto;height:100px'>";
+        msg += "<hr> " + this._detailStr;
+        msg += "</div>";
     }
     DwtMessageDialog.prototype.setMessage.call(this, msg, this._msgStyle, this._msgTitle);
     this._button[ZaErrorDialog.DETAIL_BUTTON].setImage(this._detailsVisible ? "SelectPullUpArrow" : "SelectPullDownArrow");
