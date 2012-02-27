@@ -102,6 +102,7 @@ CREATE TABLE mailbox (
    idx_deferred_count  INTEGER NOT NULL DEFAULT 0, -- deprecated
    highest_indexed     VARCHAR(21), -- deprecated
    version             VARCHAR(16),
+   last_purge_at       INTEGER UNSIGNED NOT NULL DEFAULT 0,
 
    UNIQUE INDEX i_account_id (account_id),
    INDEX i_index_volume_id (index_volume_id),
