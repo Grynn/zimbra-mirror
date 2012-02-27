@@ -363,6 +363,14 @@ function(entry) {
 		}
 	}	
 
+    if (domainObj && domainObj.attrs &&
+        domainObj.attrs[ZaDomain.A_AuthMech] &&
+        (domainObj.attrs[ZaDomain.A_AuthMech] != ZaDomain.AuthMech_zimbra) ) {
+        this._containedObject[ZaAccount.A2_isExternalAuth] = true;
+    } else {
+        this._containedObject[ZaAccount.A2_isExternalAuth] = false;
+    }
+
     //check the account type here
     this._localXForm.setInstance(this._containedObject);
     var nameFields = this._localXForm.getItemsById(ZaAccount.A_name);
@@ -453,7 +461,7 @@ ZaNewAccountXWizard.getAccountNameInfoItem = function(){
 					 msgName:ZaMsg.NAD_AccountName,label:ZaMsg.NAD_AccountName, bmolsnr:false,
                                         domainPartWidth:"100%",
                                         labelLocation:_LEFT_,onChange:ZaAccount.setDomainChanged,forceUpdate:true,
-                                        enableDisableChecks:[[ZaItem.hasRight,ZaAccount.RENAME_ACCOUNT_RIGHT]],
+                                        enableDisableChecks:[],
                                         visibilityChecks:[]
                                 },
 		ZaNewAccountXWizard.accountNameInfoPool[ZaAccount.A_firstName] = {ref:ZaAccount.A_firstName, type:_TEXTFIELD_,
@@ -710,7 +718,8 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 		case1Items.push(setupGroup);
 	}	
 	var passwordGroup = {type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_PasswordGrouper,id:"account_wiz_password_group", 
-		numCols:2,visibilityChecks:[],
+		numCols:2,visibilityChecks:[[XForm.checkInstanceValueNot,ZaAccount.A2_isExternalAuth,true]],
+        visibilityChangeEventSources:[ZaAccount.A2_isExternalAuth],
 		items:[
                	{ type: _DWT_ALERT_, containerCssStyle: "padding-bottom:0px",
                         style: DwtAlert.WARNING,iconVisible: false, 
