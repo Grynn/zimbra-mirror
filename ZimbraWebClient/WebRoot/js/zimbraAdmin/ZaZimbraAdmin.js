@@ -1403,6 +1403,7 @@ ZaAboutDialog.prototype.popup = function () {
     params.companyURL = ZaAppCtxt.getLogoURI () ;
     params.showLongVersion = true;
     params.longVersion = AjxBuffer.concat(ZaMsg.splashScreenVersion, " ", ZaServerVersionInfo.version , " " , date);
+    params.copyrightText = ZabMsg.splashScreenCopyright;
     var html = ZLoginFactory.getLoginDialogHTML(params);
     this.setContent(html);
 

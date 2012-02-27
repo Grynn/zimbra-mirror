@@ -1402,9 +1402,9 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 	});*/
 
     if (!entry.isExternal && ZaItem.hasReadPermission(ZaAccount.A_mailHost, entry)) {
-            headerItems.push({type:_OUTPUT_, ref:ZaAccount.A_mailHost, labelLocation:_LEFT_,label:ZaMsg.NAD_MailServer});
+            headerItems.push({type:_OUTPUT_, ref:ZaAccount.A_mailHost, labelLocation:_LEFT_,label:ZabMsg.attrDesc_mailHost});
     } else if(entry.isExternal && ZaItem.hasReadPermission(ZaAccount.A_zimbraMailTransport, entry)) {
-        headerItems.push({type:_OUTPUT_, ref:ZaAccount.A_zimbraMailTransport, labelLocation:_LEFT_,label:ZaMsg.NAD_MailServer});
+        headerItems.push({type:_OUTPUT_, ref:ZaAccount.A_zimbraMailTransport, labelLocation:_LEFT_,label:ZabMsg.attrDesc_mailHost});
     }
 
     if (ZaItem.hasReadPermission(ZaAccount.A_accountStatus, entry)) {

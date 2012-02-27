@@ -691,7 +691,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 								bmolsnr:true, trueValue:"TRUE", falseValue:"FALSE"
 							});
 						
-		setupGroup.items.push({type:_GROUP_, numCols:3, nowrap:true, label:ZaMsg.NAD_MailServer, labelLocation:_LEFT_,
+		setupGroup.items.push({type:_GROUP_, numCols:3, nowrap:true, label:ZabMsg.attrDesc_mailHost, labelLocation:_LEFT_,
 							visibilityChecks:[[ZaItem.hasWritePermission,ZaAccount.A_mailHost]],
 							items: [
 								{ ref: ZaAccount.A_mailHost, type: _OSELECT1_, label: null, editable:false, choices: ZaApp.getInstance().getServerListChoices(), 

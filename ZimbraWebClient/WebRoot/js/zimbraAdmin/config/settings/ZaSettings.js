@@ -831,3 +831,7 @@ ZaSettings.getLocaleChoices = function () {
 ZaSettings.isNetworkVersion = function () {
     return (ZaSettings.IS_ZCS_NETWORK_VERSION || false );
 }
+
+ZaSettings.isOctopus = function () {
+    return (ZaSettings.IS_OCTOPUS || false);
+}
