@@ -62,6 +62,8 @@ public final class SetHeaderFilter extends com.zimbra.cs.servlet.SetHeaderFilter
     private static final String HEADER_CONTENT_ENCODING= "Content-encoding";
     private static final String TIME_FORMAT = "EEE, d MMM yyyy HH:mm:ss";
     private static final String GMT = "GMT";
+    private static final String HEADER_X_FRAME_OPTIONS = "X-Frame-Options";
+    private static final String X_FRAME_OPTIONS_VALUE = "DENY";
 
     protected int debug = 0;
     protected String jsVersion = null;
@@ -484,6 +486,7 @@ public final class SetHeaderFilter extends com.zimbra.cs.servlet.SetHeaderFilter
         resp.setHeader(HEADER_EXPIRES, ALREADY_EXPIRED);
         resp.setHeader(HEADER_CACHE_CONTROL, NO_CACHE_CONTROL_VALUE);
         resp.setHeader(HEADER_PRAGMA, NO_CACHE_PRAGMA_VALUE);
+        resp.setHeader(HEADER_X_FRAME_OPTIONS, X_FRAME_OPTIONS_VALUE);
     }
 
     private void setStaticResourceCacheControlHeaders(HttpServletRequest req, HttpServletResponse resp) {
