@@ -38,6 +38,8 @@ public class PageHistory extends AbsTab {
 	  String UNFAVORITE_PREFIX  = " marked file ";
 	  String UNFAVORITE_POSTFIX = " as not favorite.";
 	  
+	  String COMMENT_PREFIX = " added a comment on file ";
+	  String COMMENT_POSTFIX= ".";
 	  
     }
     
@@ -76,7 +78,14 @@ public class PageHistory extends AbsTab {
 		}
 	}
 
+	//Get text displayed in global history
 	public static class GetText {
+		//TODO: file history text
+		
+		public static String comment(String fileName) {
+			return CONSTANTS.YOU +  CONSTANTS.COMMENT_PREFIX 
+			        +   fileName + CONSTANTS.COMMENT_POSTFIX;
+		}
 		public static String newVersion(String fileName) {
 			return CONSTANTS.YOU +  CONSTANTS.NEW_VERSION_PREFIX 
 			        +   fileName + CONSTANTS.NEW_VERSION_POSTFIX;

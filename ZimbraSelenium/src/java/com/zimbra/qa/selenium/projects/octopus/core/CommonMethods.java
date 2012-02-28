@@ -9,6 +9,22 @@ import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 public class CommonMethods {
 	
 	public CommonMethods() {}
+
+	// return comment id
+	protected String MakeAComment(ZimbraAccount account, String fileId, String comment)
+	throws HarnessException {
+		// Add comments to the file using SOAP
+		account.soapSend("<AddCommentRequest xmlns='urn:zimbraMail'> <comment parentId='"
+			+ fileId + "' text='" + comment + "'/></AddCommentRequest>");
+
+		// TODO: check if this call is redundant
+		// Get file comments through SOAP
+		account.soapSend("<GetCommentsRequest  xmlns='urn:zimbraMail'> <comment parentId='"
+			+ fileId + "'/></GetCommentsRequest>");
+		
+		return account.soapSelectValue("//mail:comment", "id");
+
+	}
 	
 	protected void MarkFileFavoriteViaSoap(ZimbraAccount account, String fileId)
 	throws HarnessException {

@@ -125,6 +125,23 @@ public class RefineHistory extends OctopusCommonTest {
 	
 	}
 	
+	@Test(description = "Functional test for check/uncheck 'comment' checkbox", groups = { "functional" })
+	public void RefineComment() throws HarnessException {
+	   String comment = "Comment" + ZimbraSeleniumProperties.getUniqueString();
+
+       MakeAComment(app.zGetActiveAccount(), fileId, comment);
+       
+       // verify check action for 'comment' 
+	   VerifyCheckAction(PageHistory.Locators.zHistoryFilterComment.locator,
+				PageHistory.GetText.comment(fileName));
+		
+		// verify uncheck action for 'comment' 
+	   VerifyUnCheckAction(PageHistory.Locators.zHistoryFilterComment.locator,
+				PageHistory.GetText.comment(fileName));
+		
+
+	}
+
 	@Test(description = "Functional test for simultaneously check/uncheck 'new version' & 'favorite' checkbox", groups = { "functional" })
 	public void RefineNewVersionFavorite() throws HarnessException {
 
@@ -148,8 +165,9 @@ public class RefineHistory extends OctopusCommonTest {
 		ZAssert.assertEquals(favoriteItem.getHistoryText(), PageHistory.GetText.favorite(fileName), "Verify " + PageHistory.GetText.favorite(fileName) + " matched");
 
 	}
-	
-	/*
+
+
+		/*
 	@Test(description = "", groups = { "smoke" })
 	public void CreateAllActivitiesViaSoapCheckHistory() throws HarnessException {
 		String fileName=JPG_FILE;
