@@ -2749,6 +2749,11 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
 
     public void assignGalAccountToDomain(OfflineDomainGal domainGal, Account galAccount) throws ServiceException {
+        String[] gals = domainGal.getMultiAttr(OfflineConstants.A_offlineGalAccountId);
+        if (gals != null && gals.length > 0) {
+            throw OfflineServiceException.UNEXPECTED("Before adding gal Account " + galAccount.getName() + "(" + galAccount.getId() + ")"
+                    + ", Domain GAL already has linked GAL account(s). " + Arrays.toString(gals));
+        }
         Map<String, Object> attrs = new HashMap<String, Object>();
         attrs.put("+" + OfflineConstants.A_offlineGalAccountId, galAccount.getId());
         modifyAttrs(domainGal, attrs);
