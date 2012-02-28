@@ -792,7 +792,8 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 	case1.items = case1Items;
 	cases.push(case1);
 
-	if(ZaTabView.isTAB_ENABLED(entry,ZaAccountXFormView.CONTACT_TAB_ATTRS, ZaAccountXFormView.CONTACT_TAB_RIGHTS)) {
+	if(ZaTabView.isTAB_ENABLED(entry,ZaAccountXFormView.CONTACT_TAB_ATTRS, ZaAccountXFormView.CONTACT_TAB_RIGHTS) &&
+        !ZaSettings.isOctopus()) {
 		ZaNewAccountXWizard.CONTACT_STEP = ++this.TAB_INDEX;
 		this.stepChoices.push({value:ZaNewAccountXWizard.CONTACT_STEP, label:ZaMsg.TABT_ContactInfo});
 		var case2={type:_CASE_, caseKey:ZaNewAccountXWizard.CONTACT_STEP, tabGroupKey:ZaNewAccountXWizard.CONTACT_STEP, numCols:1, 
@@ -1090,7 +1091,8 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 				});				
 	};
 		
-	if(ZaTabView.isTAB_ENABLED(entry,ZaAccountXFormView.FEATURE_TAB_ATTRS, ZaAccountXFormView.FEATURE_TAB_RIGHTS)) {
+	if(ZaTabView.isTAB_ENABLED(entry,ZaAccountXFormView.FEATURE_TAB_ATTRS, ZaAccountXFormView.FEATURE_TAB_RIGHTS) &&
+        !ZaSettings.isOctopus()) {
 		ZaNewAccountXWizard.FEATURES_STEP = ++this.TAB_INDEX;		
 		this.stepChoices.push({value:ZaNewAccountXWizard.FEATURES_STEP, label:ZaMsg.TABT_Features});
 		var featuresCase = {type:_CASE_,caseKey:ZaNewAccountXWizard.FEATURES_STEP, tabGroupKey:ZaNewAccountXWizard.FEATURES_STEP,id:"account_form_features_step",
@@ -1819,7 +1821,8 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 					numCols:1, width:"680", items :prefItems});
 	}	
 
-	if(ZaTabView.isTAB_ENABLED(entry,ZaAccountXFormView.SKIN_TAB_ATTRS, ZaAccountXFormView.SKIN_TAB_RIGHTS)) {
+	if(ZaTabView.isTAB_ENABLED(entry,ZaAccountXFormView.SKIN_TAB_ATTRS, ZaAccountXFormView.SKIN_TAB_RIGHTS) &&
+        !ZaSettings.isOctopus()) {
 		ZaNewAccountXWizard.SKINS_STEP = ++this.TAB_INDEX;		
 		this.stepChoices.push({value:ZaNewAccountXWizard.SKINS_STEP, label:ZaMsg.TABT_Themes});
 
@@ -1876,7 +1879,8 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 		});			
 	}
 		
-	if(ZaTabView.isTAB_ENABLED(entry,ZaAccountXFormView.ADVANCED_TAB_ATTRS, ZaAccountXFormView.ADVANCED_TAB_RIGHTS)) {
+	if(ZaTabView.isTAB_ENABLED(entry,ZaAccountXFormView.ADVANCED_TAB_ATTRS, ZaAccountXFormView.ADVANCED_TAB_RIGHTS) &&
+        !ZaSettings.isOctopus()) {
 		ZaNewAccountXWizard.ADVANCED_STEP = ++this.TAB_INDEX;			
 		this.stepChoices.push({value:ZaNewAccountXWizard.ADVANCED_STEP, label:ZaMsg.TABT_Advanced});
 		advancedCaseItems = [];
