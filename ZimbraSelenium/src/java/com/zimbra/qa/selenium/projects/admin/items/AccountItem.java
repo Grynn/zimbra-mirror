@@ -16,7 +16,7 @@ import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 public class AccountItem implements IItem {
 	protected static Logger logger = LogManager.getLogger(IItem.class);
 
-	protected static String Id;
+	protected static String Id=null;
 	
 	protected String localName; // Email Address is LocalName@DomainName
 	protected String domainName;
@@ -52,7 +52,7 @@ public class AccountItem implements IItem {
 			domainName = ZimbraSeleniumProperties.getStringProperty("testdomain");
 		}
 
-		Id = null;
+		//Id = null;
 		
 		// Surname is required in Admin Console
 		accountAttrs.put("sn", lastName);

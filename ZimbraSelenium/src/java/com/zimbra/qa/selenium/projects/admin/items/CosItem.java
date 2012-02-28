@@ -12,7 +12,7 @@ public class CosItem implements IItem {
 
 	protected static Logger logger = LogManager.getLogger(IItem.class);
 
-	protected static String Id;
+	protected static String Id=null;
 
 	protected static String cosName;
 
@@ -20,7 +20,7 @@ public class CosItem implements IItem {
 		super();
 
 		cosName = "cos" + ZimbraSeleniumProperties.getUniqueString();
-		Id = null;
+		//Id = null;
 
 	}
 	@Override

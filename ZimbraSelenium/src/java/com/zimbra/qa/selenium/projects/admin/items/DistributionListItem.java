@@ -12,7 +12,7 @@ public class DistributionListItem implements IItem {
 
 	protected static Logger logger = LogManager.getLogger(IItem.class);
 
-	protected static String Id;
+	protected static String Id=null;
 	
 	protected String distributionListLocalName; // Email Address is LocalName@DomainName
 	protected String distributionListDomainName;
@@ -22,7 +22,7 @@ public class DistributionListItem implements IItem {
 		
 		distributionListLocalName = "dl" + ZimbraSeleniumProperties.getUniqueString();
 		distributionListDomainName = ZimbraSeleniumProperties.getStringProperty("testdomain");
-		Id = null;
+		//Id = null;
 		
 	}
 	@Override

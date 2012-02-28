@@ -13,9 +13,7 @@ import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
-import com.zimbra.qa.selenium.projects.admin.items.AccountItem;
 import com.zimbra.qa.selenium.projects.admin.items.CosItem;
-import com.zimbra.qa.selenium.projects.admin.ui.PageManageAliases.Locators;
 
 /**
  * @author Matt Rhoades
