@@ -29,7 +29,7 @@ proxymap  unix  -       -       n       -       -       proxymap
 smtp      unix  -       -       n       -       -       smtp
 # When relaying mail as backup MX, disable fallback_relay to avoid MX loops
 relay     unix  -       -       n       -       -       smtp
-	-o fallback_relay=
+#	-o fallback_relay=
 showq     unix  n       -       n       -       -       showq
 error     unix  -       -       n       -       -       error
 retry     unix  -       -       n       -       -       error
