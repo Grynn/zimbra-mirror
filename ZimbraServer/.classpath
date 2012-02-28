@@ -106,7 +106,7 @@
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/hadoop-core-0.20-append-r1056497.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/hbase-0.90.4.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/zookeeper-3.3.2.jar"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/ehcache-core-2.4.6.jar"/>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/ehcache-core-2.5.1.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars-test/hsqldb-2.2.1.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars-test/sqltool-2.2.1.jar"/>
 	<classpathentry kind="lib" path="jars/snakeyaml-1.6.jar"/>
