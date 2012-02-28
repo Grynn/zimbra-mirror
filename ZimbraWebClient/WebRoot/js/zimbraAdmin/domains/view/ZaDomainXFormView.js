@@ -828,6 +828,14 @@ if(appNewUI) {
                     label:ZaMsg.Domain_zimbraPublicServiceHostname, width:250,
                     onChange:ZaDomainXFormView.onFormFieldChanged
                 },
+                {ref: ZaDomain.A_zimbraPublicServiceProtocol, type:_OSELECT1_,
+                    label:ZaMsg.Domain_zimbraPublicServiceProtocol, choices:ZaDomain.protocolChoices,
+                    onChange:ZaDomainXFormView.onFormFieldChanged
+                },
+                {ref: ZaDomain.A_zimbraPublicServicePort, type:_TEXTFIELD_,
+                    label:ZaMsg.Domain_zimbraPublicServicePort, width:100,
+                    onChange:ZaDomainXFormView.onFormFieldChanged
+                },
                 { type: _DWT_ALERT_,
                     containerCssStyle: "padding-bottom:0px",
                     style: DwtAlert.INFO,

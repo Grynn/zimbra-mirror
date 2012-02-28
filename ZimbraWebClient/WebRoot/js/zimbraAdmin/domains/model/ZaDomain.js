@@ -104,6 +104,7 @@ ZaDomain.initDomainStatus = function() {
 ZaDomain.initDomainStatus();
 
 ZaDomain.domainTypes = {alias: "alias", local: "local"} ;
+ZaDomain.protocolChoices = {http: "http", https: "https"};
 
 //attribute name constants, this values are taken from zimbra.schema
 ZaDomain.A_description = "description";
@@ -659,8 +660,18 @@ function(tmpObj, newDomain) {
 	
 	if(tmpObj.attrs[ZaDomain.A_zimbraPublicServiceHostname]) {
 		attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraPublicServiceHostname]);
-		attr.setAttribute("n", ZaDomain.A_zimbraPublicServiceHostname);	
+		attr.setAttribute("n", ZaDomain.A_zimbraPublicServiceHostname);
 	}
+
+    if(tmpObj.attrs[ZaDomain.A_zimbraPublicServiceProtocol]) {
+        attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraPublicServiceProtocol]);
+        attr.setAttribute("n", ZaDomain.A_zimbraPublicServiceProtocol);
+    }
+
+    if(tmpObj.attrs[ZaDomain.A_zimbraPublicServicePort]) {
+        attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraPublicServicePort]);
+        attr.setAttribute("n", ZaDomain.A_zimbraPublicServicePort);
+    }
 		
 	
 	if(tmpObj.attrs[ZaDomain.A_zimbraDNSCheckHostname]) {
@@ -2282,6 +2293,8 @@ ZaDomain.myXModel = {
 
                            } },
 		{id:ZaDomain.A_zimbraPublicServiceHostname, type:_STRING_, ref:"attrs/" + ZaDomain.A_zimbraPublicServiceHostname, maxLength:255},
+		{id:ZaDomain.A_zimbraPublicServiceProtocol, type:_STRING_, ref:"attrs/" + ZaDomain.A_zimbraPublicServiceProtocol, maxLength:255, defaultValue:"http"},
+		{id:ZaDomain.A_zimbraPublicServicePort, type:_NUMBER_, ref:"attrs/" + ZaDomain.A_zimbraPublicServicePort, minInclusive: 0, maxInclusive:65535, defaultValue:80},
 		{id:ZaDomain.A_zimbraDNSCheckHostname, type:_COS_STRING_, ref:"attrs/" + ZaDomain.A_zimbraDNSCheckHostname, maxLength:255},
 		{id:ZaDomain.A_zimbraBasicAuthRealm, type:_COS_STRING_, ref:"attrs/" + ZaDomain.A_zimbraBasicAuthRealm, maxLength:255},		
 		{id:ZaDomain.A_zimbraAdminConsoleDNSCheckEnabled, type:_COS_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/" + ZaDomain.A_zimbraAdminConsoleDNSCheckEnabled},

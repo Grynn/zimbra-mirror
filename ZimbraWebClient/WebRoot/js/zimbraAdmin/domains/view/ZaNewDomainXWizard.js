@@ -737,7 +737,9 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 				{type:_CASE_, caseKey:ZaNewDomainXWizard.GENERAL_STEP, colSizes:["200px","*"],numCols:2,
 					items: [
 						{ref:ZaDomain.A_domainName, type:_TEXTFIELD_, label:ZaMsg.Domain_DomainName,labelLocation:_LEFT_, required:true, width:200},
-						{ref:ZaDomain.A_zimbraPublicServiceHostname, type:_TEXTFIELD_, label:ZaMsg.Domain_zimbraPublicServiceHostname,labelLocation:_LEFT_, width:200},			
+						{ref:ZaDomain.A_zimbraPublicServiceHostname, type:_TEXTFIELD_, label:ZaMsg.Domain_zimbraPublicServiceHostname,labelLocation:_LEFT_, width:200},
+						{ref:ZaDomain.A_zimbraPublicServiceProtocol, type:_OSELECT1_, choices:ZaDomain.protocolChoices, label:ZaMsg.Domain_zimbraPublicServiceProtocol,labelLocation:_LEFT_},
+						{ref:ZaDomain.A_zimbraPublicServicePort, type:_TEXTFIELD_, label:ZaMsg.Domain_zimbraPublicServicePort,labelLocation:_LEFT_, width:100},
 						{ type: _DWT_ALERT_,containerCssStyle: "padding-bottom:0px",style: DwtAlert.INFO,
 								iconVisible: true,content: ZaMsg.Domain_InboundSMTPNote,colSpan:"*"},
 						{type:_GROUP_,colSpan:"2", colSizes:["*"],numCols:1, width:"100%", id:"dns_check_group",items:[
