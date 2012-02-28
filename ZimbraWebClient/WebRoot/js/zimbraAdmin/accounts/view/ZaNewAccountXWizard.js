@@ -212,6 +212,7 @@ ZaNewAccountXWizard.prototype.goPrev =
 function() {
 	if (this._containedObject[ZaModel.currentStep] == 2) {
 		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);
+        this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
 	} else if(this._containedObject[ZaModel.currentStep] == this._lastStep) {
 		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
 	}
