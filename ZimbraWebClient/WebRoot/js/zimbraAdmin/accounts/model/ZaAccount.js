@@ -208,6 +208,7 @@ ZaAccount.A_zimbraPrefItemsPerVirtualPage="zimbraPrefItemsPerVirtualPage",
 ZaAccount.A_zimbraFeatureManageZimlets = "zimbraFeatureManageZimlets";
 ZaAccount.A_zimbraFeatureImportFolderEnabled = "zimbraFeatureImportFolderEnabled";
 ZaAccount.A_zimbraFeatureExportFolderEnabled = "zimbraFeatureExportFolderEnabled";
+ZaAccount.A_zimbraFeatureCrocodocEnabled = "zimbraFeatureCrocodocEnabled";
 ZaAccount.A_zimbraDumpsterEnabled = "zimbraDumpsterEnabled";
 ZaAccount.A_zimbraPrefCalendarReminderSoundsEnabled = "zimbraPrefCalendarReminderSoundsEnabled";
 ZaAccount.A_zimbraPrefCalendarSendInviteDeniedAutoReply = "zimbraPrefCalendarSendInviteDeniedAutoReply";
@@ -1937,6 +1938,7 @@ ZaAccount.myXModel = {
         {id:ZaAccount.A_zimbraFeatureManageZimlets, type:_COS_ENUM_, ref:"attrs/" + ZaAccount.A_zimbraFeatureManageZimlets, choices:ZaModel.BOOLEAN_CHOICES},
         {id:ZaAccount.A_zimbraFeatureImportFolderEnabled, type:_COS_ENUM_, ref:"attrs/" + ZaAccount.A_zimbraFeatureImportFolderEnabled, choices:ZaModel.BOOLEAN_CHOICES},
         {id:ZaAccount.A_zimbraFeatureExportFolderEnabled, type:_COS_ENUM_, ref:"attrs/" + ZaAccount.A_zimbraFeatureExportFolderEnabled, choices:ZaModel.BOOLEAN_CHOICES},
+        {id:ZaAccount.A_zimbraFeatureCrocodocEnabled, type:_COS_ENUM_, ref:"attrs/" + ZaAccount.A_zimbraFeatureCrocodocEnabled, choices:ZaModel.BOOLEAN_CHOICES},
         {id:ZaAccount.A_zimbraDumpsterEnabled, type:_COS_ENUM_, ref:"attrs/" + ZaAccount.A_zimbraDumpsterEnabled, choices:ZaModel.BOOLEAN_CHOICES},
         {id:ZaAccount.A_zimbraFeatureMailPriorityEnabled, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraFeatureMailPriorityEnabled, choices:ZaModel.BOOLEAN_CHOICES},
 		{id:ZaAccount.A_zimbraFeatureReadReceiptsEnabled, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraFeatureReadReceiptsEnabled, choices:ZaModel.BOOLEAN_CHOICES},

@@ -140,6 +140,7 @@ ZaCos.A_zimbraPrefMailSendReadReceipts = "zimbraPrefMailSendReadReceipts";
 ZaCos.A_zimbraPrefAdminConsoleWarnOnExit = "zimbraPrefAdminConsoleWarnOnExit" ;
 
 //features
+ZaCos.A_zimbraFeatureCrocodocEnabled = "zimbraFeatureCrocodocEnabled";
 ZaCos.A_zimbraFeatureExportFolderEnabled = "zimbraFeatureExportFolderEnabled";
 ZaCos.A_zimbraFeatureImportFolderEnabled = "zimbraFeatureImportFolderEnabled";
 ZaCos.A_zimbraDumpsterEnabled = "zimbraDumpsterEnabled";
@@ -684,6 +685,7 @@ ZaCos.myXModel = {
         {id:ZaCos.A_zimbraJunkMessagesIndexingEnabled, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraJunkMessagesIndexingEnabled, type:_ENUM_},
 		{id:ZaCos.A_zimbraPrefMailSendReadReceipts, choices:ZaModel.SEND_READ_RECEPIT_CHOICES, ref:"attrs/"+ZaCos.A_zimbraPrefMailSendReadReceipts, type:_ENUM_},
 //features
+		{id:ZaCos.A_zimbraFeatureCrocodocEnabled, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraFeatureCrocodocEnabled, type:_ENUM_},
 		{id:ZaCos.A_zimbraFeatureExportFolderEnabled, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraFeatureExportFolderEnabled, type:_ENUM_},
 		{id:ZaCos.A_zimbraFeatureImportFolderEnabled, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraFeatureImportFolderEnabled, type:_ENUM_},
 		{id:ZaCos.A_zimbraDumpsterEnabled, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraDumpsterEnabled, type:_ENUM_},
