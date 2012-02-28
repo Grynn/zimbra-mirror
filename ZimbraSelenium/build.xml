@@ -177,13 +177,13 @@
 			<fileset dir="jars">
 				<include name="commons-beanutils-1.7.jar" />
 				<include name="commons-configuration-1.5.jar" />
-				<include name="commons-lang-2.4.jar" />
+				<include name="commons-lang-2.6.jar" />
 				<include name="ezmorph-1.0.6.jar" />
 				<include name="htmlcleaner-2.2.jar" />
 				<include name="json-lib-2.3-jdk15.jar" />
 				<include name="ocutil-2.4.2.jar" />
-				<include name="selenium-java-2.0b2.jar" />
-				<include name="selenium-server-standalone-2.0b2.jar" />
+				<include name="selenium-java-2.20.0.jar" />
+				<include name="selenium-server-standalone-2.20.0.jar" />
 				<include name="testng-5.12.1.jar" />
 				<include name="xalan.jar" />
 			</fileset>
@@ -215,7 +215,7 @@
 				<attribute name="Main-Class" value="staf.Driver" />
 				<section name="staf/service/info">
 					<attribute name="Service-Class" value="com.zimbra.qa.selenium.staf.StafIntegration" />
-					<attribute name="Packaged-Jars" value="guava-10.0.1 commons-beanutils-1.7 commons-configuration-1.5 commons-lang-2.4 ezmorph-1.0.6 htmlcleaner-2.2 json-lib-2.3-jdk15 ocutil-2.4.2 selenium-java-2.0b2 selenium-server-standalone-2.0b2 testng-5.12.1 xalan apache-log4j-extras-1.0 commons-cli-1.2 commons-code-1.4 commons-configuration-1.5 commons-httpclient-3.1 commons-logging dom4j-1.5.2 jaxen-1.1.1 libidn-1.19 log4j-1.2.16 mail mysql-connector-java-5.1.13-bin resources coverage zimbracommon zimbra-native zimbrasoap zimbraclient zimbrastore ant-tar-patched" />
+					<attribute name="Packaged-Jars" value="guava-10.0.1 commons-beanutils-1.7 commons-configuration-1.5 commons-lang-2.6 ezmorph-1.0.6 htmlcleaner-2.2 json-lib-2.3-jdk15 ocutil-2.4.2 selenium-java-2.20.0 selenium-server-standalone-2.20.0 testng-5.12.1 xalan apache-log4j-extras-1.0 commons-cli-1.2 commons-code-1.4 commons-configuration-1.5 commons-httpclient-3.1 commons-logging dom4j-1.5.2 jaxen-1.1.1 libidn-1.19 log4j-1.2.16 mail mysql-connector-java-5.1.13-bin resources coverage zimbracommon zimbra-native zimbrasoap zimbraclient zimbrastore ant-tar-patched" />
 				</section>
 			</manifest>
 		</jar>
@@ -249,7 +249,7 @@
 				<attribute name="Main-Class" value="staf.Driver" />
 				<section name="staf/service/info">
 					<attribute name="Service-Class" value="com.zimbra.qa.selenium.results.ResultsStaf" />
-					<attribute name="Packaged-Jars" value="guava-10.0.1 commons-beanutils-1.7 commons-configuration-1.5 commons-lang-2.4 ezmorph-1.0.6 htmlcleaner-2.2 json-lib-2.3-jdk15 ocutil-2.4.2 selenium-java-2.0b2 selenium-server-standalone-2.0b2 testng-5.12.1 xalan apache-log4j-extras-1.0 commons-cli-1.2 commons-code-1.4 commons-configuration-1.5 commons-httpclient-3.1 commons-logging dom4j-1.5.2 jaxen-1.1.1 libidn-1.19 log4j-1.2.16 mail resources coverage zimbracommon zimbra-native zimbrasoap zimbraclient zimbrastore" />
+					<attribute name="Packaged-Jars" value="guava-10.0.1 commons-beanutils-1.7 commons-configuration-1.5 commons-lang-2.6 ezmorph-1.0.6 htmlcleaner-2.2 json-lib-2.3-jdk15 ocutil-2.4.2 selenium-java-2.20.0 selenium-server-standalone-2.20.0 testng-5.12.1 xalan apache-log4j-extras-1.0 commons-cli-1.2 commons-code-1.4 commons-configuration-1.5 commons-httpclient-3.1 commons-logging dom4j-1.5.2 jaxen-1.1.1 libidn-1.19 log4j-1.2.16 mail resources coverage zimbracommon zimbra-native zimbrasoap zimbraclient zimbrastore" />
 				</section>
 			</manifest>
 		</jar>

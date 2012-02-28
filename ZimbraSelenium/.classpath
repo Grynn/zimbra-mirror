@@ -2,7 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="src/java"/>
 	<classpathentry kind="lib" path="jars/commons-configuration-1.5.jar"/>
-	<classpathentry kind="lib" path="jars/commons-lang-2.4.jar"/>
+	<classpathentry kind="lib" path="jars/commons-lang-2.6.jar"/>
 	<classpathentry kind="lib" path="jars/ocutil-2.4.2.jar"/>
 	<classpathentry kind="lib" path="jars/testng-5.12.1.jar"/>
 	<classpathentry kind="lib" path="jars/xalan.jar"/>
@@ -54,8 +54,8 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraSoap"/>
 	<classpathentry kind="lib" path="jars/htmlcleaner-2.2.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/ant-tar-patched.jar" sourcepath="/ThirdParty/ant-tar-patched/src/java"/>
-	<classpathentry kind="lib" path="jars/selenium-java-2.0b2.jar"/>
-	<classpathentry kind="lib" path="jars/selenium-server-standalone-2.0b2.jar"/>
+	<classpathentry kind="lib" path="jars/selenium-java-2.20.0.jar"/>
+	<classpathentry kind="lib" path="jars/selenium-server-standalone-2.20.0.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/mysql-connector-java-5.1.13-bin.jar" sourcepath="/ThirdParty/connector-j/mysql-connector-java-5.1.13/src"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraClient"/>
 	<classpathentry kind="output" path="build/classes"/>
