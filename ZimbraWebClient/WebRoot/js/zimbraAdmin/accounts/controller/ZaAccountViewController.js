@@ -118,18 +118,18 @@ function () {
     this._popupOperations[ZaOperation.CLOSE] = new ZaOperation(ZaOperation.CLOSE, ZaMsg.TBB_Close, ZaMsg.ALTBB_Close_tt, "Close", "CloseDis", new AjxListener(this, this.closeButtonListener));
 
 	if(showNewAccount) {
-        this._popupOperations[ZaOperation.NEW_WIZARD] = new ZaOperation(ZaOperation.NEW, ZaMsg.TBB_New, ZaMsg.ACTBB_New_tt, "Account", "AccountDis", new AjxListener(this, ZaAccountViewController.prototype._newButtonListener));
-
+        this._popupOperations[ZaOperation.NEW_MENU] = new ZaOperation(ZaOperation.NEW, ZaMsg.TBB_New, ZaMsg.ACTBB_New_tt, "Account", "AccountDis", new AjxListener(this, ZaAccountViewController.prototype._newButtonListener));
+        this._popupOrder.push(ZaOperation.NEW_MENU);
 	}
     this._popupOperations[ZaOperation.DELETE] = new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.ACTBB_Delete_tt,"Delete", "DeleteDis", new AjxListener(this, this.deleteButtonListener));
-    this._popupOperations[ZaOperation.REINDEX_MAILBOX] = new ZaOperation(ZaOperation.REINDEX_MAILBOX, ZaMsg.ACTBB_ReindexMbx, ZaMsg.ACTBB_ReindexMbx_tt, "ReindexMailboxes", "ReindexMailboxes", new AjxListener(this, ZaAccountViewController.prototype._reindexMbxListener));
 
-    this._popupOrder.push(ZaOperation.NEW_WIZARD);
     this._popupOrder.push(ZaOperation.SAVE);
     this._popupOrder.push(ZaOperation.CLOSE);
     this._popupOrder.push(ZaOperation.DELETE);
-    this._popupOrder.push(ZaOperation.REINDEX_MAILBOX);
-
+    if(ZaItem.hasRight(ZaAccount.REINDEX_MBX_RIGHT,this._currentObject)) {
+        this._popupOperations[ZaOperation.REINDEX_MAILBOX] = new ZaOperation(ZaOperation.REINDEX_MAILBOX, ZaMsg.ACTBB_ReindexMbx, ZaMsg.ACTBB_ReindexMbx_tt, "ReindexMailboxes", "ReindexMailboxes", new AjxListener(this, ZaAccountViewController.prototype._reindexMbxListener));
+        this._popupOrder.push(ZaOperation.REINDEX_MAILBOX);
+    }
 }
 ZaController.initPopupMenuMethods["ZaAccountViewController"].push(ZaAccountViewController.initPopupMenuMethod);
 
@@ -183,6 +183,8 @@ function(ev) {
 ZaAccountViewController.setViewMethod =
 function(entry) {
 	try {
+		this._currentObject = entry;
+
 		this._initToolbar();
         this._initPopupMenu();
 		//make sure these are last
@@ -244,7 +246,6 @@ function(entry) {
 		this._view.setDirty(false);
 		entry.attrs[ZaAccount.A_password] = null; //get rid of VALUE-BLOCKED
 		entry[ZaModel.currentTab] = "1";
-		this._currentObject = entry;
 		this._view.setObject(entry);
 	} catch (ex) {
 		this._handleException(ex, "ZaAccountViewController.prototype._setView", null, false);
@@ -309,6 +310,8 @@ ZaAccountViewController.changeActionsStateMethod = function () {
 
 	if(!ZaItem.hasRight(ZaAccount.REINDEX_MBX_RIGHT,this._currentObject))	{
 		this._toolbarOperations[ZaOperation.REINDEX_MAILBOX].enabled = false;
+        if(this._popupOperations[ZaOperation.REINDEX_MAILBOX])
+            this._popupOperations[ZaOperation.REINDEX_MAILBOX].enabled = isDeleteEnabled;
 	}
 	if(this._toolbarOperations[ZaOperation.SAVE])	
 		this._toolbarOperations[ZaOperation.SAVE].enabled = false;
