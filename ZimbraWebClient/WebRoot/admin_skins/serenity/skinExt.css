@@ -260,13 +260,18 @@ div.ZmSelectedHeaderBg {
 .DwtDialogButtonBar {
     height: 40px;
     background-color: #dadfe5;
-    @opacity(50)@;
 }
 
 .DwtDialogButtonBar .ZButtonBorder {
     border:1px solid #949494;
     background-color:#FEFEFE;
     @roundCorners(3px)@
+}
+
+.DwtDialogButtonBar .ZButtonTable .ZWidgetTitle{
+    font: Arial 12px normal;
+    color: #333333;
+	@roundCorners(3px)@
 }
 
 .DwtDialogButtonBar .ZDisabled .ZButtonTable .ZWidgetTitle{
