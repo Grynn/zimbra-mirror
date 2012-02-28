@@ -931,10 +931,6 @@ function(el, text, idx, listType, listLevel, bulletNum, ctxt, convertor, onlyOne
 		} else {
 			text[idx++] = "\u002A "; // TODO ZmMsg.bullet
 		}
-	} else if (nodeName == "img") {
-		if (el.alt && el.alt != "") {
-			text[idx++] = el.alt;
-		}
 	} else if (nodeName == "tr" && el.parentNode.firstChild != el) {
 		text[idx++] = "\n";
 	} else if (nodeName == "td" && el.parentNode.firstChild != el) {
