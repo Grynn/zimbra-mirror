@@ -126,6 +126,10 @@ function () {
     this._popupOrder.push(ZaOperation.SAVE);
     this._popupOrder.push(ZaOperation.CLOSE);
     this._popupOrder.push(ZaOperation.DELETE);
+
+    this._popupOperations[ZaOperation.EXPIRE_SESSION] = new ZaOperation(ZaOperation.EXPIRE_SESSION, ZaMsg.ACTBB_ExpireSessions, ZaMsg.ACTBB_ExpireSessions_tt, "ExpireSession", "ExpireSessionDis", new AjxListener(this, ZaAccountViewController.prototype._expireSessionListener));
+    this._popupOrder.push(ZaOperation.EXPIRE_SESSION);
+
     if(ZaItem.hasRight(ZaAccount.REINDEX_MBX_RIGHT,this._currentObject)) {
         this._popupOperations[ZaOperation.REINDEX_MAILBOX] = new ZaOperation(ZaOperation.REINDEX_MAILBOX, ZaMsg.ACTBB_ReindexMbx, ZaMsg.ACTBB_ReindexMbx_tt, "ReindexMailboxes", "ReindexMailboxes", new AjxListener(this, ZaAccountViewController.prototype._reindexMbxListener));
         this._popupOrder.push(ZaOperation.REINDEX_MAILBOX);
@@ -313,6 +317,13 @@ ZaAccountViewController.changeActionsStateMethod = function () {
         if(this._popupOperations[ZaOperation.REINDEX_MAILBOX])
             this._popupOperations[ZaOperation.REINDEX_MAILBOX].enabled = isDeleteEnabled;
 	}
+
+    if(!ZaItem.hasWritePermission(ZaAccount.A_zimbraAuthTokenValidityValue,this._currentObject)) {
+        if(this._popupOperations[ZaOperation.EXPIRE_SESSION]) {
+            this._popupOperations[ZaOperation.EXPIRE_SESSION].enabled = false;
+        }
+    }
+
 	if(this._toolbarOperations[ZaOperation.SAVE])	
 		this._toolbarOperations[ZaOperation.SAVE].enabled = false;
 
@@ -656,6 +667,26 @@ function(ev) {
 		ZaApp.getInstance()._newAccountWizard.popup();
 	} catch (ex) {
 		this._handleException(ex, "ZaAccountViewController.prototype._newButtonListener", null, false);
+	}
+}
+
+ZaAccountViewController.prototype._expireSessionListener =
+function(ev) {
+	try {
+		if(this._currentObject) {
+			var item = this._currentObject;
+
+			if(ZaItem.hasWritePermission(ZaAccount.A_zimbraAuthTokenValidityValue,item)) {
+				ZaApp.getInstance().dialogs["confirmMessageDialog"].setMessage(ZaMsg.WARN_EXPIRE_SESSIONS, DwtMessageDialog.WARNING_STYLE);
+				ZaApp.getInstance().dialogs["confirmMessageDialog"].registerCallback(DwtDialog.YES_BUTTON, ZaAccountListController.prototype.expireSessions, this, [item]);
+				ZaApp.getInstance().dialogs["confirmMessageDialog"].registerCallback(DwtDialog.NO_BUTTON, this.closeCnfrmDlg, this, null);
+				ZaApp.getInstance().dialogs["confirmMessageDialog"].popup();
+			} else {
+				this.popupMsgDialog(AjxMessageFormat.format(ZaMsg.ERROR_NO_PERMISSION_FOR_OPERATION_ON, [item.name ? item.name : item.attrs[ZaAccount.A_accountName]]), true);
+			}
+		}
+ 	}catch(ex){
+		this._handleException(ex, "ZaAccountViewController.prototype._expireSessionListener", null, false);
 	}
 }
 
