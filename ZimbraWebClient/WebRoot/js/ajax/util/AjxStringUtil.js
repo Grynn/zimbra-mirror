@@ -1536,10 +1536,12 @@ AjxStringUtil._writeToTestIframeDoc =
 function(html) {
 
 	var idoc = AjxStringUtil._htmlContentIframeDoc;
-	if (!idoc) {
+	// Firefox has weird issue where iframe gets stuck with first content written to it; subsequent opens do not truncate
+	if (!idoc || AjxEnv.isFirefox) {
 		var iframe = document.createElement("IFRAME");
+		iframe.id = Dwt.getNextId();	// without an ID, IE will throw "Permission denied" errors ?!
 		Dwt.setVisible(iframe, false);
-		appCtxt.getShell().getHtmlElement().appendChild(iframe);
+		document.body.appendChild(iframe);
 		idoc = AjxStringUtil._htmlContentIframeDoc = Dwt.getIframeDoc(iframe);
 	}
 	idoc.open();
