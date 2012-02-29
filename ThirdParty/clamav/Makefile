@@ -39,9 +39,6 @@ endif
 
 files	:= $(wildcard src/clamav-$(CLAMAV_VERSION).tar.gz)
 
-CLAMAV_TGZ_TARGET := \
-	$(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/clamav/clamav-$(CLAMAV_VERSION).tgz
-
 all: checksrc allclean build check tar
 
 checksrc:
