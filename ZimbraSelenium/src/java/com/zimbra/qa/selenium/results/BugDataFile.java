@@ -7,32 +7,40 @@ import java.util.*;
 import org.apache.log4j.*;
 
 public abstract class BugDataFile {
-	protected static Logger logger = LogManager.getLogger(BugStatus.class);
+	protected static final Logger logger = LogManager.getLogger(BugStatus.class);
 
+	
+	private static class FilePaths {
+		public static final String UNIX_PATH = "/opt/qa/testlogs/BugReports";
+		public static final String WINDOWS_TMS_PATH = "T:\\BugReports";
+		public static final String WINDOWS_DEV_PATH = "C:\\BugReports";
+	}
+	
 	/**
 	 * A list of directory paths that can contain the bug report information
 	 */
-	protected static List<File> paths = null;
+	private static List<File> paths = null;
 	
-	/**
-	 * A map of file names to file size.  Used to determine whether to reload the data
-	 */
-	protected static Map<String, String> hashes = new HashMap<String, String>();
 	
 
 	protected BugDataFile() {
 		logger.info("new " + BugDataFile.class.getCanonicalName());
 		
-		if (paths == null) {
-			paths = new ArrayList<File>();
-			paths.add(new File("/opt/qa/testlogs/BugReports"));
-			paths.add(new File("T:\\BugReports"));
-			paths.add(new File("C:\\BugReports"));
-		}
-		
+		getPaths();
 	}
 
 
+	private synchronized List<File> getPaths() {
+		if (paths == null) {
+			paths = new ArrayList<File>();
+			paths.add(new File(FilePaths.UNIX_PATH));
+			paths.add(new File(FilePaths.WINDOWS_TMS_PATH));
+			paths.add(new File(FilePaths.WINDOWS_DEV_PATH));
+		}
+		return (paths);
+	}
+	
+	
 	/**
 	 * Return the database file, if it exists, in the normal data paths 
 	 * @param filename
