@@ -31,7 +31,18 @@ public partial class UsersView
         StackPanel sp;
         TreeViewItem tvi;
         DirectoryEntry de = new DirectoryEntry();
-        String top = de.Name.Substring(3);      // remove DC=
+        String top = null;
+        try
+        {
+            top = de.Name.Substring(3);      // remove DC=
+        }
+        catch (Exception e)
+        {
+            MessageBox.Show(e.Message, "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
+            LDB.Visibility = Visibility.Collapsed;
+            UsersGrid.Visibility = Visibility.Visible;
+            return;
+        }
 
         tviTop = new TreeViewItem();
         tviTop.IsExpanded = true;
