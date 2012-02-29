@@ -70,13 +70,13 @@
 	padding-left:18px;
 }
 
-.rootOverviewHeader {
+.rootOverviewHeader, .rootOverviewHeader-selected, .rootOverviewHeader-selected-focused {
     padding-left:5px;
     padding-top:5px;
     background-color: #ccc;
 }
 
-.homeRootOverviewHeader {
+.homeRootOverviewHeader, .homeRootOverviewHeader-selected, .homeRootOverviewHeader-selected-focused {
     padding-left:5px;
     padding-top:5px;
     background-color: #2b5480;
