@@ -10,18 +10,118 @@ using System;
 
 namespace ZimbraMigrationConsole
 {
+    class CommandLineArgs
+    {
+        public static CommandLineArgs I
+        {
+            get
+            {
+                return m_instance;
+            }
+        }
+
+        public string argAsString(string argName)
+        {
+            if (m_args.ContainsKey(argName))
+            {
+                return m_args[argName];
+            }
+            else return "";
+        }
+
+        public long argAsLong(string argName)
+        {
+            if (m_args.ContainsKey(argName))
+            {
+                return Convert.ToInt64(m_args[argName]);
+            }
+            else return 0;
+        }
+
+        public double argAsDouble(string argName)
+        {
+            if (m_args.ContainsKey(argName))
+            {
+                return Convert.ToDouble(m_args[argName]);
+            }
+            else return 0;
+        }
+        public bool argAsBool(string argName)
+        {
+            if (m_args.ContainsKey(argName))
+            {
+                return Convert.ToBoolean(m_args[argName]);
+            }
+            else return false;
+        }
+
+        public void parseArgs(string[] args, string defaultArgs)
+        {
+            m_args = new Dictionary<string, string>();
+            parseDefaults(defaultArgs);
+
+            foreach (string arg in args)
+            {
+                string[] words = arg.Split('=');
+                m_args[words[0]] = words[1];
+            }
+        }
+
+        private void parseDefaults(string defaultArgs)
+        {
+            if (defaultArgs == "") return;
+            string[] args = defaultArgs.Split(';');
+
+            foreach (string arg in args)
+            {
+                string[] words = arg.Split('=');
+                m_args[words[0]] = words[1];
+            }
+        }
+
+        private Dictionary<string, string> m_args = null;
+        static readonly CommandLineArgs m_instance = new CommandLineArgs();
+    } 
+ 
+
 class Program
 {
     static void Main(string[] args)
     {
+        CommandLineArgs.I.parseArgs(args, "myStringArg=defaultVal;someLong=12");
+       // Console.WriteLine("Arg myStringArg  : '{0}' ", CommandLineArgs.I.argAsString("xmlfile"));
+
+        //Console.WriteLine("Arg someLong     : '{0}' ", CommandLineArgs.I.argAsLong("users")); 
+
+        string ConfigXmlFile = CommandLineArgs.I.argAsString("xmlfile");
+        string UserMapFile = CommandLineArgs.I.argAsString("users");
+        string MaxThreads = CommandLineArgs.I.argAsString("MaxThreads");
+        string MaxErrors = CommandLineArgs.I.argAsString("MaxErrors");
+        string MaxWarns = CommandLineArgs.I.argAsString("MaxWarn");
+        string userid = CommandLineArgs.I.argAsString("userid");
+        string Pstfile = CommandLineArgs.I.argAsString("pst");
+        string ZCSHost = CommandLineArgs.I.argAsString("ZCS");
+
+        bool Mail = CommandLineArgs.I.argAsBool("Mail");
+        bool Calendar = CommandLineArgs.I.argAsBool("Calendar");
+        bool Contacts = CommandLineArgs.I.argAsBool("Contacts");
+        bool Sent = CommandLineArgs.I.argAsBool("Sent");
+        bool DeletedItems = CommandLineArgs.I.argAsBool("DeletedItems");
+        bool Junk = CommandLineArgs.I.argAsBool("Junk");
+        bool Tasks = CommandLineArgs.I.argAsBool("Tasks");
+        bool Rules = CommandLineArgs.I.argAsBool("Rules");
+        bool OOO = CommandLineArgs.I.argAsBool("OOO");
+
+
         Migration Test = new Migration();
 
         CssLib.CSMigrationWrapper TestObj = new CSMigrationWrapper("MAPI");
 
-        if (args.Count() == 2)
+        //if (args.Count() == 2)
+        if( (ConfigXmlFile != "") &&(UserMapFile != ""))
         {
-            string ConfigXmlFile = args[0];
-            string UserMapFile = args[1];
+           // string ConfigXmlFile = args[0];
+           // string UserMapFile = args[1];
 
             if (File.Exists(ConfigXmlFile) && File.Exists(UserMapFile))
             {
@@ -250,6 +350,8 @@ class Program
                         // profile migration
 
 
+
+
                         string accountname = myXmlConfig.ConfigObj.zimbraServer.UserAccount;
                         accountname = accountname + "@" + myXmlConfig.ConfigObj.zimbraServer.ZimbraHostname;
                         string accountid = (myXmlConfig.ConfigObj.mailServer.PSTFile != "") ? myXmlConfig.ConfigObj.mailServer.PSTFile : myXmlConfig.ConfigObj.mailServer.OutlookProfile;
@@ -350,6 +452,136 @@ class Program
         }
         else
         {
+
+            if ((userid != "") || (Pstfile != ""))
+            {
+                       
+                 MigrationOptions importopts = new MigrationOptions();
+                ItemsAndFoldersOptions itemFolderFlags = ItemsAndFoldersOptions.None;
+                if (Calendar)
+                {
+                    itemFolderFlags = itemFolderFlags | ItemsAndFoldersOptions.Calendar;
+                }
+                if (Contacts)
+                {
+                    itemFolderFlags = itemFolderFlags | ItemsAndFoldersOptions.Contacts;
+                }
+                if (Mail)
+                {
+                    itemFolderFlags = itemFolderFlags | ItemsAndFoldersOptions.Mail;
+                }
+                if (Sent)
+                {
+                    itemFolderFlags = itemFolderFlags | ItemsAndFoldersOptions.Sent;
+                }
+                if (DeletedItems)
+                {
+                    itemFolderFlags = itemFolderFlags | ItemsAndFoldersOptions.DeletedItems;
+                }
+                if (Junk)
+                {
+                    itemFolderFlags = itemFolderFlags | ItemsAndFoldersOptions.Junk;
+                }
+                if (Tasks)
+                {
+                    itemFolderFlags = itemFolderFlags | ItemsAndFoldersOptions.Tasks;
+                }
+                if (Rules)
+                {
+                    itemFolderFlags = itemFolderFlags | ItemsAndFoldersOptions.Rules;
+                }
+                if (OOO)
+                {
+                    itemFolderFlags = itemFolderFlags | ItemsAndFoldersOptions.OOO;
+                }
+
+                importopts.ItemsAndFolders = itemFolderFlags;
+
+                        string accountname = userid;
+                        accountname = accountname + "@" + ZCSHost;
+                        string accountid = (Pstfile != "") ? Pstfile : userid;
+
+                        if (userid != "")
+                        {
+                           /* TestObj.Initalize(myXmlConfig.ConfigObj.zimbraServer.ZimbraHostname,
+                                   myXmlConfig.ConfigObj.zimbraServer.Port,
+                                   myXmlConfig.ConfigObj.zimbraServer.UserAccount,
+                                   myXmlConfig.ConfigObj.OutlookProfile, "",
+                                   "");*/
+                            string retval = TestObj.GlobalInit(userid, "", "");
+                            if (retval.Length > 0)
+                            {
+                                System.Console.WriteLine();
+                                ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
+                                    " Error in Migration Initialization ");
+                                System.Console.WriteLine("......... \n");
+                                ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
+                                     retval);
+                                System.Console.WriteLine("......... \n");
+                                System.Console.WriteLine();
+                                return;
+                            }
+                        }
+                        //else
+                        {
+
+                            ZimbraAPI zimbraAPI = new ZimbraAPI();
+
+                            System.Console.WriteLine();
+                            ProgressUtil.RenderConsoleProgress(
+                                    30, '\u2591', ConsoleColor.Green,
+                                    "Connecting to to Zimbra Server \n   ");
+                            System.Console.WriteLine();
+
+                            int stat = zimbraAPI.Logon(
+                                    ZCSHost,
+                                    "80",
+                                    userid,
+                                    "test123", false);
+
+                            if (stat != 0)
+                            {
+                                zimbraAPI.LastError.Count();
+
+                                System.Console.WriteLine();
+                                ProgressUtil.RenderConsoleProgress(
+                                        30, '\u2591', ConsoleColor.Red,
+                                        "Logon to to Zimbra Server  for userAccount failed " +
+                                        userid);
+                                System.Console.WriteLine("......... \n");
+                                System.Console.WriteLine();
+                                Thread.Sleep(2000);
+                                // return;
+                            }
+
+                        }
+                        System.Console.WriteLine();
+                        ProgressUtil.RenderConsoleProgress(
+                                30, '\u2591', ConsoleColor.Green,
+                                " Migration to Zimbra Started  for Profile/PST  " +
+                                accountid);
+                        System.Console.WriteLine();
+                        System.Console.WriteLine();
+
+                      //  Test.test(accountname, TestObj, accountid, importopts, false);
+                        var countdownEvent = new CountdownEvent(1);
+                        Account userAccts = new Account();
+
+                        MVVM.Model.Users User = new MVVM.Model.Users();
+                User.UserName = userid;
+                
+                List<MVVM.Model.Users> users = new List<MVVM.Model.Users>();
+                        users.Add(User);
+                        userAccts.StartMigration(users, ZCSHost, importopts, countdownEvent,TestObj, false, accountname, accountid);
+                        // Thread.Sleep(129000);
+
+                        countdownEvent.Wait();
+                        Console.WriteLine("Finished."); 
+
+
+                    }
+
+            
             System.Console.WriteLine();
             ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
                 " Make sure the correct arguments (2) are passed \n");
