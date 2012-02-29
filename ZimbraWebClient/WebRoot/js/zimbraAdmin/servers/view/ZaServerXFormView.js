@@ -1311,12 +1311,16 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 						{type:_ZA_TOP_GROUPER_,label:ZaMsg.VM_CurrentVolumesGrpTitle,id:"server_form_current_vol_group", items:[
 							{type:_OSELECT1_, editable:false,
 								valueChangeEventSources:[ZaServer.A_Volumes, ZaServer.A_RemovedVolumes],
+                                enableDisableChecks:[],
+                                visibilityChecks:[],
 								ref:ZaServer.A_CurrentMsgVolumeId,
 								choices:ZaServerXFormView.messageVolChoices,
 								label:ZaMsg.LBL_VM_CurrentMessageVolume
 							},
 							{type:_OSELECT1_, editable:false,
 								valueChangeEventSources:[ZaServer.A_Volumes, ZaServer.A_RemovedVolumes],
+                                enableDisableChecks:[],
+                                visibilityChecks:[],
 								ref:ZaServer.A_CurrentIndexVolumeId,
 								choices:ZaServerXFormView.indexVolChoices,
 								label:ZaMsg.LBL_VM_CurrentIndexVolume

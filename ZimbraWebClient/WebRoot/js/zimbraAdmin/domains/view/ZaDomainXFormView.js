@@ -1295,7 +1295,13 @@ if(appNewUI) {
 
                 ]},
                 { type:_ZA_TOP_GROUPER_, label:ZaMsg.Domain_URLSetting, colSpan:"*",
-                    numCols: 2, colSizes: ["275px","*"], items :[
+                    numCols: 2, colSizes: ["275px","*"],
+                    visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,
+                        [ZaDomain.A_zimbraAdminConsoleLoginURL,
+                         ZaDomain.A_zimbraAdminConsoleLogoutURL
+                         ]]
+                    ],
+                    items :[
 			        {ref: ZaDomain.A_zimbraAdminConsoleLoginURL, type:_TEXTFIELD_,
           		    label:ZaMsg.Domain_zimbraAdminConsoleLoginURL, width:250,
           		    onChange:ZaDomainXFormView.onFormFieldChanged
@@ -1306,13 +1312,24 @@ if(appNewUI) {
                     }
                 ]},
 				{ type:_ZA_TOP_GROUPER_, label:ZaMsg.NAD_Kerberos_Configure, colSpan:"*",
-                    numCols: 2, colSizes: ["275px","*"], items :[
+                    numCols: 2, colSizes: ["275px","*"],
+                    visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,
+                        [ZaDomain.A_zimbraAuthKerberos5Realm
+                         ]]
+                    ],
+                    items :[
 			        {ref: ZaDomain.A_zimbraAuthKerberos5Realm, type:_TEXTFIELD_,
           		    label:ZaMsg.LBL_zimbraAuthKerberos5Realm, width:250,
           		    onChange:ZaDomainXFormView.onFormFieldChanged
         		    }
                 ]},
                 { type:_ZA_TOP_GROUPER_, label: ZaMsg.NAD_AUTH_ClientConfigure, colSpan:"*",
+                    visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,
+                        [ZaDomain.A_zimbraMailSSLClientCertPrincipalMap,
+                         ZaDomain.A_zimbraReverseProxyClientCertMode,
+                         ZaDomain.A_zimbraReverseProxyClientCertCA
+                         ]]
+                    ],
                       items:[
                           { ref: ZaDomain.A_zimbraMailSSLClientCertPrincipalMap, type:_TEXTAREA_,
 				            label:ZaMsg.NAD_zimbraMailSSLClientCertPrincipalMap, labelCssStyle:"vertical-align:top", width:250,
@@ -1335,6 +1352,15 @@ if(appNewUI) {
                       ]
                 },
                 { type:_ZA_TOP_GROUPER_, label: ZaMsg.NAD_WEBCLIENT_Configure, colSpan:"*",
+                    visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,
+                        [ZaDomain.A_zimbraWebClientLoginURL,
+                         ZaDomain.A_zimbraWebClientLogoutURL,
+                         ZaDomain.A_zimbraWebClientLoginURLAllowedUA,
+                         ZaDomain.A_zimbraWebClientLogoutURLAllowedUA,
+                         ZaDomain.A_zimbraWebClientLoginURLAllowedIP,
+                         ZaDomain.A_zimbraWebClientLogoutURLAllowedIP
+                         ]]
+                    ],
                       items:[
                           { ref: ZaDomain.A_zimbraWebClientLoginURL,useParentTable: false,
                             colSpan: 2,
