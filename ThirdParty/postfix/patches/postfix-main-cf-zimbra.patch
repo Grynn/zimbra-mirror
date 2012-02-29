@@ -10,9 +10,9 @@
  # FAST ETRN SERVICE
  #
 @@ -643,3 +643,52 @@
- # readme_directory: The location of the Postfix README files.
  #
  readme_directory =
+ inet_protocols = ipv4
 +
 +#
 +# Zimbra changes.
