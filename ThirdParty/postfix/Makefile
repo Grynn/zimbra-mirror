@@ -15,6 +15,23 @@ else
 	include $(POSTFIX_ROOT)/../versions.def
 endif
 
+DBINC	:=
+DBLIB	:=
+DBFLAG	:=
+
+ifdef OCTOPUS
+	DBFLAG	:= -DNO_DB
+	POSTFIX_TGZ_TARGET := \
+	$(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/postfix/postfix-octopus-$(POSTFIX_VERSION).tgz
+	PATCH	:= patch -g0 -p1 < ../patches/postfix-no-bdb.patch;
+else
+	DBINC := -I/opt/zimbra/bdb-$(BDB_VERSION)/include
+	DBLIB := -L/opt/zimbra/bdb-$(BDB_VERSION)/lib -ldb
+	POSTFIX_TGZ_TARGET := \
+	$(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/postfix/postfix-$(POSTFIX_VERSION).tgz
+	PATCH	:= patch -g0 -p1 < ../patches/postfix-zimbra-bdb.patch;
+endif
+
 PCRE_DEF := -DHAS_PCRE
 PCRE_INCLUDE := -I/usr/include/pcre
 PCRE_LIB := -lpcre
@@ -48,9 +65,6 @@ endif
 
 SYSTEM_LIB := /usr/lib
 
-POSTFIX_TGZ_TARGET := \
-	$(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/postfix/postfix-$(POSTFIX_VERSION).tgz
-
 ifeq ($(BUILD_PLATFORM), RHEL4_64)
 	SYSTEM_LIB := /usr/lib64
 endif
@@ -72,8 +86,6 @@ LD_RUN_PATH := /opt/zimbra/lib:/opt/zimbra/mysql-$(MYSQL_VERSION)/lib:/opt/zimbr
 MYSQL_INC := /opt/zimbra/mysql-$(MYSQL_VERSION)/include
 MYSQL_LIB := /opt/zimbra/mysql-$(MYSQL_VERSION)/lib
 
-DBINC := -I/opt/zimbra/bdb-$(BDB_VERSION)/include
-DBLIB := -L/opt/zimbra/bdb-$(BDB_VERSION)/lib
 
 ifeq (MACOSXx86,$(findstring MACOSXx86,$(BUILD_PLATFORM)))
 	EXTRALIBS := -lresolv
@@ -103,7 +115,7 @@ ifeq ($(BUILD_PLATFORM), MACOSXx86_10.6)
 endif
 	(mv postfix-$(POSTFIX_RELEASE) postfix-$(POSTFIX_VERSION); \
 	cd postfix-$(POSTFIX_VERSION); \
-	patch -g0 -p1 < ../patches/postfix-zimbra-bdb.patch; \
+	$(PATCH) \
 	patch -g0 -p1 < ../patches/postfix-main-cf-zimbra.patch; \
 	$(MAKE) $(MAKEARGS)  makefiles \
 	OPT="-O2" \
@@ -122,6 +134,7 @@ endif
 	-DDEF_DATA_DIR=\"/opt/zimbra/data/postfix/data\" \
 	-DUSE_SASL_AUTH \
 	-DUSE_CYRUS_SASL \
+	$(DBFLAG) \
 	-DHAS_LDAP -DHAS_MYSQL -DUSE_TLS $(DBINC) $(PCRE_DEF) $(PCRE_INCLUDE) $(FD_SIZE) \
 	$(URANDOM) \
 	-DUSE_LDAP_SASL \
@@ -130,7 +143,7 @@ endif
 	-I/opt/zimbra/openssl-$(OPENSSL_VERSION)/include \
 	-I/opt/zimbra/cyrus-sasl-$(CYRUS_VERSION)/include/sasl -I/usr/include' \
 	AUXLIBS='$(EXTRALIBS) -L/opt/zimbra/cyrus-sasl-$(CYRUS_VERSION)/lib \
-	$(DBLIB) -ldb -L/opt/zimbra/openldap-$(LDAP_VERSION)/lib $(PCRE_LIB) \
+	$(DBLIB) -L/opt/zimbra/openldap-$(LDAP_VERSION)/lib $(PCRE_LIB) \
 	-lldap -llber \
 	-L$(MYSQL_LIB) \
 	-L/opt/zimbra/openssl-$(OPENSSL_VERSION)/lib \

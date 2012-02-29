@@ -1,0 +1,36 @@
+--- postfix-2.9.1/makedefs.orig	2012-01-17 17:19:48.000000000 -0800
++++ postfix-2.9.1/makedefs	2012-02-29 14:06:55.590574589 -0800
+@@ -270,33 +270,6 @@
+ 		SYSLIBS="-ldb"
+ 		;;
+     Linux.2*)	SYSTYPE=LINUX2
+-		# Postfix no longer needs DB 1.85 compatibility
+-		if [ -f /usr/include/db.h ]
+-		then
+-		    : we are all set
+-		elif [ -f /usr/include/db/db.h ]
+-		then
+-		    CCARGS="$CCARGS -I/usr/include/db"
+-		else
+-		    # No, we're not going to try db1 db2 db3 etc.
+-		    # On a properly installed system, Postfix builds
+-		    # by including <db.h> and by linking with -ldb
+-		    echo "No <db.h> include file found." 1>&2
+-		    echo "Install the appropriate db*-devel package first." 1>&2
+-		    echo "See the RELEASE_NOTES file for more information." 1>&2
+-		    exit 1
+-		fi
+-		# GDBM locks the DBM .pag file after open. This breaks postmap.
+-		# if [ -f /usr/include/gdbm-ndbm.h ]
+-		# then
+-		#     CCARGS="$CCARGS -DHAS_DBM -DPATH_NDBM_H='<gdbm-ndbm.h>'"
+-		#     GDBM_LIBS=gdbm
+-		# elif [ -f /usr/include/gdbm/ndbm.h ]
+-		# then
+-		#     CCARGS="$CCARGS -DHAS_DBM -DPATH_NDBM_H='<gdbm/ndbm.h>'"
+-		#     GDBM_LIBS=gdbm
+-		# fi
+-		SYSLIBS="-ldb"
+ 		for name in nsl resolv $GDBM_LIBS
+ 		do
+ 		    for lib in /usr/lib64 /lib64 /usr/lib /lib
