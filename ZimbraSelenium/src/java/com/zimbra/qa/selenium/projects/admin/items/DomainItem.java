@@ -7,8 +7,8 @@ import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 
 public class DomainItem implements IItem {
 
-	protected static String domainName;
-	protected static String Id;
+	protected String domainName;
+	protected String Id;
 	
 	public DomainItem() {
 		super();

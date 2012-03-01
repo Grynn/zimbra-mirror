@@ -12,15 +12,15 @@ public class CosItem implements IItem {
 
 	protected static Logger logger = LogManager.getLogger(IItem.class);
 
-	protected static String Id=null;
+	protected String Id;
 
-	protected static String cosName;
+	protected String cosName;
 
 	public CosItem() {
 		super();
 
 		cosName = "cos" + ZimbraSeleniumProperties.getUniqueString();
-		//Id = null;
+		Id = null;
 
 	}
 	@Override
