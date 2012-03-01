@@ -104,22 +104,19 @@ public class ConfigViewModelU: BaseViewModel
                 }
 
                 fileRead.Close();
+
                 try
                 {
                     LoadConfig(config);
+                    ((ConfigViewModelUDest)ViewModelPtrs[(int)ViewType.USRDEST]).LoadConfig(config);
+                    ((OptionsViewModel)ViewModelPtrs[(int)ViewType.OPTIONS]).LoadConfig(config);
+                    ((ScheduleViewModel)ViewModelPtrs[(int)ViewType.SCHED]).SetConfigFile(fDialog.FileName);                       
                 }
                 catch (Exception e)
                 {
-                    string temp = string.Format("Load error.\n{0}", e.Message);
-                    MessageBox.Show(temp, "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);;
+                    DisplayLoadError(e);
                     return;
                 }
-
-                ((ConfigViewModelUDest)ViewModelPtrs[(int)ViewType.USRDEST]).LoadConfig(config);
-                ((OptionsViewModel)ViewModelPtrs[(int)ViewType.OPTIONS]).LoadConfig(config);
-
-                ((ScheduleViewModel)ViewModelPtrs[(int)ViewType.SCHED]).SetConfigFile(
-                    fDialog.FileName);
             }
         }
     }

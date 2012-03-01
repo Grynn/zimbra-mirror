@@ -99,22 +99,31 @@ public class OptionsViewModel: BaseViewModel
                 }
 
                 fileRead.Close();
-                LoadConfig(config);
-                if (isServer)
+
+                try
                 {
-                    ((ConfigViewModelS)ViewModelPtrs[(int)ViewType.SVRSRC]).LoadConfig(config);
-                    ((ConfigViewModelSDest)ViewModelPtrs[(int)ViewType.SVRDEST]).LoadConfig(
-                        config);
-                    ((UsersViewModel)ViewModelPtrs[(int)ViewType.USERS]).LoadDomain(config);
+                    LoadConfig(config);
+                    if (isServer)
+                    {
+                        ((ConfigViewModelS)ViewModelPtrs[(int)ViewType.SVRSRC]).LoadConfig(config);
+                        ((ConfigViewModelSDest)ViewModelPtrs[(int)ViewType.SVRDEST]).LoadConfig(
+                            config);
+                        ((UsersViewModel)ViewModelPtrs[(int)ViewType.USERS]).LoadDomain(config);
+                    }
+                    else
+                    {
+                        ((ConfigViewModelU)ViewModelPtrs[(int)ViewType.USRSRC]).LoadConfig(config);
+                        ((ConfigViewModelUDest)ViewModelPtrs[(int)ViewType.USRDEST]).LoadConfig(
+                            config);
+                    }
+                    ((ScheduleViewModel)ViewModelPtrs[(int)ViewType.SCHED]).SetConfigFile(
+                        fDialog.FileName);
                 }
-                else
+                catch (Exception e)
                 {
-                    ((ConfigViewModelU)ViewModelPtrs[(int)ViewType.USRSRC]).LoadConfig(config);
-                    ((ConfigViewModelUDest)ViewModelPtrs[(int)ViewType.USRDEST]).LoadConfig(
-                        config);
+                    DisplayLoadError(e);
+                    return;
                 }
-                ((ScheduleViewModel)ViewModelPtrs[(int)ViewType.SCHED]).SetConfigFile(
-                    fDialog.FileName);
             }
             else
             {

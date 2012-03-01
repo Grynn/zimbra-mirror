@@ -236,5 +236,11 @@ public class BaseViewModel: INotifyPropertyChanged
             MessageBox.Show("Help file not found", "Open file error", MessageBoxButton.OK,
                 MessageBoxImage.Error);
     }
+
+    protected void DisplayLoadError(Exception e)
+    {
+        string temp = string.Format("Load error: config file could be out of date.\n{0}", e.Message);
+        MessageBox.Show(temp, "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
+    }
 }
 }

@@ -64,12 +64,20 @@ public class ConfigViewModelSDest: BaseViewModel
                 }
                 
                 fileRead.Close();
-                LoadConfig(config);
-                ((ConfigViewModelS)ViewModelPtrs[(int)ViewType.SVRSRC]).LoadConfig(config);
-                ((OptionsViewModel)ViewModelPtrs[(int)ViewType.OPTIONS]).LoadConfig(config);
-                ((UsersViewModel)ViewModelPtrs[(int)ViewType.USERS]).LoadDomain(config);
-                ((ScheduleViewModel)ViewModelPtrs[(int)ViewType.SCHED]).SetConfigFile(
-                    fDialog.FileName);
+
+                try
+                {
+                    LoadConfig(config);
+                    ((ConfigViewModelS)ViewModelPtrs[(int)ViewType.SVRSRC]).LoadConfig(config);
+                    ((OptionsViewModel)ViewModelPtrs[(int)ViewType.OPTIONS]).LoadConfig(config);
+                    ((UsersViewModel)ViewModelPtrs[(int)ViewType.USERS]).LoadDomain(config);
+                    ((ScheduleViewModel)ViewModelPtrs[(int)ViewType.SCHED]).SetConfigFile(fDialog.FileName);
+                }
+                catch (Exception e)
+                {
+                    DisplayLoadError(e);
+                    return;
+                }                    
             }
         }
     }
