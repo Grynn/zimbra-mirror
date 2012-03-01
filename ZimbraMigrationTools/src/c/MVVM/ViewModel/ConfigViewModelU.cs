@@ -164,6 +164,7 @@ public class ConfigViewModelU: BaseViewModel
         set
         {
             IsProfile = value;
+            CSEnableNext = (IsProfile) ? ProfileList.Count > 0 : true;
             OnPropertyChanged(new PropertyChangedEventArgs("Isprofile"));
         }
     }
@@ -173,7 +174,7 @@ public class ConfigViewModelU: BaseViewModel
         set
         {
             IsPST = value;
-            CSEnableNext = true;
+            CSEnableNext = (IsPST) ? true : ProfileList.Count > 0;
             OnPropertyChanged(new PropertyChangedEventArgs("IspST"));
         }
     }

@@ -191,7 +191,7 @@ public class ConfigViewModelS: BaseViewModel
         set
         {
             IsMailServer = value;
-            CSEnableNext = true;
+            CSEnableNext = (IsMailServer) ? true : ProfileList.Count > 0;
             OnPropertyChanged(new PropertyChangedEventArgs("IsmailServer"));
         }
     }
@@ -200,7 +200,7 @@ public class ConfigViewModelS: BaseViewModel
         set
         {
             IsProfile = value;
-            CSEnableNext = true;
+            CSEnableNext = (IsProfile) ? ProfileList.Count > 0 : true;
             OnPropertyChanged(new PropertyChangedEventArgs("Isprofile"));
         }
     }
