@@ -189,6 +189,7 @@ ZaHome.loadStatusfo = function () {
 			var params = new Object();
 			params.soapDoc = soapDoc;
             params.asyncMode = true;
+            params.noAuthToken = true;
             params.callback = updateServiceStatus;
 			command.invoke(params);
 		} else {
@@ -290,6 +291,7 @@ ZaHome.loadActiveSesson = function () {
                     var getSessCmd = new ZmCsfeCommand ();
                     params.soapDoc = soapDoc ;
                     params.asyncMode = true;
+                    params.noAuthToken = true;
                     params.callback = sessionCallback;
                     params.targetServer = currentSession.targetServer ;
 
@@ -356,6 +358,7 @@ ZaHome.loadQueueLength = function () {
                     var params = new Object();
                     params.soapDoc = soapDoc ;
                     params.asyncMode = true;
+                    params.noAuthToken = true;
                     params.callback = queueLengthCallback;
 
                     command.invoke(params);

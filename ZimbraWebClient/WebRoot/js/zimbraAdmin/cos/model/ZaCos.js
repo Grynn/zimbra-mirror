@@ -861,6 +861,7 @@ ZaCos.prototype.countAllAccounts = function() {
 	var command = new ZmCsfeCommand();
 	var cmdParams = new Object();
 	cmdParams.soapDoc = soapDoc;
+    cmdParams.noAuthToken = true;
     try {
 	    var resp = command.invoke(cmdParams).Body.SearchDirectoryResponse;
         if(resp.searchTotal)
@@ -885,6 +886,7 @@ ZaCos.prototype.countAllDomains = function() {
 	var command = new ZmCsfeCommand();
 	var cmdParams = new Object();
 	cmdParams.soapDoc = soapDoc;
+    cmdParams.noAuthToken = true;
     try {
 	    var resp = command.invoke(cmdParams).Body.SearchDirectoryResponse;
         if(resp.searchTotal)
