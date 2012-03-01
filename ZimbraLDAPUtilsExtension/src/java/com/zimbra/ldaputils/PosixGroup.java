@@ -16,24 +16,14 @@ package com.zimbra.ldaputils;
 
 import java.util.Map;
 
-import javax.naming.NamingException;
-import javax.naming.directory.Attributes;
-
-import com.zimbra.cs.account.ldap.legacy.LegacyLdapUtil;
 import com.zimbra.cs.ldap.LdapException;
 import com.zimbra.cs.ldap.ZAttributes;
+
 /**
  * @author Greg Solovyev
  */
 public class PosixGroup extends LDAPUtilEntry {
 	private static final String A_gidNumber = "gidNumber";
-
-	// TODO:legacy ctor, retire
-	public PosixGroup(String dn, Attributes attrs, Map<String, Object> defaults)
-			throws NamingException {
-		super(dn, attrs, defaults);
-        mId = LegacyLdapUtil.getAttrString(attrs, A_gidNumber);		
-	}
 	
 	public PosixGroup(String dn, ZAttributes attrs,
             Map<String, Object> defaults) throws LdapException {

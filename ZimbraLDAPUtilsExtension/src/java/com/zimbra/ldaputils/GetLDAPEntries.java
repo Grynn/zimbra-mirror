@@ -19,8 +19,8 @@ import java.util.Map;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.NamedEntry;
+import com.zimbra.cs.account.ldap.entry.LdapDomain;
 
-import com.zimbra.cs.account.ldap.legacy.entry.LdapDomain;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.AdminConstants;
 import com.zimbra.common.soap.LDAPUtilsConstants;
