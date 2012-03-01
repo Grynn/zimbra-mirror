@@ -376,7 +376,8 @@ ZaGlobalConfig.modifyMethod = function (tmods, tmpObj) {
 
 	var command = new ZmCsfeCommand();
 	var params = new Object();
-	params.soapDoc = soapDoc;	
+	params.soapDoc = soapDoc;
+	params.noAuthToken = true;	
 	command.invoke(params);
 	ZaGlobalConfig.isDirty = true;
 }

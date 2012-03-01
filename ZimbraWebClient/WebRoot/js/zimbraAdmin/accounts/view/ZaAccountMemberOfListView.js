@@ -510,7 +510,8 @@ function (account, addArray) {
 		addMemberSoapDoc.set("id", addArray[i].id); //group id 
 		addMemberSoapDoc.set("dlm", account.name); //account name
 		var params = new Object();
-		params.soapDoc = addMemberSoapDoc;	
+		params.soapDoc = addMemberSoapDoc;
+		params.noAuthToken = true;	
 		r=command.invoke(params).Body.AddDistributionListMemberResponse;
 	}
 };
