@@ -1543,12 +1543,25 @@ function(html) {
 		Dwt.setVisible(iframe, false);
 		document.body.appendChild(iframe);
 		idoc = AjxStringUtil._htmlContentIframeDoc = Dwt.getIframeDoc(iframe);
+		AjxStringUtil.__curIframeId = AjxEnv.isFirefox ? iframe.id : null;
 	}
 	idoc.open();
 	idoc.write(html);
 	idoc.close();
 
 	return idoc.childNodes[0];
+};
+
+// Firefox only - clean up test iframe since we can't reuse it
+AjxStringUtil._removeTestIframeDoc =
+function() {
+	if (AjxStringUtil.__curIframeId) {
+		var iframe = document.getElementById(AjxStringUtil.__curIframeId);
+		if (iframe) {
+			iframe.parentNode.removeChild(iframe);
+		}
+		AjxStringUtil.__curIframeId = null;
+	}
 };
 
 /**
@@ -1777,7 +1790,10 @@ function(text) {
 	}
 
 	// convert back to text, restoring html, head, and body nodes
-	return ctxt.done ? "<html>" + htmlNode.innerHTML + "</html>" : text;
+	var result = ctxt.done ? "<html>" + htmlNode.innerHTML + "</html>" : text;
+
+	AjxStringUtil._removeTestIframeDoc();
+	return result;	
 };
 
 // nodes to ignore; they won't have anything we're interested in
@@ -1937,12 +1953,13 @@ function(html, okTags, attrsToRemove, badStyles) {
 	}
 	AjxStringUtil._traverseCleanHtml(htmlNode, ctxt);
 	
-	if (ctxt.fail) {
-		return false;
+	var result = false;
+	if (!ctxt.fail) {
+		result = "<html>" + htmlNode.innerHTML + "</html>";
 	}
-	else {
-		return "<html>" + htmlNode.innerHTML + "</html>";
-	}
+
+	AjxStringUtil._removeTestIframeDoc();
+	return result;
 };
 
 AjxStringUtil._traverseCleanHtml =
