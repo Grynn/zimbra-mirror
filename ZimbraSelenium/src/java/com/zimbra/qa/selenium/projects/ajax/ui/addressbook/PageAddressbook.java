@@ -1035,7 +1035,13 @@ public class PageAddressbook extends AbsTab {
 				locator = "css=div#zm__Contacts";
 			}	
 						
-			locator = locator + " tr#"+ cmi.locator;
+			if ((option == Button.B_CONTACTGROUP) &&
+				(subOption == Button.O_NEW_CONTACTGROUP)) {
+				locator = locator + " tr[id^="+ cmi.locator + "]";					
+			}
+			else {
+				locator = locator + " tr#"+ cmi.locator;
+			}
 			//locator = "id="+ id;
 			
 			//  Make sure the context menu exists
@@ -1250,7 +1256,10 @@ public class PageAddressbook extends AbsTab {
 					TagItem ti = (TagItem) item;
 					itemLocator = "css=td[id$=title]:contains('" + ti.getName() + "')";
 					
-				}																	
+				}				
+			
+				locator = "css=div#zm__Contacts tr#"+ cmi.locator;
+				
 			}
 			else if (option == Button.B_CONTACTGROUP) {
 				if ( item instanceof ContactGroupItem) {
@@ -1258,10 +1267,10 @@ public class PageAddressbook extends AbsTab {
 					cmi= CONTEXT_MENU.CONTACT_GROUP;
 				    itemLocator = "css=td[id$=title]:contains('" + cgi.fileAs + "')";
 				}				
+
+				locator = "css=div#zm__Contacts tr[id^="+ cmi.locator + "]";
 			}
 			
-			id = cmi.locator;
-			locator = "css=div#zm__Contacts tr#"+ id;
 			
 			//  Make sure the context menu exists
 			zWaitForElementPresent(locator) ;
