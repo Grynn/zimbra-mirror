@@ -51,11 +51,11 @@ public class ConfigViewModelU: BaseViewModel
     }
     public void LoadConfig(Config config)
     {
-        if (config.mailServer.UseProfile)
+        if (config.SourceServer.UseProfile)
         {
             Isprofile = true;
             IspST = false;
-            OutlookProfile = config.mailServer.OutlookProfile;
+            OutlookProfile = config.SourceServer.Profile;
             if (ProfileList.Count > 0)
             {
                 CurrentProfileSelection = (OutlookProfile == null) ? 0 : ProfileList.IndexOf(
@@ -70,7 +70,7 @@ public class ConfigViewModelU: BaseViewModel
         {
             Isprofile = false;
             IspST = true;
-            PSTFile = config.mailServer.PSTFile;
+            PSTFile = config.SourceServer.DataFile;
         }
     }
 
@@ -199,12 +199,12 @@ public class ConfigViewModelU: BaseViewModel
         lb.SelectedIndex = 2;
     }
     public string OutlookProfile {
-        get { return m_config.mailServer.OutlookProfile; }
+        get { return m_config.SourceServer.Profile; }
         set
         {
-            if (value == m_config.mailServer.OutlookProfile)
+            if (value == m_config.SourceServer.Profile)
                 return;
-            m_config.mailServer.OutlookProfile = value;
+            m_config.SourceServer.Profile = value;
             // m_config.mailServer.ProfileName= value;
             CSEnableNext = true;
             OnPropertyChanged(new PropertyChangedEventArgs("OutlookProfile"));
@@ -229,12 +229,12 @@ public class ConfigViewModelU: BaseViewModel
     }
     private int profileselection;
     public string PSTFile {
-        get { return m_config.mailServer.PSTFile; }
+        get { return m_config.SourceServer.DataFile; }
         set
         {
-            if (value == m_config.mailServer.PSTFile)
+            if (value == m_config.SourceServer.DataFile)
                 return;
-            m_config.mailServer.PSTFile = value;
+            m_config.SourceServer.DataFile = value;
             OnPropertyChanged(new PropertyChangedEventArgs("PSTFile"));
         }
     }

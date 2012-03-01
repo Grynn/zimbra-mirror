@@ -178,14 +178,14 @@ class Program
                 string retval = "";   
                 if (myXmlConfig.UserList.Count > 0)
                 {
-                    if (myXmlConfig.ConfigObj.mailServer.OutlookProfile != "")
+                    if (myXmlConfig.ConfigObj.SourceServer.Profile != "")
                     {
                         // profile migration
                        /* TestObj.Initalize(myXmlConfig.ConfigObj.zimbraServer.ZimbraHostname,
                             myXmlConfig.ConfigObj.zimbraServer.Port,
                             myXmlConfig.ConfigObj.zimbraServer.ZimbraAdminID,
                             myXmlConfig.ConfigObj.OutlookProfile, "", "");*/
-                        retval = TestObj.GlobalInit(myXmlConfig.ConfigObj.mailServer.OutlookProfile, "", "");
+                        retval = TestObj.GlobalInit(myXmlConfig.ConfigObj.SourceServer.Profile, "", "");
                     }
                     else
                     {
@@ -195,7 +195,7 @@ class Program
                             myXmlConfig.ConfigObj.mailServer.SourceHostname,
                             myXmlConfig.ConfigObj.mailServer.SourceAdminID);*/
 
-                        retval = TestObj.GlobalInit(myXmlConfig.ConfigObj.mailServer.SourceAdminID, "", "");
+                        retval = TestObj.GlobalInit(myXmlConfig.ConfigObj.SourceServer.AdminID, "", "");
                        /* TestObj.InitializeMailClient(myXmlConfig.ConfigObj.mailServer.SourceHostname, myXmlConfig.ConfigObj.mailServer.SourceAdminID,
                     "");*/
                     }
@@ -235,10 +235,10 @@ class Program
 
                         ZimbraAPI zimbraAPI = new ZimbraAPI();
                         int stat = zimbraAPI.Logon(
-                            myXmlConfig.ConfigObj.zimbraServer.ZimbraHostname,
+                            myXmlConfig.ConfigObj.zimbraServer.Hostname,
                             myXmlConfig.ConfigObj.zimbraServer.Port,
-                            myXmlConfig.ConfigObj.zimbraServer.ZimbraAdminID,
-                            myXmlConfig.ConfigObj.zimbraServer.ZimbraAdminPwd, true);
+                            myXmlConfig.ConfigObj.zimbraServer.AdminID,
+                            myXmlConfig.ConfigObj.zimbraServer.AdminPwd, true);
 
                         if (stat != 0)
                         {
@@ -247,7 +247,7 @@ class Program
                             System.Console.WriteLine();
                             ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
                                 "Logon to to Zimbra Server  for adminAccount failed " +
-                                myXmlConfig.ConfigObj.zimbraServer.ZimbraAdminID);
+                                myXmlConfig.ConfigObj.zimbraServer.AdminID);
                             System.Console.WriteLine("......... \n");
                             System.Console.WriteLine();
                             Thread.Sleep(2000);
@@ -257,7 +257,7 @@ class Program
                         // userAcct.InitializeMigration(myXmlConfig.ConfigObj.zimbraServer.ZimbraHostname, myXmlConfig.ConfigObj.zimbraServer.Port, myXmlConfig.ConfigObj.zimbraServer.ZimbraAdminID,user.UserName);
 
                         string acctName = user.UserName + '@' +
-                            myXmlConfig.ConfigObj.UserProvision.Domain;
+                            myXmlConfig.ConfigObj.UserProvision.DestinationDomain;
 
                         if (zimbraAPI.GetAccount(acctName) == 0)
                         {
@@ -333,7 +333,7 @@ class Program
                     var countdownEvent = new CountdownEvent(myXmlConfig.UserList.Count); 
                     Account userAccts = new Account();
                     
-                    userAccts.StartMigration(myXmlConfig.UserList, myXmlConfig.ConfigObj.UserProvision.Domain, importopts, countdownEvent,TestObj);
+                    userAccts.StartMigration(myXmlConfig.UserList, myXmlConfig.ConfigObj.UserProvision.DestinationDomain, importopts, countdownEvent,TestObj);
                    // Thread.Sleep(129000);
 
                     countdownEvent.Wait();
@@ -343,7 +343,7 @@ class Program
                 else
                 {
 
-                    if ((myXmlConfig.ConfigObj.mailServer.OutlookProfile != "") || (myXmlConfig.ConfigObj.mailServer.PSTFile != ""))
+                    if ((myXmlConfig.ConfigObj.SourceServer.Profile != "") || (myXmlConfig.ConfigObj.SourceServer.DataFile != ""))
                     {
                         // ServerMigration = false;
 
@@ -353,17 +353,17 @@ class Program
 
 
                         string accountname = myXmlConfig.ConfigObj.zimbraServer.UserAccount;
-                        accountname = accountname + "@" + myXmlConfig.ConfigObj.zimbraServer.ZimbraHostname;
-                        string accountid = (myXmlConfig.ConfigObj.mailServer.PSTFile != "") ? myXmlConfig.ConfigObj.mailServer.PSTFile : myXmlConfig.ConfigObj.mailServer.OutlookProfile;
+                        accountname = accountname + "@" + myXmlConfig.ConfigObj.zimbraServer.Hostname;
+                        string accountid = (myXmlConfig.ConfigObj.SourceServer.DataFile != "") ? myXmlConfig.ConfigObj.SourceServer.DataFile : myXmlConfig.ConfigObj.SourceServer.Profile;
 
-                        if (myXmlConfig.ConfigObj.mailServer.OutlookProfile != "")
+                        if (myXmlConfig.ConfigObj.SourceServer.Profile != "")
                         {
                            /* TestObj.Initalize(myXmlConfig.ConfigObj.zimbraServer.ZimbraHostname,
                                    myXmlConfig.ConfigObj.zimbraServer.Port,
                                    myXmlConfig.ConfigObj.zimbraServer.UserAccount,
                                    myXmlConfig.ConfigObj.OutlookProfile, "",
                                    "");*/
-                            retval = TestObj.GlobalInit(myXmlConfig.ConfigObj.mailServer.OutlookProfile, "", "");
+                            retval = TestObj.GlobalInit(myXmlConfig.ConfigObj.SourceServer.Profile, "", "");
                             if (retval.Length > 0)
                             {
                                 System.Console.WriteLine();
@@ -389,7 +389,7 @@ class Program
                             System.Console.WriteLine();
 
                             int stat = zimbraAPI.Logon(
-                                    myXmlConfig.ConfigObj.zimbraServer.ZimbraHostname,
+                                    myXmlConfig.ConfigObj.zimbraServer.Hostname,
                                     myXmlConfig.ConfigObj.zimbraServer.Port,
                                     myXmlConfig.ConfigObj.zimbraServer.UserAccount,
                                     myXmlConfig.ConfigObj.zimbraServer.UserPassword, false);
@@ -402,7 +402,7 @@ class Program
                                 ProgressUtil.RenderConsoleProgress(
                                         30, '\u2591', ConsoleColor.Red,
                                         "Logon to to Zimbra Server  for userAccount failed " +
-                                        myXmlConfig.ConfigObj.zimbraServer.ZimbraAdminID);
+                                        myXmlConfig.ConfigObj.zimbraServer.AdminID);
                                 System.Console.WriteLine("......... \n");
                                 System.Console.WriteLine();
                                 Thread.Sleep(2000);
@@ -422,7 +422,7 @@ class Program
                         var countdownEvent = new CountdownEvent(1);
                         Account userAccts = new Account();
 
-                        userAccts.StartMigration(myXmlConfig.UserList, myXmlConfig.ConfigObj.UserProvision.Domain, importopts, countdownEvent,TestObj, false, accountname, accountid);
+                        userAccts.StartMigration(myXmlConfig.UserList, myXmlConfig.ConfigObj.UserProvision.DestinationDomain, importopts, countdownEvent,TestObj, false, accountname, accountid);
                         // Thread.Sleep(129000);
 
                         countdownEvent.Wait();

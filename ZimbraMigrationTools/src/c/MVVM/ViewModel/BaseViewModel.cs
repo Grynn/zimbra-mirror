@@ -128,7 +128,7 @@ public class BaseViewModel: INotifyPropertyChanged
 	OptionsViewModel     optionsModel      = (OptionsViewModel)ViewModelPtrs[(int)ViewType.OPTIONS];
 	UsersViewModel       usersModel        = (UsersViewModel)ViewModelPtrs[(int)ViewType.USERS];
 
-        m_config.mailServer.OutlookProfile = "";
+        m_config.SourceServer.Profile = "";
         if (isServer)
 	{
             int sel = serverSourceModel.CurrentProfileSelection;
@@ -136,18 +136,18 @@ public class BaseViewModel: INotifyPropertyChanged
             {
                 if (serverSourceModel.ProfileList.Count > 0)
                 {
-                    m_config.mailServer.OutlookProfile = serverSourceModel.ProfileList[sel];
+                    m_config.SourceServer.Profile = serverSourceModel.ProfileList[sel];
                 }
-            } 
-	    m_config.mailServer.SourceHostname   = serverSourceModel.MailServerHostName;
-	    m_config.mailServer.SourceAdminID    = serverSourceModel.MailServerAdminID;
-	    m_config.mailServer.SourceAdminPwd   = serverSourceModel.MailServerAdminPwd;
-	    m_config.mailServer.UseProfile       = serverSourceModel.Isprofile;
-	    m_config.zimbraServer.ZimbraHostname = serverDestModel.ZimbraServerHostName;
+            }
+            m_config.SourceServer.Hostname = serverSourceModel.MailServerHostName;
+            m_config.SourceServer.AdminID = serverSourceModel.MailServerAdminID;
+            m_config.SourceServer.AdminPwd = serverSourceModel.MailServerAdminPwd;
+            m_config.SourceServer.UseProfile = serverSourceModel.Isprofile;
+	    m_config.zimbraServer.Hostname = serverDestModel.ZimbraServerHostName;
 	    m_config.zimbraServer.Port           = serverDestModel.ZimbraPort;
-	    m_config.zimbraServer.ZimbraAdminID  = serverDestModel.ZimbraAdmin;
-	    m_config.zimbraServer.ZimbraAdminPwd = serverDestModel.ZimbraAdminPasswd;
-            m_config.UserProvision.Domain        = usersModel.ZimbraDomain;
+	    m_config.zimbraServer.AdminID  = serverDestModel.ZimbraAdmin;
+	    m_config.zimbraServer.AdminPwd = serverDestModel.ZimbraAdminPasswd;
+            m_config.UserProvision.DestinationDomain        = usersModel.ZimbraDomain;
 	}
 	else
 	{
@@ -156,12 +156,12 @@ public class BaseViewModel: INotifyPropertyChanged
             {
                 if (userSourceModel.ProfileList.Count > 0)
                 {
-                    m_config.mailServer.OutlookProfile = userSourceModel.ProfileList[sel];
+                    m_config.SourceServer.Profile = userSourceModel.ProfileList[sel];
                 }
-            } 
-	    m_config.mailServer.PSTFile          = userSourceModel.PSTFile;
-	    m_config.mailServer.UseProfile       = userSourceModel.Isprofile;
-	    m_config.zimbraServer.ZimbraHostname = userDestModel.ZimbraServerHostName;
+            }
+            m_config.SourceServer.DataFile = userSourceModel.PSTFile;
+            m_config.SourceServer.UseProfile = userSourceModel.Isprofile;
+	    m_config.zimbraServer.Hostname = userDestModel.ZimbraServerHostName;
 	    m_config.zimbraServer.Port           = userDestModel.ZimbraPort;
 	    m_config.zimbraServer.UserAccount    = userDestModel.ZimbraUser;
 	    m_config.zimbraServer.UserPassword   = userDestModel.ZimbraUserPasswd;
@@ -178,7 +178,7 @@ public class BaseViewModel: INotifyPropertyChanged
         m_config.importOptions.Rules        = optionsModel.ImportRuleOptions;
         m_config.importOptions.OOO          = optionsModel.ImportOOOOptions;
         m_config.AdvancedImportOptions.IsOnOrAfter = optionsModel.IsOnOrAfter;
-        m_config.AdvancedImportOptions.MigrateONRAfter =
+        m_config.AdvancedImportOptions.MigrateOnOrAfter =
             (optionsModel.IsOnOrAfter) ? DateTime.Parse(optionsModel.MigrateONRAfter)
             : DateTime.Now.AddMonths(-3);
         m_config.AdvancedImportOptions.IsMaxMessageSize = optionsModel.IsMaxMessageSize;

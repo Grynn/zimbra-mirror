@@ -37,11 +37,11 @@ public class ConfigViewModelS: BaseViewModel
     }
     public void LoadConfig(Config config)
     {
-        if (config.mailServer.UseProfile)
+        if (config.SourceServer.UseProfile)
         {
             Isprofile = true;
             IsmailServer = false;
-            OutlookProfile = config.mailServer.OutlookProfile;
+            OutlookProfile = config.SourceServer.Profile;
             if (ProfileList.Count > 0)
                 CurrentProfileSelection = (OutlookProfile == null) ? 0 : ProfileList.IndexOf(
                     OutlookProfile);
@@ -53,9 +53,9 @@ public class ConfigViewModelS: BaseViewModel
         {
             Isprofile = false;
             IsmailServer = true;
-            MailServerHostName = config.mailServer.SourceHostname;
-            MailServerAdminID = config.mailServer.SourceAdminID;
-            MailServerAdminPwd = config.mailServer.SourceAdminPwd;
+            MailServerHostName = config.SourceServer.Hostname;
+            MailServerAdminID = config.SourceServer.AdminID;
+            MailServerAdminPwd = config.SourceServer.AdminPwd;
         }
     }
 
@@ -205,12 +205,12 @@ public class ConfigViewModelS: BaseViewModel
         }
     }
     public string OutlookProfile {
-        get { return m_config.mailServer.OutlookProfile; }
+        get { return m_config.SourceServer.Profile; }
         set
         {
-            if (value == m_config.mailServer.OutlookProfile)
+            if (value == m_config.SourceServer.Profile)
                 return;
-            m_config.mailServer.OutlookProfile = value;
+            m_config.SourceServer.Profile = value;
             OnPropertyChanged(new PropertyChangedEventArgs("OutlookProfile"));
         }
     }
@@ -233,34 +233,34 @@ public class ConfigViewModelS: BaseViewModel
     }
     private int profileselection;
     public string MailServerHostName {
-        get { return m_config.mailServer.SourceHostname; }
+        get { return m_config.SourceServer.Hostname; }
         set
         {
-            if (value == m_config.mailServer.SourceHostname)
+            if (value == m_config.SourceServer.Hostname)
                 return;
-            m_config.mailServer.SourceHostname = value;
+            m_config.SourceServer.Hostname = value;
 
             OnPropertyChanged(new PropertyChangedEventArgs("MailServerHostName"));
         }
     }
     public string MailServerAdminID {
-        get { return m_config.mailServer.SourceAdminID; }
+        get { return m_config.SourceServer.AdminID; }
         set
         {
-            if (value == m_config.mailServer.SourceAdminID)
+            if (value == m_config.SourceServer.AdminID)
                 return;
-            m_config.mailServer.SourceAdminID = value;
+            m_config.SourceServer.AdminID = value;
 
             OnPropertyChanged(new PropertyChangedEventArgs("MailServerAdminID"));
         }
     }
     public string MailServerAdminPwd {
-        get { return m_config.mailServer.SourceAdminPwd; }
+        get { return m_config.SourceServer.AdminPwd; }
         set
         {
-            if (value == m_config.mailServer.SourceAdminPwd)
+            if (value == m_config.SourceServer.AdminPwd)
                 return;
-            m_config.mailServer.SourceAdminPwd = value;
+            m_config.SourceServer.AdminPwd = value;
 
             OnPropertyChanged(new PropertyChangedEventArgs("MailServerAdminPwd"));
         }

@@ -51,7 +51,7 @@ public class OptionsViewModel: BaseViewModel
         ImportOOOOptions = config.importOptions.OOO;
         SetNextState();
 
-        MigrateONRAfter = config.AdvancedImportOptions.MigrateONRAfter.ToLongDateString();
+        MigrateONRAfter = config.AdvancedImportOptions.MigrateOnOrAfter.ToLongDateString();
         IsOnOrAfter = config.AdvancedImportOptions.IsOnOrAfter;
         MaxMessageSize = config.AdvancedImportOptions.MaxMessageSize;
         IsMaxMessageSize = config.AdvancedImportOptions.IsMaxMessageSize;
@@ -288,12 +288,12 @@ public class OptionsViewModel: BaseViewModel
         }
     }
     public string MigrateONRAfter {
-        get { return m_config.AdvancedImportOptions.MigrateONRAfter.ToShortDateString(); }
+        get { return m_config.AdvancedImportOptions.MigrateOnOrAfter.ToShortDateString(); }
         set
         {
-            if (value == m_config.AdvancedImportOptions.MigrateONRAfter.ToShortDateString())
+            if (value == m_config.AdvancedImportOptions.MigrateOnOrAfter.ToShortDateString())
                 return;
-            m_config.AdvancedImportOptions.MigrateONRAfter = Convert.ToDateTime(value);
+            m_config.AdvancedImportOptions.MigrateOnOrAfter = Convert.ToDateTime(value);
 
             OnPropertyChanged(new PropertyChangedEventArgs("MigrateONRAfter"));
         }

@@ -27,7 +27,7 @@ public class ConfigViewModelUDest: BaseViewModel
     }
     public void LoadConfig(Config config)
     {
-        ZimbraServerHostName = config.zimbraServer.ZimbraHostname;
+        ZimbraServerHostName = config.zimbraServer.Hostname;
         ZimbraPort = config.zimbraServer.Port;
         ZimbraUser = config.zimbraServer.UserAccount;
         ZimbraUserPasswd = config.zimbraServer.UserPassword;
@@ -168,12 +168,12 @@ public class ConfigViewModelUDest: BaseViewModel
         }
     }
     public string ZimbraServerHostName {
-        get { return m_config.zimbraServer.ZimbraHostname; }
+        get { return m_config.zimbraServer.Hostname; }
         set
         {
-            if (value == m_config.zimbraServer.ZimbraHostname)
+            if (value == m_config.zimbraServer.Hostname)
                 return;
-            m_config.zimbraServer.ZimbraHostname = value;
+            m_config.zimbraServer.Hostname = value;
 
             OnPropertyChanged(new PropertyChangedEventArgs("ZimbraServerHostName"));
         }

@@ -10,31 +10,31 @@ public class Config
         string zimbraAdmin, string zimbrapasswd, string zimbradomain, string pstfile)
     {
         this.zimbraServer = new ZimbraServer();
-        this.mailServer = new MailServer();
+        this.SourceServer = new SourceServer();
         this.importOptions = new ImportOptions();
         this.UserProvision = new UserProvision();
         this.AdvancedImportOptions = new AdvancedImportOptions();
         this.LoggingOptions = new LoggingOptions();
         this.AdvancedImportOptions.FoldersToSkip = null;
 
-        this.zimbraServer.ZimbraHostname = zimbraserverhostname;
+        this.zimbraServer.Hostname = zimbraserverhostname;
         this.zimbraServer.Port = zimbraport;
-        this.zimbraServer.ZimbraAdminID = zimbraAdmin;
-        this.zimbraServer.ZimbraAdminPwd = zimbrapasswd;
+        this.zimbraServer.AdminID = zimbraAdmin;
+        this.zimbraServer.AdminPwd = zimbrapasswd;
         // this.zimbraServer.Domain = zimbradomain;
-        this.mailServer.SourceHostname = mailserver;
-        this.mailServer.SourceAdminID = srcAdminId;
-        this.mailServer.SourceAdminPwd = srcAdminPwd;
-        this.mailServer.OutlookProfile = outlookProfile;
-        this.mailServer.PSTFile = pstFile;
-        this.mailServer.UseProfile = true;
+        this.SourceServer.Hostname = mailserver;
+        this.SourceServer.AdminID = srcAdminId;
+        this.SourceServer.AdminPwd = srcAdminPwd;
+        this.SourceServer.Profile = outlookProfile;
+        this.SourceServer.DataFile = pstFile;
+        this.SourceServer.UseProfile = true;
 
         this.GeneralOptions = new GeneralOptions();
         // this.mailServer.PSTFile = pstfile;
         // this.mailServer.ProfileName = outlookProfile;
     }
 
-    public MailServer mailServer;
+    public SourceServer SourceServer;
     public ZimbraServer zimbraServer;
     public ImportOptions importOptions;
     public UserProvision UserProvision;
@@ -43,31 +43,31 @@ public class Config
     public GeneralOptions GeneralOptions;
 }
 
-public class MailServer
+public class SourceServer
 {
     private string m_SourceHostname;
-    public string SourceHostname {
+    public string Hostname {
         get { return m_SourceHostname; }
         set { m_SourceHostname = value; }
     }
     private string m_SourceAdminID;
-    public string SourceAdminID {
+    public string AdminID {
         get { return m_SourceAdminID; }
         set { m_SourceAdminID = value; }
     }
     private string m_SourceAdminPwd;
-    public string SourceAdminPwd {
+    public string AdminPwd {
         get { return m_SourceAdminPwd; }
         set { m_SourceAdminPwd = value; }
     }
     private string m_OutlookProfile;
-    public string OutlookProfile
+    public string Profile
     {
         get { return m_OutlookProfile; }
         set { m_OutlookProfile = value; }
     }
     private string m_PSTFile;
-    public string PSTFile {
+    public string DataFile {
         get { return m_PSTFile; }
         set { m_PSTFile = value; }
     }
@@ -82,7 +82,7 @@ public class MailServer
 public class ZimbraServer
 {
     private string m_ZimbraHostname;
-    public string ZimbraHostname {
+    public string Hostname {
         get { return m_ZimbraHostname; }
         set { m_ZimbraHostname = value; }
     }
@@ -97,12 +97,12 @@ public class ZimbraServer
         set { m_UseSSL = value; }
     }
     private string m_ZimbraAdminID;
-    public string ZimbraAdminID {
+    public string AdminID {
         get { return m_ZimbraAdminID; }
         set { m_ZimbraAdminID = value; }
     }
     private string m_ZimbraAdminPwd;
-    public string ZimbraAdminPwd {
+    public string AdminPwd {
         get { return m_ZimbraAdminPwd; }
         set { m_ZimbraAdminPwd = value; }
     }
@@ -131,7 +131,7 @@ public class UserProvision
         set { m_defaultPWD = value; }
     }
     private string m_Domain;
-    public string Domain {
+    public string DestinationDomain {
         get { return m_Domain; }
         set { m_Domain = value; }
     }

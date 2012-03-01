@@ -58,7 +58,7 @@ public class ImportOptions
 public class AdvancedImportOptions
 {
     private DateTime m_MigrateONRAfter;
-    public DateTime MigrateONRAfter {
+    public DateTime MigrateOnOrAfter {
         get { return m_MigrateONRAfter; }
         set { m_MigrateONRAfter = value; }
     }

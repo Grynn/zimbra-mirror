@@ -188,7 +188,7 @@ public class UsersViewModel: BaseViewModel
 
                         Z11 = (Config)reader.Deserialize(fileRead);
                         fileRead.Close();
-                        ZimbraDomain = Z11.UserProvision.Domain;
+                        ZimbraDomain = Z11.UserProvision.DestinationDomain;
                         if (DomainList.Count > 0)
                             CurrentDomainSelection = (ZimbraDomain == null) ? 0 :
                                 DomainList.IndexOf(ZimbraDomain);
@@ -404,7 +404,7 @@ public class UsersViewModel: BaseViewModel
     {
         CurrentDomainSelection = 0;
 
-        string d = config.UserProvision.Domain;
+        string d = config.UserProvision.DestinationDomain;
 
         if (DomainList.Count > 0)
         {
@@ -495,12 +495,12 @@ public class UsersViewModel: BaseViewModel
         }
     }
     public string ZimbraDomain {
-        get { return m_config.UserProvision.Domain; }
+        get { return m_config.UserProvision.DestinationDomain; }
         set
         {
-            if (value == m_config.UserProvision.Domain)
+            if (value == m_config.UserProvision.DestinationDomain)
                 return;
-            m_config.UserProvision.Domain = value;
+            m_config.UserProvision.DestinationDomain = value;
 
             OnPropertyChanged(new PropertyChangedEventArgs("ZimbraDomain"));
         }

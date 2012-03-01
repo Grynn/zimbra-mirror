@@ -27,10 +27,10 @@ public class ConfigViewModelSDest: BaseViewModel
     }
     public void LoadConfig(Config config)
     {
-        ZimbraServerHostName = config.zimbraServer.ZimbraHostname;
+        ZimbraServerHostName = config.zimbraServer.Hostname;
         ZimbraPort = config.zimbraServer.Port;
-        ZimbraAdmin = config.zimbraServer.ZimbraAdminID;
-        ZimbraAdminPasswd = config.zimbraServer.ZimbraAdminPwd;
+        ZimbraAdmin = config.zimbraServer.AdminID;
+        ZimbraAdminPasswd = config.zimbraServer.AdminPwd;
         ZimbraSSL = config.zimbraServer.UseSSL;
     }
 
@@ -178,34 +178,34 @@ public class ConfigViewModelSDest: BaseViewModel
         }
     }
     public string ZimbraServerHostName {
-        get { return m_config.zimbraServer.ZimbraHostname; }
+        get { return m_config.zimbraServer.Hostname; }
         set
         {
-            if (value == m_config.zimbraServer.ZimbraHostname)
+            if (value == m_config.zimbraServer.Hostname)
                 return;
-            m_config.zimbraServer.ZimbraHostname = value;
+            m_config.zimbraServer.Hostname = value;
 
             OnPropertyChanged(new PropertyChangedEventArgs("ZimbraServerHostName"));
         }
     }
     public string ZimbraAdmin {
-        get { return m_config.zimbraServer.ZimbraAdminID; }
+        get { return m_config.zimbraServer.AdminID; }
         set
         {
-            if (value == m_config.zimbraServer.ZimbraAdminID)
+            if (value == m_config.zimbraServer.AdminID)
                 return;
-            m_config.zimbraServer.ZimbraAdminID = value;
+            m_config.zimbraServer.AdminID = value;
 
             OnPropertyChanged(new PropertyChangedEventArgs("ZimbraAdmin"));
         }
     }
     public string ZimbraAdminPasswd {
-        get { return m_config.zimbraServer.ZimbraAdminPwd; }
+        get { return m_config.zimbraServer.AdminPwd; }
         set
         {
-            if (value == m_config.zimbraServer.ZimbraAdminPwd)
+            if (value == m_config.zimbraServer.AdminPwd)
                 return;
-            m_config.zimbraServer.ZimbraAdminPwd = value;
+            m_config.zimbraServer.AdminPwd = value;
 
             OnPropertyChanged(new PropertyChangedEventArgs("ZimbraAdminPasswd"));
         }
