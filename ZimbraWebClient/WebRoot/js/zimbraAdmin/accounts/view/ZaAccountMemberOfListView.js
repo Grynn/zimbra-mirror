@@ -102,7 +102,8 @@ function (val, by){
 
 		//var getAccMemberShipCommand = new ZmCsfeCommand();
 		var params = new Object();
-		params.soapDoc = soapDoc;	
+		params.soapDoc = soapDoc;
+		params.noAuthToken = true;	
 		var reqMgrParams = {
 			controller: ZaApp.getInstance().getCurrentController ()
 		}
@@ -528,7 +529,8 @@ function (account, removeArray){
 		removeMemberSoapDoc.set("id", removeArray[i].id);
 		removeMemberSoapDoc.set("dlm", account.name);
 		var params = new Object();
-		params.soapDoc = removeMemberSoapDoc;	
+		params.soapDoc = removeMemberSoapDoc;
+		params.noAuthToken = true;	
 		r=command.invoke(params).Body.RemoveDistributionListMemberResponse;		
 	}
 }

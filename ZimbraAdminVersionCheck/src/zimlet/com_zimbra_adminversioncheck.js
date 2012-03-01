@@ -221,7 +221,8 @@ ZaVersionCheck.modifyMethod = function (mods) {
 	}
 	var command = new ZmCsfeCommand();
 	var params = new Object();
-	params.soapDoc = soapDoc;	
+	params.soapDoc = soapDoc;
+	params.noAuthToken = true;	
 	command.invoke(params);
 }
 ZaItem.modifyMethods["ZaVersionCheck"].push(ZaVersionCheck.modifyMethod);

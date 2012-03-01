@@ -721,7 +721,7 @@ function(ev) {
                                                             ex.code == ZmCsfeException.AUTH_TOKEN_CHANGED
                                                            ))
                         {
-                                ZmCsfeCommand._curAuthToken = null;
+                                ZmCsfeCommand.noAuth = true;
 
                                 var dlgs = ZaApp.getInstance().dialogs;
                                 if (dlgs != undefined) {

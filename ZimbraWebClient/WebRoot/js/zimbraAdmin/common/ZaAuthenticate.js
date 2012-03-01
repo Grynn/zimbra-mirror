@@ -56,6 +56,7 @@ function (uname, pword, callback) {
 	params.soapDoc = soapDoc;	
 	params.asyncMode = true;
 	params.noAuthToken=true;
+    params.ignoreAuthToken = true;
 	params.callback = callback;
 	command.invoke(params);	
 }
@@ -64,18 +65,18 @@ ZaAuthenticate.prototype._processResponse =
 function(resp) {
 	var els = resp.childNodes;
 	var len = els.length;
-	var el, authToken, sessionId;
+	var el, sessionId;
 	AjxCookie.setCookie(document, ZaSettings.ADMIN_NAME_COOKIE, this.uname, null, "/");			    	
 	for (var i = 0; i < len; i++) {
 		el = els[i];
-		if (el.nodeName == "authToken")
+/*		if (el.nodeName == "authToken")
 			authToken = el.firstChild.nodeValue;
-/*		else if (el.nodeName == "lifetime")
+  		else if (el.nodeName == "lifetime")
 			lifetime = el.firstChild.nodeValue;*/
-		else if (el.nodeName=="session")
+		if (el.nodeName=="session")
 			sessionId = el.firstChild.nodeValue;
 	}
-	ZmCsfeCommand.setAuthToken(authToken, -1, sessionId, true);
+	ZmCsfeCommand.noAuth = false;
 
 	//Instrumentation code start
 	if(ZaAuthenticate.processResponseMethods) {

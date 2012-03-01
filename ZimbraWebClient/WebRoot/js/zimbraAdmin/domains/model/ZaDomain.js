@@ -1005,7 +1005,8 @@ function (obj, callback) {
 	
 	var command = new ZmCsfeCommand();
 	var params = new Object();
-	params.soapDoc = soapDoc;	
+	params.soapDoc = soapDoc;
+	params.noAuthToken = true;	
 	params.asyncMode = true;
 	params.callback = callback;
 	command.invoke(params);	
@@ -1094,6 +1095,7 @@ ZaDomain.setNotebookACLs = function (obj, callback) {
 	var command = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;
+	params.noAuthToken = true;
 	params.accountName = obj.attrs[ZaDomain.A_zimbraNotebookAccount];
 			
 	if(callback) {
@@ -1194,6 +1196,7 @@ ZaDomain.testSyncSettings = function (obj, callback){
 	var params = new Object();
 	params.soapDoc = soapDoc;	
 	params.asyncMode = true;
+	params.noAuthToken = true;
 	params.callback = callback;
 	command.invoke(params);	
 }
@@ -1229,7 +1232,8 @@ ZaDomain.testGALSettings = function (obj, callback, sampleQuery) {
 	
 	var command = new ZmCsfeCommand();
 	var params = new Object();
-	params.soapDoc = soapDoc;	
+	params.soapDoc = soapDoc;
+	params.noAuthToken = true;	
 	params.asyncMode = true;
 	params.callback = callback;
 	command.invoke(params);
@@ -2208,6 +2212,7 @@ ZaDomain.loadNotebookACLs = function(by, val) {
 			var getFolderCommand = new ZmCsfeCommand();
 			var params = new Object();
 			params.soapDoc = soapDoc;
+			params.noAuthToken = true;
 			params.accountName = this.attrs[ZaDomain.A_zimbraNotebookAccount];
 		
 			var folderEl = soapDoc.set("folder", "");

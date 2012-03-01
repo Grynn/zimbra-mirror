@@ -173,6 +173,7 @@ ZaSettings.init = function () {
                 var command = new ZmCsfeCommand();
                 var params = new Object();
                 params.soapDoc = soapDoc;
+				params.noAuthToken = true;
                 var resp = command.invoke(params);
                 var zimlets = null;
                 try {

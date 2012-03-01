@@ -360,13 +360,13 @@ function(ex, method, params, restartOnError, obj) {
 		) 
 	{
 		try {
+			ZmCsfeCommand.noAuth = true;
 			if (ZaApp.getInstance() != null && (ex.code == ZmCsfeException.SVC_AUTH_EXPIRED ||
 							    ex.code == ZmCsfeException.AUTH_TOKEN_CHANGED ||
 								ex.code == ZmCsfeException.NO_AUTH_TOKEN
 							   )) 
 			{
 				// Must clear Cookie in browser
-				ZmCsfeCommand.setAuthToken(null);
 
 				var dlgs = ZaApp.getInstance().dialogs;
 				for (var dlg in dlgs) {
@@ -466,7 +466,7 @@ function(ex, method, params, restartOnError, obj) {
 
 ZaController.prototype._doAuth = 
 function(username, password) {
-	ZmCsfeCommand.clearAuthToken();
+	ZmCsfeCommand.noAuth = true;
 	try {
 		//hide login dialog
 		this._hideLoginDialog();
@@ -572,8 +572,8 @@ function (resp) {
 	 		var response = resp.getResponse();
 	 		var body = response.Body;		
 	 		
-	 		ZmCsfeCommand.setAuthToken(body.AuthResponse.authToken[0]._content, -1, body.AuthResponse.session.id, true);
-	 		
+	 		ZmCsfeCommand.noAuth = false;
+
 			//Instrumentation code start
 			if(ZaAuthenticate.processResponseMethods) {
 				var cnt = ZaAuthenticate.processResponseMethods.length;

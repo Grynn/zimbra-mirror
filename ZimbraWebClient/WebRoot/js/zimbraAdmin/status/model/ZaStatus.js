@@ -63,6 +63,7 @@ function() {
 			var soapDoc = AjxSoapDoc.create("GetServiceStatusRequest", ZaZimbraAdmin.URN, null);
 			var command = new ZmCsfeCommand();
 			var params = new Object();
+			params.noAuthToken = true;
 			params.soapDoc = soapDoc;	
 			var resp = command.invoke(params).Body.GetServiceStatusResponse;			
 			this.initFromJS(resp);

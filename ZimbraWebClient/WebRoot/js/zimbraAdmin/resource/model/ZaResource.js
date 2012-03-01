@@ -334,7 +334,8 @@ function(callback) {
 	soapDoc.set("id", this.id);
 	this.deleteCommand = new ZmCsfeCommand();
 	var params = new Object();
-	params.soapDoc = soapDoc;	
+	params.soapDoc = soapDoc;
+	params.noAuthToken = true;	
 	if(callback) {
 		params.asyncMode = true;
 		params.callback = callback;

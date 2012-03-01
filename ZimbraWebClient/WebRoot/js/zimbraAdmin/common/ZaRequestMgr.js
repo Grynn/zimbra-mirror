@@ -30,6 +30,7 @@ ZaRequestMgr.invoke = function (csfeParams, params) {
 	
 	try {
 		ZaZimbraAdmin.getInstance().cancelNoOp();
+		csfeParams.noAuthToken = true;
 		var response = command.invoke(csfeParams) ;
 		if (!csfeParams.asyncMode && controller) {
 			//if(window.console && window.console.log) console.log("Clear busy dialog " + id) ;

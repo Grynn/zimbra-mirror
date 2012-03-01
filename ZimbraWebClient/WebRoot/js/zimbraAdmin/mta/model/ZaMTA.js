@@ -297,7 +297,8 @@ function(by, val) {
 	attr.setAttribute("name", this.name);		
 	var command = new ZmCsfeCommand();
 	var params = new Object();
-	params.soapDoc = soapDoc;	
+	params.soapDoc = soapDoc;
+	params.noAuthToken = true;	
 	params.asyncMode = true;
 	var callback = new AjxCallback(this, this.QCountsCallback);	
 	params.callback = callback;
@@ -368,7 +369,8 @@ ZaMTA.prototype.getMailQStatus = function (qName,query,offset,limit,force) {
 	
 	var command = new ZmCsfeCommand();
 	var params = new Object();
-	params.soapDoc = soapDoc;	
+	params.soapDoc = soapDoc;
+	params.noAuthToken = true;	
 	params.asyncMode = true;
 	var callback = new AjxCallback(this, this.mailQStatusCallback,{qName:qName,query:query,offset:offset,limit:limit,force:force});	
 	params.callback = callback;
@@ -466,6 +468,7 @@ ZaMTA.prototype.mailQueueAction = function (qName, action, by, val) {
 	var params = new Object();
 	params.soapDoc = soapDoc;	
 	params.asyncMode = true;
+	params.noAuthToken = true;
 	var callback = new AjxCallback(this, this.mailQueueActionClbck, qName);	
 	params.callback = callback;
 

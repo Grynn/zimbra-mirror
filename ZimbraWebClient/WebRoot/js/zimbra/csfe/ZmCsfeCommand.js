@@ -524,7 +524,7 @@ function(params) {
 			soapDoc.set("authToken", authToken, context);
 		}
 	}
-	else if (ZmCsfeCommand.noAuth) {
+	else if (ZmCsfeCommand.noAuth && !params.ignoreAuthToken) {
 		throw new ZmCsfeException("Auth required", ZmCsfeException.NO_AUTH_TOKEN, params.methodNameStr);
 	}
 
