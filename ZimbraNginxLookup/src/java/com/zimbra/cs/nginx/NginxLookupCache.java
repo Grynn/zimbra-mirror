@@ -14,7 +14,6 @@
  */
 package com.zimbra.cs.nginx;
 
-import java.util.List;
 import java.util.Map;
 
 import com.zimbra.common.util.MapUtil;

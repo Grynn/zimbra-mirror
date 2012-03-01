@@ -47,7 +47,6 @@ import com.zimbra.cs.account.Domain;
 import com.zimbra.cs.account.Account;
 import com.zimbra.common.account.Key;
 import com.zimbra.common.account.Key.AccountBy;
-import com.zimbra.common.account.Key.DomainBy;
 import com.zimbra.common.account.ProvisioningConstants;
 import com.zimbra.cs.account.AccessManager;
 import com.zimbra.cs.extension.ExtensionDispatcherServlet;
@@ -197,11 +196,7 @@ public class NginxLookupExtension implements ZimbraExtension {
         public NginxLookupHandler() throws ExtensionException {
             try {
                 prov = LdapProv.getInst();
-                if (prov instanceof com.zimbra.cs.account.ldap.legacy.LegacyLdapProvisioning) {
-                    helper = new LegacyNginxLookupLdapHelper(prov);
-                } else {
-                    helper = new NginxLookupLdapHelper(prov);
-                }
+                helper = new NginxLookupLdapHelper(prov);
             } catch (ServiceException e) {
                 throw new ExtensionException("unable to initialize nginx lookup servlet", e);
             }
