@@ -96,7 +96,8 @@ AjxRpcRequest.prototype.invoke =
 function(requestStr, serverUrl, requestHeaders, callback, useGet, timeout) {
 
 	var asyncMode = (callback != null);
-	this.requestStr = requestStr;	// for debugging
+	var m = requestStr && requestStr.match(/.*"(\w+Request)"/);
+	this.methodName = m ? m[1] : serverUrl || "";	// for debugging
 
 	// An exception here will be caught by AjxRpc.invoke
 	this.__httpReq.open((useGet) ? "get" : "post", serverUrl, asyncMode);
@@ -125,7 +126,7 @@ function(requestStr, serverUrl, requestHeaders, callback, useGet, timeout) {
 		}
 	}
 
-	AjxDebug.println(AjxDebug.RPC, "RPC send: " + this.id);
+	AjxDebug.println(AjxDebug.RPC, AjxDebug._getTimeStamp() + " RPC send: " + this.id);
 	this.__httpReq.send(requestStr);
 	if (asyncMode) {
 		return this.id;
@@ -185,8 +186,9 @@ function(req, callback) {
 
 		// If IE receives a 500 error, the object reference can be lost
 		DBG.println(AjxDebug.DBG1, "Async RPC request: Lost request object!!!");
-		AjxDebug.println(AjxDebug.RPC, "Async RPC request: Lost request object!!!");
+		AjxDebug.println(AjxDebug.RPC, AjxDebug._getTimeStamp() + " Async RPC request: Lost request object!!!");
 		callback.run( {text:null, xml:null, success:false, status:500} );
+		AjxRpc.freeRpcCtxt(req);
 		return;
 	}
 
