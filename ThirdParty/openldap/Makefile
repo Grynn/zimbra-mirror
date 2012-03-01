@@ -15,10 +15,10 @@ PATCH	:=
 
 ifdef BETA
 	include $(OPENLDAP_ROOT)/../beta_versions.def
-	PATCH	:= patch -g0 -N -p1 < ../patches/repllog.patch; patch -g0 -N -p1 < ../patches/ITS6024.patch; patch -g0 -N -p1 < ../patches/ITS7162.patch; patch -g0 -N -p1 < ../patches/ITS7174.patch; patch -g0 -N -p1 < ../patches/ITS7176.patch; patch -g0 -N -p1 < ../patches/ITS7170.patch; patch -g0 -N -p1 < ../patches/ITS7170-2.patch; patch -g0 -N -p1 < ../patches/ITS7180.patch;
+	PATCH	:= patch -g0 -N -p1 < ../patches/repllog.patch; patch -g0 -N -p1 < ../patches/ITS6024.patch; patch -g0 -N -p1 < ../patches/ITS7162.patch; patch -g0 -N -p1 < ../patches/ITS7174.patch; patch -g0 -N -p1 < ../patches/ITS7176.patch; patch -g0 -N -p1 < ../patches/ITS7170.patch; patch -g0 -N -p1 < ../patches/ITS7170-2.patch; patch -g0 -N -p1 < ../patches/ITS7180.patch; patch -g0 -N -p1 < ../patches/slapadd-segfault.patch;
 else
 	include $(OPENLDAP_ROOT)/../versions.def
-	PATCH	:= patch -g0 -N -p1 < ../patches/repllog.patch; patch -g0 -N -p1 < ../patches/ITS6024.patch; patch -g0 -N -p1 < ../patches/ITS7162.patch; patch -g0 -N -p1 < ../patches/ITS7174.patch; patch -g0 -N -p1 < ../patches/ITS7176.patch; patch -g0 -N -p1 < ../patches/ITS7170.patch; patch -g0 -N -p1 < ../patches/ITS7170-2.patch; patch -g0 -N -p1 < ../patches/ITS7180.patch;
+	PATCH	:= patch -g0 -N -p1 < ../patches/repllog.patch; patch -g0 -N -p1 < ../patches/ITS6024.patch; patch -g0 -N -p1 < ../patches/ITS7162.patch; patch -g0 -N -p1 < ../patches/ITS7174.patch; patch -g0 -N -p1 < ../patches/ITS7176.patch; patch -g0 -N -p1 < ../patches/ITS7170.patch; patch -g0 -N -p1 < ../patches/ITS7170-2.patch; patch -g0 -N -p1 < ../patches/ITS7180.patch; patch -g0 -N -p1 < ../patches/slapadd-segfault.patch;
 endif
 
 ifeq (MACOSX,$(findstring MACOSX,$(BUILD_PLATFORM)))
