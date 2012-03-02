@@ -486,36 +486,35 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 							]
 						},
 
-                                                {type:_ZA_TOP_GROUPER_,label: ZaMsg.NAD_MTA_PolicyServiceChecks,
-                                                        visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,
-                                                                [ZaGlobalConfig.A_zimbraMtaPolicySerice
-                                                                ]]],
-                                                        visibilityChangeEventSources:[ZaGlobalConfig.A_zimbraMtaPolicyService
-                                                        ],
-                                                        items:[
-						  	{ ref: ZaGlobalConfig.A_zimbraMtaPolicyService, type: _REPEAT_,
-						  	  label: ZaMsg.NAD_MTA_policy_service,
-							  labelLocation:_LEFT_,
-							  align:_LEFT_,
-							  repeatInstance:"",
-							  showAddButton:true,
-							  showRemoveButton:true,
-							  showAddOnNextRow:true,
-							  items: [
-								{ref:".", type:_TEXTFIELD_, label:null}
-							  ]
-							}
-                                                ]},
+                        {type:_ZA_TOP_GROUPER_,label: ZaMsg.NAD_MTA_PolicyServiceChecks,
+                                visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,
+                                        [ZaGlobalConfig.A_zimbraMtaPolicyService]]
+                                ],
+                                items:[
+                                    { ref: ZaGlobalConfig.A_zimbraMtaPolicyService, type: _REPEAT_,
+                                      label: ZaMsg.NAD_MTA_policy_service,
+                                      labelLocation:_LEFT_,
+                                      align:_LEFT_,
+                                      repeatInstance:"",
+                                      showAddButton:true,
+                                      showRemoveButton:true,
+                                      showAddOnNextRow:true,
+                                      items: [
+                                        {ref:".", type:_TEXTFIELD_, label:null, visibilityChecks:[], enableDisableChecks:[] }
+                                      ]
+                                    }
+                                ]
+                        },
 
 						{type:_ZA_TOP_GROUPER_,label: ZaMsg.NAD_MTA_ProtocolChecks,
-                                                	visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,
-                                                        	[ZaGlobalConfig.A_zimbraMtaRejectInvalidHostname,
-                                                        	ZaGlobalConfig.A_zimbraMtaRejectNonFqdnHostname,
-                                                        	ZaGlobalConfig.A_zimbraMtaRejectNonFqdnSender]]],
-                                                	visibilityChangeEventSources:[ZaGlobalConfig.A_zimbraMtaRejectUnknownClient,
-                                                        	ZaGlobalConfig.A_zimbraMtaRejectUnknownHostname,
-                                                        	ZaGlobalConfig.A_zimbraMtaRejectUnknownSenderDomain
-                                                	],
+                            visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,
+                                    [ZaGlobalConfig.A_zimbraMtaRejectInvalidHostname,
+                                    ZaGlobalConfig.A_zimbraMtaRejectNonFqdnHostname,
+                                    ZaGlobalConfig.A_zimbraMtaRejectNonFqdnSender]]],
+                            visibilityChangeEventSources:[ZaGlobalConfig.A_zimbraMtaRejectUnknownClient,
+                                    ZaGlobalConfig.A_zimbraMtaRejectUnknownHostname,
+                                    ZaGlobalConfig.A_zimbraMtaRejectUnknownSenderDomain
+                            ],
 							items:[
 						  	{ ref: ZaGlobalConfig.A_zimbraMtaRejectInvalidHostname, type: _CHECKBOX_,
 						  	  label: ZaMsg.NAD_MTA_reject_invalid_hostname
@@ -562,6 +561,9 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 						  	}
 						]},
                         { type:_ZA_TOP_GROUPER_, label:ZaMsg.NAD_AutoProvision_Setting, colSizes:["275px","100%"],
+                            visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,
+								[ZaGlobalConfig.A_zimbraAutoProvBatchSize,
+								 ZaGlobalConfig.A_zimbraAutoProvPollingInterval]]],
                         items :[
                             {ref:ZaGlobalConfig.A_zimbraAutoProvBatchSize, type:_TEXTFIELD_, label:ZaMsg.LBL_zimbraAutoProvBatchSize,
                                 autoSaveValue:true, labelLocation:_LEFT_,
