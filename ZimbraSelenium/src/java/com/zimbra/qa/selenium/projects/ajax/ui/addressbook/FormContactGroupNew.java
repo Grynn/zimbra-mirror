@@ -174,7 +174,7 @@ public class FormContactGroupNew extends AbsForm {
 	 * check if the list group is empty
 	 */
 	public boolean zIsListGroupEmpty() throws HarnessException {
-		return sIsElementPresent(getLocator(" div#[id$=_listView].groupMembers div#zl__GRP__rows>div>table>tbody>tr>td.NoResults"));			
+		return sIsElementPresent(getLocator(" div#[id$=_listView].groupMembers div[id^=zl__DWT][id$=__rows] td.NoResults"));			
 	}
 
 	/* return an array list of contact items displayed in the group list view
@@ -188,7 +188,7 @@ public class FormContactGroupNew extends AbsForm {
 	      int count=1;
 	      
 	      while (true) {
-	    	  String cssCommon= getLocator(" div#zl__GRP__rows>div:nth-child(" + count + ")>table>tbody>tr>");
+	    	  String cssCommon= getLocator(" div[id^=zl__DWT][id$=__rows]>div:nth-child(" + count + ") ");
 		      String cssName = cssCommon + "td:nth-child(2)"; 	
 		      String cssEmail= cssCommon + "td:nth-child(3)";
 		      
