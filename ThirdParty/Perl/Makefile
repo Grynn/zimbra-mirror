@@ -10,8 +10,13 @@ export JAVA_HOME
 TMPDIR	:= tmp
 BUILD_PLATFORM ?= $(shell sh $(P4_ROOT)/ZimbraBuild/rpmconf/Build/get_plat_tag.sh)
 PERL_TGZ_DEST_DIR := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/perl
-PERL_TGZ_DEST	:= $(PERL_TGZ_DEST_DIR)/perllib.tgz
-PERL_BIN_TGZ_DEST := $(PERL_TGZ_DEST_DIR)/perlbin.tgz
+ifndef OCTOPUS
+	PERL_TGZ_DEST	:= $(PERL_TGZ_DEST_DIR)/perllib.tgz
+	PERL_BIN_TGZ_DEST := $(PERL_TGZ_DEST_DIR)/perlbin.tgz
+else
+	PERL_TGZ_DEST	:= $(PERL_TGZ_DEST_DIR)/perllib-octopus.tgz
+	PERL_BIN_TGZ_DEST := $(PERL_TGZ_DEST_DIR)/perlbin-octopus.tgz
+endif
 
 ifeq ($(BUILD_PLATFORM), )
         BUILD_PLATFORM := "UNKNOWN"
