@@ -59,7 +59,7 @@
       <attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/javamail-1.4.3-javadoc.jar!/"/>
     </attributes>
   </classpathentry>
-  <classpathentry kind="lib" path="jars/mysql-connector-java-5.1.13-bin.jar" sourcepath="/ThirdParty/connector-j/mysql-connector-java-5.1.13/src"/>
+  <classpathentry kind="lib" path="jars/mysql-connector-java-5.1.18-bin.jar" sourcepath="/ThirdParty/connector-j/mysql-connector-java-5.1.18/src"/>
   <classpathentry kind="lib" path="jars/nekohtml.jar"/>
   <classpathentry kind="lib" path="jars/servlet-api-2.5.jar">
     <attributes>
