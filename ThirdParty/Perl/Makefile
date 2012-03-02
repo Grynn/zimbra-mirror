@@ -379,6 +379,7 @@ build:
 		if [ $$? -ne 0 ]; then echo "FAILED."; else echo "done."; fi \
 	done
 
+ifndef OCTOPUS
 	@for lib in $(BDB_PERL_LIBS); do \
 		echo -n "Compiling perl lib $$lib ..."; \
 		cp $(PERL_ROOT)/$$lib.tar.gz $(TMPDIR); \
@@ -393,6 +394,7 @@ build:
 		LD_RUN_PATH=$(ZIMBRA_HOME)/$(BDB_LIB_DIR) DB_FILE_INCLUDE=$(BDB_INCLUDE) DB_FILE_LIB=$(BDB_LIB_DIR) $(DB_FILE_ARGS) $(PERL) -I$(DEST_LIB_DIR) -MCPAN -e "force (\"install\", \"$$lib\")" >> $(LOGFILE) 2>&1; \
 		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
 	done
+endif
 
 	@for lib in $(DBD_PERL_LIBS); do \
 		echo -n "Compiling perl lib $$lib ..."; \
@@ -421,6 +423,7 @@ build:
 		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
 	done
 
+ifndef OCTOPUS
 	@for lib in $(SA_PERL_LIBS); do \
 		echo -n "Compiling perl lib $$lib" ...; \
 		cp $(PERL_ROOT)/$$lib.tar.gz $(TMPDIR); \
@@ -431,6 +434,7 @@ build:
 			rm -rf $(DEST_DIR)/opt;) >> $(LOGFILE) 2>&1; \
 		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
 	done
+endif
 
 	@for lib in $(SWATCH); do \
 		echo -n "Compiling perl lib $$lib ..."; \
@@ -438,7 +442,6 @@ build:
 		(cd $(TMPDIR); tar xzf $$lib.tar.gz; cd $$lib; \
 			$(SED) -i .bak -e 's#/usr/lib/sendmail /usr/sbin/sendmail#/usr/lib/sendmail /usr/sbin/sendmail /opt/zimbra/postfix/sbin/sendmail#' lib/Swatch/Actions.pm; \
 			rm -f lib/Swatch/Actions.pm.bak; \
-			BERKELEYDB_INCLUDE=$(BDB_INCLUDE) BERKELEYDB_LIB=$(BDB_LIB_DIR) \
 			$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR); \
 			$(MAKE); $(MAKE) install;) >> $(LOGFILE) 2>&1; \
 		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
