@@ -43,6 +43,7 @@ ZaZimlet.A_zimbraZimletHandlerClass = "zimbraZimletHandlerClass";
 ZaZimlet.A_zimbraZimletHandlerConfig = "zimbraZimletHandlerConfig";
 ZaZimlet.A_zimbraZimletContentObject = "zimbraZimletContentObject";
 ZaZimlet.A_zimbraZimletPanelItem = "zimbraZimletPanelItem";
+ZaZimlet.A_zimbraCreateTimestamp = "zimbraCreateTimestamp";
 ZaZimlet.A_zimbraZimletScript = "zimbraZimletScript";
 ZaZimlet.A_zimbraZimletServerIndexRegex = "zimbraZimletServerIndexRegex";
 ZaZimlet.A_zimbraAdminExtDisableUIUndeploy = "zimbraAdminExtDisableUIUndeploy";
@@ -90,11 +91,53 @@ ZaZimlet._handleGetAllResponse = function(callback, resp) {
     var list = new ZaItemList(ZaZimlet);
     resp = resp instanceof ZmCsfeResult ? resp.getResponse() : resp;
     list.loadFromJS(resp.Body.GetAllZimletsResponse);
+    
+    // cache all the zimlets information, so we can them in other pages
+    // format: zimlet-name --> ZaZimlet object
+    var oldZimlets = ZaZimlet.zimlets;
+    ZaZimlet.zimlets = new Object();
+    var zimlets = list.getVector()._array;
+    for(var i in list.getVector()._array) {
+    	var z = zimlets[i];
+    	ZaZimlet.zimlets[z[ZaZimlet.A_name]] = z;
+    }
+    
+    // compare and decide which zimlets to include
+    var incList;
+    if (oldZimlets) {
+    	incList = new ZaItemList(ZaZimlet);
+    	for (var zimletName in ZaZimlet.zimlets) {
+        	var z = ZaZimlet.zimlets[zimletName];
+        	var oz = oldZimlets[zimletName];
+        	if(!oz) { // there is a new zimlet
+        		incList.add(oz);
+        	} else {
+        		if (z.attrs[ZaZimlet.A_zimbraCreateTimestamp] !=
+        			oz.attrs[ZaZimlet.A_zimbraCreateTimestamp]) {
+        			// the zimlet has been updated
+        			incList.add(oz);
+        		}
+        	}
+        }
+    } else {
+    	incList = list;
+    }
+    
     if (callback) {
-        var args = callback.args;
+    	var args = callback.args;
         args = args ? (args instanceof Array ? args : [args]) : [];
-        callback = new AjxCallback(callback.obj, callback.func, args.concat(list));
-        ZaZimlet._handleGetAllResources(list, callback);
+   		callback = new AjxCallback(callback.obj, callback.func, args.concat(list));
+    	if (incList.size() == 0) {
+    		callback.run();
+    	} else {
+    		  // callback need to know the whole list, 
+    		  // but _handleGetAllResouce need only know what are to be included
+    	    ZaZimlet._handleGetAllResources(incList, callback);
+    	}     
+    } else {
+    	if (incList.size() > 0) {
+    		ZaZimlet._handleGetAllResources(incList);
+    	}
     }
     return list;
 };

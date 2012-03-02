@@ -173,9 +173,10 @@ ZaZimletSelect_XFormItem.prototype.getChoiceHTML = function (itemNum, value, lab
 	
 	var ref = this.getFormGlobalRef() + ".getItemById('"+ this.getId()+ "')";
 	var id = this.getId();
-	var retVal = ["<tr><td class=", cssClass,">", label, "</td><td class=", cssClass, 
-			" onclick=\"",ref, ".onChoiceClick(", itemNum,", event||window.event)\"",
-			" ondblclick=\"",ref, ".onChoiceDoubleClick(", itemNum,", event||window.event)\" id='",id,"_choice_",itemNum,"'>",
+	var retVal = ["<tr><td class=", cssClass," onmouseover=\"", ref, ".showToolTip('", value, "',event||window.event)\",",
+			      " onmouseout=\"",ref, ".hideToolTip(event||window.event)\">", label, "</td><td class=", cssClass, 
+			      " onclick=\"",ref, ".onChoiceClick(", itemNum,", event||window.event)\"",
+			      " ondblclick=\"",ref, ".onChoiceDoubleClick(", itemNum,", event||window.event)\" id='",id,"_choice_",itemNum,"'>",
 				"<table cellspacing=0 cellpadding=0><tr><td><input type=checkbox id='",id,"_choiceitem_",itemNum,"'></td><td>",
 				ZaMsg.Available,
 				"</td></tr></table></td>"];
@@ -189,6 +190,46 @@ ZaZimletSelect_XFormItem.prototype.getChoiceHTML = function (itemNum, value, lab
 	}
 	retVal.push("</tr>");
 	return retVal.join("");
+}
+
+ZaZimletSelect_XFormItem.prototype.showToolTip = function(zimletName, event) {
+	var zimlet = ZaZimlet.zimlets[zimletName];
+	var desc;
+	if (!zimlet) {
+		desc = "Unknown Zimlet";
+	} else {
+		// convert description variable to the readable text
+		desc = ZaZimletListView.__processMessage(zimletName, zimlet.attrs[ZaZimlet.A_zimbraZimletDescription ]);
+		if (desc.slice(0, 2) == "${") { // the zimlet main js is not yet loaded
+			desc = ZaMsg.Zimlet_Description_Loading;
+		}
+	}
+	var dwtEv = new DwtUiEvent(true);
+	dwtEv.setFromDhtmlEvent(event);
+	var shell = DwtShell.getShell(window);
+	var tooltip = shell.getToolTip();
+	var html = new Array(20);
+	var idx = 0;
+	html[idx++] = "<table cellpadding='0' cellspacing='0' border='0'>";
+	html[idx++] = "<tr valign='center'><td colspan='2' align='left'>";
+	html[idx++] = "<div style='white-space:nowrap; overflow:hidden;width:350'>";
+	html[idx++] = "<table cellpadding='0' cellspacing='0' border='0' style='width:100%;'>";
+	html[idx++] = "<tr valign='center' >";
+	html[idx++] = "<td><b>" + AjxStringUtil.htmlEncode(zimletName) + "</b></td>";
+	html[idx++] = "<td align='right'></td></tr>";
+	html[idx++] = "<tr><td><hr style='border:none;border-top:1px solid black;height:0'></td><tr>";
+	html[idx++] = "<tr><td>" + AjxStringUtil.htmlEncode(desc) + "</td></tr>";
+	html[idx++] = "</table>"
+	html[idx++] = "</div></td></tr>";
+	html[idx++] = "</table>";
+	tooltip.setContent(html.join(""));
+	tooltip.popup(dwtEv.docX, dwtEv.docY, null, true);
+}
+
+ZaZimletSelect_XFormItem.prototype.hideToolTip = function(event) {
+	var shell = DwtShell.getShell(window);
+	var tooltip = shell.getToolTip();
+	tooltip.popdown();
 }
 
 ZaZimletSelect_XFormItem.prototype.hiliteChoice = function (itemNum) {
