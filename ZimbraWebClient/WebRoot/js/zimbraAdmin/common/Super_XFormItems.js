@@ -2344,4 +2344,155 @@ Ip_XModelItem.prototype.validateType = function (value) {
 };
 Ip_XModelItem.prototype.maxLength = 64;
 
+//TODO: Enhance the code using XForm conventions.
+Collaborated_Select_XFormItem = function() {}
+XFormItemFactory.createItemType("_COLLAB_SELECT_", "collaborated_select", Collaborated_Select_XFormItem, Repeat_XFormItem);
+
+Collaborated_Select_XFormItem.prototype.initializeItems = function () {
+    Repeat_XFormItem.prototype.initializeItems.call(this);
+    this.colSelect = this._findColSelect(this.__originalItems);
+    if (!this.colSelect) {
+        return;
+    }
+
+    if (!this.colSelect.id) {
+        this.colSelect.id = this.id + Dwt.getNextId();
+    }
+
+    //this.colSelect.alwaysUpdateChoices = true;
+    this.colSelect.onChange = Collaborated_Select_XFormItem.selectChanged;
+
+    this.choiceItems = ZaItem.deepCloneListItem(this.getChoices()._choiceObject);
+    this.__origChoiceItems = ZaItem.deepCloneListItem(this.getChoices()._choiceObject);
+    this.__availNum = this.__origChoiceItems.length;
+    this.getAddButton().visibilityChecks.push(Collaborated_Select_XFormItem.isAddButtonVisible);
+}
+
+Collaborated_Select_XFormItem.prototype.resetChoices = function (resetAll) {
+    if (!this.colSelect) {
+        return;
+    }
+
+    for (var i = 0; i < this.__origChoiceItems.length; i++) {
+        this.__origChoiceItems[i].__selected = false;
+        if (resetAll) {
+            this.__origChoiceItems[i].__excluded = false;
+        }
+    }
+
+    if (resetAll) {
+        this.__availNum = this.__origChoiceItems.length;
+    }
+    this.choiceItems = ZaItem.deepCloneListItem(this.__origChoiceItems);
+    this._updateChoices();
+}
+
+Collaborated_Select_XFormItem.selectChanged = function (newVal, event, form) {
+    var ancestor = form.getItemsById(this.__attributes.ancestorId)[0];
+    var current = this.getInstanceValue();
+    ancestor._markSelected(newVal, current);
+    this.setInstanceValue(newVal);
+    ancestor._updateChoices();
+}
+
+Collaborated_Select_XFormItem.isAddButtonVisible = function () {
+    if (!this.getParentItem().getParentItem().colSelect) {
+        return true;
+    }
+    return (this.getParentItem().getInstanceCount() < this.getParentItem().getParentItem().__availNum);
+}
+
+Collaborated_Select_XFormItem.prototype.filterOrigItems = function(key, vals) {
+    if (!this.__origChoiceItems || !(this.__origChoiceItems instanceof Array) || !key || !vals) {
+        return;
+    }
+    if (!(vals instanceof Array)) {
+        vals = [vals];
+    }
+    var num = 0;
+    for (var j = 0; j < this.__origChoiceItems.length; j++) {
+        this.__origChoiceItems[j].__excluded = false;
+        for (var i = 0; i < vals.length; i++) {
+            if (this.__origChoiceItems[j][key] == vals[i]) {
+                this.__origChoiceItems[j].__excluded = true;
+                num++;
+                break;
+            }
+        }
+    }
+    this.__availNum -= num;
+}
+
+Collaborated_Select_XFormItem.prototype.addRowButtonClicked = function (instanceNum) {
+    Repeat_XFormItem.prototype.addRowButtonClicked.call(this, instanceNum);
+    this._updateChoices();
+}
+
+Collaborated_Select_XFormItem.prototype.removeRowButtonClicked = function (instanceNum) {
+    var removedItem = this.getInstanceValue()[instanceNum];
+    var removed = removedItem[this.colSelect.ref];
+    this._markSelected(null, removed);
+    this._updateChoices();
+
+    Repeat_XFormItem.prototype.removeRowButtonClicked.call(this, instanceNum);
+}
+
+Collaborated_Select_XFormItem.prototype._updateChoices = function () {
+    var items = this.getForm().getItemsById(this.colSelect.id);
+    if (!items) {
+        return;
+    }
+
+    for (var i = 0; i < items.length; i++) {
+        items[i].getChoices().setChoices(this._getSelectable());
+        items[i].getChoices().dirtyChoices();
+    }
+}
+Collaborated_Select_XFormItem.prototype._findColSelect = function(obj) {
+    if (!obj) {
+        return;
+    }
+
+    if (obj.type == "oselect1") {
+        if (obj.colSelect) {
+            return obj;
+        }
+        return;
+    }
+
+    if (obj.items && obj.items instanceof Array) {
+        for (var i = 0; i < obj.items.length; i++) {
+            var result = this._findColSelect(obj.items[i]);
+            if (result ) {
+                return result;
+            }
+        }
+    }
+}
+
+Collaborated_Select_XFormItem.prototype._markSelected = function(newVal, oldVal) {
+    for (var i = 0; i < this.choiceItems.length; i++) {
+        if (this.choiceItems[i].name == oldVal) {
+            this.choiceItems[i].__selected = false;
+        }
+    }
+    for (var i = 0; i < this.choiceItems.length; i++) {
+        if (this.choiceItems[i].name == newVal) {
+            this.choiceItems[i].__selected = true;
+        }
+    }
+}
+
+Collaborated_Select_XFormItem.prototype._getSelectable = function() {
+    var result = [];
+    for (var i = 0; i < this.choiceItems.length; i++) {
+        if (!this.choiceItems[i].__excluded && !this.choiceItems[i].__selected) {
+            result.push(this.choiceItems[i]);
+        }
+    }
+    return result;
+}
+
+
+
 

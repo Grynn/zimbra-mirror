@@ -484,7 +484,10 @@ function (loc) {
     else
 	    this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
 	this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
-	this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);	
+	this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);
+
+    //Reset the gal collaborated selectors.
+    this._localXForm.getItemsById(ZaDomain.A2_gal_sync_accounts_set + "_wizard")[0].resetChoices(true);
 }
 
 ZaNewDomainXWizard.prototype.goPrev =
@@ -788,8 +791,9 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 							labelCssClass:"xform_label", align:_LEFT_,labelWrap:true,
 							enableDisableChecks:[]
 						},
-                        {ref:ZaDomain.A2_gal_sync_accounts_set, type:_REPEAT_, label:null, repeatInstance:"", showAddButton:true, showRemoveButton:true,
-							visibilityChangeEventSources:[ZaDomain.A2_create_gal_acc],
+                        {ref:ZaDomain.A2_gal_sync_accounts_set, id:ZaDomain.A2_gal_sync_accounts_set + "_wizard", type:_COLLAB_SELECT_, label:null, repeatInstance:"", showAddButton:true, showRemoveButton:true,
+                            choices: ZaApp.getInstance().getServerListChoices(true),
+                            visibilityChangeEventSources:[ZaDomain.A2_create_gal_acc],
 							visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A2_create_gal_acc,"TRUE"], [function() {
                                 //A workaround to modify remove button visibility checking
                                 //Keep at least 1 item. IZaf have only 1 item, hide the remove button
@@ -841,7 +845,9 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject, entry) {
                                             enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A2_create_gal_acc,"TRUE"]],
                                             required:true
                                         },
-                                        {ref:ZaDomain.A_mailHost, type: _OSELECT1_, label:ZaMsg.NAD_MailServer,  choices: ZaApp.getInstance().getServerListChoices(), required:true,
+                                        {ref:ZaDomain.A_mailHost, type: _OSELECT1_, label:ZaMsg.NAD_MailServer,  choices: ZaApp.getInstance().getServerListChoices(), colSelect:true, required:true,
+                                            width:300,
+                                            ancestorId: ZaDomain.A2_gal_sync_accounts_set + "_wizard",
                                             enableDisableChangeEventSources:[ZaDomain.A2_create_gal_acc],
                                             enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A2_create_gal_acc,"TRUE"]],
                                             visibilityChecks:[]

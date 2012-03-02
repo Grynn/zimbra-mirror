@@ -366,7 +366,24 @@ function (loc) {
 	this._button[DwtWizardDialog.NEXT_BUTTON].setText(AjxMsg._next);
 	this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
 	this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
-	this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);	
+	this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);
+
+    //Reset the gal collaborated selectors.
+    this.filterExistingServer();
+    this._localXForm.getItemsById(ZaDomain.A2_gal_sync_accounts_set + "_config_wizard")[0].resetChoices();
+}
+
+ZaGALConfigXWizard.prototype.filterExistingServer = function() {
+    var existing = this._containedObject[ZaDomain.A2_gal_sync_accounts];
+    if (!existing || !(existing instanceof Array)) {
+        return;
+    }
+    var result = [];
+    for (var i = 0; i < existing.length; i++) {
+        result.push(existing[i].attrs[ZaDomain.A_mailHost]);
+    }
+
+    this._localXForm.getItemsById(ZaDomain.A2_gal_sync_accounts_set + "_config_wizard")[0].filterOrigItems("name", result);
 }
 
 ZaGALConfigXWizard.prototype.goPage =
@@ -577,8 +594,9 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
                                     }
                                 ]}
                         ]},
-                        {ref:ZaDomain.A2_gal_sync_accounts_set, type:_REPEAT_, label:null, repeatInstance:"", showAddButton:true, showRemoveButton:true,
-							addButtonLabel:ZaMsg.Domain_GAL_Add,
+                        {ref:ZaDomain.A2_gal_sync_accounts_set, id:ZaDomain.A2_gal_sync_accounts_set + "_config_wizard", type:_COLLAB_SELECT_, label:null, repeatInstance:"", showAddButton:true, showRemoveButton:true,
+                            choices: ZaApp.getInstance().getServerListChoices(true),
+                            addButtonLabel:ZaMsg.Domain_GAL_Add,
 							addButtonWidth: 220,
                             number:0,
 							removeButtonLabel:ZaMsg.Domain_GAL_Remove,
@@ -586,6 +604,10 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 							visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A2_create_gal_acc,"TRUE"],
                                 [ZaItem.hasReadPermission,ZaDomain.A_zimbraGalAccountId],
                                 [function() {
+                                    var existingAcc = this.getParentItem().getInstanceValue(ZaDomain.A2_gal_sync_accounts);
+                                    if (existingAcc && existingAcc instanceof Array && existingAcc.length >= this.__availNum) {
+                                         return false;
+                                    }
                                     //A workaround to modify remove button visibility checking
                                     //Keep at least 1 item. IZaf have only 1 item, hide the remove button
                                     if (this.removeButton) {
@@ -600,8 +622,7 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
                                         });
                                     }
 
-                                    //If no item exist, add 1 for better UE.
-                                    if (this.getInstanceValue().length == 0) {
+                                    if (!existingAcc || (existingAcc && existingAcc instanceof Array && existingAcc.length == 0)) {
                                         this.addRowButtonClicked(this.getParentItem().instanceNum);
                                     }
                                     return true;
@@ -635,8 +656,10 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
                                             ],
                                             required:true
                                         },
-                                        {ref:ZaDomain.A_mailHost, type: _OSELECT1_, label:ZaMsg.NAD_MailServer,  choices: ZaApp.getInstance().getServerListChoices(),
-                                            required:true
+                                        {ref:ZaDomain.A_mailHost, type: _OSELECT1_, label:ZaMsg.NAD_MailServer,  choices: ZaApp.getInstance().getServerListChoices(), colSelect:true,
+                                            required:true,
+                                            width:300,
+                                            ancestorId: ZaDomain.A2_gal_sync_accounts_set + "_config_wizard"
                                         },
                                         {ref:ZaDomain.A2_new_internal_gal_ds_name, label:ZaMsg.Domain_InternalGALDSName, type:_TEXTFIELD_,
                                             visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode],
