@@ -936,7 +936,7 @@ function(el, text, idx, listType, listLevel, bulletNum, ctxt, convertor, onlyOne
 	} else if (nodeName == "td" && el.parentNode.firstChild != el) {
 		text[idx++] = "\t";
 	} else if (nodeName == "div") {
-        if ( el.previousSibling ){//No \n for body element first Child
+        if( !( el.parentNode.nodeName.toLowerCase() === "body" && el.parentNode.firstChild === el ) ){//No \n for body element first Child if it is div
             text[idx++] = "\n";
         }
 	} else if (nodeName == "blockquote") {
