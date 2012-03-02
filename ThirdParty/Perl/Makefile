@@ -454,7 +454,11 @@ endif
 
 check:
 	@echo "Verifying perl module build...";
+ifndef OCTOPUS
 	$(PERL_ROOT)/zmcheckbuiltmodules.pl >> $(LOGFILE) 2>&1;
+else
+	$(PERL_ROOT)/zmcheckbuiltmodules-octopus.pl >> $(LOGFILE) 2>&1;
+endif
 
 tarball:
 	@echo -n "Creating $(PERL_TGZ_DEST)..."; \
