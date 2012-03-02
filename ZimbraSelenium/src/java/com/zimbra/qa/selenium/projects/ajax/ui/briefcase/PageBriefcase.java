@@ -966,7 +966,7 @@ public class PageBriefcase extends AbsTab {
 
 			if (option == Button.B_RENAME) {
 
-				optionLocator = "css=div[id^=RENAME_FILE__] tr[id=POPUP_RENAME_FILE]>td[id^=RENAME_FILE]:contains(Rename)";
+				optionLocator = "css=div[id^=RENAME_FILE__] tr[id^=POPUP_RENAME_FILE]>td[id^=RENAME_FILE]:contains(Rename)";
 
 				page = null;
 
@@ -1022,12 +1022,12 @@ public class PageBriefcase extends AbsTab {
 				page = new DialogMove(MyApplication, this);
 			} else if (option == Button.O_CHECK_IN_FILE) {
 
-				optionLocator = "css=tr[id=POPUP_CHECKIN]>td[id^=CHECKIN__]:contains('Check In File')";
+				optionLocator = "css=tr[id^=POPUP_CHECKIN]>td[id^=CHECKIN__]:contains('Check In File')";
 
 				page = new DialogCheckInFile(MyApplication, this);
 			} else if (option == Button.O_DISCARD_CHECK_OUT) {
 
-				optionLocator = "css=tr[id=POPUP_DISCARD_CHECKOUT]>td[id^=DISCARD_CHECKOUT__]:contains(Discard Check Out)";
+				optionLocator = "css=tr[id^=POPUP_DISCARD_CHECKOUT]>td[id^=DISCARD_CHECKOUT__]:contains(Discard Check Out)";
 
 				page = null;
 			} else {
