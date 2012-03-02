@@ -16,8 +16,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.naming.NamingException;
-
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.io.SAXReader;
@@ -50,7 +48,7 @@ import com.zimbra.cs.account.accesscontrol.Rights.Admin;
 import com.zimbra.cs.account.gal.GalOp;
 import com.zimbra.cs.account.gal.GalParams;
 import com.zimbra.cs.account.ldap.LdapGalMapRules;
-import com.zimbra.cs.account.ldap.legacy.LegacyLdapUtil;
+import com.zimbra.cs.account.ldap.LdapGalSearch;
 import com.zimbra.cs.ldap.LdapConstants;
 import com.zimbra.cs.mailbox.ACL;
 import com.zimbra.cs.mailbox.Folder;
@@ -383,7 +381,7 @@ public class BulkImportAccounts extends AdminDocumentHandler {
                     zimbraMailTransport = "smtp:" + SMTPHost + ":" + SMTPPort;
                 }
                 try {
-                    SearchGalResult result = LegacyLdapUtil.searchLdapGal(galParams,GalOp.search, "*", maxResults, rules, null, null);
+                    SearchGalResult result = LdapGalSearch.searchLdapGal(galParams, GalOp.search, "*", maxResults, rules, null, null);
                     List<GalContact> entries = result.getMatches();
 
                     if (entries != null) {
@@ -456,9 +454,7 @@ public class BulkImportAccounts extends AdminDocumentHandler {
                         }
 
                     }
-                } catch (NamingException e) {
-                    throw ServiceException.FAILURE("", e);
-                } catch (IOException e) {
+                } catch (ServiceException e) {
                     throw ServiceException.FAILURE("", e);
                 }
             } else {

@@ -9,8 +9,6 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import javax.naming.NamingException;
-import javax.naming.directory.InvalidSearchFilterException;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
@@ -34,7 +32,8 @@ import com.zimbra.cs.account.accesscontrol.Rights.Admin;
 import com.zimbra.cs.account.gal.GalOp;
 import com.zimbra.cs.account.gal.GalParams;
 import com.zimbra.cs.account.ldap.LdapGalMapRules;
-import com.zimbra.cs.account.ldap.legacy.LegacyLdapUtil;
+import com.zimbra.cs.account.ldap.LdapGalSearch;
+import com.zimbra.cs.ldap.LdapException;
 import com.zimbra.cs.service.admin.AdminDocumentHandler;
 import com.zimbra.cs.service.admin.AdminService;
 import com.zimbra.soap.ZimbraSoapContext;
@@ -90,7 +89,8 @@ public class GenerateBulkProvisionFileFromLDAP extends AdminDocumentHandler {
 		String fileToken = Double.toString(Math.random()*100);
         LdapGalMapRules rules = new LdapGalMapRules(Provisioning.getInstance().getConfig(), true);
 		try {
-			SearchGalResult result = LegacyLdapUtil.searchLdapGal(galParams, GalOp.search, "*", maxResults, rules, null, null);
+			SearchGalResult result = LdapGalSearch.searchLdapGal(galParams, GalOp.search, "*", maxResults, rules, null, null);
+            
 			List<GalContact> entries = result.getMatches();
 			int totalAccounts = 0;
 			int totalDomains = 0;
@@ -431,17 +431,10 @@ public class GenerateBulkProvisionFileFromLDAP extends AdminDocumentHandler {
                 }
                 response.addElement(AdminExtConstants.E_fileToken).setText(fileToken);
             }
-		} catch (InvalidSearchFilterException e) {
-			throw BulkProvisionException.BP_INVALID_SEARCH_FILTER(e);
-		} catch (NamingException e) {
-			throw BulkProvisionException.BP_NAMING_EXCEPTION(e);
-		} catch (IOException e) {
-			throw ServiceException.FAILURE(e.getMessage(), e);
 		} catch (ServiceException e) {
-			if(e.getCause() instanceof InvalidSearchFilterException) {
-				throw BulkProvisionException.BP_INVALID_SEARCH_FILTER(e.getCause());
-			} else if (e.getCause() instanceof NamingException) {
-				throw BulkProvisionException.BP_NAMING_EXCEPTION(e);
+			if (LdapException.INVALID_SEARCH_FILTER.equals(e.getCode()) ||
+			        e.getCause() instanceof LdapException.LdapInvalidSearchFilterException) {
+				throw BulkProvisionException.BP_INVALID_SEARCH_FILTER(e);
 			} else {
 				throw e;
 			}
