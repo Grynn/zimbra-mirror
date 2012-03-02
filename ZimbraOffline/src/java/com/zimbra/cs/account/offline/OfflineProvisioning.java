@@ -116,6 +116,7 @@ import com.zimbra.cs.util.yauth.MetadataTokenStore;
 import com.zimbra.cs.wiki.WikiUtil;
 import com.zimbra.soap.SoapEngine;
 import com.zimbra.soap.ZimbraSoapContext;
+import com.zimbra.soap.admin.type.CacheEntryType;
 import com.zimbra.soap.admin.type.DataSourceType;
 
 public class OfflineProvisioning extends Provisioning implements OfflineConstants {
