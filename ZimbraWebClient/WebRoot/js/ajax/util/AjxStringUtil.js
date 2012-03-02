@@ -936,7 +936,9 @@ function(el, text, idx, listType, listLevel, bulletNum, ctxt, convertor, onlyOne
 	} else if (nodeName == "td" && el.parentNode.firstChild != el) {
 		text[idx++] = "\t";
 	} else if (nodeName == "div") {
-		text[idx++] = "\n";
+        if ( el.previousSibling ){//No \n for body element first Child
+            text[idx++] = "\n";
+        }
 	} else if (nodeName == "blockquote") {
 		text[idx++] = "\n\n";
 	} else if (nodeName == "pre") {
