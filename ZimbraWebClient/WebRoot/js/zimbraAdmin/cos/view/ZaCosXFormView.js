@@ -1153,6 +1153,10 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
 
             {type:_ZA_TOP_GROUPER_, id:"cos_datasourcepolling_settings",
                 label:ZaMsg.NAD_DataSourcePolling,
+                visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,
+                                  [ZaCos.A_zimbraDataSourceMinPollingInterval, ZaCos.A_zimbraDataSourcePop3PollingInterval,ZaCos.A_zimbraDataSourceImapPollingInterval,
+                                   ZaCos.A_zimbraDataSourceCalendarPollingInterval,ZaCos.A_zimbraDataSourceRssPollingInterval,ZaCos.A_zimbraDataSourceCaldavPollingInterval
+                                  ]]],
                 items: [
                     {ref:ZaCos.A_zimbraDataSourceMinPollingInterval, type:_LIFETIME_,
                         msgName:ZaMsg.MSG_zimbraDataSourceMinPollingInterval,
@@ -1195,6 +1199,8 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
             
             {type:_ZA_TOP_GROUPER_, id:"cos_proxyalloweddomain_settings",
              	label: ZaMsg.NAD_ProxyAllowedDomains,
+                visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,
+                                  [ZaCos.A_zimbraProxyAllowedDomains]]],
              	items:[
 		    {
 			ref: ZaCos.A_zimbraProxyAllowedDomains,  
