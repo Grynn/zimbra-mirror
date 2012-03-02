@@ -1533,12 +1533,8 @@ function(element, container) {
  */
 Dwt.setLoadingTime = 
 function(id, date) {
-	if (!window.isPerfMetric) {
-		return;
-	}
-	if (!date) {
-		date = new Date();
-	}
+	if (!window.isPerfMetric) { return;	}
+	date = date || new Date();
 	id += "_loading";
 	var div = document.getElementById(id);
 	if (!div) {
@@ -1557,12 +1553,8 @@ function(id, date) {
  */
 Dwt.setLoadedTime = 
 function(id, date) {
-	if (!window.isPerfMetric) {
-		return;
-	}
-	if (!date) {
-		date = new Date();
-	} 
+	if (!window.isPerfMetric) { return;	}
+	date = date || new Date();
 	id += "_loaded";
 	var div = document.getElementById(id);
 	if (!div) {
