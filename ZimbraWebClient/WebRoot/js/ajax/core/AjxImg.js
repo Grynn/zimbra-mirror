@@ -47,6 +47,9 @@ AjxImg.RE_COLOR = /^(.*?),color=(.*)$/;
  */
 AjxImg.setImage =
 function(parentEl, imageName, useParentEl, _disabled) {
+	
+	if (!parentEl) { return; }
+	
 	var origImageName = imageName;
     var color, m = imageName && imageName.match(AjxImg.RE_COLOR);
 	if (m) {

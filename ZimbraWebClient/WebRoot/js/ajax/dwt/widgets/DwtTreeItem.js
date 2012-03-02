@@ -840,7 +840,7 @@ function(selected, noFocus) {
 		if (!this._initialized) {
 			this._initialize();
 		}
-		if (!this._itemDiv) { return; }
+		if (!this._itemDiv || !this._extraCell) { return; }
 		if (selected && (this._selectionEnabled || this._forceNotifySelection || this._checkBoxVisible) /*&& this._origClassName == "DwtTreeItem"*/) {
 			this._itemDiv.className = this._selectedClassName;
             if (this._contextEnabled)
