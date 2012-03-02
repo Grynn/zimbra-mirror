@@ -1989,10 +1989,10 @@ function(el, ctxt) {
 			for (var i = 0, attrs = el.attributes, l = attrs.length; i < l; i++) {
 				var attr = attrs.item(i);
 				var attrName = attr.nodeName && attr.nodeName.toLowerCase();
-				var attrValue = attr.nodeValue && attr.nodeValue.toLowerCase();
+				var attrValue = String(attr.nodeValue).toLowerCase();
 				// we have global CSS rules for TD that trump table properties, so bail
 				if (nodeName == "table" && (attrName == "cellpadding" || attrName == "cellspacing" ||
-						attrName == "border") && attrValue != 0) {
+						attrName == "border") && attrValue != "0") {
 					ctxt.fail = true;
 					break;
 				}
