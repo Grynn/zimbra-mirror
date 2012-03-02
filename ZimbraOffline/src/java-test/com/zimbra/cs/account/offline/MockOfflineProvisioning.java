@@ -31,7 +31,6 @@ import com.zimbra.common.account.Key.IdentityBy;
 import com.zimbra.common.account.Key.ServerBy;
 import com.zimbra.common.account.Key.SignatureBy;
 import com.zimbra.common.account.Key.XMPPComponentBy;
-import com.zimbra.soap.admin.type.DataSourceType;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.CalendarResource;
@@ -41,10 +40,8 @@ import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.DistributionList;
 import com.zimbra.cs.account.Domain;
 import com.zimbra.cs.account.Entry;
-import com.zimbra.cs.account.EntrySearchFilter;
 import com.zimbra.cs.account.GlobalGrant;
 import com.zimbra.cs.account.Identity;
-import com.zimbra.cs.account.NamedEntry;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.Server;
 import com.zimbra.cs.account.Signature;
@@ -56,7 +53,8 @@ import com.zimbra.cs.account.auth.AuthContext.Protocol;
 import com.zimbra.cs.mime.MimeTypeInfo;
 import com.zimbra.cs.mime.MockMimeTypeInfo;
 import com.zimbra.cs.mime.handler.UnknownTypeHandler;
-import com.zimbra.soap.type.GalSearchType;
+import com.zimbra.soap.admin.type.CacheEntryType;
+import com.zimbra.soap.admin.type.DataSourceType;
 
 public final class MockOfflineProvisioning extends OfflineProvisioning {
 
