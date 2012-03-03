@@ -38,7 +38,7 @@ my %BINARIES = (
     "openssl" => "1.0.0g",
     "rsync" => "3.0.9",
     "tcmalloc" => "1.8.3",
-    "jetty" => "distribution-7.6.0-SNAPSHOT"
+    "jetty" => "distribution-7.6.0.v20120127"
 );
 my $P4_CMD = "p4";
 
@@ -110,7 +110,7 @@ sub getPlatformDirName() {
 	if ($version eq "8") {
 	    $dirName = "MACOSXx86";
 	} elsif ($version eq "9") {
-	    $dirName = "MACOSXx86_10.5";
+	    $dirName = "MACOSXx86_10.6";
         } elsif ($version eq "11") {
 	    $dirName = "MACOSXx86_10.7";
 	} else {
