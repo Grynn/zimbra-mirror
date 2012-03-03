@@ -14,6 +14,7 @@ import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.PageBriefcase;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.PageMail;
 
 public class OpenLinkToMessage extends AjaxCommonTest {
@@ -90,13 +91,14 @@ public class OpenLinkToMessage extends AjaxCommonTest {
 		map.put("id", mail.getId());
 
 		app.zPageBriefcase.openUrl("", map);
+		
+		String locator = PageBriefcase.Locators.zCloseIconBtn.locator;
 
 		app.zPageBriefcase
-				.zWaitForElementPresent(PageMail.Locators.zCloseIconBtn_messageWindow);
+				.zWaitForElementPresent(locator);
 
-		app.zPageBriefcase.zClickAt(
-				PageMail.Locators.zCloseIconBtn_messageWindow, "0,0");
-
+		app.zPageBriefcase.zClickAt(locator, "0,0");
+				
 		SleepUtil.sleepVerySmall();
 		
 		ZAssert

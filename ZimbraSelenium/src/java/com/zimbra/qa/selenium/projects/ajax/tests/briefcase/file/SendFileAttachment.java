@@ -15,6 +15,7 @@ import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
+import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.PageBriefcase;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 
 public class SendFileAttachment extends AjaxCommonTest {
@@ -76,7 +77,7 @@ public class SendFileAttachment extends AjaxCommonTest {
 
 		// Verify the new mail form has attachment
 		ZAssert.assertTrue(app.zPageBriefcase
-				.sIsElementPresent(FormMailNew.Locators.zAttachmentText
+				.sIsElementPresent(PageBriefcase.Locators.zAttachmentText.locator + ":contains("
 						+ fileName + ")"), "Verify the attachment text");
 
 		// Cancel the message
@@ -134,7 +135,7 @@ public class SendFileAttachment extends AjaxCommonTest {
 
 		// Verify the new mail form has attachment
 		ZAssert.assertTrue(app.zPageBriefcase
-				.zWaitForElementPresent(FormMailNew.Locators.zAttachmentText
+				.zWaitForElementPresent(PageBriefcase.Locators.zAttachmentText.locator + ":contains("
 						+ fileName + ")"), "Verify the attachment text");
 
 		// Cancel the message

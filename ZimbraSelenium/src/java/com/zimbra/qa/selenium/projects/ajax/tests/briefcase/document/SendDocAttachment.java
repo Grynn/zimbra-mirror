@@ -16,6 +16,7 @@ import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
+import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.PageBriefcase;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 
 public class SendDocAttachment extends AjaxCommonTest {
@@ -84,7 +85,7 @@ public class SendDocAttachment extends AjaxCommonTest {
 
 		// Verify the new mail form has attachment
 		ZAssert.assertTrue(app.zPageBriefcase.zWaitForElementPresent(
-				FormMailNew.Locators.zAttachmentText + docName + ")", "3000"),
+				PageBriefcase.Locators.zAttachmentText.locator + ":contains(" + docName + ")", "3000"),
 				"Verify the attachment text");
 
 		// Cancel the message
@@ -150,7 +151,7 @@ public class SendDocAttachment extends AjaxCommonTest {
 
 		// Verify the new mail form has attachment
 		ZAssert.assertTrue(app.zPageBriefcase.zWaitForElementPresent(
-				FormMailNew.Locators.zAttachmentText + docName + ")", "3000"),
+				PageBriefcase.Locators.zAttachmentText.locator + ":contains(" + docName + ")", "3000"),
 				"Verify the attachment text");
 
 		// Cancel the message

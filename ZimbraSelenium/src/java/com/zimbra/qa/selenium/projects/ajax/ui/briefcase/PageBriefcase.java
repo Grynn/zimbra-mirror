@@ -99,10 +99,14 @@ public class PageBriefcase extends AbsTab {
 				"css=div[id=zlhi__BDLV-main__se]");
 		public static final Locators zListItemLockIcon = new Locators(
 				"css=div[id^=zlif__BDLV-main__][id$=__loid][class=ImgPadLock]");
+		public static final Locators zCloseIconBtn = new Locators(
+				"css=td[id^=zb__MSG][id$=CLOSE_left_icon]");
+		public static final Locators zAttachmentText = new Locators(
+				"css=div[class=attBubbleHolder] span");
 
-		private final String locator;
+		public final String locator;
 
-		private Locators(String locator) {
+		public Locators(String locator) {
 			this.locator = locator;
 		}
 	}
@@ -147,19 +151,9 @@ public class PageBriefcase extends AbsTab {
 
 		// If the "folders" tree is visible, then Briefcase tab is active
 
-		String locator = null;
-		if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
-			String currentActiveEmailAddress = MyApplication
-					.zGetActiveAccount() != null ? MyApplication
-					.zGetActiveAccount().EmailAddress : ZimbraAccount
-					.AccountZWC().EmailAddress;
-			locator = Locators.zBriefcaseFolderIcon_Desktop.locator + "[id*='"
-					+ currentActiveEmailAddress + "']";
-		} else {
-			locator = Locators.zBriefcaseFolderIcon.locator;
-		}
-
-		boolean loaded = this.sIsElementPresent(locator);
+		String locator = Locators.zBriefcaseFolderIcon.locator;
+		
+		boolean loaded = zWaitForElementPresent(locator,"2000");
 
 		if (!loaded)
 			return (loaded);
@@ -592,7 +586,7 @@ public class PageBriefcase extends AbsTab {
 			// wait for the page to go active
 			if (page != null) {
 				if (option == Button.O_SEND_AS_ATTACHMENT) {
-					String locator = "css=div[id$=_attachments_div] a[class='AttLink']";
+					String locator = "css=div[class='attBubbleHolder']";
 					if (!this.zWaitForElementPresent(locator, "3000")) {
 						throw new HarnessException(locator + " not present");
 					}
@@ -992,7 +986,7 @@ public class PageBriefcase extends AbsTab {
 
 			} else if (option == Button.O_SEND_LINK) {
 
-				optionLocator = "css=tr[id=POPUP_SEND_FILE]>td[id^=SEND_FILE__]:contains('Send link(s)')";
+				optionLocator = "css=tr[id^=POPUP_SEND_FILE]>td[id^=SEND_FILE__]:contains('Send link(s)')";
 
 				page = new DialogConfirm(DialogConfirm.Confirmation.SENDLINK,
 						this.MyApplication, this);
@@ -1053,7 +1047,10 @@ public class PageBriefcase extends AbsTab {
 
 		if (page != null) {
 			if (option == Button.O_SEND_AS_ATTACHMENT) {
-				zWaitForElementPresent("css=div[id$=_attachments_div] a[class='AttLink']");
+				String locator = "css=div[class='attBubbleHolder']";
+				if (!this.zWaitForElementPresent(locator, "3000")) {
+					throw new HarnessException(locator + " not present");
+				}
 				return page;
 			} else
 				page.zWaitForActive();
