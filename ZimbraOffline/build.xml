@@ -88,7 +88,7 @@
   <property name="jetty.src.dir" location="../ThirdParty/jetty" />
   <property name="prism.src.dir" location="../ThirdParty/prism" />
   <property name="xulrunner.src.dir" location="../ThirdParty/xulrunner" />
-  <property name="jetty.version" value="distribution-7.5.5-SNAPSHOT" />
+  <property name="jetty.version" value="distribution-7.6.0.v20120127" />
   <property name="db.driver.jar" value="sqlitejdbc*.jar"/>
   <property name="server.db.dir" value="${server.src.dir}/db/sqlite"/>
   <property name="src.db.dir" value="${src.dir}/db/sqlite"/>
