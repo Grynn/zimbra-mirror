@@ -458,31 +458,39 @@ ZaServerSessionStatsPage.prototype._getXForm = function () {
 		    cssClass:"ZaTabBar", id:"xform_tabbar"
 		   },
 
-		   {type:_SWITCH_, align:_LEFT_, valign:_TOP_, 
+		   {type:_SWITCH_, align:_LEFT_, valign:_TOP_,
 		    items:[
 			   {type:_ZATABCASE_, caseKey:1, align:_LEFT_, valign:_TOP_, 
 			   		cssStyle: "position: absolute; overflow: auto;",
+					getCustomWidth:ZaServerSessionListView.getCustomWidth,
+					getCustomHeight:ZaServerSessionListView.getCustomHeight,
 			    items:[
-				   {ref: "soap", type:_DWT_LIST_ , width:"100%",  cssClass: "MBXList",     	
+				   {ref: "soap", type:_DWT_LIST_ , width:"95%",  cssClass: "MBXList",     	
 						   		forceUpdate: true, widgetClass:ZaServerSessionListView, 
-						   		headerList:headerList1, defaultColumnSortable: 1}
+						   		headerList:headerList1, defaultColumnSortable: 1
+					}
 				   ]
 			   },
 			   {type:_ZATABCASE_,  caseKey:2, align:_LEFT_, valign:_TOP_, 
 			    	cssStyle: "position: absolute; overflow: auto;",
+					getCustomWidth:ZaServerSessionListView.getCustomWidth,
+					getCustomHeight:ZaServerSessionListView.getCustomHeight,
 			    items:[
-				    {ref: "admin", type:_DWT_LIST_ , width:"100%",  cssClass: "MBXList",     	
+				    {ref: "admin", type:_DWT_LIST_ , width:"95%",  cssClass: "MBXList",     	
 						   		forceUpdate: true, widgetClass:ZaServerSessionListView, 
-						   		headerList:headerList2, defaultColumnSortable: 1}
+						   		headerList:headerList2, defaultColumnSortable: 1
+					}
 				   ]
 			   },
-
 			   {type:_ZATABCASE_, caseKey:3, align:_LEFT_, valign:_TOP_, 
 			    	cssStyle: "position: absolute; overflow: auto;",
+					getCustomWidth:ZaServerSessionListView.getCustomWidth,
+					getCustomHeight:ZaServerSessionListView.getCustomHeight,
 			    items:[
-				   {ref: "imap", type:_DWT_LIST_ , width:"100%",  cssClass: "MBXList",     	
+				   {ref: "imap", type:_DWT_LIST_ , width:"95%",  cssClass: "MBXList",     	
 						   		forceUpdate: true, widgetClass:ZaServerSessionListView, 
-						   		headerList:headerList3, defaultColumnSortable: 1}
+						   		headerList:headerList3, defaultColumnSortable: 1
+					}
 				   ]
 			   }
 			 ]
@@ -641,5 +649,22 @@ function(columnItem, bSortAsc) {
 		sessStatsPage.showMe(1);
 	} catch (ex) {
 		ZaApp.getInstance().getCurrentController()._handleException(ex);
+	}
+}
+
+ZaServerSessionListView.getCustomWidth = function(){
+	if(appNewUI) {
+		return "100%";
+	} else {
+		return ZATabCase_XFormItem.prototype.getCustomHeight.call(this);
+	}
+}
+
+ZaServerSessionListView.getCustomHeight = function(){
+	var oriHeight = ZATabCase_XFormItem.prototype.getCustomHeight.call(this);
+	if(appNewUI) {
+		return oriHeight - 40; //40 is a balanced value
+	} else {
+		return oriHeight;
 	}
 }

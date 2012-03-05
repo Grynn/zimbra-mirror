@@ -540,14 +540,22 @@ ZaGlobalAdvancedStatsPage.getCounters = function(hostname, group) {
     var csfeParams = { soapDoc: soapRequest };
     var reqMgrParams = { controller: ZaApp.getInstance().getCurrentController(), busyMsg: ZaMsg.PQ_LOADING };
     var soapResponse = ZaRequestMgr.invoke(csfeParams, reqMgrParams).Body.GetLoggerStatsResponse;
-    var statCounters = soapResponse.hostname[0].stats[0].values[0].stat;
-    var counters = [];
-    if ( statCounters ) {
-        for (var i = 0, j = statCounters.length; i < j; i++) {
-             counters.push(statCounters[i].name);
+    if (soapResponse && soapResponse.hostname && soapResponse.hostname[0] &&
+        soapResponse.hostname[0].stats && soapResponse.hostname[0].stats[0] &&
+        soapResponse.hostname[0].stats[0].values && soapResponse.hostname[0].stats[0].values[0] &&
+        soapResponse.hostname[0].stats[0].values[0].stat
+        ) {
+        var statCounters = soapResponse.hostname[0].stats[0].values[0].stat;
+        var counters = [];
+        if ( statCounters ) {
+            for (var i = 0, j = statCounters.length; i < j; i++) {
+                counters.push(statCounters[i].name);
+            }
         }
+        return counters;
     }
-    return counters;
+
+    return 0;
 }
 
 ZaGlobalAdvancedStatsPage.counterSelected = function(evt, id) {
