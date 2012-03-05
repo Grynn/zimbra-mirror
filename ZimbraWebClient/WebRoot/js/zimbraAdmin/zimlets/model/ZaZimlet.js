@@ -94,34 +94,37 @@ ZaZimlet._handleGetAllResponse = function(callback, resp) {
     
     // cache all the zimlets information, so we can them in other pages
     // format: zimlet-name --> ZaZimlet object
-    var oldZimlets = ZaZimlet.zimlets;
-    ZaZimlet.zimlets = new Object();
+    if (ZaZimlet.zimlets == null) {
+    	ZaZimlet.zimlets = new Object();
+    }
+    var newZimlets = new Object();
     var zimlets = list.getVector()._array;
-    for(var i in list.getVector()._array) {
+    for(var i in zimlets) {
     	var z = zimlets[i];
-    	ZaZimlet.zimlets[z[ZaZimlet.A_name]] = z;
+    	newZimlets[z[ZaZimlet.A_name]] = z;
     }
     
     // compare and decide which zimlets to include
     var incList;
-    if (oldZimlets) {
-    	incList = new ZaItemList(ZaZimlet);
-    	for (var zimletName in ZaZimlet.zimlets) {
-        	var z = ZaZimlet.zimlets[zimletName];
-        	var oz = oldZimlets[zimletName];
-        	if(!oz) { // there is a new zimlet
-        		incList.add(oz);
-        	} else {
-        		if (z.attrs[ZaZimlet.A_zimbraCreateTimestamp] !=
-        			oz.attrs[ZaZimlet.A_zimbraCreateTimestamp]) {
-        			// the zimlet has been updated
-        			incList.add(oz);
-        		}
-        	}
-        }
-    } else {
-    	incList = list;
-    }
+
+	incList = new ZaItemList(ZaZimlet);
+	for (var zimletName in newZimlets) {
+		var oz = ZaZimlet.zimlets[zimletName];
+		var nz = newZimlets[zimletName];
+		
+		if(!oz) {
+			// put the new zimlet into cache
+			ZaZimlet.zimlets[zimletName] = nz;
+			incList.add(nz);
+		} else {
+			if (nz.attrs[ZaZimlet.A_zimbraCreateTimestamp] !=
+    			oz.attrs[ZaZimlet.A_zimbraCreateTimestamp]) {
+    			// the zimlet has been updated
+				ZaZimlet.zimlets[zimletName] = nz;
+				incList.add(nz);
+    		}
+		}
+	}
     
     if (callback) {
     	var args = callback.args;
