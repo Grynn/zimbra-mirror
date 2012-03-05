@@ -146,6 +146,7 @@ typedef struct _ApptItemData: BaseItemData
     wstring StartDate;
     wstring StartDateCommon;
     wstring EndDate;
+    wstring ApptClass;
     wstring AlarmTrigger;
     Organizer organizer;
     Tz tz;

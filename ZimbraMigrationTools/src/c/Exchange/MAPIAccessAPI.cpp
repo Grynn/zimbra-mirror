@@ -714,6 +714,7 @@ LPCWSTR MAPIAccessAPI::GetItem(SBinary sbItemEID, BaseItemData &itemData)
             ad->FreeBusy = mapiappointment.GetBusyStatus();
             ad->AllDay = mapiappointment.GetAllday();
             ad->Transparency = mapiappointment.GetTransparency();
+            ad->ApptClass = mapiappointment.GetPrivate();
             ad->AlarmTrigger = mapiappointment.GetReminderMinutes();
             ad->organizer.nam = mapiappointment.GetOrganizerName();
             ad->organizer.addr = mapiappointment.GetOrganizerAddr();

@@ -434,6 +434,7 @@ STDMETHODIMP CMapiAccessWrap::GetData(BSTR UserId, VARIANT ItemId, FolderType ty
                 pIt[L"m"] = SysAllocString((apptData.AlarmTrigger).c_str());
                 pIt[L"s"] = SysAllocString((apptData.StartDate).c_str());
                 pIt[L"e"] = SysAllocString((apptData.EndDate).c_str());
+                pIt[L"class"] = SysAllocString((apptData.ApptClass).c_str());
                 pIt[L"orAddr"] = SysAllocString((apptData.organizer.addr).c_str());
                 pIt[L"orName"] = SysAllocString((apptData.organizer.nam).c_str());
                 pIt[L"contentType0"] = SysAllocString(
