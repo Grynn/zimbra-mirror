@@ -1240,7 +1240,7 @@ public class PageAddressbook extends AbsTab {
 		String locator = null;			// If set, this will be clicked
 	
 		String itemLocator = null;
-		String id = null;
+
         
 		tracer.trace(action +" then "+ option +" then "+ item +" on contact = "+ contact);
         if ( action == Action.A_RIGHTCLICK ) {
@@ -1304,7 +1304,7 @@ public class PageAddressbook extends AbsTab {
 	public AbsPage zListItem(Action action, Button option, String contact) throws HarnessException {
 		String locator = null;			// If set, this will be clicked
 		AbsPage page = null;	// If set, this page will be returned
-		String id = null;
+
         String contactLocator = getContactLocator(contact);
         
 		tracer.trace(action +" then "+ option +" on contact = "+ contact);
@@ -1349,9 +1349,14 @@ public class PageAddressbook extends AbsTab {
 		    zRightClickAt(contactLocator,"0,0");
 		    
 			
-			id = cmi.locator;
+		    locator = "css=div#zm__Contacts tr#"+ cmi.locator;	
+	    	
+		    if (option == Button.B_NEW) {
+		    	locator = "css=div#zm__Contacts tr[id^="+ cmi.locator +"]";			    		
+		    }
+			
 			//locator = "id="+ id;
-			locator = "css=div#zm__Contacts tr#"+ id;
+			
 			
 			//  Make sure the context menu exists
 			zWaitForElementPresent(locator) ;
