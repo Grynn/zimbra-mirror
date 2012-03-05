@@ -51,7 +51,7 @@ public class ForwardContact extends AjaxCommonTest  {
    	}
 
 	@Test(	description = "Forward an editing contact by click Forward on the toolbar",
-			groups = { "functional" })
+			groups = { "deprecated" })
 	public void InEditViewClickForwardOnToolbar() throws HarnessException {
 			
 		// Create a contact via Soap then select
