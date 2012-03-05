@@ -1225,13 +1225,32 @@ ZaSearchBuilderController.getOutsideListener = function () {
     return ZaSearchBuilderController.outSideListener;
 }
 
-ZaSearchBuilderController.outsideListener = function () {
+ZaSearchBuilderController.outsideListener = function (ev, context) {
     if(ZaSearchBuilderController.currentPopupDialog) {
+        if (ZaSearchBuilderController._isChildMenuClicked(ev.target)) {
+            return;
+        }
+
         ZaSearchBuilderController.currentPopupDialog.popdown();
         var omem = DwtOutsideMouseEventMgr.INSTANCE;
         omem.stopListening({id:"ZaOptionView", obj:ZaSearchBuilderController.currentPopupDialog});
         ZaSearchBuilderController.currentPopupDialog = undefined;
     }
+}
+
+// Fix bug 69265: Search window goes away after selecting calendar date
+// If a user clicks a dropdown menu in this dialog, and clicks the menu items, without this method,
+// browser will consider the user clicks other part of the screen and popdown the dialog. But actually
+// the dialog should not disappear, and the user should see the result he select.
+// This method checks whether the target is a drop menu.
+ZaSearchBuilderController._isChildMenuClicked = function (targetHtml) {
+    while (targetHtml && targetHtml.className != "DwtShell") {
+        if (targetHtml.className == "DwtMenu") {
+            return true;
+        }
+        targetHtml = targetHtml.parentElement;
+    }
+    return false;
 }
 
 ZaSearchBuilderController.prototype.getFilterDialogByType =
