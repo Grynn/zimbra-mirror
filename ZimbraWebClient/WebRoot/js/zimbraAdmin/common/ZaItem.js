@@ -1008,3 +1008,13 @@ ZaItem.getZeroIsUnlimitedItem = function () {
             } ;
     return item ;
 }
+
+ZaItem.getSplashScreenCopyright = function() {
+	if ( AjxUtil.isEmpty(ZaItem._splashScreenCopyright) ){
+		var date = new Date();
+		var curYear = date.getFullYear() + "";
+		ZaItem._splashScreenCopyright = AjxMessageFormat.format(ZabMsg.splashScreenCopyright, [curYear]);
+	}
+
+	return ZaItem._splashScreenCopyright;
+}

@@ -600,6 +600,11 @@ function () {
 }
 ZaZimbraAdmin.prototype._refreshListener =
 function(ev) {
+	var curController = ZaApp.getInstance().getCurrentController();
+	if (AjxUtil.isInstance(curController, ZaHelpViewController)){
+		return; //don't refresh help
+	}
+
 	var tree = ZaZimbraAdmin.getInstance().getOverviewPanelController().getOverviewPanel().getFolderTree();
 	if(AjxUtil.isEmpty(tree)){
 		return;
@@ -616,7 +621,7 @@ function(ev) {
 		return;
 	}
 
-	tree.setSelectionByPath(curPath);
+	tree.setSelectionByPath(curPath, false, undefined, undefined, undefined, true);
 }
 
 ZaZimbraAdmin.prototype._goPrevListener =
@@ -1412,7 +1417,7 @@ ZaAboutDialog.prototype.popup = function () {
     params.companyURL = ZaAppCtxt.getLogoURI () ;
     params.showLongVersion = true;
     params.longVersion = AjxBuffer.concat(ZaMsg.splashScreenVersion, " ", ZaServerVersionInfo.version , " " , date);
-    params.copyrightText = ZabMsg.splashScreenCopyright;
+    params.copyrightText = ZaItem.getSplashScreenCopyright();
     var html = ZLoginFactory.getLoginDialogHTML(params);
     this.setContent(html);
 

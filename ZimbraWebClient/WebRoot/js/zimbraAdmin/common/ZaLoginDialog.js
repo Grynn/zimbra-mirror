@@ -42,7 +42,7 @@ ZaLoginDialog = function(parent, zIndex, className, appCtxt) {
 	params.loginAction = "ZaLoginDialog._loginListener(this)";
 	params.showButton = true;
     params.companyURL = ZaAppCtxt.getLogoURI () ;
-    params.copyrightText = ZabMsg.splashScreenCopyright;
+    params.copyrightText = ZaItem.getSplashScreenCopyright();
     params.clientLevelNotice = ZabMsg.clientLevelNotice ? ZabMsg.clientLevelNotice :"";
     var html = ZLoginFactory.getLoginDialogHTML(params);
 	this.setContent(html);
