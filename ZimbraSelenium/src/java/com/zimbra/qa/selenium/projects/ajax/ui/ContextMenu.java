@@ -72,8 +72,8 @@ public class ContextMenu extends AbsDisplay {
 	    		 cmi = (ContextMenuItem) f.get(null); 
 	    		 
 	    	    	
-		         if (cmi.locator.equals(locator)) {
-			     
+		         //if (cmi.locator.equals(locator)) {
+	    		 if (locator.startsWith(cmi.locator)) {
 		        	 String cssLocator= "css=td[id='" + parentLocator ;
 			 
 			        //verify image, text, and shortcut 		   
