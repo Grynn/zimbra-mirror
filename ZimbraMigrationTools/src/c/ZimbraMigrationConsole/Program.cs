@@ -93,14 +93,17 @@ class Program
 
         //Console.WriteLine("Arg someLong     : '{0}' ", CommandLineArgs.I.argAsLong("users")); 
 
-        string ConfigXmlFile = CommandLineArgs.I.argAsString("xmlfile");
-        string UserMapFile = CommandLineArgs.I.argAsString("users");
+        string ConfigXmlFile = CommandLineArgs.I.argAsString("ConfigxmlFile");
+        string UserMapFile = CommandLineArgs.I.argAsString("Users");
         string MaxThreads = CommandLineArgs.I.argAsString("MaxThreads");
         string MaxErrors = CommandLineArgs.I.argAsString("MaxErrors");
         string MaxWarns = CommandLineArgs.I.argAsString("MaxWarn");
-        string userid = CommandLineArgs.I.argAsString("userid");
-        string Pstfile = CommandLineArgs.I.argAsString("pst");
-        string ZCSHost = CommandLineArgs.I.argAsString("ZCS");
+        string userid = CommandLineArgs.I.argAsString("Profile");
+        string Pstfile = CommandLineArgs.I.argAsString("DataFile");
+        string ZCSHost = CommandLineArgs.I.argAsString("ZimbraHost");
+        string ZCSPort = CommandLineArgs.I.argAsString("ZimbraPort");
+        string ZCSID = CommandLineArgs.I.argAsString("ZimbraID");
+        string ZCSPwd = CommandLineArgs.I.argAsString("ZimbraPwd");
 
         bool Mail = CommandLineArgs.I.argAsBool("Mail");
         bool Calendar = CommandLineArgs.I.argAsBool("Calendar");
@@ -112,13 +115,161 @@ class Program
         bool Rules = CommandLineArgs.I.argAsBool("Rules");
         bool OOO = CommandLineArgs.I.argAsBool("OOO");
 
+        bool ServerMigration = false;
+        XmlConfig myXmlConfig = new XmlConfig();
+
+        if ((ConfigXmlFile != "") && (File.Exists(ConfigXmlFile)))
+        {
+            if ((UserMapFile != "") && (File.Exists(UserMapFile)))
+            {
+                myXmlConfig = new XmlConfig(ConfigXmlFile, UserMapFile);
+
+                myXmlConfig.InitializeConfig();
+
+                myXmlConfig.GetUserList();
+
+                if (myXmlConfig.UserList.Count > 0)
+                {
+
+                    ServerMigration = true;
+                    if (userid == "")
+                        userid = myXmlConfig.ConfigObj.SourceServer.AdminID;
+
+                    if(ZCSID == "")
+                        ZCSID = myXmlConfig.ConfigObj.zimbraServer.AdminID;
+
+                    if(ZCSPwd == "")
+                        ZCSPwd = myXmlConfig.ConfigObj.zimbraServer.AdminPwd;
+
+                }
+                else
+                {
+
+                    if (userid == "")
+                        userid = myXmlConfig.ConfigObj.SourceServer.Profile;
+
+                    if(ZCSID == "")
+                        ZCSID = myXmlConfig.ConfigObj.zimbraServer.UserAccount;
+
+                    if(ZCSPwd == "")
+                        ZCSPwd = myXmlConfig.ConfigObj.zimbraServer.UserPassword;
+
+
+
+                }
+
+                if (ZCSHost == "")
+                    ZCSHost = myXmlConfig.ConfigObj.zimbraServer.Hostname;
+
+                if (ZCSPort == "")
+                    ZCSHost = myXmlConfig.ConfigObj.zimbraServer.Port;
+
+                
+
+                if (Mail == false)
+                    Mail = myXmlConfig.ConfigObj.importOptions.Mail;
+
+                if (Calendar == false)
+                    Calendar = myXmlConfig.ConfigObj.importOptions.Calendar;
+
+                if (Contacts == false)
+                    Contacts = myXmlConfig.ConfigObj.importOptions.Contacts;
+
+                if (Sent == false)
+                    Sent = myXmlConfig.ConfigObj.importOptions.Sent;
+
+                if (DeletedItems == false)
+                    DeletedItems = myXmlConfig.ConfigObj.importOptions.DeletedItems;
+
+                if (Junk == false)
+                    Junk = myXmlConfig.ConfigObj.importOptions.Junk;
+                if (Tasks == false)
+                    Tasks = myXmlConfig.ConfigObj.importOptions.Tasks;
+                if (Rules == false)
+                    Rules = myXmlConfig.ConfigObj.importOptions.Rules;
+                if (OOO == false)
+                    OOO = myXmlConfig.ConfigObj.importOptions.OOO;
+
+            }
+        }
+
+       MigrationOptions importopts = new MigrationOptions();
+       ItemsAndFoldersOptions itemFolderFlags = ItemsAndFoldersOptions.None;
+       if (Calendar)
+       {
+           itemFolderFlags = itemFolderFlags | ItemsAndFoldersOptions.Calendar;
+       }
+       if (Contacts)
+       {
+           itemFolderFlags = itemFolderFlags | ItemsAndFoldersOptions.Contacts;
+       }
+       if (Mail)
+       {
+           itemFolderFlags = itemFolderFlags | ItemsAndFoldersOptions.Mail;
+       }
+       if (Sent)
+       {
+           itemFolderFlags = itemFolderFlags | ItemsAndFoldersOptions.Sent;
+       }
+       if (DeletedItems)
+       {
+           itemFolderFlags = itemFolderFlags | ItemsAndFoldersOptions.DeletedItems;
+       }
+       if (Junk)
+       {
+           itemFolderFlags = itemFolderFlags | ItemsAndFoldersOptions.Junk;
+       }
+       if (Tasks)
+       {
+           itemFolderFlags = itemFolderFlags | ItemsAndFoldersOptions.Tasks;
+       }
+       if (Rules)
+       {
+           itemFolderFlags = itemFolderFlags | ItemsAndFoldersOptions.Rules;
+       }
+       if (OOO)
+       {
+           itemFolderFlags = itemFolderFlags | ItemsAndFoldersOptions.OOO;
+       }
+
+       importopts.ItemsAndFolders = itemFolderFlags;
+
+
 
         Migration Test = new Migration();
 
         CssLib.CSMigrationWrapper TestObj = new CSMigrationWrapper("MAPI");
 
+        System.Console.WriteLine();
+        ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Green,
+            "  Migration Initialization ");
+        System.Console.WriteLine("......... \n");
+        ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Green,
+                "");
+        System.Console.WriteLine("......... \n");
+
+          string retval = TestObj.GlobalInit(userid, "", "");
+                     
+
+            if (retval.Length > 0)
+            {
+                System.Console.WriteLine();
+                ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
+                    " Error in Migration Initialization ");
+                System.Console.WriteLine("......... \n");
+                ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
+                        retval);
+                System.Console.WriteLine("......... \n");
+                System.Console.WriteLine();
+                        
+                return;
+            }
+
+
+
+
         //if (args.Count() == 2)
-        if( (ConfigXmlFile != "") &&(UserMapFile != ""))
+       /* if( (ConfigXmlFile != "") &&(UserMapFile != ""))
         {
            // string ConfigXmlFile = args[0];
            // string UserMapFile = args[1];
@@ -134,7 +285,7 @@ class Program
 
                 myXmlConfig.GetUserList();
 
-                MigrationOptions importopts = new MigrationOptions();
+                /*MigrationOptions importopts = new MigrationOptions();
                 ItemsAndFoldersOptions itemFolderFlags = ItemsAndFoldersOptions.None;
                 if (myXmlConfig.ConfigObj.importOptions.Calendar)
                 {
@@ -173,9 +324,9 @@ class Program
                     itemFolderFlags = itemFolderFlags | ItemsAndFoldersOptions.OOO;
                 }
 
-                importopts.ItemsAndFolders = itemFolderFlags;
+                importopts.ItemsAndFolders = itemFolderFlags;*/
 
-                string retval = "";   
+            /*    string retval = "";   
                 if (myXmlConfig.UserList.Count > 0)
                 {
                     if (myXmlConfig.ConfigObj.SourceServer.Profile != "")
@@ -185,22 +336,22 @@ class Program
                             myXmlConfig.ConfigObj.zimbraServer.Port,
                             myXmlConfig.ConfigObj.zimbraServer.ZimbraAdminID,
                             myXmlConfig.ConfigObj.OutlookProfile, "", "");*/
-                        retval = TestObj.GlobalInit(myXmlConfig.ConfigObj.SourceServer.Profile, "", "");
-                    }
-                    else
-                    {
+                      //  retval = TestObj.GlobalInit(myXmlConfig.ConfigObj.SourceServer.Profile, "", "");
+                  //  }
+                  //  else
+                  //  {
                        /* TestObj.Initalize(myXmlConfig.ConfigObj.zimbraServer.ZimbraHostname,
                             myXmlConfig.ConfigObj.zimbraServer.Port,
                             myXmlConfig.ConfigObj.zimbraServer.ZimbraAdminID, "",
                             myXmlConfig.ConfigObj.mailServer.SourceHostname,
                             myXmlConfig.ConfigObj.mailServer.SourceAdminID);*/
 
-                        retval = TestObj.GlobalInit(myXmlConfig.ConfigObj.SourceServer.AdminID, "", "");
+                      //  retval = TestObj.GlobalInit(myXmlConfig.ConfigObj.SourceServer.AdminID, "", "");
                        /* TestObj.InitializeMailClient(myXmlConfig.ConfigObj.mailServer.SourceHostname, myXmlConfig.ConfigObj.mailServer.SourceAdminID,
                     "");*/
-                    }
+                   // }
 
-                    if (retval.Length > 0)
+                   /* if (retval.Length > 0)
                     {
                         System.Console.WriteLine();
                         ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
@@ -213,6 +364,10 @@ class Program
                         
                         return;
                     }
+        */
+
+        if(ServerMigration)
+        {
 
                     foreach (MVVM.Model.Users user in myXmlConfig.UserList)
                     {
@@ -234,11 +389,18 @@ class Program
                         System.Console.WriteLine();
 
                         ZimbraAPI zimbraAPI = new ZimbraAPI();
-                        int stat = zimbraAPI.Logon(
+                        /*int stat = zimbraAPI.Logon(
                             myXmlConfig.ConfigObj.zimbraServer.Hostname,
                             myXmlConfig.ConfigObj.zimbraServer.Port,
                             myXmlConfig.ConfigObj.zimbraServer.AdminID,
-                            myXmlConfig.ConfigObj.zimbraServer.AdminPwd, true);
+                            myXmlConfig.ConfigObj.zimbraServer.AdminPwd, true);*/
+
+                         int stat = zimbraAPI.Logon(
+                            ZCSHost,
+                            ZCSPort,
+                           ZCSID,
+                           ZCSPwd, true);
+
 
                         if (stat != 0)
                         {
@@ -340,10 +502,10 @@ class Program
                     Console.WriteLine("Finished."); 
 
                 }
-                else
+                /*else
                 {
 
-                    if ((myXmlConfig.ConfigObj.SourceServer.Profile != "") || (myXmlConfig.ConfigObj.SourceServer.DataFile != ""))
+                   /* if ((myXmlConfig.ConfigObj.SourceServer.Profile != "") || (myXmlConfig.ConfigObj.SourceServer.DataFile != ""))
                     {
                         // ServerMigration = false;
 
@@ -363,7 +525,9 @@ class Program
                                    myXmlConfig.ConfigObj.zimbraServer.UserAccount,
                                    myXmlConfig.ConfigObj.OutlookProfile, "",
                                    "");*/
-                            retval = TestObj.GlobalInit(myXmlConfig.ConfigObj.SourceServer.Profile, "", "");
+
+                            //retval = TestObj.GlobalInit(myXmlConfig.ConfigObj.SourceServer.Profile, "", "");
+           /*
                             if (retval.Length > 0)
                             {
                                 System.Console.WriteLine();
@@ -449,14 +613,14 @@ class Program
             // Thread.Sleep(18000);
 
             
-        }
+        }*/
         else
         {
 
             if ((userid != "") || (Pstfile != ""))
             {
                        
-                 MigrationOptions importopts = new MigrationOptions();
+                 /*MigrationOptions importopts = new MigrationOptions();
                 ItemsAndFoldersOptions itemFolderFlags = ItemsAndFoldersOptions.None;
                 if (Calendar)
                 {
@@ -495,7 +659,16 @@ class Program
                     itemFolderFlags = itemFolderFlags | ItemsAndFoldersOptions.OOO;
                 }
 
-                importopts.ItemsAndFolders = itemFolderFlags;
+                importopts.ItemsAndFolders = itemFolderFlags;*/
+
+                System.Console.WriteLine();
+                ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Green,
+                    " User Migration Initialization ");
+                System.Console.WriteLine("......... \n");
+                ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Green,
+                     "");
+                System.Console.WriteLine("......... \n");
+                System.Console.WriteLine();
 
                         string accountname = userid;
                         accountname = accountname + "@" + ZCSHost;
@@ -508,7 +681,7 @@ class Program
                                    myXmlConfig.ConfigObj.zimbraServer.UserAccount,
                                    myXmlConfig.ConfigObj.OutlookProfile, "",
                                    "");*/
-                            string retval = TestObj.GlobalInit(userid, "", "");
+                             retval = TestObj.GlobalInit(userid, "", "");
                             if (retval.Length > 0)
                             {
                                 System.Console.WriteLine();
@@ -535,9 +708,9 @@ class Program
 
                             int stat = zimbraAPI.Logon(
                                     ZCSHost,
-                                    "80",
-                                    userid,
-                                    "test123", false);
+                                    ZCSPort,
+                                    ZCSID,
+                                    ZCSPwd, false);
 
                             if (stat != 0)
                             {
@@ -551,7 +724,7 @@ class Program
                                 System.Console.WriteLine("......... \n");
                                 System.Console.WriteLine();
                                 Thread.Sleep(2000);
-                                // return;
+                                 return;
                             }
 
                         }
