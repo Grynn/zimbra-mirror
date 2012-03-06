@@ -15,10 +15,21 @@ echo --------------
 MSBuild Migration.sln /t:Build /verbosity:n /p:Configuration=dbg;Platform=Win32
 IF ERRORLEVEL 1 exit /B 1 
 
+echo " unregister exchange "
+echo --------------
+regsvr32  %BASE%\Win32\dbg\Exchange.dll /u /s
+IF ERRORLEVEL 1 set ERRORLEVEL=0
+
 echo "rtl|Win32"
 echo --------------
 MSBuild Migration.sln /t:Build /verbosity:n /p:Configuration=rtl;Platform=Win32
 IF ERRORLEVEL 1 exit /B 1 
+
+echo " unregister exchange "
+echo --------------
+regsvr32  %BASE%\Win32\rtl\Exchange.dll /u /s
+IF ERRORLEVEL 1 set ERRORLEVEL=0
+
 
 call "C:\Program Files (x86)\Microsoft Visual Studio 10.0\vc\bin\amd64\vcvars64.bat"
 
@@ -27,10 +38,20 @@ echo --------------
 MSBuild Migration.sln /t:Build /verbosity:n /p:Configuration=dbg;Platform=x64
 IF ERRORLEVEL 1 exit /B 1 
 
+echo " unregister exchange "
+echo --------------
+regsvr32  %BASE%\x64\dbg\Exchange.dll /u /s
+IF ERRORLEVEL 1 set ERRORLEVEL=0
+
 echo "rtl|x64"
 echo --------------
 MSBuild Migration.sln /t:Build /verbosity:n /p:Configuration=rtl;Platform=x64
 IF ERRORLEVEL 1 exit /B 1 
+
+echo " unregister exchange "
+echo --------------
+regsvr32  %BASE%\x64\rtl\Exchange.dll /u /s
+IF ERRORLEVEL 1 set ERRORLEVEL=0
 
 ECHO Source Indexing the Project...
 ECHO Starting Point is %BASE%
