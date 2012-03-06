@@ -236,7 +236,7 @@ while (1) {
             } elsif ( $pages =~ /^\d+k$/i ) {
                 $pages =~ s/k//i;
                 $pages = $pages * 1000;
-            } elsif ( $pages !~ /^\d$/ ) {
+            } elsif ( $pages !~ /^\d+$/ ) {
                 print STDERR "Non-numeric value encountered: $pages.  This should never happen!\n";
             }
             
