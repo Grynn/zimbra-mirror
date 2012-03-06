@@ -843,7 +843,7 @@ ZaDomain.createGalAccounts = function (tmpDomainObj,newDomain) {
                     tmpObj[ZaDomain.A2_new_gal_sync_account_name] = [tmpObj[ZaDomain.A2_new_gal_sync_account_name],"@",tmpDomainObj.attrs[ZaDomain.A_domainName]].join("");
                 }
                 if((tmpDomainObj.attrs[ZaDomain.A_zimbraGalMode] == ZaDomain.GAL_Mode_internal || tmpDomainObj.attrs[ZaDomain.A_zimbraGalMode] == ZaDomain.GAL_Mode_both)
-                    && tmpObj[ZaDomain.A2_new_gal_sync_account_name] && tmpObj[ZaDomain.A2_new_internal_gal_ds_name]) {
+                    && tmpObj[ZaDomain.A2_new_gal_sync_account_name] && tmpObj[ZaDomain.A2_new_internal_gal_ds_name] && tmpObj[ZaDomain.A_mailHost]) {
                     var createInternalDSDoc = soapDoc.set("CreateGalSyncAccountRequest", null, null, ZaZimbraAdmin.URN);
                     createInternalDSDoc.setAttribute("name", tmpObj[ZaDomain.A2_new_internal_gal_ds_name]);
                     createInternalDSDoc.setAttribute("folder", "_"+tmpObj[ZaDomain.A2_new_internal_gal_ds_name]);
@@ -856,7 +856,7 @@ ZaDomain.createGalAccounts = function (tmpDomainObj,newDomain) {
                 }
 
                 if(tmpDomainObj.attrs[ZaDomain.A_zimbraGalMode] != ZaDomain.GAL_Mode_internal
-                    && tmpObj[ZaDomain.A2_new_gal_sync_account_name] && tmpObj[ZaDomain.A2_new_external_gal_ds_name]) {
+                    && tmpObj[ZaDomain.A2_new_gal_sync_account_name] && tmpObj[ZaDomain.A2_new_external_gal_ds_name] && tmpObj[ZaDomain.A_mailHost]) {
                     var createExternalDSDoc = soapDoc.set("CreateGalSyncAccountRequest", null, null, ZaZimbraAdmin.URN);
                     createExternalDSDoc.setAttribute("name", tmpObj[ZaDomain.A2_new_external_gal_ds_name]);
                     createExternalDSDoc.setAttribute("folder", "_"+tmpObj[ZaDomain.A2_new_external_gal_ds_name]);
@@ -1251,7 +1251,7 @@ function(tmpObj) {
                 newGalAccount[ZaDomain.A2_new_gal_sync_account_name] = [newGalAccount[ZaDomain.A2_new_gal_sync_account_name],"@",tmpObj.attrs[ZaDomain.A_domainName]].join("");
             }
             if((tmpObj.attrs[ZaDomain.A_zimbraGalMode] == ZaDomain.GAL_Mode_internal || tmpObj.attrs[ZaDomain.A_zimbraGalMode] == ZaDomain.GAL_Mode_both)
-                && newGalAccount[ZaDomain.A2_new_internal_gal_ds_name]) {
+                && newGalAccount[ZaDomain.A2_new_internal_gal_ds_name] && newGalAccount[ZaDomain.A_mailHost]) {
                 var createInternalDSDoc = soapDoc.set("CreateGalSyncAccountRequest", null, null, ZaZimbraAdmin.URN);
                 createInternalDSDoc.setAttribute("name", newGalAccount[ZaDomain.A2_new_internal_gal_ds_name]);
                 createInternalDSDoc.setAttribute("folder", "_"+newGalAccount[ZaDomain.A2_new_internal_gal_ds_name]);
@@ -1271,7 +1271,7 @@ function(tmpObj) {
             }
 
             if(tmpObj.attrs[ZaDomain.A_zimbraGalMode] != ZaDomain.GAL_Mode_internal
-                && newGalAccount[ZaDomain.A2_new_external_gal_ds_name]) {
+                && newGalAccount[ZaDomain.A2_new_external_gal_ds_name] && newGalAccount[ZaDomain.A_mailHost]) {
                 var createExternalDSDoc = soapDoc.set("CreateGalSyncAccountRequest", null, null, ZaZimbraAdmin.URN);
                 createExternalDSDoc.setAttribute("name", newGalAccount[ZaDomain.A2_new_external_gal_ds_name]);
                 createExternalDSDoc.setAttribute("folder", "_"+newGalAccount[ZaDomain.A2_new_external_gal_ds_name]);

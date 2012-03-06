@@ -367,23 +367,23 @@ function (loc) {
 	this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
 	this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
 	this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);
-
-    //Reset the gal collaborated selectors.
-    this.filterExistingServer();
-    this._localXForm.getItemsById(ZaDomain.A2_gal_sync_accounts_set + "_config_wizard")[0].resetChoices();
 }
 
-ZaGALConfigXWizard.prototype.filterExistingServer = function() {
-    var existing = this._containedObject[ZaDomain.A2_gal_sync_accounts];
-    if (!existing || !(existing instanceof Array)) {
-        return;
-    }
+ZaGALConfigXWizard.filterExistingServer = function(obj) {
     var result = [];
+    if (!obj) {
+        return result;
+    }
+    var existing = obj[ZaDomain.A2_gal_sync_accounts];
+    if (!existing || !(existing instanceof Array)) {
+        return result;
+    }
+
     for (var i = 0; i < existing.length; i++) {
         result.push(existing[i].attrs[ZaDomain.A_mailHost]);
     }
 
-    this._localXForm.getItemsById(ZaDomain.A2_gal_sync_accounts_set + "_config_wizard")[0].filterOrigItems("name", result);
+    return result;
 }
 
 ZaGALConfigXWizard.prototype.goPage =
@@ -595,7 +595,7 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
                                 ]}
                         ]},
                         {ref:ZaDomain.A2_gal_sync_accounts_set, id:ZaDomain.A2_gal_sync_accounts_set + "_config_wizard", type:_COLLAB_SELECT_, label:null, repeatInstance:"", showAddButton:true, showRemoveButton:true,
-                            choices: ZaApp.getInstance().getServerListChoices(true),
+                            filterMethod: ZaGALConfigXWizard.filterExistingServer,
                             addButtonLabel:ZaMsg.Domain_GAL_Add,
 							addButtonWidth: 220,
                             number:0,
@@ -658,8 +658,7 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
                                         },
                                         {ref:ZaDomain.A_mailHost, type: _OSELECT1_, label:ZaMsg.NAD_MailServer,  choices: ZaApp.getInstance().getServerListChoices(), colSelect:true,
                                             required:true,
-                                            width:300,
-                                            ancestorId: ZaDomain.A2_gal_sync_accounts_set + "_config_wizard"
+                                            width:300
                                         },
                                         {ref:ZaDomain.A2_new_internal_gal_ds_name, label:ZaMsg.Domain_InternalGALDSName, type:_TEXTFIELD_,
                                             visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode],

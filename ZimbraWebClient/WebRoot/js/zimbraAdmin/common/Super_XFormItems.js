@@ -2344,28 +2344,74 @@ Ip_XModelItem.prototype.validateType = function (value) {
 };
 Ip_XModelItem.prototype.maxLength = 64;
 
-//TODO: Enhance the code using XForm conventions.
+/**
+ *  <code>Collaborated_Select_XFormItem</code> is a subclass of <code>Repeat_XFormItem</code>, it might be used under the
+ *  following condition:
+ *  <ul>
+ *      <li>You need a repeat item;
+ *      <li>In the repeat, the values of a select must be different. E.g. Choices of the select is [ItemA, ItemB], if
+ *      in one instance, ItemA is selected. In the second one, only ItemB is available in the options.
+ *      <li>If the select is required, the add button will be invisible if the the instance number is greater or equal
+ *      than the choices number of the select.
+ *  </ul>
+ *
+ *  Usage:
+ *  <ul>
+ *      <li>Set <code>colSelect:true</code> for the select;
+ *      <li>Set <code>filterMethod</code> if you want to exclude some choices;
+ *  </ul>
+ */
 Collaborated_Select_XFormItem = function() {}
 XFormItemFactory.createItemType("_COLLAB_SELECT_", "collaborated_select", Collaborated_Select_XFormItem, Repeat_XFormItem);
 
 Collaborated_Select_XFormItem.prototype.initializeItems = function () {
-    Repeat_XFormItem.prototype.initializeItems.call(this);
-    this.colSelect = this._findColSelect(this.__originalItems);
+    //Find a select that needs to be collaborated
+    this.colSelect = this._findColSelect(this.getItems());
     if (!this.colSelect) {
         return;
     }
 
-    if (!this.colSelect.id) {
-        this.colSelect.id = this.id + Dwt.getNextId();
+    //Add ancestorId so that it can be easily locate its ancestor
+    this.colSelect.ancestorId = this.id;
+    //Add a select listener to update other selecters' choices
+    this.colSelect.onChange = Collaborated_Select_XFormItem.selectChanged;
+    var origChoices = this.colSelect.choices;
+    //Create a new choices object, to avoid the future changes on the choices will bring side effect on the original one.
+    var newChoices = new XFormChoices(origChoices.getChoiceObject(), origChoices._type, origChoices._valueProperty, origChoices._labelProperty);
+    this.colSelect.choices = newChoices;
+
+    this.choiceItems = origChoices.getChoiceObject();
+    this.__ownChoices = newChoices;
+    this.__valueProperty = origChoices._valueProperty;
+    this.__availNum = this.choiceItems.length;
+    this.__selected = [];
+    this.__excluded = [];
+
+    if (this.colSelect.required == true) {
+        this.getAddButton().visibilityChecks.push(Collaborated_Select_XFormItem.isAddButtonVisible);
     }
 
-    //this.colSelect.alwaysUpdateChoices = true;
-    this.colSelect.onChange = Collaborated_Select_XFormItem.selectChanged;
+    Repeat_XFormItem.prototype.initializeItems.call(this);
+}
 
-    this.choiceItems = ZaItem.deepCloneListItem(this.getChoices()._choiceObject);
-    this.__origChoiceItems = ZaItem.deepCloneListItem(this.getChoices()._choiceObject);
-    this.__availNum = this.__origChoiceItems.length;
-    this.getAddButton().visibilityChecks.push(Collaborated_Select_XFormItem.isAddButtonVisible);
+Collaborated_Select_XFormItem.prototype.getFilterMethod = function() {
+    return this.cacheInheritedMethod("filterMethod","$filterMethod");
+}
+
+Collaborated_Select_XFormItem.prototype.updateElement = function (value) {
+    if (this.__origInstance != this.getForm().getInstance()) {
+        this.__origInstance = this.getForm().getInstance();
+
+        if (this.getFilterMethod() && AjxUtil.isFunction(this.getFilterMethod())){
+            var excluded = this.getFilterMethod().call(this, this.getForm().getInstance());
+            this.filterOrigItems(excluded);
+            this.resetChoices();
+        } else {
+            this.resetChoices(true);
+        }
+
+    }
+    Repeat_XFormItem.prototype.updateElement.call(this, value);
 }
 
 Collaborated_Select_XFormItem.prototype.resetChoices = function (resetAll) {
@@ -2373,26 +2419,24 @@ Collaborated_Select_XFormItem.prototype.resetChoices = function (resetAll) {
         return;
     }
 
-    for (var i = 0; i < this.__origChoiceItems.length; i++) {
-        this.__origChoiceItems[i].__selected = false;
-        if (resetAll) {
-            this.__origChoiceItems[i].__excluded = false;
-        }
-    }
+    this.__selected = [];
 
     if (resetAll) {
-        this.__availNum = this.__origChoiceItems.length;
+        this.__excluded = [];
+        this.__availNum = this.choiceItems.length;
     }
-    this.choiceItems = ZaItem.deepCloneListItem(this.__origChoiceItems);
     this._updateChoices();
 }
 
 Collaborated_Select_XFormItem.selectChanged = function (newVal, event, form) {
-    var ancestor = form.getItemsById(this.__attributes.ancestorId)[0];
+    var ancestor = form.getItemById(this.__attributes.ancestorId);
     var current = this.getInstanceValue();
-    ancestor._markSelected(newVal, current);
     this.setInstanceValue(newVal);
-    ancestor._updateChoices();
+    ancestor._markSelected(newVal, current);
+
+    //Update the choices after the menu is collapsed.
+    var act = new AjxTimedAction(ancestor,Collaborated_Select_XFormItem.prototype._updateChoices,[]);
+    AjxTimedAction.scheduleAction(act,ZaController.CLICK_DELAY);
 }
 
 Collaborated_Select_XFormItem.isAddButtonVisible = function () {
@@ -2402,19 +2446,19 @@ Collaborated_Select_XFormItem.isAddButtonVisible = function () {
     return (this.getParentItem().getInstanceCount() < this.getParentItem().getParentItem().__availNum);
 }
 
-Collaborated_Select_XFormItem.prototype.filterOrigItems = function(key, vals) {
-    if (!this.__origChoiceItems || !(this.__origChoiceItems instanceof Array) || !key || !vals) {
+Collaborated_Select_XFormItem.prototype.filterOrigItems = function(vals) {
+    if (!this.choiceItems || !(this.choiceItems instanceof Array) || !vals) {
         return;
     }
     if (!(vals instanceof Array)) {
         vals = [vals];
     }
     var num = 0;
-    for (var j = 0; j < this.__origChoiceItems.length; j++) {
-        this.__origChoiceItems[j].__excluded = false;
+    for (var j = 0; j < this.choiceItems.length; j++) {
+        this.__excluded[j] = false;
         for (var i = 0; i < vals.length; i++) {
-            if (this.__origChoiceItems[j][key] == vals[i]) {
-                this.__origChoiceItems[j].__excluded = true;
+            if (this.choiceItems[j][this.__valueProperty] == vals[i]) {
+                this.__excluded[j] = true;
                 num++;
                 break;
             }
@@ -2438,16 +2482,10 @@ Collaborated_Select_XFormItem.prototype.removeRowButtonClicked = function (insta
 }
 
 Collaborated_Select_XFormItem.prototype._updateChoices = function () {
-    var items = this.getForm().getItemsById(this.colSelect.id);
-    if (!items) {
-        return;
-    }
-
-    for (var i = 0; i < items.length; i++) {
-        items[i].getChoices().setChoices(this._getSelectable());
-        items[i].getChoices().dirtyChoices();
-    }
+    this.__ownChoices.setChoices(this._getSelectable());
+    this.__ownChoices.dirtyChoices();
 }
+
 Collaborated_Select_XFormItem.prototype._findColSelect = function(obj) {
     if (!obj) {
         return;
@@ -2460,9 +2498,16 @@ Collaborated_Select_XFormItem.prototype._findColSelect = function(obj) {
         return;
     }
 
+    var items;
     if (obj.items && obj.items instanceof Array) {
-        for (var i = 0; i < obj.items.length; i++) {
-            var result = this._findColSelect(obj.items[i]);
+        items = obj.items;
+    } else if (obj instanceof Array) {
+        items = obj;
+    }
+
+    if (items) {
+        for (var i = 0; i < items.length; i++) {
+            var result = this._findColSelect(items[i]);
             if (result ) {
                 return result;
             }
@@ -2472,13 +2517,13 @@ Collaborated_Select_XFormItem.prototype._findColSelect = function(obj) {
 
 Collaborated_Select_XFormItem.prototype._markSelected = function(newVal, oldVal) {
     for (var i = 0; i < this.choiceItems.length; i++) {
-        if (this.choiceItems[i].name == oldVal) {
-            this.choiceItems[i].__selected = false;
+        if (this.choiceItems[i][this.__valueProperty] == oldVal) {
+            this.__selected[i] = false;
         }
     }
     for (var i = 0; i < this.choiceItems.length; i++) {
-        if (this.choiceItems[i].name == newVal) {
-            this.choiceItems[i].__selected = true;
+        if (this.choiceItems[i][this.__valueProperty] == newVal) {
+            this.__selected[i] = true;
         }
     }
 }
@@ -2486,9 +2531,13 @@ Collaborated_Select_XFormItem.prototype._markSelected = function(newVal, oldVal)
 Collaborated_Select_XFormItem.prototype._getSelectable = function() {
     var result = [];
     for (var i = 0; i < this.choiceItems.length; i++) {
-        if (!this.choiceItems[i].__excluded && !this.choiceItems[i].__selected) {
-            result.push(this.choiceItems[i]);
+        if (this.__excluded[i]) {
+            continue;
         }
+        if (this.__selected[i]) {
+            continue;
+        }
+        result.push(this.choiceItems[i]);
     }
     return result;
 }
