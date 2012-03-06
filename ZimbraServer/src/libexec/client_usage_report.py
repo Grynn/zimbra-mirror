@@ -19,7 +19,7 @@ import re
 from datetime import date
 
 # Number of days of log files to read
-numdays = 1
+numdays = 7
 
 # Find the current total number of log files
 p = subprocess.Popen('ls /opt/zimbra/log/access_log* | wc -l', shell=True, stdout=subprocess.PIPE)
@@ -40,10 +40,16 @@ for file in p.stdout.readlines():
     subprocess.call('echo Reading {0} ..'.format(file), shell=True)
     for line in fileinput.input([file]):
         l = line.split('"')
-        if len(l) < 6:
+        if len(l) < 7:
             continue
         ua = l[5].rstrip()
         if not re.match('(zm.*|ZCS.*|zclient.*|.*ZCB.*|Jakarta.*|curl.*|-)', ua) is None:
+            continue
+        requrl = l[1]
+        if not re.match('(.*/zimbraAdmin.*|.*/service/admin.*)', requrl) is None:
+            continue
+        result = l[2].split()[0]
+        if result != '200':
             continue
         ip = line.split('-')[0].rstrip()
         if ip == '127.0.0.1':
