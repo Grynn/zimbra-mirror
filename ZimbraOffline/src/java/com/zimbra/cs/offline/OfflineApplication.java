@@ -47,7 +47,7 @@ import com.zimbra.cs.zimlet.ZimletUtil;
 
 public final class OfflineApplication extends ZimbraApplication {
     private static String[] sqlScripts = {
-        "db", "directory", "wildfire", "versions-init", "default-volumes"
+        "db", "directory", "versions-init", "default-volumes"
     };
     private static String ZIMBRA_DB_NAME = "zimbra";
 
