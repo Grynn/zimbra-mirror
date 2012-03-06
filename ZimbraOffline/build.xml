@@ -450,7 +450,7 @@
       <then><copy tofile="${dist.dir}/conf/keystore" file="${dist.dir}/conf/keystore.base" overwrite="true" /></then>
     </if>
 
-    <copy todir="${dist.dir}/jetty/etc" file="${config.dir}/jetty-7.5/start.config" overwrite="true" />
+    <copy todir="${dist.dir}/jetty/etc" file="${config.dir}/jetty-7.6/start.config" overwrite="true" />
     <copy todir="${dist.dir}/jetty/etc" file="${config.dir}/webdefault.xml" overwrite="true"/>
 
     <copy todir="${dist.dir}/jetty/common/lib" overwrite="true">
@@ -466,7 +466,7 @@
       <fileset file="${common.jars.dir}/apache-log4j-extras-1.0.jar"/>
       <fileset file="${common.jars.dir}/slf4j*.jar"/>
     </copy>
-    <copy tofile="${dist.dir}/jetty/resources/log4j.properties" file="${server.conf.dir}/jetty-7.5/log4j.properties.production" overwrite="true" />
+    <copy tofile="${dist.dir}/jetty/resources/log4j.properties" file="${server.conf.dir}/jetty-7.6/log4j.properties.production" overwrite="true" />
 
     <!-- db schema, config and jars -->
     <antcall target="db-versions-init" />
@@ -716,7 +716,15 @@
     <antcall target="offline-clean" />
 
     <mkdir dir="${dist.dir}" />
+  	<exec executable="tar">
+  		<arg value="-xvzf"/>
+  		<arg value="${jetty.src.dir}/jetty-${jetty.version}.tar.gz"/>
+  		<arg value="-C"/>
+  		<arg value="${dist.dir}"/>
+  	</exec>
+  	<!-- Ant bug https://issues.apache.org/bugzilla/show_bug.cgi?id=41924 causes POSIX long file names to be extracted incorrectly 	
     <untar src="${jetty.src.dir}/jetty-${jetty.version}.tar.gz" dest="${dist.dir}" overwrite="true" compression="gzip"/>
+    -->
     <move file="${dist.dir}/jetty-${jetty.version}" tofile="${dist.dir}/jetty" />
     <mkdir dir="${dist.app.dir}/jetty/webapps" />
 
