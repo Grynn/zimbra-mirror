@@ -14,113 +14,91 @@
  */
 
 
-html {
-	margin: 0;
-	padding: 0;
-
-	height: auto;
-	min-height: 900px;
-	padding: 0;
-
-
-	/*background: #1d3a62 url(@SkinImgDir@/body-gradient-bg.png ) repeat-x;*/
-	/* This default setting defined for all */
-
-	/* For opera */
-	/* background-image: -o-linear-gradient(#079bdc, #153451);    <== only works in ver 11.1+   */
-
-
-	/* For WebKit (Safari, Google Chrome etc)	*/
-	background: #1d3a62 -webkit-gradient(linear, left top, left bottom, from(#57a3d5), to(#1d3a62)) no-repeat;
-
-	/* For Mozilla/Gecko (Firefox etc)	*/
-	background: #1d3a62  -moz-linear-gradient(top, #57a3d5, #1d3a62) no-repeat;
-
-	/* For Internet Explorer 5.5 - 7	*/
-	filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#57a3d5', endColorstr='#1d3a62');"
-
-	/* For Internet Explorer 8	*/
-	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#079bdc', endColorstr='#153451')";
-
-	background-image: url(@SkinImgDir@/gradient-bg.png);
-	background-repeat:  repeat-x;
-	background-color: #1d3a62;
+HTML {
+    margin:0;
+    padding:0;
+    height:auto;
+    min-height:900px;
+    padding:0;
 }
-
-body {
-	margin: 0;
-	padding: 0;
+BODY {
     @FontFamily-default@
-	background:transparent url(@SkinImgDir@/marge-mosaic-bg.png) no-repeat;
+    @grad(#57A3D5,#1D3A62)@
+    color:@TxtC@;
+    margin:0;
+    padding:0;
+}
+.DwtShell {
+    background:transparent url(@SkinImgDir@/marge-mosaic-bg.png) no-repeat;
 }
 
 /* classes for the skin around the various pieces of the app */
 
-.skin_container						{	position:relative;	overflow:hidden;	}
-.skin_table	{	@FullSize@ }	
-.full_height {height:100%; } 	
+.skin_container	{	position:relative; overflow:hidden;	}
+.skin_table		{	@FullSize@ }	
+.full_height		{	height:100%; } 	
 
-#skin_outer							{padding-top:6px; background-color:transparent;	@FullSize@		}
-#skin_top_td					{	height:40px;	}
-#skin_outer *	{ 	@FixBoxModel@
-}
-#skin_table_outer					{		padding:5px;		}
+#skin_outer		{	padding-top:6px; background-color:transparent; @FullSize@	}
+#skin_top_td		{	height:40px;	}
+#skin_outer *		{ 	@FixBoxModel@	}
+#skin_table_outer	{	padding:5px;	}
 
-/* top row:  logo, search box, quota */
-#skin_tr_top	{}
-#skin_td_logo	{
-}
+/* top row: logo, search box, quota */
+#skin_tr_top		{}
+#skin_td_logo		{}
 /** Logo displayed in the app **/
-#skin_td_logo						{}
-#skin_container_logo	{	
-	width:@TreeStartWidth@;
-	@SkinBorderLogo@
-	height: @TopHeight@;
+#skin_td_logo		{}
+#skin_container_logo {	
+    width:@TreeStartWidth@;
+    @SkinBorderLogo@
+    height:@TopHeight@;
 #IFDEF MSIE
     height:100%;
 #ENDIF
 }
 .ImgAppBanner {
-    background-position:0px;
+    background-position:0;
 }
 
 #skin_td_toaster {
-    width: 100%;
+    width:100%;
 }
 
 #skin_container_toaster {
-    width:  100%;
-    height: 100%;
+    width:100%;
+    height:100%;
 }
 
-#skin_td_search	{	
-	vertical-align:top;
-	padding:0px;
+#skin_td_search {	
+    vertical-align:top;
+    padding:0;
 }
 
 #skin_container_search	{
-	height: 21px;
+    height:21px;
     width:400px;
 }
 
 /* Vertical Seperator Section*/
 #skin_container_pre_next_vertsep{
-    width:      1px;
-    padding:0px 9px;
-	height: @TopHeight@;
+    width:1px;
+    padding:0 9px;
+    height:@TopHeight@;
 }
 
-#skin_container_refresh_vertsep, #skin_container_search_vertsep, #skin_container_username_vertsep {
-    width:      1px;
-    padding:0px 9px;
-    top: 4px;
-	height: @TopHeight@;
+#skin_container_refresh_vertsep, 
+#skin_container_search_vertsep, 
+#skin_container_username_vertsep {
+    width:1px;
+    padding:0 9px;
+    top:4px;
+    height:@TopHeight@;
 }
 
 /** User Name section **/
 #skin_container_username {
-	height: @TopHeight@;
-    width:  100px;
+    height:@TopHeight@;
+    width:100px;
 }
 
 #skin_container_username *	{
@@ -134,37 +112,28 @@ body {
 }
 
 #skin_container_refresh {
-    width:      20px;
-    height:     @TopHeight@
+    width:20px;
+    height:@TopHeight@
 }
 
-#skin_container_previous {
-    width:      16px;
-    height:     @TopHeight@
-}
-
-
+#skin_container_previous,
 #skin_container_next {
-    width:      16px;
-    height:     @TopHeight@
+    width:16px;
+    height:@TopHeight@
 }
 
 #skin_container_help {
-    height:     @TopHeight@
+    height:@TopHeight@
 }
 
-#skin_spacing_filler                {   
+#skin_spacing_filler {   
     height:12px; 
-    background-color: #FFFFFF;
-    background-image: -moz-linear-gradient(top, #FFFFFF, @AppC@); /* FF3.6 */
-    background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, #FFFFFF),color-stop(1, @AppC@)); /* Saf4+, Chrome */
-    filter:  progid:DXImageTransform.Microsoft.gradient(startColorStr='#FFFFFF', EndColorStr='@AppC@'); /* IE6,IE7 */
-    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#FFFFFF', EndColorStr='@AppC@')"; /* IE8 */
+    @grad(white,AppC)@
 }
 
 #skin_td_bottom {
-    border: 5px solid rgb(150, 197, 217);
-    background-color: rgb(150, 197, 217);
+    border:5px solid rgb(150, 197, 217);
+    background-color:rgb(150, 197, 217);
     @borderRadius@:5px;
 }
 
@@ -179,39 +148,41 @@ body {
 
 #skin_container_tree_top {
     @SkinBorderCurrentApp@;
-    @tlRadius@ : 5px;
-    @trRadius@ : 5px;
     height:@AppTopHeight@;
+    @tlRadius@:5px;
+    @trRadius@:5px;
 }
 
 #skin_td_current_app, #skin_td_tree_container {
-    padding:0 0 0 6;
+    padding:0 0 0 6px;
 }
 
 #skin_td_tree {
     height:100%;
-    padding:  0px;
+    padding:0;
 }
 
 #skin_container_tree {
     @SkinBorderTree@;
-    border-bottom-width: 0px;
+    border-bottom-width:0;
     height:100%;
 }
 
-#skin_tr_tree_footer    {
+#skin_tr_tree_footer {
     display:table-row;
 }
 
-#skin_td_tree_footer   {
+#skin_td_tree_footer {
     vertical-align:top;
 }
 
 #skin_container_tree_footer {
-    @SkinBorderCurrentApp@;
-    @blRadius@ : 5px;
-    @brRadius@ : 5px;
+    background-color:white;
+    border:solid #AAA;
+    border-width:0 1px 1px;
     height:@AppFooterHeight@;
+    @blRadius@:5px;
+    @brRadius@:5px;
 }
 
 /***Middle panel start here
@@ -222,29 +193,29 @@ body {
 }
 
 /* current app, tree-app sash, top toolbar */
-#skin_tr_app_tabs   {
-    margin:0 0 0 0;
+#skin_tr_app_tabs {
+    margin:0;
     height:@AppTopHeight@;
 }
 
-#skin_td_app_tabs	{
+#skin_td_app_tabs {
 }
 
 #skin_container_app_tabs {
     @SkinBorderCurrentApp@;
     height:@AppTopHeight@;
-    margin:0 0 0 0;
-    @tlRadius@ : 5px;
-    @trRadius@ : 5px;
+    margin:0;
+    @tlRadius@:5px;
+    @trRadius@:5px;
 }
 
 #skin_td_app_main {
-    padding: 0px;
+    padding:0;
 }
 
 #skin_container_app_main {
     @SkinBorderApp@;
-    border-bottom-width: 0px;
+    border-bottom-width:0;
     height:100%;
 }
 
@@ -259,8 +230,8 @@ body {
 #skin_container_main_footer {
     @SkinBorderCurrentApp@;
     height:@AppFooterHeight@;
-    @blRadius@ : 5px;
-    @brRadius@ : 5px;
+    @blRadius@:5px;
+    @brRadius@:5px;
 }
 
 /*right panel tool-panel*/
@@ -269,24 +240,24 @@ body {
     width:@ToolStartWidth@;
 }
 
-#skin_tr_tool_header   {
-    margin:0 0 0 0;
+#skin_tr_tool_header {
+    margin:0;
     height:@AppTopHeight@;
 }
 
-#skin_td_tool_header	{
+#skin_td_tool_header {
 }
 
 #skin_container_tool_header {
     @SkinBorderCurrentApp@;
     height:@AppTopHeight@;
-    margin:0 0 0 0;
-    @tlRadius@ : 5px;
-    @trRadius@ : 5px;
+    margin:0;
+    @tlRadius@:5px;
+    @trRadius@:5px;
 }
 
 #skin_td_tool {
-    padding:0px;
+    padding:0;
 }
 
 #skin_container_tool {
@@ -294,20 +265,20 @@ body {
     height:100%;
 }
  
-#skin_tr_tool_footer   {
+#skin_tr_tool_footer {
     display:table-row;
 }
 
-#skin_td_fool_footer  {
+#skin_td_tool_footer {
     vertical-align:top;
 }
 
 #skin_container_tool_footer {
     @SkinBorderCurrentApp@;
     height:@AppFooterHeight@;
-    @blRadius@ : 5px;
-    @brRadius@ : 5px;
-    margin-top: -2px;
+    @blRadius@:5px;
+    @brRadius@:5px;
+    margin-top:-2px;
 }
 
 /*Used by Admin Console start*/
@@ -316,41 +287,34 @@ body {
 }
 
 .asterisk {
-@Text-error@	
+    @Text-error@	
 }
 
 .overviewHeader,
-.ZaToolbar                         {
-  /*background-color: @lighten(AppC,27)@;
-  background-image: -moz-linear-gradient(top, @lighten(AppC,27)@, @darken(AppC,3)@); 
-  background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, @lighten(AppC,27)@),color-stop(1, @darken(AppC,3)@)); 
-  filter:  progid:DXImageTransform.Microsoft.gradient(startColorStr='@lighten(AppC,27)@', EndColorStr='@darken(AppC,3)@'); 
-  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='@lighten(AppC,27)@', EndColorStr='@darken(AppC,3)@')"; */
-}
+.ZaToolbar {}
 
 .DwtListView-Column,
-.ZaTaskTitleNameHeader,
-.ZaCurrentAppBar{
-  background-color: #c5c6cb;
-  background-image: -moz-linear-gradient(top, #dfe1ef, #b9bbbf); /* FF3.6 */
-  background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, #dfe1ef),color-stop(1, #b9bbbf)); /* Saf4+, Chrome */
-  filter:  progid:DXImageTransform.Microsoft.gradient(startColorStr='#dfe1ef', EndColorStr='#b9bbbf'); /* IE6,IE7 */
-  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#dfe1ef', EndColorStr='#b9bbbf')"; /* IE8 */
-  @tlRadius@:5px; @trRadius@:5px;
+.TaskHeaderPanel,
+.ZaCurrentAppBar,
+.ZaCtrAppTreeHeader,
+.ZaTaskTitleNameHeader {
+    @grad(#ECECEC,#C1C1C1)@
+    @tlRadius@:5px; 
+    @trRadius@:5px;
 }
 /** LoginPanel and Splash screen **/
-#skin_container_splash_screen           {   @SkinOuter@ @FullWindow@ z-index:90000000;      }
+#skin_container_splash_screen {	@SkinOuter@ @FullWindow@ z-index:90000000;	}
 
 .LoginScreen,
 .SplashScreen {
-    position:absolute;
-    left:0px;
-    top:0px;
-    width:100%;
-    height:100%;
+    @FontSize-normal@
     background-color:@LoginBkgdTop@;
     font-family:@FontFamily-default@;
-    @FontSize-normal@
+    height:100%;
+    left:0;
+    position:absolute;
+    top:0;
+    width:100%;
     @grad(LoginBkgdTop,LoginBkgdBottom,linear-vertical)@
 }
 .LoginScreen .center,
@@ -372,12 +336,12 @@ body {
 }
 .LoginScreen .center, .LoginScreen .center-small,
 .SplashScreen .center, .SplashScreen .center-small {
+    background-color:@LoginCenterBottom@;
     left:50%;
     overflow:visible;
     position:absolute;
     top:40%;
     z-index:11;
-    background-color:@LoginCenterBottom@;
     @grad(LoginCenterTop,LoginCenterBottom,linear-vertical)@
 }
 .LoginScreen H1,
@@ -394,21 +358,21 @@ body {
     @ImgAltBanner@
 }
 .decor1Outer{
-   margin-left:-250px;
-   margin-top:160px;
-   left:50%;
-   top:40%;
-   z-index:10;
-   width:500px;
-   height:100px;
-   position: absolute;
-   @DecorOpacity@
+    margin-left:-250px;
+    margin-top:160px;
+    left:50%;
+    top:40%;
+    z-index:10;
+    width:500px;
+    height:100px;
+    position:absolute;
+    @DecorOpacity@
 }
 .LoginScreen .decor1,
 .SplashScreen .decor1 {
-   @Decor1@
-   #background:none;/* '#'only ie work*/
-   filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='@DecorImg@');
+    @Decor1@
+    #background:none;/* '#'only ie work*/
+    filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='@DecorImg@');
 }
 
 .LoginScreen .Footer,
@@ -431,8 +395,8 @@ body {
     color:@darken(AppC,55)@;
 }
 
-.form td {
-    text-align: right;
+.form TD {
+    text-align:right;
 }
 
 /*Splash Screen Only Items*/
@@ -441,22 +405,22 @@ body {
     text-align:center;
 }
 .SplashScreen .message {
+    @FontSize-bigger@
     color:@LoginLabelColor@;
     cursor:default;
     padding-top:40px;
-    @FontSize-bigger@
 }
 .SplashScreen .switch{
     margin:100px 100px 0;
 }
 .SplashScreen .switch A {
+    @FontSize-normal@
     color:@LoginLabelColor@;
     text-decoration:underline;
-    @FontSize-normal@
 }
 
 .ZLoadingMessage {
-    color:#FFFFFF;
+    color:white;
     font-size:14px;
     font-weight:bold;
     padding-top:50px;
@@ -468,7 +432,7 @@ body {
 
 #IFDEF MSIE
 #skin_container_logo A, #skin_container_logo A:hover, #skin_container_logo A:link {
-    background-color: transparent;
+    background-color:transparent;
 }
 #ENDIF
 
@@ -476,15 +440,15 @@ body {
 .AboutScreen .WindowOuterContainer,
 .AboutScreen .DwtDialogBody {
     /*Linear gradient backgrounds*/
-    /*background-color: @darken(LoginColor,30)@;
-    background-image: -moz-linear-gradient(top, @LoginColor@, @darken(LoginColor,50)@); /* FF3.6 */
-   /* background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, @LoginColor@),color-stop(1, @darken(LoginColor,50)@)); /* Saf4+, Chrome */
-   /* filter:  progid:DXImageTransform.Microsoft.gradient(startColorStr='@LoginColor@', EndColorStr='@darken(LoginColor,50)@'); /* IE6,IE7 */
-   /* -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='@LoginColor@', EndColorStr='@darken(LoginColor,50)@')"; /* IE8 */
+    /*background-color:@darken(LoginColor,30)@;
+    background-image:-moz-linear-gradient(top, @LoginColor@, @darken(LoginColor,50)@); /* FF3.6 */
+   /* background-image:-webkit-gradient(linear,left top,left bottom,color-stop(0, @LoginColor@),color-stop(1, @darken(LoginColor,50)@)); /* Saf4+, Chrome */
+   /* filter:progid:DXImageTransform.Microsoft.gradient(startColorStr='@LoginColor@', EndColorStr='@darken(LoginColor,50)@'); /* IE6,IE7 */
+   /* -ms-filter:"progid:DXImageTransform.Microsoft.gradient(startColorStr='@LoginColor@', EndColorStr='@darken(LoginColor,50)@')"; /* IE8 */
 
     /*Radial gradient backgrounds*/
-  /*  background-image: -moz-radial-gradient(50% 0, circle farthest-corner, @LoginColor@ 0%, @darken(LoginColor,50)@ 100%); /* FF3.6 */
-  /*  background-image: -webkit-gradient( radial, 50% 0%, 0, 50% 0%, 390, from(@LoginColor@), to(@darken(LoginColor,50)@) ); /* Saf4+, Chrome */
+  /*  background-image:-moz-radial-gradient(50% 0, circle farthest-corner, @LoginColor@ 0%, @darken(LoginColor,50)@ 100%); /* FF3.6 */
+  /*  background-image:-webkit-gradient( radial, 50% 0%, 0, 50% 0%, 390, from(@LoginColor@), to(@darken(LoginColor,50)@) ); /* Saf4+, Chrome */
     background-color:@LoginCenterBottom@;
     @grad(LoginCenterTop,LoginCenterBottom,linear-vertical)@
 }
@@ -498,150 +462,147 @@ body {
 }
 
 .DwtLinkButtonDropDownArrow {
-    width :   17px;
+    width:17px;
 }
 
 /*Here start for new ui*/
 .homeGroupHeader {
     background-color:#FAFAFA;
     height:24px;
-    display: table-cell;
-    vertical-align: middle;
+    display:table-cell;
+    vertical-align:middle;
 }
 
 .nextVertSep {
-    height: 17px;
+    height:17px;
     @VertSeparator@;
 }
 
 .SearchFieldVert {
-    background-color: black;
+    background-color:black;
     @opacity(50)@
 }
 .vertSep {
-    height: 9px;
-    margin: 0px;
-    border-width: 0px;
-    padding: 0px;
+    border-width:0;
+    height:9px;
+    margin:0;
+    padding:0;
     @VertSeparator@;
 }
 #ZLoginButton{
-    background-color: #ffffff;
+    background-color:white;
     float:right;
     @roundCorners(4px)@;
 }
 
 .redAsteric {
-	color: #cb2027;
+    color:#CB2027;
 }
 
 .GroupLabel {
-    font-size: 12px;
+    font-size:12px;
 }
 
 .ZmSelectedHeaderBg .xform_repeat_label,
 .ZmSelectedHeaderBg .xform_label_left,
 .ZmSelectedHeaderBg .xform_label {
-    text-align: left;
+    text-align:left;
 }
 
 .ZaXWizardDialogPageDiv .step_body_container {
-    padding: 15px;
+    padding:15px;
 }
 
 .DwtListView-Rows .Row-selected {
-    background-color: #b3e0ff !important;
-    color: #000000;
+    background-color:#B3E0FF !important;
+    color:black;
 }
 
 .DwtListView-Rows .Row {
-    color: #333333;
+    color:#333;
 }
 
-.grid_group_container{
-    border: 1px solid #D3D3D3;
+.grid_group_container {
+    border:1px solid #D3D3D3;
     @borderRadius@:5px;
 }
 
-.grid_table{
-    border-top: 1px solid #e4e4e4;
-    border-left: 1px solid #aaaaaa;
-    border-spacing: 0;
-    padding: 0;
+.grid_table {
+    border-top:1px solid #E4E4E4;
+    border-left:1px solid #AAA;
+    border-spacing:0;
+    padding:0;
 }
-.grid_table td{
-    border-right: 1px solid #e4e4e4;
-    border-bottom: 1px solid #e4e4e4;
+.grid_table TD {
+    border-right:1px solid #E4E4E4;
+    border-bottom:1px solid #E4E4E4;
 }
-.grid_table td td{
-    border: 0;
+.grid_table TD TD {
+    border:0;
 }
-.grid_composite_table{
-   border-spacing: 0;
-   padding: 0;
-}
-.grid_xform_table{
-   border-spacing: 0;
-   padding: 0;
+.grid_composite_table,
+.grid_xform_table {
+   border-spacing:0;
+   padding:0;
 }
 
 .grid_table_cell_sheet {
-    padding: 2px;
+    padding:2px;
     overflow:auto;
 }
 
 .ZaHelpDropdown {
-    padding: 0 15px 0 15px;
+    padding:0 15px;
 }
 
 .ZaHelpDropdownFirstItem, .ZaHelpDropdownItem, .ZaHelpDropdownLastItem {
-    background-color: #FFFFFF;
-    border-color: #848484;
-    border-style: solid;
-    width: 160px;
+    background-color:white;
+    border-color:#848484;
+    border-style:solid;
+    width:160px;
 }
 
 .ZaHelpDropdownFirstItem {
-    border-width: 0 1px 0px 0;
-    padding: 6px 6px 0 6px;
+    border-width:0 1px 0 0;
+    padding:6px 6px 0;
 }
 
 .ZaHelpDropdownItem {
-    border-width: 0 1px 0px 0;
-    padding: 0 6px 0 6px;
+    border-width:0 1px 0 0;
+    padding:0 6px;
 }
 
 .ZaHelpDropdownLastItem {
-    -moz-border-radius: 0 0 3px 3px;
-    border-width: 0 1px 1px 0px;
-    padding: 0px 6px 6px 6px;
+    -moz-border-radius:0 0 3px 3px;
+    border-width:0 1px 1px 0;
+    padding:0 6px 6px;
 }
 
 .ZaHelpDropdownSearch {
-    -moz-border-radius: 3px 3px 0 0;
-    background-color: #DDDDDD;
-    border-color: #848484;
-    border-style: solid;
-    border-width: 0 1px 1px 0;
-    padding: 4px 8px 4px 8px;
+    -moz-border-radius:3px 3px 0 0;
+    background-color:#DDD;
+    border-color:#848484;
+    border-style:solid;
+    border-width:0 1px 1px 0;
+    padding:4px 8px;
 }
 
 #ZaHelpSearchInput {
-    border: #FFFFFF;
-    font-size: 12px;
-    margin-left: 3px;
-    padding: 0px;
+    border:white;
+    font-size:12px;
+    margin-left:3px;
+    padding:0;
     width:116px;
 }
 
 .ZaHelpSearchIcon {
-   float: right;
-   margin: 2px 4px 0pt 0pt;
-   cursor: pointer;
+   float:right;
+   margin:2px 4px 0 0;
+   cursor:pointer;
 }
 
 .ZaCategorizedSearchLabel {
-    font-weight: bold;
+    font-weight:bold;
 }
 
 .ZaCategorizedSearchItem {

@@ -1,8 +1,8 @@
-
+/* skinExt.css */
 
 
 .XFormCase, .SmallRadioGrouperLabel, .GrouperLabel, .RadioGrouperLabel {
-    background: @viewC@;
+    background:@viewC@;
 }
  
 .homeGroupHeader {
@@ -10,19 +10,33 @@
 }
 
 .homeGroupBody {
-    border: 1px solid #dcdcdc;
+    border:1px solid #DCDCDC;
 }
 
 .DwtTreeItemLevel1ChildDiv {
-    background-color:@PanelColor@;
+    background-color:transparent;
 }
 
-.DwtTreeItemLevel1ChildDiv > div{
-	margin-top: 8px;
+.DwtTreeItemLevel1ChildDiv > DIV {
+    margin-top:8px;
 
 }
 
 /*  -- Navigator -- */
+
+.OverviewPanel {
+    background-color:white;
+}
+
+.OverviewTreePanel {
+    background-color:white;
+    border:solid #AAA;
+    border-width:0 1px;
+}
+
+.ZaCtrAppTreeHeader .DwtLinkButtonTable {
+    cursor:pointer;
+}
 /*
 .ZaCtrAppTreeHeader .DwtLinkButtonTable {
     height:12px;
@@ -33,157 +47,167 @@
     background-color:white;
     height:12px;
     text-align:center;
-    border-top: 1px solid black;
-    border-bottom: 1px solid black;
-    border-right: 1px solid black;
+    border-top:1px solid black;
+    border-bottom:1px solid black;
+    border-right:1px solid black;
 }
 
 .ZaCtrAppTreeHeader  .DwtLinkButtonTable .ZDropDown {
-    border: 1px solid;
+    border:1px solid;
     background-color:white;
     height:12px;
-	@roundCorners(0 5px 5px 0)@
+    @roundCorners(0 5px 5px 0)@
 }
  */
 
 .ZaCtrAppTreeHeader {
-    padding: 1px 0px 0px 5px;
+    padding:1px 5px 0;
+    border:solid #AAA;
+    border-width:1px 1px 0;
 }
 
-.AdminTreeItem {
+.AdminTreeItem,
+.AdminTreeItem-selected, 
+.AdminTreeItem-selected-focused, 
+.AdminTreeItem-actioned {
     padding-left:18px;
 }
 
-.AdminTreeItem-selected, .AdminTreeItem-selected-focused  {
-    padding-left:18px;
-    background-color:#2b5480 !important;
+.AdminTreeItem-selected, 
+.AdminTreeItem-selected-focused  {
+    background-color:#B5D0F1 !important;
 }
 
 .AdminTreeItem-selected .AdminTreeItem-Text,
-.AdminTreeItem-selected-focused .AdminTreeItem-Text{
-    color: white;
+.AdminTreeItem-selected-focused .AdminTreeItem-Text {
+    color:black;
 }
 
 .AdminTreeItem-actioned {
     @TreeItem@
-	@RightClickBg@
-	padding-left:18px;
+    @RightClickBg@
 }
 
-.rootOverviewHeader, .rootOverviewHeader-selected, .rootOverviewHeader-selected-focused {
-    padding-left:5px;
-    padding-top:5px;
-    background-color: #ccc;
+.rootOverviewHeader, 
+.rootOverviewHeader-selected, 
+.rootOverviewHeader-selected-focused {
+    background-color:#3A537F;
+    padding:2px 0 3px 5px;
 }
 
-.homeRootOverviewHeader, .homeRootOverviewHeader-selected, .homeRootOverviewHeader-selected-focused {
-    padding-left:5px;
-    padding-top:5px;
-    background-color: #2b5480;
+.homeRootOverviewHeader, 
+.homeRootOverviewHeader-selected, 
+.homeRootOverviewHeader-selected-focused {
+    background-color:#B5D0F1;
+    padding:2px 0 3px 5px;
 }
 
 .AdminTreeItem-Count {
     background-color:#708090;
-    width:20px;
-    text-align:right;
     color:white;
     padding-right:3px;
-	@roundCorners(4px)@
+    text-align:right;
+    width:20px;
+    @roundCorners(4px)@
 }
 
-.rootOverviewHeader-Text, .homeRootOverviewHeader-Text {
+.rootOverviewHeader-Text {
+    color:white;
     padding-left:5px;
-    font-weight:bold;
 }
 
-.AdminTreeItem-Text {
+.homeRootOverviewHeader-Text {
+    color:black;
+    padding-left:5px;
+}
+
+.AdminTreeItem-Text,
+.AdminHomeTreeItem-Text {
     padding-left:5px;
 }
 
 .AdminHomeTreeItem {
-    padding-left: 5px;
-    cursor: pointer;
-    height: 18px;
-}
-
-.AdminHomeTreeItem-Text {
+    cursor:pointer;
+    height:18px;
     padding-left:5px;
 }
+
 /* -- view xform -- */
 
 /*  view xform - header */
 div.ZmSelectedHeaderBg {
-    background-color: #ffffff !important;
+    background-color:white !important;
 }
 
-/* veiw xform - body */
-
+/* view xform - body */
 
 .gridGroupHeader {
-    background-color:#e7e9ea;
-    border: #aaaaaa solid;
-    border-width: 1px 1px 0px 1px;
+    background-color:#E7E9EA;
+    border:#AAA solid;
+    border-width:1px 1px 0;
+    display:table-cell;
     height:24px;
-    display: table-cell;
-    vertical-align: middle;
+    vertical-align:middle;
 }
 
 .gridGroupBodyLabel {
-    text-align:left;
-    background-color:#e4eff5 !important;     /* transprant color*/
+    background-color:#E4EFF5 !important;     /* transparent color*/
     padding-left:10px;
+    text-align:left;
 }
 
 /* -- Task panel -- */
 
 .TaskHeaderPanel {
-    direction: rtl;
-    padding-right:5px;
-    padding-top:5px;
+    direction:rtl;
 }
 
-.ZaTaskTabView .DwtListView-ColHeader td{
-    font-weight: bold;
+.ImgCollapseRight, .ImgCollapseLeft {
+    cursor:pointer;
+    margin:3px 2px 2px
+}
+
+.ZaTaskTabView .DwtListView-ColHeader TD {
+    font-weight:bold;
 }
 
 .ZaTaskTitleNameHeader {
-    padding: 5px 0px;
+    padding:5px 0;
 }
 
-.ZaTaskTitleNameHeader td {
-    font-weight: bold;
+.ZaTaskTitleNameHeader TD {
+    font-weight:bold;
 }
 
 .ZaTaskListContent {
-    height: 126px;
+    height:126px;
 }
 
 .ZaTaskTabView .XFormCase {
-    background-color: #DDDDDD;
+    background-color:#DDD;
 }
 /* -- Search panel -- */
 
 .SearchPanel {
     background-color:@viewC@;
-	@roundCorners(5px)@
+    @roundCorners(5px)@
 }
 
 .SearchToolBar {
-    top: 0px;
-    border: white solid 1px;
+    border:1px solid white;
     background-color:@viewC@;
-	@roundCorners(5px)@
+    top:0;
+    @roundCorners(5px)@
 }
 
 .SearchTBSearchField .oselect, .oselect_check {
-    border:none;
     background-color:white;
+    border:none;
 }
 
 .SearchTBSearchField .dynselect_display {
     border-color:white;
 }
-
 
 .SearchTBSearchField .ZButtonBorder  {
     border:none;
@@ -203,50 +227,50 @@ div.ZmSelectedHeaderBg {
 /* new account dialog */
 
 .AdminOutputTab {
-    padding: 3px 15px 2px 15px;
     min-height:18px;
+    padding:3px 15px 2px;
 }
 
 .AdminOutputTabSelect {
-    padding: 3px 15px 2px 15px;
+    background-color:#4682B4;
+    color:white;
     min-height:18px;
-    background-color:#4682b4;
-    color: white;
-	@roundCorners(4px)@
+    padding:3px 15px 2px;
+    @roundCorners(4px)@
 }
 
 .WindowOuterContainer {
-    background-color: #EAEAEA;
-    border: 1px solid;
-    padding: 1px;
-	@roundCorners(5px)@
+    background-color:#EAEAEA;
+    border:1px solid;
+    padding:1px;
+    @roundCorners(5px)@
 }
 
 .WindowInnerContainer {
-    background-color: #DADADA;
-    border: 0px;
-    padding: 0px;
+    background-color:#DADADA;
+    border:0;
+    padding:0;
 }
 
 .step_container {
-    font: Arial bold 16pt;
-    color: #666666;
-    background-color: #e4eff6;
-    border: 0px;
-    padding: 5px;
+    background-color:#E4EFF6;
+    border:0;
+    color:#666;
+    font:Arial bold 16pt;
+    padding:5px;
 }
 
 .DwtDialogHeader {
-    background-color: #dfe1e5;
+    background-color:#DFE1E5;
 }
 
 .DwtDialogTitle {
-    vertical-align: middle;
-    font-family: Arial;
-    font-size: 12pt;
-    font-weight: bold;
-    height: 27px;
-    color: #333333;
+    color:#333;
+    font-family:Arial;
+    font-size:12pt;
+    font-weight:bold;
+    height:27px;
+    vertical-align:middle;
 }
 
 .DwtDialogMinIcon {
@@ -254,47 +278,47 @@ div.ZmSelectedHeaderBg {
 }
 
 .DwtDialogBody {
-    background-color: #FCFCFC;
+    background-color:#FCFCFC;
 }
 
 .DwtDialogButtonBar {
-    height: 40px;
-    background-color: #dadfe5;
+    height:40px;
+    background-color:#DADFE5;
 }
 
 .DwtDialogButtonBar .ZButtonBorder {
-    border:1px solid #949494;
     background-color:#FEFEFE;
+    border:1px solid #949494;
     @roundCorners(3px)@
 }
 
-.DwtDialogButtonBar .ZButtonTable .ZWidgetTitle{
-    font: Arial 12px normal;
-    color: #333333;
-	@roundCorners(3px)@
+.DwtDialogButtonBar .ZButtonTable .ZWidgetTitle {
+    color:#333333;
+    font:Arial 12px normal;
+    @roundCorners(3px)@
 }
 
-.DwtDialogButtonBar .ZDisabled .ZButtonTable .ZWidgetTitle{
-    border: 1px solid #949494;
-    font: Arial 12px normal;
-    color: #999999;
-	@roundCorners(3px)@
+.DwtDialogButtonBar .ZDisabled .ZButtonTable .ZWidgetTitle {
+    border:1px solid #949494;
+    color:#999;
+    font:Arial 12px normal;
+    @roundCorners(3px)@
 }
 
-.DwtDialogButtonBar .ZHover .ZButtonBorder{
-    border: 1px solid #949494;
-    font: Arial 12px normal;
-    background-color: #C7E9FF;
-	@roundCorners(3px)@
+.DwtDialogButtonBar .ZHover .ZButtonBorder {
+    background-color:#C7E9FF;
+    border:1px solid #949494;
+    font:Arial 12px normal;
+    @roundCorners(3px)@
 }
 
 .horizSep {
-    border-bottom: 1px solid #E0E0E0;
-    margin: 0px;
+    border-bottom:1px solid #E0E0E0;
+    margin:0;
 }
 
 .VeilOverlay {
-    background-color: black;
+    background-color:black;
     @opacity(35)@;
 }
 
@@ -303,58 +327,58 @@ div.ZmSelectedHeaderBg {
 }
 
 .ZaHomeWarningPanel {
-    padding: 12px;
-    background-color: #ffffcc;
-    border-bottom: 1px solid #efe69b;
+    background-color:#FFC;
+    border-bottom:1px solid #EFE69B;
+    padding:12px;
 }
 
 .ZaHomeWarnginItem {
-    padding: 1px 0px 2px;
+    padding:1px 0 2px;
 }
 
 .ZaLinkedItem {
-    cursor: pointer;
-    color:  #336699;
+    color:#369;
+    cursor:pointer;
 }
 
 .ZaHomeInfoTitle {
-    color: #86a1b6;
-    font-size: 16pt;
-    font-weight: bold;
-    margin-bottom: 5px;
+    color:#86A1B6;
+    font-size:16pt;
+    font-weight:bold;
+    margin-bottom:5px;
 }
 
 .ZaHomeInfoPanel {
-    padding: 12px;
+    padding:12px;
 }
 
 .ZaHomeTabView .xform_label {
-    text-align: left;
+    text-align:left;
 }
 
 .ZaHomeSetupPanelContainer {
-    padding: 12px;
+    padding:12px;
 }
 
 .ZaHomeSetupPanel{
-    background-color: #f3f7fb;
-    border: 1px solid #e7ecf2;
-	@roundCorners(10px)@
+    background-color:#F3F7FB;
+    border:1px solid #E7ECF2;
+    @roundCorners(10px)@
 }
 
 .ZaHomeSetupPanelContent {
-    padding: 12px;
+    padding:12px;
 }
 
 .ZaHomeSetupTitle {
-    color: #86a1b6;
-    font-size: 16pt;
-    font-weight: bold;
-    padding-bottom: 8px;
+    color:#86A1B6;
+    font-size:16pt;
+    font-weight:bold;
+    padding-bottom:8px;
 }
 
 .ZaHomeLinkItemLabel {
-    color: #86a1b6;
+    color:#86A1B6;
 }
 
 .NoResults {
@@ -362,28 +386,29 @@ div.ZmSelectedHeaderBg {
 }
 
 .ZaCurrentAppBar .ZDisabled .ZToolbarButtonTable .ZWidgetTitle {
-    color: #747474;
+    color:#747474;
 }
 
 .ZaSearchOptionDialog .ZaSearchOptionOverview {
-    padding: 4px;
+    padding:4px;
 }
 .ZaSearchOptionDialog {
-    border: 1px solid black;
+    border:1px solid black;
 }
 
-.DwtDialog .WindowOuterContainer table{
-    #border-collapse: collapse;  /*only IE read the attribute after '#'*/
+#IFDEF MSIE
+.DwtDialog .WindowOuterContainer TABLE {
+    border-collapse:collapse;
 }
+#ENDIF
 
-.addrBubble{
-	color:black;
-	border:1px solid #999999;
-	padding:1px 3px;
-	margin-bottom:2px;
-	margin-left:3px;
-	display:inline-block;
-    background-color:#EEEEEE;
-
-	@roundCorners(4px)@;
+.addrBubble {
+    background-color:#EEE;
+    border:1px solid #999;
+    color:black;
+    display:inline-block;
+    margin-bottom:2px;
+    margin-left:3px;
+    padding:1px 3px;
+    @roundCorners(4px)@;
 }

@@ -49,7 +49,7 @@ function() {
         this._treePanel = new DwtComposite({
 		parent:		this, 
 		className:	"OverviewTreePanel", 
-		posStyle:	DwtControl.ABSOLUTE_STYLE,
+		posStyle:	DwtControl.RELATIVE_STYLE,
 		id:		ZaId.getTreeId(this.overviewId, this.type)
 	});
 
@@ -81,8 +81,8 @@ function() {
 //	opSz.x+=100;
 	var h = opSz.y;
 //	h = (h > ZaOverviewPanel._MIN_FOLDERTREE_SIZE) ? h : ZaOverviewPanel._MIN_FOLDERTREE_SIZE;
-	
-	this._treePanel.setBounds(0, 0, opSz.x, h);
+	var w = opSz.x - 2;  //subtract 2 for 1px borders on sides
+	this._treePanel.setBounds(0, 0, w, h);
 //	var tfBds = this._treePanel.getBounds();
 }
 
