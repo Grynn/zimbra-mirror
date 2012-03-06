@@ -24,8 +24,13 @@ STDMETHODIMP CUserObject::InterfaceSupportsErrorInfo(REFIID riid)
 
 STDMETHODIMP CUserObject::Init(BSTR host, BSTR location, BSTR account, BSTR *pErrorText)
 {
+    wchar_t buf[1024];
     HRESULT hr = S_OK;
 
+    GetTempPath(sizeof (buf) / sizeof (wchar_t), buf);
+    wcscat(buf, account);
+    wcscat(buf, L".log");
+    dlog.open(buf);
     dlogd(L"Initialize", Log::KV<BSTR>(L"host", host), Log::KV<BSTR>(L"location", location),
         Log::KV<BSTR>(L"account", account));
     MailType = L"MAPI";

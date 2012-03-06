@@ -224,7 +224,7 @@ public:
         }
     };
 
-    Log(const wchar_t *file = L"stdout", Level level = Info);
+    Log(const wchar_t *file = NULL, Level level = Info);
     ~Log() { close(); }
 
     static Log glog;
@@ -378,6 +378,7 @@ private:
         ~LogFile() { close(); }
 
         const wchar_t *file(void) const { return path; }
+        bool open(void) const { return fd != INVALID_HANDLE_VALUE; }
 
         bool close(void);
         bool lock(void);

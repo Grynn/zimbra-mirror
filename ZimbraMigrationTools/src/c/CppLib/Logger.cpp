@@ -12,7 +12,7 @@ const wchar_t *const Log::LevelStr[] = {
 const wchar_t *const Log::LevelStr2[] = {
     L"nothing", L"error", L"warning", L"information", L"debug"
 };
-Log Log::glog(L"stdout", Log::Info);
+Log Log::glog(NULL, Log::Info);
 TLSClass<Log> Log::tlog;
 
 #define EPOCH_BIAS 116444736000000000i64
@@ -56,15 +56,24 @@ bool Log::LogFile::lock(void)
 
 bool Log::LogFile::open(const wchar_t *file)
 {
-    if (file && path && !wcscmp(path, file))
+    wchar_t buf[1024];
+
+    if (file && path && open() && !wcscmp(path, file))
         return true;
     close();
-    if (!wcscmp(file, L"stdout") || !wcscmp(file, L"cout"))
+    if (!file)
+    {
+        GetTempPath(sizeof (buf) / sizeof (wchar_t), buf);
+        wcscat(buf, L"default.log");
+        path = wcsdup(buf);
+        return true;
+    }
+    if (!wcscmp(file, L"cout") || !wcscmp(file, L"stdout"))
     {
         DuplicateHandle(GetCurrentProcess(), GetStdHandle(STD_OUTPUT_HANDLE),
             GetCurrentProcess(), &fd, 0L, TRUE, DUPLICATE_SAME_ACCESS);
     }
-    else if (!wcscmp(file, L"stderr") || !wcscmp(file, L"cerr"))
+    else if (!wcscmp(file, L"cerr") || !wcscmp(file, L"stderr"))
     {
         DuplicateHandle(GetCurrentProcess(), GetStdHandle(STD_ERROR_HANDLE),
             GetCurrentProcess(), &fd, 0L, TRUE, DUPLICATE_SAME_ACCESS);
@@ -131,6 +140,8 @@ void Log::endlog(Tlsdata &tlsd, Level clvl)
     wchar_t tmp[8];
 
     lck.Enter();
+    if (!ffd.open())
+        ffd.open(ffd.file());
     ffd.lock();
     now_usec = microtime();
     now_sec = (unsigned)(now_usec / 1000000);
@@ -161,7 +172,6 @@ void Log::endlog(Tlsdata &tlsd, Level clvl)
     strbuf += LevelStr[clvl];
     if (clvl == Err)
         strbuf += ' ';
-    strbuf += ' ';
     if (!tlsd.prefix.empty())
     {
         strbuf += tlsd.prefix;
