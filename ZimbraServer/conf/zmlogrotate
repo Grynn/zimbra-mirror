@@ -124,7 +124,7 @@
     missingok
     rotate 7
     notifempty
-    create 0644 USER GROUP
+    create 0644 zimbra zimbra
     postrotate
       kill -HUP `cat /var/run/syslog*.pid 2> /dev/null` 2> /dev/null || true
       su - zimbra -c "/opt/zimbra/bin/zmcbpolicydctl restart" > /dev/null 2>&1 || true
