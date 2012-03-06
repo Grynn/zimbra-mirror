@@ -565,9 +565,13 @@ ZaGlobalAdvancedStatsPage.counterSelected = function(evt, id) {
     ZaGlobalAdvancedStatsPage.setText(chartdiv, ZaMsg.NAD_AdvStatsLoadingDataLabel);
     
     var serverSelect = document.getElementById("select-servers" + id);
-    if (!serverSelect[serverSelect.selectedIndex] ||
-        !serverSelect[serverSelect.selectedIndex].value)
+    if (AjxUtil.isEmpty(serverSelect.selectedIndex) ||
+        serverSelect.selectedIndex < 0 ||
+        !serverSelect[serverSelect.selectedIndex] ||
+        !serverSelect[serverSelect.selectedIndex].value) {
         return;
+    }
+
     var hostname = serverSelect[serverSelect.selectedIndex].value;
 
     var groupSelect = document.getElementById("select-group" + id);
