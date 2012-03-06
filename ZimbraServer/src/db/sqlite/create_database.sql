@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.mailbox (
    idx_deferred_count  INTEGER UNSIGNED NOT NULL DEFAULT 0,
    highest_indexed     VARCHAR(21),                   -- mod_content of highest item in the index
    version             VARCHAR(16),
-   last_purge_at       INTEGER UNSIGNED NOT NULL DEFAULT 0,
+   last_purge_at       INTEGER UNSIGNED NOT NULL DEFAULT 0
 );
 
 -- -----------------------------------------------------------------------
