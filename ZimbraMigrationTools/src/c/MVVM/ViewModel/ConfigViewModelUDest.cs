@@ -27,11 +27,11 @@ public class ConfigViewModelUDest: BaseViewModel
     }
     public void LoadConfig(Config config)
     {
-        ZimbraServerHostName = config.zimbraServer.Hostname;
-        ZimbraPort = config.zimbraServer.Port;
-        ZimbraUser = config.zimbraServer.UserAccount;
-        ZimbraUserPasswd = config.zimbraServer.UserPassword;
-        ZimbraSSL = config.zimbraServer.UseSSL;
+        ZimbraServerHostName = config.ZimbraServer.Hostname;
+        ZimbraPort = config.ZimbraServer.Port;
+        ZimbraUser = config.ZimbraServer.UserAccount;
+        ZimbraUserPasswd = config.ZimbraServer.UserPassword;
+        ZimbraSSL = config.ZimbraServer.UseSSL;
     }
 
     private void Load()
@@ -153,56 +153,56 @@ public class ConfigViewModelUDest: BaseViewModel
         }
     }
     public string ZimbraPort {
-        get { return m_config.zimbraServer.Port; }
+        get { return m_config.ZimbraServer.Port; }
         set
         {
-            if (value == m_config.zimbraServer.Port)
+            if (value == m_config.ZimbraServer.Port)
                 return;
-            m_config.zimbraServer.Port = value;
+            m_config.ZimbraServer.Port = value;
 
             OnPropertyChanged(new PropertyChangedEventArgs("ZimbraPort"));
         }
     }
     public string ZimbraUser {
-        get { return m_config.zimbraServer.UserAccount; }
+        get { return m_config.ZimbraServer.UserAccount; }
         set
         {
-            if (value == m_config.zimbraServer.UserAccount)
+            if (value == m_config.ZimbraServer.UserAccount)
                 return;
-            m_config.zimbraServer.UserAccount = value;
+            m_config.ZimbraServer.UserAccount = value;
 
             OnPropertyChanged(new PropertyChangedEventArgs("ZimbraUser"));
         }
     }
     public string ZimbraServerHostName {
-        get { return m_config.zimbraServer.Hostname; }
+        get { return m_config.ZimbraServer.Hostname; }
         set
         {
-            if (value == m_config.zimbraServer.Hostname)
+            if (value == m_config.ZimbraServer.Hostname)
                 return;
-            m_config.zimbraServer.Hostname = value;
+            m_config.ZimbraServer.Hostname = value;
 
             OnPropertyChanged(new PropertyChangedEventArgs("ZimbraServerHostName"));
         }
     }
     public string ZimbraUserPasswd {
-        get { return m_config.zimbraServer.UserPassword; }
+        get { return m_config.ZimbraServer.UserPassword; }
         set
         {
-            if (value == m_config.zimbraServer.UserPassword)
+            if (value == m_config.ZimbraServer.UserPassword)
                 return;
-            m_config.zimbraServer.UserPassword = value;
+            m_config.ZimbraServer.UserPassword = value;
 
             OnPropertyChanged(new PropertyChangedEventArgs("ZimbraUserPasswd"));
         }
     }
     public bool ZimbraSSL {
-        get { return m_config.zimbraServer.UseSSL; }
+        get { return m_config.ZimbraServer.UseSSL; }
         set
         {
-            if (value == m_config.zimbraServer.UseSSL)
+            if (value == m_config.ZimbraServer.UseSSL)
                 return;
-            m_config.zimbraServer.UseSSL = value;
+            m_config.ZimbraServer.UseSSL = value;
 
             OnPropertyChanged(new PropertyChangedEventArgs("ZimbraSSL"));
         }

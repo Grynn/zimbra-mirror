@@ -40,15 +40,15 @@ public class OptionsViewModel: BaseViewModel
     }
     public void LoadConfig(Config config)
     {
-        ImportMailOptions = config.importOptions.Mail;
-        ImportCalendarOptions = config.importOptions.Calendar;
-        ImportContactOptions = config.importOptions.Contacts;
-        ImportDeletedItemOptions = config.importOptions.DeletedItems;
-        ImportJunkOptions = config.importOptions.Junk;
-        ImportTaskOptions = config.importOptions.Tasks;
-        ImportSentOptions = config.importOptions.Sent;
-        ImportRuleOptions = config.importOptions.Rules;
-        ImportOOOOptions = config.importOptions.OOO;
+        ImportMailOptions = config.ImportOptions.Mail;
+        ImportCalendarOptions = config.ImportOptions.Calendar;
+        ImportContactOptions = config.ImportOptions.Contacts;
+        ImportDeletedItemOptions = config.ImportOptions.DeletedItems;
+        ImportJunkOptions = config.ImportOptions.Junk;
+        ImportTaskOptions = config.ImportOptions.Tasks;
+        ImportSentOptions = config.ImportOptions.Sent;
+        ImportRuleOptions = config.ImportOptions.Rules;
+        ImportOOOOptions = config.ImportOptions.OOO;
         SetNextState();
 
         MigrateONRAfter = config.AdvancedImportOptions.MigrateOnOrAfter.ToLongDateString();
@@ -57,9 +57,9 @@ public class OptionsViewModel: BaseViewModel
         IsMaxMessageSize = config.AdvancedImportOptions.IsMaxMessageSize;
         IsSkipFolders = config.AdvancedImportOptions.IsSkipFolders;
 
-        if (config.LoggingOptions != null)  // so old config files will work
+        if (config.GeneralOptions != null)  // so old config files will work
         {
-            LoggingVerbose = config.LoggingOptions.Verbose;
+            LoggingVerbose = config.GeneralOptions.Verbose;
         }
 
         string returnval = "";
@@ -179,93 +179,93 @@ public class OptionsViewModel: BaseViewModel
         }
     }
     public bool ImportMailOptions {
-        get { return m_config.importOptions.Mail; }
+        get { return m_config.ImportOptions.Mail; }
         set
         {
-            if (value == m_config.importOptions.Mail)
+            if (value == m_config.ImportOptions.Mail)
                 return;
-            m_config.importOptions.Mail = value;
+            m_config.ImportOptions.Mail = value;
 
             OnPropertyChanged(new PropertyChangedEventArgs("ImportMailOptions"));
             SetNextState();
         }
     }
     public bool ImportTaskOptions {
-        get { return m_config.importOptions.Tasks; }
+        get { return m_config.ImportOptions.Tasks; }
         set
         {
-            if (value == m_config.importOptions.Tasks)
+            if (value == m_config.ImportOptions.Tasks)
                 return;
-            m_config.importOptions.Tasks = value;
+            m_config.ImportOptions.Tasks = value;
 
             OnPropertyChanged(new PropertyChangedEventArgs("ImportTaskOptions"));
             SetNextState();
         }
     }
     public bool ImportCalendarOptions {
-        get { return m_config.importOptions.Calendar; }
+        get { return m_config.ImportOptions.Calendar; }
         set
         {
-            if (value == m_config.importOptions.Calendar)
+            if (value == m_config.ImportOptions.Calendar)
                 return;
-            m_config.importOptions.Calendar = value;
+            m_config.ImportOptions.Calendar = value;
 
             OnPropertyChanged(new PropertyChangedEventArgs("ImportCalendarOptions"));
             SetNextState();
         }
     }
     public bool ImportContactOptions {
-        get { return m_config.importOptions.Contacts; }
+        get { return m_config.ImportOptions.Contacts; }
         set
         {
-            if (value == m_config.importOptions.Contacts)
+            if (value == m_config.ImportOptions.Contacts)
                 return;
-            m_config.importOptions.Contacts = value;
+            m_config.ImportOptions.Contacts = value;
 
             OnPropertyChanged(new PropertyChangedEventArgs("ImportContactOptions"));
             SetNextState();
         }
     }
     public bool ImportDeletedItemOptions {
-        get { return m_config.importOptions.DeletedItems; }
+        get { return m_config.ImportOptions.DeletedItems; }
         set
         {
-            if (value == m_config.importOptions.DeletedItems)
+            if (value == m_config.ImportOptions.DeletedItems)
                 return;
-            m_config.importOptions.DeletedItems = value;
+            m_config.ImportOptions.DeletedItems = value;
 
             OnPropertyChanged(new PropertyChangedEventArgs("ImportDeletedItemOptions"));
         }
     }
     public bool ImportJunkOptions {
-        get { return m_config.importOptions.Junk; }
+        get { return m_config.ImportOptions.Junk; }
         set
         {
-            if (value == m_config.importOptions.Junk)
+            if (value == m_config.ImportOptions.Junk)
                 return;
-            m_config.importOptions.Junk = value;
+            m_config.ImportOptions.Junk = value;
 
             OnPropertyChanged(new PropertyChangedEventArgs("ImportJunkOptions"));
         }
     }
     public bool ImportSentOptions {
-        get { return m_config.importOptions.Sent; }
+        get { return m_config.ImportOptions.Sent; }
         set
         {
-            if (value == m_config.importOptions.Sent)
+            if (value == m_config.ImportOptions.Sent)
                 return;
-            m_config.importOptions.Sent = value;
+            m_config.ImportOptions.Sent = value;
 
             OnPropertyChanged(new PropertyChangedEventArgs("ImportSentOptions"));
         }
     }
     public bool ImportRuleOptions {
-        get { return m_config.importOptions.Rules; }
+        get { return m_config.ImportOptions.Rules; }
         set
         {
-            if (value == m_config.importOptions.Rules)
+            if (value == m_config.ImportOptions.Rules)
                 return;
-            m_config.importOptions.Rules = value;
+            m_config.ImportOptions.Rules = value;
 
             OnPropertyChanged(new PropertyChangedEventArgs("ImportRuleOptions"));
             SetNextState();
@@ -273,12 +273,12 @@ public class OptionsViewModel: BaseViewModel
     }
     public bool ImportOOOOptions
     {
-        get { return m_config.importOptions.OOO; }
+        get { return m_config.ImportOptions.OOO; }
         set
         {
-            if (value == m_config.importOptions.OOO)
+            if (value == m_config.ImportOptions.OOO)
                 return;
-            m_config.importOptions.OOO = value;
+            m_config.ImportOptions.OOO = value;
 
             OnPropertyChanged(new PropertyChangedEventArgs("ImportOOOOptions"));
             SetNextState();
@@ -390,12 +390,12 @@ public class OptionsViewModel: BaseViewModel
     }
     public bool LoggingVerbose
     {
-        get { return m_config.LoggingOptions.Verbose; }
+        get { return m_config.GeneralOptions.Verbose; }
         set
         {
-            if (value == m_config.LoggingOptions.Verbose)
+            if (value == m_config.GeneralOptions.Verbose)
                 return;
-            m_config.LoggingOptions.Verbose = value;
+            m_config.GeneralOptions.Verbose = value;
 
             OnPropertyChanged(new PropertyChangedEventArgs("LoggingVerbose"));
         }

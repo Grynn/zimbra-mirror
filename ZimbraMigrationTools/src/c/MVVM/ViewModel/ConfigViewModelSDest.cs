@@ -27,11 +27,11 @@ public class ConfigViewModelSDest: BaseViewModel
     }
     public void LoadConfig(Config config)
     {
-        ZimbraServerHostName = config.zimbraServer.Hostname;
-        ZimbraPort = config.zimbraServer.Port;
-        ZimbraAdmin = config.zimbraServer.AdminID;
-        ZimbraAdminPasswd = config.zimbraServer.AdminPwd;
-        ZimbraSSL = config.zimbraServer.UseSSL;
+        ZimbraServerHostName = config.ZimbraServer.Hostname;
+        ZimbraPort = config.ZimbraServer.Port;
+        ZimbraAdmin = config.ZimbraServer.AdminID;
+        ZimbraAdminPasswd = config.ZimbraServer.AdminPwd;
+        ZimbraSSL = config.ZimbraServer.UseSSL;
     }
 
     private void Load()
@@ -175,56 +175,56 @@ public class ConfigViewModelSDest: BaseViewModel
         }
     }
     public string ZimbraPort {
-        get { return m_config.zimbraServer.Port; }
+        get { return m_config.ZimbraServer.Port; }
         set
         {
-            if (value == m_config.zimbraServer.Port)
+            if (value == m_config.ZimbraServer.Port)
                 return;
-            m_config.zimbraServer.Port = value;
+            m_config.ZimbraServer.Port = value;
 
             OnPropertyChanged(new PropertyChangedEventArgs("ZimbraPort"));
         }
     }
     public string ZimbraServerHostName {
-        get { return m_config.zimbraServer.Hostname; }
+        get { return m_config.ZimbraServer.Hostname; }
         set
         {
-            if (value == m_config.zimbraServer.Hostname)
+            if (value == m_config.ZimbraServer.Hostname)
                 return;
-            m_config.zimbraServer.Hostname = value;
+            m_config.ZimbraServer.Hostname = value;
 
             OnPropertyChanged(new PropertyChangedEventArgs("ZimbraServerHostName"));
         }
     }
     public string ZimbraAdmin {
-        get { return m_config.zimbraServer.AdminID; }
+        get { return m_config.ZimbraServer.AdminID; }
         set
         {
-            if (value == m_config.zimbraServer.AdminID)
+            if (value == m_config.ZimbraServer.AdminID)
                 return;
-            m_config.zimbraServer.AdminID = value;
+            m_config.ZimbraServer.AdminID = value;
 
             OnPropertyChanged(new PropertyChangedEventArgs("ZimbraAdmin"));
         }
     }
     public string ZimbraAdminPasswd {
-        get { return m_config.zimbraServer.AdminPwd; }
+        get { return m_config.ZimbraServer.AdminPwd; }
         set
         {
-            if (value == m_config.zimbraServer.AdminPwd)
+            if (value == m_config.ZimbraServer.AdminPwd)
                 return;
-            m_config.zimbraServer.AdminPwd = value;
+            m_config.ZimbraServer.AdminPwd = value;
 
             OnPropertyChanged(new PropertyChangedEventArgs("ZimbraAdminPasswd"));
         }
     }
     public bool ZimbraSSL {
-        get { return m_config.zimbraServer.UseSSL; }
+        get { return m_config.ZimbraServer.UseSSL; }
         set
         {
-            if (value == m_config.zimbraServer.UseSSL)
+            if (value == m_config.ZimbraServer.UseSSL)
                 return;
-            m_config.zimbraServer.UseSSL = value;
+            m_config.ZimbraServer.UseSSL = value;
 
             OnPropertyChanged(new PropertyChangedEventArgs("ZimbraSSL"));
         }

@@ -9,18 +9,18 @@ public class Config
         outlookProfile, string pstFile, string zimbraserverhostname, string zimbraport,
         string zimbraAdmin, string zimbrapasswd, string zimbradomain, string pstfile)
     {
-        this.zimbraServer = new ZimbraServer();
+        this.ZimbraServer = new ZimbraServer();
         this.SourceServer = new SourceServer();
-        this.importOptions = new ImportOptions();
+        this.ImportOptions = new ImportOptions();
         this.UserProvision = new UserProvision();
         this.AdvancedImportOptions = new AdvancedImportOptions();
-        this.LoggingOptions = new LoggingOptions();
+        //this.LoggingOptions = new LoggingOptions();
         this.AdvancedImportOptions.FoldersToSkip = null;
 
-        this.zimbraServer.Hostname = zimbraserverhostname;
-        this.zimbraServer.Port = zimbraport;
-        this.zimbraServer.AdminID = zimbraAdmin;
-        this.zimbraServer.AdminPwd = zimbrapasswd;
+        this.ZimbraServer.Hostname = zimbraserverhostname;
+        this.ZimbraServer.Port = zimbraport;
+        this.ZimbraServer.AdminID = zimbraAdmin;
+        this.ZimbraServer.AdminPwd = zimbrapasswd;
         // this.zimbraServer.Domain = zimbradomain;
         this.SourceServer.Hostname = mailserver;
         this.SourceServer.AdminID = srcAdminId;
@@ -35,11 +35,11 @@ public class Config
     }
 
     public SourceServer SourceServer;
-    public ZimbraServer zimbraServer;
-    public ImportOptions importOptions;
+    public ZimbraServer ZimbraServer;
+    public ImportOptions ImportOptions;
     public UserProvision UserProvision;
     public AdvancedImportOptions AdvancedImportOptions;
-    public LoggingOptions LoggingOptions;
+   // public LoggingOptions LoggingOptions;
     public GeneralOptions GeneralOptions;
 }
 
@@ -163,6 +163,13 @@ public class GeneralOptions
     public string LogFilelocation {
         get { return LogFileLocation; }
         set { LogFileLocation = value; }
+    }
+
+    private bool m_Verbose;
+    public bool Verbose
+    {
+        get { return m_Verbose; }
+        set { m_Verbose = value; }
     }
 }
 }

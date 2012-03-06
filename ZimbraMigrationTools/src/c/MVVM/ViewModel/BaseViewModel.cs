@@ -143,10 +143,10 @@ public class BaseViewModel: INotifyPropertyChanged
             m_config.SourceServer.AdminID = serverSourceModel.MailServerAdminID;
             m_config.SourceServer.AdminPwd = serverSourceModel.MailServerAdminPwd;
             m_config.SourceServer.UseProfile = serverSourceModel.Isprofile;
-	    m_config.zimbraServer.Hostname = serverDestModel.ZimbraServerHostName;
-	    m_config.zimbraServer.Port           = serverDestModel.ZimbraPort;
-	    m_config.zimbraServer.AdminID  = serverDestModel.ZimbraAdmin;
-	    m_config.zimbraServer.AdminPwd = serverDestModel.ZimbraAdminPasswd;
+	    m_config.ZimbraServer.Hostname = serverDestModel.ZimbraServerHostName;
+	    m_config.ZimbraServer.Port           = serverDestModel.ZimbraPort;
+	    m_config.ZimbraServer.AdminID  = serverDestModel.ZimbraAdmin;
+	    m_config.ZimbraServer.AdminPwd = serverDestModel.ZimbraAdminPasswd;
             m_config.UserProvision.DestinationDomain        = usersModel.ZimbraDomain;
 	}
 	else
@@ -161,22 +161,22 @@ public class BaseViewModel: INotifyPropertyChanged
             }
             m_config.SourceServer.DataFile = userSourceModel.PSTFile;
             m_config.SourceServer.UseProfile = userSourceModel.Isprofile;
-	    m_config.zimbraServer.Hostname = userDestModel.ZimbraServerHostName;
-	    m_config.zimbraServer.Port           = userDestModel.ZimbraPort;
-	    m_config.zimbraServer.UserAccount    = userDestModel.ZimbraUser;
-	    m_config.zimbraServer.UserPassword   = userDestModel.ZimbraUserPasswd;
+	    m_config.ZimbraServer.Hostname = userDestModel.ZimbraServerHostName;
+	    m_config.ZimbraServer.Port           = userDestModel.ZimbraPort;
+	    m_config.ZimbraServer.UserAccount    = userDestModel.ZimbraUser;
+	    m_config.ZimbraServer.UserPassword   = userDestModel.ZimbraUserPasswd;
 	}
 
-        m_config.LoggingOptions.Verbose     = optionsModel.LoggingVerbose;
-        m_config.importOptions.Mail         = optionsModel.ImportMailOptions;
-        m_config.importOptions.Calendar     = optionsModel.ImportCalendarOptions;
-        m_config.importOptions.Contacts     = optionsModel.ImportContactOptions;
-        m_config.importOptions.DeletedItems = optionsModel.ImportDeletedItemOptions;
-        m_config.importOptions.Junk         = optionsModel.ImportJunkOptions;
-        m_config.importOptions.Tasks        = optionsModel.ImportTaskOptions;
-        m_config.importOptions.Sent         = optionsModel.ImportSentOptions;
-        m_config.importOptions.Rules        = optionsModel.ImportRuleOptions;
-        m_config.importOptions.OOO          = optionsModel.ImportOOOOptions;
+        m_config.GeneralOptions.Verbose     = optionsModel.LoggingVerbose;
+        m_config.ImportOptions.Mail         = optionsModel.ImportMailOptions;
+        m_config.ImportOptions.Calendar     = optionsModel.ImportCalendarOptions;
+        m_config.ImportOptions.Contacts     = optionsModel.ImportContactOptions;
+        m_config.ImportOptions.DeletedItems = optionsModel.ImportDeletedItemOptions;
+        m_config.ImportOptions.Junk         = optionsModel.ImportJunkOptions;
+        m_config.ImportOptions.Tasks        = optionsModel.ImportTaskOptions;
+        m_config.ImportOptions.Sent         = optionsModel.ImportSentOptions;
+        m_config.ImportOptions.Rules        = optionsModel.ImportRuleOptions;
+        m_config.ImportOptions.OOO          = optionsModel.ImportOOOOptions;
         m_config.AdvancedImportOptions.IsOnOrAfter = optionsModel.IsOnOrAfter;
         m_config.AdvancedImportOptions.MigrateOnOrAfter =
             (optionsModel.IsOnOrAfter) ? DateTime.Parse(optionsModel.MigrateONRAfter)

@@ -128,6 +128,16 @@ class Program
 
                 myXmlConfig.GetUserList();
 
+            }
+            else
+            {
+
+                myXmlConfig = new XmlConfig(ConfigXmlFile,"");
+
+                myXmlConfig.InitializeConfig();
+
+
+            }
                 if (myXmlConfig.UserList.Count > 0)
                 {
 
@@ -136,10 +146,10 @@ class Program
                         userid = myXmlConfig.ConfigObj.SourceServer.AdminID;
 
                     if(ZCSID == "")
-                        ZCSID = myXmlConfig.ConfigObj.zimbraServer.AdminID;
+                        ZCSID = myXmlConfig.ConfigObj.ZimbraServer.AdminID;
 
                     if(ZCSPwd == "")
-                        ZCSPwd = myXmlConfig.ConfigObj.zimbraServer.AdminPwd;
+                        ZCSPwd = myXmlConfig.ConfigObj.ZimbraServer.AdminPwd;
 
                 }
                 else
@@ -149,48 +159,48 @@ class Program
                         userid = myXmlConfig.ConfigObj.SourceServer.Profile;
 
                     if(ZCSID == "")
-                        ZCSID = myXmlConfig.ConfigObj.zimbraServer.UserAccount;
+                        ZCSID = myXmlConfig.ConfigObj.ZimbraServer.UserAccount;
 
                     if(ZCSPwd == "")
-                        ZCSPwd = myXmlConfig.ConfigObj.zimbraServer.UserPassword;
+                        ZCSPwd = myXmlConfig.ConfigObj.ZimbraServer.UserPassword;
 
 
 
                 }
 
                 if (ZCSHost == "")
-                    ZCSHost = myXmlConfig.ConfigObj.zimbraServer.Hostname;
+                    ZCSHost = myXmlConfig.ConfigObj.ZimbraServer.Hostname;
 
                 if (ZCSPort == "")
-                    ZCSHost = myXmlConfig.ConfigObj.zimbraServer.Port;
+                    ZCSHost = myXmlConfig.ConfigObj.ZimbraServer.Port;
 
                 
 
                 if (Mail == false)
-                    Mail = myXmlConfig.ConfigObj.importOptions.Mail;
+                    Mail = myXmlConfig.ConfigObj.ImportOptions.Mail;
 
                 if (Calendar == false)
-                    Calendar = myXmlConfig.ConfigObj.importOptions.Calendar;
+                    Calendar = myXmlConfig.ConfigObj.ImportOptions.Calendar;
 
                 if (Contacts == false)
-                    Contacts = myXmlConfig.ConfigObj.importOptions.Contacts;
+                    Contacts = myXmlConfig.ConfigObj.ImportOptions.Contacts;
 
                 if (Sent == false)
-                    Sent = myXmlConfig.ConfigObj.importOptions.Sent;
+                    Sent = myXmlConfig.ConfigObj.ImportOptions.Sent;
 
                 if (DeletedItems == false)
-                    DeletedItems = myXmlConfig.ConfigObj.importOptions.DeletedItems;
+                    DeletedItems = myXmlConfig.ConfigObj.ImportOptions.DeletedItems;
 
                 if (Junk == false)
-                    Junk = myXmlConfig.ConfigObj.importOptions.Junk;
+                    Junk = myXmlConfig.ConfigObj.ImportOptions.Junk;
                 if (Tasks == false)
-                    Tasks = myXmlConfig.ConfigObj.importOptions.Tasks;
+                    Tasks = myXmlConfig.ConfigObj.ImportOptions.Tasks;
                 if (Rules == false)
-                    Rules = myXmlConfig.ConfigObj.importOptions.Rules;
+                    Rules = myXmlConfig.ConfigObj.ImportOptions.Rules;
                 if (OOO == false)
-                    OOO = myXmlConfig.ConfigObj.importOptions.OOO;
+                    OOO = myXmlConfig.ConfigObj.ImportOptions.OOO;
 
-            }
+            
         }
 
        MigrationOptions importopts = new MigrationOptions();
@@ -409,7 +419,7 @@ class Program
                             System.Console.WriteLine();
                             ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
                                 "Logon to to Zimbra Server  for adminAccount failed " +
-                                myXmlConfig.ConfigObj.zimbraServer.AdminID);
+                                myXmlConfig.ConfigObj.ZimbraServer.AdminID);
                             System.Console.WriteLine("......... \n");
                             System.Console.WriteLine();
                             Thread.Sleep(2000);
@@ -419,7 +429,7 @@ class Program
                         // userAcct.InitializeMigration(myXmlConfig.ConfigObj.zimbraServer.ZimbraHostname, myXmlConfig.ConfigObj.zimbraServer.Port, myXmlConfig.ConfigObj.zimbraServer.ZimbraAdminID,user.UserName);
 
                         string acctName = user.UserName + '@' +
-                            myXmlConfig.ConfigObj.UserProvision.DestinationDomain;
+                            ( myXmlConfig.ConfigObj.UserProvision.DestinationDomain == "" ? ZCSHost : myXmlConfig.ConfigObj.UserProvision.DestinationDomain);
 
                         if (zimbraAPI.GetAccount(acctName) == 0)
                         {
@@ -437,7 +447,7 @@ class Program
                             // /////////////////
 
                             // ///////////////////
-                            Thread.Sleep(15000);
+                            //Thread.Sleep(15000);
                         }
                         else
                         {
@@ -475,7 +485,7 @@ class Program
                                // Test.test(acctName, TestObj, user.UserName, importopts,true);
                                // userAcct.StartMigration(user.UserName, importopts);
                                 System.Console.WriteLine("......... \n");
-                                Thread.Sleep(9000);
+                                //Thread.Sleep(9000);
                             }
                             else
                             {
