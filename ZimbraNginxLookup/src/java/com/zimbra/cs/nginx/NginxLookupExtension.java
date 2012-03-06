@@ -40,6 +40,7 @@ import com.zimbra.cs.account.Config;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.AuthToken;
 import com.zimbra.cs.account.AuthTokenException;
+import com.zimbra.cs.account.Server;
 import com.zimbra.cs.account.auth.AuthContext;
 import com.zimbra.cs.account.auth.AuthMechanism;
 import com.zimbra.cs.account.ldap.LdapProv;
@@ -857,6 +858,16 @@ public class NginxLookupExtension implements ZimbraExtension {
                 	sendResult(req, "127.0.0.1", "9999", authUser);
                 	return;
                 }
+
+                // bug 37266, support proxy-side dns lookup
+                boolean doDnsLookup = true;
+                Server server = prov.getLocalServer();
+                if (server == null) {
+                    doDnsLookup = prov.getConfig().
+                                    getBooleanAttr(Provisioning.A_zimbraReverseProxyDnsLookupInServerEnabled, true);
+                } else {
+                    doDnsLookup = server.getBooleanAttr(Provisioning.A_zimbraReverseProxyDnsLookupInServerEnabled, true);
+                }
                 
                 Map<String, Boolean> attrs = new HashMap<String, Boolean>();
                 attrs.put(Provisioning.A_zimbraReverseProxyMailHostAttribute, true);
@@ -942,7 +953,9 @@ public class NginxLookupExtension implements ZimbraExtension {
                             ". domain " + domain.getDomainName() + " has " + 
                             Provisioning.A_zimbraReverseProxyUseExternalRouteIfAccountNotExist + " set to TRUE " +
                             "but missing external route info on domain");
-                    
+                    if(doDnsLookup) {
+                        mailhost = InetAddress.getByName(mailhost).getHostAddress();
+                    }
                     sendResult(req, mailhost, port, authUser);
                     return;
                 }
@@ -1020,7 +1033,10 @@ public class NginxLookupExtension implements ZimbraExtension {
                 
                 if (port == null)
                     port = getPortByMailhostAndProto(zlc, config, req, mailhost);
-                
+
+                if(doDnsLookup) {
+                    mailhost = InetAddress.getByName(mailhost).getHostAddress();
+                }
                 sendResult(req, mailhost, port, authUser);
             } catch (NginxLookupException e) {
                 throw e;
@@ -1041,11 +1057,10 @@ public class NginxLookupExtension implements ZimbraExtension {
          * @param authUser    If not null, then this value is sent back to override the login 
          *                     user name, (usually) with a domain suffix added
          */
-        private void sendResult(NginxLookupRequest req, String mailhost, String port, String authUser) throws UnknownHostException {
+        private void sendResult(NginxLookupRequest req, String addr, String port, String authUser) throws UnknownHostException {
             
-            String addr = InetAddress.getByName(mailhost).getHostAddress();
-            ZimbraLog.nginxlookup.debug("mailhost="+mailhost+" ("+addr+")");
-            ZimbraLog.nginxlookup.debug("port="+port);
+            ZimbraLog.nginxlookup.debug("mailhost=" + addr);
+            ZimbraLog.nginxlookup.debug("port=" + port);
             
             HttpServletResponse resp = req.httpResp;
             resp.setStatus(HttpServletResponse.SC_OK);
