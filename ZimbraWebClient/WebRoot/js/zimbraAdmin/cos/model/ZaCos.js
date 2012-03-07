@@ -656,7 +656,7 @@ ZaCos.myXModel = {
         {id:ZaCos.A_zimbraPrefShowSearchString, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraPrefShowSearchString, type:_ENUM_},
         //{id:ZaCos.A_zimbraPrefMailSignatureStyle, choices:ZaModel.SIGNATURE_STYLE_CHOICES, ref:"attrs/"+ZaCos.A_zimbraPrefMailSignatureStyle, type:_ENUM_,defaultValue:"internet"},
         {id:ZaCos.A_zimbraPrefUseTimeZoneListInCalendar, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraPrefUseTimeZoneListInCalendar, type:_ENUM_},
-        {id:ZaCos.A_zimbraPrefMailPollingInterval, ref:"attrs/"+ZaCos.A_zimbraPrefMailPollingInterval, type:_MLIFETIME_},
+        {id:ZaCos.A_zimbraPrefMailPollingInterval, ref:"attrs/"+ZaCos.A_zimbraPrefMailPollingInterval, type:_ENUM_, choices: ZaSettings.mailPollingIntervalChoices},
 	{id:ZaCos.A_zimbraPrefAutoSaveDraftInterval, ref:"attrs/"+ZaCos.A_zimbraPrefAutoSaveDraftInterval, type:_MLIFETIME_},
         {id:ZaCos.A_zimbraDataSourceMinPollingInterval, ref:"attrs/"+ZaCos.A_zimbraDataSourceMinPollingInterval, type:_MLIFETIME_},
         {id:ZaCos.A_zimbraDataSourcePop3PollingInterval, ref:"attrs/"+ZaCos.A_zimbraDataSourcePop3PollingInterval, type:_MLIFETIME_},

@@ -1854,7 +1854,7 @@ ZaAccount.myXModel = {
         {id:ZaAccount.A_zimbraPrefMailInitialSearch, type:_COS_STRING_, ref:"attrs/"+ZaAccount.A_zimbraPrefMailInitialSearch},
         {id:ZaAccount.A_zimbraMaxMailItemsPerPage, type:_COS_NUMBER_, ref:"attrs/"+ZaAccount.A_zimbraMaxMailItemsPerPage,maxInclusive:2147483647, minInclusive:0},
         {id:ZaAccount.A_zimbraPrefMailItemsPerPage, type:_COS_NUMBER_, ref:"attrs/"+ZaAccount.A_zimbraPrefMailItemsPerPage, choices:[10,25,50,100]},
-        {id:ZaAccount.A_zimbraPrefMailPollingInterval, type:_COS_MLIFETIME_, ref:"attrs/"+ZaAccount.A_zimbraPrefMailPollingInterval},
+        {id:ZaAccount.A_zimbraPrefMailPollingInterval, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraPrefMailPollingInterval, choices: ZaSettings.mailPollingIntervalChoices},
         {id:ZaAccount.A_zimbraMailMinPollingInterval, type:_COS_MLIFETIME_, ref:"attrs/"+ZaAccount.A_zimbraMailMinPollingInterval},
         {id:ZaAccount.A_zimbraPrefMailFlashIcon, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaAccount.A_zimbraPrefMailFlashIcon, type:_COS_ENUM_},
         {id:ZaAccount.A_zimbraPrefMailFlashTitle, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaAccount.A_zimbraPrefMailFlashTitle, type:_COS_ENUM_},

@@ -27,7 +27,7 @@ AjxUtil = function() {
 AjxUtil.FLOAT_RE = /^[+\-]?((\d+(\.\d*)?)|((\d*\.)?\d+))([eE][+\-]?\d+)?$/;
 AjxUtil.NOTFLOAT_RE = /[^\d\.]/;
 AjxUtil.NOTINT_RE = /[^0-9]+/;
-AjxUtil.LIFETIME_FIELD = /^([0-9])+([dhms])?$/;
+AjxUtil.LIFETIME_FIELD = /^([0-9])+([dhms]|ms)?$/;
 
 AjxUtil.isSpecified 		= function(aThing) { return ((aThing !== void 0) && (aThing !== null)); };
 AjxUtil.isUndefined 		= function(aThing) { return (aThing === void 0); };

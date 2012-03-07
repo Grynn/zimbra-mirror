@@ -30,10 +30,15 @@ ZaUtil.getLifeTimeInSeconds =
 function (v){
 	if (AjxUtil.isLifeTime(v)) {
 		var len = v.length ;
-		var d = v.substr (0, len -1);
+		var d = v.substr (0, len - 1);
 		var p = v.substr (len - 1, len);
 		
 		if (p == "s"){
+            if (v[len - 2] == 'm') {
+                // millisecond support
+                d = v.substr(0, len - 2);
+                return d / 1000.0;
+            }
 			return d;
 		}else if ( p == "m") {
 			return d*60 ;

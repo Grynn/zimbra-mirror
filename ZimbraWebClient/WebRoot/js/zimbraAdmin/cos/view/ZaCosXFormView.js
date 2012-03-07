@@ -741,7 +741,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
                     label:ZaMsg.LBL_flashTitle,
                     trueValue:"TRUE", falseValue:"FALSE"
                 },
-                {ref:ZaCos.A_zimbraPrefMailPollingInterval, type:_LIFETIME_,
+                {ref:ZaCos.A_zimbraPrefMailPollingInterval, type:_OSELECT1_,
                     msgName:ZaMsg.MSG_zimbraPrefMailPollingInterval,
                     label:ZaMsg.LBL_zimbraPrefMailPollingInterval, labelLocation:_LEFT_,
                     onChange:ZaCosXFormView.validatePollingInterval,
