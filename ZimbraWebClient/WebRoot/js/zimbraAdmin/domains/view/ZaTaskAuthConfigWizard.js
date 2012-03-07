@@ -744,7 +744,7 @@ ZaTaskAuthConfigWizard.myXFormModifier = function(xFormObject) {
                             }
 						]
 					},
-					{type:_CASE_, caseKey:ZaTaskAuthConfigWizard.SPNEGO_CONFIG_STEP_2, colSizes:["200px", "*"],
+					{type:_CASE_, caseKey:ZaTaskAuthConfigWizard.SPNEGO_CONFIG_STEP_2, colSizes:["200px", "380px"],
 						items: [
 							{type:_OUTPUT_, value:ZaMsg.spnegoSettingSSOMsg, colSpan:2},
                             {type:_SPACER_, height:10, colSpan:"*"},
@@ -787,6 +787,33 @@ ZaTaskAuthConfigWizard.myXFormModifier = function(xFormObject) {
                             },
                             {type:_OUTPUT_, value:ZaMsg.spnegoWebClientLogoutMsg,
                                 width:250, colSpan:"*",cssStyle:"padding-left:200px;"
+                            },
+                    		{type:_REPEAT_, repeatInstance:"", label: ZaMsg.LBL_zimbraWebClientLoginURLAllowedIP,
+                    		 ref: ZaDomain.A_zimbraWebClientLoginURLAllowedIP,
+                    		 labelCssStyle:"text-align:left;padding-left:20px;",
+                    		 removeButtonLabel: ZaMsg.NAD_Remove,
+                    		 addButtonLabel: ZaMsg.NAD_AddAllowedIP,
+                    		 showAddButton: true,
+                    		 showRemoveButton: true,
+                    		 showAddOnNextRow: true,
+                    		 items: [
+                                  {ref: ".", type:_TEXTFIELD_, width: "150px",
+                                   onChange:ZaDomainXFormView.onFormFieldChanged}
+                             ]
+                            },
+                            {type:_SPACER_, height:15, colSpan:"*"},
+                            {type:_REPEAT_, repeatInstance:"", label: ZaMsg.LBL_zimbraWebClientLogoutURLAllowedIP,
+                       		 ref: ZaDomain.A_zimbraWebClientLogoutURLAllowedIP,
+                       		 labelCssStyle:"text-align:left;padding-left:20px;",
+                       		 removeButtonLabel: ZaMsg.NAD_Remove,
+                       		 addButtonLabel: ZaMsg.NAD_AddAllowedIP,
+                       		 showAddButton: true,
+                       		 showRemoveButton: true,
+                       		 showAddOnNextRow: true,
+                       		 items: [
+                                     {ref: ".", type:_TEXTFIELD_, width: "150px",
+                                      onChange:ZaDomainXFormView.onFormFieldChanged}
+                                ]
                             },
                             {type:_SPACER_, height:15, colSpan:"*"},
                             {type:_OUTPUT_, value:ZaMsg.spnegoAllowedUASetting, colSpan:2, cssStyle:"padding-left:20px;"},
