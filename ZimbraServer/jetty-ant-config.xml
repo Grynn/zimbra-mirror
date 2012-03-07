@@ -130,6 +130,55 @@
       </New>
     </Set>
 
+
+    <!-- Configure System and Server classes  -->
+    <!-- By default, Jetty7 does not expose all the libraries to WebApps, so customize server/system classes -->
+    <!-- Refer http://wiki.eclipse.org/Jetty/Reference/Jetty_Classloading -->
+
+    <Call name="setAttribute">
+        <Arg>org.eclipse.jetty.webapp.systemClasses</Arg>
+        <Arg>
+           <Array type="java.lang.String">
+              <Item>java.</Item>
+              <Item>javax.</Item>
+              <Item>org.xml.</Item>
+              <Item>org.w3c.</Item>
+              <Item>org.apache.commons.logging.</Item>
+              <Item>org.eclipse.jetty.continuation.</Item>
+              <Item>org.eclipse.jetty.jndi.</Item>
+              <Item>org.eclipse.jetty.plus.jaas.</Item>
+              <Item>org.eclipse.jetty.websocket.</Item>
+              <Item>org.eclipse.jetty.servlet.</Item>
+              <Item>org.eclipse.jetty.servlets.</Item>
+              <Item>org.eclipse.jetty.server.</Item>
+              <Item>org.eclipse.jetty.io.</Item>
+              <Item>org.eclipse.jetty.http.</Item>
+              <Item>org.eclipse.jetty.security.</Item>
+              <Item>org.eclipse.jetty.util.</Item>
+           </Array>
+        </Arg>
+    </Call>
+
+    <Call name="setAttribute">
+        <Arg>org.eclipse.jetty.webapp.serverClasses</Arg>
+        <Arg>
+           <Array type="java.lang.String">
+              <Item>-org.eclipse.jetty.continuation.</Item>
+              <Item>-org.eclipse.jetty.jndi.</Item>
+              <Item>-org.eclipse.jetty.plus.jass.</Item>
+              <Item>-org.eclipse.jetty.websocket.</Item>
+              <Item>-org.eclipse.jetty.servlet.</Item>
+              <Item>-org.eclipse.jetty.servlets.</Item>
+              <Item>-org.eclipse.jetty.server.</Item>
+              <Item>-org.eclipse.jetty.io.</Item>
+              <Item>-org.eclipse.jetty.http.</Item>
+              <Item>-org.eclipse.jetty.security.</Item>
+              <Item>-org.eclipse.jetty.util.</Item>
+              <Item>org.eclipse.jetty.</Item>
+           </Array>   
+        </Arg>
+    </Call>
+
     <Ref id="RequestLog">
       <Set name="requestLog">
         <New id="RequestLogImpl" class="org.eclipse.jetty.server.NCSARequestLog">
