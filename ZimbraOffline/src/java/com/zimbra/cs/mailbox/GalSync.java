@@ -274,28 +274,48 @@ public class GalSync {
 
     private OfflineAccount ensureGalAccountExists(OfflineDomainGal domainGal) throws ServiceException {
         String galAcctId = domainGal.getGalAccountId();
-        OfflineAccount galAcct = (OfflineAccount) prov.get(AccountBy.id, galAcctId);
-        String[] gals = domainGal.getMultiAttr(OfflineConstants.A_offlineGalAccountId);
-        while (galAcct == null && gals != null && gals.length > 0) {
-            OfflineLog.offline.warn("Offline Gal account is null in prov: %s, domain: %s", galAcctId, domainGal.getDomain());
-            //bug 70395, we saw two entries of offlineGalAccountId for one GAL directory, the obsolete entry needs to be deleted
-            OfflineLog.offline.debug("Removing obsolete Gal account Id for domain GAL...");
-            Map<String, Object> attrs = new HashMap<String, Object>();
-            attrs.put("-" + OfflineConstants.A_offlineGalAccountId, galAcctId);
-            OfflineProvisioning.getInstance().modifyAttrs(domainGal, attrs);
-            galAcctId = domainGal.getGalAccountId();
-            galAcct = (OfflineAccount) prov.get(AccountBy.id, galAcctId);
-            gals = domainGal.getMultiAttr(OfflineConstants.A_offlineGalAccountId);
-        }
-        if (galAcctId == null || galAcctId.length() == 0 || (galAcct == null)) {
-            try {
+        OfflineAccount galAcct = null;
+        if (StringUtil.isNullOrEmpty(galAcctId)) {
+            OfflineLog.offline.warn("domain %s exists with no offlineGalAccountId yet", domainGal.getDomain());
+            //check if there is existing but not referenced gal account
+            List<Account> domainGalAccounts = prov.getAllGalAccounts(domainGal.getDomain());
+            if (!domainGalAccounts.isEmpty()) {
+                if (domainGalAccounts.size() > 1) {
+                    OfflineLog.offline.warn("has %d gal accounts for domain %s, not referenced. Only need one.", domainGalAccounts.size(), domainGal.getDomain());
+                }
+                galAcct = (OfflineAccount) domainGalAccounts.get(0);
+                prov.assignGalAccountToDomain(domainGal, galAcct);
+                OfflineLog.offline.info("existing Offline GAL mailbox " + galAcct.getName() + " assigned to domain");
+            } else {
                 galAcct = prov.createGalAccount(domainGal);
                 prov.assignGalAccountToDomain(domainGal, galAcct);
-                OfflineLog.offline.info("Offline GAL mailbox created: " + galAcct.getName());
-            } catch (Exception e) {
-                OfflineLog.offline.debug("Offline Gal mailbox create failed", e);
+                OfflineLog.offline.info("Offline GAL mailbox created: " + galAcct.getName() + " and assigned");
+            }
+        } else {
+            galAcct = (OfflineAccount) prov.get(AccountBy.id, galAcctId);
+            String[] gals = domainGal.getMultiAttr(OfflineConstants.A_offlineGalAccountId);
+            while (galAcct == null && gals != null && gals.length > 0) {
+                OfflineLog.offline.warn("Offline Gal account is null in prov: %s, domain: %s", galAcctId, domainGal.getDomain());
+                //bug 70395, we saw two entries of offlineGalAccountId for one GAL directory, the obsolete entry needs to be deleted
+                OfflineLog.offline.debug("Removing obsolete Gal account Id for domain GAL...");
+                Map<String, Object> attrs = new HashMap<String, Object>();
+                attrs.put("-" + OfflineConstants.A_offlineGalAccountId, galAcctId);
+                OfflineProvisioning.getInstance().modifyAttrs(domainGal, attrs);
+                galAcctId = domainGal.getGalAccountId();
+                galAcct = (OfflineAccount) prov.get(AccountBy.id, galAcctId);
+                gals = domainGal.getMultiAttr(OfflineConstants.A_offlineGalAccountId);
+            }
+            if (galAcct == null) {
+                try {
+                    galAcct = prov.createGalAccount(domainGal);
+                    prov.assignGalAccountToDomain(domainGal, galAcct);
+                    OfflineLog.offline.info("Offline GAL mailbox created: " + galAcct.getName());
+                } catch (Exception e) {
+                    OfflineLog.offline.debug("Offline Gal mailbox create failed", e);
+                }
             }
         }
+
         return galAcct;
     }
 

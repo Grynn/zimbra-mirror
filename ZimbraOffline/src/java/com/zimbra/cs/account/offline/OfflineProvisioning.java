@@ -1851,6 +1851,17 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         return accts;
     }
 
+    public synchronized List<Account> getAllGalAccounts(String domain) throws ServiceException {
+        List<Account> accts = new ArrayList<Account>();
+        List<String> ids = DbOfflineDirectory.searchDirectoryEntries(EntryType.ACCOUNT, A_mail, "%@" + domain + OfflineConstants.GAL_ACCOUNT_SUFFIX);
+        for (String id : ids) {
+            Account acct = get(AccountBy.id, id);
+            if (acct != null)
+                accts.add(acct);
+        }
+        return accts;
+    }
+
     public synchronized Set<String> getAllAccountsByDomain(String domain) throws ServiceException {
         List<Account> accounts = getAllAccounts(domain);
         Set<String> result = new HashSet<String>();
