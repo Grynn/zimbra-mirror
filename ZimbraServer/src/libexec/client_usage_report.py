@@ -26,18 +26,18 @@ p = subprocess.Popen('ls /opt/zimbra/log/access_log* | wc -l', shell=True, stdou
 numlogfiles = p.stdout.read()
 
 # Get the list of log files to read
-lscmdfmt = 'ls /opt/zimbra/log/access_log* | tail -{0} | head -{1}'
+lscmdfmt = 'ls /opt/zimbra/log/access_log* | tail -%d | head -%d'
 if numlogfiles > numdays:
-    lscmd = lscmdfmt.format(numdays + 1, numdays)
+    lscmd = lscmdfmt % (numdays + 1, numdays)
 else:
-    lscmd = lscmdfmt.format(numdays, numlogfiles - 1)
+    lscmd = lscmdfmt % (numdays, numlogfiles - 1)
 p = subprocess.Popen(lscmd, shell=True, stdout=subprocess.PIPE)
 
 resultmap = {}
 
 for file in p.stdout.readlines():
     file = file.rstrip()
-    subprocess.call('echo Reading {0} ..'.format(file), shell=True)
+    subprocess.call('echo Reading %s ..' % file, shell=True)
     for line in fileinput.input([file]):
         l = line.split('"')
         if len(l) < 7:
@@ -61,11 +61,11 @@ for file in p.stdout.readlines():
         else:
             resultmap[key] = curval + 1
 
-reportfile = '/opt/zimbra/zmstat/client_usage_report_{0}.csv'.format(date.today().isoformat())
-subprocess.call('rm -f {0}'.format(reportfile), shell=True)
+reportfile = '/opt/zimbra/zmstat/client_usage_report_%s.csv' % (date.today().isoformat())
+subprocess.call('rm -f %s' % reportfile, shell=True)
 csv = open(reportfile, 'w')
-subprocess.call('echo Writing {0} ..'.format(reportfile), shell=True)
+subprocess.call('echo Writing %s ..' % reportfile, shell=True)
 csv.write('"user_agent","client_IP","req_count"\n')
 for key, value in resultmap.iteritems():
-    csv.write('"{0}","{1}","{2}"\n'.format(key[0], key[1], value))
+    csv.write('"%s","%s","%s"\n' % (key[0], key[1], value))
 csv.close()
