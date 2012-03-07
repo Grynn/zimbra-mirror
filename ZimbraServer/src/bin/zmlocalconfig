@@ -53,6 +53,18 @@ ${PATHSEP}${ZMROOT}/lib/jars/dom4j-1.5.2.jar\
 ${PATHSEP}${ZMROOT}/lib/jars/log4j-1.2.16.jar\
 ${PATHSEP}${ZMROOT}/lib/jars/json.jar
 
+if [ -f "${ZMROOT}/lib/ext/backup/zimbrabackup.jar" ]; then
+    CP="$CP${PATHSEP}${ZMROOT}/lib/ext/backup/zimbrabackup.jar"
+fi
+
+if [ -f "${ZMROOT}/lib/ext/voice/zimbravoice.jar" ]; then
+    CP="$CP${PATHSEP}${ZMROOT}/lib/ext/voice/zimbravoice.jar"
+fi
+
+if [ -f "${ZMROOT}/lib/ext/com_zimbra_oo/com_zimbra_oo.jar" ]; then
+    CP="$CP${PATHSEP}${ZMROOT}/lib/ext/com_zimbra_oo/com_zimbra_oo.jar"
+fi
+
 java_version=$(${java} -version 2>&1 | grep "java version" | sed -e 's/"//g' | awk '{print $NF}' | awk -F_ '{print $1}')
 if [ x"$java_version" = "x1.6.0" ]; then
   java_options="-XX:ErrorFile=${ZMROOT}/log"
