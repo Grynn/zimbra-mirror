@@ -33,6 +33,7 @@ ZaCosXFormView = function(parent, entry) {
 ZaCosXFormView.prototype = new ZaTabView();
 ZaCosXFormView.prototype.constructor = ZaCosXFormView;
 ZaTabView.XFormModifiers["ZaCosXFormView"] = new Array();
+ZaTabView.ObjectModifiers["ZaCosXFormView"] = [] ;
 ZaCosXFormView.prototype.TAB_INDEX=0;
 ZaCosXFormView.zimletChoices = new XFormChoices([], XFormChoices.SIMPLE_LIST);
 ZaCosXFormView.themeChoices = new XFormChoices([], XFormChoices.SIMPLE_LIST);
@@ -138,6 +139,7 @@ function(entry) {
 	else
 		this._containedObject[ZaModel.currentTab] = entry[ZaModel.currentTab];
 
+	this.modifyContainedObject () ;
 	this._localXForm.setInstance(this._containedObject);
     if (!appNewUI)
 	    this.updateTab();
