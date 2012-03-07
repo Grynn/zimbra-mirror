@@ -497,8 +497,8 @@ WebExZimlet.prototype._createOrUpdateMeeting = function(params) {
 			params["seriesMeetingKey"] = meetingKey;//store this to params(not newParams) so we can store this
 		}
 	}
-	var request = this._getCreateOrModifyMeetingRequest(newParams);
-	AjxRpc.invoke(request, this.postUri(), {"Content-Type":"text/xml"}, new AjxCallback(this, this._createOrUpdateMeetingResponseHdlr, params), false, false);
+    var callback = new AjxCallback(this, this._createOrUpdateMeetingResponseHdlr, params);
+	this._getCreateOrModifyMeetingRequest(newParams, callback);
 };
 
 /**
@@ -654,10 +654,10 @@ WebExZimlet.prototype._getCreateAttendeesRequest = function(params) {
  * @param {string} params.pwd Meeting password
  * @param {string} params.formattedStartDate Start date string
  * @param {int} params.meetingkey meeting key
- *
+ * @param {AjxCallback} callback to be run after request is made
  * @return {string} a request string
  */
-WebExZimlet.prototype._getCreateOrModifyMeetingRequest = function(params) {
+WebExZimlet.prototype._getCreateOrModifyMeetingRequest = function(params, callback) {
 	var emails = params.emails;
 	var meetingKey = params.meetingKey;
 	var pwd = params.pwd;
@@ -730,26 +730,65 @@ WebExZimlet.prototype._getCreateOrModifyMeetingRequest = function(params) {
 	//if(params.sendWebExEmail) { //used for one-click meetings
 		 sendWebExEmailStr = "<attendeeOptions><emailInvitations>TRUE</emailInvitations></attendeeOptions>";
 	//}
-	var requestBody = [
-		"<bodyContent xsi:type=\"",apiType,"\">",
-		pwdStr,
-		"<metaData><sessionTemplate><default>true</default></sessionTemplate><confName>", AjxStringUtil.xmlEncode(subject), "</confName>",
-		"<location>",loc,"</location></metaData>",
-		"<participants><attendees>", emls.join(""),altHostsEmls.join(""), "</attendees></participants>",
-		"<schedule>",
-		"<startDate>", formattedStartDate, "</startDate>",
-		"<duration>", duration, "</duration>",
-		"<timeZoneID>", timeZoneID, "</timeZoneID></schedule>",
-		"<telephony><telephonySupport>OTHER</telephonySupport>",
-		"<extTelephonyDescription>", this._getWebExBodyString(null, "FIELD", true, true),
-		"</extTelephonyDescription></telephony>",
-		sendWebExEmailStr,
-		meetingKeyStr,
-		recurrence,
-		"</bodyContent>"].join("");
+    var requestBody = [
+        "<bodyContent xsi:type=\"",apiType,"\">",
+        pwdStr,
+        "<metaData><sessionTemplate><default>true</default></sessionTemplate><confName>", AjxStringUtil.xmlEncode(subject), "</confName>",
+        "<location>",loc,"</location></metaData>",
+        "<participants><attendees>", emls.join(""),altHostsEmls.join(""), "</attendees></participants>",
+        "<schedule>",
+        "<startDate>", formattedStartDate, "</startDate>",
+        "<duration>", duration, "</duration>",
+        "<timeZoneID>", timeZoneID, "</timeZoneID></schedule>",
+        "<telephony><telephonySupport>@callintype@</telephonySupport>",
+        "<enableTSP>@tspEnabled@</enableTSP>",
+        "@tspAccountIndex@",
+        "<extTelephonyDescription>", this._getWebExBodyString(null, "FIELD", true, true),
+        "</extTelephonyDescription></telephony>",
+        sendWebExEmailStr,
+        meetingKeyStr,
+        recurrence,
+        "</bodyContent>"].join("");
 
+    this._invokeTspAccount(requestBody, callback);
+};
 
-	return this.newWebExRequest(requestBody);
+/**
+ * Querys the WebEx server to determine if TSP is enabled for this account 
+ * @param  {String} requestBody  request body to be passed to result
+ * @param {AjxCallback}  callback   callback to be invoked after handling response
+ */
+WebExZimlet.prototype._getTspAccount = function(requestBody, callback) {
+    var detailsBody = "<bodyContent xsi:type=\"java:com.webex.service.binding.user.GetUser\"><webExId>" + this._currentWebExAccount[WebExZimlet.PROP_USERNAME.propId] + "</webExId></bodyContent>";
+    var detailsRequest = this.newWebExRequest(detailsBody);
+    AjxRpc.invoke(detailsRequest, this.postUri(), {"Content-Type":"text/xml"},
+            new AjxCallback(this, this._handleTspAccountEnabled, [requestBody, callback]), false, false); 
+};
+
+/**
+ * parse GetUser response to determine if user has setup a TSP account for recording the call
+ * @param {String} requestBody the WebEx request with TSP info
+ * @param {AjxCallback} callback to be invoked after handling response
+ * @param {object} result   the WebEx response
+ */
+WebExZimlet.prototype._handleTspAccountEnabled = function(requestBody, callback, result) {
+    var tspEnabled = false;
+    var accountIndex = 1;
+    var objResult = this.xmlToObject(result);
+    if (AjxUtil.get(objResult, "header", "response", "result") == "SUCCESS") {
+        var resp = AjxUtil.get(objResult, "body", "bodyContent", "tspAccount", "tspAccount", "accountIndex");
+        if (resp) {
+            tspEnabled = true;
+            accountIndex = parseInt(resp.toString());
+        }
+    }
+    var callInType = tspEnabled ? "CALLIN" : "OTHER";
+    var accountIndexNode = tspEnabled ? "<tspAccountIndex>" + accountIndex + "</tspAccountIndex>" : "";
+    requestBody = requestBody.replace("@callintype@", callInType);
+    requestBody = requestBody.replace("@tspAccountIndex@", accountIndexNode);
+    requestBody = requestBody.replace("@tspEnabled@", tspEnabled);
+    requestBody = this.newWebExRequest(requestBody);
+    AjxRpc.invoke(requestBody, this.postUri(), {"Content-Type":"text/xml"}, callback, false, false);
 };
 
 /**
@@ -1678,7 +1717,7 @@ function() {
 	folderNode.setAttribute("l", appCtxt.getFolderTree().root.id);
 
 	var command = new ZmCsfeCommand();
-	var top = command.invoke({soapDoc: soapDoc}).Body.GetFolderResponse.folder[0];
+	var top = command.invoke({soapDoc: soapDoc,  noAuthToken: true}).Body.GetFolderResponse.folder[0];
 	var arry1 = top.folder ? top.folder : [];
 	var arry2 = top.link ? top.link : [];
 	var folders = arry1.concat(arry2);
@@ -2544,9 +2583,9 @@ function(params) {
 	newParams["formattedStartDate"] = this._formatDate(new Date());
 	newParams["meetingKey"] = null;
 	newParams["sendWebExEmail"] = true;
-
-	var request = this._getCreateOrModifyMeetingRequest(newParams);
-	AjxRpc.invoke(request, this.postUri(), {"Content-Type":"text/xml"}, new AjxCallback(this, this._createOneClickMeetingHdlr), false, false);
+    
+    var callback = new AjxCallback(this, this._createOneClickMeetingHdlr);
+	this._getCreateOrModifyMeetingRequest(newParams, callback);
 };
 
 /**
