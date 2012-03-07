@@ -1423,7 +1423,7 @@ public class InitialSync {
 
         Element request = new Element.XMLElement(MailConstants.SEARCH_REQUEST);
         request.addAttribute(MailConstants.A_QUERY_LIMIT, 1024);  // XXX pagination
-        request.addAttribute(MailConstants.A_TYPES, "document,wiki");
+        request.addAttribute(MailConstants.A_TYPES, "document");
         request.addElement(MailConstants.E_QUERY).setText("inid:"+folderId);
         Element response = ombx.sendRequest(request);
 
@@ -1437,7 +1437,7 @@ public class InitialSync {
     void syncDocument(Element doc) throws ServiceException {
         OfflineSyncManager.getInstance().continueOK();
 
-        MailItem.Type type = doc.getName().equals(MailConstants.E_WIKIWORD) ? MailItem.Type.WIKI : MailItem.Type.DOCUMENT;
+        MailItem.Type type = MailItem.Type.DOCUMENT;
         int folderId = (int) doc.getAttributeLong(MailConstants.A_FOLDER);
         long modifiedDate = doc.getAttributeLong(MailConstants.A_DATE);
         String lastEditedBy = doc.getAttribute(MailConstants.A_LAST_EDITED_BY);
@@ -1541,7 +1541,7 @@ public class InitialSync {
                 UnderlyingData ud = itemData.ud;
 
                 MailItem item = MailItem.constructItem(ombx, ud);  // metadata only
-                if (item.getType() != MailItem.Type.DOCUMENT && item.getType() != MailItem.Type.WIKI) {
+                if (item.getType() != MailItem.Type.DOCUMENT) {
                     continue;
                 }
 

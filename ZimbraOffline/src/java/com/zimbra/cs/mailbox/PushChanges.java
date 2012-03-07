@@ -139,12 +139,12 @@ public class PushChanges {
     /** A list of all the "leaf types" (i.e. non-folder types) that we synchronize with the server. */
     private static final Set<MailItem.Type> PUSH_LEAF_TYPES = EnumSet.of(MailItem.Type.TAG, MailItem.Type.CONTACT,
             MailItem.Type.MESSAGE, MailItem.Type.CHAT, MailItem.Type.APPOINTMENT, MailItem.Type.TASK,
-            MailItem.Type.WIKI, MailItem.Type.DOCUMENT);
+            MailItem.Type.DOCUMENT);
 
     /** The set of all the MailItem types that we synchronize with the server. */
     static final Set<MailItem.Type> PUSH_TYPES = ImmutableSet.of(MailItem.Type.FOLDER, MailItem.Type.SEARCHFOLDER,
             MailItem.Type.TAG, MailItem.Type.CONTACT, MailItem.Type.MESSAGE, MailItem.Type.CHAT,
-            MailItem.Type.APPOINTMENT, MailItem.Type.TASK, MailItem.Type.WIKI, MailItem.Type.DOCUMENT,
+            MailItem.Type.APPOINTMENT, MailItem.Type.TASK, MailItem.Type.DOCUMENT,
             MailItem.Type.MOUNTPOINT);
 
     private static final TracelessContext sContext = new TracelessContext();
@@ -305,7 +305,6 @@ public class PushChanges {
                             case TASK:
                                 syncCalendarItem(id, false);
                                 break;
-                            case WIKI:
                             case DOCUMENT:
                                 syncDocument(id, tombstones);
                                 break;
@@ -538,10 +537,6 @@ public class PushChanges {
                     break;
                 case TAG:
                     rename = new Element.XMLElement(MailConstants.TAG_ACTION_REQUEST);
-                    break;
-                case DOCUMENT:
-                case WIKI:
-                    rename = new Element.XMLElement(MailConstants.WIKI_ACTION_REQUEST);
                     break;
                 default:
                     rename = new Element.XMLElement(MailConstants.ITEM_ACTION_REQUEST);
@@ -1106,61 +1101,6 @@ public class PushChanges {
         }
     }
 
-    private boolean syncWikiItem(WikiItem item, boolean create) throws ServiceException {
-        int id = item.getId();
-        Element request = new Element.XMLElement(MailConstants.SAVE_WIKI_REQUEST);
-        Element w = request.addElement(MailConstants.E_WIKIWORD);
-        w.addAttribute(MailConstants.A_NAME, item.getName());
-        if (!create) {
-            w.addAttribute(MailConstants.A_ID, id);
-            w.addAttribute(MailConstants.A_VERSION, ombx.getLastSyncedVersionForMailItem(id));
-        }
-        w.addAttribute(MailConstants.A_FOLDER, item.getFolderId());
-        try {
-            w.setText(new String(item.getContent(), "UTF-8"));
-        } catch (IOException e) {}
-        Element response = null;
-        boolean retry = false;
-        while (response == null) {
-            try {
-                response = ombx.sendRequest(request);
-            } catch (SoapFaultException e) {
-                if (e.getCode().equals(MailServiceException.ALREADY_EXISTS) ||
-                        e.getCode().equals(MailServiceException.MODIFY_CONFLICT)) {
-                    String iid = e.getArgumentValue("id");
-                    String v = e.getArgumentValue("ver");
-                    w.addAttribute(MailConstants.A_ID, iid);
-                    w.addAttribute(MailConstants.A_VERSION, v);
-                    if (!retry) {
-                        response = null;
-                        ArrayList<SyncExceptionHandler.Revision> revisions = new ArrayList<SyncExceptionHandler.Revision>();
-                        int firstV = ombx.getLastSyncedVersionForMailItem(id);
-                        int lastV = Integer.parseInt(v);
-                        for (int i = firstV+1; i <= lastV; i++) {
-                            SyncExceptionHandler.Revision rev = new SyncExceptionHandler.Revision();
-                            rev.editor = "";
-                            rev.version = i;
-                            rev.modifiedDate = 0;
-                            revisions.add(rev);
-                        }
-                        SyncExceptionHandler.logDocumentEditConflict(ombx, item, revisions);
-                    }
-                    retry = true;
-                }
-            }
-        }
-        w = response.getElement(MailConstants.E_WIKIWORD);
-        int newid = (int)w.getAttributeLong(MailConstants.A_ID);
-        int ver = (int)w.getAttributeLong(MailConstants.A_VERSION);
-        if (create) {
-            if (!ombx.renumberItem(sContext, id, MailItem.Type.WIKI, newid)) {
-                return true;
-            }
-        }
-        ombx.setSyncedVersionForMailItem("" + id, ver);
-        return true;
-    }
-
     private boolean syncDocument(int id, TypedIdList tombstones) throws ServiceException {
         if (!OfflineLC.zdesktop_sync_documents.booleanValue() ||
                 !ombx.getRemoteServerVersion().isAtLeast(InitialSync.sMinDocumentSyncVersion)) {
@@ -1182,46 +1122,41 @@ public class PushChanges {
         String name = item.getName();
         MailItem.Type type = item.getType();
 
-        if (!ombx.getRemoteServerVersion().isAtLeast(InitialSync.sDocumentSyncHistoryVersion) &&
-                type == MailItem.Type.WIKI) {
-            syncWikiItem((WikiItem)item, create);
-        } else {
-            RevisionInfo lastRev = null;
-            if (ombx.getRemoteServerVersion().isAtLeast(InitialSync.sDocumentSyncHistoryVersion) &&
-                    !create) {
-                List<RevisionInfo> revInfo = checkDocumentSyncConflict(item);
-                if (revInfo.size() > 0) {
-                    //list documents always returns newest first
-                    lastRev = revInfo.get(0);
-                }
+        RevisionInfo lastRev = null;
+        if (ombx.getRemoteServerVersion().isAtLeast(InitialSync.sDocumentSyncHistoryVersion) &&
+                !create) {
+            List<RevisionInfo> revInfo = checkDocumentSyncConflict(item);
+            if (revInfo.size() > 0) {
+                //list documents always returns newest first
+                lastRev = revInfo.get(0);
             }
-            //only upload document if we have a newer revision or modified content
-            if (lastRev == null || !(lastRev.getVersion() == item.getVersion() && lastRev.getTimestamp() == item.getDate())) {
-                Pair<Integer,Integer> resp = ombx.sendMailItem(item);
-                if (create) {
-                    if (!ombx.renumberItem(sContext, id, type, resp.getFirst()))
-                        return true;
-                    id = resp.getFirst();
-                    List<Integer> tombstonedDocs = tombstones.getIds(MailItem.Type.DOCUMENT);
-                    if (tombstonedDocs != null && tombstonedDocs.indexOf(id) > -1) {
-                        ombx.removePendingDelete(sContext, id, type);
-                        tombstonedDocs.remove(Integer.valueOf(id)); //remove(Object o), not remote(int idx)!!
-                        if (tombstonedDocs.isEmpty()) {
-                            tombstones.remove(MailItem.Type.DOCUMENT);
-                        }
+        }
+        //only upload document if we have a newer revision or modified content
+        if (lastRev == null || !(lastRev.getVersion() == item.getVersion() && lastRev.getTimestamp() == item.getDate())) {
+            Pair<Integer,Integer> resp = ombx.sendMailItem(item);
+            if (create) {
+                if (!ombx.renumberItem(sContext, id, type, resp.getFirst()))
+                    return true;
+                id = resp.getFirst();
+                List<Integer> tombstonedDocs = tombstones.getIds(MailItem.Type.DOCUMENT);
+                if (tombstonedDocs != null && tombstonedDocs.indexOf(id) > -1) {
+                    ombx.removePendingDelete(sContext, id, type);
+                    tombstonedDocs.remove(Integer.valueOf(id)); //remove(Object o), not remote(int idx)!!
+                    if (tombstonedDocs.isEmpty()) {
+                        tombstones.remove(MailItem.Type.DOCUMENT);
                     }
                 }
-                ombx.setSyncedVersionForMailItem("" + item.getId(), resp.getSecond());
             }
-            //set tags
-            Element request = new Element.XMLElement(MailConstants.ITEM_ACTION_REQUEST);
-            Element action = request.addElement(MailConstants.E_ACTION);
-            action.addAttribute(MailConstants.A_OPERATION, ItemAction.OP_UPDATE);
-            action.addAttribute(MailConstants.A_TAG_NAMES, TagUtil.encodeTags(item.getTags()));
-            action.addAttribute(MailConstants.A_TAGS, TagUtil.getTagIdString(item));
-            action.addAttribute(MailConstants.A_ID, id);
-            ombx.sendRequest(request);
+            ombx.setSyncedVersionForMailItem("" + item.getId(), resp.getSecond());
         }
+        //set tags
+        Element request = new Element.XMLElement(MailConstants.ITEM_ACTION_REQUEST);
+        Element action = request.addElement(MailConstants.E_ACTION);
+        action.addAttribute(MailConstants.A_OPERATION, ItemAction.OP_UPDATE);
+        action.addAttribute(MailConstants.A_TAG_NAMES, TagUtil.encodeTags(item.getTags()));
+        action.addAttribute(MailConstants.A_TAGS, TagUtil.getTagIdString(item));
+        action.addAttribute(MailConstants.A_ID, id);
+        ombx.sendRequest(request);
 
         ombx.lock.lock();
         try {

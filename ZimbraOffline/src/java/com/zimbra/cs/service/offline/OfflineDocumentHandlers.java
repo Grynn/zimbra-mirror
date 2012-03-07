@@ -40,7 +40,6 @@ import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.ZimbraAuthTokenEncoded;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
-import com.zimbra.cs.mailbox.OfflineServiceException;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.service.FileUploadServlet;
 import com.zimbra.cs.service.util.ItemId;
@@ -56,31 +55,28 @@ public class OfflineDocumentHandlers {
         return prov.get(Key.AccountBy.id, acctId);
     }
 
-    static class DiffDocument extends com.zimbra.cs.service.wiki.DiffDocument {
+    static class DiffDocument extends com.zimbra.cs.service.doc.DiffDocument {
+        @Override
         protected String getAuthor(ZimbraSoapContext zsc) throws ServiceException {
             return getTargetAccount(zsc).getName();
         }
     }
 
     static class ListDocumentRevisions extends
-        com.zimbra.cs.service.wiki.ListDocumentRevisions {
+        com.zimbra.cs.service.doc.ListDocumentRevisions {
+        @Override
         protected String getAuthor(ZimbraSoapContext zsc) throws ServiceException {
             return getTargetAccount(zsc).getName();
         }
     }
 
-    static class SaveDocument extends com.zimbra.cs.service.wiki.SaveDocument {
+    static class SaveDocument extends com.zimbra.cs.service.doc.SaveDocument {
+        @Override
         protected String getAuthor(ZimbraSoapContext zsc) throws ServiceException {
             return getTargetAccount(zsc).getName();
         }
     }
 
-    static class WikiAction extends com.zimbra.cs.service.wiki.WikiAction {
-        protected String getAuthor(ZimbraSoapContext zsc) throws ServiceException {
-            return getTargetAccount(zsc).getName();
-        }
-    }
-	
     public static String uploadOfflineDocument(String id, String acctId) throws ServiceException {
         HttpClient client = ZimbraHttpConnectionManager.getInternalHttpConnMgr().getDefaultHttpClient();
         boolean ka = ZimbraHttpConnectionManager.getInternalHttpConnMgr().getKeepAlive();

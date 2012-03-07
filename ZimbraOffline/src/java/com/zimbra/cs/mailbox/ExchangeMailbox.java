@@ -125,7 +125,6 @@ public class ExchangeMailbox extends ChangeTrackingMailbox {
         case APPOINTMENT:
         case TASK:
             return APPOINTMENT_CHANGES;
-        case WIKI:
         case DOCUMENT:
             return DOCUMENT_CHANGES;
         default:

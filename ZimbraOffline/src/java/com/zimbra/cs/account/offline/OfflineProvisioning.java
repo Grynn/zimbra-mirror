@@ -14,7 +14,6 @@
  */
 package com.zimbra.cs.account.offline;
 
-import java.io.File;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -98,7 +97,6 @@ import com.zimbra.cs.mailbox.MailboxManager;
 import com.zimbra.cs.mailbox.Mountpoint;
 import com.zimbra.cs.mailbox.OfflineMailboxManager;
 import com.zimbra.cs.mailbox.OfflineServiceException;
-import com.zimbra.cs.mailbox.OperationContext;
 import com.zimbra.cs.mailbox.YContactSync;
 import com.zimbra.cs.mailbox.ZcsMailbox;
 import com.zimbra.cs.mailclient.smtp.SmtpTransport;
@@ -113,7 +111,6 @@ import com.zimbra.cs.offline.util.OfflineYAuth;
 import com.zimbra.cs.offline.util.yc.oauth.OAuthManager;
 import com.zimbra.cs.util.yauth.AuthenticationException;
 import com.zimbra.cs.util.yauth.MetadataTokenStore;
-import com.zimbra.cs.wiki.WikiUtil;
 import com.zimbra.soap.SoapEngine;
 import com.zimbra.soap.ZimbraSoapContext;
 import com.zimbra.soap.admin.type.CacheEntryType;
@@ -359,9 +356,6 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 
         if (isAccountSetup && etype == EntryType.ACCOUNT)
             revalidateRemoteLogin((OfflineAccount)e, attrs);
-
-        if (e instanceof Account)
-            enableWiki((Account)e, attrs);
 
         if (etype == EntryType.CONFIG) {
             DbOfflineDirectory.modifyDirectoryEntry(etype, A_offlineDn, "config", attrs, false);
@@ -1078,38 +1072,6 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 
         Account account = createAccountInternal(LOCAL_ACCOUNT_NAME, LOCAL_ACCOUNT_ID, attrs, true, false);
         return account;
-    }
-
-    @SuppressWarnings("unchecked")
-    private synchronized void enableWiki(Account account, Map<String, ? extends
-        Object> attrs) throws ServiceException {
-        boolean b;
-        String enabled = (String)attrs.get(A_zimbraPrefNotebookSyncEnabled);
-
-        if (!isLocalAccount(account) || enabled == null)
-            return;
-        b = enabled.equals(ProvisioningConstants.TRUE);
-        if (account.isFeatureNotebookEnabled() != b)
-            ((Map<String, Object>)attrs).put(Provisioning.A_zimbraFeatureNotebookEnabled, b ? ProvisioningConstants.TRUE : ProvisioningConstants.FALSE);
-        if (b) {
-            try {
-                Mailbox mbox = MailboxManager.getInstance().getMailboxByAccount(account);
-
-                mbox.getFolderByPath(new OperationContext(account), "Template");
-                return;
-            } catch (ServiceException e) {
-            }
-            try {
-                WikiUtil wu = WikiUtil.getInstance();
-                String templatePath = LC.zimbra_home.value() + File.separator +
-                    "wiki" + File.separator + "Templates";
-
-                wu.initDefaultWiki(LOCAL_ACCOUNT_NAME);
-                wu.startImport(LOCAL_ACCOUNT_NAME, "Template", new File(templatePath));
-            } catch (Exception e) {
-                OfflineLog.offline.warn("cannot import local wiki templates");
-            }
-        }
     }
 
     private Account localAccount = null;

@@ -571,7 +571,6 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
             case APPOINTMENT:
             case TASK:
                 return PushChanges.APPOINTMENT_CHANGES;
-            case WIKI:
             case DOCUMENT:
                 return PushChanges.DOCUMENT_CHANGES;
             default:
