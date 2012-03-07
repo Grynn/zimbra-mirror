@@ -34,7 +34,7 @@ ZaXDialog = function(parent,className, title, w, h,iKeyName, contextId) {
 		this._extraButtons = [helpButton];
 	}
 	
-	this._contextId = contextId? contextId:ZaId.DLG_UNDEF
+	this._contextId = contextId || Dwt.getNextId(ZaId.DLG_UNDEF);
 	if (appNewUI && this.supportMinimize) {
         this._supportMinimize = true;
     }
@@ -49,8 +49,6 @@ ZaXDialog = function(parent,className, title, w, h,iKeyName, contextId) {
     if (this._supportMinimize) {
         this.addMiniIcon();
         this.addPopdownListener(new AjxListener(this, this.popdownHookListner));
-        if(AjxEnv.isIE)
-            this.setTitleWidth(ZaId.getDialogId(this._contextId),w ? w:"500px");  //for ie
     }
 	this._app = ZaApp.getInstance();
 	this._localXForm = null;
@@ -107,11 +105,20 @@ function () {
 	    this._minEl.onclick = AjxCallback.simpleClosure(ZaXDialog.prototype.__handleMinClick, this);
     }
 }
-ZaXDialog.prototype.setTitleWidth =
-function (id, width) {
-    width = width.replace("px","");
-    var titleWidth = Dwt.__checkPxVal(width-24-10);//24 is width for mini icon,5 for padding,
-    document.getElementById(id+"_title").style.width = titleWidth;
+ZaXDialog.prototype.setTitleWidthForIE =
+function () {
+    var titleWidth = (this._contentW || "500px" ).replace("px","");
+    titleWidth -= (24+5*2);    //24px is width for mini icon, 5*2px for two padding
+
+    if (titleWidth > 0) {
+    //TODO: can extract this part as a function named setTitleWidth(), if we need to set FF/Chrome 's width in the future.
+        titleWidth = Dwt.__checkPxVal(titleWidth);
+        var titleId = this._htmlElId + "_title";
+        var titleElement = document.getElementById(titleId);
+        if (titleElement) {
+            titleElement.style.width = titleWidth;
+        }
+    }
 }
 
 ZaXDialog.prototype.getTaskItem = function() {
@@ -200,6 +207,10 @@ function (loc) {
                 kbMgr.grabFocus(this._tabGroup.getFocusMember());
         }
 
+        if(appNewUI && AjxEnv.isIE && this._supportMinimize) {
+            //reset title width in IE, when the dialog has the minimize icon
+            this.setTitleWidthForIE();
+        }
 
 	if(this._localXForm) {
 		this._localXForm.focusFirst();
