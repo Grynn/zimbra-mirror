@@ -107,6 +107,7 @@ bool Log::LogFile::write(const wchar_t *buf, unsigned chars)
     char sbuf[1024];
     int sz;
 
+    SetFilePointer(fd, 0, NULL, FILE_END);
     if ((sz = WideCharToMultiByte(CP_UTF8, 0, buf, chars, sbuf, sizeof (sbuf), NULL, NULL)) > 0)
     {
         WriteFile(fd, sbuf, sz, &out, NULL);
@@ -124,8 +125,8 @@ bool Log::LogFile::write(const wchar_t *buf, unsigned chars)
     return out == chars;
 }
 
-Log::Log(const wchar_t *file, Level level): ffd(file), fmt(NULL), last_fmt(NULL), last_sec(0),
-    lvl(level), upos(0)
+Log::Log(const wchar_t *file, Level level): ffd(file), fmt(NULL), last_fmt(NULL),
+    last_sec(0), lvl(level), upos(0)
 {
     format(L"[%Y-%m-%d %H:%M:%S.%#]");
 }
@@ -172,6 +173,7 @@ void Log::endlog(Tlsdata &tlsd, Level clvl)
     strbuf += LevelStr[clvl];
     if (clvl == Err)
         strbuf += ' ';
+    strbuf += ' ';
     if (!tlsd.prefix.empty())
     {
         strbuf += tlsd.prefix;
