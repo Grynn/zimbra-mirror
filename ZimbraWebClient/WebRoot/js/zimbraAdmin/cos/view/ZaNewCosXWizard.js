@@ -281,6 +281,7 @@ ZaNewCosXWizard.FEATURE_TAB_ATTRS = [ZaCos.A_zimbraFeatureMailEnabled,
 	ZaCos.A_zimbraFeatureBriefcasesEnabled,
 	//ZaCos.A_zimbraFeatureIMEnabled,
     ZaCos.A_zimbraFeatureCrocodocEnabled,
+    ZaCos.A_zimbraFeatureExternalFeedbackEnabled,
 	ZaCos.A_zimbraFeatureOptionsEnabled,
 	ZaCos.A_zimbraFeatureTaggingEnabled,
 	ZaCos.A_zimbraFeatureSharingEnabled,
@@ -549,7 +550,8 @@ ZaNewCosXWizard.myXFormModifier = function(xFormObject, entry) {
 						ZaCos.A_zimbraFeatureImportFolderEnabled,
                         ZaCos.A_zimbraFeatureExportFolderEnabled,
 						ZaCos.A_zimbraDumpsterEnabled,
-                        ZaCos.A_zimbraFeatureCrocodocEnabled
+                        ZaCos.A_zimbraFeatureCrocodocEnabled,
+                        ZaCos.A_zimbraFeatureExternalFeedbackEnabled
 					]]
 				],
                 items:[
@@ -566,7 +568,8 @@ ZaNewCosXWizard.myXFormModifier = function(xFormObject, entry) {
                     {ref:ZaCos.A_zimbraFeatureImportFolderEnabled, type:_WIZ_CHECKBOX_, msgName:ZaMsg.LBL_zimbraFeatureImportFolderEnabled,label:ZaMsg.LBL_zimbraFeatureImportFolderEnabled, trueValue:"TRUE", falseValue:"FALSE"},
 		    		{ref:ZaCos.A_zimbraFeatureExportFolderEnabled, type:_WIZ_CHECKBOX_, msgName:ZaMsg.LBL_zimbraFeatureExportFolderEnabled,label:ZaMsg.LBL_zimbraFeatureExportFolderEnabled, trueValue:"TRUE", falseValue:"FALSE"},
 					{ref:ZaCos.A_zimbraDumpsterEnabled, type:_WIZ_CHECKBOX_, msgName:ZaMsg.LBL_zimbraDumpsterEnabled,label:ZaMsg.LBL_zimbraDumpsterEnabled, trueValue:"TRUE", falseValue:"FALSE"},
-					{ref:ZaCos.A_zimbraFeatureCrocodocEnabled, type:_WIZ_CHECKBOX_, msgName:ZaMsg.LBL_zimbraFeatureCrocodocrEnabled,label:ZaMsg.LBL_zimbraFeatureCrocodocrEnabled, trueValue:"TRUE", falseValue:"FALSE"}
+					{ref:ZaCos.A_zimbraFeatureCrocodocEnabled, type:_WIZ_CHECKBOX_, msgName:ZaMsg.LBL_zimbraFeatureCrocodocrEnabled,label:ZaMsg.LBL_zimbraFeatureCrocodocrEnabled, trueValue:"TRUE", falseValue:"FALSE"},
+					{ref:ZaCos.A_zimbraFeatureExternalFeedbackEnabled, type:_WIZ_CHECKBOX_, msgName:ZaMsg.LBL_zimbraFeatureExternalFeedbackEnabled,label:ZaMsg.LBL_zimbraFeatureExternalFeedbackEnabled, trueValue:"TRUE", falseValue:"FALSE"}
                 ]
             },
             {type:_ZAWIZ_TOP_GROUPER_,  label:ZaMsg.NAD_zimbraMailFeature, id:"cos_form_features_mail",
