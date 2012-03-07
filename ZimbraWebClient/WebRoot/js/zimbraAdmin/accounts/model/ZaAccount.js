@@ -491,9 +491,9 @@ function(tmpObj) {
 				//show error msg
                 var maxpassMsg;
                 if (maxPwdLen > 1) {
-                    maxpassMsg =  String(ZaMsg.NAD_passMinLengthMsg_p).replace("{0}",minPwdLen);
+                    maxpassMsg =  String(ZaMsg.NAD_passMaxLengthMsg_p).replace("{0}",minPwdLen);
                 } else {
-                    maxpassMsg =  String(ZaMsg.NAD_passMinLengthMsg_s).replace("{0}",minPwdLen);
+                    maxpassMsg =  String(ZaMsg.NAD_passMaxLengthMsg_s).replace("{0}",minPwdLen);
                 }
 				ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_PASSWORD_TOOLONG+ "<br>" + maxpassMsg);
 				return false;		
