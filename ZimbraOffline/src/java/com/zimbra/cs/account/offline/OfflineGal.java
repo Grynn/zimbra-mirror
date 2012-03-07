@@ -40,6 +40,7 @@ import com.zimbra.cs.index.ZimbraHit;
 import com.zimbra.cs.index.ZimbraQueryResults;
 import com.zimbra.cs.mailbox.Contact;
 import com.zimbra.cs.mailbox.ContactAutoComplete;
+import com.zimbra.cs.mailbox.ContactAutoComplete.AutoCompleteResult;
 import com.zimbra.cs.mailbox.Folder;
 import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.mailbox.MailServiceException;
@@ -48,7 +49,6 @@ import com.zimbra.cs.mailbox.MailboxManager;
 import com.zimbra.cs.mailbox.OfflineGalContactAutoComplete;
 import com.zimbra.cs.mailbox.OfflineServiceException;
 import com.zimbra.cs.mailbox.OperationContext;
-import com.zimbra.cs.mailbox.ContactAutoComplete.AutoCompleteResult;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.service.util.ItemId;
@@ -84,6 +84,9 @@ public class OfflineGal {
                 mAccount = (OfflineAccount) OfflineProvisioning.getOfflineInstance().getGalAccountByAccount(account);
             } catch (ServiceException e) {
                 OfflineLog.offline.debug("failed to get GAL account for account %s", account.getName());
+            } catch (NullPointerException e) {
+                OfflineLog.offline.debug("no GAL account attached to Domain yet for account %s", account.getName());
+                throw OfflineServiceException.GAL_NOT_READY();
             }
         }
         if (mAccount == null) {
