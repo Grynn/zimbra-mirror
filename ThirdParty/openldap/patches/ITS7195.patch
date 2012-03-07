@@ -1,0 +1,24 @@
+From e7448a42cfa6b191717f7917533b59d6220fef83 Mon Sep 17 00:00:00 2001
+From: Howard Chu <hyc@openldap.org>
+Date: Fri, 2 Mar 2012 14:12:41 -0800
+Subject: [PATCH] ITS#7195 add NotAllowedOnNonleaf to deltasync fallback errors
+
+---
+ servers/slapd/syncrepl.c |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+diff --git a/servers/slapd/syncrepl.c b/servers/slapd/syncrepl.c
+index ff13ff9..09de210 100644
+--- a/servers/slapd/syncrepl.c
++++ b/servers/slapd/syncrepl.c
+@@ -992,6 +992,7 @@ do_syncrep2(
+ 					case LDAP_NO_SUCH_OBJECT:
+ 					case LDAP_NO_SUCH_ATTRIBUTE:
+ 					case LDAP_TYPE_OR_VALUE_EXISTS:
++					case LDAP_NOT_ALLOWED_ON_NONLEAF:
+ 						rc = LDAP_SYNC_REFRESH_REQUIRED;
+ 						si->si_logstate = SYNCLOG_FALLBACK;
+ 						ldap_abandon_ext( si->si_ld, si->si_msgid, NULL, NULL );
+-- 
+1.7.4.2
+

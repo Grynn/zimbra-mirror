@@ -1,0 +1,27 @@
+From 44b0fab659882812c1057c0c037a9c2044282d13 Mon Sep 17 00:00:00 2001
+From: Howard Chu <hyc@symas.com>
+Date: Fri, 2 Mar 2012 17:26:49 -0800
+Subject: [PATCH] ITS#7196 use IOV_MAX if it's defined and small
+
+---
+ libraries/libmdb/mdb.c |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+
+diff --git a/libraries/libmdb/mdb.c b/libraries/libmdb/mdb.c
+index 925aae6..f028ecb 100644
+--- a/libraries/libmdb/mdb.c
++++ b/libraries/libmdb/mdb.c
+@@ -947,6 +947,10 @@ struct MDB_env {
+ };
+ 	/** max number of pages to commit in one writev() call */
+ #define MDB_COMMIT_PAGES	 64
++#if defined(IOV_MAX) && IOV_MAX < MDB_COMMIT_PAGES
++#undef MDB_COMMIT_PAGES
++#define MDB_COMMIT_PAGES	IOV_MAX
++#endif
+ 
+ static MDB_page *mdb_page_alloc(MDB_cursor *mc, int num);
+ static MDB_page *mdb_page_new(MDB_cursor *mc, uint32_t flags, int num);
+-- 
+1.7.4.2
+
