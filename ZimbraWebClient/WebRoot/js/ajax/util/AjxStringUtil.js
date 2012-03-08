@@ -1807,7 +1807,7 @@ AjxStringUtil.IGNORE_NODE = AjxUtil.arrayAsHash(AjxStringUtil.IGNORE_NODE_LIST);
 AjxStringUtil._traverseOriginalHtmlContent =
 function(el, ctxt) {
 
-	if (ctxt.done) { return; }
+	if (ctxt.done || !el) { return; }
 	
 	var nodeName = el.nodeName.toLowerCase();
 	DBG.println("html", AjxStringUtil.repeat("&nbsp;&nbsp;&nbsp;&nbsp;", ctxt.level) + nodeName + ((nodeName == "#text" && /\S+/.test(el.nodeValue) ? " - " + el.nodeValue.substr(0, 20) : "")));
@@ -1832,7 +1832,29 @@ function(el, ctxt) {
 				testLine = AjxStringUtil.trim(AjxStringUtil.htmlDecode(AjxStringUtil.stripTags(el.parentNode.innerHTML)));
 				type = AjxStringUtil._getLineType(testLine);
 				if (type == AjxStringUtil.ORIG_WROTE_STRONG) {
-					ctxt.sepNode = el.parentNode;	// mark for removal
+					// preserve content in the parent node that comes before the "... wrote:" part
+					var pn = el.parentNode, wroteNode, stopNode;
+					for (var i = pn.childNodes.length - 1; i >= 0; i--) {
+						var childNode = pn.childNodes[i];
+						var text = childNode.nodeValue;
+						if (!text) { continue; }
+						if (text.match(/(\w+):$/)) {
+							wroteNode = childNode;
+						}
+						else if (wroteNode && text.match(AjxStringUtil.ORIG_INTRO_RE)) {
+							stopNode = childNode;
+							break;
+						}
+					}
+					stopNode = stopNode || wroteNode;
+					if (stopNode) {
+						while (pn && pn.lastChild && pn.lastChild != stopNode) {
+							pn.removeChild(pn.lastChild);
+						}
+						if (pn && pn.lastChild == stopNode) {
+							pn.removeChild(pn.lastChild);
+						}
+					}
 				}
 			}
 		}
@@ -1900,7 +1922,7 @@ function(el, ctxt) {
 	}
 
 	// if we found a recognized delimiter, set flag to clip it and subsequent nodes at its level
-	if (type == AjxStringUtil.ORIG_SEP_STRONG || type == AjxStringUtil.ORIG_WROTE_STRONG) {
+	if (type == AjxStringUtil.ORIG_SEP_STRONG || (type == AjxStringUtil.ORIG_WROTE_STRONG && ctxt.sepNode)) {
 		if (ctxt.count[AjxStringUtil.ORIG_UNKNOWN] == 1) {
 			ctxt.done = true;
 		}
