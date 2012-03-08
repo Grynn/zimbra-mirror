@@ -20,6 +20,10 @@ ifeq ($(BUILD_PLATFORM), )
 	BUILD_PLATFORM := "UNKNOWN"
 endif
 
+ifeq ($(BUILD_PLATFORM), MACOSXx86_10.7)
+	CC	:= CC=gcc
+endif
+
 files	:= $(wildcard src/$(ALTMIME_NAME)-$(ALTMIME_VERSION).tar.gz)
 
 all: checksrc allclean build check tar
@@ -34,7 +38,7 @@ check:
 build: $(ALTMIME_NAME)-$(ALTMIME_VERSION)
 	(cd $(ALTMIME_NAME)-$(ALTMIME_VERSION); \
 	patch -p1 < ../patches/qpe.patch; \
-	$(MAKE))
+	$(CC) $(MAKE))
 	(mkdir -p $(INSTALL_PREFIX)/bin)
 	(cp -f $(ALTMIME_NAME)-$(ALTMIME_VERSION)/LICENCE $(INSTALL_PREFIX)/LICENSE)
 	(cp -f $(ALTMIME_NAME)-$(ALTMIME_VERSION)/$(ALTMIME_NAME) $(INSTALL_PREFIX)/bin)
