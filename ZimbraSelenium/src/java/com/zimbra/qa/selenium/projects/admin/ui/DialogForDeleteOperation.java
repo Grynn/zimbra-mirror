@@ -13,7 +13,7 @@ public class DialogForDeleteOperation extends AbsDialog {
 	public static class Locators {
 		public static final String YES_BUTTON="zdlg__MSG__GLOBAL__confirm2btn_button5_title";
 		public static final String NO_BUTTON="zdlg__MSG__GLOBAL__confirm2btn_button4_title";
-		public static final String OK_BUTTON="zdlg__UNDEFINE_button2_title";
+		public static final String OK_BUTTON="zdlg__UNDEFINE1_button2_title";
 	}
 	
 	public DialogForDeleteOperation(AbsApplication application, AbsTab page) {
