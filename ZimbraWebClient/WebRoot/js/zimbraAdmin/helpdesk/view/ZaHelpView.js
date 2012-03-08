@@ -202,7 +202,13 @@ ZaHelpView.myXFormModifier = function(xFormObject) {
                 items: [
                     {type:_OUTPUT_, value:AjxImg.getImageHtml("PDFDoc")},
                     {type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label: ZabMsg.ZWC_END_USER_GUIDE,
-                         href:(location.pathname + "help/admin/pdf/zimbra_user_guide.pdf?locid=" + AjxEnv.DEFAULT_LOCALE)}
+                         href:(location.pathname + "help/admin/pdf/o_webclient_user_guide.pdf?locid=" + AjxEnv.DEFAULT_LOCALE)},
+                    {type:_OUTPUT_, value:AjxImg.getImageHtml("PDFDoc")},
+                    {type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label: ZabMsg.ANDROID_END_USER_GUIDE,
+                         href:(location.pathname + "help/admin/pdf/o_androidclient_user_guide.pdf?locid=" + AjxEnv.DEFAULT_LOCALE)},
+                    {type:_OUTPUT_, value:AjxImg.getImageHtml("PDFDoc")},
+                    {type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label: ZabMsg.IOS_END_USER_GUIDE,
+                         href:(location.pathname + "help/admin/pdf/o_iosclient_user_guide.pdf?locid=" + AjxEnv.DEFAULT_LOCALE)}
                 ]
             },
             {type:_SPACER_, colSpan:"*"},
