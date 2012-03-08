@@ -78,7 +78,7 @@ ZmIgnoreMsgsZimlet.prototype.setIgnoreMsgsFldrId =
 			var command = new ZmCsfeCommand();
 			var acct = appCtxt.getActiveAccount();
 			accountName = (acct && acct.id != ZmAccountList.DEFAULT_ID) ? acct.name : null;
-			var top = command.invoke({soapDoc: soapDoc, accountName:accountName}).Body.GetFolderResponse.folder[0];
+			var top = command.invoke({soapDoc: soapDoc, accountName:accountName, noAuthToken: true}).Body.GetFolderResponse.folder[0];
 
 			var folders = top.folder;
 			if (folders) {

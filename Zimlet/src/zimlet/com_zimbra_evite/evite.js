@@ -307,7 +307,7 @@ function(title, url, date, time) {
 	node = soapDoc.set("su", title, m);
 
 	var command = new ZmCsfeCommand();
-	var resp = command.invoke({soapDoc: soapDoc});
+	var resp = command.invoke({soapDoc: soapDoc, noAuthToken: true});
 };
 
 /**
@@ -317,7 +317,7 @@ EviteZimlet.prototype._listFolders =
 function() {
 	var soapDoc = AjxSoapDoc.create("GetFolderRequest", "urn:zimbraMail");
 	var command = new ZmCsfeCommand();
-	var top = command.invoke({soapDoc: soapDoc}).Body.GetFolderResponse.folder[0];
+	var top = command.invoke({soapDoc: soapDoc, noAuthToken: true}).Body.GetFolderResponse.folder[0];
 
 	var folders = top.folder;
 	if (folders) {
@@ -345,7 +345,7 @@ function(parent) {
 	folderNode.setAttribute("l", parent);
     folderNode.setAttribute("view", EviteZimlet.CALENDAR_VIEW);
 	var command = new ZmCsfeCommand();
-	var resp = command.invoke({soapDoc: soapDoc});
+	var resp = command.invoke({soapDoc: soapDoc, noAuthToken: true});
 	var id = resp.Body.CreateFolderResponse.folder[0].id;
 	if (!id) {
 		throw new AjxException(this.getMessage("EviteZimlet_CannotCreateFolder"), AjxException.INTERNAL_ERROR, "createEviteFolder");
@@ -358,7 +358,7 @@ function(parent) {
 	actionNode.setAttribute("id", id);
 	actionNode.setAttribute("color", "6");
 	command = new ZmCsfeCommand();
-	resp = command.invoke({soapDoc: soapDoc});
+	resp = command.invoke({soapDoc: soapDoc, noAuthToken: true});
 };
 
 /**

@@ -1379,7 +1379,7 @@ function() {
 	folderNode.setAttribute("l", appCtxt.getFolderTree().root.id);
 
 	var command = new ZmCsfeCommand();
-	var top = command.invoke({soapDoc: soapDoc}).Body.GetFolderResponse.folder[0];
+	var top = command.invoke({soapDoc: soapDoc, noAuthToken: true}).Body.GetFolderResponse.folder[0];
 	var arry1 = top.folder ? top.folder : [];
 	var arry2 = top.link ? top.link : [];
 	var folders = arry1.concat(arry2);

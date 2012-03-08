@@ -186,7 +186,7 @@ function(postCallback) {
 	folderNode.setAttribute("l", appCtxt.getFolderTree().root.id);
 
 	var command = new ZmCsfeCommand();
-	var top = command.invoke({soapDoc: soapDoc}).Body.GetFolderResponse.folder[0];
+	var top = command.invoke({soapDoc: soapDoc, noAuthToken: true}).Body.GetFolderResponse.folder[0];
 
 	var folders = top.folder;
 	if (folders) {

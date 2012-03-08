@@ -81,7 +81,7 @@ function() {
 	var folderNode = soapDoc.set("folder");
 	folderNode.setAttribute("l", appCtxt.getFolderTree().root.id);
 	var command = new ZmCsfeCommand();
-	var top = command.invoke({soapDoc: soapDoc}).Body.GetFolderResponse.folder[0];
+	var top = command.invoke({soapDoc: soapDoc, noAuthToken: true}).Body.GetFolderResponse.folder[0];
 
 	var folders = top.folder;
 	if (folders) {
@@ -110,7 +110,7 @@ function() {
 	folderNode.setAttribute("l", appCtxt.getFolderTree().root.id);
 	folderNode.setAttribute("view", EmailReminderZimlet.VIEW_CALENDAR);
 	var command = new ZmCsfeCommand();
-	var resp = command.invoke({soapDoc: soapDoc});
+	var resp = command.invoke({soapDoc: soapDoc, noAuthToken: true});
 	var id = resp.Body.CreateFolderResponse.folder[0].id;
 	if (!id) {
 		var errMsg = AjxMessageFormat.format(this.getMessage("EmailReminder_error_createcalendar"), EmailReminderZimlet.CALENDAR_EMAIL_REMINDERS);
@@ -124,7 +124,7 @@ function() {
 	actionNode.setAttribute("id", id);
 	actionNode.setAttribute("color", "5");
 	command = new ZmCsfeCommand();
-	resp = command.invoke({soapDoc: soapDoc});
+	resp = command.invoke({soapDoc: soapDoc, noAuthToken: true});
 	this._justCreatedCalendarFolder = true;
 };
 
