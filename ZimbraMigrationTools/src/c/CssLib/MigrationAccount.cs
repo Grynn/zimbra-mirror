@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace CssLib
 {
@@ -8,10 +9,12 @@ public class MigrationAccount
     {
         AccountNum = -1;
         migrationFolder = new MigrationFolder();
+        tagDict = new Dictionary<string, string>();
     }
 
     public string AccountID;
     public MigrationFolder migrationFolder;
+    public Dictionary<string, string> tagDict;
     public event MigrationObjectEventHandler OnChanged;
 
     public string AccountName {

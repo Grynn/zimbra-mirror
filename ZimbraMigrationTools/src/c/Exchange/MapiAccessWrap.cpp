@@ -351,6 +351,30 @@ STDMETHODIMP CMapiAccessWrap::GetData(BSTR UserId, VARIANT ItemId, FolderType ty
                         pIt[bstrNam] = SysAllocString(it->value.c_str());
                     }
                 }
+                bool bHasTags = false;
+                if (cd.vTags)
+                {
+                    wstring tagData;
+                    int numTags = (int)cd.vTags->size();
+                    if (numTags > 0)
+                    {
+                        for (int i = 0; i < numTags; i++)
+                        {
+                            tagData += (*cd.vTags)[i];
+                            if (i < (numTags - 1))
+                            {
+                                tagData += L",";
+                            }
+                        }
+                        pIt[L"tags"] = SysAllocString(tagData.c_str());
+                        delete cd.vTags;
+                        bHasTags = true;
+                    }
+                }
+                if (!bHasTags)
+                {
+                    pIt[L"tags"] = SysAllocString(L"");
+                }
             }
             else if ((ft == 1) || (ft == 5))    // message or meeting request
             {
@@ -363,6 +387,31 @@ STDMETHODIMP CMapiAccessWrap::GetData(BSTR UserId, VARIANT ItemId, FolderType ty
                 pIt[L"filePath"] = SysAllocString((msgdata.MimeFile).c_str());
                 pIt[L"UrlName"] = SysAllocString((msgdata.Urlname).c_str());
                 pIt[L"rcvdDate"] = SysAllocString((msgdata.DeliveryUnixString.c_str()));
+
+                bool bHasTags = false;
+                if (msgdata.vTags)
+                {
+                    wstring tagData;
+                    int numTags = (int)msgdata.vTags->size();
+                    if (numTags > 0)
+                    {
+                        for (int i = 0; i < numTags; i++)
+                        {
+                            tagData += (*msgdata.vTags)[i];
+                            if (i < (numTags - 1))
+                            {
+                                tagData += L",";
+                            }
+                        }
+                        pIt[L"tags"] = SysAllocString(tagData.c_str());
+                        delete msgdata.vTags;
+                        bHasTags = true;
+                    }
+                }
+                if (!bHasTags)
+                {
+                    pIt[L"tags"] = SysAllocString(L"");
+                }
 
                 CComBSTR flags = L"";
 

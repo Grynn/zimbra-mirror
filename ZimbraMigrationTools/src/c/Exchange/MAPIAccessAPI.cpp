@@ -502,6 +502,7 @@ LPCWSTR MAPIAccessAPI::GetItem(SBinary sbItemEID, BaseItemData &itemData)
         MAPIMessage msg;
 
         msg.Initialize(pMessage, *m_zmmapisession);
+        std::vector<LPWSTR>* pKeywords = msg.SetKeywords();
         if ((msg.ItemType() == ZT_MAIL) || (msg.ItemType() == ZT_MEETREQ))
         {
             printf("ITEM TYPE: ZT_MAIL \n");
@@ -560,6 +561,8 @@ LPCWSTR MAPIAccessAPI::GetItem(SBinary sbItemEID, BaseItemData &itemData)
             AtoW(msg.DeliveryDateString(), wstrDelivDateString);
             msgdata->DeliveryDateString = wstrDelivDateString;
             SafeDelete(wstrDelivDateString);
+
+            msgdata->vTags = pKeywords;
 
 /*
  *          if (msgdata->HasText)
@@ -695,6 +698,7 @@ LPCWSTR MAPIAccessAPI::GetItem(SBinary sbItemEID, BaseItemData &itemData)
             cd->WorkStreet = mapicontact.WorkStreet();
             cd->WorkURL = mapicontact.WorkURL();
             cd->ContactImagePath = mapicontact.ContactImagePath();
+            cd->vTags = pKeywords;
             cd->Anniversary = mapicontact.Anniversary();
 			vector<ContactUDFields>::iterator it;
 			for (it= mapicontact.UserDefinedFields()->begin();it != mapicontact.UserDefinedFields()->end();it++)

@@ -100,7 +100,8 @@ typedef struct _ContactItemData: BaseItemData
     wstring IMAddress1;
     wstring Anniversary;
     wstring ContactImagePath;
-	vector<ContactUDFields> UserDefinedFields;
+    vector<ContactUDFields> UserDefinedFields;
+    vector<LPWSTR>* vTags;
 } ContactItemData;
 
 typedef struct
@@ -128,6 +129,7 @@ typedef struct _MessageItemData: BaseItemData
     wstring DeliveryUnixString;
     __int64 Date;
     wstring DateString;
+    vector<LPWSTR>* vTags;
     data_buffer textbody;
     data_buffer htmlbody;
     wstring MimeFile;

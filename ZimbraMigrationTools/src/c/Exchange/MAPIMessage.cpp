@@ -391,6 +391,51 @@ LPSTR MAPIMessage::DeliveryUnixString()
     return m_pDeliveryUnixDateTimeStr;
 }
 
+std::vector<LPWSTR>* MAPIMessage::SetKeywords()
+{
+    std::vector<LPWSTR>* pKeywords = NULL;
+	
+    MAPINAMEID name;
+    name.ulKind = MNID_STRING;
+    name.Kind.lpwstrName = L"Keywords";
+    name.lpguid = (LPGUID)(&PS_PUBLIC_STRINGS);
+
+    LPMAPINAMEID pNames = &name;
+	
+    LPSPropTagArray pKeywordTagArray = NULL;
+    HRESULT hr = m_pMessage->GetIDsFromNames( 1, &pNames, 0, &pKeywordTagArray );
+    if(FAILED(hr))
+    {
+        return pKeywords; 
+    }
+
+    ULONG pr_keywords = pKeywordTagArray->aulPropTag[0] | PT_MV_TSTRING;
+    MAPIFreeBuffer( pKeywordTagArray );
+
+    LPSPropValue pPropVal = NULL;
+    hr = HrGetOneProp(m_pMessage, pr_keywords, (LPSPropValue*)&pPropVal );
+
+    if( SUCCEEDED(hr) && pPropVal->ulPropTag == pr_keywords )
+    {
+	int nKeywords = pPropVal->Value.MVSZ.cValues;
+        if (nKeywords > 0)
+        {
+            pKeywords = new std::vector<LPWSTR>();
+	    for( int i = 0; i < nKeywords; i++ )
+	    {
+	        LPTSTR pKeyword = pPropVal->Value.MVSZ.LPPSZ[i];
+	        LPWSTR pDest = NULL;
+	        CopyString( pDest, pKeyword );
+                LPWSTR pEscapedKeyword = Zimbra::MAPI::Util::EscapeCategoryName(pDest);
+	        pKeywords->push_back( pEscapedKeyword );
+	    }
+        }
+    }
+	
+    MAPIFreeBuffer( pPropVal );
+    return pKeywords;
+}
+
 bool MAPIMessage::TextBody(LPTSTR *ppBody, unsigned int &nTextChars)
 {
     if (m_pMessagePropVals[TEXT_BODY].ulPropTag == PR_BODY)

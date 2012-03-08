@@ -355,6 +355,33 @@ public class ZimbraAPI
         }
     }
 
+    private void ParseCreateTag(string rsp, out string tagID)
+    {
+        tagID = "";
+        if (rsp != null)
+        {
+            int idx = rsp.IndexOf("tag id=");
+
+            if (idx != -1)
+            {
+                XDocument xmlDoc = XDocument.Parse(rsp);
+                XNamespace ns = "urn:zimbraMail";
+
+                foreach (var objIns in xmlDoc.Descendants(ns + "CreateTagResponse"))
+                {
+                    foreach (XElement tagIns in objIns.Elements())
+                    {
+                        foreach (XAttribute mAttr in tagIns.Attributes())
+                        {
+                            if (mAttr.Name == "id")
+                                tagID = mAttr.Value;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     // ////////
 
     // private UploadFile method
@@ -801,6 +828,10 @@ public class ZimbraAPI
             writer.WriteAttributeString("requestId", requestId.ToString());
         writer.WriteStartElement("cn");
         writer.WriteAttributeString("l", folderId);
+        if (contact["tags"].Length > 0)
+        {
+            writer.WriteAttributeString("t", contact["tags"]);
+        }
         foreach (KeyValuePair<string, string> pair in contact)
         {
             string nam = pair.Key;
@@ -941,6 +972,10 @@ public class ZimbraAPI
         writer.WriteAttributeString("l", message.folderId);
         writer.WriteAttributeString("d", message.rcvdDate);
         writer.WriteAttributeString("f", message.flags);
+        if (message.tags.Length > 0)
+        {
+            writer.WriteAttributeString("t", message.tags);
+        }
         if (isInline)
         {
             WriteNVPair(writer, "content", System.Text.Encoding.Default.GetString(
@@ -2046,6 +2081,71 @@ public class ZimbraAPI
         if (dcfReturnVal == 0)
             dFolderMap.Add(FolderPath, folderID);
         return dcfReturnVal;
+    }
+
+    private void CreateTagRequest(XmlWriter writer, string tag, string color, int requestId)
+    {
+        writer.WriteStartElement("CreateTagRequest", "urn:zimbraMail");
+        if (requestId != -1)
+            writer.WriteAttributeString("requestId", requestId.ToString());
+        writer.WriteStartElement("tag");
+        writer.WriteAttributeString("name", tag);
+        writer.WriteAttributeString("color", color);
+        writer.WriteEndElement();               // tag
+        writer.WriteEndElement();               // CreateTagRequest
+    }
+
+    public int CreateTag(string tag, string color, out string tagID)
+    {
+        tagID = "";
+        lastError = "";
+
+        int retval = 0;
+        WebServiceClient client = new WebServiceClient
+        {
+            Url = ZimbraValues.GetZimbraValues().Url,
+            WSServiceType =
+                WebServiceClient.ServiceType.Traditional
+        };
+        StringBuilder sb = new StringBuilder();
+        XmlWriterSettings settings = new XmlWriterSettings();
+
+        settings.OmitXmlDeclaration = true;
+        using (XmlWriter writer = XmlWriter.Create(sb, settings))
+        {
+            writer.WriteStartDocument();
+            writer.WriteStartElement("soap", "Envelope",
+                "http://www.w3.org/2003/05/soap-envelope");
+
+            WriteHeader(writer, true, true, true);
+
+            writer.WriteStartElement("Body", "http://www.w3.org/2003/05/soap-envelope");
+
+            CreateTagRequest(writer, tag, color, -1);
+
+            writer.WriteEndElement();           // soap body
+            writer.WriteEndElement();           // soap envelope
+            writer.WriteEndDocument();
+        }
+
+        string rsp = "";
+
+        client.InvokeService(sb.ToString(), out rsp);
+        retval = client.status;
+        if (client.status == 0)
+        {
+            ParseCreateTag(rsp, out tagID);       // get the id
+        }
+        else
+        {
+            string soapReason = ParseSoapFault(client.errResponseMessage);
+
+            if (soapReason.Length > 0)
+                lastError = soapReason;
+            else
+                lastError = client.exceptionMessage;
+        }
+        return retval;
     }
 
     private bool IAmTheOrganizer(string theOrganizer)

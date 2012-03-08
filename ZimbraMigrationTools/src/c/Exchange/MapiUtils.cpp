@@ -2807,3 +2807,94 @@ wstring Zimbra::MAPI::Util::CommonDateString(FILETIME ft)
 
     return retval;
 }
+
+LPWSTR Zimbra::MAPI::Util::EscapeCategoryName(LPCWSTR pwszOrigCategoryName)
+{
+    // replace all colons with spaces
+    // replace all double quotes with single quotes
+    // replace all forward slashes with back slashes
+    // remove all back slashes at the beginning of the string
+
+    // worst case is this string is just as long as the original
+    LPWSTR pwszString = new WCHAR[wcslen(pwszOrigCategoryName) + 1];
+
+    int length = (int)wcslen(pwszOrigCategoryName);
+    int counter = 0;
+    for(counter = 0; counter < length; counter++)
+    {
+        WCHAR theChar = pwszOrigCategoryName[counter];
+
+        // now build the new string as we want it
+	if (theChar < 0x20) // replace control character with space
+        {           
+            pwszString[counter] = L' ';        
+        }
+        else if ((theChar == L'\\')&&(counter == 0)) // replace first backslash with a minus
+        {            
+            pwszString[counter] = L'-';  
+        }
+        else if(theChar == L':')     // replace colons with pipe
+        {            
+            pwszString[counter] = L'|';        
+        } 
+        else if(theChar == L'\"')    // replace double quotes with single quotes
+        {           
+           pwszString[counter] = L'\'';        
+        }
+        else if(theChar == L'/')
+        {
+            if(counter == 0)
+            {
+                // if the forward slash is the first, character
+                // we need to change it to a minus instead
+                // of a backslash
+                pwszString[counter] = L'-';   
+            }
+            else
+            {               
+                pwszString[counter] = L'\\';   // replace forward slashes with back slash
+            }
+        }
+        else
+        {
+            pwszString[counter] = theChar;
+        }
+    }
+    
+    // add the null terminator
+    pwszString[counter] = L'\0';
+
+    //trim leading and trailing spaces
+    int nNonSpaceStart = 0;
+    int nNonSpaceEnd = length - 1;
+
+    while(pwszString[nNonSpaceStart] == L' ')
+	nNonSpaceStart++;
+
+    while(pwszString[nNonSpaceEnd] == L' ')
+	nNonSpaceEnd--;
+
+    if((nNonSpaceStart == 0) && (nNonSpaceEnd == (length - 1)))
+    {
+	return pwszString;
+    }
+    else if(nNonSpaceEnd < nNonSpaceStart)
+    {
+        delete[] pwszString;
+        return NULL;
+    }
+
+    LPWSTR pwszNoLeadTrailSpace = new WCHAR[nNonSpaceEnd - nNonSpaceStart + 2];
+    int i;
+    for (i = 0, counter = nNonSpaceStart; counter <= nNonSpaceEnd; counter++, i++)
+    {
+        pwszNoLeadTrailSpace[i] = pwszString[counter];
+    }
+    
+    // add the null terminator
+    pwszNoLeadTrailSpace[i] = L'\0';
+
+    delete[] pwszString ;
+
+    return pwszNoLeadTrailSpace;
+}

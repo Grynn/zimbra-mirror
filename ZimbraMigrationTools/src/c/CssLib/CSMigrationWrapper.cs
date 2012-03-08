@@ -244,6 +244,34 @@ public class CSMigrationWrapper
         return retval;
     }
 
+    // if the tag has already been created, just return it; if not, do the req and create it
+    private string DealWithTags(string theTags, MigrationAccount acct, ZimbraAPI api)
+    {
+        string retval = "";
+        string[] tokens = theTags.Split(',');
+        for (int i = 0; i < tokens.Length; i ++)
+        {
+            if (i > 0)
+            {
+                retval += ",";
+            }
+            string token = tokens.GetValue(i).ToString();
+            if (acct.tagDict.ContainsKey(token))
+            {
+                retval += acct.tagDict[token];
+            }
+            else
+            {
+                string tagID = "";  // output from CreateTag
+                string color = (acct.tagDict.Count).ToString(); // color starts at 0, will keep bumping up by 1
+                int stat = api.CreateTag(token, color, out tagID);  // do request and get the numstr back from response
+                acct.tagDict.Add(token, tagID);   // add to existing dict; token is Key, tokenNumstr is Val
+                retval += tagID;
+            }
+        }
+        return retval;
+    }
+
     private bool ProcessIt(MigrationOptions options, foldertype type)
     {
         bool retval = false;
@@ -352,13 +380,26 @@ public class CSMigrationWrapper
                                 }
                                 if (!bSkipMessage)
                                 {
+                                    if (dict["tags"].Length > 0)
+                                    {
+                                        // change the tag names into tag numbers for AddMessage
+                                        string tagsNumstrs = DealWithTags(dict["tags"], Acct, api);
+                                        bool bRet = dict.Remove("tags");
+                                        dict.Add("tags", tagsNumstrs);
+                                    }
                                     dict.Add("folderId", folder.FolderPath);
-                                    dict.Add("tags", "");
                                     stat = api.AddMessage(dict);
                                 }
                             }
                             else if (type == foldertype.Contacts)
                             {
+                                if (dict["tags"].Length > 0)
+                                {
+                                    // change the tag names into tag numbers for AddMessage
+                                    string tagsNumstrs = DealWithTags(dict["tags"], Acct, api);
+                                    bool bRet = dict.Remove("tags");
+                                    dict.Add("tags", tagsNumstrs);
+                                }
                                 stat = api.CreateContact(dict, path);
                             }
                             else if (type == foldertype.Calendar)

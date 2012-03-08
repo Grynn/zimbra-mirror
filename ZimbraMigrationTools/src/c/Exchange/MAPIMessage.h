@@ -136,6 +136,8 @@ public:
     LPSTR DeliveryDateString();
     LPSTR DeliveryUnixString();
 
+    std::vector<LPWSTR>* SetKeywords();
+
     SBinary EntryID() { return m_EntryID; }
     bool TextBody(LPTSTR *ppBody, unsigned int &nTextChars);
 
