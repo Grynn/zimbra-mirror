@@ -159,7 +159,6 @@ AjxPackage.require("zimbraAdmin.domains.view.ZaTaskAuthConfigWizard");
 AjxPackage.require("zimbraAdmin.domains.view.ZaTaskAutoProvDialog");
 AjxPackage.require("zimbraAdmin.domains.view.ZaManualProvConfigDialog");
 AjxPackage.require("zimbraAdmin.domains.view.AddrACL_XFormItem");
-AjxPackage.require("zimbraAdmin.domains.view.ZaNotebookACLListView");
 AjxPackage.require("zimbraAdmin.domains.view.ZaEditDomainAclXDialog");
 AjxPackage.require("zimbraAdmin.domains.view.ZaAddDomainAclXDialog");
 AjxPackage.require("zimbraAdmin.domains.view.ZaGalObjMiniListView");
