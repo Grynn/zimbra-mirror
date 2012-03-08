@@ -97,9 +97,12 @@
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/junixsocket-1.3.jar" sourcepath="/ZimbraCommon/jars-src/junixsocket-1.3.zip"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/icu4j-4.8.1.1.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/ews.jar" sourcepath="/ZimbraCommon/jars-src/ews.zip"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/cassandra-0.7.5.jar"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/libthrift-0.5.jar"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/hector-core-0.7.0-29.jar"/>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/apache-cassandra-0.8.7.jar"/>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/apache-cassandra-thrift-0.8.7.jar"/>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/libthrift-0.6.1.jar"/>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/jamm-0.2.2.jar"/>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/antlr-3.2.jar"/>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/hector-core-0.8.0-4.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/perf4j-0.9.13.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/high-scale-lib-1.1.2.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/jackson-all-1.9.2.jar"/>
