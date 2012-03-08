@@ -102,7 +102,7 @@
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/libthrift-0.6.1.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/jamm-0.2.2.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/antlr-3.2.jar"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/hector-core-0.8.0-4.jar"/>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/hector-core-0.8.0-4-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/perf4j-0.9.13.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/high-scale-lib-1.1.2.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/jackson-all-1.9.2.jar"/>
