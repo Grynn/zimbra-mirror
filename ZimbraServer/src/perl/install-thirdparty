@@ -28,7 +28,6 @@ my $THIRD_PARTY_BUILDS_DIR = "//depot/zimbra/$ARGV[0]/ThirdPartyBuilds/";
 my $P4_ROOT = $THIRD_PARTY_BUILDS_DIR . getPlatformDirName();
 my $JETTY_P4_PATH = "//depot/zimbra/$ARGV[0]/ThirdParty/jetty";
 my %BINARIES = (
-    "bdb" => "5.2.36",
     "curl" => "7.24.0",
     "cyrus-sasl" => "2.1.25.4z",
     "heimdal" => "1.5.2",
