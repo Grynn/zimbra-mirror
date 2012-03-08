@@ -694,16 +694,7 @@ function(ev) {
 			if(domain.rights && domain.rights[ZaDomain.RIGHT_DELETE_DOMAIN])
 				this._toolbar.getButton(ZaOperation.DELETE).setEnabled(true);
 					
-			this._newDomainWizard.popdown();		
-			if(obj[ZaDomain.A_CreateNotebook]=="TRUE") {
-				var params = new Object();
-				params[ZaDomain.A_OverwriteNotebookACLs] = true;
-				params.obj = this._newDomainWizard.getObject();
-				params[ZaDomain.A_OverwriteNotebookACLs] = false;
-					
-				var callback = new AjxCallback(this, this.initNotebookCallback, params);				
-				ZaDomain.initNotebook(obj,callback, this) ;
-			}
+			this._newDomainWizard.popdown();
 		}
 	} catch (ex) {
 		if(ex.code == ZmCsfeException.DOMAIN_EXISTS) {
@@ -711,54 +702,6 @@ function(ev) {
 		} else {
 			this._handleException(ex, "ZaDomainController.prototype._finishNewButtonListener", null, false);
 		}
-	}
-	return;
-}
-
-ZaDomainController.prototype.initNotebookCallback = 
-function (params, resp) {
-	if(!resp)
-		return;
-	if(resp.isException()) {
-		this._handleException(resp.getException(), "ZaDomainController.prototype._initNotebookCallback", null, false);
-		return;
-	} 
-//	if(params[ZaDomain.A_OverwriteNotebookACLs] && params.obj!=null) {
-		var callback = new AjxCallback(this, this.setNotebookAclsCallback);				
-		ZaDomain.setNotebookACLs(params.obj, callback) ;
-//	}	
-	this._currentObject.refresh(false,true);
-	this.show(this._currentObject);
-}
-
-ZaDomainController.prototype.setNotebookAclsCallback = 
-function (resp) {
-	if(!resp)
-		return;
-	if(resp.isException()) {
-		this._handleException(resp.getException(), "ZaDomainController.prototype.setNotebookAclsCallback", null, false);
-		return;
-	} 
-}
-
-
-ZaDomainController.prototype._finishDomainNotebookListener =
-function(ev) {
-	try {
-		var obj = this._initDomainNotebookWiz.getObject();
-		if(obj[ZaDomain.A_NotebookAccountPassword] != obj[ZaDomain.A_NotebookAccountPassword2]) {
-			this.popupErrorDialog(ZaMsg.ERROR_PASSWORD_MISMATCH);
-			return;
-		}
-		this._initDomainNotebookWiz.popdown();
-		var params = new Object();
-		params.obj = obj;
-			
-		var callback = new AjxCallback(this, this.initNotebookCallback, params);
-		ZaDomain.initNotebook(this._initDomainNotebookWiz.getObject(),callback, this) ;
-	} catch (ex) {
-		this._initDomainNotebookWiz.popdown();
-		this._handleException(ex, "ZaDomainController.prototype._finishDomainNotebookListener", null, false);
 	}
 	return;
 }
@@ -800,18 +743,6 @@ function (resp) {
 		this._errorDialog.popup();
 	}
 	
-}
-
-ZaDomainController.prototype._initNotebookButtonListener = 
-function (ev) {
-	try {
-		this._initDomainNotebookWiz = ZaApp.getInstance().dialogs["initDomainNotebookWiz"] = new ZaDomainNotebookXWizard(this._container);	
-		this._initDomainNotebookWiz.registerCallback(DwtWizardDialog.FINISH_BUTTON, ZaDomainController.prototype._finishDomainNotebookListener, this, null);			
-		this._initDomainNotebookWiz.setObject(this._currentObject);
-		this._initDomainNotebookWiz.popup();
-	} catch (ex) {
-		this._handleException(ex, "ZaDomainController.prototype._initNotebookButtonListener", null, false);
-	}	
 }
 
 ZaDomainController.prototype._handleException = 

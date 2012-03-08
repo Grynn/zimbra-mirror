@@ -954,11 +954,6 @@ ZaDomain.canConfigureAutoProv = function (obj) {
 		&& ZaItem.hasWritePermission(ZaDomain.A_zimbraAutoProvBatchSize,obj));
 }
 
-ZaDomain.canConfigureWiki = function (obj) {
-	if(ZaItem.hasRight(ZaDomain.RIGHT_CREATE_ACCOUNT,obj) && ZaItem.hasWritePermission(ZaDomain.A_zimbraNotebookAccount,obj) && ZaItem.hasRight(ZaDomain.RIGHT_ADMIN_LOGIN_AS,obj))
-		return true;
-}
-
 ZaDomain.testAuthSettings = 
 function (obj, callback) {
 	var soapDoc = AjxSoapDoc.create("CheckAuthConfigRequest", ZaZimbraAdmin.URN, null);
@@ -1040,101 +1035,6 @@ ZaDomain.getGrantNotebookACLsRequest = function (obj, soapDoc) {
 			perms+=a;
 	}
 	grantEl.setAttribute("perm", perms);				
-}
-
-ZaDomain.getNotebookACLsRequestOld = function (obj, soapDoc) {
-	if(obj.notebookAcls) {
-		for(var gt in obj.notebookAcls) {
-			if(obj.notebookAcls[gt] instanceof Array) {
-				var grants = obj.notebookAcls[gt];
-				var cnt = grants.length;
-				for (var i =0; i < cnt; i++) {
-					var grantObj = grants[i];
-					if(!grantObj.name || !grantObj.acl)
-						continue;
-						
-					var folderActionRequest = soapDoc.set("FolderActionRequest", null, null, "urn:zimbraMail");
-					var actionEl = soapDoc.set("action", "",folderActionRequest);	
-					actionEl.setAttribute("id", ZaDomain.WIKI_FOLDER_ID);	
-					actionEl.setAttribute("op", "grant");					
-					var grantEl = soapDoc.set("grant", "",actionEl);
-					grantEl.setAttribute("gt", gt);
-					grantEl.setAttribute("d", grantObj.name);
-					var perms = "";
-					for(var a in grantObj.acl) {
-						if(grantObj.acl[a]==1)
-							perms+=a;
-					}	
-					grantEl.setAttribute("perm", perms);				
-				}
-			} else {
-				var folderActionRequest = soapDoc.set("FolderActionRequest", null, null, "urn:zimbraMail");
-				var actionEl = soapDoc.set("action", "",folderActionRequest);
-				actionEl.setAttribute("id", ZaDomain.WIKI_FOLDER_ID);	
-				actionEl.setAttribute("op", "grant");	
-				var grantEl = soapDoc.set("grant", "",actionEl);	
-				grantEl.setAttribute("gt", gt);
-				if(gt==ZaDomain.A_NotebookDomainACLs) {
-					grantEl.setAttribute("d", obj.attrs[ZaDomain.A_domainName]);
-				}
-				var perms = "";
-				for(var a in obj.notebookAcls[gt]) {
-					if(obj.notebookAcls[gt][a]==1)
-						perms+=a;
-				}
-				grantEl.setAttribute("perm", perms);					
-			}
-		}
-	}
-}
-
-ZaDomain.setNotebookACLs = function (obj, callback) {
-	var soapDoc = AjxSoapDoc.create("BatchRequest", "urn:zimbra");
-	soapDoc.setMethodAttribute("onerror", "stop");
-	ZaDomain.getNotebookACLsRequestOld	(obj,soapDoc);			
-	var command = new ZmCsfeCommand();
-	var params = new Object();
-	params.soapDoc = soapDoc;
-	params.noAuthToken = true;
-	params.accountName = obj.attrs[ZaDomain.A_zimbraNotebookAccount];
-			
-	if(callback) {
-		params.asyncMode = true;
-		params.callback = callback;
-	}
-	command.invoke(params);				
-}
-
-ZaDomain.initNotebook = function (obj, callback, controller) {
-	var soapDoc = AjxSoapDoc.create("InitNotebookRequest", ZaZimbraAdmin.URN, null);
-	if(obj[ZaDomain.A_NotebookTemplateDir]) {
-		var attr = soapDoc.set("template", obj[ZaDomain.A_NotebookTemplateDir]);
-		if(obj[ZaDomain.A_NotebookTemplateFolder]) {
-			attr.setAttribute("dest", obj[ZaDomain.A_NotebookTemplateFolder]);			
-		}
-	}
-	
-	if(obj.attrs[ZaDomain.A_zimbraNotebookAccount]) {
-		var attr = soapDoc.set("name", obj.attrs[ZaDomain.A_zimbraNotebookAccount]);
-		if(obj[ZaDomain.A_NotebookAccountPassword]) {
-			soapDoc.set("password", obj[ZaDomain.A_NotebookAccountPassword]);			
-		}
-	}
-	var attr = soapDoc.set("domain", obj.attrs[ZaDomain.A_domainName]);
-	attr.setAttribute("by", "name");
-	
-	//var command = new ZmCsfeCommand();
-	var params = new Object();
-	params.soapDoc = soapDoc;
-	if(callback) {
-		params.asyncMode = true;
-		params.callback = callback;
-	}
-	var reqMgrParams = {
-		controller : controller,
-		busyMsg : ZaMsg.BUSY_INIT_NOTEBOOK
-	}
-	ZaRequestMgr.invoke(params, reqMgrParams);	
 }
 
 ZaDomain.testSyncSettings = function (obj, callback){

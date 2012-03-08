@@ -876,13 +876,6 @@ function(ev) {
 			this._newDomainWizard.popdown();
 			//if creation took place - fire an DomainChangeEvent
 			this._fireDomainCreationEvent(domain);
-			if(this._newDomainWizard.getObject()[ZaDomain.A_CreateNotebook]=="TRUE") {
-				var params = new Object();
-				params.obj = obj;
-				var callback = new AjxCallback(this, this.initNotebookCallback, params);				
-				ZaDomain.initNotebook(obj,callback, this) ;
-			}			
-		
 			var evt = new ZaEvent(ZaEvent.S_DOMAIN);
 			evt.set(ZaEvent.E_CREATE, this);
 			evt.setDetails(domain);
@@ -981,29 +974,4 @@ function(ev) {
 		this._handleException(ex, "ZaDomainListController.prototype._finishGalButtonListener", null, false);
 	}
 	return;
-}
-
-ZaDomainListController.prototype.initNotebookCallback = 
-function (params, resp) {
-	if(!resp)
-		return;
-	if(resp.isException()) {
-		this._handleException(resp.getException(), "ZaDomainListController.prototype.initNotebookCallback", null, false);
-		return;
-	} 
-//	if(params[ZaDomain.A_OverwriteNotebookACLs] && params.obj!=null) {
-	var callback = new AjxCallback(this, this.setNotebookAclsCallback);				
-	ZaDomain.setNotebookACLs(params.obj, callback) ;
-//	}
-	
-}
-
-ZaDomainListController.prototype.setNotebookAclsCallback = 
-function (resp) {
-	if(!resp)
-		return;
-	if(resp.isException()) {
-		this._handleException(resp.getException(), "ZaDomainListController.prototype.setNotebookAclsCallback", null, false);
-		return;
-	} 
 }
