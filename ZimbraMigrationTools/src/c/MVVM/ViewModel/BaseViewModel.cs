@@ -195,7 +195,12 @@ public class BaseViewModel: INotifyPropertyChanged
                 if (optionsModel.FoldersToSkip.Length > 0)
                 {
                     string[] nameTokens = optionsModel.FoldersToSkip.Split(',');
-                    for (int i = 0; i < nameTokens.Length; i++)
+                    int numToSkip = nameTokens.Length;
+                    if (m_config.AdvancedImportOptions.FoldersToSkip == null)
+                    {
+                        m_config.AdvancedImportOptions.FoldersToSkip = new Folder[numToSkip];
+                    }
+                    for (int i = 0; i < numToSkip; i++)
                     {
                         Folder folder = new Folder();
                         folder.FolderName = nameTokens.GetValue(i).ToString();
