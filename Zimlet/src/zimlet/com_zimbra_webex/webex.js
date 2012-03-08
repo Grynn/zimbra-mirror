@@ -750,7 +750,7 @@ WebExZimlet.prototype._getCreateOrModifyMeetingRequest = function(params, callba
         recurrence,
         "</bodyContent>"].join("");
 
-    this._invokeTspAccount(requestBody, callback);
+    this._getTspAccount(requestBody, callback);
 };
 
 /**
@@ -1236,7 +1236,7 @@ WebExZimlet.prototype.newSecurityContext = function(securityParams) {
 
 	return ["<securityContext>",
 		"<webExID>", name, "</webExID>",
-		"<password>", pwd, "</password>",
+		"<password>", AjxStringUtil.htmlEncode(pwd), "</password>",
 		"<siteName>", companyId, "</siteName>",
 		"</securityContext>"].join("");
 };
