@@ -962,7 +962,7 @@ LPCWSTR MAPIAccessAPI::GetExchangeRules(vector<CRule> &vRuleList)
         LPACTIONS pActions = 0;
         ULONG ulWarnings = 0;
 
-        //dlogd(L"Begin Rules Migration");
+        dlogi(L"Begin Rules Migration");
 
         CRuleProcessor* pRuleProcessor = new CRuleProcessor(m_zmmapisession, m_userStore, m_strUserAccount);
 
@@ -985,12 +985,12 @@ LPCWSTR MAPIAccessAPI::GetExchangeRules(vector<CRule> &vRuleList)
             rule.SetActive(1);                      // if it was inactive in Exchange, we'd never see it
             if (rulename.length() == 0)
             {
-                //dlogd(L"Rule", lPos, L"has no name");
+                dlogw(L"Rule", lPos, L"has no name");
                 lPos++;
                 continue;
             }
  
-            //dlogd(L"Processing rule", rulename.c_str());
+            dlogi(L"Processing rule", rulename.c_str());
 
             pRestriction = (LPSRestriction)lppRows->aRow[lPos].lpProps[5].Value.x;
 
@@ -1004,7 +1004,7 @@ LPCWSTR MAPIAccessAPI::GetExchangeRules(vector<CRule> &vRuleList)
             rule.GetConditions(listRuleConditions);
             if (listRuleConditions.size() == 0)
             {
-                //dlogd(L"Rule", rulename.c_str(), L"has no conditions supported by Zimbra -- skipping");
+                dlogw(L"Rule", rulename.c_str(), L"has no conditions supported by Zimbra -- skipping");
                 bRes = false;
             }
 
@@ -1023,17 +1023,17 @@ LPCWSTR MAPIAccessAPI::GetExchangeRules(vector<CRule> &vRuleList)
             rule.GetActions(listRuleActions);
             if (listRuleActions.size() == 0)
             {
-                //dlogd(L"Rule", rulename.c_str(), L"has no actions supported by Zimbra -- skipping");
+                dlogw(L"Rule", rulename.c_str(), L"has no actions supported by Zimbra -- skipping");
                 bAct = false;
             }
             if (bRes && bAct)
             {
                 vRuleList.push_back(rule);
-                //dlogd(L"Processed rule", rulename.c_str());
+                dlogd(L"Processed rule", rulename.c_str());
             }
             else
             {
-                //dlogd(L"Unable to import rule", rulename.c_str());
+                dlogw(L"Unable to import rule", rulename.c_str());
                 ulWarnings++;
             }
             lPos++;

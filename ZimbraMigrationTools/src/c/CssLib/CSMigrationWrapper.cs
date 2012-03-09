@@ -595,7 +595,6 @@ public class CSMigrationWrapper
                         dict.Add(Key, Value);
                     }
                     api.AccountName = Acct.AccountName;
-                    Log.info("Migrating Rules");
                     int stat = api.AddRules(dict);
                     Acct.migrationFolder.CurrentCountOfItems = 1;
                 }

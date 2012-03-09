@@ -1,4 +1,5 @@
 #include "common.h"
+#include "Logger.h"
 #include "Exchange.h"
 #include "MAPIRules.h"
 // #include <strsafe.h>
@@ -502,7 +503,7 @@ bool CRuleProcessor::ProcessRestrictions(CRule &rule, LPSRestriction pRestrictio
 
     if (pRestriction == NULL)
     {
-        //TRACE(_T("NULL Restriction"));
+        dlogw("NULL Restriction");
         return false;
     }
     switch (pRestriction->rt)
@@ -590,12 +591,12 @@ bool CRuleProcessor::ProcessRestrictions(CRule &rule, LPSRestriction pRestrictio
             }
             else if (strcmp(pProp->Value.lpszA, "IPM.Note.Rules.OofTemplate.Microsoft") == 0)
             {
-                //TRACE(_T("'which is an automatic reply' condition not supported"));
+                dlogw("'which is an automatic reply' condition not supported");
                 rule.SetActive(0);
             }
             else if (strncmp(pProp->Value.lpszA, "IPM.Note.", 9) == 0)
             {
-                //TRACE(_T("'uses the form' condition not supported"));
+                dlogw("'uses the form' condition not supported");
                 rule.SetActive(0);
             }
             break;
@@ -616,7 +617,8 @@ bool CRuleProcessor::ProcessRestrictions(CRule &rule, LPSRestriction pRestrictio
         }
 
         default:
-            //TRACE(_T("Restriction content property %0x not supported"), pProp->ulPropTag);
+            //dlogw("Restriction content property", pProp->ulPropTag, "not supported");
+            dlogw("Restriction content property not supported");
             rule.SetActive(0);
         }
         break;
@@ -776,27 +778,29 @@ bool CRuleProcessor::ProcessRestrictions(CRule &rule, LPSRestriction pRestrictio
 
         case PROP_ID(PR_FLAG_STATUS):
         {
-            //TRACE(_T("'flagged for action' %s not supported"), wMode);
+            dlogw("'flagged for action'", wMode, "not supported");
             rule.SetActive(0);
             break;
         }
 
         case PROP_ID(PR_MESSAGE_CLASS):
         {
-            //TRACE(_T("'RSS feed %s not supported"), wMode);
+            dlogw("'RSS Feed'", wMode, "not supported");
             rule.SetActive(0);
             break;
         }
 
         case PROP_ID(PR_DISPLAY_CC):
         {
-            //TRACE(_T("'sent only to me' %s not supported"), wMode);
+            dlogw("'sent only to me'", wMode, "not supported");
+
             rule.SetActive(0);
             break;
         }
 
         default:
-            //TRACE(_T("Restriction property %0x not supported"), pProp->ulPropTag);
+            //dlogw("Restriction property", pProp->ulPropTag, "not supported");
+            dlogw("Restriction content property not supported");
             rule.SetActive(0);
         }
         break;
@@ -861,7 +865,7 @@ bool CRuleProcessor::ProcessRestrictions(CRule &rule, LPSRestriction pRestrictio
     {
         if (rule.GetOrProcessed())
         {
-            //TRACE(_T("mixed OR and AND conditions not supported"));
+            dlogw("mixed OR and AND conditions not supported");
             bRetval = false;
         }
         ProcessRestrictions(rule, pRestriction->res.resNot.lpRes, TRUE, RES_NOT);
@@ -930,28 +934,25 @@ bool CRuleProcessor::ProcessRestrictions(CRule &rule, LPSRestriction pRestrictio
 
         if ((PROP_ID(ulPropTag)) == (PROP_ID(PR_MESSAGE_CLASS)))
         {
-            /*
-            TRACE(_T("Client-only %s not yet supported.  Possible conditions causing this:"),
-                wMode);
-            TRACE(_T("   sender is in specified address book"));
-            TRACE(_T("   through specified account"));
-            TRACE(_T("   assigned to category"));
-            TRACE(_T("   with selected properties of documents of forms"));
-            TRACE(_T("   with specific words in the recipient's address"));
-            TRACE(_T("   no conditions specified"));
-            */
+            dlogw("Client-only", wMode, "not yet supported.  Possible conditions causing this:");
+            dlogw("   sender is in specified address book");
+            dlogw("   through specified account");
+            dlogw("   assigned to category");
+            dlogw("   with selected properties of documents of forms");
+            dlogw("   with specific words in the recipient's address");
+            dlogw("   no conditions specified");
             rule.SetActive(0);
         }
         else if (PROP_ID(ulPropTag) == 0x8008)
         {
-            //TRACE(_T("'assigned to any category' %s not supported"), wMode);
+            dlogw("'assigned to any category'", wMode, "not supported");
             rule.SetActive(0);
         }
         break;
     }
 
     default:
-        //TRACE(_T("Restriction type %d not supported"), pRestriction->rt);
+        dlogw("Restriction type", pRestriction->rt, "not supported");
         rule.SetActive(0);
     }
     return bRetval;
@@ -972,7 +973,7 @@ bool CRuleProcessor::ProcessActions(CRule &rule, LPACTIONS pActions)
 
     if (pActions == NULL)
     {
-        //TRACE(_T("NULL Actions"));
+        dlogw("NULL Actions");
         return false;
     }
     for (i = 0; i < pActions->cActions; i++)
@@ -1015,7 +1016,7 @@ bool CRuleProcessor::ProcessActions(CRule &rule, LPACTIONS pActions)
             }
             else
             {
-               // TRACE(_T("Unable to determine folder path"));
+                dlogw("Unable to determine folder path");
                 rule.SetActive(0);
             }
             break;
@@ -1023,7 +1024,7 @@ bool CRuleProcessor::ProcessActions(CRule &rule, LPACTIONS pActions)
 
         case OP_COPY:
         {
-            //TRACE(_T("'move a copy to the specified folder' action is not supported"));
+            dlogw("'move a copy to the specified folder' action is not supported");
             rule.SetActive(0);
             break;
         }
@@ -1035,12 +1036,12 @@ bool CRuleProcessor::ProcessActions(CRule &rule, LPACTIONS pActions)
 
             if (action.ulActionFlavor == 3)
             {
-                //TRACE(_T("'redirect' action is not supported"));
+                dlogw("'redirect' action is not supported");
                 rule.SetActive(0);
             }
             else if (action.ulActionFlavor == 4)
             {
-                //TRACE(_T("'forward as an attachment' action is not supported"));
+                dlogw("'forward as an attachment' action is not supported");
                 rule.SetActive(0);
             }
             else
@@ -1075,7 +1076,7 @@ bool CRuleProcessor::ProcessActions(CRule &rule, LPACTIONS pActions)
                     }
                     else
                     {
-                        //TRACE(_T("Unable to determine address"));
+                        dlogw("Unable to determine address");
                         rule.SetActive(0);
                     }
                 }
@@ -1085,14 +1086,14 @@ bool CRuleProcessor::ProcessActions(CRule &rule, LPACTIONS pActions)
 
         case OP_REPLY:
         {
-            //TRACE(_T("'have server reply using a specific message' action is not supported"));
+            dlogw("'have server reply using a specific message' action is not supported");
             rule.SetActive(0);
             break;
         }
 
         case OP_TAG:
         {
-            //TRACE(_T("'clear message\'s categories' action is not supported"));
+            dlogw("'clear message\'s categories' action is not supported");
             rule.SetActive(0);
             break;
         }
@@ -1130,12 +1131,11 @@ bool CRuleProcessor::ProcessActions(CRule &rule, LPACTIONS pActions)
                             ruleAction.m_ruleAction = RuleActionFromString(L"flag");
                             ruleAction.m_wstrArg = L"flagged";
                             rule.AddAction(ruleAction);
-                            //TRACE(_T(
-                            //    "Deferred action 'flag message'.  If there are other non-deferred actions on this rule, you must re-add them."));
+                            dlogw("Deferred action 'flag message'.  If there are other non-deferred actions on this rule, you must re-add them.");
                         }
                         else
                         {
-                            //TRACE(_T("Follow up actions other than today are not supported"));
+                            dlogw("Follow up actions other than today are not supported");
                         }
                     }
                 }
@@ -1156,17 +1156,14 @@ bool CRuleProcessor::ProcessActions(CRule &rule, LPACTIONS pActions)
                     ruleAction.m_wstrArg = pWTagname;
                     rule.AddAction(ruleAction);
                     delete[] pWTagname;
-                    //TRACE(_T(
-                    //    "Deferred action 'assign to category'.  If there are other non-deferred actions on this rule, you must re-add them."));
+                    dlogw("Deferred action 'assign to category'.  If there are other non-deferred actions on this rule, you must re-add them.");
                 }
-
                 if (memmem(lpData, cbData, PermDelete, 10))     // hokey
                 {
                     bRecognize = true;
                     ruleAction.m_ruleAction = RuleActionFromString(L"discard");
                     rule.AddAction(ruleAction);
-                    //TRACE(_T(
-                    //    "Deferred action 'permanently delete it'.  If there are other non-deferred actions on this rule, you must re-add them."));
+                    dlogw("Deferred action 'permanently delete it'.  If there are other non-deferred actions on this rule, you must re-add them.");
                 }
                 if (memmem(lpData, cbData, MarkAsRead, 10))     // hokey
                 {
@@ -1174,38 +1171,36 @@ bool CRuleProcessor::ProcessActions(CRule &rule, LPACTIONS pActions)
                     ruleAction.m_ruleAction = RuleActionFromString(L"flag");
                     ruleAction.m_wstrArg = L"read";
                     rule.AddAction(ruleAction);
-                    //TRACE(_T(
-                    //    "Deferred action 'mark as read'.  If there are other non-deferred actions on this rule, you must re-add them."));
+                    dlogw("Deferred action 'mark as read'.  If there are other non-deferred actions on this rule, you must re-add them.");
                 }
                 if (memmem(lpData, cbData, ClearMFlag, 10))     // hokey
                 {
                     bRecognize = true;
-                    //TRACE(_T("clear message flag action not supported"));
+                    dlogw("clear message flag action not supported");
                     rule.SetActive(0);
                 }
                 if (memmem(lpData, cbData, PlayASound, 6))      // hokey
                 {
                     bRecognize = true;
-                    //TRACE(_T("play a sound action not supported"));
+                    dlogw("play a sound action not supported");
                     rule.SetActive(0);
                 }
                 if (!bRecognize)
                 {
-                    //TRACE(_T("This client-only rule is not supported"));
+                    dlogw("This client-only rule is not supported");
                     bRetval = false;
                 }
             }
             else
             {
-                //TRACE(_T(
-                //    "This client-only rule is not supported -- internal processing error"));
+                dlogw("This client-only rule is not supported -- internal processing error");
                 bRetval = false;
             }
             break;
         }
 
         default:
-            //TRACE(_T("Action type not supported"));
+            dlogw("Action type not supported");
             bRetval = false;
         }
     }
@@ -1473,9 +1468,18 @@ void CRuleMap::WriteFilterActions(CRule &rule, LPWSTR &filterActions)
             lstrcat(filterActions, L"actionRedirect`~a`~");
             lstrcat(filterActions, wstrActionArg.c_str());
         }
+        if (0 == lstrcmpiW((LPCWSTR)wstrActionName.c_str(), L"keep"))
+        {
+            lstrcat(filterActions, L"actionKeep");
+        }
         if (0 == lstrcmpiW((LPCWSTR)wstrActionName.c_str(), L"discard"))
         {
             lstrcat(filterActions, L"actionDiscard");
+        }
+        if (0 == lstrcmpiW((LPCWSTR)wstrActionName.c_str(), L"flag"))
+        {
+            lstrcat(filterActions, L"actionFlag`~flagName`~");
+            lstrcat(filterActions, wstrActionArg.c_str());
         }
         if (0 == lstrcmpiW((LPCWSTR)wstrActionName.c_str(), L"stop"))
         {

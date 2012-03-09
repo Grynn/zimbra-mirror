@@ -1839,7 +1839,7 @@ public class ZimbraAPI
     {
         // ^^^ is the delimiter for multiple filterTests, and filterActions
         // `~  is the token delimiter for individual filterTests, and filterActions
-        // see CRuleMap::WriteFilterRule, CRuleMap::WriteFilterTtests,CRuleMap::WriteFilterActions
+        // see CRuleMap::WriteFilterRule, CRuleMap::WriteFilterTests,CRuleMap::WriteFilterActions
 
         int i, j;
 
@@ -1887,17 +1887,20 @@ public class ZimbraAPI
         for (i = 0; i < allActions.Length; i++)
         {
             string eachAction = allActions.GetValue(i).ToString();
-            string[] actionTokens = eachAction.Split(new string[] { "`~" }, StringSplitOptions.None);
-            writer.WriteStartElement(actionTokens.GetValue(0).ToString());
-            if ((actionTokens.GetValue(0).ToString() != "actionStop") &&
-                (actionTokens.GetValue(0).ToString() != "actionDiscard"))
+            if (eachAction.Length > 0)    // FBS bug 71271 -- 3/9/12
             {
-                for (j = 1; j < actionTokens.Length; j++)
+                string[] actionTokens = eachAction.Split(new string[] { "`~" }, StringSplitOptions.None); ;
+                writer.WriteStartElement(actionTokens.GetValue(0).ToString());
+                if ((actionTokens.GetValue(0).ToString() != "actionStop") &&
+                    (actionTokens.GetValue(0).ToString() != "actionDiscard"))
                 {
-                    writer.WriteAttributeString(actionTokens.GetValue(j++).ToString(), actionTokens.GetValue(j).ToString());
+                    for (j = 1; j < actionTokens.Length; j++)
+                    {
+                        writer.WriteAttributeString(actionTokens.GetValue(j++).ToString(), actionTokens.GetValue(j).ToString());
+                    }
                 }
+                writer.WriteEndElement();   // actionTokens.GetValue(i)
             }
-            writer.WriteEndElement();   // actionTokens.GetValue(i)
         }
         writer.WriteEndElement();   // filterActions
 
