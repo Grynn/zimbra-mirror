@@ -1026,7 +1026,7 @@ function(mods) {
 			if(cnt) {
 				for(var ix=0; ix <cnt; ix++) {
 					var attr = null;
-					if(mods[aname][ix] instanceof String) {
+					if(mods[aname][ix] instanceof String || AjxUtil.isString(mods[aname][ix])) {
 						if(AjxUtil.isEmpty(mods[aname][ix])) {
 							continue;
 						}
