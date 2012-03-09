@@ -1188,7 +1188,7 @@ function() {
     ti = new ZaTreeItemData({
                                     parent:ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_search, ZaMsg.OVP_search]),
                                     id:ZaId.getTreeItemId(ZaId.PANEL_APP,"currentSearch",null, "dlResult"),
-                                    text: ZaMsg.OVP_dlSearchResult,
+                                    text: ZabMsg.OVP_dlSearchResult,
                                     mappingId: ZaZimbraAdmin._SEARCH_RESULT_VIEW});
     ti.setData("TreeItemType", ZaItem.DL);
     tree.addTreeItemData(ti);
