@@ -136,7 +136,7 @@ public abstract class DesktopMailbox extends Mailbox {
         } catch (MailServiceException.NoSuchItemException x) {
             CreateFolder redo = new CreateFolder(getId(), FAILURE_PATH,
                 ID_FOLDER_USER_ROOT, Folder.FOLDER_IS_IMMUTABLE,
-                MailItem.Type.MESSAGE, 0, MailItem.DEFAULT_COLOR_RGB, null);
+                MailItem.Type.MESSAGE, 0, MailItem.DEFAULT_COLOR_RGB, null, null);
 
             redo.setFolderIdAndUuid(ID_FOLDER_FAILURE, UUIDUtil.generateUUID());
             redo.start(System.currentTimeMillis());
