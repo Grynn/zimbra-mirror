@@ -27,7 +27,7 @@ import com.zimbra.cs.offline.common.OfflineConstants;
 
 /**
  * directory:
- *          entry_id | entry_type | entry_name             | zimbraId | 
+ *          entry_id | entry_type | entry_name  | zimbraId 
  *              dd   |   Gal      | xxx.com     |  aaaa-bbbb-cccc-dddd
  *
  * directory_attrs:
