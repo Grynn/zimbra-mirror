@@ -525,7 +525,7 @@ function() {
 DwtBaseDialog.prototype._dragStart = 
 function (x, y){
 	// fix for bug 3177
-	if (AjxEnv.isNav) {
+	if (AjxEnv.isNav && !this._ignoreSetDragBoundries) {
 		this._currSize = this.getSize();
 		DwtDraggable.setDragBoundaries(DwtDraggable.dragEl, 0, document.body.offsetWidth - this._currSize.x, 0, 
 									   document.body.offsetHeight - this._currSize.y);
