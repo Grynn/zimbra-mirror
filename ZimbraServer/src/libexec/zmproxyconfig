@@ -200,6 +200,7 @@ if ($options{e}) {
                if ($options{x}) {
                  $proxyMailMode=$options{x};
                }
+               my $mailMode = getStoreMailMode();
                chomp($proxyMailMode);
                print ZMPROV "ms $hostname ".
                "zimbraMailReferMode reverse-proxied ".
@@ -207,7 +208,7 @@ if ($options{e}) {
                "zimbraMailProxyPort $w2 ".
                "zimbraMailSSLPort $w3 ".
                "zimbraMailSSLProxyPort $w4 ".
-               "zimbraMailMode http ".
+               "zimbraMailMode $mailMode ".
                "zimbraReverseProxyMailMode $proxyMailMode ".
                "zimbraReverseProxyLookupTarget TRUE ".
                "zimbraReverseProxyHttpEnabled TRUE\n";
@@ -233,6 +234,7 @@ if ($options{e}) {
                  "zimbraPop3CleartextLoginEnabled TRUE\n";
             }
             if ($options{w}) {
+               my $mailMode = getStoreMailMode();
                print ZMPROV "ms $hostname ".
                "zimbraMailReferMode reverse-proxied ".
                "zimbraMailPort $w1 ".
@@ -240,7 +242,7 @@ if ($options{e}) {
                "zimbraMailSSLPort $w3 ".
                "zimbraMailSSLProxyPort $w4 ".
                "zimbraReverseProxyLookupTarget TRUE ".
-               "zimbraMailMode http\n";
+               "zimbraMailMode $mailMode\n";
             }
        }
        if (isInstalled("zimbra-proxy")) {
@@ -552,4 +554,28 @@ sub getLocalConfig {
   chomp $val;
   $main::loaded{lc}{$key} = $val;
   return $val;
+}
+
+# bug 71198, the zimbra server's mail mode is not always "http" when enabling proxy
+sub getStoreMailMode {
+    my @res = `/opt/zimbra/bin/zmprov -l gs $hostname zimbraMailMode zimbraReverseProxySSLToUpstreamEnabled\n`;
+    my $mailMode = "http";
+    my $sslToUp = "FALSE";
+
+    if ($res[1] =~ /zimbraMailMode:\ (.+)/) {
+        $mailMode = $1;
+    }
+    if ($res[2] =~ /zimbraReverseProxySSLToUpstreamEnabled:\ (.+)/) {
+        $sslToUp = $1;
+    }
+
+    if ($sslToUp eq "TRUE") {
+        if ($mailMode eq "http" || $mailMode eq "both") {
+            return "both";
+        } else {
+            return "https";
+        }
+    } else {
+        return "http";
+    }
 }
