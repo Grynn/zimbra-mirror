@@ -304,10 +304,11 @@ function() {
 			}
 			var len = domObj.childNodes.length;
             for (var i = 0; i < len; i++) {
-                if (AjxEnv.isWebKitBased && domObj.childNodes[i] != domObj.doctype) {  //workaround for bug 71259 
-                    var importedNode = this.importNode(domObj.childNodes[i], true);
-                    this.appendChild(importedNode);
+                if (AjxEnv.isWebKitBased && domObj.childNodes[i] == domObj.doctype) {
+                    continue;  //workaround for bug 71259
                 }
+                var importedNode = this.importNode(domObj.childNodes[i], true);
+                this.appendChild(importedNode);
             }
 		}
 		
