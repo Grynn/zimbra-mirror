@@ -599,5 +599,8 @@ DwtToolBarButton.PARAMS = ["parent", "style", "className", "posStyle", "actionTi
 DwtToolBarButton.prototype = new DwtButton;
 DwtToolBarButton.prototype.constructor = DwtToolBarButton;
 
+DwtToolBarButton.prototype.isDwtToolBarButton = true;
+DwtToolBarButton.prototype.toString = function() { return "DwtToolBarButton"; };
+
 // Data
 DwtToolBarButton.prototype.TEMPLATE = "dwt.Widgets#ZToolbarButton";

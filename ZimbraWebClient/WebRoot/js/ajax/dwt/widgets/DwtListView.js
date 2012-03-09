@@ -77,12 +77,12 @@ DwtListView = function(params) {
 		
 	this._setMouseEventHdlrs();
 	
-	this._listenerMouseOver = new AjxListener(this, this._mouseOverListener);
-	this._listenerMouseOut = new AjxListener(this, this._mouseOutListener);
-	this._listenerMouseDown = new AjxListener(this, this._mouseDownListener);
-	this._listenerMouseUp = new AjxListener(this, this._mouseUpListener);
-	this._listenerMouseMove = new AjxListener(this, this._mouseMoveListener);
-	this._listenerDoubleClick = new AjxListener(this, this._doubleClickListener);
+	this._listenerMouseOver = this._mouseOverListener.bind(this);
+	this._listenerMouseOut = this._mouseOutListener.bind(this);
+	this._listenerMouseDown = this._mouseDownListener.bind(this);
+	this._listenerMouseUp = this._mouseUpListener.bind(this);
+	this._listenerMouseMove = this._mouseMoveListener.bind(this);
+	this._listenerDoubleClick = this._doubleClickListener.bind(this);
 	this.addListener(DwtEvent.ONMOUSEOVER, this._listenerMouseOver);
 	this.addListener(DwtEvent.ONMOUSEOUT, this._listenerMouseOut);
 	this.addListener(DwtEvent.ONMOUSEDOWN, this._listenerMouseDown);
@@ -294,6 +294,9 @@ function(htmlArr, idx, headerCol, i, numCols, id, defaultColumnSort) {
 			htmlArr[idx++] = headerCol._widthUnits;
 		}
     }
+	if (headerCol._tooltip && this._useBrowserTooltips && !AjxEnv.isFirefox) {
+		htmlArr[idx++] = " title='" + headerCol._tooltip + "'";
+	}
 	htmlArr[idx++] = ">";
 	// must add a div to force clipping :(
 	htmlArr[idx++] = "<div";
@@ -2716,6 +2719,7 @@ function() {
  *        noRemove		[boolean]*	flag indicating whether this column can be removed (overrides visible flag)
  *        view			[constant]	ID of owning view
  *        noSortArrow	[boolean]*	if true, do not show up/down sort arrow in column
+ *        tooltip		[string]*	tooltip
  *        
  * @private
  */
@@ -2734,6 +2738,8 @@ DwtListHeaderItem = function(params) {
 	this._name = params.name || params.text;
 	this._align = params.align;
 	this._noRemove = params.noRemove;
+	this._tooltip = params.tooltip;
+	
 	// width:
 	var w = parseInt(params.width);
 	if (isNaN(w) || !w) {
@@ -2748,14 +2754,12 @@ DwtListHeaderItem = function(params) {
 	}
 };
 
+DwtListHeaderItem.prototype.isDwtListHeaderItem = true;
+DwtListHeaderItem.prototype.toString = function() { return "DwtListHeaderItem"; };
+
 DwtListHeaderItem.PARAMS = ["id", "text", "icon", "width", "sortable", "resizeable", "visible", "name", "align", "noRemove", "view"];
 
 DwtListHeaderItem.sortCompare =
 function(a, b) {
 	return a._index < b._index ? -1 : (a._index > b._index ? 1 : 0);
-};
-
-DwtListHeaderItem.prototype.toString =
-function() {
-	return "DwtListHeaderItem";
 };

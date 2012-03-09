@@ -1652,7 +1652,7 @@ function(width, height) {
  */
 DwtControl.prototype.getToolTipContent =
 function(ev) {
-	if (this._disposed) { return; }
+	if (this._disposed) { return null; }
 
 	return this.__toolTipContent;
 };
@@ -1660,12 +1660,25 @@ function(ev) {
 /**
  * Sets tooltip content for the control. The content may be plain text or HTML.
  *
- * @param {string} text		the tooltip content
+ * @param {string} 	text		the tooltip content
+ * @param {boolean}	useBrowser	if true, try to let browser handle tooltip by setting 'title' attribute
  */
 DwtControl.prototype.setToolTipContent =
-function(text) {
+function(text, useBrowser) {
 	if (this._disposed) { return; }
+	if (useBrowser) {
+		// browser tooltip can't have return, tab, or HTML
+		if (!text || (!text.match(/[\n\r\t]/) && !text.match(/<[a-zA-Z]+/))) {
+			var el = this.getHtmlElement();
+			if (el) {
+				el.title = text;
+				this.__browserToolTip = true;
+				return;
+			}
+		}
+	}
 
+	this._browserToolTip = false;
 	this.__toolTipContent = text;
 };
 
@@ -2520,7 +2533,7 @@ function(ev) {
 DwtControl.prototype.__hasToolTipContent =
 function() {
 	if (this._disposed) { return false; }
-	return Boolean(this.__toolTipContent || (this.getToolTipContent != DwtControl.prototype.getToolTipContent));
+	return Boolean(!this._browserToolTip && (this.__toolTipContent || (this.getToolTipContent != DwtControl.prototype.getToolTipContent)));
 };
 
 /**
@@ -3292,7 +3305,7 @@ DwtControl.prototype.__showToolTip =
 function(event, content) {
 
 	if (!content) { return; }
-    DwtControl.showToolTip(content, event.x, event.y);
+    DwtControl.showToolTip(content, event.x, event.y, this, event);
 	this.__lastTooltipX = event.x;
 	this.__lastTooltipY = event.y;
 	this.__tooltipClosed = false;
@@ -3357,20 +3370,28 @@ if (AjxEnv.isIE) {
  * @param y [Number] The y coordinate of the toolTip.
  */
 DwtControl.showToolTip =
-function(content, x, y) {
+function(content, x, y, obj, hoverEv) {
 	if (!content) { return; }
-	var shell = DwtShell.getShell(window);
-	var tooltip = shell.getToolTip();
+	var tooltip = DwtShell.getShell(window).getToolTip();
 	tooltip.setContent(content);
-	tooltip.popup(x, y);
-}
+	tooltip.popup(x, y, false, false, obj, hoverEv);
+};
 
 /**
  * A helper method to hide the toolTip.
  */
 DwtControl.hideToolTip =
 function() {
-	var shell = DwtShell.getShell(window);
-	var tooltip = shell.getToolTip();
-	tooltip.popdown();
-}
+	DwtShell.getShell(window).getToolTip().popdown();
+};
+
+/**
+ * Returns the element that should be used as a base for positioning the tooltip.
+ * If overridden to return null, the cursor position will be used as the base.
+ * 
+ * @param {DwtHoverEvent}	hoverEv		hover event (from hover mgr)
+ */
+DwtControl.prototype.getTooltipBase =
+function(hoverEv) {
+	return this.getHtmlElement();
+};

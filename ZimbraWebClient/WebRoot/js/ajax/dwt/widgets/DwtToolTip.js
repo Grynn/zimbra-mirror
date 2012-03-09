@@ -14,11 +14,12 @@
  */
 
 /**
- * 
- * @private
+ * Singleton tooltip class.
  */
 DwtToolTip = function(shell, className, dialog) {
-	if (arguments.length == 0) return;
+
+	if (arguments.length == 0) { return; }
+
 	this.shell = shell;
 	this._dialog = dialog;
 	this._poppedUp = false;
@@ -32,29 +33,31 @@ DwtToolTip = function(shell, className, dialog) {
 
     // create html
     // NOTE: This id is ok because there's only ever one instance of a tooltip
-    var templateId = "dwt.Widgets#"+this._borderStyle;
+    var templateId = "dwt.Widgets#" + this._borderStyle;
     this._div.innerHTML = AjxTemplate.expand(templateId, "tooltip");
 
     var params = AjxTemplate.getParams(templateId);
-    this._borderWidth = Number(params.width);
-    this._borderHeight = Number(params.height);
+    this._offsetX = (params.width != null) ? Number(params.width) : DwtToolTip.POPUP_OFFSET_X;
+    this._offsetY = (params.height != null) ? Number(params.height) : DwtToolTip.POPUP_OFFSET_Y;
 
     // save reference to content div
     this._contentDiv = document.getElementById("tooltipContents");
 
     Dwt.setHandler(this._div, DwtEvent.ONMOUSEOVER, AjxCallback.simpleClosure(this._mouseOverListener, this));
-}
-
-DwtToolTip.prototype.toString =
-function() {
-	return "DwtToolTip";
 };
+
+DwtToolTip.prototype.isDwtToolTip = true;
+DwtToolTip.prototype.toString = function() { return "DwtToolTip"; };
 
 //
 // Constants
 //
 
 DwtToolTip.TOOLTIP_DELAY = 750;
+
+DwtToolTip.WINDOW_GUTTER = 5;	// space to leave between tooltip and edge of shell
+DwtToolTip.POPUP_OFFSET_X = 5;	// default horizontal offset from control
+DwtToolTip.POPUP_OFFSET_Y = 5;	// default vertical offset from control
 
 //
 // Data
@@ -78,20 +81,36 @@ function(content, setInnerHTML) {
         this._contentDiv.innerHTML = this._content;
     }
 };
-	
+
+/**
+ * Shows the tooltip. By default, its position will be relative to the location of the
+ * cursor when the mouseover event happened. Alternatively, the control that generated
+ * the tooltip can be passed in, and the tooltip will be positioned relative to it. If
+ * the control is a large composite control (eg a DwtListView), the hover event can be
+ * passed so that the actual target of the event can be found.
+ * 
+ * @param {number}			x					X-coordinate of cursor
+ * @param {number}			y					Y-coordinate of cursor
+ * @param {boolean}			skipInnerHTML		if true, do not copy content to DOM
+ * @param {boolean}			popdownOnMouseOver	if true, hide tooltip on mouseover
+ * @param {DwtControl}		obj					control that tooltip is for (optional)
+ * @param {DwtHoverEvent}	hoverEv				hover event (optional)
+ */
 DwtToolTip.prototype.popup = 
-function(x, y, skipInnerHTML, popdownOnMouseOver) {
+function(x, y, skipInnerHTML, popdownOnMouseOver, obj, hoverEv) {
     if (this._popupAction) {
         AjxTimedAction.cancelAction(this._popupAction);
         this._popupAction = null;
     }
-    this._popdownOnMouseOver = popdownOnMouseOver; // popdownOnMouseOver may be truthy to pop down the tooltip if the mouse hovers over the tooltip. Optionally, it can be an AjxCallback that will be called after popping the tooltip down
+	// popdownOnMouseOver may be true to pop down the tooltip if the mouse hovers over the tooltip. Optionally,
+	// it can be an AjxCallback that will be called after popping the tooltip down.
+    this._popdownOnMouseOver = popdownOnMouseOver;
     if (this._content != null) {
 		if(!skipInnerHTML) {
             this._contentDiv.innerHTML = this._content;
         }
 
-		this._popupAction = new AjxTimedAction(this, this._positionElement, [x, y]);
+		this._popupAction = new AjxTimedAction(this, this._positionElement, [x, y, obj, hoverEv]);
 		AjxTimedAction.scheduleAction(this._popupAction, 5);
 	}
 };
@@ -125,125 +144,56 @@ function() {
 // Protected methods
 //
 
+// Positions the tooltip relative to the base element based on vertical and horizontal offsets.
 DwtToolTip.prototype._positionElement = 
-function(startX, startY) {
+function(startX, startY, obj, hoverEv) {
+	
     this._popupAction = null;
-
-    var element =  this._div;
-	var baseId = "tooltip";
-	var dialog = this._dialog;
-
-	var WINDOW_GUTTER = 5;
-	var POPUP_OFFSET_X = 8;
-	var POPUP_OFFSET_Y = 8;
-
-    var topPointer = document.getElementById(baseId+'TopPointer');
-    topPointer.style.display = "block";
-
-    var size = Dwt.getSize(topPointer),
-		topPointerWidth = size.x,
-		topPointerHeight = size.y
-	;
-
-	var bottomPointer = document.getElementById(baseId+'BottomPointer');
-    bottomPointer.style.display = "block";
-    
-    size = Dwt.getSize(bottomPointer),
-		bottomPointerWidth = size.x,
-		bottomPointerHeight = size.y
-	;
-
-	var pointer = topPointer;
-
-	var wdSize = DwtShell.getShell(window).getSize(),
-		wdWidth = wdSize.x,
-		wdHeight = wdSize.y
-	;
-
-	var popupSize = Dwt.getSize(element),
-		popupWidth = popupSize.x,
-		popupHeight = popupSize.y
-	;
-
-	var topBorderHeight = this._borderHeight,
-		bottomBorderHeight = this._borderHeight,
-		leftBorderWidth = this._borderWidth,
-		rightBorderWidth = this._borderWidth
-	;
-
-	var popupX = startX - popupWidth / 2 - POPUP_OFFSET_X,
-		popupY
-	;
 	
-	var pointerY,
-		pointerX,
-		pointerWidth
-	;
+	var wdSize = DwtShell.getShell(window).getSize();
+	var wdWidth = wdSize.x, wdHeight = wdSize.y;
 
-	// top pointer
-	// NOTE: bottomPointerHeight added sbecause bottom pointer is absolute
-    if (startY + POPUP_OFFSET_Y + topPointerHeight - topBorderHeight + popupHeight < wdHeight - WINDOW_GUTTER) {
-        bottomPointer.style.display = "none";
-		popupY = startY + POPUP_OFFSET_Y + topPointerHeight - topBorderHeight;
-		pointerY = topBorderHeight - topPointerHeight;
-		pointerWidth = topPointerWidth;
-		pointer = topPointer;
+	var tooltipX, tooltipY, baseLoc;
+	var baseEl = obj && obj.getTooltipBase(hoverEv);
+	if (baseEl) {
+		baseLoc = Dwt.toWindow(baseEl);
+		var baseSz = Dwt.getSize(baseEl);
+		tooltipX = baseLoc.x + this._offsetX;
+		tooltipY = baseLoc.y + baseSz.y + this._offsetY;
 	}
-	
-	// bottom pointer
 	else {
-        topPointer.style.display = "none";
-        popupY = startY - POPUP_OFFSET_Y - bottomPointerHeight + bottomBorderHeight - popupHeight;
-		pointerY = popupHeight - bottomBorderHeight;
-		pointerWidth = bottomPointerWidth;
-		pointer = bottomPointer;
+		tooltipX = startX + this._offsetX;
+		tooltipY = startY + this._offsetY;
 	}
 
-	// make sure popup is wide enough for pointer
-	var contentEl = document.getElementById(baseId+"Contents");
-	if (popupWidth - leftBorderWidth - rightBorderWidth < pointerWidth) {
-		contentEl.width = pointerWidth; // IE
-		contentEl.style.width = String(pointerWidth)+"px"; // everyone else
-	} else {
-		contentEl.width = "auto"; // IE
-		contentEl.style.width = "auto"; // everyone else
+	var popupSize = Dwt.getSize(this._div);
+	var popupWidth = popupSize.x, popupHeight = popupSize.y;
+
+	// check for sufficient room to the right
+	if (tooltipX + popupWidth > wdWidth - DwtToolTip.WINDOW_GUTTER) {
+		tooltipX = wdWidth - DwtToolTip.WINDOW_GUTTER - popupWidth;
 	}
-	
-	// adjust popup x-location
-	if (popupX < WINDOW_GUTTER) {
-		popupX = WINDOW_GUTTER;
-	}
-	else if (popupX + popupWidth > wdWidth - WINDOW_GUTTER) {
-		popupX = wdWidth - WINDOW_GUTTER - popupWidth;
-	}
-	
-	// adjust pointer x-location
-	pointerX = startX - popupX - pointerWidth / 2;
-	if (pointerX + pointerWidth > popupWidth - rightBorderWidth) {
-		pointerX = popupWidth - rightBorderWidth - pointerWidth;
-	}
-	if (pointerX < leftBorderWidth) {
-		pointerX = leftBorderWidth;
+	// check for sufficient room below
+	if (tooltipY + popupHeight > wdHeight - DwtToolTip.WINDOW_GUTTER) {
+		tooltipY = (baseLoc ? baseLoc.y : tooltipY) - this._offsetY - popupHeight;
 	}
 
-    pointer.style.left = pointerX;
-	pointer.style.top = pointerY;
-
-	Dwt.setLocation(element, popupX, popupY);
-	var zIndex = dialog ? dialog.getZIndex() + Dwt._Z_INC : Dwt.Z_TOOLTIP;
-	Dwt.setZIndex(element, zIndex);
+	Dwt.setLocation(this._div, tooltipX, tooltipY);
+	var zIndex = this._dialog ? this._dialog.getZIndex() + Dwt._Z_INC : Dwt.Z_TOOLTIP;
+	Dwt.setZIndex(this._div, zIndex);
     this._poppedUp = true;
 };
 
 DwtToolTip.prototype._mouseOverListener = 
 function(ev) {
-	if(this.isSticky) {
-		return;
-	}
+
+	if (this.isSticky) { return; }
+
     if (this._popdownOnMouseOver && this._poppedUp) {
-        var callback = (this._popdownOnMouseOver instanceof AjxCallback) ? this._popdownOnMouseOver : null;
+        var callback = (this._popdownOnMouseOver.isAjxCallback) ? this._popdownOnMouseOver : null;
         this.popdown();
-        if (callback)
+        if (callback) {
             callback.run();
+		}
     }
 };
