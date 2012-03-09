@@ -303,21 +303,12 @@ function() {
 				this.removeChild(this.lastChild);
 			}
 			var len = domObj.childNodes.length;
-			if (AjxEnv.isChrome7) {
-				// workaround for http://code.google.com/p/chromium/issues/detail?id=54969
-				var frag = this.createDocumentFragment();
-				for (var i = 0; i < len; i++) {
-					var importedNode = this.importNode(domObj.childNodes[i], true);
-					frag.appendChild(importedNode);
-				}
-				this.appendChild(frag);
-			}
-			else {
-				for (var i = 0; i < len; i++) {
-					var importedNode = this.importNode(domObj.childNodes[i], true);
-					this.appendChild(importedNode);
-				}
-			}
+            for (var i = 0; i < len; i++) {
+                if (AjxEnv.isWebKitBased && domObj.childNodes[i] != domObj.doctype) {  //workaround for bug 71259 
+                    var importedNode = this.importNode(domObj.childNodes[i], true);
+                    this.appendChild(importedNode);
+                }
+            }
 		}
 		
 		if (AjxEnv.isNav) {
