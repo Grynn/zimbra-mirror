@@ -17,16 +17,16 @@ package com.zimbra.bp;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 import au.com.bytecode.opencsv.CSVWriter;
 
 import com.zimbra.common.account.Key;
+import com.zimbra.common.account.ZAttrProvisioning;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.AdminConstants;
+import com.zimbra.common.util.DateUtil;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.AccountServiceException;
@@ -55,8 +55,9 @@ public class SearchResults {
     public static String ATTR_zimbraAccountStatus = "zimbraAccountStatus" ;
     public static String ATTR_zimbraCOSId = "zimbraCOSId" ;
 //    public static String ATTR_zimbraId = "zimbraId" ;
-    public static String [] ACCOUNT_ATTRS = {ATTR_displayName, ATTR_zimbraAccountStatus, ATTR_zimbraCOSId } ;
+    public static String [] ACCOUNT_ATTRS = {ATTR_displayName, ATTR_zimbraAccountStatus, ATTR_zimbraCOSId, ZAttrProvisioning.A_zimbraLastLogonTimestamp} ;
     private static Set<String> ACCOUNT_ATTRS_SET = new HashSet<String>(Arrays.asList(ACCOUNT_ATTRS));
+    private static String DATE_PATTERN = "yyyy.MM.dd, hh:mm:ss z";
 
     /**
      * The CSV file format will be
@@ -75,8 +76,9 @@ public class SearchResults {
         
         try {
             CSVWriter writer = new CSVWriter(new OutputStreamWriter (out, "UTF-8") ) ;
-            List entryList = getSearchResults(authToken, query, domain, types ); 
-            int noCols = 6 ;
+            List entryList = getSearchResults(authToken, query, domain, types );
+            SimpleDateFormat formatter = new SimpleDateFormat(DATE_PATTERN);
+            int noCols = 7 ;
             for (int i = 0 ; i < entryList.size(); i ++) {
                 String [] line = new String [noCols] ;
                 int m = 0 ;
@@ -102,6 +104,11 @@ public class SearchResults {
 
                  for (int j =0; j < ACCOUNT_ATTRS.length; j ++) {
                     line[j+m] = entry.getAttr(ACCOUNT_ATTRS[j], "") ;
+                     if (ACCOUNT_ATTRS[j].equals(ZAttrProvisioning.A_zimbraLastLogonTimestamp)
+                             && !line[j+m].equals("")) {
+                         Date date = DateUtil.parseGeneralizedTime(line[j+m]);
+                         line[j+m] = formatter.format(date);
+                     }
                 }
                 
                 ZimbraLog.extensions.debug("Adding entry content : " + Arrays.toString(line));
