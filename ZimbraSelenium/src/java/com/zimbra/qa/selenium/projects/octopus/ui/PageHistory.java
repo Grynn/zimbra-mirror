@@ -41,6 +41,10 @@ public class PageHistory extends AbsTab {
 	  String COMMENT_PREFIX = " added a comment on file ";
 	  String COMMENT_POSTFIX= ".";
 	  
+	  String RENAME_PREFIX = " renamed file ";
+	  String RENAME_MIDFIX = " as ";
+	  String RENAME_POSTFIX= ".";
+	  
     }
     
 	public static class Locators {
@@ -82,6 +86,11 @@ public class PageHistory extends AbsTab {
 	public static class GetText {
 		//TODO: file history text
 		
+		public static String rename(String oldName, String newName) {
+			return CONSTANTS.YOU +  CONSTANTS.RENAME_PREFIX 
+			        +   oldName + CONSTANTS.RENAME_MIDFIX + newName + CONSTANTS.RENAME_POSTFIX;
+		}
+
 		public static String comment(String fileName) {
 			return CONSTANTS.YOU +  CONSTANTS.COMMENT_PREFIX 
 			        +   fileName + CONSTANTS.COMMENT_POSTFIX;

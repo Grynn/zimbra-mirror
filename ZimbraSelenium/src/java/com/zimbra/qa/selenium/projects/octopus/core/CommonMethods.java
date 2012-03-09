@@ -11,7 +11,7 @@ public class CommonMethods {
 	public CommonMethods() {}
 
 	// return comment id
-	protected String MakeAComment(ZimbraAccount account, String fileId, String comment)
+	protected String MakeACommentViaSoap(ZimbraAccount account, String fileId, String comment)
 	throws HarnessException {
 		// Add comments to the file using SOAP
 		account.soapSend("<AddCommentRequest xmlns='urn:zimbraMail'> <comment parentId='"
@@ -22,9 +22,24 @@ public class CommonMethods {
 		account.soapSend("<GetCommentsRequest  xmlns='urn:zimbraMail'> <comment parentId='"
 			+ fileId + "'/></GetCommentsRequest>");
 		
+		
 		return account.soapSelectValue("//mail:comment", "id");
 
 	}
+	
+
+	
+	protected String RenameViaSoap(ZimbraAccount account, String fileId, String newName)
+	throws HarnessException {
+		// Add comments to the file using SOAP
+		account.soapSend("<ItemActionRequest xmlns='urn:zimbraMail'> <action id='"
+			+ fileId + "' name='" + newName + "' op='rename' /></ItemActionRequest>");
+
+        //TODO: Check if the file is renamed on the server use GetActiviyStreamRequest?		
+	    return newName;
+	}
+	
+
 	
 	protected void MarkFileFavoriteViaSoap(ZimbraAccount account, String fileId)
 	throws HarnessException {
