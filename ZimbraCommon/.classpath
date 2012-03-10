@@ -54,7 +54,7 @@
       <attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/apache-log4j-extras-1.0-javadoc.jar!/"/>
     </attributes>
   </classpathentry>
-  <classpathentry kind="lib" path="jars/mail.jar" sourcepath="jars-src/javamail-1.4.3-src.jar">
+  <classpathentry kind="lib" path="jars/javamail-1.4.3.jar" sourcepath="jars-src/javamail-1.4.3-src.jar">
     <attributes>
       <attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/javamail-1.4.3-javadoc.jar!/"/>
     </attributes>

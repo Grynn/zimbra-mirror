@@ -139,7 +139,7 @@
       <archive location="./build/dist/jetty/common/lib/commons-dbcp-1.1.jar" />
       <archive location="./build/dist/jetty/common/lib/commons-pool-1.1.jar" />
       <archive location="./build/dist/jetty/common/lib/json.jar" />
-      <archive location="./build/dist/jetty/common/lib/mail.jar" />
+      <archive location="./build/dist/jetty/common/lib/javamail-1.4.3.jar" />
       <archive location="./build/dist/jetty/common/lib/zimbracommon.jar" />
       <archive location="./build/dist/jetty/webapps/service/WEB-INF/lib/zimbrastore.jar" />
       <archive location="./build/dist/jetty/webapps/service/WEB-INF/lib/zimbraoffline.jar" />

@@ -79,7 +79,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/jars/jstl.jar!/" />
+          <root url="jar://$MODULE_DIR$/jars/jstl-1.1.0-d13.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -294,8 +294,8 @@
     </containerElement>
     <containerElement type="library" level="module">
       <attribute name="method" value="1" />
-      <attribute name="URI" value="/WEB-INF/lib/mail.jar" />
-      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/mail.jar!/</url>
+      <attribute name="URI" value="/WEB-INF/lib/javamail-1.4.3.jar" />
+      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/javamail-1.4.3.jar!/</url>
     </containerElement>
     <containerElement type="library" level="module">
       <attribute name="method" value="0" />
@@ -379,8 +379,8 @@
     </containerElement>
     <containerElement type="library" level="module">
       <attribute name="method" value="1" />
-      <attribute name="URI" value="/WEB-INF/lib/jstl.jar" />
-      <url>jar://$MODULE_DIR$/../ZimbraTagLib/jars/jstl.jar!/</url>
+      <attribute name="URI" value="/WEB-INF/lib/jstl-1.1.0-d13.jar" />
+      <url>jar://$MODULE_DIR$/../ZimbraTagLib/jars/jstl-1.1.0-d13.jar!/</url>
     </containerElement>
     <containerElement type="library" level="module">
       <attribute name="method" value="0" />
@@ -419,8 +419,8 @@
     </containerElement>
     <containerElement type="library" level="module">
       <attribute name="method" value="1" />
-      <attribute name="URI" value="/WEB-INF/lib/jstl.jar" />
-      <url>jar://$MODULE_DIR$/jars/jstl.jar!/</url>
+      <attribute name="URI" value="/WEB-INF/lib/jstl-1.1.0-d13.jar" />
+      <url>jar://$MODULE_DIR$/jars/jstl-1.1.0-d13.jar!/</url>
     </containerElement>
     <containerElement type="library" level="module">
       <attribute name="method" value="0" />

@@ -2,7 +2,7 @@
 <classpath>
   <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
   <classpathentry kind="lib" path="jars/jsp-api.jar"/>
-  <classpathentry kind="lib" path="jars/jstl.jar"/>
+  <classpathentry kind="lib" path="jars/jstl-1.1.0-d13.jar"/>
   <classpathentry kind="lib" path="jars/standard.jar"/>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/commons-fileupload-1.2.1.jar" sourcepath="/ZimbraCommon/jars-src/commons-fileupload-1.2.1-src.zip">
     <attributes>
@@ -19,7 +19,7 @@
       <attribute name="javadoc_location" value="http://www.json.org/javadoc/"/>
     </attributes>
   </classpathentry>
-  <classpathentry kind="lib" path="/ZimbraCommon/jars/mail.jar"/>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/javamail-1.4.3.jar"/>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/dom4j-1.5.2.jar" sourcepath="/ThirdParty/dom4j-1.5.2/src/java">
     <attributes>
       <attribute name="javadoc_location" value="http://www.dom4j.org/dom4j-1.5.2/apidocs/"/>

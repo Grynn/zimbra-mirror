@@ -40,7 +40,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/jars/jstl.jar!/" />
+          <root url="jar://$MODULE_DIR$/jars/jstl-1.1.0-d13.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
