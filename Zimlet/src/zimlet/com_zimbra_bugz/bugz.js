@@ -72,7 +72,8 @@ function(spanElement, obj, context, canvas) {
 com_zimbra_bugz_HandlerObject.prototype._handleBugzillaResponse =
 function(canvas, response) {
 	if(response && response.success) {
-		var jsonObj = AjxXmlDoc.createFromXml(response.text).toJSObject(true, false);
+        var xml = response.text.replace(/<!DOCTYPE.*>/,'');  
+		var jsonObj = AjxXmlDoc.createFromXml(xml).toJSObject(true, false);
 		if(jsonObj.error || !jsonObj.bug) {
 			canvas.innerHTML = this.getMessage("bugMayNotBePublicOrValid");
 		} else {
