@@ -24,6 +24,7 @@ class ATL_NO_VTABLE CMapiAccessWrap :
 public:
 	CMapiAccessWrap()
 	{
+          maapi = NULL;
 	}
 
 DECLARE_REGISTRY_RESOURCEID(IDR_MAPIACCESSWRAP)

@@ -37,6 +37,14 @@ namespace ZimbraMigrationConsole
             }
             else return 0;
         }
+        public int argAsInt(string argName)
+        {
+            if (m_args.ContainsKey(argName))
+            {
+                return Convert.ToInt32(m_args[argName]);
+            }
+            else return 2;
+        }
 
         public double argAsDouble(string argName)
         {
@@ -95,7 +103,7 @@ class Program
 
         string ConfigXmlFile = CommandLineArgs.I.argAsString("ConfigxmlFile");
         string UserMapFile = CommandLineArgs.I.argAsString("Users");
-        string MaxThreads = CommandLineArgs.I.argAsString("MaxThreads");
+        int MaxThreads = CommandLineArgs.I.argAsInt("MaxThreads");
         string MaxErrors = CommandLineArgs.I.argAsString("MaxErrors");
         string MaxWarns = CommandLineArgs.I.argAsString("MaxWarn");
         string userid = CommandLineArgs.I.argAsString("Profile");
@@ -504,8 +512,8 @@ class Program
 
                     var countdownEvent = new CountdownEvent(myXmlConfig.UserList.Count); 
                     Account userAccts = new Account();
-                    
-                    userAccts.StartMigration(myXmlConfig.UserList, myXmlConfig.ConfigObj.UserProvision.DestinationDomain, importopts, countdownEvent,TestObj);
+
+                    userAccts.StartMigration(myXmlConfig.UserList, myXmlConfig.ConfigObj.UserProvision.DestinationDomain, importopts, countdownEvent, TestObj,MaxThreads);
                    // Thread.Sleep(129000);
 
                     countdownEvent.Wait();
@@ -755,7 +763,7 @@ class Program
                 
                 List<MVVM.Model.Users> users = new List<MVVM.Model.Users>();
                         users.Add(User);
-                        userAccts.StartMigration(users, ZCSHost, importopts, countdownEvent,TestObj, false, accountname, accountid);
+                        userAccts.StartMigration(users, ZCSHost, importopts, countdownEvent,TestObj, MaxThreads, false, accountname, accountid);
                         // Thread.Sleep(129000);
 
                         countdownEvent.Wait();

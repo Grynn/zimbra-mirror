@@ -2,6 +2,7 @@
 using System.Threading;
 using System;
 
+
 namespace ZimbraMigrationConsole
 {
 class Account: BackgroundWorker
@@ -44,49 +45,69 @@ class Account: BackgroundWorker
         set { migrateOptions = value; }
     
     }*/
-   
-    public void StartMigration(System.Collections.Generic.List<MVVM.Model.Users> userlist, string Domainname, CssLib.MigrationOptions MailOptions, CountdownEvent countdown,object wrapper,bool ServerMigrationflag= true,string pstaccountname ="",string pstfile ="" )
+
+    
+    public void StartMigration(System.Collections.Generic.List<MVVM.Model.Users> userlist, string Domainname, CssLib.MigrationOptions MailOptions, CountdownEvent countdown, object wrapper, int maxThreads = 2, bool ServerMigrationflag = true, string pstaccountname = "", string pstfile = "")
     {
         int number = 0;
         if (ServerMigrationflag)
         {
-            foreach (MVVM.Model.Users user in userlist)
+            // InitializeBackgoundWorkers();
+
+            Account[] AccountArray = new Account[maxThreads];
+            for (int f = 0; f < maxThreads; f++)
             {
-                /*BackgroundWorker bgw = new System.ComponentModel.BackgroundWorker();
+                AccountArray[f] = new Account();
+            }
+            
 
-                bgw.DoWork += new System.ComponentModel.DoWorkEventHandler(accountToMigrate_DoWork);
-                bgw.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(
-                    accountToMigrate_ProgressChanged);
-                bgw.WorkerReportsProgress = true;
-                bgw.WorkerSupportsCancellation = true;*/
-
+            for (int f = 0; f < userlist.Count; f++)
+            {
+                //Use the thread array to process ech iteration  
+                //choose the first unused thread.    
 
                 Account myAccount = new Account();
-                myAccount.AccountName = user.UserName + "@" + Domainname;// AcctName;
+                myAccount.AccountName = userlist[f].UserName + "@" + Domainname;// AcctName;
                 myAccount.countdown = countdown;
                 Currentuser = new MVVM.Model.Users();
-                Currentuser.UserName = user.UserName;
+                Currentuser.UserName = userlist[f].UserName;
                 myAccount.Currentuser = Currentuser;
                 myAccount.TestObj = (CssLib.CSMigrationWrapper)wrapper;
 
                 myAccount.serverMigration = ServerMigrationflag;
-
+                myAccount.Mailoptions = MailOptions;
                 number = number + 1;
                 myAccount.num = number;
 
-                myAccount.DoWork += new DoWorkEventHandler(accountToMigrate_DoWork);
-                myAccount.RunWorkerCompleted += new RunWorkerCompletedEventHandler(
-                     accountToMigrate_RunWorkerCompleted);
-                myAccount.ProgressChanged += new ProgressChangedEventHandler(accountToMigrate_ProgressChanged);
-                myAccount.WorkerReportsProgress = true;
-                myAccount.WorkerSupportsCancellation = true;
-                myAccount.Mailoptions = MailOptions;
-                myAccount.RunWorkerAsync(myAccount);
 
+                bool fileProcessed = false;
+                while (!fileProcessed)
+                {
+                    for (int threadNum = 0; threadNum < maxThreads; threadNum++)
+                    {
+                        if (!AccountArray[threadNum].IsBusy)
+                        {   // This thread is available     
 
-                /* bgw.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(
-                    accountToMigrate_RunWorkerCompleted);
-                 bgw.RunWorkerAsync(num++);*/
+                            System.Console.WriteLine("Starting worker thread: " + threadNum + "account" + myAccount.AccountName);
+
+                            AccountArray[threadNum] = myAccount;
+                            AccountArray[threadNum].DoWork += new DoWorkEventHandler(accountToMigrate_DoWork);
+                            AccountArray[threadNum].RunWorkerCompleted += new RunWorkerCompletedEventHandler(accountToMigrate_RunWorkerCompleted);
+                            AccountArray[threadNum].ProgressChanged += new ProgressChangedEventHandler(accountToMigrate_ProgressChanged);
+                            AccountArray[threadNum].WorkerReportsProgress = true; 
+                            AccountArray[threadNum].WorkerSupportsCancellation = true;
+                            AccountArray[threadNum].RunWorkerAsync(myAccount);
+
+                            fileProcessed = true;
+                            break;
+                        }
+                    }
+                    //If all threads are being used, sleep awhile before checking again  
+                    if (!fileProcessed)
+                    {
+                        Thread.Sleep(500);
+                    }
+                }
             }
         }
         else
@@ -112,6 +133,73 @@ class Account: BackgroundWorker
             myAccount.Mailoptions = MailOptions;
             myAccount.RunWorkerAsync(myAccount);
         }
+        
+        /*
+       // int number = 0;
+        if (ServerMigrationflag)
+        {
+            foreach (MVVM.Model.Users user in userlist)
+            {
+                /*BackgroundWorker bgw = new System.ComponentModel.BackgroundWorker();
+
+                bgw.DoWork += new System.ComponentModel.DoWorkEventHandler(accountToMigrate_DoWork);
+                bgw.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(
+                    accountToMigrate_ProgressChanged);
+                bgw.WorkerReportsProgress = true;
+                bgw.WorkerSupportsCancellation = true;*/
+
+
+         /*       Account myAccount = new Account();
+                myAccount.AccountName = user.UserName + "@" + Domainname;// AcctName;
+                myAccount.countdown = countdown;
+                Currentuser = new MVVM.Model.Users();
+                Currentuser.UserName = user.UserName;
+                myAccount.Currentuser = Currentuser;
+                myAccount.TestObj = (CssLib.CSMigrationWrapper)wrapper;
+
+                myAccount.serverMigration = ServerMigrationflag;
+
+                number = number + 1;
+                myAccount.num = number;
+
+                myAccount.DoWork += new DoWorkEventHandler(accountToMigrate_DoWork);
+                myAccount.RunWorkerCompleted += new RunWorkerCompletedEventHandler(
+                     accountToMigrate_RunWorkerCompleted);
+                myAccount.ProgressChanged += new ProgressChangedEventHandler(accountToMigrate_ProgressChanged);
+                myAccount.WorkerReportsProgress = true;
+                myAccount.WorkerSupportsCancellation = true;
+                myAccount.Mailoptions = MailOptions;
+                myAccount.RunWorkerAsync(myAccount);
+
+
+                /* bgw.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(
+                    accountToMigrate_RunWorkerCompleted);
+                 bgw.RunWorkerAsync(num++);*/
+            /*}
+        }
+        else
+        {
+            Account myAccount = new Account();
+            myAccount.AccountName = pstaccountname;// AcctName;
+            myAccount.countdown = countdown;
+            Currentuser = new MVVM.Model.Users();
+            Currentuser.UserName = pstfile;
+            myAccount.Currentuser = Currentuser;
+
+            myAccount.serverMigration = ServerMigrationflag;
+            myAccount.TestObj = (CssLib.CSMigrationWrapper)wrapper;
+            number = number + 1;
+            myAccount.num = number;
+
+            myAccount.DoWork += new DoWorkEventHandler(accountToMigrate_DoWork);
+            myAccount.RunWorkerCompleted += new RunWorkerCompletedEventHandler(
+                 accountToMigrate_RunWorkerCompleted);
+            myAccount.ProgressChanged += new ProgressChangedEventHandler(accountToMigrate_ProgressChanged);
+            myAccount.WorkerReportsProgress = true;
+            myAccount.WorkerSupportsCancellation = true;
+            myAccount.Mailoptions = MailOptions;
+            myAccount.RunWorkerAsync(myAccount);
+        }*/
         //RunWorkerAsync(this);
         
         
@@ -119,6 +207,13 @@ class Account: BackgroundWorker
 
     private void accountToMigrate_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
     {
+        
+                
+        // Get argument from DoWorkEventArgs argument.  Can use any type here with cast   
+       // int myProcessArguments = (int)e.Argument;      
+        // "ProcessFile" is the name of my method that does the main work.  Replace with your own method!       
+        // Can return reulsts from this method, i.e. a status (OK, FAIL etc)   
+        //e.Result = ProcessFile(myProcessArgument); 
         BackgroundWorker worker = sender as BackgroundWorker;
 
         // Assign the result of the computation
@@ -330,6 +425,8 @@ class Account: BackgroundWorker
         e)
     {
 
+        
+
         Account argumentTest = sender as Account;
         // First, handle the case where an exception was thrown.
         if (e.Error != null)
@@ -351,8 +448,18 @@ class Account: BackgroundWorker
             // Finally, handle the case where the operation
             // succeeded.
 
+
+            
         //signal the countdown event for the main thread exit.
             {
+                System.Console.WriteLine();
+                System.Console.WriteLine();
+                ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
+                "TotalErrors For UserAccount   " + argumentTest.AccountName + " are" + Numoferrors.ToString());
+
+                System.Console.WriteLine();
+                System.Console.WriteLine();
+
                 argumentTest.countdown.Signal();
             }
             argumentTest.AccountStatus = "Completed";        // e.Result.ToString();
