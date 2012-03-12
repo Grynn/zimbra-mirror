@@ -1365,17 +1365,21 @@ function(tmpObj) {
 
     if (tmpObj.attrs[ZaDomain.A_AuthMech] != ZaDomain.AuthMech_zimbra &&
         tmpObj[ZaDomain.A2_zimbraExternalGroupLdapEnabled] == "TRUE") {
-        attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraExternalGroupLdapSearchBase]);
-        attr.setAttribute("n", ZaDomain.A_zimbraExternalGroupLdapSearchBase);
+        if (tmpObj.attrs[ZaDomain.A_zimbraExternalGroupLdapSearchBase] &&
+            tmpObj.attrs[ZaDomain.A_zimbraExternalGroupLdapSearchFilter] &&
+            tmpObj.attrs[ZaDomain.A_zimbraExternalGroupHandlerClass]) {
+            attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraExternalGroupLdapSearchBase]);
+            attr.setAttribute("n", ZaDomain.A_zimbraExternalGroupLdapSearchBase);
 
-        attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraExternalGroupLdapSearchFilter]);
-        attr.setAttribute("n", ZaDomain.A_zimbraExternalGroupLdapSearchFilter);
+            attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraExternalGroupLdapSearchFilter]);
+            attr.setAttribute("n", ZaDomain.A_zimbraExternalGroupLdapSearchFilter);
 
-        attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraExternalGroupHandlerClass]);
-        attr.setAttribute("n", ZaDomain.A_zimbraExternalGroupHandlerClass);
+            attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraExternalGroupHandlerClass]);
+            attr.setAttribute("n", ZaDomain.A_zimbraExternalGroupHandlerClass);
 
-        attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraAuthMechAdmin]);
-        attr.setAttribute("n", ZaDomain.A_zimbraAuthMechAdmin);
+            attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraAuthMechAdmin]);
+            attr.setAttribute("n", ZaDomain.A_zimbraAuthMechAdmin);
+        }
     }
     
     ZaDomain.modifySSOSettings(soapDoc, tmpObj); // temporarily put here, will be invoked by the new SSO Wizard in the future
