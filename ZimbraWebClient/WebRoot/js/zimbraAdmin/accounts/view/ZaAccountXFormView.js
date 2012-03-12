@@ -1449,8 +1449,8 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 	    headerItems.push({type:_OUTPUT_,ref:ZaAccount.A_accountStatus, label:ZaMsg.NAD_AccountStatus, labelLocation:_LEFT_, choices:this.accountStatusChoices});
     }
 
-    if (ZaItem.hasReadPermission(ZaAccount.A_name, entry)) {
-    	headerItems.push({type:_OUTPUT_,ref:ZaAccount.A_name, label:ZaMsg.NAD_Email, labelLocation:_LEFT_, required:false, cssStyle:"word-wrap:break-word;overflow:hidden"});
+    if (ZaItem.hasReadPermission(ZaAccount.A_mail, entry)) {
+    	headerItems.push({type:_OUTPUT_,ref:ZaAccount.A_mail, label:ZaMsg.NAD_Email, labelLocation:_LEFT_, required:false, cssStyle:"word-wrap:break-word;overflow:hidden"});
     }
 
     if (ZaItem.hasReadPermission(ZaItem.A_zimbraId, entry)) {
