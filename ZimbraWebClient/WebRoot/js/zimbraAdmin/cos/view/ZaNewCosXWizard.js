@@ -1216,6 +1216,17 @@ ZaNewCosXWizard.myXFormModifier = function(xFormObject, entry) {
             },
             {type:_ZAWIZ_TOP_GROUPER_, id:"cos_quota_settings",
                 label:ZaMsg.NAD_QuotaGrouper,
+                visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,
+					[
+                        ZaCos.A_zimbraMailForwardingAddressMaxLength,
+                        ZaCos.A_zimbraMailForwardingAddressMaxNumAddrs,
+                        ZaCos.A_zimbraMailQuota,
+                        ZaCos.A_zimbraContactMaxNumEntries,
+                        ZaCos.A_zimbraQuotaWarnPercent,
+						ZaCos.A_zimbraQuotaWarnInterval,
+                        ZaCos.A_zimbraQuotaWarnMessage
+					]]
+				],
                 items: [
                     {ref:ZaCos.A_zimbraMailForwardingAddressMaxLength, type:_TEXTFIELD_, 
                     	msgName:ZaMsg.MSG_zimbraMailForwardingAddressMaxLength,
@@ -1252,6 +1263,16 @@ ZaNewCosXWizard.myXFormModifier = function(xFormObject, entry) {
             },
 
             {type:_ZAWIZ_TOP_GROUPER_, id:"cos_datasourcepolling_settings",
+                visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,
+					[
+                        ZaCos.A_zimbraDataSourceMinPollingInterval,
+                        ZaCos.A_zimbraDataSourcePop3PollingInterval,
+                        ZaCos.A_zimbraDataSourceImapPollingInterval,
+                        ZaCos.A_zimbraDataSourceCalendarPollingInterval,
+                        ZaCos.A_zimbraDataSourceRssPollingInterval,
+						ZaCos.A_zimbraDataSourceCaldavPollingInterval
+					]]
+				],
                 label:ZaMsg.NAD_DataSourcePolling,
                 items: [
                     {ref:ZaCos.A_zimbraDataSourceMinPollingInterval, type:_LIFETIME_,
@@ -1293,30 +1314,33 @@ ZaNewCosXWizard.myXFormModifier = function(xFormObject, entry) {
                 ]
             },
             
-           {type:_ZAWIZ_TOP_GROUPER_, id:"cos_proxyalloweddomain_settings",
-             	label: ZaMsg.NAD_ProxyAllowedDomains,
+            {type:_ZAWIZ_TOP_GROUPER_, id:"cos_proxyalloweddomain_settings",
+                label: ZaMsg.NAD_ProxyAllowedDomains,
+                visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,
+					[
+						ZaCos.A_zimbraProxyAllowedDomains
+					]]
+				],
              	items:[
-		    {
-			ref: ZaCos.A_zimbraProxyAllowedDomains,
-			msgName:ZaMsg.MSG_zimbraProxyAllowedDomains,
-    			label:ZaMsg.LBL_zimbraProxyAllowedDomains,
-                labelLocation:_LEFT_,
-   			labelCssStyle:"vertical-align:top",
-    			type:_REPEAT_,
-    			align:_LEFT_,
-    			repeatInstance:"",
-                        addButtonLabel:ZaMsg.NAD_ProxyAddAllowedDomain ,
-                        removeButtonLabel: ZaMsg.NAD_ProxyRemoveAllowedDomain,
-    			showAddButton:true,
-    			showRemoveButton:true,
-    			showAddOnNextRow:true,
- 
-        		items: [
+		            {ref: ZaCos.A_zimbraProxyAllowedDomains,
+			        msgName:ZaMsg.MSG_zimbraProxyAllowedDomains,
+    			    label:ZaMsg.LBL_zimbraProxyAllowedDomains,
+                    labelLocation:_LEFT_,
+   			        labelCssStyle:"vertical-align:top",
+    			    type:_REPEAT_,
+    			    align:_LEFT_,
+    			    repeatInstance:"",
+                    addButtonLabel:ZaMsg.NAD_ProxyAddAllowedDomain ,
+                    removeButtonLabel: ZaMsg.NAD_ProxyRemoveAllowedDomain,
+    			    showAddButton:true,
+    			    showRemoveButton:true,
+    			    showAddOnNextRow:true,
+        		    items: [
                 		{ref:".", type:_TEXTFIELD_,
-                         	 enableDisableChecks:[] ,
-                                 visibilityChecks:[],
-                                 width: "15em"}
-                               ]
+                         enableDisableChecks:[] ,
+                         visibilityChecks:[],
+                         width: "15em"}
+                        ]
                     }
              	]
             },
