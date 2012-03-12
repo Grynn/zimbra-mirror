@@ -329,7 +329,8 @@ public class CSMigrationWrapper
                             dict.Add(Key, Value);
                             // Console.WriteLine("{0}, {1}", so1, so2);
                         }
- 
+
+                        api.AccountID = Acct.AccountID;
                         api.AccountName = Acct.AccountName;
                         if (dict.Count > 0)
                         {
@@ -549,6 +550,7 @@ public class CSMigrationWrapper
             Log.info("Processing folder", folder.Name);
             if (folder.Id == 0)
             {
+                api.AccountID = Acct.AccountID;
                 api.AccountName = Acct.AccountName;
 
                 string ViewType = GetFolderViewType(folder.ContainerClass);
@@ -582,6 +584,7 @@ public class CSMigrationWrapper
                 Acct.migrationFolder.CurrentCountOfItems = 0;
                 Acct.migrationFolder.FolderView = "All Rules";
                 Acct.migrationFolder.FolderName = "Rules Table";
+                api.AccountID = Acct.AccountID;
                 api.AccountName = Acct.AccountName;
                 if (!isPreview)
                 {
@@ -594,6 +597,7 @@ public class CSMigrationWrapper
 
                         dict.Add(Key, Value);
                     }
+                    api.AccountID = Acct.AccountID;
                     api.AccountName = Acct.AccountName;
                     int stat = api.AddRules(dict);
                     Acct.migrationFolder.CurrentCountOfItems = 1;
@@ -621,6 +625,7 @@ public class CSMigrationWrapper
                 Acct.migrationFolder.CurrentCountOfItems = 0;
                 Acct.migrationFolder.FolderView = "OOO";
                 Acct.migrationFolder.FolderName = "Out of Office";
+                api.AccountID = Acct.AccountID;
                 api.AccountName = Acct.AccountName;
                 if (!isPreview)
                 {

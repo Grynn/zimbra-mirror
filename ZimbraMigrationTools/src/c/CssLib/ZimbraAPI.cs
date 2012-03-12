@@ -58,6 +58,15 @@ public class ZimbraAPI
             sAccountName = value;
         }
     }
+    private string sAccountID;
+    public string AccountID
+    {
+        get { return sAccountID; }
+        set
+        {
+            sAccountID = value;
+        }
+    }
     private bool bIsAdminAccount;
     public bool IsAdminAccount {
         get { return bIsAdminAccount; }
@@ -2161,7 +2170,7 @@ public class ZimbraAPI
         }
         string nameAcc = AccountName.Substring(0, idxAcc);
         string nameOrg = theOrganizer.Substring(0, idxOrg);
-        return (nameAcc == nameOrg);
+        return ((nameAcc == nameOrg) || (AccountID == nameOrg));
     }
 
     private void DeleteApptTempFiles(Dictionary<string, string> appt, int numExceptions)
