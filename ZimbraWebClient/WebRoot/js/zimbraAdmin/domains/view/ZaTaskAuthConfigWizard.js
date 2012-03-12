@@ -658,12 +658,12 @@ ZaTaskAuthConfigWizard.myXFormModifier = function(xFormObject) {
 							{type:_SPACER_, height:20},
 							{type:_OUTPUT_,value:ZaMsg.Domain_AuthProvideLoginPwd, align:_LEFT_, colSpan:"*",visibilityChecks:[]},
                             {type:_SPACER_, height:10},
-                            {type:_GROUP_, numCols:2, colSpan:"*", colSizes:["100px", "auto"],
+                            {type:_GROUP_, numCols:2, colSpan:"*", colSizes:["100px", "auto"], width:"100%",
                              items: [
                                      {type:_TEXTFIELD_, label:ZaMsg.LBL_Domain_AuthTestUserName, ref:ZaDomain.A_AuthTestUserName, alignment:_LEFT_,
-                                      labelCssStyle:"text-align:right;padding-left:20px;",visibilityChecks:[],enableDisableChecks:[]},
+                                      labelCssStyle:"text-align:right;padding-left:20px;",width:"150px", visibilityChecks:[],enableDisableChecks:[]},
                                      {type:_SECRET_, label:ZaMsg.LBL_Domain_AuthTestPassword, ref:ZaDomain.A_AuthTestPassword, alignment:_LEFT_,
-                                      labelCssStyle:"text-align:right;padding-left:20px;",visibilityChecks:[],enableDisableChecks:[]}]
+                                      labelCssStyle:"text-align:right;padding-left:20px;",width:"150px", visibilityChecks:[],enableDisableChecks:[]}]
                             },
                             {type:_GROUP_, numCols:1, colSpan:"*", colSizes:["300px","200px","auto"],
                                 cssStyle:"margin-bottom:10px;padding-bottom:0px;margin-top:10px;margin-left:10px;margin-right:10px;",
@@ -763,7 +763,8 @@ ZaTaskAuthConfigWizard.myXFormModifier = function(xFormObject) {
                                 ]
                             },
                             {type:_OUTPUT_, value:ZaMsg.spnegoVirtualHostMsg,
-                                width:250, colSpan:"*",cssStyle:"padding-left:200px;"
+                                width:AjxEnv.isIE?"450px":"250px", // bug 71321, IE uses different box model
+                                colSpan:"*",cssStyle:"padding-left:200px;"
                             },
                             {type:_SPACER_, height:15, colSpan:"*"},
                             {ref: ZaDomain.A_zimbraWebClientLoginURL,useParentTable: false,
@@ -775,7 +776,8 @@ ZaTaskAuthConfigWizard.myXFormModifier = function(xFormObject) {
                                 onChange:ZaDomainXFormView.onFormFieldChanged
                             },
                             {type:_OUTPUT_, value:ZaMsg.spnegoWebClientLoginMsg,
-                                width:250, colSpan:"*",cssStyle:"padding-left:200px;"
+                                width:AjxEnv.isIE?"450px":"250px", // bug 71321, IE uses different box model
+                                colSpan:"*",cssStyle:"padding-left:200px;"
                             },
                             {ref: ZaDomain.A_zimbraWebClientLogoutURL,useParentTable: false,
                                 colSizes:["275px","*"], colSpan: 2,
@@ -786,7 +788,8 @@ ZaTaskAuthConfigWizard.myXFormModifier = function(xFormObject) {
                                 onChange:ZaDomainXFormView.onFormFieldChanged
                             },
                             {type:_OUTPUT_, value:ZaMsg.spnegoWebClientLogoutMsg,
-                                width:250, colSpan:"*",cssStyle:"padding-left:200px;"
+                            	width:AjxEnv.isIE?"450px":"250px", // bug 71321, IE uses different box model
+                            	colSpan:"*",cssStyle:"padding-left:200px;"
                             },
                     		{type:_REPEAT_, repeatInstance:"", label: ZaMsg.LBL_zimbraWebClientLoginURLAllowedIP,
                     		 ref: ZaDomain.A_zimbraWebClientLoginURLAllowedIP,
