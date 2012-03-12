@@ -34,12 +34,12 @@ download_dir=${mailboxd_directory}/webapps/zimbra/downloads
 index=${download_dir}/index.html
 
 if [ -d "${download_dir}" ]; then
-  ZCO_32BIT=$(cd ${download_dir}; ls ZimbraConnectorOLK*x86.msi 2>/dev/null)
-  ZCO_64BIT=$(cd ${download_dir}; ls ZimbraConnectorOLK*x64.msi 2>/dev/null)
-  ISYNC_UB=$(cd ${download_dir}; ls zimbra-isync*.dmg 2>/dev/null)
-  PST_IMPORT=$(cd ${download_dir}; ls ZCSPSTImportWizard* 2>/dev/null)
-  EXCHANGE_MIG_WIZARD=$(cd ${download_dir}; ls ZCSExchangeMigrationWizard* 2>/dev/null)
-  DOMINO_MIG_WIZARD=$(cd ${download_dir}; ls ZCSDominoMigrationWizard* 2>/dev/null)
+  ZCO_32BIT=$(cd ${download_dir}; ls -tr1 ZimbraConnectorOLK*x86.msi | head -1 2>/dev/null)
+  ZCO_64BIT=$(cd ${download_dir}; ls -tr1 ZimbraConnectorOLK*x64.msi | head -1 2>/dev/null)
+  ISYNC_UB=$(cd ${download_dir}; ls -tr1 zimbra-isync*.dmg | head -1 2>/dev/null)
+  PST_IMPORT=$(cd ${download_dir}; ls -tr1 ZCSPSTImportWizard* | head -1 2>/dev/null)
+  EXCHANGE_MIG_WIZARD=$(cd ${download_dir}; ls -tr1 ZCSExchangeMigrationWizard* | head -1 2>/dev/null)
+  DOMINO_MIG_WIZARD=$(cd ${download_dir}; ls -tr1 ZCSDominoMigrationWizard* | head -1 2>/dev/null)
 
   cat ${index}.in | \
     sed -e "s/@@ZCO_32BIT@@/${ZCO_32BIT}/" \
