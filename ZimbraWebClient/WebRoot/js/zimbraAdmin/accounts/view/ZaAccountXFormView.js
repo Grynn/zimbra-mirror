@@ -1457,65 +1457,67 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
         headerItems.push({type:_OUTPUT_,ref:ZaItem.A_zimbraId, label:ZaMsg.NAD_ZimbraID});
     }
 
-    if(ZaItem.hasReadPermission(ZaAccount.A_zimbraMailQuota,entry) && ZaItem.hasRight(ZaAccount.GET_MAILBOX_INFO_RIGHT,entry)) {
-			headerItems.push(
-				{type:_OUTPUT_,ref:ZaAccount.A2_mbxsize, 
-					label:ZaMsg.LBL_quota,
-					getDisplayValue:function() {
-						var usedVal = this.getInstanceValue();
-						var formatter = AjxNumberFormat.getNumberInstance();
-						if(!usedVal)
-							usedVal = "0";
-						else {
-							usedVal = Number(usedVal / 1048576).toFixed(3);
-							usedVal = formatter.format(usedVal);
-						}
+    if (!entry.isExternal) {
+        if(ZaItem.hasReadPermission(ZaAccount.A_zimbraMailQuota,entry) && ZaItem.hasRight(ZaAccount.GET_MAILBOX_INFO_RIGHT,entry)) {
+                headerItems.push(
+                    {type:_OUTPUT_,ref:ZaAccount.A2_mbxsize,
+                        label:ZaMsg.LBL_quota,
+                        getDisplayValue:function() {
+                            var usedVal = this.getInstanceValue();
+                            var formatter = AjxNumberFormat.getNumberInstance();
+                            if(!usedVal)
+                                usedVal = "0";
+                            else {
+                                usedVal = Number(usedVal / 1048576).toFixed(3);
+                                usedVal = formatter.format(usedVal);
+                            }
 
-						var quotaLimit = this.getInstanceValue(ZaAccount.A_zimbraMailQuota);
-						if(!quotaLimit || quotaLimit == "0") {
-							quotaLimit = ZaMsg.Unlimited;
-						} else {
-							quotaLimit = formatter.format(quotaLimit);
-						}
+                            var quotaLimit = this.getInstanceValue(ZaAccount.A_zimbraMailQuota);
+                            if(!quotaLimit || quotaLimit == "0") {
+                                quotaLimit = ZaMsg.Unlimited;
+                            } else {
+                                quotaLimit = formatter.format(quotaLimit);
+                            }
 
-						if(quotaLimit == ZaMsg.Unlimited) {
-							return AjxMessageFormat.format (ZaMsg.unlimitedQuotaValueTemplate,[usedVal,quotaLimit]);
-						} else {
-							return AjxMessageFormat.format (ZaMsg.quotaValueTemplate,[usedVal,quotaLimit]);
-						}
-					},
-					valueChangeEventSources:[ZaAccount.A_zimbraMailQuota,ZaAccount.A2_mbxsize]
-				});
-	} else if(ZaItem.hasReadPermission(ZaAccount.A_zimbraMailQuota,entry)) {
-		    //assigned quota
-		headerItems.push ({type:_OUTPUT_,ref:ZaAccount.A_zimbraMailQuota, label:ZaMsg.LBL_assignedQuota,
-        	getDisplayValue:function() {
-				var val = this.getInstanceValue();
-				if(!val || val == "0")
-					val = ZaMsg.Unlimited;
-					
-				if(val == ZaMsg.Unlimited) {
-                	return AjxMessageFormat.format (ZaMsg.unlimitedAssignedQuotaValueTemplate,[val]);
-				} else {
-					return AjxMessageFormat.format (ZaMsg.assignedQuotaTemplate,[val]);
-				}
-			},
-			bmolsnr:true
-		});
-	} else if(ZaItem.hasRight(ZaAccount.GET_MAILBOX_INFO_RIGHT,entry)) {
-		headerItems.push({type:_OUTPUT_,ref:ZaAccount.A2_mbxsize, label:ZaMsg.LBL_usedQuota,
-			getDisplayValue:function() {
-				var val = this.getInstanceValue();
-				if(!val) 
-					val = "0";
-				else {
-					val = Number(val / 1048576).toFixed(3);
-				}									
-				return AjxMessageFormat.format (ZaMsg.usedQuotaTemplate,[val]);
-			},
-			bmolsnr:true
-		});		
-	}
+                            if(quotaLimit == ZaMsg.Unlimited) {
+                                return AjxMessageFormat.format (ZaMsg.unlimitedQuotaValueTemplate,[usedVal,quotaLimit]);
+                            } else {
+                                return AjxMessageFormat.format (ZaMsg.quotaValueTemplate,[usedVal,quotaLimit]);
+                            }
+                        },
+                        valueChangeEventSources:[ZaAccount.A_zimbraMailQuota,ZaAccount.A2_mbxsize]
+                    });
+        } else if(ZaItem.hasReadPermission(ZaAccount.A_zimbraMailQuota,entry)) {
+                //assigned quota
+            headerItems.push ({type:_OUTPUT_,ref:ZaAccount.A_zimbraMailQuota, label:ZaMsg.LBL_assignedQuota,
+                getDisplayValue:function() {
+                    var val = this.getInstanceValue();
+                    if(!val || val == "0")
+                        val = ZaMsg.Unlimited;
+
+                    if(val == ZaMsg.Unlimited) {
+                        return AjxMessageFormat.format (ZaMsg.unlimitedAssignedQuotaValueTemplate,[val]);
+                    } else {
+                        return AjxMessageFormat.format (ZaMsg.assignedQuotaTemplate,[val]);
+                    }
+                },
+                bmolsnr:true
+            });
+        } else if(ZaItem.hasRight(ZaAccount.GET_MAILBOX_INFO_RIGHT,entry)) {
+            headerItems.push({type:_OUTPUT_,ref:ZaAccount.A2_mbxsize, label:ZaMsg.LBL_usedQuota,
+                getDisplayValue:function() {
+                    var val = this.getInstanceValue();
+                    if(!val)
+                        val = "0";
+                    else {
+                        val = Number(val / 1048576).toFixed(3);
+                    }
+                    return AjxMessageFormat.format (ZaMsg.usedQuotaTemplate,[val]);
+                },
+                bmolsnr:true
+            });
+        }
+    }
 
 	if (ZaItem.hasReadPermission(ZaAccount.A_zimbraLastLogonTimestamp, entry))	{			
 	    headerItems.push(
