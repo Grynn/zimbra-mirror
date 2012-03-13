@@ -25,7 +25,7 @@ public class PageOctopus extends AbsTab {
 
 	public static class Locators {
 		public static final Locators zUserNamePullDown = new Locators(
-				"css=div.user-display-name");
+				"css=span.user-display-name");
 		public static final Locators zSignOutButton = new Locators(
 		// "css=a.(headerLink signOutLink):contains(sign out)");
 		// temporary omitting first letter in the locator's name
