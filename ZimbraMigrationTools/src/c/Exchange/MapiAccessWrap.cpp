@@ -39,7 +39,7 @@ STDMETHODIMP CMapiAccessWrap::UserUninit()
 {
     // TODO: Add your implementation code here
 
-     maapi = NULL;
+     delete maapi;
 
     // *StatusMsg = (lpStatus) ? CComBSTR(lpStatus) : SysAllocString(L"");
     return S_OK;
