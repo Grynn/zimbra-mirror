@@ -137,16 +137,11 @@ public class AutoUpdateTest {
     @BeforeClass
     public static void setUp()
     {
-        UpdateInfo gaUpdateInfo = new UpdateInfo(10978, "7_1_2_ga", "7.1.2", "minor");
-        gaUpdateInfo.addPlatform(new PlatformInfo("macos", "0204af2635a4a6444b0f7e880ccce7c9", 75922756));
-        gaUpdateInfo.addPlatform(new PlatformInfo("win32", "d9943a891b194fdeea18ff1c7c908b50", 95958528));
-        gaUpdateInfo.addPlatform(new PlatformInfo("linux", "2add86bf0469e9e0b3f1e66d2507e064", 110755660));
+        UpdateInfo gaUpdateInfo = new UpdateInfo(11273, "7_1_4_ga", "7.1.4", "minor");
+        gaUpdateInfo.addPlatform(new PlatformInfo("macos", "22dfcf99e9928eaf58862b5bb5efbbd8", 76599981));
+        gaUpdateInfo.addPlatform(new PlatformInfo("win32", "92f0884414c1f046cb2de26de9e67c38", 96880128));
+        gaUpdateInfo.addPlatform(new PlatformInfo("linux", "76ad0c6ea4af706d033030c5820eab61", 148872612));
         updateInfo.put(CHN_RELEASE, gaUpdateInfo);
-        UpdateInfo betaUpdateInfo = new UpdateInfo(11234, "7_1_4_beta", "7.1.4", "minor");
-        betaUpdateInfo.addPlatform(new PlatformInfo("macos", "7a208abfbc3c6209717109f7bca3231a", 76597264));
-        betaUpdateInfo.addPlatform(new PlatformInfo("win32", "5cb60f54164b09368c4b677c601bef0d", 96889344));
-        betaUpdateInfo.addPlatform(new PlatformInfo("linux", "787c2a468dbb777bdd2f58994bd65f56", 148836314));
-        updateInfo.put(CHN_BETA, betaUpdateInfo);
     }
     
     static final String PARAM_CHN = "chn";
@@ -203,7 +198,7 @@ public class AutoUpdateTest {
         nvp[2] = new NameValuePair(PARAM_BID, bid+"");
         nvp[3] = new NameValuePair(PARAM_BOS, os);
         String response = send(nvp);
-//        OfflineLog.offline.info("\r\n"+response);
+        OfflineLog.offline.info("\r\n"+response);
         UpdateInfo update = updateInfo.get(chn);
         if (chn.equalsIgnoreCase(CHN_BETA)) {
             //if GA is newer it should be published
