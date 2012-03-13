@@ -80,6 +80,7 @@ public class IntroViewModel: BaseViewModel
             {
                 m_scheduleViewModel.SchedList.Clear();
             }
+            m_optionsViewModel.OEnableNext = false;
         }
     }
     public ICommand GetIntroServerMigCommand {

@@ -406,7 +406,15 @@ public class OptionsViewModel: BaseViewModel
         get { return oenableNext; }
         set
         {
-            oenableNext = value;
+            if (!isServer)
+            {
+                ScheduleViewModel scheduleViewModel = ((ScheduleViewModel)ViewModelPtrs[(int)ViewType.SCHED]);
+                oenableNext = scheduleViewModel.IsComplete() ? false : value;
+            }
+            else
+            {
+                oenableNext = value;
+            }
             OnPropertyChanged(new PropertyChangedEventArgs("OEnableNext"));
         }
     }

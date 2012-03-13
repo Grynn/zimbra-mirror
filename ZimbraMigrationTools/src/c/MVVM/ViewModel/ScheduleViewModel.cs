@@ -19,7 +19,8 @@ public class ScheduleViewModel: BaseViewModel
     readonly Schedule m_schedule = new Schedule(false);
     string m_configFile;
     string m_usermapFile;
-    bool m_isPreview;                           // temporary
+    bool m_isPreview;
+    bool m_isComplete;
 
     public ScheduleViewModel()
     {
@@ -30,6 +31,7 @@ public class ScheduleViewModel: BaseViewModel
         m_configFile = "";
         m_usermapFile = "";
         m_isPreview = false;
+        m_isComplete = false;
     }
 
     public string GetConfigFile()
@@ -45,6 +47,11 @@ public class ScheduleViewModel: BaseViewModel
     public void SetUsermapFile(string usermapFile)
     {
         this.m_usermapFile = usermapFile;
+    }
+
+    public bool IsComplete()
+    {
+        return m_isComplete;
     }
 
     // Commands
@@ -217,7 +224,14 @@ public class ScheduleViewModel: BaseViewModel
             ((AccountResultsViewModel)ViewModelPtrs[(int)ViewType.RESULTS]);
 
         accountResultsViewModel.AccountResultsList.Clear();
-        EnableMigrate = false;
+        if (isServer)
+        {
+            EnableMigrate = false;
+        }
+        else
+        {
+            ((OptionsViewModel)ViewModelPtrs[(int)ViewType.OPTIONS]).OEnableNext = false;
+        }
         accountResultsViewModel.EnableStop = !EnableMigrate;
 
         int num = 0;
@@ -309,7 +323,7 @@ public class ScheduleViewModel: BaseViewModel
         {
             if (value == m_schedule.EnableMigrate)
                 return;
-            m_schedule.EnableMigrate = value;
+            m_schedule.EnableMigrate = m_isComplete ? false : value;
             OnPropertyChanged(new PropertyChangedEventArgs("EnableMigrate"));
         }
     }
@@ -667,6 +681,7 @@ public class ScheduleViewModel: BaseViewModel
 
             usersViewModel.UsersList.Clear();
         }
+        m_isComplete = true;
     }
 
     public void Acct_OnAcctChanged(object sender, MigrationObjectEventArgs e)
