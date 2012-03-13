@@ -317,8 +317,7 @@ ZaNewCosXWizard.FEATURE_TAB_ATTRS = [ZaCos.A_zimbraFeatureMailEnabled,
 	ZaCos.A_zimbraFeatureMailSendLaterEnabled,
 	//ZaCos.A_zimbraFeatureFreeBusyViewEnabled,
     ZaCos.A_zimbraFeatureCalendarReminderDeviceEmailEnabled,
-	ZaCos.A_zimbraFeatureSMIMEEnabled,
-	ZaCos.A_zimbraFeatureManageSMIMECertificateEnabled
+	ZaCos.A_zimbraFeatureSMIMEEnabled
 ];
 
 ZaNewCosXWizard.FEATURE_TAB_RIGHTS = [];
@@ -666,13 +665,11 @@ ZaNewCosXWizard.myXFormModifier = function(xFormObject, entry) {
             {type:_ZAWIZ_TOP_GROUPER_,  label:ZaMsg.NAD_zimbraSMIMEFeature, id:"cos_form_features_smime",
                 visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,
 					[
-						ZaCos.A_zimbraFeatureManageSMIMECertificateEnabled,
 						ZaCos.A_zimbraFeatureSMIMEEnabled
 					]]
 				],
                 items:[
-                    {ref:ZaCos.A_zimbraFeatureSMIMEEnabled, type:_WIZ_CHECKBOX_, msgName:ZaMsg.LBL_zimbraFeatureSMIMEEnabled,label:ZaMsg.LBL_zimbraFeatureSMIMEEnabled, trueValue:"TRUE", falseValue:"FALSE"},
-                    {ref:ZaCos.A_zimbraFeatureManageSMIMECertificateEnabled, type:_WIZ_CHECKBOX_, msgName:ZaMsg.LBL_zimbraFeatureManageSMIMECertificateEnabled,label:ZaMsg.LBL_zimbraFeatureManageSMIMECertificateEnabled, trueValue:"TRUE", falseValue:"FALSE"}
+                    {ref:ZaCos.A_zimbraFeatureSMIMEEnabled, type:_WIZ_CHECKBOX_, msgName:ZaMsg.LBL_zimbraFeatureSMIMEEnabled,label:ZaMsg.LBL_zimbraFeatureSMIMEEnabled, trueValue:"TRUE", falseValue:"FALSE"}
                 ]
             }
 
