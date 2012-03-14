@@ -611,6 +611,7 @@ STDMETHODIMP CMapiAccessWrap::GetData(BSTR UserId, VARIANT ItemId, FolderType ty
                 {
                     pIt[L"taskflagdueby"] = SysAllocString((taskData.TaskFlagDueBy).c_str());
                 }
+                pIt[L"class"] = SysAllocString((taskData.ApptClass).c_str());
                 pIt[L"contentType0"] = SysAllocString((taskData.vMessageParts[0].contentType).c_str());
                 pIt[L"content0"] = SysAllocString((taskData.vMessageParts[0].content).c_str());
                 pIt[L"contentType1"] = SysAllocString((taskData.vMessageParts[1].contentType).c_str());

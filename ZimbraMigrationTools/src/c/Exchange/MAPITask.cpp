@@ -42,6 +42,7 @@ MAPITask::MAPITask(Zimbra::MAPI::MAPISession &session, Zimbra::MAPI::MAPIMessage
 	pr_billinginfo = 0;
         pr_taskreminderset = 0;
         pr_taskflagdueby = 0;
+        pr_private = 0;
 	InitNamedPropsForTask();
     //}
 
@@ -57,6 +58,7 @@ MAPITask::MAPITask(Zimbra::MAPI::MAPISession &session, Zimbra::MAPI::MAPIMessage
     m_pMileage = L"";
     m_pBillingInfo = L"";
     m_pTaskFlagDueBy = L"";
+    m_pPrivate = L"";
 
     SetMAPITaskValues();
 }
@@ -87,6 +89,7 @@ HRESULT MAPITask::InitNamedPropsForTask()
     nameIdsC[2] = 0x8535;
     nameIdsC[3] = 0x8503;
     nameIdsC[4] = 0x8560;
+    nameIdsC[5] = 0x8506;
 
     HRESULT hr = S_OK;
     Zimbra::Util::ScopedBuffer<SPropValue> pPropValMsgClass;
@@ -139,6 +142,7 @@ HRESULT MAPITask::InitNamedPropsForTask()
     pr_billinginfo = SetPropType(pTaskTagsC->aulPropTag[N_BILLING], PT_TSTRING);
     pr_taskreminderset = SetPropType(pTaskTagsC->aulPropTag[N_TASKREMINDERSET], PT_BOOLEAN);
     pr_taskflagdueby = SetPropType(pTaskTagsC->aulPropTag[N_TASKFLAGDUEBY], PT_SYSTIME);
+    pr_private = SetPropType(pTaskTagsC->aulPropTag[N_TPRIVATE], PT_BOOLEAN);
 
     // free the memory we allocated on the head
     for (int i = 0; i < N_NUMTASKPROPS; i++)
@@ -163,7 +167,8 @@ HRESULT MAPITask::SetMAPITaskValues()
 	T_NUMALLTASKPROPS, {
 	    PR_SUBJECT, PR_BODY, PR_HTML, PR_IMPORTANCE, pr_isrecurringt, pr_recurstreamt, pr_status,
 	    pr_percentcomplete, pr_taskstart, pr_taskdue, pr_totalwork,
-	    pr_actualwork, pr_companies, pr_mileage, pr_billinginfo, pr_taskreminderset, pr_taskflagdueby
+	    pr_actualwork, pr_companies, pr_mileage, pr_billinginfo,
+            pr_taskreminderset, pr_taskflagdueby, pr_private
 	}
     };
 
@@ -228,9 +233,13 @@ HRESULT MAPITask::SetMAPITaskValues()
     {
 	SetBillingInfo(m_pPropVals[T_BILLING].Value.lpszW);
     }
-    if (m_pPropVals[N_TASKFLAGDUEBY].ulPropTag == taskProps.aulPropTag[N_TASKFLAGDUEBY])
+    if (m_pPropVals[T_TASKFLAGDUEBY].ulPropTag == taskProps.aulPropTag[T_TASKFLAGDUEBY])
     {
         SetTaskFlagDueBy(m_pPropVals[T_TASKFLAGDUEBY].Value.ft);
+    }
+    if (m_pPropVals[T_PRIVATE].ulPropTag == taskProps.aulPropTag[T_PRIVATE])
+    {
+	SetPrivate(m_pPropVals[T_PRIVATE].Value.b);
     }
 
     SetPlainTextFileAndContent();
@@ -477,6 +486,11 @@ void MAPITask::SetTaskFlagDueBy(FILETIME ft)
     m_pTaskFlagDueBy = (st.wYear == 1601) ? L"" : Zimbra::Util::FormatSystemTime(st, TRUE, TRUE);
 }
 
+void MAPITask::SetPrivate(unsigned short usPrivate)
+{
+    m_pPrivate = (usPrivate == 1) ? L"1" : L"0";
+}
+
 void MAPITask::SetPlainTextFileAndContent()
 {
     m_pPlainTextFile = Zimbra::MAPI::Util::SetPlainText(m_pMessage, &m_pPropVals[T_BODY]);
@@ -501,6 +515,7 @@ wstring MAPITask::GetMileage() { return m_pMileage; }
 wstring MAPITask::GetCompanies() { return m_pCompanies; }
 wstring MAPITask::GetBillingInfo() { return m_pBillingInfo; }
 wstring MAPITask::GetTaskFlagDueBy() { return m_pTaskFlagDueBy; }
+wstring MAPITask::GetPrivate() { return m_pPrivate; }
 wstring MAPITask::GetPlainTextFileAndContent() { return m_pPlainTextFile; }
 wstring MAPITask::GetHtmlFileAndContent() { return m_pHtmlFile; }
 

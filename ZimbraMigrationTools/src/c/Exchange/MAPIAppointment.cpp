@@ -41,6 +41,7 @@ MAPIAppointment::MAPIAppointment(Zimbra::MAPI::MAPISession &session,  Zimbra::MA
 	pr_recurstream = 0;
 	pr_timezoneid = 0;
 	pr_reminderminutes = 0;
+        pr_private = 0;
 	pr_responsestatus = 0;
         pr_exceptionreplacetime = 0;
 	InitNamedPropsForAppt();

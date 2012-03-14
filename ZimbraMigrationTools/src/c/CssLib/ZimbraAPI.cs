@@ -1572,6 +1572,15 @@ public class ZimbraAPI
         writer.WriteAttributeString("fb", "B");
         //
 
+        // private, if applicable
+        if (task["class"].Length > 0)
+        {
+            if (task["class"] == "1")
+            {
+                writer.WriteAttributeString("class", "PRI");
+            }
+        }
+
         if (task.ContainsKey("uid"))     // for now
         {
             writer.WriteAttributeString("uid", task["uid"]);

@@ -18,7 +18,7 @@ private:
 
     // prop tags for named properties
     ULONG pr_isrecurringt, pr_recurstreamt, pr_status, pr_percentcomplete, pr_taskstart, pr_taskdue, pr_totalwork, pr_actualwork, pr_companies,
-	  pr_mileage, pr_billinginfo, pr_taskreminderset, pr_taskflagdueby;
+	  pr_mileage, pr_billinginfo, pr_taskreminderset, pr_taskflagdueby, pr_private;
 
     // index of props
     typedef enum _TaskPropIdx
@@ -28,7 +28,7 @@ private:
 
     typedef enum _CommonTPropIdx
     {
-        N_COMPANIES, N_MILEAGE, N_BILLING, N_TASKREMINDERSET, N_TASKFLAGDUEBY, N_NUMCOMMONTPROPS
+        N_COMPANIES, N_MILEAGE, N_BILLING, N_TASKREMINDERSET, N_TASKFLAGDUEBY, N_TPRIVATE, N_NUMCOMMONTPROPS
     } CommonTPropIdx;
 
     // this enum lists all the props
@@ -36,7 +36,7 @@ private:
     {
         T_SUBJECT, T_BODY, T_HTMLBODY, T_IMPORTANCE, T_ISRECURT, T_RECURSTREAMT, T_STATUS, T_PERCENTCOMPLETE,
         T_TASKSTART, T_TASKDUE, T_TOTALWORK, T_ACTUALWORK, T_COMPANIES, T_MILEAGE, T_BILLING, T_TASKREMINDERSET,
-        T_TASKFLAGDUEBY, T_NUMALLTASKPROPS
+        T_TASKFLAGDUEBY, T_PRIVATE, T_NUMALLTASKPROPS
     };
 
     // these are the named property id's
@@ -57,6 +57,7 @@ private:
     wstring m_pMileage;
     wstring m_pBillingInfo;
     wstring m_pTaskFlagDueBy;
+    wstring m_pPrivate;
     wstring m_pPlainTextFile;
     wstring m_pHtmlFile;
     //
@@ -78,6 +79,7 @@ public:
     void SetMileage(LPTSTR pStr);
     void SetBillingInfo(LPTSTR pStr);
     void SetTaskFlagDueBy(FILETIME ft);
+    void SetPrivate(unsigned short usPrivate);
     void SetPlainTextFileAndContent();
     void SetHtmlFileAndContent();
     void SetRecurValues();
@@ -96,6 +98,7 @@ public:
     wstring GetCompanies();
     wstring GetBillingInfo();
     wstring GetTaskFlagDueBy();
+    wstring GetPrivate();
     wstring GetPlainTextFileAndContent();
     wstring GetHtmlFileAndContent();
 };

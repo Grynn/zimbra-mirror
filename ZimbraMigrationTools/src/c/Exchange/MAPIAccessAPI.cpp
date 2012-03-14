@@ -780,6 +780,7 @@ LPCWSTR MAPIAccessAPI::GetItem(SBinary sbItemEID, BaseItemData &itemData)
             td->Companies = mapitask.GetCompanies();
             td->Mileage = mapitask.GetMileage();
             td->BillingInfo = mapitask.GetBillingInfo();
+            td->ApptClass = mapitask.GetPrivate();
             if (mapitask.IsTaskReminderSet())
             {
                 td->TaskFlagDueBy = mapitask.GetTaskFlagDueBy();
