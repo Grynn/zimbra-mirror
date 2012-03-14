@@ -531,6 +531,12 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     public synchronized Set<String> getDistributionLists(Account acct) throws ServiceException {
         return null;
     }
+    
+    @Override
+    public Set<String> getDirectDistributionLists(Account acct)
+            throws ServiceException {
+        return null;
+    }
 
     @Override
     public synchronized List<DistributionList> getDistributionLists(Account acct, boolean directOnly, Map<String, String> via) throws ServiceException {
