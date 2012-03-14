@@ -206,7 +206,7 @@
 				<include name="jaxen-1.1.1.jar" />
 				<include name="libidn-1.19.jar" />
 				<include name="log4j-1.2.16.jar" />
-				<include name="mail.jar" />
+				<include name="javamail-1.4.3.jar" />
 				<include name="mysql-connector-java-5.1.18-bin.jar" />
 				<include name="guava-*.jar" />
 			</fileset>

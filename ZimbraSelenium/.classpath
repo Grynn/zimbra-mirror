@@ -40,11 +40,6 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/apache-log4j-extras-1.0-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/mail.jar" sourcepath="/ZimbraCommon/jars-src/javamail-1.4.2-src.zip">
-		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/javamail-1.4.2-javadoc.zip!/"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/libidn-1.19.jar" sourcepath="/ThirdParty/libidn/libidn/src"/>
 	<classpathentry kind="lib" path="jars/JSTAF.jar"/>
 	<classpathentry kind="lib" path="jars/json-lib-2.3-jdk15.jar"/>
@@ -58,5 +53,10 @@
 	<classpathentry kind="lib" path="jars/selenium-server-standalone-2.20.0.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/mysql-connector-java-5.1.18-bin.jar" sourcepath="/ThirdParty/connector-j/mysql-connector-java-5.1.18/src"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraClient"/>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/javamail-1.4.3.jar" sourcepath="/ZimbraCommon/jars-src/javamail-1.4.3-src.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/javamail-1.4.3-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
