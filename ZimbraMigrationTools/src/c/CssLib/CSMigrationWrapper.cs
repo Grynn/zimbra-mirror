@@ -541,12 +541,6 @@ public class CSMigrationWrapper
                 Log.info("Skipping folder", folder.Name);
                 continue;
             }
-            if (folder.ItemCount == 0)
-            {
-                Log.info("Skipping empty folder", folder.Name);
-                continue;
-            }
-
             Log.info("Processing folder", folder.Name);
             if (folder.Id == 0)
             {
@@ -557,6 +551,11 @@ public class CSMigrationWrapper
                 int stat = api.CreateFolder(folder.FolderPath, ViewType);
 
                 path = folder.FolderPath;
+            }
+            if (folder.ItemCount == 0)
+            {
+                Log.info("Skipping empty folder", folder.Name);
+                continue;
             }
             // Set FolderName at the end, since we trigger results on that, so we need all the values set
             Acct.migrationFolder.TotalCountOfItems = folder.ItemCount;
