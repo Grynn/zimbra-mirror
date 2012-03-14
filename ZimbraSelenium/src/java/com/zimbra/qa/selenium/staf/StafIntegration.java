@@ -157,7 +157,7 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
 			configProperties.setProperty("server.scheme", "http");
 			configProperties.setProperty("server.host", valueServer);
 			configProperties.setProperty("server.port", "80");
-			configProperties.setProperty("adminName", "admin@" + valueServer);
+			configProperties.setProperty("adminName", "globaladmin@" + valueServer);
 			configProperties.setProperty("browser", "firefox"); // TODO
 
 			configProperties.setProperty("seleniumMode", "Local");

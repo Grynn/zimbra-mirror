@@ -20,6 +20,7 @@
 	<property name="src.dir" location="src" />
 	<property name="src.java.dir" location="${src.dir}/java" />
 
+	<property name="zimbraqa.dir" location="../ZimbraQA" />
 	<property name="webclient.dir" location="../ZimbraWebClient" />
 	<property name="native.dir" location="../ZimbraNative" />
 	<property name="zimlet.dir" location="../Zimlet" />
@@ -75,7 +76,7 @@
 		<ant dir="${soap.dir}" target="jar" inheritAll="false" />
 	</target>
 
-	<target name="compile" depends="build-init,bundles-jar,coverage-jar,compile-ZimbraCommon,compile-ZimbraSoap,compile-ZimbraServer" description="Compiles the source code">
+	<target name="compile" depends="build-init,data-files,bundles-jar,coverage-jar,compile-ZimbraCommon,compile-ZimbraSoap,compile-ZimbraServer" description="Compiles the source code">
 		<echo message="compiling framework..." />
 		<javac destdir="${build.classes.dir}" debug="true" classpathref="class.path" nowarn="on">
 			<src refid="all.java.path" />
@@ -97,6 +98,12 @@
 			<fileset dir="${src.java.dir}/com/zimbra/qa/selenium/projects/mobile/core" includes="**/*.java"/>
 			<fileset dir="${src.java.dir}/com/zimbra/qa/selenium/projects/mobile/ui" includes="**/*.java"/>
 		</javadoc>
+	</target>
+	
+	<target name="data-files" description="Copies sample data from ZimbraQA to ZimbraSelenium">
+		<copy todir="data/public/Files">
+			<fileset dir="${zimbraqa.dir}/data/Files" />
+		</copy>
 	</target>
 	
 	<target name="bundles-classes" description="Copies the I18N properties files to build">
