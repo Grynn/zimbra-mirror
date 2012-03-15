@@ -122,6 +122,21 @@ function() {
 	return "ZaZimbraAdmin";
 }
 
+ZaZimbraAdmin.clearCookie = function () {
+	try {
+		var soapDoc = AjxSoapDoc.create("ClearCookieRequest", ZaZimbraAdmin.URN, null);
+		var cookieBy = soapDoc.set("cookie");
+		cookieBy.setAttribute("name", ZaZimbraAdmin._COOKIE_NAME);
+		var clearCookieCommand = new ZmCsfeCommand();
+		var params = new Object();
+		params.soapDoc = soapDoc;	
+		params.asyncMode = false;
+		params.noAuthToken = true;
+		clearCookieCommand.invoke(params);
+	} catch (ex) {
+		this._handleException(ex, "ZaZimbraAdmin.clearCookie", null, true);
+	}
+}
 /**
 * Sets up ZimbraMail, and then starts it by calling its constructor. It is assumed that the
 * CSFE is on the same host.
@@ -166,7 +181,7 @@ function(domain) {
         }
 	}
     if (isResend) {
-    	ZmCsfeCommand.clearAuthToken();
+    	ZaZimbraAdmin.clearCookie();
 		params.resend = true;
         resp = command.invoke(params).Body.BatchResponse;
     }
