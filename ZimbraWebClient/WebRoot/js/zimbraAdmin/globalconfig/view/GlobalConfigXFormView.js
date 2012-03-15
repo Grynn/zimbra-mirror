@@ -913,6 +913,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
                 {type: _ZATABCASE_, caseKey:_tab10,         paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),
 		            colSizes:["auto"],numCols:1,id:"global_auth_tab",
 		            items:[
+                        	/* bug 71234, remove SPNEGO from UI 
                         	{ type:_ZA_TOP_GROUPER_, label:ZaMsg.NAD_SPNEGO_Configure,
                                   items:[
 							  	          { ref: ZaGlobalConfig.A_zimbraSpnegoAuthEnabled, type: _CHECKBOX_,
@@ -932,7 +933,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
                                             enableDisableChecks:[[XForm.checkInstanceValue,ZaGlobalConfig.A_zimbraSpnegoAuthEnabled,'TRUE']]
                                           }
                                   ]
-                            },
+                            }, */
                             { type:_ZA_TOP_GROUPER_, label: ZaMsg.NAD_AUTH_ClientConfigure,
                                   items:[
                                         {ref:ZaGlobalConfig.A_zimbraMailSSLClientCertMode, type:_SELECT1_,

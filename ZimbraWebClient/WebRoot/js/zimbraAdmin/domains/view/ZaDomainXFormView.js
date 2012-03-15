@@ -1311,6 +1311,7 @@ if(appNewUI) {
                     onChange:ZaDomainXFormView.onFormFieldChanged
                     }
                 ]},
+                /* bug 71234, remove Kerberos
 				{ type:_ZA_TOP_GROUPER_, label:ZaMsg.NAD_Kerberos_Configure, colSpan:"*",
                     numCols: 2, colSizes: ["275px","*"],
                     visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,
@@ -1322,7 +1323,7 @@ if(appNewUI) {
           		    label:ZaMsg.LBL_zimbraAuthKerberos5Realm, width:250,
           		    onChange:ZaDomainXFormView.onFormFieldChanged
         		    }
-                ]},
+                ]}, */
                 { type:_ZA_TOP_GROUPER_, label: ZaMsg.NAD_AUTH_ClientConfigure, colSpan:"*",
                     visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,
                         [ZaDomain.A_zimbraMailSSLClientCertPrincipalMap,
