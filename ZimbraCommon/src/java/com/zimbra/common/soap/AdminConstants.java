@@ -425,6 +425,10 @@ public final class AdminConstants {
     // noop
     public static final String E_NO_OP_REQUEST = "NoOpRequest";
     public static final String E_NO_OP_RESPONSE = "NoOpResponse";
+    
+    // cookie
+    public static final String E_CLEAR_COOKIE_REQUEST = "ClearCookieRequest";
+    public static final String E_CLEAR_COOKIE_RESPONSE = "ClearCookieResponse";
 
     // SMIME config
     public static final String E_GET_SMIME_CONFIG_REQUEST = "GetSMIMEConfigRequest";
@@ -865,6 +869,10 @@ public final class AdminConstants {
     // noop
     public static final QName NO_OP_REQUEST = QName.get(E_NO_OP_REQUEST, NAMESPACE);
     public static final QName NO_OP_RESPONSE = QName.get(E_NO_OP_RESPONSE, NAMESPACE);
+    
+    // cookie
+    public static final QName CLEAR_COOKIE_REQUEST = QName.get(E_CLEAR_COOKIE_REQUEST, NAMESPACE);
+    public static final QName CLEAR_COOKIE_RESPONSE = QName.get(E_CLEAR_COOKIE_RESPONSE, NAMESPACE);
 
     public static final QName GET_SMIME_CONFIG_REQUEST = QName.get(E_GET_SMIME_CONFIG_REQUEST, NAMESPACE);
     public static final QName GET_SMIME_CONFIG_RESPONSE = QName.get(E_GET_SMIME_CONFIG_RESPONSE, NAMESPACE);
@@ -929,6 +937,7 @@ public final class AdminConstants {
     public static final String E_CACHE = "cache";
     public static final String E_CODE = "code";
     public static final String E_CONFIG = "config";
+    public static final String E_COOKIE = "cookie";
     public static final String E_COS = "cos";
     public static final String E_CN = "cn";
     public static final String E_DOMAIN = "domain";
