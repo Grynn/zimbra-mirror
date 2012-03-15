@@ -318,6 +318,11 @@ function(enabled) {
  */
 DwtButton.prototype.setImage =
 function(imageInfo) {
+	// This button is set to not show image. Doing it here is safer against bugs resulting from dynamically modified images and text such as teh case of spam vs. "no spam".
+	// This way you don't have to worry in that code whether we show image or not (Which could change for example as it does in this bug when moving the button to the main buttons).
+	if (this.whatToShow && !this.whatToShow.showImage) {
+		return;
+	}
 	DwtLabel.prototype.setImage.call(this, imageInfo);
 	this._setMinWidth();
 };
@@ -329,6 +334,10 @@ function(imageInfo) {
  */
 DwtButton.prototype.setText =
 function(text) {
+	//see explanation in setImage
+	if (this.whatToShow && !this.whatToShow.showText) {
+		return;
+	}
 	DwtLabel.prototype.setText.call(this, text);
 	this._setMinWidth();
 };
