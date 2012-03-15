@@ -934,6 +934,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
                                           }
                                   ]
                             }, */
+                        	/* bug 71233, remove 2-way SSL auth
                             { type:_ZA_TOP_GROUPER_, label: ZaMsg.NAD_AUTH_ClientConfigure,
                                   items:[
                                         {ref:ZaGlobalConfig.A_zimbraMailSSLClientCertMode, type:_SELECT1_,
@@ -986,7 +987,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
                                             ]
                                         }
                                   ]
-                            },
+                            }, */
                             { type:_ZA_TOP_GROUPER_, label: ZaMsg.NAD_WEBCLIENT_Configure,
                                   items:[
                                           { ref: ZaGlobalConfig.A_zimbraWebClientLoginURL,

@@ -1324,6 +1324,7 @@ if(appNewUI) {
           		    onChange:ZaDomainXFormView.onFormFieldChanged
         		    }
                 ]}, */
+                /* bug 71233, remove 2-way SSL
                 { type:_ZA_TOP_GROUPER_, label: ZaMsg.NAD_AUTH_ClientConfigure, colSpan:"*",
                     visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,
                         [ZaDomain.A_zimbraMailSSLClientCertPrincipalMap,
@@ -1351,7 +1352,7 @@ if(appNewUI) {
                             onChange:ZaDomainXFormView.onFormFieldChanged
                           }
                       ]
-                },
+                }, */
                 { type:_ZA_TOP_GROUPER_, label: ZaMsg.NAD_WEBCLIENT_Configure, colSpan:"*",
                     visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,
                         [ZaDomain.A_zimbraWebClientLoginURL,
