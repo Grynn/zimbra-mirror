@@ -10,6 +10,8 @@ import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.octopus.ui.DialogError;
 import com.zimbra.qa.selenium.projects.octopus.ui.DialogError.DialogErrorID;
+import com.zimbra.qa.selenium.projects.octopus.core.CommonConstants;
+import com.zimbra.qa.selenium.projects.octopus.core.CommonConstants.SHARE_PERMISSION;
 
 
 public class PageHistory extends AbsTab {
@@ -83,46 +85,74 @@ public class PageHistory extends AbsTab {
 	}
 
 	//Get text displayed in global history
-	public static class GetText {
+	public static class GetText implements CONSTANTS{
 		//TODO: file history text
 		
+		public static String share(SHARE_PERMISSION permission, String folderName, ZimbraAccount grantee){
+			String access="";
+			
+			switch (permission) {
+			   case SHARE_AS_READ: access="Read"; break;
+			   case SHARE_AS_READWRITE: access="RW"; break;
+			   case SHARE_AS_ADMIN: access="admin"; 
+			}
+				
+			//TODO veify if grantee.EmailAddress or grantee.username is used
+			return YOU + "granted " + access + " access on folder " + folderName + " to " + grantee.EmailAddress;		   	
+		}
+		
+	
+		public static String revoke(SHARE_PERMISSION permission, String folderName, ZimbraAccount grantee){
+			String access="";
+			
+			switch (permission) {
+			   case SHARE_AS_READ: access="Read"; break;
+			   case SHARE_AS_READWRITE: access="RW"; break;
+			   case SHARE_AS_ADMIN: access="admin"; 
+			}
+				
+			//TODO veify if grantee.EmailAddress or grantee.username is used
+			return YOU + "revokeed " + access + " access on folder " + folderName + " to " + grantee.EmailAddress;		   	
+		}
+	
+		
 		public static String rename(String oldName, String newName) {
-			return CONSTANTS.YOU +  CONSTANTS.RENAME_PREFIX 
-			        +   oldName + CONSTANTS.RENAME_MIDFIX + newName + CONSTANTS.RENAME_POSTFIX;
+			return YOU +  RENAME_PREFIX 
+			        +   oldName + RENAME_MIDFIX + newName + RENAME_POSTFIX;
 		}
 
 		public static String comment(String fileName) {
-			return CONSTANTS.YOU +  CONSTANTS.COMMENT_PREFIX 
-			        +   fileName + CONSTANTS.COMMENT_POSTFIX;
+			return YOU +  COMMENT_PREFIX 
+			        +   fileName + COMMENT_POSTFIX;
 		}
 		public static String newVersion(String fileName) {
-			return CONSTANTS.YOU +  CONSTANTS.NEW_VERSION_PREFIX 
-			        +   fileName + CONSTANTS.NEW_VERSION_POSTFIX;
+			return YOU +  NEW_VERSION_PREFIX 
+			        +   fileName + NEW_VERSION_POSTFIX;
 		}
 
 		public static String newVersion(String fileName, String user) {
-			return          user +  CONSTANTS.NEW_VERSION_PREFIX 
-			        +   fileName + CONSTANTS.NEW_VERSION_POSTFIX;
+			return          user +  NEW_VERSION_PREFIX 
+			        +   fileName + NEW_VERSION_POSTFIX;
 		}
 
 		public static String favorite(String fileName) {
-			return CONSTANTS.YOU + CONSTANTS.FAVORITE_PREFIX 
-			        +   fileName + CONSTANTS.FAVORITE_POSTFIX;
+			return YOU + FAVORITE_PREFIX 
+			        +   fileName + FAVORITE_POSTFIX;
 		}
 		
 		public static String favorite(String fileName, String user) {
-			return          user + CONSTANTS.FAVORITE_PREFIX 
-			        +   fileName + CONSTANTS.FAVORITE_POSTFIX;
+			return          user + FAVORITE_PREFIX 
+			        +   fileName + FAVORITE_POSTFIX;
 		}
 		
 		public static String unfavorite(String fileName) {
-			return CONSTANTS.YOU + CONSTANTS.UNFAVORITE_PREFIX 
-			        +   fileName + CONSTANTS.UNFAVORITE_POSTFIX;
+			return YOU + UNFAVORITE_PREFIX 
+			        +   fileName + UNFAVORITE_POSTFIX;
 		}
 		
 		public static String unfavorite(String fileName, String user) {
-			return          user + CONSTANTS.UNFAVORITE_PREFIX 
-			        +   fileName + CONSTANTS.UNFAVORITE_POSTFIX;
+			return          user + UNFAVORITE_PREFIX 
+			        +   fileName + UNFAVORITE_POSTFIX;
 		}
 		
 	}
@@ -201,7 +231,7 @@ public class PageHistory extends AbsTab {
 	public void zToolbarCheckMark(String locator,boolean check) throws HarnessException {
 		logger.info(myPageName() + " zToolbarCheckOption(" + locator + ")");
 
-		tracer.trace("Check the " + locator + " option");
+		tracer.trace(check + " check " + locator + " option");
 
 		if (!this.sIsElementPresent(locator))
 			throw new HarnessException("Check box is not present: " + locator);
