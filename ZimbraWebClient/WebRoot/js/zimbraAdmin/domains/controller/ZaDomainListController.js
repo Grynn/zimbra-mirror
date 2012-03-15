@@ -161,8 +161,9 @@ function () {
 	this._popupOperations[ZaOperation.VIEW_DOMAIN_ACCOUNTS]=new ZaOperation(ZaOperation.VIEW_DOMAIN_ACCOUNTS,ZaMsg.Domain_view_accounts, ZaMsg.Domain_view_accounts_tt, "Search", "SearchDis", new AjxListener(this, this.viewAccountsButtonListener));
 	this._popupOperations[ZaOperation.GAL_WIZARD]=new ZaOperation(ZaOperation.GAL_WIZARD,ZaMsg.DTBB_GAlConfigWiz, ZaMsg.DTBB_GAlConfigWiz_tt, "GALWizard", "GALWizardDis", new AjxListener(this, ZaDomainListController.prototype._galWizButtonListener));   		
 	this._popupOperations[ZaOperation.AUTH_WIZARD]=new ZaOperation(ZaOperation.AUTH_WIZARD,ZaMsg.DTBB_AuthConfigWiz, ZaMsg.DTBB_AuthConfigWiz_tt, "AuthWizard", "AuthWizardDis", new AjxListener(this, ZaDomainListController.prototype._authWizButtonListener));
-    this._popupOperations[ZaOperation.AUTOPROV_WIZARD]=new ZaOperation(ZaOperation.AUTOPROV_WIZARD,ZaMsg.DTBB_AutoProvConfigWiz, ZaMsg.DTBB_AutoProvConfigWiz_tt, "Backup", "BackupDis", new AjxListener(this, ZaDomainListController.prototype._autoProvWizButtonListener));
-
+    /* bug 71235, remove auto provisioning
+     this._popupOperations[ZaOperation.AUTOPROV_WIZARD]=new ZaOperation(ZaOperation.AUTOPROV_WIZARD,ZaMsg.DTBB_AutoProvConfigWiz, ZaMsg.DTBB_AutoProvConfigWiz_tt, "Backup", "BackupDis", new AjxListener(this, ZaDomainListController.prototype._autoProvWizButtonListener));
+    */
 }
 ZaController.initPopupMenuMethods["ZaDomainListController"].push(ZaDomainListController.initPopupMenuMethod);
 
@@ -183,8 +184,9 @@ function () {
     this._toolbarOperations[ZaOperation.VIEW_DOMAIN_ACCOUNTS]=new ZaOperation(ZaOperation.VIEW_DOMAIN_ACCOUNTS,ZaMsg.Domain_view_accounts, ZaMsg.Domain_view_accounts_tt, "Search", "SearchDis", new AjxListener(this, this.viewAccountsButtonListener));
 	this._toolbarOperations[ZaOperation.GAL_WIZARD]=new ZaOperation(ZaOperation.GAL_WIZARD,ZaMsg.DTBB_GAlConfigWiz, ZaMsg.DTBB_GAlConfigWiz_tt, "GALWizard", "GALWizardDis", new AjxListener(this, ZaDomainListController.prototype._galWizButtonListener));   		
 	this._toolbarOperations[ZaOperation.AUTH_WIZARD]=new ZaOperation(ZaOperation.AUTH_WIZARD,ZaMsg.DTBB_AuthConfigWiz, ZaMsg.DTBB_AuthConfigWiz_tt, "AuthWizard", "AuthWizardDis", new AjxListener(this, ZaDomainListController.prototype._authWizButtonListener));
-    this._toolbarOperations[ZaOperation.AUTOPROV_WIZARD]=new ZaOperation(ZaOperation.AUTOPROV_WIZARD,ZaMsg.DTBB_AutoProvConfigWiz, ZaMsg.DTBB_AutoProvConfigWiz_tt, "Backup", "BackupDis", new AjxListener(this, ZaDomainListController.prototype._autoProvWizButtonListener));
-	
+   /* bug 71235, remove auto provisioning
+	this._toolbarOperations[ZaOperation.AUTOPROV_WIZARD]=new ZaOperation(ZaOperation.AUTOPROV_WIZARD,ZaMsg.DTBB_AutoProvConfigWiz, ZaMsg.DTBB_AutoProvConfigWiz_tt, "Backup", "BackupDis", new AjxListener(this, ZaDomainListController.prototype._autoProvWizButtonListener));
+	*/
 	if(ZaItem.hasRight(ZaDomain.RIGHT_CREATE_TOP_DOMAIN, ZaZimbraAdmin.currentAdminAccount)) {
 		this._toolbarOrder.push(ZaOperation.NEW);
 	}
@@ -194,7 +196,7 @@ function () {
     this._toolbarOrder.push(ZaOperation.VIEW_DOMAIN_ACCOUNTS);
     this._toolbarOrder.push(ZaOperation.GAL_WIZARD);
 	this._toolbarOrder.push(ZaOperation.AUTH_WIZARD);
-    this._toolbarOrder.push(ZaOperation.AUTOPROV_WIZARD);
+    /* bug 71235 removew auto privisioning this._toolbarOrder.push(ZaOperation.AUTOPROV_WIZARD); */
 	
 }
 ZaController.initToolbarMethods["ZaDomainListController"].push(ZaDomainListController.initToolbarMethod);

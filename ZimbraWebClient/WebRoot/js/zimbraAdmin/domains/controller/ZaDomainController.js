@@ -136,12 +136,13 @@ function () {
 		this._toolbarOrder.push(ZaOperation.CHECK_MX_RECORD);	   	
 	}
 
+	/* bug 71235, remove auto provisioning
 	if(ZaDomain.canConfigureAutoProv(this._currentObject)) {
 		this._toolbarOperations[ZaOperation.AUTOPROV_WIZARD]=new ZaOperation(ZaOperation.AUTOPROV_WIZARD,ZaMsg.DTBB_AutoProvConfigWiz,
                 ZaMsg.DTBB_AutoProvConfigWiz_tt, "Backup", "BackupDis",
                 new AjxListener(this, ZaDomainController.prototype._autoProvWizButtonListener));
 		this._toolbarOrder.push(ZaOperation.AUTOPROV_WIZARD);
-	}
+	} */
 
 }
 ZaController.initToolbarMethods["ZaDomainController"].push(ZaDomainController.initToolbarMethod);
@@ -178,11 +179,12 @@ function () {
 	   	this._popupOperations[ZaOperation.CHECK_MX_RECORD]=new ZaOperation(ZaOperation.CHECK_MX_RECORD,ZaMsg.DTBB_CheckMX, ZaMsg.DTBB_CheckMX_tt, "ReindexMailboxes", "ReindexMailboxes", new AjxListener(this, ZaDomainController.prototype._checkMXButtonListener));
 	}
 
+	/* bug 71235, remove auto provisioning
 	if(ZaDomain.canConfigureAutoProv(this._currentObject)) {
 		this._popupOperations[ZaOperation.AUTOPROV_WIZARD]=new ZaOperation(ZaOperation.AUTOPROV_WIZARD,ZaMsg.DTBB_AutoProvConfigWiz,
                 ZaMsg.DTBB_AutoProvConfigWiz_tt, "Backup", "BackupDis",
                 new AjxListener(this, ZaDomainController.prototype._autoProvWizButtonListener));
-	}
+	} */
 
 }
 ZaController.initPopupMenuMethods["ZaDomainController"].push(ZaDomainController.initPopupMenuMethod);

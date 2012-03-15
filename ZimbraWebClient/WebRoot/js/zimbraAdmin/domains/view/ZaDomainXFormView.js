@@ -1743,6 +1743,7 @@ items:[
 		};
                 switchGroup.items.push(case9a);
         }
+        /* bug 71235, removew auto provisioning
     // provision
     if(ZaTabView.isTAB_ENABLED(entry,ZaDomainXFormView.PROV_TAB_ATTRS, ZaDomainXFormView.PROV_TAB_RIGHTS)) {
             tabIx = ++this.TAB_INDEX;
@@ -2053,7 +2054,7 @@ if(appNewUI) {
         };
 }
         switchGroup.items.push(case10);
-    }
+    } */
     xFormObject.items.push(tabBar);
 	xFormObject.items.push(switchGroup);
     this.tabChoices = tabBar.choices;

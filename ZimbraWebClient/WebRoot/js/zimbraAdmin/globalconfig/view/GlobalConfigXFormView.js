@@ -1077,6 +1077,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
         switchItems.push (case10) ;
     }
 
+    /* bug 71235, remove AUTO Provistioning
     if(ZaTabView.isTAB_ENABLED(entry,GlobalConfigXFormView.AUTO_PROV_TAB_ATTRS, GlobalConfigXFormView.AUTO_PROV_TAB_RIGHTS)) {
     	_tab11 = ++this.TAB_INDEX;
 
@@ -1100,7 +1101,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
                     ]
                 };
         switchItems.push (case11) ;
-    }
+    } */
 
     this.tabChoices = tabBarChoices;
    if (!appNewUI) {
