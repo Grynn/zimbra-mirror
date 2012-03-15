@@ -20,9 +20,9 @@ my $sql;
 my $sth;
 
 # CONFIG VARIABLES
-my $host = "10.20.140.198";
+my $host = "10.137.244.6";
 my $database = "perf";
-my $tablename = "perf2";
+my $tablename = "perf";
 my $user = "perf";
 my $pw = "perf";
 

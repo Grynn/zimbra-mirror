@@ -24,9 +24,9 @@ my $sql;
 my $sth;
 
 # CONFIG VARIABLES
-my $host = "10.20.140.198";
+my $host = "10.137.244.6";
 my $database = "perf";
-my $tablename = "perf2";
+my $tablename = "perf";
 my $user = "perf";
 my $pw = "perf";
 
@@ -119,7 +119,7 @@ sub engine {
                 # The data for this browser
                 my @series;
 
-		$sql = "SELECT created,appid,buildid,browserid,milestoneid,delta,messageid FROM perf2 WHERE ( $sqlPlot AND $sqlMessageID AND $sqlColumnID $sqlApps $sqlBrowsers $sqlBuilds $sqlMilestones $sqlMessages ) ORDER BY messageid ASC";
+		$sql = "SELECT created,appid,buildid,browserid,milestoneid,delta,messageid FROM perf WHERE ( $sqlPlot AND $sqlMessageID AND $sqlColumnID $sqlApps $sqlBrowsers $sqlBuilds $sqlMilestones $sqlMessages ) ORDER BY messageid ASC";
                 $sth = $dbh->prepare($sql);
                 $sth->execute();
                 while ( my ($created, $appid, $buildid, $browserid, $milestoneid, $delta, $messageid ) = $sth->fetchrow_array() ) {
@@ -319,14 +319,14 @@ sub main {
 		$milestones{$id} = $milestone;
 	}
 
-	$sql = "SELECT MAX(delta) AS delta FROM perf2";
+	$sql = "SELECT MAX(delta) AS delta FROM perf";
 	$sth = $dbh->prepare($sql);
 	$sth->execute();
 	while (my ($max) = $sth->fetchrow_array()) {
 		# Round to the upper hundred
 		$ymax = ( (($max-($max%100))/100) + 1 ) * 100;
 	}
-	$sql = "SELECT MIN(delta) AS delta FROM perf2";
+	$sql = "SELECT MIN(delta) AS delta FROM perf";
 	$sth = $dbh->prepare($sql);
 	$sth->execute();
 	while (my ($min) = $sth->fetchrow_array()) {

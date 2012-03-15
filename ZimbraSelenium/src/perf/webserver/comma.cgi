@@ -20,9 +20,9 @@ my $sql;
 my $sth;
 
 # CONFIG VARIABLES
-my $host = "10.20.140.198";
+my $host = "10.137.244.6";
 my $database = "perf";
-my $tablename = "perf2";
+my $tablename = "perf";
 my $user = "perf";
 my $pw = "perf";
 
@@ -58,7 +58,7 @@ sub data {
 	my $sqlMilestones = &buildWhere("milestoneid", @milestoneids);
 	my $sqlMessages = &buildWhere("messageid", @messageids);
 
-	$sql = "SELECT created,appid,buildid,browserid,milestoneid,delta,messageid FROM perf2 WHERE ( (id > 0) $sqlApps $sqlBrowsers $sqlBuilds $sqlMilestones $sqlMessages ) ORDER BY messageid ASC";
+	$sql = "SELECT created,appid,buildid,browserid,milestoneid,delta,messageid FROM perf WHERE ( (id > 0) $sqlApps $sqlBrowsers $sqlBuilds $sqlMilestones $sqlMessages ) ORDER BY messageid ASC";
 	$sth = $dbh->prepare($sql);
 
 	$sth->execute();

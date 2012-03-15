@@ -24,9 +24,9 @@ my $sql;
 my $sth;
 
 # CONFIG VARIABLES
-my $host = "10.20.140.198";
+my $host = "10.137.244.6";
 my $database = "perf";
-my $tablename = "perf2";
+my $tablename = "perf";
 my $user = "perf";
 my $pw = "perf";
 
@@ -46,7 +46,7 @@ my $limitOrange = 1000;
 sub doAvg {
 	my ($messageid, $buildid) = @_;
 
-	$sql = "SELECT AVG(delta) FROM perf2 WHERE ( (messageid = $messageid) AND (buildid=$buildid) $sqlApps $sqlBrowsers $sqlMessages )";
+	$sql = "SELECT AVG(delta) FROM perf WHERE ( (messageid = $messageid) AND (buildid=$buildid) $sqlApps $sqlBrowsers $sqlMessages )";
 	$sth = $dbh->prepare($sql);
 	$sth->execute();
 	while (my ($ave) = $sth->fetchrow_array()) {
@@ -58,7 +58,7 @@ sub doAvg {
 sub doAvgLimit {
         my ($messageid, $buildid) = @_;
 
-	$sql = "SELECT AVG(delta) FROM (SELECT delta FROM perf2 WHERE ( (messageid = $messageid) AND (buildid=$buildid) $sqlApps $sqlBrowsers $sqlMessages ) ORDER BY created DESC LIMIT $tableLast) as t";
+	$sql = "SELECT AVG(delta) FROM (SELECT delta FROM perf WHERE ( (messageid = $messageid) AND (buildid=$buildid) $sqlApps $sqlBrowsers $sqlMessages ) ORDER BY created DESC LIMIT $tableLast) as t";
 	$sth = $dbh->prepare($sql);
 	$sth->execute();
 	while (my ($ave) = $sth->fetchrow_array()) {

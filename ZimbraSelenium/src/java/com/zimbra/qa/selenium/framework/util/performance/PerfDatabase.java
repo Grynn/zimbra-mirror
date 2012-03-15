@@ -69,7 +69,7 @@ mysql> create table messages (
  name VARCHAR(1024) 
  );
 
-mysql> create table perf2 (
+mysql> create table perf (
  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
  created TIMESTAMP(8),
  name VARCHAR(35),
@@ -151,7 +151,7 @@ public class PerfDatabase {
 		String columns = Arrays.asList(data.keySet().toArray()).toString().replace("[", "").replace("]", "");
 		String values = Arrays.asList(data.values().toArray()).toString().replace("[", "").replace("]", "");
 
-		String command = String.format("INSERT INTO perf2 (%s) VALUES (%s)", columns, values);
+		String command = String.format("INSERT INTO perf (%s) VALUES (%s)", columns, values);
 		Statement statement = null;
 		
 		try {
