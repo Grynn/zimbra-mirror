@@ -38,6 +38,12 @@ class Account: BackgroundWorker
     bool serverMigration = true;
 
     CountdownEvent countdown;
+
+    public CountdownEvent Countdown
+    {
+        get { return countdown; }
+        set { countdown = value; }
+    }
    
     /*private string migrateOptions;
     public string MigrateOptions {
@@ -45,19 +51,26 @@ class Account: BackgroundWorker
         set { migrateOptions = value; }
     
     }*/
+    private volatile bool _shouldStop;
+
+    public void RequestStop()
+    {
+        _shouldStop = true;
+    }
 
     
     public void StartMigration(System.Collections.Generic.List<MVVM.Model.Users> userlist, string Domainname, CssLib.MigrationOptions MailOptions, CountdownEvent countdown, object wrapper, int maxThreads = 2, bool ServerMigrationflag = true, string pstaccountname = "", string pstfile = "")
     {
         int number = 0;
+       
         if (ServerMigrationflag)
         {
             // InitializeBackgoundWorkers();
 
             Account[] AccountArray = new Account[maxThreads];
-            for (int f = 0; f < maxThreads; f++)
+            for (int j = 0; j < maxThreads; j++)
             {
-                AccountArray[f] = new Account();
+                AccountArray[j] = new Account();
             }
             
 
@@ -68,7 +81,7 @@ class Account: BackgroundWorker
 
                 Account myAccount = new Account();
                 myAccount.AccountName = userlist[f].UserName + "@" + Domainname;// AcctName;
-                myAccount.countdown = countdown;
+                myAccount.Countdown = countdown;
                 Currentuser = new MVVM.Model.Users();
                 Currentuser.UserName = userlist[f].UserName;
                 myAccount.Currentuser = Currentuser;
@@ -81,7 +94,7 @@ class Account: BackgroundWorker
 
 
                 bool fileProcessed = false;
-                while (!fileProcessed)
+                while ((!fileProcessed) && (!_shouldStop))
                 {
                     for (int threadNum = 0; threadNum < maxThreads; threadNum++)
                     {
@@ -105,8 +118,19 @@ class Account: BackgroundWorker
                     //If all threads are being used, sleep awhile before checking again  
                     if (!fileProcessed)
                     {
-                        Thread.Sleep(500);
+                         Thread.Sleep(500);
                     }
+                }
+                if (_shouldStop)
+                {
+                    
+                    for (int i = 0; i < maxThreads; i++)
+                    {
+                        System.Console.WriteLine("cancelling in main callback");
+                        countdown.Signal();
+                        AccountArray[i].CancelAsync();
+                    }
+                    
                 }
             }
         }
@@ -114,7 +138,7 @@ class Account: BackgroundWorker
         {
             Account myAccount = new Account();
             myAccount.AccountName = pstaccountname;// AcctName;
-            myAccount.countdown = countdown;
+            myAccount.Countdown = countdown;
             Currentuser = new MVVM.Model.Users();
             Currentuser.UserName = pstfile;
             myAccount.Currentuser = Currentuser;
@@ -207,166 +231,196 @@ class Account: BackgroundWorker
 
     private void accountToMigrate_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
     {
-        
-                
-        // Get argument from DoWorkEventArgs argument.  Can use any type here with cast   
-       // int myProcessArguments = (int)e.Argument;      
-        // "ProcessFile" is the name of my method that does the main work.  Replace with your own method!       
-        // Can return reulsts from this method, i.e. a status (OK, FAIL etc)   
-        //e.Result = ProcessFile(myProcessArgument); 
-        BackgroundWorker worker = sender as BackgroundWorker;
 
-        // Assign the result of the computation
-        // to the Result property of the DoWorkEventArgs
-        // object. This is will be available to the
-        // RunWorkerCompleted eventhandler.
-        // e.Result = Accounworker, e);
-        //int num = 0;
+       
+            // Get argument from DoWorkEventArgs argument.  Can use any type here with cast   
+            // int myProcessArguments = (int)e.Argument;      
+            // "ProcessFile" is the name of my method that does the main work.  Replace with your own method!       
+            // Can return reulsts from this method, i.e. a status (OK, FAIL etc)   
+            //e.Result = ProcessFile(myProcessArgument); 
+            BackgroundWorker worker = sender as BackgroundWorker;
 
-        Account argumentTest = e.Argument as Account;
+            // Assign the result of the computation
+            // to the Result property of the DoWorkEventArgs
+            // object. This is will be available to the
+            // RunWorkerCompleted eventhandler.
+            // e.Result = Accounworker, e);
+            //int num = 0;
 
-        CssLib.MigrationAccount MyAcct = new CssLib.MigrationAccount();
-        MyAcct.AccountName = argumentTest.AccountName;
-        MyAcct.AccountID = argumentTest.Currentuser.UserName;
-
-        
-        MyAcct.AccountNum = argumentTest.num;
-        
-        MyAcct.OnChanged += new CssLib.MigrationObjectEventHandler(Acct_OnAcctChanged);
-
-        CssLib.MigrationFolder MyFolder = new CssLib.MigrationFolder();
-
-        MyFolder.AccountNum = argumentTest.num;
-        MyFolder.OnChanged += new CssLib.MigrationObjectEventHandler(Folder_OnChanged);
-
-        MyAcct.migrationFolder = MyFolder;
-
-        CssLib.CSMigrationWrapper mw = argumentTest.TestObj;
-
-        if (worker.CancellationPending)
-        {
-            e.Cancel = true;
-        }
-        else
-        {
-           // TestObj.Migrate(MigrateOptions);
-
-            mw.StartMigration(MyAcct, argumentTest.Mailoptions, argumentTest.serverMigration);
-            /*for (int i = 1; (i <= 10); i++)
+            Account argumentTest = e.Argument as Account;
+            while (!_shouldStop)
             {
-                if ((worker.CancellationPending == true))
-                {
-                    e.Cancel = true;
-                    break;
-                }
-                else
-                {
-                    // Perform a time consuming operation and report progress.
-                    // TestObj.Migrate(MigrateOptions);
 
-                    System.Threading.Thread.Sleep(700);
-                    worker.ReportProgress((i * 10));
-                }
-            }*/
+            CssLib.MigrationAccount MyAcct = new CssLib.MigrationAccount();
+            MyAcct.AccountName = argumentTest.AccountName;
+            MyAcct.AccountID = argumentTest.Currentuser.UserName;
+
+
+            MyAcct.AccountNum = argumentTest.num;
+
+            MyAcct.OnChanged += new CssLib.MigrationObjectEventHandler(Acct_OnAcctChanged);
+
+            CssLib.MigrationFolder MyFolder = new CssLib.MigrationFolder();
+
+            MyFolder.AccountNum = argumentTest.num;
+            MyFolder.OnChanged += new CssLib.MigrationObjectEventHandler(Folder_OnChanged);
+
+            MyAcct.migrationFolder = MyFolder;
+
+            CssLib.CSMigrationWrapper mw = argumentTest.TestObj;
+
+            if (argumentTest.CancellationPending)
+            {
+                e.Cancel = true;
+            }
+            else
+            {
+                // TestObj.Migrate(MigrateOptions);
+
+                mw.StartMigration(MyAcct, argumentTest.Mailoptions, argumentTest.serverMigration);
+                /*for (int i = 1; (i <= 10); i++)
+                {
+                    if ((worker.CancellationPending == true))
+                    {
+                        e.Cancel = true;
+                        break;
+                    }
+                    else
+                    {
+                        // Perform a time consuming operation and report progress.
+                        // TestObj.Migrate(MigrateOptions);
+
+                        System.Threading.Thread.Sleep(700);
+                        worker.ReportProgress((i * 10));
+                    }
+                }*/
+            }
         }
+        worker.CancelAsync();
+        argumentTest.CancelAsync();
+        argumentTest.countdown.Signal();
+        e.Cancel = true;
     }
 
     public void Acct_OnAcctChanged(object sender, CssLib.MigrationObjectEventArgs e)
     {
-        string msg = "";
-        CssLib.MigrationAccount a = (CssLib.MigrationAccount)sender;
+       // while (!_shouldStop)
+        {
+            string msg = "";
+            CssLib.MigrationAccount a = (CssLib.MigrationAccount)sender;
+
+            if (e.PropertyName == "TotalItems")
+            {
+                System.Console.WriteLine();
+
+                ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Yellow,
+                    "TotalItems to Migrate For UserAccount   " + a.AccountID.ToString() + " is " + e.NewValue.ToString());
+                System.Console.WriteLine();
+
+                Currentuser.StatusMessage = "TotalItems to Migrate For UserAccount   " + a.AccountID.ToString() + " is " + e.NewValue.ToString();
+                System.Console.WriteLine();
+                System.Console.WriteLine();
+
+            }
+            if (e.PropertyName == "TotalErrors")
+            {
+
+                Numoferrors = (int)a.TotalErrors + 1;      // this happens first
+                System.Console.WriteLine();
+
+                ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Yellow,
+                    "TotalErrors For UserAccount   " + a.AccountID.ToString() + Numoferrors.ToString());
+
+                Currentuser.StatusMessage = "TotalErrors For UserAccount   " + a.AccountID.ToString() + Numoferrors.ToString();
+                System.Console.WriteLine();
+                System.Console.WriteLine();
+
+            }
+            else if (e.PropertyName == "TotalWarnings")
+            {
+                NumofWarns = (int)a.TotalWarnings + 1;
+                System.Console.WriteLine();
+
+                ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Yellow,
+                    "TotalWarnings For UserAccount   " + a.AccountID.ToString() + NumofWarns.ToString());
+
+                Currentuser.StatusMessage = "TotalWarnings For UserAccount   " + a.AccountID.ToString() + NumofWarns.ToString();
+                System.Console.WriteLine();
+                System.Console.WriteLine();
+
+            }
+            else
+            {
+                msg = "Begin {0} Migration";
+
+                string msgF = String.Format(msg, a.AccountID);
+                System.Console.WriteLine(msgF);
+
+            }
+        }
        
-        if (e.PropertyName == "TotalItems")
-        {
-            System.Console.WriteLine();
-
-            ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Yellow,
-                "TotalItems to Migrate For UserAccount   " + a.AccountID.ToString() + " is " + e.NewValue.ToString());
-            System.Console.WriteLine();
-
-            Currentuser.StatusMessage = "TotalItems to Migrate For UserAccount   " + a.AccountID.ToString() + " is " + e.NewValue.ToString();
-            System.Console.WriteLine();
-            System.Console.WriteLine();
-            
-        }
-        if (e.PropertyName == "TotalErrors")
-        {
-
-            Numoferrors = (int)a.TotalErrors + 1;      // this happens first
-            System.Console.WriteLine();
-
-            ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Yellow,
-                "TotalErrors For UserAccount   " + a.AccountID.ToString() + Numoferrors.ToString());
-
-            Currentuser.StatusMessage = "TotalErrors For UserAccount   " + a.AccountID.ToString() + Numoferrors.ToString();
-            System.Console.WriteLine();
-            System.Console.WriteLine();
-            
-        }
-        else if (e.PropertyName == "TotalWarnings")
-        {
-            NumofWarns = (int)a.TotalWarnings + 1;
-            System.Console.WriteLine();
-
-            ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Yellow,
-                "TotalWarnings For UserAccount   " + a.AccountID.ToString() + NumofWarns.ToString());
-
-            Currentuser.StatusMessage = "TotalWarnings For UserAccount   " + a.AccountID.ToString() + NumofWarns.ToString();
-            System.Console.WriteLine();
-            System.Console.WriteLine();
-
-        }
-        else
-        {
-           msg = "Begin {0} Migration";
-
-           string msgF= String.Format(msg, a.AccountID);
-            System.Console.WriteLine(msgF);
-
-       }
     }
 
     public void Folder_OnChanged(object sender, CssLib.MigrationObjectEventArgs e)
     {
-       CssLib.MigrationFolder f = (CssLib.MigrationFolder)sender;
-       
-        if (e.PropertyName == "CurrentCountOfItems")
+        //while (!_shouldStop)
         {
-            if (f.FolderName != null)
+            CssLib.MigrationFolder f = (CssLib.MigrationFolder)sender;
+           
+
+            if (e.PropertyName == "CurrentCountOfItems")
             {
-                if (e.NewValue.ToString() != "0")
+                if (f.FolderName != null)
                 {
-                    string msg1 = "{0} of {1} for account" + f.AccountNum.ToString();
-                    string msgF = String.Format(msg1, f.CurrentCountOfItems, f.TotalCountOfItems);
+                    if (e.NewValue.ToString() != "0")
+                    {
+                        string msg1 = "{0} of {1} for account" + f.AccountNum.ToString();
+                        string msgF = String.Format(msg1, f.CurrentCountOfItems, f.TotalCountOfItems);
+                        System.Console.WriteLine(msgF);
+
+                    }
+                }
+            }
+            if (e.PropertyName == "TotalCountOfItems")      // finish up with the last folder
+            {
+                if (f.FolderName != null)
+                {
+                    string msg2 = "{0} of {1}";
+                    string msgF = String.Format(msg2, f.CurrentCountOfItems, f.TotalCountOfItems);
+
                     System.Console.WriteLine(msgF);
-                    
+
+                }
+            }
+            if (e.PropertyName == "FolderName")
+            {
+                if (e.NewValue != null)
+                {
+                    string folderName = e.NewValue.ToString();
+                    //  string folderType = GetFolderTypeForUserResults(f.FolderView);
+                    string msg3 = "Migrating {0}" + "For " + f.AccountNum.ToString();
+
+                    /*ar.PBMsgValue = */
+                    string msgF = String.Format(msg3, folderName);
+                    System.Console.WriteLine(msgF);
+                }
+                if (_shouldStop)
+                {
+                    System.Console.WriteLine();
+                    System.Console.WriteLine();
+                    ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
+                    "Migration For UserAccount    Cancelled");
+
+                    System.Console.WriteLine();
+                    System.Console.WriteLine();
+                    Countdown.Signal();
+                    CancelAsync();
+                    Thread.CurrentThread.Abort();
+                   
                 }
             }
         }
-        if (e.PropertyName == "TotalCountOfItems")      // finish up with the last folder
-        {
-            if (f.FolderName != null)
-            {
-                string msg2 = "{0} of {1}";
-                string msgF = String.Format(msg2, f.CurrentCountOfItems, f.TotalCountOfItems);
-
-                System.Console.WriteLine(msgF);
-               
-            }
-        }
-        if (e.PropertyName == "FolderName")
-        {
-            if (e.NewValue != null)
-            {
-                string folderName = e.NewValue.ToString();
-              //  string folderType = GetFolderTypeForUserResults(f.FolderView);
-                string msg3 = "Migrating {0}" + "For " + f.AccountNum.ToString();
-
-                /*ar.PBMsgValue = */
-                string msgF = String.Format(msg3, folderName);
-                System.Console.WriteLine(msgF);
-             }
-        }
+        
     }
 
     private void accountToMigrate_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -442,6 +496,15 @@ class Account: BackgroundWorker
             // flag may not have been set, even though
             // CancelAsync was called.
             argumentTest.AccountStatus = "Canceled";
+            System.Console.WriteLine();
+            System.Console.WriteLine();
+            ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
+            "Migration For UserAccount   " + argumentTest.AccountName + " Cancelled");
+
+            System.Console.WriteLine();
+            System.Console.WriteLine();
+
+            argumentTest.Countdown.Signal();
         }
         else
         {
@@ -460,10 +523,11 @@ class Account: BackgroundWorker
                 System.Console.WriteLine();
                 System.Console.WriteLine();
 
-                argumentTest.countdown.Signal();
+                argumentTest.Countdown.Signal();
             }
             argumentTest.AccountStatus = "Completed";        // e.Result.ToString();
         }
     }
 }
 }
+
