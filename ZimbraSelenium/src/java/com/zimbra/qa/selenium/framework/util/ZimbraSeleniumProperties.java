@@ -243,7 +243,18 @@ public class ZimbraSeleniumProperties {
 			return "127.0.0.1";
 		}
 	}
-
+	
+	/**
+	 * Get Logout URL for selenium to sign out from the application
+	 * @return Logout URL
+	 */
+	public static String getLogoutURL() {
+		// get url
+		final String url =  getBaseURL() + "?loginOp=logout";
+		
+		return url;
+	}
+	
 	/**
 	 * Get Base URL for selenium to open to access the application
 	 * under test
