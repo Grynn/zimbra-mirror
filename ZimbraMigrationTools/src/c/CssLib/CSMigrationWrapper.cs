@@ -222,10 +222,15 @@ public class CSMigrationWrapper
             !options.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Tasks)) ||
             (folder.ContainerClass == "IPF.Note" &&
             !options.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Mail)))
+        {
             return true;
-        for (int i = 0; i < skipList.Count; i++) {
-            if (folder.Name == skipList[i])
+        }
+        for (int i = 0; i < skipList.Count; i++)
+        {
+            if (string.Compare(folder.Name, skipList[i], StringComparison.OrdinalIgnoreCase) == 0)
+            {
                 return true;
+            }
         }
         return false;
     }
