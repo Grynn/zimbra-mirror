@@ -54,7 +54,7 @@ exe = {
 	}
 
 class Command:
-	P = Provisioning.getInstance(CacheMode.OFF)
+	P = Provisioning.getInstance(Provisioning.CacheMode.OFF)
 
 	@classmethod
 	def resetProvisioning(cls, type):
