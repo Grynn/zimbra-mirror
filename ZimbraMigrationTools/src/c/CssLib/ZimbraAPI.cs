@@ -394,7 +394,7 @@ public class ZimbraAPI
     // ////////
 
     // private UploadFile method
-    private int UploadFile(string filepath, int mode, out string uploadToken)
+    private int UploadFile(string filepath, string mimebuffer, int mode, out string uploadToken)
     {
         bool isSecure = (ZimbraValues.GetZimbraValues().Url).Substring(0, 5) == "https";
         WebServiceClient client = (isSecure) ? new WebServiceClient {
@@ -411,7 +411,7 @@ public class ZimbraAPI
 
         uploadToken = "";
 
-        client.InvokeUploadService(ZimbraValues.GetZimbraValues().AuthToken, isSecure, filepath,
+        client.InvokeUploadService(ZimbraValues.GetZimbraValues().AuthToken, isSecure, filepath,mimebuffer,
             mode, out rsp);
         retval = client.status;
         if (retval == 0)
@@ -851,8 +851,8 @@ public class ZimbraAPI
                 if (val.Length > 0)
                 {
                     string uploadToken = "";
-
-                    if (UploadFile(val, MIXED_MODE, out uploadToken) == 0)
+                    string tmp = "";
+                    if (UploadFile(val, tmp, MIXED_MODE, out uploadToken) == 0)
                     {
                         writer.WriteStartElement("a");
                         writer.WriteAttributeString("n", nam);
@@ -1018,13 +1018,26 @@ public class ZimbraAPI
                 myFields[i].SetValue(zm, message[nam]);
         }
 
-        FileInfo f = new FileInfo(zm.filePath); // use a try/catch?
-        bool isInline = (f.Length < INLINE_LIMIT);
+        bool isInline = false;
+        if (message["wstrmimeBuffer"].Length > 0)
+        {
+            //
+        }
+        else
+        {
+            FileInfo f = new FileInfo(zm.filePath);// use a try/catch?
+            isInline = (f.Length < INLINE_LIMIT);
+        }
 
         if (isInline)
             uploadInfo = zm.filePath;
         else
-            retval = UploadFile(zm.filePath, STRING_MODE, out uploadInfo);
+        {
+            Log.debug("Begin UploadFile");
+            string tmp = message["wstrmimeBuffer"];
+            retval = UploadFile(zm.filePath, tmp, STRING_MODE, out uploadInfo);
+            Log.debug("End UploadFile");
+        }
         if (retval == 0)
         {
             WebServiceClient client = new WebServiceClient {
@@ -1071,7 +1084,7 @@ public class ZimbraAPI
                     lastError = client.exceptionMessage;
             }
         }
-        File.Delete(zm.filePath);
+        //File.Delete(zm.filePath);
         return retval;
     }
 
@@ -1118,13 +1131,26 @@ public class ZimbraAPI
                         myFields[j].SetValue(zm, message[nam]);
                 }
 
-                FileInfo f = new FileInfo(zm.filePath);
-                bool isInline = (f.Length < INLINE_LIMIT);
+                bool isInline = false;
+                if (message["wstrmimeBuffer"].Length > 0)
+                {
+                    //
+                }
+                else
+                {
+                    FileInfo f = new FileInfo(zm.filePath);
+                    isInline = (f.Length < INLINE_LIMIT);
+                }
 
                 if (isInline)
                     uploadInfo = zm.filePath;
                 else
-                    retval = UploadFile(zm.filePath, STRING_MODE, out uploadInfo);
+                {
+                    Log.debug("Begin UploadFile");
+                    string tmp = message["wstrmimeBuffer"];
+                    retval = UploadFile(zm.filePath, tmp, STRING_MODE, out uploadInfo);
+                    Log.debug("End UploadFile");
+                }
                 if (retval == 0)
                     AddMsgRequest(writer, uploadInfo, zm, isInline, -1);
                 File.Delete(zm.filePath);

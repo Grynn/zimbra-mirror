@@ -23,7 +23,7 @@ STDMETHODIMP CMapiAccessWrap::InterfaceSupportsErrorInfo(REFIID riid)
 
 STDMETHODIMP CMapiAccessWrap::UserInit(BSTR UserName, BSTR userAccount, BSTR *StatusMsg)
 {
-    Zimbra::Util::AutoCriticalSection autocriticalsection(cs);
+	Zimbra::Util::AutoCriticalSection autocriticalsection(cs);
     // TODO: Add your implementation code here
 
     maapi = new Zimbra::MAPI::MAPIAccessAPI(UserName, userAccount);
@@ -387,6 +387,7 @@ STDMETHODIMP CMapiAccessWrap::GetData(BSTR UserId, VARIANT ItemId, FolderType ty
                 pIt[L"filePath"] = SysAllocString((msgdata.MimeFile).c_str());
                 pIt[L"UrlName"] = SysAllocString((msgdata.Urlname).c_str());
                 pIt[L"rcvdDate"] = SysAllocString((msgdata.DeliveryUnixString.c_str()));
+				pIt[L"wstrmimeBuffer"] = SysAllocString((msgdata.wstrmimeBuffer.c_str()));
 
                 bool bHasTags = false;
                 if (msgdata.vTags)
@@ -663,7 +664,7 @@ STDMETHODIMP CMapiAccessWrap::GetData(BSTR UserId, VARIANT ItemId, FolderType ty
 
     // Create SafeArray of VARIANT BSTRs
     SAFEARRAY *pSA = NULL;
-    SAFEARRAYBOUND aDim[2];                     // two dimensional array
+	SAFEARRAYBOUND aDim[2];                     // two dimensional array
 
     aDim[0].lLbound = 0;
     aDim[0].cElements = (ULONG)pIt.size();
@@ -689,13 +690,24 @@ STDMETHODIMP CMapiAccessWrap::GetData(BSTR UserId, VARIANT ItemId, FolderType ty
                 else
                     temp = SysAllocString((*it).first);
                 hr = SafeArrayPutElement(pSA, aLong, temp);
-
-                it++;
+				SysFreeString(temp);
+				it++;
             }
         }
     }
-    pVal->vt = VT_ARRAY | VT_BSTR;
+
+	
+	pVal->vt = VT_ARRAY | VT_BSTR;
     pVal->parray = pSA;
+
+	//free all BSTRs
+	std::map<BSTR,BSTR>::iterator ipit=pIt.begin();
+	while(ipit !=pIt.end())
+	{
+		SysFreeString((*ipit).second);
+		ipit++;
+	}
+	pIt.clear();
 
     return hr;
 }

@@ -588,7 +588,20 @@ LPCWSTR MAPIAccessAPI::GetItem(SBinary sbItemEID, BaseItemData &itemData)
  *              msgdata->htmlbody.size = nHtmlchars;
  *          }
  */
-            // Save mime to file in temp dir
+            mimepp::Message mimeMsg;
+			try
+			{
+				msg.ToMimePPMessage(mimeMsg);
+			}
+			catch(...)
+			{
+				lpwstrStatus = FormatExceptionInfo(hr, L"ToMimePPMessage Failed",
+                    __FILE__, __LINE__);
+                goto ZM_EXIT;
+			}
+
+/*
+			// Save mime to file in temp dir
             HRESULT hr = S_OK;
             ULONG nBytesWritten = 0;
             ULONG nTotalBytesWritten = 0;
@@ -596,10 +609,6 @@ LPCWSTR MAPIAccessAPI::GetItem(SBinary sbItemEID, BaseItemData &itemData)
             char *lpszDirName = NULL;
             char *lpszUniqueName = NULL;
             Zimbra::Util::ScopedInterface<IStream> pStream;
-            mimepp::Message mimeMsg;
-
-            msg.ToMimePPMessage(mimeMsg);
-
             LPCSTR pDes = mimeMsg.getString().c_str();
             int nBytesToBeWritten = (int)(mimeMsg.getString().size());
 
@@ -618,6 +627,8 @@ LPCWSTR MAPIAccessAPI::GetItem(SBinary sbItemEID, BaseItemData &itemData)
             strFQFileName += lpszUniqueName;
             SafeDelete(lpszDirName);
             SafeDelete(lpszUniqueName);
+
+			//disable to write in file. Use buffer now.	
             // Open stream on file
             if (FAILED(hr = OpenStreamOnFile(MAPIAllocateBuffer, MAPIFreeBuffer, STGM_CREATE |
                     STGM_READWRITE, (LPTSTR)strFQFileName.c_str(), NULL, pStream.getptr())))
@@ -626,7 +637,11 @@ LPCWSTR MAPIAccessAPI::GetItem(SBinary sbItemEID, BaseItemData &itemData)
                     L"Message Error: OpenStreamOnFile Failed.", __FILE__, __LINE__);
                 goto ZM_EXIT;
             }
-            // write to file
+
+			hr = OpenStreamOnFile(MAPIAllocateBuffer, MAPIFreeBuffer, STGM_READWRITE | STGM_CREATE |
+                  SOF_UNIQUEFILENAME | STGM_DELETEONRELEASE, NULL, (LPWSTR)L"zco", pStream.getptr());
+
+            // write to buffer
             while (!FAILED(hr) && nBytesToBeWritten > 0)
             {
                 hr = pStream->Write(pDes, nBytesToBeWritten, &nBytesWritten);
@@ -638,12 +653,19 @@ LPCWSTR MAPIAccessAPI::GetItem(SBinary sbItemEID, BaseItemData &itemData)
             if (FAILED(hr = pStream->Commit(0)))
                 return L"Message Error: Stream Commit Failed.";
                          // mime file path
+*/
+			LPTSTR pwDes = NULL;
+            AtoW((LPSTR)mimeMsg.getString().c_str(),pwDes);   
+            msgdata->wstrmimeBuffer = pwDes;
+            delete[] pwDes;
 
+/*
             LPWSTR lpwstrFQFileName = NULL;
 
             AtoW((LPSTR)strFQFileName.c_str(), lpwstrFQFileName);
             msgdata->MimeFile = lpwstrFQFileName;
             SafeDelete(lpwstrFQFileName);
+*/
         }
         else if (msg.ItemType() == ZT_CONTACTS)
         {

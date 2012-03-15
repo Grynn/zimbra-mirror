@@ -50,6 +50,7 @@ public class WebServiceClient
         webRequest.ContentType = "application/soap+xml; charset=\"utf-8\"";
         webRequest.UserAgent = "Zimbra Systems Client";
         webRequest.Method = "POST";
+        webRequest.Proxy = null;
         return webRequest;
     }
 
@@ -123,12 +124,17 @@ public class WebServiceClient
         webRequest.CookieContainer = cookieContainer;
         webRequest.UserAgent = "Zimbra Systems Client";
         webRequest.Method = "POST";
+        webRequest.Proxy = null;
         return webRequest;
     }
 
-    public void InvokeUploadService(string authtoken, bool isSecure, string filePath, int mode,
+    public void InvokeUploadService(string authtoken, bool isSecure, string filePath, string mimebuffer, int mode,
         out string rsp)
     {
+        Log.debug("Start InvokeUploadService");
+        bool bIsBuffer=false;
+        if (mimebuffer.Length > 0)
+            bIsBuffer = true;
         WebResponse response = null;
         string strResponse = "";
 
@@ -165,21 +171,32 @@ public class WebServiceClient
         {
             try
             {
-                StreamReader stmr = new StreamReader(filePath);
-                string fileContents = stmr.ReadToEnd();
+                string fileContents ="";
+                StreamReader stmr = null;
+                if(bIsBuffer)
+                {
+                    fileContents = mimebuffer;
+                }
+                else
+                {
+                    stmr = new StreamReader(filePath);
+                    fileContents = stmr.ReadToEnd();
+                }
+                
                 int fcLen = fileContents.Length;
                 int buflen = fcLen + 400;
 
                 using (Stream stm = webReq.GetRequestStream()) {
                     using (StreamWriter stmw = new StreamWriter(stm,
-                            System.Text.Encoding.Default, buflen)) {
+                            System.Text.Encoding.Default)) {
                         stmw.Write(contentDisposition1);
                         stmw.Write(contentDisposition2);
                         stmw.Write(contentType);
                         stmw.Write(contentTransfer);
                         stmw.Write(fileContents);
                         stmw.Write(endBoundary);
-                        stmr.Close();
+                        if(stmr != null)
+                            stmr.Close();
                         stmw.Close();
                     }
                 }
@@ -198,16 +215,26 @@ public class WebServiceClient
             {
                 // first get the bytes from the file -- this is the attachment data
                 byte[] buf = null;
-                System.IO.FileStream fileStream = new System.IO.FileStream(filePath,
+                long datalen = 0;
+                if (bIsBuffer)
+                {
+                    datalen = mimebuffer.Length;
+                    buf = Encoding.ASCII.GetBytes(mimebuffer);
+                }
+                else
+                {
+                    System.IO.FileStream fileStream = new System.IO.FileStream(filePath,
                     System.IO.FileMode.Open, System.IO.FileAccess.Read);
-                System.IO.BinaryReader binaryReader = new System.IO.BinaryReader(fileStream);
+                    System.IO.BinaryReader binaryReader = new System.IO.BinaryReader(fileStream);
 
-                long datalen = new System.IO.FileInfo(filePath).Length;
+                    datalen = new System.IO.FileInfo(filePath).Length;
 
-                buf = binaryReader.ReadBytes((Int32)datalen);
-                fileStream.Close();
-                fileStream.Dispose();
-                binaryReader.Close();
+                    buf = binaryReader.ReadBytes((Int32)datalen);
+                    fileStream.Close();
+                    fileStream.Dispose();
+                    binaryReader.Close();
+                }
+                
 
                 // now use a memory stream since we have mixed data
                 using (Stream memStream = new System.IO.MemoryStream()) {
@@ -250,7 +277,9 @@ public class WebServiceClient
         // get the response from the web service
         try
         {
+            Log.debug("Start GetResponse");
             response = webReq.GetResponse();
+            Log.debug("End GetResponse");
         }
         catch (System.Net.WebException wex)
         {
@@ -266,6 +295,7 @@ public class WebServiceClient
 
         status = 0;
         rsp = strResponse;
+        Log.debug("End InvokeUploadService");
     }
 }
 }

@@ -133,6 +133,7 @@ typedef struct _MessageItemData: BaseItemData
     data_buffer textbody;
     data_buffer htmlbody;
     wstring MimeFile;
+	wstring wstrmimeBuffer;
 } MessageItemData;
 
 typedef struct _ApptItemData: BaseItemData
