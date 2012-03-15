@@ -133,18 +133,24 @@ LPCWSTR MAPIAccessAPI::InitGlobalSessionAndStore(LPCWSTR lpcwstrMigTarget)
     }
     catch (MAPISessionException &msse)
     {
-        lpwstrStatus = FormatExceptionInfo(msse.ErrCode(), (LPWSTR)msse.Description().c_str(),
+        LPCWSTR lpwstrLogMsg = FormatExceptionInfo(msse.ErrCode(), (LPWSTR)msse.Description().c_str(),
             (LPSTR)msse.SrcFile().c_str(), msse.SrcLine());
+		dloge(lpwstrLogMsg);
+		lpwstrStatus = L"Initialization Exception.  Make sure to enter the proper Exchange credentials.";
     }
     catch (MAPIStoreException &mste)
     {
-        lpwstrStatus = FormatExceptionInfo(mste.ErrCode(), (LPWSTR)mste.Description().c_str(),
+        LPCWSTR lpwstrLogMsg = FormatExceptionInfo(mste.ErrCode(), (LPWSTR)mste.Description().c_str(),
             (LPSTR)mste.SrcFile().c_str(), mste.SrcLine());
+		dloge(lpwstrLogMsg);
+		lpwstrStatus = L"Message Store initialization exception";
     }
     catch (Util::MapiUtilsException &muex)
     {
-        lpwstrStatus = FormatExceptionInfo(muex.ErrCode(), (LPWSTR)muex.Description().c_str(),
+        LPCWSTR lpwstrLogMsg = FormatExceptionInfo(muex.ErrCode(), (LPWSTR)muex.Description().c_str(),
             (LPSTR)muex.SrcFile().c_str(), muex.SrcLine());
+		dloge(lpwstrLogMsg);
+		lpwstrStatus = L"Mailbox Exception";
     }
     // Create Temporary dir for temp files
     Zimbra::MAPI::Util::CreateAppTemporaryDirectory();

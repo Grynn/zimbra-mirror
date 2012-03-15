@@ -3,6 +3,7 @@
 #include "ExchangeAdmin.h"
 #include "MAPISession.h"
 #include "MAPIAccessAPI.h"
+#include "Logger.h"
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 // Exception class
@@ -702,6 +703,7 @@ LPCWSTR ExchangeOps::GlobalInit(LPCWSTR lpMAPITarget, LPCWSTR lpAdminUsername, L
     catch (...)
     {
         lpwstrStatus = L"Unexpected Initialization Exception";
+		return lpwstrStatus;
     }
     if (!lpwstrStatus)
         Initialized = EXCH_INITIALIZED_PROFEXIST;
@@ -731,6 +733,7 @@ LPCWSTR ExchangeOps::GlobalUninit()
         }
     }
     else
+	if (Initialized != EXCH_UNINITIALIZED)
     {
         MAPIAccessAPI::UnInitGlobalSessionAndStore();
     }

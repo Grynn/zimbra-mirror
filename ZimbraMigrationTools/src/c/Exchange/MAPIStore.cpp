@@ -20,13 +20,20 @@ MAPIStoreException::MAPIStoreException(HRESULT hrErrCode, LPCWSTR lpszDescriptio
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 // MAPIStore
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-MAPIStore::MAPIStore(): m_Store(NULL), m_mapiSession(NULL) {}
+MAPIStore::MAPIStore(): m_Store(NULL), m_mapiSession(NULL)
+{
+	m_specialFolderIds.cValues = 0;
+	m_specialFolderIds.lpbin = NULL;
+}
 
 MAPIStore::~MAPIStore()
 {
     Zimbra::Util::AutoCriticalSection autocriticalsection(cs_store);
     ULONG flags = LOGOFF_ORDERLY;
-    Zimbra::MAPI::Util::FreeAllSpecialFolders(&m_specialFolderIds);
+	if ((m_specialFolderIds.cValues != 0) && (m_specialFolderIds.lpbin != NULL))
+	{
+		Zimbra::MAPI::Util::FreeAllSpecialFolders(&m_specialFolderIds);
+	}
 
     if (m_Store)
     {
