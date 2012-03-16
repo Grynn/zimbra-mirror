@@ -621,8 +621,8 @@ function(ev){
 	if (AjxUtil.isString(addr) && this.isMailToLink(addr)) {
 		addr = (this.parseMailToLink(addr)).to || addr;
 	}
-	var subjMod = ZmFilterRule.C_HEADER_VALUE[ZmFilterRule.C_FROM];
-	rule.addCondition(ZmFilterRule.TEST_HEADER, ZmFilterRule.OP_IS, addr, subjMod);
+	var subjMod = ZmFilterRule.C_ADDRESS_VALUE[ZmFilterRule.C_FROM];
+	rule.addCondition(ZmFilterRule.TEST_ADDRESS, ZmFilterRule.OP_IS, addr, subjMod);
 
 	appCtxt.getFilterRuleDialog().popup(rule, editMode);
 };
@@ -925,8 +925,8 @@ function() {
 	if (AjxUtil.isString(addr) && this.isMailToLink(addr)) {
 		addr = (this.parseMailToLink(addr)).to || addr;
 	}
-	var subjMod = ZmFilterRule.C_HEADER_VALUE[ZmFilterRule.C_FROM];
-	rule.addCondition(ZmFilterRule.TEST_HEADER, ZmFilterRule.OP_IS, addr, subjMod);
+	var subjMod = ZmFilterRule.C_ADDRESS_VALUE[ZmFilterRule.C_FROM];
+	rule.addCondition(ZmFilterRule.TEST_ADDRESS, ZmFilterRule.OP_IS, addr, subjMod);
 	rule.addAction(ZmFilterRule.A_KEEP);
 
 	appCtxt.getFilterRuleDialog().popup(rule);
