@@ -210,6 +210,7 @@ $final_spam_destiny       = D_DISCARD;  #!!!  D_DISCARD / D_REJECT
 $warnvirusrecip = %%binary VAR:zimbraVirusWarnRecipient%%;
 $warnbannedrecip = %%binary VAR:zimbraMtaBlockedExtensionWarnRecipient%%;
 %%uncomment VAR:zimbraAmavisQuarantineAccount%%$virus_quarantine_to = '%%zimbraAmavisQuarantineAccount%%';
+%%uncomment VAR:zimbraQuarantineBannedItems%%$banned_quarantine_to = '%%zimbraAmavisQuarantineAccount%%';
 $archive_quarantine_to = undef;
 
 #$quarantine_method_by_ccat{CC_CLEAN.",2"} = 'local:clean/%m';

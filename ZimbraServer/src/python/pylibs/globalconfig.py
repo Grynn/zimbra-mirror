@@ -41,6 +41,11 @@ class GlobalConfig(config.Config):
 
 		self.config = dict([(e.getKey(), e.getValue()) for e in sorted(c.output, key=lambda x: x.getKey())])
 
+		if self["zimbraMtaBlockedExtensionWarnRecipient"] == "TRUE" and self["zimbraAmavisQuarantineAccount"] is not None:
+			self["zimbraQuarantineBannedItems"] = 'TRUE'
+		else:
+			self["zimbraQuarantineBannedItems"] = 'FALSE'
+
 		if self["zimbraSSLExcludeCipherSuites"] is not None:
 			v = self["zimbraSSLExcludeCipherSuites"]
 			v = str(v)
