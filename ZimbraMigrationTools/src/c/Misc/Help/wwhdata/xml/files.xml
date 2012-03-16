@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<WebWorksHelpBook version="5.0" name="migration help" context="migration_help" locale="en" xmlns="urn:WebWorks-Help-Book-Files-Schema">
+<WebWorksHelpBook version="5.0" name="Exchange Migration Help" context="Exchange_Migration_Help" locale="en" xmlns="urn:WebWorks-Help-Book-Files-Schema">
   <CommonWordsToSkip minlen="3">
     a about after all also am an and another any are as at
     be because been before being between both but by
@@ -39,7 +39,8 @@
   </ScoringPrefs>
   <DocumentInfo>
     <Document title="Starting the Migration" href="welcome.html" />
-    <Document title="Destination Server Configuration" href="destination.html" />
+    <Document title="Destination Server Configuration" href="destination_server.html" />
+    <Document title="Destination Server Configuration" href="destination_user.html" />
     <Document title="Scheduling the Migration" href="migrate.html" />
     <Document title="Selecting Options to Migrate" href="options.html" />
     <Document title="Viewing Migration Results" href="results.html" />

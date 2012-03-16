@@ -2,10 +2,11 @@
 <WebWorksHelpTOC version="5.0" xmlns="urn:WebWorks-Help-TOC-Schema">
   <i t="Starting the Migration" l="0" />
   <i t="Destination Server Configuration" l="1" />
-  <i t="Scheduling the Migration" l="2" />
-  <i t="Selecting Options to Migrate" l="3" />
-  <i t="Viewing Migration Results" l="4" />
-  <i t="Server Migration Source Information" l="5" />
-  <i t="User Migration Source Information" l="6" />
-  <i t="Selecting Users to Migrate" l="7" />
+  <i t="Destination Server Configuration" l="2" />
+  <i t="Scheduling the Migration" l="3" />
+  <i t="Selecting Options to Migrate" l="4" />
+  <i t="Viewing Migration Results" l="5" />
+  <i t="Server Migration Source Information" l="6" />
+  <i t="User Migration Source Information" l="7" />
+  <i t="Selecting Users to Migrate" l="8" />
 </WebWorksHelpTOC>

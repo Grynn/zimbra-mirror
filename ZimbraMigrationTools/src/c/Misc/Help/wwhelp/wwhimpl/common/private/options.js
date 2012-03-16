@@ -3,11 +3,11 @@
 
 function  WWHCommonSettings_Object()
 {
-  this.mTitle = "migration help";
+  this.mTitle = "Exchange Migration Help";
 
   this.mbCookies            = true;
   this.mCookiesDaysToExpire = 30;
-  this.mCookiesID           = "yR-paziMT2Y";
+  this.mCookiesID           = "nqRhWFU09GU";
 
   this.mAccessible = "false";
 

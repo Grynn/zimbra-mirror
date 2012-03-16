@@ -1,7 +1,8 @@
 function  WWHBookData_Files(P)
 {
 P.fA("Starting the Migration","welcome.html");
-P.fA("Destination Server Configuration","destination.html");
+P.fA("Destination Server Configuration","destination_server.html");
+P.fA("Destination Server Configuration","destination_user.html");
 P.fA("Scheduling the Migration","migrate.html");
 P.fA("Selecting Options to Migrate","options.html");
 P.fA("Viewing Migration Results","results.html");

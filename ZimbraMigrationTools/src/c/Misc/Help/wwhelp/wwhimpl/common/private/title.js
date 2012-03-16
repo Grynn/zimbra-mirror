@@ -1,4 +1,4 @@
 // Copyright (c) 2001-2003 Quadralay Corporation.  All rights reserved.
 //
 
-document.writeln("<title>migration help</title>");
+document.writeln("<title>Exchange Migration Help</title>");
