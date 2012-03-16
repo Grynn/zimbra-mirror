@@ -129,7 +129,15 @@ public class CSMigrationWrapper
 
     public string GlobalUninit()
     {
-        return MailWrapper.GlobalUninit();
+        try
+        {
+            return MailWrapper.GlobalUninit();
+        }
+        catch (Exception e)
+        {
+            string msg = string.Format("GetListofMapiProfiles Exception: {0}", e.Message);
+            return msg;
+        }
     }
 
     public string[] GetListofMapiProfiles()

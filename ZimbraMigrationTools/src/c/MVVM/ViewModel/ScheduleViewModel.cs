@@ -49,6 +49,11 @@ public class ScheduleViewModel: BaseViewModel
         this.m_usermapFile = usermapFile;
     }
 
+    public bool IsPreviewMode()
+    {
+        return m_isPreview;
+    }
+
     public bool IsComplete()
     {
         return m_isComplete;
@@ -138,14 +143,20 @@ public class ScheduleViewModel: BaseViewModel
     private void Preview()
     {
         m_isPreview = true;
-        Migrate();
+        DoMigrate(m_isPreview);
     }
     public ICommand MigrateCommand {
         get;
         private set;
     }
-    public void Migrate()
+    private void Migrate()
     {
+        m_isPreview = false;
+        DoMigrate(m_isPreview);
+    }
+    public void DoMigrate(bool isPreview)
+    {
+        bgwlist.Clear();
         if (isServer)
         {
             if (CurrentCOSSelection == -1)
@@ -185,29 +196,32 @@ public class ScheduleViewModel: BaseViewModel
 
                 if (!SchedList[i].isProvisioned)
                 {
-                    bProvision = true;
-                    if (defaultPWD.Length == 0)
+                    if (!isPreview)
                     {
-                        MessageBox.Show("Please provide an initial password",
-                            "Zimbra Migration", MessageBoxButton.OK,
-                            MessageBoxImage.Exclamation);
-                        return;
-                    }
+                        bProvision = true;
+                        if (defaultPWD.Length == 0)
+                        {
+                            MessageBox.Show("Please provide an initial password",
+                                "Zimbra Migration", MessageBoxButton.OK,
+                                MessageBoxImage.Exclamation);
+                            return;
+                        }
 
-                    string cosID = CosList[CurrentCOSSelection].CosID;
-                    ZimbraAPI zimbraAPI = new ZimbraAPI();
+                        string cosID = CosList[CurrentCOSSelection].CosID;
+                        ZimbraAPI zimbraAPI = new ZimbraAPI();
 
-                    if (zimbraAPI.CreateAccount(accountName, defaultPWD, cosID) == 0)
-                    {
-                        tempMessage += string.Format("{0} Provisioned", userName) + "\n";
-                        // MessageBox.Show(string.Format("{0} Provisioned", userName), "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Information);
-                    }
-                    else
-                    {
-                        // MessageBox.Show(string.Format("Provision unsuccessful for {0}: {1}", userName, zimbraAPI.LastError), "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
-                        tempMessage += string.Format("Provision unsuccessful for {0}: {1}",
-                            userName, zimbraAPI.LastError) + "\n";
-                        mbi = MessageBoxImage.Error;
+                        if (zimbraAPI.CreateAccount(accountName, defaultPWD, cosID) == 0)
+                        {
+                            tempMessage += string.Format("{0} Provisioned", userName) + "\n";
+                            // MessageBox.Show(string.Format("{0} Provisioned", userName), "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Information);
+                        }
+                        else
+                        {
+                            // MessageBox.Show(string.Format("Provision unsuccessful for {0}: {1}", userName, zimbraAPI.LastError), "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
+                            tempMessage += string.Format("Provision unsuccessful for {0}: {1}",
+                                userName, zimbraAPI.LastError) + "\n";
+                            mbi = MessageBoxImage.Error;
+                        }
                     }
                 }
             }
@@ -227,6 +241,7 @@ public class ScheduleViewModel: BaseViewModel
         if (isServer)
         {
             EnableMigrate = false;
+            EnablePreview = false;
         }
         else
         {
@@ -325,6 +340,17 @@ public class ScheduleViewModel: BaseViewModel
                 return;
             m_schedule.EnableMigrate = m_isComplete ? false : value;
             OnPropertyChanged(new PropertyChangedEventArgs("EnableMigrate"));
+        }
+    }
+    public bool EnablePreview
+    {
+        get { return m_schedule.EnablePreview; }
+        set
+        {
+            if (value == m_schedule.EnablePreview)
+                return;
+            m_schedule.EnablePreview = m_isComplete ? false : value;
+            OnPropertyChanged(new PropertyChangedEventArgs("EnablePreview"));
         }
     }
     public bool EnableProvGB
@@ -671,17 +697,20 @@ public class ScheduleViewModel: BaseViewModel
             if (!m_isPreview)
             {
                 accountResultsViewModel.PBMsgValue = "Migration complete";
+                SchedList.Clear();
+
+                UsersViewModel usersViewModel =
+                    ((UsersViewModel)ViewModelPtrs[(int)ViewType.USERS]);
+
+                usersViewModel.UsersList.Clear();
             }
-            EnableMigrate = false;
             accountResultsViewModel.EnableStop = false;
-            SchedList.Clear();
-
-            UsersViewModel usersViewModel =
-                ((UsersViewModel)ViewModelPtrs[(int)ViewType.USERS]);
-
-            usersViewModel.UsersList.Clear();
         }
-        m_isComplete = true;
+        if (!m_isPreview)
+        {
+            m_isComplete = true;
+        }
+        EnablePreview = EnableMigrate = !m_isComplete;
     }
 
     public void Acct_OnAcctChanged(object sender, MigrationObjectEventArgs e)

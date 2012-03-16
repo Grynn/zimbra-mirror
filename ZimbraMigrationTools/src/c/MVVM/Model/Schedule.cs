@@ -7,8 +7,14 @@ public class Schedule
     internal Schedule(bool EnableMigrate)
     {
         this.EnableMigrate = EnableMigrate;
+        this.EnablePreview = EnableMigrate;
     }
     public bool EnableMigrate {
+        get;
+        set;
+    }
+    public bool EnablePreview
+    {
         get;
         set;
     }

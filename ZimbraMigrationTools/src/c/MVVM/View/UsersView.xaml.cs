@@ -186,6 +186,7 @@ public partial class UsersView
             }
             uvm.EnableNext = (uvm.UsersList.Count > 0);
             uvm.svm.EnableMigrate = (uvm.svm.SchedList.Count > 0);
+            uvm.svm.EnablePreview = (uvm.svm.SchedList.Count > 0);
             LDB.Visibility = Visibility.Collapsed;
             UsersGrid.Visibility = Visibility.Visible;
         }

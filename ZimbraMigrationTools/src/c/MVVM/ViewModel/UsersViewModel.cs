@@ -34,7 +34,7 @@ public class UsersViewModel: BaseViewModel
     }
 
     // a bit of a hack, but with the LDAP Browser now being controlled by the UsersView,
-    // we need a way for the view to get to the SchedulViewModel to set EnableMigrate
+    // we need a way for the view to get to the ScheduleViewModel to set EnableMigrate
     public ScheduleViewModel svm;                  
 
     // Commands
@@ -63,6 +63,7 @@ public class UsersViewModel: BaseViewModel
 
             scheduleViewModel.SchedList.Add(new SchedUser(Username, false));
             scheduleViewModel.EnableMigrate = (scheduleViewModel.SchedList.Count > 0);
+            scheduleViewModel.EnablePreview = scheduleViewModel.EnableMigrate;
             EnableNext = (UsersList.Count > 0);
         }
         EnablePopButtons = true;
@@ -172,6 +173,7 @@ public class UsersViewModel: BaseViewModel
                         EnableNext = (UsersList.Count > 0);
                     }
                     scheduleViewModel.EnableMigrate = (scheduleViewModel.SchedList.Count > 0);
+                    scheduleViewModel.EnablePreview = scheduleViewModel.EnableMigrate;
 
                     // /
                     // Domain information is stored in the xml and not in  the usermap.
@@ -220,6 +222,7 @@ public class UsersViewModel: BaseViewModel
 
         scheduleViewModel.SchedList.Add(new SchedUser(name, false));
         scheduleViewModel.EnableMigrate = (scheduleViewModel.SchedList.Count > 0);
+        scheduleViewModel.EnablePreview = scheduleViewModel.EnableMigrate;
     }
     public ICommand RemoveCommand {
         get;
@@ -234,6 +237,7 @@ public class UsersViewModel: BaseViewModel
             ((ScheduleViewModel)ViewModelPtrs[(int)ViewType.SCHED]);
 
         scheduleViewModel.EnableMigrate = (scheduleViewModel.SchedList.Count > 0);
+        scheduleViewModel.EnablePreview = scheduleViewModel.EnableMigrate;
     }
     public ICommand SaveCSVCommand {
         get;

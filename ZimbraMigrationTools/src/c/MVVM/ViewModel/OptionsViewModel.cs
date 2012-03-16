@@ -175,7 +175,7 @@ public class OptionsViewModel: BaseViewModel
             string name = configViewModelUDest.ZimbraUser;
 
             usersViewModel.UsersList.Add(new UsersViewModel(name, ""));
-            scheduleViewModel.Migrate();
+            scheduleViewModel.DoMigrate(false);
         }
     }
     public bool ImportMailOptions {

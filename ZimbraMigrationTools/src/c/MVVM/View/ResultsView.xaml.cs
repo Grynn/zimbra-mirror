@@ -188,7 +188,10 @@ public partial class ResultsView
         Binding upbBinding = new Binding("PBValue");
         upbBinding.Source = ar;
         userProgressBar.SetBinding(ProgressBar.ValueProperty, upbBinding);
-        urGrid.Children.Add(userProgressBar);
+        if (!ViewModel.GetScheduleViewModel().IsPreviewMode())
+        {
+            urGrid.Children.Add(userProgressBar);
+        }
 
         userStatusMsg = new Label();
         userStatusMsg.Visibility = System.Windows.Visibility.Visible;

@@ -49,6 +49,11 @@ public class AccountResultsViewModel: BaseViewModel
         this.ExitAppCommand = new ActionCommand(this.ExitApp, () => true);
     }
 
+    public ScheduleViewModel GetScheduleViewModel()
+    {
+        return m_scheduleViewModel;
+    }
+
     public int GetAccountNum()
     {
         return m_accountnum;
@@ -83,6 +88,7 @@ public class AccountResultsViewModel: BaseViewModel
             m_scheduleViewModel.BGWList[i].CancelAsync();
         }
         m_scheduleViewModel.EnableMigrate = true;
+        m_scheduleViewModel.EnablePreview = true;
 
         // Don't uninitialize -- this should eventually set the static stop in csslib.
         // Go through each thread and stop each user?
