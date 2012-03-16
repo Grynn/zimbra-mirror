@@ -73,6 +73,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraSoap"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/sqlite-jdbc-3.7.5-1.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraClient"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/jetty-continuation-7.6.0.v20120127.jar"/>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/jetty-continuation-7.6.2.z2.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
