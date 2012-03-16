@@ -239,6 +239,19 @@ public class OctopusCommonTest extends CommonMethods implements CommonConstants{
 	@AfterMethod(groups = { "always" })
 	public void commonTestAfterMethod() throws HarnessException {
 		logger.info("commonTestAfterMethod: start");
+		
+		// If neither the main page or login page are active, then
+				// The app may be in a confused state.
+				//
+				// Clear the cookies and reload
+				//
+				if ( (!app.zPageOctopus.zIsActive()) && (!app.zPageLogin.zIsActive()) ) {
+		            logger.error("Neither login page nor main page were active.  Clear cookies and reload.", new Exception());
+		            // app.zPageLogin.sDeleteAllVisibleCookies();
+		            app.zPageLogin.sOpen(ZimbraSeleniumProperties.getLogoutURL());            
+		            app.zPageLogin.sOpen(ZimbraSeleniumProperties.getBaseURL());
+		        }
+		
 		logger.info("commonTestAfterMethod: finish");
 	}
 }

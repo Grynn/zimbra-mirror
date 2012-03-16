@@ -267,7 +267,7 @@ public class PageTrash extends AbsTab {
 	public void deleteItemUsingSOAP(String itemId, ZimbraAccount account)
 			throws HarnessException {
 		account.soapSend("<ItemActionRequest xmlns='urn:zimbraMail'>"
-				+ "<action id='" + itemId + "' op='delete'/>"
+				+ "<action id='" + itemId + "' op='trash'/>"
 				+ "</ItemActionRequest>");
 	}
 	
