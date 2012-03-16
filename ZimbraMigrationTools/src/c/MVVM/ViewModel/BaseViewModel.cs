@@ -49,7 +49,7 @@ public class BaseViewModel: INotifyPropertyChanged
         switch (lb.SelectedIndex)
         {
         case 0:
-            DoHelp("welcome.html");
+            DoHelp("welcomeOld.html");
             break;
         case 1:
             helpFile = isServer ? "cfgS.html" : "cfgU.html";
@@ -60,10 +60,10 @@ public class BaseViewModel: INotifyPropertyChanged
             DoHelp(helpFile);
             break;
         case 3:
-            DoHelp("options.html");
+            DoHelp("optionsOld.html");
             break;
         case 4:
-            helpFile = isServer ? "users.html" : "acctresults.html";
+            helpFile = isServer ? "usersOld.html" : "acctresults.html";
             DoHelp(helpFile);
             break;
         case 5:

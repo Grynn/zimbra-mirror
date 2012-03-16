@@ -136,10 +136,10 @@
     <Content Include="Help\cfgSDest.html" />
     <Content Include="Help\cfgU.html" />
     <Content Include="Help\cfgUDest.html" />
-    <Content Include="Help\options.html" />
+    <Content Include="Help\optionsOld.html" />
     <Content Include="Help\sched.html" />
-    <Content Include="Help\users.html" />
-    <Content Include="Help\welcome.html" />
+    <Content Include="Help\usersOld.html" />
+    <Content Include="Help\welcomeOld.html" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
