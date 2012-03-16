@@ -424,7 +424,9 @@ public class Button {
 	
 	// Resources button
 	public static final Button O_RESOURCES_RESOURCE = new Button("O_RESOURCES_RESOURCE");
-	
+
+	// Preferences
+	public static final Button B_NEW_FILTER = new Button("B_NEW_FILTER");
 
 	
 	// Button properties
