@@ -3,11 +3,9 @@
 		<file>../_base/base/skin.properties</file>
 		<file>../_base/light/skin.properties</file>
 		<file>skin.properties</file>
-        <file>skinExt.properties</file>
 	</substitutions>
 	<css>
 		<file>skin.css</file>
-        <file>skinExt.css</file>
 	</css>
     <script>
         <file>skin.js</file>
