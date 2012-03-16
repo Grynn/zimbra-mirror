@@ -60,6 +60,8 @@ DwtTreeItem = function(params) {
 	this._selectedFocusedClassName = [this._origClassName, DwtCssStyle.SELECTED, DwtCssStyle.FOCUSED].join("-");
 	this._actionedClassName = [this._origClassName, DwtCssStyle.ACTIONED].join("-");
 	this._dragOverClassName = [this._origClassName, DwtCssStyle.DRAG_OVER].join("-");
+    this._treeItemTextClass = "DwtTreeItem-Text";
+    this._treeItemExtraImgClass = "DwtTreeItem-ExtraImg";
 
 	params.deferred = (params.deferred !== false);
 	params.className = null;
@@ -833,6 +835,19 @@ function(item) {
 	return false;
 };
 
+DwtTreeItem.prototype._setTreeElementStyles =
+function(treeItem, img, focused){
+   if (!treeItem && !treeItem._contextEnabled)
+        return;
+   var selected = focused ? "-focused" : "";
+   if (treeItem._extraCell){
+        AjxImg.setImage(treeItem._extraCell, img);
+        treeItem._extraCell.className = "DwtTreeItem-ExtraImg" + selected;
+   }
+   if (treeItem._textCell)
+        treeItem._textCell.className = "DwtTreeItem-Text" + selected;
+}
+
 DwtTreeItem.prototype._setSelected =
 function(selected, noFocus) {
 	if (this._selected != selected) {
@@ -843,15 +858,14 @@ function(selected, noFocus) {
 		if (!this._itemDiv || !this._extraCell) { return; }
 		if (selected && (this._selectionEnabled || this._forceNotifySelection || this._checkBoxVisible) /*&& this._origClassName == "DwtTreeItem"*/) {
 			this._itemDiv.className = this._selectedClassName;
-            if (this._contextEnabled)
-                AjxImg.setImage(this._extraCell, "DownArrowSmall");
-			if (!noFocus) {
+            this._setTreeElementStyles(this, "DownArrowSmall", true);
+            if (!noFocus) {
 				this.focus();
 			}
 			return true;
 		} else {
-            AjxImg.setImage(this._extraCell, "Blank_16");
-			this._itemDiv.className = this._origClassName;
+            this._setTreeElementStyles(this, "Blank_16", false);
+			this._itemDiv.className = this._origClassName;;
 			return false;
 		}
 	}
@@ -886,8 +900,7 @@ function() {
 	if (!this._itemDiv) { return; }
 	// focused tree item should always be selected as well
 	this._itemDiv.className = this._selectedFocusedClassName;
-    if (this._contextEnabled)
-        AjxImg.setImage(this._extraCell, "DownArrowSmall" );
+    this._setTreeElementStyles(this, "DownArrowSmall", true);
 };
 
 DwtTreeItem.prototype._blur =
@@ -895,8 +908,7 @@ function() {
 	if (!this._itemDiv) { return; }
 	this._itemDiv.className = this._selected
 		? this._selectedClassName : this._origClassName;
-    if (this._contextEnabled)
-        AjxImg.setImage(this._extraCell, this._selected ? "DownArrowSmall" : "Blank_16" );
+    this._setTreeElementStyles(this,  this._selected ? "DownArrowSmall" : "Blank_16", this._selected);
 };
 
 DwtTreeItem._mouseDownListener =
@@ -924,9 +936,10 @@ function(ev) {
 	if (treeItem._singleClickAction && treeItem._textCell) {
 		treeItem._textCell.className = treeItem._textClassName;
 	}
-    if(!treeItem._selected && treeItem._extraCell){
-        AjxImg.setImage(treeItem._extraCell, "Blank_16");
+    if(!treeItem._selected){
+       treeItem._setTreeElementStyles(treeItem, "Blank_16", false);
     }
+
 };
 
 DwtTreeItem._mouseOverListener =
@@ -938,8 +951,8 @@ function(ev) {
 	if (treeItem._singleClickAction && treeItem._textCell) {
 		treeItem._textCell.className = treeItem._hoverClassName;
 	}
-    if(!treeItem._selected && treeItem._extraCell && treeItem._contextEnabled){
-       AjxImg.setImage(treeItem._extraCell, "ColumnDownArrow");
+    if(!treeItem._selected){
+       treeItem._setTreeElementStyles(treeItem, "ColumnDownArrow", true);
     }
 };
 
