@@ -16,8 +16,8 @@ public class CommonMethods {
 
 		account.soapSend("<FolderActionRequest xmlns='urn:zimbraMail'>"
 			+ "<action id='" + folder.getId()
-			+ "' op='!grant' zid='" +  grantee.ZimbraId 
-			+ ">" + "</FolderActionRequest>");
+			+ "' op='!grant' zid='" +  grantee.ZimbraId +"'" + ">"  
+			+ "</FolderActionRequest>");
 	}
 
 	// share a folder via soap

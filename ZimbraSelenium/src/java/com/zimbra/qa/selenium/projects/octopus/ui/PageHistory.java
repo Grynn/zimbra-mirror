@@ -98,7 +98,7 @@ public class PageHistory extends AbsTab {
 			}
 				
 			//TODO veify if grantee.EmailAddress or grantee.username is used
-			return YOU + "granted " + access + " access on folder " + folderName + " to " + grantee.EmailAddress;		   	
+			return YOU + " granted " + access + " access on folder " + folderName + " to " + grantee.EmailAddress;		   	
 		}
 		
 	
@@ -112,7 +112,7 @@ public class PageHistory extends AbsTab {
 			}
 				
 			//TODO veify if grantee.EmailAddress or grantee.username is used
-			return YOU + "revokeed " + access + " access on folder " + folderName + " to " + grantee.EmailAddress;		   	
+			return YOU + " revoked " + access + " access on folder " + folderName + " to " + grantee.EmailAddress;		   	
 		}
 	
 		

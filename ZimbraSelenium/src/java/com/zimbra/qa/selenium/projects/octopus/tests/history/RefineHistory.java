@@ -8,7 +8,6 @@ import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.octopus.core.OctopusCommonTest;
 import com.zimbra.qa.selenium.projects.octopus.ui.PageHistory;
 import com.zimbra.qa.selenium.projects.octopus.ui.PageHistory.*;
-import com.zimbra.qa.selenium.projects.octopus.ui.PageHistory.Locators.*;
 
 
 public class RefineHistory extends OctopusCommonTest {
@@ -99,7 +98,7 @@ public class RefineHistory extends OctopusCommonTest {
 		
 	}
 	
-	@Test(description = "Functional test for check/uncheck 'new version' checkbox", groups = { "functional" })
+	@Test(description = "Verify check/uncheck 'new version' checkbox", groups = { "functional" })
 	public void RefineNewVersion() throws HarnessException {
 										
 		// verify check|uncheck action for 'new version' 
@@ -108,7 +107,7 @@ public class RefineHistory extends OctopusCommonTest {
 				
 	}
 	
-	@Test(description = "Functional test for check/uncheck 'favorite' checkbox with favorite/unfavorite actions", groups = { "functional" })
+	@Test(description = "Verify test for check/uncheck 'favorite' checkbox with favorite/unfavorite actions", groups = { "functional" })
 	public void RefineFavorite() throws HarnessException {
 		
         // mark file as favorite via soap
@@ -136,7 +135,7 @@ public class RefineHistory extends OctopusCommonTest {
 	
 	}
 	
-	@Test(description = "Functional test for check/uncheck 'comment' checkbox", groups = { "functional" })
+	@Test(description = "Verify check/uncheck 'comment' checkbox", groups = { "functional" })
 	public void RefineComment() throws HarnessException {
 	   String comment = "Comment" + ZimbraSeleniumProperties.getUniqueString();
 
@@ -149,7 +148,7 @@ public class RefineHistory extends OctopusCommonTest {
 		
 	}
 
-	@Test(description = "Functional test for check/uncheck 'rename' checkbox", groups = { "functional" })
+	@Test(description = "Verify check/uncheck 'rename' checkbox", groups = { "functional" })
 	public void RefineRename() throws HarnessException {
 	   String newName = "New Name " + ZimbraSeleniumProperties.getUniqueString() +
 	                    fileName.substring(fileName.indexOf("."),fileName.length());
@@ -165,7 +164,7 @@ public class RefineHistory extends OctopusCommonTest {
 	}
 
 	
-	@Test(description = "Functional test for check/uncheck 'sharing' checkbox", groups = { "functional" })
+	@Test(description = "Verify check/uncheck 'sharing' checkbox", groups = { "functional" })
 	public void RefineSharing() throws HarnessException {
 	   // create 3  grantees' accounts
 	   ZimbraAccount readGrantee = getNewAccount();
@@ -190,7 +189,7 @@ public class RefineHistory extends OctopusCommonTest {
 	   verifyCheckAction(Locators.zHistoryFilterSharing.locator,
 				GetText.share(SHARE_PERMISSION.SHARE_AS_ADMIN,folder.getName(),adminGrantee));
 
-	 // verify check|uncheck action for 'sharing' 
+	 // verify uncheck action for 'sharing' 
 	   verifyUnCheckAction(Locators.zHistoryFilterSharing.locator,
 				GetText.share(SHARE_PERMISSION.SHARE_AS_READ,folder.getName(),readGrantee));
 	   verifyUnCheckAction(Locators.zHistoryFilterSharing.locator,
