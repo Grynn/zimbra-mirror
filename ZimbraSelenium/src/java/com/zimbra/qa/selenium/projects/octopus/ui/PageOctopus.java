@@ -641,10 +641,10 @@ public class PageOctopus extends AbsTab {
 		return found;
 	}
 	
-	public void trashItemUsingSOAP(String itemId, ZimbraAccount account)
+	public void permanentlyDeleteItemUsingSOAP(String itemId, ZimbraAccount account)
 			throws HarnessException {
 		account.soapSend("<ItemActionRequest xmlns='urn:zimbraMail'>"
-				+ "<action id='" + itemId + "' op='trash'/>"
+				+ "<action id='" + itemId + "' op='delete'/>"
 				+ "</ItemActionRequest>");
 	}
 

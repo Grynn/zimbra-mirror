@@ -257,7 +257,7 @@ public class AddRemoveFavorites extends OctopusCommonTest {
 			try {
 				for (String id : fileIdList) {
 					// Delete it from Server
-					app.zPageOctopus.trashItemUsingSOAP(id,
+					app.zPageOctopus.deleteItemUsingSOAP(id,
 							app.zGetActiveAccount());
 				}
 			} catch (Exception e) {

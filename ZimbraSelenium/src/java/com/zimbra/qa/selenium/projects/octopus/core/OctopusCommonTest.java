@@ -154,7 +154,17 @@ public class OctopusCommonTest extends CommonMethods implements CommonConstants{
 					.debug("commonTestBeforeMethod: AccountZWC is not currently logged in");
 
 			if (app.zPageOctopus.zIsActive())
-				app.zPageOctopus.zLogout();
+				try{
+					app.zPageOctopus.zLogout();
+				}catch(Exception ex){
+					if ( !app.zPageLogin.zIsActive()) {
+			            logger.error("Login page is not active.  Clear cookies and reload.", ex);
+			            // app.zPageLogin.sDeleteAllVisibleCookies();
+			            app.zPageLogin.sOpen(ZimbraSeleniumProperties.getLogoutURL());            
+			            app.zPageLogin.sOpen(ZimbraSeleniumProperties.getBaseURL());
+			        }
+				}
+			
 			app.zPageLogin.zLogin(ZimbraAccount.AccountZWC());
 
 			// Confirm

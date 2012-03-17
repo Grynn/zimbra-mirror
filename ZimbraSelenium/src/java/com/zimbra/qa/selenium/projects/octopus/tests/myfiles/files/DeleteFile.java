@@ -77,7 +77,7 @@ public class DeleteFile extends OctopusCommonTest {
 		ZAssert.assertNotNull(_fileId, "Verify file is uploaded");
 
 		// trash file using SOAP
-		app.zPageOctopus.trashItemUsingSOAP(_fileId, account);
+		app.zPageOctopus.deleteItemUsingSOAP(_fileId, account);
 
 		// click on Trash tab
 		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_TRASH);
