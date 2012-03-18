@@ -303,6 +303,7 @@ STDMETHODIMP CMapiAccessWrap::GetData(BSTR UserId, VARIANT ItemId, FolderType ty
                 pIt[L"homeState"] = SysAllocString((cd.HomeState).c_str());
                 pIt[L"homeStreet"] = SysAllocString((cd.HomeStreet).c_str());
                 pIt[L"homeURL"] = SysAllocString((cd.HomeURL).c_str());
+                pIt[L"imAddress1"] = SysAllocString((cd.IMAddress1).c_str());
                 pIt[L"jobTitle"] = SysAllocString((cd.JobTitle).c_str());
                 pIt[L"lastName"] = SysAllocString((cd.LastName).c_str());
                 pIt[L"middleName"] = SysAllocString((cd.MiddleName).c_str());
