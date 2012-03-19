@@ -477,7 +477,7 @@ if ( $platform =~ /UBUNTU/ || $platform =~ /DEBIAN4/ ) {
     print "Unable to restart syslog.  Please do it manually.\n";
     exit 1;
   }
-} elsif ( $platform =~ /DEBIAN5/ || $platform =~ /DEBIAN6/ || $platform =~ /F10/ || $platform =~ /F11/ || $platform =~ /RHEL6/ ) {
+} elsif ( $platform =~ /DEBIAN5/ || $platform =~ /DEBIAN6/ || $platform =~ /F10/ || $platform =~ /F11/ || $platform =~ /RHEL6/ || $platform =~ /CentOS6/ ) {
   if ( -e "/etc/init.d/rsyslog" ) {
     `/etc/init.d/rsyslog restart> /dev/null 2>&1`;
     exit 0;
