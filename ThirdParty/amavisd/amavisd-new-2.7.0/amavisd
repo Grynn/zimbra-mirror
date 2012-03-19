@@ -10336,7 +10336,7 @@ sub init_builtin_macros() {
     P => sub {$MSGINFO->partition_tag}, # SQL partition tag
     partition_tag => sub {$MSGINFO->partition_tag},  # synonym for %P
     q => sub {my($q) = $MSGINFO->quarantined_to;
-              $q && [map { my($m)=$_; $m=~s{^\Q$QUARANTINEDIR\E/}{}; $m } @$q];
+              $q && [map { my($m)=$_; $m=~s{^\Q$QUARANTINEDIR\E/}{}; $m=~s/^march.*\.archive$//; $m } @$q];
              },  # list of quarantine mailboxes
     v => sub {[split(/[ \t]*\r?\n/,$av_output)]},   # anti-virus scanner output
     V => sub {my($vn) = $MSGINFO->virusnames;       # unique virus names
