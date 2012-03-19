@@ -43,7 +43,9 @@
  * @extends		DwtComposite		
  */
 DwtTreeItem = function(params) {
+
     if (arguments.length == 0) { return; }    
+
     params = Dwt.getParams(arguments, DwtTreeItem.PARAMS);
 	var parent = params.parent;
 	if (parent instanceof DwtTree) {
@@ -1008,6 +1010,11 @@ function(params) {
 	this._setMouseEvent(mev, params);
 	mev.kbNavEvent = params.kbNavEvent;
 	this.notifyListeners(DwtEvent.ONMOUSEUP, mev);
+};
+
+DwtTreeItem.prototype.getTooltipBase =
+function(hoverEv) {
+	return this._itemDiv;
 };
 
 DwtTreeItem._listeners = {};
