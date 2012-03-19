@@ -169,16 +169,12 @@ CRT_PROFILE_EXIT:
     }
 	else
 	{
-		LPSTR lpstrProfileName = NULL;
-		WtoA((LPWSTR)strProfileName.c_str(),lpstrProfileName);
 		//Create supporting OL profile entries else crash may happen!
 		if(!Zimbra::MAPI::Util::SetOLProfileRegistryEntries(strProfileName.c_str()))
 		{
-			Zimbra::Util::SafeDelete(lpstrProfileName);
 			throw ExchangeAdminException(hr, L"ExchangeAdmin::CreateProfile()::SetOLProfileRegistryEntries Failed.",
 				__LINE__, __FILE__);
 		}
-		Zimbra::Util::SafeDelete(lpstrProfileName);
 	}
     return hr;
 }

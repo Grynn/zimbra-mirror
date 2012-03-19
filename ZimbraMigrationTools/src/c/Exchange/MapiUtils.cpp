@@ -2428,9 +2428,11 @@ BOOL Zimbra::MAPI::Util::CreatePSTProfile(LPSTR lpstrProfileName, LPSTR lpstrPST
 	AtoW(lpstrProfileName,lpwstrProfileName);
     if(!SetOLProfileRegistryEntries(lpwstrProfileName))
 	{
+		Zimbra::Util::SafeDelete(lpwstrProfileName);
 		throw MapiUtilsException(hr, L"Util:: CreatePSTProfile()::SetOLProfileRegistryEntries Failed.",
             __LINE__, __FILE__);
 	}
+	Zimbra::Util::SafeDelete(lpwstrProfileName);
     return TRUE;
 }
 
