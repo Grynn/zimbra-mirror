@@ -1612,21 +1612,27 @@ public class ZimbraAPI
             writer.WriteAttributeString("uid", task["uid"]);
         }
 
-        writer.WriteStartElement("s");
-        writer.WriteAttributeString("d", task["s"]);
-        //if (isRecurring)
-        //{
-        //    writer.WriteAttributeString("tz", task["tid"]);
-        //}
-        writer.WriteEndElement();
+        if (task["s"].Length > 0)   // FBS bug 71748 -- 3/19/12
+        {
+            writer.WriteStartElement("s");
+            writer.WriteAttributeString("d", task["s"]);
+            //if (isRecurring)
+            //{
+            //    writer.WriteAttributeString("tz", task["tid"]);
+            //}
+            writer.WriteEndElement();
+        }
 
-        writer.WriteStartElement("e");
-        writer.WriteAttributeString("d", task["e"]);
-        //if (isRecurring)
-        //{
-        //    writer.WriteAttributeString("tz", task["tid"]);
-        //}
-        writer.WriteEndElement();
+        if (task["e"].Length > 0)   // FBS bug 71748 -- 3/19/12
+        {
+            writer.WriteStartElement("e");
+            writer.WriteAttributeString("d", task["e"]);
+            //if (isRecurring)
+            //{
+            //    writer.WriteAttributeString("tz", task["tid"]);
+            //}
+            writer.WriteEndElement();
+        }
 
         // hard code the organizer -- we don't support task requests
         writer.WriteStartElement("or");
