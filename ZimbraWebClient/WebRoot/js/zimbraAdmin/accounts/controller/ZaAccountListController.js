@@ -820,11 +820,76 @@ function(account) {
 		if(!account[ZaAccount.A2_publicMailURL]) {
 			account[ZaAccount.A2_publicMailURL] = ["http://",ZaAccount.getDomain(account[ZaAccount.A_name]),":7070"].join("");
 		}
+
+		var publicMailURL = account[ZaAccount.A2_publicMailURL];
+	    if (AjxUtil.IP_ADDRESS_RE.test(location.hostname) && publicMailURL) {
+			// Here we guess user prefer to use IP, if possible, I will replace FQDN with IP
+
+			try {
+				var startIndex = account[ZaAccount.A2_publicMailURL].indexOf("//");
+				var endIndex = account[ZaAccount.A2_publicMailURL].indexOf(":", startIndex);
+				if (endIndex == -1) {
+					endIndex = account[ZaAccount.A2_publicMailURL].indexOf("/", startIndex);
+				}
+				var mailFQDN = account[ZaAccount.A2_publicMailURL].substring(startIndex + 2, endIndex);
+				var servers = ZaServer.getAll().getArray();
+				var mailBoxIP = "";
+				if(servers.length > 1) {
+					var found = false;
+					// Try to find FQDN and IP mapping in server information.
+					// If user set domain level attribute, it shouldn't be found here.
+					for (var i = 0; i < servers.length; i++) {
+						if(!servers[i].attrs[ZaServer.A_zimbraMailboxServiceEnabled])
+							continue;
+
+						if(servers[i].attrs[ZaServer.A_ServiceHostname] == mailFQDN) {
+							found = true;
+						}
+
+						if(!found && servers[i].attrs[ZaServer.A_Pop3BindAddress]) {
+							for(var j=0;j<servers[i].attrs[ZaServer.A_Pop3BindAddress].length;j++) {
+								if(servers[i].attrs[ZaServer.A_Pop3BindAddress][j] == mailFQDN) {
+									found = true;
+									break;
+								}
+							}
+						}
+
+						if(found) {
+							// FQDN hit, start find IP information of this server
+							// ignore local address
+							servers[i].load();
+                        	if(servers[i].nifs) {
+                            	for(var j=0;j<servers[i].nifs.length;j++) {
+                                	if(servers[i].nifs[j].attrs.addr && (servers[i].nifs[j].attrs.addr != "127.0.0.1")) {
+                  						mailBoxIP = servers[i].nifs[j].attrs.addr;
+                                    }
+                                    break;
+                                }
+                            }
+							break;
+                        }
+					}
+				} else {
+					//Single Node installation, all components are in the same machine.
+					mailBoxIP = location.hostname;
+				}
+				if (mailFQDN && mailBoxIP) {
+					publicMailURL = publicMailURL.replace(mailFQDN, mailBoxIP);
+				}
+			} catch (ex1) {
+
+			}
+		}
+		var mServer = publicMailURL;
 		if(!obj.authToken || !obj.lifetime)
 			throw new AjxException(ZaMsg.ERROR_FAILED_TO_GET_CREDENTIALS, AjxException.UNKNOWN, "ZaAccountListController.prototype._viewMailListener");
 
-		var mServer = [account[ZaAccount.A2_publicMailURL], "/service/preauth?authtoken=",obj.authToken,"&isredirect=1&adminPreAuth=1"].join("");
+		AjxCookie.setCookie(document, "ZM_AUTH_TOKEN", obj.authToken, null, "/");
+
 		mServer = AjxStringUtil.trim(mServer,true);
+		mServer = (mServer.indexOf("?") < 0)?(mServer + "?") : (mServer + "&");
+		mServer += ("adminPreAuth=1");
 		var win = window.open(mServer, "_blank");
 	} catch (ex) {
 		this._handleException(ex, "ZaAccountListController._viewMailListenerLauncher", null, false);
