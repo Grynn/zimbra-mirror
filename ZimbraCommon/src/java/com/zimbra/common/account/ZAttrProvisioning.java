@@ -28,7 +28,7 @@ public class ZAttrProvisioning {
 
     ///// BEGIN-AUTO-GEN-REPLACE
 
-    /* build: 8.0.0_BETA1_1111 pburgu 20120313-1647 */
+    /* build: 8.0.0_BETA1_1111 pshao 20120319-1201 */
 
     public static enum AccountCalendarUserType {
         RESOURCE("RESOURCE"),
@@ -10973,6 +10973,22 @@ public class ZAttrProvisioning {
     public static final String A_zimbraTimeZoneStandardRRule = "zimbraTimeZoneStandardRRule";
 
     /**
+     * binary data
+     *
+     * @since ZCS 8.0.0
+     */
+    @ZAttr(id=10000)
+    public static final String A_zimbraUnittestBinary = "zimbraUnittestBinary";
+
+    /**
+     * binary data
+     *
+     * @since ZCS 8.0.0
+     */
+    @ZAttr(id=10001)
+    public static final String A_zimbraUnittestCertificate = "zimbraUnittestCertificate";
+
+    /**
      * whether end-user services on SOAP and LMTP interfaces are enabled
      */
     @ZAttr(id=146)
@@ -11356,6 +11372,18 @@ public class ZAttrProvisioning {
      */
     @ZAttr(id=281)
     public static final String A_zimbraZimletKeyword = "zimbraZimletKeyword";
+
+    /**
+     * Whether to load zimlets synchronously in the web client. If set to
+     * TRUE, users are not allowed to use the core app before zimlets are
+     * loaded. If set to FALSE, zimlets are loaded in the background and
+     * users are allowed to use the core app before all zimlets finish
+     * loading.
+     *
+     * @since ZCS 7.2.0
+     */
+    @ZAttr(id=1391)
+    public static final String A_zimbraZimletLoadSynchronously = "zimbraZimletLoadSynchronously";
 
     /**
      * The panel item section in the Zimlet description
