@@ -174,9 +174,9 @@ ZM_ITEM_TYPE MAPIMessage::ItemType()
 {
     if (PROP_TYPE(m_pMessagePropVals[MESSAGE_CLASS].ulPropTag) != PT_ERROR)
     {
-        if ((_tcsnicmp(m_pMessagePropVals[MESSAGE_CLASS].Value.LPSZ, _TEXT("IPM.NOTE"), 8) ==
-            0) || (_tcsnicmp(m_pMessagePropVals[MESSAGE_CLASS].Value.LPSZ, _TEXT("IPM.POST"),
-            8) == 0))
+        if ((_tcsnicmp(m_pMessagePropVals[MESSAGE_CLASS].Value.LPSZ, _TEXT("IPM.NOTE"), 8) == 0) ||
+            (_tcsnicmp(m_pMessagePropVals[MESSAGE_CLASS].Value.LPSZ, _TEXT("IPM.POST"), 8) == 0) ||
+            (_tcsnicmp(m_pMessagePropVals[MESSAGE_CLASS].Value.LPSZ, _TEXT("REPORT.IPM.NOTE"), 15) == 0))            
             return ZT_MAIL;
         else if ((_tcsnicmp(m_pMessagePropVals[MESSAGE_CLASS].Value.LPSZ, _TEXT("IPM.CONTACT"),
             11) == 0) || (_tcsnicmp(m_pMessagePropVals[MESSAGE_CLASS].Value.LPSZ, _TEXT(
