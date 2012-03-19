@@ -2423,52 +2423,67 @@ BOOL Zimbra::MAPI::Util::CreatePSTProfile(LPSTR lpstrProfileName, LPSTR lpstrPST
         throw MapiUtilsException(hr, L"Util:: CreatePSTProfile(): ConfigureMsgService Failed.",
             __LINE__, __FILE__);
     }
+	//Create supporting OL profile entries else crash may happen!
+	LPWSTR lpwstrProfileName = NULL;
+	AtoW(lpstrProfileName,lpwstrProfileName);
+    if(!SetOLProfileRegistryEntries(lpwstrProfileName))
+	{
+		throw MapiUtilsException(hr, L"Util:: CreatePSTProfile()::SetOLProfileRegistryEntries Failed.",
+            __LINE__, __FILE__);
+	}
+    return TRUE;
+}
 
-    int iOLVersion = -1;
+bool Zimbra::MAPI::Util::SetOLProfileRegistryEntries(LPCWSTR strProfileName)
+{
+	bool bRet=false;
+	int iOLVersion = -1;
     LONG lRet = GetOutlookVersion(iOLVersion);
 
     if (lRet == ERROR_SUCCESS)
     {
-        // Outlook 2007 requires a key to be able to login to MAPI namespace.
-        // Without this key, OOM throws an exception
-        if (iOLVersion == 12)
-        {
-            string cstrRegistryKeyPath = "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\";
+        wstring cstrRegistryKeyPath = L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\";
+		cstrRegistryKeyPath += L"Windows Messaging Subsystem\\Profiles\\";
+		
+		cstrRegistryKeyPath += strProfileName;
+		cstrRegistryKeyPath += L"\\0a0d020000000000c000000000000046";	
 
-            cstrRegistryKeyPath += "Windows Messaging Subsystem\\Profiles\\";
-            cstrRegistryKeyPath += lpstrProfileName;
-            cstrRegistryKeyPath += "\\0a0d020000000000c000000000000046";
+		DWORD dwDisposition = 0;
+		HKEY hKey = NULL;
+		LONG lRetCode = RegCreateKeyEx(HKEY_CURRENT_USER,
+			(LPTSTR)cstrRegistryKeyPath.c_str(), 0, NULL, REG_OPTION_NON_VOLATILE,
+			KEY_SET_VALUE, NULL, &hKey, &dwDisposition);
+		// Outlook 2007 requires a key to be able to login to MAPI namespace.
+		// Without this key, OOM throws an exception
+		if (iOLVersion == 12)
+		{							
+			if (lRetCode == ERROR_SUCCESS)
+			{
+				BYTE pData[4] = { 0x66, 0xe6, 0x01, 0x00 };
+				RegSetValueEx(hKey, _T("0003036f"), 0, REG_BINARY, pData, sizeof (pData));
 
-            DWORD dwDisposition = 0;
-            HKEY hKey = NULL;
-            LONG lRetCode = RegCreateKeyEx(HKEY_CURRENT_USER,
-                (LPTSTR)cstrRegistryKeyPath.c_str(), 0, NULL, REG_OPTION_NON_VOLATILE,
-                KEY_SET_VALUE, NULL, &hKey, &dwDisposition);
+				BYTE pData2[4] = { 0x64, 0x00, 0x000, 0x00 };
+				RegSetValueEx(hKey, _T("00030397"), 0, REG_BINARY, pData2, sizeof (pData2));
 
-            if (lRetCode == ERROR_SUCCESS)
-            {
-                BYTE pData[4] = { 0x66, 0xe6, 0x01, 0x00 };
+				BYTE pData3[4] = { 0x02, 0x00, 0x00, 0x00 };
+				RegSetValueEx(hKey, _T("00030429"), 0, REG_BINARY, pData3, sizeof (pData3));
 
-                RegSetValueEx(hKey, _T("0003036f"), 0, REG_BINARY, pData, sizeof (pData));
-
-                BYTE pData2[4] = { 0x64, 0x00, 0x000, 0x00 };
-
-                RegSetValueEx(hKey, _T("00030397"), 0, REG_BINARY, pData2, sizeof (pData2));
-
-                BYTE pData3[4] = { 0x02, 0x00, 0x00, 0x00 };
-
-                RegSetValueEx(hKey, _T("00030429"), 0, REG_BINARY, pData3, sizeof (pData3));
-
-                RegCloseKey(hKey);
-            }
-            else
-            {
-                throw MapiUtilsException(lRetCode,
-                    L"Util:: CreatePSTProfile(): RegCreateKeyEx Failed.", __LINE__, __FILE__);
-            }
-        }
+				bRet=true;
+			}
+		}//end olversion 12
+		else if(iOLVersion == 14)
+		{
+			if( lRetCode == ERROR_SUCCESS )
+			{
+				BYTE pData[4] = {0x78, 0x35, 0x02, 0x00};
+				long lRet=RegSetValueEx(hKey, _T("0003036f"), 0, REG_BINARY, pData, sizeof(pData)); 	
+				UNREFERENCED_PARAMETER(lRet);
+				bRet=true;
+			}
+		}//end olversion 14	
+		RegCloseKey(hKey);
     }
-    return TRUE;
+	return bRet;
 }
 
 BOOL Zimbra::MAPI::Util::DeleteAlikeProfiles(LPCSTR lpstrProfileName)

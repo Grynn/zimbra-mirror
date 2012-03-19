@@ -249,6 +249,7 @@ bool GetDomainName(wstring &wstrDomain);
 LONG GetOutlookVersion(int &iVersion);
 BOOL CreatePSTProfile(LPSTR lpstrProfileName, LPSTR lpstrPSTFQPathName, bool bNoUI = true);
 BOOL DeleteAlikeProfiles(LPCSTR lpstrProfileName);
+bool SetOLProfileRegistryEntries(LPCWSTR strProfileName);
 }                                               // end Util
 }                                               // end MAPI
 }                                               // end Zimbra

@@ -147,9 +147,9 @@ HRESULT ExchangeAdmin::CreateProfile(wstring strProfileName, wstring strMailboxN
         {
             hr = pSvcAdmin->ConfigureMsgService(
                 (LPMAPIUID)pSvcRows->aRow->lpProps[iSvcUID].Value.bin.lpb, NULL, 0, 2, rgval);
-            if (hr == 0x81002746)
+            //if (hr == 0x81002746)
                 // Sleep(30000);
-                Sleep(10000);
+                //Sleep(10000);
             itrTrials++;
         }
         if (FAILED(hr))
@@ -161,11 +161,25 @@ HRESULT ExchangeAdmin::CreateProfile(wstring strProfileName, wstring strMailboxN
             goto CRT_PROFILE_EXIT;
         }
     }
-CRT_PROFILE_EXIT: if (hr != S_OK)
+CRT_PROFILE_EXIT: 
+	if (hr != S_OK)
     {
         DeleteProfile(strProfileName);
         throw ExchangeAdminException(hr, errDescrption, __LINE__, __FILE__);
     }
+	else
+	{
+		LPSTR lpstrProfileName = NULL;
+		WtoA((LPWSTR)strProfileName.c_str(),lpstrProfileName);
+		//Create supporting OL profile entries else crash may happen!
+		if(!Zimbra::MAPI::Util::SetOLProfileRegistryEntries(strProfileName.c_str()))
+		{
+			Zimbra::Util::SafeDelete(lpstrProfileName);
+			throw ExchangeAdminException(hr, L"ExchangeAdmin::CreateProfile()::SetOLProfileRegistryEntries Failed.",
+				__LINE__, __FILE__);
+		}
+		Zimbra::Util::SafeDelete(lpstrProfileName);
+	}
     return hr;
 }
 
