@@ -743,7 +743,7 @@ LPCWSTR ExchangeOps::GlobalUninit()
         }
     }
     else
-	if (Initialized != EXCH_UNINITIALIZED)
+	//if (Initialized != EXCH_UNINITIALIZED)
     {
         MAPIAccessAPI::UnInitGlobalSessionAndStore();
     }
