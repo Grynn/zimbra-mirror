@@ -4770,8 +4770,6 @@ Dwt_Date_XFormItem = function() {}
 XFormItemFactory.createItemType("_DWT_DATE_", "dwt_date", Dwt_Date_XFormItem, Dwt_Adaptor_XFormItem)
 
 
-//	type defaults
-Dwt_Date_XFormItem.prototype.cssStyle = "width:80px;";
 
 
 //	methods
