@@ -483,7 +483,11 @@ function(params) {
 				acc.setAttribute("by", "name");
 			}
 		}
-		
+	
+		if (params.skipExpiredToken) {
+			var tokenControl = soapDoc.set("authTokenControl", null, context);
+			tokenControl.setAttribute("voidOnExpired", "1");
+		}	
 		// Tell server what kind of response we want
 		if (!params.useXml) {
 			var js = soapDoc.set("format", null, context);

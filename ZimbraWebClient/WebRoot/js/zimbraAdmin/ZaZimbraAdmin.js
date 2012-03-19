@@ -129,7 +129,8 @@ ZaZimbraAdmin.clearCookie = function () {
 		cookieBy.setAttribute("name", ZaZimbraAdmin._COOKIE_NAME);
 		var clearCookieCommand = new ZmCsfeCommand();
 		var params = new Object();
-		params.soapDoc = soapDoc;	
+		params.soapDoc = soapDoc;
+		params.skipExpiredToken = true;	
 		params.asyncMode = false;
 		params.noAuthToken = true;
 		clearCookieCommand.invoke(params);
