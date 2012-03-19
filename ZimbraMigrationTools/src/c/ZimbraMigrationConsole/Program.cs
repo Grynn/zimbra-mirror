@@ -352,8 +352,29 @@ class Program
 
 
                 Migration Test = new Migration();
+                CssLib.CSMigrationWrapper TestObj;
+                try
+                {
 
-                CssLib.CSMigrationWrapper TestObj = new CSMigrationWrapper("MAPI");
+                    TestObj = new CSMigrationWrapper("MAPI");
+                }
+
+                catch (Exception e)
+                {
+
+                    string error = " Migrationwrapper cannot be initialised ,Migration dll cannot be loaded";
+                    error += e.Message;
+                    System.Console.WriteLine();
+                    ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
+                        error);
+                    System.Console.WriteLine("......... \n");
+                    ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
+                            "");
+                    System.Console.WriteLine("......... \n");
+
+                    return;
+
+                }
 
                 System.Console.WriteLine();
                 ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Green,

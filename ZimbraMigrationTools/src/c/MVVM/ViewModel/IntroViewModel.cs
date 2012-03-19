@@ -110,7 +110,18 @@ public class IntroViewModel: BaseViewModel
     {
         if (mw == null)
         {
-            mw = new CssLib.CSMigrationWrapper("MAPI");
+            try
+            {
+                mw = new CssLib.CSMigrationWrapper("MAPI");
+            }
+            catch (Exception e)
+            {
+                
+                string error = " Migrationwrapper cannot be initialised ,Migration dll cannot be loaded";
+                error += e.Message;
+                MessageBox.Show(error, "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
             Application.Current.Properties["mw"] = mw;
         }
 
