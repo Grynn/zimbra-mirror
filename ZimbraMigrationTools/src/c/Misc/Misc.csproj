@@ -131,15 +131,15 @@
     <Compile Include="SchedUser.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Help\acctresults.html" />
-    <Content Include="Help\cfgS.html" />
-    <Content Include="Help\cfgSDest.html" />
-    <Content Include="Help\cfgU.html" />
-    <Content Include="Help\cfgUDest.html" />
-    <Content Include="Help\optionsOld.html" />
-    <Content Include="Help\sched.html" />
-    <Content Include="Help\usersOld.html" />
-    <Content Include="Help\welcomeOld.html" />
+    <Content Include="Help\destination_server.html" />
+    <Content Include="Help\destination_user.html" />
+    <Content Include="Help\migrate.html" />
+    <Content Include="Help\options.html" />
+    <Content Include="Help\results.html" />
+    <Content Include="Help\source_server.html" />
+    <Content Include="Help\source_user.html" />
+    <Content Include="Help\users.html" />
+    <Content Include="Help\welcome.html" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

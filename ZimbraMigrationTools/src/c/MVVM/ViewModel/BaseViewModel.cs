@@ -49,28 +49,28 @@ public class BaseViewModel: INotifyPropertyChanged
         switch (lb.SelectedIndex)
         {
         case 0:
-            DoHelp("welcomeOld.html");
+            DoHelp("welcome.html");
             break;
         case 1:
-            helpFile = isServer ? "cfgS.html" : "cfgU.html";
+            helpFile = isServer ? "source_server.html" : "source_user.html";
             DoHelp(helpFile);
             break;
         case 2:
-            helpFile = isServer ? "cfgSDest.html" : "cfgUDest.html";
+            helpFile = isServer ? "destination_server.html" : "destination_user.html";
             DoHelp(helpFile);
             break;
         case 3:
-            DoHelp("optionsOld.html");
+            DoHelp("options.html");
             break;
         case 4:
-            helpFile = isServer ? "usersOld.html" : "acctresults.html";
+            helpFile = isServer ? "users.html" : "results.html";
             DoHelp(helpFile);
             break;
         case 5:
-            DoHelp("sched.html");
+            DoHelp("migrate.html");
             break;
         case 6:
-            DoHelp("acctresults.html");
+            DoHelp("results.html");
             break;
         default:
             break;
@@ -229,7 +229,7 @@ public class BaseViewModel: INotifyPropertyChanged
         else
         {
             fileName = ((IntroViewModel)ViewModelPtrs[(int)ViewType.INTRO]).InstallDir;
-            fileName += "/";
+            fileName += "/Help/";
             fileName += htmlFile;
             urlString = "file:///" + fileName;
             bDoProcess = File.Exists(fileName);
