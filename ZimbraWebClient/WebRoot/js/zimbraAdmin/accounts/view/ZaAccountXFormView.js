@@ -2391,7 +2391,7 @@ textFieldCssClass:"admin_xform_number_input"}
 									type:_SUPER_LIFETIME_,
 									msgName:ZaMsg.MSG_zimbraMailMinPollingInterval,
 									txtBoxLabel:ZaMsg.LBL_zimbraMailMinPollingInterval,
-                                    onChange:ZaCosXFormView.validatePollingInterval,
+                                    onChange:ZaAccountXFormView.validatePollingInterval,
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
 									colSpan:2
 								},
