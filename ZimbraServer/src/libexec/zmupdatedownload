@@ -40,6 +40,8 @@ if [ -d "${download_dir}" ]; then
   PST_IMPORT=$(cd ${download_dir}; ls -tr1 ZCSPSTImportWizard* | head -1 2>/dev/null)
   EXCHANGE_MIG_WIZARD=$(cd ${download_dir}; ls -tr1 ZCSExchangeMigrationWizard* | head -1 2>/dev/null)
   DOMINO_MIG_WIZARD=$(cd ${download_dir}; ls -tr1 ZCSDominoMigrationWizard* | head -1 2>/dev/null)
+  GENERAL_MIG_WIZARD_32BIT=$(cd ${download_dir}; ls -tr1 ZimbraMigration_*_x86.zip | head -1 2>/dev/null)
+  GENERAL_MIG_WIZARD_64BIT=$(cd ${download_dir}; ls -tr1 ZimbraMigration_*_x64.zip | head -1 2>/dev/null)
 
   cat ${index}.in | \
     sed -e "s/@@ZCO_32BIT@@/${ZCO_32BIT}/" \
@@ -47,8 +49,9 @@ if [ -d "${download_dir}" ]; then
     -e "s/@@ISYNC_UB@@/${ISYNC_UB}/" \
     -e "s/@@PST_IMPORT@@/${PST_IMPORT}/" \
     -e "s/@@EXCHANGE_MIG_WIZARD@@/${EXCHANGE_MIG_WIZARD}/" \
+    -e "s/@@GENERAL_MIG_WIZARD_32BIT@@/${GENERAL_MIG_WIZARD_32BIT}/" \
+    -e "s/@@GENERAL_MIG_WIZARD_64BIT@@/${GENERAL_MIG_WIZARD_64BIT}/" \
     -e "s/@@DOMINO_MIG_WIZARD@@/${DOMINO_MIG_WIZARD}/" > ${index}
-
 fi
 
 exit 0

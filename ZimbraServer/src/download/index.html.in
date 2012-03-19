@@ -135,24 +135,29 @@ This application performs a server-to-server migration of email, calendar and co
 			</tr>
 		</table>
 
-		<!--  Migration IBM Domino section -->
+		<!--  General Migration Tool section -->
 		<table width="100%" cellspacing="0" cellpadding="0" border="1">
 			<tr>
 		        <td width="7%"></td>
 				<td colspan="3">
-	        <h2>Migration Wizard for IBM Lotus Domino</h2>
+	        <h2>General Migration Wizard</h2>
 				</td>
 			</tr>
 			<tr>
 		        <td width="7%"></td>
         		<td width="63%">
-This application performs a server-to-server migration of email, calendar and contacts from IBM Lotus Domino to the Zimbra Server.
+This tool imports data within Microsoft Exchange servers and Outlook PST files to the Zimbra Server.
 				</td>
 		        <td width="7%"></td>
 		        <td width="23%">
-            	<a id="domino_migration" href="/downloads/@@DOMINO_MIG_WIZARD@@" target="_blank">Download</a>
+            	<a id="general_migration_32bit" href="/downloads/@@GENERAL_MIG_WIZARD_32BIT@@" target="_blank">Download 32-bit</a>
             	<br>
-            	<small>Windows EXE Executable</small>
+            	<small>Zip Archive</small>
+                <br>
+                <br>
+            	<a id="general_migration_64bit" href="/downloads/@@GENERAL_MIG_WIZARD_64BIT@@" target="_blank">Download 64-bit</a>
+                <br>
+            	<small>Zip Archive</small>
             	</td>
 			</tr>
 		</table>
