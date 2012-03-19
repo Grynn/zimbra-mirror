@@ -272,6 +272,12 @@ function (by, val) {
 		}
 	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetCosResponse;
 	this.initFromJS(resp.cos[0]);
+
+	if(this.attrs[ZaAccount.A_zimbraPrefMailPollingInterval]) {
+    	var poIntervalInS = ZaUtil.getLifeTimeInSeconds(this.attrs[ZaAccount.A_zimbraPrefMailPollingInterval]);
+        if (poIntervalInS >= 1)
+            this.attrs[ZaAccount.A_zimbraPrefMailPollingInterval] = poIntervalInS + "s";
+    }
 }
 ZaItem.loadMethods["ZaCos"].push(ZaCos.loadMethod);
 

@@ -1613,7 +1613,13 @@ function(by, val) {
 			
 	    autoDispName += this.attrs[ZaAccount.A_lastName];
 	} 	
-	
+     
+	if(this.attrs[ZaAccount.A_zimbraPrefMailPollingInterval]) {
+        var poIntervalInS = ZaUtil.getLifeTimeInSeconds(this.attrs[ZaAccount.A_zimbraPrefMailPollingInterval]);
+        if (poIntervalInS >= 1)
+            this.attrs[ZaAccount.A_zimbraPrefMailPollingInterval] = poIntervalInS + "s";
+	}
+
 	if( autoDispName == this.attrs[ZaAccount.A_displayname]) {
 		this[ZaAccount.A2_autodisplayname] = "TRUE";
 	} else {
