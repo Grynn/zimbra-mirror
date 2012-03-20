@@ -1607,14 +1607,16 @@ function(text, isHtml) {
 			continue;
 		}
 
+		var type = AjxStringUtil._getLineType(testLine);
+
 		// WROTE can stretch over two lines; if so, join them into one line
 		var nextLine = lines[i + 1];
-		if (AjxStringUtil.ORIG_INTRO_RE.test(testLine) && nextLine.match(/\w+:$/)) {
+		var isMerged = false;
+		if ((type == AjxStringUtil.ORIG_UNKNOWN) && AjxStringUtil.ORIG_INTRO_RE.test(testLine) && nextLine.match(/\w+:$/)) {
 			testLine = [testLine, nextLine].join(" ");
+			type = AjxStringUtil._getLineType(testLine);
 			isMerged = true;
 		}
-		
-		var type = AjxStringUtil._getLineType(testLine);
 		
 		// LINE sometimes used as delimiter; if HEADER follows, lump it in with them
 		if (type == AjxStringUtil.ORIG_LINE) {
