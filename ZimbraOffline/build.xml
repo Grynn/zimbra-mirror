@@ -259,7 +259,7 @@
 
   <target name="offline-zimbra-war">
     <ant dir="../ZimbraWebClient" target="war" inheritAll="false" >
-      <property name="zimbra.buildinfo.version" value="${offline.version}"/>
+      <property name="zimbra.buildinfo.version" value="${offline.version} ${offline.relabel}"/>
       <property name="zimbra.buildinfo.release" value="${offline.buildid}"/>
       <property name="zimbra.home.dir" value="${zd.home.dir}"/>
     </ant>
