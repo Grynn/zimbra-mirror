@@ -7,6 +7,9 @@ import java.util.*;
 import java.util.Map.Entry;
 
 import org.apache.commons.configuration.*;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.utils.URIUtils;
+import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.log4j.*;
 
 import com.zimbra.qa.selenium.framework.util.performance.*;;
@@ -246,22 +249,79 @@ public class ZimbraSeleniumProperties {
 	
 	/**
 	 * Get Logout URL for selenium to sign out from the application
-	 * @return Logout URL
+	 * @return Logout URL String
+	 * 
 	 */
 	public static String getLogoutURL() {
 		// get Base URL
 		String url =  getBaseURL();
-		if (url.contains("?")) {
-			if (!url.endsWith("?")){
-				url += "&loginOp=logout";
-			}else{
-				url += "loginOp=logout";
-			}
-		}else{
-			url += "?loginOp=logout";
+		if(url == null){
+			return "";
 		}
-		
+		URI uri = URI.create(url);
+		StringBuilder sb = new StringBuilder();
+		sb.append(URIUtils.extractHost(uri));
+		try {		
+			Map<String, String> query = getUrlParameters(uri);
+			query.put("loginOp", "logout");	
+			String params = buildQueryFromMap(query);
+			if(params !=null && !params.isEmpty()){
+				sb.append("?");
+				sb.append(params);
+			}
+		} catch (Exception ex) {
+			 logger.info(ex);
+		}	
+		url = sb.toString();
 		return url;
+	}
+	
+	/**
+	 * Get URL parameters
+	 * @param uri
+	 * @return Map of arguments
+	 * 
+	 */
+	public static Map<String, String> getUrlParameters(URI uri) {
+		 Map<String, String> params =  new HashMap<String, String>();
+		 if (uri == null) {
+		        return params;
+		 }		
+		 try {
+			 for (NameValuePair param : URLEncodedUtils.parse(uri, "UTF-8")) {
+            	params.put(param.getName(), param.getValue());
+            }           
+        } catch (Exception ex) {
+            logger.error(ex);
+        }
+        return params;
+    }
+	
+	/**
+	 * Build Query from the map
+	 * @return String
+	 *  
+	 */
+	public static String buildQueryFromMap(Map<String, String> queryMap){
+		// Build the query from the map
+		StringBuilder sb = null;
+		for (Entry<String, String> set : queryMap.entrySet()) {
+			String q;
+			if ( set.getValue() == null ) {
+				q = set.getKey(); // If value is null, just use the key as the parameter value
+			} else {
+				q = set.getKey() +"="+ set.getValue();
+			}
+			if ( sb == null ) {
+				sb = new StringBuilder();
+				sb.append(q);
+			} else {
+				sb.append('&').append(q);
+			}
+		}
+		String query = ( sb == null ? null : sb.toString());
+		
+		return query;
 	}
 	
 	/**
@@ -338,24 +398,8 @@ public class ZimbraSeleniumProperties {
 			// FALL THROUGH
 
 		}
-
-		// Build the query from the map
-		StringBuilder sb = null;
-		for (Entry<String, String> set : queryMap.entrySet()) {
-			String q;
-			if ( set.getValue() == null ) {
-				q = set.getKey(); // If value is null, just use the key as the parameter value
-			} else {
-				q = set.getKey() +"="+ set.getValue();
-			}
-			if ( sb == null ) {
-				sb = new StringBuilder();
-				sb.append(q);
-			} else {
-				sb.append('&').append(q);
-			}
-		}
-		String query = ( sb == null ? null : sb.toString());
+	
+		String query = buildQueryFromMap(queryMap);
 		
 		try {
 			URI uri = new URI(scheme, userinfo, host, Integer.parseInt(port), path, query, fragment);
@@ -371,7 +415,7 @@ public class ZimbraSeleniumProperties {
 		return (scheme + "://"+ host +":"+ port);
 
 	}
-
+		
 	public static String zimbraGetVersionString() throws HarnessException {		
 		ZimbraAdminAccount.GlobalAdmin().soapSend("<GetVersionInfoRequest xmlns='urn:zimbraAdmin'/>");
 		String version = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:info", "version");
@@ -401,7 +445,7 @@ public class ZimbraSeleniumProperties {
 		ResourceBundle zmMsg = (ResourceBundle) ZimbraSeleniumProperties
 				.getInstance().getConfigProp().getProperty("zmMsg");
 		System.out.println(zmMsg.getLocale());
-		logger.debug(zmMsg.getLocale());
+		logger.debug(zmMsg.getLocale());				
 	}
 
 }
