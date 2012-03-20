@@ -287,7 +287,7 @@
     <copy file="src/installer/resources/launcher_16x16.ico" tofile="${dist.dir}/jetty/webapps/zimbra/favicon.ico"/>
     <copy file="${dist.dir}/jetty/webapps/zimbra/favicon.ico" tofile="${dist.dir}/jetty/webapps/zimbra/img/logo/favicon.ico"/>
 
-    <replace file="${dist.dir}/jetty/webapps/zimbra/js/zimbraMail/share/model/ZmSettings.js" token="@buildVersion@" value="${offline.version}"/>
+    <replace file="${dist.dir}/jetty/webapps/zimbra/js/zimbraMail/share/model/ZmSettings.js" token="@buildVersion@" value="${offline.version} ${offline.relabel}"/>
     <replace file="${dist.dir}/jetty/webapps/zimbra/js/zimbraMail/share/model/ZmSettings.js" token="@buildRelease@" value="${offline.buildid}"/>
     <replace file="${dist.dir}/jetty/webapps/zimbra/js/zimbraMail/share/model/ZmSettings.js" token="@buildDateTime@" value="${DSTAMP}-${TSTAMP}"/>
 
@@ -999,6 +999,7 @@
       <replace file="@{extroot}/defaults/preferences/preferences.js" token="@buildos@" value="@{os}"/>
       <replace file="@{extroot}/chrome/webrunner/content/about.js" token="@version@" value="${offline.version}"/>
       <replace file="@{extroot}/chrome/webrunner/content/about.js" token="@buildid@" value="${offline.buildid}"/>
+      <replace file="@{extroot}/chrome/webrunner/content/about.js" token="@relabel@" value="${offline.relabel}"/>
 
       <copy tofile="@{extroot}/components/ForceOnline.js" file="prism/components/ForceOnline.js" overwrite="true"/>
           <copy tofile="@{extroot}/chrome/chrome.manifest" file="prism/i18n/chrome.manifest" overwrite="true"/>
