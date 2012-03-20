@@ -2,6 +2,7 @@
 #include "Exchange.h"
 #include "MAPIMessage.h"
 #include "MAPIContacts.h"
+#include "Logger.h"
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 // MAPIMessageException
@@ -679,88 +680,91 @@ HRESULT MAPIContact::Init()
 					Zimbra::Util::ScopedBuffer<SPropValue> pPropVal;
 
 					hr = HrGetOneProp(m_pMessage, tagArray->aulPropTag[i], pPropVal.getptr());
-					if (lppPropNames[i]->ulKind == MNID_STRING)
-					{
-						Zimbra::Util::Guid propGuid(*lppPropNames[i]->lpguid);
+                                        if (lppPropNames[i] != NULL)    // FBS bug 71786 -- 3/20/12
+                                        {
+					    if (lppPropNames[i]->ulKind == MNID_STRING)
+					    {
+						    Zimbra::Util::Guid propGuid(*lppPropNames[i]->lpguid);
 
-						propGuid.toString(wszContactPropGUID);
-						if (lstrcmpiW(wszContactPropGUID, wszProps2GUID) == 0)
-						{
-							LPWSTR szPropName = lppPropNames[i]->Kind.lpwstrName;
+						    propGuid.toString(wszContactPropGUID);
+						    if (lstrcmpiW(wszContactPropGUID, wszProps2GUID) == 0)
+						    {
+							    LPWSTR szPropName = lppPropNames[i]->Kind.lpwstrName;
 
-							// now format a string depending on the type
-							ULONG ulPropType = PROP_TYPE(pPropVal->ulPropTag);
-							BOOL bSetAttribute = TRUE;
+							    // now format a string depending on the type
+							    ULONG ulPropType = PROP_TYPE(pPropVal->ulPropTag);
+							    BOOL bSetAttribute = TRUE;
 
-							switch (ulPropType)
-							{
-							case PT_UNICODE:
-								wcscpy(wszVal, pPropVal->Value.lpszW);
-								break;
+							    switch (ulPropType)
+							    {
+							    case PT_UNICODE:
+								    wcscpy(wszVal, pPropVal->Value.lpszW);
+								    break;
 
-							case PT_SYSTIME:
-							{
-								SYSTEMTIME sysTime = { 0 };
+							    case PT_SYSTIME:
+							    {
+								    SYSTEMTIME sysTime = { 0 };
 
-								if (FileTimeToSystemTime(&(pPropVal->Value.ft), &sysTime))
-								{
-									TIME_ZONE_INFORMATION tzInfo = { 0 };
+								    if (FileTimeToSystemTime(&(pPropVal->Value.ft), &sysTime))
+								    {
+									    TIME_ZONE_INFORMATION tzInfo = { 0 };
 
-									GetTimeZoneInformation(&tzInfo);
-									SystemTimeToTzSpecificLocalTime(&tzInfo, &sysTime, &sysTime);
-									wsprintf(wszVal, L"%4d-%02d-%02d", sysTime.wYear,
-										sysTime.wMonth, sysTime.wDay);
-								}
-								break;
-							}
+									    GetTimeZoneInformation(&tzInfo);
+									    SystemTimeToTzSpecificLocalTime(&tzInfo, &sysTime, &sysTime);
+									    wsprintf(wszVal, L"%4d-%02d-%02d", sysTime.wYear,
+										    sysTime.wMonth, sysTime.wDay);
+								    }
+								    break;
+							    }
 
-							case PT_LONG:
-								wsprintf(wszVal, L"%d", pPropVal->Value.l);
-								break;
+							    case PT_LONG:
+								    wsprintf(wszVal, L"%d", pPropVal->Value.l);
+								    break;
 
-							case PT_DOUBLE:
-							{
-								CHAR tmp[36];
+							    case PT_DOUBLE:
+							    {
+								    CHAR tmp[36];
 
-								_gcvt(pPropVal->Value.dbl, 6, tmp);
+								    _gcvt(pPropVal->Value.dbl, 6, tmp);
 
-								LPWSTR wszTmp = Zimbra::Util::AnsiiToUnicode(tmp);
+								    LPWSTR wszTmp = Zimbra::Util::AnsiiToUnicode(tmp);
 
-								wcscpy(wszVal, wszTmp);
-								break;
-							}
+								    wcscpy(wszVal, wszTmp);
+								    break;
+							    }
 
-							case PT_BOOLEAN:
-								if (pPropVal->Value.b)
-									wcscpy(wszVal, L"TRUE");
-								else
-									wcscpy(wszVal, L"FALSE");
-								break;
+							    case PT_BOOLEAN:
+								    if (pPropVal->Value.b)
+									    wcscpy(wszVal, L"TRUE");
+								    else
+									    wcscpy(wszVal, L"FALSE");
+								    break;
 
-							case PT_CURRENCY:
-							{
-								LONGLONG lCurrency;
-								CURRENCY currency;
+							    case PT_CURRENCY:
+							    {
+								    LONGLONG lCurrency;
+								    CURRENCY currency;
 
-								currency = pPropVal->Value.cur;
-								lCurrency = currency.int64;
-								lCurrency = lCurrency / 10000;
-								wsprintf(wszVal, L"$%I64d", lCurrency);
-								break;
-							}
+								    currency = pPropVal->Value.cur;
+								    lCurrency = currency.int64;
+								    lCurrency = lCurrency / 10000;
+								    wsprintf(wszVal, L"$%I64d", lCurrency);
+								    break;
+							    }
 
-							default:                // can't deal with these other types 
-								bSetAttribute = FALSE;
-								//LOG("%hs: MAPI type %0x not supported: user defined field %s will not be synced"),
-								//		__FUNCTION__, ulPropType, szPropName);
-							}
+							    default:                // can't deal with these other types 
+								    bSetAttribute = FALSE;
+								    //LOG("%hs: MAPI type %0x not supported: user defined field %s will not be synced"),
+								    //		__FUNCTION__, ulPropType, szPropName);
+							    }
 
-							ContactUDFields cudf;
-							cudf.Name = szPropName;
-							cudf.value = wszVal;
-							AddUserDefinedField(cudf);
-						}
-					}
+							    ContactUDFields cudf;
+							    cudf.Name = szPropName;
+							    cudf.value = wszVal;
+							    AddUserDefinedField(cudf);
+						    }
+					    }
+                                        }
 				}
 				MAPIFreeBuffer(lppPropNames);
 			}
