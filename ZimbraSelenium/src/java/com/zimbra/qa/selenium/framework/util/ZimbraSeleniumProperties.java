@@ -249,8 +249,17 @@ public class ZimbraSeleniumProperties {
 	 * @return Logout URL
 	 */
 	public static String getLogoutURL() {
-		// get url
-		final String url =  getBaseURL() + "?loginOp=logout";
+		// get Base URL
+		String url =  getBaseURL();
+		if (url.contains("?")) {
+			if (!url.endsWith("?")){
+				url += "&loginOp=logout";
+			}else{
+				url += "loginOp=logout";
+			}
+		}else{
+			url += "?loginOp=logout";
+		}
 		
 		return url;
 	}
