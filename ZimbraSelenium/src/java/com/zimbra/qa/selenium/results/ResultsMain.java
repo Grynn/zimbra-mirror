@@ -78,7 +78,7 @@ public class ResultsMain {
 		// Execute it
 		core.execute(root);
 		
-		logger.info("Done.");
+		System.out.println(core.getResultString());
 		
 	}
 

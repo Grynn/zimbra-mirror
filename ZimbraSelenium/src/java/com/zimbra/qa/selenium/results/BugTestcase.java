@@ -16,11 +16,17 @@ public class BugTestcase extends BugDataFile {
 		return (engine.getData());
 	}
 	
+	private static String LastResult = "Bug Test Case #: Processed 0 bugs";
+
+	public static String getResultString() {
+		return (LastResult);
+	}
 
 	
 	
 	protected static final String DataFilename = "bugTestcase.txt";
 	
+	private int CountTestcases = 0;
 	
 	protected BugTestcase() {
 		logger.info("new " + BugTestcase.class.getCanonicalName());
@@ -54,6 +60,7 @@ public class BugTestcase extends BugDataFile {
 				bugTestcaseMap.put(bugtestcase, Arrays.asList(values));
 				logger.debug("bugTestcase: put "+ line);
 
+				CountTestcases++;
 			}
 			
 		} finally {
@@ -62,7 +69,8 @@ public class BugTestcase extends BugDataFile {
 			reader = null;
 		}
 
-
+		LastResult = String.format("Bug Test Case #: Processed\n\t%d bugs with test case IDs", CountTestcases);
+		
 		return (bugTestcaseMap);
 	}
 	

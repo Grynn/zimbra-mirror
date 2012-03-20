@@ -12,6 +12,8 @@ public class ResultsCore {
 	private static Logger logger = LogManager.getLogger(ResultsCore.class);
 	
 		
+	private int CountPass = 0;
+	private int CountFail = 0;
 		
 	public ResultsCore() throws IOException {
 		logger.info("new " + ResultsCore.class.getCanonicalName());
@@ -166,7 +168,7 @@ public class ResultsCore {
 	private class ReportItemComparator implements Comparator<ReportItem> {
 		
 		private static final int LessThan = -1;
-		private static final int EqualTo = 0;
+//		private static final int EqualTo = 0;
 		private static final int GreaterThan = 1;
 		
 		@Override
@@ -230,6 +232,7 @@ public class ResultsCore {
 			
 			if ( item.TestCaseResult == Boolean.FALSE ) {
 				report.info(writeReportEntry(item));
+				CountFail++;
 			}
 			
 		}
@@ -240,6 +243,7 @@ public class ResultsCore {
 			
 			if ( item.TestCaseResult == Boolean.TRUE ) {
 				report.info(writeReportEntry(item));
+				CountPass++;
 			}
 			
 		}
@@ -284,6 +288,20 @@ public class ResultsCore {
         
 	}
 	
+	public String getResultString() {
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append(BugStatus.getResultString()).append("\n");
+		sb.append(BugTestcase.getResultString()).append("\n");
+		sb.append(BugQAContact.getResultString()).append("\n");
+		sb.append(TestCaseData.getResultString()).append("\n");
+		
+		sb.append("Report: Wrote\n");
+		sb.append("\t").append(CountPass).append(" PASS results\n");
+		sb.append("\t").append(CountFail).append(" FAIL results\n");
+		
+		return (sb.toString());
+	}
 
 
 	private static class ReportItem {

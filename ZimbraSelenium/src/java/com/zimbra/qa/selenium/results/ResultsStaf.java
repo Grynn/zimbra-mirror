@@ -23,12 +23,12 @@ public class ResultsStaf implements STAFServiceInterfaceLevel30 {
     private STAFCommandParser stafParserHelp;
 
     // REPORT Options
-    private String optionReport = "report";
-    private String argRoot = "root";    
-    private String argLog4j = "log4j";
+    private final String optionReport = "report";
+    private final String argRoot = "root";    
+    private final String argLog4j = "log4j";
 
     // HELP Options
-    private String optionHelp = "help";
+    private final String optionHelp = "help";
     
     
     private static final String defaultLog4jProperties = "/tmp/log4j.properties";
@@ -68,8 +68,32 @@ public class ResultsStaf implements STAFServiceInterfaceLevel30 {
                 return new STAFResult(STAFResult.InvalidRequestString, "Unknown (STAF) Request: " + request);
             }
 
-        } finally {
-    		System.gc();
+        } catch (Throwable t) {
+        	
+        	// If any exception is thrown, log it to the output/response
+        	
+        	PrintWriter pr = null;
+        	try {
+        		
+            	StringWriter sr = new StringWriter();
+            	pr = new PrintWriter(sr);
+            	t.printStackTrace(pr);
+
+            	StringBuilder sb = new StringBuilder();
+            	if ( t.getMessage() != null ) {
+            		sb.append(t.getMessage()).append("\n");
+            	}
+            	sb.append(sr.toString());
+
+            	return (new STAFResult(STAFResult.JavaError, sb.toString()));
+
+        	} finally {
+        		if ( pr != null ) {
+        			pr.close();
+        			pr = null;
+        		}
+        	}
+
         }
 
     }
@@ -92,7 +116,7 @@ public class ResultsStaf implements STAFServiceInterfaceLevel30 {
 
 	}
 	
-	private STAFResult handleExecute(RequestInfo info) {
+	private STAFResult handleExecute(RequestInfo info) throws IOException, DocumentException {
 
         mLog.info("STAF: handleExecute ...");
 
@@ -121,21 +145,11 @@ public class ResultsStaf implements STAFServiceInterfaceLevel30 {
 			return (parseResult);
 		}	        
 
-		try {
-			
-	        // Create the execution object
-	        ResultsCore core = new ResultsCore();
-	        core.execute(new File(valueRoot));
-	        
-
-		} catch (IOException e) {
-			return (new STAFResult(STAFResult.JavaError, e.getMessage()));
-		} catch (DocumentException e) {
-			return (new STAFResult(STAFResult.JavaError, e.getMessage()));
-		}
-
+        ResultsCore core = new ResultsCore();
+        core.execute(new File(valueRoot));
+		
 		// Return ok code with the parsable return string
-		return (new STAFResult(STAFResult.Ok));
+		return (new STAFResult(STAFResult.Ok, core.getResultString()));
 
 	}
 	

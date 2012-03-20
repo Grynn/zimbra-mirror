@@ -16,12 +16,19 @@ public class BugQAContact extends BugDataFile {
 		return (engine.getData());
 	}
 	
+	private static String LastResult = "Bug Test Case #: Processed 0 bugs";
+
+	public static String getResultString() {
+		return (LastResult);
+	}
 
 	
 	
 	protected static final String DataFilename = "bugQaContact.txt";
 	
 	protected static Map<String, String> bugQAContactMap = new HashMap<String, String>();
+	
+	private int CountQACount = 0;
 	
 	protected BugQAContact() {
 		logger.info("new " + BugQAContact.class.getCanonicalName());
@@ -56,6 +63,8 @@ public class BugQAContact extends BugDataFile {
 				bugQAContactMap.put(bugid, bugcontact);
 				logger.debug("bugQAContact: put "+ line);
 
+				CountQACount++;
+				
 			}
 			
 		} finally {
@@ -64,6 +73,7 @@ public class BugQAContact extends BugDataFile {
 			reader = null;
 		}
 
+		LastResult = String.format("QA Contact: Processed\n\t%d bugs with QA Contact", CountQACount);
 
 		return (bugQAContactMap);
 	}

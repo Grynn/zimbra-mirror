@@ -28,7 +28,11 @@ public class TestCaseData {
 		
 	}
 	
+	private static String LastResult = "Test Case Results: Parsed 0 Total Tests, 0 Passed Tests, 0 Failed Tests";
 
+	public static String getResultString() {
+		return (LastResult);
+	}
 	
 	
 	/**
@@ -36,6 +40,8 @@ public class TestCaseData {
 	 */
 	protected static final String TestNGResultsXMLFilename = "testng-results.xml";
 	
+	private int CountPass = 0;
+	private int CountFail = 0;
 	
 	protected TestCaseData() {
 		logger.info("new "+ TestCaseData.class.getCanonicalName());
@@ -94,10 +100,8 @@ public class TestCaseData {
 		
 		// Find the folder containing the "testng-results.xml" file
 		File results = findFile(TestNGResultsXMLFilename, root);
-		if ( results == null ) {
-			logger.error("Unable to find "+ TestNGResultsXMLFilename +" in "+ root.getAbsolutePath());
-			return (map);
-		}
+		if ( results == null )
+			throw new FileNotFoundException("Unable to find "+ TestNGResultsXMLFilename +" in "+ root.getAbsolutePath());
 		
 		// Open the testng-results.xml file and convert to Element
         String docStr = new String(ByteUtil.getContent(results), "utf-8");    	
@@ -113,8 +117,20 @@ public class TestCaseData {
         		String method = eTestmethod.getAttribute("name", "undefined");
         		Boolean status = eTestmethod.getAttribute("status", "FAIL").equals("PASS");
         		map.put(clazz + "." + method, status);
+        		
+        		if ( status ) {
+        			CountPass++;
+        		} else {
+        			CountFail++;
+        		}
+        		
         	}
         }
+        
+        LastResult = String.format("Test Case Results: Parsed\n\t%d Total Tests\n\t%d Passed Tests\n\t%d Failed Tests", 
+        		CountPass + CountFail, 
+        		CountPass, 
+        		CountFail);
         
         return (map);
 	}

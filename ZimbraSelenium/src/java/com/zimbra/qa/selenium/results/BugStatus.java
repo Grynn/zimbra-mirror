@@ -26,7 +26,11 @@ public class BugStatus extends BugDataFile {
 		return (engine.getData());
 	}
 	
-
+	private static String LastResult = "Bug Status: Processed 0 bugs";
+	
+	public static String getResultString() {
+		return (LastResult);
+	}
 	
 	
 	protected static final String DataFilename = "bugStatus.txt";
@@ -72,10 +76,27 @@ public class BugStatus extends BugDataFile {
 			reader = null;
 		}
 
+		updateResultString(bugStatusMap);
 
 		return (bugStatusMap);
 	}
 	
+	private void updateResultString(Map<String, BugState> map) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("Bug Status: Processed");
+		
+		for (BugState state : BugState.values()) {
+			int count = 0;
+			for (Map.Entry<String, BugState> entry : map.entrySet()) {
+				if (entry.getValue().equals(state)) {
+					count++;
+				}
+			}
+			sb.append("\n\t").append(count).append(" ").append(state.toString());
+		}
+		
+		LastResult = sb.toString();
+	}
 
 
 }
