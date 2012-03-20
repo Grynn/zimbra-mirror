@@ -1599,12 +1599,9 @@ function(text, isHtml) {
 			continue;
 		}
 		
-		// Bug 68066: hack so 3-line Bugzilla preface doesn't get treated as quoted content
+		// Bugzilla is very good at fooling us, and does not have quoted content, so bail
 		if ((testLine.indexOf("| DO NOT REPLY") == 0) && (lines[i + 2].indexOf("bugzilla") != -1)) {
-			curBlock = curBlock.concat(lines.slice(i, i + 3));
-			i += 2;
-			curType = AjxStringUtil.ORIG_UNKNOWN;
-			continue;
+			return text;
 		}
 
 		var type = AjxStringUtil._getLineType(testLine);
