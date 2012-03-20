@@ -839,8 +839,9 @@ function(item) {
 
 DwtTreeItem.prototype._setTreeElementStyles =
 function(treeItem, img, focused){
-   if (!treeItem && !treeItem._contextEnabled)
+   if (!treeItem || !treeItem._contextEnabled) {
         return;
+   }
    var selected = focused ? "-focused" : "";
    if (treeItem._extraCell){
         AjxImg.setImage(treeItem._extraCell, img);
