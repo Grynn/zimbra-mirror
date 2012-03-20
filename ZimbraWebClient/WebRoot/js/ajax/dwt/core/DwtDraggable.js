@@ -79,7 +79,7 @@ function(dragEl, rootEl, minX, maxX, minY, maxY, dragStartCB, dragCB, dragEndCB,
 	dragEl.__root.onDragStart = dragStartCB
 	dragEl.__root.onDragEnd = dragEndCB
 	dragEl.__root.onDrag = dragCB;
-}
+};
 
 /**
  * Sets the minimum and maximum drag boundries
@@ -142,7 +142,7 @@ function(e)	{
 	document.onmouseup = DwtDraggable.__end;
 
 	return false;
-}
+};
 
 /** @private */
 DwtDraggable.__drag =
@@ -185,7 +185,7 @@ function(e)	{
 		DwtDraggable.dragEl.__root.onDrag.run([nx, ny]);
 		
 	return false;
-}
+};
 
 /** @private */
 DwtDraggable.__end =
@@ -196,16 +196,18 @@ function() {
 		DwtDraggable.dragEl.__root.onDragEnd.run([parseInt(DwtDraggable.dragEl.__root.style[DwtDraggable.dragEl.__hMode ? "left" : "right"]), 
 											 	  parseInt(DwtDraggable.dragEl.__root.style[DwtDraggable.dragEl.__vMode ? "top" : "bottom"])]);
 	DwtDraggable.dragEl = null;
-}
+};
 
 /** @private */
 DwtDraggable.__fixE =
 function(e) {
 	if (typeof e == 'undefined')
 		e = window.event;
-	if (typeof e.layerX == 'undefined')
-		e.layerX = e.offsetX;
-	if (typeof e.layerY == 'undefined')
-		e.layerY = e.offsetY;
+	if (!AjxEnv.isWebKitBased) {
+		if (typeof e.layerX == 'undefined')
+			e.layerX = e.offsetX;
+		if (typeof e.layerY == 'undefined')
+			e.layerY = e.offsetY;
+	}
 	return e;
-}
+};

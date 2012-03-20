@@ -202,7 +202,7 @@ function(ev, obj) {
 	if (ev.offsetX != null) {
 		this.elementX = ev.offsetX;
 		this.elementY = ev.offsetY;
-	} else if (ev.layerX != null) {
+	} else if (!AjxEnv.isWebKitBased && ev.layerX != null) {
 		this.elementX = ev.layerX;
 		this.elementY = ev.layerY;
 	} else { // fail hard for others
