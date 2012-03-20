@@ -81,7 +81,7 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.mail_item (
    sender        VARCHAR(128),
    recipients    VARCHAR(128),
    subject       TEXT,
-   name          VARCHAR(128),               -- namespace entry for item (e.g. tag name, folder name, document/wiki filename)
+   name          VARCHAR(255),               -- namespace entry for item (e.g. tag name, folder name, document/wiki filename)
    metadata      MEDIUMTEXT,
    mod_metadata  INTEGER UNSIGNED NOT NULL,  -- change number for last row modification
    change_date   INTEGER UNSIGNED,           -- UNIX-style timestamp for last row modification
@@ -116,7 +116,7 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.revision (
    size          BIGINT UNSIGNED NOT NULL,
    volume_id     TINYINT UNSIGNED,
    blob_digest   VARCHAR(44),                -- reference to blob, meaningful for messages only (type == 5)
-   name          VARCHAR(128),               -- namespace entry for item (e.g. tag name, folder name, document filename)
+   name          VARCHAR(255),               -- namespace entry for item (e.g. tag name, folder name, document filename)
    metadata      MEDIUMTEXT,
    mod_metadata  INTEGER UNSIGNED NOT NULL,  -- change number for last row modification
    change_date   INTEGER UNSIGNED,           -- UNIX-style timestamp for last row modification
