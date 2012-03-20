@@ -137,7 +137,7 @@ OSelect1_XFormItem.prototype.getNoteElement = function () {
 	}
 	return el;
 }
-OSelect1_XFormItem.prototype.setError = function (message, childError) {
+/*OSelect1_XFormItem.prototype.setError = function (message, childError) {
 	if(window.console && window.console.log) console.log("Showing error note");
 	var errLoc = this.getErrorLocation();
 	if (errLoc == _PARENT_ || errLoc == _INHERIT_){
@@ -157,7 +157,7 @@ OSelect1_XFormItem.prototype.clearError = function () {
 	}
 	this.hideNote();
 	this.__errorState = XFormItem.ERROR_STATE_VALID;
-}
+}*/
 
 OSelect1_XFormItem.prototype.showMenu = function() {
 	if(!this._enabled)
