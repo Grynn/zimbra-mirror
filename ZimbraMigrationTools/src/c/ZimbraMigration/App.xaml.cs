@@ -12,6 +12,10 @@ public partial class App: Application
 
         if (mw != null)
         {
+            if (mw.UmUser != null)  // FBS bug 71047 -- 3/20/12
+            {
+                mw.UmUser.Uninit();
+            }
             string s = mw.GlobalUninit();
 
             if (s.Length > 0)

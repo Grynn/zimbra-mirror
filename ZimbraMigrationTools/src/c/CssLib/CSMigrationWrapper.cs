@@ -191,6 +191,12 @@ public class CSMigrationWrapper
     
     dynamic MailWrapper;
 
+    dynamic m_umUser = null; // used to store user object so Exit can do a user.Uninit
+    public dynamic UmUser {
+        get { return m_umUser; }
+        set { m_umUser = value; }
+    }
+
     public CSMigrationWrapper(string mailClient)
     {
         InitLogFile("migration", Log.Level.Info);
@@ -568,6 +574,11 @@ public class CSMigrationWrapper
         dynamic user = new Exchange.UserObject();       
         string value = "";
 
+        if (!isServer)
+        {
+            m_umUser = user;
+        }
+
         if (idx == -1)
         {
             Acct.LastProblemInfo = new ProblemInfo(Acct.AccountName, "Illegal account name",
@@ -741,6 +752,10 @@ public class CSMigrationWrapper
         }
 
         user.Uninit();
+        if (!isServer)
+        {
+            m_umUser = null;
+        }
     }    
 }
 }
