@@ -516,7 +516,7 @@ public class AjaxCommonTest {
 		// Clear the cookies and reload
 		//
 		if ( (!app.zPageMain.zIsActive()) && (!app.zPageLogin.zIsActive()) ) {
-            logger.error("Neither login page nor main page were active.  Clear cookies and reload.", new Exception());
+            logger.error("Neither login page nor main page were active.  Reload app.", new Exception());
             // app.zPageLogin.sDeleteAllVisibleCookies();
             app.zPageLogin.sOpen(ZimbraSeleniumProperties.getLogoutURL());            
             app.zPageLogin.sOpen(ZimbraSeleniumProperties.getBaseURL());
