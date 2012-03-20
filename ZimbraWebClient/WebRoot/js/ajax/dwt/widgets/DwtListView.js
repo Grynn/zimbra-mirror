@@ -294,7 +294,7 @@ function(htmlArr, idx, headerCol, i, numCols, id, defaultColumnSort) {
 			htmlArr[idx++] = headerCol._widthUnits;
 		}
     }
-	if (headerCol._tooltip && this._useBrowserTooltips && !AjxEnv.isFirefox) {
+	if (headerCol._tooltip && DwtControl.useBrowserTooltips) {
 		htmlArr[idx++] = " title='" + headerCol._tooltip + "'";
 	}
 	htmlArr[idx++] = ">";

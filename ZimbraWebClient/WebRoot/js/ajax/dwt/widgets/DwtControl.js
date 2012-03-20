@@ -266,6 +266,10 @@ DwtControl._RE_STATES = new RegExp(
     ")\\b", "g"
 );
 
+// Try to use browser tooltips (setting 'title' attribute) if possible
+DwtControl.useBrowserTooltips = false;
+
+
 /*
  * Position styles
  * 
@@ -1659,20 +1663,22 @@ function(ev) {
 
 /**
  * Sets tooltip content for the control. The content may be plain text or HTML.
+ * If DwtControl.useBrowserTooltips is set to true, and the tooltip does not have
+ * HTML, returns, or tabs, use a browser tooltip by setting the 'title' attribute
+ * on the element.
  *
  * @param {string} 	text		the tooltip content
- * @param {boolean}	useBrowser	if true, try to let browser handle tooltip by setting 'title' attribute
  */
 DwtControl.prototype.setToolTipContent =
 function(text, useBrowser) {
 	if (this._disposed) { return; }
-	if (useBrowser) {
+	if (DwtControl.useBrowserTooltips) {
 		// browser tooltip can't have return, tab, or HTML
 		if (!text || (!text.match(/[\n\r\t]/) && !text.match(/<[a-zA-Z]+/))) {
 			var el = this.getHtmlElement();
 			if (el) {
 				el.title = text;
-				this.__browserToolTip = true;
+				this._browserToolTip = true;
 				return;
 			}
 		}
