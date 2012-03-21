@@ -147,21 +147,32 @@ public class UsersViewModel: BaseViewModel
                         {
                             for (int j = 0; j < parsedData.Count; j++)
                             {
+                                bool bFoundSharp = false;
                                 strres = parsedData[j];
-                                if (strres[j].Contains("#"))
-                                    continue;
-                                tempuser.UserName = strres[0];
-                                tempuser.MappedName = strres[1];
+                                int num = strres.Count();
+                                for (int k = 0; k < num; k++)
+                                {
+                                    if (strres[k].Contains("#"))
+                                    {
+                                        bFoundSharp = true;
+                                        break;
+                                    }
+                                }
+                                if (!bFoundSharp)   // FBS bug 71933 -- 3/21/12
+                                {
+                                    tempuser.UserName = strres[0];
+                                    tempuser.MappedName = strres[1];
 
-                                // tempuser.ChangePWD = Convert.ToBoolean(strres[2]);
-                                // tempuser.PWDdefault = strres[3];
-                                // string result = tempuser.UserName + "," + tempuser.MappedName +"," + tempuser.ChangePWD + "," + tempuser.PWDdefault;
-                                string result = tempuser.Username + "," + tempuser.MappedName;
+                                    // tempuser.ChangePWD = Convert.ToBoolean(strres[2]);
+                                    // tempuser.PWDdefault = strres[3];
+                                    // string result = tempuser.UserName + "," + tempuser.MappedName +"," + tempuser.ChangePWD + "," + tempuser.PWDdefault;
+                                    string result = tempuser.Username + "," + tempuser.MappedName;
 
-                                Username = strres[0];
-                                MappedName = strres[1];
-                                UsersList.Add(new UsersViewModel(Username, MappedName));
-                                scheduleViewModel.SchedList.Add(new SchedUser(Username, false));
+                                    Username = strres[0];
+                                    MappedName = strres[1];
+                                    UsersList.Add(new UsersViewModel(Username, MappedName));
+                                    scheduleViewModel.SchedList.Add(new SchedUser(Username, false));
+                                }
                             }
                         }
                         catch (Exception)
