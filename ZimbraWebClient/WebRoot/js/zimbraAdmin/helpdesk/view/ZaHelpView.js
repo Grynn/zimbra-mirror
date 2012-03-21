@@ -28,6 +28,9 @@ ZaHelpView = function(parent) {
 //	this._createHTML();
 }
 ZaHelpView.mainHelpPage = "administration_console_help.htm";
+ZaHelpView.RELEASE_NOTE_LINK = "adminhelp/pdf/Zimbra_Release_Note.pdf";
+ZaHelpView.HELP_FORUM_LINK = "http://www.zimbra.com/forums/";
+ZaHelpView.HELP_WIKI_LINK = "http://wiki.zimbra.com";
 ZaHelpView.prototype = new ZaTabView();
 ZaHelpView.prototype.constructor = ZaHelpView;
 ZaTabView.XFormModifiers["ZaHelpView"] = new Array();
@@ -103,7 +106,7 @@ ZaHelpView.myXFormModifier = function(xFormObject) {
 					{type:_GROUP_,numCols:2,
 						items: [
 							{type:_OUTPUT_,  value:AjxImg.getImageHtml("PDFDoc")},
-							{type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:ZaMsg.HELP_PAGE_4, href:(location.pathname + "adminhelp/pdf/Zimbra_Release_Note.pdf?locid="+AjxEnv.DEFAULT_LOCALE)}
+							{type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:ZaMsg.HELP_PAGE_4, href:(location.pathname + ZaHelpView.RELEASE_NOTE_LINK +"?locid="+AjxEnv.DEFAULT_LOCALE)}
 						]
 					},
 					{type:_SPACER_, colSpan:"*"},					
@@ -117,14 +120,14 @@ ZaHelpView.myXFormModifier = function(xFormObject) {
 					{type:_GROUP_,numCols:2,
 						items: [
 							{type:_OUTPUT_, value:AjxImg.getImageHtml("PDFDoc")},
-							{type:_ANCHOR_, cssStyle:"font-size:12px;", href:ZabMsg.HELP_FORUM_LINK, showInNewWindow:true,labelLocation:_NONE_,  label:ZabMsg.HELP_PAGE_6 }
+							{type:_ANCHOR_, cssStyle:"font-size:12px;", href:ZaHelpView.HELP_FORUM_LINK, showInNewWindow:true,labelLocation:_NONE_,  label:ZabMsg.HELP_PAGE_6 }
 						]
 					},					
 					{type:_GROUP_,numCols:2,
                         visibilityChecks:[[ZaHelpView.showWikiLink]],
 						items: [
 							{type:_OUTPUT_, value:AjxImg.getImageHtml("PDFDoc")},
-							{type:_ANCHOR_, cssStyle:"font-size:12px;", href:ZabMsg.HELP_WIKI_LINK, showInNewWindow:true,labelLocation:_NONE_,  label:ZaMsg.HELP_PAGE_12 }
+							{type:_ANCHOR_, cssStyle:"font-size:12px;", href:ZaHelpView.HELP_WIKI_LINK, showInNewWindow:true,labelLocation:_NONE_,  label:ZaMsg.HELP_PAGE_12 }
 						]
 					},
 					{type:_SPACER_, colSpan:"*"},					
@@ -195,20 +198,20 @@ ZaHelpView.myXFormModifier = function(xFormObject) {
             {type:_GROUP_,numCols:2,
                 items: [
                     {type:_OUTPUT_, value:AjxImg.getImageHtml("PDFDoc")},
-                    {type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:ZabMsg.HELP_PAGE_8,href:(location.pathname + "adminhelp/pdf/admin.pdf?locid="+AjxEnv.DEFAULT_LOCALE)}
+                    {type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:ZabMsg.HELP_PAGE_8,href:(location.pathname + "help/octopus_admin/pdf/o_admin_guide.pdf??locid="+AjxEnv.DEFAULT_LOCALE)}
                 ]
             },
             {type:_GROUP_,numCols:2, id: "zwcEndUserGuide",
                 items: [
                     {type:_OUTPUT_, value:AjxImg.getImageHtml("PDFDoc")},
                     {type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label: ZabMsg.ZWC_END_USER_GUIDE,
-                         href:(location.pathname + "help/admin/pdf/o_webclient_user_guide.pdf?locid=" + AjxEnv.DEFAULT_LOCALE)},
+                         href:(location.pathname + "help/octopus_admin/pdf/o_webclient_user_guide.pdf?locid=" + AjxEnv.DEFAULT_LOCALE)},
                     {type:_OUTPUT_, value:AjxImg.getImageHtml("PDFDoc")},
                     {type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label: ZabMsg.ANDROID_END_USER_GUIDE,
-                         href:(location.pathname + "help/admin/pdf/o_androidclient_user_guide.pdf?locid=" + AjxEnv.DEFAULT_LOCALE)},
+                         href:(location.pathname + "help/octopus_admin/pdf/o_androidclient_user_guide.pdf?locid=" + AjxEnv.DEFAULT_LOCALE)},
                     {type:_OUTPUT_, value:AjxImg.getImageHtml("PDFDoc")},
                     {type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label: ZabMsg.IOS_END_USER_GUIDE,
-                         href:(location.pathname + "help/admin/pdf/o_iosclient_user_guide.pdf?locid=" + AjxEnv.DEFAULT_LOCALE)}
+                         href:(location.pathname + "help/octopus_admin/pdf/o_iosclient_user_guide.pdf?locid=" + AjxEnv.DEFAULT_LOCALE)}
                 ]
             },
             {type:_SPACER_, colSpan:"*"},
