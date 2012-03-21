@@ -306,7 +306,11 @@ public class PageMail extends AbsTab {
 		} else if ( (button == Button.B_RESPORTSPAM) || (button == Button.B_RESPORTNOTSPAM) ) {
 
 			page = null;
-			locator = "css=div[id='zb__CLV-main__SPAM'] td[id$='_title']";
+			if ( zGetPropMailView() == PageMailView.BY_MESSAGE ) {
+				locator = "css=div[id='zb__TV-main__SPAM'] td[id$='_title']";
+			} else {
+				locator = "css=div[id='zb__CLV-main__SPAM'] td[id$='_title']";
+			}
 
 			if ( !this.sIsElementPresent(locator) ) {
 				throw new HarnessException("Spam icon not present "+ button);
