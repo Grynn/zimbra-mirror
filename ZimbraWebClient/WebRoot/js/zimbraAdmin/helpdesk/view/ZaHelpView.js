@@ -198,20 +198,20 @@ ZaHelpView.myXFormModifier = function(xFormObject) {
             {type:_GROUP_,numCols:2,
                 items: [
                     {type:_OUTPUT_, value:AjxImg.getImageHtml("PDFDoc")},
-                    {type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:ZabMsg.HELP_PAGE_8,href:(location.pathname + "help/octopus_admin/pdf/o_admin_guide.pdf??locid="+AjxEnv.DEFAULT_LOCALE)}
+                    {type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:ZabMsg.HELP_PAGE_8,href:(location.pathname + "help/admin/pdf/o_admin_guide.pdf?locid="+AjxEnv.DEFAULT_LOCALE)}
                 ]
             },
             {type:_GROUP_,numCols:2, id: "zwcEndUserGuide",
                 items: [
                     {type:_OUTPUT_, value:AjxImg.getImageHtml("PDFDoc")},
                     {type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label: ZabMsg.ZWC_END_USER_GUIDE,
-                         href:(location.pathname + "help/octopus_admin/pdf/o_webclient_user_guide.pdf?locid=" + AjxEnv.DEFAULT_LOCALE)},
+                         href:(location.pathname + "help/admin/pdf/o_webclient_user_guide.pdf?locid=" + AjxEnv.DEFAULT_LOCALE)},
                     {type:_OUTPUT_, value:AjxImg.getImageHtml("PDFDoc")},
                     {type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label: ZabMsg.ANDROID_END_USER_GUIDE,
-                         href:(location.pathname + "help/octopus_admin/pdf/o_androidclient_user_guide.pdf?locid=" + AjxEnv.DEFAULT_LOCALE)},
+                         href:(location.pathname + "help/admin/pdf/o_androidclient_user_guide.pdf?locid=" + AjxEnv.DEFAULT_LOCALE)},
                     {type:_OUTPUT_, value:AjxImg.getImageHtml("PDFDoc")},
                     {type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label: ZabMsg.IOS_END_USER_GUIDE,
-                         href:(location.pathname + "help/octopus_admin/pdf/o_iosclient_user_guide.pdf?locid=" + AjxEnv.DEFAULT_LOCALE)}
+                         href:(location.pathname + "help/admin/pdf/o_iosclient_user_guide.pdf?locid=" + AjxEnv.DEFAULT_LOCALE)}
                 ]
             },
             {type:_SPACER_, colSpan:"*"},
