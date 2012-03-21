@@ -415,6 +415,16 @@ class State:
 		return None
 
 	def compareKeys(self):
+		stoppedservices = 0
+		totalservices = 0
+		for service in self.curServices():
+			totalservices += 1
+			if not self.lookUpConfig("SERVICE", service):
+				stoppedservices += 1
+
+  		if (stoppedservices == totalservices) and (totalservices > 1):
+			raise Exception, "All services detected disabled."
+
 		for sn in self.mtaconfig.getSections():
 			section = self.mtaconfig.getSection(sn)
 			Log.logMsg(5, "Checking keys for %s" % (section.name,))
@@ -448,17 +458,6 @@ class State:
 						self.delVal(section.name, type, key)
 						section.changed = True
 		
-		stoppedservices = 0
-		totalservices = 0
-		for service in self.curServices():
-			totalservices += 1
-			if not self.lookUpConfig("SERVICE", service):
-				stoppedservices += 1
-
-
-  		if (stoppedservices == totalservices) and (totalservices > 1):
-			raise Exception, "All services detected disabled."
-
 		for service in self.curServices():
 			if not self.lookUpConfig("SERVICE", service):
 				Log.logMsg(2, "service %s was disabled need to stop" % (service,))
