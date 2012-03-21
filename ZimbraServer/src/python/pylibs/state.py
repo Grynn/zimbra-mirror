@@ -427,6 +427,8 @@ class State:
 			self.resetChangedKeys(section.name)
 
 			for key in section.requiredvars():
+				if re.match(r'!', key):
+					key = re.sub(r'^!','',key)
 				type = section.requiredvars(key)
 				prev = self.lastVal(section.name,type,key)
 				val = self.lookUpConfig(type, key)
