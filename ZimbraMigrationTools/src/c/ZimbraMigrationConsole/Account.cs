@@ -27,6 +27,14 @@ class Account: BackgroundWorker
         get { return highestPercentageReached; }
         set { highestPercentageReached = value; }
     }
+
+    string m_AccountID;
+    public string AccountID
+    {
+        get { return m_AccountID; }
+        set { m_AccountID = value; }
+    }
+    
     CssLib.CSMigrationWrapper TestObj;
 
     MVVM.Model.Users Currentuser;
@@ -80,7 +88,10 @@ class Account: BackgroundWorker
                 //choose the first unused thread.    
 
                 Account myAccount = new Account();
-                myAccount.AccountName = userlist[f].UserName + "@" + Domainname;// AcctName;
+                string uname = (userlist[f].MappedName != "") ? userlist[f].MappedName : userlist[f].UserName;
+
+                myAccount.AccountName = uname +"@" + Domainname;// AcctName;
+                myAccount.AccountID = userlist[f].UserName;
                 myAccount.Countdown = countdown;
                 Currentuser = new MVVM.Model.Users();
                 Currentuser.UserName = userlist[f].UserName;
@@ -248,12 +259,12 @@ class Account: BackgroundWorker
             //int num = 0;
 
             Account argumentTest = e.Argument as Account;
-            while (!_shouldStop)
+            //while (!_shouldStop)
             {
 
             CssLib.MigrationAccount MyAcct = new CssLib.MigrationAccount();
             MyAcct.AccountName = argumentTest.AccountName;
-            MyAcct.AccountID = argumentTest.Currentuser.UserName;
+            MyAcct.AccountID = argumentTest.AccountID;
 
 
             MyAcct.AccountNum = argumentTest.num;
@@ -296,30 +307,33 @@ class Account: BackgroundWorker
                 }*/
             }
         }
+        if((_shouldStop))
+        {
         worker.CancelAsync();
         argumentTest.CancelAsync();
         argumentTest.countdown.Signal();
         e.Cancel = true;
+        }
     }
 
     public void Acct_OnAcctChanged(object sender, CssLib.MigrationObjectEventArgs e)
     {
        // while (!_shouldStop)
         {
-            string msg = "";
+            //string msg = "";
             CssLib.MigrationAccount a = (CssLib.MigrationAccount)sender;
 
             if (e.PropertyName == "TotalItems")
             {
-                System.Console.WriteLine();
+                /*System.Console.WriteLine();
 
                 ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Yellow,
                     "TotalItems to Migrate For UserAccount   " + a.AccountID.ToString() + " is " + e.NewValue.ToString());
-                System.Console.WriteLine();
+                System.Console.WriteLine();*/
 
-                Currentuser.StatusMessage = "TotalItems to Migrate For UserAccount   " + a.AccountID.ToString() + " is " + e.NewValue.ToString();
-                System.Console.WriteLine();
-                System.Console.WriteLine();
+                Currentuser.StatusMessage = "TotalItems to Migrate For UserAccount   " + a.AccountID + " is " + e.NewValue.ToString();
+                /*System.Console.WriteLine();
+                System.Console.WriteLine();*/
 
             }
             if (e.PropertyName == "TotalErrors")
@@ -351,10 +365,16 @@ class Account: BackgroundWorker
             }
             else
             {
+               /* System.Console.WriteLine();
+
+                ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Yellow,
+                    "TotalItems to Migrate For UserAccount   " + a.AccountName.ToString() + " is " + e.NewValue.ToString());
+                System.Console.WriteLine();
+
                 msg = "Begin {0} Migration";
 
-                string msgF = String.Format(msg, a.AccountID);
-                System.Console.WriteLine(msgF);
+                string msgF = String.Format(msg, a.AccountName);
+                System.Console.WriteLine(msgF);*/
 
             }
         }
@@ -366,7 +386,7 @@ class Account: BackgroundWorker
         //while (!_shouldStop)
         {
             CssLib.MigrationFolder f = (CssLib.MigrationFolder)sender;
-           
+          
 
             if (e.PropertyName == "CurrentCountOfItems")
             {

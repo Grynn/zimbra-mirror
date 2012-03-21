@@ -116,8 +116,10 @@ class XmlConfig
 
                 tempuser.UserName = strres[0];
                 tempuser.MappedName = strres[1];
-                // tempuser.ChangePWD = Convert.ToBoolean(strres[2]);
-                // tempuser.PWDdefault = strres[3];
+                
+
+                 tempuser.ChangePWD = Convert.ToBoolean(strres[2]);
+                 tempuser.PWDdefault = strres[3];
                 // string result = tempuser.UserName + "," + tempuser.MappedName +"," + tempuser.ChangePWD + "," + tempuser.PWDdefault;
 
                 UserList.Insert(index, tempuser);

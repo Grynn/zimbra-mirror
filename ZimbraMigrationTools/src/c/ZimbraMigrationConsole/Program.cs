@@ -553,9 +553,18 @@ class Program
                         }
 
                         // userAcct.InitializeMigration(myXmlConfig.ConfigObj.zimbraServer.ZimbraHostname, myXmlConfig.ConfigObj.zimbraServer.Port, myXmlConfig.ConfigObj.zimbraServer.ZimbraAdminID,user.UserName);
+                        string acctName;
+                        if (user.MappedName == "")
+                        {
+                             acctName = user.UserName + '@' +
+                                (myXmlConfig.ConfigObj.UserProvision.DestinationDomain == "" ? ZCSHost : myXmlConfig.ConfigObj.UserProvision.DestinationDomain);
+                        }
+                        else
+                        {
+                            acctName = user.MappedName + '@' +
+                               (myXmlConfig.ConfigObj.UserProvision.DestinationDomain == "" ? ZCSHost : myXmlConfig.ConfigObj.UserProvision.DestinationDomain);
 
-                        string acctName = user.UserName + '@' +
-                            (myXmlConfig.ConfigObj.UserProvision.DestinationDomain == "" ? ZCSHost : myXmlConfig.ConfigObj.UserProvision.DestinationDomain);
+                        }
 
                         if (zimbraAPI.GetAccount(acctName) == 0)
                         {
@@ -563,7 +572,7 @@ class Program
                             System.Console.WriteLine();
                             ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Green,
                                 " Migration to Zimbra Started  for UserAccount " +
-                                user.UserName);
+                                acctName);
                             System.Console.WriteLine();
                             System.Console.WriteLine();
 
@@ -581,23 +590,30 @@ class Program
                             ProgressUtil.RenderConsoleProgress(30, '\u2591',
                                 ConsoleColor.Yellow,
                                 " User is not provisioned on Zimbra Server " +
-                                user.UserName);
+                                acctName);
 
                             System.Console.WriteLine();
                             System.Console.WriteLine();
 
                             ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Green,
-                                " Provisioning user" + user.UserName);
+                                " Provisioning user" + acctName);
                             System.Console.WriteLine();
                             System.Console.WriteLine();
+                            string Defaultpwd = "";
+                            if (myXmlConfig.ConfigObj.UserProvision.DefaultPWD == null)
+                                Defaultpwd = user.PWDdefault;
+                            else
+                                Defaultpwd = myXmlConfig.ConfigObj.UserProvision.DefaultPWD;
+                            
+
                             if (zimbraAPI.CreateAccount(acctName,
-                                myXmlConfig.ConfigObj.UserProvision.DefaultPWD,
+                                Defaultpwd,
                                 myXmlConfig.ConfigObj.UserProvision.COS) == 0)
                             {
                                 System.Console.WriteLine();
                                 ProgressUtil.RenderConsoleProgress(30, '\u2591',
                                     ConsoleColor.Green,
-                                    " Provisioning useraccount success " + user.UserName);
+                                    " Provisioning useraccount success " + acctName);
 
                                 System.Console.WriteLine();
                                 System.Console.WriteLine();
@@ -619,7 +635,7 @@ class Program
 
                                 ProgressUtil.RenderConsoleProgress(30, '\u2591',
                                     ConsoleColor.Red, " error provisioning user " +
-                                    user.UserName);
+                                    acctName);
                                 System.Console.WriteLine();
                                 System.Console.WriteLine();
                             }
@@ -632,12 +648,16 @@ class Program
                     
                    
                    // Account userAccts = new Account();
+                   // keepRunning = true;
+                    
 
                     userAccts.StartMigration(myXmlConfig.UserList, myXmlConfig.ConfigObj.UserProvision.DestinationDomain, importopts, countdownEvent, TestObj, MaxThreads);
+                    countdownEvent.Wait();
                     // Thread.Sleep(129000);
 
-                    countdownEvent.Wait();
+                    
                     Console.WriteLine("Finished.");
+                    keepRunning = true;
 
                 }
                 /*else
@@ -913,13 +933,13 @@ class Program
         {
             keepRunning = true;
             //set flag to exit loop.  Other conditions could cause this too, which is why we use a seperate variable      
-            Console.WriteLine("Shutting down, user requested exit");
+           // Console.WriteLine("Shutting down, user requested exit");
             
         }
-        System.Console.WriteLine();
+       /*System.Console.WriteLine();
         ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
             " Ctrl C was pressed exiting gracefully");
-        System.Console.WriteLine();
+        System.Console.WriteLine();*/
     }
 }
 }
