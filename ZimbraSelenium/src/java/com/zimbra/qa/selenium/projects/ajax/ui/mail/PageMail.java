@@ -288,7 +288,7 @@ public class PageMail extends AbsTab {
 
 		} else if ( button == Button.B_FORWARD ) {
 
-			page = new FormMailNew(this.MyApplication);;
+			page = new FormMailNew(this.MyApplication);
 			locator = "css=div[id$='__FORWARD']";
 
 			if ( !this.sIsElementPresent(locator) ) {
@@ -301,9 +301,18 @@ public class PageMail extends AbsTab {
 				throw new HarnessException("Tried clicking on "+ button +" but it was disabled "+ attrs);
 			}
 
+			// FALL THROUGH
+
 		} else if ( (button == Button.B_RESPORTSPAM) || (button == Button.B_RESPORTNOTSPAM) ) {
 
-			return (this.zToolbarPressPulldown(Button.B_ACTIONS, button));
+			page = null;
+			locator = "css=div[id='zb__CLV-main__SPAM'] td[id$='_title']";
+
+			if ( !this.sIsElementPresent(locator) ) {
+				throw new HarnessException("Spam icon not present "+ button);
+			}
+			
+			// FALL THROUGH
 
 		} else if ( button == Button.B_TAG ) {
 
