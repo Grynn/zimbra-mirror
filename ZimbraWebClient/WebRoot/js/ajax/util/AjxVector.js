@@ -21,8 +21,8 @@
  * This class represents a vector.
  * 
  */
-AjxVector = function() {
-	this._array = new Array();
+AjxVector = function(array) {
+	this._array = array || [];
 };
 
 /**
