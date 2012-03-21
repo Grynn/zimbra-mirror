@@ -50,7 +50,7 @@ ZaCrtAppTreeHeader.prototype._handleClick =
 function(ev) {
     if (this._isArrowEvent(ev)) {
         var tree = ZaZimbraAdmin.getInstance().getOverviewPanelController().getOverviewPanel().getFolderTree();
-        var currentDataItem = tree.setSelectionByPath(this.preObj.path, false);
+        tree.setSelectionByPath(this.preObj.path, false);
     }
     // Nothing doing here
 }
@@ -245,7 +245,7 @@ ZaCrtAppTreeHeader.prototype.createMenu = function
                     style:		DwtMenuItem.NO_STYLE,
                     id:     ZaId.getMenuItemId(this._contextId, "clearHistory")
     });
-    mi.setText("Clear History");
+    mi.setText(ZaMsg.LBL_Treeheader_clearHistory);
     mi.setData("history", currentHistory);
     mi.addSelectionListener(new AjxListener(this, this.clearHistory));
 }
