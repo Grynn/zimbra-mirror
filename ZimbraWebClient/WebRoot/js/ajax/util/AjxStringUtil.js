@@ -2059,3 +2059,17 @@ function(el, ctxt) {
 		}
 	}
 };
+
+// Strips trailing <BR> from HTML text that appears before closing tags.
+AjxStringUtil.removeTrailingBR =
+function(str) {
+	if (!str) {
+		return "";
+	}
+	var m = str && str.match(/((<br>)+)((<\/\w+>)+)$/i);
+	if (m && m.length) {
+		var regex = new RegExp(m[1] + m[3] + "$", "i");
+		str = str.replace(regex, m[3]);
+	}
+	return str;
+};
