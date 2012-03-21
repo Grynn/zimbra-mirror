@@ -1377,8 +1377,8 @@ public class PageCalendar extends AbsTab {
 
 			if ( option == Button.O_NEW_CALENDAR || option == Button.O_NEW_FOLDER) {
 
-				pulldownLocator = "css=div[id='zb__CLWW__NEW_MENU'] td[id$='_dropdown'] div[class='ImgSelectPullDownArrow']";
-				optionLocator = "css=div[id='zb__CLWW__NEW_MENU_NEW_CALENDAR'] td[id$='_title']";
+				pulldownLocator = "css=div[id='zb__NEW_MENU'] td[id$='_dropdown'] div[class='ImgSelectPullDownArrow']";
+				optionLocator = "css=div[id='zb__NEW_MENU_NEW_CALENDAR'] td[id$='_title']";
 				page = new DialogCreateFolder(MyApplication, ((AppAjaxClient)MyApplication).zPageCalendar);
 
 			} else {
