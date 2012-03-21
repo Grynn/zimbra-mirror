@@ -1672,7 +1672,7 @@ function(ev) {
 DwtControl.prototype.setToolTipContent =
 function(text, useBrowser) {
 	if (this._disposed) { return; }
-	if (DwtControl.useBrowserTooltips) {
+	if (text && DwtControl.useBrowserTooltips) {
 		// browser tooltip can't have return, tab, or HTML
 		if (!text || (!text.match(/[\n\r\t]/) && !text.match(/<[a-zA-Z]+/))) {
 			var el = this.getHtmlElement();
