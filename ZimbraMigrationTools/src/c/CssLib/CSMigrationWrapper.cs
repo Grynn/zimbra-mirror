@@ -422,6 +422,7 @@ public class CSMigrationWrapper
                     foldertype type = (foldertype)itemobject.Type;
                     if (ProcessIt(options, type))
                     {
+                        bool bError = false;
                         bool bSkipMessage = false;
                         Dictionary<string, string> dict = new Dictionary<string, string>();
                         string[,] data = itemobject.GetDataForItemID(user,
@@ -502,6 +503,7 @@ public class CSMigrationWrapper
                             }
                             else if (type == foldertype.Contacts)
                             {
+                                //Log.debug("Contact Firstname: ", dict["firstName"]);
                                 if (dict["tags"].Length > 0)
                                 {
                                     // change the tag names into tag numbers for AddMessage
@@ -513,6 +515,7 @@ public class CSMigrationWrapper
                             }
                             else if (type == foldertype.Calendar)
                             {
+                                //Log.debug("Cal Subject: ", dict["su"]);
                                 if (options.DateFilter != null)
                                 {
                                     try
@@ -534,6 +537,7 @@ public class CSMigrationWrapper
                             }
                             else if (type == foldertype.Task)
                             {
+                                //Log.debug("Task Subject: ", dict["su"]);
                                 if (options.DateFilter != null)
                                 {
                                     try
@@ -553,11 +557,22 @@ public class CSMigrationWrapper
                                     stat = api.AddTask(dict, path);
                             }
                         }
+                        else
+                        {
+                            Acct.LastProblemInfo = new ProblemInfo(Acct.AccountName, "Error on message",
+                                                                   ProblemInfo.TYPE_ERR);
+                            Acct.TotalErrors++;
+                            bError = true;
+                        }
 
-                        // Note the : statement.  It seems weird to set Acct.migrationFolder.CurrentCountOFItems
-                        // to itself, but this is done so the method will be called to increment the progress bar
-                        Acct.migrationFolder.CurrentCountOfItems = bSkipMessage ?
-                            Acct.migrationFolder.CurrentCountOfItems : Acct.migrationFolder.CurrentCountOfItems + 1;
+                        if (!bError)
+                        {
+                            // Note the : statement.  It seems weird to set Acct.migrationFolder.CurrentCountOFItems
+                            // to itself, but this is done so the method will be called to increment the progress bar
+                            Acct.migrationFolder.CurrentCountOfItems = bSkipMessage
+                                ? Acct.migrationFolder.CurrentCountOfItems                               
+                                : Acct.migrationFolder.CurrentCountOfItems + 1;
+                        }
                     }
                     iProcessedItems++;
                 }

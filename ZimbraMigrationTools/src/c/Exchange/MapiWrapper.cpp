@@ -146,6 +146,7 @@ STDMETHODIMP CMapiWrapper::GetProfilelist(VARIANT *Profiles,BSTR *statusmessage)
 	*statusmessage =  status;
         status.Detach();
 
+	MAPIUninitialize();
     return hr;
 }
 

@@ -1,6 +1,7 @@
 #include "common.h"
 #include "Exchange.h"
 #include "MAPIAccessAPI.h"
+#include "Logger.h"
 
 Zimbra::MAPI::MAPISession *MAPIAccessAPI::m_zmmapisession = NULL;
 Zimbra::MAPI::MAPIStore *MAPIAccessAPI::m_defaultStore = NULL;
@@ -18,7 +19,6 @@ MAPIAccessAPI::MAPIAccessAPI(wstring strUserName, wstring strUserAccount): m_use
     else
         m_strUserName = strUserName;
     m_strUserAccount = strUserAccount;
-    MAPIInitialize(NULL);
 
     Zimbra::Mapi::Memory::SetMemAllocRoutines(NULL, MAPIAllocateBuffer, MAPIAllocateMore,
         MAPIFreeBuffer);
@@ -36,7 +36,6 @@ MAPIAccessAPI::~MAPIAccessAPI()
         delete m_rootFolder;
         m_rootFolder = NULL;
     }
-    MAPIUninitialize();
     m_bSingleMailBoxMigration = false;
 }
 
@@ -501,8 +500,32 @@ LPCWSTR MAPIAccessAPI::GetItem(SBinary sbItemEID, BaseItemData &itemData)
     {
         lpwstrStatus = FormatExceptionInfo(hr, L"MAPIAccessAPI::GetItem() Failed", __FILE__,
             __LINE__);
+		dloge("MAPIAccessAPI -- User Store OpenEntry failed");
+		dloge(lpwstrStatus);
         goto ZM_EXIT;
     }
+
+	/* in case we want some retry logic sometime
+	hr = 0x80040115;
+	int tries = 10;
+	int num = 0;
+	while ((hr == 0x80040115) && (num < tries))
+	{
+		hr = m_userStore->OpenEntry(sbItemEID.cb, (LPENTRYID)sbItemEID.lpb, NULL,
+			                        MAPI_BEST_ACCESS, &objtype, (LPUNKNOWN *)&pMessage);
+		if (FAILED(hr))
+			dlogi("got an 80040115");
+		num++;
+	}
+	if (FAILED(hr))
+	{
+		lpwstrStatus = FormatExceptionInfo(hr, L"MAPIAccessAPI::GetItem() Failed", __FILE__, __LINE__);
+		dlogi("MAPIAccessAPI -- m_userStore->OpenEntry failed");
+		dlogi(lpwstrStatus);
+		goto ZM_EXIT;
+	}
+	*/
+
     try
     {
         MAPIMessage msg;
@@ -597,6 +620,8 @@ LPCWSTR MAPIAccessAPI::GetItem(SBinary sbItemEID, BaseItemData &itemData)
 			{
 				lpwstrStatus = FormatExceptionInfo(hr, L"ToMimePPMessage Failed",
                     __FILE__, __LINE__);
+				dloge("MAPIAccessAPI -- exception");
+				dloge(lpwstrStatus);
                 goto ZM_EXIT;
 			}
 
@@ -842,11 +867,15 @@ LPCWSTR MAPIAccessAPI::GetItem(SBinary sbItemEID, BaseItemData &itemData)
     {
         lpwstrStatus = FormatExceptionInfo(mex.ErrCode(), (LPWSTR)mex.Description().c_str(),
             (LPSTR)mex.SrcFile().c_str(), mex.SrcLine());
+		dloge("MAPIAccessAPI -- MAPIMessageException");
+		dloge(lpwstrStatus);
     }
     catch (MAPIContactException &cex)
     {
         lpwstrStatus = FormatExceptionInfo(cex.ErrCode(), (LPWSTR)cex.Description().c_str(),
             (LPSTR)cex.SrcFile().c_str(), cex.SrcLine());
+		dloge("MAPIAccessAPI -- MAPIMessageException");
+		dloge(lpwstrStatus);
     }
 ZM_EXIT: return lpwstrStatus;
 }

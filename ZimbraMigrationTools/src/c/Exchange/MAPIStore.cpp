@@ -33,6 +33,8 @@ MAPIStore::~MAPIStore()
 	if ((m_specialFolderIds.cValues != 0) && (m_specialFolderIds.lpbin != NULL))
 	{
 		Zimbra::MAPI::Util::FreeAllSpecialFolders(&m_specialFolderIds);
+		m_specialFolderIds.cValues = 0;
+		m_specialFolderIds.lpbin = NULL;
 	}
 
     if (m_Store)
