@@ -167,6 +167,15 @@ public class MigrationFolder
     public event MigrationObjectEventHandler OnChanged;
 
     public MigrationFolder() {}
+    private string accountID;
+    public string AccountID
+    {
+        get { return this.accountID; }
+        set
+        {
+           accountID = value;
+        }
+    }
     private int accountNum;
     public int AccountNum {
         get { return accountNum; }

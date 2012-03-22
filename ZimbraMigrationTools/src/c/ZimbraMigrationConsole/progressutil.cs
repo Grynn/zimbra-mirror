@@ -26,33 +26,51 @@ class ProgressUtil
     public static void RenderConsoleProgress(int percentage, char progressBarCharacter,
         ConsoleColor color, string message)
     {
-        Console.CursorVisible = false;
+      try
+        {
 
-        ConsoleColor originalColor = Console.ForegroundColor;
+            Console.CursorVisible = false;
 
-        Console.ForegroundColor = color;
-        Console.CursorLeft = 0;
+            ConsoleColor originalColor = Console.ForegroundColor;
 
-        int width = Console.WindowWidth - 1;
-        int newWidth = (int)((width * percentage) / 100d);
-        string progBar = new string(progressBarCharacter, newWidth) + new string(' ', width -
-            newWidth);
+            Console.ForegroundColor = color;
+            Console.CursorLeft = 0;
 
-        Console.Write(progBar);
-        if (string.IsNullOrEmpty(message)) message = "";
-        Console.CursorTop++;
-        OverwriteConsoleMessage(message);
-        Console.CursorTop--;
-        Console.ForegroundColor = originalColor;
-        Console.CursorVisible = true;
+            int width = Console.WindowWidth - 1;
+            int newWidth = (int)((width * percentage) / 100d);
+            string progBar = new string(progressBarCharacter, newWidth) + new string(' ', width -
+                newWidth);
 
-        StringBuilder sb = new StringBuilder();
+            Console.Write(progBar);
+            if (string.IsNullOrEmpty(message)) message = "";
+            if(Console.CursorTop < (Console.BufferHeight -2))
+            Console.CursorTop++;
+            OverwriteConsoleMessage(message);
+            if (Console.CursorTop < (Console.BufferWidth - 2))
+            Console.CursorTop--;
+            Console.ForegroundColor = originalColor;
+            Console.CursorVisible = true;
 
-        sb.AppendLine("................\n");
-        sb.AppendLine(DateTime.Now.ToString());
-        sb.AppendLine(message);
+           /* StringBuilder sb = new StringBuilder();
 
-        File.AppendAllText(@"C:\Temp\ZimbraMigLog.log", sb.ToString());
+            sb.AppendLine("................\n");
+            sb.AppendLine(DateTime.Now.ToString());
+            sb.AppendLine(message);
+
+            File.AppendAllText(@"C:\Temp\ZimbraMigLog.log", sb.ToString());*/
+        }
+
+        catch (Exception e)
+        {
+           string error = "exception in ProgressUtil console output";
+               error += e.Message;
+            System.Console.WriteLine();
+            System.Console.WriteLine(error);
+            return;
+
+
+
+        }
     }
 }
 }

@@ -53,12 +53,7 @@ class Account: BackgroundWorker
         set { countdown = value; }
     }
    
-    /*private string migrateOptions;
-    public string MigrateOptions {
-        get { return migrateOptions; }
-        set { migrateOptions = value; }
     
-    }*/
     private volatile bool _shouldStop;
 
     public void RequestStop()
@@ -117,7 +112,7 @@ class Account: BackgroundWorker
                             AccountArray[threadNum] = myAccount;
                             AccountArray[threadNum].DoWork += new DoWorkEventHandler(accountToMigrate_DoWork);
                             AccountArray[threadNum].RunWorkerCompleted += new RunWorkerCompletedEventHandler(accountToMigrate_RunWorkerCompleted);
-                            AccountArray[threadNum].ProgressChanged += new ProgressChangedEventHandler(accountToMigrate_ProgressChanged);
+                            //AccountArray[threadNum].ProgressChanged += new ProgressChangedEventHandler(accountToMigrate_ProgressChanged);
                             AccountArray[threadNum].WorkerReportsProgress = true; 
                             AccountArray[threadNum].WorkerSupportsCancellation = true;
                             AccountArray[threadNum].RunWorkerAsync(myAccount);
@@ -149,6 +144,7 @@ class Account: BackgroundWorker
         {
             Account myAccount = new Account();
             myAccount.AccountName = pstaccountname;// AcctName;
+            myAccount.AccountID = pstfile;
             myAccount.Countdown = countdown;
             Currentuser = new MVVM.Model.Users();
             Currentuser.UserName = pstfile;
@@ -162,81 +158,13 @@ class Account: BackgroundWorker
             myAccount.DoWork += new DoWorkEventHandler(accountToMigrate_DoWork);
             myAccount.RunWorkerCompleted += new RunWorkerCompletedEventHandler(
                  accountToMigrate_RunWorkerCompleted);
-            myAccount.ProgressChanged += new ProgressChangedEventHandler(accountToMigrate_ProgressChanged);
+            //myAccount.ProgressChanged += new ProgressChangedEventHandler(accountToMigrate_ProgressChanged);
             myAccount.WorkerReportsProgress = true;
             myAccount.WorkerSupportsCancellation = true;
             myAccount.Mailoptions = MailOptions;
             myAccount.RunWorkerAsync(myAccount);
         }
-        
-        /*
-       // int number = 0;
-        if (ServerMigrationflag)
-        {
-            foreach (MVVM.Model.Users user in userlist)
-            {
-                /*BackgroundWorker bgw = new System.ComponentModel.BackgroundWorker();
-
-                bgw.DoWork += new System.ComponentModel.DoWorkEventHandler(accountToMigrate_DoWork);
-                bgw.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(
-                    accountToMigrate_ProgressChanged);
-                bgw.WorkerReportsProgress = true;
-                bgw.WorkerSupportsCancellation = true;*/
-
-
-         /*       Account myAccount = new Account();
-                myAccount.AccountName = user.UserName + "@" + Domainname;// AcctName;
-                myAccount.countdown = countdown;
-                Currentuser = new MVVM.Model.Users();
-                Currentuser.UserName = user.UserName;
-                myAccount.Currentuser = Currentuser;
-                myAccount.TestObj = (CssLib.CSMigrationWrapper)wrapper;
-
-                myAccount.serverMigration = ServerMigrationflag;
-
-                number = number + 1;
-                myAccount.num = number;
-
-                myAccount.DoWork += new DoWorkEventHandler(accountToMigrate_DoWork);
-                myAccount.RunWorkerCompleted += new RunWorkerCompletedEventHandler(
-                     accountToMigrate_RunWorkerCompleted);
-                myAccount.ProgressChanged += new ProgressChangedEventHandler(accountToMigrate_ProgressChanged);
-                myAccount.WorkerReportsProgress = true;
-                myAccount.WorkerSupportsCancellation = true;
-                myAccount.Mailoptions = MailOptions;
-                myAccount.RunWorkerAsync(myAccount);
-
-
-                /* bgw.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(
-                    accountToMigrate_RunWorkerCompleted);
-                 bgw.RunWorkerAsync(num++);*/
-            /*}
-        }
-        else
-        {
-            Account myAccount = new Account();
-            myAccount.AccountName = pstaccountname;// AcctName;
-            myAccount.countdown = countdown;
-            Currentuser = new MVVM.Model.Users();
-            Currentuser.UserName = pstfile;
-            myAccount.Currentuser = Currentuser;
-
-            myAccount.serverMigration = ServerMigrationflag;
-            myAccount.TestObj = (CssLib.CSMigrationWrapper)wrapper;
-            number = number + 1;
-            myAccount.num = number;
-
-            myAccount.DoWork += new DoWorkEventHandler(accountToMigrate_DoWork);
-            myAccount.RunWorkerCompleted += new RunWorkerCompletedEventHandler(
-                 accountToMigrate_RunWorkerCompleted);
-            myAccount.ProgressChanged += new ProgressChangedEventHandler(accountToMigrate_ProgressChanged);
-            myAccount.WorkerReportsProgress = true;
-            myAccount.WorkerSupportsCancellation = true;
-            myAccount.Mailoptions = MailOptions;
-            myAccount.RunWorkerAsync(myAccount);
-        }*/
-        //RunWorkerAsync(this);
-        
+              
         
     }
 
@@ -273,10 +201,12 @@ class Account: BackgroundWorker
 
             CssLib.MigrationFolder MyFolder = new CssLib.MigrationFolder();
 
-            MyFolder.AccountNum = argumentTest.num;
+            //MyFolder.AccountNum = argumentTest.num;
+            MyFolder.AccountID = argumentTest.AccountID;
             MyFolder.OnChanged += new CssLib.MigrationObjectEventHandler(Folder_OnChanged);
 
             MyAcct.migrationFolder = MyFolder;
+                
 
             CssLib.CSMigrationWrapper mw = argumentTest.TestObj;
 
@@ -289,22 +219,7 @@ class Account: BackgroundWorker
                 // TestObj.Migrate(MigrateOptions);
 
                 mw.StartMigration(MyAcct, argumentTest.Mailoptions, argumentTest.serverMigration);
-                /*for (int i = 1; (i <= 10); i++)
-                {
-                    if ((worker.CancellationPending == true))
-                    {
-                        e.Cancel = true;
-                        break;
-                    }
-                    else
-                    {
-                        // Perform a time consuming operation and report progress.
-                        // TestObj.Migrate(MigrateOptions);
-
-                        System.Threading.Thread.Sleep(700);
-                        worker.ReportProgress((i * 10));
-                    }
-                }*/
+               
             }
         }
         if((_shouldStop))
@@ -418,7 +333,7 @@ class Account: BackgroundWorker
                 {
                     string folderName = e.NewValue.ToString();
                     //  string folderType = GetFolderTypeForUserResults(f.FolderView);
-                    string msg3 = "Migrating {0}" + "For " + f.AccountNum.ToString();
+                    string msg3 = "Migrating {0}" + "For " + f.AccountID.ToString();
 
                     /*ar.PBMsgValue = */
                     string msgF = String.Format(msg3, folderName);
@@ -443,7 +358,7 @@ class Account: BackgroundWorker
         
     }
 
-    private void accountToMigrate_ProgressChanged(object sender, ProgressChangedEventArgs e)
+    /*private void accountToMigrate_ProgressChanged(object sender, ProgressChangedEventArgs e)
     {
         Account argumentTest = sender as Account;
         argumentTest.AccountStatus = e.ProgressPercentage.ToString();
@@ -493,7 +408,7 @@ class Account: BackgroundWorker
             System.Console.WriteLine();
             System.Console.WriteLine();
         }
-    }
+    }*/
 
     private void accountToMigrate_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs
         e)
@@ -530,9 +445,7 @@ class Account: BackgroundWorker
         {
             // Finally, handle the case where the operation
             // succeeded.
-
-
-            
+                     
         //signal the countdown event for the main thread exit.
             {
                 System.Console.WriteLine();
