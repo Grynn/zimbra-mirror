@@ -236,11 +236,13 @@ public class SeparateWindowDisplayMail extends AbsSeparateWindow {
 
 		} else if ( button == Button.B_RESPORTSPAM ) {
 
-			return (zToolbarPressPulldown(Button.B_ACTIONS, Button.B_RESPORTSPAM));
+			locator = container + " div[id$='__SPAM'] td[id$='_title']";
+			page = null;
 
 		} else if ( button == Button.B_RESPORTNOTSPAM ) {
 
-			return (zToolbarPressPulldown(Button.B_ACTIONS, Button.B_RESPORTNOTSPAM));
+			locator = container + " div[id$='__SPAM'] td[id$='_title']";
+			page = null;
 
 		} else {
 			
