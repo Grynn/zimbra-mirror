@@ -254,7 +254,6 @@
         <classpath location="${build.instrumented.dir}" />
         <classpath refid="class.path"/>
         <classpath path="${test.classes.dir}"/>
-        <assertions><enable/></assertions>
         <jvmarg value="-Demma.coverage.out.file=${build.coverage.dir}/coverage.emma" /> 
         <jvmarg value="-Demma.coverage.out.merge=true" /> 
         <formatter type="xml"/>
