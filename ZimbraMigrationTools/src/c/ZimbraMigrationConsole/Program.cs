@@ -922,7 +922,7 @@ class Program
                 ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
                     " Make sure the correct arguments (2) are passed \n");
                 System.Console.WriteLine();
-
+                return;
 
             }
         }
