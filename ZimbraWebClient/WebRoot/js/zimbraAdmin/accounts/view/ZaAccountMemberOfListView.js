@@ -732,14 +732,20 @@ ZaAccountMemberOfListView.prototype._setNoResultsHtml = function() {
 	var msg = "";
 	if (this.getCurrentListId().indexOf(ZaAccount.A2_indirectMemberList) >= 0) {
 		msg = ZaMsg.Account_Group_NoInDirectMember;
+
 	}else if (this.getCurrentListId().indexOf(ZaAccount.A2_directMemberList) >= 0){
 		msg = ZaMsg.Account_Group_NoDirectMember;
 	}
 	
-	buffer.append("<table width='100%' cellspacing='0' cellpadding='1'>",
-				  "<tr><td class='NoResults'>",
+	buffer.append(
+				  "<table width='99%' cellspacing='0' cellpadding='1' style='table-layout:fixed'>",
+				  "<tr>",
+				  "<td class='NoResults' style='white-space:normal; word-wrap:break-word; word-break:break-all;' >",
 				  AjxStringUtil.htmlEncode(msg),
-				  "</td></tr></table>");
+				  "</td>",
+				  "</tr>",
+				  "</table>"
+	);
 	
 	div.innerHTML = buffer.toString();
 	this._addRow(div);
