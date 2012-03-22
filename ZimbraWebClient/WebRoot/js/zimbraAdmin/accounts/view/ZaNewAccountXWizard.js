@@ -1468,11 +1468,12 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 						{type:_ZAWIZ_TOP_GROUPER_, id:"account_prefs_mail_receiving",
 							label:ZaMsg.NAD_MailOptionsReceiving,
 							items :[
-								{ref:ZaAccount.A_zimbraPrefMailPollingInterval, type:_SUPERWIZ_LIFETIME_,
-									colSizes:["200px","130px","170px","*"],
+								{ref:ZaAccount.A_zimbraPrefMailPollingInterval, type:_SUPERWIZ_SELECT1_,
+									colSizes:["300px","*"],
 									msgName:ZaMsg.MSG_zimbraPrefMailPollingInterval,
-									txtBoxLabel:ZaMsg.LBL_zimbraPrefMailPollingInterval, 
-									resetToSuperLabel:ZaMsg.NAD_ResetToCOS,colSpan:2,
+                                    label:ZaMsg.LBL_zimbraPrefMailPollingInterval,
+									resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
+                                    onChange:ZaAccountXFormView.validatePollingInterval,
 									nowrap:false,labelWrap:true									
 								},							
 								{ref:ZaAccount.A_zimbraMailMinPollingInterval, 
@@ -1480,6 +1481,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 									msgName:ZaMsg.MSG_zimbraMailMinPollingInterval,
 									txtBoxLabel:ZaMsg.LBL_zimbraMailMinPollingInterval, 
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
+                                    onChange:ZaAccountXFormView.validatePollingInterval,
 									colSpan:2,nowrap:false,labelWrap:true	
 								},
 								{ref:ZaAccount.A_zimbraPrefNewMailNotificationEnabled, 
