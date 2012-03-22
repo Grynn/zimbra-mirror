@@ -1620,6 +1620,12 @@ function(by, val) {
             this.attrs[ZaAccount.A_zimbraPrefMailPollingInterval] = poIntervalInS + "s";
 	}
 
+	if(this._defaultValues.attrs[ZaAccount.A_zimbraPrefMailPollingInterval]) {
+        var dePoIntervalInS = ZaUtil.getLifeTimeInSeconds(this._defaultValues.attrs[ZaAccount.A_zimbraPrefMailPollingInterval]);
+        if (dePoIntervalInS  >= 1)
+            this._defaultValues.attrs[ZaAccount.A_zimbraPrefMailPollingInterval] = dePoIntervalInS  + "s";
+	}
+
 	if( autoDispName == this.attrs[ZaAccount.A_displayname]) {
 		this[ZaAccount.A2_autodisplayname] = "TRUE";
 	} else {
