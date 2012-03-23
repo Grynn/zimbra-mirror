@@ -621,6 +621,9 @@ public class CSMigrationWrapper
             Acct.TotalErrors++;
             return;
         }
+        Log.info("Account name", accountName);
+        Log.info("Account Id", Acct.AccountID);
+        Log.info("Account Num", Acct.AccountNum.ToString());
 
         if (value.Length > 0)
         {
@@ -649,8 +652,10 @@ public class CSMigrationWrapper
             }
         }
 
+        Log.debug("Retrieving folders");
         folders = user.GetFolders();
         Acct.migrationFolder.CurrentCountOfItems = folders.Count();
+        Log.debug("Retrieved folders.  Count:", Acct.migrationFolder.CurrentCountOfItems.ToString());
 
         foreach (dynamic folder in folders) {
             if (!SkipFolder(options, skipList, folder))
