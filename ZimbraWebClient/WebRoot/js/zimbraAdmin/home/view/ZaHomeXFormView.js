@@ -259,6 +259,9 @@ ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
                     items:[
                         {type:_OUTPUT_, ref: ZaHome.A2_serviceStatus, bmolsnr: true,
                             getDisplayValue: function (value){
+                                if (this.getInstanceValue(ZaHome.A2_serviceDetailedMessage) == ZaMsg.MSG_HomeLoading) {
+                                    return "";
+                                }
                                 if (value === undefined) {
                                     return AjxImg.getImageHtml ("UnKnownStatus");
                                 }else if (value === false) {
@@ -266,7 +269,8 @@ ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
                                 } else {
                                     return AjxImg.getImageHtml ("Check");
                                 }
-                            }
+                            },
+                            valueChangeEventSources:[ZaHome.A2_serviceDetailedMessage]
                         },
                         {type:_OUTPUT_, ref: ZaHome.A2_serviceDetailedMessage, bmolsnr: true},
                         {type:_OUTPUT_, value:ZaMsg.LBL_HomeLinkServerStatus, containerCssClass:"ZaLinkedItem",onClick: ZaHomeXFormView.onViewService}
@@ -329,11 +333,14 @@ ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
                 ]},
                 {type:_GROUP_, numCols: 2, colSizes:["*", "90px"], valign: _TOP_, width: "100%", items:[
                     {type:_OUTPUT_, colSpan:"2", value:ZaMsg.LBL_HomeRuntime, cssClass:"ZaHomeInfoTitle"},
-                    {type:_GROUP_, colSpan:"*", numCols:3, width: "100%", colSizes:["*", "16px", "78px"],items:[
-                        {type:_OUTPUT_, value:ZaMsg.LBL_HomeService},
+                    {type:_GROUP_, colSpan:"*", label:ZaMsg.LBL_HomeService, items:[
                         {type:_OUTPUT_, ref: ZaHome.A2_serviceStatus, bmolsnr: true,
-                            visibilityChecks:[[ZaHomeXFormView.showStatusInfo]],
+                            visibilityChecks:[[ZaHomeXFormView.showStatusInfo],
+                                              [XForm.checkInstanceValueNot,ZaHome.A2_serviceStatusMessage,ZaMsg.MSG_HomeLoading]],
                             getDisplayValue: function (value){
+                                if (this.getInstanceValue(ZaHome.A2_serviceStatusMessage) == ZaMsg.MSG_HomeLoading) {
+                                    return "";
+                                }
                                 if (value === undefined) {
                                     return AjxImg.getImageHtml ("UnKnownStatus");
                                 }else if (value === false) {
@@ -341,7 +348,9 @@ ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
                                 } else {
                                     return AjxImg.getImageHtml ("Check");
                                 }
-                            }
+                            },
+                            visibilityChangeEventSources:[ZaHome.A2_serviceStatusMessage],
+                            valueChangeEventSources:[ZaHome.A2_serviceStatusMessage]
                         },
                         {type:_OUTPUT_, ref: ZaHome.A2_serviceStatusMessage, bmolsnr: true}
                     ]},
