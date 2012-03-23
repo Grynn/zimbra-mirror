@@ -201,10 +201,14 @@
 	    	<param name="ext.dir" value="CertificateMgr"/>
 			<param name="ext.name" value="com_zimbra_cert_manager" />
 	  	</antcall>
-	<antcall target="deploy-zimlet">
+	    <antcall target="deploy">
+	    	<param name="ext.dir" value="ClientUploader"/>
+			<param name="ext.name" value="com_zimbra_clientuploader" />
+	  	</antcall>
+	    <antcall target="deploy-zimlet">
             <param name="ext.dir" value="HelpTooltip"/>
             <param name="ext.name" value="com_zimbra_tooltip"/>		
-	</antcall>
+	    </antcall>
     </target>
 
     <target name="deploy-helptooltip" description="deploy help tooltip admin extension">
