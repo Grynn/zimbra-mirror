@@ -4064,8 +4064,14 @@ SetupGroup_XFormItem.prototype.initializeItems = function () {
 
     if (headerLabels.length!= 0 && headerLabels.length == contentItems.length) {
         var firstlabel = 1;
+        var isLast;
         for (var i = 0; i < headerLabels.length; i++) {
-            var result =  this.constructSingleGroup(headerLabels[i], contentItems[i], firstlabel);
+            if (i != headerLabels.length - 1) {
+                isLast = false;
+            } else {
+                isLast = true;
+            }
+            var result =  this.constructSingleGroup(headerLabels[i], contentItems[i], firstlabel, isLast);
             if (result != undefined) {
                 this.items.push(result);
                 firstlabel ++;
@@ -4086,11 +4092,24 @@ SetupGroup_XFormItem.prototype.initializeItems = function () {
     Composite_XFormItem.prototype.initializeItems.call(this);
 }
 
-SetupGroup_XFormItem.prototype.constructSingleGroup = function (headerLabel, contentItem, index) {
+SetupGroup_XFormItem.prototype.constructSingleGroup = function (headerLabel, contentItem, index, isLast) {
     var currentGroup = {type:_GROUP_, numCols:2, width: "100%", valign:_TOP_, items:[]};
     var labelMessage = (index) + "  " + headerLabel;
-    var headerItem = {type:_OUTPUT_, colSpan: "*", value: labelMessage, cssClass: "ZaHomeSetupTitle"};
-    currentGroup.items.push(headerItem);
+    /*Header Start*/
+    var headerItems;
+    if (isLast) {
+        headerItems = {type:_OUTPUT_, colSpan: "*", value: labelMessage, cssClass: "ZaHomeSetupTitle"};
+    } else {
+        headerItems = {type:_GROUP_, colSpan: "*", cssClass: "ZaHomeSetupTitle",
+            items:[
+                {type:_OUTPUT_, value: labelMessage},
+                {type:_AJX_IMAGE_, src:"SetupArrow", cssStyle:"width:50px"}
+            ]
+        };
+    }
+
+    currentGroup.items.push(headerItems);
+    /*Body Start*/
     var singleContentItem;
     var isAdd = false;
     var labelNumber = 1;
