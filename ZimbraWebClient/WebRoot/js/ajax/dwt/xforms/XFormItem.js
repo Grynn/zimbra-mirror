@@ -4098,12 +4098,13 @@ SetupGroup_XFormItem.prototype.constructSingleGroup = function (headerLabel, con
     /*Header Start*/
     var headerItems;
     if (isLast) {
-        headerItems = {type:_OUTPUT_, colSpan: "*", value: labelMessage, cssClass: "ZaHomeSetupTitle"};
+        headerItems = {type:_OUTPUT_, colSpan: "*", value: labelMessage, cssClass: "ZaHomeSetupHeader ZaHomeSetupTitle"};
     } else {
-        headerItems = {type:_GROUP_, colSpan: "*", cssClass: "ZaHomeSetupTitle",
+        headerItems = {type:_GROUP_, colSpan: "*", numCols:3, cssClass: "ZaHomeSetupHeader",
             items:[
-                {type:_OUTPUT_, value: labelMessage},
-                {type:_AJX_IMAGE_, src:"SetupArrow", cssStyle:"width:50px"}
+                {type:_OUTPUT_, value: labelMessage, cssClass: "ZaHomeSetupTitle"},
+                {type:_SPACER_, width:"5px", colSpan:1},
+                {type:_AJX_IMAGE_, src:"SetupArrow"}
             ]
         };
     }

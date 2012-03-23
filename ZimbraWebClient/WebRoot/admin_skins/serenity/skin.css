@@ -987,11 +987,14 @@ DIV.ZmSelectedHeaderBg {
     padding:12px;
 }
 
+.ZaHomeSetupHeader {
+    padding-bottom:8px;
+}
+
 .ZaHomeSetupTitle {
     color:#86A1B6;
     font-size:16pt;
     font-weight:bold;
-    padding-bottom:8px;
 }
 
 .ZaHomeLinkItemLabel {
