@@ -25,14 +25,17 @@ public class CreateFeed extends PrefGroupMailByMessageTest {
 			public void CreateFeed_01() throws HarnessException, MalformedURLException {
 
 		String foldername = "folder" + ZimbraSeleniumProperties.getUniqueString();
-		URL feed = new URL("http", "rss.news.yahoo.com", 80, "/rss/topstories");
+
+		// feed.rss=http://zqa-tms.eng.vmware.com/files/Service/RSS/Basic/basic.xml
+		String feed = ZimbraSeleniumProperties.getStringProperty("feed.rss");
+
 
 		// Click on the "new folder" button
 		DialogCreateFolder createFolderDialog = (DialogCreateFolder)app.zTreeMail.zPressButton(Button.B_TREE_NEWFOLDER);
 
 		createFolderDialog.zEnterFolderName(foldername);
 		createFolderDialog.zClickSubscribeFeed(true);
-		createFolderDialog.zEnterFeedURL(feed);
+		createFolderDialog.zEnterFeedURL(new URL(feed));
 
 		createFolderDialog.zClickButton(Button.B_OK);
 

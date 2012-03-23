@@ -29,11 +29,13 @@ public class GetFeed extends PrefGroupMailByMessageTest {
 		FolderItem inbox = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Inbox);
 
 		String foldername = "folder" + ZimbraSeleniumProperties.getUniqueString();
-		URL feed = new URL("http", "rss.news.yahoo.com", 80, "/rss/topstories");
+		
+		// feed.rss=http://zqa-tms.eng.vmware.com/files/Service/RSS/Basic/basic.xml
+		String feed = ZimbraSeleniumProperties.getStringProperty("feed.rss");
 
 		app.zGetActiveAccount().soapSend(
 				"<CreateFolderRequest xmlns='urn:zimbraMail'>" +
-					"<folder name='"+ foldername +"' l='"+ root.getId() +"' url='"+ feed.toString() +"'/>" +
+					"<folder name='"+ foldername +"' l='"+ root.getId() +"' url='"+ feed +"'/>" +
 				"</CreateFolderRequest>");
 
 		// Click on the "Inbox" to refresh
@@ -68,11 +70,13 @@ public class GetFeed extends PrefGroupMailByMessageTest {
 		FolderItem inbox = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Inbox);
 
 		String foldername = "folder" + ZimbraSeleniumProperties.getUniqueString();
-		URL url = new URL("http", "rss.news.yahoo.com", 80, "/rss/topstories");
+
+		// feed.rss=http://zqa-tms.eng.vmware.com/files/Service/RSS/Basic/basic.xml
+		String url = ZimbraSeleniumProperties.getStringProperty("feed.rss");
 
 		app.zGetActiveAccount().soapSend(
 				"<CreateFolderRequest xmlns='urn:zimbraMail'>" +
-					"<folder name='"+ foldername +"' l='"+ root.getId() +"' url='"+ url.toString() +"'/>" +
+					"<folder name='"+ foldername +"' l='"+ root.getId() +"' url='"+ url +"'/>" +
 				"</CreateFolderRequest>");
 
 		FolderItem feed = FolderItem.importFromSOAP(app.zGetActiveAccount(), foldername);
