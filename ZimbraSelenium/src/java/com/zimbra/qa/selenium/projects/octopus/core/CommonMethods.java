@@ -138,4 +138,28 @@ public class CommonMethods {
 		  "//mail:SaveDocumentResponse//mail:doc", "id");
     }
 
+	
+	// upload file
+	protected String uploadFileViaSoap(ZimbraAccount account, String fileName, FolderItem folderItem) 
+    throws HarnessException {
+
+	
+		// Create file item
+        String filePath = ZimbraSeleniumProperties.getBaseDirectory()
+		+ "/data/public/other/" + fileName;
+
+        // Upload file to server through RestUtil
+        String attachmentId = account.uploadFile(filePath);
+
+        // Save uploaded file to the root folder through SOAP
+         account.soapSend(
+         "<SaveDocumentRequest xmlns='urn:zimbraMail'>" + "<doc l='"
+		+ folderItem.getId() + "'>" + "<upload id='"
+		+ attachmentId + "'/>" + "</doc></SaveDocumentRequest>");
+
+        //return id
+        return account.soapSelectValue(
+		  "//mail:SaveDocumentResponse//mail:doc", "id");
+    }
+
 }
