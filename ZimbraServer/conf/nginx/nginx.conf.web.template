@@ -3,7 +3,11 @@ http
     # disable nginx version on error pages
     server_tokens off;
 
-    server_names_hash_max_size ${web.server_names.size};
+    # You need to customize these two values by setting local config
+    # proxy_server_names_hash_max_size and proxy_names_hash_bucket_size
+    # when too many virtual host names are added
+    server_names_hash_max_size ${web.server_names.max_size};
+    server_names_hash_bucket_size ${web.server_names.bucket_size};
 
     #  Define the collection of upstream HTTP servers to which we will proxy
     #  Define each server:port against a server directive
