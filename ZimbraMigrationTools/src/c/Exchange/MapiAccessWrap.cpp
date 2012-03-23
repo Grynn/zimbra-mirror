@@ -513,14 +513,14 @@ STDMETHODIMP CMapiAccessWrap::GetData(BSTR UserId, VARIANT ItemId, FolderType ty
 						for (int i = 0; i < numAttendees; i++)
 						{
 							attendeeData += apptData.vAttendees[i]->nam;
-							attendeeData += L",";
+							attendeeData += L"~";
 							attendeeData += apptData.vAttendees[i]->addr;
-							attendeeData += L",";
+							attendeeData += L"~";
 							attendeeData += apptData.vAttendees[i]->role;
-							attendeeData += L",";
+							attendeeData += L"~";
 							attendeeData += apptData.vAttendees[i]->partstat;
 							if (i < (numAttendees - 1))     // don't write comma after last attendee
-								attendeeData += L",";
+								attendeeData += L"~";
 						}
 						pIt[L"attendees"] = SysAllocString(attendeeData.c_str());
 						// now clean up

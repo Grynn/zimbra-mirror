@@ -1238,7 +1238,7 @@ public class ZimbraAPI
 
         if (appt.ContainsKey("attendees"))
         {
-            string[] tokens = appt["attendees"].Split(',');
+            string[] tokens = appt["attendees"].Split('~');
             for (int i = 0; i < tokens.Length; i += 4)
             {
                 writer.WriteStartElement("at");
