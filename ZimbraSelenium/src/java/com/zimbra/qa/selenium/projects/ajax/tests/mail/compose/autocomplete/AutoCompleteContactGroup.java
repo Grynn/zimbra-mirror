@@ -247,8 +247,8 @@ public class AutoCompleteContactGroup extends PrefGroupMailByMessageTest {
 		String group3name = groupPrefix + ZimbraSeleniumProperties.getUniqueString();
 		
 		ZimbraAccount contact3 = new ZimbraAccount();
-		contact2.provision();
-		contact2.authenticate();
+		contact3.provision();
+		contact3.authenticate();
 		
 		app.zGetActiveAccount().soapSend(
 				"<CreateContactRequest xmlns='urn:zimbraMail'>"
