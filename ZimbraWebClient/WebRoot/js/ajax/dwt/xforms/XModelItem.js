@@ -945,6 +945,15 @@ Enum_XModelItem.prototype.validateType = function (value) {
 	throw this.getModel().getErrorMessage("didNotMatchChoice", value);
 }
 
+//
+// Model Item Class: "bool"
+// Can only be used with checkbox
+//
+Bool_XModelItem = function(){};
+XModelItemFactory.createItemType("_BOOL_", "bool", Bool_XModelItem);
+Bool_XModelItem.prototype = new Enum_XModelItem();
+Bool_XModelItem.prototype.choices = ["FALSE", "TRUE", null];
+
 FileSize_XModelItem = function (){}
 XModelItemFactory.createItemType("_FILE_SIZE_", "file_size", FileSize_XModelItem);
 FileSize_XModelItem.prototype.validateType = XModelItem.prototype.validateNumber;
