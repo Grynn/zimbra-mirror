@@ -271,6 +271,7 @@ function (optionId){
 	return xmodel ;
 }
 
+// This XForm object is for old UI (ZCS 7.0 or below)
 ZaSearchOption.getObjectTypeXForm = 
 function (optionId, height){
 	var marginTop = ZaSearchOptionView.HEADER_HEIGHT + 8 ;
@@ -576,6 +577,7 @@ function (optionId, height){
 	return xform ;
 }
 
+// This is for new UI (ZCS 8.0+)
 ZaSearchOption.getNewObjectTypeXForm =
 function (optionId, height){
 
@@ -620,7 +622,7 @@ function (optionId, height){
 
     var adminOnlyItem = {
             type: _WIZ_CHECKBOX_, ref:  ZaSearchOption.A_objTypeAccountAdmin,
-            trueValue:"TRUE", falseValue:"FALSE",
+            trueValue:"TRUE", falseValue:"FALSE", valign: _TOP_,
             label: ZaMsg.SearchFilter_Accounts_admin,
             onChange: ZaSearchBuilderController.newHandleOptions,
             bmolsnr:true, enableDisableChecks:[],visibilityChecks:[]
@@ -631,7 +633,7 @@ function (optionId, height){
 	if (ZaSearchOption.A_objTypeAccountDomainAdmin) {
         var domainAdminObjTypeItem = {
                 type: _WIZ_CHECKBOX_, ref:  ZaSearchOption.A_objTypeAccountDomainAdmin,
-                trueValue:"TRUE", falseValue:"FALSE",
+                trueValue:"TRUE", falseValue:"FALSE", valign: _TOP_,
                 onChange: ZaSearchBuilderController.newHandleOptions,
                 label: ZaMsg.SearchFilter_Accounts_domainadmin,
                 bmolsnr:true,enableDisableChecks:[],visibilityChecks:[], labelWrap:true
@@ -641,7 +643,7 @@ function (optionId, height){
 
 	var systemAccountOnlyItem = {
         type: _WIZ_CHECKBOX_, ref:  ZaSearchOption.A_objTypeSystemAccount,
-        trueValue:"TRUE", falseValue:"FALSE",
+        trueValue:"TRUE", falseValue:"FALSE", valign: _TOP_,
         onChange: ZaSearchBuilderController.newHandleOptions,
         label: ZaMsg.SearchFilter_System_Accounts,
         bmolsnr:true, enableDisableChecks:[],visibilityChecks:[]
