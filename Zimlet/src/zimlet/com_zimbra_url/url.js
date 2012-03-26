@@ -53,14 +53,6 @@ function() {
 //Com_Zimbra_Url.THUMB_URL = "http://pthumbnails.alexa.com/image_server.cgi?id=" + document.domain + "&url=";
 Com_Zimbra_Url.THUMB_URL = "http://images.websnapr.com/?url=";
 Com_Zimbra_Url.THUMB_SIZE = 'width="200" height="150"';
-Com_Zimbra_Url.YOUTUBE_LINK_PATTERN1 = "youtube.com/watch?";
-Com_Zimbra_Url.YOUTUBE_LINK_PATTERN2 = "youtube.com/v/";
-Com_Zimbra_Url.YOUTUBE_LINK_PATTERN3 = "youtu.be/";
-Com_Zimbra_Url.YOUTUBE_FEED = "http://gdata.youtube.com/feeds/api/videos/@ID?alt=jsonc&v=2";
-Com_Zimbra_Url.YOUTUBE_EMBED_URL = "www.youtube.com/embed/";
-Com_Zimbra_Url.YOUTUBE_DEFAULT_THUMBNAIL = "http://img.youtube.com/vi/@ID.jpg";
-Com_Zimbra_Url.PROTOCOL = location.protocol;
-Com_Zimbra_Url.YOUTUBE_MAX_VIDEOS = 5;
 
 // chars to ignore if they follow a URL, since they are unlikely to be part of it
 Com_Zimbra_Url.IGNORE = AjxUtil.arrayAsHash([".", ",", ";", "!", "*", ":", "?", ")", "]", "}"]);
@@ -268,6 +260,18 @@ Com_Zimbra_Url.zeroPad = function(number, width) {
 };
 
 //Begin YouTube section
+Com_Zimbra_Url.YOUTUBE_LINK_PATTERN1 = "youtube.com/watch?";
+Com_Zimbra_Url.YOUTUBE_LINK_PATTERN2 = "youtube.com/v/";
+Com_Zimbra_Url.YOUTUBE_LINK_PATTERN3 = "youtu.be/";
+Com_Zimbra_Url.YOUTUBE_FEED = "http://gdata.youtube.com/feeds/api/videos/@ID?alt=jsonc&v=2";
+Com_Zimbra_Url.YOUTUBE_EMBED_URL = "www.youtube.com/embed/";
+Com_Zimbra_Url.YOUTUBE_DEFAULT_THUMBNAIL = "http://img.youtube.com/vi/@ID.jpg";
+Com_Zimbra_Url.PROTOCOL = location.protocol;
+Com_Zimbra_Url.YOUTUBE_MAX_VIDEOS = 5;
+
+/**
+ * Get the gDATA feed so we can parse for title & thumbnail
+ */
 Com_Zimbra_Url.prototype._getYouTubeFeed =
 function() {
 	for (var youTubeId in this._youTubeHash) {
@@ -282,6 +286,11 @@ function() {
 	}
 };
 
+/**
+ * Parse the feed for thumbnail, title
+ * @param youTubeId {String} 11 character id
+ * @param req {HttpResponse} http response
+ */
 Com_Zimbra_Url.prototype._parseYouTubeFeed =
 function(youTubeId, req) {
 	if (req.status != 200) {
@@ -327,71 +336,69 @@ function(url) {
 			}
 		}
 	}
-
 	return id;
 };
 
+/**
+ * Display YouTube video using iframe API
+ * @param youTubeId
+ * @param msgId
+ */
 Com_Zimbra_Url.prototype._showYouTubeVideo =
-function(youTubeId) {
-	if (!youTubeId) {
-		return;
-	}
+function(youTubeId, msgId) {
+	if (!youTubeId || !msgId) return;
+
 	var title = this._youTubeHash[youTubeId].title;
-	var viewId = appCtxt.getCurrentViewId();
-	var widgetId = ZmId.WIDGET_VIEW + "__" + viewId + "__MSG";
-	var el = document.getElementById("youtube-video_" + viewId);
-	var iframeEl = document.getElementById("youtube-iframe_" + viewId);
+	var el = document.getElementById("youtube-video_" + this._viewId + "_" + msgId);
+	var iframeEl = document.getElementById("youtube-iframe_" + this._viewId + "_" + msgId);
 	if (el) {
 		if (!Dwt.getVisible(el)) {
-			el.innerHTML = "<br/>" + this._showYouTubeEmbed(youTubeId);
+			el.innerHTML = "<br/>" + this._showYouTubeEmbed(youTubeId, msgId);
 			Dwt.setVisible(el, true);
-			this._setYouTubeOpacity(youTubeId, true);
+			this._setYouTubeOpacity(youTubeId, msgId, true);
 		}
 		else {
 			if (iframeEl && iframeEl.src == Com_Zimbra_Url.PROTOCOL + '//www.youtube.com/embed/' + youTubeId) {
 				Dwt.setVisible(el, false); //toggle visiblity
-				this._setYouTubeOpacity(youTubeId, false);
+				this._setYouTubeOpacity(youTubeId, msgId, false);
 			}
 			else {
-				el.innerHTML = "<br/>" + this._showYouTubeEmbed(youTubeId);
-				this._setYouTubeOpacity(youTubeId, true);
+				el.innerHTML = "<br/>" + this._showYouTubeEmbed(youTubeId, msgId);
+				this._setYouTubeOpacity(youTubeId, msgId, true);
 			}
-
 		}
 	}
 };
 
-Com_Zimbra_Url.prototype._showYouTubeEmbed = function(youTubeId){
-	var viewId = appCtxt.getCurrentViewId();
-	return '<iframe id="youtube-iframe_' + viewId + '" class="youtube-player" type="text/html"' +
-			'width="' + this._getYouTubeWidth() + '" '  +
-			'height="' + this._getYouTubeHeight() + '"'  +
+/**
+ * Setup youtube video using iframe API
+ * @param youTubeId
+ * @param msgId
+ */
+Com_Zimbra_Url.prototype._showYouTubeEmbed = 
+function(youTubeId, msgId) {
+	return '<iframe id="youtube-iframe_' + this._viewId + '_' + msgId +'" class="youtube-player" type="text/html"' +
+			'width="640" '  +
+			'height="385"'  +
 			'src="' + Com_Zimbra_Url.PROTOCOL + "//" +  Com_Zimbra_Url.YOUTUBE_EMBED_URL + youTubeId + '?autoplay=1&rel=0" frameborder="0"></iframe>';
 };
 
-Com_Zimbra_Url.prototype._getYouTubeWidth =
-function() {
-	return 640;
-};
-
-Com_Zimbra_Url.prototype._getYouTubeHeight =
-function() {
-	return 385;
-};
-
+/**
+ * Display thumbnail of youtube video
+ * @param youTubeId
+ */
 Com_Zimbra_Url.prototype._showYouTubeThumbnail =
 function(youTubeId) {
-	var youTubeThumbnail = this._youTubeHash[youTubeId].thumbnail;
-	var html = "<div class='thumb-wrapper'><div class='play'></div><img src='" + youTubeThumbnail + "' border='2'></div>"; 
-			   
-	return html;
+	return "<div class='thumb-wrapper'><div class='play'></div><img src='" + this._youTubeHash[youTubeId].thumbnail + "' border='2'></div>"; 			   
 };
 
+/**
+ * Parse the mail message for youtube links matching a specified pattern
+ * @param text
+ */
 Com_Zimbra_Url.prototype._getAllYouTubeLinks =
 function(text) {
-	if (!text) {
-		return null;
-	}
+	if (!text) return null;
 	var youTubeArr = text.match(/(\b(((http | https)\:\/\/)?(www\.)?((youtube\.com\/watch\?v=)|(youtube\.com\/watch\?.*\&v=)|(youtube\.com\/v\/)|(youtu\.be\/))((-)?[0-9a-zA-Z_-]+)?(&\w+=\w+)*)\b)/gi);
 	var hash = {};
 	var hashCount = 0;
@@ -422,33 +429,42 @@ function(text) {
 	return null;
 };
 
+/**
+ * Build the HTML of YouTube thumbnails
+ * @param youTubeId
+ */
 Com_Zimbra_Url.prototype._buildYouTubeImageHtml =
 function(youTubeId) {
-	if (!this._youTubeHash || !youTubeId) {
-		return;
-	}
-	var viewId = appCtxt.getCurrentViewId();
-	var imgHtml = this._showYouTubeThumbnail(youTubeId);
+	if (!this._youTubeHash || !youTubeId || document.getElementById("YOUTUBE_" + youTubeId + "_" + this._viewId + "_" + this._msgId)) return;
+	
+	var imgHtml = this._showYouTubeThumbnail(youTubeId);	
 	var imgSpan = document.createElement("div");
 	imgSpan.className = "youTubeImagePreview";
 	imgSpan.innerHTML = imgHtml;
-	imgSpan.id = "YOUTUBE_" + youTubeId + "_" + viewId;
-	this._youTubeCtrl.getHtmlElement().appendChild(imgSpan);
-	this._youTubeCtrl.setData(imgSpan.id, youTubeId);
-	var parentDiv = document.getElementById("youtube_" + viewId);
-	if (parentDiv) {
-		var videoDiv = document.getElementById("youtube-video_" + viewId);
-		parentDiv.insertBefore(this._youTubeCtrl.getHtmlElement(), videoDiv);
+	imgSpan.id = "YOUTUBE_" + youTubeId + "_" + this._viewId + "_" + this._msgId;
+	this._youTubeCtrlHash[this._msgId].getHtmlElement().appendChild(imgSpan);
+	this._youTubeCtrlHash[this._msgId].setData(imgSpan.id, {youTubeId: youTubeId, msgId: this._msgId});
+	var parentDiv = document.getElementById("youtube_" + this._viewId + "_" + this._msgId);
+	var videoDiv = document.getElementById("youtube-video_" + this._viewId + "_" + this._msgId);
+	if (parentDiv && videoDiv) {
+		parentDiv.insertBefore(this._youTubeCtrlHash[this._msgId].getHtmlElement(), videoDiv);
+		Dwt.setVisible(parentDiv, true);
 	}
 };
 
-
+/**
+ * Onclick handler for playing video.
+ * @param ev
+ */
 Com_Zimbra_Url.prototype._onYouTubeClickListener =
 function(ev) {
 	if (ev && ev.target && ev.target.parentNode && ev.target.parentNode.parentNode) {
-		var youTubeId = this._youTubeCtrl.getData(ev.target.parentNode.parentNode.id);
-		if (youTubeId) {
-			this._showYouTubeVideo(youTubeId);
+		var id = ev.target.parentNode.parentNode.id.replace("YOUTUBE_", "");
+		id = id.replace("_" + this._viewId, "");
+		var youTubeId = id.substring(0, 11);
+		var msgId = id.substring(12);	
+		if (youTubeId && msgId) {
+			this._showYouTubeVideo(youTubeId, msgId);
 		}
 	}
 };
@@ -468,9 +484,8 @@ function(ev) {
 };
 
 Com_Zimbra_Url.prototype._setYouTubeOpacity =
-function(youTubeId, opacity) {
-	var viewId = appCtxt.getCurrentViewId();
-	var img = document.getElementById("YOUTUBE_" + youTubeId + "_" + viewId);
+function(youTubeId, msgId, opacity) {
+	var img = document.getElementById("YOUTUBE_" + youTubeId + "_" + this._viewId + "_" + msgId);
 	if (img && img.firstChild && opacity) {
 		img = img.firstChild;
 	    img.style.opacity = 0.4;
@@ -478,7 +493,7 @@ function(youTubeId, opacity) {
 		//clear the other images opacity
 		for (var id in this._youTubeHash) {
 			if (id != youTubeId) {
-				img = document.getElementById("YOUTUBE_" + id + "_" + viewId);
+				img = document.getElementById("YOUTUBE_" + id + "_" + this._viewId + "_" + msgId);
 				if (img && img.firstChild) {
 					img.firstChild.style.opacity = "";
 					img.firstChild.style.filter = "";
@@ -491,62 +506,78 @@ function(youTubeId, opacity) {
 		img.style.opacity = "";
 		img.style.filter = "";
 	}
-
 };
 
-Com_Zimbra_Url.prototype._initYouTube =
-function() {
-	this._youTubeHitMax = false; //reset
-	this._youTubeHash = {};
-};
-
-Com_Zimbra_Url.prototype.onMsgView =
+/**
+ * handle youtube videos on conversation view
+ * @param msg
+ */
+Com_Zimbra_Url.prototype.onConvView = 
 function(msg) {
-	if (this._youtubePreview) {
-		this._initYouTube();
-		var text = msg.getBodyContent();
-		this._youTubeHash = this._getAllYouTubeLinks(text);
-		if (!this._youTubeHash) {
-			return;
-		}
-		this._getYouTubeFeed();
+	this._isConv =true;
+	this.renderYouTube(msg);
+};
 
-		var viewId = appCtxt.getCurrentViewId();
-		var widgetId = ZmId.WIDGET_VIEW + "__" + viewId + "__MSG";
-		var el = document.getElementById(widgetId);
+/**
+ * handle youtube videos on message view
+ * @param msg
+ */
+Com_Zimbra_Url.prototype.onMsgView = 
+function(msg) {
+	this._isConv = false;
+	this.renderYouTube(msg);
+}
+
+Com_Zimbra_Url.prototype.renderYouTube =
+function(msg) {
+	if (!this._youtubePreview) return;
+	this._youTubeHitMax = false; //reset
+	this._youTubeHash = {}; //hash of youtube links
+	this._youTubeCtrlHash = {};  //hash to keep track of video controls for conversation view
+
+	var text = AjxStringUtil.getOriginalContent(msg.getBodyContent(), true); 
+	this._youTubeHash = this._getAllYouTubeLinks(text);
+	if (!this._youTubeHash) return;
+
+	this._msgId = msg.id;
+	this._viewId = appCtxt.getCurrentViewId();
+	var view = appCtxt.getCurrentView().getItemView();
+	var widgetId = this._isConv ? (view._msgViews && view._msgViews[this._msgId] && view._msgViews[this._msgId]._msgBodyDivId) : view._msgBodyDivId;
+	var el = document.getElementById(widgetId);
+	
+	if (el) {
 		var div = document.createElement("DIV");
 		div.className = "video-panel";
-		div.id = "youtube_" + viewId;
-
+		div.id = "youtube_" + this._viewId + "_" + this._msgId;
+		div.style.display = "none"; //don't show until we're getting all the thumbnails
 		var title = this.getMessage("youTubeTitle");
 		if (this._youTubeHitMax) {
 			title = this.getMessage("youTubeTitleMax").replace("{0}", Com_Zimbra_Url.YOUTUBE_MAX_VIDEOS);
 		}
-		div.innerHTML = "<h3>" + title + "</h3>";
-
-		if (el) {
-			var spaceDiv = document.createElement("div");
-			spaceDiv.style.padding = "5px";
-			el.appendChild(spaceDiv);
-			el.appendChild(div);
-		}
+		div.innerHTML = "<h3 class='user_font_" + appCtxt.get(ZmSetting.FONT_NAME) +"'>" + title + "</h3>";
+		
+		var spaceDiv = document.createElement("div");
+		spaceDiv.style.padding = "5px";
+		el.appendChild(spaceDiv);
+		el.appendChild(div);
 
 		var videoDiv = document.createElement("div");
-		videoDiv.id = "youtube-video_" + viewId;
+		videoDiv.id = "youtube-video_" + this._viewId + "_" + this._msgId;
 		videoDiv.style.display = "none";
 		videoDiv.className = "movie-player";
 		div.appendChild(videoDiv);
 
-		var clickListener = new AjxListener(this, this._onYouTubeClickListener);
-		var mouseOver = new AjxListener(this, this._onYouTubeMouseOver);
-		var mouseOut = new AjxListener(this, this._onYouTubeMouseOut);
-		this._youTubeCtrl = new DwtControl({parent:appCtxt.getShell()});
-		this._youTubeCtrl.reparentHtmlElement(videoDiv);
-		this._youTubeCtrl.addListener(DwtEvent.ONMOUSEDOWN, clickListener);
-		this._youTubeCtrl.addListener(DwtEvent.ONMOUSEOVER, mouseOver);
-		this._youTubeCtrl.addListener(DwtEvent.ONMOUSEOUT, mouseOut);
+		this._getYouTubeFeed();
+		
+		var youTubeCtrl = new DwtControl({parent:appCtxt.getShell()});
+		youTubeCtrl.addListener(DwtEvent.ONMOUSEDOWN, this._onYouTubeClickListener.bind(this));
+		youTubeCtrl.addListener(DwtEvent.ONMOUSEOVER, this._onYouTubeMouseOver.bind(this));
+		youTubeCtrl.addListener(DwtEvent.ONMOUSEOUT, this._onYouTubeMouseOut.bind(this));
+		youTubeCtrl.reparentHtmlElement(videoDiv);
 
+		this._youTubeCtrlHash[this._msgId] = youTubeCtrl;
 	}
+
 };
 
 Com_Zimbra_Url.CALENDAR_URL_EXTENSION = 'ics';
