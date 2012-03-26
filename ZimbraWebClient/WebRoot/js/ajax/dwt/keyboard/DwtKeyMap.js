@@ -271,6 +271,10 @@ DwtKeyMap.TEXT_UNDERLINE	= "Underline";
  * Defines the "text strikethru" action.
  */
 DwtKeyMap.TEXT_STRIKETHRU	= "Strikethru";
+/**
+ * Defines the "text InsertLink" action.
+ */
+DwtKeyMap.INSERT_LINK	= "InsertLink";
 
 DwtKeyMap.YES				= "Yes";
 
