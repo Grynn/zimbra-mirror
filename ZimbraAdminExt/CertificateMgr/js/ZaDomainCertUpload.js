@@ -11,7 +11,7 @@ ZaDomainCertUpload = function() {}
 
 ZaDomainCertUpload.myXFormModifier = function(xFormObject) {
     var uploadCertUI =
-    {type:_GROUP_,  colSpan: "*", numCols: 2, colSizes: ["75%","25%"],
+    {type:_GROUP_,  colSpan: "*", numCols: 2, colSizes: AjxEnv.isIE?["60%", "40%"]:["75%","25%"],
         cssStyle: "margin-top: 10px; margin-left: 12px", items: [
         {type:_OUTPUT_, value: ZaDomainCertUpload.getUploadFormHtml() },
         {type: _DWT_BUTTON_ , colSpan: "*", label: com_zimbra_cert_manager.CERT_UploadButton, width: "10em",
@@ -40,8 +40,8 @@ ZaDomainCertUpload.getUploadFormHtml = function() {
 	var uri = appContextPath + "/../service/upload?fmt=extended";
 	var html = [];
 	var idx = 0;
-    var width = "210";
-    if(AjxEnv.isIE) width = "'10%'";
+    var width = "'40%'";
+    if(AjxEnv.isIE) width = "'25%'";
 	html[idx++] = "<div><form method='POST' action='";
 	html[idx++] = uri;
 	html[idx++] = "' id='";
