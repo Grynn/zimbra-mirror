@@ -218,11 +218,13 @@
 			<param name="ext.name" value="com_zimbra_bulkprovision" />
 		</antcall>
 	</target>
-	
-	<antcall target="deploy-clientuploader">
-		<param name="ext.dir" value="ClientUploader"/>
-		<param name="ext.name" value="com_zimbra_clientuploader" />
-	</antcall>
+
+	<target name="deploy-clientuploader">
+		<antcall target="deploy">
+			<param name="ext.dir" value="ClientUploader"/>
+			<param name="ext.name" value="com_zimbra_clientuploader" />
+		</antcall>
+	</target>
 	
 	<target name="deploy-all" description="deploy all the admin extensions in ZimbraAdminExt">
 		<antcall target="deploy-bulkprovision" />
