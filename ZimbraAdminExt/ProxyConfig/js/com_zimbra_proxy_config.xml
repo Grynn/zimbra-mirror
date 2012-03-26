@@ -1,0 +1,8 @@
+<zimlet name="com_zimbra_proxy_config" version="1.0.0" 
+	label="${msg.label}"
+	description="${msg.description}" 
+	extension="true">
+
+	<include>com_zimbra_proxy_config.js</include>
+	<disableUIUndeploy>FALSE</disableUIUndeploy>
+</zimlet>

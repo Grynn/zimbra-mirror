@@ -105,6 +105,9 @@ ZaServer.A_ImapSSLBindPort="zimbraImapSSLBindPort";
 ZaServer.A_ImapSSLServerEnabled="zimbraImapSSLServerEnabled";
 ZaServer.A_ImapCleartextLoginEnabled="zimbraImapCleartextLoginEnabled";
 
+//proxy lookup target
+ZaServer.A_zimbraReverseProxyLookupTarget = "zimbraReverseProxyLookupTarget";
+
 //redo log
 ZaServer.A_RedologEnabled = "zimbraRedologEnabled";
 ZaServer.A_RedologLogPath = "zimbraRedologLogPath";
@@ -145,17 +148,6 @@ ZaServer.A_zimbraApplianceCustomRepUrlPass = "zimbraApplianceCustomRepUrlPass";
 ZaServer.A_zimbraApplianceUpdateOption = "zimbraApplianceUpdateOption";
 ZaServer.A_zimbraApplianceUpdateType = "zimbraApplianceUpdateType";
 ZaServer.A_zimbraApplianceUpdatehourofrun = "zimbraApplianceUpdatehourofrun";
-
-//mail proxy
-ZaServer.A_zimbraMailProxyPort = "zimbraMailProxyPort";
-ZaServer.A_zimbraMailSSLProxyPort = "zimbraMailSSLProxyPort";
-ZaServer.A_zimbraImapProxyBindPort="zimbraImapProxyBindPort";
-ZaServer.A_zimbraImapSSLProxyBindPort="zimbraImapSSLProxyBindPort";
-ZaServer.A_zimbraPop3ProxyBindPort="zimbraPop3ProxyBindPort";
-ZaServer.A_zimbraPop3SSLProxyBindPort="zimbraPop3SSLProxyBindPort";
-ZaServer.A_zimbraReverseProxyLookupTarget = "zimbraReverseProxyLookupTarget";
-ZaServer.A_zimbraReverseProxyAdminEnabled = "zimbraReverseProxyAdminEnabled";
-ZaServer.A_zimbraAdminProxyPort = "zimbraAdminProxyPort"
 
 //bind ip address
 ZaServer.A_zimbraMailBindAddress = "zimbraMailBindAddress";
@@ -564,13 +556,7 @@ ZaServer.myXModel = {
 		{id:ZaServer.A_ImapServerEnabled, ref:"attrs/" + ZaServer.A_ImapServerEnabled, type:_COS_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},		
 		{id:ZaServer.A_ImapSSLBindPort, ref:"attrs/" + ZaServer.A_ImapSSLBindPort, type:_COS_PORT_ },
 		{id:ZaServer.A_ImapSSLServerEnabled, ref:"attrs/" + ZaServer.A_ImapSSLServerEnabled, type:_COS_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},		
-		//mail proxy
-		{id:ZaServer.A_zimbraImapProxyBindPort, ref:"attrs/" +  ZaServer.A_zimbraImapProxyBindPort, type:_COS_PORT_ },
-		{id:ZaServer.A_zimbraImapSSLProxyBindPort, ref:"attrs/" +  ZaServer.A_zimbraImapSSLProxyBindPort, type:_COS_PORT_ },
-		{id:ZaServer.A_zimbraPop3ProxyBindPort, ref:"attrs/" +  ZaServer.A_zimbraPop3ProxyBindPort, type:_COS_PORT_ },
-		{id:ZaServer.A_zimbraPop3SSLProxyBindPort, ref:"attrs/" +  ZaServer.A_zimbraPop3SSLProxyBindPort, type:_COS_PORT_ },
-		{id:ZaServer.A_zimbraAdminProxyPort, ref:"attrs/" + ZaServer.A_zimbraAdminProxyPort, type:_COS_PORT_ },
-		{id:ZaServer.A_zimbraReverseProxyAdminEnabled, ref:"attrs/" + ZaServer.A_zimbraReverseProxyAdminEnabled, type:_COS_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
+		
 		//ip address bindings
 		{id:ZaServer.A_zimbraMailBindAddress, ref:"attrs/" +  ZaServer.A_zimbraMailBindAddress, type:_IP_},
 		{id:ZaServer.A_zimbraMailSSLBindAddress, ref:"attrs/" +  ZaServer.A_zimbraMailSSLBindAddress, type:_IP_ },

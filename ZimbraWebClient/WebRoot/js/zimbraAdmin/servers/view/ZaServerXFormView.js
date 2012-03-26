@@ -753,8 +753,9 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 					  	      onChange: ZaServerXFormView.onFormFieldChanged
 						  	},
 						  	{ ref: ZaServer.A_zimbraMailProxyServiceEnabled, type: _CHECKBOX_,
-						  	  enableDisableChangeEventSources:[ZaServer.A_zimbraMailProxyServiceInstalled],
-						  	  enableDisableChecks:[[XForm.checkInstanceValue,ZaServer.A_zimbraMailProxyServiceInstalled,true],
+						  	 // even if proxy is not installed, the server can also be lookup target
+						  	 // enableDisableChangeEventSources:[ZaServer.A_zimbraMailProxyServiceInstalled], 
+						  	  enableDisableChecks:[/*[XForm.checkInstanceValue,ZaServer.A_zimbraMailProxyServiceInstalled,true], */
 						  	  [ZaItem.hasWritePermission,ZaServer.A_zimbraServiceEnabled]],
 						  	  label: ZaMsg.NAD_Service_Imapproxy,
 					  	      onChange: ZaServerXFormView.onFormFieldChanged

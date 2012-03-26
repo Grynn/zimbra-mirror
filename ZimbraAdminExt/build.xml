@@ -191,30 +191,45 @@
     <target name="deploy" depends="deploy-zimlet, deploy-server-extension"
             description="Deploy the extension, must have ext.dir and ext.name property set"/>
 
-    <target name="deploy-all" description="deploy all the admin extensions in ZimbraAdminExt">
-        <antcall target="deploy">
-	    	<param name="ext.dir" value="BulkProvision"/>
+	<target name="deploy-proxyconfig" description="deploy proxy configuration admin extension" >
+		<antcall target="deploy-zimlet">
+			<param name="ext.dir" value="ProxyConfig" />
+			<param name="ext.name" value="com_zimbra_proxy_config" />
+		</antcall>
+	</target>
+	
+	<target name="deploy-certmgr" description="deploy certificate manager">
+		<antcall target="deploy">
+			<param name="ext.dir" value="CertificateMgr"/>
+			<param name="ext.name" value="com_zimbra_cert_manager"/>
+		</antcall>
+	</target>
+
+	<target name="deploy-helptooltip" description="deploy help tooltip admin extension">
+		<antcall target="deploy-zimlet">
+			<param name="ext.dir" value="HelpTooltip"/>
+			<param name="ext.name" value="com_zimbra_tooltip"/>
+		</antcall>
+	</target>
+	
+	<target name="deploy-bulkprovision" description="deploy Bulk Provision">
+		<antcall target="deploy">
+			<param name="ext.dir" value="BulkProvision"/>
 			<param name="ext.name" value="com_zimbra_bulkprovision" />
-	  	</antcall>
-
-        <antcall target="deploy">
-	    	<param name="ext.dir" value="CertificateMgr"/>
-			<param name="ext.name" value="com_zimbra_cert_manager" />
-	  	</antcall>
-	    <antcall target="deploy">
-	    	<param name="ext.dir" value="ClientUploader"/>
-			<param name="ext.name" value="com_zimbra_clientuploader" />
-	  	</antcall>
-	    <antcall target="deploy-zimlet">
-            <param name="ext.dir" value="HelpTooltip"/>
-            <param name="ext.name" value="com_zimbra_tooltip"/>		
-	    </antcall>
-    </target>
-
-    <target name="deploy-helptooltip" description="deploy help tooltip admin extension">
-        <antcall target="deploy-zimlet">
-            <param name="ext.dir" value="HelpTooltip"/>
-            <param name="ext.name" value="com_zimbra_tooltip"/>
-        </antcall>
-    </target>
+		</antcall>
+	</target>
+	
+	<antcall target="deploy-clientuploader">
+		<param name="ext.dir" value="ClientUploader"/>
+		<param name="ext.name" value="com_zimbra_clientuploader" />
+	</antcall>
+	
+	<target name="deploy-all" description="deploy all the admin extensions in ZimbraAdminExt">
+		<antcall target="deploy-bulkprovision" />
+		<antcall target="deploy-helptooltip" />
+		<antcall target="deploy-certmgr" />
+		<antcall target="deploy-proxyconfig" />
+		<antcall target="deploy-clientuploader" />
+	</target>
+	
 </project>
