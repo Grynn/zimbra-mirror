@@ -606,7 +606,7 @@ public class ScheduleViewModel: BaseViewModel
             ConfigViewModelUDest destModel =
                 ((ConfigViewModelUDest)ViewModelPtrs[(int)ViewType.USRDEST]);
 
-            accountname = accountname + "@" + destModel.ZimbraServerHostName;
+            accountname = ZimbraValues.GetZimbraValues().AccountName;//accountname + "@" + destModel.ZimbraServerHostName;
             accountid = (sourceModel.IspST) ? sourceModel.PSTFile :
                 sourceModel.ProfileList[sourceModel.CurrentProfileSelection];
         }

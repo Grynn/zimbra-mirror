@@ -79,5 +79,15 @@ public class ZimbraValues
             lCOSes = value;
         }
     }
+
+    private string sAccountName;
+    public string AccountName
+    {
+        get { return sAccountName; }
+        set
+        {
+            sAccountName = value;
+        }
+    }
 }
 }

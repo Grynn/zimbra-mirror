@@ -94,6 +94,15 @@ public class ZimbraAPI
     private string GetSpecialFolderNum(string folderPath)
     {
         string sFolderPath = folderPath.ToUpper();
+        //for pst migration
+        if (sFolderPath == "/MAPIROOT/TRASH")
+        {
+            return "3"; //same as MAPIRoot/Deleted Items
+        }
+        if (sFolderPath == "/MAPIROOT/SENT")
+        {
+            return "5";//same as MAPIRoot/Sent Items
+        }
         for (int i = 0; i < specialFolders.Length; i++)
         {
             string sSpecialFolder = specialFolders[i].ToUpper();
@@ -184,6 +193,7 @@ public class ZimbraAPI
             }
         }
         ZimbraValues.GetZimbraValues().ServerVersion = serverVersion;
+        ZimbraValues.GetZimbraValues().AccountName = accountName;
     }
 
     private int ParseGetAccount(string rsp)
