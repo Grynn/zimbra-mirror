@@ -245,7 +245,7 @@ class Program
 
                         ServerMigration = true;
                         if (userid == "")
-                            userid = myXmlConfig.ConfigObj.SourceServer.AdminID;
+                            userid = (myXmlConfig.ConfigObj.SourceServer.AdminID != "") ? myXmlConfig.ConfigObj.SourceServer.AdminID : myXmlConfig.ConfigObj.SourceServer.Profile;
 
                         if (ZCSID == "")
                             ZCSID = myXmlConfig.ConfigObj.ZimbraServer.AdminID;
@@ -303,6 +303,15 @@ class Program
                     if (OOO == false)
                         OOO = myXmlConfig.ConfigObj.ImportOptions.OOO;
 
+
+                }
+                else
+                {
+                    if (ConfigXmlFile != "")
+                    {
+                        if (!File.Exists(ConfigXmlFile))
+                            System.Console.WriteLine(" XML file not present.please check the file name or path");
+                    }
 
                 }
 
@@ -363,11 +372,12 @@ class Program
                     string error = " Migrationwrapper cannot be initialised ,Migration dll cannot be loaded";
                     error += e.Message;
                     System.Console.WriteLine();
-                    ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
-                        error);
+                    System.Console.WriteLine(error);
+                   /* ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
+                        error);*/
                     System.Console.WriteLine("......... \n");
-                    ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
-                            "");
+                    /*ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
+                            "");*/
                     System.Console.WriteLine("......... \n");
 
                     return;
@@ -375,11 +385,12 @@ class Program
                 }
 
                 System.Console.WriteLine();
-                ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Green,
-                    "  Migration Initialization ");
+                System.Console.WriteLine("  Migration Initialization ");
+               /* ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Green,
+                    "  Migration Initialization ");*/
                 System.Console.WriteLine("......... \n");
-                ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Green,
-                        "");
+               /* ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Green,
+                        "");*/
                 System.Console.WriteLine("......... \n");
 
                 if (userid != "")
@@ -391,11 +402,12 @@ class Program
                     if (retval.Length > 0)
                     {
                         System.Console.WriteLine();
-                        ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
-                            " Error in Migration Initialization ");
+                        System.Console.WriteLine(" Error in Migration Initialization ");
+                        /*ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
+                            " Error in Migration Initialization ");*/
                         System.Console.WriteLine("......... \n");
-                        ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
-                                retval);
+                      /*  ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
+                                retval);*/
                         System.Console.WriteLine("......... \n");
                         System.Console.WriteLine();
 
@@ -412,8 +424,9 @@ class Program
                         Account userAcct = new Account();
 
                         System.Console.WriteLine();
-                        ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Green,
-                            "Connecting to to Zimbra Server \n   ");
+                        /*ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Green,
+                            "Connecting to to Zimbra Server \n   ");*/
+                        System.Console.WriteLine("Connecting to to Zimbra Server \n   ");
                         System.Console.WriteLine();
 
                         ZimbraAPI zimbraAPI = new ZimbraAPI();
@@ -435,9 +448,12 @@ class Program
                             zimbraAPI.LastError.Count();
 
                             System.Console.WriteLine();
-                            ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
+                            string message = "Logon to to Zimbra Server  for adminAccount failed " +
+                                myXmlConfig.ConfigObj.ZimbraServer.AdminID;
+                            System.Console.WriteLine(message);
+                         /*   ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
                                 "Logon to to Zimbra Server  for adminAccount failed " +
-                                myXmlConfig.ConfigObj.ZimbraServer.AdminID);
+                                myXmlConfig.ConfigObj.ZimbraServer.AdminID);*/
                             System.Console.WriteLine("......... \n");
                             System.Console.WriteLine();
                             Thread.Sleep(2000);
@@ -462,9 +478,12 @@ class Program
                         {
                             System.Console.WriteLine();
                             System.Console.WriteLine();
-                            ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Green,
+                            string mesg = " Migration to Zimbra Started  for UserAccount " +
+                                acctName;
+                            System.Console.WriteLine(mesg);
+                          /*  ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Green,
                                 " Migration to Zimbra Started  for UserAccount " +
-                                acctName);
+                                acctName);*/
                             System.Console.WriteLine();
                             System.Console.WriteLine();
 
@@ -473,16 +492,20 @@ class Program
                         else
                         {
                             System.Console.WriteLine();
-                            ProgressUtil.RenderConsoleProgress(30, '\u2591',
+                            string err = " User is not provisioned on Zimbra Server " +
+                                acctName;
+                            System.Console.WriteLine(err);
+                           /* ProgressUtil.RenderConsoleProgress(30, '\u2591',
                                 ConsoleColor.Yellow,
                                 " User is not provisioned on Zimbra Server " +
-                                acctName);
+                                acctName);*/
 
                             System.Console.WriteLine();
                             System.Console.WriteLine();
-
-                            ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Green,
-                                " Provisioning user" + acctName);
+                            err = " Provisioning user" + acctName;
+                           /* ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Green,
+                                " Provisioning user" + acctName);*/
+                            System.Console.WriteLine(err);
                             System.Console.WriteLine();
                             System.Console.WriteLine();
                             string Defaultpwd = "";
@@ -499,17 +522,21 @@ class Program
                                 myXmlConfig.ConfigObj.UserProvision.COS) == 0)
                             {
                                 System.Console.WriteLine();
-                                ProgressUtil.RenderConsoleProgress(30, '\u2591',
+                               /* ProgressUtil.RenderConsoleProgress(30, '\u2591',
                                     ConsoleColor.Green,
-                                    " Provisioning useraccount success " + acctName);
-
+                                    " Provisioning useraccount success " + acctName);*/
+                                err = " Provisioning useraccount success " + acctName;
+                                System.Console.WriteLine(err);
                                 System.Console.WriteLine();
                                 System.Console.WriteLine();
-                                ProgressUtil.RenderConsoleProgress(30, '\u2591',
+                                /*ProgressUtil.RenderConsoleProgress(30, '\u2591',
                                     ConsoleColor.Green,
                                     " Migration to Zimbra Started  for UserAccount  " +
-                                    user.UserName);
-                                System.Console.WriteLine();
+                                    user.UserName);*/
+                                err = " Migration to Zimbra Started  for UserAccount  " +
+                                    user.UserName;
+
+                                System.Console.WriteLine(err);
                                 System.Console.WriteLine();
                                 System.Console.WriteLine("......... \n");
                                 
@@ -518,9 +545,11 @@ class Program
                             {
                                 System.Console.WriteLine();
 
-                                ProgressUtil.RenderConsoleProgress(30, '\u2591',
+                               /* ProgressUtil.RenderConsoleProgress(30, '\u2591',
                                     ConsoleColor.Red, " error provisioning user " +
-                                    acctName);
+                                    acctName);*/
+                                err = " error provisioning user " +
+                                    acctName;
                                 System.Console.WriteLine();
                                 System.Console.WriteLine();
                             }
@@ -550,9 +579,11 @@ class Program
                             ZimbraAPI zimbraAPI = new ZimbraAPI();
 
                             System.Console.WriteLine();
-                            ProgressUtil.RenderConsoleProgress(
+                           /* ProgressUtil.RenderConsoleProgress(
                                     30, '\u2591', ConsoleColor.Green,
-                                    "Connecting to to Zimbra Server \n   ");
+                                    "Connecting to to Zimbra Server \n   ");*/
+                            string err = "Connecting to to Zimbra Server \n   ";
+                            System.Console.WriteLine(err);
                             System.Console.WriteLine();
 
                             int stat = zimbraAPI.Logon(
@@ -566,10 +597,13 @@ class Program
                                 zimbraAPI.LastError.Count();
 
                                 System.Console.WriteLine();
-                                ProgressUtil.RenderConsoleProgress(
+                                /*ProgressUtil.RenderConsoleProgress(
                                         30, '\u2591', ConsoleColor.Red,
                                         "Logon to to Zimbra Server  for userAccount failed " +
-                                        ZCSID);
+                                        ZCSID);*/
+                                err = "Logon to to Zimbra Server  for userAccount failed " +
+                                        ZCSID;
+                                System.Console.WriteLine(err);
                                 System.Console.WriteLine("......... \n");
                                 System.Console.WriteLine();
                                 Thread.Sleep(2000);
@@ -578,10 +612,13 @@ class Program
 
                         
                         System.Console.WriteLine();
-                        ProgressUtil.RenderConsoleProgress(
+                       /* ProgressUtil.RenderConsoleProgress(
                                 30, '\u2591', ConsoleColor.Green,
                                 " Migration to Zimbra Started  for Profile/PST  " +
-                                accountid);
+                                accountid);*/
+                        err = " Migration to Zimbra Started  for Profile/PST  " +
+                                accountid;
+                        System.Console.WriteLine(err);
                         System.Console.WriteLine();
                         System.Console.WriteLine();
 
@@ -612,8 +649,9 @@ class Program
             else
             {
                 System.Console.WriteLine();
-                ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
-                    " Make sure the correct arguments (2) are passed \n");
+                /*ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
+                    " Make sure the correct arguments (2) are passed \n");*/
+                System.Console.WriteLine(" Make sure the correct arguments (2) are passed \n");
                 System.Console.WriteLine();
                 return;
 

@@ -107,7 +107,7 @@ class Account: BackgroundWorker
                         if (!AccountArray[threadNum].IsBusy)
                         {   // This thread is available     
 
-                            System.Console.WriteLine("Starting worker thread: " + threadNum + "account" + myAccount.AccountName);
+                           // System.Console.WriteLine("Starting worker thread: " + threadNum + "account" + myAccount.AccountName);
 
                             AccountArray[threadNum] = myAccount;
                             AccountArray[threadNum].DoWork += new DoWorkEventHandler(accountToMigrate_DoWork);
@@ -202,7 +202,10 @@ class Account: BackgroundWorker
             CssLib.MigrationFolder MyFolder = new CssLib.MigrationFolder();
 
             //MyFolder.AccountNum = argumentTest.num;
-            MyFolder.AccountID = argumentTest.AccountID;
+            int idx = MyAcct.AccountName.IndexOf("@");
+                if(idx != -1)
+             MyFolder.AccountID = MyAcct.AccountName.Substring(0, idx);
+           // MyFolder.AccountID = argumentTest.AccountID;
             MyFolder.OnChanged += new CssLib.MigrationObjectEventHandler(Folder_OnChanged);
 
             MyAcct.migrationFolder = MyFolder;
@@ -245,6 +248,7 @@ class Account: BackgroundWorker
                 ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Yellow,
                     "TotalItems to Migrate For UserAccount   " + a.AccountID.ToString() + " is " + e.NewValue.ToString());
                 System.Console.WriteLine();*/
+              //  a.TotalItems = Convert.ToInt32(e.NewValue);
 
                 Currentuser.StatusMessage = "TotalItems to Migrate For UserAccount   " + a.AccountID + " is " + e.NewValue.ToString();
                 /*System.Console.WriteLine();
@@ -257,10 +261,11 @@ class Account: BackgroundWorker
                 Numoferrors = (int)a.TotalErrors + 1;      // this happens first
                 System.Console.WriteLine();
 
-                ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Yellow,
-                    "TotalErrors For UserAccount   " + a.AccountID.ToString() + Numoferrors.ToString());
+               /* ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Yellow,
+                    "TotalErrors For UserAccount   " + a.AccountID.ToString() + Numoferrors.ToString());*/  //donot use progressutil we want to have consistent logging.
 
                 Currentuser.StatusMessage = "TotalErrors For UserAccount   " + a.AccountID.ToString() + Numoferrors.ToString();
+                System.Console.WriteLine(Currentuser.StatusMessage);
                 System.Console.WriteLine();
                 System.Console.WriteLine();
 
@@ -270,21 +275,23 @@ class Account: BackgroundWorker
                 NumofWarns = (int)a.TotalWarnings + 1;
                 System.Console.WriteLine();
 
-                ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Yellow,
-                    "TotalWarnings For UserAccount   " + a.AccountID.ToString() + NumofWarns.ToString());
+               /* ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Yellow,
+                    "TotalWarnings For UserAccount   " + a.AccountID.ToString() + NumofWarns.ToString());*/
+                //donot use progressutil we want to have consistent logging.
 
                 Currentuser.StatusMessage = "TotalWarnings For UserAccount   " + a.AccountID.ToString() + NumofWarns.ToString();
-                System.Console.WriteLine();
+                System.Console.WriteLine(Currentuser.StatusMessage);
                 System.Console.WriteLine();
 
             }
             else
             {
+                
                /* System.Console.WriteLine();
 
                 ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Yellow,
                     "TotalItems to Migrate For UserAccount   " + a.AccountName.ToString() + " is " + e.NewValue.ToString());
-                System.Console.WriteLine();
+                System.Console.WriteLine();/*
 
                 msg = "Begin {0} Migration";
 
@@ -301,7 +308,8 @@ class Account: BackgroundWorker
         //while (!_shouldStop)
         {
             CssLib.MigrationFolder f = (CssLib.MigrationFolder)sender;
-          
+
+                      
 
             if (e.PropertyName == "CurrentCountOfItems")
             {
@@ -309,7 +317,7 @@ class Account: BackgroundWorker
                 {
                     if (e.NewValue.ToString() != "0")
                     {
-                        string msg1 = "{0} of {1} for account" + f.AccountNum.ToString();
+                        string msg1 = "{0} of {1} for account  " + f.AccountID.ToString();
                         string msgF = String.Format(msg1, f.CurrentCountOfItems, f.TotalCountOfItems);
                         System.Console.WriteLine(msgF);
 
@@ -333,8 +341,8 @@ class Account: BackgroundWorker
                 {
                     string folderName = e.NewValue.ToString();
                     //  string folderType = GetFolderTypeForUserResults(f.FolderView);
-                    string msg3 = "Migrating {0}" + "For " + f.AccountID.ToString();
-
+                    string msg3 = "Migrating {0} " + " For  " + f.AccountID ;
+                    
                     /*ar.PBMsgValue = */
                     string msgF = String.Format(msg3, folderName);
                     System.Console.WriteLine(msgF);
@@ -343,9 +351,10 @@ class Account: BackgroundWorker
                 {
                     System.Console.WriteLine();
                     System.Console.WriteLine();
-                    ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
-                    "Migration For UserAccount    Cancelled");
-
+                    string Messg = "Migration For UserAccount   Cancelled";
+                   /* ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
+                    "Migration For UserAccount    Cancelled");*/
+                   System.Console.WriteLine(Messg);
                     System.Console.WriteLine();
                     System.Console.WriteLine();
                     Countdown.Signal();
@@ -433,9 +442,10 @@ class Account: BackgroundWorker
             argumentTest.AccountStatus = "Canceled";
             System.Console.WriteLine();
             System.Console.WriteLine();
-            ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
-            "Migration For UserAccount   " + argumentTest.AccountName + " Cancelled");
-
+            string msg = "Migration For UserAccount   " + argumentTest.AccountName + " Cancelled";
+           /* ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
+            "Migration For UserAccount   " + argumentTest.AccountName + " Cancelled");*/
+            System.Console.WriteLine(msg);
             System.Console.WriteLine();
             System.Console.WriteLine();
 
@@ -450,8 +460,10 @@ class Account: BackgroundWorker
             {
                 System.Console.WriteLine();
                 System.Console.WriteLine();
-                ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
-                "TotalErrors For UserAccount   " + argumentTest.AccountName + " are" + Numoferrors.ToString());
+                string mesg = "TotalErrors For UserAccount   " + argumentTest.AccountName + " are" + Numoferrors.ToString();
+                System.Console.WriteLine(mesg);
+                /*ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
+                "TotalErrors For UserAccount   " + argumentTest.AccountName + " are" + Numoferrors.ToString());*/
 
                 System.Console.WriteLine();
                 System.Console.WriteLine();
