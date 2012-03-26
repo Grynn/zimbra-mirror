@@ -341,6 +341,9 @@ BODY {
 .SplashScreen .ImgAltBanner {
     @ImgAltBanner@
 }
+.LoginScreen .ZLoginField {
+	@roundCorners(5px)@
+}
 .decor1Outer{
     margin-left:-250px;
     margin-top:160px;
@@ -458,9 +461,10 @@ BODY {
 
 /* Login and Splash */
 #ZLoginButton{
-    background-color:white;
+    background-color:#DFE2E2;
     float:right;
-    @roundCorners(4px)@;
+	@grad(#FFF,#DFE2E2)@
+    @roundCorners(4px)@
 }
 
 
