@@ -1054,10 +1054,10 @@ public class ZimbraAPI
             uploadInfo = zm.filePath;
         else
         {
-            Log.debug("Begin UploadFile");
+            //Log.debug("Begin UploadFile");
             string tmp = message["wstrmimeBuffer"];
             retval = UploadFile(zm.filePath, tmp, STRING_MODE, out uploadInfo);
-            Log.debug("End UploadFile");
+            //Log.debug("End UploadFile");
         }
         if (retval == 0)
         {

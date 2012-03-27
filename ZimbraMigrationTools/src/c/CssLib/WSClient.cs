@@ -131,7 +131,7 @@ public class WebServiceClient
     public void InvokeUploadService(string authtoken, bool isSecure, string filePath, string mimebuffer, int mode,
         out string rsp)
     {
-        Log.debug("Start InvokeUploadService");
+        //Log.debug("Start InvokeUploadService");
         bool bIsBuffer=false;
         if (mimebuffer.Length > 0)
             bIsBuffer = true;
@@ -277,9 +277,9 @@ public class WebServiceClient
         // get the response from the web service
         try
         {
-            Log.debug("Start GetResponse");
+            //Log.debug("Start GetResponse");
             response = webReq.GetResponse();
-            Log.debug("End GetResponse");
+            //Log.debug("End GetResponse");
         }
         catch (System.Net.WebException wex)
         {
@@ -295,7 +295,7 @@ public class WebServiceClient
 
         status = 0;
         rsp = strResponse;
-        Log.debug("End InvokeUploadService");
+        //Log.debug("End InvokeUploadService");
     }
 }
 }
