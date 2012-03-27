@@ -54,6 +54,12 @@ public class UsersViewModel: BaseViewModel
         for (int i = 0; i < users.Length; i++)
         {
             string[] tokens = users[i].Split('~');
+            if (tokens.Length < 5)
+            {
+                MessageBox.Show("Object picker returned insufficient data", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
+                EnablePopButtons = true;
+                return;
+            }
             string uname = "", displayname = "", givenname = "", sn = "", zfp = "";
             for (int j = 0; j < tokens.Length; j += 5)
             {
