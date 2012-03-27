@@ -333,27 +333,34 @@ ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
                 ]},
                 {type:_GROUP_, numCols: 2, colSizes:["*", "90px"], valign: _TOP_, width: "100%", items:[
                     {type:_OUTPUT_, colSpan:"2", value:ZaMsg.LBL_HomeRuntime, cssClass:"ZaHomeInfoTitle"},
-                    {type:_GROUP_, colSpan:"*", label:ZaMsg.LBL_HomeService, items:[
-                        {type:_OUTPUT_, ref: ZaHome.A2_serviceStatus, bmolsnr: true,
-                            visibilityChecks:[[ZaHomeXFormView.showStatusInfo],
-                                              [XForm.checkInstanceValueNot,ZaHome.A2_serviceStatusMessage,ZaMsg.MSG_HomeLoading]],
-                            getDisplayValue: function (value){
-                                if (this.getInstanceValue(ZaHome.A2_serviceStatusMessage) == ZaMsg.MSG_HomeLoading) {
-                                    return "";
-                                }
+                    {type:_OUTPUT_, label:ZaMsg.LBL_HomeService, ref: ZaHome.A2_serviceStatus, bmolsnr: true,
+                        visibilityChecks:[[ZaHomeXFormView.showStatusInfo]],
+                        valueChangeEventSources:[ZaHome.A2_serviceStatusMessage],
+                        cssStyle:"position:relative;",
+                        getDisplayValue: function (value){
+                            var imgStr = "";
+                            var serviceStatusMsg = this.getInstanceValue(ZaHome.A2_serviceStatusMessage);
+                             var imgCssStyle;
+                            if (serviceStatusMsg != ZaMsg.MSG_HomeLoading) {
+                                imgCssStyle = "position:absolute;left:0px;"
                                 if (value === undefined) {
-                                    return AjxImg.getImageHtml ("UnKnownStatus");
+                                    imgStr = AjxImg.getImageHtml ("UnKnownStatus", imgCssStyle);
                                 }else if (value === false) {
-                                    return AjxImg.getImageHtml ("Critical");
+                                    imgStr =  AjxImg.getImageHtml ("Critical", imgCssStyle);
                                 } else {
-                                    return AjxImg.getImageHtml ("Check");
+                                    imgStr =  AjxImg.getImageHtml ("Check", imgCssStyle);
                                 }
-                            },
-                            visibilityChangeEventSources:[ZaHome.A2_serviceStatusMessage],
-                            valueChangeEventSources:[ZaHome.A2_serviceStatusMessage]
-                        },
-                        {type:_OUTPUT_, ref: ZaHome.A2_serviceStatusMessage, bmolsnr: true}
-                    ]},
+                            }
+
+                            var textStr = "";
+                            if (serviceStatusMsg != "") {
+                                textStr = ["<span style='margin-left:16px;'>", serviceStatusMsg, "</span>"].join("");
+                            }
+
+                            return imgStr + textStr;
+
+                        }
+                    },
                     {type:_OUTPUT_, label:ZaMsg.LBL_HomeActiveSession, align:_LEFT_, ref: ZaHome.A2_activeSession,
                          bmolsnr: true,
                         visibilityChecks:[[ZaHomeXFormView.showStaticsInfo]]},
