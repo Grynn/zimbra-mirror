@@ -324,6 +324,8 @@ public class CSMigrationWrapper
             (folder.ContainerClass == "IPF.Task" &&
             !options.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Tasks)) ||
             (folder.ContainerClass == "IPF.Note" &&
+            !options.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Mail)) ||
+            (folder.ContainerClass == "" &&     // if no container class, assume IPF.Note
             !options.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Mail)))
         {
             return true;
