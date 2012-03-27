@@ -12,8 +12,6 @@ import com.zimbra.qa.selenium.projects.ajax.ui.*;
 
 public class CreateReshare extends PrefGroupMailByMessageTest {
 
-	private ZimbraAccount Owner = null;
-	private ZimbraAccount Destination = null;
 
 	public CreateReshare() {
 		logger.info("New "+ CreateReshare.class.getCanonicalName());
@@ -32,11 +30,11 @@ public class CreateReshare extends PrefGroupMailByMessageTest {
 	public void CreateReshare_01() throws HarnessException {
 
 		// Create the owner and destination accounts
-		Owner = new ZimbraAccount();
+		ZimbraAccount Owner = new ZimbraAccount();
 		Owner.provision();
 		Owner.authenticate();
 
-		Destination = new ZimbraAccount();
+		ZimbraAccount Destination = new ZimbraAccount();
 		Destination.provision();
 		Destination.authenticate();
 
@@ -88,7 +86,7 @@ public class CreateReshare extends PrefGroupMailByMessageTest {
 		Destination.soapSend(
 					"<GetShareInfoRequest xmlns='urn:zimbraAccount'>"
 				+		"<grantee type='usr'/>"
-				+		"<owner by='name'>"+ app.zGetActiveAccount().EmailAddress +"</owner>"
+				+		"<owner by='name'>"+ Owner.EmailAddress +"</owner>"
 				+	"</GetShareInfoRequest>");
 		
 		// Example response:
@@ -96,9 +94,9 @@ public class CreateReshare extends PrefGroupMailByMessageTest {
 		//	      <share granteeId="0136d047-b771-49c0-a735-12183f3ca654" ownerName="enus12986828702967" granteeDisplayName="enus12986828648903" ownerId="4000b6a8-56bc-4910-ae3e-77528a5d5b18" rights="r" folderPath="/Inbox/folder12986828702964" mid="257" granteeType="usr" ownerEmail="enus12986828702967@testdomain.com" granteeName="enus12986828648903@testdomain.com" folderId="257"/>
 		//	    </GetShareInfoResponse>
 
-		String destinationPath = ZimbraAccount.AccountA().soapSelectValue("//acct:GetShareInfoResponse//acct:share[@ownerEmail='"+ app.zGetActiveAccount().EmailAddress +"']", "folderPath");
+		String destinationPath = Destination.soapSelectValue("//acct:GetShareInfoResponse//acct:share[@ownerEmail='"+ Owner.EmailAddress +"']", "folderPath");
 		ZAssert.assertNotNull(destinationPath, "Verify the share exists");
-		ZAssert.assertStringContains(destinationPath, mountpointFoldername, "Verify the test account has shared the folder");
+		ZAssert.assertStringContains(destinationPath, ownerFoldername, "Verify the test account has shared the folder");
 		
 		// I suppose this verification is correct.  It could show the Owner's email or Owner's foldername.
 		// I'm blocked on the actual verification due to bug 68760
