@@ -35,7 +35,7 @@ public class PageTasks extends AbsTab {
 		//public static final String zNewTaskMenuItem ="css=div#zb__TKL-main__NEW_MENU_NEW_TASK";
 		public static final String zNewTask = "css=div[id='zb__NEW_MENU'] td[id='zb__NEW_MENU_title']:contains('New Task')";
 		public static final String zNewTaskDropDown = "css=div[id='zb__NEW_MENU'] td[id='zb__NEW_MENU_dropdown']>div";
-		public static final String zNewTagMenuItem= "css=div[id='zb__NEW_MENU_NEW_TAG'] tr[id='POPUP_NEW_TAG']";
+		public static final String zNewTagMenuItem= "css=div[id='zb__NEW_MENU_NEW_TAG'] tr[id^='POPUP_'] td[id$='_title']";
 		public static final String zMarkAsCompleted = "css=div#zb__TKL-main__MARK_AS_COMPLETED";
 		public static final String zNewTaskMenuItem ="css=div[id='zb__NEW_MENU_NEW_TASK'] td[id$='_title']";
 		public static final String zNewTaskFolderMenuItem ="css=div[id='zb__NEW_MENU_NEW_TASK_FOLDER'] tr[id^='POPUP_'] td[id$='_title']";
