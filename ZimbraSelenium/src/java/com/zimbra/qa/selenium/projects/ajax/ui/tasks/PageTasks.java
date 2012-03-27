@@ -38,7 +38,7 @@ public class PageTasks extends AbsTab {
 		public static final String zNewTagMenuItem= "css=div[id='zb__NEW_MENU_NEW_TAG'] tr[id='POPUP_NEW_TAG']";
 		public static final String zMarkAsCompleted = "css=div#zb__TKL-main__MARK_AS_COMPLETED";
 		public static final String zNewTaskMenuItem ="css=div[id='zb__NEW_MENU_NEW_TASK'] td[id$='_title']";
-		public static final String zNewTaskFolderMenuItem ="css=div[id='zb__NEW_MENU_NEW_TASK_FOLDER'] tr[id='POPUP_NEW_TASK_FOLDER']";
+		public static final String zNewTaskFolderMenuItem ="css=div[id='zb__NEW_MENU_NEW_TASK_FOLDER'] tr[id^='POPUP_'] td[id$='_title']";
 		public static final String zDeleteTaskMenuItem ="css=div[id='zm__Tasks'] tr[id='POPUP_DELETE']";
 		public static final String zMoveTaskMenuItem ="css=div[id='zm__Tasks'] tr[id='POPUP_MOVE']";
 		public static final String zNewTaskListMenuItem="css=div[id$='NEWFOLDER']";
@@ -47,9 +47,9 @@ public class PageTasks extends AbsTab {
 		public static final String zFilterByTaskDropDown="css=tr[id='ztb__TKL-main_items'] div[id='zb__TKL-main__SORTBY_MENU'] td[id='zb__TKL-main__SORTBY_MENU_dropdown']>div";
 		public static final String zToDoListTaskMenuItem ="css=div[id^='POPUP_DWT'] div[id^='DWT'] tr[id='POPUP_TKVT']";
 		public static final String zShowOrigTaskMenuItem ="css=div[id='zm__Tasks'] tr[id='POPUP_SHOW_ORIG']";
-		public static final String zPrintTaskMenuItem ="css=div[id='zm__Tasks'] tr[id='POPUP_PRINT_TASK']";
+		public static final String zPrintTaskMenuItem ="css=div[id='zm__Tasks'] tr[id^='POPUP_PRINT_TASK'] td[id$='_title']";
 		public static final String zPrintTaskDropDown="css=td#zb__TKL-main__PRINT_dropdown>div";
-		public static final String zPrintTaskFolder ="css=div[id^='DWT'] tr[id='POPUP_PRINT_TASKFOLDER']";
+		public static final String zPrintTaskFolder ="css=tr[id='POPUP_PRINT_TASKFOLDER'] td[id$='_title']";
 	}
 
 	public PageTasks(AbsApplication application) {
