@@ -155,8 +155,6 @@ function () {
 
 ZaTaskAuthConfigWizard.prototype.changeButtonStateForStep =
 function(stepNum) {
-    this._button[DwtWizardDialog.PREV_BUTTON].setText(AjxMsg._prev);
-    this._button[DwtWizardDialog.NEXT_BUTTON].setText(AjxMsg._next);
     this._button[DwtDialog.CANCEL_BUTTON].setVisible(true);
     this._button[ZaXWizardDialog.HELP_BUTTON].setVisible(true);
     this._button[DwtWizardDialog.FINISH_BUTTON].setVisible(true);
@@ -169,20 +167,27 @@ function(stepNum) {
 	} else {
 
 		if(stepNum == ZaTaskAuthConfigWizard.AUTH_CONFIG_CHOOSE_MODE_STEP) {
-			this._button[DwtWizardDialog.NEXT_BUTTON].setText(AjxMsg._next);
+			// first step, prev is disabled
 			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
 			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
 			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);
-		} else if (stepNum == ZaTaskAuthConfigWizard.AUTH_CONFIG_SUMMARY_STEP) {
-			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
-			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
-			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
 		} else if(stepNum == ZaTaskAuthConfigWizard.CONFIG_COMPLETE_STEP) {
+			// last step, next is dsiabled
 			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
 			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
 			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
-		} else {
-			this._button[DwtWizardDialog.NEXT_BUTTON].setText(AjxMsg._next);
+		} else if (stepNum == ZaTaskAuthConfigWizard.AUTH_CONFIG_AUTH_SET_STEP) {
+			// valid check
+			var nextEnabled = true;
+			if (AjxUtil.isEmpty(this._localXForm.getInstanceValue(ZaDomain.A_AuthADDomainName)) ||
+				AjxUtil.isEmpty(this._localXForm.getInstanceValue(ZaDomain.A_AuthLdapURL))) {
+				nextEnabled = false;
+			}
+			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
+			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(nextEnabled);
+			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
+
+		} else { // other steps,
 			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
 			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
 			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
@@ -516,7 +521,7 @@ ZaTaskAuthConfigWizard.myXFormModifier = function(xFormObject) {
                                     },
 								    {type:_SPACER_, height:20,colSpan:2},
 									{ref:ZaDomain.A_AuthADDomainName, type:_TEXTFIELD_, label:ZaMsg.Domain_AuthADDomainName, labelLocation:_LEFT_,
-                                        labelCssStyle:"text-align:left;padding-left:20px;",
+                                        labelCssStyle:"text-align:left;padding-left:20px;", required: true,
 										visibilityChecks:[],enableDisableChecks:[],bmolsnr:true
 									},
                                     {type:_SPACER_, height:10,colSpan:2},
@@ -524,9 +529,17 @@ ZaTaskAuthConfigWizard.myXFormModifier = function(xFormObject) {
 									{type:_GROUP_, numCols:6, colSpan:2,label:null,labelLocation:_LEFT_, containerCssStyle:"padding-left:20px;",
 										items: [
 											{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:" ", width:"35px"},
-											{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:ZaMsg.Domain_AuthADServerName, width:"200px"},
+											{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:ZaMsg.Domain_AuthADServerName, width:"200px",
+											 getDisplayValue: function(value) {  // show required symbol, xform items with null label can't use with "required".
+												 return value + "<span class=\"redAsteric\">*</span>";
+											 }
+											},
 											{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:" ", width:"5px"},
-											{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:ZaMsg.Domain_AuthADServerPort,  width:"40px"},
+											{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:ZaMsg.Domain_AuthADServerPort, width:"40px",
+											 getDisplayValue: function(value) {
+												 return value + "<span class=\"redAsteric\">*</span>";
+											 }
+											},
 											{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:ZaMsg.Domain_AuthADUseSSL, width:"40px"}
 										]
 									},
@@ -554,9 +567,17 @@ ZaTaskAuthConfigWizard.myXFormModifier = function(xFormObject) {
 									{type:_GROUP_, numCols:6, colSpan:2,label:null,labelLocation:_LEFT_,
 										items: [
 											{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:" ", width:"35px"},
-											{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:ZaMsg.Domain_AuthLDAPServerName, width:"200px"},
+											{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:ZaMsg.Domain_AuthLDAPServerName, width:"200px",
+											 getDisplayValue: function(value) {
+												 return value + "<span class=\"redAsteric\">*</span>";
+											 }
+											},
 											{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:" ", width:"5px"},
-											{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:ZaMsg.Domain_AuthLDAPServerPort,  width:"40px"},
+											{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:ZaMsg.Domain_AuthLDAPServerPort,  width:"40px",
+											 getDisplayValue: function(value) {
+												 return value + "<span class=\"redAsteric\">*</span>";
+											 }
+											},
 											{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:ZaMsg.Domain_AuthLDAPUseSSL, width:"40px"}
 										]
 									},
