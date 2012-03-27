@@ -46,7 +46,10 @@ ZaSkin.hints = {
 	topToolbar:	 	{ containers: ["skin_tr_top_toolbar"] },
 
 	treeFooter:	 	{ containers: "skin_tr_tree_footer" },
-    rightTask:      { containers: ["skin_td_right_tool"]},
+    rightTask:      { containers: ["skin_td_right_tool"],
+                      minWidth:parseInt("@ToolMinWidth@"),
+                      width:parseInt("@ToolStartWidth@")
+                    },
 
 	// specific components
 	helpButton: 	{	style:"link", url: "@HelpAdminURL@", daUrl: "@HelpDelegatedURL@"	},

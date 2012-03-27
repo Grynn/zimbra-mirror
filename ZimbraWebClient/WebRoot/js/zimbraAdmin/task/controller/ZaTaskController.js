@@ -85,9 +85,9 @@ ZaTaskController.prototype.setExpanded = function(isExpanded) {
     // TODO  remove this to view manager
     var width;
     if (isExpanded) {
-        width = 220;
+        width = ZaSkin.hints.rightTask.width || 220;
     } else {
-        width = 20;
+        width = ZaSkin.hints.rightTask.minWidth || 20;
     }
     window.skin.setToolWidth(width);
     window.skin._reflowApp();

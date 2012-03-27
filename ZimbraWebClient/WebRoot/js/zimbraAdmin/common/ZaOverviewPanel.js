@@ -81,8 +81,8 @@ function() {
 //	opSz.x+=100;
 	var h = opSz.y;
 //	h = (h > ZaOverviewPanel._MIN_FOLDERTREE_SIZE) ? h : ZaOverviewPanel._MIN_FOLDERTREE_SIZE;
-	var w = opSz.x - 2;  //subtract 2 for 1px borders on sides
-	this._treePanel.setBounds(1, 0, w, h); // over 1px to account for left border
+	var w = opSz.x;
+	this._treePanel.setBounds(0, 0, w, h);
 //	var tfBds = this._treePanel.getBounds();
 }
 

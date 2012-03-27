@@ -401,7 +401,7 @@ function(components) {
 		//DBG.println(AjxDebug.DBG3, "fitting to container: " + cid);
 		var cont = this._containers[cid];
 		if (cont) {
-			var contBds = Dwt.getBounds(cont);
+			var contBds = ZaAppViewMgr._getBounds(cont, cid);
 			var comp = this._components[cid];
 			if (
 				cid == ZaAppViewMgr.C_APP_CONTENT || 
@@ -411,9 +411,10 @@ function(components) {
 				comp = elements[cid];
 			}
 			if (comp && (comp.getZIndex() != Dwt.Z_HIDDEN)) {
+                /*
                 var y =  contBds.y ;
                 var h =  contBds.height ;
-                /*if (AjxEnv.isIE && (!this._isAdvancedSearchBuilderDisplayed)) {
+                if (AjxEnv.isIE && (!this._isAdvancedSearchBuilderDisplayed)) {
                     //bug  22173: IE hacking. Seems that the banner image size screw the height in IE. Maybe a small banner image on IE is the final solution?
                     //Also the advanced Search Builder expand/collapse will also affect the display behavior. WEIRD! 
                     if ( cid == ZaAppViewMgr.C_TREE )  {
@@ -424,7 +425,7 @@ function(components) {
                     }
                 }*/
 				try {
-                	comp.setBounds(contBds.x, y, contBds.width, h);
+                	comp.setBounds(contBds.x, contBds.y, contBds.width, contBds.height);
 				} catch (ex) {
 					ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaAppViewMgr.prototype._stickToGrid", nul, false);
 				}
@@ -440,6 +441,20 @@ function(components) {
 	//this._debugShowMetrics(components);
 }
 
+ZaAppViewMgr._getBounds =
+function (contEl, cid) {
+    var bounds = Dwt.getBounds(contEl);
+    if (cid == ZaAppViewMgr.C_TREE ||
+        cid == ZaAppViewMgr.C_APP_CONTENT ||
+        cid == ZaAppViewMgr.C_TOOL
+        ) {
+        // consider the border issues
+        // TODO get border value by js
+        bounds.x = bounds.x + 1;
+        bounds.width = bounds.width > 2 ? (bounds.width - 2) : bounds.width;
+    }
+    return bounds;
+}
 
 // Removes a view from the hidden stack.
 ZaAppViewMgr.prototype._removeFromHidden =
