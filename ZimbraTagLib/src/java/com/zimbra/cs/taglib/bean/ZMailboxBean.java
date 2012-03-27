@@ -91,6 +91,8 @@ public class ZMailboxBean {
 
     public List<String> getAvailableSkins() throws ServiceException { return mMbox.getAvailableSkins(); }
 
+    public List<String> getAvailableLocales() throws ServiceException { return mMbox.getAvailableLocales(); }
+    
     public List<ZIdentity> getIdentities()  throws ServiceException { return mMbox.getIdentities(); }
 
     public List<ZFilterRule> getFilterRules() throws ServiceException { return mMbox.getIncomingFilterRules().getRules(); }

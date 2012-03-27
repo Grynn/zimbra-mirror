@@ -6645,6 +6645,38 @@
         </attribute>
     </tag>
 
+    <tag>
+        <description>
+            Determines if a given locale tag is a valid available locale
+        </description>
+        <name>getValidLocale</name>
+        <tag-class>com.zimbra.cs.taglib.tag.i18n.GetValidLocaleTag</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <description>
+                A String value is interpreted as the
+                printable representation of a locale, which
+                must contain a two-letter (lower-case)
+                language code (as defined by ISO-639),
+                and may contain a two-letter (upper-case)
+                country code (as defined by ISO-3166).
+                Language and country codes must be
+                separated by hyphen (-) or underscore
+                (_).
+            </description>
+            <name>locale</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>
+                Name of the return value
+            </description>
+            <name>var</name>
+            <required>true</required>
+        </attribute>
+    </tag>
+    
 	<!-- These tags are copied from jstl.tld because we implement our own
 	     versions but want to keep API compatibility. -->
 	<!--
