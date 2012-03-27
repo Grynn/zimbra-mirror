@@ -4,8 +4,11 @@ import java.util.HashMap;
 
 import org.testng.annotations.Test;
 
-import com.zimbra.qa.selenium.framework.ui.*;
-import com.zimbra.qa.selenium.framework.util.*;
+import com.zimbra.qa.selenium.framework.ui.Action;
+import com.zimbra.qa.selenium.framework.ui.Button;
+import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.ZAssert;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.preferences.TreePreferences.TreeItem;
 
@@ -40,11 +43,12 @@ public class ZimbraPrefOutOfOfficeReplyEnabledFalse extends AjaxCommonTest {
 	
 		/* GUI steps */
 
+
 		// Navigate to preferences -> mail -> Out of Office
 		app.zTreePreferences.zTreeItem(Action.A_LEFTCLICK, TreeItem.MailOutOfOffice);
 		
 		// Disable the preferences
-		app.zPagePreferences.sClick("css=input[id$='_VACATION_MSG_ENABLED']");
+		app.zPagePreferences.sClick("css=input[id$='VACATION_MSG_DISABLED_input']");
 		
 		// Click "Save"
 		app.zPagePreferences.zToolbarPressButton(Button.B_SAVE);

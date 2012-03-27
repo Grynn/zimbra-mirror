@@ -40,7 +40,7 @@ public class ZimbraPrefOutOfOfficeReplyEnabledTrue extends AjaxCommonTest {
 		app.zTreePreferences.zTreeItem(Action.A_LEFTCLICK, TreeItem.MailOutOfOffice);
 		
 		// Enable the preferences
-		app.zPagePreferences.sClick("css=input[id$='_VACATION_MSG_ENABLED']");
+		app.zPagePreferences.sClick("css=input[id$='VACATION_MSG_ENABLED_input']");
 		
 		// Add a message
 		app.zPagePreferences.sType("css=textarea[id$='_VACATION_MSG']", message);
