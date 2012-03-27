@@ -85,6 +85,7 @@ public class MigrationOptions
     public string DateFilter;
     public string MessageSizeFilter;
     public string SkipFolders;
+    public bool VerboseOn;
 }
 
 

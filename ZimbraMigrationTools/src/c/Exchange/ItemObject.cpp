@@ -93,6 +93,7 @@ STDMETHODIMP CItemObject::put_Parentfolder(IFolderObject *newVal)
 STDMETHODIMP CItemObject::GetDataForItemID(IUserObject *Userobj,VARIANT ItemId, FolderType type, VARIANT *pVal)
 {
     HRESULT hr = S_OK;
+    dlog.debug(L"ItemObject::GetDataForItemID");
     std::map<BSTR, BSTR> pIt;
     std::map<BSTR, BSTR>::iterator it;
     //SBinary ItemID;
@@ -110,8 +111,18 @@ STDMETHODIMP CItemObject::GetDataForItemID(IUserObject *Userobj,VARIANT ItemId, 
 	CComPtr<IMapiAccessWrap> Mapi;
 
 	hr = Userobj->GetMapiAccessObject(L"",&Mapi);
+        if(FAILED(hr))
+        {
+        dlog.err(L"GetMapiAccessObject failed for itemobject->getData with hresult",hr);
+        return hr;
+        }
 
 	hr = Mapi->GetData(L"",ItemId,ft,pVal);
+        if(FAILED(hr))
+        {
+        dlog.err(L"Mapiobj->GetData failed for itemobject->getData with hresult",hr);
+        return hr;
+        }
   
 
     return hr;

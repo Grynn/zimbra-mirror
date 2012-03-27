@@ -45,8 +45,13 @@ STDMETHODIMP CMapiWrapper::ConnectToServer(BSTR ServerHostName, BSTR Port, BSTR 
     (void)AdminID;
 
     // baseMigrationObj->Connecttoserver();
-
-    MAPIAccessAPI::InitGlobalSessionAndStore( /*ServerHostName, */ AdminID);
+    dlog.debug(L"Mapiwrapper connectoserver InitGlobalSessionAndStore");
+    LPCWSTR status = MAPIAccessAPI::InitGlobalSessionAndStore( /*ServerHostName, */ AdminID);
+    if(status != NULL)
+    {
+        dlog.err("MAPIACCESSAPI->InitGlobalSessionAndStore errors out ",status);
+        return S_FALSE;
+    }
 
     return S_OK;
 }
@@ -58,10 +63,10 @@ STDMETHODIMP CMapiWrapper::GlobalInit(BSTR pMAPITarget, BSTR pAdminUser, BSTR pA
     (void)pAdminUser;
     (void)pAdminPassword;
     (void)pErrorText;
-
+    dlog.debug(L"Mapiwrapper GlobalInit");
     LPCWSTR lpszErrorText = ExchangeOps::GlobalInit((LPCWSTR)pMAPITarget, (LPCWSTR)pAdminUser,
         (LPCWSTR)pAdminPassword);
-
+    
     *pErrorText = (lpszErrorText) ? CComBSTR(lpszErrorText) : CComBSTR("");
     return S_OK;
 }
@@ -76,21 +81,24 @@ STDMETHODIMP CMapiWrapper::ImportMailOptions(BSTR OptionsTag)
 STDMETHODIMP CMapiWrapper::GetProfilelist(VARIANT *Profiles,BSTR *statusmessage)
 {
     // TODO: Add your implementation code here
+    dlog.debug(L"Mapiwrapper GetProfilelist");
     HRESULT hr = S_OK;
 	CComBSTR status = L"";
 
     hr = MAPIInitialize(NULL);
 	if( hr != S_OK)
 	{
+            
 		
 		LPCSTR temp = format_error(hr).c_str();
 		
 		status.AppendBSTR(L" MapiInitialize error ");
 		status.AppendBSTR(A2BSTR(temp));
 		
+                dlog.err(status);
 		*statusmessage =  status;
 
-    return hr;
+                return hr;
 	}
 
     Zimbra::Mapi::Memory::SetMemAllocRoutines(NULL, MAPIAllocateBuffer, MAPIAllocateMore,
@@ -106,12 +114,18 @@ STDMETHODIMP CMapiWrapper::GetProfilelist(VARIANT *Profiles,BSTR *statusmessage)
 		
 		status.AppendBSTR(L" GetAllProfiles error ");
 		status.AppendBSTR(A2BSTR(temp));
-		
+		dlog.err(status);
 		*statusmessage =  status;
 
      return hr;
 	}
+         if(vProfileList.size() == 0)
+         {
+            dlog.err(L"No profiles returned for GetAllProfiles");
+            *statusmessage =  status;
+            return S_OK;
 
+         }
     vector<CComBSTR> tempvectors;
 
     std::vector<string>::iterator its;
@@ -163,7 +177,7 @@ STDMETHODIMP CMapiWrapper::GetFolderObjects(VARIANT *vObjects)
     HRESULT hr = S_OK;
 
     VariantInit(vObjects);
-    vObjects->vt = VT_ARRAY | VT_DISPATCH;
+    /*vObjects->vt = VT_ARRAY | VT_DISPATCH;
 
     SAFEARRAY *psa;
     SAFEARRAYBOUND bounds = { 2, 0 };
@@ -191,13 +205,14 @@ STDMETHODIMP CMapiWrapper::GetFolderObjects(VARIANT *vObjects)
     }
     SafeArrayUnaccessData(psa);
     vObjects->parray = psa;
-
+    *///not been used remove it from idl 
     return hr;
 }
 
 STDMETHODIMP CMapiWrapper::GlobalUninit(BSTR *pErrorText)
 {
     (void)pErrorText;
+    dlog.debug(L"Mapiwrapper::GlobalUninit");
 
     LPCWSTR lpszErrorText = ExchangeOps::GlobalUninit();
 
@@ -207,10 +222,26 @@ STDMETHODIMP CMapiWrapper::GlobalUninit(BSTR *pErrorText)
 
 STDMETHODIMP CMapiWrapper::SelectExchangeUsers(VARIANT *Users, BSTR *pErrorText)
 {
+    dlog.debug(L"Mapiwrapper::SelectExchangeUsers");
     vector<ObjectPickerData> vUserList;
 
     LPCWSTR lpszErrorText = ExchangeOps::SelectExchangeUsers(vUserList);
+    if(lpszErrorText != NULL)
+    {
+        dlog.err(L"Mapiwrapper ExchangeOps::SelectExchangeUsers errors out", lpszErrorText);
+        return S_FALSE;
 
+
+    }
+
+    if(vUserList.size() == 0)
+    {
+
+        dlog.err(L"Mapiwrapper ExchangeOps::SelectExchangeUsers returns no users ");
+        return S_OK;
+
+
+    }
     vector<CComBSTR> tempvectors;
 
     std::vector<ObjectPickerData>::iterator its;

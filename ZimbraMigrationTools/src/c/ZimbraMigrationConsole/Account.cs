@@ -221,7 +221,7 @@ class Account: BackgroundWorker
             {
                 // TestObj.Migrate(MigrateOptions);
 
-                mw.StartMigration(MyAcct, argumentTest.Mailoptions, argumentTest.serverMigration);
+                mw.StartMigration(MyAcct, argumentTest.Mailoptions, argumentTest.serverMigration, argumentTest.Mailoptions.VerboseOn);
                
             }
         }
