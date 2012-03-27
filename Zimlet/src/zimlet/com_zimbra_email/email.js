@@ -49,6 +49,7 @@ function() {
 
 	this._subscriberZimlets = [];
 	this._preLoadImgs();
+	this._convMode = false;
 };
 
 /**
@@ -114,17 +115,34 @@ function(ev) {
 	}
 };
 
+EmailTooltipZimlet.prototype.onConvStart =
+function() {
+    this._convMode = true;
+    this._clearBubbles();
+};
+
+EmailTooltipZimlet.prototype.onConvEnd =
+function() {
+    this._convMode = false;
+};
+
 EmailTooltipZimlet.prototype.onFindMsgObjects =
 function() {
-	
-	if (appCtxt.get(ZmSetting.USE_ADDR_BUBBLES)) {
+    if (!this._convMode) {
+        this._clearBubbles();
+    }
+};
+
+EmailTooltipZimlet.prototype._clearBubbles =
+function() {
+    if (appCtxt.get(ZmSetting.USE_ADDR_BUBBLES)) {
 		// TODO: dispose old bubbles
 		this._bubbleList = new ZmAddressBubbleList();
 		this._bubbleList.addSelectionListener(new AjxListener(this, this._bubbleSelectionListener));
 		this._bubbleList.addActionListener(new AjxListener(this, this._bubbleActionListener));
 		this._bubbleParams = {};
 	}
-};
+}
 
 // create bubble for address in header
 EmailTooltipZimlet.prototype.generateSpan =
@@ -158,7 +176,7 @@ function(html, idx, obj, spanId, context, options) {
 		};
 		ZmAddressInputField.BUBBLE_OBJ_ID[spanId] = this._internalId;	// pretend to be a ZmAddressInputField
 		this._bubbleParams[spanId] = bubbleParams;
-		
+
 		// placeholder SPAN
 		html[idx++] = "<span id='" + spanId + "'>";
 		html[idx++] = "</span>";
