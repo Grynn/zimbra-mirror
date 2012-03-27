@@ -518,6 +518,10 @@ class Program
                             
 
                             if (zimbraAPI.CreateAccount(acctName,
+                                "",
+                                "",
+                                "",
+                                "",
                                 Defaultpwd,
                                 myXmlConfig.ConfigObj.UserProvision.COS) == 0)
                             {

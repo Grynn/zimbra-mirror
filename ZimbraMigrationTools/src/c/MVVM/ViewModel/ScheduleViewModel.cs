@@ -210,7 +210,33 @@ public class ScheduleViewModel: BaseViewModel
                         string cosID = CosList[CurrentCOSSelection].CosID;
                         ZimbraAPI zimbraAPI = new ZimbraAPI();
 
-                        if (zimbraAPI.CreateAccount(accountName, defaultPWD, cosID) == 0)
+                        // FBS bug 71646 -- 3/26/12
+                        string displayName = "";
+                        string givenName = "";
+                        string sn = "";
+                        string zfp = "";
+                        if (usersViewModel.OPInfoList.Count > 0)
+                        {
+                            if (usersViewModel.OPInfoList[i].DisplayName.Length > 0)
+                            {
+                                displayName = usersViewModel.OPInfoList[i].DisplayName;
+                            }
+                            if (usersViewModel.OPInfoList[i].GivenName.Length > 0)
+                            {
+                                givenName = usersViewModel.OPInfoList[i].GivenName;
+                            }
+                            if (usersViewModel.OPInfoList[i].Sn.Length > 0)
+                            {
+                                sn = usersViewModel.OPInfoList[i].Sn;
+                            }
+                            if (usersViewModel.OPInfoList[i].Zfp.Length > 0)
+                            {
+                                zfp = usersViewModel.OPInfoList[i].Zfp;
+                            }
+                        }
+                        //////////////
+
+                        if (zimbraAPI.CreateAccount(accountName, displayName, givenName, sn, zfp, defaultPWD, cosID) == 0)
                         {
                             tempMessage += string.Format("{0} Provisioned", userName) + "\n";
                             // MessageBox.Show(string.Format("{0} Provisioned", userName), "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -226,7 +252,13 @@ public class ScheduleViewModel: BaseViewModel
                 }
             }
             if (bProvision)
+            {
                 MessageBox.Show(tempMessage, "Zimbra Migration", MessageBoxButton.OK, mbi);
+            }
+            if (mbi == MessageBoxImage.Error)
+            {
+                return;
+            }
             lb.SelectedIndex = 6;
         }
         else

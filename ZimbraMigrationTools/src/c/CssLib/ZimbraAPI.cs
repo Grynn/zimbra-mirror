@@ -776,14 +776,17 @@ public class ZimbraAPI
         return retval;
     }
 
-    public int CreateAccount(string accountname, string defaultpw, string cosid)
+    public int CreateAccount(string accountname, string displayname, string givenname, string sn, string zfp, string defaultpw, string cosid)
     {
         int retval = 0;
 
         lastError = "";
 
-        string displayname = accountname.Substring(0, accountname.IndexOf("@"));
-        string zimbraForeignPrincipal = "ad:" + displayname;
+        if (displayname.Length == 0)
+        {
+            displayname = accountname.Substring(0, accountname.IndexOf("@"));
+        }
+        string zimbraForeignPrincipal = (zfp.Length > 0) ? zfp : "ad:" + displayname;
         WebServiceClient client = new WebServiceClient {
             Url = ZimbraValues.GetZimbraValues().Url, WSServiceType =
                 WebServiceClient.ServiceType.Traditional
@@ -807,6 +810,14 @@ public class ZimbraAPI
             WriteNVPair(writer, "password", defaultpw);
 
             WriteAttrNVPair(writer, "a", "n", "displayName", displayname);
+            if (givenname.Length > 0)
+            {
+                WriteAttrNVPair(writer, "a", "n", "givenName", givenname);
+            }
+            if (sn.Length > 0)
+            {
+                WriteAttrNVPair(writer, "a", "n", "sn", sn);
+            }
             WriteAttrNVPair(writer, "a", "n", "zimbraForeignPrincipal", zimbraForeignPrincipal);
             WriteAttrNVPair(writer, "a", "n", "zimbraCOSId", cosid);
 

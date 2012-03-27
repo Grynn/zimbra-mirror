@@ -215,20 +215,43 @@ STDMETHODIMP CMapiWrapper::SelectExchangeUsers(VARIANT *Users, BSTR *pErrorText)
 
     std::vector<ObjectPickerData>::iterator its;
 
+    wstring str = L"", strDisplayName = L"", strGivenName = L"", strSN = L"", strZFP = L"";
     for (its = (vUserList.begin()); its != vUserList.end(); its++)
     {
         ObjectPickerData obj = (*its);
 
-        // wstring str = (*its).wstrUsername;
-        // CComBSTR temp = SysAllocString(str.c_str());
+        // FBS bug 71646 -- 3/26/12
+        str = (*its).wstrUsername;
+        for (size_t j = 0; j < (*its).pAttributeList.size(); j++)
+        {
+            if ((*its).pAttributeList[j].first == L"displayName")
+            {
+                strDisplayName = (*its).pAttributeList[j].second;
+            }
+            if ((*its).pAttributeList[j].first == L"givenName")
+            {
+                strGivenName = (*its).pAttributeList[j].second;
+            }
+            if ((*its).pAttributeList[j].first == L"sn")
+            {
+                strSN = (*its).pAttributeList[j].second;
+            }
+            if ((*its).pAttributeList[j].first == L"zimbraForeignPrincipal")
+            {
+                strZFP = (*its).pAttributeList[j].second;
+            }
+        }
 
-        // Comment out above 2 lines.  Use username, not display name.  Later, we'll
-        // return a struct that will have username and displayname (as destination name)
-        wstring strUsername = (*its).pAttributeList[0].second;
-        CComBSTR temp = SysAllocString(strUsername.c_str());
-
-        // //
-
+        str += L"~";
+        str += strDisplayName;
+        str += L"~";
+        str += strGivenName;
+        str += L"~";
+        str += strSN;
+        str += L"~";
+        str += strZFP;
+        //
+        CComBSTR temp = SysAllocString(str.c_str());
         tempvectors.push_back(temp);
     }
     VariantInit(Users);

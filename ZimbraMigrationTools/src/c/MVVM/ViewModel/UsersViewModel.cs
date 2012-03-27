@@ -49,14 +49,27 @@ public class UsersViewModel: BaseViewModel
         CSMigrationWrapper mw = ((IntroViewModel)ViewModelPtrs[(int)ViewType.INTRO]).mw;
 
         string[] users = mw.GetListFromObjectPicker();
+
+        // FBS rewrite -- bug 71646 -- 3/26/12
         for (int i = 0; i < users.Length; i++)
         {
-            // Later, we'll return a struct that will have username and displayname (as destination name)
-            string displayname = "";
+            string[] tokens = users[i].Split('~');
+            string uname = "", displayname = "", givenname = "", sn = "", zfp = "";
+            for (int j = 0; j < tokens.Length; j += 5)
+            {
+                uname = tokens.GetValue(j).ToString();
+                displayname = tokens.GetValue(j + 1).ToString();
+                givenname = tokens.GetValue(j + 2).ToString();
+                sn = tokens.GetValue(j + 3).ToString();
+                zfp = tokens.GetValue(j + 4).ToString();
+            }
 
-            if (users[i].IndexOf("@") != -1)
-                displayname = users[i].Substring(0, users[i].IndexOf("@"));
-            UsersList.Add(new UsersViewModel(users[i], displayname));
+            if (uname.IndexOf("@") != -1)
+            {
+                uname = uname.Substring(0, uname.IndexOf("@"));
+            }
+            UsersList.Add(new UsersViewModel(displayname, uname));
+            OPInfoList.Add(new ObjectPickerInfo(displayname, givenname, sn, zfp));
 
             ScheduleViewModel scheduleViewModel =
                 ((ScheduleViewModel)ViewModelPtrs[(int)ViewType.SCHED]);
@@ -488,6 +501,12 @@ public class UsersViewModel: BaseViewModel
         {
             domainlist = value;
         }
+    }
+    private ObservableCollection<ObjectPickerInfo> opinfolist =
+        new ObservableCollection<ObjectPickerInfo>();
+    public ObservableCollection<ObjectPickerInfo> OPInfoList
+    {
+        get { return opinfolist; }
     }
     public string Username {
         get { return m_users.Username; }
