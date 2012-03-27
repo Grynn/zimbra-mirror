@@ -627,41 +627,45 @@ public class PageMail extends AbsTab {
 
 				// Check if we are CLV or MV
 				if ( this.zIsVisiblePerPosition("css=div#ztb__CLV-main", 0, 0) ) {
-					pulldownLocator = "css=td#zb__CLV-main__MOVE_MENU_dropdown>div";
+					pulldownLocator = "css=div[id='ztb__CLV-main'] div[id$='__MOVE_MENU'] td[id$='_dropdown']";
+					optionLocator = "css=div[id='ZmMoveButton_CLV-main'] div[id$='NEWFOLDER'] td[id$='_title']";
 				} else {
-					pulldownLocator = "css=td#zb__TV-main__MOVE_MENU_dropdown>div";
+					pulldownLocator = "css=div[id='ztb__TV-main'] div[id$='__MOVE_MENU'] td[id$='_dropdown']";
+					optionLocator = "css=div[id='ZmMoveButton_TV-main'] div[id$='NEWFOLDER'] td[id$='_title']";
 				}
-				optionLocator = "css=div[class='DwtFolderChooser'] div[id$='_newButtonDivId'] td[id$='_title']";
 				page = new DialogCreateFolder(this.MyApplication, this);
+
+				// Make sure the locator exists
+				if (!this.sIsElementPresent(pulldownLocator)) {
+					throw new HarnessException(pulldownLocator + " not present!");
+				}
+
+				// 8.0 change ... need zClickAt()
+				// this.zClick(pulldownLocator);
+				this.zClickAt(pulldownLocator, "0,0");
+
+				// Need to wait for the menu to be drawn
+				SleepUtil.sleepMedium();
+				
+				// If the app is busy, wait for it to become active
+				zWaitForBusyOverlay();
+
+				if (!this.sIsElementPresent(optionLocator)) {
+					throw new HarnessException(optionLocator + " not present!");
+				}
+
+				this.zClick(optionLocator);
+
+				// If the app is busy, wait for it to become active
+				zWaitForBusyOverlay();
+
+				page.zWaitForActive();
+
+				return (page);
 
 			} else {
 				throw new HarnessException("no logic defined for B_MOVE and " + option);
 			}
-
-			// Make sure the locator exists
-			if (!this.sIsElementPresent(pulldownLocator)) {
-				throw new HarnessException(pulldownLocator + " not present!");
-			}
-
-			// 8.0 change ... need zClickAt()
-			// this.zClick(pulldownLocator);
-			this.zClickAt(pulldownLocator, "0,0");
-
-			// If the app is busy, wait for it to become active
-			zWaitForBusyOverlay();
-
-			if (!this.sIsElementPresent(optionLocator)) {
-				throw new HarnessException(optionLocator + " not present!");
-			}
-
-			this.zClick(optionLocator);
-
-			// If the app is busy, wait for it to become active
-			zWaitForBusyOverlay();
-
-			page.zWaitForActive();
-
-			return (page);
 
 
 		} else {
