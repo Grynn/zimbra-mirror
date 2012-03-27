@@ -71,7 +71,7 @@ function(message, service) {
 com_zimbra_speak.prototype._doIt =
 function(message, service) {
 	var textPart = message.getBodyPart(ZmMimeTable.TEXT_PLAIN);
-	this._speak(textPart ? textPart.content : "The message is empty", service);
+	this._speak(textPart ? textPart.getContent() : "The message is empty", service);
 };
 
 com_zimbra_speak.prototype._speak =
