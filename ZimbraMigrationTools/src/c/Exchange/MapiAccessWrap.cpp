@@ -26,6 +26,7 @@ STDMETHODIMP CMapiAccessWrap::UserInit(BSTR UserName, BSTR userAccount, BSTR *St
 	Zimbra::Util::AutoCriticalSection autocriticalsection(cs);
     // TODO: Add your implementation code here
 
+    dlog.debug(L"mapiaccesswrap::userinit");
     maapi = new Zimbra::MAPI::MAPIAccessAPI(UserName, userAccount);
 
     // Init session and stores
@@ -38,7 +39,7 @@ STDMETHODIMP CMapiAccessWrap::UserInit(BSTR UserName, BSTR userAccount, BSTR *St
 STDMETHODIMP CMapiAccessWrap::UserUninit()
 {
     // TODO: Add your implementation code here
-
+    dlog.debug(L"mapiaccesswrap::UserUninit");
      delete maapi;
 
     // *StatusMsg = (lpStatus) ? CComBSTR(lpStatus) : SysAllocString(L"");
@@ -48,7 +49,7 @@ STDMETHODIMP CMapiAccessWrap::UserUninit()
 STDMETHODIMP CMapiAccessWrap::GetFolderList(VARIANT *folders)
 {
     HRESULT hr = S_OK;
-
+     dlog.debug(L"mapiaccesswrap::GetFolderList");
     VariantInit(folders);
     folders->vt = VT_ARRAY | VT_DISPATCH;
 
@@ -57,10 +58,26 @@ STDMETHODIMP CMapiAccessWrap::GetFolderList(VARIANT *folders)
     USES_CONVERSION;
     vector<Folder_Data> vfolderlist;
 
-    maapi->GetRootFolderHierarchy(vfolderlist);
+   LPCWSTR lpStatus= maapi->GetRootFolderHierarchy(vfolderlist);
+   if((lpStatus) != NULL )
+   {
+       dlog.err("GetRootFolderHierarchy errored with ", lpStatus);
 
+       hr = S_FALSE;
+       return hr;
+
+   }
     std::vector<Folder_Data>::iterator it;
     size_t size = vfolderlist.size();
+
+    if(size == 0)
+    {
+        dlog.err("GetRootFolderHierarchy returned no folders");
+
+       hr = S_OK;
+       return hr;
+
+    }
 
     it = vfolderlist.begin();
 
@@ -137,7 +154,7 @@ STDMETHODIMP CMapiAccessWrap::GetItemsList(IFolderObject *FolderObj, VARIANT cre
     VARIANT *vItems)
 {
     HRESULT hr = S_OK;
-
+    dlog.debug(L"Mapiacesswrap::GetItemsList");
     VariantInit(vItems);
     vItems->vt = VT_ARRAY | VT_DISPATCH;
 
@@ -177,11 +194,25 @@ STDMETHODIMP CMapiAccessWrap::GetItemsList(IFolderObject *FolderObj, VARIANT cre
             memcpy(folderEntryid.lpb, pArrayData, size);        // Unlock the variant data
             SafeArrayUnaccessData(vararg.parray);
 
-            maapi->GetFolderItemsList(folderEntryid, vItemDataList);
+           LPCWSTR lpStatus= maapi->GetFolderItemsList(folderEntryid, vItemDataList);
+           if((lpStatus) != NULL)
+            {
+                dlog.err("MapiAccess->GetFolderItemsList errored out ",lpStatus);
+               hr = S_FALSE;
+               return hr;
+
+           }
         }
     }
 
     size_t size = vItemDataList.size();
+
+    if(size == 0)
+    {
+         dlog.err("MapiAccess->GetFolderItemsList returned no folders ");
+               hr = S_OK;
+               return hr;
+    }
 
     it = vItemDataList.begin();
 
@@ -258,6 +289,7 @@ STDMETHODIMP CMapiAccessWrap::GetData(BSTR UserId, VARIANT ItemId, FolderType ty
     VARIANT *pVal)
 {
     HRESULT hr = S_OK;
+    dlog.debug(L"MapiaccessWrap::GetData");
     std::map<BSTR, BSTR> pIt;
     std::map<BSTR, BSTR>::iterator it;
     SBinary ItemID;
@@ -285,6 +317,12 @@ STDMETHODIMP CMapiAccessWrap::GetData(BSTR UserId, VARIANT ItemId, FolderType ty
                 ContactItemData cd;
 
                 ret = maapi->GetItem(ItemID, cd);
+                if((ret != NULL))
+                {
+                    dlog.err("Mapiaccess->getItem errored  ContactItemData out",ret);
+                    hr= S_FALSE;
+                    return hr;
+                }
 				if (ret == NULL)	// FBS bug 71630 -- 3/22/12
 				{
 					pIt[L"birthday"] = SysAllocString((cd.Birthday).c_str());
@@ -387,6 +425,12 @@ STDMETHODIMP CMapiAccessWrap::GetData(BSTR UserId, VARIANT ItemId, FolderType ty
 
                 printf("Got message item:");
                 ret = maapi->GetItem(ItemID, msgdata);
+                if((ret != NULL))
+                {
+                    dlog.err("Mapiaccess->getItem  MessageItemData errored out",ret);
+                    hr= S_FALSE;
+                    return hr;
+                }
 				if (ret == NULL)	// 71630
 				{
 					pIt[L"Subject"] = SysAllocString((msgdata.Subject).c_str());
@@ -481,6 +525,12 @@ STDMETHODIMP CMapiAccessWrap::GetData(BSTR UserId, VARIANT ItemId, FolderType ty
                 ApptItemData apptData;
 
                 ret = maapi->GetItem(ItemID, apptData);
+                if((ret != NULL))
+                {
+                    dlog.err("Mapiaccess->getItem  ApptItemData errored out",ret);
+                    hr= S_FALSE;
+                    return hr;
+                }
 				if (ret == NULL)	// 71630
 				{
 					pIt[L"ptst"] = SysAllocString((apptData.PartStat).c_str());
@@ -607,6 +657,12 @@ STDMETHODIMP CMapiAccessWrap::GetData(BSTR UserId, VARIANT ItemId, FolderType ty
                 TaskItemData taskData;
 
                 ret = maapi->GetItem(ItemID, taskData);
+                if((ret != NULL))
+                {
+                    dlog.err("Mapiaccess->getItem  TaskItemData errored out",ret);
+                    hr= S_FALSE;
+                    return hr;
+                }
 				if (ret == NULL)	// 71630
 				{
 					pIt[L"name"] = SysAllocString((taskData.Subject).c_str());
@@ -728,6 +784,7 @@ STDMETHODIMP CMapiAccessWrap::GetData(BSTR UserId, VARIANT ItemId, FolderType ty
 
 STDMETHODIMP CMapiAccessWrap::GetOOOInfo(BSTR *OOOInfo)
 {
+    dlog.debug(L"MapiAccessWrap::Get000Info");
     LPCWSTR lpInfo = maapi->GetOOOStateAndMsg();
     *OOOInfo = CComBSTR(lpInfo);
     delete[] lpInfo;
@@ -758,6 +815,7 @@ STDMETHODIMP CMapiAccessWrap::GetRuleList(VARIANT *rules)
     // 0filterActions  actionRedirect`~a`~user2^^^actionFileInto`~folderPath`~Test
     
     HRESULT hr = S_OK;
+     dlog.debug(L"MapiAccessWrap::GetRuleList");
     std::map<BSTR, BSTR> pMap;
     LPWSTR pwszLine = new WCHAR[1024];
 
@@ -767,12 +825,19 @@ STDMETHODIMP CMapiAccessWrap::GetRuleList(VARIANT *rules)
     USES_CONVERSION;
     vector<CRule> vRuleList;
 
-    maapi->GetExchangeRules(vRuleList);
+    LPCWSTR status = maapi->GetExchangeRules(vRuleList);
+    if(status != NULL)
+    {
+        dlog.err(L"MapiAccessWrap::GetRuleList GetExchangerules errored out ",status);
+        return S_FALSE;
+
+    }
 
     std::vector<CRule>::iterator ruleIndex;
     size_t numRules = vRuleList.size();
-    if (numRules == 0)
+    if ((numRules == 0))
     {
+         dlog.debug(L"MapiAccessWrap::GetRuleList GetExchangerules no rules to migrated ");
         return S_OK;
     }
 
@@ -875,6 +940,8 @@ STDMETHODIMP CMapiAccessWrap::GetRuleList(VARIANT *rules)
 
 void CMapiAccessWrap::CreateExceptionAttrs(BSTR attrs[], int num)
 {
+
+    dlog.debug(L"MapiAccessWrap::CreateExceptionAttrs");
     WCHAR pwszNum[10];
     LPWSTR names[] = {L"exceptionType", L"ptst", L"fb", L"allDay",
                       L"name", L"su", L"loc", L"m", L"s", L"e",                      
