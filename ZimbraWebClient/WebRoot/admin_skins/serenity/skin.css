@@ -15,21 +15,21 @@
 
 
 HTML {
-    margin:0;
-    padding:0;
-    height:auto;
-    min-height:900px;
-    padding:0;
+	margin:0;
+	padding:0;
+	height:auto;
+	min-height:900px;
+	padding:0;
 }
 BODY {
-    @FontFamily-default@
-    @grad(#57A3D5,#1D3A62)@
-    color:@TxtC@;
-    margin:0;
-    padding:0;
+	@FontFamily-default@
+	@grad(#57A3D5,#1D3A62)@
+	color:@TxtC@;
+	margin:0;
+	padding:0;
 }
 .DwtShell {
-    background:transparent url(@SkinImgDir@/marge-mosaic-bg.png) no-repeat;
+	background:transparent url(@SkinImgDir@/marge-mosaic-bg.png) no-repeat;
 }
 
 /* classes for the skin around the various pieces of the app */
@@ -39,7 +39,7 @@ BODY {
 .full_height		{	height:100%; } 	
 
 #skin_outer {
-    @FullSize@
+	@FullSize@
 	background-color:transparent;
 #IFDEF MSIE
 	padding:0 5px 5px;
@@ -56,38 +56,38 @@ BODY {
 /** Logo displayed in the app **/
 #skin_td_logo		{}
 #skin_container_logo {	
-    @SkinBorderLogo@
-    height:@AppBannerHeight@;
-    width:@AppBannerWidth@;
+	@SkinBorderLogo@
+	height:@AppBannerHeight@;
+	width:@AppBannerWidth@;
 #IFDEF MSIE
-    height:100%;
+	height:100%;
 #ENDIF
 }
 .ImgAppBanner {
-    background-position:0;
+	background-position:0;
 #IFDEF MSIE
-    margin-top:8px;
+	margin-top:8px;
 #ENDIF
 }
 
 #skin_td_toaster {
-    width:100%;
+	width:100%;
 }
 
 #skin_container_toaster {
-    width:100%;
-    height:100%;
+	width:100%;
+	height:100%;
 }
 
 #skin_td_search { 
-    vertical-align:top;
-    padding:0;
+	vertical-align:top;
+	padding:0;
 }
 
 #skin_container_search	{
-    height:21px;
-    margin-right:5px;
-    width:400px;
+	height:21px;
+	margin-right:5px;
+	width:400px;
 }
 
 /* Vertical Seperator Section*/
@@ -95,35 +95,35 @@ BODY {
 #skin_container_refresh_vertsep, 
 #skin_container_search_vertsep, 
 #skin_container_username_vertsep {
-    height:@TopHeight@;
-    padding:8px 9px;
-    width:1px;
+	height:@TopHeight@;
+	padding:8px 9px;
+	width:1px;
 #IFDEF MSIE
-    margin:0 9px;
+	margin:0 9px;
 #ENDIF
 }
 
 
 #skin_container_previous,
 #skin_container_next {
-    height:@TopHeight@;
-    padding-top:8px;
-    width:21px;
+	height:@TopHeight@;
+	padding-top:8px;
+	width:21px;
 }
 
 #skin_container_refresh {
-    height:@TopHeight@;
-    padding-top:8px;
-    width:19px;  /* wider than image to even out spacing */
+	height:@TopHeight@;
+	padding-top:8px;
+	width:19px;  /* wider than image to even out spacing */
 }
 
 .RefreshContainer {}
 
 /** User Name section **/
 #skin_container_username {
-    height:@TopHeight@;
-    padding-top:8px;
-    width:100px;
+	height:@TopHeight@;
+	padding-top:8px;
+	width:100px;
 }
 
 /* Josh: Selectors with asterisks aren't a good idea because there's limit   */
@@ -131,74 +131,74 @@ BODY {
 /* defeats the purpose of inheritance, but I'll leave them alone for now.    */
 
 #skin_container_username * {
-    @SkinElementAlign@
-    @SkinTextUsername@
+	@SkinElementAlign@
+	@SkinTextUsername@
 }
 
 #skin_container_help * {
-    @SkinElementAlign@
-    @SkinTextHelp@
+	@SkinElementAlign@
+	@SkinTextHelp@
 }
 
 #skin_container_help {
-    height:@TopHeight@;
-    padding-top:8px;
+	height:@TopHeight@;
+	padding-top:8px;
 }
 
 #skin_spacing_filler {   
-    height:12px; 
-    @grad(white,AppC)@
+	height:12px; 
+	@grad(white,AppC)@
 }
 
 #skin_td_bottom {
-    border:5px solid rgb(150, 197, 217);
-    background-color:rgb(150, 197, 217);
-    @borderRadius@:5px;
+	border:5px solid rgb(150, 197, 217);
+	background-color:rgb(150, 197, 217);
+	@borderRadius@:5px;
 }
 
 /***Left panel start here
  *  tree
  **/
 #skin_td_left_tree {
-    height:100%;
-    width:@TreeStartWidth@;
-    padding-right:2px
+	height:100%;
+	width:@TreeStartWidth@;
+	padding-right:2px
 }
 
 #skin_container_tree_top {
-    @AppTop@
+	@AppTop@
 }
 
 #skin_td_tree {
-    height:100%;
-    padding:0;
+	height:100%;
+	padding:0;
 }
 
 #skin_container_tree {
-    @AppMiddle@
+	@AppMiddle@
 }
 
 #skin_td_current_app, #skin_td_tree_container {
-    padding:0 0 0 6px;
+	padding:0 0 0 6px;
 }
 
 #skin_tr_tree_footer {
-    display:table-row;
+	display:table-row;
 }
 
 #skin_td_tree_footer {
-    vertical-align:top;
+	vertical-align:top;
 }
 
 #skin_container_tree_footer {
-    @AppFooter@
+	@AppFooter@
 }
 
 /***Middle panel start here
  *  Main App
  **/
 #skin_td_middle_app	{
-    padding-right:2px;
+	padding-right:2px;
 }
 
 /* current app, tree-app sash, top toolbar */
@@ -209,33 +209,33 @@ BODY {
 }
 
 #skin_container_app_tabs {
-    @AppTop@
+	@AppTop@
 }
 
 #skin_td_app_main {
-    padding:0;
+	padding:0;
 }
 
 #skin_container_app_main {
-    @AppMiddle@
+	@AppMiddle@
 }
 
 #skin_tr_main_footer   {
-    display:table-row;
+	display:table-row;
 }
 
 #skin_td_main_footer  {
-    vertical-align:top;
+	vertical-align:top;
 }
 
 #skin_container_main_footer {
-    @AppFooter@
+	@AppFooter@
 }
 
 /*right panel tool-panel*/
 #skin_td_right_tool {
-    height:100%;
-    width:@ToolStartWidth@;
+	height:100%;
+	width:@ToolStartWidth@;
 }
 
 #skin_tr_tool_header {
@@ -245,29 +245,29 @@ BODY {
 }
 
 #skin_container_tool_header {
-    @AppTop@
+	@AppTop@
 }
 
 #skin_td_tool {
-    padding:0;
+	padding:0;
 }
 
 #skin_container_tool {
-    @AppMiddleBorder@
-    @AppMiddleSize@
-    background-color:#E7E7E7;
+	@AppMiddleBorder@
+	@AppMiddleSize@
+	background-color:#E7E7E7;
 }
  
 #skin_tr_tool_footer {
-    display:table-row;
+	display:table-row;
 }
 
 #skin_td_tool_footer {
-    vertical-align:top;
+	vertical-align:top;
 }
 
 #skin_container_tool_footer {
-    @AppFooter@
+	@AppFooter@
 }
 
 
@@ -276,11 +276,11 @@ BODY {
 
 /*Used by Admin Console start*/
 .AppSash-vert {
-    height:11px;
+	height:11px;
 }
 
 .asterisk {
-    @Text-error@	
+	@Text-error@	
 }
 
 
@@ -291,42 +291,42 @@ BODY {
 
 .LoginScreen,
 .SplashScreen {
-    @FontSize-normal@
-    background-color:@LoginBkgdTop@;
-    font-family:@FontFamily-default@;
-    height:100%;
-    left:0;
-    position:absolute;
-    top:0;
-    width:100%;
-    @grad(LoginBkgdTop,LoginBkgdBottom,linear-vertical)@
+	@FontSize-normal@
+	background-color:@LoginBkgdTop@;
+	font-family:@FontFamily-default@;
+	height:100%;
+	left:0;
+	position:absolute;
+	top:0;
+	width:100%;
+	@grad(LoginBkgdTop,LoginBkgdBottom,linear-vertical)@
 }
 .LoginScreen .center,
 .SplashScreen .center {
-    margin-top:-160px;
-    margin-left:-250px;
-    min-height:320px;
-    width:500px;
+	margin-top:-160px;
+	margin-left:-250px;
+	min-height:320px;
+	width:500px;
 #IFDEF MSIE
-    height:330px;
+	height:330px;
 #ENDIF
 }
 .LoginScreen .center-small,
 .SplashScreen .center-small {
-    height:270px;
-    margin-top:-135px;
-    margin-left:-175px;
-    width:350px;
+	height:270px;
+	margin-top:-135px;
+	margin-left:-175px;
+	width:350px;
 }
 .LoginScreen .center, .LoginScreen .center-small,
 .SplashScreen .center, .SplashScreen .center-small {
-    background-color:@LoginCenterBottom@;
-    left:50%;
-    overflow:visible;
-    position:absolute;
-    top:40%;
-    z-index:11;
-    @grad(LoginCenterTop,LoginCenterBottom,linear-vertical)@
+	background-color:@LoginCenterBottom@;
+	left:50%;
+	overflow:visible;
+	position:absolute;
+	top:40%;
+	z-index:11;
+	@grad(LoginCenterTop,LoginCenterBottom,linear-vertical)@
 }
 .LoginScreen H1,
 .SplashScreen H1 	{	@LoginH1@ 		}
@@ -334,83 +334,83 @@ BODY {
 .LoginScreen .ImgLoginBanner,
 .LoginScreen .ImgAppBanner,
 .SplashScreen .ImgLoginBanner {
-    cursor:pointer;
-    display:block;
+	cursor:pointer;
+	display:block;
 }
 .LoginScreen .ImgAltBanner,
 .SplashScreen .ImgAltBanner {
-    @ImgAltBanner@
+	@ImgAltBanner@
 }
 .LoginScreen .ZLoginField {
 	@roundCorners(5px)@
 }
 .decor1Outer{
-    margin-left:-250px;
-    margin-top:160px;
-    left:50%;
-    top:40%;
-    z-index:10;
-    width:500px;
-    height:100px;
-    position:absolute;
-    @DecorOpacity@
+	margin-left:-250px;
+	margin-top:160px;
+	left:50%;
+	top:40%;
+	z-index:10;
+	width:500px;
+	height:100px;
+	position:absolute;
+	@DecorOpacity@
 }
 .LoginScreen .decor1,
 .SplashScreen .decor1 {
-    @Decor1@
-    #background:none;/* '#'only ie work*/
-    filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='@DecorImg@');
+	@Decor1@
+	#background:none;/* '#'only ie work*/
+	filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='@DecorImg@');
 }
 
 .LoginScreen .Footer,
 .SplashScreen .Footer {
-    bottom:0;
-    position:absolute;
-    text-align:center;
-    width:100%;
-    z-index:10;
+	bottom:0;
+	position:absolute;
+	text-align:center;
+	width:100%;
+	z-index:10;
 }
 .LoginScreen .copyright,
 .LoginScreen #ZLoginNotice,
 .SplashScreen .copyright {
-    color:@darken(AppC,55)@;
-    cursor:default;
-    @FontSize-normal@
-    margin-bottom:5px;
+	color:@darken(AppC,55)@;
+	cursor:default;
+	@FontSize-normal@
+	margin-bottom:5px;
 }
 .LoginScreen #ZLoginNotice A {
-    color:@darken(AppC,55)@;
+	color:@darken(AppC,55)@;
 }
 
 .form TD {
-    text-align:right;
+	text-align:right;
 }
 
 /*Splash Screen Only Items*/
 .SplashScreen .content {
-    color:@LoginLabelColor@;
-    text-align:center;
+	color:@LoginLabelColor@;
+	text-align:center;
 }
 .SplashScreen .message {
-    @FontSize-bigger@
-    color:@LoginLabelColor@;
-    cursor:default;
-    padding-top:40px;
+	@FontSize-bigger@
+	color:@LoginLabelColor@;
+	cursor:default;
+	padding-top:40px;
 }
 .SplashScreen .switch{
-    margin:100px 100px 0;
+	margin:100px 100px 0;
 }
 .SplashScreen .switch A {
-    @FontSize-normal@
-    color:@LoginLabelColor@;
-    text-decoration:underline;
+	@FontSize-normal@
+	color:@LoginLabelColor@;
+	text-decoration:underline;
 }
 
 .ZLoadingMessage {
-    color:white;
-    font-size:14px;
-    font-weight:bold;
-    padding-top:50px;
+	color:white;
+	font-size:14px;
+	font-weight:bold;
+	padding-top:50px;
 }
 
 /** Logo Images **/
@@ -419,7 +419,7 @@ BODY {
 
 #IFDEF MSIE
 #skin_container_logo A, #skin_container_logo A:hover, #skin_container_logo A:link {
-    background-color:transparent;
+	background-color:transparent;
 }
 #ENDIF
 
@@ -430,30 +430,21 @@ BODY {
 .AboutScreen .WindowInnerContainer,
 .AboutScreen .WindowOuterContainer,
 .AboutScreen .DwtDialogBody {
-    /*Linear gradient backgrounds*/
-    /*background-color:@darken(LoginColor,30)@;
-    background-image:-moz-linear-gradient(top, @LoginColor@, @darken(LoginColor,50)@); /* FF3.6 */
-   /* background-image:-webkit-gradient(linear,left top,left bottom,color-stop(0, @LoginColor@),color-stop(1, @darken(LoginColor,50)@)); /* Saf4+, Chrome */
-   /* filter:progid:DXImageTransform.Microsoft.gradient(startColorStr='@LoginColor@', EndColorStr='@darken(LoginColor,50)@'); /* IE6,IE7 */
-   /* -ms-filter:"progid:DXImageTransform.Microsoft.gradient(startColorStr='@LoginColor@', EndColorStr='@darken(LoginColor,50)@')"; /* IE8 */
-
-    /*Radial gradient backgrounds*/
-  /*  background-image:-moz-radial-gradient(50% 0, circle farthest-corner, @LoginColor@ 0%, @darken(LoginColor,50)@ 100%); /* FF3.6 */
-  /*  background-image:-webkit-gradient( radial, 50% 0%, 0, 50% 0%, 390, from(@LoginColor@), to(@darken(LoginColor,50)@) ); /* Saf4+, Chrome */
-    background-color:@LoginCenterBottom@;
-    @grad(LoginCenterTop,LoginCenterBottom,linear-vertical)@
+	background-color:@LoginCenterBottom@;
+	@grad(LoginCenterTop,LoginCenterBottom,linear-vertical)@
 }
 
-.AboutScreen .copyright {
-    color:@lighten(LoginColor,36)@;
+.AboutScreen>DIV>TABLE>TBODY>TR:first-child>TD {
+	@AppTopBg@
 }
 
+.AboutScreen .copyright,
 .AboutScreen .version {
-    color:@lighten(LoginColor,36)@;
+	color:@lighten(LoginColor,36)@;
 }
 
 .DwtLinkButtonDropDownArrow {
-    width:17px;
+	width:17px;
 }
 
 /*NEW UI STYLES START HERE*/
@@ -461,164 +452,197 @@ BODY {
 
 /* Login and Splash */
 #ZLoginButton{
-    background-color:#DFE2E2;
-    float:right;
+	background-color:#DFE2E2;
+	float:right;
 	@grad(#FFF,#DFE2E2)@
-    @roundCorners(4px)@
+	@roundCorners(5px)@
 }
 
 
 /* Home Group */
 .homeGroupHeader {
-    background-color:@AppC@;
-    height:24px;
-    display:table-cell;
-    vertical-align:middle;
+	background-color:@AppC@;
+	height:24px;
+	display:table-cell;
+	vertical-align:middle;
 }
 
 .homeGroupBody {
-    border:1px solid #DCDCDC;
+	border:1px solid #DCDCDC;
+}
+
+
+/* Task Panel */
+.ZaTaskTabView .XFormCase {
+	background-color:transparent;
 }
 
 /* Vertical Separators */
 
 /* separator in search input */
 .SearchFieldVert {
-    background-color:black;
-    @opacity(50)@
+	background-color:black;
+	@opacity(50)@
 }
 
 .nextVertSep {
-    visibility:hidden;
+	visibility:hidden;
 }
 
 .vertSep {
-    @VertSeparator@;
-    border-width:0;
-    height:100%;
-    margin:0;
-    padding:0;
+	@VertSeparator@;
+	border-width:0;
+	height:100%;
+	margin:0;
+	padding:0;
 }
 
 
 /* Form Items */
 .redAsteric {
-    color:#CB2027;
+	color:#CB2027;
 }
 
 .GroupLabel {
-    font-size:12px;
+	font-size:12px;
 }
 
 /* form items in headers of edited items */
 .ZmSelectedHeaderBg .xform_repeat_label,
 .ZmSelectedHeaderBg .xform_label_left,
 .ZmSelectedHeaderBg .xform_label {
-    text-align:left;
+	text-align:left;
 }
 
 /* wizard items*/
 .ZaXWizardDialogPageDiv .step_body_container {
-    padding:15px;
+	padding:15px;
 }
 
 .DwtListView-Rows .Row-selected {
-    background-color:#B3E0FF !important;
-    color:black;
+	background-color:#B3E0FF !important;
+	color:black;
 }
 
 .DwtListView-Rows .Row {
-    color:#333;
+	color:#333;
 }
 
 .grid_group_container {
-    border:1px solid #D3D3D3;
-    @borderRadius@:5px;
+	border:1px solid #AAA;
+	overflow:hidden;
+	@borderRadius@:5px;
+}
+
+.gridGroupHeader {
+	background-color:#E7E9EA;
+	/*border:#AAA solid;
+	border-width:1px 1px 0;
+	display:table-cell;*/
+	height:24px;
+	vertical-align:middle;
+}
+
+TD.gridGroupBodyLabel {
+	/*background-color:#E4EFF5 !important;*/     /* transparent color*/
+	padding-left:10px;
+	text-align:left;
 }
 
 .grid_table {
-    border-top:1px solid #E4E4E4;
-    border-left:1px solid #AAA;
-    border-spacing:0;
-    padding:0;
+	border-top:1px solid #E4E4E4;
+	/*border-left:1px solid #AAA;*/
+	border-spacing:0;
+	padding:0;
 }
 .grid_table TD {
-    border-right:1px solid #E4E4E4;
-    border-bottom:1px solid #E4E4E4;
+	border-right:1px solid #E4E4E4;
+	border-bottom:1px solid #E4E4E4;
 }
 .grid_table TD TD {
-    border:0;
+	border:0;
 }
 .grid_composite_table,
 .grid_xform_table {
-   border-spacing:0;
-   padding:0;
+	border-spacing:0;
+	padding:0;
 }
 
 .grid_table_cell_sheet {
-    padding:2px;
-    overflow:auto;
+	padding:2px;
+	overflow:auto;
 }
 
 
 /* Help */
 .ZaHelpDropdown {
-    padding:0 15px;
+	padding:0 15px;
 }
 
 .ZaHelpDropdownFirstItem, .ZaHelpDropdownItem, .ZaHelpDropdownLastItem {
-    background-color:white;
-    border-color:#848484;
-    border-style:solid;
-    width:160px;
+	background-color:white;
+	border-color:#848484;
+	border-style:solid;
+	width:160px;
 }
 
 .ZaHelpDropdownFirstItem {
-    border-width:0 1px 0 0;
-    padding:6px 6px 0;
+	border-width:0 1px 0 0;
+	padding:6px 6px 0;
 }
 
 .ZaHelpDropdownItem {
-    border-width:0 1px 0 0;
-    padding:0 6px;
+	border-width:0 1px 0 0;
+	padding:0 6px;
 }
 
 .ZaHelpDropdownLastItem {
-    -moz-border-radius:0 0 3px 3px;
-    border-width:0 1px 1px 0;
-    padding:0 6px 6px;
+	border-width:0 1px 1px 0;
+	padding:0 6px 6px;
+	@roundCorners(0 0 3px 3px)@
 }
 
 .ZaHelpDropdownSearch {
-    -moz-border-radius:3px 3px 0 0;
-    background-color:#DDD;
-    border-color:#848484;
-    border-style:solid;
-    border-width:0 1px 1px 0;
-    padding:4px 8px;
+	background-color:#DDD;
+	border-color:#848484;
+	border-style:solid;
+	border-width:0 1px 1px 0;
+	padding:4px 8px;
+	@roundCorners(3px 3px 0 0)@
 }
 
 #ZaHelpSearchInput {
-    border:white;
-    font-size:12px;
-    margin-left:3px;
-    padding:0;
-    width:116px;
+	border:white;
+	font-size:12px;
+	margin-left:3px;
+	padding:0;
+	width:116px;
 }
 
 .ZaHelpSearchIcon {
-   float:right;
-   margin:2px 4px 0 0;
-   cursor:pointer;
+	float:right;
+	margin:2px 4px 0 0;
+	cursor:pointer;
 }
 
 /* Categorized Search ??? */
 .ZaCategorizedSearchLabel {
-    font-weight:bold;
+	font-weight:bold;
 }
 
 .ZaCategorizedSearchItem {
-    color:blue !important;
+	color:blue !important;
+}
+
+/* Inline Alerts */
+
+.xform_container .DwtTabTable {
+	background-color:transparent;
+	background-image:none;
+}
+
+.xform_container .DwtAlert {
+	@cssShadow@:2px 2px 2px #666;
 }
 
 
@@ -629,217 +653,194 @@ BODY {
 
 
 .XFormCase, .SmallRadioGrouperLabel, .GrouperLabel, .RadioGrouperLabel {
-    /*background:@viewC@;*/
+	background:white;
 }
- 
 
 .DwtTreeItemLevel1ChildDiv {
-    background-color:transparent;
+	background-color:transparent;
 }
 
 .DwtTreeItemLevel1ChildDiv > DIV {
-    margin-top:5px;
+	margin-top:5px;
 
 }
 
 /*  -- Navigator -- */
 
 .ZaCtrAppTreeHeader .DwtLinkButtonTable {
-    cursor:pointer;
-    margin:3px 5px 0;
+	cursor:pointer;
+	margin:3px 5px 0;
 }
 /*
 .ZaCtrAppTreeHeader .DwtLinkButtonTable {
-    height:12px;
-    margin-top:5px;
+	height:12px;
+	margin-top:5px;
 }
 
 .ZaCtrAppTreeHeader  .DwtLinkButtonTable .ZWidgetTitle {
-    background-color:white;
-    height:12px;
-    text-align:center;
-    border-top:1px solid black;
-    border-bottom:1px solid black;
-    border-right:1px solid black;
+	background-color:white;
+	height:12px;
+	text-align:center;
+	border-top:1px solid black;
+	border-bottom:1px solid black;
+	border-right:1px solid black;
 }
 
 .ZaCtrAppTreeHeader  .DwtLinkButtonTable .ZDropDown {
-    border:1px solid;
-    background-color:white;
-    height:12px;
-    @roundCorners(0 5px 5px 0)@
+	border:1px solid;
+	background-color:white;
+	height:12px;
+	@roundCorners(0 5px 5px 0)@
 }
  */
 
 
 .ZaCurrentAppBar>TABLE{
-    margin:0 5px;
+	margin:0 5px;
 }
 
 .AdminTreeItem,
 .AdminTreeItem-selected, 
 .AdminTreeItem-selected-focused, 
 .AdminTreeItem-actioned {
-    padding-left:18px;
+	padding-left:18px;
 }
 
 .AdminTreeItem-selected, 
 .AdminTreeItem-selected-focused  {
-    background-color:#B5D0F1 !important;
+	background-color:#B5D0F1 !important;
 }
 
 .AdminTreeItem-selected .AdminTreeItem-Text,
 .AdminTreeItem-selected-focused .AdminTreeItem-Text {
-    color:black;
+	color:black;
 }
 
 .AdminTreeItem-actioned {
-    @TreeItem@
-    @RightClickBg@
+	@TreeItem@
+	@RightClickBg@
 }
 
 .rootOverviewHeader, 
 .rootOverviewHeader-selected, 
 .rootOverviewHeader-selected-focused {
-    background-color:#3A537F;
-    padding:2px 0 3px 5px;
+	background-color:#3A537F;
+	padding:2px 0 3px 5px;
 }
 
 .homeRootOverviewHeader, 
 .homeRootOverviewHeader-selected, 
 .homeRootOverviewHeader-selected-focused {
-    background-color:#B5D0F1;
-    padding:2px 0 3px 5px;
+	background-color:#B5D0F1;
+	padding:2px 0 3px 5px;
 }
 
 .overviewHeader,
 .overviewHeader-actioned { 
-    margin-top:20px; 	
+	margin-top:20px; 	
 }
 
 .AdminTreeItem-Count {
-    background-color:#708090;
-    color:white;
-    padding:0 3px;
-    text-align:right;
-    width:20px;
-    @roundCorners(4px)@
+	background-color:#708090;
+	color:white;
+	padding:0 3px;
+	text-align:right;
+	width:20px;
+	@roundCorners(4px)@
 }
 
 .rootOverviewHeader-Text {
-    color:white;
-    padding-left:5px;
+	color:white;
+	padding-left:5px;
 }
 
 .homeRootOverviewHeader-Text {
-    color:black;
-    padding-left:5px;
+	color:black;
+	padding-left:5px;
 }
 
 .AdminTreeItem-Text,
 .AdminHomeTreeItem-Text {
-    padding-left:5px;
+	padding-left:5px;
 }
 
 .AdminHomeTreeItem {
-    cursor:pointer;
-    height:18px;
-    padding-left:5px;
+	cursor:pointer;
+	height:18px;
+	padding-left:5px;
 }
 
-/* -- view xform -- */
-
-/*  view xform - header */
-DIV.ZmSelectedHeaderBg {
-    /*background-color:white !important;*/©ƒ
-}
-
-/* view xform - body */
-
-.gridGroupHeader {
-    background-color:#E7E9EA;
-    border:#AAA solid;
-    border-width:1px 1px 0;
-    display:table-cell;
-    height:24px;
-    vertical-align:middle;
-}
-
-.gridGroupBodyLabel {
-    background-color:#E4EFF5 !important;     /* transparent color*/
-    padding-left:10px;
-    text-align:left;
-}
 
 /* -- Task panel -- */
 
 .TaskHeaderPanel {
-    direction:rtl;
+	direction:rtl;
 }
 
 .ImgCollapseRight, .ImgCollapseLeft {
-    cursor:pointer;
-    margin:3px 2px 2px
+	cursor:pointer;
+	margin:3px 2px 2px
 }
 
 .ZaTaskTabView .DwtListView-ColHeader TD {
-    font-weight:bold;
+	font-weight:bold;
 }
 
 .ZaTaskTitleNameHeader {
-    padding:5px 0;
+	padding:5px 0;
 }
 
 .ZaTaskTitleNameHeader TD {
-    font-weight:bold;
+	font-weight:bold;
 }
 
 .ZaTaskListContent {
-    height:126px;
+	height:126px;
 }
 
 /* -- Search panel -- */
 
 .SearchPanel {
-    margin-top:2px;
+	margin-top:2px;
 }
 
 .SearchToolBar {
-    /*background-color:@viewC@;*/
-    @roundCorners(5px)@
+	background-color:white;
+	@roundCorners(5px)@
 #IFNDEF MSIE
-    border:1px solid white;
+	border:1px solid white;
 #ENDIF
 }
 
 .SearchTBSearchField {
-    background-color:white;
+	/*background-color:white;*/
+	@roundCorners(5px)@
 }
 
 .SearchTBSearchField .oselect, .oselect_check {
-    background-color:white;
-    border-width:0;
+	background-color:white;
+	border-width:0;
 }
 
 .SearchTBSearchField .dynselect_display {
-    border-width:0;
+	border-width:0;
 }
 
 .SearchTBSearchField .ZButtonBorder  {
-    background-color:white;
-    border-width:0;
+	background-color:white;
+	border-width:0;
 }
 /*
 .ZaSearchFieldButton ZWidgetTable ZButtonTable ZButtonBorder .zwidget, 
 .ZaSearchFieldButton ZWidgetTable ZButtonTable ZButtonBorder .zwidget * {
-    background-color:white;
+	background-color:white;
 }
 */
 
 .SearchTBSearchField .zwidget,
 .SearchTBSearchField .zwidget * {
-    background-color:white;
-    border-width:0;
+	background-color:white;
+	border-width:0;
 }
 
 /* -- Dialog -- */
@@ -847,194 +848,207 @@ DIV.ZmSelectedHeaderBg {
 /* new account dialog */
 
 .AdminOutputTab {
-    min-height:18px;
-    padding:3px 15px 2px;
+	min-height:18px;
+	padding:3px 15px 2px;
 }
 
 .AdminOutputTabSelect {
-    background-color:#4682B4;
-    color:white;
-    min-height:18px;
-    padding:3px 15px 2px;
-    @roundCorners(4px)@
+	background-color:#4682B4;
+	color:white;
+	min-height:18px;
+	padding:3px 15px 2px;
+	@roundCorners(4px)@
 }
 
+/* Wizards */
+
+.step_container {
+	background-color:#EFEFEF;
+	border:0;
+	color:#333;
+	padding:10px 5px 10px 6px;
+}
+
+/* General Dialog*/ 
+
 .WindowOuterContainer {
-    background-color:#EAEAEA;
-    border:1px solid;
-    padding:1px;
-    @roundCorners(5px)@
+	background-color:#EAEAEA;
+	border:1px solid #A3A3A3;
+	overflow:hidden;
+	padding:0;
+	@cssShadow@:2px 2px 10px #666;
+	@roundCorners(5px)@
 }
 
 .WindowInnerContainer {
-    background-color:#DADADA;
-    border:0;
-    padding:0;
-}
-
-.step_container {
-    background-color:#E4EFF6;
-    border:0;
-    color:#666;
-    font:Arial bold 16pt;
-    padding:5px;
+	background-color:#DADADA;
+	border:0;
+	padding:0;
 }
 
 .DwtDialogHeader {
-    background-color:#DFE1E5;
+	/*background-color:#DFE1E5;*/
+	/*@grad(#ECECEC,#C1C1C1)@*/
+	@AppTopBg@
 }
 
 .DwtDialogTitle {
-    color:#333;
-    font-family:Arial;
-    font-size:12pt;
-    font-weight:bold;
-    height:27px;
-    vertical-align:middle;
+	color:#333;
+	font-size:12px;
+	font-weight:bold;
+	height:27px;
+	vertical-align:middle;
 }
 
-.DwtDialogMinIcon {
-
-}
+.DwtDialogMinIcon {}
 
 .DwtDialogBody {
-    background-color:#FCFCFC;
+	background-color:white;
 }
 
 .DwtDialogButtonBar {
-    height:40px;
-    background-color:#DADFE5;
+	height:40px;
+	background-color:#DADFE5;
 }
 
 .DwtDialogButtonBar .ZButtonBorder {
-    background-color:#FEFEFE;
-    border:1px solid #949494;
-    @roundCorners(3px)@
+	background-color:#FEFEFE;
+	border:1px solid #949494;
+	@roundCorners(3px)@
 }
 
 .DwtDialogButtonBar .ZButtonTable .ZWidgetTitle {
-    color:#333333;
-    font:Arial 12px normal;
-    @roundCorners(3px)@
+	@FontFamily-default@
+	color:#333;
+	font-size:12px;
 }
 
 .DwtDialogButtonBar .ZDisabled .ZButtonTable .ZWidgetTitle {
-    border:1px solid #949494;
-    color:#999;
-    font:Arial 12px normal;
-    @roundCorners(3px)@
+	color:#999;
 }
 
 .DwtDialogButtonBar .ZHover .ZButtonBorder {
-    background-color:#C7E9FF;
-    border:1px solid #949494;
-    font:Arial 12px normal;
+	background-color:#C7E9FF;
+	border:1px solid #949494;
+	color:black;
     @roundCorners(3px)@
 }
 
 .horizSep {
-    border-bottom:1px solid #E0E0E0;
-    margin:0;
+	display:none;
+	/*border-bottom:1px solid #E0E0E0;
+	margin:0;*/
 }
 
+
+
 .VeilOverlay {
-    background-color:black;
-    @opacity(35)@;
+	background-color:black;
+	@opacity(35)@;
 }
 
 .ZaToolBar {
-    display:none;
+	display:none;
 }
 
-.ZaHomeWarningPanel {
-    background-color:#FFC;
-    border:1px solid;
-    border-color:transparent transparent #EFE69B;
-    padding:12px;
+
+/* Info Panels on Home Screen */
+
+.ZaHomeWarningPanel > * {
+	background-color:#FFC;
+	border:1px solid;
+	border-color:transparent #EFE69B #EFE69B;
+	margin:0 auto;
+	padding:12px;
+	width:98%;
+	@roundCorners(0 0 5px 5px)@
 }
 
-.ZaHomeWarnginItem {
-    padding:1px 0 2px;
+.ZaHomeWarningItem {
+	padding:1px 0 2px;
 }
 
 .ZaLinkedItem {
-    color:#369;
-    cursor:pointer;
+	color:#369;
+	cursor:pointer;
 }
 
 .ZaHomeInfoTitle {
-    color:#86A1B6;
-    font-size:16pt;
-    font-weight:bold;
-    margin-bottom:5px;
+	color:#86A1B6;
+	font-size:16pt;
+	font-weight:bold;
+	margin-bottom:5px;
 }
 
 .ZaHomeInfoPanel {
-    padding:12px;
+	padding:12px;
 }
 
+
+
 .ZaHomeTabView .xform_label {
-    text-align:left;
+	text-align:left;
+	white-space:no-wrap;
 }
 
 .ZaHomeSetupPanelContainer {
-    padding:12px;
+	padding:12px;
 }
 
 .ZaHomeSetupPanel{
-    background-color:#F3F7FB;
-    border:1px solid #E7ECF2;
-    @roundCorners(10px)@
+	background-color:#F3F7FB;
+	border:1px solid #E7ECF2;
+	@roundCorners(10px)@
 }
 
 .ZaHomeSetupPanelContent {
-    padding:12px;
+	padding:12px;
 }
 
 .ZaHomeSetupHeader {
-    padding-bottom:8px;
+	padding-bottom:8px;
 }
 
 .ZaHomeSetupTitle {
-    color:#86A1B6;
-    font-size:16pt;
-    font-weight:bold;
+	color:#86A1B6;
+	font-size:16pt;
+	font-weight:bold;
 }
 
 .ZaHomeLinkItemLabel {
-    color:#86A1B6;
+	color:#86A1B6;
 }
 
 .NoResults {
-    @FontFamily-default@
+	@FontFamily-default@
 }
 
 .ZaCurrentAppBar .ZDisabled .ZToolbarButtonTable .ZWidgetTitle {
-    color:#747474;
+	color:#747474;
 }
 
 .ZaSearchOptionDialog .ZaSearchOptionOverview {
-    padding:4px;
+	padding:4px;
 }
 .ZaSearchOptionDialog {
-    border:1px solid black;
+	border:1px solid black;
 }
 
 #IFDEF MSIE
 .DwtDialog .WindowOuterContainer TABLE {
-    border-collapse:collapse;
+	border-collapse:collapse;
 }
 #ENDIF
 
 .addrBubble {
-    background-color:#EEE;
-    border:1px solid #999;
-    color:black;
-    display:inline-block;
-    margin-bottom:2px;
-    margin-left:3px;
-    padding:1px 3px;
-    @roundCorners(4px)@;
+	background-color:#EEE;
+	border:1px solid #999;
+	color:black;
+	display:inline-block;
+	margin-bottom:2px;
+	margin-left:3px;
+	padding:1px 3px;
+	@roundCorners(4px)@;
 }
 
 

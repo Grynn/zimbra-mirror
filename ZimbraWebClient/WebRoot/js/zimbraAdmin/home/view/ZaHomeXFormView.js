@@ -248,10 +248,10 @@ ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
     }
 
     var case1 = {type:_ZATABCASE_, numCols: 3,  colSizes:["37%", "34%", "29%"], caseKey:1,
-        paddingStyle: "", width: "100%", cellpadding: 0,
-//        height:"400px",  align:_LEFT_, valign:_TOP_,
+        paddingStyle: "", width: "100%",
+//      cellpadding: 0, height:"400px",  align:_LEFT_, valign:_TOP_,
         items:[
-            {type:_GROUP_, colSpan: "*", numCols:1, containerCssClass:"ZaHomeWarningPanel", width:"100%", items:[
+            {type:_GROUP_, colSpan: "*", numCols:1, containerCssClass:"ZaHomeWarningPanel", items:[
 
                 {type:_GROUP_, numCols:3,  width:"100%", colSizes:ZaHomeXFormView.getWarningPanelCol(), containerCssClass:"ZaHomeWarnginItem",
                     visibilityChecks:[[XForm.checkInstanceValueNot,ZaHome.A2_serviceStatus,true],[ZaHomeXFormView.showStatusInfo]],
@@ -286,7 +286,7 @@ ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
                     {type:_OUTPUT_, label:ZaMsg.LBL_HomeDomainNum, ref: ZaHome.A2_domainNum, bmolsnr: true},
                     {type:_OUTPUT_, label:ZaMsg.LBL_HomeCosNum, ref: ZaHome.A2_cosNum, bmolsnr: true}
                 ]},
-                {type:_GROUP_, id:"mainenance_grp", numCols: 2, valign: _TOP_, width:"100%", items:[
+                {type:_GROUP_, id:"maintenance_grp", numCols: 2, valign: _TOP_, width:"100%", items:[
                     {type:_OUTPUT_, colSpan:"*", value:ZaMsg.LBL_HomeMaintenance, cssClass:"ZaHomeInfoTitle",
                         visibilityChangeEventSources:[ZaHome.A2_maintenanceItemNum],
                         visibilityChecks:[[ZaHomeXFormView.showMT]]
@@ -331,7 +331,7 @@ ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
                         {type:_OUTPUT_, ref: ZaHome.A2_DBCheckMessage}
                     ]} */
                 ]},
-                {type:_GROUP_, numCols: 2, colSizes:["*", "90px"], valign: _TOP_, width: "100%", items:[
+                {type:_GROUP_, numCols: 2, colSizes:["*", "90px"], valign: _TOP_, items:[
                     {type:_OUTPUT_, colSpan:"2", value:ZaMsg.LBL_HomeRuntime, cssClass:"ZaHomeInfoTitle"},
                     {type:_OUTPUT_, label:ZaMsg.LBL_HomeService, ref: ZaHome.A2_serviceStatus, bmolsnr: true,
                         visibilityChecks:[[ZaHomeXFormView.showStatusInfo]],

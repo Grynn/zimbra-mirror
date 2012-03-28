@@ -592,7 +592,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 						{ type: _DWT_ALERT_,
 						  containerCssStyle: "padding-bottom:0px",
 						  style: DwtAlert.WARNING,
-						  iconVisible: false,
+						  iconVisible: true,
 						  content: ZaMsg.Alert_ServerRestart
 						},
 						{type: _ZA_TOP_GROUPER_, label:ZaMsg.Global_IMAP_ServiceGrp,
@@ -656,7 +656,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 						{ type: _DWT_ALERT_,
 						  containerCssStyle: "padding-bottom:0px",
 						  style: DwtAlert.WARNING,
-						  iconVisible: false,
+						  iconVisible: true,
 						  content: ZaMsg.Alert_ServerRestart
 						},
 						{type: _ZA_TOP_GROUPER_, label:ZaMsg.Global_POP_ServiceGrp,
@@ -718,7 +718,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
                             { type: _DWT_ALERT_,
                               containerCssStyle: "padding-bottom:0px",
                               style: DwtAlert.WARNING,
-                              iconVisible: false,
+                              iconVisible: true,
                               content: ZaMsg.Alert_AmavisdRestart
                             },
 						  	{ ref: ZaGlobalConfig.A_zimbraSpamKillPercent, type: _INPUT_,
@@ -1109,7 +1109,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 		{ type: _DWT_ALERT_,
 		  cssClass: "DwtTabTable",
 		  containerCssStyle: "padding-bottom:0px",
-		  style: DwtAlert.WARNING,
+		  style: DwtAlert.INFO,
 		  iconVisible: false,
 		  content: ZaMsg.Alert_GlobalConfig,
 		  id:"xform_header"
@@ -1126,7 +1126,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
             { type: _DWT_ALERT_,
               cssClass: "DwtTabTable",
               containerCssStyle: "padding-bottom:0px",
-              style: DwtAlert.WARNING,
+              style: DwtAlert.INFO,
               iconVisible: false,
               content: ZaMsg.Alert_GlobalConfig,
               id:"xform_header"

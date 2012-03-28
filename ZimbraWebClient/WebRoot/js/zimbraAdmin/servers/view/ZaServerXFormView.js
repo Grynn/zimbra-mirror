@@ -1043,7 +1043,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 					items:[
 						{ type: _DWT_ALERT_,
 						  containerCssStyle: "padding-bottom:0px",
-						  style: DwtAlert.WARNING,
+						  style: DwtAlert.INFO,
 						  iconVisible: false,
 						  content: ZaMsg.Alert_ServerRestart
 						}
@@ -1115,7 +1115,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 					items:[
 						{ type: _DWT_ALERT_,
 						  containerCssStyle: "padding-bottom:0px",
-						  style: DwtAlert.WARNING,
+						  style: DwtAlert.INFO,
 						  iconVisible: false,
 						  content: ZaMsg.Alert_ServerRestart
 						},
@@ -1298,7 +1298,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 						items: [
 							{type: _DWT_ALERT_,
 									containerCssStyle: "padding-bottom:0px",
-									style: DwtAlert.WARNING,
+									style: DwtAlert.INFO,
 									iconVisible: false,
 									content: ZaMsg.MSG_ConfigIpAddressBindings
 							},

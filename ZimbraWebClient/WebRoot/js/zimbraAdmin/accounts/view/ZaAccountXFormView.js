@@ -1737,9 +1737,9 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 		colSizes:["275px","*"],numCols:2,
 		items:[ 
                 { type: _DWT_ALERT_, containerCssStyle: "padding-bottom:0px",
-                      //style: DwtAlert.WARNING,iconVisible: (!ZaAccountXFormView.isAuthfromInternal(entry.name)),
+                      //style: DwtAlert.INFO,iconVisible: (!ZaAccountXFormView.isAuthfromInternal(entry.name)),
                       //content: ((ZaAccountXFormView.isAuthfromInternal(entry.name))?ZaMsg.Alert_InternalPassword:ZaMsg.Alert_ExternalPassword)
-                      style: DwtAlert.WARNING,iconVisible: false,
+                      style: DwtAlert.INFO,iconVisible: false,
                       content: ZaMsg.Alert_InternalPassword
 
                 },
@@ -1998,7 +1998,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 				items: [
 					{ type: _DWT_ALERT_,
 					  containerCssStyle: "padding-top:20px;width:400px;",
-					  style: DwtAlert.WARNING,
+					  style: DwtAlert.INFO,
 					  iconVisible: false, 
 					  content: ZaMsg.NAD_CheckFeaturesInfo
 					},				
@@ -3219,7 +3219,7 @@ nowrap:false, labelWrap:true,
                         			ZaAccount.A_zimbraEnforcePwdHistory]]],
 							items: [ 
 						                { type: _DWT_ALERT_, containerCssStyle: "padding-bottom:0px", colSpan:3,
-						                      style: DwtAlert.WARNING,iconVisible: (!ZaAccountXFormView.isAuthfromInternal(entry.name)),
+						                      style: DwtAlert.INFO,iconVisible: (!ZaAccountXFormView.isAuthfromInternal(entry.name)),
 						                      content: ((ZaAccountXFormView.isAuthfromInternal(entry.name))?ZaMsg.Alert_InternalPassword:ZaMsg.Alert_ExternalPassword)
 						                },
 								{ref:ZaAccount.A_zimbraPasswordLocked, type:_SUPER_CHECKBOX_, 
@@ -3393,7 +3393,7 @@ nowrap:false, labelWrap:true,
 							items: [
                                 { type: _DWT_ALERT_,
                                   containerCssStyle: "padding:10px;padding-top: 0px; width:100%;",
-                                  style: DwtAlert.WARNING,
+                                  style: DwtAlert.INFO,
                                   iconVisible: false,
                                   content: ZaMsg.Alert_EnableMailRetention,
                                   visibilityChecks:[ZaAccount.isEmailRetentionPolicyDisabled],

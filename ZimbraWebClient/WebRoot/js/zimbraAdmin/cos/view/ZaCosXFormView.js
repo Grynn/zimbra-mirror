@@ -1105,7 +1105,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
             id:"cos_form_advanced_tab"};
         var case7Items = [
             { type: _DWT_ALERT_,
-              style: DwtAlert.WARNING,
+              style: DwtAlert.INFO,
 	      iconVisible: false,
 	      content: ZaMsg.NAD_ZERO_UNLIMETED
 	    },      
@@ -1233,7 +1233,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
                 items: [ 
                     { type: _DWT_ALERT_,
                       containerCssStyle: "padding-bottom:0px",
-                      style: DwtAlert.WARNING,
+                      style: DwtAlert.INFO,
                       iconVisible:  false,
                       content: ((ZaCosXFormView.isAllAuthfromInternal())?ZaMsg.Alert_InternalPassword:ZaMsg.Alert_ExternalPassword)
                     },
@@ -1350,7 +1350,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
                 items: [
                     { type: _DWT_ALERT_,
                       containerCssStyle: "padding-bottom:0px",
-                      style: DwtAlert.WARNING,
+                      style: DwtAlert.INFO,
                       iconVisible: false,
                       content: ZaMsg.Alert_MailRetention
                     },
