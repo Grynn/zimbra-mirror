@@ -15,7 +15,6 @@ PATCH	:=
 
 ifdef BETA
 	include $(OPENLDAP_ROOT)/../beta_versions.def
-	PATCH	:= patch -g0 -N -p1 < ../patches/ITS7195.patch; patch -g0 -N -p1 < ../patches/ITS7196.patch; patch -g0 -N -p1 < ../patches/ITS7191.patch; patch -g0 -N -p1 < ../patches/mdb-comments.patch; patch -g0 -N -p1 < ../patches/ITS7190.patch;
 else
 	include $(OPENLDAP_ROOT)/../versions.def
 	PATCH	:= patch -g0 -N -p1 < ../patches/ITS7195.patch; patch -g0 -N -p1 < ../patches/ITS7196.patch; patch -g0 -N -p1 < ../patches/ITS7191.patch; patch -g0 -N -p1 < ../patches/mdb-comments.patch; patch -g0 -N -p1 < ../patches/ITS7190.patch;
