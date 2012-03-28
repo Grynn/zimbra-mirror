@@ -438,8 +438,15 @@ public class CSMigrationWrapper
                             string Key = data[0, i];
                             string Value = data[1, i];
 
-                            dict.Add(Key, Value);
-                            // Console.WriteLine("{0}, {1}", so1, so2);
+                            try
+                            {
+                                dict.Add(Key, Value);
+                            }
+                            catch (Exception e)
+                            {
+                                string s = string.Format("Exception adding {0}/{1}: {2}", Key, Value, e.Message);
+                                Log.warn(s);
+                            }
                         }
 
                         api.AccountID = Acct.AccountID;
