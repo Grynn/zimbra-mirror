@@ -2,6 +2,7 @@ CURL_ROOT := $(shell pwd)
 P4_ROOT ?= $(shell cd $(CURL_ROOT)/../..; pwd)
 MAKE ?= make
 MAKEARGS ?= -j2
+SED ?= sed
 
 BUILD_PLATFORM ?= $(shell sh $(P4_ROOT)/ZimbraBuild/rpmconf/Build/get_plat_tag.sh)
 
@@ -79,6 +80,7 @@ check:
 build:
 	tar xzf src/curl-$(CURL_VERSION).tar.gz
 	(cd curl-$(CURL_VERSION); \
+	$(SED) -i -e 's|https://mxr.mozilla.org|http://mxr.mozilla.org|' lib/mk-ca-bundle.pl; \
 	$(PATCH) \
 	./buildconf; \
 	DYLD_LIBRARY_PATH=$(OPENSSL_LIB_DIR):$(HEIMDAL_LIB_DIR):$(CURL_LIB_DIR) \
