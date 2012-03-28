@@ -824,14 +824,24 @@ function(account) {
 		var publicMailURL = account[ZaAccount.A2_publicMailURL];
 	    if (AjxUtil.IP_ADDRESS_RE.test(location.hostname) && publicMailURL) {
 			// Here we guess user prefer to use IP, if possible, I will replace FQDN with IP
-
 			try {
-				var startIndex = account[ZaAccount.A2_publicMailURL].indexOf("//");
-				var endIndex = account[ZaAccount.A2_publicMailURL].indexOf(":", startIndex);
-				if (endIndex == -1) {
-					endIndex = account[ZaAccount.A2_publicMailURL].indexOf("/", startIndex);
+				var startIndex = publicMailURL.indexOf("//");
+				if (startIndex != -1) {
+					startIndex = startIndex + 2;
+				} else {
+					startIndex = 0;
 				}
-				var mailFQDN = account[ZaAccount.A2_publicMailURL].substring(startIndex + 2, endIndex);
+				//Search Port
+				var endIndex = publicMailURL.indexOf(":", startIndex);
+				if (endIndex == -1) {
+					endIndex = publicMailURL.indexOf("/", startIndex);
+				}
+				var mailFQDN 
+				if (endIndex != -1) {
+					mailFQDN= publicMailURL.substring(startIndex, endIndex);
+				} else {
+				 	mailFQDN= publicMailURL.substring(startIndex);
+				}
 				var servers = ZaServer.getAll().getArray();
 				var mailBoxIP = "";
 				if(servers.length > 1) {
