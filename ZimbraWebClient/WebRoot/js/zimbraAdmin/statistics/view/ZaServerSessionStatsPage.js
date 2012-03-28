@@ -461,7 +461,7 @@ ZaServerSessionStatsPage.prototype._getXForm = function () {
 		   {type:_SWITCH_, align:_LEFT_, valign:_TOP_,
 		    items:[
 			   {type:_ZATABCASE_, caseKey:1, align:_LEFT_, valign:_TOP_, 
-			   		cssStyle: "position: absolute; overflow: auto;",
+			   		cssStyle: "position: absolute; overflow: auto;", paddingStyle:"",
 					getCustomWidth:ZaServerSessionListView.getCustomWidth,
 					getCustomHeight:ZaServerSessionListView.getCustomHeight,
 			    items:[
@@ -472,7 +472,7 @@ ZaServerSessionStatsPage.prototype._getXForm = function () {
 				   ]
 			   },
 			   {type:_ZATABCASE_,  caseKey:2, align:_LEFT_, valign:_TOP_, 
-			    	cssStyle: "position: absolute; overflow: auto;",
+			    	cssStyle: "position: absolute; overflow: auto;", paddingStyle:"",
 					getCustomWidth:ZaServerSessionListView.getCustomWidth,
 					getCustomHeight:ZaServerSessionListView.getCustomHeight,
 			    items:[
@@ -483,7 +483,7 @@ ZaServerSessionStatsPage.prototype._getXForm = function () {
 				   ]
 			   },
 			   {type:_ZATABCASE_, caseKey:3, align:_LEFT_, valign:_TOP_, 
-			    	cssStyle: "position: absolute; overflow: auto;",
+			    	cssStyle: "position: absolute; overflow: auto;", paddingStyle:"",
 					getCustomWidth:ZaServerSessionListView.getCustomWidth,
 					getCustomHeight:ZaServerSessionListView.getCustomHeight,
 			    items:[
