@@ -200,11 +200,19 @@ public class CSMigrationWrapper
 
     public CSMigrationWrapper(string mailClient)
     {
-        InitLogFile("migration", Log.Level.Info);
-        Log.info("Initializing migration");
-        MailClient = mailClient;
-        if (MailClient == "MAPI") {
-            MailWrapper = new Exchange.MapiWrapper();
+        try
+        {
+            InitLogFile("migration", Log.Level.Info);
+            Log.info("Initializing migration");
+            MailClient = mailClient;
+            if (MailClient == "MAPI")
+            {
+                MailWrapper = new Exchange.MapiWrapper();
+            }
+        }
+        catch (Exception e)
+        {
+            Log.err("Exception in CSMigrationWrapper construcor", e.Message);
         }
     }
 
@@ -412,7 +420,16 @@ public class CSMigrationWrapper
         ZimbraAPI api, string path, MigrationOptions options)
     {
         DateTime dt = DateTime.UtcNow;
-        dynamic[] itemobjectarray = user.GetItemsForFolder(folder, dt.ToOADate());
+        
+        dynamic[] itemobjectarray = null ;
+        try
+        {
+            itemobjectarray = user.GetItemsForFolder(folder, dt.ToOADate());
+        }
+        catch (Exception e)
+        {
+            Log.err("exception in ProcessItems->user.GetItemsFolder", e.Message);
+        }
         int iProcessedItems = 0;
 
         if (itemobjectarray.GetLength(0) > 0)
@@ -428,24 +445,36 @@ public class CSMigrationWrapper
                         bool bError = false;
                         bool bSkipMessage = false;
                         Dictionary<string, string> dict = new Dictionary<string, string>();
-                        string[,] data = itemobject.GetDataForItemID(user,
-                                       itemobject.ItemID, itemobject.Type);
+                        string[,] data = null;
+                        try
+                        {
+                            data = itemobject.GetDataForItemID(user,
+                                            itemobject.ItemID, itemobject.Type);
+                        }
+                        catch (Exception e)
+                        {
+                            Log.err("exception in ProcessItems->itemobject.GetDataForItemID", e.Message);
+                        }
 
                         int bound0 = data.GetUpperBound(0);
-
-                        for (int i = 0; i <= bound0; i++)
+                        if (bound0 > 0)
                         {
-                            string Key = data[0, i];
-                            string Value = data[1, i];
+                            for (int i = 0; i <= bound0; i++)
+                            {
+                                string Key = data[0, i];
+                                string Value = data[1, i];
 
-                            try
-                            {
-                                dict.Add(Key, Value);
-                            }
-                            catch (Exception e)
-                            {
-                                string s = string.Format("Exception adding {0}/{1}: {2}", Key, Value, e.Message);
-                                Log.warn(s);
+                                try
+                                {
+                                    dict.Add(Key, Value);
+                                    // Console.WriteLine("{0}, {1}", so1, so2);
+                                }
+                                catch (Exception e)
+                                {
+                                    string s = string.Format("Exception adding {0}/{1}: {2}", Key, Value, e.Message);
+                                    Log.warn(s);
+                                    // Console.WriteLine("{0}, {1}", so1, so2);
+                                }
                             }
                         }
 
@@ -508,7 +537,16 @@ public class CSMigrationWrapper
                                         dict.Add("tags", tagsNumstrs);
                                     }
                                     dict.Add("folderId", folder.FolderPath);
-                                    stat = api.AddMessage(dict);
+                                    try
+                                    {
+                                        stat = api.AddMessage(dict);
+                                    }
+                                    catch (Exception e)
+                                    {
+
+                                        Log.err("Exception caught in ProcessItems->api.AddMessage", e.Message);
+
+                                    }
                                 }
                             }
                             else if (type == foldertype.Contacts)
@@ -521,7 +559,16 @@ public class CSMigrationWrapper
                                     bool bRet = dict.Remove("tags");
                                     dict.Add("tags", tagsNumstrs);
                                 }
-                                stat = api.CreateContact(dict, path);
+                                try
+                                {
+                                    stat = api.CreateContact(dict, path);
+                                }
+                                catch (Exception e)
+                                {
+                                    Log.err("Exception caught in ProcessItems->api.CreateContact", e.Message);
+
+
+                                }
                             }
                             else if (type == foldertype.Calendar)
                             {
@@ -543,7 +590,17 @@ public class CSMigrationWrapper
                                     }
                                 }
                                 if (!bSkipMessage)
-                                    stat = api.AddAppointment(dict, path);
+                                {
+                                    try
+                                    {
+                                        stat = api.AddAppointment(dict, path);
+                                    }
+                                    catch(Exception e)
+                                    {
+                                        Log.err("exception caught in ProcessItems->api.AddAppointment", e.Message);
+
+                                    }
+                                }
                             }
                             else if (type == foldertype.Task)
                             {
@@ -564,7 +621,16 @@ public class CSMigrationWrapper
                                     }
                                 }
                                 if (!bSkipMessage)
-                                    stat = api.AddTask(dict, path);
+                                {
+                                    try
+                                    {
+                                        stat = api.AddTask(dict, path);
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        Log.err("exception caught in ProcessItems->api.AddTask", e.Message);
+                                    }
+                                }
                             }
                         }
                         else
@@ -594,7 +660,7 @@ public class CSMigrationWrapper
         isServer = true, bool isVerbose = false, bool isPreview = false)
     {
         string accountName = "";
-        dynamic[] folders;
+        dynamic[] folders = null;
         int idx = Acct.AccountName.IndexOf("@");
         dynamic user = new Exchange.UserObject();       
         string value = "";
@@ -663,7 +729,22 @@ public class CSMigrationWrapper
         }
 
         Log.debug("Retrieving folders");
-        folders = user.GetFolders();
+        try
+        {
+
+            folders = user.GetFolders();
+        }
+        catch (Exception e)
+        {
+            Log.err("exception in startmigration->user.GetFolders", e.Message);
+            
+        }
+        if (folders.Count() == 0)
+        {
+
+            Log.debug("No folders for user to migrate");
+            return;
+        }
         Acct.migrationFolder.CurrentCountOfItems = folders.Count();
         Log.debug("Retrieved folders.  Count:", Acct.migrationFolder.CurrentCountOfItems.ToString());
 
@@ -691,7 +772,15 @@ public class CSMigrationWrapper
                 api.AccountName = Acct.AccountName;
 
                 string ViewType = GetFolderViewType(folder.ContainerClass);
-                int stat = api.CreateFolder(folder.FolderPath, ViewType);
+                try
+                {
+
+                    int stat = api.CreateFolder(folder.FolderPath, ViewType);
+                }
+                catch (Exception e)
+                {
+                    Log.err("Exception in api.CreateFolder in Startmigration ", e.Message);
+                }
 
                 path = folder.FolderPath;
             }
@@ -718,7 +807,15 @@ public class CSMigrationWrapper
         // now do Rules
         if (options.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Rules))
         {
-            string[,] data = user.GetRules();
+            string[,] data  = null;
+            try
+            {
+                data = user.GetRules();
+            }
+            catch (Exception e)
+            {
+                Log.err("Exception in StartMigration->user.Getrules", e.Message);
+            }
             if (data != null)
             {
                 Acct.TotalItems++;
@@ -755,7 +852,15 @@ public class CSMigrationWrapper
         if (options.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.OOO))
         {
             bool isOOO = false;
-            string ooo = user.GetOOO();
+            string ooo ="";
+            try
+            {
+                ooo = user.GetOOO();
+            }
+            catch (Exception e)
+            {
+                Log.err("Exception in StartMigration->user.GetOOO", e.Message);
+            }
             if (ooo.Length > 0)
             {
                 isOOO = (ooo != "0:");
@@ -780,8 +885,15 @@ public class CSMigrationWrapper
                 Log.info("Out of Office state is off, and there is no message");
             }
         }
+        try
+        {
+            user.Uninit();
+        }
+        catch (Exception e)
+        {
+            Log.err("Exception in user.Uninit ", e.Message);
 
-        user.Uninit();
+        }
         if (!isServer)
         {
             m_umUser = null;
