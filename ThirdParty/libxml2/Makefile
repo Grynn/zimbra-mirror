@@ -16,6 +16,7 @@ XML_NAME = libxml2
 XML_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/$(XML_NAME)/$(XML_NAME)-$(XML_VERSION).tgz
 INSTALL_PREFIX := $(ZIMBRA_HOME)/$(XML_NAME)-$(XML_VERSION)
 XML_CONFIGURE ?= --prefix=$(INSTALL_PREFIX) --enable-shared=no --enable-static=yes --without-python
+LDFLAGS	:= LDFLAGS="-Wl,-rpath,$(INSTALL_PREFIX)/lib"
 
 ifeq ($(BUILD_PLATFORM), )
 	BUILD_PLATFORM := "UNKNOWN"
@@ -32,6 +33,7 @@ build:
 	(tar xzf src/$(XML_NAME)-$(XML_VERSION).tar.gz; \
 	mv $(XML_NAME)-$(XML_VERSION) $(XML_NAME)-$(XML_VERSION); \
 	cd $(XML_NAME)-$(XML_VERSION); \
+	$(LDFLAGS) \
 	CFLAGS="-g -O2 -fPIC" \
 	./configure $(XML_CONFIGURE); $(MAKE) $(MAKEARGS); $(MAKE) install)
 	(cp -f $(XML_NAME)-$(XML_VERSION)/COPYING $(INSTALL_PREFIX)/LICENSE)

@@ -70,8 +70,13 @@ LIBS="/opt/zimbra/libxml2/lib/libxml2.a" CFLAGS="-D_REENTRANT -g -O2 -I/opt/zimb
             --with-libxml2=/opt/zimbra/libxml2-${xml2_version}/bin/xml2-config \
             --with-configdir=/opt/zimbra/conf/sasl2 \
             --enable-login
-else 
-LIBS="/opt/zimbra/libxml2/lib/libxml2.a" CFLAGS="-D_REENTRANT -g -O2 -I/opt/zimbra/libxml2/include/libxml2" ./configure --enable-zimbra --prefix=/opt/zimbra/${cyrus_src} \
+else
+	if [ $build_platform = "UBUNTU12_64" ]; then
+		xmllib='/opt/zimbra/libxml2/lib/libxml2.a -lz -lm'
+	else
+		xmllib='/opt/zimbra/libxml2/lib/libxml2.a'
+	fi
+LIBS="${xmllib}" CFLAGS="-D_REENTRANT -g -O2 -I/opt/zimbra/libxml2/include/libxml2" ./configure --enable-zimbra --prefix=/opt/zimbra/${cyrus_src} \
             --with-saslauthd=/opt/zimbra/data/sasl2/state \
             --with-plugindir=/opt/zimbra/${cyrus_src}/lib/sasl2 \
             --with-dblib=no \
