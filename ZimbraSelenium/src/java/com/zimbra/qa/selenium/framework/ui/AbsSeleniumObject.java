@@ -8,14 +8,12 @@ import java.util.Set;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
-import org.openqa.selenium.HasInputDevices;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.Mouse;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverBackedSelenium;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.internal.Locatable;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import com.google.common.base.Function;
@@ -292,12 +290,9 @@ public abstract class AbsSeleniumObject {
 
 		}
 		if (ZimbraSeleniumProperties.isWebDriver()){
-			sMouseOver(locator);
 			WebElement we = getElement(locator);
-			//2.17
-			//Actions action = new Actions(webDriver());
-			//action.click(we).build().perform();	
-			we.click();
+			Actions action = new Actions(webDriver());
+			action.click(we).build().perform();			
 		}
 		else if(ZimbraSeleniumProperties.isWebDriverBackedSelenium()){
 			webDriverBackedSelenium().clickAt(locator, coord);
@@ -883,11 +878,10 @@ public abstract class AbsSeleniumObject {
 	public void sMouseOver(String locator) throws HarnessException {
 		if (ZimbraSeleniumProperties.isWebDriver()){
 			WebElement we = getElement(locator);
-			//2.17
-			//Actions action = new Actions(webDriver());    
-		    //action.moveToElement(we).build().perform();
-			Mouse mouse = ((HasInputDevices) webDriver()).getMouse(); 
-			mouse.mouseMove(((Locatable)we).getCoordinates());
+			//Mouse mouse = ((HasInputDevices) webDriver()).getMouse();
+		   	//mouse.mouseMove(((Locatable)we).getCoordinates());
+		   	Actions action = new Actions(webDriver());    
+		    action.moveToElement(we).build().perform();		   	
 		}
 		else if (ZimbraSeleniumProperties.isWebDriverBackedSelenium()){
 			webDriverBackedSelenium().mouseOver(locator);

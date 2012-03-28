@@ -5,7 +5,11 @@ import org.apache.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverBackedSelenium;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxProfile;
+import org.openqa.selenium.remote.DesiredCapabilities;
+
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 
@@ -99,15 +103,24 @@ public class ClientSession {
 				}									
 			*/
 			if(ZimbraSeleniumProperties.getStringProperty("browser").contains("googlechrome")){
-					webDriver = new ChromeDriver();
+				//DesiredCapabilities caps = DesiredCapabilities.chrome();
+				//caps.setJavascriptEnabled(true);
+				//caps.setCapability("chrome.binary", "path/to/chrome.exe");
+				//System.setProperty("webdriver.chrome.driver","/path/to/chromedriver.exe");
+				//ChromeDriver driver = new ChromeDriver(caps);
+				//ChromeOptions options = new ChromeOptions();
+				//webDriver = new ChromeDriver(options);
+				//System.setProperty("webdriver.chrome.driver","C:/p4/zimbra/main/ZimbraSelenium/chromedriver.exe");
+				webDriver = new ChromeDriver();
 			} else {
-				//FirefoxProfile profile = new FirefoxProfile();
+				FirefoxProfile profile = new FirefoxProfile();
 				//Proxy proxy = new Proxy();
 				//proxy.setHttpProxy("proxy.vmware.com:3128");
 				//profile.setProxyPreferences(proxy);
 				//profile.addExtension(....);
-				//webDriver = new FirefoxDriver(profile);
-				webDriver = new FirefoxDriver();					
+				profile.setEnableNativeEvents(false);
+				webDriver = new FirefoxDriver(profile);
+				//webDriver = new FirefoxDriver();					
 			}			
 		}
 		return webDriver;
