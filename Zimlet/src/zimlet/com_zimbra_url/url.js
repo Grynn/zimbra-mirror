@@ -513,9 +513,9 @@ function(youTubeId, msgId, opacity) {
  * @param msg
  */
 Com_Zimbra_Url.prototype.onConvView = 
-function(msg) {
-	this._isConv =true;
-	this.renderYouTube(msg);
+function(msg, oldMsg, msgView) {
+	this._isConv = true;
+	this.renderYouTube(msg, msgView);
 };
 
 /**
@@ -523,20 +523,20 @@ function(msg) {
  * @param msg
  */
 Com_Zimbra_Url.prototype.onMsgView = 
-function(msg) {
+function(msg, oldMsg, msgView) {
 	this._isConv = false;
-	this.renderYouTube(msg);
+	this.renderYouTube(msg, msgView);
 }
 
 Com_Zimbra_Url.prototype.renderYouTube =
-function(msg) {
+function(msg, msgView) {
 	if (!this._youtubePreview) return;
 	this._youTubeHitMax = false; //reset
 	this._youTubeHash = {}; //hash of youtube links
 	this._youTubeCtrlHash = {};  //hash to keep track of video controls for conversation view
 
-	var text = AjxStringUtil.getOriginalContent(msg.getBodyContent(), true); 
-	this._youTubeHash = this._getAllYouTubeLinks(text);
+	var text = msgView ? msgView.getContent() : "";
+	this._youTubeHash = text && this._getAllYouTubeLinks(text);
 	if (!this._youTubeHash) return;
 
 	this._msgId = msg.id;

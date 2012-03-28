@@ -1581,8 +1581,12 @@ function(text, isHtml) {
 	
 	if (!text) { return ""; }
 	
-	if (isHtml || /^<div|<html/i.test(text)) {
-		return AjxStringUtil._getOriginalHtmlContent(text);
+	if (isHtml) {
+		try {
+			return AjxStringUtil._getOriginalHtmlContent(text);
+		} catch (e) {
+			throw new Error("SCRIPT tag found! Please notify administrator. Text: " + text);
+		}
 	}
 
 	var results = [];
@@ -1753,6 +1757,8 @@ function(testLine) {
 	return type;
 };
 
+AjxStringUtil.SCRIPT_REGEX = /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi;
+
 /**
  * For HTML, we strip off the html, head, and body tags and stick the rest in a temporary DOM node so that
  * we can walk the tree. Instead of going line by line, we go element by element. The easiest way is to figure
@@ -1765,6 +1771,11 @@ function(testLine) {
  */
 AjxStringUtil._getOriginalHtmlContent =
 function(text) {
+	
+	// strip <script> tags (which should not be there)
+	while (AjxStringUtil.SCRIPT_REGEX.test(text)) {
+		text = text.replace(AjxStringUtil.SCRIPT_REGEX, "");
+	}
 	
 	var htmlNode = AjxStringUtil._writeToTestIframeDoc(text);
 	var ctxt = {
@@ -1903,6 +1914,9 @@ function(el, ctxt) {
 		ctxt.hasQuoted = true;
 		processChildren = false;
 
+	} else if (nodeName == "script") {
+		throw new Error("SCRIPT tag found in AjxStringUtil._traverseOriginalHtmlContent");
+	
 	// node types to ignore
 	} else if (AjxStringUtil.IGNORE_NODE[nodeName]) {
 		return;
