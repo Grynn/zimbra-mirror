@@ -747,6 +747,7 @@ function (optionId, height){
 			 				label: ZaMsg.enable_search_option_label_to ,
 			 				trueValue:"TRUE", falseValue:"FALSE",   subLabel: "",
 			 				align: _LEFT_, labelLocation:_RIGHT_,
+                            onChange: ZaSearchBuilderController.newHandleOptions,
 							enableDisableChecks:[],visibilityChecks:[] }
 		 			]
 		 		},
