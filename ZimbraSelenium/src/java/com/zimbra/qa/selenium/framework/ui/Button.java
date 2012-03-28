@@ -332,6 +332,10 @@ public class Button {
 	public static final Button B_VIEW_ENTIRE_MESSAGE = new Button("B_VIEW_ENTIRE_MESSAGE");
 	public static final Button B_HIGHLIGHT_OBJECTS = new Button("B_HIGHLIGHT_OBJECTS");
 	
+	public static final Button B_QUICK_REPLY_SEND = new Button("B_QUICK_REPLY_SEND");
+	public static final Button B_QUICK_REPLY_CANCEL = new Button("B_QUICK_REPLY_CANCEL");
+	public static final Button B_QUICK_REPLY_MORE = new Button("B_QUICK_REPLY_MORE");
+
 	// Calendar
 	public static final Button B_SAVEANDCLOSE = new Button("B_SAVEANDCLOSE");
 	public static final Button B_REFRESH = new Button("B_REFRESH");
