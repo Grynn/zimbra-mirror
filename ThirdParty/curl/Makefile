@@ -62,7 +62,7 @@ endif
 
 LDFLAGS	:= LDFLAGS="-L$(OPENSSL_LIB_DIR) -L$(HEIMDAL_LIB_DIR) -L$(CURL_LIB_DIR) -R$(OPENSSL_LIB_DIR) -R$(HEIMDAL_LIB_DIR) -R$(CURL_LIB_DIR)"
 ifeq ($(BUILD_PLATFORM), UBUNTU12_64)
-	LDFLAGS	:= LDFLAGS="-L$(OPENSSL_LIB_DIR) -L$(HEIMDAL_LIB_DIR) -L$(CURL_LIB_DIR)"
+	LDFLAGS	:= LDFLAGS="-L$(OPENSSL_LIB_DIR) -L$(HEIMDAL_LIB_DIR) -L$(CURL_LIB_DIR) -Wl,-rpath,$(OPENSSL_LIB_DIR) -Wl,-rpath,$(HEIMDAL_LIB_DIR) -Wl,-rpath,$(CURL_LIB_DIR)"
 endif
 
 files	:= $(wildcard src/curl-$(CURL_VERSION).tar.gz)
@@ -88,6 +88,7 @@ build:
 	./configure --prefix=$(ZIMBRA_HOME)/curl-$(CURL_VERSION) --disable-ldap --disable-ldaps \
 		--with-gssapi=/opt/zimbra/heimdal-$(HEIMDAL_VERSION) \
 		--with-ssl=/opt/zimbra/openssl-$(OPENSSL_VERSION) \
+		--without-gnutls \
 		--with-ca-bundle=/opt/zimbra/curl-$(CURL_VERSION)/share/curl/ca-bundle.crt \
 		--with-zlib=$(LIB_DIR) \
 		--with-libidn=$(LIB_DIR))
