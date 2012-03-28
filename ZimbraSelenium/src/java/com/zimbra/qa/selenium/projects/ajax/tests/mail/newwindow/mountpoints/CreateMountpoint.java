@@ -5,12 +5,18 @@ import java.util.List;
 
 import org.testng.annotations.Test;
 
-import com.zimbra.qa.selenium.framework.items.*;
-import com.zimbra.qa.selenium.framework.ui.*;
-import com.zimbra.qa.selenium.framework.util.*;
+import com.zimbra.qa.selenium.framework.items.FolderItem;
+import com.zimbra.qa.selenium.framework.ui.Action;
+import com.zimbra.qa.selenium.framework.ui.Button;
+import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.XmlStringUtil;
+import com.zimbra.qa.selenium.framework.util.ZAssert;
+import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
+import com.zimbra.qa.selenium.framework.util.staf.Stafpostqueue;
 import com.zimbra.qa.selenium.projects.ajax.core.PrefGroupMailByMessageTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.DialogShareAccept;
-import com.zimbra.qa.selenium.projects.ajax.ui.mail.*;
+import com.zimbra.qa.selenium.projects.ajax.ui.SeparateWindowDialog;
+import com.zimbra.qa.selenium.projects.ajax.ui.mail.SeparateWindowDisplayMail;
 
 
 public class CreateMountpoint extends PrefGroupMailByMessageTest {
@@ -84,16 +90,13 @@ public class CreateMountpoint extends PrefGroupMailByMessageTest {
 
 
 
-		FolderItem inbox = FolderItem.importFromSOAP(app.zGetActiveAccount(), FolderItem.SystemFolder.Inbox);
 
 		// Click Get Mail button
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
-		
-		// Click the inbox
-		app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, inbox);
-				
-		// Select the item
+
+		// Select the message so that it shows in the reading pane
 		app.zPageMail.zListItem(Action.A_LEFTCLICK, shareMessageSubject);
+
 		
 		
 		SeparateWindowDisplayMail window = null;
@@ -112,11 +115,15 @@ public class CreateMountpoint extends PrefGroupMailByMessageTest {
 			ZAssert.assertTrue(window.zHasShareADButtons(), "Verify that the Accept/Decline share buttons are present");
 			
 			// Accept the share, which opens a dialog
-			DialogShareAccept dialog = (DialogShareAccept)window.zPressButton(Button.B_ACCEPT_SHARE);
+			SeparateWindowDialog dialog = (SeparateWindowDialog)window.zPressButton(Button.B_ACCEPT_SHARE);
 			ZAssert.assertNotNull(dialog, "Verify that the accept share dialog opens");
 			
 			// Click OK on the dialog
 			dialog.zClickButton(Button.B_YES);
+
+			// The dialog will send a message, so wait for delivery
+			Stafpostqueue sp = new Stafpostqueue();
+			sp.waitForPostqueue();
 
 		} finally {
 			

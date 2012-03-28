@@ -10,6 +10,7 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.staf.Stafpostqueue;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
+import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning.DialogWarningID;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.DisplayMail.*;
 
 
@@ -613,13 +614,15 @@ public class SeparateWindowDisplayMail extends AbsSeparateWindow {
 		} else if ( button == Button.B_ACCEPT_SHARE ) {
 
 			locator = this.ContainerLocator + " td[id$='__Shr__SHARE_ACCEPT_title']";
-			page = new DialogShareAccept(MyApplication, ((AppAjaxClient) MyApplication).zPageMail);
+			page = new SeparateWindowDialog(DialogWarningID.ZmAcceptShare, MyApplication, this);
+			((SeparateWindowDialog)page).zSetWindowTitle(this.DialogWindowTitle);
 			doPostfixCheck = true;
 
 		} else if ( button == Button.B_DECLINE_SHARE ) {
 
 			locator = this.ContainerLocator + " td[id$='__Shr__SHARE_DECLINE_title']";
-			page = new DialogShareDecline(MyApplication, ((AppAjaxClient) MyApplication).zPageMail);
+			page = new SeparateWindowDialog(DialogWarningID.ZmAcceptShare, MyApplication, this);
+			((SeparateWindowDialog)page).zSetWindowTitle(this.DialogWindowTitle);
 			doPostfixCheck = true;
 
 		} else  {
