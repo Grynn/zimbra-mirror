@@ -9,7 +9,7 @@ using System.Text;
 namespace CssLib
 {
 public class Log {
-    public enum Level { None, Err, Warn, Info, Debug };
+    public enum Level { None, Err, Warn, Info, Debug, Trace };
 
     public static void init(string file, Level level) {
         log_init(file, level);
@@ -32,6 +32,8 @@ public class Log {
         log_print(level, s.ToString());
     }
 
+    public static void trace(string str) { log_print(Level.Trace, str); }
+    public static void trace(params object[] objs) { log(Level.Trace, objs); }
     public static void debug(string str) { log_print(Level.Debug, str); }
     public static void debug(params object[] objs) { log(Level.Debug, objs); }
     public static void err(string str) { log_print(Level.Err, str); }

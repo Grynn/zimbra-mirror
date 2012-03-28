@@ -7,10 +7,10 @@ typedef unsigned __int64 usec_t;
 
 static const wchar_t *USubst = L"\001\001";
 const wchar_t *const Log::LevelStr[] = {
-    L"none", L"err", L"warn", L"info", L"debg"
+    L"none", L"err", L"warn", L"info", L"debg", L"trce"
 };
 const wchar_t *const Log::LevelStr2[] = {
-    L"nothing", L"error", L"warning", L"information", L"debug"
+    L"nothing", L"error", L"warning", L"information", L"debug", L"trace"
 };
 Log Log::glog(NULL, Log::Info);
 TLSClass<Log> Log::tlog;

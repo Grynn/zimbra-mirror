@@ -134,7 +134,7 @@ private:
 class CPPLIB_DLLAPI Log
 {
 public:
-    enum Level { None, Err, Warn, Info, Debug };
+    enum Level { None, Err, Warn, Info, Debug, Trace };
 
     template<class C>
     class KV: NoCopy
@@ -305,6 +305,7 @@ public:
     _func_(warn, Warn);
     _func_(info, Info);
     _func_(debug, Debug);
+    _func_(trace, Trace);
 
 #undef _func_
 #define _log_(s) \
@@ -457,6 +458,7 @@ inline Log &endlog(Log &l) { return l.endlog(); }
 #define dlogw(...)              dlogl(Log::Warn, __VA_ARGS__);
 #define dlogi(...)              dlogl(Log::Info, __VA_ARGS__);
 #define dlogd(...)              dlogl(Log::Debug, __VA_ARGS__);
+#define dlogt(...)              dlogl(Log::Trace, __VA_ARGS__);
 
 #define dlogvl(lvl, ...)        { \
                                     if (lvl <= dlog.level()) \
@@ -466,3 +468,4 @@ inline Log &endlog(Log &l) { return l.endlog(); }
 #define dlogvw(...)             dlogvl(Log::Warn, __VA_ARGS__);
 #define dlogvi(...)             dlogvl(Log::Info, __VA_ARGS__);
 #define dlogvd(...)             dlogvl(Log::Debug, __VA_ARGS__);
+#define dlogvt(...)             dlogvl(Log::Trace, __VA_ARGS__);
