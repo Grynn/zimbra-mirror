@@ -77,10 +77,13 @@ public class ClientSession {
 	 */
 	public WebDriverBackedSelenium webDriverBackedSelenium() {
 		if (webDriverBackedSelenium == null) {
-			if(ZimbraSeleniumProperties.getStringProperty("browser").contains("googlechrome"))
+			if(ZimbraSeleniumProperties.getStringProperty("browser").contains("googlechrome")){
 				webDriverBackedSelenium = new WebDriverBackedSelenium(new ChromeDriver(), applicationURL);
-			else
-				webDriverBackedSelenium = new WebDriverBackedSelenium(new FirefoxDriver(), applicationURL);
+			}else{
+				FirefoxProfile profile = new FirefoxProfile();
+				profile.setEnableNativeEvents(false);
+				webDriverBackedSelenium = new WebDriverBackedSelenium(new FirefoxDriver(profile), applicationURL);
+			}
 		}
 		return webDriverBackedSelenium;
 	}
