@@ -34,6 +34,11 @@ all: checksrc allclean build check tar
 checksrc:
 	$(if $(files), @echo "", exit 1)
 
+LDFLAGS	:= LDFLAGS="-L$(OPENSSL_LIB_DIR) -R$(OPENSSL_LIB_DIR)"
+ifeq ($(BUILD_PLATFORM), UBUNTU12_64)
+	LDFLAGS	:= LDFLAGS="-L$(OPENSSL_LIB_DIR)"
+endif
+
 check:
 	@echo "Verifying heimdal build...";
 	$(HEIMDAL_ROOT)/../zmcheck.pl -b $(ZIMBRA_HOME)/heimdal-$(HEIMDAL_VERSION)/bin/hxtool
@@ -47,7 +52,7 @@ build:
 	CFLAGS="-g -O2 -D_REENTRANT" \
 	CCFLAGS="-g -O2 -D_REENTRANT" \
 	COMPILE_ET="NO" \
-	LDFLAGS="-L$(OPENSSL_LIB_DIR) -R$(OPENSSL_LIB_DIR)" \
+	$(LDFLAGS) \
 	CPPFLAGS="-I$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/include" \
 	./configure --prefix=$(ZIMBRA_HOME)/heimdal-$(HEIMDAL_VERSION) \
 	CCFLAGS="-g -O2 -D_REENTRANT" \
