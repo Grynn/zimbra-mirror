@@ -1,6 +1,6 @@
---- postfix-2.6.2/makedefs.orig	2009-06-15 12:26:45.000000000 -0700
-+++ postfix-2.6.2/makedefs	2009-06-15 12:27:31.000000000 -0700
-@@ -254,7 +254,10 @@
+--- postfix-2.9.1.2z/makedefs.orig	2012-01-17 17:19:48.000000000 -0800
++++ postfix-2.9.1.2z/makedefs	2012-03-28 16:43:26.154076634 -0700
+@@ -271,7 +271,10 @@
  		;;
      Linux.2*)	SYSTYPE=LINUX2
  		# Postfix no longer needs DB 1.85 compatibility
@@ -12,3 +12,24 @@
  		then
  		    : we are all set
  		elif [ -f /usr/include/db/db.h ]
+@@ -350,7 +353,10 @@
+ 		esac
+ 		;;
+     Linux.3*)	SYSTYPE=LINUX3
+-		if [ -f /usr/include/db.h ]
++		if [ -f /opt/zimbra/bdb/include/db.h ]
++		then
++			CCARGS="$CCARGS -I/opt/zimbra/bdb/include"
++		elif [ -f /usr/include/db.h ]
+ 		then
+ 		    : we are all set
+ 		elif [ -f /usr/include/db/db.h ]
+@@ -367,7 +373,7 @@
+ 		SYSLIBS="-ldb"
+ 		for name in nsl resolv
+ 		do
+-		    for lib in /usr/lib64 /lib64 /usr/lib /lib
++		    for lib in /usr/lib64 /lib64 /usr/lib /lib /usr/lib/x86_64-linux-gnu /lib/x86_64-linux-gnu
+ 		    do
+ 			test -e $lib/lib$name.a -o -e $lib/lib$name.so && {
+ 			    SYSLIBS="$SYSLIBS -l$name"

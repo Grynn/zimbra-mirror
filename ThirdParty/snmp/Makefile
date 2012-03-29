@@ -61,6 +61,11 @@ ifeq ($(BUILD_PLATFORM), F13_64)
 	ENVMOD := env LIBS="-L/usr/lib64"
 endif
 
+LDFLAGS	:= LDFLAGS="-L$(OPENSSL_LIB_DIR) -R$(OPENSSL_LIB_DIR)"
+ifeq ($(BUILD_PLATFORM), UBUNTU12_64)
+LDFLAGS	:= LDFLAGS="-L$(OPENSSL_LIB_DIR) -Wl,-rpath,$(OPENSSL_LIB_DIR)"
+endif
+
 files   := $(wildcard src/$(SNMP_NAME)-$(SNMP_VERSION).tar.gz)
 
 all: checksrc allclean build tar
@@ -74,7 +79,7 @@ ifeq (MACOSXx86_10, $(findstring MACOSXx86_10, $(BUILD_PLATFORM)))
 	(cd $(SNMP_NAME)-$(SNMP_VERSION); \
 	$(PATCH) \
 	$(ENVMOD) CFLAGS="-g -O2" \
-	LDFLAGS="-L$(OPENSSL_LIB_DIR) -R$(OPENSSL_LIB_DIR)" \
+	$(LDFLAGS) \
 	LD_LIBRARY_PATH=$(OPENSSL_LIB_DIR) \
 	./configure --prefix=$(INSTALL_PREFIX) \
 	--with-default-snmp-version=3 --with-sys-contact="admin" \
@@ -94,7 +99,7 @@ else
 	echo NON_MAC $(BUILD_PLATFORM)
 	(cd $(SNMP_NAME)-$(SNMP_VERSION); \
 	$(ENVMOD) CFLAGS="-g -O2" \
-	LDFLAGS="-L$(OPENSSL_LIB_DIR) -R$(OPENSSL_LIB_DIR)" \
+	$(LDFLAGS) \
 	LD_LIBRARY_PATH=$(OPENSSL_LIB_DIR) \
  	./configure --prefix=$(INSTALL_PREFIX) \
 	--with-default-snmp-version=3 --with-sys-contact="admin" \

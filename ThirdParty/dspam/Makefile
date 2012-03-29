@@ -23,6 +23,11 @@ MYSQL_LIB_DIR := $(ZIMBRA_HOME)/mysql/lib
 DSPAM_TGZ_TARGET := \
 	$(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/dspam/dspam-$(DSPAM_VERSION).tgz
 
+LDFLAGS	:= LDFLAGS="-L$(ZIMBRA_HOME)/mysql/lib -R$(ZIMBRA_HOME)/myqsl/lib"
+ifeq ($(BUILD_PLATFORM), UBUNTU12_64)
+LDFLAGS	:= LDFLAGS="-L$(ZIMBRA_HOME)/mysql/lib -Wl,-rpath,$(ZIMBRA_HOME)/myqsl/lib"
+endif
+
 files	:= $(wildcard src/dspam-$(DSPAM_VERSION).tar.gz)
 
 all: checksrc allclean build check tar
@@ -38,7 +43,7 @@ build:
 	(tar xzf src/dspam-$(DSPAM_VERSION).tar.gz; \
 	cd dspam-$(DSPAM_VERSION); \
 	CFLAGS="-g -O2" \
-	LDFLAGS="-L$(ZIMBRA_HOME)/mysql/lib -R$(ZIMBRA_HOME)/myqsl/lib" \
+	$(LDFLAGS) \
 	LD_LIBRARY_PATH=$(ZIMBRA_HOME)/openssl/lib:$(ZIMBRA_HOME)/mysql/lib \
 	./configure --prefix=$(ZIMBRA_HOME)/dspam-$(DSPAM_VERSION) \
 	--sysconfdir=$(ZIMBRA_HOME)/conf --with-logdir=$(ZIMBRA_HOME)/log \
