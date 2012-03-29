@@ -1344,7 +1344,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 
     this.tabBarChoices = tabBarChoices;
     xFormObject.items = [
-		{type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan: "*", id:"xform_header", 
+		{type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan:"*", id:"xform_header", 
 			items: [
 				{type:_GROUP_,	numCols:4,colSizes:["32px","350px","100px","250px"],
 					items: [
@@ -1366,8 +1366,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 						}						
 					]
 				}
-			],
-			cssStyle:"padding-top:5px; padding-bottom:5px"
+			]
 		},
 		{type:_TAB_BAR_, ref:ZaModel.currentTab,
 			containerCssStyle: "padding-top:0px",

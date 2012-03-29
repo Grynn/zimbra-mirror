@@ -253,7 +253,7 @@ ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
         items:[
             {type:_GROUP_, colSpan: "*", numCols:1, containerCssClass:"ZaHomeWarningPanel", items:[
 
-                {type:_GROUP_, numCols:3,  width:"100%", colSizes:ZaHomeXFormView.getWarningPanelCol(), containerCssClass:"ZaHomeWarnginItem",
+                {type:_GROUP_, numCols:3,  width:"100%", colSizes:ZaHomeXFormView.getWarningPanelCol(), containerCssClass:"ZaHomeWarningItem",
                     visibilityChecks:[[XForm.checkInstanceValueNot,ZaHome.A2_serviceStatus,true],[ZaHomeXFormView.showStatusInfo]],
                     visibilityChangeEventSources: [ZaHome.A2_serviceStatus],
                     items:[

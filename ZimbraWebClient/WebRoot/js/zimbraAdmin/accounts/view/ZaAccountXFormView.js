@@ -3459,11 +3459,10 @@ nowrap:false, labelWrap:true,
 	xFormObject.tableCssStyle="width:100%;";
 
         xFormObject.items = [
-                {type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan: "*", id:"xform_header",
+                {type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan:"*", id:"xform_header",
                     items: [
-                        {type:_GROUP_,	numCols:4, width: "100%", colSizes:["90px","300px","100px","*"],items:headerItems}
-                    ],
-                    cssStyle:"padding-top:5px; padding-bottom:5px"
+                        {type:_GROUP_, numCols:4, width:"100%", colSizes:["90px","300px","100px","*"],items:headerItems}
+                    ]
                 },
                 {type:_TAB_BAR_,  ref:ZaModel.currentTab,choices:this.tabChoices,cssClass:"ZaTabBar", cssStyle:(appNewUI?"display:none;":""), id:"xform_tabbar"},
                 {type:_SWITCH_, align:_LEFT_, valign:_TOP_, items:cases}

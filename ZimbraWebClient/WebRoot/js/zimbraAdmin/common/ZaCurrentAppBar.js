@@ -21,7 +21,7 @@ ZaCurrentAppBar = function(parent, className, buttons) {
 
 ZaCurrentAppBar.prototype = new DwtButton;
 ZaCurrentAppBar.prototype.constructor = ZaCurrentAppBar ;
-ZaCurrentAppBar.defalutImg = "Configure";
+ZaCurrentAppBar.defaultImg = "Configure";
 
 ZaCurrentAppBar.prototype.toString =
 function() {
@@ -44,7 +44,7 @@ ZaCurrentAppBar.prototype.setSettingImg = function (imgName) {
     if (!this._settingImgEl)
         return;
 
-    var localImg = imgName || ZaCurrentAppBar.defalutImg;
+    var localImg = imgName || ZaCurrentAppBar.defaultImg;
     this._settingImgEl.innerHTML = AjxImg.getImageHtml(localImg);
 }
 

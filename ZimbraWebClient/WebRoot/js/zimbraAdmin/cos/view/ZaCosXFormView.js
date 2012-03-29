@@ -1378,11 +1378,10 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
     
     xFormObject.tableCssStyle = "width:100%;overflow:auto;";
 	xFormObject.items = [
-			{type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan: "*", id:"xform_header",
+			{type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan:"*", id:"xform_header",
 				items: [
 					{type:_GROUP_,	numCols:4,colSizes:["32px","350px","100px","*"],items:headerItems}
-				],
-				cssStyle:"padding-top:5px; padding-bottom:5px"
+				]
 			},
 			{type:_TAB_BAR_,  ref:ZaModel.currentTab,choices:this.tabChoices,cssClass:"ZaTabBar", id:"xform_tabbar", cssStyle: (appNewUI? "display:none;":"")},
 			{type:_SWITCH_, align:_LEFT_, valign:_TOP_, items:cases}

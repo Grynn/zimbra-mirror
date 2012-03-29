@@ -718,7 +718,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject,entry) {
 
     xFormObject.items = [ ];
 	
-	xFormObject.items.push({type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan: "*", id:"xform_header", 
+	xFormObject.items.push({type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan:"*", id:"xform_header", 
 			items: [
 				{type:_GROUP_,	numCols:4,colSizes:["32px","350px","100px","*"],
 					items: [
@@ -740,8 +740,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject,entry) {
 						{type:_OUTPUT_, choices:ZaDomain.domainStatusChoices, bmolsnr:true, ref:ZaDomain.A_zimbraDomainStatus, label:ZaMsg.LBL_zimbraDomainStatus,visibilityChecks:[ZaItem.hasReadPermission]}
 					]
 				}
-			],
-			cssStyle:"padding-top:5px; padding-left:2px; padding-bottom:5px"
+			]
 	});	
 	var tabIx = ++this.TAB_INDEX;
 	var tabBar = {type:_TAB_BAR_,  ref:ZaModel.currentTab,choices:[],cssClass:"ZaTabBar", id:"xform_tabbar", cssStyle: (appNewUI? "display:none;":"")};

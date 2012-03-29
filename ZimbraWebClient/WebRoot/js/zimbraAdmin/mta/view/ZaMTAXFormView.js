@@ -505,17 +505,16 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 	msgHeaderList[8] = new ZaListHeaderItem(null, null, null, "auto", null, null, true, true);
 
 	xFormObject.items = [
-		{type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan: "*", id:"xform_header", 
+		{type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan:"*", id:"xform_header", 
 			items: [
-				{type:_GROUP_,	numCols:2,colSizes:["32px","auto"],
+				{type:_GROUP_, numCols:2, colSizes:["32px","auto"],
 					items: [
 						{type:_AJX_IMAGE_, src:"Queue_32", label:null},
 						{type:_OUTPUT_, ref:ZaMTA.A_name, label:null,cssClass:"AdminTitle",
-                           visibilityChecks:[ZaItem.hasReadPermission], height: 32 }
+                           visibilityChecks:[ZaItem.hasReadPermission], height:32 }
 					]
 				}
-			],
-			cssStyle:"padding-top:5px; padding-bottom:5px"
+			]
 		},
 		{type:_TAB_BAR_, ref:ZaModel.currentTab,
 			containerCssStyle: "padding-top:0px",

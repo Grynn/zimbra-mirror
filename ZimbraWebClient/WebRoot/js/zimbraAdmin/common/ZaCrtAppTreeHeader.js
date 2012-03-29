@@ -23,7 +23,7 @@ ZaCrtAppTreeHeader.prototype.constructor = ZaCrtAppTreeHeader ;
 ZaCrtAppTreeHeader.prototype._dropDownImg = "";
 ZaCrtAppTreeHeader.prototype._dropDownDepImg = "";
 ZaCrtAppTreeHeader.prototype._dropDownHovImg = "";
-ZaCrtAppTreeHeader.defalutImg = "CollapseLeft";
+ZaCrtAppTreeHeader.defaultImg = "CollapseLeft";
 
 ZaCrtAppTreeHeader.prototype.toString =
 function() {
@@ -42,7 +42,7 @@ ZaCrtAppTreeHeader.prototype.setRightImg = function (imgName) {
     if (!this._imgEl)
         return;
 
-    var localImg = imgName || ZaCrtAppTreeHeader.defalutImg;
+    var localImg = imgName || ZaCrtAppTreeHeader.defaultImg;
     this._imgEl.innerHTML = AjxImg.getImageHtml(localImg);
 }
 

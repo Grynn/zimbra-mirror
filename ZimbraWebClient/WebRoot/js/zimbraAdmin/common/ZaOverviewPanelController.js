@@ -917,7 +917,7 @@ function() {
                                         callback: accountMrgCallback,
                                         defaultSelectedItem: 1,
                                         //mappingId: ZaZimbraAdmin._MANAGE_ACCOUNT_HOME_VIEW,
-                                        image: "MangeAccounts"
+                                        image: "ManageAccounts"
                                         });
         //ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._MANAGE_ACCOUNT_HOME_VIEW] = ZaOverviewPanelController.manageAccountTreeListener;
         tree.addTreeItemData(accountMgr);
