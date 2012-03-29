@@ -9,6 +9,7 @@ import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.PrefGroupMailByConversationTest;
+import com.zimbra.qa.selenium.projects.ajax.ui.mail.DisplayMail;
 
 
 public class QuickReplyPlaceholder extends PrefGroupMailByConversationTest {
@@ -46,10 +47,10 @@ public class QuickReplyPlaceholder extends PrefGroupMailByConversationTest {
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 		
 		// Select the item
-		app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
+		DisplayMail display = (DisplayMail)app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
 		
-		String locator = "css=textarea[id='zv__CLV-main__CV_replyInput']@placeholder";
-		String placeholder = app.zPageMail.sGetAttribute(locator);
+		// Get the display placeholder helper text
+		String placeholder = display.zGetQuickReplyPlaceholder();
 		
 		ZAssert.assertStringContains(placeholder, account1.getPref("displayName"), "Verify the quick reply placeholder lists the sender");
 		ZAssert.assertStringDoesNotContain(placeholder, app.zGetActiveAccount().getPref("displayName"), "Verify the quick reply placeholder does not list the active user");
@@ -95,10 +96,11 @@ public class QuickReplyPlaceholder extends PrefGroupMailByConversationTest {
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 		
 		// Select the item
-		app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
+		DisplayMail display = (DisplayMail)app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
 		
-		String locator = "css=textarea[id='zv__CLV-main__CV_replyInput']@placeholder";
-		String placeholder = app.zPageMail.sGetAttribute(locator);
+		// Get the display placeholder helper text
+		String placeholder = display.zGetQuickReplyPlaceholder();
+		
 		
 		ZAssert.assertStringContains(placeholder, account1.getPref("displayName"), "Verify the placeholder lists the correct destination");
 		ZAssert.assertStringContains(placeholder, account2.getPref("displayName"), "Verify the placeholder lists the correct destination");
@@ -160,10 +162,11 @@ public class QuickReplyPlaceholder extends PrefGroupMailByConversationTest {
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 		
 		// Select the item
-		app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
+		DisplayMail display = (DisplayMail)app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
 		
-		String locator = "css=textarea[id='zv__CLV-main__CV_replyInput']@placeholder";
-		String placeholder = app.zPageMail.sGetAttribute(locator);
+		// Get the display placeholder helper text
+		String placeholder = display.zGetQuickReplyPlaceholder();
+		
 		
 		ZAssert.assertStringContains(placeholder, sender1.getPref("displayName"), "Verify the placeholder lists the correct destination");
 		ZAssert.assertStringContains(placeholder, to1.getPref("displayName"), "Verify the placeholder lists the correct destination");

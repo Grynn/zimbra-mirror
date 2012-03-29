@@ -642,6 +642,30 @@ public class DisplayMail extends AbsDisplay {
 	}
 	
 	/**
+	 * Get the Quick Reply Placeholder Hepler Text (e.g. "click here to reply to user1, user2, and user3")
+	 * @return the text in the placeholder area
+	 * @throws HarnessException
+	 */
+	public String zGetQuickReplyPlaceholder() throws HarnessException {
+
+		// Make sure the client is not busy
+		this.zWaitForBusyOverlay();
+		
+		String locator = "css=textarea[id='zv__CLV-main__CV_replyInput']";
+		
+		if ( !this.sIsElementPresent(locator) ) {
+			throw new HarnessException("Placeholder not visible!");
+		}
+		
+		String placeholder = this.sGetAttribute(locator + "@placeholder");
+		logger.debug("Found placeholder text: "+ placeholder);
+		
+		return (placeholder);
+		
+	}
+
+
+	/**
 	 * Wait for Zimlets to be rendered in the message
 	 * @throws HarnessException
 	 */
