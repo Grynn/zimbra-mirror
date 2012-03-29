@@ -13,7 +13,7 @@ ifdef BETA
 	PATCH	:= patch -N -g0 -p1 < ../patches/krb5-7200.patch; patch -N -g0 -p1 < ../patches/lwp-fix.patch;
 else
 	include $(CURL_ROOT)/../versions.def
-	PATCH	:= patch -N -g0 -p1 < ../patches/krb5-7200.patch;
+	PATCH	:= patch -N -g0 -p1 < ../patches/krb5-7200.patch; patch -N -g0 -p1 < ../patches/lwp-fix.patch;
 endif
 
 
