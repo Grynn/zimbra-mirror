@@ -1,0 +1,16 @@
+Description: Fix name mismatch
+Author: Cristian Rodríguez
+Origin: upstream
+Bug-Debian: http://bugs.debian.org/602515
+
+--- a/MIME_headers.c
++++ b/MIME_headers.c
+@@ -2243,7 +2243,7 @@
+ 		{
+ 			if (MIMEH_DNORMAL) LOGGER_log("%s:%d:MIME_parse_contentlocation:DEBUG: filename = %s\n", FL, p);
+ 			snprintf(hinfo->name, sizeof(hinfo->name),"%s",p);
+-			snprintf(hinfo->filename, sizeof(hinfo->name),"%s",p);
++			snprintf(hinfo->filename, sizeof(hinfo->filename),"%s",p); //PLD:20100611 - fixed name mismatch,Cristian Rodríguez 
+ 			FNFILTER_filter(hinfo->filename, _MIMEH_FILENAMELEN_MAX);
+ 			SS_push(&(hinfo->ss_filenames), hinfo->filename, strlen(hinfo->filename));
+ 
