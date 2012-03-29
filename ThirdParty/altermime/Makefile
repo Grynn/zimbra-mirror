@@ -38,8 +38,8 @@ check:
 build: $(ALTMIME_NAME)-$(ALTMIME_VERSION)
 	(cd $(ALTMIME_NAME)-$(ALTMIME_VERSION); \
 	patch -p1 < ../patches/qpe.patch; \
-	patch -p1 < ../patches/fix_snprintf.patch \
-	patch -p1 < ../patches/fix-unused-but-set-variables.patch \
+	patch -p1 < ../patches/fix_snprintf.patch; \
+	patch -p1 < ../patches/fix-unused-but-set-variables.patch; \
 	$(MYCC) $(MAKE))
 	(mkdir -p $(INSTALL_PREFIX)/bin)
 	(cp -f $(ALTMIME_NAME)-$(ALTMIME_VERSION)/LICENCE $(INSTALL_PREFIX)/LICENSE)
