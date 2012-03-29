@@ -1,0 +1,104 @@
+To: foo@zimbra.com
+From: bar@zimbra.com
+Subject: subject13217218621403
+Date: Wed, 28 Mar 2012 14:45:39 -0700
+Content-Type: multipart/alternative; boundary="=-1332971139-435613-881-9806-450-="
+MIME-Version: 1.0
+
+
+--=-1332971139-435613-881-9806-450-=
+Content-Type: text/plain; charset=utf-8
+
+content1328844621403
+Server Version: 8.0.0_BETA3_4922.NETWORK.20120328132153
+Machine zqa-382
+Client Machine zqa-381
+Pattern projects.octopus.tests
+Log file is at http://server.com/testlogs/UBUNTU10_64/OCTOPUS-D3/20120328131550_OCTOPUS/SelNG-projects-octopus-tests/133296757736852/zqa-382.eng.vmware.com/
+
+=======File: soapresult.txt
+Response
+--------
+Total Tests:   84
+Total Passed:  61
+Total Failed:  23
+Total Skipped: 0
+
+
+Failed tests:
+main.projects.octopus.tests.favorites.AddRemoveFavorites.AddRemoveFavorites_03
+main.projects.octopus.tests.history.RefineHistory.RefineCheckAll
+main.projects.octopus.tests.history.RefineHistory.RefineComment
+main.projects.octopus.tests.history.RefineHistory.RefineFavorite
+main.projects.octopus.tests.history.RefineHistory.RefineNewVersion
+main.projects.octopus.tests.history.RefineHistory.RefineNewVersionFavorite
+main.projects.octopus.tests.history.RefineHistory.RefineRename
+main.projects.octopus.tests.history.RefineHistory.RefineSharing
+main.projects.octopus.tests.history.RefineHistoryShareFolder.RefineCheckAll
+main.projects.octopus.tests.history.RefineHistoryShareFolder.RefineComment
+main.projects.octopus.tests.history.RefineHistoryShareFolder.RefineFavorite
+main.projects.octopus.tests.history.RefineHistoryShareFolder.RefineNewVersion
+main.projects.octopus.tests.history.RefineHistoryShareFolder.RefineRename
+main.projects.octopus.tests.history.RefineHistoryShareFolder.RefineSharing
+main.projects.octopus.tests.myfiles.comments.ViewSharedComment.ViewSharedComment_01
+main.projects.octopus.tests.myfiles.comments.ViewSharedComment.ViewSharedComment_Comment_01
+main.projects.octopus.tests.myfiles.comments.ViewSharedComment.ViewSharedComment_Comment_01
+main.projects.octopus.tests.myfiles.comments.ViewSharedComment.ViewSharedComment_Comment_01
+main.projects.octopus.tests.myfiles.comments.ViewSharedComment.ViewSharedComment_DisplayName_02
+main.projects.octopus.tests.myfiles.comments.ViewSharedComment.ViewSharedComment_DisplayName_02
+main.projects.octopus.tests.myfiles.comments.ViewSharedComment.ViewSharedComment_DisplayName_02
+main.projects.octopus.tests.myfiles.folders.MoveFolder.MoveFolder_02
+main.projects.octopus.tests.search.RenameFile.RenameFile_01
+
+Duration: 1531 seconds
+Browser: unknown
+
+
+=======File: BugReport.txt
+Automated bug report
+
+
+Date: Wed Mar 28 14:45:34 PDT 2012
+
+Bug Reports:
+(Items with an asterisk are out of sync and need follow up)
+
+
+FAILED test cases:
+* NEW ...octopus.tests.history.RefineHistory.RefineCheckAll -- http://bugzilla.zimbra.com/enter_bug.cgi
+* NEW ...octopus.tests.history.RefineHistory.RefineNewVersionFavorite -- http://bugzilla.zimbra.com/enter_bug.cgi
+* NEW ...octopus.tests.history.RefineHistory.RefineSharing -- http://bugzilla.zimbra.com/enter_bug.cgi
+* NEW ...octopus.tests.history.RefineHistoryShareFolder.RefineCheckAll -- http://bugzilla.zimbra.com/enter_bug.cgi
+* NEW ...octopus.tests.history.RefineHistoryShareFolder.RefineComment -- http://bugzilla.zimbra.com/enter_bug.cgi
+* NEW ...octopus.tests.history.RefineHistoryShareFolder.RefineFavorite -- http://bugzilla.zimbra.com/enter_bug.cgi
+* NEW ...octopus.tests.history.RefineHistoryShareFolder.RefineNewVersion -- http://bugzilla.zimbra.com/enter_bug.cgi
+* NEW ...octopus.tests.history.RefineHistoryShareFolder.RefineRename -- http://bugzilla.zimbra.com/enter_bug.cgi
+* NEW ...octopus.tests.history.RefineHistoryShareFolder.RefineSharing -- http://bugzilla.zimbra.com/enter_bug.cgi
+* NEW ...octopus.tests.myfiles.comments.ViewSharedComment.ViewSharedComment_Comment_01 -- http://bugzilla.zimbra.com/enter_bug.cgi
+* NEW ...octopus.tests.myfiles.folders.MoveFolder.MoveFolder_02 -- http://bugzilla.zimbra.com/enter_bug.cgi
+* NEW ...octopus.tests.search.RenameFile.RenameFile_01 -- http://bugzilla.zimbra.com/enter_bug.cgi
+69355 ASSIGNED ...octopus.tests.favorites.AddRemoveFavorites.AddRemoveFavorites_03 -- http://bugzilla.zimbra.com/show_bug.cgi?id=69355 ( none )
+70397 ASSIGNED ...octopus.tests.history.RefineHistory.RefineComment -- http://bugzilla.zimbra.com/show_bug.cgi?id=70397 ( foo@zimbra.com )
+70397 ASSIGNED ...octopus.tests.history.RefineHistory.RefineFavorite -- http://bugzilla.zimbra.com/show_bug.cgi?id=70397 ( foo@zimbra.com )
+70399 ASSIGNED ...octopus.tests.history.RefineHistory.RefineNewVersion -- http://bugzilla.zimbra.com/show_bug.cgi?id=70399 ( none )
+70397 ASSIGNED ...octopus.tests.history.RefineHistory.RefineRename -- http://bugzilla.zimbra.com/show_bug.cgi?id=70397 ( foo@zimbra.com )
+62880 REOPENED ...octopus.tests.myfiles.comments.ViewSharedComment.ViewSharedComment_01 -- http://bugzilla.zimbra.com/show_bug.cgi?id=62880 ( foo@zimbra.com )
+62880 REOPENED ...octopus.tests.myfiles.comments.ViewSharedComment.ViewSharedComment_DisplayName_02 -- http://bugzilla.zimbra.com/show_bug.cgi?id=62880 ( foo@zimbra.com )
+
+PASSED test cases:
+* 65778 ASSIGNED ...octopus.tests.sharing.RemoveMountpoint.RemoveMountpoint_02 -- http://bugzilla.zimbra.com/show_bug.cgi?id=65778 ( foo@zimbra.com )
+70820 VERIFIED ...octopus.tests.settings.AccountSettings.AccountSettings_01 -- http://bugzilla.zimbra.com/show_bug.cgi?id=70820 ( foo@zimbra.com )
+70820 VERIFIED ...octopus.tests.settings.AccountSettings.AccountSettings_02 -- http://bugzilla.zimbra.com/show_bug.cgi?id=70820 ( foo@zimbra.com )
+70820 VERIFIED ...octopus.tests.settings.AccountSettings.AccountSettings_03 -- http://bugzilla.zimbra.com/show_bug.cgi?id=70820 ( foo@zimbra.com )
+70820 VERIFIED ...octopus.tests.settings.AccountSettings.AccountSettings_04 -- http://bugzilla.zimbra.com/show_bug.cgi?id=70820 ( foo@zimbra.com )
+70925 VERIFIED ...octopus.tests.sharing.AcceptShare.AcceptShare_01 -- http://bugzilla.zimbra.com/show_bug.cgi?id=70925 ( foo@zimbra.com )
+70925 VERIFIED ...octopus.tests.sharing.CreateShare.CreateShare_01 -- http://bugzilla.zimbra.com/show_bug.cgi?id=70925 ( foo@zimbra.com )
+70925 VERIFIED ...octopus.tests.sharing.CreateShare.CreateShare_02 -- http://bugzilla.zimbra.com/show_bug.cgi?id=70925 ( foo@zimbra.com )
+70925 VERIFIED ...octopus.tests.sharing.CreateShare.CreateShare_03 -- http://bugzilla.zimbra.com/show_bug.cgi?id=70925 ( foo@zimbra.com )
+70925 VERIFIED ...octopus.tests.sharing.CreateShare.CreateShare_04 -- http://bugzilla.zimbra.com/show_bug.cgi?id=70925 ( foo@zimbra.com )
+70925 VERIFIED ...octopus.tests.sharing.CreateShare.CreateShare_05 -- http://bugzilla.zimbra.com/show_bug.cgi?id=70925 ( foo@zimbra.com )
+70925 VERIFIED ...octopus.tests.sharing.CreateShare.CreateShare_06 -- http://bugzilla.zimbra.com/show_bug.cgi?id=70925 ( foo@zimbra.com )
+70925 VERIFIED ...octopus.tests.sharing.IgnoreShare.IgnoreShare_01 -- http://bugzilla.zimbra.com/show_bug.cgi?id=70925 ( foo@zimbra.com )
+
+
+--=-1332971139-435613-881-9806-450-=--

@@ -362,7 +362,7 @@ public class ViewMail extends PrefGroupMailByMessageTest {
 
 	@Bugs(ids = "67854")
 	@Test(	description = "Verify empty message shows 'no content'",
-			groups = { "functional", "matt" })
+			groups = { "functional" })
 	public void ViewMail_12() throws HarnessException {
 		
 		final String mimeFile = ZimbraSeleniumProperties.getBaseDirectory() + "/data/public/mime/Bugs/Bug67854";
@@ -388,6 +388,35 @@ public class ViewMail extends PrefGroupMailByMessageTest {
 		
 		// Bug 67854: Verify the Content does not show HTML
 		ZAssert.assertStringDoesNotContain(body, "&lt;table", "Verify the content does not contain HTML");
+
+	}
+
+	@Bugs(ids = "72248")
+	@Test(	description = "Verify multipart/alternative with only 1 part",
+			groups = { "functional" })
+	public void ViewMail_13() throws HarnessException {
+		
+		final String mimeFile = ZimbraSeleniumProperties.getBaseDirectory() + "/data/public/mime/Bugs/Bug72248";
+		final String subject = "subject13217218621403";
+		final String content = "content1328844621403";
+		
+		LmtpInject.injectFile(app.zGetActiveAccount().EmailAddress, new File(mimeFile));
+
+
+		
+		
+		// Click Get Mail button
+		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+
+		// Select the message so that it shows in the reading pane
+		DisplayMail actual = (DisplayMail) app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
+
+		// Get the content
+		String body = actual.zGetMailProperty(Field.Body);
+		
+		// Verify the Content shows "no content"
+		ZAssert.assertStringContains(body, content, "Verify the text content");
+		
 
 	}
 
