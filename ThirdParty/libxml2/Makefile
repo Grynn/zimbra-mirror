@@ -33,6 +33,7 @@ build:
 	(tar xzf src/$(XML_NAME)-$(XML_VERSION).tar.gz; \
 	mv $(XML_NAME)-$(XML_VERSION) $(XML_NAME)-$(XML_VERSION); \
 	cd $(XML_NAME)-$(XML_VERSION); \
+	patch -p1 < ../patches/libxml2-security.patch; \
 	$(LDFLAGS) \
 	CFLAGS="-g -O2 -fPIC" \
 	./configure $(XML_CONFIGURE); $(MAKE) $(MAKEARGS); $(MAKE) install)
