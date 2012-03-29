@@ -1,0 +1,21 @@
+Date: Thu, 29 Mar 2012 15:40:12 -0700 (PDT)
+From: foo@zimbra.com
+To: bar@zimbra.com
+Subject: bug72233
+MIME-Version: 1.0
+Content-Type: multipart/alternative; 
+	boundary="----=_Part_98557_1295931906.1333060812885"
+
+------=_Part_98557_1295931906.1333060812885
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+
+text1328844621404
+
+------=_Part_98557_1295931906.1333060812885
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: 7bit
+
+<html><body><div style='font-family: Verdana; font-size: 10pt; color: #000099' ><div><br><strong>html1328844621404</strong><br></div></div></body></html>
+
+------=_Part_98557_1295931906.1333060812885--

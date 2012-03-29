@@ -420,5 +420,34 @@ public class ViewMail extends PrefGroupMailByMessageTest {
 
 	}
 
+	@Test(	description = "Verify multipart/alternative with text and html parts",
+			groups = { "functional" })
+	public void ViewMail_14() throws HarnessException {
+		
+		final String mimeFile = ZimbraSeleniumProperties.getBaseDirectory() + "/data/public/mime/Bugs/Bug72233";
+		final String subject = "bug72233";
+		// final String textcontent = "text1328844621404";
+		final String htmlcontent = "html1328844621404";
+		
+		LmtpInject.injectFile(app.zGetActiveAccount().EmailAddress, new File(mimeFile));
+
+
+		
+		
+		// Click Get Mail button
+		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+
+		// Select the message so that it shows in the reading pane
+		DisplayMail actual = (DisplayMail) app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
+
+		// Get the content
+		String body = actual.zGetMailProperty(Field.Body);
+		
+		// Verify the Content shows correctly
+		ZAssert.assertStringContains(body, htmlcontent, "Verify the html content");
+		
+
+	}
+
 
 }
