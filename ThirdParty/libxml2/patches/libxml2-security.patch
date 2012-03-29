@@ -1,0 +1,736 @@
+--- libxml2-2.7.8.dfsg.orig/libxml.h
++++ libxml2-2.7.8.dfsg/libxml.h
+@@ -13,6 +13,9 @@
+ #ifndef _LARGEFILE_SOURCE
+ #define _LARGEFILE_SOURCE
+ #endif
++#ifndef _LARGEFILE64_SOURCE
++#define _LARGEFILE64_SOURCE
++#endif
+ #ifndef _FILE_OFFSET_BITS
+ #define _FILE_OFFSET_BITS 64
+ #endif
+--- libxml2-2.7.8.dfsg.orig/parser.c
++++ libxml2-2.7.8.dfsg/parser.c
+@@ -2709,7 +2709,7 @@
+ 
+ 		buffer[nbchars++] = '&';
+ 		if (nbchars > buffer_size - i - XML_PARSER_BUFFER_SIZE) {
+-		    growBuffer(buffer, XML_PARSER_BUFFER_SIZE);
++		    growBuffer(buffer, i + XML_PARSER_BUFFER_SIZE);
+ 		}
+ 		for (;i > 0;i--)
+ 		    buffer[nbchars++] = *cur++;
+@@ -4949,7 +4949,8 @@
+ 		    (ctxt->sax->processingInstruction != NULL))
+ 		    ctxt->sax->processingInstruction(ctxt->userData,
+ 		                                     target, NULL);
+-		ctxt->instate = state;
++		if (ctxt->instate != XML_PARSER_EOF)
++		    ctxt->instate = state;
+ 		return;
+ 	    }
+ 	    buf = (xmlChar *) xmlMallocAtomic(size * sizeof(xmlChar));
+@@ -5029,7 +5030,8 @@
+ 	} else {
+ 	    xmlFatalErr(ctxt, XML_ERR_PI_NOT_STARTED, NULL);
+ 	}
+-	ctxt->instate = state;
++	if (ctxt->instate != XML_PARSER_EOF)
++	    ctxt->instate = state;
+     }
+ }
+ 
+@@ -9588,6 +9590,8 @@
+     else
+ 	name = xmlParseStartTag(ctxt);
+ #endif /* LIBXML_SAX1_ENABLED */
++    if (ctxt->instate == XML_PARSER_EOF)
++	return;
+     if (name == NULL) {
+ 	spacePop(ctxt);
+         return;
+@@ -10967,6 +10971,8 @@
+ 		else
+ 		    name = xmlParseStartTag(ctxt);
+ #endif /* LIBXML_SAX1_ENABLED */
++		if (ctxt->instate == XML_PARSER_EOF)
++		    goto done;
+ 		if (name == NULL) {
+ 		    spacePop(ctxt);
+ 		    ctxt->instate = XML_PARSER_EOF;
+@@ -11153,7 +11159,9 @@
+ 		  else
+ 		    xmlParseEndTag1(ctxt, 0);
+ #endif /* LIBXML_SAX1_ENABLED */
+-		if (ctxt->nameNr == 0) {
++		if (ctxt->instate == XML_PARSER_EOF) {
++		    /* Nothing */
++		} else if (ctxt->nameNr == 0) {
+ 		    ctxt->instate = XML_PARSER_EPILOG;
+ 		} else {
+ 		    ctxt->instate = XML_PARSER_CONTENT;
+--- libxml2-2.7.8.dfsg.orig/xpointer.c
++++ libxml2-2.7.8.dfsg/xpointer.c
+@@ -1269,6 +1269,7 @@
+ 	ctxt->valueNr = 0;
+ 	ctxt->valueMax = 10;
+ 	ctxt->value = NULL;
++	ctxt->valueFrame = 0;
+     }
+     SKIP_BLANKS;
+     if (CUR == '/') {
+--- libxml2-2.7.8.dfsg.orig/xpath.c
++++ libxml2-2.7.8.dfsg/xpath.c
+@@ -252,6 +252,7 @@
+     "Encoding error\n",
+     "Char out of XML range\n",
+     "Invalid or incomplete context\n",
++    "Stack usage errror\n",
+     "?? Unknown error ??\n"	/* Must be last in the list! */
+ };
+ #define MAXERRNO ((int)(sizeof(xmlXPathErrorMessages) /	\
+@@ -2398,6 +2399,42 @@
+  ************************************************************************/
+ 
+ /**
++ * xmlXPathSetFrame:
++ * @ctxt: an XPath parser context
++ *
++ * Set the callee evaluation frame
++ *
++ * Returns the previous frame value to be restored once done
++ */
++static int
++xmlXPathSetFrame(xmlXPathParserContextPtr ctxt) {
++    int ret;
++
++    if (ctxt == NULL)
++        return(0);
++    ret = ctxt->valueFrame;
++    ctxt->valueFrame = ctxt->valueNr;
++    return(ret);
++}
++
++/**
++ * xmlXPathPopFrame:
++ * @ctxt: an XPath parser context
++ * @frame: the previous frame value
++ *
++ * Remove the callee evaluation frame
++ */
++static void
++xmlXPathPopFrame(xmlXPathParserContextPtr ctxt, int frame) {
++    if (ctxt == NULL)
++        return;
++    if (ctxt->valueNr < ctxt->valueFrame) {
++        xmlXPatherror(ctxt, __FILE__, __LINE__, XPATH_STACK_ERROR);
++    }
++    ctxt->valueFrame = frame;
++}
++
++/**
+  * valuePop:
+  * @ctxt: an XPath evaluation context
+  *
+@@ -2412,6 +2449,12 @@
+ 
+     if ((ctxt == NULL) || (ctxt->valueNr <= 0))
+         return (NULL);
++
++    if (ctxt->valueNr <= ctxt->valueFrame) {
++        xmlXPatherror(ctxt, __FILE__, __LINE__, XPATH_STACK_ERROR);
++        return (NULL);
++    }
++
+     ctxt->valueNr--;
+     if (ctxt->valueNr > 0)
+         ctxt->value = ctxt->valueTab[ctxt->valueNr - 1];
+@@ -3522,13 +3565,13 @@
+     } else if (cur->nodeNr == cur->nodeMax) {
+         xmlNodePtr *temp;
+ 
+-        cur->nodeMax *= 2;
+-	temp = (xmlNodePtr *) xmlRealloc(cur->nodeTab, cur->nodeMax *
++	temp = (xmlNodePtr *) xmlRealloc(cur->nodeTab, cur->nodeMax * 2 *
+ 				      sizeof(xmlNodePtr));
+ 	if (temp == NULL) {
+ 	    xmlXPathErrMemory(NULL, "growing nodeset\n");
+ 	    return;
+ 	}
++        cur->nodeMax *= 2;
+ 	cur->nodeTab = temp;
+     }
+     cur->nodeTab[cur->nodeNr++] = xmlXPathNodeSetDupNs(node, ns);
+@@ -3627,14 +3670,14 @@
+     } else if (cur->nodeNr == cur->nodeMax) {
+         xmlNodePtr *temp;
+ 
+-        cur->nodeMax *= 2;
+-	temp = (xmlNodePtr *) xmlRealloc(cur->nodeTab, cur->nodeMax *
++	temp = (xmlNodePtr *) xmlRealloc(cur->nodeTab, cur->nodeMax * 2 *
+ 				      sizeof(xmlNodePtr));
+ 	if (temp == NULL) {
+ 	    xmlXPathErrMemory(NULL, "growing nodeset\n");
+ 	    return;
+ 	}
+ 	cur->nodeTab = temp;
++        cur->nodeMax *= 2;
+     }
+     if (val->type == XML_NAMESPACE_DECL) {
+ 	xmlNsPtr ns = (xmlNsPtr) val;
+@@ -3738,14 +3781,14 @@
+ 	} else if (val1->nodeNr == val1->nodeMax) {
+ 	    xmlNodePtr *temp;
+ 
+-	    val1->nodeMax *= 2;
+-	    temp = (xmlNodePtr *) xmlRealloc(val1->nodeTab, val1->nodeMax *
++	    temp = (xmlNodePtr *) xmlRealloc(val1->nodeTab, val1->nodeMax * 2 *
+ 					     sizeof(xmlNodePtr));
+ 	    if (temp == NULL) {
+ 	        xmlXPathErrMemory(NULL, "merging nodeset\n");
+ 		return(NULL);
+ 	    }
+ 	    val1->nodeTab = temp;
++	    val1->nodeMax *= 2;
+ 	}
+ 	if (n2->type == XML_NAMESPACE_DECL) {
+ 	    xmlNsPtr ns = (xmlNsPtr) n2;
+@@ -3907,14 +3950,14 @@
+ 	    } else if (set1->nodeNr >= set1->nodeMax) {
+ 		xmlNodePtr *temp;
+ 
+-		set1->nodeMax *= 2;
+ 		temp = (xmlNodePtr *) xmlRealloc(
+-		    set1->nodeTab, set1->nodeMax * sizeof(xmlNodePtr));
++		    set1->nodeTab, set1->nodeMax * 2 * sizeof(xmlNodePtr));
+ 		if (temp == NULL) {
+ 		    xmlXPathErrMemory(NULL, "merging nodeset\n");
+ 		    return(NULL);
+ 		}
+ 		set1->nodeTab = temp;
++		set1->nodeMax *= 2;
+ 	    }
+ 	    if (n2->type == XML_NAMESPACE_DECL) {
+ 		xmlNsPtr ns = (xmlNsPtr) n2;
+@@ -3991,14 +4034,14 @@
+ 	    } else if (set1->nodeNr >= set1->nodeMax) {
+ 		xmlNodePtr *temp;
+ 
+-		set1->nodeMax *= 2;
+ 		temp = (xmlNodePtr *) xmlRealloc(
+-		    set1->nodeTab, set1->nodeMax * sizeof(xmlNodePtr));
++		    set1->nodeTab, set1->nodeMax * 2 * sizeof(xmlNodePtr));
+ 		if (temp == NULL) {
+ 		    xmlXPathErrMemory(NULL, "merging nodeset\n");
+ 		    return(NULL);
+ 		}
+ 		set1->nodeTab = temp;
++		set1->nodeMax *= 2;
+ 	    }
+ 	    set1->nodeTab[set1->nodeNr++] = n2;
+ 	}
+@@ -6154,6 +6197,7 @@
+     ret->valueNr = 0;
+     ret->valueMax = 10;
+     ret->value = NULL;
++    ret->valueFrame = 0;
+ 
+     ret->context = ctxt;
+     ret->comp = comp;
+@@ -11712,6 +11756,7 @@
+ 	xmlXPathObjectPtr contextObj = NULL, exprRes = NULL;
+ 	xmlNodePtr oldContextNode, contextNode = NULL;
+ 	xmlXPathContextPtr xpctxt = ctxt->context;
++        int frame;
+ 
+ #ifdef LIBXML_XPTR_ENABLED
+ 	    /*
+@@ -11731,6 +11776,8 @@
+ 	*/
+ 	exprOp = &ctxt->comp->steps[op->ch2];
+ 	for (i = 0; i < set->nodeNr; i++) {
++            xmlXPathObjectPtr tmp;
++
+ 	    if (set->nodeTab[i] == NULL)
+ 		continue;
+ 
+@@ -11758,18 +11805,25 @@
+ 		xmlXPathNodeSetAddUnique(contextObj->nodesetval,
+ 		    contextNode);
+ 
++            frame = xmlXPathSetFrame(ctxt);
+ 	    valuePush(ctxt, contextObj);
+ 	    res = xmlXPathCompOpEvalToBoolean(ctxt, exprOp, 1);
++            tmp = valuePop(ctxt);
++            xmlXPathPopFrame(ctxt, frame);
+ 
+ 	    if ((ctxt->error != XPATH_EXPRESSION_OK) || (res == -1)) {
+-	        xmlXPathObjectPtr tmp;
+-		/* pop the result */
+-		tmp = valuePop(ctxt);
+-		xmlXPathReleaseObject(xpctxt, tmp);
+-		/* then pop off contextObj, which will be freed later */
+-		valuePop(ctxt);
++                while (tmp != contextObj) {
++                    /*
++                     * Free up the result
++                     * then pop off contextObj, which will be freed later
++                     */
++                    xmlXPathReleaseObject(xpctxt, tmp);
++                    tmp = valuePop(ctxt);
++                }
+ 		goto evaluation_error;
+ 	    }
++            /* push the result back onto the stack */
++            valuePush(ctxt, tmp);
+ 
+ 	    if (res)
+ 		pos++;
+@@ -13357,6 +13411,7 @@
+                         xmlGenericError(xmlGenericErrorContext,
+             "xmlXPathCompOpEval: variable %s bound to undefined prefix %s\n",
+                                     (char *) op->value4, (char *)op->value5);
++                        ctxt->error = XPATH_UNDEF_PREFIX_ERROR;
+                         return (total);
+                     }
+ 		    val = xmlXPathVariableLookupNS(ctxt->context,
+@@ -13373,7 +13428,9 @@
+                 xmlXPathFunction func;
+                 const xmlChar *oldFunc, *oldFuncURI;
+ 		int i;
++                int frame;
+ 
++                frame = xmlXPathSetFrame(ctxt);
+                 if (op->ch1 != -1)
+                     total +=
+                         xmlXPathCompOpEval(ctxt, &comp->steps[op->ch1]);
+@@ -13381,15 +13438,18 @@
+ 		    xmlGenericError(xmlGenericErrorContext,
+ 			    "xmlXPathCompOpEval: parameter error\n");
+ 		    ctxt->error = XPATH_INVALID_OPERAND;
++                    xmlXPathPopFrame(ctxt, frame);
+ 		    return (total);
+ 		}
+-		for (i = 0; i < op->value; i++)
++		for (i = 0; i < op->value; i++) {
+ 		    if (ctxt->valueTab[(ctxt->valueNr - 1) - i] == NULL) {
+ 			xmlGenericError(xmlGenericErrorContext,
+ 				"xmlXPathCompOpEval: parameter error\n");
+ 			ctxt->error = XPATH_INVALID_OPERAND;
++                        xmlXPathPopFrame(ctxt, frame);
+ 			return (total);
+ 		    }
++                }
+                 if (op->cache != NULL)
+                     XML_CAST_FPTR(func) = op->cache;
+                 else {
+@@ -13405,6 +13465,8 @@
+                             xmlGenericError(xmlGenericErrorContext,
+             "xmlXPathCompOpEval: function %s bound to undefined prefix %s\n",
+                                     (char *)op->value4, (char *)op->value5);
++                            ctxt->error = XPATH_UNDEF_PREFIX_ERROR;
++                            xmlXPathPopFrame(ctxt, frame);
+                             return (total);
+                         }
+                         func = xmlXPathFunctionLookupNS(ctxt->context,
+@@ -13426,6 +13488,7 @@
+                 func(ctxt, op->value);
+                 ctxt->context->function = oldFunc;
+                 ctxt->context->functionURI = oldFuncURI;
++                xmlXPathPopFrame(ctxt, frame);
+                 return (total);
+             }
+         case XPATH_OP_ARG:
+@@ -14329,6 +14392,7 @@
+ 	ctxt->valueNr = 0;
+ 	ctxt->valueMax = 10;
+ 	ctxt->value = NULL;
++        ctxt->valueFrame = 0;
+     }
+ #ifdef XPATH_STREAMING
+     if (ctxt->comp->stream) {
+--- libxml2-2.7.8.dfsg.orig/error.c
++++ libxml2-2.7.8.dfsg/error.c
+@@ -452,6 +452,8 @@
+     xmlErrorPtr to = &xmlLastError;
+     xmlNodePtr baseptr = NULL;
+ 
++    if (code == XML_ERR_OK)
++        return;
+     if ((xmlGetWarningsDefaultValue == 0) && (level == XML_ERR_WARNING))
+         return;
+     if ((domain == XML_FROM_PARSER) || (domain == XML_FROM_HTML) ||
+@@ -459,8 +461,11 @@
+ 	(domain == XML_FROM_IO) || (domain == XML_FROM_VALID)) {
+ 	ctxt = (xmlParserCtxtPtr) ctx;
+ 	if ((schannel == NULL) && (ctxt != NULL) && (ctxt->sax != NULL) &&
+-	    (ctxt->sax->initialized == XML_SAX2_MAGIC))
++	    (ctxt->sax->initialized == XML_SAX2_MAGIC) &&
++	    (ctxt->sax->serror != NULL)) {
+ 	    schannel = ctxt->sax->serror;
++	    data = ctxt->userData;
++	}
+     }
+     /*
+      * Check if structured error handler set
+@@ -473,16 +478,6 @@
+ 	if (schannel != NULL)
+ 	    data = xmlStructuredErrorContext;
+     }
+-    if ((domain == XML_FROM_VALID) &&
+-        ((channel == xmlParserValidityError) ||
+-	 (channel == xmlParserValidityWarning))) {
+-	ctxt = (xmlParserCtxtPtr) ctx;
+-	if ((schannel == NULL) && (ctxt != NULL) && (ctxt->sax != NULL) &&
+-	    (ctxt->sax->initialized == XML_SAX2_MAGIC))
+-	    schannel = ctxt->sax->serror;
+-    }
+-    if (code == XML_ERR_OK)
+-        return;
+     /*
+      * Formatting the message
+      */
+@@ -589,6 +584,11 @@
+     if (to != &xmlLastError)
+         xmlCopyError(to,&xmlLastError);
+ 
++    if (schannel != NULL) {
++	schannel(data, to);
++	return;
++    }
++
+     /*
+      * Find the callback channel if channel param is NULL
+      */
+@@ -600,19 +600,9 @@
+ 	    channel = ctxt->sax->error;
+ 	data = ctxt->userData;
+     } else if (channel == NULL) {
+-        if ((schannel == NULL) && (xmlStructuredError != NULL)) {
+-	    schannel = xmlStructuredError;
+-	    data = xmlStructuredErrorContext;
+-	} else {
+-	    channel = xmlGenericError;
+-	    if (!data) {
+-		data = xmlGenericErrorContext;
+-	    }
+-	}
+-    }
+-    if (schannel != NULL) {
+-        schannel(data, to);
+-	return;
++	channel = xmlGenericError;
++	if (!data)
++	    data = xmlGenericErrorContext;
+     }
+     if (channel == NULL)
+         return;
+--- libxml2-2.7.8.dfsg.orig/encoding.c
++++ libxml2-2.7.8.dfsg/encoding.c
+@@ -1928,7 +1928,7 @@
+     if (in == NULL) return(-1);
+ 
+     /* calculate space available */
+-    written = out->size - out->use;
++    written = out->size - out->use - 1; /* count '\0' */
+     toconv = in->use;
+     /*
+      * echo '<?xml version="1.0" encoding="UCS4"?>' | wc -c => 38
+@@ -2059,7 +2059,7 @@
+     toconv = in->use;
+     if (toconv == 0)
+         return (0);
+-    written = out->size - out->use;
++    written = out->size - out->use - 1; /* count '\0' */
+     if (toconv * 2 >= written) {
+         xmlBufferGrow(out, out->size + toconv * 2);
+         written = out->size - out->use - 1;
+--- libxml2-2.7.8.dfsg.orig/hash.c
++++ libxml2-2.7.8.dfsg/hash.c
+@@ -3,7 +3,7 @@
+  *
+  * Reference: Your favorite introductory book on algorithms
+  *
+- * Copyright (C) 2000 Bjorn Reese and Daniel Veillard.
++ * Copyright (C) 2000,2012 Bjorn Reese and Daniel Veillard.
+  *
+  * Permission to use, copy, modify, and distribute this software for any
+  * purpose with or without fee is hereby granted, provided that the above
+@@ -21,6 +21,25 @@
+ #include "libxml.h"
+ 
+ #include <string.h>
++#ifdef HAVE_STDLIB_H
++#include <stdlib.h>
++#endif
++#ifdef HAVE_TIME_H
++#include <time.h>
++#endif
++
++/* Force randomization even if configure wasn't regenerated */
++#define HASH_RANDOMIZATION
++
++/*
++ * Following http://www.ocert.org/advisories/ocert-2011-003.html
++ * it seems that having hash randomization might be a good idea
++ * when using XML with untrusted data
++ */
++#if defined(HAVE_RAND) && defined(HAVE_SRAND) && defined(HAVE_TIME)
++#define HASH_RANDOMIZATION
++#endif
++
+ #include <libxml/parser.h>
+ #include <libxml/hash.h>
+ #include <libxml/xmlmemory.h>
+@@ -31,6 +50,10 @@
+ 
+ /* #define DEBUG_GROW */
+ 
++#ifdef HASH_RANDOMIZATION
++static int hash_initialized = 0;
++#endif
++
+ /*
+  * A single entry in the hash table
+  */
+@@ -53,6 +76,9 @@
+     int size;
+     int nbElems;
+     xmlDictPtr dict;
++#ifdef HASH_RANDOMIZATION
++    int random_seed;
++#endif
+ };
+ 
+ /*
+@@ -65,6 +91,9 @@
+     unsigned long value = 0L;
+     char ch;
+     
++#ifdef HASH_RANDOMIZATION
++    value = table->random_seed;
++#endif
+     if (name != NULL) {
+ 	value += 30 * (*name);
+ 	while ((ch = *name++) != 0) {
+@@ -92,6 +121,9 @@
+     unsigned long value = 0L;
+     char ch;
+     
++#ifdef HASH_RANDOMIZATION
++    value = table->random_seed;
++#endif
+     if (prefix != NULL)
+ 	value += 30 * (*prefix);
+     else
+@@ -156,6 +188,13 @@
+         table->table = xmlMalloc(size * sizeof(xmlHashEntry));
+         if (table->table) {
+   	    memset(table->table, 0, size * sizeof(xmlHashEntry));
++#ifdef HASH_RANDOMIZATION
++            if (!hash_initialized) {
++                srand(time(NULL));
++                hash_initialized = 1;
++            }
++            table->random_seed = rand();
++#endif
+   	    return(table);
+         }
+         xmlFree(table);
+--- libxml2-2.7.8.dfsg.orig/dict.c
++++ libxml2-2.7.8.dfsg/dict.c
+@@ -2,7 +2,7 @@
+  * dict.c: dictionary of reusable strings, just used to avoid allocation
+  *         and freeing operations.
+  *
+- * Copyright (C) 2003 Daniel Veillard.
++ * Copyright (C) 2003-2012 Daniel Veillard.
+  *
+  * Permission to use, copy, modify, and distribute this software for any
+  * purpose with or without fee is hereby granted, provided that the above
+@@ -19,6 +19,31 @@
+ #define IN_LIBXML
+ #include "libxml.h"
+ 
++#ifdef HAVE_STDLIB_H
++#include <stdlib.h>
++#endif
++#ifdef HAVE_TIME_H
++#include <time.h>
++#endif
++
++/* Force randomization even if configure wasn't regenerated */
++#define DICT_RANDOMIZATION
++
++/*
++ * Following http://www.ocert.org/advisories/ocert-2011-003.html
++ * it seems that having hash randomization might be a good idea
++ * when using XML with untrusted data
++ * Note1: that it works correctly only if compiled with WITH_BIG_KEY
++ *  which is the default.
++ * Note2: the fast function used for a small dict won't protect very
++ *  well but since the attack is based on growing a very big hash
++ *  list we will use the BigKey algo as soon as the hash size grows
++ *  over MIN_DICT_SIZE so this actually works
++ */
++#if defined(HAVE_RAND) && defined(HAVE_SRAND) && defined(HAVE_TIME)
++#define DICT_RANDOMIZATION
++#endif
++
+ #include <string.h>
+ #ifdef HAVE_STDINT_H
+ #include <stdint.h>
+@@ -44,23 +69,23 @@
+ #define WITH_BIG_KEY
+ 
+ #ifdef WITH_BIG_KEY
+-#define xmlDictComputeKey(dict, name, len)			\
+-    (((dict)->size == MIN_DICT_SIZE) ?				\
+-     xmlDictComputeFastKey(name, len) :				\
+-     xmlDictComputeBigKey(name, len))
+-
+-#define xmlDictComputeQKey(dict, prefix, plen, name, len)	\
+-    (((prefix) == NULL) ?					\
+-      (xmlDictComputeKey(dict, name, len)) :			\
+-      (((dict)->size == MIN_DICT_SIZE) ?			\
+-       xmlDictComputeFastQKey(prefix, plen, name, len) :	\
+-       xmlDictComputeBigQKey(prefix, plen, name, len)))
++#define xmlDictComputeKey(dict, name, len)                              \
++    (((dict)->size == MIN_DICT_SIZE) ?                                  \
++     xmlDictComputeFastKey(name, len, (dict)->seed) :                   \
++     xmlDictComputeBigKey(name, len, (dict)->seed))
++
++#define xmlDictComputeQKey(dict, prefix, plen, name, len)               \
++    (((prefix) == NULL) ?                                               \
++      (xmlDictComputeKey(dict, name, len)) :                             \
++      (((dict)->size == MIN_DICT_SIZE) ?                                \
++       xmlDictComputeFastQKey(prefix, plen, name, len, (dict)->seed) :	\
++       xmlDictComputeBigQKey(prefix, plen, name, len, (dict)->seed)))
+ 
+ #else /* !WITH_BIG_KEY */
+-#define xmlDictComputeKey(dict, name, len)			\
+-        xmlDictComputeFastKey(name, len)
+-#define xmlDictComputeQKey(dict, prefix, plen, name, len)	\
+-        xmlDictComputeFastQKey(prefix, plen, name, len)
++#define xmlDictComputeKey(dict, name, len)                              \
++        xmlDictComputeFastKey(name, len, (dict)->seed)
++#define xmlDictComputeQKey(dict, prefix, plen, name, len)               \
++        xmlDictComputeFastQKey(prefix, plen, name, len, (dict)->seed)
+ #endif /* WITH_BIG_KEY */
+ 
+ /*
+@@ -98,6 +123,8 @@
+     xmlDictStringsPtr strings;
+ 
+     struct _xmlDict *subdict;
++    /* used for randomization */
++    int seed;
+ };
+ 
+ /*
+@@ -125,6 +152,9 @@
+     if ((xmlDictMutex = xmlNewRMutex()) == NULL)
+         return(0);
+ 
++#ifdef DICT_RANDOMIZATION
++    srand(time(NULL));
++#endif
+     xmlDictInitialized = 1;
+     return(1);
+ }
+@@ -277,13 +307,13 @@
+  */
+ 
+ static uint32_t
+-xmlDictComputeBigKey(const xmlChar* data, int namelen) {
++xmlDictComputeBigKey(const xmlChar* data, int namelen, int seed) {
+     uint32_t hash;
+     int i;
+ 
+     if (namelen <= 0 || data == NULL) return(0);
+ 
+-    hash = 0;
++    hash = seed;
+ 
+     for (i = 0;i < namelen; i++) {
+         hash += data[i];
+@@ -310,12 +340,12 @@
+  */
+ static unsigned long
+ xmlDictComputeBigQKey(const xmlChar *prefix, int plen,
+-                      const xmlChar *name, int len)
++                      const xmlChar *name, int len, int seed)
+ {
+     uint32_t hash;
+     int i;
+ 
+-    hash = 0;
++    hash = seed;
+ 
+     for (i = 0;i < plen; i++) {
+         hash += prefix[i];
+@@ -346,8 +376,8 @@
+  * for low hash table fill.
+  */
+ static unsigned long
+-xmlDictComputeFastKey(const xmlChar *name, int namelen) {
+-    unsigned long value = 0L;
++xmlDictComputeFastKey(const xmlChar *name, int namelen, int seed) {
++    unsigned long value = seed;
+ 
+     if (name == NULL) return(0);
+     value = *name;
+@@ -381,9 +411,9 @@
+  */
+ static unsigned long
+ xmlDictComputeFastQKey(const xmlChar *prefix, int plen,
+-                       const xmlChar *name, int len)
++                       const xmlChar *name, int len, int seed)
+ {
+-    unsigned long value = 0L;
++    unsigned long value = (unsigned long) seed;
+ 
+     if (plen == 0)
+ 	value += 30 * (unsigned long) ':';
+@@ -460,6 +490,11 @@
+ 	dict->subdict = NULL;
+         if (dict->dict) {
+ 	    memset(dict->dict, 0, MIN_DICT_SIZE * sizeof(xmlDictEntry));
++#ifdef DICT_RANDOMIZATION
++            dict->seed = rand();
++#else
++            dict->seed = 0;
++#endif
+ 	    return(dict);
+         }
+         xmlFree(dict);
+@@ -486,6 +521,7 @@
+ #ifdef DICT_DEBUG_PATTERNS
+         fprintf(stderr, "R");
+ #endif
++        dict->seed = sub->seed;
+         dict->subdict = sub;
+ 	xmlDictReference(dict->subdict);
+     }
+--- libxml2-2.7.8.dfsg.orig/include/libxml/xpath.h
++++ libxml2-2.7.8.dfsg/include/libxml/xpath.h
+@@ -68,7 +68,8 @@
+     XPATH_UNDEF_PREFIX_ERROR,
+     XPATH_ENCODING_ERROR,
+     XPATH_INVALID_CHAR_ERROR,
+-    XPATH_INVALID_CTXT
++    XPATH_INVALID_CTXT,
++    XPATH_STACK_ERROR
+ } xmlXPathError;
+ 
+ /*
+@@ -380,6 +381,8 @@
+     xmlXPathCompExprPtr comp;		/* the precompiled expression */
+     int xptr;				/* it this an XPointer expression */
+     xmlNodePtr         ancestor;	/* used for walking preceding axis */
++
++    int              valueFrame;        /* used to limit Pop on the stack */
+ };
+ 
+ /************************************************************************
