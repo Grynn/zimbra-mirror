@@ -439,16 +439,16 @@ ZaServerSessionStatsPage.prototype._getXForm = function () {
 		tableCssStyle:"width:100%",
 	    itemDefaults:{ },
 	    items:[
-		   {type:_SPACER_, height:"10px", colSpan:"*",id:"xform_header" },
+		   {type:_SPACER_, height:"10px", colSpan:"2",id:"xform_header" },
 		   {ref: ZaServerSession.A_activeSessions, type:_OUTPUT_, height: "15px", colSpan:"*", 
 		   		getDisplayValue:"return this.getFormController().getStatCountsOutput(ZaServerSession.A_activeSessions)"},	
 		  /*
 		   {ref: ZaServerSession.A_activeAccounts, type:_OUTPUT_, height: "15px", colSpan:"*", 
 		   		getDisplayValue:"return this.getFormController().getStatCountsOutput(ZaServerSession.A_activeAccounts)"},	
 		   */
-		   {type:_SPACER_, height:"10px", colSpan:"*", id:"xform_header" },
-		   
-		   {type:_TAB_BAR_,  ref:ZaModel.currentTab, colSpan:"*", 
+		   {type:_SPACER_, height:"10px", colSpan:"2", id:"xform_header" },
+
+		   {type:_TAB_BAR_,  ref:ZaModel.currentTab, colSpan:"2", 
 		   		onChange: ZaServerSessionStatsPage.tabChanged,
 		   		choices:[
 			     {value:ZaServerSessionStatsPage.SOAP_TAB_ID, label:ZaMsg.TABT_SessStatsSoap},
@@ -457,7 +457,6 @@ ZaServerSessionStatsPage.prototype._getXForm = function () {
 			    ],
 		    cssClass:"ZaTabBar", id:"xform_tabbar"
 		   },
-
 		   {type:_SWITCH_, align:_LEFT_, valign:_TOP_,
 		    items:[
 			   {type:_ZATABCASE_, caseKey:1, align:_LEFT_, valign:_TOP_, 
