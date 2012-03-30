@@ -349,7 +349,7 @@ public abstract class SyncMailbox extends DesktopMailbox {
                         }
                     }
 
-                    List<Integer> items = idlist.getAll();
+                    List<Integer> items = idlist.getAllIds();
                     if (items != null && !items.isEmpty()) {
                         for (int id : items) {
                             MailItem item;

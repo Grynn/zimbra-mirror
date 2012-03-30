@@ -46,9 +46,9 @@ import com.zimbra.cs.account.Server;
 import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.db.Db;
+import com.zimbra.cs.db.Db.Capability;
 import com.zimbra.cs.db.DbMailItem;
 import com.zimbra.cs.db.DbOfflineMailbox;
-import com.zimbra.cs.db.Db.Capability;
 import com.zimbra.cs.mailbox.MailItem.TargetConstraint;
 import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
 import com.zimbra.cs.mailbox.calendar.Invite;
@@ -62,8 +62,8 @@ import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.service.AuthProvider;
 import com.zimbra.cs.service.UserServlet;
 import com.zimbra.cs.service.UserServlet.HttpInputStream;
-import com.zimbra.cs.session.Session;
 import com.zimbra.cs.session.PendingModifications.Change;
+import com.zimbra.cs.session.Session;
 import com.zimbra.cs.store.MailboxBlob;
 import com.zimbra.cs.store.StoreManager;
 import com.zimbra.soap.DocumentHandler;
@@ -78,8 +78,8 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
 
     private MailboxSync mMailboxSync = null;
 
-    private Map<Integer,Integer> mRenumbers = new HashMap<Integer,Integer>();
-    private Set<Integer> mLocalTagDeletes = new HashSet<Integer>();
+    private final Map<Integer,Integer> mRenumbers = new HashMap<Integer,Integer>();
+    private final Set<Integer> mLocalTagDeletes = new HashSet<Integer>();
     private boolean runInitSync = false;
 
     private static final OfflineAccount.Version MIN_ZCS_VER_PUSH = new OfflineAccount.Version("5.0.6");
@@ -422,7 +422,7 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
                 OfflineLog.offline.info("item %d deleted from local db before sync completes renumbering to %d",
                         id, newId);
                 TypedIdList tombstones = new TypedIdList();
-                tombstones.add(type, newId);
+                tombstones.add(type, newId, null);
                 DbMailItem.writeTombstones(this, tombstones);
                 success = true;
                 return false;
@@ -852,7 +852,7 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
     }
 
     /**
-     * Ensure whoever calls saveDraft, it grabs this lock first, to avoid the deadlock situation such like OfflineSendMail 
+     * Ensure whoever calls saveDraft, it grabs this lock first, to avoid the deadlock situation such like OfflineSendMail
      * and InitialSync using opposite order to acquire Mailbox lock and the saveDraft lock introduced for bug 59287.
      * remove this synchronization after bug 59287 is fixed.
      */

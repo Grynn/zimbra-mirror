@@ -31,8 +31,6 @@ import com.zimbra.cs.mailbox.ChangeTrackingMailbox;
 import com.zimbra.cs.mailbox.Flag;
 import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.mailbox.Mailbox;
-import com.zimbra.cs.mailbox.MailboxManager;
-import com.zimbra.cs.mailbox.Tag;
 import com.zimbra.cs.mailbox.util.TypedIdList;
 import com.zimbra.cs.session.PendingModifications.Change;
 
@@ -228,7 +226,7 @@ public class DbOfflineMailbox {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
-            stmt = conn.prepareStatement("SELECT id, type" +
+            stmt = conn.prepareStatement("SELECT id, type, uuid" +
                     " FROM " + DbMailItem.getMailItemTableName(ombx) + Db.forceIndex("i_change_mask") +
                     " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "change_mask > 0");
             int pos = 1;
@@ -236,7 +234,7 @@ public class DbOfflineMailbox {
 
             rs = stmt.executeQuery();
             while (rs.next()) {
-                result.add(MailItem.Type.of(rs.getByte(2)), rs.getInt(1));
+                result.add(MailItem.Type.of(rs.getByte(2)), rs.getInt(1), rs.getString(3));
             }
             return result;
         } catch (SQLException e) {

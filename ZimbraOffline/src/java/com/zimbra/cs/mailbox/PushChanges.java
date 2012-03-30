@@ -323,7 +323,7 @@ public class PushChanges {
         if (!tombstones.isEmpty()) {
             OfflineSyncManager.getInstance().continueOK();
 
-            String ids = concatenateIds(tombstones.getAll());
+            String ids = concatenateIds(tombstones.getAllIds());
             Element request = new Element.XMLElement(MailConstants.ITEM_ACTION_REQUEST);
             request.addElement(MailConstants.E_ACTION).addAttribute(MailConstants.A_OPERATION, ItemAction.OP_HARD_DELETE).addAttribute(MailConstants.A_ID, ids);
             ombx.sendRequest(request);
