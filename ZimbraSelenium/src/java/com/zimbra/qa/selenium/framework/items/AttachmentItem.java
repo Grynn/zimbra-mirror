@@ -6,9 +6,16 @@ import org.apache.log4j.Logger;
 public class AttachmentItem {
 	protected static Logger logger = LogManager.getLogger(AttachmentItem.class);
 
-	private String Locator = null;
-	private String AttachmentName = null;
-	private String AttachmentIcon = null;
+	public enum AttachmentIcon {
+		ImgGenericDoc,
+		ImgImageDoc,
+		ImgMSWordDoc,
+		ImgMSExcelDoc,
+	}
+	
+	private String locator = null;
+	private String name = null;
+	private AttachmentIcon icon = null;
 	
 	
 	public AttachmentItem() {
@@ -17,39 +24,40 @@ public class AttachmentItem {
 
 
 	public void setLocator(String locator) {
-		Locator = locator;
+		this.locator = locator;
 	}
 
 
 	public String getLocator() {
-		return Locator;
+		return this.locator;
 	}
 
 
 	public void setAttachmentName(String attachmentName) {
-		AttachmentName = attachmentName;
+		name = attachmentName;
 	}
 
 
 	public String getAttachmentName() {
-		return AttachmentName;
+		return name;
 	}
 
-	public void setAttachmentIcon(String attachmentIcon) {
-		AttachmentIcon = attachmentIcon;
+	public void setAttachmentIcon(AttachmentIcon attachmentIcon) {
+		icon = attachmentIcon;
 	}
 
 
-	public String getAttachmentIcon() {
-		return AttachmentIcon;
+	public AttachmentIcon getAttachmentIcon() {
+		return icon;
 	}
 
 
 	public String prettyPrint() {
 		StringBuilder sb = new StringBuilder();
 		sb.append(AttachmentItem.class.getSimpleName()).append('\n');
-		sb.append("Name: ").append(AttachmentName).append('\n');
-		sb.append("Locator: ").append(Locator).append('\n');
+		sb.append("Name: ").append(name).append('\n');
+		sb.append("Icon: ").append(icon).append('\n');
+		sb.append("Locator: ").append(locator).append('\n');
 		return (sb.toString());
 	}
 	

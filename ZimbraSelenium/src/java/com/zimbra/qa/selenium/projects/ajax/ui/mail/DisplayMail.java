@@ -402,11 +402,20 @@ public class DisplayMail extends AbsDisplay {
 		
 		AttachmentItem item = new AttachmentItem();
 		
+		// Remember the locator to this structure.
+		// The locator can be re-used when clicking on the attachment.
 		item.setLocator(locator);
 		
 		// Set the icon class
-		String icon = "todo";
-		item.setAttachmentIcon(icon);
+		//
+		// "tr>td>div" ... probably not the most stable locator, however, there
+		// is no unique ID on the image element.  If this locator breaks,
+		// just file a bug to put an ID on that element, e.g. div[id$='_icon']
+		//
+		if ( this.sIsElementPresent(locator + " tr>td>div") ) {
+			String icon = this.sGetAttribute(locator + " tr>td>div@class");
+			item.setAttachmentIcon(AttachmentItem.AttachmentIcon.valueOf(icon));
+		}
 		
 		// Set the file name
 		if ( this.sIsElementPresent(locator + " a[id$='_main']") ) {
@@ -488,6 +497,10 @@ public class DisplayMail extends AbsDisplay {
 			this.sClick(locator + " a[id$='_main']");
 
 			this.zWaitForBusyOverlay();
+			
+			// Sucks.  Wait for the page to display.
+			// Any have ideas for a workaround?
+			SleepUtil.sleepVeryLong();
 			
 			return (page);
 
