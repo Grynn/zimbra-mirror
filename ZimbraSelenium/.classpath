@@ -55,7 +55,7 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraClient"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/javamail-1.4.5.jar" sourcepath="/ZimbraCommon/jars-src/javamail-1.4.5-src.zip">
 		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/javamail-1.4.3-javadoc.jar!/"/>
+			<attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/javamail-1.4.5-javadoc.zip!/"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="output" path="build/classes"/>
