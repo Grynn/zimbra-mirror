@@ -1,6 +1,10 @@
 package com.zimbra.qa.selenium.projects.ajax.ui.mail;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import com.zimbra.qa.selenium.framework.items.AttachmentItem;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.staf.Stafpostqueue;
@@ -387,7 +391,125 @@ public class DisplayMail extends AbsDisplay {
 		return (page);
 		
 	}
+	
+	/**
+	 * Parse an attachment row from a message
+	 * @param locator
+	 * @return
+	 * @throws HarnessException
+	 */
+	private AttachmentItem parseAttachmentRow(String locator) throws HarnessException {
+		
+		AttachmentItem item = new AttachmentItem();
+		
+		item.setLocator(locator);
+		
+		// Set the icon class
+		String icon = "todo";
+		item.setAttachmentIcon(icon);
+		
+		// Set the file name
+		if ( this.sIsElementPresent(locator + " a[id$='_main']") ) {
+			item.setAttachmentName(this.sGetText(locator + " a[id$='_main']"));
+		}		
 
+		return (item);
+
+	}
+	
+	/**
+	 * Get the list of attachments on the displayed message
+	 * @return
+	 * @throws HarnessException
+	 */
+	public List<AttachmentItem> zListGetAttachments() throws HarnessException {
+		logger.info(myPageName() + " zListGetMessages()");
+		
+		List<AttachmentItem> items = new ArrayList<AttachmentItem>();
+
+		String listLocator = "css=table[id$='zv__TV__TV-main_MSG_attLinks_table']";
+
+		// Make sure the button exists
+		if ( !this.sIsElementPresent(listLocator) ) {
+			// No attachments!
+			return (items);
+		}
+
+		// How many items are in the table?
+		String tableLocator = listLocator + ">tbody>tr";
+		int count = this.sGetCssCount(tableLocator);
+		logger.debug(myPageName() + " zListGetMessages: number of messages: "+ count);
+
+		// Get each conversation's data from the table list
+		for (int i = 1; i <= count; i++) {
+
+			// Add the new item to the list
+			AttachmentItem item = parseAttachmentRow(listLocator + ">tbody>tr:nth-of-type("+ i +") ");
+			items.add(item);
+			logger.info(item.prettyPrint());
+		}
+
+
+		return (items);
+	}
+
+	public AbsPage zListAttachmentItem(Action action, AttachmentItem attachment) throws HarnessException {
+
+		if ( action == null )
+			throw new HarnessException("action cannot be null");
+
+		if ( attachment == null )
+			throw new HarnessException("attachment cannot be null");
+
+		if ( attachment.getLocator() == null ) {
+			throw new HarnessException("Unable to locate attachment with filename("+ attachment.getAttachmentName() +")");
+		}
+
+		logger.info(myPageName() + " zListAttachmentItem("+ action +", "+ attachment.getAttachmentName() +")");
+
+		tracer.trace(action +" on attachment = "+ attachment.getAttachmentName());
+
+		AbsPage page = null;
+		String locator = attachment.getLocator();
+
+
+
+		if ( attachment.getLocator() == null ) {
+			throw new HarnessException("Unable to locate attachment with filename("+ attachment.getAttachmentName() +")");
+		}
+
+		if ( action == Action.A_LEFTCLICK ) {
+
+			// Since the window opens without a title bar, initialize it first
+			page = new SeparateWindowOpenAttachment(this.MyApplication);
+			((SeparateWindowOpenAttachment)page).zInitializeWindowNames();
+
+			// Left-Click on the item
+			this.sClick(locator + " a[id$='_main']");
+
+			this.zWaitForBusyOverlay();
+			
+			return (page);
+
+		} else if ( action == Action.A_RIGHTCLICK ) {
+			
+			locator = "implement me!";
+			page = null;
+			
+		} else {
+			throw new HarnessException("implement me!  action = "+ action);
+		}
+
+
+		if ( page != null ) {
+			//page.zWaitForActive();
+		}
+
+		// default return command
+		return (page);
+
+	}
+	
 	/**
 	 * Return TRUE/FALSE whether the appointment Accept/Decline/Tentative buttons are present
 	 * @return

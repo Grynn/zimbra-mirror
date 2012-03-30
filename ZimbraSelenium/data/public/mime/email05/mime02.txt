@@ -1,0 +1,47 @@
+Date: Thu, 29 Mar 2012 15:56:40 -0700 (PDT)
+From: foo@zimbra.com
+To: bar@zimbra.com
+Subject: subject151111738
+MIME-Version: 1.0
+Content-Type: multipart/mixed; 
+	boundary="----=_Part_104175_260848982.1333065432021"
+
+------=_Part_104175_260848982.1333065432021
+Content-Type: multipart/alternative; 
+	boundary="----=_Part_104176_1074716947.1333065432021"
+
+------=_Part_104176_1074716947.1333065432021
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+
+
+content213451111738 
+
+
+
+------=_Part_104176_1074716947.1333065432021
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: 7bit
+
+<html><body><div style='font-family: Verdana; font-size: 10pt; color: #000099' ><div>content213451111738</div><div><br><br></div></div></body></html>
+------=_Part_104176_1074716947.1333065432021--
+
+------=_Part_104175_260848982.1333065432021
+Content-Type: text/plain; name=file03.txt
+Content-Disposition: attachment; filename=file03.txt
+Content-Transfer-Encoding: base64
+
+VGV4dCBBdHRhY2htZW50IENvbnRlbnQNCg==
+------=_Part_104175_260848982.1333065432021
+Content-Type: text/plain; name=file02.txt
+Content-Disposition: attachment; filename=file02.txt
+Content-Transfer-Encoding: base64
+
+VGV4dCBBdHRhY2htZW50IENvbnRlbnQNCg==
+------=_Part_104175_260848982.1333065432021
+Content-Type: text/plain; name=file01.txt
+Content-Disposition: attachment; filename=file01.txt
+Content-Transfer-Encoding: base64
+
+VGV4dCBBdHRhY2htZW50IENvbnRlbnQNCg==
+------=_Part_104175_260848982.1333065432021--
