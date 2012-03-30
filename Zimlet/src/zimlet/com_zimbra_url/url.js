@@ -55,7 +55,7 @@ Com_Zimbra_Url.THUMB_URL = "http://images.websnapr.com/?url=";
 Com_Zimbra_Url.THUMB_SIZE = 'width="200" height="150"';
 
 // chars to ignore if they follow a URL, since they are unlikely to be part of it
-Com_Zimbra_Url.IGNORE = AjxUtil.arrayAsHash([".", ",", ";", "!", "*", ":", "?", ")", "]", "}"]);
+Com_Zimbra_Url.IGNORE = AjxUtil.arrayAsHash([".", ",", ";", "!", "*", ":", "?", "]", "}"]);
 
 Com_Zimbra_Url.prototype.match =
 function(line, startIndex) {
