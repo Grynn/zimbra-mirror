@@ -24,7 +24,6 @@ import com.sun.xml.ws.developer.WSBindingProvider;
 
 import generated.zcsclient.zm.testAccountBy;
 import generated.zcsclient.zm.testAccountSelector;
-import generated.zcsclient.admin.testAttr;
 import generated.zcsclient.admin.testAuthRequest;
 import generated.zcsclient.admin.testAuthResponse;
 import generated.zcsclient.admin.testDelegateAuthRequest;
@@ -60,9 +59,6 @@ public class WSDLAdminAuthRequestTest {
         Assert.assertTrue("authToken length should be at least 10 actual value=" + len, len >= 10);
         long lifetime = authResponse.getLifetime();
         Assert.assertTrue("lifetime value should be +ve", lifetime > 0);
-        testAttr attr = authResponse.getA();
-        Assert.assertEquals("value of <a> -", "false", attr.getValue());
-        Assert.assertEquals("'n' attribute of <a> -", "zimbraIsDomainAdminAccount", attr.getN());
     }
 
     @Test
