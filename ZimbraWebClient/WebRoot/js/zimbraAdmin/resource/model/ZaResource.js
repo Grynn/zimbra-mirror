@@ -477,7 +477,11 @@ function(by, val, withCos) {
 	this.initFromJS(resp.calresource[0]);
 	
 	//if(this.attrs[ZaResource.A_locationDisplayName] == null || this.getAutoLocationName() == this.attrs[ZaResource.A_locationDisplayName]) {
-	if(this.getAutoLocationName() == this.attrs[ZaResource.A_locationDisplayName]) {
+    var locationDisplayName = this.attrs[ZaResource.A_locationDisplayName]
+    if (!locationDisplayName) {
+        locationDisplayName = "";
+    }
+    if(this.getAutoLocationName() == locationDisplayName) {
 		this[ZaResource.A2_autoLocationName] = "TRUE";
 	} else {
 		this[ZaResource.A2_autoLocationName] = "FALSE";
@@ -498,7 +502,7 @@ function(by, val, withCos) {
 	elBy.setAttribute("by", by);
 
 	//var getAccCommand = new ZmCsfeCommand();
-	var params = new Object();
+	var params = new Object();         i
 	params.soapDoc = soapDoc;	
 	var reqMgrParams = {
 		controller: ZaApp.getInstance().getCurrentController()
