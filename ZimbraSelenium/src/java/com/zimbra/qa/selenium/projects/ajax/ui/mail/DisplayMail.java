@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+
 import com.zimbra.qa.selenium.framework.items.AttachmentItem;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
@@ -785,12 +786,20 @@ public class DisplayMail extends AbsDisplay {
 
 		// Make sure the client is not busy
 		this.zWaitForBusyOverlay();
+		SleepUtil.sleepSmall();
+		
 		
 		String locator = "css=textarea[id='zv__CLV-main__CV_replyInput']";
+		
 		
 		if ( !this.sIsElementPresent(locator) ) {
 			throw new HarnessException("Placeholder not visible!");
 		}
+		
+		// The placeholder tests are ok when running manually, but
+		// fail in TMS.  Get the HTML to inspect what the TMS
+		// execution is failing on.
+		this.zGetHtml("css=div#zv__CLV-main__CV");
 		
 		String placeholder = this.sGetAttribute(locator + "@placeholder");
 		logger.debug("Found placeholder text: "+ placeholder);
