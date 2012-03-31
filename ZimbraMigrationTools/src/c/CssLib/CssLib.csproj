@@ -122,6 +122,8 @@
     <Compile Include="CosInfo.cs" />
     <Compile Include="CSMigrationWrapper.cs" />
     <Compile Include="CSUnmangedTest.cs" />
+    <Compile Include="MailMigration.cs" />
+    <Compile Include="MapiMigration.cs" />
     <Compile Include="MigrationAccount.cs" />
     <Compile Include="ObjectPickerInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

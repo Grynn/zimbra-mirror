@@ -209,7 +209,8 @@ public class CSMigrationWrapper
             MailClient = mailClient;
             if (MailClient == "MAPI")
             {
-                MailWrapper = new Exchange.MapiWrapper();
+                //MailWrapper = new Exchange.MapiWrapper();
+                MailWrapper = new MapiMigration();
             }
         }
         catch (Exception e)
@@ -441,6 +442,7 @@ public class CSMigrationWrapper
                 Log.debug("Processing folder", folder.Name, "-- Total items:", folder.ItemCount);
                 foreach (dynamic itemobject in itemobjectarray)
                 {
+                   
                     foldertype type = (foldertype)itemobject.Type;
                     if (ProcessIt(options, type))
                     {
@@ -450,7 +452,7 @@ public class CSMigrationWrapper
                         string[,] data = null;
                         try
                         {
-                            data = itemobject.GetDataForItemID(user,
+                            data = itemobject.GetDataForItemID(user.GetInternalUser(),
                                             itemobject.ItemID, itemobject.Type);
                         }
                         catch (Exception e)
@@ -664,7 +666,12 @@ public class CSMigrationWrapper
         string accountName = "";
         dynamic[] folders = null;
         int idx = Acct.AccountName.IndexOf("@");
-        dynamic user = new Exchange.UserObject();       
+        dynamic user = null;
+        if (MailClient == "MAPI")
+        {
+            //user = new Exchange.UserObject();
+            user = new MapiUser();
+        }
         string value = "";
 
         if (!isServer)
