@@ -372,19 +372,27 @@ public class DeclineMeeting extends AjaxCommonTest {
 		// ---------------- Verification at organizer & invitee side both -------------------------------------       
 
 
-		// --- Check that the organizer shows the attendee as "DECLINE" ---
-
-		// Organizer: Search for the appointment (InvId)
+		// Get the response/appointment
+        
 		ZimbraAccount.AccountA().soapSend(
-					"<SearchRequest xmlns='urn:zimbraMail' types='appointment' calExpandInstStart='"+ startUTC.addDays(-10).toMillis() +"' calExpandInstEnd='"+ endUTC.addDays(10).toMillis() +"'>"
-				+		"<query>"+ apptSubject +"</query>"
+					"<SearchRequest xmlns='urn:zimbraMail' types='message'>"
+				+		"<query>in:inbox subject:("+ apptSubject +")</query>"
 				+	"</SearchRequest>");
-		
-		String organizerInvId = ZimbraAccount.AccountA().soapSelectValue("//mail:appt", "invId");
+		String messageId = ZimbraAccount.AccountA().soapSelectValue("//mail:m", "id");
 
-		// Get the appointment details
 		ZimbraAccount.AccountA().soapSend(
-					"<GetAppointmentRequest  xmlns='urn:zimbraMail' id='"+ organizerInvId +"'/>");
+				"<GetMsgRequest xmlns='urn:zimbraMail'>"
+			+		"<m id='" + messageId + "'/>"
+			+	"</GetMsgRequest>");
+
+		
+		// --- Check that the organizer sees the modified response ---
+
+		String body = ZimbraAccount.AccountA().soapSelectValue("//mail:mp[@ct='text/plain']//mail:content", null);
+		ZAssert.assertStringContains(body, modifiedBody, "Verify modified body value");
+
+		
+		// --- Check that the organizer shows the attendee as "DECLINED" ---
 		
 		String attendeeStatus = ZimbraAccount.AccountA().soapSelectValue("//mail:at[@a='"+ app.zGetActiveAccount().EmailAddress +"']", "ptst");
 
@@ -392,7 +400,8 @@ public class DeclineMeeting extends AjaxCommonTest {
 		ZAssert.assertEquals(attendeeStatus, "DE", "Verify that the attendee shows as 'DECLINED'");
 
 
-		// --- Check that the attendee showing status as "DECLINE" ---
+		
+		// --- Check that the attendee showing status as "DECLINED" ---
 
 		// Attendee: Search for the appointment (InvId)
 		app.zGetActiveAccount().soapSend(
@@ -410,18 +419,6 @@ public class DeclineMeeting extends AjaxCommonTest {
 
 		// Verify attendee status shows as psts=DE
 		ZAssert.assertEquals(myStatus, "DE", "Verify that the attendee shows as 'DECLINED'");
-
-		// Organizer: Search for the appointment response
-		String inboxId = FolderItem.importFromSOAP(ZimbraAccount.AccountA(), FolderItem.SystemFolder.Inbox).getId();
-		
-		ZimbraAccount.AccountA().soapSend(
-					"<SearchRequest xmlns='urn:zimbraMail' types='message'>"
-				+		"<query>inid:"+ inboxId +" subject:("+ apptSubject +")</query>"
-				+	"</SearchRequest>");
-		
-		// Verify message body content
-		String body = ZimbraAccount.AccountA().soapSelectValue("//mail:m/mail:fr", null);
-		ZAssert.assertStringContains(body, modifiedBody, "Verify modified body value");
 		
 	}
 	
