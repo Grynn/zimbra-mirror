@@ -1144,9 +1144,9 @@ public class PageCalendar extends AbsTab {
 		} else if (button == Button.B_NEW) {
 
 			// New button
-			// 7.X version: locator =
-			// "css=div[id^='ztb__CLD'] td[id$='zb__CLD__NEW_MENU_title']";
-			locator = Locators.NewButton;
+			// 7.X version: locator = "css=div[id^='ztb__CLD'] td[id$='zb__CLD__NEW_MENU_title']";
+			// 8.X version: locator = "css=td#zb__NEW_MENU_title"
+			locator = "css=td#zb__NEW_MENU_title";
 
 			// Create the page
 			page = new FormApptNew(this.MyApplication);
@@ -1160,15 +1160,13 @@ public class PageCalendar extends AbsTab {
 
 			locator = "css=td[id='zb__CLD__DELETE_title']";
 			
-			if (this.sIsElementPresent(Locators.DialogDivCss)) {
-				
-				page = new DialogConfirmDelete(MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
-				
-			} else {
-				
-				page = null;
-				
-			}
+			// Are there some use-cases when the dialog to confirm deletion
+			// dialog does not appear?  Which situations?  This check
+			//     if (this.sIsElementPresent(Locators.DialogDivCss))
+			// doesn't seem to work for the list view.  For now, always
+			// expect the dialog.  Update other tests if they fail.
+
+			page = new DialogConfirmDelete(MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
 
 		} else if (button == Button.O_LISTVIEW_DAY) {
 
