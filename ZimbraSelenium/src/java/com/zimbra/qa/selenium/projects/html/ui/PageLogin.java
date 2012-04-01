@@ -1,22 +1,23 @@
 package com.zimbra.qa.selenium.projects.html.ui;
 
-import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.ui.AbsApplication;
 import com.zimbra.qa.selenium.framework.ui.AbsPage;
 import com.zimbra.qa.selenium.framework.ui.AbsTab;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.ui.Shortcut;
-import com.zimbra.qa.selenium.framework.util.*;
+import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 
 
 public class PageLogin extends AbsTab {
 
 	public static class Locators {
-		public static final String zBtnLogin = "xpath=//input[@class='zLoginButton']";
-		public static final String zInputUsername = "xpath=//*[@id='username']";
-		public static final String zInputPassword = "xpath=//*[@id='password']";
-		public static final String zInputRemember = "xpath=//*[@id='remember']";
+		public static final String zBtnLogin = "css=input.zLoginButton";
+		public static final String zInputUsername = "css=input#username";
+		public static final String zInputPassword = "css=input#password";
+		public static final String zInputRemember = "css=input#remember";
 
 	}
 

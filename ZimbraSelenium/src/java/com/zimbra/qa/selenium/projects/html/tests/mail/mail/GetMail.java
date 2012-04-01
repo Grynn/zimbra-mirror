@@ -24,7 +24,8 @@ public class GetMail extends HtmlCommonTest {
 		super.startingAccountPreferences = new HashMap<String, String>() {
 			private static final long serialVersionUID = -3743597574275515006L;
 		{
-				    put("zimbraPrefGroupMailBy", "message");
+		    		put("zimbraPrefGroupMailBy", "message");
+		    		put("zimbraPrefReadingPaneLocation", "bottom");
 				    put("zimbraPrefMessageViewHtmlPreferred", "TRUE");
 				    put("zimbraPrefMailPollingInterval", "" + pollIntervalSeconds);
 				}};

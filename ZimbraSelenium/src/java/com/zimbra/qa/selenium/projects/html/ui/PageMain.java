@@ -3,7 +3,6 @@
  */
 package com.zimbra.qa.selenium.projects.html.ui;
 
-import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogError.DialogErrorID;
@@ -17,7 +16,7 @@ public class PageMain extends AbsTab {
 
 	public static class Locators {
 				
-		public static final String zLogoffButton		= "css=a[href='/zimbra/?loginOp=logout']";
+		public static final String zLogoffButton		= "css=a[href='/?loginOp=logout']";
 		
 		public static final String zAppbarMail			= "id=TAB_MAIL";
 		public static final String zAppbarContact		= "id=TAB_ADDRESSBOOK";
