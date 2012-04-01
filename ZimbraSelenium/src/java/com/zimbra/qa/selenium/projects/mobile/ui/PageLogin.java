@@ -16,12 +16,12 @@ public class PageLogin extends AbsTab {
 		// TODO: Should this just extend a single class for all (Ajax, HTML, Mobile) login pages?
 		
 		// Buttons
-		public static final String zBtnLogin = "xpath=//input[@class='zLoginButton']";
+		public static final String zBtnLogin = "css=input.zLoginButton";
 		
 		// Text Input
-		public static final String zInputUsername = "xpath=//*[@id='username']";
-		public static final String zInputPassword = "xpath=//*[@id='password']";
-		public static final String zInputRemember = "xpath=//*[@id='remember']";
+		public static final String zInputUsername = "css=input#username";
+		public static final String zInputPassword = "css=input#password";
+		public static final String zInputRemember = "css=input#remember";
 		
 		// Displayed text
 		public static final String zDisplayedZLoginAppName = "xpath=//*[@id='ZLoginAppName']";
