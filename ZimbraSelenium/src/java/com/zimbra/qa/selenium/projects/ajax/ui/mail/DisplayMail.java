@@ -307,7 +307,7 @@ public class DisplayMail extends AbsDisplay {
 				
 			} else if (option == Button.O_ACCEPT_DONT_NOTIFY_ORGANIZER) {
 
-				optionLocator = Locators.AcceptEditReplyMenu;
+				optionLocator = Locators.AcceptDontNotifyOrganizerMenu;
 				
 				page = this;
 				
@@ -335,7 +335,7 @@ public class DisplayMail extends AbsDisplay {
 				
 			} else if (option == Button.O_TENTATIVE_DONT_NOTIFY_ORGANIZER) {
 
-				optionLocator = Locators.TentativeEditReplyMenu;
+				optionLocator = Locators.TentativeDontNotifyOrganizerMenu;
 				
 				page = this;
 				
@@ -363,7 +363,7 @@ public class DisplayMail extends AbsDisplay {
 				
 			} else if (option == Button.O_DECLINE_DONT_NOTIFY_ORGANIZER) {
 
-				optionLocator = Locators.DeclineEditReplyMenu;
+				optionLocator = Locators.DeclineDontNotifyOrganizerMenu;
 				
 				page = this;
 				
