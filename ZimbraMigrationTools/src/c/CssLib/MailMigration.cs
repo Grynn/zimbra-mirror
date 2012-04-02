@@ -11,8 +11,8 @@ namespace CssLib
        public abstract  string GlobalInit(string Target, string AdminUser, string AdminPassword);
        public abstract string GlobalUninit();
 
-       public abstract string[] GetListofProfiles(object var);
-       public abstract string[] GetListFromObjectPicker(object var);
+       public abstract string GetProfilelist(out object var);
+       public abstract string SelectExchangeUsers(out object var);
     }
 
    public abstract class MigrationUser

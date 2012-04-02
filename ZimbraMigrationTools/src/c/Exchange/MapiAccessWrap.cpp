@@ -819,8 +819,8 @@ STDMETHODIMP CMapiAccessWrap::GetRuleList(VARIANT *rules)
     std::map<BSTR, BSTR> pMap;
     LPWSTR pwszLine = new WCHAR[1024];
 
-    VariantInit(rules);
-    rules->vt = VT_ARRAY | VT_DISPATCH;
+    /*VariantInit(rules);
+    rules->vt = VT_ARRAY | VT_DISPATCH;*/
 
     USES_CONVERSION;
     vector<CRule> vRuleList;

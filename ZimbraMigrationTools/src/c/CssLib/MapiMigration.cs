@@ -46,15 +46,15 @@ namespace CssLib
 
         }
 
-        public override string[] GetListofProfiles(object var)
+        public override string GetProfilelist(out object  var)
         {
             
-            return MapiWrapper.GetProfilelist(var);
+            return MapiWrapper.GetProfilelist(out var);
 
         }
-        public override string[] GetListFromObjectPicker(object var)
+        public override string SelectExchangeUsers(out object var)
         {
-            return MapiWrapper.SelectExchangeUsers(var);
+            return MapiWrapper.SelectExchangeUsers(out var);
 
         }
     }
