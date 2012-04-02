@@ -258,7 +258,7 @@ public class BeanUtils {
         s = replaceAll(s, sLEADING_SPACE, "&nbsp;");
         s = replaceAll(s, sLT, "&lt;");
         s = replaceAll(s, sGT, "&gt;");
-        s = replaceAll(s, sTAB, "<pre style='display:inline;'>\t</pre>");
+        s = replaceAll(s, sTAB, "<pre class='MsgBody-plain-tab'>\t</pre>");
         s = replaceAll(s, sNL, "<br />");
         return s;
     }
