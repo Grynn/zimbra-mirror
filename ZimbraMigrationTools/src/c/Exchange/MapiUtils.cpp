@@ -194,6 +194,93 @@ HRESULT Zimbra::MAPI::Util::MailboxLogon(LPMAPISESSION pSession, LPMDB pMdb, LPW
     return hr;
 }
 
+HRESULT Zimbra::MAPI::Util::GetmsExchHomeServerName(LPCWSTR lpszServer, LPCWSTR lpszUser, LPCWSTR lpszPwd,
+    wstring &wstrHmSvrName)
+{
+	wstrHmSvrName = L"";
+
+    // Get IDirectorySearch Object
+    CComPtr<IDirectorySearch> pDirSearch;
+
+    wstring strADServer = L"LDAP://";
+
+    strADServer += lpszServer;
+
+    HRESULT hr = ADsOpenObject(strADServer.c_str(),
+        /*lpszUser*/ NULL, lpszPwd /*NULL*/, ADS_SECURE_AUTHENTICATION, IID_IDirectorySearch,
+        (void **)&pDirSearch);
+
+    if (((FAILED(hr))))
+    {
+        throw MapiUtilsException(hr, L"Util::GetmsExchHomeServerName(): ADsOpenObject Failed.",
+            __LINE__, __FILE__);
+    }
+
+    wstring strFilter = _T("(&(objectClass=organizationalPerson)(cn=");
+
+    strFilter += lpszUser;
+    strFilter += L"))";
+
+    // Set Search Preferences
+    ADS_SEARCH_HANDLE hSearch;
+    ADS_SEARCHPREF_INFO searchPrefs[2];
+
+    searchPrefs[0].dwSearchPref = ADS_SEARCHPREF_SEARCH_SCOPE;
+    searchPrefs[0].vValue.dwType = ADSTYPE_INTEGER;
+    searchPrefs[0].vValue.Integer = ADS_SCOPE_SUBTREE;
+
+    // Ask for only one object that satisfies the criteria
+    searchPrefs[1].dwSearchPref = ADS_SEARCHPREF_SIZE_LIMIT;
+    searchPrefs[1].vValue.dwType = ADSTYPE_INTEGER;
+    searchPrefs[1].vValue.Integer = 1;
+
+    pDirSearch->SetSearchPreference(searchPrefs, 1);
+
+    // Retrieve the "msExchHomeServerName" attribute for the specified dn
+    LPWSTR pAttributes[] = {L"msExchHomeServerName" };
+
+    hr = pDirSearch->ExecuteSearch((LPWSTR)strFilter.c_str(), pAttributes, 1, &hSearch);
+    if (FAILED(hr))
+    {
+        throw MapiUtilsException(hr,
+            L"Util:: GetUserDNAndLegacyName(): ExecuteSearch() Failed.", __LINE__, __FILE__);
+    }
+
+    ADS_SEARCH_COLUMN dnCol;
+
+    while (SUCCEEDED(hr = pDirSearch->GetNextRow(hSearch)))
+    {
+        if (S_OK == hr)
+        {
+            // distinguishedName
+            hr = pDirSearch->GetColumn(hSearch, pAttributes[0], &dnCol);
+            if (FAILED(hr))
+                break;
+            wstrHmSvrName = dnCol.pADsValues->CaseIgnoreString;
+            pDirSearch->CloseSearchHandle(hSearch);
+            return S_OK;
+        }
+        else if (S_ADS_NOMORE_ROWS == hr)
+        {
+            // Call ADsGetLastError to see if the search is waiting for a response.
+            DWORD dwError = ERROR_SUCCESS;
+            WCHAR szError[512];
+            WCHAR szProvider[512];
+
+            ADsGetLastError(&dwError, szError, 512, szProvider, 512);
+            if (ERROR_MORE_DATA != dwError)
+                break;
+        }
+        else
+        {
+            break;
+        }
+    }
+    pDirSearch->CloseSearchHandle(hSearch);
+
+	return S_OK;
+}
+
 HRESULT Zimbra::MAPI::Util::GetUserDNAndLegacyName(LPCWSTR lpszServer, LPCWSTR lpszUser, LPCWSTR
     lpszPwd, wstring &wstruserdn, wstring &wstrlegacyname)
 {

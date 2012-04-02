@@ -70,8 +70,8 @@ public:
     static LPCWSTR SelectExchangeUsers(vector<ObjectPickerData> &vUserList);
 };
 
-const LPCWSTR DEFAULT_ADMIN_PROFILE_NAME = L"zm_prof";
-const LPCWSTR DEFAULT_ADMIN_MAILBOX_NAME = L"zm_mbox";
+const LPCWSTR DEFAULT_ADMIN_PROFILE_NAME = L"zmprof";
+const LPCWSTR DEFAULT_ADMIN_MAILBOX_NAME = L"zmmbox";
 const LPCWSTR DEFAULT_ADMIN_PASSWORD = L"z1mbr4Migration";
 }
 }

@@ -167,6 +167,8 @@ HRESULT MailboxLogon(LPMAPISESSION pSession, LPMDB pMdb, LPWSTR pStoreDn, LPWSTR
     LPMDB *ppMdb);
 HRESULT GetUserDNAndLegacyName(LPCWSTR lpszServer, LPCWSTR lpszUser, LPCWSTR lpszPwd,
     wstring &wstruserdn, wstring &wstrlegacyname);
+HRESULT GetmsExchHomeServerName(LPCWSTR lpszServer, LPCWSTR lpszUser, LPCWSTR lpszPwd,
+    wstring &wstrHmSvrName);
 HRESULT GetUserDnAndServerDnFromProfile(LPMAPISESSION pSession, LPSTR &pExchangeServerDn,
     LPSTR &pExchangeUserDn, LPSTR &pExchangeServerHostName);
 HRESULT HrMAPIFindIPMSubtree(LPMDB lpMdb, SBinary &bin);
