@@ -279,6 +279,7 @@
         </report>
       </emma>
       <echo>Test Report: ${test.dir}/report/index.html</echo> 
+      <fail if="junit.failure" message="Unit test failed"/>
     </target>
 
 
