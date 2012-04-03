@@ -549,6 +549,24 @@ public class ScheduleViewModel: BaseViewModel
         importOpts.DateFilter = (ovm.IsOnOrAfter) ? ovm.MigrateONRAfter : null;
         importOpts.MessageSizeFilter = ovm.MaxMessageSize;
         importOpts.SkipFolders = (ovm.IsSkipFolders) ? ovm.FoldersToSkip : null;
+
+         switch(ovm.LogLevel)
+                {
+                case"Debug":
+                     importOpts.VerboseOn = LogLevel.Debug;
+                    break;
+                case "Info":
+                    importOpts.VerboseOn = LogLevel.Info;
+                    break;
+                case "Trace":
+                    importOpts.VerboseOn = LogLevel.Trace;
+                    break;
+
+                default:
+                    importOpts.VerboseOn = LogLevel.Info;
+                    break;
+                }
+        
         return importOpts;
     }
 
@@ -658,7 +676,17 @@ public class ScheduleViewModel: BaseViewModel
         MigrationOptions importOpts = SetOptions();
         bool isVerbose = ((OptionsViewModel)ViewModelPtrs[(int)ViewType.OPTIONS]).LoggingVerbose;
 
-        mw.StartMigration(MyAcct, importOpts, isServer, isVerbose, m_isPreview);
+        if (isVerbose)
+        {
+            if (importOpts.VerboseOn < LogLevel.Debug)
+            {
+                importOpts.VerboseOn = LogLevel.Debug;
+            }
+
+        }
+
+        //mw.StartMigration(MyAcct, importOpts, isServer, (isVerbose ? (LogLevel.Debug):(LogLevel.Info)), m_isPreview);
+        mw.StartMigration(MyAcct, importOpts, isServer, importOpts.VerboseOn, m_isPreview);
 
         // special case to format last user progress message
         int count = accountResultsViewModel.AccountResultsList[num].UserResultsList.Count;

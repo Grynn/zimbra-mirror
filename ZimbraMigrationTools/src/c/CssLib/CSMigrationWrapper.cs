@@ -79,7 +79,12 @@ public enum ZimbraFolders
     Contacts = 7, Tags = 8, Conversations = 9, Calendar = 10, MailboxRoot = 11, Wiki = 12,
     EmailedContacts = 13, Chats = 14, Tasks = 15, Max = 16
 }
-
+public enum LogLevel
+{
+Info = 3,
+Debug = 4,
+Trace = 5,
+}
 public class MigrationOptions
 {
     public ItemsAndFoldersOptions ItemsAndFolders;
@@ -87,7 +92,7 @@ public class MigrationOptions
     public string DateFilter;
     public string MessageSizeFilter;
     public string SkipFolders;
-    public bool VerboseOn;
+    public LogLevel VerboseOn;
 }
 
 
@@ -661,7 +666,7 @@ public class CSMigrationWrapper
     }
 
     public void StartMigration(MigrationAccount Acct, MigrationOptions options, bool
-        isServer = true, bool isVerbose = false, bool isPreview = false)
+        isServer = true, LogLevel isVerbose=LogLevel.Info, bool isPreview = false)
     {
         string accountName = "";
         dynamic[] folders = null;
@@ -691,7 +696,8 @@ public class CSMigrationWrapper
             accountName = Acct.AccountName.Substring(0, idx);
         }
 
-        Log.Level level = isVerbose ? Log.Level.Debug : Log.Level.Info;
+        //Log.Level level = isVerbose ? Log.Level.Debug : Log.Level.Info;
+        Log.Level level = (Log.Level)isVerbose;
         Log.init(Path.GetTempPath() + "migration.log", level);  // might have gotten a new level from options
         InitLogFile(accountName, level);
         try

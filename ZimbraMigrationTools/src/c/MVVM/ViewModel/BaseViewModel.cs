@@ -166,7 +166,7 @@ public class BaseViewModel: INotifyPropertyChanged
 	    m_config.ZimbraServer.UserAccount    = userDestModel.ZimbraUser;
 	    m_config.ZimbraServer.UserPassword   = userDestModel.ZimbraUserPasswd;
 	}
-
+        m_config.GeneralOptions.LogLevel = optionsModel.LogLevel;
         m_config.GeneralOptions.Verbose     = optionsModel.LoggingVerbose;
         m_config.ImportOptions.Mail         = optionsModel.ImportMailOptions;
         m_config.ImportOptions.Calendar     = optionsModel.ImportCalendarOptions;

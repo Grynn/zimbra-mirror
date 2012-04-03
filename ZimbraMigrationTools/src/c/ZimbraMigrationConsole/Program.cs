@@ -217,7 +217,7 @@ class Program
                 bool Rules = CommandLineArgs.I.argAsBool("Rules");
                 bool OOO = CommandLineArgs.I.argAsBool("OOO");
 
-                bool Verbose = CommandLineArgs.I.argAsBool("Verbose");
+                string Verbose = CommandLineArgs.I.argAsString("Verbose");
 
                 bool ServerMigration = false;
                 XmlConfig myXmlConfig = new XmlConfig();
@@ -279,8 +279,8 @@ class Program
                     if (ZCSPort == "")
                         ZCSPort = myXmlConfig.ConfigObj.ZimbraServer.Port;
 
-                    if (Verbose == false)
-                        Verbose = myXmlConfig.ConfigObj.GeneralOptions.Verbose;
+                    if (Verbose == "")
+                        Verbose = myXmlConfig.ConfigObj.GeneralOptions.LogLevel;
 
                     if (Mail == false)
                         Mail = myXmlConfig.ConfigObj.ImportOptions.Mail;
@@ -358,8 +358,24 @@ class Program
                 }
 
                 importopts.ItemsAndFolders = itemFolderFlags;
+                switch(Verbose)
+                {
+                case"Debug":
+                     importopts.VerboseOn = LogLevel.Debug;
+                    break;
+                case "Info":
+                    importopts.VerboseOn = LogLevel.Info;
+                    break;
+                case "Trace":
+                    importopts.VerboseOn = LogLevel.Trace;
+                    break;
 
-                importopts.VerboseOn = Verbose;
+                default:
+                    importopts.VerboseOn = LogLevel.Info;
+                    break;
+                }
+
+                //importopts.VerboseOn = Verbose;
 
                 Migration Test = new Migration();
                 CssLib.CSMigrationWrapper TestObj;

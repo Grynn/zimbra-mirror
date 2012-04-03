@@ -273,6 +273,7 @@ public class IntroViewModel: BaseViewModel
         m_optionsViewModel.ImportDeletedItemOptions = false;
         m_optionsViewModel.ImportSentOptions = false;
         m_optionsViewModel.LoggingVerbose = false;
+        m_optionsViewModel.LogLevel = LogLevel.Info.ToString();
         m_optionsViewModel.OEnableNext = true;
         m_optionsViewModel.MigrateONRAfter = (DateTime.Now.AddMonths(-3)).ToShortDateString();
         m_optionsViewModel.IsMaxMessageSize = false;

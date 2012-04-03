@@ -165,6 +165,15 @@ public class GeneralOptions
         set { LogFileLocation = value; }
     }
 
+    private string m_LogLevel;
+
+    public string LogLevel
+    {
+        get { return m_LogLevel; }
+        set { m_LogLevel = value; }
+    }
+    
+
     private bool m_Verbose;
     public bool Verbose
     {

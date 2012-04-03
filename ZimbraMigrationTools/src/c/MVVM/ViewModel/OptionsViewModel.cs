@@ -60,6 +60,7 @@ public class OptionsViewModel: BaseViewModel
         if (config.GeneralOptions != null)  // so old config files will work
         {
             LoggingVerbose = config.GeneralOptions.Verbose;
+            LogLevel = config.GeneralOptions.LogLevel;
         }
 
         string returnval = "";
@@ -398,6 +399,19 @@ public class OptionsViewModel: BaseViewModel
             m_config.GeneralOptions.Verbose = value;
 
             OnPropertyChanged(new PropertyChangedEventArgs("LoggingVerbose"));
+        }
+    }
+
+    public string LogLevel
+    {
+        get { return m_config.GeneralOptions.LogLevel; }
+        set
+        {
+            if (value == m_config.GeneralOptions.LogLevel)
+                return;
+            m_config.GeneralOptions.LogLevel = value;
+
+            OnPropertyChanged(new PropertyChangedEventArgs("LogLevel"));
         }
     }
     private bool oenableNext;
