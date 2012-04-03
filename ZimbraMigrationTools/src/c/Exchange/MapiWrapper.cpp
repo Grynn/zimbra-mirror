@@ -45,14 +45,14 @@ STDMETHODIMP CMapiWrapper::ConnectToServer(BSTR ServerHostName, BSTR Port, BSTR 
     (void)AdminID;
 
     // baseMigrationObj->Connecttoserver();
-    dlog.debug(L"Mapiwrapper connectoserver InitGlobalSessionAndStore");
+    dlog.trace(L"Begin Mapiwrapper connectoserver InitGlobalSessionAndStore");
     LPCWSTR status = MAPIAccessAPI::InitGlobalSessionAndStore( /*ServerHostName, */ AdminID);
     if(status != NULL)
     {
         dlog.err("MAPIACCESSAPI->InitGlobalSessionAndStore errors out ",status);
         return S_FALSE;
     }
-
+    dlog.trace(L"End Mapiwrapper connectoserver InitGlobalSessionAndStore");
     return S_OK;
 }
 
@@ -63,11 +63,12 @@ STDMETHODIMP CMapiWrapper::GlobalInit(BSTR pMAPITarget, BSTR pAdminUser, BSTR pA
     (void)pAdminUser;
     (void)pAdminPassword;
     (void)pErrorText;
-    dlog.debug(L"Mapiwrapper GlobalInit");
+    dlog.trace(L" Begin Mapiwrapper GlobalInit");
     LPCWSTR lpszErrorText = ExchangeOps::GlobalInit((LPCWSTR)pMAPITarget, (LPCWSTR)pAdminUser,
         (LPCWSTR)pAdminPassword);
     
     *pErrorText = (lpszErrorText) ? CComBSTR(lpszErrorText) : CComBSTR("");
+    dlog.trace(L" End Mapiwrapper GlobalInit");
     return S_OK;
 }
 
@@ -81,7 +82,7 @@ STDMETHODIMP CMapiWrapper::ImportMailOptions(BSTR OptionsTag)
 STDMETHODIMP CMapiWrapper::GetProfilelist(VARIANT *Profiles,BSTR *statusmessage)
 {
     // TODO: Add your implementation code here
-    dlog.debug(L"Mapiwrapper GetProfilelist");
+    dlog.trace(L" Begin Mapiwrapper GetProfilelist");
     HRESULT hr = S_OK;
 	CComBSTR status = L"";
 
@@ -161,6 +162,8 @@ STDMETHODIMP CMapiWrapper::GetProfilelist(VARIANT *Profiles,BSTR *statusmessage)
         status.Detach();
 
 	MAPIUninitialize();
+
+        dlog.trace(L" End Mapiwrapper GetProfilelist");
     return hr;
 }
 
@@ -212,17 +215,18 @@ STDMETHODIMP CMapiWrapper::GetFolderObjects(VARIANT *vObjects)
 STDMETHODIMP CMapiWrapper::GlobalUninit(BSTR *pErrorText)
 {
     (void)pErrorText;
-    dlog.debug(L"Mapiwrapper::GlobalUninit");
+    dlog.trace(L"Begin Mapiwrapper::GlobalUninit");
 
     LPCWSTR lpszErrorText = ExchangeOps::GlobalUninit();
 
     *pErrorText = (lpszErrorText) ? CComBSTR(lpszErrorText) : CComBSTR("");
+    dlog.trace(L"End Mapiwrapper::GlobalUninit");
     return S_OK;
 }
 
 STDMETHODIMP CMapiWrapper::SelectExchangeUsers(VARIANT *Users, BSTR *pErrorText)
 {
-    dlog.debug(L"Mapiwrapper::SelectExchangeUsers");
+    dlog.trace(L"Begin Mapiwrapper::SelectExchangeUsers");
     vector<ObjectPickerData> vUserList;
 
     LPCWSTR lpszErrorText = ExchangeOps::SelectExchangeUsers(vUserList);
@@ -306,6 +310,7 @@ STDMETHODIMP CMapiWrapper::SelectExchangeUsers(VARIANT *Users, BSTR *pErrorText)
 
     Users->parray = psa;
     *pErrorText = (lpszErrorText) ? CComBSTR(lpszErrorText) : CComBSTR("");
+    dlog.trace(L"End Mapiwrapper::SelectExchangeUsers");
     return S_OK;
 }
 

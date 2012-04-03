@@ -26,30 +26,33 @@ STDMETHODIMP CMapiAccessWrap::UserInit(BSTR UserName, BSTR userAccount, BSTR *St
 	Zimbra::Util::AutoCriticalSection autocriticalsection(cs);
     // TODO: Add your implementation code here
 
-    dlog.debug(L"mapiaccesswrap::userinit");
+    dlog.trace(L" Begin mapiaccesswrap::userinit");
     maapi = new Zimbra::MAPI::MAPIAccessAPI(UserName, userAccount);
 
     // Init session and stores
     LPCWSTR lpStatus = maapi->InitializeUser();
 
     *StatusMsg = (lpStatus) ? CComBSTR(lpStatus) : SysAllocString(L"");
+
+    dlog.trace(L" End mapiaccesswrap::userinit");
     return S_OK;
 }
 
 STDMETHODIMP CMapiAccessWrap::UserUninit()
 {
     // TODO: Add your implementation code here
-    dlog.debug(L"mapiaccesswrap::UserUninit");
+    dlog.trace(L" Begin mapiaccesswrap::UserUninit");
      delete maapi;
 
     // *StatusMsg = (lpStatus) ? CComBSTR(lpStatus) : SysAllocString(L"");
+     dlog.trace(L" End mapiaccesswrap::UserUninit");
     return S_OK;
 }
 
 STDMETHODIMP CMapiAccessWrap::GetFolderList(VARIANT *folders)
 {
     HRESULT hr = S_OK;
-     dlog.debug(L"mapiaccesswrap::GetFolderList");
+     dlog.trace(L" Begin mapiaccesswrap::GetFolderList");
     VariantInit(folders);
     folders->vt = VT_ARRAY | VT_DISPATCH;
 
@@ -147,6 +150,7 @@ STDMETHODIMP CMapiAccessWrap::GetFolderList(VARIANT *folders)
     SafeArrayUnaccessData(psa);
     folders->parray = psa;
 
+    dlog.trace(L" End mapiaccesswrap::GetFolderList");
     return S_OK;
 }
 
@@ -154,7 +158,7 @@ STDMETHODIMP CMapiAccessWrap::GetItemsList(IFolderObject *FolderObj, VARIANT cre
     VARIANT *vItems)
 {
     HRESULT hr = S_OK;
-    dlog.debug(L"Mapiacesswrap::GetItemsList");
+    dlog.trace(L"Begin  Mapiacesswrap::GetItemsList");
     VariantInit(vItems);
     vItems->vt = VT_ARRAY | VT_DISPATCH;
 
@@ -282,6 +286,7 @@ STDMETHODIMP CMapiAccessWrap::GetItemsList(IFolderObject *FolderObj, VARIANT cre
     vItems->parray = psa;
     if (folderEntryid.lpb != NULL)
         delete folderEntryid.lpb;
+   dlog.trace(L"End  Mapiacesswrap::GetItemsList");
     return S_OK;
 }
 
@@ -289,7 +294,7 @@ STDMETHODIMP CMapiAccessWrap::GetData(BSTR UserId, VARIANT ItemId, FolderType ty
     VARIANT *pVal)
 {
     HRESULT hr = S_OK;
-    dlog.debug(L"MapiaccessWrap::GetData");
+    dlog.trace(L" Begin MapiaccessWrap::GetData");
     std::map<BSTR, BSTR> pIt;
     std::map<BSTR, BSTR>::iterator it;
     SBinary ItemID;
@@ -779,15 +784,17 @@ STDMETHODIMP CMapiAccessWrap::GetData(BSTR UserId, VARIANT ItemId, FolderType ty
 	}
 	pIt.clear();
 
+        dlog.trace(L" End MapiaccessWrap::GetData");
     return hr;
 }
 
 STDMETHODIMP CMapiAccessWrap::GetOOOInfo(BSTR *OOOInfo)
 {
-    dlog.debug(L"MapiAccessWrap::Get000Info");
+    dlog.trace(L" Begin MapiAccessWrap::Get000Info");
     LPCWSTR lpInfo = maapi->GetOOOStateAndMsg();
     *OOOInfo = CComBSTR(lpInfo);
     delete[] lpInfo;
+    dlog.trace(L" End MapiAccessWrap::Get000Info");
     return S_OK;
 }
 
@@ -815,7 +822,7 @@ STDMETHODIMP CMapiAccessWrap::GetRuleList(VARIANT *rules)
     // 0filterActions  actionRedirect`~a`~user2^^^actionFileInto`~folderPath`~Test
     
     HRESULT hr = S_OK;
-     dlog.debug(L"MapiAccessWrap::GetRuleList");
+     dlog.trace(L" Begin MapiAccessWrap::GetRuleList");
     std::map<BSTR, BSTR> pMap;
     LPWSTR pwszLine = new WCHAR[1024];
 
@@ -837,7 +844,7 @@ STDMETHODIMP CMapiAccessWrap::GetRuleList(VARIANT *rules)
     size_t numRules = vRuleList.size();
     if ((numRules == 0))
     {
-         dlog.debug(L"MapiAccessWrap::GetRuleList GetExchangerules no rules to migrated ");
+         dlog.trace(L"MapiAccessWrap::GetRuleList GetExchangerules no rules to migrated ");
         return S_OK;
     }
 
@@ -934,14 +941,14 @@ STDMETHODIMP CMapiAccessWrap::GetRuleList(VARIANT *rules)
     }
     delete ruleMapNames;
     ////
-
+    dlog.trace(L" End MapiAccessWrap::GetRuleList");
     return hr;
 }
 
 void CMapiAccessWrap::CreateExceptionAttrs(BSTR attrs[], int num)
 {
 
-    dlog.debug(L"MapiAccessWrap::CreateExceptionAttrs");
+    dlog.trace(L" Begin MapiAccessWrap::CreateExceptionAttrs");
     WCHAR pwszNum[10];
     LPWSTR names[] = {L"exceptionType", L"ptst", L"fb", L"allDay",
                       L"name", L"su", L"loc", L"m", L"s", L"e",                      
@@ -958,4 +965,5 @@ void CMapiAccessWrap::CreateExceptionAttrs(BSTR attrs[], int num)
 	lstrcat(pwszAttr, pwszNum);
 	attrs[i] = SysAllocString(pwszAttr);
     }
+    dlog.trace(L" End MapiAccessWrap::CreateExceptionAttrs");
 }

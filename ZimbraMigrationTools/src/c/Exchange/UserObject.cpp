@@ -73,15 +73,16 @@ STDMETHODIMP CUserObject::Init(BSTR host, BSTR location, BSTR account, BSTR *pEr
 STDMETHODIMP CUserObject::Uninit()
 {
    HRESULT hr = S_OK;
-   dlog.debug(L" UnInit");
+   dlog.trace(L"Begin UnInit");
    hr= mapiObj->UserUninit();
+    dlog.trace(L"End UnInit");
     return hr;
 }
 
 STDMETHODIMP CUserObject::GetFolders(VARIANT *vObjects)
 {
      HRESULT hr = S_OK;
-     dlog.debug(L"GetFolders");
+     dlog.trace(L"Begin GetFolders");
     VariantInit(vObjects);
     
     hr = mapiObj->GetFolderList(vObjects);
@@ -93,6 +94,7 @@ STDMETHODIMP CUserObject::GetFolders(VARIANT *vObjects)
           dlog.err(str);
           return hr;
     }
+    dlog.trace(L"End GetFolders");
     return hr;
 }
 
@@ -100,7 +102,7 @@ STDMETHODIMP CUserObject::GetItemsForFolder(IFolderObject *folderObj, VARIANT cr
     VARIANT *vItems)
 {
     HRESULT hr = S_OK;
-     dlog.debug(L"GetItemsForFolder");
+     dlog.trace(L" Begin GetItemsForFolder");
     VariantInit(vItems);
     hr = mapiObj->GetItemsList(folderObj, creationDate, vItems);
     if(FAILED(hr))
@@ -110,6 +112,8 @@ STDMETHODIMP CUserObject::GetItemsForFolder(IFolderObject *folderObj, VARIANT cr
           dlog.err(str);
           return hr;
     }
+
+    dlog.trace(L" End GetItemsForFolder");
     return hr;
 }
 
@@ -132,7 +136,7 @@ STDMETHODIMP CUserObject::GetMapiAccessObject(BSTR userID, IMapiAccessWrap **pVa
 STDMETHODIMP CUserObject::GetOOO(BSTR *pOOO)
 {
     HRESULT hr = S_OK;
-     dlog.debug(L"GetOOO");
+     dlog.trace(L" Begin GetOOO");
     hr= mapiObj->GetOOOInfo(pOOO);
     if(FAILED(hr))
     {
@@ -141,13 +145,14 @@ STDMETHODIMP CUserObject::GetOOO(BSTR *pOOO)
           dlog.err(str);
           return hr;
     }
+    dlog.trace(L" End GetOOO");
     return hr;
 }
 
 STDMETHODIMP CUserObject::GetRules(VARIANT *vRules)
 {
     HRESULT hr = S_OK;
-     dlog.debug(L"GetRules");
+     dlog.trace(L" Begin GetRules");
     VariantInit(vRules);
     hr= mapiObj->GetRuleList(vRules);
     if(FAILED(hr))
@@ -157,5 +162,7 @@ STDMETHODIMP CUserObject::GetRules(VARIANT *vRules)
           dlog.err(str);
           return hr;
     }
+    dlog.trace(L" End GetRules");
     return hr;
+
 }

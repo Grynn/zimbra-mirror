@@ -93,7 +93,7 @@ STDMETHODIMP CItemObject::put_Parentfolder(IFolderObject *newVal)
 STDMETHODIMP CItemObject::GetDataForItemID(IUserObject *Userobj,VARIANT ItemId, FolderType type, VARIANT *pVal)
 {
     HRESULT hr = S_OK;
-    dlog.debug(L"ItemObject::GetDataForItemID");
+    dlog.trace(L"Begin ItemObject::GetDataForItemID");
     std::map<BSTR, BSTR> pIt;
     std::map<BSTR, BSTR>::iterator it;
     //SBinary ItemID;
@@ -124,7 +124,7 @@ STDMETHODIMP CItemObject::GetDataForItemID(IUserObject *Userobj,VARIANT ItemId, 
         return hr;
         }
   
-
+ dlog.trace(L"End ItemObject::GetDataForItemID");
     return hr;
 }
 
