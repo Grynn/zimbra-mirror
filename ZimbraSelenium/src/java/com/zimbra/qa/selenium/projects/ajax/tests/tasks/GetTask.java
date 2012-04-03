@@ -103,8 +103,8 @@ public class GetTask extends AjaxCommonTest {
 		ZAssert.assertNotNull(found, "Verify the task is present");
 	
 	}
-
-	@Test(	description = "Get a task with text content - verify task contents",
+	@Bugs(ids="72236")
+	@Test(	description = "Verify Text Only Task that can display the body in the preview pane",
 			groups = { "smoke" })
 	public void GetTask_02() throws HarnessException {
 		
@@ -150,7 +150,7 @@ public class GetTask extends AjaxCommonTest {
 		
 	}
 
-	@Test(	description = "Get a task with html content - verify task contents",
+	@Test(	description = "Verify Multipart/alternative (text and html) task that can be display the body in preview pane",
 			groups = { "smoke" })
 			public void GetTask_03() throws HarnessException {
 
@@ -217,7 +217,7 @@ public class GetTask extends AjaxCommonTest {
 		
 	}
 
-	
+	@Bugs(ids="72236")
 	@Test(	description = "Get a task with all fields - verify task contents",
 			groups = { "smoke" })
 	public void GetTask_04() throws HarnessException {
@@ -427,7 +427,8 @@ public class GetTask extends AjaxCommonTest {
 	 * 5.Verify task should not display in list view
 	 * @throws HarnessException
 	 */
-	@Bugs(ids="64681")
+	@Bugs(ids="64681,72236")
+	
 	@Test(	description = "No refresh after task is marked complete in filter to-do list",
 			groups = { "functional" })
 	public void GetTask_07() throws HarnessException {
@@ -490,6 +491,50 @@ public class GetTask extends AjaxCommonTest {
 		ZAssert.assertNull(found, "Verify the task is no longer present for Mark as completed Tasks");
 
 		}
+	
+	@Bugs(ids="72236")
+	@Test(	description = "Verify Html Only Task that can display the html body in the preview pane",
+			groups = { "smoke" })
+	public void GetTask_08() throws HarnessException {
+		
+		FolderItem taskFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Tasks);
+		String subject = "subject" + ZimbraSeleniumProperties.getUniqueString();
+		String bodyHTML = "text<strong>bold"+ ZimbraSeleniumProperties.getUniqueString() +"</strong>text";
+		String contentHTML = XmlStringUtil.escapeXml(
+				"<html>" +
+				"<head></head>" +
+				"<body>"+ bodyHTML +"</body>" +
+		"</html>");
+				
+		app.zGetActiveAccount().soapSend(
+				"<CreateTaskRequest xmlns='urn:zimbraMail'>" +
+					"<m >" +
+			        	"<inv>" +
+			        		"<comp name='"+ subject +"'>" +
+			        			"<or a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
+			        		"</comp>" +
+			        	"</inv>" +
+			        	"<su>"+ subject +"</su>" +
+			        	"<mp ct='text/html'>" +
+			        		"<content>"+ contentHTML +"</content>" +
+			        	"</mp>" +
+					"</m>" +
+				"</CreateTaskRequest>");
+		
+		TaskItem task = TaskItem.importFromSOAP(app.zGetActiveAccount(), subject);
+		ZAssert.assertNotNull(task, "Verify the task is created");
+		
+		// Refresh the tasks view
+		app.zTreeTasks.zTreeItem(Action.A_LEFTCLICK, taskFolder);
+
+		// Select the message so that it shows in the reading pane
+		DisplayTask actual = (DisplayTask) app.zPageTasks.zListItem(Action.A_LEFTCLICK, subject);
+
+		// Verify Html Only Task that can display the body in the preview pane
+		ZAssert.assertStringContains(	actual.zGetTaskProperty(Field.Body), bodyHTML, "Verify Html Only Task that can display the body in the preview pane");
+
+	}
+
 
 
 }
