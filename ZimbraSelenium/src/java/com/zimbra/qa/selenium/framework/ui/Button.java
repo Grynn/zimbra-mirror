@@ -403,6 +403,8 @@ public class Button {
 	// Calendar dialogs
 	public static final Button B_SEND_CANCELLATION = new Button("B_SEND_CANCELLATION");
 	public static final Button B_EDIT_CANCELLATION = new Button("B_EDIT_CANCELLATION");
+	public static final Button B_NOTIFY_ORGANIZER = new Button("B_NOTIFY_ORGANIZER");
+	public static final Button B_DONT_NOTIFY_ORGANIZER = new Button("B_DONT_NOTIFY_ORGANIZER");
 
 	// Calendar tree
 	public static final Button B_RELOAD = new Button("B_RELOAD");

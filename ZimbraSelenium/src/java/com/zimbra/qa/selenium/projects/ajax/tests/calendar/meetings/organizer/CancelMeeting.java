@@ -24,13 +24,14 @@ import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogConfirm;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning.DialogWarningID;
-import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew;
-import com.zimbra.qa.selenium.projects.ajax.ui.calendar.PageCalendar;
+import com.zimbra.qa.selenium.projects.ajax.ui.calendar.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew.Field;
 
 @SuppressWarnings("unused")
 public class CancelMeeting extends AjaxCommonTest {	
+	
+	
 	public CancelMeeting() {
 		logger.info("New "+ CancelMeeting.class.getCanonicalName());
 		
@@ -41,10 +42,16 @@ public class CancelMeeting extends AjaxCommonTest {
 		super.startingAccountPreferences = null;
 	}
 	
+	
+	
 	@Bugs(ids = "69132")
 	@Test(description = "Cancel an meeting using Delete toolbar button",
 			groups = { "smoke" })
 	public void CancelMeeting_01() throws HarnessException {
+		
+
+		//-- Data setup
+
 		
 		// Creating object for meeting data
 		String tz, apptSubject, apptBody, apptAttendee1;
@@ -76,19 +83,39 @@ public class CancelMeeting extends AjaxCommonTest {
                "</CreateAppointmentRequest>");
 		String apptId = app.zGetActiveAccount().soapSelectValue("//mail:CreateAppointmentResponse", "apptId");
         
-        // Right click to meeting and cancel it
+		
+		//-- GUI actions
+		
+		
+        // Refresh the view
         app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
+        
+        // Select the appointment
         app.zPageCalendar.zListItem(Action.A_LEFTCLICK, apptSubject);
+        
+        // Press Delete toolbar button
         app.zPageCalendar.zToolbarPressButton(Button.B_DELETE);
-        DialogConfirm dlgConfirm = new DialogConfirm(DialogConfirm.Confirmation.DELETE, app, ((AppAjaxClient) app).zPageCalendar);
-		dlgConfirm.zClickButton(Button.B_NO);
-		dlgConfirm.zWaitForClose();
+        
+        // Wait for the "Send Cancellation" dialog
+        // Click Send Cancellation
+        DialogConfirmDeleteOrganizer dialog = new DialogConfirmDeleteOrganizer(app, ((AppAjaxClient) app).zPageCalendar);
+        dialog.zWaitForActive();
+		dialog.zClickButton(Button.B_SEND_CANCELLATION);
+		dialog.zWaitForClose();
+		
+		
+		
+		//-- Verification
+		
+		
+		// Verify meeting disappears from the view
 		ZAssert.assertEquals(app.zPageCalendar.sIsElementPresent(app.zPageCalendar.zGetApptLocator(apptSubject)), false, "Verify meeting is deleted from organizer's calendar");
 		
 		// Verify meeting is deleted from attendee's calendar
-		SleepUtil.sleepVeryLong(); //importSOAP gives wrong response without sleep
-		AppointmentItem canceledAppt = AppointmentItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ apptSubject +")", startUTC, endUTC);
+//		AppointmentItem canceledAppt = AppointmentItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ apptSubject +")", startUTC, endUTC);
+		AppointmentItem canceledAppt = AppointmentItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ apptSubject +")");
 		ZAssert.assertNull(canceledAppt, "Verify meeting is deleted from attendee's calendar");
+		
 	}
 	
 	@Bugs(ids = "69132")
@@ -96,6 +123,10 @@ public class CancelMeeting extends AjaxCommonTest {
 			groups = { "functional" })
 	public void CancelMeeting_02() throws HarnessException {
 		
+		
+		//-- Data setup
+		
+		
 		// Creating object for meeting data
 		String tz, apptSubject, apptBody, apptAttendee1;
 		tz = ZTimeZone.TimeZoneEST.getID();
@@ -126,17 +157,38 @@ public class CancelMeeting extends AjaxCommonTest {
                "</CreateAppointmentRequest>");
 		String apptId = app.zGetActiveAccount().soapSelectValue("//mail:CreateAppointmentResponse", "apptId");
         
-        // Right click to meeting and cancel it
+		
+		
+		//-- GUI actions
+		
+		
+        // Refresh the view
         app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
+        
+        // Select the appointment
+        app.zPageCalendar.zListItem(Action.A_LEFTCLICK, apptSubject);
+        
+        // Right Click -> Delete context menu
         app.zPageCalendar.zListItem(Action.A_RIGHTCLICK, Button.O_CANCEL_MENU, apptSubject);
-        DialogConfirm dlgConfirm = new DialogConfirm(DialogConfirm.Confirmation.DELETE, app, ((AppAjaxClient) app).zPageCalendar);
-		dlgConfirm.zClickButton(Button.B_NO);
-		dlgConfirm.zWaitForClose();
+
+        // Wait for the "Send Cancellation" dialog
+        // Click Send Cancellation
+        DialogConfirmDeleteOrganizer dialog = new DialogConfirmDeleteOrganizer(app, ((AppAjaxClient) app).zPageCalendar);
+        dialog.zWaitForActive();
+		dialog.zClickButton(Button.B_SEND_CANCELLATION);
+		dialog.zWaitForClose();
+
+		
+		
+		//-- Verification
+		
+		
+		// Verify the meeting disappears from the view
 		ZAssert.assertEquals(app.zPageCalendar.sIsElementPresent(app.zPageCalendar.zGetApptLocator(apptSubject)), false, "Verify meeting is deleted from organizer's calendar");
 		
 		// Verify meeting is deleted from attendee's calendar
-		SleepUtil.sleepLong(); //importSOAP gives wrong response without sleep
-		AppointmentItem canceledAppt = AppointmentItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ apptSubject +")", startUTC, endUTC);
+		//		AppointmentItem canceledAppt = AppointmentItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ apptSubject +")", startUTC, endUTC);
+		AppointmentItem canceledAppt = AppointmentItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ apptSubject +")");
 		ZAssert.assertNull(canceledAppt, "Verify meeting is deleted from attendee's calendar");
 	}
 	
@@ -154,6 +206,9 @@ public class CancelMeeting extends AjaxCommonTest {
 			dataProvider = "DataProviderShortcutKeys")
 	public void CancelMeeting_03(String name, int keyEvent) throws HarnessException {
 		
+		//-- Data Setup
+		
+		
 		// Creating object for meeting data
 		String tz, apptSubject, apptBody, apptAttendee1;
 		tz = ZTimeZone.TimeZoneEST.getID();
@@ -184,11 +239,31 @@ public class CancelMeeting extends AjaxCommonTest {
                "</CreateAppointmentRequest>");
 		String apptId = app.zGetActiveAccount().soapSelectValue("//mail:CreateAppointmentResponse", "apptId");
         
-        // Cancel meeting using keyboard Del and Backspace key
-		app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
+		
+		
+		//-- GUI actions
+		
+		
+        // Refresh the view
+        app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
+        
+        // Select the appointment
         app.zPageCalendar.zListItem(Action.A_LEFTCLICK, apptSubject);
-        DialogConfirm dlgConfirm = (DialogConfirm)app.zPageCalendar.zKeyboardKeyEvent(keyEvent);
-		dlgConfirm.zClickButton(Button.B_NO);
+        
+        // Cancel meeting using keyboard Del and Backspace key
+        app.zPageCalendar.zKeyboardKeyEvent(keyEvent);
+        
+        // Wait for the "Send Cancellation" dialog
+        // Click Send Cancellation
+        DialogConfirmDeleteOrganizer dialog = new DialogConfirmDeleteOrganizer(app, ((AppAjaxClient) app).zPageCalendar);
+        dialog.zWaitForActive();
+		dialog.zClickButton(Button.B_SEND_CANCELLATION);
+		dialog.zWaitForClose();
+
+		
+		//-- Verification
+		
+		// Verify the meeting disappears from the organizer's calendar
 		app.zGetActiveAccount().soapSend(
 				"<SearchRequest xmlns='urn:zimbraMail' types='appointment' calExpandInstStart='"+ startUTC.addDays(-7).toMillis() +"' calExpandInstEnd='"+ startUTC.addDays(7).toMillis() +"'>"
 			+	"<query>subject:("+ apptSubject +")</query>"
@@ -197,9 +272,10 @@ public class CancelMeeting extends AjaxCommonTest {
 		ZAssert.assertEquals(nodes.length, 0, "Verify meeting is deleted from organizer's calendar");
 		
 		// Verify meeting is deleted from attendee's calendar
-		SleepUtil.sleepLong(); //importSOAP gives wrong response without sleep
-		AppointmentItem canceledAppt = AppointmentItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ apptSubject +")", startUTC, endUTC);
+//		AppointmentItem canceledAppt = AppointmentItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ apptSubject +")", startUTC, endUTC);
+		AppointmentItem canceledAppt = AppointmentItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ apptSubject +")");
 		ZAssert.assertNull(canceledAppt, "Verify meeting is deleted from attendee's calendar");
+		
 	}
 	
 	@Bugs(ids = "69132")
@@ -207,10 +283,11 @@ public class CancelMeeting extends AjaxCommonTest {
 			groups = { "functional" })
 	public void CancelMeeting_04() throws HarnessException {
 		
+		//-- Data Setup
 		// Creating object for meeting data
 		String tz, apptSubject, apptBody, apptAttendee1;
 		tz = ZTimeZone.TimeZoneEST.getID();
-		apptSubject = ZimbraSeleniumProperties.getUniqueString();
+		apptSubject = "appt" + ZimbraSeleniumProperties.getUniqueString();
 		apptBody = ZimbraSeleniumProperties.getUniqueString();
 		apptAttendee1 = ZimbraAccount.AccountA().EmailAddress;
 		
@@ -237,26 +314,49 @@ public class CancelMeeting extends AjaxCommonTest {
                "</CreateAppointmentRequest>");
 		String apptId = app.zGetActiveAccount().soapSelectValue("//mail:CreateAppointmentResponse", "apptId");
         
-        // Right click to meeting and cancel it
+        
+		
+		
+		//-- GUI actions
+		
+		
+        // Refresh the view
         app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
+        
+        // Select the appointment
         app.zPageCalendar.zListItem(Action.A_LEFTCLICK, apptSubject);
+
+        // Press Delete Toolbar button
         app.zPageCalendar.zToolbarPressButton(Button.B_DELETE);
-        DialogConfirm dlgConfirm = new DialogConfirm(DialogConfirm.Confirmation.DELETE, app, ((AppAjaxClient) app).zPageCalendar);
-		dlgConfirm.zClickButton(Button.B_CANCEL);
-		dlgConfirm.zWaitForClose();
-		ZAssert.assertEquals(app.zPageCalendar.sIsElementPresent(app.zPageCalendar.zGetApptLocator(apptSubject)), true, "Verify meeting is not deleted from organizer's calendar");
+
+        // Wait for the "Send Cancellation" dialog
+        // Click Send Cancellation
+        DialogConfirmDeleteOrganizer dialog = new DialogConfirmDeleteOrganizer(app, ((AppAjaxClient) app).zPageCalendar);
+        dialog.zWaitForActive();
+		dialog.zClickButton(Button.B_CANCEL);
+		dialog.zWaitForClose();
+
+		
+		//-- Verification
+		ZAssert.assertTrue(app.zPageCalendar.sIsElementPresent(app.zPageCalendar.zGetApptLocator(apptSubject)), "Verify meeting is not deleted from organizer's calendar");
 		
 		// Verify meeting is not deleted from attendee's calendar
-		SleepUtil.sleepLong(); //importSOAP gives wrong response without sleep
-		AppointmentItem canceledAppt = AppointmentItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ apptSubject +")", startUTC, endUTC);
-		ZAssert.assertNotNull(canceledAppt, "Verify meeting is not deleted from attendee's calendar");
+//		AppointmentItem canceledAppt = AppointmentItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ apptSubject +")", startUTC, endUTC);
+		AppointmentItem canceledAppt = AppointmentItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ apptSubject +")");
+		ZAssert.assertNotNull(canceledAppt, "Verify meeting is NOT deleted from attendee's calendar");
+		
 	}
 	
+	
 	@Bugs(ids = "69132")
-	@Test(description = "Send meeting cancellation message to attendee while cancelling appointment",
+	@Test(description = "Verify sending the editted cancelation message immediately (without changing) sends the cancellation message to attendees",
 			groups = { "functional" })
 	public void CancelMeeting_05() throws HarnessException {
 		
+		
+		//-- Data Setup
+		
+		
 		// Creating object for meeting data
 		String tz, apptSubject, apptBody, apptAttendee1;
 		tz = ZTimeZone.TimeZoneEST.getID();
@@ -286,15 +386,33 @@ public class CancelMeeting extends AjaxCommonTest {
                      "</m>" +
                "</CreateAppointmentRequest>");
 		String apptId = app.zGetActiveAccount().soapSelectValue("//mail:CreateAppointmentResponse", "apptId");
-        
-        // Right click to meeting and cancel it
+
+		
+		
+		//-- GUI actions
+		
+		
+        // Refresh the view
         app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
-        app.zPageCalendar.zListItem(Action.A_RIGHTCLICK, Button.O_CANCEL_MENU, apptSubject);
-        DialogConfirm dlgConfirm = new DialogConfirm(DialogConfirm.Confirmation.DELETE, app, ((AppAjaxClient) app).zPageCalendar);
-		dlgConfirm.zClickButton(Button.B_YES);
-		FormMailNew mailComposeForm = new FormMailNew(app);
-		SleepUtil.sleepLong();
+        
+        // Select the appointment
+        app.zPageCalendar.zListItem(Action.A_LEFTCLICK, apptSubject);
+
+        // Press Delete Toolbar button
+        app.zPageCalendar.zToolbarPressButton(Button.B_DELETE);
+
+        // Wait for the "Send Cancellation" dialog
+        // Click Edit Cancellation
+        // When the form opens, simply click "SEND" (don't edit content)
+        DialogConfirmDeleteOrganizer dialog = new DialogConfirmDeleteOrganizer(app, ((AppAjaxClient) app).zPageCalendar);
+        dialog.zWaitForActive();
+        FormMailNew mailComposeForm = (FormMailNew)dialog.zClickButton(Button.B_EDIT_CANCELLATION);
 		mailComposeForm.zToolbarPressButton(Button.B_SEND);
+		
+		
+		//-- Verification
+		
+		// Verify the appointment does not appear in the organizers calendar
 		ZAssert.assertEquals(app.zPageCalendar.sIsElementPresent(app.zPageCalendar.zGetApptLocator(apptSubject)), false, "Verify meeting is deleted from organizer's calendar");
 		
 		// Verify meeting is deleted from attendee's calendar && receive meeting cancellation message
@@ -302,8 +420,10 @@ public class CancelMeeting extends AjaxCommonTest {
 		MailItem canceledApptMail = MailItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:(" + (char)34 + "Cancelled " + apptSubject + (char)34 + ")");
 		ZAssert.assertNotNull(canceledApptMail, "Verify meeting cancellation message received to attendee");
 		
-		AppointmentItem canceledAppt = AppointmentItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ apptSubject +")", startUTC, endUTC);
+//		AppointmentItem canceledAppt = AppointmentItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ apptSubject +")", startUTC, endUTC);
+		AppointmentItem canceledAppt = AppointmentItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ apptSubject +")");
 		ZAssert.assertNull(canceledAppt, "Verify meeting is deleted from attendee's calendar");
+		
 	}
 	
 	@Bugs(ids = "69132")
@@ -311,13 +431,17 @@ public class CancelMeeting extends AjaxCommonTest {
 			groups = { "functional" })
 	public void CancelMeeting_06() throws HarnessException {
 		
+		
+		//-- Data Setup
+		
+		
 		// Creating object for meeting data
 		String tz, apptSubject, apptBody, apptAttendee1, modifyApptBody;
 		tz = ZTimeZone.TimeZoneEST.getID();
-		apptSubject = ZimbraSeleniumProperties.getUniqueString();
+		apptSubject = "appt" + ZimbraSeleniumProperties.getUniqueString();
 		apptBody = ZimbraSeleniumProperties.getUniqueString();
 		apptAttendee1 = ZimbraAccount.AccountA().EmailAddress;
-		modifyApptBody = "Modifying body to " + ZimbraSeleniumProperties.getUniqueString();
+		modifyApptBody = "Modified" + ZimbraSeleniumProperties.getUniqueString();
 		
 		// Absolute dates in UTC zone
 		Calendar now = Calendar.getInstance();
@@ -341,27 +465,48 @@ public class CancelMeeting extends AjaxCommonTest {
                      "</m>" +
                "</CreateAppointmentRequest>");
 		String apptId = app.zGetActiveAccount().soapSelectValue("//mail:CreateAppointmentResponse", "apptId");
-        
-        // Right click to meeting and cancel it
+
+		
+		
+		//-- GUI actions
+		
+		
+        // Refresh the view
         app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
-        app.zPageCalendar.zListItem(Action.A_RIGHTCLICK, Button.O_CANCEL_MENU, apptSubject);
-        DialogConfirm dlgConfirm = new DialogConfirm(DialogConfirm.Confirmation.DELETE, app, ((AppAjaxClient) app).zPageCalendar);
-		dlgConfirm.zClickButton(Button.B_YES);
-		SleepUtil.sleepLong();
-		FormMailNew mailComposeForm = new FormMailNew(app);
+        
+        // Select the appointment
+        app.zPageCalendar.zListItem(Action.A_LEFTCLICK, apptSubject);
+
+        // Press Delete Toolbar button
+        app.zPageCalendar.zToolbarPressButton(Button.B_DELETE);
+
+        // Wait for the "Send Cancellation" dialog
+        // Click Edit Cancellation
+        // When the form opens, simply click "SEND" (don't edit content)
+        DialogConfirmDeleteOrganizer dialog = new DialogConfirmDeleteOrganizer(app, ((AppAjaxClient) app).zPageCalendar);
+        dialog.zWaitForActive();
+        FormMailNew mailComposeForm = (FormMailNew)dialog.zClickButton(Button.B_EDIT_CANCELLATION);
 		mailComposeForm.zFillField(Field.Body, modifyApptBody);		
-		mailComposeForm.zSubmit();
+		mailComposeForm.zToolbarPressButton(Button.B_SEND);
+//		mailComposeForm.zSubmit();
+		
+		
+		//-- Verification
+		
+		// Verify the meeting no longer appears in the organizer's calendar
 		ZAssert.assertEquals(app.zPageCalendar.sIsElementPresent(app.zPageCalendar.zGetApptLocator(apptSubject)), false, "Verify meeting is deleted from organizer's calendar");
 		
-		SleepUtil.sleepLong(); //importSOAP gives wrong response without sleep
-		MailItem canceledApptMail = MailItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:(" + (char)34 + "Cancelled " + apptSubject + (char)34 + ")");
+
+		// Verify the meeting no longer appears in the attendee's calendar
+		MailItem canceledApptMail = MailItem.importFromSOAP(ZimbraAccount.AccountA(), "in:inbox subject:(Cancelled) subject:("+ apptSubject +")"); // TODO: I18N
 		
 		// Verify meeting cancellation message with exact body content
 		ZAssert.assertNotNull(canceledApptMail, "Verify meeting cancellation message received to attendee");
 		ZAssert.assertStringContains(canceledApptMail.dBodyText, modifyApptBody, "Verify the body field value is correct");
 		
 		// Verify meeting is deleted from attendee's calendar
-		AppointmentItem canceledAppt = AppointmentItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ apptSubject +")", startUTC, endUTC);
+//		AppointmentItem canceledAppt = AppointmentItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ apptSubject +")", startUTC, endUTC);
+		AppointmentItem canceledAppt = AppointmentItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ apptSubject +")");
 		ZAssert.assertNull(canceledAppt, "Verify meeting is deleted from attendee's calendar");
 	}
 }

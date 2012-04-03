@@ -52,7 +52,7 @@ public class DialogWarning extends AbsDialog {
 		public static final DialogWarningID ZmAcceptShare = new DialogWarningID("ZmAcceptShare");
 
 		protected String Id;
-		protected DialogWarningID(String id) {
+		public DialogWarningID(String id) {
 			Id = id;
 		}
 	}

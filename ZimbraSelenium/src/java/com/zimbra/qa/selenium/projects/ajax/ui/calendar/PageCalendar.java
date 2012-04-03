@@ -1159,14 +1159,30 @@ public class PageCalendar extends AbsTab {
 		} else if (button == Button.B_DELETE) {
 
 			locator = "css=td[id='zb__CLD__DELETE_title']";
-			
-			// Are there some use-cases when the dialog to confirm deletion
-			// dialog does not appear?  Which situations?  This check
-			//     if (this.sIsElementPresent(Locators.DialogDivCss))
-			// doesn't seem to work for the list view.  For now, always
-			// expect the dialog.  Update other tests if they fail.
+			this.zClickAt(locator, "");
+			this.zWaitForBusyOverlay();
 
-			page = new DialogConfirmDelete(MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
+
+			// Since we are not going to "wait for active", insert
+			// a small delay to make sure the dialog shows up
+			// before the zIsActive() method is called
+			SleepUtil.sleepMedium();
+
+
+			// If the organizer deletes an appointment, you get "Send Cancellation" dialog
+			page = new DialogConfirmDeleteOrganizer(MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
+			if ( page.zIsActive() ) {
+				return (page);
+			}
+			
+			// If an attendee deletes an appointment, you get a "Confirm Delete" dialog
+			page = new DialogConfirmDeleteAttendee(MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
+			if ( page.zIsActive() ) {
+				return (page);
+			}
+
+			// No dialog
+			return (null);
 
 		} else if (button == Button.O_LISTVIEW_DAY) {
 
@@ -1293,15 +1309,38 @@ public class PageCalendar extends AbsTab {
 
 		if ( keyEvent == KeyEvent.VK_DELETE || keyEvent == KeyEvent.VK_BACK_SPACE ) {
 
-			if (this.sIsElementPresent(Locators.DialogDivCss)) {
-				
-				page = new DialogConfirmDelete(MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
-				
-			} else {
-				
-				page = new DialogDeleteRecurringItem(DialogDeleteRecurringItem.Confirmation.DELETERECURRINGITEM, MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
-				
+
+			this.zKeyboard.zTypeKeyEvent(keyEvent);
+			this.zWaitForBusyOverlay();
+			
+			// Since we are not going to "wait for active", insert
+			// a small delay to make sure the dialog shows up
+			// before the zIsActive() method is called
+			SleepUtil.sleepMedium();
+
+			// If the organizer deletes an appointment, you get "Send Cancellation" dialog
+			page = new DialogConfirmDeleteOrganizer(MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
+			if ( page.zIsActive() ) {
+				return (page);
 			}
+			
+			// If an attendee deletes an appointment, you get a "Confirm Delete" dialog
+			page = new DialogConfirmDeleteAttendee(MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
+			if ( page.zIsActive() ) {
+				return (page);
+			}
+
+			// If page was specified, make sure it is active
+			if (page != null) {
+
+				// This function (default) throws an exception if never active
+				page.zWaitForActive();
+
+			}
+
+			return (page);
+
+
 		}
 
 		this.zKeyboard.zTypeKeyEvent(keyEvent);
