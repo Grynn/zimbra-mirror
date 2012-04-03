@@ -36,7 +36,7 @@ import com.zimbra.cs.offline.OfflineLog;
 
 public class AutoUpdateTest {
 
-//    static final String BASE_UPDATE_URL = "http://localhost/update.php"; //for local testing
+//    static final String BASE_UPDATE_URL = "http://localhost/update-new.php"; //for local testing
     static final String BASE_UPDATE_URL = "https://www.zimbra.com/aus/zdesktop2/update.php"; //real update site; only updated once build is RTM
 
     static HttpClient httpClient = ZimbraHttpConnectionManager.getExternalHttpConnMgr().newHttpClient();
@@ -137,10 +137,10 @@ public class AutoUpdateTest {
     @BeforeClass
     public static void setUp()
     {
-        UpdateInfo gaUpdateInfo = new UpdateInfo(11273, "7_1_4_ga", "7.1.4", "minor");
-        gaUpdateInfo.addPlatform(new PlatformInfo("macos", "22dfcf99e9928eaf58862b5bb5efbbd8", 76599981));
-        gaUpdateInfo.addPlatform(new PlatformInfo("win32", "92f0884414c1f046cb2de26de9e67c38", 96880128));
-        gaUpdateInfo.addPlatform(new PlatformInfo("linux", "76ad0c6ea4af706d033030c5820eab61", 148872612));
+        UpdateInfo gaUpdateInfo = new UpdateInfo(11299, "7_1_4_ga", "7.1.4", "minor");
+        gaUpdateInfo.addPlatform(new PlatformInfo("macos", "8530e2c9a003a4dd66efac2bd217f12f", 76599623));
+        gaUpdateInfo.addPlatform(new PlatformInfo("win32", "7eed5033f5088f6b0d7eff6f1723c5ae", 96885760));
+        gaUpdateInfo.addPlatform(new PlatformInfo("linux", "872ae3039ee376a96e0e763f5a876b46", 148836285));
         updateInfo.put(CHN_RELEASE, gaUpdateInfo);
     }
     
