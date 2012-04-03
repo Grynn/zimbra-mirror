@@ -79,6 +79,7 @@ olcDbIndex: zimbraCalResRoom eq,sub
 olcDbIndex: zimbraCalResCapacity eq
 olcDbIndex: zimbraCalResBuilding eq,sub
 olcDbIndex: zimbraCalResFloor eq,sub
+olcDbIndex: zimbraDomainAliasTargetID eq
 olcDbMode: 0600
 olcDbMaxsize: 85899345920
 olcDbSearchStack: 16
