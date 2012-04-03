@@ -183,8 +183,8 @@ class Program
         //save a reference so it does not get GC'd     
         consoleHandler = new HandlerRoutine(ConsoleCtrlCheck);     
         //set our handler here that will trap exit          
-        SetConsoleCtrlHandler(consoleHandler, true); 
-
+        SetConsoleCtrlHandler(consoleHandler, true);
+       
         
         //Account userAccts = new Account();
         while (!keepRunning)
@@ -193,6 +193,50 @@ class Program
             
             if (args.Count() > 0)
             {
+
+                if (args[0].Equals("Help", StringComparison.CurrentCultureIgnoreCase))
+                // if (args[0] == "Help")
+                {
+                    string builder = "Usage of ZimbraMigrationConsole.exe ConfigxmlFile=C:\\MyConfig.xml Users =C:\\users.csv \n";
+                    builder += "\n";
+                    builder += "ConfigxmlFile= location of the xml file \n";
+                    builder += "\n";
+                    builder += "Users= location of the csv file \n";
+                    builder += "\n";
+                    builder += "MaxThreads= Maximum number of threads by default it uses 4.\n";
+                    builder += "\n";
+                    builder += "MaxErrors= Maximum no of errors allowed for the each migration \n";
+                    builder += "\n";
+                    builder += "MaxWarn= Maximum no of warnings \n";
+                    builder += "\n";
+                    builder += " Profile= UserProfile to be migrated for user migration \n";
+                    builder += "\n";
+                    builder += "DataFile= PST file for the user to be migrated\n";
+                    builder += "\n";
+                    builder += "ZimbraHost= The Zimbra server hostname \n";
+                    builder += "\n";
+                    builder += "ZimbraPort= The Zimbra port \n";
+                    builder += "\n";
+                    builder += " ZimbraID= The Zimbra ID. For server migration it’s the admin id and for user migration it’s the userid on Zimbra\n";
+                    builder += "\n";
+                    builder += " ZimbraPwd= Pwd for Zimbra \n";
+                    builder += "\n";
+                    builder += "The Migration Item Options can be specified as Mail=True Calendar=True Contacts=True Sent=True DeletedItems=True Junk=True Tasks=True Rules=True OOO=True \n";
+                    builder += " By default these options are false. Unless specified in the XML or as arguments \n";
+                    builder += "\n";
+                    builder += "Verbose= Debug|Info|Trace  .This option provides various levels of logging \n";
+                    builder += "\n";
+                    builder += "For more information see the help file distributed with the exe. \n";
+
+
+
+                    System.Console.Write(builder);
+                    keepRunning = true;
+                    Console.ReadKey(true);
+
+                    return;
+
+                }
                 CommandLineArgs.I.parseArgs(args, "myStringArg=defaultVal;someLong=12");
                 
                 string ConfigXmlFile = CommandLineArgs.I.argAsString("ConfigxmlFile");
@@ -674,8 +718,9 @@ class Program
                 System.Console.WriteLine();
                 /*ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
                     " Make sure the correct arguments (2) are passed \n");*/
-                System.Console.WriteLine(" Make sure the correct arguments (2) are passed \n");
+                System.Console.WriteLine(" Make sure the correct arguments (2) are passed . type Help for more information\n");
                 System.Console.WriteLine();
+                Console.ReadKey(true);
                 return;
 
             }
