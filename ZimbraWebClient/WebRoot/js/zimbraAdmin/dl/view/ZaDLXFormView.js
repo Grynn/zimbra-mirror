@@ -45,11 +45,10 @@ function () {
 ZaDLXFormView.prototype.getTabIcon =
 function () {
 	if (this._containedObject && this._containedObject.attrs && this._containedObject.attrs[ZaDistributionList.A_isAdminGroup]=="TRUE" ) {
-                return "DistributionListGroup";
-             
-        } else {
-                return "DistributionList" ;
-        }
+		return "DistributionListGroup";
+	} else {
+		return "DistributionList" ;
+	}
 
 }
 
@@ -1532,30 +1531,30 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
 		}
 		var case4 = {type:_ZATABCASE_, width:"100%", numCols:1, colSizes:["auto"],caseKey:_tab4,
 		items: [
-				{type:_SPACER_, height:"9"},
-				{type:_GROUPER_, borderCssClass:"LeftGrouperBorder",
-					 width:"100%", numCols:1,colSizes:["auto"],
-					label:ZaMsg.NAD_EditDLAliasesGroup,
-					items :[
-						{ref:ZaAccount.A_zimbraMailAlias, type:_DWT_LIST_, height:"200", width:"350px", 
-							forceUpdate: true, preserveSelection:false, multiselect:true,cssClass: "DLSource", 
-							headerList:null,onSelection:ZaDLXFormView.aliasSelectionListener
-						},
- 				{type:_GROUP_, numCols:6, colSizes:["100px","10px","100px","10px","100px","auto"],
-                                              cssStyle:"margin-bottom:10px;padding-bottom:0px;margin-top:10px;pxmargin-left:10px;margin-right:10px;",
-							items: [
-								deleteAliasButton,
-								{type:_CELLSPACER_},
-								editAliasButton,
-								{type:_CELLSPACER_},
-								addAliasButton
-							]
-						}
-					]
-				}
-			]
-		};
-		cases.push(case4);
+			{type:_SPACER_, height:"9"},
+			{type:_GROUPER_, borderCssClass:"LeftGrouperBorder",
+				width:"100%", numCols:1,colSizes:["auto"],
+				label:ZaMsg.NAD_EditDLAliasesGroup,
+				items :[
+					{ref:ZaAccount.A_zimbraMailAlias, type:_DWT_LIST_, height:"200", width:"350px", 
+						forceUpdate: true, preserveSelection:false, multiselect:true,cssClass: "DLSource", 
+						headerList:null,onSelection:ZaDLXFormView.aliasSelectionListener
+					},
+ 					{type:_GROUP_, numCols:6, colSizes:["100px","10px","100px","10px","100px","auto"],
+						cssStyle:"margin:10px;padding-bottom:0;",
+						items: [
+							deleteAliasButton,
+							{type:_CELLSPACER_},
+							editAliasButton,
+							{type:_CELLSPACER_},
+							addAliasButton
+						]
+					}
+				]
+			}
+		]
+	};
+	cases.push(case4);
 	}
 
 	if(_tab5) {
@@ -1577,36 +1576,36 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
 
 		var case5 = {type:_ZATABCASE_, width:"100%", numCols:1, colSizes:["auto"],caseKey:_tab5,
 		items: [
-				{type:_SPACER_, height:"9"},
-				{type:_GROUPER_, borderCssClass:"LeftGrouperBorder",
-					width:"100%", numCols:1,colSizes:["auto"],
-					label: ZaMsg.DLXV_GroupLabelDLOwners,
-					items :[
-						{ref:ZaDistributionList.A2_DLOwners, type:_DWT_LIST_, height:"200", width:"350px",
-							forceUpdate: true, preserveSelection:false, multiselect:true,cssClass: "DLSource",
-							headerList:null,onSelection:ZaDLXFormView.ownerSelectionListener
-						},
-                        {type:_GROUP_, numCols:6, colSizes:["100px","10px","100px","10px","100px","auto"],
-                            cssStyle:"margin-bottom:10px;padding-bottom:0px;margin-top:10px;pxmargin-left:10px;margin-right:10px;",
-                            items: [
-                                deleteOwnerButton,
-                                {type:_CELLSPACER_},
-                                editOwnerButton,
-                                {type:_CELLSPACER_},
-                                addOwnerButton
-                            ]
-                        }
-                    ]
-                }
-			]
-		};
-		cases.push(case5);
+			{type:_SPACER_, height:"9"},
+			{type:_GROUPER_, borderCssClass:"LeftGrouperBorder",
+				width:"100%", numCols:1,colSizes:["auto"],
+				label: ZaMsg.DLXV_GroupLabelDLOwners,
+				items :[
+					{ref:ZaDistributionList.A2_DLOwners, type:_DWT_LIST_, height:"200", width:"350px",
+						forceUpdate: true, preserveSelection:false, multiselect:true,cssClass: "DLSource",
+						headerList:null,onSelection:ZaDLXFormView.ownerSelectionListener
+					},
+					{type:_GROUP_, numCols:6, colSizes:["100px","10px","100px","10px","100px","auto"],
+						cssStyle:"margin:10px;padding-bottom:0;",
+						items: [
+							deleteOwnerButton,
+							{type:_CELLSPACER_},
+							editOwnerButton,
+							{type:_CELLSPACER_},
+							addOwnerButton
+						]
+					}
+				]
+			}
+		]
+	};
+	cases.push(case5);
 	}
 
 	if(_tab6) {
 		var case6 =
 		{type:_ZATABCASE_, caseKey:_tab6, colSpan:"*",
-            paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),
+			paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),
 			items:[
                 {type:_ZA_TOP_GROUPER_, label:ZaMsg.NAD_MailOptionsReceiving, id:"dl_pref_replyto_group",
                     colSpan: "*", numCols: 2, colSizes:[275, "*"],
@@ -1684,11 +1683,10 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
 	xFormObject.items = [
 		{type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan: "*", id:"xform_header", 
 			items: [
-				{type:_GROUP_,	numCols:4,colSizes:["32px","350px","100px","250px"],
+				{type:_GROUP_,	numCols:4,colSizes:["32px","*","80px","*"],
 					items: headerItems
 				}
-			],
-			cssStyle:"padding-top:5px; padding-bottom:5px"
+			]
 		},
 		{type:_TAB_BAR_, choices:this.tabChoices,
             cssStyle:(appNewUI?"display:none;":""),

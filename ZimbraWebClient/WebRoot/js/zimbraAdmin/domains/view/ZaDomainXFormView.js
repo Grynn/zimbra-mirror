@@ -720,7 +720,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject,entry) {
 	
 	xFormObject.items.push({type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan:"*", id:"xform_header", 
 			items: [
-				{type:_GROUP_,	numCols:4,colSizes:["32px","350px","100px","*"],
+				{type:_GROUP_,	numCols:4,colSizes:["32px","*","80px","*"],
 					items: [
 						{type:_AJX_IMAGE_, src:"Domain_32", label:null,rowSpan:3},
 						{type:_OUTPUT_, ref:"name", label:null,cssClass:"AdminTitle",
@@ -756,7 +756,7 @@ if(appNewUI) {
                 { type: _DWT_ALERT_,
                     visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A_zimbraDomainStatus,ZaDomain.DOMAIN_STATUS_SHUTDOWN]],
                     visibilityChangeEventSources:[ZaDomain.A_zimbraDomainStatus],
-                    containerCssStyle: "padding-bottom:0px",
+                    containerCssStyle: "padding-bottom:0;",
                     style: DwtAlert.WARNING,
                     iconVisible: true,
                     content: ZaMsg.Domain_Locked_Note,
@@ -836,7 +836,7 @@ if(appNewUI) {
                     onChange:ZaDomainXFormView.onFormFieldChanged
                 },
                 { type: _DWT_ALERT_,
-                    containerCssStyle: "padding-bottom:0px",
+                    containerCssStyle: "padding-bottom:0;",
                     style: DwtAlert.INFO,
                     iconVisible: true,
                     content: ZaMsg.Domain_InboundSMTPNote,
@@ -878,7 +878,7 @@ if(appNewUI) {
                     labelLocation:_LEFT_, choices:ZaDomain.domainStatusChoices, onChange:ZaDomainXFormView.onFormFieldChanged
                 },
                 { ref: ZaDomain.A_notes, type:_TEXTAREA_,
-                    label:ZaMsg.NAD_Notes, labelCssStyle:"vertical-align:top", width:250,
+                    label:ZaMsg.NAD_Notes, labelCssStyle:"vertical-align:top;", width:250,
                     onChange:ZaDomainXFormView.onFormFieldChanged
                 },
 			    {ref: ZaDomain.A_zimbraHelpAdminURL, type:_TEXTFIELD_,
@@ -901,7 +901,7 @@ if(appNewUI) {
 			{ type: _DWT_ALERT_,
 				visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A_zimbraDomainStatus,ZaDomain.DOMAIN_STATUS_SHUTDOWN]],
 				visibilityChangeEventSources:[ZaDomain.A_zimbraDomainStatus],
-				containerCssStyle: "padding-bottom:0px",
+				containerCssStyle: "padding-bottom:0;",
 				style: DwtAlert.WARNING,
 				iconVisible: true, 
 				content: ZaMsg.Domain_Locked_Note,
@@ -978,7 +978,7 @@ if(appNewUI) {
         
 	var group = {type:_GROUP_,colSpan:"2", id:"dns_check_group",items: [], width:"100%"};
 	case1.items.push({ type: _DWT_ALERT_,
-		containerCssStyle: "padding-bottom:0px",
+		containerCssStyle: "padding-bottom:0;",
 		style: DwtAlert.INFO,
 		iconVisible: true, 
 		content: ZaMsg.Domain_InboundSMTPNote,
@@ -1023,7 +1023,7 @@ if(appNewUI) {
 				labelLocation:_LEFT_, choices:ZaDomain.domainStatusChoices, onChange:ZaDomainXFormView.onFormFieldChanged});
 
 	case1.items.push({ ref: ZaDomain.A_notes, type:_TEXTAREA_, 
-				  label:ZaMsg.NAD_Notes, labelCssStyle:"vertical-align:top", width:250,
+				  label:ZaMsg.NAD_Notes, labelCssStyle:"vertical-align:top;", width:250,
 				  onChange:ZaDomainXFormView.onFormFieldChanged});
 
 	// help URL
@@ -1054,7 +1054,7 @@ if(appNewUI) {
 				{ type: _DWT_ALERT_,
 					visibilityChangeEventSources:[ZaDomain.A_zimbraDomainStatus],
 					visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A_zimbraDomainStatus,ZaDomain.DOMAIN_STATUS_SHUTDOWN]],
-					containerCssStyle: "padding-bottom:0px",
+					containerCssStyle: "padding-bottom:0;",
 					style: DwtAlert.WARNING,
 					iconVisible: true,
 					content: ZaMsg.Domain_Locked_Note,
@@ -1144,7 +1144,7 @@ if(appNewUI) {
 				{ type: _DWT_ALERT_,
 					visibilityChangeEventSources:[ZaDomain.A_zimbraDomainStatus],
 					visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A_zimbraDomainStatus,ZaDomain.DOMAIN_STATUS_SHUTDOWN]],
-					containerCssStyle: "padding-bottom:0px",
+					containerCssStyle: "padding-bottom:0;",
 					style: DwtAlert.WARNING,
 					iconVisible: true, 
 					content: ZaMsg.Domain_Locked_Note,
@@ -1234,7 +1234,7 @@ if(appNewUI) {
 				{ type: _DWT_ALERT_,
 					visibilityChangeEventSources:[ZaDomain.A_zimbraDomainStatus],
 					visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A_zimbraDomainStatus,ZaDomain.DOMAIN_STATUS_SHUTDOWN]],
-					containerCssStyle: "padding-bottom:0px",
+					containerCssStyle: "padding-bottom:0;",
 					style: DwtAlert.WARNING,
 					iconVisible: true, 
 					content: ZaMsg.Domain_Locked_Note,
@@ -1333,17 +1333,17 @@ if(appNewUI) {
                     ],
                       items:[
                           { ref: ZaDomain.A_zimbraMailSSLClientCertPrincipalMap, type:_TEXTAREA_,
-				            label:ZaMsg.NAD_zimbraMailSSLClientCertPrincipalMap, labelCssStyle:"vertical-align:top", width:250,
+				            label:ZaMsg.NAD_zimbraMailSSLClientCertPrincipalMap, labelCssStyle:"vertical-align:top;", width:250,
 				            onChange:ZaDomainXFormView.onFormFieldChanged
                           },
-                          {type: _DWT_ALERT_, cssClass: "DwtTabTable", containerCssStyle: "padding-bottom:0px",
+                          {type: _DWT_ALERT_, cssClass: "DwtTabTable", containerCssStyle: "padding-bottom:0;",
                             style: DwtAlert.WARNING, iconVisible: false, content: ZaMsg.Alert_Ngnix,
                             id:"xform_header_ngnix"
                           },
                           {ref:ZaDomain.A_zimbraReverseProxyClientCertMode, type:_SUPER_SELECT1_,
                             label:ZaMsg.NAD_zimbraReverseProxyClientCertMode,
                             labelCssClass:(appNewUI?"gridGroupBodyLabel":"xform_label"),
-                            labelCssStyle:(appNewUI?"text-align:left;border-right: 1px solid":_UNDEFINED_),
+                            labelCssStyle:(appNewUI?"text-align:left;border-right: 1px solid;":_UNDEFINED_),
                             labelLocation:_LEFT_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS
                           },
                           {ref: ZaDomain.A_zimbraReverseProxyClientCertCA, type:_TEXTAREA_,
@@ -1457,12 +1457,12 @@ if(appNewUI) {
 		tabIx = ++this.TAB_INDEX;
 		tabBar.choices.push({value:tabIx, label:ZaMsg.Domain_Tab_VirtualHost});
 		var case4 = {type:_ZATABCASE_, caseKey:tabIx,
-			cssStyle:"padding-left:10px",
+			cssStyle:"padding-left:10px;",
 			items:[
 				{ type: _DWT_ALERT_,
 					visibilityChangeEventSources:[ZaDomain.A_zimbraDomainStatus],
 					visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A_zimbraDomainStatus,ZaDomain.DOMAIN_STATUS_SHUTDOWN]],
-					containerCssStyle: "padding-bottom:0px",
+					containerCssStyle: "padding-bottom:0;",
 					style: DwtAlert.WARNING,
 					iconVisible: true, 
 					content: ZaMsg.Domain_Locked_Note,
@@ -1499,7 +1499,7 @@ if(appNewUI) {
 		tabIx = ++this.TAB_INDEX;
 		tabBar.choices.push({value:tabIx, label:ZaMsg.TABT_Feature});
 		var caseFeature = {type:_ZATABCASE_, caseKey:tabIx,
-                        cssStyle:"padding-left:10px",
+                        cssStyle:"padding-left:10px;",
 			items : [
 				{ type:_ZA_TOP_GROUPER_, label:ZaMsg.NAD_zimbraCalendarFeature,
 				  items :[
@@ -1522,12 +1522,12 @@ if(appNewUI) {
 		tabIx = ++this.TAB_INDEX;
 		tabBar.choices.push({value:tabIx, label:ZaMsg.Domain_Tab_Advanced});
 		var case5 = {type:_ZATABCASE_, caseKey:tabIx,colSizes:["auto"],numCols:1,id:"domain_advanced_tab",
-                        cssStyle:"padding-left:10px",
+                        cssStyle:"padding-left:10px;",
 			items : [
 				{ type: _DWT_ALERT_,
                                   visibilityChangeEventSources:[ZaDomain.A_zimbraDomainStatus],
                                   visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A_zimbraDomainStatus,ZaDomain.DOMAIN_STATUS_SHUTDOWN]],
-                                  containerCssStyle: "padding-bottom:0px",
+                                  containerCssStyle: "padding-bottom:0;",
                                   style: DwtAlert.WARNING,
                                   iconVisible: true,
                                   content: ZaMsg.Domain_Locked_Note,
@@ -1642,7 +1642,7 @@ items:[
 							choices:ZaDomainXFormView.zimletChoices
 						},
 						{type: _DWT_ALERT_,
-							containerCssStyle: "padding-bottom:0px",
+							containerCssStyle: "padding-bottom:0;",
 							style: DwtAlert.INFO,
 							iconVisible: false,
 							content: ZaMsg.Zimlet_Note
@@ -1696,7 +1696,7 @@ items:[
                             labelLocation:_LEFT_, resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
                             buttonImage: "Color", width: "50px"
                         },
-                        {type:_GROUP_,  colSpan: 2, cssStyle: "margin-top: 10px; margin-left: 200px", items: [
+                        {type:_GROUP_,  colSpan: 2, cssStyle: "margin-top:10px;margin-left:200px;", items: [
                                 {type: _DWT_BUTTON_,  label: ZaMsg.bt_ResetAllSkinColor,
                                     onActivate: ZaDomainXFormView.resetAllColorThemes }
                            ]
@@ -1715,7 +1715,7 @@ items:[
 			items: [
 
                                 {type: _DWT_ALERT_,
-                                  containerCssStyle: "padding-bottom:0px",
+                                  containerCssStyle: "padding-bottom:0;",
                                   style: DwtAlert.WARNING,
                                   iconVisible: true,
                                   content: ZaMsg.MSG_DOMAIN_CERT_KEY
@@ -1723,14 +1723,14 @@ items:[
 				{type:_SPACER_, height:"10"},
 				{type: _GROUP_, width: "100%", numCols: 2, colSizes: ["50%","50%"], items: [
 					{type:_SPACER_, height:"10"},
-					{type:_ZALEFT_GROUPER_, numCols:1, width: "100%",label:ZaMsg.NAD_DomainSSLCertificate, containerCssStyle: "padding-top:5px", 
+					{type:_ZALEFT_GROUPER_, numCols:1, width: "100%",label:ZaMsg.NAD_DomainSSLCertificate, containerCssStyle: "padding-top:5px;", 
 					items: [
 	                                        {ref: ZaDomain.A_zimbraSSLCertificate, type:_TEXTAREA_, width: "100%", height: 450,
                 	                        onChange:ZaDomainXFormView.onFormFieldChanged}
 					]}
 				
 					,
-					{type:_ZARIGHT_GROUPER_, numCols:1, width: "100%", label:ZaMsg.NAD_DomainSSLPrivateKey, containerCssStyle: "padding-top:5px",
+					{type:_ZARIGHT_GROUPER_, numCols:1, width: "100%", label:ZaMsg.NAD_DomainSSLPrivateKey, containerCssStyle: "padding-top:5px;",
 					items: [
 	                                        {ref: ZaDomain.A_zimbraSSLPrivateKey, type:_TEXTAREA_, width: "100%", height: 450,
                 	                        onChange:ZaDomainXFormView.onFormFieldChanged}

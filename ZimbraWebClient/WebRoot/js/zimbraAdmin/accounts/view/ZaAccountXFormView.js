@@ -1415,13 +1415,14 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 	}
 		
 	var emptyAlias = " @" + domainName;
-	var headerItems = [{type:_AJX_IMAGE_, src:"Person_32", label:null, rowSpan:3},
-        {type:_OUTPUT_, ref:ZaAccount.A_displayname, label:null,cssClass:"AdminTitle", height:"auto", width:350, rowSpan:3, cssStyle:"word-wrap:break-word;overflow:hidden",
-        visibilityChecks:[ZaItem.hasReadPermission],
-            getDisplayValue:function(newValue) {
-                return AjxStringUtil.htmlEncode(newValue);
-            }
-        }];
+	var headerItems = [{type:_AJX_IMAGE_, src:"Person_32", label:null, rowSpan:3, cssStyle:"margin:auto;"},
+		{type:_OUTPUT_, ref:ZaAccount.A_displayname, label:null,cssClass:"AdminTitle", height:"auto", width:350, rowSpan:3, 
+			cssStyle:"word-wrap:break-word;overflow:hidden;",
+			visibilityChecks:[ZaItem.hasReadPermission],
+			getDisplayValue:function(newValue) {
+			return AjxStringUtil.htmlEncode(newValue);
+		}
+	}];
 	/*headerItems.push({type:_OUTPUT_, ref:ZaAccount.A_COSId,valueChangeEventSources:[ZaAccount.A_COSId], labelLocation:_LEFT_, label:ZaMsg.NAD_ClassOfService, choices:this.cosChoices,getDisplayValue:function(newValue) {
 			if(ZaItem.ID_PATTERN.test(newValue)) {
 				var cos = ZaCos.getCosById(newValue, this.getForm().parent._app);
@@ -1437,23 +1438,38 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 			},
 			visibilityChecks:[ZaItem.hasReadPermission]	
 	});*/
+	
+	if (ZaItem.hasReadPermission(ZaItem.A_zimbraId, entry)) {
+		headerItems.push({type:_OUTPUT_,ref:ZaItem.A_zimbraId, label:ZaMsg.NAD_ZimbraID});
+	}
+	
+	if (ZaItem.hasReadPermission(ZaItem.A_zimbraCreateTimestamp, entry))	{
+		headerItems.push(
+						 {
+						 type:_OUTPUT_, ref:ZaItem.A_zimbraCreateTimestamp,
+						 label:ZaMsg.LBL_zimbraCreateTimestamp, labelLocation:_LEFT_,
+						 getDisplayValue:function() {
+						 var val = ZaItem.formatServerTime(this.getInstanceValue());
+						 if(!val)
+						 return ZaMsg.Server_Time_NA;
+						 else
+						 return val;
+						 }	
+						 });
+	}
 
     if (!entry.isExternal && ZaItem.hasReadPermission(ZaAccount.A_mailHost, entry)) {
             headerItems.push({type:_OUTPUT_, ref:ZaAccount.A_mailHost, labelLocation:_LEFT_,label:ZabMsg.attrDesc_mailHost});
     } else if(entry.isExternal && ZaItem.hasReadPermission(ZaAccount.A_zimbraMailTransport, entry)) {
         headerItems.push({type:_OUTPUT_, ref:ZaAccount.A_zimbraMailTransport, labelLocation:_LEFT_,label:ZabMsg.attrDesc_mailHost});
     }
+	
+	if (ZaItem.hasReadPermission(ZaAccount.A_mail, entry)) {
+		headerItems.push({type:_OUTPUT_,ref:ZaAccount.A_mail, label:ZaMsg.NAD_Email, labelLocation:_LEFT_, required:false, cssStyle:"word-wrap:break-word;overflow:hidden;"});
+	}
 
     if (ZaItem.hasReadPermission(ZaAccount.A_accountStatus, entry)) {
 	    headerItems.push({type:_OUTPUT_,ref:ZaAccount.A_accountStatus, label:ZaMsg.NAD_AccountStatus, labelLocation:_LEFT_, choices:this.accountStatusChoices});
-    }
-
-    if (ZaItem.hasReadPermission(ZaAccount.A_mail, entry)) {
-    	headerItems.push({type:_OUTPUT_,ref:ZaAccount.A_mail, label:ZaMsg.NAD_Email, labelLocation:_LEFT_, required:false, cssStyle:"word-wrap:break-word;overflow:hidden"});
-    }
-
-    if (ZaItem.hasReadPermission(ZaItem.A_zimbraId, entry)) {
-        headerItems.push({type:_OUTPUT_,ref:ZaItem.A_zimbraId, label:ZaMsg.NAD_ZimbraID});
     }
 
     if (!entry.isExternal) {
@@ -1527,21 +1543,6 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
                     return ZaAccount.getLastLoginTime(val) ;
                 }
              });
-    }
-
-    if (ZaItem.hasReadPermission(ZaItem.A_zimbraCreateTimestamp, entry))	{
-	    headerItems.push(
-                    {
-                        type:_OUTPUT_, ref:ZaItem.A_zimbraCreateTimestamp,
-						label:ZaMsg.LBL_zimbraCreateTimestamp, labelLocation:_LEFT_,
-						getDisplayValue:function() {
-							var val = ZaItem.formatServerTime(this.getInstanceValue());
-							if(!val)
-								return ZaMsg.Server_Time_NA;
-							else
-								return val;
-						}	
-					 });
     }
 					 
     this.tabChoices = new Array();
@@ -1638,7 +1639,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 	                    { type: _OUTPUT_, id: ZaAccountXFormView.accountTypeItemId ,
 	                        getDisplayValue: ZaAccount.getAccountTypeOutput,
 	                        //center the elements
-	                        cssStyle: "width: 600px; margin-left: auto; margin-right: auto;"
+	                        cssStyle: "margin-left:auto;margin-right:auto;width:600px;"
 	                    }
 	               ]
 	        },
@@ -1736,7 +1737,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
         visibilityChangeEventSources:[ZaAccount.A2_isExternalAuth],
 		colSizes:["275px","*"],numCols:2,
 		items:[ 
-                { type: _DWT_ALERT_, containerCssStyle: "padding-bottom:0px",
+                { type: _DWT_ALERT_, containerCssStyle: "padding-bottom:0;",
                       //style: DwtAlert.INFO,iconVisible: (!ZaAccountXFormView.isAuthfromInternal(entry.name)),
                       //content: ((ZaAccountXFormView.isAuthfromInternal(entry.name))?ZaMsg.Alert_InternalPassword:ZaMsg.Alert_ExternalPassword)
                       style: DwtAlert.INFO,iconVisible: false,
@@ -1772,7 +1773,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 	 	items:[
 	        ZaItem.descriptionXFormItem,
 			{ref:ZaAccount.A_notes, type:_TEXTAREA_, msgName:ZaMsg.NAD_Notes,
-				label:ZaMsg.NAD_Notes, labelLocation:_LEFT_, labelCssStyle:"vertical-align:top", width:"30em"
+				label:ZaMsg.NAD_Notes, labelLocation:_LEFT_, labelCssStyle:"vertical-align:top;", width:"30em"
 			}
 		]
 	};
@@ -1836,7 +1837,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 								//direct member group
 								{type:_ZALEFT_GROUPER_, numCols:1, width: "100%", 
 									label:ZaMsg.Account_DirectGroupLabel,
-									containerCssStyle: "padding-top:5px",
+									containerCssStyle: "padding-top:5px;",
 									items:[
 										{ref: ZaAccount.A2_directMemberList, type: _S_DWT_LIST_, width: "98%", height: 200,
 											cssClass: "DLSource", widgetClass: ZaAccountMemberOfListView, 
@@ -1877,7 +1878,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 								{type:_SPACER_, height:"10"},	
 								//indirect member group
 								{type:_ZALEFT_GROUPER_, numCols:1,  width: "100%", label:ZaMsg.Account_IndirectGroupLabel,
-									containerCssStyle: "padding-top:5px",
+									containerCssStyle: "padding-top:5px;",
 									items:[
 										{ref: ZaAccount.A2_indirectMemberList, type: _S_DWT_LIST_, width: "98%", height: 200,
 											cssClass: "DLSource", widgetClass: ZaAccountMemberOfListView, 
@@ -1912,7 +1913,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 
 						//non member group
 						{type:_ZARIGHT_GROUPER_, numCols:1, width: "100%", label:ZaMsg.Account_NonGroupLabel,
-							containerCssStyle: "padding-top:5px",
+							containerCssStyle: "padding-top:5px;",
 							items:[
 								{type:_GROUP_, numCols:5, colSizes:[55, "auto",10,80, 120,20], width:"100%", 
 								   items:[
@@ -2238,8 +2239,8 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 								{ref:ZaAccount.A_zimbraPrefMailInitialSearch, type:_SUPER_TEXTFIELD_,
 									msgName:ZaMsg.LBL_zimbraPrefMailInitialSearch,
 									txtBoxLabel:ZaMsg.LBL_zimbraPrefMailInitialSearch,
-                                     labelCssClass:(appNewUI?"gridGroupBodyLabel":"xform_label"),
-                                    labelCssStyle:"border-right: 1px solid",
+									labelCssClass:(appNewUI?"gridGroupBodyLabel":"xform_label"),
+									labelCssStyle:"border-right:1px solid;",
 									labelLocation:_LEFT_,
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS
 								},
@@ -2447,7 +2448,7 @@ textFieldCssClass:"admin_xform_number_input"}
 								{ref:ZaAccount.A_zimbraPrefOutOfOfficeReply, 
 									type:_TEXTAREA_, msgName:ZaMsg.LBL_zimbraPrefOutOfOfficeReply,
 									label:ZaMsg.LBL_zimbraPrefOutOfOfficeReply, labelLocation:_LEFT_, 
-									labelCssStyle:"vertical-align:top", 
+									labelCssStyle:"vertical-align:top;", 
 									width:"30em",
 									enableDisableChecks:[[XForm.checkInstanceValue,ZaAccount.A_zimbraPrefOutOfOfficeReplyEnabled,"TRUE"],
 										[ZaItem.hasWritePermission,ZaAccount.A_zimbraPrefOutOfOfficeReply]],
@@ -2569,7 +2570,7 @@ textFieldCssClass:"admin_xform_number_input"}
 									label:ZaMsg.LBL_zimbraPrefHtmlEditorDefaultFontFamily},
 								{ref:ZaAccount.A_zimbraPrefHtmlEditorDefaultFontColor, 
 									type:_SUPER_DWT_COLORPICKER_,
-									labelCssStyle:"width:269px",
+									labelCssStyle:"width:269px;",
 									msgName:ZaMsg.LBL_zimbraPrefHtmlEditorDefaultFontColor,
 									label:ZaMsg.LBL_zimbraPrefHtmlEditorDefaultFontColor,
 									labelLocation:_LEFT_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS
@@ -2610,7 +2611,7 @@ textFieldCssClass:"admin_xform_number_input"}
 								{ref:ZaAccount.A_zimbraPrefMailSignature, type:_TEXTAREA_, 
 									msgName:ZaMsg.MSG_zimbraPrefMailSignature,
 									label:ZaMsg.LBL_zimbraPrefMailSignature, labelLocation:_LEFT_, 
-									labelCssStyle:"vertical-align:top", width:"30em",
+									labelCssStyle:"vertical-align:top;", width:"30em",
 									enableDisableChangeEventSources:[ZaAccount.A_zimbraPrefMailSignatureEnabled],
 									enableDisableChecks:[[XForm.checkInstanceValue,ZaAccount.A_zimbraPrefMailSignatureEnabled,"TRUE"]]
 								},
@@ -2792,7 +2793,7 @@ textFieldCssClass:"admin_xform_number_input"}
 									headerList:null,onSelection:ZaAccountXFormView.aliasSelectionListener
 								},
 								{type:_GROUP_, numCols:5, width:"350px", colSizes:["100px","auto","100px","auto","100px"], 
-									cssStyle:"margin-bottom:10px;padding-bottom:0px;margin-top:10px;margin-left:10px;margin-right:10px;",
+									cssStyle:"margin:10px;padding-bottom:0;",
 									items: [
 										{type:_DWT_BUTTON_, label:ZaMsg.TBB_Delete,width:"100px",
 											onActivate:"ZaAccountXFormView.deleteAliasButtonListener.call(this);",id:"deleteAliasButton",
@@ -2859,18 +2860,18 @@ nowrap:false, labelWrap:true,
 										enableDisableChecks:[[XForm.checkInstanceValue,ZaAccount.A_zimbraFeatureMailForwardingEnabled,"TRUE"]],
 										enableDisableChangeEventSources:[ZaAccount.A_zimbraFeatureMailForwardingEnabled, ZaAccount.A_COSId]										
 									},
-                                {type:_GROUP_, colSizes:["275px", "*"], numCols: 2, width: "100%", colSpan:2,items:[
+								{type:_GROUP_, colSizes:["275px", "*"], numCols: 2, width: "100%", colSpan:2,items:[
 								{ref:ZaAccount.A_zimbraPrefCalendarForwardInvitesTo, type:_DWT_LIST_, height:"100", width:"350px",
 									forceUpdate: true, preserveSelection:false, multiselect:true,cssClass: "DLSource",
 									nowrap:false, labelWrap:true,
 									headerList:null,onSelection:ZaAccountXFormView.calFwdAddrSelectionListener,label:ZaMsg.zimbraPrefCalendarForwardInvitesTo,
-                                    labelCssClass:(appNewUI?"gridGroupBodyLabel":"xform_label"),
-                                    labelCssStyle:(appNewUI?"text-align:left;border-right: 1px solid":_UNDEFINED_),
+									labelCssClass:(appNewUI?"gridGroupBodyLabel":"xform_label"),
+									labelCssStyle:(appNewUI?"text-align:left;border-right:1px solid;":_UNDEFINED_),
 									visibilityChecks:[ZaItem.hasReadPermission]
 								},
 								{type:_GROUP_, numCols:6, width:"625px",colSizes:["275","100px","auto","100px","auto","100px"], colSpan:2,
 									visibilityChecks:[[ZaItem.hasWritePermission,ZaAccount.A_zimbraPrefCalendarForwardInvitesTo]],
-									cssStyle:"margin-bottom:10px;padding-bottom:0px;margin-top:10px;pxmargin-left:10px;margin-right:10px;",
+									cssStyle:"margin:10px;padding-bottom:0;",
 									items: [
 										{type:_CELLSPACER_},
 										{type:_DWT_BUTTON_, label:ZaMsg.TBB_Delete,width:"100px",
@@ -2892,7 +2893,7 @@ nowrap:false, labelWrap:true,
 									]
 								},
                                {type: _DWT_ALERT_, colSpan: 2,
-                                   containerCssStyle: "padding:10px;padding-top: 0px; width:100%;",
+                                   containerCssStyle: "padding:0 10px 10px;width:100%;",
                                    style: DwtAlert.WARNING,
                                    iconVisible: true,
                                    content: ZaMsg.Alert_Bouncing_Reveal_Hidden_Adds
@@ -2901,11 +2902,11 @@ nowrap:false, labelWrap:true,
 									forceUpdate: true, preserveSelection:false, multiselect:true,cssClass: "DLSource", 
 									headerList:null,onSelection:ZaAccountXFormView.fwdAddrSelectionListener,label:ZaMsg.NAD_EditFwdGroup,
                                     labelCssClass:(appNewUI?"gridGroupBodyLabel":"xform_label"), nowrap:false, labelWrap:true,
-                                    labelCssStyle:(appNewUI?"text-align:left;border-right: 1px solid":_UNDEFINED_),
+                                    labelCssStyle:(appNewUI?"text-align:left;border-right:1px solid;":_UNDEFINED_),
 									visibilityChecks:[ZaItem.hasReadPermission]
 								},
 								{type:_GROUP_, numCols:6, width:"625px",colSizes:["275","100px","auto","100px","auto","100px"], colSpan:2,
-									cssStyle:"margin-bottom:10px;padding-bottom:0px;margin-top:10px;pxmargin-left:10px;margin-right:10px;",
+									cssStyle:"margin:10px;padding-bottom:0;",
 									items: [
 										{type:_CELLSPACER_},
 										{type:_DWT_BUTTON_, label:ZaMsg.TBB_Delete,width:"100px",
@@ -2948,7 +2949,7 @@ nowrap:false, labelWrap:true,
 									headerList:null,onSelection:ZaAccountXFormView.fpSelectionListener
 								},
 								{type:_GROUP_, numCols:7, width:"350px", colSizes:["100px","auto","100px","auto","100px", "auto","100px"],
-									cssStyle:"margin-bottom:10px;padding-bottom:0px;margin-top:10px;margin-left:10px;margin-right:10px;",
+									cssStyle:"margin:10px;padding-bottom:0;",
 									items: [
 										{type:_DWT_BUTTON_, label:ZaMsg.TBB_Push,width:"100px",
 											onActivate:"ZaAccountXFormView.pushFpButtonListener.call(this);",
@@ -3031,7 +3032,7 @@ nowrap:false, labelWrap:true,
 							limitLabel:ZaMsg.NAD_LimitZimletsTo
 						},
 						{type: _DWT_ALERT_,
-							containerCssStyle: "padding-bottom:0px",
+							containerCssStyle: "padding-bottom:0",
 							style: DwtAlert.INFO,
 							iconVisible: false,
 							content: ZaMsg.Zimlet_Note
@@ -3116,8 +3117,8 @@ nowrap:false, labelWrap:true,
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 									txtBoxLabel:ZaMsg.MSG_zimbraQuotaWarnMessage,
 									msgName:ZaMsg.LBL_zimbraQuotaWarnMessage,
-                                     colSpan:1,
-									labelCssStyle:"vertical-align:top", textAreaWidth:"250px", 
+									colSpan:1,
+									labelCssStyle:"vertical-align:top;", textAreaWidth:"250px", 
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS
 								}
 								
@@ -3182,7 +3183,7 @@ nowrap:false, labelWrap:true,
                    					{
                        						ref: ZaAccount.A_zimbraProxyAllowedDomains,
                        						label:ZaMsg.LBL_zimbraProxyAllowedDomains, 
-                       						labelCssStyle:"vertical-align:top",
+                       						labelCssStyle:"vertical-align:top;",
                        						type:_SUPER_REPEAT_,
                        						resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
                        						repeatInstance:"",
@@ -3218,7 +3219,7 @@ nowrap:false, labelWrap:true,
                         			ZaAccount.A_zimbraMaxPwdAge,
                         			ZaAccount.A_zimbraEnforcePwdHistory]]],
 							items: [ 
-						                { type: _DWT_ALERT_, containerCssStyle: "padding-bottom:0px", colSpan:3,
+						                { type: _DWT_ALERT_, containerCssStyle: "padding-bottom:0;", colSpan:3,
 						                      style: DwtAlert.INFO,iconVisible: (!ZaAccountXFormView.isAuthfromInternal(entry.name)),
 						                      content: ((ZaAccountXFormView.isAuthfromInternal(entry.name))?ZaMsg.Alert_InternalPassword:ZaMsg.Alert_ExternalPassword)
 						                },
@@ -3348,7 +3349,7 @@ nowrap:false, labelWrap:true,
 									msgName:ZaMsg.MSG_zimbraPasswordLockoutFailureLifetime,
 									textFieldCssClass:"admin_xform_number_input", 
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
-									labelCssStyle:"white-space:normal; border-right: 1px solid ;",
+									labelCssStyle:"white-space:normal;border-right:1px solid;",
 									nowrap:false,labelWrap:true
 								}																		
 								
@@ -3392,7 +3393,7 @@ nowrap:false, labelWrap:true,
 							label:ZaMsg.NAD_MailRetentionGrouper, id: "mailretention_settings",
 							items: [
                                 { type: _DWT_ALERT_,
-                                  containerCssStyle: "padding:10px;padding-top: 0px; width:100%;",
+                                  containerCssStyle: "padding:0 10px 10px;width:100%;",
                                   style: DwtAlert.INFO,
                                   iconVisible: false,
                                   content: ZaMsg.Alert_EnableMailRetention,
@@ -3461,7 +3462,7 @@ nowrap:false, labelWrap:true,
         xFormObject.items = [
                 {type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan:"*", id:"xform_header",
                     items: [
-                        {type:_GROUP_, numCols:4, width:"100%", colSizes:["90px","300px","100px","*"],items:headerItems}
+                        {type:_GROUP_, numCols:4, width:"100%", colSizes:["60px","*","80px","*"],items:headerItems}
                     ]
                 },
                 {type:_TAB_BAR_,  ref:ZaModel.currentTab,choices:this.tabChoices,cssClass:"ZaTabBar", cssStyle:(appNewUI?"display:none;":""), id:"xform_tabbar"},

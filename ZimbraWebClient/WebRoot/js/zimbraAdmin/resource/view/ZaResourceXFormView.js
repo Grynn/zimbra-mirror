@@ -471,8 +471,8 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject, entry) {
 	var imgChoices = [ 	{value:ZaResource.RESOURCE_TYPE_LOCATION, label: "Location_32"},
 						{value:ZaResource.RESOURCE_TYPE_EQUIPMENT, label: "Resource_32"}   ];
 						
-	var headerItems = [	{type:_AJX_IMAGE_, ref:ZaResource.A_zimbraCalResType, src:"Resource_32", label:null, rowSpan:3, choices: imgChoices},
-						{type:_OUTPUT_, ref:ZaResource.A_displayname, label:null,cssClass:"AdminTitle", height:"auto", width:350, rowSpan:3, cssStyle:"word-wrap:break-word;overflow:hidden",
+	var headerItems = [	{type:_AJX_IMAGE_, ref:ZaResource.A_zimbraCalResType, src:"Resource_32", label:null, rowSpan:3, choices: imgChoices, cssStyle:"margin:auto;"},
+						{type:_OUTPUT_, ref:ZaResource.A_displayname, label:null,cssClass:"AdminTitle", height:"auto", width:350, rowSpan:3, cssStyle:"word-wrap:break-word;overflow:hidden;",
                              visibilityChecks:[ZaItem.hasReadPermission]}];
 						
 	/*headerItems.push({type:_OUTPUT_, ref:ZaResource.A_COSId, labelLocation:_LEFT_, label:ZaMsg.NAD_ClassOfService, 
@@ -489,31 +489,32 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject, entry) {
 				}
 				return newValue;
 			},
-			visibilityChecks:[ZaItem.hasReadPermission]});*/
+	 visibilityChecks:[ZaItem.hasReadPermission]});*/
+	
+    if (ZaItem.hasReadPermission(ZaItem.A_zimbraId, entry))
+        headerItems.push({type:_OUTPUT_,  ref:ZaItem.A_zimbraId, label:ZaMsg.NAD_ZimbraID});
+	
+    if (ZaItem.hasReadPermission(ZaItem.A_zimbraCreateTimestamp, entry))
+        headerItems.push({type:_OUTPUT_, ref:ZaItem.A_zimbraCreateTimestamp,
+						 label:ZaMsg.LBL_zimbraCreateTimestamp, labelLocation:_LEFT_,
+						 getDisplayValue:function() {
+						 var val = ZaItem.formatServerTime(this.getInstanceValue());
+						 if(!val)
+						 return ZaMsg.Server_Time_NA;
+						 else
+						 return val;
+						 }	
+						 });
+	
     if (ZaItem.hasReadPermission(ZaResource.A_mailHost, entry)) {
 	    headerItems.push({type:_OUTPUT_, ref:ZaResource.A_mailHost, labelLocation:_LEFT_,label:ZaMsg.NAD_MailServer});
     }
-
-    if (ZaItem.hasReadPermission(ZaResource.A_accountStatus, entry))
-	    headerItems.push({type:_OUTPUT_,  ref:ZaResource.A_accountStatus, label:ZaMsg.NAD_ResourceStatus, labelLocation:_LEFT_, choices:ZaResource.accountStatusChoices});
-
+	
     if (ZaItem.hasReadPermission(ZaResource.A_name, entry))
     	headerItems.push({type:_OUTPUT_, ref:ZaResource.A_name, label:ZaMsg.NAD_Email, labelLocation:_LEFT_, required:false});
 
-    if (ZaItem.hasReadPermission(ZaItem.A_zimbraId, entry))
-        headerItems.push({type:_OUTPUT_,  ref:ZaItem.A_zimbraId, label:ZaMsg.NAD_ZimbraID});
-
-    if (ZaItem.hasReadPermission(ZaItem.A_zimbraCreateTimestamp, entry))
-        headerItems.push({type:_OUTPUT_, ref:ZaItem.A_zimbraCreateTimestamp,
-							label:ZaMsg.LBL_zimbraCreateTimestamp, labelLocation:_LEFT_,
-							getDisplayValue:function() {
-								var val = ZaItem.formatServerTime(this.getInstanceValue());
-								if(!val)
-									return ZaMsg.Server_Time_NA;
-								else
-									return val;
-							}	
-						});
+    if (ZaItem.hasReadPermission(ZaResource.A_accountStatus, entry))
+	    headerItems.push({type:_OUTPUT_,  ref:ZaResource.A_accountStatus, label:ZaMsg.NAD_ResourceStatus, labelLocation:_LEFT_, choices:ZaResource.accountStatusChoices});
 
     if (ZaItem.hasReadPermission(ZaResource.A_zimbraCalResType, entry))
         headerItems.push({type:_OUTPUT_, ref:ZaResource.A_zimbraCalResType, label:ZaMsg.NAD_ResType, labelLocation:_LEFT_, required:false,
@@ -602,7 +603,7 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject, entry) {
             msgName:ZaMsg.NAD_ResType,label:ZaMsg.NAD_SchedulePolicy,
             visibilityChecks:[[ZaItem.hasWritePermission,ZaResource.A_zimbraCalResAutoAcceptDecline],[ZaItem.hasWritePermission,ZaResource.A_zimbraCalResAutoDeclineIfBusy]],
             enableDisableChecks:[[ZaItem.hasReadPermission,ZaResource.A_zimbraCalResAutoAcceptDecline],[ZaItem.hasReadPermission,ZaResource.A_zimbraCalResAutoDeclineIfBusy]],
-            labelLocation:_LEFT_, width: "*", choices:ZaResource.schedulePolicyChoices});
+            labelLocation:_LEFT_, width:"320px", choices:ZaResource.schedulePolicyChoices});
 
     setupGroup.items.push({ref:ZaResource.A_zimbraCalResMaxNumConflictsAllowed, type:_TEXTFIELD_,
         msgName:ZaMsg.zimbraCalResMaxNumConflictsAllowed, label:ZaMsg.zimbraCalResMaxNumConflictsAllowed,
@@ -626,10 +627,10 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject, entry) {
 									headerList:null,onSelection:ZaResourceXFormView.calFwdAddrSelectionListener,label:ZaMsg.zimbraPrefCalendarForwardInvitesTo,
                                     visibilityChecks:[ZaItem.hasReadPermission],
                                     labelCssClass:"gridGroupBodyLabel",
-                                    labelCssStyle:(appNewUI?"text-align:left;border-right: 1px solid":_UNDEFINED_)
+                                    labelCssStyle:(appNewUI?"text-align:left;border-right:1px solid;":_UNDEFINED_)
 								},
 								{type:_GROUP_, numCols:6, width:"625px",colSizes:["275","100px","auto","100px","auto","100px"], colSpan:2,
-									cssStyle:"margin-bottom:10px;padding-bottom:0px;margin-top:10px;pxmargin-left:10px;margin-right:10px;",
+									cssStyle:"margin:10px;padding-bottom:0;",
 									items: [
 										{type:_CELLSPACER_},
 										{type:_DWT_BUTTON_, label:ZaMsg.TBB_Delete,width:"100px",
@@ -674,7 +675,7 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject, entry) {
             forceUpdate: true, preserveSelection:false, multiselect:true,cssClass: "DLSource",
             headerList:null,label:ZaMsg.NAD_AllSignature,
             labelCssClass:(appNewUI?"gridGroupBodyLabel":"xform_label"),
-            labelCssStyle:(appNewUI?"text-align:left;border-right: 1px solid":_UNDEFINED_),
+            labelCssStyle:(appNewUI?"text-align:left;border-right:1px solid;":_UNDEFINED_),
             onSelection:ZaResourceXFormView.SignatureSelectionListener,
             bmolsnr: true,
             getDisplayValue: function(value){
@@ -687,7 +688,7 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject, entry) {
             }
         },
         {type:_GROUP_, numCols:6, width:"625px",colSizes:["275","100px","auto","100px","auto","100px"], colSpan:2,
-            cssStyle:"margin-bottom:10px;padding-bottom:0px;margin-top:10px;pxmargin-left:10px;margin-right:10px;",
+            cssStyle:"margin:10px;padding-bottom:0;",
             items: [
                 {type:_CELLSPACER_},
                 {type:_DWT_BUTTON_, label:ZaMsg.TBB_Delete,width:"100px",
@@ -832,7 +833,7 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject, entry) {
 	xFormObject.items = [
 			{type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan:"*", id:"xform_header", 
 				items: [
-					{type:_GROUP_,	numCols:4,colSizes:["90px","350px","100px","200px"],items:headerItems}
+					{type:_GROUP_,	numCols:4,colSizes:["60px","*","80px","*"],items:headerItems}
 				]
 			},
 			{type:_TAB_BAR_,  ref:ZaModel.currentTab,choices:this.tabChoices,cssClass:"ZaTabBar", cssStyle:(appNewUI?"display:none;":""), id:"xform_tabbar"},

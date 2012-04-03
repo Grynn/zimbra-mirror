@@ -349,10 +349,10 @@ function() {
 	if (!this._toolTip) {
 		var html = new Array(20);
 		var idx = 0;
-		html[idx++] = "<table cellpadding='0' cellspacing='0' border='0'>";
+		html[idx++] = "<table>";
 		html[idx++] = "<tr valign='center'><td colspan='2' align='left'>";
 		html[idx++] = "<div style='border-bottom: 1px solid black; white-space:nowrap; overflow:hidden;'>";
-		html[idx++] = "<table cellpadding='0' cellspacing='0' border='0' style='width:100%;'>";
+		html[idx++] = "<table style='width:100%;'>";
 		html[idx++] = "<tr valign='center'>";
 		html[idx++] = "<td><b>" + AjxStringUtil.htmlEncode(this.name) + "</b></td>";
 		html[idx++] = "<td align='right'>";

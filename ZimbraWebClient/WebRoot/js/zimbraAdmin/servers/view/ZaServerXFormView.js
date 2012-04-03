@@ -679,7 +679,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
             id:"server_general_tab",
             paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),
             items:[
-                //{type:_ZAGROUP_, cssStyle:"padding-left:0px; padding-right:0px", width:"100%", items:[
+                //{type:_ZAGROUP_, cssStyle:"padding-left:0;padding-right:0;", width:"100%", items:[
                 {type:_ZA_TOP_GROUPER_, width:"100%", numCols:2,colSizes: ["275px","100%"],
                     label:ZaMsg.TABT_GeneralPage,
                     items:[
@@ -704,7 +704,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
                       onChange:ZaServerXFormView.onFormFieldChanged
                     },
                     {ref:ZaServer.A_zimbraMailPurgeSleepInterval, type:_SUPER_LIFETIME_,
-                            labelCssStyle:(appNewUI?"text-align:left;background-color:#DEE5F1 !important;padding-left:10px;border-right: 1px solid;":null),
+                            labelCssStyle:(appNewUI?"text-align:left;background-color:#DEE5F1 !important;padding-left:10px;border-right:1px solid;":null),
                             resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
                             msgName:ZaMsg.MSG_zimbraMailPurgeSleepInterval,
                             txtBoxLabel:ZaMsg.LBL_zimbraMailPurgeSleepInterval,
@@ -724,7 +724,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 			colSpan: 2, colSizes: ["275px","275px","*"],
                         trueValue:"TRUE", falseValue:"FALSE", onChange:ZaServerXFormView.onReverseLookupTargetFieldChanged},
                     { ref: ZaServer.A_notes, type:_TEXTAREA_,
-                      label: ZaMsg.NAD_Notes, labelCssStyle: "vertical-align:top", 
+                      label: ZaMsg.NAD_Notes, labelCssStyle: "vertical-align:top;", 
 		      width: "30em", 
                       onChange:ZaServerXFormView.onFormFieldChanged
                     }
@@ -849,7 +849,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 								showAddOnNextRow:true,
 								addButtonLabel:ZaMsg.Add_zimbraSmtpHostname, 
 								removeButtonLabel:ZaMsg.Remove_zimbraSmtpHostname,
-								removeButtonCSSStyle: "margin-left: 5px",
+								removeButtonCSSStyle: "margin-left:5px;",
 								bmolsnr:true,
 					      		repeatItems:[
 								{ 
@@ -891,7 +891,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
                                 msgName:ZaMsg.NAD_MTA_MyNetworks,
                                 type:_SUPER_TEXTAREA_,
                                 labelCssClass:(appNewUI?"gridGroupBodyLabel":"xform_label"),
-                                labelCssStyle:(appNewUI?"text-align:left;border-right: 1px solid":_UNDEFINED_),
+                                labelCssStyle:(appNewUI?"text-align:left;border-right:1px solid;":_UNDEFINED_),
                                 colSpan: 2,
                                 resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
                                 onChange: ZaServerXFormView.onFormFieldChanged,
@@ -927,7 +927,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 								showAddOnNextRow:true,
 								addButtonLabel:ZaMsg.NAD_MTA_AddBindAddress , 
 								removeButtonLabel:ZaMsg.NAD_MTA_RemoveBindAddress ,
-								removeButtonCSSStyle: "margin-left: 50px",
+								removeButtonCSSStyle: "margin-left:50px;",
 								bmolsnr:true,
 					      	    items:[
 								{ type:_TEXTFIELD_,ref:".",
@@ -962,7 +962,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
                                     showAddOnNextRow:true,
                                     addButtonLabel:ZaMsg.NAD_Add ,
                                     removeButtonLabel:ZaMsg.NAD_Remove ,
-                                    removeButtonCSSStyle: "margin-left: 50px",
+                                    removeButtonCSSStyle: "margin-left:50px;",
                                     bmolsnr:true,
                                     items:[
                                     { type:_TEXTFIELD_,ref:".",
@@ -1008,7 +1008,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
                                   textFieldCssClass:"admin_xform_number_input",
                                   onChange:ZaServerXFormView.onFormFieldChanged
                                 },
-                                {type: _DWT_ALERT_, cssClass: "DwtTabTable", containerCssStyle: "padding-bottom:0px",
+                                {type: _DWT_ALERT_, cssClass: "DwtTabTable", containerCssStyle: "padding-bottom:0;",
                                   style: DwtAlert.WARNING, iconVisible: false, content: ZaMsg.Alert_Ngnix,
                                   id:"xform_header_ngnix"
                                 },
@@ -1042,7 +1042,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 					id:"server_imap_tab",
 					items:[
 						{ type: _DWT_ALERT_,
-						  containerCssStyle: "padding-bottom:0px",
+						  containerCssStyle: "padding-bottom:0;",
 						  style: DwtAlert.INFO,
 						  iconVisible: false,
 						  content: ZaMsg.Alert_ServerRestart
@@ -1114,7 +1114,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 					id:"server_pop_tab", colSizes:["auto"],numCols:1,
 					items:[
 						{ type: _DWT_ALERT_,
-						  containerCssStyle: "padding-bottom:0px",
+						  containerCssStyle: "padding-bottom:0;",
 						  style: DwtAlert.INFO,
 						  iconVisible: false,
 						  content: ZaMsg.Alert_ServerRestart
@@ -1164,7 +1164,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 									  labelLocation:_LEFT_, label: ZaMsg.NAD_POP_AdvertisedName,
 									  onChange: ZaServerXFormView.onFormFieldChanged,
                                       labelCssClass:(appNewUI?"gridGroupBodyLabel":"xform_label"),
-                                        labelCssStyle:(appNewUI?"text-align:left;border-right: 1px solid":_UNDEFINED_)
+                                        labelCssStyle:(appNewUI?"text-align:left;border-right:1px solid;":_UNDEFINED_)
 									}
 								]
 						  	},
@@ -1174,13 +1174,13 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 						  		items:[
 									{ ref: ZaServer.A_Pop3BindAddress, type:_TEXTFIELD_,
                                       labelCssClass:(appNewUI?"gridGroupBodyLabel":"xform_label"),
-                                      labelCssStyle:(appNewUI?"text-align:left;border-right: 1px solid":_UNDEFINED_),
+                                      labelCssStyle:(appNewUI?"text-align:left;border-right:1px solid;":_UNDEFINED_),
 									 	label:ZaMsg.NAD_POP_Address,
 									  	onChange:ZaServerXFormView.onFormFieldChanged
 								  	},
 									{type:_OUTPUT_,ref:".",label:"",
                                          labelCssClass:(appNewUI?"gridGroupBodyLabel":"xform_label"),
-                                        labelCssStyle:(appNewUI?"text-align:left;border-right: 1px solid":_UNDEFINED_),
+                                        labelCssStyle:(appNewUI?"text-align:left;border-right:1px solid;":_UNDEFINED_),
                                         labelLocation:_LEFT_, value: ZaMsg.NAD_POP_Address_NOTE}
 							  ]
 						  	},
@@ -1218,7 +1218,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 
 						{type:_ZA_TOP_GROUPER_, id:"server_form_volumes_group",width:"98%",
 							numCols:1,colSizes:["auto"],label:ZaMsg.VM_VolumesGrpTitle,
-							cssStyle:"margin-top:10px;margin-bottom:10px;padding-bottom:0px;margin-left:10px;margin-right:10px;",
+							cssStyle:"margin:10px;padding-bottom:0;",
 							items: [
 								{ref:ZaServer.A_Volumes, type:_DWT_LIST_, height:"200", width:"99%",
 									 	preserveSelection:false, multiselect:true,cssClass: "DLSource",
@@ -1227,7 +1227,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 									 	valueChangeEventSources:[ZaServer.A_Volumes, ZaServer.A_CurrentMsgVolumeId, ZaServer.A_CurrentIndexVolumeId,ZaServer.A_RemovedVolumes]
 								},
 								{type:_GROUP_, numCols:5, colSizes:["100px","auto","100px","auto","100px"], width:"350px",
-									cssStyle:"margin-bottom:10px;padding-bottom:0px;margin-top:10px;pxmargin-left:10px;margin-right:10px;",
+									cssStyle:"margin:10px;padding-bottom:0;",
 									items: [
 										{type:_DWT_BUTTON_, label:ZaMsg.TBB_Delete,width:"100px",
 											onActivate:"ZaServerXFormView.deleteButtonListener.call(this);",
@@ -1281,7 +1281,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 					items: [
 						{ type: _DWT_ALERT_,
 						  cssClass: "DwtTabTable",
-						  containerCssStyle: "padding-bottom:0px",
+						  containerCssStyle: "padding-bottom:0;",
 						  style: DwtAlert.WARNING,
 						  iconVisible: true,
 						  content:ZaMsg.Alert_MbxSvcNotInstalled,
@@ -1297,7 +1297,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 						colSizes:["auto"],numCols:1,
 						items: [
 							{type: _DWT_ALERT_,
-									containerCssStyle: "padding-bottom:0px",
+									containerCssStyle: "padding-bottom:0;",
 									style: DwtAlert.INFO,
 									iconVisible: false,
 									content: ZaMsg.MSG_ConfigIpAddressBindings
@@ -1305,19 +1305,19 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 							{type:_ZA_TOP_GROUPER_, colSizes:["275px","*"], numCols:2, label:ZaMsg.NAD_IpAddressBindingsForWebClient,
 								items:[
 									{ ref: ZaServer.A_zimbraMailBindAddress, type:_TEXTFIELD_,
-										containerCssStyle: "padding-top:6px; padding-bottom:6px;",
+										containerCssStyle: "padding-top:6px;padding-bottom:6px;",
 										labelLocation:_LEFT_,
 										label: ZaMsg.NAD_zimbraMailBindAddress,
 										onChange: ZaServerXFormView.onFormFieldChanged
 									},
 									{ ref: ZaServer.A_zimbraMailSSLBindAddress, type:_TEXTFIELD_,
-										containerCssStyle: "padding-top:6px; padding-bottom:6px;",
+										containerCssStyle: "padding-top:6px;padding-bottom:6px;",
 										labelLocation:_LEFT_,
 										label: ZaMsg.NAD_zimbraMailSSLBindAddress,
 										onChange: ZaServerXFormView.onFormFieldChanged
 									},
 									{ ref: ZaServer.A_zimbraMailSSLClientCertBindAddress, type:_TEXTFIELD_,
-										containerCssStyle: "padding-top:6px; padding-bottom:6px;",
+										containerCssStyle: "padding-top:6px;padding-bottom:6px;",
 										labelLocation:_LEFT_,
 										label: ZaMsg.NAD_zimbraMailSSLClientCertBindAddress,
 										onChange: ZaServerXFormView.onFormFieldChanged
@@ -1327,7 +1327,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 							{type:_ZA_TOP_GROUPER_, colSizes:["275px","*"], numCols:2, label:ZaMsg.NAD_IpAddressBindingsForAdminConsole,
 								items:[
 									{ ref: ZaServer.A_zimbraAdminBindAddress, type:_TEXTFIELD_,
-										containerCssStyle: "padding-top:6px; padding-bottom:6px;",
+										containerCssStyle: "padding-top:6px;padding-bottom:6px;",
 										labelLocation:_LEFT_,
 										label: ZaMsg.NAD_zimbraAdminBindAddress,
 										onChange: ZaServerXFormView.onFormFieldChanged
@@ -1346,7 +1346,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
     xFormObject.items = [
 		{type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan:"*", id:"xform_header", 
 			items: [
-				{type:_GROUP_,	numCols:4,colSizes:["32px","350px","100px","250px"],
+				{type:_GROUP_,	numCols:4,colSizes:["32px","*","80px","*"],
 					items: [
 						{type:_AJX_IMAGE_, src:"Server_32", label:null, rowSpan:3},
 						{type:_OUTPUT_, ref:ZaServer.A_name, label:null,cssClass:"AdminTitle",
@@ -1369,9 +1369,9 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 			]
 		},
 		{type:_TAB_BAR_, ref:ZaModel.currentTab,
-			containerCssStyle: "padding-top:0px",
+			containerCssStyle: "padding-top:0;",
 			choices: tabBarChoices ,
-            cssStyle: (appNewUI? "display:none": ""),
+            cssStyle: (appNewUI? "display:none;": ""),
 			cssClass:"ZaTabBar", id:"xform_tabbar"
 		},
 		{type:_SWITCH_, items:switchItems }

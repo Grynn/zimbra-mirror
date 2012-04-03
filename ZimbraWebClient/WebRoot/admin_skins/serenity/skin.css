@@ -529,6 +529,9 @@ BODY {
 	padding:5px;
 	border-bottom:1px solid #E5E5E5;
 }
+.ZmSelectedHeaderBg TABLE {
+	width:100%;
+}
 
 .ZmSelectedHeaderBg .xform_repeat_label,
 .ZmSelectedHeaderBg .xform_label_left,

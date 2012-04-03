@@ -389,7 +389,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
 					enableDisableChecks:[[ZaItem.hasRight,ZaCos.RENAME_COS_RIGHT]],
 					msgName:ZaMsg.NAD_DisplayName,label:ZaMsg.NAD_DisplayName, labelLocation:_LEFT_, cssClass:"admin_xform_name_input", required:true, width: "30em"},
 				ZaItem.descriptionXFormItem ,
-                {ref:ZaCos.A_zimbraNotes, type:_TEXTAREA_, msgName:ZaMsg.NAD_Notes,label:ZaMsg.NAD_Notes, labelLocation:_LEFT_, labelCssStyle:"vertical-align:top",width: "30em"}
+                {ref:ZaCos.A_zimbraNotes, type:_TEXTAREA_, msgName:ZaMsg.NAD_Notes,label:ZaMsg.NAD_Notes, labelLocation:_LEFT_, labelCssStyle:"vertical-align:top;",width: "30em"}
 			]
 		}
 	];
@@ -1063,7 +1063,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
                         selectLabel:"",selectLabelLocation:_NONE_
                     },
 					{type: _DWT_ALERT_,
-						containerCssStyle: "padding-bottom:0px",
+						containerCssStyle: "padding-bottom:0;",
 						style: DwtAlert.INFO,
 						iconVisible: false,
 						content: ZaMsg.Zimlet_Note
@@ -1148,7 +1148,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
                     	label:ZaMsg.LBL_zimbraQuotaWarnInterval, labelLocation:_LEFT_
                     },
                     {ref:ZaCos.A_zimbraQuotaWarnMessage, type:_TEXTAREA_, msgName:ZaMsg.MSG_zimbraQuotaWarnMessage,
-                    	label:ZaMsg.LBL_zimbraQuotaWarnMessage, labelLocation:_LEFT_, labelCssStyle:"vertical-align:top",width: "30em"
+                    	label:ZaMsg.LBL_zimbraQuotaWarnMessage, labelLocation:_LEFT_, labelCssStyle:"vertical-align:top;",width: "30em"
                     }
                 ]
             },
@@ -1208,7 +1208,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
 			ref: ZaCos.A_zimbraProxyAllowedDomains,  
 			msgName:ZaMsg.MSG_zimbraProxyAllowedDomains,
     			label:ZaMsg.LBL_zimbraProxyAllowedDomains, labelLocation:_LEFT_, 
-   			labelCssStyle:"vertical-align:top",
+   			labelCssStyle:"vertical-align:top;",
     			type:_REPEAT_,
     			align:_LEFT_,
     			repeatInstance:"",
@@ -1232,7 +1232,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
                 label:ZaMsg.NAD_PasswordGrouper,
                 items: [ 
                     { type: _DWT_ALERT_,
-                      containerCssStyle: "padding-bottom:0px",
+                      containerCssStyle: "padding-bottom:0;",
                       style: DwtAlert.INFO,
                       iconVisible:  false,
                       content: ((ZaCosXFormView.isAllAuthfromInternal())?ZaMsg.Alert_InternalPassword:ZaMsg.Alert_ExternalPassword)
@@ -1349,7 +1349,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
                 label:ZaMsg.NAD_MailRetentionGrouper,
                 items: [
                     { type: _DWT_ALERT_,
-                      containerCssStyle: "padding-bottom:0px",
+                      containerCssStyle: "padding-bottom:0;",
                       style: DwtAlert.INFO,
                       iconVisible: false,
                       content: ZaMsg.Alert_MailRetention
@@ -1380,7 +1380,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
 	xFormObject.items = [
 			{type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan:"*", id:"xform_header",
 				items: [
-					{type:_GROUP_,	numCols:4,colSizes:["32px","350px","100px","*"],items:headerItems}
+					{type:_GROUP_,	numCols:4,colSizes:["32px","*","80px","*"],items:headerItems}
 				]
 			},
 			{type:_TAB_BAR_,  ref:ZaModel.currentTab,choices:this.tabChoices,cssClass:"ZaTabBar", id:"xform_tabbar", cssStyle: (appNewUI? "display:none;":"")},

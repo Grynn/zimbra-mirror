@@ -32,7 +32,7 @@ ZaCosListView = function(parent) {
 		posStyle:posStyle, 
 		headerList:headerList,
 		id: ZaId.TAB_COS_MANAGE,
-        scrollLoading:true
+		scrollLoading:true
 
 	});
 
@@ -70,14 +70,18 @@ function(cos, no, isDragProxy) {
 	this.associateItemWithElement(cos, div, DwtListView.TYPE_LIST_ITEM);
 	
 	var idx = 0;
-	html[idx++] = "<table width='100%' cellspacing='0' cellpadding='0'>";
+	html[idx++] = "<table width='100%'>";
 	html[idx++] = "<tr>";
 
 
 	var cnt = this._headerList.length;
 	for(var i = 0; i < cnt; i++) {
 		var field = this._headerList[i]._field;
-		if(field == ZaCos.A_name) {
+		var cellWidth = this._getCellWidth(i, {});
+		if (field == "type") {
+		// type
+			html[idx++] = "<td width=" + this._headerList[i]._width + ">" + AjxImg.getImageHtml("COS") + "</td>";
+		} else if (field == ZaCos.A_name) {
 		// name
 			html[idx++] = "<td align='left' width=" + this._headerList[i]._width + "><nobr>";
 			html[idx++] = AjxStringUtil.htmlEncode(cos.name);
@@ -99,10 +103,11 @@ function() {
 
 	var headerList = new Array();
 	var sortable = 1;
+	var i = 0 ;
 	//idPrefix, label, iconInfo, width, sortable, sortField, resizeable, visible
-	headerList[0] = new ZaListHeaderItem(ZaCos.A_name, ZaMsg.CLV_Name_col, null, "200px", sortable++, ZaCos.A_name, true, true);
-
-	headerList[1] = new ZaListHeaderItem(ZaCos.A_description, ZaMsg.CLV_Description_col, null, "auto", null, null, true, true);
+	headerList[i++] = new ZaListHeaderItem("type", null, null, "22px", sortable++, "objectClass", false, true);
+	headerList[i++] = new ZaListHeaderItem(ZaCos.A_name, ZaMsg.CLV_Name_col, null, "200px", sortable++, ZaCos.A_name, true, true);
+	headerList[i++] = new ZaListHeaderItem(ZaCos.A_description, ZaMsg.CLV_Description_col, null, "auto", null, null, true, true);
 	
 	return headerList;
 }

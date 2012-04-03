@@ -44,7 +44,7 @@ ZaAccountListView = function(parent,listType) {
 		posStyle:posStyle, 
 		headerList:headerList, 
 		id:listViewId,
-        scrollLoading:true
+		scrollLoading:true
 	});
 
 	this._appCtxt = this.shell.getData(ZaAppCtxt.LABEL);
@@ -114,7 +114,7 @@ function(account, now, isDragProxy) {
 	html[idx++] = "<tr>";
 
 	var cnt = this._headerList.length;
-        var dwtId = Dwt.getNextId();
+		var dwtId = Dwt.getNextId();
 	var rowId = this._listType;
 	for(var i = 0; i < cnt; i++) {
 		var field = this._headerList[i]._field;
@@ -144,22 +144,22 @@ function(account, now, isDragProxy) {
 					}
 				break;
 				case ZaItem.DL:
-                    if (account.attrs[ZaDistributionList.A_isAdminGroup] == "TRUE") {
-					    html[idx++] = AjxImg.getImageHtml("DistributionListGroup");
-                    }else {
-                        html[idx++] = AjxImg.getImageHtml("DistributionList");
-                    }
+					if (account.attrs[ZaDistributionList.A_isAdminGroup] == "TRUE") {
+						html[idx++] = AjxImg.getImageHtml("DistributionListGroup");
+					} else {
+						html[idx++] = AjxImg.getImageHtml("DistributionList");
+					}
 				break;
 				case ZaItem.ALIAS:
-					html[idx++] = AjxImg.getImageHtml("AccountAlias");				
-				break;	
+					html[idx++] = AjxImg.getImageHtml("AccountAlias");
+				break;
 				case ZaItem.RESOURCE:
 					if (account.attrs[ZaResource.A_zimbraCalResType] == ZaResource.RESOURCE_TYPE_LOCATION){
-						html[idx++] = AjxImg.getImageHtml("Location");	
+						html[idx++] = AjxImg.getImageHtml("Location");
 					}else {//equipment or other resource types
-						html[idx++] = AjxImg.getImageHtml("Resource");	
-					}		
-				break;											
+						html[idx++] = AjxImg.getImageHtml("Resource");
+					}
+				break;
 				default:
 					html[idx++] = account.type;
 				break;
@@ -193,11 +193,11 @@ function(account, now, isDragProxy) {
 			html[idx++] = "<td id=\"" + rowId + "_data_lastlogontime_" + dwtId + "\" nowrap width=" + cellWidth + "><nobr>";
 			html[idx++] = AjxStringUtil.htmlEncode(ZaAccount.getLastLoginTime(account.attrs[ZaAccount.A_zimbraLastLogonTimestamp]));
 			html[idx++] = "</nobr></td>";	
-		} else if (field == ZaAccount.A_description) {		
+		} else if (field == ZaAccount.A_description) {
 			// description
-            html[idx++] = "<td id=\"" + rowId + "_data_description_" + dwtId + "\" width=" + cellWidth + "><nobr>";
+			html[idx++] = "<td id=\"" + rowId + "_data_description_" + dwtId + "\" width=" + cellWidth + "><nobr>";
 			html[idx++] = AjxStringUtil.htmlEncode(
-                    ZaItem.getDescriptionValue(account.attrs[ZaAccount.A_description] ));
+				ZaItem.getDescriptionValue(account.attrs[ZaAccount.A_description] ));
 			html[idx++] = "</nobr></td>";	
 		} else if (field == "target" + ZaAlias.A_targetType) {
 			html[idx++] = "<td id=\"" + rowId + "_data_targettype_" + dwtId + "\" width=" + cellWidth + "><nobr>";
@@ -229,7 +229,7 @@ function(listType) {
 	var headerList = new Array();
 	var sortable = 1;
 	var i = 0 ;
-	headerList[i++] = new ZaListHeaderItem("type", ZaMsg.ALV_Type_col, null, "40px", sortable++, "objectClass", true, true);
+	headerList[i++] = new ZaListHeaderItem("type", null, null, "22px", sortable++, "objectClass", false, true);
 	this._defaultColumnSortable = sortable ;
 	headerList[i++] = new ZaListHeaderItem(ZaAccount.A_name, ZaMsg.ALV_Name_col, null, "210px", sortable++, ZaAccount.A_name, true, true);
 	
