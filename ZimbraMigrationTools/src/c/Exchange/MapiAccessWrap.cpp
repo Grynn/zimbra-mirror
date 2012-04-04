@@ -536,126 +536,169 @@ STDMETHODIMP CMapiAccessWrap::GetData(BSTR UserId, VARIANT ItemId, FolderType ty
                     hr= S_FALSE;
                     return hr;
                 }
-				if (ret == NULL)	// 71630
-				{
-					pIt[L"ptst"] = SysAllocString((apptData.PartStat).c_str());
-					pIt[L"fb"] = SysAllocString((apptData.FreeBusy).c_str());
-					pIt[L"allDay"] = SysAllocString((apptData.AllDay).c_str());
-					pIt[L"transp"] = SysAllocString((apptData.Transparency).c_str());
-					pIt[L"name"] = SysAllocString((apptData.Name).c_str());
-					pIt[L"su"] = SysAllocString((apptData.Subject).c_str());
-					pIt[L"loc"] = SysAllocString((apptData.Location).c_str());
-					pIt[L"uid"] = SysAllocString((apptData.Uid).c_str());
-					pIt[L"m"] = SysAllocString((apptData.AlarmTrigger).c_str());
-					pIt[L"s"] = SysAllocString((apptData.StartDate).c_str());
-					pIt[L"e"] = SysAllocString((apptData.EndDate).c_str());
-					pIt[L"class"] = SysAllocString((apptData.ApptClass).c_str());
-					pIt[L"orAddr"] = SysAllocString((apptData.organizer.addr).c_str());
-					pIt[L"orName"] = SysAllocString((apptData.organizer.nam).c_str());
-					pIt[L"contentType0"] = SysAllocString(
-						(apptData.vMessageParts[0].contentType).c_str());
-					pIt[L"content0"] = SysAllocString((apptData.vMessageParts[0].content).c_str());
-					pIt[L"contentType1"] = SysAllocString(
-						(apptData.vMessageParts[1].contentType).c_str());
-					pIt[L"content1"] = SysAllocString((apptData.vMessageParts[1].content).c_str());
+                if (ret == NULL)	// 71630
+                {
+                    pIt[L"ptst"] = SysAllocString((apptData.PartStat).c_str());
+                    pIt[L"fb"] = SysAllocString((apptData.FreeBusy).c_str());
+                    pIt[L"allDay"] = SysAllocString((apptData.AllDay).c_str());
+                    pIt[L"transp"] = SysAllocString((apptData.Transparency).c_str());
+                    pIt[L"name"] = SysAllocString((apptData.Name).c_str());
+                    pIt[L"su"] = SysAllocString((apptData.Subject).c_str());
+                    pIt[L"loc"] = SysAllocString((apptData.Location).c_str());
+                    pIt[L"uid"] = SysAllocString((apptData.Uid).c_str());
+                    pIt[L"m"] = SysAllocString((apptData.AlarmTrigger).c_str());
+                    pIt[L"s"] = SysAllocString((apptData.StartDate).c_str());
+                    pIt[L"e"] = SysAllocString((apptData.EndDate).c_str());
+                    pIt[L"class"] = SysAllocString((apptData.ApptClass).c_str());
+                    pIt[L"orAddr"] = SysAllocString((apptData.organizer.addr).c_str());
+                    pIt[L"orName"] = SysAllocString((apptData.organizer.nam).c_str());
+                    pIt[L"contentType0"] = SysAllocString(
+	                    (apptData.vMessageParts[0].contentType).c_str());
+                    pIt[L"content0"] = SysAllocString((apptData.vMessageParts[0].content).c_str());
+                    pIt[L"contentType1"] = SysAllocString(
+	                    (apptData.vMessageParts[1].contentType).c_str());
+                    pIt[L"content1"] = SysAllocString((apptData.vMessageParts[1].content).c_str());
 
-					// attendees
-					wstring attendeeData;
-					int numAttendees = (int)apptData.vAttendees.size();     // cast it because in delete loop, we'll go negative
+                    // attendees
+                    wstring attendeeData;
+                    int numAttendees = (int)apptData.vAttendees.size();     // cast it because in delete loop, we'll go negative
+                    if (numAttendees > 0)
+                    {
+                        for (int i = 0; i < numAttendees; i++)
+                        {
+                            attendeeData += apptData.vAttendees[i]->nam;
+                            attendeeData += L"~";
+                            attendeeData += apptData.vAttendees[i]->addr;
+                            attendeeData += L"~";
+                            attendeeData += apptData.vAttendees[i]->role;
+                            attendeeData += L"~";
+                            attendeeData += apptData.vAttendees[i]->partstat;
+                            if (i < (numAttendees - 1))     // don't write comma after last attendee
+	                            attendeeData += L"~";
+                        }
+                        pIt[L"attendees"] = SysAllocString(attendeeData.c_str());
+                        // now clean up
+                        for (int i = (numAttendees - 1); i >= 0; i--)
+                        {
+                            delete (apptData.vAttendees[i]);
+                        }
+                    }
 
-					if (numAttendees > 0)
-					{
-						for (int i = 0; i < numAttendees; i++)
-						{
-							attendeeData += apptData.vAttendees[i]->nam;
-							attendeeData += L"~";
-							attendeeData += apptData.vAttendees[i]->addr;
-							attendeeData += L"~";
-							attendeeData += apptData.vAttendees[i]->role;
-							attendeeData += L"~";
-							attendeeData += apptData.vAttendees[i]->partstat;
-							if (i < (numAttendees - 1))     // don't write comma after last attendee
-								attendeeData += L"~";
-						}
-						pIt[L"attendees"] = SysAllocString(attendeeData.c_str());
-						// now clean up
-						for (int i = (numAttendees - 1); i >= 0; i--)
-						{
-							delete (apptData.vAttendees[i]);
-						}
-					}
-					// recurrence
-					if (apptData.recurPattern.length() > 0)
-					{
-						pIt[L"freq"] = SysAllocString((apptData.recurPattern).c_str());
-						pIt[L"ival"] = SysAllocString((apptData.recurInterval).c_str());
-						pIt[L"count"] = SysAllocString((apptData.recurCount).c_str());      // can set this either way
-						if (apptData.recurEndDate.length() > 0)
-							pIt[L"until"] = SysAllocString((apptData.recurEndDate).c_str());
-						if (apptData.recurWkday.length() > 0)
-							pIt[L"wkday"] = SysAllocString((apptData.recurWkday).c_str());
-						if (apptData.recurDayOfMonth.length() > 0)
-							pIt[L"modaylist"] = SysAllocString((apptData.recurDayOfMonth).c_str());
-						if (apptData.recurMonthOfYear.length() > 0)
-							pIt[L"molist"] = SysAllocString((apptData.recurMonthOfYear).c_str());
-						if (apptData.recurMonthOccurrence.length() > 0)
-							pIt[L"poslist"] = SysAllocString(
-								(apptData.recurMonthOccurrence).c_str());
-						 // timezone
-						pIt[L"tid"] = SysAllocString((apptData.tz.id).c_str());
-						pIt[L"stdoff"] = SysAllocString((apptData.tz.standardOffset).c_str());
-						pIt[L"dayoff"] = SysAllocString((apptData.tz.daylightOffset).c_str());
-						pIt[L"sweek"] = SysAllocString((apptData.tz.standardStartWeek).c_str());
-						pIt[L"swkday"] = SysAllocString((apptData.tz.standardStartWeekday).c_str());
-						pIt[L"smon"] = SysAllocString((apptData.tz.standardStartMonth).c_str());
-						pIt[L"shour"] = SysAllocString((apptData.tz.standardStartHour).c_str());
-						pIt[L"smin"] = SysAllocString((apptData.tz.standardStartMinute).c_str());
-						pIt[L"ssec"] = SysAllocString((apptData.tz.standardStartSecond).c_str());
-						pIt[L"dweek"] = SysAllocString((apptData.tz.daylightStartWeek).c_str());
-						pIt[L"dwkday"] = SysAllocString((apptData.tz.daylightStartWeekday).c_str());
-						pIt[L"dmon"] = SysAllocString((apptData.tz.daylightStartMonth).c_str());
-						pIt[L"dhour"] = SysAllocString((apptData.tz.daylightStartHour).c_str());
-						pIt[L"dmin"] = SysAllocString((apptData.tz.daylightStartMinute).c_str());
-						pIt[L"dsec"] = SysAllocString((apptData.tz.daylightStartSecond).c_str());
+                    // attachments
+                    int numAttachments = (int)apptData.vAttachments.size();
+                    if (numAttachments > 0)
+                    {
+                        
+                        WCHAR pwszNumAttachments[10];
+                        BSTR attrs[NUM_ATTACHMENT_ATTRS];
 
-						int numExceptions = (int)apptData.vExceptions.size();   
-						if (numExceptions > 0)
-						{
-							WCHAR pwszNumExceptions[10];
-							BSTR attrs[NUM_EXCEPTION_ATTRS];
+                        _ltow(numAttachments, pwszNumAttachments, 10);
+                        pIt[L"numAttachments"] = SysAllocString(pwszNumAttachments);
+                        for (int i = 0; i < numAttachments; i++)
+                        {
+                            CreateAttachmentAttrs(attrs, i);
+                            LPSTR pszContentType = apptData.vAttachments[i]->pszContentType;
+                            LPSTR pszTempFile = apptData.vAttachments[i]->pszTempFile;
+                            LPSTR pszRealName = apptData.vAttachments[i]->pszRealName;
+                            LPSTR pszContentDisposition = apptData.vAttachments[i]->pszContentDisposition;
+                            LPTSTR pwDes = NULL;
+                            AtoW((LPSTR)pszContentType,pwDes);
+                            pIt[attrs[0]] =  SysAllocString(pwDes);
+                            delete[] pwDes;
+                            AtoW((LPSTR)pszTempFile,pwDes);
+                            pIt[attrs[1]] =  SysAllocString(pwDes);
+                            delete[] pwDes;
+                            AtoW((LPSTR)pszRealName,pwDes);
+                            pIt[attrs[2]] =  SysAllocString(pwDes);
+                            delete[] pwDes;
+                            AtoW((LPSTR)pszContentDisposition,pwDes);
+                            pIt[attrs[3]] =  SysAllocString(pwDes);
+                            delete[] pwDes;
+                        }
 
-							_ltow(numExceptions, pwszNumExceptions, 10);
-							pIt[L"numExceptions"] = SysAllocString(pwszNumExceptions);
-							for (int i = 0; i < numExceptions; i++)
-							{
-								CreateExceptionAttrs(attrs, i);
-								pIt[attrs[0]] =  SysAllocString((apptData.vExceptions[i]->GetExceptionType()).c_str());
-								pIt[attrs[1]]  = SysAllocString((apptData.vExceptions[i]->GetResponseStatus()).c_str());
-								pIt[attrs[2]]  = SysAllocString((apptData.vExceptions[i]->GetBusyStatus()).c_str());
-								pIt[attrs[3]]  = SysAllocString((apptData.vExceptions[i]->GetAllday()).c_str());
-								pIt[attrs[4]]  = SysAllocString((apptData.vExceptions[i]->GetSubject()).c_str());
-								pIt[attrs[5]]  = SysAllocString((apptData.vExceptions[i]->GetSubject()).c_str());
-								pIt[attrs[6]]  = SysAllocString((apptData.vExceptions[i]->GetLocation()).c_str());
-								pIt[attrs[7]]  = SysAllocString((apptData.vExceptions[i]->GetReminderMinutes()).c_str());
-								pIt[attrs[8]]  = SysAllocString((apptData.vExceptions[i]->GetStartDate()).c_str());
-								pIt[attrs[9]]  = SysAllocString((apptData.vExceptions[i]->GetEndDate()).c_str());
-								pIt[attrs[10]] = SysAllocString((apptData.vExceptions[i]->GetOrganizerAddr()).c_str());
-								pIt[attrs[11]] = SysAllocString((apptData.vExceptions[i]->GetOrganizerName()).c_str());
-								pIt[attrs[12]] = SysAllocString(L"text/plain");
-								pIt[attrs[13]] = SysAllocString((apptData.vExceptions[i]->GetPlainTextFileAndContent()).c_str());
-								pIt[attrs[14]] = SysAllocString(L"text/html");
-								pIt[attrs[15]] = SysAllocString((apptData.vExceptions[i]->GetHtmlFileAndContent()).c_str());
-							}
+                        // clean up any attachment
+                        for (int i = (numAttachments - 1); i >= 0; i--)
+                        {
+                            delete apptData.vAttachments[i]->pszContentType;
+                            delete apptData.vAttachments[i]->pszTempFile;
+                            delete apptData.vAttachments[i]->pszRealName;
+                            delete apptData.vAttachments[i]->pszContentDisposition;
+                            delete apptData.vAttachments[i];
+                        }                       
+                    }
 
-							// clean up any exceptions
-							for (int i = (numExceptions - 1); i >= 0; i--)
-							{
-								delete (apptData.vExceptions[i]);
-							}
-							//
-						}
-					}
-				}
+                    // recurrence
+                    if (apptData.recurPattern.length() > 0)
+                    {
+                        pIt[L"freq"] = SysAllocString((apptData.recurPattern).c_str());
+                        pIt[L"ival"] = SysAllocString((apptData.recurInterval).c_str());
+                        pIt[L"count"] = SysAllocString((apptData.recurCount).c_str());      // can set this either way
+                        if (apptData.recurEndDate.length() > 0)
+	                        pIt[L"until"] = SysAllocString((apptData.recurEndDate).c_str());
+                        if (apptData.recurWkday.length() > 0)
+	                        pIt[L"wkday"] = SysAllocString((apptData.recurWkday).c_str());
+                        if (apptData.recurDayOfMonth.length() > 0)
+	                        pIt[L"modaylist"] = SysAllocString((apptData.recurDayOfMonth).c_str());
+                        if (apptData.recurMonthOfYear.length() > 0)
+	                        pIt[L"molist"] = SysAllocString((apptData.recurMonthOfYear).c_str());
+                        if (apptData.recurMonthOccurrence.length() > 0)
+	                        pIt[L"poslist"] = SysAllocString(
+		                        (apptData.recurMonthOccurrence).c_str());
+                            // timezone
+                        pIt[L"tid"] = SysAllocString((apptData.tz.id).c_str());
+                        pIt[L"stdoff"] = SysAllocString((apptData.tz.standardOffset).c_str());
+                        pIt[L"dayoff"] = SysAllocString((apptData.tz.daylightOffset).c_str());
+                        pIt[L"sweek"] = SysAllocString((apptData.tz.standardStartWeek).c_str());
+                        pIt[L"swkday"] = SysAllocString((apptData.tz.standardStartWeekday).c_str());
+                        pIt[L"smon"] = SysAllocString((apptData.tz.standardStartMonth).c_str());
+                        pIt[L"shour"] = SysAllocString((apptData.tz.standardStartHour).c_str());
+                        pIt[L"smin"] = SysAllocString((apptData.tz.standardStartMinute).c_str());
+                        pIt[L"ssec"] = SysAllocString((apptData.tz.standardStartSecond).c_str());
+                        pIt[L"dweek"] = SysAllocString((apptData.tz.daylightStartWeek).c_str());
+                        pIt[L"dwkday"] = SysAllocString((apptData.tz.daylightStartWeekday).c_str());
+                        pIt[L"dmon"] = SysAllocString((apptData.tz.daylightStartMonth).c_str());
+                        pIt[L"dhour"] = SysAllocString((apptData.tz.daylightStartHour).c_str());
+                        pIt[L"dmin"] = SysAllocString((apptData.tz.daylightStartMinute).c_str());
+                        pIt[L"dsec"] = SysAllocString((apptData.tz.daylightStartSecond).c_str());
+
+                        int numExceptions = (int)apptData.vExceptions.size();   
+                        if (numExceptions > 0)
+                        {
+                            WCHAR pwszNumExceptions[10];
+                            BSTR attrs[NUM_EXCEPTION_ATTRS];
+
+                            _ltow(numExceptions, pwszNumExceptions, 10);
+                            pIt[L"numExceptions"] = SysAllocString(pwszNumExceptions);
+                            for (int i = 0; i < numExceptions; i++)
+                            {
+                                CreateExceptionAttrs(attrs, i);
+                                pIt[attrs[0]] =  SysAllocString((apptData.vExceptions[i]->GetExceptionType()).c_str());
+                                pIt[attrs[1]]  = SysAllocString((apptData.vExceptions[i]->GetResponseStatus()).c_str());
+                                pIt[attrs[2]]  = SysAllocString((apptData.vExceptions[i]->GetBusyStatus()).c_str());
+                                pIt[attrs[3]]  = SysAllocString((apptData.vExceptions[i]->GetAllday()).c_str());
+                                pIt[attrs[4]]  = SysAllocString((apptData.vExceptions[i]->GetSubject()).c_str());
+                                pIt[attrs[5]]  = SysAllocString((apptData.vExceptions[i]->GetSubject()).c_str());
+                                pIt[attrs[6]]  = SysAllocString((apptData.vExceptions[i]->GetLocation()).c_str());
+                                pIt[attrs[7]]  = SysAllocString((apptData.vExceptions[i]->GetReminderMinutes()).c_str());
+                                pIt[attrs[8]]  = SysAllocString((apptData.vExceptions[i]->GetStartDate()).c_str());
+                                pIt[attrs[9]]  = SysAllocString((apptData.vExceptions[i]->GetEndDate()).c_str());
+                                pIt[attrs[10]] = SysAllocString((apptData.vExceptions[i]->GetOrganizerAddr()).c_str());
+                                pIt[attrs[11]] = SysAllocString((apptData.vExceptions[i]->GetOrganizerName()).c_str());
+                                pIt[attrs[12]] = SysAllocString(L"text/plain");
+                                pIt[attrs[13]] = SysAllocString((apptData.vExceptions[i]->GetPlainTextFileAndContent()).c_str());
+                                pIt[attrs[14]] = SysAllocString(L"text/html");
+                                pIt[attrs[15]] = SysAllocString((apptData.vExceptions[i]->GetHtmlFileAndContent()).c_str());
+                            }
+
+                            // clean up any exceptions
+                            for (int i = (numExceptions - 1); i >= 0; i--)
+                            {
+                                delete (apptData.vExceptions[i]);
+                            }
+                            //
+                        }
+                    }
+                }
             }
             else if (ft == 4)
             {
@@ -668,67 +711,111 @@ STDMETHODIMP CMapiAccessWrap::GetData(BSTR UserId, VARIANT ItemId, FolderType ty
                     hr= S_FALSE;
                     return hr;
                 }
-				if (ret == NULL)	// 71630
-				{
-					pIt[L"name"] = SysAllocString((taskData.Subject).c_str());
-					pIt[L"su"] = SysAllocString((taskData.Subject).c_str());
-					pIt[L"priority"] = SysAllocString((taskData.Importance).c_str());
-					pIt[L"s"] = SysAllocString((taskData.TaskStart).c_str());
-					pIt[L"e"] = SysAllocString((taskData.TaskDue).c_str());
-					pIt[L"status"] = SysAllocString((taskData.Status).c_str());
-					pIt[L"percentComplete"] = SysAllocString((taskData.PercentComplete).c_str());
-					pIt[L"xp-TOTAL_WORK"] = SysAllocString((taskData.TotalWork).c_str());
-					pIt[L"xp-ACTUAL_WORK"] = SysAllocString((taskData.ActualWork).c_str());
-					pIt[L"xp-COMPANIES"] = SysAllocString((taskData.Companies).c_str());
-					pIt[L"xp-MILEAGE"] = SysAllocString((taskData.Mileage).c_str());
-					pIt[L"xp-BILLING"] = SysAllocString((taskData.BillingInfo).c_str());
-					if (taskData.TaskFlagDueBy.length() > 0)
-					{
-						pIt[L"taskflagdueby"] = SysAllocString((taskData.TaskFlagDueBy).c_str());
-					}
-					pIt[L"class"] = SysAllocString((taskData.ApptClass).c_str());
-					pIt[L"contentType0"] = SysAllocString((taskData.vMessageParts[0].contentType).c_str());
-					pIt[L"content0"] = SysAllocString((taskData.vMessageParts[0].content).c_str());
-					pIt[L"contentType1"] = SysAllocString((taskData.vMessageParts[1].contentType).c_str());
-					pIt[L"content1"] = SysAllocString((taskData.vMessageParts[1].content).c_str());
-					// recurrence
-					if (taskData.recurPattern.length() > 0)
-					{
-						pIt[L"freq"] = SysAllocString((taskData.recurPattern).c_str());
-						pIt[L"ival"] = SysAllocString((taskData.recurInterval).c_str());
-						pIt[L"count"] = SysAllocString((taskData.recurCount).c_str());      // can set this either way
-						if (taskData.recurEndDate.length() > 0)
-							pIt[L"until"] = SysAllocString((taskData.recurEndDate).c_str());
-						if (taskData.recurWkday.length() > 0)
-							pIt[L"wkday"] = SysAllocString((taskData.recurWkday).c_str());
-						if (taskData.recurDayOfMonth.length() > 0)
-							pIt[L"modaylist"] = SysAllocString((taskData.recurDayOfMonth).c_str());
-						if (taskData.recurMonthOfYear.length() > 0)
-							pIt[L"molist"] = SysAllocString((taskData.recurMonthOfYear).c_str());
-						if (taskData.recurMonthOccurrence.length() > 0)
-							pIt[L"poslist"] = SysAllocString(
-								(taskData.recurMonthOccurrence).c_str());
-							/*
-							* // timezone
-							* pIt[L"tid"] = SysAllocString((apptData.tz.id).c_str());
-							* pIt[L"stdoff"] = SysAllocString((apptData.tz.standardOffset).c_str());
-							* pIt[L"dayoff"] = SysAllocString((apptData.tz.daylightOffset).c_str());
-							* pIt[L"sweek"] = SysAllocString((apptData.tz.standardStartWeek).c_str());
-							* pIt[L"swkday"] = SysAllocString((apptData.tz.standardStartWeekday).c_str());
-							* pIt[L"smon"] = SysAllocString((apptData.tz.standardStartMonth).c_str());
-							* pIt[L"shour"] = SysAllocString((apptData.tz.standardStartHour).c_str());
-							* pIt[L"smin"] = SysAllocString((apptData.tz.standardStartMinute).c_str());
-							* pIt[L"ssec"] = SysAllocString((apptData.tz.standardStartSecond).c_str());
-							* pIt[L"dweek"] = SysAllocString((apptData.tz.daylightStartWeek).c_str());
-							* pIt[L"dwkday"] = SysAllocString((apptData.tz.daylightStartWeekday).c_str());
-							* pIt[L"dmon"] = SysAllocString((apptData.tz.daylightStartMonth).c_str());
-							* pIt[L"dhour"] = SysAllocString((apptData.tz.daylightStartHour).c_str());
-							* pIt[L"dmin"] = SysAllocString((apptData.tz.daylightStartMinute).c_str());
-							* pIt[L"dsec"] = SysAllocString((apptData.tz.daylightStartSecond).c_str());
-							* //
-							*/
-					}
-				}
+                if (ret == NULL)	// 71630
+                {
+                    pIt[L"name"] = SysAllocString((taskData.Subject).c_str());
+                    pIt[L"su"] = SysAllocString((taskData.Subject).c_str());
+                    pIt[L"priority"] = SysAllocString((taskData.Importance).c_str());
+                    pIt[L"s"] = SysAllocString((taskData.TaskStart).c_str());
+                    pIt[L"e"] = SysAllocString((taskData.TaskDue).c_str());
+                    pIt[L"status"] = SysAllocString((taskData.Status).c_str());
+                    pIt[L"percentComplete"] = SysAllocString((taskData.PercentComplete).c_str());
+                    pIt[L"xp-TOTAL_WORK"] = SysAllocString((taskData.TotalWork).c_str());
+                    pIt[L"xp-ACTUAL_WORK"] = SysAllocString((taskData.ActualWork).c_str());
+                    pIt[L"xp-COMPANIES"] = SysAllocString((taskData.Companies).c_str());
+                    pIt[L"xp-MILEAGE"] = SysAllocString((taskData.Mileage).c_str());
+                    pIt[L"xp-BILLING"] = SysAllocString((taskData.BillingInfo).c_str());
+                    if (taskData.TaskFlagDueBy.length() > 0)
+                    {
+                        pIt[L"taskflagdueby"] = SysAllocString((taskData.TaskFlagDueBy).c_str());
+                    }
+                    pIt[L"class"] = SysAllocString((taskData.ApptClass).c_str());
+                    pIt[L"contentType0"] = SysAllocString((taskData.vMessageParts[0].contentType).c_str());
+                    pIt[L"content0"] = SysAllocString((taskData.vMessageParts[0].content).c_str());
+                    pIt[L"contentType1"] = SysAllocString((taskData.vMessageParts[1].contentType).c_str());
+                    pIt[L"content1"] = SysAllocString((taskData.vMessageParts[1].content).c_str());
+
+                    // attachments
+                    int numAttachments = (int)taskData.vAttachments.size();
+                    if (numAttachments > 0)
+                    {
+                        
+                        WCHAR pwszNumAttachments[10];
+                        BSTR attrs[NUM_ATTACHMENT_ATTRS];
+
+                        _ltow(numAttachments, pwszNumAttachments, 10);
+                        pIt[L"numAttachments"] = SysAllocString(pwszNumAttachments);
+                        for (int i = 0; i < numAttachments; i++)
+                        {
+                            CreateAttachmentAttrs(attrs, i);
+                            LPSTR pszContentType = taskData.vAttachments[i]->pszContentType;
+                            LPSTR pszTempFile = taskData.vAttachments[i]->pszTempFile;
+                            LPSTR pszRealName = taskData.vAttachments[i]->pszRealName;
+                            LPSTR pszContentDisposition = taskData.vAttachments[i]->pszContentDisposition;
+                            LPTSTR pwDes = NULL;
+                            AtoW((LPSTR)pszContentType,pwDes);
+                            pIt[attrs[0]] =  SysAllocString(pwDes);
+                            delete[] pwDes;
+                            AtoW((LPSTR)pszTempFile,pwDes);
+                            pIt[attrs[1]] =  SysAllocString(pwDes);
+                            delete[] pwDes;
+                            AtoW((LPSTR)pszRealName,pwDes);
+                            pIt[attrs[2]] =  SysAllocString(pwDes);
+                            delete[] pwDes;
+                            AtoW((LPSTR)pszContentDisposition,pwDes);
+                            pIt[attrs[3]] =  SysAllocString(pwDes);
+                            delete[] pwDes;
+                        }
+
+                        // clean up any attachment
+                        for (int i = (numAttachments - 1); i >= 0; i--)
+                        {
+                            delete taskData.vAttachments[i]->pszContentType;
+                            delete taskData.vAttachments[i]->pszTempFile;
+                            delete taskData.vAttachments[i]->pszRealName;
+                            delete taskData.vAttachments[i]->pszContentDisposition;
+                            delete taskData.vAttachments[i];
+                        }                       
+                    }
+
+                    // recurrence
+                    if (taskData.recurPattern.length() > 0)
+                    {
+                        pIt[L"freq"] = SysAllocString((taskData.recurPattern).c_str());
+                        pIt[L"ival"] = SysAllocString((taskData.recurInterval).c_str());
+                        pIt[L"count"] = SysAllocString((taskData.recurCount).c_str());      // can set this either way
+                        if (taskData.recurEndDate.length() > 0)
+                            pIt[L"until"] = SysAllocString((taskData.recurEndDate).c_str());
+                        if (taskData.recurWkday.length() > 0)
+                            pIt[L"wkday"] = SysAllocString((taskData.recurWkday).c_str());
+                        if (taskData.recurDayOfMonth.length() > 0)
+                            pIt[L"modaylist"] = SysAllocString((taskData.recurDayOfMonth).c_str());
+                        if (taskData.recurMonthOfYear.length() > 0)
+                            pIt[L"molist"] = SysAllocString((taskData.recurMonthOfYear).c_str());
+                        if (taskData.recurMonthOccurrence.length() > 0)
+                            pIt[L"poslist"] = SysAllocString(
+	                            (taskData.recurMonthOccurrence).c_str());
+                            /*
+                            * // timezone
+                            * pIt[L"tid"] = SysAllocString((apptData.tz.id).c_str());
+                            * pIt[L"stdoff"] = SysAllocString((apptData.tz.standardOffset).c_str());
+                            * pIt[L"dayoff"] = SysAllocString((apptData.tz.daylightOffset).c_str());
+                            * pIt[L"sweek"] = SysAllocString((apptData.tz.standardStartWeek).c_str());
+                            * pIt[L"swkday"] = SysAllocString((apptData.tz.standardStartWeekday).c_str());
+                            * pIt[L"smon"] = SysAllocString((apptData.tz.standardStartMonth).c_str());
+                            * pIt[L"shour"] = SysAllocString((apptData.tz.standardStartHour).c_str());
+                            * pIt[L"smin"] = SysAllocString((apptData.tz.standardStartMinute).c_str());
+                            * pIt[L"ssec"] = SysAllocString((apptData.tz.standardStartSecond).c_str());
+                            * pIt[L"dweek"] = SysAllocString((apptData.tz.daylightStartWeek).c_str());
+                            * pIt[L"dwkday"] = SysAllocString((apptData.tz.daylightStartWeekday).c_str());
+                            * pIt[L"dmon"] = SysAllocString((apptData.tz.daylightStartMonth).c_str());
+                            * pIt[L"dhour"] = SysAllocString((apptData.tz.daylightStartHour).c_str());
+                            * pIt[L"dmin"] = SysAllocString((apptData.tz.daylightStartMinute).c_str());
+                            * pIt[L"dsec"] = SysAllocString((apptData.tz.daylightStartSecond).c_str());
+                            * //
+                            */
+                    }
+                }
             }
         }
         delete ItemID.lpb;
@@ -943,6 +1030,25 @@ STDMETHODIMP CMapiAccessWrap::GetRuleList(VARIANT *rules)
     ////
     dlog.trace(L" End MapiAccessWrap::GetRuleList");
     return hr;
+}
+
+void CMapiAccessWrap::CreateAttachmentAttrs(BSTR attrs[], int num)
+{
+
+    dlog.debug(L"MapiAccessWrap::CreateAttachmentAttrs");
+    WCHAR pwszNum[10];
+    LPWSTR names[] = {L"attContentType", L"attTempFile", L"attRealName", L"attContentDisposition"};
+                     
+    WCHAR pwszAttr[30];
+
+    _ltow(num, pwszNum, 10);
+    for (int i = 0; i < NUM_ATTACHMENT_ATTRS; i++)
+    {
+	lstrcpy(pwszAttr, names[i]);
+        lstrcat(pwszAttr, L"_");
+	lstrcat(pwszAttr, pwszNum);
+	attrs[i] = SysAllocString(pwszAttr);
+    }
 }
 
 void CMapiAccessWrap::CreateExceptionAttrs(BSTR attrs[], int num)

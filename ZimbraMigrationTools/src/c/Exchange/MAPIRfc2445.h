@@ -102,6 +102,15 @@ typedef struct _Tz
     wstring daylightStartSecond;
 } Tz;
 
+typedef struct _AttachmentInfo
+{
+    //wstring FilePath;
+    LPSTR pszContentType;
+    LPSTR pszTempFile;
+    LPSTR pszRealName;
+    LPSTR pszContentDisposition;
+} AttachmentInfo;
+
 enum OutlookTaskStatus
 {
     oTaskNotStarted = 0,
@@ -126,9 +135,13 @@ protected:
     Zimbra::MAPI::MAPISession *m_session;
     LPMESSAGE m_pMessage;
     LPSPropValue m_pPropVals;
-    bool m_bIsRecurring;
+
+    // attachment stuff
+    bool m_bHasAttachments;
+    vector<AttachmentInfo*> m_vAttachments;
 
     // recurrence stuff
+    bool m_bIsRecurring;
     wstring m_pRecurPattern;
     wstring m_pRecurInterval;
     wstring m_pRecurWkday;
@@ -146,6 +159,11 @@ protected:
 public:
     MAPIRfc2445(Zimbra::MAPI::MAPISession &session, Zimbra::MAPI::MAPIMessage &mMessage);
     ~MAPIRfc2445();
+
+    vector<AttachmentInfo*> GetAttachmentInfo();
+    HRESULT ExtractAttachments();
+    void GenerateContentDisposition(LPSTR *ppszCD, LPSTR pszFilename);
+    void GetContentType(mimepp::Headers& headers, LPSTR *ppStr);
 
     bool IsRecurring();
     wstring GetRecurPattern();

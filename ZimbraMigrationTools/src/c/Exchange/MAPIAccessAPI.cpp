@@ -810,6 +810,13 @@ LPCWSTR MAPIAccessAPI::GetItem(SBinary sbItemEID, BaseItemData &itemData)
 
             ad->ExceptionType = mapiappointment.GetExceptionType();
 
+            // attachment stuff
+            vector<AttachmentInfo*> va = mapiappointment.GetAttachmentInfo();
+            for (size_t i = 0; i < va.size(); i++)
+            {
+                ad->vAttachments.push_back((AttachmentInfo*)va[i]);
+            }
+
             MessagePart mp;
             mp.contentType = L"text/plain";
             mp.content = mapiappointment.GetPlainTextFileAndContent();
@@ -854,6 +861,13 @@ LPCWSTR MAPIAccessAPI::GetItem(SBinary sbItemEID, BaseItemData &itemData)
 		td->recurMonthOccurrence = mapitask.GetRecurMonthOccurrence();
 		td->recurMonthOfYear = mapitask.GetRecurMonthOfYear();
 	    }
+
+            // attachment stuff
+            vector<AttachmentInfo*> va = mapitask.GetAttachmentInfo();
+            for (size_t i = 0; i < va.size(); i++)
+            {
+                td->vAttachments.push_back((AttachmentInfo*)va[i]);
+            }
 
             MessagePart mp;
             mp.contentType = L"text/plain";

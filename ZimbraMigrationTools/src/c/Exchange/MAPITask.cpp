@@ -3,6 +3,7 @@
 #include "MAPIMessage.h"
 #include "MAPIRfc2445.h"
 #include "MAPITask.h"
+#include "Logger.h"
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 // MAPIAppointmentException
@@ -165,7 +166,7 @@ HRESULT MAPITask::SetMAPITaskValues()
 {
     SizedSPropTagArray(T_NUMALLTASKPROPS, taskProps) = {
 	T_NUMALLTASKPROPS, {
-	    PR_SUBJECT, PR_BODY, PR_HTML, PR_IMPORTANCE, pr_isrecurringt, pr_recurstreamt, pr_status,
+	    PR_MESSAGE_FLAGS, PR_SUBJECT, PR_BODY, PR_HTML, PR_IMPORTANCE, pr_isrecurringt, pr_recurstreamt, pr_status,
 	    pr_percentcomplete, pr_taskstart, pr_taskdue, pr_totalwork,
 	    pr_actualwork, pr_companies, pr_mileage, pr_billinginfo,
             pr_taskreminderset, pr_taskflagdueby, pr_private
@@ -174,6 +175,7 @@ HRESULT MAPITask::SetMAPITaskValues()
 
     HRESULT hr = S_OK;
     ULONG cVals = 0;
+    m_bHasAttachments = false;
     m_bIsRecurring = false;
     m_bIsTaskReminderSet = false;
 
@@ -181,6 +183,10 @@ HRESULT MAPITask::SetMAPITaskValues()
             &m_pPropVals)))
         throw MAPITaskException(hr, L"SetMAPITaskValues(): GetProps Failed.", __LINE__, __FILE__);
 
+    if (m_pPropVals[T_MESSAGE_FLAGS].ulPropTag == taskProps.aulPropTag[T_MESSAGE_FLAGS])
+    {
+        m_bHasAttachments = (m_pPropVals[T_MESSAGE_FLAGS].Value.l & MSGFLAG_HASATTACH) != 0;
+    }
     if (m_pPropVals[T_ISRECURT].ulPropTag == taskProps.aulPropTag[T_ISRECURT]) // do this first to set dates correctly
     {
 	m_bIsRecurring = (m_pPropVals[T_ISRECURT].Value.b == 1);
@@ -244,6 +250,14 @@ HRESULT MAPITask::SetMAPITaskValues()
 
     SetPlainTextFileAndContent();
     SetHtmlFileAndContent();
+
+    if (m_bHasAttachments)
+    {
+        if (FAILED(ExtractAttachments()))
+        {
+            dlogw(L"Could not extract attachments");
+        }
+    }
 
     if (m_bIsRecurring)
     {

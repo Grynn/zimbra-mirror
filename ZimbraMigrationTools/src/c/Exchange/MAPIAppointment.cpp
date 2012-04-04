@@ -2,6 +2,7 @@
 #include "Exchange.h"
 #include "MAPIMessage.h"
 #include "MAPIAppointment.h"
+#include "Logger.h"
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 // MAPIAppointmentException
@@ -164,7 +165,7 @@ HRESULT MAPIAppointment::SetMAPIAppointmentValues()
 {
     SizedSPropTagArray(C_NUMALLAPPTPROPS, appointmentProps) = {
 	C_NUMALLAPPTPROPS, {
-	    PR_SUBJECT, PR_BODY, PR_HTML, pr_clean_global_objid,
+	    PR_MESSAGE_FLAGS, PR_SUBJECT, PR_BODY, PR_HTML, pr_clean_global_objid,
 	    pr_appt_start, pr_appt_end, pr_location, pr_busystatus, pr_allday,
 	    pr_isrecurring, pr_recurstream, pr_timezoneid, pr_responsestatus,
             pr_exceptionreplacetime,
@@ -175,12 +176,17 @@ HRESULT MAPIAppointment::SetMAPIAppointmentValues()
     HRESULT hr = S_OK;
     ULONG cVals = 0;
     bool bAllday = false;
+    m_bHasAttachments = false;
     m_bIsRecurring = false;
 
     if (FAILED(hr = m_pMessage->GetProps((LPSPropTagArray) & appointmentProps, fMapiUnicode, &cVals,
             &m_pPropVals)))
         throw MAPIAppointmentException(hr, L"SetMAPIAppointmentValues(): GetProps Failed.", __LINE__, __FILE__);
-
+    
+    if (m_pPropVals[C_MESSAGE_FLAGS].ulPropTag == appointmentProps.aulPropTag[C_MESSAGE_FLAGS])
+    {
+        m_bHasAttachments = (m_pPropVals[C_MESSAGE_FLAGS].Value.l & MSGFLAG_HASATTACH) != 0;
+    }
     if (m_pPropVals[C_ISRECUR].ulPropTag == appointmentProps.aulPropTag[C_ISRECUR]) // do this first to set dates correctly
     {
 	m_bIsRecurring = (m_pPropVals[C_ISRECUR].Value.b == 1);
@@ -230,6 +236,14 @@ HRESULT MAPIAppointment::SetMAPIAppointmentValues()
     SetTransparency(L"O");
     SetPlainTextFileAndContent();
     SetHtmlFileAndContent();
+
+    if (m_bHasAttachments)
+    {
+        if (FAILED(ExtractAttachments()))
+        {
+            dlogw(L"Could not extract attachments");
+        }
+    }
 
     SetOrganizerAndAttendees();
 
@@ -842,104 +856,6 @@ HRESULT MAPIAppointment::SetOrganizerAndAttendees()
 	    }
         }
     }
-    return hr;
-}
-
-HRESULT MAPIAppointment::SetAppointmentAttachment(wstring &wstrAttachmentPath)
-{
-    HRESULT hr = S_OK;
-    /*
-    Zimbra::Util::ScopedInterface<IStream> pSrcStream;
-    {
-        Zimbra::Util::ScopedRowSet pAttachRows;
-        Zimbra::Util::ScopedInterface<IMAPITable> pAttachTable;
-
-        SizedSPropTagArray(3, attachProps) = {
-            3, { PR_ATTACH_NUM, PR_ATTACH_SIZE, PR_ATTACH_LONG_FILENAME }
-        };
-
-        hr = m_pMessage->GetAttachmentTable(MAPI_UNICODE, pAttachTable.getptr());
-        if (SUCCEEDED(hr))
-        {
-            if (FAILED(hr = pAttachTable->SetColumns((LPSPropTagArray) & attachProps, 0)))
-                return hr;
-            ULONG ulRowCount = 0;
-            if (FAILED(hr = pAttachTable->GetRowCount(0, &ulRowCount)))
-                return hr;
-            if (FAILED(hr = pAttachTable->QueryRows(ulRowCount, 0, pAttachRows.getptr())))
-                return hr;
-            if (SUCCEEDED(hr))
-            {
-                hr = MAPI_E_NOT_FOUND;
-                for (unsigned int i = 0; i < pAttachRows->cRows; i++)
-                {
-                    // if property couldn't be found or returns error, skip it
-                    if ((pAttachRows->aRow[i].lpProps[2].ulPropTag == PT_ERROR) ||
-                        (pAttachRows->aRow[i].lpProps[2].Value.err == MAPI_E_NOT_FOUND))
-                        continue;
-                    // Discard the attachmetnt if its not contact picture
-                    if (_tcscmp(pAttachRows->aRow[i].lpProps[2].Value.LPSZ, _T(
-                        "ContactPicture.jpg")))
-                        continue;
-                    Zimbra::Util::ScopedInterface<IAttach> pAttach;
-
-                    if (FAILED(hr = m_pMessage->OpenAttach(
-                            pAttachRows->aRow[i].lpProps[0].Value.l, NULL, 0,
-                            pAttach.getptr())))
-                        continue;
-                    if (FAILED(hr = pAttach->OpenProperty(PR_ATTACH_DATA_BIN, &IID_IStream,
-                            STGM_READ, 0, (LPUNKNOWN FAR *)pSrcStream.getptr())))
-                        return hr;
-                    break;
-                }
-            }
-        }
-    }
-
-    if (hr != S_OK)
-        return hr;
-
-    // copy image to file
-    wstring wstrTempAppDirPath;
-    char *lpszDirName = NULL;
-    char *lpszUniqueName = NULL;
-    Zimbra::Util::ScopedInterface<IStream> pDestStream;
-
-    if (!Zimbra::MAPI::Util::GetAppTemporaryDirectory(wstrTempAppDirPath))
-        return MAPI_E_ACCESS_DENIED;
-    WtoA((LPWSTR)wstrTempAppDirPath.c_str(), lpszDirName);
-
-    string strFQFileName = lpszDirName;
-
-    WtoA((LPWSTR)Zimbra::MAPI::Util::GetUniqueName().c_str(), lpszUniqueName);
-    strFQFileName += "\\ZmContact_";
-    strFQFileName += lpszUniqueName;
-    strFQFileName += ".jpg";
-    SafeDelete(lpszDirName);
-    SafeDelete(lpszUniqueName);
-    // Open stream on file
-    if (FAILED(hr = OpenStreamOnFile(MAPIAllocateBuffer, MAPIFreeBuffer, STGM_CREATE |
-            STGM_READWRITE, (LPTSTR)strFQFileName.c_str(), NULL, pDestStream.getptr())))
-        return hr;
-    ULARGE_INTEGER liAll = { 0 };
-    liAll.QuadPart = (ULONGLONG)-1;
-    if (FAILED(hr = pSrcStream->CopyTo(pDestStream.get(), liAll, NULL, NULL)))
-        return hr;
-    if (FAILED(hr = pDestStream->Commit(0)))
-    {
-        return hr;
-        ;
-    }
-
-    // mime file path
-    LPWSTR lpwstrFQFileName = NULL;
-
-    AtoW((LPSTR)strFQFileName.c_str(), lpwstrFQFileName);
-    wstrImagePath = lpwstrFQFileName;
-    SafeDelete(lpwstrFQFileName);
-    */
-
-    wstrAttachmentPath = L"";	// GET RID OF THIS
     return hr;
 }
 

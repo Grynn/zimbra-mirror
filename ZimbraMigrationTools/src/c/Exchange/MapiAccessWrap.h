@@ -11,6 +11,7 @@
 #include "ExchangeAdmin.h"
 #include "MAPIAccessAPI.h"
 
+#define NUM_ATTACHMENT_ATTRS      4
 #define NUM_EXCEPTION_ATTRS      16
 
 // CMapiAccessWrap
@@ -61,6 +62,7 @@ public:
     STDMETHOD(UserUninit) ();
     STDMETHODIMP GetOOOInfo(BSTR *OOOInfo);
     STDMETHODIMP GetRuleList(VARIANT *rules);
+    void CreateAttachmentAttrs(BSTR attrs[], int num);
     void CreateExceptionAttrs(BSTR attrs[], int num);
 
 

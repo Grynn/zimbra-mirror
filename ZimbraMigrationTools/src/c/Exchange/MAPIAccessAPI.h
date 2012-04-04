@@ -154,6 +154,7 @@ typedef struct _ApptItemData: BaseItemData
     Organizer organizer;
     Tz tz;
     vector<Attendee*> vAttendees;
+    vector<AttachmentInfo*> vAttachments;
     vector<MessagePart> vMessageParts;
 
     // recurrence stuff
@@ -192,6 +193,7 @@ typedef struct _TaskItemData: BaseItemData
     wstring BillingInfo;
     wstring TaskFlagDueBy;
     wstring ApptClass;
+    vector<AttachmentInfo*> vAttachments;
     vector<MessagePart> vMessageParts;
 
     // recurrence stuff

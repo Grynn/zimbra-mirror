@@ -24,7 +24,10 @@ public class ZimbraAPI
 
     // Upload modes
     public const int STRING_MODE = 1;           // for messages -- request is all string data
-    public const int MIXED_MODE = 2;            // for contacts (or appts) -- mixed string and binary
+    public const int CONTACT_MODE = 2;          // for contacts -- with pictures
+    public const int APPT_VALUE_MODE = 3;       // for appts -- with binary
+    public const int APPT_EMB_MODE = 4;         // for appts -- embedded messages
+         
     //
 
     // Values
@@ -404,7 +407,7 @@ public class ZimbraAPI
     // ////////
 
     // private UploadFile method
-    private int UploadFile(string filepath, string mimebuffer, int mode, out string uploadToken)
+    private int UploadFile(string filepath, string mimebuffer, string contentdisposition, string contenttype, int mode, out string uploadToken)
     {
         bool isSecure = (ZimbraValues.GetZimbraValues().Url).Substring(0, 5) == "https";
         WebServiceClient client = (isSecure) ? new WebServiceClient {
@@ -422,7 +425,7 @@ public class ZimbraAPI
         uploadToken = "";
 
         client.InvokeUploadService(ZimbraValues.GetZimbraValues().AuthToken, isSecure, filepath,mimebuffer,
-            mode, out rsp);
+            contentdisposition, contenttype, mode, out rsp);
         retval = client.status;
         if (retval == 0)
         {
@@ -873,7 +876,7 @@ public class ZimbraAPI
                 {
                     string uploadToken = "";
                     string tmp = "";
-                    if (UploadFile(val, tmp, MIXED_MODE, out uploadToken) == 0)
+                    if (UploadFile(val, tmp, "", "", CONTACT_MODE, out uploadToken) == 0)
                     {
                         writer.WriteStartElement("a");
                         writer.WriteAttributeString("n", nam);
@@ -1056,7 +1059,7 @@ public class ZimbraAPI
         {
             //Log.debug("Begin UploadFile");
             string tmp = message["wstrmimeBuffer"];
-            retval = UploadFile(zm.filePath, tmp, STRING_MODE, out uploadInfo);
+            retval = UploadFile(zm.filePath, tmp, "", "", STRING_MODE, out uploadInfo);
             //Log.debug("End UploadFile");
         }
         if (retval == 0)
@@ -1169,7 +1172,7 @@ public class ZimbraAPI
                 {
                     Log.debug("Begin UploadFile");
                     string tmp = message["wstrmimeBuffer"];
-                    retval = UploadFile(zm.filePath, tmp, STRING_MODE, out uploadInfo);
+                    retval = UploadFile(zm.filePath, tmp, "", "", STRING_MODE, out uploadInfo);
                     Log.debug("End UploadFile");
                 }
                 if (retval == 0)
@@ -1361,6 +1364,64 @@ public class ZimbraAPI
     
         writer.WriteEndElement();   // mp
         writer.WriteEndElement();   // mp
+
+        int numAttachments = (appt.ContainsKey("numAttachments")) ? Int32.Parse(appt["numAttachments"]) : 0;
+        if (numAttachments > 0)
+        {
+            string aids = "";
+            for (int i = 0; i < numAttachments; i++)
+            {
+                string ContentTypeAttr = "attContentType" + "_" + i.ToString();
+                string ContentType = appt[ContentTypeAttr];
+                string TempFileAttr = "attTempFile" + "_" + i.ToString();
+                string TempFile = appt[TempFileAttr];
+                string RealNameAttr = "attRealName" + "_" + i.ToString();
+                string RealName = appt[RealNameAttr];
+                string ContentDispositionAttr = "attContentDisposition" + "_" + i.ToString();
+                string ContentDisposition = appt[ContentDispositionAttr];
+
+                /*
+                if contentType is message/rfc822, we'll rename the temp file to email_n and massage the content disposition
+                if not, we'll just rename the temp file to the real name
+                */
+                string newfile = "";
+                string path = "";
+                string name = "";
+                int mode;
+                GetParentAndChild("\\", TempFile, out path, out name);    // don't need name
+                if (ContentType == "message/rfc822")    // rename file to email_x_y and massage content disposition
+                {
+                    string newname = "email_" + appt["accountNum"] + "_" + i.ToString();
+                    newfile = path + "\\" + newname;  // accountNum for threading
+                    string oldValue = "\"" + RealName + "\"";
+                    string newValue = "\"" + newname + "\"";
+                    mode = APPT_EMB_MODE;
+                    ContentDisposition = ContentDisposition.Replace(oldValue, newValue);
+                }
+                else
+                {
+                    newfile = path + "\\" + RealName;
+                    mode = APPT_VALUE_MODE;
+                }
+                File.Move(TempFile, newfile);
+
+                string uploadToken = "";
+                string tmp = "";
+                if (UploadFile(newfile, tmp, ContentDisposition, ContentType, mode, out uploadToken) == 0)
+                {
+                    aids += uploadToken;
+                    if (i < (numAttachments - 1))
+                    {
+                        aids += ",";
+                    }
+                }
+                File.Delete(newfile);
+            }
+
+            writer.WriteStartElement("attach");
+            writer.WriteAttributeString("aid", aids);
+            writer.WriteEndElement();
+        }
 
         writer.WriteEndElement();   // m
         writer.WriteEndElement();   // default
@@ -1792,6 +1853,64 @@ public class ZimbraAPI
         writer.WriteEndElement();   // mp
         writer.WriteEndElement();   // mp
 
+        int numAttachments = (task.ContainsKey("numAttachments")) ? Int32.Parse(task["numAttachments"]) : 0;
+        if (numAttachments > 0)
+        {
+            string aids = "";
+            for (int i = 0; i < numAttachments; i++)
+            {
+                string ContentTypeAttr = "attContentType" + "_" + i.ToString();
+                string ContentType = task[ContentTypeAttr];
+                string TempFileAttr = "attTempFile" + "_" + i.ToString();
+                string TempFile = task[TempFileAttr];
+                string RealNameAttr = "attRealName" + "_" + i.ToString();
+                string RealName = task[RealNameAttr];
+                string ContentDispositionAttr = "attContentDisposition" + "_" + i.ToString();
+                string ContentDisposition = task[ContentDispositionAttr];
+
+                /*
+                if contentType is message/rfc822, we'll rename the temp file to email_n and massage the content disposition
+                if not, we'll just rename the temp file to the real name
+                */
+                string newfile = "";
+                string path = "";
+                string name = "";
+                int mode;
+                GetParentAndChild("\\", TempFile, out path, out name);    // don't need name
+                if (ContentType == "message/rfc822")    // rename file to email_x_y and massage content disposition
+                {
+                    string newname = "email_" + task["accountNum"] + "_" + i.ToString();
+                    newfile = path + "\\" + newname;  // accountNum for threading
+                    string oldValue = "\"" + RealName + "\"";
+                    string newValue = "\"" + newname + "\"";
+                    mode = APPT_EMB_MODE;
+                    ContentDisposition = ContentDisposition.Replace(oldValue, newValue);
+                }
+                else
+                {
+                    newfile = path + "\\" + RealName;
+                    mode = APPT_VALUE_MODE;
+                }
+                File.Move(TempFile, newfile);
+
+                string uploadToken = "";
+                string tmp = "";
+                if (UploadFile(newfile, tmp, ContentDisposition, ContentType, mode, out uploadToken) == 0)
+                {
+                    aids += uploadToken;
+                    if (i < (numAttachments - 1))
+                    {
+                        aids += ",";
+                    }
+                }
+                File.Delete(newfile);
+            }
+
+            writer.WriteStartElement("attach");
+            writer.WriteAttributeString("aid", aids);
+            writer.WriteEndElement();
+        }
+
         writer.WriteEndElement();   // m
         writer.WriteEndElement();   // default
         writer.WriteEndElement();   // SetTaskRequest
@@ -2097,13 +2216,13 @@ public class ZimbraAPI
         return retval;
     }
 
-    private bool GetParentAndChild(string fullPath, out string parent, out string child)
+    private bool GetParentAndChild(string slash, string fullPath, out string parent, out string child)
     {
         parent = "";
         child = "";
 
         // break up the folder name and parent from the path
-        int lastSlash = fullPath.LastIndexOf("/");
+        int lastSlash = fullPath.LastIndexOf(slash);
 
         if (lastSlash == -1)
             return false;
@@ -2133,7 +2252,7 @@ public class ZimbraAPI
         string parentPath = "";
         string folderName = "";
 
-        if (!GetParentAndChild(FolderPath, out parentPath, out folderName))
+        if (!GetParentAndChild("/", FolderPath, out parentPath, out folderName))
             return FOLDER_CREATE_FAILED_SYN;
 
         // first look in the special folders array

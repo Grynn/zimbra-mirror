@@ -38,7 +38,7 @@ private:
     // this enum lists all the props
     enum
     {
-        C_SUBJECT, C_BODY, C_HTMLBODY, C_UID, C_START, C_END, C_LOCATION, C_BUSYSTATUS, C_ALLDAY, C_ISRECUR, C_RECURSTREAM,
+        C_MESSAGE_FLAGS, C_SUBJECT, C_BODY, C_HTMLBODY, C_UID, C_START, C_END, C_LOCATION, C_BUSYSTATUS, C_ALLDAY, C_ISRECUR, C_RECURSTREAM,
 	C_TIMEZONEID, C_RESPONSESTATUS, C_EXCEPTIONREPLACETIME, C_REMINDERMINUTES, C_PRIVATE, C_NUMALLAPPTPROPS
 	//org stuff later
     };
@@ -100,7 +100,6 @@ public:
     void SetExceptionType(int type);
     void FillInExceptionAppt(MAPIAppointment* ex, Zimbra::Mapi::COutlookRecurrenceException* lpException);
     void FillInCancelException(MAPIAppointment* pEx, Zimbra::Mapi::CFileTime cancelDate);
-    HRESULT SetAppointmentAttachment(wstring &wstrAttachmentPath);
 
     wstring GetSubject();
     wstring GetStartDate();

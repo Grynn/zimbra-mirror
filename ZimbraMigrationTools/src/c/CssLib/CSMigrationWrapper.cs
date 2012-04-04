@@ -602,6 +602,7 @@ public class CSMigrationWrapper
                                 {
                                     try
                                     {
+                                        dict.Add("accountNum", Acct.AccountNum.ToString());
                                         stat = api.AddAppointment(dict, path);
                                     }
                                     catch(Exception e)

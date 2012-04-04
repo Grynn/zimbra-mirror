@@ -128,8 +128,8 @@ public class WebServiceClient
         return webRequest;
     }
 
-    public void InvokeUploadService(string authtoken, bool isSecure, string filePath, string mimebuffer, int mode,
-        out string rsp)
+    public void InvokeUploadService(string authtoken, bool isSecure, string filePath, string mimebuffer,
+        string theDisposition, string theType, int mode, out string rsp)
     {
         //Log.debug("Start InvokeUploadService");
         bool bIsBuffer=false;
@@ -160,10 +160,26 @@ public class WebServiceClient
         string contentDisposition1 = "--" + boundary + Environment.NewLine +
             "Content-Disposition: form-data; name=\"requestId\"" + Environment.NewLine +
             Environment.NewLine + "lsrpc32-client-id" + Environment.NewLine;
-        string contentDisposition2 = "--" + boundary + Environment.NewLine +
-            "Content-Disposition : form-data; name=\"lslib32\"; filename=\"lslib32.bin\"";
-        string contentType = Environment.NewLine + "Content-Type: application/octet-stream" +
-            Environment.NewLine;
+
+
+        string cd2 = (theDisposition.Length > 0) ?
+                    theDisposition :
+                    "Content-Disposition : form-data; name=\"lslib32\"; filename=\"lslib32.bin\"";
+
+        string ct;
+        if (theType.Length == 0)
+        {
+            ct = "Content-Type: " + "application/octet-stream";
+        }
+        else
+        {
+            ct = "Content-Type: " + theType;
+        }
+
+        string contentDisposition2 = "--" + boundary + Environment.NewLine + cd2;
+
+        string contentType = Environment.NewLine + ct + Environment.NewLine;
+            
         string contentTransfer = "Content-Transfer-Encoding: binary" + Environment.NewLine +
             Environment.NewLine;
 
@@ -209,7 +225,7 @@ public class WebServiceClient
                 return;
             }
         }
-        else                                    // MIXED MODE -- text and binary attachment
+        else  // CONTACT, APPT_VALUE, or APPT_EMB.  Not distinguishing yet, but we might later.
         {
             try
             {
@@ -235,7 +251,6 @@ public class WebServiceClient
                     binaryReader.Close();
                 }
                 
-
                 // now use a memory stream since we have mixed data
                 using (Stream memStream = new System.IO.MemoryStream()) {
                     // write the request data
