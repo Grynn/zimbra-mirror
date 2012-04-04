@@ -1,6 +1,7 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.calendar.appointments.views.workweek.singleday;
 
 import java.util.*;
+
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.core.Bugs;
@@ -8,7 +9,6 @@ import com.zimbra.qa.selenium.framework.items.AppointmentItem;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.calendar.ApptWorkWeekView;
 
 
 public class GetAppointment extends AjaxCommonTest {
@@ -45,88 +45,47 @@ public class GetAppointment extends AjaxCommonTest {
 		// EST timezone string
 		String tz = ZTimeZone.TimeZoneEST.getID();
 
-		// Create a meeting request from AccountA to the test account
-		ZimbraAccount.AccountA().soapSend(
-					"<CreateAppointmentRequest xmlns='urn:zimbraMail'>" +
-						"<m>" +
-							"<inv>" +
-								"<comp status='CONF' fb='B' class='PUB' transp='O' allDay='0' name='"+ subject +"' loc='"+ location +"'>" +
-									"<s d='"+ startUTC.toTimeZone(tz).toYYYYMMDDTHHMMSS() +"' tz='"+ tz +"'/>" +
-									"<e d='"+ endUTC.toTimeZone(tz).toYYYYMMDDTHHMMSS() +"' tz='"+ tz +"'/>" +
-									"<at role='REQ' ptst='NE' rsvp='1' a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
-									"<or a='"+ ZimbraAccount.AccountA().EmailAddress + "'/>" +
-								"</comp>" +
-							"</inv>" +
-							"<e a='"+ app.zGetActiveAccount().EmailAddress +"' t='t'/>" +
-							"<su>"+ subject + "</su>" +
-							"<mp ct='text/plain'>" +
-							"<content>"+ content +"</content>" +
-							"</mp>" +
-						"</m>" +
-					"</CreateAppointmentRequest>");
+		// Create an appointment
+		app.zGetActiveAccount().soapSend(
+					"<CreateAppointmentRequest xmlns='urn:zimbraMail'>"
+				+		"<m>"
+				+			"<inv>"
+				+				"<comp status='CONF' fb='B' class='PUB' transp='O' allDay='0' name='"+ subject +"' loc='"+ location +"' >"
+				+					"<s d='"+ startUTC.toTimeZone(tz).toYYYYMMDDTHHMMSS() +"' tz='"+ tz +"'/>"
+				+					"<e d='"+ endUTC.toTimeZone(tz).toYYYYMMDDTHHMMSS() +"' tz='"+ tz +"'/>"
+				+					"<or a='"+ app.zGetActiveAccount().EmailAddress + "'/>"
+				+				"</comp>"
+				+			"</inv>"
+				+			"<su>"+ subject + "</su>"
+				+			"<mp ct='text/plain'>"
+				+				"<content>"+ content +"</content>"
+				+			"</mp>"
+				+		"</m>"
+				+	"</CreateAppointmentRequest>");
 		
-		AppointmentItem appt = AppointmentItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject +")", startUTC, endUTC);
-		ZAssert.assertNotNull(appt, "Verify the new appointment is created");
 
+
+		//-- GUI Action
+	
 		app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
 		
+		
+		
+		//-- Verification
+		
 	    //verify appt displayed in workweek view
-		ApptWorkWeekView view = (ApptWorkWeekView) app.zPageCalendar.zToolbarPressPulldown(Button.B_LISTVIEW, Button.O_LISTVIEW_WORKWEEK);
+		boolean found = false;
+		List<AppointmentItem> items = app.zPageCalendar.zListGetAppointments();
+		for (AppointmentItem item : items ) {
+			if ( subject.equals(item.getSubject()) ) {
+				found = true;
+				break;
+			}
+		}
 		
-		//wait for the appointment displayed in the view
-		app.zPageCalendar.zWaitForElementPresent("css=div[id*=__zli__CLWW__]");
-		
-		ZAssert.assertTrue(view.isApptExist(appt), "Verify appt gets displayed in work week view");
+		ZAssert.assertTrue(found, "Verify appt gets displayed in work week view");
 	    
 	}
 
-	@Bugs(ids = "69132")
-	@Test(	description = "View a meeting request (TZ=America/New_York) in work week view",
-			groups = { "functional" })
-	public void GetAppointment_02() throws HarnessException {
-		
-		// Create the message data to be sent
-		String subject = "appointment" + ZimbraSeleniumProperties.getUniqueString();
-		String location = "location" + ZimbraSeleniumProperties.getUniqueString();
-		String content = "content" + ZimbraSeleniumProperties.getUniqueString();
-		
-		// Absolute dates in UTC zone
-		ZDate startUTC = new ZDate(2011, 9, 22, 12, 0, 0);
-		ZDate endUTC   = new ZDate(2011, 9, 2, 14, 0, 0);
-		
-		// EST timezone string
-		String tz = ZTimeZone.TimeZoneEST.getID();
-		
-		// Create a meeting request from AccountA to the test account
-		ZimbraAccount.AccountA().soapSend(
-					"<CreateAppointmentRequest xmlns='urn:zimbraMail'>" +
-						"<m>" +
-							"<inv>" +
-								"<comp status='CONF' fb='B' class='PUB' transp='O' allDay='0' name='"+ subject +"' loc='"+ location +"'>" +
-									"<s d='"+ startUTC.toTimeZone(tz).toYYYYMMDDTHHMMSS() +"' tz='"+ tz +"'/>" +
-									"<e d='"+ endUTC.toTimeZone(tz).toYYYYMMDDTHHMMSS() +"' tz='"+ tz +"'/>" +
-									"<at role='REQ' ptst='NE' rsvp='1' a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
-									"<or a='"+ ZimbraAccount.AccountA().EmailAddress + "'/>" +
-								"</comp>" +
-							"</inv>" +
-							"<e a='"+ app.zGetActiveAccount().EmailAddress +"' t='t'/>" +
-							"<su>"+ subject + "</su>" +
-							"<mp ct='text/plain'>" +
-							"<content>"+ content +"</content>" +
-							"</mp>" +
-						"</m>" +
-					"</CreateAppointmentRequest>");
-
-		AppointmentItem appt = AppointmentItem.importFromSOAP(app.zGetActiveAccount(), subject, startUTC.addDays(-10), endUTC.addDays(+10));
-		ZAssert.assertNotNull(appt, "Verify the appointment is in the mailbox");
-
-		ZAssert.assertEquals(subject, appt.getSubject(), "Verify the appointment subjects match");
-		ZAssert.assertEquals(location, appt.getLocation(), "Verify the appointment locations match");
-		ZAssert.assertEquals(content, appt.getContent(), "Verify the appointment contents match");
-
-		ZAssert.assertEquals(startUTC.toTimeZone(tz), appt.getStartTime(), "Verify the appointment start times match");
-		ZAssert.assertEquals(endUTC.toTimeZone(tz), appt.getEndTime(), "Verify the appointment end times match");
-
-	}
 
 }

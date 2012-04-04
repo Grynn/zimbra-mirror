@@ -4,6 +4,7 @@ import java.awt.event.KeyEvent;
 import java.util.*;
 
 import org.apache.commons.lang.StringUtils;
+import org.seleniumhq.jetty7.util.log.Log;
 
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.AppointmentItem;
@@ -1851,12 +1852,137 @@ public class PageCalendar extends AbsTab {
 
 	}
 
-	private List<AppointmentItem> zListGetAppointmentsWorkWeekView() throws HarnessException {
-		throw new HarnessException("implement me");
+	
+	
+	private AppointmentItem parseWeekViewRow(String rowLocator) throws HarnessException {
+		String locator;
+
+		// TODO: for debug logging.  Can be removed.
+		this.zGetHtml(rowLocator);
+		
+		AppointmentItem item = new AppointmentItem();
+
+		// Get the location of the appointment
+		locator = rowLocator + " div.appt_location";
+		if ( this.sIsElementPresent(locator) ) {
+			item.setLocation(this.sGetText(locator).trim());
+		}
+
+		// Get the name of the appointment (Organizer)
+		locator = rowLocator + " td.appt_name";
+		if ( this.sIsElementPresent(locator) ) {
+			String subject = this.sGetText(locator);
+			item.setSubject(subject.replace(item.getLocation(), "").trim());
+		}
+		
+		// Get the name of the appointment (Attendee)
+		locator = rowLocator + " td.appt_new_name";
+		if ( this.sIsElementPresent(locator) ) {
+			String subject = this.sGetText(locator);
+			item.setSubject(subject.replace(item.getLocation(), "").trim());
+		}
+		
+		// TODO: parse other elements
+
+		return (item);
+	}
+	
+	
+	/**
+	 * Get All Appointments from Week View
+	 * @return
+	 * @throws HarnessException
+	 */
+	private List<AppointmentItem> zListGetAppointmentsWeekView() throws HarnessException {
+		
+		List<AppointmentItem> items = new ArrayList<AppointmentItem>();
+
+		String divLocator = "css=div#zv__CLW";
+		String itemsLocator = divLocator +" div[id^='zli__CLW__'] div[id$='_body']";
+		String itemLocator = null;
+		String locator = null;
+
+		// Make sure the div exists
+		if ( !this.sIsElementPresent(divLocator) ) {
+			throw new HarnessException("Day View is not present: " + divLocator);
+		}
+
+		// If the list doesn't exist, then no items are present
+		if ( !this.sIsElementPresent(itemsLocator) ) {
+			// return an empty list
+			return (items);
+		}
+
+		// How many items are in the table?
+		int count = this.sGetCssCount(itemsLocator);
+		logger.debug(myPageName() + " zListGetAppointmentsDayView: number of appointments: "+ count);
+
+		// Get each conversation's data from the table list
+		for (int i = 1; i <= count; i++) {
+
+			itemLocator = itemsLocator + ":nth-of-type("+ i +")";
+			// Add the new item to the list
+			AppointmentItem item = parseWeekViewRow(itemLocator);
+			items.add(item);
+			logger.info(item.prettyPrint());
+
+		}
+
+		return (items);
 	}
 
-	private List<AppointmentItem> zListGetAppointmentsWeekView() throws HarnessException {
-		throw new HarnessException("implement me");
+	private AppointmentItem parseWorkWeekViewRow(String rowLocator) throws HarnessException {
+		
+		// Day View, Week View, and Work Week View are all the same
+		return (parseWeekViewRow(rowLocator));
+		
+	}
+	
+
+	/**
+	 * Get All Appointments from Week View
+	 * @return
+	 * @throws HarnessException
+	 */
+	private List<AppointmentItem> zListGetAppointmentsWorkWeekView() throws HarnessException {
+		
+		List<AppointmentItem> items = new ArrayList<AppointmentItem>();
+
+		String divLocator = "css=div#zv__CLWW";
+		String itemsLocator = divLocator +" div[id^='zli__CLWW__'] div[id$='_body']";
+		String itemLocator = null;
+		String locator = null;
+
+		// Make sure the div exists
+		if ( !this.sIsElementPresent(divLocator) ) {
+			throw new HarnessException("Day View is not present: " + divLocator);
+		}
+
+		// If the list doesn't exist, then no items are present
+		if ( !this.sIsElementPresent(itemsLocator) ) {
+			// return an empty list
+			return (items);
+		}
+
+		// How many items are in the table?
+		int count = this.sGetCssCount(itemsLocator);
+		logger.debug(myPageName() + " zListGetAppointmentsDayView: number of appointments: "+ count);
+
+		// Get each conversation's data from the table list
+		for (int i = 1; i <= count; i++) {
+
+			itemLocator = itemsLocator + ":nth-of-type("+ i +")";
+			
+			String id = this.sGetAttribute(itemLocator +"@id");
+
+			// Add the new item to the list
+			AppointmentItem item = parseWorkWeekViewRow("css=div#"+ id);
+			items.add(item);
+			logger.info(item.prettyPrint());
+
+		}
+
+		return (items);
 	}
 
 	/**
