@@ -194,8 +194,7 @@ class Program
             if (args.Count() > 0)
             {
 
-                if (args[0].Equals("Help", StringComparison.CurrentCultureIgnoreCase))
-                // if (args[0] == "Help")
+                if ((args[0].Equals("-Help", StringComparison.CurrentCultureIgnoreCase)) ||(args[0].Equals("-h", StringComparison.CurrentCultureIgnoreCase)))
                 {
                     string builder = "Usage of ZimbraMigrationConsole.exe ConfigxmlFile=C:\\MyConfig.xml Users =C:\\users.csv \n";
                     builder += "\n";
