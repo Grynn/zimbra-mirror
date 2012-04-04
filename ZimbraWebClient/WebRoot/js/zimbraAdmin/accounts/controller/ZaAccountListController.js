@@ -891,15 +891,12 @@ function(account) {
 
 			}
 		}
-		var mServer = publicMailURL;
+
 		if(!obj.authToken || !obj.lifetime)
 			throw new AjxException(ZaMsg.ERROR_FAILED_TO_GET_CREDENTIALS, AjxException.UNKNOWN, "ZaAccountListController.prototype._viewMailListener");
 
-		AjxCookie.setCookie(document, "ZM_AUTH_TOKEN", obj.authToken, null, "/");
-
+		var mServer = [publicMailURL, "/service/preauth?authtoken=",obj.authToken,"&isredirect=1&adminPreAuth=1"].join("");
 		mServer = AjxStringUtil.trim(mServer,true);
-		mServer = (mServer.indexOf("?") < 0)?(mServer + "?") : (mServer + "&");
-		mServer += ("adminPreAuth=1");
 		var win = window.open(mServer, "_blank");
 	} catch (ex) {
 		this._handleException(ex, "ZaAccountListController._viewMailListenerLauncher", null, false);
