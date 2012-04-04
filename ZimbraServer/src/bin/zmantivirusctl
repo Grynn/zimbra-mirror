@@ -17,6 +17,11 @@
 BASE=/opt/zimbra
 SCRIPTS="zmamavisdctl zmclamdctl zmfreshclamctl"
 
+if [ ! -L "/opt/zimbra/amavisd" ]; then
+  echo "Error: Antivirus not installed"
+  exit 1
+fi
+
 source /opt/zimbra/.bashrc
 
 case "$1" in 
