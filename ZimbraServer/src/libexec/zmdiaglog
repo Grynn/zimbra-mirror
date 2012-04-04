@@ -405,6 +405,11 @@ sub run() {
       system("cp /opt/zimbra/log/nginx.log $destination/logs/");
     }
    
+    if (-f "/opt/zimbra/log/nginx.access.log") {
+      logmsg "Copying nginx access log /opt/zimbra/log/nginx.access.log\n";
+      system("cp /opt/zimbra/log/nginx.access.log $destination/logs/");
+    }
+   
     if (-f "/etc/ld.so.conf") { 
       logmsg "Copying ld.so configuration\n";
       system("cp /etc/ld.so.conf /etc/ld.so.conf.d/* $destination/ld.so.conf/");
