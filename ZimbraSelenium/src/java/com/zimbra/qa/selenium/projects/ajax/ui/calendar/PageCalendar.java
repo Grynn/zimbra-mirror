@@ -1755,7 +1755,6 @@ public class PageCalendar extends AbsTab {
 
 
 		return (item);
-
 	}
 
 	private List<AppointmentItem> zListGetAppointmentsListView() throws HarnessException {
@@ -1795,8 +1794,61 @@ public class PageCalendar extends AbsTab {
 
 	}
 
+	private AppointmentItem parseDayViewRow(String rowLocator) throws HarnessException {
+		String locator;
+
+		AppointmentItem item = new AppointmentItem();
+
+		// Get the name of the appointment
+		locator = rowLocator + " td.appt_name";
+		if ( this.sIsElementPresent(locator) ) {
+			item.setSubject(this.sGetText(locator));
+		}
+		
+		// TODO: parse other elements
+
+		return (item);
+	}
+	
 	private List<AppointmentItem> zListGetAppointmentsDayView() throws HarnessException {
-		throw new HarnessException("implement me");
+
+		List<AppointmentItem> items = new ArrayList<AppointmentItem>();
+
+		
+		String divLocator = "css=div#zv__CLD";
+		String itemsLocator = divLocator +" div[id^='zli__CLD__'] div[id$='_body']";
+		String itemLocator = null;
+		String locator = null;
+
+		// Make sure the div exists
+		if ( !this.sIsElementPresent(divLocator) ) {
+			throw new HarnessException("Day View is not present: " + divLocator);
+		}
+
+		// If the list doesn't exist, then no items are present
+		if ( !this.sIsElementPresent(itemsLocator) ) {
+			// return an empty list
+			return (items);
+		}
+
+		// How many items are in the table?
+		int count = this.sGetCssCount(itemsLocator);
+		logger.debug(myPageName() + " zListGetAppointmentsDayView: number of appointments: "+ count);
+
+		// Get each conversation's data from the table list
+		for (int i = 1; i <= count; i++) {
+
+			itemLocator = itemsLocator + ":nth-of-type("+ i +")";
+			// Add the new item to the list
+			AppointmentItem item = parseDayViewRow(itemLocator);
+			items.add(item);
+			logger.info(item.prettyPrint());
+
+		}
+
+		// Return the list of items
+		return (items);
+
 	}
 
 	private List<AppointmentItem> zListGetAppointmentsWorkWeekView() throws HarnessException {
@@ -1870,34 +1922,34 @@ public class PageCalendar extends AbsTab {
 
 		/*
 
-    <tr class="calendar_month_day_item_row" id="zli__CLM__260_DWT558">
       <td class="calendar_month_day_item">
-        <div style="position:relative;" id="zli__CLM__260_DWT558_body" class="">
-          <table width="100%" cellspacing="0" cellpadding="0" border="0" style=
-          "table-layout:fixed; background:-moz-linear-gradient(top,#FFFFFF, #ecd49c);"
-          id="zli__CLM__260_DWT558_tableBody">
+        <div style="position:relative;" id="zli__CLM__258_DWT304_body" class="">
+          <table width="100%" style=
+          "table-layout:fixed; background:-moz-linear-gradient(top,#FFFFFF, #98b6e9);"
+          id="zli__CLM__258_DWT304_tableBody">
             <tbody>
               <tr>
                 <td width="4px" style=
-                "background:-moz-linear-gradient(top,#FFFFFF, #4AA6F1);"></td>
+                "background:-moz-linear-gradient(top,#FFFFFF, #FFFFFF);"></td>
 
                 <td width="100%">
-                  <div style="overflow:hidden;white-space:nowrap;">
-                    &nbsp;4:30 PM asdfasdf
+                  <div style="overflow:hidden;white-space:nowrap;" id=
+                  "zli__CLM__258_DWT304_st_su">
+                    <span id="zli__CLM__258_DWT304_start_time">&nbsp;9:00
+                    PM</span><span id=
+                    "zli__CLM__258_DWT304_subject">appointment13335134710154</span>
                   </div>
                 </td>
 
                 <td width="20px" style="padding-right:3px;" id=
-                "zli__CLM__260_DWT558_tag">
+                "zli__CLM__258_DWT304_tag">
                   <div style="width:16" class="ImgBlank_16"></div>
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
-      </td>
-    </tr>  
-		 */
+      </td>		 */
 		
 		String locator;
 		
@@ -1908,7 +1960,7 @@ public class PageCalendar extends AbsTab {
 		appt.setGIsAllDay(false);
 		
 		// Get the subject
-		locator = cssLocator + " tr td + td";
+		locator = cssLocator + " span[id$='_subject']";
 		appt.setSubject(this.sGetText(locator));
 		
 		// TODO: get the tags		
@@ -1919,37 +1971,53 @@ public class PageCalendar extends AbsTab {
 	private List<AppointmentItem> zListGetAppointmentsMonthView() throws HarnessException {
 		logger.info(myPageName() + " zListGetAppointmentsMonthView()");
 		
-		String itemsLocator;
-		
-		int count;
 		List<AppointmentItem> items = new ArrayList<AppointmentItem>();
-		
-		// Process the all-day items first
-		itemsLocator = Locators.CalendarViewMonthCSS + " div.appt";
-		count = this.sGetCssCount(itemsLocator);
-		logger.info(itemsLocator +" count: "+ count);
-		
-		for (int i = 0; i < count; i++) {
-			
-			String itemLocator = itemsLocator + StringUtils.repeat(" + div.appt", i);
-			
-			String alldayLocator = itemLocator + " div.appt_allday_body";
-			if ( this.sIsElementPresent(alldayLocator) ) {
-				items.add(parseMonthViewAllDay(alldayLocator));
-			}			
+
+		String divLocator = "css=div#zv__CLM"; 
+		String itemsLocator = null;
+		String itemLocator = null;
+		String locator = null;
+
+		// Make sure the div exists
+		if ( !this.sIsElementPresent(divLocator) ) {
+			throw new HarnessException("Day View is not present: " + divLocator);
+		}
+
+		// Process the non-all-day items first
+
+		itemsLocator = divLocator +" tr[id^='zli__CLM__']>td.calendar_month_day_item";
+		if ( this.sIsElementPresent(itemsLocator) ) {
+
+			int count = this.sGetCssCount(itemsLocator);
+			logger.info(itemsLocator +" count: "+ count);
+
+			for (int i = 1; i <= count; i++) {
+
+				AppointmentItem item = parseMonthViewNonAllDay(itemsLocator + ":nth-of-type("+ i +")");
+				items.add(item);
+				logger.info(item.prettyPrint());
+
+			}
+
 		}
 		
-		// Process the non-all-day items next
-		itemsLocator = Locators.CalendarViewMonthCSS + " tr.calendar_month_day_item_row";
-		count = this.sGetCssCount(itemsLocator);
-		logger.info(itemsLocator +" count: "+ count);
 		
-		for (int i = 0; i < count; i++) {
-			
-			String itemLocator = itemsLocator + StringUtils.repeat(" + tr.calendar_month_day_item_row", i);
-			if ( this.sIsElementPresent(itemLocator + ">td.calendar_month_day_item") ) {
-				items.add(parseMonthViewNonAllDay(itemLocator));
+		// Process the all-day items next
+		
+		itemsLocator = divLocator +" div[id^='zli__CLM__']>div[id$='_body']";
+		if ( this.sIsElementPresent(itemsLocator) ) {
+
+			int count = this.sGetCssCount(itemsLocator);
+			logger.info(itemsLocator +" count: "+ count);
+
+			for (int i = 1; i <= count; i++) {
+
+				AppointmentItem item = parseMonthViewAllDay(itemsLocator + ":nth-of-type("+ i +")");
+				items.add(item);
+				logger.info(item.prettyPrint());
+
 			}
+
 		}
 
 		return (items);

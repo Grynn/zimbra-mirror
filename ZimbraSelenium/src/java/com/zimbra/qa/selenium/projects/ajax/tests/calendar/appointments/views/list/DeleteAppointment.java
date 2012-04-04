@@ -403,7 +403,8 @@ public class DeleteAppointment extends AjaxCommonTest {
 
 		// Click delete
 		DialogConfirmDeleteAppointment dialog = (DialogConfirmDeleteAppointment)app.zPageCalendar.zToolbarPressButton(Button.B_DELETE);
-
+		ZAssert.assertNotNull(dialog, "Verify the dialog appears correctly");
+		
 		// Click Yes on the confirmation
 		dialog.zClickButton(Button.B_YES);
 

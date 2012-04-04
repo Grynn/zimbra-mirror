@@ -1,11 +1,11 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.calendar.appointments.views.day;
 
-import java.util.Calendar;
-import java.util.HashMap;
+import java.util.*;
 
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.core.Bugs;
+import com.zimbra.qa.selenium.framework.items.AppointmentItem;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
@@ -33,6 +33,10 @@ public class GetAppointment extends AjaxCommonTest {
 	@Test(	description = "View a basic appointment in the day view",
 			groups = { "functional" })
 	public void GetAppointment_01() throws HarnessException {
+		
+		
+		//-- Data Setup
+		
 		
 		// Create the appointment on the server
 		// Create the message data to be sent
@@ -65,11 +69,28 @@ public class GetAppointment extends AjaxCommonTest {
 				+		"</m>"
 				+	"</CreateAppointmentRequest>");
 		
+		
+		//-- GUI Steps
+
+		
+		// Refresh the current view
 		app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
 		
-		SleepUtil.sleep(5000);
+		// Get a list of currently visible appointments
+		List<AppointmentItem> items = app.zPageCalendar.zListGetAppointments();
+
 		
-		throw new HarnessException("add verification that the appointment appears");
+		//-- Verification
+		
+		boolean found = false;
+		for (AppointmentItem item : items ) {
+			if (item.getName().equals(subject)) {
+				found = true;
+				break;
+			}
+		}
+		
+		ZAssert.assertTrue(found, "Verify the appointment exists in the view");
 	    
 	}
 
