@@ -31,9 +31,9 @@ public class DeleteAppointment extends AjaxCommonTest {
 	}
 	
 	@Bugs(ids = "69132")
-	@Test(	description = "View a basic appointment in the month view",
+	@Test(	description = "Delete a basic appointment in the month view",
 			groups = { "functional" })
-	public void GetAppointment_01() throws HarnessException {
+	public void DeleteAppointment_01() throws HarnessException {
 		
 		// Create the appointment on the server
 		// Create the message data to be sent
@@ -57,10 +57,10 @@ public class DeleteAppointment extends AjaxCommonTest {
 		app.zPageCalendar.zListItem(Action.A_LEFTCLICK, subject);
 		
 		// Click the "delete" button
-		DialogConfirmDelete dialog = (DialogConfirmDelete)app.zPageCalendar.zToolbarPressButton(Button.B_DELETE);
+		DialogConfirmDeleteAppointment dialog = (DialogConfirmDeleteAppointment)app.zPageCalendar.zToolbarPressButton(Button.B_DELETE);
 
 		// Send the notification immediately
-		dialog.zClickButton(Button.B_SEND_CANCELLATION);
+		dialog.zClickButton(Button.B_YES);
 
 		
 		

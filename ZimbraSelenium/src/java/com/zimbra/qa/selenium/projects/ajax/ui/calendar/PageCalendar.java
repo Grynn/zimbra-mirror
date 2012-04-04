@@ -1,26 +1,17 @@
 package com.zimbra.qa.selenium.projects.ajax.ui.calendar;
 
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import org.apache.commons.lang.StringUtils;
 
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.AppointmentItem;
-import com.zimbra.qa.selenium.framework.items.MailItem;
-import com.zimbra.qa.selenium.framework.items.ContextMenuItem.CONTEXT_MENU_ITEM_NAME;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
-import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
-import com.zimbra.qa.selenium.projects.ajax.ui.calendar.DialogConfirmDelete.Locators;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.DialogCreateFolder;
-import com.zimbra.qa.selenium.projects.ajax.ui.mail.DialogRedirect;
-import com.zimbra.qa.selenium.projects.ajax.ui.mail.DisplayMail;
-import com.zimbra.qa.selenium.projects.ajax.ui.mail.TreeMail;
-import com.zimbra.qa.selenium.projects.ajax.ui.mail.PageMail.PageMailView;
+
 
 @SuppressWarnings("unused")
 public class PageCalendar extends AbsTab {
@@ -260,24 +251,48 @@ public class PageCalendar extends AbsTab {
 		String locator = null;
 		AbsPage page = null;
 
-		locator = "css=td.appt_name:contains('" + subject + "')";
-		SleepUtil.sleepMedium();
+		if ( this.sIsElementPresent("css=div#zv__CLWW div[id^='zli__CLWW__'] div[id$='_body'] td.appt_name:contains('"+ subject +"')")) {
+			
+			// Single occurrence locator
+			locator = "css=div#zv__CLWW div[id^='zli__CLWW__'] div[id$='_body'] td.appt_name:contains('"+ subject +"')";
+
+		} else if ( this.sIsElementPresent("css=div#zv__CLWW div[id^='zli__CLWW__'] div[id$='_body'] td[id$='_name']:contains('"+ subject +"')")) {
+			
+			// Recurring appointment locator (might point to any visible instance)
+			locator = "css=div#zv__CLWW div[id^='zli__CLWW__'] div[id$='_body'] td[id$='_name']:contains('"+ subject +"')";
+			
+		} else if ( this.sIsElementPresent("css=div#zv__CLWW div[id^='zli__CLWW__'] div[id$='_body'] td.appt_allday_name>div:contains('"+ subject +"')")) {
+			
+			// All day single occurrence locator
+			locator = "css=div#zv__CLWW div[id^='zli__CLWW__'] div[id$='_body'] td.appt_allday_name>div:contains('"+ subject +"')";
+			
+		}
+		
+		// Make sure one of the locators found the appt
+		if ( locator == null ) {
+			throw new HarnessException("Unable to determine locator for appointment: "+ subject);
+		}
+		
+		
 
 		if ( action == Action.A_LEFTCLICK ) {
+			
 			this.zClickAt(locator, "");
-			page=PageCalendar.this;
-			
-		} else if ( action == Action.A_RIGHTCLICK ) {
-			this.zRightClickAt(locator, "");
+			this.zWaitForBusyOverlay();
 
-		} else if ( action == Action.A_DOUBLECLICK) {
-			this.sDoubleClick(locator);
+			page = null;
 			
+		} else if ( action == Action.A_DOUBLECLICK) {
+			
+			this.sDoubleClick(locator);
+			this.zWaitForBusyOverlay();
+			
+			page = null;
+
 		} else {
 			throw new HarnessException("implement me!  action = "+ action);
 		}
 
-		this.zWaitForBusyOverlay();
 
 		if ( page != null ) {
 			page.zWaitForActive();
@@ -345,8 +360,11 @@ public class PageCalendar extends AbsTab {
 		// TODO: need some way to get a locator to all-day and non-all-day appts
 		// For now, give pref to non-all-day.  If not present, try all-day
 		
-		locator = "css=td.appt_name:contains('" + subject + "')"; // non-all-day
+// 		locator = "css=td.appt_name:contains('" + subject + "')"; // non-all-day
+		locator = "css=table.calendar_month_day_table td.calendar_month_day_item span[id$='_subject']:contains('"+ subject +"')"; // non-all-day
+		
 		if ( !this.sIsElementPresent(locator) ) {
+			// locator = "css=td.appt_allday_name:contains('" + subject + "')"; // all-day
 			locator = "css=td.appt_allday_name:contains('" + subject + "')"; // all-day
 
 		}
@@ -456,7 +474,12 @@ public class PageCalendar extends AbsTab {
 			} else if ( option == Button.O_DELETE ) {
 
 				optionLocator = Locators.DeleteMenu;
-				page = new DialogConfirmDelete(MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
+				page = new DialogConfirmDeleteAppointment(MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
+
+				// Depending on the type of appointment being deleted,
+				// We may need to use a different type of page here
+				// page = new DialogConfirmDeleteAttendee(MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
+				// page = new DialogConfirmDeleteOrganizer(MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
 
 			} else if ( option == Button.O_MOVE ) {
 
@@ -586,6 +609,9 @@ public class PageCalendar extends AbsTab {
 		if ( this.zIsVisiblePerPosition(Locators.CalendarViewListCSS, 0, 0) ) {
 			return (zListItemListView(action, option, subject));
 		}
+		if ( this.zIsVisiblePerPosition(Locators.CalendarViewWorkWeekCSS, 0, 0) ) {
+			return (zListItemWorkWeekView(action, option, subject));
+		}
 
 		// Default behavior variables
 		String locator = null;
@@ -658,6 +684,7 @@ public class PageCalendar extends AbsTab {
 
 			} else if (option == Button.O_DELETE_MENU) {
 				optionLocator = Locators.DeleteMenu;
+				page = new DialogConfirmDeleteAppointment(MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
 
 			} else if (option == Button.O_CANCEL_MENU) {
 				optionLocator = Locators.CancelMenu;
@@ -753,7 +780,104 @@ public class PageCalendar extends AbsTab {
 		return (page);
 	}
 
-	public AbsPage zListItemAllDay(Action action, Button option, String subject)
+	private AbsPage zListItemWorkWeekView(Action action, Button option, String subject)
+	throws HarnessException {
+
+		logger.info(myPageName() + " zListItemWorkWeekView("+ action +", "+ option +", "+ subject +")");
+		tracer.trace(action +" then "+ option +" on subject = "+ subject);
+
+		if ( action == null )
+			throw new HarnessException("action cannot be null");
+		if ( option == null )
+			throw new HarnessException("button cannot be null");
+		if ( subject == null || subject.trim().length() == 0)
+			throw new HarnessException("subject cannot be null or blank");
+
+
+		// Default behavior variables
+		String locator = null;
+		AbsPage page = null;
+		String optionLocator;
+
+		locator = "css=td.appt_allday_name:contains('" + subject + "')";
+		SleepUtil.sleepMedium();
+
+		if (action == Action.A_RIGHTCLICK) {
+			
+			if (option == Button.O_DELETE) {
+				
+				optionLocator = Locators.DeleteMenu;
+
+				this.zRightClickAt(locator, "");
+				this.zWaitForBusyOverlay();
+
+				this.zClickAt(optionLocator, "");
+				this.zWaitForBusyOverlay();
+
+
+				// Since we are not going to "wait for active", insert
+				// a small delay to make sure the dialog shows up
+				// before the zIsActive() method is called
+				SleepUtil.sleepMedium();
+
+				// If the organizer deletes an appointment, you get "Send Cancellation" dialog
+				page = new DialogConfirmDeleteOrganizer(MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
+				if ( page.zIsActive() ) {
+					return (page);
+				}
+				
+				// If an attendee deletes an appointment, you get a "Confirm Delete" dialog with "Notify Organizer?"
+				page = new DialogConfirmDeleteAttendee(MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
+				if ( page.zIsActive() ) {
+					return (page);
+				}
+
+				// If an attendee deletes an appointment, you get a "Confirm Delete" dialog
+				page = new DialogConfirmDeleteAppointment(MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
+				if ( page.zIsActive() ) {
+					return (page);
+				}
+
+				// If page was specified, make sure it is active
+				if (page != null) {
+
+					// This function (default) throws an exception if never active
+					page.zWaitForActive();
+
+				}
+
+				return (page);
+				
+			} else if ( option == Button.B_PRINT ) {
+				
+				optionLocator = "implement me!";
+				page = null;
+				
+			} else {
+				throw new HarnessException("implement action:"+ action +" option:"+ option);
+			}
+
+		} else {
+			throw new HarnessException("implement me!  action = "+ action);
+		}
+
+		this.zRightClickAt(locator, "");
+		SleepUtil.sleepSmall();
+		this.zWaitForBusyOverlay();
+
+		this.zClickAt(optionLocator, "");
+		SleepUtil.sleepSmall();
+		this.zWaitForBusyOverlay();
+
+		if ( page != null ) {
+			page.zWaitForActive();
+		}
+
+		return (page);
+	}
+	
+
+	private AbsPage zListItemAllDay(Action action, Button option, String subject)
 	throws HarnessException {
 
 		logger.info(myPageName() + " zListItem("+ action +", "+ option +", "+ subject +")");
@@ -1175,8 +1299,19 @@ public class PageCalendar extends AbsTab {
 				return (page);
 			}
 			
-			// If an attendee deletes an appointment, you get a "Confirm Delete" dialog
+			// If an attendee deletes an appointment, you get a "Confirm Delete / Notify Organizer" dialog
 			page = new DialogConfirmDeleteAttendee(MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
+			if ( page.zIsActive() ) {
+				return (page);
+			}
+
+			// If an organizer deletes an appointment (no attendees), you get a "Confirm Delete" dialog
+			page = new DialogConfirmDeleteAppointment(MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
+			if ( page.zIsActive() ) {
+				return (page);
+			}
+			
+			page = new DialogConfirmDeleteRecurringAppointment(MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
 			if ( page.zIsActive() ) {
 				return (page);
 			}
@@ -1324,8 +1459,14 @@ public class PageCalendar extends AbsTab {
 				return (page);
 			}
 			
-			// If an attendee deletes an appointment, you get a "Confirm Delete" dialog
+			// If an attendee deletes an appointment, you get a "Confirm Delete" dialog with "Notify Organizer?"
 			page = new DialogConfirmDeleteAttendee(MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
+			if ( page.zIsActive() ) {
+				return (page);
+			}
+
+			// If an attendee deletes an appointment, you get a "Confirm Delete" dialog
+			page = new DialogConfirmDeleteAppointment(MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
 			if ( page.zIsActive() ) {
 				return (page);
 			}
@@ -1366,13 +1507,23 @@ public class PageCalendar extends AbsTab {
 
 		} else if ( shortcut == Shortcut.S_DELETE ) {
 
-			page = new DialogConfirmDelete(MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
+			page = new DialogConfirmDeleteAppointment(MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
+
+			// Depending on the type of appointment being deleted,
+			// We may need to use a different type of page here
+			// page = new DialogConfirmDeleteAttendee(MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
+			// page = new DialogConfirmDeleteOrganizer(MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
 
 		} else if ( 
 				shortcut == Shortcut.S_MAIL_MOVETOTRASH ||
 				shortcut == Shortcut.S_MAIL_HARDELETE ) {
 
-			page = new DialogConfirmDelete(MyApplication,  ((AppAjaxClient) MyApplication).zPageCalendar);
+			page = new DialogConfirmDeleteAppointment(MyApplication,  ((AppAjaxClient) MyApplication).zPageCalendar);
+
+			// Depending on the type of appointment being deleted,
+			// We may need to use a different type of page here
+			// page = new DialogConfirmDeleteAttendee(MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
+			// page = new DialogConfirmDeleteOrganizer(MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
 
 		} else if ( shortcut == Shortcut.S_NEWCALENDAR ) {
 

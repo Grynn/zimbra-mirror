@@ -20,7 +20,7 @@ import com.zimbra.qa.selenium.framework.util.ZDate;
 import com.zimbra.qa.selenium.framework.util.ZTimeZone;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.DialogConfirm;
+import com.zimbra.qa.selenium.projects.ajax.ui.calendar.DialogConfirmDeleteAppointment;
 
 
 public class DeleteAppointment extends AjaxCommonTest {
@@ -85,7 +85,7 @@ public class DeleteAppointment extends AjaxCommonTest {
 		app.zPageCalendar.zListItem(Action.A_LEFTCLICK, subject);
 
 		// Click delete
-		DialogConfirm dialog = (DialogConfirm)app.zPageCalendar.zToolbarPressButton(Button.B_DELETE);
+		DialogConfirmDeleteAppointment dialog = (DialogConfirmDeleteAppointment)app.zPageCalendar.zToolbarPressButton(Button.B_DELETE);
 
 		// Click Yes on the confirmation
 		dialog.zClickButton(Button.B_YES);
@@ -153,7 +153,7 @@ public class DeleteAppointment extends AjaxCommonTest {
 		app.zPageCalendar.zListItem(Action.A_CHECKBOX, subject);
 
 		// Click delete
-		DialogConfirm dialog = (DialogConfirm)app.zPageCalendar.zToolbarPressButton(Button.B_DELETE);
+		DialogConfirmDeleteAppointment dialog = (DialogConfirmDeleteAppointment)app.zPageCalendar.zToolbarPressButton(Button.B_DELETE);
 
 		// Click Yes on the confirmation
 		dialog.zClickButton(Button.B_YES);
@@ -231,7 +231,7 @@ public class DeleteAppointment extends AjaxCommonTest {
 
 		// Click delete
 		logger.info("Typing shortcut key "+ name + " KeyEvent: "+ keyEvent);
-		DialogConfirm dialog = (DialogConfirm)app.zPageCalendar.zKeyboardKeyEvent(keyEvent);
+		DialogConfirmDeleteAppointment dialog = (DialogConfirmDeleteAppointment)app.zPageCalendar.zKeyboardKeyEvent(keyEvent);
 
 		// Click Yes on the confirmation
 		dialog.zClickButton(Button.B_YES);
@@ -251,7 +251,7 @@ public class DeleteAppointment extends AjaxCommonTest {
 
 	}
 
-	@Bugs(ids = "69132")
+	@Bugs(ids = "69132,72444")
 	@Test(	description = "Delete a appt by selecting and typing '.t' shortcut",
 			groups = { "functional" } )
 	public void DeleteAppointment_04() throws HarnessException {
@@ -296,7 +296,7 @@ public class DeleteAppointment extends AjaxCommonTest {
 		app.zPageCalendar.zListItem(Action.A_LEFTCLICK, subject);
 
 		// Click delete
-		DialogConfirm dialog = (DialogConfirm)app.zPageCalendar.zKeyboardShortcut(Shortcut.S_MAIL_MOVETOTRASH);
+		DialogConfirmDeleteAppointment dialog = (DialogConfirmDeleteAppointment)app.zPageCalendar.zKeyboardShortcut(Shortcut.S_MAIL_MOVETOTRASH);
 
 		// Click Yes on the confirmation
 		dialog.zClickButton(Button.B_YES);
@@ -402,7 +402,7 @@ public class DeleteAppointment extends AjaxCommonTest {
 		app.zPageCalendar.zListItem(Action.A_CHECKBOX, subject3);
 
 		// Click delete
-		DialogConfirm dialog = (DialogConfirm)app.zPageCalendar.zToolbarPressButton(Button.B_DELETE);
+		DialogConfirmDeleteAppointment dialog = (DialogConfirmDeleteAppointment)app.zPageCalendar.zToolbarPressButton(Button.B_DELETE);
 
 		// Click Yes on the confirmation
 		dialog.zClickButton(Button.B_YES);
@@ -474,7 +474,7 @@ public class DeleteAppointment extends AjaxCommonTest {
 		app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
 
 		// Right click the item, select delete
-		DialogConfirm dialog = (DialogConfirm)app.zPageCalendar.zListItem(Action.A_RIGHTCLICK, Button.O_DELETE, subject);
+		DialogConfirmDeleteAppointment dialog = (DialogConfirmDeleteAppointment)app.zPageCalendar.zListItem(Action.A_RIGHTCLICK, Button.O_DELETE, subject);
 		dialog.zClickButton(Button.B_YES);
 
 
@@ -538,7 +538,7 @@ public class DeleteAppointment extends AjaxCommonTest {
 
 
 		// Type shift-delete
-		DialogConfirm dialog = (DialogConfirm)app.zPageCalendar.zKeyboardShortcut(Shortcut.S_MAIL_HARDELETE);
+		DialogConfirmDeleteAppointment dialog = (DialogConfirmDeleteAppointment)app.zPageCalendar.zKeyboardShortcut(Shortcut.S_MAIL_HARDELETE);
 		dialog.zClickButton(Button.B_YES);
 
 
@@ -651,7 +651,7 @@ public class DeleteAppointment extends AjaxCommonTest {
 		app.zPageCalendar.zListItem(Action.A_CHECKBOX, subject3);
 
 		// Click delete
-		DialogConfirm dialog = (DialogConfirm)app.zPageCalendar.zKeyboardShortcut(Shortcut.S_MAIL_HARDELETE);
+		DialogConfirmDeleteAppointment dialog = (DialogConfirmDeleteAppointment)app.zPageCalendar.zKeyboardShortcut(Shortcut.S_MAIL_HARDELETE);
 		dialog.zClickButton(Button.B_YES);
 
 

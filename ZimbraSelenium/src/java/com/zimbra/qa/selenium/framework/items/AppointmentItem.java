@@ -95,6 +95,11 @@ public static AppointmentItem importFromSOAP(Element GetAppointmentResponse) thr
 			// Create the object
 			appt = new AppointmentItem();
 						
+			String parentFolder = m.getAttribute("l");
+			if ( parentFolder != null ) {
+				appt.dFolder = parentFolder;
+			}
+
 			Element sElement = ZimbraAccount.SoapClient.selectNode(m, "//mail:s");
 			if ( sElement != null ) {
 				

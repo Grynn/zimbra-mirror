@@ -855,9 +855,12 @@ public abstract class AbsSeleniumObject {
 	}
 
 	public void sMouseDownAt(String locator, String coordString) throws HarnessException {
-		ClientSessionFactory.session().selenium().mouseDownAt(locator,
-				coordString);
-		logger.info("mouseDownAt(" + locator + ",'" + coordString + "')");
+		try {
+			logger.info("mouseDownAt(" + locator + ",'" + coordString + "')");
+			ClientSessionFactory.session().selenium().mouseDownAt(locator, coordString);
+		} catch (SeleniumException e) {
+			throw new HarnessException(e);
+		}
 	}
 
 	public void sMouseDownRightAt(String locator, String coordString) throws HarnessException {
@@ -935,9 +938,12 @@ public abstract class AbsSeleniumObject {
 	 * DefaultSelenium.mouseUpAt()
 	 */
 	public void sMouseUpAt(String locator, String coordString) throws HarnessException {
-		ClientSessionFactory.session().selenium().mouseUpAt(locator,
-				coordString);
-		logger.info("mouseUpAt(" + locator + ",'" + coordString + ")'");
+		try {
+			logger.info("mouseUpAt(" + locator + ",'" + coordString + ")'");
+			ClientSessionFactory.session().selenium().mouseUpAt(locator, coordString);
+		} catch (SeleniumException e) {
+			throw new HarnessException(e);
+		}
 	}
 
 	/**

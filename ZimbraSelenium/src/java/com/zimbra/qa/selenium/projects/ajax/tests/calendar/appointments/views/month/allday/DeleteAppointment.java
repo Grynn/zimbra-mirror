@@ -9,7 +9,7 @@ import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.calendar.DialogConfirmDelete;
+import com.zimbra.qa.selenium.projects.ajax.ui.calendar.DialogConfirmDeleteAppointment;
 
 
 public class DeleteAppointment extends AjaxCommonTest {
@@ -58,10 +58,10 @@ public class DeleteAppointment extends AjaxCommonTest {
 		app.zPageCalendar.zListItem(Action.A_LEFTCLICK, subject);
 		
 		// Click the "delete" button
-		DialogConfirmDelete dialog = (DialogConfirmDelete)app.zPageCalendar.zToolbarPressButton(Button.B_DELETE);
+		DialogConfirmDeleteAppointment dialog = (DialogConfirmDeleteAppointment)app.zPageCalendar.zToolbarPressButton(Button.B_DELETE);
 
 		// Send the notification immediately
-		dialog.zClickButton(Button.B_SEND_CANCELLATION);
+		dialog.zClickButton(Button.B_YES);
 
 		
 		
@@ -69,7 +69,7 @@ public class DeleteAppointment extends AjaxCommonTest {
 		FolderItem trash = FolderItem.importFromSOAP(app.zGetActiveAccount(), FolderItem.SystemFolder.Trash);
 		AppointmentItem deleted = AppointmentItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject +") is:anywhere");
 		ZAssert.assertNotNull(deleted, "Verify the deleted appointment exists");
-		ZAssert.assertEquals(deleted.getFolder(), trash.getId(), "Verify the deleted appointment exists");
+		ZAssert.assertEquals(deleted.getFolder(), trash.getId(), "Verify the deleted appointment is in the trash");
 
 	}
 
