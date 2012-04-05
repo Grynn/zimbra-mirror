@@ -487,7 +487,7 @@ ZaNewCosXWizard.myXFormModifier = function(xFormObject, entry) {
 				},
 				{ref:"description",  msgName:ZaMsg.NAD_Description,
 					label:ZaMsg.NAD_Description, labelLocation:_LEFT_, //cssClass:"admin_xform_name_input" ,
-					labelCssStyle:"vertical-align:top",
+					labelCssStyle:"vertical-align:top;",
 					type:_TEXTFIELD_,
 					align:_LEFT_,
 					enableDisableChecks:[ZaItem.hasWritePermission],
@@ -496,7 +496,7 @@ ZaNewCosXWizard.myXFormModifier = function(xFormObject, entry) {
 				},
 				{ref:ZaCos.A_zimbraNotes, type:_TEXTAREA_,
 					msgName:ZaMsg.NAD_Notes,label:ZaMsg.NAD_Notes, labelLocation:_LEFT_,
-					labelCssStyle:"vertical-align:top", width: "30em"
+					labelCssStyle:"vertical-align:top;", width: "30em"
 				}
 			]
 		}
@@ -866,7 +866,7 @@ ZaNewCosXWizard.myXFormModifier = function(xFormObject, entry) {
                 },
 				{ref:ZaCos.A_zimbraPrefMailSendReadReceipts, type:_OSELECT1_, label:ZaMsg.LBL_zimbraPrefMailSendReadReceipts,labelLocation:_LEFT_,nowrap:false,labelWrap:true}
             ]},
-            {type:_ZAWIZ_TOP_GROUPER_, id:"cos_prefs_mail_sending",borderCssClass:"LowPadedTopGrouperBorder",label:ZaMsg.NAD_MailOptionsSending,
+            {type:_ZAWIZ_TOP_GROUPER_, id:"cos_prefs_mail_sending",borderCssClass:"LowPaddedTopGrouperBorder",label:ZaMsg.NAD_MailOptionsSending,
             	visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,
 					[
 						ZaCos.A_zimbraPrefSaveToSent,
@@ -882,7 +882,7 @@ ZaNewCosXWizard.myXFormModifier = function(xFormObject, entry) {
                     trueValue:"TRUE", falseValue:"FALSE"
                 }
             ]},
-            {type:_ZAWIZ_TOP_GROUPER_, id:"cos_prefs_mail_sending",borderCssClass:"LowPadedTopGrouperBorder",label:ZaMsg.NAD_MailOptionsComposing,
+            {type:_ZAWIZ_TOP_GROUPER_, id:"cos_prefs_mail_sending",borderCssClass:"LowPaddedTopGrouperBorder",label:ZaMsg.NAD_MailOptionsComposing,
             	visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,
 					[
 						ZaCos.A_zimbraPrefComposeInNewWindow,
@@ -1153,7 +1153,7 @@ ZaNewCosXWizard.myXFormModifier = function(xFormObject, entry) {
         var case5Items = [
             {type:_GROUP_, numCols:1,colSizes:["auto"],
                 items: [
-                    {type: _OUTPUT_, value: ZaMsg.COS_LimitZimletsTo,cssStyle:"margin-left: 0px;" },
+                    {type: _OUTPUT_, value: ZaMsg.COS_LimitZimletsTo,cssStyle:"margin-left:0;" },
                     {type:_ZA_ZIMLET_SELECT_COMBO_,
                         selectRef:ZaCos.A_zimbraZimletAvailableZimlets,
                         ref:ZaCos.A_zimbraZimletAvailableZimlets,
@@ -1254,7 +1254,7 @@ ZaNewCosXWizard.myXFormModifier = function(xFormObject, entry) {
                     	label:ZaMsg.LBL_zimbraQuotaWarnInterval, labelLocation:_LEFT_
                     },
                     {ref:ZaCos.A_zimbraQuotaWarnMessage, type:_TEXTAREA_, msgName:ZaMsg.MSG_zimbraQuotaWarnMessage,
-                    	label:ZaMsg.LBL_zimbraQuotaWarnMessage, labelLocation:_LEFT_, labelCssStyle:"vertical-align:top",width: "30em"
+                    	label:ZaMsg.LBL_zimbraQuotaWarnMessage, labelLocation:_LEFT_, labelCssStyle:"vertical-align:top;",width: "30em"
                     }
                 ]
             },
@@ -1323,7 +1323,7 @@ ZaNewCosXWizard.myXFormModifier = function(xFormObject, entry) {
 			        msgName:ZaMsg.MSG_zimbraProxyAllowedDomains,
     			    label:ZaMsg.LBL_zimbraProxyAllowedDomains,
                     labelLocation:_LEFT_,
-   			        labelCssStyle:"vertical-align:top",
+   			        labelCssStyle:"vertical-align:top;",
     			    type:_REPEAT_,
     			    align:_LEFT_,
     			    repeatInstance:"",
@@ -1346,7 +1346,7 @@ ZaNewCosXWizard.myXFormModifier = function(xFormObject, entry) {
                 label:ZaMsg.NAD_PasswordGrouper,
                 items: [ 
                     { type: _DWT_ALERT_,
-                      containerCssStyle: "padding-bottom:0px",
+                      containerCssStyle: "padding-bottom:0;",
                       style: DwtAlert.WARNING,
                       iconVisible:  false,
                       content: ((ZaNewCosXWizard.isAllAuthfromInternal())?ZaMsg.Alert_InternalPassword:ZaMsg.Alert_ExternalPassword)
@@ -1463,7 +1463,7 @@ ZaNewCosXWizard.myXFormModifier = function(xFormObject, entry) {
                 label:ZaMsg.NAD_MailRetentionGrouper,
                 items: [
                     { type: _DWT_ALERT_,
-                      containerCssStyle: "padding-bottom:0px",
+                      containerCssStyle: "padding-bottom:0;",
                       style: DwtAlert.WARNING,
                       iconVisible: false,
                       content: ZaMsg.Alert_MailRetention

@@ -609,7 +609,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
                         getDisplayValue: ZaAccount.getAccountTypeOutput,
                         valueChangeEventSources:[ZaAccount.A_name,ZaAccount.A_COSId,ZaAccount.A2_accountTypes,ZaAccount.A2_currentAccountType],
                         //center the elements
-                        cssStyle: "width: 600px; margin-left: auto; margin-right: auto;"
+                        cssStyle: "margin-left:auto;margin-right:auto;width:600px;"
                     }
                ]
         },
@@ -707,7 +707,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 									enableDisableChecks:[ZaAccount.isAutoMailServer],
 									enableDisableChangeEventSources:[ZaAccount.A2_autoMailServer],
 									visibilityChecks:[],
-									tableCssStyle: "height: 15px"
+									tableCssStyle: "height:15px;"
 							  	},
 								{ref:ZaAccount.A2_autoMailServer, type:_WIZ_CHECKBOX_, msgName:ZaMsg.NAD_Auto,label:ZaMsg.NAD_Auto,labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE",
 									visibilityChecks:[], labelLocation:_RIGHT_,align:_RIGHT_, subLabel:"",
@@ -722,7 +722,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 		numCols:2,visibilityChecks:[[XForm.checkInstanceValueNot,ZaAccount.A2_isExternalAuth,true]],
         visibilityChangeEventSources:[ZaAccount.A2_isExternalAuth],
 		items:[
-               	{ type: _DWT_ALERT_, containerCssStyle: "padding-bottom:0px",
+               	{ type: _DWT_ALERT_, containerCssStyle: "padding-bottom:0;",
                         style: DwtAlert.WARNING,iconVisible: false, 
                         content: ZaMsg.Alert_InternalPassword
                 },
@@ -781,7 +781,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 					 enableDisableChecks:[]
 				},
 				{ref:ZaAccount.A_notes, type:_TEXTAREA_, msgName:ZaMsg.NAD_Notes,
-					label:ZaMsg.NAD_Notes, labelLocation:_LEFT_, labelCssStyle:"vertical-align:top", width:"30em",
+					label:ZaMsg.NAD_Notes, labelLocation:_LEFT_, labelCssStyle:"vertical-align:top;", width:"30em",
 					visibilityChecks:[[ZaItem.hasWritePermission,ZaAccount.A_notes]],
 					enableDisableChecks:[]
 				}
@@ -837,7 +837,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 							addButtonLabel:ZaMsg.NAD_AddAlias, 
 							showAddOnNextRow:true,
 							removeButtonLabel:ZaMsg.NAD_RemoveAlias,
-							removeButtonCSSStyle: "margin-left: 50px",
+							removeButtonCSSStyle: "margin-left:50px;",
 							visibilityChecks:[
 								[ZaItem.hasWritePermission, ZaAccount.A_zimbraMailAlias]
 							],
@@ -868,7 +868,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
                                         //direct member group
                                         {type:_ZALEFT_GROUPER_, numCols:1, width: "100%",
                                             label:ZaMsg.Account_DirectGroupLabel,
-                                            containerCssStyle: "padding-top:5px",
+                                            containerCssStyle: "padding-top:5px;",
                                             items:[
                                                 {ref: ZaAccount.A2_directMemberList, type: _S_DWT_LIST_, width: "98%", height: 208,
                                                     cssClass: "DLSource", widgetClass: ZaAccountMemberOfListView,
@@ -909,7 +909,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
                                         {type:_SPACER_, height:"5"},
                                         //indirect member group
                                         {type:_ZALEFT_GROUPER_, numCols:1,  width: "100%", label:ZaMsg.Account_IndirectGroupLabel,
-                                            containerCssStyle: "padding-top:5px",
+                                            containerCssStyle: "padding-top:5px;",
                                             items:[
                                                 {ref: ZaAccount.A2_indirectMemberList, type: _S_DWT_LIST_, width: "98%", height: 208,
                                                     cssClass: "DLSource", widgetClass: ZaAccountMemberOfListView,
@@ -942,7 +942,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
                                 {type: _GROUP_, width: "98%", numCols: 1, //colSizes: ["auto", 20],
 					            items: [
                                     {type:_ZARIGHT_GROUPER_, numCols:1, width: "100%", label:ZaMsg.Account_NonGroupLabel,
-                                        containerCssStyle: "padding-top:5px",
+                                        containerCssStyle: "padding-top:5px;",
                                         items:[
                                             {type:_GROUP_, numCols:3, colSizes:["40", "auto", "80"], width:"98%",
                                                items:[
@@ -1057,7 +1057,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 						},		
 						{type:_SEPARATOR_,colSpan:2},
                         {type: _DWT_ALERT_, colSpan: 2,
-                                            containerCssStyle: "padding:10px;padding-top: 0px; width:100%;",
+                                            containerCssStyle: "padding:0 10px 10px;width:100%;",
                                             style: DwtAlert.WARNING,
                                             iconVisible: true,
                                             content: ZaMsg.Alert_Bouncing_Reveal_Hidden_Adds
@@ -1385,7 +1385,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 						});
 		}
 		if(ZAWizTopGrouper_XFormItem.isGroupVisible(entry,[ZaAccount.A_zimbraPrefMailItemsPerPage,ZaAccount.A_zimbraMaxMailItemsPerPage],[])) {				
-			prefItems.push({type:_ZAWIZ_TOP_GROUPER_, id:"account_prefs_standard_client",borderCssClass:"LowPadedTopGrouperBorder",
+			prefItems.push({type:_ZAWIZ_TOP_GROUPER_, id:"account_prefs_standard_client",borderCssClass:"LowPaddedTopGrouperBorder",
 							label:ZaMsg.NAD_MailOptionsStandardClient,
 							items :[
 								{ref:ZaAccount.A_zimbraMaxMailItemsPerPage, type:_SUPERWIZ_SELECT1_,
@@ -1509,7 +1509,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 								{ref:ZaAccount.A_zimbraPrefOutOfOfficeReply, type:_TEXTAREA_, 
 									msgName:ZaMsg.LBL_zimbraPrefOutOfOfficeReply,
 									label:ZaMsg.LBL_zimbraPrefOutOfOfficeReply, 
-									labelLocation:_LEFT_, labelCssStyle:"vertical-align:top", width:"30em",
+									labelLocation:_LEFT_, labelCssStyle:"vertical-align:top;", width:"30em",
 									enableDisableChecks:[ZaAccountXFormView.isOutOfOfficeReplyEnabled],
 									enableDisableChangeEventSources:[ZaAccount.A_zimbraPrefOutOfOfficeReplyEnabled]
 								},
@@ -1537,7 +1537,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 		}
 		if(ZAWizTopGrouper_XFormItem.isGroupVisible(entry,[ZaAccount.A_prefSaveToSent,ZaAccount.A_zimbraAllowAnyFromAddress, 
 			ZaAccount.A_zimbraAllowFromAddress],[])) {				
-			prefItems.push({type:_ZAWIZ_TOP_GROUPER_, id:"account_prefs_mail_sending",borderCssClass:"LowPadedTopGrouperBorder",
+			prefItems.push({type:_ZAWIZ_TOP_GROUPER_, id:"account_prefs_mail_sending",borderCssClass:"LowPaddedTopGrouperBorder",
 							label:ZaMsg.NAD_MailOptionsSending,
 							items :[
 								{ref:ZaAccount.A_zimbraPrefSaveToSent,  
@@ -1583,7 +1583,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 			ZaAccount.A_zimbraPrefMailSignatureEnabled,/*ZaAccount.A_zimbraPrefMailSignatureStyle,*/
 			ZaAccount.A_zimbraMailSignatureMaxLength,ZaAccount.A_zimbraPrefMailSignature,
 			ZaAccount.A_zimbraPrefMandatorySpellCheckEnabled, ZaAccount.A_zimbraPrefAutoSaveDraftInterval],[])) {				
-			prefItems.push({type:_ZAWIZ_TOP_GROUPER_, id:"account_prefs_mail_composing",borderCssClass:"LowPadedTopGrouperBorder",
+			prefItems.push({type:_ZAWIZ_TOP_GROUPER_, id:"account_prefs_mail_composing",borderCssClass:"LowPaddedTopGrouperBorder",
 							label:ZaMsg.NAD_MailOptionsComposing,
 							items :[																										
 								{ref:ZaAccount.A_zimbraPrefComposeInNewWindow, 
@@ -1655,7 +1655,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 									colSizes:["200px", "300px", "*"],
 									msgName:ZaMsg.MSG_zimbraPrefMailSignature,
 									label:ZaMsg.LBL_zimbraPrefMailSignature, labelLocation:_LEFT_, 
-									labelCssStyle:"vertical-align:top", width:"30em",
+									labelCssStyle:"vertical-align:top;", width:"30em",
 									enableDisableChangeEventSources:[ZaAccount.A_zimbraPrefMailSignatureEnabled],
 									enableDisableChecks:[ZaAccountXFormView.isMailSignatureEnabled]									
 								},
@@ -2015,7 +2015,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 							items: [
               							{ ref: ZaAccount.A_zimbraProxyAllowedDomains,
                                                label:ZaMsg.LBL_zimbraProxyAllowedDomains,
-                                               labelCssStyle:"vertical-align:top",
+                                               labelCssStyle:"vertical-align:top;",
                                                type:_SUPER_REPEAT_,
                                                colSizes:["300px", "*"],
                                                resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
@@ -2043,7 +2043,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 			advancedCaseItems.push({type:_ZAWIZ_TOP_GROUPER_,id:"account_password_settings",colSizes:["auto"],numCols:1,
 							label:ZaMsg.NAD_PasswordGrouper,				
 							items: [
-						        { type: _DWT_ALERT_, containerCssStyle: "padding-bottom:0px",
+						        { type: _DWT_ALERT_, containerCssStyle: "padding-bottom:0;",
 						            style: DwtAlert.WARNING,iconVisible: false,
 						            content: ZaMsg.Alert_InternalPassword, colSpan:3
 						        },

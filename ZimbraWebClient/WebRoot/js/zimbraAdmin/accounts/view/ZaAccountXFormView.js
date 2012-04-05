@@ -2474,7 +2474,7 @@ textFieldCssClass:"admin_xform_number_input"}
 								}								
 							]
 						},						
-						{type:_ZA_TOP_GROUPER_, colSizes:["275px","100%"], id:"account_prefs_mail_sending",borderCssClass:"LowPadedTopGrouperBorder",
+						{type:_ZA_TOP_GROUPER_, colSizes:["275px","100%"], id:"account_prefs_mail_sending",borderCssClass:"LowPaddedTopGrouperBorder",
 							label:ZaMsg.NAD_MailOptionsSending,
 							visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible, 
 								[ZaAccount.A_zimbraPrefSaveToSent,
@@ -2524,7 +2524,7 @@ textFieldCssClass:"admin_xform_number_input"}
 								}															
 							]
 						},
-						{type:_ZA_TOP_GROUPER_,colSizes:["275px","100%"], id:"account_prefs_mail_composing",borderCssClass:"LowPadedTopGrouperBorder",
+						{type:_ZA_TOP_GROUPER_,colSizes:["275px","100%"], id:"account_prefs_mail_composing",borderCssClass:"LowPaddedTopGrouperBorder",
 							label:ZaMsg.NAD_MailOptionsComposing,
 							visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible, 
 								[
@@ -2784,7 +2784,7 @@ textFieldCssClass:"admin_xform_number_input"}
             paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),
 					caseKey:_tab6, 
 					items: [
-						{type:_ZA_TOP_GROUPER_, id:"account_form_aliases_group",borderCssClass:"LowPadedTopGrouperBorder",
+						{type:_ZA_TOP_GROUPER_, id:"account_form_aliases_group",borderCssClass:"LowPaddedTopGrouperBorder",
 							width:"100%", numCols:1,colSizes:["auto"],
 							label:ZaMsg.NAD_EditAliasesGroup,
 							items :[
@@ -2940,7 +2940,7 @@ nowrap:false, labelWrap:true,
 					caseKey:_tab8, 
 					items: [
 						{type:_ZA_TOP_GROUPER_, id:"account_form_interop_group",
-                            borderCssClass:"LowPadedTopGrouperBorder",
+                            borderCssClass:"LowPaddedTopGrouperBorder",
 							 width:"100%", numCols:1,colSizes:["auto"],
 							label:ZaMsg.NAD_EditFpGroup,
 							items :[

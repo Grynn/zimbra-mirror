@@ -1497,7 +1497,7 @@ if(appNewUI) {
 
 	if(ZaDomainXFormView.Feature_TAB_ATTRS && ZaTabView.isTAB_ENABLED(entry,ZaDomainXFormView.Feature_TAB_ATTRS, ZaDomainXFormView.Feature_TAB_RIGHTS)) {
 		tabIx = ++this.TAB_INDEX;
-		tabBar.choices.push({value:tabIx, label:ZaMsg.TABT_Feature});
+		tabBar.choices.push({value:tabIx, label:ZaMsg.TABT_Features});
 		var caseFeature = {type:_ZATABCASE_, caseKey:tabIx,
                         cssStyle:"padding-left:10px;",
 			items : [
