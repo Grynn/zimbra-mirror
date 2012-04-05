@@ -1046,18 +1046,8 @@ function() {
                                             forceNode: false,
                                             mappingId:  ZaZimbraAdmin._SERVERS_LIST_VIEW});
                             tree.addTreeItemData(serverTi);
-                            for(var ix=0; ix< cnt; ix++) {
-                                var ti1 = new ZaTreeItemData({
-                                            parent:ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_configure, ZaMsg.OVP_servers]),
-                                            id:DwtId._makeId(serverTi.id, ix + 1),
-                                            text: serverList[ix].name,
-                                            image: "Server",
-                                            mappingId: ZaZimbraAdmin._SERVER_VIEW});;
-                                ti1.setData(ZaOverviewPanelController._OBJ_ID, serverList[ix].id);
-                                tree.addTreeItemData(ti1);
-                            }
                             ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._SERVERS_LIST_VIEW] = ZaOverviewPanelController.serverListTreeListener;
-                        } else {
+                        } else { //Keep it for future use. Change "cnt > 0" to "cnt > 1", if there is only one server, will directly goes to the edit view of this server.
                             serverTi = new ZaTreeItemData({
                                             parent:ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_configure]),
                                             id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_CONFIGURATION,null, "serverHV"),
@@ -1066,8 +1056,8 @@ function() {
                                             mappingId: ZaZimbraAdmin._SERVER_VIEW});
                             serverTi.setData(ZaOverviewPanelController._OBJ_ID, serverList[0].id);
                             tree.addTreeItemData(serverTi);
+                            ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._SERVER_VIEW] = ZaOverviewPanelController.serverTreeListener;
                         }
-                        ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._SERVER_VIEW] = ZaOverviewPanelController.serverTreeListener;
                     }
                 } catch (ex) {
                     this._handleException(ex, "ZaOverviewPanelController.prototype._buildNewFolderTree", null, false);
