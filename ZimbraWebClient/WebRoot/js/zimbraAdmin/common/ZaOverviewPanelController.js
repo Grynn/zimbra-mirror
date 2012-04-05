@@ -1362,12 +1362,8 @@ ZaOverviewPanelController.serverTreeListener = function (ev) {
 ZaOverviewPanelController.statsByServerTabTreeListener = function (ev) {
 	//only apply to new UI
 
-	var curController = ZaApp.getInstance().getCurrentController();
-	if(!curController) {
-		var viewId = ev.item.getData("viewId");
-		var currentView = ZaApp.getInstance().getAppViewMgr().getViewContentById(viewId);
-		curController = ZaApp.getInstance().getServerStatsController(viewId);
-	}
+    var viewId = ev.item.parent.getData("viewId");
+    curController = ZaApp.getInstance().getServerStatsController(viewId);
 
 	ZaOverviewPanelController.switchToSubTabForNonXFormView(curController, ev.item);
 }
