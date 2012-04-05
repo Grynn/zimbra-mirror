@@ -1035,7 +1035,7 @@ STDMETHODIMP CMapiAccessWrap::GetRuleList(VARIANT *rules)
 void CMapiAccessWrap::CreateAttachmentAttrs(BSTR attrs[], int num)
 {
 
-    dlog.debug(L"MapiAccessWrap::CreateAttachmentAttrs");
+    dlog.trace(L"Begin MapiAccessWrap::CreateAttachmentAttrs");
     WCHAR pwszNum[10];
     LPWSTR names[] = {L"attContentType", L"attTempFile", L"attRealName", L"attContentDisposition"};
                      
@@ -1049,6 +1049,7 @@ void CMapiAccessWrap::CreateAttachmentAttrs(BSTR attrs[], int num)
 	lstrcat(pwszAttr, pwszNum);
 	attrs[i] = SysAllocString(pwszAttr);
     }
+    dlog.trace(L"End MapiAccessWrap::CreateAttachmentAttrs");
 }
 
 void CMapiAccessWrap::CreateExceptionAttrs(BSTR attrs[], int num)
