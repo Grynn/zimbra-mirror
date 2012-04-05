@@ -1352,7 +1352,8 @@ public class ZimbraAPI
         writer.WriteAttributeString("ct", appt["contentType0"]);
         if (appt["content0"].Length > 0)
         {
-            WriteNVPair(writer, "content", System.Text.Encoding.Default.GetString(File.ReadAllBytes(appt["content0"])));
+            WriteNVPair(writer, "content", System.Text.Encoding.Unicode.GetString(File.ReadAllBytes(appt["content0"])));           
+            //WriteNVPair(writer, "content", System.Text.Encoding.Default.GetString(File.ReadAllBytes(appt["content0"])));
         }
         writer.WriteEndElement();   // mp
         writer.WriteStartElement("mp");

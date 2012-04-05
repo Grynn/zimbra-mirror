@@ -2794,6 +2794,59 @@ bool HtmlBody(LPMESSAGE pMessage, LPSPropValue lpv, LPVOID *ppBody, unsigned int
     return false;
 }
 
+LPWSTR WriteUnicodeToFile(LPTSTR pBody)
+{
+	LPTSTR pTemp = pBody;
+	int nBytesToBeWritten = (int)(wcslen(pTemp)*sizeof(WCHAR));
+   
+    wstring wstrTempAppDirPath;
+    if (!Zimbra::MAPI::Util::GetAppTemporaryDirectory(wstrTempAppDirPath))
+    {
+	return L"";
+    }
+
+    char *lpszDirName = NULL;
+    char *lpszUniqueName = NULL;
+    Zimbra::Util::ScopedInterface<IStream> pStream;
+    ULONG nBytesWritten = 0;
+    ULONG nTotalBytesWritten = 0;
+    HRESULT hr = S_OK;
+
+    WtoA((LPWSTR)wstrTempAppDirPath.c_str(), lpszDirName);
+
+    string strFQFileName = lpszDirName;
+
+    WtoA((LPWSTR)Zimbra::MAPI::Util::GetUniqueName().c_str(), lpszUniqueName);
+    strFQFileName += "\\";
+    strFQFileName += lpszUniqueName;
+    SafeDelete(lpszDirName);
+    SafeDelete(lpszUniqueName);
+    // Open stream on file
+    if (FAILED(hr = OpenStreamOnFile(MAPIAllocateBuffer, MAPIFreeBuffer, STGM_CREATE |
+            STGM_READWRITE, (LPTSTR)strFQFileName.c_str(), NULL, pStream.getptr())))
+    {
+	return L"";
+    }
+    // write to file
+    while (!FAILED(hr) && nBytesToBeWritten > 0)
+    {
+
+	hr = pStream->Write(pTemp, nBytesToBeWritten, &nBytesWritten);
+	pTemp += nBytesWritten;
+        nBytesToBeWritten -= nBytesWritten;
+        nTotalBytesWritten += nBytesWritten;
+        nBytesWritten = 0;
+    }
+    if (FAILED(hr = pStream->Commit(0)))
+        return L"";
+
+    LPWSTR lpwstrFQFileName = NULL;
+
+    AtoW((LPSTR)strFQFileName.c_str(), lpwstrFQFileName);
+    return lpwstrFQFileName;
+}
+
+
 LPWSTR WriteContentsToFile(LPTSTR pBody, bool isAscii)
 {
     LPSTR pTemp = NULL;
@@ -2858,7 +2911,7 @@ wstring Zimbra::MAPI::Util::SetPlainText(LPMESSAGE pMessage, LPSPropValue lpv)
     bool bRet = TextBody(pMessage, lpv, &pBody, nText);
     if (bRet)
     {
-	LPWSTR lpwszTempFile = WriteContentsToFile(pBody, false);
+	LPWSTR lpwszTempFile = WriteUnicodeToFile(pBody);//WriteContentsToFile(pBody, false);
 	retval = lpwszTempFile;
 	SafeDelete(lpwszTempFile);
     }

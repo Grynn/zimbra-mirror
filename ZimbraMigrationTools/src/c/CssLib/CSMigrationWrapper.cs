@@ -463,6 +463,7 @@ public class CSMigrationWrapper
                         catch (Exception e)
                         {
                             Log.err("exception in ProcessItems->itemobject.GetDataForItemID", e.Message);
+                            continue;
                         }
 
                         int bound0 = data.GetUpperBound(0);
