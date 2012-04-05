@@ -59,10 +59,15 @@ ZaCosController.changeActionsStateMethod = function () {
 		this._toolbarOperations[ZaOperation.DELETE].enabled = false;
         this._popupOperations[ZaOperation.DELETE].enabled = false;
 	}
-	
 
-	if(this._toolbarOperations[ZaOperation.SAVE])
-		this._toolbarOperations[ZaOperation.SAVE].enabled = false;
+    var isToEnable = (this._view && this._view.isDirty());
+
+    if(this._toolbarOperations[ZaOperation.SAVE])
+        this._toolbarOperations[ZaOperation.SAVE].enabled = isToEnable;
+
+    if(this._popupOperations[ZaOperation.SAVE]) {
+        this._popupOperations[ZaOperation.SAVE].enabled = isToEnable;
+    }
 		
 }
 ZaController.changeActionsStateMethods["ZaCosController"].push(ZaCosController.changeActionsStateMethod);

@@ -56,8 +56,14 @@ function(entry) {
 }
 
 ZaDomainController.changeActionsStateMethod = function () {
-	if(this._toolbarOperations[ZaOperation.SAVE])
-		this._toolbarOperations[ZaOperation.SAVE].enabled = false;
+    var isToEnable = (this._view && this._view.isDirty());
+
+    if(this._toolbarOperations[ZaOperation.SAVE])
+        this._toolbarOperations[ZaOperation.SAVE].enabled = isToEnable;
+
+    if(this._popupOperations[ZaOperation.SAVE]) {
+        this._popupOperations[ZaOperation.SAVE].enabled = isToEnable;
+    }
 		
 	if(this._currentObject.attrs[ZaDomain.A_zimbraDomainStatus] == ZaDomain.DOMAIN_STATUS_SHUTDOWN) {
 		if(this._toolbarOperations[ZaOperation.DELETE])
