@@ -1839,7 +1839,8 @@ public class ZimbraAPI
         writer.WriteAttributeString("ct", task["contentType0"]);
         if (task["content0"].Length > 0)
         {
-            WriteNVPair(writer, "content", System.Text.Encoding.Default.GetString(File.ReadAllBytes(task["content0"])));
+            WriteNVPair(writer, "content", System.Text.Encoding.Unicode.GetString(File.ReadAllBytes(task["content0"])));
+            //WriteNVPair(writer, "content", System.Text.Encoding.Default.GetString(File.ReadAllBytes(task["content0"])));
             File.Delete(task["content0"]);
         }
         writer.WriteEndElement();   // mp
