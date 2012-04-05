@@ -249,27 +249,26 @@ function (params) {
 	var locals = [];
 	var locals2 = [];
 	var numIFs = 0;
+
 	if(this._currentObject.nifs && this._currentObject.nifs.length) {
 		numIFs = this._currentObject.nifs.length;
 		for (var i = 0; i < numIFs; i++) {
 			if(this._currentObject.nifs[i] && this._currentObject.nifs[i].attrs && this._currentObject.nifs[i].attrs.addr && this._currentObject.nifs[i].attrs.mask) {
-				locals.push(
-				 	{
-				 		lAddr: ZaServer.octetsToLong(this._currentObject.nifs[i].attrs.addr),
-				 		szAddr: this._currentObject.nifs[i].attrs.addr,
-				 		iNetBits: ZaServer.DOT_TO_CIDR[this._currentObject.nifs[i].attrs.mask]
-				 	}
-				 );
-				 locals2.push(
-				 	{
-				 		lAddr: ZaServer.octetsToLong(this._currentObject.nifs[i].attrs.addr),
-				 		szAddr: this._currentObject.nifs[i].attrs.addr,
-				 		iNetBits: ZaServer.DOT_TO_CIDR[this._currentObject.nifs[i].attrs.mask]
-				 	}
-				 );
+                try {
+                    var localIpData = ZaIPUtil.isValidIP(this._currentObject.nifs[i].attrs.addr);
+                    var localiNetBit = ZaIPUtil.getNetBit(this._currentObject.nifs[i].attrs.mask);
+                    var localCIDR = ZaIPUtil.getNetworkAddr(localIpData, localiNetBit);
+
+                    var localIpData2 = ZaIPUtil.isValidIP(this._currentObject.nifs[i].attrs.addr);
+                    var localiNetBit2 = ZaIPUtil.getNetBit(this._currentObject.nifs[i].attrs.mask);
+                    var localCIDR2 =  ZaIPUtil.getNetworkAddr(localIpData2, localiNetBit2);
+                    locals.push(localCIDR);
+                    locals2.push(localCIDR2);
+                } catch(ex) {
+
+                }
 			}
 		}
-	
 	}	
 	
 	var IFCounter = numIFs;
@@ -280,67 +279,73 @@ function (params) {
 		var cnt = chunks.length;
 		var masks=[];
 		var excludeMasks = [];
-		var gotLocal = false;
-
+        var cidrData;
+        var validStr;
 		for(var i=0;i<cnt;i++){
-			if(chunks[i]!=null && chunks[i].length>5) {
-                                        //min IPv6 + suffix length:q!
+			if(chunks[i]!=null && chunks[i].length>2) {
 				if(chunks[i].indexOf("!")==0) {
 					//exclude
+                    validStr = chunks[i].substr(1);
 					if(chunks[i].indexOf("/")>0) {
 						//subnet
-						var _lStartIP = ZaServer.lGetStartingAddress(chunks[i].substr(1));
-						var _iNetBits = ZaServer.iGetNumNetBits(chunks[i].substring(1));
-						var _obj = {
-								lStartingAddr: _lStartIP,
-								iNetBits: _iNetBits,
-								lEndingAddr:ZaServer.lGetEndingAddress(_lStartIP,_iNetBits),
-								szCIDR: chunks[i]
-							};
-							
-						excludeMasks.push(_obj);						
+                        try {
+						    cidrData = ZaIPUtil.isValidCIDR(validStr);
+                        } catch (ex) {
+                            throw new AjxException(AjxMessageFormat.format(ZaMsg.ERROR_NOT_CIDR,[validStr]),AjxException.INVALID_PARAM,"ZaServerController.prototype.validateMyNetworks");
+                        }
+						excludeMasks.push(cidrData);
 						
 						for(var j=(numIFs-1);j>=0;j--) {
-							if(locals2[j].lAddr >= _obj.lStartingAddr && locals2[j].lAddr <= _obj.lEndingAddr /*&& locals2[j].iNetBits <= _obj.iNetBits*/) {
-								throw new AjxException(AjxMessageFormat.format(ZaMsg.ERROR_LOCAL_ADDR_EXCLUDED,[locals2[j].szAddr, chunks[i]]),AjxException.INVALID_PARAM,"ZaServerController.prototype.validateMyNetworks");
+							if(ZaIPUtil.isInSubNet(cidrData, locals2[j].ipData)) {
+								throw new AjxException(AjxMessageFormat.format(ZaMsg.ERROR_LOCAL_ADDR_EXCLUDED,[locals2[j].ipData.src, chunks[i]]),AjxException.INVALID_PARAM,"ZaServerController.prototype.validateMyNetworks");
 							}
 						}						
 					} else {
 						//address
-						var addrNumber = ZaServer.octetsToLong(chunks[i].substr(1));
-						if(addrNumber < 0) {
-							throw new AjxException(AjxMessageFormat.format(ZaMsg.ERROR_INVALID_EXCLUDE_ADDR,[chunks[i]]),AjxException.INVALID_PARAM,"ZaServerController.prototype.validateMyNetworks");
-						}
+                        try {
+						    var exIPData = ZaIPUtil.isValidIP(validStr);
+                        } catch (ex) {
+                            throw new AjxException(AjxMessageFormat.format(ZaMsg.ERROR_INVALID_EXCLUDE_ADDR,[validStr]),AjxException.INVALID_PARAM,"ZaServerController.prototype.validateMyNetworks");
+                        }
 						
 						for(var j=(numIFs-1);j>=0;j--) {
-							if(locals2[j].lAddr == addrNumber) {
-								throw new AjxException(AjxMessageFormat.format(ZaMsg.ERROR_LOCAL_ADDR_EXCLUDED,[locals2[j].szAddr,chunks[i]]),AjxException.INVALID_PARAM,"ZaServerController.prototype.validateMyNetworks");
+                            var cmpResult = 1;
+                            try {
+                                cmpResult = ZaIPUtil.compareIP(locals2[j].ipData, exIPData);
+                            } catch (ex) {
+
+                            }
+
+							if(cmpResult === 0) {
+								throw new AjxException(AjxMessageFormat.format(ZaMsg.ERROR_LOCAL_ADDR_EXCLUDED,[locals2[j].ipData.src,chunks[i]]),AjxException.INVALID_PARAM,"ZaServerController.prototype.validateMyNetworks");
 							}
 						}
 					}
 				} else {
 					//include
-					var _lStartIP = ZaServer.lGetStartingAddress(chunks[i]);
-					var _iNetBits = ZaServer.iGetNumNetBits(chunks[i]);
-					var _obj = {
-							lStartingAddr: _lStartIP,
-							iNetBits: _iNetBits,
-							lEndingAddr:ZaServer.lGetEndingAddress(_lStartIP,_iNetBits),
-							szCIDR: chunks[i]
-						};
-						
-					masks.push(_obj);
+                    validStr = chunks[i];
+                    try {
+                        cidrData = ZaIPUtil.isValidCIDR(validStr);
+                    } catch (ex) {
+                        throw new AjxException(AjxMessageFormat.format(ZaMsg.ERROR_NOT_CIDR,[validStr]),AjxException.INVALID_PARAM,"ZaServerController.prototype.validateMyNetworks");
+                    }
+                    masks.push(cidrData);
+
 					for(var j=(IFCounter-1);j>=0;j--) {
-						if(locals[j].lAddr >= _obj.lStartingAddr && locals[j].lAddr <= _obj.lEndingAddr /*&& locals[j].iNetBits <= _obj.iNetBits*/) {
-							locals.splice(j,1);
-							IFCounter--;
-						}
+                        try {
+                            if(ZaIPUtil.isInSubNet(cidrData, locals[j].ipData) /*&& locals[j].iNetBits <= _obj.iNetBits*/) {
+                                locals.splice(j,1);
+                                IFCounter--;
+                            }
+                        } catch (ex) {
+
+                        }
 					}
 				}
 									
 
 			} else {
-				throw new AjxException(ZaMsg.ERROR_MISSING_LOCAL,AjxException.INVALID_PARAM,"ZaServerController.prototype.validateMyNetworks");	
+				throw new AjxException(AjxMessageFormat.format(ZaMsg.ERROR_NOT_CIDR,[chunks[i]]),AjxException.INVALID_PARAM,"ZaServerController.prototype.validateMyNetworks");
 			}
 		}
 		
@@ -354,27 +359,10 @@ function (params) {
 			//error! missing local interfaces
 			var missingIfs = [];
 			for(var ix=0;ix<IFCounter;ix++) {
-				missingIfs.push(locals[ix].szAddr);
+				missingIfs.push(locals[ix].ipData.src);
 			}
 			throw new AjxException(AjxMessageFormat.format(ZaMsg.ERROR_MISSING_LOCAL,missingIfs.join(",")),AjxException.INVALID_PARAM,"ZaServerController.prototype.validateMyNetworks");
 		}
-		cnt = masks.length;
-		for(var i=0;i<cnt;i++) {
-			if(ZaServer.isValidPostfixSubnetString(masks[i].szCIDR) == ZaServer.ERR_NOT_CIDR) {
-				throw new AjxException(AjxMessageFormat.format(ZaMsg.ERROR_NOT_CIDR,[masks[i].szCIDR]),AjxException.INVALID_PARAM,"ZaServerController.prototype.validateMyNetworks");
-			} else if (ZaServer.isValidPostfixSubnetString(masks[i].szCIDR) == ZaServer.ERR_NOT_STARTING_ADDR) {
-				throw new AjxException(AjxMessageFormat.format(ZaMsg.ERROR_NOT_STARTING_ADDR,[masks[i].szCIDR,ZaServer.longToOctets(masks[i].lStartingAddr)]),AjxException.INVALID_PARAM,"ZaServerController.prototype.validateMyNetworks");				
-			}
-		}
-		
-		cnt = excludeMasks.length;
-		for(var i=0;i<cnt;i++) {
-			if(ZaServer.isValidPostfixSubnetString(excludeMasks[i].szCIDR) == ZaServer.ERR_NOT_CIDR) {
-				throw new AjxException(AjxMessageFormat.format(ZaMsg.ERROR_NOT_CIDR,[excludeMasks[i].szCIDR]),AjxException.INVALID_PARAM,"ZaServerController.prototype.validateMyNetworks");
-			} else if (ZaServer.isValidPostfixSubnetString(excludeMasks[i].szCIDR) == ZaServer.ERR_NOT_STARTING_ADDR) {
-				throw new AjxException(AjxMessageFormat.format(ZaMsg.ERROR_NOT_STARTING_ADDR,[excludeMasks[i].szCIDR,ZaServer.longToOctets(excludeMasks[i].lStartingAddr)]),AjxException.INVALID_PARAM,"ZaServerController.prototype.validateMyNetworks");				
-			}
-		}		
 	} 
 
 	this.runValidationStack(params);
