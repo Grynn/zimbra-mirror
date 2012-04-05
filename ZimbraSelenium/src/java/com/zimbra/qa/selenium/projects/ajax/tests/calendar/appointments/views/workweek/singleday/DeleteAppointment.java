@@ -46,20 +46,19 @@ public class DeleteAppointment extends AjaxCommonTest {
 		ZDate endUTC   = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 14, 0, 0);
 		
         app.zGetActiveAccount().soapSend(
-                          "<CreateAppointmentRequest xmlns='urn:zimbraMail'>" +
-                               "<m>"+
-                               "<inv method='REQUEST' type='event' fb='B' transp='O' allDay='0' name='"+ apptSubject +"'>"+
-                               "<s d='"+ startUTC.toTimeZone(tz).toYYYYMMDDTHHMMSS() +"' tz='"+ tz +"'/>" +
-                               "<e d='"+ endUTC.toTimeZone(tz).toYYYYMMDDTHHMMSS() +"' tz='"+ tz +"'/>" +
-                               "<or a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
-                               "</inv>" +
-                               "<mp content-type='text/plain'>" +
-                               "<content>"+ apptBody +"</content>" +
-                               "</mp>" +
-                               "<su>"+ apptSubject +"</su>" +
-                               "</m>" +
-                         "</CreateAppointmentRequest>");
-        String apptId = app.zGetActiveAccount().soapSelectValue("//mail:CreateAppointmentResponse", "apptId");
+    			"<CreateAppointmentRequest xmlns='urn:zimbraMail'>"
+    		+		"<m>"
+    		+			"<inv method='REQUEST' type='event' fb='B' transp='O' allDay='0' name='"+ apptSubject +"'>"
+    		+				"<s d='"+ startUTC.toTimeZone(tz).toYYYYMMDDTHHMMSS() +"' tz='"+ tz +"'/>"
+    		+				"<e d='"+ endUTC.toTimeZone(tz).toYYYYMMDDTHHMMSS() +"' tz='"+ tz +"'/>"
+    		+				"<or a='"+ app.zGetActiveAccount().EmailAddress +"'/>" 
+    		+			"</inv>" 
+    		+			"<mp content-type='text/plain'>" 
+    		+				"<content>" + apptBody + "</content>" 
+    		+			"</mp>"
+    		+			"<su>" + apptSubject + "</su>" 
+    		+		"</m>" 
+    		+	"</CreateAppointmentRequest>");
         
         // Right click to appointment and delete it
         app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);

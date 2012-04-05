@@ -85,13 +85,24 @@ public class PageCalendar extends AbsTab {
 		public static final String DeleteThisInstanceRadioButton = "css=td input[id*='_defaultRadio']";
 		public static final String DeleteTheSeriesRadioButton = "css=td input[id$='_openSeries']";
 		
-		public static final String CalendarViewListCSS		= "css=div[id='zv__CLL']";
-		public static final String CalendarViewDayCSS		= "css=div[id='zv__CLD']";
-		public static final String CalendarViewWorkWeekCSS	= "css=div[id='zv__CLWW']";
-		public static final String CalendarViewWeekCSS		= "css=div[id='zv__CLW']";
-		public static final String CalendarViewMonthCSS		= "css=div[id='zv__CLM']";
-		public static final String CalendarViewScheduleCSS	= "css=div[id='zv__CLS']";
+		public static final String CalendarViewListDivID		= "zv__CLL";
+		public static final String CalendarViewDayDivID			= "zv__CLD";
+		public static final String CalendarViewWeekDivID		= "zv__CLW";
+		public static final String CalendarViewWorkWeekDivID	= "zv__CLWW";
+		public static final String CalendarViewMonthDivID		= "zv__CLM";
+		public static final String CalendarViewScheduleDivID	= "zv__CLS";
+
+		public static final String CalendarViewListCSS			= "css=div#"+ CalendarViewListDivID;
+		public static final String CalendarViewDayCSS			= "css=div#"+ CalendarViewDayDivID;
+		public static final String CalendarViewWeekCSS			= "css=div#"+ CalendarViewWeekDivID;
+		public static final String CalendarViewWorkWeekCSS		= "css=div#"+ CalendarViewWorkWeekDivID;
+		public static final String CalendarViewMonthCSS			= "css=div#"+ CalendarViewMonthDivID;
+		public static final String CalendarViewScheduleCSS		= "css=div#"+ CalendarViewScheduleDivID;
 		
+		public static final String CalendarViewDayItemCSS		= CalendarViewDayCSS + " div[id^='zli__CLD__']>div.appt_body";
+		public static final String CalendarViewWeekItemCSS		= CalendarViewWeekCSS + " div[id^='zli__CLW__']>div.appt_body";
+		public static final String CalendarViewWorkWeekItemCSS	= CalendarViewWorkWeekCSS + " div[id^='zli__CLWW__']>div.appt_body";
+
 		// Dialog locators
 		public static final String DialogDivID = "CNF_DEL_YESNO";
 		public static final String DialogDivCss = "css=div[id='CNF_DEL_YESNO']";
@@ -104,6 +115,66 @@ public class PageCalendar extends AbsTab {
 		logger.info("new " + PageCalendar.class.getCanonicalName());
 	}
 
+	private String getLocatorBySubject(String subject) throws HarnessException {
+		int count;
+		String locator;
+		
+		// Organizer's view
+		locator = "css=td.appt_name:contains('"+ subject +"')";
+		count = this.sGetCssCount(locator);
+		if ( count == 1 ) {
+			return (locator);
+		} else if ( count > 1 ) {
+			for ( int i = 1; i <= count; i++ ) {
+				if ( this.zIsVisiblePerPosition(locator + ":nth-of-type("+ i +")", 0, 0) ) {
+					return (locator + ":nth-of-type("+ i +")");
+				}
+			}
+		}
+		
+		// Attendee's view
+		locator = "css=td.appt_new_name:contains('"+ subject +"')";
+		count = this.sGetCssCount(locator);
+		if ( count == 1 ) {
+			return (locator);
+		} else if ( count > 1 ) {
+			for ( int i = 1; i <= count; i++ ) {
+				if ( this.zIsVisiblePerPosition(locator + ":nth-of-type("+ i +")", 0, 0) ) {
+					return (locator + ":nth-of-type("+ i +")");
+				}
+			}
+		}
+		
+		// All day, Organizer's view
+		locator = "css=td.appt_allday_name:contains('"+ subject +"')";
+		count = this.sGetCssCount(locator);
+		if ( count == 1 ) {
+			return (locator);
+		} else if ( count > 1 ) {
+			for ( int i = 1; i <= count; i++ ) {
+				if ( this.zIsVisiblePerPosition(locator + ":nth-of-type("+ i +")", 0, 0) ) {
+					return (locator + ":nth-of-type("+ i +")");
+				}
+			}
+		}
+		
+		// All day, Attendee's view
+		locator = "css=td.appt_allday_new_name:contains('"+ subject +"')";
+		count = this.sGetCssCount(locator);
+		if ( count == 1 ) {
+			return (locator);
+		} else if ( count > 1 ) {
+			for ( int i = 1; i <= count; i++ ) {
+				if ( this.zIsVisiblePerPosition(locator + ":nth-of-type("+ i +")", 0, 0) ) {
+					return (locator + ":nth-of-type("+ i +")");
+				}
+			}
+		}
+		
+		throw new HarnessException("Unable to locate appointment!");
+		
+	}
+	
 	public String zGetApptLocator(String apptSubject) throws HarnessException {
 		return "css=td.appt_name:contains('" + apptSubject + "')";
 	}
@@ -200,47 +271,38 @@ public class PageCalendar extends AbsTab {
 	public AbsPage zListItem(Action action, String subject) throws HarnessException {
 
 		if ( this.zIsVisiblePerPosition(Locators.CalendarViewListCSS, 0, 0) ) {
-			return (zListItemListView(action, subject));
+			return (zListItemListView(action, subject));											// LIST
 		} else if ( this.zIsVisiblePerPosition(Locators.CalendarViewDayCSS, 0, 0) ) {
-			return (zListItemWorkWeekView(action, subject));
+			return (zListItemGeneral(Locators.CalendarViewDayItemCSS, action, subject));		// DAY
 		} else if ( this.zIsVisiblePerPosition(Locators.CalendarViewWorkWeekCSS, 0, 0) ) {
-			return (zListItemWorkWeekView(action, subject));
+			return (zListItemGeneral(Locators.CalendarViewWorkWeekItemCSS, action, subject));	// WORKWEEK
 		} else if ( this.zIsVisiblePerPosition(Locators.CalendarViewWeekCSS, 0, 0) ) {
-			return (zListItemWorkWeekView(action, subject));
+			return (zListItemGeneral(Locators.CalendarViewWeekItemCSS, action, subject));		// WEEK
 		} else if ( this.zIsVisiblePerPosition(Locators.CalendarViewMonthCSS, 0, 0) ) {
-			return (zListItemMonthView(action, subject));
+			return (zListItemMonthView(action, subject));											// MONTH
 		} else if ( this.zIsVisiblePerPosition(Locators.CalendarViewScheduleCSS, 0, 0) ) {
-			return (zListItemWorkWeekView(action, subject));
+			return (zListItemGeneral("TODO", action, subject));								// SCHEDULE
 		} else {
 			throw new HarnessException("Unknown calendar view");
 		}
 
 	}
 	
-	public AbsPage zListItemAllDay(Action action, String subject) throws HarnessException {
+	private AbsPage zListItemGeneral(String itemsLocator, Action action, String subject) throws HarnessException {
 
-		if ( this.zIsVisiblePerPosition(Locators.CalendarViewListCSS, 0, 0) ) {
-			return (zListItemListView(action, subject));
-		} else if ( this.zIsVisiblePerPosition(Locators.CalendarViewDayCSS, 0, 0) ) {
-			return (zListItemWorkWeekViewAllDay(action, subject));
-		} else if ( this.zIsVisiblePerPosition(Locators.CalendarViewWorkWeekCSS, 0, 0) ) {
-			return (zListItemWorkWeekViewAllDay(action, subject));
-		} else if ( this.zIsVisiblePerPosition(Locators.CalendarViewWeekCSS, 0, 0) ) {
-			return (zListItemWorkWeekViewAllDay(action, subject));
-		} else if ( this.zIsVisiblePerPosition(Locators.CalendarViewMonthCSS, 0, 0) ) {
-			return (zListItemMonthView(action, subject));
-		} else if ( this.zIsVisiblePerPosition(Locators.CalendarViewScheduleCSS, 0, 0) ) {
-			return (zListItemWorkWeekViewAllDay(action, subject));
-		} else {
-			throw new HarnessException("Unknown calendar view");
-		}
+		/**
 
-	}
-	
-	public AbsPage zListItemWorkWeekView(Action action, String subject) throws HarnessException {
+		The DAY, WEEK, WORKWEEK, all use the same logic, just
+		different DIV objects in the DOM.
+		
+		Based on the itemsLocator, which locates each individual
+		appointment in the view, parse available appointments
+		and return them.
 
-		logger.info(myPageName() + " zListItem("+ action +", "+ subject +")");
-		tracer.trace(action +" on subject = "+ subject);
+		LIST, MONTH, SCHEDULE, (FREE/BUSY) use different logic.
+		That processing must happen in a different method.
+		
+		 */
 
 		if ( action == null )
 			throw new HarnessException("action cannot be null");
@@ -248,24 +310,30 @@ public class PageCalendar extends AbsTab {
 		if ( subject == null )
 			throw new HarnessException("subject cannot be null");
 
+
+		logger.info(myPageName() + " zListItem("+ action +", "+ subject +")");
+		tracer.trace(action +" on subject = "+ subject);
+
+		
+		
 		// Default behavior variables
 		String locator = null;
 		AbsPage page = null;
 
-		if ( this.sIsElementPresent("css=div#zv__CLWW div[id^='zli__CLWW__'] div[id$='_body'] td.appt_name:contains('"+ subject +"')")) {
+		if ( this.sIsElementPresent(itemsLocator +" td.appt_name:contains('"+ subject +"')")) {
 			
 			// Single occurrence locator
-			locator = "css=div#zv__CLWW div[id^='zli__CLWW__'] div[id$='_body'] td.appt_name:contains('"+ subject +"')";
+			locator = itemsLocator +" td.appt_name:contains('"+ subject +"')";
 
-		} else if ( this.sIsElementPresent("css=div#zv__CLWW div[id^='zli__CLWW__'] div[id$='_body'] td[id$='_name']:contains('"+ subject +"')")) {
+		} else if ( this.sIsElementPresent(itemsLocator +" td[id$='appt_new_name']:contains('"+ subject +"')")) {
 			
 			// Recurring appointment locator (might point to any visible instance)
-			locator = "css=div#zv__CLWW div[id^='zli__CLWW__'] div[id$='_body'] td[id$='_name']:contains('"+ subject +"')";
+			locator = itemsLocator +" td[id$='appt_new_name']:contains('"+ subject +"')";
 			
-		} else if ( this.sIsElementPresent("css=div#zv__CLWW div[id^='zli__CLWW__'] div[id$='_body'] td.appt_allday_name>div:contains('"+ subject +"')")) {
+		} else if ( this.sIsElementPresent(itemsLocator +" td.appt_allday_name>div:contains('"+ subject +"')")) {
 			
 			// All day single occurrence locator
-			locator = "css=div#zv__CLWW div[id^='zli__CLWW__'] div[id$='_body'] td.appt_allday_name>div:contains('"+ subject +"')";
+			locator = itemsLocator +" td.appt_allday_name>div:contains('"+ subject +"')";
 			
 		}
 		
@@ -283,13 +351,17 @@ public class PageCalendar extends AbsTab {
 
 			page = null;
 			
+			// FALL THROUGH
+			
 		} else if ( action == Action.A_DOUBLECLICK) {
 			
 			this.sDoubleClick(locator);
 			this.zWaitForBusyOverlay();
 			
-			page = null;
+			page = new FormApptNew(this.MyApplication);
 
+			// FALL THROUGH
+			
 		} else {
 			throw new HarnessException("implement me!  action = "+ action);
 		}
@@ -302,47 +374,6 @@ public class PageCalendar extends AbsTab {
 		return (page);
 	}
 
-	public AbsPage zListItemWorkWeekViewAllDay(Action action, String subject) throws HarnessException {
-
-		logger.info(myPageName() + " zListItem("+ action +", "+ subject +")");
-		tracer.trace(action +" on subject = "+ subject);
-
-		if ( action == null )
-			throw new HarnessException("action cannot be null");
-
-		if ( subject == null )
-			throw new HarnessException("subject cannot be null");
-
-		// Default behavior variables
-		String locator = null;
-		AbsPage page = null;
-
-		locator = "css=td.appt_allday_name:contains('" + subject + "')";
-		SleepUtil.sleepMedium();
-
-		if ( action == Action.A_LEFTCLICK ) {
-			this.zClickAt(locator, "");
-			page=PageCalendar.this;
-			
-		} else if ( action == Action.A_RIGHTCLICK ) {
-			this.zRightClickAt(locator, "");
-
-		} else if ( action == Action.A_DOUBLECLICK) {
-			this.sDoubleClick(locator);
-			
-		} else {
-			throw new HarnessException("implement me!  action = "+ action);
-		}
-
-		this.zWaitForBusyOverlay();
-
-		if ( page != null ) {
-			page.zWaitForActive();
-		}
-
-		return (page);
-	}
-	
 	private AbsPage zListItemMonthView(Action action, String subject) throws HarnessException {
 		logger.info(myPageName() + " zListItemMonthView("+ action +", "+ subject +")");
 
@@ -878,193 +909,8 @@ public class PageCalendar extends AbsTab {
 	}
 	
 
-	private AbsPage zListItemAllDay(Action action, Button option, String subject)
-	throws HarnessException {
-
-		logger.info(myPageName() + " zListItem("+ action +", "+ option +", "+ subject +")");
-		tracer.trace(action +" then "+ option +" on subject = "+ subject);
-
-		if ( action == null )
-			throw new HarnessException("action cannot be null");
-		if ( option == null )
-			throw new HarnessException("button cannot be null");
-		if ( subject == null || subject.trim().length() == 0)
-			throw new HarnessException("subject cannot be null or blank");
-
-		// If we are in list view, route to that method
-		if ( this.zIsVisiblePerPosition(Locators.CalendarViewListCSS, 0, 0) ) {
-			return (zListItemListView(action, option, subject));
-		}
-
-		// Default behavior variables
-		String locator = null;
-		AbsPage page = null;
-		String optionLocator;
-
-		locator = "css=td.appt_allday_name:contains('" + subject + "')";
-		SleepUtil.sleepMedium();
-
-		if (action == Action.A_RIGHTCLICK) {
-			if (option == Button.O_VIEW_DAY_MENU) {
-				optionLocator = Locators.ViewDayMenu;
-
-			} else if (option == Button.O_VIEW_WORK_WEEK_MENU) {
-				optionLocator = Locators.ViewWorkWeekMenu;
-
-			}else if (option == Button.O_VIEW_WEEK_MENU) {
-				optionLocator = Locators.ViewWeekMenu;
-
-			} else if (option == Button.O_VIEW_MONTH_MENU) {
-				optionLocator = Locators.ViewMonthMenu;
-
-			} else if (option == Button.O_VIEW_LIST_MENU) {
-				optionLocator = Locators.ViewListMenu;
-
-			} else if (option == Button.O_VIEW_SCHEDULE_MENU) {
-				optionLocator = Locators.ViewScheduleMenu;
-
-			} else if (option == Button.O_OPEN_MENU) {
-				optionLocator = Locators.OpenMenu;
-
-			} else if (option == Button.O_PRINT_MENU) {
-				optionLocator = Locators.PrintMenu;
-
-			} else if (option == Button.O_ACCEPT_MENU) {
-				optionLocator = Locators.AcceptMenu;
-
-			} else if (option == Button.O_TENTATIVE_MENU) {
-				optionLocator = Locators.TentativeMenu;
-
-			} else if (option == Button.O_DECLINE_MENU) {
-				optionLocator = Locators.DeclineMenu;
-
-			} else if (option == Button.O_EDIT_REPLY_MENU) {
-				optionLocator = Locators.EditReplyMenu;
-
-			} else if (option == Button.O_EDIT_REPLY_ACCEPT_SUB_MENU) {
-				optionLocator = Locators.EditReplyAcceptSubMenu;
-
-			} else if (option == Button.O_EDIT_REPLY_TENTATIVE_SUB_MENU) {
-				optionLocator = Locators.EditReplyTentativeSubMenu;
-
-			} else if (option == Button.O_EDIT_REPLY_DECLINE_SUB_MENU) {
-				optionLocator = Locators.EditReplyDeclineSubMenu;
-
-			} else if (option == Button.O_PROPOSE_NEW_TIME_MENU) {
-				optionLocator = Locators.ProposeNewTimeMenu;
-
-			} else if (option == Button.O_CREATE_A_COPY_MENU) {
-				optionLocator = Locators.CreateACopyMenu;
-
-			} else if (option == Button.O_REPLY_MENU) {
-				optionLocator = Locators.ReplyMenu;
-
-			} else if (option == Button.O_REPLY_TO_ALL_MENU) {
-				optionLocator = Locators.ReplyToAllMenu;
-
-			} else if (option == Button.O_FORWARD_MENU) {
-				optionLocator = Locators.ForwardMenu;
-
-			} else if (option == Button.O_DELETE_MENU) {
-				optionLocator = Locators.DeleteMenu;
-
-			} else if (option == Button.O_CANCEL_MENU) {
-				optionLocator = Locators.CancelMenu;
-
-			} else if (option == Button.O_MOVE_MENU) {
-				optionLocator = Locators.MoveMenu;
-
-			} else if (option == Button.O_TAG_APPOINTMENT_MENU) {
-				optionLocator = Locators.TagAppointmentMenu;
-
-			} else if (option == Button.O_TAG_APPOINTMENT_NEW_TAG_SUB_MENU) {
-				optionLocator = Locators.TagAppointmentNewTagSubMenu;
-
-			} else if (option == Button.O_TAG_APPOINTMENT_REMOVE_TAG_SUB_MENU) {
-				optionLocator = Locators.TagAppointmentRemoveTagSubMenu;
-
-			} else if (option == Button.O_SHOW_ORIGINAL_MENU) {
-				optionLocator = Locators.ShowOriginalMenu;
-
-			} else if (option == Button.O_QUICK_COMMANDS_MENU) {
-				optionLocator = Locators.QuickCommandsMenu;
-
-			} else if (option == Button.O_INSTANCE_MENU) {
-				optionLocator = Locators.InstanceMenu;
-
-			} else if (option == Button.O_SERIES_MENU) {
-				optionLocator = Locators.SeriesMenu;
-
-			} else if (option == Button.O_OPEN_INSTANCE_MENU) {
-				optionLocator = Locators.OpenInstanceMenu;
-
-			} else if (option == Button.O_FORWARD_INSTANCE_MENU) {
-				optionLocator = Locators.ForwardInstanceMenu;
-
-			} else if (option == Button.O_DELETE_INSTANCE_MENU) {
-				optionLocator = Locators.DeleteInstanceMenu;
-
-			} else if (option == Button.O_OPEN_SERIES_MENU) {
-				optionLocator = Locators.OpenSeriesMenu;
-
-			} else if (option == Button.O_FORWARD_SERIES_MENU) {
-				optionLocator = Locators.ForwardSeriesMenu;
-
-			} else if (option == Button.O_NEW_APPOINTMENT_MENU) {
-				optionLocator = Locators.NewAppointmentMenu;
-
-			} else if (option == Button.O_NEW_ALL_DAY_APPOINTMENT_MENU) {
-				optionLocator = Locators.NewAllDayAppointmentMenu;
-
-			} else if (option == Button.O_GO_TO_TODAY_MENU) {
-				optionLocator = Locators.GoToTodayMenu;
-
-			} else if (option == Button.O_VIEW_MENU) {
-				optionLocator = Locators.ViewMenu;
-
-			} else if (option == Button.O_VIEW_DAY_SUB_MENU) {
-				optionLocator = Locators.ViewDaySubMenu;
-
-			} else if (option == Button.O_VIEW_WORK_WEEK_SUB_MENU) {
-				optionLocator = Locators.ViewWorkWeekSubMenu;
-
-			} else if (option == Button.O_VIEW_WEEK_SUB_MENU) {
-				optionLocator = Locators.ViewWeekSubMenu;
-
-			} else if (option == Button.O_VIEW_MONTH_SUB_MENU) {
-				optionLocator = Locators.ViewMonthSubMenu;
-
-			} else if (option == Button.O_VIEW_LIST_SUB_MENU) {
-				optionLocator = Locators.ViewListSubMenu;
-
-			} else if (option == Button.O_VIEW_SCHEDULE_SUB_MENU) {
-				optionLocator = Locators.ViewScheduleSubMenu;
-
-			}
-			else {
-				throw new HarnessException("implement action:"+ action +" option:"+ option);
-			}
-
-		} else {
-			throw new HarnessException("implement me!  action = "+ action);
-		}
-
-		this.zRightClickAt(locator, "");
-		SleepUtil.sleepSmall();
-		this.zClickAt(optionLocator, "");
-		SleepUtil.sleepSmall();
-		this.zWaitForBusyOverlay();
-
-		if ( page != null ) {
-			page.zWaitForActive();
-		}
-
-		return (page);
-	}
-	
 	@Override
-	public AbsPage zListItem(Action action, Button option, Button subOption,
-			String subject) throws HarnessException {
+	public AbsPage zListItem(Action action, Button option, Button subOption, String subject) throws HarnessException {
 
 		logger.info(myPageName() + " zListItem("+ action +", "+ option +", "+ subOption +", "+ subject +")");
 		tracer.trace(action +" then "+ option + "," + subOption + " on item = "+ subject);
@@ -1154,97 +1000,6 @@ public class PageCalendar extends AbsTab {
 
 	}
 
-	public AbsPage zListItemAllDay(Action action, Button option, Button subOption,
-			String subject) throws HarnessException {
-
-		logger.info(myPageName() + " zListItem("+ action +", "+ option +", "+ subOption +", "+ subject +")");
-		tracer.trace(action +" then "+ option + "," + subOption + " on item = "+ subject);
-
-		if ( action == null )
-			throw new HarnessException("action cannot be null");
-		if ( option == null || subOption == null )
-			throw new HarnessException("button cannot be null");
-		if ( subject == null || subject.trim().length() == 0)
-			throw new HarnessException("subject cannot be null or blank");
-
-		// Default behavior variables
-		String locator = null;
-		AbsPage page = null;
-		String optionLocator = null;
-		String subOptionLocator = null;
-
-		locator = "css=td.appt_allday_name:contains('" + subject + "')";
-		SleepUtil.sleepMedium();
-
-		if (action == Action.A_RIGHTCLICK) {
-			if (option == Button.O_VIEW_MENU) {
-				optionLocator = Locators.ViewMenu;
-
-				if (subOption == Button.O_VIEW_DAY_SUB_MENU) {
-					subOptionLocator = Locators.ViewDaySubMenu;
-
-				} else if (subOption == Button.O_VIEW_WORK_WEEK_SUB_MENU) {
-					subOptionLocator = Locators.ViewWorkWeekSubMenu;
-
-				} else if (subOption == Button.O_VIEW_WEEK_SUB_MENU) {
-					subOptionLocator = Locators.ViewWeekSubMenu;
-
-				} else if (subOption == Button.O_VIEW_MONTH_SUB_MENU) {
-					subOptionLocator = Locators.ViewMonthSubMenu;
-
-				} else if (subOption == Button.O_VIEW_LIST_SUB_MENU) {
-					subOptionLocator = Locators.ViewListSubMenu;
-
-				} else if (option == Button.O_VIEW_SCHEDULE_SUB_MENU) {
-					subOptionLocator = Locators.ViewScheduleSubMenu;
-				}
-
-			} else if (option == Button.O_EDIT_REPLY_MENU) {
-				optionLocator = Locators.EditReplyMenu;
-
-				if (subOption == Button.O_EDIT_REPLY_ACCEPT_SUB_MENU) {
-					subOptionLocator = Locators.EditReplyAcceptSubMenu;
-
-				} else if (subOption == Button.O_EDIT_REPLY_TENTATIVE_SUB_MENU) {
-					subOptionLocator = Locators.EditReplyTentativeSubMenu;
-
-				} else if (subOption == Button.O_EDIT_REPLY_DECLINE_SUB_MENU) {
-					subOptionLocator = Locators.EditReplyDeclineSubMenu;
-				}
-
-			} else if (option == Button.O_TAG_APPOINTMENT_MENU) {
-				optionLocator = Locators.TagAppointmentMenu;
-
-				if (subOption == Button.O_TAG_APPOINTMENT_NEW_TAG_SUB_MENU) {
-					subOptionLocator = Locators.TagAppointmentNewTagSubMenu;
-
-				} else if (subOption == Button.O_TAG_APPOINTMENT_REMOVE_TAG_SUB_MENU) {
-					subOptionLocator = Locators.TagAppointmentRemoveTagSubMenu;
-				}
-			}
-			else {
-				throw new HarnessException("implement action:"+ action +" option:"+ option);
-			}
-
-		} else {
-			throw new HarnessException("implement me!  action = "+ action);
-		}
-
-		this.zRightClickAt(locator, "");
-		this.sMouseMoveAt(optionLocator, "");
-		SleepUtil.sleepMedium();
-		this.zClickAt(subOptionLocator, "");
-
-		this.zWaitForBusyOverlay();
-
-		if ( page != null ) {
-			page.zWaitForActive();
-		}
-
-		return (new ContextMenu(MyApplication));
-
-	}
-	
 	@Override
 	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
 		logger.info(myPageName() + " zToolbarPressButton(" + button + ")");
@@ -1795,15 +1550,50 @@ public class PageCalendar extends AbsTab {
 
 	}
 
-	private AppointmentItem parseDayViewRow(String rowLocator) throws HarnessException {
-		String locator;
+	private AppointmentItem parseAppointmentRow(String rowLocator) throws HarnessException {
+
+		/**
+
+		The DAY, WEEK, WORKWEEK, all use the same logic, just
+		different DIV objects in the DOM.
+		
+		Based on the itemsLocator, which locates each individual
+		appointment in the view, parse available appointments
+		and return them.
+
+		LIST, MONTH, SCHEDULE, (FREE/BUSY) use different logic.
+		That processing must happen in a different method.
+		
+		*/
 
 		AppointmentItem item = new AppointmentItem();
+		
+		// Initialize the locator (but narrow to the subject field, if found later)
+		item.setLocator(rowLocator);
 
-		// Get the name of the appointment
+		// Get the location
+		String locator = rowLocator + " div.appt_location";
+		if ( this.sIsElementPresent(locator) ) {
+			item.setLocation(this.sGetText(locator).trim());
+		}
+
+
+		// Get the name of the appointment (organizer view)
 		locator = rowLocator + " td.appt_name";
 		if ( this.sIsElementPresent(locator) ) {
-			item.setSubject(this.sGetText(locator));
+			String subject = this.sGetText(locator);
+			item.setSubject(subject.replace(item.getLocation(), "").trim());
+			
+			item.setLocator(locator); // Update the appointment locator to point to the subject field
+		}
+		
+		// Get the name of the appointment (Attendee view)
+		locator = rowLocator + " td.appt_new_name";
+		if ( this.sIsElementPresent(locator) ) {
+			String subject = this.sGetText(locator);
+			item.setSubject(subject.replace(item.getLocation(), "").trim());
+			
+			item.setLocator(locator); // Update the appointment locator to point to the subject field
 		}
 		
 		// TODO: parse other elements
@@ -1811,20 +1601,22 @@ public class PageCalendar extends AbsTab {
 		return (item);
 	}
 	
-	private List<AppointmentItem> zListGetAppointmentsDayView() throws HarnessException {
+	private List<AppointmentItem> zListGetAppointmentsGeneral(String itemsLocator) throws HarnessException {
 
+		/**
+
+			The DAY, WEEK, WORKWEEK, all use the same logic, just
+			different DIV objects in the DOM.
+			
+			Based on the itemsLocator, which locates each individual
+			appointment in the view, parse available appointments
+			and return them.
+
+			LIST, MONTH, SCHEDULE, (FREE/BUSY) use different logic.
+			That processing must happen in a different method.
+			
+		 */
 		List<AppointmentItem> items = new ArrayList<AppointmentItem>();
-
-		
-		String divLocator = "css=div#zv__CLD";
-		String itemsLocator = divLocator +" div[id^='zli__CLD__'] div[id$='_body']";
-		String itemLocator = null;
-		String locator = null;
-
-		// Make sure the div exists
-		if ( !this.sIsElementPresent(divLocator) ) {
-			throw new HarnessException("Day View is not present: " + divLocator);
-		}
 
 		// If the list doesn't exist, then no items are present
 		if ( !this.sIsElementPresent(itemsLocator) ) {
@@ -1832,16 +1624,20 @@ public class PageCalendar extends AbsTab {
 			return (items);
 		}
 
+		
+		String locator = null;
+
 		// How many items are in the table?
 		int count = this.sGetCssCount(itemsLocator);
-		logger.debug(myPageName() + " zListGetAppointmentsDayView: number of appointments: "+ count);
+		logger.debug(myPageName() + " zListGetAppointments: number of appointments: "+ count);
 
 		// Get each conversation's data from the table list
 		for (int i = 1; i <= count; i++) {
 
-			itemLocator = itemsLocator + ":nth-of-type("+ i +")";
+			locator = itemsLocator + ":nth-of-type("+ i +")";
+			
 			// Add the new item to the list
-			AppointmentItem item = parseDayViewRow(itemLocator);
+			AppointmentItem item = parseAppointmentRow(locator);
 			items.add(item);
 			logger.info(item.prettyPrint());
 
@@ -1854,136 +1650,6 @@ public class PageCalendar extends AbsTab {
 
 	
 	
-	private AppointmentItem parseWeekViewRow(String rowLocator) throws HarnessException {
-		String locator;
-
-		// TODO: for debug logging.  Can be removed.
-		this.zGetHtml(rowLocator);
-		
-		AppointmentItem item = new AppointmentItem();
-
-		// Get the location of the appointment
-		locator = rowLocator + " div.appt_location";
-		if ( this.sIsElementPresent(locator) ) {
-			item.setLocation(this.sGetText(locator).trim());
-		}
-
-		// Get the name of the appointment (Organizer)
-		locator = rowLocator + " td.appt_name";
-		if ( this.sIsElementPresent(locator) ) {
-			String subject = this.sGetText(locator);
-			item.setSubject(subject.replace(item.getLocation(), "").trim());
-		}
-		
-		// Get the name of the appointment (Attendee)
-		locator = rowLocator + " td.appt_new_name";
-		if ( this.sIsElementPresent(locator) ) {
-			String subject = this.sGetText(locator);
-			item.setSubject(subject.replace(item.getLocation(), "").trim());
-		}
-		
-		// TODO: parse other elements
-
-		return (item);
-	}
-	
-	
-	/**
-	 * Get All Appointments from Week View
-	 * @return
-	 * @throws HarnessException
-	 */
-	private List<AppointmentItem> zListGetAppointmentsWeekView() throws HarnessException {
-		
-		List<AppointmentItem> items = new ArrayList<AppointmentItem>();
-
-		String divLocator = "css=div#zv__CLW";
-		String itemsLocator = divLocator +" div[id^='zli__CLW__'] div[id$='_body']";
-		String itemLocator = null;
-		String locator = null;
-
-		// Make sure the div exists
-		if ( !this.sIsElementPresent(divLocator) ) {
-			throw new HarnessException("Day View is not present: " + divLocator);
-		}
-
-		// If the list doesn't exist, then no items are present
-		if ( !this.sIsElementPresent(itemsLocator) ) {
-			// return an empty list
-			return (items);
-		}
-
-		// How many items are in the table?
-		int count = this.sGetCssCount(itemsLocator);
-		logger.debug(myPageName() + " zListGetAppointmentsDayView: number of appointments: "+ count);
-
-		// Get each conversation's data from the table list
-		for (int i = 1; i <= count; i++) {
-
-			itemLocator = itemsLocator + ":nth-of-type("+ i +")";
-			// Add the new item to the list
-			AppointmentItem item = parseWeekViewRow(itemLocator);
-			items.add(item);
-			logger.info(item.prettyPrint());
-
-		}
-
-		return (items);
-	}
-
-	private AppointmentItem parseWorkWeekViewRow(String rowLocator) throws HarnessException {
-		
-		// Day View, Week View, and Work Week View are all the same
-		return (parseWeekViewRow(rowLocator));
-		
-	}
-	
-
-	/**
-	 * Get All Appointments from Week View
-	 * @return
-	 * @throws HarnessException
-	 */
-	private List<AppointmentItem> zListGetAppointmentsWorkWeekView() throws HarnessException {
-		
-		List<AppointmentItem> items = new ArrayList<AppointmentItem>();
-
-		String divLocator = "css=div#zv__CLWW";
-		String itemsLocator = divLocator +" div[id^='zli__CLWW__'] div[id$='_body']";
-		String itemLocator = null;
-		String locator = null;
-
-		// Make sure the div exists
-		if ( !this.sIsElementPresent(divLocator) ) {
-			throw new HarnessException("Day View is not present: " + divLocator);
-		}
-
-		// If the list doesn't exist, then no items are present
-		if ( !this.sIsElementPresent(itemsLocator) ) {
-			// return an empty list
-			return (items);
-		}
-
-		// How many items are in the table?
-		int count = this.sGetCssCount(itemsLocator);
-		logger.debug(myPageName() + " zListGetAppointmentsDayView: number of appointments: "+ count);
-
-		// Get each conversation's data from the table list
-		for (int i = 1; i <= count; i++) {
-
-			itemLocator = itemsLocator + ":nth-of-type("+ i +")";
-			
-			String id = this.sGetAttribute(itemLocator +"@id");
-
-			// Add the new item to the list
-			AppointmentItem item = parseWorkWeekViewRow("css=div#"+ id);
-			items.add(item);
-			logger.info(item.prettyPrint());
-
-		}
-
-		return (items);
-	}
 
 	/**
 	 * @param cssLocator
@@ -2156,17 +1822,17 @@ public class PageCalendar extends AbsTab {
 	public List<AppointmentItem> zListGetAppointments() throws HarnessException {
 
 		if ( this.zIsVisiblePerPosition(Locators.CalendarViewListCSS, 0, 0) ) {
-			return (zListGetAppointmentsListView());
+			return (zListGetAppointmentsListView());								// LIST
 		} else if ( this.zIsVisiblePerPosition(Locators.CalendarViewDayCSS, 0, 0) ) {
-			return (zListGetAppointmentsDayView());
-		} else if ( this.zIsVisiblePerPosition(Locators.CalendarViewWorkWeekCSS, 0, 0) ) {
-			return (zListGetAppointmentsWorkWeekView());
+			return (zListGetAppointmentsGeneral(Locators.CalendarViewDayItemCSS));			// DAY
 		} else if ( this.zIsVisiblePerPosition(Locators.CalendarViewWeekCSS, 0, 0) ) {
-			return (zListGetAppointmentsWeekView());
+			return (zListGetAppointmentsGeneral(Locators.CalendarViewWeekItemCSS));		// WEEK
+		} else if ( this.zIsVisiblePerPosition(Locators.CalendarViewWorkWeekCSS, 0, 0) ) {
+			return (zListGetAppointmentsGeneral(Locators.CalendarViewWorkWeekItemCSS));	// WORK WEEK
 		} else if ( this.zIsVisiblePerPosition(Locators.CalendarViewMonthCSS, 0, 0) ) {
-			return (zListGetAppointmentsMonthView());
+			return (zListGetAppointmentsMonthView());								// MONTH
 		} else if ( this.zIsVisiblePerPosition(Locators.CalendarViewScheduleCSS, 0, 0) ) {
-			return (zListGetAppointmentsScheduleView());
+			return (zListGetAppointmentsScheduleView());							// SCHEDULE
 		} else {
 			throw new HarnessException("Unknown calendar view");
 		}

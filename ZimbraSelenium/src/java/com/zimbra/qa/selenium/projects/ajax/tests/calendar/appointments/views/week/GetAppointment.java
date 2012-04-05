@@ -84,7 +84,7 @@ public class GetAppointment extends AjaxCommonTest {
 		boolean found = false;
 		List<AppointmentItem> items = app.zPageCalendar.zListGetAppointments();
 		for (AppointmentItem item : items) {
-			if ( item.getSubject().equals(subject) ) {
+			if ( subject.equals(item.getSubject()) ) {
 				found = true;
 				break;
 			}

@@ -99,7 +99,7 @@ public class DeleteAppointment extends AjaxCommonTest {
 	@Bugs(ids = "69132")
 	@Test(	
 			description = "Delete entire series of recurring appointment (every week) using context menu", 
-			groups = { "smoke", "matt" } )
+			groups = { "smoke" } )
 	public void DeleteSeries_02() throws HarnessException {
 		
 		//-- Data Setup

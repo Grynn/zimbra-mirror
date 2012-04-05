@@ -5,17 +5,11 @@ import java.util.Calendar;
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.core.Bugs;
-import com.zimbra.qa.selenium.framework.items.AppointmentItem;
-import com.zimbra.qa.selenium.framework.ui.Action;
-import com.zimbra.qa.selenium.framework.ui.Button;
-import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.SleepUtil;
-import com.zimbra.qa.selenium.framework.util.ZAssert;
-import com.zimbra.qa.selenium.framework.util.ZDate;
-import com.zimbra.qa.selenium.framework.util.ZTimeZone;
-import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
+import com.zimbra.qa.selenium.framework.ui.*;
+import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew;
+import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew.Field;
 
 public class ModifyAppointment extends AjaxCommonTest {
 
@@ -37,7 +31,6 @@ public class ModifyAppointment extends AjaxCommonTest {
 	public void ModifyAllDayAppointment_01() throws HarnessException {
 
 		// Creating object for appointment data
-		AppointmentItem appt = new AppointmentItem();
 		String tz, apptSubject, apptBody, editApptSubject, editApptBody;
 		tz = ZTimeZone.TimeZoneEST.getID();
 		apptSubject = ZimbraSeleniumProperties.getUniqueString();
@@ -72,18 +65,17 @@ public class ModifyAppointment extends AjaxCommonTest {
         app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
 
         // Open appointment & modify subject, body and save it
-        app.zPageCalendar.zListItemAllDay(Action.A_DOUBLECLICK, apptSubject);
-        SleepUtil.sleepMedium();
-        FormApptNew apptForm = new FormApptNew(app);
-        appt.setSubject(editApptSubject);
-        appt.setContent(editApptBody);
-        apptForm.zFill(appt);
-        apptForm.zToolbarPressButton(Button.B_SAVEANDCLOSE);
+        FormApptNew form = (FormApptNew)app.zPageCalendar.zListItem(Action.A_DOUBLECLICK, apptSubject);
+        ZAssert.assertNotNull(form, "Verify the appointment form oopens correctly");
+
+        form.zFillField(Field.Subject, editApptSubject);
+        form.zFillField(Field.Body, editApptBody);
+        form.zToolbarPressButton(Button.B_SAVEANDCLOSE);
         
         // Use GetAppointmentRequest to verify the changes are saved
         app.zGetActiveAccount().soapSend("<GetAppointmentRequest  xmlns='urn:zimbraMail' id='"+ apptId +"'/>");
-        ZAssert.assertEquals(app.zGetActiveAccount().soapMatch("//mail:GetAppointmentResponse//mail:comp", "name", editApptSubject), true, "");
-        ZAssert.assertEquals(app.zGetActiveAccount().soapMatch("//mail:GetAppointmentResponse//mail:desc", null, editApptBody), true, "");
-        ZAssert.assertEquals(app.zGetActiveAccount().soapMatch("//mail:GetAppointmentResponse//mail:comp", "allDay", "1"), true, "");
+        ZAssert.assertEquals(app.zGetActiveAccount().soapSelectValue("//mail:GetAppointmentResponse//mail:comp", "name"), editApptSubject, "Verify the new appointment name matches");
+        ZAssert.assertStringContains(app.zGetActiveAccount().soapSelectValue("//mail:GetAppointmentResponse//mail:desc", null), editApptBody, "Verify the new appointment body matches");
+        ZAssert.assertEquals(app.zGetActiveAccount().soapSelectValue("//mail:GetAppointmentResponse//mail:comp", "allDay"), "1", "Verify the appointment remains as an allday='1'");
 	}
 }
