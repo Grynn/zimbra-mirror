@@ -96,20 +96,6 @@ Dwt.DISPLAY_TABLE_ROW = AjxEnv.isIE ? Dwt.DISPLAY_BLOCK : "table-row";
  */
 Dwt.DISPLAY_TABLE_CELL = AjxEnv.isIE ? Dwt.DISPLAY_BLOCK : "table-cell";
 
-// constants for layout
-/*
-Dwt.LEFT = 100;
-Dwt.RIGHT = 101;
-Dwt.TOP = 102;
-Dwt.BOTTOM = 103;
-
-Dwt.ABOVE = 104;
-Dwt.BELOW = 105;
-
-Dwt.WIDTH = 106;
-Dwt.HEIGHT = 107;
-*/
-
 // Scroll constants
 /**
  * Clip on overflow.
@@ -384,6 +370,7 @@ function(el1, el2) {
 
 Dwt.setHandler =
 function(htmlElement, event, func) {
+	if (!(htmlElement = Dwt.getElement(htmlElement))) { return; }
 	if (event == DwtEvent.ONMOUSEWHEEL && AjxEnv.isGeckoBased) {
 		Dwt.clearHandler(htmlElement, event);
 	}
@@ -395,6 +382,7 @@ function(htmlElement, event, func) {
 
 Dwt.clearHandler =
 function(htmlElement, event) {
+	if (!(htmlElement = Dwt.getElement(htmlElement))) { return; }
 	if (event == DwtEvent.ONMOUSEWHEEL && AjxEnv.isGeckoBased) {
 		if (htmlElement[event]) {
 			var func = htmlElement[event];
@@ -406,11 +394,13 @@ function(htmlElement, event) {
 
 Dwt.getBackgroundRepeat =
 function(htmlElement) {
+	if (!(htmlElement = Dwt.getElement(htmlElement))) { return; }
 	return DwtCssStyle.getProperty(htmlElement, "background-repeat");
 };
 
 Dwt.setBackgroundRepeat =
 function(htmlElement, style) {
+	if (!(htmlElement = Dwt.getElement(htmlElement))) { return; }
 	htmlElement.style.backgroundRepeat = style;
 };
 
@@ -427,6 +417,7 @@ function(htmlElement, style) {
  */
 Dwt.getBounds =
 function(htmlElement, rect) {
+	if (!(htmlElement = Dwt.getElement(htmlElement))) { return null; }
 	var tmpPt = DwtPoint.tmp;
 
 	Dwt.getLocation(htmlElement, tmpPt);
@@ -462,6 +453,7 @@ function(htmlElement, rect) {
  */
 Dwt.setBounds =
 function(htmlElement, x, y, width, height) {
+	if (!(htmlElement = Dwt.getElement(htmlElement))) { return; }
 	Dwt.setLocation(htmlElement, x, y);
 	Dwt.setSize(htmlElement, width, height);
 };
@@ -477,6 +469,7 @@ function(htmlElement, x, y, width, height) {
  */
 Dwt.getCursor =
 function(htmlElement) {
+	if (!(htmlElement = Dwt.getElement(htmlElement))) { return ""; }
 	return DwtCssStyle.getProperty(htmlElement, "cursor");
 };
 
@@ -490,6 +483,7 @@ function(htmlElement) {
  */
 Dwt.setCursor =
 function(htmlElement, cursorName) {
+	if (!(htmlElement = Dwt.getElement(htmlElement))) { return; }
 	htmlElement.style.cursor = cursorName;
 };
 
@@ -506,6 +500,7 @@ function(htmlElement, cursorName) {
  */
 Dwt.getLocation =
 function(htmlElement, point) {
+	if (!(htmlElement = Dwt.getElement(htmlElement))) { return null; }
 	point = point || new DwtPoint(0, 0);
 
 	if (htmlElement.style.position == Dwt.ABSOLUTE_STYLE) {
@@ -535,6 +530,7 @@ function(htmlElement, point) {
  */
 Dwt.setLocation =
 function(htmlElement, x, y) {
+	if (!(htmlElement = Dwt.getElement(htmlElement))) { return; }
 	var position = htmlElement.style.position;
 	if (position != Dwt.ABSOLUTE_STYLE && position != Dwt.RELATIVE_STYLE && position != Dwt.FIXED_STYLE) {
 		DBG.println(AjxDebug.DBG1, "Cannot position static widget " + htmlElement.className);
@@ -550,11 +546,13 @@ function(htmlElement, x, y) {
 
 Dwt.getPosition =
 function(htmlElement) {
+	if (!(htmlElement = Dwt.getElement(htmlElement))) { return; }
 	return htmlElement.style.position;
 };
 
 Dwt.setPosition =
 function(htmlElement, posStyle) {
+	if (!(htmlElement = Dwt.getElement(htmlElement))) { return; }
 	htmlElement.style.position = posStyle;
 };
 
@@ -574,6 +572,7 @@ function(htmlElement, posStyle) {
  */
 Dwt.getScrollStyle =
 function(htmlElement) {
+	if (!(htmlElement = Dwt.getElement(htmlElement))) { return ""; }
 	var overflow =  DwtCssStyle.getProperty(htmlElement, "overflow");
 
 	if (overflow == "hidden")		{ return Dwt.CLIP; }
@@ -605,6 +604,7 @@ function(htmlElement) {
  */
 Dwt.setScrollStyle =
 function(htmlElement, scrollStyle) {
+	if (!(htmlElement = Dwt.getElement(htmlElement))) { return; }
 	if (scrollStyle == Dwt.CLIP)
 		htmlElement.style.overflow = "hidden";
 	else if (scrollStyle == Dwt.SCROLL)
@@ -626,6 +626,7 @@ function(htmlElement, scrollStyle) {
 // may want to look at clientHeight for FF
 Dwt.getSize =
 function(htmlElement, point, getFromStyle) {
+	if (!(htmlElement = Dwt.getElement(htmlElement))) { return; }
 	var p;
 	if (!point) {
 		p = new DwtPoint(0, 0);
@@ -661,6 +662,7 @@ function(htmlElement, point, getFromStyle) {
 
 Dwt.setSize =
 function(htmlElement, width, height) {
+	if (!(htmlElement = Dwt.getElement(htmlElement))) { return; }
 	if (!htmlElement.style) { return; }
 
 	if (width == Dwt.CLEAR) {
@@ -729,16 +731,14 @@ function(htmlEl, attr, recursive) {
 
 Dwt.getVisible =
 function(htmlElement) {
-	htmlElement = Dwt.getElement(htmlElement);
-	if (!htmlElement) { return; }
+	if (!(htmlElement = Dwt.getElement(htmlElement))) { return; }
 	var disp = DwtCssStyle.getProperty(htmlElement, "display");
 	return (disp != Dwt.DISPLAY_NONE);
 };
 
 Dwt.setVisible =
 function(htmlElement, visible) {
-	htmlElement = Dwt.getElement(htmlElement);
-	if (!htmlElement) { return; }
+	if (!(htmlElement = Dwt.getElement(htmlElement))) { return; }
 	if (visible) {
 		if (htmlElement.nodeName.match(/tr/i)) {
 			htmlElement.style.display = Dwt.DISPLAY_TABLE_ROW;
@@ -761,12 +761,14 @@ function(htmlElement, visible) {
 
 Dwt.getVisibility =
 function(htmlElement) {
+	if (!(htmlElement = Dwt.getElement(htmlElement))) { return; }
 	var vis = DwtCssStyle.getProperty(htmlElement, "visibility");
 	return (vis == "visible");
 };
 
 Dwt.setVisibility =
 function(htmlElement, visible) {
+	if (!(htmlElement = Dwt.getElement(htmlElement))) { return; }
 	htmlElement.style.visibility = visible ? "visible" : "hidden";
 };
 
@@ -774,6 +776,7 @@ Dwt.__MSIE_OPACITY_RE = /alpha\(opacity=(\d+)\)/;
 
 Dwt.getOpacity =
 function(htmlElement) {
+	if (!(htmlElement = Dwt.getElement(htmlElement))) { return; }
 	if (AjxEnv.isIE) {
 		var filter = Dwt.getIEFilter(htmlElement, "alpha");
 		var m = Dwt.__MSIE_OPACITY_RE.exec(filter) || [ filter, "100" ];
@@ -784,6 +787,7 @@ function(htmlElement) {
 
 Dwt.setOpacity =
 function(htmlElement, opacity) {
+	if (!(htmlElement = Dwt.getElement(htmlElement))) { return; }
 	if (AjxEnv.isIE) {
         Dwt.alterIEFilter(htmlElement, "alpha", "alpha(opacity="+opacity+")");
 	} else {
@@ -793,11 +797,13 @@ function(htmlElement, opacity) {
 
 Dwt.getZIndex =
 function(htmlElement) {
+	if (!(htmlElement = Dwt.getElement(htmlElement))) { return; }
 	return DwtCssStyle.getProperty(htmlElement, "z-index");
 };
 
 Dwt.setZIndex =
 function(htmlElement, idx) {
+	if (!(htmlElement = Dwt.getElement(htmlElement))) { return; }
 	htmlElement.style.zIndex = idx;
 };
 
@@ -808,6 +814,7 @@ function(htmlElement) {
 
 Dwt.setDisplay =
 function(htmlElement, value) {
+	if (!(htmlElement = Dwt.getElement(htmlElement))) { return; }
 	htmlElement.style.display = value;
 };
 
@@ -843,6 +850,7 @@ function(htmlElement, x, y, containerElement, dontIncScrollTop, point) {
 		p.set(x, y);
 	}
 
+	htmlElement = Dwt.getElement(htmlElement);
 	var offsetParent = htmlElement;
 	while (offsetParent && offsetParent != containerElement) {
 		p.x += offsetParent.offsetLeft - offsetParent.scrollLeft;
@@ -871,6 +879,7 @@ Dwt.getInsets = function(htmlElement) {
 	//		{ left: 3, top:0, right:3, bottom:0 }
 	// NOTE: assumes values from computedStyle are returned in pixels!!!
 
+	if (!(htmlElement = Dwt.getElement(htmlElement))) { return; }
 	var style = DwtCssStyle.getComputedStyleObject(htmlElement);
 
 	var bl = parseInt(style.borderLeftWidth) 	|| 0;
