@@ -99,9 +99,9 @@ public class PageCalendar extends AbsTab {
 		public static final String CalendarViewMonthCSS			= "css=div#"+ CalendarViewMonthDivID;
 		public static final String CalendarViewScheduleCSS		= "css=div#"+ CalendarViewScheduleDivID;
 		
-		public static final String CalendarViewDayItemCSS		= CalendarViewDayCSS + " div[id^='zli__CLD__']>div.appt_body";
-		public static final String CalendarViewWeekItemCSS		= CalendarViewWeekCSS + " div[id^='zli__CLW__']>div.appt_body";
-		public static final String CalendarViewWorkWeekItemCSS	= CalendarViewWorkWeekCSS + " div[id^='zli__CLWW__']>div.appt_body";
+		public static final String CalendarViewDayItemCSS		= CalendarViewDayCSS + " div[id^='zli__CLD__']>table[id^='zli__CLD__']";
+		public static final String CalendarViewWeekItemCSS		= CalendarViewWeekCSS + " div[id^='zli__CLW__']>table[id^='zli__CLW__']";
+		public static final String CalendarViewWorkWeekItemCSS	= CalendarViewWorkWeekCSS + " div[id^='zli__CLWW__']>table[id^='zli__CLWW__']";
 
 		// Dialog locators
 		public static final String DialogDivID = "CNF_DEL_YESNO";
@@ -359,6 +359,7 @@ public class PageCalendar extends AbsTab {
 			this.zWaitForBusyOverlay();
 			
 			page = new FormApptNew(this.MyApplication);
+			SleepUtil.sleepMedium();
 
 			// FALL THROUGH
 			

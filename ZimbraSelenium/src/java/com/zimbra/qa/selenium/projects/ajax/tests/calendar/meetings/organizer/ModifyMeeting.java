@@ -10,6 +10,7 @@ import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew;
+import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew.Field;
 
 
 @SuppressWarnings("unused")
@@ -60,24 +61,26 @@ public class ModifyMeeting extends AjaxCommonTest {
                      "</m>" +
                "</CreateAppointmentRequest>");
 
-		String apptId = app.zGetActiveAccount().soapSelectValue("//mail:CreateAppointmentResponse", "apptId");
         
         // Open appointment and modify subject, attendee and content
         app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
-        app.zPageCalendar.zListItem(Action.A_DOUBLECLICK, apptSubject);
-        SleepUtil.sleepMedium();
-        FormApptNew apptForm = new FormApptNew(app);
-        appt.setSubject(editApptSubject);
-        appt.setAttendees(editApptAttendee1);
-        appt.setContent(editApptBody);
-        apptForm.zFill(appt);
+        
+        FormApptNew apptForm = (FormApptNew)app.zPageCalendar.zListItem(Action.A_DOUBLECLICK, apptSubject);
+        ZAssert.assertNotNull(apptForm, "Verify the modify appointment form opened");
+        
+        apptForm.zFillField(Field.Subject, editApptSubject);
+        apptForm.zFillField(Field.Attendees, editApptAttendee1);
+        apptForm.zFillField(Field.Body, editApptBody);
         apptForm.zToolbarPressButton(Button.B_SEND);
         
         // Use GetAppointmentRequest to verify the changes are saved
-        AppointmentItem modifyAppt = AppointmentItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ editApptSubject +")", startUTC, endUTC);
+        AppointmentItem modifyAppt = AppointmentItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ editApptSubject +")");
+        ZAssert.assertNotNull(modifyAppt, "Verify the modified appointment appears on the server");
+        
         ZAssert.assertEquals(modifyAppt.getSubject(), editApptSubject, "Subject: Verify modified appointment subject");
-        ZAssert.assertEquals(modifyAppt.getAttendees(), apptAttendee1 + "," + editApptAttendee1, "Attendees: Verify modified attendees");
-        ZAssert.assertEquals(modifyAppt.getContent(), editApptBody, "Body: Verify modified appointment body");
+        ZAssert.assertStringContains(modifyAppt.getAttendees(), apptAttendee1, "Attendees: Verify modified attendees");
+        ZAssert.assertStringContains(modifyAppt.getAttendees(), editApptAttendee1, "Attendees: Verify modified attendees");
+        ZAssert.assertStringContains(modifyAppt.getContent(), editApptBody, "Body: Verify modified appointment body");
 		
 	}
 	
