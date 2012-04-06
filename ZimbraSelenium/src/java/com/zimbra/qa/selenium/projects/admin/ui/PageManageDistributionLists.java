@@ -24,12 +24,12 @@ import com.zimbra.qa.selenium.projects.admin.items.AccountItem;
 public class PageManageDistributionLists extends AbsTab {
 
 	public static class Locators {
-		public static final String MANAGE_ACCOUNTS_ICON="css=div.ImgMangeAccounts";
+		public static final String MANAGE_ACCOUNTS_ICON="css=div.ImgManageAccounts";
 		public static final String DISTRIBUTION_LISTS="css=td[id^='zti__AppAdmin__Home__dlLstHV']";
 		public static final String GEAR_ICON="css=div.ImgConfigure";
 		public static final String NEW_MENU="css=div[id='zm__zb_currentApp__MENU_POP'] div[class='ImgDistributionList']";
 		public static final String HOME="Home";
-		public static final String MANAGE_ACCOUNTS="Manage Accounts";
+		public static final String MANAGE="Manage";
 		public static final String DISTRIBUTION_LIST="Distribution Lists";
 		public static final String DELETE_BUTTON="css=div[id='zm__zb_currentApp__MENU_POP'] div[class='ImgDelete']";		
 		public static final String EDIT_BUTTON="css=div[id='zm__zb_currentApp__MENU_POP'] div[class='ImgEdit']";
@@ -264,7 +264,7 @@ public class PageManageDistributionLists extends AbsTab {
 				throw new HarnessException("Button " + pulldown + " option " + option + " pulldownLocator " + pulldownLocator + " not present!");
 			}
 
-			this.zClickAt(pulldownLocator,"0,0");
+			this.sClickAt(pulldownLocator,"0,0");
 			SleepUtil.sleepMedium();
 
 			// If the app is busy, wait for it to become active
@@ -277,7 +277,7 @@ public class PageManageDistributionLists extends AbsTab {
 					throw new HarnessException("Button " + pulldown + " option " + option + " optionLocator " + optionLocator + " not present!");
 				}
 
-				this.zClickAt(optionLocator,"0,0");
+				this.sClickAt(optionLocator,"0,0");
 				SleepUtil.sleepMedium();
 
 				// If the app is busy, wait for it to become active

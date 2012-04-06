@@ -9,7 +9,7 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
 public class FormEditResource extends AbsForm {
 
 	public static class TreeItem {
-		public static final String RESOURCE_PROPERTIES="Resource Properties";
+		public static final String PROPERTIES="Properties";
 	}
 	
 	public static class Locators {

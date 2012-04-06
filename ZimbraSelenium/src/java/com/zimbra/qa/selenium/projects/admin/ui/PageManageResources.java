@@ -24,12 +24,12 @@ import com.zimbra.qa.selenium.projects.admin.items.AccountItem;
 public class PageManageResources extends AbsTab {
 	
 	public static class Locators {
-		// ** OverviewTreePanel -> Manage Accounts -> Resources
-		public static final String MANAGE_ACCOUNTS_ICON="css=div.ImgMangeAccounts";
+		// ** OverviewTreePanel -> Manage -> Resources
+		public static final String MANAGE_ACCOUNTS_ICON="css=div.ImgManageAccounts";
 		public static final String RESOURCES="css=td[id^='zti__AppAdmin__Home__resLstHV']";
 		public static final String GEAR_ICON="css=div.ImgConfigure";
 		public static final String HOME="Home";
-		public static final String MANAGE_ACCOUNTS="Manage Accounts";
+		public static final String MANAGE="Manage";
 		public static final String RESOURCE="Resources";
 		public static final String NEW_MENU="css=div[id='zm__zb_currentApp__MENU_POP'] div[class='ImgResource']";
 		public static final String DELETE_BUTTON="css=div[id='zm__zb_currentApp__MENU_POP'] div[class='ImgDelete']";
@@ -278,7 +278,7 @@ public class PageManageResources extends AbsTab {
 				throw new HarnessException("Button " + pulldown + " option " + option + " pulldownLocator " + pulldownLocator + " not present!");
 			}
 
-			this.zClickAt(pulldownLocator,"");
+			this.sClickAt(pulldownLocator,"");
 			SleepUtil.sleepMedium();
 			
 
@@ -292,7 +292,7 @@ public class PageManageResources extends AbsTab {
 					throw new HarnessException("Button " + pulldown + " option " + option + " optionLocator " + optionLocator + " not present!");
 				}
 
-				this.zClickAt(optionLocator,"");
+				this.sClickAt(optionLocator,"");
 
 				// If the app is busy, wait for it to become active
 				//zWaitForBusyOverlay();

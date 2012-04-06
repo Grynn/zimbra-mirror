@@ -20,7 +20,7 @@ public class NavigateDistributionList extends AdminCommonTest {
 	 * Testcase : Navigate to DL page
 	 * Steps :
 	 * 1. Go to DL
-	 * 2. Verify navigation path -- "Home --> Manage Accounts --> Distribution Lists"
+	 * 2. Verify navigation path -- "Home --> Manage --> Distribution Lists"
 	 * @throws HarnessException
 	 */
 	@Test(	description = "Navigate to DL",
@@ -31,7 +31,7 @@ public class NavigateDistributionList extends AdminCommonTest {
 		 * Verify navigation path -- "Home --> Manage Accounts --> Distribution Lists"
 		 */
 		ZAssert.assertTrue(app.zPageManageDistributionList.zVerifyHeader(PageManageDistributionLists.Locators.HOME), "Verfiy the \"Home\" text exists in navigation path");
-		ZAssert.assertTrue(app.zPageManageDistributionList.zVerifyHeader(PageManageDistributionLists.Locators.MANAGE_ACCOUNTS), "Verfiy the \"Manage Accounts\" text exists in navigation path");
+		ZAssert.assertTrue(app.zPageManageDistributionList.zVerifyHeader(PageManageDistributionLists.Locators.MANAGE), "Verfiy the \"Manage Accounts\" text exists in navigation path");
 		ZAssert.assertTrue(app.zPageManageDistributionList.zVerifyHeader(PageManageDistributionLists.Locators.DISTRIBUTION_LIST), "Verfiy the \"Distribution Lists\" text exists in navigation path");
 	}
 }

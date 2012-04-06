@@ -20,7 +20,7 @@ public class NavigateResource extends AdminCommonTest {
 	 * Testcase : Navigate to Resource page
 	 * Steps :
 	 * 1. Go to Resource
-	 * 2. Verify navigation path -- "Home --> Manage Accounts --> Resources"
+	 * 2. Verify navigation path -- "Home --> Manage --> Resources"
 	 * @throws HarnessException
 	 */
 	@Test(	description = "Navigate to Resource",
@@ -31,7 +31,7 @@ public class NavigateResource extends AdminCommonTest {
 		 * Verify navigation path -- "Home --> Manage Accounts --> Resources"
 		 */
 		ZAssert.assertTrue(app.zPageManageResources.zVerifyHeader(PageManageResources.Locators.HOME), "Verfiy the \"Home\" text exists in navigation path");
-		ZAssert.assertTrue(app.zPageManageResources.zVerifyHeader(PageManageResources.Locators.MANAGE_ACCOUNTS), "Verfiy the \"Manage Accounts\" text exists in navigation path");
+		ZAssert.assertTrue(app.zPageManageResources.zVerifyHeader(PageManageResources.Locators.MANAGE), "Verfiy the \"Manage Accounts\" text exists in navigation path");
 		ZAssert.assertTrue(app.zPageManageResources.zVerifyHeader(PageManageResources.Locators.RESOURCE), "Verfiy the \"Resources\" text exists in navigation path");
 	}
 }

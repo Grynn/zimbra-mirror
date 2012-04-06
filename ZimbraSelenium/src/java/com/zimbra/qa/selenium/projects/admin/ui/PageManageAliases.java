@@ -25,13 +25,13 @@ public class PageManageAliases extends AbsTab {
 
 	public static class Locators {
 
-		// ** OverviewTreePanel -> Manage Accounts -> Aliases
-		public static final String MANAGE_ACCOUNTS_ICON="css=div.ImgMangeAccounts";
+		// ** OverviewTreePanel -> Manage -> Aliases
+		public static final String MANAGE_ACCOUNTS_ICON="css=div.ImgManageAccounts";
 		public static final String ALIASES="css=td[id^='zti__AppAdmin__Home__aliaLstHV']";
 		public static final String GEAR_ICON="css=div.ImgConfigure";
 		public static final String NEW_MENU="css=div[id='zm__zb_currentApp__MENU_POP'] div[class='ImgAccountAlias']";
 		public static final String HOME="Home";
-		public static final String MANAGE_ACCOUNTS="Manage Accounts";
+		public static final String MANAGE="Manage";
 		public static final String ALIAS="Aliases";
 		public static final String DELETE_BUTTON="css=div[id='zm__zb_currentApp__MENU_POP'] div[class='ImgDelete']";
 		public static final String EDIT_BUTTON="css=div[id='zm__zb_currentApp__MENU_POP'] div[class='ImgEdit']";
@@ -105,7 +105,7 @@ public class PageManageAliases extends AbsTab {
 		tracer.trace(action +" on subject = "+ item);
 
 		AbsPage page = null;
-		SleepUtil.sleepSmall();
+		SleepUtil.sleepMedium();
 
 		// How many items are in the table?
 		String rowsLocator = "css=div#zl__ALIAS_MANAGE div[id$='__rows'] div[id^='zli__']";
@@ -197,7 +197,7 @@ public class PageManageAliases extends AbsTab {
 
 		// If page was specified, make sure it is active
 		if ( page != null ) {
-			SleepUtil.sleepMedium();
+			SleepUtil.sleepLong();
 		}
 
 		sMouseOut(locator);
@@ -258,6 +258,7 @@ public class PageManageAliases extends AbsTab {
 
 			this.zClickAt(pulldownLocator,"");
 			SleepUtil.sleepMedium();
+			SleepUtil.sleepLong();
 
 			// If the app is busy, wait for it to become active
 			//zWaitForBusyOverlay();

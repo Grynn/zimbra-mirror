@@ -20,7 +20,7 @@ public class NavigateAlias extends AdminCommonTest {
 	 * Testcase : Navigate to Aliases page
 	 * Steps :
 	 * 1. Go to Accounts
-	 * 2. Verify navigation path -- "Home --> Manage Accounts --> Aliases"
+	 * 2. Verify navigation path -- "Home --> Manage --> Aliases"
 	 * @throws HarnessException
 	 */
 	@Test(	description = "Navigate to Aliases",
@@ -31,7 +31,7 @@ public class NavigateAlias extends AdminCommonTest {
 		 * Verify navigation path -- "Home --> Manage Accounts --> Aliases"
 		 */
 		ZAssert.assertTrue(app.zPageManageAliases.zVerifyHeader(PageManageAliases.Locators.HOME), "Verfiy the \"Home\" text exists in navigation path");
-		ZAssert.assertTrue(app.zPageManageAliases.zVerifyHeader(PageManageAliases.Locators.MANAGE_ACCOUNTS), "Verfiy the \"Manage Accounts\" text exists in navigation path");
+		ZAssert.assertTrue(app.zPageManageAliases.zVerifyHeader(PageManageAliases.Locators.MANAGE), "Verfiy the \"Manage Accounts\" text exists in navigation path");
 		ZAssert.assertTrue(app.zPageManageAliases.zVerifyHeader(PageManageAliases.Locators.ALIAS), "Verfiy the \"Aliases\" text exists in navigation path");
 		
 	}

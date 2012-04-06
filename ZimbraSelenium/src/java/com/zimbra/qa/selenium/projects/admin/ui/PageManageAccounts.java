@@ -25,22 +25,18 @@ import com.zimbra.qa.selenium.projects.admin.items.AccountItem;
 public class PageManageAccounts extends AbsTab {
 
 	public static class Locators {
-		public static final String MANAGE_ACCOUNTS_ICON="css=div.ImgMangeAccounts";
+		public static final String MANAGE_ACCOUNTS_ICON="css=div.ImgManageAccounts";
 		public static final String ACCOUNTS="css=td[id^='zti__AppAdmin__Home__actLstHV']";
 		public static final String GEAR_ICON="css=div.ImgConfigure";
 		public static final String HOME="Home";
-		public static final String MANAGE_ACCOUNTS="Manage Accounts";
-		public static final String ACCOUNT=" Accounts";
+		public static final String MANAGE="Manage";
+		public static final String ACCOUNT="Accounts";
 		public static final String NEW_MENU="css=div[id='zm__zb_currentApp__MENU_POP'] div[class='ImgNewAccount']";
 		public static final String DELETE_BUTTON="css=div[id='zm__zb_currentApp__MENU_POP'] div[class='ImgDelete']";
 		public static final String EDIT_BUTTON="css=div[id='zm__zb_currentApp__MENU_POP'] div[class='ImgEdit']";
 		public static final String RIGHT_CLICK_MENU_DELETE_BUTTON="css=div[id^='zm__ACLV__MENU_POP'] div[class='ImgDelete']";
 		public static final String RIGHT_CLICK_MENU_EDIT_BUTTON="css=div[id^='zm__ACLV__MENU_POP'] div[class='ImgEdit']";
 	}
-
-
-
-
 
 	public PageManageAccounts(AbsApplication application) {
 		super(application);
