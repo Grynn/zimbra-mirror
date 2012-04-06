@@ -1,4 +1,4 @@
-if(ZaSettings && ZaSettings.EnabledZimlet["com_zimbra_clientuploader"]){
+if(appNewUI && ZaSettings && ZaSettings.EnabledZimlet["com_zimbra_clientuploader"]){
     if(window.console && window.console.log) console.log("Start loading com_zimbra_clientuploader.js");
     function ZaClientUploader() {
         ZaItem.call(this,"ZaClientUpload");
