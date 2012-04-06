@@ -147,7 +147,7 @@ state.State.mState = myState
 myConfig = conf.Config()
 conf.Config.mConfig = myConfig;
 myState.getLocalConfig(myConfig)
-Log.initLogging(myConfig)
+#Log.initLogging(myConfig)
 # Ldap.initLdap(myConfig)
 
 Log.logMsg(1, "%s started on %s with loglevel=%d pid=%d" % (myConfig.progname, myConfig.hostname, myConfig.loglevel, os.getpid()))
