@@ -547,6 +547,16 @@ function(str, includeSpaces) {
 };
 
 /**
+ * encode quotes for using in inline JS code, so the text does not end a quoted param prematurely.
+ * @param str
+ */
+AjxStringUtil.encodeQuotes =
+function(str) {
+	return str.replace(/"/g, '&quot;').replace(/'/g, "&#39;");
+};
+
+
+/**
  * Decodes the string.
  * 
  * @param	{string}	str		the string to decode
