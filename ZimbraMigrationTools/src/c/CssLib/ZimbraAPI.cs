@@ -112,7 +112,6 @@ public class ZimbraAPI
             if (sFolderPath == sSpecialFolder)
                 return i.ToString();
         }
-        Log.debug("Can't find special folder", folderPath, ". Message will be lost.");
         return "";
     }
 
