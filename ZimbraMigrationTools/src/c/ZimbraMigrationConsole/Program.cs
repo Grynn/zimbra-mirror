@@ -16,6 +16,7 @@ namespace ZimbraMigrationConsole
         {
             get
             {
+                
                 return m_instance;
             }
         }
@@ -65,14 +66,15 @@ namespace ZimbraMigrationConsole
 
         public void parseArgs(string[] args, string defaultArgs)
         {
-            m_args = new Dictionary<string, string>();
-            parseDefaults(defaultArgs);
+              m_args = new Dictionary<string, string>();
+                parseDefaults(defaultArgs);
 
-            foreach (string arg in args)
-            {
-                string[] words = arg.Split('=');
-                m_args[words[0]] = words[1];
-            }
+                foreach (string arg in args)
+                {
+                    string[] words = arg.Split('=');
+                    m_args[words[0]] = words[1];
+                }
+            
         }
 
         private void parseDefaults(string defaultArgs)
@@ -135,14 +137,16 @@ class Program
             userAccts.RequestStop();
             Console.WriteLine("User cancelled, shutting down");
 
-            
-            while ((countdownEvent.CurrentCount > 0))
+            if (countdownEvent != null)
             {
-                Console.WriteLine("signaling background workers");
-                countdownEvent.Signal(1);
-                Thread.Sleep(2000);
-                
-                    
+                while ((countdownEvent.CurrentCount > 0))
+                {
+                    Console.WriteLine("signaling background workers");
+                    countdownEvent.Signal(1);
+                    Thread.Sleep(2000);
+
+
+                }
             }
             
 
@@ -236,8 +240,19 @@ class Program
                     return;
 
                 }
-                CommandLineArgs.I.parseArgs(args, "myStringArg=defaultVal;someLong=12");
                 
+                try
+                {
+                CommandLineArgs.I.parseArgs(args, "myStringArg=defaultVal;someLong=12");
+                   
+                }
+                catch (Exception e)
+                {
+                    System.Console.WriteLine("Incorrect format of CmdLine arguments" + e.Message);
+                    keepRunning = true;
+                    Console.ReadKey(true);
+                    return;
+                }
                 string ConfigXmlFile = CommandLineArgs.I.argAsString("ConfigxmlFile");
                 string UserMapFile = CommandLineArgs.I.argAsString("Users");
                 int MaxThreads = CommandLineArgs.I.argAsInt("MaxThreads");
