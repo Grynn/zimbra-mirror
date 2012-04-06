@@ -52,8 +52,8 @@ public class TreeBriefcase extends AbsTree {
 		String optionLocator = null;
 
 		if (item instanceof TagItem) {
-			actionLocator = "zti__main_Briefcase__" + ((TagItem) item).getName()
-					+ "_textCell";
+			actionLocator = "css=td[id^=zti__main_Briefcase__]:contains(" + ((TagItem) item).getName()
+				+ ")";
 		} else if (item instanceof FolderItem) {
 			actionLocator = "zti__main_Briefcase__"
 					+ ((FolderItem) item).getId() + "_textCell";
@@ -160,8 +160,8 @@ public class TreeBriefcase extends AbsTree {
 		String locator = null;
 
 		if (item instanceof TagItem) {
-			locator = "zti__main_Briefcase__" + ((TagItem) item).getName()
-					+ "_textCell";
+			locator = "css=td[id^=zti__main_Briefcase__]:contains(" + ((TagItem) item).getName()
+				+ ")";
 		} else if (item instanceof FolderItem) {
 			locator = Locators.briefcaseTreeView + ((FolderItem) item).getId()
 					+ "_imageCell]";
