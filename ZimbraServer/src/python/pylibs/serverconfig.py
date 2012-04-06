@@ -89,6 +89,8 @@ class ServerConfig(config.Config):
 			if self["zimbraMilterBindAddress"] is None:
 				if self["zimbraIPMode"] == "ipv6":
 					self["zimbraMilterBindAddress"] = "::1"
+				elif self["zimbraIPMode" == "both":
+					self["zimbraMilterBindAddress"] = "::1"
 				else:
 					self["zimbraMilterBindAddress"] = "127.0.0.1"
 			milter = "inet:%s:%s" % (self["zimbraMilterBindAddress"],self["zimbraMilterBindPort"])
