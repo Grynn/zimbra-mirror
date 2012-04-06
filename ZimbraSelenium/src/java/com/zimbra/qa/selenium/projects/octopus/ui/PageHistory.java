@@ -94,11 +94,12 @@ public class PageHistory extends AbsTab {
 			switch (permission) {
 			   case SHARE_AS_READ: access="Read"; break;
 			   case SHARE_AS_READWRITE: access="RW"; break;
-			   case SHARE_AS_ADMIN: access="admin"; 
+			   case SHARE_AS_ADMIN: access="Admin"; 
 			}
 				
 			//TODO veify if grantee.EmailAddress or grantee.username is used
-			return YOU + " granted " + access + " access on folder " + folderName + " to " + grantee.EmailAddress;		   	
+			return YOU + " granted " + access + " access on folder " + folderName + " to " + grantee.EmailAddress + ".";
+			   	
 		}
 		
 	
@@ -108,11 +109,11 @@ public class PageHistory extends AbsTab {
 			switch (permission) {
 			   case SHARE_AS_READ: access="Read"; break;
 			   case SHARE_AS_READWRITE: access="RW"; break;
-			   case SHARE_AS_ADMIN: access="admin"; 
+			   case SHARE_AS_ADMIN: access="Admin"; 
 			}
 				
 			//TODO veify if grantee.EmailAddress or grantee.username is used
-			return YOU + " revoked " + access + " access on folder " + folderName + " to " + grantee.EmailAddress;		   	
+			return YOU + " revoked " + access + " access on folder " + folderName + " to " + grantee.EmailAddress +".";		   	
 		}
 	
 		
@@ -387,11 +388,11 @@ public class PageHistory extends AbsTab {
 				
 		                           
 		HistoryItem found = null;
+		logger.info("Seek...|" + historyText + "|");
 		
 		// Verify history item appears in the activity history
 		for ( HistoryItem item : historyItems ) {
-			logger.debug("|" + item.getHistoryText() + "|");
-			logger.debug("|" + historyText + "|");
+			logger.info("|" + item.getHistoryText() + "|");
 			// Verify the history is found
 			if (item.getHistoryText().equals(historyText)) {				
 				found = item;
