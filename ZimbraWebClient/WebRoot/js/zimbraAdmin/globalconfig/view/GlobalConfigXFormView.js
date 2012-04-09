@@ -409,23 +409,23 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 									addButtonLabel:ZaMsg.Add_zimbraSmtpHostname, 
 									removeButtonLabel:ZaMsg.Remove_zimbraSmtpHostname,
 									removeButtonCSSStyle: "margin-left: 50px",
-									visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,ZaGlobalConfig.A_zimbraSmtpHostname]],
-									visibilityChangeEventSources:[ZaGlobalConfig.A_zimbraSmtpHostname],
+                                    visibilityChecks:[ZaItem.hasReadPermission],
 							  		items: [
 										{ ref:".", type: _TEXTFIELD_, label:null,labelLocation:_NONE_,
-								  			toolTipContent: ZaMsg.tt_zimbraSmtpHostname
+								  			toolTipContent: ZaMsg.tt_zimbraSmtpHostname,
+                                            visibilityChecks:[ZaItem.hasReadPermission]
 										}
 							  		]
 						  		},
 								{ ref: ZaGlobalConfig.A_zimbraSmtpPort, type: _OUTPUT_,
 								  label: ZaMsg.NAD_MTA_WebMailPort,
-                                                                        visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,ZaGlobalConfig.A_zimbraSmtpHostname]],
-                                                                        visibilityChangeEventSources:[ZaGlobalConfig.A_zimbraSmtpHostname]
-							    	},
+                                  visibilityChecks:[ZaItem.hasReadPermission]
+							    },
 								{ref:ZaGlobalConfig.A_zimbraMtaRelayHost,label:ZaMsg.NAD_MTA_RelayMTA,labelLocation:_LEFT_,											
 							    	type:_HOSTPORT_,
 									onClick: "ZaController.showTooltip",
 							 		toolTipContent: ZaMsg.tt_MTA_RelayMTA,
+                                    visibilityChecks:[ZaItem.hasReadPermission],
 							 		onMouseout: "ZaController.hideTooltip"
 								},
 								{ type: _DWT_ALERT_,
