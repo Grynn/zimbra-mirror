@@ -434,7 +434,8 @@ BODY {
 
 /** Logo Images **/
 .ImgAppBanner           {   @AppBanner@ background-repeat:no-repeat;    }
-.ImgLoginBanner         {   @LoginBanner@ background-repeat:no-repeat;  }   
+.ImgLoginBanner         {   @LoginBanner@ background-repeat:no-repeat;  }
+.ImgAboutBanner         {   @AboutBanner@ background-repeat:no-repeat;  }
 
 #IFDEF MSIE
 #skin_container_logo A, #skin_container_logo A:hover, #skin_container_logo A:link {
@@ -446,10 +447,25 @@ BODY {
 
 /** About Screen **/
 
+
+.AboutScreen {
+    background:transparent url(@SkinImgDir@/about-bg.png) no-repeat;
+    @roundCorners(5)@
+}
+
+.AboutScreen .ImgAboutBanner {
+    background-repeat: no-repeat;
+    cursor: pointer;
+    display: block;
+}
+
 .AboutScreen .WindowInnerContainer {
-	background-color:@LoginCenterBottom@;
-	@grad(LoginCenterTop,LoginCenterBottom,linear-vertical)@
+    background: transparent;
 	@roundCorners(0)@
+}
+
+.AboutScreen H1 {
+	margin:30px 20px 10px;
 }
 
 .AboutScreen .DwtDialogBody {
@@ -457,16 +473,39 @@ BODY {
 	background-image:none;
 }
 
+.AboutScreen .Footer {
+    position: absolute;
+    bottom: 0px;
+#IFDEF MSIE
+	width: 539px;
+#ENDIF
+}
+ /*
 .AboutScreen>DIV>TABLE>TBODY>TR:first-child>TD {
 	@AppTopBg@
 }
-
+*/
 .AboutScreen .copyright,
 .AboutScreen .version {
-	color:white;
-	margin:1em 20px 3em;
+	margin:0px 20px 20px;
+    font-size: 10px;
+    color: #cbd9e4;
 }
 
+.ZaAboutDialog {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+	background:transparent;
+    margin: 5px 8px 10px;
+    height: 249px;
+    width: 543px;
+}
+
+.ZaAboutDialogTitle {
+    height: 30px;
+    cursor: move;
+}
 
 /* ??? */
 .DwtLinkButtonDropDownArrow {

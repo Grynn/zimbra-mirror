@@ -1414,34 +1414,4 @@ ZaZimbraAdmin.hasGlobalCOSSListAccess = function () {
 	return (ZaZimbraAdmin.isGlobalAdmin() || ZaCos.globalRights[ZaCos.RIGHT_LIST_COS]);
 }
 
-ZaAboutDialog = function(parent, className, title, w, h) {
-	if (arguments.length == 0) return;
- 	var clsName = className || "DwtDialog AboutScreen";
- 	DwtDialog.call(this, parent, clsName,  ZabMsg.about_title, [DwtDialog.OK_BUTTON]);
-}
 
-ZaAboutDialog.prototype = new DwtDialog;
-ZaAboutDialog.prototype.constructor = ZaAboutDialog;
-
-ZaAboutDialog.prototype.popup = function () {
-	// Set the content of the dialog before popping it up.
-	// This is done here because of the global IDs used by ZLoginFactory.
-	var date = AjxDateFormat.getDateInstance().format(ZaServerVersionInfo.buildDate);
-    var params = ZLoginFactory.copyDefaultParams(ZaMsg);
-	params.showAbout = true,
-	params.showPanelBorder = false;
-    params.companyURL = ZaAppCtxt.getLogoURI () ;
-    params.showLongVersion = true;
-    params.longVersion = AjxBuffer.concat(ZaMsg.splashScreenVersion, " ", ZaServerVersionInfo.version , " " , date);
-    params.copyrightText = ZaItem.getSplashScreenCopyright();
-    var html = ZLoginFactory.getLoginDialogHTML(params);
-    this.setContent(html);
-
- 	DwtBaseDialog.prototype.popup.call(this);
-};
-
-ZaAboutDialog.prototype.popdown =
-function() {
- 	DwtBaseDialog.prototype.popdown.call(this);
-    this.setContent("");
-};

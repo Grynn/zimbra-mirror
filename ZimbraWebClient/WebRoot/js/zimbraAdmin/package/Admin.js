@@ -37,6 +37,7 @@ AjxPackage.require("zimbraAdmin.common.ZaToolBarButton");
 AjxPackage.require("zimbraAdmin.common.ZaOverviewPanel");
 AjxPackage.require("zimbraAdmin.common.ZaClientCmdHandler");
 AjxPackage.require("zimbraAdmin.common.ZaApp");
+AjxPackage.require("zimbraAdmin.common.ZaAboutDialog");
 AjxPackage.require("zimbraAdmin.common.ZaMsgDialog");
 AjxPackage.require("zimbraAdmin.common.ZaErrorDialog");
 AjxPackage.require("zimbraAdmin.common.ZaTabView");
