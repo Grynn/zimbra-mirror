@@ -19,6 +19,7 @@ import javax.xml.bind.annotation.XmlValue;
  *     &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema>string">
  *       &lt;attribute name="deny" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *       &lt;attribute name="canDelegate" type="{http://www.w3.org/2001/XMLSchema}boolean" />
+ *       &lt;attribute name="disinheritSubGroups" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *       &lt;attribute name="subDomain" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *     &lt;/extension>
  *   &lt;/simpleContent>
@@ -39,6 +40,8 @@ public class testRightModifierInfo {
     protected Boolean deny;
     @XmlAttribute(name = "canDelegate")
     protected Boolean canDelegate;
+    @XmlAttribute(name = "disinheritSubGroups")
+    protected Boolean disinheritSubGroups;
     @XmlAttribute(name = "subDomain")
     protected Boolean subDomain;
 
@@ -112,6 +115,30 @@ public class testRightModifierInfo {
      */
     public void setCanDelegate(Boolean value) {
         this.canDelegate = value;
+    }
+
+    /**
+     * Gets the value of the disinheritSubGroups property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isDisinheritSubGroups() {
+        return disinheritSubGroups;
+    }
+
+    /**
+     * Sets the value of the disinheritSubGroups property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setDisinheritSubGroups(Boolean value) {
+        this.disinheritSubGroups = value;
     }
 
     /**

@@ -18,10 +18,10 @@ import generated.zcsclient.zm.testId;
  * &lt;complexType name="createCalendarItemResponse">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;all>
+ *       &lt;sequence>
  *         &lt;element name="m" type="{urn:zimbra}id" minOccurs="0"/>
  *         &lt;element name="echo" type="{urn:zimbraMail}calEcho" minOccurs="0"/>
- *       &lt;/all>
+ *       &lt;/sequence>
  *       &lt;attribute name="calItemId" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="apptId" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="invId" type="{http://www.w3.org/2001/XMLSchema}string" />
@@ -36,7 +36,8 @@ import generated.zcsclient.zm.testId;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "createCalendarItemResponse", propOrder = {
-
+    "m",
+    "echo"
 })
 @XmlSeeAlso({
     testCreateAppointmentExceptionResponse.class,

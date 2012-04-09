@@ -15,8 +15,8 @@ import javax.xml.bind.annotation.XmlType;
  * &lt;complexType name="mailImapDataSource">
  *   &lt;complexContent>
  *     &lt;extension base="{urn:zimbraMail}mailDataSource">
- *       &lt;all>
- *       &lt;/all>
+ *       &lt;sequence>
+ *       &lt;/sequence>
  *     &lt;/extension>
  *   &lt;/complexContent>
  * &lt;/complexType>

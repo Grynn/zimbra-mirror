@@ -18,8 +18,8 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *       &lt;/sequence>
- *       &lt;attribute name="part" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="id" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="part" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -31,34 +31,10 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "messagePartSpec")
 public class testMessagePartSpec {
 
-    @XmlAttribute(name = "part", required = true)
-    protected String part;
     @XmlAttribute(name = "id", required = true)
     protected String id;
-
-    /**
-     * Gets the value of the part property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getPart() {
-        return part;
-    }
-
-    /**
-     * Sets the value of the part property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setPart(String value) {
-        this.part = value;
-    }
+    @XmlAttribute(name = "part", required = true)
+    protected String part;
 
     /**
      * Gets the value of the id property.
@@ -82,6 +58,30 @@ public class testMessagePartSpec {
      */
     public void setId(String value) {
         this.id = value;
+    }
+
+    /**
+     * Gets the value of the part property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getPart() {
+        return part;
+    }
+
+    /**
+     * Sets the value of the part property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setPart(String value) {
+        this.part = value;
     }
 
 }

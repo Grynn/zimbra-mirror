@@ -19,6 +19,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="skin"/>
  *     &lt;enumeration value="uistrings"/>
  *     &lt;enumeration value="license"/>
+ *     &lt;enumeration value="all"/>
  *     &lt;enumeration value="account"/>
  *     &lt;enumeration value="config"/>
  *     &lt;enumeration value="globalgrant"/>
@@ -48,6 +49,8 @@ public enum testCacheEntryType {
     UISTRINGS("uistrings"),
     @XmlEnumValue("license")
     LICENSE("license"),
+    @XmlEnumValue("all")
+    ALL("all"),
     @XmlEnumValue("account")
     ACCOUNT("account"),
     @XmlEnumValue("config")

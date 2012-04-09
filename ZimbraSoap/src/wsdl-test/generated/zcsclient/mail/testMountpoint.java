@@ -23,6 +23,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;attribute name="rid" use="required" type="{http://www.w3.org/2001/XMLSchema}int" />
  *       &lt;attribute name="oname" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="reminder" type="{http://www.w3.org/2001/XMLSchema}boolean" />
+ *       &lt;attribute name="broken" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *     &lt;/extension>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -46,6 +47,8 @@ public class testMountpoint
     protected String oname;
     @XmlAttribute(name = "reminder")
     protected Boolean reminder;
+    @XmlAttribute(name = "broken")
+    protected Boolean broken;
 
     /**
      * Gets the value of the owner property.
@@ -157,6 +160,30 @@ public class testMountpoint
      */
     public void setReminder(Boolean value) {
         this.reminder = value;
+    }
+
+    /**
+     * Gets the value of the broken property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isBroken() {
+        return broken;
+    }
+
+    /**
+     * Sets the value of the broken property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setBroken(Boolean value) {
+        this.broken = value;
     }
 
 }

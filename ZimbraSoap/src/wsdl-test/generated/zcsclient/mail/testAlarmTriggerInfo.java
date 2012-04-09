@@ -15,10 +15,10 @@ import javax.xml.bind.annotation.XmlType;
  * &lt;complexType name="alarmTriggerInfo">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;all>
+ *       &lt;sequence>
  *         &lt;element name="abs" type="{urn:zimbraMail}dateAttr" minOccurs="0"/>
  *         &lt;element name="rel" type="{urn:zimbraMail}durationInfo" minOccurs="0"/>
- *       &lt;/all>
+ *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -28,7 +28,8 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "alarmTriggerInfo", propOrder = {
-
+    "abs",
+    "rel"
 })
 public class testAlarmTriggerInfo {
 

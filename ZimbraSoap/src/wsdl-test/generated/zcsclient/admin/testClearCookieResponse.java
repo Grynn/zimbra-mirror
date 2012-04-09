@@ -1,5 +1,5 @@
 
-package generated.zcsclient.mail;
+package generated.zcsclient.admin;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -7,17 +7,17 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for mailCalDataSource complex type.
+ * <p>Java class for clearCookieResponse complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="mailCalDataSource">
+ * &lt;complexType name="clearCookieResponse">
  *   &lt;complexContent>
- *     &lt;extension base="{urn:zimbraMail}mailDataSource">
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *       &lt;/sequence>
- *     &lt;/extension>
+ *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
@@ -25,10 +25,8 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "mailCalDataSource")
-public class testMailCalDataSource
-    extends testMailDataSource
-{
+@XmlType(name = "clearCookieResponse")
+public class testClearCookieResponse {
 
 
 }

@@ -65,7 +65,7 @@ import javax.xml.bind.annotation.XmlType;
     testAppointmentHitInfo.class,
     testTaskHitInfo.class
 })
-public class testCalendarItemHitInfo
+public abstract class testCalendarItemHitInfo
     extends testCommonCalendaringData
 {
 

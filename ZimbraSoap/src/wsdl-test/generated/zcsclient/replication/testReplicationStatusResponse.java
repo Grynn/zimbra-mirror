@@ -16,10 +16,10 @@ import javax.xml.bind.annotation.XmlType;
  * &lt;complexType name="replicationStatusResponse">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;all>
+ *       &lt;sequence>
  *         &lt;element name="masterStatus" type="{urn:zimbraRepl}replicationMasterStatus" minOccurs="0"/>
  *         &lt;element name="slaveStatus" type="{urn:zimbraRepl}replicationSlaveStatus" minOccurs="0"/>
- *       &lt;/all>
+ *       &lt;/sequence>
  *       &lt;attribute name="replicationEnabled" use="required" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *       &lt;attribute name="currentRole" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="originalRole" type="{http://www.w3.org/2001/XMLSchema}string" />
@@ -32,7 +32,8 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "replicationStatusResponse", propOrder = {
-
+    "masterStatus",
+    "slaveStatus"
 })
 public class testReplicationStatusResponse {
 

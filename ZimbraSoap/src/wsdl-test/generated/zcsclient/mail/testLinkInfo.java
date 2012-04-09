@@ -22,7 +22,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;attribute name="uuid" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="name" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="view" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="perm" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="perm" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -42,7 +42,7 @@ public class testLinkInfo {
     protected String name;
     @XmlAttribute(name = "view", required = true)
     protected String view;
-    @XmlAttribute(name = "perm", required = true)
+    @XmlAttribute(name = "perm")
     protected String perm;
 
     /**

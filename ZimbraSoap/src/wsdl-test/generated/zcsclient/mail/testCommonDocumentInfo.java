@@ -22,17 +22,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;sequence>
  *         &lt;element ref="{urn:zimbraMail}meta" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="fr" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="acl" minOccurs="0">
- *           &lt;complexType>
- *             &lt;complexContent>
- *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *                 &lt;sequence>
- *                   &lt;element name="grant" type="{urn:zimbraMail}grant" maxOccurs="unbounded" minOccurs="0"/>
- *                 &lt;/sequence>
- *               &lt;/restriction>
- *             &lt;/complexContent>
- *           &lt;/complexType>
- *         &lt;/element>
+ *         &lt;element name="acl" type="{urn:zimbraMail}acl" minOccurs="0"/>
  *       &lt;/sequence>
  *       &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="uuid" type="{http://www.w3.org/2001/XMLSchema}string" />
@@ -40,7 +30,9 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;attribute name="s" type="{http://www.w3.org/2001/XMLSchema}long" />
  *       &lt;attribute name="d" type="{http://www.w3.org/2001/XMLSchema}long" />
  *       &lt;attribute name="l" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="luuid" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="ms" type="{http://www.w3.org/2001/XMLSchema}int" />
+ *       &lt;attribute name="mdver" type="{http://www.w3.org/2001/XMLSchema}int" />
  *       &lt;attribute name="md" type="{http://www.w3.org/2001/XMLSchema}long" />
  *       &lt;attribute name="rev" type="{http://www.w3.org/2001/XMLSchema}int" />
  *       &lt;attribute name="f" type="{http://www.w3.org/2001/XMLSchema}string" />
@@ -74,7 +66,7 @@ public class testCommonDocumentInfo {
 
     protected List<testMailCustomMetadata> meta;
     protected String fr;
-    protected testCommonDocumentInfo.Acl acl;
+    protected testAcl acl;
     @XmlAttribute(name = "id")
     protected String id;
     @XmlAttribute(name = "uuid")
@@ -87,8 +79,12 @@ public class testCommonDocumentInfo {
     protected Long d;
     @XmlAttribute(name = "l")
     protected String l;
+    @XmlAttribute(name = "luuid")
+    protected String luuid;
     @XmlAttribute(name = "ms")
     protected Integer ms;
+    @XmlAttribute(name = "mdver")
+    protected Integer mdver;
     @XmlAttribute(name = "md")
     protected Long md;
     @XmlAttribute(name = "rev")
@@ -172,10 +168,10 @@ public class testCommonDocumentInfo {
      * 
      * @return
      *     possible object is
-     *     {@link testCommonDocumentInfo.Acl }
+     *     {@link testAcl }
      *     
      */
-    public testCommonDocumentInfo.Acl getAcl() {
+    public testAcl getAcl() {
         return acl;
     }
 
@@ -184,10 +180,10 @@ public class testCommonDocumentInfo {
      * 
      * @param value
      *     allowed object is
-     *     {@link testCommonDocumentInfo.Acl }
+     *     {@link testAcl }
      *     
      */
-    public void setAcl(testCommonDocumentInfo.Acl value) {
+    public void setAcl(testAcl value) {
         this.acl = value;
     }
 
@@ -336,6 +332,30 @@ public class testCommonDocumentInfo {
     }
 
     /**
+     * Gets the value of the luuid property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getLuuid() {
+        return luuid;
+    }
+
+    /**
+     * Sets the value of the luuid property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setLuuid(String value) {
+        this.luuid = value;
+    }
+
+    /**
      * Gets the value of the ms property.
      * 
      * @return
@@ -357,6 +377,30 @@ public class testCommonDocumentInfo {
      */
     public void setMs(Integer value) {
         this.ms = value;
+    }
+
+    /**
+     * Gets the value of the mdver property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
+     */
+    public Integer getMdver() {
+        return mdver;
+    }
+
+    /**
+     * Sets the value of the mdver property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
+     */
+    public void setMdver(Integer value) {
+        this.mdver = value;
     }
 
     /**
@@ -645,65 +689,6 @@ public class testCommonDocumentInfo {
      */
     public void setCd(Long value) {
         this.cd = value;
-    }
-
-
-    /**
-     * <p>Java class for anonymous complex type.
-     * 
-     * <p>The following schema fragment specifies the expected content contained within this class.
-     * 
-     * <pre>
-     * &lt;complexType>
-     *   &lt;complexContent>
-     *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
-     *       &lt;sequence>
-     *         &lt;element name="grant" type="{urn:zimbraMail}grant" maxOccurs="unbounded" minOccurs="0"/>
-     *       &lt;/sequence>
-     *     &lt;/restriction>
-     *   &lt;/complexContent>
-     * &lt;/complexType>
-     * </pre>
-     * 
-     * 
-     */
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {
-        "grant"
-    })
-    public static class Acl {
-
-        protected List<testGrant> grant;
-
-        /**
-         * Gets the value of the grant property.
-         * 
-         * <p>
-         * This accessor method returns a reference to the live list,
-         * not a snapshot. Therefore any modification you make to the
-         * returned list will be present inside the JAXB object.
-         * This is why there is not a <CODE>set</CODE> method for the grant property.
-         * 
-         * <p>
-         * For example, to add a new item, do as follows:
-         * <pre>
-         *    getGrant().add(newItem);
-         * </pre>
-         * 
-         * 
-         * <p>
-         * Objects of the following type(s) are allowed in the list
-         * {@link testGrant }
-         * 
-         * 
-         */
-        public List<testGrant> getGrant() {
-            if (grant == null) {
-                grant = new ArrayList<testGrant>();
-            }
-            return this.grant;
-        }
-
     }
 
 }

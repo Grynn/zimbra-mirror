@@ -17,10 +17,10 @@ import javax.xml.bind.annotation.XmlType;
  * &lt;complexType name="shareNotificationInfo">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;all>
+ *       &lt;sequence>
  *         &lt;element name="grantor" type="{urn:zimbraMail}grantor"/>
  *         &lt;element name="link" type="{urn:zimbraMail}linkInfo"/>
- *       &lt;/all>
+ *       &lt;/sequence>
  *       &lt;attribute name="status" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="id" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="d" use="required" type="{http://www.w3.org/2001/XMLSchema}long" />
@@ -33,7 +33,8 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "shareNotificationInfo", propOrder = {
-
+    "grantor",
+    "link"
 })
 public class testShareNotificationInfo {
 

@@ -17,11 +17,12 @@ import generated.zcsclient.zm.testGrantGranteeType;
  * &lt;complexType name="grant">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;all>
- *       &lt;/all>
+ *       &lt;sequence>
+ *       &lt;/sequence>
  *       &lt;attribute name="perm" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="gt" use="required" type="{urn:zimbra}grantGranteeType" />
  *       &lt;attribute name="zid" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="expiry" type="{http://www.w3.org/2001/XMLSchema}long" />
  *       &lt;attribute name="d" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="pw" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="key" type="{http://www.w3.org/2001/XMLSchema}string" />
@@ -33,9 +34,7 @@ import generated.zcsclient.zm.testGrantGranteeType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "grant", propOrder = {
-
-})
+@XmlType(name = "grant")
 public class testGrant {
 
     @XmlAttribute(name = "perm", required = true)
@@ -44,6 +43,8 @@ public class testGrant {
     protected testGrantGranteeType gt;
     @XmlAttribute(name = "zid", required = true)
     protected String zid;
+    @XmlAttribute(name = "expiry")
+    protected Long expiry;
     @XmlAttribute(name = "d")
     protected String d;
     @XmlAttribute(name = "pw")
@@ -121,6 +122,30 @@ public class testGrant {
      */
     public void setZid(String value) {
         this.zid = value;
+    }
+
+    /**
+     * Gets the value of the expiry property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Long }
+     *     
+     */
+    public Long getExpiry() {
+        return expiry;
+    }
+
+    /**
+     * Sets the value of the expiry property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Long }
+     *     
+     */
+    public void setExpiry(Long value) {
+        this.expiry = value;
     }
 
     /**

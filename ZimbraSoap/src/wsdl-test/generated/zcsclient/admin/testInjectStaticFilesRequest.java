@@ -1,23 +1,24 @@
 
-package generated.zcsclient.mail;
+package generated.zcsclient.admin;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
+import generated.zcsclient.zm.testAccountSelector;
 
 
 /**
- * <p>Java class for wikiActionRequest complex type.
+ * <p>Java class for injectStaticFilesRequest complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wikiActionRequest">
+ * &lt;complexType name="injectStaticFilesRequest">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="action" type="{urn:zimbraMail}actionSelector"/>
+ *         &lt;element name="account" type="{urn:zimbra}accountSelector"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -27,36 +28,36 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wikiActionRequest", propOrder = {
-    "action"
+@XmlType(name = "injectStaticFilesRequest", propOrder = {
+    "account"
 })
-public class testWikiActionRequest {
+public class testInjectStaticFilesRequest {
 
     @XmlElement(required = true)
-    protected testActionSelector action;
+    protected testAccountSelector account;
 
     /**
-     * Gets the value of the action property.
+     * Gets the value of the account property.
      * 
      * @return
      *     possible object is
-     *     {@link testActionSelector }
+     *     {@link testAccountSelector }
      *     
      */
-    public testActionSelector getAction() {
-        return action;
+    public testAccountSelector getAccount() {
+        return account;
     }
 
     /**
-     * Sets the value of the action property.
+     * Sets the value of the account property.
      * 
      * @param value
      *     allowed object is
-     *     {@link testActionSelector }
+     *     {@link testAccountSelector }
      *     
      */
-    public void setAction(testActionSelector value) {
-        this.action = value;
+    public void setAccount(testAccountSelector value) {
+        this.account = value;
     }
 
 }

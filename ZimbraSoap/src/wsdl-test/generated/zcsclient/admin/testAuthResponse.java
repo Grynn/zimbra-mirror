@@ -19,7 +19,6 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;sequence>
  *         &lt;element name="authToken" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="lifetime" type="{http://www.w3.org/2001/XMLSchema}long"/>
- *         &lt;element ref="{urn:zimbraAdmin}a"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,16 +30,13 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "authResponse", propOrder = {
     "authToken",
-    "lifetime",
-    "a"
+    "lifetime"
 })
 public class testAuthResponse {
 
     @XmlElement(required = true)
     protected String authToken;
     protected long lifetime;
-    @XmlElement(required = true)
-    protected testAttr a;
 
     /**
      * Gets the value of the authToken property.
@@ -80,30 +76,6 @@ public class testAuthResponse {
      */
     public void setLifetime(long value) {
         this.lifetime = value;
-    }
-
-    /**
-     * Gets the value of the a property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link testAttr }
-     *     
-     */
-    public testAttr getA() {
-        return a;
-    }
-
-    /**
-     * Sets the value of the a property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link testAttr }
-     *     
-     */
-    public void setA(testAttr value) {
-        this.a = value;
     }
 
 }

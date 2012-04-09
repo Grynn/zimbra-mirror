@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 import generated.zcsclient.zm.testAccountSelector;
 
@@ -48,6 +49,7 @@ import generated.zcsclient.zm.testAccountSelector;
  *         &lt;/element>
  *         &lt;element name="requestedSkin" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/all>
+ *       &lt;attribute name="persistAuthTokenCookie" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -69,6 +71,8 @@ public class testAuthRequest {
     protected testAuthRequest.Prefs prefs;
     protected testAuthRequest.Attrs attrs;
     protected String requestedSkin;
+    @XmlAttribute(name = "persistAuthTokenCookie")
+    protected Boolean persistAuthTokenCookie;
 
     /**
      * Gets the value of the account property.
@@ -260,6 +264,30 @@ public class testAuthRequest {
      */
     public void setRequestedSkin(String value) {
         this.requestedSkin = value;
+    }
+
+    /**
+     * Gets the value of the persistAuthTokenCookie property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isPersistAuthTokenCookie() {
+        return persistAuthTokenCookie;
+    }
+
+    /**
+     * Sets the value of the persistAuthTokenCookie property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setPersistAuthTokenCookie(Boolean value) {
+        this.persistAuthTokenCookie = value;
     }
 
 

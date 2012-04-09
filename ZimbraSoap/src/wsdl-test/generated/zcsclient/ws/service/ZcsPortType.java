@@ -234,6 +234,8 @@ import generated.zcsclient.mail.testGetMsgRequest;
 import generated.zcsclient.mail.testGetMsgResponse;
 import generated.zcsclient.mail.testGetNoteRequest;
 import generated.zcsclient.mail.testGetNoteResponse;
+import generated.zcsclient.mail.testGetNotificationsRequest;
+import generated.zcsclient.mail.testGetNotificationsResponse;
 import generated.zcsclient.mail.testGetOutgoingFilterRulesRequest;
 import generated.zcsclient.mail.testGetOutgoingFilterRulesResponse;
 import generated.zcsclient.mail.testGetPermissionRequest;
@@ -354,8 +356,6 @@ import generated.zcsclient.mail.testVerifyCodeRequest;
 import generated.zcsclient.mail.testVerifyCodeResponse;
 import generated.zcsclient.mail.testWaitSetRequest;
 import generated.zcsclient.mail.testWaitSetResponse;
-import generated.zcsclient.mail.testWikiActionRequest;
-import generated.zcsclient.mail.testWikiActionResponse;
 import generated.zcsclient.replication.testBecomeMasterRequest;
 import generated.zcsclient.replication.testBecomeMasterResponse;
 import generated.zcsclient.replication.testBringDownServiceIPRequest;
@@ -397,14 +397,14 @@ import generated.zcsclient.sync.testSuspendDeviceResponse;
 @WebService(name = "zcsPortType", targetNamespace = "http://www.zimbra.com/wsdl/ZimbraService.wsdl")
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
 @XmlSeeAlso({
-    generated.zcsclient.replication.ObjectFactory.class,
-    generated.zcsclient.account.ObjectFactory.class,
     generated.zcsclient.admin.ObjectFactory.class,
-    generated.zcsclient.adminext.ObjectFactory.class,
+    generated.zcsclient.replication.ObjectFactory.class,
+    generated.zcsclient.sync.ObjectFactory.class,
     generated.zcsclient.mail.ObjectFactory.class,
     generated.zcsclient.appblast.ObjectFactory.class,
+    generated.zcsclient.account.ObjectFactory.class,
     generated.zcsclient.zm.ObjectFactory.class,
-    generated.zcsclient.sync.ObjectFactory.class
+    generated.zcsclient.adminext.ObjectFactory.class
 })
 public interface ZcsPortType {
 
@@ -1757,6 +1757,18 @@ public interface ZcsPortType {
      * 
      * @param parameters
      * @return
+     *     returns generated.zcsclient.mail.testGetNotificationsResponse
+     */
+    @WebMethod(action = "urn:zimbraMail/GetNotifications")
+    @WebResult(name = "GetNotificationsResponse", targetNamespace = "urn:zimbraMail", partName = "parameters")
+    public testGetNotificationsResponse getNotificationsRequest(
+        @WebParam(name = "GetNotificationsRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
+        testGetNotificationsRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
      *     returns generated.zcsclient.mail.testGetOutgoingFilterRulesResponse
      */
     @WebMethod(action = "urn:zimbraMail/GetOutgoingFilterRules")
@@ -2472,18 +2484,6 @@ public interface ZcsPortType {
     public testWaitSetResponse waitSetRequest(
         @WebParam(name = "WaitSetRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
         testWaitSetRequest parameters);
-
-    /**
-     * 
-     * @param parameters
-     * @return
-     *     returns generated.zcsclient.mail.testWikiActionResponse
-     */
-    @WebMethod(action = "urn:zimbraMail/WikiAction")
-    @WebResult(name = "WikiActionResponse", targetNamespace = "urn:zimbraMail", partName = "parameters")
-    public testWikiActionResponse wikiActionRequest(
-        @WebParam(name = "WikiActionRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
-        testWikiActionRequest parameters);
 
     /**
      * 

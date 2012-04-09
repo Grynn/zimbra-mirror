@@ -22,6 +22,7 @@ import generated.zcsclient.zm.testAccountSelector;
  *         &lt;element name="account" type="{urn:zimbra}accountSelector" minOccurs="0"/>
  *         &lt;element name="virtualHost" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/all>
+ *       &lt;attribute name="persistAuthTokenCookie" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *       &lt;attribute name="name" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="password" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
@@ -40,6 +41,8 @@ public class testAuthRequest {
     protected String authToken;
     protected testAccountSelector account;
     protected String virtualHost;
+    @XmlAttribute(name = "persistAuthTokenCookie")
+    protected Boolean persistAuthTokenCookie;
     @XmlAttribute(name = "name")
     protected String name;
     @XmlAttribute(name = "password")
@@ -115,6 +118,30 @@ public class testAuthRequest {
      */
     public void setVirtualHost(String value) {
         this.virtualHost = value;
+    }
+
+    /**
+     * Gets the value of the persistAuthTokenCookie property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isPersistAuthTokenCookie() {
+        return persistAuthTokenCookie;
+    }
+
+    /**
+     * Sets the value of the persistAuthTokenCookie property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setPersistAuthTokenCookie(Boolean value) {
+        this.persistAuthTokenCookie = value;
     }
 
     /**

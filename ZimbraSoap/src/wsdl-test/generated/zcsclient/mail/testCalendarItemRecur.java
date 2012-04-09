@@ -16,13 +16,13 @@ import javax.xml.bind.annotation.XmlType;
  * &lt;complexType name="calendarItemRecur">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;all>
+ *       &lt;sequence>
  *         &lt;element name="exceptId" type="{urn:zimbraMail}exceptionRecurIdInfo" minOccurs="0"/>
  *         &lt;element name="s" type="{urn:zimbraMail}dtTimeInfo" minOccurs="0"/>
  *         &lt;element name="e" type="{urn:zimbraMail}dtTimeInfo" minOccurs="0"/>
  *         &lt;element name="dur" type="{urn:zimbraMail}durationInfo" minOccurs="0"/>
  *         &lt;element name="recur" type="{urn:zimbraMail}recurrenceInfo" minOccurs="0"/>
- *       &lt;/all>
+ *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -32,7 +32,11 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "calendarItemRecur", propOrder = {
-
+    "exceptId",
+    "s",
+    "e",
+    "dur",
+    "recur"
 })
 @XmlSeeAlso({
     testExceptionItemRecur.class,

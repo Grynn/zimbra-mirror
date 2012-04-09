@@ -28,6 +28,7 @@ import generated.zcsclient.zm.testCursorInfo;
  *         &lt;element name="cursor" type="{urn:zimbra}cursorInfo" minOccurs="0"/>
  *       &lt;/sequence>
  *       &lt;attribute name="includeTagDeleted" type="{http://www.w3.org/2001/XMLSchema}boolean" />
+ *       &lt;attribute name="includeTagMuted" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *       &lt;attribute name="allowableTaskStatus" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="calExpandInstStart" type="{http://www.w3.org/2001/XMLSchema}long" />
  *       &lt;attribute name="calExpandInstEnd" type="{http://www.w3.org/2001/XMLSchema}long" />
@@ -41,6 +42,7 @@ import generated.zcsclient.zm.testCursorInfo;
  *       &lt;attribute name="read" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *       &lt;attribute name="max" type="{http://www.w3.org/2001/XMLSchema}int" />
  *       &lt;attribute name="html" type="{http://www.w3.org/2001/XMLSchema}boolean" />
+ *       &lt;attribute name="needExp" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *       &lt;attribute name="neuter" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *       &lt;attribute name="recip" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *       &lt;attribute name="prefetch" type="{http://www.w3.org/2001/XMLSchema}boolean" />
@@ -74,6 +76,8 @@ public class testMailSearchParams {
     protected testCursorInfo cursor;
     @XmlAttribute(name = "includeTagDeleted")
     protected Boolean includeTagDeleted;
+    @XmlAttribute(name = "includeTagMuted")
+    protected Boolean includeTagMuted;
     @XmlAttribute(name = "allowableTaskStatus")
     protected String allowableTaskStatus;
     @XmlAttribute(name = "calExpandInstStart")
@@ -100,6 +104,8 @@ public class testMailSearchParams {
     protected Integer max;
     @XmlAttribute(name = "html")
     protected Boolean html;
+    @XmlAttribute(name = "needExp")
+    protected Boolean needExp;
     @XmlAttribute(name = "neuter")
     protected Boolean neuter;
     @XmlAttribute(name = "recip")
@@ -238,6 +244,30 @@ public class testMailSearchParams {
      */
     public void setIncludeTagDeleted(Boolean value) {
         this.includeTagDeleted = value;
+    }
+
+    /**
+     * Gets the value of the includeTagMuted property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isIncludeTagMuted() {
+        return includeTagMuted;
+    }
+
+    /**
+     * Sets the value of the includeTagMuted property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setIncludeTagMuted(Boolean value) {
+        this.includeTagMuted = value;
     }
 
     /**
@@ -550,6 +580,30 @@ public class testMailSearchParams {
      */
     public void setHtml(Boolean value) {
         this.html = value;
+    }
+
+    /**
+     * Gets the value of the needExp property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isNeedExp() {
+        return needExp;
+    }
+
+    /**
+     * Sets the value of the needExp property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setNeedExp(Boolean value) {
+        this.needExp = value;
     }
 
     /**

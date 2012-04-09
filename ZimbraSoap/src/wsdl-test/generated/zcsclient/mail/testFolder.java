@@ -23,17 +23,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element ref="{urn:zimbraMail}meta" maxOccurs="unbounded" minOccurs="0"/>
- *         &lt;element name="acl" minOccurs="0">
- *           &lt;complexType>
- *             &lt;complexContent>
- *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *                 &lt;sequence>
- *                   &lt;element name="grant" type="{urn:zimbraMail}grant" maxOccurs="unbounded" minOccurs="0"/>
- *                 &lt;/sequence>
- *               &lt;/restriction>
- *             &lt;/complexContent>
- *           &lt;/complexType>
- *         &lt;/element>
+ *         &lt;element name="acl" type="{urn:zimbraMail}acl" minOccurs="0"/>
  *         &lt;element ref="{urn:zimbraMail}retentionPolicy" minOccurs="0"/>
  *         &lt;choice maxOccurs="unbounded" minOccurs="0">
  *           &lt;element ref="{urn:zimbraMail}folder"/>
@@ -60,6 +50,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;attribute name="i4ms" type="{http://www.w3.org/2001/XMLSchema}int" />
  *       &lt;attribute name="i4next" type="{http://www.w3.org/2001/XMLSchema}int" />
  *       &lt;attribute name="url" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="activesyncdisabled" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *       &lt;attribute name="perm" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="recursive" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *       &lt;attribute name="rest" type="{http://www.w3.org/2001/XMLSchema}string" />
@@ -84,7 +75,7 @@ import javax.xml.bind.annotation.XmlType;
 public class testFolder {
 
     protected List<testMailCustomMetadata> meta;
-    protected testFolder.Acl acl;
+    protected testAcl acl;
     protected testRetentionPolicy retentionPolicy;
     @XmlElements({
         @XmlElement(name = "folder"),
@@ -130,6 +121,8 @@ public class testFolder {
     protected Integer i4Next;
     @XmlAttribute(name = "url")
     protected String url;
+    @XmlAttribute(name = "activesyncdisabled")
+    protected Boolean activesyncdisabled;
     @XmlAttribute(name = "perm")
     protected String perm;
     @XmlAttribute(name = "recursive")
@@ -171,10 +164,10 @@ public class testFolder {
      * 
      * @return
      *     possible object is
-     *     {@link testFolder.Acl }
+     *     {@link testAcl }
      *     
      */
-    public testFolder.Acl getAcl() {
+    public testAcl getAcl() {
         return acl;
     }
 
@@ -183,10 +176,10 @@ public class testFolder {
      * 
      * @param value
      *     allowed object is
-     *     {@link testFolder.Acl }
+     *     {@link testAcl }
      *     
      */
-    public void setAcl(testFolder.Acl value) {
+    public void setAcl(testAcl value) {
         this.acl = value;
     }
 
@@ -702,6 +695,30 @@ public class testFolder {
     }
 
     /**
+     * Gets the value of the activesyncdisabled property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isActivesyncdisabled() {
+        return activesyncdisabled;
+    }
+
+    /**
+     * Sets the value of the activesyncdisabled property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setActivesyncdisabled(Boolean value) {
+        this.activesyncdisabled = value;
+    }
+
+    /**
      * Gets the value of the perm property.
      * 
      * @return
@@ -771,65 +788,6 @@ public class testFolder {
      */
     public void setRest(String value) {
         this.rest = value;
-    }
-
-
-    /**
-     * <p>Java class for anonymous complex type.
-     * 
-     * <p>The following schema fragment specifies the expected content contained within this class.
-     * 
-     * <pre>
-     * &lt;complexType>
-     *   &lt;complexContent>
-     *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
-     *       &lt;sequence>
-     *         &lt;element name="grant" type="{urn:zimbraMail}grant" maxOccurs="unbounded" minOccurs="0"/>
-     *       &lt;/sequence>
-     *     &lt;/restriction>
-     *   &lt;/complexContent>
-     * &lt;/complexType>
-     * </pre>
-     * 
-     * 
-     */
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {
-        "grant"
-    })
-    public static class Acl {
-
-        protected List<testGrant> grant;
-
-        /**
-         * Gets the value of the grant property.
-         * 
-         * <p>
-         * This accessor method returns a reference to the live list,
-         * not a snapshot. Therefore any modification you make to the
-         * returned list will be present inside the JAXB object.
-         * This is why there is not a <CODE>set</CODE> method for the grant property.
-         * 
-         * <p>
-         * For example, to add a new item, do as follows:
-         * <pre>
-         *    getGrant().add(newItem);
-         * </pre>
-         * 
-         * 
-         * <p>
-         * Objects of the following type(s) are allowed in the list
-         * {@link testGrant }
-         * 
-         * 
-         */
-        public List<testGrant> getGrant() {
-            if (grant == null) {
-                grant = new ArrayList<testGrant>();
-            }
-            return this.grant;
-        }
-
     }
 
 }

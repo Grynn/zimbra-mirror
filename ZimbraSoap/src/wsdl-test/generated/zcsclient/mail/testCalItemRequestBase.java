@@ -41,7 +41,7 @@ import javax.xml.bind.annotation.XmlType;
     testModifyAppointmentRequest.class,
     testCreateAppointmentRequest.class
 })
-public class testCalItemRequestBase {
+public abstract class testCalItemRequestBase {
 
     protected testMsg m;
     @XmlAttribute(name = "echo")

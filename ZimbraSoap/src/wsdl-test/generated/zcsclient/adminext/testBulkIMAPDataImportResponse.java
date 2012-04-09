@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlType;
  * &lt;complexType name="bulkIMAPDataImportResponse">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;all>
+ *       &lt;sequence>
  *         &lt;element name="runningAccounts" minOccurs="0">
  *           &lt;complexType>
  *             &lt;complexContent>
@@ -41,7 +41,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="UseAdminLogin" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *         &lt;element name="IMAPAdminLogin" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="IMAPAdminPassword" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *       &lt;/all>
+ *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -51,7 +51,18 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "bulkIMAPDataImportResponse", propOrder = {
-
+    "runningAccounts",
+    "totalCount",
+    "idleCount",
+    "runningCount",
+    "finishedCount",
+    "connectionType",
+    "imapHost",
+    "imapPort",
+    "indexBatchSize",
+    "useAdminLogin",
+    "imapAdminLogin",
+    "imapAdminPassword"
 })
 public class testBulkIMAPDataImportResponse {
 

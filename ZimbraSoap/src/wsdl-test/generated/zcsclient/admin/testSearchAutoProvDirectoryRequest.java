@@ -27,6 +27,7 @@ import generated.zcsclient.zm.testAttributeSelectorImpl;
  *       &lt;attribute name="maxResults" type="{http://www.w3.org/2001/XMLSchema}int" />
  *       &lt;attribute name="limit" type="{http://www.w3.org/2001/XMLSchema}int" />
  *       &lt;attribute name="offset" type="{http://www.w3.org/2001/XMLSchema}int" />
+ *       &lt;attribute name="refresh" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *     &lt;/extension>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -56,6 +57,8 @@ public class testSearchAutoProvDirectoryRequest
     protected Integer limit;
     @XmlAttribute(name = "offset")
     protected Integer offset;
+    @XmlAttribute(name = "refresh")
+    protected Boolean refresh;
 
     /**
      * Gets the value of the domain property.
@@ -223,6 +226,30 @@ public class testSearchAutoProvDirectoryRequest
      */
     public void setOffset(Integer value) {
         this.offset = value;
+    }
+
+    /**
+     * Gets the value of the refresh property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isRefresh() {
+        return refresh;
+    }
+
+    /**
+     * Sets the value of the refresh property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setRefresh(Boolean value) {
+        this.refresh = value;
     }
 
 }

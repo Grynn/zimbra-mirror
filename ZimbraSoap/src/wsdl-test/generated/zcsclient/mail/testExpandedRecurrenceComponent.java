@@ -17,11 +17,11 @@ import javax.xml.bind.annotation.XmlType;
  * &lt;complexType name="expandedRecurrenceComponent">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;all>
+ *       &lt;sequence>
  *         &lt;element name="exceptId" type="{urn:zimbraMail}instanceRecurIdInfo" minOccurs="0"/>
  *         &lt;element name="dur" type="{urn:zimbraMail}durationInfo" minOccurs="0"/>
  *         &lt;element name="recur" type="{urn:zimbraMail}recurrenceInfo" minOccurs="0"/>
- *       &lt;/all>
+ *       &lt;/sequence>
  *       &lt;attribute name="s" type="{http://www.w3.org/2001/XMLSchema}long" />
  *       &lt;attribute name="e" type="{http://www.w3.org/2001/XMLSchema}long" />
  *     &lt;/restriction>
@@ -33,7 +33,9 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "expandedRecurrenceComponent", propOrder = {
-
+    "exceptId",
+    "dur",
+    "recur"
 })
 @XmlSeeAlso({
     testExpandedRecurrenceInvite.class,

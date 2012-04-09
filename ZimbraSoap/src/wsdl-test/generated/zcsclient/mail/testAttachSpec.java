@@ -35,7 +35,7 @@ import javax.xml.bind.annotation.XmlType;
     testContactAttachSpec.class,
     testMimePartAttachSpec.class
 })
-public class testAttachSpec {
+public abstract class testAttachSpec {
 
     @XmlAttribute(name = "optional")
     protected Boolean optional;

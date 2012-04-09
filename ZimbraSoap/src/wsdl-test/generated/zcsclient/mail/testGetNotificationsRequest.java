@@ -3,22 +3,22 @@ package generated.zcsclient.mail;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wikiActionResponse complex type.
+ * <p>Java class for getNotificationsRequest complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wikiActionResponse">
+ * &lt;complexType name="getNotificationsRequest">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="action" type="{urn:zimbraMail}idAndOperation"/>
  *       &lt;/sequence>
+ *       &lt;attribute name="markSeen" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -27,36 +27,34 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wikiActionResponse", propOrder = {
-    "action"
-})
-public class testWikiActionResponse {
+@XmlType(name = "getNotificationsRequest")
+public class testGetNotificationsRequest {
 
-    @XmlElement(required = true)
-    protected testIdAndOperation action;
+    @XmlAttribute(name = "markSeen")
+    protected Boolean markSeen;
 
     /**
-     * Gets the value of the action property.
+     * Gets the value of the markSeen property.
      * 
      * @return
      *     possible object is
-     *     {@link testIdAndOperation }
+     *     {@link Boolean }
      *     
      */
-    public testIdAndOperation getAction() {
-        return action;
+    public Boolean isMarkSeen() {
+        return markSeen;
     }
 
     /**
-     * Sets the value of the action property.
+     * Sets the value of the markSeen property.
      * 
      * @param value
      *     allowed object is
-     *     {@link testIdAndOperation }
+     *     {@link Boolean }
      *     
      */
-    public void setAction(testIdAndOperation value) {
-        this.action = value;
+    public void setMarkSeen(Boolean value) {
+        this.markSeen = value;
     }
 
 }

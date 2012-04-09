@@ -19,6 +19,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;sequence>
  *       &lt;/sequence>
  *       &lt;attribute name="did" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="sfd" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *     &lt;/extension>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -34,6 +35,8 @@ public class testMsgToSend
 
     @XmlAttribute(name = "did")
     protected String did;
+    @XmlAttribute(name = "sfd")
+    protected Boolean sfd;
 
     /**
      * Gets the value of the did property.
@@ -57,6 +60,30 @@ public class testMsgToSend
      */
     public void setDid(String value) {
         this.did = value;
+    }
+
+    /**
+     * Gets the value of the sfd property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isSfd() {
+        return sfd;
+    }
+
+    /**
+     * Sets the value of the sfd property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setSfd(Boolean value) {
+        this.sfd = value;
     }
 
 }

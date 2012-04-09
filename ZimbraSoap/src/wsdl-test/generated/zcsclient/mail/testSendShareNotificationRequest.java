@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 import generated.zcsclient.zm.testId;
 
@@ -23,6 +24,7 @@ import generated.zcsclient.zm.testId;
  *         &lt;element name="e" type="{urn:zimbraMail}emailAddrInfo" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="notes" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
+ *       &lt;attribute name="action" type="{urn:zimbraMail}action" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -41,6 +43,8 @@ public class testSendShareNotificationRequest {
     protected testId item;
     protected List<testEmailAddrInfo> e;
     protected String notes;
+    @XmlAttribute(name = "action")
+    protected testAction action;
 
     /**
      * Gets the value of the item property.
@@ -117,6 +121,30 @@ public class testSendShareNotificationRequest {
      */
     public void setNotes(String value) {
         this.notes = value;
+    }
+
+    /**
+     * Gets the value of the action property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link testAction }
+     *     
+     */
+    public testAction getAction() {
+        return action;
+    }
+
+    /**
+     * Sets the value of the action property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link testAction }
+     *     
+     */
+    public void setAction(testAction value) {
+        this.action = value;
     }
 
 }

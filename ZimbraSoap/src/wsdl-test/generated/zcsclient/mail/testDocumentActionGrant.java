@@ -20,7 +20,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;/sequence>
  *       &lt;attribute name="perm" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="gt" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="zid" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="expiry" type="{http://www.w3.org/2001/XMLSchema}long" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -36,8 +36,8 @@ public class testDocumentActionGrant {
     protected String perm;
     @XmlAttribute(name = "gt", required = true)
     protected String gt;
-    @XmlAttribute(name = "zid")
-    protected String zid;
+    @XmlAttribute(name = "expiry")
+    protected Long expiry;
 
     /**
      * Gets the value of the perm property.
@@ -88,27 +88,27 @@ public class testDocumentActionGrant {
     }
 
     /**
-     * Gets the value of the zid property.
+     * Gets the value of the expiry property.
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link Long }
      *     
      */
-    public String getZid() {
-        return zid;
+    public Long getExpiry() {
+        return expiry;
     }
 
     /**
-     * Sets the value of the zid property.
+     * Sets the value of the expiry property.
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link Long }
      *     
      */
-    public void setZid(String value) {
-        this.zid = value;
+    public void setExpiry(Long value) {
+        this.expiry = value;
     }
 
 }

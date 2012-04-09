@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlValue;
  * &lt;complexType name="rawInvite">
  *   &lt;simpleContent>
  *     &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema>string">
- *       &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="uid" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="summary" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/extension>
  *   &lt;/simpleContent>
@@ -34,8 +34,8 @@ public class testRawInvite {
 
     @XmlValue
     protected String value;
-    @XmlAttribute(name = "id")
-    protected String id;
+    @XmlAttribute(name = "uid")
+    protected String uid;
     @XmlAttribute(name = "summary")
     protected String summary;
 
@@ -64,27 +64,27 @@ public class testRawInvite {
     }
 
     /**
-     * Gets the value of the id property.
+     * Gets the value of the uid property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getId() {
-        return id;
+    public String getUid() {
+        return uid;
     }
 
     /**
-     * Sets the value of the id property.
+     * Sets the value of the uid property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setId(String value) {
-        this.id = value;
+    public void setUid(String value) {
+        this.uid = value;
     }
 
     /**

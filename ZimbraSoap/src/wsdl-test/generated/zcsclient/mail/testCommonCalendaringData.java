@@ -44,7 +44,7 @@ import javax.xml.bind.annotation.XmlType;
     testCalendarItemHitInfo.class,
     testLegacyCalendaringData.class
 })
-public class testCommonCalendaringData
+public abstract class testCommonCalendaringData
     extends testInstanceDataAttrs
 {
 

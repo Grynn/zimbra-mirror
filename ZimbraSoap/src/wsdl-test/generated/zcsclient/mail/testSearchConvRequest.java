@@ -20,7 +20,6 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;/sequence>
  *       &lt;attribute name="cid" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="nest" type="{http://www.w3.org/2001/XMLSchema}boolean" />
- *       &lt;attribute name="needExp" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *     &lt;/extension>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -38,8 +37,6 @@ public class testSearchConvRequest
     protected String cid;
     @XmlAttribute(name = "nest")
     protected Boolean nest;
-    @XmlAttribute(name = "needExp")
-    protected Boolean needExp;
 
     /**
      * Gets the value of the cid property.
@@ -87,30 +84,6 @@ public class testSearchConvRequest
      */
     public void setNest(Boolean value) {
         this.nest = value;
-    }
-
-    /**
-     * Gets the value of the needExp property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isNeedExp() {
-        return needExp;
-    }
-
-    /**
-     * Sets the value of the needExp property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setNeedExp(Boolean value) {
-        this.needExp = value;
     }
 
 }

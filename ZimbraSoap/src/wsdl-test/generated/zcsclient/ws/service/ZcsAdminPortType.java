@@ -65,12 +65,18 @@ import generated.zcsclient.admin.testCheckPasswordStrengthRequest;
 import generated.zcsclient.admin.testCheckPasswordStrengthResponse;
 import generated.zcsclient.admin.testCheckRightRequest;
 import generated.zcsclient.admin.testCheckRightResponse;
+import generated.zcsclient.admin.testClearCookieRequest;
+import generated.zcsclient.admin.testClearCookieResponse;
+import generated.zcsclient.admin.testComputeAggregateQuotaUsageRequest;
+import generated.zcsclient.admin.testComputeAggregateQuotaUsageResponse;
 import generated.zcsclient.admin.testConfigureZimletRequest;
 import generated.zcsclient.admin.testConfigureZimletResponse;
 import generated.zcsclient.admin.testCopyCosRequest;
 import generated.zcsclient.admin.testCopyCosResponse;
 import generated.zcsclient.admin.testCountAccountRequest;
 import generated.zcsclient.admin.testCountAccountResponse;
+import generated.zcsclient.admin.testCountObjectsRequest;
+import generated.zcsclient.admin.testCountObjectsResponse;
 import generated.zcsclient.admin.testCreateAccountRequest;
 import generated.zcsclient.admin.testCreateAccountResponse;
 import generated.zcsclient.admin.testCreateArchiveRequest;
@@ -171,6 +177,8 @@ import generated.zcsclient.admin.testGetAdminExtensionZimletsRequest;
 import generated.zcsclient.admin.testGetAdminExtensionZimletsResponse;
 import generated.zcsclient.admin.testGetAdminSavedSearchesRequest;
 import generated.zcsclient.admin.testGetAdminSavedSearchesResponse;
+import generated.zcsclient.admin.testGetAggregateQuotaUsageOnServerRequest;
+import generated.zcsclient.admin.testGetAggregateQuotaUsageOnServerResponse;
 import generated.zcsclient.admin.testGetAllAccountLoggersRequest;
 import generated.zcsclient.admin.testGetAllAccountLoggersResponse;
 import generated.zcsclient.admin.testGetAllAccountsRequest;
@@ -315,6 +323,8 @@ import generated.zcsclient.admin.testGrantRightRequest;
 import generated.zcsclient.admin.testGrantRightResponse;
 import generated.zcsclient.admin.testHsmRequest;
 import generated.zcsclient.admin.testHsmResponse;
+import generated.zcsclient.admin.testInjectStaticFilesRequest;
+import generated.zcsclient.admin.testInjectStaticFilesResponse;
 import generated.zcsclient.admin.testInstallCertRequest;
 import generated.zcsclient.admin.testInstallCertResponse;
 import generated.zcsclient.admin.testInstallLicenseRequest;
@@ -478,14 +488,14 @@ import generated.zcsclient.adminext.testPurgeBulkIMAPImportTasksResponse;
 @WebService(name = "zcsAdminPortType", targetNamespace = "http://www.zimbra.com/wsdl/ZimbraService.wsdl")
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
 @XmlSeeAlso({
-    generated.zcsclient.replication.ObjectFactory.class,
-    generated.zcsclient.account.ObjectFactory.class,
     generated.zcsclient.admin.ObjectFactory.class,
-    generated.zcsclient.adminext.ObjectFactory.class,
+    generated.zcsclient.replication.ObjectFactory.class,
+    generated.zcsclient.sync.ObjectFactory.class,
     generated.zcsclient.mail.ObjectFactory.class,
     generated.zcsclient.appblast.ObjectFactory.class,
+    generated.zcsclient.account.ObjectFactory.class,
     generated.zcsclient.zm.ObjectFactory.class,
-    generated.zcsclient.sync.ObjectFactory.class
+    generated.zcsclient.adminext.ObjectFactory.class
 })
 public interface ZcsAdminPortType {
 
@@ -842,6 +852,30 @@ public interface ZcsAdminPortType {
      * 
      * @param parameters
      * @return
+     *     returns generated.zcsclient.admin.testClearCookieResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/ClearCookie")
+    @WebResult(name = "ClearCookieResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public testClearCookieResponse clearCookieRequest(
+        @WebParam(name = "ClearCookieRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        testClearCookieRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns generated.zcsclient.admin.testComputeAggregateQuotaUsageResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/ComputeAggregateQuotaUsage")
+    @WebResult(name = "ComputeAggregateQuotaUsageResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public testComputeAggregateQuotaUsageResponse computeAggregateQuotaUsageRequest(
+        @WebParam(name = "ComputeAggregateQuotaUsageRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        testComputeAggregateQuotaUsageRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
      *     returns generated.zcsclient.admin.testConfigureZimletResponse
      */
     @WebMethod(action = "urn:zimbraAdmin/ConfigureZimlet")
@@ -873,6 +907,18 @@ public interface ZcsAdminPortType {
     public testCountAccountResponse countAccountRequest(
         @WebParam(name = "CountAccountRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
         testCountAccountRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns generated.zcsclient.admin.testCountObjectsResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/CountObjects")
+    @WebResult(name = "CountObjectsResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public testCountObjectsResponse countObjectsRequest(
+        @WebParam(name = "CountObjectsRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        testCountObjectsRequest parameters);
 
     /**
      * 
@@ -1473,6 +1519,18 @@ public interface ZcsAdminPortType {
     public testGetAdminSavedSearchesResponse getAdminSavedSearchesRequest(
         @WebParam(name = "GetAdminSavedSearchesRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
         testGetAdminSavedSearchesRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns generated.zcsclient.admin.testGetAggregateQuotaUsageOnServerResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/GetAggregateQuotaUsageOnServer")
+    @WebResult(name = "GetAggregateQuotaUsageOnServerResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public testGetAggregateQuotaUsageOnServerResponse getAggregateQuotaUsageOnServerRequest(
+        @WebParam(name = "GetAggregateQuotaUsageOnServerRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        testGetAggregateQuotaUsageOnServerRequest parameters);
 
     /**
      * 
@@ -2337,6 +2395,18 @@ public interface ZcsAdminPortType {
     public testHsmResponse hsmRequest(
         @WebParam(name = "HsmRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
         testHsmRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns generated.zcsclient.admin.testInjectStaticFilesResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/InjectStaticFiles")
+    @WebResult(name = "InjectStaticFilesResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public testInjectStaticFilesResponse injectStaticFilesRequest(
+        @WebParam(name = "InjectStaticFilesRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        testInjectStaticFilesRequest parameters);
 
     /**
      * 

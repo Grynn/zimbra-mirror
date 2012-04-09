@@ -48,7 +48,7 @@ import javax.xml.bind.annotation.XmlType;
     testAppointmentData.class,
     testTaskData.class
 })
-public class testCalendaringData
+public abstract class testCalendaringData
     extends testCommonCalendaringData
 {
 
