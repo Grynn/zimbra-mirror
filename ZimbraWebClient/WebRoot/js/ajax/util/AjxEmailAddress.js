@@ -511,3 +511,23 @@ function(a, b) {
 	if (addrA.toLowerCase() < addrB.toLowerCase()) { return -1; }
 	return 0;
 };
+
+/**
+ * Returns the list of addresses with duplicates (based on email) removed.
+ * 
+ * @param {array}	addrs	list of AjxEmailAddress
+ */
+AjxEmailAddress.dedup =
+function(addrs) {
+	var list = [], used = {};
+	if (addrs && addrs.length) {
+		for (var i = 0; i < addrs.length; i++) {
+			var addr = addrs[i];
+			if (!used[addr.address]) {
+				list.push(addr);
+			}
+			used[addr.address] = true;
+		}
+	}
+	return list;
+};
