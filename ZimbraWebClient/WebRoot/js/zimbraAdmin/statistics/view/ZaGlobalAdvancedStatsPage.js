@@ -613,12 +613,13 @@ ZaGlobalAdvancedStatsPage.removeChild = function(id) {
 ZaGlobalAdvancedStatsPage.insertChartHTML = function(element) {
 	var id = Math.random();
 	var form = document.createElement("form");
-	form.style.margin = "5px 20px";
+	form.style.margin = "5px 10px";
 	form.id = "loggerform" + id;
 	form.onsubmit = "return false;";
 	form.action = "#";
 	
 	var table = document.createElement("table");
+	table.className = "ChartSettings";
 	var tbody = document.createElement("tbody");
         table.appendChild(tbody);
 	table.id = "loggertable" + id;
@@ -706,7 +707,8 @@ ZaGlobalAdvancedStatsPage.insertChartHTML = function(element) {
 	var a;
 	var span;
 	a = document.createElement("a");
-	a.href = "#";
+	a.href = "javascript:void(0)";
+	a.className = "LinkButton";
 	a.onclick = function (evt) {
 	    var showing = ZaGlobalAdvancedStatsPage.showhide("loggertable" + id);
             var target = ZaGlobalAdvancedStatsPage.getTarget(evt);
@@ -715,22 +717,24 @@ ZaGlobalAdvancedStatsPage.insertChartHTML = function(element) {
 	ZaGlobalAdvancedStatsPage.setText(a, " - " + ZaMsg.NAD_AdvStatsChartSettingsLabel);
 	form.appendChild(a);
 	
-	span = document.createElement("span");
-	ZaGlobalAdvancedStatsPage.setText(span, " | ");
-	form.appendChild(span);
+	//span = document.createElement("span");
+	//ZaGlobalAdvancedStatsPage.setText(span, " | ");
+	//form.appendChild(span);
 	a = document.createElement("a");
-	a.href = "#";
+	a.href = "javascript:void(0)";
+	a.className = "LinkButton";
 	a.onclick = function () {
 	    var s = document.getElementById("select-counter" + id);
 	    ZaGlobalAdvancedStatsPage.counterSelected({ target: s }, id);
     }
 	ZaGlobalAdvancedStatsPage.setText(a, ZaMsg.NAD_AdvStatsUpdateChartLabel);
 	form.appendChild(a);
-	span = document.createElement("span");
-	ZaGlobalAdvancedStatsPage.setText(span, " | ");
-	form.appendChild(span);
+	//span = document.createElement("span");
+	//ZaGlobalAdvancedStatsPage.setText(span, " | ");
+	//form.appendChild(span);
 	a = document.createElement("a");
-	a.href = "#";
+	a.href = "javascript:void(0)";
+	a.className = "LinkButton";
 	a.onclick = function () {
 	    ZaGlobalAdvancedStatsPage.removeChild("loggerform" + id);
 	    ZaGlobalAdvancedStatsPage.removeChild("loggerchart" + id);
@@ -739,7 +743,7 @@ ZaGlobalAdvancedStatsPage.insertChartHTML = function(element) {
 	form.appendChild(a);
 	
 	var div = document.createElement("div");
-	div.style.padding = "20px";
+	div.style.padding = "5px 10px 15px";
 	div.id = "loggerchart" + id;
 	element.appendChild(form);
 	element.appendChild(div);
@@ -771,10 +775,11 @@ function () {
 	DwtTabViewPage.prototype._createHtml.call(this);
 	var element = this.getHtmlElement();
 	var div = document.createElement("div");
-	div.style.padding = "20px";
+	div.style.padding = "5px 10px";
 	var a = document.createElement("a");
 	ZaGlobalAdvancedStatsPage.setText(a, ZaMsg.NAD_AdvStatsAddChartLabel);
-	a.href = "#";
+	a.href = "javascript:void(0)";
+	a.className = "LinkButton";
 	a.onclick = function () { ZaGlobalAdvancedStatsPage.insertChartHTML(element); };
 	div.appendChild(a);
 	element.appendChild(div);

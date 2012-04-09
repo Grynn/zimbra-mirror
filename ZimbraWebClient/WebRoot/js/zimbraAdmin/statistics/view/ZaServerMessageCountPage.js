@@ -82,34 +82,30 @@ function (item) {
 
 ZaServerMessageCountPage.prototype._createHtml = 
 function () {
-    var idx = 0;
-    var html = new Array(50);
+	var idx = 0;
+	var html = new Array(50);
 	var serverId = this.serverId;
 	DwtTabViewPage.prototype._createHtml.call(this);
-	html[idx++] = "<h1 style='display: none' id='loggerchartservermc-flashdetect-" + serverId + "'></h1>";	
-	html[idx++] = "<h1 style='display: none' id='loggerchartservermc-no-mta-" + serverId + "'></h1>";	
-	html[idx++] = "<h3 style='padding-left: 10px'>" + ZaMsg.Stats_MC_Header + "</h3>" ;
-	html[idx++] = "<div id='loggerchartservermc-" + serverId + "'>";	
-	html[idx++] = "<table cellpadding='5' cellspacing='4' border='0' align='left' style='width: 90%'>";	
-	html[idx++] = "<tr valign='top'><td align='left' class='StatsImageTitle'>" + AjxStringUtil.htmlEncode(ZaMsg.NAD_StatsHour) + "</td></tr>";	
-	html[idx++] = "<tr valign='top'><td align='left'>";
-	html[idx++] = "<div id='loggerchartserver-message-count-48hours-" + serverId + "'></div>";	
-	html[idx++] = "</td></tr>";
-	html[idx++] = "<tr valign='top'><td align='left' class='StatsImageTitle'>" + AjxStringUtil.htmlEncode(ZaMsg.NAD_StatsDay) + "</td></tr>";	
-	html[idx++] = "<tr valign='top'><td align='left'>";
-	html[idx++] = "<div id='loggerchartserver-message-count-30days-" + serverId + "'></div>";	
-	html[idx++] = "</td></tr>";
-	html[idx++] = "<tr valign='top'><td align='left'>&nbsp;&nbsp;</td></tr>";	
-	html[idx++] = "<tr valign='top'><td align='left' class='StatsImageTitle'>" + AjxStringUtil.htmlEncode(ZaMsg.NAD_StatsMonth) + "</td></tr>";	
-	html[idx++] = "<tr valign='top'><td align='left'>";
-	html[idx++] = "<div id='loggerchartserver-message-count-60days-" + serverId + "'></div>";	
-	html[idx++] = "</td></tr>";
-	html[idx++] = "<tr valign='top'><td align='left'>&nbsp;&nbsp;</td></tr>";		
-	html[idx++] = "<tr valign='top'><td align='left' class='StatsImageTitle'>" + AjxStringUtil.htmlEncode(ZaMsg.NAD_StatsYear) + "</td></tr>";	
-	html[idx++] = "<tr valign='top'><td align='left'>";
+	html[idx++] = "<h1 style='display:none;' id='loggerchartservermc-flashdetect-" + serverId + "'></h1>";
+	html[idx++] = "<h1 style='display:none;' id='loggerchartservermc-no-mta-" + serverId + "'></h1>";
+	html[idx++] = "<div class='StatsHeader'>" + ZaMsg.Stats_MC_Header + "</div>";
+	html[idx++] = "<div class='StatsDiv' id='loggerchartservermc-" + serverId + "'>";
+	html[idx++] = "<div class='StatsImageTitle'>" + AjxStringUtil.htmlEncode(ZaMsg.NAD_StatsHour) + "</div>";
+	html[idx++] = "<div class='StatsImage'>";
+	html[idx++] = "<div id='loggerchartserver-message-count-48hours-" + serverId + "'></div>";
+	html[idx++] = "</div>";
+	html[idx++] = "<div class='StatsImageTitle'>" + AjxStringUtil.htmlEncode(ZaMsg.NAD_StatsDay) + "</div>";
+	html[idx++] = "<div class='StatsImage'>";
+	html[idx++] = "<div id='loggerchartserver-message-count-30days-" + serverId + "'></div>";
+	html[idx++] = "</div>";
+	html[idx++] = "<div class='StatsImageTitle'>" + AjxStringUtil.htmlEncode(ZaMsg.NAD_StatsMonth) + "</div>";
+	html[idx++] = "<div class='StatsImage'>";
+	html[idx++] = "<div id='loggerchartserver-message-count-60days-" + serverId + "'></div>";
+	html[idx++] = "</div>";
+	html[idx++] = "<div class='StatsImageTitle'>" + AjxStringUtil.htmlEncode(ZaMsg.NAD_StatsYear) + "</div>";
+	html[idx++] = "<div class='StatsImage'>";
 	html[idx++] = "<div id='loggerchartserver-message-count-year-" + serverId + "'></div>";
-	html[idx++] = "</td></tr>";
-	html[idx++] = "</table>";
+	html[idx++] = "</div>";
 	html[idx++] = "</div>";
 	this.getHtmlElement().innerHTML = html.join("");
 }

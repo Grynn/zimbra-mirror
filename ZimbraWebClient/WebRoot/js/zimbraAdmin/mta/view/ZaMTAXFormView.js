@@ -517,12 +517,12 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 			]
 		},
 		{type:_TAB_BAR_, ref:ZaModel.currentTab,
-			containerCssStyle: "padding-top:0px",
+			containerCssStyle: "background-color:#DDD;padding-top:5px;",
 			choices:ZaMTAXFormView.tabChoices,
 			cssClass:"ZaTabBar", id:"xform_tabbar"
 		},
 		{type:_SWITCH_, items:[
-				{type:_ZATABCASE_, numCols:1, caseKey:ZaMTAXFormView._tab1, 
+				{type:_ZATABCASE_, numCols:1, width:"100%", caseKey:ZaMTAXFormView._tab1, 
 					items:[	
 						{type:_SPACER_, height:"15"},
 						{type:_GROUP_,numCols:8, colSizes:["10%", "10%","10%", "15%", "17%", "25%", "auto", "10%"],tableCssClass:"search_field_tableCssClass", cssClass:"qsearch_field_bar", width:"95%", items: [
@@ -605,7 +605,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 						]}		
 					]
 				},							
-				{type:_ZATABCASE_, numCols:1,  caseKey:ZaMTAXFormView._tab2, 
+				{type:_ZATABCASE_, numCols:1, width:"100%", caseKey:ZaMTAXFormView._tab2, 
 					items:[	
 						{type:_SPACER_, height:"15"},
 						{type:_GROUP_,numCols:8, colSizes:["10%", "10%","10%", "15%", "15%", "25%", "auto", "10%"],tableCssClass:"search_field_tableCssClass", cssClass:"qsearch_field_bar", width:"95%", items: [
