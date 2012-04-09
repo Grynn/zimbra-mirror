@@ -1387,6 +1387,11 @@ function (account) {
 	if(!this.attrs[ZaItem.A_zimbraId] && this.id) {
 		this.attrs[ZaItem.A_zimbraId] = this.id;
 	}
+
+	if(this.attrs[ZaAccount.A_zimbraProxyAllowedDomains] &&
+       (!(this.attrs[ZaAccount.A_zimbraProxyAllowedDomains] instanceof Array)) ) {
+		this.attrs[ZaAccount.A_zimbraProxyAllowedDomains] = [this.attrs[ZaAccount.A_zimbraProxyAllowedDomains]];
+	}
 }
 
 /**

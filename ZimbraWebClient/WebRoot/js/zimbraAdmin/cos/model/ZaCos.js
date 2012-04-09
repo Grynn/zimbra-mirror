@@ -278,6 +278,11 @@ function (by, val) {
         if (poIntervalInS >= 1)
             this.attrs[ZaAccount.A_zimbraPrefMailPollingInterval] = poIntervalInS + "s";
     }
+
+	if(this.attrs[ZaCos.A_zimbraProxyAllowedDomains] &&
+       (!(this.attrs[ZaCos.A_zimbraProxyAllowedDomains] instanceof Array)) ) {
+		this.attrs[ZaCos.A_zimbraProxyAllowedDomains] = [this.attrs[ZaCos.A_zimbraProxyAllowedDomains]];
+	}
 }
 ZaItem.loadMethods["ZaCos"].push(ZaCos.loadMethod);
 
