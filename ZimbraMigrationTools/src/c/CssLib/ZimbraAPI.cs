@@ -1532,7 +1532,8 @@ public class ZimbraAPI
         attr = "content0" + "_" + num.ToString();
         if (appt[attr].Length > 0)
         {
-            WriteNVPair(writer, "content", System.Text.Encoding.Default.GetString(File.ReadAllBytes(appt[attr])));
+            WriteNVPair(writer, "content", System.Text.Encoding.Unicode.GetString(File.ReadAllBytes(appt[attr])));
+            //WriteNVPair(writer, "content", System.Text.Encoding.Default.GetString(File.ReadAllBytes(appt[attr])));
         }
 
         attr = "contentType1" + "_" + num.ToString();
