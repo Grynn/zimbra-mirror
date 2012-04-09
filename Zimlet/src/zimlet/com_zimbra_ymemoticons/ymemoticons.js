@@ -43,7 +43,7 @@ function(msg, manager) {
 		this.enableInMail = Boolean(this.getUserProperty("yemoticons_enableInMail"));
 	}
 
-	if (msg.folderId == ZmOrganizer.ID_CHATS) {
+	if (msg && msg.folderId == ZmOrganizer.ID_CHATS) {
 		manager.addHandler(this);
 		manager.sortHandlers();
 		manager.__hasSmileysHandler = true;
