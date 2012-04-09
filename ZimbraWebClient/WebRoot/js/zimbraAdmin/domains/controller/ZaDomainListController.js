@@ -585,26 +585,25 @@ ZaDomainListController.prototype._deleteDomainsCallback =
 function () {
     if(!this._successRemList)
 	    this._successRemList=new Array();
-	for(var key in this._removeList) {
-		if(this._removeList[key] && AjxUtil.indexOf(this._successRemList, this._removeList[key]) == -1) {
-			try {
-				this._removeList[key].remove();
-                this.fireRemovalEvent(this._removeList[key]);
-				this._successRemList.push(this._removeList[key]);
-			} catch (ex) {
-				this._removeConfirmMessageDialog.popdown();
-				if(ex.code == ZmCsfeException.DOMAIN_NOT_EMPTY) {
+    for(var key in this._removeList) {
+        if(this._removeList[key] && AjxUtil.indexOf(this._successRemList, this._removeList[key]) == -1) {
+            try {
+                this._removeList[key].remove();
+                this._successRemList.push(this._removeList[key]);
+            } catch (ex) {
+                this._removeConfirmMessageDialog.popdown();
+                if(ex.code == ZmCsfeException.DOMAIN_NOT_EMPTY) {
                     this._forceDeleteDomain(this._removeList[key]);
-					//this._errorDialog.setMessage(ZaMsg.ERROR_DOMAIN_NOT_EMPTY, null, DwtMessageDialog.CRITICAL_STYLE, null);
-					//this._errorDialog.popup();
-				} else {
-					this._handleException(ex, "ZaDomainListController.prototype._deleteDomainsCallback", null, false);				
-				}
-				return;
-			}
-		    this._list.remove(this._removeList[key]); //remove from the list
+                    //this._errorDialog.setMessage(ZaMsg.ERROR_DOMAIN_NOT_EMPTY, null, DwtMessageDialog.CRITICAL_STYLE, null);
+                    //this._errorDialog.popup();
+                } else {
+                    this._handleException(ex, "ZaDomainListController.prototype._deleteDomainsCallback", null, false);
+                }
+                return;
+            }
+            this._list.remove(this._removeList[key]); //remove from the list
         }
-	}
+    }
 	this.fireRemovalEvent(this._successRemList);
     this._successRemList = null;
 	this._removeConfirmMessageDialog.popdown();
