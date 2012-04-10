@@ -44,7 +44,7 @@ index 46fd268..77886e1 100644
  		/* Maximum free space in an empty page */
  		pmax = mc->mc_txn->mt_env->me_psize - PAGEHDRSZ;
  		nsize = mdb_leaf_size(mc->mc_txn->mt_env, newkey, newdata);
-+		if ((nkeys < 4) || (nsize > pmax/4)) {
++		if ((nkeys < 20) || (nsize > pmax/4)) {
  		if (newindx <= split_indx) {
  			psize = nsize;
  			newpos = 0;
