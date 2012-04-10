@@ -42,9 +42,9 @@ my $isLdapMaster = getLocalConfig("ldap_is_master");
 
 chomp($isLdapMaster);
 if (lc($isLdapMaster) eq "true" ) {
-   $isLdapMaster = 1;
+  $isLdapMaster = 1;
 } else {
-   $isLdapMaster = 0;
+  $isLdapMaster = 0;
 }
 
 if ( !-d $zimbra_tmp_directory ) {
@@ -54,13 +54,13 @@ if ( !-d $zimbra_tmp_directory ) {
 getopts('arcblnph',\%options) or die "Unable to set options\n";
 
 if ($options{h})  {
-   usage();
-   exit 1;
+  usage();
+  exit 1;
 }
 
 if ( $options{r} + $options{p} + $options{l} + $options{n} + $options{a} + $options{b} > 1) {
-    usage();
-    exit 1;
+  usage();
+  exit 1;
 }
 
 if ( $options{c} && !$options{l} ) {
@@ -74,8 +74,8 @@ if ( $options{c} && $isLdapMaster ) {
 }
 
 if ($#ARGV == -1) {
-    usage();
-    exit 1;
+  usage();
+  exit 1;
 }
 
 my $password = $ARGV[0];
@@ -101,302 +101,332 @@ if (!$options{r} && !$options{c}) {
 
 if ( $ldap_starttls_supported ) {
   my $mesg = $ldap->start_tls(
-          verify => 'require',
-          capath => "$zimbra_home/conf/ca",
-          ) or die "start_tls: $@";
-
+       verify => 'require',
+       capath => "$zimbra_home/conf/ca",
+     ) or die "start_tls: $@";
   $mesg->code && die "TLS: " . $mesg->error . "\n";
 }
 
 if ( $options{r}) {
-    setLocalConfig("ldap_root_password", "$password");
-    my $mesg = $ldap->bind("cn=config", password=>"$cur_rootdn_passwd");
+  setLocalConfig("ldap_root_password", "$password");
+  my $mesg = $ldap->bind("cn=config", password=>"$password");
+  if ($mesg->code) {
+    $mesg = $ldap->bind("cn=config", password=>"$cur_rootdn_passwd");
     my $entry = Net::LDAP::Entry->new;
     $entry->changetype ( "modify" );
     $entry->dn('olcDatabase={0}config,cn=config'); 
     $entry->replace(
-        olcRootPW=> "$ssha_password",
+      olcRootPW=> "$ssha_password",
     );
     $entry->update($ldap);
+  }
 } elsif ( $options{l} ) {
-    setLocalConfig("ldap_replication_password", "$password");
-    my $mesg = $ldap->bind("cn=config", password=>"$cur_rootdn_passwd");
+  setLocalConfig("ldap_replication_password", "$password");
+  my $mesg = $ldap->bind('uid=zmreplica,cn=admins,cn=zimbra', password=>"$password");
+  if ($mesg->code) {
+    $mesg = $ldap->bind("cn=config", password=>"$cur_rootdn_passwd");
     if (!$options{c}) {
-        $mesg = $ldap->modify('uid=zmreplica,cn=admins,cn=zimbra',
-                               replace => [ userPassword => $password] );
-        my $infile = "$zimbra_home/conf/zimbra.ldif";
-        my $outfile = "$zimbra_tmp_directory/zimbra.ldif.$$";
-        my $ldifin = Net::LDAP::LDIF->new( "$infile", "r", onerror => 'undef' );
-        my $ldifout = Net::LDAP::LDIF->new("$outfile", "w", onerror => 'undef' );
-        my $entry;
-        while( not $ldifin->eof ( ) ) {
-          $entry = $ldifin->read_entry ( );
-          if ( $ldifin->error ( ) ) {
-            print "Error msg: ", $ldifin->error ( ), "\n";
-            print "Error lines:\n", $ldifin->error_lines ( ), "\n";
-          } else {
-              if ($entry->dn() eq "uid=zmreplica,cn=admins,cn=zimbra") {
-                $entry->replace (
-                  userPassword => "$ssha_password",
-                );
-              }
-            $ldifout->write($entry);
-          }
-        }
-        $ldifin->done ( ); 
-        $ldifout->done ( );
-        if ( -s $outfile ) {
-          my $rc=0xffff & system("/bin/mv -f $infile $infile.bak");
-          if ($rc != 0) {
-            print "Warning: Failed to backup $infile\n";
-          }
-          $rc=0xffff & system("/bin/mv -f $outfile $infile");
-          if ($rc != 0) {
-            print "Failed to move $outfile to $infile\nRestoring old configuration\n";
-            $rc=0xffff & system("/bin/mv -f $infile.bak $infile");
-            if ($rc != 0) {
-              print "Failed to restore backup\n";
-            }
-          } else {
-            system("/bin/rm -f $infile.bak");
-          }
-        }
-    } elsif (!$isLdapMaster)  {
-        $mesg = $ldap->search(
-            base => "olcDatabase={2}mdb,cn=config",
-            filter => "(olcSyncrepl=*)",
-            attrs => ['olcSyncrepl']
-        );
-        my $entry=$mesg->entry(0);
-        my $attr = $entry->get_value("olcSyncrepl");
-        my ($attr1, $attr2);
-        ($attr, $attr1) = split (/credentials=/, $attr, 2);
-        ($attr1, $attr2) = split (/filter=/, $attr1, 2);
-        $attr = $attr."credentials=";
-        $attr2 = " filter=".$attr2;
-        $attr1="$password";
-        $attr = $attr . $attr1 . $attr2;
-        $mesg = $ldap->modify(
-            $entry->dn,
-            replace => {
-                olcSyncrepl => "$attr",
-            }
-        );
-    } else {
-       print "Error: Trying to run a replica only change on a master.\n";
-       exit 1;
+      $mesg = $ldap->modify(
+        'uid=zmreplica,cn=admins,cn=zimbra',
+        replace => [ userPassword => $password]
+      );
     }
+  }
+  if (!$options{c}) {
+    my $infile = "$zimbra_home/conf/zimbra.ldif";
+    my $outfile = "$zimbra_tmp_directory/zimbra.ldif.$$";
+    my $ldifin = Net::LDAP::LDIF->new( "$infile", "r", onerror => 'undef' );
+    my $ldifout = Net::LDAP::LDIF->new("$outfile", "w", onerror => 'undef' );
+    my $entry;
+    while( not $ldifin->eof ( ) ) {
+      $entry = $ldifin->read_entry ( );
+      if ( $ldifin->error ( ) ) {
+        print "Error msg: ", $ldifin->error ( ), "\n";
+        print "Error lines:\n", $ldifin->error_lines ( ), "\n";
+      } else {
+        if ($entry->dn() eq "uid=zmreplica,cn=admins,cn=zimbra") {
+          $entry->replace (
+            userPassword => "$ssha_password",
+          );
+        }
+        $ldifout->write($entry);
+      }
+    }
+    $ldifin->done ( ); 
+    $ldifout->done ( );
+    if ( -s $outfile ) {
+      my $rc=0xffff & system("/bin/mv -f $infile $infile.bak");
+      if ($rc != 0) {
+        print "Warning: Failed to backup $infile\n";
+      }
+      $rc=0xffff & system("/bin/mv -f $outfile $infile");
+      if ($rc != 0) {
+        print "Failed to move $outfile to $infile\nRestoring old configuration\n";
+        $rc=0xffff & system("/bin/mv -f $infile.bak $infile");
+        if ($rc != 0) {
+          print "Failed to restore backup\n";
+        }
+      } else {
+        system("/bin/rm -f $infile.bak");
+      }
+    }
+  }
+  $mesg = $ldap->search(
+    base => "olcDatabase={2}mdb,cn=config",
+    filter => "(olcSyncrepl=*)",
+    attrs => ['olcSyncrepl']
+  );
+  my $entry=$mesg->entry(0);
+  my $attr = $entry->get_value("olcSyncrepl");
+  my ($attr1, $attr2);
+  ($attr, $attr1) = split (/credentials=/, $attr, 2);
+  ($attr1, $attr2) = split (/filter=/, $attr1, 2);
+  $attr = $attr."credentials=";
+  $attr2 = " filter=".$attr2;
+  $attr1="$password";
+  $attr = $attr . $attr1 . $attr2;
+  $mesg = $ldap->modify(
+    $entry->dn,
+    replace => {
+      olcSyncrepl => "$attr",
+    }
+  );
 } elsif ( $options{p} ) {
-    setLocalConfig("ldap_postfix_password", "$password");
-    my $mesg = $ldap->bind("cn=config", password=>"$cur_rootdn_passwd");
-    $mesg = $ldap->modify('uid=zmpostfix,cn=appaccts,cn=zimbra',
-                           replace => [ userPassword => $password ] );
-    my $infile = "$zimbra_home/conf/zimbra.ldif";
-    my $outfile = "$zimbra_tmp_directory/zimbra.ldif.$$";
-    my $ldifin = Net::LDAP::LDIF->new( "$infile", "r", onerror => 'undef' );
-    my $ldifout = Net::LDAP::LDIF->new("$outfile", "w", onerror => 'undef' );
-    my $entry;
-    while( not $ldifin->eof ( ) ) {
-      $entry = $ldifin->read_entry ( );
-      if ( $ldifin->error ( ) ) {
-        print "Error msg: ", $ldifin->error ( ), "\n";
-        print "Error lines:\n", $ldifin->error_lines ( ), "\n";
-      } else {
-          if ($entry->dn() eq "uid=zmpostfix,cn=appaccts,cn=zimbra") {
-            $entry->replace (
-              userPassword => "$ssha_password",
-            );
-          }
-        $ldifout->write($entry);
+  setLocalConfig("ldap_postfix_password", "$password");
+  my $mesg = $ldap->bind('uid=zmpostfix,cn=appaccts,cn=zimbra', password=>"$password");
+  if ($mesg->code) {
+    $mesg = $ldap->bind("cn=config", password=>"$cur_rootdn_passwd");
+    $mesg = $ldap->modify(
+      'uid=zmpostfix,cn=appaccts,cn=zimbra',
+      replace => [ userPassword => $password ],
+    );
+  }
+  my $infile = "$zimbra_home/conf/zimbra.ldif";
+  my $outfile = "$zimbra_tmp_directory/zimbra.ldif.$$";
+  my $ldifin = Net::LDAP::LDIF->new( "$infile", "r", onerror => 'undef' );
+  my $ldifout = Net::LDAP::LDIF->new("$outfile", "w", onerror => 'undef' );
+  my $entry;
+  while( not $ldifin->eof ( ) ) {
+    $entry = $ldifin->read_entry ( );
+    if ( $ldifin->error ( ) ) {
+      print "Error msg: ", $ldifin->error ( ), "\n";
+      print "Error lines:\n", $ldifin->error_lines ( ), "\n";
+    } else {
+      if ($entry->dn() eq "uid=zmpostfix,cn=appaccts,cn=zimbra") {
+        $entry->replace (
+          userPassword => "$ssha_password",
+        );
       }
+      $ldifout->write($entry);
     }
-    $ldifin->done ( ); 
-    $ldifout->done ( );
-    if ( -s $outfile ) {
-      my $rc=0xffff & system("/bin/mv -f $infile $infile.bak");
-      if ($rc != 0) {
-        print "Warning: Failed to backup $infile\n";
-      }
-      $rc=0xffff & system("/bin/mv -f $outfile $infile");
-      if ($rc != 0) {
-        print "Failed to move $outfile to $infile\nRestoring old configuration\n";
-        $rc=0xffff & system("/bin/mv -f $infile.bak $infile");
-        if ($rc != 0) {
-          print "Failed to restore backup\n";
-        }
-      } else {
-        system("/bin/rm -f $infile.bak");
-      }
+  }
+  $ldifin->done ( ); 
+  $ldifout->done ( );
+  if ( -s $outfile ) {
+    my $rc=0xffff & system("/bin/mv -f $infile $infile.bak");
+    if ($rc != 0) {
+      print "Warning: Failed to backup $infile\n";
     }
+    $rc=0xffff & system("/bin/mv -f $outfile $infile");
+    if ($rc != 0) {
+      print "Failed to move $outfile to $infile\nRestoring old configuration\n";
+      $rc=0xffff & system("/bin/mv -f $infile.bak $infile");
+      if ($rc != 0) {
+        print "Failed to restore backup\n";
+      }
+    } else {
+      system("/bin/rm -f $infile.bak");
+    }
+  }
 } elsif ( $options{a} ) {
-    setLocalConfig("ldap_amavis_password", "$password");
-    my $mesg = $ldap->bind("cn=config", password=>"$cur_rootdn_passwd");
-    $mesg = $ldap->modify('uid=zmamavis,cn=appaccts,cn=zimbra',
-                           replace  => [ userPassword => $password ] );
-    my $infile = "$zimbra_home/conf/zimbra.ldif";
-    my $outfile = "$zimbra_tmp_directory/zimbra.ldif.$$";
-    my $ldifin = Net::LDAP::LDIF->new( "$infile", "r", onerror => 'undef' );
-    my $ldifout = Net::LDAP::LDIF->new("$outfile", "w", onerror => 'undef' );
-    my $entry;
-    while( not $ldifin->eof ( ) ) {
-      $entry = $ldifin->read_entry ( );
-      if ( $ldifin->error ( ) ) {
-        print "Error msg: ", $ldifin->error ( ), "\n";
-        print "Error lines:\n", $ldifin->error_lines ( ), "\n";
-      } else {
-          if ($entry->dn() eq "uid=zmamavis,cn=appaccts,cn=zimbra") {
-            $entry->replace (
-              userPassword => "$ssha_password",
-            );
-          }
-        $ldifout->write($entry);
+  setLocalConfig("ldap_amavis_password", "$password");
+  my $mesg = $ldap->bind('uid=zmamavis,cn=appaccts,cn=zimbra', password=>"$password");
+  if ($mesg->code) {
+    $mesg = $ldap->bind("cn=config", password=>"$cur_rootdn_passwd");
+    $mesg = $ldap->modify(
+      'uid=zmamavis,cn=appaccts,cn=zimbra',
+      replace  => [ userPassword => $password ],
+    );
+  }
+  my $infile = "$zimbra_home/conf/zimbra.ldif";
+  my $outfile = "$zimbra_tmp_directory/zimbra.ldif.$$";
+  my $ldifin = Net::LDAP::LDIF->new( "$infile", "r", onerror => 'undef' );
+  my $ldifout = Net::LDAP::LDIF->new("$outfile", "w", onerror => 'undef' );
+  my $entry;
+  while( not $ldifin->eof ( ) ) {
+    $entry = $ldifin->read_entry ( );
+    if ( $ldifin->error ( ) ) {
+      print "Error msg: ", $ldifin->error ( ), "\n";
+      print "Error lines:\n", $ldifin->error_lines ( ), "\n";
+    } else {
+      if ($entry->dn() eq "uid=zmamavis,cn=appaccts,cn=zimbra") {
+        $entry->replace (
+          userPassword => "$ssha_password",
+        );
       }
+      $ldifout->write($entry);
     }
-    $ldifin->done ( ); 
-    $ldifout->done ( );
-    if ( -s $outfile ) {
-      my $rc=0xffff & system("/bin/mv -f $infile $infile.bak");
-      if ($rc != 0) {
-        print "Warning: Failed to backup $infile\n";
-      }
-      $rc=0xffff & system("/bin/mv -f $outfile $infile");
-      if ($rc != 0) {
-        print "Failed to move $outfile to $infile\nRestoring old configuration\n";
-        $rc=0xffff & system("/bin/mv -f $infile.bak $infile");
-        if ($rc != 0) {
-          print "Failed to restore backup\n";
-        }
-      } else {
-        system("/bin/rm -f $infile.bak");
-      }
+  }
+  $ldifin->done ( ); 
+  $ldifout->done ( );
+  if ( -s $outfile ) {
+    my $rc=0xffff & system("/bin/mv -f $infile $infile.bak");
+    if ($rc != 0) {
+      print "Warning: Failed to backup $infile\n";
     }
+    $rc=0xffff & system("/bin/mv -f $outfile $infile");
+    if ($rc != 0) {
+      print "Failed to move $outfile to $infile\nRestoring old configuration\n";
+      $rc=0xffff & system("/bin/mv -f $infile.bak $infile");
+      if ($rc != 0) {
+        print "Failed to restore backup\n";
+      }
+    } else {
+      system("/bin/rm -f $infile.bak");
+    }
+  }
 } elsif ( $options{n} ) {
-    setLocalConfig("ldap_nginx_password", "$password");
-    my $mesg = $ldap->bind("cn=config", password=>"$cur_rootdn_passwd");
-    $mesg = $ldap->modify('uid=zmnginx,cn=appaccts,cn=zimbra',
-                           replace  => [ userPassword => $password ] );
-    my $infile = "$zimbra_home/conf/zimbra.ldif";
-    my $outfile = "$zimbra_tmp_directory/zimbra.ldif.$$";
-    my $ldifin = Net::LDAP::LDIF->new( "$infile", "r", onerror => 'undef' );
-    my $ldifout = Net::LDAP::LDIF->new("$outfile", "w", onerror => 'undef' );
-    my $entry;
-    while( not $ldifin->eof ( ) ) {
-      $entry = $ldifin->read_entry ( );
-      if ( $ldifin->error ( ) ) {
-        print "Error msg: ", $ldifin->error ( ), "\n";
-        print "Error lines:\n", $ldifin->error_lines ( ), "\n";
-      } else {
-          if ($entry->dn() eq "uid=zmnginx,cn=appaccts,cn=zimbra") {
-            $entry->replace (
-              userPassword => "$ssha_password",
-            );
-          }
-        $ldifout->write($entry);
+  setLocalConfig("ldap_nginx_password", "$password");
+  my $mesg = $ldap->bind( 'uid=zmnginx,cn=appaccts,cn=zimbra', password=>"$password");
+  if ($mesg->code) {
+    $mesg = $ldap->bind("cn=config", password=>"$cur_rootdn_passwd");
+    $mesg = $ldap->modify(
+      'uid=zmnginx,cn=appaccts,cn=zimbra',
+      replace  => [ userPassword => $password ],
+    );
+  }
+  my $infile = "$zimbra_home/conf/zimbra.ldif";
+  my $outfile = "$zimbra_tmp_directory/zimbra.ldif.$$";
+  my $ldifin = Net::LDAP::LDIF->new( "$infile", "r", onerror => 'undef' );
+  my $ldifout = Net::LDAP::LDIF->new("$outfile", "w", onerror => 'undef' );
+  my $entry;
+  while( not $ldifin->eof ( ) ) {
+    $entry = $ldifin->read_entry ( );
+    if ( $ldifin->error ( ) ) {
+      print "Error msg: ", $ldifin->error ( ), "\n";
+      print "Error lines:\n", $ldifin->error_lines ( ), "\n";
+    } else {
+      if ($entry->dn() eq "uid=zmnginx,cn=appaccts,cn=zimbra") {
+        $entry->replace (
+          userPassword => "$ssha_password",
+        );
       }
+      $ldifout->write($entry);
     }
-    $ldifin->done ( ); 
-    $ldifout->done ( );
-    if ( -s $outfile ) {
-      my $rc=0xffff & system("/bin/mv -f $infile $infile.bak");
-      if ($rc != 0) {
-        print "Warning: Failed to backup $infile\n";
-      }
-      $rc=0xffff & system("/bin/mv -f $outfile $infile");
-      if ($rc != 0) {
-        print "Failed to move $outfile to $infile\nRestoring old configuration\n";
-        $rc=0xffff & system("/bin/mv -f $infile.bak $infile");
-        if ($rc != 0) {
-          print "Failed to restore backup\n";
-        }
-      } else {
-        system("/bin/rm -f $infile.bak");
-      }
+  }
+  $ldifin->done ( ); 
+  $ldifout->done ( );
+  if ( -s $outfile ) {
+    my $rc=0xffff & system("/bin/mv -f $infile $infile.bak");
+    if ($rc != 0) {
+      print "Warning: Failed to backup $infile\n";
     }
+    $rc=0xffff & system("/bin/mv -f $outfile $infile");
+    if ($rc != 0) {
+      print "Failed to move $outfile to $infile\nRestoring old configuration\n";
+      $rc=0xffff & system("/bin/mv -f $infile.bak $infile");
+      if ($rc != 0) {
+        print "Failed to restore backup\n";
+      }
+    } else {
+      system("/bin/rm -f $infile.bak");
+    }
+  }
 } elsif ( $options{b} ) {
-    setLocalConfig("ldap_bes_searcher_password", "$password");
-    my $mesg = $ldap->bind("cn=config", password=>"$cur_rootdn_passwd");
-    $mesg = $ldap->modify('uid=zmbes-searcher,cn=appaccts,cn=zimbra',
-                           replace  => [ userPassword => $password ] );
-    my $infile = "$zimbra_home/conf/zimbra.ldif";
-    my $outfile = "$zimbra_tmp_directory/zimbra.ldif.$$";
-    my $ldifin = Net::LDAP::LDIF->new( "$infile", "r", onerror => 'undef' );
-    my $ldifout = Net::LDAP::LDIF->new("$outfile", "w", onerror => 'undef' );
-    my $entry;
-    while( not $ldifin->eof ( ) ) {
-      $entry = $ldifin->read_entry ( );
-      if ( $ldifin->error ( ) ) {
-        print "Error msg: ", $ldifin->error ( ), "\n";
-        print "Error lines:\n", $ldifin->error_lines ( ), "\n";
-      } else {
-          if ($entry->dn() eq "uid=zmbes-searcher,cn=appaccts,cn=zimbra") {
-            $entry->replace (
-              userPassword => "$ssha_password",
-            );
-          }
-        $ldifout->write($entry);
+  setLocalConfig("ldap_bes_searcher_password", "$password");
+  my $mesg = $ldap->bind('uid=zmbes-searcher,cn=appaccts,cn=zimbra', password=>"$password");
+  if ($mesg->code) {
+    $mesg = $ldap->bind("cn=config", password=>"$cur_rootdn_passwd");
+    $mesg = $ldap->modify(
+      'uid=zmbes-searcher,cn=appaccts,cn=zimbra',
+      replace  => [ userPassword => $password ],
+    );
+  }
+  my $infile = "$zimbra_home/conf/zimbra.ldif";
+  my $outfile = "$zimbra_tmp_directory/zimbra.ldif.$$";
+  my $ldifin = Net::LDAP::LDIF->new( "$infile", "r", onerror => 'undef' );
+  my $ldifout = Net::LDAP::LDIF->new("$outfile", "w", onerror => 'undef' );
+  my $entry;
+  while( not $ldifin->eof ( ) ) {
+    $entry = $ldifin->read_entry ( );
+    if ( $ldifin->error ( ) ) {
+      print "Error msg: ", $ldifin->error ( ), "\n";
+      print "Error lines:\n", $ldifin->error_lines ( ), "\n";
+    } else {
+      if ($entry->dn() eq "uid=zmbes-searcher,cn=appaccts,cn=zimbra") {
+        $entry->replace (
+          userPassword => "$ssha_password",
+        );
       }
+      $ldifout->write($entry);
     }
-    $ldifin->done ( ); 
-    $ldifout->done ( );
-    if ( -s $outfile ) {
-      my $rc=0xffff & system("/bin/mv -f $infile $infile.bak");
-      if ($rc != 0) {
-        print "Warning: Failed to backup $infile\n";
-      }
-      $rc=0xffff & system("/bin/mv -f $outfile $infile");
-      if ($rc != 0) {
-        print "Failed to move $outfile to $infile\nRestoring old configuration\n";
-        $rc=0xffff & system("/bin/mv -f $infile.bak $infile");
-        if ($rc != 0) {
-          print "Failed to restore backup\n";
-        }
-      } else {
-        system("/bin/rm -f $infile.bak");
-      }
+  }
+  $ldifin->done ( ); 
+  $ldifout->done ( );
+  if ( -s $outfile ) {
+    my $rc=0xffff & system("/bin/mv -f $infile $infile.bak");
+    if ($rc != 0) {
+      print "Warning: Failed to backup $infile\n";
     }
+    $rc=0xffff & system("/bin/mv -f $outfile $infile");
+    if ($rc != 0) {
+      print "Failed to move $outfile to $infile\nRestoring old configuration\n";
+      $rc=0xffff & system("/bin/mv -f $infile.bak $infile");
+      if ($rc != 0) {
+        print "Failed to restore backup\n";
+      }
+    } else {
+      system("/bin/rm -f $infile.bak");
+    }
+  }
 } else {
-    my $zimbra_ldap_userdn = getLocalConfig("zimbra_ldap_userdn");
-    setLocalConfig("zimbra_ldap_password", "$password");
-    my $mesg = $ldap->bind("cn=config", password=>"$cur_rootdn_passwd");
-    $mesg = $ldap->modify("$zimbra_ldap_userdn",
-                           replace => [ userPassword => $password ] );
-    my $infile = "$zimbra_home/conf/zimbra.ldif";
-    my $outfile = "$zimbra_tmp_directory/zimbra.ldif.$$";
-    my $ldifin = Net::LDAP::LDIF->new( "$infile", "r", onerror => 'undef' );
-    my $ldifout = Net::LDAP::LDIF->new("$outfile", "w", onerror => 'undef' );
-    my $entry;
-    while( not $ldifin->eof ( ) ) {
-      $entry = $ldifin->read_entry ( );
-      if ( $ldifin->error ( ) ) {
-        print "Error msg: ", $ldifin->error ( ), "\n";
-        print "Error lines:\n", $ldifin->error_lines ( ), "\n";
-      } else {
-          if ($entry->dn() eq "$zimbra_ldap_userdn") {
-            $entry->replace (
-              userPassword => "$ssha_password",
-            );
-          }
-        $ldifout->write($entry);
+  my $zimbra_ldap_userdn = getLocalConfig("zimbra_ldap_userdn");
+  setLocalConfig("zimbra_ldap_password", "$password");
+  my $mesg = $ldap->bind("$zimbra_ldap_userdn", password=>"$password");
+  if ($mesg->code) {
+    $mesg = $ldap->bind("cn=config", password=>"$cur_rootdn_passwd");
+    $mesg = $ldap->modify(
+      "$zimbra_ldap_userdn",
+      replace => [ userPassword => $password ],
+    );
+  }
+  my $infile = "$zimbra_home/conf/zimbra.ldif";
+  my $outfile = "$zimbra_tmp_directory/zimbra.ldif.$$";
+  my $ldifin = Net::LDAP::LDIF->new( "$infile", "r", onerror => 'undef' );
+  my $ldifout = Net::LDAP::LDIF->new("$outfile", "w", onerror => 'undef' );
+  my $entry;
+  while( not $ldifin->eof ( ) ) {
+    $entry = $ldifin->read_entry ( );
+    if ( $ldifin->error ( ) ) {
+      print "Error msg: ", $ldifin->error ( ), "\n";
+      print "Error lines:\n", $ldifin->error_lines ( ), "\n";
+    } else {
+      if ($entry->dn() eq "$zimbra_ldap_userdn") {
+        $entry->replace (
+          userPassword => "$ssha_password",
+        );
       }
+      $ldifout->write($entry);
     }
-    $ldifin->done ( ); 
-    $ldifout->done ( );
-    if ( -s $outfile ) {
-      my $rc=0xffff & system("/bin/mv -f $infile $infile.bak");
-      if ($rc != 0) {
-        print "Warning: Failed to backup $infile\n";
-      }
-      $rc=0xffff & system("/bin/mv -f $outfile $infile");
-      if ($rc != 0) {
-        print "Failed to move $outfile to $infile\nRestoring old configuration\n";
-        $rc=0xffff & system("/bin/mv -f $infile.bak $infile");
-        if ($rc != 0) {
-          print "Failed to restore backup\n";
-        }
-      } else {
-        system("/bin/rm -f $infile.bak");
-      }
+  }
+  $ldifin->done ( ); 
+  $ldifout->done ( );
+  if ( -s $outfile ) {
+    my $rc=0xffff & system("/bin/mv -f $infile $infile.bak");
+    if ($rc != 0) {
+      print "Warning: Failed to backup $infile\n";
     }
+    $rc=0xffff & system("/bin/mv -f $outfile $infile");
+    if ($rc != 0) {
+      print "Failed to move $outfile to $infile\nRestoring old configuration\n";
+      $rc=0xffff & system("/bin/mv -f $infile.bak $infile");
+      if ($rc != 0) {
+        print "Failed to restore backup\n";
+      }
+    } else {
+      system("/bin/rm -f $infile.bak");
+    }
+  }
 }
 $ldap->unbind();
 $ldap->disconnect();
