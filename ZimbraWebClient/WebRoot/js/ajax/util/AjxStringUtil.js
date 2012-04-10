@@ -1553,7 +1553,10 @@ function(html) {
 	if (!idoc || AjxEnv.isFirefox || AjxEnv.isIE) {
 		var iframe = document.createElement("IFRAME");
 		iframe.id = Dwt.getNextId();	// without an ID, IE will throw "Permission denied" errors ?!
-		Dwt.setVisible(iframe, false);
+		
+		// position offscreen rather than set display:none so we can get metrics if needed; no perf difference seen
+		Dwt.setPosition(iframe, Dwt.ABSOLUTE_STYLE);
+		Dwt.setLocation(iframe, Dwt.LOC_NOWHERE, Dwt.LOC_NOWHERE);
 		document.body.appendChild(iframe);
 		idoc = AjxStringUtil._htmlContentIframeDoc = Dwt.getIframeDoc(iframe);
 		AjxStringUtil.__curIframeId = AjxEnv.isFirefox ? iframe.id : null;
@@ -2005,9 +2008,10 @@ function(html, okTags, attrsToRemove, badStyles) {
 	if (!ctxt.fail) {
 		result = "<html>" + htmlNode.innerHTML + "</html>";
 	}
+	var width = Math.max(htmlNode.scrollWidth, htmlNode.lastChild.scrollWidth);
 
 	AjxStringUtil._removeTestIframeDoc();
-	return result;
+	return {html:result, width:width};
 };
 
 AjxStringUtil._traverseCleanHtml =
