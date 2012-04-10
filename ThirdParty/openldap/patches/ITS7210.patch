@@ -1,19 +1,31 @@
-From a66f9e9292069ed01ae0fcf50e8a5bb3d3888935 Mon Sep 17 00:00:00 2001
-From: Howard Chu <hyc@symas.com>
-Date: Mon, 9 Apr 2012 19:24:47 -0700
-Subject: [PATCH] ITS#7210 fix check for freelist changes
-
-Was being fooled before because the newly malloc'd block had
-the same address as the previously freed block.
----
- libraries/libmdb/mdb.c |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
-
 diff --git a/libraries/libmdb/mdb.c b/libraries/libmdb/mdb.c
-index 46fd268..eddeb5e 100644
+index 46fd268..77886e1 100644
 --- a/libraries/libmdb/mdb.c
 +++ b/libraries/libmdb/mdb.c
-@@ -1989,7 +1989,7 @@ again:
+@@ -259,9 +259,12 @@ typedef ID	txnid_t;
+ #if !(__STDC_VERSION__ >= 199901L || defined(__GNUC__))
+ # define DPRINTF	(void)	/* Vararg macros may be unsupported */
+ #elif MDB_DEBUG
++static int mdb_debug;
++static int mdb_debug_start;
++
+ 	/**	Print a debug message with printf formatting. */
+ # define DPRINTF(fmt, ...)	/**< Requires 2 or more args */ \
+-	fprintf(stderr, "%s:%d " fmt "\n", __func__, __LINE__, __VA_ARGS__)
++	if (mdb_debug) fprintf(stderr, "%s:%d " fmt "\n", __func__, __LINE__, __VA_ARGS__)
+ #else
+ # define DPRINTF(fmt, ...)	((void) 0)
+ #endif
+@@ -1576,6 +1579,8 @@ mdb_txn_renew0(MDB_txn *txn)
+ 		if (env->me_wtxnid < txn->mt_txnid)
+ 			mt_dbflag = DB_STALE;
+ 		txn->mt_txnid++;
++		if (txn->mt_txnid == mdb_debug_start)
++			mdb_debug = 1;
+ 		txn->mt_toggle = env->me_txns->mti_me_toggle;
+ 		txn->mt_u.dirty_list = env->me_dirty_list;
+ 		txn->mt_u.dirty_list[0].mid = 0;
+@@ -1989,7 +1994,7 @@ again:
  		 * due to freed overflow pages...
  		 */
  		mdb_cursor_put(&mc, &key, &data, 0);
@@ -22,6 +34,33 @@ index 46fd268..eddeb5e 100644
  			/* could have been used again here */
  			if (mop->mo_pages[0] != orig) {
  				data.mv_size = MDB_IDL_SIZEOF(mop->mo_pages);
--- 
-1.7.4.2
-
+@@ -5765,11 +5770,12 @@ mdb_page_split(MDB_cursor *mc, MDB_val *newkey, MDB_val *newdata, pgno_t newpgno
+ 	 * When the size of the data items is much smaller than
+ 	 * one-half of a page, this check is irrelevant.
+ 	 */
+-	if (IS_LEAF(mp) && nkeys < 16) {
++	if (IS_LEAF(mp)) {
+ 		unsigned int psize, nsize;
+ 		/* Maximum free space in an empty page */
+ 		pmax = mc->mc_txn->mt_env->me_psize - PAGEHDRSZ;
+ 		nsize = mdb_leaf_size(mc->mc_txn->mt_env, newkey, newdata);
++		if ((nkeys < 4) || (nsize > pmax/4)) {
+ 		if (newindx <= split_indx) {
+ 			psize = nsize;
+ 			newpos = 0;
+@@ -5805,6 +5811,7 @@ mdb_page_split(MDB_cursor *mc, MDB_val *newkey, MDB_val *newdata, pgno_t newpgno
+ 				}
+ 			}
+ 		}
++		}
+ 	}
+ 
+ 	/* First find the separating key between the split pages.
+@@ -5918,6 +5925,7 @@ newsep:
+ 		}
+ 
+ 		rc = mdb_node_add(mc, j, &rkey, rdata, pgno, flags);
++		if (rc) break;
+ 	}
+ 
+ 	nkeys = NUMKEYS(copy);
