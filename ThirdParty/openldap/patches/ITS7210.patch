@@ -1,0 +1,27 @@
+From a66f9e9292069ed01ae0fcf50e8a5bb3d3888935 Mon Sep 17 00:00:00 2001
+From: Howard Chu <hyc@symas.com>
+Date: Mon, 9 Apr 2012 19:24:47 -0700
+Subject: [PATCH] ITS#7210 fix check for freelist changes
+
+Was being fooled before because the newly malloc'd block had
+the same address as the previously freed block.
+---
+ libraries/libmdb/mdb.c |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/libraries/libmdb/mdb.c b/libraries/libmdb/mdb.c
+index 46fd268..eddeb5e 100644
+--- a/libraries/libmdb/mdb.c
++++ b/libraries/libmdb/mdb.c
+@@ -1989,7 +1989,7 @@ again:
+ 		 * due to freed overflow pages...
+ 		 */
+ 		mdb_cursor_put(&mc, &key, &data, 0);
+-		if (mop == env->me_pghead) {
++		if (mop == env->me_pghead && env->me_pghead->mo_txnid == id) {
+ 			/* could have been used again here */
+ 			if (mop->mo_pages[0] != orig) {
+ 				data.mv_size = MDB_IDL_SIZEOF(mop->mo_pages);
+-- 
+1.7.4.2
+
