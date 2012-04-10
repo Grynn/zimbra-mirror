@@ -346,7 +346,12 @@ public class SeparateWindowFormMailNew extends AbsSeparateWindow {
 			locator = container + " div[id$='__CANCEL'] td[id$='_title']";
 			page = null;
 
-			// FALL THROUGH
+			this.zClickAt(locator,"0,0");
+
+			// Wait for a while for the window to close
+			SleepUtil.sleepMedium();
+
+			return (page);
 
 		} else if ( button == Button.B_SAVE_DRAFT ) {
 
