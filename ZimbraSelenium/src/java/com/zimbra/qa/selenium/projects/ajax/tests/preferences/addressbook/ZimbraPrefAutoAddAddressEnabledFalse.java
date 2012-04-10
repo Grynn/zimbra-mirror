@@ -19,7 +19,7 @@ public class ZimbraPrefAutoAddAddressEnabledFalse extends AjaxCommonTest {
 
 	@SuppressWarnings("serial")
 	public ZimbraPrefAutoAddAddressEnabledFalse() {
-		super.startingPage = app.zPagePreferences;
+		super.startingPage = app.zPageMail;
 		super.startingAccountPreferences = new HashMap<String, String>() {
 			{				
 				put("zimbraPrefAutoAddAddressEnabled", "FALSE");
@@ -80,8 +80,8 @@ public class ZimbraPrefAutoAddAddressEnabledFalse extends AjaxCommonTest {
 		receiver1.authenticate();
 		
 		ZimbraAccount receiver2 = new ZimbraAccount();
-		receiver1.provision();
-		receiver1.authenticate();
+		receiver2.provision();
+		receiver2.authenticate();
 		
 		// Create the message data to be sent
 		MailItem mail = new MailItem();

@@ -91,8 +91,8 @@ public class ZimbraPrefAutoAddAddressEnabledTrue extends AjaxCommonTest {
 		receiver1.authenticate();
 		
 		ZimbraAccount receiver2 = new ZimbraAccount();
-		receiver1.provision();
-		receiver1.authenticate();
+		receiver2.provision();
+		receiver2.authenticate();
 		
 		// Create the message data to be sent
 		MailItem mail = new MailItem();
