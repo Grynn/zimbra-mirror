@@ -151,8 +151,8 @@ public class TagContactGroup extends AjaxCommonTest  {
 	    // Dnd on the new tag
 		app.zPageAddressbook.zDragAndDrop(
 				"css=td#zlif__CNS-main__" + group.getId() + "__fileas:contains("+ group.fileAs + ")",
-				"css=div#zov__main_Contacts td#zti__main_Contacts__" + tagItem.getId() + "_textCell:contains("+ tagItem.getName() + ")");
-			
+				"css=div[id=ztih__main_Contacts__TAG] td[id^=zti__main_Contacts__tag][id$=_textCell]:contains("+ tagItem.getName() + ")");
+		
 		// Make sure the tag was applied to the contact
 		app.zGetActiveAccount().soapSend(
 					"<GetContactsRequest xmlns='urn:zimbraMail'>" +
