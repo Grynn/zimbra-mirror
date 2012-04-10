@@ -2,12 +2,12 @@
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Server
  * Copyright (C) 2011 Zimbra, Inc.
- * 
+ *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
@@ -20,8 +20,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.zimbra.common.service.ServiceException;
@@ -29,7 +29,6 @@ import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.MailConstants;
 import com.zimbra.common.util.LruMap;
 import com.zimbra.cs.account.DataSource;
-import com.zimbra.soap.admin.type.DataSourceType;
 import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.datasource.DataSourceDbMapping;
@@ -37,13 +36,14 @@ import com.zimbra.cs.datasource.DataSourceMapping;
 import com.zimbra.cs.db.DbDataSource.DataSourceItem;
 import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
 import com.zimbra.cs.offline.OfflineLog;
+import com.zimbra.soap.admin.type.DataSourceType;
 
 public class TagSync {
 
     private static final String dsName = "zcs7tag";
     private boolean mappingRequired = false;
     private DataSource tagDs = null;
-    private ZcsMailbox mbox;
+    private final ZcsMailbox mbox;
 
     private LruMap<Integer, Integer> localIdFromRemote;
     private LruMap<Integer, Integer> remoteIdFromLocal;
@@ -181,7 +181,7 @@ public class TagSync {
                 Integer tagId = localIdsByName.get(name);
                 if (tagId == null) {
                     try {
-                        Tag tag = mbox.getTagByName(name);
+                        Tag tag = mbox.getTagByName(null, name);
                         tagId = tag.getId();
                         localIdsByName.put(name, tagId);
                     } catch (MailServiceException mse) {

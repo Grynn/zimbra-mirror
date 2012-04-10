@@ -850,7 +850,7 @@ public class DeltaSync {
 
     private Tag getTag(String name) throws ServiceException {
         try {
-            return ombx.getTagByName(name);
+            return ombx.getTagByName(sContext, name);
         } catch (MailServiceException.NoSuchItemException nsie) {
             return null;
         }
