@@ -55,6 +55,7 @@ private:
     wstring m_pLocation;
     wstring m_pStartDate;
     wstring m_pStartDateCommon;
+    wstring m_pStartDateForRecID;
     wstring m_pEndDate;
     wstring m_pBusyStatus;
     wstring m_pAllday;
@@ -104,6 +105,7 @@ public:
     wstring GetSubject();
     wstring GetStartDate();
     wstring GetStartDateCommon();
+    wstring GetStartDateForRecID();
     wstring GetEndDate();
     wstring GetInstanceUID();
     wstring GetLocation();

@@ -1483,7 +1483,11 @@ public class ZimbraAPI
             writer.WriteAttributeString("tz", appt["tid"]);
             writer.WriteEndElement();
         }
-        attr = "s" + "_" + num.ToString();
+
+        // FBS bug 71050 -- used to compute recurrence id
+        attr = (isCancel) ? "s" + "_" + num.ToString() : "rid" + "_" + num.ToString();
+        //
+
         if (appt[attr].Length > 0)
         {
             writer.WriteStartElement("exceptId");

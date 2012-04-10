@@ -12,7 +12,7 @@
 #include "MAPIAccessAPI.h"
 
 #define NUM_ATTACHMENT_ATTRS      4
-#define NUM_EXCEPTION_ATTRS      16
+#define NUM_EXCEPTION_ATTRS      17
 
 // CMapiAccessWrap
 

@@ -50,6 +50,7 @@ MAPIAppointment::MAPIAppointment(Zimbra::MAPI::MAPISession &session,  Zimbra::MA
 
     m_pSubject = L"";
     m_pStartDate = L"";
+    m_pStartDateForRecID = L"";
     m_pEndDate = L"";
     m_pInstanceUID = L"";
     m_pLocation = L"";
@@ -484,6 +485,11 @@ void MAPIAppointment::FillInExceptionAppt(MAPIAppointment* pEx, Zimbra::Mapi::CO
         pEx->m_pStartDate = MakeDateFromExPtr(ftStartDate);
         pEx->m_pStartDateCommon = Zimbra::MAPI::Util::CommonDateString(ftStartDate);
 
+        // FBS bug 71050 -- 4/9/12 -- recurrence id needs the original occurrence date
+        Zimbra::Mapi::CRecurrenceTime rtOriginalDate = lpException->GetOriginalDateTime();  
+        Zimbra::Mapi::CFileTime ftOriginalDate = (FILETIME)rtOriginalDate;
+        pEx->m_pStartDateForRecID = MakeDateFromExPtr(rtOriginalDate);
+        //
     }
     if (pEx->m_pEndDate.length() == 0)
     {
@@ -862,6 +868,7 @@ HRESULT MAPIAppointment::SetOrganizerAndAttendees()
 wstring MAPIAppointment::GetSubject() { return m_pSubject; }
 wstring MAPIAppointment::GetStartDate() { return m_pStartDate; }
 wstring MAPIAppointment::GetStartDateCommon() { return m_pStartDateCommon; }
+wstring MAPIAppointment::GetStartDateForRecID() { return m_pStartDateForRecID; }
 wstring MAPIAppointment::GetEndDate() { return m_pEndDate; }
 wstring MAPIAppointment::GetInstanceUID() { return m_pInstanceUID; }
 wstring MAPIAppointment::GetLocation() { return m_pLocation; }
