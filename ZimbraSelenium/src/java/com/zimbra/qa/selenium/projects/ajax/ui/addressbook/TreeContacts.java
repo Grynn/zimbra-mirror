@@ -351,8 +351,23 @@ public class TreeContacts extends AbsTree {
 			throw new HarnessException("Action Left click not yet implemented");
 
 		 } else if (action == Action.A_RIGHTCLICK) {
-			actionLocator = "css=div#zti__main_Contacts__" + t.getId() + "_div";				
-			zRightClickAt(actionLocator,"0,0");		
+			 			
+			
+			zWaitForElementPresent("css=div[id=ztih__main_Contacts__TAG] div[id=zti__main_Contacts__tag1]");
+
+			try {
+				for (int i=1; ; i++) {
+					                          
+					actionLocator = "css=div[id=ztih__main_Contacts__TAG] div[id=zti__main_Contacts__tag" + i +"]";				
+					logger.info(sGetText(actionLocator));
+					
+					if (sGetText(actionLocator).equals(t.getName())){						
+						zRightClickAt(actionLocator,"0,0");
+						break;
+					}				
+				}
+			}
+			catch (Exception e) {}
 			//SleepUtil.sleepMedium();
          } else {
 			throw new HarnessException("Action " + action
