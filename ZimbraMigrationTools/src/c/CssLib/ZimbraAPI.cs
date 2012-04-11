@@ -1513,6 +1513,24 @@ public class ZimbraAPI
         }
         writer.WriteAttributeString("a", theOrganizer);
         writer.WriteEndElement();
+
+        // FBS Bug 71054 -- 4/11/12
+        attr = "attendees" + "_" + num.ToString();
+        if (appt[attr].Length > 0)
+        {
+            string[] tokens = appt[attr].Split('~');
+            for (int i = 0; i < tokens.Length; i += 4)
+            {
+                writer.WriteStartElement("at");
+                writer.WriteAttributeString("d", tokens.GetValue(i).ToString());
+                writer.WriteAttributeString("a", tokens.GetValue(i + 1).ToString());
+                writer.WriteAttributeString("role", tokens.GetValue(i + 2).ToString());
+                writer.WriteAttributeString("ptst", tokens.GetValue(i + 3).ToString());
+                writer.WriteEndElement();
+            }
+        }
+        //
+
         if (!isCancel)
         {
             attr = "m" + "_" + num.ToString();

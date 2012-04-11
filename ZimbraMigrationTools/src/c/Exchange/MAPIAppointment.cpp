@@ -540,7 +540,7 @@ void MAPIAppointment::FillInExceptionAppt(MAPIAppointment* pEx, Zimbra::Mapi::CO
         pEx->m_pOrganizerAddr = m_pOrganizerAddr;
     }
 
-    // attendees?
+    pEx->m_vAttendees = m_vAttendees;   // FBS bug 71054 -- 4/12/12
 
     if (pEx->m_pReminderMinutes.length() == 0)
     {
