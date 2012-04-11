@@ -1662,22 +1662,23 @@ function(ev) {
 };
 
 /**
- * Sets tooltip content for the control. The content may be plain text or HTML.
+ * Sets tooltip content for the control. The toolTip passed in may be plain text,
+ * HTML or an object containing a callback function.
  * If DwtControl.useBrowserTooltips is set to true, and the tooltip does not have
  * HTML, returns, or tabs, use a browser tooltip by setting the 'title' attribute
  * on the element.
  *
- * @param {string} 	text		the tooltip content
+ * @param {string/object} 	toolTip		the tooltip content
  */
 DwtControl.prototype.setToolTipContent =
-function(text, useBrowser) {
+function(toolTip, useBrowser) {
 	if (this._disposed) { return; }
-	if (text && DwtControl.useBrowserTooltips) {
+	if (toolTip && (typeof(tooltip) == "string")  && DwtControl.useBrowserTooltips) {
 		// browser tooltip can't have return, tab, or HTML
-		if (!text || (!text.match(/[\n\r\t]/) && !text.match(/<[a-zA-Z]+/))) {
+		if (!toolTip || (!toolTip.match(/[\n\r\t]/) && !toolTip.match(/<[a-zA-Z]+/))) {
 			var el = this.getHtmlElement();
 			if (el) {
-				el.title = text;
+				el.title = toolTip;
 				this._browserToolTip = true;
 				return;
 			}
@@ -1685,7 +1686,7 @@ function(text, useBrowser) {
 	}
 
 	this._browserToolTip = false;
-	this.__toolTipContent = text;
+	this.__toolTipContent = toolTip;
 };
 
 /**
