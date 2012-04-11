@@ -10,7 +10,8 @@ import org.testng.annotations.Test;
 
 import com.zimbra.common.soap.Element;
 import com.zimbra.qa.selenium.framework.core.Bugs;
-import com.zimbra.qa.selenium.framework.items.AppointmentItem;
+import com.zimbra.qa.selenium.framework.items.*;
+import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.ui.Shortcut;
@@ -46,6 +47,9 @@ public class DeleteAppointment extends AjaxCommonTest {
 			groups = { "functional" })
 	public void DeleteAppointment_01() throws HarnessException {
 
+		//-- Data setup
+		
+		
 		// Create the appointment on the server
 		// Create the message data to be sent
 		String subject = "appointment" + ZimbraSeleniumProperties.getUniqueString();
@@ -78,6 +82,10 @@ public class DeleteAppointment extends AjaxCommonTest {
 				+	"</CreateAppointmentRequest>");
 
 
+		
+		//-- GUI Actions
+		
+		
 		// Refresh the calendar
 		app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
 
@@ -91,8 +99,27 @@ public class DeleteAppointment extends AjaxCommonTest {
 		// Click Yes on the confirmation
 		dialog.zClickButton(Button.B_YES);
 
+		
+		
+		//-- Verification
+		
+		
+		// On the server, verify the appointment is in the trash
+		app.zGetActiveAccount().soapSend(
+				"<SearchRequest xmlns='urn:zimbraMail' types='appointment' calExpandInstStart='"+ startUTC.addDays(-7).toMillis() +"' calExpandInstEnd='"+ startUTC.addDays(7).toMillis() +"'>"
+			+		"<query>is:anywhere "+ subject +"</query>"
+			+	"</SearchRequest>");
 
-		// Verify the appointment is gone
+		
+		
+		String folderID = app.zGetActiveAccount().soapSelectValue("//mail:appt", "l");
+		ZAssert.assertEquals(
+				folderID,
+				FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Trash).getId(),
+				"Verify appointment is in the trash folder");
+
+
+		// On the GUI app, verify the appointment is gone from the list
 		AppointmentItem found = null;
 		List<AppointmentItem> appts = app.zPageCalendar.zListGetAppointments();
 		for (AppointmentItem item : appts) {
@@ -160,6 +187,20 @@ public class DeleteAppointment extends AjaxCommonTest {
 		// Click Yes on the confirmation
 		dialog.zClickButton(Button.B_YES);
 
+
+		// On the server, verify the appointment is in the trash
+		app.zGetActiveAccount().soapSend(
+				"<SearchRequest xmlns='urn:zimbraMail' types='appointment' calExpandInstStart='"+ startUTC.addDays(-7).toMillis() +"' calExpandInstEnd='"+ startUTC.addDays(7).toMillis() +"'>"
+			+		"<query>is:anywhere "+ subject +"</query>"
+			+	"</SearchRequest>");
+
+		
+		
+		String folderID = app.zGetActiveAccount().soapSelectValue("//mail:appt", "l");
+		ZAssert.assertEquals(
+				folderID,
+				FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Trash).getId(),
+				"Verify appointment is in the trash folder");
 
 		// Verify the appointment is gone
 		AppointmentItem found = null;
@@ -240,6 +281,21 @@ public class DeleteAppointment extends AjaxCommonTest {
 		dialog.zClickButton(Button.B_YES);
 
 
+		// On the server, verify the appointment is in the trash
+		app.zGetActiveAccount().soapSend(
+				"<SearchRequest xmlns='urn:zimbraMail' types='appointment' calExpandInstStart='"+ startUTC.addDays(-7).toMillis() +"' calExpandInstEnd='"+ startUTC.addDays(7).toMillis() +"'>"
+			+		"<query>is:anywhere "+ subject +"</query>"
+			+	"</SearchRequest>");
+
+		
+		
+		String folderID = app.zGetActiveAccount().soapSelectValue("//mail:appt", "l");
+		ZAssert.assertEquals(
+				folderID,
+				FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Trash).getId(),
+				"Verify appointment is in the trash folder");
+
+		
 		// Verify the appointment is gone
 		AppointmentItem found = null;
 		List<AppointmentItem> appts = app.zPageCalendar.zListGetAppointments();
@@ -306,6 +362,21 @@ public class DeleteAppointment extends AjaxCommonTest {
 		dialog.zClickButton(Button.B_YES);
 
 
+		// On the server, verify the appointment is in the trash
+		app.zGetActiveAccount().soapSend(
+				"<SearchRequest xmlns='urn:zimbraMail' types='appointment' calExpandInstStart='"+ startUTC.addDays(-7).toMillis() +"' calExpandInstEnd='"+ startUTC.addDays(7).toMillis() +"'>"
+			+		"<query>is:anywhere "+ subject +"</query>"
+			+	"</SearchRequest>");
+
+		
+		
+		String folderID = app.zGetActiveAccount().soapSelectValue("//mail:appt", "l");
+		ZAssert.assertEquals(
+				folderID,
+				FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Trash).getId(),
+				"Verify appointment is in the trash folder");
+
+		
 		// Verify the appointment is gone
 		AppointmentItem found = null;
 		List<AppointmentItem> appts = app.zPageCalendar.zListGetAppointments();
@@ -413,6 +484,51 @@ public class DeleteAppointment extends AjaxCommonTest {
 		dialog.zClickButton(Button.B_YES);
 
 
+		// On the server, verify the appointment is in the trash
+		app.zGetActiveAccount().soapSend(
+				"<SearchRequest xmlns='urn:zimbraMail' types='appointment' calExpandInstStart='"+ startUTC.addDays(-7).toMillis() +"' calExpandInstEnd='"+ startUTC.addDays(7).toMillis() +"'>"
+			+		"<query>is:anywhere "+ subject1 +"</query>"
+			+	"</SearchRequest>");
+
+		
+		
+		String folderID = app.zGetActiveAccount().soapSelectValue("//mail:appt", "l");
+		ZAssert.assertEquals(
+				folderID,
+				FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Trash).getId(),
+				"Verify appointment is in the trash folder");
+
+		
+		// On the server, verify the appointment is in the trash
+		app.zGetActiveAccount().soapSend(
+				"<SearchRequest xmlns='urn:zimbraMail' types='appointment' calExpandInstStart='"+ startUTC.addDays(-7).toMillis() +"' calExpandInstEnd='"+ startUTC.addDays(7).toMillis() +"'>"
+			+		"<query>is:anywhere "+ subject2 +"</query>"
+			+	"</SearchRequest>");
+
+		
+		
+		folderID = app.zGetActiveAccount().soapSelectValue("//mail:appt", "l");
+		ZAssert.assertEquals(
+				folderID,
+				FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Trash).getId(),
+				"Verify appointment is in the trash folder");
+
+		
+		// On the server, verify the appointment is in the trash
+		app.zGetActiveAccount().soapSend(
+				"<SearchRequest xmlns='urn:zimbraMail' types='appointment' calExpandInstStart='"+ startUTC.addDays(-7).toMillis() +"' calExpandInstEnd='"+ startUTC.addDays(7).toMillis() +"'>"
+			+		"<query>is:anywhere "+ subject3 +"</query>"
+			+	"</SearchRequest>");
+
+		
+		
+		folderID = app.zGetActiveAccount().soapSelectValue("//mail:appt", "l");
+		ZAssert.assertEquals(
+				folderID,
+				FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Trash).getId(),
+				"Verify appointment is in the trash folder");
+
+		
 		// Verify the appointment is gone
 		AppointmentItem found1 = null;
 		AppointmentItem found2 = null;
@@ -485,6 +601,21 @@ public class DeleteAppointment extends AjaxCommonTest {
 		dialog.zClickButton(Button.B_YES);
 
 
+		// On the server, verify the appointment is in the trash
+		app.zGetActiveAccount().soapSend(
+				"<SearchRequest xmlns='urn:zimbraMail' types='appointment' calExpandInstStart='"+ startUTC.addDays(-7).toMillis() +"' calExpandInstEnd='"+ startUTC.addDays(7).toMillis() +"'>"
+			+		"<query>is:anywhere "+ subject +"</query>"
+			+	"</SearchRequest>");
+
+		
+		
+		String folderID = app.zGetActiveAccount().soapSelectValue("//mail:appt", "l");
+		ZAssert.assertEquals(
+				folderID,
+				FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Trash).getId(),
+				"Verify appointment is in the trash folder");
+
+		
 		// Verify the appointment is gone
 		AppointmentItem found = null;
 		List<AppointmentItem> appts = app.zPageCalendar.zListGetAppointments();
