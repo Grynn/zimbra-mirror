@@ -74,10 +74,7 @@ function (xModelMetaData, xFormMetaData) {
 
 ZaHelpView.prototype.showAboutDialog = function () {                  
     var appCtrl = this._appCtxt.getAppController() ;
-    if (!appCtrl.aboutDialog) {
-        appCtrl.aboutDialog = new ZaAboutDialog(this.shell,null,ZabMsg.about_title);
-    }
-    appCtrl.aboutDialog.popup();
+    appCtrl._aboutZimbraListener();
 };
 
 ZaHelpView.showWikiLink = function () {
