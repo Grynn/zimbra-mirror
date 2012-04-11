@@ -155,24 +155,29 @@ public class RefineHistory extends OctopusCommonTest {
 		
 		boolean found = false;
 	
-		// Verify only history texts associated with check boxes present
-		// not check for "all types"
-		for (int i=1; i<checkboxes.length; i++) {
-			// if checkbox is checked
-			if (app.zPageHistory.sIsChecked(checkboxes[i])) {
-				// verify if and only if the corresponding history text present
-				for (HistoryItem item:currHistoryArray) {		
-					
-					 ZAssert.assertTrue(item.getHistoryText().matches(historyRegexps[i]), 
-							 "Verify " +  item.getHistoryText() + " matches with " + historyRegexps[i] + " displayed");
-					 
-					 logger.info(item.getHistoryText());
-					 if (item.getHistoryText().equals(historyText)) {
-						 found = true; 
-					 }
-					 
+		
+		// verify if and only if the corresponding history text present
+		for (HistoryItem item:currHistoryArray) {
+			
+			logger.info(item.getHistoryText());
+			boolean isMatched = false;
+	        
+			// Verify only history texts associated with check boxes present
+			// not check for "all types"
+			for (int i=1; i<checkboxes.length; i++) {
+				
+				// if checkbox is checked
+				if (app.zPageHistory.sIsChecked(checkboxes[i])) {					
+					 isMatched |= item.getHistoryText().matches(historyRegexps[i]);					 					 
 				}
 			}
+							
+			 ZAssert.assertTrue(isMatched , "Verify " +  item.getHistoryText() + " displayed");
+	
+			 if (item.getHistoryText().equals(historyText)) {
+				 found = true; 
+			 }					 
+	
 			
 		}			
 		
