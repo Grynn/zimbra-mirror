@@ -164,7 +164,10 @@ public class ZimbraAPI
                         var x = from a in objIns.Elements(ns + "a") where a.Attribute(
                             "n").Value == "zimbraIsDomainAdminAccount" select a.Value;
 
-                        isDomainAdmin = x.ElementAt(0);
+                        if (x.Any())    // FBS bug 72777
+                        {
+                            isDomainAdmin = x.ElementAt(0);
+                        }
                     }
                 }
             }
