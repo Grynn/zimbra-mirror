@@ -25,7 +25,7 @@ olcSockbufMaxIncomingAuth: 16777215
 olcThreads: 8
 olcTLSCRLCheck: none
 olcTLSVerifyClient: never
-olcToolThreads: 1
+olcToolThreads: 2
 olcWriteTimeout: 0
 structuralObjectClass: olcGlobal
 entryUUID: 1525b684-333e-102d-86f5-d562901af228
