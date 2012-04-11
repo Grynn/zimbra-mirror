@@ -20,7 +20,6 @@ if [ x`whoami` != xzimbra ]; then
 fi
 
 if [ ! -L "/opt/zimbra/amavisd" ]; then
-  echo "Error: Amavis is not installed"
   exit 1
 fi
 
