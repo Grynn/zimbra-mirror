@@ -15,5 +15,5 @@ public interface CommonConstants {
 	
 	
 	//user name can also be an email address if display name is missing
-	String REGEXP_USER = "[0-9a-zA-Z@]+";
+	String REGEXP_USER = "[0-9a-zA-Z_]+(@[a-zA-Z\\-]+.[a-zA-Z]+)?";
 }  
