@@ -441,8 +441,30 @@ function() {
 **/
 
 ZaTaskAuthConfigWizard.myXFormModifier = function(xFormObject) {
+	var labelVisibility = {};
+    labelVisibility[ZaTaskAuthConfigWizard.AUTH_CONFIG_AUTH_SET_STEP] = {
+        checks:[[XForm.checkInstanceValueNot,ZaDomain.A_AuthMech,ZaDomain.AuthMech_zimbra]],
+        sources:[ZaDomain.A_AuthMech]
+    };
+    labelVisibility[ZaTaskAuthConfigWizard.AUTH_CONFIG_BIND_PWD_STEP] = {
+        checks:[[XForm.checkInstanceValueNot,ZaDomain.A_AuthMech,ZaDomain.AuthMech_zimbra]],
+        sources:[ZaDomain.A_AuthMech]
+    };
+    labelVisibility[ZaTaskAuthConfigWizard.AUTH_CONFIG_BIND_PWD_STEP] = {
+        checks:[[XForm.checkInstanceValueNot,ZaDomain.A_AuthMech,ZaDomain.AuthMech_zimbra]],
+        sources:[ZaDomain.A_AuthMech]
+    };
+    labelVisibility[ZaTaskAuthConfigWizard.AUTH_CONFIG_SUMMARY_STEP] = {
+        checks:[[XForm.checkInstanceValueNot,ZaDomain.A_AuthMech,ZaDomain.AuthMech_zimbra]],
+        sources:[ZaDomain.A_AuthMech]
+    };
+    labelVisibility[ZaTaskAuthConfigWizard.EXTERNAL_LDAP_GROUP_STEP] = {
+        checks:[[XForm.checkInstanceValue,ZaDomain.A_AuthMech,ZaDomain.AuthMech_ad]],
+        sources:[ZaDomain.A_AuthMech]
+    };
+
 	xFormObject.items = [
-			{type:_OUTPUT_, colSpan:2, align:_CENTER_, valign:_TOP_, ref:ZaModel.currentStep, choices:this.stepChoices,valueChangeEventSources:[ZaModel.currentStep]},
+			{type:_OUTPUT_, colSpan:2, align:_CENTER_, valign:_TOP_, ref:ZaModel.currentStep, choices:this.stepChoices,valueChangeEventSources:[ZaModel.currentStep], labelVisibility:labelVisibility},
 			{type:_SEPARATOR_, align:_CENTER_, valign:_TOP_},
 			{type:_SPACER_,  align:_CENTER_, valign:_TOP_},
 			{type:_SWITCH_,width:580, valign:_TOP_,

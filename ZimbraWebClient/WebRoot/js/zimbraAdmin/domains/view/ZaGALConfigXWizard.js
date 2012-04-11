@@ -40,9 +40,9 @@ ZaGALConfigXWizard = function(parent, entry) {
 	this.stepChoices = [
 		{label:ZaMsg.GALMode, value:ZaGALConfigXWizard.GALMODE_STEP},
 		//{label:ZaMsg.GALConfiguration, value:ZaGALConfigXWizard.GAL_CONFIG_STEP_1}, 
-		{label:ZaMsg.GALConfiguration, value:ZaGALConfigXWizard.GAL_CONFIG_STEP_2},		
+		{label:ZaMsg.GALDnConfiguration, value:ZaGALConfigXWizard.GAL_CONFIG_STEP_2},
 		{label:ZaMsg.GALSyncConfiguration, value:ZaGALConfigXWizard.GAL_SYNC_CONFIG_STEP_1},
-		{label:ZaMsg.GALSyncConfiguration, value:ZaGALConfigXWizard.GAL_SYNC_CONFIG_STEP_2},
+		{label:ZaMsg.GALSyncDnConfiguration, value:ZaGALConfigXWizard.GAL_SYNC_CONFIG_STEP_2},
 		{label:ZaMsg.GALConfigSummary, value:ZaGALConfigXWizard.GAL_CONFIG_SUM_STEP},		
 //		{label:ZaMsg.TestGalConfig, value:ZaGALConfigXWizard.GAL_TEST_STEP},
 		{label:ZaMsg.GalTestResult, value:ZaGALConfigXWizard.GAL_TEST_RESULT_STEP},
@@ -478,9 +478,41 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 	var resultHeaderList = new Array();
 	resultHeaderList[0] = new ZaListHeaderItem("email", ZaMsg.ALV_Name_col, null, "116px", null, "email", true, true);
 	resultHeaderList[1] = new ZaListHeaderItem("fullName", ZaMsg.ALV_FullName_col, null, "auto", null, "fullName", true, true);
-	
+
+	var labelVisibility = {};
+    labelVisibility[ZaGALConfigXWizard.GAL_CONFIG_STEP_2] = {
+        checks:[ZaNewDomainXWizard.isDomainModeNotInternal],
+        sources:[ZaDomain.A_zimbraGalMode]
+    };
+    labelVisibility[ZaGALConfigXWizard.GAL_SYNC_CONFIG_STEP_1] = {
+        checks:[ZaNewDomainXWizard.isDomainModeNotInternal],
+        sources:[ZaDomain.A_zimbraGalMode]
+    };
+    labelVisibility[ZaGALConfigXWizard.GAL_SYNC_CONFIG_STEP_2] = {
+        checks:[[ZaNewDomainXWizard.isDomainModeNotInternal],
+                [XForm.checkInstanceValue,ZaDomain.A_GALSyncUseGALSearch,"FALSE"]
+        ],
+        sources:[ZaDomain.A_zimbraGalMode, ZaDomain.A_GALSyncUseGALSearch]
+    };
+    labelVisibility[ZaGALConfigXWizard.GAL_CONFIG_SUM_STEP] = {
+        checks:[ZaNewDomainXWizard.isDomainModeNotInternal],
+        sources:[ZaDomain.A_zimbraGalMode]
+    };
+    labelVisibility[ZaGALConfigXWizard.GAL_TEST_RESULT_STEP] = {
+        checks:[ZaNewDomainXWizard.isDomainModeNotInternal],
+        sources:[ZaDomain.A_zimbraGalMode]
+    };
+    labelVisibility[ZaGALConfigXWizard.SYNC_CONFIG_SUM_STEP] = {
+        checks:[ZaNewDomainXWizard.isDomainModeNotInternal],
+        sources:[ZaDomain.A_zimbraGalMode]
+    };
+    labelVisibility[ZaGALConfigXWizard.SYNC_TEST_RESULT_STEP] = {
+        checks:[ZaNewDomainXWizard.isDomainModeNotInternal],
+        sources:[ZaDomain.A_zimbraGalMode]
+    };
+
 	xFormObject.items = [
-		{type:_OUTPUT_, colSpan:2, align:_CENTER_, valign:_TOP_, ref:ZaModel.currentStep, choices:this.stepChoices,valueChangeEventSources:[ZaModel.currentStep]},
+		{type:_OUTPUT_, colSpan:2, align:_CENTER_, valign:_TOP_, ref:ZaModel.currentStep, choices:this.stepChoices,valueChangeEventSources:[ZaModel.currentStep], labelVisibility:labelVisibility},
 		{type:_SEPARATOR_, align:_CENTER_, valign:_TOP_},
 		{type:_SPACER_,  align:_CENTER_, valign:_TOP_},				
 		{type: _SWITCH_,width:650, valign:_TOP_,

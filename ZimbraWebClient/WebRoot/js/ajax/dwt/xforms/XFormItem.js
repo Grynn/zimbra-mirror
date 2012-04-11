@@ -3116,20 +3116,56 @@ Step_Choices_XFormItem = function() {}
 XFormItemFactory.createItemType("_STEPCHOICE_", "stepchoices", Step_Choices_XFormItem, Group_XFormItem);
 
 Step_Choices_XFormItem.prototype.numCols = 1;
-Step_Choices_XFormItem.prototype.initFormItem = function() {
-	XFormItem.prototype.initFormItem.call(this);
-
-    this.signUpForEvents();
-    var label = this.getNormalizedLabels();
-    var values = this.getNormalizedValues();
-    this.items = [];
-    var currentItem;
-    for (var i = 0; i < label.length; i++) {
-        currentItem = {type:_OUTPUT_, value:label[i], sourceValue: values[i]};
-        this.items.push(currentItem);
+Step_Choices_XFormItem.prototype.labelVisibility = _UNDEFINED_;
+Step_Choices_XFormItem.prototype.labelUpdateMethod = function(newValue) {
+    var el = this.getElement();
+    var sourceValue =  this.getInheritedProperty("sourceValue");
+    if (sourceValue == newValue) {
+        Dwt.addClass(el, "AdminOutputTabSelect");
+        Dwt.delClass(el, "AdminOutputTab");
+    } else {
+        Dwt.delClass(el, "AdminOutputTabSelect");
+        Dwt.addClass(el, "AdminOutputTab");
     }
 }
 
+Step_Choices_XFormItem.prototype.getLabelUpdateMethod = function() {
+    return this.cacheInheritedMethod("labelUpdateMethod", "$labelUpdateMethod", "newValue");
+}
+
+Step_Choices_XFormItem.prototype.initFormItem = function() {
+    var choices = this.getNormalizedChoices();
+    if (!choices)
+        return;
+
+	XFormItem.prototype.initFormItem.call(this);
+
+    this.signUpForEvents();
+    var labels = choices.labels;
+    var values =choices.values;
+
+    this.items = [];
+    var currentItem;
+    var labelUpdateMethod = this.getLabelUpdateMethod();
+    var labelVisibility = this.getInheritedProperty ("labelVisibility")
+    for (var i = 0; i < labels.length; i++) {
+        if (labelVisibility && labelVisibility[values[i]]) {
+            currentItem = {ref: ".", type:_OUTPUT_,
+                value:labels[i], sourceValue: values[i],
+                updateElement: labelUpdateMethod,
+                visibilityChecks: labelVisibility[values[i]].checks,
+                visibilityChangeEventSources:labelVisibility[values[i]].sources
+            };
+        } else {
+            currentItem = {ref: ".", type:_OUTPUT_,
+                value:labels[i], sourceValue: values[i],
+                updateElement: labelUpdateMethod
+            };
+        }
+        this.items.push(currentItem);
+    }
+}
+ /*
 Step_Choices_XFormItem.prototype.updateElement = function (newValue) {
     var items = this.getItems();
     var el;
@@ -3144,6 +3180,7 @@ Step_Choices_XFormItem.prototype.updateElement = function (newValue) {
         }
     }
 }
+*/
 
 
 HomeGroup_XFormItem = function() {
