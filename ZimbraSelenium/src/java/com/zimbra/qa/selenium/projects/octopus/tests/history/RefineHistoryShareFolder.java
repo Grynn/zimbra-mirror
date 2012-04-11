@@ -24,6 +24,7 @@ public class RefineHistoryShareFolder extends OctopusCommonTest {
     
     
     //created 3 new accounts
+    ZimbraAccount granter = getNewAccount();
     ZimbraAccount readGrantee = getNewAccount();
     ZimbraAccount readWriteGrantee = getNewAccount();
     ZimbraAccount adminGrantee = getNewAccount();
@@ -56,22 +57,45 @@ public class RefineHistoryShareFolder extends OctopusCommonTest {
 	public void setup() 
 	    throws HarnessException
 	{		
-		if (folder == null) {
-		   
-		   //create a new folder
-		   FolderItem folder = createFolderViaSoap(app.zGetActiveAccount());
+		if (fileId == null) {
+			//create a new granter's folder
+			folder = createFolderViaSoap(granter);
 		
+			//granter share the folder with admin access 
+			shareFolderViaSoap(granter,app.zGetActiveAccount(), folder,SHARE_AS_ADMIN);		   
+			SleepUtil.sleepSmall();
+		
+			//accpet and mount the shared folder
+			
+			//upload file to the shared folder
+		    fileId = uploadFileViaSoap(app.zGetActiveAccount(),fileName, folder);    
+			   		
+	        // mark file as favorite via soap
+   		    markFileFavoriteViaSoap(app.zGetActiveAccount(), fileId);
+   		
+           // unmark file as favorite via soap
+   		   unMarkFileFavoriteViaSoap(app.zGetActiveAccount(), fileId);
+   		 
 		   // share read|readWrite|admin for the folder with grantees
-		   shareFolderViaSoap(app.zGetActiveAccount(), readGrantee, folder,SHARE_AS_READ);
-		   shareFolderViaSoap(app.zGetActiveAccount(), readWriteGrantee, folder,SHARE_AS_READWRITE);
-		   shareFolderViaSoap(app.zGetActiveAccount(), adminGrantee, folder, SHARE_AS_ADMIN); 
-		           
-		   // upload file before running test
-		   if (fileId == null) {		 
-	 	       fileId = uploadFileViaSoap(app.zGetActiveAccount(),fileName, folder);    
-		   }
+		   shareFolderViaSoap(app.zGetActiveAccount(), readGrantee, folder,SHARE_AS_READ);		   
+		   SleepUtil.sleepSmall();
 		   
-		   refresh();
+		   shareFolderViaSoap(app.zGetActiveAccount(), readWriteGrantee, folder,SHARE_AS_READWRITE);
+		   SleepUtil.sleepSmall();
+		   
+		   shareFolderViaSoap(app.zGetActiveAccount(), adminGrantee, folder, SHARE_AS_ADMIN); 		   
+		   app.zPageOctopus.zRefresh();
+
+		   // revoke sharing the folder with grantees
+		   revokeShareFolderViaSoap(app.zGetActiveAccount(), readGrantee, folder);
+		   SleepUtil.sleepSmall();
+		   
+		   revokeShareFolderViaSoap(app.zGetActiveAccount(), readWriteGrantee, folder);
+		   SleepUtil.sleepSmall();
+		   
+		   revokeShareFolderViaSoap(app.zGetActiveAccount(), adminGrantee, folder); 
+		   app.zPageOctopus.zRefresh();
+
 		}
 		   
 		// reset - uncheck all check boxes
@@ -127,7 +151,7 @@ public class RefineHistoryShareFolder extends OctopusCommonTest {
 				
 	}
 	
-	@Test(description = "Verify test for check/uncheck 'favorite' checkbox with favorite/unfavorite actions", groups = { "functional" })
+	@Test(description = "Verify test for check/uncheck 'favorite' checkbox with favorite/unfavorite actions", groups = { "skip" })
 	public void RefineFavorite() throws HarnessException {
 		
         // mark file as favorite via soap
@@ -155,7 +179,7 @@ public class RefineHistoryShareFolder extends OctopusCommonTest {
 	
 	}
 	
-	@Test(description = "Verify check/uncheck 'comment' checkbox", groups = { "functional" })
+	@Test(description = "Verify check/uncheck 'comment' checkbox", groups = { "skip" })
 	public void RefineComment() throws HarnessException {
 	   String comment = "Comment" + ZimbraSeleniumProperties.getUniqueString();
 
@@ -168,7 +192,7 @@ public class RefineHistoryShareFolder extends OctopusCommonTest {
 		
 	}
 
-	@Test(description = "Verify check/uncheck 'rename' checkbox", groups = { "functional" })
+	@Test(description = "Verify check/uncheck 'rename' checkbox", groups = { "skip" })
 	public void RefineRename() throws HarnessException {
 	   String newName = "New Name " + ZimbraSeleniumProperties.getUniqueString() +
 	                    fileName.substring(fileName.indexOf("."),fileName.length());
@@ -184,7 +208,7 @@ public class RefineHistoryShareFolder extends OctopusCommonTest {
 	}
 
 	
-	@Test(description = "Verify check/uncheck 'sharing' checkbox", groups = { "functional" })
+	@Test(description = "Verify check/uncheck 'sharing' checkbox", groups = { "skip" })
 	public void RefineSharing() throws HarnessException {
 
        // verify check action for 'sharing' 
@@ -206,7 +230,7 @@ public class RefineHistoryShareFolder extends OctopusCommonTest {
 	   	   
 	}
 
-	@Test(description = "Functional test for simultaneously check/uncheck 'new version' & 'favorite' checkbox", groups = { "functional" })
+	@Test(description = "Functional test for simultaneously check/uncheck 'new version' & 'favorite' checkbox", groups = { "skip" })
 	public void RefineNewVersionFavorite() throws HarnessException {
 
         // mark file as favorite via soap
