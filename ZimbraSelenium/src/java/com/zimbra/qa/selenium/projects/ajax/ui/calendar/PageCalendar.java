@@ -10,6 +10,7 @@ import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.AppointmentItem;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
+import com.zimbra.qa.selenium.framework.util.staf.Stafpostqueue;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.DialogCreateFolder;
 
@@ -47,7 +48,7 @@ public class PageCalendar extends AbsTab {
 		public static final String ReplyToAllMenu = "css=div[id='zm__Calendar'] tr[id='POPUP_REPLY_ALL']";
 		public static final String ForwardMenu = "css=div[id='zm__Calendar'] tr[id='POPUP_FORWARD_APPT']";
 		public static final String DeleteMenu = "css=div[id='zm__Calendar'] tr[id='POPUP_DELETE']";
-		public static final String CancelMenu = "css=div[id='zm__Calendar'] tr[id='POPUP_DELETE']";
+		public static final String CancelMenu = "css=div#zm__Calendar div#DELETE td[id$='_title']";
 		public static final String MoveMenu = "css=div[id='zm__Calendar'] tr[id='POPUP_MOVE']";
 		public static final String TagAppointmentMenu = "css=div[id='zm__Calendar'] tr[id='POPUP_TAG_MENU']";
 		public static final String TagAppointmentNewTagSubMenu = "id=TAG_MENU|MENU|NEWTAG_title";
@@ -269,6 +270,8 @@ public class PageCalendar extends AbsTab {
 
 	@Override
 	public AbsPage zListItem(Action action, String subject) throws HarnessException {
+		logger.info(myPageName() + " zListItem("+ action +", "+ subject +")");
+		tracer.trace(action +" on subject = "+ subject);
 
 		if ( this.zIsVisiblePerPosition(Locators.CalendarViewListCSS, 0, 0) ) {
 			return (zListItemListView(action, subject));											// LIST
@@ -311,7 +314,7 @@ public class PageCalendar extends AbsTab {
 			throw new HarnessException("subject cannot be null");
 
 
-		logger.info(myPageName() + " zListItem("+ action +", "+ subject +")");
+		logger.info(myPageName() + " zListItemGeneral("+ action +", "+ subject +")");
 		tracer.trace(action +" on subject = "+ subject);
 
 		
@@ -625,10 +628,31 @@ public class PageCalendar extends AbsTab {
 	}
 
 	@Override
-	public AbsPage zListItem(Action action, Button option, String subject)
-	throws HarnessException {
-
+	public AbsPage zListItem(Action action, Button option, String subject) throws HarnessException {
 		logger.info(myPageName() + " zListItem("+ action +", "+ option +", "+ subject +")");
+
+		if ( this.zIsVisiblePerPosition(Locators.CalendarViewListCSS, 0, 0) ) {
+			return (zListItemListView(action, option, subject));									// LIST
+		} else if ( this.zIsVisiblePerPosition(Locators.CalendarViewDayCSS, 0, 0) ) {
+			return (zListItemGeneral(Locators.CalendarViewDayItemCSS, action, option, subject));	// DAY
+		} else if ( this.zIsVisiblePerPosition(Locators.CalendarViewWorkWeekCSS, 0, 0) ) {
+			return (zListItemGeneral(Locators.CalendarViewWorkWeekItemCSS, action, option, subject));	// WORKWEEK
+		} else if ( this.zIsVisiblePerPosition(Locators.CalendarViewWeekCSS, 0, 0) ) {
+			return (zListItemGeneral(Locators.CalendarViewWeekItemCSS, action, option, subject));	// WEEK
+		} else if ( this.zIsVisiblePerPosition(Locators.CalendarViewMonthCSS, 0, 0) ) {
+			return (zListItemMonthView(action, option, subject));									// MONTH
+		} else if ( this.zIsVisiblePerPosition(Locators.CalendarViewScheduleCSS, 0, 0) ) {
+			return (zListItemGeneral("TODO", action, option, subject));								// SCHEDULE
+		} else {
+			throw new HarnessException("Unknown calendar view");
+		}
+
+	}
+	
+
+	private AbsPage zListItemGeneral(String itemsLocator, Action action, Button option, String subject) throws HarnessException {
+
+		logger.info(myPageName() + " zListItemGeneral("+ action +", "+ option +", "+ subject +")");
 		tracer.trace(action +" then "+ option +" on subject = "+ subject);
 
 		if ( action == null )
@@ -638,28 +662,80 @@ public class PageCalendar extends AbsTab {
 		if ( subject == null || subject.trim().length() == 0)
 			throw new HarnessException("subject cannot be null or blank");
 
-		// If we are in list view, route to that method
-		if ( this.zIsVisiblePerPosition(Locators.CalendarViewListCSS, 0, 0) ) {
-			return (zListItemListView(action, option, subject));
-		}
-		if ( this.zIsVisiblePerPosition(Locators.CalendarViewWorkWeekCSS, 0, 0) ) {
-			return (zListItemWorkWeekView(action, option, subject));
-		}
 
 		// Default behavior variables
 		String locator = null;
 		AbsPage page = null;
-		String optionLocator;
+		String optionLocator = null;
 
-		locator = "css=td.appt_name:contains('" + subject + "')";
-		SleepUtil.sleepMedium();
+		
+		if ( this.sIsElementPresent(itemsLocator +" td.appt_name:contains('"+ subject +"')")) {
+			
+			// Single occurrence locator
+			locator = itemsLocator +" td.appt_name:contains('"+ subject +"')";
+
+		} else if ( this.sIsElementPresent(itemsLocator +" td[id$='appt_new_name']:contains('"+ subject +"')")) {
+			
+			// Recurring appointment locator (might point to any visible instance)
+			locator = itemsLocator +" td[id$='appt_new_name']:contains('"+ subject +"')";
+			
+		} else if ( this.sIsElementPresent(itemsLocator +" td.appt_allday_name>div:contains('"+ subject +"')")) {
+			
+			// All day single occurrence locator
+			locator = itemsLocator +" td.appt_allday_name>div:contains('"+ subject +"')";
+			
+		}
+		
+		// Make sure one of the locators found the appt
+		if ( locator == null ) {
+			throw new HarnessException("Unable to determine locator for appointment: "+ subject);
+		}
 
 		if (action == Action.A_RIGHTCLICK) {
-			if (option == Button.O_VIEW_DAY_MENU) {
-				optionLocator = Locators.ViewDayMenu;
+			if ( (option == Button.O_DELETE) || (option == Button.O_CANCEL_MENU) ) {
+				
+				optionLocator = Locators.CancelMenu;
 
-			} else if (option == Button.O_VIEW_WORK_WEEK_MENU) {
-				optionLocator = Locators.ViewWorkWeekMenu;
+				this.zRightClickAt(locator, "");
+				this.zWaitForBusyOverlay();
+
+				this.zClickAt(optionLocator, "");
+				this.zWaitForBusyOverlay();
+
+
+				// Since we are not going to "wait for active", insert
+				// a small delay to make sure the dialog shows up
+				// before the zIsActive() method is called
+				SleepUtil.sleepMedium();
+
+				// If the organizer deletes an appointment, you get "Send Cancellation" dialog
+				page = new DialogConfirmDeleteOrganizer(MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
+				if ( page.zIsActive() ) {
+					return (page);
+				}
+				
+				// If an attendee deletes an appointment, you get a "Confirm Delete" dialog with "Notify Organizer?"
+				page = new DialogConfirmDeleteAttendee(MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
+				if ( page.zIsActive() ) {
+					return (page);
+				}
+
+				// If an attendee deletes an appointment, you get a "Confirm Delete" dialog
+				page = new DialogConfirmDeleteAppointment(MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
+				if ( page.zIsActive() ) {
+					return (page);
+				}
+
+				// If page was specified, make sure it is active
+				if (page != null) {
+
+					// This function (default) throws an exception if never active
+					page.zWaitForActive();
+
+				}
+
+				return (page);
+				
 
 			}else if (option == Button.O_VIEW_WEEK_MENU) {
 				optionLocator = Locators.ViewWeekMenu;
@@ -800,115 +876,33 @@ public class PageCalendar extends AbsTab {
 			throw new HarnessException("implement me!  action = "+ action);
 		}
 
+		if ( locator == null ) {
+			throw new HarnessException("Unable to determine the appointment locator");
+		}
+		
 		this.zRightClickAt(locator, "");
-		SleepUtil.sleepSmall();
-		this.zClickAt(optionLocator, "");
-		SleepUtil.sleepSmall();
 		this.zWaitForBusyOverlay();
+		SleepUtil.sleepSmall();
+		
+		if ( optionLocator != null ) {
 
+			this.zClickAt(optionLocator, "");
+			SleepUtil.sleepSmall();
+			this.zWaitForBusyOverlay();
+
+		}
+		
 		if ( page != null ) {
 			page.zWaitForActive();
 		}
-
+		
 		return (page);
 	}
 
-	private AbsPage zListItemWorkWeekView(Action action, Button option, String subject)
-	throws HarnessException {
-
-		logger.info(myPageName() + " zListItemWorkWeekView("+ action +", "+ option +", "+ subject +")");
-		tracer.trace(action +" then "+ option +" on subject = "+ subject);
-
-		if ( action == null )
-			throw new HarnessException("action cannot be null");
-		if ( option == null )
-			throw new HarnessException("button cannot be null");
-		if ( subject == null || subject.trim().length() == 0)
-			throw new HarnessException("subject cannot be null or blank");
-
-
-		// Default behavior variables
-		String locator = null;
-		AbsPage page = null;
-		String optionLocator;
-
-		locator = "css=td.appt_allday_name:contains('" + subject + "')";
-		SleepUtil.sleepMedium();
-
-		if (action == Action.A_RIGHTCLICK) {
-			
-			if (option == Button.O_DELETE) {
-				
-				optionLocator = Locators.DeleteMenu;
-
-				this.zRightClickAt(locator, "");
-				this.zWaitForBusyOverlay();
-
-				this.zClickAt(optionLocator, "");
-				this.zWaitForBusyOverlay();
-
-
-				// Since we are not going to "wait for active", insert
-				// a small delay to make sure the dialog shows up
-				// before the zIsActive() method is called
-				SleepUtil.sleepMedium();
-
-				// If the organizer deletes an appointment, you get "Send Cancellation" dialog
-				page = new DialogConfirmDeleteOrganizer(MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
-				if ( page.zIsActive() ) {
-					return (page);
-				}
-				
-				// If an attendee deletes an appointment, you get a "Confirm Delete" dialog with "Notify Organizer?"
-				page = new DialogConfirmDeleteAttendee(MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
-				if ( page.zIsActive() ) {
-					return (page);
-				}
-
-				// If an attendee deletes an appointment, you get a "Confirm Delete" dialog
-				page = new DialogConfirmDeleteAppointment(MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
-				if ( page.zIsActive() ) {
-					return (page);
-				}
-
-				// If page was specified, make sure it is active
-				if (page != null) {
-
-					// This function (default) throws an exception if never active
-					page.zWaitForActive();
-
-				}
-
-				return (page);
-				
-			} else if ( option == Button.B_PRINT ) {
-				
-				optionLocator = "implement me!";
-				page = null;
-				
-			} else {
-				throw new HarnessException("implement action:"+ action +" option:"+ option);
-			}
-
-		} else {
-			throw new HarnessException("implement me!  action = "+ action);
-		}
-
-		this.zRightClickAt(locator, "");
-		SleepUtil.sleepSmall();
-		this.zWaitForBusyOverlay();
-
-		this.zClickAt(optionLocator, "");
-		SleepUtil.sleepSmall();
-		this.zWaitForBusyOverlay();
-
-		if ( page != null ) {
-			page.zWaitForActive();
-		}
-
-		return (page);
+	private AbsPage zListItemMonthView(Action action, Button option, String subject) throws HarnessException {
+		throw new HarnessException("implement me!");
 	}
-	
+
 
 	@Override
 	public AbsPage zListItem(Action action, Button option, Button subOption, String subject) throws HarnessException {

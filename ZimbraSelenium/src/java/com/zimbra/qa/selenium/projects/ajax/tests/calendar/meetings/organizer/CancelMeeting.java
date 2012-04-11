@@ -11,7 +11,7 @@ import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
+import com.zimbra.qa.selenium.projects.ajax.ui.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.calendar.DialogConfirmDeleteOrganizer;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew.Field;
@@ -82,14 +82,11 @@ public class CancelMeeting extends AjaxCommonTest {
         app.zPageCalendar.zListItem(Action.A_LEFTCLICK, apptSubject);
         
         // Press Delete toolbar button
-        app.zPageCalendar.zToolbarPressButton(Button.B_DELETE);
+        DialogWarning dialog = (DialogWarning)app.zPageCalendar.zToolbarPressButton(Button.B_DELETE);
         
         // Wait for the "Send Cancellation" dialog
         // Click Send Cancellation
-        DialogConfirmDeleteOrganizer dialog = new DialogConfirmDeleteOrganizer(app, ((AppAjaxClient) app).zPageCalendar);
-        dialog.zWaitForActive();
 		dialog.zClickButton(Button.B_SEND_CANCELLATION);
-		dialog.zWaitForClose();
 		
 		
 		
@@ -157,14 +154,10 @@ public class CancelMeeting extends AjaxCommonTest {
         app.zPageCalendar.zListItem(Action.A_LEFTCLICK, apptSubject);
         
         // Right Click -> Delete context menu
-        app.zPageCalendar.zListItem(Action.A_RIGHTCLICK, Button.O_CANCEL_MENU, apptSubject);
+        DialogWarning dialog = (DialogWarning)app.zPageCalendar.zListItem(Action.A_RIGHTCLICK, Button.O_CANCEL_MENU, apptSubject);
 
-        // Wait for the "Send Cancellation" dialog
         // Click Send Cancellation
-        DialogConfirmDeleteOrganizer dialog = new DialogConfirmDeleteOrganizer(app, ((AppAjaxClient) app).zPageCalendar);
-        dialog.zWaitForActive();
 		dialog.zClickButton(Button.B_SEND_CANCELLATION);
-		dialog.zWaitForClose();
 
 		
 		
@@ -239,14 +232,11 @@ public class CancelMeeting extends AjaxCommonTest {
         app.zPageCalendar.zListItem(Action.A_LEFTCLICK, apptSubject);
         
         // Cancel meeting using keyboard Del and Backspace key
-        app.zPageCalendar.zKeyboardKeyEvent(keyEvent);
+        DialogWarning dialog = (DialogWarning)app.zPageCalendar.zKeyboardKeyEvent(keyEvent);
         
         // Wait for the "Send Cancellation" dialog
         // Click Send Cancellation
-        DialogConfirmDeleteOrganizer dialog = new DialogConfirmDeleteOrganizer(app, ((AppAjaxClient) app).zPageCalendar);
-        dialog.zWaitForActive();
 		dialog.zClickButton(Button.B_SEND_CANCELLATION);
-		dialog.zWaitForClose();
 
 		
 		//-- Verification
@@ -315,14 +305,11 @@ public class CancelMeeting extends AjaxCommonTest {
         app.zPageCalendar.zListItem(Action.A_LEFTCLICK, apptSubject);
 
         // Press Delete Toolbar button
-        app.zPageCalendar.zToolbarPressButton(Button.B_DELETE);
+        DialogWarning dialog = (DialogWarning)app.zPageCalendar.zToolbarPressButton(Button.B_DELETE);
 
         // Wait for the "Send Cancellation" dialog
         // Click Send Cancellation
-        DialogConfirmDeleteOrganizer dialog = new DialogConfirmDeleteOrganizer(app, ((AppAjaxClient) app).zPageCalendar);
-        dialog.zWaitForActive();
 		dialog.zClickButton(Button.B_CANCEL);
-		dialog.zWaitForClose();
 
 		
 		//-- Verification
@@ -387,13 +374,11 @@ public class CancelMeeting extends AjaxCommonTest {
         app.zPageCalendar.zListItem(Action.A_LEFTCLICK, apptSubject);
 
         // Press Delete Toolbar button
-        app.zPageCalendar.zToolbarPressButton(Button.B_DELETE);
+        DialogWarning dialog = (DialogWarning)app.zPageCalendar.zToolbarPressButton(Button.B_DELETE);
 
         // Wait for the "Send Cancellation" dialog
         // Click Edit Cancellation
         // When the form opens, simply click "SEND" (don't edit content)
-        DialogConfirmDeleteOrganizer dialog = new DialogConfirmDeleteOrganizer(app, ((AppAjaxClient) app).zPageCalendar);
-        dialog.zWaitForActive();
         FormMailNew mailComposeForm = (FormMailNew)dialog.zClickButton(Button.B_EDIT_CANCELLATION);
 		mailComposeForm.zToolbarPressButton(Button.B_SEND);
 		
@@ -466,17 +451,14 @@ public class CancelMeeting extends AjaxCommonTest {
         app.zPageCalendar.zListItem(Action.A_LEFTCLICK, apptSubject);
 
         // Press Delete Toolbar button
-        app.zPageCalendar.zToolbarPressButton(Button.B_DELETE);
+        DialogWarning dialog = (DialogWarning)app.zPageCalendar.zToolbarPressButton(Button.B_DELETE);
 
         // Wait for the "Send Cancellation" dialog
         // Click Edit Cancellation
         // When the form opens, simply click "SEND" (don't edit content)
-        DialogConfirmDeleteOrganizer dialog = new DialogConfirmDeleteOrganizer(app, ((AppAjaxClient) app).zPageCalendar);
-        dialog.zWaitForActive();
         FormMailNew mailComposeForm = (FormMailNew)dialog.zClickButton(Button.B_EDIT_CANCELLATION);
 		mailComposeForm.zFillField(Field.Body, modifyApptBody);		
 		mailComposeForm.zToolbarPressButton(Button.B_SEND);
-//		mailComposeForm.zSubmit();
 		
 		
 		//-- Verification
