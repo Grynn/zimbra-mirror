@@ -526,7 +526,7 @@ PurgeHits1I	15          # Tokens with only 1 innocent hit
 # header when tracking the source of an email. Note: you should use the address
 # of the host as appears between brackets [ ] in the Received header.
 #
-LocalMX 127.0.0.1
+LocalMX %%zimbraLocalBindAddress%%
 
 #
 # Logging: Disabling logging for users will make usage graphs unavailable to

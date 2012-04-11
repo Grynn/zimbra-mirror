@@ -574,13 +574,13 @@ $banned_filename_re = new_RE(
 
   ### http://www.symantec.com/
   ['Symantec CarrierScan via Symantec CommandLineScanner',
-    'cscmdline', '-a scan -i 1 -v -s 127.0.0.1:7777 {}',
+    'cscmdline', '-a scan -i 1 -v -s %%zimbraLocalBindAddress%%:7777 {}',
     qr/^Files Infected:\s+0$/m, qr/^Infected\b/m,
     qr/^(?:Info|Virus Name):\s+(.+)/m ],
 
   ### http://www.symantec.com/
   ['Symantec AntiVirus Scan Engine',
-    'savsecls', '-server 127.0.0.1:7777 -mode scanrepair -details -verbose {}',
+    'savsecls', '-server %%zimbraLocalBindAddress%%:7777 -mode scanrepair -details -verbose {}',
     [0], qr/^Infected\b/m,
     qr/^(?:Info|Virus Name):\s+(.+)/m ],
     # NOTE: check options and patterns to see which entry better applies
