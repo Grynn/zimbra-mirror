@@ -1,0 +1,145 @@
+diff --git a/servers/slapd/back-mdb/tools.c b/servers/slapd/back-mdb/tools.c
+index 42d2c42..8b52f60 100644
+--- a/servers/slapd/back-mdb/tools.c
++++ b/servers/slapd/back-mdb/tools.c
+@@ -24,6 +24,11 @@
+ #include "back-mdb.h"
+ #include "idl.h"
+ 
++#define	ldap_pvt_thread_barrier_t	pthread_barrier_t
++#define ldap_pvt_thread_barrier_init(barrier,count)	pthread_barrier_init(barrier,NULL,count)
++#define ldap_pvt_thread_barrier_destroy(barrier)	pthread_barrier_destroy(barrier)
++#define ldap_pvt_thread_barrier_wait(barrier)	pthread_barrier_wait(barrier)
++
+ #ifdef MDB_TOOL_IDL_CACHING
+ static int mdb_tool_idl_flush( BackendDB *be, MDB_txn *txn );
+ 
+@@ -74,12 +79,10 @@ static Entry		*tool_next_entry;
+ static ID mdb_tool_ix_id;
+ static Operation *mdb_tool_ix_op;
+ static MDB_txn *mdb_tool_ix_txn;
+-static int mdb_tool_index_tcount, mdb_tool_threads;
++static int mdb_tool_threads;
++static ldap_pvt_thread_barrier_t mdb_barrier1, mdb_barrier2;
+ static IndexRec *mdb_tool_index_rec;
+ static struct mdb_info *mdb_tool_info;
+-static ldap_pvt_thread_mutex_t mdb_tool_index_mutex;
+-static ldap_pvt_thread_cond_t mdb_tool_index_cond_main;
+-static ldap_pvt_thread_cond_t mdb_tool_index_cond_work;
+ static void * mdb_tool_index_task( void *ctx, void *ptr );
+ 
+ static int	mdb_writes, mdb_writes_per_commit;
+@@ -101,15 +104,13 @@ int mdb_tool_entry_open(
+ 	if (( slapMode & (SLAP_TOOL_QUICK|SLAP_TOOL_READONLY)) == SLAP_TOOL_QUICK ) {
+ 		if ( !mdb_tool_info ) {
+ 			struct mdb_info *mdb = (struct mdb_info *) be->be_private;
+-			ldap_pvt_thread_mutex_init( &mdb_tool_index_mutex );
+-			ldap_pvt_thread_cond_init( &mdb_tool_index_cond_main );
+-			ldap_pvt_thread_cond_init( &mdb_tool_index_cond_work );
+ 			if ( mdb->mi_nattrs ) {
+ 				int i;
+ 				mdb_tool_threads = slap_tool_thread_max - 1;
+ 				if ( mdb_tool_threads > 1 ) {
++					ldap_pvt_thread_barrier_init(&mdb_barrier1, mdb_tool_threads);
++					ldap_pvt_thread_barrier_init(&mdb_barrier2, mdb_tool_threads);
+ 					mdb_tool_index_rec = ch_calloc( mdb->mi_nattrs, sizeof( IndexRec ));
+-					mdb_tool_index_tcount = mdb_tool_threads - 1;
+ 					for (i=1; i<mdb_tool_threads; i++) {
+ 						int *ptr = ch_malloc( sizeof( int ));
+ 						*ptr = i;
+@@ -130,28 +131,11 @@ int mdb_tool_entry_close(
+ {
+ 	if ( mdb_tool_info ) {
+ 		slapd_shutdown = 1;
+-		ldap_pvt_thread_mutex_lock( &mdb_tool_index_mutex );
+-
+-		/* There might still be some threads starting */
+-		while ( mdb_tool_index_tcount > 0 ) {
+-			ldap_pvt_thread_cond_wait( &mdb_tool_index_cond_main,
+-					&mdb_tool_index_mutex );
+-		}
+-
+-		mdb_tool_index_tcount = mdb_tool_threads - 1;
+-		ldap_pvt_thread_cond_broadcast( &mdb_tool_index_cond_work );
+-
+-		/* Make sure all threads are stopped */
+-		while ( mdb_tool_index_tcount > 0 ) {
+-			ldap_pvt_thread_cond_wait( &mdb_tool_index_cond_main,
+-				&mdb_tool_index_mutex );
+-		}
+-		ldap_pvt_thread_mutex_unlock( &mdb_tool_index_mutex );
++		ldap_pvt_thread_barrier_wait(&mdb_barrier1);
+ 
+ 		mdb_tool_info = NULL;
+ 		slapd_shutdown = 0;
+ 		ch_free( mdb_tool_index_rec );
+-		mdb_tool_index_tcount = mdb_tool_threads - 1;
+ 	}
+ 
+ 	if( idcursor ) {
+@@ -539,36 +523,20 @@ mdb_tool_index_add(
+ 		mdb_tool_ix_id = e->e_id;
+ 		mdb_tool_ix_op = op;
+ 		mdb_tool_ix_txn = txn;
+-		ldap_pvt_thread_mutex_lock( &mdb_tool_index_mutex );
+-		/* Wait for all threads to be ready */
+-		while ( mdb_tool_index_tcount ) {
+-			ldap_pvt_thread_cond_wait( &mdb_tool_index_cond_main,
+-				&mdb_tool_index_mutex );
+-		}
+-
+ 		for ( i=1; i<mdb_tool_threads; i++ )
+ 			mdb_tool_index_rec[i].ir_i = LDAP_BUSY;
+-		mdb_tool_index_tcount = mdb_tool_threads - 1;
+-		ldap_pvt_thread_mutex_unlock( &mdb_tool_index_mutex );
+-		ldap_pvt_thread_cond_broadcast( &mdb_tool_index_cond_work );
++		ldap_pvt_thread_barrier_wait(&mdb_barrier1);
+ 
+ 		rc = mdb_index_recrun( op, txn, mdb, ir, e->e_id, 0 );
+ 		if ( rc )
+ 			return rc;
+-		ldap_pvt_thread_mutex_lock( &mdb_tool_index_mutex );
++		ldap_pvt_thread_barrier_wait(&mdb_barrier2);
+ 		for ( i=1; i<mdb_tool_threads; i++ ) {
+-			if ( mdb_tool_index_rec[i].ir_i == LDAP_BUSY ) {
+-				ldap_pvt_thread_cond_wait( &mdb_tool_index_cond_main,
+-					&mdb_tool_index_mutex );
+-				i--;
+-				continue;
+-			}
+ 			if ( mdb_tool_index_rec[i].ir_i ) {
+ 				rc = mdb_tool_index_rec[i].ir_i;
+ 				break;
+ 			}
+ 		}
+-		ldap_pvt_thread_mutex_unlock( &mdb_tool_index_mutex );
+ 		return rc;
+ 	} else
+ 	{
+@@ -965,23 +933,13 @@ mdb_tool_index_task( void *ctx, void *ptr )
+ 
+ 	free( ptr );
+ 	while ( 1 ) {
+-		ldap_pvt_thread_mutex_lock( &mdb_tool_index_mutex );
+-		mdb_tool_index_tcount--;
+-		if ( !mdb_tool_index_tcount )
+-			ldap_pvt_thread_cond_signal( &mdb_tool_index_cond_main );
+-		ldap_pvt_thread_cond_wait( &mdb_tool_index_cond_work,
+-			&mdb_tool_index_mutex );
+-		if ( slapd_shutdown ) {
+-			mdb_tool_index_tcount--;
+-			if ( !mdb_tool_index_tcount )
+-				ldap_pvt_thread_cond_signal( &mdb_tool_index_cond_main );
+-			ldap_pvt_thread_mutex_unlock( &mdb_tool_index_mutex );
++		ldap_pvt_thread_barrier_wait( &mdb_barrier1 );
++		if ( slapd_shutdown )
+ 			break;
+-		}
+-		ldap_pvt_thread_mutex_unlock( &mdb_tool_index_mutex );
+ 		mdb_tool_index_rec[base].ir_i = mdb_index_recrun( mdb_tool_ix_op,
+ 			mdb_tool_ix_txn,
+ 			mdb_tool_info, mdb_tool_index_rec, mdb_tool_ix_id, base );
++		ldap_pvt_thread_barrier_wait( &mdb_barrier2 );
+ 	}
+ 
+ 	return NULL;
