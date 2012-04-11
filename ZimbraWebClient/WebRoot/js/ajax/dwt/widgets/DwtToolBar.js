@@ -235,10 +235,13 @@ function(className, index) {
  */
 DwtToolBar.prototype.addChild =
 function(child, index) {
-    DwtComposite.prototype.addChild.apply(this, arguments);
+	
+	if (child.isDwtControl) {
+    	DwtComposite.prototype.addChild.apply(this, arguments);
+	}
 
     var itemEl = this._createItemElement();
-    itemEl.appendChild(child.getHtmlElement());
+    itemEl.appendChild(child.isDwtControl ? child.getHtmlElement() : child);
 
     this._addItem(DwtToolBar.ELEMENT, itemEl, index);
 };
