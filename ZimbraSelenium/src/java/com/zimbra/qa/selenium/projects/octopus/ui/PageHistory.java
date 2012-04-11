@@ -15,7 +15,7 @@ import com.zimbra.qa.selenium.projects.octopus.core.CommonConstants.SHARE_PERMIS
 
 
 public class PageHistory extends AbsTab {
-    public interface CONSTANTS {
+    public interface CONSTANTS extends CommonConstants{
       String VIEW_LOCATOR = "css=div.octopus-updates-view";
       String HEADER_VIEW_LOCATOR = VIEW_LOCATOR + " div#my-updates-header-view";
       String FILTER_VIEW_LOCATOR = VIEW_LOCATOR + " div.my-updates-filter-view";
@@ -87,7 +87,26 @@ public class PageHistory extends AbsTab {
 	//Get text displayed in global history
 	public static class GetText implements CONSTANTS{
 		//TODO: file history text
+		public interface REGEXP {
+			String NEWVERSION = REGEXP_USER + NEW_VERSION_PREFIX 
+		                +   REGEXP_FILENAME + NEW_VERSION_POSTFIX;
+	
+			String   RENAME = REGEXP_USER +  RENAME_PREFIX 
+	                    +   REGEXP_FILENAME + RENAME_MIDFIX + REGEXP_FILENAME + RENAME_POSTFIX;
+			
+		    String COMMENT  = REGEXP_USER +  COMMENT_PREFIX 
+	                    +   REGEXP_FILENAME + COMMENT_POSTFIX;
+				
+		    String FAVORITE = REGEXP_USER + FAVORITE_PREFIX 
+	                    +   REGEXP_FILENAME + "(" + FAVORITE_POSTFIX + "|" + UNFAVORITE_POSTFIX + ")";
+		    
+		    //TODO: Add regexp connstants for folder name & email
+		    String   SHARE  = REGEXP_USER + " (granted|revoked) " + "(Read|RW|Admin)" + " access on folder " + REGEXP_FILENAME + " to " + REGEXP_USER+ ".";;
+		    
+		     
+		}
 		
+	
 		public static String share(SHARE_PERMISSION permission, String folderName, ZimbraAccount grantee){
 			String access="";
 			
@@ -246,7 +265,7 @@ public class PageHistory extends AbsTab {
 			return;
 		
 		
-		if (check)
+		if (check)		
 			this.sCheck(locator);
 		else
 			this.sUncheck(locator);

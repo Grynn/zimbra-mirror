@@ -8,20 +8,35 @@ import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.octopus.core.OctopusCommonTest;
 import com.zimbra.qa.selenium.projects.octopus.ui.PageHistory;
 import com.zimbra.qa.selenium.projects.octopus.ui.PageHistory.*;
-
+import java.util.ArrayList;
 
 public class RefineHistory extends OctopusCommonTest {
+ 
 	String fileName=JPG_FILE;
-	String fileId  =null;
+	String fileId  = null;
+	String comment = null;
+	String newName = null;
+	
     String[] checkboxes = {
-    		PageHistory.Locators.zHistoryFilterAllTypes.locator,
-    		PageHistory.Locators.zHistoryFilterFavorites.locator,
-    		PageHistory.Locators.zHistoryFilterComment.locator,
-    		PageHistory.Locators.zHistoryFilterSharing.locator,
-    		PageHistory.Locators.zHistoryFilterNewVersion.locator,
-    		PageHistory.Locators.zHistoryFilterRename.locator    		
+		PageHistory.Locators.zHistoryFilterAllTypes.locator,
+		PageHistory.Locators.zHistoryFilterFavorites.locator,
+		PageHistory.Locators.zHistoryFilterComment.locator,
+		PageHistory.Locators.zHistoryFilterSharing.locator,
+		PageHistory.Locators.zHistoryFilterNewVersion.locator,
+		PageHistory.Locators.zHistoryFilterRename.locator    		
     }; 
 
+    //parallel array with checkboxes[]
+    String[] historyRegexps = {
+		"*",
+		PageHistory.GetText.REGEXP.FAVORITE,
+		PageHistory.GetText.REGEXP.COMMENT,
+		PageHistory.GetText.REGEXP.SHARE,
+		PageHistory.GetText.REGEXP.NEWVERSION,
+		PageHistory.GetText.REGEXP.RENAME
+    };
+    
+    
     ZimbraAccount readGrantee = getNewAccount();;
 	ZimbraAccount readWriteGrantee = getNewAccount();;
 	ZimbraAccount adminGrantee = getNewAccount();;
@@ -47,9 +62,11 @@ public class RefineHistory extends OctopusCommonTest {
  		// Click on MyFiles tab
 		// this extra click makes the history text displayed
 		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_MY_FILES);
-
+		
+	   
 		// Click on History tab
-		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_HISTORY);	
+		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_HISTORY);
+		SleepUtil.sleepSmall();
 	}
 
 	
@@ -59,17 +76,27 @@ public class RefineHistory extends OctopusCommonTest {
 	{		
 		// upload file,folder 
 		// share revoke folder
+		// comment, rename, favorite/unfavorite file
 		// before running test
 		if (fileId == null) {		 
 	 	   fileId = uploadFileViaSoap(app.zGetActiveAccount(),fileName);    	 	  	
            folder = createFolderViaSoap(app.zGetActiveAccount());	 	  	            		
-    	
+           comment = "Comment " + ZimbraSeleniumProperties.getUniqueString();
+    	   newName = "New Name " + ZimbraSeleniumProperties.getUniqueString() 
+           		   + fileName.substring(fileName.indexOf("."),fileName.length());
+
+           
+           
           // mark file as favorite via soap
    		   markFileFavoriteViaSoap(app.zGetActiveAccount(), fileId);
    		
            // unmark file as favorite via soap
    		   unMarkFileFavoriteViaSoap(app.zGetActiveAccount(), fileId);
    		 
+   		   
+   		   // make comment via soap
+   	       makeCommentViaSoap(app.zGetActiveAccount(), fileId, comment);
+   	       
 		   // share read|readWrite|admin for the folder with grantees
 		   shareFolderViaSoap(app.zGetActiveAccount(), readGrantee, folder,SHARE_AS_READ);		   
 		   SleepUtil.sleepSmall();
@@ -88,10 +115,15 @@ public class RefineHistory extends OctopusCommonTest {
 		   SleepUtil.sleepSmall();
 		   
 		   revokeShareFolderViaSoap(app.zGetActiveAccount(), adminGrantee, folder); 
-		   app.zPageOctopus.zRefresh();
-
+		   
+		   //rename via soap
+		   renameViaSoap(app.zGetActiveAccount(), fileId, newName);
+		   
 		}
 
+		refresh();
+
+			
 		// reset - uncheck all check boxes
 		for (int i=0; i<checkboxes.length; i++) {
 			if (app.zPageHistory.sIsChecked(checkboxes[i])) {
@@ -99,32 +131,76 @@ public class RefineHistory extends OctopusCommonTest {
 			}
 		}
 
+
 	 }
 
-	private void verifyCheckAction(String locator, String historyText) 
+	private void verifyCheckAction(String locator, String historyText, String... regExpArray) 
 	    throws HarnessException
-	{			
-        //TODO: verify there is no other message existed 
+	{		
+		String historyRegexp = historyText;
+		if (regExpArray.length > 0) {
+			historyRegexp = regExpArray[0];
+		}
+		
 		// Make a check
+		// TODO use Robot check? the Selenium sCheck not trigger the filter action		
 		app.zPageHistory.zToolbarCheckMark(locator, true);
 		
-		// check if the text present
-		HistoryItem found = app.zPageHistory.isTextPresentInGlobalHistory(historyText);
-			
-		// verification
-		ZAssert.assertNotNull(found, "Verify " +  historyText + " displayed");		
+        
+		//get current history items
+		ArrayList<HistoryItem> currHistoryArray = app.zPageHistory.zListItem();
 		
+		
+		boolean found = false;
+	
+		// Verify only history texts associated with check boxes present
+		// not check for "all types"
+		for (int i=1; i<checkboxes.length; i++) {
+			// if checkbox is checked
+			if (app.zPageHistory.sIsChecked(checkboxes[i])) {
+				// verify if and only if the corresponding history text present
+				for (HistoryItem item:currHistoryArray) {		
+					
+					 ZAssert.assertTrue(item.getHistoryText().matches(historyRegexps[i]), 
+							 "Verify " +  item.getHistoryText() + " matches with " + historyRegexps[i] + " displayed");
+					 
+					 if (item.getHistoryText().equals(historyText)) {
+						 found = true; 
+					 }
+					 
+				}
+			}
+			
+		}			
+		
+		ZAssert.assertTrue(found, "Verify " + historyText + " is displayed");
 	}
 	
-	private void verifyUnCheckAction(String locator, String historyText) 
+	private void verifyUnCheckAction(String locator, String historyText, String... regExpArray) 
 	    throws HarnessException
-	{						
+	{					
+		String historyRegexp = historyText;
+		if (regExpArray.length > 0) {
+			historyRegexp = regExpArray[0];
+		}
+				
 		// UnCheck the check box
 		app.zPageHistory.zToolbarCheckMark(locator, false);
-						  
-		// verification
-		ZAssert.assertNull(app.zPageHistory.isTextPresentInGlobalHistory(historyText)
-				, "Verify " +  historyText + " not found");		
+	
+		//get current history items
+		ArrayList<HistoryItem> currHistoryArray = app.zPageHistory.zListItem();
+
+		//count the associated history texts
+		int total=0;
+		for (HistoryItem item:currHistoryArray) {
+			if (item.getHistoryText().matches(historyRegexp)) 
+				total++;					 
+		}
+					
+		// verification 		
+		ZAssert.assertGreaterThan(total,0, "Verify " + historyText + " present");
+		ZAssert.assertGreaterThanEqualTo( currHistoryArray.size(), total, 
+				             "Verify " +  historyRegexp + " not refined");		
 		
 	}
 	
@@ -154,7 +230,7 @@ public class RefineHistory extends OctopusCommonTest {
 				
 	}
 	
-	@Test(description = "Verify test for check 'favorite' checkbox with favorite action", groups = { "smoke" })
+	@Test(description = "Verify check 'favorite' checkbox with favorite action", groups = { "smoke" })
 	public void RefineCheckFavorite() throws HarnessException {
 		
         // verify favorite text present
@@ -163,16 +239,16 @@ public class RefineHistory extends OctopusCommonTest {
 
 	}
 	
-	@Test(description = "Verify test for uncheck 'favorite' checkbox with favorite action", groups = { "functional" })
+	@Test(description = "Verify uncheck 'favorite' checkbox with favorite action", groups = { "functional" })
 	public void RefineUnCheckFavorite() throws HarnessException {
 		
 		// verify favorite text not present
 		verifyUnCheckAction(Locators.zHistoryFilterFavorites.locator, 
-				GetText.favorite(fileName));											
+				GetText.favorite(fileName), PageHistory.GetText.REGEXP.FAVORITE);											
 
 	}
 	
-	@Test(description = "Verify test for check 'favorite' checkbox with non favorite action", groups = { "smoke" })
+	@Test(description = "Verify check 'favorite' checkbox with non favorite action", groups = { "smoke" })
 	public void RefineCheckNonFavorite() throws HarnessException {
 		        
 		// verify non favorite text present
@@ -182,7 +258,7 @@ public class RefineHistory extends OctopusCommonTest {
 	}
 	
 
-	@Test(description = "Verify test for uncheck 'favorite' checkbox with non favorite action", groups = { "functional" })
+	@Test(description = "Verify uncheck 'favorite' checkbox with non favorite action", groups = { "functional" })
 	public void RefineUnCheckNonFavorite() throws HarnessException {
 		
 		// verify non favorite text not present
@@ -194,11 +270,7 @@ public class RefineHistory extends OctopusCommonTest {
 		
 	@Test(description = "Verify check 'comment' checkbox", groups = { "smoke" })
 	public void RefineCheckComment() throws HarnessException {
-	   String comment = "Comment" + ZimbraSeleniumProperties.getUniqueString();
-
-       makeCommentViaSoap(app.zGetActiveAccount(), fileId, comment);
-       refresh();
-		
+    		
        // verify check action for 'comment' 
 	   verifyCheckAction(Locators.zHistoryFilterComment.locator,
 				GetText.comment(fileName));
@@ -207,11 +279,7 @@ public class RefineHistory extends OctopusCommonTest {
 
 	@Test(description = "Verify uncheck 'comment' checkbox", groups = { "functional" })
 	public void RefineUnCheckComment() throws HarnessException {
-	   String comment = "Comment" + ZimbraSeleniumProperties.getUniqueString();
-
-       makeCommentViaSoap(app.zGetActiveAccount(), fileId, comment);
-       refresh();
-		
+			
        // verify uncheck action for 'comment' 
 	   verifyCheckUnCheckAction(Locators.zHistoryFilterComment.locator,
 				GetText.comment(fileName));
@@ -220,33 +288,21 @@ public class RefineHistory extends OctopusCommonTest {
 
 	@Test(description = "Verify check 'rename' checkbox", groups = { "smoke" })
 	public void RefineCheckRename() throws HarnessException {
-	   String newName = "New Name " + ZimbraSeleniumProperties.getUniqueString() +
-	                    fileName.substring(fileName.indexOf("."),fileName.length());
-
-       renameViaSoap(app.zGetActiveAccount(), fileId, newName);
-       refresh();
-		  
+	   		  
        // verify check action for 'rename' 
 	   verifyCheckAction(Locators.zHistoryFilterRename.locator,
 				GetText.rename(fileName,newName));
-		
-       fileName= newName;
+		       
 	}
 
 
 	@Test(description = "Verify uncheck 'rename' checkbox", groups = { "functional" })
 	public void RefineUnCheckRename() throws HarnessException {
-	   String newName = "New Name " + ZimbraSeleniumProperties.getUniqueString() +
-	                    fileName.substring(fileName.indexOf("."),fileName.length());
-
-       renameViaSoap(app.zGetActiveAccount(), fileId, newName);
-       refresh();
-		  
+    		  
        // verify uncheck action for 'rename' 
 	   verifyUnCheckAction(Locators.zHistoryFilterRename.locator,
 				GetText.rename(fileName,newName));
-		
-       fileName= newName;
+		       
 	}
 
 	
@@ -304,31 +360,23 @@ public class RefineHistory extends OctopusCommonTest {
 	@Test(description = "Functional test for simultaneously check/uncheck 'new version' & 'favorite' checkbox", groups = { "functional" })
 	public void RefineNewVersionFavorite() throws HarnessException {
 
-        // mark file as favorite via soap
-		markFileFavoriteViaSoap(app.zGetActiveAccount(), fileId);
-		refresh();
-		
-		// Make checks for 'new version' & 'favorite'
-		app.zPageHistory.zToolbarCheckMark(Locators.zHistoryFilterNewVersion.locator, true);
-		app.zPageHistory.zToolbarCheckMark(Locators.zHistoryFilterFavorites.locator, true);
-		
-		// Get the text 
-		HistoryItem newversionItem = app.zPageHistory.isTextPresentInGlobalHistory(GetText.newVersion(fileName));
-		HistoryItem favoriteItem = app.zPageHistory.isTextPresentInGlobalHistory(GetText.favorite(fileName));
-					
-		// Verify the text present
-		ZAssert.assertNotNull(newversionItem, "Verify " +  GetText.newVersion(fileName) + " displayed");		
-		ZAssert.assertNotNull(favoriteItem, "Verify " +  GetText.favorite(fileName) + " displayed");		
-			
-		// Verify the text matched
-		ZAssert.assertEquals(newversionItem.getHistoryText(), GetText.newVersion(fileName), "Verify " + PageHistory.GetText.newVersion(fileName) + " matched");
-		ZAssert.assertEquals(favoriteItem.getHistoryText(), GetText.favorite(fileName), "Verify " + PageHistory.GetText.favorite(fileName) + " matched");
+		// verify check action for 'new version' 
+		verifyCheckAction(Locators.zHistoryFilterNewVersion.locator,
+				GetText.newVersion(fileName));
+
+        // verify favorite text present
+		verifyCheckAction(Locators.zHistoryFilterFavorites.locator, 
+				GetText.favorite(fileName));											
 
 	}
 
 	@Test(description = "Functional test for simultaneouly check all boxes", groups = { "functional" })
 	public void RefineCheckAll() throws HarnessException {
-	
+        // since class variable fileName should be changed following any rename test case run,
+		// local variables are used here to overwrite them 
+		String fileName = PPT_FILE;
+		String  fileId = uploadFileViaSoap(app.zGetActiveAccount(), fileName);    	
+		  
 		// mark|unmark file as favorite via soap
 		markFileFavoriteViaSoap(app.zGetActiveAccount(), fileId);
 		unMarkFileFavoriteViaSoap(app.zGetActiveAccount(), fileId);
