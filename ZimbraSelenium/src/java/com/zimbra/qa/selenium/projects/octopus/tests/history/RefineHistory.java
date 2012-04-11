@@ -56,17 +56,17 @@ public class RefineHistory extends OctopusCommonTest {
 		throws HarnessException
 	{
 		//work around for bug #
-		//TODO: remove after bug fixed to 
+		//TODO: remove after bug fixed 
 		app.zPageOctopus.zRefresh();
 
  		// Click on MyFiles tab
 		// this extra click makes the history text displayed
-		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_MY_FILES);
+		//app.zPageOctopus.zToolbarPressButton(Button.B_TAB_MY_FILES);
 		
 	   
 		// Click on History tab
 		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_HISTORY);
-		SleepUtil.sleepSmall();
+		
 	}
 
 	
@@ -141,10 +141,12 @@ public class RefineHistory extends OctopusCommonTest {
 		if (regExpArray.length > 0) {
 			historyRegexp = regExpArray[0];
 		}
+	
+		
 		
 		// Make a check
-		// TODO use Robot check? the Selenium sCheck not trigger the filter action		
 		app.zPageHistory.zToolbarCheckMark(locator, true);
+		
 		
         
 		//get current history items
@@ -164,6 +166,7 @@ public class RefineHistory extends OctopusCommonTest {
 					 ZAssert.assertTrue(item.getHistoryText().matches(historyRegexps[i]), 
 							 "Verify " +  item.getHistoryText() + " matches with " + historyRegexps[i] + " displayed");
 					 
+					 logger.info(item.getHistoryText());
 					 if (item.getHistoryText().equals(historyText)) {
 						 found = true; 
 					 }

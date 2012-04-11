@@ -264,12 +264,19 @@ public class PageHistory extends AbsTab {
 		if (!check && !sIsChecked(locator))
 			return;
 		
+        
 		
-		if (check)		
-			this.sCheck(locator);
+		if (check)	{				
+			sCheck(locator);
+		}
 		else
 			this.sUncheck(locator);
-			
+
+		// extra actions to trigger js
+		sFocus(locator);
+		zClick(locator);
+
+		
 		// If the app is busy, wait for it to become active
 		zWaitForBusyOverlay();
 	}
