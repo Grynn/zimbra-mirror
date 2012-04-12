@@ -3055,3 +3055,25 @@ LPWSTR Zimbra::MAPI::Util::EscapeCategoryName(LPCWSTR pwszOrigCategoryName)
 
     return pwszNoLeadTrailSpace;
 }
+
+CString Zimbra::MAPI::Util::GetGUID()
+{
+	GUID guid;
+	HRESULT hr=CoCreateGuid(&guid);
+	if(hr!=S_OK)
+	{
+            return L"";
+	}
+	BYTE * str;
+	hr=UuidToString((UUID*)&guid, (RPC_WSTR*)&str);
+	if(hr!=RPC_S_OK)
+	{
+            return L"";
+	}
+	CString unique((LPTSTR)str);
+	RpcStringFree((RPC_WSTR*)&str);
+	unique.Replace(_T("-"), _T("_"));
+	unique += "_migwiz";
+
+	return unique;
+}

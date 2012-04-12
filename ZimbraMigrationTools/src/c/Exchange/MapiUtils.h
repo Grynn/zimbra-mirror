@@ -197,6 +197,7 @@ wstring SetHtml(LPMESSAGE pMessage, LPSPropValue lpv);
 wstring CommonDateString(FILETIME ft);
 
 LPWSTR EscapeCategoryName(LPCWSTR pwszOrigCategoryName);
+CString GetGUID();
 
 namespace CharsetUtil
 {

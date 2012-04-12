@@ -538,6 +538,10 @@ STDMETHODIMP CMapiAccessWrap::GetData(BSTR UserId, VARIANT ItemId, FolderType ty
                 }
                 if (ret == NULL)	// 71630
                 {
+                    if (apptData.Uid.length() == 0)     // FBS bug 72893 -- 4/12/12
+                    {
+                        apptData.Uid = Zimbra::MAPI::Util::GetGUID();
+                    }
                     int numAttendees = (int)apptData.vAttendees.size();     // cast it because in delete loop, we'll go negative
                     wstring attendeeData = L"";
 
