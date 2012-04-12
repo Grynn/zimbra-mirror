@@ -1650,6 +1650,10 @@ public class ZimbraAPI
 
     private string ComputeExceptId(string exceptDate, string originalDate)
     {
+        if (exceptDate.Length == 8) // already done -- must be allday
+        {
+            return exceptDate;
+        }
         string retval = exceptDate.Substring(0, 9);
         retval += originalDate.Substring(9, 6);
         return retval;
