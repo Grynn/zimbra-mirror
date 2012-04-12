@@ -33,6 +33,6 @@ public class RefineComment extends HistoryCommonTest {
 		
 	}
 
-	
+	//TODO add test case for delete comment (bug #70800)
 
 }

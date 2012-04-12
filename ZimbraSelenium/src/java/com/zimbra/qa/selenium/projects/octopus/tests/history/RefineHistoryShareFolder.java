@@ -1,5 +1,7 @@
 package com.zimbra.qa.selenium.projects.octopus.tests.history;
 
+import java.util.ArrayList;
+
 import org.testng.annotations.*;
 
 import com.zimbra.qa.selenium.framework.items.*;
@@ -21,6 +23,16 @@ public class RefineHistoryShareFolder extends OctopusCommonTest {
     		PageHistory.Locators.zHistoryFilterNewVersion.locator,
     		PageHistory.Locators.zHistoryFilterRename.locator    		
     }; 
+    
+    //parallel array with checkboxes[]
+    String[] historyRegexps = {
+		"*",
+		PageHistory.GetText.REGEXP.FAVORITE,
+		PageHistory.GetText.REGEXP.COMMENT,
+		PageHistory.GetText.REGEXP.SHARE,
+		PageHistory.GetText.REGEXP.NEWVERSION,
+		PageHistory.GetText.REGEXP.RENAME
+    };
     
     
     //created 3 new accounts
@@ -107,33 +119,84 @@ public class RefineHistoryShareFolder extends OctopusCommonTest {
 
 	 }
 
-	private void verifyCheckAction(String locator, String historyText) 
-	    throws HarnessException
-	{			
-        //TODO: verify there is no other message existed 
-		// Make a check
-		app.zPageHistory.zToolbarCheckMark(locator, true);
+	private void verifyCheckAction(String locator, String historyText, String... regExpArray) 
+    throws HarnessException
+{		
+	String historyRegexp = historyText;
+	if (regExpArray.length > 0) {
+		historyRegexp = regExpArray[0];
+	}
+
+	
+	
+	// Make a check
+	app.zPageHistory.zToolbarCheckMark(locator, true);
+	
+	
+    
+	//get current history items
+	ArrayList<HistoryItem> currHistoryArray = app.zPageHistory.zListItem();
+	
+	
+	boolean found = false;
+
+	
+	// verify if and only if the corresponding history text present
+	for (HistoryItem item:currHistoryArray) {
 		
-		// check if the text present
-		HistoryItem found = app.zPageHistory.isTextPresentInGlobalHistory(historyText);
+		logger.info(item.getHistoryText());
+		boolean isMatched = false;
+        
+		// Verify only history texts associated with check boxes present
+		// not check for "all types"
+		for (int i=1; i<checkboxes.length; i++) {
 			
-		// verification
-		ZAssert.assertNotNull(found, "Verify " +  historyText + " displayed");		
+			// if checkbox is checked
+			if (app.zPageHistory.sIsChecked(checkboxes[i])) {					
+				 isMatched |= item.getHistoryText().matches(historyRegexps[i]);					 					 
+			}
+		}
+						
+		 ZAssert.assertTrue(isMatched , "Verify " +  item.getHistoryText() + " displayed");
+
+		 if (item.getHistoryText().equals(historyText)) {
+			 found = true; 
+		 }					 
+
 		
-	}
+	}			
 	
-	private void verifyUnCheckAction(String locator, String historyText) 
-	    throws HarnessException
-	{						
-		// UnCheck the check box
-		app.zPageHistory.zToolbarCheckMark(locator, false);
-					
-		// verification
-		ZAssert.assertNull(app.zPageHistory.isTextPresentInGlobalHistory(historyText)
-				, "Verify " +  historyText + " not found");		
-		
+	ZAssert.assertTrue(found, "Verify " + historyText + " is displayed");
+}
+
+private void verifyUnCheckAction(String locator, String historyText, String... regExpArray) 
+    throws HarnessException
+{					
+	String historyRegexp = historyText;
+	if (regExpArray.length > 0) {
+		historyRegexp = regExpArray[0];
 	}
+			
+	// UnCheck the check box
+	app.zPageHistory.zToolbarCheckMark(locator, false);
+
+	//get current history items
+	ArrayList<HistoryItem> currHistoryArray = app.zPageHistory.zListItem();
+
+	//count the associated history texts
+	int total=0;
+	for (HistoryItem item:currHistoryArray) {
+		if (item.getHistoryText().matches(historyRegexp)) 
+			total++;					 
+	}
+				
+	// verification 		
+	ZAssert.assertGreaterThan(total,0, "Verify " + historyText + " present");
+	ZAssert.assertGreaterThanEqualTo( currHistoryArray.size(), total, 
+			             "Verify " +  historyRegexp + " not refined");		
 	
+}
+
 	private void verifyCheckUnCheckAction(String locator, String historyText) 
 	    throws HarnessException
 	{
@@ -142,7 +205,16 @@ public class RefineHistoryShareFolder extends OctopusCommonTest {
 		
 	}
 	
-	@Test(description = "Verify check/uncheck 'new version' checkbox", groups = { "functional" })
+	@Test(description = "Verify check 'new version' checkbox", groups = { "smoke" })
+	public void RefineCheckNewVersion() throws HarnessException {
+										
+		// verify check action for 'new version' 
+		verifyCheckAction(Locators.zHistoryFilterNewVersion.locator,
+				GetText.newVersion(fileName));
+				
+	}
+	
+	@Test(description = "Verify check/uncheck 'new version' checkbox", groups = { "skip" })
 	public void RefineNewVersion() throws HarnessException {
 										
 		// verify check|uncheck action for 'new version' 
@@ -255,7 +327,7 @@ public class RefineHistoryShareFolder extends OctopusCommonTest {
 
 	}
 
-	@Test(description = "Functional test for simultaneouly check all boxes", groups = { "functional" })
+	@Test(description = "Functional test for simultaneouly check all boxes", groups = { "skip" })
 	public void RefineCheckAll() throws HarnessException {
 	
 		// mark|unmark file as favorite via soap
