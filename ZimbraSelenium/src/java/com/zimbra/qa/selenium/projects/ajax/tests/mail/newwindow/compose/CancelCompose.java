@@ -39,7 +39,11 @@ public class CancelCompose extends PrefGroupMailByMessageTest {
 			
 			window.zToolbarPressButton(Button.B_CANCEL);
 			
-			ZAssert.assertFalse(window.zIsActive(), "Verify the window is closed");
+			//ZAssert.assertFalse(window.zIsActive(), "Verify the window is closed");
+			// get title by calling getTitle() method once it's implemented, 
+			// for now just hardcoding window title name
+			boolean status = window.zIsClosed("Zimbra: Compose");
+			ZAssert.assertTrue(status, "Verify the window is closed");
 			
 			window = null;
 

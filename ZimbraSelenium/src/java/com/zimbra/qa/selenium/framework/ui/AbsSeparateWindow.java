@@ -591,6 +591,11 @@ public abstract class AbsSeparateWindow extends AbsPage {
 		return (false);
 
 	}
+	
+	public boolean zIsClosed(String windowName) throws HarnessException {
+		logger.info(myPageName() + " zIsClosed()");
+		return zWaitForWindowClosed(windowName);
+	}
 
 	public boolean zIsActive() throws HarnessException {
 		logger.info(myPageName() + " zIsActive()");

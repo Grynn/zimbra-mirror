@@ -1522,10 +1522,10 @@ public abstract class AbsSeleniumObject {
 	 */
 	public boolean zWaitForWindowClosed(String name) throws HarnessException {
 		logger.info("zWaitForWindowClosed(" + name + ")");
-
+		boolean result = false;
 		try {
 			if(ZimbraSeleniumProperties.isWebDriver()){
-				waitForWindowClosed(name);
+				result = waitForWindowClosed(name);
 			}else{
 				String condition = "{var x; for(var windowName in selenium.browserbot.openedWindows ){"
 					+ "var targetWindow = selenium.browserbot.openedWindows[windowName];"
@@ -1536,12 +1536,12 @@ public abstract class AbsSeleniumObject {
 					+ name
 					+ "')){x=windowName;" + "}}}; x==null;";
 			
-				sWaitForCondition(condition);
+				result = sWaitForCondition(condition);
 			}
-			return true;
+			return result;
 		} catch (Exception ex) {
 			logger.info("Error: win not opened " + name, ex.fillInStackTrace());
-			return false;
+			return result;
 		}
 	}
 
