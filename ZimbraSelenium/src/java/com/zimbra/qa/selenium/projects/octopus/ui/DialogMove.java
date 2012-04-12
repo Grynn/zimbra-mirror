@@ -108,6 +108,7 @@ public class DialogMove extends AbsDialog {
 
 		if (this.zWaitForElementPresent(locator, "3000")) {
 			sClickAt(locator, "");
+			this.zWaitForElementDeleted(locator, "3000");
 			if (this.sIsElementPresent(locator))
 				sClickAt(locator, "");
 

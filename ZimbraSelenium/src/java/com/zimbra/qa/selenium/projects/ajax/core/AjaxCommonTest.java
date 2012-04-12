@@ -1,11 +1,18 @@
 package com.zimbra.qa.selenium.projects.ajax.core;
 
+import java.awt.Toolkit;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.*;
 import org.apache.log4j.*;
+import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.Dimension;
+import org.openqa.selenium.Point;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverBackedSelenium;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.*;
 import org.testng.annotations.*;
 import org.xml.sax.SAXException;
@@ -177,32 +184,29 @@ public class AjaxCommonTest {
 				_webDriver = ClientSessionFactory.session().webDriver();
 				
 				/*
-				  //2.17 
-				  Set<String> handles = _webDriver.getWindowHandles(); 
-				  String script = "if (window.screen){var win = window.open(window.location); win.moveTo(0,0);win.resizeTo(window.screen.availWidth, window.screen.availHeight);};"; 
-				  ((JavascriptExecutor) _webDriver).executeScript(script); 
-				  Set<String> newHandles = _webDriver.getWindowHandles(); 
-				  newHandles.removeAll(handles); 
-				  _webDriver.switchTo().window(newHandles.iterator().next());
-				
-				 							 
+				Set<String> handles = _webDriver.getWindowHandles(); 
+				String script = "if (window.screen){var win = window.open(window.location); win.moveTo(0,0);win.resizeTo(window.screen.availWidth, window.screen.availHeight);};"; 
+				((JavascriptExecutor) _webDriver).executeScript(script); 
+				Set<String> newHandles = _webDriver.getWindowHandles(); 
+				newHandles.removeAll(handles); 
+				_webDriver.switchTo().window(newHandles.iterator().next());
+							 							 
 				_webDriver.manage().window().setSize(new Dimension(800,600));
 				 
-				 Selenium selenium = new WebDriverBackedSelenium(_webDriver, _webDriver.getCurrentUrl());
-				 //selenium.windowMaximize();
-				 int width = Integer.parseInt(selenium.getEval("screen.width;"));
-				 int height = Integer.parseInt(selenium.getEval("screen.height;"));
-				 _webDriver.manage().window().setPosition(new Point(0, 0));
-				 _webDriver.manage().window().setSize(new Dimension(width,height));
-				
+				Selenium selenium = new WebDriverBackedSelenium(_webDriver, _webDriver.getCurrentUrl());
+				selenium.windowMaximize();
+						
+				int width = Integer.parseInt(selenium.getEval("screen.width;"));
+				int height = Integer.parseInt(selenium.getEval("screen.height;"));
+				_webDriver.manage().window().setPosition(new Point(0, 0));
+				_webDriver.manage().window().setSize(new Dimension(width,height));
 				*/
-				//2.17
-				//FF only
-				//Capabilities cp =  ((RemoteWebDriver)_webDriver).getCapabilities();
-				//if(cp.getBrowserName().equals("firefox")){				
-				//_webDriver.manage().window().setPosition(new Point(0, 0));
-				//_webDriver.manage().window().setSize(new Dimension((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth(),(int)Toolkit.getDefaultToolkit().getScreenSize().getHeight()));
-				//}								
+				
+				Capabilities cp =  ((RemoteWebDriver)_webDriver).getCapabilities();
+				 if (cp.getBrowserName().equals(DesiredCapabilities.firefox().getBrowserName())||cp.getBrowserName().equals(DesiredCapabilities.chrome().getBrowserName())||cp.getBrowserName().equals(DesiredCapabilities.internetExplorer().getBrowserName())){				
+					_webDriver.manage().window().setPosition(new Point(0, 0));
+					_webDriver.manage().window().setSize(new Dimension((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth(),(int)Toolkit.getDefaultToolkit().getScreenSize().getHeight()));
+				}								
 			} else if (ZimbraSeleniumProperties.isWebDriverBackedSelenium()) {
 				_webDriverBackedSelenium = ClientSessionFactory.session()
 						.webDriverBackedSelenium();
@@ -460,7 +464,6 @@ public class AjaxCommonTest {
 		logger.info("commonTestAfterSuite: start");
 
 		if (ZimbraSeleniumProperties.isWebDriver()) {
-			_webDriver.close();
 			_webDriver.quit();
 		} else if (ZimbraSeleniumProperties.isWebDriverBackedSelenium()) {
 			_webDriverBackedSelenium.stop();

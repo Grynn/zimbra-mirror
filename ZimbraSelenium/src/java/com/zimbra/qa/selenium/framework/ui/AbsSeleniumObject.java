@@ -5,20 +5,30 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
+
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverBackedSelenium;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.FluentWait;
+import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import com.google.common.base.Function;
 import com.thoughtworks.selenium.DefaultSelenium;
 import com.thoughtworks.selenium.SeleniumException;
+import com.zimbra.cs.db.Db.Capability;
 import com.zimbra.qa.selenium.framework.core.ClientSession;
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.core.ExecuteHarnessMain;
@@ -291,8 +301,12 @@ public abstract class AbsSeleniumObject {
 		}
 		if (ZimbraSeleniumProperties.isWebDriver()){
 			WebElement we = getElement(locator);
-			Actions action = new Actions(webDriver());
-			action.click(we).build().perform();			
+			Actions builder = new Actions(webDriver());
+			Action action = builder
+					.moveToElement(we)
+				    .click(we)
+				    .build();
+			action.perform();
 		}
 		else if(ZimbraSeleniumProperties.isWebDriverBackedSelenium()){
 			webDriverBackedSelenium().clickAt(locator, coord);
@@ -348,11 +362,9 @@ public abstract class AbsSeleniumObject {
 		}
 		if (ZimbraSeleniumProperties.isWebDriver()){
 			WebElement element = getElement(locator);
-			element.isEnabled();
-			//2.17
-			//Actions builder = new Actions(webDriver());
-			//Action rClick = builder.contextClick(element).build();
-			//rClick.perform();
+			Actions builder = new Actions(webDriver());
+			Action rClick = builder.contextClick(element).build();
+			rClick.perform();
 		} else {				
 			this.sMouseDownRightAt(locator, coord);
 			this.sMouseUpRightAt(locator, coord);
@@ -628,11 +640,8 @@ public abstract class AbsSeleniumObject {
 		try {
 			int n = -1;
 			if (ZimbraSeleniumProperties.isWebDriver()){
-				/* 2.17
 				WebElement we = getElement(locator);
-				n = we.getLocation().getX();
-				*/
-				n = 1;
+				n = we.getLocation().getX();				
 			} 
 			else if(ZimbraSeleniumProperties.isWebDriverBackedSelenium()){
 				n = webDriverBackedSelenium().getElementPositionLeft(locator).intValue();
@@ -656,11 +665,8 @@ public abstract class AbsSeleniumObject {
 		try {
 			int n = -1;
 			if (ZimbraSeleniumProperties.isWebDriver()){
-				/* 2.17
 				WebElement we = getElement(locator);
-				n = we.getLocation().getY();
-				*/				
-				n = 1;
+				n = we.getLocation().getY();				
 			}
 			else if (ZimbraSeleniumProperties.isWebDriverBackedSelenium()){
 				n = webDriverBackedSelenium().getElementPositionTop(locator).intValue();
@@ -720,7 +726,12 @@ public abstract class AbsSeleniumObject {
 		// Cast to DefaultSelenium ... Workaround until ZimbraSelnium is removed
 		if (ZimbraSeleniumProperties.isWebDriver()){
 			WebElement we = getElement(locator);
-			we.click();		
+			Actions builder = new Actions(webDriver());
+			Action action = builder
+					.moveToElement(we)
+				    .click(we)
+				    .build();
+			action.perform();					
 		}	
 		else if (ZimbraSeleniumProperties.isWebDriverBackedSelenium()){
 			webDriverBackedSelenium().clickAt(locator, coord);
@@ -742,7 +753,8 @@ public abstract class AbsSeleniumObject {
 			// Cast to DefaultSelenium ... Workaround until ZimbraSelnium is removed
 			if (ZimbraSeleniumProperties.isWebDriver()){
 				WebElement we = getElement(locator);
-				we.click();			}
+				we.click();
+			}
 			else if(ZimbraSeleniumProperties.isWebDriverBackedSelenium()){
 				webDriverBackedSelenium().click(locator);
 			}
@@ -808,17 +820,19 @@ public abstract class AbsSeleniumObject {
 			
 			if(ZimbraSeleniumProperties.isWebDriver()){
 				/*
-				waitForElementPresent("zov__main_Mail",20);	
+				waitForElementPresent("zov__main_Mail",20);					
 				
-				//2.17
-				//Wait<WebDriver> wait = new FluentWait<WebDriver>(webDriver()).withTimeout(30, TimeUnit.SECONDS).pollingEvery(5, TimeUnit.SECONDS).ignoring(NoSuchElementException.class);
-			    // WebElement we = wait.until(new ExpectedCondition<WebElement>() {
-			    //	 public WebElement apply(WebDriver driver) {
-			    //		 return driver.findElement(By.id("zov__main_Mail"));
-			    //	 }
-				//});
-				*/			
-				WebDriverWait wait = new WebDriverWait(webDriver(), 20);
+				Wait<WebDriver> wait = new FluentWait<WebDriver>(webDriver()).withTimeout(30, TimeUnit.SECONDS).pollingEvery(5, TimeUnit.SECONDS).ignoring(NoSuchElementException.class);
+			    WebElement we = wait.until(new ExpectedCondition<WebElement>() {
+			    	 public WebElement apply(WebDriver driver) {
+			    		 return driver.findElement(By.id("zov__main_Mail"));
+			    	 }
+				});
+				*/
+				
+				//WebDriverWait wait = new WebDriverWait(webDriver(), 20);
+				Wait<WebDriver> wait = new FluentWait<WebDriver>(webDriver()).withTimeout(30, TimeUnit.SECONDS).pollingEvery(5, TimeUnit.SECONDS).ignoring(NoSuchElementException.class);
+
 				try{
 					wait.until(new ExpectedCondition<Boolean>(){					
 						public Boolean apply(WebDriver driver) {
@@ -969,10 +983,10 @@ public abstract class AbsSeleniumObject {
 	public void sFocus(String locator) throws HarnessException {
 		if (ZimbraSeleniumProperties.isWebDriver()){ 
 			WebElement we = getElement(locator);
-			//2.17
-			//Capabilities cp =  ((RemoteWebDriver)webDriver()).getCapabilities();
-            //if (cp.getBrowserName().equals("chrome")||cp.getBrowserName().equals("firefox"))
-            executeScript("arguments[0].focus();", we);                        		
+			Capabilities cp =  ((RemoteWebDriver)webDriver()).getCapabilities();
+			if (cp.getBrowserName().equals(DesiredCapabilities.firefox().getBrowserName())||cp.getBrowserName().equals(DesiredCapabilities.chrome().getBrowserName())||cp.getBrowserName().equals(DesiredCapabilities.internetExplorer().getBrowserName())){
+				executeScript("arguments[0].focus();", we);  
+			}
 		}
 		else if (ZimbraSeleniumProperties.isWebDriverBackedSelenium()){
 			webDriverBackedSelenium().focus(locator);
@@ -1137,9 +1151,7 @@ public abstract class AbsSeleniumObject {
 		boolean visible = false;
 		if (ZimbraSeleniumProperties.isWebDriver()) {
 			WebElement we = getElement(locator);
-			//2.17
-			//visible = element.isDisplayed();
-			visible = we.isEnabled();			
+			visible = we.isDisplayed();					
 		} 
 		else if (ZimbraSeleniumProperties.isWebDriverBackedSelenium()){
 			visible = webDriverBackedSelenium().isVisible(locator);
@@ -1540,7 +1552,7 @@ public abstract class AbsSeleniumObject {
 			}
 			return result;
 		} catch (Exception ex) {
-			logger.info("Error: win not opened " + name, ex.fillInStackTrace());
+			logger.info("Error: win not opened " + name, ex);
 			return result;
 		}
 	}
@@ -2102,9 +2114,7 @@ public abstract class AbsSeleniumObject {
 					WebElement we = null;
 					if(driver!=null){
 						we = driver.findElement(locator);
-						//2.17
-						//if (toReturn.isDisplayed()) {
-						if (we !=null && we.isEnabled()) {
+						if (we !=null && we.isDisplayed()) {
 							return we;
 						}
 					}

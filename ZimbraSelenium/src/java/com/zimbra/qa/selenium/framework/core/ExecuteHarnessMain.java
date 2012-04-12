@@ -11,7 +11,12 @@ import java.util.regex.*;
 
 import org.apache.commons.cli.*;
 import org.apache.commons.cli.CommandLine;
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.*;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.remote.Augmenter;
 import org.testng.*;
 import org.testng.xml.*;
 
@@ -713,7 +718,17 @@ public class ExecuteHarnessMain {
 		public static void getScreenCapture(ITestResult result) {
 			String filename = getScreenCaptureFilename(result.getMethod().getMethod());
 			logger.warn("Creating screenshot: "+ filename);
-			ClientSessionFactory.session().selenium().captureScreenshot(filename);
+			if (ZimbraSeleniumProperties.isWebDriver()){
+				WebDriver augmentedDriver = new Augmenter().augment(ClientSessionFactory.session().webDriver()); 
+				File scrFile = ((TakesScreenshot)augmentedDriver).getScreenshotAs(OutputType.FILE);
+				try {
+					FileUtils.copyFile(scrFile, new File(filename));
+				} catch (Exception ex) {
+					logger.error(ex);
+				}
+			}else{
+				ClientSessionFactory.session().selenium().captureScreenshot(filename);
+			}
 		}
 		
 		@Override
@@ -938,7 +953,7 @@ public class ExecuteHarnessMain {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		
+
 		BasicConfigurator.configure();
 
     	String result = "No results";

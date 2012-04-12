@@ -10,6 +10,9 @@ import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.octopus.core.OctopusCommonTest;
 import com.zimbra.qa.selenium.projects.octopus.ui.DisplayFilePreview;
+import com.zimbra.qa.selenium.projects.octopus.ui.PageFavorites;
+import com.zimbra.qa.selenium.projects.octopus.ui.PageOctopus;
+import com.zimbra.qa.selenium.projects.octopus.ui.PageOctopus.Locators;
 
 public class AddRemoveFavorites extends OctopusCommonTest {
 
@@ -135,8 +138,11 @@ public class AddRemoveFavorites extends OctopusCommonTest {
 		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_FAVORITES);
 
 		// Verify the file appears in the Favorites tab
-		ZAssert.assertTrue(app.zPageOctopus.zIsItemInCurentListView(fileName),
-				"Verify the file appears in the Favorites tab");
+		boolean present = app.zPageOctopus.zWaitForElementPresent(PageOctopus.Locators.zMyFilesListViewItems.locator + ":contains(" + fileName + ")", "3000");
+		
+		ZAssert.assertTrue(present,	"Verify is present in the Favorites tab");
+
+		ZAssert.assertTrue(app.zPageOctopus.zIsItemInCurentListView(fileName),	"Verify the file appears in the Favorites tab");
 	}
 
 	@Test(description = "Mark file as Not Favorite using Context menu - verify favorite file dissapears from the Favorites tab", groups = { "functional" })

@@ -1,14 +1,28 @@
 package com.zimbra.qa.selenium.framework.core;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import static org.openqa.selenium.firefox.FirefoxDriver.PROFILE;
+
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverBackedSelenium;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
+import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.remote.Augmenter;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.remote.ScreenshotException;
 
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
@@ -95,27 +109,25 @@ public class ClientSession {
 	 * @return
 	 */
 	public WebDriver webDriver() {
-		if (webDriver == null) {
-			/*
-			try {
-				DesiredCapabilities capability = DesiredCapabilities.firefox();
-				capability.setJavascriptEnabled(true);
-				webDriver = new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"), capability);
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				}									
-			*/
-			if(ZimbraSeleniumProperties.getStringProperty("browser").contains("googlechrome")){
+		if (webDriver == null) {			
+			if(ZimbraSeleniumProperties.getStringProperty("browser").contains("iexplore")){	
+				DesiredCapabilities desiredCapabilities = DesiredCapabilities.internetExplorer();
+				//desiredCapabilities.setCapability(InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS, true);
+				desiredCapabilities.setCapability("ignoreProtectedModeSettings", true);
+				webDriver = new InternetExplorerDriver(desiredCapabilities);	
+			}
+			else if(ZimbraSeleniumProperties.getStringProperty("browser").contains("googlechrome")){
 				//DesiredCapabilities caps = DesiredCapabilities.chrome();
 				//caps.setJavascriptEnabled(true);
 				//caps.setCapability("chrome.binary", "path/to/chrome.exe");
 				//System.setProperty("webdriver.chrome.driver","/path/to/chromedriver.exe");
 				//ChromeDriver driver = new ChromeDriver(caps);
-				//ChromeOptions options = new ChromeOptions();
-				//webDriver = new ChromeDriver(options);
+				
+				ChromeOptions options = new ChromeOptions();
 				//System.setProperty("webdriver.chrome.driver","C:/p4/zimbra/main/ZimbraSelenium/chromedriver.exe");
-				webDriver = new ChromeDriver();
-			} else {
+				webDriver = new ChromeDriver(options);
+				//webDriver = new ChromeDriver();
+			} else if (ZimbraSeleniumProperties.getStringProperty("browser").contains("firefox")){
 				FirefoxProfile profile = new FirefoxProfile();
 				//Proxy proxy = new Proxy();
 				//proxy.setHttpProxy("proxy.vmware.com:3128");
@@ -124,10 +136,23 @@ public class ClientSession {
 				profile.setEnableNativeEvents(false);
 				webDriver = new FirefoxDriver(profile);
 				//webDriver = new FirefoxDriver();					
+			} else {
+				try {
+					FirefoxProfile fp = new FirefoxProfile();
+					fp.setEnableNativeEvents(false); 
+					//DesiredCapabilities desiredCapabilities = DesiredCapabilities.firefox();
+					DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
+					desiredCapabilities.setJavascriptEnabled(true);					
+					desiredCapabilities.setBrowserName(DesiredCapabilities.firefox().getBrowserName());
+					desiredCapabilities.setCapability(PROFILE,fp); 
+					webDriver = new RemoteWebDriver(new URL(String.format("http://localhost:%d/wd/hub", 4444)), desiredCapabilities);
+					} catch (Exception ex) {
+					logger.error(ex);					
+				}				
 			}			
 		}
 		return webDriver;
-	}
+	}	
 	
 	/**
 	 * Get the current Browser Name

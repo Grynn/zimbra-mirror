@@ -302,6 +302,7 @@ public class CreateDocument extends AjaxCommonTest {
 		.zWaitForElementPresent(TreeBriefcase.Locators.briefcaseListView);
 		
 		app.zPageBriefcase.sMouseOver(TreeBriefcase.Locators.briefcaseListView);
+		app.zPageBriefcase.sFocus(TreeBriefcase.Locators.briefcaseListView);
 		
 		// Open new document page
 		DocumentBriefcaseNew documentBriefcaseNew = (DocumentBriefcaseNew) app.zPageBriefcase
