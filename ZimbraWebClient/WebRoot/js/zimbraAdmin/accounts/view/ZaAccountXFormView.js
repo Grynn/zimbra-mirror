@@ -1382,7 +1382,9 @@ ZaAccountXFormView.validatePollingInterval = function(value, event, form) {
 	}
 	var prefPollingIntervalItem = form.getItemsById (ZaAccount.A_zimbraPrefMailPollingInterval)[0];
 	try {
-		if (ZaUtil.getLifeTimeInSeconds(prefPollingInterval) < ZaUtil.getLifeTimeInSeconds(minPollingInterval)){
+        var prefPollingInNum = parseInt(ZaUtil.getLifeTimeInSeconds(prefPollingInterval));
+        var minPollingNum = parseInt(ZaUtil.getLifeTimeInSeconds(minPollingInterval));
+		if (prefPollingInNum < minPollingNum){
 			prefPollingIntervalItem.setError (ZaMsg.tt_mailPollingIntervalError + minPollingInterval) ;
 			form.parent.setDirty(false);	
 		}else{
