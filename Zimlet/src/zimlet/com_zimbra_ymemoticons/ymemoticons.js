@@ -82,6 +82,9 @@ Com_Zimbra_YMEmoticons.prototype.generateSpan =
 function(html, idx, obj, spanId, context) {
 
 	var h = context.height / 2;
+	if (AjxEnv.isIE) {
+		h = "0px"; // IE uses non-standard box model
+	}
 	html[idx++] = [
 		"<span style='height:", context.height,
 		";width:", context.width,
@@ -92,7 +95,11 @@ function(html, idx, obj, spanId, context) {
 		"background:url(", context.img.src, ") no-repeat 0 50%;'",
 		' title="', AjxStringUtil.xmlAttrEncode(context.text), ' - ',
 		AjxStringUtil.xmlAttrEncode(context.alt), '"',
-		"></span>"
+		// bug 72304 in IE and Chrome, an empty span with only background
+		// image's position doesn't follow the element before, so add a
+		// invisible character
+		"><span style=\"visibility:hidden\">a</span>"
+		
 	].join("");
 
 	return idx;
