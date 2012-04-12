@@ -357,7 +357,7 @@ public class ZimbraAPI
         folderID = "";
         if (rsp != null)
         {
-            int idx = rsp.IndexOf("folder id=");
+            int idx = rsp.IndexOf("id=");
 
             if (idx != -1)
             {
