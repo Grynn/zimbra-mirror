@@ -1,6 +1,5 @@
 package com.zimbra.qa.selenium.projects.octopus.ui;
 
-import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 

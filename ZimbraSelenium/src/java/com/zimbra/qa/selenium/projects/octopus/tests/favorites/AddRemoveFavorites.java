@@ -10,9 +10,8 @@ import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.octopus.core.OctopusCommonTest;
 import com.zimbra.qa.selenium.projects.octopus.ui.DisplayFilePreview;
-import com.zimbra.qa.selenium.projects.octopus.ui.PageFavorites;
 import com.zimbra.qa.selenium.projects.octopus.ui.PageOctopus;
-import com.zimbra.qa.selenium.projects.octopus.ui.PageOctopus.Locators;
+
 
 public class AddRemoveFavorites extends OctopusCommonTest {
 
