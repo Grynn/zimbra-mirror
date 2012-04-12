@@ -3133,6 +3133,18 @@ Step_Choices_XFormItem.prototype.getLabelUpdateMethod = function() {
     return this.cacheInheritedMethod("labelUpdateMethod", "$labelUpdateMethod", "newValue");
 }
 
+Step_Choices_XFormItem.prototype.labelClickMethod = function(event) {
+    var sourceValue =  this.getInheritedProperty("sourceValue");
+    var instanceValue = this.getInstanceValue();
+    if (sourceValue < instanceValue) {
+        this.setInstanceValue(sourceValue);
+    }
+}
+
+Step_Choices_XFormItem.prototype.getLabelClickMethod = function() {
+    return this.cacheInheritedMethod("labelClickMethod", "$labelClickMethod", "event");
+}
+
 Step_Choices_XFormItem.prototype.initFormItem = function() {
     var choices = this.getNormalizedChoices();
     if (!choices)
@@ -3147,7 +3159,8 @@ Step_Choices_XFormItem.prototype.initFormItem = function() {
     this.items = [];
     var currentItem;
     var labelUpdateMethod = this.getLabelUpdateMethod();
-    var labelVisibility = this.getInheritedProperty ("labelVisibility")
+    var labelVisibility = this.getInheritedProperty ("labelVisibility");
+    var labelOnClickMethod = this.getLabelClickMethod();
     for (var i = 0; i < labels.length; i++) {
         if (labelVisibility && labelVisibility[values[i]]) {
             currentItem = {ref: ".", type:_OUTPUT_,
@@ -3161,6 +3174,10 @@ Step_Choices_XFormItem.prototype.initFormItem = function() {
                 value:labels[i], sourceValue: values[i],
                 updateElement: labelUpdateMethod
             };
+        }
+
+        if (labelOnClickMethod) {
+            currentItem.onClick = labelOnClickMethod;
         }
         this.items.push(currentItem);
     }
