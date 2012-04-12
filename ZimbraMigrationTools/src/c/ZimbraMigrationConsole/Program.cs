@@ -151,6 +151,9 @@ class Program
             
 
             Console.WriteLine("User cancelled, aborting down");
+            System.Console.WriteLine("press an key to continue");
+                Console.ReadKey(true);
+                
            Thread.CurrentThread.Abort();
             
              break;                
