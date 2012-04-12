@@ -5,7 +5,7 @@ package com.zimbra.qa.selenium.projects.ajax.ui.calendar;
 
 
 import com.zimbra.qa.selenium.framework.ui.*;
-import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.*;
 
 /**
  * Represents a "Confirmation" dialog box
@@ -14,8 +14,8 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
 public class DialogAddExternalCalendar extends AbsDialog {
 
 	public static class Locators {
-		public static final String DialogDivID = "DWT563";
-		public static final String DialogDivCss = "css=div[id='DWT563']";
+		public static final String DialogDivID = "ADD_EXTERNAL_CAL_DIALOG";
+		public static final String DialogDivCss = "css=div[id='"+ DialogDivID +"']";
 		
 		public static final String RadioGoogleCss = "css=input[id$='_shareRadioGoogle']";
 		public static final String RadioYahooCss = "css=input[id$='_shareRadioYahoo']";
@@ -171,5 +171,37 @@ public class DialogAddExternalCalendar extends AbsDialog {
 
 	}
 	
+	public void zSetSourceEmailAddress(String address) throws HarnessException {
+		logger.info(myPageName() + " zSetSourceEmailAddress("+ address +")");
+
+		String locator = "css=input#ADD_EXTERNAL_CAL_DIALOG_syncUserNameInput";
+		this.sType(locator, address);
+		this.zWaitForBusyOverlay();
+		
+	}
+	
+	public void zSetSourcePassword(String password) throws HarnessException {
+		logger.info(myPageName() + " zSetSourceEmailAddress("+ password +")");
+
+		String locator = "css=input#ADD_EXTERNAL_CAL_DIALOG_syncPasswordInput";
+		this.sType(locator, password);
+		this.zWaitForBusyOverlay();
+		
+	}
+	
+	public void zSetSourceServer(String server) throws HarnessException {
+		logger.info(myPageName() + " zSetSourceEmailAddress("+ server +")");
+
+		String locator = "css=input#ADD_EXTERNAL_CAL_DIALOGsyncUrlInput";
+		this.sType(locator, server);
+		this.zWaitForBusyOverlay();
+	
+		
+		SleepUtil.sleepMedium();
+
+	}
+	
+
+
 }
 

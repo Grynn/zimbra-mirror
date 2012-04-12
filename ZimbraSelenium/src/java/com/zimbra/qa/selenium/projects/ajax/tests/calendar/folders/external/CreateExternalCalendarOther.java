@@ -7,7 +7,8 @@ import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.calendar.DialogAddExternalCalendar;
+import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
+import com.zimbra.qa.selenium.projects.ajax.ui.calendar.*;
 
 public class CreateExternalCalendarOther extends AjaxCommonTest {
 
@@ -25,6 +26,10 @@ public class CreateExternalCalendarOther extends AjaxCommonTest {
 			groups = { "functional" })
 	public void CreateExternalCalendarOther_01() throws HarnessException {
 
+		ZimbraAccount icalAccount = new ZimbraAccount();
+		icalAccount.provision();
+		icalAccount.authenticate();
+		
 		
 		// Set the new calendar name
 		String calendarname = "calendar" + ZimbraSeleniumProperties.getUniqueString();
@@ -37,6 +42,17 @@ public class CreateExternalCalendarOther extends AjaxCommonTest {
 		dialog.zSetSourceType(DialogAddExternalCalendar.SourceType.Other);
 		dialog.zClickButton(Button.B_NEXT);
 
+		// Fill out the external calendar
+		dialog.zSetSourceEmailAddress(icalAccount.EmailAddress);
+		dialog.zSetSourcePassword(icalAccount.Password);
+		dialog.zSetSourceServer(icalAccount.ZimbraMailHost);
+		dialog.zClickButton(Button.B_NEXT);
+		
+		DialogCreateCalendarFolder dailog2 = new DialogCreateCalendarFolder(app, ((AppAjaxClient) app).zPageCalendar);
+		dailog2.zWaitForActive();
+		dailog2.zEnterFolderName(calendarname);
+		dailog2.zClickButton(Button.B_OK);
+		
 		
 		// Make sure the folder was created on the ZCS server
 		FolderItem folder = FolderItem.importFromSOAP(app.zGetActiveAccount(), calendarname);
