@@ -91,11 +91,16 @@ public class HistoryCommonTest extends OctopusCommonTest {
 		// before running test
 		if (fileId == null) {		 
 	 	   fileId = uploadFileViaSoap(app.zGetActiveAccount(),fileName);    	 	  	
-           folder = createFolderViaSoap(app.zGetActiveAccount());	 	  	            		
+	 	   SleepUtil.sleepSmall();
+   	   
+	 	   folder = createFolderViaSoap(app.zGetActiveAccount());	 	  	            		
+           SleepUtil.sleepSmall();
+    	   
            mainFolder = FolderItem.importFromSOAP(
         		   app.zGetActiveAccount(), SystemFolder.Briefcase);
            
-		           comment = "Comment " + ZimbraSeleniumProperties.getUniqueString();
+           SleepUtil.sleepSmall();
+    	   comment = "Comment " + ZimbraSeleniumProperties.getUniqueString();
     	   newName = "New Name " + ZimbraSeleniumProperties.getUniqueString() 
            		   + fileName.substring(fileName.indexOf("."),fileName.length());
 
@@ -148,9 +153,9 @@ public class HistoryCommonTest extends OctopusCommonTest {
        readWriteFolder = createFolderViaSoap(readWriteGranter);	 	  	            		
        adminFolder = createFolderViaSoap(adminGranter);	 	  	            		
 
-	   mountReadFolderName = "mount read " + ZimbraSeleniumProperties.getUniqueString();
-	   mountReadWriteFolderName = "mount read write " + ZimbraSeleniumProperties.getUniqueString();
-	   mountAdminFolderName = "mount admin " + ZimbraSeleniumProperties.getUniqueString();
+	   mountReadFolderName = "Mount Read " + ZimbraSeleniumProperties.getUniqueString();
+	   mountReadWriteFolderName = "Mount Read Write " + ZimbraSeleniumProperties.getUniqueString();
+	   mountAdminFolderName = "Mount Admin " + ZimbraSeleniumProperties.getUniqueString();
 
 	   mountFolderViaSoap(readGranter, app.zGetActiveAccount(), readFolder, SHARE_AS_READ, mainFolder, mountReadFolderName);
 	   SleepUtil.sleepSmall();
@@ -181,35 +186,21 @@ public class HistoryCommonTest extends OctopusCommonTest {
 
 
 	}
-	protected void verifyCheckAction(String locator, String historyText, String... regExpArray) 
-	    throws HarnessException
-	{		
-		String historyRegexp = historyText;
-		if (regExpArray.length > 0) {
-			historyRegexp = regExpArray[0];
-		}
 	
-		
-		
-		// Make a check
-		app.zPageHistory.zToolbarCheckMark(locator, true);
-		
-		
-        
-		//get current history items
-		ArrayList<HistoryItem> currHistoryArray = app.zPageHistory.zListItem();
-		
+	
+	private boolean isHistoryTextPresent(ArrayList<HistoryItem> currHistoryArray, String historyText) 
+	throws HarnessException
+	{
 		
 		boolean found = false;
-	
-		
+			
+		// checking all history records in the stream
 		// verify if and only if the corresponding history text present
 		for (HistoryItem item:currHistoryArray) {
 			
 			logger.info(item.getHistoryText());
 			boolean isMatched = false;
 	        
-			// Verify only history texts associated with check boxes present
 			// not check for "all types"
 			for (int i=1; i<checkboxes.length; i++) {
 				
@@ -218,45 +209,62 @@ public class HistoryCommonTest extends OctopusCommonTest {
 					 isMatched |= item.getHistoryText().matches(historyRegexps[i]);					 					 
 				}
 			}
-							
-			 ZAssert.assertTrue(isMatched , "Verify " +  item.getHistoryText() + " displayed");
 	
-			 if (item.getHistoryText().equals(historyText)) {
+		   ZAssert.assertTrue(isMatched , "Verify " +  item.getHistoryText() + " is displayed if associated checkbox is checked");
+	
+		   if (item.getHistoryText().equals(historyText)) {
 				 found = true; 
-			 }					 
-	
-			
+		   }					 			
 		}			
-		
-		ZAssert.assertTrue(found, "Verify " + historyText + " is displayed");
+	
+		return found;
 	}
 	
-	protected void verifyUnCheckAction(String locator, String historyText, String... regExpArray) 
+	
+	protected void verifyCheckAction(String locator, String historyText) 
+	    throws HarnessException
+	{		
+		// Make a check
+		app.zPageHistory.zToolbarCheckMark(locator, true);
+	     	
+		
+		ZAssert.assertTrue(isHistoryTextPresent(app.zPageHistory.zListItem(), historyText)
+				        , "Verify " + historyText + " is displayed");
+	}
+	
+	protected void verifyUnCheckAction(String locator, String historyText) 
 	    throws HarnessException
 	{					
-		String historyRegexp = historyText;
-		if (regExpArray.length > 0) {
-			historyRegexp = regExpArray[0];
-		}
-				
 		// UnCheck the check box
 		app.zPageHistory.zToolbarCheckMark(locator, false);
-	
-		//get current history items
+
 		ArrayList<HistoryItem> currHistoryArray = app.zPageHistory.zListItem();
 
-		//count the associated history texts
-		int total=0;
-		for (HistoryItem item:currHistoryArray) {
-			if (item.getHistoryText().matches(historyRegexp)) 
-				total++;					 
+        boolean allNotChecked=true;
+		for (int i=0; i<checkboxes.length; i++) {
+			allNotChecked &= (!app.zPageHistory.sIsChecked(checkboxes[i]));
 		}
-					
-		// verification 		
-		ZAssert.assertGreaterThan(total,0, "Verify " + historyText + " present");
-		ZAssert.assertGreaterThanEqualTo( currHistoryArray.size(), total, 
-				             "Verify " +  historyRegexp + " not refined");		
+
+
+		//if all checkboxes not checked, the history text should present
+		if (allNotChecked) {
+            boolean found=false;
+			for (int i=0; i< currHistoryArray.size()& !found; i++) {
+				HistoryItem item = currHistoryArray.get(i);
+			
+				logger.info(item.getHistoryText());
+	        
+				found = item.getHistoryText().equals(historyText); 			
+			}			
+
+			ZAssert.assertTrue(found, "Verify " + historyText + " is displayed");
+		} 
 		
+  		//otherwise, refine is active, the text should not be present
+		else {
+			ZAssert.assertFalse(isHistoryTextPresent(currHistoryArray, historyText)
+					    , "Verify " + historyText + " should not be displayed");
+		}
 	}
 	
 	protected void verifyCheckUnCheckAction(String locator, String historyText) 

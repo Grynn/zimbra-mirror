@@ -3,7 +3,6 @@ package com.zimbra.qa.selenium.projects.octopus.tests.history;
 import org.testng.annotations.*;
 
 import com.zimbra.qa.selenium.framework.util.*;
-import com.zimbra.qa.selenium.projects.octopus.core.CommonConstants.SHARE_PERMISSION;
 import com.zimbra.qa.selenium.projects.octopus.ui.PageHistory.*;
 
 public class RefineShare extends HistoryCommonTest {

@@ -65,23 +65,25 @@ public class CommonMethods {
 	}
 
 	// create a new folder via soap
-	protected FolderItem createFolderViaSoap(ZimbraAccount account) throws HarnessException {
+	protected FolderItem createFolderViaSoap(ZimbraAccount account, FolderItem ...folderItemArray) throws HarnessException {
+		
+		FolderItem folderItem = FolderItem.importFromSOAP(account, SystemFolder.Briefcase);
 
-		FolderItem briefcaseFolder = FolderItem.importFromSOAP(account, SystemFolder.Briefcase);
-
+		if ((folderItemArray != null) && folderItemArray.length >0) {
+			folderItem = folderItemArray[0];
+		}
+		
 		// generate folder name
-		String foldername = "folder" + ZimbraSeleniumProperties.getUniqueString();
+		String foldername = "Folder " + ZimbraSeleniumProperties.getUniqueString();
 
 		// send soap request
 	    account.soapSend("<CreateFolderRequest xmlns='urn:zimbraMail'>"
 					+ "<folder name='" + foldername + "' l='"
-					+ briefcaseFolder.getId()
+					+ folderItem.getId()
 					+ "' view='document'/>" + "</CreateFolderRequest>");
 
-	    // get the folder Item
-	    FolderItem folderItem = FolderItem.importFromSOAP(account, foldername);
-
-	    return folderItem;
+	    // verify folder creation on the server 
+	    return FolderItem.importFromSOAP(account, foldername);
 	}
 	
 	// create a new zimbra account
@@ -137,37 +139,17 @@ public class CommonMethods {
 		+ "<action id='" + fileId + "'  op='!watch' /></DocumentActionRequest>");
 	} 
 
-	// upload file
-	protected String uploadFileViaSoap(ZimbraAccount account, String fileName) 
-    throws HarnessException {
-
-		FolderItem briefcaseRootFolder = FolderItem.importFromSOAP(account,
-		SystemFolder.Briefcase);
-
-		// Create file item
-        String filePath = ZimbraSeleniumProperties.getBaseDirectory()
-		+ "/data/public/other/" + fileName;
-
-        // Upload file to server through RestUtil
-        String attachmentId = account.uploadFile(filePath);
-
-        // Save uploaded file to the root folder through SOAP
-         account.soapSend(
-         "<SaveDocumentRequest xmlns='urn:zimbraMail'>" + "<doc l='"
-		+ briefcaseRootFolder.getId() + "'>" + "<upload id='"
-		+ attachmentId + "'/>" + "</doc></SaveDocumentRequest>");
-
-        //return id
-        return account.soapSelectValue(
-		  "//mail:SaveDocumentResponse//mail:doc", "id");
-    }
-
 	
 	// upload file
-	protected String uploadFileViaSoap(ZimbraAccount account, String fileName, FolderItem folderItem) 
+	protected String uploadFileViaSoap(ZimbraAccount account, String fileName, FolderItem ...folderItemArray) 
     throws HarnessException {
+		FolderItem folderItem = FolderItem.importFromSOAP(account, SystemFolder.Briefcase);
 
-	
+		if ((folderItemArray != null) && folderItemArray.length >0) {
+			folderItem = folderItemArray[0];
+		}
+		
+	    
 		// Create file item
         String filePath = ZimbraSeleniumProperties.getBaseDirectory()
 		+ "/data/public/other/" + fileName;

@@ -3,7 +3,6 @@ package com.zimbra.qa.selenium.projects.octopus.tests.history;
 import org.testng.annotations.*;
 
 import com.zimbra.qa.selenium.framework.util.*;
-import com.zimbra.qa.selenium.projects.octopus.ui.PageHistory;
 import com.zimbra.qa.selenium.projects.octopus.ui.PageHistory.*;
 
 public class RefineFavorite extends HistoryCommonTest {
@@ -30,7 +29,7 @@ public class RefineFavorite extends HistoryCommonTest {
 		
 		// verify favorite text not present
 		verifyUnCheckAction(Locators.zHistoryFilterFavorites.locator, 
-				GetText.favorite(fileName), PageHistory.GetText.REGEXP.FAVORITE);											
+				GetText.favorite(fileName));											
 
 	}
 	

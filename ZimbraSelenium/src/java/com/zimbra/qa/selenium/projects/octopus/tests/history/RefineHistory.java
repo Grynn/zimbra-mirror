@@ -3,12 +3,8 @@ package com.zimbra.qa.selenium.projects.octopus.tests.history;
 import org.testng.annotations.*;
 
 import com.zimbra.qa.selenium.framework.items.*;
-import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
-import com.zimbra.qa.selenium.projects.octopus.core.OctopusCommonTest;
-import com.zimbra.qa.selenium.projects.octopus.ui.PageHistory;
 import com.zimbra.qa.selenium.projects.octopus.ui.PageHistory.*;
-import java.util.ArrayList;
 
 public class RefineHistory extends HistoryCommonTest {
  
