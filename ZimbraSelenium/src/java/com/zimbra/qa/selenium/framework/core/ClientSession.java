@@ -127,13 +127,13 @@ public class ClientSession {
 				//webDriver = new FirefoxDriver();					
 			} else {
 				try {
-					FirefoxProfile fp = new FirefoxProfile();
-					fp.setEnableNativeEvents(false); 
 					//DesiredCapabilities desiredCapabilities = DesiredCapabilities.firefox();
 					DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
-					desiredCapabilities.setJavascriptEnabled(true);					
 					desiredCapabilities.setBrowserName(DesiredCapabilities.firefox().getBrowserName());
-					desiredCapabilities.setCapability(PROFILE,fp); 
+					FirefoxProfile fp = new FirefoxProfile();
+					fp.setEnableNativeEvents(false);
+					desiredCapabilities.setCapability(PROFILE,fp);
+					desiredCapabilities.setJavascriptEnabled(true);
 					webDriver = new RemoteWebDriver(new URL(String.format("http://localhost:%d/wd/hub", 4444)), desiredCapabilities);
 					} catch (Exception ex) {
 					logger.error(ex);					

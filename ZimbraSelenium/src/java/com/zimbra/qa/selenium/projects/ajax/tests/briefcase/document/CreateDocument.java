@@ -304,6 +304,8 @@ public class CreateDocument extends AjaxCommonTest {
 		app.zPageBriefcase.sMouseOver(TreeBriefcase.Locators.briefcaseListView);
 		app.zPageBriefcase.sFocus(TreeBriefcase.Locators.briefcaseListView);
 		
+		//ZAssert.assertStringContains("ccc", "vvv","Testing failure");
+				
 		// Open new document page
 		DocumentBriefcaseNew documentBriefcaseNew = (DocumentBriefcaseNew) app.zPageBriefcase
 				.zToolbarPressButton(Button.B_NEW, docItem);
