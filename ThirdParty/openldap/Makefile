@@ -46,6 +46,8 @@ build:
 	mv openldap-$(LDAP_RELEASE) openldap-$(LDAP_VERSION); \
 	cd openldap-$(LDAP_VERSION); \
 	patch -g0 -N -p1 < ../patches/ITS5037.patch; \
+	patch -g0 -N -p1 < ../patches/0001-trial.patch; \
+	patch -g0 -N -p1 < ../patches/0002-More-threading-tweaks.patch; \
 	$(PATCH) \
 	patch -g0 -N -p1 < ../patches/leopard.fix; \
 	patch -g0 -N -p1 < ../patches/index-slot-increase.patch; \

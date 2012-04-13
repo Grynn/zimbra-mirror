@@ -1,0 +1,871 @@
+From 746c386a8490c7a74ad11c41a60e36ae4c1ef43e Mon Sep 17 00:00:00 2001
+From: Howard Chu <hyc@openldap.org>
+Date: Thu, 12 Apr 2012 01:37:10 -0700
+Subject: [PATCH 1/2] trial
+
+---
+ servers/slapd/back-mdb/attr.c      |    4 +-
+ servers/slapd/back-mdb/back-mdb.h  |   27 +--
+ servers/slapd/back-mdb/index.c     |  101 +-------
+ servers/slapd/back-mdb/proto-mdb.h |    1 +
+ servers/slapd/back-mdb/tools.c     |  449 +++++++-----------------------------
+ 5 files changed, 108 insertions(+), 474 deletions(-)
+
+diff --git a/servers/slapd/back-mdb/attr.c b/servers/slapd/back-mdb/attr.c
+index 8faf17a..8fea5bf 100644
+--- a/servers/slapd/back-mdb/attr.c
++++ b/servers/slapd/back-mdb/attr.c
+@@ -117,6 +117,7 @@ mdb_attr_dbs_open(
+ 	if ( !(slapMode & SLAP_TOOL_READONLY) )
+ 		flags |= MDB_CREATE;
+ 
++flags |= MDB_INTEGERKEY;
+ 	for ( i=0; i<mdb->mi_nattrs; i++ ) {
+ 		if ( mdb->mi_attrs[i]->ai_dbi )	/* already open */
+ 			continue;
+@@ -359,9 +360,6 @@ mdb_attr_index_config(
+ 		a->ai_cr = NULL;
+ #endif
+ 		a->ai_cursor = NULL;
+-		a->ai_flist = NULL;
+-		a->ai_clist = NULL;
+-		a->ai_root = NULL;
+ 		a->ai_desc = ad;
+ 		a->ai_dbi = 0;
+ 
+diff --git a/servers/slapd/back-mdb/back-mdb.h b/servers/slapd/back-mdb/back-mdb.h
+index e4b6d7e..0efe2bf 100644
+--- a/servers/slapd/back-mdb/back-mdb.h
++++ b/servers/slapd/back-mdb/back-mdb.h
+@@ -23,8 +23,6 @@
+ 
+ LDAP_BEGIN_DECL
+ 
+-#define MDB_TOOL_IDL_CACHING	1
+-
+ #define DN_BASE_PREFIX		SLAP_INDEX_EQUALITY_PREFIX
+ #define DN_ONE_PREFIX	 	'%'
+ #define DN_SUBTREE_PREFIX 	'@'
+@@ -144,11 +142,8 @@ typedef struct mdb_attrinfo {
+ #ifdef LDAP_COMP_MATCH
+ 	ComponentReference* ai_cr; /*component indexing*/
+ #endif
+-	Avlnode *ai_root;		/* for tools */
+-	void *ai_flist;		/* for tools */
+-	void *ai_clist;		/* for tools */
+ 	MDB_cursor *ai_cursor;	/* for tools */
+-	int ai_idx;	/* position in AI array */
++	int	ai_idx;
+ 	MDB_dbi ai_dbi;
+ } AttrInfo;
+ 
+@@ -156,14 +151,6 @@ typedef struct mdb_attrinfo {
+ #define	MDB_INDEX_DELETING	0x8000U	/* index is being modified */
+ #define	MDB_INDEX_UPDATE_OP	0x03	/* performing an index update */
+ 
+-/* For slapindex to record which attrs in an entry belong to which
+- * index database 
+- */
+-typedef struct AttrList {
+-	struct AttrList *next;
+-	Attribute *attr;
+-} AttrList;
+-
+ #ifndef CACHELINE
+ #define CACHELINE	64
+ #endif
+@@ -175,18 +162,18 @@ typedef struct AttrList {
+ #endif
+ 
+ typedef struct IndexRbody {
+-	AttrInfo *ai;
+-	AttrList *attrs;
+-	void *tptr;
++	struct berval **keys;
++	int nkeys;
++	int mkeys;
+ 	int i;
+ } IndexRbody;
+ 
+ typedef struct IndexRec {
+ 	union {
+ 		IndexRbody irb;
+-#define ir_ai	iru.irb.ai
+-#define ir_attrs	iru.irb.attrs
+-#define ir_tptr	iru.irb.tptr
++#define ir_keys	iru.irb.keys
++#define ir_nkeys	iru.irb.nkeys
++#define ir_mkeys	iru.irb.mkeys
+ #define ir_i	iru.irb.i
+ 		/* cache line alignment */
+ 		char pad[(sizeof(IndexRbody)+CACHELINE-1) & (!CACHELINE-1)];
+diff --git a/servers/slapd/back-mdb/index.c b/servers/slapd/back-mdb/index.c
+index 6acdfc0..4c8bef2 100644
+--- a/servers/slapd/back-mdb/index.c
++++ b/servers/slapd/back-mdb/index.c
+@@ -26,7 +26,7 @@
+ #include "lutil_hash.h"
+ 
+ static char presence_keyval[] = {0,0,0,0,0};
+-static struct berval presence_key[2] = {BER_BVC(presence_keyval), BER_BVNULL};
++struct berval mdb_presence_key[2] = {BER_BVC(presence_keyval), BER_BVNULL};
+ 
+ AttrInfo *mdb_index_mask(
+ 	Backend *be,
+@@ -114,7 +114,7 @@ int mdb_index_param(
+ 	case LDAP_FILTER_PRESENT:
+ 		type = SLAP_INDEX_PRESENT;
+ 		if( IS_SLAP_INDEX( mask, SLAP_INDEX_PRESENT ) ) {
+-			*prefixp = presence_key[0];
++			*prefixp = mdb_presence_key[0];
+ 			goto done;
+ 		}
+ 		break;
+@@ -172,7 +172,7 @@ static int indexer(
+ 	int opid,
+ 	slap_mask_t mask )
+ {
+-	int rc, i;
++	int rc, i, freeit = 1;
+ 	struct berval *keys;
+ 	MDB_cursor *mc = ai->ai_cursor;
+ 	mdb_idl_keyfunc *keyfunc;
+@@ -189,18 +189,18 @@ static int indexer(
+ 	}
+ 
+ 	if ( opid == SLAP_INDEX_ADD_OP ) {
+-#ifdef MDB_TOOL_IDL_CACHING
+ 		if (( slapMode & SLAP_TOOL_QUICK ) && slap_tool_thread_max > 2 ) {
+-			keyfunc = mdb_tool_idl_add;
++			keyfunc = mdb_tool_index_gen;
+ 			mc = (MDB_cursor *)ai;
+-		} else
+-#endif
++			freeit = 0;
++		} else {
+ 			keyfunc = mdb_idl_insert_keys;
++		}
+ 	} else
+ 		keyfunc = mdb_idl_delete_keys;
+ 
+ 	if( IS_SLAP_INDEX( mask, SLAP_INDEX_PRESENT ) ) {
+-		rc = keyfunc( mc, presence_key, id );
++		rc = keyfunc( mc, mdb_presence_key, id );
+ 		if( rc ) {
+ 			err = "presence";
+ 			goto done;
+@@ -217,7 +217,7 @@ static int indexer(
+ 
+ 		if( rc == LDAP_SUCCESS && keys != NULL ) {
+ 			rc = keyfunc( mc, keys, id );
+-			ber_bvarray_free_x( keys, op->o_tmpmemctx );
++			if ( freeit ) ber_bvarray_free_x( keys, op->o_tmpmemctx );
+ 			if ( rc ) {
+ 				err = "equality";
+ 				goto done;
+@@ -236,7 +236,7 @@ static int indexer(
+ 
+ 		if( rc == LDAP_SUCCESS && keys != NULL ) {
+ 			rc = keyfunc( mc, keys, id );
+-			ber_bvarray_free_x( keys, op->o_tmpmemctx );
++			if ( freeit ) ber_bvarray_free_x( keys, op->o_tmpmemctx );
+ 			if ( rc ) {
+ 				err = "approx";
+ 				goto done;
+@@ -256,7 +256,7 @@ static int indexer(
+ 
+ 		if( rc == LDAP_SUCCESS && keys != NULL ) {
+ 			rc = keyfunc( mc, keys, id );
+-			ber_bvarray_free_x( keys, op->o_tmpmemctx );
++			if ( freeit ) ber_bvarray_free_x( keys, op->o_tmpmemctx );
+ 			if( rc ) {
+ 				err = "substr";
+ 				goto done;
+@@ -390,85 +390,6 @@ int mdb_index_values(
+ 	return rc;
+ }
+ 
+-/* Get the list of which indices apply to this attr */
+-int
+-mdb_index_recset(
+-	struct mdb_info *mdb,
+-	Attribute *a,
+-	AttributeType *type,
+-	struct berval *tags,
+-	IndexRec *ir )
+-{
+-	int rc, slot;
+-	AttrList *al;
+-
+-	if( type->sat_sup ) {
+-		/* recurse */
+-		rc = mdb_index_recset( mdb, a, type->sat_sup, tags, ir );
+-		if( rc ) return rc;
+-	}
+-	/* If this type has no AD, we've never used it before */
+-	if( type->sat_ad ) {
+-		slot = mdb_attr_slot( mdb, type->sat_ad, NULL );
+-		if ( slot >= 0 ) {
+-			ir[slot].ir_ai = mdb->mi_attrs[slot];
+-			al = ch_malloc( sizeof( AttrList ));
+-			al->attr = a;
+-			al->next = ir[slot].ir_attrs;
+-			ir[slot].ir_attrs = al;
+-		}
+-	}
+-	if( tags->bv_len ) {
+-		AttributeDescription *desc;
+-
+-		desc = ad_find_tags( type, tags );
+-		if( desc ) {
+-			slot = mdb_attr_slot( mdb, desc, NULL );
+-			if ( slot >= 0 ) {
+-				ir[slot].ir_ai = mdb->mi_attrs[slot];
+-				al = ch_malloc( sizeof( AttrList ));
+-				al->attr = a;
+-				al->next = ir[slot].ir_attrs;
+-				ir[slot].ir_attrs = al;
+-			}
+-		}
+-	}
+-	return LDAP_SUCCESS;
+-}
+-
+-/* Apply the indices for the recset */
+-int mdb_index_recrun(
+-	Operation *op,
+-	MDB_txn *txn,
+-	struct mdb_info *mdb,
+-	IndexRec *ir0,
+-	ID id,
+-	int base )
+-{
+-	IndexRec *ir;
+-	AttrList *al;
+-	int i, rc = 0;
+-
+-	/* Never index ID 0 */
+-	if ( id == 0 )
+-		return 0;
+-
+-	for (i=base; i<mdb->mi_nattrs; i+=slap_tool_thread_max-1) {
+-		ir = ir0 + i;
+-		if ( !ir->ir_ai ) continue;
+-		while (( al = ir->ir_attrs )) {
+-			ir->ir_attrs = al->next;
+-			rc = indexer( op, txn, ir->ir_ai, ir->ir_ai->ai_desc,
+-				&ir->ir_ai->ai_desc->ad_type->sat_cname,
+-				al->attr->a_nvals, id, SLAP_INDEX_ADD_OP,
+-				ir->ir_ai->ai_indexmask );
+-			free( al );
+-			if ( rc ) break;
+-		}
+-	}
+-	return rc;
+-}
+-
+ int
+ mdb_index_entry(
+ 	Operation *op,
+diff --git a/servers/slapd/back-mdb/proto-mdb.h b/servers/slapd/back-mdb/proto-mdb.h
+index 27c2738..d28d94f 100644
+--- a/servers/slapd/back-mdb/proto-mdb.h
++++ b/servers/slapd/back-mdb/proto-mdb.h
+@@ -208,6 +208,7 @@ typedef int (mdb_idl_keyfunc)(
+ 
+ mdb_idl_keyfunc mdb_idl_insert_keys;
+ mdb_idl_keyfunc mdb_idl_delete_keys;
++mdb_idl_keyfunc mdb_tool_index_gen;
+ 
+ int
+ mdb_idl_intersection(
+diff --git a/servers/slapd/back-mdb/tools.c b/servers/slapd/back-mdb/tools.c
+index 42d2c42..14db69e 100644
+--- a/servers/slapd/back-mdb/tools.c
++++ b/servers/slapd/back-mdb/tools.c
+@@ -24,31 +24,12 @@
+ #include "back-mdb.h"
+ #include "idl.h"
+ 
+-#ifdef MDB_TOOL_IDL_CACHING
+-static int mdb_tool_idl_flush( BackendDB *be, MDB_txn *txn );
+-
+-#define	IDBLOCK	1024
+-
+-typedef struct mdb_tool_idl_cache_entry {
+-	struct mdb_tool_idl_cache_entry *next;
+-	ID ids[IDBLOCK];
+-} mdb_tool_idl_cache_entry;
+-
+-typedef struct mdb_tool_idl_cache {
+-	struct berval kstr;
+-	mdb_tool_idl_cache_entry *head, *tail;
+-	ID first, last;
+-	int count;
+-	short offset;
+-	short flags;
+-} mdb_tool_idl_cache;
+-#define WAS_FOUND	0x01
+-#define WAS_RANGE	0x02
+-
+-#define MDB_TOOL_IDL_FLUSH(be, txn)	mdb_tool_idl_flush(be, txn)
+-#else
+-#define MDB_TOOL_IDL_FLUSH(be, txn)
+-#endif /* MDB_TOOL_IDL_CACHING */
++#define	ldap_pvt_thread_barrier_t	pthread_barrier_t
++#define ldap_pvt_thread_barrier_init(barrier,count)	pthread_barrier_init(barrier,NULL,count)
++#define ldap_pvt_thread_barrier_destroy(barrier)	pthread_barrier_destroy(barrier)
++#define ldap_pvt_thread_barrier_wait(barrier)	pthread_barrier_wait(barrier)
++
++extern struct berval mdb_presence_key;
+ 
+ static MDB_txn *txn = NULL, *txi = NULL;
+ static MDB_cursor *cursor = NULL, *idcursor = NULL;
+@@ -71,15 +52,13 @@ static int		tool_scope;
+ static Filter		*tool_filter;
+ static Entry		*tool_next_entry;
+ 
+-static ID mdb_tool_ix_id;
++static Entry *mdb_tool_ix_e;
+ static Operation *mdb_tool_ix_op;
+ static MDB_txn *mdb_tool_ix_txn;
+-static int mdb_tool_index_tcount, mdb_tool_threads;
++static int mdb_tool_threads;
++static ldap_pvt_thread_barrier_t mdb_barrier1, mdb_barrier2;
+ static IndexRec *mdb_tool_index_rec;
+ static struct mdb_info *mdb_tool_info;
+-static ldap_pvt_thread_mutex_t mdb_tool_index_mutex;
+-static ldap_pvt_thread_cond_t mdb_tool_index_cond_main;
+-static ldap_pvt_thread_cond_t mdb_tool_index_cond_work;
+ static void * mdb_tool_index_task( void *ctx, void *ptr );
+ 
+ static int	mdb_writes, mdb_writes_per_commit;
+@@ -101,22 +80,23 @@ int mdb_tool_entry_open(
+ 	if (( slapMode & (SLAP_TOOL_QUICK|SLAP_TOOL_READONLY)) == SLAP_TOOL_QUICK ) {
+ 		if ( !mdb_tool_info ) {
+ 			struct mdb_info *mdb = (struct mdb_info *) be->be_private;
+-			ldap_pvt_thread_mutex_init( &mdb_tool_index_mutex );
+-			ldap_pvt_thread_cond_init( &mdb_tool_index_cond_main );
+-			ldap_pvt_thread_cond_init( &mdb_tool_index_cond_work );
+ 			if ( mdb->mi_nattrs ) {
+ 				int i;
+ 				mdb_tool_threads = slap_tool_thread_max - 1;
+ 				if ( mdb_tool_threads > 1 ) {
++					ldap_pvt_thread_barrier_init(&mdb_barrier1, mdb_tool_threads);
++					ldap_pvt_thread_barrier_init(&mdb_barrier2, mdb_tool_threads);
+ 					mdb_tool_index_rec = ch_calloc( mdb->mi_nattrs, sizeof( IndexRec ));
+-					mdb_tool_index_tcount = mdb_tool_threads - 1;
+-					for (i=1; i<mdb_tool_threads; i++) {
++					mdb_tool_threads--;
++					for (i=0; i<mdb_tool_threads; i++) {
+ 						int *ptr = ch_malloc( sizeof( int ));
+ 						*ptr = i;
+ 						ldap_pvt_thread_pool_submit( &connection_pool,
+ 							mdb_tool_index_task, ptr );
+ 					}
+ 					mdb_tool_info = mdb;
++					for (i=0; i<mdb->mi_nattrs; i++)
++						mdb->mi_attrs[i]->ai_idx = i;
+ 				}
+ 			}
+ 		}
+@@ -130,28 +110,11 @@ int mdb_tool_entry_close(
+ {
+ 	if ( mdb_tool_info ) {
+ 		slapd_shutdown = 1;
+-		ldap_pvt_thread_mutex_lock( &mdb_tool_index_mutex );
+-
+-		/* There might still be some threads starting */
+-		while ( mdb_tool_index_tcount > 0 ) {
+-			ldap_pvt_thread_cond_wait( &mdb_tool_index_cond_main,
+-					&mdb_tool_index_mutex );
+-		}
+-
+-		mdb_tool_index_tcount = mdb_tool_threads - 1;
+-		ldap_pvt_thread_cond_broadcast( &mdb_tool_index_cond_work );
+-
+-		/* Make sure all threads are stopped */
+-		while ( mdb_tool_index_tcount > 0 ) {
+-			ldap_pvt_thread_cond_wait( &mdb_tool_index_cond_main,
+-				&mdb_tool_index_mutex );
+-		}
+-		ldap_pvt_thread_mutex_unlock( &mdb_tool_index_mutex );
++		ldap_pvt_thread_barrier_wait(&mdb_barrier1);
+ 
+ 		mdb_tool_info = NULL;
+ 		slapd_shutdown = 0;
+ 		ch_free( mdb_tool_index_rec );
+-		mdb_tool_index_tcount = mdb_tool_threads - 1;
+ 	}
+ 
+ 	if( idcursor ) {
+@@ -163,7 +126,6 @@ int mdb_tool_entry_close(
+ 		cursor = NULL;
+ 	}
+ 	if( txn ) {
+-		MDB_TOOL_IDL_FLUSH( be, txn );
+ 		if ( mdb_txn_commit( txn ))
+ 			return -1;
+ 		txn = NULL;
+@@ -513,69 +475,45 @@ mdb_tool_index_add(
+ 	if ( !mdb->mi_nattrs )
+ 		return 0;
+ 
+-	if ( mdb_tool_threads > 1 ) {
+-		IndexRec *ir;
+-		int i, rc;
+-		Attribute *a;
++	if ( mdb_tool_threads ) {
++		int i;
+ 
+-		ir = mdb_tool_index_rec;
+-		for (i=0; i<mdb->mi_nattrs; i++)
+-			ir[i].ir_attrs = NULL;
++		for ( i=0; i<mdb->mi_nattrs; i++ )
++			mdb_tool_index_rec[i].ir_i = LDAP_BUSY;
+ 
+-		for ( a = e->e_attrs; a != NULL; a = a->a_next ) {
+-			rc = mdb_index_recset( mdb, a, a->a_desc->ad_type,
+-				&a->a_desc->ad_tags, ir );
+-			if ( rc )
+-				return rc;
+-		}
+-		for (i=0; i<mdb->mi_nattrs; i++) {
+-			if ( !ir[i].ir_ai )
+-				break;
+-			rc = mdb_cursor_open( txn, ir[i].ir_ai->ai_dbi,
+-				 &ir[i].ir_ai->ai_cursor );
+-			if ( rc )
+-				return rc;
+-		}
+-		mdb_tool_ix_id = e->e_id;
++		mdb_tool_ix_e = e;
+ 		mdb_tool_ix_op = op;
+ 		mdb_tool_ix_txn = txn;
+-		ldap_pvt_thread_mutex_lock( &mdb_tool_index_mutex );
+-		/* Wait for all threads to be ready */
+-		while ( mdb_tool_index_tcount ) {
+-			ldap_pvt_thread_cond_wait( &mdb_tool_index_cond_main,
+-				&mdb_tool_index_mutex );
+-		}
+ 
+-		for ( i=1; i<mdb_tool_threads; i++ )
+-			mdb_tool_index_rec[i].ir_i = LDAP_BUSY;
+-		mdb_tool_index_tcount = mdb_tool_threads - 1;
+-		ldap_pvt_thread_mutex_unlock( &mdb_tool_index_mutex );
+-		ldap_pvt_thread_cond_broadcast( &mdb_tool_index_cond_work );
++		ldap_pvt_thread_barrier_wait(&mdb_barrier1);
+ 
+-		rc = mdb_index_recrun( op, txn, mdb, ir, e->e_id, 0 );
+-		if ( rc )
+-			return rc;
+-		ldap_pvt_thread_mutex_lock( &mdb_tool_index_mutex );
+-		for ( i=1; i<mdb_tool_threads; i++ ) {
+-			if ( mdb_tool_index_rec[i].ir_i == LDAP_BUSY ) {
+-				ldap_pvt_thread_cond_wait( &mdb_tool_index_cond_main,
+-					&mdb_tool_index_mutex );
+-				i--;
+-				continue;
+-			}
+-			if ( mdb_tool_index_rec[i].ir_i ) {
+-				rc = mdb_tool_index_rec[i].ir_i;
+-				break;
+-			}
+-		}
+-		ldap_pvt_thread_mutex_unlock( &mdb_tool_index_mutex );
+-		return rc;
++		return 0;
+ 	} else
+ 	{
+ 		return mdb_index_entry_add( op, txn, e );
+ 	}
+ }
+ 
++static int
++mdb_tool_index_finish()
++{
++	struct mdb_info *mdb = mdb_tool_info;
++	int i, j, rc = 0;
++
++	ldap_pvt_thread_barrier_wait(&mdb_barrier2);
++	for (i=0; i<mdb->mi_nattrs; i++) {
++		for (j=0; j<mdb_tool_index_rec[i].ir_nkeys; j++) {
++			if (!rc)
++				rc = mdb_idl_insert_keys( mdb->mi_attrs[i]->ai_cursor,
++					mdb_tool_index_rec[i].ir_keys[j], mdb_tool_ix_e->e_id );
++			if (mdb_tool_index_rec[i].ir_keys[j] != &mdb_presence_key)
++				ch_free(mdb_tool_index_rec[i].ir_keys[j]);
++		}
++		mdb_tool_index_rec[i].ir_nkeys = 0;
++	}
++	return rc;
++}
++
+ ID mdb_tool_entry_put(
+ 	BackendDB *be,
+ 	Entry *e,
+@@ -652,6 +590,7 @@ ID mdb_tool_entry_put(
+ 		goto done;
+ 	}
+ 
++	/* add attribute indices */
+ 	rc = mdb_tool_index_add( &op, txn, e );
+ 	if( rc != 0 ) {
+ 		snprintf( text->bv_val, text->bv_len,
+@@ -674,12 +613,16 @@ ID mdb_tool_entry_put(
+ 		goto done;
+ 	}
+ 
++	/* finish up attr indices */
++	if ( rc == 0 && mdb_tool_threads ) {
++		rc = mdb_tool_index_finish();
++	}
++
+ done:
+ 	if( rc == 0 ) {
+ 		mdb_writes++;
+ 		if ( mdb_writes >= mdb_writes_per_commit ) {
+ 			unsigned i;
+-			MDB_TOOL_IDL_FLUSH( be, txn );
+ 			rc = mdb_txn_commit( txn );
+ 			for ( i=0; i<mdb->mi_nattrs; i++ )
+ 				mdb->mi_attrs[i]->ai_cursor = NULL;
+@@ -836,12 +779,14 @@ int mdb_tool_entry_reindex(
+ 
+ 	rc = mdb_tool_index_add( &op, txi, e );
+ 
++	if (rc == 0 && mdb_tool_threads)
++		rc = mdb_tool_index_finish();
++
+ done:
+ 	if( rc == 0 ) {
+ 		mdb_writes++;
+ 		if ( mdb_writes >= mdb_writes_per_commit ) {
+ 			unsigned i;
+-			MDB_TOOL_IDL_FLUSH( be, txi );
+ 			rc = mdb_txn_commit( txi );
+ 			mdb_writes = 0;
+ 			for ( i=0; i<mi->mi_nattrs; i++ )
+@@ -958,283 +903,65 @@ done:
+ 	return e->e_id;
+ }
+ 
+-static void *
+-mdb_tool_index_task( void *ctx, void *ptr )
+-{
+-	int base = *(int *)ptr;
+ 
+-	free( ptr );
+-	while ( 1 ) {
+-		ldap_pvt_thread_mutex_lock( &mdb_tool_index_mutex );
+-		mdb_tool_index_tcount--;
+-		if ( !mdb_tool_index_tcount )
+-			ldap_pvt_thread_cond_signal( &mdb_tool_index_cond_main );
+-		ldap_pvt_thread_cond_wait( &mdb_tool_index_cond_work,
+-			&mdb_tool_index_mutex );
+-		if ( slapd_shutdown ) {
+-			mdb_tool_index_tcount--;
+-			if ( !mdb_tool_index_tcount )
+-				ldap_pvt_thread_cond_signal( &mdb_tool_index_cond_main );
+-			ldap_pvt_thread_mutex_unlock( &mdb_tool_index_mutex );
+-			break;
+-		}
+-		ldap_pvt_thread_mutex_unlock( &mdb_tool_index_mutex );
+-		mdb_tool_index_rec[base].ir_i = mdb_index_recrun( mdb_tool_ix_op,
+-			mdb_tool_ix_txn,
+-			mdb_tool_info, mdb_tool_index_rec, mdb_tool_ix_id, base );
+-	}
+-
+-	return NULL;
+-}
+-
+-#ifdef MDB_TOOL_IDL_CACHING
+ static int
+-mdb_tool_idl_cmp( const void *v1, const void *v2 )
++mdb_tool_index_attr( int base, Attribute *a, AttributeType *at )
+ {
+-	const mdb_tool_idl_cache *c1 = v1, *c2 = v2;
+-	int rc;
+-
+-	if (( rc = c1->kstr.bv_len - c2->kstr.bv_len )) return rc;
+-	return memcmp( c1->kstr.bv_val, c2->kstr.bv_val, c1->kstr.bv_len );
+-}
++	int rc = 0, slot;
+ 
+-static int
+-mdb_tool_idl_flush_one( MDB_cursor *mc, AttrInfo *ai, mdb_tool_idl_cache *ic )
+-{
+-	mdb_tool_idl_cache_entry *ice;
+-	MDB_val key, data[2];
+-	int i, rc;
+-	ID id, nid;
+-
+-	/* Freshly allocated, ignore it */
+-	if ( !ic->head && ic->count <= MDB_IDL_DB_SIZE ) {
+-		return 0;
++	if (at->sat_sup) {
++		rc = mdb_tool_index_attr(base, a, at->sat_sup);
++		if (rc) return rc;
+ 	}
+ 
+-	key.mv_data = ic->kstr.bv_val;
+-	key.mv_size = ic->kstr.bv_len;
+-
+-	if ( ic->count > MDB_IDL_DB_SIZE ) {
+-		while ( ic->flags & WAS_FOUND ) {
+-			rc = mdb_cursor_get( mc, &key, data, MDB_SET );
+-			if ( rc ) {
+-				/* FIXME: find out why this happens */
+-				ic->flags = 0;
+-				break;
+-			}
+-			if ( ic->flags & WAS_RANGE ) {
+-				/* Skip lo */
+-				rc = mdb_cursor_get( mc, &key, data, MDB_NEXT_DUP );
+-
+-				/* Get hi */
+-				rc = mdb_cursor_get( mc, &key, data, MDB_NEXT_DUP );
+-
+-				/* Store range hi */
+-				data[0].mv_data = &ic->last;
+-				rc = mdb_cursor_put( mc, &key, data, MDB_CURRENT );
+-			} else {
+-				/* Delete old data, replace with range */
+-				ic->first = *(ID *)data[0].mv_data;
+-				mdb_cursor_del( mc, MDB_NODUPDATA );
+-			}
+-			break;
+-		}
+-		if ( !(ic->flags & WAS_RANGE)) {
+-			/* range, didn't exist before */
+-			nid = 0;
+-			data[0].mv_size = sizeof(ID);
+-			data[0].mv_data = &nid;
+-			rc = mdb_cursor_put( mc, &key, data, 0 );
+-			if ( rc == 0 ) {
+-				data[0].mv_data = &ic->first;
+-				rc = mdb_cursor_put( mc, &key, data, 0 );
+-				if ( rc == 0 ) {
+-					data[0].mv_data = &ic->last;
+-					rc = mdb_cursor_put( mc, &key, data, 0 );
+-				}
+-			}
+-			if ( rc ) {
+-				rc = -1;
+-			}
+-		}
+-	} else {
+-		/* Normal write */
+-		int n;
+-
+-		data[0].mv_size = sizeof(ID);
+-		rc = 0;
+-		i = ic->offset;
+-		for ( ice = ic->head, n=0; ice; ice = ice->next, n++ ) {
+-			int end;
+-			if ( ice->next ) {
+-				end = IDBLOCK;
+-			} else {
+-				end = ic->count & (IDBLOCK-1);
+-				if ( !end )
+-					end = IDBLOCK;
+-			}
+-			data[1].mv_size = end - i;
+-			data[0].mv_data = &ice->ids[i];
+-			i = 0;
+-			rc = mdb_cursor_put( mc, &key, data, MDB_NODUPDATA|MDB_APPEND|MDB_MULTIPLE );
+-			if ( rc ) {
+-				if ( rc == MDB_KEYEXIST ) {
+-					rc = 0;
+-					continue;
+-				}
+-				rc = -1;
+-				break;
+-			}
+-		}
+-		if ( ic->head ) {
+-			ic->tail->next = ai->ai_flist;
+-			ai->ai_flist = ic->head;
++	if (at->sat_ad) {
++		slot = mdb_attr_slot( mdb_tool_info, at->sat_ad, NULL );
++		if ( slot >= 0 && (slot % mdb_tool_threads) == base ) {
++			rc = mdb_index_values( mdb_tool_ix_op,
++				mdb_tool_ix_txn, a->a_desc, a->a_nvals, mdb_tool_ix_e->e_id, SLAP_INDEX_ADD_OP );
+ 		}
+ 	}
+-	ic->head = ai->ai_clist;
+-	ai->ai_clist = ic;
+ 	return rc;
+ }
+ 
+-static int
+-mdb_tool_idl_flush_db( MDB_txn *txn, AttrInfo *ai )
++static void *
++mdb_tool_index_task( void *ctx, void *ptr )
+ {
+-	MDB_cursor *mc;
+-	Avlnode *root;
+-	int rc;
+-
+-	mdb_cursor_open( txn, ai->ai_dbi, &mc );
+-	root = tavl_end( ai->ai_root, TAVL_DIR_LEFT );
+-	do {
+-		rc = mdb_tool_idl_flush_one( mc, ai, root->avl_data );
+-		if ( rc != -1 )
+-			rc = 0;
+-	} while ((root = tavl_next(root, TAVL_DIR_RIGHT)));
+-	mdb_cursor_close( mc );
+-
+-	return rc;
+-}
++	Attribute *a;
++	int base = *(int *)ptr;
++	int i;
+ 
+-static int
+-mdb_tool_idl_flush( BackendDB *be, MDB_txn *txn )
+-{
+-	struct mdb_info *mdb = (struct mdb_info *) be->be_private;
+-	int rc = 0;
+-	unsigned int i, dbi;
+-
+-	for ( i=0; i < mdb->mi_nattrs; i++ ) {
+-		if ( !mdb->mi_attrs[i]->ai_root ) continue;
+-		rc = mdb_tool_idl_flush_db( txn, mdb->mi_attrs[i] );
+-		tavl_free(mdb->mi_attrs[i]->ai_root, NULL);
+-		mdb->mi_attrs[i]->ai_root = NULL;
+-		if ( rc )
++	free( ptr );
++	while ( 1 ) {
++		ldap_pvt_thread_barrier_wait( &mdb_barrier1 );
++		if ( slapd_shutdown )
+ 			break;
++
++		for (a = mdb_tool_ix_e->e_attrs; a; a=a->a_next) {
++			mdb_tool_index_rec[base].ir_i = mdb_tool_index_attr(base, a, a->a_desc->ad_type);
++		}
++		ldap_pvt_thread_barrier_wait( &mdb_barrier2 );
+ 	}
+-	return rc;
++
++	return NULL;
+ }
+ 
+-int mdb_tool_idl_add(
++/* Just save the generated keys until later */
++int mdb_tool_index_gen(
+ 	MDB_cursor *mc,
+ 	struct berval *keys,
+ 	ID id )
+ {
+-	MDB_dbi dbi;
+-	mdb_tool_idl_cache *ic, itmp;
+-	mdb_tool_idl_cache_entry *ice;
+-	int i, rc, lcount;
+ 	AttrInfo *ai = (AttrInfo *)mc;
+-	mc = ai->ai_cursor;
++	IndexRec *ir;
++	int i;
+ 
+-	dbi = ai->ai_dbi;
+-	for (i=0; keys[i].bv_val; i++) {
+-	itmp.kstr = keys[i];
+-	ic = tavl_find( (Avlnode *)ai->ai_root, &itmp, mdb_tool_idl_cmp );
+-
+-	/* No entry yet, create one */
+-	if ( !ic ) {
+-		MDB_val key, data;
+-		ID nid;
+-		int rc;
+-
+-		if ( ai->ai_clist ) {
+-			ic = ai->ai_clist;
+-			ai->ai_clist = ic->head;
+-		} else {
+-			ic = ch_malloc( sizeof( mdb_tool_idl_cache ) + itmp.kstr.bv_len + 4 );
+-		}
+-		ic->kstr.bv_len = itmp.kstr.bv_len;
+-		ic->kstr.bv_val = (char *)(ic+1);
+-		memcpy( ic->kstr.bv_val, itmp.kstr.bv_val, ic->kstr.bv_len );
+-		ic->head = ic->tail = NULL;
+-		ic->last = 0;
+-		ic->count = 0;
+-		ic->offset = 0;
+-		ic->flags = 0;
+-		tavl_insert( (Avlnode **)&ai->ai_root, ic, mdb_tool_idl_cmp,
+-			avl_dup_error );
+-
+-		/* load existing key count here */
+-		key.mv_size = keys[i].bv_len;
+-		key.mv_data = keys[i].bv_val;
+-		rc = mdb_cursor_get( mc, &key, &data, MDB_SET );
+-		if ( rc == 0 ) {
+-			ic->flags |= WAS_FOUND;
+-			nid = *(ID *)data.mv_data;
+-			if ( nid == 0 ) {
+-				ic->count = MDB_IDL_DB_SIZE+1;
+-				ic->flags |= WAS_RANGE;
+-			} else {
+-				size_t count;
+-
+-				mdb_cursor_count( mc, &count );
+-				ic->count = count;
+-				ic->first = nid;
+-				ic->offset = count & (IDBLOCK-1);
+-			}
+-		}
+-	}
+-	/* are we a range already? */
+-	if ( ic->count > MDB_IDL_DB_SIZE ) {
+-		ic->last = id;
+-		continue;
+-	/* Are we at the limit, and converting to a range? */
+-	} else if ( ic->count == MDB_IDL_DB_SIZE ) {
+-		if ( ic->head ) {
+-			ic->tail->next = ai->ai_flist;
+-			ai->ai_flist = ic->head;
+-		}
+-		ic->head = ic->tail = NULL;
+-		ic->last = id;
+-		ic->count++;
+-		continue;
+-	}
+-	/* No free block, create that too */
+-	lcount = ic->count & (IDBLOCK-1);
+-	if ( !ic->tail || lcount == 0) {
+-		if ( ai->ai_flist ) {
+-			ice = ai->ai_flist;
+-			ai->ai_flist = ice->next;
+-		} else {
+-			ice = ch_malloc( sizeof( mdb_tool_idl_cache_entry ));
+-		}
+-		ice->next = NULL;
+-		if ( !ic->head ) {
+-			ic->head = ice;
+-		} else {
+-			ic->tail->next = ice;
+-		}
+-		ic->tail = ice;
+-		if ( lcount )
+-			ice->ids[lcount-1] = 0;
+-		if ( !ic->count )
+-			ic->first = id;
+-	}
+-	ice = ic->tail;
+-	if (!lcount || ice->ids[lcount-1] != id)
+-		ice->ids[lcount] = id;
+-	ic->count++;
+-	}
++	mc = ai->ai_cursor;
++	i = ai->ai_idx;
++	ir = &mdb_tool_index_rec[i];
+ 
++	if (!(ir->ir_nkeys & 3))
++		ir->ir_keys = ch_realloc(ir->ir_keys, (ir->ir_nkeys + 4) * sizeof(struct berval *));
++	ir->ir_keys[ir->ir_nkeys++] = keys;
+ 	return 0;
+ }
+-#endif /* MDB_TOOL_IDL_CACHING */
+-- 
+1.7.1
+

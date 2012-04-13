@@ -1,0 +1,491 @@
+From 6956824ad65d9c26502781dcf6a2b3a81c2c17ac Mon Sep 17 00:00:00 2001
+From: Howard Chu <hyc@openldap.org>
+Date: Thu, 12 Apr 2012 05:38:30 -0700
+Subject: [PATCH 2/2] More threading tweaks
+
+---
+ servers/slapd/back-mdb/back-mdb.h  |    7 ++-
+ servers/slapd/back-mdb/index.c     |   13 ++--
+ servers/slapd/back-mdb/proto-mdb.h |   12 +++
+ servers/slapd/back-mdb/tools.c     |  133 +++++++++++++++++++++++-------------
+ servers/slapd/sl_malloc.c          |   21 +++++-
+ servers/slapd/slapadd.c            |   12 +++-
+ 6 files changed, 136 insertions(+), 62 deletions(-)
+
+diff --git a/servers/slapd/back-mdb/back-mdb.h b/servers/slapd/back-mdb/back-mdb.h
+index 0efe2bf..ea7c63f 100644
+--- a/servers/slapd/back-mdb/back-mdb.h
++++ b/servers/slapd/back-mdb/back-mdb.h
+@@ -165,7 +165,6 @@ typedef struct IndexRbody {
+ 	struct berval **keys;
+ 	int nkeys;
+ 	int mkeys;
+-	int i;
+ } IndexRbody;
+ 
+ typedef struct IndexRec {
+@@ -174,12 +173,16 @@ typedef struct IndexRec {
+ #define ir_keys	iru.irb.keys
+ #define ir_nkeys	iru.irb.nkeys
+ #define ir_mkeys	iru.irb.mkeys
+-#define ir_i	iru.irb.i
+ 		/* cache line alignment */
+ 		char pad[(sizeof(IndexRbody)+CACHELINE-1) & (!CACHELINE-1)];
+ 	} iru;
+ } IndexRec;
+ 
++typedef struct IndexCtx {
++	Operation *op;
++	struct mdb_attrinfo *ai;
++} IndexCtx;
++
+ #define MAXRDNS	SLAP_LDAPDN_MAXLEN/4
+ 
+ #include "proto-mdb.h"
+diff --git a/servers/slapd/back-mdb/index.c b/servers/slapd/back-mdb/index.c
+index 4c8bef2..6311763 100644
+--- a/servers/slapd/back-mdb/index.c
++++ b/servers/slapd/back-mdb/index.c
+@@ -161,7 +161,7 @@ done:
+ 	return LDAP_SUCCESS;
+ }
+ 
+-static int indexer(
++int mdb_indexer(
+ 	Operation *op,
+ 	MDB_txn *txn,
+ 	struct mdb_attrinfo *ai,
+@@ -177,6 +177,7 @@ static int indexer(
+ 	MDB_cursor *mc = ai->ai_cursor;
+ 	mdb_idl_keyfunc *keyfunc;
+ 	char *err;
++	IndexCtx ic;
+ 
+ 	assert( mask != 0 );
+ 
+@@ -191,7 +192,9 @@ static int indexer(
+ 	if ( opid == SLAP_INDEX_ADD_OP ) {
+ 		if (( slapMode & SLAP_TOOL_QUICK ) && slap_tool_thread_max > 2 ) {
+ 			keyfunc = mdb_tool_index_gen;
+-			mc = (MDB_cursor *)ai;
++			ic.op = op;
++			ic.ai = ai;
++			mc = (MDB_cursor *)&ic;
+ 			freeit = 0;
+ 		} else {
+ 			keyfunc = mdb_idl_insert_keys;
+@@ -316,7 +319,7 @@ static int index_at_values(
+ 			if ( ai->ai_cr ) {
+ 				ComponentReference *cr;
+ 				for( cr = ai->ai_cr ; cr ; cr = cr->cr_next ) {
+-					rc = indexer( op, txn, ai, cr->cr_ad, &type->sat_cname,
++					rc = mdb_indexer( op, txn, ai, cr->cr_ad, &type->sat_cname,
+ 						cr->cr_nvals, id, ixop,
+ 						cr->cr_indexmask );
+ 				}
+@@ -334,7 +337,7 @@ static int index_at_values(
+ 			 */
+ 				mask = ai->ai_newmask ? ai->ai_newmask : ai->ai_indexmask;
+ 			if( mask ) {
+-				rc = indexer( op, txn, ai, ad, &type->sat_cname,
++				rc = mdb_indexer( op, txn, ai, ad, &type->sat_cname,
+ 					vals, id, ixop, mask );
+ 
+ 				if( rc ) return rc;
+@@ -355,7 +358,7 @@ static int index_at_values(
+ 				else
+ 					mask = ai->ai_newmask ? ai->ai_newmask : ai->ai_indexmask;
+ 				if ( mask ) {
+-					rc = indexer( op, txn, ai, desc, &desc->ad_cname,
++					rc = mdb_indexer( op, txn, ai, desc, &desc->ad_cname,
+ 						vals, id, ixop, mask );
+ 
+ 					if( rc ) {
+diff --git a/servers/slapd/back-mdb/proto-mdb.h b/servers/slapd/back-mdb/proto-mdb.h
+index d28d94f..d0c5c95 100644
+--- a/servers/slapd/back-mdb/proto-mdb.h
++++ b/servers/slapd/back-mdb/proto-mdb.h
+@@ -257,6 +257,18 @@ mdb_index_values LDAP_P((
+ 	int opid ));
+ 
+ extern int
++mdb_indexer LDAP_P((
++	Operation *op,
++	MDB_txn *txn,
++	struct mdb_attrinfo *ai,
++	AttributeDescription *ad,
++	struct berval *atname,
++	BerVarray vals,
++	ID id,
++	int opid,
++	slap_mask_t mask ));
++
++extern int
+ mdb_index_recset LDAP_P((
+ 	struct mdb_info *mdb,
+ 	Attribute *a,
+diff --git a/servers/slapd/back-mdb/tools.c b/servers/slapd/back-mdb/tools.c
+index 14db69e..d6571ae 100644
+--- a/servers/slapd/back-mdb/tools.c
++++ b/servers/slapd/back-mdb/tools.c
+@@ -52,18 +52,30 @@ static int		tool_scope;
+ static Filter		*tool_filter;
+ static Entry		*tool_next_entry;
+ 
++typedef struct tstat {
++	union {
++		int ts;
++		char pad[CACHELINE];
++	} ts;
++} tstat;
++
++static BackendDB *mdb_tool_ix_be;
+ static Entry *mdb_tool_ix_e;
+-static Operation *mdb_tool_ix_op;
+ static MDB_txn *mdb_tool_ix_txn;
++static int mdb_tool_ix_toggle;
+ static int mdb_tool_threads;
++static tstat *mdb_tool_tstat;
+ static ldap_pvt_thread_barrier_t mdb_barrier1, mdb_barrier2;
+-static IndexRec *mdb_tool_index_rec;
++static IndexRec *mdb_tool_index_rec[2];
+ static struct mdb_info *mdb_tool_info;
+ static void * mdb_tool_index_task( void *ctx, void *ptr );
+ 
+ static int	mdb_writes, mdb_writes_per_commit;
+ 
+ static int
++mdb_tool_index_finish(int toggle);
++
++static int
+ mdb_tool_entry_get_int( BackendDB *be, ID id, Entry **ep );
+ 
+ int mdb_tool_entry_open(
+@@ -84,10 +96,16 @@ int mdb_tool_entry_open(
+ 				int i;
+ 				mdb_tool_threads = slap_tool_thread_max - 1;
+ 				if ( mdb_tool_threads > 1 ) {
++					IndexRec *buf;
+ 					ldap_pvt_thread_barrier_init(&mdb_barrier1, mdb_tool_threads);
+ 					ldap_pvt_thread_barrier_init(&mdb_barrier2, mdb_tool_threads);
+-					mdb_tool_index_rec = ch_calloc( mdb->mi_nattrs, sizeof( IndexRec ));
++					buf = ch_calloc( 2*mdb->mi_nattrs, sizeof( IndexRec ));
++					mdb_tool_index_rec[0] = buf;
++					mdb_tool_index_rec[1] = buf + mdb->mi_nattrs;
++					mdb_tool_ix_be = be;
++					mdb_tool_ix_toggle = 0;
+ 					mdb_tool_threads--;
++					mdb_tool_tstat = ch_calloc(mdb_tool_threads, sizeof( tstat ));
+ 					for (i=0; i<mdb_tool_threads; i++) {
+ 						int *ptr = ch_malloc( sizeof( int ));
+ 						*ptr = i;
+@@ -97,6 +115,8 @@ int mdb_tool_entry_open(
+ 					mdb_tool_info = mdb;
+ 					for (i=0; i<mdb->mi_nattrs; i++)
+ 						mdb->mi_attrs[i]->ai_idx = i;
++				} else {
++					mdb_tool_threads = 0;
+ 				}
+ 			}
+ 		}
+@@ -109,12 +129,12 @@ int mdb_tool_entry_close(
+ 	BackendDB *be )
+ {
+ 	if ( mdb_tool_info ) {
+-		slapd_shutdown = 1;
++		mdb_tool_ix_e = NULL;
+ 		ldap_pvt_thread_barrier_wait(&mdb_barrier1);
++		mdb_tool_index_finish(mdb_tool_ix_toggle);
+ 
+ 		mdb_tool_info = NULL;
+-		slapd_shutdown = 0;
+-		ch_free( mdb_tool_index_rec );
++		ch_free( mdb_tool_index_rec[0] );
+ 	}
+ 
+ 	if( idcursor ) {
+@@ -465,6 +485,24 @@ static int mdb_tool_next_id(
+ }
+ 
+ static int
++mdb_tool_index_finish(int toggle)
++{
++	struct mdb_info *mdb = mdb_tool_info;
++	int i, j, rc = 0;
++
++/*	ldap_pvt_thread_barrier_wait(&mdb_barrier2); */
++	for (i=0; i<mdb->mi_nattrs; i++) {
++		for (j=0; j<mdb_tool_index_rec[toggle][i].ir_nkeys; j++) {
++			if (!rc)
++				rc = mdb_idl_insert_keys( mdb->mi_attrs[i]->ai_cursor,
++					mdb_tool_index_rec[toggle][i].ir_keys[j], mdb_tool_ix_e->e_id );
++		}
++		mdb_tool_index_rec[toggle][i].ir_nkeys = 0;
++	}
++	return rc;
++}
++
++static int
+ mdb_tool_index_add(
+ 	Operation *op,
+ 	MDB_txn *txn,
+@@ -478,15 +516,15 @@ mdb_tool_index_add(
+ 	if ( mdb_tool_threads ) {
+ 		int i;
+ 
+-		for ( i=0; i<mdb->mi_nattrs; i++ )
+-			mdb_tool_index_rec[i].ir_i = LDAP_BUSY;
+-
+ 		mdb_tool_ix_e = e;
+-		mdb_tool_ix_op = op;
+ 		mdb_tool_ix_txn = txn;
+ 
+-		ldap_pvt_thread_barrier_wait(&mdb_barrier1);
++		for (i=0; i<mdb_tool_threads; i++)
++			mdb_tool_tstat[i].ts.ts = LDAP_BUSY;
+ 
++		ldap_pvt_thread_barrier_wait(&mdb_barrier1);
++		mdb_tool_ix_toggle ^= 1;
++		mdb_tool_index_finish(mdb_tool_ix_toggle);
+ 		return 0;
+ 	} else
+ 	{
+@@ -494,25 +532,6 @@ mdb_tool_index_add(
+ 	}
+ }
+ 
+-static int
+-mdb_tool_index_finish()
+-{
+-	struct mdb_info *mdb = mdb_tool_info;
+-	int i, j, rc = 0;
+-
+-	ldap_pvt_thread_barrier_wait(&mdb_barrier2);
+-	for (i=0; i<mdb->mi_nattrs; i++) {
+-		for (j=0; j<mdb_tool_index_rec[i].ir_nkeys; j++) {
+-			if (!rc)
+-				rc = mdb_idl_insert_keys( mdb->mi_attrs[i]->ai_cursor,
+-					mdb_tool_index_rec[i].ir_keys[j], mdb_tool_ix_e->e_id );
+-			if (mdb_tool_index_rec[i].ir_keys[j] != &mdb_presence_key)
+-				ch_free(mdb_tool_index_rec[i].ir_keys[j]);
+-		}
+-		mdb_tool_index_rec[i].ir_nkeys = 0;
+-	}
+-	return rc;
+-}
+ 
+ ID mdb_tool_entry_put(
+ 	BackendDB *be,
+@@ -613,16 +632,17 @@ ID mdb_tool_entry_put(
+ 		goto done;
+ 	}
+ 
+-	/* finish up attr indices */
+-	if ( rc == 0 && mdb_tool_threads ) {
+-		rc = mdb_tool_index_finish();
+-	}
+-
+ done:
+ 	if( rc == 0 ) {
+ 		mdb_writes++;
+ 		if ( mdb_writes >= mdb_writes_per_commit ) {
+ 			unsigned i;
++			if (mdb_tool_threads) {
++				for (i=0; i<mdb_tool_threads; i++)
++					while (mdb_tool_tstat[i].ts.ts)
++						ldap_pvt_thread_yield();
++				mdb_tool_index_finish(mdb_tool_ix_toggle^1);
++			}
+ 			rc = mdb_txn_commit( txn );
+ 			for ( i=0; i<mdb->mi_nattrs; i++ )
+ 				mdb->mi_attrs[i]->ai_cursor = NULL;
+@@ -779,9 +799,6 @@ int mdb_tool_entry_reindex(
+ 
+ 	rc = mdb_tool_index_add( &op, txi, e );
+ 
+-	if (rc == 0 && mdb_tool_threads)
+-		rc = mdb_tool_index_finish();
+-
+ done:
+ 	if( rc == 0 ) {
+ 		mdb_writes++;
+@@ -905,20 +922,21 @@ done:
+ 
+ 
+ static int
+-mdb_tool_index_attr( int base, Attribute *a, AttributeType *at )
++mdb_tool_index_attr( Operation *op, int base, Attribute *a, AttributeType *at )
+ {
+ 	int rc = 0, slot;
+ 
+ 	if (at->sat_sup) {
+-		rc = mdb_tool_index_attr(base, a, at->sat_sup);
++		rc = mdb_tool_index_attr(op, base, a, at->sat_sup);
+ 		if (rc) return rc;
+ 	}
+ 
+ 	if (at->sat_ad) {
+ 		slot = mdb_attr_slot( mdb_tool_info, at->sat_ad, NULL );
+ 		if ( slot >= 0 && (slot % mdb_tool_threads) == base ) {
+-			rc = mdb_index_values( mdb_tool_ix_op,
+-				mdb_tool_ix_txn, a->a_desc, a->a_nvals, mdb_tool_ix_e->e_id, SLAP_INDEX_ADD_OP );
++			struct mdb_attrinfo *ai = mdb_tool_info->mi_attrs[slot];
++			rc = mdb_indexer( op, mdb_tool_ix_txn, ai, a->a_desc, &at->sat_cname,
++				a->a_nvals, mdb_tool_ix_e->e_id, SLAP_INDEX_ADD_OP, ai->ai_indexmask );
+ 		}
+ 	}
+ 	return rc;
+@@ -927,21 +945,39 @@ mdb_tool_index_attr( int base, Attribute *a, AttributeType *at )
+ static void *
+ mdb_tool_index_task( void *ctx, void *ptr )
+ {
++	Operation op = {0};
++	Opheader ohdr = {0};
++	void *memctx[2];
+ 	Attribute *a;
+ 	int base = *(int *)ptr;
+-	int i;
++	int i, toggle = 0;
++
++	memctx[0] = slap_sl_mem_create( SLAP_SLAB_SIZE, SLAP_SLAB_STACK, ctx, 2 );
++	memctx[1] = slap_sl_mem_create( SLAP_SLAB_SIZE, SLAP_SLAB_STACK, ctx, 2 );
++
++	op.o_hdr = &ohdr;
++	op.o_bd = mdb_tool_ix_be;
++	op.o_tmpmfuncs = &slap_sl_mfuncs;
+ 
+ 	free( ptr );
+ 	while ( 1 ) {
+ 		ldap_pvt_thread_barrier_wait( &mdb_barrier1 );
+-		if ( slapd_shutdown )
++		if ( !mdb_tool_ix_e )
+ 			break;
+ 
++		op.o_opid = toggle;
++		op.o_tmpmemctx = memctx[toggle];
++		slap_sl_mem_reset( memctx[toggle] );
++		toggle ^= 1;
++
+ 		for (a = mdb_tool_ix_e->e_attrs; a; a=a->a_next) {
+-			mdb_tool_index_rec[base].ir_i = mdb_tool_index_attr(base, a, a->a_desc->ad_type);
++			mdb_tool_index_attr(&op, base, a, a->a_desc->ad_type);
+ 		}
+-		ldap_pvt_thread_barrier_wait( &mdb_barrier2 );
++		mdb_tool_tstat[base].ts.ts = 0;
++/*		ldap_pvt_thread_barrier_wait( &mdb_barrier2 ); */
+ 	}
++	slap_sl_mem_destroy( &op, memctx[0] );
++	slap_sl_mem_destroy( &op, memctx[1] );
+ 
+ 	return NULL;
+ }
+@@ -952,13 +988,14 @@ int mdb_tool_index_gen(
+ 	struct berval *keys,
+ 	ID id )
+ {
+-	AttrInfo *ai = (AttrInfo *)mc;
++	IndexCtx *ic = (IndexCtx *)mc;
++	AttrInfo *ai = ic->ai;
+ 	IndexRec *ir;
+ 	int i;
+ 
+ 	mc = ai->ai_cursor;
+ 	i = ai->ai_idx;
+-	ir = &mdb_tool_index_rec[i];
++	ir = &mdb_tool_index_rec[ic->op->o_opid][i];
+ 
+ 	if (!(ir->ir_nkeys & 3))
+ 		ir->ir_keys = ch_realloc(ir->ir_keys, (ir->ir_nkeys + 4) * sizeof(struct berval *));
+diff --git a/servers/slapd/sl_malloc.c b/servers/slapd/sl_malloc.c
+index fc8eb74..eaddc5e 100644
+--- a/servers/slapd/sl_malloc.c
++++ b/servers/slapd/sl_malloc.c
+@@ -183,6 +183,14 @@ slap_sl_mem_init()
+ 	ber_set_option( NULL, LBER_OPT_MEMORY_FNS, &slap_sl_mfuncs );
+ }
+ 
++void
++slap_sl_mem_reset( void *memctx )
++{
++	struct slab_heap *sh = memctx;
++	enum { Base_offset = (unsigned) -sizeof(ber_len_t) % Align };
++	sh->sh_last = sh->sh_base + Base_offset;
++}
++
+ /* Create, reset or just return the memory context of the current thread. */
+ void *
+ slap_sl_mem_create(
+@@ -199,9 +207,13 @@ slap_sl_mem_create(
+ 	char *base, *newptr;
+ 	enum { Base_offset = (unsigned) -sizeof(ber_len_t) % Align };
+ 
+-	sh = GET_MEMCTX(thrctx, &memctx);
+-	if ( sh && !new )
+-		return sh;
++	if (new < 2) {
++		sh = GET_MEMCTX(thrctx, &memctx);
++		if ( sh && !new )
++			return sh;
++	} else {
++		sh = NULL;
++	}
+ 
+ 	/* Round up to doubleword boundary, then make room for initial
+ 	 * padding, preserving expected available size for pool version */
+@@ -210,7 +222,8 @@ slap_sl_mem_create(
+ 	if (!sh) {
+ 		sh = ch_malloc(sizeof(struct slab_heap));
+ 		base = ch_malloc(size);
+-		SET_MEMCTX(thrctx, sh, slap_sl_mem_destroy);
++		if ( new < 2 )
++			SET_MEMCTX(thrctx, sh, slap_sl_mem_destroy);
+ 		VGMEMP_MARK(base, size);
+ 		VGMEMP_CREATE(sh, 0, 0);
+ 	} else {
+diff --git a/servers/slapd/slapadd.c b/servers/slapd/slapadd.c
+index ec0eb01..d8e1722 100644
+--- a/servers/slapd/slapadd.c
++++ b/servers/slapd/slapadd.c
+@@ -331,6 +331,7 @@ slapadd( int argc, char **argv )
+ 	struct berval bvtext;
+ 	ldap_pvt_thread_t thr;
+ 	ID id;
++	Entry *prev = NULL;
+ 
+ 	int ldifrc;
+ 	int rc = EXIT_SUCCESS;
+@@ -431,8 +432,11 @@ slapadd( int argc, char **argv )
+ 								 "(line=%d): %s\n", progname, erec.e->e_dn,
+ 								 erec.lineno, bvtext.bv_val );
+ 				rc = EXIT_FAILURE;
+-				entry_free( erec.e );
+-				if( continuemode ) continue;
++				if( continuemode ) {
++					if ( prev ) entry_free( prev );
++					prev = erec.e;
++					continue;
++				}
+ 				break;
+ 			}
+ 			if ( verbose )
+@@ -444,7 +448,8 @@ slapadd( int argc, char **argv )
+ 					erec.e->e_dn );
+ 		}
+ 
+-		entry_free( erec.e );
++		if ( prev ) entry_free( prev );
++		prev = erec.e;
+ 	}
+ 
+ 	if ( slap_tool_thread_max > 1 ) {
+@@ -455,6 +460,7 @@ slapadd( int argc, char **argv )
+ 		ldap_pvt_thread_mutex_unlock( &add_mutex );
+ 		ldap_pvt_thread_join( thr, NULL );
+ 	}
++	entry_free( erec.e );
+ 
+ 	if ( ldifrc < 0 )
+ 		rc = EXIT_FAILURE;
+-- 
+1.7.1
+
