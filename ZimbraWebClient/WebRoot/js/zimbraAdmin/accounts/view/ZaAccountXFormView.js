@@ -1760,14 +1760,26 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 			msgName:ZaMsg.NAD_MustChangePwd,label:ZaMsg.NAD_MustChangePwd,
 			trueValue:"TRUE", falseValue:"FALSE",
 			visibilityChecks:[], enableDisableChecks:[[ZaAccountXFormView.isAuthfromInternalSync, entry.name, ZaAccount.A_name]]
-		},
-		{ref:ZaAccount.A_zimbraAuthLdapExternalDn,type:_TEXTFIELD_,width:256,
-                       	msgName:ZaMsg.NAD_AuthLdapExternalDn,label:ZaMsg.NAD_AuthLdapExternalDn, labelLocation:_LEFT_, 
-			align:_LEFT_, toolTipContent: ZaMsg.tt_AuthLdapExternalDn
 		}
 		]
 	};
-	case1Items.push(passwordGroup);														
+	case1Items.push(passwordGroup);
+
+    var externalAuthGroup = {type:_TOP_GROUPER_, label:ZaMsg.NAD_ExternalAuthGrouper,id:"account_form_ext_auth_group",
+        visibilityChecks:[[ZaItem.hasRight,ZaAccount.SET_PASSWORD_RIGHT],
+            [XForm.checkInstanceValue,ZaAccount.A2_isExternalAuth,true],
+            [ZaItem.hasReadPermission,ZaAccount.A_zimbraAuthLdapExternalDn]
+        ],
+        visibilityChangeEventSources:[ZaAccount.A2_isExternalAuth],
+        colSizes:["275px","*"],numCols:2,
+        items:[
+            {ref:ZaAccount.A_zimbraAuthLdapExternalDn,type:_TEXTFIELD_,width:256,
+                msgName:ZaMsg.NAD_AuthLdapExternalDn,label:ZaMsg.NAD_AuthLdapExternalDn, labelLocation:_LEFT_,
+                align:_LEFT_, toolTipContent: ZaMsg.tt_AuthLdapExternalDn
+            }
+        ]
+    };
+    case1Items.push(externalAuthGroup);
 
 	var notesGroup = {type:_TOP_GROUPER_, label:ZaMsg.NAD_NotesGrouper, id:"account_form_notes_group",
 		colSizes:["275px","*"],numCols:2,

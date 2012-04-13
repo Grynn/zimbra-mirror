@@ -739,13 +739,25 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 		{ref:ZaAccount.A_zimbraPasswordMustChange,  type:_WIZ_CHECKBOX_, labelLocation:_RIGHT_,align:_RIGHT_, subLabel:"",
 			msgName:ZaMsg.NAD_MustChangePwd,label:ZaMsg.NAD_MustChangePwd,trueValue:"TRUE", falseValue:"FALSE",
 			visibilityChecks:[], enableDisableChecks:[[ZaNewAccountXWizard.isAuthfromInternal, domainName,ZaAccount.A_name]]
-		},
-		{ref:ZaAccount.A_zimbraAuthLdapExternalDn,type:_TEXTFIELD_,width:256,
-                                msgName:ZaMsg.NAD_AuthLdapExternalDn,label:ZaMsg.NAD_AuthLdapExternalDn, labelLocation:_LEFT_,			      align:_LEFT_, toolTipContent: ZaMsg.tt_AuthLdapExternalDn
 		}
 		]
 	};
-	case1Items.push(passwordGroup);														
+	case1Items.push(passwordGroup);
+
+    var externalAuthGroup = {type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_ExternalAuthGrouper,id:"account_wiz_ext_auth_group",
+        numCols:2,
+        visibilityChecks:[[ZaItem.hasRight,ZaAccount.SET_PASSWORD_RIGHT],
+            [XForm.checkInstanceValue,ZaAccount.A2_isExternalAuth,true],
+            [ZaItem.hasReadPermission,ZaAccount.A_zimbraAuthLdapExternalDn]],
+        visibilityChangeEventSources:[ZaAccount.A2_isExternalAuth],
+        items:[
+            {ref:ZaAccount.A_zimbraAuthLdapExternalDn,type:_TEXTFIELD_,width:256,
+                msgName:ZaMsg.NAD_AuthLdapExternalDn,label:ZaMsg.NAD_AuthLdapExternalDn, labelLocation:_LEFT_,
+                align:_LEFT_, toolTipContent: ZaMsg.tt_AuthLdapExternalDn
+            }
+        ]
+    };
+    case1Items.push(externalAuthGroup);
 
     var new_acct_timezone_group = {
          type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_TimezoneGrouper, id: "account_wiz_timezone_group",
