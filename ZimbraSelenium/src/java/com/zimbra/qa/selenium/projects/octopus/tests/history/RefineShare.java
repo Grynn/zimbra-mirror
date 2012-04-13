@@ -7,14 +7,31 @@ import com.zimbra.qa.selenium.projects.octopus.core.CommonConstants.SHARE_PERMIS
 import com.zimbra.qa.selenium.projects.octopus.ui.PageHistory.*;
 
 public class RefineShare extends HistoryCommonTest {
- 
+    private boolean isShared=true;
 	
 	public RefineShare() {
 		super();
 		logger.info("New " + RefineShare.class.getCanonicalName());
 	}
 
-
+	@BeforeMethod (groups = {"always"})
+    protected void setup() 
+	throws HarnessException
+	{
+       super.setup();
+    	
+       if (isShared) {
+    	   // revoke sharing the folder with grantees
+    	   revokeShareFolderViaSoap(app.zGetActiveAccount(), readGrantee, folder);
+ 	   	   SleepUtil.sleepSmall();
+ 	   
+ 	   	   revokeShareFolderViaSoap(app.zGetActiveAccount(), readWriteGrantee, folder);
+ 	   	   SleepUtil.sleepSmall();
+ 	   
+ 	   	   revokeShareFolderViaSoap(app.zGetActiveAccount(), adminGrantee, folder); 
+           isShared=false;
+       }
+    }
 			
 	@Test(description = "Verify check 'sharing' checkbox for sharing action ", groups = { "smoke" })
 	public void RefineCheckSharingShareAction() throws HarnessException {
@@ -68,6 +85,21 @@ public class RefineShare extends HistoryCommonTest {
 	}
 
 
-
+    @AfterClass(groups = {"always"})
+    public void share() 
+    throws HarnessException
+    {
+       if (!isShared) {
+    	  // share read|readWrite|admin for the folder with grantees
+    	   shareFolderViaSoap(app.zGetActiveAccount(), readGrantee, folder,SHARE_AS_READ);		   
+    	   SleepUtil.sleepSmall();
+ 	   
+    	   shareFolderViaSoap(app.zGetActiveAccount(), readWriteGrantee, folder,SHARE_AS_READWRITE);
+    	   SleepUtil.sleepSmall();
+ 	   
+    	   shareFolderViaSoap(app.zGetActiveAccount(), adminGrantee, folder, SHARE_AS_ADMIN); 		   
+    	   app.zPageOctopus.zRefresh();
+       }
+    }
 	
 }

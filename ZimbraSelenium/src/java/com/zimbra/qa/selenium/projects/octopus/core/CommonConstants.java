@@ -5,6 +5,11 @@ public interface CommonConstants {
 	String PPT_FILE = "testpptfile.ppt";
 	String LOG_FILE = "putty.log";
 	String EXCEL_FILE = "testexcelFile.xls";
+	String BMP_FILE = "testbitmapfile.bmp";
+	String WAV_FILE = "testsoundfile.wav";
+	String TEXT_FILE= "testtextfile.txt";
+	String WORD_FILE= "testwordfile.doc";
+	String ZIP_FILE = "com_zimbra_vmaps.zip";
 	
 	String SHARE_AS_READ = "r";
 	String SHARE_AS_READWRITE = "rwidx";

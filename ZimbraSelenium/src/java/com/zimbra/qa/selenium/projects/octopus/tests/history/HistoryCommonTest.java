@@ -103,17 +103,19 @@ public class HistoryCommonTest extends OctopusCommonTest {
     	   
           // mark file as favorite via soap
    		   markFileFavoriteViaSoap(app.zGetActiveAccount(), fileId);
-   		
-           // unmark file as favorite via soap
+   		   SleepUtil.sleepSmall();
+           
+   		   // unmark file as favorite via soap
    		   unMarkFileFavoriteViaSoap(app.zGetActiveAccount(), fileId);
-   		 
+   		   SleepUtil.sleepSmall();
    		   
    		   // make comment via soap
    	       makeCommentViaSoap(app.zGetActiveAccount(), fileId, comment);
-   	       
+   	       SleepUtil.sleepSmall();
 		   
 		   //rename via soap
 		   renameViaSoap(app.zGetActiveAccount(), fileId, newName);
+		   SleepUtil.sleepSmall();
 		   
 		   //shere revoke
 		   setUpShareRevoke();
@@ -157,7 +159,7 @@ public class HistoryCommonTest extends OctopusCommonTest {
 	   SleepUtil.sleepSmall();
 	   
 	   mountFolderViaSoap(adminGranter, app.zGetActiveAccount(), adminFolder, SHARE_AS_ADMIN, mainFolder, mountAdminFolderName);
-		   
+	   app.zPageOctopus.zRefresh();   
 	   
 	}
 	private void setUpShareRevoke() 
@@ -177,14 +179,6 @@ public class HistoryCommonTest extends OctopusCommonTest {
 	   shareFolderViaSoap(app.zGetActiveAccount(), adminGrantee, folder, SHARE_AS_ADMIN); 		   
 	   app.zPageOctopus.zRefresh();
 
-	   // revoke sharing the folder with grantees
-	   revokeShareFolderViaSoap(app.zGetActiveAccount(), readGrantee, folder);
-	   SleepUtil.sleepSmall();
-	   
-	   revokeShareFolderViaSoap(app.zGetActiveAccount(), readWriteGrantee, folder);
-	   SleepUtil.sleepSmall();
-	   
-	   revokeShareFolderViaSoap(app.zGetActiveAccount(), adminGrantee, folder); 
 
 	}
 	protected void verifyCheckAction(String locator, String historyText, String... regExpArray) 
