@@ -119,7 +119,7 @@ if(ZaDomain) {
     
     ZaTaskAuthConfigWizard.loadExtLdapGroup = function (entry) {
         if (!this.attrs[ZaDomain.A_zimbraExternalGroupHandlerClass]) {
-            this.attrs[ZaDomain.A_zimbraExternalGroupHandlerClass] = "com.zimbra.cs.account.grouperhandle.ADGroupHandler";
+            this.attrs[ZaDomain.A_zimbraExternalGroupHandlerClass] = "com.zimbra.cs.account.grouphandler.ADGroupHandler";
         }
         if (!this.attrs[ZaDomain.A_zimbraAuthMechAdmin]) {
             this.attrs[ZaDomain.A_zimbraAuthMechAdmin] = ZaDomain.AuthMech_ad;
