@@ -654,8 +654,10 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
                                         });
                                     }
 
-                                    if (!existingAcc || (existingAcc && existingAcc instanceof Array && existingAcc.length == 0)) {
-                                        this.addRowButtonClicked(this.getParentItem().instanceNum);
+                                    if (this.getInstanceValue().length == 0) {
+                                        if (!existingAcc || (existingAcc && existingAcc instanceof Array && existingAcc.length == 0)) {
+                                            this.addRowButtonClicked(this.getParentItem().instanceNum);
+                                        }
                                     }
                                     return true;
                                 }]],
@@ -682,7 +684,7 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
                                         items:[
                                         {type:_GROUP_, label:ZaMsg.Domain_GalSyncAccount, numCols:3,colSizes:["130px", "25px","auto"], colSpan:"1", ref: ".",
                                             items:[
-                                                {ref:ZaDomain.A2_new_gal_sync_account_name, width:130, label:null, type:_TEXTFIELD_},
+                                                {ref:ZaDomain.A2_new_gal_sync_account_name, width:130, label:null, type:_TEXTFIELD_, enableDisableChecks:[], visibilityChecks:[]},
                                                 {type:_OUTPUT_, value:"@"},
                                                 {type:_OUTPUT_,refPath:ZaDomain.A_domainName,label:null,align:_LEFT_}
                                             ],
