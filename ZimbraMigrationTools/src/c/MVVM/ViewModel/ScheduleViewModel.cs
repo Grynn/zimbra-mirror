@@ -877,7 +877,7 @@ public class ScheduleViewModel: BaseViewModel
                     msg3 = "{0} ({1} items)";
                     ar.PBMsgValue = String.Format(msg3, folderName, f.TotalCountOfItems);
                     accountResultsViewModel.PBMsgValue = String.Format(msg3, folderName, f.TotalCountOfItems);   // for the user results window
-                    System.Threading.Thread.Sleep(1000);    // to see the message
+                    System.Threading.Thread.Sleep(500);    // to see the message
                 }
 
                 f.LastFolderInfo = new FolderInfo(e.NewValue.ToString(), folderType,
