@@ -555,7 +555,7 @@ function(query, types, pagenum, orderby, isascending,  attrs, limit, domainName,
 		
 	var searchTotal = resp.searchTotal;
 	var numPages = Math.ceil(searchTotal/limit);
-	return {"list":list, "numPages":numPages};
+	return {"list":list, "numPages":numPages, "searchTotal":searchTotal};
 }
 
 ZaSearch.searchByDomain = 

@@ -49,6 +49,8 @@ ZaDLController.prototype.toString = function () {
 ZaDLController.prototype.show = 
 function(entry, openInNewTab, skipRefresh) {
 	this._setView(entry, openInNewTab, skipRefresh);
+	//if it has many members, that could slow down the performance when loading members, so make the get members request as async
+	entry.schedulePostLoading(this);
 }
 
 ZaDLController.setViewMethod =
@@ -299,7 +301,7 @@ ZaDLController.prototype._saveChanges = function () {
              this._currentObject[ZaModel.currentTab] = obj[ZaModel.currentTab];
 
 		if (this._currentObject.id){
-
+			this._currentObject.schedulePostLoading(this);
 			this._currentObject.modify(null, obj);
 			//check if need to rename
 			if(this._currentObject && obj.name != this._currentObject.name && this._currentObject.id) {

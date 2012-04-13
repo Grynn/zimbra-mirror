@@ -46,13 +46,14 @@ ZaItem.modifyMethods["ZaDistributionList"] = new Array();
 ZaItem.loadMethods["ZaDistributionList"] = new Array();
 ZaItem.initMethods["ZaDistributionList"] = new Array();
 ZaItem.createMethods["ZaDistributionList"] = new Array();
-ZaItem.loadMethods["ZaDistributionList"] = [];
-ZaItem.ObjectModifiers["ZaDistributionList"] = [] ;
+ZaItem.ObjectModifiers["ZaDistributionList"] = new Array();
 
 ZaDistributionList.EMAIL_ADDRESS = "ZDLEA";
 ZaDistributionList.DESCRIPTION = "ZDLDESC";
 ZaDistributionList.ID = "ZDLID";
-ZaDistributionList.MEMBER_QUERY_LIMIT = 25;                  
+ZaDistributionList.MEMBER_QUERY_LIMIT = 25;
+ZaDistributionList.MEMBER_LIST_PAGE_SIZE = 15;
+ZaDistributionList.MEMBER_POOL_PAGE_SIZE = 15;
 ZaDistributionList.A_zimbraGroupId = "zimbraGroupId";
 ZaDistributionList.A_zimbraCreateTimestamp = "zimbraCreateTimestamp";
 
@@ -61,6 +62,9 @@ ZaDistributionList.A2_dlType = "dlType";
 ZaDistributionList.A_memberOfURL = "memberURL";
 ZaDistributionList.A_zimbraIsACLGroup = "zimbraIsACLGroup";
 ZaDistributionList.A2_members = "members";
+ZaDistributionList.A2_allMemberHash = "allMemberHash";
+ZaDistributionList.A2_allMemberPages = "allMemberPages";
+ZaDistributionList.A2_allMemberHash = "allMemberHash";
 ZaDistributionList.A2_memberList = "memberList";
 ZaDistributionList.A2_origList = "origList";
 ZaDistributionList.A2_addList = "addList";
@@ -69,6 +73,7 @@ ZaDistributionList.A2_query = "query";
 ZaDistributionList.A2_pagenum = "pagenum";
 ZaDistributionList.A2_poolPagenum = "poolPagenum";
 ZaDistributionList.A2_poolNumPages = "poolNumPages";
+ZaDistributionList.A2_totalNumInPool = "totalNumInPool";
 ZaDistributionList.A2_numMembers = "numMembers";
 ZaDistributionList.A2_memPagenum = "memPagenum";
 ZaDistributionList.A2_memNumPages = "memNumPages";
@@ -120,6 +125,7 @@ ZaDistributionList.searchAttributes = AjxBuffer.concat(ZaAccount.A_displayname,"
 
 ZaDistributionList.DYNAMIC_DL_TYPE = "1";
 ZaDistributionList.STATIC_DL_TYPE = "0";
+ZaDistributionList.postLoadDataFunction = new Array();
 
 // ==============================================================
 // public methods
@@ -767,15 +773,201 @@ ZaDistributionList.prototype.getName = function () {
 	return this.name;
 };
 
+ZaDistributionList.prototype.getMemberQueryParams = function(callbackQuery, offset, limit, controller, ajxCallbackWhenCompleted){
+		if ( offset == null ) {
+			offset = 0;
+		}
+		if ( limit == null ){
+			limit = ZaDistributionList.MEMBER_QUERY_LIMIT;
+		}
+
+		var soapDoc = AjxSoapDoc.create("GetDistributionListRequest", ZaZimbraAdmin.URN, null);
+		if(!this.getAttrs.all && !AjxUtil.isEmpty(this.attrsToGet)) {
+			soapDoc.setMethodAttribute("attrs", this.attrsToGet.join(","));
+		}
+
+		soapDoc.setMethodAttribute("limit", limit);
+		soapDoc.setMethodAttribute("offset", offset ); //start from the beginning
+
+		var dl = soapDoc.set("dl", this.id);
+		dl.setAttribute("by", "id");
+		soapDoc.set("name", this.getName());
+
+		var busyId = Dwt.getNextId();
+		var argsOfCallback = {
+			controller : controller,
+			offset: offset,
+			limit: limit,
+			busyId: busyId,
+			ajxCallbackWhenCompleted: ajxCallbackWhenCompleted
+		};
+
+		var reqCtrlParams = {
+			soapDoc : soapDoc,
+			noAuthToken : true,
+			asyncMode : true
+		}
+		if ( callbackQuery != null ) {
+			reqCtrlParams.callback = new AjxCallback(this, callbackQuery, argsOfCallback);
+		}
+
+		var reqMgrParams = {
+			controller : controller,
+			showBusy: true,
+			busyMsg : ZaMsg.BUSY_GET_DL,
+			busyId: busyId,
+			skipCallbackIfCancelled: true
+		}
+
+		queryParams = {
+			reqCtrlParams: reqCtrlParams,
+			reqMgrParams: reqMgrParams
+		}
+		return queryParams;
+}
+
+
+ZaDistributionList.prototype.getAllMembers = function ( params ) {
+	if ( AjxUtil.isEmpty(params) || AjxUtil.isEmpty(params.controller) || AjxUtil.isEmpty(params.controller._view) ) {
+		return;
+	}
+	var controller = params.controller, view = params.controller._view;
+
+	if (this.id != null) {
+		var limit = 0; //0 means unlimited
+		var offset = 0;
+		var callbackQuery = ZaDistributionList.prototype.getAllMembersCallback;
+		this[ZaDistributionList.A2_allMemberHash] = {}; // make a new one
+
+		try {
+			var ajxCallbackWhenCompleted = new AjxCallback(view, ZaDLXFormView.prototype.updateMemberList);
+
+			var queryParams = ZaDistributionList.prototype.getMemberQueryParams.call( this, callbackQuery, offset, 
+																	limit, controller, ajxCallbackWhenCompleted );
+			ZaRequestMgr.invoke(queryParams.reqCtrlParams, queryParams.reqMgrParams);
+		} catch (ex) {
+			ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaDistributionList.prototype.getAllMembers", null, false);
+		}
+	}
+}
+
+ZaDistributionList.prototype.getAllMembersCallback = function ( params, resp ) {
+	try {
+
+		if(params.busyId) {
+			ZaApp.getInstance().getAppCtxt().getShell().setBusy(false, params.busyId);
+		}
+
+		if(!resp && !this._currentRequest.cancelled) {
+			throw(new AjxException(ZaMsg.ERROR_EMPTY_RESPONSE_ARG, AjxException.UNKNOWN, "ZaListViewController.prototype.getAllMembersCallback"));
+
+		} else if( !resp.isException() ) {
+			if ( !resp._data || !resp._data || !resp._data.Body ||
+				!resp._data.Body.GetDistributionListResponse ) {
+				return;
+			}
+			dlBody = resp._data.Body.GetDistributionListResponse;
+			if (!dlBody.dl || !(dlBody.dl[0]) ) {
+				return;
+			}
+			dlResp = dlBody.dl[0];
+
+			//whether is dynamic group
+			if (dlResp.dynamic === true) {
+				this[ZaDistributionList.A2_dlType] = ZaDistributionList.DYNAMIC_DL_TYPE;
+			}
+
+
+			//all its members
+			var members = dlResp.dlm;
+			var len = (members && members.length) ? members.length : 0;
+
+			var allMembers = this[ZaDistributionList.A2_allMemberHash];
+			for (var i =0; i < len; ++i) {
+				var name = members[i]._content;
+				if ( !AjxUtil.isEmpty(name) ) {
+					var member = new ZaDistributionListMember(name);
+					allMembers[name] = member;
+				}
+			}
+
+			this[ZaDistributionList.A2_numMembers] = len;
+			this[ZaDistributionList.A2_memNumPages] = Math.ceil(len/ZaDistributionList.MEMBER_LIST_PAGE_SIZE);
+			ZaDistributionList.prototype.pageAllMembers.call(this);
+
+			this.id = dlResp.id;
+			this.initFromJS(dlResp);
+
+			//membership related instance variables, Make a GetAccountMembershipRequest
+			if (this[ZaDistributionList.A2_dlType] !== ZaDistributionList.DYNAMIC_DL_TYPE)
+				this[ZaAccount.A2_memberOf] = ZaAccountMemberOfListView.getDlMemberShip(this.id, "id" ) ;
+			else
+				this[ZaAccount.A2_memberOf] = { directMemberList: [],
+												indirectMemberList: [],
+												nonMemberList: []
+												};
+			this[ZaAccount.A2_directMemberList + "_more"] = 
+				(this[ZaAccount.A2_memberOf][ZaAccount.A2_directMemberList].length > ZaAccountMemberOfListView.SEARCH_LIMIT) ? 1: 0;
+			this[ZaAccount.A2_indirectMemberList + "_more"] = 
+				(this[ZaAccount.A2_memberOf][ZaAccount.A2_indirectMemberList].length > ZaAccountMemberOfListView.SEARCH_LIMIT) ? 1: 0;
+
+			//dl owners
+			var owners = dlResp.owners;
+			var ownerLen = (owners && owners.length) ? owners.length: 0;
+			this[ZaDistributionList.A2_DLOwners] = new Array();
+			if ( ownerLen > 0 ) {
+				var ownerSet = owners[0].owner;
+				for (var i = 0; i < ownerSet.length; i++) {
+					var owner = new ZaDistributionListOwner(ownerSet[i]);
+					this[ZaDistributionList.A2_DLOwners].push(owner.name);
+				}
+			}
+
+			//run the CallBack finally
+			var ajxCallbackWhenCompleted = params.ajxCallbackWhenCompleted || null;
+			if (ajxCallbackWhenCompleted != null) {
+				ajxCallbackWhenCompleted.run1([this])
+			}
+
+		}
+
+	} catch (ex) {
+		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaDistributionList.prototype.getAllMembersCallback", null, false);
+	}
+}
+
+
+ZaDistributionList.prototype.pageAllMembers = function ( ) {
+	var allMembers = this[ZaDistributionList.A2_allMemberHash];
+	if ( AjxUtil.isEmpty(allMembers) ) {
+		return;
+	}
+
+	var pages = new Array();
+	var names = AjxUtil.getHashKeys(allMembers); //sorted by name
+	for ( var i = 0; i < names.length ; i+= ZaDistributionList.MEMBER_LIST_PAGE_SIZE ) {
+		var page = new Array();
+		for ( var j = 0; (i + j < names.length) && (j < ZaDistributionList.MEMBER_LIST_PAGE_SIZE); j++ ) {
+			var member = allMembers[ names[i+j] ];
+			page.push(member);
+		}
+		pages.push(page);
+	}
+
+	this[ZaDistributionList.A2_allMemberPages] = pages;
+}
+
 /**
  * Makes a server call to get the distribution list details, if the
  * internal list of members is null
  */
+
+/*
 ZaDistributionList.prototype.getMembers = function () {
 	if (this.id != null) {
 		var soapDoc = AjxSoapDoc.create("GetDistributionListRequest", ZaZimbraAdmin.URN, null);
 
-		var limit = ZaDistributionList.MEMBER_QUERY_LIMIT;
+		var limit = ZaDistributionList.MEMBER_LIST_PAGE_SIZE;
 			
 		soapDoc.setMethodAttribute("limit", limit);
 		if(!this.getAttrs.all && !AjxUtil.isEmpty(this.attrsToGet)) {
@@ -802,8 +994,8 @@ ZaDistributionList.prototype.getMembers = function () {
             if (resp.dl[0].dynamic === true)
                 this[ZaDistributionList.A2_dlType] = ZaDistributionList.DYNAMIC_DL_TYPE;
 			var members = resp.dl[0].dlm;
-			this.numMembers = resp.total;
-			this.memNumPages = Math.ceil(this.numMembers/limit);
+			this[ZaDistributionList.A2_numMembers] = resp.total;
+			this[ZaDistributionList.A2_memNumPages] = Math.ceil(resp.total/limit);
 			this[ZaDistributionList.A2_memberList] = new Array();
 			this[ZaDistributionList.A2_origList] = new Array();
 			var len = members ? members.length : 0;
@@ -851,8 +1043,10 @@ ZaDistributionList.prototype.getMembers = function () {
 	}
 	return this[ZaDistributionList.A2_memberList];
 };
+*/
+//ZaItem.loadMethods["ZaDistributionList"].push(ZaDistributionList.prototype.getMembers) ;
 
-ZaItem.loadMethods["ZaDistributionList"].push(ZaDistributionList.prototype.getMembers) ;
+
 
 ZaDistributionList.removeDeletedMembers = function (mods, obj, dl, finishedCallback) {
 	if(!ZaItem.hasRight(ZaDistributionList.REMOVE_DL_MEMBER_RIGHT, obj)) {
@@ -1102,6 +1296,8 @@ ZaDistributionList.myXModel = {
 		{id:ZaDistributionList.A2_memNumPages, type:_NUMBER_, defaultValue:1},	
 		{id:ZaDistributionList.A2_memberPool, type:_LIST_},
 		{id:ZaDistributionList.A2_memberList, type:_LIST_},
+		{id:ZaDistributionList.A2_allMemberHash, type:_OBJECT_, defaultValue:{}},
+		{id:ZaDistributionList.A2_allMemberPages, type:_LIST_, defaultValue:[]},
 		{id:ZaDistributionList.A2_origList, type:_LIST_},
 		{id:ZaDistributionList.A2_addList, type:_LIST_},
 		{id:ZaDistributionList.A2_removeList, type:_LIST_},
@@ -1157,3 +1353,10 @@ ZaDistributionList.myXModel = {
         {id:ZaDistributionList.A_zimbraPrefReplyToAddress, type:_EMAIL_ADDRESS_, ref:"attrs/"+ZaDistributionList.A_zimbraPrefReplyToAddress}
 	]
 };
+
+// Don't disturbe the DL view rendering process, when view is realy, start to update data.
+ZaDistributionList.prototype.schedulePostLoading = function (controller) {
+    //async load the member
+    var act = new AjxTimedAction(this, ZaDistributionList.prototype.getAllMembers, {controller:controller});
+    AjxTimedAction.scheduleAction(act, 100);
+}

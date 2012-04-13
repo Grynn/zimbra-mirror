@@ -20,7 +20,15 @@
  * ***** END LICENSE BLOCK *****
  */
 ZaNewDLXWizard = function(parent, entry) {
-	ZaXWizardDialog.call(this, parent, null, ZaMsg.DLTBB_New_tt, "800px", "300px","ZaNewDLXWizard",null,ZaId.DLG_NEW_DL);
+	var height, width;
+	if (AjxEnv.isWebKitBased || AjxEnv.isFirefox) {
+		width = "740px"; //940px is full view, but it is too big, so cut it
+		height = "465px"; //665px is full view ....
+	} else {
+		width = "720px"; //920px is full view, but it is too big, so cut it
+		height = "455px";  //655px is full view ....
+	}
+	ZaXWizardDialog.call(this, parent, null, ZaMsg.DLTBB_New_tt, width, height, "ZaNewDLXWizard",null,ZaId.DLG_NEW_DL);
 	this.dlStatusChoices = [
 		{value:"enabled", label:ZaMsg.DL_Status_enabled},
 		{value:"disabled", label:ZaMsg.DL_Status_disabled}
@@ -167,21 +175,6 @@ function() {
 
 
 
-ZaNewDLXWizard.membersSelectionListener =
-function (ev) {
-	var arr = this.widget.getSelection();
-	if(arr && arr.length) {
-		arr.sort();
-		this.getModel().setInstanceValue(this.getInstance(), ZaDistributionList.A2_membersSelected, arr);
-	} else {
-		this.getModel().setInstanceValue(this.getInstance(), ZaDistributionList.A2_membersSelected, null);
-	}
-
-    if (ev.detail == DwtListView.ITEM_DBL_CLICKED) {
-		ZaNewDLXWizard.removeMembers.call(this, ev);
-	}
-}
-
 ZaNewDLXWizard.nonmemberSelectionListener =
 function (ev) {
 	var arr = this.widget.getSelection();
@@ -197,20 +190,6 @@ function (ev) {
 	}
 }
 
-ZaNewDLXWizard.memberPoolSelectionListener =
-function (ev) {
-	var arr = this.widget.getSelection();
-	if(arr && arr.length) {
-		arr.sort();
-		this.getModel().setInstanceValue(this.getInstance(), ZaDistributionList.A2_memberPoolSelected, arr);
-	} else {
-		this.getModel().setInstanceValue(this.getInstance(), ZaDistributionList.A2_memberPoolSelected, null);
-	}
-
-    if (ev.detail == DwtListView.ITEM_DBL_CLICKED) {
-		ZaNewDLXWizard.addAddressesToMembers.call(this, ev);
-	}
-}
 
 ZaNewDLXWizard.directMemberSelectionListener =
 function (ev) {
@@ -300,63 +279,7 @@ ZaNewDLXWizard.removeMembers = function(event) {
 	this.getForm().parent.setDirty(true);
 };
 
-/**
-* method of an XFormItem
-**/
-ZaNewDLXWizard.srchButtonHndlr =
-function(evt) {
-	var fieldObj = this.getForm().parent;
-	fieldObj.searchAccounts(null, true);
-}
 
-/**
-* method of an XFormItem
-**/
-ZaNewDLXWizard.fwdPoolButtonHndlr =
-function(evt) {
-	var fieldObj = this.getForm().parent;
-	var currentPageNum = this.getInstanceValue("/poolPagenum");
-	this.setInstanceValue(currentPageNum+1,"/poolPagenum");
-	fieldObj.searchAccounts(null, true);
-}
-
-/**
-* method of an XFormItem
-**/
-ZaNewDLXWizard.backPoolButtonHndlr =
-function(evt) {
-	var fieldObj = this.getForm().parent;
-	var currentPageNum = this.getInstanceValue("/poolPagenum")-1;
-	this.setInstanceValue(currentPageNum,"/poolPagenum");
-	fieldObj.searchAccounts(null, true);
-}
-
-/**
-* method of an XFormItem
-**/
-ZaNewDLXWizard.fwdMemButtonHndlr =
-function(evt) {
-	var currentPageNum = this.getInstanceValue("/memPagenum")+1;
-	this.setInstanceValue(currentPageNum,"/memPagenum");
-    var currentObj = ZaApp.getInstance().getCurrentController()._currentObject ;
-    currentObj[ZaDistributionList.A2_memPagenum] = currentPageNum ;
-    var memberList = currentObj.getMembers();
-    this.setInstanceValue(memberList, ZaDistributionList.A2_memberList);
-    //	ZaDistributionList.prototype.getMembers.call (this,ZaDistributionList.MEMBER_QUERY_LIMIT ) ;
-}
-
-/**
-* method of an XFormItem
-**/
-ZaNewDLXWizard.backMemButtonHndlr =
-function(evt) {
-	var currentPageNum = this.getInstanceValue("/memPagenum")-1;
-	this.setInstanceValue(currentPageNum,"/memPagenum");
-    var currentObj = ZaApp.getInstance().getCurrentController()._currentObject ;
-    currentObj[ZaDistributionList.A2_memPagenum] = currentPageNum ;
-    var memberList = currentObj.getMembers();
-    this.setInstanceValue(memberList, ZaDistributionList.A2_memberList);
-}
 /**
 * method of the XForm
 **/
@@ -432,33 +355,7 @@ ZaNewDLXWizard.shouldEnableFreeFormButtons = function () {
 	return (optionalAdd && optionalAdd.length > 0);
 };
 
-/**
-* method of the XForm
-**/
-ZaNewDLXWizard.shouldEnablePoolForwardButton = function () {
-	return (this.getInstanceValue(ZaDistributionList.A2_poolPagenum) < this.getInstanceValue(ZaDistributionList.A2_poolNumPages));
-};
 
-/**
-* method of the XForm
-**/
-ZaNewDLXWizard.shouldEnablePoolBackButton = function () {
-	return (this.getInstanceValue(ZaDistributionList.A2_poolPagenum) > 1);
-};
-
-/**
-* method of the XForm
-**/
-ZaNewDLXWizard.shouldEnableMemForwardButton = function () {
-	return (this.getInstanceValue(ZaDistributionList.A2_memPagenum) < this.getInstanceValue(ZaDistributionList.A2_memNumPages));
-};
-
-/**
-* method of the XForm
-**/
-ZaNewDLXWizard.shouldEnableMemBackButton = function () {
-	return (this.getInstanceValue(ZaDistributionList.A2_memPagenum) > 1);
-};
 
 /**
  * method of an XFormItem
@@ -522,50 +419,6 @@ ZaNewDLXWizard.addAllAddressesToMembers = function (event) {
 	this.getForm().parent.setDirty(true);
 };
 
-/**
- * method of an XFormItem
-**/
-ZaNewDLXWizard.addFreeFormAddressToMembers = function (event) {
- 	var form = this.getForm();
-	// get the current value of the textfied
- 	var val = form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_optionalAdd);
- 	if(!val)
- 		return;
-
- 	var values = val.split(/[\r\n,;]+/);
-	var cnt = values.length;
- 	var members = new Array();
- 	var stdEmailRegEx = /([^\<\;]*)\<([^\>]+)\>/ ;
-	for (var i = 0; i < cnt; i++) {
-		var tmpval = AjxStringUtil.trim(values[i],true);
-		var result ;
-		if (tmpval) {
-			if ((result = stdEmailRegEx.exec(tmpval)) != null) {
-				tmpval = result[2];
-			}
-			if(!AjxEmailAddress.isValid(tmpval)) {
-				//how error msg
-				ZaApp.getInstance().getCurrentController().popupErrorDialog(AjxMessageFormat.format(ZaMsg.WARNING_DL_INVALID_EMAIL,[values[i]]),null,DwtMessageDialog.WARNING_STYLE);
-				return false;
-			}
-			members.push(new ZaDistributionListMember(tmpval));
-		}
-	}
-
-	var tmpAddArray = AjxUtil.mergeArrays(form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_addList),members);
-
-	tmpAddArray._version = form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_addList)._version + 1;
-
-	var tmpMembersArray = AjxUtil.mergeArrays(form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_memberList),
-		members,ZaDistributionList.compareTwoMembers);
-
-	tmpMembersArray._version = form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_memberList)._version + 1;
-	this.setInstanceValue(tmpMembersArray, ZaDistributionList.A2_memberList);
-	this.setInstanceValue("", ZaDistributionList.A2_optionalAdd);
-	this.setInstanceValue(tmpAddArray, ZaDistributionList.A2_addList);
-
-	this.getForm().parent.setDirty(true);
-};
 
 ZaNewDLXWizard.prototype.setObject =
 function (entry) {
@@ -616,6 +469,11 @@ function (entry) {
 	this._containedObject[ZaAccount.A2_nonMemberList + "_offset"] = entry[ZaAccount.A2_nonMemberList + "_offset"];
     this._containedObject[ZaModel.currentStep] = entry[ZaModel.currentStep] || 1;
 	//dl.isgroup = this.isgroup ;
+
+	//new ZaDistributionList don't have members, so here two are empty list
+	this._containedObject[ZaDistributionList.A2_allMemberHash] = new Array();
+	this._containedObject[ZaDistributionList.A2_allMemberPages] = new Array();
+
 
 	if(entry.rights)
 		this._containedObject.rights = entry.rights;
@@ -776,7 +634,7 @@ function () {
 
 	var obj = {};
 	obj[ZaAccount.A_name] = "";
-	obj[ZaAlias.A_index] = - 1;
+	obj[ZaAlias.A_index] = -1;
 	formPage.addAliasDlg.setObject(obj);
 	formPage.addAliasDlg.popup();
 }
@@ -804,13 +662,6 @@ ZaNewDLXWizard.isDeleteAliasEnabled = function () {
 	return (!AjxUtil.isEmpty(this.getInstanceValue(ZaDistributionList.A2_alias_selection_cache)));
 }
 
-ZaNewDLXWizard.isDynamicDL = function () {
-    return this.getInstanceValue(ZaDistributionList.A2_dlType) === ZaDistributionList.DYNAMIC_DL_TYPE;
-}
-
-ZaNewDLXWizard.notDynamicDL = function () {
-    return this.getInstanceValue(ZaDistributionList.A2_dlType) !== ZaDistributionList.DYNAMIC_DL_TYPE;
-}
 
 ZaNewDLXWizard.NOTES_TAB_ATTRS = [ZaAccount.A_notes];
 ZaNewDLXWizard.NOTES_TAB_RIGHTS = [];
@@ -885,410 +736,584 @@ ZaNewDLXWizard.myXFormModifier = function(xFormObject, entry) {
 	    };
 
 	var cases = [];
-        if(AjxEnv.isIE || AjxEnv.isFirefox){
-	var spaceHeight = "7";
-	if (AjxEnv.isIE)
-		spaceHeight = "2";
+
+	var hMsgMemberNum, hMemberList, wMemberList, hMemberPool, wMemberPool, wRightPanel;
+	if (AjxEnv.isWebKitBased || AjxEnv.isFirefox ) {
+		hMsgMemberNum = 30;
+		hMemberList = 305;
+		wMemberList = "99%";
+		hMemberPool = 330;
+		wMemberPool = "99%";
+	} else /* if (AjxEnv.isIE  || others... ) */ {
+		hMsgMemberNum = 25;
+		hMemberList = 306;
+		wMemberList = 378;
+		hMemberPool = 335;
+		wMemberPool = 396;
+	}
+	wRightPanel = (appNewUI) ? "100%" : "98%";
 	var case1 =
-        {type:_CASE_,  caseKey:_tab1,  numCols:2,  colSizes: ["430px","420px"], id: "dl_form_members",
-                  items:[
-                         {type:_GROUP_, width: "100%", numCols: 1,
-                                items:[
-                                    {type:_SPACER_, height:"5"},
-                                    {type: _GROUP_, width: "100%", id: "dl_form_members_general_group", numCols: 2, colSizes:[100, "*"], items: [
-                                                {ref:ZaAccount.A_name, type:_EMAILADDR_, msgName:ZaMsg.MSG_LabelListName, label: ZaMsg.LBL_LabelListName,
-                                                        forceUpdate:true, tableCssStyle: "width:100%", inputWidth:"100", domainPartWidth:"100%",
-                                                                id:"dl_name_field", nameContainerCss: "width:100px", domainContainerWidth: "100%",
-								midContainerCss: "width:20px",
-                                                                visibilityChecks:[],
-                                                                enableDisableChecks:[[XFormItem.prototype.hasRight,ZaDistributionList.RENAME_DL_RIGHT]]
-                                                        },
-                                                    {ref:ZaAccount.A_displayname, type:_TEXTFIELD_, label:ZaMsg.NAD_DisplayName, msgName:ZaMsg.NAD_DisplayName,width:"100%",
-                                                        cssClass:"admin_xform_name_input", align: _LEFT_
-                                                    },
-                                                    {type:_SPACER_, height:"3"},
-                                                    {
-                                                        ref:"description",  msgName:ZaMsg.NAD_Description,
-                                                        label:ZaMsg.NAD_Description, labelLocation:_LEFT_, //cssClass:"admin_xform_name_input" ,
-                                                        align:_LEFT_,
-                                                        type:_TEXTFIELD_,
-                                                        enableDisableChecks:[ZaItem.hasWritePermission] ,
-                                                        visibilityChecks:[ZaItem.hasReadPermission],
-                                                        width:"100%"
-                                                     },
-                                                        {ref: "zimbraMailStatus", type:_WIZ_CHECKBOX_, trueValue:"enabled", falseValue:"disabled", align:_LEFT_,
-                                                                nowrap:false,labelWrap:true,
-                                label:ZaMsg.DLXV_LabelEnabled, msgName:ZaMsg.DLXV_LabelEnabled, labelLocation:_LEFT_,
-                                                                labelCssClass:"xform_label", cssStyle:"padding-left:0px"
-                                                        },
-                                                        {ref:ZaAccount.A_zimbraHideInGal, type:_WIZ_CHECKBOX_, trueValue:"TRUE", falseValue:"FALSE", align:_LEFT_,
-                                                                nowrap:false,labelWrap:true,
-                                label:ZaMsg.LBL_zimbraHideInGal, msgName:ZaMsg.LBL_zimbraHideInGal, labelLocation:_LEFT_,labelCssClass:"xform_label", cssStyle:"padding-left:0px"
-                                                        },
-                                                        {type:_GROUP_, numCols:3, nowrap:true, label:ZaMsg.NAD_MailServer, labelLocation:_LEFT_,
-                                                            visibilityChecks:[[ZaItem.hasWritePermission,ZaAccount.A_mailHost]],
-                                                            items: [
-                                                                { ref: ZaAccount.A_mailHost, type: _OSELECT1_, label: null, editable:false, choices: ZaApp.getInstance().getServerListChoices(),
-                                                                    enableDisableChecks:[ZaAccount.isAutoMailServer],
-                                                                    enableDisableChangeEventSources:[ZaAccount.A2_autoMailServer],
-                                                                    visibilityChecks:[],
-                                                                    tableCssStyle: "height: 15px"
-                                                                },
-                                                                {ref:ZaAccount.A2_autoMailServer, type:_WIZ_CHECKBOX_, msgName:ZaMsg.NAD_Auto,label:ZaMsg.NAD_Auto,labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE",
-                                                                    visibilityChecks:[], labelLocation:_RIGHT_,align:_RIGHT_, subLabel:"",
-                                                                    enableDisableChecks:[]
-                                                                }
-                                                            ]
-                                                        }
-                                                ]
-                                        },
-                                {type:_GROUP_, colSpan:"*", width:"100%", colSizes:["100px", "*"],items:[
-                                    {ref:ZaDistributionList.A2_dlType, type:_WIZ_CHECKBOX_,
-                                        label:ZaMsg.MSG_DL_Type, trueValue:ZaDistributionList.DYNAMIC_DL_TYPE, falseValue:ZaDistributionList.STATIC_DL_TYPE,
-                                        visibilityChecks:[], labelLocation:_RIGHT_,align:_RIGHT_, subLabel:"",
-                                        enableDisableChecks:[]
-                                    },
-                                    {ref:ZaDistributionList.A_zimbraIsACLGroup, type:_WIZ_CHECKBOX_,
-                                        label:ZaMsg.MSG_ACL_Group,trueValue:"TRUE", falseValue:"FALSE",
-                                        labelLocation:_RIGHT_,align:_RIGHT_, subLabel:"",
-                                        visibilityChangeEventSources:[ZaDistributionList.A2_dlType],
-                                        visibilityChecks:[ZaNewDLXWizard.isDynamicDL],
-                                        enableDisableChecks:[]
-                                    },
-                                    {type:_INPUT_, ref:ZaDistributionList.A_memberOfURL,
-                                        label:ZaMsg.LBL_Member_URL, labelLocation:_LEFT_, width:"100%",
-                                        visibilityChangeEventSources:[ZaDistributionList.A2_dlType],
-                                        visibilityChecks:[ZaNewDLXWizard.isDynamicDL],
-                                        enableDisableChangeEventSources:[ZaDistributionList.A_zimbraIsACLGroup],
-                                        enableDisableChecks:[ZaDLXFormView.isNotACLGroup]
-                                    }
-                                ]},
-                                {type:_SPACER_, height:spaceHeight},
-                                  {type:_GROUPER_, borderCssClass:"LeftGrouperBorder",
-                                         width:"100%", numCols:1,colSizes:["auto"],
-                                        label:ZaMsg.DLXV_LabelListMembers,
-                                    items:[
-                                        {ref:ZaDistributionList.A2_memberList, type:_DWT_LIST_, height:"270", width:"99%",
-                                                cssClass: "DLTarget", cssStyle:"margin-left: 5px; ",
-                                                widgetClass:ZaAccMiniListView, headerList:membersHeaderList,hideHeader:true,
-                                                onSelection:ZaNewDLXWizard.membersSelectionListener,bmolsnr:true
-                                        },
-                                  // ]
-                                //},
-                                        {type:_SPACER_, height:"8"},
-                                                {type:_GROUP_, width:"98%", numCols:8, colSizes:[85,5, 85,"100%",80,5,80,5],
-                                                        items:[
-                                                                {type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonRemoveAll, width:80,
-                                                           enableDisableChangeEventSources:[ZaDistributionList.A2_memberList],
-                                                           enableDisableChecks:[ZaNewDLXWizard.shouldEnableRemoveAllButton,[XFormItem.prototype.hasRight,ZaDistributionList.REMOVE_DL_MEMBER_RIGHT]],
-                                                           onActivate:"ZaNewDLXWizard.removeAllMembers.call(this,event)"
-                                                                 },
-                                                                {type:_CELLSPACER_},
-                                                                {type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonRemove, width:80, id:"removeButton",
-                                                                onActivate:"ZaNewDLXWizard.removeMembers.call(this,event)",
-                                                                enableDisableChangeEventSources:[ZaDistributionList.A2_membersSelected],
-                                                                enableDisableChecks:[[XForm.checkInstanceValueNotEmty,ZaDistributionList.A2_membersSelected],[XFormItem.prototype.hasRight,ZaDistributionList.REMOVE_DL_MEMBER_RIGHT]]
-                                                                },
-                                                                {type:_CELLSPACER_},
-                                                                {type:_DWT_BUTTON_, label:ZaMsg.Previous, width:75, id:"backButton", icon:"LeftArrow", disIcon:"LeftArrowDis",
-                                                                        onActivate:"ZaNewDLXWizard.backMemButtonHndlr.call(this,event)",
-                                                                        enableDisableChangeEventSources:[ZaDistributionList.A2_memberList],
-                                                                        enableDisableChecks:[ZaNewDLXWizard.shouldEnableMemBackButton]
-                                                                },
-                                                                {type:_CELLSPACER_},
-                                                                {type:_DWT_BUTTON_, label:ZaMsg.Next, width:75, id:"fwdButton", icon:"RightArrow", disIcon:"RightArrowDis",
-                                                                        onActivate:"ZaNewDLXWizard.fwdMemButtonHndlr.call(this,event)",
-                                                                        enableDisableChangeEventSources:[ZaDistributionList.A2_memberList],
-                                                                        enableDisableChecks:[ZaNewDLXWizard.shouldEnableMemForwardButton]
-                                                                },
-                                                                {type:_CELLSPACER_}
-                                                        ]
-                                                }
-                                        ]
-                                },
-                                                {type:_SPACER_, height:"5"}
-                            ]
-                    },
-                        {type:_ZARIGHT_GROUPER_, numCols:1, width: "100%", label:ZaMsg.DLXV_GroupLabelAddMembers,
-                                items:[
-                               {type:_GROUP_, numCols:3, width:"98%",
-                                           items:[
-                                                        {type:_TEXTFIELD_, cssClass:"admin_xform_name_input", ref:ZaSearch.A_query, label:ZaMsg.DLXV_LabelFind,labelCssStyle:"white-space: nowrap;",
-                                                      visibilityChecks:[],enableDisableChecks:[],
-                                                      elementChanged: function(elementValue,instanceValue, event) {
-                                                                  var charCode = event.charCode;
-                                                                  if (charCode == 13 || charCode == 3) {
-                                                                      ZaNewDLXWizard.srchButtonHndlr.call(this);
-                                                                  } else {
-                                                                      this.getForm().itemChanged(this, elementValue, event);
-                                                                  }
-                                                        }
-                                                        },
-                                                        {type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonSearch, width:80,
-                                                           onActivate:ZaNewDLXWizard.srchButtonHndlr
-                                                        }
-                                                ]
-                               },
-                               {type:_SPACER_, height:"5"},
-                                   {ref:ZaDistributionList.A2_memberPool, type:_DWT_LIST_, height:"219", width:"390", cssClass: "DLSource",
-                                                forceUpdate: true, widgetClass:ZaAccMiniListView, headerList:sourceHeaderList, hideHeader:false,
-                                       onSelection:ZaNewDLXWizard.memberPoolSelectionListener
-                                        },
-                               {type:_SPACER_, height:"5"},
-                               {type:_GROUP_, width:"98%", numCols:8, colSizes:[85,5, 85,"100%",80,5,80,5],
-                                        items: [
-                                           {type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonAddFromList, width:80,
-                                                onActivate:"ZaNewDLXWizard.addAddressesToMembers.call(this,event)",
-                                                enableDisableChangeEventSources:[ZaDistributionList.A2_memberPoolSelected],
-                                                enableDisableChecks:[[XForm.checkInstanceValueNotEmty,ZaDistributionList.A2_memberPoolSelected],[XFormItem.prototype.hasRight,ZaDistributionList.ADD_DL_MEMBER_RIGHT]]
-                                                },
-                                           {type:_CELLSPACER_},
-                                           {type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonAddAll, width:80,
-                                                onActivate:"ZaNewDLXWizard.addAllAddressesToMembers.call(this,event)",
-                                                enableDisableChangeEventSources:[ZaDistributionList.A2_memberPool],
-                                                enableDisableChecks:[[XForm.checkInstanceValueNotEmty,ZaDistributionList.A2_memberPool],[XFormItem.prototype.hasRight,ZaDistributionList.ADD_DL_MEMBER_RIGHT]]
-                                                },
-                                                {type:_CELLSPACER_},
-                                                {type:_DWT_BUTTON_, label:ZaMsg.Previous, width:75, id:"backButton", icon:"LeftArrow", disIcon:"LeftArrowDis",
-                                                        enableDisableChecks:[ZaNewDLXWizard.shouldEnablePoolBackButton],
-                                                        enableDisableChangeEventSources:[ZaDistributionList.A2_poolPagenum],
-                                                        onActivate:"ZaNewDLXWizard.backPoolButtonHndlr.call(this,event)"
-                                                },
-                                                {type:_CELLSPACER_},
-
-					 	{type:_DWT_BUTTON_, label:ZaMsg.Next, width:75, id:"fwdButton", icon:"RightArrow", disIcon:"RightArrowDis",
-                                                        enableDisableChecks:[ZaNewDLXWizard.shouldEnablePoolForwardButton],
-                                                        enableDisableChangeEventSources:[ZaDistributionList.A2_poolPagenum],
-                                                        onActivate:"ZaNewDLXWizard.fwdPoolButtonHndlr.call(this,event)"
-                                                },
-                                                {type:_CELLSPACER_}
-                                          ]
-                               },
-                               {type:_SPACER_, height:"7"},
-
-                               {type:_OUTPUT_, value:ZaMsg.DLXV_GroupLabelEnterAddressBelow,
-                                        visibilityChecks:[[XFormItem.prototype.hasRight,ZaDistributionList.ADD_DL_MEMBER_RIGHT]]
-                               },
-                               {type:_SPACER_, height:"7"},
-                               {ref:ZaDistributionList.A2_optionalAdd, type:_TEXTAREA_,width:"98%", height:98,bmolsnr:true,
-                                                visibilityChecks:[[XFormItem.prototype.hasRight,ZaDistributionList.ADD_DL_MEMBER_RIGHT]],
-                                                enableDisableChecks:[]
-                               },
-                               {type:_SPACER_, height:"5",
-                                        visibilityChecks:[[XFormItem.prototype.hasRight,ZaDistributionList.ADD_DL_MEMBER_RIGHT]]
-                               },
-                               {type:_GROUP_, numCols:2, width:"98%", colSizes:[80,"auto"],
-                                        visibilityChecks:[[XFormItem.prototype.hasRight,ZaDistributionList.ADD_DL_MEMBER_RIGHT]],
-                                                items: [
-                                                        {type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonAddFromFreeForm, width:"100%",
-                                                                onActivate:"ZaNewDLXWizard.addFreeFormAddressToMembers.call(this,event)",
-                                                                enableDisableChecks:[[XForm.checkInstanceValueNotEmty,ZaDistributionList.A2_optionalAdd]],
-                                                                enableDisableChangeEventSources:[ZaDistributionList.A2_optionalAdd]
-                                                        },
-                                                   {type:_OUTPUT_, value: ZaMsg.DLXV_SeparateAddresses, align:"right"}
-                                                ]
-                               }
-                                ]
-                    }
-                  ]
-                };
-
-                cases.push(case1);
-
-
-        } else {
-	var case1 =
-	{type:_CASE_,  caseKey:_tab1,  numCols:2,  colSizes: ["50%","50%"], id: "dl_form_members",
-		  items:[
-			 {type:_GROUP_, width: "100%", numCols: 1,
-				items:[
-				    {type:_SPACER_, height:"5"},
-				    {type: _GROUP_, width: "100%", id: "dl_form_members_general_group", numCols: 2, colSizes:[100, "*"], items: [
-				    		{ref:ZaAccount.A_name, type:_EMAILADDR_, msgName:ZaMsg.MSG_LabelListName, label: ZaMsg.LBL_LabelListName,
-				    			forceUpdate:true, tableCssStyle: "width:100%", inputWidth:"100",domainPartWidth:"100%",
-								id:"dl_name_field", nameContainerCss: "width:100px", domainContainerWidth:"100%",
-							midContainerCss: "width:20px",
-								                                                                                                                              visibilityChecks:[],
-								enableDisableChecks:[[XFormItem.prototype.hasRight,ZaDistributionList.RENAME_DL_RIGHT]]
-							},
-						    {ref:ZaAccount.A_displayname, type:_TEXTFIELD_, label:ZaMsg.NAD_DisplayName, msgName:ZaMsg.NAD_DisplayName,width:"100%",
-						    	cssClass:"admin_xform_name_input", align: _LEFT_
-						    },
-			                            {type:_SPACER_, height:"3"},
-                                                    {
-                                                        ref:"description",  msgName:ZaMsg.NAD_Description,
-                                                        label:ZaMsg.NAD_Description, labelLocation:_LEFT_, //cssClass:"admin_xform_name_input" ,
-                                                        align:_LEFT_,
-                                                        type:_TEXTFIELD_,
-                                                        enableDisableChecks:[ZaItem.hasWritePermission] ,
-                                                        visibilityChecks:[ZaItem.hasReadPermission],
-                                                        width:"100%"
-                                                     },
-
-							{ref: "zimbraMailStatus", type:_WIZ_CHECKBOX_, trueValue:"enabled", falseValue:"disabled", align:_LEFT_,
-								nowrap:false,labelWrap:true,
-                                label:ZaMsg.DLXV_LabelEnabled, msgName:ZaMsg.DLXV_LabelEnabled, labelLocation:_LEFT_,
-								labelCssClass:"xform_label", cssStyle:"padding-left:0px"
-							},
-   							{ref:ZaAccount.A_zimbraHideInGal, type:_WIZ_CHECKBOX_, trueValue:"TRUE", falseValue:"FALSE", align:_LEFT_,
-								nowrap:false,labelWrap:true,
-                                label:ZaMsg.LBL_zimbraHideInGal, msgName:ZaMsg.LBL_zimbraHideInGal, labelLocation:_LEFT_,labelCssClass:"xform_label", cssStyle:"padding-left:0px"
-							}
-						]
-					},
-                    {type:_GROUP_, colSpan:"*", width:"100%", colSizes:["100px", "*"],items:[
-                        {ref:ZaDistributionList.A2_dlType, type:_WIZ_CHECKBOX_,
-                            label:ZaMsg.MSG_DL_Type, trueValue:ZaDistributionList.DYNAMIC_DL_TYPE, falseValue:ZaDistributionList.STATIC_DL_TYPE,
-                            visibilityChecks:[], labelLocation:_RIGHT_,align:_RIGHT_, subLabel:"",
-                            enableDisableChecks:[]
-                        },
-                        {ref:ZaDistributionList.A_zimbraIsACLGroup, type:_WIZ_CHECKBOX_,
-                            label:ZaMsg.MSG_ACL_Group,labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE",
-                            labelLocation:_RIGHT_,align:_RIGHT_, subLabel:"",
-                            visibilityChangeEventSources:[ZaDistributionList.A2_dlType],
-                            visibilityChecks:[ZaNewDLXWizard.isDynamicDL],
-                            enableDisableChecks:[]
-                        },
-                        {type:_INPUT_, ref:ZaDistributionList.A_memberOfURL,
-                            label:ZaMsg.LBL_Member_URL, labelLocation:_LEFT_, width:"100%",
-                            visibilityChangeEventSources:[ZaDistributionList.A2_dlType],
-                            visibilityChecks:[ZaNewDLXWizard.isDynamicDL],
-                            enableDisableChangeEventSources:[ZaDistributionList.A_zimbraIsACLGroup],
-                            enableDisableChecks:[ZaDLXFormView.isNotACLGroup]
-                        }
-                    ]},
-			        {type:_SPACER_, height:"7"},
-                            	  {type:_GROUPER_, borderCssClass:"LeftGrouperBorder",
-                                         width:"100%", numCols:1,colSizes:["auto"],
-                                        label:ZaMsg.DLXV_LabelListMembers,
-
-                                    items:[
-					{ref:ZaDistributionList.A2_memberList, type:_DWT_LIST_, height:"270", width:"99%",
-						cssClass: "DLTarget", cssStyle:"margin-left: 5px; ",
-						widgetClass:ZaAccMiniListView, headerList:membersHeaderList,hideHeader:true,
-						onSelection:ZaNewDLXWizard.membersSelectionListener,bmolsnr:true
-					},
-				  // ]
-				//},
-			        	{type:_SPACER_, height:"8"},
-				   		{type:_GROUP_, width:"98%", numCols:8, colSizes:[75,10,70,10,75,10,70,10],
-							items:[
-								{type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonRemoveAll,
-							   enableDisableChangeEventSources:[ZaDistributionList.A2_memberList],
-							   enableDisableChecks:[ZaNewDLXWizard.shouldEnableRemoveAllButton,[XFormItem.prototype.hasRight,ZaDistributionList.REMOVE_DL_MEMBER_RIGHT]],
-							   onActivate:"ZaNewDLXWizard.removeAllMembers.call(this,event)"
-								 },
-								{type:_CELLSPACER_},
-								{type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonRemove, id:"removeButton",
-						      		onActivate:"ZaNewDLXWizard.removeMembers.call(this,event)",
-						       		enableDisableChangeEventSources:[ZaDistributionList.A2_membersSelected],
-						       		enableDisableChecks:[[XForm.checkInstanceValueNotEmty,ZaDistributionList.A2_membersSelected],[XFormItem.prototype.hasRight,ZaDistributionList.REMOVE_DL_MEMBER_RIGHT]]
-						    		},
-								{type:_CELLSPACER_},
-								{type:_DWT_BUTTON_, label:ZaMsg.Previous, id:"backButton", icon:"LeftArrow", disIcon:"LeftArrowDis",
-									onActivate:"ZaNewDLXWizard.backMemButtonHndlr.call(this,event)",
-									enableDisableChangeEventSources:[ZaDistributionList.A2_memberList],
-									enableDisableChecks:[ZaNewDLXWizard.shouldEnableMemBackButton]
-						    		},
-								{type:_CELLSPACER_},
-								{type:_DWT_BUTTON_, label:ZaMsg.Next, id:"fwdButton", icon:"RightArrow", disIcon:"RightArrowDis",
-									onActivate:"ZaNewDLXWizard.fwdMemButtonHndlr.call(this,event)",
-									enableDisableChangeEventSources:[ZaDistributionList.A2_memberList],
-									enableDisableChecks:[ZaNewDLXWizard.shouldEnableMemForwardButton]
-						    		},
-								{type:_CELLSPACER_}
-							]
-						}
+	{
+		type : _CASE_,  caseKey : _tab1,  numCols : 2,  id : "dl_form_members",
+		colSizes : ["440px", "440px"], cssStyle : "padding-top:5px; table-layout:fixed;",
+		items : [
+		{
+			type : _GROUP_, width : "98%", numCols : 1, items : [
+			{
+				type : _SPACER_, height : "5"
+			}
+			,
+			{
+				type : _GROUP_, width : "98%", id : "dl_form_members_general_group", numCols : 2, colSizes : [130, "*"], items : [
+				{
+					ref : ZaAccount.A_name,
+					type : _EMAILADDR_,
+					msgName : ZaMsg.MSG_LabelListName,
+					label : ZaMsg.LBL_LabelListName,
+					forceUpdate : true,
+					tableCssStyle : "width:100%",
+					inputWidth : "100",
+					domainPartWidth : "100%",
+					id : "dl_name_field",
+					nameContainerCss : "width:100px",
+					domainContainerWidth : "100%",
+					midContainerCss : "width:20px",
+					visibilityChecks : [],
+					enableDisableChecks : [[XFormItem.prototype.hasRight, ZaDistributionList.RENAME_DL_RIGHT]]
+				}
+				,
+				{
+					type : _SPACER_, height : "3"
+				}
+				,
+				{
+					ref : ZaAccount.A_displayname,
+					type : _TEXTFIELD_,
+					label : ZaMsg.NAD_DisplayName,
+					msgName : ZaMsg.NAD_DisplayName,
+					align : _LEFT_,
+					cssClass : "admin_xform_name_input",
+					width : "100%"
+				}
+				,
+				{
+					type : _SPACER_, height : "3"
+				}
+				,
+				{
+					ref : "description",
+					msgName : ZaMsg.NAD_Description,
+					label : ZaMsg.NAD_Description,
+					labelLocation : _LEFT_, // cssClass : "admin_xform_name_input" ,
+					align : _LEFT_,
+					type : _TEXTFIELD_,
+					enableDisableChecks : [ZaItem.hasWritePermission] ,
+					visibilityChecks : [ZaItem.hasReadPermission],
+					cssClass : "admin_xform_name_input",
+					width : "100%"
+				}
+				,
+				{
+					ref : "zimbraMailStatus",
+					type : _WIZ_CHECKBOX_,
+					trueValue : "enabled",
+					falseValue : "disabled",
+					align : _LEFT_,
+					nowrap : false,
+					labelWrap : true,
+					label : ZaMsg.DLXV_LabelEnabled,
+					msgName : ZaMsg.DLXV_LabelEnabled,
+					labelLocation : _LEFT_,
+					labelCssClass : "xform_label",
+					cssStyle : "padding-left:0px"
+				}
+				,
+				{
+					ref : ZaAccount.A_zimbraHideInGal,
+					type : _WIZ_CHECKBOX_,
+					trueValue : "TRUE",
+					falseValue : "FALSE",
+					label : ZaMsg.LBL_zimbraHideInGal,
+					labelLocation : _LEFT_,
+					labelCssClass : "xform_label",
+					labelWrap : true,
+					align : _LEFT_,
+					nowrap : false,
+					msgName : ZaMsg.LBL_zimbraHideInGal,
+					cssStyle : "padding-left:0px"
+				}
+				,
+				{
+					type : _GROUP_, numCols : 3, nowrap : true, label : ZaMsg.NAD_MailServer, labelLocation : _LEFT_,
+					visibilityChecks : [[ZaItem.hasWritePermission, ZaAccount.A_mailHost]],
+					items : [
+					{
+						ref : ZaAccount.A_mailHost, type : _OSELECT1_, label : null, editable : false, choices : ZaApp.getInstance().getServerListChoices(),
+						enableDisableChecks : [ZaAccount.isAutoMailServer],
+						enableDisableChangeEventSources : [ZaAccount.A2_autoMailServer],
+						visibilityChecks : [],
+						tableCssStyle : "height: 15px"
+					}
+					,
+					{
+						ref : ZaAccount.A2_autoMailServer, type : _WIZ_CHECKBOX_, msgName : ZaMsg.NAD_Auto, label : ZaMsg.NAD_Auto, labelLocation : _RIGHT_, trueValue : "TRUE", falseValue : "FALSE",
+						visibilityChecks : [], labelLocation : _RIGHT_, align : _RIGHT_, subLabel : "",
+						enableDisableChecks : []
+					}
 					]
-				},
-						{type:_SPACER_, height:"5"}
-			    ]
-		    },
-			{type:_ZARIGHT_GROUPER_, numCols:1, width: "100%", label:ZaMsg.DLXV_GroupLabelAddMembers,
-				items:[
-			       {type:_GROUP_, numCols:3, width:"98%",
-					   items:[
-							{type:_TEXTFIELD_, cssClass:"admin_xform_name_input", ref:ZaSearch.A_query, label:ZaMsg.DLXV_LabelFind,labelCssStyle:"white-space: nowrap;",
-						      visibilityChecks:[],enableDisableChecks:[],
-						      elementChanged: function(elementValue,instanceValue, event) {
-								  var charCode = event.charCode;
-								  if (charCode == 13 || charCode == 3) {
-								      ZaNewDLXWizard.srchButtonHndlr.call(this);
-								  } else {
-								      this.getForm().itemChanged(this, elementValue, event);
-								  }
-					      		}
-							},
-							{type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonSearch, width:80,
-							   onActivate:ZaNewDLXWizard.srchButtonHndlr
-							}
-						]
-			       },
-			       {type:_SPACER_, height:"5"},
-				   {ref:ZaDistributionList.A2_memberPool, type:_DWT_LIST_, height:"230", width:"98%", cssClass: "DLSource",
-				   		forceUpdate: true, widgetClass:ZaAccMiniListView, headerList:sourceHeaderList,hideHeader:false,
-				   		onSelection:ZaNewDLXWizard.memberPoolSelectionListener
-				   	},
-			       {type:_SPACER_, height:"5"},
-			       {type:_GROUP_, width:"98%", numCols:8, colSizes:[75,10,70,10,75,10,70,10],
-					items: [
-					   {type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonAddFromList,
-						onActivate:"ZaNewDLXWizard.addAddressesToMembers.call(this,event)",
-						enableDisableChangeEventSources:[ZaDistributionList.A2_memberPoolSelected],
-						enableDisableChecks:[[XForm.checkInstanceValueNotEmty,ZaDistributionList.A2_memberPoolSelected],[XFormItem.prototype.hasRight,ZaDistributionList.ADD_DL_MEMBER_RIGHT]]
-						},
-					   {type:_CELLSPACER_},
-					   {type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonAddAll,
-						onActivate:"ZaNewDLXWizard.addAllAddressesToMembers.call(this,event)",
-						enableDisableChangeEventSources:[ZaDistributionList.A2_memberPool],
-						enableDisableChecks:[[XForm.checkInstanceValueNotEmty,ZaDistributionList.A2_memberPool],[XFormItem.prototype.hasRight,ZaDistributionList.ADD_DL_MEMBER_RIGHT]]
-						},
-						{type:_CELLSPACER_},
-						{type:_DWT_BUTTON_, label:ZaMsg.Previous, id:"backButton", icon:"LeftArrow", disIcon:"LeftArrowDis",
-							enableDisableChecks:[ZaNewDLXWizard.shouldEnablePoolBackButton],
-							enableDisableChangeEventSources:[ZaDistributionList.A2_poolPagenum],
-							onActivate:"ZaNewDLXWizard.backPoolButtonHndlr.call(this,event)"
-						},
-						{type:_CELLSPACER_},
-						{type:_DWT_BUTTON_, label:ZaMsg.Next, id:"fwdButton", icon:"RightArrow", disIcon:"RightArrowDis",
-						 	enableDisableChecks:[ZaNewDLXWizard.shouldEnablePoolForwardButton],
-						 	enableDisableChangeEventSources:[ZaDistributionList.A2_poolPagenum],
-							onActivate:"ZaNewDLXWizard.fwdPoolButtonHndlr.call(this,event)"
-						},
-						{type:_CELLSPACER_}
-					  ]
-			       },
-                               {type:_SPACER_, height:"7"},
-
-			       {type:_OUTPUT_, value:ZaMsg.DLXV_GroupLabelEnterAddressBelow,
-			       		visibilityChecks:[[XFormItem.prototype.hasRight,ZaDistributionList.ADD_DL_MEMBER_RIGHT]]
-			       },
-                               {type:_SPACER_, height:"7"},
-			       {ref:ZaDistributionList.A2_optionalAdd, type:_TEXTAREA_,width:"98%", height:98,bmolsnr:true,
-						visibilityChecks:[[XFormItem.prototype.hasRight,ZaDistributionList.ADD_DL_MEMBER_RIGHT]],
-						enableDisableChecks:[]
-			       },
-			       {type:_SPACER_, height:"5",
-			       		visibilityChecks:[[XFormItem.prototype.hasRight,ZaDistributionList.ADD_DL_MEMBER_RIGHT]]
-			       },
-			       {type:_GROUP_, numCols:2, width:"98%", colSizes:[80,"auto"],
-			       		visibilityChecks:[[XFormItem.prototype.hasRight,ZaDistributionList.ADD_DL_MEMBER_RIGHT]],
-						items: [
-							{type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonAddFromFreeForm, width:"100%",
-								onActivate:"ZaNewDLXWizard.addFreeFormAddressToMembers.call(this,event)",
-								enableDisableChecks:[[XForm.checkInstanceValueNotEmty,ZaDistributionList.A2_optionalAdd]],
-								enableDisableChangeEventSources:[ZaDistributionList.A2_optionalAdd]
-							},
-						   {type:_OUTPUT_, value: ZaMsg.DLXV_SeparateAddresses, align:"right"}
-						]
-			       }
+				}
 				]
-		    }
-		  ]
-		};
+			}
+			,
+			{
+				type : _GROUP_, colSpan : "*", width : "98%", colSizes : ["130px", "*"],
+				labelCssClass : "xform_label", cssStyle : "padding-left:0px",
+				items : [
+				{
+					ref : ZaDistributionList.A2_dlType,
+					type : _WIZ_CHECKBOX_,
+					trueValue : ZaDistributionList.DYNAMIC_DL_TYPE,
+					falseValue : ZaDistributionList.STATIC_DL_TYPE,
+					label : ZaMsg.LBL_DL_Type,
+					labelLocation : _LEFT_,
+					labelCssClass : "xform_label",
+					labelWrap : true,
+					align : _LEFT_,
+					nowrap : false,
+					msgName : ZaMsg.LBL_DL_Type,
+					subLabel : "",
+					visibilityChecks : [],
+					enableDisableChecks : []
+				}
+				,
+				{
+					ref : ZaDistributionList.A_zimbraIsACLGroup,
+					type : _WIZ_CHECKBOX_,
+					trueValue : "TRUE",
+					falseValue : "FALSE",
+					label : ZaMsg.LBL_ACL_Group,
+					labelLocation : _LEFT_,
+					labelCssClass : "xform_label",
+					align : _LEFT_,
+					subLabel : "",
+					visibilityChangeEventSources : [ZaDistributionList.A2_dlType],
+					visibilityChecks : [ZaDLXFormView.isDynamicDL],
+					enableDisableChecks : []
+				}
+				,
+				{
+					type : _INPUT_,
+					ref : ZaDistributionList.A_memberOfURL,
+					label : ZaMsg.LBL_Member_URL,
+					labelLocation : _LEFT_,
+					labelCssClass : "xform_label",
+					width : "100%",
+					visibilityChangeEventSources : [ZaDistributionList.A2_dlType],
+					visibilityChecks : [ZaDLXFormView.isDynamicDL],
+					enableDisableChangeEventSources : [ZaDistributionList.A_zimbraIsACLGroup],
+					enableDisableChecks : [ZaDLXFormView.isNotACLGroup]
+				}
+				]
+			}
+			,
+			{
+				type : _SPACER_, height : "20"
+			}
+			,
+			{
+				type : _GROUPER_,
+				borderCssClass : "LeftGrouperBorder",
+				width : "100%",
+				numCols : 1,
+				colSizes : ["auto"],
+				label : ZaMsg.DLXV_LabelListMembers,
+				items : [
+				{
+					type : _GROUP_,
+					width : "100%",
+					height : hMsgMemberNum, numCols : 3, colSizes : [ "*", "20px", "104px"], items : [
+					{
+						type : _OUTPUT_,
+						ref : ZaDistributionList.A2_numMembers,
+						align : _LEFT_,
+						valueChangeEventSources : [ZaDistributionList.A2_numMembers, ZaDistributionList.A2_memNumPages],
+						getDisplayValue : ZaDLXFormView.showMembersNum
+					}
+					,
+					{
+						type : _CELLSPACER_
+					}
+					,
+					{
+						type : _GROUP_,
+						width : "100%",
+						numCols : 3,
+						colSizes : ["32px", "40px", "32px"],
+						visibilityChangeEventSources : [ZaDistributionList.A2_memNumPages],
+						visibilityChecks : [[ZaDLXFormView.isMoreThanOnePage,
+						ZaDistributionList.A2_memNumPages]],
+						items : [
+						{
+							type : _DWT_BUTTON_,
+							label : null,
+							labelLocation : _NONE_,
+							width : "100%",
+							id : "backButton",
+							icon : "LeftArrow",
+							disIcon : "LeftArrowDis",
+							enableDisableChecks : [ZaDLXFormView.shouldEnableMemBackButton],
+							enableDisableChangeEventSources : [ZaDistributionList.A2_memberList, ZaDistributionList.A2_memNumPages, ZaDistributionList.A2_memPagenum],
+							onActivate : "ZaDLXFormView.backMemButtonHndlr.call(this,event)"
+						}
+						,
+						{
+							type : _OUTPUT_,
+							ref : ZaDistributionList.A2_memPagenum,
+							valueChangeEventSources : [ZaDistributionList.A2_memPagenum, ZaDistributionList.A2_memNumPages],
+							align : _CENTER_,
+							getDisplayValue : ZaDLXFormView.showMembersPaging
+						}
+						,
+						{
+							type : _DWT_BUTTON_,
+							label : null,
+							labelLocation : _NONE_,
+							width : "100%",
+							id : "fwdButton",
+							icon : "RightArrow",
+							disIcon : "RightArrowDis",
+							enableDisableChecks : [ZaDLXFormView.shouldEnableMemForwardButton],
+							enableDisableChangeEventSources : [ZaDistributionList.A2_memberList,
+							ZaDistributionList.A2_memNumPages,
+							ZaDistributionList.A2_memPagenum],
+							onActivate : "ZaDLXFormView.fwdMemButtonHndlr.call(this,event)"
+						}
+						]
+					}
+					]
+				}
+				,
+				{
+					type : _SPACER_, height : "5"
+				}
+				,
+				{
+					ref : ZaDistributionList.A2_memberList,
+					type : _DWT_LIST_,
+					height : hMemberList,
+					width : wMemberList,
+					cssClass : "DLTarget",
+					cssStyle : "margin-left: 5px; ",
+					widgetClass : ZaAccMiniListView,
+					headerList : membersHeaderList,
+					hideHeader : true,
+					onSelection : ZaDLXFormView.membersSelectionListener,
+					bmolsnr : true
+				}
+				,
+				{
+					type : _SPACER_, height : "8"
+				}
+				,
+				{
+					type : _GROUP_,
+					width : "99%",
+					numCols : 3,
+					//colSizes : ["45%", "10%", "45%"],
+					cssStyle : "table-layout:fixed",
+					items : [
+					{
+						type : _DWT_BUTTON_,
+						id:"removeButton",
+						label : ZaMsg.DLXV_ButtonRemoveSelected,
+						width : "140px", //in IE should use it to control width
+						nowrap : true,
+						cssStyle : "padding:0px;",
+						enableDisableChangeEventSources : [ZaDistributionList.A2_membersSelected],
+						enableDisableChecks : [
+							[XForm.checkInstanceValueNotEmty, ZaDistributionList.A2_membersSelected],
+							[XFormItem.prototype.hasRight, ZaDistributionList.REMOVE_DL_MEMBER_RIGHT]
+						],
+						onActivate : "ZaDLXFormView.removeSelectedMembers.call(this,event)"
+					}
+					,
+					{
+						type : _CELLSPACER_, width : "10px" //in IE should use it to control width
+					}
+					,
+					{
+						type : _DWT_BUTTON_,
+						label : ZaMsg.DLXV_ButtonRemovePage,
+						width : "140px", //in IE should use it to control width
+						nowrap : true,
+						cssStyle : "padding:0px;",
+						visibilityChangeEventSources : [ZaDistributionList.A2_numMembers],
+						visibilityChecks : [[XForm.checkInstanceValueNot, ZaDistributionList.A2_numMembers, 0]],
+						enableDisableChangeEventSources : [ZaDistributionList.A2_memberList],
+						enableDisableChecks : [
+							ZaDLXFormView.shouldEnableRemoveThisPageButton,
+							[XFormItem.prototype.hasRight, ZaDistributionList.REMOVE_DL_MEMBER_RIGHT]
+						],
+						onActivate : "ZaDLXFormView.removeOnePageMembers.call(this,event)"
+					}
+					]
+				}
+				]
+			}
+			,
+			{
+				type : _SPACER_, height : "5"
+			}
+			]
+		}
+		,
+		{
+			type : _ZARIGHT_GROUPER_, numCols : 1, width : wRightPanel, label : ZaMsg.DLXV_GroupLabelAddMembers,
+			items : [
+			{
+				type : _GROUP_, width : "100%", numCols : 3,
+				//colSizes : [ "auto", "10px", "104px"],
+				items : [
+				{
+					type : _GROUP_, width : "100%", numCols : 2, colSizes : ["20%", "80%"], items : [
+					{
+						type : _TEXTFIELD_,
+						cssClass : "admin_xform_name_input",
+						ref : ZaSearch.A_query,
+						label : ZaMsg.DLXV_LabelFind,
+						labelLocation : _LEFT_,
+						labelCssStyle : "white-space: nowrap;",
+						visibilityChecks : [],
+						enableDisableChecks : [],
+						width : "100%",
+						align : _LEFT_,
+						elementChanged : function(elementValue, instanceValue, event)
+						{
+							var charCode = event.charCode;
+							if (charCode == 13 || charCode == 3)
+							{
+								ZaDLXFormView.srchButtonHndlr.call(this);
+							}
+							else
+							{
+								this.getForm().itemChanged(this, elementValue, event);
+							}
+						}
+					}
+					]
+				}
+				,
+				{
+					type : _CELLSPACER_, width : "10px"
+				}
+				,
+				{
+					type : _DWT_BUTTON_,
+					//width : "100%",
+					width : "104px",
+					label : ZaMsg.DLXV_ButtonSearch,
+					onActivate : ZaDLXFormView.srchButtonHndlr
+				}
+				]
+			}
+			,
+			{
+				type : _SPACER_, height : "5", colSpan : "*"
+			}
+			,
+			{
+				type : _GROUP_, width : "100%", numCols : 3, colSizes : [ "*", "10px", "104px"],
+				items : [
+				{	type : _GROUP_, items: [
+					{
+						type : _OUTPUT_,
+						ref : ZaDistributionList.A2_totalNumInPool,
+						align : _LEFT_,
+						visibilityChecks : [[ZaDLXFormView.checkTotalNumInPool, -1]],
+						getDisplayValue : ZaDLXFormView.showSearchFoundNum,
+						nowrap : false
+					}
+					]
+				}
+				,
+				{
+					type : _CELLSPACER_
+				}
+				,
+				{
+					type : _GROUP_,
+					visibilityChangeEventSources : [ZaDistributionList.A2_poolNumPages],
+					visibilityChecks : [[ZaDLXFormView.isMoreThanOnePage,
+					ZaDistributionList.A2_poolNumPages]],
+					numCols : 3,
+					colSizes : ["32px", "40px", "32px"],
+					width : "100%",
+					items : [
+					{
+						type : _DWT_BUTTON_,
+						label : null,
+						labelLocation : _NONE_,
+						id : "backButton",
+						icon : "LeftArrow",
+						disIcon : "LeftArrowDis",
+						enableDisableChecks : [ZaDLXFormView.shouldEnablePoolBackButton],
+						enableDisableChangeEventSources : [ZaDistributionList.A2_poolPagenum],
+						onActivate : "ZaDLXFormView.backPoolButtonHndlr.call(this,event)"
+					}
+					,
+					{
+						type : _OUTPUT_,
+						ref : ZaDistributionList.A2_poolPagenum,
+						align : _CENTER_,
+						getDisplayValue : ZaDLXFormView.showSearchFoundPaging 
+					}
+					, // label : ZaMsg.Next, nowrap : true,
+					{
+						type : _DWT_BUTTON_,
+						label : null,
+						labelLocation : _NONE_,
+						id : "fwdButton",
+						icon : "RightArrow",
+						disIcon : "RightArrowDis",
+						enableDisableChecks : [ZaDLXFormView.shouldEnablePoolForwardButton],
+						enableDisableChangeEventSources : [ZaDistributionList.A2_poolPagenum],
+						onActivate : "ZaDLXFormView.fwdPoolButtonHndlr.call(this,event)"
+					}
+					]
+				}
+				]
+			}
+			,
+			{
+				type : _SPACER_, height : "5"
+			}
+			,
+			{
+				ref : ZaDistributionList.A2_memberPool,
+				type : _DWT_LIST_,
+				height : hMemberPool,
+				width :  wMemberPool,
+				cssClass : "DLSource",
+				forceUpdate : true,
+				widgetClass : ZaAccMiniListView,
+				headerList : sourceHeaderList,
+				hideHeader : false,
+				onSelection : ZaDLXFormView.memberPoolSelectionListener
+			}
+			,
+			{
+				type : _SPACER_, height : "5", colSpan : "*"
+			}
+			,
+			{
+				type : _GROUP_, width : wRightPanel, items : [
+				{
+					type : _GROUP_,
+					width : "99%",
+					numCols : 3,
+					//colSizes : [ "45%", "10%", "45%"],
+					cssStyle : "table-layout:fixed",
+					items : [
+					{
+						type : _DWT_BUTTON_,
+						label : ZaMsg.DLXV_ButtonAddSelected,
+						width : "140px", //in IE should use it to control width
+						nowrap : true,
+						onActivate : "ZaDLXFormView.addSelectedAddressesToMembers.call(this,event)",
+						enableDisableChangeEventSources : [ZaDistributionList.A2_memberPoolSelected],
+						enableDisableChecks : [
+							[XForm.checkInstanceValueNotEmty, ZaDistributionList.A2_memberPoolSelected],
+							[XFormItem.prototype.hasRight, ZaDistributionList.ADD_DL_MEMBER_RIGHT]
+						]
+					}
+					,
+					{
+						type : _CELLSPACER_, width : "10px" //in IE should use it to control width
+					}
+					,
+					{
+						type : _DWT_BUTTON_,
+						label : ZaMsg.DLXV_ButtonAddPage,
+						width : "140px", //in IE should use it to control width
+						nowrap : true,
+						onActivate : "ZaDLXFormView.addOnePageAddressesToMembers.call(this,event)",
+						visibilityChangeEventSources : [ZaDistributionList.A2_totalNumInPool],
+						visibilityChecks : [[ZaDLXFormView.checkTotalNumInPool, 1]],
+						enableDisableChangeEventSources : [ZaDistributionList.A2_memberPool],
+						enableDisableChecks : [
+							[XForm.checkInstanceValueNotEmty, ZaDistributionList.A2_memberPool],
+							[XFormItem.prototype.hasRight, ZaDistributionList.ADD_DL_MEMBER_RIGHT]
+						]
+					}
+					]
+				}
+				,
+				{
+					type : _SPACER_
+				}
+				]
+			}
+			,
+			{
+				type : _SPACER_, height : "5"
+			}
+			,
+			{
+				type : _OUTPUT_,
+				value : ZaMsg.DLXV_GroupLabelEnterAddressBelow,
+				visibilityChecks : [[XFormItem.prototype.hasRight, ZaDistributionList.ADD_DL_MEMBER_RIGHT]]
+			}
+			,
+			{
+				type : _SPACER_, height : "5"
+			}
+			,
+			{
+				ref : ZaDistributionList.A2_optionalAdd,
+				type : _TEXTAREA_,
+				width : wRightPanel,
+				height : 98,
+				bmolsnr : true,
+				visibilityChecks : [[XFormItem.prototype.hasRight, ZaDistributionList.ADD_DL_MEMBER_RIGHT]],
+				enableDisableChecks : []
+			}
+			,
+			{
+				type : _SPACER_, height : "5",
+				visibilityChecks : [[XFormItem.prototype.hasRight, ZaDistributionList.ADD_DL_MEMBER_RIGHT]]
+			}
+			,
+			{
+				type : _GROUP_,
+				numCols : 2,
+				width : wRightPanel,
+				//colSizes : [80, "auto"],
+				visibilityChecks : [[XFormItem.prototype.hasRight, ZaDistributionList.ADD_DL_MEMBER_RIGHT]],
+				items : [
+				{
+					type : _DWT_BUTTON_,
+					label : ZaMsg.DLXV_ButtonAddFromFreeForm,
+					width : 100,
+					onActivate : "ZaDLXFormView.addFreeFormAddressToMembers.call(this,event)",
+					enableDisableChecks : [[XForm.checkInstanceValueNotEmty,
+					ZaDistributionList.A2_optionalAdd]],
+					enableDisableChangeEventSources : [ZaDistributionList.A2_optionalAdd]
+				}
+				,
+				{
+					type : _OUTPUT_,
+					value : ZaMsg.DLXV_SeparateAddresses,
+					align : "right"
+				}
+				]
+			}
+			]
+		}
+		]
+	};
 
-		cases.push(case1);
-        }
+	cases.push(case1);
+
 
 	if(_tab2) {
 		var case2 =
