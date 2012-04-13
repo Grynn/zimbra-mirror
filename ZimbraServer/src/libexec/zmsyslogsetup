@@ -260,7 +260,7 @@ sub updateSyslog {
       if ( $rsyslog == 0 ) {
         s/^\*\.info/\*\.info;local0.none;local1.none;auth.none/;
       }
-      if ( $rsyslog == 1 && ($platform =~ /RHEL6/ || $platform eq "F13_64" || $platform =~ /CentOS6/)) {
+      if ( $rsyslog == 1 && ($platform =~ /RHEL6/ || $platform eq "F13_64" || $platform =~ /CentOS6/ || $platform =~ /F11/)) {
         s/^\*\.info/\*\.info;local0.none;local1.none;auth.none/;
       }
       if ($rsyslog == 1 || -e "/etc/init.d/sysklogd") {
