@@ -338,6 +338,9 @@ public class CreateDocument extends AjaxCommonTest {
 
 		// Click on created document
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docItem);
+		
+		// Mark a check box on the selected document
+		app.zPageBriefcase.zListItem(Action.A_BRIEFCASE_CHECKBOX, docItem);
 
 		// Click on open in a separate window icon in toolbar
 		DocumentBriefcaseOpen documentBriefcaseOpen;
