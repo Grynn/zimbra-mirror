@@ -3,6 +3,7 @@ package com.zimbra.qa.selenium.projects.octopus.tests.history;
 import org.testng.annotations.*;
 
 import com.zimbra.qa.selenium.framework.items.*;
+import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.octopus.core.OctopusCommonTest;
@@ -16,6 +17,15 @@ public class HistoryCommonTest extends OctopusCommonTest {
 	protected static String comment = null;
 	protected static String newName = null;
 	protected static FolderItem folder = null; 
+	protected static FolderItem mainFolder = null;
+	
+	protected static FolderItem readFolder = null;
+	protected static FolderItem readWriteFolder = null;	
+	protected static FolderItem adminFolder = null;
+	
+	protected static String mountReadFolderName = null;
+	protected static String mountReadWriteFolderName = null;
+	protected static String mountAdminFolderName = null;
 	
 	protected static String[] checkboxes = {
 		PageHistory.Locators.zHistoryFilterAllTypes.locator,
@@ -41,7 +51,11 @@ public class HistoryCommonTest extends OctopusCommonTest {
 	protected static ZimbraAccount readWriteGrantee = null;
 	protected static ZimbraAccount adminGrantee = null;
 	   
-	
+
+	protected static ZimbraAccount readGranter = null;
+	protected static ZimbraAccount readWriteGranter = null;
+	protected static ZimbraAccount adminGranter = null;
+
 	public HistoryCommonTest() {
 		// test starts at the History tab
 		super.startingPage = app.zPageHistory;
@@ -68,7 +82,7 @@ public class HistoryCommonTest extends OctopusCommonTest {
 
 	
 	@BeforeMethod(groups = { "always" })
-	public void setup() 
+	protected void setup() 
 	    throws HarnessException
 	{		
 		// upload file,folder 
@@ -78,15 +92,15 @@ public class HistoryCommonTest extends OctopusCommonTest {
 		if (fileId == null) {		 
 	 	   fileId = uploadFileViaSoap(app.zGetActiveAccount(),fileName);    	 	  	
            folder = createFolderViaSoap(app.zGetActiveAccount());	 	  	            		
-           comment = "Comment " + ZimbraSeleniumProperties.getUniqueString();
+           mainFolder = FolderItem.importFromSOAP(
+        		   app.zGetActiveAccount(), SystemFolder.Briefcase);
+           
+		           comment = "Comment " + ZimbraSeleniumProperties.getUniqueString();
     	   newName = "New Name " + ZimbraSeleniumProperties.getUniqueString() 
            		   + fileName.substring(fileName.indexOf("."),fileName.length());
 
-    	   readGrantee = getNewAccount();;
-    	   readWriteGrantee = getNewAccount();;
-    	   adminGrantee = getNewAccount();;
     		   
-                      
+    	   
           // mark file as favorite via soap
    		   markFileFavoriteViaSoap(app.zGetActiveAccount(), fileId);
    		
@@ -97,28 +111,15 @@ public class HistoryCommonTest extends OctopusCommonTest {
    		   // make comment via soap
    	       makeCommentViaSoap(app.zGetActiveAccount(), fileId, comment);
    	       
-		   // share read|readWrite|admin for the folder with grantees
-		   shareFolderViaSoap(app.zGetActiveAccount(), readGrantee, folder,SHARE_AS_READ);		   
-		   SleepUtil.sleepSmall();
-		   
-		   shareFolderViaSoap(app.zGetActiveAccount(), readWriteGrantee, folder,SHARE_AS_READWRITE);
-		   SleepUtil.sleepSmall();
-		   
-		   shareFolderViaSoap(app.zGetActiveAccount(), adminGrantee, folder, SHARE_AS_ADMIN); 		   
-		   app.zPageOctopus.zRefresh();
-
-		   // revoke sharing the folder with grantees
-		   revokeShareFolderViaSoap(app.zGetActiveAccount(), readGrantee, folder);
-		   SleepUtil.sleepSmall();
-		   
-		   revokeShareFolderViaSoap(app.zGetActiveAccount(), readWriteGrantee, folder);
-		   SleepUtil.sleepSmall();
-		   
-		   revokeShareFolderViaSoap(app.zGetActiveAccount(), adminGrantee, folder); 
 		   
 		   //rename via soap
 		   renameViaSoap(app.zGetActiveAccount(), fileId, newName);
 		   
+		   //shere revoke
+		   setUpShareRevoke();
+		   
+		   //setup mount point
+		   setUpMountPoint();   
 		}
 
 		refresh();
@@ -134,6 +135,58 @@ public class HistoryCommonTest extends OctopusCommonTest {
 
 	 }
 
+	private void setUpMountPoint() 
+	  throws HarnessException
+	{
+ 	   readGranter = getNewAccount();;
+	   readWriteGranter = getNewAccount();;
+	   adminGranter = getNewAccount();;
+
+       readFolder = createFolderViaSoap(readGranter);	 	  	            		
+       readWriteFolder = createFolderViaSoap(readWriteGranter);	 	  	            		
+       adminFolder = createFolderViaSoap(adminGranter);	 	  	            		
+
+	   mountReadFolderName = "mount read " + ZimbraSeleniumProperties.getUniqueString();
+	   mountReadWriteFolderName = "mount read write " + ZimbraSeleniumProperties.getUniqueString();
+	   mountAdminFolderName = "mount admin " + ZimbraSeleniumProperties.getUniqueString();
+
+	   mountFolderViaSoap(readGranter, app.zGetActiveAccount(), readFolder, SHARE_AS_READ, mainFolder, mountReadFolderName);
+	   SleepUtil.sleepSmall();
+	   
+	   mountFolderViaSoap(readWriteGranter, app.zGetActiveAccount(), readWriteFolder, SHARE_AS_READWRITE, mainFolder, mountReadWriteFolderName);
+	   SleepUtil.sleepSmall();
+	   
+	   mountFolderViaSoap(adminGranter, app.zGetActiveAccount(), adminFolder, SHARE_AS_ADMIN, mainFolder, mountAdminFolderName);
+		   
+	   
+	}
+	private void setUpShareRevoke() 
+	   throws HarnessException
+	{
+ 	   readGrantee = getNewAccount();;
+	   readWriteGrantee = getNewAccount();;
+	   adminGrantee = getNewAccount();;
+
+	   // share read|readWrite|admin for the folder with grantees
+	   shareFolderViaSoap(app.zGetActiveAccount(), readGrantee, folder,SHARE_AS_READ);		   
+	   SleepUtil.sleepSmall();
+	   
+	   shareFolderViaSoap(app.zGetActiveAccount(), readWriteGrantee, folder,SHARE_AS_READWRITE);
+	   SleepUtil.sleepSmall();
+	   
+	   shareFolderViaSoap(app.zGetActiveAccount(), adminGrantee, folder, SHARE_AS_ADMIN); 		   
+	   app.zPageOctopus.zRefresh();
+
+	   // revoke sharing the folder with grantees
+	   revokeShareFolderViaSoap(app.zGetActiveAccount(), readGrantee, folder);
+	   SleepUtil.sleepSmall();
+	   
+	   revokeShareFolderViaSoap(app.zGetActiveAccount(), readWriteGrantee, folder);
+	   SleepUtil.sleepSmall();
+	   
+	   revokeShareFolderViaSoap(app.zGetActiveAccount(), adminGrantee, folder); 
+
+	}
 	protected void verifyCheckAction(String locator, String historyText, String... regExpArray) 
 	    throws HarnessException
 	{		

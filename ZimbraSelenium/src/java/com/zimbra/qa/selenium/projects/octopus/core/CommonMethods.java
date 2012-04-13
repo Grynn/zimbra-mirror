@@ -21,6 +21,28 @@ public class CommonMethods {
 			+ "</FolderActionRequest>");
 	}
 
+	
+	// create mountpoint via soap
+	protected void mountFolderViaSoap(ZimbraAccount account, ZimbraAccount grantee, FolderItem folder,
+			  String permission, FolderItem mountPointFolder, String mountPointName) throws HarnessException {
+
+		account.soapSend("<FolderActionRequest xmlns='urn:zimbraMail'>"
+				+ "<action id='" + folder.getId()
+				+ "' op='grant'>" + "<grant d='"
+				+ grantee.EmailAddress + "' gt='usr' perm='" + permission + "'/>"
+				+ "</action>" + "</FolderActionRequest>");
+
+
+
+		grantee.soapSend("<CreateMountpointRequest xmlns='urn:zimbraMail'>"
+						+ "<link l='" + mountPointFolder.getId()
+						+ "' name='" + mountPointName
+						+ "' view='document' rid='" + folder.getId()
+						+ "' zid='" + account.ZimbraId + "'/>"
+						+ "</CreateMountpointRequest>");
+
+		
+	}
 	// share a folder via soap
 	protected void shareFolderViaSoap(ZimbraAccount account, ZimbraAccount grantee, FolderItem folder,
 			  String permission) throws HarnessException {
@@ -41,6 +63,7 @@ public class CommonMethods {
 			+ "<notes _content='share folder invitation'/>"
 			+ "</SendShareNotificationRequest>");
 	}
+
 	// create a new folder via soap
 	protected FolderItem createFolderViaSoap(ZimbraAccount account) throws HarnessException {
 
