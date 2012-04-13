@@ -597,26 +597,14 @@ public class ScheduleViewModel: BaseViewModel
         return retval;
     }
 
-    private string FormatTheLastMsg(string existingMsg, bool isOOOorRules)
-    // A bit of the hack -- take the existing msg, add 1 to the first part
-    // i.e. if it's 13 of 14, make it 14 of 14
-    // if it's Out of Office, just say 1 of 1
+    private string FormatTheLastMsg(MigrationFolder lastFolder, bool isOOOorRules)
+    // FBS 4/13/12 -- rewrite to fix bug 71048
     {
-        string retval = (isOOOorRules) ? "1 of 1" : "";
+        string retval = (isOOOorRules) ? "1 of 1" : ""; // if it's Out of Office or Rules, just say 1 of 1
         if (!isOOOorRules)
         {
-            int len = existingMsg.Length;
-            int idx = existingMsg.IndexOf(" of");
-            if (idx == -1)  // never happen
-            {
-                return retval;
-            }
-            string strNum = existingMsg.Substring(0, idx);
-            int num = Int32.Parse(strNum);
-            num++;
-            strNum = num.ToString();
-            string endOfMsg = existingMsg.Substring(idx, (len - idx));
-            retval = strNum + endOfMsg;
+            string msg = "{0} of {1}";
+            retval = String.Format(msg, lastFolder.CurrentCountOfItems, lastFolder.TotalCountOfItems);
         }
         return retval;
     }
@@ -697,7 +685,7 @@ public class ScheduleViewModel: BaseViewModel
                 string lastmsg = accountResultsViewModel.AccountResultsList[num].UserResultsList[count - 1].UserProgressMsg;
                 int len = lastmsg.Length;
                 bool isOOOorRules = ((MyFolder.FolderView == "OOO") || (MyFolder.FolderView == "All Rules"));
-                accountResultsViewModel.AccountResultsList[num].UserResultsList[count - 1].UserProgressMsg = FormatTheLastMsg(accountResultsViewModel.AccountResultsList[num].AcctProgressMsg, isOOOorRules);
+                accountResultsViewModel.AccountResultsList[num].UserResultsList[count - 1].UserProgressMsg = FormatTheLastMsg(MyFolder, isOOOorRules);
                 accountResultsViewModel.AccountResultsList[num].PBValue = 100;  // to make sure
             }
             else
