@@ -205,7 +205,7 @@ private void verifyUnCheckAction(String locator, String historyText, String... r
 		
 	}
 	
-	@Test(description = "Verify check 'new version' checkbox", groups = { "smoke" })
+	@Test(description = "Verify check 'new version' checkbox", groups = { "skip" })
 	public void RefineCheckNewVersion() throws HarnessException {
 										
 		// verify check action for 'new version' 
