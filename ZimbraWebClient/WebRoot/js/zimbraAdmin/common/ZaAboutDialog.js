@@ -11,7 +11,7 @@ ZaAboutDialog = function(parent, className, w, h) {
     if (arguments.length == 0) return;
     var clsName = className || "DwtBaseDialog AboutScreen";
     DwtBaseDialog.call(this, parent, clsName,  "");
-    w = w || "559px";
+    w = w || "579px";
     h = h || "264px";
     this.setSize(w, h);
     this.addCloseListener();
