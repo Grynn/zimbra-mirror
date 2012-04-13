@@ -45,6 +45,7 @@ import com.zimbra.client.ZMailbox;
 import com.zimbra.common.account.Key;
 import com.zimbra.common.account.Key.AccountBy;
 import com.zimbra.common.account.Key.ShareLocatorBy;
+import com.zimbra.common.account.Key.UCServerBy;
 import com.zimbra.common.account.ProvisioningConstants;
 import com.zimbra.common.auth.ZAuthToken;
 import com.zimbra.common.localconfig.LC;
@@ -72,6 +73,7 @@ import com.zimbra.cs.account.GlobalGrant;
 import com.zimbra.cs.account.IDNUtil;
 import com.zimbra.cs.account.Identity;
 import com.zimbra.cs.account.NamedEntry;
+import com.zimbra.cs.account.UCServer;
 import com.zimbra.cs.account.NamedEntry.Visitor;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.Server;
@@ -2779,6 +2781,25 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 
     @Override
     public void deleteShareLocator(String id) throws ServiceException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public UCServer createUCServer(String name, Map<String, Object> attrs)
+            throws ServiceException {
+        throw new UnsupportedOperationException();    }
+
+    @Override
+    public void deleteUCServer(String zimbraId) throws ServiceException {
+        throw new UnsupportedOperationException();    }
+
+    @Override
+    public UCServer get(UCServerBy keyName, String key) throws ServiceException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public List<UCServer> getAllUCServers() throws ServiceException {
         throw new UnsupportedOperationException();
     }
 }

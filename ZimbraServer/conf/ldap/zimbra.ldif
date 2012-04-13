@@ -121,6 +121,11 @@ dn: cn=servers,cn=zimbra
 objectclass: organizationalRole
 cn: servers
 
+# for storing UC server info
+dn: cn=ucservers,cn=zimbra
+objectclass: organizationalRole
+cn: ucservers
+
 # for storing xmpp component info
 dn: cn=xmppcomponents,cn=zimbra
 objectclass: organizationalRole
