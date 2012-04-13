@@ -1043,8 +1043,14 @@ public abstract class AbsSeleniumObject {
 	 * @throws HarnessException 
 	 */
 	public int sGetCssCount(String css) throws HarnessException {
-		int count = ClientSessionFactory.session().selenium().getCssCount(css)
+		int count = 0;
+		
+		if(ZimbraSeleniumProperties.isWebDriver()){		
+			count = webDriver().findElements(By.cssSelector(getCssLocator(css))).size();
+		}else{		
+			count = ClientSessionFactory.session().selenium().getCssCount(css)
 				.intValue();
+		}
 		logger.info("getCssCount(" + css + ") = " + count);
 		return (count);
 	}
@@ -1131,8 +1137,23 @@ public abstract class AbsSeleniumObject {
 		try {
 
 			logger.info("getAttribute(" + locator + ")");
-			String attrs = ClientSessionFactory.session().selenium()
+			
+			String attrs = "";
+			if (ZimbraSeleniumProperties.isWebDriver()) {
+				String [] elements = locator.split("@");
+				if(elements != null && elements.length > 1){
+					try {
+						WebElement we = getElement(elements[0]);
+						attrs = we.getAttribute(elements[1]);
+					} catch (Exception ex) {
+						logger.error(ex);
+					}								
+				}
+			} else{
+				attrs = ClientSessionFactory.session().selenium()
 					.getAttribute(locator);
+			}
+			
 			logger.info("getAttribute(" + locator + ") = " + attrs);
 			return (attrs);
 
@@ -1926,6 +1947,10 @@ public abstract class AbsSeleniumObject {
 		cssl.setText(text);
 
 		return cssl;
+	}
+	
+	public String getCssLocator(String locator) {
+		return stripCssLocator(locator, "css=", ":contains").getLocator();
 	}
 
 		private WebElement getElement(String locator, String startSuffix,
