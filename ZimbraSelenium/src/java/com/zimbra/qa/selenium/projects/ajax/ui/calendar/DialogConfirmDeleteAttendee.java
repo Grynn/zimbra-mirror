@@ -8,6 +8,7 @@ import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.staf.Stafpostqueue;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
+import com.zimbra.qa.selenium.projects.ajax.ui.calendar.DialogConfirmDeleteRecurringAppointment.Locators;
 
 /**
  * Represents a "Delete Meeting Request" dialog box,
@@ -57,6 +58,40 @@ public class DialogConfirmDeleteAttendee extends DialogWarning {
 			locator = "css=div[id='"+ this.MyDivId +"'] td[id^='TODO'] td[id$='_title']";
 			page = null;
 			waitForPostfix = false;
+
+		} else if (button == Button.B_DELETE_THE_SERIES) {
+
+			//** 
+			// The application can return this dialog
+			// even when the appointment is owned by
+			// the organizer (instead of attendee).  So
+			// handle the organizer-view buttons, too.
+			// Specifically:
+			// Button.B_DELETE_THE_SERIES
+			// Button.B_DELETE_THIS_INSTANCE
+			//**
+			
+			locator = Locators.DeleteTheSeriesRadioButton;
+			page = null;
+
+			sClick(locator);
+			this.zWaitForBusyOverlay();
+			
+			return (page);
+
+		} else if (button == Button.B_DELETE_THIS_INSTANCE) {
+
+			//** 
+			// See note above for Button.B_DELETE_THE_SERIES
+			//**
+			
+			locator = Locators.DeleteThisInstanceRadioButton;
+			page = null;
+
+			sClick(locator);
+			this.zWaitForBusyOverlay();
+			
+			return (page);
 
 		} else {
 			

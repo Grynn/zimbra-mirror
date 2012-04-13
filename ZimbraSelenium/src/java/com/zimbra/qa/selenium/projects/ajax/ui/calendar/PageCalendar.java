@@ -119,7 +119,7 @@ public class PageCalendar extends AbsTab {
 	private String getLocatorBySubject(String subject) throws HarnessException {
 		int count;
 		String locator;
-		
+
 		// Organizer's view
 		locator = "css=td.appt_name:contains('"+ subject +"')";
 		count = this.sGetCssCount(locator);
@@ -127,8 +127,8 @@ public class PageCalendar extends AbsTab {
 			return (locator);
 		} else if ( count > 1 ) {
 			for ( int i = 1; i <= count; i++ ) {
-				if ( this.zIsVisiblePerPosition(locator + ":nth-of-type("+ i +")", 0, 0) ) {
-					return (locator + ":nth-of-type("+ i +")");
+				if ( this.zIsVisiblePerPosition(locator + ":nth-child("+ i +")", 0, 0) ) {
+					return (locator + ":nth-child("+ i +")");
 				}
 			}
 		}
@@ -726,12 +726,9 @@ public class PageCalendar extends AbsTab {
 					return (page);
 				}
 
-				// If page was specified, make sure it is active
-				if (page != null) {
-
-					// This function (default) throws an exception if never active
-					page.zWaitForActive();
-
+				page = new DialogConfirmDeleteRecurringAppointment(MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
+				if ( page.zIsActive() ) {
+					return (page);
 				}
 
 				return (page);
@@ -924,74 +921,109 @@ public class PageCalendar extends AbsTab {
 		String subOptionLocator = null;
 
 		locator = "css=td.appt_name:contains('" + subject + "')";
-		SleepUtil.sleepMedium();
-
+		locator = this.getLocatorBySubject(subject);
+		
 		if (action == Action.A_RIGHTCLICK) {
-			if (option == Button.O_VIEW_MENU) {
-				optionLocator = Locators.ViewMenu;
-
-				if (subOption == Button.O_VIEW_DAY_SUB_MENU) {
-					subOptionLocator = Locators.ViewDaySubMenu;
-
-				} else if (subOption == Button.O_VIEW_WORK_WEEK_SUB_MENU) {
-					subOptionLocator = Locators.ViewWorkWeekSubMenu;
-
-				} else if (subOption == Button.O_VIEW_WEEK_SUB_MENU) {
-					subOptionLocator = Locators.ViewWeekSubMenu;
-
-				} else if (subOption == Button.O_VIEW_MONTH_SUB_MENU) {
-					subOptionLocator = Locators.ViewMonthSubMenu;
-
-				} else if (subOption == Button.O_VIEW_LIST_SUB_MENU) {
-					subOptionLocator = Locators.ViewListSubMenu;
-
-				} else if (option == Button.O_VIEW_SCHEDULE_SUB_MENU) {
-					subOptionLocator = Locators.ViewScheduleSubMenu;
-				}
-
-			} else if (option == Button.O_EDIT_REPLY_MENU) {
-				optionLocator = Locators.EditReplyMenu;
-
-				if (subOption == Button.O_EDIT_REPLY_ACCEPT_SUB_MENU) {
-					subOptionLocator = Locators.EditReplyAcceptSubMenu;
-
-				} else if (subOption == Button.O_EDIT_REPLY_TENTATIVE_SUB_MENU) {
-					subOptionLocator = Locators.EditReplyTentativeSubMenu;
-
-				} else if (subOption == Button.O_EDIT_REPLY_DECLINE_SUB_MENU) {
-					subOptionLocator = Locators.EditReplyDeclineSubMenu;
-				}
-
-			} else if (option == Button.O_TAG_APPOINTMENT_MENU) {
-				optionLocator = Locators.TagAppointmentMenu;
-
-				if (subOption == Button.O_TAG_APPOINTMENT_NEW_TAG_SUB_MENU) {
-					subOptionLocator = Locators.TagAppointmentNewTagSubMenu;
-
-				} else if (subOption == Button.O_TAG_APPOINTMENT_REMOVE_TAG_SUB_MENU) {
-					subOptionLocator = Locators.TagAppointmentRemoveTagSubMenu;
-				}
-			}
-			else {
-				throw new HarnessException("implement action:"+ action +" option:"+ option);
+			
+			if (option == Button.O_SERIES_MENU) {
+				
+				optionLocator = "css=div#VIEW_APPT_SERIES td[id$='_title']";
+				
+			} else if (option == Button.O_INSTANCE_MENU) {
+				
+				optionLocator = "css=div#VIEW_APPT_INSTANCE td[id$='_title']";
+				
 			}
 
-		} else {
-			throw new HarnessException("implement me!  action = "+ action);
+			this.zRightClickAt(locator, "");
+			this.zWaitForBusyOverlay();
+			
+			this.sFocus(optionLocator);
+			this.sMouseOver(optionLocator);
+			this.zWaitForBusyOverlay();
+			
+			// Very complicated popups at this point
+			// Instance and Series will have id='zm__Calendar__DWTXYZ' format.
+			// Determine which is visible
+//			String popupCSS = null;
+//			int count = this.sGetCssCount("css=div[id^='zm__Calendar']");
+//			if ( count < 1 ) {
+//				throw new HarnessException("No popup ever opened!");
+//			}
+//			if (count == 1) {
+//				popupCSS = "css=div[id^='zm__Calendar']";
+//			} else {
+//				for (int i = 1; i <= count; i ++) {
+//					String l = "css=div[id^='zm__Calendar']:nth-child("+ i +")";
+//					if ( this.sIsElementPresent(l) && this.zIsVisiblePerPosition(l, 0, 0) ) {
+//						popupCSS = l;
+//						break;
+//					}
+//				}
+//			}
+//			if ( popupCSS == null ) {
+//				throw new HarnessException("No popup ever opened!");
+//			}
+			
+			if ( subOption == Button.O_DELETE ) {
+				subOptionLocator = "css=td#DELETE_SERIES_title";
+			}
+
+			if ( subOptionLocator == null ) {
+				throw new HarnessException("implement action:"+ action +" option:"+ option +" suboption:" + subOption);
+			}
+			
+			this.zClickAt(subOptionLocator, "");
+			this.zWaitForBusyOverlay();
+
+			// Since we are not going to "wait for active", insert
+			// a small delay to make sure the dialog shows up
+			// before the zIsActive() method is called
+			SleepUtil.sleepMedium();
+
+
+			// If the organizer deletes an appointment, you get "Send Cancellation" dialog
+			page = new DialogConfirmDeleteOrganizer(MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
+			if ( page.zIsActive() ) {
+				return (page);
+			}
+			
+			// If an attendee deletes an appointment, you get a "Confirm Delete / Notify Organizer" dialog
+			page = new DialogConfirmDeleteAttendee(MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
+			if ( page.zIsActive() ) {
+				return (page);
+			}
+
+			// If an organizer deletes an appointment (no attendees), you get a "Confirm Delete" dialog
+			page = new DialogConfirmDeleteAppointment(MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
+			if ( page.zIsActive() ) {
+				return (page);
+			}
+			
+			page = new DialogConfirmDeleteRecurringAppointment(MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
+			if ( page.zIsActive() ) {
+				return (page);
+			}
+
+			// No dialog
+			return (null);
+
+		}
+		
+		if ( locator == null || optionLocator == null || subOptionLocator == null ) {
+			throw new HarnessException("implement action:"+ action +" option:"+ option +" suboption:" + subOption);
 		}
 
-		this.zRightClickAt(locator, "");
-		this.sMouseMoveAt(optionLocator, "");
-		SleepUtil.sleepMedium();
-		this.zClickAt(subOptionLocator, "");
 
+		
+		// TODO: implement me
 		this.zWaitForBusyOverlay();
 
 		if ( page != null ) {
 			page.zWaitForActive();
 		}
 
-		return (new ContextMenu(MyApplication));
+		return (page);
 
 	}
 
@@ -1131,65 +1163,6 @@ public class PageCalendar extends AbsTab {
 		return (page);
 	}
 
-	public AbsPage zCheckRadioButton(Button button) throws HarnessException {
-		logger.info(myPageName() + " zToolbarPressButton(" + button + ")");
-
-		tracer.trace("Check the radio " + button + " button");
-
-		if (button == null)
-			throw new HarnessException("Radio button cannot be null!");
-
-		// Default behavior variables
-		String locator = null; // If set, this will be clicked
-		AbsPage page = null; // If set, this page will be returned
-
-		// Based on the button specified, take the appropriate action(s)
-
-		if (button == Button.B_OPEN_THIS_INSTANCE) {
-			
-			locator = Locators.OpenThisInstanceRadioButton;
-			page = null;
-			
-		} else if (button == Button.B_OPEN_THE_SERIES) {
-			
-			locator = Locators.OpenTheSeriesRadioButton;
-			page = null;
-		
-		} else if (button == Button.B_DELETE_THIS_INSTANCE) {
-			
-			locator = Locators.DeleteThisInstanceRadioButton;
-			page = null;
-			
-		} else if (button == Button.B_DELETE_THE_SERIES) {
-			
-			locator = Locators.DeleteTheSeriesRadioButton;
-			page = null;
-	
-		} else {
-			throw new HarnessException("no logic defined for radio button " + button);
-		}
-
-		if (locator == null) {
-			throw new HarnessException("locator was null for radio button " + button);
-		}
-
-		// Default behavior, process the locator by clicking on it
-		sClick(locator);
-
-		// If the app is busy, wait for it to become active
-		this.zWaitForBusyOverlay();
-
-		// If page was specified, make sure it is active
-		if (page != null) {
-
-			// This function (default) throws an exception if never active
-			page.zWaitForActive();
-
-		}
-
-		return (page);
-	}
-	
 	public AbsPage zKeyboardKeyEvent(int keyEvent) throws HarnessException {
 		AbsPage page = null;
 
@@ -1222,12 +1195,9 @@ public class PageCalendar extends AbsTab {
 				return (page);
 			}
 
-			// If page was specified, make sure it is active
-			if (page != null) {
-
-				// This function (default) throws an exception if never active
-				page.zWaitForActive();
-
+			page = new DialogConfirmDeleteRecurringAppointment(MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
+			if ( page.zIsActive() ) {
+				return (page);
 			}
 
 			return (page);
