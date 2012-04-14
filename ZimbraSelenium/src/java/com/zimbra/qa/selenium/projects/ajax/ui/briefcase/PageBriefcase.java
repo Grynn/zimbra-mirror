@@ -865,22 +865,22 @@ public class PageBriefcase extends AbsTab {
 			zWaitForElementPresent(itemNameLocator);
 
 			String checkBoxLocator = "";
-
+			String itemIndexLocator = "";
 			int count = sGetCssCount(itemLocator);
 
 			for (int i = 1; i <= count; i++) {
-				if (sIsElementPresent(itemLocator + ":nth-child(" + i
-						+ "):contains(" + itemName + ")")) {
-					checkBoxLocator = itemLocator + ":nth-child(" + i
-							+ ") div[class^=ImgCheckbox]";
+				itemIndexLocator = itemLocator + ":nth-child(" + i + ")";
+				if (sIsElementPresent(itemIndexLocator + ":contains(" + itemName + ")")) {
+					checkBoxLocator = itemIndexLocator + " td[id^=zlif__BDLV]>div[class^=ImgCheckbox]";
 					break;
 				}
 			}
 
-			if (!this.sIsElementPresent(checkBoxLocator))
+			if (!this.sIsElementPresent(checkBoxLocator)){							
 				throw new HarnessException("Checkbox locator is not present "
 						+ checkBoxLocator);
-
+			}
+			
 			String image = this.sGetAttribute(checkBoxLocator + "@class");
 
 			if (image.equals("ImgCheckboxChecked"))
