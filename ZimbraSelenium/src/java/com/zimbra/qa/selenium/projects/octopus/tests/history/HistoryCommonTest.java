@@ -13,11 +13,26 @@ import java.util.ArrayList;
 
 public class HistoryCommonTest extends OctopusCommonTest {
 	protected static String fileName=JPG_FILE;
+	protected static String fileInFolderName = PPT_FILE;
+	protected static String fileInSubFolderName = TEXT_FILE;    
+	protected static String fileInReadFolderName = WORD_FILE;
+	protected static String fileInReadWriteFolderName = EXCEL_FILE;
+	protected static String fileInAdminFolderName = LOG_FILE;
+
+
 	protected static String fileId  = null;
+	protected static String fileIdInFolder  = null;
+	protected static String fileIdInSubFolder  = null;
+	protected static String fileIdInReadFolder  = null;
+	protected static String fileIdInReadWriteFolder  = null;
+	protected static String fileIdInAdminFolder  = null;
+
 	protected static String comment = null;
 	protected static String newName = null;
 	protected static FolderItem folder = null; 
 	protected static FolderItem mainFolder = null;
+	protected static FolderItem subFolder = null;
+
 	
 	protected static FolderItem readFolder = null;
 	protected static FolderItem readWriteFolder = null;	
@@ -27,6 +42,8 @@ public class HistoryCommonTest extends OctopusCommonTest {
 	protected static String mountReadWriteFolderName = null;
 	protected static String mountAdminFolderName = null;
 	
+    
+    
 	protected static String[] checkboxes = {
 		PageHistory.Locators.zHistoryFilterAllTypes.locator,
 		PageHistory.Locators.zHistoryFilterFavorites.locator,
@@ -122,7 +139,22 @@ public class HistoryCommonTest extends OctopusCommonTest {
 		   renameViaSoap(app.zGetActiveAccount(), fileId, newName);
 		   SleepUtil.sleepSmall();
 		   
-		   //shere revoke
+		   //create the sub folder
+		   subFolder = createFolderViaSoap(app.zGetActiveAccount(),folder);	 	  	            		
+		   SleepUtil.sleepSmall();
+	           	   
+		   //upload file to subfolder
+		   fileIdInSubFolder=uploadFileViaSoap(app.zGetActiveAccount(),fileInSubFolderName,subFolder);    	 	  	
+		   SleepUtil.sleepSmall();
+	           
+		      	   
+		   //upload file to folder
+		   fileIdInFolder =uploadFileViaSoap(app.zGetActiveAccount(),fileInFolderName, folder);    	 	  	
+		   SleepUtil.sleepSmall();
+		   
+		
+
+		   //share revoke
 		   setUpShareRevoke();
 		   
 		   //setup mount point
@@ -164,6 +196,27 @@ public class HistoryCommonTest extends OctopusCommonTest {
 	   SleepUtil.sleepSmall();
 	   
 	   mountFolderViaSoap(adminGranter, app.zGetActiveAccount(), adminFolder, SHARE_AS_ADMIN, mainFolder, mountAdminFolderName);
+	   SleepUtil.sleepSmall();
+	   
+	   
+	   //upload file to read folder		      
+	   fileIdInReadFolder = uploadFileViaSoap(readGranter,fileInReadFolderName, 
+			             FolderItem.importFromSOAP(readGranter,readFolder.getName()));    	 	  	
+	   SleepUtil.sleepSmall();
+	  
+	   
+	   //upload file to read write folder		      
+	   fileIdInReadWriteFolder = uploadFileViaSoap(app.zGetActiveAccount(),fileInReadWriteFolderName, 
+			                 FolderMountpointItem.importFromSOAP(app.zGetActiveAccount(),mountReadWriteFolderName));    	 	  	
+	   SleepUtil.sleepSmall();
+	  
+	   
+	  //upload file to Admin folder		      		   
+	   fileIdInAdminFolder = uploadFileViaSoap(app.zGetActiveAccount(),fileInAdminFolderName, 
+			             FolderMountpointItem.importFromSOAP(app.zGetActiveAccount(),mountAdminFolderName));    	 	  	
+	   SleepUtil.sleepSmall();
+	   
+
 	   app.zPageOctopus.zRefresh();   
 	   
 	}
