@@ -103,7 +103,7 @@ public class DialogAddVersionNotes extends AbsDialog {
 		String locator = "css=div[class=" + Locators.zDialogContentClassId
 				+ "] textarea[id$='notes']";
 
-		if (!this.sIsElementPresent(locator))
+		if (!this.zWaitForElementPresent(locator,"10000"))
 			throw new HarnessException("unable to find body field " + locator);
 
 		this.sFocus(locator);

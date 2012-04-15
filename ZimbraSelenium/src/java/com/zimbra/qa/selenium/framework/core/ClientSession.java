@@ -125,9 +125,8 @@ public class ClientSession {
 				profile.setEnableNativeEvents(false);
 				webDriver = new FirefoxDriver(profile);
 				//webDriver = new FirefoxDriver();					
-			} else {
+			} else if(ZimbraSeleniumProperties.getStringProperty("browser").contains("remoteff")){
 				try {
-					//DesiredCapabilities desiredCapabilities = DesiredCapabilities.firefox();
 					DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
 					desiredCapabilities.setBrowserName(DesiredCapabilities.firefox().getBrowserName());
 					FirefoxProfile fp = new FirefoxProfile();
@@ -135,11 +134,34 @@ public class ClientSession {
 					desiredCapabilities.setCapability(PROFILE,fp);
 					desiredCapabilities.setJavascriptEnabled(true);
 					webDriver = new RemoteWebDriver(new URL(String.format("http://localhost:%d/wd/hub", 4444)), desiredCapabilities);
-					} catch (Exception ex) {
+				} catch (Exception ex) {
+					logger.error(ex);
+				}
+			}else if(ZimbraSeleniumProperties.getStringProperty("browser").contains("remotechrome")){
+				try {
+					DesiredCapabilities desiredCapabilities = DesiredCapabilities.chrome();
+					desiredCapabilities.setJavascriptEnabled(true);
+					webDriver = new RemoteWebDriver(new URL(String.format("http://localhost:%d/wd/hub", 4444)), desiredCapabilities);
+				} catch (Exception ex) {
+						logger.error(ex);					
+				}					
+			}else if(ZimbraSeleniumProperties.getStringProperty("browser").contains("remoteie")){
+				try {
+					DesiredCapabilities desiredCapabilities = DesiredCapabilities.internetExplorer();
+					desiredCapabilities.setJavascriptEnabled(true);
+					webDriver = new RemoteWebDriver(new URL(String.format("http://localhost:%d/wd/hub", 4444)), desiredCapabilities);
+				} catch (Exception ex) {
 					logger.error(ex);					
-				}				
-			}			
-		}
+				}					
+			}else{
+				// default FirefoxDriver
+				FirefoxProfile profile = new FirefoxProfile();
+				profile.setEnableNativeEvents(false);
+				profile.setPreference("javascript.enabled", true);
+				webDriver = new FirefoxDriver(profile);
+			}
+		}	
+		
 		return webDriver;
 	}	
 	

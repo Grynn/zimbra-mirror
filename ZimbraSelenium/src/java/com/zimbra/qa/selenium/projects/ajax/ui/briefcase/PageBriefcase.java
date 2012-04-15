@@ -883,13 +883,12 @@ public class PageBriefcase extends AbsTab {
 			
 			String image = this.sGetAttribute(checkBoxLocator + "@class");
 
-			if (image.equals("ImgCheckboxChecked"))
-				throw new HarnessException(
-						"Trying to check box, but it was already enabled");
-
-			// Left-Click on the Check box field
-			this.zClickAt(checkBoxLocator, "0,0");
-
+			if (!image.equals("ImgCheckboxChecked")){
+				// Left-Click on the Check box field
+				this.zClickAt(checkBoxLocator, "0,0");
+			}else{
+				logger.error("Trying to mark check box, but it was already enabled");
+			}
 			// No page to return
 			page = null;
 
