@@ -5,10 +5,10 @@ import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.items.AppointmentItem;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.core.CalendarWorkWeekTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew;
 
-public class CreateAppointment extends AjaxCommonTest {
+public class CreateAppointment extends CalendarWorkWeekTest {
 
 	public CreateAppointment() {
 		logger.info("New "+ CreateAppointment.class.getCanonicalName());
@@ -29,7 +29,7 @@ public class CreateAppointment extends AjaxCommonTest {
 		
 		// Create appointment
 		AppointmentItem appt = new AppointmentItem();
-		Calendar now = Calendar.getInstance();
+		Calendar now = this.calendarWeekDayUTC;
 		appt.setSubject("appointment" + ZimbraSeleniumProperties.getUniqueString());
 		appt.setContent("content" + ZimbraSeleniumProperties.getUniqueString());
 		appt.setStartTime(new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 12, 0, 0));
@@ -63,7 +63,7 @@ public class CreateAppointment extends AjaxCommonTest {
 		AppointmentItem appt = new AppointmentItem();
 		
 		String apptSubject, apptAttendee1, apptOptional1, apptLocation1, apptEquipment1, apptContent;
-		Calendar now = Calendar.getInstance();
+		Calendar now = this.calendarWeekDayUTC;
 		apptSubject = ZimbraSeleniumProperties.getUniqueString();
 		apptAttendee1 = ZimbraAccount.AccountA().EmailAddress;
 		apptOptional1 = ZimbraAccount.AccountB().EmailAddress;

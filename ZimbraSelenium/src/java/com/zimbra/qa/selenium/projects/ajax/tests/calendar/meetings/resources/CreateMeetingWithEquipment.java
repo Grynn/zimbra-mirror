@@ -8,10 +8,10 @@ import com.zimbra.qa.selenium.framework.items.AppointmentItem;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.core.CalendarWorkWeekTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew;
 
-public class CreateMeetingWithEquipment extends AjaxCommonTest {
+public class CreateMeetingWithEquipment extends CalendarWorkWeekTest {
 
 	public CreateMeetingWithEquipment() {
 		logger.info("New "+ CreateMeetingWithEquipment.class.getCanonicalName());
@@ -27,7 +27,7 @@ public class CreateMeetingWithEquipment extends AjaxCommonTest {
 		
 		// Create appointment data
 		AppointmentItem appt = new AppointmentItem();
-		Calendar now = Calendar.getInstance();
+		Calendar now = this.calendarWeekDayUTC;
 		ZimbraResource equipment1 = new ZimbraResource(ZimbraResource.Type.EQUIPMENT);
 		
 		String apptSubject, apptAttendee1, apptEquipment1, apptContent;

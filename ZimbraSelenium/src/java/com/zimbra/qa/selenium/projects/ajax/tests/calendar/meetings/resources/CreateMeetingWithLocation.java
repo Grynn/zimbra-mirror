@@ -8,10 +8,10 @@ import com.zimbra.qa.selenium.framework.items.AppointmentItem;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.core.CalendarWorkWeekTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew;
 
-public class CreateMeetingWithLocation extends AjaxCommonTest {
+public class CreateMeetingWithLocation extends CalendarWorkWeekTest {
 
 	public CreateMeetingWithLocation() {
 		logger.info("New "+ CreateMeetingWithLocation.class.getCanonicalName());
@@ -30,7 +30,7 @@ public class CreateMeetingWithLocation extends AjaxCommonTest {
 		ZimbraResource location = new ZimbraResource(ZimbraResource.Type.LOCATION);
 		
 		String apptSubject, apptAttendee1, apptLocation1, apptContent;
-		Calendar now = Calendar.getInstance();
+		Calendar now = this.calendarWeekDayUTC;
 		apptSubject = ZimbraSeleniumProperties.getUniqueString();
 		apptAttendee1 = ZimbraAccount.AccountA().EmailAddress;
 		apptLocation1 = location.EmailAddress;
@@ -80,7 +80,7 @@ public class CreateMeetingWithLocation extends AjaxCommonTest {
 		ZimbraResource location2 = new ZimbraResource(ZimbraResource.Type.LOCATION);		
 		
 		String apptSubject, apptAttendee1, apptLocation, apptContent;
-		Calendar now = Calendar.getInstance();
+		Calendar now = this.calendarWeekDayUTC;
 		apptSubject = ZimbraSeleniumProperties.getUniqueString();
 		apptAttendee1 = ZimbraAccount.AccountA().EmailAddress;
 		apptLocation = location1.EmailAddress + " " + location2.EmailAddress;
@@ -127,7 +127,7 @@ public class CreateMeetingWithLocation extends AjaxCommonTest {
 		AppointmentItem appt = new AppointmentItem();
 		
 		String apptSubject, apptAttendee1, apptLocation, apptContent;
-		Calendar now = Calendar.getInstance();
+		Calendar now = this.calendarWeekDayUTC;
 		apptSubject = ZimbraSeleniumProperties.getUniqueString();
 		apptAttendee1 = ZimbraAccount.AccountA().EmailAddress;
 		apptLocation = ZimbraSeleniumProperties.getUniqueString() + " " + ZimbraSeleniumProperties.getUniqueString();

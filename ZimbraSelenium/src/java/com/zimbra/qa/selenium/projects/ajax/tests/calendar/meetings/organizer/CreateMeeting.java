@@ -5,10 +5,10 @@ import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.items.AppointmentItem;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.core.CalendarWorkWeekTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew;
 
-public class CreateMeeting extends AjaxCommonTest {
+public class CreateMeeting extends CalendarWorkWeekTest {
 
 	public CreateMeeting() {
 		logger.info("New "+ CreateMeeting.class.getCanonicalName());
@@ -25,7 +25,7 @@ public class CreateMeeting extends AjaxCommonTest {
 		AppointmentItem appt = new AppointmentItem();
 		
 		String apptSubject, apptAttendee1, apptContent;
-		Calendar now = Calendar.getInstance();
+		Calendar now = this.calendarWeekDayUTC;
 		apptSubject = ZimbraSeleniumProperties.getUniqueString();
 		apptAttendee1 = ZimbraAccount.AccountA().EmailAddress;
 		apptContent = ZimbraSeleniumProperties.getUniqueString();
@@ -58,7 +58,7 @@ public class CreateMeeting extends AjaxCommonTest {
 		AppointmentItem appt = new AppointmentItem();
 		
 		String apptSubject, apptAttendee1, apptOptional1, apptContent;
-		Calendar now = Calendar.getInstance();
+		Calendar now = this.calendarWeekDayUTC;
 		apptSubject = ZimbraSeleniumProperties.getUniqueString();
 		apptAttendee1 = ZimbraAccount.AccountA().EmailAddress;
 		apptOptional1 = ZimbraAccount.AccountB().EmailAddress;
