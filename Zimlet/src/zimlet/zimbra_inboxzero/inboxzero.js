@@ -160,7 +160,12 @@ InboxZero.prototype.onSendMsgSuccess = function(controller, msg) {
 };
 
 InboxZero.prototype.onSaveApptSuccess = function(controller, calItem, result) {
-//    console.log("onSaveApptSuccess: ",arguments);
+    // bug 72822, only archive the original mail when the task is saved
+    var msg = calItem._relatedMsg;
+    if (msg) {
+        this._archive(msg, null);
+        calItem._relatedMsg = null;
+    }
 };
 
 //
@@ -253,19 +258,11 @@ InboxZero.prototype._delete = function(msg, callback) {
 };
 
 InboxZero.prototype._do = function(msg, callback) {
-    var doCallback = new AjxCallback(this, this._doWithPrefix, ["", msg, callback]);
-    this._archive(msg, doCallback);
-};
-
-InboxZero.prototype._doWithPrefix = function(prefix, msg, callback) {
-    // NOTE: This won't help in this case because the new task won't have
-    // NOTE: any relationship to the original message.
-//    this._msgResponseMap[msg.id] = { msg:msg, callback:callback };
-
     AjxDispatcher.require(["TasksCore", "Tasks"]);
     var task = new ZmTask();
     task.setEndDate(AjxDateUtil.roundTimeMins(new Date, 30));
-    task.setFromMailMessage(msg, prefix+msg.subject);
+    task.setFromMailMessage(msg, msg.subject);
+    task._relatedMsg = msg;
     appCtxt.getApp(ZmApp.TASKS).getTaskController().show(task, ZmCalItem.MODE_NEW, true);
 };
 
