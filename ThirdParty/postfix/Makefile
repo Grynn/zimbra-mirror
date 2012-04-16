@@ -9,8 +9,10 @@ BUILD_PLATFORM ?= $(shell sh $(P4_ROOT)/ZimbraBuild/rpmconf/Build/get_plat_tag.s
 
 ZIMBRA_HOME ?= /opt/zimbra
 
+PATCH	:=
 ifdef BETA
 	include $(POSTFIX_ROOT)/../beta_versions.def
+	PATCH	:= patch -g0 -p0 < ../../patches/postconf-X.patch;
 else
 	include $(POSTFIX_ROOT)/../versions.def
 endif
@@ -23,13 +25,13 @@ ifdef OCTOPUS
 	DBFLAG	:= -DNO_DB
 	POSTFIX_TGZ_TARGET := \
 	$(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/postfix/postfix-octopus-$(POSTFIX_VERSION).tgz
-	PATCH	:= patch -g0 -p1 < ../patches/postfix-no-bdb.patch;
+	BDB_PATCH	:= patch -g0 -p1 < ../patches/postfix-no-bdb.patch;
 else
 	DBINC := -I/opt/zimbra/bdb-$(BDB_VERSION)/include
 	DBLIB := -L/opt/zimbra/bdb-$(BDB_VERSION)/lib -ldb
 	POSTFIX_TGZ_TARGET := \
 	$(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/postfix/postfix-$(POSTFIX_VERSION).tgz
-	PATCH	:= patch -g0 -p1 < ../patches/postfix-zimbra-bdb.patch;
+	BDB_PATCH	:= patch -g0 -p1 < ../patches/postfix-zimbra-bdb.patch;
 endif
 
 PCRE_DEF := -DHAS_PCRE
@@ -115,6 +117,7 @@ ifeq ($(BUILD_PLATFORM), MACOSXx86_10.6)
 endif
 	(mv postfix-$(POSTFIX_RELEASE) postfix-$(POSTFIX_VERSION); \
 	cd postfix-$(POSTFIX_VERSION); \
+	$(BDB_PATCH) \
 	$(PATCH) \
 	patch -g0 -p1 < ../patches/postfix-main-cf-zimbra.patch; \
 	$(MAKE) $(MAKEARGS)  makefiles \
