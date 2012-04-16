@@ -792,14 +792,16 @@ TD.gridGroupBodyLabel {
 
 .rootOverviewHeader, 
 .rootOverviewHeader-selected, 
-.rootOverviewHeader-selected-focused {
+.rootOverviewHeader-selected-focused,
+.rootOverviewHeader-actioned {
 	background-color:#2B5480;
 	padding:2px 0 3px 5px;
 }
 
 .homeRootOverviewHeader, 
 .homeRootOverviewHeader-selected, 
-.homeRootOverviewHeader-selected-focused {
+.homeRootOverviewHeader-selected-focused,
+.homeRootOverviewHeader-actioned {
 	background-color:#C1DFFE;
 	padding:2px 0 3px 5px;
 }
