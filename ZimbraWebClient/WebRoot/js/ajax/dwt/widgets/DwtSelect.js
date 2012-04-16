@@ -607,7 +607,8 @@ function() {
             mi = new DwtMenuItem({parent:menu, style:DwtMenuItem.SEPARATOR_STYLE});
             mi.setEnabled(false);
         } else {
-            var mi = new DwtSelectMenuItem(menu, Dwt.getNextId(option._value + "_"));
+			var optionValue = option._value || "";
+            var mi = new DwtSelectMenuItem(menu, Dwt.getNextId(optionValue.toUpperCase() + "_"));
             var image = option.getImage();
             if (image) {
                 mi.setImage(image);
