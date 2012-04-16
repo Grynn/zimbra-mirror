@@ -751,7 +751,7 @@ if(appNewUI) {
     var case1 = {type:_ZATABCASE_, caseKey:tabIx,numCols:1,paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0) 
             };
     var case1Items = [
-		{type:_ZA_TOP_GROUPER_, width:"100%", numCols:2,colSizes: ["275px","auto"],
+		{type:_ZA_TOP_GROUPER_, label:ZaMsg.TABT_GeneralPage, width:"100%", numCols:2,colSizes: ["275px","auto"],
 			items:[
                 { type: _DWT_ALERT_,
                     visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A_zimbraDomainStatus,ZaDomain.DOMAIN_STATUS_SHUTDOWN]],
@@ -1049,7 +1049,7 @@ if(appNewUI) {
     var case2 = {type:_ZATABCASE_, caseKey:tabIx,numCols:1, paddingStyle:(appNewUI? "padding-left:15px;":null),
             width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0)};
     var case2Items = [
-		{type:_ZA_TOP_GROUPER_, numCols:2,colSizes: ["275px","auto"],
+		{type:_ZA_TOP_GROUPER_, label:ZaMsg.Domain_GAL_Configuration, numCols:2,colSizes: ["275px","auto"],
 			items:[
 				{ type: _DWT_ALERT_,
 					visibilityChangeEventSources:[ZaDomain.A_zimbraDomainStatus],

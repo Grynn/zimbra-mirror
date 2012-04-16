@@ -771,7 +771,7 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject, entry) {
         var case2={type:_ZATABCASE_, numCols:1, caseKey:_tab2,
              paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),
             items: [
-                {type:_ZA_TOP_GROUPER_, items:[
+                {type:_ZA_TOP_GROUPER_, label:ZaMsg.NAD_ContactInfo, items:[
                     {ref:ZaResource.A_zimbraCalResContactName, type:_TEXTFIELD_, msgName:ZaMsg.NAD_ContactName,label:ZaMsg.NAD_ContactName, labelLocation:_LEFT_, width:defaultWidth},
                     {ref:ZaResource.A_zimbraCalResContactEmail, type:_TEXTFIELD_, msgName:ZaMsg.NAD_ContactEmail,label:ZaMsg.NAD_ContactEmail, labelLocation:_LEFT_, width:defaultWidth},
                     {ref:ZaResource.A_zimbraCalResContactPhone, type:_TEXTFIELD_, msgName:ZaMsg.NAD_ContactPhone,label:ZaMsg.NAD_ContactPhone, labelLocation:_LEFT_, width:defaultWidth},
@@ -783,7 +783,7 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject, entry) {
                     }
 
                 ]},
-                {type:_ZA_TOP_GROUPER_,colSizes:["275px","*"],numCols:2, items:[
+                {type:_ZA_TOP_GROUPER_, label:ZaMsg.NAD_LocationInfo, colSizes:["275px","*"],numCols:2, items:[
                     {type:_GROUP_, numCols:3,colSizes:["156px","22px","100px"], nowrap:true, msgName:ZaMsg.NAD_LocationDisplayName, label:ZaMsg.NAD_LocationDisplayName, labelLocation:_LEFT_,
                         items: [
                             {ref:ZaResource.A_locationDisplayName, type:_TEXTFIELD_, label:null, cssClass:"admin_xform_name_input", width:defaultWidth,
@@ -822,7 +822,7 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject, entry) {
                         visibilityChangeEventSources:[ZaResource.A_zimbraCalResType]
                     }
                 ]},
-                {type:_ZA_TOP_GROUPER_, items:ZaAccountXFormView.getAddressFormItem()
+                {type:_ZA_TOP_GROUPER_, label:ZaMsg.NAD_Address, items:ZaAccountXFormView.getAddressFormItem()
                  }
             ]
         };

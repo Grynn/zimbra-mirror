@@ -381,7 +381,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
     };
 
     var case1Items = [
-		{type:_ZA_TOP_GROUPER_, numCols:2,colSizes: ["275px","auto"],
+		{type:_ZA_TOP_GROUPER_, label:ZaMsg.TABT_GeneralPage, numCols:2,colSizes: ["275px","auto"],
 			items:[
 				{ref:ZaCos.A_name, type:_INPUT_,
 					enableDisableChecks:[[ZaItem.hasRight,ZaCos.RENAME_COS_RIGHT]],
