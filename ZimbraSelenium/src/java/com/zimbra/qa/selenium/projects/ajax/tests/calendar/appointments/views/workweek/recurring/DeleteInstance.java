@@ -169,7 +169,7 @@ public class DeleteInstance extends CalendarWorkWeekTest {
 		
         app.zPageCalendar.zListItem(Action.A_LEFTCLICK, apptSubject);
         
-        DialogWarning dialogSeriesOrInstance = (DialogWarning)app.zPageCalendar.zListItem(Action.A_RIGHTCLICK, Button.O_DELETE_MENU, apptSubject);
+        DialogWarning dialogSeriesOrInstance = (DialogWarning)app.zPageCalendar.zListItem(Action.A_RIGHTCLICK, Button.O_DELETE, apptSubject);
         dialogSeriesOrInstance.zClickButton(Button.B_DELETE_THIS_INSTANCE);
         DialogWarning confirmDelete = (DialogWarning)dialogSeriesOrInstance.zClickButton(Button.B_OK);
         confirmDelete.zClickButton(Button.B_YES);

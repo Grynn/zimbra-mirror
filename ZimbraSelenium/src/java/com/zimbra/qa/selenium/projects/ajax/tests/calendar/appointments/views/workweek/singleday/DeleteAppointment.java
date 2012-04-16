@@ -103,7 +103,7 @@ public class DeleteAppointment extends CalendarWorkWeekTest {
         
         // Right click to appointment and delete it
         app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
-        DialogConfirmDeleteAppointment dlgConfirm = (DialogConfirmDeleteAppointment)app.zPageCalendar.zListItem(Action.A_RIGHTCLICK, Button.O_DELETE_MENU, apptSubject);
+        DialogConfirmDeleteAppointment dlgConfirm = (DialogConfirmDeleteAppointment)app.zPageCalendar.zListItem(Action.A_RIGHTCLICK, Button.O_DELETE, apptSubject);
 		dlgConfirm.zClickButton(Button.B_YES);
 		dlgConfirm.zWaitForClose();
 		ZAssert.assertEquals(app.zPageCalendar.sIsElementPresent(app.zPageCalendar.zGetApptLocator(apptSubject)), false, "Verify appointment is deleted");
