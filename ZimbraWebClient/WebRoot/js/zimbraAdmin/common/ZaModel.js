@@ -34,6 +34,15 @@ ZaModel.getBooleanChoices2 = function () {
 }
 ZaModel.BOOLEAN_CHOICES2= ZaModel.getBooleanChoices2 ;
 
+ZaModel.getAllowChoices = function () {
+	return [{value:"1", label: ZaMsg.Yes},
+            {value:"0", label: ZaMsg.No},
+            {value:"-1", label: ZaMsg.Ignored},
+            {value: null, label: ZaMsg.No}];  
+}
+
+ZaModel.ALLOW_CHOICES = ZaModel.getAllowChoices;
+
 
 ZaModel.FONT_SIZE_CHOICES = [
 	{value:"8pt", label: "8pt"},

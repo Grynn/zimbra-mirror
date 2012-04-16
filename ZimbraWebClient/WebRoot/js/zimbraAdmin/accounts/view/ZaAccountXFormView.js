@@ -119,6 +119,18 @@ function(entry) {
 	if(entry.id)
 		this._containedObject.id = entry.id;
 	
+	for (var a in entry.attrs) {
+        var modelItem = this._localXForm.getModel().getItem(a) ;
+        if ((modelItem != null && modelItem.type == _LIST_)
+           || (entry.attrs[a] != null && entry.attrs[a] instanceof Array)) 
+        {  //need deep clone
+            this._containedObject.attrs [a] =
+                    ZaItem.deepCloneListItem (entry.attrs[a]);
+        } else {
+            this._containedObject.attrs[a] = entry.attrs[a];
+        }
+     }
+	
 	//add the member group, need a deep clone
 //	this._containedObject[ZaAccount.A2_memberOf] = entry [ZaAccount.A2_memberOf];
 //    this._containedObject[ZaAccount.A2_memberOf] = {};
