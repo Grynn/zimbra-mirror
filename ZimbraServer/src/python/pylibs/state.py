@@ -740,6 +740,18 @@ class State:
 	#  SERVER:key - use command gs with zimbra_server_hostname, get value of key
 	#
 
+	def xformConfigVariable(self, match):
+		sr = match.group(1)
+		val = None
+		val = self.lookUpConfig("VAR", sr)
+		if val is None:
+			val = self.lookUpConfig("LOCAL", sr)
+
+		# Requires a string return for re.sub()
+		if val is None:
+			val = ""
+		return str(val)
+
 	def xformConfig(self, match):
 		sr = match.group(1)
 		val = None
@@ -898,6 +910,17 @@ class State:
 
 	def transform(self, line):
 		line = re.sub(r"@@([^@]+)@@", self.xformLocalConfig, line)
+
+		# If the line begins and ends with %%, then we are asking a special action be done
+		# Howewver, before we do that action, we need to do variable substitution in the line
+		# and then evaluate the action
+		line = line.rstrip()
+		if(line.startswith("%%") and line.endswith("%%")):
+			line = line.strip("%%")
+			line = re.sub(r"%%([^%]+)%%", self.xformConfigVariable, line)
+			line = line + "%%"
+			line = "%%" + line
+		line = line + '\n'
 		line = re.sub(r"%%([^%]+)%%", self.xformConfig, line)
 		return line
 
