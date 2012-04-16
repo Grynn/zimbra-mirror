@@ -62,7 +62,7 @@ public class PageAddressbook extends AbsTab {
 	public static class CONTEXT_SUB_MENU {
 				
 		public static final ContextMenuItem CONTACT_SUB_NEW_TAG = new ContextMenuItem("div#contacts_newtag","New Tag","div[class='ImgNewTag']",":contains('nt')");
-		public static final ContextMenuItem CONTACT_SUB_REMOVE_TAG = new ContextMenuItem("div[id^=contacts_removetag]","Remove Tag","div[class='ImgDeleteTag']","");
+		public static final ContextMenuItem CONTACT_SUB_REMOVE_TAG = new ContextMenuItem("div[id=^contacts_removetag]","Remove Tag","div[class='ImgDeleteTag']","");
 		//public static final ContextMenuItem CONTACT_SUB_REMOVE_TAG = new ContextMenuItem("td#zmi__Contacts__TAG_MENU|MENU|REMOVETAG_title","Remove Tag","div[class='ImgDeleteTag']","");
 
 		
@@ -764,7 +764,7 @@ public class PageAddressbook extends AbsTab {
 			 pulldownLocator = "css=td#zb__CNS-main__TAG_MENU_dropdown div.ImgSelectPullDownArrow";
 			
 			 if (option == Button.O_TAG_REMOVETAG) {
-				  optionLocator = "css=div[id='zb__CNS-main__TAG_MENU|MENU'] div[id='contacts_removetag'] td[id='contacts_removetag_title']"; 
+				  optionLocator = "css=div[id='zb__CNS-main__TAG_MENU|MENU'] div[id^='contacts_removetag'] td[id^='contacts_removetag'][id$=_title]"; 
 					
 				
 			 }	  
@@ -796,17 +796,16 @@ public class PageAddressbook extends AbsTab {
 				   zWaitForBusyOverlay();
 				   
 				   if (item instanceof TagItem) {
-					   String tagName="";
 					   
 					   if (item == TagItem.Remove_All_Tags) {
-						  tagName = "All Tags"; // DWT291_dropdown ‌·[u]?
+						   subOptionLocator = "css=div[id=REMOVE_TAG_MENU][style*=z-index: 500;] div[id=REMOVE_ALL_TAGS]";						  
 					   }
 					   else {						   
-						  tagName = ((TagItem) item).getName();
+						   subOptionLocator = "css=div[id=REMOVE_TAG_MENU][style*=z-index: 500;] td[id=^Remove_tag_][id$=_title]:contains('" +  ((TagItem) item).getName() + "')";														    							
 					   }  
 						  
 						// find active menu id
-						  
+						/*  
 					   //get number of z_shell's children
 					   int countOption= Integer.parseInt(sGetEval("window.document.getElementById('z_shell').children.length"));
 					   String parentMenuid= null;
@@ -820,17 +819,17 @@ public class PageAddressbook extends AbsTab {
 								 subOptionLocator = "css=div#" + parentMenuid + " td[id$=title]:contains(" + tagName + ")";
 								 break;
 						   }
-					   }					          				     
+					   }	*/				          				     
 				   }
 				   
 				   if (subOptionLocator != null) {
 					   // Make sure the locator exists and visible
 						zWaitForElementPresent(subOptionLocator);
 						
-						if (zIsVisiblePerPosition(subOptionLocator,0,0)) {
+						//if (zIsVisiblePerPosition(subOptionLocator,0,0)) {
 						   zClick(subOptionLocator);
 						   zWaitForBusyOverlay();
-						}	   					   
+						//}	   					   
 				   }
 				}				
 			}
@@ -1119,11 +1118,11 @@ public class PageAddressbook extends AbsTab {
 			zWaitForElementPresent(locator) ;
 			
 			// make sure the sub context menu enabled			
-			zWaitForElementEnabled(locator);
+			//zWaitForElementEnabled(locator);
 			
         } 
 		
-        ExecuteHarnessMain.ResultListener.captureScreen();
+        //ExecuteHarnessMain.ResultListener.captureScreen();
    
     
     	//else {
@@ -1131,7 +1130,7 @@ public class PageAddressbook extends AbsTab {
             sMouseOver(locator);
             //jClick(locator);
             //zClickAt(locator, "0,0");
-            sClickAt(locator, "0,0");
+             sClickAt(locator, "0,0");
      	//}
        zWaitForBusyOverlay();
 		
@@ -1196,40 +1195,30 @@ public class PageAddressbook extends AbsTab {
 				    //find the parent id
 				    
 				    //reset locator
-				    locator =null;
+				    //locator =null;
 				    
 				    //get number of z_shell's children
-					int countOption= Integer.parseInt(sGetEval("window.document.getElementById('z_shell').children.length"));
+					//int countOption= Integer.parseInt(sGetEval("window.document.getElementById('z_shell').children.length"));
 							
-					//find id of the active menu
-					for (int i=countOption-1; i>0;  i--) {
-						 id= sGetEval("window.document.getElementById('z_shell').children[" + i + "].id");
-				     
-						 if (id.startsWith("DWT") 					
-							 && sGetEval("window.document.getElementById('" + id + "').getAttribute('class')").contains("ActionMenu ZHasIcon")) {
-							 	if (sIsVisible(id)){
-							 		//locator="css=div#" + id + " td[id^=DWT][id$=_title]:contains('" + tagName + "')";	
-							 		locator="css=div#" + id + " td.ZWidgetTitle:contains('" + tagName + "')";	
-							 
-							 	break;
-							 }
-						 }
-					}		
-			        
+				    if (tagName.equals("All Tags")) {					
+				    	locator = "css=div[id=REMOVE_TAG_MENU][style*=z-index: 500;] div[id=REMOVE_ALL_TAGS]";;
+				    }
+				    else {
+				    	locator = "css=div[id=REMOVE_TAG_MENU][style*=z-index: 500;] td[id=^Remove_tag_][id$=_title]:contains('" + tagName + "')";														    
+				    }
 						
-				    if (locator != null) {
 				    
-				    	//  Make sure the sub context menu exists			
-				    	zWaitForElementPresent(locator) ;
+				    //  Make sure the sub context menu exists			
+				    zWaitForElementPresent(locator) ;
 			
-				    	// 	make sure the sub context menu enabled			
-				    	zWaitForElementEnabled(locator);
+				    // 	make sure the sub context menu enabled			
+				    //zWaitForElementEnabled(locator);
 					
-				    	// select the tag name
-				    	zClick(locator);
+				    // select the tag name
+				    zClick(locator);
 				    				     	
-				    	zWaitForBusyOverlay();
-				    }	
+				    zWaitForBusyOverlay();
+				    	
 				}
 			}     		       		
 	    }
