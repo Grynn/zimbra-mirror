@@ -37,6 +37,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ZimbraMime", "..\ZimbraMAPI\vcproj\ZimbraMime.vcxproj", "{A541A6A1-5677-4504-8D2D-1FB7F3F85585}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Zimbra", "..\ZimbraMAPI\vcproj\ZimbraRpc.vcxproj", "{3391699B-1204-4098-8697-2E43800AABE4}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0BA08DC3-4B25-491D-91DD-CE07979332CE} = {0BA08DC3-4B25-491D-91DD-CE07979332CE}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Exchange", "src\c\Exchange\Exchange.vcxproj", "{76F01C7C-953B-4A0F-92D4-F3FBF50C6D71}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -54,6 +57,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZimbraMigrationConsole", "src\c\ZimbraMigrationConsole\ZimbraMigrationConsole.csproj", "{DEBF5F38-2B24-4958-9895-A201E3C133BC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GroupWise", "src\c\GroupWise\GroupWise.csproj", "{1E39385E-ED50-4230-CBF8-49AE7E224FFA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "libicalvcard", "..\ZimbraMAPI\vcproj\libicalvcard.vcxproj", "{0BA08DC3-4B25-491D-91DD-CE07979332CE}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A541A6A1-5677-4504-8D2D-1FB7F3F85585} = {A541A6A1-5677-4504-8D2D-1FB7F3F85585}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SourceCodeControl) = preSolution
@@ -255,7 +263,19 @@ Global
 		{1E39385E-ED50-4230-CBF8-49AE7E224FFA}.tst|Win32.ActiveCfg = tst|Win32
 		{1E39385E-ED50-4230-CBF8-49AE7E224FFA}.tst|Win32.Build.0 = tst|Win32
 		{1E39385E-ED50-4230-CBF8-49AE7E224FFA}.tst|x64.ActiveCfg = tst|x64
-		{1E39385E-ED50-4230-CBF8-49AE7E224FFA}.tst|x64.Build.0 = tst|x64
+		{1E39385E-ED50-4230-CBF8-49AE7E224FFA}.tst|x64.Build.0 = tst|x64		
+		{0BA08DC3-4B25-491D-91DD-CE07979332CE}.dbg|Win32.ActiveCfg = dbg|Win32
+		{0BA08DC3-4B25-491D-91DD-CE07979332CE}.dbg|Win32.Build.0 = dbg|Win32
+		{0BA08DC3-4B25-491D-91DD-CE07979332CE}.dbg|x64.ActiveCfg = dbg|x64
+		{0BA08DC3-4B25-491D-91DD-CE07979332CE}.dbg|x64.Build.0 = dbg|x64
+		{0BA08DC3-4B25-491D-91DD-CE07979332CE}.rtl|Win32.ActiveCfg = rtl|Win32
+		{0BA08DC3-4B25-491D-91DD-CE07979332CE}.rtl|Win32.Build.0 = rtl|Win32
+		{0BA08DC3-4B25-491D-91DD-CE07979332CE}.rtl|x64.ActiveCfg = rtl|x64
+		{0BA08DC3-4B25-491D-91DD-CE07979332CE}.rtl|x64.Build.0 = rtl|x64
+		{0BA08DC3-4B25-491D-91DD-CE07979332CE}.tst|Win32.ActiveCfg = tst|Win32
+		{0BA08DC3-4B25-491D-91DD-CE07979332CE}.tst|Win32.Build.0 = tst|Win32
+		{0BA08DC3-4B25-491D-91DD-CE07979332CE}.tst|x64.ActiveCfg = tst|x64
+		{0BA08DC3-4B25-491D-91DD-CE07979332CE}.tst|x64.Build.0 = tst|x64		
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
