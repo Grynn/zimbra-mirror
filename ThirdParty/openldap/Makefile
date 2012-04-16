@@ -12,6 +12,7 @@ MAKEARGS ?= -j2 DEFINES="-DCHECK_CSN -DSLAP_SCHEMA_EXPOSE -DMDB_DSYNC=0"
 ZIMBRA_HOME ?= /opt/zimbra
 
 PATCH	:=
+INDEX_PATCH	:= patch -g0 -N -p1 < ../patches/0001-trial.patch; patch -g0 -N -p1 < ../patches/0002-More-threading-tweaks.patch;
 
 ifdef BETA
 	include $(OPENLDAP_ROOT)/../beta_versions.def
@@ -22,6 +23,11 @@ endif
 ifeq (MACOSX,$(findstring MACOSX,$(BUILD_PLATFORM)))
 	ENVMOD := env LIBS="-lresolv" 
 	CPPFLAG := "-DOPENLDAP_FD_SETSIZE=32768"
+	INDEX_PATCH :=
+endif
+
+ifeq ($(BUILD_PLATFORM), RHEL4_64)
+	INDEX_PATCH :=
 endif
 
 LDFLAGS	:=	LDFLAGS="-L$(OPENSSL_LIB_DIR) -L$(CYRUS_LIB_DIR) -L$(LDAP_LIB_DIR) -L$(LIBTOOL_LIB_DIR) \
