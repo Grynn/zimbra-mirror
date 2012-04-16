@@ -717,11 +717,14 @@ ZaTaskAuthConfigWizard.myXFormModifier = function(xFormObject) {
                                     {type:_DWT_BUTTON_, label:ZaMsg.Domain_AuthTestSettings,width:"100px",
                                     	ref:ZaDomain.A2_zimbraAuthConfigTestStatus,
                                         onActivate:"ZaTaskAuthConfigWizard.autoTestSetting.call(this);"},
-                                    {type:_DWT_ALERT_, 
-                                     content:ZaMsg.Domain_AuthTestingInProgress, style:DwtAlert.INFO,
-                                     visibilityChecks: [[XForm.checkInstanceValue, ZaDomain.A2_zimbraAuthConfigTestStatus, "RUNNING"]],
-                                     visibilityChangeEventSources:[ZaModel.currentStep, ZaDomain.A2_zimbraAuthConfigTestStatus]},
-                                    {type:_GROUP_, isTabGroup:false, deferred:false, colSpan:2,
+                                    {type:_GROUP_, isTabGroup:false, deferred:false, colSpan:2, colSizes:["100px", "400px"],
+                                        visibilityChangeEventSources:[ZaModel.currentStep, ZaDomain.A2_zimbraAuthConfigTestStatus],
+                                        visibilityChecks:[[XForm.checkInstanceValue, ZaDomain.A2_zimbraAuthConfigTestStatus, "RUNNING"]],
+                                        items: [
+                                            {type:_DWT_ALERT_, content:ZaMsg.Domain_AuthTestingInProgress, alignment:_CENTER_, colSpan:2, style:DwtAlert.INFO}
+                                        ]
+                                    },
+                                    {type:_GROUP_, isTabGroup:false, deferred:false, colSpan:2, colSizes:["100px", "400px"],
                                     	 visibilityChangeEventSources:[ZaDomain.A2_zimbraAuthConfigTestStatus, ZaDomain.A_AuthTestResultCode],
     									 visibilityChecks:[[XForm.checkInstanceValue, ZaDomain.A2_zimbraAuthConfigTestStatus, "RUNNED"],
     											           [XForm.checkInstanceValue, ZaDomain.A_AuthTestResultCode, ZaDomain.Check_OK]],
