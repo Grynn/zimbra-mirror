@@ -62,7 +62,7 @@ public class PageAddressbook extends AbsTab {
 	public static class CONTEXT_SUB_MENU {
 				
 		public static final ContextMenuItem CONTACT_SUB_NEW_TAG = new ContextMenuItem("div#contacts_newtag","New Tag","div[class='ImgNewTag']",":contains('nt')");
-		public static final ContextMenuItem CONTACT_SUB_REMOVE_TAG = new ContextMenuItem("div[id=^contacts_removetag]","Remove Tag","div[class='ImgDeleteTag']","");
+		public static final ContextMenuItem CONTACT_SUB_REMOVE_TAG = new ContextMenuItem("div[id^=contacts_removetag]","Remove Tag","div[class='ImgDeleteTag']","");
 		//public static final ContextMenuItem CONTACT_SUB_REMOVE_TAG = new ContextMenuItem("td#zmi__Contacts__TAG_MENU|MENU|REMOVETAG_title","Remove Tag","div[class='ImgDeleteTag']","");
 
 		
@@ -1180,11 +1180,12 @@ public class PageAddressbook extends AbsTab {
 										    	
 					locator = "css=" + parentLocator + " " + sub_cmi.locator + extraLocator;		        			
 				    	
+					//SleepUtil.sleep(1234567890);
 					//  Make sure the sub context menu exists			
 					zWaitForElementPresent(locator) ;
 			
 					// 	make sure the sub context menu enabled			
-					zWaitForElementEnabled(locator);
+					//zWaitForElementEnabled(locator);
 						
 					// mouse over the sub menu
 					sFocus(locator);
