@@ -28,6 +28,8 @@ public class ZApptAllDayLayoutBean {
     long mEndTime;
     int mNumDays;
 
+    public static final String PSTATUS_DECLINED = "DE";
+
     List<ZAppointmentHit> mAllday; // all all-day appts in this range
     List<List<ZAppointmentHit>> mRows;
 
@@ -42,14 +44,15 @@ public class ZApptAllDayLayoutBean {
         return mRows.size();
     }
 
-    public ZApptAllDayLayoutBean(List<ZAppointmentHit> appts, long startTime, long endTime, int numDays, boolean scheduleMode) {
+    public ZApptAllDayLayoutBean(List<ZAppointmentHit> appts, long startTime, long endTime, int numDays, boolean scheduleMode, boolean isShowDeclined) {
         mAllday = new ArrayList<ZAppointmentHit>();
         mStartTime = startTime;
         mEndTime = endTime;
         mNumDays = numDays;
 
         for (ZAppointmentHit appt : appts) {
-            if (appt.isAllDay() && appt.isInRange(mStartTime, mEndTime)) {
+            if (appt.isAllDay() && appt.isInRange(mStartTime, mEndTime) 
+                    && (!appt.getParticipantStatus().equals(PSTATUS_DECLINED) || (appt.getParticipantStatus().equals(PSTATUS_DECLINED) && isShowDeclined))) {
                 mAllday.add(appt);
             }
         }

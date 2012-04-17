@@ -2386,15 +2386,15 @@
             </description>
             <name>name</name>
             <required>true</required>
-            <rtexprvalue>true</rtexprvalue>            
+            <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
             <description>
-               Value of the field.
+                Value of the field.
             </description>
             <name>value</name>
             <required>true</required>
-            <rtexprvalue>true</rtexprvalue>            
+            <rtexprvalue>true</rtexprvalue>
         </attribute>
     </tag>
 
@@ -4952,6 +4952,13 @@
         <attribute>
             <description>print request</description>
             <name>isprint</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+
+        <attribute>
+            <description>whether to show declined meetings</description>
+            <name>isShowDeclined</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>

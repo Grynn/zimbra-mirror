@@ -64,6 +64,7 @@ public class ApptMultiDayLayoutTag extends ZimbraSimpleTag {
     private String mSchedule; // comma-sep list of folders ids to render in "schedule" mode
     boolean mScheduleMode;
     boolean mIsPrint;
+    boolean mIsShowDeclined;
 
     private List<Boolean> workDays;
     public void setSchedule(String schedule) { this.mSchedule = schedule; }
@@ -79,6 +80,8 @@ public class ApptMultiDayLayoutTag extends ZimbraSimpleTag {
     public void setAppointments(ZApptSummariesBean appts) { this.mAppointments = appts; }
     public void setTimezone(TimeZone timeZone) { mTimeZone = timeZone; }
     public void setIsprint(boolean isprint) {mIsPrint = isprint; }
+    public void setIsShowDeclined(boolean isShowDeclined) {mIsShowDeclined  = isShowDeclined; }
+
 
     public void doTag() throws JspException, IOException {
         JspContext jctxt = getJspContext();
@@ -108,7 +111,7 @@ public class ApptMultiDayLayoutTag extends ZimbraSimpleTag {
             mEnd = BeanUtils.addDay(startCal, 1).getTimeInMillis();
 
             for (int i=0; i < folders.length; i++) {
-                days.add(new ZApptDayLayoutBean(mAppointments.getAppointments(), mStart, i, mNumDays, folders[i], MSECS_INCR));
+                days.add(new ZApptDayLayoutBean(mAppointments.getAppointments(), mStart, i, mNumDays, folders[i], MSECS_INCR, mIsShowDeclined));
             }
         } else {
 
@@ -118,7 +121,7 @@ public class ApptMultiDayLayoutTag extends ZimbraSimpleTag {
             mEnd = BeanUtils.addDay(startCal, mNumDays).getTimeInMillis();
 
             for (int i=0; i < mNumDays; i++) {
-                days.add(new ZApptDayLayoutBean(mAppointments.getAppointments(), dayStartTime, i, mNumDays, null, MSECS_INCR));
+                days.add(new ZApptDayLayoutBean(mAppointments.getAppointments(), dayStartTime, i, mNumDays, null, MSECS_INCR, mIsShowDeclined));
                 /*
                  * StartTime = Prev Day Start Time + 24hrs( this will respect the DST_OFFSET, if any)
                  */
@@ -139,7 +142,7 @@ public class ApptMultiDayLayoutTag extends ZimbraSimpleTag {
 
     private List<ZApptRowLayoutBean> computeAllDayRows(List<ZApptDayLayoutBean> days) {
 
-        ZApptAllDayLayoutBean allday = new ZApptAllDayLayoutBean(mAppointments.getAppointments(), mStart, mEnd, mNumDays, mScheduleMode);
+        ZApptAllDayLayoutBean allday = new ZApptAllDayLayoutBean(mAppointments.getAppointments(), mStart, mEnd, mNumDays, mScheduleMode, mIsShowDeclined);
         double percentPerDay;
         if (mScheduleMode) {
             String folders[] = mSchedule.split(",");
@@ -273,7 +276,7 @@ public class ApptMultiDayLayoutTag extends ZimbraSimpleTag {
         /**
          * Get all "AllDay" appointments within the input date range (mstart, mEnd)
          */
-        ZApptAllDayLayoutBean allday = new ZApptAllDayLayoutBean(mAppointments.getAppointments(), mStart, mEnd, mNumDays, mScheduleMode);
+        ZApptAllDayLayoutBean allday = new ZApptAllDayLayoutBean(mAppointments.getAppointments(), mStart, mEnd, mNumDays, mScheduleMode, mIsShowDeclined);
 
         double percentPerDay = 100.0;
         List<List<ZApptRowLayoutBean>> allDayRowsofRows = new ArrayList<List<ZApptRowLayoutBean>>();
