@@ -133,8 +133,18 @@ public class ConfigViewModelUDest: BaseViewModel
         catch (Exception)
         {}
         ZimbraAPI zimbraAPI = new ZimbraAPI();
-        int stat = zimbraAPI.Logon(this.ZimbraServerHostName, this.ZimbraPort, this.ZimbraUser,
-            this.ZimbraUserPasswd, false);
+
+        int stat = -1;
+        try
+        {
+            stat = zimbraAPI.Logon(this.ZimbraServerHostName, this.ZimbraPort, this.ZimbraUser,
+                this.ZimbraUserPasswd, false);
+        }
+        catch (Exception e)
+        {
+            MessageBox.Show(e.Message, "Logon", MessageBoxButton.OK, MessageBoxImage.Error);
+            return;
+        }
 
         if (stat == 0)
         {
