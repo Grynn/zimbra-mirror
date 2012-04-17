@@ -1127,4 +1127,34 @@ TD.gridGroupBodyLabel {
 	@roundCorners(4px)@;
 }
 
+.ZaHelpViewGroupBorder {
+    border: none;
+    border-right: solid 2px black !important;
+    padding-right: 10px;
+}
+
+.ZaHelpViewGroupNoneBorder {
+    border: none;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.ZaHelpViewGroupLabel {
+    display: none;
+}
+
+.ZaHelpAskCommunityContainer {
+    padding:12px;
+}
+
+.ZaHelpAskCommunityPanel{
+    background-color:#F3F7FB;
+    border:1px solid #E7ECF2;
+    @roundCorners(10px)@
+}
+
+.ZaHelpAskCommunityContent {
+    padding:12px;
+}
+
 

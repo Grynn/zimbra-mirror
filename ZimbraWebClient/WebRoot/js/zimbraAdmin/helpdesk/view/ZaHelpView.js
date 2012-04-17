@@ -83,6 +83,10 @@ ZaHelpView.showWikiLink = function () {
 ZaHelpView.myXFormModifier = function(xFormObject) {	
 	xFormObject.tableCssStyle="width:100%;overflow:auto;";
 	xFormObject.itemDefaults = {_SEPARATOR_: {containerCssStyle:"padding-right:3px;padding-left:3px;"}};
+    if (!ZaSettings.isOctopus()) {
+        xFormObject.items = ZaHelpView.getAdminXFormItems();
+        return;
+    }
 	xFormObject.items = [
 	        {type:_SWITCH_, align:_LEFT_, valign:_TOP_, items:[{type:_ZATABCASE_,id:"help_view_tab",  numCols:1, width:"100%", caseKey:1,
 	        		paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),
@@ -260,5 +264,87 @@ ZaHelpView.myXFormModifier = function(xFormObject) {
     }
 }
 ZaTabView.XFormModifiers["ZaHelpView"].push(ZaHelpView.myXFormModifier);
+
+ZaHelpView.getAdminXFormItems =
+function() {
+    return [{type:_SWITCH_, align:_LEFT_, valign:_TOP_,
+        items:[{type:_ZATABCASE_,id:"help_view_tab",  numCols:1, width:"100%", caseKey:1,
+            paddingStyle:"padding-left:15px;", width:"98%", cellpadding:2,
+            visibilityChecks:[function() { return true; }],
+            items: [
+                {type:_SPACER_, height:"10"},
+                {type:_OUTPUT_, label:null, value:ZabMsg.HELP_CENTER_TITLE, colSpan:"*", cssStyle:"font-size:12pt;	font-weight: bold;"},
+                {type: _GROUP_, width: "100%", numCols: 2, colSizes: ["70%","30%"],
+                    items: [
+                        {type:_SPACER_, height:"10"},
+                        {type:_ZALEFT_GROUPER_, numCols:1, width: "100%",labelCssClass:"ZaHelpViewGroupLabel",borderCssClass:"ZaHelpViewGroupBorder",
+                            items: [
+                                {type: _GROUP_, id:"helpDocsGroup", numCols:1, width: "100%",
+                                    items: [
+                                        {type:_ANCHOR_, cssStyle:"font-size:14px;", showInNewWindow:true, labelLocation:_NONE_, label:ZabMsg.HELP_PAGE_2, href:(location.pathname + ZaUtil.HELP_URL + ZaHelpView.mainHelpPage + "?locid="+AjxEnv.DEFAULT_LOCALE)},
+                                        {type:_OUTPUT_, cssStyle:"font-size:12px;",
+                                            label:null, value:AjxMessageFormat.format(ZabMsg.onlineHelpDetail, [location.pathname + ZaHelpView.RELEASE_NOTE_LINK +"?locid="+AjxEnv.DEFAULT_LOCALE]),
+                                            cssStyle:"padding-top:5px;padding-right:10px;padding-left:10px;"},
+                                        {type:_SPACER_, height:"20"},
+                                        {type:_ANCHOR_, cssStyle:"font-size:14px;", showInNewWindow:true, labelLocation:_NONE_, label:ZabMsg.HELP_adminGuide, href:(location.pathname + "adminhelp/pdf/admin.pdf?locid="+AjxEnv.DEFAULT_LOCALE)},
+                                        {type:_OUTPUT_, cssStyle:"font-size:12px;",
+                                            label:null, value:AjxMessageFormat.format(ZabMsg.HELP_adminGuideDetail, [location.pathname + ZaHelpView.RELEASE_NOTE_LINK +"?locid="+AjxEnv.DEFAULT_LOCALE]),
+                                            cssStyle:"padding-top:5px;padding-right:10px;padding-left:10px;"},
+                                        {type:_SPACER_, height:"20"},
+                                        {type:_ANCHOR_, cssStyle:"font-size:14px;", showInNewWindow:true, labelLocation:_NONE_, label:ZabMsg.HELP_usersGuide, href:(location.pathname + "help/admin/pdf/zimbra_user_guide.pdf?locid=" + AjxEnv.DEFAULT_LOCALE)},
+                                        {type:_OUTPUT_, cssStyle:"font-size:12px;",
+                                            label:null, value:ZabMsg.HELP_usersGuideDetail,
+                                            cssStyle:"padding-top:5px;padding-right:10px;padding-left:10px;"}
+                                    ]},
+                                {type:_SPACER_, height:"20"},
+                                {type:_GROUP_, colSpan: "*", id:"helpAskCommunity", containerCssClass:"ZaHelpAskCommunityContainer", cssClass:"ZaHelpAskCommunityPanel", numCols:1, items:[
+                                    {type:_GROUP_, colSpan: "*", numCols: 1,  width:"100%",
+                                        containerCssClass:"ZaHelpAskCommunityContent", items:[
+                                        {type:_OUTPUT_, label:null, value:ZabMsg.HELP_askCommunity, colSpan:"*", cssStyle:"font-size:12px;	font-weight: bold;"},
+                                        {type:_OUTPUT_, cssStyle:"font-size:12px;",
+                                            label:null, value:ZabMsg.HELP_askCommunityItem1,
+                                            cssStyle:"padding-top:5px;padding-right:10px;padding-left:10px;"},
+                                        {type:_SPACER_, height:"10"},
+                                        {type:_OUTPUT_, cssStyle:"font-size:12px;",
+                                            label:null, value:ZabMsg.HELP_askCommunityItem2,
+                                            cssStyle:"padding-top:5px;padding-right:10px;padding-left:10px;"}
+                                    ]}
+                                ]}
+                            ]
+                        },
+                        {type:_ZARIGHT_GROUPER_, numCols:1, width: "100%",labelCssClass:"ZaHelpViewGroupLabel",borderCssClass:"ZaHelpViewGroupNoneBorder", containerCssStyle:"vertical-align:top",
+                            items: [
+                                {type:_OUTPUT_, label:null, value:ZabMsg.HELP_topMigrationQuestions, colSpan:"*", cssStyle:"font-size:14px;	font-weight: bold;"},
+                                {type:_SPACER_, height:"20"},
+                                {type: _GROUP_, width: "100%", numCols: 2, colSizes: ["20","*"],items: [
+                                    {type:_OUTPUT_, cssStyle:"font-size:8px;",
+                                        label:null, value:"<li></li>"},
+                                    {type:_ANCHOR_, cssStyle:"font-size:13px;", showInNewWindow:true, labelLocation:_NONE_, label:ZabMsg.HELP_MIG_Q1, href:(location.pathname + "adminhelp/pdf/MigrationWizard.pdf?locid="+AjxEnv.DEFAULT_LOCALE)}
+                                ]},
+                                {type:_SPACER_, height:"20"},
+                                {type: _GROUP_, width: "100%", numCols: 2, colSizes: ["20","*"],items: [
+                                    {type:_OUTPUT_, cssStyle:"font-size:8px;",
+                                        label:null, value:"<li></li>"},
+                                    {type:_ANCHOR_, cssStyle:"font-size:13px;", showInNewWindow:true, labelLocation:_NONE_, label:ZabMsg.HELP_MIG_Q2, href:(location.pathname + "adminhelp/pdf/Import_Wizard_Outlook.pdf?locid="+AjxEnv.DEFAULT_LOCALE)}
+                                ]},
+                                {type:_SPACER_, height:"20"},
+                                {type: _GROUP_, width: "100%", numCols: 2, colSizes: ["20","*"],items: [
+                                    {type:_OUTPUT_, cssStyle:"font-size:8px;",
+                                        label:null, value:"<li></li>"},
+                                    {type:_ANCHOR_, cssStyle:"font-size:13px;", showInNewWindow:true, labelLocation:_NONE_, label:ZabMsg.HELP_MIG_Q3, href:(location.pathname + "adminhelp/pdf/MigrationWizard_Domino.pdf?locid="+AjxEnv.DEFAULT_LOCALE)}
+                                ]},
+                                {type:_SPACER_, height:"20"},
+                                {type: _GROUP_, width: "100%", numCols: 2, colSizes: ["20","*"],items: [
+                                    {type:_OUTPUT_, cssStyle:"font-size:8px;",
+                                        label:null, value:"<li></li>"},
+                                    {type:_ANCHOR_, cssStyle:"font-size:13px;", showInNewWindow:true, labelLocation:_NONE_, label:ZabMsg.HELP_MIG_Q4, href:(location.pathname + "help/admin/pdf/Zimbra%20iCalendar%20Migration%20Guide.pdf?locid=" + AjxEnv.DEFAULT_LOCALE)}
+                                ]}
+                            ]
+                        }
+                    ]
+                }]
+        }]
+    }];
+}
 
 
