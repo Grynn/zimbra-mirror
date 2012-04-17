@@ -32,7 +32,7 @@ public class ActivityHistory extends OctopusCommonTest {
 		super.startingAccountPreferences = null;
 	}
 
-	@Test(description = "Upload file through RestUtil - verify account email in the history through SOAP", groups = { "sanity" })
+	@Test(description = "Upload file through RestUtil - verify account email in the history through SOAP", groups = { "functional" })
 	public void ActivityHistory_01() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 
