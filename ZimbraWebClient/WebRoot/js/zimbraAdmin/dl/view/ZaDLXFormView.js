@@ -1168,7 +1168,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
 		this.tabChoices.push({value:_tab2, label:ZaMsg.DLXV_TabNotes});	
 	}
 
-	if(ZaTabView.isTAB_ENABLED(entry,ZaDLXFormView.MEMBEROF_TAB_ATTRS, ZaDLXFormView.MEMBEROF_TAB_RIGHTS)) {
+	if(ZaTabView.isTAB_ENABLED(entry,ZaDLXFormView.MEMBEROF_TAB_ATTRS, ZaDLXFormView.MEMBEROF_TAB_RIGHTS)  && (!entry.dynamic)) {
 		_tab3 = ++this.TAB_INDEX;
 		this.tabChoices.push({value:_tab3, label:ZaMsg.TABT_MemberOf});	
 	}

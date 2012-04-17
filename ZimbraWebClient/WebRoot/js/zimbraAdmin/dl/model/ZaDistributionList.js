@@ -1204,6 +1204,7 @@ function (dl) {
 	this.attrs[ZaAccount.A_zimbraMailAlias] = new Array();
 	this.name = dl.name;
 	this.id = dl.id;
+    this.dynamic = dl.dynamic;
 	var len = dl.a.length;
 
 	for(var ix = 0; ix < len; ix++) {

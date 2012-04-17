@@ -1337,8 +1337,19 @@ ZaNewDLXWizard.myXFormModifier = function(xFormObject, entry) {
 
 		var case3 = {type:_CASE_, numCols:2, colSpan:"*", caseKey:_tab3, colSizes: [400, 400],
 			items: [
+                {type: _DWT_ALERT_,
+                    containerCssStyle: "padding-bottom:0;",
+                    style: DwtAlert.INFO,
+                    colSpan:"*",
+                    iconVisible: false,
+                    content: ZaMsg.WARNING_DYNAMIC_DL_MEMBER,
+                    visibilityChecks:[[XForm.checkInstanceValue, ZaDistributionList.A2_dlType, ZaDistributionList.DYNAMIC_DL_TYPE]],
+                    visibilityChangeEventSources:[ZaDistributionList.A2_dlType]
+                },
 				//layout rapper around the direct/indrect list
 				{type: _GROUP_, width: "98%", numCols: 1, //colSizes: ["auto", 20],
+                    visibilityChecks:[[XForm.checkInstanceValue, ZaDistributionList.A2_dlType, ZaDistributionList.STATIC_DL_TYPE]],
+                    visibilityChangeEventSources:[ZaDistributionList.A2_dlType],
 					items: [
 					    {type:_SPACER_, height:"5"},
 						//direct member group
@@ -1419,6 +1430,8 @@ ZaNewDLXWizard.myXFormModifier = function(xFormObject, entry) {
 				//non member group
 				//layout rapper around the elements
 				{type: _GROUP_, width: "98%", numCols: 1, //colSizes: ["auto", 20],
+                    visibilityChecks:[[XForm.checkInstanceValue, ZaDistributionList.A2_dlType, ZaDistributionList.STATIC_DL_TYPE]],
+                    visibilityChangeEventSources:[ZaDistributionList.A2_dlType],
 					items: [
 					    {type:_SPACER_, height:"5"},
 						{type:_ZARIGHT_GROUPER_, numCols:1, width: "100%", label:ZaMsg.Account_NonGroupLabel, containerCssStyle: "padding-top:5px",
