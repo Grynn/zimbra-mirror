@@ -81,3 +81,11 @@ function (value, ref) {
     var xformView = this._view._localXForm;
     xformView.setInstanceValue (value, ref);
 }
+
+ZaHomeController.prototype.showWarningPanel =
+function() {
+    var xformView = this._view._localXForm;
+    if (xformView.getInstanceValue(ZaHome.A2_showWarningPanel) != true) {
+        xformView.setInstanceValue(true, ZaHome.A2_showWarningPanel);
+    }
+}

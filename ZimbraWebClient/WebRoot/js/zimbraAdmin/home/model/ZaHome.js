@@ -36,6 +36,7 @@ ZaHome.A2_queueLength = "queueLength";
 ZaHome.A2_messageCount = "messageCount";
 ZaHome.A2_messageVolume = "messageVolume";
 
+ZaHome.A2_showWarningPanel = "showWarningPanel";
 ZaHome.A2_maintenanceItemNum = "maintenanceItemNum";
 ZaHome.initMethod = function () {
 	this.attrs = new Object();
@@ -70,7 +71,8 @@ function () {
     this.attrs[ZaHome.A2_messageCount] = "120/h";
     this.attrs[ZaHome.A2_messageVolume] = "34MB/h";
 
-    this.attrs[ZaHome.A2_maintenanceItemNum] = 2;
+    this.attrs[ZaHome.A2_showWarningPanel] = false;
+    this.attrs[ZaHome.A2_maintenanceItemNum] = 1;
 }
 ZaItem.loadMethods["ZaHome"].push(ZaHome.loadMethod);
 
@@ -78,7 +80,7 @@ ZaHome.updateMaintenanceNum = function() {
     var num = 1;
     try {
         var homeCtl = ZaApp.getInstance().getHomeViewController();
-        var maintainenceGroup = homeCtl._view._localXForm.getItemsById("mainenance_grp");
+        var maintainenceGroup = homeCtl._view._localXForm.getItemsById("maintenance_grp");
         num = maintainenceGroup[0].items.length;
     } catch (ex) {
 
@@ -229,9 +231,13 @@ ZaHome.prototype.updateServiceStatus = function (resp) {
         }
     } catch (ex) {
     }
-    ZaApp.getInstance().getHomeViewController().setInstanceValue(serviceStatus, ZaHome.A2_serviceStatus);
-    ZaApp.getInstance().getHomeViewController().setInstanceValue(serviceStatusMessage, ZaHome.A2_serviceStatusMessage);
-    ZaApp.getInstance().getHomeViewController().setInstanceValue(serviceDetailedMessage, ZaHome.A2_serviceDetailedMessage);
+    var viewController = ZaApp.getInstance().getHomeViewController();
+    viewController.setInstanceValue(serviceStatus, ZaHome.A2_serviceStatus);
+    viewController.setInstanceValue(serviceStatusMessage, ZaHome.A2_serviceStatusMessage);
+    viewController.setInstanceValue(serviceDetailedMessage, ZaHome.A2_serviceDetailedMessage);
+    if (serverStatus != true) {
+        viewController.showWarningPanel();
+    }
 }
 
 ZaHome.loadActiveSesson = function () {
@@ -416,6 +422,7 @@ ZaHome.myXModel = {
         {id:ZaHome.A2_queueLength, type:_STRING_, ref:"attrs/" + ZaHome.A2_queueLength},
         {id:ZaHome.A2_messageCount, type:_NUMBER_, ref:"attrs/" + ZaHome.A2_messageCount},
         {id:ZaHome.A2_messageVolume, type:_NUMBER_, ref:"attrs/" + ZaHome.A2_messageVolume},
+        {id:ZaHome.A2_showWarningPanel, type:_ENUM_, ref:"attrs/" + ZaHome.A2_showWarningPanel, choices: ZaModel.BOOLEAN_CHOICES1},
         {id:ZaHome.A2_maintenanceItemNum, type:_NUMBER_, ref:"attrs/" + ZaHome.A2_maintenanceItemNum}
     ]
 }

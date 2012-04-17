@@ -251,30 +251,32 @@ ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
         paddingStyle: "", width: "100%",
 //      cellpadding: 0, height:"400px",  align:_LEFT_, valign:_TOP_,
         items:[
-            {type:_GROUP_, colSpan: "*", numCols:1, containerCssClass:"ZaHomeWarningPanel", items:[
-
-                {type:_GROUP_, numCols:3,  width:"100%", colSizes:ZaHomeXFormView.getWarningPanelCol(), containerCssClass:"ZaHomeWarningItem",
-                    visibilityChecks:[[XForm.checkInstanceValueNot,ZaHome.A2_serviceStatus,true],[ZaHomeXFormView.showStatusInfo]],
-                    visibilityChangeEventSources: [ZaHome.A2_serviceStatus],
-                    items:[
-                        {type:_OUTPUT_, ref: ZaHome.A2_serviceStatus, bmolsnr: true,
-                            getDisplayValue: function (value){
-                                if (this.getInstanceValue(ZaHome.A2_serviceDetailedMessage) == ZaMsg.MSG_HomeLoading) {
-                                    return "";
-                                }
-                                if (value === undefined) {
-                                    return AjxImg.getImageHtml ("UnKnownStatus");
-                                }else if (value === false) {
-                                    return AjxImg.getImageHtml ("Critical");
-                                } else {
-                                    return AjxImg.getImageHtml ("Check");
-                                }
+            {type:_GROUP_, colSpan: "*", numCols:1, containerCssClass:"ZaHomeWarningPanel",
+                visibilityChecks:[[XForm.checkInstanceValue, ZaHome.A2_showWarningPanel, true]],
+                visibilityChangeEventSources: [ZaHome.A2_showWarningPanel],
+                items:[
+                    {type:_GROUP_, numCols:3,  width:"100%", colSizes:ZaHomeXFormView.getWarningPanelCol(), containerCssClass:"ZaHomeWarningItem",
+                        visibilityChecks:[[XForm.checkInstanceValueNot,ZaHome.A2_serviceStatus,true],[ZaHomeXFormView.showStatusInfo]],
+                        visibilityChangeEventSources: [ZaHome.A2_serviceStatus],
+                        items:[
+                            {type:_OUTPUT_, ref: ZaHome.A2_serviceStatus, bmolsnr: true,
+                                getDisplayValue: function (value){
+                                    if (this.getInstanceValue(ZaHome.A2_serviceDetailedMessage) == ZaMsg.MSG_HomeLoading) {
+                                        return "";
+                                    }
+                                    if (value === undefined) {
+                                        return AjxImg.getImageHtml ("UnKnownStatus");
+                                    }else if (value === false) {
+                                        return AjxImg.getImageHtml ("Critical");
+                                    } else {
+                                        return AjxImg.getImageHtml ("Check");
+                                    }
+                                },
+                                valueChangeEventSources:[ZaHome.A2_serviceDetailedMessage]
                             },
-                            valueChangeEventSources:[ZaHome.A2_serviceDetailedMessage]
-                        },
-                        {type:_OUTPUT_, ref: ZaHome.A2_serviceDetailedMessage, bmolsnr: true},
-                        {type:_OUTPUT_, value:ZaMsg.LBL_HomeLinkServerStatus, containerCssClass:"ZaLinkedItem",onClick: ZaHomeXFormView.onViewService}
-                ]}
+                            {type:_OUTPUT_, ref: ZaHome.A2_serviceDetailedMessage, bmolsnr: true},
+                            {type:_OUTPUT_, value:ZaMsg.LBL_HomeLinkServerStatus, containerCssClass:"ZaLinkedItem",onClick: ZaHomeXFormView.onViewService}
+                    ]}
             ]},
             {type:_GROUP_, colSpan: "*", numCols: 3,  colSizes:["33%", "34%", "33%"], width: "100%",
                 containerCssClass:"ZaHomeInfoPanel",items:[
