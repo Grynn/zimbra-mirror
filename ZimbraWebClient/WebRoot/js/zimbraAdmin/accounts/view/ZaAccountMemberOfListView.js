@@ -594,6 +594,15 @@ function(event, listItemId){
 	}
 };
 
+ZaAccountMemberOfListView.makeQueryStringWithoutDynamicDL =
+function (rawQueryString) {
+	if (rawQueryString == null) {
+		rawQueryString = "";
+	}
+
+	return "(&" + rawQueryString + "(!(zimbraIsACLGroup=TRUE)))";
+}
+
 /**
  * search for the dls or groups
  * 
@@ -628,8 +637,10 @@ function (item, offset){
 			var attrs = [ZaAccount.A_name, ZaItem.A_zimbraId];
 			//var attrs = [""];
 			var valStr = curInstance[ZaSearch.A_query];
-            var queryTypes = [ZaSearch.DLS] ;
-            var query = ZaSearch.getSearchByNameQuery(valStr, queryTypes);
+			var queryTypes = [ZaSearch.DLS] ;
+			var query = ZaSearch.getSearchByNameQuery(valStr, queryTypes);
+			query = ZaAccountMemberOfListView.makeQueryStringWithoutDynamicDL(query);
+
 			var params = { 	query: query ,
 							sortBy: sortby,
 							limit : ZaAccountMemberOfListView.SEARCH_LIMIT,
