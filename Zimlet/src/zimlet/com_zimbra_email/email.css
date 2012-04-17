@@ -29,6 +29,21 @@
     height: 16px;
     overflow: hidden;
 }
+
+.ImgMail_icon {
+    background: url("img/mail_icon.png") no-repeat center center;
+    width: 16px;
+    height: 16px;
+    overflow: hidden;
+}
+
+.ImgCalendar_icon {
+    background: url("img/calendar_icon.png") no-repeat center center;
+    width: 16px;
+    height: 16px;
+    overflow: hidden;
+}
+
 .ImgEmailZimlet_closeBtn {
   background: url("img/EmailZimlet_closeBtn.png") no-repeat center center;
     width: 16px;

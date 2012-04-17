@@ -461,14 +461,11 @@ function(object, context, x, y, span, spanId) {
 		this.primarySubscriberZimlet.showTooltip();
 		return true;
 	}
-	else if (this._subscriberZimlets.length > 0 && !this.primarySubscriberZimlet) {
-		this._unknownPersonSlide = new UnknownPersonSlide();
-		this._unknownPersonSlide.onEmailHoverOver(this);
-		this._unknownPersonSlide.showTooltip();
-		return true;
-	}
 
-	return false;
+    this._unknownPersonSlide = new UnknownPersonSlide();
+    this._unknownPersonSlide.onEmailHoverOver(this);
+    this._unknownPersonSlide.showTooltip();
+    return true;
 };
 
 EmailTooltipZimlet.prototype._initializeProps =
@@ -479,6 +476,13 @@ function(object, context, x, y, span) {
 	this.seriesAnimation.reset();
 	var shell = DwtShell.getShell(window);
 	var tooltip = shell.getToolTip();
+    tooltip.setSticky(true);
+    // Turn on the stickiness of the tooltip for three seconds, enough time to move to the tooltip without it closing
+    AjxTimedAction.scheduleAction(new AjxTimedAction(this,
+        function() {
+            tooltip.setSticky(false);
+    }), 3000);
+
 	tooltip.setContent("<div id=\"zimletTooltipDiv\"></div>", true);
 	this.x = x;
 	this.y = y;

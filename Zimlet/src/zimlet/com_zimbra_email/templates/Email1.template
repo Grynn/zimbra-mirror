@@ -25,7 +25,7 @@
 		<label ><$= AjxStringUtil.htmlEncode(data.address) $> (<$= ZmMsg.work $>)</label><br/>
 	<$ } $>
 	<br/>
-	<$ if (data.rightClickForMoreOptions) { $>
-		<label style='font-size:11px;color:white;font-weight:bold;color:gray'><$= AjxStringUtil.htmlEncode(data.rightClickForMoreOptions) $></label><br/>
-	<$ } $>
+	<br/>
+	<br/>
+	<hr/>
 </template>

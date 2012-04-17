@@ -14,9 +14,19 @@
  */
 
 /**
-* A Email tooltip class that adds a blank slide when UnknownPersonSlide is not loaded. 
-* Usually this is for customers outside of VMWare where they dont have access to 
-* UnknownPersonSlide but can still use LinkedIn, TwitterSearch etc Zimlets
+* A tooltip based implementation for a generic contact.
+* This class forms the basis for creating an extensible contact card
+* into which a customer can add LinkedIn, TwitterSearch, Click2Call etc.
+*
+* The basic design is to have the tooltip as the canvas for the contact card.
+* The extensions to the basic card (e.g. Linked-in) are added as "slides" into the card.
+* Clicking on these extensions could open the corresponding application either in the tooltip itself or outside.
+*
+* Since tooltips are hidden on mouse movement, we need to make the tooltip to stay around
+* by setting the sticky flag on the tooltip.
+*
+* A word of caution: the tooltip is a singleton, so making it unsticky asap is important for application
+* responsiveness.
 */
 function UnknownPersonSlide() {
 }
@@ -25,6 +35,7 @@ function UnknownPersonSlide() {
 UnknownPersonSlide.PHOTO_ID = "unkownPerson_photoBG";
 UnknownPersonSlide.PHOTO_PARENT_ID = "unkownPerson_photoBGDiv";
 UnknownPersonSlide.TEXT_DIV_ID = "unkownPerson_TextDiv";
+UnknownPersonSlide.DOMAIN = "";
 
 /**
 * Implement onEmailHoverOver to get notified by Email tooltip zimlet.
@@ -35,6 +46,7 @@ function(emailZimlet) {
 	emailZimlet.addSubscriberZimlet(this, false);
 	this.emailZimlet = emailZimlet;
 	this._alwaysSetTooltipToSmall();
+    //appCtxt.getAppController().activateApp(ZmApp.CONTACTS);
 };
 
 UnknownPersonSlide.prototype._alwaysSetTooltipToSmall =
@@ -47,25 +59,54 @@ function() {
 };
 
 /**
-* This is called by Email Zimlet when user hoverovers an email
+* This is called by Email Zimlet when user hovers over an email
 */
 UnknownPersonSlide.prototype.showTooltip =
 function() {
-	this._setFrame();
+    this._setCalendarFrame();
+
+    this._setMailFrame();
+
+    this._setContactFrame();
+
+    //this.addEmailSlide();
+    //this.addCalendarSlide();
 	this.emailZimlet.tooltip.popup(this.emailZimlet.x, this.emailZimlet.y, true, null);
 	this._slide.select();
 };
 
-UnknownPersonSlide.prototype._setFrame =
+UnknownPersonSlide.prototype._setContactFrame =
 function() {
 	this.emailZimlet.hideBusyImg();
 	var tthtml = this._getTooltipBGHtml();
-	var selectCallback = new AjxCallback(this, this._handleSlideSelect);
+	var selectCallback = new AjxCallback(this, this._handleContactSlideSelect);
 	this._slide = new EmailToolTipSlide(tthtml, true, "UnknownPerson_contact", selectCallback, this.emailZimlet.getMessage("slideTooltip"));
 	this.emailZimlet.slideShow.addSlide(this._slide);
 	this._mainDiv = document.getElementById(UnknownPersonSlide.TEXT_DIV_ID);
 	this._slide.setCanvasElement(this._mainDiv);
 };
+
+UnknownPersonSlide.prototype._setMailFrame =
+    function() {
+        //this.emailZimlet.hideBusyImg();
+        //var tthtml = this._getTooltipBGHtml();
+        var selectCallback = new AjxCallback(this, this._handleMailSlideSelect);
+        var slide = new EmailToolTipSlide(null, true, "Mail_icon", selectCallback, this.emailZimlet.getMessage("slideMailTooltip"));
+        this.emailZimlet.slideShow.addSlide(slide);
+        //this._mainDiv = document.getElementById(UnknownPersonSlide.TEXT_DIV_ID);
+        //this._slide.setCanvasElement(this._mainDiv);
+    };
+
+UnknownPersonSlide.prototype._setCalendarFrame =
+    function() {
+        //this.emailZimlet.hideBusyImg();
+        //var tthtml = this._getTooltipBGHtml();
+        var selectCallback = new AjxCallback(this, this._handleCalendarSlideSelect);
+        var slide = new EmailToolTipSlide(null, true, "Calendar_icon", selectCallback, this.emailZimlet.getMessage("slideCalendarTooltip"));
+        this.emailZimlet.slideShow.addSlide(slide);
+        //this._mainDiv = document.getElementById(UnknownPersonSlide.TEXT_DIV_ID);
+        //this._slide.setCanvasElement(this._mainDiv);
+    };
 
 UnknownPersonSlide.prototype._handleImgLoadFailure =
 function() {//onfailure to load img w/in 5 secs, load an dataNotFound image
@@ -140,7 +181,7 @@ function(ev) {
 	this.emailZimlet.contextMenu.popup(100, this.emailZimlet.x, this.emailZimlet.y);
 };
 
-UnknownPersonSlide.prototype._handleSlideSelect =
+UnknownPersonSlide.prototype._handleContactSlideSelect =
 function() {
 	if (this._slide.loaded) {
 		return;
@@ -149,18 +190,45 @@ function() {
 	this._getContactDetailsAndShowTooltip();
 };
 
+UnknownPersonSlide.prototype._handleMailSlideSelect =
+    function() {
+        this.emailZimlet.popdown();
+        this.emailZimlet._composeListener(null, this.emailZimlet.emailAddress);
+    };
+
+UnknownPersonSlide.prototype._handleCalendarSlideSelect =
+    function() {
+        this.emailZimlet.popdown();
+        //var calController = AjxDispatcher.run("GetApptComposeController");
+        //var contact = this.emailZimlet._getActionedContact();
+        //var appt = calController._createComposeView().show();
+        var appt = new ZmAppt();
+        var c =  this.emailZimlet._getActionedContact() || new AjxEmailAddress(this.emailZimlet.emailAddress);
+        appt.setAttendees(c, ZmCalBaseItem.PERSON);
+        AjxDispatcher.run("GetCalController").newAppointment(appt, null, null, null);
+    };
+
 UnknownPersonSlide.prototype._getContactDetailsAndShowTooltip =
 function() {
 	this._slide.setInfoMessage(this.emailZimlet.getMessage("loading"));
-	if(this.emailZimlet.emailAddress.indexOf(UnknownPersonSlide.DOMAIN)  == -1) {
-		var contactList = AjxDispatcher.run("GetContacts");
-		var contact = contactList ? contactList.getContactByEmail(this.emailZimlet.emailAddress) : null;
-		if (contact) {
-			this._handleContactDetails(null, contact.attr);
-		} else {
-			this._handleContactDetails(null, null);
-		}		
-	} else {//make gal search request
+
+    var contactList = AjxDispatcher.run("GetContacts");
+    var contact = contactList ? contactList.getContactByEmail(this.emailZimlet.emailAddress) : null;
+    if (contact) {
+        //this._handleContactDetails(null, contact);
+        var jsonObj, request, soapDoc;
+        jsonObj = {SearchRequest:{_jsns:"urn:zimbraMail"}};
+        request = jsonObj.SearchRequest;
+        request.query = "in:contacts";
+        request.types = "contact";
+        request.name = this.emailZimlet.emailAddress;
+        request.offset = 0;
+        request.limit = 3;
+        var callback = new AjxCallback(this, this._handleContactDetails);
+        appCtxt.getAppController().sendRequest({jsonObj:jsonObj,asyncMode:true,callback:callback, noBusyOverlay:true});
+    }
+
+	if (!contact) {//make gal search request
 		var jsonObj, request, soapDoc;
 		jsonObj = {SearchGalRequest:{_jsns:"urn:zimbraAccount"}};
 		request = jsonObj.SearchGalRequest;
@@ -174,14 +242,16 @@ function() {
 };
 
 UnknownPersonSlide.prototype._handleContactDetails =
-function(response, attrsFromAB) {
+function(response, contact) {
+    var attrsFromAB = contact && contact.attr;
 	var validResponse = false;
 	var attrs = {};
 	if(response) {
-		var data = response.getResponse();	
-		var cn = data.SearchGalResponse.cn;
+		var data = response.getResponse();
+        var r = data.SearchResponse || data.SearchGalResponse;
+		var cn = r.cn;
 		if (cn && cn[0] && cn[0]._attrs) {
-			attrs = data.SearchGalResponse.cn[0]._attrs;
+			attrs = r.cn[0]._attrs;
 			validResponse = true;
 		}
 	} else if(attrsFromAB) {
@@ -197,8 +267,14 @@ function(response, attrsFromAB) {
 			attrs["email"] = this.emailZimlet.emailAddress;
 		}
 	}
-	var photoName = attrs["photoFileName"] ? attrs["photoFileName"] : "noname.jpg";
-	this._setProfileImage(photoName);
+	//var photoName = attrs.image && attrs.image.filename || "noname.jpg";
+    var image = attrs[ZmContact.F_image];
+    var msgFetchUrl = appCtxt.get(ZmSetting.CSFE_MSG_FETCHER_URI);
+    var imgUrl = null;
+    if(image && image.part) {
+        imgUrl =  [msgFetchUrl, "&id=", cn[0].id, "&part=", image.part, "&t=", (new Date()).getTime()].join("");
+    }
+	this._setProfileImage(imgUrl);
 	this._setContactDetails(attrs);
 	this._popupToolTip();
 };
@@ -239,7 +315,8 @@ function(attrs) {
 	}
 
 	if (!this.emailZimlet.noRightClick) {
-		attrs["rightClickForMoreOptions"] = this.emailZimlet.getMessage("rightClickForMoreOptions");
+		//attrs["rightClickForMoreOptions"] = this.emailZimlet.getMessage("rightClickForMoreOptions");
+        attrs["rightClickForMoreOptions"] = false;
 	}
 	attrs = this._formatTexts(attrs);
 	var iHtml = AjxTemplate.expand("com_zimbra_email.templates.Email1#ContactDetails", attrs);
@@ -290,7 +367,7 @@ function(attrs) {
 }
 
 UnknownPersonSlide.prototype._setProfileImage =
-function(photoName) {
+function(imgUrl) {
 	var div = document.getElementById(UnknownPersonSlide.PHOTO_PARENT_ID);
 	div.width = 65;
 	div.height = 80;
@@ -302,7 +379,8 @@ function(photoName) {
 	}
 
 	var img = new Image();
-	img.src = ZmZimletBase.PROXY + UnknownPersonSlide.PHOTO_BASE_URL + photoName;
+	//img.src = ZmZimletBase.PROXY + UnknownPersonSlide.PHOTO_BASE_URL + photoName;
+    img.src = imgUrl;
 	img.onload = AjxCallback.simpleClosure(this._handleImageLoad, this, img);
 	var timeoutCallback = new AjxCallback(this, this._handleImgLoadFailure);
 	this.emailZimlet.showLoadingAtId(timeoutCallback, UnknownPersonSlide.PHOTO_PARENT_ID);

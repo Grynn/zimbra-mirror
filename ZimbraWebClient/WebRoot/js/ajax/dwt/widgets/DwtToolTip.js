@@ -134,7 +134,7 @@ function() {
         AjxTimedAction.cancelAction(this._popupAction);
         this._popupAction = null;
     }
-	if (this._content != null && this._poppedUp) {
+	if (this._content != null && this._poppedUp && !this.isSticky) {
 		Dwt.setLocation(this._div, Dwt.LOC_NOWHERE, Dwt.LOC_NOWHERE);
 		this._poppedUp = false;
 	}
@@ -186,10 +186,7 @@ function(startX, startY, obj, hoverEv) {
 
 DwtToolTip.prototype._mouseOverListener = 
 function(ev) {
-
-	if (this.isSticky) { return; }
-
-    if (this._popdownOnMouseOver && this._poppedUp) {
+    if (this._popdownOnMouseOver && this._poppedUp && !this.isSticky) {
         var callback = (this._popdownOnMouseOver.isAjxCallback) ? this._popdownOnMouseOver : null;
         this.popdown();
         if (callback) {
