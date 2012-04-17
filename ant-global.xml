@@ -262,6 +262,7 @@
           <fileset dir="${test.src.dir}">
             <include name="**/*Test.java"/>
             <exclude name="**/*ITest.java"/>
+            <exclude name="**/Abstract*Test.java"/>
 	    <exclude name="**/RemoteMailboxContactOpsTest.java"/>
 	    <exclude name="**/yc/**/*.java"/>
           </fileset>
