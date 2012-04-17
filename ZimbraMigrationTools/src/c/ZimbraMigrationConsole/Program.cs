@@ -591,12 +591,24 @@ class Program
                             string Defaultpwd = "";
 
                             /************************************///if csv file has a pwd use it else looks for the pwd in xml file.
-                            if(user.PWDdefault != null)
+                            if((user.PWDdefault != ""))
                                 Defaultpwd = user.PWDdefault;
                             else
                                 Defaultpwd = myXmlConfig.ConfigObj.UserProvision.DefaultPWD;
-                            
 
+
+                            if (Defaultpwd == "")
+                            {
+
+                                System.Console.WriteLine();
+                                string msg = @" Default Pwd for user provisioning is empty string.Please correct the csv/xml file \n";
+                                    
+                                System.Console.WriteLine(msg);
+                                System.Console.WriteLine("Press any key to exit");
+                                Console.ReadKey(true);
+                
+                                return;
+                            }
                             if (zimbraAPI.CreateAccount(acctName,
                                 "",
                                 "",
@@ -752,6 +764,9 @@ class Program
            // Console.WriteLine("Shutting down, user requested exit");
             
         }
+        System.Console.WriteLine(" Press any key to continue \n");
+        Console.ReadKey(true);
+        return;
       }
 }
 }
