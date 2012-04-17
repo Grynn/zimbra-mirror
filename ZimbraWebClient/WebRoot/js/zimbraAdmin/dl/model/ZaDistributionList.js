@@ -1320,7 +1320,7 @@ ZaDistributionList.myXModel = {
 		{id:ZaDistributionList.A2_members, type:_LIST_},
 		ZaItem.descriptionModelItem,
 		{id:ZaItem.A_zimbraId, type:_STRING_, ref:"attrs/" + ZaItem.A_zimbraId},
-        {id:ZaDistributionList.A_memberOfURL, ref:"attrs/" + ZaDistributionList.A_memberOfURL, type:_STRING_},
+        {id:ZaDistributionList.A_memberOfURL, ref:"attrs/" + ZaDistributionList.A_memberOfURL, type:_STRING_, required: true},
         {id:ZaDistributionList.A_zimbraIsACLGroup, ref:"attrs/"+ZaDistributionList.A_zimbraIsACLGroup, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
 		{id:ZaItem.A_zimbraCreateTimestamp, ref:"attrs/" + ZaItem.A_zimbraCreateTimestamp},
         {id:ZaAccount.A_zimbraHideInGal, type:_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraHideInGal, choices:ZaModel.BOOLEAN_CHOICES},
