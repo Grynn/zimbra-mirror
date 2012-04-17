@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.mail_item (
    imap_id       INTEGER UNSIGNED,
    date          INTEGER UNSIGNED NOT NULL,  -- stored as a UNIX-style timestamp
    size          BIGINT UNSIGNED NOT NULL,
-   volume_id     TINYINT UNSIGNED,
+   locator       VARCHAR(1024),
    blob_digest   VARCHAR(44),                -- reference to blob, meaningful only for certain item types
    unread        INTEGER UNSIGNED,           -- stored separately from the other flags so we can index it
    flags         INTEGER NOT NULL DEFAULT 0,
@@ -91,7 +91,6 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.mail_item (
 
    -- UNIQUE (folder_id, name),  -- for namespace uniqueness
 
-   -- CONSTRAINT fk_mail_item_volume_id FOREIGN KEY (volume_id) REFERENCES zimbra.volume(id),
    CONSTRAINT fk_mail_item_parent_id FOREIGN KEY (parent_id) REFERENCES mail_item(id) ON UPDATE CASCADE,
    CONSTRAINT fk_mail_item_folder_id FOREIGN KEY (folder_id) REFERENCES mail_item(id) ON UPDATE CASCADE
 );
@@ -114,7 +113,7 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.revision (
    version       INTEGER UNSIGNED NOT NULL,
    date          INTEGER UNSIGNED NOT NULL,  -- stored as a UNIX-style timestamp
    size          BIGINT UNSIGNED NOT NULL,
-   volume_id     TINYINT UNSIGNED,
+   locator       VARCHAR(1024),
    blob_digest   VARCHAR(44),                -- reference to blob, meaningful for messages only (type == 5)
    name          VARCHAR(255),               -- namespace entry for item (e.g. tag name, folder name, document filename)
    metadata      MEDIUMTEXT,

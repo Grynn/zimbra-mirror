@@ -54,9 +54,9 @@ public class DbOfflineMailbox {
             String table = DbMailItem.getMailItemTableName(mbox);
             String mailbox_id = DebugConfig.disableMailboxGroups ? "" : "mailbox_id, ";
             stmt = conn.prepareStatement("INSERT INTO " + table +
-                    " (" + mailbox_id + "id, type, parent_id, folder_id, index_id, imap_id, date, size, volume_id, blob_digest," +
+                    " (" + mailbox_id + "id, type, parent_id, folder_id, index_id, imap_id, date, size, locator, blob_digest," +
                     " unread, flags, tags, sender, subject, name, metadata, mod_metadata, change_date, mod_content, change_mask)" +
-                    " SELECT " + mailbox_id + "?, type, parent_id, folder_id, index_id, imap_id, date, size, volume_id, blob_digest," +
+                    " SELECT " + mailbox_id + "?, type, parent_id, folder_id, index_id, imap_id, date, size, locator, blob_digest," +
                     " unread, flags, tags, sender, subject, name, metadata, mod_metadata, change_date, mod_content, change_mask" +
                     " FROM " + table + " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "id = ?");
             int pos = 1;

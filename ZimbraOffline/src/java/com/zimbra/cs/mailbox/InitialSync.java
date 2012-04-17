@@ -1281,7 +1281,7 @@ public class InitialSync {
             convId = Mailbox.ID_AUTO_INCREMENT;
         }
         try {
-            blob = StoreManager.getInstance().storeIncoming(cs, null);
+            blob = StoreManager.getInstance().storeIncoming(cs);
             data = bs.isPartial() ? null : bs.getBuffer();
             OfflineLog.offline.debug("message id=%d streamed to %s", id,
                 data == null ? blob.getPath() : "memory" );

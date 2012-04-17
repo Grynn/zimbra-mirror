@@ -379,7 +379,7 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
 
                     // copy blob to new id (note that item.getSavedSequence() may change again later)
                     try {
-                        MailboxBlob newBlob = StoreManager.getInstance().link(mblob, this, newId,
+                        MailboxBlob newBlob = StoreManager.getInstance().copy(mblob, this, newId,
                                 item.getSavedSequence());
                         markOtherItemDirty(newBlob);
                     } catch (IOException e) {

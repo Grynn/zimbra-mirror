@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.mail_item (
    imap_id       INTEGER UNSIGNED,
    date          INTEGER UNSIGNED NOT NULL,  -- stored as a UNIX-style timestamp
    size          BIGINT UNSIGNED NOT NULL,
-   volume_id     TINYINT UNSIGNED,
+   locator       VARCHAR(1024),
    blob_digest   VARCHAR(44) BINARY,         -- reference to blob
    unread        INTEGER UNSIGNED,           -- stored separately from the other flags so we can index it
    flags         INTEGER NOT NULL DEFAULT 0,
@@ -48,15 +48,13 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.mail_item (
    INDEX i_index_id (mailbox_id, index_id),  -- for looking up based on search results
    INDEX i_date (mailbox_id, date),          -- fallback index in case other constraints are not specified
    INDEX i_mod_metadata (mailbox_id, mod_metadata),      -- used by the sync code
-   INDEX i_volume_id (mailbox_id, volume_id),            -- for the foreign key into the volume table
    INDEX i_uuid (mailbox_id, uuid),          -- for looking up by uuid 
 
    UNIQUE INDEX i_name_folder_id (mailbox_id, folder_id, name),   -- for namespace uniqueness
 
    CONSTRAINT fk_mail_item_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES zimbra.mailbox(id),
    CONSTRAINT fk_mail_item_parent_id FOREIGN KEY (mailbox_id, parent_id) REFERENCES ${DATABASE_NAME}.mail_item(mailbox_id, id),
-   CONSTRAINT fk_mail_item_folder_id FOREIGN KEY (mailbox_id, folder_id) REFERENCES ${DATABASE_NAME}.mail_item(mailbox_id, id),
-   CONSTRAINT fk_mail_item_volume_id FOREIGN KEY (volume_id) REFERENCES zimbra.volume(id)
+   CONSTRAINT fk_mail_item_folder_id FOREIGN KEY (mailbox_id, folder_id) REFERENCES ${DATABASE_NAME}.mail_item(mailbox_id, id)
 ) ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.mail_item_dumpster (
@@ -69,7 +67,7 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.mail_item_dumpster (
    imap_id       INTEGER UNSIGNED,
    date          INTEGER UNSIGNED NOT NULL,  -- stored as a UNIX-style timestamp
    size          BIGINT UNSIGNED NOT NULL,
-   volume_id     TINYINT UNSIGNED,
+   locator       VARCHAR(1024),
    blob_digest   VARCHAR(44) BINARY,         -- reference to blob
    unread        INTEGER UNSIGNED,           -- stored separately from the other flags so we can index it
    flags         INTEGER NOT NULL DEFAULT 0,
@@ -92,13 +90,11 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.mail_item_dumpster (
    INDEX i_index_id (mailbox_id, index_id),  -- for looking up based on search results
    INDEX i_date (mailbox_id, date),          -- fallback index in case other constraints are not specified
    INDEX i_mod_metadata (mailbox_id, mod_metadata),      -- used by the sync code
-   INDEX i_volume_id (mailbox_id, volume_id),            -- for the foreign key into the volume table
    INDEX i_uuid (mailbox_id, uuid),          -- for looking up by uuid 
 
    -- Must not enforce unique index on (mailbox_id, folder_id, name) for the dumpster version!
 
-   CONSTRAINT fk_mail_item_dumpster_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES zimbra.mailbox(id),
-   CONSTRAINT fk_mail_item_dumpster_volume_id FOREIGN KEY (volume_id) REFERENCES zimbra.volume(id)
+   CONSTRAINT fk_mail_item_dumpster_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES zimbra.mailbox(id)
 ) ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.revision (
@@ -107,7 +103,7 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.revision (
    version       INTEGER UNSIGNED NOT NULL,
    date          INTEGER UNSIGNED NOT NULL,  -- stored as a UNIX-style timestamp
    size          BIGINT UNSIGNED NOT NULL,
-   volume_id     TINYINT UNSIGNED,
+   locator       VARCHAR(1024),
    blob_digest   VARCHAR(44) BINARY,         -- reference to blob
    name          VARCHAR(255),               -- namespace entry for item (e.g. tag name, folder name, document filename)
    metadata      MEDIUMTEXT,
@@ -127,7 +123,7 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.revision_dumpster (
    version       INTEGER UNSIGNED NOT NULL,
    date          INTEGER UNSIGNED NOT NULL,  -- stored as a UNIX-style timestamp
    size          BIGINT UNSIGNED NOT NULL,
-   volume_id     TINYINT UNSIGNED,
+   locator       VARCHAR(1024),
    blob_digest   VARCHAR(44) BINARY,         -- reference to blob
    name          VARCHAR(255),               -- namespace entry for item (e.g. tag name, folder name, document filename)
    metadata      MEDIUMTEXT,
