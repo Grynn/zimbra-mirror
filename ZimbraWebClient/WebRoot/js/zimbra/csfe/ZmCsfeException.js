@@ -60,6 +60,7 @@ ZmCsfeException.PARAMS = ["msg", "code", "method", "detail", "data", "trace"];
 
 ZmCsfeException.prototype = new AjxException;
 ZmCsfeException.prototype.constructor = ZmCsfeException;
+ZmCsfeException.prototype.isZmCsfeException = true;
 
 /**
  * Returns a string representation of the object.
