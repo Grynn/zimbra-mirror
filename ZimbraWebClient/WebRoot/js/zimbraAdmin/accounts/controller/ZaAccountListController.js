@@ -505,8 +505,6 @@ function(ev) {
 					newAlias, ZaApp.getInstance().dialogs["newAliasDialog"]._localXForm );
 		}
 
-        var enterListener = new AjxListener (newAlias, ZaAlias.prototype.addAlias, ZaApp.getInstance().dialogs["newAliasDialog"]._localXForm);
-        ZaApp.getInstance().dialogs["newAliasDialog"].setEnterListener(enterListener);
 		ZaApp.getInstance().dialogs["newAliasDialog"].setObject(newAlias);
 		ZaApp.getInstance().dialogs["newAliasDialog"].popup();
 	} catch (ex) {
