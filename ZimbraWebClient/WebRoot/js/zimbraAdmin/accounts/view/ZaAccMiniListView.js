@@ -58,38 +58,61 @@ function(account, now, isDragProxy) {
 		var cnt = this._headerList.length;
 		for(var i = 0; i < cnt; i++) {
 			var field = this._headerList[i]._field;
+			var imgName = null;
 			if(field!=null) {			
 				if(field == "type") {
 					// type
 					html[idx++] = "<td width=" + this._headerList[i]._width + ">";
 					switch(account.type) {
 						case ZaItem.ACCOUNT:
-							html[idx++] = AjxImg.getImageHtml("Account");
+							if(account.attrs[ZaAccount.A_zimbraIsAdminAccount]=="TRUE" ) {
+								imgName = ("AdminUser");
+							} else if (account.attrs[ZaAccount.A_zimbraIsDelegatedAdminAccount] == "TRUE") {
+								imgName = ("DomainAdminUser");
+							} else if (account.attrs[ZaAccount.A_zimbraIsSystemAccount] == "TRUE") {
+								imgName = ("SpecialAccount");
+							} else if (account.attrs[ZaAccount.A_zimbraIsSystemResource] == "TRUE") {
+								imgName = ("SystemResource");
+							} else if (account.attrs[ZaAccount.A_zimbraIsExternalVirtualAccount] == "TRUE") {
+								imgName = ("AccountExternalVirtual");
+							} else {
+								if(account.isExternal) {
+									imgName = ("AccountIMAP");
+								} else {
+									imgName = ("Account");
+								}
+							}
 						break;
 						case ZaItem.DL:
-							html[idx++] = AjxImg.getImageHtml("DistributionList");				
+							if (account.attrs[ZaDistributionList.A_isAdminGroup] == "TRUE") {
+								imgName = ("DistributionListGroup");
+							} else {
+								imgName = ("DistributionList");
+							}
 						break;
 						case ZaItem.ALIAS:
-							html[idx++] = AjxImg.getImageHtml("AccountAlias");				
-						break;	
+							imgName = ("AccountAlias");
+						break;
 						case ZaItem.DOMAIN:
-							html[idx++] = AjxImg.getImageHtml("Domain");				
-						break;					
+							imgName = ("Domain");
+						break;
 						case ZaItem.COS:
-							html[idx++] = AjxImg.getImageHtml("COS");				
-						break;					
-						
+							imgName = ("COS");
+						break;
 						case ZaItem.RESOURCE:
 							if (account.attrs[ZaResource.A_zimbraCalResType] == ZaResource.RESOURCE_TYPE_LOCATION){
-								html[idx++] = AjxImg.getImageHtml("Location");	
+								imgName = ("Location");
 							} else {//equipment or other resource types
-								html[idx++] = AjxImg.getImageHtml("Resource");	
-							}	
-							//html[idx++] = AjxImg.getImageHtml("Resource");				
-						break;												
+								imgName = ("Resource");
+							}
+						break;
 						default:
 							html[idx++] = AjxStringUtil.htmlEncode(account.type);
 						break;
+					}
+
+					if (imgName != null) {
+						html[idx++] = AjxImg.getImageHtml(imgName);
 					}
 					html[idx++] = "</td>";
 				} else if(field == ZaAccount.A_name) {

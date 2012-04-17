@@ -1202,15 +1202,15 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
 	var hMsgMemberNum, hMemberList, wMemberList, hMemberPool, wMemberPool, wRightPanel;
 	if (AjxEnv.isWebKitBased || AjxEnv.isFirefox ) {
 		hMsgMemberNum = 30;
-		hMemberList = 305;
+		hMemberList = 310;
 		wMemberList = "99%";
-		hMemberPool = 330;
+		hMemberPool = 342;
 		wMemberPool = "99%";
 	} else /* if (AjxEnv.isIE || others... ) */ {
 		hMsgMemberNum = 25;
 		hMemberList = 308;
 		wMemberList = "100%";
-		hMemberPool = 335;
+		hMemberPool = 338;
 		wMemberPool = "100%";
 	}
 	wRightPanel = (appNewUI) ? "100%" : "98%";
