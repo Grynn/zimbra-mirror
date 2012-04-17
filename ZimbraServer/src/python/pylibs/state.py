@@ -76,6 +76,7 @@ class State:
 								"config"     : {},
 								# "restarts"   : {}, Don't need this, I think
 								"postconf"   : {},
+								"postconfd"   : {},
 								"services"   : {},
 								"ldap"       : {},
 								"proxygen"   : False # 0|1
@@ -85,6 +86,7 @@ class State:
 								"config"     : {},
 								"restarts"   : {},
 								"postconf"   : {},
+								"postconfd"   : {},
 								"services"   : {},
 								"ldap"       : {},
 								"proxygen"   : False # 0|1
@@ -141,6 +143,18 @@ class State:
 		except Exception:
 			return
 
+	def clearPostconfd(self):
+		try:
+			self.current["postconfd"] = {}
+		except Exception:
+			return
+
+	def delPostconfd(self, service):
+		try:
+			del self.current["postconfd"][service]
+		except Exception:
+			return
+
 	def delRewrite(self, service):
 		try:
 			del self.current["rewrites"][service]
@@ -194,6 +208,21 @@ class State:
 			except Exception, e:
 				return None
 		return self.current["postconf"]
+
+	def curPostconfd(self, key=None, val=None):
+		if key is not None:
+			if val is not None:
+				if val == True:
+					val = "yes"
+				elif val == False:
+					val = "no"
+				Log.logMsg(5, "Adding postconfd %s = %s" % (key, val))
+				self.current["postconfd"][key] = val.replace('\n', ' ')
+			try:
+				return self.current["postconfd"][key]
+			except Exception, e:
+				return None
+		return self.current["postconfd"]
 
 	def curServices(self, service=None, state=None):
 		if service is not None:
@@ -493,6 +522,10 @@ class State:
 				for postconf in section.postconf():
 					self.curPostconf(postconf, section.postconf(postconf))
 
+				Log.logMsg(5, "Section %s changed compiling postconfd" % (section.name,))
+				for postconfd in section.postconfd():
+					self.curPostconfd(postconfd, section.postconfd(postconfd))
+
 				if section.name == "proxy":
 					Log.logMsg(5, "Section %s changed compiling proxygen" % (section.name,))
 					self.proxygen(True)
@@ -545,6 +578,18 @@ class State:
 			return rc
 		return 0
 
+	def doPostconfd(self):
+		if self.curPostconfd():
+			c = commands.commands["postconfd"]
+			for (postconfd, val) in self.curPostconfd().items():
+				try:
+					rc = c.execute("%s" % postconfd)
+				except Exception, e:
+					return rc
+			self.clearPostconfd()
+			return rc
+		return 0
+
 	def runProxygen(self):
 		if self.proxygen():
 			if not self.doProxygen():
@@ -566,6 +611,7 @@ class State:
 		th.append(threading.Thread(target=State.runProxygen,args=(self,),name="proxygen"))
 		th.append(threading.Thread(target=State.doRewrites,args=(self,),name="rewrites"))
 		th.append(threading.Thread(target=State.doPostconf,args=(self,),name="postconf"))
+		th.append(threading.Thread(target=State.doPostconfd,args=(self,),name="postconfd"))
 		th.append(threading.Thread(target=State.runLdap,args=(self,),name="ldap"))
 
 		[t.start() for t in th]

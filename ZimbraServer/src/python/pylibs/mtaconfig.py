@@ -30,6 +30,7 @@ class Section():
 						"configkeys" : {},
 						"requiredvars" : {},
 						"postconf"   : {},
+						"postconfd"  : {},
 					}
 
 	def depends(self, key=None, val=None):
@@ -76,6 +77,15 @@ class Section():
 				return self.config["postconf"][key]
 			return None
 		return self.config["postconf"]
+
+	def postconfd(self, key=None, val=None):
+		if val is not None:
+			self.config["postconfd"][key] = val
+		if key is not None:
+			if key in self.config["postconfd"]:
+				return self.config["postconfd"][key]
+			return None
+		return self.config["postconfd"]
 
 	def ldap(self, key=None, val=None):
 		if val is not None:
@@ -173,6 +183,25 @@ class MtaConfig():
 				elif re.match(r"VAR|LOCAL", ln):
 					Log.logMsg(5, "Adding %s to required vars:  processing %s" % (fields[1], ln));
 					section.requiredvars(fields[1], fields[0])
+				elif re.match(r"POSTCONFD", ln):
+					if len(fields) > 2:
+						if (re.match(r"VAR|LOCAL|FILE", fields[2])):
+							val = state.lookUpConfig(fields[2], fields[3])
+							section.requiredvars(fields[3], fields[2])
+							if val is not None:
+								if (str(val).upper() == "TRUE"):
+									val = "yes"
+								if (str(val).upper() == "FALSE"):
+									val = "no"
+							else:
+								val = ""
+							Log.logMsg(5, "Adding to postconfd commands: \'%s\' %s=\'%s\'" % (ln, fields[1], val))
+							section.postconfd(fields[1],val)
+						else:
+							value = " ".join(fields[2:len(fields)]);
+							section.postconfd(fields[1],value)
+					else:
+						section.postconfd(fields[1],"")
 				elif re.match(r"POSTCONF", ln):
 					if len(fields) > 2:
 						if (re.match(r"VAR|LOCAL|FILE", fields[2])):
@@ -210,7 +239,19 @@ class MtaConfig():
 								continue
 							fields = lines[i].split()
 							ln = lines[i].strip()
-							if re.match(r"POSTCONF", ln):
+							if re.match(r"POSTCONFD", ln):
+								if len(fields) > 2:
+									if (re.match(r"VAR|LOCAL|FILE", fields[2])):
+										val = state.lookUpConfig(fields[2], fields[3])
+										section.requiredvars(fields[3], fields[2])
+										Log.logMsg(5, "Adding to postconfd commands: \'%s\' %s=\'%s\'" % (ln, fields[1], val))
+										section.postconfd(fields[1],val)
+									else:
+										value = " ".join(fields[2:len(fields)]);
+										section.postconfd(fields[1],value)
+								else:
+									section.postconfd(fields[1],"")
+							elif re.match(r"POSTCONF", ln):
 								if len(fields) > 2:
 									if (re.match(r"VAR|LOCAL|FILE", fields[2])):
 										val = state.lookUpConfig(fields[2], fields[3])

@@ -29,6 +29,7 @@ from com.zimbra.cs.util import ProxyConfGen
 
 exe = {
 	"POSTCONF"      : "postfix/sbin/postconf -e",
+	"POSTCONFD"     : "postfix/sbin/postconf -X",
 	"ZMPROV"        : "bin/zmprov -l",
 	"ZMLOCALCONFIG" : "bin/zmlocalconfig",
 	'PERDITION'     : "bin/zmperditionctl",
@@ -342,6 +343,12 @@ commands = {
 		name = "postconf",
 		cmd  = exe["POSTCONF"] + " %s",
 		# cmd  = exe["POSTCONF"] + " %s='%s'",
+	),
+	"postconfd" : Command(
+		desc = "postconfd",
+		name = "postconfd",
+		cmd  = exe["POSTCONFD"] + " %s",
+		# cmd  = exe["POSTCONFD"] + " %s='%s'",
 	),
 	"proxygen" : Command(
 		desc = "proxygen",
