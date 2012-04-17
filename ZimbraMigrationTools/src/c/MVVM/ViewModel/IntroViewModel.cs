@@ -127,22 +127,43 @@ public class IntroViewModel: BaseViewModel
 
         // Get data to initialize the profile combo boxes
         string[] profiles = mw.GetListofMapiProfiles();
-        foreach (string s in profiles)
+        if (profiles[0].IndexOf("No profiles") != -1)
         {
-            if (s.IndexOf("GetListofMapiProfiles Exception") != -1)
+            string msg = "No Exchange profiles exist.  ";
+            if (isServer)
             {
-                MessageBox.Show(s, "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);                               
-                return;
+                msg += "Please enter the Exchange Server information manually.";
+                m_configViewModelS.Isprofile = false;
+                m_configViewModelS.IsmailServer = true;
+            }
+            else
+            {
+                msg += "Please enter a PST file.";
+                m_configViewModelU.Isprofile = false;
+                m_configViewModelU.IspST = true;
+            }
+            MessageBox.Show(msg, "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Information);
+            m_configViewModelS.CSEnableNext = true;
+        }
+        else
+        {
+            foreach (string s in profiles)
+            {
+                if (s.IndexOf("GetListofMapiProfiles Exception") != -1)
+                {
+                    MessageBox.Show(s, "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+                if (isServer)
+                    m_configViewModelS.ProfileList.Add(s);
+                else
+                    m_configViewModelU.ProfileList.Add(s);
             }
             if (isServer)
-                m_configViewModelS.ProfileList.Add(s);
+                m_configViewModelS.CSEnableNext = (m_configViewModelS.ProfileList.Count > 0);
             else
-                m_configViewModelU.ProfileList.Add(s);
+                m_configViewModelU.CSEnableNext = (m_configViewModelU.ProfileList.Count > 0);
         }
-        if (isServer)
-            m_configViewModelS.CSEnableNext = (m_configViewModelS.ProfileList.Count > 0);
-        else
-            m_configViewModelU.CSEnableNext = (m_configViewModelU.ProfileList.Count > 0);
         lb.SelectedIndex = 1;
     }
     public string BuildNum {

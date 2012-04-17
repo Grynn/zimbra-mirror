@@ -265,8 +265,9 @@ public class CSMigrationWrapper
         }
         catch (Exception e)
         {
-            msg = string.Format("GetListofMapiProfiles Exception: {0}", e.Message);
-
+            msg = (msg.Substring(0, 11) == "No profiles")   // FBS bug 73020 -- 4/17/12
+                ? "No profiles"
+                : string.Format("GetListofMapiProfiles Exception: {0}", e.Message);
             s[0]= msg;
         }
         return s;

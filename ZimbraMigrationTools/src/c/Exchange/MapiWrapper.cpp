@@ -123,7 +123,9 @@ STDMETHODIMP CMapiWrapper::GetProfilelist(VARIANT *Profiles,BSTR *statusmessage)
          if(vProfileList.size() == 0)
          {
             dlog.err(L"No profiles returned for GetAllProfiles");
+			status.AppendBSTR(L"No profiles");
             *statusmessage =  status;
+			status.Detach();
             return S_OK;
 
          }
