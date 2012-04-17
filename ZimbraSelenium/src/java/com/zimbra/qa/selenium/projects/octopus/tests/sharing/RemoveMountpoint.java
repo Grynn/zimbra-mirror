@@ -42,7 +42,7 @@ public class RemoveMountpoint extends OctopusCommonTest {
 		ownerAccount.authenticate();
 	}
 
-	@Test(description = "Remove a mountpoint to a shared folder using pull down list", groups = { "sanity" })
+	@Test(description = "Remove a mountpoint to a shared folder using pull down list", groups = { "functional" })
 	public void RemoveMountpoint_01() throws HarnessException {
 		FolderItem ownerBriefcaseRootFolder = FolderItem.importFromSOAP(
 				ownerAccount, SystemFolder.Briefcase);

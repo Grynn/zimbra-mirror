@@ -34,7 +34,7 @@ public class DeleteFile extends OctopusCommonTest {
 		_fileAttached = false;
 	}
 
-	@Test(description = "Delete file through SOAP - verify deleted file in the Trash tab", groups = { "sanity" })
+	@Test(description = "Delete file through SOAP - verify deleted file in the Trash tab", groups = { "functional" })
 	public void DeleteFile_01() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 

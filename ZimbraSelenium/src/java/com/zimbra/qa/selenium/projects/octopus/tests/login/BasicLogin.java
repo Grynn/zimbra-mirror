@@ -18,7 +18,7 @@ public class BasicLogin extends OctopusCommonTest {
 		super.startingAccountPreferences = null;
 	}
 
-	@Test(description = "Login to the Octopus client", groups = { "sanity" })
+	@Test(description = "Login to the Octopus client", groups = { "functional" })
 	public void BasicLogin01() throws HarnessException {
 		// Login
 		if (!startingPage.zIsActive())

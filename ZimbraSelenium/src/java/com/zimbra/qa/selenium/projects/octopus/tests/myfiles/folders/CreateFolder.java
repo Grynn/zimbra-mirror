@@ -20,7 +20,7 @@ public class CreateFolder extends OctopusCommonTest {
 		super.startingAccountPreferences = null;
 	}
 
-	@Test(description = "Create a new folder using drop down list option", groups = { "smoke" })
+	@Test(description = "Create a new folder using drop down list option", groups = { "sanity" })
 	public void CreateFolder_01() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 

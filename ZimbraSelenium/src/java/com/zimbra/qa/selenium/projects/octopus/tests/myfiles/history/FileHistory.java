@@ -36,7 +36,7 @@ public class FileHistory extends OctopusCommonTest {
 		super.startingAccountPreferences = null;
 	}
 
-	@Test(description = "Upload file through RestUtil - verify file name in the history through SOAP", groups = { "sanity" })
+	@Test(description = "Upload file through RestUtil - verify file name in the history through SOAP", groups = { "functional" })
 	public void FileHistory_01() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 
