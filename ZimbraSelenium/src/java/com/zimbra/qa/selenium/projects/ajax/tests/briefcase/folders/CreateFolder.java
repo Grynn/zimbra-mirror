@@ -3,6 +3,8 @@ package com.zimbra.qa.selenium.projects.ajax.tests.briefcase.folders;
 import java.util.HashMap;
 
 import org.testng.annotations.*;
+
+import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
@@ -62,8 +64,8 @@ public class CreateFolder extends AjaxCommonTest {
 		ZAssert.assertEquals(folder.getName(), _folderName,
 				"Verify the server and client folder names match");
 	}
-
-	@Test(description = "Create a new folder using 'nf' keyboard shortcut", groups = { "functional" })
+	@Bugs(ids = "67061")
+	@Test(description = "According to Comment#1 in the bug 67061 Create a new folder using 'nf' keyboard shortcut is for mail only", groups = { "skip" })
 	public void CreateFolder_02() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 
