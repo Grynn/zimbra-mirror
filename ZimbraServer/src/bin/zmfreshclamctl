@@ -20,8 +20,7 @@ if [ x`whoami` != xzimbra ]; then
 fi
 
 if [ ! -L "/opt/zimbra/clamav" ]; then
-  echo "Error: ClamAV not installed"
-  exit 1
+  exit 0
 fi
 
 platform=`/opt/zimbra/libexec/get_plat_tag.sh`

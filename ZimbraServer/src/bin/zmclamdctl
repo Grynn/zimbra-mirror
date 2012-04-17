@@ -20,7 +20,7 @@ if [ x`whoami` != xzimbra ]; then
 fi
 
 if [ ! -L "/opt/zimbra/clamav" ]; then
-  exit 1
+  exit 0
 fi
 
 platform=`/opt/zimbra/libexec/get_plat_tag.sh`
