@@ -845,7 +845,26 @@ function(refresh) {
 ZaApp.prototype.getInstalledSkins = 
 function(refresh) {
     try {
-    	return this.getGlobalConfig(refresh).attrs[ZaGlobalConfig.A_zimbraInstalledSkin];
+        if (refresh || this._installedSkins == null) {
+            var soapDoc = AjxSoapDoc.create("GetAllSkinsRequest", ZaZimbraAdmin.URN, null);
+
+	        var csfeParams = new Object();
+	        csfeParams.soapDoc = soapDoc;
+	        var reqMgrParams = {} ;
+	        reqMgrParams.controller = ZaApp.getInstance().getCurrentController();
+            try {
+                this._installedSkins = [];
+                var resp = ZaRequestMgr.invoke(csfeParams, reqMgrParams ).Body.GetAllSkinsResponse;
+                if (resp && resp.skin) {
+                    for(var i = 0; i < resp.skin.length;i++) {
+                        this._installedSkins.push(resp.skin[i].name);
+                    }
+                }
+            } catch (ex) {
+                //not implemented yet
+            }
+        }
+    	return this._installedSkins;
     }catch (e) {
         return null ;
     }
