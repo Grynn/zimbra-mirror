@@ -294,7 +294,7 @@ function (showRootNode) {
     }
 
     if (showRootNode.recentObject.length != 0) {
-        this.currentRecented = this._buildNodeItem(this._getDefaultRecentObjects(showRootNode));
+        this.currentRecented = this._buildNodeItem(this._getDefaultRecentObjects(showRootNode), false, true);
         this.currentRecented.setExpanded(true);
     }
 
@@ -396,7 +396,7 @@ function (treeDataItem) {
 }
 
 ZaTree.prototype._buildNodeItem =
-function(showRootNode, isRoot) {
+function(showRootNode, isRoot, isHightlightedWhenMouseUp ) {
     var ti, nextTi, key, currentRoot;
     var clsName;
     if (showRootNode.text == ZaMsg.OVP_home) {
@@ -438,11 +438,32 @@ function(showRootNode, isRoot) {
         ti.setImage(currentAddNode.image);
         ti.setData(ZaOverviewPanelController._TID, currentAddNode.mappingId);
         ti.setData("dataItem", currentAddNode);
+
+        if ( isHightlightedWhenMouseUp ) {
+            var mouseOutEv = (AjxEnv.isIE) ? DwtEvent.ONMOUSELEAVE : DwtEvent.ONMOUSEOUT;
+
+            ti.addListener(DwtEvent.ONMOUSEDOWN, new AjxListener(ti, ZaTree._highlightItemOn));
+            ti.addListener(DwtEvent.ONMOUSEUP, new AjxListener(ti, ZaTree._highlightItemOff));
+            ti.addListener(mouseOutEv, new AjxListener(ti, ZaTree._highlightItemOff));
+        }
+
         for (key in currentAddNode._data) {
             ti.setData(key, currentAddNode._data[key]);
         }
     }
     return currentRoot;
+}
+
+ZaTree._highlightItemOff =
+function(ev) {
+	var ti = this;
+	ti._setSelected(false);
+}
+
+ZaTree._highlightItemOn =
+function(ev) {
+	var ti = this;
+	ti._setSelected(true);
 }
 
 ZaTree.prototype._itemClicked =
@@ -484,7 +505,6 @@ function(item, ev) {
             buildDataItem = currentDataItem.parentObject;
         this.buildTree(buildDataItem);
         this._selectedItems.removeAll();
-
 
         var selectedItem;
         if (currentDataItem.isLeaf())
