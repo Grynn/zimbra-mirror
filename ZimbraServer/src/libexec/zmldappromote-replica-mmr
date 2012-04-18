@@ -148,10 +148,10 @@ if(lc($ldap_is_master) eq "true") {
     ],
   );
   $mesg=>$ldap->add(
-    'olcOverlay=accesslog,olcDatabase={3}mdb,cn=config',
+    'olcOverlay={1}accesslog,olcDatabase={3}mdb,cn=config',
     attr => [
       objectClass=>['olcOverlayConfig','olcAccessLogConfig'],
-      olcOverlay=>'accesslog',
+      olcOverlay=>'{1}accesslog',
       olcAccessLogDB=>'cn=accesslog',
       olcAccessLogOps=>'writes',
       olcAccessLogSuccess=>'TRUE',
