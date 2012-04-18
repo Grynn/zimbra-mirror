@@ -1,0 +1,1 @@
+check_policy_service inet:%%zimbraLocalBindAddress%%:10031
