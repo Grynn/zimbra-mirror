@@ -25,7 +25,7 @@ public class SearchFile extends OctopusCommonTest {
 
 	@Test(
 			description = "Search for a file by filename", 
-			groups = { "sanity" })
+			groups = { "functional" })
 	public void SearchFile_01() throws HarnessException {
 
 		String filename = "filename"+ ZimbraSeleniumProperties.getUniqueString() +".xls";
