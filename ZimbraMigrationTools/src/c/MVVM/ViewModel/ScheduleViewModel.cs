@@ -154,6 +154,21 @@ public class ScheduleViewModel: BaseViewModel
         m_isPreview = false;
         DoMigrate(m_isPreview);
     }
+
+    private int AvailableThread()
+    {
+        int iThreadNum = -1;
+        for (int i = 0; i < bgwlist.Count; i++)
+        {
+            if (!bgwlist[i].IsBusy)
+            {
+                iThreadNum = i;
+                break;
+            }
+        }
+        return iThreadNum;
+    }
+
     public void DoMigrate(bool isPreview)
     {
         bgwlist.Clear();
@@ -290,30 +305,51 @@ public class ScheduleViewModel: BaseViewModel
                 accountResultsViewModel.EnableStop));
         }
         accountResultsViewModel.OpenLogFileEnabled = true;
-        num = 0;
-        foreach (SchedUser su in SchedList)
-        {
-            BackgroundWorker bgw = new System.ComponentModel.BackgroundWorker();
 
-            bgw.DoWork += new System.ComponentModel.DoWorkEventHandler(worker_DoWork);
-            bgw.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(
-                worker_ProgressChanged);
-            bgw.WorkerReportsProgress = true;
-            bgw.WorkerSupportsCancellation = true;
-            bgw.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(
-                worker_RunWorkerCompleted);
-            bgw.RunWorkerAsync(num++);
-            bgwlist.Add(bgw);
-        }
+        // FBS bug 71048 -- 4/16/12 -- use the correct number of threads.
+        // If MaxThreadCount not specified, default to 4.  If fewer users than MaxThreadCount, numThreads = numUsers
+        // NOTE: 4/18/12 -- currently there is no support for MaxThreadCount in the UI, so for now we always default to 4
+        int maxThreads = (m_config.GeneralOptions.MaxThreadCount > 0) ? m_config.GeneralOptions.MaxThreadCount : 4;
+        int numUsers = SchedList.Count;
+        int numThreads = Math.Min(numUsers, maxThreads);
+        for (int i = 0; i < numUsers; i++)
+        {
+            if (i < numThreads)
+            {
+                UserBW bgw = new UserBW(i);
+                bgw.DoWork += new System.ComponentModel.DoWorkEventHandler(worker_DoWork);
+                bgw.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(
+                    worker_ProgressChanged);
+                bgw.WorkerReportsProgress = true;
+                bgw.WorkerSupportsCancellation = true;
+                bgw.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(
+                    worker_RunWorkerCompleted);
+                bgw.usernum = i;
+                bgw.RunWorkerAsync(i);
+                bgwlist.Add(bgw);
+            }
+            else
+            {
+                overflowList.Add(i);
+            }
+        }; 
     }
 
     // //////////////////////
 
-    private ObservableCollection<BackgroundWorker> bgwlist =
-        new ObservableCollection<BackgroundWorker>();
-    public ObservableCollection<BackgroundWorker> BGWList {
+    private ObservableCollection<UserBW> bgwlist =
+        new ObservableCollection<UserBW>();
+    public ObservableCollection<UserBW> BGWList
+    {
         get { return bgwlist; }
         set { bgwlist = value; }
+    }
+    private ObservableCollection<int> overflowList =
+        new ObservableCollection<int>();
+    public ObservableCollection<int> OverflowList
+    {
+        get { return overflowList; }
+        set { overflowList = value; }
     }
     private ObservableCollection<DoWorkEventArgs> eventArglist =
         new ObservableCollection<DoWorkEventArgs>();
@@ -745,12 +781,12 @@ public class ScheduleViewModel: BaseViewModel
             if (!m_isPreview)
             {
                 accountResultsViewModel.PBMsgValue = "Migration complete";
-                SchedList.Clear();
-
-                UsersViewModel usersViewModel =
-                    ((UsersViewModel)ViewModelPtrs[(int)ViewType.USERS]);
-
-                usersViewModel.UsersList.Clear();
+                if (overflowList.Count == 0)
+                {
+                    SchedList.Clear();
+                    UsersViewModel usersViewModel = ((UsersViewModel)ViewModelPtrs[(int)ViewType.USERS]);
+                    usersViewModel.UsersList.Clear();
+                }
             }
             accountResultsViewModel.EnableStop = false;
         }
@@ -759,6 +795,30 @@ public class ScheduleViewModel: BaseViewModel
             m_isComplete = true;
         }
         EnablePreview = EnableMigrate = !m_isComplete;
+        if (overflowList.Count > 0)
+        {
+            int usernum = overflowList[0];
+            int threadnum = AvailableThread();
+            if (threadnum != -1)
+            {
+                bgwlist[threadnum].usernum = usernum;
+                bgwlist[threadnum].RunWorkerAsync(usernum);
+            }
+            overflowList.RemoveAt(0);
+        }
+    }
+
+    public int GetThreadNum(int usernum)
+    {
+        int ct = bgwlist.Count;
+        for (int i = 0; i < ct; i++)
+        {
+            if (bgwlist[i].usernum == usernum)
+            {
+                return bgwlist[i].threadnum;
+            }
+        }
+        return -1;
     }
 
     public void Acct_OnAcctChanged(object sender, MigrationObjectEventArgs e)
@@ -798,7 +858,8 @@ public class ScheduleViewModel: BaseViewModel
             ((AccountResultsViewModel)ViewModelPtrs[(int)ViewType.RESULTS]);    // main one
         AccountResultsViewModel ar = accountResultsViewModel.AccountResultsList[f.AccountNum];
 
-        if (bgwlist[f.AccountNum].CancellationPending)
+        int tnum = GetThreadNum(f.AccountNum);
+        if (bgwlist[tnum].CancellationPending)
         {
             eventArglist[f.AccountNum].Cancel = true;
             return;
@@ -820,7 +881,7 @@ public class ScheduleViewModel: BaseViewModel
                     ar.CurrentItemNum++;
                     ar.PBValue = (int)Math.Round(((Decimal)ar.CurrentItemNum /
                         (Decimal)ar.TotalItemsToMigrate) * 100);
-                    bgwlist[f.AccountNum].ReportProgress(ar.PBValue, f.AccountNum);
+                    bgwlist[tnum].ReportProgress(ar.PBValue, f.AccountNum);
                 }
             }
         }
