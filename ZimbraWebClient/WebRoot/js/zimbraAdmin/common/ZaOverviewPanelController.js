@@ -1939,7 +1939,7 @@ ZaOverviewPanelController.prototype.refreshRelatedTree = function(items,skipCos,
                 }
             }
 
-            if( item.type == ZaItem.ACCOUNT || item.type == ZaItem.DL){
+            if( item.type == ZaItem.ACCOUNT){
                 if(!skipDL){
                     if (!AjxUtil.isEmpty(item[ZaAccount.A2_memberOf]) &&
                         !AjxUtil.isEmpty(item[ZaAccount.A2_memberOf][ZaAccount.A2_directMemberList])
@@ -1954,6 +1954,14 @@ ZaOverviewPanelController.prototype.refreshRelatedTree = function(items,skipCos,
                                 ZaOverviewPanelController.manageRelatedTreeListener.call(this,[ZaMsg.OVP_home,ZaMsg.OVP_manageAccounts,ZaMsg.OVP_distributionLists,dlName],dl) ;
                             }
                         }
+                    }
+                }
+            }
+
+            if (item.type == ZaItem.DL) {
+                if(!skipDL){
+                    if (item[ZaDistributionList.A2_numMembers] > 0) {
+                        ZaOverviewPanelController.manageRelatedTreeListener.call(this,[ZaMsg.OVP_home,ZaMsg.OVP_manageAccounts,ZaMsg.OVP_distributionLists,item.name],item) ;
                     }
                 }
             }
@@ -2320,11 +2328,10 @@ function(parentPath, item) {
     return [];
 }
 
-
 ZaOverviewPanelController.prototype.getRelatedList4DL =
 function(parentPath, item) {
     var alias = item.attrs[ZaAccount.A_zimbraMailAlias];
-    var members = item[ZaDistributionList.A2_memberList];
+    var membersNum = item[ZaDistributionList.A2_numMembers];
     var Tis = [];
     if(alias.length > 0) {
         var aliasTi = new ZaTreeItemData({
@@ -2340,10 +2347,10 @@ function(parentPath, item) {
         ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._DL_ALIAS_LIST_VIEW] = ZaOverviewPanelController.aliasListTreeListener;
         Tis.push(aliasTi);
     }
-    if(members.length > 0) {
+    if(membersNum > 0) {
         var membersTi = new ZaTreeItemData({
                     text: ZaMsg.DLXV_LabelListMembers,
-                    count:members.length,
+                    count:membersNum,
                     image:"DistributionList",
                     mappingId: ZaZimbraAdmin._DL_MEMBERS_LIST_VIEW,
                     path: parentPath + ZaTree.SEPERATOR + item.name + ZaTree.SEPERATOR + ZaMsg.DLXV_LabelListMembers

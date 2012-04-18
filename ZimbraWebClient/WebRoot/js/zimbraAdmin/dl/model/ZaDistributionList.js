@@ -819,7 +819,7 @@ ZaDistributionList.prototype.getMemberQueryParams = function(callbackQuery, offs
 			skipCallbackIfCancelled: true
 		}
 
-		queryParams = {
+		var queryParams = {
 			reqCtrlParams: reqCtrlParams,
 			reqMgrParams: reqMgrParams
 		}
@@ -841,14 +841,19 @@ ZaDistributionList.prototype.getAllMembers = function ( params ) {
 
 		try {
 			var ajxCallbackWhenCompleted = new AjxCallback(view, ZaDLXFormView.prototype.updateMemberList);
-
+            var updateTreeWhenCompleted = new AjxCallback(this, this.updateTree);
 			var queryParams = ZaDistributionList.prototype.getMemberQueryParams.call( this, callbackQuery, offset, 
-																	limit, controller, ajxCallbackWhenCompleted );
+																	limit, controller, [ajxCallbackWhenCompleted, updateTreeWhenCompleted] );
 			ZaRequestMgr.invoke(queryParams.reqCtrlParams, queryParams.reqMgrParams);
 		} catch (ex) {
 			ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaDistributionList.prototype.getAllMembers", null, false);
 		}
 	}
+}
+
+ZaDistributionList.prototype.updateTree = function () {
+    var treeCtrl = ZaZimbraAdmin.getInstance().getOverviewPanelController();
+    treeCtrl.refreshRelatedTree(this, true, true);
 }
 
 ZaDistributionList.prototype.getAllMembersCallback = function ( params, resp ) {
@@ -866,11 +871,11 @@ ZaDistributionList.prototype.getAllMembersCallback = function ( params, resp ) {
 				!resp._data.Body.GetDistributionListResponse ) {
 				return;
 			}
-			dlBody = resp._data.Body.GetDistributionListResponse;
+			var dlBody = resp._data.Body.GetDistributionListResponse;
 			if (!dlBody.dl || !(dlBody.dl[0]) ) {
 				return;
 			}
-			dlResp = dlBody.dl[0];
+			var dlResp = dlBody.dl[0];
 
 			//whether is dynamic group
 			if (dlResp.dynamic === true) {
@@ -923,11 +928,14 @@ ZaDistributionList.prototype.getAllMembersCallback = function ( params, resp ) {
 				}
 			}
 
-			//run the CallBack finally
+			//run the CallBack finall
 			var ajxCallbackWhenCompleted = params.ajxCallbackWhenCompleted || null;
-			if (ajxCallbackWhenCompleted != null) {
-				ajxCallbackWhenCompleted.run1([this])
-			}
+			if (ajxCallbackWhenCompleted instanceof Array) {
+                for (var i = 0; i < ajxCallbackWhenCompleted.length; i++)
+				    ajxCallbackWhenCompleted[i].run1([this])
+			} else if (ajxCallbackWhenCompleted instanceof AjxCallback) {
+                ajxCallbackWhenCompleted.run1([this])
+            }
 
 		}
 

@@ -44,7 +44,7 @@ function(index, realizeDeferred, forceNode) {
 
 	this._countCell = document.getElementById(this._htmlElId + "_countCell");
 	// initialize count
-	if (this._countCell && this._countInfoParam) {
+	if (this._countCell && (this._countInfoParam !== undefined)) {
 	    this._countCell.innerHTML = this._countInfoParam;
         // only make css take effect when it has value;
         this._countCell.className = "AdminTreeItem-Count";

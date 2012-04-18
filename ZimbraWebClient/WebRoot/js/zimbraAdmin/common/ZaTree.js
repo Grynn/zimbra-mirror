@@ -294,8 +294,8 @@ function (showRootNode) {
     }
 
     if (showRootNode.recentObject.length != 0) {
-        this.currentRelated = this._buildNodeItem(this._getDefaultRecentObjects(showRootNode));
-        this.currentRelated.setExpanded(true);
+        this.currentRecented = this._buildNodeItem(this._getDefaultRecentObjects(showRootNode));
+        this.currentRecented.setExpanded(true);
     }
 
     for (var i = 0; i < showRootNode.siblings.size(); i++) {
