@@ -1,6 +1,7 @@
 package com.zimbra.qa.selenium.framework.ui;
 
 import java.awt.Toolkit;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -458,6 +459,9 @@ public abstract class AbsSeleniumObject {
 	 * @throws HarnessException
 	 */
 	public void zType(String locator, String value) throws HarnessException {
+		if(ZimbraSeleniumProperties.isWebDriver()){
+			logger.info("...WebDriver...zType()");
+		}
 		// Check if the locator is present
 		if (!sIsElementPresent(locator)) {
 			logger.info("zType(" + locator + ") element is not present");
@@ -482,22 +486,55 @@ public abstract class AbsSeleniumObject {
 	 * @throws HarnessException 
 	 */
 	public void zTypeKeys(String locator, String value) throws HarnessException {
-	   sTypeKeys(locator, value);
-	   sType(locator, value);
-	   logger.info("zTypeKeys(" + locator + "," + value + ")");
+		if(ZimbraSeleniumProperties.isWebDriver()){
+			logger.info("...WebDriver...zTypeKeys()");
+			sType(locator, value);
+		}else{
+			sTypeKeys(locator, value);
+			sType(locator, value);
+			logger.info("zTypeKeys(" + locator + "," + value + ")");
+		}
 	}
-
+	
 	public void zKeyDown(String keyCode) throws HarnessException {
 
 		if (keyCode == null || keyCode.isEmpty()){
 			throw new HarnessException("keyCode needs to be provided");
 		}
-		
 		tracer.trace("keyboard shortcut " + keyCode);
-
-		for (String kc : keyCode.split(",")) {
-
-			sGetEval("if(document.createEventObject){var body_locator=\"css=html>body\"; "
+		
+		if(ZimbraSeleniumProperties.isWebDriver()){
+			logger.info("...WebDriver...zKeyDown()");
+			
+			String locator = "css=html body";
+					
+			//WebElement we = getElement(locator); 
+			
+			//Actions builder = new Actions(webDriver());			
+			
+			for (String kc : keyCode.split(",")) {
+				try{
+					int code = Integer.parseInt(kc);
+					String key = KeyEvent.getKeyText(code);
+					if (key == null || key.isEmpty()){
+						throw new HarnessException("cannot convert " + code + " to String");
+					}else{
+						
+						//we.sendKeys(key.toLowerCase());
+						
+						//builder.sendKeys(we,key.toLowerCase()).build().perform();
+						
+						//zKeyEvent(locator, kc, "keydown");
+						
+						sType(locator,key.toLowerCase());						
+					}
+				}catch(Exception ex){
+					logger.error(ex);
+				}
+			}			
+		}else{
+			for (String kc : keyCode.split(",")) {
+				sGetEval("if(document.createEventObject){var body_locator=\"css=html>body\"; "
 					+ "var body=selenium.browserbot.findElement(body_locator);"
 					+ "var evObj = body.document.createEventObject();"
 					+ "evObj.keyCode="
@@ -514,15 +551,53 @@ public abstract class AbsSeleniumObject {
 					+ ";}var x = selenium.browserbot.findElementOrNull('"
 					+ "css=html>body"
 					+ "');x.focus(); x.dispatchEvent(evObj);}");
+			}
 		}
+		
 	}
 
 	public void zKeyEvent(String locator, String keyCode, String event)
 			throws HarnessException {
+		if(ZimbraSeleniumProperties.isWebDriver()){
+			logger.info("...WebDriver...zKeyEvent()");	
 
-		sFocus(locator);
-
-		sGetEval("if(document.createEventObject){var x=selenium.browserbot.findElementOrNull('"
+			//JavascriptLibrary jsLib = new JavascriptLibrary();
+			//jsLib.callEmbeddedSelenium(webDriver(), "triggerMouseEventAt", we, "onfocus","1,1"); 
+		
+			if (this.zIsBrowserMatch(BrowserMasks.BrowserMaskIE)) {
+				executeScript(
+					"try {var el = arguments[0]; " 
+					+ "var evObj = document.createEventObject(); " 
+					+ "evObj.keyCode=" 
+					+ keyCode 
+					+ "; evObj.repeat = false; " 
+					+ "el.focus(); el.fireEvent(\"on" 
+					+ event 
+					+ "\", evObj);}catch(err){return(err.message)}",
+					getElement(locator));
+			}else if (this.zIsBrowserMatch(BrowserMasks.BrowserMaskFF)){
+				executeScript(
+					"try {var el = arguments[0]; " 
+				    + "var evo = document.createEvent('HTMLEvents'); " 
+					+ "evo.initEvent('"
+					+ event
+					+ "', true, true, window, 1 ); evo.keyCode="
+					+ keyCode
+					+ "; el.blur(); el.focus(); el.dispatchEvent(evo);}catch(err){return(err.message)}",
+					getElement("css=html body"));
+			}else {
+				executeScript(
+						"try {var el = arguments[0]; " 
+					    + "var evo = document.createEvent('HTMLEvents'); " 
+						+ "evo.initEvent('"
+						+ event
+						+ "', true, true, window, 1 ); evo.keyCode="
+						+ keyCode
+						+ "; el.blur(); el.focus(); el.dispatchEvent(evo);}catch(err){return(err.message)}",
+						getElement("css=html body"));
+			}
+		}else{			
+			sGetEval("if(document.createEventObject){var x=selenium.browserbot.findElementOrNull('"
 				+ locator
 				+ "');var evObj = x.document.createEventObject();"
 				+ "evObj.keyCode="
@@ -543,6 +618,7 @@ public abstract class AbsSeleniumObject {
 				+ keyCode
 				+ ";} var x = selenium.browserbot.findElementOrNull('"
 				+ locator + "'); x.blur(); x.focus(); x.dispatchEvent(evObj);}");
+		}
 	}
 
 	/**
@@ -1716,7 +1792,14 @@ public abstract class AbsSeleniumObject {
 	 * DefaultSelenium.typeKeys()
 	 */
 	public void sTypeKeys(String locator, String text) throws HarnessException {
-		ClientSessionFactory.session().selenium().typeKeys(locator, text);
+		if (ZimbraSeleniumProperties.isWebDriver()){
+			WebElement we = getElement(locator);
+			Actions builder = new Actions(webDriver());
+			Action action = builder.sendKeys(we,text).build();
+			action.perform();
+		}else{
+			ClientSessionFactory.session().selenium().typeKeys(locator, text);
+		}
 		logger.info("typeKeys(" + locator + ", " + text + ")");
 	}
 
@@ -2177,8 +2260,8 @@ public abstract class AbsSeleniumObject {
 					return we;
 				}
 			};
-		}
-
+		}		
+		
 		// // ***
 		// End: WebDriver methods
 		// // ***

@@ -164,7 +164,7 @@ public class DialogTag extends AbsDialog {
 
 		logger.info(myPageName() + " zIsActive()");
 
-		String locator = "id="+ Locators.zTagDialogId;
+		String locator = "css=div[id="+ Locators.zTagDialogId + "]";
 
 		if ( !this.sIsElementPresent(locator) ) {
 			return (false); // Not even present

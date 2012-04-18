@@ -20,6 +20,7 @@ import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.ui.DialogTag;
 import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.DocumentBriefcaseNew;
 import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.DocumentBriefcaseOpen;
 import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.PageBriefcase;
@@ -301,15 +302,36 @@ public class CreateDocument extends AjaxCommonTest {
 		app.zPageBriefcase
 		.zWaitForElementPresent(TreeBriefcase.Locators.briefcaseListView);
 		
-		app.zPageBriefcase.sMouseOver(TreeBriefcase.Locators.briefcaseListView);
-		app.zPageBriefcase.sFocus(TreeBriefcase.Locators.briefcaseListView);
+		app.zPageBriefcase.zIsVisiblePerPosition(TreeBriefcase.Locators.briefcaseTreeView+"16]",0,0);
+		app.zPageBriefcase.sMouseOver(TreeBriefcase.Locators.briefcaseTreeView+"16]");
+		app.zPageBriefcase.sFocus(TreeBriefcase.Locators.briefcaseTreeView+"16]");
+		app.zPageBriefcase.zClickAt(TreeBriefcase.Locators.briefcaseTreeView+"16]","");
+		app.zPageBriefcase.zRightClickAt(TreeBriefcase.Locators.briefcaseTreeView+"16]","");
+		app.zPageBriefcase.zClick(TreeBriefcase.Locators.briefcaseTreeView+"16]");
+		app.zPageBriefcase.zGetHtml(TreeBriefcase.Locators.briefcaseListView);
 		
-		//ZAssert.assertStringContains("ccc", "vvv","Testing failure");
-				
+		//ZAssert.assertStringContains("ccc", "vvv","Testing failure");				
+		
+		String tagName = "tag" + ZimbraSeleniumProperties.getUniqueString();
+		Shortcut shortcut = Shortcut.S_NEWTAG;
+		
+		app.zPageBriefcase.zSelectWindow(PageBriefcase.pageTitle);
+		
+		DialogTag dialog = (DialogTag) app.zPageBriefcase
+				.zKeyboardShortcut(shortcut);
+		
+		// Fill out the tag dialog input field
+		dialog.zSetTagName(tagName);
+		
+		SleepUtil.sleepVerySmall();
+		
+		dialog.zClickButton(Button.B_OK);
+		
 		// Open new document page
+		//app.zPageBriefcase.zKeyEvent("css=html body", "78","keydown");		
 		DocumentBriefcaseNew documentBriefcaseNew = (DocumentBriefcaseNew) app.zPageBriefcase
-				.zToolbarPressButton(Button.B_NEW, docItem);
-
+			.zToolbarPressButton(Button.B_NEW, docItem);
+		
 		SleepUtil.sleepMedium();
 		
 		try {

@@ -835,7 +835,7 @@ public class PageBriefcase extends AbsTab {
 
 		if (!this.sIsElementPresent(itemLocator))
 			throw new HarnessException("List View Rows is not present "
-					+ listLocator);
+					+ itemLocator);
 
 		if (action == Action.A_LEFTCLICK) {
 			zWaitForElementPresent(itemNameLocator);
@@ -1203,7 +1203,7 @@ public class PageBriefcase extends AbsTab {
 		/*
 		 * for (String kc : keyCode.split(",")) {
 		 * 
-		 * //vare=document.createEvent('KeyboardEvent');
+		 * //var e=document.createEvent('KeyboardEvent');
 		 * //if(typeof(e.initKeyboardEvent)!='undefined'){e.initEvent()}
 		 * //else{e.initKeyEvent()}
 		 * 
