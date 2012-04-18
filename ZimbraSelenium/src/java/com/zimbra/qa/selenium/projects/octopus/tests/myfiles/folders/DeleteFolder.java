@@ -61,7 +61,7 @@ public class DeleteFolder extends OctopusCommonTest {
 				"Verify the subfolder's parent id matches trash folder id");
 	}
 
-	@Test(description = "Delete a sub-folder using right click context menu", groups = { "smoke" })
+	@Test(description = "Delete a sub-folder using right click context menu", groups = { "sanity" })
 	public void DeleteFolder_02() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 

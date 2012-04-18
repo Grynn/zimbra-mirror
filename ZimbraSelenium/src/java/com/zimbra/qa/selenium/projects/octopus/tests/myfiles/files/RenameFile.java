@@ -32,7 +32,7 @@ public class RenameFile extends OctopusCommonTest {
 		_fileAttached = false;
 	}
 
-	@Test(description = "Upload file through RestUtil - Rename File using Right Click Context Menu", groups = { "smoke" })
+	@Test(description = "Upload file through RestUtil - Rename File using Right Click Context Menu", groups = { "sanity" })
 	public void RenameFile_01() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 

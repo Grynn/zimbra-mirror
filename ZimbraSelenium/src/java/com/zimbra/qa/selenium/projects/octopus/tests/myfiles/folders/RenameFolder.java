@@ -20,7 +20,7 @@ public class RenameFolder extends OctopusCommonTest {
 
 	}
 
-	@Test(description = "Rename folder using context menu", groups = { "smoke" })
+	@Test(description = "Rename folder using context menu", groups = { "sanity" })
 	public void RenameFolder_01() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 

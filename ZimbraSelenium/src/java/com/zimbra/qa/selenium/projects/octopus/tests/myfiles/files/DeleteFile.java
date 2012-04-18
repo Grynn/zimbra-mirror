@@ -87,7 +87,7 @@ public class DeleteFile extends OctopusCommonTest {
 				"Verify the file was moved to the trash folder");
 	}
 
-	@Test(description = "Delete file using drop down menu - - verify deleted file in the Trash tab", groups = { "smoke" })
+	@Test(description = "Delete file using drop down menu - - verify deleted file in the Trash tab", groups = { "sanity" })
 	public void DeleteFile_02() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 	
