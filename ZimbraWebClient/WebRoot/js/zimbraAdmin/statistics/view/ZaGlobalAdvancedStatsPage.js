@@ -560,12 +560,16 @@ ZaGlobalAdvancedStatsPage.getCounters = function(hostname, group) {
 
 ZaGlobalAdvancedStatsPage.counterSelected = function(evt, id) {
     var select = ZaGlobalAdvancedStatsPage.getTarget(evt);
+    if (AjxUtil.isEmpty(select)) {
+        return;
+	}
     
     var chartdiv = document.getElementById("loggerchart" + id);
     ZaGlobalAdvancedStatsPage.setText(chartdiv, ZaMsg.NAD_AdvStatsLoadingDataLabel);
     
     var serverSelect = document.getElementById("select-servers" + id);
-    if (AjxUtil.isEmpty(serverSelect.selectedIndex) ||
+    if (AjxUtil.isEmpty(serverSelect) ||
+        AjxUtil.isEmpty(serverSelect.selectedIndex) ||
         serverSelect.selectedIndex < 0 ||
         !serverSelect[serverSelect.selectedIndex] ||
         !serverSelect[serverSelect.selectedIndex].value) {
@@ -575,10 +579,13 @@ ZaGlobalAdvancedStatsPage.counterSelected = function(evt, id) {
     var hostname = serverSelect[serverSelect.selectedIndex].value;
 
     var groupSelect = document.getElementById("select-group" + id);
-
-    if (!groupSelect[groupSelect.selectedIndex] ||
+    if (AjxUtil.isEmpty(groupSelect) ||
+        AjxUtil.isEmpty(groupSelect.selectedIndex) ||
+        groupSelect.selectedIndex < 0 ||
+        !groupSelect[groupSelect.selectedIndex] ||
         !groupSelect[groupSelect.selectedIndex].value)
         return;
+
     var group = groupSelect[groupSelect.selectedIndex].value;
     
     var selected = [];
@@ -607,7 +614,9 @@ ZaGlobalAdvancedStatsPage.showhide = function(id) {
 
 ZaGlobalAdvancedStatsPage.removeChild = function(id) {
     var e = document.getElementById(id);
-    e.parentNode.removeChild(e);
+    if (!AjxUtil.isEmpty(e) && !AjxUtil.isEmpty(e.parentNode)) {
+        e.parentNode.removeChild(e);
+    }
 }
 
 ZaGlobalAdvancedStatsPage.insertChartHTML = function(element) {
