@@ -79,21 +79,20 @@ class Ldap:
 		
 		bindPassword = cls.cf.ldap_root_password
 		cls.mLdapConfig = GenericLdapConfig(ldapUrl, startTLSEnabled, bindDN, bindPassword)
-		mLdapContext = LdapClient.getContext(cls.mLdapConfig, LdapUsage.SEARCH)
 
 		if cls.cf.ldap_is_master:
 			Log.logMsg(5, "Creating ldap context")
 			atbase = "cn=accesslog"
 			atfilter = "(objectClass=*)"
 			atreturn = ['1.1']
+			mLdapContext = LdapClient.getContext(cls.mLdapConfig, LdapUsage.SEARCH)
 			zfilter = ZLdapFilterFactory.getInstance().fromFilterString(FilterId.ZMCONFIGD, atfilter)
 			searchControls = ZSearchControls.createSearchControls(ZSearchScope.SEARCH_SCOPE_BASE, ZSearchControls.SIZE_UNLIMITED, atreturn);
 			ne = mLdapContext.searchDir(base, zFilter, searchControls);
 			if ne.hasMore():
 				Log.logMsg(5, "Ldap config is master")
 				cls.master = True
-
-		LdapClient.closeContext(mLdapContext)
+			LdapClient.closeContext(mLdapContext)
 
 	@classmethod
 	def getLdapContext(cls):
