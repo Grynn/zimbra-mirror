@@ -632,7 +632,15 @@ public abstract class AbsSeleniumObject {
 		
 			logger.info("zTypeFormattedText(" + locator + ", " + html + ")");
 
-			sGetEval("var bodytext=\""
+			if(ZimbraSeleniumProperties.isWebDriver()){
+				executeScript("try{var bodytext=\""
+					+ html
+					+ "\";"
+					+ "var iframe_element=arguments[0];"
+					+ "var iframe_body=iframe_element.contentWindow.document.body;"
+					+ "iframe_body.innerHTML = bodytext;}catch(err){return(err);}",getElement(locator));	
+			}else{
+				sGetEval("var bodytext=\""
 					+ html
 					+ "\";"
 					+ "var iframe_locator=\""
@@ -640,6 +648,7 @@ public abstract class AbsSeleniumObject {
 					+ "\";"
 					+ "var iframe_body=selenium.browserbot.findElement(iframe_locator).contentWindow.document.body;"
 					+ "iframe_body.innerHTML = bodytext;");	
+			}
 	}
 
 	/**
@@ -1736,9 +1745,15 @@ public abstract class AbsSeleniumObject {
 	 * DefaultSelenium.getValue()
 	 */
 	public String sGetValue(String locator) throws HarnessException {
-		String text = ClientSessionFactory.session().selenium().getValue(
+		String text = null;
+		if (ZimbraSeleniumProperties.isWebDriver()){
+			WebElement el = getElement(locator);
+			text = el.getAttribute("value");
+		}else{
+			text = ClientSessionFactory.session().selenium().getValue(
 				locator);
-		logger.info("DefaultSelenium.getValue(" + locator + ") = " + text);
+		}
+		logger.info("getValue(" + locator + ") = " + text);
 		return (text);
 	}
 
@@ -1882,19 +1897,17 @@ public abstract class AbsSeleniumObject {
 	 * @throws HarnessException 
 	 */
 	public void sSelectFrame(String locator) throws HarnessException {	
-		String modifiedLocator = locator;
+		
 		try {
 			if (ZimbraSeleniumProperties.isWebDriver()) {
-				if (locator.startsWith("css=")){
-					modifiedLocator = locator.substring("css=".length());
+				if(locator.contains("relative=top")){
+					webDriver().switchTo().defaultContent();
+				}else{
+					webDriver().switchTo().frame(getElement(locator));
 				}
-				webDriver().switchTo().frame(getElement(modifiedLocator));
 			} else if (ZimbraSeleniumProperties.isWebDriverBackedSelenium()) {
-				if (locator.startsWith("css=")){
-					modifiedLocator = locator.substring("css=".length());
-				}
 				webDriverBackedSelenium().getWrappedDriver().switchTo()
-						.frame(getElement(modifiedLocator));
+						.frame(getElement(locator));
 				// WebElement el = getElement("body");
 			} else {
 				ClientSessionFactory.session().selenium().selectFrame(locator);
@@ -2027,7 +2040,7 @@ public abstract class AbsSeleniumObject {
 			return locator;
 		}
 
-		public void setLocator(String l) {
+		private void setLocator(String l) {
 			locator = l;
 		}
 
@@ -2035,27 +2048,35 @@ public abstract class AbsSeleniumObject {
 			return text;
 		}
 
-		public void setText(String txt) {
+		private void setText(String txt) {
 			text = txt;
 		}
 
 	}
 
 	private CssLocator stripCssLocator(String locator, String startSuffix,
-				String containSuffix) {
+			String containSuffix) {
 		String modifiedLocator = locator;
 		String text = "";
 		CssLocator cssl = new CssLocator();
-			
-		if (modifiedLocator.startsWith(startSuffix)) {
-			modifiedLocator = modifiedLocator.substring(startSuffix.length());				
-		}
+		
+		if(modifiedLocator!= null){		
+			if (modifiedLocator.startsWith(startSuffix)) {
+				modifiedLocator = modifiedLocator.substring(startSuffix.length());				
+			}
 
-		if (modifiedLocator.contains(containSuffix)) {
-			String[] tokens = modifiedLocator.split(containSuffix);
-			modifiedLocator = tokens[0];
-			text = tokens[1].substring(tokens[1].indexOf('(') + 1,
-					tokens[1].lastIndexOf(')'));
+			if (modifiedLocator.contains(containSuffix)) {
+				String[] tokens = modifiedLocator.split(containSuffix);
+				modifiedLocator = tokens[0];
+				if(tokens[1].startsWith("(")&& tokens[1].endsWith(")")){
+					text = tokens[1].substring(tokens[1].indexOf('(') + 1,
+							tokens[1].lastIndexOf(')'));
+					if(text.startsWith("'")&& text.endsWith("'")){
+						text = text.substring(text.indexOf('\'') + 1,
+								text.lastIndexOf('\''));
+					}
+				}
+			}
 		}
 
 		cssl.setLocator(modifiedLocator);
@@ -2068,50 +2089,74 @@ public abstract class AbsSeleniumObject {
 		return stripCssLocator(locator, "css=", ":contains").getLocator();
 	}
 
-		private WebElement getElement(String locator, String startSuffix,
-				String containSuffix) {
-			WebElement element = null;
-			WebDriver driver = null;
-			CssLocator cssl = stripCssLocator(locator, startSuffix, containSuffix);
-			if (ZimbraSeleniumProperties.isWebDriverBackedSelenium()){
-				driver = webDriverBackedSelenium().getWrappedDriver();
-			}else{
-				driver = webDriver();
-			}			
-			if (null != cssl.getLocator()) {
-				try {
-					if (cssl.getText() != null && !cssl.getText().isEmpty()) {
-						String txt = cssl.getText();
-						List<WebElement> elements = driver.findElements(By
-								.cssSelector(cssl.getLocator()));
-						Iterator<WebElement> it = elements.iterator();
-						while (it.hasNext()) {
-							element = it.next();
-							if (element.getText().contains(txt)){
-								break;
-							}else{
-								element = null;
-							}
+	private WebElement getElement(String locator, String startSuffix) {
+		WebElement element = null;
+		WebDriver driver = webDriver();
+		String modifiedLocator = locator;
+		if (modifiedLocator != null){
+			if( modifiedLocator.startsWith(startSuffix)) {
+				modifiedLocator = modifiedLocator.substring(startSuffix.length());				
+			}
+			try {
+				element = driver.findElement(By.id(modifiedLocator));
+			}catch(Exception ex){
+				logger.info("...getElement(String, String)..." + ex);
+			}
+		}
+		return element;
+	}
+	
+	private WebElement getElement(String locator, String startSuffix,
+			String containSuffix) {
+		WebElement element = null;
+		WebDriver driver = null;
+		CssLocator cssl = stripCssLocator(locator, startSuffix, containSuffix);
+		if (ZimbraSeleniumProperties.isWebDriverBackedSelenium()){
+			driver = webDriverBackedSelenium().getWrappedDriver();
+		}else{
+			driver = webDriver();
+		}			
+		if (null != cssl.getLocator()) {
+			try {
+				if (cssl.getText() != null && !cssl.getText().isEmpty()) {
+					String txt = cssl.getText();
+					List<WebElement> elements = driver.findElements(By
+						.cssSelector(cssl.getLocator()));
+					Iterator<WebElement> it = elements.iterator();
+					while (it.hasNext()) {
+						element = it.next();
+						if (element.getText().contains(txt)){
+							break;
+						}else{
+							element = null;
 						}
-
-					} else {
-						element = driver.findElement(By.cssSelector(cssl
-								.getLocator()));
 					}
 
-				} catch (Exception ex) {
-					logger.info("...getElement()..." + ex);
+				} else {
+					element = driver.findElement(By.cssSelector(cssl
+						.getLocator()));
 				}
-			}
-			return element;
-		}
 
-		public WebElement getElementOrNull(String locator) {
-			return getElement(locator, "css=", ":contains");
+			} catch (Exception ex) {
+				logger.info("...getElement(String, String, String)..." + ex);
+			}
 		}
+		return element;
+	}
+
+	public WebElement getElementOrNull(String locator) {
+		WebElement we = null;
+		if(locator.startsWith("id=")){
+			we = getElement(locator, "id=");
+		}else{
+			we = getElement(locator, "css=", ":contains");
+		}
+		return we;
+	}
 		
 		public WebElement getElement(String locator) throws HarnessException{
-			WebElement we = getElement(locator, "css=", ":contains");
+			WebElement we = getElementOrNull(locator);
+			
 			if(we!=null){
 				return we;
 			}else{
