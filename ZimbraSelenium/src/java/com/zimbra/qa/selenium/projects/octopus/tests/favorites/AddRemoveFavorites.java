@@ -38,7 +38,7 @@ public class AddRemoveFavorites extends OctopusCommonTest {
 		_fileAttached = false;
 	}
 
-	@Test(description = "Mark file as Favorite through SOAP - verify file was added to Favorites using SOAP", groups = { "sanity" })
+	@Test(description = "Mark file as Favorite through SOAP - verify file was added to Favorites using SOAP", groups = { "functional" })
 	public void AddRemoveFavorites_01() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 

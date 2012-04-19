@@ -31,7 +31,7 @@ public class AccountSettings extends OctopusCommonTest {
 		_fileAttached = false;
 	}
 
-	@Test(description = "Open Settings dialog - verify UI layout", groups = { "sanity" })
+	@Test(description = "Open Settings dialog - verify UI layout", groups = { "functional" })
 	public void AccountSettings_01() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 

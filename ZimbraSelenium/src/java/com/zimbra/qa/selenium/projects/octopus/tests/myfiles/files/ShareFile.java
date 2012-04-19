@@ -33,7 +33,7 @@ public class ShareFile extends OctopusCommonTest {
 		_fileAttached = false;
 	}
 
-	@Test(description = "Share file using soap - verify file is shared", groups = { "sanity" })
+	@Test(description = "Share file using soap - verify file is shared", groups = { "functional" })
 	public void ShareFile_01() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 

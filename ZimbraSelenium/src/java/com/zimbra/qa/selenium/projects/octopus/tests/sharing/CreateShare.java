@@ -39,7 +39,7 @@ public class CreateShare extends OctopusCommonTest {
 		granteeAccount.authenticate();
 	}
 
-	@Test(description = "Create share using SOAP - verify view permissions in Share info using SOAP", groups = { "sanity" })
+	@Test(description = "Create share using SOAP - verify view permissions in Share info using SOAP", groups = { "functional" })
 	public void CreateShare_01() throws HarnessException {
 		ZimbraAccount currentOwnerAccount = app.zGetActiveAccount();
 

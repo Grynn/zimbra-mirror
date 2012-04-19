@@ -36,7 +36,7 @@ public class AddComment extends OctopusCommonTest {
 		super.startingAccountPreferences = null;
 	}
 
-	@Test(description = "Add file comments - verify comments text in the file Comments through SOAP", groups = { "sanity" })
+	@Test(description = "Add file comments - verify comments text in the file Comments through SOAP", groups = { "functional" })
 	public void AddComment_01() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 
