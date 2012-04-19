@@ -113,7 +113,10 @@ public class ClientSession {
 				//ChromeDriver driver = new ChromeDriver(caps);
 				
 				ChromeOptions options = new ChromeOptions();
-				//System.setProperty("webdriver.chrome.driver","C:/p4/zimbra/main/ZimbraSelenium/chromedriver.exe");
+				String chromedriverPath = null;
+				if((chromedriverPath = ZimbraSeleniumProperties.getStringProperty("chromedriver.path"))!=null){
+					System.setProperty("webdriver.chrome.driver",chromedriverPath);
+				}
 				webDriver = new ChromeDriver(options);
 				//webDriver = new ChromeDriver();
 			} else if (ZimbraSeleniumProperties.getStringProperty("browser").contains("firefox")){
