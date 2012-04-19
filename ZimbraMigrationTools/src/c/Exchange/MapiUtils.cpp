@@ -2846,6 +2846,39 @@ LPWSTR WriteUnicodeToFile(LPTSTR pBody)
     return lpwstrFQFileName;
 }
 
+bool Zimbra::MAPI::Util::DumpContentsToFile(LPTSTR pBody, string strFilePath,bool isAscii)
+{
+	LPSTR pTemp = NULL;
+    int nBytesToBeWritten;
+
+    pTemp = (isAscii) ? (LPSTR)pBody : Zimbra::Util::UnicodeToAnsii(pBody);
+    nBytesToBeWritten = (int)strlen(pTemp);
+	Zimbra::Util::ScopedInterface<IStream> pStream;
+    ULONG nBytesWritten = 0;
+    ULONG nTotalBytesWritten = 0;
+    HRESULT hr = S_OK;
+
+	// Open stream on file
+    if (FAILED(hr = OpenStreamOnFile(MAPIAllocateBuffer, MAPIFreeBuffer, STGM_CREATE |
+            STGM_READWRITE, (LPTSTR)strFilePath.c_str(), NULL, pStream.getptr())))
+    {
+		return false;
+    }
+    // write to file
+    while (!FAILED(hr) && nBytesToBeWritten > 0)
+    {
+
+	hr = pStream->Write(pTemp, nBytesToBeWritten, &nBytesWritten);
+	pTemp += nBytesWritten;
+        nBytesToBeWritten -= nBytesWritten;
+        nTotalBytesWritten += nBytesWritten;
+        nBytesWritten = 0;
+    }
+    if (FAILED(hr = pStream->Commit(0)))
+        return false;
+
+	return true;
+}
 
 LPWSTR WriteContentsToFile(LPTSTR pBody, bool isAscii)
 {
