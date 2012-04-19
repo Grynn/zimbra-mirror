@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import org.testng.annotations.Test;
 
+import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
@@ -44,6 +45,7 @@ public class ZimbraZimletAvailableZimlets extends AjaxCommonTest {
 	 * See http://bugzilla.zimbra.com/show_bug.cgi?id=61982 - WONTFIX
 	 * @throws HarnessException
 	 */
+	@Bugs(ids = "50123")
 	@Test(	description = "Load the client with just Social enabled",
 			groups = { "deprecated" })
 	public void ZimbraZimletAvailableZimlets_01() throws HarnessException {

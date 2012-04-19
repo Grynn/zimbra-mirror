@@ -2,6 +2,7 @@ package com.zimbra.qa.selenium.projects.ajax.tests.zimlets.social;
 
 import org.testng.annotations.Test;
 
+import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
@@ -26,8 +27,9 @@ public class LoadSocialTab extends AjaxCommonTest {
 	/**
 	 * @throws HarnessException
 	 */
+	@Bugs(ids = "50123")
 	@Test(	description = "Basic test case: Load the Social tab",
-			groups = { "functional" })
+			groups = { "deprecated" })
 	public void LoadSocialTab_01() throws HarnessException {
 		
 		ZAssert.assertTrue(app.zPageSocial.zIsActive(), "Verify the social page is active");

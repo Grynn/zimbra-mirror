@@ -2,6 +2,7 @@ package com.zimbra.qa.selenium.projects.ajax.tests.preferences.zimlets;
 
 import org.testng.annotations.Test;
 
+import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
@@ -38,12 +39,15 @@ public class GetZimlets extends AjaxCommonTest {
 		int count = app.zPagePreferences.sGetCssCount(locator + ">div[id^='zli__']");
 		
 		// IronMaiden: 5 zimlets - LinkedIn, Phone, Search Highlighter, Webex, Zimbra Social
-		ZAssert.assertEquals(count, 5, "Verify 5 zimlets are shown in the preferences page");
+		// IronMaiden: Bug 50123: 3 zimlets - Phone, Search Highlighter, Webex
+		ZAssert.assertEquals(count, 3, "Verify 3 zimlets are shown in the preferences page");
 	}
 	
+	// IronMaiden: Bug 50123: 3 zimlets - Phone, Search Highlighter, Webex
+	@Bugs(ids = "50123")
 	@Test(
 			description = "Verify the LinkedIn table text",
-			groups = { "functional" }
+			groups = { "deprecated" }
 			)
 	public void GetZimlets_02() throws HarnessException {
 
@@ -126,9 +130,11 @@ public class GetZimlets extends AjaxCommonTest {
 		
 	}
 
+	// IronMaiden: Bug 50123: 3 zimlets - Phone, Search Highlighter, Webex
+	@Bugs(ids = "50123")
 	@Test(
 			description = "Verify the Zimbra Social table text",
-			groups = { "functional" }
+			groups = { "deprecated" }
 			)
 	public void GetZimlets_06() throws HarnessException {
 
