@@ -29,6 +29,7 @@ import com.zimbra.cs.ldap.ZSearchScope;
 import com.zimbra.cs.ldap.LdapException.LdapSizeLimitExceededException;
 import com.zimbra.cs.ldap.LdapServerConfig.GenericLdapConfig;
 import com.zimbra.cs.ldap.ZLdapFilterFactory.FilterId;
+from logmsg import *
 
 # (Key, DN, requires_master)
 keymap = {
@@ -60,7 +61,6 @@ class Ldap:
 		Log.logMsg(4, "Initializing ldap")
 		if c:
 			cls.cf = c
-			cls.LdapClient.initialize()
 		else:
 			raise Exception("Ldap not initialized")
 
@@ -74,7 +74,7 @@ class Ldap:
 		bindDN = "cn=config"
 		if cls.cf.ldap_starttls_required=="false":
 			startTLSEnabled = False
-		else
+		else:
 			startTLSEnabled = True
 		
 		bindPassword = cls.cf.ldap_root_password
