@@ -39,8 +39,8 @@ public class GetZimlets extends AjaxCommonTest {
 		int count = app.zPagePreferences.sGetCssCount(locator + ">div[id^='zli__']");
 		
 		// IronMaiden: 5 zimlets - LinkedIn, Phone, Search Highlighter, Webex, Zimbra Social
-		// IronMaiden: Bug 50123: 3 zimlets - Phone, Search Highlighter, Webex
-		ZAssert.assertEquals(count, 3, "Verify 3 zimlets are shown in the preferences page");
+		// IronMaiden: Bug 50123: 3 zimlets - Phone, Search Highlighter, Webex, Y-Emoticons
+		ZAssert.assertEquals(count, 4, "Verify 4 zimlets are shown in the preferences page");
 	}
 	
 	// IronMaiden: Bug 50123: 3 zimlets - Phone, Search Highlighter, Webex
@@ -149,6 +149,27 @@ public class GetZimlets extends AjaxCommonTest {
 		
 		ZAssert.assertEquals(name, "Zimbra Social", "Verify the Zimbra Social entry exists");
 		ZAssert.assertEquals(description, "Access social services like Twitter, Facebook, Digg and TweetMeme.", "Verify the Zimbra Social description");
+		
+		
+	}
+
+	@Test(
+			description = "Verify the Y-Emoticons table text",
+			groups = { "functional" }
+			)
+	public void GetZimlets_07() throws HarnessException {
+
+		// Navigate to preferences -> notifications
+		app.zTreePreferences.zTreeItem(Action.A_LEFTCLICK, TreeItem.Zimlets);
+
+		// The locator to the table
+		String locator = "css=div[id='ZmPrefZimletListView'] div[id$='__rows']";
+
+		String name = app.zPagePreferences.sGetText(locator + " td[id$='__com_zimbra_ymemoticons__na']");
+		String description = app.zPagePreferences.sGetText(locator + " td[id$='__com_zimbra_ymemoticons__ds']");
+		
+		ZAssert.assertEquals(name, "Yahoo! Emoticons", "Verify the Y Emoticons entry exists");
+		ZAssert.assertEquals(description, "Displays Yahoo! Emoticons images in email messages.", "Verify the Y Emoticons description");
 		
 		
 	}
