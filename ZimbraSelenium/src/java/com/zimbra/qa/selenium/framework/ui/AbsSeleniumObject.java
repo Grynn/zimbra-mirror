@@ -25,6 +25,7 @@ import org.openqa.selenium.WebDriverBackedSelenium;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.interactions.Action;
+import org.openqa.selenium.internal.seleniumemulation.JavascriptLibrary;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
@@ -559,10 +560,7 @@ public abstract class AbsSeleniumObject {
 	public void zKeyEvent(String locator, String keyCode, String event)
 			throws HarnessException {
 		if(ZimbraSeleniumProperties.isWebDriver()){
-			logger.info("...WebDriver...zKeyEvent()");	
-
-			//JavascriptLibrary jsLib = new JavascriptLibrary();
-			//jsLib.callEmbeddedSelenium(webDriver(), "triggerMouseEventAt", we, "onfocus","1,1"); 
+			logger.info("...WebDriver...zKeyEvent()");
 		
 			if (this.zIsBrowserMatch(BrowserMasks.BrowserMaskIE)) {
 				executeScript(
@@ -658,7 +656,18 @@ public abstract class AbsSeleniumObject {
 	 * @param eventName
 	 */
 	public void sFireEvent(String locator, String eventName) throws HarnessException {
-		ClientSessionFactory.session().selenium().fireEvent(locator, eventName);
+		if (ZimbraSeleniumProperties.isWebDriver()){
+			//not used in webdriver
+			
+			WebElement we = getElement(locator);
+			JavascriptLibrary jsLib = new JavascriptLibrary();
+			//jsLib.callEmbeddedSelenium(webDriver(), "triggerMouseEvent", we, eventName);
+			//jsLib.callEmbeddedSelenium(webDriver(), "triggerMouseEventAt", we, "focus","0,0");
+			//jsLib.callEmbeddedSelenium(webDriver(), "triggerEvent", we, eventName);
+			jsLib.callEmbeddedSelenium(webDriver(), "doFireEvent", we, eventName);
+		}else{
+			ClientSessionFactory.session().selenium().fireEvent(locator, eventName);
+		}
 		logger.info("fireEvent(" + locator + ", " + eventName + ")");
 	}
 
@@ -2008,6 +2017,20 @@ public abstract class AbsSeleniumObject {
 		logger.info("sWindowMaximize()");
 	}
 
+	/**
+	 * sGetLocation()
+	 */
+	public String sGetLocation() throws HarnessException {
+		String url = null;
+		if (ZimbraSeleniumProperties.isWebDriver()){
+			url = webDriver().getCurrentUrl();
+		}else{
+			url = ClientSessionFactory.session().selenium().getLocation();
+		}
+		logger.info("sGetLocation(): " + url);
+		return url;
+	}
+	
 	// // ***
 	// End: Selenium methods
 	// // ***

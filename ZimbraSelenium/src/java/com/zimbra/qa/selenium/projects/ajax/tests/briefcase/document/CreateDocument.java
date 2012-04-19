@@ -310,7 +310,8 @@ public class CreateDocument extends AjaxCommonTest {
 		app.zPageBriefcase.zClick(TreeBriefcase.Locators.briefcaseTreeView+"16]");
 		app.zPageBriefcase.zGetHtml(TreeBriefcase.Locators.briefcaseListView);
 		
-		//ZAssert.assertStringContains("ccc", "vvv","Testing failure");				
+		//ZAssert.assertStringContains("ccc", "vvv","Testing failure");	 
+		//app.zPageBriefcase.fireEvent(TreeBriefcase.Locators.briefcaseTreeView+"16]", "focus");
 		
 		String tagName = "tag" + ZimbraSeleniumProperties.getUniqueString();
 		Shortcut shortcut = Shortcut.S_NEWTAG;
@@ -361,7 +362,9 @@ public class CreateDocument extends AjaxCommonTest {
 		// Click on created document
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docItem);
 		
-		// Mark a check box of the selected document to execute GetCssCount and GetAttribute calls
+		// Mark a check box of the selected document to execute 
+		//GetCssCount() 
+		//GetAttribute()
 		app.zPageBriefcase.zListItem(Action.A_BRIEFCASE_CHECKBOX, docItem);
 
 		// Click on open in a separate window icon in toolbar

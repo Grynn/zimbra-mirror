@@ -1279,6 +1279,9 @@ public class PageBriefcase extends AbsTab {
 	public void fireEvent(String locator, String eventName)
 			throws HarnessException {
 		logger.info("firing Event: " + eventName + " on " + locator);
+		if (ZimbraSeleniumProperties.isWebDriver()){
+			super.sFireEvent(locator, eventName);
+		}else{
 		// ClientSessionFactory.session().selenium().fireEvent(locator,eventName);
 		ClientSessionFactory
 				.session()
@@ -1287,6 +1290,7 @@ public class PageBriefcase extends AbsTab {
 						"selenium.browserbot.triggerMouseEvent(selenium.browserbot.findElement('"
 								+ locator + "'),'" + eventName
 								+ "', null, 0, 0, 0)");
+		}
 	}
 
 	public void isOpenDocLoaded(DocumentItem docItem) throws HarnessException {
@@ -1452,7 +1456,13 @@ public class PageBriefcase extends AbsTab {
 	}
 
 	public String getLocation() {
-		return ClientSessionFactory.session().selenium().getLocation();
+		String url = null;
+		try{
+			url = sGetLocation();
+		}catch(Exception ex){
+			logger.info(ex);
+		}
+		return url;
 	}
 
 	public String openUrl(String path, Map<String, String> params)
