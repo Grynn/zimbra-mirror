@@ -233,5 +233,16 @@
 		<antcall target="deploy-proxyconfig" />
 		<antcall target="deploy-clientuploader" />
 	</target>
+
+    <target name="package-clientuploader" description="package clientuploader extension">
+        <antcall target="package-zimlet">
+            <param name="ext.dir" value="ClientUploader"/>
+            <param name="ext.name" value="com_zimbra_clientuploader" />
+        </antcall>
+        <antcall target="jar">
+            <param name="ext.dir" value="ClientUploader"/>
+            <param name="ext.name" value="com_zimbra_clientuploader" />
+        </antcall>
+    </target>
 	
 </project>
