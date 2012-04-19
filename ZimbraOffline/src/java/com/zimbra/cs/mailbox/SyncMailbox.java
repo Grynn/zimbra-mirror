@@ -25,8 +25,8 @@ import java.util.concurrent.atomic.AtomicLong;
 import com.google.common.primitives.Ints;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Constants;
-import com.zimbra.common.util.UUIDUtil;
 import com.zimbra.common.util.SpoolingCache;
+import com.zimbra.common.util.UUIDUtil;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.AccountServiceException;
 import com.zimbra.cs.account.offline.OfflineAccount;
@@ -104,10 +104,10 @@ public abstract class SyncMailbox extends DesktopMailbox {
 
             Folder.create(ID_FOLDER_FAILURE, UUIDUtil.generateUUID(), this, userRoot, FAILURE_PATH,
                 Folder.FOLDER_IS_IMMUTABLE, MailItem.Type.MESSAGE, 0,
-                MailItem.DEFAULT_COLOR_RGB, null, null);
+                MailItem.DEFAULT_COLOR_RGB, null, null, null);
             Folder.create(ID_FOLDER_OUTBOX, UUIDUtil.generateUUID(), this, userRoot, OUTBOX_PATH,
                 Folder.FOLDER_IS_IMMUTABLE, MailItem.Type.MESSAGE, 0,
-                MailItem.DEFAULT_COLOR_RGB, null, null);
+                MailItem.DEFAULT_COLOR_RGB, null, null, null);
         } finally {
             lock.release();
         }

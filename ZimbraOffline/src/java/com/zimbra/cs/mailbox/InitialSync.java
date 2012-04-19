@@ -511,8 +511,10 @@ public class InitialSync {
         int remoteId = 0;
         String remoteUuid = null;
         if (itemType == MailItem.Type.FOLDER) {
-            redo = new CreateFolder(ombx.getId(), name, parentId, system, view, flags, itemColor, url);
-            ((CreateFolder)redo).setFolderIdAndUuid(id, uuid);
+            Folder.FolderOptions fopt = new Folder.FolderOptions();
+            fopt.setAttributes(system).setDefaultView(view).setFlags(flags).setColor(itemColor).setUrl(url);
+            redo = new CreateFolder(ombx.getId(), name, parentId, fopt);
+            ((CreateFolder) redo).setFolderIdAndUuid(id, uuid);
         } else {
             if (!OfflineLC.zdesktop_sync_mountpoints.booleanValue()) {
                 OfflineLog.offline.debug("mountpoint sync is disabled in local config (zdesktop_sync_mountpoints=false). mountpoint skipped: " + name);
@@ -539,7 +541,9 @@ public class InitialSync {
         try {
             if (itemType == MailItem.Type.FOLDER) {
                 // don't care about current feed syncpoint; sync can't be done offline
-                ombx.createFolder(new TracelessContext(redo), name, parentId, system, view, flags, itemColor, url);
+                Folder.FolderOptions fopt = new Folder.FolderOptions();
+                fopt.setAttributes(system).setDefaultView(view).setFlags(flags).setColor(itemColor).setUrl(url);
+                ombx.createFolder(new TracelessContext(redo), name, parentId, fopt);
             } else {
                 ombx.createMountpoint(new TracelessContext(redo), parentId, name, ownerId, remoteId, remoteUuid, view, flags, itemColor, reminderEnabled);
             }
@@ -1642,8 +1646,8 @@ public class InitialSync {
 
     // for use with codes that expects to read InputStream until EOF
     private static class EofInputStream extends InputStream {
-        private InputStream mIn;
-        private long mSize;
+        private final InputStream mIn;
+        private final long mSize;
         private long mPos;
         public EofInputStream(InputStream in, long size) {
             mIn = in;

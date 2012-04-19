@@ -203,8 +203,7 @@ public class OfflineFolderAction extends FolderAction {
                             if (String.valueOf(HttpStatus.SC_NO_CONTENT).equals(arg.getName())) {
                                 isSrcFolderEmpty = true;
                             } else {
-                                OfflineLog.offline.debug("[Folder Move] resource unreachable, export tgz file failed",
-                                        e);
+                                OfflineLog.offline.debug("[Folder Move] resource unreachable, export tgz file failed", e);
                                 throw e;
                             }
                         } else {
@@ -225,9 +224,10 @@ public class OfflineFolderAction extends FolderAction {
                                     srcSearchFolder.getFlagBitmask(), srcSearchFolder.getColor());
                         } else {
                             // just create a new folder
-                            destMbox.createFolder(octxt, srcFolder.getName(), targetParentFolderId,
-                                    srcFolder.getDefaultView(), srcFolder.getFlagBitmask(), srcFolder.getColor(),
-                                    srcFolder.getUrl());
+                            Folder.FolderOptions fopt = new Folder.FolderOptions();
+                            fopt.setDefaultView(srcFolder.getDefaultView()).setFlags(srcFolder.getFlagBitmask());
+                            fopt.setColor(srcFolder.getColor()).setUrl(srcFolder.getUrl());
+                            destMbox.createFolder(octxt, srcFolder.getName(), targetParentFolderId, fopt);
                         }
                     } else {
                         // import backup file to target folder

@@ -14,11 +14,11 @@
  */
 package com.zimbra.cs.mailbox;
 
+import com.zimbra.common.account.Key.AccountBy;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.UUIDUtil;
 import com.zimbra.cs.account.AccountServiceException;
 import com.zimbra.cs.account.Provisioning;
-import com.zimbra.common.account.Key.AccountBy;
 import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.db.DbMailbox;
 import com.zimbra.cs.mailbox.ChangeTrackingMailbox.TracelessContext;
@@ -134,15 +134,14 @@ public abstract class DesktopMailbox extends Mailbox {
         try {
             getFolderById(ID_FOLDER_FAILURE);
         } catch (MailServiceException.NoSuchItemException x) {
-            CreateFolder redo = new CreateFolder(getId(), FAILURE_PATH,
-                ID_FOLDER_USER_ROOT, Folder.FOLDER_IS_IMMUTABLE,
-                MailItem.Type.MESSAGE, 0, MailItem.DEFAULT_COLOR_RGB, null, null);
+            Folder.FolderOptions fopt = new Folder.FolderOptions();
+            fopt.setAttributes(Folder.FOLDER_IS_IMMUTABLE).setDefaultView(MailItem.Type.MESSAGE);
+
+            CreateFolder redo = new CreateFolder(getId(), FAILURE_PATH, ID_FOLDER_USER_ROOT, fopt);
 
             redo.setFolderIdAndUuid(ID_FOLDER_FAILURE, UUIDUtil.generateUUID());
             redo.start(System.currentTimeMillis());
-            createFolder(new TracelessContext(redo), FAILURE_PATH,
-                ID_FOLDER_USER_ROOT, Folder.FOLDER_IS_IMMUTABLE,
-                MailItem.Type.MESSAGE, 0, MailItem.DEFAULT_COLOR_RGB, null);
+            createFolder(new TracelessContext(redo), FAILURE_PATH, ID_FOLDER_USER_ROOT, fopt);
         } finally {
             lock.release();
         }

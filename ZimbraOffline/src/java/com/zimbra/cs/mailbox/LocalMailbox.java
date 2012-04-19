@@ -44,15 +44,13 @@ public class LocalMailbox extends DesktopMailbox {
             try {
                 getFolderById(ID_FOLDER_NOTIFICATIONS);
             } catch (NoSuchItemException e) {
-                CreateFolder redo = new CreateFolder(getId(), NOTIFICATIONS_PATH,
-                    ID_FOLDER_USER_ROOT, Folder.FOLDER_IS_IMMUTABLE,
-                    MailItem.Type.UNKNOWN, 0, MailItem.DEFAULT_COLOR_RGB, null);
+                Folder.FolderOptions fopt = new Folder.FolderOptions().setAttributes(Folder.FOLDER_IS_IMMUTABLE);
+
+                CreateFolder redo = new CreateFolder(getId(), NOTIFICATIONS_PATH, ID_FOLDER_USER_ROOT, fopt);
 
                 redo.setFolderIdAndUuid(ID_FOLDER_NOTIFICATIONS, UUIDUtil.generateUUID());
                 redo.start(System.currentTimeMillis());
-                createFolder(new TracelessContext(redo), NOTIFICATIONS_PATH,
-                    ID_FOLDER_USER_ROOT, Folder.FOLDER_IS_IMMUTABLE,
-                    MailItem.Type.UNKNOWN, 0, MailItem.DEFAULT_COLOR_RGB, null);
+                createFolder(new TracelessContext(redo), NOTIFICATIONS_PATH, ID_FOLDER_USER_ROOT, fopt);
             }
             OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
             for (String accountId : prov.getAllAccountIds()) {
@@ -77,11 +75,13 @@ public class LocalMailbox extends DesktopMailbox {
         lock.lock();
         try {
             super.initialize();
-            getCachedItem(ID_FOLDER_CALENDAR).setColor(new Color((byte)8));
+
+            getCachedItem(ID_FOLDER_CALENDAR).setColor(new Color((byte) 8));
+
             Folder.create(ID_FOLDER_NOTIFICATIONS, UUIDUtil.generateUUID(), this,
-                getFolderById(ID_FOLDER_USER_ROOT), NOTIFICATIONS_PATH,
-                Folder.FOLDER_IS_IMMUTABLE, MailItem.Type.UNKNOWN, 0,
-                MailItem.DEFAULT_COLOR_RGB, null, null);
+                    getFolderById(ID_FOLDER_USER_ROOT), NOTIFICATIONS_PATH,
+                    Folder.FOLDER_IS_IMMUTABLE, MailItem.Type.UNKNOWN, 0,
+                    MailItem.DEFAULT_COLOR_RGB, null, null, null);
         } finally {
             lock.release();
         }
