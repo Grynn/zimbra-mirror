@@ -241,7 +241,7 @@ ZaHome.prototype.updateServiceStatus = function (resp) {
 }
 
 ZaHome.loadActiveSesson = function () {
-    var serverList = ZaApp.getInstance().getServerList().getArray();
+    var serverList = ZaApp.getInstance().getMailServers();
     var totalSession = 0;
     if(serverList && serverList.length) {
         var sessionType = ["soap", "admin", "imap"];
