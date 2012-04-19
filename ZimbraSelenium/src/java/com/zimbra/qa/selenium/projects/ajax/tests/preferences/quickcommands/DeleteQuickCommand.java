@@ -2,6 +2,7 @@ package com.zimbra.qa.selenium.projects.ajax.tests.preferences.quickcommands;
 
 import org.testng.annotations.Test;
 
+import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxQuickCommandTest;
@@ -19,9 +20,10 @@ public class DeleteQuickCommand extends AjaxQuickCommandTest {
 	
 
 
+	@Bugs(ids = "71389")	// Hold off on GUI implementation of Quick Commands in 8.X
 	@Test(
 			description = "Delete a Quick Command",
-			groups = { "functional" }
+			groups = { "deprecated" }
 			)
 	public void DeleteQuickCommand_01() throws HarnessException {
 		

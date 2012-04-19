@@ -3,6 +3,7 @@ package com.zimbra.qa.selenium.projects.ajax.tests.preferences.quickcommands;
 import org.testng.annotations.Test;
 
 import com.zimbra.common.soap.Element;
+import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.QuickCommand;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
@@ -22,9 +23,10 @@ public class CreateQuickCommand extends AjaxCommonTest {
 	
 
 
+	@Bugs(ids = "71389")	// Hold off on GUI implementation of Quick Commands in 8.X
 	@Test(
 			description = "Create a basic Quick Command",
-			groups = { "functional" }
+			groups = { "deprecated" }
 			)
 	public void CreateQuickCommand_01() throws HarnessException {
 		

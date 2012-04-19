@@ -2,19 +2,12 @@ package com.zimbra.qa.selenium.projects.ajax.core;
 
 import java.util.ArrayList;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
-import org.testng.annotations.BeforeClass;
+import org.apache.log4j.*;
 
-import com.zimbra.qa.selenium.framework.items.FolderItem;
-import com.zimbra.qa.selenium.framework.items.QuickCommand;
-import com.zimbra.qa.selenium.framework.items.TagItem;
-import com.zimbra.qa.selenium.framework.items.QuickCommand.QuickCommandAction;
-import com.zimbra.qa.selenium.framework.items.QuickCommand.ItemTypeId;
-import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.ZAssert;
-import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
-import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
+import com.zimbra.qa.selenium.framework.core.Bugs;
+import com.zimbra.qa.selenium.framework.items.*;
+import com.zimbra.qa.selenium.framework.items.QuickCommand.*;
+import com.zimbra.qa.selenium.framework.util.*;
 
 /**
  * A base class that creates some basic Quick Command shortcuts in the mailbox.  This
@@ -205,7 +198,8 @@ public class AjaxQuickCommandTest extends AjaxCommonTest {
 	 * Set up basic quick commands for all combinations 
 	 * @throws HarnessException
 	 */
-	@BeforeClass( groups = { "always" } )
+	@Bugs(ids = "71389")	// Hold off on GUI implementation of Quick Commands in 8.X
+//	@BeforeClass( groups = { "always" } )
 	public void addQuickCommands() throws HarnessException {
 		logger.info("addQuickCommands: start");
 		

@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import org.testng.annotations.Test;
 
+import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.MailItem;
 import com.zimbra.qa.selenium.framework.ui.Action;
@@ -30,8 +31,9 @@ public class ApplyQuickCommandMessage extends AjaxQuickCommandTest {
 
 	}
 
+	@Bugs(ids = "71389")	// Hold off on GUI implementation of Quick Commands in 8.X
 	@Test(	description = "Apply a Quick Command to a message",
-			groups = { "smoke" })
+			groups = { "deprectated" })
 	public void ApplyQuickCommandMessage_01() throws HarnessException {
 
 		// Create the message data to be sent

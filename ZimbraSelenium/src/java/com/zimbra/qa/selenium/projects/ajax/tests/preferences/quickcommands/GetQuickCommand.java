@@ -2,6 +2,7 @@ package com.zimbra.qa.selenium.projects.ajax.tests.preferences.quickcommands;
 
 import org.testng.annotations.Test;
 
+import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.QuickCommand;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
@@ -20,9 +21,10 @@ public class GetQuickCommand extends AjaxQuickCommandTest {
 
 	}
 
+	@Bugs(ids = "71389")	// Hold off on GUI implementation of Quick Commands in 8.X
 	@Test(
 			description = "Get a list of basic Quick Commands",
-			groups = { "functional" }
+			groups = { "deprecated" }
 	)
 	public void GetQuickCommand_01() throws HarnessException {
 
@@ -35,9 +37,10 @@ public class GetQuickCommand extends AjaxQuickCommandTest {
 
 	}
 	
+	@Bugs(ids = "71389")	// Hold off on GUI implementation of Quick Commands in 8.X
 	@Test(
 			description = "Verify the Quick Command data in the list",
-			groups = { "functional" }
+			groups = { "deprecated" }
 	)
 	public void GetQuickCommand_02() throws HarnessException {
 
