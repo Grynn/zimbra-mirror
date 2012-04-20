@@ -3,6 +3,7 @@ package com.zimbra.qa.selenium.projects.octopus.core;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
@@ -115,28 +116,49 @@ public class CommonMethods {
 	
 	protected String renameViaSoap(ZimbraAccount account, String fileId, String newName)
 	throws HarnessException {
-		// Add comments to the file using SOAP
+		// Rename file using SOAP
 		account.soapSend("<ItemActionRequest xmlns='urn:zimbraMail'> <action id='"
 			+ fileId + "' name='" + newName + "' op='rename' /></ItemActionRequest>");
 
-        //TODO: Check if the file is renamed on the server use GetActiviyStreamRequest?		
-	    return newName;
+		SleepUtil.sleepVerySmall();
+
+		//verification
+		ZAssert.assertTrue(account.soapMatch(
+				"//mail:ItemActionResponse//mail:action", "op", "rename"),
+				"Verify file is renamed to " + newName);
+
+		return newName;
 	}
 	
 
 	
+	
 	protected void markFileFavoriteViaSoap(ZimbraAccount account, String fileId)
 	throws HarnessException {
-	 account.soapSend
-       ("<DocumentActionRequest xmlns='urn:zimbraMail'>"
-		+ "<action id='" + fileId + "'  op='watch' /></DocumentActionRequest>");
+		account.soapSend("<DocumentActionRequest xmlns='urn:zimbraMail'>"
+				+ "<action id='" + fileId + "'  op='watch' /></DocumentActionRequest>");
+
+		SleepUtil.sleepVerySmall();
+
+		//verification
+		ZAssert.assertTrue(account.soapMatch(
+				"//mail:DocumentActionResponse//mail:action", "op", "watch"),
+				"Verify file is marked as favorite");
+		
 	} 
 
 	protected void unMarkFileFavoriteViaSoap(ZimbraAccount account, String fileId)
 	throws HarnessException {
-	 account.soapSend
-       ("<DocumentActionRequest xmlns='urn:zimbraMail'>"
-		+ "<action id='" + fileId + "'  op='!watch' /></DocumentActionRequest>");
+		account.soapSend("<DocumentActionRequest xmlns='urn:zimbraMail'>"
+				+ "<action id='" + fileId + "'  op='!watch' /></DocumentActionRequest>");
+
+		SleepUtil.sleepVerySmall();
+
+		//verification
+		ZAssert.assertTrue(account.soapMatch(
+				"//mail:DocumentActionResponse//mail:action", "op", "!watch"),
+				"Verify file is inmarked favorite");
+		
 	} 
 
 	
