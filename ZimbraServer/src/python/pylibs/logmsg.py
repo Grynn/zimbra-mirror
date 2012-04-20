@@ -35,9 +35,16 @@ class Log:
 	zmsyslog.getConfig().setLocalName("zmconfigd[%d]:" % os.getpid())
 
 	@classmethod
-	def logMsg(cls, lvl, msg):
+	def initLogging(cls, c = None):
+		if c:
+			cls.cf = c
+			if cls.cf.loglevel > 5:
+				cls.cf.loglevel = 5
+		else:
+			cls.cf = conf.Config()
 
-		cls.cf = conf.Config()
+	@classmethod
+	def logMsg(cls, lvl, msg):
 
 		if lvl > 5:
 			lvl = 5
@@ -50,3 +57,4 @@ class Log:
 			Log.zmsyslog.fatal("%s: shutting down" % (cls.cf.progname,) )
 			os._exit(1)
 
+Log.initLogging()
