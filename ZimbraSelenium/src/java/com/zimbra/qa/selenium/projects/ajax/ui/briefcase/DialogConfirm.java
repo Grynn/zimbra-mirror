@@ -105,7 +105,7 @@ public class DialogConfirm extends AbsDialog {
 	public boolean zIsActive() throws HarnessException {
 		logger.info(myPageName() + " zIsActive()");
 
-		String locator = "class=" + Locators.zDialogClass;
+		String locator = "div." + Locators.zDialogClass;
 
 		if (!this.sIsElementPresent(locator)) {
 			return (false); // Not even present

@@ -1,14 +1,12 @@
 package com.zimbra.qa.selenium.framework.ui;
 
 import java.awt.Toolkit;
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
@@ -306,6 +304,7 @@ public abstract class AbsSeleniumObject {
 
 		}
 		if (ZimbraSeleniumProperties.isWebDriver()){
+			logger.info("WebDriver()" + locator + "," + coord + ")");
 			WebElement we = getElement(locator);
 			Actions builder = new Actions(webDriver());
 			Action action = builder
@@ -514,6 +513,8 @@ public abstract class AbsSeleniumObject {
 			//Actions builder = new Actions(webDriver());			
 			
 			for (String kc : keyCode.split(",")) {
+				zKeyEvent(locator, kc, "keydown");
+				/*
 				try{
 					int code = Integer.parseInt(kc);
 					String key = KeyEvent.getKeyText(code);
@@ -525,13 +526,12 @@ public abstract class AbsSeleniumObject {
 						
 						//builder.sendKeys(we,key.toLowerCase()).build().perform();
 						
-						//zKeyEvent(locator, kc, "keydown");
-						
-						sType(locator,key.toLowerCase());						
+						//sType(locator,key.toLowerCase());						
 					}
 				}catch(Exception ex){
 					logger.error(ex);
 				}
+				*/
 			}			
 		}else{
 			for (String kc : keyCode.split(",")) {
@@ -700,14 +700,18 @@ public abstract class AbsSeleniumObject {
 	}
 
 	/**
-	 * DefaultSelenium.getHtmlSource()
+	 * getHtmlSource()
 	 * 
-	 * @param locator
 	 */
 	public String sGetHtmlSource() throws HarnessException {
-		String htmlString = ClientSessionFactory.session().selenium()
+		String htmlString = null;
+		if (ZimbraSeleniumProperties.isWebDriver()){
+			htmlString = webDriver().getPageSource();
+		}else{
+			htmlString = ClientSessionFactory.session().selenium()
 				.getHtmlSource();
-		logger.info("getHtmlSource()");
+		}
+		logger.info("sGetHtmlSource()");
 		return (htmlString);
 	}
 
@@ -943,7 +947,7 @@ public abstract class AbsSeleniumObject {
 				*/
 				
 				//WebDriverWait wait = new WebDriverWait(webDriver(), 20);
-				Wait<WebDriver> wait = new FluentWait<WebDriver>(webDriver()).withTimeout(30, TimeUnit.SECONDS).pollingEvery(5, TimeUnit.SECONDS).ignoring(NoSuchElementException.class);
+				Wait<WebDriver> wait = new FluentWait<WebDriver>(webDriver()).withTimeout(20, TimeUnit.SECONDS).pollingEvery(1, TimeUnit.SECONDS).ignoring(NoSuchElementException.class);
 
 				try{
 					wait.until(new ExpectedCondition<Boolean>(){					
@@ -1186,24 +1190,6 @@ public abstract class AbsSeleniumObject {
 		return (Arrays.asList(ids));
 	}
 
-	protected boolean switchToWindowUsingTitle(WebDriver driver, String title) { 
-		logger.info("switchToWindowUsingTitle()");
-		boolean result = false;
-		String currentWindow = driver.getWindowHandle(); 
-		Set<String> availableWindows = driver.getWindowHandles(); 
-		if (!availableWindows.isEmpty()) { 
-			for (String windowId : availableWindows) { 
-				if (driver.switchTo().window(windowId).getTitle().equals(title)) { 
-					result = true; 
-					break;
-			    }
-			}
-			if(!result) { 
-		    	driver.switchTo().window(currentWindow); 
-		    } 
-		} 
-		return result; 
-	}
 	
 	/**
 	 * DefaultSelenium.getAllWindowNames()
@@ -1669,7 +1655,7 @@ public abstract class AbsSeleniumObject {
 		boolean result = false;
 		try {
 			if(ZimbraSeleniumProperties.isWebDriver()){
-				result = waitForWindowClosed(name);
+				result = waitForWindowClosed(name, webDriver().getWindowHandles().size());
 			}else{
 				String condition = "{var x; for(var windowName in selenium.browserbot.openedWindows ){"
 					+ "var targetWindow = selenium.browserbot.openedWindows[windowName];"
@@ -1684,7 +1670,7 @@ public abstract class AbsSeleniumObject {
 			}
 			return result;
 		} catch (Exception ex) {
-			logger.info("Error: win not opened " + name, ex);
+			logger.info("window not found " + name, ex);
 			return result;
 		}
 	}
@@ -1796,8 +1782,7 @@ public abstract class AbsSeleniumObject {
 	public void sType(String locator, String text) throws HarnessException {
 		try {
 			if (ZimbraSeleniumProperties.isWebDriver()){
-				WebElement we = getElement(locator);
-				we.sendKeys(text);
+				sendKeys(locator,text);
 			} 
 			else if (ZimbraSeleniumProperties.isWebDriverBackedSelenium()){
 				webDriverBackedSelenium().type(locator, text);
@@ -1806,7 +1791,6 @@ public abstract class AbsSeleniumObject {
 				ClientSessionFactory.session().selenium().type(locator, text);
 			}
 			logger.info("type(" + locator + ", " + text + ")");
-
 		} catch (SeleniumException e) {
 			throw new HarnessException(e);
 		}
@@ -2039,7 +2023,16 @@ public abstract class AbsSeleniumObject {
 	// Start: WebDriver methods
 	// // ***
 	
+	
+	public void sendKeys(String locator, CharSequence ... keyValues) throws HarnessException {
+		logger.info("...WebDriver...sendKeys()");
+		WebElement we = getElement(locator);
+		we.sendKeys(keyValues);
+	}
+	
+	
 	public String executeScript(String script, Object... arg){
+		logger.info("...WebDriver...executeScript()");
 		String value = null;
 		try {			
 			Object ob = ((JavascriptExecutor) webDriver()).executeScript(script,arg);
@@ -2079,6 +2072,7 @@ public abstract class AbsSeleniumObject {
 
 	private CssLocator stripCssLocator(String locator, String startSuffix,
 			String containSuffix) {
+		logger.info("...WebDriver...stripCssLocator()");
 		String modifiedLocator = locator;
 		String text = "";
 		CssLocator cssl = new CssLocator();
@@ -2109,10 +2103,24 @@ public abstract class AbsSeleniumObject {
 	}
 	
 	public String getCssLocator(String locator) {
+		logger.info("...WebDriver...getCssLocator()");
 		return stripCssLocator(locator, "css=", ":contains").getLocator();
 	}
+	
+	public WebElement getElement(String locator) throws HarnessException{
+		logger.info("...WebDriver...getElement(" + locator + ")");
+		WebElement we = getElementOrNull(locator);
+		
+		if(we!=null){
+			return we;
+		}else{
+			throw new HarnessException("WebElement is null: " + locator );
+		}
+	}
+
 
 	private WebElement getElement(String locator, String startSuffix) {
+		logger.info("...WebDriver...getElement(String, String)");
 		WebElement element = null;
 		WebDriver driver = webDriver();
 		String modifiedLocator = locator;
@@ -2131,6 +2139,7 @@ public abstract class AbsSeleniumObject {
 	
 	private WebElement getElement(String locator, String startSuffix,
 			String containSuffix) {
+		logger.info("...WebDriver...getElement(String, String, String)");
 		WebElement element = null;
 		WebDriver driver = null;
 		CssLocator cssl = stripCssLocator(locator, startSuffix, containSuffix);
@@ -2168,6 +2177,7 @@ public abstract class AbsSeleniumObject {
 	}
 
 	public WebElement getElementOrNull(String locator) {
+		logger.info("...WebDriver...getElementOrNull()");
 		WebElement we = null;
 		if(locator.startsWith("id=")){
 			we = getElement(locator, "id=");
@@ -2176,161 +2186,227 @@ public abstract class AbsSeleniumObject {
 		}
 		return we;
 	}
+	
+	public boolean elementPresent(String locator) {
+		logger.info("...WebDriver...elementPresent()");
+		WebElement el = getElementOrNull(locator);
+		return el != null;
+	}
+
+	public boolean waitForElementPresent(final String locator, long timeout) {
+		logger.info("...WebDriver...waitForElementPresent()");
+		return waitForElement(locator, timeout)!=null;
+	}
 		
-		public WebElement getElement(String locator) throws HarnessException{
-			WebElement we = getElementOrNull(locator);
+	public WebElement waitForElement(String locator, long timeout) {
+		logger.info("...WebDriver...waitForElement()");
+		CssLocator cssl = stripCssLocator(locator, "css=", ":contains");
+		WebDriver driver = null;
+		WebElement element = null;
 			
-			if(we!=null){
-				return we;
-			}else{
-				throw new HarnessException("WebElement is null: " + locator );
-			}
-		}
-
-		public boolean elementPresent(String locator) {
-			WebElement el = getElementOrNull(locator);
-			return el != null;
-		}
-
-		public boolean waitForElementPresent(final String locator, long timeout) {	
-			return waitForElement(locator, timeout)!=null;
+		if (ZimbraSeleniumProperties.isWebDriverBackedSelenium()){
+			driver = webDriverBackedSelenium().getWrappedDriver();
+		}else{
+			driver = webDriver();
 		}
 		
-		public WebElement waitForElement(String locator, long timeout) {
-			CssLocator cssl = stripCssLocator(locator, "css=", ":contains");
-			WebDriver driver = null;
-			WebElement element = null;
-			
-			if (ZimbraSeleniumProperties.isWebDriverBackedSelenium()){
-				driver = webDriverBackedSelenium().getWrappedDriver();
-			}else{
-				driver = webDriver();
-			}
-			
-			WebDriverWait wait = new WebDriverWait(driver, timeout);
+		WebDriverWait wait = new WebDriverWait(driver, timeout);
 
-			if (null != cssl.getLocator()) {
-				try{
-					if (cssl.getText() != null && !cssl.getText().isEmpty()) {
-						element = wait.until(forText(By.cssSelector(cssl.getLocator()),
-							cssl.getText()));
-					} else {
-						element = wait.until(forElement(By.cssSelector(cssl
-							.getLocator())));
-					}
-				}catch(TimeoutException  e){
-					logger.info("...waitForElement()... " + locator + " timed out after " + timeout + "s");
+		if (null != cssl.getLocator()) {
+			try{
+				if (cssl.getText() != null && !cssl.getText().isEmpty()) {
+					element = wait.until(forText(By.cssSelector(cssl.getLocator()),
+						cssl.getText()));
+				} else {
+					element = wait.until(forElement(By.cssSelector(cssl
+						.getLocator())));
 				}
+			}catch(TimeoutException  e){
+				logger.info("...waitForElement()... " + locator + " timed out after " + timeout + "s");
 			}
-			return element;
 		}
+		
+		return element;
+	}
 
-		public Function<WebDriver, WebElement> forElement(final By locator) {
-			return new Function<WebDriver, WebElement>() {
-				public WebElement apply(WebDriver driver) {
-					WebElement element = null;
-					if(driver!=null){
-						element = driver.findElement(locator);
-					}					
-					return element;					
-				}
-			};
-		}
+	public Function<WebDriver, WebElement> forElement(final By locator) {
+		logger.info("...WebDriver...forElement()");
+		return new Function<WebDriver, WebElement>() {
+			public WebElement apply(WebDriver driver) {
+				WebElement element = null;
+				if(driver!=null){
+					element = driver.findElement(locator);
+				}					
+				return element;					
+			}
+		};
+	}
 
-		public Function<WebDriver, WebElement> forText(final By locator,
-				final String txt) {
-			return new Function<WebDriver, WebElement>() {
-				public WebElement apply(WebDriver driver) {
-					WebElement element = null;
-					if(driver!=null){
-						List<WebElement> elements = driver.findElements(locator);
-						Iterator<WebElement> it = elements.iterator();
-						while (it.hasNext()) {
-							element = it.next();
-							if (element.getText().contains(txt)){
-								break;
-							}
+	public Function<WebDriver, WebElement> forText(final By locator,
+		final String txt) {
+		logger.info("...WebDriver...forText()");
+		return new Function<WebDriver, WebElement>() {
+			public WebElement apply(WebDriver driver) {
+				WebElement element = null;
+				if(driver!=null){
+					List<WebElement> elements = driver.findElements(locator);
+					Iterator<WebElement> it = elements.iterator();
+					while (it.hasNext()) {
+						element = it.next();
+						if (element.getText().contains(txt)){
+							break;
 						}
 					}
-					return element;				
 				}
-			};
-		}
+				return element;				
+			}
+		};
+	}
 
-		public boolean switchTo(String name) {
-			WebDriver driver = null;
-			Set<String> handles = null;
-			boolean found = false;
-			if (ZimbraSeleniumProperties.isWebDriverBackedSelenium()){
-				driver = webDriverBackedSelenium().getWrappedDriver();
-			}else{ 
-				driver = webDriver();
-			}			
-			if(driver != null){
-				handles = driver.getWindowHandles();			
-				if (handles != null && !handles.isEmpty()) {
-					String url = "";
-					String title = "";
-					for (String h : handles) {
-						driver.switchTo().window(h);
-						url = driver.getCurrentUrl();
-						title = driver.getTitle();
-						if (title.contentEquals(name) || url.contains("/" + name + "?")) {
-							found = true;
+	protected boolean switchToWindowUsingTitle(WebDriver driver, String title) { 
+		logger.info("...WebDriver...switchToWindowUsingTitle()");
+		boolean result = false;
+		String currentWindow = driver.getWindowHandle(); 
+		Set<String> availableWindows = driver.getWindowHandles(); 
+		if (!availableWindows.isEmpty()) { 
+			for (String windowId : availableWindows) { 
+				if (driver.switchTo().window(windowId).getTitle().equals(title)) { 
+					result = true; 
+					break;
+			    }
+			}
+			if(!result) { 
+		    	driver.switchTo().window(currentWindow); 
+		    } 
+		} 
+		return result; 
+	}
+	
+	public boolean switchTo(String name) {
+		logger.info("...WebDriver...switchTo() " + name);	
+		WebDriver driver = null;
+		Set<String> handles = null;
+		boolean found = false;
+		if (ZimbraSeleniumProperties.isWebDriverBackedSelenium()){
+			driver = webDriverBackedSelenium().getWrappedDriver();
+		}else{ 
+			driver = webDriver();
+		}	
+			
+		final String currentHandle;
+			
+		try{
+			currentHandle = driver.getWindowHandle();
+			logger.info("currentHandle: " + currentHandle);
+			handles = driver.getWindowHandles();	
+			logger.info("handles size: " + handles.size());
+			if (handles != null && !handles.isEmpty()) {
+				String url = "";
+				String title = null;
+				for (String handle : handles) {
+					
+					logger.info("about to switch to handle: " + handle);
+					try{						
+						title = driver.switchTo().window(handle).getTitle();
+						logger.info("switched to title: " + title);						
+					}catch(Exception ex){
+						logger.error(ex);
+					}
+					url = driver.getCurrentUrl();
+					
+					if (title!=null && (title.contentEquals(name) || url.contains("/" + name + "?"))) {
+						found = true;
+						logger.info("found: " + title);
 						break;
-						}
 					}
-					if (!found) {
-						String handle = driver.getWindowHandle();
-						driver.switchTo().window(handle);
-					}
-				}
+				}				
 			}
-			return found;
+		}catch(Exception ex){
+			logger.error(ex);			
+		}finally{
+			if (!found) {
+				String defaultContent = driver.switchTo().defaultContent().getTitle();
+				logger.info("back to defaultContent()" + defaultContent);
+			}
+			
 		}
+		return found;
+	}
 
-		public boolean waitForWindow(String name) {
-			boolean found = false;
-			for (int i = 0; i < 10; i++) {
+	public boolean waitForWindow(String name) {
+		logger.info("...WebDriver...waitForWindow() " + name);
+	
+		boolean found = false;
+		for (int i = 0; i < 10; i++) {
+			try{
 				found = switchTo(name);
-				if (found){
-					break;
-				}
-				SleepUtil.sleepSmall();
-				//webDriver().manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
+			}catch(Exception ex){
+				logger.error(ex);
 			}
-			return found;
-		}
-
-		public boolean waitForWindowClosed(String name) {
-			boolean found = true;
-			for (int i = 0; i < 10; i++) {
-				found = switchTo(name);
-				if (!found){
-					break;
-				}
-				SleepUtil.sleepSmall();
+			if (found){
+				break;
 			}
-			return !found;
+			//SleepUtil.sleepSmall();
+			webDriver().manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
 		}
+		return found;
+	}
 
-		public ExpectedCondition<WebElement> elementDisplayed(
-				final By locator) {
-			return new ExpectedCondition<WebElement>() {
-				public WebElement apply(WebDriver driver) {
-					WebElement we = null;
-					if(driver!=null){
-						we = driver.findElement(locator);
-						if (we !=null && we.isDisplayed()) {
-							return we;
-						}
-					}
-					return we;
-				}
-			};
-		}		
+	public boolean waitForWindowClosed(final String name, int ... handlesSize) {
+		logger.info("...WebDriver...waitForWindowClosed() " + name);
 		
-		// // ***
-		// End: WebDriver methods
-		// // ***
+		Wait<WebDriver> wait = null;
+		final int size;
+		if(handlesSize != null && handlesSize.length > 1){
+			size = handlesSize[0];
+		}else{
+			size = webDriver().getWindowHandles().size();
+		}
+		wait = new FluentWait<WebDriver>(webDriver()).withTimeout(5, TimeUnit.SECONDS).pollingEvery(1, TimeUnit.SECONDS).ignoring(TimeoutException.class);
+		try{
+			wait.until(new ExpectedCondition<Boolean>(){					
+				public Boolean apply(WebDriver driver) {
+					Boolean result = false;
+					result = driver.getWindowHandles().size() < size;
+					return result;
+				}
+			});
+		}catch(Exception te){
+			logger.info("...wait for getWindowHandles().size < " + size + " timed out");
+		}
+		
+	
+		boolean closed = false;
+		try{
+			closed = wait.until(new ExpectedCondition<Boolean>(){					
+				public Boolean apply(WebDriver driver) {
+					return !switchTo(name);
+				}
+			});
+		}catch(Exception te){
+			logger.info("...wait for closed " + name + " timed out");
+		}
+		return closed;
+	}
+
+	public ExpectedCondition<WebElement> elementDisplayed(
+		final By locator) {
+		logger.info("...WebDriver...elementDisplayed()");
+		return new ExpectedCondition<WebElement>() {
+			public WebElement apply(WebDriver driver) {
+				WebElement we = null;
+				if(driver!=null){
+					we = driver.findElement(locator);
+					if (we !=null && we.isDisplayed()) {
+						return we;
+					}
+				}
+				return we;
+			}
+		};
+	}		
+		
+	// // ***
+	// End: WebDriver methods
+	// // ***
 }

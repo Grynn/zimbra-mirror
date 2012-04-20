@@ -309,6 +309,7 @@ public class CreateDocument extends AjaxCommonTest {
 		app.zPageBriefcase.zRightClickAt(TreeBriefcase.Locators.briefcaseTreeView+"16]","");
 		app.zPageBriefcase.zClick(TreeBriefcase.Locators.briefcaseTreeView+"16]");
 		app.zPageBriefcase.zGetHtml(TreeBriefcase.Locators.briefcaseListView);
+		app.zPageBriefcase.sGetHtmlSource();
 		
 		//ZAssert.assertStringContains("ccc", "vvv","Testing failure");	 
 		//app.zPageBriefcase.fireEvent(TreeBriefcase.Locators.briefcaseTreeView+"16]", "focus");
