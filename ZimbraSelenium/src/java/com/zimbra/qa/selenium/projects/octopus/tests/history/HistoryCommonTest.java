@@ -8,7 +8,9 @@ import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.octopus.core.OctopusCommonTest;
 import com.zimbra.qa.selenium.projects.octopus.ui.PageHistory;
-import com.zimbra.qa.selenium.projects.octopus.ui.PageHistory.*;
+import static com.zimbra.qa.selenium.projects.octopus.ui.PageHistory.*;
+import static com.zimbra.qa.selenium.projects.octopus.ui.PageHistory.CONSTANTS.*;
+
 import java.util.ArrayList;
 
 public class HistoryCommonTest extends OctopusCommonTest {
@@ -41,28 +43,7 @@ public class HistoryCommonTest extends OctopusCommonTest {
 	protected static String mountReadFolderName = null;
 	protected static String mountReadWriteFolderName = null;
 	protected static String mountAdminFolderName = null;
-	
-    
-    
-	protected static String[] checkboxes = {
-		PageHistory.Locators.zHistoryFilterAllTypes.locator,
-		PageHistory.Locators.zHistoryFilterFavorites.locator,
-		PageHistory.Locators.zHistoryFilterComment.locator,
-		PageHistory.Locators.zHistoryFilterSharing.locator,
-		PageHistory.Locators.zHistoryFilterNewVersion.locator,
-		PageHistory.Locators.zHistoryFilterRename.locator    		
-    }; 
-
-    //parallel array with checkboxes[]
-	protected static String[] historyRegexps = {
-		"*",
-		PageHistory.GetText.REGEXP.FAVORITE,
-		PageHistory.GetText.REGEXP.COMMENT,
-		PageHistory.GetText.REGEXP.SHARE,
-		PageHistory.GetText.REGEXP.NEWVERSION,
-		PageHistory.GetText.REGEXP.RENAME
-    };
-    
+	    
     
 	protected static ZimbraAccount readGrantee = null;
 	protected static ZimbraAccount readWriteGrantee = null;
@@ -106,7 +87,7 @@ public class HistoryCommonTest extends OctopusCommonTest {
 		// share revoke folder
 		// comment, rename, favorite/unfavorite file
 		// before running test
-		if (fileId == null) {		 
+		if (notSetup) {		 
 	 	   fileId = uploadFileViaSoap(app.zGetActiveAccount(),fileName);    	 	  	
 	 	   SleepUtil.sleepSmall();
    	   
@@ -158,7 +139,9 @@ public class HistoryCommonTest extends OctopusCommonTest {
 		   setUpShareRevoke();
 		   
 		   //setup mount point
-		   setUpMountPoint();   
+		   setUpMountPoint();
+		   
+		   notSetup=false;
 		}
 
 		refresh();
@@ -251,7 +234,7 @@ public class HistoryCommonTest extends OctopusCommonTest {
 		// verify if and only if the corresponding history text present
 		for (HistoryItem item:currHistoryArray) {
 			
-			logger.info(item.getHistoryText());
+			logger.info(app.zGetActiveAcount().EmailAddress + " " + item.getHistoryText());
 			boolean isMatched = false;
 	        
 			// not check for "all types"
@@ -263,7 +246,7 @@ public class HistoryCommonTest extends OctopusCommonTest {
 				}
 			}
 	
-		   ZAssert.assertTrue(isMatched , "Verify " +  item.getHistoryText() + " is displayed if associated checkbox is checked");
+		   ZAssert.assertTrue(isMatched , app.zGetActiveAcount().EmailAddress + " Verify " +  item.getHistoryText() + " is displayed if associated checkbox is checked");
 	
 		   if (item.getHistoryText().equals(historyText)) {
 				 found = true; 
@@ -282,7 +265,7 @@ public class HistoryCommonTest extends OctopusCommonTest {
 	     	
 		
 		ZAssert.assertTrue(isHistoryTextPresent(app.zPageHistory.zListItem(), historyText)
-				        , "Verify " + historyText + " is displayed");
+				        , app.zGetActiveAcount().EmailAddress + " Verify " + historyText + " is displayed");
 	}
 	
 	protected void verifyUnCheckAction(String locator, String historyText) 
@@ -305,18 +288,18 @@ public class HistoryCommonTest extends OctopusCommonTest {
 			for (int i=0; i< currHistoryArray.size()& !found; i++) {
 				HistoryItem item = currHistoryArray.get(i);
 			
-				logger.info(item.getHistoryText());
+				logger.info(app.zGetActiveAcount().EmailAddress + " " + item.getHistoryText());
 	        
 				found = item.getHistoryText().equals(historyText); 			
 			}			
 
-			ZAssert.assertTrue(found, "Verify " + historyText + " is displayed");
+			ZAssert.assertTrue(found, app.zGetActiveAcount().EmailAddress + " Verify " + historyText + " is displayed");
 		} 
 		
   		//otherwise, refine is active, the text should not be present
 		else {
 			ZAssert.assertFalse(isHistoryTextPresent(currHistoryArray, historyText)
-					    , "Verify " + historyText + " should not be displayed");
+					    , app.zGetActiveAcount().EmailAddress + " Verify " + historyText + " should not be displayed");
 		}
 	}
 	
