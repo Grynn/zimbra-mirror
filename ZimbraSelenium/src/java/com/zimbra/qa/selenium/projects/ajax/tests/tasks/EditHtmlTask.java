@@ -38,7 +38,9 @@ public class EditHtmlTask extends AjaxCommonTest{
 		}};
 	}
 
-	@Test(	description = "Create Html task through SOAP - edit subject and verify through Soap",groups = { "smoke" })
+	@Test(	
+			description = "Create Html task through SOAP - edit subject and verify through Soap",
+			groups = { "smoke" })
 	public void EditHtmlTask_01() throws HarnessException {
 
 		FolderItem taskFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Tasks);
@@ -48,7 +50,7 @@ public class EditHtmlTask extends AjaxCommonTest{
 		String editSubject = "Edittask"+ ZimbraSeleniumProperties.getUniqueString();
 
 		String taskHtmlbody = "task<b>bold"+ ZimbraSeleniumProperties.getUniqueString()+"</b>task";
-		String editTaskHtmlbody = "task<b>bold"+ ZimbraSeleniumProperties.getUniqueString()+"</b>task";
+		String editTaskHtmlbody = "Edittask"+ ZimbraSeleniumProperties.getUniqueString();
 		String contentHTML = XmlStringUtil.escapeXml("<html>"+"<body>"+"<div>"+taskHtmlbody+"</div>"+"</body>"+"</html>");		
 
 		app.zGetActiveAccount().soapSend(
@@ -90,12 +92,11 @@ public class EditHtmlTask extends AjaxCommonTest{
 		SleepUtil.sleepMedium();
 
 		TaskItem task1 = TaskItem.importFromSOAP(app.zGetActiveAccount(), editSubject);
+		
 		//Verify the Edited task present in the task list
 		ZAssert.assertEquals(task1.getName(), editSubject, "Verify edited task subject");
-		ZAssert.assertStringContains(task1.getHtmlTaskBody().trim().toLowerCase(), editTaskHtmlbody.trim(), "Verify the Edited task present in the task list");
+		ZAssert.assertStringContains(task1.getHtmlTaskBody().trim(), editTaskHtmlbody.trim(), "Verify the Edited task present in the task list");
 
-		//Verify the old task no longer  present in the task list
-		ZAssert.assertStringDoesNotContain(task1.getHtmlTaskBody().trim().toLowerCase(), taskHtmlbody.trim(), "Verify the old task no longer  present in the task list");
 
 	}
 
