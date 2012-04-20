@@ -953,7 +953,11 @@ public class PageMail extends AbsTab {
 			this.zWaitForBusyOverlay();
 
 			// Return the displayed mail page object
-			page = new DisplayMail(MyApplication);
+			if ( zGetPropMailView() == PageMailView.BY_MESSAGE ) {
+				page = new DisplayMail(MyApplication);
+			} else {
+				page = new DisplayConversation(MyApplication);
+			}
 
 			// FALL THROUGH
 

@@ -14,16 +14,16 @@ import com.zimbra.qa.selenium.projects.ajax.ui.mail.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.DisplayMail.Field;
 
 
-public class QuickReply extends PrefGroupMailByConversationTest {
+public class QuickReplyAll extends PrefGroupMailByConversationTest {
 
-	public QuickReply() {
-		logger.info("New "+ QuickReply.class.getCanonicalName());
+	public QuickReplyAll() {
+		logger.info("New "+ QuickReplyAll.class.getCanonicalName());
 
 	}
 	
 	@Test(	description = "Quick Reply to a conversation (1 message, 1 recipient)",
 			groups = { "smoke" })
-	public void QuickReply_01() throws HarnessException {
+	public void QuickReplyAll_01() throws HarnessException {
 		
 		ZimbraAccount account1 = new ZimbraAccount();
 		account1.provision();
@@ -53,7 +53,7 @@ public class QuickReply extends PrefGroupMailByConversationTest {
 		DisplayConversation display = (DisplayConversation)app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
 		
 		// Quick Reply
-		display.zPressButton(Button.B_QUICK_REPLY_REPLY);
+		display.zPressButton(Button.B_QUICK_REPLY_REPLY_ALL);
 		display.zFillField(Field.Body, reply);
 		display.zPressButton(Button.B_QUICK_REPLY_SEND);
 	
@@ -70,7 +70,7 @@ public class QuickReply extends PrefGroupMailByConversationTest {
 
 	@Test(	description = "Quick Reply to a conversation (1 message, 2 recipients)",
 			groups = { "functional" })
-	public void QuickReply_02() throws HarnessException {
+	public void QuickReplyAll_02() throws HarnessException {
 		
 		ZimbraAccount account1 = new ZimbraAccount();
 		account1.provision();
@@ -106,7 +106,7 @@ public class QuickReply extends PrefGroupMailByConversationTest {
 		DisplayConversation display = (DisplayConversation)app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
 		
 		// Quick Reply
-		display.zPressButton(Button.B_QUICK_REPLY_REPLY);
+		display.zPressButton(Button.B_QUICK_REPLY_REPLY_ALL);
 		display.zFillField(Field.Body, reply);
 		display.zPressButton(Button.B_QUICK_REPLY_SEND);
 	
@@ -115,23 +115,23 @@ public class QuickReply extends PrefGroupMailByConversationTest {
 		MailItem sent = MailItem.importFromSOAP(app.zGetActiveAccount(), "in:sent subject:("+ subject +")");
 		ZAssert.assertNotNull(sent, "Verify the message is in the sent folder");
 
-		// Verify message is NOT Received by active account
-		MailItem active = MailItem.importFromSOAP(app.zGetActiveAccount(), "in:inbox subject:("+ subject +") from:("+ app.zGetActiveAccount().EmailAddress +")");
-		ZAssert.assertNull(active, "Verify the message is NOT received by the active account");
-
 		// Verify message is Received by sender
 		MailItem sender = MailItem.importFromSOAP(account1, "subject:("+ subject +") from:("+ app.zGetActiveAccount().EmailAddress +")");
 		ZAssert.assertNotNull(sender, "Verify the message is received by the original sender");
 
-		// Verify message is NOT Received by To
+		// Verify message is Received by To
 		MailItem to = MailItem.importFromSOAP(account2, "subject:("+ subject +") from:("+ app.zGetActiveAccount().EmailAddress +")");
-		ZAssert.assertNull(to, "Verify the message is NOT received by the original To");
+		ZAssert.assertNotNull(to, "Verify the message is received by the original To");
+
+		// Verify message is Received by Cc
+		MailItem active = MailItem.importFromSOAP(app.zGetActiveAccount(), "in:inbox subject:("+ subject +") from:("+ app.zGetActiveAccount().EmailAddress +")");
+		ZAssert.assertNull(active, "Verify the message is NOT received by the active account");
 
 	}
 
 	@Test(	description = "Quick Reply to a conversation (1 message, 1 recipient, 1 CC, 1 BCC)",
 			groups = { "functional" })
-	public void QuickReply_03() throws HarnessException {
+	public void QuickReplyAll_03() throws HarnessException {
 		
 		ZimbraAccount account1 = new ZimbraAccount();
 		account1.provision();
@@ -176,7 +176,7 @@ public class QuickReply extends PrefGroupMailByConversationTest {
 		DisplayConversation display = (DisplayConversation)app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
 		
 		// Quick Reply
-		display.zPressButton(Button.B_QUICK_REPLY_REPLY);
+		display.zPressButton(Button.B_QUICK_REPLY_REPLY_ALL);
 		display.zFillField(Field.Body, reply);
 		display.zPressButton(Button.B_QUICK_REPLY_SEND);
 	
@@ -189,15 +189,15 @@ public class QuickReply extends PrefGroupMailByConversationTest {
 		MailItem received = MailItem.importFromSOAP(account1, "subject:("+ subject +") from:("+ app.zGetActiveAccount().EmailAddress +")");
 		ZAssert.assertNotNull(received, "Verify the message is received by the original sender");
 
-		// Verify message is NOT Received by To
+		// Verify message is Received by To
 		MailItem to = MailItem.importFromSOAP(account2, "subject:("+ subject +") from:("+ app.zGetActiveAccount().EmailAddress +")");
-		ZAssert.assertNull(to, "Verify the message is NOT received by the original To");
+		ZAssert.assertNotNull(to, "Verify the message is received by the original To");
 
-		// Verify message is NOT Received by Cc
+		// Verify message is Received by Cc
 		MailItem cc = MailItem.importFromSOAP(account3, "subject:("+ subject +") from:("+ app.zGetActiveAccount().EmailAddress +")");
-		ZAssert.assertNull(cc, "Verify the message is NOT received by the original Cc");
+		ZAssert.assertNotNull(cc, "Verify the message is received by the original Cc");
 
-		// Verify message is NOT Received by Bcc
+		// Verify message is Received by Cc
 		MailItem bcc = MailItem.importFromSOAP(account4, "subject:("+ subject +") from:("+ app.zGetActiveAccount().EmailAddress +")");
 		ZAssert.assertNull(bcc, "Verify the message is NOT received by the original Bcc");
 
