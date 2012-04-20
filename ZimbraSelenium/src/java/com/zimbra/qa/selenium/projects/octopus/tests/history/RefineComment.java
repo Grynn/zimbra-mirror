@@ -13,7 +13,12 @@ public class RefineComment extends HistoryCommonTest {
 		logger.info("New " + RefineComment.class.getCanonicalName());
 	}
 
-
+    @BeforeMethod(groups= ("always")) 
+    public void setup()
+    throws HarnessException {
+    	super.setup();
+    	logger.info("EMAIL  " + app.zGetActiveAccount().EmailAddress );
+    }
 			
 	@Test(description = "Verify check 'comment' checkbox", groups = { "functional" })
 	public void RefineCheckComment() throws HarnessException {

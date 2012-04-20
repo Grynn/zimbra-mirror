@@ -13,7 +13,13 @@ public class RefineFavorite extends HistoryCommonTest {
 		logger.info("New " + RefineFavorite.class.getCanonicalName());
 	}
 
-
+	 @BeforeMethod(groups= ("always")) 
+	 public void setup()
+	 throws HarnessException {
+	    	super.setup();
+	    	logger.info("EMAIL  " + app.zGetActiveAccount().EmailAddress );
+	 }
+				
 			
 	@Test(description = "Verify check 'favorite' checkbox with favorite action", groups = { "smoke" })
 	public void RefineCheckFavorite() throws HarnessException {

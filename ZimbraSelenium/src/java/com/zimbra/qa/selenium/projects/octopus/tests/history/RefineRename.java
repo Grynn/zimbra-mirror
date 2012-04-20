@@ -13,7 +13,12 @@ public class RefineRename extends HistoryCommonTest {
 		logger.info("New " + RefineRename.class.getCanonicalName());
 	}
 
-
+	 @BeforeMethod(groups= ("always")) 
+	 public void setup()
+	 throws HarnessException {
+	    	super.setup();
+	    	logger.info("EMAIL  " + app.zGetActiveAccount().EmailAddress );
+	 }
 			
 	@Test(description = "Verify check 'rename' checkbox", groups = { "functional" })
 	public void RefineCheckRename() throws HarnessException {

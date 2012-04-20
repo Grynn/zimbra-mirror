@@ -4,7 +4,10 @@ import org.testng.annotations.*;
 
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.util.*;
+
+import static com.zimbra.qa.selenium.projects.octopus.ui.PageHistory.CONSTANTS.*;
 import com.zimbra.qa.selenium.projects.octopus.ui.PageHistory.*;
+
 
 public class RefineHistory extends HistoryCommonTest {
  
@@ -18,7 +21,12 @@ public class RefineHistory extends HistoryCommonTest {
 	}
 
 
-	
+	 @BeforeMethod(groups= ("always")) 
+	 public void setup()
+	 throws HarnessException {
+	    	super.setup();
+	    	logger.info("EMAIL  " + app.zGetActiveAccount().EmailAddress );
+	 }	
 	
 		
 
