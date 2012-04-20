@@ -314,10 +314,10 @@ public class TreeMail extends AbsTree {
 	}
 	
 	
-	protected AbsPage zTreeItem(Action action, Button option, TagItem folder)
+	protected AbsPage zTreeItem(Action action, Button option, TagItem t)
 	throws HarnessException {
 
-		if ((action == null) || (option == null) || (folder == null)) {
+		if ((action == null) || (option == null) || (t == null)) {
 			throw new HarnessException(
 			"Must define an action, option, and addressbook");
 		}
@@ -325,7 +325,6 @@ public class TreeMail extends AbsTree {
 		String actionLocator = null;
 		String optionLocator = Locators.ContextMenuTVTagsCSS; // css=div[id='ZmActionMenu_conversationList_TAG']
 
-		TagItem t = (TagItem) folder;
 		tracer.trace("processing " + t.getName());
 
 		if (action == Action.A_LEFTCLICK) {
@@ -334,10 +333,12 @@ public class TreeMail extends AbsTree {
 
 		} else if (action == Action.A_RIGHTCLICK) {
 
-			actionLocator = "zti__main_Mail__" + t.getId() + "_textCell";
-
-			GeneralUtility.waitForElementPresent(this, actionLocator);
 			// actionLocator= Locators.zTagsHeader;
+			// 8.0 D4 (4/19/2012)
+			// actionLocator = "zti__main_Mail__" + t.getId() + "_textCell";
+
+			actionLocator = "css=td[id^='zti__main_Mail__']:contains('"+ t.getName() +"')";
+
 			this.zRightClickAt(actionLocator,"");
 			
 			this.zWaitForBusyOverlay();

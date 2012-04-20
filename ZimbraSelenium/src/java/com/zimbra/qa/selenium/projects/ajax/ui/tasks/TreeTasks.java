@@ -5,9 +5,7 @@ package com.zimbra.qa.selenium.projects.ajax.ui.tasks;
 
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
-import com.zimbra.qa.selenium.framework.util.GeneralUtility;
-import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
+import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.DialogEditFolder;
@@ -312,15 +310,12 @@ public class TreeTasks extends AbsTree {
 
 		} else if (action == Action.A_RIGHTCLICK) {
 
-		   if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
-		      actionLocator = "css=[id^='zti__" + MyApplication.zGetActiveAccount().EmailAddress +
-		            ":main_Tasks__'][id$=':" + t.getId() + "_textCell']";
-		   } else {
-		      actionLocator = "zti__main_Tasks__" + t.getId() + "_textCell";
-		   }
+			// actionLocator= Locators.zTagsHeader;
+			// 8.0 D4 (4/19/2012)
+			// actionLocator = "zti__main_Mail__" + t.getId() + "_textCell";
 
-		   GeneralUtility.waitForElementPresent(this, actionLocator);
-		   // actionLocator= Locators.zTagsHeader;
+			actionLocator = "css=td[id^='zti__main_Mail__']:contains('"+ t.getName() +"')";
+
 			this.zRightClickAt(actionLocator,"");
 
 			page = new DialogTag(MyApplication,((AppAjaxClient) MyApplication).zPageTasks);
