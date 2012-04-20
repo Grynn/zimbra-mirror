@@ -1,4 +1,4 @@
-%%contains VAR:zimbraServiceEnabled cbpolicyd, check_policy_service inet:%%zimbraLocalBindAddress%%:10031%%
+%%contains VAR:zimbraServiceEnabled cbpolicyd, check_policy_service inet:@@cbpolicyd_bind_host@@:@@cbpolicyd_bind_port@@%%
 reject_non_fqdn_recipient
 permit_sasl_authenticated
 permit_mynetworks
