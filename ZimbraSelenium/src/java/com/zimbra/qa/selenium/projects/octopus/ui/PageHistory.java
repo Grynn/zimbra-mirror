@@ -27,6 +27,26 @@ public class PageHistory extends AbsTab {
                                            "comment",
                                            "sharing",
                                            "new version"};
+  	  String[] checkboxes = {
+		PageHistory.Locators.zHistoryFilterAllTypes.locator,
+		PageHistory.Locators.zHistoryFilterFavorites.locator,
+		PageHistory.Locators.zHistoryFilterComment.locator,
+		PageHistory.Locators.zHistoryFilterSharing.locator,
+		PageHistory.Locators.zHistoryFilterNewVersion.locator,
+		PageHistory.Locators.zHistoryFilterRename.locator    		
+  	  }; 
+
+      //parallel array with checkboxes[]
+  	  String[] historyRegexps = {
+		"*",
+		PageHistory.GetText.REGEXP.FAVORITE,
+		PageHistory.GetText.REGEXP.COMMENT,
+		PageHistory.GetText.REGEXP.SHARE,
+		PageHistory.GetText.REGEXP.NEWVERSION,
+		PageHistory.GetText.REGEXP.RENAME
+  	  };
+    
+
    	  
    	  // text displayed in Global History
    	  String YOU = "You";
@@ -49,6 +69,7 @@ public class PageHistory extends AbsTab {
 	  
     }
     
+    public static boolean notSetup= true;
 	public static class Locators {
 		public static final Locators zTabHistory = new Locators(
 				"css=div.octopus-tab-label:contains(History)");
