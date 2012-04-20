@@ -111,6 +111,8 @@ public class TreeBriefcase extends AbsTree {
 					+ " not yet implemented");
 		}
 
+		this.zWaitForBusyOverlay();		
+				
 		// Default behavior. Click the locator
 		zClickAt(optionLocator, "0,0");
 
