@@ -230,24 +230,6 @@ public class DisplayMail extends AbsDisplay {
 			page = new DialogShareDecline(MyApplication, ((AppAjaxClient) MyApplication).zPageMail);
 			doPostfixCheck = true;
 
-		} else if ( button == Button.B_QUICK_REPLY_SEND ) {
-
-			locator = "css=div[id='zb__CV2__Rep__SEND'] td[id$='_title']";
-			page = null;
-			doPostfixCheck = true;
-
-		} else if ( button == Button.B_QUICK_REPLY_CANCEL ) {
-
-			locator = "css=div[id='zb__CV2__Rep__CANCEL'] td[id$='_title']";
-			page = null;
-			doPostfixCheck = false;
-
-		} else if ( button == Button.B_QUICK_REPLY_MORE ) {
-
-			locator = "css=div[id='zb__CV2__Rep__REPLY_ALL'] td[id$='_title']";
-			page = new FormMailNew(this.MyApplication);
-			doPostfixCheck = false;
-
 		} else  {
 			
 			throw new HarnessException("no implementation for button: "+ button);
@@ -756,58 +738,6 @@ public class DisplayMail extends AbsDisplay {
 		
 	}
 	
-	/**
-	 * Set the "Quick Reply" content
-	 * @param reply The text to set the content area as
-	 * @throws HarnessException 
-	 */
-	public void zSetQuickReplyContent(String reply) throws HarnessException {
-		
-		String locator = "css=textarea[id='zv__CLV-main__CV_replyInput']";
-		
-		// Focus in the quick reply area
-		this.sFocus(locator);
-		
-		// Add the reply text
-		this.sType(locator, reply);
-		
-		// Wait for any client processing
-		this.zWaitForBusyOverlay();
-		
-		// All done
-	}
-	
-	/**
-	 * Get the Quick Reply Placeholder Hepler Text (e.g. "click here to reply to user1, user2, and user3")
-	 * @return the text in the placeholder area
-	 * @throws HarnessException
-	 */
-	public String zGetQuickReplyPlaceholder() throws HarnessException {
-
-		// Make sure the client is not busy
-		this.zWaitForBusyOverlay();
-		SleepUtil.sleepSmall();
-		
-		
-		String locator = "css=textarea[id='zv__CLV-main__CV_replyInput']";
-		
-		
-		if ( !this.sIsElementPresent(locator) ) {
-			throw new HarnessException("Placeholder not visible!");
-		}
-		
-		// The placeholder tests are ok when running manually, but
-		// fail in TMS.  Get the HTML to inspect what the TMS
-		// execution is failing on.
-		this.zGetHtml("css=div#zv__CLV-main__CV");
-		
-		String placeholder = this.sGetAttribute(locator + "@placeholder");
-		logger.debug("Found placeholder text: "+ placeholder);
-		
-		return (placeholder);
-		
-	}
-
 
 	/**
 	 * Wait for Zimlets to be rendered in the message
