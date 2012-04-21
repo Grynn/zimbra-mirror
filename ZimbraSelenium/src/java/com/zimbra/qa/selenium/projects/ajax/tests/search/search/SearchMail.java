@@ -11,10 +11,10 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.core.*;
 
 
-public class SearchMail extends AjaxCommonTest {
+public class SearchMail extends PrefGroupMailByMessageTest {
 
 	int pollIntervalSeconds = 60;
 	
@@ -56,17 +56,25 @@ public class SearchMail extends AjaxCommonTest {
 		// Click Get Mail button
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 
-		// Search for the message
-		app.zPageSearch.zAddSearchQuery("subject:("+ subject +")");
-		app.zPageSearch.zToolbarPressButton(Button.B_SEARCH);
+		// Remember to close the search view
+		try {
+			
+			// Search for the message
+			app.zPageSearch.zAddSearchQuery("subject:("+ subject +")");
+			app.zPageSearch.zToolbarPressButton(Button.B_SEARCH);
+			
+			// Get all the messages in the inbox
+			List<MailItem> messages = app.zPageSearch.zListGetMessages();
+			ZAssert.assertNotNull(messages, "Verify the message list exists");
+	
+			ZAssert.assertEquals(messages.size(), 1, "Verify only the one message was returned");
+			ZAssert.assertEquals(messages.get(0).gSubject, subject, "Verify the message's subject matches");
 		
-		// Get all the messages in the inbox
-		List<MailItem> messages = app.zPageMail.zListGetMessages();
-		ZAssert.assertNotNull(messages, "Verify the message list exists");
+		} finally {
+			// Remember to close the search view
+			app.zPageSearch.zClose();
+		}
 
-		ZAssert.assertEquals(messages.size(), 1, "Verify only the one message was returned");
-		ZAssert.assertEquals(messages.get(0).gSubject, subject, "Verify the message's subject matches");
-		
 
 		
 	}

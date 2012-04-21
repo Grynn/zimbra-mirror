@@ -740,7 +740,7 @@ public class PageMail extends AbsTab {
 		throw new HarnessException("Unable to determine the Page Mail View");
 	}
 
-	private MailItem parseMessageRow(String top) throws HarnessException {
+	public MailItem parseMessageRow(String top) throws HarnessException {
 		MailItem item = null;
 
 		if ( top.contains("CLV") ) {

@@ -3,10 +3,12 @@
  */
 package com.zimbra.qa.selenium.projects.ajax.ui.search;
 
+import java.util.*;
+
+import com.zimbra.qa.selenium.framework.items.MailItem;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.projects.ajax.ui.*;
-import java.util.*;
+import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
 
 
 /**
@@ -335,6 +337,58 @@ public class PageSearch extends AbsTab {
             
     	return sIsElementPresent("css=td#zb__Search__MENU_left_icon>div." + imageClass);
     }
+
+	public List<MailItem> zListGetMessages() throws HarnessException {
+
+		List<MailItem> items = new ArrayList<MailItem>();
+
+		String listLocator = null;
+		String rowLocator = null;
+		if (zGetPropMailView() == SearchView.BY_MESSAGE) {
+			listLocator = "css=div[id^='zv__TV-SR-Mail-']";
+			rowLocator = "div[id$='__rows']";
+		} else {
+			listLocator = "css=div[id^='zv__CLV-SR-Mail-']";
+			rowLocator = "div[id$='__rows']";
+		}
+
+		// Make sure the button exists
+		if ( !this.sIsElementPresent(listLocator) )
+			throw new HarnessException("Message List View Rows is not present: " + listLocator);
+
+		String tableLocator = listLocator + " " + rowLocator;
+		
+		// How many items are in the table?
+		int count = this.sGetCssCount(tableLocator);
+		logger.debug(myPageName() + " zListGetMessages: number of messages: "+ count);
+
+		// Get each conversation's data from the table list
+		for (int i = 1; i <= count; i++) {
+
+			// Add the new item to the list
+			MailItem item = ((AppAjaxClient)this.MyApplication).zPageMail.parseMessageRow(listLocator + " div:nth-of-type("+ i +") ");
+			items.add(item);
+			logger.info(item.prettyPrint());
+		}
+
+		// Return the list of items
+		return (items);
+	}
 	
+	public enum SearchView {
+		BY_MESSAGE, BY_CONVERSATION
+	}
+
+
+	public SearchView zGetPropMailView() throws HarnessException {
+		if ( this.zIsVisiblePerPosition("css=div[id^='zv__CLV-SR-Mail-']", 0, 0) ) {
+			return (SearchView.BY_CONVERSATION);
+		} else if ( this.zIsVisiblePerPosition("css=div[id^='zv__TV-SR-Mail-']", 0, 0) ) {
+			return (SearchView.BY_MESSAGE);
+		}
+
+		throw new HarnessException("Unable to determine the Page Mail View");
+	}
+
 
 }
