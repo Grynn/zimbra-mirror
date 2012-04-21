@@ -660,6 +660,26 @@ class Program
                     countdownEvent.Wait();
                    
                     Console.WriteLine("Finished Migration");
+                    Console.WriteLine("UNinit Migration");
+
+                    string retval = TestObj.GlobalUninit();
+
+
+                    if (retval.Length > 0)
+                    {
+                        System.Console.WriteLine();
+                        System.Console.WriteLine(" Error in Migration UnInitialization ");
+                        /*ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
+                            " Error in Migration Initialization ");*/
+                        System.Console.WriteLine("......... \n");
+                        /*  ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
+                                  retval);*/
+                        System.Console.WriteLine("......... \n");
+                        System.Console.WriteLine();
+                        keepRunning = true;
+                        return;
+                    }
+
                     keepRunning = true;
 
                 }
@@ -733,6 +753,28 @@ class Program
                         countdownEvent.Wait();
                         Console.WriteLine("Finished Migration");
                         Console.WriteLine();
+                        Console.WriteLine("Finished Migration");
+                        Console.WriteLine("UNinit Migration");
+
+                        string retval = TestObj.GlobalUninit();
+
+
+                        if (retval.Length > 0)
+                        {
+                            System.Console.WriteLine();
+                            System.Console.WriteLine(" Error in Migration UnInitialization ");
+                            /*ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
+                                " Error in Migration Initialization ");*/
+                            System.Console.WriteLine("......... \n");
+                            /*  ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
+                                      retval);*/
+                            System.Console.WriteLine("......... \n");
+                            System.Console.WriteLine();
+                            keepRunning = true;
+                            return;
+                        }
+
+                        
                         keepRunning = true;
 
 
