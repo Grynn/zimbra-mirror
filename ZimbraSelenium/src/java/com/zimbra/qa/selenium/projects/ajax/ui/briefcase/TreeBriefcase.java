@@ -169,7 +169,7 @@ public class TreeBriefcase extends AbsTree {
 					+ "_imageCell]";
 
 		} else if (item instanceof LinkItem) {
-			locator = "css=a[id$=DWT54_addshare_link]";
+			locator = "css=div[id=ztih__main_Briefcase__BRIEFCASE] a[id$=_addshare_link]";
 			page = new DialogFindShares(MyApplication,
 					((AppAjaxClient) MyApplication).zPageBriefcase);
 

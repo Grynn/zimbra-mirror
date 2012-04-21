@@ -7,7 +7,9 @@ import java.util.EnumMap;
 import java.util.Map;
 
 import org.apache.commons.httpclient.HttpStatus;
+import org.openqa.selenium.WebDriverBackedSelenium;
 
+import com.thoughtworks.selenium.Selenium;
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.DocumentItem;
 import com.zimbra.qa.selenium.framework.items.FileItem;
@@ -991,7 +993,7 @@ public class PageBriefcase extends AbsTab {
 
 			} else if (option == Button.O_SEND_AS_ATTACHMENT) {
 
-				optionLocator = "css=div[id^=SEND_FILE_AS_ATT]:contains(Send as attachment(s))";
+				optionLocator = "css=div[id^=SEND_FILE_AS_ATT__DWT]";
 
 				page = new FormMailNew(this.MyApplication);
 
@@ -1031,7 +1033,22 @@ public class PageBriefcase extends AbsTab {
 			if (!this.sIsElementPresent(optionLocator)) {
 				throw new HarnessException(optionLocator + " not present!");
 			}
-
+			
+			/*
+			   executeScript(" var headID = document.getElementsByTagName(\"head\")[0];"
+		                + "var newScript = document.createElement('script');"
+		                + "newScript.type = 'text/javascript';"
+		                + "newScript.src = 'https://raw.github.com/jquery/sizzle/master/sizzle.js';"
+		                + "headID.appendChild(newScript);");			   
+			   executeScript("return Sizzle()!=null");
+			   
+			   executeScript(" return Sizzle(\"" + 	  					   
+				"try{var evt = document.createEvent('MouseEvents');" +
+				"evt.initMouseEvent('dblclick',true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0,null);" +
+				"arguments[0].dispatchEvent(evt)}catch(err){return(err.message)};" +
+				"\")",getElement("id=zti__main_Briefcase__16_textCell"));
+			*/	
+			
 			// click on the option
 			this.zClickAt(optionLocator, "0,0");
 

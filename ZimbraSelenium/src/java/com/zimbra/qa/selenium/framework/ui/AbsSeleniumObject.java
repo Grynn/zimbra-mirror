@@ -15,6 +15,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Mouse;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.TimeoutException;
@@ -23,6 +24,7 @@ import org.openqa.selenium.WebDriverBackedSelenium;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.interactions.Action;
+import org.openqa.selenium.interactions.internal.Coordinates;
 import org.openqa.selenium.internal.seleniumemulation.JavascriptLibrary;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.FluentWait;
@@ -37,6 +39,9 @@ import com.zimbra.qa.selenium.framework.core.ExecuteHarnessMain;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
+
+import org.openqa.selenium.HasInputDevices;
+import org.openqa.selenium.internal.Locatable;;
 
 /**
  * The <code>AbsSeleniumObject</code> class is a base class that all "GUI"
@@ -307,11 +312,12 @@ public abstract class AbsSeleniumObject {
 			logger.info("WebDriver()" + locator + "," + coord + ")");
 			WebElement we = getElement(locator);
 			Actions builder = new Actions(webDriver());
-			Action action = builder
-					.moveToElement(we)
+			Action action = builder.moveToElement(we)
 				    .click(we)
 				    .build();
 			action.perform();
+			//Mouse mouse = ((HasInputDevices) webDriver()).getMouse();			
+		    //mouse.click(((Locatable)we).getCoordinates());
 		}
 		else if(ZimbraSeleniumProperties.isWebDriverBackedSelenium()){
 			webDriverBackedSelenium().clickAt(locator, coord);
@@ -376,7 +382,10 @@ public abstract class AbsSeleniumObject {
 					.moveToElement(element)
 				    .contextClick(element)
 				    .build();
-			rClick.perform();			
+			rClick.perform();	
+			
+			//Mouse mouse = ((HasInputDevices) webDriver()).getMouse();			
+		    //mouse.contextClick(((Locatable)element).getCoordinates());
 		} else {				
 			this.sMouseDownRightAt(locator, coord);
 			this.sMouseUpRightAt(locator, coord);
@@ -906,9 +915,18 @@ public abstract class AbsSeleniumObject {
 	public void sDoubleClick(String locator) throws HarnessException {
 		if (ZimbraSeleniumProperties.isWebDriver()){
 			logger.info("...WebDriver...doubleClick()");
-			Actions action = new Actions(webDriver()); 
-			WebElement we = getElement(locator);
-		    action.moveToElement(we).doubleClick(we).build().perform();
+			Actions actions = new Actions(webDriver()); 
+			WebElement we = getElement(locator);			
+			Action doubleClick = actions.doubleClick(we).build();
+			doubleClick.perform();		    
+			//Mouse mouse = ((HasInputDevices) webDriver()).getMouse();			
+		   	//mouse.doubleClick(((Locatable)we).getCoordinates());
+			/*
+			executeScript("try{var evt = document.createEvent('MouseEvents');" +
+			        "evt.initMouseEvent('dblclick',true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0,null);" +
+			        "arguments[0].dispatchEvent(evt)}catch(err){return(err.message)};", we);
+			executeScript("arguments[0].fireEvent('ondblclick');", we);
+			*/
 		}else{		
 			((DefaultSelenium) ClientSessionFactory.session().selenium())
 				.doubleClick(locator);
