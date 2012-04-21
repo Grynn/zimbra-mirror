@@ -116,8 +116,8 @@ public class SavedSearchFolderItem extends AItem implements IItem {
 	public String prettyPrint() {
 		StringBuilder sb = new StringBuilder();
 		sb.append(SavedSearchFolderItem.class.getSimpleName()).append('\n');
-		sb.append("ID: ").append(super.getId()).append('\n');
-		sb.append("Name: ").append(super.getName()).append('\n');
+		sb.append("ID: ").append(getId()).append('\n');
+		sb.append("Name: ").append(getName()).append('\n');
 		sb.append("Query: ").append(getQuery()).append('\n');
 		sb.append("Types: ").append(getTypes()).append('\n');
 		sb.append("Parent ID: ").append(getParentId()).append('\n');

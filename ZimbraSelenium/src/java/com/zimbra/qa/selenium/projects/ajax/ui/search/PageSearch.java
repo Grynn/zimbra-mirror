@@ -79,6 +79,24 @@ public class PageSearch extends AbsTab {
 		return (true);
 
 	}
+	
+	public void zClose() throws HarnessException {
+		
+		if ( !zIsActive() ) {
+			return; // Already closed
+		}
+		
+		String locator = "css=div[id^='zb__App__tab_SR'] td[id$='_right_icon'] div.ImgCloseGray";
+		
+		if ( !this.sIsElementPresent(locator) ) {
+			return; // Already closed
+		}
+		
+		this.zClickAt(locator, "");
+		this.zWaitForBusyOverlay();
+		
+		return;
+	}
 
 	/* (non-Javadoc)
 	 * @see projects.admin.ui.AbsPage#myPageName()
@@ -132,38 +150,18 @@ public class PageSearch extends AbsTab {
 		//
 		
 		if ( button == Button.B_SEARCH ) {
-			locator = "css=div#zb__Search__SEARCH>div#zb__Search__SEARCH_left_icon>div.ImgSearch2";
+			locator = "css=div#zb__Search__SEARCH_left_icon div.ImgSearch2";
 			
 			// for all item types
 			if (zIsSearchType(Button.O_SEARCHTYPE_ALL)) {
 			    page = new PageAllItemTypes(((AppAjaxClient)MyApplication));
 			}
 			
-			// Make sure the button exists
-			if ( !sIsElementPresent(locator) )
-				throw new HarnessException("Button is not present locator="+ locator +" button="+ button);
+		} else if ( (button == Button.B_SEARCHSAVE) || (button == Button.B_SAVE) ) {
 			
-		} else if ( button == Button.B_SEARCHSAVE ) {
-			
-			locator = "css=div[id='zb__Search__SAVE'] td[id='zb__Search__SAVE_left_icon']";
+			locator = "css=div[id^='ztb_searchresults__'] td[id$='_saveButton'] td[id$='_title']";
 			page = new DialogSaveSearch(MyApplication, this);
 			
-			// Make sure the button exists
-			if ( !sIsElementPresent(locator) )
-				throw new HarnessException("Button is not present locator="+ locator +" button="+ button);
-			
-		/*	IronMaiden does not support Advanced Search 
-		} else if ( button == Button.B_SEARCHADVANCED ) {
-			
-			locator = "zb__Search__ADV_title";
-			page = ((AppAjaxClient)MyApplication).zPageAdvancedSearch;
-			
-			// Make sure the button exists
-			if ( !this.sIsElementPresent(locator) )
-				throw new HarnessException("Button is not present locator="+ locator +" button="+ button);
-			
-			// FALL THROUGH
-			*/
 		} else {
 			throw new HarnessException("no logic defined for button "+ button);
 		}
@@ -171,6 +169,10 @@ public class PageSearch extends AbsTab {
 		if ( locator == null ) {
 			throw new HarnessException("locator was null for button "+ button);
 		}
+		
+		// Make sure the button exists
+		if ( !sIsElementPresent(locator) )
+			throw new HarnessException("Button is not present locator="+ locator +" button="+ button);
 		
 		// Default behavior, process the locator by clicking on it
 		//
@@ -185,8 +187,6 @@ public class PageSearch extends AbsTab {
 		// If page was specified, make sure it is active
 		if ( page != null ) {
             
-			sWaitForPageToLoad();
-			
 			// This function (default) throws an exception if never active
 			page.zWaitForActive();
 			

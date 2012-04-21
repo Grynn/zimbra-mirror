@@ -164,7 +164,8 @@ public class DialogSaveSearch extends AbsDialog {
 		// For some reason, the text doesn't get entered on the first try
 		this.sFocus(locator);
 		this.zClick(locator);
-		zKeyboard.zTypeCharacters(folder);
+		this.sType(locator, folder);
+		// zKeyboard.zTypeCharacters(folder);
 
 		// Is this sleep necessary?
 		SleepUtil.sleepSmall();

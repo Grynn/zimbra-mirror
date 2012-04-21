@@ -906,11 +906,11 @@ public class TreeMail extends AbsTree {
 	private List<SavedSearchFolderItem>zListGetSavedSearchFolders(String top) throws HarnessException {
 		List<SavedSearchFolderItem> items = new ArrayList<SavedSearchFolderItem>();
 
-		String searchLocator = top + "//div[@class='DwtComposite']";
+		String searchLocator = top + " div[id^='zti__main_Mail__']";
 
-		int count = this.sGetXpathCount(searchLocator);
+		int count = this.sGetCssCount(searchLocator);
 		for ( int i = 1; i <= count; i++) {
-			String itemLocator = searchLocator + "["+ i + "]";
+			String itemLocator = searchLocator + ":nth-child("+ i +")";
 
 			if ( !this.sIsElementPresent(itemLocator) ) {
 				continue;
@@ -918,13 +918,17 @@ public class TreeMail extends AbsTree {
 
 			String locator;
 
-			String id = sGetAttribute("xpath=("+ itemLocator +"/.)@id");
+			String id = this.sGetAttribute(itemLocator + "@id");
 			if ( id == null || id.trim().length() == 0 || !(id.startsWith("zti__main_Mail__")) ) {
 				// Not a folder
 				// Maybe "Find Shares ..."
 				continue;
 			}
 
+			// Since we have the ID, just simplify the locator
+			// Example: zti__main_Mail__257
+			itemLocator = "css=div#"+ id;
+			
 			SavedSearchFolderItem item = new SavedSearchFolderItem();
 
 			// Set the locator
@@ -933,11 +937,11 @@ public class TreeMail extends AbsTree {
 					":main_Mail__", ""));
 
 			// Set the name
-			locator = itemLocator + "//td[contains(@id, '_textCell')]";
+			locator = itemLocator + " td[id$='_textCell']";
 			item.setName(this.sGetText(locator));
 
 			// Set the expanded boolean
-			locator = itemLocator + "//td[contains(@id, '_nodeCell')]/div";
+			locator = itemLocator + " td[id$='_nodeCell']>div";
 			if ( sIsElementPresent(locator) ) {
 				// The image could be hidden, if there are no subfolders
 				//item.gSetIsExpanded("ImgNodeExpanded".equals(sGetAttribute("xpath=("+ locator + ")@class")));
@@ -976,7 +980,7 @@ public class TreeMail extends AbsTree {
 		List<SavedSearchFolderItem> items = new ArrayList<SavedSearchFolderItem>();
 
 		// Recursively fill out the list, starting with all mail folders
-		items.addAll(zListGetSavedSearchFolders("//div[@id='ztih__main_Mail__SEARCH']"));
+		items.addAll(zListGetSavedSearchFolders("css=div#ztih__main_Mail__SEARCH div.DwtTreeItemLevel1ChildDiv"));
 
 		// Return the list of items
 		return (items);

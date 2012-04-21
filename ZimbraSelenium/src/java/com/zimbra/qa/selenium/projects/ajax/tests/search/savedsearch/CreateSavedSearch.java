@@ -37,16 +37,27 @@ public class CreateSavedSearch extends AjaxCommonTest  {
 		// Create the message data to be sent
 		String name = "search" + ZimbraSeleniumProperties.getUniqueString();
 		String query = "subject:(" + ZimbraSeleniumProperties.getUniqueString() + ")";
-		
 
-		// Search for the message
-		app.zPageSearch.zAddSearchQuery(query);
-		DialogSaveSearch dialog = (DialogSaveSearch)app.zPageSearch.zToolbarPressButton(Button.B_SEARCHSAVE);
-		
-		// Save the search
-		dialog.zEnterFolderName(name);
-		dialog.zClickButton(Button.B_OK);
+		// Remember to close the search window after saving
+		try {
 
+			// Search for the message
+			app.zPageSearch.zAddSearchQuery(query);
+			app.zPageSearch.zToolbarPressButton(Button.B_SEARCH);
+			DialogSaveSearch dialog = (DialogSaveSearch)app.zPageSearch.zToolbarPressButton(Button.B_SAVE);
+			
+			// Save the search
+			dialog.zEnterFolderName(name);
+			dialog.zClickButton(Button.B_OK);
+		
+		} finally {
+			
+			// Remember to close the search window after saving
+			app.zPageSearch.zClose();
+			
+		}
+
+		
 		//Verify the saved search exists in the server
 		SavedSearchFolderItem item = SavedSearchFolderItem.importFromSOAP(app.zGetActiveAccount(), name);
 		ZAssert.assertNotNull(item, "Verify the saved search was created correctly");
