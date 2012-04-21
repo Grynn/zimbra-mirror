@@ -108,16 +108,16 @@ public class HistoryCommonTest extends OctopusCommonTest {
     		      	   
           // mark file as favorite via soap
    		   markFileFavoriteViaSoap(app.zGetActiveAccount(), fileId);
-   		  
+   		   SleepUtil.sleepSmall();
            
    		   // unmark file as favorite via soap
    		   unMarkFileFavoriteViaSoap(app.zGetActiveAccount(), fileId);
-   		   
+   		   SleepUtil.sleepSmall();
    		
    		   // just for debugging
    		   // mark file as favorite again via soap
    		   markFileFavoriteViaSoap(app.zGetActiveAccount(), fileId);
-   		   
+   		   SleepUtil.sleepSmall();
         
    		   // make comment via soap
    	       makeCommentViaSoap(app.zGetActiveAccount(), fileId, comment);
