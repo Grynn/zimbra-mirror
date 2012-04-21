@@ -1,6 +1,7 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.briefcase.document;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
@@ -260,8 +261,8 @@ public class OpenDocument extends AjaxCommonTest {
 		logger.info("Checking for the opened window ...");
 
 		// Check if the window is still open
-		String[] windows = ClientSessionFactory.session().selenium()
-				.getAllWindowNames();
+		List<String> windows = app.zPageBriefcase.sGetAllWindowNames();
+				
 		for (String window : windows) {
 			if (!window.isEmpty() && !window.contains("null") && !window.contains(PageBriefcase.pageTitle)
 					&& !window.contains("main_app_window")

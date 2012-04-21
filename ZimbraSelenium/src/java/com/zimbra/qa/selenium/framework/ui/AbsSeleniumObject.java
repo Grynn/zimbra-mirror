@@ -904,10 +904,16 @@ public abstract class AbsSeleniumObject {
 	 * DefaultSelenium.doubleClick()
 	 */
 	public void sDoubleClick(String locator) throws HarnessException {
-		// Cast to DefaultSelenium ... Workaround until ZimbraSelnium is removed
-		((DefaultSelenium) ClientSessionFactory.session().selenium())
+		if (ZimbraSeleniumProperties.isWebDriver()){
+			logger.info("...WebDriver...doubleClick()");
+			Actions action = new Actions(webDriver()); 
+			WebElement we = getElement(locator);
+		    action.moveToElement(we).doubleClick(we).build().perform();
+		}else{		
+			((DefaultSelenium) ClientSessionFactory.session().selenium())
 				.doubleClick(locator);
-		logger.info("doubleClick(" + locator + ")");
+			logger.info("doubleClick(" + locator + ")");
+		}
 	}
 
 	/**
@@ -1200,8 +1206,8 @@ public abstract class AbsSeleniumObject {
 		Set<String> availableWindows = null;
 		
 		if (ZimbraSeleniumProperties.isWebDriver()){
-			availableWindows =  webDriver().getWindowHandles(); 
-		    list = new ArrayList<String>(availableWindows);			
+			logger.info("...WebDriver... getAllWindowNames()");
+			list =  getAllWindowNames(); 		   		
 		}
 		else if (ZimbraSeleniumProperties.isWebDriverBackedSelenium()){
 			availableWindows =  webDriverBackedSelenium().getWrappedDriver().getWindowHandles(); 
@@ -1917,6 +1923,7 @@ public abstract class AbsSeleniumObject {
 	public void sSelectWindow(String windowID) throws HarnessException {
 		if (ZimbraSeleniumProperties.isWebDriver()){
 			switchTo(windowID);
+			//switchToWindowUsingTitle(windowID);
 		}else{
 			ClientSessionFactory.session().selenium().selectWindow(windowID);			
 		}
@@ -1955,7 +1962,12 @@ public abstract class AbsSeleniumObject {
 	 */
 	public void sOpen(String url) throws HarnessException {
 		logger.info("open(" + url + ")");
-		ClientSessionFactory.session().selenium().open(url);
+		if (ZimbraSeleniumProperties.isWebDriver()){
+			logger.info("...WebDriver...navigate().to()");
+			webDriver().navigate().to(url);
+		}else{			
+			ClientSessionFactory.session().selenium().open(url);
+		}
 	}
 
 	/**
@@ -1980,6 +1992,7 @@ public abstract class AbsSeleniumObject {
 	 */
 	public void sWindowFocus() throws HarnessException {
 		if (ZimbraSeleniumProperties.isWebDriver()){
+			logger.info("...WebDriver... focus()");
 			executeScript("window.focus()");
 		}else {
 			ClientSessionFactory.session().selenium().windowFocus();
@@ -2118,9 +2131,24 @@ public abstract class AbsSeleniumObject {
 		}
 	}
 
+	private WebElement getElementByXPath(String locator) {
+		logger.info("...WebDriver...getElementByXPath()");
+		WebElement element = null;
+		WebDriver driver = webDriver();
+		if (locator != null){
+			try {
+				element = driver.findElement(By.xpath(locator));
+			}catch(Exception ex){
+				logger.info("...getElementByXPath()..." + ex);
+			}
+		}
+		return element;
+	}
+	
 
-	private WebElement getElement(String locator, String startSuffix) {
-		logger.info("...WebDriver...getElement(String, String)");
+	private WebElement getElementById(String locator) {
+		logger.info("...WebDriver...getElementById()");
+		String startSuffix = "id=";
 		WebElement element = null;
 		WebDriver driver = webDriver();
 		String modifiedLocator = locator;
@@ -2131,15 +2159,16 @@ public abstract class AbsSeleniumObject {
 			try {
 				element = driver.findElement(By.id(modifiedLocator));
 			}catch(Exception ex){
-				logger.info("...getElement(String, String)..." + ex);
+				logger.info("...getElementById()..." + ex);
 			}
 		}
 		return element;
 	}
 	
-	private WebElement getElement(String locator, String startSuffix,
-			String containSuffix) {
-		logger.info("...WebDriver...getElement(String, String, String)");
+	private WebElement getElementByCss(String locator) {
+		logger.info("...WebDriver...getElementByCss()");
+		String startSuffix = "css=";
+		String containSuffix = ":contains";
 		WebElement element = null;
 		WebDriver driver = null;
 		CssLocator cssl = stripCssLocator(locator, startSuffix, containSuffix);
@@ -2170,7 +2199,7 @@ public abstract class AbsSeleniumObject {
 				}
 
 			} catch (Exception ex) {
-				logger.info("...getElement(String, String, String)..." + ex);
+				logger.info("...getElementByCss()..." + ex);
 			}
 		}
 		return element;
@@ -2180,9 +2209,11 @@ public abstract class AbsSeleniumObject {
 		logger.info("...WebDriver...getElementOrNull()");
 		WebElement we = null;
 		if(locator.startsWith("id=")){
-			we = getElement(locator, "id=");
+			we = getElementById(locator);
+		}else if(locator.startsWith("//")){
+			we = getElementByXPath(locator);
 		}else{
-			we = getElement(locator, "css=", ":contains");
+			we = getElementByCss(locator);
 		}
 		return we;
 	}
@@ -2263,26 +2294,47 @@ public abstract class AbsSeleniumObject {
 		};
 	}
 
-	protected boolean switchToWindowUsingTitle(WebDriver driver, String title) { 
+	protected boolean switchToWindowUsingTitle(String title) { 
 		logger.info("...WebDriver...switchToWindowUsingTitle()");
-		boolean result = false;
-		String currentWindow = driver.getWindowHandle(); 
-		Set<String> availableWindows = driver.getWindowHandles(); 
-		if (!availableWindows.isEmpty()) { 
-			for (String windowId : availableWindows) { 
-				if (driver.switchTo().window(windowId).getTitle().equals(title)) { 
-					result = true; 
-					break;
-			    }
-			}
-			if(!result) { 
-		    	driver.switchTo().window(currentWindow); 
-		    } 
-		} 
+		WebDriver driver = webDriver();
+		boolean result = false;		
+		try{
+			Set<String> windowHandles = driver.getWindowHandles(); 		
+			if (windowHandles!=null && !windowHandles.isEmpty()) {
+				for (String handle : windowHandles) { 
+					String currentWindowTitle = driver.switchTo().window(handle).getTitle();
+					if (currentWindowTitle.equals(title)) { 
+						result = true; 
+						break;
+					}
+				}		
+			} 
+		}catch(Exception ex){
+			logger.error(ex);
+		}
 		return result; 
 	}
 	
-	public boolean switchTo(String name) {
+	protected List<String> getAllWindowNames() throws HarnessException{ 
+		logger.info("...WebDriver...getAllWindowNames()");
+		
+		List<String> list = new ArrayList<String>();
+		WebDriver driver = webDriver();			
+		try{
+			Set<String> windowHandles = driver.getWindowHandles(); 		
+			if (windowHandles!=null && !windowHandles.isEmpty()) {
+				for (String handle : windowHandles) { 
+					list.add(driver.switchTo().window(handle).getTitle());
+				}
+			}
+		}catch(Exception ex){
+			logger.error(ex);
+		}
+		return list;
+	}
+
+	
+	public boolean switchTo(String name) throws HarnessException {
 		logger.info("...WebDriver...switchTo() " + name);	
 		WebDriver driver = null;
 		Set<String> handles = null;
@@ -2292,14 +2344,11 @@ public abstract class AbsSeleniumObject {
 		}else{ 
 			driver = webDriver();
 		}	
-			
-		final String currentHandle;
-			
-		try{
-			currentHandle = driver.getWindowHandle();
-			logger.info("currentHandle: " + currentHandle);
+		
+		try{	
+			logger.info("handles size" );
 			handles = driver.getWindowHandles();	
-			logger.info("handles size: " + handles.size());
+			logger.info(" : " + handles.size());
 			if (handles != null && !handles.isEmpty()) {
 				String url = "";
 				String title = null;
@@ -2308,7 +2357,7 @@ public abstract class AbsSeleniumObject {
 					logger.info("about to switch to handle: " + handle);
 					try{						
 						title = driver.switchTo().window(handle).getTitle();
-						logger.info("switched to title: " + title);						
+						logger.info("switched to title: " + title);											
 					}catch(Exception ex){
 						logger.error(ex);
 					}
@@ -2322,13 +2371,14 @@ public abstract class AbsSeleniumObject {
 				}				
 			}
 		}catch(Exception ex){
-			logger.error(ex);			
-		}finally{
-			if (!found) {
+			logger.error(ex);
+		}
+		finally{
+			if(!found){
 				String defaultContent = driver.switchTo().defaultContent().getTitle();
 				logger.info("back to defaultContent()" + defaultContent);
+				sWindowFocus();
 			}
-			
 		}
 		return found;
 	}
@@ -2357,30 +2407,36 @@ public abstract class AbsSeleniumObject {
 		
 		Wait<WebDriver> wait = null;
 		final int size;
-		if(handlesSize != null && handlesSize.length > 1){
+		if(handlesSize != null ){
 			size = handlesSize[0];
 		}else{
 			size = webDriver().getWindowHandles().size();
 		}
 		wait = new FluentWait<WebDriver>(webDriver()).withTimeout(5, TimeUnit.SECONDS).pollingEvery(1, TimeUnit.SECONDS).ignoring(TimeoutException.class);
-		try{
-			wait.until(new ExpectedCondition<Boolean>(){					
-				public Boolean apply(WebDriver driver) {
-					Boolean result = false;
-					result = driver.getWindowHandles().size() < size;
-					return result;
-				}
-			});
-		}catch(Exception te){
+		if(size > 1){
+			try{
+				wait.until(new ExpectedCondition<Boolean>(){					
+					public Boolean apply(WebDriver driver) {
+						Boolean result = false;
+						result = driver.getWindowHandles().size() < size;
+						return result;
+					}
+				});
+			}catch(Exception te){
 			logger.info("...wait for getWindowHandles().size < " + size + " timed out");
+			}
 		}
-		
 	
 		boolean closed = false;
 		try{
 			closed = wait.until(new ExpectedCondition<Boolean>(){					
 				public Boolean apply(WebDriver driver) {
-					return !switchTo(name);
+					try {
+						return !switchTo(name);
+					} catch (HarnessException ex) {
+						logger.info(ex);
+						return false;						
+					}
 				}
 			});
 		}catch(Exception te){

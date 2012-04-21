@@ -76,7 +76,7 @@ public class DocumentBriefcaseOpen extends AbsDisplay {
 		else if(ZimbraSeleniumProperties.isWebDriverBackedSelenium())
 			text = webDriverBackedSelenium().getText(Locators.zDocumentNameField);
 		else
-			text = ClientSessionFactory.session().selenium().getText(Locators.zDocumentNameField);
+			text = sGetText(Locators.zDocumentNameField);
 
 		return text;
 	}

@@ -46,7 +46,13 @@ public class PagePrint extends AbsPage {
 		SleepUtil.sleepSmall();
 		
 		//switch to Print View
-		ClientSessionFactory.session().selenium().selectWindow("title=Zimbra");
+		String title ="title=Zimbra";
+		if (ZimbraSeleniumProperties.isWebDriver()){
+			logger.info("...WebDriver...switch to Print View");
+			switchTo(title);
+		}else{
+			ClientSessionFactory.session().selenium().selectWindow(title);
+		}
 	}
 	
 	
