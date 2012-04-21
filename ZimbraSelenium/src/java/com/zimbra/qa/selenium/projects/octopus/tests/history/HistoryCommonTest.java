@@ -125,11 +125,13 @@ public class HistoryCommonTest extends OctopusCommonTest {
 		   
 		   //rename file via soap
 		   renameViaSoap(app.zGetActiveAccount(), fileId, newName);
+		   SleepUtil.sleepSmall();
 		   
 		   //rename folder via soap
 		   folderOldName = folder.getName();
 		   folderNewName = "Rename Folder " +  app.zGetActiveAccount().getPref("displayName");
 		   renameViaSoap(app.zGetActiveAccount(), folder.getId(), folderNewName);
+		   SleepUtil.sleepSmall();
 		   
 		   //updated 'folder' object 
 		   folder = FolderItem.importFromSOAP(app.zGetActiveAccount(), folderNewName);
