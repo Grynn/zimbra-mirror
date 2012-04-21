@@ -83,7 +83,7 @@ public class ActivityHistory extends OctopusCommonTest {
 	public void UploadFileVerifyTextUseremailInGlobalHistory() throws HarnessException {
 		String fileName=JPG_FILE;
 		
-		uploadFileViaSoap(app.zGetActiveAccount(),fileName);
+		_fileId=uploadFileViaSoap(app.zGetActiveAccount(),fileName);
 
 		// Click on MyFiles tab 
 		// this makes the history text displayed
@@ -109,7 +109,7 @@ public class ActivityHistory extends OctopusCommonTest {
 	public void VerifyActivityTypeFilterControls() throws HarnessException {
 	    String fileName=JPG_FILE;
 		
-		uploadFileViaSoap(app.zGetActiveAccount(),fileName);	
+		_fileId=uploadFileViaSoap(app.zGetActiveAccount(),fileName);	
 
 	
 		// Click on History tab
@@ -172,7 +172,7 @@ public class ActivityHistory extends OctopusCommonTest {
 
 	@AfterMethod(groups = { "always" })
 	public void testCleanup() {
-		if (_fileAttached && _fileId != null) {
+		if (_fileAttached || _fileId != null) {
 			try {
 				// Delete it from Server
 				app.zPageOctopus.deleteItemUsingSOAP(_fileId,

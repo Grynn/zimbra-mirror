@@ -16,7 +16,6 @@ public class RefineNewVersion extends HistoryCommonTest {
 	 public void setup()
 	 throws HarnessException {
 	    	super.setup();
-	    	logger.info("EMAIL  " + app.zGetActiveAccount().EmailAddress );
 	 }
 			
 	@Test(description = "Verify check 'new version' checkbox", groups = { "functional" })

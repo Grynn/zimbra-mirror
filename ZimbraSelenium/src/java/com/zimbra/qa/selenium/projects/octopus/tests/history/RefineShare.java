@@ -18,7 +18,6 @@ public class RefineShare extends HistoryCommonTest {
 	throws HarnessException
 	{
        super.setup();
-       logger.info("EMAIL  " + app.zGetActiveAccount().EmailAddress );
     	  
        if (isShared) {
     	   // revoke sharing the folder with grantees

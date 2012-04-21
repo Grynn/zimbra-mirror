@@ -17,7 +17,6 @@ public class RefineComment extends HistoryCommonTest {
     public void setup()
     throws HarnessException {
     	super.setup();
-    	logger.info("EMAIL  " + app.zGetActiveAccount().EmailAddress );
     }
 			
 	@Test(description = "Verify check 'comment' checkbox", groups = { "functional" })

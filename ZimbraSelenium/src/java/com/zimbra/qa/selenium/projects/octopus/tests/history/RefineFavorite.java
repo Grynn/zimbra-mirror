@@ -16,23 +16,24 @@ public class RefineFavorite extends HistoryCommonTest {
 	 @BeforeMethod(groups= ("always")) 
 	 public void setup()
 	 throws HarnessException {
-	    	super.setup();
-	    	logger.info("EMAIL  " + app.zGetActiveAccount().EmailAddress );
+	    super.setup();
 	 }
 				
 			
 	@Test(description = "Verify check 'favorite' checkbox with favorite action", groups = { "smoke" })
 	public void RefineCheckFavorite() throws HarnessException {
-		
-        // verify favorite text present
+						
+        // verify favorite text present on GUI
 		verifyCheckAction(Locators.zHistoryFilterFavorites.locator, 
 				GetText.favorite(fileName));											
 
+		
 	}
 	
 	@Test(description = "Verify uncheck 'favorite' checkbox with favorite action", groups = { "functional" })
 	public void RefineUnCheckFavorite() throws HarnessException {
-		
+
+	
 		// verify favorite text not present
 		verifyUnCheckAction(Locators.zHistoryFilterFavorites.locator, 
 				GetText.favorite(fileName));											

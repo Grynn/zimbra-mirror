@@ -64,6 +64,9 @@ public class PageHistory extends AbsTab {
 	  String COMMENT_POSTFIX= ".";
 	  
 	  String RENAME_PREFIX = " renamed file ";
+	  String RENAME_FOLDER_PREFIX = " renamed folder ";
+	  
+	  
 	  String RENAME_MIDFIX = " as ";
 	  String RENAME_POSTFIX= ".";
 	  
@@ -112,7 +115,7 @@ public class PageHistory extends AbsTab {
 			String NEWVERSION = REGEXP_USER + NEW_VERSION_PREFIX 
 		                +   REGEXP_FILENAME + NEW_VERSION_POSTFIX;
 	
-			String   RENAME = REGEXP_USER +  RENAME_PREFIX 
+			String   RENAME = REGEXP_USER +  "(" + RENAME_PREFIX +"|" + RENAME_FOLDER_PREFIX + ")"
 	                    +   REGEXP_FILENAME + RENAME_MIDFIX + REGEXP_FILENAME + RENAME_POSTFIX;
 			
 		    String COMMENT  = REGEXP_USER +  COMMENT_PREFIX 
@@ -157,11 +160,12 @@ public class PageHistory extends AbsTab {
 		}
 	
 		
-		public static String rename(String oldName, String newName) {
-			return YOU +  RENAME_PREFIX 
+		public static String rename(String oldName, String newName, String... forFolder) {
+			return YOU +  ((forFolder.length ==1)?RENAME_FOLDER_PREFIX:RENAME_PREFIX) 
 			        +   oldName + RENAME_MIDFIX + newName + RENAME_POSTFIX;
 		}
-
+		
+		
 		public static String comment(String fileName) {
 			return YOU +  COMMENT_PREFIX 
 			        +   fileName + COMMENT_POSTFIX;

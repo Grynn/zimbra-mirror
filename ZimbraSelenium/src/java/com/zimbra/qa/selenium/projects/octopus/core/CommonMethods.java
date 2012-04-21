@@ -1,5 +1,6 @@
 package com.zimbra.qa.selenium.projects.octopus.core;
 
+import com.zimbra.common.soap.Element;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
@@ -20,6 +21,8 @@ public class CommonMethods {
 			+ "' op='!grant' zid='" +  grantee.ZimbraId +"'" + ">"  
 			+ "</action>"
 			+ "</FolderActionRequest>");
+		
+		
 	}
 
 	
@@ -61,7 +64,7 @@ public class CommonMethods {
 			+ "<e a='"
 			+ grantee.EmailAddress
 			+ "'/>"
-			+ "<notes _content='share folder invitation'/>"
+			+ "<notes _content='You are invited to view my shared folder " + folder.getName() + " '/>"
 			+ "</SendShareNotificationRequest>");
 	}
 
@@ -84,7 +87,7 @@ public class CommonMethods {
 					+ "' view='document'/>" + "</CreateFolderRequest>");
 
 	    // verify folder creation on the server 
-	    return FolderItem.importFromSOAP(account, foldername);
+	    return FolderItem.importFromSOAP(account, foldername); 
 	}
 	
 	// create a new zimbra account
@@ -102,14 +105,10 @@ public class CommonMethods {
 		account.soapSend("<AddCommentRequest xmlns='urn:zimbraMail'> <comment parentId='"
 			+ fileId + "' text='" + comment + "'/></AddCommentRequest>");
 
-		// TODO: check if this call is redundant
-		// Get file comments through SOAP
-		account.soapSend("<GetCommentsRequest  xmlns='urn:zimbraMail'> <comment parentId='"
-			+ fileId + "'/></GetCommentsRequest>");
-		
-		
-		return account.soapSelectValue("//mail:comment", "id");
-
+		SleepUtil.sleepVerySmall();
+       
+		//TODO: verify valid id?
+		return account.soapSelectValue("//mail:AddCommentResponse//mail:comment", "id");		
 	}
 	
 
