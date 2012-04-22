@@ -96,6 +96,8 @@ public class OpenLinkToMessage extends AjaxCommonTest {
 
 		app.zPageBriefcase
 				.zWaitForElementPresent(locator);
+		
+		SleepUtil.sleepSmall();
 
 		app.zPageBriefcase.sClickAt(locator,"");
 				

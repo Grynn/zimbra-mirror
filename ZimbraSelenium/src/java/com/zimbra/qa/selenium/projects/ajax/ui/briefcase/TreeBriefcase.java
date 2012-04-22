@@ -55,12 +55,14 @@ public class TreeBriefcase extends AbsTree {
 			actionLocator = "css=td[id^=zti__main_Briefcase__]:contains(" + ((TagItem) item).getName()
 				+ ")";
 		} else if (item instanceof FolderItem) {
-			actionLocator = "zti__main_Briefcase__"
-					+ ((FolderItem) item).getId() + "_textCell";
+			actionLocator = "css=td[id^=zti__main_Briefcase__"
+					+ ((FolderItem) item).getId() + "_textCell]";
 		} else {
 			throw new HarnessException("Must use IItem as argument, but was "
 					+ item.getClass());
 		}
+		
+		zWaitForElementPresent(actionLocator, "3000");	
 
 		if (action == Action.A_RIGHTCLICK) {
 			this.zRightClickAt(actionLocator, "0,0");
@@ -112,7 +114,8 @@ public class TreeBriefcase extends AbsTree {
 		}
 
 		this.zWaitForBusyOverlay();		
-				
+		zWaitForElementPresent(optionLocator, "3000");		
+		
 		// Default behavior. Click the locator
 		zClickAt(optionLocator, "0,0");
 

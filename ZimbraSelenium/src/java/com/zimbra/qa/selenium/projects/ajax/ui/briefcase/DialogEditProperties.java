@@ -46,7 +46,7 @@ public class DialogEditProperties extends AbsDialog {
 
 		logger.info(myPageName() + " zIsActive()");
 
-		String locator = "div." + Locators.zEditPropertiesDialogId;
+		String locator = "css=div[class=" + Locators.zEditPropertiesDialogId +"]";
 
 		if (!this.sIsElementPresent(locator)) {
 			return (false); // Not even present
