@@ -7,7 +7,10 @@ import java.util.EnumMap;
 import java.util.Map;
 
 import org.apache.commons.httpclient.HttpStatus;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriverBackedSelenium;
+import org.openqa.selenium.WebElement;
 
 import com.thoughtworks.selenium.Selenium;
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
@@ -395,7 +398,7 @@ public class PageBriefcase extends AbsTab {
 			if (option == Button.O_TAG_NEWTAG) {
 
 				pulldownLocator = "css=td[id=zb__BDLV-main__TAG_MENU_dropdown]>div[class='ImgSelectPullDownArrow']";
-				optionLocator = "css=td[id^=briefcase_newtag]";
+				optionLocator = "css=div[id='zb__BDLV-main__TAG_MENU|MENU'] div[id=briefcase_newtag]";
 
 				page = new DialogTag(this.MyApplication, this);
 
@@ -406,7 +409,8 @@ public class PageBriefcase extends AbsTab {
 
 				pulldownLocator = "css=td[id$='__TAG_MENU_dropdown']>div[class='ImgSelectPullDownArrow']";
 
-				optionLocator = "css=td[id^=briefcase_removetag]";
+				optionLocator = "css=div[id^=briefcase_removetag__]";
+
 
 				page = null;
 
@@ -1133,8 +1137,8 @@ public class PageBriefcase extends AbsTab {
 
 			// Now the ContextMenu option is opened
 			// Click on the specified sub option
-			String subOptionLocator = "css=div[id^=TAG_MENU][id$=|MENU] [class=ZWidgetTitle]:contains("
-					+ subOption + ")";
+			String subOptionLocator = "css=div[id='TAG_MENU|MENU'] [class=ZWidgetTitle]:contains("
+				+ subOption + ")";
 
 			// click on the sub option
 			this.zClickAt(subOptionLocator, "0,0");
@@ -1258,10 +1262,16 @@ public class PageBriefcase extends AbsTab {
 		zSelectWindow("Zimbra: Briefcase");
 
 		// sSelectFrame("relative=top");
+		if (ZimbraSeleniumProperties.isWebDriver()){
+			WebElement we = getElement(Locators.zRenameInput.locator);
+			we.clear();
+			we.sendKeys(text);
+			we.sendKeys(Keys.RETURN);			
+		}else{
+			sType(Locators.zRenameInput.locator, text);
 
-		sType(Locators.zRenameInput.locator, text);
-
-		zKeyEvent(Locators.zRenameInput.locator, "13", "keyup");
+			zKeyEvent(Locators.zRenameInput.locator, "13", "keyup");
+		}
 	}
 
 	public void typeKey(String locator, String keycode, String event)
