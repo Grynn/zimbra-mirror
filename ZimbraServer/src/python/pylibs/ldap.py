@@ -39,15 +39,15 @@ keymap = {
 	"ldap_common_require_tls"		:	("olcSecurity",		"cn=config", False),
 	"ldap_common_writetimeout"		:	("olcWriteTimeout",	"cn=config", False),
 
-	"ldap_db_checkpoint"			:	("olcDbCheckpoint",		"olcDatabase={3}mdb,cn=config", False),
-	"ldap_db_maxsize"			:	("olcDbMaxsize",			"olcDatabase={3}mdb,cn=config", False),
+	"ldap_db_checkpoint"			:	("olcDbCheckpoint",	"olcDatabase={3}mdb,cn=config", False),
+	"ldap_db_maxsize"			:	("olcDbMaxsize",	"olcDatabase={3}mdb,cn=config", False),
 
-	"ldap_accesslog_checkpoint"		:	("olcDbCheckpoint",		"olcDatabase={2}mdb,cn=config", True),
-	"ldap_accesslog_maxsize"		:	("olcDbMaxsize",			"olcDatabase={2}mdb,cn=config", True),
+	"ldap_accesslog_checkpoint"		:	("olcDbCheckpoint",	"olcDatabase={2}mdb,cn=config", True),
+	"ldap_accesslog_maxsize"		:	("olcDbMaxsize",	"olcDatabase={2}mdb,cn=config", True),
 
 	"ldap_overlay_syncprov_checkpoint"	:	("olcSpCheckpoint",	"olcOverlay=syncprov,olcDatabase={3}mdb,cn=config", True),
 
-	"ldap_overlay_accesslog_logpurge"	:	("olcAccessLogPurge", "olcOverlay=accesslog,olcDatabase={3}mdb,cn=config", True)
+	"ldap_overlay_accesslog_logpurge"	:	("olcAccessLogPurge",	"olcOverlay=accesslog,olcDatabase={3}mdb,cn=config", True)
 }
 
 class Ldap:
@@ -77,25 +77,37 @@ class Ldap:
 			atfilter = "(objectClass=*)"
 			atreturn = ['1.1']
 			zfilter = ZLdapFilterFactory.getInstance().fromFilterString(FilterId.ZMCONFIGD, atfilter)
-			searchControls = ZSearchControls.createSearchControls(ZSearchScope.SEARCH_SCOPE_OBJECT, ZSearchControls.SIZE_UNLIMITED, atreturn);
+			searchControls = ZSearchControls.createSearchControls(ZSearchScope.SEARCH_SCOPE_OBJECT, ZSearchControls.SIZE_UNLIMITED, atreturn)
 			mLdapContext = LdapClient.getContext(cls.mLdapConfig, LdapUsage.SEARCH)
-			ne = mLdapContext.searchDir(atbase, zFilter, searchControls);
-			if ne.hasMore():
-				Log.logMsg(5, "Ldap config is master")
+			try:
+				ne = mLdapContext.searchDir(atbase, zfilter, searchControls)
+			except:
+				cls.master = False
+			else:
 				cls.master = True
+				Log.logMsg(5, "Ldap config is master")
 			LdapClient.closeContext(mLdapContext)
 		(attr, dn, xform) = Ldap.lookupKey(key)
 		if attr is not None:
 			v = xform % (value,)
-			Log.logMsg(4, "Setting %s to %s" % (key, v))
-			mLdapContext = LdapClient.getContext(cls.mLdapConfig, LdapUsage.MOD)
-			mEntry = LdapClient.createMutableEntry()
-			mEntry.setAttr(attr, v)
-			try:
-				mLdapContext.replaceAttributes(dn, mEntry.getAttributes())
-				LdapClient.closeContext(mLdapContext)
-			except:
-				return 1;
+			atreturn = [attr]
+			searchControls = ZSearchControls.createSearchControls(ZSearchScope.SEARCH_SCOPE_OBJECT, ZSearchControls.SIZE_UNLIMITED, atreturn)
+			mLdapContext = LdapClient.getContext(cls.mLdapConfig, LdapUsage.SEARCH)
+			ne = mLdapContext.searchDir(dn, zfilter, searchControls)
+			entry = ne.next()
+			entryAttrs = entry.getAttributes()
+			origValue = entryAttrs.getAttrString(attr)
+			LdapClient.closeContext(mLdapContext)
+			if origValue != v:
+				Log.logMsg(4, "Setting %s to %s" % (key, v))
+				mLdapContext = LdapClient.getContext(cls.mLdapConfig, LdapUsage.MOD)
+				mEntry = LdapClient.createMutableEntry()
+				mEntry.setAttr(attr, v)
+				try:
+					mLdapContext.replaceAttributes(dn, mEntry.getAttributes())
+					LdapClient.closeContext(mLdapContext)
+				except:
+					return 1;
 
 	@classmethod
 	def lookupKey(cls, key):
@@ -103,7 +115,6 @@ class Ldap:
 			(attr, dn, requires_master) = keymap[key]
 			if re.match("ldap_db_", key) and not cls.master:
 				dn = "olcDatabase={2}mdb,cn=config"
-				
 			xform = "%s"
 			if key == "ldap_common_require_tls":
 				xform = "ssf=%s"
