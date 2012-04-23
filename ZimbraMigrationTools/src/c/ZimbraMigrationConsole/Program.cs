@@ -236,6 +236,8 @@ class Program
                     builder += "\n";
                     builder += " ZimbraPwd= Pwd for Zimbra \n";
                     builder += "\n";
+                    builder += "ZimbraDomain= The Zimbra Domain name \n";
+                    builder += "\n";
                     builder += "The Migration Item Options can be specified as Mail=True Calendar=True Contacts=True Sent=True DeletedItems=True Junk=True Tasks=True Rules=True OOO=True \n";
                     builder += " By default these options are false. Unless specified in the XML or as arguments \n";
                     builder += "\n";
@@ -276,6 +278,7 @@ class Program
                 string ZCSPort = CommandLineArgs.I.argAsString("ZimbraPort");
                 string ZCSID = CommandLineArgs.I.argAsString("ZimbraID");
                 string ZCSPwd = CommandLineArgs.I.argAsString("ZimbraPwd");
+                string ZCSDomain = CommandLineArgs.I.argAsString("ZimbraDomain");
 
                 //bool Mail = CommandLineArgs.I.argAsBool("Mail");
                 bool Mail = false;
@@ -340,12 +343,24 @@ class Program
 
                     if (ZCSHost == "")
                         ZCSHost = myXmlConfig.ConfigObj.ZimbraServer.Hostname;
+                    else
+                        if (ZCSDomain == "")
+                        {
+                            System.Console.WriteLine("ZimbraHost and ZimbraDomain go together.To override ZimbraHost ,ZimbraDomain has to be overridden as well \n");
+                            System.Console.WriteLine(" Press any key to return \n");
+                            Console.ReadKey(true);
+                            return;
+                        }
+                   
 
                     if (ZCSPort == "")
                         ZCSPort = myXmlConfig.ConfigObj.ZimbraServer.Port;
 
                     if (Verbose == "")
                         Verbose = myXmlConfig.ConfigObj.GeneralOptions.LogLevel;
+
+                    if (ZCSDomain == "")
+                        ZCSDomain = myXmlConfig.ConfigObj.UserProvision.DestinationDomain;
 
                    /* if (Mail == false)
                         Mail = myXmlConfig.ConfigObj.ImportOptions.Mail;*/
@@ -602,12 +617,14 @@ class Program
                         if (user.MappedName == "")
                         {
                              acctName = user.UserName + '@' +
-                                (myXmlConfig.ConfigObj.UserProvision.DestinationDomain == "" ? ZCSHost : myXmlConfig.ConfigObj.UserProvision.DestinationDomain);
+//                                (myXmlConfig.ConfigObj.UserProvision.DestinationDomain == "" ? ZCSHost : myXmlConfig.ConfigObj.UserProvision.DestinationDomain);
+                                  (ZCSDomain == "" ? ZCSHost : ZCSDomain);
                         }
                         else
                         {
                             acctName = user.MappedName + '@' +
-                               (myXmlConfig.ConfigObj.UserProvision.DestinationDomain == "" ? ZCSHost : myXmlConfig.ConfigObj.UserProvision.DestinationDomain);
+                               //(myXmlConfig.ConfigObj.UserProvision.DestinationDomain == "" ? ZCSHost : myXmlConfig.ConfigObj.UserProvision.DestinationDomain);
+                               (ZCSDomain == "" ? ZCSHost : ZCSDomain);
 
                         }
 
@@ -703,8 +720,10 @@ class Program
                                     acctName);*/
                                 err = " error provisioning user " +
                                     acctName;
-                                System.Console.WriteLine();
-                                System.Console.WriteLine();
+                                System.Console.WriteLine(err);
+                                System.Console.ReadKey(true);
+                                keepRunning = true;
+                                return;
                             }
                         }
 
@@ -713,7 +732,7 @@ class Program
 
                     countdownEvent = new CountdownEvent(myXmlConfig.UserList.Count);
                     
-                    userAccts.StartMigration(myXmlConfig.UserList, myXmlConfig.ConfigObj.UserProvision.DestinationDomain, importopts, countdownEvent, TestObj, MaxThreads);
+                    userAccts.StartMigration(myXmlConfig.UserList, ZCSDomain, importopts, countdownEvent, TestObj, MaxThreads);
                     countdownEvent.Wait();
                    
                     Console.WriteLine("Finished Migration");
