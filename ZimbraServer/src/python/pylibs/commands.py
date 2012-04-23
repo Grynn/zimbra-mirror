@@ -51,7 +51,6 @@ exe = {
 	'CBPOLICYD'     : "bin/zmcbpolicydctl",
 	'PROXYGEN'      : "bin/zmproxyconfgen",
 	'CONVERTD'      : "bin/zmconvertctl",
-	'LDAPHELPER'    : "bin/ldapHelper.pl",
 	}
 
 class Command:
@@ -444,11 +443,6 @@ commands = {
 		desc = "convertd",
 		name = "convertd",
 		cmd  = exe["CONVERTD"] + " %s",
-	),
-	"ldaphelper" : Command(
-		desc = "ldaphelper",
-		name = "ldaphelper",
-		cmd  = exe["LDAPHELPER"] + " %s %s %s '%s'",
 	),
 	}
 

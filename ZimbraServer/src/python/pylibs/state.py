@@ -28,6 +28,7 @@ import re
 import threading
 import time
 import traceback
+import ldap
 
 class State:
 	
@@ -65,6 +66,7 @@ class State:
 		self.globalconfig     = globalconfig.GlobalConfig()
 		self.miscconfig       = miscconfig.MiscConfig()
 		self.serverconfig     = serverconfig.ServerConfig()
+		self.ldap             = ldap.Ldap()
 		self.forcedconfig     = {}
 		self.requestedconfig     = {}
 		self.fileCache 		  = {}
@@ -596,12 +598,8 @@ class State:
 				self.proxygen(False)
 
 	def runLdap(self):
-		master = conf.Config.mConfig.ldap_is_master
-		if master != "true":
-			master = "false"
-		pw = conf.Config.mConfig.ldap_root_password
 		for (ldap,val) in self.curLdap().items():
-			if not self.doLdap(ldap, val, master, pw):
+			if not self.doLdap(ldap, val):
 				self.delLdap(ldap)
 
 	def doConfigRewrites(self):
@@ -630,17 +628,14 @@ class State:
 		dt = time.clock()-t1
 		Log.logMsg(3, "All restarts completed in %.2f sec" % dt)
 
-	def doLdap(self, key, val, master, pw):
+	def doLdap(self, key, val):
 		Log.logMsg(4, "Setting ldap %s=%s" % (key, val))
-		c = commands.commands["ldaphelper"]
-		rc = 0
-		try:
-			rc = c.execute((master, pw, key, val))
-			[Log.logMsg(5,t) for t in c.output.splitlines()]
-		except Exception, e:
-			[Log.logMsg(1,t) for t in traceback.format_tb(sys.exc_info()[2])]
-			Log.logMsg(1, "LDAP FAILURE (%s)" % e)
-		return rc
+                rc = 0
+                try:
+			rc = self.ldap.modify_attribute(key, val)
+                except Exception, e:
+                        Log.logMsg(1, "LDAP FAILURE (%s)" % e)
+                return rc
 
 	def processIsRunning(self,process):
 		return (not self.controlProcess(process, 2))

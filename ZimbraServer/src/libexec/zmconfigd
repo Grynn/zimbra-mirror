@@ -29,9 +29,7 @@ import conf
 # import commands
 import state
 import listener
-# Not used
-# from ldap import Ldap
-
+from ldap import Ldap
 from logmsg import *
 
 if (os.geteuid() == 0):
@@ -148,7 +146,7 @@ myConfig = conf.Config()
 conf.Config.mConfig = myConfig;
 myState.getLocalConfig(myConfig)
 Log.initLogging(myConfig)
-# Ldap.initLdap(myConfig)
+Ldap.initLdap(myConfig)
 
 Log.logMsg(1, "%s started on %s with loglevel=%d pid=%d" % (myConfig.progname, myConfig.hostname, myConfig.loglevel, os.getpid()))
 

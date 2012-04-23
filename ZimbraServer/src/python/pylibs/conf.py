@@ -61,6 +61,8 @@ class Config:
 		self.ldap_root_password = state.localconfig["ldap_root_password"]
 		self.ldap_master_url = state.localconfig["ldap_master_url"]
 		self.loglevel 	= 3
+		if state.localconfig["ldap_starttls_required"] is not None:
+			self.ldap_starttls_required = (state.localconfig["ldap_starttls_required"].upper() != "FALSE")
 		if state.localconfig["zmconfigd_log_level"] is not None:
 			self.loglevel 	= int(state.localconfig["zmconfigd_log_level"])
 		self.interval 	= 60
