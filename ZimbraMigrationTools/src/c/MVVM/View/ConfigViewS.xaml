@@ -12,7 +12,7 @@
             <RowDefinition MaxHeight="40"></RowDefinition>
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0" HorizontalAlignment="Left" Margin="15,20,30,0" Name="serverDestTitle" Text="Source" TextWrapping="Wrap" FontWeight="Bold" VerticalAlignment="Top" />
-        <TextBlock Grid.Row="1" HorizontalAlignment="Left" Margin="15,5,30,0" Name="serverSourceText" Text="This is the source for data to be migrated.  Choose Outlook Profile if you already an Exchange Admin profile.  If not, choose Exchange Server and enter the proper credentials.  An admin profile will be created for the migration and then deleted." TextWrapping="Wrap" VerticalAlignment="Top" />
+        <TextBlock Grid.Row="1" HorizontalAlignment="Left" Margin="15,5,30,0" Name="serverSourceText" Text="This is the source for data to be migrated.  Choose Outlook Profile if you already have an Exchange Admin profile.  If not, choose Exchange Server and enter the proper credentials.  An admin profile will be created for the migration and then deleted." TextWrapping="Wrap" VerticalAlignment="Top" />
         <StackPanel Grid.Row="2">
             <Grid Name="ConfigSourceGrid">
                 <Grid.RowDefinitions>
