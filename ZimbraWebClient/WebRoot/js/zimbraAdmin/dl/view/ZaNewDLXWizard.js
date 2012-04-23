@@ -65,7 +65,8 @@ function () {
 
 ZaNewDLXWizard.prototype.handleXFormChange = function (ev) {
     if(ev && this._localXForm.hasErrors()) {
-			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
+        this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
+	    this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
 	} else {
 		if(this._containedObject[ZaAccount.A_name]
                 && this._containedObject[ZaAccount.A_name].indexOf("@") > 0) {
@@ -883,7 +884,17 @@ ZaNewDLXWizard.myXFormModifier = function(xFormObject, entry) {
 					msgName : ZaMsg.LBL_DL_Type,
 					subLabel : "",
 					visibilityChecks : [],
-					enableDisableChecks : []
+					enableDisableChecks : [],
+                    elementChanged: function (elementValue, instanceValue, event) {
+                        if (elementValue == ZaDistributionList.STATIC_DL_TYPE) {
+                            var memberItem = this.getParentItem().items[2];
+                            if( memberItem.hasError() ) {
+                                memberItem.clearError();
+                                memberItem.setInstanceValue(null);
+                            }
+                        }
+                        this.getForm().itemChanged(this, elementValue, event);
+                    }
 				}
 				,
 				{
@@ -898,7 +909,17 @@ ZaNewDLXWizard.myXFormModifier = function(xFormObject, entry) {
 					subLabel : "",
 					visibilityChangeEventSources : [ZaDistributionList.A2_dlType],
 					visibilityChecks : [ZaDLXFormView.isDynamicDL],
-					enableDisableChecks : []
+					enableDisableChecks : [],
+                    elementChanged: function (elementValue, instanceValue, event) {
+                        if (elementValue == "TRUE") {
+                            var memberItem = this.getParentItem().items[2];
+                            if( memberItem.hasError() ) {
+                                memberItem.clearError();
+                                memberItem.setInstanceValue(null);
+                            }
+                        }
+                        this.getForm().itemChanged(this, elementValue, event);
+                    }
 				}
 				,
 				{
