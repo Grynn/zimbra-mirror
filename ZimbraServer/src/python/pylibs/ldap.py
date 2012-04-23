@@ -15,20 +15,20 @@
 
 import conf
 
-import com.zimbra.cs.ldap.LdapClient;
-import com.zimbra.cs.ldap.LdapUsage;
-import com.zimbra.cs.ldap.ZAttributes;
-import com.zimbra.cs.ldap.ZLdapContext;
-import com.zimbra.cs.ldap.ZLdapFilter;
-import com.zimbra.cs.ldap.ZLdapFilterFactory;
-import com.zimbra.cs.ldap.ZMutableEntry;
-import com.zimbra.cs.ldap.ZSearchControls;
-import com.zimbra.cs.ldap.ZSearchResultEntry;
-import com.zimbra.cs.ldap.ZSearchResultEnumeration;
-import com.zimbra.cs.ldap.ZSearchScope;
-import com.zimbra.cs.ldap.LdapException.LdapSizeLimitExceededException;
-import com.zimbra.cs.ldap.LdapServerConfig.GenericLdapConfig;
-import com.zimbra.cs.ldap.ZLdapFilterFactory.FilterId;
+from com.zimbra.cs.ldap.LdapServerConfig import GenericLdapConfig
+from com.zimbra.cs.ldap import LdapClient
+from com.zimbra.cs.ldap import LdapUsage
+from com.zimbra.cs.ldap import ZAttributes
+from com.zimbra.cs.ldap import ZLdapContext
+from com.zimbra.cs.ldap import ZLdapFilter
+from com.zimbra.cs.ldap import ZLdapFilterFactory
+from com.zimbra.cs.ldap.ZLdapFilterFactory import FilterId
+from com.zimbra.cs.ldap import ZSearchControls
+from com.zimbra.cs.ldap import ZSearchResultEntry;
+from com.zimbra.cs.ldap import ZMutableEntry
+from com.zimbra.cs.ldap import ZSearchResultEnumeration
+from com.zimbra.cs.ldap import ZSearchScope
+from com.zimbra.cs.ldap.LdapException import LdapSizeLimitExceededException
 from logmsg import *
 
 # (Key, DN, requires_master)
@@ -45,75 +45,60 @@ keymap = {
 	"ldap_accesslog_checkpoint"		:	("olcDbCheckpoint",		"olcDatabase={2}mdb,cn=config", True),
 	"ldap_accesslog_maxsize"		:	("olcDbMaxsize",			"olcDatabase={2}mdb,cn=config", True),
 
-	"ldap_overlay_syncprov_checkpoint"	:	("olcSpCheckpoint",	"olcOverlay={0}syncprov,olcDatabase={3}mdb,cn=config", True),
+	"ldap_overlay_syncprov_checkpoint"	:	("olcSpCheckpoint",	"olcOverlay=syncprov,olcDatabase={3}mdb,cn=config", True),
 
-	"ldap_overlay_accesslog_logpurge"	:	("olcAccessLogPurge", "olcOverlay={1}accesslog,olcDatabase={3}mdb,cn=config", True)
+	"ldap_overlay_accesslog_logpurge"	:	("olcAccessLogPurge", "olcOverlay=accesslog,olcDatabase={3}mdb,cn=config", True)
 }
 
 class Ldap:
 
-	cf = None
-	mLdapConfig = None
 	master = False
+	mLdapConfig = None
 
 	@classmethod
-	def initLdap(cls, c=None):
-		Log.logMsg(4, "Initializing ldap")
+	def initLdap(cls, c = None):
 		if c:
 			cls.cf = c
+			Log.logMsg(5, "Creating ldap context")
+			ldapUrl = "ldapi://"
+			bindDN = "cn=config"
+			try:
+				cls.mLdapConfig =  GenericLdapConfig(ldapUrl, cls.cf.ldap_starttls_required, bindDN, cls.cf.ldap_root_password)
+			except Exception, e:
+				Log.logMsg(1, "LDAP CONFIG FAILURE (%s)" % e)
+
 		else:
-			raise Exception("Ldap not initialized")
+			cls.cf = conf.Config()
 
 	@classmethod
-	def createLdapConfig(cls):
-		Log.logMsg(5, "Creating ldap context")
-		if cls.cf is None:
-			raise Exception("Ldap not initialized")
-
-		ldapUrl = "ldapi:///"
-		bindDN = "cn=config"
-		if cls.cf.ldap_starttls_required=="false":
-			startTLSEnabled = False
-		else:
-			startTLSEnabled = True
-		
-		bindPassword = cls.cf.ldap_root_password
-		cls.mLdapConfig = GenericLdapConfig(ldapUrl, startTLSEnabled, bindDN, bindPassword)
-
+	def modify_attribute(cls, key, value):
 		if cls.cf.ldap_is_master:
-			Log.logMsg(5, "Creating ldap context")
 			atbase = "cn=accesslog"
 			atfilter = "(objectClass=*)"
 			atreturn = ['1.1']
-			mLdapContext = LdapClient.getContext(cls.mLdapConfig, LdapUsage.SEARCH)
 			zfilter = ZLdapFilterFactory.getInstance().fromFilterString(FilterId.ZMCONFIGD, atfilter)
-			searchControls = ZSearchControls.createSearchControls(ZSearchScope.SEARCH_SCOPE_BASE, ZSearchControls.SIZE_UNLIMITED, atreturn);
-			ne = mLdapContext.searchDir(base, zFilter, searchControls);
+			searchControls = ZSearchControls.createSearchControls(ZSearchScope.SEARCH_SCOPE_OBJECT, ZSearchControls.SIZE_UNLIMITED, atreturn);
+			mLdapContext = LdapClient.getContext(cls.mLdapConfig, LdapUsage.SEARCH)
+			ne = mLdapContext.searchDir(atbase, zFilter, searchControls);
 			if ne.hasMore():
 				Log.logMsg(5, "Ldap config is master")
 				cls.master = True
 			LdapClient.closeContext(mLdapContext)
-
-	@classmethod
-	def getLdapContext(cls):
-		if cls.mLdapConfig is None:
-			cls.createLdapConfig()
-		return cls.mLdapContext
-
-	@classmethod
-	def modify_attribute(cls, key, value):
-		(attr, dn, xform) = Ldap.lookupKey(key, cls.master)
+		(attr, dn, xform) = Ldap.lookupKey(key)
 		if attr is not None:
 			v = xform % (value,)
 			Log.logMsg(4, "Setting %s to %s" % (key, v))
 			mLdapContext = LdapClient.getContext(cls.mLdapConfig, LdapUsage.MOD)
 			mEntry = LdapClient.createMutableEntry()
 			mEntry.setAttr(attr, v)
-			mLdapContext.replaceAttributes(dn, mEntry.getAttributes())
-			LdapClient.closeContext(mLdapContext)
+			try:
+				mLdapContext.replaceAttributes(dn, mEntry.getAttributes())
+				LdapClient.closeContext(mLdapContext)
+			except:
+				return 1;
 
 	@classmethod
-	def lookupKey(cls, key, master):
+	def lookupKey(cls, key):
 		if key in keymap:
 			(attr, dn, requires_master) = keymap[key]
 			if re.match("ldap_db_", key) and not cls.master:
@@ -132,3 +117,5 @@ class Ldap:
 			Log.logMsg(1, "UNKNOWN KEY %s" % (key,))
 
 		raise Exception("Key error")
+
+Ldap.initLdap()
