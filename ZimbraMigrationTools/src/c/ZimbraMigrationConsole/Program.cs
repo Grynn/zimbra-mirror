@@ -21,6 +21,15 @@ namespace ZimbraMigrationConsole
             }
         }
 
+        public object arg(string argName)
+        {
+            if (m_args.ContainsKey(argName))
+            {
+                return m_args[argName];
+            }
+            else return null;
+        }
+
         public string argAsString(string argName)
         {
             if (m_args.ContainsKey(argName))
@@ -268,16 +277,11 @@ class Program
                 string ZCSID = CommandLineArgs.I.argAsString("ZimbraID");
                 string ZCSPwd = CommandLineArgs.I.argAsString("ZimbraPwd");
 
-                bool Mail = CommandLineArgs.I.argAsBool("Mail");
-                bool Calendar = CommandLineArgs.I.argAsBool("Calendar");
-                bool Contacts = CommandLineArgs.I.argAsBool("Contacts");
-                bool Sent = CommandLineArgs.I.argAsBool("Sent");
-                bool DeletedItems = CommandLineArgs.I.argAsBool("DeletedItems");
-                bool Junk = CommandLineArgs.I.argAsBool("Junk");
-                bool Tasks = CommandLineArgs.I.argAsBool("Tasks");
-                bool Rules = CommandLineArgs.I.argAsBool("Rules");
-                bool OOO = CommandLineArgs.I.argAsBool("OOO");
-
+                //bool Mail = CommandLineArgs.I.argAsBool("Mail");
+                bool Mail = false;
+                bool Calendar = false;bool Contacts = false;
+                bool Sent= false;bool DeletedItems = false;bool Junk = false;bool Tasks=false;bool Rules=false;bool OOO = false;
+              
                 string Verbose = CommandLineArgs.I.argAsString("Verbose");
 
                 bool ServerMigration = false;
@@ -343,31 +347,84 @@ class Program
                     if (Verbose == "")
                         Verbose = myXmlConfig.ConfigObj.GeneralOptions.LogLevel;
 
-                    if (Mail == false)
+                   /* if (Mail == false)
+                        Mail = myXmlConfig.ConfigObj.ImportOptions.Mail;*/
+                    if (CommandLineArgs.I.arg("Mail") != null)
+                    {
+
+                        Mail = CommandLineArgs.I.argAsBool("Mail");
+                    }
+                    else
                         Mail = myXmlConfig.ConfigObj.ImportOptions.Mail;
 
-                    if (Calendar == false)
+                    if (CommandLineArgs.I.arg("Calendar") != null)
+                    {
+
+                        Calendar = CommandLineArgs.I.argAsBool("Calendar");
+                    }
+                    else
                         Calendar = myXmlConfig.ConfigObj.ImportOptions.Calendar;
 
-                    if (Contacts == false)
+
+                    if (CommandLineArgs.I.arg("Contacts") != null)
+                    {
+
+                        Contacts = CommandLineArgs.I.argAsBool("Contacts");
+                    }
+                    else
                         Contacts = myXmlConfig.ConfigObj.ImportOptions.Contacts;
 
-                    if (Sent == false)
+
+                    if (CommandLineArgs.I.arg("Sent") != null)
+                    {
+
+                        Sent = CommandLineArgs.I.argAsBool("Sent");
+                    }
+                    else
                         Sent = myXmlConfig.ConfigObj.ImportOptions.Sent;
 
-                    if (DeletedItems == false)
+
+                    if (CommandLineArgs.I.arg("DeletedItems") != null)
+                    {
+
+                        DeletedItems = CommandLineArgs.I.argAsBool("DeletedItems");
+                    }
+                    else
                         DeletedItems = myXmlConfig.ConfigObj.ImportOptions.DeletedItems;
 
-                    if (Junk == false)
+                    if (CommandLineArgs.I.arg("Junk") != null)
+                    {
+
+                        Junk = CommandLineArgs.I.argAsBool("Junk");
+                    }
+                    else
                         Junk = myXmlConfig.ConfigObj.ImportOptions.Junk;
-                    if (Tasks == false)
+
+                    if (CommandLineArgs.I.arg("Tasks") != null)
+                    {
+
+                        Tasks = CommandLineArgs.I.argAsBool("Tasks");
+                    }
+                    else
                         Tasks = myXmlConfig.ConfigObj.ImportOptions.Tasks;
-                    if (Rules == false)
+
+                    if (CommandLineArgs.I.arg("Rules") != null)
+                    {
+
+                        Rules = CommandLineArgs.I.argAsBool("Rules");
+                    }
+                    else
                         Rules = myXmlConfig.ConfigObj.ImportOptions.Rules;
-                    if (OOO == false)
+
+                    if (CommandLineArgs.I.arg("OOO") != null)
+                    {
+
+                        OOO = CommandLineArgs.I.argAsBool("OOO");
+                    }
+                    else
                         OOO = myXmlConfig.ConfigObj.ImportOptions.OOO;
 
-
+                  
                 }
                 else
                 {
