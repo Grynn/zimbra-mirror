@@ -119,7 +119,7 @@ class Ldap:
 			if key == "ldap_common_require_tls":
 				xform = "ssf=%s"
 			if requires_master and not cls.master:
-				Log.logMsg(2, "LDAP: Trying to modify key: %s when not a master" % (key,))
+				Log.logMsg(5, "LDAP: Trying to modify key: %s when not a master" % (key,))
 				return (None, None, None)
 			else:
 				Log.logMsg(5, "Found key %s and dn %s for %s (%s)" % (attr, dn, key, cls.master))
