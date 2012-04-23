@@ -2101,6 +2101,27 @@ public abstract class AbsSeleniumObject {
 
 	}
 
+	public WebElement findBy(By ... bys){
+		logger.info("...WebDriver...findBy()");
+		WebElement we = null;
+		if(bys != null){
+			for(By by:bys){
+				if(we == null){
+					we = webDriver().findElement(by);
+				}else{
+					we = we.findElement(by);
+				}
+			}
+		}
+		return we;
+	}
+	
+	public void clickBy(By ... bys) {
+		logger.info("...WebDriver...clickBy()");
+		findBy(bys).click();		
+	}
+	
+	
 	private CssLocator configureCssLocator(String locator, String startSuffix,
 			String containSuffix) {
 		logger.info("...WebDriver...configureCssLocator()");

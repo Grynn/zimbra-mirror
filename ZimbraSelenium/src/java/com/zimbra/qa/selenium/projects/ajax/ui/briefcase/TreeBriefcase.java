@@ -5,6 +5,9 @@ package com.zimbra.qa.selenium.projects.ajax.ui.briefcase;
 
 import java.util.*;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
@@ -172,10 +175,18 @@ public class TreeBriefcase extends AbsTree {
 					+ "_imageCell]";
 
 		} else if (item instanceof LinkItem) {
-			locator = "css=div[id=ztih__main_Briefcase__BRIEFCASE] a[id$=_addshare_link]";
 			page = new DialogFindShares(MyApplication,
 					((AppAjaxClient) MyApplication).zPageBriefcase);
-
+			if (ZimbraSeleniumProperties.isWebDriver()) {
+				clickBy(By.id("ztih__main_Briefcase__BRIEFCASE"),
+					By.linkText("Find Shares..."));
+				return page;
+			}else{
+				locator = "css=div[id=ztih__main_Briefcase__BRIEFCASE] a[id$=_addshare_link]";
+				page = new DialogFindShares(MyApplication,
+					((AppAjaxClient) MyApplication).zPageBriefcase);
+			}
+			
 			if (!this.sIsElementPresent(locator)) {
 				throw new HarnessException("Unable to locate link in the tree "
 						+ locator);

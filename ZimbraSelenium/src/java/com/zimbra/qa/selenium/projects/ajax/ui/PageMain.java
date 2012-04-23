@@ -146,20 +146,33 @@ public class PageMain extends AbsTab {
 
 		zNavigateTo();
 
-		if ( !sIsElementPresent(Locators.zLogoffPulldown) ) {
-			throw new HarnessException("The logoff button is not present " + Locators.zLogoffPulldown);
-		}
+		if (ZimbraSeleniumProperties.isWebDriver()) {
+			// Click on logout pulldown
+			getElement("css=div[class=DwtLinkButtonDropDownArrow]").click();			
+		}else{
+		
+			if ( !sIsElementPresent(Locators.zLogoffPulldown) ) {
+				throw new HarnessException("The logoff button is not present " + Locators.zLogoffPulldown);
+			}
 
-		// Click on logout pulldown
-		zClickAt(Locators.zLogoffPulldown, "0,0");
+			// Click on logout pulldown
+			zClickAt(Locators.zLogoffPulldown, "0,0");
+		}
+		
 		this.zWaitForBusyOverlay();
 		
-		if ( !sIsElementPresent(Locators.zLogoffOption) ) {
-			throw new HarnessException("The logoff button is not present " + Locators.zLogoffOption);
-		}
+		if (ZimbraSeleniumProperties.isWebDriver()) {
+			// Click on logout pulldown
+			getElement("css=tr[id=POPUP_logOff]>td[id=logOff_title]").click();			
+		}else{
+			if ( !sIsElementPresent(Locators.zLogoffOption) ) {
+				throw new HarnessException("The logoff button is not present " + Locators.zLogoffOption);
+			}
 
-		// Click on logout pulldown
-		zClick(Locators.zLogoffOption);
+			// Click on logout pulldown
+			zClick(Locators.zLogoffOption);
+		}
+		
 		this.zWaitForBusyOverlay();
 
 
