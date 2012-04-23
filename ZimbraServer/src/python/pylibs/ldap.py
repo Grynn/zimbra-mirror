@@ -60,7 +60,7 @@ class Ldap:
 		if c:
 			cls.cf = c
 			Log.logMsg(5, "Creating ldap context")
-			ldapUrl = "ldapi://"
+			ldapUrl = "ldapi:///"
 			bindDN = "cn=config"
 			try:
 				cls.mLdapConfig =  GenericLdapConfig(ldapUrl, cls.cf.ldap_starttls_required, bindDN, cls.cf.ldap_root_password)
@@ -77,7 +77,7 @@ class Ldap:
 			atfilter = "(objectClass=*)"
 			atreturn = ['1.1']
 			zfilter = ZLdapFilterFactory.getInstance().fromFilterString(FilterId.ZMCONFIGD, atfilter)
-			searchControls = ZSearchControls.createSearchControls(ZSearchScope.SEARCH_SCOPE_OBJECT, ZSearchControls.SIZE_UNLIMITED, atreturn)
+			searchControls = ZSearchControls.createSearchControls(ZSearchScope.SEARCH_SCOPE_BASE, ZSearchControls.SIZE_UNLIMITED, atreturn)
 			mLdapContext = LdapClient.getContext(cls.mLdapConfig, LdapUsage.SEARCH)
 			try:
 				ne = mLdapContext.searchDir(atbase, zfilter, searchControls)
@@ -91,7 +91,7 @@ class Ldap:
 		if attr is not None:
 			v = xform % (value,)
 			atreturn = [attr]
-			searchControls = ZSearchControls.createSearchControls(ZSearchScope.SEARCH_SCOPE_OBJECT, ZSearchControls.SIZE_UNLIMITED, atreturn)
+			searchControls = ZSearchControls.createSearchControls(ZSearchScope.SEARCH_SCOPE_BASE, ZSearchControls.SIZE_UNLIMITED, atreturn)
 			mLdapContext = LdapClient.getContext(cls.mLdapConfig, LdapUsage.SEARCH)
 			ne = mLdapContext.searchDir(dn, zfilter, searchControls)
 			entry = ne.next()
