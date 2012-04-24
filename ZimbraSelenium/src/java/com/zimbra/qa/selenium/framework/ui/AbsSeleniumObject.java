@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.remote.RemoteWebElement;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.JavascriptExecutor;
@@ -28,6 +29,7 @@ import org.openqa.selenium.interactions.internal.Coordinates;
 import org.openqa.selenium.internal.seleniumemulation.JavascriptLibrary;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.FluentWait;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import com.google.common.base.Function;
@@ -39,9 +41,8 @@ import com.zimbra.qa.selenium.framework.core.ExecuteHarnessMain;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
-
 import org.openqa.selenium.HasInputDevices;
-import org.openqa.selenium.internal.Locatable;;
+import org.openqa.selenium.internal.Locatable;
 
 /**
  * The <code>AbsSeleniumObject</code> class is a base class that all "GUI"
@@ -866,8 +867,16 @@ public abstract class AbsSeleniumObject {
 	 * @param locator
 	 */
 	public String sGetSelectedId(String locator) throws HarnessException {
-		String id = ClientSessionFactory.session().selenium().getSelectedId(
+		String id = null;
+		if (ZimbraSeleniumProperties.isWebDriver()){
+			logger.info("...WebDriver...getFirstSelectedOption()");
+			Select select =  new Select (getElement(locator));
+			WebElement we = select.getFirstSelectedOption();
+			id = we.getAttribute("id");
+		}else{
+			id = ClientSessionFactory.session().selenium().getSelectedId(
 				locator);
+		}
 		logger.info("getSelectedId(" + locator + ") = " + id);
 		return (id);
 	}
@@ -878,6 +887,7 @@ public abstract class AbsSeleniumObject {
 	public void sClickAt(String locator, String coord) throws HarnessException {
 		// Cast to DefaultSelenium ... Workaround until ZimbraSelnium is removed
 		if (ZimbraSeleniumProperties.isWebDriver()){
+			logger.info("...WebDriver...moveToElement:click()");
 			WebElement we = getElement(locator);
 			Actions builder = new Actions(webDriver());
 			Action action = builder
@@ -905,6 +915,7 @@ public abstract class AbsSeleniumObject {
 
 			// Cast to DefaultSelenium ... Workaround until ZimbraSelnium is removed
 			if (ZimbraSeleniumProperties.isWebDriver()){
+				logger.info("...WebDriver...click()");
 				WebElement we = getElement(locator);
 				we.click();
 			}
@@ -926,6 +937,7 @@ public abstract class AbsSeleniumObject {
 	 */
 	public void sClose() throws HarnessException {
 		if (ZimbraSeleniumProperties.isWebDriver()){
+			logger.info("...WebDriver...close()");
 			webDriver().close();
 		}
 		else if (ZimbraSeleniumProperties.isWebDriverBackedSelenium()){
@@ -968,9 +980,18 @@ public abstract class AbsSeleniumObject {
 	 * @return
 	 */
 	public String zGetCenterPoint(String locator) throws HarnessException {
-	   String centerHeight = Integer.toString(ClientSessionFactory.session().selenium().getElementHeight(locator).intValue() / 2);
-	   String centerWidth = Integer.toString(ClientSessionFactory.session().selenium().getElementWidth(locator).intValue() / 2);
-	   return new StringBuilder("(").append(centerWidth).append(",").append(centerHeight).append(")").toString();
+		int height = -1;
+		int width  = -1;
+		
+		if (ZimbraSeleniumProperties.isWebDriver()){
+			logger.info("...WebDriver...getSize()");
+		}
+		height = sGetElementHeight(locator) / 2;
+		width =  sGetElementWidth(locator) / 2;
+					
+		String centerHeight = Integer.toString(height);
+		String centerWidth = Integer.toString(width);
+   	   	return new StringBuilder("(").append(centerWidth).append(",").append(centerHeight).append(")").toString();
 	}
 
 	/**
@@ -987,6 +1008,7 @@ public abstract class AbsSeleniumObject {
 			logger.info("waitForPageToLoad(" + timeout + ")");
 			
 			if(ZimbraSeleniumProperties.isWebDriver()){
+				logger.info("...WebDriver...executeScript:readyState");
 				/*
 				waitForElementPresent("zov__main_Mail",20);					
 				
@@ -1032,28 +1054,58 @@ public abstract class AbsSeleniumObject {
 	 * @throws HarnessException 
 	 */
 	public void sMouseDown(String locator) throws HarnessException {
-		ClientSessionFactory.session().selenium().mouseDown(locator);
-		logger.info("mouseDown(" + locator + ")");
+		if(ZimbraSeleniumProperties.isWebDriver()){
+			logger.info("...WebDriver...mouseDown()");
+			WebElement we =  getElement(locator);
+			Mouse mouse = ((HasInputDevices)webDriver()).getMouse();
+			mouse.mouseDown(((RemoteWebElement)we).getCoordinates());
+		}else{
+			ClientSessionFactory.session().selenium().mouseDown(locator);
+			logger.info("mouseDown(" + locator + ")");
+		}
 	}
 
 	public void sMouseDownAt(String locator, String coordString) throws HarnessException {
 		try {
+			if(ZimbraSeleniumProperties.isWebDriver()){
+				logger.info("...WebDriver...mouseMove.MoseDown()");
+				Coordinates we =  (Coordinates) getElement(locator);
+				Mouse mouse = ((HasInputDevices)webDriver()).getMouse();
+				mouse.mouseMove(we,1,1);
+				mouse.mouseDown(we);
+			}else{
+				ClientSessionFactory.session().selenium().mouseDownAt(locator, coordString);
+			}
 			logger.info("mouseDownAt(" + locator + ",'" + coordString + "')");
-			ClientSessionFactory.session().selenium().mouseDownAt(locator, coordString);
+			
 		} catch (SeleniumException e) {
 			throw new HarnessException(e);
 		}
 	}
 
 	public void sMouseDownRightAt(String locator, String coordString) throws HarnessException {
-		ClientSessionFactory.session().selenium().mouseDownRightAt(locator,
+		if(ZimbraSeleniumProperties.isWebDriver()){
+			logger.info("...WebDriver...action.moveToElement.contextClick()");
+			WebElement we = getElement(locator);
+			Actions action = new Actions(webDriver());    
+		    action.moveToElement(we,1,1).contextClick(we).build().perform();		   	
+		}else{
+			ClientSessionFactory.session().selenium().mouseDownRightAt(locator,
 				coordString);
+		}
 		logger.info("mouseDownRightAt(" + locator + ",'" + coordString + "')");
 	}
 
 	public void sMouseUpRightAt(String locator, String coordString) throws HarnessException {
-		ClientSessionFactory.session().selenium().mouseUpRightAt(locator,
+		if(ZimbraSeleniumProperties.isWebDriver()){
+			logger.info("...WebDriver...action.moveToElement.release()");
+			WebElement we = getElement(locator);
+			Actions action = new Actions(webDriver());    
+			action.moveToElement(we,1,1).release().build().perform();		   	
+		}else{
+			ClientSessionFactory.session().selenium().mouseUpRightAt(locator,
 				coordString);
+		}
 		logger.info("mouseUpRightAt(" + locator + ",'" + coordString + "')");
 	}
 
@@ -1062,6 +1114,7 @@ public abstract class AbsSeleniumObject {
 	 */
 	public void sMouseOver(String locator) throws HarnessException {
 		if (ZimbraSeleniumProperties.isWebDriver()){
+			logger.info("...WebDriver...action.moveToElement()");
 			WebElement we = getElement(locator);
 			//Mouse mouse = ((HasInputDevices) webDriver()).getMouse();
 		   	//mouse.mouseMove(((Locatable)we).getCoordinates());
@@ -1081,7 +1134,14 @@ public abstract class AbsSeleniumObject {
 	 * DefaultSelenium.mouseOut()
 	 */
 	public void sMouseOut(String locator) throws HarnessException {
-		ClientSessionFactory.session().selenium().mouseOut(locator);
+		if (ZimbraSeleniumProperties.isWebDriver()){
+			logger.info("...WebDriver...action.clickAndHold.moveByOffset()");
+			WebElement we = getElement(locator);
+			Actions action = new Actions(webDriver());    
+		    action.clickAndHold(we).moveByOffset(1,1).build().perform();		 
+		}else{
+			ClientSessionFactory.session().selenium().mouseOut(locator);
+		}
 		logger.info("mouseOut(" + locator + ")");
 	}
 
@@ -1089,7 +1149,12 @@ public abstract class AbsSeleniumObject {
 	 * DefaultSelenium.refresh()
 	 */
 	public void sRefresh() throws HarnessException {
-		ClientSessionFactory.session().selenium().refresh();
+		if (ZimbraSeleniumProperties.isWebDriver()){
+			logger.info("...WebDriver...navigate.refresh()");
+			webDriver().navigate().refresh();
+		}else{
+			ClientSessionFactory.session().selenium().refresh();
+		}
 		logger.info("refresh()");
 	}
 
