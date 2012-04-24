@@ -75,68 +75,75 @@ class Account: BackgroundWorker
             {
                 AccountArray[j] = new Account();
             }
-            
-
             for (int f = 0; f < userlist.Count; f++)
             {
                 //Use the thread array to process ech iteration  
-                //choose the first unused thread.    
-
-                Account myAccount = new Account();
-                string uname = (userlist[f].MappedName != "") ? userlist[f].MappedName : userlist[f].UserName;
-
-                myAccount.AccountName = uname +"@" + Domainname;// AcctName;
-                myAccount.AccountID = userlist[f].UserName;
-                myAccount.Countdown = countdown;
-                Currentuser = new MVVM.Model.Users();
-                Currentuser.UserName = userlist[f].UserName;
-                myAccount.Currentuser = Currentuser;
-                myAccount.TestObj = (CssLib.CSMigrationWrapper)wrapper;
-
-                myAccount.serverMigration = ServerMigrationflag;
-                myAccount.Mailoptions = MailOptions;
-                number = number + 1;
-                myAccount.num = number;
-
-
-                bool fileProcessed = false;
-                while ((!fileProcessed) && (!_shouldStop))
+                //choose the first unused thread.  
+                if (userlist[f].IsProvisioned)
                 {
-                    for (int threadNum = 0; threadNum < maxThreads; threadNum++)
+
+                    Account myAccount = new Account();
+                    string uname = (userlist[f].MappedName != "") ? userlist[f].MappedName : userlist[f].UserName;
+
+                    myAccount.AccountName = uname + "@" + Domainname;// AcctName;
+                    myAccount.AccountID = userlist[f].UserName;
+                    myAccount.Countdown = countdown;
+                    Currentuser = new MVVM.Model.Users();
+                    Currentuser.UserName = userlist[f].UserName;
+                    myAccount.Currentuser = Currentuser;
+                    myAccount.TestObj = (CssLib.CSMigrationWrapper)wrapper;
+
+                    myAccount.serverMigration = ServerMigrationflag;
+                    myAccount.Mailoptions = MailOptions;
+                    number = number + 1;
+                    myAccount.num = number;
+
+
+                    bool fileProcessed = false;
+                    while ((!fileProcessed) && (!_shouldStop))
                     {
-                        if (!AccountArray[threadNum].IsBusy)
-                        {   // This thread is available     
+                        for (int threadNum = 0; threadNum < maxThreads; threadNum++)
+                        {
+                            if (!AccountArray[threadNum].IsBusy)
+                            {   // This thread is available     
 
-                           // System.Console.WriteLine("Starting worker thread: " + threadNum + "account" + myAccount.AccountName);
+                                // System.Console.WriteLine("Starting worker thread: " + threadNum + "account" + myAccount.AccountName);
 
-                            AccountArray[threadNum] = myAccount;
-                            AccountArray[threadNum].DoWork += new DoWorkEventHandler(accountToMigrate_DoWork);
-                            AccountArray[threadNum].RunWorkerCompleted += new RunWorkerCompletedEventHandler(accountToMigrate_RunWorkerCompleted);
-                            //AccountArray[threadNum].ProgressChanged += new ProgressChangedEventHandler(accountToMigrate_ProgressChanged);
-                            AccountArray[threadNum].WorkerReportsProgress = true; 
-                            AccountArray[threadNum].WorkerSupportsCancellation = true;
-                            AccountArray[threadNum].RunWorkerAsync(myAccount);
+                                AccountArray[threadNum] = myAccount;
+                                AccountArray[threadNum].DoWork += new DoWorkEventHandler(accountToMigrate_DoWork);
+                                AccountArray[threadNum].RunWorkerCompleted += new RunWorkerCompletedEventHandler(accountToMigrate_RunWorkerCompleted);
+                                //AccountArray[threadNum].ProgressChanged += new ProgressChangedEventHandler(accountToMigrate_ProgressChanged);
+                                AccountArray[threadNum].WorkerReportsProgress = true;
+                                AccountArray[threadNum].WorkerSupportsCancellation = true;
+                                AccountArray[threadNum].RunWorkerAsync(myAccount);
 
-                            fileProcessed = true;
-                            break;
+                                fileProcessed = true;
+                                break;
+                            }
+                        }
+                        //If all threads are being used, sleep awhile before checking again  
+                        if (!fileProcessed)
+                        {
+                            Thread.Sleep(500);
                         }
                     }
-                    //If all threads are being used, sleep awhile before checking again  
-                    if (!fileProcessed)
+                    if (_shouldStop)
                     {
-                         Thread.Sleep(500);
+
+                        for (int i = 0; i < maxThreads; i++)
+                        {
+                            System.Console.WriteLine("cancelling in main callback");
+                            countdown.Signal();
+                            AccountArray[i].CancelAsync();
+                        }
+
                     }
                 }
-                if (_shouldStop)
+                else
                 {
-                    
-                    for (int i = 0; i < maxThreads; i++)
-                    {
-                        System.Console.WriteLine("cancelling in main callback");
-                        countdown.Signal();
-                        AccountArray[i].CancelAsync();
-                    }
-                    
+                    string msg = ""+ userlist[f].MappedName + " is not provisioned. Exit Migration for the user " + userlist[f].UserName + "\n";
+                    System.Console.WriteLine(msg);
+                    countdown.Signal();
                 }
             }
         }

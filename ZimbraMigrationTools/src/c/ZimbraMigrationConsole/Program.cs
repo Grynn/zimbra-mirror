@@ -341,9 +341,13 @@ class Program
 
                     }
 
-                    if (ZCSHost == "")
+                    if ((ZCSHost == "") && (ZCSDomain == ""))
+                    {
                         ZCSHost = myXmlConfig.ConfigObj.ZimbraServer.Hostname;
+                        ZCSDomain = myXmlConfig.ConfigObj.UserProvision.DestinationDomain;
+                    }
                     else
+                    {
                         if (ZCSDomain == "")
                         {
                             System.Console.WriteLine("ZimbraHost and ZimbraDomain go together.To override ZimbraHost ,ZimbraDomain has to be overridden as well \n");
@@ -351,7 +355,16 @@ class Program
                             Console.ReadKey(true);
                             return;
                         }
+                        if (ZCSHost == "")
+                        {
+                            System.Console.WriteLine("ZimbraHost and ZimbraDomain go together.To override ZimbraDomain ,ZimbraHost has to be overridden as well \n");
+                            System.Console.WriteLine(" Press any key to return \n");
+                            Console.ReadKey(true);
+                            return;
+                        }
+                    }
                    
+
 
                     if (ZCSPort == "")
                         ZCSPort = myXmlConfig.ConfigObj.ZimbraServer.Port;
@@ -361,6 +374,7 @@ class Program
 
                     if (ZCSDomain == "")
                         ZCSDomain = myXmlConfig.ConfigObj.UserProvision.DestinationDomain;
+                    
 
                    /* if (Mail == false)
                         Mail = myXmlConfig.ConfigObj.ImportOptions.Mail;*/
@@ -608,7 +622,7 @@ class Program
                                 myXmlConfig.ConfigObj.ZimbraServer.AdminID);*/
                             System.Console.WriteLine("......... \n");
                             System.Console.WriteLine();
-                            Thread.Sleep(2000);
+                            
                             // return;
                         }
 
@@ -640,6 +654,8 @@ class Program
                                 acctName);*/
                             System.Console.WriteLine();
                             System.Console.WriteLine();
+                            user.IsProvisioned = true;
+                            
 
                             
                         }
@@ -671,18 +687,7 @@ class Program
                                 Defaultpwd = myXmlConfig.ConfigObj.UserProvision.DefaultPWD;
 
 
-                            if (Defaultpwd == "")
-                            {
-
-                                System.Console.WriteLine();
-                                string msg = @" Default Pwd for user provisioning is empty string.Please correct the csv/xml file \n";
-                                    
-                                System.Console.WriteLine(msg);
-                                System.Console.WriteLine("Press any key to exit");
-                                Console.ReadKey(true);
-                
-                                return;
-                            }
+                            
                             if (zimbraAPI.CreateAccount(acctName,
                                 "",
                                 "",
@@ -709,7 +714,7 @@ class Program
                                 System.Console.WriteLine(err);
                                 System.Console.WriteLine();
                                 System.Console.WriteLine("......... \n");
-                                
+                                user.IsProvisioned = true;
                             }
                             else
                             {
@@ -721,22 +726,22 @@ class Program
                                 err = " error provisioning user " +
                                     acctName;
                                 System.Console.WriteLine(err);
-                                System.Console.ReadKey(true);
-                                keepRunning = true;
-                                return;
+                               user.IsProvisioned=false;
                             }
                         }
 
                         string final = user.StatusMessage;
                     }
+                    if (myXmlConfig.UserList.Count > 0)
+                    {
+                        countdownEvent = new CountdownEvent(myXmlConfig.UserList.Count);
 
-                    countdownEvent = new CountdownEvent(myXmlConfig.UserList.Count);
-                    
-                    userAccts.StartMigration(myXmlConfig.UserList, ZCSDomain, importopts, countdownEvent, TestObj, MaxThreads);
-                    countdownEvent.Wait();
-                   
-                    Console.WriteLine("Finished Migration");
-                    Console.WriteLine("UNinit Migration");
+                        userAccts.StartMigration(myXmlConfig.UserList, ZCSDomain, importopts, countdownEvent, TestObj, MaxThreads);
+                        countdownEvent.Wait();
+
+                        Console.WriteLine("Finished Migration");
+                        Console.WriteLine("UNinit Migration");
+                    }
 
                     string retval = TestObj.GlobalUninit();
 
@@ -798,7 +803,27 @@ class Program
                                 System.Console.WriteLine(err);
                                 System.Console.WriteLine("......... \n");
                                 System.Console.WriteLine();
-                                Thread.Sleep(2000);
+                                //Thread.Sleep(2000);
+                                string val = TestObj.GlobalUninit();
+
+
+                                if (val.Length > 0)
+                                {
+                                    System.Console.WriteLine();
+                                    System.Console.WriteLine(" Error in Migration UnInitialization ");
+                                    /*ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
+                                        " Error in Migration Initialization ");*/
+                                    System.Console.WriteLine("......... \n");
+                                    /*  ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
+                                              retval);*/
+                                    System.Console.WriteLine("......... \n");
+                                    System.Console.WriteLine();
+                                    keepRunning = true;
+                                    return;
+                                }
+
+                                System.Console.ReadKey(true);
+                                keepRunning = true;
                                 return;
                             }
 
