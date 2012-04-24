@@ -703,16 +703,12 @@ ngx_zm_lookup_connect_handler(ngx_event_t *ev)
 {
     ngx_connection_t                    *c;
     ngx_zm_lookup_ctx_t                 *ctx;
-    ngx_zm_lookup_conf_t                *zlcf;
-    ngx_pool_t                          *pool;
     int                                  sockerr;
     socklen_t                            sockerr_len;
     struct timeval                       tv;
 
     c = ev->data;
     ctx = c->data;
-    zlcf = (ngx_zm_lookup_conf_t *)ngx_get_conf(ngx_cycle->conf_ctx, ngx_zm_lookup_module);
-    pool = ctx->pool;
 
     /* Add health checked as auth http? */
 
