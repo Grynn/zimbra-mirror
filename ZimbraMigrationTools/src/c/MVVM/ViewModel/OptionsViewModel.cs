@@ -61,6 +61,7 @@ public class OptionsViewModel: BaseViewModel
         {
             LoggingVerbose = config.GeneralOptions.Verbose;
             LogLevel = config.GeneralOptions.LogLevel;
+            MaxThreadCount = config.GeneralOptions.MaxThreadCount;
         }
 
         string returnval = "";
@@ -412,6 +413,18 @@ public class OptionsViewModel: BaseViewModel
             m_config.GeneralOptions.LogLevel = value;
 
             OnPropertyChanged(new PropertyChangedEventArgs("LogLevel"));
+        }
+    }
+    public Int32 MaxThreadCount
+    {
+        get { return m_config.GeneralOptions.MaxThreadCount; }
+        set
+        {
+            if (value == m_config.GeneralOptions.MaxThreadCount)
+                return;
+            m_config.GeneralOptions.MaxThreadCount = value;
+
+            OnPropertyChanged(new PropertyChangedEventArgs("MaxThreadCount"));
         }
     }
     private bool oenableNext;

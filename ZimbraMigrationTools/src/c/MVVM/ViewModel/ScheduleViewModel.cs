@@ -308,8 +308,8 @@ public class ScheduleViewModel: BaseViewModel
 
         // FBS bug 71048 -- 4/16/12 -- use the correct number of threads.
         // If MaxThreadCount not specified, default to 4.  If fewer users than MaxThreadCount, numThreads = numUsers
-        // NOTE: 4/18/12 -- currently there is no support for MaxThreadCount in the UI, so for now we always default to 4
-        int maxThreads = (m_config.GeneralOptions.MaxThreadCount > 0) ? m_config.GeneralOptions.MaxThreadCount : 4;
+        OptionsViewModel ovm = ((OptionsViewModel)ViewModelPtrs[(int)ViewType.OPTIONS]);
+        int maxThreads = (ovm.MaxThreadCount > 0) ? ovm.MaxThreadCount : 4;
         int numUsers = SchedList.Count;
         int numThreads = Math.Min(numUsers, maxThreads);
         for (int i = 0; i < numUsers; i++)
