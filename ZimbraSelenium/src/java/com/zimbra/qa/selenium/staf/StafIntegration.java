@@ -154,11 +154,13 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
 			StafProperties configProperties = new StafProperties(valueRoot + "/conf/config.properties");
 			
 			// Set values
-			configProperties.setProperty("server.scheme", "http");
+			// Bug 65650: don't use http/80
+			// configProperties.setProperty("server.scheme", "https");
 			configProperties.setProperty("server.host", valueServer);
-			configProperties.setProperty("server.port", "80");
+			// Bug 65650: don't use http/80
+			// configProperties.setProperty("server.port", "443");
 			configProperties.setProperty("adminName", "globaladmin@" + valueServer);
-			configProperties.setProperty("browser", "firefox"); // TODO
+			// configProperties.setProperty("browser", "firefox"); // TODO
 
 			configProperties.setProperty("seleniumMode", "Local");
 			configProperties.setProperty("serverName", "localhost");
