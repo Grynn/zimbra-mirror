@@ -26,6 +26,9 @@ endif
 NGINX_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/nginx/nginx-$(NGINX_VERSION)-zimbra.tgz
 NGINX_INSTALL := $(ZIMBRA_HOME)/nginx-$(NGINX_VERSION)-zimbra
 
+CHUNKIN_TGZ_TARGET := $(NGINX_ROOT)/src/chunkin-nginx-module-0.23rc2.tar.gz
+CHUNKIN_SOURCE := $(NGINX_ROOT)/chunkin-nginx-module
+
 WITH_CC_OPT := -g \
 	-I/opt/zimbra/cyrus-sasl-$(CYRUS_VERSION)/include \
 	-I/opt/zimbra/openssl-$(OPENSSL_VERSION)/include \
@@ -35,7 +38,7 @@ WITH_LD_OPT :=	-L$(CYRUS_LIB_DIR) \
 	-L$(OPENSSL_LIB_DIR) \
 	$(PCRELIB)
 
-all: allclean build tar
+all: allclean prepare build tar
 
 build:
 	(cd nginx-$(NGINX_VERSION)-zimbra; \
@@ -57,7 +60,8 @@ build:
             --http-log-path=/opt/zimbra/log/nginx.access.log \
             --http-client-body-temp-path=$(ZIMBRA_HOME)/data/tmp/nginx/client \
             --http-proxy-temp-path=$(ZIMBRA_HOME)/data/tmp/nginx/proxy \
-            --http-fastcgi-temp-path=$(ZIMBRA_HOME)/data/tmp/nginx/fastcgi; )
+            --http-fastcgi-temp-path=$(ZIMBRA_HOME)/data/tmp/nginx/fastcgi \
+            --add-module=$(CHUNKIN_SOURCE); )
 	(cd nginx-$(NGINX_VERSION)-zimbra; \
 	LD_RUN_PATH="$(CYRUS_LIB_DIR):$(OPENSSL_LIB_DIR)" make; make install)
 	(cd $(ZIMBRA_HOME); ln -s $(NGINX_INSTALL) nginx)
@@ -78,3 +82,8 @@ allclean: clean
 	/bin/rm -rf $(ZIMBRA_HOME)/nginx-$(NGINX_VERSION)-zimbra
 	/bin/rm -rf $(ZIMBRA_HOME)/nginx
 	rm -f $(NGINX_TGZ_TARGET)
+	rm -rf $(CHUNKIN_SOURCE)
+
+prepare:
+	tar zxf $(CHUNKIN_TGZ_TARGET)
+

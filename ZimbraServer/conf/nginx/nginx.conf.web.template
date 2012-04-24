@@ -44,6 +44,10 @@ http
 
     ${ssl.clientcertca.enabled}ssl_client_certificate  ${ssl.clientcertca.default};
 
+    # handle chunking encoded request
+    chunkin on;
+    error_page 411 = @chunkin_handler;
+
     ${web.http.enabled}include ${core.includes}/${core.cprefix}.web.http;
     ${web.http.enabled}include ${core.includes}/${core.cprefix}.web.http.default;
     ${web.https.enabled}include ${core.includes}/${core.cprefix}.web.https;
