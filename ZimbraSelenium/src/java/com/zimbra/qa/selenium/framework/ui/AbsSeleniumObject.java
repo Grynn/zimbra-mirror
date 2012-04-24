@@ -1012,7 +1012,7 @@ public abstract class AbsSeleniumObject {
 				/*
 				waitForElementPresent("zov__main_Mail",20);					
 				
-				Wait<WebDriver> wait = new FluentWait<WebDriver>(webDriver()).withTimeout(30, TimeUnit.SECONDS).pollingEvery(5, TimeUnit.SECONDS).ignoring(NoSuchElementException.class);
+				Wait<WebDriver> wait = new FluentWait<WebDriver>(webDriver()).withTimeout(30, TimeUnit.SECONDS).pollingEvery(500, TimeUnit.MILLISECONDS).ignoring(NoSuchElementException.class);
 			    WebElement we = wait.until(new ExpectedCondition<WebElement>() {
 			    	 public WebElement apply(WebDriver driver) {
 			    		 return driver.findElement(By.id("zov__main_Mail"));
@@ -1021,7 +1021,7 @@ public abstract class AbsSeleniumObject {
 				*/
 				
 				//WebDriverWait wait = new WebDriverWait(webDriver(), 20);
-				Wait<WebDriver> wait = new FluentWait<WebDriver>(webDriver()).withTimeout(20, TimeUnit.SECONDS).pollingEvery(1, TimeUnit.SECONDS).ignoring(NoSuchElementException.class);
+				Wait<WebDriver> wait = new FluentWait<WebDriver>(webDriver()).withTimeout(20, TimeUnit.SECONDS).pollingEvery(500, TimeUnit.MILLISECONDS).ignoring(NoSuchElementException.class);
 
 				try{
 					wait.until(new ExpectedCondition<Boolean>(){					
@@ -2362,7 +2362,7 @@ public abstract class AbsSeleniumObject {
 		if(locator !=null && !locator.isEmpty()){
 			try{
 				present = (new FluentWait<WebDriver>(webDriver()).withTimeout(timeout, TimeUnit.SECONDS).
-					pollingEvery(1, TimeUnit.SECONDS).ignoring(NoSuchElementException.class))
+					pollingEvery(500, TimeUnit.MILLISECONDS).ignoring(NoSuchElementException.class))
 						.until(new ExpectedCondition<Boolean>(){
 							public Boolean apply(WebDriver d) {
 								return elementPresent(locator);
@@ -2540,8 +2540,8 @@ public abstract class AbsSeleniumObject {
 			if (found){
 				break;
 			}
-			//SleepUtil.sleepSmall();
-			webDriver().manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
+			SleepUtil.sleepSmall();
+			//webDriver().manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
 		}
 		return found;
 	}
@@ -2556,7 +2556,7 @@ public abstract class AbsSeleniumObject {
 		}else{
 			size = webDriver().getWindowHandles().size();
 		}
-		wait = new FluentWait<WebDriver>(webDriver()).withTimeout(5, TimeUnit.SECONDS).pollingEvery(1, TimeUnit.SECONDS).ignoring(TimeoutException.class);
+		wait = new FluentWait<WebDriver>(webDriver()).withTimeout(5, TimeUnit.SECONDS).pollingEvery(500, TimeUnit.MILLISECONDS).ignoring(TimeoutException.class);
 		if(size > 1){
 			try{
 				wait.until(new ExpectedCondition<Boolean>(){					

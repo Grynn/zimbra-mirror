@@ -23,33 +23,33 @@ public class DialogWarning extends AbsDialog {
 	public static class DialogWarningID {
 		
 
-		public static final DialogWarningID SaveCurrentMessageAsDraft = new DialogWarningID("YesNoCancel");
+		public static final DialogWarningID SaveCurrentMessageAsDraft = new DialogWarningID("id=YesNoCancel");
 
-		public static final DialogWarningID SaveTaskChangeMessage = new DialogWarningID("YesNoCancel");
+		public static final DialogWarningID SaveTaskChangeMessage = new DialogWarningID("id=YesNoCancel");
 		
 		public static final DialogWarningID SendLink = new DialogWarningID("css=div[class=DwtConfirmDialog]");
-		public static final DialogWarningID DeleteTagWarningMessage = new DialogWarningID("YesNoMsgDialog");
-		public static final DialogWarningID EmptyFolderWarningMessage = new DialogWarningID("OkCancel");
-		public static final DialogWarningID SaveSignatureChangeMessage = new DialogWarningID("YesNoCancel");
-		public static final DialogWarningID CancelCreateContact = new DialogWarningID("YesNoCancel");
-		public static final DialogWarningID PermanentlyDeleteTheItem = new DialogWarningID("OkCancel");
+		public static final DialogWarningID DeleteTagWarningMessage = new DialogWarningID("id=YesNoMsgDialog");
+		public static final DialogWarningID EmptyFolderWarningMessage = new DialogWarningID("id=OkCancel");
+		public static final DialogWarningID SaveSignatureChangeMessage = new DialogWarningID("id=YesNoCancel");
+		public static final DialogWarningID CancelCreateContact = new DialogWarningID("id=YesNoCancel");
+		public static final DialogWarningID PermanentlyDeleteTheItem = new DialogWarningID("id=OkCancel");
 		
-		public static final DialogWarningID DeleteAppointment = new DialogWarningID("YesNo");
+		public static final DialogWarningID DeleteAppointment = new DialogWarningID("id=YesNo");
 
 		// See bug: http://bugzilla.zimbra.com/show_bug.cgi?id=63353
-		public static final DialogWarningID SelectedTimeIsInPast = new DialogWarningID("ShowDelayPastDialog");
+		public static final DialogWarningID SelectedTimeIsInPast = new DialogWarningID("id=ShowDelayPastDialog");
 		
 		// See http://bugzilla.zimbra.com/show_bug.cgi?id=64081
-		public static final DialogWarningID SendReadReceipt = new DialogWarningID("YesNoMsgDialog");;
+		public static final DialogWarningID SendReadReceipt = new DialogWarningID("id=YesNoMsgDialog");;
 
-		public static final DialogWarningID QuickCommandConfirmDelete = new DialogWarningID("ZmQuickCommandConfirmation1");
+		public static final DialogWarningID QuickCommandConfirmDelete = new DialogWarningID("id=ZmQuickCommandConfirmation1");
 
-		public static final DialogWarningID PreferencesSaveChanges = new DialogWarningID("YesNoCancel");
+		public static final DialogWarningID PreferencesSaveChanges = new DialogWarningID("id=YesNoCancel");
 		public static final DialogWarningID SwitchingToTextWillDiscardHtmlFormatting = new DialogWarningID("css=div[class='DwtMsgDialog']");
 
-		public static final DialogWarningID SmsVerificationCodeSent = new DialogWarningID("ZmMsgDialog");
+		public static final DialogWarningID SmsVerificationCodeSent = new DialogWarningID("id=ZmMsgDialog");
 
-		public static final DialogWarningID ZmAcceptShare = new DialogWarningID("ZmAcceptShare");
+		public static final DialogWarningID ZmAcceptShare = new DialogWarningID("id=ZmAcceptShare");
 
 		protected String Id;
 		public DialogWarningID(String id) {
@@ -79,7 +79,7 @@ public class DialogWarning extends AbsDialog {
 	}
 	
 	public String zGetWarningTitle() throws HarnessException {
-		String locator = "css=div[id='"+ MyDivId +"'] td[id='"+ MyDivId +"_title']";
+		String locator = "css=div["+ MyDivId +"] td["+ MyDivId +"_title]";
 		return (zGetDisplayedText(locator));
 	}
 	
@@ -103,7 +103,7 @@ public class DialogWarning extends AbsDialog {
 
 		// See http://bugzilla.zimbra.com/show_bug.cgi?id=54560
 		// Need unique id's for the buttons
-		String buttonsTableLocator = "css=div[id='"+ MyDivId +"'] div[id$='_buttons']";
+		String buttonsTableLocator = "css=div["+ MyDivId +"] div[id$='_buttons']";
 
 		if ( button == Button.B_YES ) {
 
