@@ -1587,11 +1587,11 @@ ngx_zm_lookup_retrieve_route (ngx_pool_t * pool, ngx_str_t * addr_text,
 {
     ngx_int_t                rc;
     size_t                   i;
-    ngx_flag_t               ipv6, ipv4, domainName;
+    ngx_flag_t               ipv6, domainName;
     ngx_url_t                u;
     u_char                   c;
 
-    ipv6 = 0, domainName = 0, ipv4 = 1;
+    ipv6 = 0, domainName = 0;
     for (i = 0; i < addr_text->len; i++) {
         c = addr_text->data[i];
         if (c == ':') {
@@ -1600,7 +1600,6 @@ ngx_zm_lookup_retrieve_route (ngx_pool_t * pool, ngx_str_t * addr_text,
             ipv6 = 1;
             break;
         } else if (c >= 'A' && c != '.') {
-            ipv4 = 0;
             domainName = 1;
             // try to look for ":". if found it must be ipv6
         }
