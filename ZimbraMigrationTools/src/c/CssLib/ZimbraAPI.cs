@@ -1637,23 +1637,31 @@ public class ZimbraAPI
         writer.WriteStartElement("tz");
         writer.WriteAttributeString("id", appt["tid"]);
         writer.WriteAttributeString("stdoff", appt["stdoff"]);
-        writer.WriteAttributeString("dayoff", appt["dayoff"]);
-        writer.WriteStartElement("standard");
-        writer.WriteAttributeString("week", appt["sweek"]);
-        writer.WriteAttributeString("wkday", appt["swkday"]);
-        writer.WriteAttributeString("mon", appt["smon"]);
-        writer.WriteAttributeString("hour", appt["shour"]);
-        writer.WriteAttributeString("min", appt["smin"]);
-        writer.WriteAttributeString("sec", appt["ssec"]);
-        writer.WriteEndElement();   // standard
-        writer.WriteStartElement("daylight");
-        writer.WriteAttributeString("week", appt["dweek"]);
-        writer.WriteAttributeString("wkday", appt["dwkday"]);
-        writer.WriteAttributeString("mon", appt["dmon"]);
-        writer.WriteAttributeString("hour", appt["dhour"]);
-        writer.WriteAttributeString("min", appt["dmin"]);
-        writer.WriteAttributeString("sec", appt["dsec"]);
-        writer.WriteEndElement();   // daylight
+
+        // FBS bug 73047 -- 4/24/12 -- don't write standard/daylight nodes if no DST
+        if ((appt["sweek"] != "0") && (appt["smon"] != "0"))
+        {
+            writer.WriteAttributeString("dayoff", appt["dayoff"]);
+            writer.WriteStartElement("standard");
+            writer.WriteAttributeString("week", appt["sweek"]);
+            writer.WriteAttributeString("wkday", appt["swkday"]);
+            writer.WriteAttributeString("mon", appt["smon"]);
+            writer.WriteAttributeString("hour", appt["shour"]);
+            writer.WriteAttributeString("min", appt["smin"]);
+            writer.WriteAttributeString("sec", appt["ssec"]);
+            writer.WriteEndElement();   // standard
+        }
+        if ((appt["dweek"] != "0") && (appt["dmon"] != "0"))
+        {
+            writer.WriteStartElement("daylight");
+            writer.WriteAttributeString("week", appt["dweek"]);
+            writer.WriteAttributeString("wkday", appt["dwkday"]);
+            writer.WriteAttributeString("mon", appt["dmon"]);
+            writer.WriteAttributeString("hour", appt["dhour"]);
+            writer.WriteAttributeString("min", appt["dmin"]);
+            writer.WriteAttributeString("sec", appt["dsec"]);
+            writer.WriteEndElement();   // daylight
+        }
         writer.WriteEndElement();   // tz
     }
 
