@@ -93,15 +93,12 @@ void
 ngx_mail_zmauth_init(ngx_mail_session_t *s) {
     ngx_pool_t *pool;
     ngx_mail_zmauth_ctx_t    *ctx;
-    ngx_mail_core_srv_conf_t *cscf;
     ngx_zm_lookup_work_t     *work;
     ngx_str_t                 escaped_login, escaped_account_name;
     ngx_mail_cleanup_t       *cln;
     ngx_flag_t                proxy_ssl;
 
     s->connection->log->action = "in mail zmauth state";
-
-    cscf = ngx_mail_get_module_srv_conf(s, ngx_mail_core_module);
 
     /* create pool and module context */
     pool = ngx_create_pool(2048, s->connection->log);
