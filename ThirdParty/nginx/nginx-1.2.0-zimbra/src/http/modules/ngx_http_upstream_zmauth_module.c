@@ -207,14 +207,12 @@ ngx_http_upstream_do_init_zmauth_peer(ngx_http_request_t *r,
     ngx_str_t                             usr, schema;
     ngx_http_upstream_zmauth_ctx_t       *ctx;
     ngx_pool_t                           *pool;
-    ngx_http_upstream_zmauth_srv_conf_t  *zscf;
     void                                 *info;
     ngx_zm_lookup_work_t                 *work;
 
     ngx_log_debug0 (NGX_LOG_DEBUG_ZIMBRA, r->connection->log, 0,
             "zmauth: lookup route for web proxy");
 
-    zscf = ngx_http_get_module_srv_conf(r, ngx_http_upstream_zmauth_module);
     zmp = ngx_palloc(r->pool, sizeof(ngx_http_upstream_zmauth_peer_data_t));
 
     if (zmp == NULL) {
