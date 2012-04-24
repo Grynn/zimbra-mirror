@@ -12,7 +12,6 @@ ZIMBRA_HOME ?= /opt/zimbra
 PATCH	:=
 ifdef BETA
 	include $(POSTFIX_ROOT)/../beta_versions.def
-	PATCH	:= patch -g0 -p0 < ../patches/postconf-X.patch;
 else
 	include $(POSTFIX_ROOT)/../versions.def
 endif
