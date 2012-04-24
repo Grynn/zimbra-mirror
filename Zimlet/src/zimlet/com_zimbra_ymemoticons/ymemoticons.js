@@ -98,7 +98,7 @@ function(html, idx, obj, spanId, context) {
 		// bug 72304 in IE and Chrome, an empty span with only background
 		// image's position doesn't follow the element before, so add a
 		// invisible character
-		"><span style=\"visibility:hidden\">a</span>"
+		"><span style=\"visibility:hidden\">a</span></span>"
 		
 	].join("");
 
