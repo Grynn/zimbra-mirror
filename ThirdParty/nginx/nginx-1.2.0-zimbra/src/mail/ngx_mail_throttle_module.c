@@ -252,11 +252,9 @@ void ngx_mail_throttle_ip (ngx_str_t ip, throttle_callback_t *callback)
     mc_work_t        w;
     ngx_str_t        k;
     ngx_str_t       *value, *eip, *key;
-    ngx_mail_session_t  *s;
 
     pool = callback->pool;
     log = callback->log;
-    s = callback->session;
 
     ngx_log_error (NGX_LOG_INFO, log, 0, "check ip throttle:[%V]", &ip);
 
@@ -653,12 +651,10 @@ static void ngx_mail_throttle_quser (ngx_str_t * quser, throttle_callback_t *cal
     mc_work_t            w;
     ngx_str_t            k;
     ngx_str_t           *value, *key;
-    ngx_mail_session_t  *s;
     ngx_flag_t           check_only;
 
     pool = callback->pool;
     log = callback->log;
-    s = callback->session;
     check_only = callback->check_only;
 
     k = ngx_mail_throttle_get_user_throttle_key(pool, log, *quser);
