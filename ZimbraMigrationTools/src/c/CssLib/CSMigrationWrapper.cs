@@ -613,6 +613,14 @@ public class CSMigrationWrapper
                                     {
                                         dict.Add("accountNum", Acct.AccountNum.ToString());
                                         stat = api.AddAppointment(dict, path);
+                                        if (stat != 0)
+                                        {
+                                            Acct.LastProblemInfo = new ProblemInfo(dict["su"], api.LastError,
+                                                                                   ProblemInfo.TYPE_ERR);
+                                            Acct.TotalErrors++;
+                                            bError = true;
+                                        }
+
                                     }
                                     catch(Exception e)
                                     {

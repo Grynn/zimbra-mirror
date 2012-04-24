@@ -1620,6 +1620,15 @@ public class ZimbraAPI
 
         client.InvokeService(sb.ToString(), out rsp);
         retval = client.status;
+        if (client.status != 0)
+        {
+            string soapReason = ParseSoapFault(client.errResponseMessage);
+            if (soapReason.Length > 0)
+            {
+                lastError = soapReason;
+                Log.err("Error on appointment", appt["su"], "--", soapReason);
+            }
+        }
         return retval;
     }
 
