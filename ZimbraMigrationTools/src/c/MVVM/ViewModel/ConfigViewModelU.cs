@@ -172,6 +172,11 @@ public class ConfigViewModelU: BaseViewModel
         {
             IsPST = value;
             CSEnableNext = (IsPST) ? true : ProfileList.Count > 0;
+            OptionsViewModel ovm = ((OptionsViewModel)ViewModelPtrs[(int)ViewType.OPTIONS]);
+            if (ovm != null)
+            {
+                ovm.OEnableRulesAndOOO = !IsPST;
+            }
             OnPropertyChanged(new PropertyChangedEventArgs("IspST"));
         }
     }

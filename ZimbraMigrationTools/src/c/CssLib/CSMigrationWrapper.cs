@@ -683,8 +683,8 @@ public class CSMigrationWrapper
         }
     }
 
-    public void StartMigration(MigrationAccount Acct, MigrationOptions options, bool
-        isServer = true, LogLevel isVerbose=LogLevel.Info, bool isPreview = false)
+    public void StartMigration(MigrationAccount Acct, MigrationOptions options, bool isServer = true,
+        LogLevel isVerbose = LogLevel.Info, bool isPreview = false, bool doRulesAndOOO = true)      
     {
         string accountName = "";
         dynamic[] folders = null;
@@ -838,7 +838,7 @@ public class CSMigrationWrapper
         }
 
         // now do Rules
-        if (options.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Rules))
+        if ((options.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.Rules)) && (doRulesAndOOO))
         {
             string[,] data  = null;
             try
@@ -882,7 +882,7 @@ public class CSMigrationWrapper
         }
 
         // now do OOO
-        if (options.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.OOO))
+        if ((options.ItemsAndFolders.HasFlag(ItemsAndFoldersOptions.OOO)) && (doRulesAndOOO))
         {
             bool isOOO = false;
             string ooo ="";

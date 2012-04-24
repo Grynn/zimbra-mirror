@@ -432,6 +432,18 @@ public class OptionsViewModel: BaseViewModel
             OnPropertyChanged(new PropertyChangedEventArgs("OEnableNext"));
         }
     }
+    private bool oenableRulesAndOOO;
+    public bool OEnableRulesAndOOO
+    {
+        get { return oenableRulesAndOOO; }
+        set
+        {
+            if (value == oenableRulesAndOOO)
+                return;
+            oenableRulesAndOOO = value;
+            OnPropertyChanged(new PropertyChangedEventArgs("OEnableRulesAndOOO"));
+        }
+    }
     public string ConvertToCSV(Folder[] objectarray, string delimiter)
     {
         if (objectarray == null)
