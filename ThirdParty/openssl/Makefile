@@ -53,8 +53,8 @@ checksrc:
 
 build:
 	(tar xzf src/openssl-$(OPENSSL_VERSION).tar.gz; \
-	patch -p1 -N -g0 < ../patches/mac-fix.patch; \
 	cd openssl-$(OPENSSL_VERSION); \
+	patch -p1 -N -g0 < ../patches/mac-fix.patch; \
 	CFLAGS="-g -O2" \
 	CXXFLAGS="-g -O2" \
 	PERL=/usr/bin/perl \
