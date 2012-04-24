@@ -121,3 +121,23 @@ function(phoneIn) {
 	}
 	return "callto:" + phone;
 };
+
+Com_Zimbra_Phone.prototype.match = function(line, startIndex) {
+	var re = this.RE;
+	re.lastIndex = startIndex;
+	var m = re.exec(line);
+	if (!m) { return m; }
+
+	var phone = m[0];
+	// bug 73264, don't identify long digit sequence (length > 10) without separators as phone number
+	if (phone.length > 10 &&
+		phone[0] != "+"   &&
+		!(AjxUtil.arrayContains(phone, " ")) &&
+		!(AjxUtil.arrayContains(phone, ".")) &&
+		!(AjxUtil.arrayContains(phone, "-"))) {
+			return null;
+	} else {
+		m[0] = phone;
+		return m;
+	}
+}
