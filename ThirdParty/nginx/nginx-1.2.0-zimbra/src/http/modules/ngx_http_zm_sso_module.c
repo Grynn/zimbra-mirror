@@ -242,7 +242,6 @@ ngx_http_zm_sso_redirect (ngx_http_request_t *r)
     ngx_http_zm_sso_loc_conf_t   *zlcf;
     ngx_http_variable_value_t    *host_var;
     ngx_str_t                     host_value;
-    u_char                       *b;
 
     zlcf = ngx_http_get_module_loc_conf(r, ngx_http_zm_sso_module);
     ngx_table_elt_t * location = ngx_list_push(&r->headers_out.headers);
@@ -268,7 +267,7 @@ ngx_http_zm_sso_redirect (ngx_http_request_t *r)
                               sizeof ("/?ignoreLoginURL=1") - 1;
 
         location->value.data = ngx_palloc(r->pool, location->value.len);
-        b = ngx_sprintf(location->value.data, "%V://%V:%V/?ignoreLoginURL=1",
+        ngx_sprintf(location->value.data, "%V://%V:%V/?ignoreLoginURL=1",
                 &zlcf->redirect_schema,
                 &host_value,
                 &zlcf->redirect_url->port_text);
@@ -281,7 +280,7 @@ ngx_http_zm_sso_redirect (ngx_http_request_t *r)
                               sizeof ("/?ignoreLoginURL=1") - 1;
 
         location->value.data = ngx_palloc(r->pool, location->value.len);
-        b = ngx_sprintf(location->value.data, "%V://%V/?ignoreLoginURL=1",
+        ngx_sprintf(location->value.data, "%V://%V/?ignoreLoginURL=1",
                         &zlcf->redirect_schema,
                         &zlcf->redirect_url->url);
     }
