@@ -2297,6 +2297,25 @@ public abstract class AbsSeleniumObject {
 		return element;
 	}
 	
+	private WebElement getElementByClassName(String locator) {
+		logger.info("...WebDriver...getElementById()");
+		String startSuffix = "class=";
+		WebElement element = null;
+		WebDriver driver = webDriver();
+		String modifiedLocator = locator;
+		if (modifiedLocator != null){
+			if( modifiedLocator.startsWith(startSuffix)) {
+				modifiedLocator = modifiedLocator.substring(startSuffix.length());				
+			}
+			try {
+				element = driver.findElement(By.className(modifiedLocator));
+			}catch(Exception ex){
+				logger.info("...getElementById()..." + ex);
+			}
+		}
+		return element;
+	}
+	
 	private WebElement getElementByCss(String locator) {
 		logger.info("...WebDriver...getElementByCss()");
 		String startSuffix = "css=";
@@ -2342,10 +2361,18 @@ public abstract class AbsSeleniumObject {
 		WebElement we = null;
 		if(locator.startsWith("id=")){
 			we = getElementById(locator);
+		}else if(locator.startsWith("class=")){
+			we = getElementByClassName(locator);
 		}else if(locator.startsWith("//")){
 			we = getElementByXPath(locator);
-		}else{
+		}else if(locator.startsWith("css=")){
 			we = getElementByCss(locator);
+		}else{
+			if(locator.contains("=")){
+				we = getElementByCss(locator);
+			}else{
+				we = getElementById(locator);
+			}
 		}
 		return we;
 	}
