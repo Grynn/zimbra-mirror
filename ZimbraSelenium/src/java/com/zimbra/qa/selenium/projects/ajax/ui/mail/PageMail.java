@@ -8,7 +8,6 @@ import java.util.*;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
-import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogTag;
 
@@ -334,16 +333,25 @@ public class PageMail extends AbsTab {
 
 		} else if ( button == Button.B_NEWWINDOW ) {
 
-			// Check if the button is enabled
-			String attrs = sGetAttribute("xpath=(//td[@id='"+ Locators.zDetachIconBtnID +"']/div)@class");
-			if ( attrs.contains("ZDisabledImage") ) {
-				throw new HarnessException("Tried clicking on "+ button +" but it was disabled "+ attrs);
+			page = null;
+			if ( zGetPropMailView() == PageMailView.BY_MESSAGE ) {
+				locator = "css=div#ztb__TV-main div[id$='__DETACH'] div.ImgOpenInNewWindow";
+			} else {
+				locator = "css=div#ztb__CLV-main div[id$='__DETACH'] div.ImgOpenInNewWindow";
 			}
 
-			locator = "id='"+ Locators.zDetachIconBtnID;
-			page = null;	// TODO
-			throw new HarnessException("implement new window page ... probably just DisplayMail object?");
+			if ( !this.sIsElementPresent(locator) ) {
+				throw new HarnessException("Detach icon not present "+ button);
+			}
+			
+			this.zClickAt(locator, "");
+			page = new SeparateWindowDisplayMail(this.MyApplication);
+			
+			// We don't know the window title at this point (However, the test case should.)
+			// Don't check that the page is active, let the test case do that.
 
+			return (page);
+			
 
 		} else if ( button == Button.B_LISTVIEW ) {
 
@@ -418,13 +426,6 @@ public class PageMail extends AbsTab {
 		// If the app is busy, wait for it to become active
 		this.zWaitForBusyOverlay();
 
-		if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP &&
-				button == Button.B_GETMAIL) {
-
-
-			// Wait for the spinner image
-			zWaitForDesktopLoadingSpinner(5000);
-		}
 
 		// If page was specified, make sure it is active
 		if ( page != null ) {
@@ -524,19 +525,22 @@ public class PageMail extends AbsTab {
 
 			} else if ( option == Button.B_LAUNCH_IN_SEPARATE_WINDOW ) {
 				
-				optionLocator += " div[id^='DETACH'] td[id$='_title']";
-				page = new SeparateWindowDisplayMail(this.MyApplication);
+				// 8.0, 4/25/2012: separate window moved from Actions menu to Toolbar
+//				optionLocator += " div[id^='DETACH'] td[id$='_title']";
+//				page = new SeparateWindowDisplayMail(this.MyApplication);
+//
+//				// We don't know the window title at this point (However, the test case should.)
+//				// Don't check that the page is active, let the test case do that.
+//
+//				this.zClickAt(pulldownLocator, "0,0");
+//				zWaitForBusyOverlay();
+//
+//				this.zClickAt(optionLocator, "0,0");
+//				zWaitForBusyOverlay();
+//
+//				return (page);
 
-				// We don't know the window title at this point (However, the test case should.)
-				// Don't check that the page is active, let the test case do that.
-
-				this.zClickAt(pulldownLocator, "0,0");
-				zWaitForBusyOverlay();
-
-				this.zClickAt(optionLocator, "0,0");
-				zWaitForBusyOverlay();
-
-				return (page);
+				return (this.zToolbarPressButton(Button.B_NEWWINDOW));
 
 			} else if ( option == Button.O_MARK_AS_READ ) {
 				
