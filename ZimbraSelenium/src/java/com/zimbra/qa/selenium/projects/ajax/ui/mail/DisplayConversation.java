@@ -50,13 +50,17 @@ public class DisplayConversation extends DisplayMail {
 			
 			return (null);
 
-		} else if ( button == Button.B_QUICK_REPLY_FOWARD ) {
+		} else if ( button == Button.B_QUICK_REPLY_FORWARD ) {
 			
 			locator = "css=div.footer a[id$='__footer_forward']";
+			page = new FormMailNew(this.MyApplication);
+
 			this.sClick(locator);
 			this.zWaitForBusyOverlay();
+
+			page.zWaitForActive();
 			
-			return (null);
+			return (page);
 
 		} else if ( button == Button.B_QUICK_REPLY_MORE_ACTIONS ) {
 			
