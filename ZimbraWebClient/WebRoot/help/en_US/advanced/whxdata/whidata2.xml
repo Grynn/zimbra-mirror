@@ -1,6 +1,21 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
+<key name="POP account" >
+  <topic name="Managing your POP Accounts" url="Userspecific/Managing_your_POP_Accounts.htm" />
+</key>
+<key name="POP account email, receiving" >
+  <topic name="Setting your user preferences" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="POP accounts, adding" >
+  <topic name="Adding POP accounts" url="Userspecific/Adding_POP_accounts.htm" />
+</key>
+<key name="POP addresses, adding" >
+  <topic name="Mail Identities" url="Userspecific/Mail_Identities.htm" />
+</key>
+<key name="preferences" >
+  <topic name="Setting your user preferences" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
 <key name="preferences, calendar" >
   <topic name="Setting your Calendar preferences" url="Userspecific/Setting_your_Calendar_preferences.htm" />
 </key>
@@ -95,6 +110,9 @@
 <key name="reminders" >
   <topic name="Setting up desktop alerts" url="Userspecific/Setting_up_desktop_alerts.htm" />
 </key>
+<key name="reminders, text message" >
+  <topic name="Setting Email and SMS Reminder Notification" url="Userspecific/Setting_Email_and_SMS_Reminder_Notification.htm" />
+</key>
 <key name="reminders, turn off" >
   <topic name="Turning off reminders" url="Userspecific/Turning_off_reminders.htm" />
 </key>
@@ -159,6 +177,12 @@
   <topic name="Filtering your messages" url="filters/filtering_your_messages.htm" />
   <topic name="How Filtering Works" url="filters/how_filtering_works.htm" />
 </key>
+<key name="s/mime preferences" >
+  <topic name="Setting security preferences for using S/MIME" url="smime/Setting_security_preferences_for_using_S_MIME.htm" />
+</key>
+<key name="s/mime, setting up" >
+  <topic name="Setting up S/MIME to send and receive signed adn encrypted email messages" url="smime/setting_up_S_MIME.htm" />
+</key>
 <key name="schedule view" >
   <topic name="Viewing Multiple Calendars" url="Calendar/Best_View_to_See_All_Your_Shared_Calendars.htm" />
 </key>
@@ -167,6 +191,9 @@
 </key>
 <key name="search examples" >
   <topic name="Search examples" url="Search/search_examples.htm" />
+</key>
+<key name="search failure" >
+  <topic name="Search Issues with Non-Western Language Attachments" url="Search/Search_Issues_with_Non-Western_Language_Attachments.htm" />
 </key>
 <key name="search feature" >
   <topic name="Using the search feature" url="Search/using_the_search_feature.htm" />
@@ -189,8 +216,14 @@
 <key name="searching for a message" >
   <topic name="Searching for messages" url="Search/_search__vs.__search_for_.htm" />
 </key>
+<key name="security preferences" >
+  <topic name="Setting security preferences for using S/MIME" url="smime/Setting_security_preferences_for_using_S_MIME.htm" />
+</key>
 <key name="send files from Briefcase" >
   <topic name="Send Files from your Briefcase" url="Briefcase/Send_Files_from_your_Briefcase.htm" />
+</key>
+<key name="sending an encrypted message" >
+  <topic name="Compose and send an encrypted message" url="smime/Compose_and_send_an_encrypted_message.htm" />
 </key>
 <key name="sending free busy status" >
   <topic name="Sending your free/busy status to others" url="Userspecific/Sending_your_free_busy_status_to_others.htm" />
@@ -203,6 +236,9 @@
 </key>
 <key name="setting up filter rules" >
   <topic name="How Filtering Works" url="filters/how_filtering_works.htm" />
+</key>
+<key name="setting up s/mime" >
+  <topic name="Setting up S/MIME to send and receive signed adn encrypted email messages" url="smime/setting_up_S_MIME.htm" />
 </key>
 <key name="share your calendar" >
   <topic name="Delegating Calendar Access" url="Calendar/Delegating_Calendar_Access.htm" />
@@ -235,6 +271,9 @@
 </key>
 <key name="signatures, adding automatically" >
   <topic name="Creating Personas" url="Userspecific/Creating_Personas.htm" />
+</key>
+<key name="SMS" >
+  <topic name="Setting Email and SMS Reminder Notification" url="Userspecific/Setting_Email_and_SMS_Reminder_Notification.htm" />
 </key>
 <key name="sorting incoming email" >
   <topic name="How Filtering Works" url="filters/how_filtering_works.htm" />
@@ -275,54 +314,6 @@
 </key>
 <key name="tasks, print" >
   <topic name="About Tasks" url="Tasks/About_Tasks.htm" />
-</key>
-<key name="three-pane view" >
-  <topic name="Zimbra Web Client Workspace" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
-</key>
-<key name="tool tips" >
-  <topic name="Zimbra Web Client Workspace" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
-</key>
-<key name="trash folder" >
-  <topic name="Trash folder" url="Navigation_folders_and_tips/trash_folder.htm" />
-</key>
-<key name="undeliverable mail" >
-  <topic name="Undeliverable mail" url="Creating_Messages/undeliverable_mail.htm" />
-</key>
-<key name="undo" >
-  <topic name="Undo Action" url="Userspecific/Undo_Action.htm" />
-</key>
-<key name="upload new Zimlets" >
-  <topic name="Managing your Zimlets" url="Zimlets/Managing_your_Zimlets.htm" />
-</key>
-<key name="URL in signatures" >
-  <topic name="Using a signature" url="Userspecific/using_a_signature.htm" />
-</key>
-<key name="user interface features" >
-  <topic name="User Interface Features and Shortcuts" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
-</key>
-<key name="user preferences" >
-  <topic name="Setting your user preferences" url="Userspecific/Setting_your_user_preferences.htm" />
-</key>
-<key name="using tags" >
-  <topic name="Using tags to classify mail messages" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
-</key>
-<key name="vacation message" >
-  <topic name="Vacation message" url="Userspecific/vacation_message.htm" />
-</key>
-<key name="versions" >
-  <topic name="Version Control of Files in Briefcase" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
-</key>
-<key name="view as HTML" >
-  <topic name="Opening file attachments" url="reading_mail/opening_file_attachments.htm" />
-</key>
-<key name="view reading pane" >
-  <topic name="Reading Mail from the Reading Pane" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
-</key>
-<key name="view, calendar" >
-  <topic name="About Zimbra Calendar" url="Calendar/About_Calendar.htm" />
-</key>
-<key name="view, calendars by lists" >
-  <topic name="Calendar List View" url="Calendar/Calendar_List_View.htm" />
 </key>
 
 </indexdata>

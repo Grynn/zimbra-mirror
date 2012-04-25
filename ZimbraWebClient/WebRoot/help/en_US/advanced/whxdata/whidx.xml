@@ -1,9 +1,9 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <index>
-<chunkinfo url="whidata0.xml" first="accessing external accounts" last="external user" num="107" />
-<chunkinfo url="whidata1.xml" first="features of Zimbra Web Client" last="preferences" num="102" />
-<chunkinfo url="whidata2.xml" first="preferences, calendar" last="view, calendars by lists" num="106" />
-<chunkinfo url="whidata3.xml" first="W in mini calendar" last="Zimlets, disable" num="8" />
+<chunkinfo url="whidata0.xml" first="accessing external accounts" last="events" num="104" />
+<chunkinfo url="whidata1.xml" first="export account data" last="polling for new mail" num="102" />
+<chunkinfo url="whidata2.xml" first="POP account" last="tasks, print" num="103" />
+<chunkinfo url="whidata3.xml" first="three-pane view" last="Zimlets, disable" num="24" />
 
 </index>

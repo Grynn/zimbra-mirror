@@ -19,6 +19,9 @@
 <key name="adding appointment information to calendar" >
   <topic name="Responding_to_an_invitation" url="Calendar/Responding_to_an_invitation.htm" />
 </key>
+<key name="adding certificates to Address Book" >
+  <topic name="Adding certificates to contacts in Address Book" url="smime/Adding_certificates_to_contacts_in_Address_Book.htm" />
+</key>
 <key name="adding contacts" >
   <topic name="Creating a new contact" url="Contacts/creating_a_new_contact.htm" />
 </key>
@@ -67,9 +70,6 @@
 <key name="archiving messages" >
   <topic name="purging messages" url="reading_mail/archiving_old_messages.htm" />
 </key>
-<key name="assistant" >
-  <topic name="Zimbra Assistant" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
-</key>
 <key name="atom feed" >
   <topic name="Subscribe to RSS/Atom feeds" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
 </key>
@@ -81,6 +81,9 @@
 </key>
 <key name="attachments" >
   <topic name="Opening file attachments" url="reading_mail/opening_file_attachments.htm" />
+</key>
+<key name="attachments not found in search" >
+  <topic name="Search Issues with Non-Western Language Attachments" url="Search/Search_Issues_with_Non-Western_Language_Attachments.htm" />
 </key>
 <key name="auto-complete addresses" >
   <topic name="Using address lookup" url="Creating_Messages/Using_address_lookup.htm" />
@@ -229,9 +232,6 @@
 <key name="corporate address book" >
   <topic name="Using the corporate address book" url="Contacts/using_the_corporate_address_book.htm" />
 </key>
-<key name="create an appointment from a message" >
-  <topic name="Zimbra Assistant" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
-</key>
 <key name="creating new mail messages" >
   <topic name="Creating a new mail message" url="Creating_Messages/Creating_a_new_mail_message.htm" />
 </key>
@@ -303,28 +303,20 @@
 </key>
 <key name="email notification" >
   <topic name="Setting up desktop alerts" url="Userspecific/Setting_up_desktop_alerts.htm" />
+  <topic name="Setting Email and SMS Reminder Notification" url="Userspecific/Setting_Email_and_SMS_Reminder_Notification.htm" />
+</key>
+<key name="encrypted message, send" >
+  <topic name="Compose and send an encrypted message" url="smime/Compose_and_send_an_encrypted_message.htm" />
 </key>
 <key name="equipment, reserving" >
   <topic name="Scheduling Resources" url="Calendar/Scheduling_Resources.htm" />
 </key>
+<key name="EUC-JP" >
+  <topic name="Search Issues with Non-Western Language Attachments" url="Search/Search_Issues_with_Non-Western_Language_Attachments.htm" />
+</key>
 <key name="events" >
   <topic name="Scheduling All Day events" url="Calendar/Scheduling_All_Day_events.htm" />
   <topic name="About Appointments, Meetings and Events" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
-</key>
-<key name="export account data" >
-  <topic name="Backing up the Content of Your Account" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
-</key>
-<key name="export iCal calendars" >
-  <topic name="Importing your iCal calendar" url="Calendar/Importing_your_iCal_calendar.htm" />
-</key>
-<key name="external accounts" >
-  <topic name="Managing your POP Accounts" url="Userspecific/Managing_your_POP_Accounts.htm" />
-</key>
-<key name="external accounts, how to add" >
-  <topic name="Adding POP accounts" url="Userspecific/Adding_POP_accounts.htm" />
-</key>
-<key name="external user" >
-  <topic name="Identifying who can invite you to meetings" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
 </key>
 
 </indexdata>

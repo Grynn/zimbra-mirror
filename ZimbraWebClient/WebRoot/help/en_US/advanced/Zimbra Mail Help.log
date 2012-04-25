@@ -123,7 +123,7 @@ toolbarNav_search_sel.gif
 toolbarNav_search.gif
 toolbar_searchBtn.gif
 zimbra_desktop_icons_32x32.png
-silver.png
+zimbra_logo.png
 VMW-LGO-Zimbra-gray_50.png
 navBar_prev_dis.gif
 navBar_prev.gif
@@ -204,7 +204,6 @@ Contacts\using_the_corporate_address_book.htm
 conversations\conversation_list_view.htm
 conversations\conversations_can_span_folders.htm
 conversations\printing_a_conversation.htm
-Creating_Messages\attaching_files_to_a_mail_message.htm
 Creating_Messages\Attachment_File_Types_Supported.htm
 Creating_Messages\Composing_a_new_mail_message.htm
 Creating_Messages\Creating_a_new_mail_message.htm
@@ -236,7 +235,6 @@ Getting_Started\about_liquid_mail.htm
 Getting_Started\user_interface_features_and_shortcuts.htm
 managing_your_account\Backing_up_the_Content_of_Your_Account.htm
 Miscellaneous_one_off_topics\How_Address_Bubbles_Work.htm
-Miscellaneous_one_off_topics\Zimbra_Assistant.htm
 Navigation_folders_and_tips\about_folders.htm
 Navigation_folders_and_tips\applying_actions_to_multiple_selections.htm
 Navigation_folders_and_tips\b_Subscribe_to_RSS_Atom_feeds.htm
@@ -274,6 +272,7 @@ Search\query_language_description.htm
 Search\Quick_search.htm
 Search\saving_search_queries.htm
 Search\search_examples.htm
+Search\Search_Issues_with_Non-Western_Language_Attachments.htm
 Search\Searching_for_messages_sent_to_or_from_the_sender.htm
 Search\Searching_for_messages_sent_to_or_received_from_a_contact_name.htm
 Search\Searching_for_Recipients_.htm
@@ -282,6 +281,11 @@ Search\Using_Wildcard_in_Search.htm
 Sharing\Managing_items_you_share.htm
 Sharing\Sharing_a_folder.htm
 Sharing\Sharing_with_a_Distribution_List.htm
+smime\Adding_certificates_to_contacts_in_Address_Book.htm
+smime\Compose_and_send_an_encrypted_message.htm
+smime\Compose_signed_message.htm
+smime\securitypreferences.htm
+smime\setting_up_smime.htm
 Tags_and_flags\Assigning_tags_to_messages.htm
 Tags_and_flags\deleting_tags.htm
 Tags_and_flags\Flagging_an_email_message.htm
@@ -313,6 +317,7 @@ Userspecific\Managing_your_POP_Accounts.htm
 Userspecific\New_mail_notifications.htm
 Userspecific\Sending_your_free_busy_status_to_others.htm
 Userspecific\Setting_a_Forwarding_Address.htm
+Userspecific\Setting_Email_and_SMS_Reminder_Notification.htm
 Userspecific\Setting_up_desktop_alerts.htm
 Userspecific\Setting_your_address_book_preferences.htm
 Userspecific\Setting_your_Calendar_preferences.htm
@@ -335,7 +340,6 @@ searchbutton75.png
 tables.png
 rss.png
 draganddrop.png
-dndview.png
 Tasks_content_pane.png
 para_styles.png
 newfolder.png
@@ -384,15 +388,17 @@ schedular.png
 newcalendarand_arrow.png
 CalendarWeek.png
 tag-purple.gif
-add_attachment_75.png
 mailnotificationtab.png
 right-clickmenus80.png
 zimbra_logo_nc.png
 calendarmultimgtview.gif
 ehlpdhtm.js
 SearchOptions.xml
+smime\Setting_security_preferences_for_using_S_MIME.htm
 Zimbra_User_Help.ppf
+smime\setting_up_S_MIME.htm
 RoboHHRE.lng
+Creating_Messages\attaching_files_to_a_mail_message.htm
 whxdata\package_0.xml
 whxdata\package_1.xml
 whxdata\package_2.xml
@@ -441,6 +447,7 @@ whxdata\whtdata6.xml
 whxdata\whtdata7.xml
 whxdata\whtdata8.xml
 whxdata\whtdata9.xml
+whxdata\whtdata10.xml
 whxdata\whidata0.xml
 whxdata\whidata1.xml
 whxdata\whidata2.xml
@@ -455,6 +462,7 @@ whdata\whtdata6.htm
 whdata\whtdata7.htm
 whdata\whtdata8.htm
 whdata\whtdata9.htm
+whdata\whtdata10.htm
 whdata\whidata0.htm
 whdata\whidata1.htm
 whdata\whidata2.htm
@@ -485,6 +493,7 @@ whgdata\whlstt22.htm
 whgdata\whlstt23.htm
 whgdata\whlstt24.htm
 whgdata\whlstt25.htm
+whgdata\whlstt26.htm
 whgdata\whlsti0.htm
 whgdata\whlsti1.htm
 whgdata\whlstfl0.htm

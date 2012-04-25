@@ -31,7 +31,7 @@ function delayReload()
 	}
 }
 
-var gsToolbarOrder = "toc|idx|fts|blankblock|banner";
+var gsToolbarOrder = "toc|idx|fts|blankblock";
 var gsMinibarOrder = "blankblock|hide2|";
 
 var gsTopic = "Getting_Started/about_liquid_mail.htm";

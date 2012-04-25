@@ -294,40 +294,37 @@ try
 {
 	var sCurrentDocPath=_getPath(document.location.href);
 	var bAsyncReq = true ;
-	if (typeof(bAsync) !='undefined' )
+	if (bAsync !='undefined' )
 		bAsyncReq = bAsync ;
 	sdocPath=_getFullPath(sCurrentDocPath,sFileName);
 	if(gbIE5)
 	{
 		// use xmlhttp for 304 support, xmldom doesn't support it, IE5 or later
-		var bIsHTTPURL = IsHTTPURL(sdocPath);
-		if (bIsHTTPURL) 
+		var bIsHTTPURL = false;
+		if(gbAIRSSL)
 		{
-			if (window.XMLHttpRequest) 
-			{
-				xmlDoc = new XMLHttpRequest();
-			}
-			else
-			{
-				if (window.ActiveXObject) 
-	    			{
-		   			 xmlDoc=new ActiveXObject("Microsoft.XMLHTTP");
-				} 
-			}
-		    	xmlDoc.onreadystatechange=checkState;
-		    	if(document.body!=null)
-		   	{
-				xmlDoc.open("GET", sdocPath, bAsyncReq);
-				xmlDoc.send(null);
-		    	};
-	   	 }else
-	    	 {
+		    bIsHTTPURL = IsHTTPURL(sdocPath);
+		}
+		else
+		    bIsHTTPURL = mrIsOnEngine();
+
+	    if( bIsHTTPURL )
+	    {
+		    xmlDoc=new ActiveXObject("Microsoft.XMLHTTP");
+		    xmlDoc.onreadystatechange=checkState;
+		    if(document.body!=null)
+		    {
+			    xmlDoc.Open("get", sdocPath, bAsyncReq);
+			    xmlDoc.Send("");
+		    };
+	    }else
+	    {
 		    xmlDoc=new ActiveXObject("Microsoft.XMLDOM");
 		    xmlDoc.onreadystatechange=checkState;
 		    xmlDoc.async=bAsyncReq;
 		    if(document.body!=null)
 			    xmlDoc.load(sdocPath);
-	   	 };
+	    };
 	}
 	else if(gbNav6 && !gbAIR)
 	{
@@ -356,7 +353,7 @@ try
 	}
 }catch(e)
 {
-    onLoadXMLError();
+    //Do nothing
 }
 }
 
@@ -393,28 +390,8 @@ function checkState()
 		if(state==4)
 		{
 			// engine version uses xmlhttp, xml data in the responseXML
-			if(typeof(xmlDoc.responseXML) != 'undefined')
-			{
-				if (gbIE5 && !xmlDoc.responseXML.documentElement) 
-				{
-					var indx = xmlDoc.responseText.indexOf("<?xml");
-					if(indx != -1)
-					{
-						indx = xmlDoc.responseText.indexOf("?>", indx);
-						if(indx != -1)
-						{
-							var strXML = xmlDoc.responseText.substr(indx+2);
-							xmlDoc.responseXML.loadXML(strXML); 
-						}
-					}
-					else
-					{
-						xmlDoc.responseXML.loadXML(xmlDoc.responseText);
-					}
-					
-				}
+			if( xmlDoc.responseXML!=null )
 				xmlDoc=xmlDoc.responseXML;
-			}
 
 			var err=xmlDoc.parseError;
 			if(err.errorCode==0)

@@ -6,7 +6,6 @@
   <item name="Logging in and out" url="Userspecific/logging_on_and_off.htm" />
   <item name="Changing my default client type for log in" url="Navigation_folders_and_tips/Changing_my_default_client_type_for_log_in.htm" />
   <item name="Keyboard shortcut keys" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
-  <item name="@CompanyName@ Assistant" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
   <item name="Changing your password" url="Userspecific/chaning_your_password.htm" />
   <item name="Forget your password?" url="Userspecific/if_you_forget_your_password.htm" />
   <item name="If your session expires" url="Userspecific/if_your_session_expires.htm" />
@@ -147,11 +146,14 @@
 <book name="Managing your Mobile Device (Network Edition Only)" >
 <chunk name="Managing your Mobile Device (Network Edition Only)" ref="whtdata7.xml" />
 </book>
+<book name="Sending Secure Email Messages" >
+<chunk name="Sending Secure Email Messages" ref="whtdata8.xml" />
+</book>
 <book name="Export and Import Your Account Data" >
-<chunk name="Export and Import Your Account Data" ref="whtdata8.xml" />
+<chunk name="Export and Import Your Account Data" ref="whtdata9.xml" />
 </book>
 <book name="Using Zimlets" >
-<chunk name="Using Zimlets" ref="whtdata9.xml" />
+<chunk name="Using Zimlets" ref="whtdata10.xml" />
 </book>
 
 </tocdata>
