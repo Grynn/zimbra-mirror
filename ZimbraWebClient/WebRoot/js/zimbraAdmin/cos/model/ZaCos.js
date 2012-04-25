@@ -143,6 +143,9 @@ ZaCos.A_zimbraPrefAdminConsoleWarnOnExit = "zimbraPrefAdminConsoleWarnOnExit" ;
 ZaCos.A_zimbraFeatureExportFolderEnabled = "zimbraFeatureExportFolderEnabled";
 ZaCos.A_zimbraFeatureImportFolderEnabled = "zimbraFeatureImportFolderEnabled";
 ZaCos.A_zimbraDumpsterEnabled = "zimbraDumpsterEnabled";
+ZaCos.A_zimbraMailDumpsterLifetime = "zimbraMailDumpsterLifetime";
+ZaCos.A_zimbraDumpsterUserVisibleAge = "zimbraDumpsterUserVisibleAge";
+ZaCos.A_zimbraDumpsterPurgeEnabled = "zimbraDumpsterPurgeEnabled";
 ZaCos.A_zimbraPrefCalendarFirstDayOfWeek = "zimbraPrefCalendarFirstDayOfWeek"; 
 ZaCos.A_zimbraFeatureReadReceiptsEnabled = "zimbraFeatureReadReceiptsEnabled";
 ZaCos.A_zimbraFeatureMailPriorityEnabled = "zimbraFeatureMailPriorityEnabled";
@@ -698,6 +701,9 @@ ZaCos.myXModel = {
 		{id:ZaCos.A_zimbraFeatureExportFolderEnabled, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraFeatureExportFolderEnabled, type:_ENUM_},
 		{id:ZaCos.A_zimbraFeatureImportFolderEnabled, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraFeatureImportFolderEnabled, type:_ENUM_},
 		{id:ZaCos.A_zimbraDumpsterEnabled, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraDumpsterEnabled, type:_ENUM_},
+		{id:ZaCos.A_zimbraDumpsterUserVisibleAge, type:_MLIFETIME_, ref:"attrs/"+ZaCos.A_zimbraDumpsterUserVisibleAge },
+		{id:ZaCos.A_zimbraDumpsterPurgeEnabled, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraDumpsterPurgeEnabled, type:_ENUM_},
+		{id:ZaCos.A_zimbraMailDumpsterLifetime, type:_MLIFETIME_, ref:"attrs/"+ZaCos.A_zimbraMailDumpsterLifetime },
 		{id:ZaCos.A_zimbraPrefCalendarSendInviteDeniedAutoReply, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraPrefCalendarSendInviteDeniedAutoReply, type:_ENUM_},
 		{id:ZaCos.A_zimbraFeatureReadReceiptsEnabled, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraFeatureReadReceiptsEnabled, type:_ENUM_},
         {id:ZaCos.A_zimbraFeatureMailPriorityEnabled, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraFeatureMailPriorityEnabled, type:_ENUM_},

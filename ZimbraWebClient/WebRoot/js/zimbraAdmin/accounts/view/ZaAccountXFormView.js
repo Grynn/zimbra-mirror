@@ -1100,6 +1100,7 @@ ZaAccountXFormView.FEATURE_TAB_ATTRS = [ZaAccount.A_zimbraFeatureManageZimlets,
 	ZaAccount.A_zimbraFeatureImportFolderEnabled,
     ZaAccount.A_zimbraFeatureExportFolderEnabled,
 	ZaAccount.A_zimbraDumpsterEnabled,
+	ZaAccount.A_zimbraDumpsterPurgeEnabled,
 	ZaAccount.A_zimbraFeatureSMIMEEnabled,
     ZaAccount.A_zimbraFeatureCalendarReminderDeviceEmailEnabled
 ];
@@ -1215,6 +1216,8 @@ ZaAccountXFormView.ADVANCED_TAB_ATTRS = [ZaAccount.A_zimbraAttachmentsBlocked,
 	ZaAccount.A_zimbraMailMessageLifetime,
 	ZaAccount.A_zimbraMailTrashLifetime,
 	ZaAccount.A_zimbraMailSpamLifetime,
+	ZaAccount.A_zimbraDumpsterUserVisibleAge,
+	ZaAccount.A_zimbraMailDumpsterLifetime,
 	ZaAccount.A_zimbraFreebusyExchangeUserOrg,
 	ZaAccount.A_zimbraMailTransport	
 	];
@@ -2099,7 +2102,8 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 							 ZaAccount.A_zimbraFeatureGalAutoCompleteEnabled,
 							 ZaAccount.A_zimbraFeatureImportFolderEnabled,
                              ZaAccount.A_zimbraFeatureExportFolderEnabled,
-							 ZaAccount.A_zimbraDumpsterEnabled
+							 ZaAccount.A_zimbraDumpsterEnabled,
+							 ZaAccount.A_zimbraDumpsterPurgeEnabled
 							 ]]
 						],
 						items:[							
@@ -2119,7 +2123,10 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 							{ref:ZaAccount.A_zimbraFeatureGalAutoCompleteEnabled, type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraFeatureGalAutoCompleteEnabled,checkBoxLabel:ZaMsg.LBL_zimbraFeatureGalAutoCompleteEnabled,  trueValue:"TRUE", falseValue:"FALSE"},
 							{ref:ZaAccount.A_zimbraFeatureImportFolderEnabled, type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraFeatureImportFolderEnabled,checkBoxLabel:ZaMsg.LBL_zimbraFeatureImportFolderEnabled,  trueValue:"TRUE", falseValue:"FALSE"},
                             {ref:ZaAccount.A_zimbraFeatureExportFolderEnabled, type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraFeatureExportFolderEnabled,checkBoxLabel:ZaMsg.LBL_zimbraFeatureExportFolderEnabled,  trueValue:"TRUE", falseValue:"FALSE"},
-							{ref:ZaAccount.A_zimbraDumpsterEnabled, type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraDumpsterEnabled, checkBoxLabel:ZaMsg.LBL_zimbraDumpsterEnabled,  trueValue:"TRUE", falseValue:"FALSE"}
+							{ref:ZaAccount.A_zimbraDumpsterEnabled, type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.MSG_zimbraDumpsterEnabled, checkBoxLabel:ZaMsg.LBL_zimbraDumpsterEnabled,  trueValue:"TRUE", falseValue:"FALSE"},
+							{ref:ZaAccount.A_zimbraDumpsterPurgeEnabled, type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.MSG_zimbraDumpsterPurgeEnabled, checkBoxLabel:ZaMsg.LBL_zimbraDumpsterPurgeEnabled, trueValue:"TRUE", falseValue:"FALSE",
+								visibilityChecks:[[ZaItem.hasReadPermission], [XForm.checkInstanceValue, ZaAccount.A_zimbraDumpsterEnabled, "TRUE"]], visibilityChangeEventSources:[ZaAccount.A_zimbraDumpsterEnabled]
+							}
 
 						]
 					},	
@@ -3384,11 +3391,11 @@ nowrap:false, labelWrap:true,
 							visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,
                         			[ZaAccount.A_zimbraAdminAuthTokenLifetime,
                         			ZaAccount.A_zimbraAuthTokenLifetime,
-                        			ZaAccount.A_zimbraMailIdleSessionTimeout]]],							
+                        			ZaAccount.A_zimbraMailIdleSessionTimeout,
+                        			ZaAccount.A_zimbraDumpsterUserVisibleAge]]],
 							items: [
 								{ref:ZaAccount.A_zimbraAdminAuthTokenLifetime,
 									type:_SUPER_LIFETIME_,
-									colSpan:1,
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 									msgName:ZaMsg.MSG_zimbraAdminAuthTokenLifetime,
 									txtBoxLabel:ZaMsg.LBL_zimbraAdminAuthTokenLifetime,
@@ -3398,54 +3405,73 @@ nowrap:false, labelWrap:true,
 								},								
 								{ref:ZaAccount.A_zimbraAuthTokenLifetime,
 									type:_SUPER_LIFETIME_,
-									colSpan:1,
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 									msgName:ZaMsg.MSG_zimbraAuthTokenLifetime,
 									txtBoxLabel:ZaMsg.LBL_zimbraAuthTokenLifetime},										
 								{ref:ZaAccount.A_zimbraMailIdleSessionTimeout, 
 									type:_SUPER_LIFETIME_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 									msgName:ZaMsg.MSG_zimbraMailIdleSessionTimeout,
-									colSpan:1,
-									txtBoxLabel:ZaMsg.LBL_zimbraMailIdleSessionTimeout}															
+									txtBoxLabel:ZaMsg.LBL_zimbraMailIdleSessionTimeout},
+                                {ref:ZaAccount.A_zimbraDumpsterUserVisibleAge,
+                                    resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
+                                    type:_SUPER_LIFETIME_,
+                                    msgName:ZaMsg.MSG_zimbraDumpsterUserVisibleAge, 
+                                    txtBoxLabel:ZaMsg.LBL_zimbraDumpsterUserVisibleAge,
+                                    visibilityChecks:[[ZaItem.hasReadPermission], [XForm.checkInstanceValue, ZaAccount.A_zimbraDumpsterEnabled, "TRUE"]],
+                                    visibilityChangeEventSources:[ZaAccount.A_zimbraDumpsterEnabled]
+                                }
 							]
 						},
                         { type:_ZA_TOP_GROUPER_, colSizes:["auto"], numCols:1,
                         	visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,
                         			[ZaAccount.A_zimbraMailMessageLifetime,
                         			ZaAccount.A_zimbraMailTrashLifetime,
-                        			ZaAccount.A_zimbraMailSpamLifetime]],[XForm.checkInstanceValue,ZaAccount.A_zimbraIsExternalVirtualAccount,"FALSE"]],
+                        			ZaAccount.A_zimbraMailSpamLifetime,
+                        			ZaAccount.A_zimbraMailDumpsterLifetime
+									]],[XForm.checkInstanceValueNot,ZaAccount.A_zimbraIsExternalVirtualAccount,"TRUE"]],
 							label:ZaMsg.NAD_MailRetentionGrouper, id: "mailretention_settings",
 							items: [
                                 { type: _DWT_ALERT_,
                                   containerCssStyle: "padding:0 10px 10px;width:100%;",
                                   style: DwtAlert.INFO,
                                   iconVisible: false,
-                                  content: ZaMsg.Alert_EnableMailRetention,
-                                  visibilityChecks:[ZaAccount.isEmailRetentionPolicyDisabled],
-                                  visibilityChangeEventSources:[ZaAccount.A_mailHost]
+                                  content: ZaMsg.Alert_EnableMailRetention
                                 },
-                                { type: _GROUP_ , width: "100%",
-                                    visibilityChecks:[ZaAccount.isEmailRetentionPolicyEnabled],
+                                {ref:ZaAccount.A_zimbraMailMessageLifetime, type:_SUPER_LIFETIME2_,
+                                    resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
+                                    msgName:ZaMsg.MSG_zimbraMailMessageLifetime,
+                                    txtBoxLabel:ZaMsg.LBL_zimbraMailMessageLifetime,
+                                    visibilityChecks:[[ZaItem.hasReadPermission], [ZaAccount.isEmailRetentionPolicyEnabled]],
                                     visibilityChangeEventSources:[ZaAccount.A_mailHost],
-                                    items: [
-                                        {ref:ZaAccount.A_zimbraMailMessageLifetime, type:_SUPER_LIFETIME2_,
-                                            resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
-                                            msgName:ZaMsg.MSG_zimbraMailMessageLifetime,
-                                            txtBoxLabel:ZaMsg.LBL_zimbraMailMessageLifetime,
-                                            labelCssClass:(appNewUI?"gridGroupBodyLabel":"xform_label")
-                                        },
-                                        {ref:ZaAccount.A_zimbraMailTrashLifetime, type:_SUPER_LIFETIME1_,
-                                            resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.MSG_zimbraMailTrashLifetime,
-                                            txtBoxLabel:ZaMsg.LBL_zimbraMailTrashLifetime,
-                                            labelCssClass:(appNewUI?"gridGroupBodyLabel":"xform_label")
-                                        },
-                                        {ref:ZaAccount.A_zimbraMailSpamLifetime, type:_SUPER_LIFETIME1_,
-                                            resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
-                                            msgName:ZaMsg.MSG_zimbraMailSpamLifetime,
-                                            txtBoxLabel:ZaMsg.LBL_zimbraMailSpamLifetime,
-                                            labelCssClass:(appNewUI?"gridGroupBodyLabel":"xform_label")
-                                        }
-                                    ]
+									labelCssStyle:(appNewUI?"border-right:1px solid;":_UNDEFINED_),
+                                    labelCssClass:(appNewUI?"gridGroupBodyLabel":"xform_label")
+                                },
+                                {ref:ZaAccount.A_zimbraMailTrashLifetime, type:_SUPER_LIFETIME1_,
+                                    resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.MSG_zimbraMailTrashLifetime,
+                                    txtBoxLabel:ZaMsg.LBL_zimbraMailTrashLifetime,
+                                    visibilityChecks:[[ZaItem.hasReadPermission], [ZaAccount.isEmailRetentionPolicyEnabled]],
+                                    visibilityChangeEventSources:[ZaAccount.A_mailHost],
+									labelCssStyle:(appNewUI?"padding-left:10px; text-align:left; border-right:1px solid;":_UNDEFINED_),
+                                    labelCssClass:(appNewUI?"gridGroupBodyLabel":"xform_label")
+                                },
+                                {ref:ZaAccount.A_zimbraMailSpamLifetime, type:_SUPER_LIFETIME1_,
+                                    resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
+                                    msgName:ZaMsg.MSG_zimbraMailSpamLifetime,
+                                    txtBoxLabel:ZaMsg.LBL_zimbraMailSpamLifetime,
+                                    visibilityChecks:[[ZaItem.hasReadPermission], [ZaAccount.isEmailRetentionPolicyEnabled]],
+                                    visibilityChangeEventSources:[ZaAccount.A_mailHost],
+									labelCssStyle:(appNewUI?"padding-left:10px; text-align:left; border-right:1px solid;":_UNDEFINED_),
+                                    labelCssClass:(appNewUI?"gridGroupBodyLabel":"xform_label")
+                                },
+                                {ref:ZaAccount.A_zimbraMailDumpsterLifetime,
+                                    resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
+                                    type:_SUPER_LIFETIME1_,
+                                    msgName:ZaMsg.MSG_zimbraMailDumpsterLifetime,
+                                    txtBoxLabel:ZaMsg.LBL_zimbraMailDumpsterLifetime,
+									labelCssStyle:(appNewUI?"padding-left:10px; text-align:left;border-right:1px solid;":_UNDEFINED_),
+                                    labelCssClass:(appNewUI?"gridGroupBodyLabel":"xform_label"),
+                                    visibilityChecks:[[ZaItem.hasReadPermission], [ZaAccount.isEmailRetentionPolicyEnabled], [XForm.checkInstanceValue, ZaAccount.A_zimbraDumpsterEnabled, "TRUE"], [XForm.checkInstanceValue, ZaAccount.A_zimbraDumpsterPurgeEnabled, "TRUE"]],
+                                    visibilityChangeEventSources:[ZaAccount.A_zimbraDumpsterEnabled, ZaAccount.A_zimbraDumpsterPurgeEnabled]
                                 }
                             ]
                         },
@@ -3470,7 +3496,7 @@ nowrap:false, labelWrap:true,
                                                 [ZaAccount.A_zimbraMailTransport]]],
                                 items:[
                                 {ref:ZaAccount.A_zimbraMailTransport, type:_TEXTFIELD_, msgName:ZaMsg.NAD_MailTransport,label:ZaMsg.NAD_MailTransport,
-                                        labelLocation:_LEFT_, cssClass:"admin_xform_name_input", width:150
+                                        labelLocation:_LEFT_, cssClass:"admin_xform_name_input", width:220
                                 },
                             	{type:_OUTPUT_,ref:".",label:"", labelLocation:_LEFT_, value: ZaMsg.MSG_MailTransportMessage}
 

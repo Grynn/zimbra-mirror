@@ -1188,7 +1188,10 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 							{ref:ZaAccount.A_zimbraFeatureGalAutoCompleteEnabled, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraFeatureGalAutoCompleteEnabled,checkBoxLabel:ZaMsg.LBL_zimbraFeatureGalAutoCompleteEnabled,  trueValue:"TRUE", falseValue:"FALSE"},
 							{ref:ZaAccount.A_zimbraFeatureImportFolderEnabled, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraFeatureImportFolderEnabled,checkBoxLabel:ZaMsg.LBL_zimbraFeatureImportFolderEnabled,  trueValue:"TRUE", falseValue:"FALSE"},
                             {ref:ZaAccount.A_zimbraFeatureExportFolderEnabled, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraFeatureExportFolderEnabled,checkBoxLabel:ZaMsg.LBL_zimbraFeatureExportFolderEnabled,  trueValue:"TRUE", falseValue:"FALSE"},
-							{ref:ZaAccount.A_zimbraDumpsterEnabled, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraDumpsterEnabled,checkBoxLabel:ZaMsg.LBL_zimbraDumpsterEnabled,  trueValue:"TRUE", falseValue:"FALSE"}
+							{ref:ZaAccount.A_zimbraDumpsterEnabled, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.MSG_zimbraDumpsterEnabled,checkBoxLabel:ZaMsg.LBL_zimbraDumpsterEnabled,  trueValue:"TRUE", falseValue:"FALSE"},
+							{ref:ZaAccount.A_zimbraDumpsterPurgeEnabled, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.MSG_zimbraDumpsterPurgeEnabled,checkBoxLabel:ZaMsg.LBL_zimbraDumpsterPurgeEnabled,  trueValue:"TRUE", falseValue:"FALSE",
+								visibilityChecks:[[ZaItem.hasReadPermission], [XForm.checkInstanceValue, ZaAccount.A_zimbraDumpsterEnabled, "TRUE"]], visibilityChangeEventSources:[ZaAccount.A_zimbraDumpsterEnabled]
+							}
 						]
 					});
 			
@@ -2199,8 +2202,14 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 							]
 						});
 		}
-		if(ZAWizTopGrouper_XFormItem.isGroupVisible(entry,[ZaAccount.A_zimbraAdminAuthTokenLifetime,ZaAccount.A_zimbraAuthTokenLifetime,
-			ZaAccount.A_zimbraMailIdleSessionTimeout,ZaAccount.A_zimbraMailMessageLifetime,ZaAccount.A_zimbraMailTrashLifetime,ZaAccount.A_zimbraMailSpamLifetime],[])) {
+
+		if(ZAWizTopGrouper_XFormItem.isGroupVisible(entry,
+			[
+			ZaAccount.A_zimbraAdminAuthTokenLifetime,
+			ZaAccount.A_zimbraAuthTokenLifetime,
+			ZaAccount.A_zimbraMailIdleSessionTimeout,
+			ZaAccount.A_zimbraDumpsterUserVisibleAge
+			],[])) {
 			advancedCaseItems.push({type:_ZAWIZ_TOP_GROUPER_, colSizes:["auto"],numCols:1,
 							label:ZaMsg.NAD_TimeoutGrouper,	id:"timeout_settings",
 							items: [
@@ -2224,23 +2233,72 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 									msgName:ZaMsg.MSG_zimbraMailIdleSessionTimeout,
                                     colSizes:["200px", "80px", "220px", "*"],colSpan:1,
 									txtBoxLabel:ZaMsg.LBL_zimbraMailIdleSessionTimeout},
+								{ref:ZaAccount.A_zimbraDumpsterUserVisibleAge, type:_SUPERWIZ_LIFETIME_,
+                                    colSizes:["200px", "80px", "220px", "*"],colSpan:1,
+									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
+									msgName:ZaMsg.MSG_zimbraDumpsterUserVisibleAge, 
+									txtBoxLabel:ZaMsg.LBL_zimbraDumpsterUserVisibleAge,
+									visibilityChecks:[[ZaItem.hasReadPermission], [XForm.checkInstanceValue, ZaAccount.A_zimbraDumpsterEnabled, "TRUE"]],
+									visibilityChangeEventSources:[ZaAccount.A_zimbraDumpsterEnabled]
+								}
+
+
+							]
+						});
+		}
+
+
+		if(ZAWizTopGrouper_XFormItem.isGroupVisible(entry,
+			[
+				ZaAccount.A_zimbraMailMessageLifetime,
+				ZaAccount.A_zimbraMailTrashLifetime,
+				ZaAccount.A_zimbraMailSpamLifetime,
+				ZaAccount.A_zimbraMailDumpsterLifetime
+			],[])) {
+			advancedCaseItems.push({ type:_ZAWIZ_TOP_GROUPER_, colSizes:["auto"], numCols:1,
+                        	visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,
+                        			[ZaAccount.A_zimbraMailMessageLifetime,
+                        			ZaAccount.A_zimbraMailTrashLifetime,
+                        			ZaAccount.A_zimbraMailSpamLifetime,
+                        			ZaAccount.A_zimbraMailDumpsterLifetime
+									]],[XForm.checkInstanceValueNot,ZaAccount.A_zimbraIsExternalVirtualAccount,"TRUE"]],
+							label:ZaMsg.NAD_MailRetentionGrouper, id: "mailretention_settings",
+							items: [
+                                { type: _DWT_ALERT_,
+                                  containerCssStyle: "padding:0 10px 10px;width:100%;",
+                                  style: DwtAlert.INFO,
+                                  iconVisible: false,
+                                  content: ZaMsg.Alert_EnableMailRetention
+                                },
 								{ref:ZaAccount.A_zimbraMailMessageLifetime, type:_SUPERWIZ_LIFETIME2_, 
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 									msgName:ZaMsg.MSG_zimbraMailMessageLifetime,
                                     colSizes:["200px", "80px", "220px", "*"],colSpan:1,
+                                    visibilityChecks:[[ZaItem.hasReadPermission], [ZaAccount.isEmailRetentionPolicyEnabled]],
 									txtBoxLabel:ZaMsg.LBL_zimbraMailMessageLifetime},
 								{ref:ZaAccount.A_zimbraMailTrashLifetime, type:_SUPERWIZ_LIFETIME1_,
                                     colSizes:["200px", "80px", "220px", "*"],colSpan:1,
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.MSG_zimbraMailTrashLifetime,
+                                    visibilityChecks:[[ZaItem.hasReadPermission], [ZaAccount.isEmailRetentionPolicyEnabled]],
 									txtBoxLabel:ZaMsg.LBL_zimbraMailTrashLifetime},
 								{ref:ZaAccount.A_zimbraMailSpamLifetime, type:_SUPERWIZ_LIFETIME1_,
                                     colSizes:["200px", "80px", "220px", "*"],colSpan:1,
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 									msgName:ZaMsg.MSG_zimbraMailSpamLifetime,
-									txtBoxLabel:ZaMsg.LBL_zimbraMailSpamLifetime}
+                                    visibilityChecks:[[ZaItem.hasReadPermission], [ZaAccount.isEmailRetentionPolicyEnabled]],
+									txtBoxLabel:ZaMsg.LBL_zimbraMailSpamLifetime},
+								{ref:ZaAccount.A_zimbraMailDumpsterLifetime, type:_SUPERWIZ_LIFETIME1_,
+									colSizes:["200px", "80px", "220px", "*"],colSpan:1,
+									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
+									msgName:ZaMsg.MSG_zimbraMailDumpsterLifetime,
+									txtBoxLabel:ZaMsg.LBL_zimbraMailDumpsterLifetime,
+									visibilityChecks:[[ZaItem.hasReadPermission], [ZaAccount.isEmailRetentionPolicyEnabled], [XForm.checkInstanceValue, ZaAccount.A_zimbraDumpsterEnabled, "TRUE"], [XForm.checkInstanceValue, ZaAccount.A_zimbraDumpsterPurgeEnabled, "TRUE"]],
+									visibilityChangeEventSources:[ZaAccount.A_zimbraDumpsterEnabled, ZaAccount.A_zimbraDumpsterPurgeEnabled]
+								}
 							]
 						});
-		}		
+		}
+
 		cases.push({type:_CASE_, caseKey:ZaNewAccountXWizard.ADVANCED_STEP, tabGroupKey:ZaNewAccountXWizard.ADVANCED_STEP, id:"account_form_advanced_step", numCols:1, width:"100%", 
 				items:advancedCaseItems});
 	}

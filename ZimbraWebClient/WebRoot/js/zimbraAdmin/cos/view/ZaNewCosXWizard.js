@@ -312,6 +312,7 @@ ZaNewCosXWizard.FEATURE_TAB_ATTRS = [ZaCos.A_zimbraFeatureMailEnabled,
 	ZaCos.A_zimbraFeatureImportFolderEnabled,
     ZaCos.A_zimbraFeatureExportFolderEnabled,
 	ZaCos.A_zimbraDumpsterEnabled,
+	ZaCos.A_zimbraDumpsterPurgeEnabled,
 	ZaCos.A_zimbraFeatureMailSendLaterEnabled,
 	//ZaCos.A_zimbraFeatureFreeBusyViewEnabled,
     ZaCos.A_zimbraFeatureCalendarReminderDeviceEmailEnabled,
@@ -404,6 +405,8 @@ ZaNewCosXWizard.ADVANCED_TAB_ATTRS = [ZaCos.A_zimbraAttachmentsBlocked,
 	ZaCos.A_zimbraMailMessageLifetime,
 	ZaCos.A_zimbraMailTrashLifetime,
 	ZaCos.A_zimbraMailSpamLifetime,
+	ZaCos.A_zimbraDumpsterUserVisibleAge,
+	ZaCos.A_zimbraMailDumpsterLifetime,
 	ZaCos.A_zimbraFreebusyExchangeUserOrg,
         ZaCos.A_zimbraDataSourcePop3PollingInterval,
         ZaCos.A_zimbraDataSourceImapPollingInterval,
@@ -546,7 +549,8 @@ ZaNewCosXWizard.myXFormModifier = function(xFormObject, entry) {
 						ZaCos.A_zimbraFeatureGalAutoCompleteEnabled,
 						ZaCos.A_zimbraFeatureImportFolderEnabled,
                         ZaCos.A_zimbraFeatureExportFolderEnabled,
-						ZaCos.A_zimbraDumpsterEnabled
+						ZaCos.A_zimbraDumpsterEnabled,
+						ZaCos.A_zimbraDumpsterPurgeEnabled
 					]]
 				],
                 items:[
@@ -562,7 +566,10 @@ ZaNewCosXWizard.myXFormModifier = function(xFormObject, entry) {
 		    {ref:ZaCos.A_zimbraFeatureGalAutoCompleteEnabled, type:_WIZ_CHECKBOX_, msgName:ZaMsg.LBL_zimbraFeatureGalAutoCompleteEnabled,label:ZaMsg.LBL_zimbraFeatureGalAutoCompleteEnabled, trueValue:"TRUE", falseValue:"FALSE"},
                     {ref:ZaCos.A_zimbraFeatureImportFolderEnabled, type:_WIZ_CHECKBOX_, msgName:ZaMsg.LBL_zimbraFeatureImportFolderEnabled,label:ZaMsg.LBL_zimbraFeatureImportFolderEnabled, trueValue:"TRUE", falseValue:"FALSE"},
 		    		{ref:ZaCos.A_zimbraFeatureExportFolderEnabled, type:_WIZ_CHECKBOX_, msgName:ZaMsg.LBL_zimbraFeatureExportFolderEnabled,label:ZaMsg.LBL_zimbraFeatureExportFolderEnabled, trueValue:"TRUE", falseValue:"FALSE"},
-					{ref:ZaCos.A_zimbraDumpsterEnabled, type:_WIZ_CHECKBOX_, msgName:ZaMsg.LBL_zimbraDumpsterEnabled,label:ZaMsg.LBL_zimbraDumpsterEnabled, trueValue:"TRUE", falseValue:"FALSE"}
+					{ref:ZaCos.A_zimbraDumpsterEnabled, type:_WIZ_CHECKBOX_, msgName:ZaMsg.MSG_zimbraDumpsterEnabled,label:ZaMsg.LBL_zimbraDumpsterEnabled, trueValue:"TRUE", falseValue:"FALSE"},
+					{ref:ZaCos.A_zimbraDumpsterPurgeEnabled, type:_WIZ_CHECKBOX_, msgName:ZaMsg.MSG_zimbraDumpsterPurgeEnabled,label:ZaMsg.LBL_zimbraDumpsterPurgeEnabled, trueValue:"TRUE", falseValue:"FALSE",
+						visibilityChecks:[[ZaItem.hasReadPermission], [XForm.checkInstanceValue, ZaCos.A_zimbraDumpsterEnabled, "TRUE"]], visibilityChangeEventSources:[ZaCos.A_zimbraDumpsterEnabled]
+					}
                 ]
             },
             {type:_ZAWIZ_TOP_GROUPER_,  label:ZaMsg.NAD_zimbraMailFeature, id:"cos_form_features_mail",
@@ -1450,7 +1457,10 @@ ZaNewCosXWizard.myXFormModifier = function(xFormObject, entry) {
                 items: [
                     {ref:ZaCos.A_zimbraAdminAuthTokenLifetime, type:_LIFETIME_, msgName:ZaMsg.MSG_zimbraAdminAuthTokenLifetime,label:ZaMsg.LBL_zimbraAdminAuthTokenLifetime,labelLocation:_LEFT_},
                     {ref:ZaCos.A_zimbraAuthTokenLifetime, type:_LIFETIME_, msgName:ZaMsg.MSG_zimbraAuthTokenLifetime,label:ZaMsg.LBL_zimbraAuthTokenLifetime,labelLocation:_LEFT_},
-                    {ref:ZaCos.A_zimbraMailIdleSessionTimeout, type:_LIFETIME_, msgName:ZaMsg.MSG_zimbraMailIdleSessionTimeout,label:ZaMsg.LBL_zimbraMailIdleSessionTimeout,labelLocation:_LEFT_}
+                    {ref:ZaCos.A_zimbraMailIdleSessionTimeout, type:_LIFETIME_, msgName:ZaMsg.MSG_zimbraMailIdleSessionTimeout,label:ZaMsg.LBL_zimbraMailIdleSessionTimeout,labelLocation:_LEFT_},
+                    {ref:ZaCos.A_zimbraDumpsterUserVisibleAge, type:_LIFETIME_, msgName:ZaMsg.MSG_zimbraDumpsterUserVisibleAge, label:ZaMsg.LBL_zimbraDumpsterUserVisibleAge,
+                        visibilityChecks:[[ZaItem.hasReadPermission], [XForm.checkInstanceValue, ZaCos.A_zimbraDumpsterEnabled, "TRUE"]], visibilityChangeEventSources:[ZaCos.A_zimbraDumpsterEnabled]
+                    }
                 ]
             },
             {type:_ZAWIZ_TOP_GROUPER_,
@@ -1464,7 +1474,11 @@ ZaNewCosXWizard.myXFormModifier = function(xFormObject, entry) {
                     },
                     {ref:ZaCos.A_zimbraMailMessageLifetime, type:_LIFETIME2_, msgName:ZaMsg.MSG_zimbraMailMessageLifetime,label:ZaMsg.LBL_zimbraMailMessageLifetime,labelLocation:_LEFT_},
                     {ref:ZaCos.A_zimbraMailTrashLifetime, type:_LIFETIME1_, msgName:ZaMsg.MSG_zimbraMailTrashLifetime,label:ZaMsg.LBL_zimbraMailTrashLifetime, labelLocation:_LEFT_},
-                    {ref:ZaCos.A_zimbraMailSpamLifetime, type:_LIFETIME1_, msgName:ZaMsg.MSG_zimbraMailSpamLifetime,label:ZaMsg.LBL_zimbraMailSpamLifetime, labelLocation:_LEFT_}
+                    {ref:ZaCos.A_zimbraMailSpamLifetime, type:_LIFETIME1_, msgName:ZaMsg.MSG_zimbraMailSpamLifetime,label:ZaMsg.LBL_zimbraMailSpamLifetime, labelLocation:_LEFT_},
+                    {ref:ZaCos.A_zimbraMailDumpsterLifetime, type:_LIFETIME1_, msgName:ZaMsg.MSG_zimbraMailDumpsterLifetime, label:ZaMsg.LBL_zimbraMailDumpsterLifetime,
+                        visibilityChecks:[[ZaItem.hasReadPermission], [XForm.checkInstanceValue, ZaCos.A_zimbraDumpsterEnabled, "TRUE"], [XForm.checkInstanceValue, ZaCos.A_zimbraDumpsterPurgeEnabled, "TRUE"]],
+                        visibilityChangeEventSources:[ZaCos.A_zimbraDumpsterEnabled, ZaCos.A_zimbraDumpsterPurgeEnabled]
+                    }
                 ]
             },
             {type:_ZAWIZ_TOP_GROUPER_,
