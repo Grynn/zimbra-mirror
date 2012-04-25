@@ -1,0 +1,197 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0014)about:internet -->
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+ <meta name="generator" content="Adobe RoboHelp 9" />
+<title>Setting Up Zimbra Mobile Device Security Policies</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+ <script type="text/javascript" language="JavaScript">
+//<![CDATA[
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//]]>
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
+-->
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
+</head>
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.gbWhTopic)
+{
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
+	if (window.addTocInfo)
+	{
+	addButton("show",BTN_TEXT,"Show TOC","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	
+	
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../administration_console_help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+//]]></script>
+<p>&#160;</p>
+
+<h1>Setting Up Zimbra Mobile Device Security Policies</h1>
+<p>The following attributes can be configured either from the COS or individual account Mobile tab to enable the mobile device feature and establish rules for PIN and device lockout and local wipe initiation rules.</p>
+<table style="vertical-align: top; border-top-style: Solid; border-bottom-style: Solid; border-top-width: 1px; border-bottom-width: 1px;" cellspacing="0" width="100%">
+<col style="width: 38.193%;" />
+<col style="width: 61.807%;" />
+<tr style="vertical-align: top;">
+<td style="padding-right: 10px; padding-left: 10px; border-right-width: 1px; border-right-style: Solid; border-bottom-width: 1px; border-bottom-style: Solid; vertical-align: middle;">
+<p style="font-weight: bold;">Enable Mobile Sync</p>
+</td>
+<td style="padding-right: 10px; padding-left: 10px; border-bottom-width: 1px; border-bottom-style: Solid; vertical-align: middle;">
+<p>In order for mobile devices to sync to Zimbra Collaboration Server, <span style="font-weight: bold;"><b>Enable Mobile Sync</b></span> must be checked. Users have &#160;two-way, over the air synchronization of mail, contacts, and calendar data between mobile devices and the Zimbra server. &#160;</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td style="padding-right: 10px; padding-left: 10px; border-right-width: 1px; border-right-style: Solid; border-bottom-width: 1px; border-bottom-style: Solid; vertical-align: middle;">
+<p style="font-weight: bold;">Enable Mobile Policy</p>
+</td>
+<td style="padding-right: 10px; padding-left: 10px; border-bottom-width: 1px; border-bottom-style: Solid; vertical-align: middle;">
+<p>Check this box to set up mobile security policies that enforce security rules on compliant mobile devices. You can enforce general security policies including password rules and set up <a href="mobile_device_wipe.htm">local wipe</a> capability on compliant devices.</p>
+<ul>
+<li class="p-note">
+<p class="note" style="margin-left: 0px;">Only WM6 devices and IPhones support security policies set by the server. Older devices do not respond to security policies.</p>
+</li>
+</ul>
+<p>After the mobile policy is set up, the next time a mobile device sends a request to the server, mobile devices that are capable of enforcing security policies automatically set up the rules you implement and immediately enforces them.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td colspan="2" style="padding-right: 10px; padding-left: 10px; border-bottom-width: 1px; border-bottom-style: Solid; vertical-align: middle;">
+<p>&#160;</p>
+<h6>Mobile Policy Settings</h6>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td style="padding-right: 10px; padding-left: 10px; border-right-width: 1px; border-right-style: Solid; border-bottom-width: 1px; border-bottom-style: Solid; vertical-align: middle;">
+<p style="font-weight: bold;">Allow non-provisionable devices</p>
+</td>
+<td style="padding-right: 10px; padding-left: 10px; border-bottom-width: 1px; border-bottom-style: Solid; vertical-align: middle;">
+<p>If this is enabled, old devices that do not support device security policy enforcement can still access the server.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td style="padding-right: 10px; padding-left: 10px; border-right-width: 1px; border-right-style: Solid; border-bottom-width: 1px; border-bottom-style: Solid; vertical-align: middle;">
+<p style="font-weight: bold;">Allow partial policy enforcement on device</p>
+</td>
+<td style="padding-right: 10px; padding-left: 10px; border-bottom-width: 1px; border-bottom-style: Solid; vertical-align: middle;">
+<p>Devices that are capable of enforcing only parts of the mobile security policy can still be used. For example, the policy requires an alphanumeric PIN, but a device that only supports numbered PINs could still be used.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td style="padding-right: 10px; padding-left: 10px; border-right-width: 1px; border-right-style: Solid; border-bottom-width: 1px; border-bottom-style: Solid; vertical-align: middle;">
+<p style="font-weight: bold;">Force PIN on device</p>
+</td>
+<td style="padding-right: 10px; padding-left: 10px; border-bottom-width: 1px; border-bottom-style: Solid; vertical-align: middle;">
+<p>Force the user to create a personal identification number on the mobile device.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td style="padding-right: 10px; padding-left: 10px; border-right-width: 1px; border-right-style: Solid; border-bottom-width: 1px; border-bottom-style: Solid; vertical-align: middle;">
+<p style="font-weight: bold;">Require alpha-numeric password for device</p>
+</td>
+<td style="padding-right: 10px; padding-left: 10px; border-bottom-width: 1px; border-bottom-style: Solid; vertical-align: middle;">
+<p>Require that the password include both numeric and alpha characters.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td colspan="2" style="padding-right: 10px; padding-left: 10px; border-bottom-width: 1px; border-bottom-style: Solid; vertical-align: middle;">
+<h6>&#160;</h6>
+<h6>Password Strength Policy Settings</h6>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td style="padding-right: 10px; padding-left: 10px; border-right-width: 1px; border-right-style: Solid; border-bottom-width: 1px; border-bottom-style: Solid; vertical-align: middle;">
+<p style="font-weight: bold;">Minimum length of device PIN</p>
+</td>
+<td style="padding-right: 10px; padding-left: 10px; border-bottom-width: 1px; border-bottom-style: Solid; vertical-align: middle;">
+<p>This specifies the minimum length of the PIN.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td style="padding-right: 10px; padding-left: 10px; border-right-width: 1px; border-right-style: Solid; border-bottom-width: 1px; border-bottom-style: Solid; vertical-align: middle;">
+<p style="font-weight: bold;">Number of consecutive incorrect PIN input before device is wiped</p>
+</td>
+<td style="padding-right: 10px; padding-left: 10px; border-bottom-width: 1px; border-bottom-style: Solid; vertical-align: middle;">
+<p>The number of failed login attempts to the device before the device automatically initiates a <a href="mobile_device_wipe.htm">local wipe</a>. The device does not need to contact the server for this to happen.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td style="padding-right: 10px; padding-left: 10px; border-right-width: 1px; border-right-style: Solid; vertical-align: middle;">
+<p style="font-weight: bold;">Idle time before device is locked (Minutes)</p>
+</td>
+<td style="padding-right: 10px; padding-left: 10px; vertical-align: middle;">
+<p>How long the device remains active when not in use before the device is locked. To unlock the device, users must enter their PIN.</p>
+</td>
+</tr>
+</table>
+<p>&#160;</p>
+<hr style="color: #000000; background-color: #000000;" size="1" width="50%" 
+	 align="left" />
+<p>Copyright © 2012 
+ VMware, Inc. All rights reserved.</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+
+
+highlightSearch();
+//-->
+//]]></script>
+</body>
+</html>
