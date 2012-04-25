@@ -25,6 +25,8 @@ AjxVector = function(array) {
 	this._array = array || [];
 };
 
+AjxVector.prototype.isAjxVector = true;
+
 /**
  * Returns a string representation of the object.
  * 

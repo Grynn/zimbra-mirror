@@ -786,13 +786,24 @@ function(hash1, hash2, overwrite, ignore) {
 // can get lost in new window
 AjxUtil.isArray1 =
 function(arg) {
-	return Boolean(arg && (arg.length != null) && arg.splice && arg.slice);
+	return !!(arg && (arg.length != null) && arg.splice && arg.slice);
 };
 
 // converts the arg to an array if it isn't one
 AjxUtil.toArray =
 function(arg) {
-	return AjxUtil.isArray1(arg) ? arg : (arg === undefined) ? [] : [arg];
+	if (!arg) {
+		return [];
+	}
+	else if (AjxUtil.isArray1(arg)) {
+		return arg;
+	}
+	else if (arg.isAjxVector) {
+		return arg.toArray();
+	}
+	else {
+		return [arg];
+	}
 };
 
 /**
