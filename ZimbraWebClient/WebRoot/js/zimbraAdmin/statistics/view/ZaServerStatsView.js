@@ -57,26 +57,13 @@ ZaServerStatsView = function(parent) {
     if(appNewUI){
         this._tabBar.setVisible(false); //new UI doesn't need to show the inner tabbar
     }
+    // TODO move add page to constructor function and not in setObject function
+    this._lastWidth = 0;
+    this._lastHeight = 0;
 }
 
 ZaServerStatsView.prototype = new DwtTabView;
 ZaServerStatsView.prototype.constructor = ZaServerStatsView;
-
-
-
-//ZaServerStatsView.prototype.getOneServersMtaServiceStatus = function( serverName ){
-//	
-//	allServersMtaServiceEnableStatus = ZaGlobalStatsView.prototype.getAllServersMtaServiceStatus();
-//  if( !allServersMtaServiceEnableStatus ){
-//  	return false;
-//  }
-//	
-//	if( allServersMtaServiceEnableStatus[serverName] ){
-//		return allServersMtaServiceEnableStatus[serverName];
-//	}
-//	return false;
-//		
-//}
 
 ZaServerStatsView.prototype.getOneServersMtaServiceStatus = function( by, val ){
 
@@ -142,17 +129,6 @@ ZaServerStatsView.prototype._isMtaEnable = function( id ){
 	}
 	return ZaServerStatsView.prototype.getOneServersMtaServiceStatus( "id", id );
 }
-
-//ZaServerStatsView.prototype._isMtaEnable = function( name ){
-//	
-//	if ( !name ){
-//		return false;
-//	}
-
-	//return ZaServerStatsView.prototype.getOneServersMtaServiceStatus( name ) ;
-//}
-
-
 
 ZaServerStatsView.prototype.toString = 
 function() {
@@ -255,10 +231,16 @@ function(entry) {
     if (!appNewUI){
 		this.updateTab (); //new UI doesn't have the top level tab
 	}
+
+    // Only a hook here to resize all the page
+    if (this._lastWidth && this._lastHeight)
+        this._resetTabSizes(this._lastWidth, this._lastHeight);
 }
 
 ZaServerStatsView.prototype._resetTabSizes = 
 function (width, height) {
+    this._lastWidth = width;
+    this._lastHeight = height;
     var tabBarSize = this._tabBar.getSize();
 	var titleCellSize = Dwt.getSize(this.titleCell);
 

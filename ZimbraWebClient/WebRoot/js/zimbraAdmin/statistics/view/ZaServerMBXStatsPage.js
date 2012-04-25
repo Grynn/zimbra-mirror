@@ -27,7 +27,7 @@
 		
 ZaServerMBXStatsPage = function(parent) {
 	DwtTabViewPage.call(this, parent);
-
+    this.setScrollStyle(Dwt.SCROLL_Y);
 	this._rendered = false;
 	this._initialized = false ;
 	this._hide = true ; //indicate that the Mbx Quota Tab is hidden
@@ -87,8 +87,8 @@ ZaServerMBXStatsPage.prototype._render = function (server) {
 };
 
 //data instance of the xform
-ZaServerMBXStatsPage.prototype.getMbxes = function ( targetServer, offset, sortBy, sortAscending  ){
-	var result = { totalPage: 0, curPage:0, mbxes: new Array() };
+ZaServerMBXStatsPage.prototype.getMbxes = function ( targetServer, offset, sortBy, sortAscending, callback){
+	var result = { totalPage: 0, curPage:0, hasMore: false, mbxes: new Array() };
 	var soapDoc = AjxSoapDoc.create("GetQuotaUsageRequest", ZaZimbraAdmin.URN, null);
 	
 	this._prevAscending = sortAscending ;
@@ -114,18 +114,27 @@ ZaServerMBXStatsPage.prototype.getMbxes = function ( targetServer, offset, sortB
 	soapDoc.getMethod().setAttribute("refresh", "1");
 	//use refresh="1" to force server side re-calculating quota and ignore cached data.
 
-	//var getQuotaUsageCmd = new ZmCsfeCommand ();
 	var params = new Object ();
 	params.soapDoc = soapDoc ;
 	params.targetServer = targetServer ;
+    var isAsyncMode = callback? true: false;
+    if (isAsyncMode) {
+        params.asyncMode = true;
+        params.callback = callback;
+    }
 	var reqMgrParams = {
 		controller : ZaApp.getInstance().getCurrentController(),
 		busyMsg : ZaMsg.BUSY_GET_QUOTA
 	}
-	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetQuotaUsageResponse;
+	var resp = ZaRequestMgr.invoke(params, reqMgrParams);
+    if (isAsyncMode) {
+        return resp;
+    } else {
+        resp = resp.Body.GetQuotaUsageResponse;
+    }
 	
 	if ((resp.account && resp.account.length > 0) && (resp.searchTotal && resp.searchTotal > 0)){	
-		var more = resp.more ;
+		result.hasMore = resp.more ;
 		var totalMbxes = resp.searchTotal;
 		
 		result.totalPage = parseInt (Math.ceil(totalMbxes / ZaServerMBXStatsPage.MBX_DISPLAY_LIMIT ));
@@ -195,18 +204,50 @@ ZaServerMBXStatsPage.prototype._getXForm = function () {
 					
 	    items:[
 	      	//Convert to the listview
-		   	{ref:"mbxPool", type:_DWT_LIST_, width:"100%",  cssClass: "MBXList", defaultColumnSortable: defaultColumnSortable,	    	
-						   		forceUpdate: true, widgetClass:ZaServerMbxListView, headerList:sourceHeaderList}
+		   	{ref:"mbxPool", type:_DWT_LIST_, id: "mbxPool", width:"100%",  cssClass: "MBXList", defaultColumnSortable: defaultColumnSortable,
+                getCustomWidth:ZaServerMBXStatsPage.getCustomWidth, getCustomHeight:ZaServerMBXStatsPage.getCustomHeight,
+				forceUpdate: true, widgetClass:ZaServerMbxListView, headerList:sourceHeaderList}
 		]	    
 	};		   
 
 	return this._xform;
 };
 
+ZaServerMBXStatsPage.getCustomWidth = function () {
+    var page = this.getForm().parent;
+    if (page._rendered) {
+        var bounds = page.getBounds();
+        return bounds.width;
+    }
+    return "100%"
+}
+
+ZaServerMBXStatsPage.getCustomHeight = function () {
+    var page = this.getForm().parent;
+    if (page._rendered) {
+        var bounds = page.getBounds();
+        return bounds.height;
+    }
+    return "100%"
+}
+
 //this function is called when user switch to the mbx quota tab
 ZaServerMBXStatsPage.prototype.showMe = 
 function (refresh){
-	DwtTabViewPage.prototype.showMe.call(this);
+	this.setZIndex(DwtTabView.Z_ACTIVE_TAB);
+
+	if (this.parent.getHtmlElement().offsetHeight > 26) { 						// if parent visible, use offsetHeight
+		this._contentEl.style.height=this.parent.getHtmlElement().offsetHeight-26;
+	} else {
+		var parentHeight = parseInt(this.parent.getHtmlElement().style.height);	// if parent not visible, resize page to fit parent
+		var units = AjxStringUtil.getUnitsFromSizeString(this.parent.getHtmlElement().style.height);
+		if (parentHeight > 26) {
+			this._contentEl.style.height = (Number(parentHeight-26).toString() + units);
+		}
+	}
+
+	this._contentEl.style.width = this.parent.getHtmlElement().style.width;	// resize page to fit parent
+
 	var instance = null ;
 
 	if ( !this._initialized || refresh) {
@@ -232,6 +273,14 @@ function (refresh){
 		
 		var xform = this._view ;
 		xform.setInstance( instance );
+
+        if (!this._initialized) {
+            var parentBounds = this.parent.getBounds();
+            this.setSize(parentBounds.width, parentBounds.height);
+        }
+
+        this.mbxPoolWidget = xform.getItemById(xform.getId()+ "_mbxPool").getWidget();
+        this.mbxPoolWidget.setScrollHasMore(mbxesObj.hasMore);
 		this._initialized = true ;
 	}else{
 		instance = this._view.getInstance();
@@ -270,6 +319,7 @@ function (curInstance, serverid, offset, sortBy, sortAscending) {
 	var xform = this._view ;
 	xform.parent.updateToolbar(curInstance.curPage, curInstance.totalPage);
 	xform.setInstance(curInstance) ;
+    this.mbxPoolWidget.setScrollHasMore(mbxesObj.hasMore);
 }; 
 
 ZaServerMBXStatsPage.prototype.updateToolbar = 
@@ -320,15 +370,9 @@ function (curPage, totalPage, hide ){
 
 ZaServerMbxListView = function(parent, className, posStyle, headerList) {
 	var posStyle = DwtControl.ABSOLUTE_STYLE;
-	ZaListView.call(this, parent, className, posStyle, headerList);
-	//hacking to display the scroll bar for the mbx lists.
-	//it works for FF only. and For IE, need to set the cssTableStyle: height: 100%	
-	//htmlDiv is the MBXList class
-	//var htmlDiv = this.getHtmlElement();	
-	//htmlDiv.style.height = "100%" ;
-	
-	this._listDiv.style.overflow = "auto";
-	this._listDiv.style.height = "97%";	//to display the surround border of the shell
+	ZaListView.call(this, parent, className, posStyle, headerList, undefined, undefined, true);
+    // For IE fix scroll everywhere issue;
+    this.setLocation(0,0);
 }
 
 ZaServerMbxListView.prototype = new ZaListView;
@@ -349,7 +393,7 @@ function(mbx, now, isDragProxy) {
 	div.style.height = "20";
 	
 	var idx = 0;
-	html[idx++] = "<table width='100%'  height='20' cellspacing='2' cellpadding='0'>";
+	html[idx++] = "<table width='100%'  cellspacing='2' cellpadding='0'>";
 
 	html[idx++] = "<tr>";
 	if(this._headerList) {
@@ -435,6 +479,62 @@ ZaServerMbxListView.prototype._sortColumn = function (columnItem, bSortAsc){
 	var curInst = xform.getInstance();
 	var mbxPage = xform.parent ;
 	mbxPage.updateMbxLists(curInst, null, 0, sortBy, sortAscending );
-	
 };
+
+ZaServerMbxListView.prototype._loadMsg = function(params) {
+    var offset = params.offset;
+    var instance = this.parent.getInstance();
+    var server = instance.serverid;
+    var sortBy = instance.sortBy;
+    var sortAscending = instance.sortAscending;
+    var limit = params.limit;
+    var updateCallback = new AjxCallback(this, this.updateMoreItems);
+    ZaServerMBXStatsPage.prototype.getMbxes.call(this.parent.parent, server, offset, sortBy, sortAscending, updateCallback);
+
+}
+
+ZaServerMbxListView.prototype.updateMoreItems = function(resp) {
+    if (resp && !resp.isException()) {
+        resp = resp.getResponse().Body.GetQuotaUsageResponse;
+
+        if ((resp.account && resp.account.length > 0) && (resp.searchTotal && resp.searchTotal > 0)){
+            var hasMore = resp.more ;
+            var totalMbxes = resp.searchTotal;
+
+            var accounts = resp.account ;
+            var quotaLimit = 0;
+            var percentage = 0 ;
+            var diskUsed = 0;
+            var _1MB = 1048576 ;
+            var accountArr = new Array ();
+
+            for (var i=0; i<accounts.length; i ++){
+                diskUsed = ( accounts[i].used / _1MB ).toFixed(2) ;
+
+                if (accounts[i].limit == 0 ){
+                    quotaLimit = ZaMsg.Unlimited;
+                    percentage = 0 ;
+                }else{
+                    if (accounts[i].limit >= _1MB) {
+                        quotaLimit = ( accounts[i].limit / _1MB ).toFixed() ;
+                    }else{ //quota limit is too small, we set it to 1MB. And it also avoid the NaN error when quotaLimit = 0
+                        quotaLimit = 1 ;
+                    }
+                    percentage = ((diskUsed * 100) / quotaLimit).toFixed() ;
+                }
+
+                accountArr[i] = { 	account : accounts[i].name,
+                                    diskUsage :  AjxMessageFormat.format (ZaMsg.MBXStats_DISK_MSB, [diskUsed]),
+                                    quotaUsage : percentage + "\%" ,
+                                    quota: quotaLimit + " MB"
+                                    };
+                //need to override the toString method, so when XForm does the element comparison, it will return the correct result
+                //it is required when xform list needs to be update.
+                accountArr[i].toString = function (){ return this.account ; };
+            }
+            this.replenish(AjxVector.fromArray(accountArr));
+            this.setScrollHasMore(hasMore);
+        }
+    }
+}
 

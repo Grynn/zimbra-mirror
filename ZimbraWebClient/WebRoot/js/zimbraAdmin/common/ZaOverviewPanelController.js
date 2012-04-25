@@ -2275,7 +2275,6 @@ ZaOverviewPanelController.xformTabTreeListener = function(ev) {
     }
     if(!AjxUtil.isEmpty(currentView._localXForm)){ //some views of zimlets are created by dwt
         currentView._localXForm.setInstanceValue(stepValue, ZaModel.currentTab);
-        currentView._localXForm.refresh() ;
     }
 
 }
@@ -2306,7 +2305,6 @@ ZaOverviewPanelController.xformTreeListener = function(ev) {
 
     if(!AjxUtil.isEmpty(currentView._localXForm)){ //some views of zimlets are created by dwt
         currentView._localXForm.setInstanceValue(stepValue, ZaModel.currentTab);
-        currentView._localXForm.refresh() ;
     }
 }
 

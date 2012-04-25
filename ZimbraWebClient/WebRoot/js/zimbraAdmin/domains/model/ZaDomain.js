@@ -330,6 +330,8 @@ ZaDomain.A2_new_internal_gal_polling_interval = "new_internal_gal_polling_interv
 ZaDomain.A2_new_external_gal_polling_interval = "new_external_gal_polling_interval";
 ZaDomain.A2_gal_sync_accounts_set = "gal_sync_accounts_set";
 ZaDomain.A2_create_gal_acc = "create_gal_acc";
+
+ZaDomain.A2_domain_account_quota = "domain_account_quota";
 //result codes returned from Check* requests
 ZaDomain.Check_OK = "check.OK";
 ZaDomain.Check_UNKNOWN_HOST="check.UNKNOWN_HOST";
@@ -361,6 +363,7 @@ ZaDomain.RIGHT_CREATE_ALIAS = "createAlias";
 ZaDomain.RIGHT_ADMIN_LOGIN_AS = "adminLoginAs";
 ZaDomain.RIGHT_CHECK_MX_RECORD = "checkDomainMXRecord";
 ZaDomain.CHECK_AUTH_CONFIG = "checkExchangeAuthConfig";
+ZaDomain.RIGHT_GET_DOMAIN_QUOTA = "getDomainQuotaUsage";
 ZaDomain.cacheCounter = 0;
 ZaDomain.staticDomainByNameCacheTable = {};
 ZaDomain.staticDomainByIdCacheTable = {};
@@ -1786,6 +1789,69 @@ function(tmods,tmpObj) {
 }
 ZaItem.modifyMethods["ZaDomain"].push(ZaDomain.modifyMethod);
 
+ZaDomain.getAccountQuota = function ( name, offset, limit, sortBy, sortAscending, callback){
+	var soapDoc = AjxSoapDoc.create("GetQuotaUsageRequest", ZaZimbraAdmin.URN, null);
+
+	if (sortBy == null || sortBy == ZaAccountQuota.A2_diskUsage) {
+		sortBy = "totalUsed" ;
+	}else if (sortBy == ZaAccountQuota.A2_quotaUsage){
+		sortBy = "percentUsed" ;
+	}else if (sortBy == ZaAccountQuota.A2_quota){
+		sortBy = "quotaLimit";
+	}else if (sortBy == ZaAccountQuota.A2_name){
+		sortBy = "account";
+	} else {
+		sortBy = "totalUsed";
+	}
+	soapDoc.getMethod().setAttribute("sortBy", sortBy );
+	if (sortAscending) {
+		soapDoc.getMethod().setAttribute("sortAscending", sortAscending);
+	}
+
+    limit = limit ? limit : ZaSettings.RESULTSPERPAGE;
+	soapDoc.getMethod().setAttribute("offset", offset);
+	soapDoc.getMethod().setAttribute("limit", ZaServerMBXStatsPage.MBX_DISPLAY_LIMIT);
+	soapDoc.getMethod().setAttribute("refresh", "1");
+    if (name) {
+        soapDoc.getMethod().setAttribute("domain", name);
+    }
+	//use refresh="1" to force server side re-calculating quota and ignore cached data.
+
+	var params = new Object ();
+	params.soapDoc = soapDoc ;
+    var isAsyncMode = callback? true: false;
+    if (isAsyncMode) {
+        params.asyncMode = true;
+        params.callback = callback;
+    }
+	var reqMgrParams = {
+		controller : ZaApp.getInstance().getCurrentController(),
+		busyMsg : ZaMsg.BUSY_GET_QUOTA
+	}
+	var resp = ZaRequestMgr.invoke(params, reqMgrParams);
+    if (isAsyncMode) {
+        return resp;
+    } else {
+        resp = resp.Body.GetQuotaUsageResponse;
+    }
+
+    var result = { hasMore: false, mbxes: new Array() };
+	if ((resp.account && resp.account.length > 0) && (resp.searchTotal && resp.searchTotal > 0)){
+		result.hasMore = resp.more ;
+
+		var accounts = resp.account ;
+		var accountArr = new Array ();
+
+		for (var i=0; i<accounts.length; i ++){
+            accountArr[i] = new ZaAccountQuota(accounts[i]);
+		}
+
+		result.mbxes = accountArr ;
+	}
+
+	return result;
+};
+
 ZaDomain.prototype.initFromJS = 
 function (obj) {
     ZaItem.prototype.initFromJS.call(this, obj);
@@ -2253,18 +2319,13 @@ ZaDomain.myXModel = {
                 {id:ZaDomain.A2_new_internal_gal_polling_interval, type:_MLIFETIME_, ref:ZaDomain.A2_new_internal_gal_polling_interval, defaultValue: "1d"},
                 {id:ZaDomain.A2_new_external_gal_polling_interval, type:_MLIFETIME_, ref:ZaDomain.A2_new_external_gal_polling_interval, defaultValue: "1d"}
             ]
-        }},/*
-		{id:ZaDomain.A2_new_gal_sync_account_name, type:_STRING_, ref:ZaDomain.A2_new_gal_sync_account_name},
-		{id:ZaDomain.A2_new_internal_gal_ds_name, type:_STRING_, ref:ZaDomain.A2_new_internal_gal_ds_name},
-		{id:ZaDomain.A2_new_external_gal_ds_name, type:_STRING_, ref:ZaDomain.A2_new_external_gal_ds_name},
-		{id:ZaDomain.A2_new_internal_gal_polling_interval, type:_MLIFETIME_, ref:ZaDomain.A2_new_internal_gal_polling_interval},
-		{id:ZaDomain.A2_new_external_gal_polling_interval, type:_MLIFETIME_, ref:ZaDomain.A2_new_external_gal_polling_interval},*/
+        }},
 		{id:ZaDomain.A2_gal_sync_accounts, type:_LIST_, listItem:{type:_OBJECT_, items:ZaAccount.myXModel.items}, ref:ZaDomain.A2_gal_sync_accounts},
 		{id:ZaDomain.A_AuthLdapUserDn, type:_STRING_,ref:"attrs/" + ZaDomain.A_AuthLdapUserDn},
 		{id:ZaDomain.A_zimbraAuthLdapStartTlsEnabled, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/" + ZaDomain.A_zimbraAuthLdapStartTlsEnabled},
-		{id:ZaDomain.A_AuthLDAPServerName, type:_STRING_, ref:"attrs/" + ZaDomain.A_AuthLDAPServerName},
+		//{id:ZaDomain.A_AuthLDAPServerName, type:_STRING_, ref:"attrs/" + ZaDomain.A_AuthLDAPServerName},
 		{id:ZaDomain.A_AuthLDAPSearchBase, type:_STRING_, ref:"attrs/" + ZaDomain.A_AuthLDAPSearchBase},
-		{id:ZaDomain.A_AuthLDAPServerPort, type:_NUMBER_, ref:"attrs/" + ZaDomain.A_AuthLDAPServerPort, maxInclusive:2147483647},
+		//{id:ZaDomain.A_AuthLDAPServerPort, type:_NUMBER_, ref:"attrs/" + ZaDomain.A_AuthLDAPServerPort, maxInclusive:2147483647},
 		{id:ZaDomain.A_AuthMech, type:_STRING_, ref:"attrs/" + ZaDomain.A_AuthMech},
 		{id:ZaDomain.A_AuthLdapURL, type:_LIST_,  listItem:{type:_SHORT_URL_}, ref:"attrs/" + ZaDomain.A_AuthLdapURL},
 		{id:ZaDomain.A_AuthADDomainName, type:_STRING_, ref:"attrs/" + ZaDomain.A_AuthADDomainName},
@@ -2438,7 +2499,8 @@ ZaDomain.myXModel = {
                  type:_LIST_ , dataType: _STRING_ ,outputType:_LIST_ },
       { id:ZaDomain.A_zimbraDomainFeatureMaxAccounts, ref:"attrs/" + ZaDomain.A_zimbraDomainFeatureMaxAccounts ,
                         type:_LIST_ , dataType: _STRING_ ,outputType:_LIST_ },
-
+      // domain account quota
+      { id:ZaDomain.A2_domain_account_quota, ref: ZaDomain.A2_domain_account_quota, type:_LIST_, listItem: {type:_OBJECT_} },
        //skin properties
       { id:ZaDomain.A_zimbraSkinForegroundColor, ref:"attrs/" + ZaDomain.A_zimbraSkinForegroundColor, type: _COS_STRING_ },
       { id:ZaDomain.A_zimbraSkinBackgroundColor, ref:"attrs/" + ZaDomain.A_zimbraSkinBackgroundColor, type: _COS_STRING_ },
