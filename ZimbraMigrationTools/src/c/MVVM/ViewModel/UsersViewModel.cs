@@ -29,6 +29,7 @@ public class UsersViewModel: BaseViewModel
         this.NextCommand = new ActionCommand(this.Next, () => true);
         this.Username = username;
         this.MappedName = mappedname;
+        this.OPInfo = new ObjectPickerInfo("", "", "", "");
         this.IsProvisioned = false;
         this.EnablePopButtons = true;
     }
@@ -74,8 +75,9 @@ public class UsersViewModel: BaseViewModel
             {
                 uname = uname.Substring(0, uname.IndexOf("@"));
             }
-            UsersList.Add(new UsersViewModel(displayname, uname));
-            OPInfoList.Add(new ObjectPickerInfo(displayname, givenname, sn, zfp));
+            UsersViewModel uvm = new UsersViewModel(displayname, uname);
+            uvm.AddOPInfo(new ObjectPickerInfo(displayname, givenname, sn, zfp));
+            UsersList.Add(uvm);
 
             ScheduleViewModel scheduleViewModel =
                 ((ScheduleViewModel)ViewModelPtrs[(int)ViewType.SCHED]);
@@ -493,6 +495,19 @@ public class UsersViewModel: BaseViewModel
         }
     }
 
+    public ObjectPickerInfo GetOPInfo()
+    {
+        return OPInfo;
+    }
+
+    private void AddOPInfo(ObjectPickerInfo info)
+    {
+        OPInfo.DisplayName = info.DisplayName;
+        OPInfo.GivenName = info.GivenName;
+        OPInfo.Sn = info.Sn;
+        OPInfo.Zfp = info.Zfp;
+    }
+
     // //////////////////////
 
     private ObservableCollection<UsersViewModel> userslist =
@@ -508,12 +523,7 @@ public class UsersViewModel: BaseViewModel
             domainlist = value;
         }
     }
-    private ObservableCollection<ObjectPickerInfo> opinfolist =
-        new ObservableCollection<ObjectPickerInfo>();
-    public ObservableCollection<ObjectPickerInfo> OPInfoList
-    {
-        get { return opinfolist; }
-    }
+    ObjectPickerInfo OPInfo;
     public string Username {
         get { return m_users.Username; }
         set

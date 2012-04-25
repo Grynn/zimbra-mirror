@@ -230,26 +230,27 @@ public class ScheduleViewModel: BaseViewModel
                         string givenName = "";
                         string sn = "";
                         string zfp = "";
-                        if (usersViewModel.OPInfoList.Count > 0)
+
+                        // FBS bug 73395 -- 4/25/12
+                        ObjectPickerInfo opinfo = usersViewModel.GetOPInfo();
+                        if (opinfo.DisplayName.Length > 0)
                         {
-                            if (usersViewModel.OPInfoList[i].DisplayName.Length > 0)
-                            {
-                                displayName = usersViewModel.OPInfoList[i].DisplayName;
-                            }
-                            if (usersViewModel.OPInfoList[i].GivenName.Length > 0)
-                            {
-                                givenName = usersViewModel.OPInfoList[i].GivenName;
-                            }
-                            if (usersViewModel.OPInfoList[i].Sn.Length > 0)
-                            {
-                                sn = usersViewModel.OPInfoList[i].Sn;
-                            }
-                            if (usersViewModel.OPInfoList[i].Zfp.Length > 0)
-                            {
-                                zfp = usersViewModel.OPInfoList[i].Zfp;
-                            }
+                            displayName = opinfo.DisplayName;
                         }
-                        //////////////
+                        if (opinfo.GivenName.Length > 0)
+                        {
+                            givenName = opinfo.GivenName;
+                        }
+                        if (opinfo.Sn.Length > 0)
+                        {
+                            sn = opinfo.Sn;
+                        }
+                        if (opinfo.Zfp.Length > 0)
+                        {
+                            zfp = opinfo.Zfp;
+                        }
+                        // end 73395
+                        // end 71646
 
                         if (zimbraAPI.CreateAccount(accountName, displayName, givenName, sn, zfp, defaultPWD, cosID) == 0)
                         {
