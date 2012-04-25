@@ -19,14 +19,23 @@
 <key name="address completion in mail" >
   <topic name="Using address lookup" url="Creating_Messages/Using_address_lookup.htm" />
 </key>
+<key name="attaching files from Briefcase" >
+  <topic name="Attaching files to a mail message" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
+</key>
 <key name="attachment file types supported" >
   <topic name="Attachment File Types Supported" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
 </key>
 <key name="attachments" >
   <topic name="Opening file attachments" url="reading_mail/opening_file_attachments.htm" />
 </key>
+<key name="attachments not found in search" >
+  <topic name="Search Issues with Non-Western Language Attachments" url="Search/Search_Issues_with_Non-Western_Language_Attachments.htm" />
+</key>
 <key name="auto-complete addresses" >
   <topic name="Using address lookup" url="Creating_Messages/Using_address_lookup.htm" />
+</key>
+<key name="briefcase, attaching files to email" >
+  <topic name="Attaching files to a mail message" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
 </key>
 <key name="calendar view" >
   <topic name="Calendar_Views" url="Calendar/Calendar_Views.htm" />
@@ -57,6 +66,15 @@
 </key>
 <key name="email message" >
   <topic name="Parts of an Email Message" url="Creating_Messages/parts_of_an_email_message.htm" />
+</key>
+<key name="email notification" >
+  <topic name="Setting Email and SMS Reminder Notification" url="Userspecific/Setting_Email_and_SMS_Reminder_Notification.htm" />
+</key>
+<key name="EUC-JP" >
+  <topic name="Search Issues with Non-Western Language Attachments" url="Search/Search_Issues_with_Non-Western_Language_Attachments.htm" />
+</key>
+<key name="files, attaching" >
+  <topic name="Attaching files to a mail message" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
 </key>
 <key name="filter condition" >
   <topic name="Filter Conditions and Actions Supported" url="filters/filter_conditions_and_actions_supported.htm" />
@@ -143,6 +161,9 @@
 <key name="remember me on this computer" >
   <topic name="Logging on and off" url="Userspecific/logging_on_and_off.htm" />
 </key>
+<key name="reminders, text message" >
+  <topic name="Setting Email and SMS Reminder Notification" url="Userspecific/Setting_Email_and_SMS_Reminder_Notification.htm" />
+</key>
 <key name="remote calendar" >
   <topic name="Create New Calendar" url="Calendar/b_Create_New_Calendar.htm" />
 </key>
@@ -152,11 +173,20 @@
 <key name="RSS feed" >
   <topic name="Subscribe to RSS/ATOM feed " url="Navigation_folders_and_tips/Subscribe_to_RSS_ATOM_feed_.htm" />
 </key>
+<key name="s/mime preferences" >
+  <topic name="Setting security preferences for using S/MIME" url="smime/Setting_security_preferences_for_using_S_MIME.htm" />
+</key>
+<key name="s/mime, setting up" >
+  <topic name="Setting up S/MIME to send and receive signed adn encrypted email messages" url="smime/setting_up_S_MIME.htm" />
+</key>
 <key name="save search" >
   <topic name="Create and Save a Search Query" url="Search/b_Create_and_Save_a_Search_Query.htm" />
 </key>
 <key name="search" >
   <topic name="Using Search" url="Search/b_Using_Search.htm" />
+</key>
+<key name="search failure" >
+  <topic name="Search Issues with Non-Western Language Attachments" url="Search/Search_Issues_with_Non-Western_Language_Attachments.htm" />
 </key>
 <key name="search, creating a search" >
   <topic name="Using Search" url="Search/b_Using_Search.htm" />
@@ -164,14 +194,23 @@
 <key name="search, saving" >
   <topic name="Using Search" url="Search/b_Using_Search.htm" />
 </key>
+<key name="security preferences" >
+  <topic name="Setting security preferences for using S/MIME" url="smime/Setting_security_preferences_for_using_S_MIME.htm" />
+</key>
 <key name="setting a forwarding address" >
   <topic name="Setting a Forwarding Address" url="Userspecific/Setting_a_Forwarding_Address.htm" />
+</key>
+<key name="setting up s/mime" >
+  <topic name="Setting up S/MIME to send and receive signed adn encrypted email messages" url="smime/setting_up_S_MIME.htm" />
 </key>
 <key name="shortcut keys" >
   <topic name="Keyboard Shortcut keys" url="Navigation_folders_and_tips/b_Keyboard_Shortcut_keys.htm" />
 </key>
 <key name="signature, automatically add" >
   <topic name="Automatically adding your signature" url="Userspecific/b_Automatically_adding_your_signature.htm" />
+</key>
+<key name="SMS" >
+  <topic name="Setting Email and SMS Reminder Notification" url="Userspecific/Setting_Email_and_SMS_Reminder_Notification.htm" />
 </key>
 <key name="sync to another calendar" >
   <topic name="Create New Calendar" url="Calendar/b_Create_New_Calendar.htm" />
