@@ -1069,10 +1069,10 @@ public abstract class AbsSeleniumObject {
 		try {
 			if(ZimbraSeleniumProperties.isWebDriver()){
 				logger.info("...WebDriver...mouseMove.MoseDown()");
-				Coordinates we =  (Coordinates) getElement(locator);
+				Coordinates co =  ((RemoteWebElement)getElement(locator)).getCoordinates();
 				Mouse mouse = ((HasInputDevices)webDriver()).getMouse();
-				mouse.mouseMove(we,1,1);
-				mouse.mouseDown(we);
+				mouse.mouseMove(co,0,0);
+				mouse.mouseDown(co);
 			}else{
 				ClientSessionFactory.session().selenium().mouseDownAt(locator, coordString);
 			}
@@ -1187,7 +1187,15 @@ public abstract class AbsSeleniumObject {
 	public void sMouseUpAt(String locator, String coordString) throws HarnessException {
 		try {
 			logger.info("mouseUpAt(" + locator + ",'" + coordString + ")'");
-			ClientSessionFactory.session().selenium().mouseUpAt(locator, coordString);
+			if(ZimbraSeleniumProperties.isWebDriver()){
+				logger.info("...WebDriver...mouseMove.MoseUp()");
+				Coordinates co =  ((RemoteWebElement)getElement(locator)).getCoordinates();
+				Mouse mouse = ((HasInputDevices)webDriver()).getMouse();
+				mouse.mouseMove(co,0,0);
+				mouse.mouseUp(co);
+			}else{
+				ClientSessionFactory.session().selenium().mouseUpAt(locator, coordString);
+			}
 		} catch (SeleniumException e) {
 			throw new HarnessException(e);
 		}
@@ -1262,24 +1270,29 @@ public abstract class AbsSeleniumObject {
 	}
 
 	/**
-	 * DefaultSelenium.getXpathCount()
+	 * getXpathCount()
 	 */
 	public int sGetXpathCount(String xpath) throws HarnessException {
-		int count = ClientSessionFactory.session().selenium().getXpathCount(
+		int count = 0;
+		if(ZimbraSeleniumProperties.isWebDriver()){		
+			count = getElements(By.xpath(xpath)).size();
+		}else{
+			count = ClientSessionFactory.session().selenium().getXpathCount(
 				xpath).intValue();
+		}
 		logger.info("getXpathCount(" + xpath + ") = " + count);
 		return (count);
 	}
 
 	/**
-	 * DefaultSelenium.getCssCount()
+	 * getCssCount()
 	 * @throws HarnessException 
 	 */
 	public int sGetCssCount(String css) throws HarnessException {
 		int count = 0;
 		
 		if(ZimbraSeleniumProperties.isWebDriver()){		
-			count = webDriver().findElements(By.cssSelector(getCssLocator(css).getLocator())).size();
+			count = getElements(By.cssSelector(getCssLocator(css).getLocator())).size();
 		}else{		
 			count = ClientSessionFactory.session().selenium().getCssCount(css)
 				.intValue();
@@ -1293,9 +1306,17 @@ public abstract class AbsSeleniumObject {
 	 */
 	public List<String> sGetAllWindowTitles() throws HarnessException {
 		logger.info("getAllWindowTitles()");
-		String[] windows = ClientSessionFactory.session().selenium()
+		List<String> list = null;
+				
+		if (ZimbraSeleniumProperties.isWebDriver()){
+			logger.info("...WebDriver... switchTo.window.getTitles()");
+			list =  getAllWindowNames(); 		   		
+		}else{
+			String[] windows = ClientSessionFactory.session().selenium()
 				.getAllWindowTitles();
-		return (Arrays.asList(windows));
+			list = (Arrays.asList(windows));
+		}
+		return list;
 	}
 
 	/**
@@ -1303,8 +1324,16 @@ public abstract class AbsSeleniumObject {
 	 */
 	public List<String> sGetAllWindowIds() throws HarnessException {
 		logger.info("getAllWindowIds()");
-		String[] ids = ClientSessionFactory.session().selenium().getAllWindowIds();
-		return (Arrays.asList(ids));
+		List<String> list = null;
+		
+		if (ZimbraSeleniumProperties.isWebDriver()){
+			logger.info("...WebDriver... getWindowHandles");
+			list = new ArrayList<String>(webDriver().getWindowHandles()); 		   		
+		}else{
+			String[] ids = ClientSessionFactory.session().selenium().getAllWindowIds();
+			list = (Arrays.asList(ids));
+		}
+		return list;
 	}
 
 	
@@ -1317,7 +1346,7 @@ public abstract class AbsSeleniumObject {
 		Set<String> availableWindows = null;
 		
 		if (ZimbraSeleniumProperties.isWebDriver()){
-			logger.info("...WebDriver... getAllWindowNames()");
+			logger.info("...WebDriver... switchTo.window.getTitle()");
 			list =  getAllWindowNames(); 		   		
 		}
 		else if (ZimbraSeleniumProperties.isWebDriverBackedSelenium()){
@@ -2088,7 +2117,12 @@ public abstract class AbsSeleniumObject {
 	 * @param windowID
 	 */
 	public void sOpenWindow(String url, String windowID) throws HarnessException {
-		ClientSessionFactory.session().selenium().openWindow(url, windowID);
+		if (ZimbraSeleniumProperties.isWebDriver()){
+			logger.info("...WebDriver...navigate().to()");
+			webDriver().navigate().to(url);
+		}else{
+			ClientSessionFactory.session().selenium().openWindow(url, windowID);
+		}
 		logger.info("openWindow(" + url + ", " + windowID + ")");
 	}
 
@@ -2250,6 +2284,11 @@ public abstract class AbsSeleniumObject {
 	public CssLocator getCssLocator(String locator) {
 		logger.info("...WebDriver...getCssLocator()");
 		return configureCssLocator(locator, "css=", ":contains");
+	}
+	
+	public List<WebElement> getElements(By by) {
+		logger.info("...WebDriver...findElements()");
+		return webDriver().findElements(by);
 	}
 	
 	public WebElement getElement(String locator) throws HarnessException{
@@ -2487,7 +2526,7 @@ public abstract class AbsSeleniumObject {
 	}
 	
 	public List<String> getAllWindowNames() throws HarnessException{ 
-		logger.info("...WebDriver...getAllWindowNames()");
+		logger.info("...WebDriver...switchTo.window.getTitle()");
 		
 		List<String> list = new ArrayList<String>();
 		WebDriver driver = webDriver();			
