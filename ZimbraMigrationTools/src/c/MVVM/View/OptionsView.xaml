@@ -50,9 +50,10 @@
                 <CheckBox Content="Junk" Grid.Row="2" HorizontalAlignment="Left" Name="cbJunk" VerticalAlignment="Center"  IsChecked="{Binding Path=ImportJunkOptions}" />
             </Grid>
         </GroupBox>
-        <GroupBox Name="GBOptions" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" MinWidth="400" Header="Filters" HorizontalAlignment="Left" Margin="15,15,0,0" VerticalAlignment="Top" Padding="10,8,10,8">
+        <GroupBox Name="GBOptions" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" MinWidth="404" Header="Filters" HorizontalAlignment="Left" Margin="15,10,0,0" VerticalAlignment="Top" Padding="10,4,10,4">
             <Grid>
                 <Grid.RowDefinitions>
+                    <RowDefinition MinHeight= "24" Height="Auto"></RowDefinition>
                     <RowDefinition MinHeight= "24" Height="Auto"></RowDefinition>
                     <RowDefinition MinHeight= "24" Height="Auto"></RowDefinition>
                     <RowDefinition MinHeight= "24" Height="Auto"></RowDefinition>
@@ -66,10 +67,11 @@
                 <CheckBox Content="Maximum message size (MB)" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" Name="cbMaxMessage" VerticalAlignment="Center" IsChecked="{Binding Path=IsMaxMessageSize}" />
                 <TextBox HorizontalAlignment="Right" MinWidth="56" MaxHeight="18" Margin="0,0,130,0" Name="tbMaxMessage" VerticalAlignment="Center" Grid.Row="1" Grid.Column="1" IsEnabled="{Binding ElementName=cbMaxMessage, Path=IsChecked}" Text="{Binding Path=MaxMessageSize}"/>
                 <CheckBox Content="Skip these folders (separate with comma)" Grid.Row="2" HorizontalAlignment="Left" Name="cbSkip" VerticalAlignment="Center" IsChecked="{Binding Path=IsSkipFolders}" />
-                <TextBox HorizontalAlignment="Stretch" Margin="16,5,0,0" Name="tbSkip" VerticalAlignment="Top" Grid.Row="3" Grid.Column="0" IsEnabled="{Binding ElementName=cbSkip, Path=IsChecked}" Text="{Binding Path=FoldersToSkip}"/>
+                <TextBox HorizontalAlignment="Stretch" Margin="16,0,0,0" Name="tbSkip" VerticalAlignment="Top" Grid.Row="3" Grid.Column="0" IsEnabled="{Binding ElementName=cbSkip, Path=IsChecked}" Text="{Binding Path=FoldersToSkip}"/>
+                <CheckBox Content="Skip previously migrated items" Grid.Row="4" HorizontalAlignment="Left" Name="cbSkipPrev" VerticalAlignment="Center" IsChecked="{Binding Path=IsSkipPrevMigratedItems}" />
             </Grid>
         </GroupBox>
-        <CheckBox Content="Verbose Logging" Grid.Row="4" HorizontalAlignment="Left" Margin="31,-10,0,0" Name="cbVerbose" VerticalAlignment="Center" IsChecked="{Binding Path=LoggingVerbose}" />
+        <CheckBox Content="Verbose Logging" Grid.Row="4" HorizontalAlignment="Left" Margin="31,0,0,0" Name="cbVerbose" VerticalAlignment="Center" IsChecked="{Binding Path=LoggingVerbose}" />
         <Grid Name="BottomGrid" Grid.Row="5" Grid.ColumnSpan="2" Margin="10,0,0,10" VerticalAlignment="Bottom">
             <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,0,0" Content="Load" Name="buttonOptionsLoad" Command="{Binding LoadCommand}"  />
             <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="81,0,0,0" Content="Save" Name="buttonOptionsSav" Command="{Binding SaveCommand}"  />
