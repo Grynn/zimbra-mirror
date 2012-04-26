@@ -19,7 +19,7 @@ else
 	include $(OPENDKIM_ROOT)/../versions.def
 endif
 
-LDFLAGS	:=	LDFLAGS="-L$(OPENSSL_LIB_DIR) -L$(CYRUS_LIB_DIR) -L$(LDAP_LIB_DIR) -L$(LIBTOOL_LIB_DIR) \
+LDFLAGS	:=	LDFLAGS="-L$(OPENSSL_LIB_DIR) -L$(CYRUS_LIB_DIR) -L$(LDAP_LIB_DIR) -L$(LIBTOOL_LIB_DIR) -L$(ZIMBRA_HOME)/libxml2/lib \
 		 -Wl,-rpath,$(OPENSSL_LIB_DIR) -Wl,-rpath,$(CYRUS_LIB_DIR) -Wl,-rpath,$(LDAP_LIB_DIR) -Wl,-rpath,$(LIBTOOL_LIB_DIR)"
 
 DKIM_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/opendkim/opendkim-$(DKIM_VERSION).tgz
@@ -34,8 +34,10 @@ checksrc:
 build:
 	(tar xzf src/opendkim-$(DKIM_VERSION).tar.gz; \
 	cd opendkim-$(DKIM_VERSION); \
+	patch -p1 -g0 -N < ../patches/libxml2.patch; \
 	$(LDFLAGS) \
 	LD_LIBRARY_PATH=$(OPENSSL_LIB_DIR):$(CYRUS_LIB_DIR):$(LIBTOOL_LIB_DIR) \
+	ac_cv_path_SENDMAIL_PATH=/opt/zimbra/postfix/sbin/sendmail \
 	CPPFLAGS="-I$(ZIMBRA_HOME)/libxml2/include/libxml2 -I$(ZIMBRA_HOME)/cyrus-sasl-$(CYRUS_VERSION)/include -I$(ZIMBRA_HOME)/libxml2/include -I$(ZIMBRA_HOME)/curl/include \
 		  -I$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/include -I$(ZIMBRA_HOME)/libtool-$(LIBTOOL_VERSION)/include $(CPPFLAG)" \
 	CFLAGS="-g -O0" \
@@ -69,7 +71,7 @@ build:
 	--with-sasl=/opt/zimbra/cyrus-sasl \
 	--with-libcurl=/opt/zimbra/curl \
 	--with-libxml2=/opt/zimbra/libxml2 \
-	--without-db; \
+	--with-db=/opt/zimbra/bdb; \
 	LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(CYRUS_LIB_DIR):$(LIBTOOL_LIB_DIR) $(MAKE) $(MAKEARGS); \
 	LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(CYRUS_LIB_DIR):$(LIBTOOL_LIB_DIR) $(MAKE) install STRIP="";)
 	(cd $(ZIMBRA_HOME); ln -s opendkim-$(DKIM_VERSION) opendkim)
