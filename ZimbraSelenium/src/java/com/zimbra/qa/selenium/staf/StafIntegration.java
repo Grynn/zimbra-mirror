@@ -154,13 +154,18 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
 			StafProperties configProperties = new StafProperties(valueRoot + "/conf/config.properties");
 			
 			// Set values
-			// Bug 65650: don't use http/80
-			// configProperties.setProperty("server.scheme", "https");
+			// Bug 65650: use https/443 ... see defaults in config.properties
+			
+			if ( (valuePattern != null) && (valuePattern.toLowerCase().contains("octopus")) ) {
+				
+				// For octopus, until it implements 65650, hard code http
+				configProperties.setProperty("server.scheme", "http");
+				configProperties.setProperty("server.port", "80");
+
+			}
+			
 			configProperties.setProperty("server.host", valueServer);
-			// Bug 65650: don't use http/80
-			// configProperties.setProperty("server.port", "443");
 			configProperties.setProperty("adminName", "globaladmin@" + valueServer);
-			// configProperties.setProperty("browser", "firefox"); // TODO
 
 			configProperties.setProperty("seleniumMode", "Local");
 			configProperties.setProperty("serverName", "localhost");
