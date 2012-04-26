@@ -249,5 +249,44 @@ public class GetMail extends PrefGroupMailByMessageTest {
 		
 	}
 
+	@Test(	description = "Type keyboard shortcut (=) for 'Get Mail' to receive any new messages",
+			groups = { "functional" })
+	public void GetMail_06() throws HarnessException {
+
+		
+		// Create the message data to be sent
+		String subject = "subject" + ZimbraSeleniumProperties.getUniqueString();
+		
+		ZimbraAccount.AccountA().soapSend(
+					"<SendMsgRequest xmlns='urn:zimbraMail'>" +
+						"<m>" +
+							"<e t='t' a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
+							"<su>"+ subject +"</su>" +
+							"<mp ct='text/plain'>" +
+								"<content>content" + ZimbraSeleniumProperties.getUniqueString() +"</content>" +
+							"</mp>" +
+						"</m>" +
+					"</SendMsgRequest>");
+		
+		MailItem mail = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject +")");
+
+		// Type shortcut
+		app.zPageMail.zKeyboardShortcut(Shortcut.S_MAIL_GETMAIL);
+		
+		// Get the message list
+		List<MailItem> messages = app.zPageMail.zListGetMessages();
+		ZAssert.assertNotNull(messages, "Verify the list contains messages");
+
+		MailItem found = null;
+		for (MailItem m : messages) {
+			if ( mail.dSubject.equals(m.gSubject) ) {
+				found = m;
+				break;
+			}
+		}
+		ZAssert.assertNotNull(found, "Verify the list contains the new message");
+		
+	}
+
 
 }
