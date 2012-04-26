@@ -11,19 +11,20 @@ import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.*;
 
 
-public class MarkSpamMessage extends AjaxCommonTest {
+public class MarkSpamConversation extends AjaxCommonTest {
 
 	
-	@SuppressWarnings("serial")
-	public MarkSpamMessage() {
-		logger.info("New "+ MarkSpamMessage.class.getCanonicalName());
+	public MarkSpamConversation() {
+		logger.info("New "+ MarkSpamConversation.class.getCanonicalName());
 		
 		
 		// All tests start at the login page
 		super.startingPage = app.zPageMail;
 		
 		// Make sure we are using an account with conversation view
-		super.startingAccountPreferences = new HashMap<String , String>() {{
+		super.startingAccountPreferences = new HashMap<String , String>() {
+			private static final long serialVersionUID = 3807049034222905017L;
+		{
 				    put("zimbraPrefGroupMailBy", "conversation");
 				}};
 
@@ -34,7 +35,7 @@ public class MarkSpamMessage extends AjaxCommonTest {
 	
 	@Test(	description = "Mark a conversation as spam, using 'Spam' toolbar button",
 			groups = { "smoke" })
-	public void MarkSpamMessage_01() throws HarnessException {
+	public void MarkSpamConversation_01() throws HarnessException {
 		
 		String subject = "subject"+ ZimbraSeleniumProperties.getUniqueString();
 		
@@ -81,7 +82,7 @@ public class MarkSpamMessage extends AjaxCommonTest {
 
 	@Test(	description = "Mark a message as spam, using keyboard shortcut (keyboard='ms')",
 			groups = { "smoke" })
-	public void MarkSpamMessage_02() throws HarnessException {
+	public void MarkSpamConversation_02() throws HarnessException {
 		
 		String subject = "subject"+ ZimbraSeleniumProperties.getUniqueString();
 		
@@ -127,7 +128,7 @@ public class MarkSpamMessage extends AjaxCommonTest {
 
 	@Test(	description = "Mark multiple messages (3) as spam by select and toolbar delete",
 			groups = { "functional" })
-	public void MarkSpamMessage_03() throws HarnessException {
+	public void MarkSpamConversation_03() throws HarnessException {
 		
 		FolderItem junk = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Junk);
 
