@@ -223,8 +223,7 @@ ZaTaskContentView.myXFormModifier = function(xFormObject, entry) {
                                 ],
                                 cssClass:"ZaTaskTitleNameHeader"
                             },
-                            {ref:ZaTask.A_serverStatus, type:_GROUP_, numCols:1,
-								cssClass: "ZaTaskListContent", width:"96%",
+                            {ref:ZaTask.A_serverStatus, type:_GROUP_, numCols:1, width:"96%",
                                 forceUpdate: true, preserveSelection:false, multiselect:false,
                                 visibilityChecks:[[XForm.checkInstanceValue, ZaTask.A2_isServerExpaned, true]],
                                 visibilityChangeEventSources:[ZaTask.A2_isServerExpaned],
