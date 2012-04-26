@@ -1,4 +1,4 @@
-package com.zimbra.qa.selenium.projects.ajax.tests.calendar.appointments.views.day;
+package com.zimbra.qa.selenium.projects.ajax.tests.calendar.appointments.views.day.allday;
 
 import java.util.*;
 
@@ -56,7 +56,7 @@ public class GetAppointment extends AjaxCommonTest {
 					"<CreateAppointmentRequest xmlns='urn:zimbraMail'>"
 				+		"<m>"
 				+			"<inv>"
-				+				"<comp status='CONF' fb='B' class='PUB' transp='O' allDay='0' name='"+ subject +"' >"
+				+				"<comp status='CONF' fb='B' class='PUB' transp='O' allDay='1' name='"+ subject +"' >"
 				+					"<s d='"+ startUTC.toTimeZone(tz).toYYYYMMDDTHHMMSS() +"' tz='"+ tz +"'/>"
 				+					"<e d='"+ endUTC.toTimeZone(tz).toYYYYMMDDTHHMMSS() +"' tz='"+ tz +"'/>"
 				+					"<or a='"+ app.zGetActiveAccount().EmailAddress + "'/>"

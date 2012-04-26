@@ -1,4 +1,4 @@
-package com.zimbra.qa.selenium.projects.ajax.tests.calendar.appointments.views.day;
+package com.zimbra.qa.selenium.projects.ajax.tests.calendar.appointments.views.day.allday;
 
 import java.util.*;
 
@@ -51,7 +51,7 @@ public class DeleteAppointment extends AjaxCommonTest {
         app.zGetActiveAccount().soapSend(
     			"<CreateAppointmentRequest xmlns='urn:zimbraMail'>"
     		+		"<m>"
-    		+			"<inv method='REQUEST' type='event' fb='B' transp='O' allDay='0' name='"+ apptSubject +"'>"
+    		+			"<inv method='REQUEST' type='event' fb='B' transp='O' allDay='1' name='"+ apptSubject +"'>"
     		+				"<s d='"+ startUTC.toTimeZone(tz).toYYYYMMDDTHHMMSS() +"' tz='"+ tz +"'/>"
     		+				"<e d='"+ endUTC.toTimeZone(tz).toYYYYMMDDTHHMMSS() +"' tz='"+ tz +"'/>"
     		+				"<or a='"+ app.zGetActiveAccount().EmailAddress +"'/>" 

@@ -1458,6 +1458,22 @@ public class PageCalendar extends AbsTab {
 			
 		}
 		
+		// Get the name of the appointment (Attendee view)
+		locator = rowLocator + " td.appt_allday_name";
+		if ( this.sIsElementPresent(locator) ) {
+			
+			// The name field contains both the subject and location, if there is a location
+			String subject = this.sGetText(locator);
+			if ( item.getLocation() == null ) {
+				item.setSubject(subject.trim());
+			} else {
+				item.setSubject(subject.replace(item.getLocation(), "").trim());
+			}
+			
+			item.setLocator(locator); // Update the appointment locator to point to the subject field
+			
+		}
+		
 		// TODO: parse other elements
 
 		return (item);
