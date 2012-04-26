@@ -38,7 +38,18 @@ function() {
 }
 
 ZaGlobalMessageCountPage.prototype.showMe =  function(refresh) {
-	DwtTabViewPage.prototype.showMe.call(this);	
+    this.setZIndex(DwtTabView.Z_ACTIVE_TAB);
+	if (this.parent.getHtmlElement().offsetHeight > 26) { 						// if parent visible, use offsetHeight
+		this._contentEl.style.height=this.parent.getHtmlElement().offsetHeight-26;
+	} else {
+		var parentHeight = parseInt(this.parent.getHtmlElement().style.height);	// if parent not visible, resize page to fit parent
+		var units = AjxStringUtil.getUnitsFromSizeString(this.parent.getHtmlElement().style.height);
+		if (parentHeight > 26) {
+			this._contentEl.style.height = (Number(parentHeight-26).toString() + units);
+		}
+	}
+	this._contentEl.style.width = this.parent.getHtmlElement().style.width;	// resize page to fit parent
+
 	ZaGlobalAdvancedStatsPage.detectFlash(document.getElementById("loggerchartglobalmc-flashdetect"));
 	if (refresh)
 	    this.setObject();

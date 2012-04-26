@@ -87,7 +87,18 @@ function (refresh){
 	//if(window.console && window.console.log) console.debug("show the session stats page") ;
 	
 	if (!this._rendered) {
-		DwtTabViewPage.prototype.showMe.call(this);
+        this.setZIndex(DwtTabView.Z_ACTIVE_TAB);
+        if (this.parent.getHtmlElement().offsetHeight > 26) { 						// if parent visible, use offsetHeight
+            this._contentEl.style.height=this.parent.getHtmlElement().offsetHeight-26;
+        } else {
+            var parentHeight = parseInt(this.parent.getHtmlElement().style.height);	// if parent not visible, resize page to fit parent
+            var units = AjxStringUtil.getUnitsFromSizeString(this.parent.getHtmlElement().style.height);
+            if (parentHeight > 26) {
+                this._contentEl.style.height = (Number(parentHeight-26).toString() + units);
+            }
+        }
+        this._contentEl.style.width = this.parent.getHtmlElement().style.width;	// resize page to fit parent
+
 		var instance = {currentTab:ZaServerSessionStatsPage.SOAP_TAB_ID}; 
 		var xModelObj = new XModel({id:"currentTab", type:_UNTYPED_});
 		this._localXForm = this._view = new XForm(this._getXForm(), xModelObj, instance, this);
@@ -464,9 +475,10 @@ ZaServerSessionStatsPage.prototype._getXForm = function () {
 					getCustomWidth:ZaServerSessionListView.getCustomWidth,
 					getCustomHeight:ZaServerSessionListView.getCustomHeight,
 			    items:[
-				   {ref: "soap", type:_DWT_LIST_ , width:"95%",  cssClass: "MBXList",     	
-						   		forceUpdate: true, widgetClass:ZaServerSessionListView, 
-						   		headerList:headerList1, defaultColumnSortable: 1
+				   {ref: "soap", type:_DWT_LIST_ , width:"100%",  cssClass: "MBXList",
+                        height: (AjxEnv.isIE? "" : "100%"),
+						forceUpdate: true, widgetClass:ZaServerSessionListView,
+						headerList:headerList1, defaultColumnSortable: 1
 					}
 				   ]
 			   },
@@ -475,9 +487,10 @@ ZaServerSessionStatsPage.prototype._getXForm = function () {
 					getCustomWidth:ZaServerSessionListView.getCustomWidth,
 					getCustomHeight:ZaServerSessionListView.getCustomHeight,
 			    items:[
-				    {ref: "admin", type:_DWT_LIST_ , width:"95%",  cssClass: "MBXList",     	
-						   		forceUpdate: true, widgetClass:ZaServerSessionListView, 
-						   		headerList:headerList2, defaultColumnSortable: 1
+				    {ref: "admin", type:_DWT_LIST_ , width:"100%",  cssClass: "MBXList",
+                        height: (AjxEnv.isIE? "" : "100%"),
+						forceUpdate: true, widgetClass:ZaServerSessionListView,
+						headerList:headerList2, defaultColumnSortable: 1
 					}
 				   ]
 			   },
@@ -486,9 +499,10 @@ ZaServerSessionStatsPage.prototype._getXForm = function () {
 					getCustomWidth:ZaServerSessionListView.getCustomWidth,
 					getCustomHeight:ZaServerSessionListView.getCustomHeight,
 			    items:[
-				   {ref: "imap", type:_DWT_LIST_ , width:"95%",  cssClass: "MBXList",     	
-						   		forceUpdate: true, widgetClass:ZaServerSessionListView, 
-						   		headerList:headerList3, defaultColumnSortable: 1
+				   {ref: "imap", type:_DWT_LIST_ , width:"100%",  cssClass: "MBXList",
+                        height: (AjxEnv.isIE? "" : "100%"),
+						forceUpdate: true, widgetClass:ZaServerSessionListView,
+						headerList:headerList3, defaultColumnSortable: 1
 					}
 				   ]
 			   }
@@ -542,6 +556,7 @@ ZaServerSessionListView = function(parent, cssClass, posStyle, headerList) {
 	//var headerList = this._getHeaderList();
 	
 	ZaListView.call(this, parent, className, posStyle, headerList);
+    this.setLocation(0, 0);
 	this._bSortAsc = true; //default is ascending
 }
 
@@ -652,17 +667,14 @@ function(columnItem, bSortAsc) {
 }
 
 ZaServerSessionListView.getCustomWidth = function(){
-	if(appNewUI) {
-		return "100%";
-	} else {
-		return ZATabCase_XFormItem.prototype.getCustomHeight.call(this);
-	}
+	return ZATabCase_XFormItem.prototype.getCustomWidth.call(this);
 }
 
 ZaServerSessionListView.getCustomHeight = function(){
 	var oriHeight = ZATabCase_XFormItem.prototype.getCustomHeight.call(this);
 	if(appNewUI) {
-		return oriHeight - 40; //40 is a balanced value
+        // ToDo Readlly bad here, we need to caculate it ourself
+		return oriHeight - 23; //40 is a balanced value
 	} else {
 		return oriHeight;
 	}
