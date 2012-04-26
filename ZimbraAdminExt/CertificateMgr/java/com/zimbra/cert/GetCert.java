@@ -15,6 +15,7 @@
 package com.zimbra.cert;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -48,32 +49,49 @@ public class GetCert extends AdminDocumentHandler {
         ZimbraSoapContext lc = getZimbraSoapContext(context);
 
         Provisioning prov = Provisioning.getInstance();
+        ArrayList<Server> servers = new ArrayList<Server>();
+        String serverId = request.getAttribute(AdminConstants.A_SERVER) ;
+        String certType = request.getAttribute(AdminConstants.A_TYPE);
+        String option = null;
+        if (certType.equals(CERT_TYPE_STAGED)) {
+            option = request.getAttribute(CertMgrConstants.A_OPTION);
+        }
+        if (serverId != null && serverId.equals(ZimbraCertMgrExt.ALL_SERVERS)) {
+            servers.addAll(prov.getAllServers());
+        }else {
+           Server server =  prov.get(ServerBy.id, serverId);
+           if (server != null) {
+               servers.add(server);
+           } else {
+               throw ServiceException.INVALID_REQUEST("Server with id " + serverId + " could not be found", null);
+           }
+        }
+       
+        Element response = lc.createElement(CertMgrConstants.GET_CERT_RESPONSE);
+        
+        for (Server s: servers) {
+            addCertsOnServer(response, s, certType, option, context, lc);
+        }
+        
+        return response;
+ 
+    }
+    
+    private void addCertsOnServer(Element response, Server server,
+            String certType, String option, Map<String, Object> context,
+            ZimbraSoapContext lc) throws ServiceException {
+        
+        checkRight(lc, context, server, Admin.R_getCertificateInfo);
+        ZimbraLog.security.debug("load the cert info from server:  " + server.getName()) ;
+        
+        String cmd = "";
         try {
-            Server server = null;
-            String serverId = request.getAttribute(AdminConstants.A_SERVER) ;
-            if (serverId != null && serverId.equals(ZimbraCertMgrExt.ALL_SERVERS)) {
-                server = prov.getLocalServer() ;
-            }else { 
-                server = prov.get(ServerBy.id, serverId);
-            }
-            
-            if (server == null) {
-                throw ServiceException.INVALID_REQUEST("Server with id " + serverId + " could not be found", null);
-            }
-            
-            checkRight(lc, context, server, Admin.R_getCertificateInfo);
-            ZimbraLog.security.debug("load the cert info from server:  " + server.getName()) ;
-            
-            String certType = request.getAttribute(AdminConstants.A_TYPE);
-            String option = null ;
-            String cmd = "";
             RemoteManager rmgr = RemoteManager.getRemoteManager(server);
-            Element response = lc.createElement(CertMgrConstants.GET_CERT_RESPONSE);
             
             if (certType == null || certType.length() == 0 ) {
                 throw ServiceException.INVALID_REQUEST("No valid certificate type is set in GetCertRequest", null);
             }else if (certType.equals(CERT_TYPE_STAGED)){ 
-                option = request.getAttribute(CertMgrConstants.A_OPTION);
+               
                 if (option == null || option.length() ==0) {
                     throw ServiceException.INVALID_REQUEST("No valid option type is set in GetCertRequest for staged certs", null);
                 }else if (option.equals(CERT_STAGED_OPTION_SELF) || option.equals(CERT_STAGED_OPTION_COMM)){
@@ -99,8 +117,6 @@ public class GetCert extends AdminDocumentHandler {
             }else{
                 throw ServiceException.INVALID_REQUEST("Invalid certificate type: " + certType + ". Must be (self|comm).", null);
             }
-           
-            return response;
         }catch (IOException ioe) {
             throw ServiceException.FAILURE("exception occurred handling command", ioe);
         }

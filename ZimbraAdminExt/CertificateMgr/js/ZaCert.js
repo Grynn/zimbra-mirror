@@ -263,24 +263,7 @@ ZaCert.certsServerNodeTreeListener = function (ev) {
 	}
 }
 
-if (ZaHome && ZaHome.myXModel) {
-    ZaHome.A2_expiredType = "expiredType";
-    ZaHome.A2_expiredMessage = "expiredMessage";
-    ZaHome.myXModel.items.push(
-       {id:ZaHome.A2_expiredMessage, type:_STRING_, ref: "attrs/" + ZaHome.A2_expiredMessage}
-    );
-    ZaHome.myXModel.items.push(
-       {id:ZaHome.A2_expiredType, type:_ENUM_, ref: "attrs/" + ZaHome.A2_expiredType, choices: ZaModel.BOOLEAN_CHOICES}
-    );
-    ZaHome.loadCert = function () {
-        this.attrs[ZaHome.A2_expiredType] = true;
-        this.attrs[ZaHome.A2_expiredMessage] = ZaMsg.LBL_HomeStatusOK;
-    }
-    ZaItem.loadMethods["ZaHome"].push(ZaHome.loadCert);
-}
-
 if(ZaTabView.XFormModifiers["ZaHomeXFormView"]) {
-
 
     ZaHomeXFormView.onInstallCertficate = function (ev) {
         var certServerList = ZaApp.getInstance().getCertsServerListController();
@@ -294,24 +277,7 @@ if(ZaTabView.XFormModifiers["ZaHomeXFormView"]) {
 
     ZaCert.HomeXFormModifier = function(xFormObject) {
         if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CERTS_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
-            var maintainItem;
-            maintainItem = ZaHomeXFormView.getHomeMaintenanceItem(xFormObject);
-            maintainItem.items.push(
-                {type:_GROUP_, colSpan:"*", numCols:3, width: "100%", colSizes:["*", "20px", "120px"],items:[
-                    {type:_OUTPUT_, value: ZaMsg.LBL_HomeExpiredCerts},
-                    {type:_OUTPUT_, ref: ZaHome.A2_expiredType,
-                        getDisplayValue: function (value){
-                            if (value) {
-                                return AjxImg.getImageHtml ("Check");
-                            } else {
-                                return AjxImg.getImageHtml ("Cancel");
-                            }
-                        }
-                    },
-                    {type:_OUTPUT_, ref: ZaHome.A2_expiredMessage}
-                ]}
-            );
-
+        
             var setupItem = ZaHomeXFormView.getHomeSetupItem(xFormObject);
             var labelItem = setupItem.headerLabels;
             var contentItem = setupItem.contentItems;
@@ -331,13 +297,157 @@ if(ZaTabView.XFormModifiers["ZaHomeXFormView"]) {
     ZaTabView.XFormModifiers["ZaHomeXFormView"].push(ZaCert.HomeXFormModifier);
 }
 
-ZaCert.getCerts = function (app, serverId) {
+ZaCert.isCertExpired = function() {
+	var value = this.getInstanceValue(ZaTask.A2_expiredCertMsg);
+	return !(value === undefined);
+}
+
+ZaCert.isCertExpiring = function() {
+	var value = this.getInstanceValue(ZaTask.A2_expiringCertMsg);
+	return !(value === undefined);
+}
+
+// add cert expire status to Server Status
+if (ZaTask && ZaTask.myXModel){
+	ZaTask.A2_expiredCertMsg = "expiredCertMsg";
+	ZaTask.A2_expiringCertMsg = "expiringCertMsg";
+	ZaTask.myXModel.items.push(
+			{id: ZaTask.A2_expiredCertMsg, type: _STRING_},
+			{id: ZaTask.A2_expiringCertMsg, type: _STRING_});
+
+	if (ZaTabView.XFormModifiers["ZaTaskContentView"] != null) {
+		ZaCert.taskContentViewXFormModifier = function(xFormObject) {
+			
+			if(!(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CERTS_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])) {
+		        return ;
+		    }
+			
+			var board = ZaTaskContentView.getNotificationBoard(xFormObject);
+			board.items.push(
+				{type: _GROUP_, numCols:1, width: "98%", //100%
+				 visibilityChecks:[ZaCert.isCertExpired],
+				 visibilityChangeEventSources:[ZaTask.A2_expiredCertMsg],
+				 items:[
+					{type: _GROUP_, numCols:2, colSizes:["20px", "*"],
+						cssStyle: "padding-left:5px; padding-top:8px;",
+						items:[
+							{type:_OUTPUT_, value: AjxImg.getImageHtml("Critical"), valign:_TOP_, bmolsnr: true
+							},
+							{type:_OUTPUT_, ref: ZaTask.A2_expiredCertMsg,
+							 cssStyle:"padding-left:5px;", bmolsnr: true
+							}
+						]
+					},
+					{type:_OUTPUT_, align:_RIGHT_, value: com_zimbra_cert_manager.ManageCert,
+					 containerCssClass:"ZaLinkedItem",
+					 onClick: ZaCert.onManageCert
+					},
+					{type:_SPACER_, height:5}
+				 ]
+				},
+				{type: _GROUP_, numCols:1, width: "98%", //100%
+				 visibilityChecks:[ZaCert.isCertExpiring],
+				 visibilityChangeEventSources:[ZaTask.A2_expiringCertMsg],
+				 items:[
+					{type: _GROUP_, numCols:2, colSizes:["20px", "*"],
+						cssStyle: "padding-left:5px; padding-top:8px;",
+						items:[
+							{type:_OUTPUT_, value: AjxImg.getImageHtml("Warning"), valign:_TOP_, bmolsnr: true
+							},
+							{type:_OUTPUT_, ref: ZaTask.A2_expiringCertMsg,
+							 cssStyle:"padding-left:5px;", bmolsnr: true
+							}
+						]
+					},
+					{type:_OUTPUT_, align:_RIGHT_, value: com_zimbra_cert_manager.ManageCert,
+					 containerCssClass:"ZaLinkedItem",
+					 onClick: ZaCert.onManageCert
+					},
+					{type:_SPACER_, height:5}
+				 ]
+				}
+			);
+		}
+		ZaTabView.XFormModifiers["ZaTaskContentView"].push(ZaCert.taskContentViewXFormModifier);
+		
+	    ZaCert.onManageCert = function(ev) {
+	        var tree = ZaZimbraAdmin.getInstance().getOverviewPanelController().getOverviewPanel().getFolderTree();
+	        var path = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_configure, com_zimbra_cert_manager.OVP_certs]);
+	        tree.setSelectionByPath(path, false);
+	    }		
+	}
+}
+
+ZaCert.postLoadCertExpireStatus = function () {
+	if(!(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CERTS_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])) {
+        return ;
+    }
+	
+	var callback = new AjxCallback(this, ZaCert.doLoadCertExpireStatus);
+	ZaCert.getCerts(ZaApp.getInstance(), ZaCert.ALL_SERVERS, false, callback);
+}
+ZaHome.postLoadDataFunction.push(ZaCert.postLoadCertExpireStatus);
+
+ZaCert.doLoadCertExpireStatus = function(resp) {
+	if (resp && resp.getException && resp.getException()) {
+		return;
+	}
+	
+	var response = resp._data.Body.GetCertResponse;
+	
+	var now = new Date();
+	var _30days = 30 * 24 * 60 * 60 * 1000; // the millisecond of 30 days
+	var expiredCerts = [];
+	var expiringCerts = [];
+	var minExpDateForExpiredCerts = new Date(9999, 12, 31);
+	var minExpDateForExpiringCerts = new Date(9999, 12, 31);
+	for (var i in response.cert) {
+		var cert = response.cert[i];
+		var expDate = cert.notAfter? new Date(Date.parse(cert.notAfter[0]._content)) : null;
+		if (!expDate) continue;
+		if (now > expDate) {
+			expiredCerts.push(cert);
+			if (expDate < minExpDateForExpiredCerts) minExpDateForExpiredCerts = expDate;
+		} else if (new Date(now.getTime() + _30days) > expDate) {
+			expiringCerts.push(cert);
+			if (expDate < minExpDateForExpiringCerts) minExpDateForExpiringCerts = expDate;
+		}
+	}
+	
+	var formatter = AjxDateFormat.getDateInstance(AjxDateFormat.LONG);
+	var taskController = ZaZimbraAdmin.getInstance().getTaskController();
+	if (expiredCerts.length > 0) {
+		var message = AjxMessageFormat.format(com_zimbra_cert_manager.ExpiredCertMsg, [expiredCerts.length]);
+		
+		var expMsg = (expiredCerts.length > 1)?  
+				AjxMessageFormat.format(com_zimbra_cert_manager.MultiExpDate, formatter.format(minExpDateForExpiredCerts)):
+				AjxMessageFormat.format(com_zimbra_cert_manager.SingleExpDate, formatter.format(minExpDateForExpiredCerts));
+
+		taskController.setInstanceValue(message + " " + expMsg, ZaTask.A2_expiredCertMsg);
+	}
+	
+	if (expiringCerts.length > 0) {
+		var message = AjxMessageFormat.format(com_zimbra_cert_manager.ExpiringCertMsg, [expiringCerts.length]);
+		
+		var expMsg = (expiringCerts.length > 1)?  
+				AjxMessageFormat.format(com_zimbra_cert_manager.MultiExpDate, formatter.format(minExpDateForExpiringCerts)):
+				AjxMessageFormat.format(com_zimbra_cert_manager.SingleExpDate, formatter.format(minExpDateForExpiringCerts));
+
+		taskController.setInstanceValue(message + " " + expMsg, ZaTask.A2_expiringCertMsg);
+	}
+}
+
+ZaCert.getCerts = function (app, serverId, isSync, callback) {
 	if(window.console && window.console.log) console.log("Getting certificates for server " + serverId) ;
 	
 	var soapDoc = AjxSoapDoc.create("GetCertRequest", "urn:zimbraAdmin", null);
 	soapDoc.getMethod().setAttribute("type", "all");
 	var csfeParams = new Object();
-	csfeParams.soapDoc = soapDoc;	
+	csfeParams.soapDoc = soapDoc;
+	if (!isSync) {
+		csfeParams.asyncMode = true;
+		csfeParams.callback = callback;
+    }
 	if (serverId != null) {
 		soapDoc.getMethod().setAttribute("server", serverId);
 	}else{
@@ -347,9 +457,14 @@ ZaCert.getCerts = function (app, serverId) {
 	try {
 		var reqMgrParams = {} ;
 		reqMgrParams.controller = app.getCurrentController();
-		reqMgrParams.busyMsg = com_zimbra_cert_manager.BUSY_RETRIEVE_CERT ;
-		resp = ZaRequestMgr.invoke(csfeParams, reqMgrParams ).Body.GetCertResponse;
-		return resp;
+		reqMgrParams.busyMsg = com_zimbra_cert_manager.BUSY_RETRIEVE_CERT;
+		if (isSync) {
+			resp = ZaRequestMgr.invoke(csfeParams, reqMgrParams).Body.GetCertResponse;
+			return resp;
+		} else {
+			ZaRequestMgr.invoke(csfeParams, reqMgrParams);
+		}
+		
 	}catch (ex) {
 		app.getCurrentController()._handleException(ex, "ZaCert.getCerts", null, false);
 	}
