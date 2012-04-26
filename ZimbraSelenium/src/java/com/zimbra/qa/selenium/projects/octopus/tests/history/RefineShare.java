@@ -2,6 +2,7 @@ package com.zimbra.qa.selenium.projects.octopus.tests.history;
 
 import org.testng.annotations.*;
 
+import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.octopus.ui.PageHistory.*;
 
@@ -44,10 +45,10 @@ public class RefineShare extends HistoryCommonTest {
 				GetText.share(SHARE_PERMISSION.SHARE_AS_ADMIN,folder.getName(),adminGrantee));
 	}
 	   
-	@Test(description = "Verify uncheck 'sharing' checkbox for sharing action", groups = { "functional" })
+    @Test(description = "Verify uncheck 'sharing' checkbox for sharing action", groups = { "functional" })
 	public void RefineUnCheckSharingShareAction() throws HarnessException {
 	   
-	   	   
+    	
 	 // verify uncheck action for 'sharing' 
 	   verifyUnCheckAction(Locators.zHistoryFilterSharing.locator,
 				GetText.share(SHARE_PERMISSION.SHARE_AS_READ,folder.getName(),readGrantee));
@@ -71,9 +72,13 @@ public class RefineShare extends HistoryCommonTest {
 				GetText.revoke(SHARE_PERMISSION.SHARE_AS_ADMIN,folder.getName(),adminGrantee));
 	}
 	
-	@Test(description = "Verify uncheck 'sharing' checkbox for revoke action", groups = { "functional" })
+	@Test(description = "Verify uncheck 'sharing' checkbox for revoke action", groups = { "functional1" })
 	public void RefineUnCheckSharingRevokeAction() throws HarnessException {
-	 // verify uncheck action for 'revoke' 
+		/*To get revoke share history ,user needs to do refresh first*/
+		app.zPageOctopus.zRefresh();   
+		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_HISTORY);
+		
+	   // verify uncheck action for 'revoke' 
 	   verifyUnCheckAction(Locators.zHistoryFilterSharing.locator,
 				GetText.revoke(SHARE_PERMISSION.SHARE_AS_READ,folder.getName(),readGrantee));
 	   verifyUnCheckAction(Locators.zHistoryFilterSharing.locator,
