@@ -1223,17 +1223,6 @@ function(sourceUri) {
 	return params;
 };
 
-AjxStringUtil._SPECIAL_CHARS = /["\\\x00-\x1f]/g;
-AjxStringUtil._CHARS = {
-	'\b': '\\b',
-	'\t': '\\t',
-	'\n': '\\n',
-	'\f': '\\f',
-	'\r': '\\r',
-	'"' : '\\"',
-	'\\': '\\\\'
-};
-
 /**
  * Pretty-prints a JS object. Preferred over JSON.stringify for the debug-related dumping
  * of an object for several reasons:
@@ -2004,10 +1993,7 @@ function(html, okTags, attrsToRemove, badStyles) {
 	}
 	AjxStringUtil._traverseCleanHtml(htmlNode, ctxt);
 	
-	var result = false;
-	if (!ctxt.fail) {
-		result = "<html>" + htmlNode.innerHTML + "</html>";
-	}
+	var result = !ctxt.fail && "<html>" + htmlNode.innerHTML + "</html>";
 	var width = Math.max(htmlNode.scrollWidth, htmlNode.lastChild.scrollWidth);
 
 	AjxStringUtil._removeTestIframeDoc();
