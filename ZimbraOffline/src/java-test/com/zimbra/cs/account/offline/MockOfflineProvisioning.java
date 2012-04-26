@@ -42,12 +42,12 @@ import com.zimbra.cs.account.Domain;
 import com.zimbra.cs.account.Entry;
 import com.zimbra.cs.account.GlobalGrant;
 import com.zimbra.cs.account.Identity;
+import com.zimbra.cs.account.NamedEntry.Visitor;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.Server;
 import com.zimbra.cs.account.Signature;
 import com.zimbra.cs.account.XMPPComponent;
 import com.zimbra.cs.account.Zimlet;
-import com.zimbra.cs.account.NamedEntry.Visitor;
 import com.zimbra.cs.account.auth.AuthContext;
 import com.zimbra.cs.account.auth.AuthContext.Protocol;
 import com.zimbra.cs.mime.MimeTypeInfo;
@@ -60,20 +60,17 @@ public final class MockOfflineProvisioning extends OfflineProvisioning {
 
     private final Map<String, Account> id2account = new HashMap<String, Account>();
     private final Map<String, Account> name2account = new HashMap<String, Account>();
-    private final Map<String, List<MimeTypeInfo>> mimeConfig = new HashMap<String, List<MimeTypeInfo>>();
-    private final Config config = new Config(new HashMap<String, Object>(), this);
     private final Server localhost;
 
     public MockOfflineProvisioning() {
         super(true);
         Map<String, Object> attrs = new HashMap<String, Object>();
         attrs.put(Provisioning.A_zimbraServiceHostname, "localhost");
-        localhost = new Server("localhost", "localhost", attrs, Collections.<String, Object>emptyMap(), this);
+        localhost = new Server("localhost", "localhost", attrs, Collections.<String, Object> emptyMap(), this);
     }
 
     @Override
-    public Account createAccount(String email, String password,
-            Map<String, Object> attrs) throws ServiceException {
+    public synchronized Account createAccount(String email, String password, Map<String, Object> attrs) throws ServiceException {
         validate(ProvisioningValidator.CREATE_ACCOUNT, email, null, attrs);
 
         Account account = new OfflineAccount(email, email, attrs, null, null, this);
@@ -97,20 +94,22 @@ public final class MockOfflineProvisioning extends OfflineProvisioning {
         }
     }
 
+    private final Map<String, List<MimeTypeInfo>> mimeConfig = new HashMap<String, List<MimeTypeInfo>>();
+
     @Override
-    public List<MimeTypeInfo> getMimeTypes(String mime) {
+    public synchronized List<MimeTypeInfo> getMimeTypes(String mime) {
         List<MimeTypeInfo> result = mimeConfig.get(mime);
         if (result != null) {
             return result;
         } else {
             MockMimeTypeInfo info = new MockMimeTypeInfo();
             info.setHandlerClass(UnknownTypeHandler.class.getName());
-            return Collections.<MimeTypeInfo>singletonList(info);
+            return Collections.<MimeTypeInfo> singletonList(info);
         }
     }
 
     @Override
-    public List<MimeTypeInfo> getAllMimeTypes() {
+    public synchronized List<MimeTypeInfo> getAllMimeTypes() {
         List<MimeTypeInfo> result = new ArrayList<MimeTypeInfo>();
         for (List<MimeTypeInfo> entry : mimeConfig.values()) {
             result.addAll(entry);
@@ -127,6 +126,8 @@ public final class MockOfflineProvisioning extends OfflineProvisioning {
         list.add(info);
     }
 
+    private final Config config = new Config(new HashMap<String, Object>(), this);
+
     @Override
     public Config getConfig() {
         return config;
@@ -138,9 +139,7 @@ public final class MockOfflineProvisioning extends OfflineProvisioning {
 //    }
 
     @Override
-    public void modifyAttrs(Entry entry, Map<String, ? extends Object> attrs,
-            boolean checkImmutable) {
-
+    public void modifyAttrs(Entry entry, Map<String, ? extends Object> attrs, boolean checkImmutable) {
         Map<String, Object> map = entry.getAttrs(false);
         for (Map.Entry<String, ? extends Object> attr : attrs.entrySet()) {
             if (attr.getValue() != null) {
@@ -158,51 +157,48 @@ public final class MockOfflineProvisioning extends OfflineProvisioning {
     }
 
     @Override
-    public void modifyAttrs(Entry e, Map<String, ? extends Object> attrs,
-            boolean checkImmutable, boolean allowCallback) {
+    public void modifyAttrs(Entry e, Map<String, ? extends Object> attrs, boolean checkImmutable, boolean allowCallback) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void reload(Entry e) {
+    public synchronized void reload(Entry e) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean inDistributionList(Account acct, String zimbraId) {
+    public synchronized boolean inDistributionList(Account acct, String zimbraId) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public Set<String> getDistributionLists(Account acct) {
+    public synchronized Set<String> getDistributionLists(Account acct) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public List<DistributionList> getDistributionLists(Account acct,
-            boolean directOnly, Map<String, String> via) {
+    public synchronized List<DistributionList> getDistributionLists(Account acct, boolean directOnly, Map<String, String> via) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public List<DistributionList> getDistributionLists(DistributionList list,
-            boolean directOnly, Map<String, String> via) {
+    public synchronized List<DistributionList> getDistributionLists(DistributionList list, boolean directOnly, Map<String, String> via) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean healthCheck() {
+    public synchronized boolean healthCheck() {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public GlobalGrant getGlobalGrant() {
+    public synchronized GlobalGrant getGlobalGrant() {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public Account restoreAccount(String emailAddress, String password,
-            Map<String, Object> attrs, Map<String, Object> origAttrs) {
+    public synchronized Account restoreAccount(String emailAddress, String password, Map<String, Object> attrs,
+            Map<String, Object> origAttrs) {
         throw new UnsupportedOperationException();
     }
 
@@ -212,7 +208,7 @@ public final class MockOfflineProvisioning extends OfflineProvisioning {
     }
 
     @Override
-    public void renameAccount(String zimbraId, String newName) {
+    public synchronized void renameAccount(String zimbraId, String newName) {
         throw new UnsupportedOperationException();
     }
 
@@ -222,12 +218,12 @@ public final class MockOfflineProvisioning extends OfflineProvisioning {
     }
 
     @Override
-    public void setCOS(Account acct, Cos cos) {
+    public synchronized void setCOS(Account acct, Cos cos) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void modifyAccountStatus(Account acct, String newStatus) {
+    public synchronized void modifyAccountStatus(Account acct, String newStatus) {
         throw new UnsupportedOperationException();
     }
 
@@ -237,314 +233,301 @@ public final class MockOfflineProvisioning extends OfflineProvisioning {
     }
 
     @Override
-    public void authAccount(Account acct, String password, Protocol proto,
-            Map<String, Object> authCtxt) {
+    public void authAccount(Account acct, String password, Protocol proto, Map<String, Object> authCtxt) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void preAuthAccount(Account acct, String accountName,
-            String accountBy, long timestamp, long expires, String preAuth,
-            Map<String, Object> authCtxt) {
+    public synchronized void preAuthAccount(Account acct, String accountName, String accountBy, long timestamp, long expires,
+            String preAuth, Map<String, Object> authCtxt) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void ssoAuthAccount(Account acct, AuthContext.Protocol proto, Map<String, Object> authCtxt)
-    throws ServiceException {
+    public void ssoAuthAccount(Account acct, AuthContext.Protocol proto, Map<String, Object> authCtxt) throws ServiceException {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void changePassword(Account acct, String currentPassword,
-            String newPassword) {
+    public synchronized void changePassword(Account acct, String currentPassword, String newPassword) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public SetPasswordResult setPassword(Account acct, String newPassword) {
+    public synchronized SetPasswordResult setPassword(Account acct, String newPassword) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void checkPasswordStrength(Account acct, String password) {
+    public synchronized void checkPasswordStrength(Account acct, String password) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void addAlias(Account acct, String alias) {
+    public synchronized void addAlias(Account acct, String alias) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void removeAlias(Account acct, String alias) {
+    public synchronized void removeAlias(Account acct, String alias) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public Domain createDomain(String name, Map<String, Object> attrs) {
+    public synchronized Domain createDomain(String name, Map<String, Object> attrs) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public Domain get(DomainBy keyType, String key) {
+    public synchronized Domain get(DomainBy keyType, String key) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public List<Domain> getAllDomains() {
+    public synchronized List<Domain> getAllDomains() {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void deleteDomain(String zimbraId) {
+    public synchronized void deleteDomain(String zimbraId) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public Cos createCos(String name, Map<String, Object> attrs) {
+    public synchronized Cos createCos(String name, Map<String, Object> attrs) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public Cos copyCos(String srcCosId, String destCosName) {
+    public synchronized Cos copyCos(String srcCosId, String destCosName) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void renameCos(String zimbraId, String newName) {
+    public synchronized void renameCos(String zimbraId, String newName) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public Cos get(CosBy keyType, String key) {
+    public synchronized Cos get(CosBy keyType, String key) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public List<Cos> getAllCos() {
+    public synchronized List<Cos> getAllCos() {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void deleteCos(String zimbraId) {
+    public synchronized void deleteCos(String zimbraId) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public Server createServer(String name, Map<String, Object> attrs) {
+    public synchronized Server createServer(String name, Map<String, Object> attrs) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public Server get(ServerBy keyName, String key) {
+    public synchronized Server get(ServerBy keyName, String key) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public List<Server> getAllServers() {
+    public synchronized List<Server> getAllServers() {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public List<Server> getAllServers(String service) {
+    public synchronized List<Server> getAllServers(String service) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void deleteServer(String zimbraId) {
+    public synchronized void deleteServer(String zimbraId) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public DistributionList createDistributionList(String listAddress,
-            Map<String, Object> listAttrs) {
+    public synchronized DistributionList createDistributionList(String listAddress, Map<String, Object> listAttrs) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public DistributionList get(DistributionListBy keyType, String key) {
+    public synchronized DistributionList get(DistributionListBy keyType, String key) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void deleteDistributionList(String zimbraId) {
+    public synchronized void deleteDistributionList(String zimbraId) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void addAlias(DistributionList dl, String alias) {
+    public synchronized void addAlias(DistributionList dl, String alias) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void removeAlias(DistributionList dl, String alias) {
+    public synchronized void removeAlias(DistributionList dl, String alias) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void renameDistributionList(String zimbraId, String newName) {
+    public synchronized void renameDistributionList(String zimbraId, String newName) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public Zimlet getZimlet(String name) {
+    public synchronized Zimlet getZimlet(String name) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public List<Zimlet> listAllZimlets() {
+    public synchronized List<Zimlet> listAllZimlets() {
         return Collections.emptyList();
     }
 
     @Override
-    public Zimlet createZimlet(String name, Map<String, Object> attrs) {
+    public synchronized Zimlet createZimlet(String name, Map<String, Object> attrs) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void deleteZimlet(String name) {
+    public synchronized void deleteZimlet(String name) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public CalendarResource createCalendarResource(String emailAddress,
-            String password, Map<String, Object> attrs) {
+    public synchronized CalendarResource createCalendarResource(String emailAddress, String password, Map<String, Object> attrs) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void deleteCalendarResource(String zimbraId) {
+    public synchronized void deleteCalendarResource(String zimbraId) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void renameCalendarResource(String zimbraId, String newName) {
+    public synchronized void renameCalendarResource(String zimbraId, String newName) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public CalendarResource get(CalendarResourceBy keyType, String key) {
+    public synchronized CalendarResource get(CalendarResourceBy keyType, String key) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public List<Account> getAllAccounts(Domain d) {
+    public synchronized List<Account> getAllAccounts(Domain d) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void getAllAccounts(Domain d, Visitor visitor) {
+    public synchronized void getAllAccounts(Domain d, Visitor visitor) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void getAllAccounts(Domain d, Server s, Visitor visitor) {
+    public synchronized void getAllAccounts(Domain d, Server s, Visitor visitor) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public List<?> getAllCalendarResources(Domain d) {
+    public synchronized List<?> getAllCalendarResources(Domain d) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void getAllCalendarResources(Domain d, Visitor visitor) {
+    public synchronized void getAllCalendarResources(Domain d, Visitor visitor) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void getAllCalendarResources(Domain d, Server s, Visitor visitor) {
+    public synchronized void getAllCalendarResources(Domain d, Server s, Visitor visitor) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public List<?> getAllDistributionLists(Domain d) {
+    public synchronized List<?> getAllDistributionLists(Domain d) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void addMembers(DistributionList list, String[] members) {
+    public synchronized void addMembers(DistributionList list, String[] members) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void removeMembers(DistributionList list, String[] member) {
+    public synchronized void removeMembers(DistributionList list, String[] member) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public Identity createIdentity(Account account, String identityName,
-            Map<String, Object> attrs) {
+    public synchronized Identity createIdentity(Account account, String identityName, Map<String, Object> attrs) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public Identity restoreIdentity(Account account, String identityName,
-            Map<String, Object> attrs) {
+    public synchronized Identity restoreIdentity(Account account, String identityName, Map<String, Object> attrs) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void modifyIdentity(Account account, String identityName,
-            Map<String, Object> attrs) {
+    public synchronized void modifyIdentity(Account account, String identityName, Map<String, Object> attrs) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void deleteIdentity(Account account, String identityName) {
+    public synchronized void deleteIdentity(Account account, String identityName) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public List<Identity> getAllIdentities(Account account) {
+    public synchronized List<Identity> getAllIdentities(Account account) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public Identity get(Account account, IdentityBy keyType, String key) {
+    public synchronized Identity get(Account account, IdentityBy keyType, String key) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public Signature createSignature(Account account, String signatureName,
-            Map<String, Object> attrs) {
+    public synchronized Signature createSignature(Account account, String signatureName, Map<String, Object> attrs) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public Signature restoreSignature(Account account, String signatureName,
-            Map<String, Object> attrs) {
+    public synchronized Signature restoreSignature(Account account, String signatureName, Map<String, Object> attrs) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void modifySignature(Account account, String signatureId,
-            Map<String, Object> attrs) {
+    public synchronized void modifySignature(Account account, String signatureId, Map<String, Object> attrs) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void deleteSignature(Account account, String signatureId) {
+    public synchronized void deleteSignature(Account account, String signatureId) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public List<Signature> getAllSignatures(Account account) {
+    public synchronized List<Signature> getAllSignatures(Account account) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public Signature get(Account account, SignatureBy keyType, String key) {
+    public synchronized Signature get(Account account, SignatureBy keyType, String key) {
         throw new UnsupportedOperationException();
     }
 
-    private Map<String, DataSource> dataSourcesById = new HashMap<String, DataSource>();
-    private Map<String, DataSource> dataSourcesByName = new HashMap<String, DataSource>();
-    
+    private final Map<String, DataSource> dataSourcesById = new HashMap<String, DataSource>();
+    private final Map<String, DataSource> dataSourcesByName = new HashMap<String, DataSource>();
+
     @Override
-    public DataSource createDataSource(Account account, DataSourceType type,
-            String dataSourceName, Map<String, Object> attrs) {
+    public synchronized DataSource createDataSource(Account account, DataSourceType type, String dataSourceName, Map<String, Object> attrs) {
         DataSource ds = new OfflineDataSource(account, type, dataSourceName, (String) attrs.get(A_zimbraDataSourceId), attrs, this);
         dataSourcesById.put(ds.getId(), ds);
         dataSourcesByName.put(ds.getName(), ds);
@@ -552,36 +535,33 @@ public final class MockOfflineProvisioning extends OfflineProvisioning {
     }
 
     @Override
-    public DataSource createDataSource(Account account, DataSourceType type,
-            String dataSourceName, Map<String, Object> attrs,
+    public synchronized DataSource createDataSource(Account account, DataSourceType type, String dataSourceName, Map<String, Object> attrs,
             boolean passwdAlreadyEncrypted) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public DataSource restoreDataSource(Account account, DataSourceType type,
-            String dataSourceName, Map<String, Object> attrs) {
+    public synchronized DataSource restoreDataSource(Account account, DataSourceType type, String dataSourceName, Map<String, Object> attrs) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void modifyDataSource(Account account, String dataSourceId,
-            Map<String, Object> attrs) {
+    public void modifyDataSource(Account account, String dataSourceId, Map<String, Object> attrs) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void deleteDataSource(Account account, String dataSourceId) {
+    public synchronized void deleteDataSource(Account account, String dataSourceId) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public List<DataSource> getAllDataSources(Account account) {
+    public synchronized List<DataSource> getAllDataSources(Account account) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public DataSource get(Account account, DataSourceBy keyType, String key) {
+    public synchronized DataSource get(Account account, DataSourceBy keyType, String key) {
         if (keyType == DataSourceBy.id) {
             return dataSourcesById.get(key);
         } else if (keyType == DataSourceBy.name) {
@@ -589,12 +569,10 @@ public final class MockOfflineProvisioning extends OfflineProvisioning {
         } else {
             throw new UnsupportedOperationException();
         }
-            
     }
 
     @Override
-    public XMPPComponent createXMPPComponent(String name, Domain domain,
-            Server server, Map<String, Object> attrs) {
+    public XMPPComponent createXMPPComponent(String name, Domain domain, Server server, Map<String, Object> attrs) {
         throw new UnsupportedOperationException();
     }
 
