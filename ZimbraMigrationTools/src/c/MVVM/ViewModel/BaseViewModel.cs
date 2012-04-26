@@ -182,6 +182,7 @@ public class BaseViewModel: INotifyPropertyChanged
         m_config.AdvancedImportOptions.MigrateOnOrAfter =
             (optionsModel.IsOnOrAfter) ? DateTime.Parse(optionsModel.MigrateONRAfter)
             : DateTime.Now.AddMonths(-3);
+        m_config.AdvancedImportOptions.IsSkipPrevMigratedItems = optionsModel.IsSkipPrevMigratedItems;
         m_config.AdvancedImportOptions.IsMaxMessageSize = optionsModel.IsMaxMessageSize;
         m_config.AdvancedImportOptions.MaxMessageSize =
             (optionsModel.IsMaxMessageSize) ? optionsModel.MaxMessageSize

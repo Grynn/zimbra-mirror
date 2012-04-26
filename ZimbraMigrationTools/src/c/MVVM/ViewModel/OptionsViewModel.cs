@@ -54,6 +54,7 @@ public class OptionsViewModel: BaseViewModel
         MigrateONRAfter = config.AdvancedImportOptions.MigrateOnOrAfter.ToLongDateString();
         IsOnOrAfter = config.AdvancedImportOptions.IsOnOrAfter;
         MaxMessageSize = config.AdvancedImportOptions.MaxMessageSize;
+        IsSkipPrevMigratedItems = config.AdvancedImportOptions.IsSkipPrevMigratedItems;
         IsMaxMessageSize = config.AdvancedImportOptions.IsMaxMessageSize;
         IsSkipFolders = config.AdvancedImportOptions.IsSkipFolders;
 
@@ -343,6 +344,18 @@ public class OptionsViewModel: BaseViewModel
             m_config.AdvancedImportOptions.IsMaxMessageSize = value;
 
             OnPropertyChanged(new PropertyChangedEventArgs("IsMaxMessageSize"));
+        }
+    }
+    public bool IsSkipPrevMigratedItems
+    {
+        get { return m_config.AdvancedImportOptions.IsSkipPrevMigratedItems; }
+        set
+        {
+            if (value == m_config.AdvancedImportOptions.IsSkipPrevMigratedItems)
+                return;
+            m_config.AdvancedImportOptions.IsSkipPrevMigratedItems = value;
+
+            OnPropertyChanged(new PropertyChangedEventArgs("IsSkipPrevMigratedItems"));
         }
     }
     private string placeholderstring;
