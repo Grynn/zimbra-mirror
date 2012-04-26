@@ -13,7 +13,7 @@ import com.zimbra.qa.selenium.framework.util.staf.Stafpostqueue;
  */
 public class DisplayConversationMessage extends DisplayMail {
 
-	private String itemLocator = null;
+	private String itemId = null;
 	
 	protected DisplayConversationMessage(AbsApplication application) {
 		super(application);
@@ -23,18 +23,18 @@ public class DisplayConversationMessage extends DisplayMail {
 
 	/**
 	 * Set the locator to this item in the DOM
-	 * @param itemLocator
+	 * @param id
 	 */
-	public void setItemLocator(String itemLocator) {
-		this.itemLocator = itemLocator;
+	public void setItemId(String id) {
+		this.itemId = id;
 	}
 
 	/**
 	 * Get the locator to this item in the DOM
 	 * @return
 	 */
-	public String getItemLocator() {
-		return itemLocator;
+	public String getItemId() {
+		return itemId;
 	}
 
 	public AbsPage zPressButton(Button button) throws HarnessException {
@@ -48,7 +48,7 @@ public class DisplayConversationMessage extends DisplayMail {
 
 		if ( button == Button.B_QUICK_REPLY_REPLY ) {
 			
-			locator = "css=div@"+ this.itemLocator + " a[id$='__footer_reply']";
+			locator = "css=div#"+ this.itemId + " a[id$='__footer_reply']";
 			this.sClick(locator);
 			this.zWaitForBusyOverlay();
 			
@@ -56,7 +56,7 @@ public class DisplayConversationMessage extends DisplayMail {
 
 		} else if ( button == Button.B_QUICK_REPLY_REPLY_ALL ) {
 			
-			locator = "css=div@"+ this.itemLocator + " a[id$='__footer_replyAll']";
+			locator = "css=div#"+ this.itemId + " a[id$='__footer_replyAll']";
 			this.sClick(locator);
 			this.zWaitForBusyOverlay();
 			
@@ -64,7 +64,7 @@ public class DisplayConversationMessage extends DisplayMail {
 
 		} else if ( button == Button.B_QUICK_REPLY_FORWARD ) {
 			
-			locator = "css=div@"+ this.itemLocator + " a[id$='__footer_forward']";
+			locator = "css=div#"+ this.itemId + " a[id$='__footer_forward']";
 			page = new FormMailNew(this.MyApplication);
 
 			this.sClick(locator);
@@ -76,7 +76,7 @@ public class DisplayConversationMessage extends DisplayMail {
 
 		} else if ( button == Button.B_QUICK_REPLY_MORE_ACTIONS ) {
 			
-			locator = "css=div@"+ this.itemLocator + " a[id$='__footer_moreActions']";
+			locator = "css=div#"+ this.itemId + " a[id$='__footer_moreActions']";
 			this.sClick(locator);
 			this.zWaitForBusyOverlay();
 			
@@ -143,7 +143,7 @@ public class DisplayConversationMessage extends DisplayMail {
 		
 		if ( field == Field.Body ) {
 
-			locator = "css=div@zv__CLV-main textarea[id$='_replyInput']";
+			locator = "css=div#zv__CLV-main textarea[id$='_replyInput']";
 				
 		} else {
 			
@@ -176,40 +176,10 @@ public class DisplayConversationMessage extends DisplayMail {
 
 	}
 	
-	/**
-	 * Get the Quick Reply Placeholder Hepler Text (e.g. "click here to reply to user1, user2, and user3")
-	 * @return the text in the placeholder area
-	 * @throws HarnessException
-	 */
-	public String zGetQuickReplyPlaceholder() throws HarnessException {
-
-		// Make sure the client is not busy
-		this.zWaitForBusyOverlay();
-		SleepUtil.sleepSmall();
-		
-		
-		String locator = "css=textarea[id='zv__CLV-main__CV_replyInput']";
-		
-		
-		if ( !this.sIsElementPresent(locator) ) {
-			throw new HarnessException("Placeholder not visible!");
-		}
-		
-		// The placeholder tests are ok when running manually, but
-		// fail in TMS.  Get the HTML to inspect what the TMS
-		// execution is failing on.
-		this.zGetHtml("css=div#zv__CLV-main__CV");
-		
-		String placeholder = this.sGetAttribute(locator + "@placeholder");
-		logger.debug("Found placeholder text: "+ placeholder);
-		
-		return (placeholder);
-		
-	}
 
 	public String prettyPrint() {
 		StringBuilder sb = new StringBuilder();
-		sb.append(itemLocator);
+		sb.append(itemId);
 		return (sb.toString());
 	}
 
