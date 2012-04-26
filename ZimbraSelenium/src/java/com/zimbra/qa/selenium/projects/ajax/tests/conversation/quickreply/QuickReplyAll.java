@@ -1,5 +1,7 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.conversation.quickreply;
 
+import java.util.List;
+
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.MailItem;
@@ -49,14 +51,18 @@ public class QuickReplyAll extends PrefGroupMailByConversationTest {
 		// Click Get Mail button
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 		
-		// Select the item
+		// Select the conversation
 		DisplayConversation display = (DisplayConversation)app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
 		
+		// Get the first mesage
+		List<DisplayConversationMessage> messages = display.zListGetMessages();
+				
 		// Quick Reply
-		display.zPressButton(Button.B_QUICK_REPLY_REPLY_ALL);
-		display.zFillField(Field.Body, reply);
-		display.zPressButton(Button.B_QUICK_REPLY_SEND);
-	
+		messages.get(0).zPressButton(Button.B_QUICK_REPLY_REPLY_ALL);
+		messages.get(0).zFillField(Field.Body, reply);
+		messages.get(0).zPressButton(Button.B_QUICK_REPLY_SEND);
+
+		
 
 		// Verify message in Sent
 		MailItem sent = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject +") from:("+ app.zGetActiveAccount().EmailAddress +")");
@@ -102,13 +108,16 @@ public class QuickReplyAll extends PrefGroupMailByConversationTest {
 		// Click Get Mail button
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 		
-		// Select the item
+		// Select the conversation
 		DisplayConversation display = (DisplayConversation)app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
 		
+		// Get the first mesage
+		List<DisplayConversationMessage> messages = display.zListGetMessages();
+				
 		// Quick Reply
-		display.zPressButton(Button.B_QUICK_REPLY_REPLY_ALL);
-		display.zFillField(Field.Body, reply);
-		display.zPressButton(Button.B_QUICK_REPLY_SEND);
+		messages.get(0).zPressButton(Button.B_QUICK_REPLY_REPLY_ALL);
+		messages.get(0).zFillField(Field.Body, reply);
+		messages.get(0).zPressButton(Button.B_QUICK_REPLY_SEND);
 	
 
 		// Verify message in Sent
@@ -172,13 +181,16 @@ public class QuickReplyAll extends PrefGroupMailByConversationTest {
 		// Click Get Mail button
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 		
-		// Select the item
+		// Select the conversation
 		DisplayConversation display = (DisplayConversation)app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
 		
+		// Get the first mesage
+		List<DisplayConversationMessage> messages = display.zListGetMessages();
+				
 		// Quick Reply
-		display.zPressButton(Button.B_QUICK_REPLY_REPLY_ALL);
-		display.zFillField(Field.Body, reply);
-		display.zPressButton(Button.B_QUICK_REPLY_SEND);
+		messages.get(0).zPressButton(Button.B_QUICK_REPLY_REPLY_ALL);
+		messages.get(0).zFillField(Field.Body, reply);
+		messages.get(0).zPressButton(Button.B_QUICK_REPLY_SEND);
 	
 
 		// Verify message in Sent

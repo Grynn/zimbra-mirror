@@ -1,5 +1,7 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.conversation.quickreply;
 
+import java.util.List;
+
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.MailItem;
@@ -49,13 +51,16 @@ public class QuickReply extends PrefGroupMailByConversationTest {
 		// Click Get Mail button
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 		
-		// Select the item
+		// Select the conversation
 		DisplayConversation display = (DisplayConversation)app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
 		
+		// Get the first mesage
+		List<DisplayConversationMessage> messages = display.zListGetMessages();
+				
 		// Quick Reply
-		display.zPressButton(Button.B_QUICK_REPLY_REPLY);
-		display.zFillField(Field.Body, reply);
-		display.zPressButton(Button.B_QUICK_REPLY_SEND);
+		messages.get(0).zPressButton(Button.B_QUICK_REPLY_REPLY);
+		messages.get(0).zFillField(Field.Body, reply);
+		messages.get(0).zPressButton(Button.B_QUICK_REPLY_SEND);
 	
 
 		// Verify message in Sent
@@ -102,13 +107,16 @@ public class QuickReply extends PrefGroupMailByConversationTest {
 		// Click Get Mail button
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 		
-		// Select the item
+		// Select the conversation
 		DisplayConversation display = (DisplayConversation)app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
 		
+		// Get the first mesage
+		List<DisplayConversationMessage> messages = display.zListGetMessages();
+				
 		// Quick Reply
-		display.zPressButton(Button.B_QUICK_REPLY_REPLY);
-		display.zFillField(Field.Body, reply);
-		display.zPressButton(Button.B_QUICK_REPLY_SEND);
+		messages.get(0).zPressButton(Button.B_QUICK_REPLY_REPLY);
+		messages.get(0).zFillField(Field.Body, reply);
+		messages.get(0).zPressButton(Button.B_QUICK_REPLY_SEND);
 	
 
 		// Verify message in Sent
@@ -172,13 +180,16 @@ public class QuickReply extends PrefGroupMailByConversationTest {
 		// Click Get Mail button
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 		
-		// Select the item
+		// Select the conversation
 		DisplayConversation display = (DisplayConversation)app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
 		
+		// Get the first mesage
+		List<DisplayConversationMessage> messages = display.zListGetMessages();
+				
 		// Quick Reply
-		display.zPressButton(Button.B_QUICK_REPLY_REPLY);
-		display.zFillField(Field.Body, reply);
-		display.zPressButton(Button.B_QUICK_REPLY_SEND);
+		messages.get(0).zPressButton(Button.B_QUICK_REPLY_REPLY);
+		messages.get(0).zFillField(Field.Body, reply);
+		messages.get(0).zPressButton(Button.B_QUICK_REPLY_SEND);
 	
 
 		// Verify message in Sent
@@ -202,5 +213,268 @@ public class QuickReply extends PrefGroupMailByConversationTest {
 		ZAssert.assertNull(bcc, "Verify the message is NOT received by the original Bcc");
 
 	}
+
+	
+	@Test(	description = "Quick Reply two a 3 message conversation - first message",
+			groups = { "functional" })
+	public void QuickReply_10() throws HarnessException {
+		
+		ZimbraAccount account1 = new ZimbraAccount();
+		account1.provision();
+		account1.authenticate();
+		
+		ZimbraAccount account2 = new ZimbraAccount();
+		account2.provision();
+		account2.authenticate();
+		
+		ZimbraAccount account3 = new ZimbraAccount();
+		account3.provision();
+		account3.authenticate();
+		
+
+		// Create the message data to be sent
+		String subject = "subject" + ZimbraSeleniumProperties.getUniqueString();
+		String content1 = "onecontent" + ZimbraSeleniumProperties.getUniqueString();
+		String content2 = "twocontent" + ZimbraSeleniumProperties.getUniqueString();
+		String content3 = "threecontent" + ZimbraSeleniumProperties.getUniqueString();
+		String reply = "quickreply" + ZimbraSeleniumProperties.getUniqueString();
+		
+		account1.soapSend(
+				"<SendMsgRequest xmlns='urn:zimbraMail'>" +
+					"<m>" +
+						"<e t='t' a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
+						"<su>RE: "+ subject +"</su>" +
+						"<mp ct='text/plain'>" +
+							"<content>"+ content1 +"</content>" +
+						"</mp>" +
+					"</m>" +
+				"</SendMsgRequest>");
+
+		account2.soapSend(
+				"<SendMsgRequest xmlns='urn:zimbraMail'>" +
+					"<m>" +
+						"<e t='t' a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
+						"<su>RE: "+ subject +"</su>" +
+						"<mp ct='text/plain'>" +
+							"<content>"+ content2 +"</content>" +
+						"</mp>" +
+					"</m>" +
+				"</SendMsgRequest>");
+
+		account3.soapSend(
+				"<SendMsgRequest xmlns='urn:zimbraMail'>" +
+					"<m>" +
+						"<e t='t' a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
+						"<su>RE: "+ subject +"</su>" +
+						"<mp ct='text/plain'>" +
+							"<content>"+ content3 +"</content>" +
+						"</mp>" +
+					"</m>" +
+				"</SendMsgRequest>");
+
+		// Click Get Mail button
+		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+		
+		// Select the conversation
+		DisplayConversation display = (DisplayConversation)app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
+		
+		// Get the first mesage
+		List<DisplayConversationMessage> messages = display.zListGetMessages();
+				
+		// Quick Reply
+		messages.get(0).zPressButton(Button.B_QUICK_REPLY_REPLY);
+		messages.get(0).zFillField(Field.Body, reply);
+		messages.get(0).zPressButton(Button.B_QUICK_REPLY_SEND);
+	
+
+		MailItem mailitem;
+		
+		// Verify message is received by account3
+		mailitem = MailItem.importFromSOAP(account3, "subject:("+ subject +") from:("+ app.zGetActiveAccount().EmailAddress +")");
+		ZAssert.assertNotNull(mailitem, "Verify message is received by account3");
+
+		// Verify message is not received by account2 and account1
+		mailitem = MailItem.importFromSOAP(account2, "subject:("+ subject +") from:("+ app.zGetActiveAccount().EmailAddress +")");
+		ZAssert.assertNull(mailitem, "Verify message is not received by account2 and account1");
+
+		mailitem = MailItem.importFromSOAP(account1, "subject:("+ subject +") from:("+ app.zGetActiveAccount().EmailAddress +")");
+		ZAssert.assertNull(mailitem, "Verify message is not received by account2 and account1");
+
+	}
+
+	@Test(	description = "Quick Reply two a 3 message conversation - middle message",
+			groups = { "functional" })
+	public void QuickReply_11() throws HarnessException {
+		
+		ZimbraAccount account1 = new ZimbraAccount();
+		account1.provision();
+		account1.authenticate();
+		
+		ZimbraAccount account2 = new ZimbraAccount();
+		account2.provision();
+		account2.authenticate();
+		
+		ZimbraAccount account3 = new ZimbraAccount();
+		account3.provision();
+		account3.authenticate();
+		
+
+		// Create the message data to be sent
+		String subject = "subject" + ZimbraSeleniumProperties.getUniqueString();
+		String content1 = "onecontent" + ZimbraSeleniumProperties.getUniqueString();
+		String content2 = "twocontent" + ZimbraSeleniumProperties.getUniqueString();
+		String content3 = "threecontent" + ZimbraSeleniumProperties.getUniqueString();
+		String reply = "quickreply" + ZimbraSeleniumProperties.getUniqueString();
+		
+		account1.soapSend(
+				"<SendMsgRequest xmlns='urn:zimbraMail'>" +
+					"<m>" +
+						"<e t='t' a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
+						"<su>RE: "+ subject +"</su>" +
+						"<mp ct='text/plain'>" +
+							"<content>"+ content1 +"</content>" +
+						"</mp>" +
+					"</m>" +
+				"</SendMsgRequest>");
+
+		account2.soapSend(
+				"<SendMsgRequest xmlns='urn:zimbraMail'>" +
+					"<m>" +
+						"<e t='t' a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
+						"<su>RE: "+ subject +"</su>" +
+						"<mp ct='text/plain'>" +
+							"<content>"+ content2 +"</content>" +
+						"</mp>" +
+					"</m>" +
+				"</SendMsgRequest>");
+
+		account3.soapSend(
+				"<SendMsgRequest xmlns='urn:zimbraMail'>" +
+					"<m>" +
+						"<e t='t' a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
+						"<su>RE: "+ subject +"</su>" +
+						"<mp ct='text/plain'>" +
+							"<content>"+ content3 +"</content>" +
+						"</mp>" +
+					"</m>" +
+				"</SendMsgRequest>");
+
+		// Click Get Mail button
+		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+		
+		// Select the conversation
+		DisplayConversation display = (DisplayConversation)app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
+		
+		// Get the first mesage
+		List<DisplayConversationMessage> messages = display.zListGetMessages();
+				
+		// Quick Reply
+		messages.get(1).zPressButton(Button.B_QUICK_REPLY_REPLY);
+		messages.get(1).zFillField(Field.Body, reply);
+		messages.get(1).zPressButton(Button.B_QUICK_REPLY_SEND);
+	
+
+		MailItem mailitem;
+		
+		// Verify message is received by account2
+		mailitem = MailItem.importFromSOAP(account2, "subject:("+ subject +") from:("+ app.zGetActiveAccount().EmailAddress +")");
+		ZAssert.assertNotNull(mailitem, "Verify message is received by account2");
+
+		// Verify message is not received by account3 and account1
+		mailitem = MailItem.importFromSOAP(account1, "subject:("+ subject +") from:("+ app.zGetActiveAccount().EmailAddress +")");
+		ZAssert.assertNull(mailitem, "Verify message is NOT received by account3 and account1");
+
+		mailitem = MailItem.importFromSOAP(account3, "subject:("+ subject +") from:("+ app.zGetActiveAccount().EmailAddress +")");
+		ZAssert.assertNull(mailitem, "Verify message is NOT received by account3 and account1");
+
+	}
+
+	@Test(	description = "Quick Reply two a 3 message conversation - last message",
+			groups = { "functional" })
+	public void QuickReply_12() throws HarnessException {
+		
+		ZimbraAccount account1 = new ZimbraAccount();
+		account1.provision();
+		account1.authenticate();
+		
+		ZimbraAccount account2 = new ZimbraAccount();
+		account2.provision();
+		account2.authenticate();
+		
+		ZimbraAccount account3 = new ZimbraAccount();
+		account3.provision();
+		account3.authenticate();
+		
+
+		// Create the message data to be sent
+		String subject = "subject" + ZimbraSeleniumProperties.getUniqueString();
+		String content1 = "onecontent" + ZimbraSeleniumProperties.getUniqueString();
+		String content2 = "twocontent" + ZimbraSeleniumProperties.getUniqueString();
+		String content3 = "threecontent" + ZimbraSeleniumProperties.getUniqueString();
+		String reply = "quickreply" + ZimbraSeleniumProperties.getUniqueString();
+		
+		account1.soapSend(
+				"<SendMsgRequest xmlns='urn:zimbraMail'>" +
+					"<m>" +
+						"<e t='t' a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
+						"<su>RE: "+ subject +"</su>" +
+						"<mp ct='text/plain'>" +
+							"<content>"+ content1 +"</content>" +
+						"</mp>" +
+					"</m>" +
+				"</SendMsgRequest>");
+
+		account2.soapSend(
+				"<SendMsgRequest xmlns='urn:zimbraMail'>" +
+					"<m>" +
+						"<e t='t' a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
+						"<su>RE: "+ subject +"</su>" +
+						"<mp ct='text/plain'>" +
+							"<content>"+ content2 +"</content>" +
+						"</mp>" +
+					"</m>" +
+				"</SendMsgRequest>");
+
+		account3.soapSend(
+				"<SendMsgRequest xmlns='urn:zimbraMail'>" +
+					"<m>" +
+						"<e t='t' a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
+						"<su>RE: "+ subject +"</su>" +
+						"<mp ct='text/plain'>" +
+							"<content>"+ content3 +"</content>" +
+						"</mp>" +
+					"</m>" +
+				"</SendMsgRequest>");
+
+		// Click Get Mail button
+		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+		
+		// Select the conversation
+		DisplayConversation display = (DisplayConversation)app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
+		
+		// Get the first mesage
+		List<DisplayConversationMessage> messages = display.zListGetMessages();
+				
+		// Quick Reply
+		messages.get(2).zPressButton(Button.B_QUICK_REPLY_REPLY);
+		messages.get(2).zFillField(Field.Body, reply);
+		messages.get(2).zPressButton(Button.B_QUICK_REPLY_SEND);
+	
+
+		MailItem mailitem;
+		
+		// Verify message is received by account1
+		mailitem = MailItem.importFromSOAP(account1, "subject:("+ subject +") from:("+ app.zGetActiveAccount().EmailAddress +")");
+		ZAssert.assertNotNull(mailitem, "Verify message is received by account1");
+
+		// Verify message is not received by account2 and account3
+		mailitem = MailItem.importFromSOAP(account2, "subject:("+ subject +") from:("+ app.zGetActiveAccount().EmailAddress +")");
+		ZAssert.assertNull(mailitem, "Verify message is NOT received by account2 and account3");
+
+		mailitem = MailItem.importFromSOAP(account3, "subject:("+ subject +") from:("+ app.zGetActiveAccount().EmailAddress +")");
+		ZAssert.assertNull(mailitem, "Verify message is NOT received by account2 and account3");
+
+	}
+
 
 }
