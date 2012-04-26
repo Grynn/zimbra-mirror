@@ -5,6 +5,7 @@ package com.zimbra.qa.selenium.projects.ajax.ui.mail;
 
 import java.util.*;
 
+import com.thoughtworks.selenium.SeleniumException;
 import com.zimbra.qa.selenium.framework.ui.AbsApplication;
 import com.zimbra.qa.selenium.framework.util.*;
 
@@ -43,8 +44,8 @@ public class DisplayConversation extends DisplayMail {
 	public List<DisplayConversationMessage> zListGetMessages() throws HarnessException {
 		List<DisplayConversationMessage> items = new ArrayList<DisplayConversationMessage>();
 		
-		String listLocator = "css=div#zv__CLV-main__CV div[id$='_messages']";
-		String rowLocator = "div.ZmMailMsgCapsuleView";
+		String listLocator = "css=div#zv__CLV-main__CV_messages";
+		String rowLocator = "div";
 
 		// Make sure the button exists
 		if ( !this.sIsElementPresent(listLocator) )
@@ -52,7 +53,7 @@ public class DisplayConversation extends DisplayMail {
 
 		
 		// How many items are in the table?
-		int count = this.sGetCssCount(listLocator + " " + rowLocator);
+		int count = this.sGetCssCount(listLocator + ">" + rowLocator);
 		logger.debug(myPageName() + " zListGetMessages: number of messages: "+ count);
 
 		this.zGetHtml(listLocator);
@@ -60,8 +61,24 @@ public class DisplayConversation extends DisplayMail {
 		// Get each conversation's data from the table list
 		for (int i = 1; i <= count; i++) {
 
-			// Add the new item to the list
-			DisplayConversationMessage item = parseMessageRow(listLocator + " " + rowLocator + ":nth-of-type("+ i +")");
+			String locator = listLocator + ">" + rowLocator +":nth-child("+ i +")";
+
+			try {
+				
+				if ( !this.sIsElementPresent(locator) ) {
+					continue;
+				}
+				
+				String clazz = this.sGetAttribute(locator + "@class");
+				if ( !("ZmMailMsgCapsuleView".equals(clazz)) ) {
+					continue;
+				}
+				
+			} catch (SeleniumException e) {
+				continue;
+			}
+			
+			DisplayConversationMessage item = parseMessageRow(locator);
 			items.add(item);
 			logger.info(item.prettyPrint());
 			
