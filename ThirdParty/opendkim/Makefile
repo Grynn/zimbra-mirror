@@ -24,7 +24,7 @@ LDFLAGS	:=	LDFLAGS="-L$(OPENSSL_LIB_DIR) -L$(CYRUS_LIB_DIR) -L$(LDAP_LIB_DIR) -L
 
 DKIM_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/opendkim/opendkim-$(DKIM_VERSION).tgz
 
-files	:= $(wildcard src/opendkim-$(DKIM_VERSION).tgz)
+files	:= $(wildcard src/opendkim-$(DKIM_VERSION).tar.gz)
 
 all: checksrc allclean build tar
 
@@ -32,18 +32,17 @@ checksrc:
 	$(if $(files), @echo "", exit 1)
 
 build:
-	(tar xzf src/opendkim-$(DKIM_VERSION).tgz; \
+	(tar xzf src/opendkim-$(DKIM_VERSION).tar.gz; \
 	cd opendkim-$(DKIM_VERSION); \
 	$(LDFLAGS) \
 	LD_LIBRARY_PATH=$(OPENSSL_LIB_DIR):$(CYRUS_LIB_DIR):$(LIBTOOL_LIB_DIR) \
-	CPPFLAGS="-I$(ZIMBRA_HOME)/cyrus-sasl-$(CYRUS_VERSION)/include -I$(ZIMBRA_HOME)/libxml2/include -I$(ZIMBRA_HOME)/curl/include \
+	CPPFLAGS="-I$(ZIMBRA_HOME)/libxml2/include/libxml2 -I$(ZIMBRA_HOME)/cyrus-sasl-$(CYRUS_VERSION)/include -I$(ZIMBRA_HOME)/libxml2/include -I$(ZIMBRA_HOME)/curl/include \
 		  -I$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/include -I$(ZIMBRA_HOME)/libtool-$(LIBTOOL_VERSION)/include $(CPPFLAG)" \
 	CFLAGS="-g -O0" \
 	$(ENVMOD) ./configure --prefix=$(ZIMBRA_HOME)/opendkim-$(DKIM_VERSION) \
 	--enable-poll \
 	--enable-adsp_lists \
 	--enable-atps \
-	--enable-diffheaders \
 	--enable-ldap_caching \
 	--enable-rate_limit \
 	--enable-replace_rules \
@@ -55,7 +54,6 @@ build:
 	--enable-selector_header \
 	--enable-sender_macro \
 	--enable-stats \
-	--enable-rbl \
 	--enable-vbr \
 	--enable-xtags \
 	--enable-default_sender \
@@ -66,16 +64,14 @@ build:
 	--enable-debug \
 	--with-openssl=/opt/zimbra/openssl \
 	--with-milter=/opt/zimbra/sendmail \
-	--with-libmemcached=/opt/zimbra/memcached \
+	--with-libmemcached=/opt/zimbra/libmemcached \
 	--with-openldap=/opt/zimbra/openldap \
 	--with-sasl=/opt/zimbra/cyrus-sasl \
 	--with-libcurl=/opt/zimbra/curl \
 	--with-libxml2=/opt/zimbra/libxml2 \
 	--without-db; \
 	LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(CYRUS_LIB_DIR):$(LIBTOOL_LIB_DIR) $(MAKE) $(MAKEARGS); \
-	LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(CYRUS_LIB_DIR):$(LIBTOOL_LIB_DIR) $(MAKE) install STRIP=""; \
-	cd contrib/slapd-modules/noopsrch; \
-	LD_RUN_PATH=$(LDAP_LIB_DIR):$(OPENSSL_LIB_DIR):$(CYRUS_LIB_DIR):$(LIBTOOL_LIB_DIR) $(MAKE) prefix=$(ZIMBRA_HOME)/opendkim-$(DKIM_VERSION) install STRIP="";)
+	LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(CYRUS_LIB_DIR):$(LIBTOOL_LIB_DIR) $(MAKE) install STRIP="";)
 	(cd $(ZIMBRA_HOME); ln -s opendkim-$(DKIM_VERSION) opendkim)
 
 tar:
