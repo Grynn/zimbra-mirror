@@ -157,7 +157,7 @@ public class PageBriefcase extends AbsTab {
 
 		String locator = Locators.zBriefcaseFolderIcon.locator;
 		
-		boolean loaded = zWaitForElementPresent(locator,"2000");
+		boolean loaded = zWaitForElementPresent(locator,"1000");
 
 		if (!loaded)
 			return (loaded);

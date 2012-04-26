@@ -1637,8 +1637,7 @@ public abstract class AbsSeleniumObject {
 				|| ZimbraSeleniumProperties.isWebDriver()){
 			logger.info("...WebDriver...executeScript:wait.until()");
 			return waitForElementPresent(locator, 10);
-		}
-		else{
+		}else{
 			return sWaitForCondition("selenium.isElementPresent(\"" + locator
 				+ "\")");
 		}
@@ -1660,8 +1659,7 @@ public abstract class AbsSeleniumObject {
 				|| ZimbraSeleniumProperties.isWebDriver())	{
 			logger.info("...WebDriver...executeScript:wait.until()");
 			return waitForElementPresent(locator, Long.valueOf(timeout)/SleepUtil.SleepGranularity);
-		}
-		else{
+		}else{
 			return sWaitForCondition("selenium.isElementPresent(\"" + locator
 				+ "\")", timeout);
 		}
@@ -1680,8 +1678,10 @@ public abstract class AbsSeleniumObject {
 		try {
 			if (ZimbraSeleniumProperties.isWebDriver())	{
 				logger.info("...WebDriver...executeScript:wait.until()");
+				waitForElementDeleted(locator, 10);
+			}else{
+				sWaitForCondition("!selenium.isElementPresent(\"" + locator + "\")");
 			}
-			sWaitForCondition("!selenium.isElementPresent(\"" + locator + "\")");
 		} catch (Exception ex) {
 			throw new HarnessException(locator + " never disappeared : ", ex);
 		}
@@ -1699,8 +1699,10 @@ public abstract class AbsSeleniumObject {
 		logger.info("zWaitForElementDeleted(" + locator + ", " + timeout +")");
 		if (ZimbraSeleniumProperties.isWebDriver())	{
 			logger.info("...WebDriver...executeScript:wait.until()");
-		}
-		return sWaitForCondition("!selenium.isElementPresent(\"" + locator + "\")", timeout);		
+			return waitForElementDeleted(locator, Long.valueOf(timeout)/SleepUtil.SleepGranularity);
+		}else{
+			return sWaitForCondition("!selenium.isElementPresent(\"" + locator + "\")", timeout);
+		}		   		
 	}
 
 	/**
@@ -1750,6 +1752,9 @@ public abstract class AbsSeleniumObject {
 	 */
 	public void zWaitForElementVisible(String locator) throws HarnessException {
 		logger.info("zWaitForElementVisible(" + locator + ")");
+		if (ZimbraSeleniumProperties.isWebDriver())	{
+			logger.info("...WebDriver...findElement.getLocation()");
+		}
 		for (int i = 0; i < 15; i++) {
 			if (zIsVisiblePerPosition(locator, 0, 0)) {
 				return;
@@ -1769,6 +1774,9 @@ public abstract class AbsSeleniumObject {
 	public void zWaitForElementInvisible(String locator)
 			throws HarnessException {
 		logger.info("zWaitForElementInvisible(" + locator + ")");
+		if (ZimbraSeleniumProperties.isWebDriver())	{
+			logger.info("...WebDriver...findElement.getLocation()");
+		}
 		for (int i = 0; i < 15; i++) {
 			if (!zIsVisiblePerPosition(locator, 0, 0)) {
 				return;
@@ -2502,6 +2510,24 @@ public abstract class AbsSeleniumObject {
 						.until(new ExpectedCondition<Boolean>(){
 							public Boolean apply(WebDriver d) {
 								return elementPresent(locator);
+				}});
+			}catch(TimeoutException  e){
+				logger.info("...waitForElementPresent()... " + locator + " timed out after " + timeout + "s");
+			}
+		}
+		return present;
+	}
+	
+	public boolean waitForElementDeleted(final String locator, long timeout) {
+		logger.info("...WebDriver...waitForElementPresent()");
+		Boolean present = false;
+		if(locator !=null && !locator.isEmpty()){
+			try{
+				present = (new FluentWait<WebDriver>(webDriver()).withTimeout(timeout, TimeUnit.SECONDS).
+					pollingEvery(500, TimeUnit.MILLISECONDS).ignoring(NoSuchElementException.class))
+						.until(new ExpectedCondition<Boolean>(){
+							public Boolean apply(WebDriver d) {
+								return !elementPresent(locator);
 				}});
 			}catch(TimeoutException  e){
 				logger.info("...waitForElementPresent()... " + locator + " timed out after " + timeout + "s");
