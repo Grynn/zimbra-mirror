@@ -125,6 +125,12 @@ function(mouseEv, div) {
 	return true;
 }
 
+// Tooltip will be based on cursor
+ZaListView.prototype.getTooltipBase =
+function (hoverEv) {
+    return null;
+}
+
 ZaListView.prototype._setListEvent =
 function (ev, listEv, clickedEl) {
 	DwtListView.prototype._setListEvent.call(this, ev, listEv, clickedEl);
