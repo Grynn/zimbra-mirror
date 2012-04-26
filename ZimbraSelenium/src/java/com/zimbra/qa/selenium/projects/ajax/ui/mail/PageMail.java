@@ -1090,7 +1090,7 @@ public class PageMail extends AbsTab {
 
 
 		if ( page != null ) {
-			//page.zWaitForActive();
+			page.zWaitForActive();
 		}
 
 		// default return command
