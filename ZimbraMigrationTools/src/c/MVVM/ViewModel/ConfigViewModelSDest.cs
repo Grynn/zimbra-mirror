@@ -125,12 +125,12 @@ public class ConfigViewModelSDest: BaseViewModel
             return;
         }
 
-        ZimbraAPI zimbraAPI = new ZimbraAPI();
+        ZimbraAPI zimbraAPI = new ZimbraAPI(true);
         int stat = -1;
         try
         {
             stat = zimbraAPI.Logon(this.ZimbraServerHostName, this.ZimbraPort, this.ZimbraAdmin,
-                this.ZimbraAdminPasswd, true);
+                this.ZimbraAdminPasswd, this.ZimbraSSL, true);
         }
         catch (Exception e)
         {

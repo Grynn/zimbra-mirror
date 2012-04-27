@@ -595,7 +595,7 @@ class Program
                         System.Console.WriteLine("Connecting to to Zimbra Server \n   ");
                         System.Console.WriteLine();
 
-                        ZimbraAPI zimbraAPI = new ZimbraAPI();
+                        ZimbraAPI zimbraAPI = new ZimbraAPI(true);
                         /*int stat = zimbraAPI.Logon(
                             myXmlConfig.ConfigObj.zimbraServer.Hostname,
                             myXmlConfig.ConfigObj.zimbraServer.Port,
@@ -606,7 +606,7 @@ class Program
                            ZCSHost,
                            ZCSPort,
                           ZCSID,
-                          ZCSPwd, true);
+                          ZCSPwd, true, true);
 
 
                         if (stat != 0)
@@ -773,7 +773,7 @@ class Program
                         accountname = accountname + "@" + ZCSHost;
                         string accountid = (Pstfile != "") ? Pstfile : userid;
 
-                            ZimbraAPI zimbraAPI = new ZimbraAPI();
+                            ZimbraAPI zimbraAPI = new ZimbraAPI(false);
 
                             System.Console.WriteLine();
                            /* ProgressUtil.RenderConsoleProgress(
@@ -787,7 +787,7 @@ class Program
                                     ZCSHost,
                                     ZCSPort,
                                     ZCSID,
-                                    ZCSPwd, false);
+                                    ZCSPwd, false, false);
 
                             if (stat != 0)
                             {

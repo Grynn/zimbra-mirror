@@ -86,10 +86,20 @@ public class ZimbraAPI
             bIsDomainAdminAccount = value;
         }
     }
+    private bool bIsServerMigration;
+    public bool IsServerMigration
+    {
+        get { return bIsServerMigration; }
+        set
+        {
+            bIsServerMigration = value;
+        }
+    }
     private Dictionary<string, string> dFolderMap;
 
-    public ZimbraAPI()
+    public ZimbraAPI(bool isServer)
     {
+        bIsServerMigration = isServer;
         ZimbraValues.GetZimbraValues();
         dFolderMap = new Dictionary<string, string>();
     }
@@ -426,7 +436,7 @@ public class ZimbraAPI
 
         uploadToken = "";
 
-        client.InvokeUploadService(ZimbraValues.GetZimbraValues().AuthToken, isSecure, filepath,mimebuffer,
+        client.InvokeUploadService(ZimbraValues.GetZimbraValues().AuthToken, IsServerMigration, filepath, mimebuffer,
             contentdisposition, contenttype, mode, out rsp);
         retval = client.status;
         if (retval == 0)
@@ -504,26 +514,19 @@ public class ZimbraAPI
 
     // API methods /////////
     public int Logon(string hostname, string port, string username, string password, bool
-        isAdmin)
+        isSecure, bool isAdmin)
     {
         if (ZimbraValues.GetZimbraValues().AuthToken.Length > 0)
             return 0;                           // already logged on
         lastError = "";
 
-        string urn = "";
+        // FBS Bug 73394 -- 4/26/12 -- rewrite this section
+        string mode = isSecure ? "https://"            : "http://";
+        string svc  = isAdmin  ? "/service/admin/soap" : "/service/soap";
+        string urn  = isAdmin  ? "urn:zimbraAdmin"     : "urn:zimbraAccount";
+        ZimbraValues.GetZimbraValues().Url = mode + hostname + ":" + port + svc;
+        // end Bug 73394
 
-        if (isAdmin)
-        {
-            ZimbraValues.GetZimbraValues().Url = "https://" + hostname + ":" + port +
-                "/service/admin/soap";
-            urn = "urn:zimbraAdmin";
-        }
-        else
-        {
-            ZimbraValues.GetZimbraValues().Url = "http://" + hostname + ":" + port +
-                "/service/soap";
-            urn = "urn:zimbraAccount";
-        }
         WebServiceClient client = new WebServiceClient {
             Url = ZimbraValues.GetZimbraValues().Url, WSServiceType =
                 WebServiceClient.ServiceType.Traditional
@@ -1105,9 +1108,14 @@ public class ZimbraAPI
                 string soapReason = ParseSoapFault(client.errResponseMessage);
 
                 if (soapReason.Length > 0)
+                {
                     lastError = soapReason;
+                    Log.err("Error on message", message["Subject"], "--", soapReason);
+                }
                 else
+                {
                     lastError = client.exceptionMessage;
+                }
             }
         }
         //File.Delete(zm.filePath);

@@ -223,7 +223,7 @@ public class ScheduleViewModel: BaseViewModel
                         }
 
                         string cosID = CosList[CurrentCOSSelection].CosID;
-                        ZimbraAPI zimbraAPI = new ZimbraAPI();
+                        ZimbraAPI zimbraAPI = new ZimbraAPI(isServer);
 
                         // FBS bug 71646 -- 3/26/12
                         string displayName = "";

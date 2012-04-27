@@ -335,7 +335,7 @@ public class UsersViewModel: BaseViewModel
     {
         if (!ValidateUsersList(true))
             return;
-        ZimbraAPI zimbraAPI = new ZimbraAPI();
+        ZimbraAPI zimbraAPI = new ZimbraAPI(isServer);
         if (ZimbraValues.zimbraValues.AuthToken.Length == 0)
         {
             MessageBox.Show("You must log on to the Zimbra server", "Zimbra Migration",

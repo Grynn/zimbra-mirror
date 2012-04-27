@@ -111,10 +111,10 @@ public class WebServiceClient
         rsp = strResponse;
     }
 
-    private HttpWebRequest CreateWebRequestRaw(string authtoken, bool isSecure)
+    private HttpWebRequest CreateWebRequestRaw(string authtoken, bool isServerMig)
     {
         CookieContainer cookieContainer = new CookieContainer();
-        Cookie cookie = (isSecure) ? new Cookie("ZM_ADMIN_AUTH_TOKEN", authtoken) : new Cookie(
+        Cookie cookie = (isServerMig) ? new Cookie("ZM_ADMIN_AUTH_TOKEN", authtoken) : new Cookie(
             "ZM_AUTH_TOKEN", authtoken);
 
         cookieContainer.Add(new Uri(this.Url), cookie);
@@ -128,7 +128,7 @@ public class WebServiceClient
         return webRequest;
     }
 
-    public void InvokeUploadService(string authtoken, bool isSecure, string filePath, string mimebuffer,
+    public void InvokeUploadService(string authtoken, bool isServerMig, string filePath, string mimebuffer,
         string theDisposition, string theType, int mode, out string rsp)
     {
         //Log.debug("Start InvokeUploadService");
@@ -150,7 +150,7 @@ public class WebServiceClient
             );
 
         // Create the request
-        HttpWebRequest webReq = this.CreateWebRequestRaw(authtoken, isSecure);
+        HttpWebRequest webReq = this.CreateWebRequestRaw(authtoken, isServerMig);
         string boundary = "--B-00=_" + DateTime.Now.Ticks.ToString("x");
         string endBoundary = Environment.NewLine + Environment.NewLine + "--" + boundary +
             "--" + Environment.NewLine;

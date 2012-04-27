@@ -558,6 +558,13 @@ public class CSMigrationWrapper
                                     try
                                     {
                                         stat = api.AddMessage(dict);
+                                        if (stat != 0)
+                                        {
+                                            Acct.LastProblemInfo = new ProblemInfo(dict["Subject"], api.LastError,
+                                                                                   ProblemInfo.TYPE_ERR);
+                                            Acct.TotalErrors++;
+                                            bError = true;
+                                        }
                                     }
                                     catch (Exception e)
                                     {
@@ -787,7 +794,7 @@ public class CSMigrationWrapper
         }
         Log.info("Acct.TotalItems=", Acct.TotalItems.ToString());
 
-        ZimbraAPI api = new ZimbraAPI();
+        ZimbraAPI api = new ZimbraAPI(isServer);
 
         foreach (dynamic folder in folders)
         {
