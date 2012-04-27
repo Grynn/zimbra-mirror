@@ -930,6 +930,7 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 							visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A_GALSearchTestResultCode,ZaDomain.Check_OK]] ,
 							visibilityChangeEventSources:[ZaDomain.A_GALSearchTestResultCode],							
 							numCols:2,
+                            colSpan:2,
 							items: [
 								{type:_DWT_ALERT_,content:ZaMsg.Domain_GALSearchTestSuccessful,
 									ref:null,
@@ -954,7 +955,8 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 							visibilityChecks:[[XForm.checkInstanceValueNot,ZaDomain.A_GALSearchTestResultCode,ZaDomain.Check_OK],
 							                  [XForm.checkInstanceValueNot,ZaDomain.A_GALSearchTestResultCode,ZaDomain.Check_SKIPPED]],							
 							visibilityChangeEventSources:[ZaDomain.A_GALSearchTestResultCode],						
-							numCols:2,					
+							numCols:2,
+                            colSpan:2,
 							items: [
 							   {type:_DWT_ALERT_,content:ZaMsg.Domain_GALSearchTestFailed,
 									ref:null,
@@ -969,7 +971,7 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 						},
 						{type:_DWT_ALERT_,content:ZaMsg.Domain_GALSearchTestSkipped,
 							ref:null,
-							colSpan:"2",
+							colSpan:2,
 							iconVisible: true,
 							align:_CENTER_,				
 							style: DwtAlert.WARNING,
