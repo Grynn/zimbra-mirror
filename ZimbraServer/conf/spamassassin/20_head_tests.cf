@@ -134,8 +134,9 @@ describe MSGID_FROM_MTA_HEADER	Message-Id was added by a relay
 header MSGID_SHORT		MESSAGEID =~ /^.{1,15}$|<.{0,4}\@/
 describe MSGID_SHORT		Message-ID is unusually short
 
-header MSGID_MULTIPLE_AT	MESSAGEID =~ /<[^>]*\@[^>]*\@/
-describe MSGID_MULTIPLE_AT	Message-ID contains multiple '@' characters
+#DEMOTED TO SANDBOX - 2012-03-21
+#header MSGID_MULTIPLE_AT	MESSAGEID =~ /<[^>]*\@[^>]*\@/
+#describe MSGID_MULTIPLE_AT	Message-ID contains multiple '@' characters
 
 ###########################################################################
 
@@ -417,6 +418,13 @@ header __ML4  exists:Mailing-List
 header __ML5  Return-Path:addr =~ m{^([^\@]+-(request|bounces|admin|owner)|owner-[^\@]+)(\@|\z)}i
 meta     __VIA_ML  __ML1 || __ML2 || __ML3 || __ML4 || __ML5
 describe __VIA_ML  Mail from a mailing list
+
+
+# some clueless mailing lists (like zmailer with an RFC822TABS option on)
+# are replacing a leading space by a TAB in header fields From, To,
+# Cc, Date (Bug 6429)
+header   __ML_TURNS_SP_TO_TAB  Received =~ /\(ORCPT <rfc822;/
+describe __ML_TURNS_SP_TO_TAB  A mailing list changing a space to a TAB
 
 
 # must keep it in sync with http://www.iana.org/assignments/ipv4-address-space/

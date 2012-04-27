@@ -39,11 +39,6 @@ score ACT_NOW_CAPS 1.404 2.399 0.925 2.211
 #score ADVANCE_FEE_4 0.001 0.001 0.001 0.271
 score ALL_TRUSTED -1.000
 score APOSTROPHE_FROM 0.148 0.786 0.651 0.545 # n=2
-score AXB_XMID_1212 0 # n=0 n=1 n=2 n=3
-score AXB_XMID_1510 0 # n=0 n=1 n=2 n=3
-score AXB_XMID_OEGOESNULL 0 # n=0 n=1 n=2 n=3
-score AXB_XM_SENDMAIL_NOT 0 # n=0 n=1 n=2 n=3
-score AXB_XR_STULDAP 0 # n=0 n=1 n=2 n=3
 score BAD_CREDIT 2.799 1.658 1.279 2.415
 score BANG_GUAR 2.202 2.377 1.690 2.704
 score BANG_OPRAH 0 # n=0 n=1 n=2 n=3
@@ -104,7 +99,7 @@ score ENGLISH_UCE_SUBJECT 0.953 1.542 2.569 2.899 # n=0
 score EXCUSE_24 2.799
 score EXCUSE_4 2.399 1.687 2.399 1.325
 score EXCUSE_REMOVE 2.907 2.992 3.299 3.299
-score FAKE_HELO_MAIL_COM_DOM 1.887 0.152 1.370 2.136
+#score FAKE_HELO_MAIL_COM_DOM 1.887 0.152 1.370 2.136
 score FAKE_OUTBLAZE_RCVD 0 # n=0 n=1 n=2 n=3
 score FAKE_REPLY_C 0.688 0.001 2.553 1.486 # n=2
 score FB_ADD_INCHES 0 # n=0 n=1 n=2 n=3
@@ -250,10 +245,15 @@ score FORGED_TELESP_RCVD 2.499 2.499 2.499 1.841 # n=0
 score FORGED_THEBAT_HTML 0 # n=0 n=1 n=2 n=3
 score FORWARD_LOOKING 0 # n=0 n=1 n=2 n=3
 score FRAGMENTED_MESSAGE 0 # n=0 n=1 n=2
+
+#FREEMAIL SCORES - Scores lowered per bug 6744
 score FREEMAIL_FORGED_REPLYTO 1.199 2.503 1.204 2.095
-score FREEMAIL_REPLY 2.499 2.499 1.788 1.929
-score FREEMAIL_REPLYTO 3.257 2.775 1.811 2.398
-score FREEMAIL_REPLYTO_END_DIGIT 1.221 0.980 1.179 1.151
+score FREEMAIL_REPLY 1.0
+score FREEMAIL_REPLYTO 1.0
+score FREEMAIL_REPLYTO_END_DIGIT 0.25
+score FREEMAIL_ENVFROM_END_DIGIT 0.25
+score FREEMAIL_FROM     0.001
+
 score FREE_PORN 0 # n=0 n=1 n=2 n=3
 score FREE_QUOTE_INSTANT 2.700 2.699 2.699 1.297 # n=2
 score FROM_BLANK_NAME 2.099 2.099 2.099 0.723
@@ -266,6 +266,7 @@ score FROM_NO_USER 0.001 2.599 0.019 0.798
 score FROM_OFFERS 2.699 2.699 2.510 2.699
 score FROM_STARTS_WITH_NUMS 2.801 0.553 1.201 0.738
 score FRT_APPROV 2.499
+score FRT_PRICE 0.001
 score FR_3TAG_3TAG 0 # n=0 n=1 n=2 n=3
 score FR_ALMOST_VIAG2 2.299 1.594 2.299 1.531 # n=2
 score FR_CANTSEETEXT 0 # n=0 n=1 n=2 n=3
@@ -523,9 +524,6 @@ score TVD_LINK_SAVE 0 # n=0 n=1 n=2 n=3
 score TVD_PH_BODY_ACCOUNTS_PRE 1.201 1.527 1.327 2.393 # n=1
 score TVD_PH_REC 3.127 2.026 3.266 1.784 # n=2
 score TVD_PH_SEC 0.291 1.498 0.869 1.764 # n=1
-score TVD_PH_SUBJ_ACCOUNTS_POST 2.602 2.607 2.497 3.099 # n=2
-score TVD_PH_SUBJ_SEC_MEASURES 2.284 1.522 1.675 1.145
-score TVD_PH_SUBJ_URGENT 1.251 2.326 2.255 2.800 # n=2
 score TVD_PP_PHISH 0 # n=0 n=1 n=2 n=3
 score TVD_QUAL_MEDS 2.697 2.397 2.799 2.483 # n=2
 score TVD_RATWARE_CB 0 # n=0 n=1 n=2 n=3
@@ -613,8 +611,6 @@ score YAHOO_RD_REDIR 0 # n=0 n=1 n=2 n=3
 
 score FH_HAS_XID 0
 
-# Bug 6394, score 1.5 is too high, depends on local traffic
-score FREEMAIL_ENVFROM_END_DIGIT 0.1
 # Bug 6022, settle at informative score
 score TVD_RCVD_IP 0.001
 score TVD_RCVD_IP4 0.001
@@ -762,11 +758,15 @@ score RCVD_IN_CSS 0 1.0 0 1.0
 score RCVD_IN_RP_CERTIFIED 0.0 -3.0 0.0 -3.0
 score RCVD_IN_RP_SAFE 0.0 -2.0 0.0 -2.0
 
-# DNSWL
+# DNSWL is a commercial service that requires payment for servers over 100K queries daily. 
+# Unfortunately, they will return true answers for DNS servers they consider abusive so
+# SA Admins must enable these rules manually.
+#
 score RCVD_IN_DNSWL_NONE 0 -0.0001 0 -0.0001
 score RCVD_IN_DNSWL_LOW 0 -0.7 0 -0.7
 score RCVD_IN_DNSWL_MED 0 -2.3 0 -2.3
 score RCVD_IN_DNSWL_HI 0 -5 0 -5
+score RCVD_IN_DNSWL_BLOCKED 0 0.001 0 0.001
 
 # IADB
 score RCVD_IN_IADB_VOUCHED 0 -2.2 0 -2.2
@@ -999,6 +999,8 @@ endif # Mail::SpamAssassin::Plugin::Hashcash
 # likely that more spammers would quickly move to setting valid SPF records
 # otherwise.  The penalties for an *incorrect* record, however, are large.  ;)
 ifplugin Mail::SpamAssassin::Plugin::SPF
+score SPF_NONE 0
+score SPF_HELO_NONE 0
 score SPF_PASS -0.001
 score SPF_HELO_PASS -0.001
 # <gen:mutable>
@@ -1025,44 +1027,17 @@ score URIBL_WS_SURBL 0 1.659 0 1.608 # n=0 n=2
 score URIBL_BLACK 0 1.775 0 1.725 # n=0 n=2
 score URIBL_GREY 0 1.084 0 0.424 # n=0 n=2
 score URIBL_DBL_SPAM 0 1.7 0 1.7
+score URIBL_DBL_REDIR 0 0.001 0 0.001
 # </gen:mutable>
 # score URIBL_GREY 0.25
-score URIBL_RED 0.001
+score URIBL_RED 0 0.001 0 0.001
+score URIBL_BLOCKED 0 0.001 0 0.001
 score URIBL_DBL_ERROR 0 0.001 0 0.001
 endif # Mail::SpamAssassin::Plugin::URIDNSBL
 
 # ReplaceTags
 ifplugin Mail::SpamAssassin::Plugin::ReplaceTags
 # <gen:mutable>
-score FRT_ADOBE2 0.001 1.099 0.221 0.877 # n=1
-score FRT_BIGGERMEM1 2.523 0.146 2.372 1.758 # n=2
-score FRT_DIPLOMA 0.000 1.548 0.787 1.599 # n=1
-score FRT_DISCOUNT 0 # n=0 n=1 n=2 n=3
-score FRT_DOLLAR 0 # n=0 n=1 n=2 n=3
-score FRT_ESTABLISH2 0 # n=0 n=1 n=2 n=3
-score FRT_FUCK2 0 # n=0 n=1 n=2 n=3
-score FRT_GUARANTEE1 0 # n=0 n=1 n=2 n=3
-score FRT_INVESTOR 0 # n=0 n=1 n=2 n=3
-score FRT_LEVITRA 0 # n=0 n=1 n=2 n=3
-score FRT_MEETING 0 # n=0 n=1 n=2 n=3
-score FRT_OFFER2 1.681 1.109 2.048 0.926 # n=2
-score FRT_OPPORTUN2 0 # n=0 n=1 n=2 n=3
-score FRT_PENIS1 2.299 2.293 1.029 0.731 # n=2
-score FRT_PRICE 0.001 # n=0 n=1 n=2 n=3
-score FRT_REFINANCE1 0 # n=0 n=1 n=2 n=3
-score FRT_ROLEX 2.699 2.183 1.440 2.699 # n=2
-score FRT_SEXUAL 0 # n=0 n=1 n=2 n=3
-score FRT_SOMA 0.000 3.280 2.099 2.871 # n=1
-score FRT_SOMA2 0.001 0.001 0.001 0.001 # n=1
-score FRT_STRONG1 0 # n=0 n=1 n=2 n=3
-score FRT_STRONG2 0 # n=0 n=1 n=2 n=3
-score FRT_SYMBOL 0 # n=0 n=1 n=2 n=3
-score FRT_TODAY2 0.480 0.693 1.988 0.905 # n=2
-score FRT_VALIUM1 0 # n=0 n=1 n=2 n=3
-score FRT_VALIUM2 0 # n=0 n=1 n=2 n=3
-score FRT_WEIGHT2 0 # n=0 n=1 n=2 n=3
-score FRT_XANAX1 0 # n=0 n=1 n=2 n=3
-score FRT_XANAX2 0 # n=0 n=1 n=2 n=3
 score FUZZY_AFFORDABLE 0 # n=0 n=1 n=2 n=3
 score FUZZY_AMBIEN 2.199 1.851 0.925 0.552
 score FUZZY_BILLION 0 # n=0 n=1 n=2 n=3
@@ -1205,11 +1180,32 @@ score TVD_FW_GRAPHIC_NAME_MID 0.600 0.001 0.389 0.095 # n=2
 # </gen:mutable>
 endif
 
-score FREEMAIL_FROM     0.001
-score MSGID_MULTIPLE_AT 0.001
+#DEMOTED TO SANDBOX
+#score MSGID_MULTIPLE_AT 0.001
 
 # Bug 6155 c115
 score KB_RATWARE_OUTLOOK_08  0
 score KB_RATWARE_OUTLOOK_12  0
 score KB_RATWARE_OUTLOOK_16  0
 score KB_RATWARE_BOUNDARY    0
+
+# MAILSPIKE RBL ENABLED FOR SA3.4 and above - BUG 6400
+if (version >= 3.004000)
+  # FLOATING SCORES FOR GA - adjust after GA to make L3 - L5 linear
+  # Probably adjust up slightly to make up for the "reuse" imperfection
+# <gen:mutable>
+  score RCVD_IN_MSPIKE_ZBI     2.7
+  score RCVD_IN_MSPIKE_L5      2.5
+  score RCVD_IN_MSPIKE_L4      1.7
+  score RCVD_IN_MSPIKE_L3      0.9
+# </gen:mutable>
+  # FIXED SCORES
+  # TEMPORARILY LOWERED - adjust these higher after GA is done
+  # (pending discussion: Whitelists need scores, but they shouldn't effect the scoring of spam detection rules.)
+  score RCVD_IN_MSPIKE_H3      -0.01
+  score RCVD_IN_MSPIKE_H4      -0.01
+  score RCVD_IN_MSPIKE_H5      -1.0
+  # FIXED SCORES - informational rules, useful only for statistical comparisons
+  score RCVD_IN_MSPIKE_BL      0.01
+  score RCVD_IN_MSPIKE_WL      -0.01
+endif
