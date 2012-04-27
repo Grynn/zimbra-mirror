@@ -311,6 +311,7 @@ public class ScheduleViewModel: BaseViewModel
         // If MaxThreadCount not specified, default to 4.  If fewer users than MaxThreadCount, numThreads = numUsers
         OptionsViewModel ovm = ((OptionsViewModel)ViewModelPtrs[(int)ViewType.OPTIONS]);
         int maxThreads = (ovm.MaxThreadCount > 0) ? ovm.MaxThreadCount : 4;
+        maxThreads = Math.Min(maxThreads, 8);   // let's make 8 the limit for now
         int numUsers = SchedList.Count;
         int numThreads = Math.Min(numUsers, maxThreads);
         for (int i = 0; i < numUsers; i++)
