@@ -829,3 +829,28 @@ AjxUtil.get = function(object /* , propName1, ... */) {
     }
     return object;
 };
+
+
+/**
+ *  Convert non-ASCII characters to valid HTML UNICODE entities 
+ * @param {string}
+ * 
+*/
+AjxUtil.convertToEntities = function (source){
+	var result = '', temp, length = 0, i = 0;
+    
+    if (!source || !(length = source.length)) return result;
+    
+	for(i; i < length; ++i){
+		if(source.charCodeAt(i) > 127){
+			temp = source.charCodeAt(i).toString(10);
+			while(temp.length < 4){
+				temp = '0' + temp;
+			}
+			result += '&#' + temp + ';';
+		} else {
+			result += source.charAt(i);
+		}
+	}
+	return result;
+};
