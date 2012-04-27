@@ -232,49 +232,49 @@ public class FormRecoverDeletedItems extends AbsForm {
 		tracer.trace(action +" on subject = "+ subject);
 
 		AbsPage page = null;
-		String listLocator = "//div[@id='zl__dumpsterMail__rows']";
-		String rowLocator = "//div[contains(@id,'zli__dumpsterMail__')]";
-		String itemlocator = null;
+		String listLocator = "css=div[id=zl__dumpsterMail__rows]";
+		String rowLocator = listLocator + " div[id^=zli__dumpsterMail__]";
+		String itemLocator = null;
 
 
 		// Find the item locator
 		//
 
 		// TODO: how to handle both messages and conversations, maybe check the view first?
-		if ( !this.sIsElementPresent(listLocator) )
-			throw new HarnessException("List View Rows is not present "+ listLocator);
+		if ( !this.sIsElementPresent(rowLocator) )
+			throw new HarnessException("List View Rows is not present "+ rowLocator);
 
 		// How many items are in the table?
-		int count = this.sGetXpathCount(listLocator + rowLocator);
+		int count = this.sGetCssCount(rowLocator);
 		logger.debug(myPageName() + " zListSelectItem: number of list items: "+ count);
-
+				
 		// Get each conversation's data from the table list
 		for (int i = 1; i <= count; i++) {
-
-			itemlocator = listLocator + "/div["+ i +"]";
-			String subjectlocator;
-
+			
 			// Look for the subject
+			String s = "";			
 
 			// Subject - Fragment
-			subjectlocator = itemlocator + "//td[contains(@id, '__su')]";
-			String s = this.sGetText(subjectlocator).trim();
-
+			itemLocator = rowLocator + ":nth-child("+ i +") td[id*='__su']";
+			if (sIsElementPresent(itemLocator)) {				
+				s = this.sGetText(itemLocator).trim();
+			}
+			
 			if ( s.contains(subject) ) {
 				break; // found it
-			}
-
-			itemlocator = null;
+			}	
+		
+			itemLocator = null;
 		}
 
-		if ( itemlocator == null ) {
-			throw new HarnessException("Unable to locate item with subject("+ subject +")");
+		if ( itemLocator == null ){							
+			throw new HarnessException("subject locator is not present " + itemLocator);
 		}
-
+		
 		if ( action == Action.A_LEFTCLICK ) {
 
 			// Left-Click on the item
-			this.zClick(itemlocator);
+			this.zClick(itemLocator);
 
 			this.zWaitForBusyOverlay();
 
