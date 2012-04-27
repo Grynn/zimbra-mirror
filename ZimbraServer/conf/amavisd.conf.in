@@ -119,7 +119,7 @@ $policy_bank{'AM.PDP-SOCK'} = {
 
 # $sa_debug = 1;
 $sa_configpath = '/opt/zimbra/conf/spamassassin';
-$sa_siteconfigpath = '/opt/zimbra/conf/salocal.cf';
+$sa_siteconfigpath = '/opt/zimbra/conf/sa';
 @sa_userconf_maps= ('/opt/zimbra/conf/sauser.cf');
 
 $sa_tag_level_deflt  = -10.0;  # add spam info headers if at, or above that level

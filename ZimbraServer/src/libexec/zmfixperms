@@ -652,7 +652,10 @@ if [ -L ${zimbra_home}/postfix ]; then
     chmod -f g+s ${zimbra_home}/postfix/sbin/postqueue
     chmod -f g+s ${zimbra_home}/postfix/sbin/postdrop
   fi
-
+  if [ ! -d ${zimbra_home}/conf/sa ]; then
+    mkdir -p ${zimbra_home}/conf/sa
+    chown -f ${zimbra_user}:${zimbra_group} ${zimbra_home}/conf/sa
+  fi
 fi
 
 if [ -d ${zimbra_home}/data/postfix ]; then
