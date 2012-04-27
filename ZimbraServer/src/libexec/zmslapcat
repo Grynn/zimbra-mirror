@@ -18,7 +18,7 @@ source /opt/zimbra/bin/zmshutil || exit 1
 zmsetvars \
 	zimbra_home 
 
-if [[ ! -L ${zimbra_home}/openldap && ! -d ${zimbra_home}/openldap ]]; then
+if [ ! -x /opt/zimbra/openldap/sbin/slapcat ]; then
 	# No ldap - exit gracefully
 	exit 0
 fi
