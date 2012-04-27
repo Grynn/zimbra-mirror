@@ -1,11 +1,11 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.resources;
 
 import java.util.Calendar;
+
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.AppointmentItem;
-import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.CalendarWorkWeekTest;
@@ -22,8 +22,12 @@ public class CreateMeetingWithLocation extends CalendarWorkWeekTest {
 	
 	@Bugs(ids = "69132")
 	@Test(description = "Create simple meeting with location resource",
-			groups = { "smoke" })
+			groups = { "sanity" })
 	public void CreateMeetingWithSingleLocation_01() throws HarnessException {
+		
+		
+		//-- Data Setup
+		
 		
 		// Create appointment data
 		AppointmentItem appt = new AppointmentItem();
@@ -31,10 +35,10 @@ public class CreateMeetingWithLocation extends CalendarWorkWeekTest {
 		
 		String apptSubject, apptAttendee1, apptLocation1, apptContent;
 		Calendar now = this.calendarWeekDayUTC;
-		apptSubject = ZimbraSeleniumProperties.getUniqueString();
+		apptSubject = "appointment" + ZimbraSeleniumProperties.getUniqueString();
 		apptAttendee1 = ZimbraAccount.AccountA().EmailAddress;
 		apptLocation1 = location.EmailAddress;
-		apptContent = ZimbraSeleniumProperties.getUniqueString();
+		apptContent = "content" + ZimbraSeleniumProperties.getUniqueString();
 		
 		appt.setSubject(apptSubject);
 		appt.setAttendees(apptAttendee1);
@@ -43,10 +47,40 @@ public class CreateMeetingWithLocation extends CalendarWorkWeekTest {
 		appt.setEndTime(new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 13, 0, 0));
 		appt.setContent(apptContent);
 	
+		
+		
+		//-- GUI Actions
+		
+		
 		// Compose appointment and send it to invitee
 		FormApptNew apptForm = (FormApptNew) app.zPageCalendar.zToolbarPressButton(Button.B_NEW);
 		apptForm.zFill(appt);
 		apptForm.zSubmit();
+		
+		
+		// Because the response from the resource may
+		// take some time, make sure the response is
+		// received in the inbox before proceeding
+		for (int i = 0; i < 10; i++) {
+			
+			app.zGetActiveAccount().soapSend(
+						"<SearchRequest xmlns='urn:zimbraMail' types='message'>"
+					+		"<query>in:inbox subject:(aa"+ apptSubject +")</query>"
+					+	"</SearchRequest>");
+			
+			String id = app.zGetActiveAccount().soapSelectValue("//mail:m", "id");
+			if ( id != null ) {
+				// found it
+				break;
+			}
+			
+			SleepUtil.sleep(1000);
+		}
+		
+		
+		
+		//-- Verification
+		
 		
 		// Verify appointment exists on the server
 		AppointmentItem actual = AppointmentItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ appt.getSubject() +")", appt.getStartTime().addDays(-7), appt.getEndTime().addDays(7));
@@ -60,12 +94,6 @@ public class CreateMeetingWithLocation extends CalendarWorkWeekTest {
 		String locationStatus = app.zGetActiveAccount().soapSelectValue("//mail:at[@a='"+ apptLocation1 +"']", "ptst");
 		ZAssert.assertEquals(locationStatus, "AC", "Verify that the location status shows as 'ACCEPTED'");
 		
-		// Open appointment and verify location value via UI
-        app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
-        app.zPageCalendar.zListItem(Action.A_DOUBLECLICK, apptSubject);
-        SleepUtil.sleepSmall();
-        ZAssert.assertEquals(apptForm.zGetApptLocation(apptLocation1), apptLocation1, "Location: Verify the appointment data");
-        app.zPageCalendar.zToolbarPressButton(Button.B_CLOSE);
         
 	}
 	
@@ -98,6 +126,33 @@ public class CreateMeetingWithLocation extends CalendarWorkWeekTest {
 		apptForm.zFill(appt);
 		apptForm.zSubmit();
 		
+		// Because the response from the resource may
+		// take some time, make sure the response is
+		// received in the inbox before proceeding
+		for (int i = 0; i < 10; i++) {
+			
+			app.zGetActiveAccount().soapSend(
+						"<SearchRequest xmlns='urn:zimbraMail' types='message'>"
+					+		"<query>in:inbox subject:(aa"+ apptSubject +") from:("+ location1.EmailAddress +")</query>"
+					+	"</SearchRequest>");
+			
+			String id1 = app.zGetActiveAccount().soapSelectValue("//mail:m", "id");
+
+			app.zGetActiveAccount().soapSend(
+					"<SearchRequest xmlns='urn:zimbraMail' types='message'>"
+				+		"<query>in:inbox subject:(aa"+ apptSubject +") from:("+ location2.EmailAddress +")</query>"
+				+	"</SearchRequest>");
+		
+			String id2 = app.zGetActiveAccount().soapSelectValue("//mail:m", "id");
+
+			if ( (id1 != null) && (id2 != null) ) {
+				// found it
+				break;
+			}
+			
+			SleepUtil.sleep(1000);
+		}
+
 		// Verify appointment exists on the server
 		AppointmentItem actual = AppointmentItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ appt.getSubject() +")", appt.getStartTime().addDays(-7), appt.getEndTime().addDays(7));
 		ZAssert.assertNotNull(actual, "Verify the new appointment is created");
@@ -109,13 +164,6 @@ public class CreateMeetingWithLocation extends CalendarWorkWeekTest {
 		ZAssert.assertEquals(locationStatus1, "AC", "Verify that the location1 status shows as 'ACCEPTED'");
 		ZAssert.assertEquals(locationStatus2, "AC", "Verify that the location2 status shows as 'ACCEPTED'");
 		
-		// Open appointment and verify location value via UI
-        app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
-        app.zPageCalendar.zListItem(Action.A_DOUBLECLICK, apptSubject);
-        SleepUtil.sleepSmall();
-        ZAssert.assertStringContains(apptForm.zGetApptLocation(apptLocation), location1.EmailAddress, "Location: Verify the appointment data");
-        ZAssert.assertStringContains(apptForm.zGetApptLocation(apptLocation), location2.EmailAddress, "Location: Verify the appointment data");
-        app.zPageCalendar.zToolbarPressButton(Button.B_CLOSE);
 		
 	}
 	
@@ -149,13 +197,6 @@ public class CreateMeetingWithLocation extends CalendarWorkWeekTest {
 		AppointmentItem actual = AppointmentItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ appt.getSubject() +")", appt.getStartTime().addDays(-7), appt.getEndTime().addDays(7));
 		ZAssert.assertNotNull(actual, "Verify the new appointment is created");
 		
-		// Open appointment and verify location via UI
-        app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
-        app.zPageCalendar.zListItem(Action.A_DOUBLECLICK, apptSubject);
-        SleepUtil.sleepSmall();
-        ZAssert.assertEquals(apptForm.zGetApptLocationFloating(apptLocation), apptLocation, "Location: Verify the appointment data");
-        app.zPageCalendar.zToolbarPressButton(Button.B_CLOSE);
-        
 	}
 
 }

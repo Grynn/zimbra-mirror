@@ -1,11 +1,11 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.resources;
 
 import java.util.Calendar;
+
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.AppointmentItem;
-import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.CalendarWorkWeekTest;
@@ -25,6 +25,10 @@ public class CreateMeetingWithEquipment extends CalendarWorkWeekTest {
 			groups = { "sanity" })
 	public void CreateMeetingWithEquipment_01() throws HarnessException {
 		
+		
+		//-- Data Setup
+		
+		
 		// Create appointment data
 		AppointmentItem appt = new AppointmentItem();
 		Calendar now = this.calendarWeekDayUTC;
@@ -43,10 +47,39 @@ public class CreateMeetingWithEquipment extends CalendarWorkWeekTest {
 		appt.setEndTime(new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 16, 0, 0));
 		appt.setContent(apptContent);
 	
+		
+		
+		//-- GUI Actions
+		
+		
 		// Compose appointment and send it to invitee
 		FormApptNew apptForm = (FormApptNew) app.zPageCalendar.zToolbarPressButton(Button.B_NEW);
 		apptForm.zFill(appt);
 		apptForm.zSubmit();
+		
+		// Because the response from the resource may
+		// take some time, make sure the response is
+		// received in the inbox before proceeding
+		for (int i = 0; i < 10; i++) {
+			
+			app.zGetActiveAccount().soapSend(
+						"<SearchRequest xmlns='urn:zimbraMail' types='message'>"
+					+		"<query>in:inbox subject:(aa"+ apptSubject +")</query>"
+					+	"</SearchRequest>");
+			
+			String id = app.zGetActiveAccount().soapSelectValue("//mail:m", "id");
+			if ( id != null ) {
+				// found it
+				break;
+			}
+			
+			SleepUtil.sleep(1000);
+		}
+		
+		
+		
+		//-- Verification
+		
 		
 		// Verify appointment exists on the server
 		AppointmentItem actual = AppointmentItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ appt.getSubject() +")", appt.getStartTime().addDays(-7), appt.getEndTime().addDays(7));
@@ -59,13 +92,6 @@ public class CreateMeetingWithEquipment extends CalendarWorkWeekTest {
 		// Verify equipment free/busy status shows as psts=AC	
 		String equipmentStatus = app.zGetActiveAccount().soapSelectValue("//mail:at[@a='"+ apptEquipment1 +"']", "ptst");
 		ZAssert.assertEquals(equipmentStatus, "AC", "Verify that the equipment status shows as 'ACCEPTED'");
-		
-		// Open appointment and verify equipment value via UI
-        app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
-        app.zPageCalendar.zListItem(Action.A_DOUBLECLICK, apptSubject);
-        SleepUtil.sleepSmall();
-        ZAssert.assertEquals(apptForm.zGetApptEquipment(apptEquipment1), apptEquipment1, "Equipment: Verify the appointment data");
-        app.zPageCalendar.zToolbarPressButton(Button.B_CLOSE);
 		
 	}
 
