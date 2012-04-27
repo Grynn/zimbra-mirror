@@ -1,7 +1,6 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.calendar.appointments.views.schedule;
 
 import java.util.Calendar;
-import java.util.HashMap;
 
 import org.testng.annotations.Test;
 
@@ -14,24 +13,25 @@ import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 public class GetAppointment extends AjaxCommonTest {
 
 	
-	@SuppressWarnings("serial")
 	public GetAppointment() {
 		logger.info("New "+ GetAppointment.class.getCanonicalName());
 		
 		// All tests start at the Calendar page
 		super.startingPage = app.zPageCalendar;
 
-		// Make sure we are using an account with message view
-		super.startingAccountPreferences = new HashMap<String, String>() {{
-		    put("zimbraPrefCalendarInitialView", "schedule");
-		}};
+		// BUG 68610: remove schedule view
+//		// Make sure we are using an account with message view
+//		super.startingAccountPreferences = new HashMap<String, String>() {{
+//		    put("zimbraPrefCalendarInitialView", "schedule");
+//		}};
 
 
 	}
 	
-	@Bugs(ids = "69132")
+	// BUG 68610: remove schedule view
+	@Bugs(ids = "69132,68610")
 	@Test(	description = "View a basic appointment in the schedule view",
-			groups = { "functional" })
+			groups = { "deprecated" })
 	public void GetAppointment_01() throws HarnessException {
 		
 		// Create the appointment on the server
