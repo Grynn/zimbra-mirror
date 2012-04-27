@@ -92,6 +92,7 @@ public class PageCalendar extends AbsTab {
 		public static final String CalendarViewWorkWeekDivID	= "zv__CLWW";
 		public static final String CalendarViewMonthDivID		= "zv__CLM";
 		public static final String CalendarViewScheduleDivID	= "zv__CLS";
+		public static final String CalendarViewFreeBusyDivID	= "zv__CLFB";
 
 		public static final String CalendarViewListCSS			= "css=div#"+ CalendarViewListDivID;
 		public static final String CalendarViewDayCSS			= "css=div#"+ CalendarViewDayDivID;
@@ -99,6 +100,7 @@ public class PageCalendar extends AbsTab {
 		public static final String CalendarViewWorkWeekCSS		= "css=div#"+ CalendarViewWorkWeekDivID;
 		public static final String CalendarViewMonthCSS			= "css=div#"+ CalendarViewMonthDivID;
 		public static final String CalendarViewScheduleCSS		= "css=div#"+ CalendarViewScheduleDivID;
+		public static final String CalendarViewFreeBusyCSS		= "css=div#"+ CalendarViewFreeBusyDivID;
 		
 		public static final String CalendarViewDayItemCSS		= CalendarViewDayCSS + " div[id^='zli__CLD__']>table[id^='zli__CLD__']";
 		public static final String CalendarViewWeekItemCSS		= CalendarViewWeekCSS + " div[id^='zli__CLW__']>table[id^='zli__CLW__']";
@@ -1698,6 +1700,63 @@ public class PageCalendar extends AbsTab {
 		throw new HarnessException("implement me");
 	}
 
+	private List<AppointmentItem> zListGetAppointmentsFreeBusyView() throws HarnessException {
+		logger.info(myPageName() + " zListGetAppointmentsFreeBusyView()");
+		
+		
+		List<AppointmentItem> items = new ArrayList<AppointmentItem>();
+		
+		String listLocator = Locators.CalendarViewFreeBusyCSS;
+		String rowLocator = listLocator + " div[id^='zli__CLFB__']";
+		String itemLocator = null;
+
+		// Process the non-all-day items first
+		if ( !this.sIsElementPresent(rowLocator) )
+			throw new HarnessException("List View Rows is not present "+ rowLocator);
+
+		// How many items are in the table?
+		int count = this.sGetCssCount(rowLocator);
+		logger.debug(myPageName() + " zListSelectItem: number of list items: "+ count);
+
+		// Get each conversation's data from the table list
+		for (int i = 1; i <= count; i++) {
+			
+			itemLocator = rowLocator + ":nth-child("+ i +")";
+
+			String clazz = this.sGetAttribute(itemLocator +"@class");
+			if ( clazz.contains("appt") ) {
+				
+				// Look for the subject
+				String s = this.sGetText(itemLocator).trim();
+				
+				if ( (s == null) || (s.length() == 0) ) {
+					continue; // No subject
+				}
+				
+				AppointmentItem item = new AppointmentItem();
+				
+				// Parse the subject (which is the only data available from F/B
+				item.setSubject(s);
+				
+				// Add the item to the returned list
+				items.add(item);
+				logger.info(item.prettyPrint());
+
+			}
+
+		}
+		
+		
+		// Process the all-day items next (?)
+		// TODO
+		
+		// Process the recurring items next (?)
+		// TODO
+		
+		
+		return (items);
+	}
+
 	public List<AppointmentItem> zListGetAppointments() throws HarnessException {
 
 		if ( this.zIsVisiblePerPosition(Locators.CalendarViewListCSS, 0, 0) ) {
@@ -1712,6 +1771,8 @@ public class PageCalendar extends AbsTab {
 			return (zListGetAppointmentsMonthView());								// MONTH
 		} else if ( this.zIsVisiblePerPosition(Locators.CalendarViewScheduleCSS, 0, 0) ) {
 			return (zListGetAppointmentsScheduleView());							// SCHEDULE
+		} else if ( this.zIsVisiblePerPosition(Locators.CalendarViewFreeBusyCSS, 0, 0) ) {
+			return (zListGetAppointmentsFreeBusyView());							// FREE/BUSY
 		} else {
 			throw new HarnessException("Unknown calendar view");
 		}

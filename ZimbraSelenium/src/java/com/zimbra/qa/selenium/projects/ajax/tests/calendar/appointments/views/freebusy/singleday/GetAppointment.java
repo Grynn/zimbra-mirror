@@ -5,6 +5,7 @@ import java.util.*;
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.core.Bugs;
+import com.zimbra.qa.selenium.framework.items.AppointmentItem;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
@@ -67,15 +68,29 @@ public class GetAppointment extends AjaxCommonTest {
 				+	"</CreateAppointmentRequest>");
 		
 		
+		//-- GUI Actions
+
 		// Go to F/B view
 		app.zPageCalendar.zToolbarPressPulldown(Button.B_LISTVIEW, Button.O_LISTVIEW_FREEBUSY);
 		
-		// Refresh the cal
+		// Refresh the calendar
 		app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
 		
-		SleepUtil.sleep(5000);
+
 		
-		throw new HarnessException("add verification that the appointment appears");
+		//-- Verification
+		
+		// Verify the appointment appears on the page
+		boolean found = false;
+		List<AppointmentItem> items = app.zPageCalendar.zListGetAppointments();
+		for (AppointmentItem item : items) {
+			if ( subject.equals(item.getSubject()) ) {
+				found = true;
+				break;
+			}
+		}
+
+		ZAssert.assertTrue(found, "Verify the appointment appears in the view");
 	    
 	}
 }
