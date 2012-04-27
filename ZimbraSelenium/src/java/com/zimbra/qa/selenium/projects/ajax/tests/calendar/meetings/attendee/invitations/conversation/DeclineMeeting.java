@@ -254,7 +254,6 @@ public class DeclineMeeting extends CalendarWorkWeekTest {
 
 		// Select the invitation
 		DisplayMail display = (DisplayMail)app.zPageMail.zListItem(Action.A_LEFTCLICK, apptSubject);
-		SleepUtil.sleepMedium();
 
 		// Click Decline > Notify Organizer
 		display.zPressButtonPulldown(Button.B_DECLINE, Button.O_DECLINE_NOTIFY_ORGANIZER);
@@ -468,7 +467,6 @@ public class DeclineMeeting extends CalendarWorkWeekTest {
 
 		// Select the invitation
 		DisplayMail display = (DisplayMail)app.zPageMail.zListItem(Action.A_LEFTCLICK, apptSubject);
-		SleepUtil.sleepMedium();
 
 		// Click Decline > Don't Notify Organizer
 		display.zPressButtonPulldown(Button.B_DECLINE, Button.O_DECLINE_DONT_NOTIFY_ORGANIZER);

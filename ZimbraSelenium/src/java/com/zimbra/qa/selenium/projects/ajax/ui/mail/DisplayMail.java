@@ -270,6 +270,7 @@ public class DisplayMail extends AbsDisplay {
 		String pulldownLocator = null;
 		String optionLocator = null;
 		AbsPage page = this;
+		boolean doPostfixCheck = false;
 
 		if ( pulldown == Button.B_ACCEPT ) {
 			
@@ -278,19 +279,19 @@ public class DisplayMail extends AbsDisplay {
 			if (option == Button.O_ACCEPT_NOTIFY_ORGANIZER) {
 
 				optionLocator = Locators.AcceptNotifyOrganizerMenu;
-				
+				doPostfixCheck = true;
 				page = this;
 
 			} else if (option == Button.O_ACCEPT_EDIT_REPLY) {
 
 				optionLocator = Locators.AcceptEditReplyMenu;
-				
+				doPostfixCheck = false;
 				page = new FormMailNew(this.MyApplication);
 				
 			} else if (option == Button.O_ACCEPT_DONT_NOTIFY_ORGANIZER) {
 
 				optionLocator = Locators.AcceptDontNotifyOrganizerMenu;
-				
+				doPostfixCheck = false;
 				page = this;
 				
 			} else {
@@ -306,19 +307,19 @@ public class DisplayMail extends AbsDisplay {
 			if (option == Button.O_TENTATIVE_NOTIFY_ORGANIZER) {
 
 				optionLocator = Locators.TentativeNotifyOrganizerMenu;
-				
+				doPostfixCheck = true;
 				page = this;
 
 			} else if (option == Button.O_TENTATIVE_EDIT_REPLY) {
 
 				optionLocator = Locators.TentativeEditReplyMenu;
-				
+				doPostfixCheck = false;
 				page = new FormMailNew(this.MyApplication);
 				
 			} else if (option == Button.O_TENTATIVE_DONT_NOTIFY_ORGANIZER) {
 
 				optionLocator = Locators.TentativeDontNotifyOrganizerMenu;
-				
+				doPostfixCheck = false;
 				page = this;
 				
 			} else {
@@ -334,19 +335,19 @@ public class DisplayMail extends AbsDisplay {
 			if (option == Button.O_DECLINE_NOTIFY_ORGANIZER) {
 
 				optionLocator = Locators.DeclineNotifyOrganizerMenu;
-				
+				doPostfixCheck = true;
 				page = this;
 
 			} else if (option == Button.O_DECLINE_EDIT_REPLY) {
 
 				optionLocator = Locators.DeclineEditReplyMenu;
-				
+				doPostfixCheck = false;
 				page = new FormMailNew(this.MyApplication);
 				
 			} else if (option == Button.O_DECLINE_DONT_NOTIFY_ORGANIZER) {
 
 				optionLocator = Locators.DeclineDontNotifyOrganizerMenu;
-				
+				doPostfixCheck = false;
 				page = this;
 				
 			} else {
@@ -369,6 +370,12 @@ public class DisplayMail extends AbsDisplay {
 
 		if (page != null) {
 			page.zWaitForActive();
+		}
+
+		if ( doPostfixCheck ) {
+			// Make sure the response is delivered before proceeding
+			Stafpostqueue sp = new Stafpostqueue();
+			sp.waitForPostqueue();
 		}
 
 		return (page);

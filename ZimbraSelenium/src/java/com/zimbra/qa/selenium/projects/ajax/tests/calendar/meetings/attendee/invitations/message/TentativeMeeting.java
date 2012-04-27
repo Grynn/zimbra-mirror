@@ -254,7 +254,6 @@ public class TentativeMeeting extends CalendarWorkWeekTest {
 
 		// Select the invitation
 		DisplayMail display = (DisplayMail)app.zPageMail.zListItem(Action.A_LEFTCLICK, apptSubject);
-		SleepUtil.sleepMedium();
 
 		// Click Tentative > Notify Organizer
 		display.zPressButtonPulldown(Button.B_TENTATIVE, Button.O_TENTATIVE_NOTIFY_ORGANIZER);
@@ -465,7 +464,6 @@ public class TentativeMeeting extends CalendarWorkWeekTest {
 
 		// Select the invitation
 		DisplayMail display = (DisplayMail)app.zPageMail.zListItem(Action.A_LEFTCLICK, apptSubject);
-		SleepUtil.sleepMedium();
 
 		// Click Tentative > Don't Notify Organizer
 		display.zPressButtonPulldown(Button.B_TENTATIVE, Button.O_TENTATIVE_DONT_NOTIFY_ORGANIZER);

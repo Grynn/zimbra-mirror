@@ -100,7 +100,6 @@ public class AcceptMeeting extends CalendarWorkWeekTest {
 
 		// Select the invitation
 		DisplayMail display = (DisplayMail)app.zPageMail.zListItem(Action.A_LEFTCLICK, apptSubject);
-		SleepUtil.sleepMedium();
 		
 		// Click Accept
 		display.zPressButton(Button.B_ACCEPT);
@@ -175,7 +174,6 @@ public class AcceptMeeting extends CalendarWorkWeekTest {
 
 		// Select the invitation
 		DisplayMail display = (DisplayMail)app.zPageMail.zListItem(Action.A_LEFTCLICK, apptSubject);
-		SleepUtil.sleepMedium();
 		
 		// Click Accept
 		display.zPressButton(Button.B_ACCEPT);
@@ -247,7 +245,6 @@ public class AcceptMeeting extends CalendarWorkWeekTest {
 
 		// Select the invitation
 		DisplayMail display = (DisplayMail)app.zPageMail.zListItem(Action.A_LEFTCLICK, apptSubject);
-		SleepUtil.sleepMedium();
 
 		// Click Accept > Notify Organizer
 		display.zPressButtonPulldown(Button.B_ACCEPT, Button.O_ACCEPT_NOTIFY_ORGANIZER);
@@ -461,7 +458,6 @@ public class AcceptMeeting extends CalendarWorkWeekTest {
 
 		// Select the invitation
 		DisplayMail display = (DisplayMail)app.zPageMail.zListItem(Action.A_LEFTCLICK, apptSubject);
-		SleepUtil.sleepMedium();
 
 		// Click Accept > Don't Notify Organizer
 		display.zPressButtonPulldown(Button.B_ACCEPT, Button.O_ACCEPT_DONT_NOTIFY_ORGANIZER);
