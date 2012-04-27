@@ -98,6 +98,7 @@ case "$1" in
       --defaults-file=${mysql_mycnf} \
       --external-locking \
       --log-error=${mysql_errlogfile} \
+      --malloc-lib=${zimbra_home}/tcmalloc/lib/libtcmalloc_minimal.so \
       --ledir=${mysql_directory}/bin < /dev/null > /dev/null 2>&1 &
     SQLSTARTED=0
     for ((i = 0; i < 60; i++))

@@ -122,6 +122,7 @@ case "$1" in
       ${antispam_mysql_directory}/bin/mysqld_safe \
       --defaults-file=${antispam_mysql_mycnf} \
       --external-locking \
+      --malloc-lib=${zimbra_home}/tcmalloc/lib/libtcmalloc_minimal.so \
       --datadir=${antispam_mysql_data_directory} \
       --log-error=${antispam_mysql_errlogfile} \
       --ledir=${antispam_mysql_directory}/bin < /dev/null > /dev/null 2>&1 &
