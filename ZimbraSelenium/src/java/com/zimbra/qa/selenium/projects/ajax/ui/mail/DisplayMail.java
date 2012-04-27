@@ -36,7 +36,9 @@ public class DisplayMail extends AbsDisplay {
 		
 		public static final String MessageViewPreviewAtBottomCSS		= "css=div[id='zv__TV-main__MSG']";
 		public static final String MessageViewPreviewAtRightCSS			= "css=div[id='zv__TV-main__MSG']";
-		public static final String MessageViewOpenMessageCSS			= "css=div[id='zv__MSG-1__MSG']";
+		// 4/26/2012, the message ID is now used in the locator
+		// public static final String MessageViewOpenMessageCSS			= "css=div[id='zv__MSG-1__MSG']";
+		public static final String MessageViewOpenMessageCSS			= "css=div[id^='zv__MSG-'][id$='__MSG']";
 		
 		public static final String ConversationViewPreviewAtBottomCSS	= "css=div[id='zv__CLV-main__CV']";
 		public static final String ConversationViewPreviewAtRightCSS	= "css=div[id='zv__CLV-main__CV']";
@@ -765,7 +767,11 @@ public class DisplayMail extends AbsDisplay {
 		// Use this 'top' css for all subsequent parsing
 		
 		if ( this.zIsVisiblePerPosition(Locators.MessageViewOpenMessageCSS, 0, 0) ) {
-			ContainerLocator = Locators.MessageViewOpenMessageCSS;
+			int count = this.sGetCssCount(Locators.MessageViewOpenMessageCSS);
+			if ( count > 1 ) {
+				throw new HarnessException("Too many message views open: "+ count);
+			}
+			ContainerLocator = "css=div#" + this.sGetAttribute(Locators.MessageViewOpenMessageCSS + "@id");
 		} else if ( this.zIsVisiblePerPosition(PageMail.Locators.IsMsgViewActiveCSS, 0, 0)) {
 			if ( this.zIsVisiblePerPosition(Locators.MessageViewPreviewAtBottomCSS, 0, 0) ) {
 				ContainerLocator = Locators.MessageViewPreviewAtBottomCSS;
