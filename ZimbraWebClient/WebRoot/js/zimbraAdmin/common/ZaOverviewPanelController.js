@@ -859,6 +859,7 @@ function() {
                                         id:ZaId.getTreeItemId(ZaId.PANEL_APP,"monHV",null, "serverListForStatisticsHV"),
                                         text: ZaMsg.OVP_statistics,
                                         canShowOnRoot: false,
+                                        forceNode: false,
                                         mappingId: ZaZimbraAdmin._SERVER_LIST_FOR_STATISTICS_VIEW
                                         });
             tree.addTreeItemData(ti);
@@ -1326,7 +1327,7 @@ ZaOverviewPanelController.domainTreeListener = function (ev) {
         if (isLocal) {
             ZaApp.getInstance().getCurrentController().switchToNextView(ZaApp.getInstance().getDomainController(),
              ZaDomainController.prototype.show,
-             domain /*ZaApp.getInstance().getDomainList(true).getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID))*/);
+             domain);
         } else if (isAlias) {
             ZaApp.getInstance().getDomainAliasWizard(true).editDomainAlias (domain, false) ;
         }
@@ -1353,7 +1354,7 @@ ZaOverviewPanelController.serverTreeListener = function (ev) {
 	if(ZaApp.getInstance().getCurrentController()) {
 		ZaApp.getInstance().getCurrentController().switchToNextView(ZaApp.getInstance().getServerController(),
 		 ZaServerController.prototype.show,
-		 server /*ZaApp.getInstance().getServerList(true).getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID))*/);
+		 server);
 	} else {					
 		ZaApp.getInstance().getServerController().show(ZaApp.getInstance().getServerList(true).getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID)));
 	}
@@ -1363,7 +1364,7 @@ ZaOverviewPanelController.statsByServerTabTreeListener = function (ev) {
 	//only apply to new UI
 
     var viewId = ev.item.parent.getData("viewId");
-    curController = ZaApp.getInstance().getServerStatsController(viewId);
+    var curController = ZaApp.getInstance().getServerStatsController(viewId);
 
 	ZaOverviewPanelController.switchToSubTabForNonXFormView(curController, ev.item);
 }
@@ -2524,22 +2525,7 @@ function() {
     var ti = null;
     var image = null;
     for(var i = objList.length - 1; i > -1; i --) {
-/*
-        if(objList[i].type == ZaItem.ACCOUNT)
-            image = "Account";
-        else if(objList[i].type == ZaItem.COS)
-            image = "COS";
-        else if(objList[i].type == ZaItem.DOMAIN)
-            image = "Domain";
-        else if(objList[i].type == ZaItem.RESOURCE)
-            image = "Resource";
-        else if(objList[i].type == ZaItem.DL)
-            image = "DistributionList";
-        else if(objList[i].type == ZaItem.ALIAS)
-            image = "AccountAlias";
-        else if(objList[i].type == ZaItem.SERVER)
-            image = "Server";
-*/
+
         image = this.getIconByType(objList[i].type);
         ti = new ZaTreeItemData({
                 text: objList[i].displayName,

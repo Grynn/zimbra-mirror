@@ -144,12 +144,13 @@ function() {
 		numCols:1,
 		items:[
 			{type:_ZAWIZGROUP_, isTabGroup:true,
+                colSizes:["200px", "275px"],
 				items:[
 					{ type: _DWT_ALERT_,
 						  style: DwtAlert.WARNING,
 						  iconVisible: true, 
 						  content: ZaMsg.Alert_FlushCache,
-						  align:_CENTER_, valign:_MIDDLE_,colSpan:2,width:"90%",
+						  align:_CENTER_, valign:_MIDDLE_,colSpan:2,width:"460px",
 						  visibilityChecks:[]
 					},
 					{ type: _DWT_ALERT_,
@@ -157,11 +158,11 @@ function() {
 						  iconVisible: true, 
 						  content: null,
 						  ref:"statusMessage",
-						  align:_CENTER_, valign:_MIDDLE_,colSpan:2,width:"90%",
+						  align:_CENTER_, valign:_MIDDLE_,colSpan:2,width:"460px",
 						  visibilityChecks:[[XForm.checkInstanceValueNotEmty,"statusMessage"]],
 						  visibilityChangeEventSources:["statusMessage"],bmolsnr:true
 					},
-					{ref:"serverList", type:_DWT_LIST_, labelLocation:_NONE_, label:null,  height:"120", width:"100%",colSpan:2,
+					{ref:"serverList", type:_DWT_LIST_, labelLocation:_NONE_, label:null,  height:"120", width:"460",colSpan:2,
 						headerList:srvHeaderList,align:_CENTER_,
 						visibilityChecks:[],enableDisableChecks:[],widgetClass:ZaServerMiniListView,valueChangeEventSources:["serverList"]
 					},

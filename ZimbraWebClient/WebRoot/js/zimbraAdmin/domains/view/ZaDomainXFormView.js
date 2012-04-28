@@ -1815,7 +1815,7 @@ if(appNewUI) {
 
     if(ZaTabView.isTAB_ENABLED(entry,ZaDomainXFormView.ACCOUNT_QUOTA_TAB_ATTRS, ZaDomainXFormView.ACCOUNT_QUOTA_TAB_RIGHTS)) {
         tabIx = ++this.TAB_INDEX;
-        tabBar.choices.push({value:tabIx, label:ZaMsg.TABT_AccountQuota});
+        tabBar.choices.push({value:tabIx, label:ZaMsg.TABT_MBX});
 		var case10 = {type:_SUPER_TABCASE_, numCols:1, caseKey:tabIx, colSizes: ["100%"],paddingStyle:"padding: 0px", width: "100%",
             getCustomPaddingStyle:"return 0",
             loadDataMethods: [ZaDomainXFormView.getUserQuota],

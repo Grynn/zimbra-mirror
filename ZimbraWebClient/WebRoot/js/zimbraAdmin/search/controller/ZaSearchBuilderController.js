@@ -1258,15 +1258,15 @@ function (filterType, noCached) {
     if (!ZaSearchBuilderController.filterDialogSet[filterType] || noCached) {
         var w, h;
         if (filterType == ZaSearchOption.SERVER_FILTER_ID) {
-            w = ZaSearchOptionView.WIDTH;
+            w = ZaSearchOptionView.WIDTH + 10;
             h = 150;
         } else if (filterType == ZaSearchOption.COS_FILTER_ID ||
             filterType == ZaSearchOption.DOMAIN_FILTER_ID) {
-            w = ZaSearchOptionView.WIDTH;
+            w = ZaSearchOptionView.WIDTH + 10;
             h = 150;
         } else if (filterType == ZaSearchOption.EXT_EMAIL_ADDRESS_FILTER_ID) {
             w = 230;
-            h= 40;
+            h= 45;
         }
         ZaSearchBuilderController.filterDialogSet[filterType] = new ZaSearchOptionDialog(ZaApp.getInstance().getAppCtxt().getShell(), filterType, w, h);
         ZaSearchBuilderController.filterDialogSet[filterType].registerCallback(DwtDialog.OK_BUTTON, this.filterOKListener, this, filterType);
