@@ -81,13 +81,13 @@ public class DocumentBriefcaseEdit extends AbsForm {
 			this.sMouseOver(nameFieldLocator);
 			this.sFocus(nameFieldLocator);
 			this.zClickAt(nameFieldLocator, "0,0");
+			
 			if (ZimbraSeleniumProperties.isWebDriver()) {
-				WebElement we = getElement(nameFieldLocator);
-				we.clear();
-				we.sendKeys(value);
-			}else{
-				this.sType(nameFieldLocator, value);
+				this.clearField(nameFieldLocator);
 			}
+			
+			this.sType(nameFieldLocator, value);
+			
 			logger.info("typed: " + value);
 
 		} else if (field == Field.Body) {

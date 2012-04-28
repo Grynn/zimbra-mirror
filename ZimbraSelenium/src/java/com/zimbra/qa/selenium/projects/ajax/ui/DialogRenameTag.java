@@ -5,6 +5,7 @@ package com.zimbra.qa.selenium.projects.ajax.ui;
 
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 
 
 /**
@@ -38,7 +39,10 @@ public class DialogRenameTag extends AbsDialog {
 		if ( !this.sIsElementPresent(locator) ) {
 			throw new HarnessException("Rename locator "+ locator +" is not present");
 		}		
-		sType(locator, name);		
+		if (ZimbraSeleniumProperties.isWebDriver()){		
+			clearField(locator);
+		}
+		sType(locator, name);
 	}
 	
 	
