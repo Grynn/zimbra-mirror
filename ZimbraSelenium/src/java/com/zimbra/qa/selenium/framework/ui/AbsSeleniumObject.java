@@ -13,8 +13,10 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.RemoteWebElement;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Dimension;
+import org.openqa.selenium.ElementNotVisibleException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Mouse;
 import org.openqa.selenium.NoSuchElementException;
@@ -1024,7 +1026,7 @@ public abstract class AbsSeleniumObject {
 				*/
 				
 				//WebDriverWait wait = new WebDriverWait(webDriver(), 20);
-				Wait<WebDriver> wait = new FluentWait<WebDriver>(webDriver()).withTimeout(20, TimeUnit.SECONDS).pollingEvery(500, TimeUnit.MILLISECONDS).ignoring(NoSuchElementException.class);
+				Wait<WebDriver> wait = new FluentWait<WebDriver>(webDriver()).withTimeout(10, TimeUnit.SECONDS).pollingEvery(500, TimeUnit.MILLISECONDS).ignoring(NoSuchElementException.class);
 
 				try{
 					wait.until(new ExpectedCondition<Boolean>(){					
@@ -1931,6 +1933,7 @@ public abstract class AbsSeleniumObject {
 	public boolean sIsChecked(String locator) throws HarnessException {
 		boolean checked = false;
 		if (ZimbraSeleniumProperties.isWebDriver()) {
+			logger.info("...WebDriver...findElement.isSelected()");
 			WebElement element = getElement(locator);
 			checked = element.isSelected();
 		} else if (ZimbraSeleniumProperties.isWebDriverBackedSelenium()) {
@@ -1954,6 +1957,7 @@ public abstract class AbsSeleniumObject {
 		try {
 			String text = null;
 			if (ZimbraSeleniumProperties.isWebDriver()) {
+				logger.info("...WebDriver...findElement.getText()");
 				WebElement we = getElement(locator);
 				text = we.getText();
 			}
@@ -1976,6 +1980,7 @@ public abstract class AbsSeleniumObject {
 	public String sGetValue(String locator) throws HarnessException {
 		String text = null;
 		if (ZimbraSeleniumProperties.isWebDriver()){
+			logger.info("...WebDriver...findElement.getAttribute()");
 			WebElement el = getElement(locator);
 			text = el.getAttribute("value");
 		}else{
@@ -1992,7 +1997,14 @@ public abstract class AbsSeleniumObject {
 	 * @return
 	 */
 	public String sGetBodyText() throws HarnessException {
-		String text = ClientSessionFactory.session().selenium().getBodyText();
+		String text = "";
+		if (ZimbraSeleniumProperties.isWebDriver()){
+			logger.info("...WebDriver...findElement.getText()");
+			WebElement el = getElement("css=body");
+			text = el.getText();
+		}else{
+			text = ClientSessionFactory.session().selenium().getBodyText();
+		}
 		logger.info("sGetBodyText() = " + text);
 		return text;
 	}
@@ -2016,6 +2028,7 @@ public abstract class AbsSeleniumObject {
 	public void sType(String locator, String text) throws HarnessException {
 		try {
 			if (ZimbraSeleniumProperties.isWebDriver()){
+				logger.info("...WebDriver...action.sendKeys()");
 				sendKeys(locator,text);
 			} 
 			else if (ZimbraSeleniumProperties.isWebDriverBackedSelenium()){
@@ -2035,6 +2048,7 @@ public abstract class AbsSeleniumObject {
 	 */
 	public void sTypeKeys(String locator, String text) throws HarnessException {
 		if (ZimbraSeleniumProperties.isWebDriver()){
+			logger.info("...WebDriver...action.sendKeys()");
 			WebElement we = getElement(locator);
 			Actions builder = new Actions(webDriver());
 			Action action = builder.sendKeys(we,text).build();
@@ -2049,15 +2063,29 @@ public abstract class AbsSeleniumObject {
 	 * DefaultSelenium.getConfirmation()
 	 */
 	public String sGetConfirmation() throws HarnessException {
+		String confirm = null;
+		if (ZimbraSeleniumProperties.isWebDriver()){
+			logger.info("...WebDriver...switchTo.alert.getText()");
+			confirm = webDriver().switchTo().alert().getText();
+		}else{
+			confirm =  ClientSessionFactory.session().selenium().getConfirmation();
+		}
 		logger.info("getConfirmation()");
-		return ClientSessionFactory.session().selenium().getConfirmation();
+		
+		return confirm;
 	}
 
 	/**
 	 * DefaultSelenium.keyPressNative()
 	 */
 	public void sKeyPressNative(String code) throws HarnessException {
-		ClientSessionFactory.session().selenium().keyPressNative(code);
+		if (ZimbraSeleniumProperties.isWebDriver()){
+			logger.info("...WebDriver...action.sendKeys()");
+			Actions builder = new Actions(webDriver());
+			builder.sendKeys(code).build().perform();				
+		}else{
+			ClientSessionFactory.session().selenium().keyPressNative(code);
+		}
 		logger.info("keyPressNative(" + code + ")");
 	}
 
@@ -2065,7 +2093,13 @@ public abstract class AbsSeleniumObject {
 	 * DefaultSelenium.keyPress()
 	 */
 	public void sKeyPress(String locator, String code) throws HarnessException {
-		ClientSessionFactory.session().selenium().keyPress(locator, code);
+		if (ZimbraSeleniumProperties.isWebDriver()){
+			logger.info("...WebDriver...action.sendKeys()");
+			Actions builder = new Actions(webDriver());
+			builder.sendKeys(getElement(locator), code).build().perform();			
+		}else{
+			ClientSessionFactory.session().selenium().keyPress(locator, code);			
+		}
 		logger.info("keypress(" + code + ")");
 	}
 
@@ -2073,15 +2107,27 @@ public abstract class AbsSeleniumObject {
 	 * DefaultSelenium.keyUp()
 	 */
 	public void sKeyUp(String locator, String code) throws HarnessException {
-		ClientSessionFactory.session().selenium().keyUp(locator, code);
-		logger.info("keypress(" + code + ")");
+		if (ZimbraSeleniumProperties.isWebDriver()){
+			logger.info("...WebDriver...action.release()");
+			Actions builder = new Actions(webDriver());
+			builder.release(getElement(locator)).build().perform();				
+		}else{
+			ClientSessionFactory.session().selenium().keyUp(locator, code);
+		}
+		logger.info("keyup(" + code + ")");
 	}
 
 	/**
 	 * DefaultSelenium.keyDownNative()
 	 */
 	public void sKeyDownNative(String code) throws HarnessException {
-		ClientSessionFactory.session().selenium().keyDownNative(code);
+		if (ZimbraSeleniumProperties.isWebDriver()){
+			logger.info("...WebDriver...action.sendKeys()");
+			Actions builder = new Actions(webDriver());
+			builder.sendKeys(code).build().perform();				
+		}else{
+			ClientSessionFactory.session().selenium().keyDownNative(code);
+		}
 		logger.info("keyDownNative(" + code + ")");
 	}
 
@@ -2089,7 +2135,13 @@ public abstract class AbsSeleniumObject {
 	 * DefaultSelenium.keyUpNative()
 	 */
 	public void sKeyUpNative(String code) throws HarnessException {
-		ClientSessionFactory.session().selenium().keyUpNative(code);
+		if (ZimbraSeleniumProperties.isWebDriver()){
+			logger.info("...WebDriver...action.release()");
+			Actions builder = new Actions(webDriver());
+			builder.release().build().perform();				
+		}else{
+			ClientSessionFactory.session().selenium().keyUpNative(code);
+		}
 		logger.info("keyUpNative(" + code + ")");
 	}
 
@@ -2127,6 +2179,7 @@ public abstract class AbsSeleniumObject {
 		
 		try {
 			if (ZimbraSeleniumProperties.isWebDriver()) {
+				logger.info("...WebDriver...switchTo.frame()");
 				if(locator.contains("relative=top")){
 					webDriver().switchTo().defaultContent();
 				}else{
@@ -2150,6 +2203,7 @@ public abstract class AbsSeleniumObject {
 	 */
 	public void sSelectWindow(String windowID) throws HarnessException {
 		if (ZimbraSeleniumProperties.isWebDriver()){
+			logger.info("...WebDriver...switchTo()");
 			switchTo(windowID);
 			//switchToWindowUsingTitle(windowID);
 		}else{
@@ -2164,6 +2218,7 @@ public abstract class AbsSeleniumObject {
 	public void sDeleteAllVisibleCookies() {
 		logger.info("sDeleteAllVisibleCookies()");
 		if (ZimbraSeleniumProperties.isWebDriver()){
+			logger.info("...WebDriver...manage.deleteAllCookies()");
 			webDriver().manage().deleteAllCookies();
 		}
 		else if (ZimbraSeleniumProperties.isWebDriverBackedSelenium()){
@@ -2600,7 +2655,7 @@ public abstract class AbsSeleniumObject {
 		if(locator !=null && !locator.isEmpty()){
 			try{
 				visible = (new FluentWait<WebDriver>(webDriver()).withTimeout(timeout, TimeUnit.SECONDS).
-					pollingEvery(500, TimeUnit.MILLISECONDS).ignoring(NoSuchElementException.class, MoveTargetOutOfBoundsException.class))
+					pollingEvery(500, TimeUnit.MILLISECONDS).ignoring(NoSuchElementException.class).ignoring(MoveTargetOutOfBoundsException.class).ignoring(ElementNotVisibleException.class))
 						.until(new ExpectedCondition<Boolean>(){
 							public Boolean apply(WebDriver d) {
 								if(flag){

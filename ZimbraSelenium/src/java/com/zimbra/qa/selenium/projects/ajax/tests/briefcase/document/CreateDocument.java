@@ -310,6 +310,7 @@ public class CreateDocument extends AjaxCommonTest {
 		app.zPageBriefcase.zClick(TreeBriefcase.Locators.briefcaseTreeView+"16]");
 		app.zPageBriefcase.zGetHtml(TreeBriefcase.Locators.briefcaseListView);
 		app.zPageBriefcase.sGetHtmlSource();
+		app.zPageBriefcase.sGetBodyText();
 		//String id1 = app.zPageBriefcase.sGetNextSiblingId("zli__BDLV__258");
 		//String id2 = app.zPageBriefcase.sGetPreviousSiblingId(id1);
 		

@@ -6,8 +6,6 @@ package com.zimbra.qa.selenium.projects.ajax.ui.briefcase;
 import java.util.*;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
-
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
@@ -26,7 +24,7 @@ public class TreeBriefcase extends AbsTree {
 		public static final String zNewTagTreeMenuItem = "css=td[id^=NEW_TAG__][id$=_title]";
 		public static final String zNewFolderTreeMenuItem = "css=td[id^=NEW_BRIEFCASE__][id$=_title]";
 		public static final String zRenameTagTreeMenuItem = "css=td[id$=_left_icon]>[class=ImgRename]";
-		public static final String zDeleteTreeMenuItem = "css=div[id='DELETE_WITHOUT_SHORTCUT'] tr[id^='POPUP_DELETE']:contains(Delete)";
+		public static final String zDeleteTreeMenuItem = "css=td[id^=DELETE_WITHOUT_SHORTCUT][id$=_title]";
 		public static final String zEditPropertiesTreeMenuItem = "css=div[id=EDIT_PROPS] tr[id=POPUP_EDIT_PROPS]:contains('Edit Properties')";
 	}
 
@@ -116,7 +114,7 @@ public class TreeBriefcase extends AbsTree {
 					+ " not yet implemented");
 		}
 
-		this.zWaitForBusyOverlay();		
+		this.zWaitForBusyOverlay();
 		zWaitForElementVisible(optionLocator);		
 		
 		// Default behavior. Click the locator

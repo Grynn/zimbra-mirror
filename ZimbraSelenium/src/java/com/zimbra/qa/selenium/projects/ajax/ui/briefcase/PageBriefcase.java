@@ -7,12 +7,8 @@ import java.util.EnumMap;
 import java.util.Map;
 
 import org.apache.commons.httpclient.HttpStatus;
-import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriverBackedSelenium;
 import org.openqa.selenium.WebElement;
-
-import com.thoughtworks.selenium.Selenium;
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.DocumentItem;
 import com.zimbra.qa.selenium.framework.items.FileItem;
