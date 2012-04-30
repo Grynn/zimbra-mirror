@@ -18,6 +18,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="domain" type="{urn:zimbraAdmin}domainSelector" minOccurs="0"/>
+ *         &lt;element name="ucservice" type="{urn:zimbraAdmin}ucServiceSelector" minOccurs="0"/>
  *       &lt;/sequence>
  *       &lt;attribute name="type" use="required" type="{urn:zimbraAdmin}countObjectsType" />
  *     &lt;/restriction>
@@ -29,11 +30,13 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "countObjectsRequest", propOrder = {
-    "domain"
+    "domain",
+    "ucservice"
 })
 public class testCountObjectsRequest {
 
     protected testDomainSelector domain;
+    protected testUcServiceSelector ucservice;
     @XmlAttribute(name = "type", required = true)
     protected testCountObjectsType type;
 
@@ -59,6 +62,30 @@ public class testCountObjectsRequest {
      */
     public void setDomain(testDomainSelector value) {
         this.domain = value;
+    }
+
+    /**
+     * Gets the value of the ucservice property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link testUcServiceSelector }
+     *     
+     */
+    public testUcServiceSelector getUcservice() {
+        return ucservice;
+    }
+
+    /**
+     * Sets the value of the ucservice property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link testUcServiceSelector }
+     *     
+     */
+    public void setUcservice(testUcServiceSelector value) {
+        this.ucservice = value;
     }
 
     /**

@@ -29,6 +29,7 @@ import generated.zcsclient.zm.testId;
  *       &lt;/sequence>
  *       &lt;attribute name="more" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *       &lt;attribute name="token" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="galDefinitionLastModified" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -43,14 +44,16 @@ import generated.zcsclient.zm.testId;
 public class testSyncGalResponse {
 
     @XmlElements({
-        @XmlElement(name = "deleted", type = testId.class),
-        @XmlElement(name = "cn", type = testContactInfo.class)
+        @XmlElement(name = "cn", type = testContactInfo.class),
+        @XmlElement(name = "deleted", type = testId.class)
     })
     protected List<Object> cnOrDeleted;
     @XmlAttribute(name = "more")
     protected Boolean more;
     @XmlAttribute(name = "token")
     protected String token;
+    @XmlAttribute(name = "galDefinitionLastModified")
+    protected String galDefinitionLastModified;
 
     /**
      * Gets the value of the cnOrDeleted property.
@@ -70,8 +73,8 @@ public class testSyncGalResponse {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link testId }
      * {@link testContactInfo }
+     * {@link testId }
      * 
      * 
      */
@@ -128,6 +131,30 @@ public class testSyncGalResponse {
      */
     public void setToken(String value) {
         this.token = value;
+    }
+
+    /**
+     * Gets the value of the galDefinitionLastModified property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getGalDefinitionLastModified() {
+        return galDefinitionLastModified;
+    }
+
+    /**
+     * Sets the value of the galDefinitionLastModified property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setGalDefinitionLastModified(String value) {
+        this.galDefinitionLastModified = value;
     }
 
 }

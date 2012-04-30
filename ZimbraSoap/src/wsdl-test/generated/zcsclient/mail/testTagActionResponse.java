@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="action" type="{urn:zimbraMail}idAndOperation"/>
+ *         &lt;element name="action" type="{urn:zimbraMail}tagActionInfo"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -33,17 +33,17 @@ import javax.xml.bind.annotation.XmlType;
 public class testTagActionResponse {
 
     @XmlElement(required = true)
-    protected testIdAndOperation action;
+    protected testTagActionInfo action;
 
     /**
      * Gets the value of the action property.
      * 
      * @return
      *     possible object is
-     *     {@link testIdAndOperation }
+     *     {@link testTagActionInfo }
      *     
      */
-    public testIdAndOperation getAction() {
+    public testTagActionInfo getAction() {
         return action;
     }
 
@@ -52,10 +52,10 @@ public class testTagActionResponse {
      * 
      * @param value
      *     allowed object is
-     *     {@link testIdAndOperation }
+     *     {@link testTagActionInfo }
      *     
      */
-    public void setAction(testIdAndOperation value) {
+    public void setAction(testTagActionInfo value) {
         this.action = value;
     }
 

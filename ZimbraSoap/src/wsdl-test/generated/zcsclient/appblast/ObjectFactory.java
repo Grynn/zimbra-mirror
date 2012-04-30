@@ -37,6 +37,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link testEditDocumentResponse }
+     * 
+     */
+    public testEditDocumentResponse createtestEditDocumentResponse() {
+        return new testEditDocumentResponse();
+    }
+
+    /**
      * Create an instance of {@link testFinishEditDocumentResponse }
      * 
      */
@@ -58,14 +66,6 @@ public class ObjectFactory {
      */
     public testFinishEditDocumentRequest createtestFinishEditDocumentRequest() {
         return new testFinishEditDocumentRequest();
-    }
-
-    /**
-     * Create an instance of {@link testEditDocumentResponse }
-     * 
-     */
-    public testEditDocumentResponse createtestEditDocumentResponse() {
-        return new testEditDocumentResponse();
     }
 
     /**

@@ -19,6 +19,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;sequence>
  *       &lt;/sequence>
  *       &lt;attribute name="domain" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="allServers" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *       &lt;attribute name="limit" type="{http://www.w3.org/2001/XMLSchema}int" />
  *       &lt;attribute name="offset" type="{http://www.w3.org/2001/XMLSchema}int" />
  *       &lt;attribute name="sortBy" type="{http://www.w3.org/2001/XMLSchema}string" />
@@ -37,6 +38,8 @@ public class testGetQuotaUsageRequest {
 
     @XmlAttribute(name = "domain")
     protected String domain;
+    @XmlAttribute(name = "allServers")
+    protected Boolean allServers;
     @XmlAttribute(name = "limit")
     protected Integer limit;
     @XmlAttribute(name = "offset")
@@ -70,6 +73,30 @@ public class testGetQuotaUsageRequest {
      */
     public void setDomain(String value) {
         this.domain = value;
+    }
+
+    /**
+     * Gets the value of the allServers property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isAllServers() {
+        return allServers;
+    }
+
+    /**
+     * Sets the value of the allServers property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setAllServers(Boolean value) {
+        this.allServers = value;
     }
 
     /**

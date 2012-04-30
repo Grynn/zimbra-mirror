@@ -21,6 +21,9 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="domain"/>
  *     &lt;enumeration value="cos"/>
  *     &lt;enumeration value="server"/>
+ *     &lt;enumeration value="accountOnUCService"/>
+ *     &lt;enumeration value="cosOnUCService"/>
+ *     &lt;enumeration value="domainOnUCService"/>
  *     &lt;enumeration value="internalUserAccount"/>
  *     &lt;enumeration value="internalArchivingAccount"/>
  *   &lt;/restriction>
@@ -46,6 +49,12 @@ public enum testCountObjectsType {
     COS("cos"),
     @XmlEnumValue("server")
     SERVER("server"),
+    @XmlEnumValue("accountOnUCService")
+    ACCOUNT_ON_UC_SERVICE("accountOnUCService"),
+    @XmlEnumValue("cosOnUCService")
+    COS_ON_UC_SERVICE("cosOnUCService"),
+    @XmlEnumValue("domainOnUCService")
+    DOMAIN_ON_UC_SERVICE("domainOnUCService"),
     @XmlEnumValue("internalUserAccount")
     INTERNAL_USER_ACCOUNT("internalUserAccount"),
     @XmlEnumValue("internalArchivingAccount")

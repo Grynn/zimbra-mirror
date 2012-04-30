@@ -21,6 +21,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="group"/>
  *     &lt;enumeration value="domain"/>
  *     &lt;enumeration value="server"/>
+ *     &lt;enumeration value="ucservice"/>
  *     &lt;enumeration value="xmppcomponent"/>
  *     &lt;enumeration value="zimlet"/>
  *     &lt;enumeration value="config"/>
@@ -48,6 +49,8 @@ public enum testTargetType {
     DOMAIN("domain"),
     @XmlEnumValue("server")
     SERVER("server"),
+    @XmlEnumValue("ucservice")
+    UCSERVICE("ucservice"),
     @XmlEnumValue("xmppcomponent")
     XMPPCOMPONENT("xmppcomponent"),
     @XmlEnumValue("zimlet")

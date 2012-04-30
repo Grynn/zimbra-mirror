@@ -53,9 +53,9 @@ public class testAdminZimletDesc {
 
     @XmlElementRefs({
         @XmlElementRef(name = "includeCSS", namespace = "urn:zimbraAdmin", type = JAXBElement.class),
+        @XmlElementRef(name = "include", namespace = "urn:zimbraAdmin", type = JAXBElement.class),
         @XmlElementRef(name = "target", namespace = "urn:zimbraAdmin", type = JAXBElement.class),
-        @XmlElementRef(name = "serverExtension", namespace = "urn:zimbraAdmin", type = JAXBElement.class),
-        @XmlElementRef(name = "include", namespace = "urn:zimbraAdmin", type = JAXBElement.class)
+        @XmlElementRef(name = "serverExtension", namespace = "urn:zimbraAdmin", type = JAXBElement.class)
     })
     @XmlAnyElement
     protected List<Object> serverExtensionOrIncludeOrIncludeCSS;

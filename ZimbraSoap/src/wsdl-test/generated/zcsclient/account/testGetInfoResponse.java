@@ -1017,14 +1017,14 @@ public class testGetInfoResponse {
     public static class DataSources {
 
         @XmlElements({
-            @XmlElement(name = "imap", type = testAccountImapDataSource.class),
-            @XmlElement(name = "cal", type = testAccountCalDataSource.class),
-            @XmlElement(name = "rss", type = testAccountRssDataSource.class),
-            @XmlElement(name = "pop3", type = testAccountPop3DataSource.class),
-            @XmlElement(name = "yab", type = testAccountYabDataSource.class),
+            @XmlElement(name = "unknown", type = testAccountUnknownDataSource.class),
             @XmlElement(name = "gal", type = testAccountGalDataSource.class),
             @XmlElement(name = "caldav", type = testAccountCaldavDataSource.class),
-            @XmlElement(name = "unknown", type = testAccountUnknownDataSource.class)
+            @XmlElement(name = "pop3", type = testAccountPop3DataSource.class),
+            @XmlElement(name = "rss", type = testAccountRssDataSource.class),
+            @XmlElement(name = "yab", type = testAccountYabDataSource.class),
+            @XmlElement(name = "cal", type = testAccountCalDataSource.class),
+            @XmlElement(name = "imap", type = testAccountImapDataSource.class)
         })
         protected List<testAccountDataSource> imapOrPop3OrCaldav;
 
@@ -1046,14 +1046,14 @@ public class testGetInfoResponse {
          * 
          * <p>
          * Objects of the following type(s) are allowed in the list
-         * {@link testAccountImapDataSource }
-         * {@link testAccountCalDataSource }
-         * {@link testAccountRssDataSource }
-         * {@link testAccountPop3DataSource }
-         * {@link testAccountYabDataSource }
+         * {@link testAccountUnknownDataSource }
          * {@link testAccountGalDataSource }
          * {@link testAccountCaldavDataSource }
-         * {@link testAccountUnknownDataSource }
+         * {@link testAccountPop3DataSource }
+         * {@link testAccountRssDataSource }
+         * {@link testAccountYabDataSource }
+         * {@link testAccountCalDataSource }
+         * {@link testAccountImapDataSource }
          * 
          * 
          */

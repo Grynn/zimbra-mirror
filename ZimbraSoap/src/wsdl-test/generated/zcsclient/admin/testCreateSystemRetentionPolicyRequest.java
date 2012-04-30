@@ -16,6 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
+ *         &lt;element name="cos" type="{urn:zimbraAdmin}cosSelector" minOccurs="0"/>
  *         &lt;element name="keep" type="{urn:zimbraAdmin}policyHolder" minOccurs="0"/>
  *         &lt;element name="purge" type="{urn:zimbraAdmin}policyHolder" minOccurs="0"/>
  *       &lt;/sequence>
@@ -28,13 +29,39 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "createSystemRetentionPolicyRequest", propOrder = {
+    "cos",
     "keep",
     "purge"
 })
 public class testCreateSystemRetentionPolicyRequest {
 
+    protected testCosSelector cos;
     protected testPolicyHolder keep;
     protected testPolicyHolder purge;
+
+    /**
+     * Gets the value of the cos property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link testCosSelector }
+     *     
+     */
+    public testCosSelector getCos() {
+        return cos;
+    }
+
+    /**
+     * Sets the value of the cos property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link testCosSelector }
+     *     
+     */
+    public void setCos(testCosSelector value) {
+        this.cos = value;
+    }
 
     /**
      * Gets the value of the keep property.

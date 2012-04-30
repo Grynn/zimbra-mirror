@@ -99,6 +99,8 @@ import generated.zcsclient.admin.testCreateServerRequest;
 import generated.zcsclient.admin.testCreateServerResponse;
 import generated.zcsclient.admin.testCreateSystemRetentionPolicyRequest;
 import generated.zcsclient.admin.testCreateSystemRetentionPolicyResponse;
+import generated.zcsclient.admin.testCreateUCServiceRequest;
+import generated.zcsclient.admin.testCreateUCServiceResponse;
 import generated.zcsclient.admin.testCreateVolumeRequest;
 import generated.zcsclient.admin.testCreateVolumeResponse;
 import generated.zcsclient.admin.testCreateXMPPComponentRequest;
@@ -131,6 +133,8 @@ import generated.zcsclient.admin.testDeleteServerRequest;
 import generated.zcsclient.admin.testDeleteServerResponse;
 import generated.zcsclient.admin.testDeleteSystemRetentionPolicyRequest;
 import generated.zcsclient.admin.testDeleteSystemRetentionPolicyResponse;
+import generated.zcsclient.admin.testDeleteUCServiceRequest;
+import generated.zcsclient.admin.testDeleteUCServiceResponse;
 import generated.zcsclient.admin.testDeleteVolumeRequest;
 import generated.zcsclient.admin.testDeleteVolumeResponse;
 import generated.zcsclient.admin.testDeleteXMPPComponentRequest;
@@ -207,6 +211,10 @@ import generated.zcsclient.admin.testGetAllRightsRequest;
 import generated.zcsclient.admin.testGetAllRightsResponse;
 import generated.zcsclient.admin.testGetAllServersRequest;
 import generated.zcsclient.admin.testGetAllServersResponse;
+import generated.zcsclient.admin.testGetAllSkinsRequest;
+import generated.zcsclient.admin.testGetAllSkinsResponse;
+import generated.zcsclient.admin.testGetAllUCServicesRequest;
+import generated.zcsclient.admin.testGetAllUCServicesResponse;
 import generated.zcsclient.admin.testGetAllVolumesRequest;
 import generated.zcsclient.admin.testGetAllVolumesResponse;
 import generated.zcsclient.admin.testGetAllXMPPComponentsRequest;
@@ -307,6 +315,8 @@ import generated.zcsclient.admin.testGetShareInfoRequest;
 import generated.zcsclient.admin.testGetShareInfoResponse;
 import generated.zcsclient.admin.testGetSystemRetentionPolicyRequest;
 import generated.zcsclient.admin.testGetSystemRetentionPolicyResponse;
+import generated.zcsclient.admin.testGetUCServiceRequest;
+import generated.zcsclient.admin.testGetUCServiceResponse;
 import generated.zcsclient.admin.testGetVersionInfoRequest;
 import generated.zcsclient.admin.testGetVersionInfoResponse;
 import generated.zcsclient.admin.testGetVolumeRequest;
@@ -361,6 +371,8 @@ import generated.zcsclient.admin.testModifyServerRequest;
 import generated.zcsclient.admin.testModifyServerResponse;
 import generated.zcsclient.admin.testModifySystemRetentionPolicyRequest;
 import generated.zcsclient.admin.testModifySystemRetentionPolicyResponse;
+import generated.zcsclient.admin.testModifyUCServiceRequest;
+import generated.zcsclient.admin.testModifyUCServiceResponse;
 import generated.zcsclient.admin.testModifyVolumeRequest;
 import generated.zcsclient.admin.testModifyVolumeResponse;
 import generated.zcsclient.admin.testModifyZimletRequest;
@@ -465,6 +477,8 @@ import generated.zcsclient.admin.testVerifyCertKeyRequest;
 import generated.zcsclient.admin.testVerifyCertKeyResponse;
 import generated.zcsclient.admin.testVerifyIndexRequest;
 import generated.zcsclient.admin.testVerifyIndexResponse;
+import generated.zcsclient.admin.testVerifyStoreManagerRequest;
+import generated.zcsclient.admin.testVerifyStoreManagerResponse;
 import generated.zcsclient.admin.testVersionCheckRequest;
 import generated.zcsclient.admin.testVersionCheckResponse;
 import generated.zcsclient.adminext.testBulkIMAPDataImportRequest;
@@ -488,14 +502,14 @@ import generated.zcsclient.adminext.testPurgeBulkIMAPImportTasksResponse;
 @WebService(name = "zcsAdminPortType", targetNamespace = "http://www.zimbra.com/wsdl/ZimbraService.wsdl")
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
 @XmlSeeAlso({
-    generated.zcsclient.admin.ObjectFactory.class,
-    generated.zcsclient.replication.ObjectFactory.class,
-    generated.zcsclient.sync.ObjectFactory.class,
-    generated.zcsclient.mail.ObjectFactory.class,
-    generated.zcsclient.appblast.ObjectFactory.class,
     generated.zcsclient.account.ObjectFactory.class,
+    generated.zcsclient.mail.ObjectFactory.class,
+    generated.zcsclient.replication.ObjectFactory.class,
+    generated.zcsclient.admin.ObjectFactory.class,
+    generated.zcsclient.appblast.ObjectFactory.class,
+    generated.zcsclient.adminext.ObjectFactory.class,
     generated.zcsclient.zm.ObjectFactory.class,
-    generated.zcsclient.adminext.ObjectFactory.class
+    generated.zcsclient.sync.ObjectFactory.class
 })
 public interface ZcsAdminPortType {
 
@@ -1056,6 +1070,18 @@ public interface ZcsAdminPortType {
      * 
      * @param parameters
      * @return
+     *     returns generated.zcsclient.admin.testCreateUCServiceResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/CreateUCService")
+    @WebResult(name = "CreateUCServiceResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public testCreateUCServiceResponse createUCServiceRequest(
+        @WebParam(name = "CreateUCServiceRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        testCreateUCServiceRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
      *     returns generated.zcsclient.admin.testCreateVolumeResponse
      */
     @WebMethod(action = "urn:zimbraAdmin/CreateVolume")
@@ -1243,6 +1269,18 @@ public interface ZcsAdminPortType {
     public testDeleteSystemRetentionPolicyResponse deleteSystemRetentionPolicyRequest(
         @WebParam(name = "DeleteSystemRetentionPolicyRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
         testDeleteSystemRetentionPolicyRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns generated.zcsclient.admin.testDeleteUCServiceResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/DeleteUCService")
+    @WebResult(name = "DeleteUCServiceResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public testDeleteUCServiceResponse deleteUCServiceRequest(
+        @WebParam(name = "DeleteUCServiceRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        testDeleteUCServiceRequest parameters);
 
     /**
      * 
@@ -1699,6 +1737,30 @@ public interface ZcsAdminPortType {
     public testGetAllServersResponse getAllServersRequest(
         @WebParam(name = "GetAllServersRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
         testGetAllServersRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns generated.zcsclient.admin.testGetAllSkinsResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/GetAllSkins")
+    @WebResult(name = "GetAllSkinsResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public testGetAllSkinsResponse getAllSkinsRequest(
+        @WebParam(name = "GetAllSkinsRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        testGetAllSkinsRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns generated.zcsclient.admin.testGetAllUCServicesResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/GetAllUCServices")
+    @WebResult(name = "GetAllUCServicesResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public testGetAllUCServicesResponse getAllUCServicesRequest(
+        @WebParam(name = "GetAllUCServicesRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        testGetAllUCServicesRequest parameters);
 
     /**
      * 
@@ -2304,6 +2366,18 @@ public interface ZcsAdminPortType {
      * 
      * @param parameters
      * @return
+     *     returns generated.zcsclient.admin.testGetUCServiceResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/GetUCService")
+    @WebResult(name = "GetUCServiceResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public testGetUCServiceResponse getUCServiceRequest(
+        @WebParam(name = "GetUCServiceRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        testGetUCServiceRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
      *     returns generated.zcsclient.admin.testGetVersionInfoResponse
      */
     @WebMethod(action = "urn:zimbraAdmin/GetVersionInfo")
@@ -2623,6 +2697,18 @@ public interface ZcsAdminPortType {
     public testModifySystemRetentionPolicyResponse modifySystemRetentionPolicyRequest(
         @WebParam(name = "ModifySystemRetentionPolicyRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
         testModifySystemRetentionPolicyRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns generated.zcsclient.admin.testModifyUCServiceResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/ModifyUCService")
+    @WebResult(name = "ModifyUCServiceResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public testModifyUCServiceResponse modifyUCServiceRequest(
+        @WebParam(name = "ModifyUCServiceRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        testModifyUCServiceRequest parameters);
 
     /**
      * 
@@ -3247,6 +3333,18 @@ public interface ZcsAdminPortType {
     public testVerifyIndexResponse verifyIndexRequest(
         @WebParam(name = "VerifyIndexRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
         testVerifyIndexRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns generated.zcsclient.admin.testVerifyStoreManagerResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/VerifyStoreManager")
+    @WebResult(name = "VerifyStoreManagerResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public testVerifyStoreManagerResponse verifyStoreManagerRequest(
+        @WebParam(name = "VerifyStoreManagerRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        testVerifyStoreManagerRequest parameters);
 
     /**
      * 

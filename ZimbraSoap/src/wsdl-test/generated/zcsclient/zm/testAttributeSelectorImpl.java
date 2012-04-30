@@ -11,6 +11,7 @@ import generated.zcsclient.admin.testGetCalendarResourceRequest;
 import generated.zcsclient.admin.testGetCosRequest;
 import generated.zcsclient.admin.testGetDomainRequest;
 import generated.zcsclient.admin.testGetServerRequest;
+import generated.zcsclient.admin.testGetUCServiceRequest;
 import generated.zcsclient.admin.testGetXMPPComponentRequest;
 import generated.zcsclient.admin.testGetZimletRequest;
 import generated.zcsclient.admin.testSearchAutoProvDirectoryRequest;
@@ -43,6 +44,7 @@ import generated.zcsclient.admin.testSearchDirectoryRequest;
     testGetCosRequest.class,
     testSearchDirectoryRequest.class,
     testGetServerRequest.class,
+    testGetUCServiceRequest.class,
     testGetXMPPComponentRequest.class,
     testGetCalendarResourceRequest.class,
     testGetAccountRequest.class,

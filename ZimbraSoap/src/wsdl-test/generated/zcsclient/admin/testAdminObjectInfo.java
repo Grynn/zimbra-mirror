@@ -40,6 +40,7 @@ import javax.xml.bind.annotation.XmlType;
     testDistributionListInfo.class,
     testAliasInfo.class,
     testDlInfo.class,
+    testUcServiceInfo.class,
     testServerInfo.class,
     testAccountInfo.class,
     testCalendarResourceInfo.class,

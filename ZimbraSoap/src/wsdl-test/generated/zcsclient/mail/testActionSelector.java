@@ -19,7 +19,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *       &lt;/sequence>
- *       &lt;attribute name="id" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="op" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="tcon" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="tag" type="{http://www.w3.org/2001/XMLSchema}int" />
@@ -48,7 +48,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class testActionSelector {
 
-    @XmlAttribute(name = "id", required = true)
+    @XmlAttribute(name = "id")
     protected String id;
     @XmlAttribute(name = "op", required = true)
     protected String op;

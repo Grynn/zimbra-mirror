@@ -33,6 +33,7 @@ import javax.xml.bind.annotation.XmlType;
     "a"
 })
 @XmlSeeAlso({
+    testCreateUCServiceRequest.class,
     testCreateZimletRequest.class,
     testCreateCalendarResourceRequest.class,
     testModifyDataSourceRequest.class,
@@ -46,6 +47,7 @@ import javax.xml.bind.annotation.XmlType;
     testModifyAccountRequest.class,
     testDeleteDataSourceRequest.class,
     testModifyDomainRequest.class,
+    testModifyUCServiceRequest.class,
     testCreateDomainRequest.class,
     testCheckRightRequest.class,
     testModifyCosRequest.class,
