@@ -54,7 +54,7 @@ AjxRpc.__RPC_REAP_INTERVAL	= 1800000;	// 30 minutes; run the reaper this often
  * 		below), then the object passed to the callback will be the same as in the 
  * 		error case with the exception that the status will be set to 
  * 		{@link AjxRpcRequest.TIMEDOUT}.
- * @param {boolean} [useGet=false] 		if <code>true</code>, use get method; otherwise, use post
+ * @param {Constant} [method] 		the HTTP method -- GET, POST, PUT, DELETE. if <code>true</code>, use get method for backward compatibility
  * @param {number} [timeout] 		the timeout (in milliseconds) after which the request is canceled
  * 
  * @return {object|hash}	if invoking in asynchronous mode, then it will return the id of the 
@@ -81,13 +81,13 @@ AjxRpc.__RPC_REAP_INTERVAL	= 1800000;	// 30 minutes; run the reaper this often
  * 
  */
 AjxRpc.invoke =
-function(requestStr, serverUrl, requestHeaders, callback, useGet, timeout) {
+function(requestStr, serverUrl, requestHeaders, callback, method, timeout) {
 
 	var asyncMode = (callback != null);
 	var rpcCtxt = AjxRpc.__getFreeRpcCtxt();
 
 	try {
-		var response = rpcCtxt.invoke(requestStr, serverUrl, requestHeaders, callback, useGet, timeout);
+		var response = rpcCtxt.invoke(requestStr, serverUrl, requestHeaders, callback, method, timeout);
 	} catch (ex) {
 		var newEx = new AjxException();
 		newEx.method = "AjxRpc.prototype._invoke";

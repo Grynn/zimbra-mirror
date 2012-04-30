@@ -48,6 +48,10 @@ AjxRpcRequest.prototype.isAjxRpcRequest = true;
 AjxRpcRequest.prototype.toString = function() { return "AjxRpcRequest"; };
 
 AjxRpcRequest.TIMEDOUT		= -1000;		// Timed out exception
+AjxRpcRequest.HTTP_GET		= "get";		//HTTP GET
+AjxRpcRequest.HTTP_POST		= "post";		//HTTP POST
+AjxRpcRequest.HTTP_PUT		= "put";		//HTTP PUT
+AjxRpcRequest.HTTP_DELETE	= "delete";		//HTTP DELETE
 
 AjxRpcRequest.__inited		= false;
 AjxRpcRequest.__msxmlVers	= null;
@@ -67,7 +71,7 @@ AjxRpcRequest.__msxmlVers	= null;
  * 		below), then the object passed to the callback will be the same as in the 
  * 		error case with the exception that the status will be set to 
  * 		{@link AjxRpcRequest.TIMEDOUT}.
- * @param {boolean} [useGet=false] 		if <code>true</code>, use get method; otherwise, use post
+ * @param {Constant} [method] 		the HTTP method -- GET, POST, PUT, DELETE. if <code>true</code>, use get method for backward compatibility
  * @param {number} [timeout] 		the timeout (in milliseconds) after which the request is canceled
  * 
  * @return {object|hash}	if invoking in asynchronous mode, then it will return the id of the 
@@ -93,14 +97,18 @@ AjxRpcRequest.__msxmlVers	= null;
  * @see AjxRpc.invoke
  */
 AjxRpcRequest.prototype.invoke =
-function(requestStr, serverUrl, requestHeaders, callback, useGet, timeout) {
+function(requestStr, serverUrl, requestHeaders, callback, method, timeout) {
 
 	var asyncMode = (callback != null);
 	var m = requestStr && requestStr.match(/.*"(\w+Request)"/);
 	this.methodName = m ? m[1] : serverUrl || "";	// for debugging
 
 	// An exception here will be caught by AjxRpc.invoke
-	this.__httpReq.open((useGet) ? "get" : "post", serverUrl, asyncMode);
+	var httpMethod = AjxRpcRequest.HTTP_POST;
+	if (method) {
+		httpMethod = method === true ? AjxRpcRequest.HTTP_GET : method;
+	}
+	this.__httpReq.open(httpMethod, serverUrl, asyncMode);
 
 	if (asyncMode) {
 		if (timeout) {
