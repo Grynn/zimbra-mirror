@@ -2,6 +2,7 @@
 # Server configuration
 #
 [server]
+cache_file=@@cbpolicyd_cache_file@@
 # Protocols to load
 protocols=<<EOT
 Postfix
@@ -77,7 +78,7 @@ log_mail=@@cbpolicyd_log_mail@@
 log_detail=@@cbpolicyd_log_detail@@
 
 # IP to listen on, * for all
-host=@@cbpolicyd_bind_host@@
+host=%%zimbraLocalBindAddress%%
 
 # Port to run on
 port=@@cbpolicyd_bind_port@@
