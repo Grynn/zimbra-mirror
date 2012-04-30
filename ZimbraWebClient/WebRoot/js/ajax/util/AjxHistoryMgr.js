@@ -93,8 +93,6 @@ AjxHistoryMgr.BLANK_FILE = "blankHistory.html";
 // ID for the iframe
 AjxHistoryMgr.IFRAME_ID = "DhtmlHistoryFrame";
 
-// Number of ms between checks of the Location bar for changes
-AjxHistoryMgr.LOCATION_CHECK_INTERVAL = 100;
 
 /**
  * Adds a history change listener.
@@ -223,7 +221,7 @@ function() {
 	var locationHandler = function() {
 		self._checkLocation();
 	};
-	setInterval(locationHandler, AjxHistoryMgr.LOCATION_CHECK_INTERVAL);
+	window.onhashchange = locationHandler;
 };
 
 /**
