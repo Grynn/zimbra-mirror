@@ -93,7 +93,7 @@ while( not $ldifin->eof()) {
   if ( $ldifin->error ( ) ) {
     print "Error msg: ", $ldifin->error ( ), "\n";
     print "Error lines:\n", $ldifin->error_lines ( ), "\n";
-  } else {
+  } elsif ( $entry ) {
       if ($entry->dn() eq "uid=zimbra,cn=admins,cn=zimbra") {
         $entry->replace (
           userPassword => "${zimbra_ssha_password}",
@@ -142,7 +142,7 @@ while ( not $ldifin->eof() ) {
     if ( $ldifin->error() ) {
       print "Error msg: ", $ldifin->error ( ), "\n";
       print "Error lines:\n", $ldifin->error_lines ( ), "\n";
-    } else {
+    } elsif ( $entry )  {
       $entry->changetype("add");
       $entry->update($ldap);
     }
@@ -155,7 +155,7 @@ while ( not $ldifin->eof() ) {
     if ( $ldifin->error() ) {
       print "Error msg: ", $ldifin->error ( ), "\n";
       print "Error lines:\n", $ldifin->error_lines ( ), "\n";
-    } else {
+    } elsif ( $entry ) {
       $entry->changetype("add");
       $entry->update($ldap);
     }
@@ -168,7 +168,7 @@ while ( not $ldifin->eof() ) {
     if ( $ldifin->error() ) {
       print "Error msg: ", $ldifin->error ( ), "\n";
       print "Error lines:\n", $ldifin->error_lines ( ), "\n";
-    } else {
+    } elsif ( $entry ) {
       $entry->changetype("add");
       $entry->update($ldap);
     }
@@ -181,7 +181,7 @@ while ( not $ldifin->eof() ) {
     if ( $ldifin->error() ) {
       print "Error msg: ", $ldifin->error ( ), "\n";
       print "Error lines:\n", $ldifin->error_lines ( ), "\n";
-    } else {
+    } elsif ( $entry ) {
       $entry->changetype("add");
       $entry->update($ldap);
     }
@@ -198,7 +198,7 @@ while ( not $ldifin->eof() ) {
     if ( $ldifin->error() ) {
       print "Error msg: ", $ldifin->error ( ), "\n";
       print "Error lines:\n", $ldifin->error_lines ( ), "\n";
-    } else {
+    } elsif ( $entry ) {
       $entry->changetype("add");
       $entry->update($ldap);
     }
@@ -216,7 +216,7 @@ if ( -d "/opt/zimbra/lib/conf/" ) {
             if ( $ldifin->error() ) {
               print "Error msg: ", $ldifin->error ( ), "\n";
               print "Error lines:\n", $ldifin->error_lines ( ), "\n";
-            } else {
+            } elsif ( $entry ) {
               $entry->update($ldap);
             }
        }
