@@ -1862,13 +1862,13 @@ public abstract class AbsSeleniumObject {
 			}else{
 				result = sWaitForCondition("var x = selenium.browserbot.findElementOrNull(\""
 					+ iframe
-					+ "\");if(x!=null){x=x.contentWindow.document.body;}if(browserVersion.isChrome){x.textContent.indexOf('"
+					+ "\");if(x!=null){x=x.contentWindow.document.body;if(browserVersion.isChrome){x.textContent.indexOf('"
 					+ text
 					+ "') >= 0;}else if(browserVersion.isIE){x.innerText.indexOf('"
 					+ text
 					+ "') >= 0;}else{x.textContent.indexOf('"
 					+ text
-					+ "') >= 0;}");
+					+ "') >= 0;}}else{false}","10000");
 			}
 			return result;
 		} catch (Exception ex) {

@@ -82,7 +82,7 @@ public class SendFileLink extends AjaxCommonTest {
 
 		// Verify link
 		ZAssert.assertTrue(mailform.zWaitForIframeText(
-				FormMailNew.Locators.zLinkText, fileName),
+				"css=iframe[id*=_content_ifr]", fileName),
 				"Verify the link text");
 
 		// Cancel the message
@@ -149,7 +149,7 @@ public class SendFileLink extends AjaxCommonTest {
 
 		// Verify link
 		ZAssert.assertTrue(mailform.zWaitForIframeText(
-				FormMailNew.Locators.zLinkText, fileName),
+				"css=iframe[id*=_content_ifr]", fileName),
 				"Verify the link text");
 
 		// Cancel the message
