@@ -13,7 +13,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.RemoteWebElement;
-import org.openqa.selenium.Alert;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.ElementNotVisibleException;
@@ -1809,7 +1808,7 @@ public abstract class AbsSeleniumObject {
 		logger.info("zWaitForWindow(" + name + ")");
 		if (ZimbraSeleniumProperties.isWebDriverBackedSelenium()
 				|| ZimbraSeleniumProperties.isWebDriver()) {
-			waitForWindow(name);
+			waitForWindowOpen(name,10L);
 		} else {
 			try {
 				sWaitForCondition("var x; for(var windowName in selenium.browserbot.openedWindows)"
@@ -1886,7 +1885,7 @@ public abstract class AbsSeleniumObject {
 		logger.info("zIsWindowOpen(" + name + ")");
 		if (ZimbraSeleniumProperties.isWebDriverBackedSelenium()
 				|| ZimbraSeleniumProperties.isWebDriver()) {
-			return waitForWindow(name);
+			return isWindowOpen(name);
 		} else {
 			String result = sGetEval("{var x; for(var windowName in selenium.browserbot.openedWindows ){"
 				+ "var targetWindow = selenium.browserbot.openedWindows[windowName];"
@@ -1913,7 +1912,7 @@ public abstract class AbsSeleniumObject {
 		boolean result = false;
 		try {
 			if(ZimbraSeleniumProperties.isWebDriver()){
-				result = waitForWindowClosed(name, webDriver().getWindowHandles().size());
+				result = waitForWindowClosed(name, 5L, webDriver().getWindowHandles().size());
 			}else{
 				String condition = "{var x; for(var windowName in selenium.browserbot.openedWindows ){"
 					+ "var targetWindow = selenium.browserbot.openedWindows[windowName];"
@@ -2053,7 +2052,13 @@ public abstract class AbsSeleniumObject {
 	 * @return
 	 */
 	public String sGetTitle() throws HarnessException {
-		String text = ClientSessionFactory.session().selenium().getTitle();
+		String text = null;
+		if (ZimbraSeleniumProperties.isWebDriver()){
+			logger.info("...WebDriver...getTitle()");
+			text = webDriver().getTitle();
+		}else{
+			text = ClientSessionFactory.session().selenium().getTitle();
+		}
 		logger.info("DefaultSelenium.getTitle() = " + text);
 		return text;
 
@@ -2282,7 +2287,12 @@ public abstract class AbsSeleniumObject {
 	 */
 	public void sDeleteCookie(String name, String optionString) {
 		logger.info("sDeleteCookie("+ name +", "+ optionString +")");
-		ClientSessionFactory.session().selenium().deleteCookie(name , optionString);	
+		if (ZimbraSeleniumProperties.isWebDriver()){
+			logger.info("...WebDriver...manage.deleteCookieNamed()");
+			webDriver().manage().deleteCookieNamed(name);
+		}else{
+			ClientSessionFactory.session().selenium().deleteCookie(name , optionString);
+		}			
 	}
 	
 	/**
@@ -2318,8 +2328,13 @@ public abstract class AbsSeleniumObject {
 	}
 
 	public void sWaitForPopUp(String windowID, String timeout) throws HarnessException {
-		ClientSessionFactory.session().selenium().waitForPopUp(windowID,
+		if (ZimbraSeleniumProperties.isWebDriver()){
+			logger.info("...WebDriver...wait().switchTo()");			
+			waitForWindowOpen(windowID,Long.valueOf(timeout)/SleepUtil.SleepGranularity);		
+		}else{
+			ClientSessionFactory.session().selenium().waitForPopUp(windowID,
 				timeout);
+		}
 		logger.info("sWaitForPopUp(" + windowID + ")");
 	}
 
@@ -2885,11 +2900,11 @@ public abstract class AbsSeleniumObject {
 		return found;
 	}
 
-	private boolean waitForWindow(String name) {
-		logger.info("...WebDriver...waitForWindow() " + name);
+	private boolean isWindowOpen(String name) {
+		logger.info("...WebDriver...isWindowOpen() " + name);
 	
 		boolean found = false;
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 5; i++) {
 			try{
 				found = switchTo(name);
 			}catch(Exception ex){
@@ -2903,37 +2918,54 @@ public abstract class AbsSeleniumObject {
 		}
 		return found;
 	}
-
-	private boolean waitForWindowClosed(final String name, int ... handlesSize) {
+	
+	private boolean waitForWindowClosed(final String name, Long timeout, int ... handlesSize) {
 		logger.info("...WebDriver...waitForWindowClosed() " + name);
+		return waitForWindow(name, false, timeout, handlesSize);
+	}
+	
+	private boolean waitForWindowOpen(final String name, Long timeout, int ... handlesSize) {
+		logger.info("...WebDriver...waitForWindowOpen() " + name);
+		return waitForWindow(name, true, timeout, handlesSize);
+	}
+	
+	private boolean waitForWindow(final String name, final Boolean flag, Long timeout, int ... handlesSize) {
+		logger.info("...WebDriver...waitForWindow() " + name);
 		
 		Wait<WebDriver> wait = null;
-		final int size;
-		if(handlesSize != null ){
+		final int size; 
+		if(handlesSize != null && handlesSize.length > 0){
 			size = handlesSize[0];
-		}else{
-			size = webDriver().getWindowHandles().size();
-		}
-		wait = new FluentWait<WebDriver>(webDriver()).withTimeout(5, TimeUnit.SECONDS).pollingEvery(500, TimeUnit.MILLISECONDS).ignoring(TimeoutException.class);
-		if(size > 1){
 			try{
-				wait.until(new ExpectedCondition<Boolean>(){					
+				wait = new FluentWait<WebDriver>(webDriver()).withTimeout(5L, TimeUnit.SECONDS).pollingEvery(500, TimeUnit.MILLISECONDS);
+				wait.until(new ExpectedCondition<Boolean>(){	
+					Boolean result = false;
 					public Boolean apply(WebDriver driver) {
-						Boolean result = false;
-						result = driver.getWindowHandles().size() < size;
+						if(flag){
+							result = driver.getWindowHandles().size() > size;
+						}else{
+							if(size > 1){
+								result = driver.getWindowHandles().size() < size;
+							}
+						}
 						return result;
 				}});
 			}catch(Exception te){
-			logger.info("...wait for getWindowHandles().size < " + size + " timed out");
+				logger.info("...wait for getWindowHandles().size differ from " + size + " timed out");
 			}
 		}
-	
-		boolean closed = false;
+		
+		boolean status = false;
+		wait = new FluentWait<WebDriver>(webDriver()).withTimeout(timeout, TimeUnit.SECONDS).pollingEvery(500, TimeUnit.MILLISECONDS);
 		try{
-			closed = wait.until(new ExpectedCondition<Boolean>(){					
+			status = wait.until(new ExpectedCondition<Boolean>(){					
 				public Boolean apply(WebDriver driver) {
 					try {
-						return !switchTo(name);
+						if(flag){
+							return switchTo(name);
+						}else{
+							return !switchTo(name);
+						}
 					} catch (HarnessException ex) {
 						logger.info(ex);
 						return false;						
@@ -2941,9 +2973,9 @@ public abstract class AbsSeleniumObject {
 				}
 			});
 		}catch(Exception te){
-			logger.info("...wait for closed " + name + " timed out");
+			logger.info("...wait for window " + name + " become:" + flag + " timed out");
 		}
-		return closed;
+		return status;
 	}	
 		
 	// // ***
