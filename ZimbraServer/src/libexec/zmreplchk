@@ -28,55 +28,88 @@ my $ldap_starttls_supported=getLocalConfig("ldap_starttls_supported");
 my $zimbra_home=getLocalConfig("zimbra_home");
 my $ldap_master=getLocalConfig("ldap_master_url");
 my $ldap_urls=getLocalConfig("ldap_url");
-my ($mesgp, $ldapp, $entry,$pcsn);
+my ($mesgp, $entry);
 
-chomp($ldap_master);
+my @masters = split / /, $ldap_master;
 my @replicas = split / /, $ldap_urls;
 
-my $index=0;
-for my $rep (@replicas) {
-  chomp($rep);
-  if ($ldap_master eq $rep) {
-    splice @replicas,$index,1;
+for my $master (@masters) {
+  my $index=0;
+  chomp($master);
+  for my $rep (@replicas) {
+    chomp($rep);
+    if ($master eq $rep) {
+      splice @replicas,$index,1;
+    }
+    $index++;
   }
-  $index++;
-}
+}  
 
-if ($ldapp = Net::LDAP->new( $ldap_master, async=> 1 ) ) { 
-  if ($ldap_master !~ /^ldaps/i) {
-    if ($ldap_starttls_supported) {
-      $mesgp = $ldapp->start_tls(
-                 verify => 'none',
-                 capath => "${zimbra_home}/conf/ca",
-               ) or die "start_tls: $@";
-      $mesgp->code && die "TLS: " . $mesgp->error . "\n";
+foreach my $master (@masters) {
+  my $pcsn;
+  my $ldapp;
+  chomp($master);
+  if ($ldapp = Net::LDAP->new( $master, async=> 1 ) ) { 
+    if ($master !~ /^ldaps/i) {
+      if ($ldap_starttls_supported) {
+        $mesgp = $ldapp->start_tls(
+                   verify => 'none',
+                   capath => "${zimbra_home}/conf/ca",
+                 ) or die "start_tls: $@";
+	    if($mesgp->code) {
+		  $status{$master}[0]=3;
+		  $status{$master}[1]="Could not execute StartTLS";
+		}
+      }
     }
   }
+  if (!defined($ldapp)) {
+    $status{$master}[0]=4;
+    $status{$master}[1]="Server down";
+    next;
+  }
+  $mesgp=$ldapp->bind;
+  $mesgp->code && die "Unable to bind to master\n";
+  
+  $mesgp = $ldapp->search(
+             base    =>  '',
+             scope   =>  'base',
+             filter  =>  '(objectclass=*)',
+             attrs   =>  ['contextCSN']
+           );
+  if ($mesgp->code) {
+    $status{$master}[0]=5;
+    $status{$master}[1]="Unable to search";
+    next;
+  }
+  $entry = $mesgp->entry(0);
+  $pcsn = $entry->get_value('contextCSN');
+  
+  if (!$pcsn) {
+    $status{$master}[0]=5;
+	$status{$master}[1]="Not a replicated master\n";
+  }
+  $status{$master}[0]=0;
+  $status{$master}[1]="In Sync";
+  $status{$master}[2]=$pcsn;
+  $ldapp->unbind;
 }
-if (!defined($ldapp)) {
-  print "Error: Master is not online\n";
-  exit 1;
+
+if (scalar(@masters) > 1) {
+  foreach my $master (@masters) {
+    chomp($master);
+    print "Master: $master";
+    print " Code: ".$status{$master}[0];
+    print " Status: ".$status{$master}[1];
+	if(defined($status{$master}[2])) {
+      print " CSN: ".$status{$master}[2];
+	}
+    print "\n";
+  }
 }
-
-$mesgp=$ldapp->bind;
-$mesgp->code && die "Unable to bind to master\n";
-
-$mesgp = $ldapp->search(
-           base    =>  '',
-           scope   =>  'base',
-           filter  =>  '(objectclass=*)',
-           attrs   =>  ['contextCSN']
-         );
-$entry = $mesgp->entry(0);
-$pcsn = $entry->get_value('contextCSN');
-
-if (!$pcsn) {
-  print "Error: Not a replicated master\n";
-  exit 2;
-} 
 
 foreach my $replica (@replicas) {
-  my ($rcsn, $mesgr, $ldapr);
+  my ($pcsn, $rcsn, $mesgr, $ldapr);
   chomp($replica);
 
   if ($ldapr = Net::LDAP->new( $replica, async=> 1 ) ) {
@@ -98,6 +131,7 @@ foreach my $replica (@replicas) {
     $status{$replica}[1]="Server down";
     next;
   }
+
   $mesgr=$ldapr->bind;
   $mesgr = $ldapr->search(
              base    =>  "",
@@ -112,20 +146,15 @@ foreach my $replica (@replicas) {
   }
   $entry = $mesgr->entry(0);
   $rcsn=$entry->get_value('contextCSN');
-  $ldapr->unbind;
 
-  $mesgp = $ldapp->search(
-             base    =>  "",
-             scope   =>  'base',
-             filter  =>  '(objectclass=*)',
-             attrs   =>  ['contextCSN']
-           );
-  $entry = $mesgp->entry(0);
-  $pcsn=$entry->get_value('contextCSN');
+  my $master=$masters[0];
+  chomp($master);
+  $pcsn = $status{$master}[2];
 
   if ($rcsn eq $pcsn) {
     $status{$replica}[0]=0;
     $status{$replica}[1]="In Sync";
+	$status{$replica}[2]=$rcsn;
   } else {
     my $rtime = $rcsn;
     my $ptime = $pcsn;
@@ -142,15 +171,17 @@ foreach my $replica (@replicas) {
     foreach ("w","d", "h", "m") { $tdelta =~ s/:/$_ /;}
     $status{$replica}[0]=6;
     $status{$replica}[1]="$tdelta";
+	$status{$replica}[2]=$rcsn;
   }
 }
-
-$ldapp->unbind;
 
 foreach my $replica (@replicas) {
   print "Replica: $replica";
   print " Code: ".$status{$replica}[0];
   print " Status: ".$status{$replica}[1];
+  if(defined($status{$replica}[2])) {
+    print " CSN: ".$status{$replica}[2];
+  }
   print "\n";
 }
 
