@@ -1,32 +1,20 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.conversation;
 
-import java.util.HashMap;
 import java.util.List;
 
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.MailItem;
 import com.zimbra.qa.selenium.framework.ui.Button;
-import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.ZAssert;
-import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
-import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.framework.util.*;
+import com.zimbra.qa.selenium.projects.ajax.core.PrefGroupMailByConversationTest;
 
 
-public class GetConversation extends AjaxCommonTest {
+public class GetConversation extends PrefGroupMailByConversationTest {
 
-	@SuppressWarnings("serial")
 	public GetConversation() {
 		logger.info("New "+ GetConversation.class.getCanonicalName());
 		
-		// All tests start at the login page
-		super.startingPage = app.zPageMail;
-
-		// Make sure we are using an account with conversation view
-		super.startingAccountPreferences = new HashMap<String, String>() {{
-				    put("zimbraPrefGroupMailBy", "conversation");
-				}};
 	
 		
 	}

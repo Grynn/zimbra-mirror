@@ -1,34 +1,19 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.conversation;
 
-import java.util.*;
-
-import org.testng.annotations.*;
+import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.*;
-import com.zimbra.qa.selenium.framework.items.FolderItem.*;
+import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
-import com.zimbra.qa.selenium.projects.ajax.core.*;
+import com.zimbra.qa.selenium.projects.ajax.core.PrefGroupMailByConversationTest;
 
 
-public class MarkSpamConversation extends AjaxCommonTest {
+public class MarkSpamConversation extends PrefGroupMailByConversationTest {
 
 	
 	public MarkSpamConversation() {
 		logger.info("New "+ MarkSpamConversation.class.getCanonicalName());
-		
-		
-		// All tests start at the login page
-		super.startingPage = app.zPageMail;
-		
-		// Make sure we are using an account with conversation view
-		super.startingAccountPreferences = new HashMap<String , String>() {
-			private static final long serialVersionUID = 3807049034222905017L;
-		{
-				    put("zimbraPrefGroupMailBy", "conversation");
-				}};
-
-
 
 		
 	}
