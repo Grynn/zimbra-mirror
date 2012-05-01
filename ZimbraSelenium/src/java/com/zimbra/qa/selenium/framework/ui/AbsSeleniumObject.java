@@ -1834,12 +1834,33 @@ public abstract class AbsSeleniumObject {
 	 * @param text
 	 * @throws HarnessException
 	 */
-	public boolean zWaitForIframeText(String iframe, String text)
+	public boolean zWaitForIframeText(String iframe, final String text)
 			throws HarnessException {
 		logger.info("zWaitForIframeText(" + iframe + ", " + text + ")");
-
+		Boolean result = false;
 		try {
-			sWaitForCondition("var x = selenium.browserbot.findElementOrNull(\""
+			if(ZimbraSeleniumProperties.isWebDriver()){
+				final WebElement we = getElement(iframe);
+				logger.info("...WebDriver...executeScript.textContent");				
+				ExpectedCondition<Boolean> ec = new ExpectedCondition<Boolean>() {
+					public Boolean apply(WebDriver driver) {
+						String result =  executeScript("var iframe = arguments[0];"				
+								+ "var iframe_body = " 
+								+ "iframe.contentWindow.document.body;" 
+								//+ "var result = iframe_body.innerHTML.indexOf('"
+								+ "var result = iframe_body.textContent.indexOf('"
+								+ text
+								+ "') >= 0; return result",we);
+						if(result != null){
+							return Boolean.valueOf(result);
+						}else{
+							return false;
+						}
+					}
+				};
+				result =  waitForCondition(ec,10);						
+			}else{
+				result = sWaitForCondition("var x = selenium.browserbot.findElementOrNull(\""
 					+ iframe
 					+ "\");if(x!=null){x=x.contentWindow.document.body;}if(browserVersion.isChrome){x.textContent.indexOf('"
 					+ text
@@ -1848,7 +1869,8 @@ public abstract class AbsSeleniumObject {
 					+ "') >= 0;}else{x.textContent.indexOf('"
 					+ text
 					+ "') >= 0;}");
-			return true;
+			}
+			return result;
 		} catch (Exception ex) {
 			throw new HarnessException(iframe + " never opened : ", ex);
 		}
@@ -1915,7 +1937,15 @@ public abstract class AbsSeleniumObject {
 	 * DefaultSelenium.check()
 	 */
 	public void sCheck(String locator) throws HarnessException {
-		ClientSessionFactory.session().selenium().check(locator);
+		if (ZimbraSeleniumProperties.isWebDriver()) {
+			logger.info("...WebDriver...findElement.click()");
+			WebElement we = getElement(locator);
+			if(!we.isSelected()){				  
+				we.click();		 
+		    } 	
+		}else{
+			ClientSessionFactory.session().selenium().check(locator);
+		}
 		logger.info("check(" + locator + ")");
 	}
 
@@ -1923,7 +1953,15 @@ public abstract class AbsSeleniumObject {
     * DefaultSelenium.uncheck()
     */
 	public void sUncheck(String locator) throws HarnessException {
-		ClientSessionFactory.session().selenium().uncheck(locator);
+		if (ZimbraSeleniumProperties.isWebDriver()){
+			logger.info("...WebDriver...findElement.isSelected.click()");
+			WebElement we = getElement(locator);
+			if(we.isSelected()){				  
+				we.click();		 
+		    } 			
+		}else{
+			ClientSessionFactory.session().selenium().uncheck(locator);
+		}
       logger.info("uncheck(" + locator + ")");
 	}
 
@@ -2165,8 +2203,18 @@ public abstract class AbsSeleniumObject {
 	 *            label.
 	 */
 	public void sSelectDropDown(String selectLocator, String optionLocator) throws HarnessException {
-		ClientSessionFactory.session().selenium().select(selectLocator,
+		if (ZimbraSeleniumProperties.isWebDriver()){
+			logger.info("...WebDriver...getFirstSelectedOption()");
+			Select select =  new Select (getElement(selectLocator));
+			String option = optionLocator;
+			if(option.contains("value=")){
+				option = option.split("value=")[1];
+			}
+			select.selectByValue(option);
+		}else{
+			ClientSessionFactory.session().selenium().select(selectLocator,
 				optionLocator);
+		}
 		logger.info("sSelectDropDown(" + selectLocator + ", " + optionLocator
 				+ ")");
 	}
@@ -2736,6 +2784,18 @@ public abstract class AbsSeleniumObject {
 		};
 	}
 
+	private Boolean waitForCondition(ExpectedCondition<Boolean> condition, long timeout) {
+		logger.info("...WebDriver...waitForCondition()");
+		WebDriverWait wait = new WebDriverWait(webDriver(), timeout);
+		Boolean result = false;		
+		try{
+			result = wait.until(condition);
+		}catch(TimeoutException  e){
+				logger.info("...WebDriver...waitForCondition()... timed out after " + timeout + "s");
+		}				
+		return result;
+	}
+	
 	private boolean switchToWindowUsingTitle(String title) { 
 		logger.info("...WebDriver...switchToWindowUsingTitle()");
 		WebDriver driver = webDriver();
