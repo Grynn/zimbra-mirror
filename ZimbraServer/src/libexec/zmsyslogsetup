@@ -392,8 +392,11 @@ sub updateRsyslogd {
     open(my $tlog, ">/var/log/zimbra-stats.log");
   }
   if ($platform eq "UBUNTU10_64" || $platform eq "UBUNTU12_64") {
-    chown "syslog","adm","/var/log/zimbra.log";
-    chown "syslog","adm","/var/log/zimbra-stats.log";
+    my $junk;
+    ($junk, $junk, $uid, $junk) = getpwnam("syslog");
+    $gid = getgrnam("adm");
+    chown $uid,$gid,"/var/log/zimbra.log";
+    chown $uid,$gid,"/var/log/zimbra-stats.log";
   } else {
     chown $uid,$gid,"/var/log/zimbra.log";
     chown $uid,$gid,"/var/log/zimbra-stats.log";
