@@ -3,6 +3,9 @@
  */
 package com.zimbra.qa.selenium.projects.ajax.ui.mail;
 
+import java.util.*;
+
+import com.zimbra.qa.selenium.framework.items.AttachmentItem;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.staf.Stafpostqueue;
@@ -176,7 +179,37 @@ public class DisplayConversationMessage extends DisplayMail {
 
 	}
 	
+	public List<AttachmentItem> zListGetAttachments() throws HarnessException {
+		logger.info(myPageName() + " zListGetAttachments()");
+		
+		List<AttachmentItem> items = new ArrayList<AttachmentItem>();
 
+		String listLocator = "css=div#"+ this.itemId + " table[id$='_attLinks_table']";
+
+		// Make sure the button exists
+		if ( !this.sIsElementPresent(listLocator) ) {
+			// No attachments!
+			return (items);
+		}
+
+		// How many items are in the table?
+		String tableLocator = listLocator + ">tbody>tr";
+		int count = this.sGetCssCount(tableLocator);
+		logger.debug(myPageName() + " zListGetMessages: number of messages: "+ count);
+
+		// Get each conversation's data from the table list
+		for (int i = 1; i <= count; i++) {
+
+			// Add the new item to the list
+			AttachmentItem item = parseAttachmentRow(listLocator + ">tbody>tr:nth-of-type("+ i +") ");
+			items.add(item);
+			logger.info(item.prettyPrint());
+		}
+
+
+		return (items);
+	}
+	
 	public String prettyPrint() {
 		StringBuilder sb = new StringBuilder();
 		sb.append(itemId);

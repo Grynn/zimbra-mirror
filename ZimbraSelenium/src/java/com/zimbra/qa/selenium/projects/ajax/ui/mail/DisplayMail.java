@@ -390,7 +390,7 @@ public class DisplayMail extends AbsDisplay {
 	 * @return
 	 * @throws HarnessException
 	 */
-	private AttachmentItem parseAttachmentRow(String locator) throws HarnessException {
+	protected AttachmentItem parseAttachmentRow(String locator) throws HarnessException {
 		
 		AttachmentItem item = new AttachmentItem();
 		
@@ -424,7 +424,7 @@ public class DisplayMail extends AbsDisplay {
 	 * @throws HarnessException
 	 */
 	public List<AttachmentItem> zListGetAttachments() throws HarnessException {
-		logger.info(myPageName() + " zListGetMessages()");
+		logger.info(myPageName() + " zListGetAttachments()");
 		
 		List<AttachmentItem> items = new ArrayList<AttachmentItem>();
 
