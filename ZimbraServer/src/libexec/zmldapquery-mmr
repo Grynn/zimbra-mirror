@@ -82,7 +82,7 @@ if(lc($ldap_is_master) eq "true") {
   $size = $mesg->count;
   if ($size > 0) {
     $entry=$mesg->entry(0);
-    print "Replica information\n";
+    print "Master replication information\n";
 	my $count=1;
     foreach ($entry->get_value('olcSyncRepl')) {
 	  my ($rid,$uri, $junk);
@@ -90,7 +90,7 @@ if(lc($ldap_is_master) eq "true") {
 	  ($junk, $uri) = split (/provider=/, $rid, 2);
 	  ($rid, $junk) = split (/ /, $rid, 2);
 	  ($uri, $junk) = split (/ /, $uri, 2);
-	  print "Replica $count\n";
+	  print "Master replica $count\n";
 	  print "rid: $rid ";
 	  print "URI: $uri\n";
 	  $count++;
