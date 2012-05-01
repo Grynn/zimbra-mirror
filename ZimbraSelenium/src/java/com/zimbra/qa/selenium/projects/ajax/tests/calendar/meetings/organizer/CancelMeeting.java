@@ -23,11 +23,6 @@ public class CancelMeeting extends CalendarWorkWeekTest {
 	public CancelMeeting() {
 		logger.info("New "+ CancelMeeting.class.getCanonicalName());
 		
-		// All tests start at the Calendar page
-		super.startingPage = app.zPageCalendar;
-
-		// Make sure we are using an account with message view
-		super.startingAccountPreferences = null;
 	}
 	
 	

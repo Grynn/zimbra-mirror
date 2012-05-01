@@ -13,8 +13,6 @@ public class CreateMeeting extends CalendarWorkWeekTest {
 	public CreateMeeting() {
 		logger.info("New "+ CreateMeeting.class.getCanonicalName());
 		
-		// All tests start at the Calendar page
-		super.startingPage = app.zPageCalendar;
 	}
 	
 	@Test(description = "Create a basic meeting with attendee",

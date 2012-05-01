@@ -6,22 +6,14 @@ import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
-import com.zimbra.qa.selenium.projects.ajax.core.CalendarWorkWeekTest;
+import com.zimbra.qa.selenium.projects.ajax.core.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.DisplayMail;
 
-public class MeetingResponse extends CalendarWorkWeekTest {
+public class MeetingResponse extends PrefGroupMailByMessageTest {
 
 	public MeetingResponse() {
 		logger.info("New "+ MeetingResponse.class.getCanonicalName());
 		
-		// All tests start at the Calendar page
-		super.startingPage = app.zPageMail;
-		
-		super.startingAccountPreferences = new HashMap<String, String>() {
-			private static final long serialVersionUID = -6085933426219057063L;
-			{
-				put("zimbraPrefGroupMailBy", "message");
-			}};
 
 	}
 	
@@ -35,7 +27,7 @@ public class MeetingResponse extends CalendarWorkWeekTest {
 		
 		
 		// Absolute dates in UTC zone
-		Calendar now = this.calendarWeekDayUTC;
+		Calendar now = Calendar.getInstance();
 		ZDate startUTC = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 12, 0, 0);
 		ZDate endUTC   = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 14, 0, 0);
 		

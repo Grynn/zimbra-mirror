@@ -23,12 +23,6 @@ public class DeleteInstance extends CalendarWorkWeekTest {
 	public DeleteInstance() {
 		logger.info("New "+ DeleteInstance.class.getCanonicalName());
 		
-		// All tests start at the Calendar page
-		super.startingPage = app.zPageCalendar;
-
-		// Make sure we are using an account with message view
-		super.startingAccountPreferences = null;
-
 	}
 	
 	

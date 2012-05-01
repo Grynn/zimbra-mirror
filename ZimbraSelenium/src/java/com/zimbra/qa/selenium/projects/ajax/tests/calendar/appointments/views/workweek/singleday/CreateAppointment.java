@@ -13,12 +13,6 @@ public class CreateAppointment extends CalendarWorkWeekTest {
 	public CreateAppointment() {
 		logger.info("New "+ CreateAppointment.class.getCanonicalName());
 
-		// All tests start at the Calendar page
-		super.startingPage = app.zPageCalendar;
-
-		// Make sure we are using an account with message view
-		super.startingAccountPreferences = null;
-
 	}
 
 	

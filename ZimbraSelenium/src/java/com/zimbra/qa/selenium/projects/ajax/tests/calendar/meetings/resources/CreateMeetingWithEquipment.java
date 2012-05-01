@@ -16,8 +16,6 @@ public class CreateMeetingWithEquipment extends CalendarWorkWeekTest {
 	public CreateMeetingWithEquipment() {
 		logger.info("New "+ CreateMeetingWithEquipment.class.getCanonicalName());
 		
-		// All tests start at the Calendar page
-		super.startingPage = app.zPageCalendar;
 	}
 	
 	@Bugs(ids = "69132")

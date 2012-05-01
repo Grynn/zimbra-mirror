@@ -30,12 +30,6 @@ public class DeleteAppointment extends CalendarWorkWeekTest {
 	public DeleteAppointment() {
 		logger.info("New "+ DeleteAppointment.class.getCanonicalName());
 		
-		// All tests start at the Calendar page
-		super.startingPage = app.zPageCalendar;
-
-		// Make sure we are using an account with message view
-		super.startingAccountPreferences = null;
-
 
 	}
 	
