@@ -19,7 +19,11 @@ public class CalendarWorkWeekTest extends AjaxCommonTest {
 		
 		super.startingPage = app.zPageCalendar;
 
-		super.startingAccountPreferences = new HashMap<String, String>();
+		super.startingAccountPreferences = new HashMap<String, String>() {
+			private static final long serialVersionUID = -109947857488617841L;
+		{
+		    put("zimbraPrefCalendarInitialView", "workweek");
+		}};
 		
 		calendarWeekDayUTC = Calendar.getInstance();
 		
