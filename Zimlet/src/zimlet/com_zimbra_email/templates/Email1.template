@@ -16,10 +16,10 @@
 		<label  id='UnknownPersonSlide_EmailAnchorId' style='text-decoration:underline;color:darkBlue;cursor:pointer'><$= AjxStringUtil.htmlEncode(data.email) $></label><br/>
 	<$ } $>
 	<$ if (data.mobilePhone) { $>
-		<label ><$= AjxStringUtil.htmlEncode(data.mobilePhone) $> (<$= ZmMsg.cell $>)</label><br/>
+		<label id='UnknownPersonSlide_mobilePhoneAnchorId' style='text-decoration:underline;color:blue;cursor:pointer'><$= AjxStringUtil.htmlEncode(data.mobilePhone) $> (<$= ZmMsg.cell $>)</label><br/>
 	<$ } $>
 	<$ if (data.workPhone) { $>
-		<label ><$= AjxStringUtil.htmlEncode(data.workPhone) $> (<$= ZmMsg.work $>)</label><br/>
+		<label id='UnknownPersonSlide_workPhoneAnchorId' style='text-decoration:underline;color:blue;cursor:pointer'><$= AjxStringUtil.htmlEncode(data.workPhone) $> (<$= ZmMsg.work $>)</label><br/>
 	<$ } $>
 	<$ if (data.address) { $>
 		<label ><$= AjxStringUtil.htmlEncode(data.address) $> (<$= ZmMsg.work $>)</label><br/>
@@ -27,5 +27,10 @@
 	<br/>
 	<br/>
 	<br/>
-	<hr/>
+	<br/>
+	<div>
+        <div id='ContactDetails_Presence' style='float:left; padding-left:20px; padding-right:10px'>
+        </div>
+        <label style='float:left; font-size:12px;font-weight:bold;'><$= AjxStringUtil.htmlEncode(data.presence) $></label>
+    </div
 </template>

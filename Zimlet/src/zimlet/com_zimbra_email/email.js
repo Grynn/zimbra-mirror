@@ -48,8 +48,10 @@ function() {
 	this._prefDialog = new EmailToolTipPrefDialog(this);
 
 	this._subscriberZimlets = [];
+    this._presenceProvider = null; // For the subscriber zimlet that can provide presence info. Only one presence provider
 	this._preLoadImgs();
 	this._convMode = false;
+    this._presenceCache = []; // Cache for holding presence information
 };
 
 /**
@@ -368,9 +370,13 @@ function(contact, address) {
 
 EmailTooltipZimlet.prototype.hoverOut =
 function(object, context, span, spanId) {
-
+    //console.log("In hoverout");
+    //console.log("Object " + object && object.currentTarget);
 	if(!this.tooltip) {	return;	}
-	if (spanId && this._bubbleParams[spanId]) { return; }
+	if (spanId && this._bubbleParams[spanId]) {
+        //console.log("Bubble params");
+        return;
+    }
 
 	this._hoverOver =  false;
 	this.tooltip._poppedUp = false;//makes the tooltip sticky
@@ -381,10 +387,13 @@ function(object, context, span, spanId) {
 EmailTooltipZimlet.prototype.popDownIfMouseNotOnSlide =
 function() {
 	if(this._hoverOver) {
+        //console.log("_hoverOver is true")
 		return;
 	} else if(this.slideShow && this.slideShow.isMouseOverTooltip) {
+        //console.log("isMouseOverTooltip is true");
 		return;
 	} else if(this.tooltip) {
+        //console.log("Popping down tooltip");
 		this.tooltip._poppedUp = true;//makes the tooltip non-sticky
 		this.tooltip.popdown();
 	}
@@ -401,11 +410,17 @@ function() {
 };
 
 EmailTooltipZimlet.prototype.addSubscriberZimlet =
-function(subscriberZimlet, isPrimary) {
+function(subscriberZimlet, isPrimary, cbObject) {
 	this._subscriberZimlets.push(subscriberZimlet);	
 	if(isPrimary) {
 		this.primarySubscriberZimlet = subscriberZimlet;
 	}
+
+    // Presence provider set up - only one presence provider assumed
+
+    if (cbObject && cbObject.presenceCallback && !this._presenceProvider){
+        this._presenceProvider = cbObject.presenceCallback;
+    }
 };
 
 // This is called by the zimlet framework.
@@ -476,13 +491,6 @@ function(object, context, x, y, span) {
 	this.seriesAnimation.reset();
 	var shell = DwtShell.getShell(window);
 	var tooltip = shell.getToolTip();
-    tooltip.setSticky(true);
-    // Turn on the stickiness of the tooltip for three seconds, enough time to move to the tooltip without it closing
-    AjxTimedAction.scheduleAction(new AjxTimedAction(this,
-        function() {
-            tooltip.setSticky(false);
-    }), 3000);
-
 	tooltip.setContent("<div id=\"zimletTooltipDiv\"></div>", true);
 	this.x = x;
 	this.y = y;
@@ -974,6 +982,14 @@ function() {
 		this.displayStatusMessage(ZmMsg.errorCreateUrl);
 	}
 };
+
+// To call a phone by clicking on it in the contact card
+
+EmailTooltipZimlet.prototype._phoneListener =
+    function(phone) {
+        if (!phone) return;
+        appCtxt.notifyZimlets("onPhoneClicked", [phone], {waitUntilLoaded:true});
+    };
 
 /**
  * Helper function

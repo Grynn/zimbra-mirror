@@ -44,6 +44,21 @@
     overflow: hidden;
 }
 
+
+.ImgFree {
+    background: transparent url("img/free.gif") no-repeat 0 0;
+    width: 16px;
+    height: 16px;
+    overflow: hidden;
+}
+
+.ImgBusy {
+    background: transparent url("img/busy.png") no-repeat 0 0;
+    width: 16px;
+    height: 16px;
+    overflow: hidden;
+}
+
 .ImgEmailZimlet_closeBtn {
   background: url("img/EmailZimlet_closeBtn.png") no-repeat center center;
     width: 16px;
