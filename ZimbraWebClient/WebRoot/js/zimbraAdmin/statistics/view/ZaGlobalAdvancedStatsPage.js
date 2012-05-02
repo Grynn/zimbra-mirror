@@ -345,6 +345,7 @@ ZaGlobalAdvancedStatsPage.plotQuickChart = function (id, hostname, group, column
     ZaRequestMgr.invoke(csfeParams, reqMgrParams);
 }
 
+
 ZaGlobalAdvancedStatsPage.plotChart = function (id, fields, colDef, newData) {
     var yAxis = new YAHOO.widget.NumericAxis();
     var max = 0;
@@ -372,15 +373,16 @@ ZaGlobalAdvancedStatsPage.plotChart = function (id, fields, colDef, newData) {
         var ts0 = newData[0].timestamp.getTime();
         var ts1 = newData[newData.length - 1].timestamp.getTime();
         var delta = (ts1 - ts0) / 1000;
-    
-        var fmt;
-        if (delta > (2 * 24 * 60 * 60)) {
-            fmt = ZaMsg.NAD_AdvStatsTimeAxisLabelMonthDay;
+
+        var formatter;
+        if (delta > 2 * 24 * 60 * 60) { //2 days
+            formatter = AjxDateFormat.getDateInstance(AjxDateFormat.SHORT);
+
         } else {
-            fmt = ZaMsg.NAD_AdvStatsTimeAxisLabelHourMinute;
+
+            formatter = AjxDateFormat.getTimeInstance(AjxDateFormat.SHORT); 
         }
-        
-        return YAHOO.util.Date.format(value, { format: fmt });
+        return formatter.format(value);
     }
     
     timeAxis.maximum = newData[newData.length - 1].timestamp;
