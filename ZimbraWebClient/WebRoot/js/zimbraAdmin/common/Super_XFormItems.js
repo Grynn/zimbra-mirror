@@ -2186,15 +2186,18 @@ Categorized_DynSelect_XFormItem.prototype.onChoiceClick = function(num, event) {
     if (item.type == ZaItem.ACCOUNT || item.type == ZaItem.DL
         || item.type == ZaItem.RESOURCE || item.type == ZaItem.ALIAS) {
         ZaApp.getInstance().getAccountListController()._editItem(item);
+        this.hideMenu();
         return;
     }
 
     if (item.type == ZaItem.DOMAIN) {
         ZaApp.getInstance().getDomainListController()._editItem(item);
+        this.hideMenu();
         return;
     }
     if (item.type == ZaItem.COS) {
         ZaApp.getInstance().getCosListController()._editItem(item);
+        this.hideMenu();
         return;
     }
 
