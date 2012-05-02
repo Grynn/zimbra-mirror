@@ -19,8 +19,8 @@ else
 	include $(OPENDKIM_ROOT)/../versions.def
 endif
 
-LDFLAGS	:=	LDFLAGS="-L$(OPENSSL_LIB_DIR) -L$(BDB_LIB_DIR) -L$(CYRUS_LIB_DIR) -L$(LDAP_LIB_DIR) -L$(LIBTOOL_LIB_DIR) -L$(ZIMBRA_HOME)/libxml2/lib \
-		 -Wl,-rpath,$(OPENSSL_LIB_DIR) -Wl,-rpath,$(BDB_LIB_DIR) -Wl,-rpath,$(CYRUS_LIB_DIR) -Wl,-rpath,$(LDAP_LIB_DIR) -Wl,-rpath,$(LIBTOOL_LIB_DIR)"
+LDFLAGS	:=	LDFLAGS="-L$(OPENSSL_LIB_DIR) -L$(CYRUS_LIB_DIR) -L$(LDAP_LIB_DIR) -L$(LIBTOOL_LIB_DIR) -L$(ZIMBRA_HOME)/libxml2/lib \
+		 -Wl,-rpath,$(OPENSSL_LIB_DIR) -Wl,-rpath,$(CYRUS_LIB_DIR) -Wl,-rpath,$(LDAP_LIB_DIR) -Wl,-rpath,$(LIBTOOL_LIB_DIR)"
 
 DKIM_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/opendkim/opendkim-$(DKIM_VERSION).tgz
 
@@ -55,12 +55,10 @@ build:
 	--enable-select_canonicalization \
 	--enable-selector_header \
 	--enable-sender_macro \
-	--enable-stats \
 	--enable-vbr \
 	--enable-xtags \
 	--enable-default_sender \
 	--enable-rpath \
-	--enable-query_cache \
 	--enable-parsetime \
 	--enable-arlib \
 	--enable-debug \
@@ -71,7 +69,6 @@ build:
 	--with-sasl=/opt/zimbra/cyrus-sasl \
 	--with-libcurl=/opt/zimbra/curl \
 	--with-libxml2=/opt/zimbra/libxml2 \
-	--with-db=/opt/zimbra/bdb; \
 	LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(CYRUS_LIB_DIR):$(LIBTOOL_LIB_DIR) $(MAKE) $(MAKEARGS); \
 	LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(CYRUS_LIB_DIR):$(LIBTOOL_LIB_DIR) $(MAKE) install STRIP="";)
 	(cd $(ZIMBRA_HOME); ln -s opendkim-$(DKIM_VERSION) opendkim)
