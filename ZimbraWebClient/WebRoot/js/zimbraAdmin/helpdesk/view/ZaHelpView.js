@@ -286,15 +286,23 @@ function() {
                                             label:null, value:AjxMessageFormat.format(ZabMsg.onlineHelpDetail, [location.pathname + ZaHelpView.RELEASE_NOTE_LINK +"?locid="+AjxEnv.DEFAULT_LOCALE]),
                                             cssStyle:"padding-top:5px;padding-right:10px;padding-left:10px;"},
                                         {type:_SPACER_, height:"20"},
-                                        {type:_ANCHOR_, cssStyle:"font-size:14px;", showInNewWindow:true, labelLocation:_NONE_, label:ZabMsg.HELP_adminGuide, href:(location.pathname + "adminhelp/pdf/admin.pdf?locid="+AjxEnv.DEFAULT_LOCALE)},
-                                        {type:_OUTPUT_, cssStyle:"font-size:12px;",
-                                            label:null, value:AjxMessageFormat.format(ZabMsg.HELP_adminGuideDetail, [location.pathname + ZaHelpView.RELEASE_NOTE_LINK +"?locid="+AjxEnv.DEFAULT_LOCALE]),
-                                            cssStyle:"padding-top:5px;padding-right:10px;padding-left:10px;"},
+                                        {type: _GROUP_, id:"helpDocsGroup_Admin", numCols:1, width: "100%",
+                                            items:[
+                                                {type:_ANCHOR_, cssStyle:"font-size:14px;", showInNewWindow:true, labelLocation:_NONE_, label:ZabMsg.HELP_adminGuide, href:(location.pathname + "adminhelp/pdf/admin.pdf?locid="+AjxEnv.DEFAULT_LOCALE)},
+                                                {type:_OUTPUT_, cssStyle:"font-size:12px;",
+                                                    label:null, value:AjxMessageFormat.format(ZabMsg.HELP_adminGuideDetail, [location.pathname + ZaHelpView.RELEASE_NOTE_LINK +"?locid="+AjxEnv.DEFAULT_LOCALE]),
+                                                    cssStyle:"padding-top:5px;padding-right:10px;padding-left:10px;"}
+                                            ]
+                                        },
                                         {type:_SPACER_, height:"20"},
-                                        {type:_ANCHOR_, cssStyle:"font-size:14px;", showInNewWindow:true, labelLocation:_NONE_, label:ZabMsg.HELP_usersGuide, href:(location.pathname + "help/admin/pdf/zimbra_user_guide.pdf?locid=" + AjxEnv.DEFAULT_LOCALE)},
-                                        {type:_OUTPUT_, cssStyle:"font-size:12px;",
-                                            label:null, value:ZabMsg.HELP_usersGuideDetail,
-                                            cssStyle:"padding-top:5px;padding-right:10px;padding-left:10px;"}
+                                        {type: _GROUP_, id:"helpDocsGroup_User", numCols:1, width: "100%",
+                                            items:[
+                                                {type:_ANCHOR_, cssStyle:"font-size:14px;", showInNewWindow:true, labelLocation:_NONE_, label:ZabMsg.HELP_usersGuide, href:(location.pathname + "help/admin/pdf/zimbra_user_guide.pdf?locid=" + AjxEnv.DEFAULT_LOCALE)},
+                                                {type:_OUTPUT_, cssStyle:"font-size:12px;",
+                                                    label:null, value:ZabMsg.HELP_usersGuideDetail,
+                                                    cssStyle:"padding-top:5px;padding-right:10px;padding-left:10px;"}
+                                            ]
+                                        }
                                     ]},
                                 {type:_SPACER_, height:"20"},
                                 {type:_GROUP_, colSpan: "*", id:"helpAskCommunity", containerCssClass:"ZaHelpAskCommunityContainer", cssClass:"ZaHelpAskCommunityPanel", numCols:1, items:[
