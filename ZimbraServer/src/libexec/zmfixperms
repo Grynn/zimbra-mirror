@@ -36,6 +36,14 @@ else
   postfix_suid_group=postdrop
 fi
 
+if [ "X$PLAT" = "XUBUNTU10_64" -o "X$PLAT" = "XUBUNTU12_64" ]; then
+  syslog_user=syslog
+  syslog_group=adm
+else
+  syslog_user=zimbra
+  syslog_group=zimbra
+fi
+
 zimbra_user=zimbra
 zimbra_group=zimbra
 
@@ -333,7 +341,7 @@ if [ -d /var/log/ ]; then
   if [ ! -f /var/log/zimbra.log ]; then
     touch /var/log/zimbra.log
   fi
-  chown ${zimbra_user}:${zimbra_group} /var/log/zimbra.log
+  chown ${syslog_user}:${syslog_group} /var/log/zimbra.log
   chmod 644 /var/log/zimbra.log
 fi
 
