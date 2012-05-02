@@ -123,6 +123,7 @@ AjxPackage.require("zimbraAdmin.search.model.ZaSearch");
 AjxPackage.require("zimbraAdmin.search.model.ZaSearchOption");
 AjxPackage.require("zimbraAdmin.servers.model.ZaServer");
 AjxPackage.require("zimbraAdmin.zimlets.model.ZaZimlet");
+AjxPackage.require("zimbraAdmin.rp.model.ZaRetentionPolicy");
 AjxPackage.require("zimbraAdmin.globalconfig.model.ZaGlobalConfig");
 AjxPackage.require("zimbraAdmin.status.model.ZaStatus");
 AjxPackage.require("zimbraAdmin.mta.model.ZaMTA");
@@ -190,6 +191,9 @@ AjxPackage.require("zimbraAdmin.statistics.view.ZaServerSpamActivityPage");
 AjxPackage.require("zimbraAdmin.statistics.view.ZaServerDiskStatsPage");
 AjxPackage.require("zimbraAdmin.statistics.view.ZaServerMBXStatsPage");
 AjxPackage.require("zimbraAdmin.statistics.view.ZaServerSessionStatsPage");
+
+AjxPackage.require("zimbraAdmin.rp.view.ZaRetentionPolicyListView");
+AjxPackage.require("zimbraAdmin.rp.view.ZaRetentionPolicyDlg");
 
 AjxPackage.require("zimbraAdmin.globalconfig.view.GlobalConfigXFormView");
 AjxPackage.require("zimbraAdmin.accounts.view.ZaAccMiniListView");

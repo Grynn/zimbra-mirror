@@ -247,3 +247,68 @@ LifetimeMinutes_XFormItem.prototype.initializeItems = function () {
 	Composite_XFormItem.prototype.initializeItems.call(this);
 };
 LifetimeMinutes_XFormItem.prototype.items = [];
+
+Long_Lifetime_XFormItem = function() {}
+XFormItemFactory.createItemType("_LONG_LIFETIME_", "long_lifetime", Long_Lifetime_XFormItem, Composite_XFormItem);
+Long_Lifetime_XFormItem.prototype.visibilityChecks = [ZaItem.hasReadPermission];
+Long_Lifetime_XFormItem.prototype.enableDisableChecks = [ZaItem.hasWritePermission];
+Long_Lifetime_XFormItem.prototype.nowrap = false;
+Long_Lifetime_XFormItem.prototype.labelWrap = true;
+Long_Lifetime_XFormItem.prototype.initializeItems = function(){
+    this.items = [
+        {type:_TEXTFIELD_, ref:".", labelLocation:_NONE_, cssClass:"admin_xform_number_input",
+            visibilityChecks:[],
+            enableDisableChecks:[],
+            getDisplayValue:function (itemVal) {
+                var val = "";
+                if(itemVal != null && itemVal.length >0) {
+                    if(itemVal.length > 1) {
+                        val = parseInt(itemVal);
+                    } else {
+                        if(itemVal == "0") {
+                            val = "0";
+                        } else {
+                            val = "";
+                        }
+                    }
+                }
+                this.getParentItem()._numericPart = val;
+                return ((!val || val=="0") ? "0" : val);
+            },
+            elementChanged:function(numericPart, instanceValue, event) {
+                if (numericPart  == ZaMsg.Unlimited) {
+                    numericPart = 0;
+                }
+                var val = numericPart + this.getParentItem()._stringPart;
+                this.getParentItem()._numericPart = numericPart;
+                this.getForm().itemChanged(this.getParentItem(), val, event);
+            }
+        },
+        {type:_OSELECT1_, ref:".", labelLocation:_NONE_, choices: ZaModel.getLongTimeChoices,
+            visibilityChecks:[],
+            enableDisableChecks:[],
+            getDisplayValue:function (itemVal){
+                var val = "d";
+                if(itemVal != null && itemVal.length >0) {
+                    if(itemVal.length > 1) {
+                        val = itemVal.substr(itemVal.length-1, 1);
+                    } else if (itemVal != "0") {
+                        val = (itemVal == "h" || itemVal == "d" || itemVal== "m" || itemVal == "y") ? itemVal : "d";
+                    }
+                }
+                this.getParentItem()._stringPart = val;
+                return val;
+            },
+            elementChanged:function(stringPart,instanceValue, event) {
+                var val = this.getParentItem()._numericPart + stringPart;
+                this.getParentItem()._stringPart = stringPart;
+                this.getForm().itemChanged(this.getParentItem(), val, event);
+            }
+        }
+    ];
+    Composite_XFormItem.prototype.initializeItems.call(this);
+}
+Long_Lifetime_XFormItem.prototype.items = [];
+Long_Lifetime_XFormItem.prototype.getDisplayElement = function () {
+    return this.getElement(this.getId() + "_display");
+}

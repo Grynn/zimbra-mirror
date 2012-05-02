@@ -323,10 +323,276 @@ ZaCosXFormView.ADVANCED_TAB_ATTRS = [ZaCos.A_zimbraAttachmentsBlocked,
 ];
 ZaCosXFormView.ADVANCED_TAB_RIGHTS = [];
 
-ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {	
+ZaCosXFormView.RETENTION_POLICY_TAB_ATTRS = [];
+ZaCosXFormView.RETENTION_POLICY_TAB_RIGHTS = [];
+
+ZaCosXFormView.prototype.loadRetentionPolicies = function () {
+    var resultCos = ZaRetentionPolicy.getRetentionPolicies("id", this.getForm().getInstance().id);
+    var resultGlobal = ZaRetentionPolicy.getRetentionPolicies();
+
+    if (resultCos[ZaRetentionPolicy.TYPE_KEEP].length) {
+        //It is global
+        if (ZaCosXFormView._arrayContains(resultGlobal[ZaRetentionPolicy.TYPE_KEEP], resultCos[ZaRetentionPolicy.TYPE_KEEP][0])) {
+            this.getForm().setInstanceValue(resultGlobal[ZaRetentionPolicy.TYPE_KEEP],ZaCos.A2_retentionPoliciesKeep);
+            this.getForm().setInstanceValue(resultGlobal[ZaRetentionPolicy.TYPE_PURGE],ZaCos.A2_retentionPoliciesPurge);
+            this.getForm().setInstanceValue("FALSE",ZaCos.A2_retentionPoliciesKeepInherited);
+            return;
+        }
+    }
+
+    if (resultCos[ZaRetentionPolicy.TYPE_PURGE].length) {
+        //It is global
+        if (ZaCosXFormView._arrayContains(resultGlobal[ZaRetentionPolicy.TYPE_PURGE], resultCos[ZaRetentionPolicy.TYPE_PURGE][0])) {
+            this.getForm().setInstanceValue(resultGlobal[ZaRetentionPolicy.TYPE_KEEP],ZaCos.A2_retentionPoliciesKeep);
+            this.getForm().setInstanceValue(resultGlobal[ZaRetentionPolicy.TYPE_PURGE],ZaCos.A2_retentionPoliciesPurge);
+            this.getForm().setInstanceValue("FALSE",ZaCos.A2_retentionPoliciesKeepInherited);
+            return;
+        }
+    }
+
+
+
+    if (resultCos[ZaRetentionPolicy.TYPE_PURGE].length == 0 &&
+        resultCos[ZaRetentionPolicy.TYPE_KEEP].length == 0) {
+        this.getForm().setInstanceValue(resultGlobal[ZaRetentionPolicy.TYPE_KEEP],ZaCos.A2_retentionPoliciesKeep);
+        this.getForm().setInstanceValue(resultGlobal[ZaRetentionPolicy.TYPE_PURGE],ZaCos.A2_retentionPoliciesPurge);
+        this.getForm().setInstanceValue("FALSE",ZaCos.A2_retentionPoliciesKeepInherited);
+    } else {
+        this.getForm().setInstanceValue(resultCos[ZaRetentionPolicy.TYPE_KEEP],ZaCos.A2_retentionPoliciesKeep);
+        this.getForm().setInstanceValue(resultCos[ZaRetentionPolicy.TYPE_PURGE],ZaCos.A2_retentionPoliciesPurge);
+        this.getForm().setInstanceValue("TRUE",ZaCos.A2_retentionPoliciesKeepInherited);
+    }
+}
+
+ZaCosXFormView._arrayContains = function(arr, obj) {
+    if (!arr || !(arr instanceof Array) || !obj) {
+        return false;
+    }
+
+    for (var i = 0; i < arr.length; i++) {
+        if (arr[i].id && obj.id && arr[i].id == obj.id) {
+            return true;
+        }
+    }
+    return false;
+}
+
+ZaCosXFormView.retentionSelectionListener = function(ev) {
+    this.getForm().setInstanceValue(this.getSelection(),ZaCos.A2_retentionPoliciesKeep_Selection);
+}
+
+ZaCosXFormView.purgeSelectionListener = function() {
+    this.getForm().setInstanceValue(this.getSelection(),ZaCos.A2_retentionPoliciesPurge_Selection);
+}
+
+ZaCosXFormView.deleteButtonListener = function(action) {
+    var selected = this.getForm().getInstanceValue(ZaCos.A2_retentionPoliciesKeep_Selection);
+
+    if (action == 1) {
+        selected = this.getForm().getInstanceValue(ZaCos.A2_retentionPoliciesPurge_Selection);
+    } else if (action == 2) {
+        selected = this.getForm().getInstanceValue(ZaCos.A2_retentionPoliciesPurge).length +
+            this.getForm().getInstanceValue(ZaCos.A2_retentionPoliciesKeep).length
+    }
+
+    //The original list is empty, but should show global polices
+    if (selected === 0) {
+        ZaCosXFormView.deleteRetentionPolicies.call(this, action);
+        return;
+    }
+    if (!selected) {
+        return;
+    }
+
+    if(!ZaApp.getInstance().dialogs["DeleteRetionPolicyConfirmMessageDialog"])
+        ZaApp.getInstance().dialogs["DeleteRetionPolicyConfirmMessageDialog"] = new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], null, ZaId.CTR_PREFIX + "DELETE_RETENTION_POLICY_ConfirmMessage");
+
+    ZaApp.getInstance().dialogs["DeleteRetionPolicyConfirmMessageDialog"].setMessage(ZaMsg.Q_Delete_RetentionPolicy_Confirm,
+        DwtMessageDialog.WARNING_STYLE);
+    ZaApp.getInstance().dialogs["DeleteRetionPolicyConfirmMessageDialog"].registerCallback(DwtDialog.YES_BUTTON, ZaCosXFormView.deleteRetentionPolicies, this, [action]);
+    ZaApp.getInstance().dialogs["DeleteRetionPolicyConfirmMessageDialog"].popup();
+}
+
+ZaCosXFormView.deleteRetentionPolicies = function(action) {
+    if(ZaApp.getInstance().dialogs["DeleteRetionPolicyConfirmMessageDialog"])
+        ZaApp.getInstance().dialogs["DeleteRetionPolicyConfirmMessageDialog"].popdown();
+
+    var selected;
+    var all;
+    if (action == 1) { //Remove purge
+        selected = this.getForm().getInstanceValue(ZaCos.A2_retentionPoliciesPurge_Selection);
+        all = this.getForm().getInstanceValue(ZaCos.A2_retentionPoliciesPurge);
+        if (!selected) {
+            return;
+        }
+        for (var i = 0; i <selected.length; i++ ) {
+            selected[i].deletePolicy("id", this.getForm().getInstance().id);
+            AjxUtil.arrayRemove(all, selected[i]);
+        }
+        this.getForm().setInstanceValue([],ZaCos.A2_retentionPoliciesPurge);
+        this.getForm().setInstanceValue(all,ZaCos.A2_retentionPoliciesPurge);
+        this.getForm().setInstanceValue([],ZaCos.A2_retentionPoliciesPurge_Selection);
+    } else if (action == 2) { //Remove all
+        all = this.getForm().getInstanceValue(ZaCos.A2_retentionPoliciesPurge);
+        all = all.concat(this.getForm().getInstanceValue(ZaCos.A2_retentionPoliciesKeep));
+        for (var i = 0; i < all.length; i++) {
+            all[i].deletePolicy("id", this.getForm().getInstance().id);
+        }
+        this.getForm().setInstanceValue([],ZaCos.A2_retentionPoliciesPurge);
+        this.getForm().setInstanceValue([],ZaCos.A2_retentionPoliciesKeep);
+
+        var resultGlobal = ZaRetentionPolicy.getRetentionPolicies();
+        this.getForm().setInstanceValue(resultGlobal[ZaRetentionPolicy.TYPE_KEEP],ZaCos.A2_retentionPoliciesKeep);
+        this.getForm().setInstanceValue(resultGlobal[ZaRetentionPolicy.TYPE_PURGE],ZaCos.A2_retentionPoliciesPurge);
+        this.getForm().setInstanceValue("FALSE",ZaCos.A2_retentionPoliciesKeepInherited);
+    }else { //Remove keep
+        selected = this.getForm().getInstanceValue(ZaCos.A2_retentionPoliciesKeep_Selection);
+        all = this.getForm().getInstanceValue(ZaCos.A2_retentionPoliciesKeep);
+        if (!selected) {
+            return;
+        }
+        for (var i = 0; i <selected.length; i++ ) {
+            selected[i].deletePolicy("id", this.getForm().getInstance().id);
+            AjxUtil.arrayRemove(all, selected[i]);
+        }
+        this.getForm().setInstanceValue([],ZaCos.A2_retentionPoliciesKeep);
+        this.getForm().setInstanceValue(all,ZaCos.A2_retentionPoliciesKeep);
+        this.getForm().setInstanceValue([],ZaCos.A2_retentionPoliciesKeep_Selection);
+    }
+}
+
+ZaCosXFormView.addButtonListener = function (isPurge) {
+    var policy;
+    if (isPurge) {
+        policy = new ZaRetentionPolicy(null, null, null, ZaRetentionPolicy.TYPE_PURGE);
+    } else {
+        policy = new ZaRetentionPolicy();
+    }
+
+    if(!ZaApp.getInstance().dialogs["newRetentionPolicyDialog"]) {
+        ZaApp.getInstance().dialogs["newRetentionPolicyDialog"] =
+            new ZaRetentionPolicyDlg(ZaApp.getInstance().getAppCtxt().getShell(), "500px","100px", ZaMsg.TTL_Policy_Add);
+        ZaApp.getInstance().dialogs["newRetentionPolicyDialog"].registerCallback(DwtDialog.OK_BUTTON,
+            ZaCosXFormView.createRetentionPolicy,
+            this, ZaApp.getInstance().dialogs["newRetentionPolicyDialog"]._localXForm);
+    }
+
+    ZaApp.getInstance().dialogs["newRetentionPolicyDialog"].setObject(policy);
+    ZaApp.getInstance().dialogs["newRetentionPolicyDialog"].popup();
+}
+
+ZaCosXFormView.createRetentionPolicy = function (form) {
+    if(ZaApp.getInstance().dialogs["newRetentionPolicyDialog"]) {
+        ZaApp.getInstance().dialogs["newRetentionPolicyDialog"].popdown();
+        var obj = form.getInstance();
+        obj.createPolicy("id", this.getForm().getInstance().id);
+
+        var all;
+        if (obj[ZaRetentionPolicy.A2_type] == ZaRetentionPolicy.TYPE_KEEP) {
+            all = this.getForm().getInstanceValue(ZaCos.A2_retentionPoliciesKeep);
+        } else {
+            all = this.getForm().getInstanceValue(ZaCos.A2_retentionPoliciesPurge);
+        }
+        if (!all) {
+            all = [];
+        }
+
+        all.push(obj);
+
+        if (obj[ZaRetentionPolicy.A2_type] == ZaRetentionPolicy.TYPE_KEEP) {
+            this.getForm().setInstanceValue([], ZaCos.A2_retentionPoliciesKeep);
+            this.getForm().setInstanceValue(all, ZaCos.A2_retentionPoliciesKeep);
+            this.getForm().setInstanceValue([],ZaCos.A2_retentionPoliciesKeep_Selection);
+        } else {
+            this.getForm().setInstanceValue([], ZaCos.A2_retentionPoliciesPurge);
+            this.getForm().setInstanceValue(all, ZaCos.A2_retentionPoliciesPurge);
+            this.getForm().setInstanceValue([],ZaCos.A2_retentionPoliciesPurge_Selection);
+        }
+    }
+}
+
+ZaCosXFormView.editButtonListener = function (isPurge) {
+    var policy;
+    if (isPurge) {
+        policy = this.getForm().getInstanceValue(ZaCos.A2_retentionPoliciesPurge_Selection)[0];
+    } else {
+        policy = this.getForm().getInstanceValue(ZaCos.A2_retentionPoliciesKeep_Selection)[0];
+    }
+
+    if(!ZaApp.getInstance().dialogs["editRetentionPolicyDialog"]) {
+        ZaApp.getInstance().dialogs["editRetentionPolicyDialog"] =
+            new ZaRetentionPolicyDlg(ZaApp.getInstance().getAppCtxt().getShell(), "500px","100px", ZaMsg.TTL_Policy_Edit);
+        ZaApp.getInstance().dialogs["editRetentionPolicyDialog"].registerCallback(DwtDialog.OK_BUTTON,
+            ZaCosXFormView.updateRetentionPolicy,
+            this, ZaApp.getInstance().dialogs["editRetentionPolicyDialog"]._localXForm);
+    }
+
+    ZaApp.getInstance().dialogs["editRetentionPolicyDialog"].setObject(policy);
+    ZaApp.getInstance().dialogs["editRetentionPolicyDialog"].popup();
+}
+
+ZaCosXFormView.updateRetentionPolicy = function (form) {
+    if(ZaApp.getInstance().dialogs["editRetentionPolicyDialog"]) {
+        ZaApp.getInstance().dialogs["editRetentionPolicyDialog"].popdown();
+        var obj = form.getInstance();
+        obj.modifyPolicy("id", this.getForm().getInstance().id);
+
+        var all;
+        if (obj[ZaRetentionPolicy.A2_type] == ZaRetentionPolicy.TYPE_KEEP) {
+            all = this.getForm().getInstanceValue(ZaCos.A2_retentionPoliciesKeep);
+        } else {
+            all = this.getForm().getInstanceValue(ZaCos.A2_retentionPoliciesPurge);
+        }
+        if (!all) {
+            all = [];
+        }
+
+        var index = AjxUtil.indexOf(all, obj);
+        AjxUtil.arrayRemove(all, obj);
+        AjxUtil.arrayAdd(all, obj, index);
+
+        if (obj[ZaRetentionPolicy.A2_type] == ZaRetentionPolicy.TYPE_KEEP) {
+            this.getForm().setInstanceValue([], ZaCos.A2_retentionPoliciesKeep);
+            this.getForm().setInstanceValue(all, ZaCos.A2_retentionPoliciesKeep);
+            this.getForm().setInstanceValue([],ZaCos.A2_retentionPoliciesKeep_Selection);
+        } else {
+            this.getForm().setInstanceValue([], ZaCos.A2_retentionPoliciesPurge);
+            this.getForm().setInstanceValue(all, ZaCos.A2_retentionPoliciesPurge);
+            this.getForm().setInstanceValue([],ZaCos.A2_retentionPoliciesPurge_Selection);
+        }
+    }
+}
+
+ZaCosXFormView.inheritCOSRetentionPolicies = function(value, event, form) {
+    if (value == "TRUE") {
+        this.setInstanceValue(value);
+        this.getForm().setInstanceValue([], ZaCos.A2_retentionPoliciesKeep);
+        this.getForm().setInstanceValue([],ZaCos.A2_retentionPoliciesKeep_Selection);
+        this.getForm().setInstanceValue([], ZaCos.A2_retentionPoliciesPurge);
+        this.getForm().setInstanceValue([],ZaCos.A2_retentionPoliciesPurge_Selection);
+    } else if (value == "FALSE") {
+        ZaCosXFormView.deleteButtonListener.call(this, 2);
+    }
+}
+
+
+ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
+    var headerListKeep = new Array();
+    var sortable = 1;
+    var i = 0 ;
+    //idPrefix, label, iconInfo, width, sortable, sortField, resizeable, visible
+    headerListKeep[i++] = new ZaListHeaderItem(ZaRetentionPolicy.A2_name, ZaMsg.CLV_Policy_Name_col, null, "200px", sortable, ZaRetentionPolicy.A2_name, true, true);
+    headerListKeep[i++] = new ZaListHeaderItem(ZaRetentionPolicy.A2_lifetime, ZaMsg.CLV_Policy_Retention_col, null, "auto", null, null, true, true);
+
+    var headerListPurge = new Array();
+    i = 0 ;
+    //idPrefix, label, iconInfo, width, sortable, sortField, resizeable, visible
+    headerListPurge[i++] = new ZaListHeaderItem(ZaRetentionPolicy.A2_name, ZaMsg.CLV_Policy_Name_col, null, "200px", sortable++, ZaRetentionPolicy.A2_name, true, true);
+    headerListPurge[i++] = new ZaListHeaderItem(ZaRetentionPolicy.A2_lifetime, ZaMsg.CLV_Policy_Purge_col, null, "auto", null, null, true, true);
+
     this.tabChoices = new Array();
 	var _tab1 = ++this.TAB_INDEX;
-	var _tab2, _tab3, _tab4, _tab5, _tab6, _tab7;
+	var _tab2, _tab3, _tab4, _tab5, _tab6, _tab7, _tab8;
 	
 	var headerItems = [	{type:_AJX_IMAGE_, src:"COS_32", label:null,rowSpan:2},
 							{type:_OUTPUT_, ref:ZaCos.A_name, label:null,cssClass:"AdminTitle",
@@ -376,8 +642,12 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
     	_tab7 = ++this.TAB_INDEX;
         this.tabChoices.push({value:_tab7, label:ZaMsg.TABT_Advanced});
     }
-    
-    
+
+    if(ZaTabView.isTAB_ENABLED(entry,ZaCosXFormView.RETENTION_POLICY_TAB_ATTRS, ZaCosXFormView.RETENTION_POLICY_TAB_RIGHTS)) {
+        _tab8 = ++this.TAB_INDEX;
+        this.tabChoices.push({value:_tab8, label:ZaMsg.TABT_RetentionPolicy});
+    }
+
     var cases = [];
 	var case1 = {type:_ZATABCASE_,caseKey:_tab1,numCols:1,
         paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0)
@@ -1383,6 +1653,120 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
 
         case7.items = case7Items;
         cases.push(case7);
+    }
+
+    if(_tab8) {
+        var case8 =
+        {type: _SUPER_TABCASE_, caseKey:_tab8,
+            paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),
+            colSizes:["100%"],numCols:1,id:"cos_retentionpolicy_tab",
+            loadDataMethods: [ZaCosXFormView.prototype.loadRetentionPolicies],
+            items: [
+                {type:_GROUP_, numCols:2, colSizes:["20px","auto"], width:"600px",
+                    cssStyle:"margin-left:10px;",
+                    items: [
+                        {type:_SPACER_, height:"10px"},
+                        {ref:ZaCos.A2_retentionPoliciesKeepInherited, type:_CHECKBOX_,
+                            onChange: ZaCosXFormView.inheritCOSRetentionPolicies,
+                            msgName:ZaMsg.LBL_POLICY_COS_INHERIT_PROMPT,label:ZaMsg.LBL_POLICY_COS_INHERIT_PROMPT,
+                            trueValue:"TRUE", falseValue:"FALSE", labelLocation:_RIGHT_}
+                    ]
+                },
+                {type:_ZA_TOP_GROUPER_, id:"cos_form_keep_p_group",width:"98%",
+                    numCols:1,colSizes:["auto"],label:ZaMsg.Glb_RetentionPolicies,
+                    cssStyle:"margin:10px;padding-bottom:0;",
+                    items: [
+                        {ref:ZaCos.A2_retentionPoliciesKeep, type:_DWT_LIST_, height:"200", width:"99%",
+                            preserveSelection:false, multiselect:true,cssClass: "DLSource",
+                            headerList:headerListKeep, widgetClass:ZaRetentionPolicyListView,
+                            onSelection:ZaCosXFormView.retentionSelectionListener,
+                            valueChangeEventSources:[ZaCos.A2_retentionPoliciesKeep]
+                        },
+                        {type:_GROUP_, numCols:5, colSizes:["100px","auto","100px","auto","100px"], width:"350px",
+                            cssStyle:"margin:10px;padding-bottom:0;",
+                            items: [
+                                {type:_DWT_BUTTON_, label:ZaMsg.TBB_Delete,width:"100px",
+                                    onActivate:"ZaCosXFormView.deleteButtonListener.call(this);",
+                                    enableDisableChangeEventSources:[ZaCos.A2_retentionPoliciesKeep_Selection,ZaCos.A2_retentionPoliciesKeepInherited],
+                                    enableDisableChecks:[[
+                                        function() {
+                                            var sel = this.getForm().getInstanceValue(ZaCos.A2_retentionPoliciesKeep_Selection);
+                                            return sel && sel.length > 0;
+                                        }],
+                                        [XForm.checkInstanceValue, ZaCos.A2_retentionPoliciesKeepInherited, "TRUE"]
+                                    ]
+                                },
+                                {type:_CELLSPACER_},
+                                {type:_DWT_BUTTON_, label:ZaMsg.TBB_Edit,width:"100px",
+                                    onActivate:"ZaCosXFormView.editButtonListener.call(this);",
+                                    enableDisableChangeEventSources:[ZaCos.A2_retentionPoliciesKeep_Selection, ZaCos.A2_retentionPoliciesKeepInherited],
+                                    enableDisableChecks:[[
+                                        function() {
+                                            var sel = this.getForm().getInstanceValue(ZaCos.A2_retentionPoliciesKeep_Selection);
+                                            return sel && sel.length == 1;
+                                        }],
+                                        [XForm.checkInstanceValue, ZaCos.A2_retentionPoliciesKeepInherited, "TRUE"]
+                                    ]
+                                },
+                                {type:_CELLSPACER_},
+                                {type:_DWT_BUTTON_, label:ZaMsg.NAD_Add,width:"100px",
+                                    enableDisableChangeEventSources:[ZaCos.A2_retentionPoliciesKeepInherited],
+                                    enableDisableChecks:[[XForm.checkInstanceValue, ZaCos.A2_retentionPoliciesKeepInherited, "TRUE"]],
+                                    onActivate:"ZaCosXFormView.addButtonListener.call(this);"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {type:_ZA_TOP_GROUPER_, id:"cos_form_purge_p_group",width:"98%",
+                    numCols:1,colSizes:["auto"],label:ZaMsg.Glb_DisposalPolicies,
+                    cssStyle:"margin:10px;padding-bottom:0;",
+                    items: [
+                        {ref:ZaCos.A2_retentionPoliciesPurge, type:_DWT_LIST_, height:"200", width:"99%",
+                            preserveSelection:false, multiselect:true,cssClass: "DLSource",
+                            headerList:headerListPurge, widgetClass:ZaRetentionPolicyListView,
+                            onSelection:ZaCosXFormView.purgeSelectionListener,
+                            valueChangeEventSources:[ZaCos.A2_retentionPoliciesPurge]
+                        },
+                        {type:_GROUP_, numCols:5, colSizes:["100px","auto","100px","auto","100px"], width:"350px",
+                            cssStyle:"margin:10px;padding-bottom:0;",
+                            items: [
+                                {type:_DWT_BUTTON_, label:ZaMsg.TBB_Delete,width:"100px",
+                                    onActivate:"ZaCosXFormView.deleteButtonListener.call(this, 1);",
+                                    enableDisableChangeEventSources:[ZaCos.A2_retentionPoliciesPurge_Selection, ZaCos.A2_retentionPoliciesKeepInherited],
+                                    enableDisableChecks:[
+                                        [function() {
+                                            var sel = this.getForm().getInstanceValue(ZaCos.A2_retentionPoliciesPurge_Selection);
+                                            return sel && sel.length > 0;
+                                        }],
+                                        [XForm.checkInstanceValue, ZaCos.A2_retentionPoliciesKeepInherited, "TRUE"]
+                                    ]
+                                },
+                                {type:_CELLSPACER_},
+                                {type:_DWT_BUTTON_, label:ZaMsg.TBB_Edit,width:"100px",
+                                    onActivate:"ZaCosXFormView.editButtonListener.call(this, 1);",
+                                    enableDisableChangeEventSources:[ZaCos.A2_retentionPoliciesPurge_Selection, ZaCos.A2_retentionPoliciesKeepInherited],
+                                    enableDisableChecks:[
+                                        [function() {
+                                            var sel = this.getForm().getInstanceValue(ZaCos.A2_retentionPoliciesPurge_Selection);
+                                            return sel && sel.length == 1;
+                                        }],
+                                        [XForm.checkInstanceValue, ZaCos.A2_retentionPoliciesKeepInherited, "TRUE"]
+                                    ]
+                                },
+                                {type:_CELLSPACER_},
+                                {type:_DWT_BUTTON_, label:ZaMsg.NAD_Add,width:"100px",
+                                    enableDisableChangeEventSources:[ZaCos.A2_retentionPoliciesKeepInherited],
+                                    enableDisableChecks:[[XForm.checkInstanceValue, ZaCos.A2_retentionPoliciesKeepInherited, "TRUE"]],
+                                    onActivate:"ZaCosXFormView.addButtonListener.call(this,1);"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        };
+        cases.push (case8) ;
     }
     
     xFormObject.tableCssStyle = "width:100%;overflow:auto;";

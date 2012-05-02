@@ -204,6 +204,13 @@ ZaCos.A_zimbraUnaccessedFileLifetime = "zimbraUnaccessedFileLifetime";
 ZaCos.A_zimbraFileTrashLifetime = "zimbraFileTrashLifetime";
 ZaCos.A_zimbraFileSendExpirationWarning = "zimbraFileSendExpirationWarning";
 ZaCos.A_zimbraFileExpirationWarningDays = "zimbraFileExpirationWarningDays";
+
+ZaCos.A2_retentionPoliciesKeepInherited ="retentionPoliciesKeepInherited";
+ZaCos.A2_retentionPoliciesKeep = "retentionPolicyKeep";
+ZaCos.A2_retentionPoliciesPurge = "retentionPolicyPurge";
+ZaCos.A2_retentionPoliciesKeep_Selection = "retentionPoliciesKeep_Selection";
+ZaCos.A2_retentionPoliciesPurge_Selection = "retentionPoliciesPurge_Selection";
+
 // right
 ZaCos.RIGHT_LIST_COS = "listCos";
 ZaCos.RIGHT_LIST_ZIMLET = "listZimlet";
@@ -767,7 +774,12 @@ ZaCos.myXModel = {
         {id:ZaCos.A_zimbraFileSendExpirationWarning, type:_ENUM_, ref:"attrs/"+ZaCos.A_zimbraFileSendExpirationWarning,
         	choices:["none", "owner", "all"]
         },
-        {id:ZaCos.A_zimbraFileExpirationWarningDays, type:_MLIFETIME_, ref:"attrs/"+ZaCos.A_zimbraFileExpirationWarningDays}
+        {id:ZaCos.A_zimbraFileExpirationWarningDays, type:_MLIFETIME_, ref:"attrs/"+ZaCos.A_zimbraFileExpirationWarningDays},
+        {id:ZaCos.A2_retentionPoliciesKeepInherited, type:_ENUM_, ref:ZaCos.A2_retentionPoliciesKeepInherited, choices:ZaModel.BOOLEAN_CHOICES},
+        {id:ZaCos.A2_retentionPoliciesKeep, type:_LIST_},
+        {id:ZaCos.A2_retentionPoliciesPurge, type:_LIST_},
+        {id:ZaCos.A2_retentionPoliciesKeep_Selection, type:_LIST_},
+        {id:ZaCos.A2_retentionPoliciesPurge_Selection, type:_LIST_}
     ]
 };
 

@@ -124,6 +124,15 @@ ZaModel.getTimeChoices1 = function () {
             ];
 }
 
+ZaModel.getLongTimeChoices = function () {
+    return [
+        {value:"d", label:AjxMsg.days},
+        {value:"w", label:AjxMsg.weeks},
+        {value:"m", label:AjxMsg.months},
+        {value:"y", label:AjxMsg.years}
+    ];
+}
+
 ZaModel.prototype.toString = 
 function() {
 	return "ZaModel";

@@ -205,6 +205,10 @@ ZaGlobalConfig.A_zimbraSkinLogoLoginBanner = "zimbraSkinLogoLoginBanner" ;
 ZaGlobalConfig.A_zimbraSkinLogoAppBanner = "zimbraSkinLogoAppBanner" ;
 ZaGlobalConfig.A2_blocked_extension_selection = "blocked_extension_selection";
 ZaGlobalConfig.A2_common_extension_selection = "common_extension_selection";
+ZaGlobalConfig.A2_retentionPoliciesKeep = "retentionPolicyKeep";
+ZaGlobalConfig.A2_retentionPoliciesPurge = "retentionPolicyPurge";
+ZaGlobalConfig.A2_retentionPoliciesKeep_Selection = "retentionPoliciesKeep_Selection";
+ZaGlobalConfig.A2_retentionPoliciesPurge_Selection = "retentionPoliciesPurge_Selection";
 
 // help URL
 ZaGlobalConfig.A_zimbraHelpAdminURL = "zimbraHelpAdminURL";
@@ -526,7 +530,11 @@ ZaGlobalConfig.myXModel = {
 	{ id:ZaGlobalConfig.A_zimbraFreebusyExchangeURL, ref:"attrs/" + ZaGlobalConfig.A_zimbraFreebusyExchangeURL, type: _STRING_ },
         { id:ZaGlobalConfig.A_zimbraFreebusyExchangeUserOrg, ref:"attrs/" + ZaGlobalConfig.A_zimbraFreebusyExchangeUserOrg, type: _STRING_ },
         {id:ZaGlobalConfig.A2_blocked_extension_selection, type:_LIST_},
-        {id:ZaGlobalConfig.A2_common_extension_selection, type:_LIST_}
+        {id:ZaGlobalConfig.A2_common_extension_selection, type:_LIST_},
+        {id:ZaGlobalConfig.A2_retentionPoliciesKeep, type:_LIST_},
+        {id:ZaGlobalConfig.A2_retentionPoliciesPurge, type:_LIST_},
+        {id:ZaGlobalConfig.A2_retentionPoliciesKeep_Selection, type:_LIST_},
+        {id:ZaGlobalConfig.A2_retentionPoliciesPurge_Selection, type:_LIST_}
 
     ]
 }

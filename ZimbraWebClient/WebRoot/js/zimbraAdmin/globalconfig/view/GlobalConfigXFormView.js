@@ -148,6 +148,167 @@ GlobalConfigXFormView.addNewExt = function() {
 	this.getForm().parent.setDirty(true);
 }
 
+GlobalConfigXFormView.retentionSelectionListener = function(ev) {
+    this.getForm().setInstanceValue(this.getSelection(),ZaGlobalConfig.A2_retentionPoliciesKeep_Selection);
+}
+
+GlobalConfigXFormView.purgeSelectionListener = function() {
+    this.getForm().setInstanceValue(this.getSelection(),ZaGlobalConfig.A2_retentionPoliciesPurge_Selection);
+}
+
+GlobalConfigXFormView.deleteButtonListener = function(isPurge) {
+    var selected = this.getForm().getInstanceValue(ZaGlobalConfig.A2_retentionPoliciesKeep_Selection);
+
+    if (isPurge) {
+        selected = this.getForm().getInstanceValue(ZaGlobalConfig.A2_retentionPoliciesPurge_Selection);
+    }
+
+    if (!selected) {
+        return;
+    }
+
+    if(!ZaApp.getInstance().dialogs["deleteGlobalRetionPolicyConfirmMessageDialog"])
+        ZaApp.getInstance().dialogs["deleteGlobalRetionPolicyConfirmMessageDialog"] = new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], null, ZaId.CTR_PREFIX + "DELETE_RETENTION_POLICY_ConfirmMessage");
+
+    ZaApp.getInstance().dialogs["deleteGlobalRetionPolicyConfirmMessageDialog"].setMessage(ZaMsg.Q_Delete_RetentionPolicy_Confirm,
+        DwtMessageDialog.WARNING_STYLE);
+    ZaApp.getInstance().dialogs["deleteGlobalRetionPolicyConfirmMessageDialog"].registerCallback(DwtDialog.YES_BUTTON, GlobalConfigXFormView.deleteRetentionPolicies, this, [isPurge]);
+    ZaApp.getInstance().dialogs["deleteGlobalRetionPolicyConfirmMessageDialog"].popup();
+}
+
+GlobalConfigXFormView.deleteRetentionPolicies = function(isPurge) {
+    if(ZaApp.getInstance().dialogs["deleteGlobalRetionPolicyConfirmMessageDialog"])
+        ZaApp.getInstance().dialogs["deleteGlobalRetionPolicyConfirmMessageDialog"].popdown();
+
+    var selected = this.getForm().getInstanceValue(ZaGlobalConfig.A2_retentionPoliciesKeep_Selection);
+    var all = this.getForm().getInstanceValue(ZaGlobalConfig.A2_retentionPoliciesKeep);
+
+    if (isPurge) {
+        selected = this.getForm().getInstanceValue(ZaGlobalConfig.A2_retentionPoliciesPurge_Selection);
+        all = this.getForm().getInstanceValue(ZaGlobalConfig.A2_retentionPoliciesPurge);
+    }
+
+    if (!selected) {
+        return;
+    }
+    for (var i = 0; i <selected.length; i++ ) {
+        selected[i].deletePolicy();
+        AjxUtil.arrayRemove(all, selected[i]);
+    }
+
+    if (isPurge) {
+        this.getForm().setInstanceValue([],ZaGlobalConfig.A2_retentionPoliciesPurge);
+        this.getForm().setInstanceValue(all,ZaGlobalConfig.A2_retentionPoliciesPurge);
+        this.getForm().setInstanceValue([],ZaGlobalConfig.A2_retentionPoliciesPurge_Selection);
+    } else {
+        this.getForm().setInstanceValue([],ZaGlobalConfig.A2_retentionPoliciesKeep);
+        this.getForm().setInstanceValue(all,ZaGlobalConfig.A2_retentionPoliciesKeep);
+        this.getForm().setInstanceValue([],ZaGlobalConfig.A2_retentionPoliciesKeep_Selection);
+    }
+}
+
+GlobalConfigXFormView.addButtonListener = function (isPurge) {
+    var policy;
+    if (isPurge) {
+        policy = new ZaRetentionPolicy(null, null, null, ZaRetentionPolicy.TYPE_PURGE);
+    } else {
+        policy = new ZaRetentionPolicy();
+    }
+
+    if(!ZaApp.getInstance().dialogs["newGlobalRetentionPolicyDialog"]) {
+        ZaApp.getInstance().dialogs["newGlobalRetentionPolicyDialog"] =
+            new ZaRetentionPolicyDlg(ZaApp.getInstance().getAppCtxt().getShell(), "500px","100px", ZaMsg.TTL_Policy_Add);
+        ZaApp.getInstance().dialogs["newGlobalRetentionPolicyDialog"].registerCallback(DwtDialog.OK_BUTTON,
+            GlobalConfigXFormView.createRetentionPolicy,
+            this, ZaApp.getInstance().dialogs["newGlobalRetentionPolicyDialog"]._localXForm);
+    }
+
+    ZaApp.getInstance().dialogs["newGlobalRetentionPolicyDialog"].setObject(policy);
+    ZaApp.getInstance().dialogs["newGlobalRetentionPolicyDialog"].popup();
+}
+
+GlobalConfigXFormView.createRetentionPolicy = function (form) {
+    if(ZaApp.getInstance().dialogs["newGlobalRetentionPolicyDialog"]) {
+        ZaApp.getInstance().dialogs["newGlobalRetentionPolicyDialog"].popdown();
+        var obj = form.getInstance();
+        obj.createPolicy();
+
+        var all;
+        if (obj[ZaRetentionPolicy.A2_type] == ZaRetentionPolicy.TYPE_KEEP) {
+            all = this.getForm().getInstanceValue(ZaGlobalConfig.A2_retentionPoliciesKeep);
+        } else {
+            all = this.getForm().getInstanceValue(ZaGlobalConfig.A2_retentionPoliciesPurge);
+        }
+        if (!all) {
+            all = [];
+        }
+
+        all.push(obj);
+
+        if (obj[ZaRetentionPolicy.A2_type] == ZaRetentionPolicy.TYPE_KEEP) {
+            this.getForm().setInstanceValue([], ZaGlobalConfig.A2_retentionPoliciesKeep);
+            this.getForm().setInstanceValue(all, ZaGlobalConfig.A2_retentionPoliciesKeep);
+            this.getForm().setInstanceValue([],ZaGlobalConfig.A2_retentionPoliciesKeep_Selection);
+        } else {
+            this.getForm().setInstanceValue([], ZaGlobalConfig.A2_retentionPoliciesPurge);
+            this.getForm().setInstanceValue(all, ZaGlobalConfig.A2_retentionPoliciesPurge);
+            this.getForm().setInstanceValue([],ZaGlobalConfig.A2_retentionPoliciesPurge_Selection);
+        }
+    }
+}
+
+GlobalConfigXFormView.editButtonListener = function (isPurge) {
+    var policy;
+    if (isPurge) {
+        policy = this.getForm().getInstanceValue(ZaGlobalConfig.A2_retentionPoliciesPurge_Selection)[0];
+    } else {
+        policy = this.getForm().getInstanceValue(ZaGlobalConfig.A2_retentionPoliciesKeep_Selection)[0];
+    }
+
+    if(!ZaApp.getInstance().dialogs["editGlobalRetentionPolicyDialog"]) {
+        ZaApp.getInstance().dialogs["editGlobalRetentionPolicyDialog"] =
+            new ZaRetentionPolicyDlg(ZaApp.getInstance().getAppCtxt().getShell(), "500px","100px", ZaMsg.TTL_Policy_Edit);
+        ZaApp.getInstance().dialogs["editGlobalRetentionPolicyDialog"].registerCallback(DwtDialog.OK_BUTTON,
+            GlobalConfigXFormView.updateRetentionPolicy,
+            this, ZaApp.getInstance().dialogs["editGlobalRetentionPolicyDialog"]._localXForm);
+    }
+
+    ZaApp.getInstance().dialogs["editGlobalRetentionPolicyDialog"].setObject(policy);
+    ZaApp.getInstance().dialogs["editGlobalRetentionPolicyDialog"].popup();
+}
+
+GlobalConfigXFormView.updateRetentionPolicy = function (form) {
+    if(ZaApp.getInstance().dialogs["editGlobalRetentionPolicyDialog"]) {
+        ZaApp.getInstance().dialogs["editGlobalRetentionPolicyDialog"].popdown();
+        var obj = form.getInstance();
+        obj.modifyPolicy();
+
+        var all;
+        if (obj[ZaRetentionPolicy.A2_type] == ZaRetentionPolicy.TYPE_KEEP) {
+            all = this.getForm().getInstanceValue(ZaGlobalConfig.A2_retentionPoliciesKeep);
+        } else {
+            all = this.getForm().getInstanceValue(ZaGlobalConfig.A2_retentionPoliciesPurge);
+        }
+        if (!all) {
+            all = [];
+        }
+
+        var index = AjxUtil.indexOf(all, obj);
+        AjxUtil.arrayRemove(all, obj);
+        AjxUtil.arrayAdd(all, obj, index);
+
+        if (obj[ZaRetentionPolicy.A2_type] == ZaRetentionPolicy.TYPE_KEEP) {
+            this.getForm().setInstanceValue([], ZaGlobalConfig.A2_retentionPoliciesKeep);
+            this.getForm().setInstanceValue(all, ZaGlobalConfig.A2_retentionPoliciesKeep);
+            this.getForm().setInstanceValue([],ZaGlobalConfig.A2_retentionPoliciesKeep_Selection);
+        } else {
+            this.getForm().setInstanceValue([], ZaGlobalConfig.A2_retentionPoliciesPurge);
+            this.getForm().setInstanceValue(all, ZaGlobalConfig.A2_retentionPoliciesPurge);
+            this.getForm().setInstanceValue([],ZaGlobalConfig.A2_retentionPoliciesPurge_Selection);
+        }
+    }
+}
+
 GlobalConfigXFormView.GENERAL_TAB_ATTRS = [ZaGlobalConfig.A_zimbraMailPurgeSleepInterval, ZaGlobalConfig.A_zimbraFileUploadMaxSize, ZaGlobalConfig.A_zimbraGalMaxResults, ZaGlobalConfig.A_zimbraDefaultDomainName,ZaGlobalConfig.A_zimbraScheduledTaskNumThreads];
 GlobalConfigXFormView.GENERAL_TAB_RIGHTS = [];
 
@@ -193,6 +354,17 @@ GlobalConfigXFormView.BC_TAB_RIGHTS = [];
 GlobalConfigXFormView.AUTO_PROV_TAB_ATTRS = [ZaGlobalConfig.A_zimbraAutoProvNotificationBody, ZaGlobalConfig.A_zimbraAutoProvNotificationSubject];
 GlobalConfigXFormView.AUTO_PROV_TAB_RIGHTS = [];
 
+GlobalConfigXFormView.RETENTION_POLICY_TAB_ATTRS = [];
+GlobalConfigXFormView.RETENTION_POLICY_TAB_RIGHTS = [];
+
+GlobalConfigXFormView.prototype.loadRetentionPolicies = function () {
+    var result = ZaRetentionPolicy.getRetentionPolicies();
+
+    if (result) {
+        this.getForm().setInstanceValue(result[ZaRetentionPolicy.TYPE_KEEP],ZaGlobalConfig.A2_retentionPoliciesKeep);
+        this.getForm().setInstanceValue(result[ZaRetentionPolicy.TYPE_PURGE],ZaGlobalConfig.A2_retentionPoliciesPurge);
+    }
+}
 
 GlobalConfigXFormView.prototype.setObject =
 function(entry) {
@@ -218,6 +390,19 @@ function(entry) {
 
 
 GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
+    var headerListKeep = new Array();
+    var sortable = 1;
+    var i = 0 ;
+    //idPrefix, label, iconInfo, width, sortable, sortField, resizeable, visible
+    headerListKeep[i++] = new ZaListHeaderItem(ZaRetentionPolicy.A2_name, ZaMsg.CLV_Policy_Name_col, null, "200px", sortable, ZaRetentionPolicy.A2_name, true, true);
+    headerListKeep[i++] = new ZaListHeaderItem(ZaRetentionPolicy.A2_lifetime, ZaMsg.CLV_Policy_Retention_col, null, "auto", null, null, true, true);
+
+    var headerListPurge = new Array();
+    i = 0 ;
+    //idPrefix, label, iconInfo, width, sortable, sortField, resizeable, visible
+    headerListPurge[i++] = new ZaListHeaderItem(ZaRetentionPolicy.A2_name, ZaMsg.CLV_Policy_Name_col, null, "200px", sortable++, ZaRetentionPolicy.A2_name, true, true);
+    headerListPurge[i++] = new ZaListHeaderItem(ZaRetentionPolicy.A2_lifetime, ZaMsg.CLV_Policy_Purge_col, null, "auto", null, null, true, true);
+
 	xFormObject.tableCssStyle = "width:100%;overflow:auto;";
 	var _tab1, _tab2, _tab3, _tab4, _tab5, _tab6, _tab7, _tab8, _tab9, _tab10, _tab11;
 	
@@ -1075,6 +1260,97 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
                     ]
                 };
         switchItems.push (case10) ;
+    }
+
+    if(ZaTabView.isTAB_ENABLED(entry,GlobalConfigXFormView.RETENTION_POLICY_TAB_ATTRS, GlobalConfigXFormView.RETENTION_POLICY_TAB_RIGHTS)) {
+        _tab11 = ++this.TAB_INDEX;
+
+        tabBarChoices.push ({value:_tab11, label:ZaMsg.TABT_RetentionPolicy});
+        var case11 =
+        {type: _SUPER_TABCASE_, caseKey:_tab11,
+            paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),
+            colSizes:["100%"],numCols:1,id:"global_retentionpolicy_tab",
+            loadDataMethods: [GlobalConfigXFormView.prototype.loadRetentionPolicies],
+            items: [
+                {type:_ZA_TOP_GROUPER_, id:"global_form_keep_p_group",width:"98%",
+                    numCols:1,colSizes:["auto"],label:ZaMsg.Glb_RetentionPolicies,
+                    cssStyle:"margin:10px;padding-bottom:0;",
+                    items: [
+                        {ref:ZaGlobalConfig.A2_retentionPoliciesKeep, type:_DWT_LIST_, height:"200", width:"99%",
+                            preserveSelection:false, multiselect:true,cssClass: "DLSource",
+                            headerList:headerListKeep, widgetClass:ZaRetentionPolicyListView,
+                            onSelection:GlobalConfigXFormView.retentionSelectionListener,
+                            valueChangeEventSources:[ZaGlobalConfig.A2_retentionPoliciesKeep]
+                        },
+                        {type:_GROUP_, numCols:5, colSizes:["100px","auto","100px","auto","100px"], width:"350px",
+                            cssStyle:"margin:10px;padding-bottom:0;",
+                            items: [
+                                {type:_DWT_BUTTON_, label:ZaMsg.TBB_Delete,width:"100px",
+                                    onActivate:"GlobalConfigXFormView.deleteButtonListener.call(this);",
+                                    enableDisableChangeEventSources:[ZaGlobalConfig.A2_retentionPoliciesKeep_Selection],
+                                    enableDisableChecks:[function() {
+                                        var sel = this.getForm().getInstanceValue(ZaGlobalConfig.A2_retentionPoliciesKeep_Selection);
+                                        return sel && sel.length > 0;
+                                    }]
+                                },
+                                {type:_CELLSPACER_},
+                                {type:_DWT_BUTTON_, label:ZaMsg.TBB_Edit,width:"100px",
+                                    onActivate:"GlobalConfigXFormView.editButtonListener.call(this);",
+                                    enableDisableChangeEventSources:[ZaGlobalConfig.A2_retentionPoliciesKeep_Selection],
+                                    enableDisableChecks:[function() {
+                                        var sel = this.getForm().getInstanceValue(ZaGlobalConfig.A2_retentionPoliciesKeep_Selection);
+                                        return sel && sel.length == 1;
+                                    }]
+                                },
+                                {type:_CELLSPACER_},
+                                {type:_DWT_BUTTON_, label:ZaMsg.NAD_Add,width:"100px",
+                                    onActivate:"GlobalConfigXFormView.addButtonListener.call(this);"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {type:_ZA_TOP_GROUPER_, id:"global_form_purge_p_group",width:"98%",
+                    numCols:1,colSizes:["auto"],label:ZaMsg.Glb_DisposalPolicies,
+                    cssStyle:"margin:10px;padding-bottom:0;",
+                    items: [
+                        {ref:ZaGlobalConfig.A2_retentionPoliciesPurge, type:_DWT_LIST_, height:"200", width:"99%",
+                            preserveSelection:false, multiselect:true,cssClass: "DLSource",
+                            headerList:headerListPurge, widgetClass:ZaRetentionPolicyListView,
+                            onSelection:GlobalConfigXFormView.purgeSelectionListener,
+                            valueChangeEventSources:[ZaGlobalConfig.A2_retentionPoliciesPurge]
+                        },
+                        {type:_GROUP_, numCols:5, colSizes:["100px","auto","100px","auto","100px"], width:"350px",
+                            cssStyle:"margin:10px;padding-bottom:0;",
+                            items: [
+                                {type:_DWT_BUTTON_, label:ZaMsg.TBB_Delete,width:"100px",
+                                    onActivate:"GlobalConfigXFormView.deleteButtonListener.call(this, 1);",
+                                    enableDisableChangeEventSources:[ZaGlobalConfig.A2_retentionPoliciesPurge_Selection],
+                                    enableDisableChecks:[function() {
+                                        var sel = this.getForm().getInstanceValue(ZaGlobalConfig.A2_retentionPoliciesPurge_Selection);
+                                        return sel && sel.length > 0;
+                                    }]
+                                },
+                                {type:_CELLSPACER_},
+                                {type:_DWT_BUTTON_, label:ZaMsg.TBB_Edit,width:"100px",
+                                    onActivate:"GlobalConfigXFormView.editButtonListener.call(this, 1);",
+                                    enableDisableChangeEventSources:[ZaGlobalConfig.A2_retentionPoliciesPurge_Selection],
+                                    enableDisableChecks:[function() {
+                                        var sel = this.getForm().getInstanceValue(ZaGlobalConfig.A2_retentionPoliciesPurge_Selection);
+                                        return sel && sel.length == 1;
+                                    }]
+                                },
+                                {type:_CELLSPACER_},
+                                {type:_DWT_BUTTON_, label:ZaMsg.NAD_Add,width:"100px",
+                                    onActivate:"GlobalConfigXFormView.addButtonListener.call(this,1);"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        };
+        switchItems.push (case11) ;
     }
 
     /* bug 71235, remove AUTO Provistioning
