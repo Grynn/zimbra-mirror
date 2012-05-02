@@ -1,0 +1,58 @@
+UserID                zimbra:zimbra
+UMask                 022
+Socket                inet:8465@localhost
+PidFile               /opt/zimbra/log/opendkim.pid
+
+
+#SigningTable          refile:/var/opendkim/signing_table
+#KeyTable              /var/opendkim/key_table
+#InternalHosts         /var/opendkim/internal_hosts
+#AuthservID            domain.example.com
+Canonicalization      relaxed/relaxed
+#ReportAddress         "Someone" <someone@example.com>
+SignHeaders          
+message-id,date,from,reply-to,mime-version,to,subject,content-type,content-transfer-encoding
+
+On-BadSignature       accept
+On-DNSError           tempfail
+On-InternalError      tempfail
+On-NoSignature        accept
+On-Security           tempfail
+
+AllowSHA1Only         no
+AlwaysAddARHeader     no
+AuthservIDWithJobId   yes
+AutoRestart           yes
+AutoRestartCount      20
+AutoRestartRate       10/1h
+Background            Yes
+ClockDrift            300
+DNSTimeout            10
+DomainKeysCompat      no
+EnableCoredumps       no
+FixCRLF               no
+MaximumHeaders        65536
+Minimum               0
+Mode                  sv
+MultipleSignatures    no
+NoHeaderB             no
+RequireSafeKeys       Yes
+SignatureAlgorithm    rsa-sha256
+SignatureTTL          0
+StrictHeaders         no
+StrictTestMode        no
+SubDomains            no
+
+SendADSPReports       no
+SendReports           no
+Diagnostics           no
+LogWhy                yes
+Quarantine            no
+ResolverTracing       no
+Syslog                yes
+SyslogFacility        mail
+SyslogSuccess         no
+X-Header              yes
+TemporaryDirectory    /opt/zimbra/data/tmp
+KeepTemporaryFiles    no
+MilterDebug           0
