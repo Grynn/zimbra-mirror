@@ -653,12 +653,15 @@ ZaDomainXFormView.checkGALAccountAttribute = function(attributeRelativepath, isE
 }
 
 ZaDomainXFormView.getUserQuota = function () {
-    var domainName = this.getInstanceValue(ZaDomain.A_domainName);
-    var cb = new AjxCallback(this, ZaDomainXFormView.updateUserQuota, domainName);
-    ZaDomain.getAccountQuota(domainName, 0, 50, undefined, undefined, cb);
+    var params = {};
+    params.domainName = this.getForm().getInstanceValue(ZaDomain.A_domainName);
+    params.sortBy = ZaAccountQuota.A2_diskUsage;
+    params.sortAscending = 0;
+    var cb = new AjxCallback(this.getForm(), ZaDomainXFormView.updateUserQuota, params);
+    ZaDomain.getAccountQuota(params.domainName , 0, 50, params.sortBy, params.sortAscending, cb);
 }
 
-ZaDomainXFormView.updateUserQuota = function(domainName, resp) {
+ZaDomainXFormView.updateUserQuota = function(params, resp) {
     if (resp && !resp.isException()) {
         resp = resp.getResponse().Body.GetQuotaUsageResponse;
 
@@ -679,8 +682,10 @@ ZaDomainXFormView.updateUserQuota = function(domainName, resp) {
         _version = _version? ++_version: 1;
         result.mbxes._version = _version;
         this.setInstanceValue(result.mbxes, ZaDomain.A2_domain_account_quota);
-        var accountQuotaPool = this.getForm().getItemById(this.getForm().getId() + "_accountQuota").getWidget();
-        accountQuotaPool.setDomainName(domainName);
+        var accountQuotaPool = this.getItemById(this.getId() + "_accountQuota").getWidget();
+        accountQuotaPool.setDomainName(params.domainName);
+        accountQuotaPool.setSortBy(params.sortBy);
+        accountQuotaPool.setSortAscending(params.sortAscending);
         accountQuotaPool.setScrollHasMore(result.hasMore);
     }
 }

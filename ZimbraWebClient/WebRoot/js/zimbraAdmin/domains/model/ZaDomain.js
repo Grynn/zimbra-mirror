@@ -1814,6 +1814,7 @@ ZaDomain.getAccountQuota = function ( name, offset, limit, sortBy, sortAscending
 	soapDoc.getMethod().setAttribute("refresh", "1");
     if (name) {
         soapDoc.getMethod().setAttribute("domain", name);
+        soapDoc.getMethod().setAttribute("allServers", "1");
     }
 	//use refresh="1" to force server side re-calculating quota and ignore cached data.
 

@@ -168,6 +168,19 @@ function() {
 	return headerList;
 }
 
+ZaDomainAccountQuotaListView.prototype._sortColumn = function (columnItem, bSortAsc){
+	var sortAscending = bSortAsc ? 1 : 0 ;
+	var sortBy = columnItem._sortField ;
+	var xform = this.parent;
+    var domainName = this._domainName ? this._domainName: "";
+    var params = {};
+    params.domainName = domainName;
+    params.sortBy = sortBy;
+    params.sortAscending =  sortAscending;
+    var updateCallback = new AjxCallback(xform, ZaDomainXFormView.updateUserQuota, params);
+    ZaDomain.getAccountQuota(domainName, 0, 50, sortBy, sortAscending, updateCallback);
+};
+
 ZaDomainAccountQuotaListView.prototype._loadMsg = function(params) {
     var offset = params.offset;
     var domainName = this._domainName ? this._domainName: "";
@@ -176,7 +189,6 @@ ZaDomainAccountQuotaListView.prototype._loadMsg = function(params) {
     var limit = params.limit;
     var updateCallback = new AjxCallback(this, this.updateMoreItems);
     ZaDomain.getAccountQuota(domainName, offset, limit, sortBy, sortAscending, updateCallback);
-
 }
 
 ZaDomainAccountQuotaListView.prototype.updateMoreItems = function(resp) {
