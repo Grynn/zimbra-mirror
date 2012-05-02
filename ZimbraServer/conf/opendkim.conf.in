@@ -3,7 +3,9 @@ UMask                 022
 Socket                inet:8465@localhost
 PidFile               /opt/zimbra/log/opendkim.pid
 
-
+LDAPBindUser		uid=zmpostfix,cn=appaccts,cn=zimbra
+LDAPBindPassword	@@ldap_postfix_password@@
+LDAPUseTLS		@@ldap_starttls_supported@@			
 #SigningTable          refile:/var/opendkim/signing_table
 #KeyTable              /var/opendkim/key_table
 #InternalHosts         /var/opendkim/internal_hosts

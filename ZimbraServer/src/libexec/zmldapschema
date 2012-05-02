@@ -94,6 +94,15 @@ installDynlistSchema() {
     ${zimbra_home}/data/ldap/config/cn\=config/cn\=schema/cn\=\{3\}dyngroup.ldif
 }
 
+installOpenDKIMSchema() {
+  echo "Installing OpenDKIM schema..."
+  cp -f ${zimbra_home}/openldap/etc/openldap/schema/opendkim.ldif ${zimbra_home}/data/ldap/config/cn\=config/cn\=schema/cn\=\{6\}opendkim.ldif
+  chown ${zimbra_user}:${zimbra_user} ${zimbra_home}/data/ldap/config/cn\=config/cn\=schema/cn\=\{6\}opendkim.ldif
+  chmod 600 ${zimbra_home}/data/ldap/config/cn\=config/cn\=schema/cn\=\{6\}opendkim.ldif
+  sed -i.orig -e '/^dn: cn=opendkim,/ s/dn: cn=opendkim,cn=schema,cn=config/dn: cn={6}opendkim/' -e '/^cn: opendkim/ s/cn: opendkim/cn: {6}opendkim/' \
+    ${zimbra_home}/data/ldap/config/cn\=config/cn\=schema/cn\=\{6\}opendkim.ldif
+}
+
 cleanup() {
   rm -f ${zimbra_home}/data/ldap/config/cn\=config/cn\=schema/*.orig
 }
@@ -106,4 +115,5 @@ installInetOrgPersonSchema
 installZimbraSchema
 installAmavisSchema
 installDynlistSchema
+installOpenDKIMSchema
 cleanup
