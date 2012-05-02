@@ -594,13 +594,13 @@ function(event, listItemId){
 	}
 };
 
-ZaAccountMemberOfListView.makeQueryStringWithoutDynamicDL =
+ZaAccountMemberOfListView.makeQueryStringWithoutNonACLGroup =
 function (rawQueryString) {
 	if (rawQueryString == null) {
 		rawQueryString = "";
 	}
 
-	return "(&" + rawQueryString + "(!(zimbraIsACLGroup=TRUE)))";
+	return "(&" + rawQueryString + "(!(zimbraIsACLGroup=FALSE)))";
 }
 
 /**
@@ -639,7 +639,7 @@ function (item, offset){
 			var valStr = curInstance[ZaSearch.A_query];
 			var queryTypes = [ZaSearch.DLS] ;
 			var query = ZaSearch.getSearchByNameQuery(valStr, queryTypes);
-			query = ZaAccountMemberOfListView.makeQueryStringWithoutDynamicDL(query);
+			query = ZaAccountMemberOfListView.makeQueryStringWithoutNonACLGroup(query);
 
 			var params = { 	query: query ,
 							sortBy: sortby,
