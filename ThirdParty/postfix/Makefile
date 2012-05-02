@@ -24,7 +24,6 @@ ifdef OCTOPUS
 	DBFLAG	:= -DNO_DB
 	POSTFIX_TGZ_TARGET := \
 	$(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/postfix/postfix-octopus-$(POSTFIX_VERSION).tgz
-	BDB_PATCH	:= patch -g0 -p1 < ../patches/postfix-no-bdb.patch;
 else
 	DBINC := -I/opt/zimbra/bdb-$(BDB_VERSION)/include
 	DBLIB := -L/opt/zimbra/bdb-$(BDB_VERSION)/lib -ldb
