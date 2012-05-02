@@ -384,7 +384,7 @@ ZaCert.postLoadCertExpireStatus = function () {
     }
 	
 	var callback = new AjxCallback(this, ZaCert.doLoadCertExpireStatus);
-	ZaCert.getCerts(ZaApp.getInstance(), ZaCert.ALL_SERVERS, false, callback);
+	ZaCert.getCerts(ZaApp.getInstance(), ZaCert.ALL_SERVERS, true, callback);
 }
 ZaHome.postLoadDataFunction.push(ZaCert.postLoadCertExpireStatus);
 
@@ -437,17 +437,17 @@ ZaCert.doLoadCertExpireStatus = function(resp) {
 	}
 }
 
-ZaCert.getCerts = function (app, serverId, isSync, callback) {
+ZaCert.getCerts = function (app, serverId, isAsync, callback) {
 	if(window.console && window.console.log) console.log("Getting certificates for server " + serverId) ;
 	
 	var soapDoc = AjxSoapDoc.create("GetCertRequest", "urn:zimbraAdmin", null);
 	soapDoc.getMethod().setAttribute("type", "all");
 	var csfeParams = new Object();
 	csfeParams.soapDoc = soapDoc;
-	if (!isSync) {
+	if (isAsync) {
 		csfeParams.asyncMode = true;
 		csfeParams.callback = callback;
-    }
+   }
 	if (serverId != null) {
 		soapDoc.getMethod().setAttribute("server", serverId);
 	}else{
@@ -458,7 +458,7 @@ ZaCert.getCerts = function (app, serverId, isSync, callback) {
 		var reqMgrParams = {} ;
 		reqMgrParams.controller = app.getCurrentController();
 		reqMgrParams.busyMsg = com_zimbra_cert_manager.BUSY_RETRIEVE_CERT;
-		if (isSync) {
+		if (!isAsync) {
 			resp = ZaRequestMgr.invoke(csfeParams, reqMgrParams).Body.GetCertResponse;
 			return resp;
 		} else {
