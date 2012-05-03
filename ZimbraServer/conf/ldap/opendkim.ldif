@@ -17,5 +17,5 @@ olcAttributeTypes: {1}( 1.3.6.1.4.1.29426.2.2.1.5 NAME 'DKIMPublicKey' DESC '
  DKIM signing key' EQUALITY certificateExactMatch SYNTAX 1.3.6.1.4.1.1466.115.
  121.1.8 SINGLE-VALUE )
 olcObjectClasses: {0}( 1.3.6.1.4.1.29426.2.2.2.1 NAME 'DKIM' DESC 'DKIM Select
- or and Key container' SUP top AUXILIARY MUST ( DKIMSelector $ DKIMKey ) MAY (
-  DKIMIdentity $ DKIMDomain $ DKIMPublicKey ) )
+ or and Key container' SUP top AUXILIARY MUST ( DKIMSelector $ DKIMKey $ DKIMP
+ ublicKey ) MAY ( DKIMIdentity $ DKIMDomain ) )
