@@ -18,8 +18,9 @@ olcAccess: {4}to attrs=@amavisAccount  by dn.children="cn=admins,cn=zimbra" wr
  ite  by dn.base="uid=zmamavis,cn=appaccts,cn=zimbra" read  by * +0 break
 olcAccess: {5}to attrs=mail  by dn.children="cn=admins,cn=zimbra" write  by dn
  .base="uid=zmamavis,cn=appaccts,cn=zimbra" read  by * +0 break
-olcAccess: {6}to attrs=zimbraAllowFromAddress  by dn.children="cn=admins,cn=zi
- mbra" write  by dn.base="uid=zmpostfix,cn=appaccts,cn=zimbra" read  by * none
+olcAccess: {6}to attrs=zimbraAllowFromAddress,DKIMIdentity,DKIMSelector,DKIMDo
+ main,DKIMKey  by dn.children="cn=admins,cn=zimbra" write  by dn.base="uid=zmp
+ ostfix,cn=appaccts,cn=zimbra" read  by * none
 olcAccess: {7}to filter="(!(zimbraHideInGal=TRUE))"  attrs=cn,co,company,dc,di
  splayName,givenName,gn,initials,l,mail,o,ou,physicalDeliveryOfficeName,postal
  Code,sn,st,street,streetAddress,telephoneNumber,title,uid,homePhone,pager,mob
