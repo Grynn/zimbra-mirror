@@ -16,6 +16,7 @@
 use strict;
 use lib '/opt/zimbra/zimbramon/lib';
 use Net::LDAP;
+use Net::LDAP::Util qw ( ldap_error_name );
 use XML::Simple;
 use Getopt::Long;
 use Data::UUID;
@@ -32,15 +33,15 @@ if ($id ne "zimbra") {
   exit (1);
 }
 
-my $keygen = "/opt/zimbra/opendkim/bin/opendkim-genkey";
-my ($add, $help, $query, $update, $domain, $delete);
+my ($add, $help, $query, $update, $domain, $delete, $selector);
 
 my $opts_good = GetOptions(
         'h|help' => \$help,
         'a|add' => \$add,
         'd|domain=s' => \$domain,
         'q|query' => \$query,
-		'r|remove' => \$delete,
+        'r|remove' => \$delete,
+        's|selector=s' => \$selector,
         'u|update' => \$update,
 );
 
@@ -52,7 +53,11 @@ if ($help) {
         usage(0);
 }
 
-if (!($domain)) {
+if (!($domain) && !($query)) {
+  usage(0);
+}
+
+if ($query && !($selector) && !($domain)) {
   usage(0);
 }
 
@@ -77,6 +82,8 @@ if ($zimbra_home eq "") {
    $zimbra_home = "/opt/zimbra";
 }
 
+my $keygen = "${zimbra_home}/opendkim/bin/opendkim-genkey";
+
 my $mesg;
 my $ldap = Net::LDAP->new($ldap_master_url) or die "$@";
 
@@ -95,15 +102,18 @@ if (!defined($ldap)) {
 $mesg = $ldap->bind($zimbra_admin_dn, password=>$zimbra_admin_password);
 $mesg->code && die "Bind: ". $mesg->error . "\n";
 
-$mesg = $ldap ->search(
-          base=>"",
-          filter=>"(&(objectClass=zimbraDomain)(zimbraDomainName=$domain))",
-          scope=>"sub",
-);
-my $size = $mesg->count;
-if ($size == 0) {
-  print "Domain $domain not found.\n";
-  exit(1);
+if ($domain) {
+  $mesg = $ldap ->search(
+            base=>"",
+            filter=>"(&(objectClass=zimbraDomain)(zimbraDomainName=$domain))",
+            scope=>"sub",
+  );
+  
+  my $size = $mesg->count;
+  if ($size == 0) {
+    print "Domain $domain not found.\n";
+    exit(1);
+  }
 }
 
 if($add) {
@@ -117,32 +127,93 @@ if($add) {
     print "Error: Domain $domain already has DKIM enabled.\n";
 	exit(1);
   }
-  my $selector;
-  my $ug = Data::UUID->new;
-  $selector = $ug->create_str();
-
-} elsif ($query) {
-  print "DKIM Information for domain $domain\n";
   $mesg = $ldap->search(
        base=>"",
-	   filter=>"(&(objectClass=zimbraDomain)(zimbraDomainName=$domain)(DKIMSelector=*))",
+	   filter=>"(&(objectClass=zimbraDomain)(zimbraDomainName=$domain))",
 	   scope=>"sub",
   );
+  my $entry = $mesg->entry($size-1);
+  my $dn = $entry->dn;
+  if (!($selector)) {
+    my $ug = Data::UUID->new;
+    $selector = $ug->create_str();
+  }
+  `$keygen -s $selector -d $domain -D /opt/zimbra/data/tmp`;
+  my $privatekey = "${zimbra_home}/data/tmp/${selector}.private";
+  my $publickey = "${zimbra_home}/data/tmp/${selector}.txt";
+  if (-f $privatekey && -s $privatekey && -f $publickey && -s $publickey) {
+    my $private;
+	my $public;
+    {
+      local $/ = undef; # Slurp mode
+      open PRIVATEKEY, "$privatekey" or die "Cannot open $privatekey for read :$!";
+      $private = <PRIVATEKEY>;
+	  close PRIVATEKEY;
+      open PUBLICKEY, "$publickey" or die "Cannot open $publickey for read :$!";
+	  $public = <PUBLICKEY>;
+	  close PUBLICKEY;
+	}
+    $mesg = $ldap->modify( $dn,
+      add => [
+        objectClass   => 'DKIM',    # Add description attribute
+        DKIMSelector  => "$selector",
+        DKIMDomain    => "$domain",
+        'DKIMKey'       =>  "$private",
+        'DKIMPublicKey' => "$public",
+      ]
+    );
+	if ($mesg->code) {
+	  print "Error: Failed to update LDAP: " . ldap_error_name($mesg->code) ."\n";
+	  exit 1;
+    } else {
+      print "DKIM Data added to LDAP for domain $domain with selector $selector\n";
+    }
+    unlink($privatekey);
+    unlink($publickey);
+	$ldap->unbind;
+	print "Public key to enter into DNS:\n";
+	print "$public";
+	exit 0;
+  } else {
+    print "Error: Key generation failed.\n";
+	exit 1;
+  }
+} elsif ($query) {
+  if (!($selector)) {
+    print "DKIM Information for domain $domain\n";
+    $mesg = $ldap->search(
+         base=>"",
+	     filter=>"(&(objectClass=zimbraDomain)(zimbraDomainName=$domain)(DKIMSelector=*))",
+	     scope=>"sub",
+    );
+  } else {
+    $mesg = $ldap->search(
+         base=>"",
+	     filter=>"(&(objectClass=zimbraDomain)(DKIMSelector=$selector))",
+	     scope=>"sub",
+    );
+  }
   my $size = $mesg->count;
   if ($size == 0) {
-    print "No DKIM data\n";
+    if (!($selector)) {
+      print "No DKIM Information for domain $domain\n";
+    } else {
+      print "No DKIM Information for Selector $selector\n";
+    }
   } else {
     my $entry=$mesg->entry($size-1);
-    my $attrval=$entry->get_value("DKIMSelector");
-    print "   DKIM Selector: $attrval\n";
-    my $attrval=$entry->get_value("DKIMKey");
-    print "   DKIM Private Key: $attrval\n";
-    my $attrval=$entry->get_value("DKIMPublicKey");
-    print "   DKIM Public Key: $attrval\n";
-    my $attrval=$entry->get_value("DKIMIdentity");
-    print "   DKIM Identity:$attrval\n";
     my $attrval=$entry->get_value("DKIMDomain");
-    print "   DKIM Domain: $attrval";
+    print "DKIM Domain:\n$attrval\n\n";
+    my $attrval=$entry->get_value("DKIMSelector");
+    print "DKIM Selector:\n$attrval\n\n";
+    my $attrval=$entry->get_value("DKIMKey");
+    print "DKIM Private Key:\n$attrval\n";
+    my $attrval=$entry->get_value("DKIMPublicKey");
+    print "DKIM Public Key:\n$attrval\n";
+    my $attrval=$entry->get_value("DKIMIdentity");
+	if ($attrval) {
+      print "DKIM Identity:\n$attrval\n\n";
+    }
   }
 } elsif ($update) {
   $mesg = $ldap->search(
@@ -155,7 +226,6 @@ if($add) {
     print "Error: Domain $domain doesn't have DKIM enabled.\n";
 	exit(1);
   }
-  my $selector;
   my $ug = Data::UUID->new;
   $selector = $ug->create_str();
 } elsif ($delete) {
@@ -165,13 +235,15 @@ $ldap->unbind();
 exit;
 
 sub usage() {
-  print "$0 [-a] [-q] [-r] [-x] -d domain\n";
-  print "-a: Add new key pair and selector for domain [default]\n";
+  print "$0 [-a] [-q] [-r] [-s selector] [-x] [-d domain]\n";
+  print "-a: Add new key pair and selector for domain\n";
+  print "-d domain: Domain to use\n";
   print "-h: Show this usage block\n";
   print "-q: Query DKIM information for domain\n";
   print "-r: Remove DKIM keys for domain\n";
+  print "-s: Use custom selector string instead of random UUID\n";
   print "-u: Update keys for domain\n";
-  print "-d domain: Domain to use\n";
   print "One of [a, q, r, or u] must be supplied\n";
+  print "For -q, search can be either by selector or domain\n";
   exit 1;
 }
