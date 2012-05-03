@@ -725,6 +725,11 @@ function(n, types,excludeClosed) {
 ZaSearch.getBestMatchSearchByNameQuery =
 function(n, types) {
     var query = ZaSearch.getSearchByNameQuery(n, types);
+	n = n.replace(/\\/g, "\\5C");
+	n = n.replace(/\(/g, "\\28");
+	n = n.replace(/\)/g, "\\29");
+	n = n.replace(/\*/g, "\\2A");
+
     var orig = new RegExp("\\*" + n + "\\*","g");
     var lReg = new RegExp("^\\\s*\\(\\\s*\\|");
     var rReg = new RegExp("\\)\\\s*$");
