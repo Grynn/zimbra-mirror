@@ -6,8 +6,8 @@ PidFile               /opt/zimbra/log/opendkim.pid
 LDAPBindUser		uid=zmpostfix,cn=appaccts,cn=zimbra
 LDAPBindPassword	@@ldap_postfix_password@@
 LDAPUseTLS		@@ldap_starttls_supported@@			
-SigningTable		ldap://192.0.2.1/""?DKIMSelector?sub?(DKIMIdentity=$d)
-KeyTable		ldap://192.0.2.1/""?DKIMDomain,DKIMSelector,DKIMKey,?sub?(DKIMSelector=$d)
+SigningTable		@@opendkim_signingtable_uri@@
+KeyTable		@@opendkim_keytable_uri@@
 #InternalHosts         /var/opendkim/internal_hosts
 #AuthservID            domain.example.com
 Canonicalization	relaxed/relaxed
