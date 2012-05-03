@@ -11,7 +11,7 @@ KeyTable		ldap://192.0.2.1/""?DKIMDomain,DKIMSelector,DKIMKey,?sub?(DKIMSelector
 #InternalHosts         /var/opendkim/internal_hosts
 #AuthservID            domain.example.com
 Canonicalization	relaxed/relaxed
-#ReportAddress		"Someone" <someone@example.com>
+ReportAddress		@@av_notify_user@@
 SignHeaders		message-id,date,from,reply-to,mime-version,to,subject,content-type,content-transfer-encoding
 
 On-BadSignature       accept
