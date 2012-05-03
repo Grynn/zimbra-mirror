@@ -1,159 +1,140 @@
-#!/bin/sh
-#
-# Copyright (c) 2010, 2011, The OpenDKIM Project.  All rights reserved.
-#
-# $Id: opendkim.init,v 1.6 2010/10/25 17:13:47 cm-msk Exp $
-#
-### BEGIN INIT INFO
-# Provides:          opendkim
-# Required-Start:    $syslog $time $local_fs $remote_fs $named $network
-# Required-Stop:     $syslog $time $local_fs $remote_fs $named
-# Default-Start:     2 3 4 5
-# Default-Stop:      S 0 1 6
-# Short-Description: OpenDKIM Milter
-# Description:       The OpenDKIM milter for signing and verifying email
-#                    messages using the DomainKeys Identified Mail protocol
-### END INIT INFO
-#
-# chkconfig: 345 20 80
-# description: OpenDKIM milter for signing and verifying email
-# processname: opendkim
-#
-# This script should run successfully on any LSB-compliant system. It will
-# attempt to fall back to RedHatisms if LSB isn't available, or to
-# commonly-available utilities if it's not even RedHat.
+#!/bin/bash
+# 
+# ***** BEGIN LICENSE BLOCK *****
+# Zimbra Collaboration Suite Server
+# Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010 Zimbra, Inc.
+# 
+# The contents of this file are subject to the Zimbra Public License
+# Version 1.3 ("License"); you may not use this file except in
+# compliance with the License.  You may obtain a copy of the License at
+# http://www.zimbra.com/license.
+# 
+# Software distributed under the License is distributed on an "AS IS"
+# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
+# ***** END LICENSE BLOCK *****
+# 
 
-NAME=opendkim
-PATH=/bin:/usr/bin:/sbin:/usr/sbin
-DAEMON=/opt/zimbra/opendkim/sbin/opendkim
-PIDFILE=/opt/zimbra/log/opendkim.pid
-CONFIG=/opt/zimbra/conf/$NAME.conf
-USER=zimbra
-
-# Implement our own status function per LSB specs. This will be used on
-# non-RedHat systems.
-
-log_success_msg () {
-    echo "done."
-}
-
-log_failure_msg () {
-    echo "failed."
-}
-
-od_status() {
-	od_getpid
-	pid=$?
-	if [ $pid -eq 0 ]; then
-		if [ -f $PIDFILE ]; then
-			echo "$NAME dead but pid file exists"
-			return 1
-		elif [ -d /var/lock/subsys -a -f /var/lock/subsys/$NAME ]; then
-			echo "$NAME dead but subsys locked"
-			return 2
-		else
-			echo "$NAME is stopped"
-			return 3
-		fi
-	fi
-	echo "$NAME (pid $pid) is running..."
-	return 0
-}
-
-od_getpid() {
-    PIDFILE=$(grep -i '^pidfile' $CONFIG | head -n 1 | awk '{print $2}')
-	if [ ! -f "$PIDFILE" ]; then
-		return 0
-	fi
-	PID=$(cat "$PIDFILE")
-	return $PID
-}
-
-od_killproc() {
-	[ -z "$1" ] && return 1
-	if [ -n "$2" ]; then 
-		signal=$2
-	else
-		signal="TERM"
-	fi
-	od_getpid
-	pid=$?
-	if [ $pid -ne 0 ]; then
-		kill -"$signal" $pid
-		return 0
-	fi
-	return 1
-}
-
-if [ ! -x "$DAEMON" ]; then
-	exit 5
+if [ x`whoami` != xzimbra ]; then
+  echo Error: must be run as zimbra user
+  exit 1
 fi
 
-if [ ! -f "$CONFIG" ]; then
-	log_failure_msg "$CONFIG not found"
-	exit 6
+if [ ! -L "/opt/zimbra/opendkim" ]; then
+  exit 0
 fi
 
-ARGS="-u $USER $ARGS"
+source `dirname $0`/zmshutil || exit 1
+zmsetvars \
+  zimbra_home \
+  zimbra_log_directory
 
-od_start() {
-	echo -n "Starting OpenDKIM..."
-	$DAEMON -x $CONFIG $ARGS
-	if [ $? -eq 0 ]; then
-		log_success_msg $NAME
-		if [ -d /var/lock/subsys ]; then
-			touch /var/lock/subsys/$NAME
-		fi
-	else
-		log_failure_msg $NAME
-	fi
-	echo
+PID=""
+PIDFILE=${zimbra_log_directory}/opendkim.pid
+odk=${zimbra_home}/opendkim/sbin/opendkim
+config=${zimbra_home}/conf/opendkim.conf
+
+rewriteconfig() {
+    /opt/zimbra/libexec/configrewrite opendkim > /dev/null 2>&1
 }
 
-od_stop() {
-	echo -n "Stopping OpenDKIM..."
-	od_killproc $DAEMON
-	if [ $? -eq 0 ]; then
-		log_success_msg $NAME
-		if [ -d /var/lock/subsys ]; then
-			rm -f /var/lock/subsys/$NAME
-		fi
-	else
-		log_failure_msg $NAME
-	fi
-	echo
+getpid()
+{
+        if [ -f $PIDFILE ]; then
+                PID=`cat $PIDFILE`
+        fi
 }
 
-od_reload() {
-	echo -n "Reloading OpenDKIM Milter configuration: "
-	od_killproc $DAEMON SIGUSR1
-	if [ $? -eq 0 ]; then
-		log_success_msg $NAME
-	else
-		log_failure_msg $NAME
-	fi
-	echo
+
+checkrunning()
+{
+        getpid
+        if [ "x$PID" = "x" ]; then
+                RUNNING=0
+        else
+                kill -0 $PID
+                if [ $? != 0 ]; then
+                        PID=""
+                        RUNNING=0
+                else
+                        RUNNING=1
+                fi
+        fi
+}
+
+start()
+{
+        checkrunning
+        if [ $RUNNING = 0 ]; then
+          if [ x$2 = "x" ]; then
+            rewriteconfig
+          fi
+          $odk -x $config -u zimbra
+          sleep 2
+          getpid
+          echo "Started opendkim: pid $PID"
+        else
+          echo "opendkim already running: pid $PID"
+          exit 1
+        fi
+}
+
+stop()
+{
+        checkrunning
+        if [ $RUNNING = 0 ]; then
+          echo "opendkim not running"
+          exit 1
+        else
+          echo -n "Stopping opendkim..."
+          kill -TERM $PID 2> /dev/null
+          for ((i=0; i < 300; i++)); do
+            sleep 5
+            kill -0 $PID 2> /dev/null
+            if [ $? != 0 ]; then
+              echo " done."
+              exit 0
+            fi
+          done
+          kill -TERM $PID 2> /dev/null
+          if [ $? = 0 ]; then
+            echo " failed to stop $PID"
+            exit 1
+          else
+            echo " done."
+          fi
+        fi
+        exit 0
+}
+
+status()
+{
+        checkrunning
+        echo -n "opendkim is "
+        if [ $RUNNING = 0 ]; then
+                echo "not running."
+                exit 1
+        else
+                echo "running with pid: $PID"
+                exit 0
+        fi
 }
 
 case "$1" in
-  start)
-  	od_start
-	;;
-	
-  stop)
-  	od_stop
-	;;
-	
-  restart|force-reload)
-  	od_stop
-	od_start
-	;;
-	
-  reload)
-  	od_reload
-	;;
-	
-  status)
-	od_status $NAME
-	;;
+        reload|restart)
+                $0 stop
+                $0 start $2
+                ;;
+        start)
+                start
+                ;;
+        stop)
+                stop
+                ;;
+        status)
+                status
+                ;;
+        *)
+                echo "Usage: $0 start|stop|restart|reload|status"
+                exit 1
+                ;;
 esac
