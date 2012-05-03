@@ -28,9 +28,9 @@ fi
 zimbraMilterServerEnabled=${zimbraMilterServerEnabled:=FALSE}
 
 if [ x"$zimbraMilterServerEnabled" = "xTRUE" ]; then
-  SCRIPTS="postfix zmsaslauthdctl zmmilterctl"
+  SCRIPTS="postfix zmsaslauthdctl zmmilterctl zmopendkimctl"
 else 
-  SCRIPTS="postfix zmsaslauthdctl"
+  SCRIPTS="postfix zmsaslauthdctl zmopendkimctl"
 fi
 
 rewriteconfig() {
@@ -41,7 +41,7 @@ rewriteconfig() {
       ${zimbra_home}/bin/postconf -e mail_owner=${postfix_mail_owner} setgid_group=${postfix_setgid_group}
     fi
   fi
-  /opt/zimbra/libexec/configrewrite antispam antivirus mta sasl  > /dev/null 2>&1
+  /opt/zimbra/libexec/configrewrite antispam antivirus opendkim mta sasl  > /dev/null 2>&1
   if [ $? = 0 ]; then
     echo "done."
   else
