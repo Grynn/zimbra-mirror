@@ -103,7 +103,7 @@ public class GetTask extends AjaxCommonTest {
 		ZAssert.assertNotNull(found, "Verify the task is present");
 	
 	}
-	@Bugs(ids="72236")
+	//@Bugs(ids="72236")
 	@Test(	description = "Verify Text Only Task that can display the body in the preview pane",
 			groups = { "smoke" })
 	public void GetTask_02() throws HarnessException {
@@ -492,7 +492,7 @@ public class GetTask extends AjaxCommonTest {
 
 		}
 	
-	@Bugs(ids="72236")
+	//@Bugs(ids="72236")
 	@Test(	description = "Verify Html Only Task that can display the html body in the preview pane",
 			groups = { "smoke" })
 	public void GetTask_08() throws HarnessException {
