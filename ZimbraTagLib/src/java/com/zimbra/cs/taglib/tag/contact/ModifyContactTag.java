@@ -45,8 +45,8 @@ public class ModifyContactTag extends ContactOpTag {
             }
 
             String id = (mId == null || mId.length() == 0) ?
-                    getMailbox().createContact(mFolderid, mTagids, mAttrs).getId() :
-                    getMailbox().modifyContact(mId, mReplace, mAttrs).getId();
+                    getMailbox().createContactWithMembers(mFolderid, mTagids, mAttrs, mMembers).getId() :
+                    getMailbox().modifyContactWithMembers(mId, mReplace, mAttrs, mMembers).getId();
             getJspContext().setAttribute(mVar, id, PageContext.PAGE_SCOPE);
         } catch (ServiceException e) {
             throw new JspTagException(e);

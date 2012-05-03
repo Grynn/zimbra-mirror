@@ -2400,6 +2400,35 @@
 
     <tag>
         <description>
+            A field for a contact being created or modified
+        </description>
+
+        <name>member</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.contact.MemberTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <attribute>
+            <description>
+                Name of the field.
+            </description>
+            <name>name</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>
+                Value of the field.
+            </description>
+            <name>value</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+    <tag>
+        <description>
             Move a contact to a folder.
         </description>
 
@@ -6863,6 +6892,13 @@
     </tag-file>
 
     <function>
+        <description>Fetch the group member, given the id of the contact</description>
+        <name>groupMemberById</name>
+        <function-class>com.zimbra.cs.taglib.bean.ZContactBean</function-class>
+        <function-signature>com.zimbra.cs.taglib.bean.ZContactBean getGroupMemberById(com.zimbra.cs.taglib.bean.ZContactBean, java.lang.String)</function-signature>
+    </function>
+
+    <function>
         <description>Used to determine if any of the specified fields are set in a contact</description>
         <name>anySet</name>
         <function-class>com.zimbra.cs.taglib.bean.ZContactBean</function-class>
@@ -7640,6 +7676,12 @@
         <name>isValidEmailAddresses</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>boolean isValidEmailAddresses(java.lang.String)</function-signature>
+    </function>
+
+    <function>
+        <name>isFileAsExplicit</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>boolean isFileAsExplicit(java.lang.String)</function-signature>
     </function>
 
     <function>

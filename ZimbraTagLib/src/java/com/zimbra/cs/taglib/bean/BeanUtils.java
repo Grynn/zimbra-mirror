@@ -1647,6 +1647,15 @@ public class BeanUtils {
     }
 
     /**
+     * Determines if the fileAs param of a contact is set to FA_EXPLICIT
+     * @param fileAs value of fileAs param
+     * @return true if fileAs is set to FA_EXPLICIT(8)
+     */
+    public static boolean isFileAsExplicit(String fileAs) {
+        return fileAs.equals(Integer.toString(ContactConstants.FA_EXPLICIT));
+    }
+
+    /**
      * Checks if the user's UA matches the allowed user agents for honoring
      * zimbraWebClientLogoutURL.
      * Returns true if the regex matches or if the

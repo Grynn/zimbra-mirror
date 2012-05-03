@@ -27,6 +27,7 @@ public class ContactOpTag extends ZimbraSimpleTag {
 
     protected boolean mForce;
     protected Map<String, String> mAttrs = new HashMap<String,String>();
+    protected Map<String, String> mMembers = new HashMap<String,String>();
 
     public void setForce(boolean force) { mForce = force; }
 
@@ -39,6 +40,10 @@ public class ContactOpTag extends ZimbraSimpleTag {
             }
         }
         mAttrs.put(name, value);
+    }
+    
+    public void addMembers(String id, String type) throws JspTagException {
+        mMembers.put(id, type);
     }
 
     protected boolean allFieldsEmpty() {

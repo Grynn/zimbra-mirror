@@ -15,10 +15,12 @@
 package com.zimbra.cs.taglib.bean;
 
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.soap.MailConstants;
 import com.zimbra.cs.mailbox.Contact;
 import com.zimbra.client.ZContact;
 import com.zimbra.client.ZEmailAddress;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ArrayList;
@@ -235,21 +237,22 @@ public class ZContactBean implements Comparable {
     private static final Pattern sCOMMA = Pattern.compile(",");
     
     public String[] getGroupMembers() throws ServiceException {
-        String dlist = mContact.getAttrs().get("dlist");
-        if (dlist != null) {
-            try {
-                List<ZEmailAddress> addrs = ZEmailAddress.parseAddresses(dlist, ZEmailAddress.EMAIL_TYPE_TO);
-                List<String> result = new ArrayList<String>(addrs.size());
-                for (ZEmailAddress a : addrs) {
-                    result.add(a.getFullAddressQuoted());
-                }
-                return result.toArray(new String[result.size()]);
-            } catch (ServiceException e) {
-                return sCOMMA.split(dlist);
-            }
-        } else {
-            return new String[0];
+        Map<String, ZContact> members = mContact.getMembers();
+        if (members != null) {
+            String memberIds[] = members.keySet().toArray(new String[0]);
+            return memberIds;
         }
+        return null;
+    }
+
+    public static ZContactBean getGroupMemberById(ZContactBean contact, String id) throws ServiceException {
+        Map<String, ZContact> members = contact.mContact.getMembers();
+        if (members != null) {
+            ZContact memberContact = members.get(id);    
+            if (memberContact != null)
+                return new ZContactBean(memberContact, memberContact.isGalContact());
+        }
+        return null;
     }
 
     public String getGroupMembersPerLine() throws ServiceException {
