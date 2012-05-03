@@ -464,6 +464,9 @@ function() {
     var offset = Dwt.toWindow(container);
     x += offset.x;
     y += offset.y;
+
+    x = (x>0) ? x : 0;
+    y = (y>0) ? y : 0;
     Dwt.setLocation(el, x, y);
 
     this._funcs["next"]();
