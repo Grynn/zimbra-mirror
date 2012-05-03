@@ -253,7 +253,7 @@ public class ImageMerger {
                 if (!aggregate.acceptSubImage(entry)) {
                     continue;
                 }
-				else if (spacerEntry != null) {
+				else if (spacerEntry != null && allEntries.hasNext()) {
 					aggregate.acceptSubImage(spacerEntry);
 				}
 
