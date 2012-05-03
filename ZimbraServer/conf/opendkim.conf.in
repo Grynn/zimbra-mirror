@@ -10,10 +10,9 @@ SigningTable		ldap://192.0.2.1/""?DKIMSelector?sub?(DKIMIdentity=$d)
 KeyTable		ldap://192.0.2.1/""?DKIMDomain,DKIMSelector,DKIMKey,?sub?(DKIMSelector=$d)
 #InternalHosts         /var/opendkim/internal_hosts
 #AuthservID            domain.example.com
-Canonicalization      relaxed/relaxed
-#ReportAddress         "Someone" <someone@example.com>
-SignHeaders          
-message-id,date,from,reply-to,mime-version,to,subject,content-type,content-transfer-encoding
+Canonicalization	relaxed/relaxed
+#ReportAddress		"Someone" <someone@example.com>
+SignHeaders		message-id,date,from,reply-to,mime-version,to,subject,content-type,content-transfer-encoding
 
 On-BadSignature       accept
 On-DNSError           tempfail
@@ -52,7 +51,7 @@ LogWhy                yes
 Quarantine            no
 ResolverTracing       no
 Syslog                yes
-SyslogFacility        mail
+SyslogFacility        LOCAL0
 SyslogSuccess         no
 X-Header              yes
 TemporaryDirectory    /opt/zimbra/data/tmp
