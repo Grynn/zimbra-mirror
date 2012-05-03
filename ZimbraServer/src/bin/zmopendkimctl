@@ -34,16 +34,17 @@ USER=zimbra
 # non-RedHat systems.
 
 log_success_msg () {
-    echo " * $@"
+    echo "done."
 }
 
 log_failure_msg () {
-    echo " * $@"
+    echo "failed."
 }
 
 od_status() {
-	pid=$(od_getpid)
-	if [ $? -ne 0 ]; then
+	od_getpid
+	pid=$?
+	if [ $pid -eq 0 ]; then
 		if [ -f $PIDFILE ]; then
 			echo "$NAME dead but pid file exists"
 			return 1
@@ -60,19 +61,12 @@ od_status() {
 }
 
 od_getpid() {
-	if [ -n "$1" -a "$1" = "-P" ]; then
-		shift
-		PIDFILE=$1
-		shift
-	else
-		PIDFILE=$(grep -i '^pidfile' $CONFIG | head -n 1 | awk '{print $2}')
-	fi
+    PIDFILE=$(grep -i '^pidfile' $CONFIG | head -n 1 | awk '{print $2}')
 	if [ ! -f "$PIDFILE" ]; then
-		return 1
+		return 0
 	fi
 	PID=$(cat "$PIDFILE")
-	echo $PID
-	return 0
+	return $PID
 }
 
 od_killproc() {
@@ -82,10 +76,13 @@ od_killproc() {
 	else
 		signal="TERM"
 	fi
-	pid=$(od_getpid)
-	if [ $? -eq 0 ]; then
-		pkill -"$signal" -f $1
+	od_getpid
+	pid=$?
+	if [ $pid -ne 0 ]; then
+		kill -"$signal" $pid
+		return 0
 	fi
+	return 1
 }
 
 if [ ! -x "$DAEMON" ]; then
@@ -97,16 +94,10 @@ if [ ! -f "$CONFIG" ]; then
 	exit 6
 fi
 
-[ -r /etc/default/$NAME ] && . /etc/default/$NAME
-
 ARGS="-u $USER $ARGS"
 
-if [ -n "$SOCKET" ]; then
-	ARGS="$ARGS -p $SOCKET"
-fi
-
 od_start() {
-	echo -n "Starting OpenDKIM Milter: "
+	echo -n "Starting OpenDKIM..."
 	$DAEMON -x $CONFIG $ARGS
 	if [ $? -eq 0 ]; then
 		log_success_msg $NAME
@@ -120,7 +111,7 @@ od_start() {
 }
 
 od_stop() {
-	echo -n "Stopping OpenDKIM Milter: "
+	echo -n "Stopping OpenDKIM..."
 	od_killproc $DAEMON
 	if [ $? -eq 0 ]; then
 		log_success_msg $NAME
