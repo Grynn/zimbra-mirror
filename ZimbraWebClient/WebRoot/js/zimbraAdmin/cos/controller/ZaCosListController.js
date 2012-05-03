@@ -273,7 +273,7 @@ function(ev) {
 			ZaApp.getInstance().getCosController().show(ev.item);
             if (appNewUI) {
                 var parentPath = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_configure, ZaMsg.OVP_cos]);
-                ZaZimbraAdmin.getInstance().getOverviewPanelController().addObjectItem(parentPath, ev.item.name, null, false, false, ev.item);
+                ZaZimbraAdmin.getInstance().getOverviewPanelController().addObjectItem(parentPath, ev.item.name, null, false, false, ev.item, undefined, true);
             }
 		}
 	} else {

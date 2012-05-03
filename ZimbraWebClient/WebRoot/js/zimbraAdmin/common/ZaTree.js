@@ -159,7 +159,7 @@ function(treeItem, skipNotify, kbNavEvent, noFocus) {
  * We only add history automatically when user click the tree item
  */
 ZaTree.prototype.setSelectionByPath =
-function (path, isAddHistory, skipNotify, kbNavEvent, noFocus, refresh) {
+function (path, isAddHistory, skipNotify, kbNavEvent, noFocus, refresh, skipDestroyNotify) {
 
     var dataItem = this.getTreeItemDataByPath(path);
     if (dataItem.isAlias()) {
@@ -168,9 +168,16 @@ function (path, isAddHistory, skipNotify, kbNavEvent, noFocus, refresh) {
     }
 
     var result = this._getBuildNode(dataItem);
-    if (result.isNeed)
+    if (result.isNeed) {
+        if (this.currentRoot && !skipDestroyNotify) {
+            var treeEvent = new ZaTreeEvent(result.oldPath, result.newPath);
+            var notifyRet = this.currentRoot.getData("dataItem").notifyListeners(ZaTreeEvent.ONDESTROY, treeEvent);
+            if (notifyRet === false) {
+                return;
+            }
+        }
         this.buildTree(result.resultItem);
-    else {
+    } else {
 	    var a = this._selectedItems.getArray();
 	    var numSelectedItems = this._selectedItems.size();
         if (numSelectedItems > 0) {
@@ -225,10 +232,12 @@ ZaTree.prototype._getBuildNode = function (currentDataItem) {
     }
 
     var currentPath = this.getABPath(result.resultItem);
+    result.newPath = currentPath;
     if (lastPath == currentPath) {
         result.isNeed = false;
+    } else {
+        result.oldPath = lastPath;
     }
-
     return result;
 }
 

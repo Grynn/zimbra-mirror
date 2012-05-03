@@ -96,32 +96,6 @@ function(listener) {
 	this._evtMgr.removeListener(ZaEvent.E_MODIFY, listener);    	
 }
 
-
-/**
-* @param nextViewCtrlr - the controller of the next view
-* Checks if it is safe to leave this view. Displays warning and Information messages if neccesary.
-**/
-ZaServerController.prototype.switchToNextView = 
-function (nextViewCtrlr, func, params) {
-	if(this._view.isDirty()) {
-		//parameters for the confirmation dialog's callback 
-		var args = new Object();		
-		args["params"] = params;
-		args["obj"] = nextViewCtrlr;
-		args["func"] = func;
-		//ask if the user wants to save changes			
-		//ZaApp.getInstance().dialogs["confirmMessageDialog"] = ZaApp.getInstance().dialogs["confirmMessageDialog"] = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON]);					
-		ZaApp.getInstance().dialogs["confirmMessageDialog"].setMessage(ZaMsg.Q_SAVE_CHANGES, DwtMessageDialog.INFO_STYLE);
-		ZaApp.getInstance().dialogs["confirmMessageDialog"].registerCallback(DwtDialog.YES_BUTTON, this.validateChanges, this, args);		
-		ZaApp.getInstance().dialogs["confirmMessageDialog"].registerCallback(DwtDialog.NO_BUTTON, this.discardAndGoAway, this, args);		
-		ZaApp.getInstance().dialogs["confirmMessageDialog"].popup();
-	} else {
-		ZaController.prototype.switchToNextView.call(this, nextViewCtrlr, func, params);
-	}
-}
-
-
-
 /**
 * @method initToolbarMethod
 * This method creates ZaOperation objects 

@@ -114,6 +114,23 @@ function(ev) {
 
 }
 
+ZaTreeEvent = function (oldPath, newPath, details) {
+    if (arguments.length == 0)
+       return;
+    this.oldPath = oldPath;
+    this.newPath = newPath;
+    this.details = details;
+}
+
+ZaTreeEvent.prototype = new DwtEvent();
+ZaTreeEvent.prototype.consturctor = ZaTreeEvent;
+ZaTreeEvent.prototype.toString = function () {
+    return "ZaTreeEvent";
+}
+
+ZaTreeEvent.ONDRAW= "ondraw";
+ZaTreeEvent.ONDESTROY = "ondestroy";
+
 // type 0: local
 // type 1: alias
 ZaTreeItemData = function(params) {
@@ -144,6 +161,7 @@ ZaTreeItemData = function(params) {
     this.buildPath = (params.buildPath ? params.buildPath : undefined);
     this._data = {};
     this.childrenData = new AjxVector();
+    this._eventMgr = new AjxEventMgr();
 }
 
 ZaTreeItemData.PARAMS = ["parent", "id", "text", "image", "index", "count", "mappingId", "callback", "relatedObject", "recentObject", "type", "path", "canShowOnRoot", "forceNode", "isShowHistory", "buildPath", "className", "defaultSelectedItem"];
@@ -207,4 +225,14 @@ function(relatedObject) {
 ZaTreeItemData.prototype.addRecentObject =
 function(recentObject) {
     this.recentObject = recentObject;
+}
+
+ZaTreeItemData.prototype.addListener =
+function (eventType, listener) {
+    this._eventMgr.addListener(eventType, listener);
+}
+
+ZaTreeItemData.prototype.notifyListeners =
+function (eventType, event) {
+    return this._eventMgr.notifyListeners(eventType, event);
 }

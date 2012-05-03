@@ -85,7 +85,7 @@ function(details) {
 * handles the Close button click. Returns to the list view.
 **/ 
 ZaXFormViewController.prototype.closeButtonListener =
-function(ev, noPopView, func, obj, params) {
+function(ev, noPopView, func, obj, params, newPath) {
     //prompt if the user wants to save the changes
     if(this._view.isDirty()) {
         //parameters for the confirmation dialog's callback 
@@ -107,12 +107,13 @@ function(ev, noPopView, func, obj, params) {
             args["params"] = [null, this];
             args["func"] = function(paramList){
                 var realParams = paramList[0];
-                ZaApp.prototype.popView.call(this, realParams);
+                //TODO have a new framework to handle memory issues
+                //ZaApp.prototype.popView.call(this, realParams);
                 //this == ZaApp.getInstance(), when being called in saveAndGoAway() or discardAndGoAway()
                 var xFormViewController = paramList[1];
                 //paramList[1] is ZaXFormViewController or its sub class
                 xFormViewController._emptyUI();
-                xFormViewController._setSelectionAfterCloseView();
+                xFormViewController._setSelectionAfterCloseView(newPath);
             };
 
         }
@@ -132,26 +133,29 @@ function(ev, noPopView, func, obj, params) {
             this._view._localXForm.removeListener(DwtEvent.XFORMS_VALUE_ERROR,this._view.formDirtyLsnr);
         }
         //this._app.getTabGroup().removeCurrentTab(true) ;
-        ZaApp.getInstance().popView();
+        //ZaApp.getInstance().popView();
         //ZaApp.getInstance().getTabGroup().removeCurrentTab(true) ;
 
         this._emptyUI();
-        this._setSelectionAfterCloseView();
+        this._setSelectionAfterCloseView(newPath);
     }
 }
 
 ZaXFormViewController.prototype._setSelectionAfterCloseView =
-function() {
+function(newPath) {
 	if(appNewUI) { //only work in new UI
-		var tree = ZaZimbraAdmin.getInstance().getOverviewPanelController().getOverviewPanel().getFolderTree();
-		var rootItem = tree.getCurrentRootItem();
-		var rootPath = tree.getABPath(rootItem.getData("dataItem"));
-		var topPath = "";
-		var lastLoc = rootPath.lastIndexOf(ZaTree.SEPERATOR);
-		if(lastLoc > 0) {
-			topPath = rootPath.substring(0,lastLoc);
-		}
-		tree.setSelectionByPath(topPath);
+        var tree = ZaZimbraAdmin.getInstance().getOverviewPanelController().getOverviewPanel().getFolderTree();
+        if (!newPath) {
+            var rootItem = tree.getCurrentRootItem();
+            var rootPath = tree.getABPath(rootItem.getData("dataItem"));
+            var topPath = "";
+            var lastLoc = rootPath.lastIndexOf(ZaTree.SEPERATOR);
+            if(lastLoc > 0) {
+                topPath = rootPath.substring(0,lastLoc);
+            }
+            newPath = topPath;
+        }
+		tree.setSelectionByPath(newPath, undefined, undefined, undefined, undefined, undefined, true);
 	}
 }
 
