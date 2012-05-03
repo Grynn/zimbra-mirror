@@ -46,14 +46,21 @@
 
 
 .ImgFree {
-    background: transparent url("img/free.gif") no-repeat 0 0;
+    background: transparent url("img/ImgPresenceAvailable.png") no-repeat 0 0;
     width: 16px;
     height: 16px;
     overflow: hidden;
 }
 
 .ImgBusy {
-    background: transparent url("img/busy.png") no-repeat 0 0;
+    background: transparent url("img/ImgPresenceUnavailable.png") no-repeat 0 0;
+    width: 16px;
+    height: 16px;
+    overflow: hidden;
+}
+
+.ImgOutOfOffice {
+    background: transparent url("img/ImgFreeBusyDotOOO.gif") no-repeat 0 0;
     width: 16px;
     height: 16px;
     overflow: hidden;

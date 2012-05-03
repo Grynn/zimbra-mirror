@@ -64,9 +64,13 @@ function() {
 */
 UnknownPersonSlide.prototype.showTooltip =
 function() {
-    this._setCalendarFrame();    // New appointment
+    if (appCtxt.get(ZmSetting.CALENDAR_ENABLED)) {
+        this._setCalendarFrame();    // New appointment
+    }
 
-    this._setMailFrame();        // New message
+    if (appCtxt.get(ZmSetting.MAIL_ENABLED)) {
+        this._setMailFrame();        // New message
+    }
 
     this._setContactFrame();     // "Home" slide for the contact.
 
