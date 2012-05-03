@@ -200,21 +200,21 @@ public class ImageMerger {
     // processing
 
     private void processMerge(File dir) throws IOException {
-        processMerge(dir, dir.listFiles(F_GIF), IF_GIF);
-        processMerge(dir, dir.listFiles(F_JPG), IF_JPG);
-        processMerge(dir, dir.listFiles(F_PNG), IF_PNG);
+        processMerge(dir, dir.listFiles(F_GIF), IF_GIF, "WebRoot/img/zimbra/1x1-trans.gif");
+        processMerge(dir, dir.listFiles(F_JPG), IF_JPG, null);
+        processMerge(dir, dir.listFiles(F_PNG), IF_PNG, "WebRoot/img/zimbra/1x1-trans.png");
     }
 
-    private void processMerge(File dir, File[] files, ImageFactory factory) throws IOException {
+    private void processMerge(File dir, File[] files, ImageFactory factory, String spacerFileName) throws IOException {
         if (files.length == 0) return;
-        processMerge(dir, listFiles(files, F_NONE), factory, ImageLayout.NONE);
-        processMerge(dir, listFiles(files, F_HORIZONTAL), factory, ImageLayout.HORIZONTAL);
-        processMerge(dir, listFiles(files, F_VERTICAL), factory, ImageLayout.VERTICAL);
+        processMerge(dir, listFiles(files, F_NONE), factory, ImageLayout.NONE, spacerFileName);
+        processMerge(dir, listFiles(files, F_HORIZONTAL), factory, ImageLayout.HORIZONTAL, null);
+        processMerge(dir, listFiles(files, F_VERTICAL), factory, ImageLayout.VERTICAL, null);
         processCopy(dir, listFiles(files, F_TILE), factory);
     }
 
     private void processMerge(File dir, File[] files, ImageFactory factory,
-                              ImageLayout layout) throws IOException {
+                              ImageLayout layout, String spacerFileName) throws IOException {
         if (files.length == 0) return;
         if (verbose) System.out.println("merging files with layout "+layout.toString().toLowerCase());
 
@@ -233,6 +233,13 @@ public class ImageMerger {
             all.add(entry);
         }
 
+		ImageEntry spacerEntry = null;
+		if (spacerFileName != null) {
+			File spacerFile = new File(spacerFileName);
+			DecodedImage spacerImage = factory.loadImage(spacerFile);
+			spacerEntry = new ImageEntry(dir, spacerFile, spacerImage, layout, true);
+		}
+
         // process images
         for (int filecount = 1; all.size() > 0; filecount++) {
             aggregate.reset();
@@ -246,6 +253,9 @@ public class ImageMerger {
                 if (!aggregate.acceptSubImage(entry)) {
                     continue;
                 }
+				else if (spacerEntry != null) {
+					aggregate.acceptSubImage(spacerEntry);
+				}
 
                 // original image is now processed
                 allEntries.remove();
@@ -271,6 +281,9 @@ public class ImageMerger {
                 System.out.println("generating "+file);
                 aggregate.saveImage(file);
                 for (ImageEntry entry : subEntries) {
+					if (entry.isSpacer) { // no need to create JS or CSS for spacer
+						continue;
+					}
                     if (verbose) System.out.println("generating output for "+entry.image.getName());
                     entry.filename = filename;
                     printlnJs(entry);
@@ -546,13 +559,19 @@ public class ImageMerger {
         public int x;
         public int y;
         public ImageLayout layout;
+		public boolean isSpacer;
         // Constructors
-        public ImageEntry(File dir, File file, DecodedImage image, ImageLayout layout) {
+        public ImageEntry(File dir, File file, DecodedImage image, ImageLayout layout, boolean isSpacer) {
             this.filename = dir.getName()+File.separator+file.getName();
             this.iefilename = this.filename;
             this.image = image;
             this.layout = layout;
+			this.isSpacer = isSpacer;
         }
+		public ImageEntry(File dir, File file, DecodedImage image, ImageLayout layout) {
+			this(dir, file, image, layout, false);
+		}
+
         // Object methods
         public String toString() {
             return image.getName();
