@@ -944,11 +944,12 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 						
 							{ref:ZaServer.A_zimbraMilterBindPort, type:_OUTPUT_, label:ZaMsg.NAD_MTA_MilterBindPort}
                            ]
-                        },
+                        }
+                        /*
                         {type:_ZA_TOP_GROUPER_, colSizes:["275px","*"], numCols:2, label:ZaMsg.NAD_AutoProvision_Setting,
                             items:[
                                 {ref:ZaServer.A_zimbraAutoProvPollingInterval, type:_SUPER_LIFETIME_,
-                                   // colSizes:["275px","*","200px","150px"],
+
                                     txtBoxLabel:ZaMsg.LBL_zimbraAutoProvPollingInterval,
                                     resetToSuperLabel:ZaMsg.NAD_ResetToCOS,colSpan:2,
                                     useParentTable: false,
@@ -973,7 +974,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
                                     ]
 					      		}
                             ]
-                        }
+                        } */
 				    ]
 				};
         switchItems.push (case3) ;

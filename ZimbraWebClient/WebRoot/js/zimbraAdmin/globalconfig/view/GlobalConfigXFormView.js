@@ -744,7 +744,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 							  ]/*,
 							  onRemove:GlobalConfigXFormView.onRepeatRemove*/
 						  	}
-						]},
+						]},/*
                         { type:_ZA_TOP_GROUPER_, label:ZaMsg.NAD_AutoProvision_Setting, colSizes:["275px","100%"],
                             visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,
 								[ZaGlobalConfig.A_zimbraAutoProvBatchSize,
@@ -760,7 +760,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
                                 colSpan:2,nowrap:false,labelWrap:true
                             }
                         ]
-                        },
+                        },*/
                         {type: _SPACER_, height: 10 }
                 ]
             };
