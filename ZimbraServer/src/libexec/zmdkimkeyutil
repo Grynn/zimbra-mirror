@@ -172,7 +172,7 @@ if($add) {
     unlink($privatekey);
     unlink($publickey);
 	$ldap->unbind;
-	print "Public key to enter into DNS:\n";
+	print "Public signature to enter into DNS:\n";
 	print "$public";
 	exit 0;
   } else {
@@ -209,7 +209,7 @@ if($add) {
     my $attrval=$entry->get_value("DKIMKey");
     print "DKIM Private Key:\n$attrval\n";
     my $attrval=$entry->get_value("DKIMPublicKey");
-    print "DKIM Public Key:\n$attrval\n";
+    print "DKIM Public signature:\n$attrval\n";
     my $attrval=$entry->get_value("DKIMIdentity");
     print "DKIM Identity:\n$attrval\n\n";
   }
@@ -263,7 +263,7 @@ if($add) {
     unlink($privatekey);
     unlink($publickey);
 	$ldap->unbind;
-	print "Public key to enter into DNS:\n";
+	print "Public signature to enter into DNS:\n";
 	print "$public";
 	exit 0;
   } else {
