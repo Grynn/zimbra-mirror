@@ -572,7 +572,7 @@ ZaBulkDataImportXWizard.prototype._uploadCallback = function (status, attId) {
 
 ZaBulkDataImportXWizard.isAccountSourceLDAP = function() {
 	var val = this.getModel().getInstanceValue(this.getInstance(),ZaBulkProvision.A2_sourceType);
-	return (val == ZaBulkProvision.SOURCE_TYPE_LDAP || val == ZaBulkProvision.SOURCE_TYPE_AD)
+	return (val == ZaBulkProvision.SOURCE_TYPE_LDAP);
 }
 
 ZaBulkDataImportXWizard.getUploadFormHtml = function (){

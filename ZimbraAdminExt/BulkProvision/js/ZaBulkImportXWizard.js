@@ -716,15 +716,6 @@ ZaBulkImportXWizard.myXFormModifier = function(xFormObject,entry) {
 		tabGroupKey:ZaBulkImportXWizard.STEP_CHOOSE_ACTION,caseKey:ZaBulkImportXWizard.STEP_CHOOSE_ACTION,
 		items:[
 		       {type:_DWT_ALERT_,colSpan:2,style:DwtAlert.INFO, iconVisible:false, content:com_zimbra_bulkprovision.AccountImportWizardOverview,visibilityChecks:[]},
-		       {type:_RADIO_, groupname:"action_selection_group",ref:ZaBulkProvision.A2_provAction,bmolsnr:true,
-					labelLocation:_RIGHT_,label:com_zimbra_bulkprovision.ActionImportAccountsFromAD,
-					updateElement:function (newValue) {
-						this.getElement().checked = (newValue == ZaBulkProvision.ACTION_IMPORT_AD);
-					},
-					elementChanged: function(elementValue,instanceValue, event) {
-						this.setInstanceValue(ZaBulkProvision.ACTION_IMPORT_AD,ZaBulkProvision.A2_provAction);
-					},visibilityChecks:[],enableDisableChecks:[]
-		       },		       
 		       {type:_RADIO_, groupname:"action_selection_subgroup",ref:ZaBulkProvision.A2_provAction,bmolsnr:true,
 					labelLocation:_RIGHT_,label:com_zimbra_bulkprovision.ActionImportFromLDAP,
 					updateElement:function (newValue) {
@@ -751,7 +742,7 @@ ZaBulkImportXWizard.myXFormModifier = function(xFormObject,entry) {
 					elementChanged: function(elementValue,instanceValue, event) {
 						this.setInstanceValue(ZaBulkProvision.ACTION_IMPORT_XML,ZaBulkProvision.A2_provAction);
 					},visibilityChecks:[],enableDisableChecks:[]
-		       },
+		       }
        ]
 	};
 	cases.push(case_choose_action);

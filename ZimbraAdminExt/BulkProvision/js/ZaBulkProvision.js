@@ -125,7 +125,6 @@ ZaBulkProvision.FILE_FORMAT_BULK_CSV = "csv";
 
 ZaBulkProvision.SOURCE_TYPE_ZIMBRA = "zimbra";
 ZaBulkProvision.SOURCE_TYPE_LDAP = "ldap";
-ZaBulkProvision.SOURCE_TYPE_AD = "ad";
 ZaBulkProvision.SOURCE_TYPE_XML = "bulkxml";
 ZaBulkProvision.SOURCE_TYPE_REUSE_XML = "reusebulkxml";
 ZaBulkProvision.SOURCE_TYPE_CSV = "csv";
@@ -153,7 +152,7 @@ ZaBulkProvision.BP_NO_ACCOUNTS_TO_IMPORT =  "bulkprovision.BP_NO_ACCOUNTS_TO_IMP
 
 ZaBulkProvision.getMyXModel = function () {
 	ZaBulkProvision.ProvActionChoices = [
-		{value:ZaBulkProvision.ACTION_IMPORT_LDAPL,label:com_zimbra_bulkprovision.ActionImportFromLDAP},
+		{value:ZaBulkProvision.ACTION_IMPORT_LDAP,label:com_zimbra_bulkprovision.ActionImportFromLDAP},
 		{value:ZaBulkProvision.ACTION_IMPORT_CSV,label:com_zimbra_bulkprovision.ActionImportFromSCV},
 		{value:ZaBulkProvision.ACTION_IMPORT_XML,label:com_zimbra_bulkprovision.ActionImportFromXML},
 		{value:ZaBulkProvision.ACTION_GENERATE_MIG_XML,label:com_zimbra_bulkprovision.ActionGenerateMigXML},
@@ -161,17 +160,14 @@ ZaBulkProvision.getMyXModel = function () {
 		{value:ZaBulkProvision.ACTION_GENERATE_BULK_XML,label:com_zimbra_bulkprovision.ActionGenerateBulkXML},
 		{value:ZaBulkProvision.ACTION_GENERATE_BULK_CSV,label:com_zimbra_bulkprovision.ActionGenerateBulkCSV}
     ];
-	
+
 	ZaBulkProvision.SourceServerTypeChoices = [
         {label:com_zimbra_bulkprovision.SourceServerTypeIMAP, value:ZaBulkProvision.MAIL_SOURCE_TYPE_IMAP},
-        {label:com_zimbra_bulkprovision.SourceServerTypeExchange, value:ZaBulkProvision.MAIL_SOURCE_TYPE_EXCHANGE},
-        {label:com_zimbra_bulkprovision.SourceServerTypeExchangeIMAP, value:ZaBulkProvision.MAIL_SOURCE_TYPE_EXCHANGE_IMAP},
         {label:com_zimbra_bulkprovision.SourceServerTypeZimbra, value:ZaBulkProvision.MAIL_SOURCE_TYPE_ZIMBRA}
 	];
 
 	ZaBulkProvision.AccountListSourceTypeChoices = [
         {label:com_zimbra_bulkprovision.AccountListTypeLDAP, value:ZaBulkProvision.SOURCE_TYPE_LDAP},
-        {label:com_zimbra_bulkprovision.AccountListTypeAD, value:ZaBulkProvision.SOURCE_TYPE_AD},
         {label:com_zimbra_bulkprovision.AccountListTypeXML, value:ZaBulkProvision.SOURCE_TYPE_XML}
     ];
 
