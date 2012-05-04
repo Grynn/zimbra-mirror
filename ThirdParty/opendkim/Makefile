@@ -45,7 +45,6 @@ build:
 	--enable-poll \
 	--enable-adsp_lists \
 	--enable-atps \
-	--enable-ldap_caching \
 	--enable-rate_limit \
 	--enable-replace_rules \
 	--enable-redirect \
