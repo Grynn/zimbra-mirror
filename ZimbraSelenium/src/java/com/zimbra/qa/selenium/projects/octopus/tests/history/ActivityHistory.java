@@ -1,12 +1,15 @@
 package com.zimbra.qa.selenium.projects.octopus.tests.history;
 
 import org.testng.annotations.*;
+
+import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.octopus.core.OctopusCommonTest;
 import com.zimbra.qa.selenium.projects.octopus.ui.PageHistory;
+import com.zimbra.qa.selenium.projects.octopus.ui.PageHistory.GetText;
 
 
 public class ActivityHistory extends OctopusCommonTest {
@@ -169,7 +172,38 @@ public class ActivityHistory extends OctopusCommonTest {
 						.sIsChecked(PageHistory.Locators.zHistoryFilterRename.locator),
 				"Verify Rename check box is checked");
 	}
-
+    @Bugs(ids="71867")
+	@Test(description="Open history tab - Verify if history for comments added is present", groups={"functional"})
+	public void VerifyActivityForComments()throws HarnessException
+	{
+		// get current Active account
+		ZimbraAccount act = app.zGetActiveAccount();
+		//Select a file type to upload
+		String fileName = TEXT_FILE;
+		//Upload a file using Soap
+		_fileId = uploadFileViaSoap(act, fileName);
+	
+		
+		String Comment = "comment"+ ZimbraSeleniumProperties.getUniqueString();
+		//Add comments to a file using SOAP AddCommentRequest 
+		act.soapSend("<AddCommentRequest xmlns='urn:zimbraMail'> <comment parentId='"
+				+ _fileId + "' text='" + Comment + "'/></AddCommentRequest>");
+		
+		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_HISTORY);
+				
+		String requiredHistory = "You added a comment on file "+fileName+".";
+		
+		//Assert if found history matches with Add comment history
+		ZAssert.assertEquals(GetText.comment(fileName), app.zPageHistory.isTextPresentInGlobalHistory(requiredHistory).getHistoryText(), "Checking if Required history Matches with found history");
+		//Logout and Login to application again with same account
+		app.zPageOctopus.zLogout();
+		
+		app.zPageLogin.zLogin(act);
+		
+		ZAssert.assertEquals(GetText.comment(fileName), app.zPageHistory.isTextPresentInGlobalHistory(requiredHistory).getHistoryText(), "Checking if Required history Matches with found history after re-login");
+	
+	}
+	
 	@AfterMethod(groups = { "always" })
 	public void testCleanup() {
 		if (_fileAttached || _fileId != null) {
