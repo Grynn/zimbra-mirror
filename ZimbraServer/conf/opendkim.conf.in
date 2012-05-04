@@ -41,6 +41,7 @@ SignatureTTL          0
 StrictHeaders         no
 StrictTestMode        no
 SubDomains            no
+InternalHosts         file:/opt/zimbra/conf/opendkim-localnets.conf
 
 SendADSPReports       no
 SendReports           no
