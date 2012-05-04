@@ -109,8 +109,14 @@ DwtSoundPlugin._getPluginClass =
 function() {
 	if (!DwtSoundPlugin._pluginClass) {
 		if (AjxEnv.isIE && AjxPluginDetector.detectWindowsMedia()) {
+			//IE8 windows media player does not work with httpOnly cookie attribute
 			DwtSoundPlugin._pluginClass = DwtWMSoundPlugin;
-		} else {
+		} 
+		else if (AjxEnv.isSafari5up && !AjxEnv.isChrome) {
+			//safari quicktime does not work with httpOnly cookie attribute
+			DwtSoundPlugin._pluginClass = DwtHtml5SoundPlugin;
+		}
+		else {
 			var version = AjxPluginDetector.getQuickTimeVersion();
 			if (version) {
 				DBG.println("DwtSoundPlugin: QuickTime version=" + version);
@@ -311,18 +317,14 @@ function(version) {
 		// the checkScripting() routine below. I'm going to disable all QT versions that
 		// are greater than 7.1.6. We should change this check when QT is fixed. More info:
 		// http://lists.apple.com/archives/quicktime-users/2007/May/msg00016.html
-		var badVersion = [7, 1, 6];
-		for(var i = 0, count = version.length; i < count; i++) {
-			if (version[i] < badVersion[i]) {
-				return true;
-			} else if (version[i] > badVersion[i]) {
-				return false;
-			}
+		var badVersion = "716";
+		var currentVersion = "";
+		for(var i = 0; i < version.length; i++) {
+			currentVersion += version[i];
 		}
-		return false;
-	} else {
-		return true;
-	}
+		return currentVersion != badVersion;
+	} 
+	return true;
 };
 
 /**
@@ -340,7 +342,7 @@ function() {
 		height: 16,
 		offscreen: true,
 		posStyle: DwtControl.RELATIVE_STYLE,
-		url: "/QuickTimeScriptTest.wav", // Not a valid url.
+		url: "/public/sounds/im/alert.wav", // Not a valid url.
 		volume: 0
 	};
 	var test = new DwtQTSoundPlugin(args);
@@ -503,6 +505,133 @@ function(params) {
 	this._createQTHtml(params);
 };
 
+/**
+ * Sound player that goes through the HTML5 audio tag
+ * @class
+ * This class provides and HTML5 audio widget
+ *
+ * @param	{hash}	params		a hash of parameters
+ *
+ * @extends		DwtSoundPlugin
+ *
+ * @private
+ */
+DwtHtml5SoundPlugin = function(params) {
+	if (arguments.length == 0) return;
+	params.className = params.className || "DwtSoundPlugin";
+	DwtSoundPlugin.call(this, params);
+
+	this._playerId = Dwt.getNextId();
+	this._createHtml(params);	
+};
+
+DwtHtml5SoundPlugin.prototype = new DwtSoundPlugin;
+DwtHtml5SoundPlugin.prototype.constructor = DwtHtml5SoundPlugin;
+
+DwtHtml5SoundPlugin.prototype.toString = 
+function() {
+	return "DwtHtml5SoundPlugin";
+};
+
+DwtHtml5SoundPlugin.prototype._createHtml = 
+function(params) {
+	var html = [
+		"<audio autoplay='yes' ",
+		"id='", this._playerId,
+		"' preload ",
+		"><source src='", params.url,
+		"' type='audio/wav' />",
+		"</audio>"
+	];
+	this.getHtmlElement().innerHTML = html.join("");
+};
+
+DwtHtml5SoundPlugin.prototype.play =
+function() {
+	var player = this._getPlayer();
+	this._monitorStatus();
+	player.play();
+};
+
+DwtHtml5SoundPlugin.prototype.pause =
+function() {
+	var player = this._getPlayer();
+	player.pause();
+};
+
+DwtHtml5SoundPlugin.prototype._getPlayer =
+function() {
+	return document.getElementById(this._playerId);
+};
+
+
+DwtHtml5SoundPlugin.prototype.rewind =
+function() {
+	this.setTime(0);
+};
+
+DwtHtml5SoundPlugin.prototype.setTime =
+function(time) {
+	var player = this._getPlayer();
+	player.controls.currentPosition = time / 1000;
+	player.currentTime = time / 1000;
+};
+
+DwtHtml5SoundPlugin.prototype._resetEvent =
+function(event) {
+	var keepChecking = true;
+	var player = this._getPlayer();
+	event.finished = false;
+	var valid = false;
+	if (player) {
+		var status = player.duration;
+		switch (status) {
+			case "NaN":
+				event.status = DwtSoundPlugin.LOADING;
+				break;
+			default :
+				event.status = DwtSoundPlugin.PLAYABLE;
+				valid = true;
+				keepChecking = false;
+				break;
+		}
+	}
+	if (valid) {
+		var scale = 1000; // Converts to milliseconds.
+		event.time = player.currentTime * scale;
+		event.duration = player.duration * scale;
+	} else {
+		event.status = DwtSoundPlugin.WAITING;
+		event.time = 0;
+		event.duration = 100;
+	}
+	if (event.status == DwtSoundPlugin.PLAYABLE && event.time == event.duration) {
+		event.time = 0;
+		event.finished = true;
+		keepChecking = false;
+	}
+	return keepChecking;
+};
+
+/**
+ * Adds a change listener to monitor the status of the sound being played.
+ * Handles the HTML5 event timeupdate 
+ * The listener will be passed an event object with the following fields:
+ * <ul>
+ * <li>status, a constant representing the loaded state of the sound</li>
+ * <li>duration, the length of the sound</li>
+ * <li>time, the current time of the sound</li>
+ * </ul>
+ *
+ * @param {AjxListener}	listener	the listener
+ */
+DwtHtml5SoundPlugin.prototype.addChangeListener =
+function(listener) {
+	var player = this._getPlayer();
+	player.addEventListener("timeupdate", function(e) { 
+			listener.handleEvent({time: player.currentTime * 1000, duration: player.duration * 1000, status: DwtSoundPlugin.PLAYABLE});}, false);
+	this._monitorStatus();
+};
 //////////////////////////////////////////////////////////////////////////////
 // Sound player that goes through the Windows Media (WM) plugin.
 //
