@@ -932,7 +932,13 @@ ZaNewDLXWizard.myXFormModifier = function(xFormObject, entry) {
 					visibilityChangeEventSources : [ZaDistributionList.A2_dlType],
 					visibilityChecks : [ZaDLXFormView.isDynamicDL],
 					enableDisableChangeEventSources : [ZaDistributionList.A_zimbraIsACLGroup],
-					enableDisableChecks : [ZaDLXFormView.isNotACLGroup]
+					enableDisableChecks : [ZaDLXFormView.isNotACLGroup],
+                    elementChanged: function (elementValue, instanceValue, event) {
+                        if(elementValue) {
+                            elementValue = AjxStringUtil.trim(elementValue);
+                        }
+                        this.getForm().itemChanged(this, elementValue, event);
+                    }
 				}
 				]
 			}
