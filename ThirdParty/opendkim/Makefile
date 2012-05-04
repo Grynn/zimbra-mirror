@@ -48,8 +48,6 @@ build:
 	--enable-rate_limit \
 	--enable-replace_rules \
 	--enable-redirect \
-	--enable-reputation \
-	--enable-reputation_cache \
 	--enable-resign \
 	--enable-select_canonicalization \
 	--enable-selector_header \
