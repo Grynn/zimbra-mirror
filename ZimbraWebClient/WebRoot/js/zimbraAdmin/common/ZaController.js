@@ -857,6 +857,14 @@ function(details) {
 		if (this._evtMgr.isListenerRegistered(ZaEvent.E_REMOVE)) {
 			var evt = new ZaEvent(this.objType);
 			evt.set(ZaEvent.E_REMOVE, this);
+            /*
+             * Remove the last element if it is empty
+             */
+            if (!AjxUtil.isEmpty(details)) {
+                if (!details[details.length - 1]) {
+                    details.splice(details.length - 1,1);
+                }
+            }
 			evt.setDetails(details);
 			this._evtMgr.notifyListeners(ZaEvent.E_REMOVE, evt);
 		}

@@ -180,8 +180,11 @@ function (result) {
 DeleteAcctsPgrsDlg.prototype.deleteOneAccount = 
 function () {
 	var callback = new AjxCallback(this, this.deleteOneAccountCallback);
-	this._containedObject[this._currentIndex].remove(callback);
-	this._button[DeleteAcctsPgrsDlg.ABORT_BUTTON].setEnabled(true);		
+    if (this._containedObject[this._currentIndex] && this._containedObject[this._currentIndex].remove){
+        this._containedObject[this._currentIndex].remove(callback);
+        this._button[DeleteAcctsPgrsDlg.ABORT_BUTTON].setEnabled(true);
+    }
+
 }
 
 
