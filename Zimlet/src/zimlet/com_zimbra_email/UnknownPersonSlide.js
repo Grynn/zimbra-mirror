@@ -171,6 +171,13 @@ function(ev) {
     else if (el.id == "UnknownPersonSlide_workPhoneAnchorId") {
         this.emailZimlet._phoneListener(this.attribs && this.attribs.workPhone);
     }
+    else if (el.id == "UnknownPersonSlide_imAnchorId") {
+        //ev.preventDefault();
+        ZmZimbraMail.unloadHackCallback();
+        location.href = this.imURI;
+        this.emailZimlet._imListener(this.imURI);
+        return false;
+    }
 };
 
 UnknownPersonSlide.prototype._handleRightClick =
@@ -338,6 +345,13 @@ function(attrs) {
 		attrs["address"] = AjxStringUtil.trim(address);
 	}
 
+    var im = attrs["imAddress"] || attrs["imAddress1"]  || attrs["imAddress2"]  || attrs["imAddress3"];
+    if (im) {
+        im = im.split(":")[1];
+        im = "<a  id='UnknownPersonSlide_imAnchorId' href='" + "im:" + im + "'>" + im.substring(2) + "</a>" ;
+    }
+    this.imURI = attrs["imURI"] = im;
+
 	if (!this.emailZimlet.noRightClick) {
         attrs["rightClickForMoreOptions"] = false;
 	}
@@ -356,7 +370,8 @@ function(attrs) {
 	this._removeCustomAttrs(attrs);
 };
 
-
+// Remove custom attributes we added because we are playing with the contact data directly
+// todo - implement clone on attrs
 
 UnknownPersonSlide.prototype._removeCustomAttrs =
 function(attrs) {
@@ -369,6 +384,15 @@ function(attrs) {
 	if(attrs["address"]) {
 		delete attrs["address"];
 	}
+    if(attrs["presence"]) {
+        delete attrs["presence"];
+    }
+    if(attrs["imagepart"]) {
+        delete attrs["imagepart"];
+    }
+    if(attrs["imURI"]) {
+        delete attrs["imURI"];
+    }
 };
 
 UnknownPersonSlide.prototype._formatTexts =

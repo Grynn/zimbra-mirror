@@ -24,6 +24,9 @@
 	<$ if (data.address) { $>
 		<label ><$= AjxStringUtil.htmlEncode(data.address) $> (<$= ZmMsg.work $>)</label><br/>
 	<$ } $>
+    <$ if (data.imURI) { $>
+       <label> <$= data.imURI $> (<$= ZmMsg.imShort $>)</label><br/>
+    <$ } $>
 	<br/>
 	<br/>
 	<br/>

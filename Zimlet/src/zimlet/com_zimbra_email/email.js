@@ -991,6 +991,10 @@ EmailTooltipZimlet.prototype._phoneListener =
         appCtxt.notifyZimlets("onPhoneClicked", [phone], {waitUntilLoaded:true});
     };
 
+EmailTooltipZimlet.prototype._imListener =
+    function(imURI) {
+        if (!imURI) return;
+    };
 /**
  * Helper function
  */
