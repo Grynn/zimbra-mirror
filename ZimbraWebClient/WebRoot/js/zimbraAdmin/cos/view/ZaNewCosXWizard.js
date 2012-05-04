@@ -479,28 +479,28 @@ ZaNewCosXWizard.myXFormModifier = function(xFormObject, entry) {
     };
 
     var case1Items = [
-		{type:_GROUP_, numCols:2,colSizes: ["200px","auto"],
-			items:[
-				{ref:ZaCos.A_name, type:_INPUT_,
-					enableDisableChecks:[[ZaItem.hasRight,ZaCos.RENAME_COS_RIGHT]],
-					msgName:ZaMsg.NAD_DisplayName,label:ZaMsg.NAD_DisplayName, labelLocation:_LEFT_,
-					cssClass:"admin_xform_name_input", required:true, width: "30em"
-				},
-				{ref:"description",  msgName:ZaMsg.NAD_Description,
-					label:ZaMsg.NAD_Description, labelLocation:_LEFT_, //cssClass:"admin_xform_name_input" ,
-					labelCssStyle:"vertical-align:top;",
-					type:_TEXTFIELD_,
-					align:_LEFT_,
-					enableDisableChecks:[ZaItem.hasWritePermission],
-					visibilityChecks:[ZaItem.hasReadPermission],
-					width:"30em"
-				},
-				{ref:ZaCos.A_zimbraNotes, type:_TEXTAREA_,
-					msgName:ZaMsg.NAD_Notes,label:ZaMsg.NAD_Notes, labelLocation:_LEFT_,
-					labelCssStyle:"vertical-align:top;", width: "30em"
-				}
-			]
-		}
+        {type:_ZAWIZ_TOP_GROUPER_, numCols:2,colSizes: ["200px","auto"], label:ZaMsg.TABT_GeneralPage,
+            items:[
+                {ref:ZaCos.A_name, type:_INPUT_,
+                    enableDisableChecks:[[ZaItem.hasRight,ZaCos.RENAME_COS_RIGHT]],
+                    msgName:ZaMsg.NAD_DisplayName,label:ZaMsg.NAD_DisplayName, labelLocation:_LEFT_,
+                    cssClass:"admin_xform_name_input", required:true, width: "30em"
+                },
+                {ref:"description",  msgName:ZaMsg.NAD_Description,
+                    label:ZaMsg.NAD_Description, labelLocation:_LEFT_, //cssClass:"admin_xform_name_input" ,
+                    labelCssStyle:"vertical-align:top;",
+                    type:_TEXTFIELD_,
+                    align:_LEFT_,
+                    enableDisableChecks:[ZaItem.hasWritePermission],
+                    visibilityChecks:[ZaItem.hasReadPermission],
+                    width:"30em"
+                },
+                {ref:ZaCos.A_zimbraNotes, type:_TEXTAREA_,
+                    msgName:ZaMsg.NAD_Notes,label:ZaMsg.NAD_Notes, labelLocation:_LEFT_,
+                    labelCssStyle:"vertical-align:top;", width: "30em"
+                }
+            ]
+        }
 	];
 
 	case1.items = case1Items;
