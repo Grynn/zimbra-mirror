@@ -83,7 +83,7 @@ stop()
         checkrunning
         if [ $RUNNING = 0 ]; then
           echo "opendkim not running"
-          exit 1
+          exit 0
         else
           echo -n "Stopping opendkim..."
           kill -TERM $PID 2> /dev/null
