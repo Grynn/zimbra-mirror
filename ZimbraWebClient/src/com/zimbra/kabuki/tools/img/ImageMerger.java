@@ -147,6 +147,9 @@ public class ImageMerger {
             System.setProperty(P_HEADLESS, "true");
 
             // create output streams
+            if (!outputDir.exists()) {
+                outputDir.mkdir();
+            }
             boolean jsNeedsHeader = !(new File(outputDir, jsFilename).exists());
             cssOut = open(cssFilename);
             jsOut = open(jsFilename);
