@@ -16,6 +16,8 @@ public class DisplayFilePreview extends AbsDisplay {
 				"css=div[id=my-files-preview] div[id=my-files-preview-toolbar] button[id=show-activitystream-button]");
 		public static final Locators zComments = new Locators(
 				"css=div[id=my-files-preview] div[id=my-files-preview-toolbar] button[id=my-files-preview-show-comments-button]");
+		public static final Locators zPreviewFileName=new Locators(
+				"css=div[id=my-files-preview-toolbar] span[class=file-info-view-file-name]");
 
 		public final String locator;
 

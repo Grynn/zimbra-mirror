@@ -1,12 +1,16 @@
 package com.zimbra.qa.selenium.projects.octopus.tests.myfiles.files;
 
 import org.testng.annotations.*;
+
+import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.FileItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
+import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.octopus.core.OctopusCommonTest;
+import com.zimbra.qa.selenium.projects.octopus.ui.DisplayFilePreview;
 import com.zimbra.qa.selenium.projects.octopus.ui.PageMyFiles;
 
 public class RenameFile extends OctopusCommonTest {
@@ -15,7 +19,7 @@ public class RenameFile extends OctopusCommonTest {
 	private String _folderName = null;
 	private boolean _fileAttached = false;
 	private String _fileId = null;
-
+	
 	public RenameFile() {
 		logger.info("New " + RenameFile.class.getCanonicalName());
 
@@ -136,5 +140,45 @@ public class RenameFile extends OctopusCommonTest {
 		} catch (Exception e) {
 			logger.info("Failed while emptying Trash", e);
 		}
+	}
+	
+	@Bugs(ids = "69347")
+	@Test(description = "After renaming a file, the file list must be refreshed", groups = { "functional" })
+	public void RefreshRenamefile() throws HarnessException
+    {
+		String fileName=JPEG_FILE1;
+		String fileName1=JPEG_FILE2;
+		String newName = "3.jpg";
+		
+		 //Upload 1st file
+		 _fileId = uploadFileViaSoap(app.zGetActiveAccount(),fileName);  
+		
+		 //Upload 2nd file
+	     uploadFileViaSoap(app.zGetActiveAccount(),fileName1); 
+		
+		 //rename file via soap
+		 renameViaSoap(app.zGetActiveAccount(), _fileId, newName);
+		 
+		 // Verify Renamed file exists in My Files view
+		 ZAssert.assertTrue(app.zPageMyFiles.zWaitForElementPresent(PageMyFiles.Locators.zMyFilesListViewItems.locator
+							+ ":contains(" + newName + ")", "3000"),"Verify file appears in My Files view");
+			
+	     // Select renamed file in the list view for preview
+		 DisplayFilePreview filePreview = (DisplayFilePreview) app.zPageMyFiles.zListItem(Action.A_LEFTCLICK, newName);
+		 SleepUtil.sleepLong();
+
+		 //Get filename from preview panel.
+		 String expectedResult=app.zPageOctopus.sGetText(DisplayFilePreview.Locators.zPreviewFileName.locator);
+		
+		
+		 // Verify File name from preview panel and file list should be same .
+		 ZAssert.assertEquals(newName, expectedResult, "Verify file names are same");
+		
+		 // Select file in the list view.
+		 DisplayFilePreview filePreview1 = (DisplayFilePreview) app.zPageMyFiles.zListItem(Action.A_LEFTCLICK, fileName1);
+		 SleepUtil.sleepLong();
+		
+		 ZAssert.assertEquals(fileName1, expectedResult, "Verify file names are same");
+		 
 	}
 }
