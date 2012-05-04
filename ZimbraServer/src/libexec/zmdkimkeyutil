@@ -160,7 +160,7 @@ if($add) {
         DKIMDomain    => "$domain",
         DKIMKey       => "$private",
         DKIMPublicKey => "$public",
-        DKIMIdentity  => "*.".$domain,
+        DKIMIdentity  => "$domain",
       ]
     );
 	if ($mesg->code) {
