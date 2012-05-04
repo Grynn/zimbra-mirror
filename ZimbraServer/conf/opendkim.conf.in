@@ -33,7 +33,7 @@ FixCRLF               no
 MaximumHeaders        65536
 Minimum               0
 Mode                  s
-MultipleSignatures    yes
+MultipleSignatures    no
 NoHeaderB             no
 RequireSafeKeys       Yes
 SignatureAlgorithm    rsa-sha256
