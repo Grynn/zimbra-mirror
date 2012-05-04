@@ -38,6 +38,7 @@ public class ImageMergerTask
 	private File outputDir;
 	private String cssFilename;
 	private String cssPath;
+	private String spacerImagesPath;
 
 	// optional
 
@@ -69,6 +70,11 @@ public class ImageMergerTask
 
 	public void setCssPath(String path) {
 		cssPath = path;
+	}
+
+
+	public void setSpacerImagesPath(String path) {
+		spacerImagesPath = path;
 	}
 
     // optional
@@ -108,12 +114,14 @@ public class ImageMergerTask
 		assertAndThrow(inputDirs.size() > 0, "missing <dirset> element(s)");
 		assertAndThrow(cssFilename != null && cssFilename.length() > 0, "missing cssfile attribute");
 		assertAndThrow(cssPath != null, "missing csspath attribute");
+		assertAndThrow(spacerImagesPath != null, "missing spacerimagespath attribute");
 
         // create merger
         ImageMerger merger = new ImageMerger();
         merger.setOutputDirectory(outputDir);
         merger.setCssFilename(cssFilename);
         merger.setCssPath(cssPath);
+		merger.setSpacerImagesPath(spacerImagesPath);
         merger.setCacheFilename(cacheFilename);
         merger.setJsFilename(jsFilename);
         merger.setCopyFiles(copyFiles);

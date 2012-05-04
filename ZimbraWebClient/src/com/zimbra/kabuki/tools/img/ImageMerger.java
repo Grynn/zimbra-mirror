@@ -120,6 +120,7 @@ public class ImageMerger {
 
     private File outputDir;
     private String cssPath;
+	private String spacerImagesPath;
     private String cssFilename;
     private String jsFilename;
     private String cacheFilename;
@@ -195,6 +196,9 @@ public class ImageMerger {
     public void setCssPath(String path) {
         cssPath = path.endsWith("/") ? path.substring(0, path.length()-1) : path;
     }
+	public void setSpacerImagesPath(String path) {
+		spacerImagesPath = path;
+	}
     public void setCssFilename(String name) {
         cssFilename = name;
     }
@@ -221,9 +225,9 @@ public class ImageMerger {
     // processing
 
     private void processMerge(File dir) throws IOException {
-        processMerge(dir, dir.listFiles(F_GIF), IF_GIF, "WebRoot/img/zimbra/1x1-trans.gif");
+        processMerge(dir, dir.listFiles(F_GIF), IF_GIF, "1x1-trans.gif");
         processMerge(dir, dir.listFiles(F_JPG), IF_JPG, null);
-        processMerge(dir, dir.listFiles(F_PNG), IF_PNG, "WebRoot/img/zimbra/1x1-trans.png");
+        processMerge(dir, dir.listFiles(F_PNG), IF_PNG, "1x1-trans.png");
     }
 
     private void processMerge(File dir, File[] files, ImageFactory factory, String spacerFileName) throws IOException {
@@ -256,13 +260,9 @@ public class ImageMerger {
 
 		ImageEntry spacerEntry = null;
 		if (spacerFileName != null) {
-            File spacerFile = new File(spacerFileName);
-		    try {
-    			DecodedImage spacerImage = factory.loadImage(spacerFile);
-    			spacerEntry = new ImageEntry(dir, spacerFile, spacerImage, layout, true);
-		    } catch (FileNotFoundException e) {
-		        e.printStackTrace();
-		    }
+			File spacerFile = new File(spacerImagesPath + spacerFileName);
+			DecodedImage spacerImage = factory.loadImage(spacerFile);
+			spacerEntry = new ImageEntry(dir, spacerFile, spacerImage, layout, true);
 		}
 
         // process images
