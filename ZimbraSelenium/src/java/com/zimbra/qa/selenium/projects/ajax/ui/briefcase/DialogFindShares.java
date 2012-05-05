@@ -59,7 +59,7 @@ public class DialogFindShares extends AbsDialog {
 		
 		if ( button == Button.B_CANCEL ) {
 
-         locator = "css=td[class=ZWidgetTitle]:contains(Cancel)";
+         locator = "css=div[id=ZmShareSearchDialog_buttons] td[class=ZWidgetTitle]:contains(Cancel)";
 
       } else {
          throw new HarnessException("Button "+ button +" not implemented");
