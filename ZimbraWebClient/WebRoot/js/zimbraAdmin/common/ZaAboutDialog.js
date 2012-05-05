@@ -31,6 +31,7 @@ ZaAboutDialog.prototype._createHtmlFromTemplate = function (templateId, data) {
     data.version = AjxBuffer.concat(ZaMsg.splashScreenVersion, " ", ZaServerVersionInfo.version , " " , date);
     data.copyright = ZaItem.getSplashScreenCopyright();
     data.aboutBanner = "ImgAboutBanner";
+    data.logoURL = ZaAppCtxt.getLogoURI();
     DwtComposite.prototype._createHtmlFromTemplate.call(this, templateId, data);
     this._contentEl = document.getElementById(data.id+"_content");
     this._closeIconEl = document.getElementById(data.id+"_close");
