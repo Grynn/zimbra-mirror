@@ -37,6 +37,7 @@ my $convertdCsv = 'convertd.csv';
 my $nginxCsv = 'nginx.csv';
 my $mysqlCsv = 'mysql.csv';
 my $soapCsv = 'soap.csv';
+my $ldapCsv = 'ldap.csv';
 
 my @DEVICE_LIST;        # list of device names (e.g. "sda", "sdb")
 my %DEVICE_PARTITIONS;  # $DEVICE_PARTITIONS{device} = arrayref of partitions
@@ -983,6 +984,55 @@ _HERE_
     print "  </chart>\n\n";
 }
 
+sub ldapConfig() {
+    print <<_HERE_;
+  <!-- LDAP Stats -->
+
+  <chart title="Host $ZIMBRA_HOSTNAME: LDAP: Invocation Count: Summary (Top 10 max)"
+         category="ldap"
+         height="400"
+         topPlots="10"
+         topPlotsType="max"
+         infile="ldap.csv"
+         outfile="${ZIMBRA_HOSTNAME}_ldap_call_count.png"
+         yAxis="calls/min">
+    <groupplot data="exec_count"  groupBy="command" aggregateFunction="max"/>
+  </chart>
+  
+  <chart title="Host $ZIMBRA_HOSTNAME: LDAP: Average Call Duration: Summary (Top 10 avg)"
+         category="ldap"
+         height="1200"
+         topPlots="10"
+         topPlotsType="avg"
+         infile="ldap.csv"
+         outfile="${ZIMBRA_HOSTNAME}_ldap_avg_duration.png"
+         yAxis="ms avg">
+    <groupplot data="exec_ms_avg"  groupBy="command"/>
+  </chart>
+  <chart title="Host $ZIMBRA_HOSTNAME: LDAP: Invocation Count: %s"
+         category="ldap"
+         outDocument="ldap.html"
+         infile="ldap.csv"
+         outfile="${ZIMBRA_HOSTNAME}_ldap_call_count_%s.png"
+         yAxis="calls/min">
+    <groupplot data="exec_count" groupBy="command" aggregateFunction="max"/>
+  </chart>
+  
+  <chart title="Host $ZIMBRA_HOSTNAME: LDAP: Average Call Duration: %s"
+         category="ldap"
+         outDocument="ldap.html"
+         infile="ldap.csv"
+         outfile="${ZIMBRA_HOSTNAME}_ldap_avg_duration_%s.png"
+         yAxis="ms avg">
+    <groupplot data="exec_ms_avg" groupBy="command"/>
+  </chart>
+
+  
+
+
+_HERE_
+}
+
 
 
 #
@@ -1009,5 +1059,6 @@ if ($HAS_MAILBOX) {
     heapConfig();
     convertdConfig() if !$isMac;
     nginxConfig();
+    ldapConfig();
 }
 print "</charts>\n";
