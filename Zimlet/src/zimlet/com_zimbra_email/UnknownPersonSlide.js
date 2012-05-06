@@ -266,7 +266,7 @@ function(response, contact) {
     attrs = attrs || contact && contact.attr || {};
 
     attrs["fullName"] =  attrs["fullName"] || this.emailZimlet.fullName;
-    var presentity = attrs["email"] = attrs["email"] || this.emailZimlet.emailAddress;        // email is the presence identity
+    this._presentity = attrs["email"] = attrs["email"] || this.emailZimlet.emailAddress;        // email is the presence identity
 
     var image = attrs[ZmContact.F_image];
     var imagepart =  attrs[ZmContact.F_imagepart];
@@ -285,24 +285,24 @@ function(response, contact) {
 	this._setProfileImage(imgUrl);
 	this._setContactDetails(attrs);
     // Retrieve the presence information from the presence provider - e.g. Click2Call
-    this._getPresence(attrs["email"]); // todo - validate that email is the presentity
 	this._popupToolTip();
-    this._setPresenceUI(presentity);
+    this._setPresenceUI();
 };
 
 UnknownPersonSlide.prototype._getPresence =
-    function(presentity) {
+    function() {
         var now = new Date();
         //debugger;
         // Do we have the presence data for this user in the presence cache
         // Also check for cache staleness: currently anything over 30 secs is considered stale
+        var then = this._presenceCache[this._presentity] && this._presenceCache[this._presentity].timestamp || 0;
 
-        if (this._presenceCache[presentity] && (now - this._presenceCache.timestamp < 30000))  {
-            return this._presenceCache[presentity].value;
+        if (now - then < 30000)  {
+            return this._presenceCache[this._presentity];
         }
 
         if (this.emailZimlet._presenceProvider)  {
-            this.emailZimlet._presenceProvider(presentity, this._handlePresence.bind(this));
+            this.emailZimlet._presenceProvider(this._presentity, this._handlePresence.bind(this));
         }
         return null;
     }
@@ -315,14 +315,17 @@ UnknownPersonSlide.prototype._getPresence =
 
 UnknownPersonSlide.prototype._handlePresence =
     function(presenceObject) {
-        if (!presenceObject || !presenceObject.id){
+        if (!presenceObject){
             return;
         }
-        var obj = this._presenceCache[presenceObject.id];  // Array of presences (IM, Phone, etc.)
+        var obj = this._presenceCache[this._presentity];  // Array of presences (IM, Phone, etc.)
         if (!obj) {
-            obj = this._presenceCache[presenceObject.id] = [];
+            obj = this._presenceCache[this._presentity] = [];
         }
-        obj[presenceObject.type] = {value:presenceObject.value, timestamp:new Date()};
+        obj["IM"] = presenceObject.imStatus;
+        obj["Phone"] = presenceObject.phoneStatus;
+        obj["timestamp"] = new Date();
+        this._setPresenceUI();
     }
 
 UnknownPersonSlide.prototype._popupToolTip =
@@ -512,9 +515,9 @@ UnknownPersonSlide.prototype._isKnownPresenceCode =
     }
 
 UnknownPersonSlide.prototype._setPresenceUI =
-    function(user) {
+    function() {
 
-        var presenceObj = this._getPresence(user);
+        var presenceObj = this._getPresence();
 
         /*
         presenceObj =   { "IM": {value:"available", timestamp:new Date()},
@@ -523,8 +526,8 @@ UnknownPersonSlide.prototype._setPresenceUI =
         */
 
         if (presenceObj) {
-            this._setIMPresenceUI(presenceObj["IM"] && presenceObj["IM"].value);
-            this._setPhonePresenceUI(presenceObj["Phone"] && presenceObj["Phone"].value);
+            this._setIMPresenceUI(presenceObj["IM"]);
+            this._setPhonePresenceUI(presenceObj["Phone"]);
         }
         return;
     }
