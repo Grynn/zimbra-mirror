@@ -59,7 +59,35 @@
     overflow: hidden;
 }
 
-.Img_xa {
+.Img_busy {
+    background: transparent url("img/ImgPresenceUnavailable.png") no-repeat 0 0;
+    width: 16px;
+    height: 16px;
+    overflow: hidden;
+}
+
+.Img_dnd {
+    background: transparent url("img/ImgPresenceUnavailable.png") no-repeat 0 0;
+    width: 16px;
+    height: 16px;
+    overflow: hidden;
+}
+
+.Img_away {
+    background: transparent url("img/ImgFreeBusyDotOOO.gif") no-repeat 0 0;
+    width: 16px;
+    height: 16px;
+    overflow: hidden;
+}
+
+.Img_vacation {
+    background: transparent url("img/ImgFreeBusyDotOOO.gif") no-repeat 0 0;
+    width: 16px;
+    height: 16px;
+    overflow: hidden;
+}
+
+.Img_unknown {
     background: transparent url("img/ImgFreeBusyDotOOO.gif") no-repeat 0 0;
     width: 16px;
     height: 16px;

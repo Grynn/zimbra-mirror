@@ -172,7 +172,6 @@ function(ev) {
         this.emailZimlet._phoneListener(this.attribs && this.attribs.workPhone);
     }
     else if (el.id == "UnknownPersonSlide_imAnchorId") {
-        //ev.preventDefault();
         ZmZimbraMail.unloadHackCallback();
         location.href = this.imURI;
         this.emailZimlet._imListener(this.imURI);
@@ -265,13 +264,12 @@ function(response, contact) {
     }
 
     attrs = attrs || contact && contact.attr || {};
-    var presentity = attrs["email"] || "";        // Using email as the identity for presence
 
     attrs["fullName"] =  attrs["fullName"] || this.emailZimlet.fullName;
-    attrs["email"] = attrs["email"] || this.emailZimlet.emailAddress;
+    var presentity = attrs["email"] = attrs["email"] || this.emailZimlet.emailAddress;        // email is the presence identity
 
     var image = attrs[ZmContact.F_image];
-    var imagepart =  attrs[ZmContact.F_imagepart] || "1";  // TODO - fix when image url works
+    var imagepart =  attrs[ZmContact.F_imagepart];
     var imgUrl = null;
     id = id || contact && contact.id;
 
@@ -362,10 +360,13 @@ function(attrs) {
 
     var im = attrs["imAddress"] || attrs["imAddress1"]  || attrs["imAddress2"]  || attrs["imAddress3"];
     if (im) {
-        im = im.split(":")[1];
-        im = "<a  id='UnknownPersonSlide_imAnchorId' href='" + "im:" + im + "'>" + im.substring(2) + "</a>" ;
+        imParts = im.split(":");
+        if (imParts.length == 2){
+            im = im.split(":")[1];
+            im = "<a  id='UnknownPersonSlide_imAnchorId' href='" + "im:" + im + "'>" + im.substring(2) + "</a>" ;
+            this.imURI = attrs["imURI"] = im;
+        }
     }
-    this.imURI = attrs["imURI"] = im;
 
 	if (!this.emailZimlet.noRightClick) {
         attrs["rightClickForMoreOptions"] = false;
@@ -449,20 +450,83 @@ function(imgUrl) {
 	this.emailZimlet.showLoadingAtId(timeoutCallback, UnknownPersonSlide.PHOTO_PARENT_ID);
 };
 
-// todo - Placeholder - replace with real presence info when available
+/***
+ * <person id ="p1"  >
+ <activities>
+ <available/>
+ </activities>
+ </person>
+ Busy
+ <person id="p2" >
+ <activities>
+ <busy/>
+ </activities>
+ </person>
+ Do Not Disturb
+ <person id="p3" >
+ <activities>
+ <dnd/>
+ </activities>
+ </person>
+ Away
+ <person id="p4" >
+ <activities>
+ <away/>
+ </activities>
+ </person>
+ On Vacation
+ <person id="p5" >
+ <activities>
+ <vacation/>
+ </activities>
+ </person>
+ Unavailable
+ <person id="p6" >
+ <activities>
+ <unavailable/>
+ </activities>
+ </person>
+ Unknown
+ <person id="p7" >
+ <activities>
+ <unknown/>
+ </activities>
+ </person>
+ */
+
+UnknownPersonSlide.prototype._isKnownPresenceCode =
+    function(presence) {
+         if (!this._presenceCodes){
+             this._presenceCodes = {
+                                    "available" :1,
+                                    "unavailable":1,
+                                    "busy":1,
+                                    "away":1,
+                                    "vacation":1,
+                                    "unknown":1,
+                                    "dnd":1,
+                                    "unknown":1
+                                   };
+         }
+         return this._presenceCodes[presence];
+    }
 
 UnknownPersonSlide.prototype._setPresenceUI =
     function(user) {
 
         var presenceObj = this._getPresence(user);
+
+        /*
         presenceObj =   { "IM": {value:"available", timestamp:new Date()},
-                          "Phone": {value:"unavailable", timestamp:new Date()}
+                          "Phone": {value:"dnd", timestamp:new Date()}
                         };
+        */
 
         if (presenceObj) {
             this._setIMPresenceUI(presenceObj["IM"] && presenceObj["IM"].value);
             this._setPhonePresenceUI(presenceObj["Phone"] && presenceObj["Phone"].value);
         }
+        return;
     }
 
 UnknownPersonSlide.prototype._setIMPresenceUI =
@@ -475,14 +539,17 @@ UnknownPersonSlide.prototype._setIMPresenceUI =
         }
         // If no presence info, hide the row.
         if (presence){
+            if (!this._isKnownPresenceCode(presence)) {
+                presence = "unknown";
+            }
             row.style.display = "";
+            div.className = "Img_" + presence;
+            txt.innerHTML = this.emailZimlet.getMessage("msg_"+presence) + " (" + ZmMsg.imShort + ")";
         }
         else {
             row.style.display = "none";
-            return;
         }
-        div.className = "Img_" + presence.toLowerCase();
-        txt.innerHTML = this.emailZimlet.getMessage("msg_"+presence.toLowerCase()) + " (" + ZmMsg.imShort + ")";
+        return;
     }
 
 UnknownPersonSlide.prototype._setPhonePresenceUI =
@@ -496,11 +563,14 @@ UnknownPersonSlide.prototype._setPhonePresenceUI =
         // If no presence info, hide the row.
         if (presence){
             row.style.display = "";
+            if (!this._isKnownPresenceCode(presence)) {
+                presence = "unknown";
+            }
+            div.className = "Img_" + presence.toLowerCase();
+            txt.innerHTML = this.emailZimlet.getMessage("msg_"+presence.toLowerCase()) + " (" + ZmMsg.phone +")";
         }
         else {
             row.style.display = "none";
-            return;
         }
-        div.className = "Img_" + presence.toLowerCase();
-        txt.innerHTML = this.emailZimlet.getMessage("msg_"+presence.toLowerCase()) + " (" + ZmMsg.phone +")";
+        return;
     }
