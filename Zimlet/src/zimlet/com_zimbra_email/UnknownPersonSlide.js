@@ -247,8 +247,8 @@ function() {
 
 
 // Common code for AB & GAL search
-// If response is not null, the call is from the GAL search handler
-// If contact is not null, the call is from AB
+// If response is not undefined, the call is from the GAL search handler
+// If contact is not undefined, the call is from AB
 
 UnknownPersonSlide.prototype._handleContactDetails =
 function(response, contact) {
@@ -265,6 +265,7 @@ function(response, contact) {
     }
 
     attrs = attrs || contact && contact.attr || {};
+    var presentity = attrs["email"] || "";        // Using email as the identity for presence
 
     attrs["fullName"] =  attrs["fullName"] || this.emailZimlet.fullName;
     attrs["email"] = attrs["email"] || this.emailZimlet.emailAddress;
@@ -288,13 +289,13 @@ function(response, contact) {
     // Retrieve the presence information from the presence provider - e.g. Click2Call
     this._getPresence(attrs["email"]); // todo - validate that email is the presentity
 	this._popupToolTip();
-    this._setPresenceUI(attrs);
+    this._setPresenceUI(presentity);
 };
 
 UnknownPersonSlide.prototype._getPresence =
     function(presentity) {
         var now = new Date();
-
+        //debugger;
         // Do we have the presence data for this user in the presence cache
         // Also check for cache staleness: currently anything over 30 secs is considered stale
 
@@ -302,14 +303,28 @@ UnknownPersonSlide.prototype._getPresence =
             return this._presenceCache[presentity].value;
         }
 
-        if (this.emailZimlet.presenceProvider)  {
-            this.emailZimlet.presenceProvider(presentity, this._handlePresence.bind(this));
+        if (this.emailZimlet._presenceProvider)  {
+            this.emailZimlet._presenceProvider(presentity, this._handlePresence.bind(this));
         }
+        return null;
     }
+
+//
+// Callback from the presence provider.
+// Valid values for type are: "IM", "PHONE"
+// Valid values for value are: "AVAILABLE", "UNAVAILABLE", "DND", "XA", "AWAY"
+//
 
 UnknownPersonSlide.prototype._handlePresence =
     function(presenceObject) {
-        this._presenceCache[presenceObject.user] = {type:presenceObject.type, value:presenceObject.value, timestamp:new Date()};
+        if (!presenceObject || !presenceObject.id){
+            return;
+        }
+        var obj = this._presenceCache[presenceObject.id];  // Array of presences (IM, Phone, etc.)
+        if (!obj) {
+            obj = this._presenceCache[presenceObject.id] = [];
+        }
+        obj[presenceObject.type] = {value:presenceObject.value, timestamp:new Date()};
     }
 
 UnknownPersonSlide.prototype._popupToolTip =
@@ -437,10 +452,55 @@ function(imgUrl) {
 // todo - Placeholder - replace with real presence info when available
 
 UnknownPersonSlide.prototype._setPresenceUI =
-    function(attrs) {
-        attrs.presence = this.emailZimlet.getMessage("busy");
-        var div = document.getElementById("ContactDetails_Presence");
-        if (div) {
-            div.className = "ImgBusy";
+    function(user) {
+
+        var presenceObj = this._getPresence(user);
+        presenceObj =   { "IM": {value:"available", timestamp:new Date()},
+                          "Phone": {value:"unavailable", timestamp:new Date()}
+                        };
+
+        if (presenceObj) {
+            this._setIMPresenceUI(presenceObj["IM"] && presenceObj["IM"].value);
+            this._setPhonePresenceUI(presenceObj["Phone"] && presenceObj["Phone"].value);
         }
+    }
+
+UnknownPersonSlide.prototype._setIMPresenceUI =
+    function(presence) {
+        var row = document.getElementById("row_IM_Presence");
+        var div = document.getElementById("img_IM_Presence");
+        var txt = document.getElementById("text_IM_Presence");
+        if (!row || !div || !txt){
+            return;
+        }
+        // If no presence info, hide the row.
+        if (presence){
+            row.style.display = "";
+        }
+        else {
+            row.style.display = "none";
+            return;
+        }
+        div.className = "Img_" + presence.toLowerCase();
+        txt.innerHTML = this.emailZimlet.getMessage("msg_"+presence.toLowerCase()) + " (" + ZmMsg.imShort + ")";
+    }
+
+UnknownPersonSlide.prototype._setPhonePresenceUI =
+    function(presence) {
+        var row = document.getElementById("row_Phone_Presence");
+        var div = document.getElementById("img_Phone_Presence");
+        var txt = document.getElementById("text_Phone_Presence");
+        if (!row || !div || !txt){
+            return;
+        }
+        // If no presence info, hide the row.
+        if (presence){
+            row.style.display = "";
+        }
+        else {
+            row.style.display = "none";
+            return;
+        }
+        div.className = "Img_" + presence.toLowerCase();
+        txt.innerHTML = this.emailZimlet.getMessage("msg_"+presence.toLowerCase()) + " (" + ZmMsg.phone +")";
     }

@@ -411,6 +411,7 @@ function() {
 
 EmailTooltipZimlet.prototype.addSubscriberZimlet =
 function(subscriberZimlet, isPrimary, cbObject) {
+    //debugger;
 	this._subscriberZimlets.push(subscriberZimlet);	
 	if(isPrimary) {
 		this.primarySubscriberZimlet = subscriberZimlet;

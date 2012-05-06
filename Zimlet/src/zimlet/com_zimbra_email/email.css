@@ -45,21 +45,21 @@
 }
 
 
-.ImgFree {
+.Img_available {
     background: transparent url("img/ImgPresenceAvailable.png") no-repeat 0 0;
     width: 16px;
     height: 16px;
     overflow: hidden;
 }
 
-.ImgBusy {
+.Img_unavailable {
     background: transparent url("img/ImgPresenceUnavailable.png") no-repeat 0 0;
     width: 16px;
     height: 16px;
     overflow: hidden;
 }
 
-.ImgOutOfOffice {
+.Img_xa {
     background: transparent url("img/ImgFreeBusyDotOOO.gif") no-repeat 0 0;
     width: 16px;
     height: 16px;
