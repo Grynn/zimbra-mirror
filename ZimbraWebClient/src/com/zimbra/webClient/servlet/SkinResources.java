@@ -1814,12 +1814,18 @@ public class SkinResources
 					}
 				}
 				
-				String size = (params.length > 0 ? params[0] : "3px").toLowerCase();
+				String size = (params.length > 0 ? params[0] : "3px");
 				
-				if (size.equals("") || size.equals("small")){	size = "3px";	}
-				else if (size.equals("medium")) 			{	size = "5px";	}
-				else if (size.equals("big"))				{	size = "10px";	}
-				else if (size.equals("huge"))				{	size = "15px";	}
+				if (size == null || size.equals("") || size.equalsIgnoreCase("small")){	size = "3px";	}
+				else if (size.equalsIgnoreCase("medium")) 			{	size = "5px";	}
+				else if (size.equalsIgnoreCase("big"))				{	size = "10px";	}
+				else if (size.equalsIgnoreCase("huge"))				{	size = "15px";	}
+                else if (size.matches("/^(\\d+)(px|em|\\%)$/i") == false)           {
+                    // value is not valid, so getting the value from properties
+                    String value = getProperty(stack, size);
+                    if (value != null) size = value;
+                }
+
 				return (propName + size + ";");
 			}
 			return "";
