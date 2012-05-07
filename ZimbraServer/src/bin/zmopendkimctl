@@ -65,7 +65,7 @@ start()
 {
         checkrunning
         if [ $RUNNING = 0 ]; then
-          if [ x$2 = "x" ]; then
+          if [ x$1 = "x" ]; then
             rewriteconfig
           fi
           $odk -x $config -u zimbra
@@ -125,7 +125,7 @@ case "$1" in
                 $0 start $2
                 ;;
         start)
-                start
+                start $2
                 ;;
         stop)
                 stop
