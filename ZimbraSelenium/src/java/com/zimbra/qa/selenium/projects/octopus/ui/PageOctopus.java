@@ -64,6 +64,8 @@ public class PageOctopus extends AbsTab {
 				"css=div[class^=sc-view sc-menu-item] a[class=menu-item]>span:contains(Move)");
 		public static final Locators zDeleteItem = new Locators(
 				"css=div[class^=sc-view sc-menu-item] a[class=menu-item]>span:contains(Delete)");
+		public static final Locators zUserDisplayName = new Locators(
+				"css=span[class='user-display-name']");
 
 		public final String locator;
 
