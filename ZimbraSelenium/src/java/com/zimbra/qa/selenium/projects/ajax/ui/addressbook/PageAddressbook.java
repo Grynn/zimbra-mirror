@@ -66,8 +66,8 @@ public class PageAddressbook extends AbsTab {
 		//public static final ContextMenuItem CONTACT_SUB_REMOVE_TAG = new ContextMenuItem("td#zmi__Contacts__TAG_MENU|MENU|REMOVETAG_title","Remove Tag","div[class='ImgDeleteTag']","");
 
 		
-		public static final ContextMenuItem CONTACT_SUB_RECEIVED_FROM_CONTACT = new ContextMenuItem("tr#POPUP_SEARCH","Received From Contact","div[class='ImgSearch']","");
-	    public static final ContextMenuItem CONTACT_SUB_SENT_TO_CONTACT = new ContextMenuItem("tr#POPUP_SEARCH_TO","Sent To Contact","div[class='ImgSearch']","");
+		public static final ContextMenuItem CONTACT_SUB_RECEIVED_FROM_CONTACT = new ContextMenuItem("tr[id^=SEARCH__DWT]","Received From Contact","div[class='ImgSearch']","");
+	    public static final ContextMenuItem CONTACT_SUB_SENT_TO_CONTACT = new ContextMenuItem("tr[id^=SEARCH_TO__DWT]","Sent To Contact","div[class='ImgSearch']","");
 	
 	    public static final ContextMenuItem CONTACT_SUB_NEW_CONTACT_GROUP = new ContextMenuItem("div[id^='CONTACTGROUP_MENU__DWT'][id$='|GROUP_MENU|NEWGROUP']","New Contact Group","div[class='ImgNewGroup']","");
 	    
@@ -798,10 +798,10 @@ public class PageAddressbook extends AbsTab {
 				   if (item instanceof TagItem) {
 					   
 					   if (item == TagItem.Remove_All_Tags) {
-						   subOptionLocator = "css=div[id=REMOVE_TAG_MENU][style*=z-index: 500;] div[id=REMOVE_ALL_TAGS]";						  
+						   subOptionLocator = "css=div[id=REMOVE_TAG_MENU_TAG_MENU|MENU] div[id=REMOVE_ALL_TAGS]";						  
 					   }
 					   else {						   
-						   subOptionLocator = "css=div[id=REMOVE_TAG_MENU][style*=z-index: 500;] td[id=^Remove_tag_][id$=_title]:contains('" +  ((TagItem) item).getName() + "')";														    							
+						   subOptionLocator = "css=div[id=REMOVE_TAG_MENU_TAG_MENU|MENU] td[id=^Remove_tag_][id$=_title]:contains('" +  ((TagItem) item).getName() + "')";														    							
 					   }  
 						  
 						// find active menu id
@@ -1034,8 +1034,9 @@ public class PageAddressbook extends AbsTab {
 				locator = "css=div#zm__Contacts";
 			}	
 						
-			if ((option == Button.B_CONTACTGROUP) &&
-				(subOption == Button.O_NEW_CONTACTGROUP)) {
+			if ( ((option == Button.B_CONTACTGROUP) && (subOption == Button.O_NEW_CONTACTGROUP)) || 
+				  (option == Button.B_SEARCH) )
+			{
 				locator = locator + " tr[id^="+ cmi.locator + "]";					
 			}
 			else {
@@ -1124,7 +1125,7 @@ public class PageAddressbook extends AbsTab {
 		
         //ExecuteHarnessMain.ResultListener.captureScreen();
    
-    
+       // SleepUtil.sleep(987654321);
     	//else {
     		sFocus(locator);
             sMouseOver(locator);
@@ -1202,10 +1203,10 @@ public class PageAddressbook extends AbsTab {
 					//int countOption= Integer.parseInt(sGetEval("window.document.getElementById('z_shell').children.length"));
 							
 				    if (tagName.equals("All Tags")) {					
-				    	locator = "css=div[id=REMOVE_TAG_MENU][style*=z-index: 500;] div[id=REMOVE_ALL_TAGS]";;
+				    	locator = "css=div[id=REMOVE_TAG_MENU_TAG_MENU|MENU] td[id=REMOVE_ALL_TAGS_title]";
 				    }
 				    else {
-				    	locator = "css=div[id=REMOVE_TAG_MENU][style*=z-index: 500;] td[id=^Remove_tag_][id$=_title]:contains('" + tagName + "')";														    
+				    	locator = "css=td[id=^Remove_tag_][id$=_title]:contains('" + tagName + "')";														    
 				    }
 						
 				    
