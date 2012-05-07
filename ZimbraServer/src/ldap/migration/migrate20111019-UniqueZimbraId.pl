@@ -73,7 +73,7 @@ $mesg = $ldap ->search(
 
 my $size = $mesg->count;
 if ($size > 0) {
-  my $dn="olcOverlay=unique,$bdn";
+  my $dn=$mesg->entry(0)->dn;
   $mesg = $ldap->modify( "$dn",
                           add =>{olcUniqueURI => 'ldap:///?zimbraId?sub'},
                      );
