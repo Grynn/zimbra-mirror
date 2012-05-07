@@ -11,6 +11,7 @@ import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.PrefGroupMailByMessageTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.DisplayMail;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.DisplayMail.Field;
+import com.zimbra.qa.selenium.projects.ajax.ui.preferences.trustedaddresses.DisplayTrustedAddress;
 
 
 public class ViewMail extends PrefGroupMailByMessageTest {
@@ -445,6 +446,38 @@ public class ViewMail extends PrefGroupMailByMessageTest {
 		
 		// Verify the Content shows correctly
 		ZAssert.assertStringContains(body, htmlcontent, "Verify the html content");
+		
+
+	}
+
+	// See also 
+	// com.zimbra.qa.selenium.projects.ajax.tests.preferences.mail.trustedaddresses.TrustedEmailAddrMsgView.TrustedEmailAddrMsgView_01
+	// et. al.
+	
+	@Test(	description = "View a message with external images",
+			groups = { "functional" })
+	public void ViewMail_20() throws HarnessException {
+		
+		final String mimeFile = ZimbraSeleniumProperties.getBaseDirectory() + "/data/public/mime/externalImage01/externalimage01.txt";
+		final String subject = "externalimage01";
+		
+		LmtpInject.injectFile(app.zGetActiveAccount().EmailAddress, new File(mimeFile));
+
+
+		
+		
+		// Click Get Mail button
+		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+
+		// Select the message so that it shows in the reading pane
+		app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
+
+		// Verify the links shows correctly
+		DisplayTrustedAddress actual = new DisplayTrustedAddress(app);
+
+		// Verify Warning info bar with other links
+
+		ZAssert.assertTrue(actual.zHasWDDLinks("message"), "Verify display images link");
 		
 
 	}

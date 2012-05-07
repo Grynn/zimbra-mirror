@@ -1,0 +1,33 @@
+From: foo@example.com
+To: bar@example.com
+Subject: externalimage01
+Date: Mon, 7 May 2012 13:51:53 -0700 (PDT)
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+	boundary="----=_NextPart_000_B185_01CD2C59.BDF2F460"
+
+This is a multipart message in MIME format.
+
+------=_NextPart_000_B185_01CD2C59.BDF2F460
+Content-Type: text/plain;
+	charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+
+Foo
+
+
+------=_NextPart_000_B185_01CD2C59.BDF2F460
+Content-Type: text/html;
+	charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+
+<html >
+<head></head>
+<body> 
+<b>Bold</b>
+<img src="https://www.google.com/logos/classicplus.png"/>
+<i>Italics</i>
+</body>
+</html>
+
+------=_NextPart_000_B185_01CD2C59.BDF2F460--
