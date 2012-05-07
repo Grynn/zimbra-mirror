@@ -29,8 +29,8 @@ public class DialogCreateFolder extends AbsDialog {
       public static final String zNameField = "css=input[id$='_name'][class*='Field']";
 
       // Buttons
-      public static final String zOkButton = "css=tr>td>div[id*='button2']";
-      public static final String zCancelButton = "css=tr>td>div[id*='button1']";
+      public static final String zOkButton = "css=td[id=CreateNewFolderDialog_button2_title]";
+      public static final String zCancelButton = "css=td[id=CreateNewFolderDialog_button1_title]";
 	}
 	
 	
