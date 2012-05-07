@@ -561,23 +561,26 @@ class Program
 
                 if (userid != "")
                 {
-
-                    string retval = TestObj.GlobalInit(userid, "", "");
-
-
-                    if (retval.Length > 0)
+                    if (Pstfile == "")
                     {
-                        System.Console.WriteLine();
-                        System.Console.WriteLine(" Error in Migration Initialization ");
-                        /*ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
-                            " Error in Migration Initialization ");*/
-                        System.Console.WriteLine("......... \n");
-                      /*  ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
-                                retval);*/
-                        System.Console.WriteLine("......... \n");
-                        System.Console.WriteLine();
 
-                        return;
+                        string retval = TestObj.GlobalInit(userid, "", "");
+
+
+                        if (retval.Length > 0)
+                        {
+                            System.Console.WriteLine();
+                            System.Console.WriteLine(" Error in Migration Initialization ");
+                            /*ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
+                                " Error in Migration Initialization ");*/
+                            System.Console.WriteLine("......... \n");
+                            /*  ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
+                                      retval);*/
+                            System.Console.WriteLine("......... \n");
+                            System.Console.WriteLine();
+
+                            return;
+                        }
                     }
                 }
                                 
@@ -615,7 +618,7 @@ class Program
 
                             System.Console.WriteLine();
                             string message = "Logon to to Zimbra Server  for adminAccount failed " +
-                                myXmlConfig.ConfigObj.ZimbraServer.AdminID;
+                                myXmlConfig.ConfigObj.ZimbraServer.AdminID + zimbraAPI.LastError;
                             System.Console.WriteLine(message);
                          /*   ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
                                 "Logon to to Zimbra Server  for adminAccount failed " +
@@ -724,7 +727,7 @@ class Program
                                     ConsoleColor.Red, " error provisioning user " +
                                     acctName);*/
                                 err = " error provisioning user " +
-                                    acctName;
+                                    acctName + zimbraAPI.LastError + "\n";
                                 System.Console.WriteLine(err);
                                user.IsProvisioned=false;
                             }
@@ -799,27 +802,30 @@ class Program
                                         "Logon to to Zimbra Server  for userAccount failed " +
                                         ZCSID);*/
                                 err = "Logon to to Zimbra Server  for userAccount failed " +
-                                        ZCSID;
+                                        ZCSID + zimbraAPI.LastError;
                                 System.Console.WriteLine(err);
                                 System.Console.WriteLine("......... \n");
                                 System.Console.WriteLine();
                                 //Thread.Sleep(2000);
-                                string val = TestObj.GlobalUninit();
-
-
-                                if (val.Length > 0)
+                                if (Pstfile == "")
                                 {
-                                    System.Console.WriteLine();
-                                    System.Console.WriteLine(" Error in Migration UnInitialization ");
-                                    /*ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
-                                        " Error in Migration Initialization ");*/
-                                    System.Console.WriteLine("......... \n");
-                                    /*  ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
-                                              retval);*/
-                                    System.Console.WriteLine("......... \n");
-                                    System.Console.WriteLine();
-                                    keepRunning = true;
-                                    return;
+                                    string val = TestObj.GlobalUninit();
+
+
+                                    if (val.Length > 0)
+                                    {
+                                        System.Console.WriteLine();
+                                        System.Console.WriteLine(" Error in Migration UnInitialization ");
+                                        /*ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
+                                            " Error in Migration Initialization ");*/
+                                        System.Console.WriteLine("......... \n");
+                                        /*  ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
+                                                  retval);*/
+                                        System.Console.WriteLine("......... \n");
+                                        System.Console.WriteLine();
+                                        keepRunning = true;
+                                        return;
+                                    }
                                 }
 
                                 System.Console.ReadKey(true);
@@ -857,22 +863,26 @@ class Program
                         Console.WriteLine("Finished Migration");
                         Console.WriteLine("UNinit Migration");
 
-                        string retval = TestObj.GlobalUninit();
-
-
-                        if (retval.Length > 0)
+                        if (Pstfile == "")
                         {
-                            System.Console.WriteLine();
-                            System.Console.WriteLine(" Error in Migration UnInitialization ");
-                            /*ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
-                                " Error in Migration Initialization ");*/
-                            System.Console.WriteLine("......... \n");
-                            /*  ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
-                                      retval);*/
-                            System.Console.WriteLine("......... \n");
-                            System.Console.WriteLine();
-                            keepRunning = true;
-                            return;
+                            string retval = TestObj.GlobalUninit();
+
+
+
+                            if (retval.Length > 0)
+                            {
+                                System.Console.WriteLine();
+                                System.Console.WriteLine(" Error in Migration UnInitialization ");
+                                /*ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
+                                    " Error in Migration Initialization ");*/
+                                System.Console.WriteLine("......... \n");
+                                /*  ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
+                                          retval);*/
+                                System.Console.WriteLine("......... \n");
+                                System.Console.WriteLine();
+                                keepRunning = true;
+                                return;
+                            }
                         }
 
                         
