@@ -79,7 +79,7 @@ public class OfflineDocumentHandlers {
 
     public static String uploadOfflineDocument(String id, String acctId) throws ServiceException {
         HttpClient client = ZimbraHttpConnectionManager.getInternalHttpConnMgr().getDefaultHttpClient();
-        boolean ka = ZimbraHttpConnectionManager.getInternalHttpConnMgr().getKeepAlive();
+        boolean ka = LC.httpclient_soaphttptransport_keepalive_connections.booleanValue();
         FileUploadServlet.Upload upload = FileUploadServlet.fetchUpload(
             OfflineConstants.LOCAL_ACCOUNT_ID, id, null);
         OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
