@@ -141,7 +141,7 @@ class Account: BackgroundWorker
                 }
                 else
                 {
-                    string msg = ""+ userlist[f].MappedName + " is not provisioned. Exit Migration for the user " + userlist[f].UserName + "\n";
+                    string msg =  userlist[f].MappedName + " is not provisioned. Exit Migration for the user " + userlist[f].UserName + "\n";
                     System.Console.WriteLine(msg);
                     countdown.Signal();
                 }
@@ -257,7 +257,7 @@ class Account: BackgroundWorker
                 System.Console.WriteLine();*/
               //  a.TotalItems = Convert.ToInt32(e.NewValue);
 
-                Currentuser.StatusMessage = "TotalItems to Migrate For UserAccount   " + a.AccountID + " is " + e.NewValue.ToString();
+                Currentuser.StatusMessage = "Total Items to Migrate For UserAccount   " + a.AccountID + " is " + e.NewValue.ToString();
                 /*System.Console.WriteLine();
                 System.Console.WriteLine();*/
 
@@ -271,7 +271,7 @@ class Account: BackgroundWorker
                /* ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Yellow,
                     "TotalErrors For UserAccount   " + a.AccountID.ToString() + Numoferrors.ToString());*/  //donot use progressutil we want to have consistent logging.
 
-                Currentuser.StatusMessage = "TotalErrors For UserAccount   " + a.AccountID.ToString() + Numoferrors.ToString();
+                Currentuser.StatusMessage = "Total Errors For UserAccount " + a.AccountID.ToString() +"are"+ Numoferrors.ToString();
                 System.Console.WriteLine(Currentuser.StatusMessage);
                 System.Console.WriteLine();
                 System.Console.WriteLine();
@@ -286,7 +286,7 @@ class Account: BackgroundWorker
                     "TotalWarnings For UserAccount   " + a.AccountID.ToString() + NumofWarns.ToString());*/
                 //donot use progressutil we want to have consistent logging.
 
-                Currentuser.StatusMessage = "TotalWarnings For UserAccount   " + a.AccountID.ToString() + NumofWarns.ToString();
+                Currentuser.StatusMessage = "Total Warnings For UserAccount   " + a.AccountID.ToString() + NumofWarns.ToString();
                 System.Console.WriteLine(Currentuser.StatusMessage);
                 System.Console.WriteLine();
 
@@ -467,7 +467,7 @@ class Account: BackgroundWorker
             {
                 System.Console.WriteLine();
                 System.Console.WriteLine();
-                string mesg = "TotalErrors For UserAccount   " + argumentTest.AccountName + " are" + Numoferrors.ToString();
+                string mesg = "Total Errors For UserAccount " + argumentTest.AccountName + " are " + Numoferrors.ToString();
                 System.Console.WriteLine(mesg);
                 /*ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
                 "TotalErrors For UserAccount   " + argumentTest.AccountName + " are" + Numoferrors.ToString());*/

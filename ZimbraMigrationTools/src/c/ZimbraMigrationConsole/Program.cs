@@ -352,14 +352,14 @@ class Program
                         if (ZCSDomain == "")
                         {
                             System.Console.WriteLine("ZimbraHost and ZimbraDomain go together.To override ZimbraHost ,ZimbraDomain has to be overridden as well \n");
-                            System.Console.WriteLine(" Press any key to return \n");
+                            System.Console.WriteLine("Press any key to return \n");
                             Console.ReadKey(true);
                             return;
                         }
                         if (ZCSHost == "")
                         {
                             System.Console.WriteLine("ZimbraHost and ZimbraDomain go together.To override ZimbraDomain ,ZimbraHost has to be overridden as well \n");
-                            System.Console.WriteLine(" Press any key to return \n");
+                            System.Console.WriteLine("Press any key to return \n");
                             Console.ReadKey(true);
                             return;
                         }
@@ -470,7 +470,7 @@ class Program
                     if (ConfigXmlFile != "")
                     {
                         if (!File.Exists(ConfigXmlFile))
-                            System.Console.WriteLine(" XML file not present.please check the file name or path");
+                            System.Console.WriteLine("XML file not present.please check the file name or path");
                     }
 
                 }
@@ -545,7 +545,7 @@ class Program
                 catch (Exception e)
                 {
 
-                    string error = " Migrationwrapper cannot be initialised ,Migration dll cannot be loaded";
+                    string error = "Migrationwrapper cannot be initialised ,Migration dll cannot be loaded";
                     error += e.Message;
                     System.Console.WriteLine();
                     System.Console.WriteLine(error);
@@ -561,7 +561,7 @@ class Program
                 }
 
                 System.Console.WriteLine();
-                System.Console.WriteLine("  Migration Initialization ");
+                System.Console.WriteLine("Migration Initialization ");
                /* ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Green,
                     "  Migration Initialization ");*/
                 System.Console.WriteLine("......... \n");
@@ -580,7 +580,7 @@ class Program
                         if (retval.Length > 0)
                         {
                             System.Console.WriteLine();
-                            System.Console.WriteLine(" Error in Migration Initialization ");
+                            System.Console.WriteLine("Error in Migration Initialization ");
                             /*ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
                                 " Error in Migration Initialization ");*/
                             System.Console.WriteLine("......... \n");
@@ -659,7 +659,7 @@ class Program
                         {
                             System.Console.WriteLine();
                             System.Console.WriteLine();
-                            string mesg = " Migration to Zimbra Started  for UserAccount " +
+                            string mesg = "Migration to Zimbra Started  for UserAccount " +
                                 acctName;
                             System.Console.WriteLine(mesg);
                           /*  ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Green,
@@ -675,7 +675,7 @@ class Program
                         else
                         {
                             System.Console.WriteLine();
-                            string err = " User is not provisioned on Zimbra Server " +
+                            string err = "User is not provisioned on Zimbra Server " +
                                 acctName;
                             System.Console.WriteLine(err);
                            /* ProgressUtil.RenderConsoleProgress(30, '\u2591',
@@ -685,7 +685,7 @@ class Program
 
                             System.Console.WriteLine();
                             System.Console.WriteLine();
-                            err = " Provisioning user" + acctName;
+                            err = "Provisioning user" + acctName;
                            /* ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Green,
                                 " Provisioning user" + acctName);*/
                             System.Console.WriteLine(err);
@@ -713,7 +713,7 @@ class Program
                                /* ProgressUtil.RenderConsoleProgress(30, '\u2591',
                                     ConsoleColor.Green,
                                     " Provisioning useraccount success " + acctName);*/
-                                err = " Provisioning useraccount success " + acctName;
+                                err = "Provisioning useraccount success " + acctName;
                                 System.Console.WriteLine(err);
                                 System.Console.WriteLine();
                                 System.Console.WriteLine();
@@ -721,7 +721,7 @@ class Program
                                     ConsoleColor.Green,
                                     " Migration to Zimbra Started  for UserAccount  " +
                                     user.UserName);*/
-                                err = " Migration to Zimbra Started  for UserAccount  " +
+                                err = "Migration to Zimbra Started  for UserAccount  " +
                                     user.UserName;
 
                                 System.Console.WriteLine(err);
@@ -736,7 +736,7 @@ class Program
                                /* ProgressUtil.RenderConsoleProgress(30, '\u2591',
                                     ConsoleColor.Red, " error provisioning user " +
                                     acctName);*/
-                                err = " error provisioning user " +
+                                err = "error provisioning user " +
                                     acctName + zimbraAPI.LastError + "\n";
                                 System.Console.WriteLine(err);
                                user.IsProvisioned=false;
@@ -762,7 +762,7 @@ class Program
                     if (retval.Length > 0)
                     {
                         System.Console.WriteLine();
-                        System.Console.WriteLine(" Error in Migration UnInitialization ");
+                        System.Console.WriteLine("Error in Migration UnInitialization ");
                         /*ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
                             " Error in Migration Initialization ");*/
                         System.Console.WriteLine("......... \n");
@@ -825,7 +825,7 @@ class Program
                                     if (val.Length > 0)
                                     {
                                         System.Console.WriteLine();
-                                        System.Console.WriteLine(" Error in Migration UnInitialization ");
+                                        System.Console.WriteLine("Error in Migration UnInitialization ");
                                         /*ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
                                             " Error in Migration Initialization ");*/
                                         System.Console.WriteLine("......... \n");
@@ -849,7 +849,7 @@ class Program
                                 30, '\u2591', ConsoleColor.Green,
                                 " Migration to Zimbra Started  for Profile/PST  " +
                                 accountid);*/
-                        err = " Migration to Zimbra Started  for Profile/PST  " +
+                        err = "Migration to Zimbra Started  for Profile/PST  " +
                                 accountid;
                         System.Console.WriteLine(err);
                         System.Console.WriteLine();
@@ -882,7 +882,7 @@ class Program
                             if (retval.Length > 0)
                             {
                                 System.Console.WriteLine();
-                                System.Console.WriteLine(" Error in Migration UnInitialization ");
+                                System.Console.WriteLine("Error in Migration UnInitialization ");
                                 /*ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
                                     " Error in Migration Initialization ");*/
                                 System.Console.WriteLine("......... \n");
@@ -910,7 +910,7 @@ class Program
                 System.Console.WriteLine();
                 /*ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
                     " Make sure the correct arguments (2) are passed \n");*/
-                System.Console.WriteLine(" Make sure the correct arguments (2) are passed . type Help for more information\n");
+                System.Console.WriteLine("Make sure the correct arguments (2) are passed . type Help for more information\n");
                 System.Console.WriteLine();
                 Console.ReadKey(true);
                 return;
@@ -927,7 +927,7 @@ class Program
            // Console.WriteLine("Shutting down, user requested exit");
             
         }
-        System.Console.WriteLine(" Press any key to continue \n");
+        System.Console.WriteLine("Press any key to continue \n");
         Console.ReadKey(true);
         return;
       }

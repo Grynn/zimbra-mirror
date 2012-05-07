@@ -428,7 +428,7 @@ STDMETHODIMP CMapiAccessWrap::GetData(BSTR UserId, VARIANT ItemId, FolderType ty
             {
                 MessageItemData msgdata;
 
-                printf("Got message item:");
+                //printf("Got message item:");
                 ret = maapi->GetItem(ItemID, msgdata);
                 if((ret != NULL))
                 {

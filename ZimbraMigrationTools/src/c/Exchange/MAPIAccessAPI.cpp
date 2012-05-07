@@ -535,7 +535,7 @@ LPCWSTR MAPIAccessAPI::GetItem(SBinary sbItemEID, BaseItemData &itemData)
         std::vector<LPWSTR>* pKeywords = msg.SetKeywords();
         if ((msg.ItemType() == ZT_MAIL) || (msg.ItemType() == ZT_MEETREQ))
         {
-            printf("ITEM TYPE: ZT_MAIL \n");
+           // printf("ITEM TYPE: ZT_MAIL \n");
 
             MessageItemData *msgdata = (MessageItemData *)&itemData;
 
@@ -695,7 +695,7 @@ LPCWSTR MAPIAccessAPI::GetItem(SBinary sbItemEID, BaseItemData &itemData)
         }
         else if (msg.ItemType() == ZT_CONTACTS)
         {
-            printf("ITEM TYPE: ZT_CONTACTS \n");
+           // printf("ITEM TYPE: ZT_CONTACTS \n");
 
             MAPIContact mapicontact(*m_zmmapisession, msg);
             ContactItemData *cd = (ContactItemData *)&itemData;
