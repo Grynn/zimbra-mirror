@@ -50,15 +50,23 @@ public class DialogConfirm extends AbsDialog {
 		AbsPage page = null; 
 
 		if (button == Button.B_YES) {
+			/*
 			locator = "css=div[class='" + Locators.zDialogClass + "'] "
 					+ "div[class='" + Locators.zDialogButtonsClass
 					+ "'] td[class=ZWidgetTitle]:contains(Yes)";
+			*/
+			locator = "//div[@class='DwtDialogButtonBar']" 
+					+ "//*[contains(@class,'ZWidgetTitle') and contains(text(),'Yes')]";
 			if(confirmation == DialogConfirm.Confirmation.SENDLINK)
 			page = 	new FormMailNew(this.MyApplication);
 		} else if (button == Button.B_NO) {
+			/*
 			locator = "css=div[class='" + Locators.zDialogClass + "'] "
 					+ "div[class='" + Locators.zDialogButtonsClass
 					+ "'] td[class=ZWidgetTitle]:contains(No)";
+			*/
+			locator = "//div[@class='DwtDialogButtonBar']" 
+					+ "//*[contains(@class,'ZWidgetTitle') and contains(text(),'No')]";
 		} else {
 			throw new HarnessException("Button " + button + " not implemented");
 		}
@@ -66,7 +74,8 @@ public class DialogConfirm extends AbsDialog {
 		// Make sure the locator was set
 	
 		// Make sure the locator exists
-		if (!this.sIsElementPresent(locator)) {
+		if (!
+	this.sIsVisible(locator)) {
 			throw new HarnessException("Button " + button + " locator "
 					+ locator + " not present!");
 		}

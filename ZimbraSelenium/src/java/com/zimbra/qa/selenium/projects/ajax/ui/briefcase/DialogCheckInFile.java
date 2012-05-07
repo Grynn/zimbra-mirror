@@ -54,9 +54,14 @@ public class DialogCheckInFile extends AbsDialog {
 		String locator = null;
 
 		if (button == Button.B_CANCEL) {
+			/*
 			locator = Locators.zDialogClass
 			+ " div[class='" + Locators.zDialogButtonsClass
-			+ "'] td[class=ZWidgetTitle]:contains(Cancel)";			
+			+ "'] td[class=ZWidgetTitle]:contains(Cancel)";		
+			*/
+			locator = "//div[@class='DwtDialog']"
+					+ "//*[contains(@class,'ZWidgetTitle') and contains(text(),'Cancel')]";
+
 		} else {
 			throw new HarnessException("Button " + button + " not implemented");
 		}
@@ -66,9 +71,9 @@ public class DialogCheckInFile extends AbsDialog {
 		// Make sure the locator was set
 	
 		// Make sure the locator exists
-		if (!this.sIsElementPresent(locator)) {
+		if (!this.sIsVisible(locator)) {
 			throw new HarnessException("Button " + button + " locator "
-					+ locator + " not present!");
+					+ locator + " not visible!");
 		}
 		
 		// if(zIsActive())

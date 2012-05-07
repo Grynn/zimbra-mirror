@@ -2386,6 +2386,25 @@ public abstract class AbsSeleniumObject {
 	// Start: WebDriver methods
 	// // ***
 		
+	public boolean zWaitForElementVisible(String locator, Boolean flag, String timeout) throws HarnessException {
+		logger.info("zWaitForElementVisible(" + locator + ", " + timeout +")");
+		Long wait = Long.valueOf(timeout)/SleepUtil.SleepGranularity;
+		if (ZimbraSeleniumProperties.isWebDriver())	{
+			logger.info("...WebDriver...findElement.getLocation()");
+			if(waitForElementVisible(locator, flag, wait)){
+				return true;
+			}
+		}else{
+			for (int i = 0; i < wait; i++) {
+				if (zIsVisiblePerPosition(locator, 0, 0)||!flag) {
+					return true;
+				}
+				SleepUtil.sleepSmall();
+			}
+		}
+		throw new HarnessException(locator + " - wait for visisble timed out after " + wait + "s");		
+	}
+	
 	private void sendKeys(String locator, CharSequence ... keyValues) throws HarnessException {
 		logger.info("...WebDriver...sendKeys()");
 		WebElement we = getElement(locator);
