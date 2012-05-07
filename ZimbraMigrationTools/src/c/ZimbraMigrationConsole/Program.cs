@@ -284,6 +284,7 @@ class Program
                 bool Mail = false;
                 bool Calendar = false;bool Contacts = false;
                 bool Sent= false;bool DeletedItems = false;bool Junk = false;bool Tasks=false;bool Rules=false;bool OOO = false;
+                 bool UseSSL = false;
               
                 string Verbose = CommandLineArgs.I.argAsString("Verbose");
 
@@ -378,6 +379,15 @@ class Program
 
                    /* if (Mail == false)
                         Mail = myXmlConfig.ConfigObj.ImportOptions.Mail;*/
+                   
+                    if (CommandLineArgs.I.arg("UseSSL") != null)
+                    {
+
+                        UseSSL = CommandLineArgs.I.argAsBool("UseSSL");
+                    }
+                    else
+                        UseSSL = myXmlConfig.ConfigObj.ZimbraServer.UseSSL;
+
                     if (CommandLineArgs.I.arg("Mail") != null)
                     {
 
@@ -609,7 +619,7 @@ class Program
                            ZCSHost,
                            ZCSPort,
                           ZCSID,
-                          ZCSPwd, true, true);
+                          ZCSPwd, UseSSL, true);
 
 
                         if (stat != 0)
@@ -790,7 +800,7 @@ class Program
                                     ZCSHost,
                                     ZCSPort,
                                     ZCSID,
-                                    ZCSPwd, false, false);
+                                    ZCSPwd, UseSSL, false);
 
                             if (stat != 0)
                             {
