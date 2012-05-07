@@ -506,7 +506,6 @@ UnknownPersonSlide.prototype._isKnownPresenceCode =
                                     "busy":1,
                                     "away":1,
                                     "vacation":1,
-                                    "unknown":1,
                                     "dnd":1,
                                     "unknown":1
                                    };
@@ -519,10 +518,11 @@ UnknownPersonSlide.prototype._setPresenceUI =
 
         var presenceObj = this._getPresence();
 
-        /*
-        presenceObj =   { "IM": {value:"available", timestamp:new Date()},
-                          "Phone": {value:"dnd", timestamp:new Date()}
-                        };
+        /*     Example
+        *
+            presenceObj =   {   "IM": "available",
+                                "Phone": "dnd"
+                            };
         */
 
         if (presenceObj) {
