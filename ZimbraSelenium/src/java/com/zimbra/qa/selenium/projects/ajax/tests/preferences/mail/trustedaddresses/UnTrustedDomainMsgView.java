@@ -13,7 +13,7 @@ import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.preferences.trustedaddresses.DisplayTrustedAddress;
+//import com.zimbra.qa.selenium.projects.ajax.ui.preferences.trustedaddresses.DisplayTrustedAddress;
 
 public class UnTrustedDomainMsgView extends AjaxCommonTest {
 
@@ -64,11 +64,9 @@ public class UnTrustedDomainMsgView extends AjaxCommonTest {
 		// Select the message so that it shows in the reading pane
 		app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
 		
-		DisplayTrustedAddress actual = new DisplayTrustedAddress(app);
-		
 		//Verify Warning info bar with other links
 		//ZAssert.assertTrue(actual.zDisplayImageLink("message").equals(""),"Verify Display Image link is present");
-		ZAssert.assertTrue(actual.zHasWDDLinks("message"),"Verify Display Image,Domain link  and warning icon are present");
+		ZAssert.assertTrue(app.zPageMail.zHasWDDLinks(),"Verify Display Image,Domain link  and warning icon are present");
 
 	}
 

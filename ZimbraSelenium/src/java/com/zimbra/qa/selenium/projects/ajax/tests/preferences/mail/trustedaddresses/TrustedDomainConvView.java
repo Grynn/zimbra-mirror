@@ -16,7 +16,8 @@ import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.preferences.trustedaddresses.DisplayTrustedAddress;
+//import com.zimbra.qa.selenium.projects.ajax.ui.mail.PageMail;
+//import com.zimbra.qa.selenium.projects.ajax.ui.preferences.trustedaddresses.DisplayTrustedAddress;
 
 public class TrustedDomainConvView extends AjaxCommonTest {
 
@@ -74,14 +75,9 @@ public class TrustedDomainConvView extends AjaxCommonTest {
 
 		// Select the message so that it shows in the reading pane
 		app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
-
-		DisplayTrustedAddress actual = new DisplayTrustedAddress(app);
-
 		// Verify Warning info bar with other links
 
-		ZAssert
-				.assertFalse(actual.zHasWDDLinks("conversation"),
-						"Verify Warning icon ,Display Image and Domain link  does not present");
+		ZAssert.assertFalse(app.zPageMail.zHasWDDLinks(),"Verify Warning icon ,Display Image and Domain link  does not present");
 
 	}
 
