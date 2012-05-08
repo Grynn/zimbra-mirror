@@ -491,6 +491,7 @@ public class ExecuteHarnessMain {
 		// Configure the runner
 		ng.setXmlSuites(suites);
 		ng.addListener(new MethodListener(this.testoutputfoldername));
+		ng.addListener(new ErrorDialogListener());
 		ng.addListener(listener = new ResultListener(this.testoutputfoldername));
 		
 		try {
@@ -522,6 +523,64 @@ public class ExecuteHarnessMain {
 	
 
 
+	/**
+	 * This class checks for the Zimbra error dialog after each test
+	 * method.  If present, it marks the test case as failed, then
+	 * logs out of the application.
+	 * 
+	 * @author Matt Rhoades
+	 *
+	 */
+	protected static class ErrorDialogListener implements IInvokedMethodListener {
+
+		@Override
+		public void afterInvocation(IInvokedMethod method, ITestResult result) {
+			logger.debug("ErrorDialogListener:afterInvocation ...");
+
+			String locator = "css=div#ErrorDialog";
+
+			ZimbraSelenium selenium = ClientSessionFactory.session().selenium();
+
+			boolean present = selenium.isElementPresent(locator);
+			if ( present ) {
+
+				logger.info("ErrorDialogListener:afterInvocation ... present="+ present);
+
+				Number left = selenium.getElementPositionLeft(locator);
+				if ( left.intValue() > 0 ) {
+
+					logger.info("ErrorDialogListener:afterInvocation ... left="+ left);
+
+					Number top = selenium.getElementPositionTop(locator);
+
+					if ( top.intValue()>0 ) {
+
+						logger.info("ErrorDialogListener:afterInvocation ... top="+ top);
+
+						// Log the error
+						// Take a snapshot
+						logger.error(new HarnessException("Error Dialog is visible"));
+						
+						// Set the test as failed
+						result.setStatus(ITestResult.FAILURE);
+
+						// Logout and go to the login page
+//						selenium.open(ZimbraSeleniumProperties.getLogoutURL());
+//						selenium.open(ZimbraSeleniumProperties.getBaseURL());
+
+					}
+				}
+
+			}
+
+			logger.debug("ErrorDialogListener:afterInvocation ... done");
+		}
+
+		@Override
+		public void beforeInvocation(IInvokedMethod arg0, ITestResult arg1) {
+		}
+		
+	}
 
 	
 	/**
