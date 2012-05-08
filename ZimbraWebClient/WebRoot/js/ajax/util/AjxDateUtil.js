@@ -322,6 +322,19 @@ function(now, dateMSec) {
 	}
 };
 
+/* returns true if dateString is a valid and understandable date string
+ * in compliance with the locale of the user ie. dd/mm/yy or mm/dd/yy etc.
+ * Also for date strings like 1/32/2000 (that roll over to 2/1/2000), false is returned.
+ */
+AjxDateUtil.isValidSimpleDateStr =
+function(str){
+        if(!str) {return false};
+        var dateValue = AjxDateUtil.getSimpleDateFormat().parse(str);
+        if (!dateValue) {return false};
+        var dateValueStr = AjxDateUtil.simpleComputeDateStr(dateValue);
+        return (str == dateValueStr);
+}
+
 AjxDateUtil.computeTimeString =
 function(date) {
 	var formatter = AjxDateFormat.getTimeInstance(AjxDateFormat.SHORT);
