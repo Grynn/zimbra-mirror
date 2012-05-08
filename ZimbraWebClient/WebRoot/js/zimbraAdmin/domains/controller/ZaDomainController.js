@@ -286,15 +286,15 @@ function () {
          catchAllChanged = true ;
     }
 
-        // execute other plugin methods
-        if(ZaController.saveChangeCheckMethods["ZaDomainController"]) {
-                var methods = ZaController.saveChangeCheckMethods["ZaDomainController"];
-                var cnt = methods.length;
-                for(var i = 0; i < cnt && !haveSmth; i++) {
-                        if(typeof(methods[i]) == "function")
-                               haveSmth =  methods[i].call(this, mods, tmpObj, this._currentObject);
-                }
-        }
+    // execute other plugin methods
+    if(ZaController.saveChangeCheckMethods["ZaDomainController"]) {
+            var methods = ZaController.saveChangeCheckMethods["ZaDomainController"];
+            var cnt = methods.length;
+            for(var i = 0; i < cnt && !haveSmth; i++) {
+                    if(typeof(methods[i]) == "function")
+                           haveSmth =  methods[i].call(this, mods, tmpObj, this._currentObject);
+            }
+    }
 
 	for (var a in tmpObj.attrs) {
 		if(a == ZaItem.A_zimbraId || a==ZaDomain.A_domainName  || a == ZaDomain.A_domainType

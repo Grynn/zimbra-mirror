@@ -1595,30 +1595,50 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 				{type:_CASE_, caseKey:ZaNewDomainXWizard.ADVANCED_STEP, numCols:1, 
 					items: [
 						{ type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.Domain_BC_ShareConf,
-                                  		  items :[
-                                          		{ ref: ZaDomain.A_zimbraBasicAuthRealm,
-                                            		  type: _SUPERWIZ_TEXTFIELD_, width: 250 ,
-                                            		  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
-                                            		  txtBoxLabel: ZaMsg.Domain_zimbraBasicAuthRealm
-                                          		}
-                                         	 ]
-                                		},
-                                                { type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.Domain_AD_EmailValidate,
+                            items :[
+                                    { ref: ZaDomain.A_zimbraBasicAuthRealm,
+                                          type: _SUPERWIZ_TEXTFIELD_, width: 250 ,
+                                          resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
+                                          txtBoxLabel: ZaMsg.Domain_zimbraBasicAuthRealm
+                                    }
+                                 ]
+                            },
+                        { type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.Domain_AD_EmailValidate,
 							colSizes:["200px","*"], 
-                                                  items :[
-
-                                                	{ref:ZaDomain.A_zimbraMailAddressValidationRegex, type:_REPEAT_, 
-                                                		nowrap:false,labelWrap:true,
-                                                        label:ZaMsg.LBL_EmailValidate, repeatInstance:"", labelWrap:true,
-                                                		showAddButton:true, showRemoveButton:true,
-                                                                addButtonLabel:ZaMsg.NAD_AddRegex,
-                                                                showAddOnNextRow:true,
-                                                                removeButtonLabel:ZaMsg.NAD_RemoveRegex,
-                                                                items: [
-                                                                        {ref:".", type:_TEXTFIELD_, label:null,width:250}
-                                                                ]
-                                                	}
-						   ]}	
+                            items :[
+                                    {ref:ZaDomain.A_zimbraMailAddressValidationRegex, type:_REPEAT_,
+                                        nowrap:false,labelWrap:true,
+                                        label:ZaMsg.LBL_EmailValidate, repeatInstance:"", labelWrap:true,
+                                        showAddButton:true, showRemoveButton:true,
+                                        addButtonLabel:ZaMsg.NAD_AddRegex,
+                                        showAddOnNextRow:true,
+                                        removeButtonLabel:ZaMsg.NAD_RemoveRegex,
+                                        items: [
+                                            {ref:".", type:_TEXTFIELD_, label:null,width:250}
+                                        ]
+                                    }
+						   ]
+                        },
+                        {type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.Domain_QUOTA_Configuration,
+                            colSizes:["200px","*"],
+                            items:[
+                                {ref:ZaDomain.A_zimbraMailDomainQuota, type:_TEXTFIELD_,
+                                    label:ZaMsg.LBL_DomainQuota
+                                },
+                                {ref:ZaDomain.A_zimbraDomainAggregateQuota, type:_TEXTFIELD_,
+                                    label:ZaMsg.LBL_DomainAggregateQuota
+                                },
+                                {ref:ZaDomain.A_zimbraDomainAggregateQuotaWarnPercent, type:_TEXTFIELD_,
+                                    label:ZaMsg.LBL_DomainAggregateQuotaWarnPercent
+                                },
+                                {ref:ZaDomain.A_zimbraDomainAggregateQuotaWarnEmailRecipient, type:_TEXTFIELD_,
+                                    label:ZaMsg.LBL_DomainAggregateQuotaWarnEmailRecipient
+                                },
+                                {ref:ZaDomain.A_zimbraDomainAggregateQuotaPolicy, type:_OSELECT1_,
+                                   label:ZaMsg.LBL_DomainAggregateQuotaPolicy, labelLocation:_LEFT_
+                                }
+                            ]
+                        }
 									
 					]
 				},

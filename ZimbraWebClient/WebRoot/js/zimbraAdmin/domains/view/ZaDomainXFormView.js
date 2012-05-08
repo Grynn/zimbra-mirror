@@ -702,8 +702,12 @@ ZaDomainXFormView.AUTH_TAB_RIGHTS = [];
 ZaDomainXFormView.VH_TAB_ATTRS = [ZaDomain.A_zimbraVirtualHostname];
 ZaDomainXFormView.VH_TAB_RIGHTS = [];
 
-ZaDomainXFormView.BC_TAB_ATTRS = [ZaDomain.A_zimbraBasicAuthRealm];
-ZaDomainXFormView.BC_TAB_RIGHTS = [];
+ZaDomainXFormView.ADV_TAB_ATTRS = [ZaDomain.A_zimbraBasicAuthRealm, ZaDomain.A_zimbraMailAddressValidationRegex,
+    ZaDomain.A_zimbraMailDomainQuota, ZaDomain.A_zimbraDomainAggregateQuota, ZaDomain.A_zimbraDomainAggregateQuotaWarnPercent,
+    ZaDomain.A_zimbraDomainAggregateQuotaWarnEmailRecipient, ZaDomain.A_zimbraDomainAggregateQuotaPolicy
+];
+
+ZaDomainXFormView.ADV_TAB_RIGHTS = [];
 
 ZaDomainXFormView.Feature_TAB_ATTRS = [ZaDomain.A_zimbraFeatureCalendarReminderDeviceEmailEnabled];
 ZaDomainXFormView.Feature_TAB_RIGHTS = [];
@@ -1593,49 +1597,83 @@ if(appNewUI) {
 		switchGroup.items.push(caseFeature);
 	}
 
-	if(ZaDomainXFormView.BC_TAB_ATTRS && ZaTabView.isTAB_ENABLED(entry,ZaDomainXFormView.BC_TAB_ATTRS, ZaDomainXFormView.BC_TAB_RIGHTS)) {
+	if(ZaDomainXFormView.ADV_TAB_ATTRS && ZaTabView.isTAB_ENABLED(entry,ZaDomainXFormView.ADV_TAB_ATTRS, ZaDomainXFormView.ADV_TAB_RIGHTS)) {
 		tabIx = ++this.TAB_INDEX;
 		tabBar.choices.push({value:tabIx, label:ZaMsg.Domain_Tab_Advanced});
 		var case5 = {type:_ZATABCASE_, caseKey:tabIx,colSizes:["auto"],numCols:1,id:"domain_advanced_tab",
                         cssStyle:"padding-left:10px;",
-			items : [
-				{ type: _DWT_ALERT_,
-                                  visibilityChangeEventSources:[ZaDomain.A_zimbraDomainStatus],
-                                  visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A_zimbraDomainStatus,ZaDomain.DOMAIN_STATUS_SHUTDOWN]],
-                                  containerCssStyle: "padding-bottom:0;",
-                                  style: DwtAlert.WARNING,
-                                  iconVisible: true,
-                                  content: ZaMsg.Domain_Locked_Note,
-                                  colSpan:"*"
-                                },
+			items:[
+                {type: _DWT_ALERT_,
+                    visibilityChangeEventSources:[ZaDomain.A_zimbraDomainStatus],
+                    visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A_zimbraDomainStatus,ZaDomain.DOMAIN_STATUS_SHUTDOWN]],
+                    containerCssStyle: "padding-bottom:0;",
+                    style: DwtAlert.WARNING,
+                    iconVisible: true,
+                    content: ZaMsg.Domain_Locked_Note,
+                    colSpan:"*"
+                },
 
-				{ type:_ZA_TOP_GROUPER_, label:ZaMsg.Domain_BC_ShareConf,
-				  items :[
-					  { ref: ZaDomain.A_zimbraBasicAuthRealm,
-                             		    type: _SUPER_TEXTFIELD_, width: 250 ,
-                            		    resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
-                             		    onChange: ZaDomainXFormView.onFormFieldChanged ,
-                             		    txtBoxLabel: ZaMsg.Domain_zimbraBasicAuthRealm
-					  }	
-				         ]
+				{type:_ZA_TOP_GROUPER_, label:ZaMsg.Domain_BC_ShareConf,
+                    visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible, ZaDomain.A_zimbraBasicAuthRealm]],
+				    items:[
+					    {ref: ZaDomain.A_zimbraBasicAuthRealm,
+                            type: _SUPER_TEXTFIELD_, width: 250 ,
+                            resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
+                            onChange: ZaDomainXFormView.onFormFieldChanged ,
+                            txtBoxLabel: ZaMsg.Domain_zimbraBasicAuthRealm}
+				    ]
 				},
-                                { type:_ZA_TOP_GROUPER_, label:ZaMsg.Domain_AD_EmailValidate,
-                                  items :[
-					{ref:ZaDomain.A_zimbraMailAddressValidationRegex, type:_REPEAT_,
-			                       nowrap:false,labelWrap:true,
-			                       label:ZaMsg.LBL_EmailValidate, repeatInstance:"", showAddButton:true,
-			                      showRemoveButton:true,
-							addButtonLabel:ZaMsg.NAD_AddRegex, 
-							showAddOnNextRow:true,
-							removeButtonLabel:ZaMsg.NAD_RemoveRegex,
-			                    	items: [
-								{ref:".", type:_TEXTFIELD_, label:null,
-			                              enableDisableChecks:[], visibilityChecks:[],
-			                              onChange:ZaDomainXFormView.onFormFieldChanged}
-							]
-					}
-                                  ]
-                                }			
+
+                {type:_ZA_TOP_GROUPER_, label:ZaMsg.Domain_AD_EmailValidate,
+                    visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible, ZaDomain.A_zimbraMailAddressValidationRegex]],
+                    items:[
+                        {ref:ZaDomain.A_zimbraMailAddressValidationRegex, type:_REPEAT_,
+                            nowrap:false,labelWrap:true,
+                            label:ZaMsg.LBL_EmailValidate, repeatInstance:"", showAddButton:true,
+                            showRemoveButton:true,
+                            addButtonLabel:ZaMsg.NAD_AddRegex,
+                            showAddOnNextRow:true,
+                            removeButtonLabel:ZaMsg.NAD_RemoveRegex,
+                            items: [
+                                {ref:".", type:_TEXTFIELD_, label:null,
+                                    enableDisableChecks:[], visibilityChecks:[],
+                                    onChange:ZaDomainXFormView.onFormFieldChanged}
+                            ]
+                        }
+                    ]
+                },
+
+                {type:_ZA_TOP_GROUPER_, label:ZaMsg.Domain_QUOTA_Configuration,
+                    visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible, [
+                            ZaDomain.A_zimbraMailDomainQuota,
+                            ZaDomain.A_zimbraDomainAggregateQuota,
+                            ZaDomain.A_zimbraDomainAggregateQuotaWarnPercent,
+                            ZaDomain.A_zimbraDomainAggregateQuotaWarnEmailRecipient,
+                            ZaDomain.A_zimbraDomainAggregateQuotaPolicy
+                        ]]],
+                    items:[
+                        {ref:ZaDomain.A_zimbraMailDomainQuota, type:_TEXTFIELD_,
+                            label:ZaMsg.LBL_DomainQuota,
+                            onChange:ZaDomainXFormView.onFormFieldChanged
+                        },
+                        {ref:ZaDomain.A_zimbraDomainAggregateQuota, type:_TEXTFIELD_,
+                            label:ZaMsg.LBL_DomainAggregateQuota,
+                            onChange:ZaDomainXFormView.onFormFieldChanged
+                        },
+                        {ref:ZaDomain.A_zimbraDomainAggregateQuotaWarnPercent, type:_TEXTFIELD_,
+                            label:ZaMsg.LBL_DomainAggregateQuotaWarnPercent,
+                            onChange:ZaDomainXFormView.onFormFieldChanged
+                        },
+                        {ref:ZaDomain.A_zimbraDomainAggregateQuotaWarnEmailRecipient, type:_TEXTFIELD_,
+                            label:ZaMsg.LBL_DomainAggregateQuotaWarnEmailRecipient,
+                            onChange:ZaDomainXFormView.onFormFieldChanged
+                        },
+                        {ref:ZaDomain.A_zimbraDomainAggregateQuotaPolicy, type:_OSELECT1_,
+                           label:ZaMsg.LBL_DomainAggregateQuotaPolicy, labelLocation:_LEFT_,
+                           onChange:ZaDomainXFormView.onFormFieldChanged
+                        }
+                    ]
+                }
 			]
 		};
 		switchGroup.items.push(case5);

@@ -102,6 +102,15 @@ ZaDomain.initDomainStatus = function() {
 }
 ZaDomain.initDomainStatus();
 
+ZaDomain.getAggregateQuotaPolicyChoices = function () {
+    return [
+        {label:ZaMsg.Choice_QuotaPolicy_AllAllowed, value:"ALLOWSENDRECEIVE"},
+        {label:ZaMsg.Choice_QuotaPolicy_BlockSends, value:"BLOCKSEND"},
+        {label:ZaMsg.Choice_QuotaPolicy_AllBlocked, value:"BLOCKSENDRECEIVE"}
+    ];
+}
+ZaDomain.aggregateQuotaPolicyChoices = ZaDomain.getAggregateQuotaPolicyChoices;
+
 ZaDomain.domainTypes = {alias: "alias", local: "local"} ;
 ZaDomain.protocolChoices = {http: "http", https: "https"};
 
@@ -305,6 +314,13 @@ ZaDomain.A_zimbraSkinSelectionColor  = "zimbraSkinSelectionColor" ;
 ZaDomain.A_zimbraSkinLogoURL ="zimbraSkinLogoURL" ;
 ZaDomain.A_zimbraSkinLogoLoginBanner = "zimbraSkinLogoLoginBanner" ;
 ZaDomain.A_zimbraSkinLogoAppBanner = "zimbraSkinLogoAppBanner" ;
+
+// domain quota
+ZaDomain.A_zimbraMailDomainQuota = "zimbraMailDomainQuota";
+ZaDomain.A_zimbraDomainAggregateQuota = "zimbraDomainAggregateQuota";
+ZaDomain.A_zimbraDomainAggregateQuotaPolicy = "zimbraDomainAggregateQuotaPolicy";
+ZaDomain.A_zimbraDomainAggregateQuotaWarnPercent = "zimbraDomainAggregateQuotaWarnPercent";
+ZaDomain.A_zimbraDomainAggregateQuotaWarnEmailRecipient = "zimbraDomainAggregateQuotaWarnEmailRecipient";
 
 // regex of domain name
 ZaDomain.A_zimbraMailAddressValidationRegex = "zimbraMailAddressValidationRegex";
@@ -724,18 +740,18 @@ function(tmpObj, newDomain) {
 		}
 	}
 	
-        if(tmpObj.attrs[ZaDomain.A_zimbraMailAddressValidationRegex]) {
-                if(tmpObj.attrs[ZaDomain.A_zimbraMailAddressValidationRegex] instanceof Array) {
-                        var cnt = tmpObj.attrs[ZaDomain.A_zimbraMailAddressValidationRegex].length;
-                        for(var ix=0; ix<cnt; ix++) {
-                                attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraMailAddressValidationRegex][ix]);
-                                attr.setAttribute("n", ZaDomain.A_zimbraMailAddressValidationRegex);                                     
-                        }
-                } else {
-                        attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraMailAddressValidationRegex]);
-                        attr.setAttribute("n", ZaDomain.A_zimbraMailAddressValidationRegex);
-                }
-        }
+    if(tmpObj.attrs[ZaDomain.A_zimbraMailAddressValidationRegex]) {
+            if(tmpObj.attrs[ZaDomain.A_zimbraMailAddressValidationRegex] instanceof Array) {
+                    var cnt = tmpObj.attrs[ZaDomain.A_zimbraMailAddressValidationRegex].length;
+                    for(var ix=0; ix<cnt; ix++) {
+                            attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraMailAddressValidationRegex][ix]);
+                            attr.setAttribute("n", ZaDomain.A_zimbraMailAddressValidationRegex);
+                    }
+            } else {
+                    attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraMailAddressValidationRegex]);
+                    attr.setAttribute("n", ZaDomain.A_zimbraMailAddressValidationRegex);
+            }
+    }
 
     if(tmpObj.attrs[ZaDomain.A_zimbraAuthKerberos5Realm]){
         attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraAuthKerberos5Realm]);
@@ -819,6 +835,30 @@ function(tmpObj, newDomain) {
 		}
 	}
 
+    if(tmpObj.attrs[ZaDomain.A_zimbraMailDomainQuota]){
+        attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraMailDomainQuota]);
+        attr.setAttribute("n", ZaDomain.A_zimbraMailDomainQuota);
+    }
+
+    if(tmpObj.attrs[ZaDomain.A_zimbraDomainAggregateQuota]){
+        attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraDomainAggregateQuota]);
+        attr.setAttribute("n", ZaDomain.A_zimbraDomainAggregateQuota);
+    }
+
+    if(tmpObj.attrs[ZaDomain.A_zimbraDomainAggregateQuotaWarnPercent]){
+        attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraDomainAggregateQuotaWarnPercent]);
+        attr.setAttribute("n", ZaDomain.A_zimbraDomainAggregateQuotaWarnPercent);
+    }
+
+    if(tmpObj.attrs[ZaDomain.A_zimbraDomainAggregateQuotaWarnEmailRecipient]){
+        attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraDomainAggregateQuotaWarnEmailRecipient]);
+        attr.setAttribute("n", ZaDomain.A_zimbraDomainAggregateQuotaWarnEmailRecipient);
+    }
+
+    if(tmpObj.attrs[ZaDomain.A_zimbraDomainAggregateQuotaPolicy]){
+        attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraDomainAggregateQuotaPolicy]);
+        attr.setAttribute("n", ZaDomain.A_zimbraDomainAggregateQuotaPolicy);
+    }
 	//var command = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
@@ -2281,12 +2321,12 @@ ZaDomain.myXModel = {
         {id:ZaDomain.A_zimbraAdminConsoleCatchAllAddressEnabled, type:_COS_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/" + ZaDomain.A_zimbraAdminConsoleCatchAllAddressEnabled},
         {id:ZaDomain.A_zimbraAdminConsoleLDAPAuthEnabled, type:_COS_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/" + ZaDomain.A_zimbraAdminConsoleLDAPAuthEnabled},    
         {id:ZaDomain.A_zimbraAdminConsoleSkinEnabled, type:_COS_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/" + ZaDomain.A_zimbraAdminSkinAddressEnabled},
-	// regex
-	{id:ZaDomain.A_zimbraMailAddressValidationRegex, type:_LIST_, listItem:{type:_STRING_, maxLength:512}, ref:"attrs/" + ZaDomain.A_zimbraMailAddressValidationRegex},
+	    // regex
+	    {id:ZaDomain.A_zimbraMailAddressValidationRegex, type:_LIST_, listItem:{type:_STRING_, maxLength:512}, ref:"attrs/" + ZaDomain.A_zimbraMailAddressValidationRegex},
         {id:ZaDomain.A_zimbraVirtualHostname, type:_LIST_, listItem:{type:_STRING_, maxLength:255}, ref:"attrs/" + ZaDomain.A_zimbraVirtualHostname},
          ZaItem.descriptionModelItem,  
-	{id:ZaDomain.A_zimbraSSLCertificate, type:_STRING_, ref:"attrs/" + ZaDomain.A_zimbraSSLCertificate},
-	{id:ZaDomain.A_zimbraSSLPrivateKey, type:_STRING_, ref:"attrs/" + ZaDomain.A_zimbraSSLPrivateKey}, 
+	    {id:ZaDomain.A_zimbraSSLCertificate, type:_STRING_, ref:"attrs/" + ZaDomain.A_zimbraSSLCertificate},
+	    {id:ZaDomain.A_zimbraSSLPrivateKey, type:_STRING_, ref:"attrs/" + ZaDomain.A_zimbraSSLPrivateKey},
         {id:ZaDomain.A_notes, type:_STRING_, ref:"attrs/" + ZaDomain.A_notes},
 		{id:ZaDomain.A_domainDefaultCOSId, type:_STRING_, ref:"attrs/" + ZaDomain.A_domainDefaultCOSId},		
 		{id:ZaDomain.A_zimbraGalMode, type:_STRING_, ref:"attrs/" + ZaDomain.A_zimbraGalMode},
@@ -2296,7 +2336,7 @@ ZaDomain.myXModel = {
 		{id:ZaDomain.A_GALSyncServerType, type:_STRING_, ref:"attrs/" + ZaDomain.A_GALSyncServerType},
 		{id:ZaDomain.A_GALSyncUseGALSearch, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/" + ZaDomain.A_GALSyncUseGALSearch},
 		{id:ZaDomain.A_zimbraGalSyncLdapBindDn, type:_STRING_, ref:"attrs/" + ZaDomain.A_zimbraGalSyncLdapBindDn},
-                {id:ZaDomain.A_zimbraGalSyncLdapBindPassword, type:_STRING_, ref:"attrs/" + ZaDomain.A_zimbraGalSyncLdapBindPassword},
+        {id:ZaDomain.A_zimbraGalSyncLdapBindPassword, type:_STRING_, ref:"attrs/" + ZaDomain.A_zimbraGalSyncLdapBindPassword},
 		{id:ZaDomain.A_zimbraGalSyncLdapSearchBase, type:_STRING_, ref:"attrs/" + ZaDomain.A_zimbraGalSyncLdapSearchBase},
 		{id:ZaDomain.A_zimbraGalSyncLdapFilter, type:_STRING_, ref:"attrs/" + ZaDomain.A_zimbraGalSyncLdapFilter,required:true},
 		{id:ZaDomain.A_GalLdapFilter, type:_STRING_, ref:"attrs/" + ZaDomain.A_GalLdapFilter,required:true},
@@ -2381,7 +2421,12 @@ ZaDomain.myXModel = {
         {id:ZaDomain.A2_zimbraAutoProvAccountTgtSelectedPool,type:_LIST_,ref:ZaDomain.A2_zimbraAutoProvAccountTgtSelectedPool},
         {id:ZaDomain.A2_zimbraAutoProvAccountPoolPageTotal,ref:ZaDomain.A2_zimbraAutoProvAccountPoolPageTotal, type:_NUMBER_,defaultValue:1},
         {id:ZaDomain.A2_zimbraAutoProvAccountPassword	, type:_STRING_, ref:ZaDomain.A2_zimbraAutoProvAccountPassword, maxLength:256},
-
+        // Domain Quota
+        {id:ZaDomain.A_zimbraMailDomainQuota, type:_NUMBER_, ref: "attrs/"+ZaDomain.A_zimbraMailDomainQuota, minInclusive:0},
+        {id:ZaDomain.A_zimbraDomainAggregateQuota, type:_NUMBER_, ref: "attrs/"+ZaDomain.A_zimbraDomainAggregateQuota, minInclusive:0},
+        {id:ZaDomain.A_zimbraDomainAggregateQuotaWarnPercent, type:_NUMBER_, ref:"attrs/"+ZaDomain.A_zimbraDomainAggregateQuotaWarnPercent, maxInclusive:100, minInclusive:0},
+        {id:ZaDomain.A_zimbraDomainAggregateQuotaWarnEmailRecipient, type:_EMAIL_ADDRESS_, ref:"attrs/"+ZaDomain.A_zimbraDomainAggregateQuotaWarnEmailRecipient},
+        {id:ZaDomain.A_zimbraDomainAggregateQuotaPolicy, type:_ENUM_, ref:"attrs/"+ZaDomain.A_zimbraDomainAggregateQuotaPolicy, choices:ZaDomain.aggregateQuotaPolicyChoices},
 		{id:ZaDomain.A_zimbraPrefTimeZoneId,type:_STRING_, ref:"attrs/"+ZaDomain.A_zimbraPrefTimeZoneId, choices:ZaSettings.timeZoneChoices},
         {id:ZaModel.currentStep, type:_NUMBER_, ref:ZaModel.currentStep, maxInclusive:2147483647},
 		{id:ZaDomain.A2_acl_selection_cache, type:_LIST_},
@@ -2492,9 +2537,9 @@ ZaDomain.myXModel = {
 				]
 			}
 		},
-      {id:ZaDomain.A_zimbraZimletDomainAvailableZimlets, type:_LIST_,
-          ref:"attrs/" + ZaDomain.A_zimbraZimletDomainAvailableZimlets,
-          dataType: _STRING_ ,outputType:_LIST_},
+        {id:ZaDomain.A_zimbraZimletDomainAvailableZimlets, type:_LIST_,
+            ref:"attrs/" + ZaDomain.A_zimbraZimletDomainAvailableZimlets,
+            dataType: _STRING_ ,outputType:_LIST_},
       { id:ZaAccount.A_zimbraMailCatchAllAddress, ref:ZaAccount.A_zimbraMailCatchAllAddress , type:_OBJECT_,items:[ {id:"id", type:_STRING_},{id:"name", type:_STRING_}] },
       { id:ZaDomain.A_zimbraDomainCOSMaxAccounts, ref:"attrs/" + ZaDomain.A_zimbraDomainCOSMaxAccounts ,
                  type:_LIST_ , dataType: _STRING_ ,outputType:_LIST_ },
