@@ -313,7 +313,7 @@ $ldap->unbind();
 exit;
 
 sub usage() {
-  print "$0 [-a] [-q] [-r] [-s selector] [-x] [-d domain]\n";
+  print "$0 [-a] [-q] [-r] [-s selector] [-u] [-d domain]\n";
   print "-a: Add new key pair and selector for domain\n";
   print "-d domain: Domain to use\n";
   print "-h: Show this usage block\n";
