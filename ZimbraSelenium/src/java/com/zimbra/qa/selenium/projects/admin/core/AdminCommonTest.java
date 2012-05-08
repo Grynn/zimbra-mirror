@@ -71,14 +71,14 @@ public class AdminCommonTest {
 		{
 			ZimbraSeleniumProperties.setAppType(ZimbraSeleniumProperties.AppType.ADMIN);
 
-			// Use 50 second timeout for opening the browser
-			String timeout = ZimbraSeleniumProperties.getStringProperty("selenium.maxpageload.msec", "50000");
+			// Use 30 second timeout for opening the browser
+			String timeout = ZimbraSeleniumProperties.getStringProperty("selenium.maxpageload.msec", "30000");
 
 			ClientSessionFactory.session().selenium().start();
 			ClientSessionFactory.session().selenium().windowMaximize();
 			ClientSessionFactory.session().selenium().windowFocus();
 			ClientSessionFactory.session().selenium().allowNativeXpath("true");
-			ClientSessionFactory.session().selenium().setTimeout(timeout);
+			ClientSessionFactory.session().selenium().setTimeout("30000");
 			ClientSessionFactory.session().selenium().open(ZimbraSeleniumProperties.getBaseURL());
 			
 		} catch (SeleniumException e) {
