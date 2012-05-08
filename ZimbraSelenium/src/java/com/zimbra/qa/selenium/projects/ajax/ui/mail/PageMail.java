@@ -10,6 +10,7 @@ import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogTag;
+//import com.zimbra.qa.selenium.projects.ajax.ui.preferences.trustedaddresses.DisplayTrustedAddress.Locators;
 
 
 
@@ -51,6 +52,16 @@ public class PageMail extends AbsTab {
 		
 		public static final String ProposeNewTimeButtonMsgView = "id=zb__TV-main__Inv__PROPOSE_NEW_TIME_title";
 
+		///////
+		public static final String zMsgViewDisplayImgLink = "css=a#zv__TV__TV-main_MSG_displayImages_dispImgs";
+		public static final String zMsgViewDomainLink = "css=a#zv__TV__TV-main_MSG_displayImages_domain";
+		public static final String zMsgViewWarningIcon = "css=div#zv__TV__TV-main_MSG_displayImages.DisplayImages div div.ImgWarning";
+		public static final String zConViewDisplayImgLink = "css=a[id$='_displayImages_dispImgs']";
+		public static final String zConViewDomainLink = "css=a[id$='_displayImages_domain']";
+		public static final String zConViewWarningIcon = "css=div[id$='_displayImages'] div div[class='ImgWarning']";
+
+		
+		
 		public static class CONTEXT_MENU {
 			// TODO: Until https://bugzilla.zimbra.com/show_bug.cgi?id=56273 is fixed, ContextMenuItem will be defined using the text content
 			public static String stringToReplace = "<ITEM_NAME>";
@@ -891,8 +902,8 @@ public class PageMail extends AbsTab {
 		// Return the list of items
 		return (items);
 	}
-
-
+	
+	
 
 	@Override
 	public AbsPage zListItem(Action action, String subject) throws HarnessException {
@@ -1684,7 +1695,55 @@ public class PageMail extends AbsTab {
 		
 		return (tooltip);
 	}
+	
 
 
+	/**
+	 * Check warning icon,Display Image link,Domain link
+	 * 
+	 * @return
+	 * @throws HarnessException
+	 */
+	public boolean zHasWDDLinks()throws HarnessException {
 
+		if (zGetPropMailView() == PageMailView.BY_MESSAGE){
+			List<String> locators = Arrays.asList(
+					Locators.zMsgViewDisplayImgLink,
+					Locators.zMsgViewDomainLink, Locators.zMsgViewWarningIcon);
+			for (String locator : locators) {
+				if (!this.sIsElementPresent(locator))
+					return (false);
+			}
+
+			return (true);
+		} else if (zGetPropMailView() == PageMailView.BY_CONVERSATION) {
+			List<String> locators = Arrays.asList(
+					Locators.zConViewDisplayImgLink,
+					Locators.zConViewDomainLink, Locators.zConViewWarningIcon);
+
+			for (String locator : locators) {
+				if (!this.sIsElementPresent(locator))
+					return (false);
+			}
+
+			return (true);
+		} else {
+			throw new HarnessException("no logic defined  ");
+		}
+	}
+
+
+	/*public String zDisplayImageLink()throws HarnessException {
+
+		String DisplayImgLink = null;
+		if (zGetPropMailView() == PageMailView.BY_MESSAGE) {
+			DisplayImgLink = sGetEval("selenium.browserbot.getCurrentWindow().document.getElementById('zv__TV-main__MSG_displayImages').style.display");
+			return DisplayImgLink;
+		} else if (zGetPropMailView() == PageMailView.BY_CONVERSATION) {
+			DisplayImgLink = sGetEval("selenium.browserbot.getCurrentWindow().document.getElementById('zv__CLV-main__MSG_displayImages').style.display");
+			return DisplayImgLink;
+		} else {
+			throw new HarnessException("no logic defined  ");
+		}
+	}*/
 }
