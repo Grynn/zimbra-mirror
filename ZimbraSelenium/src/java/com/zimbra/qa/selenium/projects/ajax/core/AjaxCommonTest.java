@@ -17,11 +17,12 @@ import org.testng.annotations.*;
 import org.xml.sax.SAXException;
 import com.thoughtworks.selenium.*;
 import com.zimbra.qa.selenium.framework.core.*;
-import com.zimbra.qa.selenium.framework.ui.AbsTab;
+import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.OperatingSystem.OsType;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount.SOAP_DESTINATION_HOST_TYPE;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
+import com.zimbra.qa.selenium.projects.ajax.ui.DialogError.DialogErrorID;
 
 /**
  * The <code>AjaxCommonTest</code> class is the base test case class
@@ -451,7 +452,17 @@ public class AjaxCommonTest {
 
 		}
 
+		// Check for error dialogs
+		AbsDialog dialog = app.zPageMain.zGetErrorDialog(DialogErrorID.Zimbra);
+		if ( dialog != null ) {
+			if ( dialog.zIsActive() ) {
+				// Oops!  Error dialog is visible.
+				// Mark the test case as failed
+				throw new HarnessException("Error Dialog is visible");
+			}
+		}
 		
+
 		// Make sure any extra compose tabs are closed
 		app.zPageMain.zCloseComposeTabs();
 
