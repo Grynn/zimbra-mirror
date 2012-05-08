@@ -293,22 +293,33 @@ class Program
 
                 if ((ConfigXmlFile != "") && (File.Exists(ConfigXmlFile)))
                 {
-                    if ((UserMapFile != "") && (File.Exists(UserMapFile)))
+                    //if ((UserMapFile != "") && (File.Exists(UserMapFile)))
+                    if (UserMapFile != "") 
                     {
-                        myXmlConfig = new XmlConfig(ConfigXmlFile, UserMapFile);
+                        if (File.Exists(UserMapFile))
+                        {
+                            myXmlConfig = new XmlConfig(ConfigXmlFile, UserMapFile);
 
-                        myXmlConfig.InitializeConfig();
+                            myXmlConfig.InitializeConfig();
 
-                        myXmlConfig.GetUserList();
+                            myXmlConfig.GetUserList();
+                        }
+                        else
+                        {
+                            System.Console.WriteLine("UserMap file not present.please check the file name or path");
+                            Console.ReadKey(true);
+                            return;
+
+                        }
 
                     }
                     else
                     {
+                        
+                            myXmlConfig = new XmlConfig(ConfigXmlFile, "");
 
-                        myXmlConfig = new XmlConfig(ConfigXmlFile, "");
-
-                        myXmlConfig.InitializeConfig();
-
+                            myXmlConfig.InitializeConfig();
+                       
 
                     }
                     if (myXmlConfig.UserList.Count > 0)
@@ -323,6 +334,17 @@ class Program
 
                         if (ZCSPwd == "")
                             ZCSPwd = myXmlConfig.ConfigObj.ZimbraServer.AdminPwd;
+
+                        if (ZCSID == "")
+                        {
+                            if (myXmlConfig.ConfigObj.SourceServer.Profile != "")
+                            {
+                                System.Console.WriteLine(" Are you trying Server /User Migration .Check the arguments");
+                                Console.ReadKey();
+                                return;
+
+                            }
+                        }
 
                     }
                     else
@@ -470,7 +492,11 @@ class Program
                     if (ConfigXmlFile != "")
                     {
                         if (!File.Exists(ConfigXmlFile))
+                        {
                             System.Console.WriteLine("XML file not present.please check the file name or path");
+                            Console.ReadKey(true);
+                            return;
+                        }
                     }
 
                 }
