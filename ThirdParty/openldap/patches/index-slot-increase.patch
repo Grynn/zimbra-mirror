@@ -20,3 +20,25 @@
  #define MDB_IDL_DB_SIZE		(1<<MDB_IDL_LOGN)
  #define MDB_IDL_UM_SIZE		(1<<(MDB_IDL_LOGN+1))
  #define MDB_IDL_UM_SIZEOF	(MDB_IDL_UM_SIZE * sizeof(ID))
+--- openldap-2.4.31.2z/include/ldap_pvt_thread.h.orig	2012-05-08 12:39:43.448475644 -0700
++++ openldap-2.4.31.2z/include/ldap_pvt_thread.h	2012-05-08 12:40:09.878482861 -0700
+@@ -68,7 +68,7 @@
+ #	undef LDAP_PVT_THREAD_SET_STACK_SIZE
+ #elif !defined( LDAP_PVT_THREAD_STACK_SIZE )
+ 	/* LARGE stack. Will be twice as large on 64 bit machine. */
+-#	define LDAP_PVT_THREAD_STACK_SIZE ( 1 * 1024 * 1024 * sizeof(void *) )
++#	define LDAP_PVT_THREAD_STACK_SIZE ( 2 * 1024 * 1024 * sizeof(void *) )
+ #endif
+ #endif /* !LDAP_PVT_THREAD_H_DONE */
+ 
+--- openldap-2.4.31/libraries/libmdb/midl.h.orig	2012-05-08 12:51:07.558476745 -0700
++++ openldap-2.4.31/libraries/libmdb/midl.h	2012-05-08 12:51:20.158477565 -0700
+@@ -53,7 +53,7 @@
+ /* IDL sizes - likely should be even bigger
+  *   limiting factors: sizeof(ID), thread stack size
+  */
+-#define	MDB_IDL_LOGN	16	/* DB_SIZE is 2^16, UM_SIZE is 2^17 */
++#define	MDB_IDL_LOGN	17	/* DB_SIZE is 2^16, UM_SIZE is 2^17 */
+ #define MDB_IDL_DB_SIZE		(1<<MDB_IDL_LOGN)
+ #define MDB_IDL_UM_SIZE		(1<<(MDB_IDL_LOGN+1))
+ #define MDB_IDL_UM_SIZEOF	(MDB_IDL_UM_SIZE * sizeof(ID))
