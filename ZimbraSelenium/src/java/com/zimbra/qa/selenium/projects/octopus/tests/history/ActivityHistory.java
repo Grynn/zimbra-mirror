@@ -18,7 +18,7 @@ public class ActivityHistory extends OctopusCommonTest {
 	private String _folderName = null;
 	private boolean _fileAttached = false;
 	private String _fileId = null;
-
+	
 	@BeforeMethod(groups = { "always" })
 	public void testReset() {
 		_folderName = null;
@@ -26,7 +26,7 @@ public class ActivityHistory extends OctopusCommonTest {
 		_fileId = null;
 		_fileAttached = false;
 	}
-
+	
 	public ActivityHistory() {
 		logger.info("New " + ActivityHistory.class.getCanonicalName());
 
@@ -172,7 +172,8 @@ public class ActivityHistory extends OctopusCommonTest {
 						.sIsChecked(PageHistory.Locators.zHistoryFilterRename.locator),
 				"Verify Rename check box is checked");
 	}
-    @Bugs(ids="71867")
+   
+	@Bugs(ids="71867")
 	@Test(description="Open history tab - Verify if history for comments added is present", groups={"functional"})
 	public void VerifyActivityForComments()throws HarnessException
 	{
@@ -202,6 +203,26 @@ public class ActivityHistory extends OctopusCommonTest {
 		
 		ZAssert.assertEquals(GetText.comment(fileName), app.zPageHistory.isTextPresentInGlobalHistory(requiredHistory).getHistoryText(), "Checking if Required history Matches with found history after re-login");
 	
+	}
+	
+	@Bugs(ids = "71692")
+	@Test(description = "History must not be empty", groups = { "functional" })
+	public void VerifyHistoryIsNotEmpty() throws HarnessException
+    {
+		// Get current Active account
+		ZimbraAccount act = app.zGetActiveAccount();
+		//Select a file type to upload
+		String fileName = TEXT_FILE;
+		//Upload a file using Soap
+		_fileId = uploadFileViaSoap(act, fileName);
+	 	 
+	 	// Click on History tab
+		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_HISTORY);
+		String requiredHistory = "You created version 1 of file "+fileName+".";
+		
+		//Assert if found history matches with upload file history
+		ZAssert.assertEquals(GetText.newVersion(fileName), app.zPageHistory.isTextPresentInGlobalHistory(requiredHistory).getHistoryText(), "Verify if required history matches with found history");
+		
 	}
 	
 	@AfterMethod(groups = { "always" })
@@ -251,4 +272,5 @@ public class ActivityHistory extends OctopusCommonTest {
 			logger.info("Failed while emptying Trash", e);
 		}
 	}
+
 }
