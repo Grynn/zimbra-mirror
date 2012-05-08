@@ -9,8 +9,6 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
 
-
-import com.thoughtworks.selenium.DefaultSelenium;
 import com.thoughtworks.selenium.SeleniumException;
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.ui.AbsTab;
@@ -73,8 +71,8 @@ public class AdminCommonTest {
 		{
 			ZimbraSeleniumProperties.setAppType(ZimbraSeleniumProperties.AppType.ADMIN);
 
-			// Use 30 second timeout for opening the browser
-			String timeout = ZimbraSeleniumProperties.getStringProperty("selenium.maxpageload.msec", "30000");
+			// Use 50 second timeout for opening the browser
+			String timeout = ZimbraSeleniumProperties.getStringProperty("selenium.maxpageload.msec", "50000");
 
 			ClientSessionFactory.session().selenium().start();
 			ClientSessionFactory.session().selenium().windowMaximize();

@@ -70,7 +70,7 @@ public class EditAccount extends AdminCommonTest {
 				+			"<account by='name'>"+ editedName+"@"+account.getDomainName() +"</account>"
 				+		"</GetAccountRequest>");
 		Element response = ZimbraAdminAccount.AdminConsoleAdmin().soapSelectNode("//admin:GetAccountResponse/admin:account", 1);
-		ZAssert.assertNotNull(response, "Verify the account is deleted successfully");
+		ZAssert.assertNotNull(response, "Verify the account is edited successfully");
 	}
 	
 	/**
@@ -118,7 +118,7 @@ public class EditAccount extends AdminCommonTest {
 				+			"<account by='name'>"+ editedName+"@"+account.getDomainName() +"</account>"
 				+		"</GetAccountRequest>");
 		Element response = ZimbraAdminAccount.AdminConsoleAdmin().soapSelectNode("//admin:GetAccountResponse/admin:account", 1);
-		ZAssert.assertNotNull(response, "Verify the account is deleted successfully");
+		ZAssert.assertNotNull(response, "Verify the account is edited successfully");
 	}
 
 }
