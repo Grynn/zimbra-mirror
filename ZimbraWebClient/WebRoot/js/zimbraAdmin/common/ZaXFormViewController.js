@@ -87,7 +87,7 @@ function(details) {
 ZaXFormViewController.prototype.closeButtonListener =
 function(ev, noPopView, func, obj, params, newPath) {
     //prompt if the user wants to save the changes
-    if(this._view.isDirty()) {
+    if(this._view && this._view.isDirty && this._view.isDirty()) {
         //parameters for the confirmation dialog's callback 
         var args = new Object();
         if (noPopView) {
@@ -128,7 +128,7 @@ function(ev, noPopView, func, obj, params, newPath) {
         this._emptyUI();
 
     }else{
-        if(this._view._localXForm && this._view.formDirtyLsnr) {
+        if(this._view && this._view._localXForm && this._view.formDirtyLsnr) {
             this._view._localXForm.removeListener(DwtEvent.XFORMS_FORM_DIRTY_CHANGE,this._view.formDirtyLsnr);
             this._view._localXForm.removeListener(DwtEvent.XFORMS_VALUE_ERROR,this._view.formDirtyLsnr);
         }
