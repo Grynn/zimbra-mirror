@@ -33,7 +33,15 @@ public class PageMyFiles extends PageOctopus {
 				"css=div[id=my-files-preview] div[id=my-files-preview-toolbar]>button[id=show-activitystream-button])");
 		public static final Locators zComments = new Locators(
 				"css=div[id=my-files-preview] div[id=my-files-preview-toolbar]>button[id=my-files-preview-show-comments-button])");
-
+		public static final Locators zBackButton = new Locators(
+				"css=button[class*='my-files-menu-bar-back-button myfiles-button button']");
+        public static final Locators zUploadFileButton = new Locators(
+        		"css=div[class^='octopus-template-context-menu-item action-upload']:contains('Upload')");
+        public static final Locators zUploadButtonDisabled = new Locators(
+        		"css=div[class^='octopus-template-context-menu-item action-upload disabled']:contains('Upload')");
+        public static final Locators zNewFolderButtonDisabled = new Locators(
+		"css=div[class^='octopus-template-context-menu-item action-new-folder disabled']:contains('New Folder')");
+        
 		public final String locator;
 
 		private Locators(String locator) {

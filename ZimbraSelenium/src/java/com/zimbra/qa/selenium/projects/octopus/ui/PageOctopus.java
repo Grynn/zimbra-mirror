@@ -20,6 +20,7 @@ import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.projects.octopus.ui.DialogError.DialogErrorID;
 import com.zimbra.soap.mail.type.Folder;
+import com.zimbra.qa.selenium.projects.octopus.ui.PageMyFiles.Locators;
 
 public class PageOctopus extends AbsTab {
 
@@ -66,6 +67,10 @@ public class PageOctopus extends AbsTab {
 				"css=div[class^=sc-view sc-menu-item] a[class=menu-item]>span:contains(Delete)");
 		public static final Locators zUserDisplayName = new Locators(
 				"css=span[class='user-display-name']");
+		public static final Locators zDisabledOptionItem = new Locators(
+				"css=div[class^=sc-view sc-menu-item][aria-disabled=true] a[class=menu-item]");
+		public static final Locators zEnaabledOptionItem = new Locators(
+				"css=div[class^=sc-view sc-menu-item] a[class=menu-item]");
 
 		public final String locator;
 
@@ -88,6 +93,7 @@ public class PageOctopus extends AbsTab {
 	public DialogError zGetErrorDialog(DialogErrorID octopus) {
 		return (new DialogError(octopus, this.MyApplication, this));
 	}
+	
 
 	@Override
 	public boolean zIsActive() throws HarnessException {
@@ -145,7 +151,178 @@ public class PageOctopus extends AbsTab {
 		((AppOctopusClient) MyApplication).zSetActiveAcount(null);
 
 	}
+	/*
+	 * Following function will take the option name as parameter. Refer CommonConstants.java for constants value
+	 * of parameter optionName. It will return whether context menu option is enabled or disabled.
+	 */
+	public boolean zIsContextMenuOptionDisabled(Button pulldown, String optionName,String itemName)throws HarnessException
+	{
+		logger.info(myPageName() + " zIsContextMenuOptionDisabled(" + pulldown + ", "
+				+ optionName + "," + itemName+ ")");
 
+		tracer.trace("Click pulldown " + pulldown + " then " + optionName + "then" + itemName);
+
+		if (pulldown == null){
+			throw new HarnessException("Pulldown cannot be null!");
+		}
+		if (optionName == null){
+			throw new HarnessException("Option cannot be null!");
+		}
+		if (itemName == null){
+			throw new HarnessException("Item name cannot be null!");
+		}
+		// Default behavior variables
+		String pulldownLocator = null; // If set, this will be expanded
+		String optionLocatorDisabled = null; // If set, this will be clicked
+		String optionLocatorEnabled = null; 
+		boolean isDisabled = false; // If set, value will be returned
+        
+		if (pulldown == Button.B_MY_FILES_LIST_ITEM) {
+
+			pulldownLocator = Locators.zMyFilesListViewItems.locator
+			+ ":contains(" + itemName
+			+ ") span[class^=my-files-list-item-action-button]";
+
+			if (!this.zWaitForElementPresent(pulldownLocator, "3000")){
+				throw new HarnessException("Button is not present locator="
+						+ pulldownLocator);
+			}
+
+			zClick(pulldownLocator);
+
+			// If the app is busy, wait for it to become active
+			zWaitForBusyOverlay();
+
+			optionLocatorDisabled = Locators.zDisabledOptionItem.locator+">span:contains("+optionName+")";
+			optionLocatorEnabled =Locators.zEnaabledOptionItem.locator+">span:contains("+optionName+")";
+
+         	if(this.sIsElementPresent(optionLocatorDisabled)==true)
+			{
+				isDisabled=true;
+
+			}else if (this.sIsElementPresent(optionLocatorEnabled)==true)
+			{
+				isDisabled=false;
+			}else
+			{
+				throw new HarnessException("Option Name specified not found");
+			}
+		}else if(pulldown == Button.B_MY_FILES){
+			pulldownLocator = PageMyFiles.Locators.zMyFilesArrowButton.locator;
+
+			zClick(pulldownLocator);
+
+			// If the app is busy, wait for it to become active
+			zWaitForBusyOverlay();
+			
+			if(optionName=="Upload"){
+				optionLocatorEnabled = PageMyFiles.Locators.zUploadFileButton.locator;
+				optionLocatorDisabled =PageMyFiles.Locators.zUploadButtonDisabled.locator;
+			}else if(optionName == "New Folder"){
+				optionLocatorEnabled = PageMyFiles.Locators.zNewFolderOption.locator;
+				optionLocatorDisabled = PageMyFiles.Locators.zNewFolderButtonDisabled.locator;
+			}
+
+			if(this.sIsElementPresent(optionLocatorDisabled)==true)
+			{
+				isDisabled=true;
+
+			}else if (this.sIsElementPresent(optionLocatorEnabled)==true)
+			{
+				isDisabled=false;
+			}else
+			{
+				throw new HarnessException("Option locator specified not found");
+			}
+		}
+
+		
+		return isDisabled;
+		
+	}
+	/*
+	 * Following function will take the option name as parameter. Refer CommonConstants.java for constants value
+	 * of parameter optionName. It will return whether context menu option is present or not.
+	 */
+	public boolean zIsContextMenuOptionPresent(Button pulldown, String optionName,String itemName)throws HarnessException
+	{
+		logger.info(myPageName() + " zIsContextMenuOptionPresent(" + pulldown + ", "
+				+ optionName + "," + itemName+ ")");
+
+		tracer.trace("Click pulldown " + pulldown + " then " + optionName + "then" + itemName);
+
+		if (pulldown == null){
+			throw new HarnessException("Pulldown cannot be null!");
+		}
+		if (optionName == null){
+			throw new HarnessException("Option cannot be null!");
+		}
+		if (itemName == null){
+			throw new HarnessException("Item name cannot be null!");
+		}
+		// Default behavior variables
+		String pulldownLocator = null; // If set, this will be expanded
+		String optionLocator = null; // If set, this will be Checked
+		boolean isPresent = false; // If set, value will be returned
+		String optionLocatorDisabled =null;
+
+		if (pulldown == Button.B_MY_FILES_LIST_ITEM) {
+
+			pulldownLocator = Locators.zMyFilesListViewItems.locator
+			+ ":contains(" + itemName
+			+ ") span[class^=my-files-list-item-action-button]";
+
+			if (!this.zWaitForElementPresent(pulldownLocator, "3000")){
+				throw new HarnessException("Button is not present locator="
+						+ pulldownLocator);
+			}
+
+			zClick(pulldownLocator);
+
+			// If the app is busy, wait for it to become active
+			zWaitForBusyOverlay();
+
+			optionLocator =Locators.zEnaabledOptionItem.locator+">span:contains("+optionName+")";
+
+
+			if(this.sIsElementPresent(optionLocator)==true)
+			{
+				isPresent=true;
+
+			}else 
+			{
+				isPresent=false;
+			}
+		}else if(pulldown == Button.B_MY_FILES){
+			pulldownLocator = PageMyFiles.Locators.zMyFilesArrowButton.locator;
+
+			zClick(pulldownLocator);
+
+			// If the app is busy, wait for it to become active
+			zWaitForBusyOverlay();
+
+			if(optionName=="Upload"){
+				optionLocator = PageMyFiles.Locators.zUploadFileButton.locator;
+				optionLocatorDisabled =PageMyFiles.Locators.zUploadButtonDisabled.locator;
+			}else if(optionName == "New Folder"){
+				optionLocator = PageMyFiles.Locators.zNewFolderOption.locator;
+				optionLocatorDisabled = PageMyFiles.Locators.zNewFolderButtonDisabled.locator;
+			}
+
+			if(this.sIsElementPresent(optionLocator)==true||this.sIsElementPresent(optionLocatorDisabled))
+			{
+				isPresent=true;
+
+			}else 
+			{
+				isPresent=false;
+			}
+		}
+
+		return isPresent;
+
+	}
+	
 	public AbsPage zToolbarPressPulldown(Button pulldown, Button option,
 			String itemName) throws HarnessException {
 		logger.info(myPageName() + " zToolbarPressPulldown(" + pulldown + ", "
@@ -190,7 +367,7 @@ public class PageOctopus extends AbsTab {
 					throw new HarnessException("Button is not present locator="
 							+ optionLocator);
 				}
-
+                
 				this.sClickAt(optionLocator, "0,0");
 
 				// If the app is busy, wait for it to become active
