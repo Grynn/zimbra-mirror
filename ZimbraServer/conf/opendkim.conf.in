@@ -5,7 +5,11 @@ PidFile               /opt/zimbra/log/opendkim.pid
 
 LDAPBindUser		uid=zmpostfix,cn=appaccts,cn=zimbra
 LDAPBindPassword	@@ldap_postfix_password@@
-LDAPUseTLS		@@ldap_starttls_supported@@			
+LDAPUseTLS		@@ldap_starttls_supported@@
+LDAPTimeout             30
+LDAPKeepaliveIdle       240
+LDAPKeepaliveProbes     10
+LDAPKeepaliveInterval   30
 SigningTable		@@opendkim_signingtable_uri@@
 KeyTable		@@opendkim_keytable_uri@@
 Canonicalization	relaxed/relaxed
