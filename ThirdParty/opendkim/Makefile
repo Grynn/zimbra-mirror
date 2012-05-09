@@ -46,6 +46,8 @@ build:
 	--enable-atps \
 	--enable-rate_limit \
 	--enable-replace_rules \
+	--enable-reputation \
+	--enable-reputation_cache \
 	--enable-redirect \
 	--enable-resign \
 	--enable-select_canonicalization \
@@ -64,6 +66,7 @@ build:
 	--with-openldap=/opt/zimbra/openldap \
 	--with-sasl=/opt/zimbra/cyrus-sasl \
 	--with-libcurl=/opt/zimbra/curl \
+	--with-mdb=/opt/zimbra/openldap \
 	--without-db \
 	--with-libxml2=/opt/zimbra/libxml2; \
 	LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(CYRUS_LIB_DIR):$(LIBTOOL_LIB_DIR) $(MAKE) $(MAKEARGS); \
