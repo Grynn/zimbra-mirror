@@ -241,3 +241,10 @@ sub sendEmailReport {
         warn("DEBUG: Email report sent to $to_address\n") if ($Debug);
     }
 }
+
+sub logError {
+  my $msg = shift;
+  print STDERR $msg;
+  return;
+}
+
