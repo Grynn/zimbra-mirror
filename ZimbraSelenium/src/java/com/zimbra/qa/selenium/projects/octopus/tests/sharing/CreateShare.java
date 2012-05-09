@@ -1,6 +1,7 @@
 package com.zimbra.qa.selenium.projects.octopus.tests.sharing;
 
 import org.testng.annotations.*;
+import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.Button;
@@ -11,6 +12,7 @@ import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.octopus.ui.DialogFolderShare;
 import com.zimbra.qa.selenium.projects.octopus.core.OctopusCommonTest;
+import com.zimbra.qa.selenium.projects.octopus.ui.DialogFolderShare.Locators;
 
 public class CreateShare extends OctopusCommonTest {
 
@@ -461,6 +463,62 @@ public class CreateShare extends OctopusCommonTest {
 				"Verify granted permissions for the folder are matched");
 	}
 
+	@Bugs(ids = "71149")
+	@Test(description = "History shows 'undefined' if user has specified wrong email address while sharing folder", groups = { "functional" })
+	public void CreateShareWithInvalidEmailFormat() throws HarnessException {
+		ZimbraAccount currentOwnerAccount = app.zGetActiveAccount();
+
+		FolderItem ownerBriefcaseRootFolder = FolderItem.importFromSOAP(
+				currentOwnerAccount, SystemFolder.Briefcase);
+
+		ZAssert.assertNotNull(ownerBriefcaseRootFolder,
+				"Verify the owner Briefcase root folder exists");
+
+		// Owner creates a folder, shares it with current user
+		String ownerFoldername = "ownerFolder"
+				+ ZimbraSeleniumProperties.getUniqueString();
+
+		currentOwnerAccount
+		.soapSend(
+				"<CreateFolderRequest xmlns='urn:zimbraMail'>"
+						+ "<folder name='" + ownerFoldername + "' l='"
+						+ ownerBriefcaseRootFolder.getId()+ "' view='document'/>"
+				+ "</CreateFolderRequest>"
+				);
+
+		// Verify the folder exists on the server
+		FolderItem ownerFolderItem = FolderItem.importFromSOAP(
+				currentOwnerAccount, ownerFoldername);
+
+		ZAssert.assertNotNull(ownerFolderItem, "Verify the owner folder exists");
+
+		_folderIsCreated = true;
+		_folderName = ownerFoldername;
+
+		// Owner selects Share option from the Context menu
+		DialogFolderShare dialogShare = (DialogFolderShare) app.zPageMyFiles
+				.zToolbarPressPulldown(Button.B_MY_FILES_LIST_ITEM,
+						Button.O_FOLDER_SHARE, ownerFoldername);
+
+		// Click on Permissions input field
+		dialogShare.zClick(DialogFolderShare.Locators.zViewAndEditInput.locator);
+
+		String invalidEmailFormat="invalidemailaddress";
+		// Provide input into Permissions field
+		dialogShare.zTypeInput(DialogFolderShare.Locators.zViewEditAndShareInput,invalidEmailFormat);
+
+		// Verify error Message text appears in the Share Dialog for invalid email format.
+		ZAssert.assertTrue(app.zPageOctopus.sIsElementPresent(DialogFolderShare.Locators.zInavlidEmailFormatMessage.locator),
+				"Verify message Text appears in the Dialog for invalid email format.");
+
+		dialogShare.zClickButton(Button.B_SHARE);
+		
+		// Verify Toast message Text appears for sharing invalid email format.
+		ZAssert.assertTrue(app.zPageOctopus.sIsElementPresent(DialogFolderShare.Locators.zSharingFailedToastMessage.locator),
+						"Verify Toast message Text appears for sharing invalid email format.");
+		
+	}
+	
 	@AfterMethod(groups = { "always" })
 	public void testCleanup() {
 		if (_fileAttached && _fileId != null) {
@@ -508,4 +566,5 @@ public class CreateShare extends OctopusCommonTest {
 			logger.info("Failed while emptying Trash", e);
 		}
 	}
+	
 }

@@ -2,6 +2,7 @@ package com.zimbra.qa.selenium.projects.octopus.ui;
 
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.projects.octopus.ui.PageSharing.Locators;
 
 public class DialogFolderShare extends AbsDialog {
 	public static class Locators {
@@ -29,6 +30,10 @@ public class DialogFolderShare extends AbsDialog {
 				"css=div[class=ShareInfo]>div[class=ShareInfoTitle]:contains(\u25BA)");
 		public static final Locators zShareInfoCollapseAddrBubble = new Locators(
 				"css=div[class=ShareInfo]>div[class=ShareInfoTitle]:contains(\u25BC)");
+		public static final Locators zInavlidEmailFormatMessage = new Locators(
+				"css=div[class=' ShareDialogContent'] span div[class='permission-label info-message']:contains('invalid email addresses')");
+		public static final Locators zSharingFailedToastMessage=new Locators(
+				"css=*[id='octopus-status-msg']:contains('Sharing of folder')");
 
 		public final String locator;
 
