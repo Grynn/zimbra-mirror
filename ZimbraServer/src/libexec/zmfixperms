@@ -399,6 +399,8 @@ if [ -d ${zimbra_home}/db ]; then
 fi
 
 if [ -L ${zimbra_home}/cbpolicyd ]; then
+  printMsg "Fixing ownership and permissions on ${zimbra_home}/cbpolicyd"
+  chown -fR ${root_user}:${root_group} ${zimbra_home}/cbpolicyd*
   if [ -d ${zimbra_home}/cbpolicyd/bin ]; then
     for i in ${zimbra_home}/cbpolicyd/bin/*; do
       chmod 755 ${i}
@@ -631,12 +633,12 @@ fi
 
 if [ -L ${zimbra_home}/libmemcached ]; then
   printMsg "Fixing ownership and permissions on ${zimbra_home}/libmemcached"
-  chown -fR ${root_user}:${root_group} ${zimbra_home}/libmemcached
+  chown -fR ${root_user}:${root_group} ${zimbra_home}/libmemcached*
 fi
 
 if [ -L ${zimbra_home}/opendkim ]; then
   printMsg "Fixing ownership and permissions on ${zimbra_home}/opendkim"
-  chown -fR ${root_user}:${root_group} ${zimbra_home}/opendkim
+  chown -fR ${root_user}:${root_group} ${zimbra_home}/opendkim*
 fi
 
 if [ -L ${zimbra_home}/postfix ]; then
