@@ -46,8 +46,6 @@ build:
 	--enable-atps \
 	--enable-rate_limit \
 	--enable-replace_rules \
-	--enable-reputation \
-	--enable-reputation_cache \
 	--enable-redirect \
 	--enable-resign \
 	--enable-select_canonicalization \
