@@ -3,25 +3,26 @@
  */
 package com.zimbra.qa.selenium.framework.core;
 
-import java.awt.Image;
-import java.awt.Rectangle;
-import java.awt.Robot;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.List;
 import java.util.jar.*;
 import java.util.regex.*;
+
 import javax.imageio.ImageIO;
+
 import org.apache.commons.cli.*;
 import org.apache.commons.cli.CommandLine;
 import org.apache.log4j.*;
 import org.testng.*;
 import org.testng.xml.*;
-import com.zimbra.qa.selenium.framework.util.performance.*;
+
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
+import com.zimbra.qa.selenium.framework.util.performance.PerfMetrics;
 
 
 
@@ -537,6 +538,13 @@ public class ExecuteHarnessMain {
 		public void afterInvocation(IInvokedMethod method, ITestResult result) {
 			logger.debug("ErrorDialogListener:afterInvocation ...");
 
+			boolean check = "true".equals(ZimbraSeleniumProperties.getStringProperty("dialog.error.aftertest.check", "true"));
+			boolean dismiss = "true".equals(ZimbraSeleniumProperties.getStringProperty("dialog.error.aftertest.dismiss", "true"));
+			if ( !check ) {
+				return;
+			}
+			
+			
 			String locator = "css=div#ErrorDialog";
 
 			ZimbraSelenium selenium = ClientSessionFactory.session().selenium();
@@ -557,16 +565,22 @@ public class ExecuteHarnessMain {
 
 						logger.info("ErrorDialogListener:afterInvocation ... top="+ top);
 
-						// Log the error
-						// Take a snapshot
-						logger.error(new HarnessException("Error Dialog is visible"));
-						
-						// Set the test as failed
-						result.setStatus(ITestResult.FAILURE);
+						if ( dismiss ) {
+							
+							String bLocator = locator + " td[id^='OK_'] td[id$='_title']";
+							selenium.mouseDownAt(bLocator, "");
+							selenium.mouseUpAt(bLocator, "");
+							
+						} else {
+							
+							// Log the error
+							// Take a snapshot
+							logger.error(new HarnessException("Error Dialog is visible"));
+							
+							// Set the test as failed
+							result.setStatus(ITestResult.FAILURE);
 
-						// Logout and go to the login page
-//						selenium.open(ZimbraSeleniumProperties.getLogoutURL());
-//						selenium.open(ZimbraSeleniumProperties.getBaseURL());
+						}
 
 					}
 				}

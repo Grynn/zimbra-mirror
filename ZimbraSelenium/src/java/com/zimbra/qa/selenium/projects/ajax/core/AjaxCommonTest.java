@@ -453,14 +453,29 @@ public class AjaxCommonTest {
 		}
 
 		// Check for error dialogs
-		AbsDialog dialog = app.zPageMain.zGetErrorDialog(DialogErrorID.Zimbra);
-		if ( dialog != null ) {
-			if ( dialog.zIsActive() ) {
-				// Oops!  Error dialog is visible.
-				// Mark the test case as failed
-				throw new HarnessException("Error Dialog is visible");
+		boolean check = "true".equals( ZimbraSeleniumProperties.getStringProperty("dialog.error.beforetest.check", "true") );
+		boolean dismiss = "true".equals( ZimbraSeleniumProperties.getStringProperty("dialog.error.beforetest.dismiss", "false") );
+		if ( check ) {
+
+			AbsDialog dialog = app.zPageMain.zGetErrorDialog(DialogErrorID.Zimbra);
+			if ( (dialog != null) && (dialog.zIsActive()) ) {
+
+				// Error dialog is visible.
+				if ( dismiss ) {
+
+					// Dismiss the dialog and carry on
+					dialog.zClickButton(Button.B_OK);
+
+				} else {
+
+					// Throw an exception (all future tests will likely be skipped)
+					throw new HarnessException("Error Dialog is visible");
+
+				}
+
+
 			}
-		}
+		}	
 		
 
 		// Make sure any extra compose tabs are closed
