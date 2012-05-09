@@ -19,6 +19,7 @@ public class PageLogin extends AbsTab {
 		// Displayed text
 		public static final String zDisplayedusername = "css=form[name='loginForm'] label[for='username']";
 		public static final String zDisplayedcopyright = "css=div[class='copyright']";
+		public static final String zLoginErrorPanel ="css=div[class*='LoginScreen'] div[id='ZLoginErrorPanel']";
 
 	}
 
