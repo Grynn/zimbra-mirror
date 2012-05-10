@@ -209,7 +209,7 @@ public class CSMigrationWrapper
     {
         try
         {
-            InitLogFile("migration", Log.Level.Info);
+            InitLogFile("migration", Log.Level.Trace);
             Log.info("Initializing migration");
             MailClient = mailClient;
             if (MailClient == "MAPI")
@@ -447,6 +447,8 @@ public class CSMigrationWrapper
             Log.err("exception in ProcessItems->user.GetItemsFolder", e.Message);
         }
         int iProcessedItems = 0;
+        string historyfile = Path.GetTempPath() + Acct.AccountID + "history.log";
+        string historyid = "";
 
         if (itemobjectarray.GetLength(0) > 0)
         {
@@ -463,6 +465,13 @@ public class CSMigrationWrapper
                         bool bSkipMessage = false;
                         Dictionary<string, string> dict = new Dictionary<string, string>();
                         string[,] data = null;
+                        string itemtype = type.ToString();
+                        historyid = itemtype + itemobject.IDasString;
+                      /*  if (CheckifAlreadyMigrated(historyfile, historyid))
+                        {
+                            bSkipMessage = true;
+                            return;
+                        }*/ //uncomment after more testing
                         try
                         {
                             data = itemobject.GetDataForItemID(user.GetInternalUser(),
@@ -687,6 +696,8 @@ public class CSMigrationWrapper
                                 : Acct.migrationFolder.CurrentCountOfItems + 1;
                         }
                     }
+                   /* File.AppendAllText(historyfile, historyid); //uncomment after more testing
+                    File.AppendAllText(historyfile, "\n");*/
                     iProcessedItems++;
                 }
             }
@@ -941,6 +952,36 @@ public class CSMigrationWrapper
         {
             m_umUser = null;
         }
-    }    
+    }
+
+    private bool CheckifAlreadyMigrated(string filename, string itemid)
+    {
+
+        List<string> parsedData = new List<string>();
+
+        if (File.Exists(filename))
+        {
+            using (StreamReader readFile = new StreamReader(filename))
+            {
+                string line;
+
+                string row;
+                while ((line = readFile.ReadLine()) != null)
+                {
+                    row = line;
+                    if (row.CompareTo(itemid) == 0)
+                    {
+                        return true;
+
+                    }
+                }
+                readFile.Close();
+                return false;
+            }
+
+        }
+
+        return false;
+    }
 }
 }

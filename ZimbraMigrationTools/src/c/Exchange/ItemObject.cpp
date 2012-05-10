@@ -89,6 +89,28 @@ STDMETHODIMP CItemObject::put_Parentfolder(IFolderObject *newVal)
     return S_OK;
 }
 
+STDMETHODIMP CItemObject::get_IDasString(BSTR *pVal)
+{
+    // TODO: Add your implementation code here
+    /*Zimbra::Util::ScopedArray<CHAR> pszEid(NULL);
+    Zimbra::Util::HexFromBin(ItemID->lpb, ItemID->cb, pszEid.get());
+    LPTSTR pszCount = ULongToString(ItemID.cb);
+    LPTSTR pRetVal = NULL;*/
+    //LPTSTR pszHexEncoded = HexEncode(ItemID.cb, ItemID.lpb);
+
+
+   *pVal = IDasString;
+
+    return S_OK;
+}
+
+STDMETHODIMP CItemObject::put_IDasString(BSTR newVal)
+{
+    // TODO: Add your implementation code here
+    IDasString = newVal;
+    return S_OK;
+}
+
 
 STDMETHODIMP CItemObject::GetDataForItemID(IUserObject *Userobj,VARIANT ItemId, FolderType type, VARIANT *pVal)
 {

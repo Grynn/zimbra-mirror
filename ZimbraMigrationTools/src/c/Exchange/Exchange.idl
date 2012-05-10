@@ -111,6 +111,8 @@ interface IItemObject : IDispatch{
     [propput, id(3)] HRESULT CreationDate([in] VARIANT newVal);
     [propget, id(4)] HRESULT Parentfolder([out, retval] IFolderObject **pVal);
     [propput, id(4)] HRESULT Parentfolder([in] IFolderObject *newVal);
+     [propget, id(5)] HRESULT IDasString([out, retval] BSTR *pVal);
+    [propput, id(5)] HRESULT IDasString([in] BSTR newVal);
 
     [propput, id(6)] HRESULT ItemID([in] VARIANT newVal);
     [propget, id(6)] HRESULT ItemID([out,retval] VARIANT *newVal);

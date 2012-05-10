@@ -24,6 +24,7 @@ private:
     /*BSTR ID;*/
     FolderType TYPE;
     SBinary ItemID;
+    BSTR  IDasString ;
 
     CComQIPtr<IFolderObject, &IID_IFolderObject> parentObj;
 
@@ -73,6 +74,8 @@ public:
     STDMETHOD(put_Parentfolder) (IFolderObject * newVal);
     STDMETHOD(get_CreationDate) (VARIANT * pVal);
     STDMETHOD(put_CreationDate) (VARIANT newVal);
+    STDMETHOD(get_IDasString)(BSTR *pVal);
+    STDMETHOD(put_IDasString)(BSTR newVal);
     
 
     STDMETHOD(put_ItemID) (VARIANT id);
