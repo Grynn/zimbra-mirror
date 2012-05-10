@@ -375,6 +375,11 @@ public class CancelMeeting extends CalendarWorkWeekTest {
         // Click Edit Cancellation
         // When the form opens, simply click "SEND" (don't edit content)
         FormMailNew mailComposeForm = (FormMailNew)dialog.zClickButton(Button.B_EDIT_CANCELLATION);
+        
+        // For some reason, the form takes some time to render
+        // Sometimes the SEND button is not activated.
+        SleepUtil.sleepMedium();
+        
 		mailComposeForm.zToolbarPressButton(Button.B_SEND);
 		
 		
@@ -452,6 +457,11 @@ public class CancelMeeting extends CalendarWorkWeekTest {
         // Click Edit Cancellation
         // When the form opens, simply click "SEND" (don't edit content)
         FormMailNew mailComposeForm = (FormMailNew)dialog.zClickButton(Button.B_EDIT_CANCELLATION);
+        
+        // For some reason, the form takes some time to render
+        // Sometimes the SEND button is not activated.
+        SleepUtil.sleepMedium();
+        
 		mailComposeForm.zFillField(Field.Body, modifyApptBody);		
 		mailComposeForm.zToolbarPressButton(Button.B_SEND);
 		
