@@ -286,7 +286,7 @@ function(oel, nel, inheritClass, inheritStyle) {
 		this.setHtmlElementId(oel.id+"_control");
 		nel.id = oel.id;
 		if (this._textEl) {
-			this._textEl.setAttribute("for", oel.id);
+			this._textEl.setAttribute(AjxEnv.isIE ? "htmlFor" : "for", oel.id);
 		}
 	}
 };
