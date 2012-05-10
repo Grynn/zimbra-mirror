@@ -20,6 +20,7 @@ import org.apache.log4j.*;
 import org.testng.*;
 import org.testng.xml.*;
 
+import com.zimbra.qa.selenium.framework.ui.AbsSeleniumObject;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.framework.util.performance.PerfMetrics;
@@ -532,7 +533,7 @@ public class ExecuteHarnessMain {
 	 * @author Matt Rhoades
 	 *
 	 */
-	protected static class ErrorDialogListener implements IInvokedMethodListener {
+	protected static class ErrorDialogListener extends AbsSeleniumObject implements IInvokedMethodListener {
 
 		@Override
 		public void afterInvocation(IInvokedMethod method, ITestResult result) {
@@ -547,46 +548,47 @@ public class ExecuteHarnessMain {
 			
 			String locator = "css=div#ErrorDialog";
 
-			ZimbraSelenium selenium = ClientSessionFactory.session().selenium();
-
-			boolean present = selenium.isElementPresent(locator);
-			if ( present ) {
+			try{
+			    
+			    boolean present = sIsElementPresent(locator);
+			    if ( present ) {
 
 				logger.info("ErrorDialogListener:afterInvocation ... present="+ present);
 
-				Number left = selenium.getElementPositionLeft(locator);
+				Number left = sGetElementPositionLeft(locator);
 				if ( left.intValue() > 0 ) {
 
-					logger.info("ErrorDialogListener:afterInvocation ... left="+ left);
+				    logger.info("ErrorDialogListener:afterInvocation ... left="+ left);
 
-					Number top = selenium.getElementPositionTop(locator);
+				    Number top = sGetElementPositionTop(locator);
 
-					if ( top.intValue()>0 ) {
+				    if ( top.intValue()>0 ) {
 
-						logger.info("ErrorDialogListener:afterInvocation ... top="+ top);
+					logger.info("ErrorDialogListener:afterInvocation ... top="+ top);
 
-						if ( dismiss ) {
+					if ( dismiss ) {
 							
-							String bLocator = locator + " td[id^='OK_'] td[id$='_title']";
-							selenium.mouseDownAt(bLocator, "");
-							selenium.mouseUpAt(bLocator, "");
+					    String bLocator = locator + " td[id^='OK_'] td[id$='_title']";
+					    sMouseDownAt(bLocator, "");
+					    sMouseUpAt(bLocator, "");
 							
-						} else {
+					} else {
 							
-							// Log the error
-							// Take a snapshot
-							logger.error(new HarnessException("Error Dialog is visible"));
+					    // Log the error
+					    // Take a snapshot
+					    logger.error(new HarnessException("Error Dialog is visible"));
 							
-							// Set the test as failed
-							result.setStatus(ITestResult.FAILURE);
-
-						}
+					    // Set the test as failed
+					    result.setStatus(ITestResult.FAILURE);
 
 					}
+				    }
 				}
-
+			    }
+			}catch(Exception ex){
+			    logger.error(new HarnessException("ErrorDialogListener:afterInvocation "), ex);
 			}
-
+			
 			logger.debug("ErrorDialogListener:afterInvocation ... done");
 		}
 
