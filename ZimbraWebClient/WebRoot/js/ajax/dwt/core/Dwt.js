@@ -1259,6 +1259,7 @@ function(args, paramNames, force) {
 Dwt.__checkPxVal =
 function(val, check) {
 	if (val == Dwt.DEFAULT) { return false; }
+	if (isNaN(parseInt(val))) { return false; }
 
 	if (check && val < 0 && val != Dwt.LOC_NOWHERE) {
 		DBG.println(AjxDebug.DBG1, "negative pixel value: " + val);
