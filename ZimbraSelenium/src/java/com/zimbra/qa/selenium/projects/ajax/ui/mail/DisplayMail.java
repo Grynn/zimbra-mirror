@@ -454,6 +454,77 @@ public class DisplayMail extends AbsDisplay {
 		return (items);
 	}
 
+	public AbsPage zListAttachmentItem(Button button, AttachmentItem attachment) throws HarnessException {
+		
+		if ( button == null )
+			throw new HarnessException("button cannot be null");
+
+		if ( attachment == null )
+			throw new HarnessException("attachment cannot be null");
+
+		if ( attachment.getLocator() == null ) {
+			throw new HarnessException("Unable to locate attachment with filename("+ attachment.getAttachmentName() +")");
+		}
+		
+		logger.info(myPageName() + " zListAttachmentItem("+ button +", "+ attachment.getAttachmentName() +")");
+
+		tracer.trace(button +" on attachment = "+ attachment.getAttachmentName());
+
+		AbsPage page = null;
+		String locator = attachment.getLocator();
+
+
+
+		if ( attachment.getLocator() == null ) {
+			throw new HarnessException("Unable to locate attachment with filename("+ attachment.getAttachmentName() +")");
+		}
+
+		if ( button == Button.B_REMOVE ) {
+
+			locator = attachment.getLocator() + "a[id$='_remove']";
+			page = new DialogWarning(
+					DialogWarning.DialogWarningID.PermanentlyRemoveTheAttachment,
+					MyApplication, 
+					((AppAjaxClient) MyApplication).zPageMail);
+
+			this.sClick(locator);
+			
+			this.zWaitForBusyOverlay();
+
+			if ( page != null ) {
+				page.zWaitForActive();
+			}
+			
+			return (page);
+
+		} else if ( button == Button.B_ADD_TO_MY_FILES ) {
+			
+			locator = "implement me!";
+			page = null;
+			
+		} else {
+			throw new HarnessException("implement me!  action = "+ button);
+		}
+
+
+		if ( locator == null )
+			throw new HarnessException("no locator defined for button "+ button);
+		
+		if ( !this.sIsElementPresent(locator) )
+			throw new HarnessException("locator is not present for button "+ button +" : "+ locator);
+		
+		this.zClick(locator);
+		
+		this.zWaitForBusyOverlay();
+
+		if ( page != null ) {
+			page.zWaitForActive();
+		}
+		
+		return (page);
+
+	}
+
 	public AbsPage zListAttachmentItem(Action action, AttachmentItem attachment) throws HarnessException {
 
 		if ( action == null )

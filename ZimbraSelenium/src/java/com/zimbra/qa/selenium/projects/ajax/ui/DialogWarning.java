@@ -33,6 +33,7 @@ public class DialogWarning extends AbsDialog {
 		public static final DialogWarningID SaveSignatureChangeMessage = new DialogWarningID("YesNoCancel");
 		public static final DialogWarningID CancelCreateContact = new DialogWarningID("YesNoCancel");
 		public static final DialogWarningID PermanentlyDeleteTheItem = new DialogWarningID("OkCancel");
+		public static final DialogWarningID PermanentlyRemoveTheAttachment = new DialogWarningID("YesNoMsgDialog");
 		
 		public static final DialogWarningID DeleteAppointment = new DialogWarningID("YesNo");
 
