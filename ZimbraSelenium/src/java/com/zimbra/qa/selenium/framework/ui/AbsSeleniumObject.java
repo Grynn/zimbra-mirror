@@ -2386,7 +2386,7 @@ public abstract class AbsSeleniumObject {
 	// Start: WebDriver methods
 	// // ***
 		
-	public boolean zWaitForElementVisible(String locator, Boolean flag, String timeout) throws HarnessException {
+	protected boolean zWaitForElementVisible(String locator, Boolean flag, String timeout) throws HarnessException {
 		logger.info("zWaitForElementVisible(" + locator + ", " + timeout +")");
 		Long wait = Long.valueOf(timeout)/SleepUtil.SleepGranularity;
 		if (ZimbraSeleniumProperties.isWebDriver())	{

@@ -14,6 +14,7 @@ import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.ui.PageMain;
 import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.PageBriefcase;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.PageMail;
 
@@ -115,7 +116,7 @@ public class OpenLinkToMessage extends AjaxCommonTest {
 
 		// app.zPageBriefcase.openUrl("", null);
 		app.zPageBriefcase.openUrl(url);
-
+		app.zPageBriefcase.zWaitForElementPresent(PageMain.Locators.zLogoffOption,"2000");
 		app.zPageBriefcase.zNavigateTo();
 	}
 }
