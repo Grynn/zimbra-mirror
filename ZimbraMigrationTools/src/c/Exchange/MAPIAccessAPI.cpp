@@ -9,6 +9,7 @@ std::wstring MAPIAccessAPI::m_strTargetProfileName = L"";
 std::wstring MAPIAccessAPI::m_strExchangeHostName = L"";
 bool MAPIAccessAPI::m_bSingleMailBoxMigration = false;
 bool MAPIAccessAPI::m_bHasJoinedDomain = false;
+Zimbra::Util::MiniDumpGenerator *MAPIAccessAPI::m_minidmpgntr = NULL;
 
 // Initialize with Exchange Sever hostname, Outlook Admin profile name, Exchange mailbox name to be migrated
 MAPIAccessAPI::MAPIAccessAPI(wstring strUserName, wstring strUserAccount): m_userStore(NULL), m_rootFolder(NULL)
@@ -22,12 +23,15 @@ MAPIAccessAPI::MAPIAccessAPI(wstring strUserName, wstring strUserAccount): m_use
 
     Zimbra::Mapi::Memory::SetMemAllocRoutines(NULL, MAPIAllocateBuffer, MAPIAllocateMore,
         MAPIFreeBuffer);
-
+	
     InitFoldersToSkip();
 }
 
 MAPIAccessAPI::~MAPIAccessAPI()
 {
+	if(m_minidmpgntr)
+		delete m_minidmpgntr;
+	m_minidmpgntr=NULL;
     if ((m_userStore) && (!m_bSingleMailBoxMigration))
         delete m_userStore;
     m_userStore = NULL;
@@ -60,13 +64,57 @@ bool MAPIAccessAPI::SkipFolder(ExchangeSpecialFolderId exfid)
     return false;
 }
 
+LONG WINAPI MAPIAccessAPI::UnhandledExceptionFilter(LPEXCEPTION_POINTERS pExPtrs)
+{
+	LPWSTR strOutMessage=NULL;
+	LONG lRetVal = m_minidmpgntr->GenerateCoreDump(pExPtrs,strOutMessage);
+	WCHAR pwszTempPath[MAX_PATH];
+	GetTempPath(MAX_PATH, pwszTempPath);
+    wstring strMsg;
+	WCHAR strbuf[256];
+	wsprintf(strbuf,L"The application has requested the Runtime to terminate it in an unusual way.\nThe core dump would get generated in %s.",
+       pwszTempPath);
+	MessageBox(NULL, strbuf, _T("Runtime Error"), MB_OK);
+	Zimbra::Util::FreeString(strOutMessage);
+    return lRetVal;
+}
+
+void MAPIAccessAPI::internalInit()
+{
+	//Get App dir
+	wstring appdir= Zimbra::Util::GetAppDir();
+	//instantiate dump generator
+	LPWSTR pwszTempPath = new WCHAR[MAX_PATH];
+	wcscpy(pwszTempPath,appdir.c_str());
+	Zimbra::Util::AppendString(pwszTempPath,L"dbghelp.dll");
+    m_minidmpgntr = new Zimbra::Util::MiniDumpGenerator(pwszTempPath);
+
+	SetUnhandledExceptionFilter(UnhandledExceptionFilter);
+	delete []pwszTempPath;
+}
+
 LPCWSTR MAPIAccessAPI::InitGlobalSessionAndStore(LPCWSTR lpcwstrMigTarget)
+{
+	internalInit();
+	LPWSTR exceptionmsg=NULL;
+	__try
+	{
+		return _InitGlobalSessionAndStore(lpcwstrMigTarget);
+	}
+	__except(m_minidmpgntr->GenerateCoreDump(GetExceptionInformation(),exceptionmsg))
+	{
+		dloge(exceptionmsg);
+		Zimbra::Util::FreeString(exceptionmsg);
+	}
+	return NULL;
+}
+
+LPCWSTR MAPIAccessAPI::_InitGlobalSessionAndStore(LPCWSTR lpcwstrMigTarget)
 {
     LPCWSTR lpwstrStatus = NULL;
 	// If part of domain, get domain name
     m_bHasJoinedDomain = Zimbra::MAPI::Util::GetDomainName(m_strExchangeHostName);
-	
-    try
+	try
     {
         // Logon into target profile
         m_zmmapisession = new Zimbra::MAPI::MAPISession();
@@ -151,6 +199,7 @@ LPCWSTR MAPIAccessAPI::InitGlobalSessionAndStore(LPCWSTR lpcwstrMigTarget)
 		dloge(lpwstrLogMsg);
 		lpwstrStatus = L"Mailbox Exception";
     }
+	
     // Create Temporary dir for temp files
     Zimbra::MAPI::Util::CreateAppTemporaryDirectory();
 
@@ -168,6 +217,8 @@ CLEAN_UP: if (lpwstrStatus)
 
 void MAPIAccessAPI::UnInitGlobalSessionAndStore()
 {
+	if(m_minidmpgntr)
+		delete m_minidmpgntr;
     // Delete any PST migration profiles
     Zimbra::MAPI::Util::DeleteAlikeProfiles(Zimbra::MAPI::Util::PSTMIG_PROFILE_PREFIX.c_str());
 
@@ -282,8 +333,22 @@ CLEAN_UP: SafeDelete(ExchangeServerDN);
     return lpwstrStatus;
 }
 
-// Get root folders
 LPCWSTR MAPIAccessAPI::InitializeUser()
+{
+	LPWSTR exceptionmsg=NULL;
+	__try
+	{
+		return _InitializeUser();
+	}
+	__except(m_minidmpgntr->GenerateCoreDump(GetExceptionInformation(),exceptionmsg))
+	{
+		dloge(exceptionmsg);		
+	}
+	return exceptionmsg;
+}
+
+// Get root folders
+LPCWSTR MAPIAccessAPI::_InitializeUser()
 {
     LPCWSTR lpwstrStatus = NULL;
     HRESULT hr = S_OK;
@@ -315,7 +380,22 @@ LPCWSTR MAPIAccessAPI::InitializeUser()
     return lpwstrStatus;
 }
 
+
 LPCWSTR MAPIAccessAPI::GetRootFolderHierarchy(vector<Folder_Data> &vfolderlist)
+{
+	LPWSTR exceptionmsg=NULL;
+	__try
+	{
+		return _GetRootFolderHierarchy(vfolderlist);
+	}
+	__except(m_minidmpgntr->GenerateCoreDump(GetExceptionInformation(),exceptionmsg))
+	{
+		dloge(exceptionmsg);		
+	}
+	return exceptionmsg;
+}
+
+LPCWSTR MAPIAccessAPI::_GetRootFolderHierarchy(vector<Folder_Data> &vfolderlist)
 {
     LPCWSTR lpwstrStatus = NULL;
     HRESULT hr = S_OK;
@@ -423,7 +503,22 @@ HRESULT MAPIAccessAPI::GetInternalFolder(SBinary sbFolderEID, MAPIFolder &folder
     return hr;
 }
 
+
 LPCWSTR MAPIAccessAPI::GetFolderItemsList(SBinary sbFolderEID, vector<Item_Data> &ItemList)
+{
+	LPWSTR exceptionmsg=NULL;
+	__try
+	{
+		_GetFolderItemsList(sbFolderEID,ItemList);
+	}
+	__except(m_minidmpgntr->GenerateCoreDump(GetExceptionInformation(),exceptionmsg))
+	{
+		dloge(exceptionmsg);		
+	}
+	return exceptionmsg;
+}
+
+LPCWSTR MAPIAccessAPI::_GetFolderItemsList(SBinary sbFolderEID, vector<Item_Data> &ItemList)
 {
     LPCWSTR lpwstrStatus = NULL;
     HRESULT hr = S_OK;
@@ -490,6 +585,20 @@ ZM_EXIT: return lpwstrStatus;
 }
 
 LPCWSTR MAPIAccessAPI::GetItem(SBinary sbItemEID, BaseItemData &itemData)
+{
+	LPWSTR exceptionmsg=NULL;
+	__try
+	{
+		_GetItem(sbItemEID,itemData);
+	}
+	__except(m_minidmpgntr->GenerateCoreDump(GetExceptionInformation(),exceptionmsg))
+	{
+		dloge(exceptionmsg);		
+	}
+	return exceptionmsg;
+}
+
+LPCWSTR MAPIAccessAPI::_GetItem(SBinary sbItemEID, BaseItemData &itemData)
 {
     LPWSTR lpwstrStatus = NULL;
     HRESULT hr = S_OK;

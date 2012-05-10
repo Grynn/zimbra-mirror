@@ -1,5 +1,6 @@
 #pragma once
 #include "logger.h"
+#include "Util.h"
 #include "MAPIRules.h"
 
 namespace Zimbra
@@ -229,13 +230,16 @@ private:
     HRESULT Iterate_folders(Zimbra::MAPI::MAPIFolder &folder, vector<Folder_Data> &fd);
     void traverse_folder(Zimbra::MAPI::MAPIFolder &folder);
     HRESULT GetInternalFolder(SBinary sbFolderEID, MAPIFolder &folder);
-
+	static Zimbra::Util::MiniDumpGenerator *m_minidmpgntr;
+	static LONG WINAPI UnhandledExceptionFilter(LPEXCEPTION_POINTERS pExPtrs);
+	static void internalInit();
 public:
 	// static methods to be used by all mailboxes/profile/PST
     // lpcwstrMigTarget -> Exchange Admin Profile for Exchange mailboxes migration
     // lpcwstrMigTarget -> Local Exchange profile migration
     // lpcwstrMigTarget -> PST file path for PST migration
     static LPCWSTR InitGlobalSessionAndStore(LPCWSTR lpcwstrMigTarget);
+	static LPCWSTR _InitGlobalSessionAndStore(LPCWSTR lpcwstrMigTarget);	
     static void UnInitGlobalSessionAndStore();
 
     // Per mailbox methods.
@@ -243,9 +247,13 @@ public:
 
     ~MAPIAccessAPI();
     LPCWSTR InitializeUser();
+	LPCWSTR _InitializeUser();
     LPCWSTR GetRootFolderHierarchy(vector<Folder_Data> &vfolderlist);
+	LPCWSTR _GetRootFolderHierarchy(vector<Folder_Data> &vfolderlist);
     LPCWSTR GetFolderItemsList(SBinary sbFolderEID, vector<Item_Data> &ItemList);
+	LPCWSTR _GetFolderItemsList(SBinary sbFolderEID, vector<Item_Data> &ItemList);
     LPCWSTR GetItem(SBinary sbItemEID, BaseItemData &itemData);
+	LPCWSTR _GetItem(SBinary sbItemEID, BaseItemData &itemData);
     LPWSTR  GetOOOStateAndMsg();
     LPCWSTR GetExchangeRules(vector<CRule> &vRuleList);
 };

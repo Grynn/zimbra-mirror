@@ -3,6 +3,7 @@
 #include "..\Exchange\ExchangeAdmin.h"
 #include "Zimbra/RPC.h"
 #include "..\Exchange\MAPIAccessAPI.h"
+#include "..\Exchange\Util.h"
 
 #pragma comment(lib, "netapi32.lib")
 

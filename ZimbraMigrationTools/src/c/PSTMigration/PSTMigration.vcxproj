@@ -164,7 +164,7 @@
       <ExceptionHandling>Async</ExceptionHandling>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>comsupp.lib;ActiveDS.lib;adsiid.lib;mapi32.lib;Rpcrt4.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>comsupp.lib;ActiveDS.lib;adsiid.lib;mapi32.lib;Rpcrt4.lib;dbghelp.lib;Version.lib%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
@@ -428,6 +428,7 @@
     <ClCompile Include="..\Exchange\MAPITableIterator.cpp" />
     <ClCompile Include="..\Exchange\MAPITask.cpp" />
     <ClCompile Include="..\Exchange\MapiUtils.cpp" />
+    <ClCompile Include="..\Exchange\Util.cpp" />
     <ClCompile Include="PSTMigration.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='rtl|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='tst|Win32'">Create</PrecompiledHeader>
@@ -453,6 +454,7 @@
     <ClInclude Include="..\Exchange\MAPITableIterator.h" />
     <ClInclude Include="..\Exchange\MAPITask.h" />
     <ClInclude Include="..\Exchange\MapiUtils.h" />
+    <ClInclude Include="..\Exchange\Util.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\ZimbraMAPI\vcproj\Util.vcxproj">

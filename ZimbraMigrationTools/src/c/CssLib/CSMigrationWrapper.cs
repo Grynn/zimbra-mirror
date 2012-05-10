@@ -473,6 +473,9 @@ public class CSMigrationWrapper
                             Log.err("exception in ProcessItems->itemobject.GetDataForItemID", e.Message);
                             continue;
                         }
+                        //check if data is valid
+                        if (data == null)
+                            continue;
 
                         int bound0 = data.GetUpperBound(0);
                         if (bound0 > 0)

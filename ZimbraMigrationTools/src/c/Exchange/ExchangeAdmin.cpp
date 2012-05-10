@@ -887,16 +887,9 @@ LPCWSTR ExchangeOps::GlobalInit(LPCWSTR lpMAPITarget, LPCWSTR lpAdminUsername, L
         }
     }
     // Create Session and Open admin store with profile
-    try
-    {
-        lpwstrStatus = MAPIAccessAPI::InitGlobalSessionAndStore(lpMAPITarget);
-    }
-    catch (...)
-    {
-        lpwstrStatus = L"Unexpected Initialization Exception";
-		return lpwstrStatus;
-    }
-    if (!lpwstrStatus)
+	lpwstrStatus = MAPIAccessAPI::InitGlobalSessionAndStore(lpMAPITarget);
+
+	if (!lpwstrStatus)
         Initialized = EXCH_INITIALIZED_PROFEXIST;
     return lpwstrStatus;
 }

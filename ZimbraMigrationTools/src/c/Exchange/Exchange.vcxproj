@@ -150,7 +150,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>comsupp.lib;ActiveDS.lib;adsiid.lib;mapi32.lib;Rpcrt4.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>comsupp.lib;ActiveDS.lib;adsiid.lib;mapi32.lib;Rpcrt4.lib;dbghelp.lib;Version.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>Exchange.def</ModuleDefinitionFile>
       <RegisterOutput>true</RegisterOutput>
     </Link>
@@ -457,6 +457,7 @@
     <ClCompile Include="MapiUtils.cpp" />
     <ClCompile Include="MapiWrapper.cpp" />
     <ClCompile Include="UserObject.cpp" />
+    <ClCompile Include="Util.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Exchange.h" />
@@ -483,6 +484,7 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="tree.h" />
     <ClInclude Include="UserObject.h" />
+    <ClInclude Include="Util.h" />
   </ItemGroup>
   <ItemGroup>
     <Midl Include="Exchange.idl">
