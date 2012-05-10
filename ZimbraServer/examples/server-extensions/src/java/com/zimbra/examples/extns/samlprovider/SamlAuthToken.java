@@ -14,6 +14,19 @@
  */
 package com.zimbra.examples.extns.samlprovider;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TimeZone;
+
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpMethod;
+import org.apache.commons.httpclient.HttpState;
+
+import com.zimbra.common.account.Key.AccountBy;
 import com.zimbra.common.auth.ZAuthToken;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.Element;
@@ -23,16 +36,6 @@ import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.AuthToken;
 import com.zimbra.cs.account.AuthTokenException;
 import com.zimbra.cs.account.Provisioning;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpMethod;
-import org.apache.commons.httpclient.HttpState;
-
-import javax.servlet.http.HttpServletResponse;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TimeZone;
 
 /**
  * SAML auth token.
@@ -72,15 +75,17 @@ public class SamlAuthToken extends AuthToken {
             throw new AuthTokenException("SAML auth token does not contain any authentication statement");
     }
 
+    @Override
     public String toString() {
         return "SAML Auth Token(ID=" + id + ",NameID=" + subjectNameId + ")";
     }
 
+    @Override
     public String getAccountId() {
         Provisioning prov = Provisioning.getInstance();
         Account acct;
         try {
-            acct = prov.get(Key.AccountBy.name, subjectNameId);
+            acct = prov.get(AccountBy.name, subjectNameId);
         } catch (ServiceException e) {
             ZimbraLog.extensions.error(SystemUtil.getStackTrace(e));
             return null;
@@ -90,42 +95,52 @@ public class SamlAuthToken extends AuthToken {
         return null;
     }
 
+    @Override
     public String getAdminAccountId() {
         return null;
     }
 
+    @Override
     public long getExpires() {
         return expires.getTime();
     }
 
+    @Override
     public boolean isExpired() {
         return ! new Date().before(expires);
     }
 
+    @Override
     public boolean isAdmin() {
         return false;
     }
 
+    @Override
     public boolean isDomainAdmin() {
         return false;
     }
 
+    @Override
     public boolean isDelegatedAdmin() {
         return false;
     }
 
+    @Override
     public boolean isZimbraUser() {
         return true;
     }
 
+    @Override
     public String getExternalUserEmail() {
         return null;
     }
 
+    @Override
     public String getDigest() {
         return null;
     }
 
+    @Override
     public String getCrumb() throws AuthTokenException {
         return null;
     }
@@ -140,6 +155,7 @@ public class SamlAuthToken extends AuthToken {
      * @throws com.zimbra.common.service.ServiceException
      *
      */
+    @Override
     public void encode(HttpClient client, HttpMethod method, boolean isAdminReq, String cookieDomain) throws ServiceException {
     }
 
@@ -152,6 +168,7 @@ public class SamlAuthToken extends AuthToken {
      * @throws com.zimbra.common.service.ServiceException
      *
      */
+    @Override
     public void encode(HttpState state, boolean isAdminReq, String cookieDomain) throws ServiceException {
     }
 
@@ -161,20 +178,25 @@ public class SamlAuthToken extends AuthToken {
      * @param resp response message
      * @param isAdminReq is admin request
      * @param secureCookie secure cookie
+     * @param remember is auth token persisted by client after logout
      * @throws com.zimbra.common.service.ServiceException
      */
-    public void encode(HttpServletResponse resp, boolean isAdminReq, boolean secureCookie) throws ServiceException {
+    @Override
+    public void encode(HttpServletResponse resp, boolean isAdminReq, boolean secureCookie, boolean remember) throws ServiceException {
     }
 
+    @Override
     public void encodeAuthResp(Element parent, boolean isAdmin) throws ServiceException {
     }
 
+    @Override
     public ZAuthToken toZAuthToken() throws ServiceException {
         Map<String,String> attrs = new HashMap<String, String>();
         attrs.put("ID", id);
         return new ZAuthToken("SAML_AUTH_PROVIDER", null, attrs);
     }
 
+    @Override
     public String getEncoded() throws AuthTokenException {
         return null;
     }

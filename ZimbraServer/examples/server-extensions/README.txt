@@ -67,4 +67,21 @@ samlprovider example
            <NoOpRequest xmlns='urn:zimbraMail'/>
        </soap:Body>
    </soap:Envelope>
+   
+ storemanager example
+ --------------------
+ 
+ 1. Copy zimbra-extns-storemanager.jar to /opt/zimbra/lib/ext/storemanager dir
+ 
+ 2. Execute:
+ 
+    zmlocalconfig -e zimbra_class_store=com.zimbra.examples.extns.storemanager.ExampleStoreManager
+    
+ 3. Restart server
+ 
+ 4. Perform any write operations such as sending mail, uploading files, etc. Blobs should be written to /tmp/examplestore/blobs
+ 
+ 
+ 
+ 
 

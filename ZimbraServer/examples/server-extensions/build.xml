@@ -17,11 +17,13 @@
 
 	<property name="zimbraServer.dir" value="../../"/>
 	<property name="zimbraCommon.dir" value="../../../ZimbraCommon"/>
+    <property name="zimbraSoap.dir" value="../../../ZimbraSoap"/>
 
 	<path id="class.path">
 		<pathelement location="${build.classes.dir}" />
 		<pathelement location="${zimbraServer.dir}/build/classes"/>
 		<pathelement location="${zimbraCommon.dir}/build/classes"/>
+        <pathelement location="${zimbraSoap.dir}/build/classes"/>
 		<fileset dir="${zimbraCommon.dir}/jars">
 			<include name="**/*.jar"/>
 		</fileset>
@@ -50,6 +52,10 @@
              destfile="${build.jars.dir}/zimbra-extns-samlprovider.jar"
              basedir="${build.classes.dir}"
              includes="**/samlprovider/**"/>
+        <jar manifest="${conf.dir}/storemanager/MANIFEST.MF"
+             destfile="${build.jars.dir}/zimbra-extns-storemanager.jar"
+             basedir="${build.classes.dir}"
+             includes="**/storemanager/**"/>
 	</target>
 
     <target name="javadoc">
