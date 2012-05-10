@@ -120,7 +120,7 @@ function(x, y, skipInnerHTML, popdownOnMouseOver, obj, hoverEv) {
 * So, it is very important for the code setting tooltip to sticky to have some mechanism to close the tooltip by itself. 
 * Like have a close-button inside tooltip and when clicked, should set the setSticky(false) and then close the tooltip.
 *
-* Here, by if setSticky(true) is called, _poppedUp is set to false, which is essentially pretending the tooltip is not
+* If setSticky(true) is called, _poppedUp is set to false, which is essentially pretending the tooltip is not
 * up. In that case, a call to popdown will not close the tooltip. And that means tooltip will stay up even if some other
 * code path calls popdown on the singleton tooltip.
 *
