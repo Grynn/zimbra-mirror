@@ -93,6 +93,7 @@ public class MigrationOptions
     public string MessageSizeFilter;
     public string SkipFolders;
     public LogLevel VerboseOn;
+    public bool SkipPrevMigrated;
 }
 
 
@@ -447,7 +448,7 @@ public class CSMigrationWrapper
             Log.err("exception in ProcessItems->user.GetItemsFolder", e.Message);
         }
         int iProcessedItems = 0;
-        string historyfile = Path.GetTempPath() + Acct.AccountID + "history.log";
+        string historyfile = Path.GetTempPath() + Acct.AccountName.Substring(0,Acct.AccountName.IndexOf('@')) + "history.log";
         string historyid = "";
 
         if (itemobjectarray.GetLength(0) > 0)
@@ -467,11 +468,15 @@ public class CSMigrationWrapper
                         string[,] data = null;
                         string itemtype = type.ToString();
                         historyid = itemtype + itemobject.IDasString;
-                      /*  if (CheckifAlreadyMigrated(historyfile, historyid))
+                        if (options.SkipPrevMigrated)
                         {
-                            bSkipMessage = true;
-                            return;
-                        }*/ //uncomment after more testing
+                              if (CheckifAlreadyMigrated(historyfile, historyid))
+                              {
+                                  bSkipMessage = true;
+                                  return;
+                              }
+                            //uncomment after more testing
+                        }
                         try
                         {
                             data = itemobject.GetDataForItemID(user.GetInternalUser(),
@@ -696,8 +701,8 @@ public class CSMigrationWrapper
                                 : Acct.migrationFolder.CurrentCountOfItems + 1;
                         }
                     }
-                   /* File.AppendAllText(historyfile, historyid); //uncomment after more testing
-                    File.AppendAllText(historyfile, "\n");*/
+                    File.AppendAllText(historyfile, historyid); //uncomment after more testing
+                    File.AppendAllText(historyfile, "\n");
                     iProcessedItems++;
                 }
             }

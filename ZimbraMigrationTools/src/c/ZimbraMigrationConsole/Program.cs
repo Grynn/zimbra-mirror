@@ -558,6 +558,17 @@ class Program
                     break;
                 }
 
+                if (myXmlConfig.ConfigObj.AdvancedImportOptions.IsOnOrAfter)
+                {
+                    importopts.DateFilter = myXmlConfig.ConfigObj.AdvancedImportOptions.MigrateOnOrAfter.ToString();
+
+                }
+                if (myXmlConfig.ConfigObj.AdvancedImportOptions.IsSkipPrevMigratedItems)
+                {
+
+                    importopts.SkipPrevMigrated = myXmlConfig.ConfigObj.AdvancedImportOptions.IsSkipPrevMigratedItems;
+
+                }
                 //importopts.VerboseOn = Verbose;
 
                 Migration Test = new Migration();
@@ -714,6 +725,21 @@ class Program
                             err = "Provisioning user" + acctName;
                            /* ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Green,
                                 " Provisioning user" + acctName);*/
+                            string historyfile = Path.GetTempPath() + acctName.Substring(0, acctName.IndexOf('@')) + "history.log";
+                            if (File.Exists(historyfile))
+                            {
+                                try
+                                {
+
+                                    File.Delete(historyfile);
+                                }
+                                catch (Exception e)
+                                {
+                                    string msg = "exception in deleteing the Histroy file " + e.Message;
+                                    System.Console.WriteLine(msg);
+                                }
+
+                            }
                             System.Console.WriteLine(err);
                             System.Console.WriteLine();
                             System.Console.WriteLine();

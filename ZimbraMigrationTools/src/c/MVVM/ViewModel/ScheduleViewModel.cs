@@ -252,6 +252,22 @@ public class ScheduleViewModel: BaseViewModel
                         // end 73395
                         // end 71646
 
+                        string historyfile = Path.GetTempPath() + accountName.Substring(0, accountName.IndexOf('@')) + "history.log";
+                        if (File.Exists(historyfile))
+                        {
+                            try
+                            {
+
+                                File.Delete(historyfile);
+                            }
+                            catch (Exception e)
+                            {
+                                string msg = "exception in deleteing the Histroy file " + e.Message;
+                                System.Console.WriteLine(msg);
+                            }
+
+                        }
+
                         if (zimbraAPI.CreateAccount(accountName, displayName, givenName, sn, zfp, defaultPWD, cosID) == 0)
                         {
                             tempMessage += string.Format("{0} Provisioned", userName) + "\n";
@@ -587,7 +603,8 @@ public class ScheduleViewModel: BaseViewModel
         importOpts.DateFilter = (ovm.IsOnOrAfter) ? ovm.MigrateONRAfter : null;
         importOpts.MessageSizeFilter = ovm.MaxMessageSize;
         importOpts.SkipFolders = (ovm.IsSkipFolders) ? ovm.FoldersToSkip : null;
-
+        importOpts.SkipPrevMigrated = ovm.IsSkipPrevMigratedItems;
+        
          switch(ovm.LogLevel)
                 {
                 case"Debug":
@@ -702,6 +719,7 @@ public class ScheduleViewModel: BaseViewModel
         MigrationOptions importOpts = SetOptions();
         bool isVerbose = ((OptionsViewModel)ViewModelPtrs[(int)ViewType.OPTIONS]).LoggingVerbose;
         bool doRulesAndOOO = ((OptionsViewModel)ViewModelPtrs[(int)ViewType.OPTIONS]).OEnableRulesAndOOO;
+        
 
         if (isVerbose)
         {
