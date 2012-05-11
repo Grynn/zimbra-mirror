@@ -31,9 +31,16 @@ public class ZContactBean implements Comparable {
     private ZContact mContact;
     private String mFileAs;       
     private boolean mIsGalContact;
+    private String mTypeOfMember;
     
     public ZContactBean(ZContact contact) {
         mContact = contact;
+    }
+
+    public ZContactBean(ZContact contact, boolean isGalContact, String type) {
+        mContact = contact;
+        mIsGalContact = isGalContact;
+        mTypeOfMember = type;
     }
 
     public ZContactBean(ZContact contact, boolean isGalContact) {
@@ -42,6 +49,8 @@ public class ZContactBean implements Comparable {
     }
 
     public boolean getIsGalContact() { return mIsGalContact; }
+    
+    public boolean getIsTypeI() { return mTypeOfMember.equals("I"); }
 
     public String getId() { return mContact.getId(); }
     
@@ -250,7 +259,7 @@ public class ZContactBean implements Comparable {
         if (members != null) {
             ZContact memberContact = members.get(id);    
             if (memberContact != null)
-                return new ZContactBean(memberContact, memberContact.isGalContact());
+                return new ZContactBean(memberContact, memberContact.isGalContact(), memberContact.getTypeOfMember());
         }
         return null;
     }
