@@ -2,12 +2,12 @@
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Server
  * Copyright (C) 2010 Zimbra, Inc.
- * 
+ *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
@@ -22,15 +22,16 @@ import com.zimbra.common.soap.Element;
 import com.zimbra.cs.offline.OfflineSyncManager;
 import com.zimbra.cs.service.util.ItemId;
 import com.zimbra.cs.service.util.ItemIdFormatter;
+import com.zimbra.soap.ZimbraSoapContext;
 
 public class OfflineSoapSession extends SoapSession {
 
-    public OfflineSoapSession(String authenticatedId, boolean asAdmin) {
-        super(authenticatedId, asAdmin);
+    public OfflineSoapSession(ZimbraSoapContext zsc) {
+        super(zsc);
     }
 
     @Override
-    protected void addRemoteNotifications(RemoteNotifications rns) {
+    public void addRemoteNotifications(RemoteNotifications rns) {
         removeUnqualifiedRemoteNotifications(rns);
         super.addRemoteNotifications(rns);
     }
@@ -48,7 +49,7 @@ public class OfflineSoapSession extends SoapSession {
             return;
         }
         //we don't want to add acct id, just want to see if formatting *requires* id to be added
-        ItemIdFormatter ifmt = new ItemIdFormatter("any","any", false); 
+        ItemIdFormatter ifmt = new ItemIdFormatter("any","any", false);
         Iterator<Element> it = notifs.iterator();
         while (it.hasNext()) {
             Element elt = it.next();
@@ -75,7 +76,7 @@ public class OfflineSoapSession extends SoapSession {
         RegisterNotificationResult result = super.registerNotificationConnection(sc);
         if (result == RegisterNotificationResult.BLOCKING && OfflineSyncManager.getInstance().hasPendingStatusChanges()) {
             //if any pending sync state changes make it DATA_READY
-            result = RegisterNotificationResult.DATA_READY; 
+            result = RegisterNotificationResult.DATA_READY;
         }
         return result;
     }
