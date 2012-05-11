@@ -563,6 +563,17 @@ class Program
                     importopts.DateFilter = myXmlConfig.ConfigObj.AdvancedImportOptions.MigrateOnOrAfter.ToString();
 
                 }
+                if (myXmlConfig.ConfigObj.AdvancedImportOptions.IsSkipFolders)
+                {
+                    string returnval = "";
+                    MVVM.ViewModel.OptionsViewModel M = new MVVM.ViewModel.OptionsViewModel();
+                    returnval = M.ConvertToCSV(myXmlConfig.ConfigObj.AdvancedImportOptions.FoldersToSkip, ",");
+
+
+                    importopts.SkipFolders = returnval;
+
+                }
+
                 if (myXmlConfig.ConfigObj.AdvancedImportOptions.IsSkipPrevMigratedItems)
                 {
 
