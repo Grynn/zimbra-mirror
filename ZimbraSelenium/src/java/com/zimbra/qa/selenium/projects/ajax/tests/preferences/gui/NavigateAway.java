@@ -82,7 +82,10 @@ public class NavigateAway extends AjaxCommonTest {
 				new Object[] { TreeItem.Notifications,			null },
 				new Object[] { TreeItem.ImportExport,			null },
 				new Object[] { TreeItem.Shortcuts,				null },
-				new Object[] { TreeItem.QuickCommands,			null },
+				
+				// Bug: 71389 ... remove quick commands
+				// new Object[] { TreeItem.QuickCommands,			null },
+				
 				new Object[] { TreeItem.Zimlets,				null },
 		};
 	}
