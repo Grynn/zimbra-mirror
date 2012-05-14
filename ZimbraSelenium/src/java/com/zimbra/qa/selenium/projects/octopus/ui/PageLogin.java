@@ -15,7 +15,8 @@ public class PageLogin extends AbsTab {
 		public static final String zInputUsername = "css=input[id='username']";
 		public static final String zInputPassword = "css=input[id='password']";
 		public static final String zInputRemember = "css=input[id='remember']";
-
+		public static final String zInputNewPassword ="css=input[id='loginNewPassword']";
+		public static final String zInputConfirmPassword ="css=input[id='confirmNew']";		
 		// Displayed text
 		public static final String zDisplayedusername = "css=form[name='loginForm'] label[for='username']";
 		public static final String zDisplayedcopyright = "css=div[class='copyright']";
