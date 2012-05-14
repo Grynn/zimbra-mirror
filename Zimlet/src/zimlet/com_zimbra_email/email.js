@@ -50,7 +50,7 @@ function() {
 	this._subscriberZimlets = [];
     this._presenceProvider = null; // For the subscriber zimlet that can provide presence info. Only one presence provider
 	this._preLoadImgs();
-	this._convMode = false;
+	this._convModeCount = 0;
     this._presenceCache = []; // Cache for holding presence information
 };
 
@@ -119,24 +119,27 @@ function(ev) {
 
 EmailTooltipZimlet.prototype.onConvStart =
 function() {
-    this._convMode = true;
-    this._clearBubbles();
+    if (this._convModeCount == 0) {
+        this._clearBubbles();
+    }
+    this._convModeCount++;
 };
 
 EmailTooltipZimlet.prototype.onConvEnd =
 function() {
-    this._convMode = false;
+    this._convModeCount--;
 };
 
 EmailTooltipZimlet.prototype.onFindMsgObjects =
 function() {
-    if (!this._convMode) {
+    if (this._convModeCount == 0) {
         this._clearBubbles();
     }
 };
 
 EmailTooltipZimlet.prototype._clearBubbles =
 function() {
+    DBG.println(AjxDebug.DBG3, "EmailTooltipZimlet._clearBubbles");
     if (appCtxt.get(ZmSetting.USE_ADDR_BUBBLES)) {
 		// TODO: dispose old bubbles
 		this._bubbleList = new ZmAddressBubbleList();
@@ -149,6 +152,7 @@ function() {
 // create bubble for address in header
 EmailTooltipZimlet.prototype.generateSpan =
 function(html, idx, obj, spanId, context, options) {
+    DBG.println(AjxDebug.DBG3, "EmailTooltipZimlet.generateSpan");
 	options = options || {};
 	if (options.addrBubbles) {
 		this._isBubble[spanId] = true;
@@ -178,6 +182,7 @@ function(html, idx, obj, spanId, context, options) {
 		};
 		ZmAddressInputField.BUBBLE_OBJ_ID[spanId] = this._internalId;	// pretend to be a ZmAddressInputField
 		this._bubbleParams[spanId] = bubbleParams;
+        DBG.println(AjxDebug.DBG3, "  create span = " + spanId + ", email = " + bubbleParams.email);
 
 		// placeholder SPAN
 		html[idx++] = "<span id='" + spanId + "'>";
@@ -203,6 +208,7 @@ function() {
 
 EmailTooltipZimlet.prototype._createBubbles =
 function() {
+	DBG.println(AjxDebug.DBG3, "EmailTooltipZimlet._createBubble");
 	for (var id in this._bubbleParams) {
 		// make sure SPAN was actually added to DOM (may have been ignored by template, for example)
 		if (!document.getElementById(id)) {
@@ -214,6 +220,7 @@ function() {
 		if (this._bubbleList) {
 			this._bubbleList.add(bubble);
 		}
+		DBG.println(AjxDebug.DBG3, "  span = " + id + ", email = " + bubbleParams.email);
 	}
 }
 
