@@ -70,7 +70,9 @@ public class PageHistory extends AbsTab {
 	  String RENAME_MIDFIX = " as ";
 	  String RENAME_POSTFIX= ".";
 	  
-    }
+	  String MOVE_PREFIX=" moved file ";
+	  String MOVE_POSTFIX=" from folder ";
+	}
     
     public static boolean notSetup= true;
 	public static class Locators {
@@ -100,8 +102,12 @@ public class PageHistory extends AbsTab {
 				"css=input[id=filter_new]");
 		public static final Locators zHistoryFilterRename = new Locators(
 				"css=input[id=filter_rename]");
+		public static final Locators zHistoryFolderLink=new Locators(
+				"css=[class='activity-item-container'] [class='action to-folder']");
+		public static final Locators zHistoryVersionLink=new Locators(
+				"css=[class='activity-item-container'] [class='action version']");
 
-			public final String locator;
+		public final String locator;
 
 		private Locators(String locator) {
 			this.locator = locator;
@@ -170,13 +176,21 @@ public class PageHistory extends AbsTab {
 			return YOU +  COMMENT_PREFIX 
 			        +   fileName + COMMENT_POSTFIX;
 		}
+		
+		
+		public static String comment1(String fileName,String... forsharee) {
+			
+			return ((forsharee.length ==1)?forsharee:YOU) + COMMENT_PREFIX + fileName + COMMENT_POSTFIX;
+			        
+		}
+		
 		public static String newVersion(String fileName) {
 			return YOU +  NEW_VERSION_PREFIX 
 			        +   fileName + NEW_VERSION_POSTFIX;
 		}
 
 		public static String newVersion(String fileName, String user) {
-			return          user +  NEW_VERSION_PREFIX 
+			return  user +  NEW_VERSION_PREFIX 
 			        +   fileName + NEW_VERSION_POSTFIX;
 		}
 
@@ -199,8 +213,12 @@ public class PageHistory extends AbsTab {
 			return          user + UNFAVORITE_PREFIX 
 			        +   fileName + UNFAVORITE_POSTFIX;
 		}
-		
+		public static String move(String fileName,String rootFolder,String folderName) {
+			return YOU +  MOVE_PREFIX 
+			        +   fileName + MOVE_POSTFIX  + rootFolder + " to folder " + folderName +".";
+		}
 	}
+	
 	public PageHistory(AbsApplication application) {
 		super(application);
 
@@ -410,7 +428,7 @@ public class PageHistory extends AbsTab {
 			item.setLocator(itemLocator);
 						
 			// Get the user
-			locator = itemLocator + " span[class='activity-item-body'] span[class='user']";
+			locator = itemLocator + " span[class='activity-item-body'] span[class*='user']";
 			item.setHistoryUser(sGetText(locator));
 			
 			// Get the Time
@@ -429,6 +447,14 @@ public class PageHistory extends AbsTab {
 		
 		return historyItems;
     }
+	
+	///@SuppressWarnings("null")
+	public String verifyHistory(String expResult) throws HarnessException
+	{
+		return isTextPresentInGlobalHistory(expResult).getHistoryText();
+		
+		
+	}
 
 	// check if the history text present in global history
 	public HistoryItem isTextPresentInGlobalHistory(String historyText) 

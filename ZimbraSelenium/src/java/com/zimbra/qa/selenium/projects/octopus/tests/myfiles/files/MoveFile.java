@@ -8,6 +8,8 @@ import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.octopus.ui.DialogMove;
+import com.zimbra.qa.selenium.projects.octopus.ui.PageHistory;
+import com.zimbra.qa.selenium.projects.octopus.ui.PageHistory.GetText;
 import com.zimbra.qa.selenium.projects.octopus.core.OctopusCommonTest;
 import com.zimbra.qa.selenium.projects.octopus.ui.PageMyFiles;
 
@@ -183,6 +185,64 @@ public class MoveFile extends OctopusCommonTest {
 						+ fileName + ")", "3000"),
 				"Verify the file was moved to the destination folder");
 	}
+	
+	@Test(description = "Ensure folder link in history opens that folder", groups = { "smoke" })
+	public void VerifyFolderLinkFromHistory() throws HarnessException 
+	{
+		//Create folder and Move file.
+		ZimbraAccount account = app.zGetActiveAccount();
+
+		FolderItem briefcaseRootFolder = FolderItem.importFromSOAP(account,
+				SystemFolder.Briefcase);
+
+		// Create sub-folder
+		String subFolderName = "subFolder"+ ZimbraSeleniumProperties.getUniqueString();
+		String rootFolder = "My Files";
+
+		// Create a sub folder to move the file into i.e. My Files/subfolder
+		account.soapSend(
+						"<CreateFolderRequest xmlns='urn:zimbraMail'>"
+								+ "<folder name='" + subFolderName + "' l='"
+								+ briefcaseRootFolder.getId() + "' view='document'/>"
+					  + "</CreateFolderRequest>"
+						 );
+
+		// Create file item
+		String fileName = TEXT_FILE;
+		uploadFileViaSoap(app.zGetActiveAccount(), fileName);
+
+		// verify the file is uploaded
+		ZAssert.assertNotNull(fileName, "Verify file is uploaded");
+
+		// move file using right click context menu
+		DialogMove chooseFolder = (DialogMove) app.zPageMyFiles.zToolbarPressPulldown(Button.B_MY_FILES_LIST_ITEM,
+				Button.O_MOVE, fileName);
+
+		// Double click to choose folder
+		chooseFolder.zDoubleClickTreeFolder(subFolderName);
+
+		// Verify the moved file disappears from My Files tab
+		ZAssert.assertTrue(app.zPageMyFiles.zWaitForElementDeleted(
+				PageMyFiles.Locators.zMyFilesListView.locator + ":contains("
+						+ fileName + ")", "5000"),
+				"Verify the moved file disappears from My Files tab");
+
+		// Click on History tab
+		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_HISTORY);
+
+		String requiredHistory = "You moved file "+ fileName + " from folder " + rootFolder + " to folder " + subFolderName +".";
+
+		//Assert if found history matches with upload file history
+		ZAssert.assertEquals(GetText.move(fileName,rootFolder,subFolderName), app.zPageHistory.isTextPresentInGlobalHistory(requiredHistory).getHistoryText(), "Verify if required history matches with found history");
+
+		app.zPageHistory.sClickAt(PageHistory.Locators.zHistoryFolderLink.locator, "0,0");
+
+		// Verify the file is now in the destination folder
+		ZAssert.assertTrue(app.zPageMyFiles.zWaitForElementPresent(
+				PageMyFiles.Locators.zMyFilesListView.locator + ":contains("
+						+ fileName + ")", "3000"),"Verify the file is avilable");
+	}
+
 
 	@AfterMethod(groups = { "always" })
 	public void testCleanup() {
