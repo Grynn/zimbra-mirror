@@ -323,5 +323,6 @@ sub usage() {
   print "-u: Update keys for domain\n";
   print "One of [a, q, r, or u] must be supplied\n";
   print "For -q, search can be either by selector or domain\n";
+  print "For all other usage patterns, domain is required\n";
   exit 1;
 }
