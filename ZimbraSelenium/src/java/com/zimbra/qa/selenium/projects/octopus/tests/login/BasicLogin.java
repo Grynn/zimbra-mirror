@@ -97,7 +97,7 @@ public class BasicLogin extends OctopusCommonTest {
 		ZAssert.assertTrue(isErrorPresent, "Check if error message displayed when incorrect password is entered.");
 	}
 	
-	@Test(description="Verify if Error is displayed when incorrect Username is entered",groups={"smoke1"})
+	@Test(description="Verify if Error is displayed when incorrect Username is entered",groups={"smoke"})
 	public void IncorrectUsername()throws HarnessException
 	{
 		//Logout current account
