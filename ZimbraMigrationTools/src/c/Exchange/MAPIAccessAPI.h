@@ -148,7 +148,7 @@ typedef struct _ApptItemData: BaseItemData
     wstring Transparency;
     wstring AllDay;
     wstring StartDate;
-    wstring StartDateCommon;
+    wstring CalFilterDate;
     wstring EndDate;
     wstring ApptClass;
     wstring AlarmTrigger;
@@ -183,7 +183,7 @@ typedef struct _TaskItemData: BaseItemData
     wstring Subject;
     wstring Importance;
     wstring TaskStart;
-    wstring TaskStartCommon;
+    wstring TaskFilterDate;
     wstring TaskDue;
     wstring Status;
     wstring PercentComplete;

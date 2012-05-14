@@ -393,6 +393,9 @@ void MAPITask::SetRecurValues()
     }
 
     ULONG ulRecurrenceEndType = recur.GetEndType();
+    Zimbra::Mapi::CRecurrenceTime rtEndDate = recur.GetEndDate();
+    Zimbra::Mapi::CFileTime ft = (FILETIME)rtEndDate;
+    m_pTaskFilterDate = Zimbra::MAPI::Util::CommonDateString(ft);
     if (ulRecurrenceEndType == oetEndAfterN)
     {
 	IntToWstring(recur.GetOccurrences(), m_pRecurCount);
@@ -401,8 +404,6 @@ void MAPITask::SetRecurValues()
     if (ulRecurrenceEndType == oetEndDate)
     {
 	SYSTEMTIME st;
-	Zimbra::Mapi::CRecurrenceTime rtEndDate = recur.GetEndDate();
-	Zimbra::Mapi::CFileTime ft = (FILETIME)rtEndDate;
 	FileTimeToSystemTime(&ft, &st);
 	wstring temp = Zimbra::Util::FormatSystemTime(st, TRUE, TRUE);
 	m_pRecurEndDate = temp.substr(0, 8);
@@ -452,7 +453,7 @@ void MAPITask::SetTaskStart(FILETIME ft)
 
     FileTimeToSystemTime(&ft, &st);
     m_pTaskStart = Zimbra::Util::FormatSystemTime(st, FALSE, FALSE);
-    m_pTaskStartCommon = Zimbra::MAPI::Util::CommonDateString(m_pPropVals[T_TASKSTART].Value.ft);
+    m_pTaskFilterDate = Zimbra::MAPI::Util::CommonDateString(m_pPropVals[T_TASKDUE].Value.ft);
 }
 
 void MAPITask::SetTaskDue(FILETIME ft)
@@ -521,7 +522,7 @@ wstring MAPITask::GetImportance() { return m_pImportance; }
 wstring MAPITask::GetTaskStatus() { return m_pStatus; }
 wstring MAPITask::GetPercentComplete() { return m_pPercentComplete; }
 wstring MAPITask::GetTaskStart() { return m_pTaskStart; }
-wstring MAPITask::GetTaskStartCommon() { return m_pTaskStartCommon; }
+wstring MAPITask::GetTaskFilterDate() { return m_pTaskFilterDate; }
 wstring MAPITask::GetTaskDue() { return m_pTaskDue; }
 wstring MAPITask::GetTotalWork() { return m_pTotalWork; }
 wstring MAPITask::GetActualWork() { return m_pActualWork; }

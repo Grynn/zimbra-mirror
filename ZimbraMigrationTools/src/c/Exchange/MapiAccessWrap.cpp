@@ -567,6 +567,7 @@ STDMETHODIMP CMapiAccessWrap::GetData(BSTR UserId, VARIANT ItemId, FolderType ty
                     pIt[L"uid"] = SysAllocString((apptData.Uid).c_str());
                     pIt[L"m"] = SysAllocString((apptData.AlarmTrigger).c_str());
                     pIt[L"s"] = SysAllocString((apptData.StartDate).c_str());
+                    pIt[L"sFilterDate"] = SysAllocString((apptData.CalFilterDate).c_str());   // FBS bug 73982 -- 5/14/12
                     pIt[L"e"] = SysAllocString((apptData.EndDate).c_str());
                     pIt[L"class"] = SysAllocString((apptData.ApptClass).c_str());
                     pIt[L"orAddr"] = SysAllocString((apptData.organizer.addr).c_str());
@@ -754,6 +755,7 @@ STDMETHODIMP CMapiAccessWrap::GetData(BSTR UserId, VARIANT ItemId, FolderType ty
                     pIt[L"su"] = SysAllocString((taskData.Subject).c_str());
                     pIt[L"priority"] = SysAllocString((taskData.Importance).c_str());
                     pIt[L"s"] = SysAllocString((taskData.TaskStart).c_str());
+                    pIt[L"sFilterDate"] = SysAllocString((taskData.TaskFilterDate).c_str());   // FBS bug 73982 -- 5/14/12
                     pIt[L"e"] = SysAllocString((taskData.TaskDue).c_str());
                     pIt[L"status"] = SysAllocString((taskData.Status).c_str());
                     pIt[L"percentComplete"] = SysAllocString((taskData.PercentComplete).c_str());

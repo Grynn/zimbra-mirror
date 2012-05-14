@@ -400,6 +400,9 @@ void MAPIAppointment::SetTimezoneId(LPTSTR pStr)
     }
 
     ULONG ulRecurrenceEndType = recur.GetEndType();
+    Zimbra::Mapi::CRecurrenceTime rtEndDate = recur.GetEndDate();
+    Zimbra::Mapi::CFileTime ft = (FILETIME)rtEndDate;
+    m_pCalFilterDate = Zimbra::MAPI::Util::CommonDateString(ft);
     if (ulRecurrenceEndType == oetEndAfterN)
     {
 	IntToWstring(recur.GetOccurrences(), m_pRecurCount);
@@ -407,12 +410,10 @@ void MAPIAppointment::SetTimezoneId(LPTSTR pStr)
     else
     if (ulRecurrenceEndType == oetEndDate)
     {
-	SYSTEMTIME st;
-	Zimbra::Mapi::CRecurrenceTime rtEndDate = recur.GetEndDate();
-	Zimbra::Mapi::CFileTime ft = (FILETIME)rtEndDate;
-	FileTimeToSystemTime(&ft, &st);
-	wstring temp = Zimbra::Util::FormatSystemTime(st, TRUE, TRUE);
-	m_pRecurEndDate = temp.substr(0, 8);
+        SYSTEMTIME st;
+        FileTimeToSystemTime(&ft, &st);
+        wstring temp = Zimbra::Util::FormatSystemTime(st, TRUE, TRUE);
+        m_pRecurEndDate = temp.substr(0, 8);
     }
     return recur.GetExceptionCount();  
 }
@@ -491,7 +492,7 @@ void MAPIAppointment::FillInExceptionAppt(MAPIAppointment* pEx, Zimbra::Mapi::CO
         Zimbra::Mapi::CRecurrenceTime rtStartDate = lpException->GetStartDateTime();
         Zimbra::Mapi::CFileTime ftStartDate = (FILETIME)rtStartDate;
         pEx->m_pStartDate = MakeDateFromExPtr(ftStartDate);
-        pEx->m_pStartDateCommon = Zimbra::MAPI::Util::CommonDateString(ftStartDate);
+        pEx->m_pCalFilterDate = Zimbra::MAPI::Util::CommonDateString(ftStartDate);
     }
     if (pEx->m_pEndDate.length() == 0)
     {
@@ -611,7 +612,7 @@ void MAPIAppointment::SetStartDate(FILETIME ft)
     }
     m_pStartDate = (bUseLocal) ? Zimbra::Util::FormatSystemTime(localst, FALSE, TRUE)
 			       : Zimbra::Util::FormatSystemTime(st, TRUE, TRUE);
-    m_pStartDateCommon = Zimbra::MAPI::Util::CommonDateString(m_pPropVals[C_START].Value.ft);   // may have issue with recur/local
+    m_pCalFilterDate = Zimbra::MAPI::Util::CommonDateString(m_pPropVals[C_START].Value.ft);   // may have issue with recur/local
 }
 
 LPWSTR MAPIAppointment::MakeDateFromExPtr(FILETIME ft)
@@ -882,7 +883,7 @@ HRESULT MAPIAppointment::SetOrganizerAndAttendees()
 
 wstring MAPIAppointment::GetSubject() { return m_pSubject; }
 wstring MAPIAppointment::GetStartDate() { return m_pStartDate; }
-wstring MAPIAppointment::GetStartDateCommon() { return m_pStartDateCommon; }
+wstring MAPIAppointment::GetCalFilterDate() { return m_pCalFilterDate; }
 wstring MAPIAppointment::GetStartDateForRecID() { return m_pStartDateForRecID; }
 wstring MAPIAppointment::GetEndDate() { return m_pEndDate; }
 wstring MAPIAppointment::GetInstanceUID() { return m_pInstanceUID; }
