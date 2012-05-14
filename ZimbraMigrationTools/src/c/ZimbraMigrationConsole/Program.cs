@@ -243,6 +243,14 @@ class Program
                     builder += "\n";
                     builder += "Verbose= Debug|Info|Trace  .This option provides various levels of logging \n";
                     builder += "\n";
+                    builder += "IsSkipFolders= true|false  .This option provides skipping of folders \n";
+                    builder += "\n";
+                    builder += "FoldersToSkip= comma separated folder names to be skipped \n";
+                    builder += "\n";
+                    builder += "IsOnOrAfter= true|false  .This option provides the date filter to migration \n";
+                    builder += "\n";
+                    builder += "MigrateOnOrAfter= Date in the format YYYY-MM-DD .Items from this date and after get migrated \n";
+                    builder += "\n";
                     builder += "For more information see the help file distributed with the exe. \n";
 
 
@@ -287,6 +295,12 @@ class Program
                  bool UseSSL = false;
               
                 string Verbose = CommandLineArgs.I.argAsString("Verbose");
+                bool Datefilter = false;
+                bool SkipFolder = false;
+
+                string Folderlist = CommandLineArgs.I.argAsString("FoldersToSkip");
+
+                string MigrateDate = CommandLineArgs.I.argAsString("MigrateOnOrAfter");
 
                 bool ServerMigration = false;
                 XmlConfig myXmlConfig = new XmlConfig();
@@ -401,6 +415,22 @@ class Program
 
                    /* if (Mail == false)
                         Mail = myXmlConfig.ConfigObj.ImportOptions.Mail;*/
+                    if (CommandLineArgs.I.arg("IsSkipFolders") != null)
+                    {
+
+                        SkipFolder = CommandLineArgs.I.argAsBool("IsSkipFolders");
+                    }
+                    else
+                        SkipFolder = myXmlConfig.ConfigObj.AdvancedImportOptions.IsSkipFolders;
+                   
+
+                    if (CommandLineArgs.I.arg("IsOnOrAfter") != null)
+                    {
+
+                        Datefilter = CommandLineArgs.I.argAsBool("IsOnOrAfter");
+                    }
+                    else
+                        Datefilter = myXmlConfig.ConfigObj.AdvancedImportOptions.IsOnOrAfter;
                    
                     if (CommandLineArgs.I.arg("UseSSL") != null)
                     {
@@ -557,20 +587,27 @@ class Program
                     importopts.VerboseOn = LogLevel.Info;
                     break;
                 }
-
-                if (myXmlConfig.ConfigObj.AdvancedImportOptions.IsOnOrAfter)
+                if (MigrateDate == "")
                 {
-                    importopts.DateFilter = myXmlConfig.ConfigObj.AdvancedImportOptions.MigrateOnOrAfter.ToString();
+                    MigrateDate = myXmlConfig.ConfigObj.AdvancedImportOptions.MigrateOnOrAfter.ToString();
+                }
+
+                if (Datefilter)
+                {
+                    importopts.DateFilter = MigrateDate;
 
                 }
-                if (myXmlConfig.ConfigObj.AdvancedImportOptions.IsSkipFolders)
+
+                if (Folderlist == "")
                 {
-                    string returnval = "";
+
+                   
                     MVVM.ViewModel.OptionsViewModel M = new MVVM.ViewModel.OptionsViewModel();
-                    returnval = M.ConvertToCSV(myXmlConfig.ConfigObj.AdvancedImportOptions.FoldersToSkip, ",");
-
-
-                    importopts.SkipFolders = returnval;
+                    Folderlist = M.ConvertToCSV(myXmlConfig.ConfigObj.AdvancedImportOptions.FoldersToSkip, ",");
+                }
+                if (SkipFolder)
+                {
+                    importopts.SkipFolders = Folderlist;
 
                 }
 
