@@ -1,5 +1,7 @@
 package com.zimbra.qa.selenium.projects.octopus.tests.history;
 
+import java.util.ArrayList;
+
 import org.testng.annotations.*;
 
 import com.zimbra.qa.selenium.framework.core.Bugs;
@@ -192,16 +194,32 @@ public class ActivityHistory extends OctopusCommonTest {
 		
 		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_HISTORY);
 				
-		String requiredHistory = "You added a comment on file "+fileName+".";
+		String requiredHistory = (GetText.comment(fileName));
 		
+		boolean found = false;
+		
+		ArrayList<HistoryItem> historyItems;
+		
+		historyItems = app.zPageHistory.zListItem();
+		
+		for (HistoryItem historyItem : historyItems) {
+		
+			if(historyItem.getHistoryText().contains(requiredHistory))
+			{
+				found = true;
+				
+			}
+			
+		}
 		//Assert if found history matches with Add comment history
-		ZAssert.assertEquals(GetText.comment(fileName), app.zPageHistory.isTextPresentInGlobalHistory(requiredHistory).getHistoryText(), "Checking if Required history Matches with found history");
+		ZAssert.assertTrue(found, "Verify if history found");
+		
 		//Logout and Login to application again with same account
 		app.zPageOctopus.zLogout();
 		
 		app.zPageLogin.zLogin(act);
 		
-		ZAssert.assertEquals(GetText.comment(fileName), app.zPageHistory.isTextPresentInGlobalHistory(requiredHistory).getHistoryText(), "Checking if Required history Matches with found history after re-login");
+		
 	
 	}
 	
