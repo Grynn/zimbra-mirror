@@ -529,20 +529,10 @@ public class CSMigrationWrapper
                                     {
                                         msf = Int32.Parse(options.MessageSizeFilter);
                                         msf *= 1000000;
-                                        try
+                                        if (dict["wstrmimeBuffer"].Length > msf)    // FBS bug 74000 -- 5/14/12 
                                         {
-                                            FileInfo f = new FileInfo(dict["filePath"]);
-                                            if (f.Length > msf)
-                                            {
-                                                bSkipMessage = true;
-                                                File.Delete(dict["filePath"]);
-                                                // FBS -- When logging implemented, we should log this
-                                                // Should we put a message in the UI as well?
-                                            }
-                                        }
-                                        catch (Exception)
-                                        {
-                                            Log.info("File exception on ", dict["filePath"]);
+                                            bSkipMessage = true;
+                                            Log.info("Skipping", dict["Subject"], "-- message size exceeds size filter value");
                                         }
                                     }
                                 }
