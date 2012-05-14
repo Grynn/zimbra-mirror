@@ -36,7 +36,6 @@ index=${download_dir}/index.html
 if [ -d "${download_dir}" ]; then
   ZCO_32BIT=$(cd ${download_dir}; ls -tr1 ZimbraConnectorOLK*x86.msi 2>/dev/null | head -1)
   ZCO_64BIT=$(cd ${download_dir}; ls -tr1 ZimbraConnectorOLK*x64.msi 2>/dev/null | head -1)
-  ISYNC_UB=$(cd ${download_dir}; ls -tr1 zimbra-isync*.dmg 2>/dev/null | head -1)
   PST_IMPORT=$(cd ${download_dir}; ls -tr1 ZCSPSTImportWizard* 2>/dev/null | head -1)
   EXCHANGE_MIG_WIZARD=$(cd ${download_dir}; ls -tr1 ZCSExchangeMigrationWizard* 2>/dev/null | head -1)
   DOMINO_MIG_WIZARD=$(cd ${download_dir}; ls -tr1 ZCSDominoMigrationWizard* 2>/dev/null | head -1)
@@ -46,7 +45,6 @@ if [ -d "${download_dir}" ]; then
   cat ${index}.in | \
     sed -e "s/@@ZCO_32BIT@@/${ZCO_32BIT}/" \
     -e "s/@@ZCO_64BIT@@/${ZCO_64BIT}/" \
-    -e "s/@@ISYNC_UB@@/${ISYNC_UB}/" \
     -e "s/@@PST_IMPORT@@/${PST_IMPORT}/" \
     -e "s/@@EXCHANGE_MIG_WIZARD@@/${EXCHANGE_MIG_WIZARD}/" \
     -e "s/@@GENERAL_MIG_WIZARD_32BIT@@/${GENERAL_MIG_WIZARD_32BIT}/" \
