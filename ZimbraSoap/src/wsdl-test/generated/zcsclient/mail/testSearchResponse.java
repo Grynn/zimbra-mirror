@@ -70,17 +70,17 @@ import generated.zcsclient.zm.testWildcardExpansionQueryInfo;
 public class testSearchResponse {
 
     @XmlElements({
-        @XmlElement(name = "appt", type = testAppointmentHitInfo.class),
-        @XmlElement(name = "hit", type = testSimpleSearchHit.class),
-        @XmlElement(name = "doc", type = testDocumentHitInfo.class),
-        @XmlElement(name = "task", type = testTaskHitInfo.class),
-        @XmlElement(name = "m", type = testMessageHitInfo.class),
         @XmlElement(name = "note", type = testNoteHitInfo.class),
         @XmlElement(name = "w", type = testWikiHitInfo.class),
-        @XmlElement(name = "cn", type = testContactInfo.class),
         @XmlElement(name = "mp", type = testMessagePartHitInfo.class),
         @XmlElement(name = "c", type = testConversationHitInfo.class),
-        @XmlElement(name = "chat", type = testChatHitInfo.class)
+        @XmlElement(name = "chat", type = testChatHitInfo.class),
+        @XmlElement(name = "task", type = testTaskHitInfo.class),
+        @XmlElement(name = "appt", type = testAppointmentHitInfo.class),
+        @XmlElement(name = "cn", type = testContactInfo.class),
+        @XmlElement(name = "m", type = testMessageHitInfo.class),
+        @XmlElement(name = "hit", type = testSimpleSearchHit.class),
+        @XmlElement(name = "doc", type = testDocumentHitInfo.class)
     })
     protected List<Object> hitOrCOrM;
     protected testSearchResponse.Info info;
@@ -111,17 +111,17 @@ public class testSearchResponse {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link testAppointmentHitInfo }
-     * {@link testSimpleSearchHit }
-     * {@link testDocumentHitInfo }
-     * {@link testTaskHitInfo }
-     * {@link testMessageHitInfo }
      * {@link testNoteHitInfo }
      * {@link testWikiHitInfo }
-     * {@link testContactInfo }
      * {@link testMessagePartHitInfo }
      * {@link testConversationHitInfo }
      * {@link testChatHitInfo }
+     * {@link testTaskHitInfo }
+     * {@link testAppointmentHitInfo }
+     * {@link testContactInfo }
+     * {@link testMessageHitInfo }
+     * {@link testSimpleSearchHit }
+     * {@link testDocumentHitInfo }
      * 
      * 
      */

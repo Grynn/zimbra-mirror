@@ -35,6 +35,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;attribute name="uuid" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="name" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="l" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="luuid" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="f" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="color" type="{http://www.w3.org/2001/XMLSchema}int" />
  *       &lt;attribute name="rgb" type="{http://www.w3.org/2001/XMLSchema}string" />
@@ -78,9 +79,9 @@ public class testFolder {
     protected testAcl acl;
     protected testRetentionPolicy retentionPolicy;
     @XmlElements({
+        @XmlElement(name = "link", type = testMountpoint.class),
         @XmlElement(name = "folder"),
-        @XmlElement(name = "search", type = testSearchFolder.class),
-        @XmlElement(name = "link", type = testMountpoint.class)
+        @XmlElement(name = "search", type = testSearchFolder.class)
     })
     protected List<testFolder> folderOrLinkOrSearch;
     @XmlAttribute(name = "id", required = true)
@@ -91,6 +92,8 @@ public class testFolder {
     protected String name;
     @XmlAttribute(name = "l")
     protected String l;
+    @XmlAttribute(name = "luuid")
+    protected String luuid;
     @XmlAttribute(name = "f")
     protected String f;
     @XmlAttribute(name = "color")
@@ -225,9 +228,9 @@ public class testFolder {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
+     * {@link testMountpoint }
      * {@link testFolder }
      * {@link testSearchFolder }
-     * {@link testMountpoint }
      * 
      * 
      */
@@ -332,6 +335,30 @@ public class testFolder {
      */
     public void setL(String value) {
         this.l = value;
+    }
+
+    /**
+     * Gets the value of the luuid property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getLuuid() {
+        return luuid;
+    }
+
+    /**
+     * Sets the value of the luuid property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setLuuid(String value) {
+        this.luuid = value;
     }
 
     /**

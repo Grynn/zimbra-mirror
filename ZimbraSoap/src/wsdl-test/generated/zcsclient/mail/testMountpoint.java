@@ -21,6 +21,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;attribute name="owner" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="zid" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="rid" use="required" type="{http://www.w3.org/2001/XMLSchema}int" />
+ *       &lt;attribute name="ruuid" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="oname" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="reminder" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *       &lt;attribute name="broken" type="{http://www.w3.org/2001/XMLSchema}boolean" />
@@ -43,6 +44,8 @@ public class testMountpoint
     protected String zid;
     @XmlAttribute(name = "rid", required = true)
     protected int rid;
+    @XmlAttribute(name = "ruuid")
+    protected String ruuid;
     @XmlAttribute(name = "oname")
     protected String oname;
     @XmlAttribute(name = "reminder")
@@ -112,6 +115,30 @@ public class testMountpoint
      */
     public void setRid(int value) {
         this.rid = value;
+    }
+
+    /**
+     * Gets the value of the ruuid property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getRuuid() {
+        return ruuid;
+    }
+
+    /**
+     * Sets the value of the ruuid property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setRuuid(String value) {
+        this.ruuid = value;
     }
 
     /**

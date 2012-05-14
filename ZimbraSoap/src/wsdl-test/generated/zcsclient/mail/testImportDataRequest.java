@@ -45,14 +45,14 @@ import javax.xml.bind.annotation.XmlType;
 public class testImportDataRequest {
 
     @XmlElements({
-        @XmlElement(name = "caldav", type = testCaldavDataSourceNameOrId.class),
-        @XmlElement(name = "yab", type = testYabDataSourceNameOrId.class),
-        @XmlElement(name = "rss", type = testRssDataSourceNameOrId.class),
-        @XmlElement(name = "cal", type = testCalDataSourceNameOrId.class),
-        @XmlElement(name = "pop3", type = testPop3DataSourceNameOrId.class),
         @XmlElement(name = "gal", type = testGalDataSourceNameOrId.class),
-        @XmlElement(name = "unknown", type = testUnknownDataSourceNameOrId.class),
-        @XmlElement(name = "imap", type = testImapDataSourceNameOrId.class)
+        @XmlElement(name = "rss", type = testRssDataSourceNameOrId.class),
+        @XmlElement(name = "pop3", type = testPop3DataSourceNameOrId.class),
+        @XmlElement(name = "caldav", type = testCaldavDataSourceNameOrId.class),
+        @XmlElement(name = "cal", type = testCalDataSourceNameOrId.class),
+        @XmlElement(name = "imap", type = testImapDataSourceNameOrId.class),
+        @XmlElement(name = "yab", type = testYabDataSourceNameOrId.class),
+        @XmlElement(name = "unknown", type = testUnknownDataSourceNameOrId.class)
     })
     protected List<testDataSourceNameOrId> imapOrPop3OrCaldav;
 
@@ -74,14 +74,14 @@ public class testImportDataRequest {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link testCaldavDataSourceNameOrId }
-     * {@link testYabDataSourceNameOrId }
-     * {@link testRssDataSourceNameOrId }
-     * {@link testCalDataSourceNameOrId }
-     * {@link testPop3DataSourceNameOrId }
      * {@link testGalDataSourceNameOrId }
-     * {@link testUnknownDataSourceNameOrId }
+     * {@link testRssDataSourceNameOrId }
+     * {@link testPop3DataSourceNameOrId }
+     * {@link testCaldavDataSourceNameOrId }
+     * {@link testCalDataSourceNameOrId }
      * {@link testImapDataSourceNameOrId }
+     * {@link testYabDataSourceNameOrId }
+     * {@link testUnknownDataSourceNameOrId }
      * 
      * 
      */

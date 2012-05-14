@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="folder" type="{urn:zimbraMail}newMountpointSpec"/>
+ *         &lt;element name="link" type="{urn:zimbraMail}newMountpointSpec"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -28,35 +28,35 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "createMountpointRequest", propOrder = {
-    "folder"
+    "link"
 })
 public class testCreateMountpointRequest {
 
     @XmlElement(required = true)
-    protected testNewMountpointSpec folder;
+    protected testNewMountpointSpec link;
 
     /**
-     * Gets the value of the folder property.
+     * Gets the value of the link property.
      * 
      * @return
      *     possible object is
      *     {@link testNewMountpointSpec }
      *     
      */
-    public testNewMountpointSpec getFolder() {
-        return folder;
+    public testNewMountpointSpec getLink() {
+        return link;
     }
 
     /**
-     * Sets the value of the folder property.
+     * Sets the value of the link property.
      * 
      * @param value
      *     allowed object is
      *     {@link testNewMountpointSpec }
      *     
      */
-    public void setFolder(testNewMountpointSpec value) {
-        this.folder = value;
+    public void setLink(testNewMountpointSpec value) {
+        this.link = value;
     }
 
 }

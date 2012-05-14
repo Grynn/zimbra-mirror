@@ -22,6 +22,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="gst"/>
  *     &lt;enumeration value="key"/>
  *     &lt;enumeration value="pub"/>
+ *     &lt;enumeration value="email"/>
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
@@ -46,7 +47,9 @@ public enum testGranteeType {
     @XmlEnumValue("key")
     KEY("key"),
     @XmlEnumValue("pub")
-    PUB("pub");
+    PUB("pub"),
+    @XmlEnumValue("email")
+    EMAIL("email");
     private final String value;
 
     testGranteeType(String v) {
