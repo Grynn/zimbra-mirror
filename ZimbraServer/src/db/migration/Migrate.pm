@@ -40,8 +40,6 @@ if ($^O !~ /MSWin/i) {
     chomp $DB_PASSWORD;
     $DB_USER = `$ZMLOCALCONFIG -m nokey zimbra_mysql_user`;
     chomp $DB_USER;
-    $LOGGER_DB_PASSWORD = `$ZMLOCALCONFIG -s -m nokey zimbra_logger_mysql_password`;
-    chomp $LOGGER_DB_PASSWORD;
     $MYSQL = "/opt/zimbra/bin/mysql";
 }
 
