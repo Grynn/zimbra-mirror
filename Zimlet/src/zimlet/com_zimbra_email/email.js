@@ -163,7 +163,7 @@ function(html, idx, obj, spanId, context, options) {
 				dataClass:		appCtxt.getAutocompleter(),
 				matchValue:		ZmAutocomplete.AC_VALUE_FULL,
 				options:		{addrBubbles:true, massDLComplete:true},
-				compCallback:	this._dlAddrSelected.bind(this),
+				selectionCallback:	this._dlAddrSelected.bind(this),
 				contextId:		this.name
 			};
 			this._aclv = new ZmAutocompleteListView(aclvParams);
@@ -1076,6 +1076,6 @@ function(bubbleId, email) {
 
 // handle click on an address (or "Select All") in popup DL expansion list
 EmailTooltipZimlet.prototype._dlAddrSelected =
-function(text, el, match, ev) {
-	this._composeListener(ev, text);
+function(match, ev) {
+	this._composeListener(ev, match);
 };
