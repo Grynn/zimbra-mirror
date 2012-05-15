@@ -10,13 +10,13 @@ import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew.Field;
 
 
-public class FromAlias extends PrefGroupMailByMessageTest {
+public class FromAllowAddress extends PrefGroupMailByMessageTest {
 
-	private String AliasEmailAddress = null;
-	private String AliasFromDisplay = null;
+	private String AllowEmailAddress = null;
+	private String AllowFromDisplay = null;
 
-	public FromAlias() {
-		logger.info("New "+ FromAlias.class.getCanonicalName());
+	public FromAllowAddress() {
+		logger.info("New "+ FromAllowAddress.class.getCanonicalName());
 		
 		super.startingAccountPreferences.put("zimbraPrefComposeFormat", "text");
 		
@@ -25,25 +25,27 @@ public class FromAlias extends PrefGroupMailByMessageTest {
 	@BeforeMethod( groups = { "always" } )
 	public void addAliasToActiveAccount() throws HarnessException {
 		
-		AliasFromDisplay = "alias" + ZimbraSeleniumProperties.getUniqueString();
-		AliasEmailAddress = AliasFromDisplay + 
+		AllowFromDisplay = "allowed" + ZimbraSeleniumProperties.getUniqueString();
+		AllowEmailAddress = AllowFromDisplay + 
 					"@" +
 					ZimbraSeleniumProperties.getStringProperty("testdomain", "testdomain.com");
 		
 		String identity = "identity" + ZimbraSeleniumProperties.getUniqueString();
 		
 		ZimbraAdminAccount.GlobalAdmin().soapSend(
-				"<AddAccountAliasRequest xmlns='urn:zimbraAdmin'>"
-			+		"<id>"+ app.zGetActiveAccount().ZimbraId +"</id>"
-			+		"<alias>"+ AliasEmailAddress +"</alias>"
-			+	"</AddAccountAliasRequest>");
+					"<ModifyAccountRequest xmlns='urn:zimbraAdmin'>"
+				+		"<id>"+ app.zGetActiveAccount().ZimbraId +"</id>"
+				+		"<a n='zimbraAllowFromAddress'>"+ AllowEmailAddress +"</a>"
+				+	"</ModifyAccountRequest>");
+
+		
 		
 		app.zGetActiveAccount().soapSend(
 				" <CreateIdentityRequest xmlns='urn:zimbraAccount'>"
 			+		"<identity name='"+ identity +"'>"
 			+			"<a name='zimbraPrefIdentityName'>"+ identity +"</a>"
-			+			"<a name='zimbraPrefFromDisplay'>"+ AliasFromDisplay +"</a>"
-			+			"<a name='zimbraPrefFromAddress'>"+ AliasEmailAddress +"</a>"
+			+			"<a name='zimbraPrefFromDisplay'>"+ AllowFromDisplay +"</a>"
+			+			"<a name='zimbraPrefFromAddress'>"+ AllowEmailAddress +"</a>"
 			+			"<a name='zimbraPrefReplyToEnabled'>FALSE</a>"
 			+			"<a name='zimbraPrefReplyToDisplay'/>"
 			+			"<a name='zimbraPrefDefaultSignatureId'/>"
@@ -59,9 +61,9 @@ public class FromAlias extends PrefGroupMailByMessageTest {
 		
 	}
 
-	@Test(	description = "Send a mail using an alias as From",
+	@Test(	description = "Send a mail using zimbraAllowFromAddress",
 			groups = { "functional" })
-	public void FromAlias_01() throws HarnessException {
+	public void FromAllowAddress_01() throws HarnessException {
 		
 		
 		
@@ -74,7 +76,7 @@ public class FromAlias extends PrefGroupMailByMessageTest {
 		ZAssert.assertNotNull(mailform, "Verify the new form opened");
 		
 		// Fill out the form with the data
-		mailform.zFillField(Field.From, AliasEmailAddress);
+		mailform.zFillField(Field.From, AllowEmailAddress);
 		mailform.zFillField(Field.To, ZimbraAccount.AccountA().EmailAddress);
 		mailform.zFillField(Field.Subject, subject);
 		mailform.zFillField(Field.Body, "content" + ZimbraSeleniumProperties.getUniqueString());
@@ -98,7 +100,7 @@ public class FromAlias extends PrefGroupMailByMessageTest {
 
 		// Verify From: alias
 		String address = ZimbraAccount.AccountA().soapSelectValue("//mail:e[@t='f']", "a");
-		ZAssert.assertEquals(address, AliasEmailAddress, "Verify the from is the alias email address");
+		ZAssert.assertEquals(address, AllowEmailAddress, "Verify the from is the alias email address");
 		
 		// Verify no headers contain active account
 		Element[] nodes = ZimbraAccount.AccountA().soapSelectNodes("//mail:e");
