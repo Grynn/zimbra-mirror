@@ -40,6 +40,8 @@ public class ZContactBean implements Comparable {
         mContact = contact;
         mIsGalContact = isGalContact;
     }
+    
+    public boolean getIsTypeI() { return mContact.isTypeI();}
 
     public boolean getIsGalContact() { return mIsGalContact; }
 
