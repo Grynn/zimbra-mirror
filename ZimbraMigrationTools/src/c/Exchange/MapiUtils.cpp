@@ -2580,7 +2580,7 @@ BOOL Zimbra::MAPI::Util::DeleteAlikeProfiles(LPCSTR lpstrProfileName)
     HRESULT hr = S_OK;
     Zimbra::Util::ScopedInterface<IMAPITable> proftable;
     Zimbra::Util::ScopedInterface<IProfAdmin> iprofadmin;
-
+    MAPIInitialize(NULL);
     // Get IProfAdmin interface pointer
     if (FAILED(hr = MAPIAdminProfiles(0, iprofadmin.getptr())))
     {
@@ -2611,6 +2611,7 @@ BOOL Zimbra::MAPI::Util::DeleteAlikeProfiles(LPCSTR lpstrProfileName)
                 hr = iprofadmin->DeleteProfile((LPTSTR)name.c_str(), 0);
         }
     }
+    MAPIUninitialize();
     return TRUE;
 }
 
