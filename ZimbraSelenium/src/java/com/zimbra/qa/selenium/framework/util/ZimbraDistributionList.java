@@ -1,7 +1,6 @@
 package com.zimbra.qa.selenium.framework.util;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.apache.log4j.*;
 
 public class ZimbraDistributionList {
 	private static Logger logger = LogManager.getLogger(ZimbraDistributionList.class);
@@ -101,5 +100,18 @@ public class ZimbraDistributionList {
 				+	"</AddDistributionListMemberRequest>");
 
 		return (this);
+	}
+	
+	public ZimbraDistributionList grantRight(ZimbraAccount grantee, String right) throws HarnessException {
+
+		ZimbraAdminAccount.GlobalAdmin().soapSend(
+					"<GrantRightRequest xmlns='urn:zimbraAdmin'>"
+				+		"<target by='name' type='dl'>"+ this.EmailAddress +"</target>"
+				+		"<grantee by='name' type='usr'>"+ grantee.EmailAddress +"</grantee>"
+				+		"<right>"+ right +"</right>"
+				+	"</GrantRightRequest>");
+
+		return (this);
+
 	}
 }
