@@ -31,7 +31,7 @@ public class FormMailNew extends AbsForm {
 	 */
 	public static class Locators {
 		
-		public static final String zSendIconBtn			= "css=[id^=zb__COMPOSE][id$=__SEND_title]";
+		public static final String zSendIconBtn			= "css=div[id^='ztb__COMPOSE'] div[id*='SEND'] td[id$='_title']";
 		public static final String zCancelIconBtn		= "css=[id^=zb__COMPOSE][id$=__CANCEL_title]";
 		public static final String zSaveDraftIconBtn	= "css=[id^=zb__COMPOSE][id$=__SAVE_DRAFT_title]";
 		public static final String zSpellCheckIconBtn	= "css=[id^=zb__COMPOSE][id$=__SPELL_CHECK_title]";
