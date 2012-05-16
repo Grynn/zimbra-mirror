@@ -278,17 +278,17 @@ ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
                             {type:_OUTPUT_, value:ZaMsg.LBL_HomeLinkServerStatus, containerCssClass:"ZaLinkedItem",onClick: ZaHomeXFormView.onViewService}
                     ]}
             ]},
-            {type:_GROUP_, colSpan: "*", numCols: 3,  colSizes:["33%", "34%", "33%"], width: "100%",
+            {type:_GROUP_, colSpan: "*", numCols:3,  width:"100%", colSizes:["33%", "34%", "33%"],
                 containerCssClass:"ZaHomeInfoPanel",items:[
-                {type:_GROUP_, numCols: 2, valign: _TOP_,  colSizes:["auto"], width:"100%", items:[
+                {type:_GROUP_, containerCssClass:"ZaHomePanelPage", colSizes:["auto"], width:"100%", items:[
                     {type:_OUTPUT_, colSpan:"2", value:ZaMsg.LBL_HomeSummary, cssClass:"ZaHomeInfoTitle"},
-                    {type:_OUTPUT_, label:ZabMsg.LBL_HomeZimbraVersion, cssStyle:"word-wrap:break-word",ref: ZaHome.A2_version},
+                    {type:_OUTPUT_, label:ZabMsg.LBL_HomeZimbraVersion, cssStyle:"word-wrap:break-word;word-break:break-all;",ref: ZaHome.A2_version},
                     {type:_OUTPUT_, label:ZaMsg.LBL_HomeServerNum, ref: ZaHome.A2_serverNum, bmolsnr: true},
                     {type:_OUTPUT_, label:ZaMsg.LBL_HomeAccountNum, ref: ZaHome.A2_accountNum, bmolsnr: true},
                     {type:_OUTPUT_, label:ZaMsg.LBL_HomeDomainNum, ref: ZaHome.A2_domainNum, bmolsnr: true},
                     {type:_OUTPUT_, label:ZaMsg.LBL_HomeCosNum, ref: ZaHome.A2_cosNum, bmolsnr: true}
                 ]},
-                {type:_GROUP_, id:"maintenance_grp", numCols: 2, valign: _TOP_, width:"100%", items:[
+                {type:_GROUP_, id:"maintenance_grp", containerCssClass:"ZaHomePanelPage", items:[
                     {type:_OUTPUT_, colSpan:"*", value:ZaMsg.LBL_HomeMaintenance, cssClass:"ZaHomeInfoTitle",
                         visibilityChangeEventSources:[ZaHome.A2_maintenanceItemNum],
                         visibilityChecks:[[ZaHomeXFormView.showMT]]
@@ -333,7 +333,7 @@ ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
                         {type:_OUTPUT_, ref: ZaHome.A2_DBCheckMessage}
                     ]} */
                 ]},
-                {type:_GROUP_, numCols: 2, colSizes:["*", "90px"], valign: _TOP_, items:[
+                {type:_GROUP_, containerCssClass:"ZaHomePanelPage", items:[
                     {type:_OUTPUT_, colSpan:"2", value:ZaMsg.LBL_HomeRuntime, cssClass:"ZaHomeInfoTitle"},
                     {type:_OUTPUT_, label:ZaMsg.LBL_HomeService, ref: ZaHome.A2_serviceStatus, bmolsnr: true,
                         visibilityChecks:[[ZaHomeXFormView.showStatusInfo]],

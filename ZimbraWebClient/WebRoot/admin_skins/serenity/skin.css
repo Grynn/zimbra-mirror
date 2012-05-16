@@ -1061,7 +1061,9 @@ TD.gridGroupBodyLabel {
 	padding:12px;
 }
 
-
+.ZaHomePanelPage {
+    vertical-align: top;
+}
 
 .ZaHomeTabView .xform_label {
 	text-align:left;
