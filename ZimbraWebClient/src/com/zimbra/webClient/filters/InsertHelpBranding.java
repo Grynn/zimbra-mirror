@@ -127,10 +127,12 @@ public class InsertHelpBranding implements Filter {
                 // dump whatever is left over
                 out.write(buffer.data, last, buffer.count - last);
             }
-        }
-        finally {
+        } catch(FileNotFoundException ex){
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+        } finally {
             try {
-                in.close();
+                if (in != null)
+                    in.close();
             }
             catch (Exception e) {
                 // ignore
