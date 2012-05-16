@@ -16,10 +16,10 @@ INDEX_PATCH	:= patch -g0 -N -p1 < ../patches/0001-trial.patch; patch -g0 -N -p1 
 
 ifdef BETA
 	include $(OPENLDAP_ROOT)/../beta_versions.def
-	PATCH	:= patch -g0 -N -p1 < ../patches/ITS7255.patch; patch -g0 -N -p1 < ../patches/mdb-leaf.patch; patch -g0 -N -p1 < ../patches/mdb-pgfree.patch
+	PATCH	:= patch -g0 -N -p1 < ../patches/ITS7255.patch; patch -g0 -N -p1 < ../patches/mdb-leaf.patch; patch -g0 -N -p1 < ../patches/mdb-pgfree.patch;
 else
 	include $(OPENLDAP_ROOT)/../versions.def
-	PATCH	:= patch -g0 -N -p1 < ../patches/ITS7255.patch; patch -g0 -N -p1 < ../patches/mdb-leaf.patch; patch -g0 -N -p1 < ../patches/mdb-pgfree.patch
+	PATCH	:= patch -g0 -N -p1 < ../patches/ITS7255.patch; patch -g0 -N -p1 < ../patches/mdb-leaf.patch; patch -g0 -N -p1 < ../patches/mdb-pgfree.patch;
 endif
 
 ifeq (MACOSX,$(findstring MACOSX,$(BUILD_PLATFORM)))
