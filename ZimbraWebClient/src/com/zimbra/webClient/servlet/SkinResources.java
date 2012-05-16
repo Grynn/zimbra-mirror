@@ -1813,14 +1813,17 @@ public class SkinResources
 						propName = "-moz-border-radius:";
 					}
 				}
-				
-				String size = (params.length > 0 ? params[0] : "3px").toLowerCase();
-				
-				if (size.equals("") || size.equals("small")){	size = "3px";	}
-				else if (size.equals("medium")) 			{	size = "5px";	}
-				else if (size.equals("big"))				{	size = "10px";	}
-				else if (size.equals("huge"))				{	size = "15px";	}
-				return (propName + size + ";");
+				String size = (params.length > 0 ? params[0] : null);
+                if (size == null || size.equals("") )
+                    return propName + "3px;";  // Default value
+                String[] tokens = size.split(" ");
+                StringBuffer outStr = new StringBuffer(propName);
+                for(int i=0; i<tokens.length; i++){
+                    String propertyString = (tokens[i].matches("^[a-zA-Z]+")) ? getProperty(stack, tokens[i]) : tokens[i];
+                    propertyString = (propertyString != null) ? propertyString : tokens[i];
+                    outStr.append(propertyString).append((i == tokens.length-1) ? ";": " ");
+                }
+                return outStr.toString();
 			}
 			return "";
 		}
