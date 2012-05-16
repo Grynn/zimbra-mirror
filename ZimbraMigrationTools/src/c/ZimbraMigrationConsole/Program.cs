@@ -794,13 +794,17 @@ class Program
                             string Defaultpwd = "";
 
                             /************************************///if csv file has a pwd use it else looks for the pwd in xml file.
-                            if((user.PWDdefault != ""))
+                            if ((user.PWDdefault != ""))
                                 Defaultpwd = user.PWDdefault;
                             else
+                            {
                                 Defaultpwd = myXmlConfig.ConfigObj.UserProvision.DefaultPWD;
-
-
-                            
+                                if (Defaultpwd == null)
+                                {
+                                    Defaultpwd = "default";
+                                }
+                            }
+                           
                             if (zimbraAPI.CreateAccount(acctName,
                                 "",
                                 "",

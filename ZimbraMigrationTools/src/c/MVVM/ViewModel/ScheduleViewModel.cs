@@ -112,16 +112,16 @@ public class ScheduleViewModel: BaseViewModel
         proc.StartInfo.Arguments +=
             ((IntroViewModel)ViewModelPtrs[(int)ViewType.INTRO]).InstallDir;
         proc.StartInfo.Arguments += @"\";
-        proc.StartInfo.Arguments += "ZimbraMigrationConsole.exe";
+        proc.StartInfo.Arguments += "ZimbraMigrationConsole";
         proc.StartInfo.Arguments += @"\";
         proc.StartInfo.Arguments += @"""";
         proc.StartInfo.Arguments += " ";
 
-        proc.StartInfo.Arguments += m_configFile + " ";
-        proc.StartInfo.Arguments += m_usermapFile + " ";
+        proc.StartInfo.Arguments += "ConfigxmlFile=" + m_configFile + " ";
+        proc.StartInfo.Arguments += "Users=" + m_usermapFile;
         proc.StartInfo.Arguments += @"""";
         if (v.Major >= 6)
-            proc.StartInfo.Arguments += "/F /Z /V1";
+            proc.StartInfo.Arguments += " /F /Z /V1";
         proc.StartInfo.Arguments += " /TN " + dtName + " /SD " + dtStr + " /ST " + dtTime;
 
         proc.Start();
