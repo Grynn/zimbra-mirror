@@ -1,5 +1,7 @@
 package com.zimbra.qa.selenium.projects.octopus.core;
 
+import java.util.ArrayList;
+
 import com.zimbra.common.soap.Element;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
@@ -188,5 +190,37 @@ public class CommonMethods {
         return account.soapSelectValue(
 		  "//mail:SaveDocumentResponse//mail:doc", "id");
     }
+	/*
+	 * Function returns the array list containing folder Items. folder structure gets created is with hierarchy folder1>folder2>folder3.
+	 */
+	protected ArrayList<FolderItem> createMultipleSubfolders(ZimbraAccount act,String ParentFolder,int noOfSubFolders) throws HarnessException
+	{
+		ArrayList<FolderItem> folderNames = new ArrayList<FolderItem>();
+
+		String _parent = ParentFolder;
+
+		for(int i=0;i<noOfSubFolders;i++)
+		{
+			FolderItem newParentFolder = FolderItem.importFromSOAP(act, _parent);
+
+			folderNames.add(newParentFolder);
+
+			String subFolderName = "childFolder"+ZimbraSeleniumProperties.getUniqueString();
+			// Create sub folder Using SOAP under a folder created
+
+			act.soapSend(
+					"<CreateFolderRequest xmlns='urn:zimbraMail'>"
+					+"<folder name='" + subFolderName + "' l='" + newParentFolder.getId() + "' view='document'/>"
+					+"</CreateFolderRequest>");
+
+			_parent =subFolderName;
+
+
+		}
+
+		return folderNames;
+
+	}
+
 
 }
