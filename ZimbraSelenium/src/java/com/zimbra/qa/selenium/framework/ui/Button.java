@@ -372,6 +372,7 @@ public class Button {
 	public static final Button O_CREATE_A_COPY_MENU = new Button("O_CREATE_A_COPY_MENU");
 	public static final Button O_REPLY_MENU = new Button("O_REPLY_MENU");
 	public static final Button O_REPLY_TO_ALL_MENU = new Button("O_REPLY_TO_ALL_MENU");
+	public static final Button O_REINVITE = new Button("O_REINVITE");
 	public static final Button O_FORWARD_MENU = new Button("O_FORWARD_MENU");
 	public static final Button O_DELETE_MENU = new Button("O_DELETE_MENU");
 	public static final Button O_CANCEL_MENU = new Button("O_CANCEL_MENU");

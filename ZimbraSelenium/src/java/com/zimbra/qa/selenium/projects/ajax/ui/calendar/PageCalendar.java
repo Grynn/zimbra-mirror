@@ -673,6 +673,7 @@ public class PageCalendar extends AbsTab {
 		// Default behavior variables
 		String locator = null;
 		AbsPage page = null;
+		boolean waitForPostfix = false;
 		String optionLocator = null;
 
 		
@@ -741,11 +742,18 @@ public class PageCalendar extends AbsTab {
 
 				return (page);
 				
-			} else if ( option == Button.O_PRINT ) {
+			} else if ( option == Button.O_REINVITE ) {
 				
-				// TODO: implement me
-				locator = "TODO:implement me";
+				optionLocator = "css=div#zm__Calendar div#REINVITE_ATTENDEES td[id$='_title']";
 				page = null;
+				waitForPostfix = true;
+				
+				this.zRightClickAt(locator, "");
+				this.zWaitForBusyOverlay();
+
+				this.zClickAt(optionLocator, "");
+				this.zWaitForBusyOverlay();
+
 				
 				// FALL THROUGH
 				
@@ -778,6 +786,11 @@ public class PageCalendar extends AbsTab {
 			page.zWaitForActive();
 		}
 		
+		if ( waitForPostfix ) {
+			Stafpostqueue sp = new Stafpostqueue();
+			sp.waitForPostqueue();
+		}
+
 		return (page);
 	}
 
