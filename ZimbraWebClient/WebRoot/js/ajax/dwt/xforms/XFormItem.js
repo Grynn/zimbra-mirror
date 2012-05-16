@@ -3120,12 +3120,12 @@ Step_Choices_XFormItem.prototype.labelVisibility = _UNDEFINED_;
 Step_Choices_XFormItem.prototype.labelUpdateMethod = function(newValue) {
     var el = this.getElement();
     var sourceValue =  this.getInheritedProperty("sourceValue");
-    if (sourceValue == newValue) {
-        Dwt.addClass(el, "AdminOutputTabSelect");
-        Dwt.delClass(el, "AdminOutputTab");
+    if (sourceValue < newValue) {
+        el.className = "AdminOutputTabClick";
+    } else if (sourceValue == newValue) {
+        el.className =  "AdminOutputTabSelect";
     } else {
-        Dwt.delClass(el, "AdminOutputTabSelect");
-        Dwt.addClass(el, "AdminOutputTab");
+        el.className = "AdminOutputTab";
     }
 }
 
