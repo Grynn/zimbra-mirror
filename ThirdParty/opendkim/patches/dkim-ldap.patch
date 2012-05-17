@@ -1,0 +1,11 @@
+--- opendkim-2.6.0/opendkim/opendkim-db.c.orig	2012-05-16 21:23:27.697476623 -0700
++++ opendkim-2.6.0/opendkim/opendkim-db.c	2012-05-16 21:24:00.777477457 -0700
+@@ -2856,7 +2856,7 @@
+ 				free(new);
+ 				return -1;
+ 			}
+-
++			q += plen;
+ 			rem -= plen;
+ 
+ 			ldap_free_urldesc(descr);
