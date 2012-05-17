@@ -69,6 +69,10 @@ start()
             rewriteconfig
           fi
           $odk -x $config -u zimbra
+          if [ $? != 0 ]; then
+            echo "Failed to start opendkim: $?"
+            exit 1
+          fi
           sleep 2
           getpid
           echo "Started opendkim: pid $PID"
