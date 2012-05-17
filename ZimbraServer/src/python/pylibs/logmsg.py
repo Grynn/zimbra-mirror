@@ -54,7 +54,7 @@ class Log:
 			Log.zmsyslog.log(lvl, msg)
 
 		if lvl == 0:
-			Log.zmsyslog.fatal("%s: shutting down" % (cls.cf.progname,) )
+			Log.zmsyslog.log(2, "%s: shutting down" % (cls.cf.progname,) )
 			os._exit(1)
 
 Log.initLogging()
