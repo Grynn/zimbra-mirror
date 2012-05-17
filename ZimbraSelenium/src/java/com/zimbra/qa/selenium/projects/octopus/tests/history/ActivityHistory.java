@@ -10,6 +10,7 @@ import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.octopus.core.OctopusCommonTest;
+import com.zimbra.qa.selenium.projects.octopus.ui.DisplayFilePreview;
 import com.zimbra.qa.selenium.projects.octopus.ui.PageHistory;
 import com.zimbra.qa.selenium.projects.octopus.ui.PageHistory.GetText;
 
@@ -240,9 +241,42 @@ public class ActivityHistory extends OctopusCommonTest {
 		
 		//Assert if found history matches with upload file history
 		ZAssert.assertEquals(GetText.newVersion(fileName), app.zPageHistory.isTextPresentInGlobalHistory(requiredHistory).getHistoryText(), "Verify if required history matches with found history");
-		
 	}
 	
+	@Test(description ="Ensure version link in history opens that version" ,groups = { "smoke" })
+	public void VerifyVersionLinkNameFromHistory() throws HarnessException
+	{
+		ZimbraAccount account = app.zGetActiveAccount();
+		
+		// Create file item
+		String fileName = TEXT_FILE;
+		uploadFileViaSoap(app.zGetActiveAccount(), fileName);
+		
+		String name = account.soapSelectValue(
+				"//mail:SaveDocumentResponse//mail:doc", "name");
+		
+		// verify the file is uploaded
+		ZAssert.assertEquals(fileName, name, "Verify file is uploaded");
+
+		// Click on History tab
+		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_HISTORY);
+
+		String requiredHistory = "You created version 1 of file " + fileName + ".";
+
+		//Assert if found history matches with upload file history
+		ZAssert.assertEquals(GetText.newVersion(fileName), app.zPageHistory.isTextPresentInGlobalHistory(requiredHistory).getHistoryText(), "Verify if required history matches with found history");
+
+		// Click on version link and verify the file.
+		app.zPageHistory.sClickAt(PageHistory.Locators.zHistoryVersionLink.locator, "0,0");
+
+		//Get filename from preview panel.
+		String expectedResult=app.zPageOctopus.sGetText(DisplayFilePreview.Locators.zPreviewFileName.locator);
+
+		// Verify File name from preview panel and file selected from version link should be same .
+		ZAssert.assertEquals(fileName, expectedResult, "Verify file names are same");
+	}
+
+		
 	@AfterMethod(groups = { "always" })
 	public void testCleanup() {
 		if (_fileAttached || _fileId != null) {
