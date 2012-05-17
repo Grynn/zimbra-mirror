@@ -120,7 +120,7 @@ function() {
             }
 
 		} 
-		else if (AjxEnv.isSafari5up && !AjxEnv.isChrome) {
+		else if (AjxEnv.isSafari5up && !AjxEnv.isChrome && !AjxEnv.isWindows) {
 			//safari quicktime does not work with httpOnly cookie attribute
 			DwtSoundPlugin._pluginClass = DwtHtml5SoundPlugin;
 		}
