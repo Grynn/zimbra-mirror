@@ -56,7 +56,6 @@ build:
 	--enable-xtags \
 	--enable-default_sender \
 	--enable-rpath \
-	--enable-parsetime \
 	--enable-arlib \
 	--enable-debug \
 	--with-openssl=/opt/zimbra/openssl \
