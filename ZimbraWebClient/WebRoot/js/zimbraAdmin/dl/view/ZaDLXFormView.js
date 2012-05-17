@@ -1126,6 +1126,10 @@ ZaDLXFormView.isNotACLGroup = function () {
     return this.getInstanceValue(ZaDistributionList.A_zimbraIsACLGroup ) === "FALSE";
 }
 
+ZaDLXFormView.isACLGroup = function () {
+    return !ZaDLXFormView.isNotACLGroup.call(this);
+}
+
 ZaDLXFormView.NOTES_TAB_ATTRS = [ZaAccount.A_notes];
 ZaDLXFormView.NOTES_TAB_RIGHTS = [];
 
@@ -1338,9 +1342,8 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
 					labelCssClass : "xform_label",
 					align : _LEFT_,
 					subLabel : "",
-					visibilityChangeEventSources : [ZaDistributionList.A2_dlType],
 					visibilityChecks : [ZaDLXFormView.isDynamicDL],
-					enableDisableChecks : []
+					enableDisableChecks : false
 				}
 				,
 				{
@@ -1350,11 +1353,16 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
 					labelLocation : _LEFT_,
 					labelCssClass : "xform_label",
 					width : "100%",
-					visibilityChangeEventSources : [ZaDistributionList.A2_dlType],
-					visibilityChecks : [ZaDLXFormView.isDynamicDL],
-					enableDisableChangeEventSources : [ZaDistributionList.A_zimbraIsACLGroup],
-					enableDisableChecks : [ZaDLXFormView.isNotACLGroup]
-				}
+					visibilityChecks : [[ZaDLXFormView.isDynamicDL], [ZaDLXFormView.isNotACLGroup]]
+				},
+                {
+                    type : _OUTPUT_,
+					ref : ZaDistributionList.A_memberOfURL,
+					label : ZaMsg.LBL_Member_URL,
+					labelLocation : _LEFT_,
+					labelCssClass : "xform_label",
+					visibilityChecks : [[ZaDLXFormView.isDynamicDL], [ZaDLXFormView.isACLGroup]]
+                }
 				]
 			}
 			,

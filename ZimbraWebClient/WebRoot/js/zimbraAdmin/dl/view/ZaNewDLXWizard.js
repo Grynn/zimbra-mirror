@@ -886,11 +886,15 @@ ZaNewDLXWizard.myXFormModifier = function(xFormObject, entry) {
 					visibilityChecks : [],
 					enableDisableChecks : [],
                     elementChanged: function (elementValue, instanceValue, event) {
+                        var memberItem = this.getParentItem().items[2];
                         if (elementValue == ZaDistributionList.STATIC_DL_TYPE) {
-                            var memberItem = this.getParentItem().items[2];
                             if( memberItem.hasError() ) {
                                 memberItem.clearError();
-                                memberItem.setInstanceValue(null);
+                            }
+                            memberItem.setInstanceValue(null);
+                        } else {
+                            if (this.getInstanceValue(ZaDistributionList.A_zimbraIsACLGroup) != "TRUE") {
+                                memberItem.setError(AjxMsg.valueIsRequired);
                             }
                         }
                         this.getForm().itemChanged(this, elementValue, event);
@@ -911,12 +915,14 @@ ZaNewDLXWizard.myXFormModifier = function(xFormObject, entry) {
 					visibilityChecks : [ZaDLXFormView.isDynamicDL],
 					enableDisableChecks : [],
                     elementChanged: function (elementValue, instanceValue, event) {
+                        var memberItem = this.getParentItem().items[2];
                         if (elementValue == "TRUE") {
-                            var memberItem = this.getParentItem().items[2];
                             if( memberItem.hasError() ) {
                                 memberItem.clearError();
-                                memberItem.setInstanceValue(null);
                             }
+                            memberItem.setInstanceValue(null);
+                        } else {
+                            memberItem.setError(AjxMsg.valueIsRequired);
                         }
                         this.getForm().itemChanged(this, elementValue, event);
                     }
@@ -929,16 +935,11 @@ ZaNewDLXWizard.myXFormModifier = function(xFormObject, entry) {
 					labelLocation : _LEFT_,
 					labelCssClass : "xform_label",
 					width : "100%",
+                    bmolsnr: true,
 					visibilityChangeEventSources : [ZaDistributionList.A2_dlType],
 					visibilityChecks : [ZaDLXFormView.isDynamicDL],
 					enableDisableChangeEventSources : [ZaDistributionList.A_zimbraIsACLGroup],
-					enableDisableChecks : [ZaDLXFormView.isNotACLGroup],
-                    elementChanged: function (elementValue, instanceValue, event) {
-                        if(elementValue) {
-                            elementValue = AjxStringUtil.trim(elementValue);
-                        }
-                        this.getForm().itemChanged(this, elementValue, event);
-                    }
+					enableDisableChecks : [ZaDLXFormView.isNotACLGroup]
 				}
 				]
 			}
