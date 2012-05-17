@@ -1,5 +1,5 @@
 --- opendkim-2.6.0/opendkim/opendkim-db.c.orig	2012-05-16 21:23:27.697476623 -0700
-+++ opendkim-2.6.0/opendkim/opendkim-db.c	2012-05-16 22:16:06.509143302 -0700
++++ opendkim-2.6.0/opendkim/opendkim-db.c	2012-05-17 15:01:54.094977947 -0700
 @@ -2856,7 +2856,7 @@
  				free(new);
  				return -1;
@@ -9,7 +9,7 @@
  			rem -= plen;
  
  			ldap_free_urldesc(descr);
-@@ -4857,19 +4857,19 @@
+@@ -4857,21 +4857,21 @@
  		{
  			ldap_unbind_ext(ld, NULL, NULL);
  			db->db_handle = NULL;
@@ -23,12 +23,16 @@
  
 -			db->db_flags |= DKIMF_DB_IFLAG_RECONNECT;
 +			db->db_iflags |= DKIMF_DB_IFLAG_RECONNECT;
++
++			pthread_mutex_unlock(&ldap->ldap_lock);
  
  			status = dkimf_db_get(db, buf, buflen, req, reqnum,
  			                      exists);
  
 -			db->db_flags &= ~DKIMF_DB_IFLAG_RECONNECT;
+-
+-			pthread_mutex_unlock(&ldap->ldap_lock);
 +			db->db_iflags &= ~DKIMF_DB_IFLAG_RECONNECT;
  
- 			pthread_mutex_unlock(&ldap->ldap_lock);
- 
+ 			return status;
+ 		}
