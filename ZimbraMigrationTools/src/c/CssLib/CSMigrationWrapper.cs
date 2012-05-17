@@ -449,7 +449,7 @@ public class CSMigrationWrapper
         }
         int iProcessedItems = 0;
         string historyfile = Path.GetTempPath() + Acct.AccountName.Substring(0,Acct.AccountName.IndexOf('@')) + "history.log";
-        string historyid = "";
+       // string historyid = "";
 
         if (itemobjectarray.GetLength(0) > 0)
         {
@@ -467,7 +467,7 @@ public class CSMigrationWrapper
                         Dictionary<string, string> dict = new Dictionary<string, string>();
                         string[,] data = null;
                         string itemtype = type.ToString();
-                        try
+                        /*try
                         {
 
                             if (itemobject.IDasString != null)
@@ -492,7 +492,7 @@ public class CSMigrationWrapper
                                 }
                             }
                             //uncomment after more testing
-                        }
+                        }*/
                         try
                         {
                             data = itemobject.GetDataForItemID(user.GetInternalUser(),
@@ -712,11 +712,11 @@ public class CSMigrationWrapper
                                 : Acct.migrationFolder.CurrentCountOfItems + 1;
                         }
                     }
-                    if (historyid != "")
+                    /*if (historyid != "")
                     {
                         File.AppendAllText(historyfile, historyid); //uncomment after more testing
                         File.AppendAllText(historyfile, "\n");
-                    }
+                    }*/
                     iProcessedItems++;
                 }
             }
