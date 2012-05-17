@@ -279,12 +279,15 @@ STDMETHODIMP CMapiAccessWrap::GetItemsList(IFolderObject *FolderObj, VARIANT cre
     if (spUid.get() != NULL)
     {
 	Zimbra::Util::HexFromBin(Itemid.lpb, Itemid.cb, spUid.get());
-    }
-            
-    CComBSTR str=spUid.getref();
+        CComBSTR str=spUid.getref();
       pIItemObject->put_IDasString(str);
       SysFreeString(str);
 
+        
+    }
+    
+            
+    
         }
         if (FAILED(hr))
             return S_FALSE;
