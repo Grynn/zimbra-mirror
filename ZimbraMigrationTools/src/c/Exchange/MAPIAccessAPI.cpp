@@ -554,6 +554,14 @@ LPCWSTR MAPIAccessAPI::_GetFolderItemsList(SBinary sbFolderEID, vector<Item_Data
                 SBinary sbin = msg->EntryID();
 
                 CopyEntryID(sbin, itemdata.sbMessageID);
+                //Add eid in string format
+                itemdata.strMsgEntryId = "";
+                Zimbra::Util::ScopedArray<CHAR> spUid(new CHAR[(sbin.cb * 2) + 1]);
+                if (spUid.get() != NULL)
+                {
+	            Zimbra::Util::HexFromBin(sbin.lpb, sbin.cb, spUid.get());
+                    itemdata.strMsgEntryId = spUid.getref();
+                }
                 itemdata.MessageDate = msg->Date();
                 ItemList.push_back(itemdata);
             }

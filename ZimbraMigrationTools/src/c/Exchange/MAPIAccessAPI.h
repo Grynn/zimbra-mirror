@@ -21,7 +21,7 @@ typedef struct _Item_Data
     SBinary sbMessageID;
     long lItemType;
     __int64 MessageDate;
-
+    string strMsgEntryId;
     // parent folder
 } Item_Data;
 
