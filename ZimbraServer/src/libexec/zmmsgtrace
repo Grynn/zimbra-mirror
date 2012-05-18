@@ -642,7 +642,7 @@ sub printRecip {
 
     $ph ||= $msg->{host};
     $pi ||= "";
-    ( $ph, $pi ) = ( $msg->{host}, "" ) if ( $pi eq "127.0.0.1" );
+    ( $ph, $pi ) = ( $msg->{host}, "" ) if ( $pi eq "127.0.0.1" or $pi eq "::1" );
 
     print( $indent, "$at - $ph ",
         ( $pi ? "($pi) "     : "" ),

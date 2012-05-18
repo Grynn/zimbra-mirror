@@ -53,7 +53,7 @@ for file in p.stdout.readlines():
         if result != '200':
             continue
         ip = line.split('-')[0].rstrip()
-        if ip == '127.0.0.1':
+        if (ip == '127.0.0.1' or ip == '::1'):
             continue
         key = ua, ip
         curval = resultmap.get(key)
