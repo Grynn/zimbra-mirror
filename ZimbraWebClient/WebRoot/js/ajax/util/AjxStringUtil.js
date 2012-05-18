@@ -23,8 +23,7 @@
  * @author Roland Schemers
  * @author Conrad Damon
  */
-AjxStringUtil = function() {
-}
+AjxStringUtil = function() {};
 
 AjxStringUtil.TRIM_RE = /^\s+|\s+$/g;
 AjxStringUtil.COMPRESS_RE = /\s+/g;
@@ -1584,11 +1583,7 @@ function(text, isHtml) {
 	if (!text) { return ""; }
 	
 	if (isHtml) {
-		try {
-			return AjxStringUtil._getOriginalHtmlContent(text);
-		} catch (e) {
-			throw new Error("SCRIPT tag found! Please notify administrator. Text: " + text);
-		}
+		return AjxStringUtil._getOriginalHtmlContent(text);
 	}
 
 	var results = [];
@@ -1645,15 +1640,6 @@ function(text, isHtml) {
 				count[curType] = count[curType] ? count[curType] + 1 : 1;
 				curBlock = [];
 				curType = type;
-				
-				// If first block is UNKNOWN and it's followed by a recognized delimiter, return it. Done and done.
-				var hitBreak = (type == AjxStringUtil.ORIG_SEP_STRONG || type == AjxStringUtil.ORIG_WROTE_STRONG || type == AjxStringUtil.ORIG_HEADER);
-				var firstBlock = results[0] && results[0].block;
-				if (hitBreak && results[0].type == AjxStringUtil.ORIG_UNKNOWN && count[AjxStringUtil.ORIG_UNKNOWN] == 1 && firstBlock && firstBlock.length) {
-					var originalText = firstBlock.join("\n") + "\n";
-					originalText = originalText.replace(/\s+$/, "\n");
-					return originalText;
-				}
 			}
 		}
 		else {
@@ -1677,18 +1663,7 @@ function(text, isHtml) {
 		count[curType] = count[curType] ? count[curType] + 1 : 1;
 	}
 	
-	// We've scanned the whole text. If we found quoted content and there's exactly one UNKNOWN block, return it.
-	if (count[AjxStringUtil.ORIG_UNKNOWN] == 1 && count[AjxStringUtil.ORIG_QUOTED] > 0) {
-		if (unknownBlock && unknownBlock.length) {
-			var originalText = unknownBlock.join("\n") + "\n";
-			originalText = originalText.replace(/\s+$/, "\n");
-			if (AjxStringUtil._NON_WHITESPACE.test(originalText)) {
-				return originalText;
-			}
-		}
-	}
-	
-	// If we have a STRONG separator, return the text that precedes it
+	// If we have a STRONG separator (eg "--- Original Message ---"), consider it authoritative and return the text that precedes it
 	if (count[AjxStringUtil.ORIG_SEP_STRONG] > 0) {
 		var block = [];
 		for (var i = 0; i < results.length; i++) {
@@ -1696,11 +1671,24 @@ function(text, isHtml) {
 			if (result.type == AjxStringUtil.ORIG_SEP_STRONG) {
 				break;
 			}
-			block = block.concat(results[i].block);
+			block = block.concat(result.block);
 		}
-		var originalText = block.join("\n") + "\n";
-		originalText = originalText.replace(/\s+$/, "\n");
-		if (AjxStringUtil._NON_WHITESPACE.test(originalText)) {
+		var originalText = AjxStringUtil._getTextFromBlock(block);
+		if (originalText) {
+			return originalText;
+		}
+	}
+
+	// check for special case of WROTE preceded by UNKNOWN, followed by mix of UNKNOWN and QUOTED (inline reply)
+	var originalText = AjxStringUtil._checkInlineWrote(count, results, false);
+	if (originalText) {
+		return originalText;
+	}
+	
+	// If we found quoted content and there's exactly one UNKNOWN block, return it.
+	if (count[AjxStringUtil.ORIG_UNKNOWN] == 1 && count[AjxStringUtil.ORIG_QUOTED] > 0) {
+		var originalText = AjxStringUtil._getTextFromBlock(unknownBlock);
+		if (originalText) {
 			return originalText;
 		}
 	}
@@ -1759,6 +1747,14 @@ function(testLine) {
 	return type;
 };
 
+AjxStringUtil._getTextFromBlock =
+function(block) {
+	if (!(block && block.length)) { return null; }
+	var originalText = block.join("\n") + "\n";
+	originalText = originalText.replace(/\s+$/, "\n");
+	return (AjxStringUtil._NON_WHITESPACE.test(originalText)) ? originalText : null;
+};
+
 AjxStringUtil.SCRIPT_REGEX = /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi;
 
 /**
@@ -1787,10 +1783,14 @@ function(text) {
 		toRemove:	[],
 		done:		false,
 		hasQuoted:	false,
-		sepNode:	null
+		sepNode:	null,
+		results:	[]
 	};
 	AjxStringUtil._traverseOriginalHtmlContent(htmlNode, ctxt);
-		
+
+	// check for special case of WROTE preceded by UNKNOWN, followed by mix of UNKNOWN and QUOTED (inline reply)
+	AjxStringUtil._checkInlineWrote(ctxt.count, ctxt.results, true, ctxt);
+	
 	// if there's one UNKNOWN section and some QUOTED, preserve the UNKNOWN
 	if (!ctxt.done) {
 		if (ctxt.count[AjxStringUtil.ORIG_UNKNOWN] == 1 && ctxt.hasQuoted) {
@@ -1837,7 +1837,7 @@ function(el, ctxt) {
 		if (type == AjxStringUtil.ORIG_SEP_STRONG || type == AjxStringUtil.ORIG_WROTE_STRONG) {
 			ctxt.sepNode = el;	// mark for removal
 		}
-		else {
+		else if (type != AjxStringUtil.ORIG_WROTE_STRONG) {
 			var m = testLine.match(/(\w+):$/);
 			if (m && m[1] && el.parentNode) {
 				// what appears as a single "... wrote:" line may have multiple elements, so gather it all
@@ -1845,28 +1845,28 @@ function(el, ctxt) {
 				testLine = AjxStringUtil.trim(AjxStringUtil.htmlDecode(AjxStringUtil.stripTags(el.parentNode.innerHTML)));
 				type = AjxStringUtil._getLineType(testLine);
 				if (type == AjxStringUtil.ORIG_WROTE_STRONG) {
-					// preserve content in the parent node that comes before the "... wrote:" part
-					var pn = el.parentNode, wroteNode, stopNode;
+					// check for a multinode WROTE; if we find one, gather it into a SPAN so that we
+					// have a single node to deal with later
+					var pn = el.parentNode, nodes = pn.childNodes, startNodeIndex, stopNodeIndex;
 					for (var i = pn.childNodes.length - 1; i >= 0; i--) {
 						var childNode = pn.childNodes[i];
 						var text = childNode.nodeValue;
 						if (!text) { continue; }
 						if (text.match(/(\w+):$/)) {
-							wroteNode = childNode;
+							stopNodeIndex = i;
 						}
-						else if (wroteNode && text.match(AjxStringUtil.ORIG_INTRO_RE)) {
-							stopNode = childNode;
+						else if ((stopNodeIndex != null) && text.match(AjxStringUtil.ORIG_INTRO_RE)) {
+							startNodeIndex = i;
 							break;
 						}
 					}
-					stopNode = stopNode || wroteNode;
-					if (stopNode) {
-						while (pn && pn.lastChild && pn.lastChild != stopNode) {
-							pn.removeChild(pn.lastChild);
+					if (startNodeIndex != null && stopNodeIndex != null) {
+						var span = document.createElement("span");
+						for (var i = 0; i < (stopNodeIndex - startNodeIndex) + 1; i++) {
+							span.appendChild(nodes[startNodeIndex]);
 						}
-						if (pn && pn.lastChild == stopNode) {
-							pn.removeChild(pn.lastChild);
-						}
+						pn.insertBefore(span, nodes[startNodeIndex]);
+						ctxt.sepNode = span;
 					}
 				}
 			}
@@ -1929,7 +1929,9 @@ function(el, ctxt) {
 		if (ctxt.curType) {
 			if (ctxt.curType != type) {
 				ctxt.count[ctxt.curType] = ctxt.count[ctxt.curType] ? ctxt.count[ctxt.curType] + 1 : 1;
+				ctxt.results.push({type:ctxt.curType});
 				ctxt.curType = type;
+				ctxt.curBlock = [];
 			}
 		}
 		else {
@@ -1938,7 +1940,7 @@ function(el, ctxt) {
 	}
 
 	// if we found a recognized delimiter, set flag to clip it and subsequent nodes at its level
-	if (type == AjxStringUtil.ORIG_SEP_STRONG || (type == AjxStringUtil.ORIG_WROTE_STRONG && ctxt.sepNode)) {
+	if (type == AjxStringUtil.ORIG_SEP_STRONG) {
 		if (ctxt.count[AjxStringUtil.ORIG_UNKNOWN] == 1) {
 			ctxt.done = true;
 		}
@@ -2070,6 +2072,54 @@ function(el, ctxt) {
 		var childNode = el.childNodes[i];
 		if (childNode.doDelete) {
 			el.removeChild(childNode);
+		}
+	}
+};
+
+/**
+ * A "... wrote:" separator is not quite as authoritative, since the user might be replying inline. If we have
+ * a single UNKNOWN block before the WROTE separator, return it unless there is a mix of QUOTED and UNKNOWN
+ * following the separator.
+ * 
+ * @private
+ */
+AjxStringUtil._checkInlineWrote =
+function(count, results, isHtml, ctxt) {
+
+	if (count[AjxStringUtil.ORIG_WROTE_STRONG] > 0) {
+		var unknownBlock, foundSep = false, afterSep = {};
+		for (var i = 0; i < results.length; i++) {
+			var result = results[i], type = result.type;
+			if (type == AjxStringUtil.ORIG_WROTE_STRONG) {
+				foundSep = true;
+			}
+			else if (type == AjxStringUtil.ORIG_UNKNOWN && !foundSep) {
+				unknownBlock = isHtml ? true : result.block;
+			}
+			else if (foundSep) {
+				afterSep[type] = true;
+			}
+		}
+
+		if (unknownBlock && (!isHtml || ctxt.sepNode) && !(afterSep[AjxStringUtil.ORIG_UNKNOWN] && afterSep[AjxStringUtil.ORIG_QUOTED])) {
+			if (isHtml) {
+				// In HTML mode we do DOM surgery rather than returning the original content
+				var el = ctxt.sepNode.parentNode;
+				// clip all subsequent nodes
+				while (el && el.lastChild && el.lastChild != ctxt.sepNode) {
+					el.removeChild(el.lastChild);
+				}
+				// clip the delimiter node
+				if (el && el.lastChild == ctxt.sepNode) {
+					el.removeChild(el.lastChild);
+				}
+			}
+			else {
+				var originalText = AjxStringUtil._getTextFromBlock(unknownBlock);
+				if (originalText) {
+					return originalText;
+				}
+			}
 		}
 	}
 };
