@@ -335,6 +335,9 @@ public class Props2JsServlet extends HttpServlet {
                 // load path list, but not actual properties to prevent caching
                 ResourceBundle.getBundle(basename, locale, loader);
                 for (File file : loader.getFiles()) {
+                    if (locale.getLanguage() == "zh") {
+                        out.writeBytes("// file: " + getCommentSafeString(file.getName()) + '\n');    
+                    }
                     Props2Js.convert(out, file, classname);
                 }
             } catch (MissingResourceException e) {
