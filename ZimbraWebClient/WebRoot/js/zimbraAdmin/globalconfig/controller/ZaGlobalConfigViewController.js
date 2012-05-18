@@ -70,7 +70,6 @@ ZaGlobalConfigViewController.initPopupMenuMethod =
 function () {
     for (var key in this._toolbarOperations) {
         // For zimlet issue.
-
         this._popupOperations[key] = ZaOperation.duplicate(this._toolbarOperations[key]);
     }
 }
@@ -407,4 +406,11 @@ function (serverList) {
 	obj = {statusMessage:null,flushZimlet:false,flushSkin:true,flushLocale:false,serverList:serverList,status:0};
 	ZaApp.getInstance().dialogs["flushCacheDialog"].setObject(obj);
 	ZaApp.getInstance().dialogs["flushCacheDialog"].popup();
+}
+
+
+ZaGlobalConfigViewController.prototype._emptyUI =
+function () {
+    //do nothing, Global Config is special, it has only one copy and no need to be regenerated,
+    //so always keep Global Config view alive.
 }
