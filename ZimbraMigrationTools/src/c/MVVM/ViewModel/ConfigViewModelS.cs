@@ -57,6 +57,7 @@ public class ConfigViewModelS: BaseViewModel
             MailServerAdminID = config.SourceServer.AdminID;
             MailServerAdminPwd = config.SourceServer.AdminPwd;
         }
+        savedDomain = config.UserProvision.DestinationDomain;
     }
 
     private void Load()

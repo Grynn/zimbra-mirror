@@ -32,6 +32,7 @@ public class BaseViewModel: INotifyPropertyChanged
     public ListBox lb { get; set; }
     public static bool isServer { get; set; }
     public bool isBrowser { get; set; }
+    public string savedDomain { get; set; }
     public static Object[] ViewModelPtrs = new Object[(int)ViewType.MAX];
 
     public BaseViewModel()
@@ -147,7 +148,25 @@ public class BaseViewModel: INotifyPropertyChanged
 	    m_config.ZimbraServer.Port           = serverDestModel.ZimbraPort;
 	    m_config.ZimbraServer.AdminID  = serverDestModel.ZimbraAdmin;
 	    m_config.ZimbraServer.AdminPwd = serverDestModel.ZimbraAdminPasswd;
-            m_config.UserProvision.DestinationDomain        = usersModel.ZimbraDomain;
+
+            // FBS bug 73500 -- 5/18/12
+            if (usersModel.ZimbraDomain.Length == 0)
+            {
+                if (usersModel.DomainsFilledIn)
+                {
+                    m_config.UserProvision.DestinationDomain = usersModel.DomainList[usersModel.CurrentDomainSelection];
+                }
+                else
+                if (savedDomain.Length > 0)
+                {
+                    m_config.UserProvision.DestinationDomain = savedDomain;
+                }
+            }
+            else
+            {
+                m_config.UserProvision.DestinationDomain = usersModel.ZimbraDomain;
+            }
+            //
 	}
 	else
 	{

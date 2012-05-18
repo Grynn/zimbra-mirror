@@ -69,7 +69,7 @@ public class OptionsViewModel: BaseViewModel
 
         returnval = ConvertToCSV(config.AdvancedImportOptions.FoldersToSkip, ",");
         FoldersToSkip = returnval;
-  
+        savedDomain = config.UserProvision.DestinationDomain;
     }
 
     private void Load()

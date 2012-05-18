@@ -239,6 +239,7 @@ public class IntroViewModel: BaseViewModel
         BaseViewModel.isServer = true;          // because we start out with Server on -- wouldn't get set by command
         IsServerMigration = true;
         IsUserMigration = false;
+        savedDomain = "";
 
         m_configViewModelS = new ConfigViewModelS();
         m_configViewModelS.Name = "ConfigViewModelS";

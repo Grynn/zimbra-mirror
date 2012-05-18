@@ -32,6 +32,7 @@ public class ConfigViewModelSDest: BaseViewModel
         ZimbraAdmin = config.ZimbraServer.AdminID;
         ZimbraAdminPasswd = config.ZimbraServer.AdminPwd;
         ZimbraSSL = config.ZimbraServer.UseSSL;
+        savedDomain = config.UserProvision.DestinationDomain;
     }
 
     private void Load()
@@ -166,6 +167,7 @@ public class ConfigViewModelSDest: BaseViewModel
                         {
                             if (s == currentDomain)
                                 usersViewModel.CurrentDomainSelection = i;
+                            usersViewModel.DomainsFilledIn = true;
                         }
                     }
                 }

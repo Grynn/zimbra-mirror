@@ -32,6 +32,7 @@ public class UsersViewModel: BaseViewModel
         this.OPInfo = new ObjectPickerInfo("", "", "", "");
         this.IsProvisioned = false;
         this.EnablePopButtons = true;
+        this.DomainsFilledIn = false;
     }
 
     // a bit of a hack, but with the LDAP Browser now being controlled by the UsersView,
@@ -449,6 +450,7 @@ public class UsersViewModel: BaseViewModel
                 if (d == DomainList[i])
                 {
                     CurrentDomainSelection = i;
+                    DomainsFilledIn = true;
                     break;
                 }
             }
@@ -610,6 +612,16 @@ public class UsersViewModel: BaseViewModel
         {
             enablePopButtons = value;
             OnPropertyChanged(new PropertyChangedEventArgs("EnablePopButtons"));
+        }
+    }
+    private bool domainsFilledIn;
+    public bool DomainsFilledIn
+    {
+        get { return domainsFilledIn; }
+        set
+        {
+            domainsFilledIn = value;
+            OnPropertyChanged(new PropertyChangedEventArgs("DomainsFilledIn"));
         }
     }
 }
