@@ -61,6 +61,8 @@ build:
             --http-client-body-temp-path=$(ZIMBRA_HOME)/data/tmp/nginx/client \
             --http-proxy-temp-path=$(ZIMBRA_HOME)/data/tmp/nginx/proxy \
             --http-fastcgi-temp-path=$(ZIMBRA_HOME)/data/tmp/nginx/fastcgi \
+            --without-http_scgi_module \
+            --without-http_uwsgi_module \
             --add-module=$(CHUNKIN_SOURCE);)
 	(cd nginx-$(NGINX_VERSION)-zimbra; \
 	LD_RUN_PATH="$(CYRUS_LIB_DIR):$(OPENSSL_LIB_DIR)" make; make install)
