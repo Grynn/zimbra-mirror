@@ -99,14 +99,14 @@ if (!$options{r} && !$options{c}) {
   $ldap = Net::LDAP->new('ldapi://%2fopt%2fzimbra%2fopenldap%2fvar%2frun%2fldapi/')  or  die "$@";
 }
 
-# startTLS Operation, add later
-
-if ( $ldap_starttls_supported ) {
-  my $mesg = $ldap->start_tls(
-       verify => 'require',
-       capath => "$zimbra_home/conf/ca",
-     ) or die "start_tls: $@";
-  $mesg->code && die "TLS: " . $mesg->error . "\n";
+if (!$options{r} && !$options{c}) {
+  if ( $ldap_starttls_supported ) {
+    my $mesg = $ldap->start_tls(
+         verify => 'require',
+         capath => "$zimbra_home/conf/ca",
+       ) or die "start_tls: $@";
+    $mesg->code && die "TLS: " . $mesg->error . "\n";
+  }
 }
 
 if ( $options{r}) {
@@ -178,21 +178,24 @@ if ( $options{r}) {
     filter => "(olcSyncrepl=*)",
     attrs => ['olcSyncrepl']
   );
-  my $entry=$mesg->entry(0);
-  my $attr = $entry->get_value("olcSyncrepl");
-  my ($attr1, $attr2);
-  ($attr, $attr1) = split (/credentials=/, $attr, 2);
-  ($attr1, $attr2) = split (/filter=/, $attr1, 2);
-  $attr = $attr."credentials=";
-  $attr2 = " filter=".$attr2;
-  $attr1="$password";
-  $attr = $attr . $attr1 . $attr2;
-  $mesg = $ldap->modify(
-    $entry->dn,
-    replace => {
-      olcSyncrepl => "$attr",
-    }
-  );
+  my $size = $mesg->count;
+  if ($size > 0) {
+    my $entry=$mesg->entry(0);
+    my $attr = $entry->get_value("olcSyncrepl");
+    my ($attr1, $attr2);
+    ($attr, $attr1) = split (/credentials=/, $attr, 2);
+    ($attr1, $attr2) = split (/filter=/, $attr1, 2);
+    $attr = $attr."credentials=";
+    $attr2 = " filter=".$attr2;
+    $attr1="$password";
+    $attr = $attr . $attr1 . $attr2;
+    $mesg = $ldap->modify(
+      $entry->dn,
+      replace => {
+        olcSyncrepl => "$attr",
+      }
+    );
+  }
 } elsif ( $options{p} ) {
   setLocalConfig("ldap_postfix_password", "$password");
   my $mesg = $ldap->bind('uid=zmpostfix,cn=appaccts,cn=zimbra', password=>"$password");
