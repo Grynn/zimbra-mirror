@@ -85,7 +85,9 @@ if ($zimbra_home eq "") {
 my $keygen = "${zimbra_home}/opendkim/bin/opendkim-genkey";
 
 my $mesg;
-my $ldap = Net::LDAP->new($ldap_master_url) or die "$@";
+my @masters=split(/ /, $ldap_master_url);
+my $master_ref=\@masters;
+my $ldap = Net::LDAP->new($master_ref) or die "$@";
 
 if ($ldap_master_url !~ /^ldaps/i) {
   if ($ldap_starttls_supported) {

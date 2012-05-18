@@ -88,11 +88,13 @@ my $ssha_password = $ctx->generate;
 # Get the LDAP Master
 my $ldap_master = getLocalConfig("ldap_master_url");
 
+my @masters=split(/ /, $ldap_master);
+my $master_ref=\@masters;
 my $ldap;
 
 print "Updating local config and LDAP\n";
 if (!$options{r} && !$options{c}) {
-  $ldap = Net::LDAP->new("$ldap_master")  or  die "$@";
+  $ldap = Net::LDAP->new($master_ref)  or  die "$@";
 } else {
   $ldap = Net::LDAP->new('ldapi://%2fopt%2fzimbra%2fopenldap%2fvar%2frun%2fldapi/')  or  die "$@";
 }

@@ -71,11 +71,13 @@ my $conf = zmlocalconfig(
 }
 
 # ldap_url may have multiple uri's separated by spaces
-my $ldap_url = ( split( /\s+/, $conf->{ldap_url} ) )[0] || "ldap://localhost";
+my $ldap_url = $conf->{ldap_url};
+my @replicas=split(/ /, $ldap_url);
+my $replica_ref=\@replicas;
 
 # connect to LDAP server
 my $ldap = Net::LDAP->new(
-    $ldap_url,
+    $replica_ref,
     timeout => LDAP_TIMEOUT,
     async   => 1,
 ) or fatal("connect to '$ldap_url' failed: $@");

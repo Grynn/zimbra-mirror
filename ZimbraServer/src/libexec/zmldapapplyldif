@@ -119,7 +119,9 @@ if (lc($ldap_is_master) ne "true" ) {
 # Start ldap
 my $rc=`${zimbra_home}/bin/ldap start`;
 
-my $ldap = Net::LDAP->new("${ldap_master_url}")  or  die "$@";
+my @masters=split(/ /, $ldap_master_url);
+my $master_ref=\@masters;
+my $ldap = Net::LDAP->new($master_ref)  or  die "$@";
 
 # startTLS Operation
 my $mesg;
