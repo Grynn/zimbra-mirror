@@ -855,8 +855,8 @@ function() {
 
 	// Construct the header row with the prev/next year and prev/next month
 	// icons as well as the month/year title cell
-	html[idx++] =	"<table width=100% style='border-collapse:collapse;'>";
-	html[idx++] =		"<tr><td class=DwtCalendarTitlebar>";
+	html[idx++] =	"<table width=100%>";
+	html[idx++] =		"<tr><td class='DwtCalendarTitlebar'>";
 	html[idx++] =			"<table width='100%'>";
 	html[idx++] =				"<tr>";
 	html[idx++] =					"<td class='";
@@ -899,9 +899,9 @@ function() {
 	html[idx++] =				"</tr>";
 	html[idx++] =			"</table>";
 	html[idx++] =		"</td></tr>";
-	html[idx++] =	"<tr><td>";
-	html[idx++] = "<table width='100%' style='border-collapse:separate;'>";
-	html[idx++] = "<tr>";
+	html[idx++] =	"<tr><td class='DwtCalendarBody'>";
+	html[idx++] =		"<table width='100%' style='border-collapse:separate;' cellspacing='0'>";
+	html[idx++] =			"<tr>";
 
 	if (this._showWeekNumber) {
 		html[idx++] = "<td class='DwtCalendarWeekNoTitle' width='14%' id='";

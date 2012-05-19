@@ -1796,13 +1796,14 @@ public class SkinResources
 			boolean isWebKitBased = isBrowser("WEBKIT");
 			boolean isSafari5up = isBrowser("SAFARI_5_OR_HIGHER");
 			boolean isChrome4up = isBrowser("CHROME_4_OR_HIGHER");
-			boolean isIE9up = isBrowser("MSIE_9_OR_HIGHER");
+			//removing IE9+ until rendering in standards mode is supported
+			//boolean isIE9up = isBrowser("MSIE_9_OR_HIGHER"); 
 			
 			// Pick out browsers that support rounding in some fashion
-			if (isFirefox1_5up || isWebKitBased || isIE9up) {
+			if (isFirefox1_5up || isWebKitBased) {
 				String propName;
 				
-				if (isFirefox4up || isSafari5up || isChrome4up || isIE9up) { 
+				if (isFirefox4up || isSafari5up || isChrome4up) { 
 					// browsers that support the w3c syntax should use it
 					propName = "border-radius:";
 				} else { 
