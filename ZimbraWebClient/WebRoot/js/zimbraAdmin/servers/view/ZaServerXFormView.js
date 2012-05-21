@@ -173,8 +173,8 @@ function (entry) {
 
 
 ZaServerXFormView.getTLSEnabled = function () {
-	var value = this.getModel().getInstanceValue(this.getInstance(),ZaServer.A_zimbraMtaAuthEnabled);
-	return value == 'TRUE';
+	var value = this.getModel().getInstanceValue(this.getInstance(),ZaServer.A_zimbraMtaSaslAuthEnable);
+	return value == 'yes';
 }
 
 ZaServerXFormView.getIMAPEnabled = function () {
@@ -585,7 +585,7 @@ ZaServerXFormView.SERVICE_TAB_ATTRS = [ZaServer.A_zimbraLdapServiceEnabled, ZaSe
 	ZaServer.A_zimbraAntiVirusServiceEnabled, ZaServer.A_zimbraSpellServiceEnabled, ZaServer.A_zimbraLoggerServiceEnabled];
 ZaServerXFormView.SERVICE_TAB_RIGHTS = [];
 
-ZaServerXFormView.MTA_TAB_ATTRS = [ZaServer.A_zimbraMtaAuthEnabled, ZaServer.A_zimbraMtaTlsAuthOnly, ZaServer.A_zimbraSmtpHostname,
+ZaServerXFormView.MTA_TAB_ATTRS = [ZaServer.A_zimbraMtaSaslAuthEnable, ZaServer.A_zimbraMtaTlsAuthOnly, ZaServer.A_zimbraSmtpHostname,
 	ZaServer.A_SmtpPort, ZaServer.A_zimbraMtaRelayHost, ZaServer.A_SmtpTimeout, ZaServer.A_zimbraMtaMyNetworks, ZaServer.A_zimbraMtaDnsLookupsEnabled];
 ZaServerXFormView.MTA_TAB_RIGHTS = [];
 
@@ -821,14 +821,14 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 					items: [
 						{type:_ZA_TOP_GROUPER_, colSizes:["auto"],numCols:1,label:ZaMsg.Global_MTA_AuthenticationGrp,
 					      items: [
-						      	{ ref:ZaServer.A_zimbraMtaAuthEnabled, type: _SUPER_CHECKBOX_,
-						      	  trueValue: "TRUE", falseValue: "FALSE",
+						      	{ ref:ZaServer.A_zimbraMtaSaslAuthEnable, type: _SUPER_CHECKBOX_,
+						      	  trueValue: "yes", falseValue: "no",
 						      	  onChange: ZaServerXFormView.onFormFieldChanged,
 						      	  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
 						      	  checkBoxLabel:ZaMsg.NAD_MTA_Authentication
 					      	    },
 						      	{ ref:ZaServer.A_zimbraMtaTlsAuthOnly, type: _SUPER_CHECKBOX_,
-						      	  enableDisableChangeEventSources:[ZaServer.A_zimbraMtaAuthEnabled],
+						      	  enableDisableChangeEventSources:[ZaServer.A_zimbraMtaSaslAuthEnable],
 						      	  enableDisableChecks:[ZaServerXFormView.getTLSEnabled],
 						      	  trueValue: "TRUE", falseValue: "FALSE",
 						      	  onChange: ZaServerXFormView.onFormFieldChanged,

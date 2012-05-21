@@ -315,7 +315,7 @@ GlobalConfigXFormView.GENERAL_TAB_RIGHTS = [];
 GlobalConfigXFormView.ATTACHMENTS_TAB_ATTRS = [ZaGlobalConfig.A_zimbraMtaBlockedExtensionWarnRecipient, ZaGlobalConfig.A_zimbraMtaBlockedExtension,ZaGlobalConfig.A_zimbraMtaCommonBlockedExtension];
 GlobalConfigXFormView.ATTACHMENTS_TAB_RIGHTS = [];
 
-GlobalConfigXFormView.MTA_TAB_ATTRS = [ZaGlobalConfig.A_zimbraMtaAuthEnabled, ZaGlobalConfig.A_zimbraMtaTlsAuthOnly, ZaGlobalConfig.A_zimbraSmtpHostname,
+GlobalConfigXFormView.MTA_TAB_ATTRS = [ZaGlobalConfig.A_zimbraMtaSaslAuthEnable, ZaGlobalConfig.A_zimbraMtaTlsAuthOnly, ZaGlobalConfig.A_zimbraSmtpHostname,
 	ZaGlobalConfig.A_zimbraSmtpPort, ZaGlobalConfig.A_zimbraMtaRelayHost, ZaGlobalConfig.A_zimbraMtaMyNetworks, ZaGlobalConfig.A_zimbraMtaDnsLookupsEnabled, ZaGlobalConfig.A_zimbraMilterServerEnabled, ZaGlobalConfig.A_zimbraMilterBindPort];
 GlobalConfigXFormView.MTA_TAB_RIGHTS = [];
 
@@ -548,18 +548,18 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 					items: [
 						{type:_ZA_TOP_GROUPER_,label:ZaMsg.Global_MTA_AuthenticationGrp,
 							visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,
-								[ZaGlobalConfig.A_zimbraMtaAuthEnabled,
+								[ZaGlobalConfig.A_zimbraMtaSaslAuthEnable,
 								ZaGlobalConfig.A_zimbraMtaTlsAuthOnly]]],
-							visibilityChangeEventSources:[ZaGlobalConfig.A_zimbraMtaAuthEnabled,
+							visibilityChangeEventSources:[ZaGlobalConfig.A_zimbraMtaSaslAuthEnable,
 								ZaGlobalConfig.A_zimbraMtaTlsAuthOnly],
 							items:[
-							  	{ ref: ZaGlobalConfig.A_zimbraMtaAuthEnabled, type: _CHECKBOX_,
+							  	{ ref: ZaGlobalConfig.A_zimbraMtaSaslAuthEnable, type: _CHECKBOX_,
 							   	  label:ZaMsg.NAD_MTA_Authentication,
-							   	  trueValue: "TRUE", falseValue: "FALSE"
+							   	  trueValue: "yes", falseValue: "no"
 						   	    },
 						   	    { ref: ZaGlobalConfig.A_zimbraMtaTlsAuthOnly, type: _CHECKBOX_,
-						  	  		enableDisableChangeEventSources:[ZaGlobalConfig.A_zimbraMtaAuthEnabled,ZaGlobalConfig.A_zimbraMtaTlsAuthOnly],
-						  	  		enableDisableChecks:[[ZaItem.hasWritePermission,ZaGlobalConfig.A_zimbraMtaTlsAuthOnly],[XForm.checkInstanceValue,ZaGlobalConfig.A_zimbraMtaAuthEnabled,"TRUE"]],
+						  	  		enableDisableChangeEventSources:[ZaGlobalConfig.A_zimbraMtaSaslAuthEnable,ZaGlobalConfig.A_zimbraMtaTlsAuthOnly],
+						  	  		enableDisableChecks:[[ZaItem.hasWritePermission,ZaGlobalConfig.A_zimbraMtaTlsAuthOnly],[XForm.checkInstanceValue,ZaGlobalConfig.A_zimbraMtaSaslAuthEnable,"yes"]],
 
 				   	    		  label: ZaMsg.NAD_MTA_TlsAuthenticationOnly,
 						   	      trueValue: "TRUE", falseValue: "FALSE"
