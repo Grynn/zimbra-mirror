@@ -47,6 +47,7 @@ ZaItem.loadMethods["ZaDistributionList"] = new Array();
 ZaItem.initMethods["ZaDistributionList"] = new Array();
 ZaItem.createMethods["ZaDistributionList"] = new Array();
 ZaItem.ObjectModifiers["ZaDistributionList"] = new Array();
+ZaItem.getRelatedMethods["ZaDistributionList"] = new Array();
 
 ZaDistributionList.EMAIL_ADDRESS = "ZDLEA";
 ZaDistributionList.DESCRIPTION = "ZDLDESC";
@@ -1382,3 +1383,40 @@ ZaDistributionList.prototype.schedulePostLoading = function (controller) {
     var act = new AjxTimedAction(this, ZaDistributionList.prototype.getAllMembers, {controller:controller});
     AjxTimedAction.scheduleAction(act, 100);
 }
+
+ZaDistributionList.getRelatedList =
+function (parentPath) {
+    var alias = this.attrs[ZaAccount.A_zimbraMailAlias];
+    var membersNum = this[ZaDistributionList.A2_numMembers];
+    var Tis = [];
+    if(alias.length > 0) {
+        var aliasTi = new ZaTreeItemData({
+                    text: ZaMsg.TABT_Aliases,
+                    //type: 1,
+                    count:alias.length,
+                    image:"AccountAlias",
+                    mappingId: ZaZimbraAdmin._DL_ALIAS_LIST_VIEW,
+                    path: parentPath + ZaTree.SEPERATOR + this.name + ZaTree.SEPERATOR + ZaMsg.TABT_Aliases
+                    }
+                );
+        aliasTi.setData("aliasTargetId", this.id);
+        ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._DL_ALIAS_LIST_VIEW] = ZaOverviewPanelController.aliasListTreeListener;
+        Tis.push(aliasTi);
+    }
+    if(membersNum > 0) {
+        var membersTi = new ZaTreeItemData({
+                    text: ZaMsg.DLXV_LabelListMembers,
+                    count:membersNum,
+                    image:"DistributionList",
+                    mappingId: ZaZimbraAdmin._DL_MEMBERS_LIST_VIEW,
+                    path: parentPath + ZaTree.SEPERATOR + this.name + ZaTree.SEPERATOR + ZaMsg.DLXV_LabelListMembers
+                    }
+                );
+        membersTi.setData("dlItem", this);
+        ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._DL_MEMBERS_LIST_VIEW] = ZaOverviewPanelController.memberListInDLTreeListener;
+        Tis.push(membersTi);
+    }
+    return Tis;
+
+}
+ZaItem.getRelatedMethods["ZaDistributionList"].push(ZaDistributionList.getRelatedList);

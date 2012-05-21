@@ -27,6 +27,7 @@ ZaCos = function() {
 ZaItem.loadMethods["ZaCos"] = new Array();
 ZaItem.modifyMethods["ZaCos"] = new Array();
 ZaItem.initMethods["ZaCos"] = new Array();
+ZaItem.getRelatedMethods["ZaCos"] = new Array();
 
 ZaCos.prototype = new ZaItem;
 ZaCos.prototype.constructor = ZaCos;
@@ -1292,3 +1293,38 @@ ZaCos.checkValues = function(tmpObj){
 	}
     return true;
 }
+
+ZaCos.getRelatedList =
+function (parentPath) {
+    var Tis = [];
+    var count = this.countAllAccounts();
+    if(count > 0) {
+        var accountTi = new ZaTreeItemData({
+                    text: ZaMsg.OVP_accounts,
+                    count:count,
+                    image:"Account",
+                    mappingId: ZaZimbraAdmin._COS_ACCOUNT_LIST_VIEW,
+                    path: parentPath + ZaTree.SEPERATOR + this.name + ZaTree.SEPERATOR + ZaMsg.OVP_accounts
+                    }
+                );
+        accountTi.setData("cosItem", this);
+        ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._COS_ACCOUNT_LIST_VIEW] = ZaOverviewPanelController.accountListTreeListener;
+        Tis.push(accountTi);
+    }
+    count = this.countAllDomains();
+    if(count > 0) {
+        var domainTi = new ZaTreeItemData({
+                    text: ZaMsg.OVP_domains,
+                    count:count,
+                    image:"Domain",
+                    mappingId: ZaZimbraAdmin._COS_DOMAIN_LIST_VIEW,
+                    path: parentPath + ZaTree.SEPERATOR + this.name + ZaTree.SEPERATOR + ZaMsg.OVP_domains
+                    }
+                );
+        domainTi.setData("cosItem", this);
+        ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._COS_DOMAIN_LIST_VIEW] = ZaOverviewPanelController.domainListTreeListener;
+        Tis.push(domainTi);
+    }
+    return Tis;
+}
+ZaItem.getRelatedMethods["ZaCos"].push(ZaCos.getRelatedList);

@@ -37,6 +37,7 @@ ZaItem.modifyMethods["ZaAccount"] = new Array();
 ZaItem.createMethods["ZaAccount"] = new Array();
 ZaItem.ObjectModifiers["ZaAccount"] = [];
 ZaItem.modelExtensions["ZaAccount"] = new Array();
+ZaItem.getRelatedMethods["ZaAccount"] = new Array();
 ZaAccount.renameMethods = new Array();
 ZaAccount.changePasswordMethods = new Array();
 
@@ -2701,3 +2702,90 @@ function (accountId, domainName) {
 	params.noAuthToken = true;
 	command.invoke(params);
 }
+
+ZaAccount.getRelatedList =
+function (parentPath) {
+    var alias = this.attrs[ZaAccount.A_zimbraMailAlias];
+    var cos = ZaCos.getCosById(this.attrs[ZaAccount.A_COSId])
+            || ZaCos.getDefaultCos4Account(this[ZaAccount.A_name]);
+    var domainName = ZaAccount.getDomain(this[ZaAccount.A_name]);
+    var domainObj =  ZaDomain.getDomainByName (domainName) ;
+    //var zimletList = item.attrs[ZaAccount.A_zimbraZimletAvailableZimlets]
+    //        || item._defaultValues.attrs[ZaAccount.A_zimbraZimletAvailableZimlets];
+
+    var Tis = [];
+    if(alias.length > 0) {
+        var aliasTi = new ZaTreeItemData({
+                    text: ZaMsg.TABT_Aliases,
+                    //type: 1,
+                    count:alias.length,
+                    image:"AccountAlias",
+                    mappingId: ZaZimbraAdmin._ACCOUNT_ALIAS_LIST_VIEW,    //ZaZimbraAdmin._ALIASES_LIST_VIEW,
+                    path: parentPath + ZaTree.SEPERATOR + this.name + ZaTree.SEPERATOR + ZaMsg.TABT_Aliases
+                    }
+                );
+        aliasTi.setData("aliasTargetId", this.id);
+        ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._ACCOUNT_ALIAS_LIST_VIEW] = ZaOverviewPanelController.aliasListTreeListener;
+        Tis.push(aliasTi);
+    }
+
+    var dls = this[ZaAccount.A2_memberOf];
+    if (dls != null) {
+        var direct_dls = dls[ZaAccount.A2_directMemberList];
+        var indirect_dls = dls[ZaAccount.A2_indirectMemberList];
+
+        if ((direct_dls.length + indirect_dls.length) > 0) {
+            var dlsTi = new ZaTreeItemData({
+                    text: ZaMsg.OVP_distributionLists,
+                    count:direct_dls.length + indirect_dls.length,
+                    image:"DistributionList",
+                    mappingId: ZaZimbraAdmin._DISTRIBUTION_LISTS_LIST_VIEW,
+                    path: parentPath + ZaTree.SEPERATOR + this.name + ZaTree.SEPERATOR + ZaMsg.OVP_distributionLists
+                }
+            );
+            dlsTi.setData(ZaAccount.A2_memberOf, dls);
+            ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._DISTRIBUTION_LISTS_LIST_VIEW] = ZaOverviewPanelController.dlListTreeListener;
+            Tis.push(dlsTi);
+        }
+    }
+
+    var cosTi = new ZaTreeItemData({
+                text: cos.name,
+                image:"COS",
+                forceNode: true,
+                mappingId: ZaZimbraAdmin._COS_VIEW,
+                path: parentPath + ZaTree.SEPERATOR + cos.name
+                }
+            );
+    cosTi.setData(ZaOverviewPanelController._OBJ_ID, cos.id);
+    cosTi.setData("skipHistory", "TRUE");
+    ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._COS_VIEW] = ZaOverviewPanelController.cosTreeListener;
+    Tis.push(cosTi);
+
+    var domainTi = new ZaTreeItemData({
+                text: domainName,
+                image:"Domain",
+                forceNode: true,
+                mappingId: ZaZimbraAdmin._DOMAIN_VIEW,
+                path: parentPath + ZaTree.SEPERATOR + domainName
+                }
+            );
+    domainTi.setData(ZaOverviewPanelController._OBJ_ID, domainObj.id);
+    domainTi.setData("skipHistory", "TRUE");
+    ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._DOMAIN_VIEW] = ZaOverviewPanelController.domainTreeListener;
+    Tis.push(domainTi);
+    /*
+    var zimletTi = new ZaTreeItemData({
+                text: ZaMsg.TABT_Zimlets,
+                //type: 1,
+                count:zimletList.length,
+                mappingId:ZaZimbraAdmin._ZIMLET_LIST_VIEW,
+                path: parentPath + ZaTree.SEPERATOR + item.name + ZaTree.SEPERATOR + ZaMsg.TABT_Zimlets
+                }
+            );
+    ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._ZIMLET_LIST_VIEW] = ZaOverviewPanelController.zimletListTreeListener;
+    */
+    return Tis;
+}
+ZaItem.getRelatedMethods["ZaAccount"].push(ZaAccount.getRelatedList);
+

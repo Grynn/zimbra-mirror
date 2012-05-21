@@ -66,6 +66,10 @@ ZaHistoryMgr.prototype.addHistoryObj =
 function (historyObject) {
     if (AjxUtil.isEmpty(historyObject.type))
         return;
+
+    if (!ZaHistoryMgr.isAllowedRecentedObject(historyObject.path))
+        return;
+
     var lastObj = this._historyObj.get(this._historyObj.size() - 1);
     if(lastObj && lastObj.path == historyObject.path)
         return;
@@ -87,6 +91,32 @@ function(historyObject) {
     }
     return -1;
 }
+
+ZaHistoryMgr.isAllowedRecentedObject =
+function (srcPath) {
+    var ret = false;
+    var srcPathArr = ZaTree.getPathItems(srcPath);
+    var destPathArr;
+    for (var i = 0; i < ZaHistoryMgr.AllowedRecenctObject.length; i++ ) {
+        destPathArr =  ZaTree.getPathItems( ZaHistoryMgr.AllowedRecenctObject[i]);
+        for (var j = 0; j < destPathArr.length; j++) {
+            if (srcPathArr[j] != destPathArr[j]) {
+                break;
+            }
+        }
+
+        if (j == destPathArr.length) {
+            ret = true;
+            break;
+        }
+    }
+    return ret;
+}
+
+ZaHistoryMgr.AllowedRecenctObject = [
+    [ZaMsg.OVP_home, ZaMsg.OVP_manageAccounts].join(ZaTree.SEPERATOR),
+    [ZaMsg.OVP_home, ZaMsg.OVP_configure].join(ZaTree.SEPERATOR)
+];
 
 ZaHistoryMgr.prototype.removeHistory =
 function() {

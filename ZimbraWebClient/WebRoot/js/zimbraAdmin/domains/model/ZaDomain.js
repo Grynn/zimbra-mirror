@@ -61,6 +61,7 @@ ZaItem.initMethods["ZaDomain"] = new Array();
 ZaItem.modifyMethods["ZaDomain"] = new Array();
 ZaItem.modifyMethodsExt["ZaDomain"] = new Array();
 ZaItem.createMethods["ZaDomain"] = new Array();
+ZaItem.getRelatedMethods["ZaDomain"] = new Array();
 
 ZaDomain.DOMAIN_STATUS_ACTIVE = "active";
 ZaDomain.DOMAIN_STATUS_MAINTENANCE = "maintenance";
@@ -3050,3 +3051,40 @@ ZaDomain.prototype.countAllAliases = function() {
     }
     return 0;
 }
+
+ZaDomain.getRelatedList =
+function (parentPath) {
+    var Tis = [];
+    var count = this.countAllAccounts();
+    if(count > 0) {
+        var accountTi = new ZaTreeItemData({
+                    text: ZaMsg.OVP_accounts,
+                    count:count,
+                    image:"Account",
+                    mappingId: ZaZimbraAdmin._DOMAIN_ACCOUNT_LIST_VIEW,
+                    path: parentPath + ZaTree.SEPERATOR + this.name + ZaTree.SEPERATOR + ZaMsg.OVP_accounts
+                    }
+                );
+        accountTi.setData("domainItem", this);
+        ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._DOMAIN_ACCOUNT_LIST_VIEW] = ZaOverviewPanelController.accountListInDomainTreeListener;
+        Tis.push(accountTi);
+    }
+
+    count = this.countAllAliases();
+    if(count > 0) {
+        var aliasTi = new ZaTreeItemData({
+                    text: ZaMsg.TABT_Aliases,
+                    count:count,
+                    image:"DomainAlias",
+                    mappingId: ZaZimbraAdmin._DOMAIN_ALIAS_LIST_VIEW,
+                    path: parentPath + ZaTree.SEPERATOR + this.name + ZaTree.SEPERATOR + ZaMsg.OVP_accounts
+                    }
+                );
+        aliasTi.setData("domainItem", this);
+        ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._DOMAIN_ALIAS_LIST_VIEW] = ZaOverviewPanelController.domainListTreeListener;
+        Tis.push(aliasTi);
+    }
+    return Tis;
+}
+
+ZaItem.getRelatedMethods["ZaDomain"].push(ZaDomain.getRelatedList);

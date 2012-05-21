@@ -35,6 +35,7 @@ ZaItem.modifyMethodsExt = new Object();
 ZaItem.createMethods = new Object();
 ZaItem.removeMethods = new Object();
 ZaItem.modelExtensions = new Object();
+ZaItem.getRelatedMethods = new Object();
 
 ZaItem.ACCOUNT = "account";
 ZaItem.DATASOURCE = "dataSource";
@@ -194,9 +195,27 @@ function () {
 	//Instrumentation code end
 }
 
+
 ZaItem.prototype.refresh = 
 function (skipRights,expandDefaults) {
 	this.load(this.id ? "id" : null, this.id ? this.id : null,skipRights,expandDefaults);
+}
+
+ZaItem.prototype.getRelatedList =
+function (parentPath) {
+	//Instrumentation code start
+    var ret = [];
+	if(ZaItem.getRelatedMethods[this._iKeyName]) {
+		var methods = ZaItem.getRelatedMethods[this._iKeyName];
+		var cnt = methods.length;
+		for(var i = 0; i < cnt; i++) {
+			if(typeof(methods[i]) == "function") {
+				ret = ret.concat(methods[i].call(this, parentPath));
+			}
+		}
+	}
+    return ret;
+	//Instrumentation code end
 }
 
 ZaItem.prototype.copyTo = 
