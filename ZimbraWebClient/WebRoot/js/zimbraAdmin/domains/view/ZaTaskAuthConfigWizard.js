@@ -178,10 +178,11 @@ function(stepNum) {
 			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
 		} else if (stepNum == ZaTaskAuthConfigWizard.AUTH_CONFIG_AUTH_SET_STEP) {
 			// valid check
-			var nextEnabled = true;
-			if (AjxUtil.isEmpty(this._localXForm.getInstanceValue(ZaDomain.A_AuthADDomainName)) ||
-				AjxUtil.isEmpty(this._localXForm.getInstanceValue(ZaDomain.A_AuthLdapURL))) {
-				nextEnabled = false;
+			var nextEnabled = false;
+            var authMode = this._containedObject.attrs[ZaDomain.A_AuthMech];
+			if (((authMode == ZaDomain.AuthMech_ad) && !AjxUtil.isEmpty(this._localXForm.getInstanceValue(ZaDomain.A_AuthADDomainName))) ||
+				((authMode == ZaDomain.AuthMech_ldap) && !AjxUtil.isEmpty(this._localXForm.getInstanceValue(ZaDomain.A_AuthLdapURL)))) {
+				nextEnabled = true;
 			}
 			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
 			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(nextEnabled);
@@ -547,7 +548,7 @@ ZaTaskAuthConfigWizard.myXFormModifier = function(xFormObject) {
 										visibilityChecks:[],enableDisableChecks:[],bmolsnr:true
 									},
                                     {type:_SPACER_, height:10,colSpan:2},
-                                    {type:_OUTPUT_, label:"AD Server", value:" ", labelCssStyle:"text-align:left;padding-left:20px;"},
+                                    {type:_OUTPUT_, label:ZaMsg.Domain_AuthADServer, value:" ", labelCssStyle:"text-align:left;padding-left:20px;"},
 									{type:_GROUP_, numCols:6, colSpan:2,label:null,labelLocation:_LEFT_, containerCssStyle:"padding-left:20px;",
 										items: [
 											{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:" ", width:"35px"},
@@ -603,7 +604,7 @@ ZaTaskAuthConfigWizard.myXFormModifier = function(xFormObject) {
 											{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:ZaMsg.Domain_AuthLDAPUseSSL, width:"40px"}
 										]
 									},
-									{ref:ZaDomain.A_AuthLdapURL, type:_REPEAT_, colSpan:"*",cssStyple:"padding-left:10px;",//label:ZaMsg.Domain_AuthLdapURL, repeatInstance:"", showAddButton:true, showRemoveButton:true,
+									{ref:ZaDomain.A_AuthLdapURL, type:_REPEAT_, colSpan:"*",cssStyle:"padding-left:10px;",//label:ZaMsg.Domain_AuthLdapURL, repeatInstance:"", showAddButton:true, showRemoveButton:true,
 										addButtonLabel:ZaMsg.Domain_AddURL,
 										removeButtonLabel:ZaMsg.Domain_REPEAT_REMOVE,
 										showAddOnNextRow:true,
