@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -333,7 +334,21 @@ public class Props2JsServlet extends HttpServlet {
                     basedir, dirname, classname);
                 
                 // load path list, but not actual properties to prevent caching
-                ResourceBundle.getBundle(basename, locale, loader);
+                ResourceBundle.getBundle(basename, locale, loader,  new ResourceBundle.Control()
+                {
+                    @Override
+                    public List<Locale> getCandidateLocales(String baseName, Locale locale)
+                    {
+                        if (baseName == null) throw new NullPointerException();
+                        if (locale.equals(new Locale("zh", "HK")) || locale.equals(new Locale("zh", "CN")))
+                        {
+                            return Arrays.asList(
+                                    locale,
+                                    Locale.ROOT);
+                        }
+                        return super.getCandidateLocales(baseName, locale);
+                    }
+                });
                 for (File file : loader.getFiles()) {
                     if (locale.getLanguage() == "zh") {
                         out.writeBytes("// file: " + getCommentSafeString(file.getName()) + '\n');    
