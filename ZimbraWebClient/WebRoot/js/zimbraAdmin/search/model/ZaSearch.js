@@ -633,7 +633,8 @@ function(n) {
 	if (n == null || n == "") {
 		return "";
 	} else {
-		n = String(n).replace(/([\\\\\\*\\(\\)])/g, "\\$1");
+		n = ZaSearch.escapeLdapQuery(n);
+		//n = String(n).replace(/([\\\\\\*\\(\\)])/g, "\\$1");
 		return ("(|(uid=*"+n+"*)(cn=*"+n+"*)(sn=*"+n+"*)(gn=*"+n+"*)(zimbraId="+n+"))");
 	}
 }
@@ -643,7 +644,8 @@ function(n) {
 	if (n == null || n == "") {
 		return "";
 	} else {
-		n = String(n).replace(/([\\\\\\*\\(\\)])/g, "\\$1");
+		n = ZaSearch.escapeLdapQuery(n);
+		//n = String(n).replace(/([\\\\\\*\\(\\)])/g, "\\$1");
 		return ("(|(uid=*"+n+"*)(cn=*"+n+"*)(sn=*"+n+"*)(gn=*"+n+"*)(zimbraId="+n+")(zimbraDomainName=*"+n+"*))");
 	}
 }
@@ -653,7 +655,8 @@ function(n) {
         if (n == null || n == "") {
                 return "";
         } else {
-                n = String(n).replace(/([\\\\\\*\\(\\)])/g, "\\$1");
+                n = ZaSearch.escapeLdapQuery(n);
+                //n = String(n).replace(/([\\\\\\*\\(\\)])/g, "\\$1");
                 return ("(&(|(uid=*"+n+"*)(cn=*"+n+"*)(sn=*"+n+"*)(gn=*"+n+"*)(zimbraId="+n+")(zimbraDomainName=*"+n+"*))(zimbraDomainType=local))");
         }
 }
@@ -675,10 +678,7 @@ function(n, types,excludeClosed) {
 	if (!AjxUtil.isEmpty(n)) {
 		query.push("(|");
 		// bug 67477, escape special symbols "(", ")", "*", "\"
-		n = String(n).replace(/\\/g, "\\5C");
-		n = String(n).replace(/\(/g, "\\28");
-		n = String(n).replace(/\)/g, "\\29");
-		n = String(n).replace(/\*/g, "\\2A");
+		n = ZaSearch.escapeLdapQuery(n);
         if (!types) types = [ZaSearch.ALIASES, ZaSearch.ACCOUNTS, ZaSearch.DLS, ZaSearch.RESOURCES, ZaSearch.DOMAINS, ZaSearch.COSES] ;
         var addedAddrFields = false;
         var addedAccResFields = false;
@@ -725,10 +725,7 @@ function(n, types,excludeClosed) {
 ZaSearch.getBestMatchSearchByNameQuery =
 function(n, types) {
     var query = ZaSearch.getSearchByNameQuery(n, types);
-	n = n.replace(/\\/g, "\\5C");
-	n = n.replace(/\(/g, "\\28");
-	n = n.replace(/\)/g, "\\29");
-	n = n.replace(/\*/g, "\\2A");
+	n = ZaSearch.escapeLdapQuery(n);
 
     var orig = new RegExp("\\*" + n + "\\*","g");
     var lReg = new RegExp("^\\\s*\\(\\\s*\\|");
@@ -1075,3 +1072,15 @@ function (days) {
 //A sample saved search object:
 // {name:"savedA", query:"users"};
 ZaSearch.SAVED_SEARCHES = [];
+
+
+ZaSearch.escapeLdapQuery =
+function (value) {
+    value = String(value);
+    value = value.replace(/\\/g, "\\5C");
+    value = value.replace(/\(/g, "\\28");
+    value = value.replace(/\)/g, "\\29");
+    value = value.replace(/\*/g, "\\2A");
+
+    return value;
+}
