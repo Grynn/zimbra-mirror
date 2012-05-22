@@ -24,6 +24,7 @@ public interface CommonConstants {
 	String OPTION_LEAVE_SHARED_FOLDER="Leave this Shared Folder";
 	String OPTION_UPLOAD="Upload";
 	String OPTION_NEW_FOLDER="New Folder";
+	String OPTION_SHARED_VIA_PARENT="Shared via Parent Folder";
 		
 	enum SHARE_PERMISSION {SHARE_AS_READ, SHARE_AS_READWRITE, SHARE_AS_ADMIN};
 	

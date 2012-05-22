@@ -68,9 +68,9 @@ public class PageOctopus extends AbsTab {
 		public static final Locators zUserDisplayName = new Locators(
 				"css=span[class='user-display-name']");
 		public static final Locators zDisabledOptionItem = new Locators(
-				"css=div[class^=sc-view sc-menu-item][aria-disabled=true] a[class=menu-item]");
+				"css=div.sc-view.sc-menu-item.disabled a[class=menu-item]");
 		public static final Locators zEnaabledOptionItem = new Locators(
-				"css=div[class^=sc-view sc-menu-item] a[class=menu-item]");
+				"css=div.sc-view.sc-menu-item a[class=menu-item]");
 
 		public final String locator;
 
