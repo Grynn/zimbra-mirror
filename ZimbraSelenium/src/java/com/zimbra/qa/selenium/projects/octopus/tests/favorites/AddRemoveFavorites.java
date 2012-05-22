@@ -188,6 +188,10 @@ public class AddRemoveFavorites extends OctopusCommonTest {
 		ZAssert.assertTrue(account.soapMatch(
 				"//mail:GetWatchingItemsResponse//mail:item", "id", _fileId),
 				"Verify file is added to Favorites");
+		
+		app.zPageMyFiles.zRefresh();
+		
+		//TO DO: remove refresh call when bug HS-1778 is fixed.
 
 		/*
 		
