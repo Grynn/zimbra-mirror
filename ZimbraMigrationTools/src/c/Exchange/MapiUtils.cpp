@@ -669,7 +669,8 @@ HRESULT Zimbra::MAPI::Util::GetExchangeUsersUsingObjectPicker(
     HRESULT hr = S_OK;
     wstring wstrExchangeDomainAddress;
 
-    MAPIInitialize(NULL);
+    hr=MAPIInitialize(NULL);
+    
     CComPtr<IDsObjectPicker> pDsObjectPicker = NULL;
     hr = CoCreateInstance(CLSID_DsObjectPicker, NULL, CLSCTX_INPROC_SERVER, IID_IDsObjectPicker,
         (LPVOID *)&pDsObjectPicker);
@@ -2447,7 +2448,7 @@ BOOL Zimbra::MAPI::Util::CreatePSTProfile(LPSTR lpstrProfileName, LPSTR lpstrPST
     Zimbra::Util::ScopedInterface<IMsgServiceAdmin> imsadmin;
     Zimbra::Util::ScopedInterface<IMAPITable> mstable;
     Zimbra::Util::ScopedRowSet msrows;
-
+    
     // Get IProfAdmin interface pointer
     if (FAILED(hr = MAPIAdminProfiles(0, iprofadmin.getptr())))
     {
@@ -2580,7 +2581,7 @@ BOOL Zimbra::MAPI::Util::DeleteAlikeProfiles(LPCSTR lpstrProfileName)
     HRESULT hr = S_OK;
     Zimbra::Util::ScopedInterface<IMAPITable> proftable;
     Zimbra::Util::ScopedInterface<IProfAdmin> iprofadmin;
-    MAPIInitialize(NULL);
+        
     // Get IProfAdmin interface pointer
     if (FAILED(hr = MAPIAdminProfiles(0, iprofadmin.getptr())))
     {
@@ -2611,7 +2612,6 @@ BOOL Zimbra::MAPI::Util::DeleteAlikeProfiles(LPCSTR lpstrProfileName)
                 hr = iprofadmin->DeleteProfile((LPTSTR)name.c_str(), 0);
         }
     }
-    MAPIUninitialize();
     return TRUE;
 }
 

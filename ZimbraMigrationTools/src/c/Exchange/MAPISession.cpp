@@ -26,8 +26,12 @@ MAPISession::MAPISession(): m_Session(NULL)
 {
     Zimbra::Util::AutoCriticalSection autocriticalsection(cs);
 
-    MAPIInitialize(NULL);
-
+    MAPIINIT_0 MAPIInit;
+   MAPIInit.ulFlags = MAPI_NO_COINIT | 0;
+   MAPIInit.ulVersion = MAPI_INIT_VERSION;
+   HRESULT hr= MAPIInitialize(&MAPIInit);
+       
+    UNREFERENCED_PARAMETER(hr);
     Zimbra::Mapi::Memory::SetMemAllocRoutines(NULL, MAPIAllocateBuffer, MAPIAllocateMore,
         MAPIFreeBuffer);
 }
