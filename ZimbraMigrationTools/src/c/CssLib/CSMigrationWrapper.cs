@@ -477,7 +477,7 @@ public class CSMigrationWrapper
                         }
                         catch (Exception e)
                         {
-                           Log.err("exception in ProcessItems->itemobject.GetDataForItemID", e.Message);
+                           Log.err("exception in Bitconverter cconverting itemid to a hexstring", e.Message);
                             
                        
                         }

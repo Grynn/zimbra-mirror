@@ -297,10 +297,12 @@ class Program
                 string Verbose = CommandLineArgs.I.argAsString("Verbose");
                 bool Datefilter = false;
                 bool SkipFolder = false;
-
+                bool SkipPreviousMigration = false;
                 string Folderlist = CommandLineArgs.I.argAsString("FoldersToSkip");
 
                 string MigrateDate = CommandLineArgs.I.argAsString("MigrateOnOrAfter");
+
+                
 
                 bool ServerMigration = false;
                 XmlConfig myXmlConfig = new XmlConfig();
@@ -415,6 +417,15 @@ class Program
 
                    /* if (Mail == false)
                         Mail = myXmlConfig.ConfigObj.ImportOptions.Mail;*/
+                    if (CommandLineArgs.I.arg("IsSkipPrevMigratedItems") != null)
+                    {
+
+                        SkipPreviousMigration = CommandLineArgs.I.argAsBool("IsSkipPrevMigratedItems");
+                    }
+                    else
+                        SkipPreviousMigration = myXmlConfig.ConfigObj.AdvancedImportOptions.IsSkipPrevMigratedItems;
+                   
+
                     if (CommandLineArgs.I.arg("IsSkipFolders") != null)
                     {
 
@@ -611,12 +622,10 @@ class Program
 
                 }
 
-                if (myXmlConfig.ConfigObj.AdvancedImportOptions.IsSkipPrevMigratedItems)
-                {
+               
+                    importopts.SkipPrevMigrated = SkipPreviousMigration;
 
-                    importopts.SkipPrevMigrated = myXmlConfig.ConfigObj.AdvancedImportOptions.IsSkipPrevMigratedItems;
-
-                }
+                
                 //importopts.VerboseOn = Verbose;
 
                 Migration Test = new Migration();
