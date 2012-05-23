@@ -26,6 +26,9 @@
  * @param {hash}	inputParams		params for the input (see {@link DwtInputField})
  * @param {string}      className		the CSS class
  * @param {constant}      posStyle		the positioning style (see {@link DwtControl})
+ * @param {int}     maxRows         The number of maxRows needed in drop down(see {@link DwtMenu})
+ * @param {constant} layout         The layout of the drop down(see {@link DwtMenu})
+ * @param {boolean} autoScroll    Set to true if auto scroll to the input text is needed. Defaults to false.
  * 
  * @extends		DwtComposite
  */
@@ -48,6 +51,9 @@ DwtComboBox = function(params) {
 	this._menuItemListenerObj = new AjxListener(this, this._menuItemListener);
 
     this._inputParams = params.inputParams;
+	this._maxRows = params.maxRows;
+	this._layout = params.layout;
+	this._autoScroll = params.autoScroll || false;
     this._createHtml();
 };
 
@@ -212,7 +218,14 @@ DwtComboBox.prototype.focus = function() {
 
 DwtComboBox.prototype._createMenu =
 function() {
-    var menu = this._menu = new DwtMenu({parent:this});
+	var params = {parent:this};
+	if (this._maxRows) {
+		params.maxRows = this._maxRows;
+	}
+	if (this._layout) {
+		params.layout = this._layout;
+	}
+    var menu = this._menu = new DwtMenu(params);
     for (var i in this._textToValue) {
     	var item = this._createMenuItem(menu, i);
         var value = this._textToValue[i];
@@ -262,8 +275,21 @@ DwtComboBox.prototype._handleKeyUp = function(ev) {
 	DwtInputField._keyUpHdlr(ev);
 	// notify our listeners
 	var event = DwtUiEvent.getEvent(ev);
-	event._args = { selectObj: this, newValue: this.input.getValue(), oldValue: this.__ovalue };
+	var newValue = this.input.getValue();
+	event._args = { selectObj: this, newValue: newValue, oldValue: this.__ovalue };
 	this.notifyListeners(DwtEvent.ONCHANGE, event);
+	if (this._autoScroll && newValue != this.__ovalue) {
+		//if auto scroll is on then scroll to the index which starts with
+		//the value in input field
+		var index = 0;
+		for (var text in this._textToValue) {
+			if (text.indexOf(newValue) == 0) {
+				this._menu.scrollToIndex(index);
+				break;
+			}
+			index++;
+		}
+	}
 	return true;
 };
 
