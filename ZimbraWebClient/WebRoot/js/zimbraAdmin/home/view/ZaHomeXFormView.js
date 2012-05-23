@@ -280,7 +280,7 @@ ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
             ]},
             {type:_GROUP_, colSpan: "*", numCols:3,  width:"100%", colSizes:["33%", "34%", "33%"],
                 containerCssClass:"ZaHomeInfoPanel",items:[
-                {type:_GROUP_, containerCssClass:"ZaHomePanelPage", colSizes:["auto"], width:"100%", items:[
+                {type:_GROUP_, containerCssClass:"ZaHomePanelPage", cssStyle:"overflow:hidden", colSizes:["auto"], items:[
                     {type:_OUTPUT_, colSpan:"2", value:ZaMsg.LBL_HomeSummary, cssClass:"ZaHomeInfoTitle"},
                     {type:_OUTPUT_, label:ZabMsg.LBL_HomeZimbraVersion, cssStyle:"word-wrap:break-word;word-break:break-all;",ref: ZaHome.A2_version},
                     {type:_OUTPUT_, label:ZaMsg.LBL_HomeServerNum, ref: ZaHome.A2_serverNum, bmolsnr: true,
