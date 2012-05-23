@@ -2323,7 +2323,7 @@ ZaOverviewPanelController.xformTreeListener = function(ev) {
 ZaOverviewPanelController.prototype.getRelatedList =
 function(parentPath, item) {
     if(!item || !item.getRelatedList)
-        return;
+        return [];
 
     return item.getRelatedList(parentPath);
 }
