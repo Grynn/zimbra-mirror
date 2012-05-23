@@ -28,9 +28,9 @@ if(XFormItem) {
         dwtEv.setFromDhtmlEvent(event);
         var content = this.getInheritedProperty("helpTooltipContent");
         if (!content) {
-            var attributeName = this.getRefPath();
+            var attributeName = this.getInheritedProperty("attributeName");
             if(!attributeName) {
-                attributeName = this.getInheritedProperty("attributeName");
+                attributeName = this.getRefPath();
             }
 
             if(!attributeName) {
@@ -39,7 +39,7 @@ if(XFormItem) {
 
             var findSlash = attributeName.lastIndexOf("/");
             if(findSlash != -1) {
-               attributeName = attributeName.substring(findSlash);
+               attributeName = attributeName.substring(findSlash + 1); //exclude reverse slash
             }
 
             content = attributeName;
