@@ -21,7 +21,7 @@ import com.zimbra.qa.selenium.framework.util.ZDate;
 import com.zimbra.qa.selenium.framework.util.ZTimeZone;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.calendar.DialogConfirmDeleteAppointment;
+import com.zimbra.qa.selenium.projects.ajax.ui.calendar.*;
 
 
 public class DeleteAppointment extends AjaxCommonTest {
@@ -477,7 +477,7 @@ public class DeleteAppointment extends AjaxCommonTest {
 		app.zPageCalendar.zListItem(Action.A_CHECKBOX, subject3);
 
 		// Click delete
-		DialogConfirmDeleteAppointment dialog = (DialogConfirmDeleteAppointment)app.zPageCalendar.zToolbarPressButton(Button.B_DELETE);
+		DialogConfirmDeleteAppointments dialog = (DialogConfirmDeleteAppointments)app.zPageCalendar.zToolbarPressButton(Button.B_DELETE);
 		ZAssert.assertNotNull(dialog, "Verify the dialog appears correctly");
 		
 		// Click Yes on the confirmation
