@@ -157,9 +157,12 @@ public class BaseViewModel: INotifyPropertyChanged
                     m_config.UserProvision.DestinationDomain = usersModel.DomainList[usersModel.CurrentDomainSelection];
                 }
                 else
-                if (savedDomain.Length > 0)
+                if (savedDomain != null)
                 {
-                    m_config.UserProvision.DestinationDomain = savedDomain;
+                    if (savedDomain.Length > 0)
+                    {
+                        m_config.UserProvision.DestinationDomain = savedDomain;
+                    }
                 }
             }
             else
