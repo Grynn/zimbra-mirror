@@ -98,7 +98,7 @@ public class EditHtmlSignature extends AjaxCommonTest {
 
 		//Verify signature name and body contents
 		ZAssert.assertEquals(editsignature.getName(),sigEditName,"Verify Edited signature name");
-		ZAssert.assertEquals(editsignature.dBodyHtmlText,editbodyHTML,"Verify Edited Html signature body");
+		ZAssert.assertStringContains(editsignature.dBodyHtmlText,editbodyHTML,"Verify Edited Html signature body");
 		ZAssert.assertStringDoesNotContain(editsignature.getName(), this.sigName, "Verify after edit 1st signature  does not present");
 
 	}

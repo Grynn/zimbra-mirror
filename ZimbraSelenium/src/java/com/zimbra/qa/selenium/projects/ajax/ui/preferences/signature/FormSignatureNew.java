@@ -1,5 +1,9 @@
 package com.zimbra.qa.selenium.projects.ajax.ui.preferences.signature;
 
+import java.awt.AWTException;
+import java.awt.Robot;
+import java.awt.event.KeyEvent;
+
 import com.zimbra.qa.selenium.framework.items.IItem;
 import com.zimbra.qa.selenium.framework.ui.AbsApplication;
 import com.zimbra.qa.selenium.framework.ui.AbsForm;
@@ -152,14 +156,24 @@ public class FormSignatureNew extends AbsForm {
 			return;
 
 		} else if (field == Field.SignatureHtmlBody) {
-			locator = Locators.zHtmlBodyField;
+			//locator = Locators.zHtmlBodyField;
+
+			locator = "css=body[id='tinymce']";
 			try{
-			sSelectFrame(Locators.zFrame);
-			this.sFocus(locator);
-			this.zClickAt(locator,"");
-			//sType(locator, value);
-			//sTypeKeys(locator, value);
-			this.zKeyboard.zTypeCharacters(value);
+				sSelectFrame(Locators.zFrame);
+				this.sFocus(locator);
+				this.zClickAt(locator,"");
+				Robot zRobot;
+				try {
+					zRobot = new Robot();
+					zRobot.keyPress(KeyEvent.VK_CONTROL);
+					zRobot.keyPress(KeyEvent.VK_A);
+					zRobot.keyRelease(KeyEvent.VK_CONTROL);
+					zRobot.keyRelease(KeyEvent.VK_A);				
+				} catch (AWTException e) {
+					e.printStackTrace();
+				}
+				this.zKeyboard.zTypeCharacters(value);
 			}finally{
 				sSelectFrame("relative=top");
 			}
