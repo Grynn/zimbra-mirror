@@ -235,7 +235,7 @@ ZaHome.prototype.updateServiceStatus = function (resp) {
     viewController.setInstanceValue(serviceStatus, ZaHome.A2_serviceStatus);
     viewController.setInstanceValue(serviceStatusMessage, ZaHome.A2_serviceStatusMessage);
     viewController.setInstanceValue(serviceDetailedMessage, ZaHome.A2_serviceDetailedMessage);
-    if (serverStatus != true) {
+    if (serviceStatus != true) {
         viewController.showWarningPanel();
     }
 }
