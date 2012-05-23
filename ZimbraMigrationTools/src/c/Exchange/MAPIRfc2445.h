@@ -6,6 +6,8 @@ DEFINE_GUID(PS_OUTLOOK_MTG, 0x6ED8DA90, 0x450B, 0x101B, 0x98, 0xDA, 0x00, 0xAA, 
     0x13, 0x05);
 DEFINE_GUID(PS_OUTLOOK_TASK, 0x00062003, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46);
 
+const ULONG PR_ATTACHMENT_HIDDEN    = 0x7FFE000B ;
+
 enum OutlookBusyStatus
 {
     oFree = 0,
@@ -161,6 +163,7 @@ public:
     ~MAPIRfc2445();
 
     vector<AttachmentInfo*> GetAttachmentInfo();
+    int GetNumHiddenAttachments();
     HRESULT ExtractAttachments();
     void GenerateContentDisposition(LPSTR *ppszCD, LPSTR pszFilename);
     void GetContentType(mimepp::Headers& headers, LPSTR *ppStr);

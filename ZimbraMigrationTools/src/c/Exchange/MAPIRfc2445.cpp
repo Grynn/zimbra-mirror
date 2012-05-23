@@ -41,8 +41,7 @@ wstring MAPIRfc2445::GetRecurMonthOccurrence() { return m_pRecurMonthOccurrence;
 wstring MAPIRfc2445::GetRecurMonthOfYear() { return m_pRecurMonthOfYear; };
 Tz MAPIRfc2445::GetRecurTimezone() { return m_timezone; };
 
-HRESULT ConvertIt(LPMESSAGE pMsg, IStream** ppszMimeMsg, UINT& mimeLength ) 
-                                                                       
+HRESULT ConvertIt(LPMESSAGE pMsg, IStream** ppszMimeMsg, UINT& mimeLength )                                                                       
 {
     HRESULT hr = S_OK;
 
@@ -97,6 +96,67 @@ HRESULT ConvertIt(LPMESSAGE pMsg, IStream** ppszMimeMsg, UINT& mimeLength )
     return hr;
 }
 
+int MAPIRfc2445::GetNumHiddenAttachments()
+{
+    int retval = 0;
+    HRESULT hr = S_OK;
+    LPCWSTR errMsg;
+    Zimbra::Util::ScopedInterface<IStream> pSrcStream;
+    Zimbra::Util::ScopedRowSet pAttachRows;
+    Zimbra::Util::ScopedInterface<IMAPITable> pAttachTable;
+
+    SizedSPropTagArray(1, attachProps) = {
+        1, { PR_ATTACHMENT_HIDDEN }
+    };
+
+    hr = m_pMessage->GetAttachmentTable(MAPI_UNICODE, pAttachTable.getptr());
+    if (SUCCEEDED(hr))
+    {
+        if (FAILED(hr = pAttachTable->SetColumns((LPSPropTagArray) &attachProps, 0)))
+        {
+            errMsg = FormatExceptionInfo(hr, L"Error setting attachment table columns", __FILE__, __LINE__);
+            dlogw(errMsg);
+            return 0;
+        }
+        ULONG ulRowCount = 0;
+        if (FAILED(hr = pAttachTable->GetRowCount(0, &ulRowCount)))
+        {
+            errMsg = FormatExceptionInfo(hr, L"Error getting attachment table row count", __FILE__, __LINE__);
+            dlogw(errMsg);
+            return 0;
+        }
+        if (FAILED(hr = pAttachTable->QueryRows(ulRowCount, 0, pAttachRows.getptr())))
+        {
+            errMsg = FormatExceptionInfo(hr, L"Error querying attachment table rows", __FILE__, __LINE__);
+            dlogw(errMsg);
+            return 0;
+        }
+        if (SUCCEEDED(hr))
+        {
+            hr = MAPI_E_NOT_FOUND;
+            for (unsigned int i = 0; i < pAttachRows->cRows; i++)
+            {
+                // if property couldn't be found or returns error, skip it
+                if ((pAttachRows->aRow[i].lpProps[0].ulPropTag != PT_ERROR) &&
+                    (pAttachRows->aRow[i].lpProps[0].Value.err != MAPI_E_NOT_FOUND))
+                {
+                    if (pAttachRows->aRow[i].lpProps[0].Value.b)
+                    {
+                        retval++;
+                    }
+                }
+            }
+        }
+    }
+    else
+    {
+        errMsg = FormatExceptionInfo(hr, L"Error getting attachment tables", __FILE__, __LINE__);
+        dlogw(errMsg);
+        return 0;
+    }
+    return retval;
+}
+
 HRESULT MAPIRfc2445::ExtractAttachments()
 {
     // may need to break this up so we can call for exceptions, cancel exceptions
@@ -107,7 +167,7 @@ HRESULT MAPIRfc2445::ExtractAttachments()
     HRESULT hr = ConvertIt( m_pMessage, pIStream.getptr(), mimeLen );
     if (FAILED(hr))
     {
-        errMsg = FormatExceptionInfo(S_OK, L"Mime conversion of message with attachments failed", __FILE__, __LINE__);
+        errMsg = FormatExceptionInfo(hr, L"Mime conversion of message with attachments failed", __FILE__, __LINE__);
         dlogw(errMsg);
         return hr;
     }
@@ -121,7 +181,7 @@ HRESULT MAPIRfc2445::ExtractAttachments()
     hr = pIStream->Seek(li, STREAM_SEEK_SET, NULL);
     if (FAILED(hr))
     {
-        errMsg = FormatExceptionInfo(S_OK, L"Stream seek failed", __FILE__, __LINE__);
+        errMsg = FormatExceptionInfo(hr, L"Stream seek failed", __FILE__, __LINE__);
         dlogw(errMsg);
         return hr;
     }
@@ -140,13 +200,13 @@ HRESULT MAPIRfc2445::ExtractAttachments()
     hr = pIStream->Read((LPVOID)(pszMimeMsg.get()), mimeLen, &ulNumRead);
     if (FAILED(hr))
     {
-        errMsg = FormatExceptionInfo(S_OK, L"Mime msg read failed", __FILE__, __LINE__);
+        errMsg = FormatExceptionInfo(hr, L"Mime msg read failed", __FILE__, __LINE__);
         dlogw(errMsg);
         return hr;
     }
     if (ulNumRead != mimeLen)
     {
-        errMsg = FormatExceptionInfo(S_OK, L"Mime msg read error", __FILE__, __LINE__);
+        errMsg = FormatExceptionInfo(hr, L"Mime msg read error", __FILE__, __LINE__);
         dlogw(errMsg);
         return hr;
     }
@@ -173,7 +233,16 @@ HRESULT MAPIRfc2445::ExtractAttachments()
     const mimepp::Body& theBody = mimeMsg.body();
     int numParts = theBody.numBodyParts();
 
+    // FBS bug 73682 -- 5/23/12
+    int numHiddenAttachments = GetNumHiddenAttachments();
+    int totalAttachments = numParts - 1;
+    if (totalAttachments == numHiddenAttachments)
+    {
+        return S_OK;
+    }
+
     // let's look for a multipart mixed and grab the attachments
+    int ctr = numHiddenAttachments;
     for(int i = 0; i < numParts; i++) 
     {
         // now look for attachments
@@ -187,6 +256,18 @@ HRESULT MAPIRfc2445::ExtractAttachments()
             LPSTR pszCD;
             LPSTR lpszRealName = new char[256];
             GetContentType(thePart.headers(), &pszAttachContentType);
+
+            // FBS bug 73682 -- Exceptions are at the beginning.  Don't make attachments for those
+            if (ctr > 0)
+            {
+                if (0 == strcmpi(pszAttachContentType, "message/rfc822"))
+                {
+                    ctr--;
+                    continue;
+                }
+            }
+            //
+
             if((LPSTR)theFilename.length()>0)
             {
                 GenerateContentDisposition(&pszCD, (LPSTR)theFilename.c_str());
