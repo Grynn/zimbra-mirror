@@ -871,7 +871,7 @@ AjxStringUtil._LF = /\n/;
 AjxStringUtil.convertHtml2Text =
 function(domRoot, convertor, onlyOneNewLinePerP) {
 
-	if (!domRoot) { return null; }
+	if (!domRoot) { return ""; }
 
 	if (convertor && AjxUtil.isFunction(convertor._before)) {
 		domRoot = convertor._before(domRoot);
