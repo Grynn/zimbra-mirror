@@ -27,7 +27,6 @@ import com.zimbra.qa.selenium.projects.ajax.ui.calendar.*;
 public class DeleteAppointment extends AjaxCommonTest {
 
 
-	@SuppressWarnings("serial")
 	public DeleteAppointment() {
 		logger.info("New "+ DeleteAppointment.class.getCanonicalName());
 
@@ -35,7 +34,9 @@ public class DeleteAppointment extends AjaxCommonTest {
 		super.startingPage = app.zPageCalendar;
 
 		// Make sure we are using an account with message view
-		super.startingAccountPreferences = new HashMap<String, String>() {{
+		super.startingAccountPreferences = new HashMap<String, String>() {
+			private static final long serialVersionUID = -5268509108302506830L;
+		{
 			put("zimbraPrefCalendarInitialView", "list");
 		}};
 
@@ -477,7 +478,7 @@ public class DeleteAppointment extends AjaxCommonTest {
 		app.zPageCalendar.zListItem(Action.A_CHECKBOX, subject3);
 
 		// Click delete
-		DialogConfirmDeleteAppointments dialog = (DialogConfirmDeleteAppointments)app.zPageCalendar.zToolbarPressButton(Button.B_DELETE);
+		DialogConfirmDeleteAppointment dialog = (DialogConfirmDeleteAppointment)app.zPageCalendar.zToolbarPressButton(Button.B_DELETE);
 		ZAssert.assertNotNull(dialog, "Verify the dialog appears correctly");
 		
 		// Click Yes on the confirmation

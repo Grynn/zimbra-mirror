@@ -992,12 +992,6 @@ public class PageCalendar extends AbsTab {
 				return (page);
 			}
 			
-			// If an organizer deletes an appointment(s) (no attendees), you get a "Confirmation" dialog
-			page = new DialogConfirmDeleteAppointments(MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
-			if ( page.zIsActive() ) {
-				return (page);
-			}
-			
 			page = new DialogConfirmDeleteRecurringAppointment(MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
 			if ( page.zIsActive() ) {
 				return (page);

@@ -17,7 +17,7 @@ import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
 public class DialogConfirmDeleteAppointment extends DialogWarning {
 
 	// The ID for the main Dialog DIV
-	public static final String LocatorDivID = "CNF_DEL_YESNO";
+	public static final String LocatorDivID = "CONFIRM_DIALOG";
 
 	
 	
