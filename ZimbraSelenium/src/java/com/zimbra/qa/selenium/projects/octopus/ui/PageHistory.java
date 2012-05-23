@@ -45,8 +45,6 @@ public class PageHistory extends AbsTab {
 		PageHistory.GetText.REGEXP.NEWVERSION,
 		PageHistory.GetText.REGEXP.RENAME
   	  };
-    
-
    	  
    	  // text displayed in Global History
    	  String YOU = "You";
@@ -72,6 +70,12 @@ public class PageHistory extends AbsTab {
 	  
 	  String MOVE_PREFIX=" moved file ";
 	  String MOVE_POSTFIX=" from folder ";
+	  
+	  String DELETE_PREFIX=" deleted file ";
+	  String DELETE_POSTFIX=" from folder My Files un-delete";
+	  
+	  String SHARE_PREFIX=" enabled public link to file ";
+	  String SHARE_POSTFIX=" Copy Link";
 	}
     
     public static boolean notSetup= true;
@@ -177,13 +181,6 @@ public class PageHistory extends AbsTab {
 			        +   fileName + COMMENT_POSTFIX;
 		}
 		
-		
-		public static String comment1(String fileName,String... forsharee) {
-			
-			return ((forsharee.length ==1)?forsharee:YOU) + COMMENT_PREFIX + fileName + COMMENT_POSTFIX;
-			        
-		}
-		
 		public static String newVersion(String fileName) {
 			return YOU +  NEW_VERSION_PREFIX 
 			        +   fileName + NEW_VERSION_POSTFIX;
@@ -213,9 +210,20 @@ public class PageHistory extends AbsTab {
 			return          user + UNFAVORITE_PREFIX 
 			        +   fileName + UNFAVORITE_POSTFIX;
 		}
+		
 		public static String move(String fileName,String rootFolder,String folderName) {
 			return YOU +  MOVE_PREFIX 
 			        +   fileName + MOVE_POSTFIX  + rootFolder + " to folder " + folderName +".";
+		}
+		
+		public static String deleteFile(String fileName) {
+			return YOU +  DELETE_PREFIX 
+			        +   fileName + DELETE_POSTFIX;
+		}
+		
+		public static String shareFile(String fileName) {
+			return YOU +  SHARE_PREFIX 
+			        +   fileName + SHARE_POSTFIX;
 		}
 	}
 	
