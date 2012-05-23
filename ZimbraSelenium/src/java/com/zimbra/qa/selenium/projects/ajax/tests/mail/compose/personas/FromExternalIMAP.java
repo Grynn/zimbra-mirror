@@ -91,13 +91,26 @@ public class FromExternalIMAP extends PrefGroupMailByMessageTest {
 			+			"<m id='"+ id +"' html='1'/>"
 			+		"</GetMsgRequest>");
 
+		/**
+		 * Since we are using Zimbra to Zimbra to set up the external
+		 * account, the MTA knows both accounts and allows the
+		 * Zimbra user to send from the External account directly,
+		 * without the OBO.
+		 * 
+		 * Due to limitations in the WDC (5/22/2012), external
+		 * accounts cannot be set up with third party servers.
+		 * (Maybe a stand alone Zimbra server may be used.)
+		 * 
+		 * If this test case is executed with a third party
+		 * server, you should see:
+		 * From: Zimbra
+		 * OBO: External
+		 * 
+		 */
+		
 		// Verify From: alias
 		String address = ZimbraAccount.AccountA().soapSelectValue("//mail:e[@t='f']", "a");
-		ZAssert.assertEquals(address, external.EmailAddress, "Verify the from is the alias email address");
-		
-		// Verify Sender: active account
-		String sender = ZimbraAccount.AccountA().soapSelectValue("//mail:e[@t='s']", "a");
-		ZAssert.assertEquals(sender, app.zGetActiveAccount().EmailAddress, "Verify Sender: active account");
+		ZAssert.assertEquals(address, app.zGetActiveAccount().EmailAddress, "In the Zimbra-Zimbra config, verify the from is the Zimbra email address");
 
 		
 	}	
