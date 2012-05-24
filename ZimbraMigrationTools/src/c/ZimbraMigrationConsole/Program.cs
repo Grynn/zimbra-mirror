@@ -820,6 +820,7 @@ class Program
                                 "",
                                 "",
                                 Defaultpwd,
+                                false,
                                 myXmlConfig.ConfigObj.UserProvision.COS) == 0)
                             {
                                 System.Console.WriteLine();

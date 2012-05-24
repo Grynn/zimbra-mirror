@@ -784,7 +784,7 @@ public class ZimbraAPI
         return retval;
     }
 
-    public int CreateAccount(string accountname, string displayname, string givenname, string sn, string zfp, string defaultpw, string cosid)
+    public int CreateAccount(string accountname, string displayname, string givenname, string sn, string zfp, string defaultpw, bool mustChangePW, string cosid)
     {
         int retval = 0;
 
@@ -828,6 +828,10 @@ public class ZimbraAPI
             }
             WriteAttrNVPair(writer, "a", "n", "zimbraForeignPrincipal", zimbraForeignPrincipal);
             WriteAttrNVPair(writer, "a", "n", "zimbraCOSId", cosid);
+            if (mustChangePW)
+            {
+                WriteAttrNVPair(writer, "a", "n", "zimbraPasswordMustChange", "TRUE");
+            }
 
             writer.WriteEndElement();           // CreateAccountRequest
             writer.WriteEndElement();           // soap body

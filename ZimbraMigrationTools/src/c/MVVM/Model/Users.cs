@@ -34,6 +34,11 @@ public class Users
         get;
         set;
     }
+    public bool MustChangePassword
+    {
+        get;
+        set;
+    }
     public bool EnableNext {
         get;
         set;

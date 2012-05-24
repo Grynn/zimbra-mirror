@@ -31,6 +31,7 @@ public class UsersViewModel: BaseViewModel
         this.MappedName = mappedname;
         this.OPInfo = new ObjectPickerInfo("", "", "", "");
         this.IsProvisioned = false;
+        this.MustChangePassword = false;
         this.EnablePopButtons = true;
         this.DomainsFilledIn = false;
     }
@@ -185,14 +186,16 @@ public class UsersViewModel: BaseViewModel
                                     tempuser.UserName = strres[0];
                                     tempuser.MappedName = strres[1];
 
-                                    // tempuser.ChangePWD = Convert.ToBoolean(strres[2]);
+                                    tempuser.ChangePWD = Convert.ToBoolean(strres[2]);
                                     // tempuser.PWDdefault = strres[3];
                                     // string result = tempuser.UserName + "," + tempuser.MappedName +"," + tempuser.ChangePWD + "," + tempuser.PWDdefault;
                                     string result = tempuser.Username + "," + tempuser.MappedName;
 
                                     Username = strres[0];
                                     MappedName = strres[1];
-                                    UsersList.Add(new UsersViewModel(Username, MappedName));
+                                    UsersViewModel uvm = new UsersViewModel(Username, MappedName);
+                                    uvm.MustChangePassword = tempuser.ChangePWD;
+                                    UsersList.Add(uvm);
                                     scheduleViewModel.SchedList.Add(new SchedUser(Username, false));
                                 }
                             }
@@ -291,7 +294,7 @@ public class UsersViewModel: BaseViewModel
 
             tempUser.UserName = nameTokens.GetValue(0).ToString();
             tempUser.MappedName = nameTokens.GetValue(1).ToString();
-            // tempUser.ChangePWD = Convert.ToBoolean(nameTokens.GetValue(2).ToString());
+            tempUser.ChangePWD = Convert.ToBoolean(nameTokens.GetValue(2).ToString());
             // tempUser.PWDdefault = nameTokens.GetValue(3).ToString();
 
             ListofUsers.Add(tempUser);
@@ -594,6 +597,16 @@ public class UsersViewModel: BaseViewModel
         {
             isProvisioned = value;
             OnPropertyChanged(new PropertyChangedEventArgs("IsProvisioned"));
+        }
+    }
+    private bool mustChangePassword;
+    public bool MustChangePassword
+    {
+        get { return mustChangePassword; }
+        set
+        {
+            mustChangePassword = value;
+            OnPropertyChanged(new PropertyChangedEventArgs("MustChangePassword"));
         }
     }
     private bool enableNext;
