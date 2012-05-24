@@ -163,15 +163,27 @@ public class OptionsViewModel: BaseViewModel
 
     private void Next()
     {
-        if (MaxMessageSize.Length > 0)
+        bool mmsError = false;
+        if (IsMaxMessageSize)
         {
-            try
+            if (MaxMessageSize.Length == 0)
             {
-                int msf = Int32.Parse(MaxMessageSize);
+                mmsError = true;
             }
-            catch (Exception)
+            else
             {
-                MessageBox.Show("Please enter an integer value for maximum message size" , "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
+                try
+                {
+                    int msf = Int32.Parse(MaxMessageSize);
+                }
+                catch (Exception)
+                {
+                    mmsError = true;
+                }
+            }
+            if (mmsError)
+            {
+                MessageBox.Show("Please enter an integer value for maximum message size", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
         }
