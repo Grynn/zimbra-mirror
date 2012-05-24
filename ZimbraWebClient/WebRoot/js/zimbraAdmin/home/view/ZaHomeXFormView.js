@@ -196,6 +196,10 @@ ZaHomeXFormView.showStaticsInfo = function () {
     return (ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.SERVER_STATS_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]);
 }
 
+ZaHomeXFormView.showRunTime = function () {
+    return (ZaHomeXFormView.showStatusInfo() || ZaHomeXFormView.showStaticsInfo());
+}
+
 ZaHomeXFormView.showMT = function() {
     var value = this.getInstanceValue(ZaHome.A2_maintenanceItemNum);
     return value > 1;
@@ -341,7 +345,9 @@ ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
                         {type:_OUTPUT_, ref: ZaHome.A2_DBCheckMessage}
                     ]} */
                 ]},
-                {type:_GROUP_, containerCssClass:"ZaHomePanelPage", items:[
+                {type:_GROUP_, containerCssClass:"ZaHomePanelPage",
+                    visibilityChecks:[[ZaHomeXFormView.showRunTime]],
+                    items:[
                     {type:_OUTPUT_, colSpan:"2", value:ZaMsg.LBL_HomeRuntime, cssClass:"ZaHomeInfoTitle"},
                     {type:_OUTPUT_, label:ZaMsg.LBL_HomeService, ref: ZaHome.A2_serviceStatus, bmolsnr: true,
                         visibilityChecks:[[ZaHomeXFormView.showStatusInfo]],
