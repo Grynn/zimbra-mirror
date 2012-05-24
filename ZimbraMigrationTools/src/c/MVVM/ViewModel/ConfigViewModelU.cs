@@ -110,7 +110,13 @@ public class ConfigViewModelU: BaseViewModel
                     LoadConfig(config);
                     ((ConfigViewModelUDest)ViewModelPtrs[(int)ViewType.USRDEST]).LoadConfig(config);
                     ((OptionsViewModel)ViewModelPtrs[(int)ViewType.OPTIONS]).LoadConfig(config);
-                    ((ScheduleViewModel)ViewModelPtrs[(int)ViewType.SCHED]).SetConfigFile(fDialog.FileName);                       
+                    ((ScheduleViewModel)ViewModelPtrs[(int)ViewType.SCHED]).SetConfigFile(fDialog.FileName);
+                    if ((IsProfile) && (CurrentProfileSelection == -1))
+                    {
+                        MessageBox.Show("The profile listed in the file does not exist on this system.  Please select a valid profile",
+                                        "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }   
                 }
                 catch (Exception e)
                 {
@@ -197,6 +203,12 @@ public class ConfigViewModelU: BaseViewModel
                 return;
             }
         }
+        else
+        if (CurrentProfileSelection == -1)
+        {
+            MessageBox.Show("Please select a valid profile", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
+            return;
+        }
 
         lb.SelectedIndex = 2;
     }
@@ -208,7 +220,6 @@ public class ConfigViewModelU: BaseViewModel
                 return;
             m_config.SourceServer.Profile = value;
             // m_config.mailServer.ProfileName= value;
-            CSEnableNext = true;
             OnPropertyChanged(new PropertyChangedEventArgs("OutlookProfile"));
         }
     }
@@ -225,6 +236,7 @@ public class ConfigViewModelU: BaseViewModel
         set
         {
             profileselection = value;
+            CSEnableNext = (value != -1);
 
             OnPropertyChanged(new PropertyChangedEventArgs("CurrentProfileSelection"));
         }

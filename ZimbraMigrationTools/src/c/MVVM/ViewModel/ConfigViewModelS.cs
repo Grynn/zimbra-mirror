@@ -98,6 +98,12 @@ public class ConfigViewModelS: BaseViewModel
                     ((OptionsViewModel)ViewModelPtrs[(int)ViewType.OPTIONS]).LoadConfig(config);
                     ((UsersViewModel)ViewModelPtrs[(int)ViewType.USERS]).LoadDomain(config);
                     ((ScheduleViewModel)ViewModelPtrs[(int)ViewType.SCHED]).SetConfigFile(fDialog.FileName);
+                    if ((IsProfile) && (CurrentProfileSelection == -1))
+                    {
+                        MessageBox.Show("The profile listed in the file does not exist on this system.  Please select a valid profile",
+                                        "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
                 }
                 catch (Exception e)
                 {
@@ -149,6 +155,11 @@ public class ConfigViewModelS: BaseViewModel
 
         if (IsProfile)
         {
+            if (CurrentProfileSelection == -1)
+            {
+                MessageBox.Show("Please select a valid profile", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
             if (iMailSvrInitialized == EXCHSVR_MODE)
             {
                 MessageBox.Show("You are already logged in via Exchange Server credentials",
@@ -236,6 +247,7 @@ public class ConfigViewModelS: BaseViewModel
         set
         {
             profileselection = value;
+            CSEnableNext = (value != -1);
 
             OnPropertyChanged(new PropertyChangedEventArgs("CurrentProfileSelection"));
         }
