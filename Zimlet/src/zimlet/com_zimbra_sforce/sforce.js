@@ -43,6 +43,7 @@ Com_Zimbra_SForce.prototype.init = function() {
 	this._shell = this.getShell();
 	this.loginToSFOnLaunch = this.getUserProperty("loginToSFOnLaunch") == "true";
 	this.sforce_linkNamesInSalesForceStartsWith = this.getUserProperty("sforce_linkNamesInSalesForceStartsWith");
+	this.sforce_taskType = this.getUserProperty("sforce_taskType");
 	this._force_show_salesforceBar = false;
 	this.loadLoginInfo = false;//used to ensure people has entered valid user/pwd 
 	this._loadingSalesForceHtml = ["<table align=center><tr><td><div style='padding:10px'><img   src=\"", this.getResource("img/sf_busy.gif") , "\"  /> <b> Searching SalesForce..</b></div></td></tr></table>"].join("");
@@ -2300,7 +2301,13 @@ Com_Zimbra_SForce.prototype._addNotesOKButtonListener = function(dlg) {
 			ids[i].Description = props.Body;
 			ids[i].Status = 'Completed';
 			ids[i].ActivityDate = Com_Zimbra_SForce.toIsoDateTime(new Date());
+
+			// bug 74118, force to set a type of Task
+			if (this.sforce_taskType) {
+				ids[i].Type = this.sforce_taskType;
+			}
 		}
+
 		this.createSFObject(ids, "Task", function() {
 			this.displayStatusMessage("Saved " + ids.length + " notes.");
 		});

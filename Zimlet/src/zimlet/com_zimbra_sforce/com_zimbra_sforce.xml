@@ -31,6 +31,7 @@
 		<property type="string" name="sforce_logindlg_sbarShowOnlyOnResult" value= "false" />
 		<property type="string" name="sforce_logindlg_showSendAndAddBtn" value= "true" />
 		<property type="string" name="sforce_linkNamesInSalesForceStartsWith" value= "Link_to_" />
+		<property type="string" name="sforce_taskType" value="Email" />
 
   </userProperties>
 
