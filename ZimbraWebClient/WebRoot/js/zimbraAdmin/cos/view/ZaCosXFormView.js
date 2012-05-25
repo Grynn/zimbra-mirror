@@ -483,10 +483,7 @@ ZaCosXFormView.addButtonListener = function (isPurge) {
 
 ZaCosXFormView.createRetentionPolicy = function (form) {
     if(ZaApp.getInstance().dialogs["newRetentionPolicyDialog"]) {
-        ZaApp.getInstance().dialogs["newRetentionPolicyDialog"].popdown();
         var obj = form.getInstance();
-        obj.createPolicy("id", this.getForm().getInstance().id);
-
         var all;
         if (obj[ZaRetentionPolicy.A2_type] == ZaRetentionPolicy.TYPE_KEEP) {
             all = this.getForm().getInstanceValue(ZaCos.A2_retentionPoliciesKeep);
@@ -496,6 +493,14 @@ ZaCosXFormView.createRetentionPolicy = function (form) {
         if (!all) {
             all = [];
         }
+
+        if (!ZaRetentionPolicy.checkValues(obj, all)) {
+            return false;
+        }
+
+        ZaApp.getInstance().dialogs["newRetentionPolicyDialog"].popdown();
+
+        obj.createPolicy("id", this.getForm().getInstance().id);
 
         all.push(obj);
 
@@ -533,10 +538,7 @@ ZaCosXFormView.editButtonListener = function (isPurge) {
 
 ZaCosXFormView.updateRetentionPolicy = function (form) {
     if(ZaApp.getInstance().dialogs["editRetentionPolicyDialog"]) {
-        ZaApp.getInstance().dialogs["editRetentionPolicyDialog"].popdown();
         var obj = form.getInstance();
-        obj.modifyPolicy("id", this.getForm().getInstance().id);
-
         var all;
         if (obj[ZaRetentionPolicy.A2_type] == ZaRetentionPolicy.TYPE_KEEP) {
             all = this.getForm().getInstanceValue(ZaCos.A2_retentionPoliciesKeep);
@@ -546,6 +548,13 @@ ZaCosXFormView.updateRetentionPolicy = function (form) {
         if (!all) {
             all = [];
         }
+        if (!ZaRetentionPolicy.checkValues(obj, all)) {
+            return false;
+        }
+
+        ZaApp.getInstance().dialogs["editRetentionPolicyDialog"].popdown();
+
+        obj.modifyPolicy("id", this.getForm().getInstance().id);
 
         var index = AjxUtil.indexOf(all, obj);
         AjxUtil.arrayRemove(all, obj);

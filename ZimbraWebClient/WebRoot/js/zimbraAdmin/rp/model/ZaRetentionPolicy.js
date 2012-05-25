@@ -22,7 +22,7 @@ function(name, id, lifetime, type) {
     this.name = name;
 
     if (!lifetime) {
-        this.lifetime = "0d";
+        this.lifetime = "1d";
     } else {
         var number = lifetime.substr(0, lifetime.length - 1);
         if (number % ZaRetentionPolicy.YEAR == 0) {
@@ -38,6 +38,7 @@ function(name, id, lifetime, type) {
     this.type = type ? type: ZaRetentionPolicy.TYPE_KEEP;
 }
 
+ZaRetentionPolicy.prototype = new ZaItem;
 ZaRetentionPolicy.prototype.constructor = ZaRetentionPolicy;
 ZaRetentionPolicy.prototype.toString =
 function() {
@@ -74,8 +75,8 @@ ZaRetentionPolicy.A2_type = "type";
 ZaRetentionPolicy.myXModel = {
     items:[
         {id:ZaRetentionPolicy.A2_id, type:_STRING_, ref:ZaRetentionPolicy.A2_id},
-        {id:ZaRetentionPolicy.A2_name, type:_STRING_, ref:ZaRetentionPolicy.A2_name},
-        {id:ZaRetentionPolicy.A2_lifetime, type:_MLIFETIME_, ref:ZaRetentionPolicy.A2_lifetime},
+        {id:ZaRetentionPolicy.A2_name, type:_STRING_, ref:ZaRetentionPolicy.A2_name, required:true},
+        {id:ZaRetentionPolicy.A2_lifetime, type:_MLIFETIME_, ref:ZaRetentionPolicy.A2_lifetime, minInclusive: 1},
         {id:ZaRetentionPolicy.A2_type, type:_STRING_, ref:ZaRetentionPolicy.A2_type}
     ]
 }
@@ -169,6 +170,44 @@ function(by, val) {
         throw ex;
         return null;
     }
+}
+
+ZaRetentionPolicy.checkLifeTime = function (lifetime) {
+    if (!lifetime || lifetime.length < 1) {
+        return false;
+    }
+    var digit = lifetime.substr(0, lifetime.length - 1);
+    if (!digit) {
+        return false;
+    }
+
+    return AjxUtil.isPositiveInt(digit);
+}
+
+ZaRetentionPolicy.checkValues = function (tmpObj, list) {
+    if (!tmpObj) {
+        return false;
+    }
+    if (AjxUtil.isEmpty(tmpObj[ZaRetentionPolicy.A2_name])) {
+        ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_EmptyRPName) ;
+        return false;
+    }
+
+    if (!ZaRetentionPolicy.checkLifeTime(tmpObj[ZaRetentionPolicy.A2_lifetime])) {
+        ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_InvalidRPLifetime);
+        return false;
+    }
+
+    if (list && AjxUtil.isArray(list)) {
+        for (var i = 0; i < list.length; i++) {
+            if (list[i][ZaRetentionPolicy.A2_name] == tmpObj[ZaRetentionPolicy.A2_name] &&
+                list[i] != tmpObj) {
+                ZaApp.getInstance().getCurrentController().popupErrorDialog(AjxMessageFormat.format(ZaMsg.ERROR_RPExists, [tmpObj[ZaRetentionPolicy.A2_name]])) ;
+                return false;
+            }
+        }
+    }
+    return true;
 }
 
 ZaRetentionPolicy.prototype.modifyPolicy =

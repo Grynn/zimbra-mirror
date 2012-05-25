@@ -229,10 +229,7 @@ GlobalConfigXFormView.addButtonListener = function (isPurge) {
 
 GlobalConfigXFormView.createRetentionPolicy = function (form) {
     if(ZaApp.getInstance().dialogs["newGlobalRetentionPolicyDialog"]) {
-        ZaApp.getInstance().dialogs["newGlobalRetentionPolicyDialog"].popdown();
         var obj = form.getInstance();
-        obj.createPolicy();
-
         var all;
         if (obj[ZaRetentionPolicy.A2_type] == ZaRetentionPolicy.TYPE_KEEP) {
             all = this.getForm().getInstanceValue(ZaGlobalConfig.A2_retentionPoliciesKeep);
@@ -242,6 +239,13 @@ GlobalConfigXFormView.createRetentionPolicy = function (form) {
         if (!all) {
             all = [];
         }
+
+        if (!ZaRetentionPolicy.checkValues(obj, all)) {
+            return false;
+        }
+        ZaApp.getInstance().dialogs["newGlobalRetentionPolicyDialog"].popdown();
+
+        obj.createPolicy();
 
         all.push(obj);
 
@@ -279,10 +283,7 @@ GlobalConfigXFormView.editButtonListener = function (isPurge) {
 
 GlobalConfigXFormView.updateRetentionPolicy = function (form) {
     if(ZaApp.getInstance().dialogs["editGlobalRetentionPolicyDialog"]) {
-        ZaApp.getInstance().dialogs["editGlobalRetentionPolicyDialog"].popdown();
         var obj = form.getInstance();
-        obj.modifyPolicy();
-
         var all;
         if (obj[ZaRetentionPolicy.A2_type] == ZaRetentionPolicy.TYPE_KEEP) {
             all = this.getForm().getInstanceValue(ZaGlobalConfig.A2_retentionPoliciesKeep);
@@ -292,6 +293,13 @@ GlobalConfigXFormView.updateRetentionPolicy = function (form) {
         if (!all) {
             all = [];
         }
+        if (!ZaRetentionPolicy.checkValues(obj, all)) {
+            return false;
+        }
+
+        ZaApp.getInstance().dialogs["editGlobalRetentionPolicyDialog"].popdown();
+
+        obj.modifyPolicy();
 
         var index = AjxUtil.indexOf(all, obj);
         AjxUtil.arrayRemove(all, obj);
