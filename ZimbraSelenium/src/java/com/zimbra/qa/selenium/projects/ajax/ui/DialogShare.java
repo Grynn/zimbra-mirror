@@ -43,15 +43,35 @@ public class DialogShare extends AbsDialog {
 
 	}
 	
-	public void zSetShareWith(ShareWith name) throws HarnessException {
-		logger.info(myPageName() + " zSetShareWith("+ name +")");
+	public void zSetShareWith(ShareWith type) throws HarnessException {
+		logger.info(myPageName() + " zSetShareWith("+ type +")");
 
-		String locator = "implement me";
+		String locator = null;
+		
+		if ( type == ShareWith.InternalUsers ) {
+			
+			locator = "css=input#ShareWith_user";
+
+		} else if ( type == ShareWith.ExternalGuests ) {
+			
+			locator = "css=input#ShareWith_external";
+			
+		} else if ( type == ShareWith.Public ) {
+			
+			locator = "css=input#ShareWith_public";
+			
+		} else {
+			throw new HarnessException("type = " + type + " not implemented yet");
+		}
 		
 		// Make sure the locator exists
 		if ( !this.sIsElementPresent(locator) ) {
 			throw new HarnessException("zSetShareWith "+ locator +" is not present");
 		}
+		
+		// check the box
+		this.sClick(locator);
+		this.zWaitForBusyOverlay();
 		
 	}
 	
