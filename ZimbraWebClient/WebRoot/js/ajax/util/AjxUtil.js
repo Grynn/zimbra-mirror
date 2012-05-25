@@ -839,7 +839,7 @@ AjxUtil.get = function(object /* , propName1, ... */) {
 AjxUtil.convertToEntities = function (source){
 	var result = '', temp, length = 0, i = 0;
     
-    if (!source || !(length = source.length)) return result;
+    if (!source || !(length = source.length)) return source;
     
 	for(i; i < length; ++i){
 		if(source.charCodeAt(i) > 127){

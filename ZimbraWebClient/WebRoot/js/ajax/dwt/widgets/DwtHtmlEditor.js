@@ -901,23 +901,10 @@ function(content) {
 	// The onload event was originally used to continue init, but we went to setTimeout for bug 10619. That bug doesn't
 	// occur if we go back to using onload, so maybe something got fixed in FF.
 	// iFrame.onload = cont;
-
-    if( this._isPasteEnabled ){
-        var pastecont = AjxCallback.simpleClosure(this._registerPasteEvent, this);
-        iFrame.onload = pastecont;
-    }
     iFrame.src = 'javascript:(function(d){d.open();d.write("<html><body></body></html>");d.close();})(document)';
 	htmlEl.appendChild(iFrame);
 
 	return iFrame;
-};
-
-DwtHtmlEditor.prototype._registerPasteEvent = function(){
-    var editor = this,
-        doc = editor._getIframeDoc();
-    //Always unregister event handler as safari and chrome fires multiple times if registered multiple
-    editor._unregisterEditorEventHandler(doc,"paste");
-    editor._registerEditorEventHandler(doc,"paste");
 };
 
 DwtHtmlEditor.prototype._finishHtmlModeInit =
