@@ -376,9 +376,10 @@ function(ex, method, params, restartOnError, obj) {
  				 * But in the process of login, we use this exception to popup login dialog if user doesn't 
  				 * login. We shouldn't disable the username field in the first soap request if an exception is thrown.
  				 */
-			if (!(ZaZimbraAdmin.isFirstRequest &&  
+			if ((!ZaZimbraAdmin.isFirstRequest &&  
 				  (ex.code == ZmCsfeException.NO_AUTH_TOKEN ||
-				   ex.code == ZmCsfeException.SVC_AUTH_REQUIRED	
+				   ex.code == ZmCsfeException.SVC_AUTH_REQUIRED ||
+				   ex.code == ZmCsfeException.SVC_AUTH_EXPIRED	
 				 ))
 			   ) {
 				this._loginDialog.disableUnameField();
@@ -540,7 +541,7 @@ function (resp) {
 			var msg = ex.code == ZmCsfeException.ACCT_PASS_RECENTLY_USED ? ZaMsg.errorPassRecentlyUsed : (ZaMsg.errorPassChangeTooSoon);
 			this._loginDialog.setError(msg);
 			this._loginDialog.clearPassword();
-			this._loginDialog.setFocus();
+			this._loginDialog.setFocus(null);
 		} else if (ex.code == ZmCsfeException.PASSWORD_LOCKED) {
 			this._showLoginDialog(true);
 			// re-enable username and password fields
@@ -648,7 +649,7 @@ function(uname, oldPass, newPass, conPass) {
 				? ZaMsg.errorPassRecentlyUsed
 				: (ZaMsg.errorPassChangeTooSoon);
 			this._loginDialog.setError(msg);
-			this._loginDialog.setFocus();
+			this._loginDialog.setFocus(null);
 		} else if (ex.code == ZmCsfeException.ACCT_PASS_LOCKED)	{
 			// re-enable username and password fields
 			this._loginDialog.disablePasswordField(false);
