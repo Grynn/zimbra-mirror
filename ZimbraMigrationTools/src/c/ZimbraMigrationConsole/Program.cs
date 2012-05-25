@@ -330,9 +330,21 @@ class Program
                         {
                             myXmlConfig = new XmlConfig(ConfigXmlFile, UserMapFile);
 
-                            myXmlConfig.InitializeConfig();
 
-                            myXmlConfig.GetUserList();
+                            try
+                            {
+                                myXmlConfig.InitializeConfig();
+
+                                myXmlConfig.GetUserList();
+                            }
+                            catch (Exception e)
+                            {
+                                System.Console.WriteLine("Exception in initializeconfig/Getuserlist \n" + e.Message);
+                                Console.ReadKey(true);
+                                return;
+
+
+                            }
                         }
                         else
                         {
@@ -348,7 +360,17 @@ class Program
                         
                             myXmlConfig = new XmlConfig(ConfigXmlFile, "");
 
-                            myXmlConfig.InitializeConfig();
+
+                            try
+                            {
+                                myXmlConfig.InitializeConfig();
+                            }
+                            catch (Exception e)
+                            {
+                                System.Console.WriteLine("Exception in initializeconfig \n" + e.Message);
+                                Console.ReadKey(true);
+                                return;
+                            }
                        
 
                     }
