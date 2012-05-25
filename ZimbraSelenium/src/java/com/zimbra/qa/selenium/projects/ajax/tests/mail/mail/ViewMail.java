@@ -363,12 +363,12 @@ public class ViewMail extends PrefGroupMailByMessageTest {
 
 	@Bugs(ids = "67854")
 	@Test(	description = "Verify empty message shows 'no content'",
-			groups = { "functional" })
+			groups = { "functional", "matt" })
 	public void ViewMail_12() throws HarnessException {
 		
 		final String mimeFile = ZimbraSeleniumProperties.getBaseDirectory() + "/data/public/mime/Bugs/Bug67854";
 		final String subject = "subject13218526621403";
-		final String content = "The message has no text content.";
+		final String content = "The message has no content.";
 		
 		LmtpInject.injectFile(app.zGetActiveAccount().EmailAddress, new File(mimeFile));
 
