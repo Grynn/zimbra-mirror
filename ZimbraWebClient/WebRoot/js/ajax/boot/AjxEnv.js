@@ -231,6 +231,7 @@ function() {
     AjxEnv.isChrome2up = false;
     AjxEnv.isChrome7 = false;
     AjxEnv.isChrome10up = false;
+	AjxEnv.isChrome19up = false;
 	AjxEnv.isGeckoBased = false;
 	AjxEnv.isWebKitBased = false;
 	AjxEnv.isOpera = false;
@@ -377,6 +378,7 @@ function() {
         AjxEnv.isChrome2up		= (AjxEnv.isChrome && browserVersion >= 2.0);
         AjxEnv.isChrome7		= (AjxEnv.isChrome && browserVersion >= 7.0);
         AjxEnv.isChrome10up		= (AjxEnv.isChrome && browserVersion >= 10.0);
+		AjxEnv.isChrome19up		= (AjxEnv.isChrome && browserVersion >= 19.0);
 
 		AjxEnv.browser = "[unknown]";
 		if (AjxEnv.isOpera) 				{	AjxEnv.browser = "OPERA";	}
