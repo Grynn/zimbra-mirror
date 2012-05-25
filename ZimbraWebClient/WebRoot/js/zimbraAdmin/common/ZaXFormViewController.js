@@ -99,7 +99,6 @@ function(ev, noPopView, func, obj, params, newPath) {
                 //use closure to pass 'func', and this == obj, when being called in saveAndGoAway() or discardAndGoAway()
                 var xFormViewController = paramList[1];
                 //paramList[1] is ZaXFormViewController or its sub class
-                xFormViewController._emptyUI();
             };
 
         }else{
@@ -112,7 +111,6 @@ function(ev, noPopView, func, obj, params, newPath) {
                 //this == ZaApp.getInstance(), when being called in saveAndGoAway() or discardAndGoAway()
                 var xFormViewController = paramList[1];
                 //paramList[1] is ZaXFormViewController or its sub class
-                xFormViewController._emptyUI();
                 xFormViewController._setSelectionAfterCloseView(newPath);
             };
 
@@ -125,7 +123,6 @@ function(ev, noPopView, func, obj, params, newPath) {
 
     } else if (noPopView){
         func.call(obj, params) ;
-        this._emptyUI();
 
     }else{
         if(this._view && this._view._localXForm && this._view.formDirtyLsnr) {
@@ -136,7 +133,6 @@ function(ev, noPopView, func, obj, params, newPath) {
         //ZaApp.getInstance().popView();
         //ZaApp.getInstance().getTabGroup().removeCurrentTab(true) ;
 
-        this._emptyUI();
         this._setSelectionAfterCloseView(newPath);
     }
 }
@@ -440,14 +436,6 @@ function () {
 
 	this._UICreated = true;
 	ZaApp.getInstance()._controllers[this.getContentViewId ()] = this ;
-}
-
-
-ZaXFormViewController.prototype._emptyUI =
-function () {
-    this._view = null;
-    this._contentView = null;
-    this._UICreated = false;
 }
 
 

@@ -407,10 +407,3 @@ function (serverList) {
 	ZaApp.getInstance().dialogs["flushCacheDialog"].setObject(obj);
 	ZaApp.getInstance().dialogs["flushCacheDialog"].popup();
 }
-
-
-ZaGlobalConfigViewController.prototype._emptyUI =
-function () {
-    //do nothing, Global Config is special, it has only one copy and no need to be regenerated,
-    //so always keep Global Config view alive.
-}
