@@ -34,7 +34,15 @@ public class DialogFolderShare extends AbsDialog {
 				"css=div[class=' ShareDialogContent'] span div[class='permission-label info-message']:contains('invalid email addresses')");
 		public static final Locators zSharingFailedToastMessage=new Locators(
 				"css=*[id='octopus-status-msg']:contains('Sharing of folder')");
-
+		public static final Locators zHideMessageLink = new Locators(
+				"css=div[class=octopus-share-item-view]>div[class=permission-label info-message] span[class^=customLink]>span:contains(Hide message)");
+		public static final Locators zPermissionLabel = new Locators(
+				"css=[class='octopus-share-item-view'] [class='permission-label']");
+		public static final Locators zExpandArrow = new Locators(
+				"css=[class='ShareInfo'] span");
+		public static final Locators zSharePermission = new Locators(
+				"css=[class='ShareInfoFieldLabel']");
+				
 		public final String locator;
 
 		private Locators(String locator) {
