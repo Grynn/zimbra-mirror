@@ -228,6 +228,10 @@ class Program
                     builder += "\n";
                     builder += "DataFile= PST file for the user to be migrated\n";
                     builder += "\n";
+                    builder += "SourceHost= The Source server hostname \n";
+                    builder += "\n";
+                    builder += "SourceAdminID= The Source AdminID \n";
+                    builder += "\n";
                     builder += "ZimbraHost= The Zimbra server hostname \n";
                     builder += "\n";
                     builder += "ZimbraPort= The Zimbra port \n";
@@ -250,6 +254,12 @@ class Program
                     builder += "IsOnOrAfter= true|false  .This option provides the date filter to migration \n";
                     builder += "\n";
                     builder += "MigrateOnOrAfter= Date in the format YYYY-MM-DD .Items from this date and after get migrated \n";
+                    builder += "\n";
+                    builder += "IsMaxMessageSize= true|false  .This option provides the maxmessagesize filter to migration \n";
+                    builder += "\n";
+                    builder += "MaxMessageSize= a numeric value .Items whose size falls into this category after get migrated \n";
+                    builder += "\n";
+                    builder += "IsSkipPrevMigratedItems= True|false .To skip previously migrated items \n";
                     builder += "\n";
                     builder += "For more information see the help file distributed with the exe. \n";
 
@@ -277,7 +287,7 @@ class Program
                 }
                 string ConfigXmlFile = CommandLineArgs.I.argAsString("ConfigxmlFile");
                 string UserMapFile = CommandLineArgs.I.argAsString("Users");
-                int MaxThreads = CommandLineArgs.I.argAsInt("MaxThreads");
+                int MaxThreads = CommandLineArgs.I.argAsInt("MaxThreadCount");
                 string MaxErrors = CommandLineArgs.I.argAsString("MaxErrors");
                 string MaxWarns = CommandLineArgs.I.argAsString("MaxWarn");
                 string userid = CommandLineArgs.I.argAsString("Profile");
@@ -287,6 +297,9 @@ class Program
                 string ZCSID = CommandLineArgs.I.argAsString("ZimbraID");
                 string ZCSPwd = CommandLineArgs.I.argAsString("ZimbraPwd");
                 string ZCSDomain = CommandLineArgs.I.argAsString("ZimbraDomain");
+                string SourceHost = CommandLineArgs.I.argAsString("SourceHost");
+                string SourceAdmin = CommandLineArgs.I.argAsString("SourceAdminID");
+                
 
                 //bool Mail = CommandLineArgs.I.argAsBool("Mail");
                 bool Mail = false;
@@ -298,11 +311,12 @@ class Program
                 bool Datefilter = false;
                 bool SkipFolder = false;
                 bool SkipPreviousMigration = false;
+                bool IsMaxSize = false;
                 string Folderlist = CommandLineArgs.I.argAsString("FoldersToSkip");
 
                 string MigrateDate = CommandLineArgs.I.argAsString("MigrateOnOrAfter");
 
-                
+                string MaxMessageSize = CommandLineArgs.I.argAsString("MaxMessageSize");
 
                 bool ServerMigration = false;
                 XmlConfig myXmlConfig = new XmlConfig();
@@ -353,11 +367,14 @@ class Program
 
                         if (ZCSID == "")
                         {
-                            if (myXmlConfig.ConfigObj.SourceServer.Profile != "")
+                            if ((myXmlConfig.ConfigObj.SourceServer.Profile != ""))
                             {
-                                System.Console.WriteLine(" Are you trying Server /User Migration .Check the arguments");
-                                Console.ReadKey();
-                                return;
+                               // if (myXmlConfig.ConfigObj.SourceServer.Hostname == "")
+                                {
+                                    System.Console.WriteLine(" Are you trying Server /User Migration .Check the arguments");
+                                    Console.ReadKey();
+                                    return;
+                                }
 
                             }
                         }
@@ -424,7 +441,14 @@ class Program
                     }
                     else
                         SkipPreviousMigration = myXmlConfig.ConfigObj.AdvancedImportOptions.IsSkipPrevMigratedItems;
-                   
+
+                    if (CommandLineArgs.I.arg("IsMaxMessageSize") != null)
+                    {
+
+                        IsMaxSize = CommandLineArgs.I.argAsBool("IsMaxMessageSize");
+                    }
+                    else
+                        IsMaxSize = myXmlConfig.ConfigObj.AdvancedImportOptions.IsMaxMessageSize;
 
                     if (CommandLineArgs.I.arg("IsSkipFolders") != null)
                     {
@@ -622,8 +646,25 @@ class Program
 
                 }
 
+                if (IsMaxSize)
+                {
+                    if(MaxMessageSize == "")
+                        MaxMessageSize = myXmlConfig.ConfigObj.AdvancedImportOptions.MaxMessageSize;
+
+                    importopts.MessageSizeFilter = MaxMessageSize;
+                }
                
-                    importopts.SkipPrevMigrated = SkipPreviousMigration;
+                 importopts.SkipPrevMigrated = SkipPreviousMigration;
+
+                 if (SourceHost == "")
+                 {
+                     SourceHost = myXmlConfig.ConfigObj.SourceServer.Hostname;
+
+                 }
+                 if (SourceAdmin == "")
+                 {
+                     SourceAdmin = myXmlConfig.ConfigObj.SourceServer.AdminID;
+                 }
 
                 
                 //importopts.VerboseOn = Verbose;
@@ -686,6 +727,30 @@ class Program
                             return;
                         }
                     }
+                }
+                else
+                {
+                    if ((SourceHost != "") && (SourceAdmin != ""))
+                    {
+                        string retval = TestObj.GlobalInit(SourceHost, SourceAdmin, "");
+
+
+                        if (retval.Length > 0)
+                        {
+                            System.Console.WriteLine();
+                            System.Console.WriteLine("Error in server Migration Initialization ");
+                            /*ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
+                                " Error in Migration Initialization ");*/
+                            System.Console.WriteLine("......... \n");
+                            /*  ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
+                                      retval);*/
+                            System.Console.WriteLine("......... \n");
+                            System.Console.WriteLine();
+
+                            return;
+                        }
+                    }
+
                 }
                                 
                 if (ServerMigration)
@@ -813,14 +878,15 @@ class Program
                                     Defaultpwd = "default";
                                 }
                             }
-                           
+
+                            bool mustChangePW = user.ChangePWD;
                             if (zimbraAPI.CreateAccount(acctName,
                                 "",
                                 "",
                                 "",
                                 "",
                                 Defaultpwd,
-                                false,
+                                mustChangePW,
                                 myXmlConfig.ConfigObj.UserProvision.COS) == 0)
                             {
                                 System.Console.WriteLine();
