@@ -35,7 +35,7 @@ ZaNewAccountXWizard = function(parent, entry) {
 
 
 ZaNewAccountXWizard.zimletChoices = new XFormChoices([], XFormChoices.SIMPLE_LIST);
-ZaNewAccountXWizard.themeChoices = new XFormChoices([], XFormChoices.SIMPLE_LIST);
+ZaNewAccountXWizard.themeChoices = new XFormChoices([], XFormChoices.OBJECT_LIST);
 ZaNewAccountXWizard.prototype = new ZaXWizardDialog;
 ZaNewAccountXWizard.prototype.constructor = ZaNewAccountXWizard;
 ZaNewAccountXWizard.prototype.toString = function() {
@@ -328,8 +328,9 @@ function(entry) {
 				skins = [skins];
 			}
 		}
-		
-		ZaNewAccountXWizard.themeChoices.setChoices(skins);
+
+        var skinsChoices = ZaApp.getInstance().getSkinChoices(skins);
+		ZaNewAccountXWizard.themeChoices.setChoices(skinsChoices);
 		ZaNewAccountXWizard.themeChoices.dirtyChoices();		
 		
 	}	

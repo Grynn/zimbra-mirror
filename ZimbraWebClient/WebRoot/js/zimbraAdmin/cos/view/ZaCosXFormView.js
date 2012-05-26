@@ -36,7 +36,7 @@ ZaTabView.XFormModifiers["ZaCosXFormView"] = new Array();
 ZaTabView.ObjectModifiers["ZaCosXFormView"] = [] ;
 ZaCosXFormView.prototype.TAB_INDEX=0;
 ZaCosXFormView.zimletChoices = new XFormChoices([], XFormChoices.SIMPLE_LIST);
-ZaCosXFormView.themeChoices = new XFormChoices([], XFormChoices.SIMPLE_LIST);
+ZaCosXFormView.themeChoices = new XFormChoices([], XFormChoices.OBJECT_LIST);
 /**
 * @method setObject sets the object contained in the view
 * @param entry - ZaDomain object to display
@@ -105,7 +105,8 @@ function(entry) {
                 skins = [skins];
             }
 
-            ZaCosXFormView.themeChoices.setChoices(skins);
+            var skinsChoices = ZaApp.getInstance().getSkinChoices(skins);
+            ZaCosXFormView.themeChoices.setChoices(skinsChoices);
             ZaCosXFormView.themeChoices.dirtyChoices();
         }
 
@@ -1287,7 +1288,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
                 items:[
                     {type:_OSELECT1_,
                         ref:ZaCos.A_zimbraPrefSkin,
-                        msgName:ZaMsg.LBL_zimbraPrefSkin,label:ZaMsg.LBL_zimbraPrefSkin, labelLocation:_LEFT_,choices:ZaApp.getInstance().getInstalledSkins(),
+                        msgName:ZaMsg.LBL_zimbraPrefSkin,label:ZaMsg.LBL_zimbraPrefSkin, labelLocation:_LEFT_,choices:ZaCosXFormView.themeChoices,
                         visibilityChecks:[ZaCosXFormView.gotSkins]
                     }
                 ]

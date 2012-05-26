@@ -19,7 +19,7 @@ ZaNewCosXWizard.prototype.constructor = ZaNewCosXWizard;
 ZaXDialog.XFormModifiers["ZaNewCosXWizard"] = new Array();
 ZaNewCosXWizard.prototype.TAB_INDEX=0;
 ZaNewCosXWizard.zimletChoices = new XFormChoices([], XFormChoices.SIMPLE_LIST);
-ZaNewCosXWizard.themeChoices = new XFormChoices([], XFormChoices.SIMPLE_LIST);
+ZaNewCosXWizard.themeChoices = new XFormChoices([], XFormChoices.OBJECT_LIST);
 /**
 * @method setObject sets the object contained in the view
 * @param entry - ZaDomain object to display
@@ -206,7 +206,8 @@ function(entry) {
                 skins = [skins];
             }
 
-            ZaNewCosXWizard.themeChoices.setChoices(skins);
+            var skinsChoices = ZaApp.getInstance().getSkinChoices(skins);
+            ZaNewCosXWizard.themeChoices.setChoices(skinsChoices);
             ZaNewCosXWizard.themeChoices.dirtyChoices();
         }
 
@@ -1111,7 +1112,7 @@ ZaNewCosXWizard.myXFormModifier = function(xFormObject, entry) {
         var case4Items = [
             {type:_GROUP_,numCols:2,colSizes:["275","auto"],items:[							{
                 ref:ZaCos.A_zimbraPrefSkin, type:_OSELECT1_,
-                msgName:ZaMsg.LBL_zimbraPrefSkin,label:ZaMsg.LBL_zimbraPrefSkin, labelLocation:_LEFT_,choices:ZaApp.getInstance().getInstalledSkins(),
+                msgName:ZaMsg.LBL_zimbraPrefSkin,label:ZaMsg.LBL_zimbraPrefSkin, labelLocation:_LEFT_,choices:ZaNewCosXWizard.themeChoices,
                 visibilityChecks:[ZaNewCosXWizard.gotSkins]
             }]},
             {type:_GROUP_,

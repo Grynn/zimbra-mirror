@@ -871,6 +871,14 @@ function(refresh) {
     }
 }
 
+ZaApp.prototype.getSkinChoices =
+function (skins) {
+    var skinChoices = [];
+    for (var i = 0; i < skins.length; i++) {
+        skinChoices.push ({label: ZaMsg['theme-' + skins[i]], value: skins[i]});
+    }
+    return skinChoices;
+}
 /**
 * @param ev
 * This listener is invoked by any controller that can create an ZaDomain object

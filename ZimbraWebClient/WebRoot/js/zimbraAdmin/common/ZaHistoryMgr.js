@@ -97,8 +97,9 @@ function (srcPath) {
     var ret = false;
     var srcPathArr = ZaTree.getPathItems(srcPath);
     var destPathArr;
-    for (var i = 0; i < ZaHistoryMgr.AllowedRecenctObject.length; i++ ) {
-        destPathArr =  ZaTree.getPathItems( ZaHistoryMgr.AllowedRecenctObject[i]);
+    var allowedObject= ZaHistoryMgr.getAllowedRecenctObject();
+    for (var i = 0; i < allowedObject.length; i++ ) {
+        destPathArr =  ZaTree.getPathItems( allowedObject[i]);
         for (var j = 0; j < destPathArr.length; j++) {
             if (srcPathArr[j] != destPathArr[j]) {
                 break;
@@ -113,11 +114,16 @@ function (srcPath) {
     return ret;
 }
 
-ZaHistoryMgr.AllowedRecenctObject = [
-    [ZaMsg.OVP_home, ZaMsg.OVP_manageAccounts].join(ZaTree.SEPERATOR),
-    [ZaMsg.OVP_home, ZaMsg.OVP_configure].join(ZaTree.SEPERATOR)
-];
+ZaHistoryMgr.getAllowedRecenctObject = function() {
+    if (!ZaHistoryMgr._allowedRecentObject) {
 
+        ZaHistoryMgr._allowedRecentObject = [
+            [ZaMsg.OVP_home, ZaMsg.OVP_manageAccounts].join(ZaTree.SEPERATOR),
+            [ZaMsg.OVP_home, ZaMsg.OVP_configure].join(ZaTree.SEPERATOR)
+        ];
+    }
+    return ZaHistoryMgr._allowedRecentObject;
+}
 ZaHistoryMgr.prototype.removeHistory =
 function() {
     var currentSize = this._history.size();

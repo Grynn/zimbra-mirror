@@ -51,7 +51,7 @@ ZaAccountXFormView.prototype.constructor = ZaAccountXFormView;
 ZaTabView.XFormModifiers["ZaAccountXFormView"] = new Array();
 ZaTabView.ObjectModifiers["ZaAccountXFormView"] = [] ;
 ZaAccountXFormView.zimletChoices = new XFormChoices([], XFormChoices.SIMPLE_LIST);
-ZaAccountXFormView.themeChoices = new XFormChoices([], XFormChoices.SIMPLE_LIST);
+ZaAccountXFormView.themeChoices = new XFormChoices([], XFormChoices.OBJECT_LIST);
 
 /**
  * * Get Tab's Icon according to different account's type
@@ -206,8 +206,9 @@ function(entry) {
 				skins = [skins];
 			}
 		}
-		
-		ZaAccountXFormView.themeChoices.setChoices(skins);
+
+        var skinsChoices = ZaApp.getInstance().getSkinChoices(skins);
+		ZaAccountXFormView.themeChoices.setChoices(skinsChoices);
 		ZaAccountXFormView.themeChoices.dirtyChoices();		
 		
 	}

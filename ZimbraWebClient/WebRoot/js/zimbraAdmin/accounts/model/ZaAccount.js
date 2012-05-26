@@ -2193,13 +2193,15 @@ function (value, event, form){
 						skins = [skins];
 					}
 				}
+
+                var skinsChoices = ZaApp.getInstance().getSkinChoices(skins);
 				if(ZaNewAccountXWizard.themeChoices) {
-					ZaNewAccountXWizard.themeChoices.setChoices(skins);
+					ZaNewAccountXWizard.themeChoices.setChoices(skinsChoices);
 					ZaNewAccountXWizard.themeChoices.dirtyChoices();
 				}		
 				
 				if(ZaAccountXFormView.themeChoices) {
-					ZaAccountXFormView.themeChoices.setChoices(skins);
+					ZaAccountXFormView.themeChoices.setChoices(skinsChoices);
 					ZaAccountXFormView.themeChoices.dirtyChoices();
 				}		
 				
