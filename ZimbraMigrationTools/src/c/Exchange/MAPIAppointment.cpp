@@ -447,7 +447,10 @@ void MAPIAppointment::SetExceptions()
         {
             Zimbra::Util::ScopedInterface<IMessage> lpExceptionMessage;
             Zimbra::Util::ScopedInterface<IAttach> lpExceptionAttach;
-            HRESULT hResult = lpException->OpenAppointment((LPMESSAGE)OlkAppt.MapiMsg(),
+
+            // FBS bug 70987 -- 5/27/12 -- since Exchange provider doesn't seem to support restriction on
+            // attachment table, call OpenApptNR instead of OpenAppointment
+            HRESULT hResult = lpException->OpenApptNR((LPMESSAGE)OlkAppt.MapiMsg(),
                 lpExceptionMessage.getptr(), lpExceptionAttach.getptr(), pr_exceptionreplacetime);
 
             if (FAILED(hResult))
@@ -477,9 +480,6 @@ void MAPIAppointment::SetExceptions()
 
 void MAPIAppointment::FillInExceptionAppt(MAPIAppointment* pEx, Zimbra::Mapi::COutlookRecurrenceException* lpException)
 {
-    // PST seems to find the MAPI message, thereby eventually filling in the pEx.  Server does not, but the
-    // info is in the lpException.  Note that for allday, PST seems to MAPI msg set right -- just need to truncate end
-
     // FBS 4/12/12 -- set this up no matter what (so exceptId will be set)
     // FBS bug 71050 -- 4/9/12 -- recurrence id needs the original occurrence date
     Zimbra::Mapi::CRecurrenceTime rtOriginalDate = lpException->GetOriginalDateTime();  
