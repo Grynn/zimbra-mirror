@@ -16,21 +16,11 @@ else
 	include $(POSTFIX_ROOT)/../versions.def
 endif
 
-DBINC	:=
-DBLIB	:=
-DBFLAG	:=
-
-ifdef OCTOPUS
-	DBFLAG	:= -DNO_DB
-	POSTFIX_TGZ_TARGET := \
-	$(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/postfix/postfix-octopus-$(POSTFIX_VERSION).tgz
-else
-	DBINC := -I/opt/zimbra/bdb-$(BDB_VERSION)/include
-	DBLIB := -L/opt/zimbra/bdb-$(BDB_VERSION)/lib -ldb
-	POSTFIX_TGZ_TARGET := \
+DBINC := -I/opt/zimbra/bdb-$(BDB_VERSION)/include
+DBLIB := -L/opt/zimbra/bdb-$(BDB_VERSION)/lib -ldb
+POSTFIX_TGZ_TARGET := \
 	$(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/postfix/postfix-$(POSTFIX_VERSION).tgz
-	BDB_PATCH	:= patch -g0 -p1 < ../patches/postfix-zimbra-bdb.patch;
-endif
+BDB_PATCH	:= patch -g0 -p1 < ../patches/postfix-zimbra-bdb.patch;
 
 PCRE_DEF := -DHAS_PCRE
 PCRE_INCLUDE := -I/usr/include/pcre
@@ -135,7 +125,6 @@ endif
 	-DDEF_DATA_DIR=\"/opt/zimbra/data/postfix/data\" \
 	-DUSE_SASL_AUTH \
 	-DUSE_CYRUS_SASL \
-	$(DBFLAG) \
 	-DHAS_LDAP -DHAS_MYSQL -DUSE_TLS $(DBINC) $(PCRE_DEF) $(PCRE_INCLUDE) $(FD_SIZE) \
 	$(URANDOM) \
 	-DUSE_LDAP_SASL \
