@@ -1,6 +1,8 @@
 package com.zimbra.qa.selenium.projects.ajax.ui.briefcase;
 
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.interactions.Actions;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
@@ -62,12 +64,20 @@ public class DialogUploadFile extends AbsDialog {
 		}else if (button == Button.B_BROWSE) {
 		    locator = "css=td>input[id*=_input][type=file][name=uploadFile]";
 		    if (ZimbraSeleniumProperties.isWebDriver()){ 
-			    WebElement el = this.getElement(locator);
-			    executeScript("arguments[0].click()",el);
+			WebElement el = this.getElement(locator);
+		    	if (webDriver() instanceof InternetExplorerDriver) {
+			    Actions action = new Actions(webDriver());
+			    action.moveToElement(el,1,1).doubleClick(el).build().perform();
+		    	}else{
+		    	    executeScript("arguments[0].click()",el);
+		    	}			    
+		    }else{
+			if (zIsBrowserMatch(BrowserMasks.BrowserMaskIE)) {
+			    sDoubleClick(locator);
 			}else{
-			    String script = "this.page().findElement('" + locator + "').click();";
-			    sGetEval(script);
+			    sGetEval("selenium.browserbot.findElement('" + locator + "').click();");
 			}
+		    }
 		    return null;
 		} else {
 			throw new HarnessException("Button " + button + " not implemented");
@@ -89,7 +99,7 @@ public class DialogUploadFile extends AbsDialog {
 
 		return (null);
 	}
-
+	
 	@Override
 	public String zGetDisplayedText(String locator) throws HarnessException {
 		logger.info(myPageName() + " zGetDisplayedText(" + locator + ")");

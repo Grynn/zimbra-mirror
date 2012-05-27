@@ -1,7 +1,6 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.briefcase.file;
 
 import java.io.File;
-
 import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.items.FileItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
@@ -119,7 +118,7 @@ public class UploadFile extends AjaxCommonTest {
 				SystemFolder.Briefcase);
 		
 		// Create file item
-		String filePath = ZimbraSeleniumProperties.getBaseDirectory()
+		final String filePath = ZimbraSeleniumProperties.getBaseDirectory()
 		+ "\\data\\public\\other\\testtextfile.txt";
 		
 		FileItem fileItem = new FileItem(filePath);
@@ -135,13 +134,21 @@ public class UploadFile extends AjaxCommonTest {
 		String upload = "upload.vbs";
 		
 		if(new File(upload).isFile()){
-		    dlg.zClickButton(Button.B_BROWSE);
+		    dlg.zClickButton(Button.B_BROWSE);	
+		    
+		    Process p = null;
 		    try{
-			Process p = 
-				Runtime.getRuntime().exec("wscript.exe upload.vbs " + filePath);
-			p.waitFor();
-		    }catch(Exception ex){
-			    logger.error(ex);
+			p = Runtime.getRuntime().exec("wscript.exe upload.vbs " + filePath);			
+			for(int i = 0; ; i++){
+			    SleepUtil.sleepSmall(); 
+			    if (!isAlive(p) || i > 20) {
+			        break;
+			    }
+			} 
+		    } catch(Exception ex){
+			logger.error(ex);			
+		    } finally{
+			p.destroy();
 		    }
 		}else{
 		    throw new HarnessException(upload + " not found");
@@ -164,4 +171,22 @@ public class UploadFile extends AjaxCommonTest {
 		// delete file upon test completion
 		app.zPageBriefcase.deleteFileByName(fileItem.getName());
 	}
+	
+	public static boolean isAlive(Process p){
+	    try
+	    {
+		if(p.exitValue()==0){
+		    return false;
+		}else{
+		    return true;
+		}
+	    } catch (IllegalThreadStateException itex) {
+		logger.error(itex);
+		return true;
+	    } catch (Exception ex) {
+		logger.error(ex);
+		return false;
+	    }
+	}
+	
 }
