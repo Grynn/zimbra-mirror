@@ -200,7 +200,6 @@ PERL_LIBS 	:= \
 	S/SB/SBECK/Date-Manip-5.56.tar.gz \
 	Time::HiRes \
 	Convert::ASN1 \
-	M/MA/MARSCHAP/perl-ldap-0.44.tar.gz \
 	Unix::Syslog \
 	Parallel::ForkManager \
 	Package::Constants \
@@ -272,6 +271,9 @@ XML_PARSER := \
 NET_SERVER := \
 	Net-Server-0.99
 
+PERL_LDAP := \
+	perl-ldap-0.44
+
 DBD_PERL_LIBS 	:= \
 	DBD-mysql-4.020
 
@@ -340,6 +342,16 @@ build:
 		(cd $(TMPDIR); tar xfz $$lib.tar.gz; cd $$lib; \
 		OPENSSL_PREFIX=$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION) $(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR); \
 		LD_RUN_PATH="$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)" $(MAKE); $(MAKE) install;) >>$(LOGFILE) 2>&1; \
+		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
+	done
+	
+	@for lib in $(PERL_LDAP); do \
+		echo -n "Compiling perl lib $$lib ..."; \
+		cp $(PERL_ROOT)/$$lib.tar.gz $(TMPDIR); \
+		(cd $(TMPDIR); tar xfz $$lib.tar.gz; cd $$lib; \
+		patch -g0 -N -p1 < $(PERL_ROOT)/patches/net-ldap-ipv6.patch; \
+		$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR); \
+		$(MAKE); $(MAKE) install;) >>$(LOGFILE) 2>&1; \
 		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
 	done
 	

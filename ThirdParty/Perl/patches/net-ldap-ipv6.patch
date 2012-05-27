@@ -1,0 +1,32 @@
+--- perl-ldap-0.44/lib/Net/LDAP.pm.orig	2012-05-26 17:16:24.414268149 -0700
++++ perl-ldap-0.44/lib/Net/LDAP.pm	2012-05-26 17:17:31.094270464 -0700
+@@ -135,16 +135,11 @@
+ sub connect_ldap {
+   my ($ldap, $host, $arg) = @_;
+   my $port = $arg->{port} || 389;
+-  my $class = 'IO::Socket::INET';
++  my $class = 'IO::Socket::INET6';
+ 
+   # separate port from host overwriting given/default port
+   $host =~ s/^([^:]+|\[.*\]):(\d+)$/$1/ and $port = $2;
+ 
+-  if ($arg->{inet6}) {
+-    require IO::Socket::INET6;
+-    $class = 'IO::Socket::INET6';
+-  }  
+-
+   $ldap->{net_ldap_socket} = $class->new(
+     PeerAddr   => $host,
+     PeerPort   => $port,
+@@ -168,9 +163,9 @@
+   my ($ldap, $host, $arg) = @_;
+   my $port = $arg->{port} || 636;
+ 
+-  require IO::Socket::INET6  if ($arg->{inet6});
++  require IO::Socket::INET6;
+   require IO::Socket::SSL;
+-  IO::Socket::SSL->import(qw/inet6/)  if ($arg->{inet6});
++  IO::Socket::SSL->import(qw/inet6/);
+ 
+   # separate port from host overwriting given/default port
+   $host =~ s/^([^:]+|\[.*\]):(\d+)$/$1/ and $port = $2;
