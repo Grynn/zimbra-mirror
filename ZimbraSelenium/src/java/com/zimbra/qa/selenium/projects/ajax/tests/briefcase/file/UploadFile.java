@@ -1,16 +1,21 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.briefcase.file;
 
+import java.io.File;
+
 import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.items.FileItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.Action;
+import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.DialogUploadFile;
 
 public class UploadFile extends AjaxCommonTest {
 
@@ -99,6 +104,60 @@ public class UploadFile extends AjaxCommonTest {
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
 		// Verify document is created
+		String name = app.zPageBriefcase.getItemNameFromListView(fileName);
+		ZAssert.assertStringContains(name, fileName, "Verify file name through GUI");
+		
+		// delete file upon test completion
+		app.zPageBriefcase.deleteFileByName(fileItem.getName());
+	}
+	
+	@Test(description = "Upload file through GUI - verify through GUI", groups = { "webdriver" })
+	public void UploadFile_03() throws HarnessException {
+		ZimbraAccount account = app.zGetActiveAccount();
+		
+		FolderItem briefcaseFolder = FolderItem.importFromSOAP(account,
+				SystemFolder.Briefcase);
+		
+		// Create file item
+		String filePath = ZimbraSeleniumProperties.getBaseDirectory()
+		+ "\\data\\public\\other\\testtextfile.txt";
+		
+		FileItem fileItem = new FileItem(filePath);
+
+		String fileName = fileItem.getName();
+
+		// refresh briefcase page
+		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, false);
+		
+		// Click on Upload File button in the Toolbar
+		DialogUploadFile dlg = (DialogUploadFile) app.zPageBriefcase.zToolbarPressButton(Button.B_UPLOAD_FILE, fileItem);
+		
+		String upload = "upload.vbs";
+		
+		if(new File(upload).isFile()){
+		    dlg.zClickButton(Button.B_BROWSE);
+		    try{
+			Process p = 
+				Runtime.getRuntime().exec("wscript.exe upload.vbs " + filePath);
+			p.waitFor();
+		    }catch(Exception ex){
+			    logger.error(ex);
+		    }
+		}else{
+		    throw new HarnessException(upload + " not found");
+		}		
+		
+		dlg.zClickButton(Button.B_OK);
+		
+		// refresh briefcase page
+		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
+		
+		SleepUtil.sleepSmall();
+		
+		// Click on created File
+		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
+			
+		// Verify file is uploaded
 		String name = app.zPageBriefcase.getItemNameFromListView(fileName);
 		ZAssert.assertStringContains(name, fileName, "Verify file name through GUI");
 		

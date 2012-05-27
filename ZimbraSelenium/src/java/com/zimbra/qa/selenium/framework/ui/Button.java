@@ -244,8 +244,9 @@ public class Button {
 	public static final Button O_CHECK_IN_FILE = new Button("O_CHECK_IN_FILE");
 	public static final Button O_DISCARD_CHECK_OUT = new Button("O_DISCARD_CHECK_OUT");
 	public static final Button B_TREE_EDIT_PROPERTIES = new Button("B_TREE_EDIT_PROPERTIES");
+	public static final Button B_BROWSE = new Button("B_BROWSE");
 
-	
+
     //Addressbook button
 	public static final Button B_EDIT = new Button("zb__CNS__EDIT");
 	public static final Button B_FILEAS = new Button("td$=_FILE_AS_select_container");

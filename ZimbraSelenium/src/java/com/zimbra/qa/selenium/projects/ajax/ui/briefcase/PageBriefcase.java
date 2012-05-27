@@ -63,6 +63,8 @@ public class PageBriefcase extends AbsTab {
 				"css=div[id=zb__NEW_MENU] div[class^=ImgSelectPullDownArrow]");
 		public static final Locators zUploadFileIconBtn = new Locators(
 				"id=zb__BDLV-main__NEW_FILE_left_icon");
+		public static final Locators zUploadFileTitleBtn = new Locators(
+			"css=div[id=zb__BDLV-main__NEW_FILE]>table>tbody>tr>td[id=zb__BDLV-main__NEW_FILE_title]");
 		public static final Locators zEditFileIconBtn = new Locators(
 				"id=zb__BDLV-main__EDIT_FILE_left_icon");
 		public static final Locators zEditFileBtn = new Locators(
@@ -235,15 +237,9 @@ public class PageBriefcase extends AbsTab {
 			return page;
 		} else if (button == Button.B_UPLOAD_FILE) {
 			// Check if the button is disabled
-			locator = Locators.zUploadFileIconBtn.locator;
-
-			String attrs = sGetAttribute("css=td[" + locator + "]>div@class");
-
-			if (attrs.contains("ZDisabledImage")) {
-				throw new HarnessException(button + " is disabled " + attrs);
-			}
-
-			page = null;
+			locator = Locators.zUploadFileTitleBtn.locator;
+			
+			page = new DialogUploadFile(MyApplication, this);
 		} else if (button == Button.B_EDIT_FILE) {
 
 			locator = Locators.zEditFileBtn.locator;

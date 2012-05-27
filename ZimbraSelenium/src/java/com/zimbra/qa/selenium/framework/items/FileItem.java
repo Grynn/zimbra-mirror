@@ -27,8 +27,13 @@ public class FileItem implements IItem, IOctListViewItem {
 	 */
 	public FileItem(String path) {		
 		filePath = path;
-		String[] arr = filePath.split("/");
-		fileName = arr[arr.length - 1].trim();
+		if(filePath.contains("/")){
+		    fileName = filePath.substring(filePath.lastIndexOf("/") + 1);
+		}else if(filePath.contains("\\")){
+		    fileName = filePath.substring(filePath.lastIndexOf("\\") + 1);
+		}else{
+		    fileName = filePath;
+		}	
 	}
 	
 	/**
