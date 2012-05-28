@@ -205,6 +205,7 @@ function(list) {
 ZaServerStatsListController.initPopupMenuMethod =
 function () {
         this._popupOperations[ZaOperation.VIEW] = new ZaOperation(ZaOperation.VIEW,ZaMsg.TBB_View, ZaMsg.PQTBB_View_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaServerStatsListController.prototype._viewButtonListener));
+        this._popupOperations[ZaOperation.VIEW].enabled = false;
 }
 ZaController.initPopupMenuMethods["ZaServerStatsListController"].push(ZaServerStatsListController.initPopupMenuMethod);
 
@@ -337,7 +338,14 @@ ZaServerStatsListController.prototype._switchToSubItem = function (item)
 
 ZaServerStatsListController.changeActionsStateMethod =
 function () {
-    if(this._contentView) {
+    var view = this._contentView;
+    if(!view) {
+        return;
+    }
+
+    var canEnableButton = (view.getSelectionCount() == 1 && view.getSelection()[0] != null);
+    if(this._popupOperations[ZaOperation.VIEW]) {
+        this._popupOperations[ZaOperation.VIEW].enabled = canEnableButton;
     }
 }
 ZaController.changeActionsStateMethods["ZaServerStatsListController"].push(ZaServerStatsListController.changeActionsStateMethod);
