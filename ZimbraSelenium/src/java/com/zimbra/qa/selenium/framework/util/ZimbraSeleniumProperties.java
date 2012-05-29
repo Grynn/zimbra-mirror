@@ -415,6 +415,58 @@ public class ZimbraSeleniumProperties {
 		return (scheme + "://"+ host +":"+ port);
 
 	}
+	
+	/**
+	 * Given a URL, add the necessary parameters.
+	 * This method is useful for external user registration, for example,
+	 * add the code coverage parameters to the registration URL
+	 * @return
+	 */
+	public static String getConvertedURL(URL url) {
+		
+		String scheme = url.getProtocol();
+		String userinfo = url.getUserInfo();
+		String host = url.getHost();
+		String port = ZimbraSeleniumProperties.getStringProperty("server.port", "7070");
+		if ( url.getPort() > 0 ) {
+			port = "" + url.getPort();
+		}
+		String path = url.getPath();
+		Map<String, String> queryMap = new HashMap<String, String>();
+		for (String pair : url.getQuery().split("&")) {
+			if ( pair.contains("=") ) {
+				String[] split = pair.split("=");
+				queryMap.put(split[0], split[1]);
+			}
+		}
+		String fragment = url.getRef();
+		
+		if ( CodeCoverage.getInstance().isEnabled() ) {
+			queryMap.putAll(CodeCoverage.getInstance().getQueryMap());
+		}
+		
+		if ( PerfMetrics.getInstance().Enabled ) {
+			queryMap.putAll(PerfMetrics.getInstance().getQueryMap());
+		}
+		
+	
+		String query = buildQueryFromMap(queryMap);
+		
+		try {
+			URI uri = new URI(scheme, userinfo, host, Integer.parseInt(port), path, query, fragment);
+			logger.info("Converted URL: "+ uri.toString());
+			return (uri.toString());
+		} catch (NumberFormatException e) {
+			logger.error("Unable to parse port into integer: "+ port, e);
+		} catch (URISyntaxException e) {
+			logger.error("Unable to build Base URL.  Use default.", e);
+		}
+
+		// Use default
+		return (url.toString());
+
+	}
+
 		
 	public static String zimbraGetVersionString() throws HarnessException {		
 		ZimbraAdminAccount.GlobalAdmin().soapSend("<GetVersionInfoRequest xmlns='urn:zimbraAdmin'/>");
