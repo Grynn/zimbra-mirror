@@ -195,12 +195,13 @@ function(entry) {
     }
     this._sessionPage.setObject(entry);
 
-    if( this._mbxPage == null ){
-        this._mbxPage = new ZaServerMBXStatsPage (this);
-        ZaServerMBXStatsPage.TAB_KEY = this.addTab(ZaMsg.TABT_MBX, this._mbxPage);
+    if (ZaZimbraAdmin.isGlobalAdmin()) {
+        if( this._mbxPage == null ){
+            this._mbxPage = new ZaServerMBXStatsPage (this);
+            ZaServerMBXStatsPage.TAB_KEY = this.addTab(ZaMsg.TABT_MBX, this._mbxPage);
+        }
+        this._mbxPage.setObject(entry);
     }
-    this._mbxPage.setObject(entry);
-
 
 	if( ZaServerStatsView.prototype._isMtaEnable( entry.id ) ){
 
@@ -291,7 +292,11 @@ function() {
 ZaServerStatsView.prototype.getTabChoices =
 function() {
     //var innerTabs = this._tab;
-    var innerTabs = [ZaMsg.TABT_Disk, ZaMsg.TABT_Session, ZaMsg.TABT_MBX];
+    var innerTabs = [ZaMsg.TABT_Disk, ZaMsg.TABT_Session];
+
+    if (ZaZimbraAdmin.isGlobalAdmin()) {
+        innerTabs.push(ZaMsg.TABT_MBX);
+    }
 
     var entry = this._containedObject;
     if( ZaServerStatsView.prototype._isMtaEnable( entry.id ) ){

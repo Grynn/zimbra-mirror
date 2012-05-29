@@ -185,7 +185,8 @@ ZaGlobalStatsView.prototype.setObject = function (entry) {
 
     }
 
-    this._advancedPage.setObject(entry);
+    if (this._advancedPage)
+        this._advancedPage.setObject(entry);
     //    this._mobileSyncPage.setObject(entry);
 
     for(var i = 0; i < ZaGlobalStatsView.extTabObjects.length; i++) {
