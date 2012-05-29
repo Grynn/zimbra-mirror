@@ -43,7 +43,7 @@ public class WSDLSearchTest {
     public static void init() throws Exception {
         Utility.setUpToAcceptAllHttpsServerCerts();
         mailSvcEIF = Utility.getZcsSvcEIF();
-        nvMailSvcEIF = Utility.getNonValidatingZcsSvcEIF();
+        // nvMailSvcEIF = Utility.getNonValidatingZcsSvcEIF();
         oneTimeTearDown();
     }
 
@@ -78,14 +78,14 @@ public class WSDLSearchTest {
         req.setTypes("appointment");
         req.setOffset(0);
         req.setQuery("every (inid:\"10\")");
-        // TODO: Swap back to using validating (i.e. mailSvcEIF) when using JAXB server side
-        //       Current "GetCalendarItemSummaries" code differs in element ordering to other element orderings
-        //       created on the server and does NOT match the prop order in LegacyCalendaringData
+        // Note: With earlier code, needed to use the non-validating variant nvMailSvcEIF
+        //       "GetCalendarItemSummaries" code produced an elements ordering that differed to other element orderings
+        //       created on the server and did NOT match the prop order in LegacyCalendaringData
         //       With validation turned on, this test currently fails complaining:
         //          cvc-complex-type.2.4.a: Invalid content was found starting with element &apos;fr&apos;.
         //          One of &apos;{&quot;urn:zimbraMail&quot;:inv, &quot;urn:zimbraMail&quot;:replies}&apos; is expected.
         //       Fortunately, non-validating accepts this.
-        ZcsPortType myMailSvcEIF = nvMailSvcEIF;
+        ZcsPortType myMailSvcEIF = mailSvcEIF;
 
         Utility.addSoapAcctAuthHeaderForAcct((WSBindingProvider)myMailSvcEIF,
                 "user1");
