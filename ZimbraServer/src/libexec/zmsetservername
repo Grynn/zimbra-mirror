@@ -91,7 +91,7 @@ $c{ldap_is_master} = getLocalConfig("ldap_is_master");
 $c{ldap_url} = getLocalConfig("ldap_url");
 $c{ldap_master_url} = getLocalConfig("ldap_master_url");
 $c{ldap_starttls_supported} = getLocalConfig("ldap_starttls_supported");
-my @masters=split(/ /, $ldap_master_url);
+my @masters=split(/ /, $c{ldap_master_url});
 my $master_ref=\@masters;
 
 &startLdap if (lc($c{ldap_is_master}) eq "true");
@@ -209,7 +209,7 @@ sub modifyServerName($) {
   my $zimbra_base = "cn=zimbra";
   my $root_base = "";
   my $ldap;
-  unless($ldap = Net::LDAP->new($master_ref) {
+  unless($ldap = Net::LDAP->new($master_ref)) {
     print ("Unable to contact $c{ldap_master_url}: $!\n");
     return 1;
   }
@@ -476,7 +476,7 @@ sub modifyAccountData($) {
   my ($server) = @_;
   my $ldap_base = "";
   my $ldap;
-  unless($ldap = Net::LDAP->new($master_ref) {
+  unless($ldap = Net::LDAP->new($master_ref)) {
     print ("Unable to contact $c{ldap_master_url}: $!\n");
     return 1;
   }
