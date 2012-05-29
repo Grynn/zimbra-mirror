@@ -1749,7 +1749,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 	case1Items.push(setupGroup);
 	
 	var passwordGroup = {type:_TOP_GROUPER_, label:ZaMsg.NAD_PasswordGrouper,id:"account_form_password_group",
-		visibilityChecks:[[ZaItem.hasRight,ZaAccount.SET_PASSWORD_RIGHT],
+		visibilityChecks:[[ZaItem.hasAnyRight,[ZaAccount.SET_PASSWORD_RIGHT, ZaAccount.CHANGE_PASSWORD_RIGHT]],
                           [XForm.checkInstanceValueNot,ZaAccount.A2_isExternalAuth,true]
             ],
         visibilityChangeEventSources:[ZaAccount.A2_isExternalAuth],
@@ -1782,7 +1782,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 	case1Items.push(passwordGroup);
 
     var externalAuthGroup = {type:_TOP_GROUPER_, label:ZaMsg.NAD_ExternalAuthGrouper,id:"account_form_ext_auth_group",
-        visibilityChecks:[[ZaItem.hasRight,ZaAccount.SET_PASSWORD_RIGHT],
+        visibilityChecks:[
             [XForm.checkInstanceValue,ZaAccount.A2_isExternalAuth,true],
             [ZaItem.hasReadPermission,ZaAccount.A_zimbraAuthLdapExternalDn]
         ],

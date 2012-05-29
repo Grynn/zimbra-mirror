@@ -462,7 +462,7 @@ ZaNewResourceXWizard.myXFormModifier = function(xFormObject) {
 						});
 						
 	var passwordGroup = {type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_PasswordGrouper,id:"account_wiz_password_group", 
-		numCols:2,visibilityChecks:[],
+		numCols:2,visibilityChecks:[[XFormItem.prototype.hasAnyRight,[ZaResource.SET_CALRES_PASSWORD_RIGHT, ZaResource.CHANGE_CALRES_PASSWORD_RIGHT]]],
 		items:[
 			{ref:ZaResource.A_password, type:_SECRET_, msgName:ZaMsg.NAD_Password,label:ZaMsg.NAD_Password, visibilityChecks:[],enableDisableChecks:[], labelLocation:_LEFT_, cssClass:"admin_xform_name_input"},
 			{ref:ZaResource.A2_confirmPassword, type:_SECRET_, msgName:ZaMsg.NAD_ConfirmPassword,label:ZaMsg.NAD_ConfirmPassword, visibilityChecks:[],enableDisableChecks:[], labelLocation:_LEFT_, cssClass:"admin_xform_name_input"}

@@ -720,7 +720,9 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 		case1Items.push(setupGroup);
 	}	
 	var passwordGroup = {type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_PasswordGrouper,id:"account_wiz_password_group", 
-		numCols:2,visibilityChecks:[[XForm.checkInstanceValueNot,ZaAccount.A2_isExternalAuth,true]],
+		numCols:2,visibilityChecks:[
+            [ZaItem.hasAnyRight,[ZaAccount.SET_PASSWORD_RIGHT, ZaAccount.CHANGE_PASSWORD_RIGHT]],
+            [XForm.checkInstanceValueNot,ZaAccount.A2_isExternalAuth,true]],
         visibilityChangeEventSources:[ZaAccount.A2_isExternalAuth],
 		items:[
                	{ type: _DWT_ALERT_, containerCssStyle: "padding-bottom:0;",
@@ -747,7 +749,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 
     var externalAuthGroup = {type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_ExternalAuthGrouper,id:"account_wiz_ext_auth_group",
         numCols:2,
-        visibilityChecks:[[ZaItem.hasRight,ZaAccount.SET_PASSWORD_RIGHT],
+        visibilityChecks:[
             [XForm.checkInstanceValue,ZaAccount.A2_isExternalAuth,true],
             [ZaItem.hasReadPermission,ZaAccount.A_zimbraAuthLdapExternalDn]],
         visibilityChangeEventSources:[ZaAccount.A2_isExternalAuth],

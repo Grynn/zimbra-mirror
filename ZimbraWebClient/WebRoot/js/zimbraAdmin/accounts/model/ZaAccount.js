@@ -333,6 +333,7 @@ ZaAccount.A2_isExternalAuth = "isExternalAuth";
 //constants for rights
 
 ZaAccount.SET_PASSWORD_RIGHT = "setAccountPassword";
+ZaAccount.CHANGE_PASSWORD_RIGHT = "changeAccountPassword"; // Enable password policy
 ZaAccount.RENAME_ACCOUNT_RIGHT = "renameAccount";
 ZaAccount.REINDEX_MBX_RIGHT = "reindexMailbox";
 ZaAccount.DELETE_ACCOUNT_RIGHT = "deleteAccount";
@@ -470,7 +471,7 @@ function(tmpObj) {
 		}	
 	}
 	//if there is a password - validate it
-	if(ZaItem.hasRight(ZaAccount.SET_PASSWORD_RIGHT,tmpObj)) {
+	if(ZaItem.hasAnyRight([ZaAccount.SET_PASSWORD_RIGHT, ZaAccount.CHANGE_PASSWORD_RIGHT],tmpObj)) {
 		if(!AjxUtil.isEmpty(tmpObj.attrs[ZaAccount.A_password]) || !AjxUtil.isEmpty(tmpObj[ZaAccount.A2_confirmPassword])) {
 			if(tmpObj.attrs[ZaAccount.A_password] != tmpObj[ZaAccount.A2_confirmPassword]) {
 				//show error msg

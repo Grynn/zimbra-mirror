@@ -338,7 +338,7 @@ function () {
 	if(!ZaResource.checkValues(tmpObj))
 		return false;
 		
-	if(ZaItem.hasRight(ZaResource.SET_CALRES_PASSWORD_RIGHT,tmpObj)) {
+	if(ZaItem.hasAnyRight([ZaResource.SET_CALRES_PASSWORD_RIGHT, ZaResource.CHANGE_CALRES_PASSWORD_RIGHT],tmpObj)) {
 		//change password if new password is provided
 		if(tmpObj.attrs[ZaResource.A_password]!=null && tmpObj[ZaResource.A2_confirmPassword]!=null && tmpObj.attrs[ZaResource.A_password].length > 0) {
 			try {

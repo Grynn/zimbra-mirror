@@ -1269,7 +1269,7 @@ function () {
 						 if(this._toolbarOperations[ZaOperation.DELETE])
 						 	this._toolbarOperations[ZaOperation.DELETE].enabled = false;   
 					}
-					if(!ZaItem.hasRight(ZaAccount.SET_PASSWORD_RIGHT, item) && isAuthInternal) {
+					if(!ZaItem.hasAnyRight([ZaAccount.SET_PASSWORD_RIGHT, ZaAccount.CHANGE_PASSWORD_RIGHT], item) && isAuthInternal) {
 						 if(this._popupOperations[ZaOperation.CHNG_PWD])
 						 	this._popupOperations[ZaOperation.CHNG_PWD].enabled = false;
 						 
@@ -1312,7 +1312,7 @@ function () {
 						 if(this._toolbarOperations[ZaOperation.DELETE])
 						 	this._toolbarOperations[ZaOperation.DELETE].enabled = false;   
 					}
-					if(!ZaItem.hasRight(ZaAccount.SET_PASSWORD_RIGHT,item.targetObj)) {
+					if(!ZaItem.hasAnyRight([ZaAccount.SET_PASSWORD_RIGHT, ZaAccount.CHANGE_PASSWORD_RIGHT],item.targetObj)) {
 						 if(this._popupOperations[ZaOperation.CHNG_PWD])
 						 	this._popupOperations[ZaOperation.CHNG_PWD].enabled = false;
 						 

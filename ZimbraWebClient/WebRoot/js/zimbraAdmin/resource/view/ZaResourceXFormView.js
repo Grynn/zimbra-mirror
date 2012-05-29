@@ -654,7 +654,7 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject, entry) {
 	 setupGroup.items.push(fwdInvitesGrpr);							
 
     var passwordGroup = {type:_TOP_GROUPER_, label:ZaMsg.NAD_PasswordGrouper, id:"resource_form_password_group",
-        visibilityChecks:[[XFormItem.prototype.hasRight,ZaResource.SET_CALRES_PASSWORD_RIGHT]],
+        visibilityChecks:[[XFormItem.prototype.hasAnyRight,[ZaResource.SET_CALRES_PASSWORD_RIGHT, ZaResource.CHANGE_CALRES_PASSWORD_RIGHT]]],
         colSizes:["275px","*"],numCols:2,items:[
         {ref:ZaResource.A_password, type:_SECRET_,
                 msgName:ZaMsg.NAD_Password,label:ZaMsg.NAD_Password, labelLocation:_LEFT_,

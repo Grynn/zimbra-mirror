@@ -1007,6 +1007,31 @@ ZaItem.hasRight = function (right, instance) {
 }
 XFormItem.prototype.hasRight = ZaItem.hasRight;
 
+ZaItem.hasAnyRight = function (rights, instance) {
+	if(ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraIsAdminAccount] == 'TRUE')
+		return true;
+
+	if(!instance)
+		instance = this.getInstance();
+
+	if (!instance.rights)
+		return false;
+
+    if (!rights)
+        return true;
+
+    if (!rights instanceof Array)
+        rights = [rights];
+
+    for (var i = 0; i < rights.length; i++) {
+        if (instance.rights[rights[i]] === true) {
+            return true;
+        }
+    }
+    return false;
+}
+XFormItem.prototype.hasAnyRight = ZaItem.hasAnyRight;
+
 ZaItem.formatServerTime = function(serverStr) {
 	if(serverStr) {
 		var ajxTKServerStr = serverStr.substring(0,8) + "T" + serverStr.substring(8) ;

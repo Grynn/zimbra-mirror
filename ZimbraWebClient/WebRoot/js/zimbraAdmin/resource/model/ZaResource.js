@@ -120,6 +120,7 @@ ZaResource.searchAttributes = AjxBuffer.concat(ZaResource.A_displayname,",",
 
 ZaResource.VIEW_RESOURCE_MAIL_RIGHT = "adminLoginCalendarResourceAs";
 ZaResource.SET_CALRES_PASSWORD_RIGHT = "setCalendarResourcePassword";
+ZaResource.CHANGE_CALRES_PASSWORD_RIGHT = "changeCalendarResourcePassword";
 ZaResource.ADD_CALRES_ALIAS_RIGHT = "addCalendarResourceAlias";
 ZaResource.REMOVE_CALRES_ALIAS_RIGHT = "removeCalendarResourceAlias";
 ZaResource.DELETE_CALRES_RIGHT = "deleteCalendarResource";
@@ -164,7 +165,7 @@ function(tmpObj) {
 			maxPwdLen = tmpObj._defaultValues.attrs[ZaResource.A_zimbraMaxPwdLength];
 		}
 	}
-	if(ZaItem.hasRight(ZaResource.SET_CALRES_PASSWORD_RIGHT,tmpObj)) {
+	if(ZaItem.hasAnyRight([ZaResource.SET_CALRES_PASSWORD_RIGHT, ZaResource.CHANGE_CALRES_PASSWORD_RIGHT],tmpObj)) {
 		//if there is a password - validate it
 		if(tmpObj.attrs[ZaResource.A_password]!=null || tmpObj[ZaResource.A2_confirmPassword]!=null) {
 			if(tmpObj.attrs[ZaResource.A_password] != tmpObj[ZaResource.A2_confirmPassword]) {
