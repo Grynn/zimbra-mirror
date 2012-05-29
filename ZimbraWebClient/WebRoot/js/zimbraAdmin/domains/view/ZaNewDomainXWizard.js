@@ -1267,13 +1267,13 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject, entry) {
                                 { ref: ZaDomain.A_zimbraAdminConsoleLogoutURL, type:_TEXTFIELD_,
                                 label:ZaMsg.Domain_zimbraAdminConsoleLogoutURL  , width:250
                                 }
-                            ]},
+                            ]}, /*
                             { type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_Kerberos_Configure, colSpan:"*",
                                 items :[
                                 {ref: ZaDomain.A_zimbraAuthKerberos5Realm, type:_TEXTFIELD_,
                                 label:ZaMsg.LBL_zimbraAuthKerberos5Realm, width:250
                                 }
-                            ]},
+                            ]},   */
                             { type:_ZAWIZ_TOP_GROUPER_, label: ZaMsg.NAD_AUTH_ClientConfigure, colSpan:"*",
                                   items:[
                                       { ref: ZaDomain.A_zimbraMailSSLClientCertPrincipalMap, labelCssStyle:"vertical-align:top", type:_TEXTAREA_,
