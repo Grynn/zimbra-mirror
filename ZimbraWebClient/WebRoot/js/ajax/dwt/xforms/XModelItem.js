@@ -390,6 +390,7 @@ XModelItem.prototype.validateEmailAddress = function(value) {
 	}
     return value;
 }
+
 /**
  * Normalizes value against whiteSpace facet and then validates 
  * against pattern and enumeration facets.
@@ -1005,3 +1006,9 @@ EmailAddress_XModelItem = function() {}
 XModelItemFactory.createItemType("_EMAIL_ADDRESS_", "email_address", EmailAddress_XModelItem);
 EmailAddress_XModelItem.prototype.validateType = XModelItem.prototype.validateEmailAddress;
 EmailAddress_XModelItem.prototype.maxLength = 256;
+
+FullUrl_XModelItem = function() {}
+XModelItemFactory.createItemType("_FULL_URL_", "full_url", FullUrl_XModelItem);
+FullUrl_XModelItem.prototype.validateType = XModelItem.prototype.validateString;
+FullUrl_XModelItem.prototype.maxLength = 1024;
+FullUrl_XModelItem.prototype.pattern = [AjxUtil.FULL_URL_RE, AjxUtil.IP_FULL_URL_RE];
