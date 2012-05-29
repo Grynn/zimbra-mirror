@@ -393,7 +393,7 @@ public class WSDLAdminTest {
         Assert.assertTrue("searchTotal " + searchTotal + " should be at least 1",
                 searchTotal >=1);
         Assert.assertFalse("value for attribute 'more'", resp.isMore());
-        List <testAdminObjectInfo> entries = resp.getCalresourceOrDlOrAlias();
+        List <Object> entries = resp.getCalresourceOrDlOrAlias();
         Assert.assertTrue("number of entries in response [" + searchTotal + "] should be at least 1",
                 entries.size() >= 1);
     }
@@ -1127,7 +1127,7 @@ public class WSDLAdminTest {
         Assert.assertEquals("getCosResponse <cos> 'id' attribute", testCosId, respId);
         len = cosInfo.getA().size();
         Assert.assertEquals("Number of GetCosResponse <cos> <a> children", 1, len);
-        testAttr maxFwdingAddrs = cosInfo.getA().get(0);
+        testCosInfoAttr maxFwdingAddrs = cosInfo.getA().get(0);
         Assert.assertNotNull(maxFwdingAddrs);
         Assert.assertEquals("getCosResponse <cos> <a> 'n' attribute",
                 "zimbraMailForwardingAddressMaxNumAddrs", maxFwdingAddrs.getN());
@@ -1201,7 +1201,7 @@ public class WSDLAdminTest {
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
         testGetAllCosResponse resp = eif.getAllCosRequest(req);
         Assert.assertNotNull("GetAllCosResponse object", resp);
-        List <testAnnotatedCosInfo> cosInfoList = resp.getCos();
+        List <testCosInfo> cosInfoList = resp.getCos();
         int len;
         Assert.assertNotNull("GetAllCosResponse list of cos", cosInfoList);
         len = cosInfoList.size();
