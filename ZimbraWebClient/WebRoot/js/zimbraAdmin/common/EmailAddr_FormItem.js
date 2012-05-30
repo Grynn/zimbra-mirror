@@ -23,6 +23,7 @@
 DynSelectDomainPart_XFormItem = function() {}
 XFormItemFactory.createItemType("_DYNSELECT_DOMAIN_PART_", "dynselect_domain_part", DynSelectDomainPart_XFormItem, DynSelect_XFormItem);
 DynSelectDomainPart_XFormItem.prototype.inputSize = 35 ;
+DynSelectDomainPart_XFormItem.prototype.setMenuWidth = false;
 DynSelectDomainPart_XFormItem.prototype.handleKeyPressDelay = function (event,value) {
 	if(!this.dataFetcherObject && this.dataFetcherClass !=null && this.dataFetcherMethod !=null) {
 		this.dataFetcherObject = new this.dataFetcherClass(this.getForm().getController());

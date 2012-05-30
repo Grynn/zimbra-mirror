@@ -51,6 +51,7 @@ OSelect1_XFormItem.prototype.labelWrap = true;
 //		* teach select1 that more than one value may be selected (same as select)
 //		* convert OSELECT_CHECK to just use showCheck?
 //		* does &radic; work everywhere?  Use an image?
+OSelect1_XFormItem.prototype.setMenuWidth = true;
 OSelect1_XFormItem.prototype.showCheck = false;
 OSelect1_XFormItem.prototype.checkHTML = "&radic;";
 OSelect1_XFormItem.MENU_DIR_DOWN=1;
@@ -214,23 +215,25 @@ OSelect1_XFormItem.prototype.showMenu = function() {
 	var mBounds = this.getBounds(menu);
 	var menuHeight = mBounds.height;
 	var menuTop = mBounds.top;
-	if (AjxEnv.isIE) {
-		if(this.getInheritedProperty("editable")) {
-			menu.style.width = parseInt(bounds.width)+4;
-			menu.getElementsByTagName("table")[0].style.width = parseInt(bounds.width) - 1;			
-		} else {
-			menu.style.width = parseInt(bounds.width)+2;
-			menu.getElementsByTagName("table")[0].style.width = parseInt(bounds.width) - 1;
-		}
-	} else {
-		if(this.getInheritedProperty("editable")) {
-			menu.style.width = parseInt(bounds.width)-5;
-			menu.getElementsByTagName("table")[0].style.width = parseInt(bounds.width) - 6;
-		} else {
-			menu.style.width = parseInt(bounds.width)-3;
-			menu.getElementsByTagName("table")[0].style.width = parseInt(bounds.width) - 4;			
-		}
-	}
+    if (this.getInheritedProperty("setMenuWidth") == true) {
+        if (AjxEnv.isIE) {
+            if(this.getInheritedProperty("editable")) {
+                menu.style.width = parseInt(bounds.width)+4;
+                menu.getElementsByTagName("table")[0].style.width = parseInt(bounds.width) - 1;
+            } else {
+                menu.style.width = parseInt(bounds.width)+2;
+                menu.getElementsByTagName("table")[0].style.width = parseInt(bounds.width) - 1;
+            }
+        } else {
+            if(this.getInheritedProperty("editable")) {
+                menu.style.width = parseInt(bounds.width)-5;
+                menu.getElementsByTagName("table")[0].style.width = parseInt(bounds.width) - 6;
+            } else {
+                menu.style.width = parseInt(bounds.width)-3;
+                menu.getElementsByTagName("table")[0].style.width = parseInt(bounds.width) - 4;
+            }
+        }
+    }
 	if(menuHeight + menuTop > wh - WINDOW_GUTTER) {
 		//menu does not fit downwards - check if it fits upwards
 		if((bounds.top - menuHeight) > WINDOW_GUTTER) {
