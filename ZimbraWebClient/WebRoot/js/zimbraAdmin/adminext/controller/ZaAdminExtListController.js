@@ -94,7 +94,7 @@ ZaController.initPopupMenuMethods["ZaAdminExtListController"].push(ZaAdminExtLis
 ZaAdminExtListController.prototype.deployZimletListener = 
 function (ev) {
 	try {
-		if(!this._deployZimletWizard)
+		//if(!this._deployZimletWizard)
 			this._deployZimletWizard = new ZaZimletDeployXWizard(this._container);		
 	
 		var zimlet = new ZaZimlet();

@@ -131,7 +131,14 @@ ZaXDialog.prototype.getTaskItem = function() {
     if (!title) {
         title = this.toString();
     }
-    var taskItem = new ZaTaskItem(this.constructor, cacheName, title, this.getObject(), this.getBounds(), this.miniType, undefined, this.getFinishBtnCallback(),this.cacheDialog);
+
+    var viewForPopup;
+    if (this.miniType == 1) {
+        viewForPopup = this.constructor;
+    } else {
+        viewForPopup = this;
+    }
+    var taskItem = new ZaTaskItem(viewForPopup, cacheName, title, this.getObject(), this.getBounds(), this.miniType, undefined, this.getFinishBtnCallback(),this.cacheDialog);
     return taskItem;
 }
 

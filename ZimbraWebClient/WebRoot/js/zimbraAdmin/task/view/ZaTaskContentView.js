@@ -23,19 +23,28 @@ ZaTabView.XFormModifiers["ZaTaskContentView"] = new Array();
 ZaTaskContentView._dialogCache = new Array();
 ZaTaskContentView._getDialog =
 function(selectedItem) {
-    var cacheName = selectedItem.cacheName;
-    var myConstructor = selectedItem.constructor;
-    var entry = selectedItem.data;
-    if(selectedItem.cacheDialog && !ZaTaskContentView._dialogCache[cacheName])
-            ZaTaskContentView._dialogCache[cacheName] = ZaApp.getInstance().dialogs[cacheName];
+    var dialog
+    if (selectedItem.type == 1) {
+        var cacheName = selectedItem.cacheName;
+        var myConstructor = selectedItem.viewForPopup;
+        var entry = selectedItem.data;
+        if(selectedItem.cacheDialog && !ZaTaskContentView._dialogCache[cacheName])
+                ZaTaskContentView._dialogCache[cacheName] = ZaApp.getInstance().dialogs[cacheName];
 
-    if(!selectedItem.cacheDialog ||!ZaTaskContentView._dialogCache[cacheName]){
-          ZaTaskContentView._dialogCache[cacheName] = ZaApp.getInstance().dialogs[cacheName] = new myConstructor(ZaApp.getInstance().getAppCtxt().getShell(), entry);
-          if (selectedItem.finishCallback)
-               ZaTaskContentView._dialogCache[cacheName].registerCallback(selectedItem.finishCallback.id, selectedItem.finishCallback.callback);
+        if(!selectedItem.cacheDialog ||!ZaTaskContentView._dialogCache[cacheName]){
+              ZaTaskContentView._dialogCache[cacheName] = ZaApp.getInstance().dialogs[cacheName] = new myConstructor(ZaApp.getInstance().getAppCtxt().getShell(), entry);
+              if (selectedItem.finishCallback)
+                   ZaTaskContentView._dialogCache[cacheName].registerCallback(selectedItem.finishCallback.id, selectedItem.finishCallback.callback);
+        }
+
+        dialog = ZaTaskContentView._dialogCache[cacheName];
+        dialog.setObject(selectedItem.data);
+    } else if  (selectedItem.type == 2) {
+        dialog = selectedItem.viewForPopup;
+    } else {
+        // shouldn't go here
     }
-
-    return ZaTaskContentView._dialogCache[cacheName];
+    return dialog;
 }
 
 ZaTaskContentView.prototype.setObject =
@@ -56,7 +65,6 @@ function (ev) {
 	if(arr && arr.length) {
 		var selectedItem = arr[0];
         var dialog = ZaTaskContentView._getDialog(selectedItem);
-        dialog.setObject(selectedItem.data);
         dialog.popup();
         var position = selectedItem.position;
         dialog.setBounds(position.x, position.y, position.width, position.height);

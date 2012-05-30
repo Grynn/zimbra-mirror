@@ -60,8 +60,8 @@ ZaTask.myXModel = {
 };
 
 // type 1: for working in process, 2 for running task
-ZaTaskItem = function(constructor, cacheName, title, data, position, type, displayName, finishCallback, cacheDialog, dialogType, editData) {
-    this.constructor = constructor;
+ZaTaskItem = function(viewForPopup, cacheName, title, data, position, type, displayName, finishCallback, cacheDialog, dialogType, editData) {
+    this.viewForPopup = viewForPopup;
     this.cacheName = cacheName;
     this._title = title;
     this.data = data;
