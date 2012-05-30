@@ -533,6 +533,10 @@ public class PageBriefcase extends AbsTab {
 
 			if (zIsBrowserMatch(BrowserMasks.BrowserMaskIE)) {
 				if (pulldown == Button.B_NEW) {
+				    if (ZimbraSeleniumProperties.isWebDriver()){
+					pulldownLocator = "css=td[id=zb__NEW_MENU_dropdown]>div[class^=ImgSelectPullDownArrow]";
+					zClick(pulldownLocator);
+				    }else{
 					sGetEval("if(document.createEventObject()){var evObj = document.createEventObject(); "
 							+ "var x = selenium.browserbot.findElementOrNull('"
 							+ pulldownLocator
@@ -544,11 +548,13 @@ public class PageBriefcase extends AbsTab {
 							+ pulldownLocator
 							+ "');"
 							+ "x.focus();x.blur();x.dispatchEvent(evObj);}");
-				} else
+				    }
+				}else{
 					zClick(pulldownLocator);
-			} else
+				}
+			} else {
 				zClickAt(pulldownLocator, "0,0");
-
+			}
 			// If the app is busy, wait for it to become active
 			zWaitForBusyOverlay();
 
@@ -801,12 +807,10 @@ public class PageBriefcase extends AbsTab {
 				+ ")");
 
 		AbsPage page = null;
-		String listLocator = Locators.briefcaseListView.locator;
-		String itemLocator = listLocator
-				+ " div[id^='zli__BDLV__'][class^='Row']";
+		String listLocator = "//div[contains(@id,'zl__BDLV__rows')]";
+		String itemLocator = listLocator + "//div[contains(@id,'zli__BDLV__') and contains(@class,'Row')]";
 		//String itemNameLocator = itemLocator + " div:contains(" + itemName + ")";
-		String itemNameLocator = "//div[contains(@id,'zl__BDLV__rows')]" 
-		+ "//*[contains(@id,'zlif__BDLV__') and contains(text(),'" 
+		String itemNameLocator = listLocator + "//*[contains(@id,'zlif__BDLV__') and contains(text(),'" 
 		+ itemName + "')]";
 		/*
 		 * listLocator =
@@ -865,14 +869,14 @@ public class PageBriefcase extends AbsTab {
 
 			String checkBoxLocator = "";
 			String itemIndexLocator = "";
-			int count = sGetCssCount(itemLocator);
+			int count = sGetXpathCount(itemLocator);
 
 			for (int i = 1; i <= count; i++) {
-				itemIndexLocator = itemLocator + ":nth-child(" + i + ")";
-				if (sIsElementPresent(itemIndexLocator + ":contains(" + itemName + ")")) {
-					checkBoxLocator = itemIndexLocator + " td[id^=zlif__BDLV]>div[class^=ImgCheckbox]";
-					break;
-				}
+			    itemIndexLocator = itemLocator + "[position()=" + i + "]";
+			    if (sIsElementPresent(itemIndexLocator + "//*[contains(text(),'" + itemName + "')]")) {
+				checkBoxLocator = itemIndexLocator + "//td[contains(@id,'zlif__BDLV')]/div[contains(@class,'ImgCheckbox')]";
+				break;
+			    }
 			}
 
 			if (!this.sIsElementPresent(checkBoxLocator)){							
