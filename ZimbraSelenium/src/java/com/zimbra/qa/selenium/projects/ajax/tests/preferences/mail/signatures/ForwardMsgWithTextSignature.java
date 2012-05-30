@@ -29,7 +29,7 @@ public class ForwardMsgWithTextSignature extends AjaxCommonTest {
 		super.startingAccountPreferences = new HashMap<String, String>() {
 			{
 				put("zimbraPrefComposeFormat", "text");
-				// put("zimbraPrefGroupMailBy", "message");
+				put("zimbraPrefGroupMailBy", "message");
 			}
 		};
 	}
