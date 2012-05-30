@@ -294,7 +294,15 @@ public class UsersViewModel: BaseViewModel
 
             tempUser.UserName = nameTokens.GetValue(0).ToString();
             tempUser.MappedName = nameTokens.GetValue(1).ToString();
-            tempUser.ChangePWD = Convert.ToBoolean(nameTokens.GetValue(2).ToString());
+            if (nameTokens.Length > 2)
+            {
+                tempUser.ChangePWD = Convert.ToBoolean(nameTokens.GetValue(2).ToString());
+            }
+            else
+            {
+                tempUser.ChangePWD = false;
+            }
+            
             // tempUser.PWDdefault = nameTokens.GetValue(3).ToString();
 
             ListofUsers.Add(tempUser);
