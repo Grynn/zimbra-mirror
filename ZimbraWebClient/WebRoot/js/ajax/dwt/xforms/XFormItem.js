@@ -4907,6 +4907,7 @@ Dwt_Time_XFormItem = function() {
 		return ret;
 	};
 	this.items[2].type = _DWT_SELECT_;
+    this.items[2].choices = [I18nMsg.periodAm, I18nMsg.periodPm];
 	this.items[2].errorLocation = _INHERIT_;
 }
 Dwt_Time_XFormItem.TIME_MINUTE_CHOICES = ["00","15","30","45"];
