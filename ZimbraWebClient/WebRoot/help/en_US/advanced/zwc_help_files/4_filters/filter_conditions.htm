@@ -1,0 +1,165 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="Originator" content="ImportMif" />
+<meta name="OriginalFile" content="C:\Users\charrison\Documents\2012_Iron-Maiden\zwcHelp\zimbra_user_help_source\4_filters.fm" />
+ <meta name="generator" content="Adobe RoboHelp 9" />
+ <title>Filter Conditions</title>
+<link rel="stylesheet" href="../../zwc_8.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//]]>
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
+-->
+</style>
+<script type="text/javascript" language="javascript1.2" src="../../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whtopic.js"></script>
+
+</head>
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.gbWhTopic)
+{
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
+	if (window.addTocInfo)
+	{
+	addTocInfo("Using Mail Filters\nFilter Conditions");
+addButton("show",BTN_TEXT,"Show","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	
+	document.write("<p style=\"text-align:right\"> ");
+AddMasterBreadcrumbs("../../index.htm", "", "&gt;", "Home", "../../advanced_web_client.htm");
+document.write("<a href=\"working_with_email_filters.htm\">Using Mail Filters<\/a> &gt; Filter Conditions<\/p>");
+
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../../index.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+//]]></script>
+<p class="FM_2HeadingC">Filter Conditions</p>
+<p class="FM_Body">A filter can contain one or more conditions. For example, 
+ if someone sends you email messages from more than one email address and 
+ you want to direct all messages from the person into one folder, you can 
+ create one filter that has two conditions, one for each email address, 
+ and one action to move the email messages to the same folder. </p>
+<p class="FM_Body">The order of the conditions is not important. You can 
+ choose whether the email message must match all conditions or just meet 
+ any one of the listed conditions. You can also use a negative condition. 
+ For example, you can filter an email message that does not contain a particular 
+ word. Filter conditions are not case-sensitive.</p>
+<p class="FM_Body">A filter condition can be based on the following:</p>
+<p class="FM_Bulleted1"><span class="FM_bullet1">•<span style="word-spacing: normal; 
+														 font: 6.0pt 'Times New Roman';">&#160;&#160;&#160;&#160;&#160;&#160;</span></span>Specific 
+ email addresses in the From, To, or Cc fields</p>
+<p class="FM_Bulleted1"><span class="FM_bullet1">•<span style="word-spacing: normal; 
+														 font: 6.0pt 'Times New Roman';">&#160;&#160;&#160;&#160;&#160;&#160;</span></span>Email 
+ messages that are under or over a specific size</p>
+<p class="FM_Bulleted1"><span class="FM_bullet1">•<span style="word-spacing: normal; 
+														 font: 6.0pt 'Times New Roman';">&#160;&#160;&#160;&#160;&#160;&#160;</span></span>Dates</p>
+<p class="FM_Bulleted1"><span class="FM_bullet1">•<span style="word-spacing: normal; 
+														 font: 6.0pt 'Times New Roman';">&#160;&#160;&#160;&#160;&#160;&#160;</span></span>Presence 
+ or absence of file attachments</p>
+<p class="FM_Bulleted1"><span class="FM_bullet1">•<span style="word-spacing: normal; 
+														 font: 6.0pt 'Times New Roman';">&#160;&#160;&#160;&#160;&#160;&#160;</span></span>Words 
+ in the message subject or body</p>
+<p class="FM_Bulleted1"><span class="FM_bullet1">•<span style="word-spacing: normal; 
+														 font: 6.0pt 'Times New Roman';">&#160;&#160;&#160;&#160;&#160;&#160;</span></span>Calendar 
+ invitation</p>
+<p class="FM_3Heading">Filtering Using <span style="font-style: italic;">Any</span>&#160;Versus 
+ <span style="font-style: italic;">All</span>&#160;</p>
+<p class="FM_Body">Conditions within a filter rule can be grouped using 
+ <span class="FM_attribute">Any</span>&#160;or <span class="FM_attribute">All</span>. 
+ The use of these terms is similar to the &quot;AND&quot; versus &quot;OR&quot; 
+ type searches described under the Search feature, with <span class="FM_attribute">Any</span>&#160;being 
+ OR and <span class="FM_attribute">All</span> being AND.</p>
+<p class="FM_Body">If you choose <span class="FM_attribute">Any</span>&#160;when 
+ defining conditions for a new filter rule, then a message that meets any 
+ one of the conditions is considered a match. However, if you choose <span 
+	 class="FM_attribute">All</span>, every condition specified in that 
+ filter rule must apply in order for that message to match the filter.</p>
+<p class="FM_3Heading">Filtering Using <span style="font-style: italic;">Contains</span>, 
+ <span style="font-style: italic;">Matches</span>, and <span style="font-style: italic;">Is</span> 
+ options</p>
+<p class="FM_Body">Three of the comparison methods for filter conditions 
+ are Contains, Matches pattern, and Matches Exactly. These options appear 
+ for some items such as the subject line.</p>
+<p class="FM_Bulleted1"><span class="FM_bullet1">•<span style="word-spacing: normal; 
+														 font: 6.0pt 'Times New Roman';">&#160;&#160;&#160;&#160;&#160;&#160;</span></span><span 
+	 class="FM_attribute">Contains</span>&#160;means that the specified 
+ line must contain, somewhere within it, the specified string. For example, 
+ specifying that the subject line contains &quot;bananas&quot; would match 
+ both &quot;Cooking with bananas&quot; and &quot;Bananas for breakfast&quot;.</p>
+<p class="FM_Bulleted1"><span class="FM_bullet1">•<span style="word-spacing: normal; 
+														 font: 6.0pt 'Times New Roman';">&#160;&#160;&#160;&#160;&#160;&#160;</span></span><span 
+	 class="FM_attribute">Matches</span>&#160;pattern means that the specified 
+ line must match the specified string, which includes wildcards. For example, 
+ specifying &quot; bana*&quot; would match &quot;banana&quot; and &quot;banana 
+ tree but not &quot;free bananas&quot;.</p>
+<p class="FM_Bulleted1"><span class="FM_bullet1">•<span style="word-spacing: normal; 
+														 font: 6.0pt 'Times New Roman';">&#160;&#160;&#160;&#160;&#160;&#160;</span></span><span 
+	 class="FM_attribute">Is</span>&#160;means that the specified line 
+ must exactly match the specified string, with no wildcards or substitutions. 
+ For example, specifying that the subject line must match &quot;bananas&quot; 
+ would only match &quot;bananas&quot; and not &quot;Banana&quot;, &quot;My 
+ bananas&quot;, or &quot;Bananas?&quot;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+
+
+highlightSearch();
+//-->
+//]]></script>
+</body>
+</html>

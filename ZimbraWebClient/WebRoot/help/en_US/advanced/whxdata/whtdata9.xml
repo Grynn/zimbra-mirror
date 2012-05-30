@@ -1,0 +1,9 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<tocdata>
+<item name="Setting up S/MIME to send and receive signed adn encrypted email messages" url="zwc_help_files/15_s_mime/setting_up_smime.htm" />
+<item name="Setting security preferences for using S/MIME" url="zwc_help_files/15_s_mime/setting_security_preferences_for_using_s_mime.htm" />
+<item name="Adding certificates to contacts in Address Book" url="zwc_help_files/15_s_mime/adding_certificates_to_contacts_in_address_book.htm" />
+<item name="Compose and send a digitally signed message" url="zwc_help_files/15_s_mime/compose_and_send_a_digitally_signed_message.htm" />
+<item name="Compose and send an encrypted message" url="zwc_help_files/15_s_mime/compose_and_send_an_encrypted_message.htm" />
+
+</tocdata>

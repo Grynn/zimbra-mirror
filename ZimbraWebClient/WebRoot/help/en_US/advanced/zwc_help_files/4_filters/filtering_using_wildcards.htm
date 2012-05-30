@@ -1,0 +1,132 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="Originator" content="ImportMif" />
+<meta name="OriginalFile" content="C:\Users\charrison\Documents\2012_Iron-Maiden\zwcHelp\zimbra_user_help_source\4_filters.fm" />
+ <meta name="generator" content="Adobe RoboHelp 9" />
+ <title>Filtering Using Wildcards</title>
+<link rel="stylesheet" href="../../zwc_8.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//]]>
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
+-->
+</style>
+<script type="text/javascript" language="javascript1.2" src="../../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whtopic.js"></script>
+
+</head>
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.gbWhTopic)
+{
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
+	if (window.addTocInfo)
+	{
+	addTocInfo("Using Mail Filters\nFiltering Using Wildcards");
+addButton("show",BTN_TEXT,"Show","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	
+	document.write("<p style=\"text-align:right\"> ");
+AddMasterBreadcrumbs("../../index.htm", "", "&gt;", "Home", "../../advanced_web_client.htm");
+document.write("<a href=\"working_with_email_filters.htm\">Using Mail Filters<\/a> &gt; Filtering Using Wildcards<\/p>");
+
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../../index.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+//]]></script>
+<p class="FM_1HeadingC">Filtering Using Wildcards</p>
+<p class="FM_Body">Wildcards can be used in comparisons that use the &quot;Matches 
+ pattern&quot; comparison operator. The two wildcard characters are * and 
+ ?</p>
+<p class="FM_2Heading">Asterisk (*)</p>
+<p class="FM_Body">The asterisk * is a placeholder for &quot;zero or more 
+ characters of any type&quot;.</p>
+<p class="FM_Body">Example subject-line search string: banana*float</p>
+<p class="FM_Body">With Matches: Subject lines such as &quot; bananafloat&quot;, 
+ &quot;bananas&quot;, &quot;banana-leaf casserole float&quot; but not &quot;super-banana-float&quot;</p>
+<p class="FM_Body">Example subject-line search string: w*bandanna</p>
+<p class="FM_Body">With Matches: Subject lines such as &quot;white bandanna&quot; 
+ or &quot;whose bandanna&quot; but not &quot;whose bandanna is this?&quot;</p>
+<p class="FM_2Heading">Question mark (?)</p>
+<p class="FM_Body">The question mark is a placeholder for &quot;exactly 
+ one character&quot;.</p>
+<p class="FM_Body">Example subject-line search string: banana?boat</p>
+<p class="FM_Body">With Matches: Subject lines such as &quot; bananasboat&quot;, 
+ &quot;banana-boat&quot;, &quot;banana!boat&quot;, or &quot;banana boat&quot;</p>
+<p class="FM_2Heading">Escape character is Slash: \</p>
+<p class="FM_Body">There may be times that you will want to specify an 
+ exact match on a string that contains characters that normally are considered 
+ wildcards. For example, you might want to specify a match on a subject 
+ line where the main heading is surrounded on both sides by three asterisks, 
+ such as</p>
+<p class="FM_Body">***MORE MONEY!!!*** or</p>
+<p class="FM_Body">***FREE GIFT***</p>
+<p class="FM_Body">To specify a wildcard as itself rather than a substitution 
+ for other characters, use the backslash \ immediately before the character. 
+ For example the comparison string &quot;\*\*\**\*\*\*&quot; specifies 
+ a subject with three asterisks before and after any string in the middle 
+ (including spaces).</p>
+<p class="FM_Body">&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+
+
+highlightSearch();
+//-->
+//]]></script>
+</body>
+</html>
