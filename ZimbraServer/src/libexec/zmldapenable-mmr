@@ -93,12 +93,7 @@ if(lc($ldap_is_master) eq "true") {
                 );
   my $size = $mesg->count;
   if ($size == 0) {
-    if($sid > 0) {
-      $mesg = $ldap->modify(
-        $dn,
-        add=>{olcServerID =>"$sid"},
-      );
-    } else {
+    if($sid <= 0) {
       print "Error: No Server ID exists on master and none provided.\n";
       print "       Provide valid Server ID value via the -s option.\n";
       exit(1);
@@ -169,6 +164,26 @@ if(lc($ldap_is_master) eq "true") {
         olcAccessLogPurge=>'01+00:00  00+04:00',
       ],
     );
+  }
+  $dn="cn=config";
+  $mesg = $ldap ->search(
+                    base=>"$dn",
+                    filter=>"(&(objectClass=olcGlobal)(olcServerID=*))",
+                    scope=>"sub",
+                    attrs => ['olcServerID'],
+                );
+  my $size = $mesg->count;
+  if ($size == 0) {
+    if($sid > 0) {
+      $mesg = $ldap->modify(
+        $dn,
+        add=>{olcServerID =>"$sid"},
+      );
+    } else {
+      print "Error: No Server ID exists on master and none provided.\n";
+      print "       Provide valid Server ID value via the -s option.\n";
+      exit(1);
+    }
   }
   $bdn="olcDatabase={3}mdb,cn=config";
   if ($mmrURI =~ /^ldaps:/) {
