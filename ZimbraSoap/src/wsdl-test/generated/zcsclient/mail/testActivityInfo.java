@@ -26,6 +26,7 @@ import generated.zcsclient.zm.testNamedValue;
  *       &lt;attribute name="ts" use="required" type="{http://www.w3.org/2001/XMLSchema}long" />
  *       &lt;attribute name="itemId" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="ver" type="{http://www.w3.org/2001/XMLSchema}int" />
+ *       &lt;attribute name="ua" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="email" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -49,6 +50,8 @@ public class testActivityInfo {
     protected String itemId;
     @XmlAttribute(name = "ver")
     protected Integer ver;
+    @XmlAttribute(name = "ua")
+    protected String ua;
     @XmlAttribute(name = "email")
     protected String email;
 
@@ -167,6 +170,30 @@ public class testActivityInfo {
      */
     public void setVer(Integer value) {
         this.ver = value;
+    }
+
+    /**
+     * Gets the value of the ua property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getUa() {
+        return ua;
+    }
+
+    /**
+     * Sets the value of the ua property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setUa(String value) {
+        this.ua = value;
     }
 
     /**

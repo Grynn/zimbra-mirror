@@ -22,6 +22,7 @@ import generated.zcsclient.zm.testCursorInfo;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
+ *         &lt;element name="query" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="header" type="{urn:zimbra}attributeName" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="tz" type="{urn:zimbraMail}calTZInfo" minOccurs="0"/>
  *         &lt;element name="locale" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -32,7 +33,6 @@ import generated.zcsclient.zm.testCursorInfo;
  *       &lt;attribute name="allowableTaskStatus" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="calExpandInstStart" type="{http://www.w3.org/2001/XMLSchema}long" />
  *       &lt;attribute name="calExpandInstEnd" type="{http://www.w3.org/2001/XMLSchema}long" />
- *       &lt;attribute name="query" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="inDumpster" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *       &lt;attribute name="types" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="groupBy" type="{http://www.w3.org/2001/XMLSchema}string" />
@@ -59,6 +59,7 @@ import generated.zcsclient.zm.testCursorInfo;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "mailSearchParams", propOrder = {
+    "query",
     "header",
     "tz",
     "locale",
@@ -70,6 +71,7 @@ import generated.zcsclient.zm.testCursorInfo;
 })
 public class testMailSearchParams {
 
+    protected String query;
     protected List<testAttributeName> header;
     protected testCalTZInfo tz;
     protected String locale;
@@ -84,8 +86,6 @@ public class testMailSearchParams {
     protected Long calExpandInstStart;
     @XmlAttribute(name = "calExpandInstEnd")
     protected Long calExpandInstEnd;
-    @XmlAttribute(name = "query")
-    protected String query;
     @XmlAttribute(name = "inDumpster")
     protected Boolean inDumpster;
     @XmlAttribute(name = "types")
@@ -120,6 +120,30 @@ public class testMailSearchParams {
     protected Integer limit;
     @XmlAttribute(name = "offset")
     protected Integer offset;
+
+    /**
+     * Gets the value of the query property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getQuery() {
+        return query;
+    }
+
+    /**
+     * Sets the value of the query property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setQuery(String value) {
+        this.query = value;
+    }
 
     /**
      * Gets the value of the header property.
@@ -340,30 +364,6 @@ public class testMailSearchParams {
      */
     public void setCalExpandInstEnd(Long value) {
         this.calExpandInstEnd = value;
-    }
-
-    /**
-     * Gets the value of the query property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getQuery() {
-        return query;
-    }
-
-    /**
-     * Sets the value of the query property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setQuery(String value) {
-        this.query = value;
     }
 
     /**

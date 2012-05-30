@@ -141,7 +141,7 @@ import javax.xml.bind.annotation.XmlType;
  *             &lt;/complexContent>
  *           &lt;/complexType>
  *         &lt;/element>
- *         &lt;element name="soapURL" type="{http://www.w3.org/2001/XMLSchema}string" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="soapURL" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="publicURL" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="changePasswordURL" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="license" type="{urn:zimbraAccount}licenseInfo" minOccurs="0"/>
@@ -209,7 +209,7 @@ public class testGetInfoResponse {
     protected testGetInfoResponse.DataSources dataSources;
     protected testGetInfoResponse.ChildAccounts childAccounts;
     protected testGetInfoResponse.Rights rights;
-    protected List<String> soapURL;
+    protected String soapURL;
     protected String publicURL;
     protected String changePasswordURL;
     protected testLicenseInfo license;
@@ -717,30 +717,25 @@ public class testGetInfoResponse {
     /**
      * Gets the value of the soapURL property.
      * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the soapURL property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getSoapURL().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link String }
-     * 
-     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
-    public List<String> getSoapURL() {
-        if (soapURL == null) {
-            soapURL = new ArrayList<String>();
-        }
-        return this.soapURL;
+    public String getSoapURL() {
+        return soapURL;
+    }
+
+    /**
+     * Sets the value of the soapURL property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setSoapURL(String value) {
+        this.soapURL = value;
     }
 
     /**
@@ -1018,13 +1013,13 @@ public class testGetInfoResponse {
 
         @XmlElements({
             @XmlElement(name = "unknown", type = testAccountUnknownDataSource.class),
-            @XmlElement(name = "gal", type = testAccountGalDataSource.class),
-            @XmlElement(name = "yab", type = testAccountYabDataSource.class),
             @XmlElement(name = "caldav", type = testAccountCaldavDataSource.class),
-            @XmlElement(name = "imap", type = testAccountImapDataSource.class),
             @XmlElement(name = "cal", type = testAccountCalDataSource.class),
+            @XmlElement(name = "pop3", type = testAccountPop3DataSource.class),
+            @XmlElement(name = "imap", type = testAccountImapDataSource.class),
             @XmlElement(name = "rss", type = testAccountRssDataSource.class),
-            @XmlElement(name = "pop3", type = testAccountPop3DataSource.class)
+            @XmlElement(name = "gal", type = testAccountGalDataSource.class),
+            @XmlElement(name = "yab", type = testAccountYabDataSource.class)
         })
         protected List<testAccountDataSource> imapOrPop3OrCaldav;
 
@@ -1047,13 +1042,13 @@ public class testGetInfoResponse {
          * <p>
          * Objects of the following type(s) are allowed in the list
          * {@link testAccountUnknownDataSource }
+         * {@link testAccountCaldavDataSource }
+         * {@link testAccountCalDataSource }
+         * {@link testAccountPop3DataSource }
+         * {@link testAccountImapDataSource }
+         * {@link testAccountRssDataSource }
          * {@link testAccountGalDataSource }
          * {@link testAccountYabDataSource }
-         * {@link testAccountCaldavDataSource }
-         * {@link testAccountImapDataSource }
-         * {@link testAccountCalDataSource }
-         * {@link testAccountRssDataSource }
-         * {@link testAccountPop3DataSource }
          * 
          * 
          */

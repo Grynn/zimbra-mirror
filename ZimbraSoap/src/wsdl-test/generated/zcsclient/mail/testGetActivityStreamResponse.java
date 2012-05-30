@@ -25,6 +25,7 @@ import generated.zcsclient.zm.testNamedElement;
  *         &lt;element name="a" type="{urn:zimbraMail}activityInfo" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *       &lt;attribute name="session" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="count" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -45,6 +46,8 @@ public class testGetActivityStreamResponse {
     protected List<testActivityInfo> a;
     @XmlAttribute(name = "session")
     protected String session;
+    @XmlAttribute(name = "count")
+    protected String count;
 
     /**
      * Gets the value of the op property.
@@ -155,6 +158,30 @@ public class testGetActivityStreamResponse {
      */
     public void setSession(String value) {
         this.session = value;
+    }
+
+    /**
+     * Gets the value of the count property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getCount() {
+        return count;
+    }
+
+    /**
+     * Sets the value of the count property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setCount(String value) {
+        this.count = value;
     }
 
 }

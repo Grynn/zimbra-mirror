@@ -431,6 +431,8 @@ import generated.zcsclient.admin.testRenameDistributionListRequest;
 import generated.zcsclient.admin.testRenameDistributionListResponse;
 import generated.zcsclient.admin.testRenameLDAPEntryRequest;
 import generated.zcsclient.admin.testRenameLDAPEntryResponse;
+import generated.zcsclient.admin.testRenameUCServiceRequest;
+import generated.zcsclient.admin.testRenameUCServiceResponse;
 import generated.zcsclient.admin.testResetAllLoggersRequest;
 import generated.zcsclient.admin.testResetAllLoggersResponse;
 import generated.zcsclient.admin.testRestoreRequest;
@@ -504,14 +506,14 @@ import generated.zcsclient.adminext.testPurgeBulkIMAPImportTasksResponse;
 @WebService(name = "zcsAdminPortType", targetNamespace = "http://www.zimbra.com/wsdl/ZimbraService.wsdl")
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
 @XmlSeeAlso({
-    generated.zcsclient.sync.ObjectFactory.class,
-    generated.zcsclient.appblast.ObjectFactory.class,
+    generated.zcsclient.account.ObjectFactory.class,
     generated.zcsclient.adminext.ObjectFactory.class,
     generated.zcsclient.admin.ObjectFactory.class,
-    generated.zcsclient.zm.ObjectFactory.class,
     generated.zcsclient.mail.ObjectFactory.class,
-    generated.zcsclient.account.ObjectFactory.class,
-    generated.zcsclient.replication.ObjectFactory.class
+    generated.zcsclient.replication.ObjectFactory.class,
+    generated.zcsclient.appblast.ObjectFactory.class,
+    generated.zcsclient.zm.ObjectFactory.class,
+    generated.zcsclient.sync.ObjectFactory.class
 })
 public interface ZcsAdminPortType {
 
@@ -3059,6 +3061,18 @@ public interface ZcsAdminPortType {
     public testRenameLDAPEntryResponse renameLDAPEntryRequest(
         @WebParam(name = "RenameLDAPEntryRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
         testRenameLDAPEntryRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns generated.zcsclient.admin.testRenameUCServiceResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/RenameUCService")
+    @WebResult(name = "RenameUCServiceResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public testRenameUCServiceResponse renameUCServiceRequest(
+        @WebParam(name = "RenameUCServiceRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        testRenameUCServiceRequest parameters);
 
     /**
      * 

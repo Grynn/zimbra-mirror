@@ -56,17 +56,17 @@ public class testSyncResponse {
 
     protected testSyncDeletedInfo deleted;
     @XmlElements({
-        @XmlElement(name = "chat", type = testChatSummary.class),
-        @XmlElement(name = "m", type = testMessageSummary.class),
-        @XmlElement(name = "tag", type = testTagInfo.class),
+        @XmlElement(name = "c", type = testConversationSummary.class),
         @XmlElement(name = "task", type = testTaskItemInfo.class),
         @XmlElement(name = "folder", type = testFolder.class),
         @XmlElement(name = "w", type = testCommonDocumentInfo.class),
+        @XmlElement(name = "chat", type = testChatSummary.class),
+        @XmlElement(name = "m", type = testMessageSummary.class),
         @XmlElement(name = "cn", type = testContactInfo.class),
-        @XmlElement(name = "c", type = testConversationSummary.class),
+        @XmlElement(name = "doc", type = testDocumentInfo.class),
+        @XmlElement(name = "tag", type = testTagInfo.class),
         @XmlElement(name = "appt", type = testCalendarItemInfo.class),
-        @XmlElement(name = "note", type = testNoteInfo.class),
-        @XmlElement(name = "doc", type = testDocumentInfo.class)
+        @XmlElement(name = "note", type = testNoteInfo.class)
     })
     protected List<Object> folderOrTagOrNote;
     @XmlAttribute(name = "md", required = true)
@@ -120,17 +120,17 @@ public class testSyncResponse {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link testChatSummary }
-     * {@link testMessageSummary }
-     * {@link testTagInfo }
+     * {@link testConversationSummary }
      * {@link testTaskItemInfo }
      * {@link testFolder }
      * {@link testCommonDocumentInfo }
+     * {@link testChatSummary }
+     * {@link testMessageSummary }
      * {@link testContactInfo }
-     * {@link testConversationSummary }
+     * {@link testDocumentInfo }
+     * {@link testTagInfo }
      * {@link testCalendarItemInfo }
      * {@link testNoteInfo }
-     * {@link testDocumentInfo }
      * 
      * 
      */

@@ -22,9 +22,9 @@ import generated.zcsclient.zm.testNamedValue;
  *       &lt;sequence>
  *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="attr" type="{urn:zimbra}namedValue" maxOccurs="unbounded"/>
- *         &lt;element name="soapURL" type="{urn:zimbra}namedValue" maxOccurs="unbounded" minOccurs="0"/>
- *         &lt;element name="publicURL" type="{urn:zimbra}namedValue" minOccurs="0"/>
- *         &lt;element name="changePasswordURL" type="{urn:zimbra}namedValue" minOccurs="0"/>
+ *         &lt;element name="soapURL" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="publicURL" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="changePasswordURL" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -47,9 +47,9 @@ public class testGetAccountInfoResponse {
     protected String name;
     @XmlElement(required = true)
     protected List<testNamedValue> attr;
-    protected List<testNamedValue> soapURL;
-    protected testNamedValue publicURL;
-    protected testNamedValue changePasswordURL;
+    protected String soapURL;
+    protected String publicURL;
+    protected String changePasswordURL;
 
     /**
      * Gets the value of the name property.
@@ -107,30 +107,25 @@ public class testGetAccountInfoResponse {
     /**
      * Gets the value of the soapURL property.
      * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the soapURL property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getSoapURL().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link testNamedValue }
-     * 
-     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
-    public List<testNamedValue> getSoapURL() {
-        if (soapURL == null) {
-            soapURL = new ArrayList<testNamedValue>();
-        }
-        return this.soapURL;
+    public String getSoapURL() {
+        return soapURL;
+    }
+
+    /**
+     * Sets the value of the soapURL property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setSoapURL(String value) {
+        this.soapURL = value;
     }
 
     /**
@@ -138,10 +133,10 @@ public class testGetAccountInfoResponse {
      * 
      * @return
      *     possible object is
-     *     {@link testNamedValue }
+     *     {@link String }
      *     
      */
-    public testNamedValue getPublicURL() {
+    public String getPublicURL() {
         return publicURL;
     }
 
@@ -150,10 +145,10 @@ public class testGetAccountInfoResponse {
      * 
      * @param value
      *     allowed object is
-     *     {@link testNamedValue }
+     *     {@link String }
      *     
      */
-    public void setPublicURL(testNamedValue value) {
+    public void setPublicURL(String value) {
         this.publicURL = value;
     }
 
@@ -162,10 +157,10 @@ public class testGetAccountInfoResponse {
      * 
      * @return
      *     possible object is
-     *     {@link testNamedValue }
+     *     {@link String }
      *     
      */
-    public testNamedValue getChangePasswordURL() {
+    public String getChangePasswordURL() {
         return changePasswordURL;
     }
 
@@ -174,10 +169,10 @@ public class testGetAccountInfoResponse {
      * 
      * @param value
      *     allowed object is
-     *     {@link testNamedValue }
+     *     {@link String }
      *     
      */
-    public void setChangePasswordURL(testNamedValue value) {
+    public void setChangePasswordURL(String value) {
         this.changePasswordURL = value;
     }
 

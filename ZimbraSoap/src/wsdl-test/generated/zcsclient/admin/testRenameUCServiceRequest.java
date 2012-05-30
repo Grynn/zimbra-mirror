@@ -1,5 +1,5 @@
 
-package generated.zcsclient.account;
+package generated.zcsclient.admin;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -8,18 +8,18 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for cos complex type.
+ * <p>Java class for renameUCServiceRequest complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="cos">
+ * &lt;complexType name="renameUCServiceRequest">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *       &lt;/sequence>
- *       &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="name" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;all>
+ *       &lt;/all>
+ *       &lt;attribute name="id" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="newName" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -28,13 +28,15 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "cos")
-public class testCos {
+@XmlType(name = "renameUCServiceRequest", propOrder = {
 
-    @XmlAttribute(name = "id")
+})
+public class testRenameUCServiceRequest {
+
+    @XmlAttribute(name = "id", required = true)
     protected String id;
-    @XmlAttribute(name = "name")
-    protected String name;
+    @XmlAttribute(name = "newName", required = true)
+    protected String newName;
 
     /**
      * Gets the value of the id property.
@@ -61,27 +63,27 @@ public class testCos {
     }
 
     /**
-     * Gets the value of the name property.
+     * Gets the value of the newName property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getName() {
-        return name;
+    public String getNewName() {
+        return newName;
     }
 
     /**
-     * Sets the value of the name property.
+     * Sets the value of the newName property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setName(String value) {
-        this.name = value;
+    public void setNewName(String value) {
+        this.newName = value;
     }
 
 }

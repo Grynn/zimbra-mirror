@@ -17,7 +17,7 @@ import javax.xml.ws.WebServiceFeature;
  * Generated source version: 2.1
  * 
  */
-@WebServiceClient(name = "zcsAdminService", targetNamespace = "http://www.zimbra.com/wsdl/ZimbraService.wsdl", wsdlLocation = "file:/p4/coco1/main/ZimbraSoap/build/classes/com/zimbra/soap/ZimbraService.wsdl")
+@WebServiceClient(name = "zcsAdminService", targetNamespace = "http://www.zimbra.com/wsdl/ZimbraService.wsdl", wsdlLocation = "file:/p4/tarka/main/ZimbraSoap/build/classes/com/zimbra/soap/ZimbraService.wsdl")
 public class ZcsAdminService
     extends Service
 {
@@ -30,9 +30,9 @@ public class ZcsAdminService
         try {
             URL baseUrl;
             baseUrl = generated.zcsclient.ws.service.ZcsAdminService.class.getResource(".");
-            url = new URL(baseUrl, "file:/p4/coco1/main/ZimbraSoap/build/classes/com/zimbra/soap/ZimbraService.wsdl");
+            url = new URL(baseUrl, "file:/p4/tarka/main/ZimbraSoap/build/classes/com/zimbra/soap/ZimbraService.wsdl");
         } catch (MalformedURLException e) {
-            logger.warning("Failed to create URL for the wsdl Location: 'file:/p4/coco1/main/ZimbraSoap/build/classes/com/zimbra/soap/ZimbraService.wsdl', retrying as a local file");
+            logger.warning("Failed to create URL for the wsdl Location: 'file:/p4/tarka/main/ZimbraSoap/build/classes/com/zimbra/soap/ZimbraService.wsdl', retrying as a local file");
             logger.warning(e.getMessage());
         }
         ZCSADMINSERVICE_WSDL_LOCATION = url;

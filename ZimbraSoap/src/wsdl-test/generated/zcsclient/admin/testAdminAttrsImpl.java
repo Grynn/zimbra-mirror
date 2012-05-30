@@ -63,17 +63,17 @@ import javax.xml.bind.annotation.XmlType;
     testModifyDistributionListRequest.class,
     testGetDistributionListRequest.class,
     testModifyServerRequest.class,
-    testSmimeConfigModifications.class,
     testArchiveSpec.class,
     testDataSourceSpecifier.class,
     testLdapEntryInfo.class,
-    testSearchNode.class,
     testSmimeConfigInfo.class,
     testDataSourceInfo.class,
-    testXmppComponentInfo.class,
     testGalContactInfo.class,
     testXmppComponentSpec.class,
-    testNetworkInformation.class
+    testNetworkInformation.class,
+    testSmimeConfigModifications.class,
+    testSearchNode.class,
+    testXmppComponentInfo.class
 })
 public class testAdminAttrsImpl {
 

@@ -45,13 +45,13 @@ import javax.xml.bind.annotation.XmlType;
 public class testGetImportStatusResponse {
 
     @XmlElements({
-        @XmlElement(name = "yab", type = testYabImportStatusInfo.class),
-        @XmlElement(name = "caldav", type = testCaldavImportStatusInfo.class),
+        @XmlElement(name = "unknown", type = testUnknownImportStatusInfo.class),
         @XmlElement(name = "rss", type = testRssImportStatusInfo.class),
+        @XmlElement(name = "yab", type = testYabImportStatusInfo.class),
         @XmlElement(name = "pop3", type = testPop3ImportStatusInfo.class),
         @XmlElement(name = "imap", type = testImapImportStatusInfo.class),
-        @XmlElement(name = "unknown", type = testUnknownImportStatusInfo.class),
         @XmlElement(name = "cal", type = testCalImportStatusInfo.class),
+        @XmlElement(name = "caldav", type = testCaldavImportStatusInfo.class),
         @XmlElement(name = "gal", type = testGalImportStatusInfo.class)
     })
     protected List<testImportStatusInfo> imapOrPop3OrCaldav;
@@ -74,13 +74,13 @@ public class testGetImportStatusResponse {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link testYabImportStatusInfo }
-     * {@link testCaldavImportStatusInfo }
+     * {@link testUnknownImportStatusInfo }
      * {@link testRssImportStatusInfo }
+     * {@link testYabImportStatusInfo }
      * {@link testPop3ImportStatusInfo }
      * {@link testImapImportStatusInfo }
-     * {@link testUnknownImportStatusInfo }
      * {@link testCalImportStatusInfo }
+     * {@link testCaldavImportStatusInfo }
      * {@link testGalImportStatusInfo }
      * 
      * 

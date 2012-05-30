@@ -1,23 +1,24 @@
 
-package generated.zcsclient.admin;
+package generated.zcsclient.mail;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for getCosResponse complex type.
+ * <p>Java class for itemIdSpec complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="getCosResponse">
+ * &lt;complexType name="itemIdSpec">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="cos" type="{urn:zimbraAdmin}cosInfo" minOccurs="0"/>
  *       &lt;/sequence>
+ *       &lt;attribute name="id" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -26,35 +27,34 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "getCosResponse", propOrder = {
-    "cos"
-})
-public class testGetCosResponse {
+@XmlType(name = "itemIdSpec")
+public class testItemIdSpec {
 
-    protected testCosInfo cos;
+    @XmlAttribute(name = "id", required = true)
+    protected String id;
 
     /**
-     * Gets the value of the cos property.
+     * Gets the value of the id property.
      * 
      * @return
      *     possible object is
-     *     {@link testCosInfo }
+     *     {@link String }
      *     
      */
-    public testCosInfo getCos() {
-        return cos;
+    public String getId() {
+        return id;
     }
 
     /**
-     * Sets the value of the cos property.
+     * Sets the value of the id property.
      * 
      * @param value
      *     allowed object is
-     *     {@link testCosInfo }
+     *     {@link String }
      *     
      */
-    public void setCos(testCosInfo value) {
-        this.cos = value;
+    public void setId(String value) {
+        this.id = value;
     }
 
 }

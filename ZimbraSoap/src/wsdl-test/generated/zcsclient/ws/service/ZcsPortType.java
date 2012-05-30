@@ -210,6 +210,7 @@ import generated.zcsclient.mail.testGetCustomMetadataRequest;
 import generated.zcsclient.mail.testGetCustomMetadataResponse;
 import generated.zcsclient.mail.testGetDataSourcesRequest;
 import generated.zcsclient.mail.testGetDataSourcesResponse;
+import generated.zcsclient.mail.testGetDocumentShareURLRequest;
 import generated.zcsclient.mail.testGetEffectiveFolderPermsRequest;
 import generated.zcsclient.mail.testGetEffectiveFolderPermsResponse;
 import generated.zcsclient.mail.testGetFilterRulesRequest;
@@ -244,6 +245,8 @@ import generated.zcsclient.mail.testGetRecurRequest;
 import generated.zcsclient.mail.testGetRecurResponse;
 import generated.zcsclient.mail.testGetSearchFolderRequest;
 import generated.zcsclient.mail.testGetSearchFolderResponse;
+import generated.zcsclient.mail.testGetShareDetailsRequest;
+import generated.zcsclient.mail.testGetShareDetailsResponse;
 import generated.zcsclient.mail.testGetShareNotificationsRequest;
 import generated.zcsclient.mail.testGetShareNotificationsResponse;
 import generated.zcsclient.mail.testGetSpellDictionariesRequest;
@@ -397,14 +400,14 @@ import generated.zcsclient.sync.testSuspendDeviceResponse;
 @WebService(name = "zcsPortType", targetNamespace = "http://www.zimbra.com/wsdl/ZimbraService.wsdl")
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
 @XmlSeeAlso({
-    generated.zcsclient.sync.ObjectFactory.class,
-    generated.zcsclient.appblast.ObjectFactory.class,
+    generated.zcsclient.account.ObjectFactory.class,
     generated.zcsclient.adminext.ObjectFactory.class,
     generated.zcsclient.admin.ObjectFactory.class,
-    generated.zcsclient.zm.ObjectFactory.class,
     generated.zcsclient.mail.ObjectFactory.class,
-    generated.zcsclient.account.ObjectFactory.class,
-    generated.zcsclient.replication.ObjectFactory.class
+    generated.zcsclient.replication.ObjectFactory.class,
+    generated.zcsclient.appblast.ObjectFactory.class,
+    generated.zcsclient.zm.ObjectFactory.class,
+    generated.zcsclient.sync.ObjectFactory.class
 })
 public interface ZcsPortType {
 
@@ -1613,6 +1616,18 @@ public interface ZcsPortType {
      * 
      * @param parameters
      * @return
+     *     returns java.lang.String
+     */
+    @WebMethod(action = "urn:zimbraMail/GetDocumentShareURL")
+    @WebResult(name = "GetDocumentShareURLResponse", targetNamespace = "urn:zimbraMail", partName = "parameters")
+    public String getDocumentShareURLRequest(
+        @WebParam(name = "GetDocumentShareURLRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
+        testGetDocumentShareURLRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
      *     returns generated.zcsclient.mail.testGetEffectiveFolderPermsResponse
      */
     @WebMethod(action = "urn:zimbraMail/GetEffectiveFolderPerms")
@@ -1812,6 +1827,18 @@ public interface ZcsPortType {
     public testGetSearchFolderResponse getSearchFolderRequest(
         @WebParam(name = "GetSearchFolderRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
         testGetSearchFolderRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns generated.zcsclient.mail.testGetShareDetailsResponse
+     */
+    @WebMethod(action = "urn:zimbraMail/GetShareDetails")
+    @WebResult(name = "GetShareDetailsResponse", targetNamespace = "urn:zimbraMail", partName = "parameters")
+    public testGetShareDetailsResponse getShareDetailsRequest(
+        @WebParam(name = "GetShareDetailsRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
+        testGetShareDetailsRequest parameters);
 
     /**
      * 

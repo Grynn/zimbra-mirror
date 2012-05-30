@@ -7,16 +7,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for deleteMailboxResponse complex type.
+ * <p>Java class for renameUCServiceResponse complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="deleteMailboxResponse">
+ * &lt;complexType name="renameUCServiceResponse">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="mbox" type="{urn:zimbraAdmin}mailboxWithMailboxId" minOccurs="0"/>
+ *         &lt;element ref="{urn:zimbraAdmin}ucservice" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -26,35 +26,35 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "deleteMailboxResponse", propOrder = {
-    "mbox"
+@XmlType(name = "renameUCServiceResponse", propOrder = {
+    "ucservice"
 })
-public class testDeleteMailboxResponse {
+public class testRenameUCServiceResponse {
 
-    protected testMailboxWithMailboxId mbox;
+    protected testUcServiceInfo ucservice;
 
     /**
-     * Gets the value of the mbox property.
+     * Gets the value of the ucservice property.
      * 
      * @return
      *     possible object is
-     *     {@link testMailboxWithMailboxId }
+     *     {@link testUcServiceInfo }
      *     
      */
-    public testMailboxWithMailboxId getMbox() {
-        return mbox;
+    public testUcServiceInfo getUcservice() {
+        return ucservice;
     }
 
     /**
-     * Sets the value of the mbox property.
+     * Sets the value of the ucservice property.
      * 
      * @param value
      *     allowed object is
-     *     {@link testMailboxWithMailboxId }
+     *     {@link testUcServiceInfo }
      *     
      */
-    public void setMbox(testMailboxWithMailboxId value) {
-        this.mbox = value;
+    public void setUcservice(testUcServiceInfo value) {
+        this.ucservice = value;
     }
 
 }

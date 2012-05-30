@@ -1,5 +1,5 @@
 
-package generated.zcsclient.admin;
+package generated.zcsclient.mail;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -7,16 +7,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for deleteMailboxResponse complex type.
+ * <p>Java class for getDocumentShareURLRequest complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="deleteMailboxResponse">
+ * &lt;complexType name="getDocumentShareURLRequest">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="mbox" type="{urn:zimbraAdmin}mailboxWithMailboxId" minOccurs="0"/>
+ *         &lt;element name="item" type="{urn:zimbraMail}itemSpec" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -26,35 +26,35 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "deleteMailboxResponse", propOrder = {
-    "mbox"
+@XmlType(name = "getDocumentShareURLRequest", propOrder = {
+    "item"
 })
-public class testDeleteMailboxResponse {
+public class testGetDocumentShareURLRequest {
 
-    protected testMailboxWithMailboxId mbox;
+    protected testItemSpec item;
 
     /**
-     * Gets the value of the mbox property.
+     * Gets the value of the item property.
      * 
      * @return
      *     possible object is
-     *     {@link testMailboxWithMailboxId }
+     *     {@link testItemSpec }
      *     
      */
-    public testMailboxWithMailboxId getMbox() {
-        return mbox;
+    public testItemSpec getItem() {
+        return item;
     }
 
     /**
-     * Sets the value of the mbox property.
+     * Sets the value of the item property.
      * 
      * @param value
      *     allowed object is
-     *     {@link testMailboxWithMailboxId }
+     *     {@link testItemSpec }
      *     
      */
-    public void setMbox(testMailboxWithMailboxId value) {
-        this.mbox = value;
+    public void setItem(testItemSpec value) {
+        this.item = value;
     }
 
 }
