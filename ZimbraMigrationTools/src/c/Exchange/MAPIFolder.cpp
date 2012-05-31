@@ -388,14 +388,15 @@ HRESULT MAPIFolder::GetMessageIterator(MessageIterator &msgIterator)
             __LINE__, __FILE__);
     }
 
-    ULONG ulItemMask =ZCM_ALL;
-    wstring wstrCntrClass = L"";
-    if(S_OK==ContainerClass(wstrCntrClass))
-    {
-        if (_tcsicmp(wstrCntrClass.c_str(), _TEXT("IPF.NOTE")) == 0)
-            ulItemMask  &= ~ZCM_APPOINTMENTS;
-    }
+    //ULONG ulItemMask =ZCM_ALL;
+    //wstring wstrCntrClass = L"";
+    //if(S_OK==ContainerClass(wstrCntrClass))
+    //{
+    //    if (_tcsicmp(wstrCntrClass.c_str(), _TEXT("IPF.NOTE")) == 0)
+    //        ulItemMask  &= ~ZCM_APPOINTMENTS;
+    //}
     // Init message iterator
-    msgIterator.Initialize(pContentsTable, m_folder, *m_session,ulItemMask);
+    //msgIterator.Initialize(pContentsTable, m_folder, *m_session,ulItemMask);
+    msgIterator.Initialize(pContentsTable, m_folder, *m_session);
     return S_OK;
 }
