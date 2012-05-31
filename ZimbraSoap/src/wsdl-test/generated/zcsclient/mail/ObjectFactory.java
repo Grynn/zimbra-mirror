@@ -2963,14 +2963,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link testGlobalSearchRequest }
-     * 
-     */
-    public testGlobalSearchRequest createtestGlobalSearchRequest() {
-        return new testGlobalSearchRequest();
-    }
-
-    /**
      * Create an instance of {@link testCheckSpellingResponse }
      * 
      */
@@ -3072,14 +3064,6 @@ public class ObjectFactory {
      */
     public testApplyOutgoingFilterRulesRequest createtestApplyOutgoingFilterRulesRequest() {
         return new testApplyOutgoingFilterRulesRequest();
-    }
-
-    /**
-     * Create an instance of {@link testGlobalSearchResponse }
-     * 
-     */
-    public testGlobalSearchResponse createtestGlobalSearchResponse() {
-        return new testGlobalSearchResponse();
     }
 
     /**
@@ -5643,15 +5627,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link testGlobalSearchResponse }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "urn:zimbraMail", name = "GlobalSearchResponse")
-    public JAXBElement<testGlobalSearchResponse> createGlobalSearchResponse(testGlobalSearchResponse value) {
-        return new JAXBElement<testGlobalSearchResponse>(_GlobalSearchResponse_QNAME, testGlobalSearchResponse.class, null, value);
-    }
-
-    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link testCheckPermissionRequest }{@code >}}
      * 
      */
@@ -6792,15 +6767,6 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "urn:zimbraMail", name = "RegisterDeviceRequest")
     public JAXBElement<testRegisterDeviceRequest> createRegisterDeviceRequest(testRegisterDeviceRequest value) {
         return new JAXBElement<testRegisterDeviceRequest>(_RegisterDeviceRequest_QNAME, testRegisterDeviceRequest.class, null, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link testGlobalSearchRequest }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "urn:zimbraMail", name = "GlobalSearchRequest")
-    public JAXBElement<testGlobalSearchRequest> createGlobalSearchRequest(testGlobalSearchRequest value) {
-        return new JAXBElement<testGlobalSearchRequest>(_GlobalSearchRequest_QNAME, testGlobalSearchRequest.class, null, value);
     }
 
     /**

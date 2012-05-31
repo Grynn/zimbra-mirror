@@ -269,8 +269,6 @@ import generated.zcsclient.mail.testGetYahooAuthTokenRequest;
 import generated.zcsclient.mail.testGetYahooAuthTokenResponse;
 import generated.zcsclient.mail.testGetYahooCookieRequest;
 import generated.zcsclient.mail.testGetYahooCookieResponse;
-import generated.zcsclient.mail.testGlobalSearchRequest;
-import generated.zcsclient.mail.testGlobalSearchResponse;
 import generated.zcsclient.mail.testGrantPermissionRequest;
 import generated.zcsclient.mail.testGrantPermissionResponse;
 import generated.zcsclient.mail.testICalReplyRequest;
@@ -1971,18 +1969,6 @@ public interface ZcsPortType {
     public testGetYahooCookieResponse getYahooCookieRequest(
         @WebParam(name = "GetYahooCookieRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
         testGetYahooCookieRequest parameters);
-
-    /**
-     * 
-     * @param parameters
-     * @return
-     *     returns generated.zcsclient.mail.testGlobalSearchResponse
-     */
-    @WebMethod(action = "urn:zimbraMail/GlobalSearch")
-    @WebResult(name = "GlobalSearchResponse", targetNamespace = "urn:zimbraMail", partName = "parameters")
-    public testGlobalSearchResponse globalSearchRequest(
-        @WebParam(name = "GlobalSearchRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
-        testGlobalSearchRequest parameters);
 
     /**
      * 
