@@ -62,7 +62,8 @@ public class OpenLinkToMessage extends AjaxCommonTest {
 		SleepUtil.sleepSmall();
 		
 		// Click Get Mail button to view message in the list
-		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+		// app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+		app.zPageMail.zClick("//div[@id='CHECK_MAIL']//td[@id='CHECK_MAIL_left_icon']/div");
 
 		SleepUtil.sleepSmall();
 

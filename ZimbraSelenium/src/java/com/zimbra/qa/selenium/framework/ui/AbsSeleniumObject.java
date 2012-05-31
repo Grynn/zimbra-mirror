@@ -1845,10 +1845,13 @@ public abstract class AbsSeleniumObject {
 						String result =  executeScript("var iframe = arguments[0];"				
 								+ "var iframe_body = " 
 								+ "iframe.contentWindow.document.body;" 
-								//+ "var result = iframe_body.innerHTML.indexOf('"
+								+ "if(navigator.userAgent.indexOf('MSIE')!=-1){" 
+								+ "var result = iframe_body.innerHTML.indexOf('"
+								+ text
+								+ "') >= 0}else{"
 								+ "var result = iframe_body.textContent.indexOf('"
 								+ text
-								+ "') >= 0; return result",we);
+								+ "') >= 0} return result",we);
 						if(result == null){
 							return false;							
 						}else{

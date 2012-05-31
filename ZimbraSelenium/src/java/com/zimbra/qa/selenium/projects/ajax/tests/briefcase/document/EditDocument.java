@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
-import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.DocumentItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
@@ -89,8 +88,9 @@ public class EditDocument extends AjaxCommonTest {
 			app.zPageBriefcase.zSelectWindow(docItem1.getName());
 
 			// Fill out the document with the new data
-			documentBriefcaseEdit.typeDocumentName(docItem2.getName());
-
+			//documentBriefcaseEdit.typeDocumentName(docItem2.getName());
+			documentBriefcaseEdit.zFillField(DocumentBriefcaseNew.Field.Name, docItem2.getName());
+			
 			// Save and close
 			documentBriefcaseEdit.zSubmit();
 		} catch (Exception ex) {

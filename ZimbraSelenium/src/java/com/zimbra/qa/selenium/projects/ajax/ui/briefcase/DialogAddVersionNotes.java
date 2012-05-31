@@ -113,7 +113,7 @@ public class DialogAddVersionNotes extends AbsDialog {
 
 	public void zDismissAddVersionNotesDlg(String parentWindow)
 			throws HarnessException {
-		zSelectWindow(PageBriefcase.pageTitle);
+		sSelectWindow(PageBriefcase.pageTitle);
 		//SleepUtil.sleepSmall();
 		if (zIsWindowOpen(parentWindow)) {
 			zSelectWindow(parentWindow);
