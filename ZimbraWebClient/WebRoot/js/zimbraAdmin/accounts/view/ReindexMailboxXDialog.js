@@ -186,13 +186,13 @@ function() {
 				height:"150px", width:"490px",colSpan:"*"
 			},
 			{type:_GROUP_, colSpan:"*", numCols:5, width:appNewUI?"490px":"460px",cssStyle:"text-align:center; overflow:hidden", align:_CENTER_, items: [
-				{type:_SPACER_, width:"100px", colSpan:1},
+				{type:_SPACER_, width:"30px", colSpan:1},
 				{type:_DWT_BUTTON_, 
 					onActivate:"ReindexMailboxXDialog.startReindexMailbox.call(this)", label:ZaMsg.NAD_ACC_Start_Reindexing, 
 					enableDisableChecks:[ReindexMailboxXDialog.isStartEnabled],
 					enableDisableChangeEventSources:[ZaReindexMailbox.A_status],
 					visibilityChecks:[],					
-					valign:_BOTTOM_,width:"100px"
+					valign:_BOTTOM_,width:"150px"
 				},
 				{type:_SPACER_, width:appNewUI?"90px":"60px", colSpan:1},
 				{type:_DWT_BUTTON_, 
@@ -200,9 +200,9 @@ function() {
 					enableDisableChecks:[ReindexMailboxXDialog.isAbortEnabled],
 					enableDisableChangeEventSources:[ZaReindexMailbox.A_status],
 					visibilityChecks:[],					
-					valign:_BOTTOM_,width:"100px"				
+					valign:_BOTTOM_,width:"150px"				
 				},
-				{type:_SPACER_, width:"100px", colSpan:1}
+				{type:_SPACER_, width:"30px", colSpan:1}
 			]}
 		]		
 	}
