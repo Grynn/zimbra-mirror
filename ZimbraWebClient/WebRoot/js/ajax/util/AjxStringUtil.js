@@ -489,7 +489,12 @@ AjxStringUtil.urlDecode =
 function(str) {
 	if (!str) return "";
 	var func = window.decodeURL || window.decodeURI;
-	return func(str);
+	try {
+		return func(str);
+	}
+	catch(e) {
+		return "";
+	}
 };
 
 /**
