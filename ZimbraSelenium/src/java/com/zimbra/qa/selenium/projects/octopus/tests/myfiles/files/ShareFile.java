@@ -9,6 +9,7 @@ import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.octopus.ui.DialogFileShare;
 import com.zimbra.qa.selenium.projects.octopus.core.OctopusCommonTest;
 import com.zimbra.qa.selenium.projects.octopus.ui.PageMyFiles;
+import com.zimbra.qa.selenium.projects.octopus.ui.PageSharing.Locators;
 
 public class ShareFile extends OctopusCommonTest {
 
@@ -71,7 +72,7 @@ public class ShareFile extends OctopusCommonTest {
 		// Verify the file share icon is displayed
 		ZAssert.assertTrue(app.zPageMyFiles.zWaitForElementPresent(
 				PageMyFiles.Locators.zMyFilesListViewItems.locator
-						+ " img[src*='shared_badge.png']", "3000"),
+				+ " img[src*='shared_badge.png']", "3000"),
 				"Verify the file share icon is displayed");
 	}
 
@@ -116,10 +117,49 @@ public class ShareFile extends OctopusCommonTest {
 		// Verify the file share icon is displayed
 		ZAssert.assertTrue(app.zPageMyFiles.zWaitForElementPresent(
 				PageMyFiles.Locators.zMyFilesListViewItems.locator
-						+ " img[src*='shared_badge.png']", "3000"),
+				+ " img[src*='shared_badge.png']", "3000"),
+				"Verify the file share icon is displayed");
+	}
+
+	@Test(description = "Stopping public share of file", groups = { "smoke" })
+	public void StopSharingOfFile() throws HarnessException
+	{
+		String fileName=PPT_FILE;
+		uploadFileViaSoap(app.zGetActiveAccount(),fileName);
+
+		// Click on Share publicly option in the file Context menu.
+		DialogFileShare dialogFileShare = (DialogFileShare) app.zPageMyFiles
+				.zToolbarPressPulldown(Button.B_MY_FILES_LIST_ITEM,
+						Button.O_FILE_SHARE, fileName);
+
+		// Click on Close button.
+		dialogFileShare.zClickButton(Button.B_CLOSE);
+
+		// File shared publicly.Verify the file share icon is displayed.
+		ZAssert.assertTrue(app.zPageMyFiles.zWaitForElementPresent(
+				PageMyFiles.Locators.zMyFilesListViewItems.locator
+				+ " img[src*='shared_badge.png']", "3000"),
 				"Verify the file share icon is displayed");
 
+		// Again,click on Share option in the file Context menu
+		dialogFileShare = (DialogFileShare) app.zPageMyFiles
+				.zToolbarPressPulldown(Button.B_MY_FILES_LIST_ITEM,
+						Button.O_FILE_SHARE, fileName);
 
+		// Click on Stop Sharing link.
+		dialogFileShare.zClickAt(Locators.zStopSharingLink.locator,"0,0");
+
+		//Confirm public unSharing of file.Click on 'OK' button.
+		dialogFileShare.zClickAt(Locators.zOkButtonStopSharing.locator, "0,0");
+
+		// If there is a busy overlay, wait for that to finish
+		app.zPageOctopus.zWaitForBusyOverlayOctopus();
+
+		// Verify the file share icon is not displayed
+		ZAssert.assertFalse(app.zPageMyFiles.zWaitForElementPresent(
+				PageMyFiles.Locators.zMyFilesListViewItems.locator
+				+ " img[src*='shared_badge.png']", "3000"),
+				"Verify the file share icon is not displayed");
 	}
 
 	@AfterMethod(groups = { "always" })
@@ -140,7 +180,7 @@ public class ShareFile extends OctopusCommonTest {
 			try {
 				// Delete it from Server
 				FolderItem
-						.deleteUsingSOAP(app.zGetActiveAccount(), _folderName);
+				.deleteUsingSOAP(app.zGetActiveAccount(), _folderName);
 			} catch (Exception e) {
 				logger.info("Failed while removing the folder.", e);
 			} finally {
@@ -149,7 +189,7 @@ public class ShareFile extends OctopusCommonTest {
 			}
 		}
 		try {
-			// Refresh view 
+			// Refresh view
 			//ZimbraAccount account = app.zGetActiveAccount();
 			//FolderItem item = FolderItem.importFromSOAP(account,SystemFolder.Briefcase);
 			//account.soapSend("<GetFolderRequest xmlns='urn:zimbraMail'><folder l='1' recursive='0'/>" + "</GetFolderRequest>");
@@ -157,7 +197,6 @@ public class ShareFile extends OctopusCommonTest {
 			//account.soapSend("<GetActivityStreamRequest xmlns='urn:zimbraMail' id='16'/>");
 			//app.zGetActiveAccount().accountIsDirty = true;
 			//app.zPageOctopus.sRefresh();
-												
 			// Empty trash
 			app.zPageTrash.emptyTrashUsingSOAP(app.zGetActiveAccount());
 		} catch (Exception e) {

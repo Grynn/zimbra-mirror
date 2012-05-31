@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.zimbra.qa.selenium.projects.octopus.ui;
 
@@ -17,22 +17,25 @@ public class PageSharing extends AbsTab {
 		public static final Locators zTabSharingSelected = new Locators(
 				"css=div[class^=octopus-tab sc-collection-item sel]>div.octopus-tab-label:contains(Sharing)");
 		public static final Locators zShareHeader = new Locators(
-		"css=div[id=share-header-view]");
+				"css=div[id=share-header-view]");
 		public static final Locators zShareView = new Locators(
 				"css=div[id=octopus-share-view]");
 		public static final Locators zShareNotificationListView = new Locators(
-		"css=ul[id=share-notification-pending-page-list-view]");
+				"css=ul[id=share-notification-pending-page-list-view]");
 		public static final Locators zShareNotificationListItem =  new Locators(
 				"css=div[class=share-notification-list-item]");
 		public static final Locators zSharedItemsView =  new Locators(
-		"css=div[id=shared-items-view]");
+				"css=div[id=shared-items-view]");
 		public static final Locators zSharedItemRow =  new Locators(
-		"css=div[class=shared-item-row]");
+				"css=div[class=shared-item-row]");
 		public static final Locators zIgnoredItemsView =  new Locators(
-		"css=div[id=ignored-items-view]");
+				"css=div[id=ignored-items-view]");
 		public static final Locators zIgnoredItemRow =  new Locators(
-		"css=div[class=shared-item-row]");
-		
+				"css=div[class=shared-item-row]");
+		public static final Locators zStopSharingLink = new Locators(
+				"css=span[class^='customLink stop-sharing-link']");
+		public static final Locators zOkButtonStopSharing = new Locators(
+				"css=[class^='octopus-action-button button']:contains('Ok')");
 		
 		public final String locator;
 
