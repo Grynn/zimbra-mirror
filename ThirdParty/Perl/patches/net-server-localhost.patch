@@ -1,0 +1,23 @@
+--- Net-Server-2.001/lib/Net/Server/Proto.pm.orig	2012-05-31 15:18:39.504267681 -0700
++++ Net-Server-2.001/lib/Net/Server/Proto.pm	2012-05-31 15:31:13.854263509 -0700
+@@ -71,16 +71,16 @@
+     $server->fatal("Invalid ipv parameter - must contain 4, 6, or *") if $ipv && $ipv !~ /[46*]/;
+     my @_info;
+     if ($info->{'host'} !~ /:/
+-        && (!$ipv
+-            || $ipv =~ /4/
++        && ($ipv =~ /4/
+             || ($ipv =~ /[*]/ && $info->{'host'} !~ /:/ && !eval{ require Socket6; require IO::Socket::INET6; require Socket }))) {
+         push @_info, {%$info, ipv => '4'};
+     }
+     if ($ipv =~ /6/ || $info->{'host'} =~ /:/) {
+         push @_info, {%$info, ipv => '6'};
+         $requires_ipv6++ if $proto ne 'ssl'; # IO::Socket::SSL does its own determination
+-    } elsif ($ipv =~ /[*]/
+-        && eval { require Socket6; require IO::Socket::INET6; require Socket }) {
++    } 
++    if (!$ipv || ($ipv =~ /[*]/
++        && eval { require Socket6; require IO::Socket::INET6; require Socket })) {
+         my ($host, $port) = @$info{qw(host port)};
+         my $proto = getprotobyname(lc($info->{'proto'}) eq 'udp' ? 'udp' : 'tcp');
+         my $type  = lc($info->{'proto'}) eq 'udp' ? Socket::SOCK_DGRAM() : Socket::SOCK_STREAM();
