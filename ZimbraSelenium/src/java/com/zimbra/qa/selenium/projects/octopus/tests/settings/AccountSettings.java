@@ -7,6 +7,7 @@ import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.octopus.core.OctopusCommonTest;
 import com.zimbra.qa.selenium.projects.octopus.ui.DialogSettings;
+import com.zimbra.qa.selenium.projects.octopus.ui.PageMyFiles;
 
 public class AccountSettings extends OctopusCommonTest {
 
@@ -55,11 +56,6 @@ public class AccountSettings extends OctopusCommonTest {
 				account.soapMatch("//mail:GetAllDevicesResponse/mail:device",
 						"name", deviceName), "Verify Device name");
 
-		// Verify Done button is present in the Settings dialog
-		ZAssert.assertTrue(app.zPageOctopus
-				.sIsElementPresent(DialogSettings.Locators.zDoneBtn.locator),
-				"Verify Done button is present");
-
 		// Verify User Name is present in the Settings dialog
 		ZAssert.assertTrue(app.zPageOctopus
 				.sIsElementPresent(DialogSettings.Locators.zUserName.locator),
@@ -68,28 +64,22 @@ public class AccountSettings extends OctopusCommonTest {
 		// Verify Change Picture is present in the Settings dialog
 		ZAssert.assertTrue(
 				app.zPageOctopus
-						.sIsElementPresent(DialogSettings.Locators.zChangePictureBtn.locator),
+				.sIsElementPresent(DialogSettings.Locators.zChangePictureBtn.locator),
 				"Verify Change Picture is present");
-
-		// Verify Change Name is present in the Settings dialog
-		ZAssert.assertTrue(
-				app.zPageOctopus
-						.sIsElementPresent(DialogSettings.Locators.zChangeNameBtn.locator),
-				"Verify Change Name is present");
 
 		// Verify Quota Usage is present in the Settings dialog
 		ZAssert.assertTrue(
 				app.zPageOctopus
-						.sIsElementPresent(DialogSettings.Locators.zQuotaUsage.locator),
+				.sIsElementPresent(DialogSettings.Locators.zQuotaUsage.locator),
 				"Verify Quota Usage is present");
 
 		// Verify Change Password is present in the Settings dialog
 		ZAssert.assertTrue(
 				app.zPageOctopus
-						.sIsElementPresent(DialogSettings.Locators.zChangePasswordBtn.locator),
+				.sIsElementPresent(DialogSettings.Locators.zChangePasswordBtn.locator),
 				"Verify Change Password is present");
 
-		dlg.zClickButton(Button.B_DONE);
+		dlg.zClickButton(Button.B_CLOSE);
 	}
 
 	@Test(description = "Open Settings dialog - verify account Name", groups = { "smoke" })
@@ -129,8 +119,8 @@ public class AccountSettings extends OctopusCommonTest {
 		// Verify Device name in the list
 		ZAssert.assertTrue(
 				app.zPageOctopus
-						.zWaitForElementPresent(DialogSettings.Locators.zDevicesListView.locator
-								+ ":contains(" + deviceName + ")", "3000"),
+				.zWaitForElementPresent(DialogSettings.Locators.zDevicesListView.locator
+						+ ":contains(" + deviceName + ")", "3000"),
 				" Verify Device name in the list");
 
 		dlg.zClickButton(Button.B_CLOSE);
@@ -157,8 +147,8 @@ public class AccountSettings extends OctopusCommonTest {
 		// Verify Device name in the list
 		ZAssert.assertTrue(
 				app.zPageOctopus
-						.zWaitForElementPresent(DialogSettings.Locators.zDevicesListView.locator
-								+ ":contains(" + deviceName + ")","3000"),
+				.zWaitForElementPresent(DialogSettings.Locators.zDevicesListView.locator
+						+ ":contains(" + deviceName + ")","3000"),
 				" Verify Device name in the list");
 
 		dlg.zListItem(Action.A_LEFTCLICK, Button.B_UNLINK_AND_WIPE, deviceName);
@@ -167,7 +157,37 @@ public class AccountSettings extends OctopusCommonTest {
 		ZAssert.assertTrue(dlg.zIsDeviceDisabled(deviceName),
 				"Verify Device is disabled");
 
-		dlg.zClickButton(Button.B_DONE);
+		dlg.zClickButton(Button.B_CLOSE);
+	}
+
+	@Test(description = "Clicking settings should open the settings dialog", groups = { "smoke" })
+	public void CheckSettingsDialog() throws HarnessException
+	{
+		// Open Settings dialog
+		DialogSettings dlg = (DialogSettings) app.zPageOctopus.zToolbarPressPulldown(Button.B_USER_NAME, Button.O_SETTINGS);
+
+		// Verify Settings label is present in the Settings dialog
+		ZAssert.assertTrue(app.zPageOctopus.sIsElementPresent(DialogSettings.Locators.zSettingDialogLabel.locator),
+				"Verify Settings dialog is opened.");
+
+		dlg.zClickAt(DialogSettings.Locators.zCloseIcon.locator, "0,0");
+	}
+
+	@Test(description = "Clicking x icon should close the settings dialog", groups = { "smoke" })
+	public void ClickOnCloseIcon() throws HarnessException
+	{
+		// Open Settings dialog
+		DialogSettings dlg = (DialogSettings) app.zPageOctopus.zToolbarPressPulldown(Button.B_USER_NAME, Button.O_SETTINGS);
+
+		// Verify Settings label is present in the Settings dialog
+		ZAssert.assertTrue(app.zPageOctopus.sIsElementPresent(DialogSettings.Locators.zSettingDialogLabel.locator),
+				"Verify Settings dialog is opened.");
+
+		dlg.zClickAt(DialogSettings.Locators.zCloseIcon.locator, "0,0");
+
+		// Verify Settings dialog is closed.
+		ZAssert.assertTrue(app.zPageOctopus.sIsElementPresent(PageMyFiles.Locators.zMyFilesCurrentMenuLabel.locator),
+				"Verify Settings dialog is closed.");
 	}
 
 	@AfterMethod(groups = { "always" })
@@ -176,7 +196,7 @@ public class AccountSettings extends OctopusCommonTest {
 			try {
 				// Delete it from Server
 				FolderItem
-						.deleteUsingSOAP(app.zGetActiveAccount(), _folderName);
+				.deleteUsingSOAP(app.zGetActiveAccount(), _folderName);
 			} catch (Exception e) {
 				logger.info("Failed while removing the folder.", e);
 			} finally {

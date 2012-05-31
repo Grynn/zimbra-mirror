@@ -16,7 +16,7 @@ public class DialogSettings extends AbsDialog {
 		public static final Locators zQuotaUsage = new Locators(
 				"css=div[class=settings-pane] span[class=settings-quota-usage]");
 		public static final Locators zChangePasswordBtn = new Locators(
-				"css=div[class=settings-pane] button:contains(Change Password)");
+				"css=[class*='button']:contains(Change Password)");
 		public static final Locators zCloseBtn = new Locators(
 				//"css=div[class*=SettingsDialogContent] span[id=settings-close-button] span:contains(" + (char)215 + ")");
 				"css=div[class*=SettingsDialogContent] span[id=settings-close-button] span:contains(\u00D7)");
@@ -30,6 +30,10 @@ public class DialogSettings extends AbsDialog {
 				"css=div[id=devices-list-view] div[class=devices-list-container] span[class=devices-list-item]");
 		public static final Locators zUnlinkAndWipeBtn = new Locators(
 				"css=div[id=devices-list-view] div[class=devices-list-container] span[class=devices-wipe-button] button:contains(Unlink & Wipe)");
+		public static final Locators zSettingDialogLabel=new Locators(
+				"css=[class='tab-label']:contains('Settings')");
+		public static final Locators zCloseIcon=new Locators(
+				"css=[class='button close']");
 
 		public final String locator;
 
