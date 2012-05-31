@@ -705,9 +705,10 @@ STDMETHODIMP CMapiAccessWrap::GetData(BSTR UserId, VARIANT ItemId, FolderType ty
                                 pIt[attrs[14]] = SysAllocString((apptData.vExceptions[i]->GetPlainTextFileAndContent()).c_str());
                                 pIt[attrs[15]] = SysAllocString(L"text/html");
                                 pIt[attrs[16]] = SysAllocString((apptData.vExceptions[i]->GetHtmlFileAndContent()).c_str());
-                                if (numAttendees > 0)
+                                int numAttendeesInException = apptData.vExceptions[i]->GetAttendees().size();
+                                if (numAttendeesInException > 0)
                                 {
-                                    for (int j = 0; j < numAttendees; j++)
+                                    for (int j = 0; j < numAttendeesInException; j++)
                                     {                                       
                                         attendeeData += apptData.vExceptions[i]->GetAttendees()[j]->nam;
                                         attendeeData += L"~";
@@ -716,7 +717,7 @@ STDMETHODIMP CMapiAccessWrap::GetData(BSTR UserId, VARIANT ItemId, FolderType ty
                                         attendeeData += apptData.vExceptions[i]->GetAttendees()[j]->role;
                                         attendeeData += L"~";
                                         attendeeData += apptData.vExceptions[i]->GetAttendees()[j]->partstat;
-                                        if (j < (numAttendees - 1))     // don't write comma after last attendee
+                                        if (j < (numAttendeesInException - 1))     // don't write comma after last attendee
 	                                        attendeeData += L"~";
                                     }
                                 }
