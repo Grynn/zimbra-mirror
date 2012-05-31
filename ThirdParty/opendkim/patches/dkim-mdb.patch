@@ -1,0 +1,17 @@
+--- opendkim-2.6.0/opendkim/opendkim-db.c.orig	2012-05-31 15:55:14.765097261 -0700
++++ opendkim-2.6.0/opendkim/opendkim-db.c	2012-05-31 15:55:31.265090870 -0700
+@@ -3816,10 +3816,10 @@
+ 	DB *bdb;
+ #endif /* USE_DB */
+ #ifdef USE_MDB
+-	MDB_VAL key;
+-	MDB_VAL data;
+-	MDB_DBI dbi;
+-	MDB_TXN *txn;
++	MDB_val key;
++	MDB_val data;
++	MDB_dbi dbi;
++	MDB_txn *txn;
+ 	struct dkimf_db_mdb *mdb;
+ #endif /* USE_MDB */
+ 
