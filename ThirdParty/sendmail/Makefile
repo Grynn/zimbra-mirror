@@ -13,10 +13,10 @@ PATCH   :=
 
 ifdef BETA
 	include $(SENDMAIL_ROOT)/../beta_versions.def
-	PATCH   := patch -g0 -N -p1 < ../patches/mac-osx-107.patch;
+	PATCH   := patch -g0 -N -p1 < ../patches/mac-osx-107.patch; patch -g0 -N -p1 < ../patches/ipv6.patch;
 else
 	include $(SENDMAIL_ROOT)/../versions.def
-	PATCH   := patch -g0 -N -p1 < ../patches/mac-osx-107.patch;
+	PATCH   := patch -g0 -N -p1 < ../patches/mac-osx-107.patch; patch -g0 -N -p1 < ../patches/ipv6.patch;
 endif
 
 SENDMAIL_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/sendmail/sendmail-$(SENDMAIL_VERSION).tgz
@@ -34,7 +34,7 @@ build:
 	cd sendmail-$(SENDMAIL_VERSION); \
 	$(PATCH) \
 	cd libmilter; \
-	./Build; \
+	./Build -c; \
 	cd ../obj.*/libmilter; \
 	mkdir -p $(ZIMBRA_HOME)/sendmail-$(SENDMAIL_VERSION)/lib; \
 	cp -p libmilter.a $(ZIMBRA_HOME)/sendmail-$(SENDMAIL_VERSION)/lib;)

@@ -1,0 +1,10 @@
+--- sendmail-8.14.3/libmilter/Makefile.m4.orig	2012-05-31 11:46:14.698752464 -0700
++++ sendmail-8.14.3/libmilter/Makefile.m4	2012-05-31 11:48:07.432768277 -0700
+@@ -13,6 +13,7 @@
+ define(`bldINSTALLABLE', `true')
+ define(`LIBMILTER_EXTRAS', `errstring.c strl.c')
+ APPENDDEF(`confENVDEF', `-DNOT_SENDMAIL -Dsm_snprintf=snprintf')
++APPENDDEF(`confENVDEF', `-DNETINET6')
+ define(`bldSOURCES', `main.c engine.c listener.c worker.c handler.c comm.c smfi.c signal.c sm_gethost.c monitor.c LIBMILTER_EXTRAS ')
+ define(`confBEFORE', `LIBMILTER_EXTRAS')
+ bldPUSH_INSTALL_TARGET(`install-mfapi')
