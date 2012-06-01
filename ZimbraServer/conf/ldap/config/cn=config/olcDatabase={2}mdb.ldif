@@ -48,7 +48,7 @@ olcTimeLimit: unlimited
 olcMonitoring: TRUE
 olcDbDirectory: /opt/zimbra/data/ldap/mdb/db
 olcDbCheckpoint: 64 5
-olcDbNoSync: FALSE
+olcDbNoSync: TRUE
 olcDbIndex: objectClass eq
 olcDbIndex: entryUUID eq
 olcDbIndex: entryCSN eq

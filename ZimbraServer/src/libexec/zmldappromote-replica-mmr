@@ -125,7 +125,7 @@ if(lc($ldap_is_master) eq "true") {
       olcTimeLimit=>"unlimited",
       olcMonitoring=>"TRUE",
       olcDbCheckpoint=>"64 5",
-      olcDbNoSync=>"FALSE",
+      olcDbNoSync=>"TRUE",
       olcDbIndex=>["entryCSN eq", "objectClass eq", "reqEnd eq", "reqResult eq", "reqStart eq"],
       olcDbMode=>"0600",
       olcDbSearchStack=>"16",
