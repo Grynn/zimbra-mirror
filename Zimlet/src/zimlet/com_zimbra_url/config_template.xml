@@ -1,4 +1,4 @@
-<zimletConfig name="com_zimbra_url" version="2.5">
+<zimletConfig name="com_zimbra_url" version="2.6">
     <global>
 		<property name="ZIMLET_CONFIG_REGEX_VALUE">(((telnet|cid):)|((https?|mailto|notes|smb|ftp|gopher|news|tel|callto|webcal|feed|file):\/\/)|(www\.[\w\.\_\-]+))[^\s\xA0\&lt;\>\[\]\{\}\'\"]*</property>
         <property name="ZIMLET_UNC_REGEX_VALUE">\s*\\\\[a-zA-Z0-9.-_]+.*\s*</property>

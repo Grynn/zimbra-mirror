@@ -23,7 +23,7 @@ Com_Zimbra_Url.prototype.init =
 function() {
 	
 	this._disablePreview = this.getBoolConfig("disablePreview", true);
-	this._youtubePreview = this.getBoolConfig("youTubePreview", true);
+	this._youtubePreview = this.getBoolConfig("youtubePreview", true);
 	this._alexaId = this.getConfig("alexaThumbnailId");	
 	if (this._alexaId) {
 		this._alexaId = AjxStringUtil.trim(this._alexaId);
