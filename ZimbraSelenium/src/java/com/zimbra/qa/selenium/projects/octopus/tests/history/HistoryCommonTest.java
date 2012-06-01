@@ -149,7 +149,6 @@ public class HistoryCommonTest extends OctopusCommonTest {
 		   fileIdInFolder =uploadFileViaSoap(app.zGetActiveAccount(),fileInFolderName, folder);    	 	  	
 		   SleepUtil.sleepSmall();
 		   
-		
 
 		   //share revoke
 		   setUpShareRevoke();
@@ -173,8 +172,7 @@ public class HistoryCommonTest extends OctopusCommonTest {
 
 	 }
 
-	private void setUpMountPoint() 
-	  throws HarnessException
+	private void setUpMountPoint() throws HarnessException
 	{
  	   readGranter = getNewAccount();;
 	   readWriteGranter = getNewAccount();;
@@ -219,7 +217,8 @@ public class HistoryCommonTest extends OctopusCommonTest {
 	   app.zPageOctopus.zRefresh();   
 	   
 	}
-	private void setUpShareRevoke() 
+	//private
+	protected void setUpShareRevoke() 
 	   throws HarnessException
 	{
  	   readGrantee = getNewAccount();;
@@ -326,6 +325,22 @@ public class HistoryCommonTest extends OctopusCommonTest {
 		verifyUnCheckAction(locator,historyText);		
 	}
 	
+	//Verify found history matches with required history.
+	protected void VerifyHistory(String requiredHistory) throws HarnessException
+	{
+		boolean found = false;
+		ArrayList<HistoryItem> historyItems = new ArrayList<HistoryItem>();
+		historyItems = app.zPageHistory.zListItem();
+		for (HistoryItem historyItem : historyItems)
+		{
+			if(historyItem.getHistoryText().contains(requiredHistory))
+			{
+				found = true;
+				break;
+			}
+		}
+		ZAssert.assertTrue(found, "Verify if "+ requiredHistory +" history found");
+	}
 	@AfterClass(groups = { "always" })
 	public void teardown() 
 	    throws HarnessException
