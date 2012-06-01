@@ -78,7 +78,7 @@ log_mail=@@cbpolicyd_log_mail@@
 log_detail=@@cbpolicyd_log_detail@@
 
 # IP to listen on, * for all
-host=%%zimbraLocalBindAddress%%
+host=localhost
 
 # Port to run on
 port=@@cbpolicyd_bind_port@@
