@@ -129,6 +129,15 @@ public class IntroViewModel: BaseViewModel
 
         // Get data to initialize the profile combo boxes
         string[] profiles = mw.GetListofMapiProfiles();
+
+        // FBS bug 74917 -- 6/1/12
+        if (profiles == null)
+        {
+            profiles = new string[1];
+            profiles[0] = "No profiles";
+        }
+        ////
+
         if (profiles[0].IndexOf("No profiles") != -1)
         {
             string msg = "No Exchange profiles exist.  ";
