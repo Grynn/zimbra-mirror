@@ -63,7 +63,7 @@ public final class SetHeaderFilter extends com.zimbra.cs.servlet.SetHeaderFilter
     private static final String TIME_FORMAT = "EEE, d MMM yyyy HH:mm:ss";
     private static final String GMT = "GMT";
     private static final String HEADER_X_FRAME_OPTIONS = "X-Frame-Options";
-    private static final String X_FRAME_OPTIONS_VALUE = "DENY";
+    private static final String X_FRAME_OPTIONS_VALUE = "SAMEORIGIN";
 
     protected int debug = 0;
     protected String jsVersion = null;
