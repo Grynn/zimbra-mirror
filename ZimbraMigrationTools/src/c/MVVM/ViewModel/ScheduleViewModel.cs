@@ -916,6 +916,12 @@ public class ScheduleViewModel: BaseViewModel
                     ar.CurrentItemNum++;
                     ar.PBValue = (int)Math.Round(((Decimal)ar.CurrentItemNum /
                         (Decimal)ar.TotalItemsToMigrate) * 100);
+
+                    // FBS bug 74960 -- 6/1/12
+                    string msg2 = "{0} of {1} ({2}%)";
+                    string msgG = String.Format(msg2, ar.CurrentItemNum, ar.TotalItemsToMigrate, ar.PBValue);
+                    ar.GlobalAcctProgressMsg = msgG;
+
                     bgwlist[tnum].ReportProgress(ar.PBValue, f.AccountNum);
                 }
             }

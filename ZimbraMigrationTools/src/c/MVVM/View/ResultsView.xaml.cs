@@ -178,6 +178,13 @@ public partial class ResultsView
         userProgressBar.Margin = new Thickness(36, 0, 0, 0);
         userProgressBar.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
 
+        // FBS bug 74960 -- 6/1/12
+        ToolTip tooltip = new ToolTip();
+        Binding tbBinding = new Binding("GlobalAcctProgressMsg");
+        tbBinding.Source = ar;
+        tooltip.SetBinding(ContentControl.ContentProperty, tbBinding);
+        ToolTipService.SetToolTip(userProgressBar, tooltip);
+
         // Change the background and foreground colors
         SolidColorBrush scbBack = new SolidColorBrush();
         scbBack.Color = Color.FromArgb(255, 218, 227, 235);   // #FFDAE3EB

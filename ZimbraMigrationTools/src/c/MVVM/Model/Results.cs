@@ -50,6 +50,11 @@ public class AccountResults
         get;
         set;
     }
+    public string GlobalAcctProgressMsg
+    {
+        get;
+        set;
+    }
     public int NumErrs {
         get;
         set;

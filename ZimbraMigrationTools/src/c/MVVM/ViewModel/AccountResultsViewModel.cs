@@ -40,6 +40,7 @@ public class AccountResultsViewModel: BaseViewModel
 
         this.CurrentItemNum = 0;
         this.TotalItemsToMigrate = 0;
+        this.GlobalAcctProgressMsg = "";
 
         this.SelectedTab = "";
         this.m_AccountOnTab = -1;
@@ -204,6 +205,17 @@ public class AccountResultsViewModel: BaseViewModel
                 return;
             m_accountResults.AcctProgressMsg = value;
             OnPropertyChanged(new PropertyChangedEventArgs("AcctProgressMsg"));
+        }
+    }
+    public string GlobalAcctProgressMsg
+    {
+        get { return m_accountResults.GlobalAcctProgressMsg; }
+        set
+        {
+            if (value == m_accountResults.GlobalAcctProgressMsg)
+                return;
+            m_accountResults.GlobalAcctProgressMsg = value;
+            OnPropertyChanged(new PropertyChangedEventArgs("GlobalAcctProgressMsg"));
         }
     }
     public int NumErrs {
