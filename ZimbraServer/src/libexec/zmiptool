@@ -85,15 +85,31 @@ my $mesg = $ldap->bind("$zdn", password=>"$zps");
 $mesg->code && die "Bind: ". $mesg->error . "\n";
 
 my $zimbraIPMode;
+my $zimbraMtaSmtpdMilters;
 my $size;
 if ($mode) {
   $zimbraIPMode=$mode;
+  $mesg = $ldap->search(
+            base=>"",
+            filter=>"(&(objectClass=zimbraServer)(cn=$host))",
+            scope=>"sub",
+            attrs => ['zimbraMtaSmtpdMilters'],
+          );
+  
+  $size = $mesg->count;
+  if ($size == 0) {
+    print "Error: Server $host not found\n";
+    exit 1;
+  }
+  
+  my $entry=$mesg->entry(0);
+  $zimbraMtaSmtpdMilters = $entry->get_value("zimbraMtaSmtpdMilters");
 } else {
   $mesg = $ldap->search(
             base=>"",
             filter=>"(&(objectClass=zimbraServer)(cn=$host))",
             scope=>"sub",
-            attrs => ['zimbraIPMode'],
+            attrs => ['zimbraIPMode', 'zimbraMtaSmtpdMilters'],
           );
   
   $size = $mesg->count;
@@ -104,11 +120,12 @@ if ($mode) {
   
   my $entry=$mesg->entry(0);
   $zimbraIPMode = $entry->get_value("zimbraIPMode");
+  $zimbraMtaSmtpdMilters = $entry->get_value("zimbraMtaSmtpdMilters");
 }
 
 $mesg = $ldap->search(
           base=>"",
-          filter=>"(&(objectClass=zimbraServer)(cn=$host)(zimbraServiceEnabled=mailbox)",
+          filter=>"(&(objectClass=zimbraServer)(cn=$host)(zimbraServiceEnabled=mailbox))",
           scope=>"sub",
         );
 
@@ -116,6 +133,22 @@ $size = $mesg->count;
 my $storeserver=0;
 if ($size > 0) {
   $storeserver=1;
+}
+
+$mesg = $ldap->search(
+          base=>"",
+          filter=>"(&(objectClass=zimbraServer)(cn=$host)(zimbraServiceEnabled=mta))",
+          scope=>"sub",
+        );
+
+$size = $mesg->count;
+my $mtaserver=0;
+my $mtadn;
+my $entry;
+if ($size > 0) {
+  $entry = $mesg->entry($size-1);
+  $mtaserver=1;
+  $mtadn=$entry->dn()
 }
 
 my $mailboxd_java_options = getLocalConfig("mailboxd_java_options");
@@ -141,6 +174,21 @@ if ($zimbraIPMode eq "ipv4") {
         print "Would set mailboxd_java_options to $mailboxd_java_options\n";
       } else {
         setLocalConfig("zimbra_zmjava_options", $mailboxd_java_options);
+      }
+    }
+  }
+  if ($zimbraMtaSmtpdMilters ne "") {
+    if ($mtaserver) {
+      if ($zimbraMtaSmtpdMilters =~ /inet6:/) {
+        $zimbraMtaSmtpdMilters =~ s/inet6:/inet:/g;
+      }
+      if ($dryrun) {
+        print "Would set ServerConfig zimbraMtaSmtpdMilters to: $zimbraMtaSmtpdMilters\n";
+      } else {
+        $mesg = $ldap->modify(
+          $mtadn,
+          replace=>{zimbraMtaSmtpdMilters=>"$zimbraMtaSmtpdMilters"},
+        );
       }
     }
   }
@@ -172,6 +220,21 @@ elsif ($zimbraIPMode eq "both") {
       }
     }
   }
+  if ($zimbraMtaSmtpdMilters ne "") {
+    if ($mtaserver) {
+      if ($zimbraMtaSmtpdMilters =~ /inet:/) {
+        $zimbraMtaSmtpdMilters =~ s/inet:/inet6:/g;
+      }
+      if ($dryrun) {
+        print "Would set ServerConfig zimbraMtaSmtpdMilters to: $zimbraMtaSmtpdMilters\n";
+      } else {
+        $mesg = $ldap->modify(
+          $mtadn,
+          replace=>{zimbraMtaSmtpdMilters=>"$zimbraMtaSmtpdMilters"},
+        );
+      }
+    }
+  }
 }
 elsif ($zimbraIPMode eq "ipv6") {
   my $ans = getDnsRecords($host, 'AAAA');
@@ -193,6 +256,21 @@ elsif ($zimbraIPMode eq "ipv6") {
         print "Would set mailboxd_java_options to $mailboxd_java_options\n";
       } else {
         setLocalConfig("zimbra_zmjava_options", $mailboxd_java_options);
+      }
+    }
+  }
+  if ($zimbraMtaSmtpdMilters ne "") {
+    if ($mtaserver) {
+      if ($zimbraMtaSmtpdMilters =~ /inet:/) {
+        $zimbraMtaSmtpdMilters =~ s/inet:/inet6:/g;
+      }
+      if ($dryrun) {
+        print "Would set ServerConfig zimbraMtaSmtpdMilters to: $zimbraMtaSmtpdMilters\n";
+      } else {
+        $mesg = $ldap->modify(
+          $mtadn,
+          replace=>{zimbraMtaSmtpdMilters=>"$zimbraMtaSmtpdMilters"},
+        );
       }
     }
   }

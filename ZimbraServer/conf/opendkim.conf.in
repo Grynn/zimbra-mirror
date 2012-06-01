@@ -1,6 +1,6 @@
 UserID                zimbra:zimbra
 UMask                 022
-Socket                inet:8465@localhost
+Socket                %%zimbraInetMode%%:8465@localhost
 PidFile               /opt/zimbra/log/opendkim.pid
 
 LDAPBindUser		uid=zmpostfix,cn=appaccts,cn=zimbra

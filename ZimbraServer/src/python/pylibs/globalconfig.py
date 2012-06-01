@@ -68,14 +68,17 @@ class GlobalConfig(config.Config):
 				self["zimbraLocalBindAddress"] = "127.0.0.1"
 				self["zimbraPostconfProtocol"] = "ipv4"
 				self["zimbraAmavisListenSockets"] = "'10024','10026'"
+				self["zimbraInetMode"] = "inet"
 			if v == "ipv6":
 				self["zimbraLocalBindAddress"] = "::1"
 				self["zimbraPostconfProtocol"] = "ipv6"
 				self["zimbraAmavisListenSockets"] = "'[::1]:10024','[::1]:10026'"
+				self["zimbraInetMode"] = "inet6"
 			if v == "both":
 				self["zimbraLocalBindAddress"] = "::1"
 				self["zimbraPostconfProtocol"] = "all"
 				self["zimbraAmavisListenSockets"] = "'10024','10026','[::1]:10024','[::1]:10026'"
+				self["zimbraInetMode"] = "inet6"
 
 		dt = time.clock()-t1
 		Log.logMsg(5,"globalconfig loaded in %.2f seconds" % dt)
