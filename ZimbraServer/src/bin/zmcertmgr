@@ -435,13 +435,18 @@ updateCACERTS() {
 
 createCA() {
 
-  if [ ! -d "${zimbra_ssl_directory}" ]; then
-    initSSLDirs
-  fi
+  initSSLDirs
 
   if [ x"$1" = "x-new" ]; then
     IS_NEW_CA=$1 #Allow the scripts to overwrite the existing csr
     shift
+  fi
+
+  # silently ignore the -new flag if this is not the ldap master
+  # we only create CA's on the ldap master 
+  ldap_is_master="$(echo ${ldap_is_master} | tr 'A-Z' 'a-z')"
+  if [ x"$ldap_is_master" = "xfalse" -a x"$IS_NEW_CA" != "x-new" ]; then
+    IS_NEW_CA=""
   fi
   
   if [ x"$1" = "x-keysize" ]; then
@@ -859,9 +864,7 @@ createConf() {
 
 createCASerial() {
 
-  if [ ! -d "${zimbra_ssl_directory}" ]; then
-    initSSLDirs
-  fi
+  initSSLDirs
 
   SER=`date "+%s"`
   echo "$SER" > ${zimbra_ca_srl}
