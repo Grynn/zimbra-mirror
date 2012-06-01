@@ -36,6 +36,12 @@ public class PageSharing extends AbsTab {
 				"css=span[class^='customLink stop-sharing-link']");
 		public static final Locators zOkButtonStopSharing = new Locators(
 				"css=[class^='octopus-action-button button']:contains('Ok')");
+		public static final Locators zNotificationCount = new Locators(
+				"css=[class='notification-count']");
+		public static final Locators zAddToMyFiles = new Locators(
+				"css=div[class^=notification-actions] [class*='notification-button-add button']");
+		public static final Locators zIgnoreShare = new Locators(
+				"css=div[class^=notification-actions] [class*='notification-button-ignore button']");
 		
 		public final String locator;
 
