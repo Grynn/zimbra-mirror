@@ -464,10 +464,13 @@ void MAPIAppointment::SetExceptions()
                                            lpException, lpExceptionAttach.get(),
                                            OlkAppt.MapiMsg());
             MAPIMessage exMAPIMsg;
-            exMAPIMsg.Initialize(lpExceptionMessage.get(), *m_session);
-            MAPIAppointment* pEx = new MAPIAppointment(*m_session, exMAPIMsg, NORMAL_EXCEPTION);   // delete done in CMapiAccessWrap::GetData
-            FillInExceptionAppt(pEx, lpException);
-            m_vExceptions.push_back(pEx);
+            if (lpExceptionMessage.get() != NULL)
+            {
+                exMAPIMsg.Initialize(lpExceptionMessage.get(), *m_session);
+                MAPIAppointment* pEx = new MAPIAppointment(*m_session, exMAPIMsg, NORMAL_EXCEPTION);   // delete done in CMapiAccessWrap::GetData
+                FillInExceptionAppt(pEx, lpException);
+                m_vExceptions.push_back(pEx);
+            }
         }
         else
         {
