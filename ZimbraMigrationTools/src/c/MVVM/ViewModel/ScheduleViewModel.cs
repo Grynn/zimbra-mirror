@@ -85,6 +85,8 @@ public class ScheduleViewModel: BaseViewModel
          *  proc.Start();
          * }
          */
+        const int TR_MAX_SIZE = 261;
+
         if ((m_configFile.Length == 0) || (m_usermapFile.Length == 0))
         {
             MessageBox.Show("There must be a config file and usermap file", "Zimbra Migration",
@@ -121,6 +123,16 @@ public class ScheduleViewModel: BaseViewModel
         proc.StartInfo.Arguments += "\\\"" + "ConfigxmlFile="  + m_configFile + "\\\"" + " ";
         proc.StartInfo.Arguments += "\\\"" + "Users=" + m_usermapFile + "\\\"";
         proc.StartInfo.Arguments += @"""";
+
+        // FBS bug 74232 -- make sure value for /TR option does not exceed 261 characters
+        int trLen = proc.StartInfo.Arguments.Length - 21;  // 21 is length of "/Create /SC ONCE /TR "
+        if (trLen > TR_MAX_SIZE)
+        {
+            MessageBox.Show("Taskrun argument string exceeds 261 characters.  Please use config files with smaller path sizes.",
+                "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
+            return;
+        }
+
         if (v.Major >= 6)
             proc.StartInfo.Arguments += " /F /Z /V1";
         proc.StartInfo.Arguments += " /TN " + dtName + " /SD " + dtStr + " /ST " + dtTime;
