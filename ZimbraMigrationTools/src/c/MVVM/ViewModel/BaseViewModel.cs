@@ -148,6 +148,7 @@ public class BaseViewModel: INotifyPropertyChanged
 	    m_config.ZimbraServer.Port           = serverDestModel.ZimbraPort;
 	    m_config.ZimbraServer.AdminID  = serverDestModel.ZimbraAdmin;
 	    m_config.ZimbraServer.AdminPwd = serverDestModel.ZimbraAdminPasswd;
+            m_config.ZimbraServer.UseSSL = serverDestModel.ZimbraSSL;
 
             // FBS bug 73500 -- 5/18/12
             if (usersModel.ZimbraDomain.Length == 0)
