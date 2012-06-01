@@ -265,7 +265,7 @@ function(response, contact) {
 
     attrs = attrs || contact && contact.attr || {};
 
-    attrs["fullName"] =  attrs["fullName"] || this.emailZimlet.fullName;
+    attrs["fullName"] =  attrs["fullName"] || contact && contact._fileAs || this.emailZimlet.fullName;
     this._presentity = attrs["email"] = attrs["email"] || this.emailZimlet.emailAddress;        // email is the presence identity
 
     var image = attrs[ZmContact.F_image];
