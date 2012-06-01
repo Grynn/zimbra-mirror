@@ -111,8 +111,8 @@ public class CSMigrationWrapper
         get { return m_MailClient; }
         set { m_MailClient = value; }
     }
-    
-    dynamic MailWrapper = null;
+
+    dynamic MailWrapper;
 
     dynamic m_umUser = null; // used to store user object so Exit can do a user.Uninit
     public dynamic UmUser {
@@ -122,20 +122,26 @@ public class CSMigrationWrapper
 
     public CSMigrationWrapper(string mailClient)
     {
-       
+        try
         {
+
+
             InitLogFile("migration", Log.Level.Trace);
             Log.info("Initializing migration");
 
-            
+
             MailClient = mailClient;
             if (MailClient == "MAPI")
             {
-               
+
                 MailWrapper = new MapiMigration();
-        
-              
+
+
             }
+        }
+        catch (Exception e)
+        {
+            Log.err("Exception in CSMigrationWrapper construcor", e.Message);
         }
       
     }

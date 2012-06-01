@@ -95,8 +95,8 @@ namespace CssLib
 
     public class MapiMigration : MailMigration
     {
-       // public dynamic MapiWrapper;
-        public Exchange.MapiWrapper MapiWrapper;
+        public dynamic MapiWrapper;
+       // public Exchange.MapiWrapper MapiWrapper;
         static public string  checkPrereqs()
         {
             string str = "";
@@ -129,6 +129,11 @@ namespace CssLib
                 }
                 else
                 {
+                    path = path + @"Program Files\Common Files\System\MSMAPI\1033";
+                    if (System.IO.Directory.Exists(path))
+                    {
+                    }
+                    else
                     str = "Outlook and Migration are not comaptbile.check the bitness fo the apps";
                 }
             }
@@ -139,17 +144,17 @@ namespace CssLib
         }
         public  MapiMigration()
         {
-            string message = MapiMigration.checkPrereqs();
-            if (message == "")
+          /*  string message = MapiMigration.checkPrereqs();
+            if (message == "")*/
             {
 
                 MapiWrapper = new Exchange.MapiWrapper();
             }
-            else
+           /* else
             {
                 Log.err("Exception in CSMigrationWrapper construcor", message);
                 throw new Exception(message);
-            }
+            }*/
             
 
              
