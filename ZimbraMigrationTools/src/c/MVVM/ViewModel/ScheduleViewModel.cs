@@ -117,8 +117,9 @@ public class ScheduleViewModel: BaseViewModel
         proc.StartInfo.Arguments += @"""";
         proc.StartInfo.Arguments += " ";
 
-        proc.StartInfo.Arguments += "ConfigxmlFile=" + "'"+ m_configFile +"'"+ " ";
-        proc.StartInfo.Arguments += "Users=" + "'" + m_usermapFile + "'";
+        // FBS bug 74232 -- 6/1/12 -- have to put \" around arguments since they might have spaces
+        proc.StartInfo.Arguments += "\\\"" + "ConfigxmlFile="  + m_configFile + "\\\"" + " ";
+        proc.StartInfo.Arguments += "\\\"" + "Users=" + m_usermapFile + "\\\"";
         proc.StartInfo.Arguments += @"""";
         if (v.Major >= 6)
             proc.StartInfo.Arguments += " /F /Z /V1";
