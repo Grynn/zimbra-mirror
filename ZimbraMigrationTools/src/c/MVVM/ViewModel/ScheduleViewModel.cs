@@ -678,6 +678,13 @@ public class ScheduleViewModel: BaseViewModel
         return retval;
     }
 
+    private void FormatGlobalMsg(AccountResultsViewModel ar)
+    {
+        string msg = "{0} of {1} ({2}%)";
+        string msgG = String.Format(msg, ar.TotalItemsToMigrate, ar.TotalItemsToMigrate, 100);
+        ar.GlobalAcctProgressMsg = msgG;
+    }
+
     private ObservableCollection<CosInfo> coslist = new ObservableCollection<CosInfo>();
     public ObservableCollection<CosInfo> CosList {
         get { return coslist; }
@@ -758,6 +765,10 @@ public class ScheduleViewModel: BaseViewModel
                 bool isOOOorRules = ((MyFolder.FolderView == "OOO") || (MyFolder.FolderView == "All Rules"));
                 accountResultsViewModel.AccountResultsList[num].UserResultsList[count - 1].UserProgressMsg = FormatTheLastMsg(MyFolder, isOOOorRules);
                 accountResultsViewModel.AccountResultsList[num].PBValue = 100;  // to make sure
+                if (accountResultsViewModel.AccountResultsList[num].CurrentItemNum != accountResultsViewModel.AccountResultsList[num].TotalItemsToMigrate)
+                {
+                    FormatGlobalMsg(accountResultsViewModel.AccountResultsList[num]);
+                }
             }
             else
             {   // For preview, take the "foldername (n items)" message we constructed, extract the n, and make "Total n"
