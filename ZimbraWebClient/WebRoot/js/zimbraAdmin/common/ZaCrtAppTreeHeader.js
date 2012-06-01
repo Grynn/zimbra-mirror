@@ -24,6 +24,8 @@ ZaCrtAppTreeHeader.prototype._dropDownImg = "";
 ZaCrtAppTreeHeader.prototype._dropDownDepImg = "";
 ZaCrtAppTreeHeader.prototype._dropDownHovImg = "";
 ZaCrtAppTreeHeader.defaultImg = "CollapseLeft";
+ZaCrtAppTreeHeader.normalBgImg = "ImgArrowShapeNormal";
+ZaCrtAppTreeHeader.hoverBgImg = "ImgArrowShapeHover";
 
 ZaCrtAppTreeHeader.prototype.toString =
 function() {
@@ -33,7 +35,9 @@ function() {
 ZaCrtAppTreeHeader.prototype.TEMPLATE = "admin.Widgets#ZaTreeHeaderButton";
 
 ZaCrtAppTreeHeader.prototype._createHtmlFromTemplate = function(templateId, data) {
+    data.bgImg = ZaCrtAppTreeHeader.normalBgImg;
     DwtButton.prototype._createHtmlFromTemplate.call(this, templateId, data);
+    this._tabelEl = document.getElementById(data.id+"_table");
     this._arrowEl = document.getElementById(data.id+"_doubleArrow");
     this._imgEl = document.getElementById(data.id+"_img");
 };
@@ -74,6 +78,18 @@ ZaCrtAppTreeHeader.prototype._getPreviousObject = function(path) {
     var displayName = pathItems[pathItems.length - 1];
     var resultPath = ZaTree.getPathByArray(pathItems);
     return new ZaHistory(resultPath, displayName);
+}
+
+ZaCrtAppTreeHeader.prototype._showHoverImage =
+function(show) {
+    if (this._tabelEl) {
+        if (show) {
+            Dwt.delClass(this._tabelEl, ZaCrtAppTreeHeader.normalBgImg, ZaCrtAppTreeHeader.hoverBgImg);
+        } else {
+            Dwt.delClass(this._tabelEl, ZaCrtAppTreeHeader.hoverBgImg, ZaCrtAppTreeHeader.normalBgImg);
+        }
+    }
+
 }
 
 ZaCrtAppTreeHeader.prototype._isDropDownEvent =
