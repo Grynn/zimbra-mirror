@@ -698,7 +698,7 @@ Status()
 	syslog(LOG_ERR, "could not send signal 0 to manager process (pid=%d): %s", managerPid, strerror(errno));
 	exit(1);
     }
-    syslog(LOG_INFO, "status OK");
+    syslog(LOG_DEBUG, "status OK");
     exit(0);
 }
 
@@ -777,7 +777,7 @@ main(int argc, char *argv[])
 	syslog(LOG_INFO, "restart requested");
 	Restart();
     } else  if (strcmp(action, "status") == 0) {
-	syslog(LOG_INFO, "status requested");
+	syslog(LOG_DEBUG, "status requested");
 	Status();
     } else  if (strcmp(action, "threaddump") == 0) {
 	syslog(LOG_INFO, "threaddump requested");
