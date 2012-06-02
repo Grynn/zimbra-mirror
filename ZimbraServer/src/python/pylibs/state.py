@@ -48,6 +48,7 @@ class State:
 		"antivirus" : 70,
 		"cbpolicyd" : 72,
 		"amavis"    : 75,
+		"opendkim"  : 78,
 		"archiving" : 80,
 		"snmp"      : 90,
 		"spell"     : 100,
