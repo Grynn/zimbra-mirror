@@ -102,7 +102,7 @@ public class PageBriefcase extends AbsTab {
 		public static final Locators zListItemLockIcon = new Locators(
 				"css=div[id^=zlif__BDLV-main__][id$=__loid][class=ImgPadLock]");
 		public static final Locators zCloseIconBtn = new Locators(
-				"css=td[id^=zb__MSG][id$=CLOSE_left_icon]");
+				"css=td[id^=zb__MSG][id$=CLOSE_title]");
 		public static final Locators zAttachmentText = new Locators(
 				"css=div[class=attBubbleHolder] span");
 
@@ -443,20 +443,20 @@ public class PageBriefcase extends AbsTab {
 
 			if (option == Button.B_LAUNCH_IN_SEPARATE_WINDOW) {
 
-				optionLocator = "css=td[id$=NEW_BRIEFCASE_WIN_title]:contains(Launch in a separate window)";
+				optionLocator = "css=div[id=NEW_BRIEFCASE_WIN] td[id*=NEW_BRIEFCASE_WIN_title]:contains(Launch in a separate window)";
 
 				page = new DocumentBriefcaseOpen(this.MyApplication, item);
 
 			} else if (option == Button.O_SEND_AS_ATTACHMENT) {
 
-				optionLocator = "css=td[id$='_title']:contains('Send as attachment')";
+				optionLocator = "css=div[id=SEND_FILE_AS_ATT] td[id*=SEND_FILE_AS_ATT_title]:contains('Send as attachment')";
 
 				page = new FormMailNew(this.MyApplication);
 
 				// FALL THROUGH
 			} else if (option == Button.O_SEND_LINK) {
 
-				optionLocator = "css=td[id$='_title']:contains('Send link')";
+				optionLocator = "css=div[id=SEND_FILE] td[id*=SEND_FILE_title]:contains('Send link')";
 
 				page = new DialogConfirm(DialogConfirm.Confirmation.SENDLINK,
 						this.MyApplication, this);
@@ -964,7 +964,7 @@ public class PageBriefcase extends AbsTab {
 
 			if (option == Button.B_RENAME) {
 
-				optionLocator = "css=div[id^=RENAME_FILE__] tr[id^=POPUP_RENAME_FILE]>td[id^=RENAME_FILE]:contains(Rename)";
+				optionLocator = "css=div[id=zm__Briefcase] div[id^=RENAME_FILE__] tr[id^=POPUP_RENAME_FILE]>td[id^=RENAME_FILE]:contains(Rename)";
 
 				page = null;
 
@@ -1395,11 +1395,11 @@ public class PageBriefcase extends AbsTab {
 			if (sIsElementPresent(itemLocator + ":nth-child(" + i
 					+ "):contains(" + itemName + ")")) {
 				lockIconLocator = itemLocator + ":nth-child(" + i
-						+ ") div[id^=zlif__BDLV__][id$=__loid][class^=Img]";
+						+ ")>table>tbody>tr>td>div[id^=zlif__BDLV__][id$=__loid][class^=Img]";
 				break;
 			}
 		}
-
+		
 		if (!this.sIsElementPresent(lockIconLocator)) {
 			logger.info("Lock icon locator is not present " + lockIconLocator);
 		} else {

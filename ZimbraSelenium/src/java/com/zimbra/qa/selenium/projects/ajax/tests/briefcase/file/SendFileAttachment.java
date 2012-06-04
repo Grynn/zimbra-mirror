@@ -145,8 +145,10 @@ public class SendFileAttachment extends AjaxCommonTest {
 
 		ZAssert.assertNotNull(warningDlg, "Verify the dialog is returned");
 
-		// Dismiss the dialog
-		warningDlg.zClickButton(Button.B_NO);
+		// Dismiss the dialog clicking No
+		// warningDlg.zClickButton(Button.B_NO);
+		app.zPageBriefcase.zClick("//div[@id='YesNoCancel']//td[contains(@id,'No_')]//td[contains(@id,'_title')]");
+
 
 		warningDlg.zWaitForClose(); // Make sure the dialog is dismissed
 

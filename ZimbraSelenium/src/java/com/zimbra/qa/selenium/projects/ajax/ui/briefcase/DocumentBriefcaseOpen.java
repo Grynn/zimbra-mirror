@@ -21,7 +21,7 @@ public class DocumentBriefcaseOpen extends AbsDisplay {
 		public static final String zSaveAndCloseIconBtn = "//*[@id='DWT8_left_icon']";
 		public static final String zBodyField = "css=body";
 		public static final String zDocumentBodyField = "css=td[class='ZhAppContent'] div[id='zdocument']";
-		public static final String zFileBodyField = "css=html>body";
+		public static final String zFileBodyField = "//html/body";
 		public static final String zNameField = "css=[class=DwtInputField] [input$=]";
 		public static final String zDocumentNameField = "css=[class=TbTop] b";
 	}

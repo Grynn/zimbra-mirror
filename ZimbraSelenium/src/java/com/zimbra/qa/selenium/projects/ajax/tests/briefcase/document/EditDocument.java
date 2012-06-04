@@ -183,7 +183,7 @@ public class EditDocument extends AjaxCommonTest {
 			throw new HarnessException("error in editing document "
 					+ docItem1.getName(), ex);
 		} finally {
-			app.zPageBriefcase.zSelectWindow(PageBriefcase.pageTitle);
+			app.zPageBriefcase.sSelectWindow(PageBriefcase.pageTitle);
 		}
 
 		// refresh briefcase page

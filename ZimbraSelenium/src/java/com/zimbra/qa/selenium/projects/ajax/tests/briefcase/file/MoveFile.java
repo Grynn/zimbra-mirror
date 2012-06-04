@@ -208,9 +208,8 @@ public class MoveFile extends AjaxCommonTest {
 		// Choose destination folder and Click OK on Confirmation dialog
 		chooseFolder.zClickTreeFolder(subFolders[1]);
 
-		chooseFolder.zClickButton(Button.B_OK);
-
-		// app.zPageBriefcase.zClickAt("css=div[id=ChooseFolderDialog_button2],"0,0");
+		//chooseFolder.zClickButton(Button.B_OK);
+		app.zPageBriefcase.zClickAt("css=div[id=ChooseFolderDialog_button2]","0,0");
 
 		// click on sub-folder1 in tree view
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, subFolders[0], false);
@@ -252,7 +251,6 @@ public class MoveFile extends AjaxCommonTest {
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, folderItem, true);
 
 		// Click on created subfolder
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, subFolderItem);
 
 		// Create file item

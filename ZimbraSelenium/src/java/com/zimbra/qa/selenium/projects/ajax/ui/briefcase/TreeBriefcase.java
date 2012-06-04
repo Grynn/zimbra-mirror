@@ -22,7 +22,7 @@ public class TreeBriefcase extends AbsTree {
 		public static final String briefcaseListView = "css=[id='zl__BDLV__rows']";
 		public static final String briefcaseTreeView = "css=[id*=zti__main_Briefcase__";
 		public static final String zNewTagTreeMenuItem = "css=td[id^=NEW_TAG__][id$=_title]";
-		public static final String zNewFolderTreeMenuItem = "css=td[id^=NEW_BRIEFCASE__][id$=_title]";
+		public static final String zNewFolderTreeMenuItem = "//div[contains(@id,NEW_BRIEFCASE)]//tr[contains(@id,POPUP_NEW_BRIEFCASE)]//td[contains(text(),'New Folder')]";
 		public static final String zRenameTagTreeMenuItem = "css=td[id$=_left_icon]>[class=ImgRename]";
 		public static final String zDeleteTreeMenuItem = "css=td[id^=DELETE_WITHOUT_SHORTCUT][id$=_title]";
 		public static final String zEditPropertiesTreeMenuItem = "css=div[id=EDIT_PROPS] tr[id=POPUP_EDIT_PROPS]:contains('Edit Properties')";
@@ -115,11 +115,12 @@ public class TreeBriefcase extends AbsTree {
 		}
 
 		this.zWaitForBusyOverlay();
+		
 		zWaitForElementVisible(optionLocator);		
 		
 		// Default behavior. Click the locator
-		zClickAt(optionLocator, "0,0");
-
+		zClickAt(optionLocator,"");
+ 
 		// If there is a busy overlay, wait for that to finish
 		this.zWaitForBusyOverlay();
 
@@ -325,7 +326,7 @@ public class TreeBriefcase extends AbsTree {
 
 		if (pulldown == Button.B_TREE_FOLDERS_OPTIONS) {
 
-			pulldownLocator = "css=div[id='zov__main_Briefcase'] td[id='ztih__main_Briefcase__BRIEFCASE_optCell'] div[class=ImgContextMenu]";
+			pulldownLocator = "css=div[id='ztih__main_Briefcase__BRIEFCASE_div'] td[id='ztih__main_Briefcase__BRIEFCASE_optCell'] div[class=ImgContextMenu]";
 
 			if (option == Button.B_TREE_NEWFOLDER) {
 
