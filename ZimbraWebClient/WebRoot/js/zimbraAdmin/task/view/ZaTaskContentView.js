@@ -98,6 +98,7 @@ ZaTaskContentView.myXFormModifier = function(xFormObject, entry) {
                     {type: _GROUP_, numCols: 1,width: "100%",
                         visibilityChecks:[[XForm.checkInstanceValue, ZaTask.A2_isExpanded, true]],
                         visibilityChangeEventSources:[ZaTask.A2_isExpanded],
+                        cssClass: "ZaTaskListGroup",
                         items: [
                             { type:_COMPOSITE_, numCols:2, width:"100%",
                                visibilityChecks:[[XForm.checkInstanceValue, ZaTask.A2_isWIPExpanded, true]],
@@ -150,6 +151,7 @@ ZaTaskContentView.myXFormModifier = function(xFormObject, entry) {
                     {type: _GROUP_, numCols: 1,width: "100%",
                         visibilityChecks:[[XForm.checkInstanceValue, ZaTask.A2_isExpanded, true]],
                         visibilityChangeEventSources:[ZaTask.A2_isExpanded],
+                        cssClass: "ZaTaskListGroup",
                         items: [
                             { type:_COMPOSITE_, numCols:2, width:"100%",
                                visibilityChecks:[[XForm.checkInstanceValue, ZaTask.A2_isRTExpanded, true]],
@@ -202,6 +204,7 @@ ZaTaskContentView.myXFormModifier = function(xFormObject, entry) {
                     {type: _GROUP_, numCols: 1,width: "100%", height: "100%",
                         visibilityChecks:[[XForm.checkInstanceValue, ZaTask.A2_isExpanded, true]],
                         visibilityChangeEventSources:[ZaTask.A2_isExpanded],
+                        cssClass: "ZaTaskListGroup",
                         items: [
                             { type:_COMPOSITE_, numCols:2, width:"100%",
                                visibilityChecks:[[XForm.checkInstanceValue, ZaTask.A2_isServerExpaned, true]],
