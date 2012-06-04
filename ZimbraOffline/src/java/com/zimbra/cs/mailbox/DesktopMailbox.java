@@ -25,6 +25,7 @@ import com.zimbra.cs.mailbox.ChangeTrackingMailbox.TracelessContext;
 import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.redolog.op.CreateFolder;
+import com.zimbra.cs.redolog.op.RedoableOp;
 
 public abstract class DesktopMailbox extends Mailbox {
 
@@ -163,9 +164,9 @@ public abstract class DesktopMailbox extends Mailbox {
     }
 
     @Override
-    protected boolean needRedo(OperationContext octxt) {
+    protected boolean needRedo(OperationContext octxt,  RedoableOp recorder) {
         if (OfflineLC.zdesktop_redolog_enabled.booleanValue()) {
-            return super.needRedo(octxt);
+            return super.needRedo(octxt, recorder);
         } else {
             return false;
         }
