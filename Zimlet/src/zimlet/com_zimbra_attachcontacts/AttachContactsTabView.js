@@ -512,7 +512,9 @@ function(params) {
 		};
 		overview =  opc.createOverview(ovParams);
 		overview.account = this.prevAccount;
-		overview.set(params.treeIds);
+		var omit = {};
+		omit[ZmOrganizer.ID_DLS] = true;
+		overview.set(params.treeIds, omit);
 	} else if (params.account) {
 		overview.account = params.account;
 	}
