@@ -1345,16 +1345,19 @@ public class ZimbraAPI
             writer.WriteEndElement();   // recur
         }
 
-        writer.WriteStartElement("alarm");
-        writer.WriteAttributeString("action", "DISPLAY");
-        writer.WriteStartElement("trigger");
-        writer.WriteStartElement("rel");
-        writer.WriteAttributeString("related", "START");
-        writer.WriteAttributeString("neg", "1");
-        writer.WriteAttributeString("m", appt["m"]);
-        writer.WriteEndElement();   // rel
-        writer.WriteEndElement();   // trigger
-        writer.WriteEndElement();   // alarm
+        if (appt["m"].Length > 0)   // FBS bug 73665 -- 6/4/12
+        {
+            writer.WriteStartElement("alarm");
+            writer.WriteAttributeString("action", "DISPLAY");
+            writer.WriteStartElement("trigger");
+            writer.WriteStartElement("rel");
+            writer.WriteAttributeString("related", "START");
+            writer.WriteAttributeString("neg", "1");
+            writer.WriteAttributeString("m", appt["m"]);
+            writer.WriteEndElement();   // rel
+            writer.WriteEndElement();   // trigger
+            writer.WriteEndElement();   // alarm
+        }
 
         writer.WriteEndElement();   // inv
 
@@ -1546,16 +1549,19 @@ public class ZimbraAPI
         if (!isCancel)
         {
             attr = "m" + "_" + num.ToString();
-            writer.WriteStartElement("alarm");
-            writer.WriteAttributeString("action", "DISPLAY");
-            writer.WriteStartElement("trigger");
-            writer.WriteStartElement("rel");
-            writer.WriteAttributeString("related", "START");
-            writer.WriteAttributeString("neg", "1");
-            writer.WriteAttributeString("m", appt[attr]);
-            writer.WriteEndElement();   // rel
-            writer.WriteEndElement();   // trigger
-            writer.WriteEndElement();   // alarm
+            if (appt[attr].Length > 0)   // FBS bug 73665 -- 6/4/12
+            {
+                writer.WriteStartElement("alarm");
+                writer.WriteAttributeString("action", "DISPLAY");
+                writer.WriteStartElement("trigger");
+                writer.WriteStartElement("rel");
+                writer.WriteAttributeString("related", "START");
+                writer.WriteAttributeString("neg", "1");
+                writer.WriteAttributeString("m", appt[attr]);
+                writer.WriteEndElement();   // rel
+                writer.WriteEndElement();   // trigger
+                writer.WriteEndElement();   // alarm
+            }
         }
         writer.WriteEndElement();   // inv
         attr = "su" + "_" + num.ToString();
@@ -1784,14 +1790,17 @@ public class ZimbraAPI
         // task reminder if applicable
         if (task.ContainsKey("taskflagdueby"))
         {
-            writer.WriteStartElement("alarm");
-            writer.WriteAttributeString("action", "DISPLAY");
-            writer.WriteStartElement("trigger");
-            writer.WriteStartElement("abs");
-            writer.WriteAttributeString("d", task["taskflagdueby"]);
-            writer.WriteEndElement();   // abs
-            writer.WriteEndElement();   // trigger
-            writer.WriteEndElement();   // alarm
+            if (task["taskflagdueby"].Length > 0)   // FBS bug 73665 -- 6/4/12
+            {
+                writer.WriteStartElement("alarm");
+                writer.WriteAttributeString("action", "DISPLAY");
+                writer.WriteStartElement("trigger");
+                writer.WriteStartElement("abs");
+                writer.WriteAttributeString("d", task["taskflagdueby"]);
+                writer.WriteEndElement();   // abs
+                writer.WriteEndElement();   // trigger
+                writer.WriteEndElement();   // alarm
+            }
         }
 
         if (isRecurring)
