@@ -1,0 +1,28 @@
+#!/bin/bash
+# 
+# ***** BEGIN LICENSE BLOCK *****
+#
+# Zimbra Collaboration Suite Server
+# Copyright (C) 2005-2012 VMware, Inc. VMware and Zimbra are registered trademarks of VMware, Inc.
+# 
+# ***** END LICENSE BLOCK *****
+# 
+
+source `dirname $0`/../bin/zmshutil || exit 1
+zmsetvars \
+  zimbra_ldap_password \
+  ldap_url
+
+LDAP_URL=`echo ${ldap_url} | awk '{ print $1 }'`
+
+GSA_ID_LIST=`/opt/zimbra/bin/ldapsearch -x -H ${LDAP_URL} -w ${zimbra_ldap_password} -D uid=zimbra,cn=admins,cn=zimbra -b '' '(&(objectClass=zimbraDomain)(zimbraGalAccountId=*))' zimbraGalAccountId | awk '{if ($1 ~ /^zimbraGalAccountId:$/) { print $2 } }'`
+
+MY_HOSTNAME=`zmhostname`
+for ID in $GSA_ID_LIST
+do
+  GSA_MAIL_HOST=`/opt/zimbra/bin/ldapsearch -x -H ${LDAP_URL} -w ${zimbra_ldap_password} -D uid=zimbra,cn=admins,cn=zimbra -b '' '(&(objectClass=zimbraAccount)(zimbraId='${ID}'))' zimbraMailHost | awk '{if ($1 ~ /^zimbraMailHost:$/) { print $2 } }'`
+  if [ "x${GSA_MAIL_HOST}" == "x${MY_HOSTNAME}" ]
+  then
+    zmgsautil trickleSync -i ${ID} -n InternalGAL
+  fi
+done
