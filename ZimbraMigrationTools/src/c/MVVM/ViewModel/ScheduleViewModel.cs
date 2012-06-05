@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Threading;
 using System.Windows.Input;
@@ -101,7 +102,36 @@ public class ScheduleViewModel: BaseViewModel
         proc.StartInfo.FileName = "c:\\windows\\system32\\schtasks.exe";
 
         // set up date, time, and name for task scheduler
-        string dtStr = Convert.ToDateTime(this.ScheduleDate).ToString("MM/dd/yyyy");    // formatting in C# is nuts -- only way to get this to work
+        // FBS Bug 74232 -- need to get the right format for Schtasks SD parameter (dtStr)
+        // Has to be either MM/DD/YYYY, DD/MM/YYYY, or YYYY/MM/DD
+        // C# formatting stuff and schtasks are both very fussy.  Only MM capitalized (because of minutes)
+        string dtStr = Convert.ToDateTime(this.ScheduleDate).ToString("MM/dd/yyyy");
+        CultureInfo currentCulture = Thread.CurrentThread.CurrentCulture;
+        String shortDatePattern = currentCulture.DateTimeFormat.ShortDatePattern; 
+        if ((shortDatePattern.StartsWith("d")) || (shortDatePattern.StartsWith("D")))   // being safe with "D"
+        {
+            dtStr = Convert.ToDateTime(this.ScheduleDate).ToString("dd/MM/yyyy");
+        }
+        else
+        if ((shortDatePattern.StartsWith("y")) || (shortDatePattern.StartsWith("Y")))   // being safe with "Y"
+        {
+            dtStr = Convert.ToDateTime(this.ScheduleDate).ToString("yyyy/MM/dd");
+        }
+        if (v.Major < 6)    // XP is a pain -- you have to make sure is has slashes.  W7 doesn't care
+        {
+            if (dtStr.Contains("."))
+            {
+                dtStr = dtStr.Replace(".", "/");
+            }
+            else
+            if (dtStr.Contains("-"))
+            {
+                dtStr = dtStr.Replace("-", "/");
+            }
+        }
+        //
+        //
+
         string dtTime = MakeTimeStr();
         string dtName = "Migrate" + dtTime.Substring(0, 2) + dtTime.Substring(3, 2);
 
