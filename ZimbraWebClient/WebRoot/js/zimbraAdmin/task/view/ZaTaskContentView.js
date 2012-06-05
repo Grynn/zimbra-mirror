@@ -193,11 +193,14 @@ ZaTaskContentView.myXFormModifier = function(xFormObject, entry) {
                     {type:_AJX_IMAGE_, src: "Status", label:null, containerCssStyle:"text-align:center;",
                         visibilityChecks:[[XForm.checkInstanceValue, ZaTask.A2_isExpanded, false]],
                         visibilityChangeEventSources:[ZaTask.A2_isExpanded]},
-                    {ref:ZaTask.A_serverStatus, type:_OUTPUT_, bmolsnr: true, value:0,
+                    {ref:ZaTask.A2_notificationCount, type:_OUTPUT_, bmolsnr: true, value:0,
                         visibilityChecks:[[XForm.checkInstanceValue, ZaTask.A2_isExpanded, false]],
                         visibilityChangeEventSources:[ZaTask.A2_isExpanded], containerCssStyle:"text-align:center;",
                         getDisplayValue: function(newValue) {
-                            return 0; //TODO: should be overloaded and show the real number 
+                            if (!newValue || newValue < 0) {
+                                return 0;
+                            }
+                            return newValue;
                         }
                     },
 

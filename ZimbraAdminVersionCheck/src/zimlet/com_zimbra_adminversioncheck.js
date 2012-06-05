@@ -435,6 +435,12 @@ if (ZaTask && ZaTask.myXModel){
 			taskController.setInstanceValue(canShow, ZaTask.A2_versionCanBeShown);
 			taskController.setInstanceValue(isAvailable, ZaTask.A2_versionUpdateAvailable);
 			taskController.setInstanceValue(hasError, ZaTask.A2_versionHasError);
+
+			if (canShow) {
+				taskController.increaseNotificationCount(ZaTask.A2_versionUpdateMessage);
+			} else {
+				taskController.decreaseNotificationCount(ZaTask.A2_versionUpdateMessage);
+			}
 		}
 
 

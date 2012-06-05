@@ -11,6 +11,7 @@ ZaTaskController = function(appCtxt, container) {
     this._workingInProcess.getArray()._version = 1;
     this._runningTask = new AjxVector();
     this._runningTask.getArray()._version = 1;
+    this._notification = { _msgNames:{} };
 }
 
 ZaTaskController.prototype = new ZaController();
@@ -99,4 +100,40 @@ ZaTaskController.prototype.setInstanceValue = function(value, ref){
     if( this._taskContentPanel && this._taskContentPanel._localXForm){
         this._taskContentPanel._localXForm.setInstanceValue(value, ref);
     }
+}
+
+ZaTaskController.prototype.getInstanceValue = function(ref){
+    if( this._taskContentPanel && this._taskContentPanel._localXForm){
+        return this._taskContentPanel._localXForm.getInstanceValue(ref);
+    }
+    return null;
+}
+
+ZaTaskController.prototype.increaseNotificationCount = function(msgName){
+    if (AjxUtil.isEmpty(msgName)) {
+        return;
+    }
+    //not allow more than once for the same msgName
+    if (!this._notification._msgNames[msgName]) {
+        this._notification._msgNames[msgName] = true;
+        var count = this.getInstanceValue(ZaTask.A2_notificationCount) || 0;
+        this.setInstanceValue(++count, ZaTask.A2_notificationCount);
+    }
+
+}
+
+ZaTaskController.prototype.decreaseNotificationCount = function(msgName){
+    if (AjxUtil.isEmpty(msgName)) {
+        return;
+    }
+
+    //only allow the msgName has been added (marked true)
+    if (this._notification._msgNames[msgName]) {
+        this._notification._msgNames[msgName] = false;
+        var count = this.getInstanceValue(ZaTask.A2_notificationCount) || 0;
+        if ( count > 0 ){
+            this.setInstanceValue(--count, ZaTask.A2_notificationCount);
+        }
+    }
+
 }

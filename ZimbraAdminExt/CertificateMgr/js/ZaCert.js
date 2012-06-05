@@ -397,8 +397,8 @@ ZaCert.doLoadCertExpireStatus = function(resp) {
 	
 	var now = new Date();
 	var _30days = 30 * 24 * 60 * 60 * 1000; // the millisecond of 30 days
-	var expiredCerts = [];
-	var expiringCerts = [];
+	var expiredCerts = new Array();
+	var expiringCerts = new Array();
 	var minExpDateForExpiredCerts = new Date(9999, 12, 31);
 	var minExpDateForExpiringCerts = new Date(9999, 12, 31);
 	for (var i in response.cert) {
@@ -424,7 +424,12 @@ ZaCert.doLoadCertExpireStatus = function(resp) {
 				AjxMessageFormat.format(com_zimbra_cert_manager.SingleExpDate, formatter.format(minExpDateForExpiredCerts));
 
 		taskController.setInstanceValue(message + " " + expMsg, ZaTask.A2_expiredCertMsg);
+		taskController.increaseNotificationCount(ZaTask.A2_expiredCertMsg);
+	} else {
+		taskController.setInstanceValue(undefined, ZaTask.A2_expiredCertMsg);
+		taskController.decreaseNotificationCount(ZaTask.A2_expiredCertMsg);
 	}
+
 	
 	if (expiringCerts.length > 0) {
 		var message = AjxMessageFormat.format(com_zimbra_cert_manager.ExpiringCertMsg, [expiringCerts.length]);
@@ -434,6 +439,10 @@ ZaCert.doLoadCertExpireStatus = function(resp) {
 				AjxMessageFormat.format(com_zimbra_cert_manager.SingleExpDate, formatter.format(minExpDateForExpiringCerts));
 
 		taskController.setInstanceValue(message + " " + expMsg, ZaTask.A2_expiringCertMsg);
+		taskController.increaseNotificationCount(ZaTask.A2_expiringCertMsg);
+	} else {
+		taskController.setInstanceValue(undefined, ZaTask.A2_expiringCertMsg);
+		taskController.decreaseNotificationCount(ZaTask.A2_expiringCertMsg);
 	}
 }
 
