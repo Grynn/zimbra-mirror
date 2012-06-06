@@ -1,0 +1,222 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 9" />
+<title>Filter Conditions</title>
+<link rel="StyleSheet" href="../zwc_8.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//]]>
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
+-->
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
+</head>
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.gbWhTopic)
+{
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
+	if (window.addTocInfo)
+	{
+	addTocInfo("Using Mail Filters\nFilter Conditions");
+addButton("show",BTN_TEXT,"Show","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	
+	document.write("<p style=\"text-align:right\"> ");
+AddMasterBreadcrumbs("../zimbra_user_help.htm", "", ">", "Home", "../zimbra_basic_user_help.htm");
+document.write("<a href=\"bc_filtering_your_messages.htm\">Using Mail Filters<\/a> > Filter Conditions<\/p>");
+
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../zimbra_user_help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+//]]></script>
+<p class="FM_1HeadingC">Filter Conditions</p>
+<p class="FM_Body">Filter rules are not case-insensitive, meaning that 
+ the rules ignore capitalization.</p>
+<p class="FM_2Heading">Conditions</p>
+<p class="FM_Body">Comparison text boxes include the following:</p>
+<ul style="margin-top: 0in;" type="disc">
+	<li class="MsoNormal" style="mso-list: l3 level1 lfo1; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>From.</b> Use this to specify a name in 
+	 the From header of an email message.</p></li>
+	<li class="MsoNormal" style="mso-list: l3 level1 lfo1; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>To.</b> Same as From, but looks for specified 
+	 names in the To header.</p></li>
+	<li class="MsoNormal" style="mso-list: l3 level1 lfo1; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>Cc.</b> Same as From, but looks in the 
+	 Cc header.</p></li>
+	<li class="MsoNormal" style="mso-list: l3 level1 lfo1; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>To or Cc</b>. Same as From, but looks 
+	 in both To and Cc header.</p></li>
+	<li class="MsoNormal" style="mso-list: l3 level1 lfo1; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>Subject.</b> Looks in the message's Subject 
+	 header.</p></li>
+</ul>
+<ul style="margin-top: 0in;" type="disc">
+	<li class="MsoNormal" style="mso-list: l0 level1 lfo2; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>Header Named.</b> When this option is 
+	 selected, an additional text box appears before the comparison operator 
+	 (the &quot;contains&quot; portion). This option allows you to specify 
+	 any email header. You can specify not only the standard text boxes 
+	 of To or From, but also Date, Reply-To, or other custom text boxes 
+	 that may be included in the message header. You can use this option 
+	 to filter out email messages that have &quot;malformed&quot; headers, 
+	 meaning they do not contain certain information that is normally considered 
+	 standard for an email message. Sometimes spam, which is automatically 
+	 generated, omits information such as the Sender or Reply-to fields. 
+	 Use the second text box (the text box immediately to the right of 
+	 the comparison operator) to specify the header to test for.</p></li>
+	<li class="MsoNormal" style="mso-list: l0 level1 lfo2; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>Size.</b> Use this to select email messages 
+	 that are larger or smaller than a specified size. The size of the 
+	 email includes any file attachments. You can use this to discard email 
+	 messages that are too large.</p></li>
+	<li class="MsoNormal" style="mso-list: l0 level1 lfo2; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>Date.</b> Use this option to specify email 
+	 messages sent before or after a specified date.</p></li>
+	<li class="MsoNormal" style="mso-list: l0 level1 lfo2; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>Body.</b> The options for Body are Contains/Does 
+	 not contain, and this allows you to specify matching words in the 
+	 body of the email. You cannot filter for words in file attachments.</p></li>
+	<li class="MsoNormal" style="mso-list: l0 level1 lfo2; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>Attachment.</b> You can filter for email 
+	 messages that have, or don't have, file attachments.</p></li>
+	<li class="MsoNormal" style="mso-list: l0 level1 lfo2; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>Address In.</b> Tests for the presence 
+	 of an address in your contacts. The next text box allows you to specify 
+	 which address.</p></li>
+</ul>
+<p class="FM_Body">Comparison operators include the following:</p>
+<ul style="margin-top: 0in;" type="disc">
+	<li class="MsoNormal" style="mso-list: l2 level1 lfo3; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>Matches exactly/does not match exactly</b>. 
+	 Specifies an exact match. For example, specifying <b>Subject</b> <b>matches 
+	 exactly</b> - <b>Banana</b> would only match &quot;Banana&quot; and 
+	 not &quot;Bananas&quot; or &quot;A truck full of banana leaves&quot;.</p></li>
+	<li class="MsoNormal" style="mso-list: l2 level1 lfo3; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>Contains/does not contain</b>. Specifies 
+	 that the subject line must contain the specified substring. &#160;For 
+	 example, specifying <b>Subject contains Banana</b> would match &quot;I'm 
+	 going bananas&quot;.</p></li>
+	<li class="MsoNormal" style="mso-list: l2 level1 lfo3; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>Matches wildcard/does not match wildcard 
+	 condition</b>. The wildcard * is a character used in the mail filter 
+	 comparison text box to represent one or more characters in the filter. 
+	 For example, specifying Subject matches &quot; banana*&quot; would 
+	 match &quot;bananas&quot; or &quot;banana-leaf casserole&quot; but 
+	 not &quot;my banana-leaf casserole.&quot;</p></li>
+</ul>
+<p class="FM_2Heading">Actions</p>
+<ul style="margin-top: 0in;" type="disc">
+	<li class="MsoNormal" style="mso-list: l4 level1 lfo4; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>Keep in Inbox.</b> Saves mail to Inbox. 
+	 If none of the filter rules match an email message, this action takes 
+	 place by default.</p></li>
+	<li class="MsoNormal" style="mso-list: l4 level1 lfo4; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>Discard.</b> Deletes the mail message 
+	 without delivering it. The message is not in any of your folders, 
+	 not even Trash.</p></li>
+	<li class="MsoNormal" style="mso-list: l4 level1 lfo4; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>File into folder.</b> Moves the mail to 
+	 a specified folder.</p></li>
+	<li class="MsoNormal" style="mso-list: l4 level1 lfo4; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>Tag with.</b> You can tag matching messages 
+	 with a selected tag.</p></li>
+	<li class="MsoNormal" style="mso-list: l4 level1 lfo4; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>Mark.</b> Select <b>as Read</b> or <b>as 
+	 Flagged</b>.</p></li>
+	<li class="MsoNormal" style="mso-list: l4 level1 lfo4; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>Forward to address</b>. Forwards mail 
+	 to the address you specify.</p></li>
+</ul>
+<p class="FM_2Heading">Multiple Actions</p>
+<p class="MsoNormal">You can create a filter rule made up of multiple actions. 
+ The combinations of actions in your rule are interpreted as follows:</p>
+<ul style="margin-top: 0in;" type="disc">
+	<li class="MsoNormal" style="mso-list: l1 level1 lfo5; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>Keep in Inbox.</b> Multiple &quot;keep&quot; 
+	 actions can be specified, but only one copy of the message is saved 
+	 to the Inbox.</p></li>
+	<li class="MsoNormal" style="mso-list: l1 level1 lfo5; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>Discard.</b> If combined with other actions, 
+	 discard is ignored and the other actions take place.</p></li>
+	<li class="MsoNormal" style="mso-list: l1 level1 lfo5; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>File into folder.</b> Multiple &quot;file 
+	 into&quot; actions results in multiple copies of the message being 
+	 stored in different folders. If a specified folder does not exist, 
+	 the message is saved to the Inbox.</p></li>
+	<li class="MsoNormal" style="mso-list: l1 level1 lfo5; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>Tag with/Mark.</b> These actions apply 
+	 to the message returned from the nearest preceding action. In the 
+	 case of multiple &quot;File into&quot; actions, this could result 
+	 in some copies of the message stored without a tag, and others stored 
+	 with a tag.</p></li>
+	<li class="MsoNormal" style="mso-list: l1 level1 lfo5; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>Forward to address.</b> Mail is forwarded 
+	 to the address specified.</p></li>
+</ul>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+
+
+highlightSearch();
+//-->
+//]]></script>
+</body>
+</html>
