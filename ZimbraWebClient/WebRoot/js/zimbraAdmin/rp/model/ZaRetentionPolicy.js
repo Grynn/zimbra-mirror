@@ -40,6 +40,9 @@ function(name, id, lifetime, type) {
 
 ZaRetentionPolicy.prototype = new ZaItem;
 ZaRetentionPolicy.prototype.constructor = ZaRetentionPolicy;
+
+ZaRetentionPolicy.POLICY_CUSTOM = "custom";
+
 ZaRetentionPolicy.prototype.toString =
 function() {
     return this.name;
@@ -188,8 +191,15 @@ ZaRetentionPolicy.checkValues = function (tmpObj, list) {
     if (!tmpObj) {
         return false;
     }
-    if (AjxUtil.isEmpty(tmpObj[ZaRetentionPolicy.A2_name])) {
+
+    var name = AjxStringUtil.trim(tmpObj[ZaRetentionPolicy.A2_name]);
+    if (AjxUtil.isEmpty(name)) {
         ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_EmptyRPName) ;
+        return false;
+    }
+
+    if (ZaRetentionPolicy.POLICY_CUSTOM == name.toLowerCase()) {
+        ZaApp.getInstance().getCurrentController().popupErrorDialog(AjxMessageFormat.format(ZaMsg.ERROR_RPNameCustomDisallowed, [name])) ;
         return false;
     }
 
