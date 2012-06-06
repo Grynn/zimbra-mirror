@@ -154,14 +154,12 @@ public class DragAndDropAppointment extends CalendarWorkWeekTest {
         app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
 		
 		
-		// Select the item
-		app.zPageCalendar.zDragAndDrop(
-				"css=div[id^='zli__CLWW__"+ apptId +"'] td.appt_name", // <div id="zli__CLWW__263_DWT114" .../>
-				"css=div[id^='zli__CLWW__"+ otherApptId +"'] td.appt_name");
-		
-		
-		
-		
+		// drag and drop the item
+        	String sourceLocator = "css=div[id^='zli__CLWW__"+ apptId +"'] td.appt_name";
+        	String destinationLocator = "css=div[id^='zli__CLWW__"+ otherApptId +"'] td.appt_name";
+
+        	app.zPageCalendar.zDragAndDropBy(sourceLocator,destinationLocator,0,10);
+        		
 		//-- Server verification
 		
 		// Make sure the time has changed

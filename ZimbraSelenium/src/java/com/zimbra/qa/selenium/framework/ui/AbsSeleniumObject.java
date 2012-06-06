@@ -81,6 +81,24 @@ public abstract class AbsSeleniumObject {
 	public AbsSeleniumObject() {
 		logger.info("new " + AbsSeleniumObject.class.getCanonicalName());
 	}
+	
+	protected static class Coordinate {
+		final int X;
+		final int Y;
+		
+		public Coordinate(int x, int y) {
+			this.X = x;
+			this.Y = y;
+		}
+		
+		/** 
+		 * Print this coordinate in "x,y" format
+		 */
+		public String toString() {
+			return (this.X + "," + this.Y);
+		}
+		
+	}
 
 	protected class BrowserMasks {
 
@@ -2381,6 +2399,63 @@ public abstract class AbsSeleniumObject {
 		return url;
 	}
 	
+	/**
+	 * Drag and Drop a locator onto another locator
+	 * @param locatorSource The locator item to drag
+	 * @param locatorDestination The locator item to drop onto
+	 * @param xOffset The offset of x coordinate
+	 * @param yOffset The offset of y coordinate
+	 * @throws HarnessException	 
+	 */
+	public void zDragAndDropBy(String locatorSource, String locatorDestination, int xOffset, int yOffset) throws HarnessException {
+
+		if ( !this.sIsElementPresent(locatorSource) ) {
+			throw new HarnessException("locator (source) cannot be found: "+ locatorSource);
+		}
+		
+		if ( !this.sIsElementPresent(locatorDestination) ) {
+			throw new HarnessException("locator (destination) cannot be found: "+ locatorDestination);
+		}
+		
+		SleepUtil.sleepSmall();
+		
+		// Get the coordinates for the locators
+		Coordinate source = new Coordinate(
+				this.sGetElementPositionLeft(locatorSource), 
+				this.sGetElementPositionTop(locatorSource));
+		
+		Coordinate destination = new Coordinate(
+			this.sGetElementPositionLeft(locatorDestination), 
+			this.sGetElementPositionTop(locatorDestination));
+		
+		Coordinate relative = new Coordinate(
+				(destination.X - source.X) + xOffset,
+				(destination.Y - source.Y) + yOffset);
+		
+		logger.info("x,y coordinate of the objectToBeDragged=" + source);
+		logger.info("x,y coordinate of the objectToBeDroppedInto=" + destination);
+		logger.info("xOffset,yOffset =" + xOffset + "," + yOffset);
+		logger.info("x,y coordinate of the objectToBeDroppedInto relative to objectToBeDragged + offset = " + relative);
+
+		if (ZimbraSeleniumProperties.isWebDriver()){
+		    WebElement sourceElement = getElement(locatorSource);
+		    WebElement destinationElement = getElement(locatorDestination);
+		    
+		    //(new Actions(webDriver())).dragAndDropBy(sourceElement,relative.X,relative.Y).build().perform();
+		    (new Actions(webDriver())).clickAndHold(sourceElement)
+		    .moveToElement(destinationElement,xOffset,yOffset)
+		    .build().perform();
+		    (new Actions(webDriver())).release(sourceElement).build().perform();
+		}else{
+		    ClientSessionFactory.session().selenium().dragAndDrop(locatorSource,relative.toString());
+		}
+		
+		// Wait for the client to come back
+		SleepUtil.sleepSmall();
+	
+		this.zWaitForBusyOverlay();
+	}
+
 	// // ***
 	// End: Selenium methods
 	// // ***

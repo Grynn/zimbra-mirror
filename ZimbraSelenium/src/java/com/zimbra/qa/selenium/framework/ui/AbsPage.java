@@ -116,26 +116,7 @@ public abstract class AbsPage extends AbsSeleniumObject {
 	 */
 	public AbsTooltip zHoverOver(Button button) throws HarnessException {
 		throw new HarnessException("implement me");
-	}
-
-	private static class Coordinate {
-		final int X;
-		final int Y;
-		
-		public Coordinate(int x, int y) {
-			this.X = x;
-			this.Y = y;
-		}
-		
-		/** 
-		 * Print this coordinate in "x,y" format
-		 */
-		public String toString() {
-			return (this.X + "," + this.Y);
-		}
-		
-	}
-	
+	}		
 	
 	/**
 	 * Drag and Drop a locator onto another locator
