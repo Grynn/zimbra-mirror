@@ -100,7 +100,7 @@ ZaTaskContentView.myXFormModifier = function(xFormObject, entry) {
                         visibilityChangeEventSources:[ZaTask.A2_isExpanded],
                         cssClass: "ZaTaskListGroup",
                         items: [
-                            { type:_COMPOSITE_, numCols:2, width:"100%",
+                            { type:_COMPOSITE_, numCols:2,
                                visibilityChecks:[[XForm.checkInstanceValue, ZaTask.A2_isWIPExpanded, true]],
                                visibilityChangeEventSources:[ZaTask.A2_isWIPExpanded],
                                 colSizes:["20px", "100%"],
@@ -114,7 +114,7 @@ ZaTaskContentView.myXFormModifier = function(xFormObject, entry) {
                                 ],
                                 cssClass:"ZaTaskTitleNameHeader"
                             },
-                            { type:_COMPOSITE_, numCols:2, width:"100%",
+                            { type:_COMPOSITE_, numCols:2,
                                visibilityChecks:[[XForm.checkInstanceValue, ZaTask.A2_isWIPExpanded, false]],
                                visibilityChangeEventSources:[ZaTask.A2_isWIPExpanded],
                                 colSizes:["20px", "100%"],
@@ -153,7 +153,7 @@ ZaTaskContentView.myXFormModifier = function(xFormObject, entry) {
                         visibilityChangeEventSources:[ZaTask.A2_isExpanded],
                         cssClass: "ZaTaskListGroup",
                         items: [
-                            { type:_COMPOSITE_, numCols:2, width:"100%",
+                            { type:_COMPOSITE_, numCols:2,
                                visibilityChecks:[[XForm.checkInstanceValue, ZaTask.A2_isRTExpanded, true]],
                                visibilityChangeEventSources:[ZaTask.A2_isRTExpanded],
                                 colSizes:["20px", "100%"],
@@ -167,7 +167,7 @@ ZaTaskContentView.myXFormModifier = function(xFormObject, entry) {
                                 ],
                                 cssClass:"ZaTaskTitleNameHeader"
                             },
-                            { type:_COMPOSITE_, numCols:2, width:"100%",
+                            { type:_COMPOSITE_, numCols:2,
                                visibilityChecks:[[XForm.checkInstanceValue, ZaTask.A2_isRTExpanded, false]],
                                visibilityChangeEventSources:[ZaTask.A2_isRTExpanded],
                                 colSizes:["20px", "100%"],
@@ -209,7 +209,7 @@ ZaTaskContentView.myXFormModifier = function(xFormObject, entry) {
                         visibilityChangeEventSources:[ZaTask.A2_isExpanded],
                         cssClass: "ZaTaskListGroup",
                         items: [
-                            { type:_COMPOSITE_, numCols:2, width:"100%",
+                            { type:_COMPOSITE_, numCols:2,
                                visibilityChecks:[[XForm.checkInstanceValue, ZaTask.A2_isServerExpaned, true]],
                                visibilityChangeEventSources:[ZaTask.A2_isServerExpaned],
                                 colSizes:["20px", "100%"],
@@ -223,7 +223,7 @@ ZaTaskContentView.myXFormModifier = function(xFormObject, entry) {
                                 ],
                                 cssClass:"ZaTaskTitleNameHeader"
                             },
-                            { type:_COMPOSITE_, numCols:2, width:"100%",
+                            { type:_COMPOSITE_, numCols:2,
                                visibilityChecks:[[XForm.checkInstanceValue, ZaTask.A2_isServerExpaned, false]],
                                visibilityChangeEventSources:[ZaTask.A2_isServerExpaned],
                                 colSizes:["20px", "100%"],
