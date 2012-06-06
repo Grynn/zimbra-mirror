@@ -122,7 +122,7 @@ public class CSMigrationWrapper
 
     public CSMigrationWrapper(string mailClient)
     {
-        try
+       // try
         {
 
 
@@ -139,10 +139,10 @@ public class CSMigrationWrapper
 
             }
         }
-        catch (Exception e)
+       /* catch (Exception e)
         {
             Log.err("Exception in CSMigrationWrapper construcor", e.Message);
-        }
+        }*/
       
     }
 

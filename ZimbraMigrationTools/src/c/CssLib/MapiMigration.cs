@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using Microsoft.Win32;
 
 namespace CssLib
 {
@@ -95,8 +96,8 @@ namespace CssLib
 
     public class MapiMigration : MailMigration
     {
-        public dynamic MapiWrapper;
-       // public Exchange.MapiWrapper MapiWrapper;
+       // public dynamic MapiWrapper;
+        public Exchange.MapiWrapper MapiWrapper;
         static public string  checkPrereqs()
         {
             string str = "";
@@ -104,57 +105,71 @@ namespace CssLib
             string absolutepath = Path.GetFullPath("Exchange.dll");
 
             bool bitness = CompatibilityChk.UnmanagedDllIs64Bit(absolutepath).Value;
-            if (bitness)
+
+           // string InstallPath = (string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Office\14\Outlook\", "Bitness", null);
+          /* RegistryKey mykey =  Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Office\14.0\Outlook");
+            string InstallPath= null;
+            //if( mykey != null)
             {
-                path = path + @"Program Files\Common Files\System\MSMAPI\1033";
-                if (System.IO.Directory.Exists(path))
+           InstallPath = (string)mykey.GetValue("test");
+            }*/
+
+            string InstallPath = (string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Office\14.0\Outlook", "Bitness", null);
+            if (InstallPath != null)
+            {
+                //its 64 bit outlook and 64 bit migration
+
+                if (bitness == true)
                 {
-                   
+                    //64 bit mapi and migration
                 }
                 else
                 {
-                    str = "MAPI and Migration tool are not compatabile versions .check the bitness of outlook and Migration tool";
+                    //64 bit mapi and 32 bit migration throw error.
+
+                    str = " bitness is " + InstallPath + "MAPI is 64 bit  and Migration tool (32 bit) are not compatabile versions .Check the bit compatibility of outlook and Migration tool";
+                    return str;
+
                 }
             }
             else
             {
-                 
-                
-                 path = path + @"Program Files (x86)\Common Files\System\MSMAPI\1033";
-
-               // path =@" C:\Program Files (x86)\Common Files\System\MSMAPI\1033";
-                if (System.IO.Directory.Exists(path))// (System.IO.File.Exists(@"ProgramFiles(x86)\\CommonFiles\\System\\msmapi\\1033\\msmapi32.dll"))
+                if (bitness == true)
                 {
-                   
+                    //32 bit mapi and  64 bitmigration
+                    str = " bitness is " + InstallPath + "MAPI(32 bit) and Migration tool(64 bit) are not compatabile versions .Check the bit compatibility of outlook and Migration tool";
+                    return str;
                 }
                 else
                 {
-                    path = path + @"Program Files\Common Files\System\MSMAPI\1033";
-                    if (System.IO.Directory.Exists(path))
-                    {
-                    }
-                    else
-                    str = "Outlook and Migration are not comaptbile.check the bitness fo the apps";
+
+                    //32 bit mapi and 32 bit migration.
                 }
+
+
             }
 
-
+          
             return str;
 
         }
         public  MapiMigration()
         {
-          /*  string message = MapiMigration.checkPrereqs();
-            if (message == "")*/
+            string message = MapiMigration.checkPrereqs();
+            if (message == "")
+           // try
             {
 
                 MapiWrapper = new Exchange.MapiWrapper();
             }
-           /* else
+           else
+           // catch(Exception )
             {
-                Log.err("Exception in CSMigrationWrapper construcor", message);
+                //Log.err("Exception in CSMigrationWrapper construcor", message);
+               // throw new Exception(message);
+                
                 throw new Exception(message);
-            }*/
+            }
             
 
              
