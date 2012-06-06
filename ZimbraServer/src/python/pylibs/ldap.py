@@ -45,9 +45,9 @@ keymap = {
 	"ldap_accesslog_checkpoint"		:	("olcDbCheckpoint",	"olcDatabase={2}mdb,cn=config", True),
 	"ldap_accesslog_maxsize"		:	("olcDbMaxsize",	"olcDatabase={2}mdb,cn=config", True),
 
-	"ldap_overlay_syncprov_checkpoint"	:	("olcSpCheckpoint",	"{0}olcOverlay=syncprov,olcDatabase={3}mdb,cn=config", True),
+	"ldap_overlay_syncprov_checkpoint"	:	("olcSpCheckpoint",	"olcOverlay={0}syncprov,olcDatabase={3}mdb,cn=config", True),
 
-	"ldap_overlay_accesslog_logpurge"	:	("olcAccessLogPurge",	"{1}olcOverlay=accesslog,olcDatabase={3}mdb,cn=config", True)
+	"ldap_overlay_accesslog_logpurge"	:	("olcAccessLogPurge",	"olcOverlay={1}accesslog,olcDatabase={3}mdb,cn=config", True)
 }
 
 class Ldap:
