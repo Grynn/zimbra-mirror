@@ -121,15 +121,43 @@ namespace CssLib
 
                 if (bitness == true)
                 {
-                    //64 bit mapi and migration
+                    if (InstallPath == "x64")
+                    {
+                        //64 bit mapi and 64 bit migration perfect
+                    }
+                    else
+                    {
+                        if (InstallPath == "x86")
+                        {
+                            //32 bit mapi and 64 bit migration cannot continue
+                            str = " MAPI bitness is " + InstallPath + "  and Migration tool (64 bit) are not compatabile versions .Check the bit compatibility of outlook and Migration tool";
+                            return str;
+                        }
+                        
+                    }
+
                 }
-                else
+               else
                 {
-                    //64 bit mapi and 32 bit migration throw error.
+                    
+                    if (InstallPath == "x64")
+                    {
+                        //64 bit mapi and 32 bit bit migration cannot continue
+                        str = " MAPI bitness is " + InstallPath + "  and Migration tool (32 bit) are not compatabile versions .Check the bit compatibility of outlook and Migration tool";
+                        return str;
 
-                    str = " bitness is " + InstallPath + "MAPI is 64 bit  and Migration tool (32 bit) are not compatabile versions .Check the bit compatibility of outlook and Migration tool";
-                    return str;
+                    }
+                    else
+                    {
+                        if (InstallPath == "x86")
+                        {
+                            //32 bit mapi and 32 bit migration perfect
+                            
+                        }
 
+                    }
+
+                   
                 }
             }
             else
