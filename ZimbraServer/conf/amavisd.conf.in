@@ -189,8 +189,8 @@ $defang_by_ccat{CC_BADH.",6"} = 1;  # header field syntax error
 
 $myhostname = '@@zimbra_server_hostname@@';  # must be a fully-qualified domain name!
 
-# $notify_method  = 'smtp:[127.0.0.1]:10025';
-# $forward_method = 'smtp:[127.0.0.1]:10025';  # set to undef with milter!
+$notify_method  = 'smtp:[%%zimbraLocalBindAddress%%]:10025';
+$forward_method = 'smtp:[%%zimbraLocalBindAddress%%]:10025';  # set to undef with milter!
 %%uncomment SERVICE:archiving%%$archive_quarantine_method = 'smtp:[%%zimbraLocalBindAddress%%]:10025';
 
 %%uncomment VAR:zimbraAmavisQuarantineAccount%%$final_virus_destiny      = D_DISCARD;
