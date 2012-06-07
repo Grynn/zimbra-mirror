@@ -850,15 +850,23 @@ TD.gridGroupBodyLabel {
 
 .ImgCollapseRight, .ImgCollapseLeft {
 	cursor:pointer;
-	margin:5px 2px 2px
+	margin:5px 2px 2px;
 }
 
 .ZaTaskTabView .DwtListView-ColHeader TD {
 	font-weight:bold;
 }
 
+.ZaTaskListGroup {
+	border:1px solid #BCBCBC;
+	margin:5px;
+	overflow:hidden;
+	@roundCorners(5px)@
+}
+
 .ZaTaskTitleNameHeader {
-	padding:5px 0;
+	padding:3px;
+	@grad(#EBEBEB,#CCC)@
 }
 
 .ZaTaskTitleNameHeader TD {
@@ -866,7 +874,14 @@ TD.gridGroupBodyLabel {
 }
 
 .ZaTaskListContent {
-	height:126px;
+	background-color:#F5F5F5;
+	border-top:1px solid #BCBCBC;
+	height:125px;
+	overflow:auto;
+}
+
+.ZaTaskListContent .Row TD {
+	padding:3px;
 }
 
 /* -- Search panel -- */
@@ -1104,6 +1119,7 @@ TD.gridGroupBodyLabel {
 
 .NoResults {
 	@FontFamily-default@
+	padding:10px;
 }
 
 .ZaCurrentAppBar .ZDisabled .ZToolbarButtonTable .ZWidgetTitle {
