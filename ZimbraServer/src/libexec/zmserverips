@@ -18,13 +18,20 @@ use strict;
 use Getopt::Long;
 
 my @interfaces = ();
-open INTS, "/sbin/ifconfig | grep 'inet[6] ' |";
+open INTS, "/sbin/ifconfig | grep ' addr' |";
 foreach (<INTS>) {
   chomp;
-  s/.*inet[6] //;
-  s/addr: //;
-  s/.(bcast|broadcast)[0-9:.\s]*//ig;
-  s/.netmask\s/  Mask:/;
+  if ($_ =~ /inet6/) {
+    s/.*inet6 //;
+    s/addr: //;
+	s/ Scope:.*//;
+	s/\// Mask:/;
+  } else {
+    s/.*inet //;
+    s/addr://;
+    s/.(bcast|broadcast)[0-9:.\s]*//ig;
+    s/.netmask\s/  Mask:/;
+  }
 #  s/\s.*//;
 #  s/[a-zA-Z:]//g;
   next if /^$/;
