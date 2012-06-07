@@ -1110,11 +1110,13 @@ public class ZimbraAPI
             else
             {
                 string soapReason = ParseSoapFault(client.errResponseMessage);
-
+                string errMsg = (soapReason.IndexOf("upload ID: null") != -1)    // FBS bug 75159 -- 6/7/12
+                                ? "Unable to upload file. Please check server message size limits (Global Settings General Information and MTA)."
+                                : soapReason; 
                 if (soapReason.Length > 0)
                 {
                     lastError = soapReason;
-                    Log.err("Error on message", message["Subject"], "--", soapReason);
+                    Log.err("Error on message", message["Subject"], "--", errMsg);
                 }
                 else
                 {

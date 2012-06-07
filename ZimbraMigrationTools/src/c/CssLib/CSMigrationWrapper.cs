@@ -505,8 +505,10 @@ public class CSMigrationWrapper
                                         stat = api.AddMessage(dict);
                                         if (stat != 0)
                                         {
-                                            Acct.LastProblemInfo = new ProblemInfo(dict["Subject"], api.LastError,
-                                                                                   ProblemInfo.TYPE_ERR);
+                                            string errMsg = (api.LastError.IndexOf("upload ID: null") != -1)    // FBS bug 75159 -- 6/7/12
+                                                            ? "Unable to upload file. Please check server message size limits."
+                                                            : api.LastError;                                            
+                                            Acct.LastProblemInfo = new ProblemInfo(dict["Subject"], errMsg, ProblemInfo.TYPE_ERR);                                                                                   
                                             Acct.TotalErrors++;
                                             bError = true;
                                         }
