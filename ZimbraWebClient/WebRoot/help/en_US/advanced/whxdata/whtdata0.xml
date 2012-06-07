@@ -28,8 +28,6 @@
   <item name="Sorting Messages in the Content Pane" url="zwc_help_files/2_manage_email/sorting_messages_in_the_content_pane.htm" />
   <item name="Moving Less Important Mail Out of the Inbox" url="zwc_help_files/2_manage_email/moving_less_important_mail_out_of_the_inbox.htm" />
   <item name="Moving Email Messages" url="zwc_help_files/2_manage_email/moving_email_messages.htm" />
-  <item name="Print a conversation (all messages)" url="zwc_help_files/2_manage_email/print_a_conversation_all_messages.htm" />
-  <item name="Printing an Email Message" url="zwc_help_files/2_manage_email/printing_an_email_message.htm" />
   <item name="Subscribing to RSS Feeds" url="zwc_help_files/2_manage_email/subscribing_to_rss_feeds.htm" />
   <item name="Removing Spam" url="zwc_help_files/2_manage_email/removing_spam.htm" />
   <item name="Spam Mail Options" url="zwc_help_files/2_manage_email/spam_mail_options.htm" />
@@ -56,6 +54,8 @@
   <item name="Using A Reading Pane" url="zwc_help_files/2_manage_email/using_a_reading_pane.htm" />
   <item name="Displaying Messages in HTML Format or Plain Text" url="zwc_help_files/2_manage_email/displaying_messages_in_html_format_or_plain_text.htm" />
   <item name="Returning Read Receipts" url="zwc_help_files/2_manage_email/returning_read_receipts.htm" />
+  <item name="Print a conversation (all messages)" url="zwc_help_files/2_manage_email/print_a_conversation_all_messages.htm" />
+  <item name="Printing an Email Message" url="zwc_help_files/2_manage_email/printing_an_email_message.htm" />
   <item name="Receiving a “Permission Denied” Message" url="zwc_help_files/8_scheduling/receiving_a_permission_denied_message.htm" />
   <item name="Opening Attachments to an Email Message" url="zwc_help_files/2_manage_email/opening_attachments_to_an_email_message.htm" />
 </book>

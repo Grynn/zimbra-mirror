@@ -207,7 +207,7 @@
 			<background color="#ffffff" img="" />
 			<icons>
 				<book open="bookopen.gif" close="book_closed.gif" />
-				<item  local="page.gif" remote="urls.gif" />
+				<item  local="navpane_page.gif" remote="urls.gif" />
 				<newbook open="" close="" />
 				<newitem  local="" remote="" />
 			</icons>

@@ -1,11 +1,5 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <indexdata>
-<key name="persona settings" >
-  <topic name="Add Personas" url="zwc_help_files/3_compose/add_personas.htm" />
-</key>
-<key name="POP" >
-  <topic name="Accessing Your External Accounts" url="zwc_help_files/1_setting_up/accessing_your_external_accounts.htm" />
-</key>
 <key name="POP behavior" >
   <topic name="Set Up POP Behavior for Your Account" url="zwc_help_files/1_setting_up/set_up_pop_behavior_for_your_account.htm" />
 </key>
@@ -240,6 +234,12 @@
 </key>
 <key name="type face" >
   <topic name="Personalizing the View of Your Account" url="zwc_help_files/1_setting_up/personalizing_the_view_of_your_account.htm" />
+</key>
+<key name="upload email attachments" >
+  <topic name="Upload Email Attachments to Briefcase" url="zwc_help_files/10_briefcase/upload_email_attachments_to_briefcase.htm" />
+  <key name="briefcase" >
+    <topic name="Upload Email Attachments to Briefcase" url="zwc_help_files/10_briefcase/upload_email_attachments_to_briefcase.htm" />
+  </key>
 </key>
 
 </indexdata>

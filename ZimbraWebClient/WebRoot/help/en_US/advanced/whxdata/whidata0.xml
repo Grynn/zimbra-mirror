@@ -207,9 +207,6 @@
     <topic name="Disable a Zimlet" url="zwc_help_files/14_zimlets/disable_a_zimlet.htm" />
   </key>
 </key>
-<key name="display images" >
-  <topic name="Turn Off Preference to Display Images in Messages" url="zwc_help_files/2_manage_email/turn_off_preference_to_display_images_in_messages.htm" />
-</key>
 <key name="draft" >
   <topic name="Save a Message as a Draft" url="zwc_help_files/3_compose/save_a_message_as_a_draft.htm" />
 </key>
@@ -233,6 +230,9 @@
 </key>
 <key name="email, send later" >
   <topic name="Composing and Sending Email" url="zwc_help_files/3_compose/composing_and_sending_email.htm" />
+</key>
+<key name="emailed contacts" >
+  <topic name="Automatically Add Contacts to Emailed Contacts List" url="zwc_help_files/6_address_book/automatically_add_contacts_to_emailed_contacts_list.htm" />
 </key>
 
 </indexdata>

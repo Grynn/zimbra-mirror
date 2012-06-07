@@ -1,8 +1,8 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <index>
-<chunkinfo url="whidata0.xml" first="accept share" last="email, send later" num="74" />
-<chunkinfo url="whidata1.xml" first="emailed contacts" last="performing" num="75" />
-<chunkinfo url="whidata2.xml" first="persona settings" last="type face" num="77" />
-<chunkinfo url="whidata3.xml" first="upload email attachments" last="zimlets" num="19" />
+<chunkinfo url="whidata0.xml" first="accept share" last="emailed contacts" num="74" />
+<chunkinfo url="whidata1.xml" first="emailed contacts list" last="POP" num="76" />
+<chunkinfo url="whidata2.xml" first="POP behavior" last="upload email attachments" num="77" />
+<chunkinfo url="whidata3.xml" first="user access" last="zimlets" num="17" />
 
 </index>

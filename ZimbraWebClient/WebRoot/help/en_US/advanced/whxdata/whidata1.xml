@@ -1,8 +1,5 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <indexdata>
-<key name="emailed contacts" >
-  <topic name="Automatically Add Contacts to Emailed Contacts List" url="zwc_help_files/6_address_book/automatically_add_contacts_to_emailed_contacts_list.htm" />
-</key>
 <key name="emailed contacts list" >
   <topic name="Automatically Add Contacts to Emailed Contacts List" url="zwc_help_files/6_address_book/automatically_add_contacts_to_emailed_contacts_list.htm" />
   <key name="automatically add contacts" >
@@ -234,6 +231,12 @@
   <key name="quick search" >
     <topic name="Performing a Quick Search" url="zwc_help_files/12_search/performing_a_quick_search.htm" />
   </key>
+</key>
+<key name="persona settings" >
+  <topic name="Add Personas" url="zwc_help_files/3_compose/add_personas.htm" />
+</key>
+<key name="POP" >
+  <topic name="Accessing Your External Accounts" url="zwc_help_files/1_setting_up/accessing_your_external_accounts.htm" />
 </key>
 
 </indexdata>
