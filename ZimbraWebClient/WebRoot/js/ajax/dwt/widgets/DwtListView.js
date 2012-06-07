@@ -2467,7 +2467,7 @@ function(ev) {
 		delta = Math.max(DwtListView.MIN_COLUMN_WIDTH - fcol._width, delta);
 		fcol._width = Math.max(fcol._width + delta, DwtListView.MIN_COLUMN_WIDTH);
 		col2._width = Math.max(this._calcRelativeWidth(col2._index) - delta, DwtListView.MIN_COLUMN_WIDTH);
-		resized.push(fcol, col2);
+		resized.push(fcol._index, col2._index);
 		
 	} else if (delta > 0) {
 
@@ -2492,16 +2492,16 @@ function(ev) {
 				remain = 0;
 			}
 			col2._width = col2width;
-			resized.push(col2);
+			resized.push(col2._index);
 			col1 = col2;
 		}
 	
 		fcol._width = Math.max(fcol._width + delta, DwtListView.MIN_COLUMN_WIDTH);
-		resized.push(fcol);
+		resized.push(fcol._index);
 
 	}
 
-	var col = this._getNextResizeableColumnHeader(-1, resized, true);
+	var col = this._getNextResizeableColumnHeader(fcol, resized, true);
 	if (col) {
 		col._width = "auto";
 	}
