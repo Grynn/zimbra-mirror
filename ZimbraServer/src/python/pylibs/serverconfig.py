@@ -99,7 +99,7 @@ class ServerConfig(config.Config):
 					self["zimbraMilterBindAddress"] = "::1"
 				else:
 					self["zimbraMilterBindAddress"] = "127.0.0.1"
-			milter = "%s:%s:%s" % (self["zimbraInetMode"], self["zimbraMilterBindAddress"],self["zimbraMilterBindPort"])
+			milter = "inet:%s:%s" % (self["zimbraMilterBindAddress"],self["zimbraMilterBindPort"])
 
 		if self["zimbraMtaSmtpdMilters"] is not None and milter is not None:
 			self["zimbraMtaSmtpdMilters"] = "%s, %s" % (self["zimbraMtaSmtpdMilters"], milter)
