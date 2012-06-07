@@ -34,7 +34,6 @@ checksrc:
 build:
 	(tar xzf src/opendkim-$(DKIM_VERSION).tar.gz; \
 	cd opendkim-$(DKIM_VERSION); \
-	patch -g0 -N -p1 < ../patches/dkim-mdb.patch; \
 	$(LDFLAGS) \
 	LD_LIBRARY_PATH=$(OPENSSL_LIB_DIR):$(CYRUS_LIB_DIR):$(LIBTOOL_LIB_DIR) \
 	ac_cv_path_SENDMAIL_PATH=/opt/zimbra/postfix/sbin/sendmail \
