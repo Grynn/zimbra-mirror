@@ -1,0 +1,318 @@
+#!/usr/bin/perl -T
+
+#------------------------------------------------------------------------------
+# This is amavisd-nanny, a program to show the status
+# and keep an eye on the health of child processes in amavisd-new.
+#
+# Author: Mark Martinec <mark.martinec@ijs.si>
+# Copyright (C) 2012  Mark Martinec,  All Rights Reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#
+# * Redistributions of source code must retain the above copyright notice,
+#   this list of conditions and the following disclaimer.
+# * Redistributions in binary form must reproduce the above copyright notice,
+#   this list of conditions and the following disclaimer in the documentation
+#   and/or other materials provided with the distribution.
+# * Neither the name of the author, nor the name of the "Jozef Stefan"
+#   Institute, nor the names of contributors may be used to endorse or
+#   promote products derived from this software without specific prior
+#   written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+# "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+# PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
+# OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+# EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+# PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+# OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+# WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+# OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+# ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+#(the license above is the new BSD license, and pertains to this program only)
+#
+# Patches and problem reports are welcome.
+# The latest version of this program is available at:
+#   http://www.ijs.si/software/amavisd/
+#------------------------------------------------------------------------------
+
+use strict;
+use re 'taint';
+use warnings;
+use warnings FATAL => qw(utf8 void);
+no warnings 'uninitialized';
+
+use Errno qw(ESRCH ENOENT);
+use POSIX qw(strftime);
+use Time::HiRes ();
+
+use vars qw($VERSION);  $VERSION = 2.002;
+
+use vars qw($zmq_mod_name $zmq_mod_version $zmq_lib_version);
+BEGIN {
+  my($zmq_major, $zmq_minor, $zmq_patch);
+  if (eval { require ZMQ::LibZMQ3 && require ZMQ::Constants }) {
+    $zmq_mod_name = 'ZMQ::LibZMQ3';  # new interface module to zmq v3 or cx
+    import ZMQ::LibZMQ3;  import ZMQ::Constants qw(:all);
+    ($zmq_major, $zmq_minor, $zmq_patch) = ZMQ::LibZMQ3::zmq_version();
+  } elsif (eval { require ZMQ::LibZMQ2 && require ZMQ::Constants }) {
+    $zmq_mod_name = 'ZMQ::LibZMQ2';  # new interface module to zmq v2
+    import ZMQ::LibZMQ2;  import ZMQ::Constants qw(:all);
+    ($zmq_major, $zmq_minor, $zmq_patch) = ZMQ::LibZMQ2::zmq_version();
+    # zmq v2/v3 incompatibile renaming
+    *zmq_recvmsg = \&ZMQ::LibZMQ2::zmq_recv;
+    *zmq_sendmsg = \&ZMQ::LibZMQ2::zmq_send;
+  } elsif (eval { require ZeroMQ::Constants && require ZeroMQ::Raw }) {
+    $zmq_mod_name = 'ZeroMQ';  # old interface module to zmq v2
+    import ZeroMQ::Raw;  import ZeroMQ::Constants qw(:all);
+    ($zmq_major, $zmq_minor, $zmq_patch) = ZeroMQ::version();
+    # zmq v2/v3 incompatibile renaming
+    *zmq_recvmsg = \&ZeroMQ::Raw::zmq_recv;
+    *zmq_sendmsg = \&ZeroMQ::Raw::zmq_send;
+  } else {
+    die "Perl modules ZMQ::LibZMQ3 or ZMQ::LibZMQ2 or ZeroMQ not available\n";
+  }
+  $zmq_mod_version = $zmq_mod_name->VERSION;
+  $zmq_lib_version = join('.', $zmq_major, $zmq_minor, $zmq_patch);
+}
+
+sub zmq_version {
+  sprintf("%s %s, lib %s",
+          $zmq_mod_name, $zmq_mod_version, $zmq_lib_version);
+};
+
+my $wakeuptime = 1;    # -w, sleep time in seconds, may be fractional
+my $repeatcount;       # -c, repeat count (when defined)
+
+my $zmq_sock_specs = "tcp://127.0.0.1:23232";
+
+my $zmq_poll_units = 1000;  # milliseconds since zmq v3
+$zmq_poll_units *= 1000  if $zmq_lib_version =~ /^[012]\./;  # microseconds
+
+sub fmt_age($$$) {
+  my($t,$state_bar,$idling) = @_;
+  $t = int($t);
+  my $char = $idling ? '.' : '=';
+  my $bar_l = $idling ? $t : length($state_bar);
+  my $bar = substr( ($char x 9 . ':') x 3 . $char x 5, 0,$bar_l);
+  if (!$idling) {
+    $state_bar = substr($state_bar,0,length($bar)-2) . substr($state_bar,-1,1)
+                 . '>'  if length($state_bar) > length($bar);
+    for my $j (0 .. length($bar)-1) {
+      substr($bar,$j,1) = substr($state_bar,$j,1)
+        if substr($bar,$j,1) eq '=' && substr($state_bar,$j,1) ne ' ';
+    }
+  }
+  my $s = $t % 60;  $t = int($t/60);
+  my $m = $t % 60;  $t = int($t/60);
+  my $h = $t % 24;  $t = int($t/24);
+  my $d = $t;
+  my $str = sprintf("%d:%02d:%02d", $h,$m,$s);
+  $str = (!$d ? "  " : sprintf("%dd",$d)) . $str;
+  $str . ' ' . $bar;
+};
+
+sub usage() {
+  print <<'EOD';
+States legend:
+  A  accepted a connection
+  b  begin with a protocol for accepting a request
+  m  'MAIL FROM' smtp command started a new transaction in the same session
+  d  transferring data from MTA to amavisd
+  =  content checking just started
+  G  generating and verifying unique mail_id
+  D  decoding of mail parts
+  V  virus scanning
+  S  spam scanning
+  P  pen pals database lookup and updates
+  r  preparing results
+  Q  quarantining and preparing/sending notifications
+  F  forwarding mail to MTA
+  .  content checking just finished
+  sp space indicates idle (elapsed bar is showing dots)
+
+EOD
+  print "Usage: $0 [-c <count>] [-w <wait-interval>]\n";
+}
+
+my($zmq_ctx, $zmq_sock);
+my %process; # associative array on pid
+my $any_events = 0;
+
+sub process_message {
+  my($msg,$val,$p);
+  $msg = zmq_recvmsg($zmq_sock);
+  $any_events = 1;
+  if ($msg) {
+    $val = zmq_msg_data($msg);
+    zmq_msg_close($msg); undef $msg;
+  }
+  if (!defined $val) {
+    # should not happen (except on a failure of zmq_recvmsg)
+  } elsif ($val =~ /^am\.st \d+\s+/s) {
+    my($subscription_chan, $pid, $time, $state, $task_id) = split(' ',$val);
+    if ($state eq 'FLUSH') {
+      %process = ();  # flush all kept state (e.g. on a restart)
+      printf STDERR ("state flushed (restart)\n");
+    } elsif ($state eq 'exiting' || $state eq 'purged') {
+      delete $process{$pid};  # may or may not exist
+    } else {
+      $state = ' ' if $state eq '-';
+      $p = $process{$pid};
+      if ($p) {
+        $p->{state} = $state;
+        $p->{task_id} = $task_id;
+      } else {  # new process appeared
+        $process{$pid} = $p = {
+          state     => $state,
+          task_id   => $task_id,
+          timestamp => undef,
+          base_timestamp => undef,
+          last_displ_timestamp => undef,
+          state_bars => undef,
+        };
+      }
+      my $now = Time::HiRes::time;
+      if ($time > 1e9) {  # Unix time in seconds with fraction (> Y2000)
+        $p->{base_timestamp} = $p->{timestamp} = $time;
+        $p->{state_bars} = '';  # reset for a new task
+      } elsif (!$p->{base_timestamp}) {  # delta time but no base
+        $p->{timestamp} = $now;
+        $p->{base_timestamp} = $p->{timestamp} - $time/1000;  # estimate
+      } else {  # delta time since base_timestamp in ms
+        $p->{timestamp} = $p->{base_timestamp} + $time/1000;
+      }
+      $p->{tick} = $now;
+    }
+  } elsif ($val =~ /^am\.proc\.(busy|idle) /) {
+    my($subscription_chan, @pid_list) = split(' ',$val);
+    my $now = Time::HiRes::time;
+    for my $pid (@pid_list) {
+      if ($process{$pid}) {
+        $p->{tick} = $now;
+      } else {
+        $process{$pid} = $p = {
+          state => $1 eq 'busy' ? '?' : ' ',
+          base_timestamp => $now, timestamp => $now, tick => $now,
+        };
+      }
+    }
+  } else {
+    print STDERR "Unrecognized message received: $val\n";
+  }
+  1;
+}
+
+sub display_state() {
+  my $num_idling = 0;
+  my $num_active = 0;
+  my $now = Time::HiRes::time;
+  for my $pid (sort { $a <=> $b } keys %process) {
+    my $p = $process{$pid};
+    my $idling = !defined $p->{task_id} && $p->{state} =~ /^[. ]\z/s;
+    my $age = $now - $p->{base_timestamp};
+    if ($idling) {
+      $num_idling++;
+      $p->{state_bars} = '';
+      next;  # suppress reporting idle processes (or comment-out)
+    } else {
+      $num_active++;
+      my $len = int($age + 0.5);
+      $len = 1  if $len < 1;
+      my $str = $p->{state_bars};
+      $str = ''  if !defined $str;
+      if ($len > length $str) {  # replicate last character to desired size
+        my $ch = $str eq '' ? '=' : substr($str,-1,1);
+        $str .= $ch x ($len - length $str);
+      }
+      substr($str,$len-1,1) = $p->{state};
+      $p->{state_bars} = $str;
+    }
+    printf STDERR ("PID %5d: %-11s %s\n",
+                   $pid, $p->{task_id} || $p->{state},
+                   fmt_age($age, $p->{state_bars}, $idling) );
+  }
+  printf STDERR ("%d active, %d idling processes\n", $num_active, $num_idling);
+}
+
+# main program starts here
+
+  my $normal_termination = 0;
+  $SIG{INT} = sub { die "\n" };  # do the END code block when interrupted
+  while (@ARGV) {
+    my $opt = shift @ARGV;
+    my $val = shift @ARGV;
+    if ($opt eq '-w' && $val =~ /^\+?\d+(?:\.\d*)?\z/) { $wakeuptime = $val }
+    elsif ($opt eq '-c' && $val =~ /^[+-]?\d+\z/) { $repeatcount = $val }
+    else { usage(); exit 1 }
+  }
+  print <<'EOD';
+process-id task-id     elapsed in    elapsed-bar (dots indicate idle)
+           or state   idle or busy
+EOD
+
+  $zmq_ctx = zmq_init();
+  $zmq_ctx or die "Can't create ZMQ context: $!";
+  $zmq_sock = zmq_socket($zmq_ctx,ZMQ_SUB);
+  $zmq_sock or die "Can't create ZMQ socket: $!";
+
+# $zmq_sock->setsockopt(ZMQ_IPV4ONLY, 0) == 0
+#   or die "Error turning off ZMQ_IPV4ONLY on a ZMQ socket: $!";
+  zmq_setsockopt($zmq_sock, ZMQ_SUBSCRIBE, 'am.st ') != -1
+    or die "zmq_setsockopt SUBSCRIBE failed: $!";
+  zmq_setsockopt($zmq_sock, ZMQ_SUBSCRIBE, 'am.proc.') != -1
+    or die "zmq_setsockopt SUBSCRIBE failed: $!";
+
+  zmq_connect($zmq_sock, $zmq_sock_specs) != -1
+    or die "zmq_connect to $zmq_sock_specs failed: $!";
+
+  my $last_display_time;
+  for (;;) {
+    last  if defined $repeatcount && $repeatcount <= 0;
+    $| = 0;
+
+    $repeatcount--  if defined $repeatcount && $repeatcount > 0;
+    print "\n";
+
+    my $now = Time::HiRes::time;
+    my $redraw_at =
+      defined $last_display_time ? $last_display_time + $wakeuptime
+                                 : $now + 0.2;
+    for (;;) {
+      my $timeout = $redraw_at - Time::HiRes::time;
+      $timeout = 0  if $timeout < 0;
+      $any_events = 0;
+      zmq_poll(
+        [
+          { socket => $zmq_sock,
+            events => ZMQ_POLLIN,
+            callback => \&process_message,
+          },
+        ],
+        $timeout * $zmq_poll_units
+      ) != -1  or die "zmq_poll failed: $!";
+      $now = Time::HiRes::time;
+      last if $now >= $redraw_at;
+      last if $any_events && $now > $last_display_time + 0.2;
+    }
+
+    while (my($pid,$p) = each %process) {  # remove stale entries
+      delete $process{$pid}  if $p && $now - $p->{tick} > 30*60;
+    }
+    display_state();
+    $last_display_time = Time::HiRes::time;
+
+    $| = 1;
+  } # forever
+
+  $normal_termination = 1;
+
+END {
+  # ignoring status
+  zmq_close($zmq_sock) if $zmq_sock;
+  zmq_term($zmq_ctx)   if $zmq_ctx;
+  print "exited\n" if !$normal_termination;
+}

@@ -1,0 +1,516 @@
+#!/usr/bin/perl -T
+
+#------------------------------------------------------------------------------
+# This is amavis-mc, a master (of ceremonies) processes to supervise
+# supporting service processes (such as amavisd-services) used by amavisd-new.
+#
+# Author: Mark Martinec <mark.martinec@ijs.si>
+# Copyright (C) 2012  Mark Martinec,  All Rights Reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#
+# * Redistributions of source code must retain the above copyright notice,
+#   this list of conditions and the following disclaimer.
+# * Redistributions in binary form must reproduce the above copyright notice,
+#   this list of conditions and the following disclaimer in the documentation
+#   and/or other materials provided with the distribution.
+# * Neither the name of the author, nor the name of the "Jozef Stefan"
+#   Institute, nor the names of contributors may be used to endorse or
+#   promote products derived from this software without specific prior
+#   written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+# "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+# PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
+# OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+# EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+# PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+# OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+# WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+# OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+# ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+#(the license above is the new BSD license, and pertains to this program only)
+#
+# Patches and problem reports are welcome.
+# The latest version of this program is available at:
+#   http://www.ijs.si/software/amavisd/
+#------------------------------------------------------------------------------
+
+use strict;
+use re 'taint';
+use warnings;
+use warnings FATAL => qw(utf8 void);
+no warnings 'uninitialized';
+
+use vars qw($VERSION);  $VERSION = 2.002;
+
+use vars qw($myproduct_name $myversion_id $myversion_date $myversion);
+BEGIN {
+  $myproduct_name = 'amavis-mc';
+  $myversion_id = '2.8.0'; $myversion_date = '20120417';
+  $myversion = "$myproduct_name-$myversion_id ($myversion_date)";
+}
+
+use Errno qw(ESRCH ENOENT);
+use POSIX qw(:sys_wait_h
+             WIFEXITED WIFSIGNALED WIFSTOPPED WEXITSTATUS WTERMSIG WSTOPSIG);
+use Time::HiRes qw(time);
+use IO::File qw(O_RDONLY O_WRONLY O_RDWR O_APPEND O_CREAT O_EXCL);
+use Unix::Syslog qw(:macros :subs);
+
+use vars qw($MYHOME @path $daemon_user $daemon_group $pid_file $log_level
+            $syslog_ident $syslog_facility);
+
+$daemon_user  = 'vscan';
+$daemon_group = 'vscan';
+
+$pid_file = '/var/amavis/amavis-mc.pid';
+
+$log_level = 0;
+$syslog_ident = 'amavis-mc';
+$syslog_facility = LOG_MAIL;
+
+@path = qw(/usr/local/sbin /usr/local/bin /usr/sbin /sbin /usr/bin /bin);
+my(@services) = (
+  { cmd => 'amavis-services msg-forwarder' },
+  { cmd => 'amavis-services childproc-minder' },
+  { cmd => 'amavis-services snmp-aggregator' },
+);
+
+my($interrupted, $syslog_open, $pid_file_created, @pids_exited, %pid2service);
+
+# Return untainted copy of a string (argument can be a string or a string ref)
+#
+sub untaint($) {
+  return undef  if !defined $_[0];  # must return undef even in a list context!
+  no re 'taint';
+  local $1;  # avoid Perl taint bug: tainted global $1 propagates taintedness
+  (ref($_[0]) ? ${$_[0]} : $_[0]) =~ /^(.*)\z/s;
+  $1;
+}
+
+# is message log level below the current log level (i.e. eligible for logging)?
+#
+sub ll($) {
+  my($level) = @_;
+  $level <= $log_level;
+}
+
+sub do_log($$;@) {
+  my($level,$errmsg,@args) = @_;
+  if ($level <= $log_level) {
+    # treat $errmsg as sprintf format string if additional arguments provided
+    if (@args) { $errmsg = sprintf($errmsg,@args) }
+    if (!$syslog_open) {
+      print STDERR $errmsg."\n";  # ignoring I/O status
+    } else {
+      my $prio = $level <= -2 ? LOG_ERR
+               : $level <= -1 ? LOG_WARNING
+               : $level <=  0 ? LOG_NOTICE
+               : $level <=  1 ? LOG_INFO
+               :                LOG_DEBUG;
+      syslog(LOG_INFO, "%s", $errmsg);
+    }
+  }
+}
+
+sub find_program_path($$) {
+  my($fv_list, $path_list_ref) = @_;
+  $fv_list = [$fv_list]  if !ref $fv_list;
+  my $found;
+  for my $fv (@$fv_list) {  # search through alternatives
+    my(@fv_cmd) = split(' ',$fv);
+    my $cmd = $fv_cmd[0];
+    if (!@fv_cmd) {
+      # empty, not available
+    } elsif ($cmd =~ m{^/}s) {  # absolute path
+      my $errn = stat($cmd) ? 0 : 0+$!;
+      if ($errn == ENOENT) {
+        # file does not exist
+      } elsif ($errn) {
+        do_log(-1, "find_program_path: %s inaccessible: %s", $cmd,$!);
+      } elsif (-x _ && !-d _) {
+        $found = join(' ', @fv_cmd);
+      }
+    } elsif ($cmd =~ m{/}s) {  # relative path
+      die "find_program_path: relative paths not implemented: @fv_cmd\n";
+    } else {                   # walk through the specified PATH
+      for my $p (@$path_list_ref) {
+        my $errn = stat("$p/$cmd") ? 0 : 0+$!;
+        if ($errn == ENOENT) {
+          # file does not exist
+        } elsif ($errn) {
+          do_log(-1, "find_program_path: %s/%s inaccessible: %s", $p,$cmd,$!);
+        } elsif (-x _ && !-d _) {
+          $found = $p . '/' . join(' ', @fv_cmd);
+          last;
+        }
+      }
+    }
+    last  if defined $found;
+  }
+  $found;
+}
+
+# drop privileges
+#
+sub drop_priv($$) {
+  my($desired_user,$desired_group) = @_;
+  local($1);
+  my($username,$passwd,$uid,$gid) =
+    $desired_user=~/^(\d+)$/ ? (undef,undef,$1,undef) :getpwnam($desired_user);
+  defined $uid or die "drop_priv: No such username: $desired_user\n";
+  if ($desired_group eq '') { $desired_group = $gid }  # for logging purposes
+  else { $gid = $desired_group=~/^(\d+)$/ ? $1 : getgrnam($desired_group) }
+  defined $gid or die "drop_priv: No such group: $desired_group\n";
+  $( = $gid;  $) = "$gid $gid";   # real and effective GID
+  POSIX::setgid($gid) or die "drop_priv: Can't setgid to $gid: $!";
+  POSIX::setuid($uid) or die "drop_priv: Can't setuid to $uid: $!";
+  $> = $uid; $< = $uid;  # just in case
+# print STDERR "desired user=$desired_user ($uid), current: EUID: $> ($<)\n";
+# print STDERR "desired group=$desired_group ($gid), current: EGID: $) ($()\n";
+  $> != 0 or die "drop_priv: Still running as root, aborting\n";
+  $< != 0 or die "Effective UID changed, but Real UID is 0, aborting\n";
+}
+
+sub daemonize() {
+  my($pid);
+  closelog(); $syslog_open = 0;
+
+  STDOUT->autoflush(1);
+  STDERR->autoflush(1);
+
+  # the first fork allows the shell to return and allows doing a setsid
+  eval { $pid = fork(); 1 }
+  or do {
+    my($eval_stat) = $@ ne '' ? $@ : "errno=$!";  chomp $eval_stat;
+    die "Error forking #1: $eval_stat";
+  };
+  defined $pid  or die "Can't fork #1: $!";
+  if ($pid) {  # parent process terminates here
+    POSIX::_exit(0);  # avoid END and destructor processing
+  }
+
+  # disassociate from a controlling terminal
+  my($pgid) = POSIX::setsid();
+  defined $pgid && $pgid >= 0 or die "Can't start a new session: $!";
+
+  # We are now a session leader. As a session leader, opening a file
+  # descriptor that is a terminal will make it our controlling terminal.
+  # The second fork makes us NOT a session leader. Only session leaders
+  # can acquire a controlling terminal, so we may now open up any file
+  # we wish without worrying that it will become a controlling terminal.
+
+  # second fork prevents from accidentally reacquiring a controlling terminal
+  eval { $pid = fork(); 1 }
+  or do {
+    my($eval_stat) = $@ ne '' ? $@ : "errno=$!";  chomp $eval_stat;
+    die "Error forking #2: $eval_stat";
+  };
+  defined $pid  or die "Can't fork #2: $!";
+  if ($pid) {  # parent process terminates here
+    POSIX::_exit(0);  # avoid END and destructor processing
+  }
+
+  # a daemonized child process, live long and prosper...
+  do_log(2, "Daemonized as process [%s]", $$);
+
+  chdir('/')  or die "Can't chdir to '/': $!";
+
+  openlog($syslog_ident, LOG_PID | LOG_NDELAY, $syslog_facility);
+  $syslog_open = 1;
+
+  close(STDIN)                or die "Can't close STDIN: $!";
+  close(STDOUT)               or die "Can't close STDOUT: $!";
+  open(STDIN,  '</dev/null')  or die "Can't open /dev/null: $!";
+  open(STDOUT, '>/dev/null')  or die "Can't open /dev/null: $!";
+  close(STDERR)               or die "Can't close STDERR: $!";
+  open(STDERR, '>&STDOUT')    or die "Can't dup STDOUT: $!";
+}
+
+# Run specified command as a subprocess.
+# Return a process id of a child process.
+#
+sub spawn_command($@) {
+  my($cmd, @args) = @_;
+  my $cmd_text = join(' ', $cmd, @args);
+  my $pid;
+  eval {
+    # Note that fork(2) returns ENOMEM on lack of swap space, and EAGAIN when
+    # process limit is reached; we want it to fail in both cases and not obey
+    # the EAGAIN and keep retrying, as perl open() does.
+    $pid = fork(); 1;
+  } or do {
+    my $eval_stat = $@ ne '' ? $@ : "errno=$!";  chomp $eval_stat;
+    die "spawn_command (forking): $eval_stat";
+  };
+  defined($pid) or die "spawn_command: can't fork: $!";
+  if (!$pid) {  # child
+    alarm(0); my $interrupt = '';
+    my $h1 = sub { $interrupt = $_[0] };
+    my $h2 = sub { die "Received signal ".$_[0] };
+    @SIG{qw(INT HUP TERM TSTP QUIT USR1 USR2)} = ($h1) x 7;
+    eval {  # die must be caught, otherwise we end up with two running daemons
+      local(@SIG{qw(INT HUP TERM TSTP QUIT USR1 USR2)}) = ($h2) x 7;
+      if ($interrupt ne '') { my $i = $interrupt; $interrupt = ''; die $i }
+      close STDIN;   # ignoring errors
+      close STDOUT;  # ignoring errors
+      # BEWARE of Perl older that 5.6.0: sockets and pipes were not FD_CLOEXEC
+      exec {$cmd} ($cmd,@args);
+      die "spawn_command: failed to exec $cmd_text: $!";
+    } or 1;  # ignore failures, make perlcritic happy
+    my $err = $@ ne '' ? $@ : "errno=$!";  chomp $err;
+    eval {
+      local(@SIG{qw(INT HUP TERM TSTP QUIT USR1 USR2)}) = ($h2) x 7;
+      if ($interrupt ne '') { my $i = $interrupt; $interrupt = ''; die $i }
+      # we're in trouble if stderr was attached to a terminal, but no longer is
+      eval { do_log(-1,"spawn_command: child process [%s]: %s", $$,$err) };
+    } or 1;  # ignore failures, make perlcritic happy
+    { # no warnings;
+      POSIX::_exit(6);  # avoid END and destructor processing
+      kill('KILL',$$); exit 1;   # still kicking? die!
+    }
+  }
+  # parent
+  do_log(5,"spawn_command: [%s] %s", $pid, $cmd_text);
+  $pid;  # return the PID of a subprocess
+}
+
+sub usage() {
+  my $me = $0; local $1; $me =~ s{([^/]*)\z}{$1}s;
+  "Usage: $me (-h | -V | [-f] [-P pid_file] [-d log_level])";
+}
+
+# map process termination status number to an informative string, and
+# append optional message (dual-valued errno or a string or a number),
+# returning the resulting string
+#
+sub exit_status_str($;$) {
+  my($stat,$errno) = @_; my $str;
+  if (!defined($stat)) {
+    $str = '(no status)';
+  } elsif (WIFEXITED($stat)) {
+    $str = sprintf('exit %d', WEXITSTATUS($stat));
+  } elsif (WIFSTOPPED($stat)) {
+    $str = sprintf('stopped, signal %d', WSTOPSIG($stat));
+  } else {
+    my $sig = WTERMSIG($stat);
+    $str = sprintf('%s, signal %d (%04x)',
+             $sig == 1 ? 'HANGUP' : $sig == 2 ? 'INTERRUPTED' :
+             $sig == 6 ? 'ABORTED' : $sig == 9 ? 'KILLED' :
+             $sig == 15 ? 'TERMINATED' : 'DIED',
+             $sig, $stat);
+  }
+  if (defined $errno) {  # deal with dual-valued and plain variables
+    $str .= ', '.$errno  if (0+$errno) != 0 || ($errno ne '' && $errno ne '0');
+  }
+  $str;
+}
+
+# check errno to be 0 and a process exit status to be in the list of success
+# status codes, returning true if both are ok, and false otherwise
+#
+sub proc_status_ok($;$@) {
+  my($exit_status,$errno,@success) = @_;
+  my $ok = 0;
+  if ((!defined $errno || $errno == 0) && WIFEXITED($exit_status)) {
+    my $j = WEXITSTATUS($exit_status);
+    if (!@success) { $ok = $j==0 }  # empty list implies only status 0 is good
+    elsif (grep($_==$j, @success)) { $ok = 1 }
+  }
+  $ok;
+}
+
+sub report_terminations($) {
+  my($pids_exited_list) = @_;
+  # note: child_handler may be growing the list at its tail during the loop
+  while (@$pids_exited_list) {
+    my $pid_stat = shift(@$pids_exited_list);
+    next if !$pid_stat;  # just in case
+    my($pid,$status,$timestamp) = @$pid_stat;
+    my $serv = delete $pid2service{$pid};
+    if (defined $serv) {
+      $serv->{status} = $status;
+      $serv->{terminated_at} = $timestamp;
+    }
+    if (!defined $serv) {
+      do_log(-1,'Unknown process [%d] exited: %s',
+                $pid, exit_status_str($status,0));
+    } else {
+      my $ll = proc_status_ok($status,0) ? 2 : -1;
+      do_log($ll, 'Process [%d] exited (%s) after %.1f s: %s',
+                  $pid, $serv->{cmd},
+                  $serv->{terminated_at} - $serv->{started_at},
+                  exit_status_str($status,0));
+    }
+  }
+}
+
+sub child_handler {
+  my $signal = $_[0];
+  for (;;) {
+    my $child_pid = waitpid(-1,WNOHANG);
+    # PID may be negative on Windows
+    last if !$child_pid || $child_pid == -1;
+    push(@pids_exited, [$child_pid, $?, time]);
+  }
+  $SIG{CHLD} = \&child_handler;
+};
+
+
+# main program starts here
+
+delete @ENV{'PATH', 'IFS', 'CDPATH', 'ENV', 'BASH_ENV'};
+$ENV{PATH} = join(':',@path)  if @path;
+
+my $daemonize = 1;
+my(@argv) = @ARGV;  # preserve @ARGV, may modify @argv
+while (@argv >= 2 && $argv[0] =~ /^-[dP]\z/ ||
+       @argv >= 1 && $argv[0] =~ /^-/) {
+  my($opt,$val);
+  $opt = shift @argv;
+  $val = shift @argv  if $opt !~ /^-[hVf-]\z/;  # these take no arguments
+  if ($opt eq '--') {
+    last;
+  } elsif ($opt eq '-h') {  # -h  (help)
+    die "$myversion\n\n" . usage() . "\n";
+  } elsif ($opt eq '-V') {  # -V  (version)
+    die "$myversion\n";
+  } elsif ($opt eq '-f') {
+    $daemonize = 0;
+  } elsif ($opt eq '-d') {  # -d log_level or -d SAdbg1,SAdbg2,..,SAdbg3
+    $val =~ /^\d+\z/  or die "Bad value for option -d: $val\n";
+    $log_level = untaint($val)  if $val =~ /^\d+\z/;
+  } elsif ($opt eq '-P') {  # -P pid_file
+    $pid_file = untaint($val)  if $val ne '';
+  } else {
+    die "Error in command line options: $opt\n\n" . usage() . "\n";
+  }
+}
+!@argv or die sprintf("Error parsing a command line %s\n\n%s\n",
+                      join(' ',@ARGV), usage());
+
+if (!$daemonize) {
+  do_log(0,"amavis master process starting in foreground, perl %s", $] );
+} else {  # daemonize
+  openlog($syslog_ident, LOG_PID | LOG_NDELAY, $syslog_facility);
+  $syslog_open = 1;
+  do_log(2,"to be daemonized");
+  daemonize();
+  srand();
+  $SIG{'__DIE__' } =
+    sub { if (!$^S) { my($m) = @_; chomp($m); do_log(-1,"_DIE: %s", $m) } };
+  $SIG{'__WARN__'} =
+    sub { my($m) = @_; chomp($m); do_log(0,"_WARN: %s",$m) };
+  do_log(0,'amavis master process starting. '.
+           'daemonized as PID [%s], perl %s', $$, $] );
+}
+
+if (defined $daemon_user) {
+  drop_priv($daemon_user,$daemon_group);
+}
+
+if (defined $pid_file && $pid_file ne '') {
+  my $pid_file_fh = IO::File->new;
+  $pid_file_fh->open($pid_file, O_CREAT|O_WRONLY, 0640)
+    or die "Can't create PID file $pid_file: $!";
+  $pid_file_fh->print($$."\n")
+    or die "Can't write to PID file $pid_file: $!";
+  $pid_file_fh->close
+    or die "Can't close PID file $pid_file: $!";
+  $pid_file_created = 1;
+}
+
+# initialize
+for my $serv (@services) {
+  $serv->{started_cnt} = 0;
+  $serv->{pid} = $serv->{status} = undef;
+  $serv->{started_at} = $serv->{terminated_at} = undef;
+  my $found = find_program_path($serv->{cmd}, \@path);
+  defined $found
+    or die sprintf("Can't find program %s in path %s\n",
+                   $serv->{cmd}, join(':',@path));
+  $serv->{cmd} = $found;
+}
+
+$SIG{CHLD} = \&child_handler;
+
+eval {  # catch TERM and INT signals for a controlled shutdown
+  my $h = sub { $interrupted = $_[0]; die "\n" };
+  local $SIG{INT}  = $h;
+  local $SIG{TERM} = $h;
+  for (;;) {
+    last if defined $interrupted;
+    for my $serv (@services) {
+      next if $serv->{disabled};
+      report_terminations(\@pids_exited)  if @pids_exited;
+      if (defined $serv->{status}) {
+        # process has terminated, clean up
+        $serv->{pid} = undef;
+        $serv->{started_at} = undef;
+      }
+      last if defined $interrupted;
+      if (!defined $serv->{pid}) {
+        # service not running
+        if ($serv->{started_cnt} >= 5) {
+          do_log(-1,'Exceeded restart count, giving up on (%s)', $serv->{cmd});
+          $serv->{disabled} = 1;
+        } elsif (defined $serv->{terminated_at} &&
+                 time - $serv->{terminated_at} < 1) {
+          # postpone a restart for at least a second
+          do_log(5, 'Postponing a restart (%s)', $serv->{cmd});
+        } else {
+          my($cmd,@args) = split(' ',$serv->{cmd});
+          $serv->{started_cnt}++;
+          $serv->{status} = $serv->{terminated_at} = undef;
+          $serv->{started_at} = time;
+          my $pid = $serv->{pid} = spawn_command($cmd,@args);
+          do_log(0, 'Process [%d] started: %s', $pid, $serv->{cmd});
+          # to avoid race the signal handler must not be updating %pid2service
+          $pid2service{$pid} = $serv;
+        }
+      }
+    }
+    sleep 5;  # sleep may be aborted prematurely by a signal
+  } # until interrupted
+};
+
+do_log(0, 'Master process shutting down');
+
+for my $sig ('TERM', 'KILL') {
+  # terminate or kill child processes
+  for my $serv (@services) {
+    my $pid = $serv->{pid};
+    next if !$pid;
+    my $n = kill($sig,$pid);
+    if ($n == 0 && $! == ESRCH) {
+      # process already gone
+    } elsif ($n == 0) {
+      do_log(-1, "Can't send SIG%s to process [%s]: %s", $sig, $pid, $!);
+    } else {
+      do_log(0, "%s process [%s] (%s)",
+                $sig eq 'TERM' ? 'Terminating' : 'Killing',
+                $pid, $serv->{cmd});
+    }
+  }
+  my $deadline = time + 10;  # 10 second grace period
+  while (time < $deadline) {
+    report_terminations(\@pids_exited);
+    sleep 1;  # sleep may be aborted prematurely by a signal
+    # stop waiting if all gone
+    last if !grep { $_->{pid} && kill(0, $_->{pid}) } @services;
+  }
+  report_terminations(\@pids_exited);
+}
+
+END {
+  do_log(0,'Master process exiting: %s', $interrupted) if defined $interrupted;
+  if ($pid_file_created) {
+    unlink($pid_file)
+      or do_log(-1, "Can't delete a PID file %s: %s", $pid_file, $!);
+  }
+  if ($syslog_open) { closelog(); $syslog_open = 0 }
+}
