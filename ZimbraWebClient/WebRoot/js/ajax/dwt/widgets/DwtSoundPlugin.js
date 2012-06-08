@@ -109,7 +109,12 @@ DwtSoundPlugin._getPluginClass =
 function() {
 	if (!DwtSoundPlugin._pluginClass) {
 		if (AjxEnv.isIE) {
-            var version = AjxPluginDetector.getQuickTimeVersion();
+            var version;
+            try {
+                version = AjxPluginDetector.getQuickTimeVersion();
+            } catch (e) {
+            }
+
             //Use Quicktime for IE 8, as IE8 windows media player does not work with httpOnly cookie attribute
             //TODO: Currently if Quick time is not installed, users will not get any prompt to install it.
             if (AjxEnv.isIE8 && version) {
@@ -371,7 +376,10 @@ function() {
 DwtQTSoundPlugin.prototype.play =
 function() {
 	var player = this._getPlayer();
-	player.Play();
+    try {
+	    player.Play();
+    }catch(e) {
+    }
 	this._monitorStatus();
 };
 
