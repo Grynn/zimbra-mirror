@@ -988,14 +988,14 @@ function(resp, orig) {
 }
 
 ZaSearchListController.prototype.updateSearchTree =
-function(resp, vectArray) {
+function(searchTotal, hasMore,  vectArray) {
     if (!vectArray)
         return "";
 
     var array = vectArray.getArray();
     var result = {}
-    result.searchTotal = resp.searchTotal;
-    result.more = resp.more;
+    result.searchTotal = searchTotal;
+    result.more = hasMore;
     result [ZaItem.ACCOUNT] = 0;
     result [ZaItem.DOMAIN] = 0;
     result [ZaItem.DL] = 0;

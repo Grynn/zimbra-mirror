@@ -384,15 +384,15 @@ function(preParams, paramsArr) {
 		if(batchResp.SearchDirectoryResponse && batchResp.SearchDirectoryResponse instanceof Array) {
 			var cnt2 = batchResp.SearchDirectoryResponse.length;
 			ZaSearch.TOO_MANY_RESULTS_FLAG = false;
-			//this._searchTotal = 0;
-			//this._list = null;
-             var tempResultList = null;
-             var hasmore=false;
+
+            var tempResultList = null;
+            var hasmore=false;
+            var searchTotal = 0;
 			for(var i = 0; i < cnt2; i++) {
-				resp = batchResp.SearchDirectoryResponse[i];
+				var resp = batchResp.SearchDirectoryResponse[i];
 				var subList = new ZaItemList(preParams.CONS);
 
-		                subList.loadFromJS(resp);
+		        subList.loadFromJS(resp);
 				//combine the search results
 				if(!tempResultList) tempResultList = subList;
 				else {
@@ -406,8 +406,8 @@ function(preParams, paramsArr) {
 					}
 				}
 
-				//this._searchTotal += resp.searchTotal;
-                 hasmore= resp.more|hasmore;
+				searchTotal +=  (resp.searchTotal ? resp.searchTotal : 0);
+                hasmore= resp.more|hasmore;
 			}
 		        if(ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraIsAdminAccount] != 'TRUE') {
 		                var act = new AjxTimedAction(this._list, ZaItemList.prototype.loadEffectiveRights, null);
@@ -431,8 +431,12 @@ function(preParams, paramsArr) {
 			        tmpArr.push(tempResultList.getArray()[ix]);
 		        }
             }
-               this.replenish(AjxVector.fromArray(tmpArr));
-               this.setScrollHasMore(hasmore);
+            this.replenish(AjxVector.fromArray(tmpArr));
+            this.setScrollHasMore(hasmore);
+
+            if (this.scrollSearchParams && this.scrollSearchParams.postCallback) {
+                this.scrollSearchParams.postCallback.run(searchTotal, hasmore, this.getList());
+            }
 
 		}
 	}
@@ -521,7 +525,7 @@ function(params, resp) {
                 this.replenish(AjxVector.fromArray(tmpArr));
                 this.setScrollHasMore(hasmore);
                 if (this.scrollSearchParams && this.scrollSearchParams.postCallback) {
-                    this.scrollSearchParams.postCallback.run(response, this.getList());
+                    this.scrollSearchParams.postCallback.run(response.searchTotal, response.more, this.getList());
                 }
              }
 

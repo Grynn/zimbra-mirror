@@ -1829,10 +1829,23 @@ ZaOverviewPanelController.prototype.refreshSearchTree = function(ev) {
     }
 
     var childItems = rootItem.getItems();
+    var currentSelected = tree.getCurrentSelectedItems().get(0);
+    var count;
+    var attr;
+
+    if (currentSelected)
+        attr = currentSelected.getData("TreeItemType");
+    if (attr) {
+        count = details.searchTotal;
+        count = count || 0;
+        currentSelected.setCount(count);
+        return;
+    }
+
     for(var i = 0; i < childItems.length; i++) {
         var child = childItems[i];
-        var attr = child.getData("TreeItemType");
-        var count;
+        attr = child.getData("TreeItemType");
+
         if (attr) {
             count = details[attr];
             count = count || 0;
@@ -2175,70 +2188,6 @@ function (parentPath, name, currentView, skipHistory, skipNotify, relatedZaItem,
     return true;
 }
 
-/*
-ZaOverviewPanelController.prototype.addObjectItemOri = function (parentPath, name, currentView, skipHistory, skipNotify, item) {
-    if (!currentView) {
-        currentView = ZaApp.getInstance().getAppViewMgr().getCurrentViewContent();
-        if (!currentView)
-            return;
-        if (!currentView.getTabChoices)
-            return;
-        if (!currentView.getTabChoices())
-            return;
-    }
-
-    var namePath = parentPath + ZaTree.SEPERATOR + name;
-    var tree = this.getOverviewPanel().getFolderTree();
-    var nameDataItem = tree.getTreeItemDataByPath (namePath);
-    var isAddNameNode = false;
-    var isAddTabNode = false;
-
-    if (!nameDataItem) {
-        isAddNameNode = true;
-        isAddTabNode = true;
-    } else {
-        if (nameDataItem.getChildrenNum() == 0) {
-            isAddTabNode = true;
-        }
-    }
-
-    var historyObject = new ZaHistory(namePath, name, item?item.type:null);
-    ZaZimbraAdmin.getInstance().getHisotryMgr().addHistoryObj(historyObject);
-
-    if (isAddNameNode) {
-        var parentDataItem = tree.getTreeItemDataByPath (parentPath);
-        var index = parentDataItem.getChildrenNum();
-        var parentId = parentDataItem.id;
-        nameDataItem =   new ZaTreeItemData({
-                            parent:parentPath,
-                            image: (item?this.getIconByType(item.type):null),
-                            mappingId: ZaZimbraAdmin._XFORM_VIEW,
-                            id:DwtId._makeId(parentId, index + 1),
-                            text: name});
-        tree.addTreeItemData(nameDataItem);
-        nameDataItem.addRelatedObject(this.getRelatedList(parentPath,item));
-        nameDataItem.addRecentObject(this.getRecentList())
-    }else{ //update related object count
-        nameDataItem.addRelatedObject(this.getRelatedList(parentPath,item));
-        nameDataItem.addRecentObject(this.getRecentList());
-    }
-
-    if (!nameDataItem.getData("viewId")) {
-        var currentViewId = ZaApp.getInstance().getAppViewMgr().getCurrentView();
-        nameDataItem.setData("viewId", currentViewId);
-    }
-
-    if (isAddTabNode) {
-        this.addSubTabsToParentTreeItem(nameDataItem, currentView.getTabChoices(), ZaZimbraAdmin._XFORM_TAB_VIEW);
-    }
-
-    if (! ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._XFORM_VIEW])
-        ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._XFORM_VIEW] = ZaOverviewPanelController.xformTreeListener;
-    if (! ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._XFORM_TAB_VIEW])
-        ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._XFORM_TAB_VIEW] = ZaOverviewPanelController.xformTabTreeListener;
-    tree.setSelectionByPath(namePath, !skipHistory, skipNotify);
-}
-*/
 ZaOverviewPanelController.prototype.addSubTabsToParentTreeItem = function(parentItem, subTabs, mappingIdForAllSubTabs, isShowHistory) {
         var subTabItem, subTabInfo, subTabItemId;
         var tree = this.getOverviewPanel().getFolderTree();
