@@ -48,7 +48,6 @@ ZaSearchListController = function(appCtxt, container) {
 	this._searchFieldInput = null ; //the input of the search field for basic search, it is also be used as the tab title
 	this.objType = ZaEvent.S_ACCOUNT;	
 	this.fetchAttrs = ZaSearch.standardAttributes;
-
     this.searchResultFilter = [ZaAccount.A_accountStatus];  // for Alias currently
     this._filterObj = null;
 }
@@ -342,6 +341,7 @@ function(params) {
 	controller._currentSortField = params.sortBy;
 	var busyId = Dwt.getNextId();	
 	var callback = new AjxCallback(controller, controller.searchCallback, {limit:controller.RESULTSPERPAGE,show:true, openInSearchTab: true,busyId:busyId, resultFilter:controller._filterObj, isShowBubble:params.isShowBubble});
+        var postCallback = new AjxCallback(this, this.updateSearchTree);
         var searchParams = {
                         query:controller._currentQuery,//params.query,
                         types:params.types,
@@ -376,7 +376,8 @@ function(params) {
                         sortAscending:this._currentSortOrder,
                         attrs:ZaSearch.standardAttributes,
                         controller: controller,
-                        scrollType:"isAliasSearch"
+                        scrollType:"isAliasSearch",
+                        postCallback: postCallback
          }
 		searchQueryList.push(searchParams);
 		var keyword = ZaSearchListController._getSearchKeyWord(params.query);
@@ -392,7 +393,8 @@ function(params) {
                         sortBy:params.sortBy,
                         sortAscending:this._currentSortOrder,
                         attrs:ZaSearch.standardAttributes,
-                        controller: controller
+                        controller: controller,
+                        postCallback: postCallback
         }
 		ZaSearch.searchDirectory(searchParams);
     }
@@ -930,6 +932,7 @@ function () {
 		}
 	}
 }
+ZaController.changeActionsStateMethods["ZaSearchListController"].push(ZaSearchListController.changeActionsStateMethod);
 
 /**
  * Get the count statistics that will show in the search tree
@@ -946,6 +949,10 @@ function(resp, orig) {
 
     if (!resp || !resp.searchTotal) {
         return result;
+    }
+
+    if (resp.more || ((orig && orig.more))) {
+        result.more = true;
     }
 
     if (result.searchTotal) {
@@ -980,7 +987,29 @@ function(resp, orig) {
     return result;
 }
 
-ZaController.changeActionsStateMethods["ZaSearchListController"].push(ZaSearchListController.changeActionsStateMethod);
+ZaSearchListController.prototype.updateSearchTree =
+function(resp, vectArray) {
+    if (!vectArray)
+        return "";
+
+    var array = vectArray.getArray();
+    var result = {}
+    result.searchTotal = resp.searchTotal;
+    result.more = resp.more;
+    result [ZaItem.ACCOUNT] = 0;
+    result [ZaItem.DOMAIN] = 0;
+    result [ZaItem.DL] = 0;
+    for (var i = 0;i < array.length; i++) {
+        if (array[i].type == ZaItem.ACCOUNT) {
+            result[ZaItem.ACCOUNT]++;
+        } else if (array[i].type == ZaItem.DOMAIN) {
+            result[ZaItem.DOMAIN]++;
+        } else if (array[i].type == ZaItem.DL) {
+            result[ZaItem.DL]++;
+        }
+    }
+    ZaZimbraAdmin.getInstance().getOverviewPanelController().fireSearchEvent(result);
+}
 
 
 ZaSearchListController.prototype._initPopupMenuAtAppBar = function(){

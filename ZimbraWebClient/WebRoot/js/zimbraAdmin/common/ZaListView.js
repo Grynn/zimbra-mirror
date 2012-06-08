@@ -518,8 +518,11 @@ function(params, resp) {
 		        for(var ix = 0; ix < cnt; ix++) {
 			        tmpArr.push(tempResultList.getArray()[ix]);
 		        }
-               this.replenish(AjxVector.fromArray(tmpArr));
-               this.setScrollHasMore(hasmore);
+                this.replenish(AjxVector.fromArray(tmpArr));
+                this.setScrollHasMore(hasmore);
+                if (this.scrollSearchParams && this.scrollSearchParams.postCallback) {
+                    this.scrollSearchParams.postCallback.run(response, this.getList());
+                }
              }
 
 		}

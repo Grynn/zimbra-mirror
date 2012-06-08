@@ -1835,15 +1835,14 @@ ZaOverviewPanelController.prototype.refreshSearchTree = function(ev) {
         var count;
         if (attr) {
             count = details[attr];
+            count = count || 0;
+            if (details.more)
+                count = count + "+";
         } else {
-            count = details.searchTotal;
+            count = details.searchTotal || 0;
         }
+        child.setCount(count);
 
-        if (count) {
-            child.setCount(count);
-        } else {
-            child.setCount(0);
-        }
     }
 }
 
