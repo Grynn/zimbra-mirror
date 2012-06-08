@@ -370,7 +370,7 @@ function(attrs) {
         imParts = im.split(":");
         if (imParts.length == 2){
             im = im.split(":")[1];
-            im = "<a  id='UnknownPersonSlide_imAnchorId' href='" + "im:" + im + "'>" + im.substring(2) + "</a>" ;
+            im = "<a  id='UnknownPersonSlide_imAnchorId' href='" + "im:" + im + "'>" + AjxStringUtil.htmlEncode(im.substring(2)) + "</a>" ;
             this.imURI = attrs["imURI"] = im;
         }
     }
