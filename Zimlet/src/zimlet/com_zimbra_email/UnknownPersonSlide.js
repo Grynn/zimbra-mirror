@@ -165,13 +165,16 @@ function(ev) {
 	} else if(el.id == "UnknownPersonSlide_NameAnchorId") {
 		this.emailZimlet._contactListener(true);
 	}
-    else if (el.id == "UnknownPersonSlide_mobilePhoneAnchorId") {
+    else if (el.id == "UnknownPersonSlide_mobilePhoneAnchorId" &&
+        appCtxt.getSettings()._hasVoiceFeature()) {
         this.emailZimlet._phoneListener(this.attribs && this.attribs.mobilePhone);
     }
-    else if (el.id == "UnknownPersonSlide_workPhoneAnchorId") {
+    else if (el.id == "UnknownPersonSlide_workPhoneAnchorId" &&
+        appCtxt.getSettings()._hasVoiceFeature()) {
         this.emailZimlet._phoneListener(this.attribs && this.attribs.workPhone);
     }
-    else if (el.id == "UnknownPersonSlide_imAnchorId") {
+    else if (el.id == "UnknownPersonSlide_imAnchorId" &&
+        appCtxt.getSettings()._hasVoiceFeature()) {
         ZmZimbraMail.unloadHackCallback();
         location.href = this.imURI;
         this.emailZimlet._imListener(this.imURI);
