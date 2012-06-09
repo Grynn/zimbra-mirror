@@ -73,6 +73,13 @@
     overflow: hidden;
 }
 
+.Img_onthephone {
+    background: transparent url("img/ImgPresenceUnavailable.png") no-repeat 0 0;
+    width: 16px;
+    height: 16px;
+    overflow: hidden;
+}
+
 .Img_away {
     background: transparent url("img/ImgFreeBusyDotOOO.gif") no-repeat 0 0;
     width: 16px;

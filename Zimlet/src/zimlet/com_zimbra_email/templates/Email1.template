@@ -31,20 +31,13 @@
 	<br/>
 
 	<table border=0>
-	    <tr id='row_IM_Presence'>
+	    <tr id='row_Presence'>
 	        <td>
-                <div id='img_IM_Presence'></div>
+                <div id='img_Presence'></div>
             </td>
             <td>
-                <label id='text_IM_Presence'></label>
+                <label id='text_Presence'></label>
             </td?
         </tr>
-	    <tr id='row_Phone_Presence'>
-	        <td>
-                <div id='img_Phone_Presence'></div>
-            </td>
-            <td>
-                <label id='text_Phone_Presence'></label>
-            </td>
-        </tr>
+    </table>
 </template>

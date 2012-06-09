@@ -312,8 +312,7 @@ UnknownPersonSlide.prototype._getPresence =
 
 //
 // Callback from the presence provider.
-// Valid values for type are: "IM", "PHONE"
-// Valid values for value are: "AVAILABLE", "UNAVAILABLE", "DND", "XA", "AWAY"
+// Valid values for value are: "AVAILABLE", "UNAVAILABLE", "DND", "AWAY"  etc.
 //
 
 UnknownPersonSlide.prototype._handlePresence =
@@ -321,17 +320,12 @@ UnknownPersonSlide.prototype._handlePresence =
         if (!presenceObject){
             return;
         }
-        var obj = this._presenceCache[this._presentity];  // Array of presences (IM, Phone, etc.)
+        var obj = this._presenceCache[this._presentity];
         if (!obj) {
-            obj = this._presenceCache[this._presentity] = [];
+            obj = this._presenceCache[this._presentity] = {};
         }
-		if (presenceObject.imStatus) {
-        	obj["IM"] = presenceObject.imStatus;
-		}
-		if (presenceObject.phoneStatus) {
-        	obj["Phone"] = presenceObject.phoneStatus;
-		}
-        obj["timestamp"] = new Date();
+       	obj.presenceStatus = presenceObject.presenceStatus;
+        obj.timestamp = new Date();
         this._setPresenceUI();
     }
 
@@ -507,45 +501,22 @@ function(imgUrl) {
 UnknownPersonSlide.prototype._isKnownPresenceCode =
     function(presence) {
          if (!this._presenceCodes){
-             this._presenceCodes = {
-                                    "available" :1,
-                                    "unavailable":1,
-                                    "busy":1,
-                                    "away":1,
-                                    "vacation":1,
-                                    "dnd":1,
-                                    "unknown":1
-                                   };
+             var status_array = ["dnd", "vacation", "on-the-phone", "busy", "unavailable", "away", "available", "unknown"];
+             this._presenceCodes = {};
+             for (var i=0; i < status_array.length; i++){
+                 this._presenceCodes[status_array[i]] = true;
+             }
          }
          return this._presenceCodes[presence];
     }
 
 UnknownPersonSlide.prototype._setPresenceUI =
     function() {
-
         var presenceObj = this._getPresence();
-
-        /*     Example
-        *
-            presenceObj =   {   "IM": "available",
-                                "Phone": "dnd"
-                            };
-        */
-
-        if (presenceObj && presenceObj["IM"]) {
-            this._setIMPresenceUI(presenceObj["IM"]);
-		}
-		if (presenceObj && presenceObj["Phone"]) {
-            this._setPhonePresenceUI(presenceObj["Phone"]);
-        }
-        return;
-    }
-
-UnknownPersonSlide.prototype._setIMPresenceUI =
-    function(presence) {
-        var row = document.getElementById("row_IM_Presence");
-        var div = document.getElementById("img_IM_Presence");
-        var txt = document.getElementById("text_IM_Presence");
+        var presence =  presenceObj && presenceObj.presenceStatus;
+        var row = document.getElementById("row_Presence");
+        var div = document.getElementById("img_Presence");
+        var txt = document.getElementById("text_Presence");
         if (!row || !div || !txt){
             return;
         }
@@ -555,31 +526,9 @@ UnknownPersonSlide.prototype._setIMPresenceUI =
                 presence = "unknown";
             }
             row.style.display = "";
-            div.className = "Img_" + presence;
-            txt.innerHTML = this.emailZimlet.getMessage("msg_"+presence) + " (" + ZmMsg.imShort + ")";
-        }
-        else {
-            row.style.display = "none";
-        }
-        return;
-    }
-
-UnknownPersonSlide.prototype._setPhonePresenceUI =
-    function(presence) {
-        var row = document.getElementById("row_Phone_Presence");
-        var div = document.getElementById("img_Phone_Presence");
-        var txt = document.getElementById("text_Phone_Presence");
-        if (!row || !div || !txt){
-            return;
-        }
-        // If no presence info, hide the row.
-        if (presence){
-            row.style.display = "";
-            if (!this._isKnownPresenceCode(presence)) {
-                presence = "unknown";
-            }
-            div.className = "Img_" + presence.toLowerCase();
-            txt.innerHTML = this.emailZimlet.getMessage("msg_"+presence.toLowerCase()) + " (" + ZmMsg.phone +")";
+            var normalizedPresence = presence.split("-").join(""); // remove hyphens (e.g. on-the-phone)
+            div.className = "Img_" + normalizedPresence;
+            txt.innerHTML = this.emailZimlet.getMessage("msg_"+normalizedPresence);
         }
         else {
             row.style.display = "none";
