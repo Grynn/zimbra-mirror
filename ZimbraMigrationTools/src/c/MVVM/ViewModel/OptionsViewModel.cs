@@ -51,7 +51,7 @@ public class OptionsViewModel: BaseViewModel
         ImportOOOOptions = config.ImportOptions.OOO;
         SetNextState();
 
-        MigrateONRAfter = config.AdvancedImportOptions.MigrateOnOrAfter.ToLongDateString();
+        MigrateONRAfter = config.AdvancedImportOptions.MigrateOnOrAfter.ToShortDateString();
         IsOnOrAfter = config.AdvancedImportOptions.IsOnOrAfter;
         MaxMessageSize = config.AdvancedImportOptions.MaxMessageSize;
         IsSkipPrevMigratedItems = config.AdvancedImportOptions.IsSkipPrevMigratedItems;
@@ -323,14 +323,34 @@ public class OptionsViewModel: BaseViewModel
             OnPropertyChanged(new PropertyChangedEventArgs("ImportNextButtonContent"));
         }
     }
+    private string dateFormatLabelContent;
+    public string DateFormatLabelContent
+    {
+        get { return dateFormatLabelContent; }
+        set
+        {
+            if (value == dateFormatLabelContent)
+                return;
+            dateFormatLabelContent = value;
+
+            OnPropertyChanged(new PropertyChangedEventArgs("DateFormatLabelContent"));
+        }
+    }
     public string MigrateONRAfter {
         get { return m_config.AdvancedImportOptions.MigrateOnOrAfter.ToShortDateString(); }
         set
         {
             if (value == m_config.AdvancedImportOptions.MigrateOnOrAfter.ToShortDateString())
                 return;
-            m_config.AdvancedImportOptions.MigrateOnOrAfter = Convert.ToDateTime(value);
-
+            try
+            {
+                m_config.AdvancedImportOptions.MigrateOnOrAfter = Convert.ToDateTime(value);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Please enter a valid date in the indicated format", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
             OnPropertyChanged(new PropertyChangedEventArgs("MigrateONRAfter"));
         }
     }

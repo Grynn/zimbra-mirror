@@ -59,11 +59,13 @@
                     <RowDefinition MinHeight= "24" Height="Auto"></RowDefinition>
                     <RowDefinition MinHeight= "24" Height="Auto"></RowDefinition>
                 </Grid.RowDefinitions>
-                <CheckBox Content="Migrate On or After" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Name="CBoaItems" VerticalAlignment="Center" IsChecked="{Binding Path=IsOnOrAfter}" />
-                <DatePicker Grid.Row="0" Grid.Column="1" MaxHeight="20" Margin="4,0,0,0" HorizontalAlignment="Center" Name="datePickerItems"  IsEnabled="{Binding ElementName=CBoaItems, Path=IsChecked}" VerticalAlignment="Center" SelectedDate="{Binding Path=MigrateONRAfter, Mode=TwoWay,  
+                <CheckBox Content="Migrate On or After" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Name="cbOnOrAfter" VerticalAlignment="Center" IsChecked="{Binding Path=IsOnOrAfter}" />
+                <DatePicker Grid.Row="0" Grid.Column="1" MaxHeight="20" Margin="4,0,0,0" HorizontalAlignment="Center" Name="datePickerItems"  IsEnabled="{Binding ElementName=cbOnOrAfter, Path=IsChecked}" VerticalAlignment="Center" SelectedDate="{Binding Path=MigrateONRAfter, Mode=TwoWay,  
                           ValidatesOnExceptions=true,  
                           NotifyOnValidationError=true,  
                           UpdateSourceTrigger=PropertyChanged}"/>
+                <Label Grid.Row="0" Grid.Column="0" MaxHeight="28" Margin="-50,0,0,0" HorizontalAlignment="Center" Visibility="Hidden" Name="DateboxLbl" Content="{Binding Path=DateFormatLabelContent}"/>
+                <TextBox Grid.Row="0" Grid.Column="1" MinWidth="76" MaxHeight="18" Margin="116,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Hidden" Name="Datebox" IsEnabled="{Binding ElementName=cbOnOrAfter, Path=IsChecked}" Text="{Binding Path=MigrateONRAfter}"/>
                 <CheckBox Content="Maximum message size (MB)" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" Name="cbMaxMessage" VerticalAlignment="Center" IsChecked="{Binding Path=IsMaxMessageSize}" />
                 <TextBox HorizontalAlignment="Right" MinWidth="56" MaxHeight="18" Margin="0,0,130,0" Name="tbMaxMessage" VerticalAlignment="Center" Grid.Row="1" Grid.Column="1" IsEnabled="{Binding ElementName=cbMaxMessage, Path=IsChecked}" Text="{Binding Path=MaxMessageSize}"/>
                 <CheckBox Content="Skip these folders (separate with comma)" Grid.Row="2" HorizontalAlignment="Left" Name="cbSkip" VerticalAlignment="Center" IsChecked="{Binding Path=IsSkipFolders}" />

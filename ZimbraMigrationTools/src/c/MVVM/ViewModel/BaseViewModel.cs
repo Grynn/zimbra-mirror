@@ -3,6 +3,8 @@ using Misc;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Globalization;
+using System.Threading;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows;
@@ -34,10 +36,14 @@ public class BaseViewModel: INotifyPropertyChanged
     public bool isBrowser { get; set; }
     public string savedDomain { get; set; }
     public static Object[] ViewModelPtrs = new Object[(int)ViewType.MAX];
+    public string shortDatePattern;
 
     public BaseViewModel()
     {
         this.ProcessHelpCommand = new ActionCommand(this.ProcessHelp, () => true);
+        CultureInfo currentCulture = Thread.CurrentThread.CurrentCulture;
+        shortDatePattern = currentCulture.DateTimeFormat.ShortDatePattern;
+
     }
     public ICommand ProcessHelpCommand {
         get;

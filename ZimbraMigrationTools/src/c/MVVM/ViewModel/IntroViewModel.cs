@@ -39,6 +39,7 @@ public class IntroViewModel: BaseViewModel
         this.GetIntroUserMigCommand = new ActionCommand(this.GetIntroUserMig, () => true);
         this.GetIntroServerMigCommand = new ActionCommand(this.GetIntroServerMig, () => true);
         this.NextCommand = new ActionCommand(this.Next, () => true);
+        Application.Current.Properties["sdp"] = shortDatePattern;
     }
 
     public UsersViewModel GetUsersViewModel()
@@ -362,6 +363,7 @@ public class IntroViewModel: BaseViewModel
             TheViews.Add(m_usersViewModel);
             TheViews.Add(m_scheduleViewModel);
             TheViews.Add(m_resultsViewModel);
+            m_optionsViewModel.DateFormatLabelContent = "(" + shortDatePattern + ")";
             m_optionsViewModel.ImportNextButtonContent = "Next >";
         }
         else
@@ -373,6 +375,7 @@ public class IntroViewModel: BaseViewModel
             TheViews.Add(m_configViewModelUDest);
             TheViews.Add(m_optionsViewModel);
             TheViews.Add(m_resultsViewModel);
+            m_optionsViewModel.DateFormatLabelContent = "(" + shortDatePattern + ")";
             m_optionsViewModel.ImportNextButtonContent = "Migrate";
         }
     }
