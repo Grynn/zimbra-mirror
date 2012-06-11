@@ -49,7 +49,7 @@ ZaNewDLXWizard.helpURL = location.pathname + ZaUtil.HELP_URL + "managing_account
 
 ZaNewDLXWizard.prototype.getTitle =
 function () {
-	return ZaMsg.DL_view_title;
+	return ZaMsg.DLTBB_New_tt;
 }
 
 ZaNewDLXWizard.prototype.getTabIcon =
@@ -427,6 +427,12 @@ function (entry) {
 	this._containedObject.attrs = new Object();
 	this._containedObject[ZaDistributionList.A2_memberList] = new Array();
 	this._containedObject[ZaDistributionList.A2_memberList]._version = 1;
+
+
+    if(entry._uuid) {
+        this._containedObject._uuid = entry._uuid;
+    }
+
 	if(entry[ZaDistributionList.A2_memberList]) {
 		var memberList;
 		memberList = entry[ZaDistributionList.A2_memberList];
