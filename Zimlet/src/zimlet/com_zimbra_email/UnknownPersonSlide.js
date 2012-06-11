@@ -166,15 +166,15 @@ function(ev) {
 		this.emailZimlet._contactListener(true);
 	}
     else if (el.id == "UnknownPersonSlide_mobilePhoneAnchorId" &&
-        appCtxt.getSettings()._hasVoiceFeature()) {
+		appCtxt.getSettings()._hasVoiceFeature()) {
         this.emailZimlet._phoneListener(this.attribs && this.attribs.mobilePhone);
     }
     else if (el.id == "UnknownPersonSlide_workPhoneAnchorId" &&
-        appCtxt.getSettings()._hasVoiceFeature()) {
+		appCtxt.getSettings()._hasVoiceFeature()) {
         this.emailZimlet._phoneListener(this.attribs && this.attribs.workPhone);
     }
     else if (el.id == "UnknownPersonSlide_imAnchorId" &&
-        appCtxt.getSettings()._hasVoiceFeature()) {
+		appCtxt.getSettings()._hasVoiceFeature()) {
         ZmZimbraMail.unloadHackCallback();
         location.href = this.imURI;
         this.emailZimlet._imListener(this.imURI);
@@ -325,6 +325,7 @@ UnknownPersonSlide.prototype._handlePresence =
             obj = this._presenceCache[this._presentity] = {};
         }
        	obj.presenceStatus = presenceObject.presenceStatus;
+		obj.notes = presenceObject.notes;
         obj.timestamp = new Date();
         this._setPresenceUI();
     }
@@ -528,7 +529,12 @@ UnknownPersonSlide.prototype._setPresenceUI =
             row.style.display = "";
             var normalizedPresence = presence.split("-").join(""); // remove hyphens (e.g. on-the-phone)
             div.className = "Img_" + normalizedPresence;
-            txt.innerHTML = this.emailZimlet.getMessage("msg_"+normalizedPresence);
+			if (presenceObj.notes) {
+				txt.innerHTML = presenceObj.notes;
+			}
+			else {
+            	txt.innerHTML = this.emailZimlet.getMessage("msg_"+normalizedPresence);
+			}
         }
         else {
             row.style.display = "none";
