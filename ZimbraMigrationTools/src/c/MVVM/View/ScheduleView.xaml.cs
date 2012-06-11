@@ -8,6 +8,13 @@ public partial class ScheduleView
     public ScheduleView()
     {
         InitializeComponent();
+        string sdp = (string)Application.Current.Properties["sdp"];
+        if (sdp.StartsWith("d"))
+        {
+            datePickerSched.Visibility = System.Windows.Visibility.Hidden;
+            Datebox2.Visibility = System.Windows.Visibility.Visible;
+            DateboxLbl2.Visibility = System.Windows.Visibility.Visible;
+        }
     }
 
     // Kind of a drag that we have to put these next 2 methods in here, but PasswordBox is not a dependency property,

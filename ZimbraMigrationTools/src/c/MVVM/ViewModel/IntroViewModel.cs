@@ -364,6 +364,7 @@ public class IntroViewModel: BaseViewModel
             TheViews.Add(m_scheduleViewModel);
             TheViews.Add(m_resultsViewModel);
             m_optionsViewModel.DateFormatLabelContent = "(" + shortDatePattern + ")";
+            m_scheduleViewModel.DateFormatLabelContent2 = "(" + shortDatePattern + ")";
             m_optionsViewModel.ImportNextButtonContent = "Next >";
         }
         else

@@ -40,15 +40,15 @@
             -->
             <RadioButton Grid.Column="1" Margin="15,0,0,0" Name="rbTaskDisable" VerticalAlignment="Top" Content="Migrate Now" IsChecked="True" HorizontalAlignment="Stretch" />
             <RadioButton Grid.Column="1" Margin="125,0,0,0" Name="rbTaskEnable" VerticalAlignment="Top" Content="Schedule" IsChecked="False" HorizontalAlignment="Stretch" />
-            <GroupBox Grid.Column="1" HorizontalAlignment="Left" Margin="20,30,0,0" VerticalAlignment="Top" Name="gbSched" MinHeight="140" MinWidth="200" Grid.RowSpan="3" Header="Schedule">
+            <GroupBox Grid.Column="1" HorizontalAlignment="Left" Margin="20,30,0,0" VerticalAlignment="Top" Name="gbSched" MinHeight="140" MinWidth="240" Grid.RowSpan="3" Header="Schedule">
                 <Grid Name="gbSGrid">
                     <Grid.RowDefinitions>
                         <RowDefinition MinHeight="50" Height="Auto"></RowDefinition>
                         <RowDefinition MinHeight="30" Height="Auto"></RowDefinition>
                         <RowDefinition Height="Auto"></RowDefinition>
-                        <RowDefinition Height="Auto"></RowDefinition>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
                         <ColumnDefinition Width="Auto"></ColumnDefinition>
                         <ColumnDefinition Width="Auto"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
@@ -58,9 +58,11 @@
                     </Grid>
                     -->
                     <TextBlock Grid.Row="0" Grid.Column="0" Margin="10,20,0,0" HorizontalAlignment="Left" Name="textDate" Text="Date:" VerticalAlignment="Top"/>
-                    <DatePicker Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" Margin="50,5,0,0" Name="datePickerSched" VerticalAlignment="Center" IsEnabled="{Binding ElementName=rbTaskEnable, Path=IsChecked}" SelectedDate="{Binding Path=ScheduleDate, Mode=TwoWay}"/>
+                    <DatePicker Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Margin="10,5,0,0" Name="datePickerSched" VerticalAlignment="Center" IsEnabled="{Binding ElementName=rbTaskEnable, Path=IsChecked}" SelectedDate="{Binding Path=ScheduleDate, Mode=TwoWay}"/>
+                    <TextBox Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Margin="10,5,0,0" MinWidth="76" MaxHeight="18" VerticalAlignment="Center" Visibility="Hidden" Name="Datebox2" IsEnabled="{Binding ElementName=rbTaskEnable, Path=IsChecked}" Text="{Binding Path=ScheduleDate}"/>
+                    <Label Grid.Row="0" Grid.Column="2" MaxHeight="28" Margin="-27,10,0,0" HorizontalAlignment="Left" Visibility="Hidden" Name="DateboxLbl2" Content="{Binding Path=DateFormatLabelContent2}"/>
                     <TextBlock Grid.Row="1" Grid.Column="0" Margin="10,10,0,0" HorizontalAlignment="Left" Name="textTime" Text="Time:" VerticalAlignment="Top"/>
-                    <ComboBox Grid.Row="1"  Grid.Column="0" MaxWidth="35" FontSize="9" Margin="-20,5,0,0" Name="cbHour" VerticalAlignment="Center" IsEnabled="{Binding ElementName=rbTaskEnable, Path=IsChecked}" SelectedIndex="{Binding Path=HrSelection, Mode=TwoWay}">
+                    <ComboBox Grid.Row="1"  Grid.Column="1" HorizontalAlignment="Left" Margin="10,5,0,0" MinWidth="35" MaxWidth="35" FontSize="9" Name="cbHour" VerticalAlignment="Center" IsEnabled="{Binding ElementName=rbTaskEnable, Path=IsChecked}" SelectedIndex="{Binding Path=HrSelection, Mode=TwoWay}">
                         <ComboBoxItem Content="1" />
                         <ComboBoxItem Content="2" />
                         <ComboBoxItem Content="3" />
@@ -74,7 +76,7 @@
                         <ComboBoxItem Content="11" />
                         <ComboBoxItem Content="12" />
                     </ComboBox>
-                    <ComboBox Grid.Row="1"  Grid.Column="0" MaxWidth="35" FontSize="9" Margin="50,5,0,0" Name="cbMinute" VerticalAlignment="Center" IsEnabled="{Binding ElementName=rbTaskEnable, Path=IsChecked}" SelectedIndex="{Binding Path=MinSelection, Mode=TwoWay}">
+                    <ComboBox Grid.Row="1"  Grid.Column="1" HorizontalAlignment="Left" Margin="45,5,0,0" MinWidth="35" MaxWidth="35" FontSize="9" Name="cbMinute" VerticalAlignment="Center" IsEnabled="{Binding ElementName=rbTaskEnable, Path=IsChecked}" SelectedIndex="{Binding Path=MinSelection, Mode=TwoWay}">
                         <ComboBoxItem Content="00" />
                         <ComboBoxItem Content="10" />
                         <ComboBoxItem Content="20" />
@@ -82,15 +84,15 @@
                         <ComboBoxItem Content="40" />
                         <ComboBoxItem Content="50" />
                     </ComboBox>
-                    <ComboBox Grid.Row="1"  Grid.Column="0" MaxWidth="40" FontSize="9" Margin="122,5,0,0" Name="cbAMPM" VerticalAlignment="Center" IsEnabled="{Binding ElementName=rbTaskEnable, Path=IsChecked}" SelectedIndex="{Binding Path=AMPMSelection, Mode=TwoWay}">
+                    <ComboBox Grid.Row="1"  Grid.Column="1" HorizontalAlignment="Left" Margin="80,5,0,0" MinWidth="40" MaxWidth="40" FontSize="9" Name="cbAMPM" VerticalAlignment="Center" IsEnabled="{Binding ElementName=rbTaskEnable, Path=IsChecked}" SelectedIndex="{Binding Path=AMPMSelection, Mode=TwoWay}">
                         <ComboBoxItem Content="AM" />
                         <ComboBoxItem Content="PM" />
                     </ComboBox>
-                    <Button Grid.Row="3" Grid.Column="0" HorizontalAlignment="Left"  Margin="55,10,0,0" Name="tsButton" MinWidth="60" Command="{Binding ScheduleTaskCommand}" IsEnabled="{Binding ElementName=rbTaskEnable, Path=IsChecked}">Schedule Task</Button>
+                    <Button Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left"  Margin="10,10,0,0" Name="tsButton" MinWidth="60" Command="{Binding ScheduleTaskCommand}" IsEnabled="{Binding ElementName=rbTaskEnable, Path=IsChecked}">Schedule Task</Button>
                 </Grid>
             </GroupBox>
         </Grid>
-        <GroupBox Grid.Row="3" Margin="15,12,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Name="gbProv" Header="Provisioning" Padding="6" IsEnabled="{Binding Path=EnableProvGB}">
+        <GroupBox Grid.Row="3" Margin="15,12,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" MinWidth="411" Name="gbProv" Header="Provisioning" Padding="6" IsEnabled="{Binding Path=EnableProvGB}">
             <Grid Name="gbPGrid">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"></RowDefinition>
@@ -98,12 +100,12 @@
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"></ColumnDefinition>
-                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Row="0" Grid.Column="0" Margin="0,0,0,0" HorizontalAlignment="Left" Name="textInitialPW" Text="Initial password for unprovisioned users" VerticalAlignment="Center"/>
-                <PasswordBox Grid.Row="0" Grid.Column="1" Margin="10,0,0,0" HorizontalAlignment="Right" MinWidth="122" Name="ipwBox" PasswordChanged="pb_DefPasswordChanged"/>
+                <PasswordBox Grid.Row="0" Grid.Column="1" Margin="10,0,0,0" HorizontalAlignment="Left" MinWidth="156" Name="ipwBox" PasswordChanged="pb_DefPasswordChanged"/>
                 <TextBlock Grid.Row="1" Grid.Column="0" Margin="0,7,0,0" HorizontalAlignment="Left" Name="textSelectCOS" Text="Select the Class of Service" VerticalAlignment="Center"/>
-                <ComboBox Grid.Row="1" Grid.Column="1" Margin="10,5,0,0" HorizontalAlignment="Right" MaxHeight="{Binding ElementName=ipwBox, Path=ActualHeight}" MinWidth="{Binding ElementName=ipwBox, Path=ActualWidth}" Name="cbCOS" SelectedIndex="{Binding Path=CurrentCOSSelection, Mode=TwoWay}" ItemsSource="{Binding Path=CosList}" DisplayMemberPath="CosName" >
+                <ComboBox Grid.Row="1" Grid.Column="1" Margin="10,5,0,0" HorizontalAlignment="Left" MaxHeight="{Binding ElementName=ipwBox, Path=ActualHeight}" MinWidth="{Binding ElementName=ipwBox, Path=ActualWidth}" Name="cbCOS" SelectedIndex="{Binding Path=CurrentCOSSelection, Mode=TwoWay}" ItemsSource="{Binding Path=CosList}" DisplayMemberPath="CosName" >
                 </ComboBox>
             </Grid>
         </GroupBox>

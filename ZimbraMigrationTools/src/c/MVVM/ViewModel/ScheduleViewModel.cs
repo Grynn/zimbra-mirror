@@ -510,9 +510,30 @@ public class ScheduleViewModel: BaseViewModel
         {
             if (value == m_schedule.ScheduleDate.ToShortDateString())
                 return;
-            m_schedule.ScheduleDate = Convert.ToDateTime(value);
+            try
+            {
+                m_schedule.ScheduleDate = Convert.ToDateTime(value);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Please enter a valid date in the indicated format", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
 
             OnPropertyChanged(new PropertyChangedEventArgs("ScheduleDate"));
+        }
+    }
+    private string dateFormatLabelContent2;
+    public string DateFormatLabelContent2
+    {
+        get { return dateFormatLabelContent2; }
+        set
+        {
+            if (value == dateFormatLabelContent2)
+                return;
+            dateFormatLabelContent2 = value;
+
+            OnPropertyChanged(new PropertyChangedEventArgs("DateFormatLabelContent2"));
         }
     }
     public int HrSelection {
