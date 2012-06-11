@@ -137,6 +137,18 @@ public class ScheduleViewModel: BaseViewModel
 
         //
 
+        // FBS Bug 75004 -- 6/6/12
+        string userEntry = dtStr + " " + dtTime;
+        DateTime userDT = Convert.ToDateTime(userEntry);
+        DateTime nowDT = DateTime.Now;
+        if (DateTime.Compare(userDT, nowDT) < 0)
+        {
+            MessageBox.Show("You can't schedule a task in the past", "Zimbra Migration",
+                MessageBoxButton.OK, MessageBoxImage.Error);
+            return;
+        }
+        //
+
         proc.StartInfo.Arguments = "/Create /SC ONCE /TR ";
         proc.StartInfo.Arguments += @"""";
         proc.StartInfo.Arguments += @"\";
