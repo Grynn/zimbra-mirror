@@ -1216,6 +1216,10 @@ public class ZimbraAPI
         int numExceptions = (appt.ContainsKey("numExceptions")) ? Int32.Parse(appt["numExceptions"]) : 0;
         writer.WriteStartElement("SetAppointmentRequest", "urn:zimbraMail");
         writer.WriteAttributeString("l", folderId);
+        if (appt["tags"].Length > 0)
+        {
+            writer.WriteAttributeString("t", appt["tags"]);
+        }
         writer.WriteStartElement("default");
         writer.WriteAttributeString("ptst", appt["ptst"]);
         writer.WriteStartElement("m");
@@ -1702,6 +1706,10 @@ public class ZimbraAPI
         bool isRecurring = task.ContainsKey("freq");
         writer.WriteStartElement("SetTaskRequest", "urn:zimbraMail");
         writer.WriteAttributeString("l", folderId);
+        if (task["tags"].Length > 0)
+        {
+            writer.WriteAttributeString("t", task["tags"]);
+        }
         writer.WriteStartElement("default");
         writer.WriteAttributeString("ptst", "NE");  // we don't support Task Requests
         writer.WriteStartElement("m");

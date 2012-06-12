@@ -642,6 +642,31 @@ STDMETHODIMP CMapiAccessWrap::GetData(BSTR UserId, VARIANT ItemId, FolderType ty
                         }                       
                     }
 
+		    bool bHasTags = false;
+		    if (apptData.vTags)
+		    {
+		        wstring tagData;
+		        int numTags = (int)apptData.vTags->size();
+		        if (numTags > 0)
+		        {
+			    for (int i = 0; i < numTags; i++)
+			    {
+				tagData += (*apptData.vTags)[i];
+				if (i < (numTags - 1))
+				{
+				    tagData += L",";
+				}
+			    }
+			    pIt[L"tags"] = SysAllocString(tagData.c_str());
+			    delete apptData.vTags;
+			    bHasTags = true;
+		        }
+		    }
+		    if (!bHasTags)
+		    {
+		        pIt[L"tags"] = SysAllocString(L"");
+		    }
+
                     // recurrence
                     if (apptData.recurPattern.length() > 0)
                     {
@@ -820,6 +845,31 @@ STDMETHODIMP CMapiAccessWrap::GetData(BSTR UserId, VARIANT ItemId, FolderType ty
                             delete taskData.vAttachments[i];
                         }                       
                     }
+
+		    bool bHasTags = false;
+		    if (taskData.vTags)
+		    {
+			wstring tagData;
+			int numTags = (int)taskData.vTags->size();
+			if (numTags > 0)
+			{
+			    for (int i = 0; i < numTags; i++)
+			    {
+				tagData += (*taskData.vTags)[i];
+				if (i < (numTags - 1))
+				{
+				    tagData += L",";
+				}
+			    }
+			    pIt[L"tags"] = SysAllocString(tagData.c_str());
+			    delete taskData.vTags;
+			    bHasTags = true;
+			}
+		    }
+		    if (!bHasTags)
+		    {
+	                pIt[L"tags"] = SysAllocString(L"");
+		    }
 
                     // recurrence
                     if (taskData.recurPattern.length() > 0)

@@ -894,6 +894,7 @@ LPCWSTR MAPIAccessAPI::_GetItem(SBinary sbItemEID, BaseItemData &itemData)
             ad->organizer.nam = mapiappointment.GetOrganizerName();
             ad->organizer.addr = mapiappointment.GetOrganizerAddr();
             ad->Uid = mapiappointment.GetInstanceUID();
+            ad->vTags = pKeywords;
 	    
             // fill in attendees
             vector<Attendee*> v = mapiappointment.GetAttendees();
@@ -959,6 +960,7 @@ LPCWSTR MAPIAccessAPI::_GetItem(SBinary sbItemEID, BaseItemData &itemData)
             td->Mileage = mapitask.GetMileage();
             td->BillingInfo = mapitask.GetBillingInfo();
             td->ApptClass = mapitask.GetPrivate();
+            td->vTags = pKeywords;
             if (mapitask.IsTaskReminderSet())
             {
                 td->TaskFlagDueBy = mapitask.GetTaskFlagDueBy();

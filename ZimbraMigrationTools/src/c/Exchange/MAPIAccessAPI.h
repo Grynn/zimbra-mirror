@@ -157,6 +157,7 @@ typedef struct _ApptItemData: BaseItemData
     vector<Attendee*> vAttendees;
     vector<AttachmentInfo*> vAttachments;
     vector<MessagePart> vMessageParts;
+    vector<LPWSTR>* vTags;
 
     // recurrence stuff
     wstring recurPattern;
@@ -196,6 +197,7 @@ typedef struct _TaskItemData: BaseItemData
     wstring ApptClass;
     vector<AttachmentInfo*> vAttachments;
     vector<MessagePart> vMessageParts;
+    vector<LPWSTR>* vTags;
 
     // recurrence stuff
     wstring recurPattern;
