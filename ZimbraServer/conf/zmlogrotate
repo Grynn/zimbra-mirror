@@ -6,6 +6,7 @@
     postrotate
       kill -HUP `cat /var/run/syslog*.pid 2> /dev/null` 2> /dev/null || true
       su - zimbra -c "/opt/zimbra/bin/zmswatchctl restart" > /dev/null 2>&1 || true
+      su - zimbra -c "/opt/zimbra/bin/zmconfigdctl restart" > /dev/null 2>&1 || true
     endscript
     compress
 }
