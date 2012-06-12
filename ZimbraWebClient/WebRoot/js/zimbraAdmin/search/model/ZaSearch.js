@@ -565,67 +565,76 @@ function (domainName, types, pagenum, orderby, isascending, attrs, limit) {
 
 ZaSearch.getAccountStats =
 function() {
-	var soapDoc, params, retObj;
+	var retObj;
     retObj = {};
     retObj[ZaItem.ACCOUNT] = 0;
     retObj[ZaItem.ALIAS] = 0;
     retObj[ZaItem.RESOURCE] = 0;
     retObj[ZaItem.DL] = 0;
 
-	//batch the rest of the requests
-	soapDoc = AjxSoapDoc.create("BatchRequest", "urn:zimbra");
-    soapDoc.setMethodAttribute("onerror", "continue");
-
-    //ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.ACCOUNTS, ZaSearch.RESOURCES,ZaSearch.DOMAINS, ZaSearch.COSES
-    var accDoc = soapDoc.set("SearchDirectoryRequest", null, null, ZaZimbraAdmin.URN);
-    var queryString = "(!("+ ZaAccount.A_zimbraIsSystemAccount +"=TRUE))";
-	accDoc.setAttribute("limit", "1");
-    var elBy = soapDoc.set("query", queryString, accDoc);
-    //elBy.setAttribute("by", by);
-    soapDoc.set("limit", 1, accDoc);
-    soapDoc.set("types", ZaSearch.ACCOUNTS, accDoc);
-
-    accDoc = soapDoc.set("SearchDirectoryRequest", null, null, ZaZimbraAdmin.URN);
-	accDoc.setAttribute("limit", "1");
-    elBy = soapDoc.set("query", "", accDoc);
-    soapDoc.set("limit", 1, accDoc);
-    soapDoc.set("types", ZaSearch.ALIASES, accDoc);
-
-    accDoc = soapDoc.set("SearchDirectoryRequest", null, null, ZaZimbraAdmin.URN);
-	accDoc.setAttribute("limit", "1");
-    elBy = soapDoc.set("query", "", accDoc);
-    soapDoc.set("limit", 1, accDoc);
-    soapDoc.set("types", ZaSearch.RESOURCES, accDoc);
-
-    accDoc = soapDoc.set("SearchDirectoryRequest", null, null, ZaZimbraAdmin.URN);
-	accDoc.setAttribute("limit", "1");
-    elBy = soapDoc.set("query", "", accDoc);
-    soapDoc.set("limit", 1, accDoc);
-    soapDoc.set("types", [ZaSearch.DLS, ZaSearch.DDLS].toString(), accDoc);
-
-    params = new Object();
-    params.soapDoc = soapDoc;
-    var reqMgrParams ={
-        controller:ZaApp.getInstance().getCurrentController()
+    for (var i in retObj) {
+        if (!ZaZimbraAdmin.isGlobalAdmin())
+            retObj[i] = ZaSearch.getObjectNumberBySearch(i);
+        else
+            retObj[i] = ZaSearch.getObjectNumberByType(i);
     }
-    var respObj = ZaRequestMgr.invoke(params, reqMgrParams);
-    if(respObj && respObj.Body.BatchResponse) {
-        var response = respObj.Body.BatchResponse.SearchDirectoryResponse;
-        var attr;
-        for(var i = 0; i < response.length; i++) {
-            //if(response[i].account) retObj[ZaSearch.ACCOUNTS] = response[i].searchTotal;
-            //else if(response[i].account) retObj[ZaSearch.ACCOUNTS] = response[i].searchTotal;
-            if(response[i][ZaItem.ACCOUNT])  attr = ZaItem.ACCOUNT;
-            else if(response[i][ZaItem.ALIAS])  attr = ZaItem.ALIAS;
-            else if(response[i][ZaItem.RESOURCE])  attr = ZaItem.RESOURCE;
-            else if(response[i][ZaItem.DL])  attr = ZaItem.DL;
-            else attr = null;
 
-            if(attr)
-                retObj[attr] = response[i].searchTotal;
-        }
-    }
     return retObj;
+}
+
+ZaSearch.getObjectNumberBySearch = function (type) {
+    var query = "";
+    if (type == ZaItem.ACCOUNT) {
+        query = "(!("+ ZaAccount.A_zimbraIsSystemAccount +"=TRUE))";
+        type = ZaSearch.ACCOUNTS;
+    } else if (type == ZaItem.ALIAS) {
+        type = ZaSearch.ALIASES;
+    } else if (type == ZaItem.RESOURCE) {
+        type = ZaSearch.RESOURCES;
+    }  else if (type  == ZaItem.DL) {
+        type = [ZaSearch.DLS, ZaSearch.DDLS];
+    }
+
+    var num = 0;
+    var soapDoc = AjxSoapDoc.create("SearchDirectoryRequest", ZaZimbraAdmin.URN, null);
+    soapDoc.setMethodAttribute("types", type);
+    soapDoc.setMethodAttribute("countOnly", 1);
+
+    soapDoc.set("query", query)
+    try {
+        var params = new Object();
+        params.soapDoc = soapDoc;
+        var reqMgrParams ={
+            controller:ZaApp.getInstance().getCurrentController()
+        }
+        var resp = ZaRequestMgr.invoke(params, reqMgrParams);
+        num = resp.Body.SearchDirectoryResponse.num;
+    } catch (ex) {
+
+    }
+    return num;
+}
+
+ZaSearch.getObjectNumberByType = function (type) {
+    var num = 0;
+    var soapDoc = AjxSoapDoc.create("CountObjectsRequest", ZaZimbraAdmin.URN, null);
+    if (type == ZaItem.ACCOUNT) {
+        type = "userAccount"; // exclude system account
+    }
+
+    soapDoc.setMethodAttribute("type", type);
+    try {
+        var params = new Object();
+        params.soapDoc = soapDoc;
+        var reqMgrParams ={
+            controller:ZaApp.getInstance().getCurrentController()
+        }
+        var resp = ZaRequestMgr.invoke(params, reqMgrParams);
+        num = resp.Body.CountObjectsResponse.num;
+    } catch (ex) {
+
+    }
+    return num;
 }
 
 ZaSearch.getSearchCosByNameQuery =
