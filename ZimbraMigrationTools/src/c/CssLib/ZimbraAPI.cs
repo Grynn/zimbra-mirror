@@ -334,6 +334,39 @@ public class ZimbraAPI
         }
     }
 
+    private void ParseGetTag(string rsp)
+    {
+        if (rsp != null)
+        {
+            int dIdx = rsp.IndexOf("tag");
+
+            if (dIdx != -1)
+            {
+                XDocument xmlDoc = XDocument.Parse(rsp);
+                XNamespace ns = "urn:zimbraMail";
+
+                foreach (var objIns in xmlDoc.Descendants(ns + "GetTagResponse"))
+                {
+                    foreach (XElement tagIns in objIns.Elements())
+                    {
+                        string name = "";
+                        string id = "";
+
+                        foreach (XAttribute tagAttr in tagIns.Attributes())
+                        {
+                            if (tagAttr.Name == "name")
+                                name = tagAttr.Value;
+                            if (tagAttr.Name == "id")
+                                id = tagAttr.Value;
+                        }
+                        if ((name.Length > 0) || (id.Length > 0))
+                            ZimbraValues.GetZimbraValues().Tags.Add(new TagInfo(name, id));
+                    }
+                }
+            }
+        }
+    }
+
     // may not need this -- it's here anyway for now
     private void ParseAddMsg(string rsp, out string mID)
     {
@@ -2407,6 +2440,66 @@ public class ZimbraAPI
         if (client.status == 0)
         {
             ParseCreateTag(rsp, out tagID);       // get the id
+        }
+        else
+        {
+            string soapReason = ParseSoapFault(client.errResponseMessage);
+
+            if (soapReason.Length > 0)
+                lastError = soapReason;
+            else
+                lastError = client.exceptionMessage;
+        }
+        return retval;
+    }
+
+    private void GetTagRequest(XmlWriter writer, int requestId)
+    {
+        writer.WriteStartElement("GetTagRequest", "urn:zimbraMail");
+        if (requestId != -1)
+            writer.WriteAttributeString("requestId", requestId.ToString());
+        writer.WriteEndElement();               // CreateTagRequest
+    }
+
+    public int GetTags()
+    {
+        lastError = "";
+
+        int retval = 0;
+        WebServiceClient client = new WebServiceClient
+        {
+            Url = ZimbraValues.GetZimbraValues().Url,
+            WSServiceType =
+                WebServiceClient.ServiceType.Traditional
+        };
+        StringBuilder sb = new StringBuilder();
+        XmlWriterSettings settings = new XmlWriterSettings();
+
+        settings.OmitXmlDeclaration = true;
+        using (XmlWriter writer = XmlWriter.Create(sb, settings))
+        {
+            writer.WriteStartDocument();
+            writer.WriteStartElement("soap", "Envelope",
+                "http://www.w3.org/2003/05/soap-envelope");
+
+            WriteHeader(writer, true, true, true);
+
+            writer.WriteStartElement("Body", "http://www.w3.org/2003/05/soap-envelope");
+
+            GetTagRequest(writer, -1);
+
+            writer.WriteEndElement();           // soap body
+            writer.WriteEndElement();           // soap envelope
+            writer.WriteEndDocument();
+        }
+
+        string rsp = "";
+
+        client.InvokeService(sb.ToString(), out rsp);
+        retval = client.status;
+        if (client.status == 0)
+        {
+            ParseGetTag(rsp);   // will store in ZimbraValues
         }
         else
         {

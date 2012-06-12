@@ -127,6 +127,7 @@
     <Compile Include="MigrationAccount.cs" />
     <Compile Include="ObjectPickerInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TagInfo.cs" />
     <Compile Include="WSClient.cs" />
     <Compile Include="ZimbraAPI.cs" />
     <Compile Include="ZimbraObjects.cs" />

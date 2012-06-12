@@ -765,6 +765,14 @@ public class CSMigrationWrapper
         Log.info("Acct.TotalItems=", Acct.TotalItems.ToString());
 
         ZimbraAPI api = new ZimbraAPI(isServer);
+        api.AccountID = Acct.AccountID;
+        api.AccountName = Acct.AccountName;
+
+        api.GetTags();
+        foreach (TagInfo taginfo in ZimbraValues.GetZimbraValues().Tags)
+        {
+            Acct.tagDict.Add(taginfo.TagName, taginfo.TagID);
+        }
 
         foreach (dynamic folder in folders)
         {
@@ -778,9 +786,6 @@ public class CSMigrationWrapper
             Log.info("Processing folder", folder.Name);
             if (folder.Id == 0)
             {
-                api.AccountID = Acct.AccountID;
-                api.AccountName = Acct.AccountName;
-
                 string ViewType = GetFolderViewType(folder.ContainerClass);
                 try
                 {

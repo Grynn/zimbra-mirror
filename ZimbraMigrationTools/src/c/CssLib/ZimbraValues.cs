@@ -14,6 +14,7 @@ public class ZimbraValues
         sServerVersion = "";
         lDomains = new List<string>();
         lCOSes = new List<CosInfo>();
+        lTags = new List<TagInfo>();
     }
 
     public static ZimbraValues GetZimbraValues()
@@ -77,6 +78,15 @@ public class ZimbraValues
         set
         {
             lCOSes = value;
+        }
+    }
+    private List<TagInfo> lTags;
+    public List<TagInfo> Tags
+    {
+        get { return lTags; }
+        set
+        {
+            lTags = value;
         }
     }
 
