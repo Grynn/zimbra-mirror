@@ -49,7 +49,7 @@ foreach my $p ( @{$table->table} ) {
 }
 
 if (scalar keys %mysqld > $maxcnt) {
- addToReport("More then $maxcnt mysqld processes are running\n");
+ addToReport("More than $maxcnt mysqld processes are running\n");
  my $procs = join " ", keys %mysqld;
  addToReport("Parent processes include: $procs\n\n");
  addToReport("This should be investigated immediately as it may lead\n");
