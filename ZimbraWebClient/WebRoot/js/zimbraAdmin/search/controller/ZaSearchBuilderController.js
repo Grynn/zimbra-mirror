@@ -1248,7 +1248,7 @@ ZaSearchBuilderController._isChildMenuClicked = function (targetHtml) {
         if (targetHtml.className == "DwtMenu") {
             return true;
         }
-        targetHtml = targetHtml.parentElement;
+        targetHtml = targetHtml.parentElement ? targetHtml.parentElement : targetHtml.parentNode;
     }
     return false;
 }
