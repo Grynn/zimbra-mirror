@@ -858,8 +858,8 @@ function(x, y, width, height) {
 		bds = Dwt.getBounds(htmlElement);
 		this.__controlEvent.newX = bds.x;
 		this.__controlEvent.newY = bds.y;
-		this.__controlEvent.newWidth = bds.width;
-		this.__controlEvent.newHeight = bds.height;
+		this.__controlEvent.newWidth = (AjxUtil.isNumber(width)) ? width : bds.width; //if it's exact number, no need to use the bounds, especially since they are not accurate, wrong in about 2 pixels at least in the case I'm testing.
+		this.__controlEvent.newHeight = (AjxUtil.isNumber(height)) ? height : bds.height;
 		this.__controlEvent.requestedWidth = width;
 		this.__controlEvent.requestedHeight = height;
 		this.notifyListeners(DwtEvent.CONTROL, this.__controlEvent);
