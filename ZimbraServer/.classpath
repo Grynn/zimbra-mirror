@@ -89,9 +89,9 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/guava-10.0.1-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/unboundid-ldapsdk-2.3.0-se.jar" sourcepath="/ZimbraCommon/jars-src/unboundid-ldapsdk-2.3.0-src.zip">
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/unboundid-ldapsdk-2.3.1-se.jar" sourcepath="/ZimbraCommon/jars-src/unboundid-ldapsdk-2.3.1-src.zip">
 		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/unboundid-ldapsdk-2.3.0-javadoc.zip!/"/>
+			<attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/unboundid-ldapsdk-2.3.1-javadoc.zip!/"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/junixsocket-1.3.jar" sourcepath="/ZimbraCommon/jars-src/junixsocket-1.3.zip"/>
