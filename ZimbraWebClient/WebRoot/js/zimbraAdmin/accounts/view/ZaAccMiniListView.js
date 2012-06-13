@@ -16,10 +16,10 @@
  /**
  * @author Greg Solovyev
  **/
-ZaAccMiniListView = function(parent, className, posStyle, headerList) {
+ZaAccMiniListView = function(parent, className, posStyle, headerList, view, id, scrollLoading) {
 	if (arguments.length == 0) return;
     if (posStyle == null) posStyle = DwtControl.RELATIVE_STYLE ;
-	ZaListView.call(this, parent, className, posStyle, headerList);           
+	ZaListView.call(this, parent, className, posStyle, headerList, view, id, scrollLoading);
 	this.hideHeader = true;
 }
 
