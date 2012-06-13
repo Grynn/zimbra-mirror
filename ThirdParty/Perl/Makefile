@@ -269,13 +269,16 @@ XML_PARSER := \
 	XML-Parser-2.40
 
 NET_SERVER := \
-	Net-Server-2.002
+	Net-Server-2.005
 
 PERL_LDAP := \
 	perl-ldap-0.44
 
 DBD_PERL_LIBS 	:= \
 	DBD-mysql-4.020
+
+ZMQ	:= \
+	ZMQ-LibZMQ3-1.00_04
 
 PERL_MM_USE_DEFAULT	:= 1
 export PERL_MM_USE_DEFAULT
@@ -359,7 +362,6 @@ build:
 		echo -n "Compiling perl lib $$lib ..."; \
 		cp $(PERL_ROOT)/$$lib.tar.gz $(TMPDIR); \
 		(cd $(TMPDIR); tar xfz $$lib.tar.gz; cd $$lib; \
-		patch -g0 -N -p1 < $(PERL_ROOT)/patches/net-server-localhost.patch; \
 		$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR); \
 		$(MAKE); $(MAKE) install;) >>$(LOGFILE) 2>&1; \
 		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
@@ -370,6 +372,15 @@ build:
 		cp $(PERL_ROOT)/$$lib.tar.gz $(TMPDIR); \
 		(cd $(TMPDIR); tar xfz $$lib.tar.gz; cd $$lib; \
 		$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR) $(EXPAT_LIB) $(EXPAT_INCLUDE); \
+		$(MAKE); $(MAKE) install;) >>$(LOGFILE) 2>&1; \
+		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
+	done
+
+	@for lib in $(ZMQ); do \
+		echo -n "Compiling perl lib $$lib ..."; \
+		cp $(PERL_ROOT)/$$lib.tar.gz $(TMPDIR); \
+		(cd $(TMPDIR); tar xfz $$lib.tar.gz; cd $$lib; \
+		ZMQ_HOME=$(ZIMBRA_HOME)/zeromq-$(ZMQ_VERSION) $(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR); \
 		$(MAKE); $(MAKE) install;) >>$(LOGFILE) 2>&1; \
 		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
 	done
