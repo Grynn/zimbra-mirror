@@ -1,0 +1,35 @@
+--- ZMQ-LibZMQ3-1.00/Makefile.PL.orig	2012-06-12 23:33:59.433858522 -0700
++++ ZMQ-LibZMQ3-1.00/Makefile.PL	2012-06-12 23:34:50.189919470 -0700
+@@ -48,16 +48,6 @@
+     }
+ }
+ 
+-# XXX As of Devel::CheckLib 0.93, it seems like LIBS = "-L/path/to/foo"
+-# gets ignored (unlike what the docs say). So we manually strip and
+-# re-arrange the paths here
+-assertlibs
+-    lib => 'zmq',
+-    header => 'zmq.h',
+-    incpath => [ split /\s+/, $ENV{ZMQ_INCLUDES} ],
+-    libpath => [ grep { -d $_ } map { s/^-L//; $_ } split /\s+/, $ENV{ZMQ_LIBS} ]
+-;
+-
+ auto_set_repository;
+ requires 'Task::Weaken';
+ requires 'ZMQ::Constants';
+@@ -74,7 +64,7 @@
+ cc_include_paths 'xs';
+ cc_src_paths 'xs';
+ cc_assert_lib 'zmq';
+-cc_libs 'zmq', 'uuid'; # uuid for cygwin, but can't hurt
++cc_libs 'zmq'; # uuid for cygwin, but can't hurt
+ if ($ENV{ZMQ_TRACE}) {
+     cc_define qq|-DPERLZMQ_TRACE=$ENV{ZMQ_TRACE}|;
+ }
+@@ -83,4 +73,4 @@
+ clean_files "xs/*.inc xs/typemap";
+ 
+ do 'tools/genfiles.pl';
+-WriteAll;
+\ No newline at end of file
++WriteAll;

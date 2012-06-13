@@ -380,7 +380,8 @@ build:
 		echo -n "Compiling perl lib $$lib ..."; \
 		cp $(PERL_ROOT)/$$lib.tar.gz $(TMPDIR); \
 		(cd $(TMPDIR); tar xfz $$lib.tar.gz; cd $$lib; \
-		ZMQ_HOME=$(ZIMBRA_HOME)/zeromq-$(ZMQ_VERSION) $(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR); \
+		patch -g0 -N -p1 < $(PERL_ROOT)/patches/zmq-make.patch; \
+		PKG_CONFIG_PATH=$(ZIMBRA_HOME)/zeromq-$(ZMQ_VERSION)/lib/pkgconfig ZMQ_HOME=$(ZIMBRA_HOME)/zeromq-$(ZMQ_VERSION) $(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR); \
 		$(MAKE); $(MAKE) install;) >>$(LOGFILE) 2>&1; \
 		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
 	done
