@@ -27,6 +27,7 @@ class Account: BackgroundWorker
         get { return highestPercentageReached; }
         set { highestPercentageReached = value; }
     }
+    
 
     string m_AccountID;
     public string AccountID
@@ -95,6 +96,7 @@ class Account: BackgroundWorker
 
                     myAccount.serverMigration = ServerMigrationflag;
                     myAccount.Mailoptions = MailOptions;
+                   
                     number = number + 1;
                     myAccount.num = number;
 
@@ -201,6 +203,7 @@ class Account: BackgroundWorker
             MyAcct.AccountName = argumentTest.AccountName;
             MyAcct.AccountID = argumentTest.AccountID;
 
+            MyAcct.MaxErrorCount = argumentTest.Mailoptions.MaxErrorCnt;
 
             MyAcct.AccountNum = argumentTest.num;
 
@@ -267,6 +270,26 @@ class Account: BackgroundWorker
 
                 Numoferrors = (int)a.TotalErrors + 1;      // this happens first
                 System.Console.WriteLine();
+                if (Numoferrors > a.MaxErrorCount)
+                {
+                    System.Console.WriteLine();
+                    System.Console.WriteLine();
+                    Currentuser.StatusMessage = "Total Errors For UserAccount " + a.AccountID.ToString() + "are" + Numoferrors.ToString();
+                    System.Console.WriteLine(Currentuser.StatusMessage);
+                    string Messg = "Migration For UserAccount   Cancelled";
+                   /* ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
+                    "Migration For UserAccount    Cancelled");*/
+                   System.Console.WriteLine(Messg);
+                    System.Console.WriteLine();
+                    System.Console.WriteLine();
+                    //this.countdown.Signal();
+                   // this.CancelAsync();
+                    //this.CancelAsync();
+                    this.RequestStop();
+                    //Countdown.Signal();
+                   // CancelAsync();
+                    //Thread.CurrentThread.Abort();
+                }
 
                /* ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Yellow,
                     "TotalErrors For UserAccount   " + a.AccountID.ToString() + Numoferrors.ToString());*/  //donot use progressutil we want to have consistent logging.
@@ -455,8 +478,8 @@ class Account: BackgroundWorker
             System.Console.WriteLine(msg);
             System.Console.WriteLine();
             System.Console.WriteLine();
-
-            argumentTest.Countdown.Signal();
+            if(argumentTest.Countdown.CurrentCount != 0)
+                argumentTest.Countdown.Signal();
         }
         else
         {
@@ -468,6 +491,8 @@ class Account: BackgroundWorker
                 System.Console.WriteLine();
                 System.Console.WriteLine();
                 string mesg = "Total Errors For UserAccount " + argumentTest.AccountName + " are " + Numoferrors.ToString();
+                System.Console.WriteLine(mesg);
+                mesg = "Migration finished for accountt " + argumentTest.AccountName ;
                 System.Console.WriteLine(mesg);
                 /*ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
                 "TotalErrors For UserAccount   " + argumentTest.AccountName + " are" + Numoferrors.ToString());*/

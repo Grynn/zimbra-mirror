@@ -310,6 +310,7 @@ public class IntroViewModel: BaseViewModel
         m_optionsViewModel.LoggingVerbose = false;
         m_optionsViewModel.LogLevel = LogLevel.Info.ToString();
         m_optionsViewModel.MaxThreadCount = 0;
+        m_optionsViewModel.MaxErrorCount = 0;
         m_optionsViewModel.OEnableRulesAndOOO = true;
         m_optionsViewModel.OEnableNext = true;
         m_optionsViewModel.MigrateONRAfter = (DateTime.Now.AddMonths(-3)).ToShortDateString();

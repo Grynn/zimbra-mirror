@@ -681,7 +681,7 @@ public class ScheduleViewModel: BaseViewModel
         importOpts.MessageSizeFilter = (ovm.IsMaxMessageSize) ? ovm.MaxMessageSize : null;
         importOpts.SkipFolders = (ovm.IsSkipFolders) ? ovm.FoldersToSkip : null;
         importOpts.SkipPrevMigrated = ovm.IsSkipPrevMigratedItems;
-        
+        importOpts.MaxErrorCnt = ovm.MaxErrorCount;
          switch(ovm.LogLevel)
                 {
                 case"Debug":
@@ -946,6 +946,16 @@ public class ScheduleViewModel: BaseViewModel
         {
             ar.NumErrs = (int)a.TotalErrors + 1;      // this happens first
             ar.AccountProblemsList.Add(a.LastProblemInfo);
+            OptionsViewModel ovm = ((OptionsViewModel)ViewModelPtrs[(int)ViewType.OPTIONS]);
+            if (ar.NumErrs > ovm.MaxErrorCount)
+            {
+                for (int i = 0; i < this.BGWList.Count; i++)
+                {
+                    this.BGWList[i].CancelAsync();
+                }
+                
+
+            }
         }
         else if (e.PropertyName == "TotalWarnings")
         {

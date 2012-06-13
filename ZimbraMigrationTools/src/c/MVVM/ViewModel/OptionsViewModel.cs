@@ -63,6 +63,7 @@ public class OptionsViewModel: BaseViewModel
             LoggingVerbose = config.GeneralOptions.Verbose;
             LogLevel = config.GeneralOptions.LogLevel;
             MaxThreadCount = config.GeneralOptions.MaxThreadCount;
+            MaxErrorCount = config.GeneralOptions.MaxErrorCount;
         }
 
         string returnval = "";
@@ -482,6 +483,18 @@ public class OptionsViewModel: BaseViewModel
             m_config.GeneralOptions.MaxThreadCount = value;
 
             OnPropertyChanged(new PropertyChangedEventArgs("MaxThreadCount"));
+        }
+    }
+    public Int32 MaxErrorCount
+    {
+        get { return m_config.GeneralOptions.MaxErrorCount; }
+        set
+        {
+            if (value == m_config.GeneralOptions.MaxErrorCount)
+                return;
+            m_config.GeneralOptions.MaxErrorCount = value;
+
+            OnPropertyChanged(new PropertyChangedEventArgs("MaxErrorCount"));
         }
     }
     private bool oenableNext;

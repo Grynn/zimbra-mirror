@@ -198,6 +198,7 @@ public class BaseViewModel: INotifyPropertyChanged
         m_config.GeneralOptions.LogLevel = optionsModel.LogLevel;
         m_config.GeneralOptions.Verbose     = optionsModel.LoggingVerbose;
         m_config.GeneralOptions.MaxThreadCount = optionsModel.MaxThreadCount;
+        m_config.GeneralOptions.MaxErrorCount = optionsModel.MaxErrorCount;
         m_config.ImportOptions.Mail         = optionsModel.ImportMailOptions;
         m_config.ImportOptions.Calendar     = optionsModel.ImportCalendarOptions;
         m_config.ImportOptions.Contacts     = optionsModel.ImportContactOptions;

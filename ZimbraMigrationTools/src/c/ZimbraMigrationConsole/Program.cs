@@ -75,6 +75,7 @@ namespace ZimbraMigrationConsole
 
         public void parseArgs(string[] args, string defaultArgs)
         {
+
               m_args = new Dictionary<string, string>();
                 parseDefaults(defaultArgs);
 
@@ -85,6 +86,20 @@ namespace ZimbraMigrationConsole
                 }
             
         }
+      /*  public void parseArgs(string args, string defaultArgs)
+        {
+            string[] vargs = args.Split(';');
+            m_args = new Dictionary<string, string>();
+            parseDefaults(defaultArgs);
+
+            foreach (string arg in vargs)
+            {
+                string[] words = arg.Split('=');
+                if(words[1] != null)
+                m_args[words[0]] = words[1];
+            }
+
+        }*/
 
         private void parseDefaults(string defaultArgs)
         {
@@ -277,6 +292,9 @@ class Program
                 {
                 CommandLineArgs.I.parseArgs(args, "myStringArg=defaultVal;someLong=12");
                    
+                   // CommandLineArgs.I.parseArgs(vargs, "myStringArg=defaultVal;someLong=12");
+                    //CommandLineArgs.I.parseArgs(args[0] + args[1] +args[2] +args[3], "myStringArg=defaultVal;someLong=12");
+                   
                 }
                 catch (Exception e)
                 {
@@ -288,7 +306,7 @@ class Program
                 string ConfigXmlFile = CommandLineArgs.I.argAsString("ConfigxmlFile");
                 string UserMapFile = CommandLineArgs.I.argAsString("Users");
                 int MaxThreads = CommandLineArgs.I.argAsInt("MaxThreadCount");
-                string MaxErrors = CommandLineArgs.I.argAsString("MaxErrors");
+                int MaxErrors = CommandLineArgs.I.argAsInt("MaxErrorCount");
                 string MaxWarns = CommandLineArgs.I.argAsString("MaxWarn");
                 string userid = CommandLineArgs.I.argAsString("Profile");
                 string Pstfile = CommandLineArgs.I.argAsString("DataFile");
@@ -688,6 +706,11 @@ class Program
                      SourceAdmin = myXmlConfig.ConfigObj.SourceServer.AdminID;
                  }
 
+                 if (MaxErrors == 0)
+                 {
+                     MaxErrors = myXmlConfig.ConfigObj.GeneralOptions.MaxErrorCount;
+                 }
+                 importopts.MaxErrorCnt = MaxErrors;
                 
                 //importopts.VerboseOn = Verbose;
 
@@ -702,7 +725,7 @@ class Program
                 catch (Exception e)
                 {
 
-                    string error = "Migrationwrapper cannot be initialised ,Migration dll cannot be loaded";
+                    string error = "Migrationwrapper cannot be initialised ,Migration dll cannot be loaded. ";
                     error += e.Message;
                     System.Console.WriteLine();
                     System.Console.WriteLine(error);
@@ -712,7 +735,7 @@ class Program
                     /*ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
                             "");*/
                     System.Console.WriteLine("......... \n");
-
+                    Console.ReadKey(true);
                     return;
 
                 }

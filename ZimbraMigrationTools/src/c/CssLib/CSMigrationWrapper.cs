@@ -94,6 +94,7 @@ public class MigrationOptions
     public string SkipFolders;
     public LogLevel VerboseOn;
     public bool SkipPrevMigrated;
+    public Int32 MaxErrorCnt;
 }
 
 
@@ -379,7 +380,14 @@ public class CSMigrationWrapper
                 Log.debug("Processing folder", folder.Name, "-- Total items:", folder.ItemCount);
                 foreach (dynamic itemobject in itemobjectarray)
                 {
-                   
+                    if (Acct.TotalErrors > options.MaxErrorCnt)
+                    {
+                      
+                        Log.err("Skipping migration since max error occured");
+                        return;
+
+
+                    }
                     foldertype type = (foldertype)itemobject.Type;
                     if (ProcessIt(options, type))
                     {
@@ -515,7 +523,7 @@ public class CSMigrationWrapper
                                     }
                                     catch (Exception e)
                                     {
-
+                                        Acct.TotalErrors++;
                                         Log.err("Exception caught in ProcessItems->api.AddMessage", e.Message);
 
                                     }
@@ -537,6 +545,7 @@ public class CSMigrationWrapper
                                 }
                                 catch (Exception e)
                                 {
+                                    Acct.TotalErrors++;
                                     Log.err("Exception caught in ProcessItems->api.CreateContact", e.Message);
 
 
@@ -586,6 +595,7 @@ public class CSMigrationWrapper
                                     }
                                     catch(Exception e)
                                     {
+                                        Acct.TotalErrors++;
                                         Log.err("exception caught in ProcessItems->api.AddAppointment", e.Message);
 
                                     }
@@ -609,6 +619,7 @@ public class CSMigrationWrapper
                                     }
                                     catch (Exception)
                                     {
+
                                         Log.info(dict["su"], ": unable to parse date");
                                     }
                                 }
@@ -627,6 +638,7 @@ public class CSMigrationWrapper
                                     }
                                     catch (Exception e)
                                     {
+                                        Acct.TotalErrors++;
                                         Log.err("exception caught in ProcessItems->api.AddTask", e.Message);
                                     }
                                 }
@@ -777,6 +789,15 @@ public class CSMigrationWrapper
         foreach (dynamic folder in folders)
         {
             string path = "";
+
+            if (Acct.TotalErrors > options.MaxErrorCnt)
+            {
+               
+                Log.err("Skipping migration since max error occured");
+                return;
+
+
+            }
 
             if (SkipFolder(options, skipList, folder))
             {

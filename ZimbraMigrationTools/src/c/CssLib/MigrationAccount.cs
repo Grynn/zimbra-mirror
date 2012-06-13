@@ -134,6 +134,12 @@ public class MigrationAccount
             totalWarnings = value;
         }
     }
+    Int32 maxErrorCount;
+    public Int32 MaxErrorCount
+    {
+        get { return maxErrorCount; }
+        set { maxErrorCount = value; }
+    }
     public ProblemInfo LastProblemInfo {
         get { return lastProblemInfo; }
         set
