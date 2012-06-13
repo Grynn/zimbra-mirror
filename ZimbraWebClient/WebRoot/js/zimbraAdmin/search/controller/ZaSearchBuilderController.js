@@ -140,6 +140,9 @@ function (value, event, form){
 
 ZaSearchBuilderController.filterDomains =
 function (value, event, form) {
+	if (AjxUtil.isEmpty(value) || AjxStringUtil.trim(value) == "") {
+		return;
+	}
 	this.setInstanceValue (value);
 	var busyId = Dwt.getNextId();
 	var callback = new AjxCallback(this, ZaSearchBuilderController.optionFilterCallback, {busyId:busyId});
@@ -161,6 +164,9 @@ function (value, event, form) {
 
 ZaSearchBuilderController.filterCOSES =
 function (value, event, form) {
+        if (AjxUtil.isEmpty(value) || AjxStringUtil.trim(value) == "") {
+            return;
+        }
         this.setInstanceValue (value);
         var busyId = Dwt.getNextId();
         var callback = new AjxCallback(this, ZaSearchBuilderController.optionCosFilterCallback, {busyId:busyId});
