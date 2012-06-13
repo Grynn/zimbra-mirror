@@ -1,0 +1,9 @@
+--- zeromq-3.2.0/tests/test_monitor.cpp.orig	2012-06-12 22:42:28.000000000 -0700
++++ zeromq-3.2.0/tests/test_monitor.cpp	2012-06-12 22:43:18.000000000 -0700
+@@ -122,4 +122,4 @@
+     assert (events & ZMQ_EVENT_CLOSED);
+ 
+     return 0 ;
+-}
+\ No newline at end of file
++}
