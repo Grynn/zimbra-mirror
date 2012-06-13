@@ -250,6 +250,7 @@ public class IntroViewModel: BaseViewModel
         IsServerMigration = true;
         IsUserMigration = false;
         savedDomain = "";
+        ZimbraValues.GetZimbraValues().ClientVersion = BuildNum;
 
         m_configViewModelS = new ConfigViewModelS();
         m_configViewModelS.Name = "ConfigViewModelS";

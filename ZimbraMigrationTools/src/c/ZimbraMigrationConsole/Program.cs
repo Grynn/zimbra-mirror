@@ -774,6 +774,8 @@ class Program
                     }
 
                 }
+
+                ZimbraValues.GetZimbraValues().ClientVersion = new MVVM.Model.BuildNum().BUILD_NUM;
                                 
                 if (ServerMigration)
                 {

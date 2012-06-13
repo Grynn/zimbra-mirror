@@ -48,7 +48,7 @@ public class WebServiceClient
         HttpWebRequest webRequest = (HttpWebRequest)WebRequest.Create(this.Url);
 
         webRequest.ContentType = "application/soap+xml; charset=\"utf-8\"";
-        webRequest.UserAgent = "Zimbra Systems Client";
+        webRequest.UserAgent = "ZimbraMigration" + "/" + ZimbraValues.GetZimbraValues().ClientVersion; 
         webRequest.Method = "POST";
         webRequest.Proxy = null;
         return webRequest;
@@ -122,7 +122,7 @@ public class WebServiceClient
         HttpWebRequest webRequest = (HttpWebRequest)WebRequest.Create(this.Url);
 
         webRequest.CookieContainer = cookieContainer;
-        webRequest.UserAgent = "Zimbra Systems Client";
+        webRequest.UserAgent = "ZimbraMigration" + "/" + ZimbraValues.GetZimbraValues().ClientVersion;
         webRequest.Method = "POST";
         webRequest.Proxy = null;
         return webRequest;

@@ -40,6 +40,15 @@ public class ZimbraValues
             sAuthToken = value;
         }
     }
+    private string sClientVersion;
+    public string ClientVersion
+    {
+        get { return sClientVersion; }
+        set
+        {
+            sClientVersion = value;
+        }
+    }
     private string sServerVersion;
     public string ServerVersion {
         get { return sServerVersion; }

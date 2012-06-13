@@ -100,7 +100,6 @@ public class ZimbraAPI
     public ZimbraAPI(bool isServer)
     {
         bIsServerMigration = isServer;
-        ZimbraValues.GetZimbraValues();
         dFolderMap = new Dictionary<string, string>();
     }
 
