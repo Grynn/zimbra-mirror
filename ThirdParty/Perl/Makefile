@@ -277,7 +277,10 @@ PERL_LDAP := \
 DBD_PERL_LIBS 	:= \
 	DBD-mysql-4.020
 
-ZMQ	:= \
+ZMQ_CONSTANTS	:= \
+	ZMQ-Constants-1.00
+
+ZMQ_LIB	:= \
 	ZMQ-LibZMQ3-1.00
 
 PERL_MM_USE_DEFAULT	:= 1
@@ -376,7 +379,16 @@ build:
 		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
 	done
 
-	@for lib in $(ZMQ); do \
+	@for lib in $(ZMQ_CONSTANTS); do \
+		echo -n "Compiling perl lib $$lib ..."; \
+		cp $(PERL_ROOT)/$$lib.tar.gz $(TMPDIR); \
+		(cd $(TMPDIR); tar xfz $$lib.tar.gz; cd $$lib; \
+		$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR); \
+		$(MAKE); $(MAKE) install;) >>$(LOGFILE) 2>&1; \
+		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
+	done
+
+	@for lib in $(ZMQ_LIB); do \
 		echo -n "Compiling perl lib $$lib ..."; \
 		cp $(PERL_ROOT)/$$lib.tar.gz $(TMPDIR); \
 		(cd $(TMPDIR); tar xfz $$lib.tar.gz; cd $$lib; \
