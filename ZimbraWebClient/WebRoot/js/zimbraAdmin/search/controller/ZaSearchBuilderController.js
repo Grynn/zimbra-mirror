@@ -709,6 +709,10 @@ function (optionId) {
 		}else{
 			this._serverOptionViewPosition = position;
 		}
+	} else if (optionId == ZaSearchOption.DOMAIN_ID) {
+		width = ZaSearchOptionView.DOMAIN_OPTION_WIDTH;    
+	} else if (optionId == ZaSearchOption.COS_ID) {
+        width = ZaSearchOptionView.COS_OPTION_WIDTH;
 	}
 	/*
 	else if (optionId == ZaSearchOption.DOMAIN_ID){
@@ -1266,9 +1270,10 @@ function (filterType, noCached) {
         if (filterType == ZaSearchOption.SERVER_FILTER_ID) {
             w = ZaSearchOptionView.WIDTH + 10;
             h = 150;
-        } else if (filterType == ZaSearchOption.COS_FILTER_ID ||
-            filterType == ZaSearchOption.DOMAIN_FILTER_ID) {
-            w = ZaSearchOptionView.WIDTH + 10;
+        } else if (filterType == ZaSearchOption.COS_FILTER_ID) {
+            w = ZaSearchOptionView.COS_OPTION_WIDTH;
+        } else if (filterType == ZaSearchOption.DOMAIN_FILTER_ID) {
+            w = ZaSearchOptionView.DOMAIN_OPTION_WIDTH;
             h = 150;
         } else if (filterType == ZaSearchOption.EXT_EMAIL_ADDRESS_FILTER_ID) {
             w = 230;

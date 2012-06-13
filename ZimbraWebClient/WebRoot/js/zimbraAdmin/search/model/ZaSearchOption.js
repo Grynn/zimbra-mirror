@@ -408,9 +408,6 @@ function (optionId, height){
 
 	var domainFilterLabelWidth = 50;
 
-	if(ZaZimbraAdmin.isLanguage("ja")){ /* bug 49524 */
-		domainFilterLabelWidth = 100;
-	}
 	
 	var domainItems = [
 	/*
@@ -422,7 +419,7 @@ function (optionId, height){
 		 },
 		{ type: _SEPARATOR_ , width: 150 },*/
 		{ type: _TEXTFIELD_, ref:  ZaSearchOption.A_domainFilter,
-			label: ZaMsg.search_option_filter, align: _LEFT_, width: ZaSearchOptionView.WIDTH - domainFilterLabelWidth, 
+			label: ZaMsg.search_option_filter, align: _LEFT_, width: ZaSearchOptionView.DOMAIN_OPTION_WIDTH - domainFilterLabelWidth, 
 			inputHelp: ZaMsg.search_option_filter_input_help_domain,
 		  	toolTipContent: ZaMsg.tt_domain_search_option_filter,
 			onChange: ZaSearchBuilderController.filterDomains,
@@ -465,7 +462,7 @@ function (optionId, height){
         var cosItems = [
 
                 { type: _TEXTFIELD_, ref:  ZaSearchOption.A_cosFilter,
-                        label: ZaMsg.search_option_filter, align: _LEFT_, width: ZaSearchOptionView.WIDTH - 50,
+                        label: ZaMsg.search_option_filter, align: _LEFT_, width: ZaSearchOptionView.COS_OPTION_WIDTH - domainFilterLabelWidth,
                         inputHelp: ZaMsg.search_option_filter_input_help_cos,
                         toolTipContent: ZaMsg.tt_cos_search_option_filter,
                         onChange: ZaSearchBuilderController.filterCOSES,
@@ -651,19 +648,14 @@ function (optionId, height){
 
     basicFilterItem[0].items[i-1].items.push (systemAccountOnlyItem) ;
 
-	var domainFilterLabelWidth = 50;
-
-	if(ZaZimbraAdmin.isLanguage("ja")){ /* bug 49524 */
-		domainFilterLabelWidth = 100;
-	}
-
     var domainFilterItems = [
 
 		{ type: _TEXTFIELD_, ref:  ZaSearchOption.A_domainFilter,
-			label: ZaMsg.search_option_filter, align: _LEFT_, width: ZaSearchOptionView.WIDTH - domainFilterLabelWidth,
+			label: ZaMsg.search_option_filter, align: _LEFT_, width: ZaSearchOptionView.WIDTH - 35,
 			inputHelp: ZaMsg.search_option_filter_input_help_domain,
 		  	toolTipContent: ZaMsg.tt_domain_search_option_filter,
-            onChange: ZaSearchBuilderController.filterDomains,
+                        labelCssStyle: "white-space:nowrap",
+            		onChange: ZaSearchBuilderController.filterDomains,
 			enableDisableChecks:[],visibilityChecks:[]
 		 },
 
@@ -704,6 +696,7 @@ function (optionId, height){
                     inputHelp: ZaMsg.search_option_filter_input_help_cos,
                     toolTipContent: ZaMsg.tt_cos_search_option_filter,
                     onChange: ZaSearchBuilderController.filterCOSES,
+		    labelCssStyle: "white-space:nowrap",
                     enableDisableChecks:[],visibilityChecks:[]
              },
              {type: _GROUP_, colSpan: "2", numCols:2, items: [
