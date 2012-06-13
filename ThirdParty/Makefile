@@ -48,7 +48,8 @@ DIRS := openssl \
 	tcmalloc \
 	libmemcached \
 	opendkim \
-	altermime
+	altermime \
+	zeromq
 
 LOGFILE := ThirdParty.make.log
 
