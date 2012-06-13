@@ -32,7 +32,7 @@ build:
 	(tar xzf src/zeromq-$(ZMQ_VERSION).tar.gz; \
 	cd zeromq-$(ZMQ_VERSION); \
 	CFLAGS="-g -O0" \
-	./configure --prefix=$(ZIMBRA_HOME)/zeromq-$(ZMQ_VERSION);
+	./configure --prefix=$(ZIMBRA_HOME)/zeromq-$(ZMQ_VERSION); \
 	$(MAKE) $(MAKEARGS); \
 	$(MAKE) install STRIP="";)
 	(cd $(ZIMBRA_HOME); ln -s zeromq-$(ZMQ_VERSION) zeromq)
