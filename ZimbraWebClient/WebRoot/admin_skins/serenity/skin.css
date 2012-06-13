@@ -772,7 +772,7 @@ TD.gridGroupBodyLabel {
 .AdminTreeItem-selected, 
 .AdminTreeItem-selected-focused, 
 .AdminTreeItem-actioned {
-	padding-left:18px;
+	padding-left:5px;
 }
 
 .AdminTreeItem-selected, 

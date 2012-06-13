@@ -46,12 +46,14 @@ function() {
 
 ZaOverviewPanel.prototype._createFolderTree =
 function() {
-        this._treePanel = new DwtComposite({
+    this._treePanel = new DwtComposite({
 		parent:		this, 
 		className:	"OverviewTreePanel", 
 		posStyle:	DwtControl.RELATIVE_STYLE,
 		id:		ZaId.getTreeId(this.overviewId, this.type)
 	});
+
+    this._treePanel.setScrollStyle(Dwt.SCROLL_Y);
 
     if (!appNewUI){
         this._tree = new DwtTree({

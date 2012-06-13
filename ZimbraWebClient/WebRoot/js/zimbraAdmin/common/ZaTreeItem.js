@@ -58,7 +58,57 @@ function(index, realizeDeferred, forceNode) {
             Dwt.clearHandler(imgEl, DwtEvent.ONMOUSEUP);
         }
     }
+
+    this._adjustText();
 }
+
+ZaTreeItem.prototype._adjustText = function() {
+    var tableNode = document.getElementById(this._htmlElId + "_table");
+    if (tableNode && this._textCell && this._text) {
+        var currentTextSize = AjxStringUtil.getWidth(this._text);
+        // ToDo compute the DOM's width
+        // 202: Total Left Panel Width
+        // 16: first type image 16 expanded image 5 padding before text
+        var allowedSize = 202 - 16 - 16 - 5;
+        if (this._count !== undefined) {
+            allowedSize = allowedSize - 16;
+        }
+
+        if (allowedSize < currentTextSize) {
+            var displayText = this._getDisplayText (currentTextSize, allowedSize);
+            this._textCell.innerHTML = displayText;
+            this.setToolTipContent(this._text);
+        } else {
+            this.setToolTipContent("");
+        }
+
+    }
+}
+
+ZaTreeItem.prototype._getDisplayText = function (currentTextSize, allowedSize) {
+    var totalNumber = (this._text && this._text.length) ? this._text.length: 0;
+    var maxNumberOfLetters= Math.floor(allowedSize * totalNumber / currentTextSize);
+    var displayText  = "";
+    if(maxNumberOfLetters > 0){
+        displayText = this._text.substring(0, maxNumberOfLetters)
+    }
+    return displayText;
+}
+/**
+ * Sets the text.
+ *
+ * @param	{string}	text		the text
+ */
+DwtTreeItem.prototype.setText =
+function(text) {
+	if (this._initialized) {
+		if (!text) text = "";
+		this._text = this._textCell.innerHTML = text;
+        this._adjustText();
+	} else {
+		this._textParam = text;
+	}
+};
 
 ZaTreeItem.prototype.getCount =
 function() {
