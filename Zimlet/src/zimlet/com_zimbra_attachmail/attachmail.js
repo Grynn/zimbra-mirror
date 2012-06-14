@@ -292,9 +292,9 @@ function(ev) {
 AttachMailTabView.prototype._viewMsgButtonListener =
 function(ev) {
 	var items = this.getSelectedMsgs();
-	if (items.length > 0) {
-		items[0].load({});
-		ZmMailMsgView.detachMsgInNewWindow(items[0]);
+	for (var i = 0; i < items.length; i++) {
+		items[i].load({});
+		ZmMailMsgView.detachMsgInNewWindow(items[i]);
 	}
 };
 
