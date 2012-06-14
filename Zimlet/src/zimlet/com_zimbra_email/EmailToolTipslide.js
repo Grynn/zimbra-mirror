@@ -31,10 +31,6 @@ function() {
 	if(this.slideShow.currentSlideId) {
 		document.getElementById(this.slideShow.currentSlideId).style.display = "none";
 	}
-	var offsetHeight = document.getElementById(EmailToolTipSlideShow.mainDivId).offsetHeight;
-	if(offsetHeight != 0) {
-		document.getElementById(this.id).style.height =offsetHeight;
-	}
 
 	document.getElementById(this.id).style.display = "block";
 
@@ -42,7 +38,7 @@ function() {
 	if(this.slideShow.currentSelectCellId) {
 		document.getElementById(this.slideShow.currentSelectCellId).style.background = "";
 	}
-	document.getElementById(this.selectCellId).style.background = "white";
+	document.getElementById(this.selectCellId).style.display = "none";
 	this.slideShow.currentSelectCellId = this.selectCellId;
 	if(this._selectCallback) {
 		this._selectCallback.run();

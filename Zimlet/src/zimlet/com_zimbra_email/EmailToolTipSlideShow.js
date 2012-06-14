@@ -16,7 +16,6 @@
 EmailToolTipSlideShow.mainDivId = "EmailZimlet_slidesMainDiv";
 EmailToolTipSlideShow.navDivId = "EmailZimlet_slidesNavDiv";
 EmailToolTipSlideShow.navTableRowId = "EmailZimlet_slidesNavTableRow";
-EmailToolTipSlideShow.closeBtnId = "emailTooltip_CloseTooltipBtnId";
 
 function EmailToolTipSlideShow(zimlet, canvas) {
 	this.slidesIconAndSlideMap = [];
@@ -34,16 +33,16 @@ function EmailToolTipSlideShow(zimlet, canvas) {
 	canvas.onmouseout = AjxCallback.simpleClosure(this.handleMouseOut, this);
 	//set height and width to make it work in IE
 	this.mainDiv.style.width = EmailTooltipZimlet.tooltipWidth + "px";
-	this.mainDiv.style.height =  EmailTooltipZimlet.tooltipHeight + "px";
 	this.navDiv.style.width = EmailTooltipZimlet.tooltipWidth + "px";
 };
 
 EmailToolTipSlideShow.prototype._createFrame =
 function(canvas) {
-	canvas.innerHTML = ["<div id='", EmailToolTipSlideShow.mainDivId, "' height='", EmailTooltipZimlet.height, "'   width='",EmailTooltipZimlet.width , 
-						"'  style='height:",EmailTooltipZimlet.height,"px;width:",EmailTooltipZimlet.width ,"px;'></div><div  id='", 
-						EmailToolTipSlideShow.navDivId, "'><table  cellpadding=0 cellspacing=0><tr><td><table width=100% cellpadding=0 cellspacing=0><tr id='",
-						EmailToolTipSlideShow.navTableRowId,"'></tr></table></td><td width=90% id='emailTooltip_CloseTooltipBtnId'></td></tr></table></div>"].join("");
+	canvas.innerHTML = ["<div id='", EmailToolTipSlideShow.mainDivId,"'></div>",
+						"<div id='", EmailToolTipSlideShow.navDivId, "'>",
+						"<div class='horizsep'></div>",
+						"<table width=100%><tr id='",EmailToolTipSlideShow.navTableRowId,"'>",
+						"</tr></table></div>"].join("");
 };
 
 EmailToolTipSlideShow.prototype._handleClick =
@@ -96,11 +95,8 @@ function(slide) {
 
 EmailToolTipSlideShow.prototype._insertIconHtml =
 function(iconCell, selectCellId, name, iconDivId, iconName) {
-	iconCell.width= '25px';
 	iconCell.align="center";
 	iconCell.id = selectCellId;
-	iconCell.style.padding = "3px";
-	iconCell.style.paddingTop = "0px";
 
 	iconCell.innerHTML = ["<div title='",name,"' id='",iconDivId,"' class='Img", iconName, "' style='cursor:pointer;'></div>"].join("");
 };

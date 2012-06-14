@@ -29,13 +29,13 @@ com_zimbra_email_handlerObject.prototype.constructor = com_zimbra_email_handlerO
 var EmailTooltipZimlet = com_zimbra_email_handlerObject;
 
 
-// static Contst
+// static content
 EmailTooltipZimlet.IM_NEW_IM = "im new im";
 EmailTooltipZimlet.IM_NEW_BUDDY = "im new buddy";
 EmailTooltipZimlet.NEW_FILTER = "__new__";
 EmailTooltipZimlet.MAILTO_RE = /^mailto:[\x27\x22]?([^@?&\x22\x27]+@[^@?&]+\.[^@?&\x22\x27]+)[\x27\x22]?/;
 EmailTooltipZimlet.tooltipWidth = 280;
-EmailTooltipZimlet.tooltipHeight = 150;
+//EmailTooltipZimlet.tooltipHeight = 150;
 
 EmailTooltipZimlet.prototype.init =
 function() {

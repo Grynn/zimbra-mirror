@@ -1,43 +1,37 @@
 <template id='Frame'>
-	<div id='UnknownPersonSlide_Frame' style='display:block;width:100%;height:100%;background:white;overflow:auto;' width=100% height=100%>
-		<table><tr><td valign='top'>
-		<div align=center id="${photoParentId}"></div></td><td>
-		<div align=center style='width:175px' id="${textDivId}"></div></td></tr></table>
+	<div id='UnknownPersonSlide_Frame' style='background:white;display:block;height:100%;overflow:auto;padding:10px;'>
+		<table width='100%'><tr>
+			<td valign='top' width='65'><div id="${photoParentId}"></div></td>
+			<td><div id="${textDivId}" style='margin-left:10px;'></div></td>
+		</tr></table>
 	</div>
 </template>
+
 <template id='ContactDetails'>
 	<$ if (data.fullName) { $>
-		<label id='UnknownPersonSlide_NameAnchorId' style='font-size:15px;font-weight:bold;text-decoration:none;color:darkBlue;cursor:pointer'><$= AjxStringUtil.htmlEncode(data.fullName) $></label><br/>
+		<div><label id='UnknownPersonSlide_NameAnchorId' class='FakeAnchor' style='font-size:15px;font-weight:bold;'><$= AjxStringUtil.htmlEncode(data.fullName) $></label></div>
 	<$ } $>
+	<table style='margin-bottom:.5em;'><tr id='row_Presence'>
+			<td><div id='img_Presence'></div></td>
+			<td><label id='text_Presence'></label></td>
+	</tr></table>
 	<$ if (data.jobTitle) { $>
-		<label ><$= AjxStringUtil.htmlEncode(data.jobTitle) $></label><br/>
+		<div><label ><$= AjxStringUtil.htmlEncode(data.jobTitle) $></label></div>
 	<$ } $>
 	<$ if (data.email) { $>
-		<label  id='UnknownPersonSlide_EmailAnchorId' style='text-decoration:underline;color:darkBlue;cursor:pointer'><$= AjxStringUtil.htmlEncode(data.email) $></label><br/>
+		<div><label  id='UnknownPersonSlide_EmailAnchorId' class='FakeAnchor'><$= AjxStringUtil.htmlEncode(data.email) $></label></div>
 	<$ } $>
 	<$ if (data.mobilePhone) { $>
-		<label id='UnknownPersonSlide_mobilePhoneAnchorId' style='text-decoration:underline;color:blue;cursor:pointer'><$= AjxStringUtil.htmlEncode(data.mobilePhone) $> (<$= ZmMsg.cell $>)</label><br/>
+		<div><label id='UnknownPersonSlide_mobilePhoneAnchorId' class='FakeAnchor'><$= AjxStringUtil.htmlEncode(data.mobilePhone) $> (<$= ZmMsg.cell $>)</label></div>
 	<$ } $>
 	<$ if (data.workPhone) { $>
-		<label id='UnknownPersonSlide_workPhoneAnchorId' style='text-decoration:underline;color:blue;cursor:pointer'><$= AjxStringUtil.htmlEncode(data.workPhone) $> (<$= ZmMsg.work $>)</label><br/>
+		<div><label id='UnknownPersonSlide_workPhoneAnchorId' class='FakeAnchor'><$= AjxStringUtil.htmlEncode(data.workPhone) $> (<$= ZmMsg.work $>)</label></div>
 	<$ } $>
 	<$ if (data.address) { $>
-		<label ><$= AjxStringUtil.htmlEncode(data.address) $> (<$= ZmMsg.work $>)</label><br/>
+		<div><label><$= AjxStringUtil.htmlEncode(data.address) $> (<$= ZmMsg.work $>)</label></div>
 	<$ } $>
     <$ if (data.imURI) { $>
-       <label> <$= data.imURI $> (<$= ZmMsg.imShort $>)</label><br/>
+       <div><label> <$= data.imURI $> (<$= ZmMsg.imShort $>)</label></div>
     <$ } $>
-	<br/>
-	<br/>
 
-	<table border=0>
-	    <tr id='row_Presence'>
-	        <td>
-                <div id='img_Presence'></div>
-            </td>
-            <td>
-                <label id='text_Presence'></label>
-            </td?
-        </tr>
-    </table>
 </template>
