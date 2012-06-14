@@ -439,7 +439,6 @@ function(event) {
 				event.status = DwtSoundPlugin.LOADING;
 				break;
 			case "Loading":
-				valid = true;
 				event.status = DwtSoundPlugin.LOADING;
 				break;
 			case "Playable":
@@ -598,6 +597,8 @@ function(event) {
 	var keepChecking = true;
 	var player = this._getPlayer();
 	event.finished = false;
+	/*
+	use HTML5 canPlay event instead
 	var valid = false;
 	if (player) {
 		var status = player.duration;
@@ -611,12 +612,13 @@ function(event) {
 				keepChecking = false;
 				break;
 		}
-	}
-	if (valid) {
+	} */
+	/*if (valid) {
 		var scale = 1000; // Converts to milliseconds.
 		event.time = player.currentTime * scale;
 		event.duration = player.duration * scale;
-	} else {
+	} */
+	if(!valid) {
 		event.status = DwtSoundPlugin.WAITING;
 		event.time = 0;
 		event.duration = 100;
@@ -644,8 +646,20 @@ function(event) {
 DwtHtml5SoundPlugin.prototype.addChangeListener =
 function(listener) {
 	var player = this._getPlayer();
+	var obj = this;
 	player.addEventListener("timeupdate", function(e) { 
 			listener.handleEvent({time: player.currentTime * 1000, duration: player.duration * 1000, status: DwtSoundPlugin.PLAYABLE});}, false);
+	player.addEventListener("ended", function(e) {
+			player.pause(); 
+			obj.setTime(0);
+			listener.obj.setFinished();
+	});
+	player.addEventListener("canplay", function(event) {
+		var scale = 1000; // Converts to milliseconds.
+		event.time = player.currentTime * scale;
+		event.duration = player.duration * scale;
+		player.play();
+	});
 	this._monitorStatus();
 };
 //////////////////////////////////////////////////////////////////////////////
