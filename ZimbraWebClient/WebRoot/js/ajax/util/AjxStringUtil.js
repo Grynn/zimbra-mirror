@@ -1662,11 +1662,14 @@ function(text, isHtml) {
 		}
 	}
 
+	// Handle remaining content
 	if (curBlock.length) {
 		results.push({type:curType, block:curBlock});
 		unknownBlock = (curType == AjxStringUtil.ORIG_UNKNOWN) ? curBlock : unknownBlock;
 		count[curType] = count[curType] ? count[curType] + 1 : 1;
 	}
+	
+	// Now it's time to analyze all these blocks that we've classified
 	
 	// If we have a STRONG separator (eg "--- Original Message ---"), consider it authoritative and return the text that precedes it
 	if (count[AjxStringUtil.ORIG_SEP_STRONG] > 0) {
@@ -1693,6 +1696,15 @@ function(text, isHtml) {
 	// If we found quoted content and there's exactly one UNKNOWN block, return it.
 	if (count[AjxStringUtil.ORIG_UNKNOWN] == 1 && count[AjxStringUtil.ORIG_QUOTED] > 0) {
 		var originalText = AjxStringUtil._getTextFromBlock(unknownBlock);
+		if (originalText) {
+			return originalText;
+		}
+	}
+	
+	// Check for UNKNOWN followed by HEADER
+	var first = results[0], second = results[1];
+	if (first && first.type == AjxStringUtil.ORIG_UNKNOWN && second && second.type == AjxStringUtil.ORIG_HEADER) {
+		var originalText = AjxStringUtil._getTextFromBlock(first.block);
 		if (originalText) {
 			return originalText;
 		}
@@ -2099,7 +2111,12 @@ function(count, results, isHtml, ctxt) {
 				foundSep = true;
 			}
 			else if (type == AjxStringUtil.ORIG_UNKNOWN && !foundSep) {
-				unknownBlock = isHtml ? true : result.block;
+				if (unknownBlock) {
+					return null;
+				}
+				else {
+					unknownBlock = isHtml ? true : result.block;
+				}
 			}
 			else if (foundSep) {
 				afterSep[type] = true;
