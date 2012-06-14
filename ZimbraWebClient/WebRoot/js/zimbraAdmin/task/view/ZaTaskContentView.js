@@ -250,7 +250,19 @@ ZaTaskContentView.myXFormModifier = function(xFormObject, entry) {
                                 visibilityChecks:[[XForm.checkInstanceValue, ZaTask.A2_isServerExpaned, true]],
                                 visibilityChangeEventSources:[ZaTask.A2_isServerExpaned],
                                 onSelection:ZaTaskContentView.taskItemSelectionListener,
-                                items:[ //will be appended by others as notification
+                                items:[
+                                    {   type:_GROUP_, cssClass: "ZaTaskListContent", tableCssClass: "NoResults", width:"100%",
+                                        visibilityChecks:[ [ZaTaskContentView.prototype.canShowServerStatusIsHealthy] ],
+                                        visibilityChangeEventSources:[ZaTask.A2_isRTExpanded, ZaTask.A2_notificationCount],
+                                        items:[
+                                           { type:_OUTPUT_, value: "<br><br>" + ZaMsg.ServerStatusHealthy,  width:"100%"
+                                             //use  <br><br> to align the style of 'Running Tasks' and 'Work in Progress'
+                                             //when they are 'No results found'
+                                           }
+                                        ]
+                                    }
+
+                                    //will be appended by others as notification
                                 ]
                             }
                         ]
@@ -265,6 +277,12 @@ ZaTaskContentView.myXFormModifier = function(xFormObject, entry) {
 	xFormObject.items = [
 			{type:_SWITCH_, align:_LEFT_, valign:_TOP_, items:cases}
 	];
+}
+
+ZaTaskContentView.prototype.canShowServerStatusIsHealthy = function () {
+    var isRTExpanded = this.getInstanceValue( ZaTask.A2_isRTExpanded ) || false;
+    var notificationCount = this.getInstanceValue(ZaTask.A2_notificationCount) || 0;
+    return  isRTExpanded && (notificationCount == 0)
 }
 
 ZaTaskContentView.prototype.getCustomWidth = function () {
