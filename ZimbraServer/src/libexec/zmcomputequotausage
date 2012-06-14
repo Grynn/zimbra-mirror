@@ -7,28 +7,63 @@
 # 
 # ***** END LICENSE BLOCK *****
 # 
-source /opt/zimbra/bin/zmshutil || exit 1
-zmsetvars -f zimbra_home
+source `dirname $0`/../bin/zmshutil || exit 1
+zmsetvars -f \
+  zimbra_home \
+  zimbra_server_hostname \
+  zimbra_ldap_password \
+  ldap_url
+
+COMPUTE_HOST=`/opt/zimbra/bin/ldapsearch -x -H "${ldap_url}" -w ${zimbra_ldap_password} -D uid=zimbra,cn=admins,cn=zimbra -b '' '(&(objectClass=zimbraServer)(zimbraServiceEnabled=mailbox))' zimbraServiceHostname | awk 'BEGIN { FOUND=0 } { if ((FOUND == 0) && ($1 ~ /^zimbraServiceHostname:$/)) { print $2 ; FOUND=1 } }'`
 
 while [ $# -gt 0 ]
 do
-    if [ "$1" == "-h" -o "$1" == "--help" ]
-	then
-	    echo "usage: $0 [ -h | --help ]"
-		echo "Compute current total aggregate quota used by each domain in the system and update LDAP with the data."
-		echo ""
-		echo "  -h, --help    display this help and exit"
-		echo ""
-		exit 0
-	else
-		echo "Usage: $0 [ -h | --help ]"
-		echo "Compute current total aggregate quota used by each domain in the system and update LDAP with the data."
-		echo ""
-		echo "  -h, --help    display this help and exit"
-		echo ""
-		exit 1
-    fi
+  if [ "$1" == "-h" -o "$1" == "--help" ]
+  then
+    echo "usage: $0 [ -h | --help ]"
+    echo "Compute current total aggregate quota used by each domain in the system and update LDAP with the data."
+    echo ""
+    echo "  -h, --help    display this help and exit"
+    echo ""
+    exit 0
+  elif [ "$1" == "-d" -o "$1" == "--debug" ]
+  then
+    DEBUG=1
+    shift
+  elif [ "$1" == "-f" -o "$1" == "--force" ]
+  then
+    FORCE=1
+    shift
+  else
+    echo "Usage: $0 [ -h | --help ]"
+    echo "Compute current total aggregate quota used by each domain in the system and update LDAP with the data."
+    echo ""
+    echo "  -h, --help    display this help and exit"
+    echo ""
+    exit 1
+  fi
 done
+
+if [ "x${DEBUG}" == "x1" ]
+then
+  echo "Your hostname:                " ${zimbra_server_hostname}
+  echo "Host this should be run from: " ${COMPUTE_HOST}
+fi
+
+# Exit if you are not the chosen one!
+if [ "x${zimbra_server_hostname}" != "x${COMPUTE_HOST}" -a "x${FORCE}" != "x1" ]
+then
+  if [ "x${DEBUG}" == "x1" ]
+  then
+    echo "You are not the chosen one!  Run this command from host:  ${COMPUTE_HOST}"
+  fi
+  exit
+fi
+
+if [ "x${FORCE}" == "x1" -a "x${DEBUG}" == "x1" ]
+then
+  echo "Forcing execution from un-expected host:  ${zimbra_server_hostname}"
+fi
 
 exec ${zimbra_home}/bin/zmjava com.zimbra.common.soap.SoapCommandUtil -z ComputeAggregateQuotaUsageRequest
 
