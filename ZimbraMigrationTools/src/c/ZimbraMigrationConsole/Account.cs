@@ -270,25 +270,28 @@ class Account: BackgroundWorker
 
                 Numoferrors = (int)a.TotalErrors + 1;      // this happens first
                 System.Console.WriteLine();
-                if (Numoferrors > a.MaxErrorCount)
+                if (a.MaxErrorCount > 0)
                 {
-                    System.Console.WriteLine();
-                    System.Console.WriteLine();
-                    Currentuser.StatusMessage = "Total Errors For UserAccount " + a.AccountID.ToString() + "are" + Numoferrors.ToString();
-                    System.Console.WriteLine(Currentuser.StatusMessage);
-                    string Messg = "Migration For UserAccount   Cancelled";
-                   /* ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
-                    "Migration For UserAccount    Cancelled");*/
-                   System.Console.WriteLine(Messg);
-                    System.Console.WriteLine();
-                    System.Console.WriteLine();
-                    //this.countdown.Signal();
-                   // this.CancelAsync();
-                    //this.CancelAsync();
-                    this.RequestStop();
-                    //Countdown.Signal();
-                   // CancelAsync();
-                    //Thread.CurrentThread.Abort();
+                    if (Numoferrors > a.MaxErrorCount)
+                    {
+                        System.Console.WriteLine();
+                        System.Console.WriteLine();
+                        Currentuser.StatusMessage = "Total Errors For UserAccount " + a.AccountID.ToString() + "are" + Numoferrors.ToString();
+                        System.Console.WriteLine(Currentuser.StatusMessage);
+                        string Messg = "Migration For UserAccount Cancelled";
+                        /* ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
+                         "Migration For UserAccount    Cancelled");*/
+                        System.Console.WriteLine(Messg);
+                        System.Console.WriteLine();
+                        System.Console.WriteLine();
+                        //this.countdown.Signal();
+                        // this.CancelAsync();
+                        //this.CancelAsync();
+                        this.RequestStop();
+                        //Countdown.Signal();
+                        // CancelAsync();
+                        //Thread.CurrentThread.Abort();
+                    }
                 }
 
                /* ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Yellow,
@@ -492,7 +495,7 @@ class Account: BackgroundWorker
                 System.Console.WriteLine();
                 string mesg = "Total Errors For UserAccount " + argumentTest.AccountName + " are " + Numoferrors.ToString();
                 System.Console.WriteLine(mesg);
-                mesg = "Migration finished for accountt " + argumentTest.AccountName ;
+                mesg = "Migration finished for account " + argumentTest.AccountName ;
                 System.Console.WriteLine(mesg);
                 /*ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
                 "TotalErrors For UserAccount   " + argumentTest.AccountName + " are" + Numoferrors.ToString());*/

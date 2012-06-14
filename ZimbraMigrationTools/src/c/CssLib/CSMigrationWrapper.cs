@@ -380,13 +380,13 @@ public class CSMigrationWrapper
                 Log.debug("Processing folder", folder.Name, "-- Total items:", folder.ItemCount);
                 foreach (dynamic itemobject in itemobjectarray)
                 {
-                    if (Acct.TotalErrors > options.MaxErrorCnt)
+                    if (options.MaxErrorCnt > 0)
                     {
-                      
-                        Log.err("Skipping migration since max error occured");
-                        return;
-
-
+                        if (Acct.TotalErrors > options.MaxErrorCnt)
+                        {
+                            Log.err("Cancelling migration -- error threshold reached");
+                            return;
+                        }
                     }
                     foldertype type = (foldertype)itemobject.Type;
                     if (ProcessIt(options, type))
@@ -792,13 +792,13 @@ public class CSMigrationWrapper
         {
             string path = "";
 
-            if (Acct.TotalErrors > options.MaxErrorCnt)
+            if (options.MaxErrorCnt > 0)
             {
-               
-                Log.err("Skipping migration since max error occured");
-                return;
-
-
+                if (Acct.TotalErrors > options.MaxErrorCnt)
+                {
+                    Log.err("Cancelling migration -- error threshold reached");
+                    return;
+                }
             }
 
             if (SkipFolder(options, skipList, folder))

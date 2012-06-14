@@ -947,14 +947,15 @@ public class ScheduleViewModel: BaseViewModel
             ar.NumErrs = (int)a.TotalErrors + 1;      // this happens first
             ar.AccountProblemsList.Add(a.LastProblemInfo);
             OptionsViewModel ovm = ((OptionsViewModel)ViewModelPtrs[(int)ViewType.OPTIONS]);
-            if (ar.NumErrs > ovm.MaxErrorCount)
+            if (ovm.MaxErrorCount > 0)
             {
-                for (int i = 0; i < this.BGWList.Count; i++)
+                if (ar.NumErrs > ovm.MaxErrorCount)
                 {
-                    this.BGWList[i].CancelAsync();
+                    for (int i = 0; i < this.BGWList.Count; i++)
+                    {
+                        this.BGWList[i].CancelAsync();
+                    }
                 }
-                
-
             }
         }
         else if (e.PropertyName == "TotalWarnings")
