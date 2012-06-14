@@ -595,8 +595,10 @@ public class CSMigrationWrapper
                                     }
                                     catch(Exception e)
                                     {
+                                        Acct.LastProblemInfo = new ProblemInfo(dict["su"], e.Message,
+                                                                               ProblemInfo.TYPE_ERR);
                                         Acct.TotalErrors++;
-                                        Log.err("exception caught in ProcessItems->api.AddAppointment", e.Message);
+                                        Log.err(dict["su"], "exception caught in ProcessItems->api.AddAppointment", e.Message);
 
                                     }
                                 }
