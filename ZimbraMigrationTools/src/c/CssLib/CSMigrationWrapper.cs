@@ -11,15 +11,18 @@ namespace CssLib
 public class Log {
     public enum Level { None, Err, Warn, Info, Debug, Trace };
 
-    public static void init(string file, Level level) {
+    public static void init(string file, Level level)
+    {
         log_init(file, level);
     }
 
-    public static void log(Level level, object obj) {
+    public static void log(Level level, object obj)
+    {
         log_print(level, obj.ToString());
     }
 
-    public static void log(Level level, params object[] objs) {
+    public static void log(Level level, params object[] objs)
+    {
         StringBuilder s = new StringBuilder();
         String last = null;
 
@@ -43,8 +46,12 @@ public class Log {
     public static void warn(string str) { log_print(Level.Warn, str); }
     public static void warn(params object[] objs) { log(Level.Warn, objs); }
 
-    public static void open(string file) { log_open(file); }
+    public static void dump(string str, string data)
+    {
+        log_print(Level.Trace, (str + "\r\n" + data).ToString());
+    }
     public static string file() { return log_file(); }
+    public static void open(string file) { log_open(file); }
     public static void prefix(string prefix) { log_prefix(prefix); }
 
     #region PInvokes
@@ -79,12 +86,14 @@ public enum ZimbraFolders
     Contacts = 7, Tags = 8, Conversations = 9, Calendar = 10, MailboxRoot = 11, Wiki = 12,
     EmailedContacts = 13, Chats = 14, Tasks = 15, Max = 16
 }
+
 public enum LogLevel
 {
-Info = 3,
-Debug = 4,
-Trace = 5,
+    Info = 3,
+    Debug = 4,
+    Trace = 5,
 }
+
 public class MigrationOptions
 {
     public ItemsAndFoldersOptions ItemsAndFolders;
@@ -96,9 +105,6 @@ public class MigrationOptions
     public bool SkipPrevMigrated;
     public Int32 MaxErrorCnt;
 }
-
-
-
 
 public class CSMigrationWrapper
 {
@@ -123,24 +129,18 @@ public class CSMigrationWrapper
 
     public CSMigrationWrapper(string mailClient)
     {
-       // try
+        // try
         {
-
-
             InitLogFile("migration", Log.Level.Trace);
             Log.info("Initializing migration");
-
 
             MailClient = mailClient;
             if (MailClient == "MAPI")
             {
-
                 MailWrapper = new MapiMigration();
-
-
             }
         }
-       /* catch (Exception e)
+        /* catch (Exception e)
         {
             Log.err("Exception in CSMigrationWrapper construcor", e.Message);
         }*/
@@ -190,6 +190,7 @@ public class CSMigrationWrapper
         {
             // FBS bug 73020 -- 4/18/12
             string tmp = msg;
+
             msg = string.Format("GetListofMapiProfiles Exception: {0}", e.Message);
             if (tmp.Length > 0)
             {
@@ -359,8 +360,8 @@ public class CSMigrationWrapper
         ZimbraAPI api, string path, MigrationOptions options)
     {
         DateTime dt = DateTime.UtcNow;
-        
         dynamic[] itemobjectarray = null ;
+        
         try
         {
             itemobjectarray = user.GetItemsForFolder(folder, dt.ToOADate());
@@ -369,6 +370,7 @@ public class CSMigrationWrapper
         {
             Log.err("exception in ProcessItems->user.GetItemsFolder", e.Message);
         }
+
         int iProcessedItems = 0;
         string historyfile = Path.GetTempPath() + Acct.AccountName.Substring(0,Acct.AccountName.IndexOf('@')) + "history.log";
         string historyid = "";
@@ -675,24 +677,23 @@ public class CSMigrationWrapper
     }
 
     public void StartMigration(MigrationAccount Acct, MigrationOptions options, bool isServer = true,
-        LogLevel isVerbose = LogLevel.Info, bool isPreview = false, bool doRulesAndOOO = true)      
+        LogLevel logLevel = LogLevel.Info, bool isPreview = false, bool doRulesAndOOO = true)      
     {
         string accountName = "";
         dynamic[] folders = null;
         int idx = Acct.AccountName.IndexOf("@");
+        Log.Level level = (Log.Level)logLevel;
         dynamic user = null;
-        if (MailClient == "MAPI")
-        {
-            //user = new Exchange.UserObject();
-            user = new MapiUser();
-        }
         string value = "";
 
+        if (MailClient == "MAPI")
+        {
+            user = new MapiUser();
+        }
         if (!isServer)
         {
             m_umUser = user;
         }
-
         if (idx == -1)
         {
             Acct.LastProblemInfo = new ProblemInfo(Acct.AccountName, "Illegal account name",
@@ -705,10 +706,9 @@ public class CSMigrationWrapper
             accountName = Acct.AccountName.Substring(0, idx);
         }
 
-        //Log.Level level = isVerbose ? Log.Level.Debug : Log.Level.Info;
-        Log.Level level = (Log.Level)isVerbose;
         Log.init(Path.GetTempPath() + "migration.log", level);  // might have gotten a new level from options
-        InitLogFile(accountName, level);
+        if (isServer)
+            InitLogFile(accountName, level);
         try
         {
             value = user.Init(isServer ? "host" : "", Acct.AccountID, accountName);

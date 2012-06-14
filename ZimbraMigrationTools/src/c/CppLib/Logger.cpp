@@ -133,12 +133,10 @@ Log::Log(const wchar_t *file, Level level): ffd(file), fmt(NULL), last_fmt(NULL)
 
 void Log::endlog(Tlsdata &tlsd, Level clvl)
 {
-    size_t tmlen;
+    wchar_t buf[128];
     time_t now_sec;
     usec_t now_usec;
     wstring &strbuf(tlsd.strbuf);
-    size_t sz = (size_t)tlsd.strm.size();
-    wchar_t tmp[8];
 
     lck.Enter();
     if (!ffd.open())
@@ -149,14 +147,13 @@ void Log::endlog(Tlsdata &tlsd, Level clvl)
     if (now_sec != last_sec)
     {
         wchar_t *p;
-        wchar_t tbuf[128];
         struct tm *tm;
 
         tm = localtime(&now_sec);
-        wcsftime(tbuf, sizeof (tbuf) / sizeof (wchar_t), fmt, tm);
+        wcsftime(buf, sizeof (buf) / sizeof (wchar_t), fmt, tm);
         if (last_fmt != NULL)
             free(last_fmt);
-        last_fmt = wcsdup(tbuf);
+        last_fmt = wcsdup(buf);
         last_sec = now_sec;
         p = wcsstr(last_fmt, USubst);
         upos = p ? (int)(p - last_fmt) : -1;
@@ -164,12 +161,11 @@ void Log::endlog(Tlsdata &tlsd, Level clvl)
     strbuf = last_fmt;
     if (upos != -1)
     {
-        wsprintf(tmp, L"%06u", (unsigned)(now_usec % 1000000));
-        strbuf.replace(upos, 2, tmp);
+        wsprintf(buf, L"%06u", (unsigned)(now_usec % 1000000));
+        strbuf.replace(upos, 2, buf);
     }
     if (!strbuf.empty())
         strbuf += ' ';
-    tmlen = strbuf.size();
     strbuf += LevelStr[clvl];
     if (clvl == Err)
         strbuf += ' ';
@@ -179,31 +175,11 @@ void Log::endlog(Tlsdata &tlsd, Level clvl)
         strbuf += tlsd.prefix;
         strbuf += ' ';
     }
-    for (const wchar_t *p = tlsd.strm.str(); sz--; p++)
-    {
-        if ((*p < ' ') && (*p != '\t'))
-        {
-            if (*p == '\n')
-            {
-                strbuf += L"\\n";
-            }
-            else if (*p == '\r')
-            {
-                strbuf += L"\\r";
-            }
-            else
-            {
-                wsprintf(tmp, L"\\%03o", *p);
-                strbuf += tmp;
-            }
-        }
-        else
-        {
-            strbuf += *p;
-        }
+    strbuf.append(tlsd.strm.str(), (unsigned)tlsd.strm.size());
+    if (strbuf.at(strbuf.length() - 1) != '\n') {
+        strbuf += '\r';
+        strbuf += '\n';
     }
-    strbuf += '\r';
-    strbuf += '\n';
     ffd.write(strbuf.c_str(), (unsigned)strbuf.size());
     ffd.unlock();
     lck.Leave();

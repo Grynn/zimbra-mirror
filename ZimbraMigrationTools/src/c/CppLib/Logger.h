@@ -291,6 +291,8 @@ public:
         return *this;
     }
 
+    void dump(const wchar_t *str, const wchar_t *data) { log(Trace, str, "\r\n", data); }
+
 #define _func_(n, l) \
     template<class C> void n(const C &c) { log(l, c); } \
     template<class C, class D> void n(const C &c, const D &d) { log(l, c, d); } \
