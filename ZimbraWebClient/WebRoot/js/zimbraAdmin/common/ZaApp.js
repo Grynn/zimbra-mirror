@@ -886,6 +886,9 @@ function (skins) {
 ZaApp.prototype.handleDomainCreation = 
 function (ev) {
 	if(ev) {
+        if (!ZaZimbraAdmin.hasGlobalDomainListAccess()) {
+            ZaApp.getInstance()._domainNameList = ZaDomain.getEffectiveDomainList(ZaZimbraAdmin.currentAdminAccount.id);
+        }
 		//update the overpanel
         this.searchDomains();
         //update the domain list. We separate two search domains because domain list view only need the first page

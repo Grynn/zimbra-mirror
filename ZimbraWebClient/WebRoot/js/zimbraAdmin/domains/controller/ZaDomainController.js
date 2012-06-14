@@ -699,9 +699,10 @@ function(ev) {
 		if(domain != null) {
 			//if creation took place - fire an DomainChangeEvent
 			this.fireCreationEvent(domain);
-			if(domain.rights && domain.rights[ZaDomain.RIGHT_DELETE_DOMAIN])
-				this._toolbar.getButton(ZaOperation.DELETE).setEnabled(true);
-					
+			if(domain.rights && domain.rights[ZaDomain.RIGHT_DELETE_DOMAIN]) {
+                if (this._toolbar && this._toolbar.getButton(ZaOperation.DELETE))
+				    this._toolbar.getButton(ZaOperation.DELETE).setEnabled(true);
+            }
 			this._newDomainWizard.popdown();
 		}
 	} catch (ex) {
