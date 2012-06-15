@@ -9,8 +9,7 @@ import org.testng.annotations.Test;
 
 import com.zimbra.common.soap.Element;
 import com.zimbra.qa.selenium.framework.core.Bugs;
-import com.zimbra.qa.selenium.framework.items.AppointmentItem;
-import com.zimbra.qa.selenium.framework.items.RecipientItem;
+import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.AbsApplication;
 import com.zimbra.qa.selenium.framework.ui.AbsDialog;
 import com.zimbra.qa.selenium.framework.ui.AbsSeleniumObject;
@@ -56,7 +55,7 @@ public class DeleteAppointment extends CalendarWorkWeekTest {
 		apptBody = "body" + ZimbraSeleniumProperties.getUniqueString();
 		
 		// Absolute dates in UTC zone
-		Calendar now = this.calendarWeekDayUTC;
+		Calendar now = Calendar.getInstance();
 		ZDate startUTC = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 12, 0, 0);
 		ZDate endUTC   = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 14, 0, 0);
 		
@@ -92,8 +91,14 @@ public class DeleteAppointment extends CalendarWorkWeekTest {
 		
 		
 		//-- Verification
-		SleepUtil.sleepMedium(); //testcase failing due to timing issue so added sleep
-		ZAssert.assertEquals(app.zPageCalendar.sIsElementPresent(app.zPageCalendar.zGetAllDayApptLocator(apptSubject)), false, "Verify all-day appointment is deleted");
+//		SleepUtil.sleepMedium(); //testcase failing due to timing issue so added sleep
+//		ZAssert.assertEquals(app.zPageCalendar.sIsElementPresent(app.zPageCalendar.zGetAllDayApptLocator(apptSubject)), false, "Verify all-day appointment is deleted");
+		
+		
+		AppointmentItem trashed = AppointmentItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ apptSubject +") is:anywhere");
+		ZAssert.assertNotNull(trashed, "Verify the appointment exists (it is in the trash)");
+		ZAssert.assertEquals(trashed.getFolder(), FolderItem.importFromSOAP(app.zGetActiveAccount(), FolderItem.SystemFolder.Trash).getId(), "Verify the appointment is in the trash");
+		
 	}
 	
 	@Bugs(ids = "69132")
