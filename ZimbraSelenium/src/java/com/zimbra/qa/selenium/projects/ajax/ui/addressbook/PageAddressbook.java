@@ -62,7 +62,7 @@ public class PageAddressbook extends AbsTab {
 	public static class CONTEXT_SUB_MENU {
 				
 		public static final ContextMenuItem CONTACT_SUB_NEW_TAG = new ContextMenuItem("div#contacts_newtag","New Tag","div[class='ImgNewTag']",":contains('nt')");
-		public static final ContextMenuItem CONTACT_SUB_REMOVE_TAG = new ContextMenuItem("div[id^=contacts_removetag]","Remove Tag","div[class='ImgDeleteTag']","");
+		public static final ContextMenuItem CONTACT_SUB_REMOVE_TAG = new ContextMenuItem("div[id='contacts_removetag']","Remove Tag","div[class='ImgDeleteTag']","");
 		//public static final ContextMenuItem CONTACT_SUB_REMOVE_TAG = new ContextMenuItem("td#zmi__Contacts__TAG_MENU|MENU|REMOVETAG_title","Remove Tag","div[class='ImgDeleteTag']","");
 
 		
@@ -500,6 +500,11 @@ public class PageAddressbook extends AbsTab {
 		return (page);
 	}
 
+	public void clickDistributionListsFolder(AppAjaxClient app) throws HarnessException {	     
+	      FolderItem contactFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), "Distribution Lists");
+	      app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, contactFolder);	    		
+	}
+	
 	public ContactGroupItem createUsingSOAPSelectContactGroup(AppAjaxClient app, Action action, String ... tagIDArray)  throws HarnessException {	
 	  // Create a contact group via Soap
 	  ContactGroupItem group = ContactGroupItem.createUsingSOAP(app, tagIDArray);
@@ -989,13 +994,10 @@ public class PageAddressbook extends AbsTab {
 				else if (subOption == Button.O_TAG_REMOVETAG) {
 					sub_cmi = CONTEXT_SUB_MENU.CONTACT_SUB_REMOVE_TAG;					
 					//parentLocator= "div[id^=TAG_MENU__DWT][id$=|MENU]";
-					parentLocator= "div[id=TAG_MENU|MENU]";
+					parentLocator= "div[id='TAG_MENU|MENU']";
 					
 					page = null;	
-				}
-				
-				
-			    
+				}											    
 			}
 			else if (option == Button.B_CONTACTGROUP) {
 				if (subOption == Button.O_NEW_CONTACTGROUP) {
@@ -1144,11 +1146,12 @@ public class PageAddressbook extends AbsTab {
     
 	}
 	
+
   
 	public AbsPage zListItem(Action action, Button option ,Button subOption, String tagName, String contact) throws HarnessException {
 		String locator = null;			// If set, this will be clicked
 		AbsPage page = null;	// If set, this page will be returned
-		String id = null;
+		
 		String parentLocator = null;
 		String extraLocator="";
 		
@@ -1166,44 +1169,43 @@ public class PageAddressbook extends AbsTab {
 						
 				if (subOption == Button.O_TAG_REMOVETAG) {
 					sub_cmi = CONTEXT_SUB_MENU.CONTACT_SUB_REMOVE_TAG;					
-					//parentLocator= "div[id^=TAG_MENU__DWT][id$=|MENU]";
 					parentLocator= "div[id=TAG_MENU|MENU]";					//id = cmi.locator;
 					locator = "css=div#zm__Contacts tr#"+ cmi.locator;
 									
 					//  Make sure the context menu exists
 					zWaitForElementPresent(locator) ;
 			
+					ExecuteHarnessMain.ResultListener.captureScreen();
 					// Mouse over the option
 					sFocus(locator);
 					sMouseOver(locator);		    			 
 					zWaitForBusyOverlay();
 	
-										    	
 					locator = "css=" + parentLocator + " " + sub_cmi.locator + extraLocator;		        			
-				    	
-					//SleepUtil.sleep(1234567890);
-					//  Make sure the sub context menu exists			
 					zWaitForElementPresent(locator) ;
 			
-					// 	make sure the sub context menu enabled			
-					//zWaitForElementEnabled(locator);
+			
 						
 					// mouse over the sub menu
 					sFocus(locator);
-				    sMouseOver(locator);
-				     	
-				    zWaitForBusyOverlay();
+					sMouseOver(locator);
+					SleepUtil.sleepSmall();
+
+					//the above sMouseOver not work on my ff browser for some unknown reason, work around steps need here					
+					int count= Integer.parseInt(sGetEval("window.document.getElementById('TAG_MENU|MENU').children[0].children[0].children.length"));
 					
-				    //find the parent id
-				    
-				    //reset locator
-				    //locator =null;
-				    
-				    //get number of z_shell's children
-					//int countOption= Integer.parseInt(sGetEval("window.document.getElementById('z_shell').children.length"));
-							
+					
+					for (int i=0; i<count -1 ; i++) {
+						zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);					
+						SleepUtil.sleepSmall();
+					}
+					zKeyboard.zTypeKeyEvent(KeyEvent.VK_RIGHT);		
+																
+					zWaitForBusyOverlay();
+					
+				    							
 				    if (tagName.equals("All Tags")) {					
-				    	locator = "css=div[id=REMOVE_TAG_MENU_TAG_MENU|MENU] td[id=REMOVE_ALL_TAGS_title]";
+				    	locator = "css=div[id=REMOVE_ALL_TAGS]";
 				    }
 				    else {
 				    	locator = "css=td[id=^Remove_tag_][id$=_title]:contains('" + tagName + "')";														    
@@ -1214,12 +1216,29 @@ public class PageAddressbook extends AbsTab {
 				    zWaitForElementPresent(locator) ;
 			
 				    // 	make sure the sub context menu enabled			
-				    //zWaitForElementEnabled(locator);
+				    zWaitForElementEnabled(locator);
 					
-				    // select the tag name
-				    zClick(locator);
-				    				     	
+				   //sClick not work on my ff browser for some unknown reason, work around  here					
+				    sClick(locator);
+
+					count= Integer.parseInt(sGetEval("window.document.getElementById('REMOVE_TAG_MENU_TAG_MENU|MENU').children[0].children[0].children.length"));
+					
+					
+					for (int i=1; i<count ; i++) {
+												
+						if (sGetText("css=div[id='REMOVE_TAG_MENU_TAG_MENU|MENU'] tr:nth-child(" + i + ")").contains(tagName)){
+							break;
+						}
+								   	
+				        zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);					
+						SleepUtil.sleepSmall();
+						
+					}
+			
+					zKeyboard.zTypeKeyEvent(KeyEvent.VK_ENTER);														
+			     	
 				    zWaitForBusyOverlay();
+				    //ExecuteHarnessMain.ResultListener.captureScreen();
 				    	
 				}
 			}     		       		
