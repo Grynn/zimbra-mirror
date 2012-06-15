@@ -3,24 +3,13 @@
  */
 package com.zimbra.qa.selenium.projects.octopus.ui;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import com.zimbra.common.soap.Element;
-import com.zimbra.qa.selenium.framework.items.FileItem;
-import com.zimbra.qa.selenium.framework.items.FolderItem;
-import com.zimbra.qa.selenium.framework.items.IOctListViewItem;
-import com.zimbra.qa.selenium.framework.ui.AbsApplication;
-import com.zimbra.qa.selenium.framework.ui.AbsPage;
-import com.zimbra.qa.selenium.framework.ui.AbsTab;
-import com.zimbra.qa.selenium.framework.ui.Action;
-import com.zimbra.qa.selenium.framework.ui.Button;
-import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.SleepUtil;
-import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
+import com.zimbra.qa.selenium.framework.items.*;
+import com.zimbra.qa.selenium.framework.ui.*;
+import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.octopus.ui.DialogError.DialogErrorID;
-import com.zimbra.soap.mail.type.Folder;
-import com.zimbra.qa.selenium.projects.octopus.ui.PageMyFiles.Locators;
 
 public class PageOctopus extends AbsTab {
 
@@ -695,9 +684,9 @@ public class PageOctopus extends AbsTab {
 			parentFolderItem = FolderItem.importFromSOAP(
 					MyApplication.zGetActiveAccount(), parentFolderName);
 			if (parentFolderItem != null) {
-				List<Folder> subfolders = parentFolderItem.getSubfolders();
+				List<AFolderItem> subfolders = parentFolderItem.getSubfolders();
 				String name = folderItem.getName();
-				for (Folder folder : subfolders){
+				for (AFolderItem folder : subfolders){
 					if (folder.getName().contains(name)) {
 						return true;
 					}

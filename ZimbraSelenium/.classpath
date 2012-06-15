@@ -46,7 +46,6 @@
 	<classpathentry kind="lib" path="jars/ezmorph-1.0.6.jar"/>
 	<classpathentry kind="lib" path="jars/commons-beanutils-1.7.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/jaxen-1.1.3.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraSoap"/>
 	<classpathentry kind="lib" path="jars/htmlcleaner-2.2.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/ant-tar-patched.jar" sourcepath="/ThirdParty/ant-tar-patched/src/java"/>
 	<classpathentry kind="lib" path="jars/selenium-java-2.20.0.jar"/>

@@ -14,14 +14,13 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility.WAIT_FOR_OPERAND;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount.SOAP_DESTINATION_HOST_TYPE;
-import com.zimbra.soap.mail.type.Folder;
 
 
 /**
  * @author Matt Rhoades
  *
  */
-public class FolderItem extends com.zimbra.soap.mail.type.Folder implements IItem, IOctListViewItem {
+public class FolderItem extends AFolderItem implements IItem, IOctListViewItem {
 	protected static Logger logger = LogManager.getLogger(IItem.class);
 	private boolean _isDesktopClientFolder = false;
 	private boolean _isDesktopLocalFolder = false;
@@ -255,7 +254,7 @@ public class FolderItem extends com.zimbra.soap.mail.type.Folder implements IIte
 		item.setParentId(e.getAttribute("l"));
 
 		// sub folders
-		List<Folder> subFolders = new ArrayList<Folder>();
+		List<AFolderItem> subFolders = new ArrayList<AFolderItem>();
 		for (Element child : e.listElements(MailConstants.E_FOLDER))
 			subFolders.add(CreateFolderItem(child));
 
@@ -395,7 +394,7 @@ public class FolderItem extends com.zimbra.soap.mail.type.Folder implements IIte
 	public void setListViewName(String name) throws HarnessException {
 		ListViewName = name;
 	}
-	
+
 	/////////
 	// IListViewItem: End
 	/////////
