@@ -818,7 +818,7 @@ public class PageMail extends AbsTab {
 			item.gFragment = this.sGetText(locator).trim();
 
 			// Get the subject
-			locator = msglocator + " td[id$='__su']";
+			locator = msglocator + " span[id$='__su']";
 			String subject = this.sGetText(locator).trim();
 
 			// The subject contains the fragment, e.g. "subject - fragment", so
@@ -829,7 +829,7 @@ public class PageMail extends AbsTab {
 		} else {
 
 			// Conversation items's fragment is in the subject field
-			locator = msglocator + " td[id$='__su']";
+			locator = msglocator + " span[id$='__su']";
 			item.gFragment = this.sGetText(locator).trim();
 
 			// TODO: should the subject be parsed from the conversation container?
@@ -856,7 +856,7 @@ public class PageMail extends AbsTab {
 		}
 
 		// Get the received date
-		locator = msglocator + " td[id$='__dt']";
+		locator = msglocator + " span[id$='__dt']";
 		item.gReceived = this.sGetText(locator).trim();
 
 
@@ -953,7 +953,7 @@ public class PageMail extends AbsTab {
 		for (int i = 1; i <= count; i++) {
 
 			itemlocator = listLocator + " div:nth-of-type("+ i +") ";
-			String s = this.sGetText(itemlocator + " td[id$='__su']").trim();
+			String s = this.sGetText(itemlocator + " span[id$='__su']").trim();
 
 			if ( s.contains(subject) ) {
 				break; // found it
@@ -1169,7 +1169,7 @@ public class PageMail extends AbsTab {
 
 
 			itemlocator = listLocator + " div:nth-of-type("+ i +") ";
-			String s = this.sGetText(itemlocator + " td[id$='__su']").trim();
+			String s = this.sGetText(itemlocator + " span[id$='__su']").trim();
 
 			if ( s.contains(subject) ) {
 				break; // found it
