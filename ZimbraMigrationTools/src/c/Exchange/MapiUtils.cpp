@@ -209,13 +209,23 @@ HRESULT Zimbra::MAPI::Util::GetmsExchHomeServerName(LPCWSTR lpszServer, LPCWSTR 
     HRESULT hr = ADsOpenObject(strADServer.c_str(),
         /*lpszUser*/ NULL, lpszPwd /*NULL*/, ADS_SECURE_AUTHENTICATION, IID_IDirectorySearch,
         (void **)&pDirSearch);
-
-    if (((FAILED(hr))))
-    {
-        throw MapiUtilsException(hr, L"Util::GetmsExchHomeServerName(): ADsOpenObject Failed.",
+	if (FAILED(hr))
+	{
+		if (hr == 0x8007052e)                   // credentials are not valid
+		{
+			hr = ADsOpenObject(strADServer.c_str(), lpszUser, lpszPwd,
+				ADS_SECURE_AUTHENTICATION, IID_IDirectorySearch, (void **)&pDirSearch);
+			if (FAILED(hr)||(pDirSearch==NULL))
+				throw MapiUtilsException(hr, L"Util::GetmsExchHomeServerName(): ADsOpenObject Failed.(with credentials)",
+				 __LINE__, __FILE__);
+		}
+		else
+		{
+			throw MapiUtilsException(hr, L"Util::GetmsExchHomeServerName(): ADsOpenObject Failed.(w/o credentials)",
             __LINE__, __FILE__);
-    }
-
+		}
+	}
+    
     wstring strFilter = _T("(&(objectClass=organizationalPerson)(cn=");
 
     strFilter += lpszUser;
@@ -293,16 +303,26 @@ HRESULT Zimbra::MAPI::Util::GetUserDNAndLegacyName(LPCWSTR lpszServer, LPCWSTR l
 
     strADServer += lpszServer;
 
-    HRESULT hr = ADsOpenObject(strADServer.c_str(),
+	HRESULT hr = ADsOpenObject(strADServer.c_str(),
         /*lpszUser*/ NULL, lpszPwd /*NULL*/, ADS_SECURE_AUTHENTICATION, IID_IDirectorySearch,
         (void **)&pDirSearch);
-
-    if (((FAILED(hr))))
-    {
-        throw MapiUtilsException(hr, L"Util::GetUserDNAndLegacyName(): ADsOpenObject Failed.",
-            __LINE__, __FILE__);
-    }
-
+	if (FAILED(hr))
+	{
+		if (hr == 0x8007052e)                   // credentials are not valid
+		{
+			hr = ADsOpenObject(strADServer.c_str(), lpszUser, lpszPwd,
+				ADS_SECURE_AUTHENTICATION, IID_IDirectorySearch, (void **)&pDirSearch);
+			if (FAILED(hr)||(pDirSearch==NULL))
+				throw MapiUtilsException(hr, L"Util::GetUserDNAndLegacyName(): ADsOpenObject Failed(With credentials).",
+				__LINE__, __FILE__);
+		}
+		else
+		{
+			throw MapiUtilsException(hr, L"Util::GetUserDNAndLegacyName(): ADsOpenObject Failed.(W/o credentials)",
+				__LINE__, __FILE__);
+		}
+	}
+   
     wstring strFilter = _T("(&(objectClass=organizationalPerson)(cn=");
 
     strFilter += lpszUser;
