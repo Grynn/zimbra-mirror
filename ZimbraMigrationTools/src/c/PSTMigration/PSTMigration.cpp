@@ -146,9 +146,9 @@ void CreateExchangeMailBox()
             UNREFERENCED_PARAMETER(ex);
         }
         exchadmin->CreateExchangeMailBox(Zimbra::MAPI::DEFAULT_ADMIN_MAILBOX_NAME,
-            Zimbra::MAPI::DEFAULT_ADMIN_PASSWORD, L"Administrator", L"z1mbr4Migration");
+             L"z1mbr4Migration", L"Administrator", L"z1mbr4Migration");
         exchadmin->CreateProfile(Zimbra::MAPI::DEFAULT_ADMIN_PROFILE_NAME,
-            Zimbra::MAPI::DEFAULT_ADMIN_MAILBOX_NAME, Zimbra::MAPI::DEFAULT_ADMIN_PASSWORD);
+            Zimbra::MAPI::DEFAULT_ADMIN_MAILBOX_NAME,  L"z1mbr4Migration");
         exchadmin->SetDefaultProfile(Zimbra::MAPI::DEFAULT_ADMIN_PROFILE_NAME);
     }
     catch (Zimbra::MAPI::ExchangeAdminException &ex)

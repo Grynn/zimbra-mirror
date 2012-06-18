@@ -34,7 +34,7 @@ ExchangeAdmin::ExchangeAdmin(wstring strExchangeServer)
     }
     catch (ExchangeAdminException &exc)
     {
-        UNREFERENCED_PARAMETER(exc);
+        dloge("ExchangeAdmin::ExchangeAdmin exception: %S", exc.Description().c_str());
     }
 }
 
@@ -175,6 +175,10 @@ CRT_PROFILE_EXIT:
 			throw ExchangeAdminException(hr, L"ExchangeAdmin::CreateProfile()::SetOLProfileRegistryEntries Failed.",
 				__LINE__, __FILE__);
 		}
+/*		Zimbra::Util::ScopedBuffer<char> strProfName;
+		WtoA((LPWSTR)strProfileName.c_str(), strProfName.getref());
+		hr=m_pProfAdmin->SetDefaultProfile((LPTSTR)strProfName.get(),NULL);
+*/
 	}
     return hr;
 }
@@ -285,7 +289,11 @@ HRESULT ExchangeAdmin::SetDefaultProfile(wstring strProfile)
     return hr;
 }
 
-
+void ThrowSetInfoException(HRESULT hr, LPWSTR wstrmsg)
+{
+    dloge("SetInfoException : %S",wstrmsg);
+    throw ExchangeAdminException(hr,wstrmsg, __LINE__, __FILE__);
+}
 BOOL PutBinaryIntoVariant(CComVariant * ovData, BYTE * pBuf,unsigned long cBufLen)
 {
 	BOOL fRetVal = FALSE;
@@ -336,6 +344,7 @@ HRESULT ExchangeAdmin::CreateExchangeMailBox(LPCWSTR lpwstrNewUser, LPCWSTR lpws
 
     strContainer += LogonUserDN.c_str();
 
+    dloge("strContainer %S  msExchHomeSvrName: %S", strContainer.c_str(), msExchHomeSvrName.c_str());
     // Get loggedin user container
     hr = ADsOpenObject(strContainer.c_str(), NULL, NULL, ADS_SECURE_AUTHENTICATION,
         IID_IDirectoryObject, (void **)pLogonContainer.getptr());
@@ -344,8 +353,8 @@ HRESULT ExchangeAdmin::CreateExchangeMailBox(LPCWSTR lpwstrNewUser, LPCWSTR lpws
         if (hr == 0x8007052e)                   // credentials are not valid
         {
             hr = ADsOpenObject((LPTSTR)strContainer.c_str(), lpwstrlogonuser, lpwstrLogonUsrPwd,
-                ADS_SECURE_AUTHENTICATION, IID_IDirectoryObject, (void **)&pLogonContainer);
-            if (FAILED(hr))
+				ADS_SECURE_AUTHENTICATION, IID_IDirectoryObject, (void **)pLogonContainer.getptr());
+			if (FAILED(hr)||(pLogonContainer.get()==NULL))
                 throw ExchangeAdminException(hr,
                     L"CreateExchangeMailBox(): ADsOpenObject Failed.", __LINE__, __FILE__);
         }
@@ -453,6 +462,7 @@ HRESULT ExchangeAdmin::CreateExchangeMailBox(LPCWSTR lpwstrNewUser, LPCWSTR lpws
     wstring wstrUserCN = L"CN=";
 
     wstrUserCN += lpwstrNewUser;
+    dloge("CreateDSObject: %S",wstrUserCN.c_str());
     if (FAILED(hr = pDirContainer->CreateDSObject((LPWSTR)wstrUserCN.c_str(), attrInfo, dwAttrs,
             pDisp.getptr())))
         throw ExchangeAdminException(hr, L"CreateExchangeMailBox(): CreateDSObject Failed.",
@@ -469,7 +479,9 @@ HRESULT ExchangeAdmin::CreateExchangeMailBox(LPCWSTR lpwstrNewUser, LPCWSTR lpws
     if (FAILED(hr = pIADNewUser->Put(CComBSTR(L"sAMAccountName"), varProp)))
         throw ExchangeAdminException(hr,
             L"CreateExchangeMailBox(): Put(sAMAccountName) Failed.", __LINE__, __FILE__);
-	hr = pIADNewUser->SetInfo();
+    if(FAILED(hr = pIADNewUser->SetInfo()))
+        throw ExchangeAdminException(hr,
+            L"CreateExchangeMailBox(): Put(sAMAccountName) Failed.", __LINE__, __FILE__);
     // set userAccountControl
     varProp.Clear();
     hr = pIADNewUser->Get(CComBSTR(L"userAccountControl"), &varProp);
@@ -477,7 +489,8 @@ HRESULT ExchangeAdmin::CreateExchangeMailBox(LPCWSTR lpwstrNewUser, LPCWSTR lpws
     if (FAILED(hr = pIADNewUser->Put(CComBSTR(L"userAccountControl"), varProp)))
         throw ExchangeAdminException(hr,
             L"CreateExchangeMailBox(): Put(userAccountControl) Failed.", __LINE__, __FILE__);
-	hr = pIADNewUser->SetInfo();
+    if(FAILED(hr = pIADNewUser->SetInfo()))
+        ThrowSetInfoException(hr, L"SetInfo - Put(userAccountControl) Failed.");
     // set Account enabled
     if (FAILED(hr = pIADNewUser->put_AccountDisabled(VARIANT_FALSE)))
     {
@@ -485,7 +498,8 @@ HRESULT ExchangeAdmin::CreateExchangeMailBox(LPCWSTR lpwstrNewUser, LPCWSTR lpws
             ExchangeAdminException(hr, L"CreateExchangeMailBox(): put_AccountDisabled Failed.",
             __LINE__, __FILE__);
     }
-	hr = pIADNewUser->SetInfo();
+    if(FAILED(hr = pIADNewUser->SetInfo()))
+        ThrowSetInfoException(hr, L"SetInfo - put_AccountDisabled Failed.");
     // set password
     if (FAILED(hr = pIADNewUser->SetPassword(CComBSTR(lpwstrNewUserPwd))))
     {
@@ -493,7 +507,8 @@ HRESULT ExchangeAdmin::CreateExchangeMailBox(LPCWSTR lpwstrNewUser, LPCWSTR lpws
             ExchangeAdminException(hr, L"CreateExchangeMailBox(): SetPassword Failed.",
             __LINE__, __FILE__);
     }
-	hr = pIADNewUser->SetInfo();
+    if(FAILED(hr = pIADNewUser->SetInfo()))
+        ThrowSetInfoException(hr, L"SetInfo - SetPassword Failed.");
     // user account password does not expire
     varProp.Clear();
 
@@ -510,8 +525,9 @@ HRESULT ExchangeAdmin::CreateExchangeMailBox(LPCWSTR lpwstrNewUser, LPCWSTR lpws
                 __FILE__);
         }
     }
-	hr = pIADNewUser->SetInfo();
-	varProp.Clear();
+    if(FAILED(hr = pIADNewUser->SetInfo()))
+        ThrowSetInfoException(hr, L"SetInfo - userAccountControl Failed.");
+    varProp.Clear();
     // set the homeMDB;
     if (!strLogonHomeMDB.empty())
     {
@@ -520,7 +536,8 @@ HRESULT ExchangeAdmin::CreateExchangeMailBox(LPCWSTR lpwstrNewUser, LPCWSTR lpws
             throw ExchangeAdminException(hr, L"CreateExchangeMailBox(): Put(homeMDB) Failed.",
                 __LINE__, __FILE__);
     }
-	hr = pIADNewUser->SetInfo();
+    if(FAILED(hr = pIADNewUser->SetInfo()))
+        ThrowSetInfoException(hr, L"SetInfo - Put(homeMDB) Failed.");
 
 	varProp.Clear();
     if (!strLogonHomeMTA.empty())
@@ -530,7 +547,8 @@ HRESULT ExchangeAdmin::CreateExchangeMailBox(LPCWSTR lpwstrNewUser, LPCWSTR lpws
             throw ExchangeAdminException(hr, L"CreateExchangeMailBox(): Put(homeMTA) Failed.",
                 __LINE__, __FILE__);
     }
-	hr = pIADNewUser->SetInfo();
+    if(FAILED(hr = pIADNewUser->SetInfo()))
+        ThrowSetInfoException(hr, L"SetInfo - Put(homeMTA) Failed.");
 
 	varProp.Clear();
 	if (!msExchHomeSvrName.empty())
@@ -540,18 +558,28 @@ HRESULT ExchangeAdmin::CreateExchangeMailBox(LPCWSTR lpwstrNewUser, LPCWSTR lpws
             throw ExchangeAdminException(hr, L"CreateExchangeMailBox(): Put(msExchHomeServerName) Failed.",
                 __LINE__, __FILE__);
     }
-	hr = pIADNewUser->SetInfo();
+    if(FAILED(hr = pIADNewUser->SetInfo()))
+        ThrowSetInfoException(hr, L"SetInfo - Put(msExchHomeServerName) Failed.");
 	varProp.Clear();
 
 	varProp.Clear();
-	if (!legacyName.empty())
+	wstring newUsrLegacyName=legacyName;
+	size_t nwpos=newUsrLegacyName.rfind(L"cn=");
+	if(nwpos !=wstring::npos)
+	{
+		newUsrLegacyName = newUsrLegacyName.substr(0,nwpos);
+		newUsrLegacyName += L"cn=";
+		newUsrLegacyName += lpwstrNewUser;
+	}
+	if (!newUsrLegacyName.empty())
     {
-        varProp = legacyName.c_str();
+        varProp = newUsrLegacyName.c_str();
         if (FAILED(hr = pIADNewUser->Put(CComBSTR("legacyExchangeDN"), varProp)))
             throw ExchangeAdminException(hr, L"CreateExchangeMailBox(): Put(legacyExchangeDN) Failed.",
                 __LINE__, __FILE__);
     }
-	hr = pIADNewUser->SetInfo();
+    if(FAILED(hr = pIADNewUser->SetInfo()))
+        ThrowSetInfoException(hr, L"SetInfo - Put(legacyExchangeDN) Failed.");
 
     // set nickname
     varProp.Clear();
@@ -559,21 +587,25 @@ HRESULT ExchangeAdmin::CreateExchangeMailBox(LPCWSTR lpwstrNewUser, LPCWSTR lpws
     if (FAILED(hr = pIADNewUser->Put(CComBSTR("mailNickname"), varProp)))
         throw ExchangeAdminException(hr, L"CreateExchangeMailBox(): Put(mailNickname) Failed.",
             __LINE__, __FILE__);
-	hr = pIADNewUser->SetInfo();
+    if(FAILED(hr = pIADNewUser->SetInfo()))
+        ThrowSetInfoException(hr, L"SetInfo - Put(mailNickname) Failed.");
+
     // set the displayName
     varProp.Clear();
     varProp = lpwstrNewUser;
     if (FAILED(hr = pIADNewUser->Put(CComBSTR("displayName"), varProp)))
         throw ExchangeAdminException(hr, L"CreateExchangeMailBox(): Put(displayName) Failed.",
             __LINE__, __FILE__);
-	hr = pIADNewUser->SetInfo();
+    if(FAILED(hr = pIADNewUser->SetInfo()))
+        ThrowSetInfoException(hr, L"SetInfo - Put(displayName) Failed.");
     // set the mail atrribute
     varProp.Clear();
     varProp = wstrMail.c_str();
     if (FAILED(hr = pIADNewUser->Put(CComBSTR("mail"), varProp)))
         throw ExchangeAdminException(hr, L"CreateExchangeMailBox(): Put(mail) Failed.",
             __LINE__, __FILE__);
-	hr = pIADNewUser->SetInfo();
+    if(FAILED(hr = pIADNewUser->SetInfo()))
+        ThrowSetInfoException(hr, L"SetInfo - Put(mail) Failed.");
     // set email
     if (FAILED(hr = pIADNewUser->put_EmailAddress(CComBSTR(wstrMail.c_str()))))
     {
@@ -581,7 +613,8 @@ HRESULT ExchangeAdmin::CreateExchangeMailBox(LPCWSTR lpwstrNewUser, LPCWSTR lpws
             ExchangeAdminException(hr, L"CreateExchangeMailBox(): put_EmailAddress Failed.",
             __LINE__, __FILE__);
     }
-	hr = pIADNewUser->SetInfo();
+    if(FAILED(hr = pIADNewUser->SetInfo()))
+        ThrowSetInfoException(hr, L"SetInfo - put_EmailAddress Failed.");
 
 	varProp.Clear();
 	wstrMail=L"SMTP:"+wstrMail;
@@ -592,7 +625,8 @@ HRESULT ExchangeAdmin::CreateExchangeMailBox(LPCWSTR lpwstrNewUser, LPCWSTR lpws
             ExchangeAdminException(hr, L"CreateExchangeMailBox(): proxyAddressess Failed.",
             __LINE__, __FILE__);
     }
-	hr = pIADNewUser->SetInfo();
+    if(FAILED(hr = pIADNewUser->SetInfo()))
+        ThrowSetInfoException(hr, L"SetInfo - proxyAddressess Failed.");
 
     // add to Domain Admins group
     BSTR bstrADSPath;
@@ -648,7 +682,8 @@ HRESULT ExchangeAdmin::CreateExchangeMailBox(LPCWSTR lpwstrNewUser, LPCWSTR lpws
 		throw ExchangeAdminException(hr, L"CreateExchangeMailBox(): Put msExchMailboxGuid Failed.",
             __LINE__, __FILE__);
 	}
-	hr = pIADNewUser->SetInfo();
+	if(FAILED(hr = pIADNewUser->SetInfo()))
+            ThrowSetInfoException(hr, L"SetInfo - msExchMailboxGuid Failed.");
 
 	if (FAILED(hr = ADsOpenObject(strContainer.c_str(), NULL, NULL, ADS_SECURE_AUTHENTICATION,
         IID_IDirectoryObject, (void **)pIAdUser.getptr())))
@@ -673,7 +708,8 @@ HRESULT ExchangeAdmin::CreateExchangeMailBox(LPCWSTR lpwstrNewUser, LPCWSTR lpws
 		throw ExchangeAdminException(hr, L"CreateExchangeMailBox(): Put msExchMailboxSecurityDescriptor Failed.",
             __LINE__, __FILE__);
 	}
-	hr = pIADNewUser->SetInfo();
+	if(FAILED(hr = pIADNewUser->SetInfo()))
+            ThrowSetInfoException(hr, L"SetInfo - msExchMailboxSecurityDescriptor Failed.");
 
 	varProp.Clear();
 	if( FAILED(hr=pIAds->Get(CComBSTR("msExchPoliciesIncluded"),&varProp)))
@@ -686,7 +722,8 @@ HRESULT ExchangeAdmin::CreateExchangeMailBox(LPCWSTR lpwstrNewUser, LPCWSTR lpws
 		throw ExchangeAdminException(hr, L"CreateExchangeMailBox(): Put msExchPoliciesIncluded Failed.",
             __LINE__, __FILE__);     
 	}
-	hr = pIADNewUser->SetInfo();
+	if(FAILED(hr = pIADNewUser->SetInfo()))
+            ThrowSetInfoException(hr, L"SetInfo - msExchPoliciesIncluded Failed.");
 
 	varProp.Clear();
 	if( FAILED(hr= pIAds->Get(CComBSTR("msExchUserAccountControl"),&varProp)))
@@ -699,7 +736,8 @@ HRESULT ExchangeAdmin::CreateExchangeMailBox(LPCWSTR lpwstrNewUser, LPCWSTR lpws
 		throw ExchangeAdminException(hr, L"CreateExchangeMailBox(): Put msExchUserAccountControl Failed.",
             __LINE__, __FILE__);    
 	}
-	hr = pIADNewUser->SetInfo();
+	if(FAILED(hr = pIADNewUser->SetInfo()))
+            ThrowSetInfoException(hr, L"SetInfo - msExchUserAccountControl Failed.");
 
 	varProp.Clear();
 	if(FAILED(hr = pIAds->GetEx(CComBSTR("showInAddressBook"), &varProp )))
@@ -712,7 +750,8 @@ HRESULT ExchangeAdmin::CreateExchangeMailBox(LPCWSTR lpwstrNewUser, LPCWSTR lpws
 		throw ExchangeAdminException(hr, L"CreateExchangeMailBox(): Put showInAddressBook Failed.",
             __LINE__, __FILE__);
 	}
-	hr = pIADNewUser->SetInfo();
+	if(FAILED(hr = pIADNewUser->SetInfo()))
+            ThrowSetInfoException(hr, L"SetInfo - showInAddressBook Failed.");
     return hr;
 }
 
@@ -731,14 +770,12 @@ HRESULT ExchangeAdmin::DeleteExchangeMailBox(LPCWSTR lpwstrMailBox, LPCWSTR lpws
     }
     catch (Zimbra::MAPI::ExchangeAdminException &ex)
     {
-        // To do .. logs entry
-        UNREFERENCED_PARAMETER(ex);
+        dloge("ExchangeAdmin::DeleteExchangeMailBox ExchangeAdminException exception: %S", ex.Description().c_str());
         throw;
     }
     catch (Zimbra::MAPI::Util::MapiUtilsException &ex)
     {
-        UNREFERENCED_PARAMETER(ex);
-        // To do .. logs entry
+        dloge("ExchangeAdmin::DeleteExchangeMailBox MapiUtilsException exception: %S", ex.Description().c_str());
         throw;
     }
     wstring twtsrlogonuserDN = UserDN;
@@ -779,36 +816,53 @@ ExchangeMigrationSetup::~ExchangeMigrationSetup()
 
 HRESULT ExchangeMigrationSetup::Setup()
 {
-    Clean();
+	try
+	{
+		Clean();
+	}
+	catch (Zimbra::MAPI::ExchangeAdminException &ex)
+    {
+		dloge("Setup: Clean exception: %S",ex.Description().c_str());
+	}
+	catch(...)
+	{
+		dloge("Setup: Unknown Clean exception");
+	}
 
     try
     {
-        m_exchAdmin->CreateExchangeMailBox(DEFAULT_ADMIN_MAILBOX_NAME, DEFAULT_ADMIN_PASSWORD,
+        dloge("Going for CreateExchangeMailbox...");
+        m_exchAdmin->CreateExchangeMailBox(DEFAULT_ADMIN_MAILBOX_NAME, m_ExchangeAdminPwd.c_str(),
             m_ExchangeAdminName.c_str(), m_ExchangeAdminPwd.c_str());
+		dloge("CreateExchangeMailbox success.");
     }
     catch (Zimbra::MAPI::ExchangeAdminException &ex)
     {
-        // To do .. logs entry
-        UNREFERENCED_PARAMETER(ex);
+        dloge("ExchangeMigrationSetup::Setup::CreateExchangeMailBox ExchangeAdminException exception: %S", ex.Description().c_str());
         throw;
     }
     catch (Zimbra::MAPI::Util::MapiUtilsException &ex)
     {
-        // To do .. logs entry
-        UNREFERENCED_PARAMETER(ex);
+        dloge("ExchangeMigrationSetup::Setup::CreateExchangeMailBox MapiUtilsException exception: %S", ex.Description().c_str());
         throw;
     }
+	
     try
     {
         m_exchAdmin->CreateProfile(DEFAULT_ADMIN_PROFILE_NAME, DEFAULT_ADMIN_MAILBOX_NAME,
-            DEFAULT_ADMIN_PASSWORD);
+            m_ExchangeAdminPwd.c_str());
     }
     catch (Zimbra::MAPI::ExchangeAdminException &ex)
     {
-        // To do .. logs entry
-        UNREFERENCED_PARAMETER(ex);
+        dloge("ExchangeMigrationSetup::Setup::CreateProfile ExchangeAdminException exception: %S", ex.Description().c_str());
         throw;
     }
+	catch(...)
+	{
+		dloge("ExchangeMigrationSetup::Setup::CreateProfile Unknown exception");
+		throw;
+	}
+
     return S_OK;
 }
 
@@ -820,8 +874,7 @@ HRESULT ExchangeMigrationSetup::Clean()
     }
     catch (Zimbra::MAPI::ExchangeAdminException &ex)
     {
-        // To do.. log entry
-        UNREFERENCED_PARAMETER(ex);
+		dloge("DeleteProfile exception: %S", ex.Description().c_str());
         throw;
     }
     try
@@ -831,14 +884,12 @@ HRESULT ExchangeMigrationSetup::Clean()
     }
     catch (Zimbra::MAPI::ExchangeAdminException &ex)
     {
-        // To do .. logs entry
-        UNREFERENCED_PARAMETER(ex);
+        dloge("DeleteExchangeMailBox exception: %S", ex.Description().c_str());
         throw;
     }
     catch (Zimbra::MAPI::Util::MapiUtilsException &ex)
     {
-        // To do .. logs entry
-        UNREFERENCED_PARAMETER(ex);
+        dloge("DeleteExchangeMailBox(MAPIUtils) exception: %S", ex.Description().c_str());
         throw;
     }
     return S_OK;
@@ -855,23 +906,56 @@ HRESULT ExchangeMigrationSetup::GetAllProfiles(vector<string> &vProfileList)
 int ExchangeOps::Initialized = EXCH_UNINITIALIZED;
 ExchangeMigrationSetup *ExchangeOps::m_exchmigsetup = NULL;
 MAPISession *ExchangeOps::m_zmmapisession = NULL;
+Zimbra::Util::MiniDumpGenerator *ExchangeOps::m_EOminidmpgntr = NULL;
+
+void  ExchangeOps::internalEOInit()
+{
+	//Get App dir
+	wstring appdir= Zimbra::Util::GetAppDir();
+	//instantiate dump generator
+	LPWSTR pwszTempPath = new WCHAR[MAX_PATH];
+	wcscpy(pwszTempPath,appdir.c_str());
+	Zimbra::Util::AppendString(pwszTempPath,L"dbghelp.dll");
+    m_EOminidmpgntr = new Zimbra::Util::MiniDumpGenerator(pwszTempPath);
+}
+
 LPCWSTR ExchangeOps::GlobalInit(LPCWSTR lpMAPITarget, LPCWSTR lpAdminUsername, LPCWSTR
+    lpAdminPassword)
+{
+	LPWSTR exceptionmsg=NULL;
+	internalEOInit();	
+	__try
+	{
+		return _GlobalInit(lpMAPITarget, lpAdminUsername, lpAdminPassword);
+	}
+	__except(m_EOminidmpgntr->GenerateCoreDump(GetExceptionInformation(),exceptionmsg))
+	{
+		dloge(exceptionmsg);
+	}
+	return exceptionmsg;
+}
+
+LPCWSTR ExchangeOps::_GlobalInit(LPCWSTR lpMAPITarget, LPCWSTR lpAdminUsername, LPCWSTR
     lpAdminPassword)
 {
     LPCWSTR lpwstrStatus = NULL;
 
     // if lpAdminUsername is NULL then we assume that Outlook admin profile exists and we should use it
     // else create a Admin mailbox and create corresponding profile on local machine
+    dloge("Check AdminUserName");
     if (lstrlen(lpAdminUsername) > 0)
     {
+        dloge("Check Initialized:%d",Initialized);
         if (Initialized == EXCH_UNINITIALIZED)
         {
+            dloge("Do ExchangeMigrationSetup");
             m_exchmigsetup = new ExchangeMigrationSetup(lpMAPITarget, lpAdminUsername,
                 lpAdminPassword);
             Initialized = EXCH_INITIALIZED_PROFCREATE;			
         }
         try
         {
+            dloge("Going for Exchange mig setup");
             m_exchmigsetup->Setup();
 			lpMAPITarget = DEFAULT_ADMIN_PROFILE_NAME;
         }
@@ -886,6 +970,10 @@ LPCWSTR ExchangeOps::GlobalInit(LPCWSTR lpMAPITarget, LPCWSTR lpAdminUsername, L
                 (LPSTR)ex.SrcFile().c_str(), ex.SrcLine());
         }
     }
+	//check for any exception or error
+	if(lpwstrStatus)
+		return lpwstrStatus;
+
     // Create Session and Open admin store with profile
 	lpwstrStatus = MAPIAccessAPI::InitGlobalSessionAndStore(lpMAPITarget);
 
@@ -926,6 +1014,11 @@ LPCWSTR ExchangeOps::GlobalUninit()
         delete m_zmmapisession;
         m_zmmapisession = NULL;
     }
+	//clean minidump ptr
+	if(m_EOminidmpgntr)
+		delete m_EOminidmpgntr;
+	m_EOminidmpgntr=NULL;
+
     Initialized = EXCH_UNINITIALIZED;
 
     return lpwstrStatus;
