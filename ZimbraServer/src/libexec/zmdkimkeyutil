@@ -46,11 +46,11 @@ my $opts_good = GetOptions(
 );
 
 if (!$opts_good) {
-        print STDERR "\n";
-        usage();
+  print STDERR "\n";
+  usage();
 }
 if ($help) {
-        usage(0);
+  usage(0);
 }
 
 if (!($domain) && !($query)) {
@@ -79,7 +79,7 @@ my $ldap_starttls_supported = $localxml->{key}->{ldap_starttls_supported}->{valu
 my $zimbra_require_interprocess_security = $localxml->{key}->{zimbra_require_interprocess_security}->{value};
 
 if ($zimbra_home eq "") {
-   $zimbra_home = "/opt/zimbra";
+  $zimbra_home = "/opt/zimbra";
 }
 
 my $keygen = "${zimbra_home}/opendkim/bin/opendkim-genkey";
@@ -92,8 +92,8 @@ my $ldap = Net::LDAP->new($master_ref) or die "$@";
 if ($ldap_master_url !~ /^ldaps/i) {
   if ($ldap_starttls_supported) {
     $mesg = $ldap->start_tls(
-              verify => 'none',
-              capath => "${zimbra_home}/conf/ca",
+        verify => 'none',
+        capath => "${zimbra_home}/conf/ca",
      ) or die "start_tls: $@";
      $mesg->code && die "Could not execute StartTLS\n";
   }
@@ -106,9 +106,9 @@ $mesg->code && die "Bind: ". $mesg->error . "\n";
 
 if ($domain) {
   $mesg = $ldap ->search(
-            base=>"",
-            filter=>"(&(objectClass=zimbraDomain)(zimbraDomainName=$domain))",
-            scope=>"sub",
+      base=>"",
+      filter=>"(&(objectClass=zimbraDomain)(zimbraDomainName=$domain))",
+      scope=>"sub",
   );
   
   my $size = $mesg->count;
@@ -120,19 +120,19 @@ if ($domain) {
 
 if($add) {
   $mesg = $ldap->search(
-       base=>"",
-	   filter=>"(&(objectClass=zimbraDomain)(zimbraDomainName=$domain)(DKIMSelector=*))",
-	   scope=>"sub",
+      base=>"",
+      filter=>"(&(objectClass=zimbraDomain)(zimbraDomainName=$domain)(DKIMSelector=*))",
+      scope=>"sub",
   );
   my $size = $mesg->count;
   if ($size > 0) {
     print "Error: Domain $domain already has DKIM enabled.\n";
-	exit(1);
+    exit(1);
   }
   $mesg = $ldap->search(
-       base=>"",
-	   filter=>"(&(objectClass=zimbraDomain)(zimbraDomainName=$domain))",
-	   scope=>"sub",
+      base=>"",
+      filter=>"(&(objectClass=zimbraDomain)(zimbraDomainName=$domain))",
+      scope=>"sub",
   );
   my $entry = $mesg->entry($size-1);
   my $dn = $entry->dn;
@@ -145,16 +145,16 @@ if($add) {
   my $publickey = "${zimbra_home}/data/tmp/${selector}.txt";
   if (-f $privatekey && -s $privatekey && -f $publickey && -s $publickey) {
     my $private;
-	my $public;
+    my $public;
     {
       local $/ = undef; # Slurp mode
       open PRIVATEKEY, "$privatekey" or die "Cannot open $privatekey for read :$!";
       $private = <PRIVATEKEY>;
-	  close PRIVATEKEY;
+      close PRIVATEKEY;
       open PUBLICKEY, "$publickey" or die "Cannot open $publickey for read :$!";
-	  $public = <PUBLICKEY>;
-	  close PUBLICKEY;
-	}
+      $public = <PUBLICKEY>;
+      close PUBLICKEY;
+    }
     $mesg = $ldap->modify( $dn,
       add => [
         objectClass   => 'DKIM',    # Add description attribute
@@ -165,34 +165,34 @@ if($add) {
         DKIMIdentity  => "$domain",
       ]
     );
-	if ($mesg->code) {
-	  print "Error: Failed to update LDAP: " . ldap_error_name($mesg->code) ."\n";
-	  exit 1;
+    if ($mesg->code) {
+      print "Error: Failed to update LDAP: " . ldap_error_name($mesg->code) ."\n";
+      exit 1;
     } else {
       print "DKIM Data added to LDAP for domain $domain with selector $selector\n";
     }
     unlink($privatekey);
     unlink($publickey);
-	$ldap->unbind;
-	print "Public signature to enter into DNS:\n";
-	print "$public";
-	exit 0;
+    $ldap->unbind;
+    print "Public signature to enter into DNS:\n";
+    print "$public";
+    exit 0;
   } else {
     print "Error: Key generation failed.\n";
-	exit 1;
+    exit 1;
   }
 } elsif ($query) {
   if (!($selector)) {
     $mesg = $ldap->search(
-         base=>"",
-	     filter=>"(&(objectClass=zimbraDomain)(zimbraDomainName=$domain)(DKIMSelector=*))",
-	     scope=>"sub",
+      base=>"",
+      filter=>"(&(objectClass=zimbraDomain)(zimbraDomainName=$domain)(DKIMSelector=*))",
+      scope=>"sub",
     );
   } else {
     $mesg = $ldap->search(
-         base=>"",
-	     filter=>"(&(objectClass=zimbraDomain)(DKIMSelector=$selector))",
-	     scope=>"sub",
+      base=>"",
+      filter=>"(&(objectClass=zimbraDomain)(DKIMSelector=$selector))",
+      scope=>"sub",
     );
   }
   my $size = $mesg->count;
@@ -219,14 +219,14 @@ if($add) {
   exit 0;
 } elsif ($update) {
   $mesg = $ldap->search(
-       base=>"",
-	   filter=>"(&(objectClass=zimbraDomain)(zimbraDomainName=$domain)(DKIMSelector=*))",
-	   scope=>"sub",
+      base=>"",
+      filter=>"(&(objectClass=zimbraDomain)(zimbraDomainName=$domain)(DKIMSelector=*))",
+      scope=>"sub",
   );
   my $size = $mesg->count;
   if ($size == 0 ) {
     print "Error: Domain $domain doesn't have DKIM enabled.\n";
-	exit(1);
+    exit(1);
   }
   my $entry = $mesg->entry($size-1);
   my $dn = $entry->dn;
@@ -239,16 +239,16 @@ if($add) {
   my $publickey = "${zimbra_home}/data/tmp/${selector}.txt";
   if (-f $privatekey && -s $privatekey && -f $publickey && -s $publickey) {
     my $private;
-	my $public;
+    my $public;
     {
       local $/ = undef; # Slurp mode
       open PRIVATEKEY, "$privatekey" or die "Cannot open $privatekey for read :$!";
       $private = <PRIVATEKEY>;
-	  close PRIVATEKEY;
+      close PRIVATEKEY;
       open PUBLICKEY, "$publickey" or die "Cannot open $publickey for read :$!";
-	  $public = <PUBLICKEY>;
-	  close PUBLICKEY;
-	}
+      $public = <PUBLICKEY>;
+      close PUBLICKEY;
+    }
     $mesg = $ldap->modify( $dn,
       replace => [
         DKIMSelector  => "$selector",
@@ -256,34 +256,34 @@ if($add) {
         DKIMPublicKey => "$public",
       ]
     );
-	if ($mesg->code) {
-	  print "Error: Failed to update LDAP: " . ldap_error_name($mesg->code) ."\n";
-	  exit 1;
+    if ($mesg->code) {
+      print "Error: Failed to update LDAP: " . ldap_error_name($mesg->code) ."\n";
+      exit 1;
     } else {
       print "DKIM Data added to LDAP for domain $domain with selector $selector\n";
     }
     unlink($privatekey);
     unlink($publickey);
-	$ldap->unbind;
-	print "Public signature to enter into DNS:\n";
-	print "$public";
-	exit 0;
+    $ldap->unbind;
+    print "Public signature to enter into DNS:\n";
+    print "$public";
+    exit 0;
   } else {
     print "Error: Key generation failed.\n";
-	$ldap->unbind;
-	exit 1;
+    $ldap->unbind;
+    exit 1;
   }
 } elsif ($delete) {
   $mesg = $ldap->search(
-       base=>"",
-	   filter=>"(&(objectClass=zimbraDomain)(zimbraDomainName=$domain)(DKIMSelector=*))",
-	   scope=>"sub",
+      base=>"",
+      filter=>"(&(objectClass=zimbraDomain)(zimbraDomainName=$domain)(DKIMSelector=*))",
+      scope=>"sub",
   );
   my $size = $mesg->count;
   if ($size == 0 ) {
     print "Error: Domain $domain doesn't have DKIM enabled.\n";
-	$ldap->unbind;
-	exit(1);
+    $ldap->unbind;
+    exit(1);
   }
   my $entry = $mesg->entry($size-1);
   my $dn = $entry->dn;
