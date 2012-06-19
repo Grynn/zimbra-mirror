@@ -707,8 +707,7 @@ public class CSMigrationWrapper
         }
 
         Log.init(Path.GetTempPath() + "migration.log", level);  // might have gotten a new level from options
-        if (isServer)
-            InitLogFile(accountName, level);
+        InitLogFile(accountName, level);
         try
         {
             value = user.Init(isServer ? "host" : "", Acct.AccountID, accountName);

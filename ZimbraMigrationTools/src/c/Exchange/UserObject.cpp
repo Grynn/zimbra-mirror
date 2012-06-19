@@ -25,10 +25,7 @@ STDMETHODIMP CUserObject::Init(BSTR host, BSTR location, BSTR account, BSTR *pEr
     HRESULT hr = S_FALSE;
 
     GetTempPath(sizeof (buf) / sizeof (wchar_t), buf);
-    if (host && *host)
-        wcscat(buf, account);
-    else
-        wcscat(buf, L"migration");
+    wcscat(buf, account);
     wcscat(buf, L".log");
     dlog.open(buf);
     dlogi(L"Init", Log::KV<BSTR>(L"host", host), Log::KV<BSTR>(L"location", location),
