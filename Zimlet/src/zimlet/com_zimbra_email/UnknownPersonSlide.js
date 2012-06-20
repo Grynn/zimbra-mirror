@@ -443,7 +443,7 @@ function(imgUrl) {
 	div.height = 80;
 	div.style.width = 65;
 	div.style.height = 80;
-	if (this.emailZimlet.emailAddress.indexOf(UnknownPersonSlide.DOMAIN) == -1) {
+	if (this.emailZimlet.emailAddress.indexOf(UnknownPersonSlide.DOMAIN) == -1 || !imgUrl) {
 		this._handleImgLoadFailure();
 		return;
 	}
