@@ -540,7 +540,7 @@ public abstract class AbsSeleniumObject {
 		
 		if(ZimbraSeleniumProperties.isWebDriver()){
 			logger.info("...WebDriver...executeScript.KeyDownEvent");			
-			String locator = "css=html body";					
+			String locator = "//html//body";					
 			//WebElement we = getElement(locator); 			
 			//Actions builder = new Actions(webDriver());			
 			for (String kc : keyCode.split(",")) {

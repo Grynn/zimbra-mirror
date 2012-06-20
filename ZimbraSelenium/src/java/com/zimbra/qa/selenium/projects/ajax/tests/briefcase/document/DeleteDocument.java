@@ -31,7 +31,8 @@ public class DeleteDocument extends AjaxCommonTest {
 			private static final long serialVersionUID = 1L;
 			
 			{
-				put("zimbraPrefBriefcaseReadingPaneLocation", "bottom");				
+				put("zimbraPrefBriefcaseReadingPaneLocation", "bottom");
+				put("zimbraPrefShowSelectionCheckbox","TRUE");
 			}
 		};	
 	}

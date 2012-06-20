@@ -161,6 +161,8 @@ public class EditDocument extends AjaxCommonTest {
 		// Click on created document
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docItem1);
 
+		SleepUtil.sleepVerySmall();
+		
 		// Click on Edit document icon in toolbar
 		DocumentBriefcaseEdit documentBriefcaseEdit = (DocumentBriefcaseEdit) app.zPageBriefcase
 				.zToolbarPressButton(Button.B_EDIT_FILE, docItem1);
