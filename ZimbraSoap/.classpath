@@ -40,7 +40,6 @@
       <attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/apache-log4j-extras-1.0-javadoc.jar!/"/>
     </attributes>
   </classpathentry>
-  <classpathentry kind="lib" path="/ZimbraSoap/jars/metro/webservices-rt.jar"/>
   <classpathentry kind="output" path="build/classes"/>
   <classpathentry kind="lib" path="/ZimbraServer/soapdocs/jars/freemarker-2.2.8.jar"/>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/jaxws-api-2.2.6.jar"/>
