@@ -73,7 +73,7 @@ public class DragAndDropTask extends AjaxCommonTest {
 		
 		//Drag and drop task item into subfolder
 		app.zPageMail.zDragAndDrop(
-				"css=td[id$='"+task.getId() +"__su']",
+				"css=span[id$='"+task.getId() +"__su']",
 				"css=td[id='zti__main_Tasks__"+ subFolder.getId() + "_textCell']:contains('"+ name + "')");
 		
 		// refresh tasks page

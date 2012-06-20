@@ -190,7 +190,7 @@ public class TagMessage extends PrefGroupMailByMessageTest {
 		app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
 
 		// Tag it by DnD
-		String source = "css=td[id='zlif__TV-main__"+ mail.getId() +"__su']";
+		String source = "css=span[id='zlif__TV-main__"+ mail.getId() +"__su']";
 		String destination = "css=td[id='zti__main_Mail__"+ tag.getId() +"_textCell']";
 		
 		app.zPageMail.zDragAndDrop(source, destination);

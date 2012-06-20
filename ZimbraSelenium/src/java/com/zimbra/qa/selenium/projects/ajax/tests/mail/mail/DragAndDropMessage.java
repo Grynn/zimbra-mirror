@@ -70,7 +70,7 @@ public class DragAndDropMessage extends PrefGroupMailByMessageTest {
 		
 		// Select the item
 		app.zPageMail.zDragAndDrop(
-					"css=td[id$='"+ mail.getId() +"__su']", // <td id="zlif__TV__12345__su" .../>
+					"css=span[id$='"+ mail.getId() +"__su']", // <td id="zlif__TV__12345__su" .../>
 					"css=div[id='zti__main_Mail__"+ subfolder.getId() +"']"); // <div id="zti__main_Mail__67890" .../>
 		
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());

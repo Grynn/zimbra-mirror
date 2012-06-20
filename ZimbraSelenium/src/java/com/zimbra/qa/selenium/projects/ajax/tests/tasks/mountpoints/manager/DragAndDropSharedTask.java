@@ -101,7 +101,7 @@ public class DragAndDropSharedTask extends AjaxCommonTest {
 
 		//Drag and drop task from shared to local task folder
 		app.zPageMail.zDragAndDrop(
-				"css=td[id$='"+mountpointsubject.getId() +"__su']",
+				"css=span[id$='"+mountpointsubject.getId() +"__su']",
 				"css=td[id='zti__main_Tasks__"+ taskFolder.getId() + "_textCell']:contains('"+ taskFolder.getName() + "')");
 
 		// refresh tasks page
@@ -203,7 +203,7 @@ public class DragAndDropSharedTask extends AjaxCommonTest {
 
 		//Drag and drop task from local to shared task folder
 		app.zPageMail.zDragAndDrop(
-				"css=td[id$='"+task1.getId() +"__su']",
+				"css=span[id$='"+task1.getId() +"__su']",
 				"css=td[id='zti__main_Tasks__"+ mountpoint.getId() + "_textCell']:contains('"+ mountpoint.getName() + "')");
 
 

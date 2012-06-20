@@ -77,7 +77,7 @@ public class DragAndDropConversation extends PrefGroupMailByConversationTest {
 		
 		// Drag the conversation to the subfolder
 		app.zPageMail.zDragAndDrop(
-				"css=td#zlif__CLV-main__"+ cid +"__su",
+				"css=span#zlif__CLV-main__"+ cid +"__su",
 				"css=div[id='zti__main_Mail__"+ subfolder.getId() +"']"); // <div id="zti__main_Mail__67890" .../>
 		
 		
@@ -171,7 +171,7 @@ public class DragAndDropConversation extends PrefGroupMailByConversationTest {
 		
 		// Drag the conversation to the subfolder
 		app.zPageMail.zDragAndDrop(
-				"css=td#zlif__CLV-main__"+ cid +"__su",
+				"css=span#zlif__CLV-main__"+ cid +"__su",
 				"css=div[id='zti__main_Mail__"+ subfolder.getId() +"']"); // <div id="zti__main_Mail__67890" .../>
 		
 		
@@ -267,7 +267,7 @@ public class DragAndDropConversation extends PrefGroupMailByConversationTest {
 		
 		// Drag the conversation to the subfolder
 		app.zPageMail.zDragAndDrop(
-				"css=td#zlif__CLV-main__"+ cid +"__su",
+				"css=span#zlif__CLV-main__"+ cid +"__su",
 				"css=div[id='zti__main_Mail__"+ subfolder.getId() +"']"); // <div id="zti__main_Mail__67890" .../>
 		
 		
