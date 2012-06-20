@@ -54,6 +54,7 @@ public class AppAdminConsole extends AbsApplication {
 	public PageEditMailQueue			zPageEditMailQueue = null;
 	public PageManageAccountMigration	zPageManageAccountMigration = null;
 	public PageManageCertificates		zPageManageCertificates = null;
+	public PageManageClientUpload		zPageManageClientUpload = null;
 	public PageEditCertificate			zPageEditCertificate = null;
 	public PageManageSoftwareUpdates	zPageManageSoftwareUpdates = null;
 	public PageManageSearchMail			zPageManageSearchMail = null;
@@ -182,6 +183,9 @@ public class AppAdminConsole extends AbsApplication {
 
 		zPageManageCertificates = new PageManageCertificates(this);
 		pages.put(zPageManageCertificates.myPageName(), zPageManageCertificates);
+		
+		zPageManageClientUpload = new PageManageClientUpload(this);
+		pages.put(zPageManageClientUpload.myPageName(), zPageManageClientUpload);
 
 		zPageEditCertificate = new PageEditCertificate(this);
 		pages.put(zPageEditCertificate.myPageName(), zPageEditCertificate);

@@ -15,18 +15,17 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
  * @author Matt Rhoades
  *
  */
-public class PageManageAccountMigration extends AbsTab {
+public class PageManageClientUpload extends AbsTab {
 	
 	public static class Locators {
 		public static final String TOOLS_AND_MIGRATION_ICON="css=div.ImgToolsAndMigration";
-		public static final String ACCOUNTMIGRATION="css=div[id^='zti__AppAdmin__magHV__bpHV'][id$='div']";
+		public static final String CLIENTUPLOAD="css=div[id^='zti__AppAdmin__magHV__ClientUploadHV'][id$='div']";
 		public static final String HOME="Home";
 		public static final String TOOLS_AND_MIGRATION="Tools and Migration";
-		public static final String ACCOUNT_MIGRATION="Account Migration";
+		public static final String CLIENT_UPLOAD="Client Upload";
 	}
-
-
-	public PageManageAccountMigration(AbsApplication application) {
+	
+	public PageManageClientUpload(AbsApplication application) {
 		super(application);
 	}
 
@@ -53,7 +52,6 @@ public class PageManageAccountMigration extends AbsTab {
 		}
 
 		return (true);
-
 	}
 
 	/* (non-Javadoc)
@@ -79,8 +77,8 @@ public class PageManageAccountMigration extends AbsTab {
 
 		// Click on Tools and Migration -> Downloads
 		zClickAt(Locators.TOOLS_AND_MIGRATION_ICON,"");
-		if(sIsElementPresent(Locators.ACCOUNTMIGRATION));
-		sClickAt(Locators.ACCOUNTMIGRATION, "");
+		if(sIsElementPresent(Locators.CLIENTUPLOAD));
+		sClickAt(Locators.CLIENTUPLOAD, "");
 		
 		zWaitForActive();
 	}

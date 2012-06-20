@@ -16,7 +16,15 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
  *
  */
 public class PageManageSearchMail extends AbsTab {
-
+	
+	public static class Locators {
+		public static final String TOOLS_AND_MIGRATION_ICON="css=div.ImgToolsAndMigration";
+		public static final String SEARCHMAIL="css=div[id^='zti__AppAdmin__magHV__xmbSearch'][id$='div']";
+		public static final String HOME="Home";
+		public static final String TOOLS_AND_MIGRATION="Tools and Migration";
+		public static final String SEARCH_MAIL="Search Mail";
+	}
+	
 	public PageManageSearchMail(AbsApplication application) {
 		super(application);
 	}
@@ -26,7 +34,24 @@ public class PageManageSearchMail extends AbsTab {
 	 */
 	@Override
 	public boolean zIsActive() throws HarnessException {
-		throw new HarnessException("implement me");
+
+		// Make sure the Admin Console is loaded in the browser
+		if ( !MyApplication.zIsLoaded() )
+			throw new HarnessException("Admin Console application is not active!");
+
+
+		boolean present = sIsElementPresent("css=span:contains('" + Locators.TOOLS_AND_MIGRATION + "')");
+		if ( !present ) {
+			return (false);
+		}
+
+		boolean visible = zIsVisiblePerPosition("css=span:contains('" + Locators.TOOLS_AND_MIGRATION + "')", 0, 0);
+		if ( !visible ) {
+			logger.debug("isActive() visible = "+ visible);
+			return (false);
+		}
+
+		return (true);
 	}
 
 	/* (non-Javadoc)
@@ -42,7 +67,19 @@ public class PageManageSearchMail extends AbsTab {
 	 */
 	@Override
 	public void zNavigateTo() throws HarnessException {
-		throw new HarnessException("implement me");
+
+		if ( zIsActive() ) {
+			// This page is already active.
+			
+			return;
+		}
+
+		// Click on Tools and Migration -> Downloads
+		zClickAt(Locators.TOOLS_AND_MIGRATION_ICON,"");
+		if(sIsElementPresent(Locators.SEARCHMAIL));
+		sClickAt(Locators.SEARCHMAIL, "");
+		
+		zWaitForActive();
 	}
 
 	@Override
@@ -76,6 +113,12 @@ public class PageManageSearchMail extends AbsTab {
 			throws HarnessException {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public boolean zVerifyHeader (String header) throws HarnessException {
+		if(this.sIsElementPresent("css=span:contains('" + header + "')"))
+			return true;
+		return false;
 	}
 
 }
