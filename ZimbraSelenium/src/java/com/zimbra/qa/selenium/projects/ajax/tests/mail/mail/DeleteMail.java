@@ -20,7 +20,7 @@ public class DeleteMail extends PrefGroupMailByMessageTest {
 		logger.info("New "+ DeleteMail.class.getCanonicalName());
 		
 		
-		
+		super.startingAccountPreferences.put("zimbraPrefShowSelectionCheckbox", "TRUE");
 
 		
 	}

@@ -16,9 +16,7 @@ public class MarkSpamMessage extends PrefGroupMailByMessageTest {
 		logger.info("New "+ MarkSpamMessage.class.getCanonicalName());
 		
 		
-		
-
-
+		super.startingAccountPreferences.put("zimbraPrefShowSelectionCheckbox", "TRUE");
 		
 	}
 	

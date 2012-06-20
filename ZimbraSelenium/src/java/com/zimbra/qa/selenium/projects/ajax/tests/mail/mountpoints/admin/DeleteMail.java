@@ -15,7 +15,8 @@ public class DeleteMail extends PrefGroupMailByMessageTest {
 	public DeleteMail() {
 		logger.info("New "+ DeleteMail.class.getCanonicalName());
 		
-		
+		super.startingAccountPreferences.put("zimbraPrefShowSelectionCheckbox", "TRUE");
+
 	}
 	
 	@Bugs(ids = "66525, 26103")
