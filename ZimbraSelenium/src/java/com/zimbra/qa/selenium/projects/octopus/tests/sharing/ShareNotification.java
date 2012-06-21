@@ -1,12 +1,8 @@
 package com.zimbra.qa.selenium.projects.octopus.tests.sharing;
 
-import java.util.ArrayList;
-
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
 import com.zimbra.qa.selenium.framework.items.FolderItem;
-import com.zimbra.qa.selenium.framework.items.HistoryItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
@@ -14,12 +10,9 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
-import com.zimbra.qa.selenium.projects.octopus.core.OctopusCommonTest;
-import com.zimbra.qa.selenium.projects.octopus.core.CommonConstants.SHARE_PERMISSION;
 import com.zimbra.qa.selenium.projects.octopus.tests.history.HistoryCommonTest;
-import com.zimbra.qa.selenium.projects.octopus.ui.DialogFolderShare;
-import com.zimbra.qa.selenium.projects.octopus.ui.PageMyFiles;
 import com.zimbra.qa.selenium.projects.octopus.ui.PageHistory.GetText;
+import com.zimbra.qa.selenium.projects.octopus.ui.PageMyFiles;
 import com.zimbra.qa.selenium.projects.octopus.ui.PageSharing.Locators;
 
 public class ShareNotification extends HistoryCommonTest
@@ -28,7 +21,7 @@ public class ShareNotification extends HistoryCommonTest
 	private ZimbraAccount owner = null;
 
 	public ShareNotification(){
-		logger.info("New " + CreateShare.class.getCanonicalName());
+		logger.info("New " + ShareNotification.class.getCanonicalName());
 
 		// Test starts at the Octopus page
 		super.startingPage = app.zPageMyFiles;
@@ -42,7 +35,7 @@ public class ShareNotification extends HistoryCommonTest
 	public void AcceptShareByNotification() throws HarnessException
 	{
 		String ownerFolderName = "ownerFolder"+ ZimbraSeleniumProperties.getUniqueString();
-		CreateFolder(ownerFolderName,PPT_FILE);
+		shareFolder(ownerFolderName,PPT_FILE);
 
 		// Login with grantee's Credential's.
 		app.zPageLogin.zLogin(granteeAccount);
@@ -61,7 +54,7 @@ public class ShareNotification extends HistoryCommonTest
 		app.zPageSharing.sClickAt(Locators.zAddToMyFiles.locator,"0,0");
 
 		// If there is a busy overlay, wait for that to finish
-		app.zPageOctopus.zWaitForBusyOverlayOctopus();
+		//app.zPageOctopus.zWaitForBusyOverlayOctopus();
 
 		// Verify shared mount point folder gets added in My files list view by clicking on Add to My files button from the notification.
 		ZAssert.assertTrue(app.zPageMyFiles.zWaitForElementPresent(
@@ -73,7 +66,7 @@ public class ShareNotification extends HistoryCommonTest
 		app.zPageMyFiles.zListItem(Action.A_LEFTCLICK, ownerFolderName);
 
 		// If there is a busy overlay, wait for that to finish
-		app.zPageOctopus.zWaitForBusyOverlayOctopus();
+		//app.zPageOctopus.zWaitForBusyOverlayOctopus();
 
 		// Verify the file present in the shared folder
 		ZAssert.assertTrue(app.zPageMyFiles.zWaitForElementPresent(
@@ -86,7 +79,7 @@ public class ShareNotification extends HistoryCommonTest
 	public void VerifyShareNotificationMenu() throws HarnessException
 	{
 		String ownerFolderName = "ownerFolder"+ ZimbraSeleniumProperties.getUniqueString();
-		CreateFolder(ownerFolderName,PPT_FILE);
+		shareFolder(ownerFolderName,PPT_FILE);
 
 		// Login with grantee's Credential's.
 		app.zPageLogin.zLogin(granteeAccount);
@@ -109,7 +102,7 @@ public class ShareNotification extends HistoryCommonTest
 				"Verify Add to My files button is visible.");
 
 		// If there is a busy overlay, wait for that to finish
-		app.zPageOctopus.zWaitForBusyOverlayOctopus();
+		//app.zPageOctopus.zWaitForBusyOverlayOctopus();
 
 		// Verify Ignore button in share Notification.
 		ZAssert.assertTrue(app.zPageOctopus.sIsElementPresent(Locators.zIgnoreShare.locator),
@@ -120,7 +113,7 @@ public class ShareNotification extends HistoryCommonTest
 	public void IgnoreShareUsingNotification() throws HarnessException
 	{
 		String ownerFolderName = "ownerFolder"+ ZimbraSeleniumProperties.getUniqueString();
-		CreateFolder(ownerFolderName,PPT_FILE);
+		shareFolder(ownerFolderName,PPT_FILE);
 
 		// Login with grantee's Credential's.
 		app.zPageLogin.zLogin(granteeAccount);
@@ -148,7 +141,7 @@ public class ShareNotification extends HistoryCommonTest
 				"Verify the mount point folder is not visible in the My Files list view");
 
 		// If there is a busy overlay, wait for that to finish
-		app.zPageOctopus.zWaitForBusyOverlayOctopus();
+		//app.zPageOctopus.zWaitForBusyOverlayOctopus();
 
 		// Verify the ignored folder doesn't appear in My Files list view
 		ZAssert.assertFalse(app.zPageOctopus.zIsItemInCurentListView(ownerFolderName),
@@ -192,17 +185,17 @@ public class ShareNotification extends HistoryCommonTest
 		app.zPageMyFiles.zListItem(Action.A_LEFTCLICK, mountPointFolderName);
 
 		// If there is a busy overlay, wait for that to finish
-		app.zPageOctopus.zWaitForBusyOverlayOctopus();
+		//app.zPageOctopus.zWaitForBusyOverlayOctopus();
 
-		// Verify the file present in the shared folder
+		// Verify the file present in the shared mount point folder
 		ZAssert.assertFalse(app.zPageMyFiles.zWaitForElementPresent(
 				PageMyFiles.Locators.zMyFilesListView.locator
 				+ ":contains("+ PPT_FILE + ")", "3000"),
 				"Verify the file is not availble in shared mount point folder.");
 	}
 
-	/*Common code to create folder using Soap request*/
-	public void CreateFolder(String ownerFolderName,String fileInFolder) throws HarnessException
+	//Common code to share folder using Soap request
+	public void shareFolder(String ownerFolderName,String fileInFolder) throws HarnessException
 	{
 		// Get current active account as owner
 		owner = app.zGetActiveAccount();
@@ -219,7 +212,7 @@ public class ShareNotification extends HistoryCommonTest
 		FolderItem ownerFolder = FolderItem.importFromSOAP(owner, ownerFolderName);
 
 		//upload file to folder
-		uploadFileViaSoap(app.zGetActiveAccount(),PPT_FILE, ownerFolder);	  	
+		uploadFileViaSoap(app.zGetActiveAccount(),fileInFolder, ownerFolder);
 
 		//Share folder with grantee using Edit access
 		shareFolderViaSoap(owner, granteeAccount, ownerFolder, SHARE_AS_READWRITE);
@@ -228,16 +221,4 @@ public class ShareNotification extends HistoryCommonTest
 		app.zPageOctopus.zLogout();
 	}
 
-	@AfterMethod(groups = { "always" })
-	public void testCleanup()
-	{
-		try {
-			// Empty trash
-			app.zPageTrash.emptyTrashUsingSOAP(app.zGetActiveAccount());
-
-			app.zPageOctopus.zLogout();
-		} catch (Exception e) {
-			logger.info("Failed while emptying Trash", e);
-		}
-	}
 }
