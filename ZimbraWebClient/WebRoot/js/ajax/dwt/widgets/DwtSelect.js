@@ -567,6 +567,18 @@ function() {
 	this._pseudoItemsEl.style.display =  "none";
 }
 
+/*
+ * Use this in case you want the select to be as wide as the widest option and
+ * the options hidden so they don't overflow outside containers.
+ */
+DwtSelect.prototype.fixedButtonWidth =
+function(){
+    var elm = this._selectEl;
+    var width = elm.offsetWidth;
+    elm.style.width = width + "px";
+    this._pseudoItemsEl.style.display = "none";
+};
+
 DwtSelect.prototype._createHtmlFromTemplate =
 function(templateId, data) {
     // wrap params
