@@ -38,6 +38,7 @@ public class DeleteAppointment extends AjaxCommonTest {
 			private static final long serialVersionUID = -5268509108302506830L;
 		{
 			put("zimbraPrefCalendarInitialView", "list");
+			put("zimbraPrefShowSelectionCheckbox", "TRUE");
 		}};
 
 

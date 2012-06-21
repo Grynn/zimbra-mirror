@@ -15,7 +15,8 @@ public class MarkSpamConversation extends PrefGroupMailByConversationTest {
 	public MarkSpamConversation() {
 		logger.info("New "+ MarkSpamConversation.class.getCanonicalName());
 
-		
+		super.startingAccountPreferences.put("zimbraPrefShowSelectionCheckbox", "TRUE");
+
 	}
 	
 	@Test(	description = "Mark a conversation as spam, using 'Spam' toolbar button",
