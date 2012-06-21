@@ -29,6 +29,7 @@ public class DragAndDropSharedTask extends AjaxCommonTest {
 			{
 				put("zimbraPrefReadingPaneLocation", "bottom");
 				put("zimbraPrefTasksReadingPaneLocation", "bottom");
+				put("zimbraPrefShowSelectionCheckbox", "TRUE");
 			}
 		};			
 

@@ -29,6 +29,7 @@ public class DeleteEditMove extends AjaxCommonTest {
 				put("zimbraPrefReadingPaneLocation", "bottom");
 				put("zimbraPrefTasksReadingPaneLocation", "bottom");
 				put("zimbraPrefGroupMailBy", "message");
+				put("zimbraPrefShowSelectionCheckbox", "TRUE");
 			}
 		};			
 		

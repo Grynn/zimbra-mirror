@@ -28,6 +28,7 @@ public class EditShare extends AjaxCommonTest {
 		super.startingAccountPreferences = new HashMap<String, String>() {
 			{
 				put("zimbraPrefTasksReadingPaneLocation", "bottom");
+				put("zimbraPrefShowSelectionCheckbox", "TRUE");
 			}
 		};
 

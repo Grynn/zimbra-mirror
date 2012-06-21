@@ -32,6 +32,7 @@ public class ChangeColorMountpoint extends PrefGroupMailByMessageTest {
 		super.startingAccountPreferences = new HashMap<String, String>() {
 			{
 				put("zimbraPrefReadingPaneLocation", "bottom");
+				put("zimbraPrefShowSelectionCheckbox", "TRUE");
 				
 			}
 		};

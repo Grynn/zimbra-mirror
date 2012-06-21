@@ -29,6 +29,7 @@ private ZimbraAccount Owner = null;
 		super.startingAccountPreferences = new HashMap<String, String>() {
 			{
 				put("zimbraPrefReadingPaneLocation", "bottom");
+				put("zimbraPrefShowSelectionCheckbox", "TRUE");
 				put("zimbraPrefGroupMailBy", "message");
 			}
 		};		

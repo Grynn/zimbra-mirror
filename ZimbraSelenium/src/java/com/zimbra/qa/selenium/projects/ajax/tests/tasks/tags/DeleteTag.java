@@ -1,5 +1,7 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.tasks.tags;
 
+import java.util.HashMap;
+
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.FolderItem;
@@ -12,12 +14,19 @@ import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
 
 public class DeleteTag extends AjaxCommonTest {
 
+	@SuppressWarnings("serial")
 	public DeleteTag() {
 		logger.info("New " + DeleteTag.class.getCanonicalName());
 
 		// All tests start at the login page
 		super.startingPage = app.zPageTasks;
-		super.startingAccountPreferences = null;
+	//	super.startingAccountPreferences = null;
+		super.startingAccountPreferences = new HashMap<String, String>() {
+			{
+				put("zimbraPrefTasksReadingPaneLocation", "bottom");
+				put("zimbraPrefShowSelectionCheckbox", "TRUE");
+			}
+		};
 
 	}
 

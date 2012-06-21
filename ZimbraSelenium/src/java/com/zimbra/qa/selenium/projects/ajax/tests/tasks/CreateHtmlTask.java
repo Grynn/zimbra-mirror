@@ -31,6 +31,7 @@ public class CreateHtmlTask extends AjaxCommonTest {
 			put("zimbraPrefGroupMailBy", "message");
 			put("zimbraPrefComposeFormat", "html");
 			put("zimbraPrefTasksReadingPaneLocation", "bottom");
+			put("zimbraPrefShowSelectionCheckbox", "TRUE");
 		}};
 	}
 

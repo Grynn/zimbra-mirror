@@ -29,6 +29,7 @@ public class MoveMountpoint extends AjaxCommonTest {
 			{
 				put("zimbraPrefReadingPaneLocation", "bottom");
 				put("zimbraPrefGroupMailBy", "message");
+				put("zimbraPrefShowSelectionCheckbox", "TRUE");
 			}
 		};		
 		
