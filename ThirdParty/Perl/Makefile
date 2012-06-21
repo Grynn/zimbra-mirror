@@ -224,7 +224,7 @@ PERL_LIBS 	:= \
 	XML::NamespaceSupport \
 	XML::SAX \
 	XML::SAX::Expat \
-	XML::Simple \
+	G/GR/GRANTM/XML-Simple-2.20.tar.gz \
 	IO::Socket::INET6 \
 	$(MODULE_NETADDR_IP) \
 	Net::DNS::Resolver::Programmable \
