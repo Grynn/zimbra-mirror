@@ -819,22 +819,39 @@ public class PageMail extends AbsTab {
 
 			// Get the subject
 			locator = msglocator + " span[id$='__su']";
-			String subject = this.sGetText(locator).trim();
+			if ( this.sIsElementPresent(locator) ) {
+				
+				String subject = this.sGetText(locator).trim();
 
-			// The subject contains the fragment, e.g. "subject - fragment", so
-			// strip it off
-			item.gSubject = subject.replace(item.gFragment, "").trim();
+				// The subject contains the fragment, e.g. "subject - fragment", so
+				// strip it off
+				item.gSubject = subject.replace(item.gFragment, "").trim();
 
+			} else {
+				
+				// No subject (i.e. expanded conversation message)
+				item.gSubject = "";
+				
+			}
 
 		} else {
 
 			// Conversation items's fragment is in the subject field
 			locator = msglocator + " span[id$='__su']";
-			item.gFragment = this.sGetText(locator).trim();
+			if ( this.sIsElementPresent(locator) ) {
+				
+				item.gFragment = this.sGetText(locator).trim();
 
-			// TODO: should the subject be parsed from the conversation container?
-			// For now, just set it to blank
-			item.gSubject = "";
+				// TODO: should the subject be parsed from the conversation container?
+				// For now, just set it to blank
+				item.gSubject = "";
+
+			} else {
+
+				item.gFragment = "";
+				item.gSubject = "";
+				
+			}
 
 		}
 
