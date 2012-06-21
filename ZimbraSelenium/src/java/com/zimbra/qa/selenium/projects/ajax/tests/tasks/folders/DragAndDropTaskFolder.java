@@ -26,6 +26,7 @@ public class DragAndDropTaskFolder extends AjaxCommonTest {
 		super.startingPage = app.zPageTasks;
 		super.startingAccountPreferences = new HashMap<String , String>() {{
 			put("zimbraPrefTasksReadingPaneLocation", "bottom");
+			put("zimbraPrefShowSelectionCheckbox", "TRUE");
 		}};
 	}	
 
