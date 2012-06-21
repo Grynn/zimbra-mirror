@@ -29,6 +29,7 @@ ifeq ($(BUILD_PLATFORM), MACOSXx86_10.5)
 	DEST_BIN_DIR  :=	$(DEST_DIR)/bin
 endif
 
+MODULE_UPLEVEL	:= Sub::Uplevel
 MODULE_WWW	:= LWP::Protocol::https
 MODULE_NETADDR_IP	:= NetAddr::IP
 MODULE_EXTUTIL_MAKEMAKER	:= \
@@ -70,6 +71,7 @@ MODULE_BUILD_LIBS       := \
 	D/DA/DAGOLDEN/Module-Build-0.3607.tar.gz
 
 ifeq (RHEL4,$(findstring RHEL4,$(BUILD_PLATFORM)))
+	MODULE_UPLEVEL	:= D/DA/DAGOLDEN/Sub-Uplevel-0.22.tar.gz
 	MODULE_BUILD_LIBS	:= K/KW/KWILLIAMS/Module-Build-0.2808.tar.gz
 	MODULE_WWW	:= G/GA/GAAS/libwww-perl-5.837.tar.gz
 	MODULE_NETADDR_IP	:= M/MI/MIKER/NetAddr-IP-4.040.tar.gz
@@ -144,7 +146,7 @@ endif
 PRE_PERL_LIBS	:= \
 	Tree::DAG_Node \
 	Test::Simple \
-	Sub::Uplevel \
+	$(MODULE_UPLEVEL) \
 	Test::Exception \
 	Test::Warn
 
