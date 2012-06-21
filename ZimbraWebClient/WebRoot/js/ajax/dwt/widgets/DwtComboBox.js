@@ -278,7 +278,7 @@ DwtComboBox.prototype._handleKeyUp = function(ev) {
 	var newValue = this.input.getValue();
 	event._args = { selectObj: this, newValue: newValue, oldValue: this.__ovalue };
 	this.notifyListeners(DwtEvent.ONCHANGE, event);
-	if (this._autoScroll && newValue != this.__ovalue) {
+	if (this._menu && this._autoScroll && newValue != this.__ovalue) {
 		//if auto scroll is on then scroll to the index which starts with
 		//the value in input field
 		var index = 0;
