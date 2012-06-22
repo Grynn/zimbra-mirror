@@ -2,7 +2,7 @@
 #
 # ***** BEGIN LICENSE BLOCK *****
 # Zimbra Collaboration Suite Server
-# Copyright (C) 2008, 2009, 2010 Zimbra, Inc.
+# Copyright (C) 2008, 2009, 2010, 2011, 2012 VMware, Inc.
 # 
 # The contents of this file are subject to the Zimbra Public License
 # Version 1.3 ("License"); you may not use this file except in
@@ -23,7 +23,7 @@ zimbra_home=/opt/zimbra
 zimbra_java_home=${zimbra_home}/java
 jspc_src_dir=${zimbra_home}/mailboxd/webapps/zimbra
 jspc_build_dir=${zimbra_home}/mailboxd/work/zimbra/jsp
-jspc_class_path="${zimbra_home}/jetty/lib:${zimbra_home}/jetty/lib/jsp-2.1:${zimbra_home}/jetty/lib/ext:${zimbra_home}/jetty/lib/plus:${zimbra_home}/jetty/lib/naming:/opt/zimbra/lib/ext"
+jspc_class_path="${zimbra_home}/jetty/lib:${zimbra_home}/jetty/lib/jsp-2.1:${zimbra_home}/jetty/lib/ext:${zimbra_home}/jetty/lib/plus:${zimbra_home}/jetty/lib/naming:/opt/zimbra/lib/ext:${zimbra_home}/jetty/common/lib:${zimbra_home}/jetty/webapps/zimbra/WEB-INF/lib"
 
 extensions="backup clamscanner network zimbra-license zimbrahsm zimbrasync"
 ext_dir="/opt/zimbra/lib/ext-common"
@@ -53,49 +53,13 @@ mkdir ${jspc_build_dir}
 
 compile_jsp() {
   file=shift
-  ${java_cmd} org.apache.jasper.JspC -v -s -l -d ${jspc_build_dir} -uriroot ${jspc_src_dir} ${param_jspfile}  2> /dev/null
+  ${java_cmd} org.apache.jasper.JspC -v -d ${jspc_build_dir} -webapp ${jspc_src_dir} -uriroot ${jspc_src_dir} -compile
   return $?
 }
 
-for param_jspfile in `cd ${jspc_src_dir}; find h m -type f | sed 's/\.\///g'`; do
-  echo -n "Compiling ${param_jspfile}..."
-  compile_jsp ${param_jspfile}
-  if [ $? = 0 ]; then
-    echo "done."
-  else
-    jspc_retry_list="${jspc_retry_list} ${param_jspfile}"
-    echo "failed."
-  fi
-done
-for param_jspfile in `cd ${jspc_src_dir}; find public -type f -name '*.jsp' -depth 1 | sed 's/\.\///g'`; do
-  echo -n "Compiling ${param_jspfile}..."
-  compile_jsp ${param_jspfile}
-  if [ $? = 0 ]; then
-    echo "done."
-  else
-    jspc_retry_list="${jspc_retry_list} ${param_jspfile}"
-    echo "failed."
-  fi
-done
-
-retries=0
-while [ "x${jspc_retry_list}" != "x" ];  do
-  if [ "$retries" -gt 5 ]; then
-    break
-  else
-    retries=$((retries+1))
-  fi
-
-  jspc_list=${jspc_retry_list}
-  jspc_retry_list=""
-  for param_jspfile in ${jspc_list}; do
-    echo -n "Re-compiling ${param_jspfile}..."
-    compile_jsp ${param_jspfile}
-    if [ $? = 0 ]; then
-      echo "done."
-    else
-      jspc_retry_list="${jspc_retry_list} ${param_jspfile}"
-      echo "failed."
-    fi
-  done
-done
+compile_jsp ${param_jspfile}
+if [ $? = 0 ]; then
+  echo "done."
+else
+  echo "failed."
+fi
