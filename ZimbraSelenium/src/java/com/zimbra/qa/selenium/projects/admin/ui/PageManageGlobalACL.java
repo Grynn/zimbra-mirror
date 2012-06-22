@@ -17,6 +17,15 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
  */
 public class PageManageGlobalACL extends AbsTab {
 
+	public static class Locators {
+		public static final String CONFIGURE_ICON="css=div.ImgAdministration";
+		public static final String GLOBALACL="zti__AppAdmin__CONFIGURATION__GrantsHV_textCell";
+		public static final String GEAR_ICON="css=div.ImgConfigure";
+		public static final String HOME="Home";
+		public static final String CONFIGURE="Configure";
+		public static final String GLOBAL_ACL="Global ACL";
+	}
+
 	public PageManageGlobalACL(AbsApplication application) {
 		super(application);
 	}
@@ -26,7 +35,25 @@ public class PageManageGlobalACL extends AbsTab {
 	 */
 	@Override
 	public boolean zIsActive() throws HarnessException {
-		throw new HarnessException("implement me");
+
+		// Make sure the Admin Console is loaded in the browser
+		if ( !MyApplication.zIsLoaded() )
+			throw new HarnessException("Admin Console application is not active!");
+
+
+		boolean present = sIsElementPresent(Locators.GEAR_ICON);
+		if ( !present ) {
+			return (false);
+		}
+
+		boolean visible = zIsVisiblePerPosition(Locators.GEAR_ICON, 0, 0);
+		if ( !visible ) {
+			logger.debug("isActive() visible = "+ visible);
+			return (false);
+		}
+
+		return (true);
+
 	}
 
 	/* (non-Javadoc)
@@ -42,7 +69,19 @@ public class PageManageGlobalACL extends AbsTab {
 	 */
 	@Override
 	public void zNavigateTo() throws HarnessException {
-		throw new HarnessException("implement me");
+
+		if ( zIsActive() ) {
+			// This page is already active.
+			return;
+		}
+
+		// Click on Addresses -> Accounts
+		zClickAt(Locators.CONFIGURE_ICON,"");
+		sIsElementPresent(Locators.GLOBALACL);
+		zClickAt(Locators.GLOBALACL, "");
+
+		zWaitForActive();
+
 	}
 
 	@Override
@@ -77,5 +116,12 @@ public class PageManageGlobalACL extends AbsTab {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	public boolean zVerifyHeader (String header) throws HarnessException {
+		if(this.sIsElementPresent("css=span:contains('" + header + "')"))
+			return true;
+		return false;
+	}
+
 
 }
