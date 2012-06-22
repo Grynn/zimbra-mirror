@@ -102,7 +102,7 @@
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/ehcache-core-2.5.1.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars-test/hsqldb-2.2.1.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars-test/sqltool-2.2.1.jar"/>
-	<classpathentry kind="lib" path="jars/concurrentlinkedhashmap-lru-1.1.jar"/>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/concurrentlinkedhashmap-lru-1.1.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraCommon"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraSoap"/>
 	<classpathentry kind="src" path="src/java"/>
