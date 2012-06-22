@@ -29,6 +29,9 @@ NGINX_INSTALL := $(ZIMBRA_HOME)/nginx-$(NGINX_VERSION)-zimbra
 CHUNKIN_TGZ_TARGET := $(NGINX_ROOT)/src/chunkin-nginx-module-0.23rc2.tar.gz
 CHUNKIN_SOURCE := $(NGINX_ROOT)/chunkin-nginx-module
 
+KEEPALIVE_TGZ_TARGET := $(NGINX_ROOT)/src/nviennot-nginx-tcp-keepalive-4d7186d.tar.gz
+KEEPALIVE_SOURCE := $(NGINX_ROOT)/nviennot-nginx-tcp-keepalive
+
 WITH_CC_OPT := -g \
 	-I/opt/zimbra/cyrus-sasl-$(CYRUS_VERSION)/include \
 	-I/opt/zimbra/openssl-$(OPENSSL_VERSION)/include \
@@ -63,7 +66,8 @@ build:
             --http-fastcgi-temp-path=$(ZIMBRA_HOME)/data/tmp/nginx/fastcgi \
             --without-http_scgi_module \
             --without-http_uwsgi_module \
-            --add-module=$(CHUNKIN_SOURCE);)
+            --add-module=$(CHUNKIN_SOURCE) \
+            --add-module=$(KEEPALIVE_SOURCE);)
 	(cd nginx-$(NGINX_VERSION)-zimbra; \
 	LD_RUN_PATH="$(CYRUS_LIB_DIR):$(OPENSSL_LIB_DIR)" make; make install)
 	(cd $(ZIMBRA_HOME); ln -s $(NGINX_INSTALL) nginx)
@@ -85,7 +89,8 @@ allclean: clean
 	/bin/rm -rf $(ZIMBRA_HOME)/nginx
 	rm -f $(NGINX_TGZ_TARGET)
 	rm -rf $(CHUNKIN_SOURCE)
+	rm -rf $(KEEPALIVE_SOURCE)
 
 prepare:
 	tar zxf $(CHUNKIN_TGZ_TARGET)
-
+	tar zxf $(KEEPALIVE_TGZ_TARGET)
