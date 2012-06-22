@@ -24,6 +24,7 @@ public class Bug_51017 extends AjaxCommonTest {
 
 		super.startingAccountPreferences = new HashMap<String , String>() {{
 			put("zimbraPrefTasksReadingPaneLocation", "bottom");
+			put("zimbraPrefShowSelectionCheckbox", "TRUE");
 		}};
 
 	}
