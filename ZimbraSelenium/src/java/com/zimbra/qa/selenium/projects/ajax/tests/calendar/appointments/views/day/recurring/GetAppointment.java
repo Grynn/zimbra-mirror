@@ -3,16 +3,14 @@ package com.zimbra.qa.selenium.projects.ajax.tests.calendar.appointments.views.d
 import java.util.*;
 
 import org.testng.annotations.Test;
-
 import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.AppointmentItem;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
-import com.zimbra.qa.selenium.projects.ajax.core.CalendarWorkWeekTest;
+import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.calendar.ApptWorkWeekView;
 
-
-public class GetAppointment extends CalendarWorkWeekTest {
+public class GetAppointment extends AjaxCommonTest {
 
 	
 	public GetAppointment() {
@@ -31,7 +29,7 @@ public class GetAppointment extends CalendarWorkWeekTest {
 	
 	@Bugs(ids = "69132")
 	@Test(	description = "View a basic appointment in day view",
-			groups = { "implement" }) // smoke
+			groups = { "smoke" }) // smoke
 	public void GetAppointment_01() throws HarnessException {
 		
 		// Create the appointment on the server
@@ -42,7 +40,7 @@ public class GetAppointment extends CalendarWorkWeekTest {
 		
 		
 		// Absolute dates in UTC zone
-		Calendar now = this.calendarWeekDayUTC;
+		Calendar now = Calendar.getInstance();
 		ZDate startUTC = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 12, 0, 0);
 		ZDate endUTC   = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 14, 0, 0);
 		

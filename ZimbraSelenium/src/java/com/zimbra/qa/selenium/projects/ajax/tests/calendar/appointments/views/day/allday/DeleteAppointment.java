@@ -3,10 +3,8 @@ package com.zimbra.qa.selenium.projects.ajax.tests.calendar.appointments.views.d
 import java.awt.event.KeyEvent;
 import java.util.Calendar;
 import java.util.HashMap;
-
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-
 import com.zimbra.common.soap.Element;
 import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.*;
@@ -17,7 +15,7 @@ import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.ui.Shortcut;
 import com.zimbra.qa.selenium.framework.util.*;
-import com.zimbra.qa.selenium.projects.ajax.core.CalendarWorkWeekTest;
+import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning.DialogWarningID;
@@ -25,7 +23,7 @@ import com.zimbra.qa.selenium.projects.ajax.ui.calendar.*;
 
 
 @SuppressWarnings("unused")
-public class DeleteAppointment extends CalendarWorkWeekTest {
+public class DeleteAppointment extends AjaxCommonTest {
 
 	public DeleteAppointment() {
 		logger.info("New "+ DeleteAppointment.class.getCanonicalName());
@@ -116,7 +114,7 @@ public class DeleteAppointment extends CalendarWorkWeekTest {
 		apptBody = ZimbraSeleniumProperties.getUniqueString();
 		
 		// Absolute dates in UTC zone
-		Calendar now = this.calendarWeekDayUTC;
+		Calendar now = Calendar.getInstance();
 		ZDate startUTC = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 12, 0, 0);
 		ZDate endUTC   = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 14, 0, 0);
 		
@@ -176,7 +174,7 @@ public class DeleteAppointment extends CalendarWorkWeekTest {
 		apptBody = ZimbraSeleniumProperties.getUniqueString();
 		
 		// Absolute dates in UTC zone
-		Calendar now = this.calendarWeekDayUTC;
+		Calendar now = Calendar.getInstance();
 		ZDate startUTC = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 12, 0, 0);
 		ZDate endUTC   = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 14, 0, 0);
 		

@@ -2,9 +2,7 @@ package com.zimbra.qa.selenium.projects.ajax.tests.calendar.appointments.views.d
 
 import java.util.Calendar;
 import java.util.HashMap;
-
 import org.testng.annotations.Test;
-
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
@@ -12,7 +10,7 @@ import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.*;
 
 
-public class DragAndDropAppointment extends CalendarWorkWeekTest {
+public class DragAndDropAppointment extends AjaxCommonTest {
 
 	
 	public DragAndDropAppointment() {
@@ -51,7 +49,7 @@ public class DragAndDropAppointment extends CalendarWorkWeekTest {
 		String apptBody = ZimbraSeleniumProperties.getUniqueString();
 		
 		// Absolute dates in UTC zone
-		Calendar now = this.calendarWeekDayUTC;
+		Calendar now = Calendar.getInstance();
 		ZDate startUTC = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 12, 0, 0);
 		ZDate endUTC   = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 14, 0, 0);
 		
@@ -112,7 +110,7 @@ public class DragAndDropAppointment extends CalendarWorkWeekTest {
 		String apptBody = ZimbraSeleniumProperties.getUniqueString();
 		
 		// Absolute dates in UTC zone
-		Calendar now = this.calendarWeekDayUTC;
+		Calendar now = Calendar.getInstance();
 		ZDate startUTC = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 12, 0, 0);
 		ZDate endUTC   = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 13, 0, 0);
 		

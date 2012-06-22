@@ -3,23 +3,19 @@ package com.zimbra.qa.selenium.projects.ajax.tests.calendar.appointments.views.d
 import java.awt.event.KeyEvent;
 import java.util.Calendar;
 import java.util.HashMap;
-
 import org.testng.annotations.*;
-
 import com.zimbra.common.soap.Element;
 import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
-import com.zimbra.qa.selenium.projects.ajax.core.CalendarWorkWeekTest;
+import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.calendar.*;
 
-
-
 @SuppressWarnings("unused")
-public class DeleteInstance extends CalendarWorkWeekTest {
+public class DeleteInstance extends AjaxCommonTest {
 
 	public DeleteInstance() {
 		logger.info("New "+ DeleteInstance.class.getCanonicalName());
@@ -53,7 +49,7 @@ public class DeleteInstance extends CalendarWorkWeekTest {
 		apptBody = "body" + ZimbraSeleniumProperties.getUniqueString();
 		
 		// Absolute dates in UTC zone
-		Calendar now = this.calendarWeekDayUTC;
+		Calendar now = Calendar.getInstance();
 		ZDate startTime = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 12, 0, 0);
 		ZDate endTime   = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 14, 0, 0);
 		
@@ -138,7 +134,7 @@ public class DeleteInstance extends CalendarWorkWeekTest {
 		apptBody = "body" + ZimbraSeleniumProperties.getUniqueString();
 		
 		// Absolute dates in UTC zone
-		Calendar now = this.calendarWeekDayUTC;
+		Calendar now = Calendar.getInstance();
 		ZDate startTime = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 12, 0, 0);
 		ZDate endTime   = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 14, 0, 0);
 		
@@ -232,7 +228,7 @@ public class DeleteInstance extends CalendarWorkWeekTest {
 		apptBody = "body" + ZimbraSeleniumProperties.getUniqueString();
 		
 		// Absolute dates in UTC zone
-		Calendar now = this.calendarWeekDayUTC;
+		Calendar now = Calendar.getInstance();
 		ZDate startTime = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 12, 0, 0);
 		ZDate endTime   = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 14, 0, 0);
 		
