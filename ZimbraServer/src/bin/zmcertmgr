@@ -93,7 +93,7 @@ export RANDFILE=${zimbra_home}/ssl/.rnd
 
 #Default subject with the RDN values
 SUBJECT="/C=US/ST=N\/A/L=N\/A/O=Zimbra Collaboration Server/OU=Zimbra Collaboration Server/CN=${zimbra_server_hostname}"
-validation_days=365
+validation_days=1825
 
 #OUTPUT_PREFIX="##### OUTPUT:"
 ERROR_PREFIX="XXXXX ERROR:"
@@ -1571,7 +1571,7 @@ usage () {
   echo "-  Default <subject>"
   echo "     \"$SUBJECT\""
   echo "-  Default RSA <keysize> is 1024."
-  echo "-  Default <validation_days> is 365. "
+  echo "-  Default <validation_days> is 1825 (5 years). "
   echo "-  Default <csr_file> is ${zimbra_csr}"
   echo "-  deploycrt self installs the certificates using self signed csr in ${zimbra_self_cert_directory}"
   echo "-  deploycrt comm installs the certificates using commercially signed certificate in ${zimbra_comm_cert_directory} "
