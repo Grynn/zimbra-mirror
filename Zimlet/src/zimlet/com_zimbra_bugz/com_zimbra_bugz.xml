@@ -4,7 +4,7 @@
 	<handlerObject>com_zimbra_bugz_HandlerObject</handlerObject>
 	<contentObject>
 		<matchOn>
-			<regex attrs="ig">(?:(?:\bbug(?:zilla)?:?\s*#?)|(?:show_bug.cgi\?id=))(\d+)\b</regex>
+			<regex attrs="ig">(?:(?:\bbug(?:zilla)?:?\s*#?))(\d+)\b</regex>
 		</matchOn>
 		<onClick>
 			<canvas type="window" props=""/>
