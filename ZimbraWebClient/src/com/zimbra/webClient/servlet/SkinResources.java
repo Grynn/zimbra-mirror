@@ -855,10 +855,19 @@ public class SkinResources
 			cookie = getCookie(req, defaultCookiePara);
 			skin = cookie != null ? cookie.getValue() : getServletContext().getInitParameter(defaultSkinPara);
 		}
-		File manifest = new File(getServletContext().getRealPath("/skins/"+skin+"/"+SKIN_MANIFEST));
-		if (!manifest.exists()) {
-			skin = getServletContext().getInitParameter(defaultSkinPara);
-		}
+        try {
+		    File manifest = new File(getServletContext().getRealPath("/skins/"+skin+"/"+SKIN_MANIFEST));
+            if (!manifest.exists()) {
+                skin = getServletContext().getInitParameter(defaultSkinPara);
+            }
+        }
+        catch(NullPointerException e) {
+            if (ZimbraLog.webclient.isDebugEnabled()) { 
+                ZimbraLog.webclient.debug("DEBUG: cannot get skin file " + skin);
+            }
+            skin = getServletContext().getInitParameter(defaultSkinPara);
+        }
+		
 		return StringUtil.escapeHtml(skin);
 	}
 
