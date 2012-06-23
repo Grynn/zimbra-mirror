@@ -844,12 +844,7 @@ public class PageBriefcase extends AbsTab {
 			zWaitForElementPresent(itemNameLocator);
 
 			// Left-Click on the item
-			// temporary workaround for FOSS
-			if (ZimbraSeleniumProperties.zimbraGetVersionString().contains(
-					"FOSS"))
-				zListItem(Action.A_BRIEFCASE_CHECKBOX, item);
-			else
-				this.zClickAt(itemNameLocator, "0,0");
+			this.zClickAt(itemNameLocator, "0,0");
 
 			// page = new DocumentPreview(MyApplication);
 
