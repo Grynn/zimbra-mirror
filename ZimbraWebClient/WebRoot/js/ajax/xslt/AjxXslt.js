@@ -140,7 +140,7 @@ function(dom) {
 	var ret;
 	if (AjxEnv.isIE) {
 		ret = this.transformIE(dom);
-	} else if (AjxEnv.isNav) {
+	} else if (AjxEnv.isNav || AjxEnv.isChrome || AjxEnv.isSafari) {
 		return this.transformNav(dom);  // already in dom
 	} else {
 		DBG.println(AjxDebug.DBG1, "No XSL transformation due to browser incompatibility.");
