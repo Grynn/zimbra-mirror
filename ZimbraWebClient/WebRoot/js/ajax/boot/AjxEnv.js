@@ -45,6 +45,8 @@ AjxEnv.webKitVersion;
 AjxEnv.isMac;
 /** Windows. */
 AjxEnv.isWindows;
+/** Windows 64-bit. */
+AjxEnv.isWindows64;
 /** Linux. */
 AjxEnv.isLinux;
 /** Netscape Navigator compatible. */
@@ -187,6 +189,7 @@ function() {
 	AjxEnv.webKitVersion = -1;
 	AjxEnv.isMac = false;
 	AjxEnv.isWindows = false;
+	AjxEnv.isWindows64 = false;
 	AjxEnv.isLinux = false;
 	AjxEnv.isNav  = false;
 	AjxEnv.isIE = false;
@@ -325,6 +328,8 @@ function() {
 				browserVersion = parseFloat(token.substr(index + 7));
 			} else if (token.indexOf('windows') != -1) {
 				AjxEnv.isWindows = true;
+			} else if (token.indexOf('win64') != -1) {
+				AjxEnv.isWindows64 = true;
 			} else if ((token.indexOf('macintosh') != -1) ||
 					   (token.indexOf('mac_') != -1)) {
 				AjxEnv.isMac = true;
