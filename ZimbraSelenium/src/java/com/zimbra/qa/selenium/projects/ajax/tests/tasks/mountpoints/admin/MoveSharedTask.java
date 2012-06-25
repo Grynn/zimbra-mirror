@@ -13,6 +13,7 @@ import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
@@ -80,7 +81,7 @@ public class MoveSharedTask extends AjaxCommonTest {
 					"</m>" +
 				"</CreateTaskRequest>");
 		
-		
+		app.zPageTasks.zToolbarPressButton(Button.B_REFRESH);
 		TaskItem task1 = TaskItem.importFromSOAP(ZimbraAccount.AccountA(), subject);
 		ZAssert.assertNotNull(task1, "Verify the task added");
 		
@@ -94,6 +95,7 @@ public class MoveSharedTask extends AjaxCommonTest {
 
 		// Refresh the tasks view
 		app.zPageTasks.zToolbarPressButton(Button.B_REFRESH);
+		SleepUtil.sleepMedium();
 		app.zTreeTasks.zTreeItem(Action.A_LEFTCLICK, task);
 		
 		// Click on the mountpoint
@@ -182,7 +184,8 @@ public class MoveSharedTask extends AjaxCommonTest {
 					"</m>" +
 				"</CreateTaskRequest>");
 		
-			
+		app.zPageTasks.zToolbarPressButton(Button.B_REFRESH);
+				
 		TaskItem task1 = TaskItem.importFromSOAP(app.zGetActiveAccount(), subject);
 		ZAssert.assertNotNull(task1, "Verify the task added");
 		
@@ -196,6 +199,7 @@ public class MoveSharedTask extends AjaxCommonTest {
 
 		// Refresh the tasks view
 		app.zPageTasks.zToolbarPressButton(Button.B_REFRESH);
+		SleepUtil.sleepMedium();
 		app.zTreeTasks.zTreeItem(Action.A_LEFTCLICK, task);
 		
 		// Select the item
