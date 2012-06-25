@@ -441,7 +441,7 @@ function() {
 	
 	if (this._layoutStyle == DwtChooser.HORIZ_STYLE) {
 		// start new table for list views
-		html[idx++] = "<table cellspacing=0 cellpadding=0 border=0>";
+		html[idx++] = "<table>";
 		html[idx++] = "<tr>";
 
 		// source list
@@ -484,7 +484,7 @@ function() {
 		
 		if (this._hasTextField) {
 			html[idx++] = "<tr><td>";
-			html[idx++] = "<table border=0 width=100%><tr><td style='white-space:nowrap; width:1%'>";
+			html[idx++] = "<table width=100%><tr><td style='white-space:nowrap; width:1%'>";
 			html[idx++] = AjxMsg.add;
 			html[idx++] = ":</td><td id='";
 			html[idx++] = this._textFieldTdId;
@@ -503,7 +503,7 @@ function() {
 		html[idx++] = "<div align='center' id='";
 		html[idx++] = this._buttonsDivId;
 		html[idx++] = "'>";
-		html[idx++] = "<table><tr>";
+		html[idx++] = "<table class='ZPropertySheet' cellspacing='6'><tr>";
 		if (this._allButtons) {
 			html[idx++] = "<td id='";
 			html[idx++] = this._addAllButtonDivId;
