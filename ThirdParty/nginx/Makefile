@@ -29,13 +29,8 @@ NGINX_INSTALL := $(ZIMBRA_HOME)/nginx-$(NGINX_VERSION)-zimbra
 CHUNKIN_TGZ_SRC := $(NGINX_ROOT)/src/chunkin-nginx-module-0.23rc2.tar.gz
 CHUNKIN_SOURCE := $(NGINX_ROOT)/chunkin-nginx-module
 
-KEEPALIVE	:=
-
-ifneq (MACOSX,$(findstring MACOSX,$(BUILD_PLATFORM)))
-	KEEPALIVE_TGZ_SRC := $(NGINX_ROOT)/src/nviennot-nginx-tcp-keepalive-4d7186d.tar.gz
-	KEEPALIVE_SOURCE := $(NGINX_ROOT)/nviennot-nginx-tcp-keepalive
-	KEEPALIVE	:= --add-module=$(KEEPALIVE_SOURCE)
-endif
+KEEPALIVE_TGZ_SRC := $(NGINX_ROOT)/src/nviennot-nginx-tcp-keepalive-4d7186d.tar.gz
+KEEPALIVE_SOURCE := $(NGINX_ROOT)/nviennot-nginx-tcp-keepalive
 
 WITH_CC_OPT := -g \
 	-I/opt/zimbra/cyrus-sasl-$(CYRUS_VERSION)/include \
@@ -71,7 +66,7 @@ build:
             --http-fastcgi-temp-path=$(ZIMBRA_HOME)/data/tmp/nginx/fastcgi \
             --without-http_scgi_module \
             --without-http_uwsgi_module \
-	    $(KEEPALIVE) \
+	    --add-module=$(KEEPALIVE_SOURCE) \
             --add-module=$(CHUNKIN_SOURCE);)
 	(cd nginx-$(NGINX_VERSION)-zimbra; \
 	LD_RUN_PATH="$(CYRUS_LIB_DIR):$(OPENSSL_LIB_DIR)" make; make install)
@@ -98,6 +93,6 @@ allclean: clean
 
 prepare:
 	tar zxf $(CHUNKIN_TGZ_SRC)
-ifneq (MACOSX,$(findstring MACOSX,$(BUILD_PLATFORM)))
 	tar zxf $(KEEPALIVE_TGZ_SRC)
-endif
+	(cd $(KEEPALIVE_SOURCE); \
+	patch -g0 -N -p1 < ../patches/osx-keepalive.patch;)
