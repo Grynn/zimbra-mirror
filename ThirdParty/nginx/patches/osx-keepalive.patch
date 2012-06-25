@@ -1,0 +1,19 @@
+--- nviennot-nginx-tcp-keepalive/ngx_http_tcp_keepalive_module.c.orig	2011-12-14 08:45:35.000000000 -0800
++++ nviennot-nginx-tcp-keepalive/ngx_http_tcp_keepalive_module.c	2012-06-25 12:34:45.000000000 -0700
+@@ -36,9 +36,13 @@
+ 	}								\
+ })
+ 	SSO(SOL_SOCKET, SO_KEEPALIVE, conf->enable);
+-	SSO(SOL_TCP, TCP_KEEPCNT, conf->tcp_keepcnt);
+-	SSO(SOL_TCP, TCP_KEEPIDLE, conf->tcp_keepidle);
+-	SSO(SOL_TCP, TCP_KEEPINTVL, conf->tcp_keepintvl);
++#ifdef NGX_DARWIN
++	SSO(IPPROTO_TCP, TCP_KEEPALIVE, conf->tcp_keepintvl);
++#else
++	SSO(IPPROTO_TCP, TCP_KEEPCNT, conf->tcp_keepcnt);
++	SSO(IPPROTO_TCP, TCP_KEEPIDLE, conf->tcp_keepidle);
++	SSO(IPPROTO_TCP, TCP_KEEPINTVL, conf->tcp_keepintvl);
++#endif
+ #undef SSO
+ 
+ 	return NGX_DECLINED;
