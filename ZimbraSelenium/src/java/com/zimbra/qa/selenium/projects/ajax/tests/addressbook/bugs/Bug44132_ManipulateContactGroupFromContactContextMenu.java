@@ -3,8 +3,10 @@ package com.zimbra.qa.selenium.projects.ajax.tests.addressbook.bugs;
 
 import java.util.*;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 
+import com.zimbra.qa.selenium.framework.core.ExecuteHarnessMain;
 import com.zimbra.qa.selenium.framework.items.*;
 
 import com.zimbra.qa.selenium.framework.items.ContactItem.GenerateItemType;
@@ -23,8 +25,11 @@ public class Bug44132_ManipulateContactGroupFromContactContextMenu extends AjaxC
 		// All tests start at the Address page
 		super.startingPage = app.zPageAddressbook;
 
-		// Make sure we are using an account with conversation view
-		super.startingAccountPreferences = null;		
+		// Enable user preference checkboxes
+		super.startingAccountPreferences = new HashMap<String , String>() {
+		   {
+		    	put("zimbraPrefShowSelectionCheckbox", "TRUE");		         
+		   }};			
 		
 	}
 	
@@ -144,7 +149,7 @@ public class Bug44132_ManipulateContactGroupFromContactContextMenu extends AjaxC
 	@Test(	description = "D1 Enhancement : Create a contact group with only one contact",
 			groups = { "smoke" })
 	public void CreateContactGroupWith1Contact() throws HarnessException {			
-		
+		;
 		 // Create a contact via Soap then select
 		ContactItem contactItem = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_LEFTCLICK);
 		  			
@@ -338,5 +343,29 @@ public class Bug44132_ManipulateContactGroupFromContactContextMenu extends AjaxC
 		}
 	
 	    Verification(group);
+	}
+	
+	@AfterMethod( groups = { "always" } )
+	public void afterMethod() throws HarnessException {
+		logger.info("afterMethod: start");
+
+	    // if error dialog exist, then expand and capture screen
+		// throw error message
+	
+        if (startingPage.sIsElementPresent("css=div#ErrorDialog") &&
+            startingPage.sIsVisible("css=div#ErrorDialog")) {
+        	
+        	// click show details
+        	startingPage.zClick("css=td#ErrorDialog_buttonDetail_title");
+        	startingPage.zWaitForElementPresent("css=div#MessageDialog_1");
+        	
+        	// capture screen
+        	ExecuteHarnessMain.ResultListener.captureScreen();
+        		
+        	// get error content and throw
+            logger.info(startingPage.sGetText("css=div#MessageDialog_1"));
+        	
+        }
+		logger.info("afterMethod: finish");
 	}
 }

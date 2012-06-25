@@ -1,6 +1,7 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.addressbook.folders;
 
 import java.awt.event.KeyEvent;
+import java.util.HashMap;
 
 import org.testng.annotations.Test;
 
@@ -19,7 +20,12 @@ public class DeleteFolder extends AjaxCommonTest {
 		
 		// All tests start at the login page
 		super.startingPage = app.zPageAddressbook;
-		super.startingAccountPreferences = null;
+		
+		// Enable user preference checkboxes
+		super.startingAccountPreferences = new HashMap<String , String>() {
+		   {
+		    	put("zimbraPrefShowSelectionCheckbox", "TRUE");		         
+		   }};		
 		
 	}
 
