@@ -32,7 +32,7 @@ public class GetAppointment extends CalendarWorkWeekTest {
 	
 	@Bugs(ids = "69132")
 	@Test(	description = "View a basic appointment in week view",
-			groups = { "implement" }) // smoke
+			groups = { "smoke" }) // smoke
 	public void GetAppointment_01() throws HarnessException {
 		
 		// Create the appointment on the server

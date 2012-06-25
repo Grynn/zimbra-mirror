@@ -179,7 +179,13 @@ public class PageCalendar extends AbsTab {
 	}
 	
 	public String zGetApptLocator(String apptSubject) throws HarnessException {
-		return "css=td.appt_name:contains('" + apptSubject + "')";
+		boolean apptExists;
+		apptExists = sIsElementPresent("css=td.appt_name:contains('" + apptSubject + "')");
+		if (apptExists == false) {
+			return "css=td.appt_new_name:contains('" + apptSubject + "')";
+		} else {
+			return "css=td.appt_name:contains('" + apptSubject + "')";
+		}	
 	}
 	
 	public String zGetReadOnlyApptLocator(String apptSubject) throws HarnessException {

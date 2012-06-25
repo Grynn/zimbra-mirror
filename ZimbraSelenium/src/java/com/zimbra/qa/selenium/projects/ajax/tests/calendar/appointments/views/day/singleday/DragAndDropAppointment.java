@@ -75,7 +75,7 @@ public class DragAndDropAppointment extends AjaxCommonTest {
         
 		// Click Refresh		
         app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
-		
+        app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH); //Adding temporary work around because appt disappears after first clicking first refresh
 		
 		// Select the item
 		app.zPageCalendar.zDragAndDrop(

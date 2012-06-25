@@ -1,14 +1,12 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.calendar.appointments.views.day.recurring;
 
 import java.util.*;
-
 import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.AppointmentItem;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.calendar.ApptWorkWeekView;
 
 public class GetAppointment extends AjaxCommonTest {
 
@@ -72,13 +70,11 @@ public class GetAppointment extends AjaxCommonTest {
 
 		app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
 		
-	    //verify appt displayed in workweek view
-		ApptWorkWeekView view = (ApptWorkWeekView) app.zPageCalendar.zToolbarPressPulldown(Button.B_LISTVIEW, Button.O_LISTVIEW_WORKWEEK);
-		
 		//wait for the appointment displayed in the view
-		app.zPageCalendar.zWaitForElementPresent("css=div[id*=__zli__CLWW__]");
+		app.zPageCalendar.zWaitForElementPresent("css=div[id*=zli__CLD__]");
 		
-		ZAssert.assertTrue(view.isApptExist(appt), "Verify appt gets displayed in day view");
-	    
+		//verify appt displayed in day view
+		ZAssert.assertEquals(app.zPageCalendar.sIsElementPresent(app.zPageCalendar.zGetApptLocator(subject)), true, "Verify appointment present in day view");
+		
 	}
 }
