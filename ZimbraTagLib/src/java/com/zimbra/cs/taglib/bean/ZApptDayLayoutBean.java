@@ -68,8 +68,11 @@ public class ZApptDayLayoutBean {
         mFolderId = folderId;
 
         for (ZAppointmentHit appt : appts) {
-            if (appt.isInRange(mStartTime, mEndTime) && (mFolderId == null || mFolderId.equals(appt.getFolderId())) 
-                    && (!appt.getParticipantStatus().equals(PSTATUS_DECLINED)) || (appt.getParticipantStatus().equals(PSTATUS_DECLINED) && isShowDeclined)) {
+            if (appt.isInRange(mStartTime, mEndTime)
+                    && (mFolderId == null || mFolderId.equals(appt.getFolderId()))
+                    && (appt.getParticipantStatus() == null || (appt.getParticipantStatus() != null
+                                                                && ((!appt.getParticipantStatus().equals(PSTATUS_DECLINED))
+                                                                    || (appt.getParticipantStatus().equals(PSTATUS_DECLINED) && isShowDeclined))))) {
                 if (appt.isAllDay())
                     mAllday.add(appt);
                 else {
