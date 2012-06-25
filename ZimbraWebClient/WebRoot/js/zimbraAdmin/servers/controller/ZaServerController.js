@@ -123,7 +123,7 @@ function () {
    	this._popupOperations[ZaOperation.FLUSH_CACHE] = new ZaOperation(ZaOperation.FLUSH_CACHE, ZaMsg.SERTBB_FlushCache, ZaMsg.SERTBB_FlushCache_tt, "FlushCache", "FlushCache", new AjxListener(this, ZaServerController.prototype.flushCacheButtonListener));
 	this._popupOperations[ZaOperation.DOWNLOAD_SERVER_CONFIG]=new ZaOperation(ZaOperation.DOWNLOAD_SERVER_CONFIG,ZaMsg.TBB_DownloadConfig, ZaMsg.SERTBB_DownloadConfig_tt, "DownloadServerConfig", "DownloadServerConfig", new AjxListener(this, this.downloadConfigButtonListener));
 }
-ZaController.initToolbarMethods["ZaServerController"].push(ZaServerController.initPopupMethod);
+ZaController.initPopupMenuMethods["ZaServerController"].push(ZaServerController.initPopupMethod);
 
 ZaServerController.prototype.getAppBarAction =
 function () {

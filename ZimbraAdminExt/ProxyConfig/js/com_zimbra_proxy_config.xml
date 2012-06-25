@@ -2,7 +2,8 @@
 	label="${msg.label}"
 	description="${msg.description}" 
 	extension="true">
-
 	<include>com_zimbra_proxy_config.js</include>
+    <include>ZaEnableProxyWizard.js</include>
+    <include>ZaDisableProxyWizard.js</include>
 	<disableUIUndeploy>FALSE</disableUIUndeploy>
 </zimlet>
