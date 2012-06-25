@@ -793,8 +793,12 @@ public class ZMessageComposeBean {
                 action == Action.INVITE_TENTATIVE || action == Action.FORWARD) && mailbox.getPrefs().getForwardReplyInOriginalFormat()){
             if (getContentType() != null) {isText = getContentType().equals("text/plain");} 
         }
-        // Compose in mobile interface is always in text/plain. Decode the HTML signatures, if any.
-        if((isText || isMobile) && zsignature != null && (zsignature.getType().equals("text/html"))){
+        // Compose in mobile interface is always in text/plain.
+        if (isMobile) {
+            isText = true;
+        }
+        // Decode the HTML signatures, if any.
+        if(isText && zsignature != null && (zsignature.getType().equals("text/html"))){
            signature = BeanUtils.htmlDecode(signature);
         }
         if (signatureTop && signature != null && signature.length() > 0)
