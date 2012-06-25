@@ -1,6 +1,8 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.briefcase.file;
 
 import java.io.File;
+import java.util.HashMap;
+
 import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.items.FileItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
@@ -18,12 +20,22 @@ import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.DialogUploadFile;
 
 public class UploadFile extends AjaxCommonTest {
 
-	public UploadFile() {
+	public UploadFile() throws HarnessException {
 		logger.info("New " + UploadFile.class.getCanonicalName());
 
 		super.startingPage = app.zPageBriefcase;
 
-		super.startingAccountPreferences = null;
+		super.startingAccountPreferences = new HashMap<String, String>() {
+			
+			private static final long serialVersionUID = 1L;
+			
+			{
+			    if(ZimbraSeleniumProperties.zimbraGetVersionString().contains(
+		    			"FOSS")){
+				put("zimbraPrefShowSelectionCheckbox","TRUE");
+			    }			    
+			}
+		};
 	}
 
 	@Test(description = "Upload file through RestUtil - verify through SOAP", groups = { "smoke" })
@@ -162,8 +174,14 @@ public class UploadFile extends AjaxCommonTest {
 		SleepUtil.sleepSmall();
 		
 		// Click on created File
-		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
-			
+		if(ZimbraSeleniumProperties.zimbraGetVersionString().contains(
+    			"FOSS")){
+		    app.zPageBriefcase.zListItem(Action.A_BRIEFCASE_CHECKBOX, fileItem);
+
+		}else{
+		    app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
+		}
+		
 		// Verify file is uploaded
 		String name = app.zPageBriefcase.getItemNameFromListView(fileName);
 		ZAssert.assertStringContains(name, fileName, "Verify file name through GUI");

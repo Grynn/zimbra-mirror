@@ -22,7 +22,7 @@ import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.PageBriefcase;
 
 public class EditFile extends AjaxCommonTest {
 
-	public EditFile() {
+	public EditFile() throws HarnessException {
 		logger.info("New " + EditFile.class.getCanonicalName());
 
 		super.startingPage = app.zPageBriefcase;
@@ -32,7 +32,12 @@ public class EditFile extends AjaxCommonTest {
 			private static final long serialVersionUID = 1L;
 			
 			{
-				put("zimbraPrefBriefcaseReadingPaneLocation", "bottom");				
+			    if(ZimbraSeleniumProperties.zimbraGetVersionString().contains(
+		    			"FOSS")){
+				put("zimbraPrefShowSelectionCheckbox","TRUE");
+			    }
+	
+			    put("zimbraPrefBriefcaseReadingPaneLocation", "bottom");				
 			}
 		};
 	}
@@ -71,9 +76,14 @@ public class EditFile extends AjaxCommonTest {
 		// refresh briefcase page
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
-		// Click on created document
-		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
+		if(ZimbraSeleniumProperties.zimbraGetVersionString().contains(
+    			"FOSS")){
+		    app.zPageBriefcase.zListItem(Action.A_BRIEFCASE_CHECKBOX, fileItem);
 
+		}else{
+		    app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
+		}
+		
 		// Right click on File, select Rename
 		app.zPageBriefcase.zListItem(Action.A_RIGHTCLICK, Button.B_RENAME,
 				fileItem);
@@ -182,9 +192,14 @@ public class EditFile extends AjaxCommonTest {
 		// refresh briefcase page
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
-		// Click on created document
-		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
+		if(ZimbraSeleniumProperties.zimbraGetVersionString().contains(
+    			"FOSS")){
+		    app.zPageBriefcase.zListItem(Action.A_BRIEFCASE_CHECKBOX, fileItem);
 
+		}else{
+		    app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
+		}
+		
 		// Verify 'Edit' tool-bar button is disabled
 		ZAssert.assertTrue(app.zPageBriefcase
 				.isOptionDisabled(PageBriefcase.Locators.zEditFileBtn),

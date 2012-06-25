@@ -11,7 +11,7 @@ import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 
 public class UnTagFile extends AjaxCommonTest {
 
-	public UnTagFile() {
+	public UnTagFile() throws HarnessException {
 		logger.info("New " + UnTagFile.class.getCanonicalName());
 
 		// All tests start at the Briefcase page
@@ -22,7 +22,12 @@ public class UnTagFile extends AjaxCommonTest {
 			private static final long serialVersionUID = 1L;
 			
 			{
-				put("zimbraPrefBriefcaseReadingPaneLocation", "bottom");
+			    if(ZimbraSeleniumProperties.zimbraGetVersionString().contains(
+		    			"FOSS")){
+				put("zimbraPrefShowSelectionCheckbox","TRUE");
+			    }
+			
+			    put("zimbraPrefBriefcaseReadingPaneLocation", "bottom");
 			}
 		};
 	}
@@ -128,8 +133,14 @@ public class UnTagFile extends AjaxCommonTest {
 
 		SleepUtil.sleepVerySmall();
 
-		// Click on created document
-		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
+		// Click on created file
+		if(ZimbraSeleniumProperties.zimbraGetVersionString().contains(
+    			"FOSS")){
+		    app.zPageBriefcase.zListItem(Action.A_BRIEFCASE_CHECKBOX, fileItem);
+
+		}else{
+		    app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
+		}
 
 		// Tag document using Right Click context menu
 		app.zPageBriefcase.zListItem(Action.A_RIGHTCLICK, Button.O_TAG_FILE,
@@ -158,8 +169,14 @@ public class UnTagFile extends AjaxCommonTest {
 
 		SleepUtil.sleepVerySmall();
 
-		// Click on tagged document
-		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
+		// Click on tagged file
+		if(ZimbraSeleniumProperties.zimbraGetVersionString().contains(
+    			"FOSS")){
+		    app.zPageBriefcase.zListItem(Action.A_BRIEFCASE_CHECKBOX, fileItem);
+
+		}else{
+		    app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
+		}
 
 		// Click Remove Tag
 		app.zPageBriefcase.zToolbarPressPulldown(Button.B_TAG,

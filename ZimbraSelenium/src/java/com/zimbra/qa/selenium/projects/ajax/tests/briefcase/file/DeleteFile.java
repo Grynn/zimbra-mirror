@@ -20,7 +20,7 @@ import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.DialogConfirm;
 
 public class DeleteFile extends AjaxCommonTest {
 
-	public DeleteFile() {
+	public DeleteFile() throws HarnessException {
 		logger.info("New " + DeleteFile.class.getCanonicalName());
 
 		super.startingPage = app.zPageBriefcase;
@@ -30,7 +30,12 @@ public class DeleteFile extends AjaxCommonTest {
 			private static final long serialVersionUID = 1L;
 			
 			{
-				put("zimbraPrefBriefcaseReadingPaneLocation", "bottom");				
+			    if(ZimbraSeleniumProperties.zimbraGetVersionString().contains(
+		    			"FOSS")){
+				put("zimbraPrefShowSelectionCheckbox","TRUE");
+			    }
+			    
+			    put("zimbraPrefBriefcaseReadingPaneLocation", "bottom");				
 			}
 		};
 
@@ -73,7 +78,13 @@ public class DeleteFile extends AjaxCommonTest {
 		SleepUtil.sleepVerySmall();
 		
 		// Click on created document
-		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
+		 if(ZimbraSeleniumProperties.zimbraGetVersionString().contains(
+	    			"FOSS")){
+		     app.zPageBriefcase.zListItem(Action.A_BRIEFCASE_CHECKBOX, fileItem);
+
+		 }else{
+		     app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
+		 }
 
 		// Click on Delete document icon in toolbar
 		DialogConfirm deleteConfirm = (DialogConfirm) app.zPageBriefcase
@@ -135,8 +146,13 @@ public class DeleteFile extends AjaxCommonTest {
 		SleepUtil.sleepVerySmall();
 		
 		// Click on created document
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
+		if(ZimbraSeleniumProperties.zimbraGetVersionString().contains(
+    			"FOSS")){
+		    app.zPageBriefcase.zListItem(Action.A_BRIEFCASE_CHECKBOX, fileItem);
+
+		}else{
+		    app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
+		}
 
 		// Click the Delete keyboard shortcut
 		DialogConfirm deleteConfirm = (DialogConfirm) app.zPageBriefcase
@@ -207,9 +223,14 @@ public class DeleteFile extends AjaxCommonTest {
 		SleepUtil.sleepVerySmall();
 		
 		// Click on created document
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
+		if(ZimbraSeleniumProperties.zimbraGetVersionString().contains(
+    			"FOSS")){
+		    app.zPageBriefcase.zListItem(Action.A_BRIEFCASE_CHECKBOX, fileItem);
 
+		}else{
+		    app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
+		}
+		
 		// Click the Backspace keyboard shortcut
 		DialogConfirm deleteConfirm = (DialogConfirm) app.zPageBriefcase
 				.zKeyboardShortcut(shortcut);
@@ -273,9 +294,14 @@ public class DeleteFile extends AjaxCommonTest {
 		SleepUtil.sleepVerySmall();
 		
 		// Click on created file
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
+		if(ZimbraSeleniumProperties.zimbraGetVersionString().contains(
+    			"FOSS")){
+		    app.zPageBriefcase.zListItem(Action.A_BRIEFCASE_CHECKBOX, fileItem);
 
+		}else{
+		    app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
+		}
+		
 		// Delete File using Right Click Context Menu
 		DialogConfirm deleteConfirm = (DialogConfirm) app.zPageBriefcase
 				.zListItem(Action.A_RIGHTCLICK, Button.O_DELETE, fileItem);

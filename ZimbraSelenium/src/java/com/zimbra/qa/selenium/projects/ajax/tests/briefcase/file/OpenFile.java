@@ -20,7 +20,7 @@ import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.PageBriefcase;
 
 public class OpenFile extends AjaxCommonTest {
 
-	public OpenFile() {
+	public OpenFile() throws HarnessException {
 		logger.info("New " + OpenFile.class.getCanonicalName());
 
 		super.startingPage = app.zPageBriefcase;
@@ -30,7 +30,12 @@ public class OpenFile extends AjaxCommonTest {
 			private static final long serialVersionUID = 1L;
 			
 			{
-				put("zimbraPrefBriefcaseReadingPaneLocation", "bottom");
+			    if(ZimbraSeleniumProperties.zimbraGetVersionString().contains(
+		    			"FOSS")){
+				put("zimbraPrefShowSelectionCheckbox","TRUE");
+			    }
+			    
+			    put("zimbraPrefBriefcaseReadingPaneLocation", "bottom");
 			}
 		};
 	}
@@ -66,8 +71,14 @@ public class OpenFile extends AjaxCommonTest {
 		SleepUtil.sleepVerySmall();
 
 		// Click on created file
-		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
+		if(ZimbraSeleniumProperties.zimbraGetVersionString().contains(
+    			"FOSS")){
+		    app.zPageBriefcase.zListItem(Action.A_BRIEFCASE_CHECKBOX, fileItem);
 
+		}else{
+		    app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
+		}
+		
 		// Click on open in a separate window icon in toolbar
 	
 		DocumentBriefcaseOpen file;

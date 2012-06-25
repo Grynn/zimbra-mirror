@@ -21,15 +21,21 @@ import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 public class SendFileLink extends AjaxCommonTest {
 
 	@SuppressWarnings("serial")
-	public SendFileLink() {
+	public SendFileLink() throws HarnessException {
 		logger.info("New " + SendFileLink.class.getCanonicalName());
 
 		super.startingPage = app.zPageBriefcase;
 
 		super.startingAccountPreferences = new HashMap<String, String>() {
 			{
-				put("zimbraPrefComposeFormat", "html");
-				put("zimbraPrefBriefcaseReadingPaneLocation", "bottom");
+			    if(ZimbraSeleniumProperties.zimbraGetVersionString().contains(
+		    			"FOSS")){
+				put("zimbraPrefShowSelectionCheckbox","TRUE");
+			    }
+			    
+			    put("zimbraPrefComposeFormat", "html");
+			    
+			    put("zimbraPrefBriefcaseReadingPaneLocation", "bottom");
 			}
 		};
 	}
@@ -63,8 +69,14 @@ public class SendFileLink extends AjaxCommonTest {
 		SleepUtil.sleepVerySmall();
 		
 		// Click on uploaded file
-		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
+		if(ZimbraSeleniumProperties.zimbraGetVersionString().contains(
+    			"FOSS")){
+		    app.zPageBriefcase.zListItem(Action.A_BRIEFCASE_CHECKBOX, fileItem);
 
+		}else{
+		    app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
+		}
+		
 		// Click on Send Link
 		DialogConfirm confDlg;
 		if (ZimbraSeleniumProperties.zimbraGetVersionString().contains("7.1."))
@@ -135,8 +147,14 @@ public class SendFileLink extends AjaxCommonTest {
 		SleepUtil.sleepVerySmall();
 		
 		// Click on uploaded file
-		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
+		if(ZimbraSeleniumProperties.zimbraGetVersionString().contains(
+    			"FOSS")){
+		    app.zPageBriefcase.zListItem(Action.A_BRIEFCASE_CHECKBOX, fileItem);
 
+		}else{
+		    app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
+		}
+		
 		// Click on Send Link using Right Click Context Menu
 		DialogConfirm confDlg = (DialogConfirm) app.zPageBriefcase.zListItem(
 				Action.A_RIGHTCLICK, Button.O_SEND_LINK, fileItem);

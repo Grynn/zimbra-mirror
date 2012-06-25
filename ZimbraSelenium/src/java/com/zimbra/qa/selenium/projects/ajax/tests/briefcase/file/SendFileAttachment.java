@@ -20,7 +20,7 @@ import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 
 public class SendFileAttachment extends AjaxCommonTest {
 
-	public SendFileAttachment() {
+	public SendFileAttachment() throws HarnessException {
 		logger.info("New " + SendFileAttachment.class.getCanonicalName());
 
 		super.startingPage = app.zPageBriefcase;
@@ -30,7 +30,12 @@ public class SendFileAttachment extends AjaxCommonTest {
 			private static final long serialVersionUID = 1L;
 			
 			{
-				put("zimbraPrefBriefcaseReadingPaneLocation", "bottom");				
+			    if(ZimbraSeleniumProperties.zimbraGetVersionString().contains(
+		    			"FOSS")){
+				put("zimbraPrefShowSelectionCheckbox","TRUE");
+			    }
+			
+			    put("zimbraPrefBriefcaseReadingPaneLocation", "bottom");				
 			}
 		};
 	}
@@ -64,8 +69,14 @@ public class SendFileAttachment extends AjaxCommonTest {
 		SleepUtil.sleepVerySmall();
 
 		// Click on uploaded file
-		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
+		if(ZimbraSeleniumProperties.zimbraGetVersionString().contains(
+    			"FOSS")){
+		    app.zPageBriefcase.zListItem(Action.A_BRIEFCASE_CHECKBOX, fileItem);
 
+		}else{
+		    app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
+		}
+		
 		// Click on Send as attachment
 		FormMailNew mailform;
 		if (ZimbraSeleniumProperties.zimbraGetVersionString().contains("7.1."))
@@ -127,8 +138,14 @@ public class SendFileAttachment extends AjaxCommonTest {
 		SleepUtil.sleepVerySmall();
 
 		// Click on uploaded file
-		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
+		if(ZimbraSeleniumProperties.zimbraGetVersionString().contains(
+    			"FOSS")){
+		    app.zPageBriefcase.zListItem(Action.A_BRIEFCASE_CHECKBOX, fileItem);
 
+		}else{
+		    app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
+		}
+		
 		// Click on Send as attachment using Right Click Context Menu
 		FormMailNew mailform = (FormMailNew) app.zPageBriefcase.zListItem(
 				Action.A_RIGHTCLICK, Button.O_SEND_AS_ATTACHMENT, fileItem);

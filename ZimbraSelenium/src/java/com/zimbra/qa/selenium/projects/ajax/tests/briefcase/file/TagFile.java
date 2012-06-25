@@ -17,7 +17,7 @@ import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.PageBriefcase;
 
 public class TagFile extends AjaxCommonTest {
 
-	public TagFile() {
+	public TagFile() throws HarnessException {
 		logger.info("New " + TagFile.class.getCanonicalName());
 
 		// All tests start at the Briefcase page
@@ -28,7 +28,12 @@ public class TagFile extends AjaxCommonTest {
 			private static final long serialVersionUID = 1L;
 			
 			{
-				put("zimbraPrefBriefcaseReadingPaneLocation", "bottom");
+			    if(ZimbraSeleniumProperties.zimbraGetVersionString().contains(
+		    			"FOSS")){
+				put("zimbraPrefShowSelectionCheckbox","TRUE");
+			    }
+			    
+			    put("zimbraPrefBriefcaseReadingPaneLocation", "bottom");
 			}
 		};
 	}
@@ -62,7 +67,13 @@ public class TagFile extends AjaxCommonTest {
 		SleepUtil.sleepVerySmall();
 
 		// Click on created File
-		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
+		if(ZimbraSeleniumProperties.zimbraGetVersionString().contains(
+    			"FOSS")){
+		    app.zPageBriefcase.zListItem(Action.A_BRIEFCASE_CHECKBOX, fileItem);
+
+		}else{
+		    app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
+		}
 
 		// Click on header check box
 		// app.zPageBriefcase.zHeader(Action.A_BRIEFCASE_HEADER_CHECKBOX);
@@ -170,7 +181,13 @@ public class TagFile extends AjaxCommonTest {
 		SleepUtil.sleepVerySmall();
 
 		// Click on uploaded file
-		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
+		if(ZimbraSeleniumProperties.zimbraGetVersionString().contains(
+    			"FOSS")){
+		    app.zPageBriefcase.zListItem(Action.A_BRIEFCASE_CHECKBOX, fileItem);
+
+		}else{
+		    app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
+		}
 
 		// Click on header check box
 		// app.zPageBriefcase.zHeader(Action.A_BRIEFCASE_HEADER_CHECKBOX);
@@ -241,7 +258,13 @@ public class TagFile extends AjaxCommonTest {
 		SleepUtil.sleepVerySmall();
 
 		// Click on uploaded file
-		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
+		if(ZimbraSeleniumProperties.zimbraGetVersionString().contains(
+    			"FOSS")){
+		    app.zPageBriefcase.zListItem(Action.A_BRIEFCASE_CHECKBOX, fileItem);
+
+		}else{
+		    app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
+		}
 
 		// Click on header check box
 		// app.zPageBriefcase.zHeader(Action.A_BRIEFCASE_HEADER_CHECKBOX);

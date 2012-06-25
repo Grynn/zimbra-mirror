@@ -23,7 +23,7 @@ import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 
 public class MoveFile extends AjaxCommonTest {
 
-	public MoveFile() {
+	public MoveFile() throws HarnessException {
 		logger.info("New " + MoveFile.class.getCanonicalName());
 
 		super.startingPage = app.zPageBriefcase;
@@ -33,7 +33,12 @@ public class MoveFile extends AjaxCommonTest {
 			private static final long serialVersionUID = 1L;
 			
 			{
-				put("zimbraPrefBriefcaseReadingPaneLocation", "bottom");				
+			    if(ZimbraSeleniumProperties.zimbraGetVersionString().contains(
+		    			"FOSS")){
+				put("zimbraPrefShowSelectionCheckbox","TRUE");
+			    }
+	
+			    put("zimbraPrefBriefcaseReadingPaneLocation", "bottom");				
 			}
 		};
 		
@@ -95,9 +100,14 @@ public class MoveFile extends AjaxCommonTest {
 
 		SleepUtil.sleepVerySmall();
 		
-		// Click on created file
-		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
+		if(ZimbraSeleniumProperties.zimbraGetVersionString().contains(
+    			"FOSS")){
+		    app.zPageBriefcase.zListItem(Action.A_BRIEFCASE_CHECKBOX, fileItem);
 
+		}else{
+		    app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
+		}
+		
 		// Click on 'Move selected item' icon in toolbar
 		if (ZimbraSeleniumProperties.zimbraGetVersionString().contains(
 		"8.0.")){
@@ -198,9 +208,14 @@ public class MoveFile extends AjaxCommonTest {
 
 		SleepUtil.sleepVerySmall();
 
-		// Click on created file in list view
-		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
+		if(ZimbraSeleniumProperties.zimbraGetVersionString().contains(
+    			"FOSS")){
+		    app.zPageBriefcase.zListItem(Action.A_BRIEFCASE_CHECKBOX, fileItem);
 
+		}else{
+		    app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
+		}
+		
 		// Click the Move keyboard shortcut
 		DialogMove chooseFolder = (DialogMove) app.zPageBriefcase
 				.zKeyboardShortcut(shortcut);
@@ -282,9 +297,14 @@ public class MoveFile extends AjaxCommonTest {
 
 		SleepUtil.sleepVerySmall();
 		
-		// Click on created file
-		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
+		if(ZimbraSeleniumProperties.zimbraGetVersionString().contains(
+    			"FOSS")){
+		    app.zPageBriefcase.zListItem(Action.A_BRIEFCASE_CHECKBOX, fileItem);
 
+		}else{
+		    app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
+		}
+		
 		// Move using Right Click Context Menu 
 		DialogMove chooseFolder = (DialogMove) app.zPageBriefcase
 		.zListItem(Action.A_RIGHTCLICK, Button.O_MOVE, fileItem);
