@@ -644,6 +644,11 @@ if [ -L ${zimbra_home}/opendkim ]; then
   fi
 fi
 
+if [ -L ${zimbra_home}/zeromq ]; then
+  printMsg "Fixing ownership and permissions on ${zimbra_home}/zeromq"
+  chown -fR ${root_user}:${root_group} ${zimbra_home}/opendkim*
+fi
+
 if [ -L ${zimbra_home}/postfix ]; then
   printMsg "Fixing ownership and permissions on ${zimbra_home}/postfix"
   chown -fR ${root_user}:${root_group} ${zimbra_home}/postfix* 2> /dev/null
