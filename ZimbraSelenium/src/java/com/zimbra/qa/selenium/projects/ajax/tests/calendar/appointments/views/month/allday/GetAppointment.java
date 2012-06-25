@@ -90,20 +90,24 @@ public class GetAppointment extends AjaxCommonTest {
 		// Refresh the calendar
 		app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
 
-		// Get the list of appointments in the current view
-		List<AppointmentItem> items = app.zPageCalendar.zListGetAppointments();
-		ZAssert.assertNotNull(items, "Get the list of appointments");
+		// Verify appointment displayed in month view
+		ZAssert.assertEquals(app.zPageCalendar.sIsElementPresent(app.zPageCalendar.zGetAllDayApptLocator(subject)), true, "Verify appointment present in month view");
+		
+		// Below code works fine for single-day all day but for multi-day all day appointment it fails because it finds empty cell
+		
+		//List<AppointmentItem> items = app.zPageCalendar.zListGetAppointments();
+		//ZAssert.assertNotNull(items, "Get the list of appointments");
 		
 		// Verify the appointment is in the view
-		AppointmentItem found = null;
-		for(AppointmentItem item : items) {
-			if ( item.getSubject().equals(subject) ) {
-				found = item;
-				break;
-			}
-		}
+		//AppointmentItem found = null;
+		//for(AppointmentItem item : items) {
+		//	if ( item.getSubject().equals(subject) ) {
+		//		found = item;
+		//		break;
+		//	}
+		//}
 		
-		ZAssert.assertNotNull(found, "Verify the new appointment appears in the view");
+		//ZAssert.assertNotNull(found, "Verify the new appointment appears in the view");
 	    
 	}
 
