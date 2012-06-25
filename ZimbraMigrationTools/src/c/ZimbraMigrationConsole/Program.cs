@@ -53,7 +53,7 @@ namespace ZimbraMigrationConsole
             {
                 return Convert.ToInt32(m_args[argName]);
             }
-            else return 4;
+            else return 0;
         }
 
         public double argAsDouble(string argName)
@@ -305,8 +305,8 @@ class Program
                 }
                 string ConfigXmlFile = CommandLineArgs.I.argAsString("ConfigxmlFile");
                 string UserMapFile = CommandLineArgs.I.argAsString("Users");
-                int MaxThreads = CommandLineArgs.I.argAsInt("MaxThreadCount");
-                int MaxErrors = CommandLineArgs.I.argAsInt("MaxErrorCount");
+
+                
                 string MaxWarns = CommandLineArgs.I.argAsString("MaxWarn");
                 string userid = CommandLineArgs.I.argAsString("Profile");
                 string Pstfile = CommandLineArgs.I.argAsString("DataFile");
@@ -324,6 +324,7 @@ class Program
                 bool Calendar = false;bool Contacts = false;
                 bool Sent= false;bool DeletedItems = false;bool Junk = false;bool Tasks=false;bool Rules=false;bool OOO = false;
                  bool UseSSL = false;
+                 int MaxErrors =0; int MaxThreads =0;
               
                 string Verbose = CommandLineArgs.I.argAsString("Verbose");
                 bool Datefilter = false;
@@ -474,6 +475,22 @@ class Program
 
                    /* if (Mail == false)
                         Mail = myXmlConfig.ConfigObj.ImportOptions.Mail;*/
+
+                    
+                    if (CommandLineArgs.I.arg("MaxThreadCount") != null)
+                          MaxThreads = CommandLineArgs.I.argAsInt("MaxThreadCount");
+                    else
+                        MaxThreads = myXmlConfig.ConfigObj.GeneralOptions.MaxThreadCount;
+                    if (MaxThreads == 0)
+                        MaxThreads = 4;
+
+                    ;
+                    if (CommandLineArgs.I.arg("MaxErrorCount") != null)
+                        MaxErrors = CommandLineArgs.I.argAsInt("MaxErrorCount");
+                    else
+                        MaxErrors = myXmlConfig.ConfigObj.GeneralOptions.MaxErrorCount;
+
+
                     if (CommandLineArgs.I.arg("IsSkipPrevMigratedItems") != null)
                     {
 
@@ -706,11 +723,11 @@ class Program
                      SourceAdmin = myXmlConfig.ConfigObj.SourceServer.AdminID;
                  }
 
-                 if (MaxErrors == 0)
+                /* if (MaxErrors == 0)
                  {
                      MaxErrors = myXmlConfig.ConfigObj.GeneralOptions.MaxErrorCount;
-                 }
-                 importopts.MaxErrorCnt = MaxErrors;
+                 }*/
+                 importopts.MaxErrorCnt =  MaxErrors;
                 
                 //importopts.VerboseOn = Verbose;
 

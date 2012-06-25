@@ -27,7 +27,13 @@ class Account: BackgroundWorker
         get { return highestPercentageReached; }
         set { highestPercentageReached = value; }
     }
-    
+    int Numoferrors;
+
+    public int NumofErrors
+    {
+        get { return Numoferrors; }
+        set { Numoferrors = value; }
+    }
 
     string m_AccountID;
     public string AccountID
@@ -41,19 +47,27 @@ class Account: BackgroundWorker
     MVVM.Model.Users Currentuser;
     CssLib.MigrationOptions Mailoptions;
     int num = 0;
-    int Numoferrors = 0;
+   // int Numoferrors = 0;
     int NumofWarns = 0;
 
     bool serverMigration = true;
 
     CountdownEvent countdown;
 
+    
+
     public CountdownEvent Countdown
     {
         get { return countdown; }
         set { countdown = value; }
     }
-   
+
+    private  bool _shouldCancel;
+
+    public void RequestCancel()
+    {
+        _shouldCancel = true;
+    }
     
     private volatile bool _shouldStop;
 
@@ -61,7 +75,6 @@ class Account: BackgroundWorker
     {
         _shouldStop = true;
     }
-
     
     public void StartMigration(System.Collections.Generic.List<MVVM.Model.Users> userlist, string Domainname, CssLib.MigrationOptions MailOptions, CountdownEvent countdown, object wrapper, int maxThreads = 2, bool ServerMigrationflag = true, string pstaccountname = "", string pstfile = "")
     {
@@ -75,6 +88,7 @@ class Account: BackgroundWorker
             for (int j = 0; j < maxThreads; j++)
             {
                 AccountArray[j] = new Account();
+                AccountArray[j].WorkerSupportsCancellation = true;
             }
             for (int f = 0; f < userlist.Count; f++)
             {
@@ -89,6 +103,7 @@ class Account: BackgroundWorker
                     myAccount.AccountName = uname + "@" + Domainname;// AcctName;
                     myAccount.AccountID = userlist[f].UserName;
                     myAccount.Countdown = countdown;
+                    myAccount.NumofErrors = 0;
                     Currentuser = new MVVM.Model.Users();
                     Currentuser.UserName = userlist[f].UserName;
                     myAccount.Currentuser = Currentuser;
@@ -99,6 +114,7 @@ class Account: BackgroundWorker
                    
                     number = number + 1;
                     myAccount.num = number;
+                    myAccount.WorkerSupportsCancellation = true;
 
 
                     bool fileProcessed = false;
@@ -198,7 +214,7 @@ class Account: BackgroundWorker
             Account argumentTest = e.Argument as Account;
             //while (!_shouldStop)
             {
-
+                argumentTest.WorkerSupportsCancellation = true;
             CssLib.MigrationAccount MyAcct = new CssLib.MigrationAccount();
             MyAcct.AccountName = argumentTest.AccountName;
             MyAcct.AccountID = argumentTest.AccountID;
@@ -206,10 +222,12 @@ class Account: BackgroundWorker
             MyAcct.MaxErrorCount = argumentTest.Mailoptions.MaxErrorCnt;
 
             MyAcct.AccountNum = argumentTest.num;
+                
 
             MyAcct.OnChanged += new CssLib.MigrationObjectEventHandler(Acct_OnAcctChanged);
 
             CssLib.MigrationFolder MyFolder = new CssLib.MigrationFolder();
+                
 
             //MyFolder.AccountNum = argumentTest.num;
             int idx = MyAcct.AccountName.IndexOf("@");
@@ -230,17 +248,28 @@ class Account: BackgroundWorker
             else
             {
                 // TestObj.Migrate(MigrateOptions);
-
+               
                 mw.StartMigration(MyAcct, argumentTest.Mailoptions, argumentTest.serverMigration, argumentTest.Mailoptions.VerboseOn);
                
             }
         }
-        if((_shouldStop))
+        if(_shouldStop)
         {
         worker.CancelAsync();
         argumentTest.CancelAsync();
         argumentTest.countdown.Signal();
         e.Cancel = true;
+        }
+        if (_shouldCancel)
+        {
+             
+            //worker.CancelAsync();
+           // argumentTest.CancelAsync();
+           // argumentTest.NumofErrors = NumofErrors;
+            argumentTest.CancelAsync();
+           
+            
+            
         }
     }
 
@@ -268,15 +297,15 @@ class Account: BackgroundWorker
             if (e.PropertyName == "TotalErrors")
             {
 
-                Numoferrors = (int)a.TotalErrors + 1;      // this happens first
+                this.NumofErrors = (int)a.TotalErrors + 1;      // this happens first
                 System.Console.WriteLine();
                 if (a.MaxErrorCount > 0)
                 {
-                    if (Numoferrors > a.MaxErrorCount)
+                    if (this.NumofErrors >= a.MaxErrorCount)
                     {
                         System.Console.WriteLine();
                         System.Console.WriteLine();
-                        Currentuser.StatusMessage = "Total Errors For UserAccount " + a.AccountID.ToString() + "are" + Numoferrors.ToString();
+                        Currentuser.StatusMessage = "Total Errors For UserAccount " + a.AccountID.ToString() + "are" + this.NumofErrors.ToString();
                         System.Console.WriteLine(Currentuser.StatusMessage);
                         string Messg = "Migration For UserAccount Cancelled";
                         /* ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
@@ -285,11 +314,14 @@ class Account: BackgroundWorker
                         System.Console.WriteLine();
                         System.Console.WriteLine();
                         //this.countdown.Signal();
-                        // this.CancelAsync();
-                        //this.CancelAsync();
-                        this.RequestStop();
+                         
+                         
+                       // this.CancelAsync();
+                        //this.RequestCancel();
+                        
+                       // this.RequestStop();
                         //Countdown.Signal();
-                        // CancelAsync();
+                         CancelAsync();
                         //Thread.CurrentThread.Abort();
                     }
                 }
@@ -297,10 +329,10 @@ class Account: BackgroundWorker
                /* ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Yellow,
                     "TotalErrors For UserAccount   " + a.AccountID.ToString() + Numoferrors.ToString());*/  //donot use progressutil we want to have consistent logging.
 
-                Currentuser.StatusMessage = "Total Errors For UserAccount " + a.AccountID.ToString() +"are"+ Numoferrors.ToString();
+                /*Currentuser.StatusMessage = "Total Errors For UserAccount " + a.AccountID.ToString() + "are" + NumofErrors.ToString();
                 System.Console.WriteLine(Currentuser.StatusMessage);
                 System.Console.WriteLine();
-                System.Console.WriteLine();
+                System.Console.WriteLine();*/
 
             }
             else if (e.PropertyName == "TotalWarnings")
@@ -463,6 +495,8 @@ class Account: BackgroundWorker
         if (e.Error != null)
         {
             argumentTest.AccountStatus = (e.Error.Message);
+            argumentTest.Countdown.Signal();
+            
         }
         else if (e.Cancelled)
         {
@@ -481,6 +515,7 @@ class Account: BackgroundWorker
             System.Console.WriteLine(msg);
             System.Console.WriteLine();
             System.Console.WriteLine();
+            
             if(argumentTest.Countdown.CurrentCount != 0)
                 argumentTest.Countdown.Signal();
         }
@@ -493,9 +528,9 @@ class Account: BackgroundWorker
             {
                 System.Console.WriteLine();
                 System.Console.WriteLine();
-                string mesg = "Total Errors For UserAccount " + argumentTest.AccountName + " are " + Numoferrors.ToString();
+                string mesg = "Total Errors For UserAccount " + argumentTest.AccountName + " are " + argumentTest.NumofErrors.ToString();
                 System.Console.WriteLine(mesg);
-                mesg = "Migration finished for account " + argumentTest.AccountName ;
+                 mesg = "Migration finished for account " + argumentTest.AccountName ;
                 System.Console.WriteLine(mesg);
                 /*ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
                 "TotalErrors For UserAccount   " + argumentTest.AccountName + " are" + Numoferrors.ToString());*/
