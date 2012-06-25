@@ -576,6 +576,38 @@ function(str, decodeSpaces) {
      return str.replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">");
 };
 
+AjxStringUtil.__jsEscapeChar = function(c) {
+	var codestr = c.charCodeAt(0).toString(16);
+
+	if (codestr.length == 1)
+		return '\\u000' + codestr;
+	else if (codestr.length == 2)
+		return '\\u00' + codestr;
+	else if (codestr.length == 3)
+		return '\\u0' + codestr;
+	else if (codestr.length == 4)
+		return '\\u' + codestr;
+
+	// shouldn't happen -- ECMAscript proscribes that strings are
+	// UTF-16 internally
+	DBG.println(AjxDebug.NONE, "unexpected condition in " +
+	            "AjxStringUtil.__jsEscapeChar -- code point 0x" +
+	            codestr + " doesn't fit in 16 bits");
+};
+
+/**
+ * Encodes non-ASCII and non-printable characters as \uXXXX, suitable
+ * for JSON.
+ *
+ * @param	{string}	str		the string
+ * @return	{string}	the encoded string
+ */
+AjxStringUtil.jsEncode =
+function(str) {
+	return str.replace(/[^\u0020-\u007e]/g,
+	                   AjxStringUtil.__jsEscapeChar);
+};
+
 /**
  * Removes HTML tags from the given string.
  * 

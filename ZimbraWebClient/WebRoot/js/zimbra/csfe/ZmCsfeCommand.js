@@ -427,7 +427,12 @@ function(params) {
 
 	params.jsonRequestObj = obj;
 	
-	return params.useStringify1 ? JSON.stringify1(obj) : JSON.stringify(obj);
+	var requestStr = (params.useStringify1 ?
+	                  JSON.stringify1(obj) : JSON.stringify(obj));
+
+	// bug 74240: escape non-ASCII characters to prevent the browser from
+	// combining decomposed characters in paths
+	return AjxStringUtil.jsEncode(requestStr)
 };
 
 /**
