@@ -15,6 +15,8 @@
 package com.zimbra.cs.nginx;
 
 import java.io.IOException;
+import java.net.Inet4Address;
+import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -49,6 +51,7 @@ import com.zimbra.cs.account.Account;
 import com.zimbra.common.account.Key;
 import com.zimbra.common.account.Key.AccountBy;
 import com.zimbra.common.account.ProvisioningConstants;
+import com.zimbra.common.account.ZAttrProvisioning.IPMode;
 import com.zimbra.cs.account.AccessManager;
 import com.zimbra.cs.extension.ExtensionDispatcherServlet;
 import com.zimbra.cs.extension.ExtensionException;
@@ -954,7 +957,7 @@ public class NginxLookupExtension implements ZimbraExtension {
                             Provisioning.A_zimbraReverseProxyUseExternalRouteIfAccountNotExist + " set to TRUE " +
                             "but missing external route info on domain");
                     if(doDnsLookup) {
-                        mailhost = InetAddress.getByName(mailhost).getHostAddress();
+                        mailhost = this.getIPByIPMode(mailhost).getHostAddress();
                     }
                     sendResult(req, mailhost, port, authUser);
                     return;
@@ -1035,7 +1038,7 @@ public class NginxLookupExtension implements ZimbraExtension {
                     port = getPortByMailhostAndProto(zlc, config, req, mailhost);
 
                 if(doDnsLookup) {
-                    mailhost = InetAddress.getByName(mailhost).getHostAddress();
+                	mailhost = this.getIPByIPMode(mailhost).getHostAddress();
                 }
                 sendResult(req, mailhost, port, authUser);
             } catch (NginxLookupException e) {
@@ -1048,13 +1051,53 @@ public class NginxLookupExtension implements ZimbraExtension {
                 helper.closeLdapContext(zlc);
             }
         }
+        
+        /** get the IP address of the host name according to current IP mode
+         * 
+         * for ipv4 mode, the first ipv4 address will be used.
+         * for ipv6 mode, the first ipv6 address will be used.
+         * for both mode, try to return the first available ipv4. If no ipv4 available,
+         * use the first available ipv6
+         * 
+         * @param hostname the host name to be resolved
+         * @return the IP Address
+         * @throws ServiceException
+         * @throws UnknownHostException
+         */
+        public InetAddress getIPByIPMode(String hostname) throws ServiceException, UnknownHostException {
+            String localhost = LC.get("zimbra_server_hostname");
+            IPMode mode = Provisioning.getInstance().getServerByName(localhost).getIPMode();
+            InetAddress[] ips = InetAddress.getAllByName(hostname);
+            if (mode == IPMode.ipv4) {
+                for (InetAddress ip: ips) {
+                    if (ip instanceof Inet4Address) {
+                        return ip;
+                    }
+                }
+                throw ServiceException.FAILURE("Can't find available IPv4 address for upstream " + hostname + " whose IP mode is IPv4 only", null);
+            } else if (mode == IPMode.ipv6) {
+                for (InetAddress ip: ips) {
+                    if (ip instanceof Inet6Address) {
+                        return ip;
+                    }
+                }
+                throw ServiceException.FAILURE("Can't find available IPv6 address for upstream " + hostname + " whose IP mode is IPv6 bonly", null);
+            } else {
+                for (InetAddress ip: ips) {
+                    if (ip instanceof Inet4Address) {
+                        return ip;
+                    }
+                }
+                return ips[0];
+            }
+        }
 
         /**
          * Send the routing information HTTP response back to the NGINX IMAP proxy
          * @param req    The HTTP request object
          * @param mailhost    The requested mail server name
          * @param port        The requested mail server port
-         * @param authUser    If not null, then this value is sent back to override the login 
+         * @param authUser    If not null, then this value is sent back to override the login
          *                     user name, (usually) with a domain suffix added
          */
         private void sendResult(NginxLookupRequest req, String addr, String port, String authUser) throws UnknownHostException {
