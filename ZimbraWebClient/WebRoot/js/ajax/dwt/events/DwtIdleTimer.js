@@ -89,9 +89,6 @@ function() {
 		DwtIdleTimer.idleHandlers++;
 		this.idle = true;
 		this.handler.run(true);
-		if (AjxEnv.isIE) {
-			document.body.setCapture(true);
-		}
 	}
 };
 
@@ -101,9 +98,6 @@ function() {
 		this.idle = false;
 		this.handler.run(false);
 		DwtIdleTimer.idleHandlers--;
-		if (AjxEnv.isIE) {
-			document.releaseCapture();
-		}
 	}
 };
 
