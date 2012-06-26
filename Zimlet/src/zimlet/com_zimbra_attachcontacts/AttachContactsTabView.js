@@ -133,11 +133,11 @@ function() {
 	this._folderTreeCellId = Dwt.getNextId();
 	this._folderListId = Dwt.getNextId();
 	var html = [];
-	html.push("<table class='AttachContacts_table' width='100%' height='5%'>",
+	html.push("<table class='AttachContacts_table' width='100%' style='margin-bottom:5px;'>",
 	"<TR><td><INPUT type='text' id='", AttachContactsTabView.ELEMENT_ID_SEARCH_FIELD,"'></INPUT></td>",
-	"<td width='80%'><SPAN id='", AttachContactsTabView.ELEMENT_ID_SEARCH_BUTTON, "' /></td>",
+	"<td width='80%' style='padding:0 2px'><SPAN id='", AttachContactsTabView.ELEMENT_ID_SEARCH_BUTTON, "' /></td>",
 	"<td><SPAN id='", AttachContactsTabView.ELEMENT_ID_NAV_BUTTON_CELL,"' /></td></TR></table>",
-	"<table><tr><td valign='top' id='", this._folderTreeCellId, "'></td>",
+	"<table width='100%'><tr><td valign='top' id='", this._folderTreeCellId, "'></td>",
 	"<td  valign='top'><div  id='", this._folderListId, "' ></div>",
 	"</td></tr></table>");
 
@@ -370,16 +370,16 @@ function(items) {
 
 
 
-				html[idx++] = "<td width=16px><div  id='";
+				html[idx++] = "<td width='1px'><div  id='";
                 html[idx++] = chkId;
                 html[idx++] = "' class='ImgCheckboxunChecked'></div></td>";
 
 
-                html[idx++] = "<td width=16px>";
+                html[idx++] = "<td width='1px'>";
                 html[idx++] = AjxImg.getImageHtml(contact.getIcon());
                 html[idx++] = "</td>";
 
-                html[idx++] = "<td><span style=\"font-weight:bold;\">";
+                html[idx++] = "<td width='98%'><span style=\"font-weight:bold;\">";
                 html[idx++] = AjxStringUtil.htmlEncode(name || ZmMsg.noName);
                 html[idx++] = "</span></td></tr>";
 
@@ -563,7 +563,8 @@ function(width, height) {
 	var size = this.getSize();
 
 	var treeWidth = size.x * 0.350;
-	var listWidth = size.x - treeWidth - 15;
+	//var listWidth = size.x - treeWidth - 15;
+	var listWidth = size.x - treeWidth;
 	var newHeight = height - 55;
 	this._overview.setSize(treeWidth, newHeight);
 	var listEl = Dwt.byId(this._folderListId);

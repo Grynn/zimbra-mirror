@@ -18,4 +18,5 @@ table.AttachContacts_table input[type="text"]{
     border-width: 1px 0;
     cursor: pointer;
     border-color: #E0E0E0;
+    padding: 3px 0;
 }
